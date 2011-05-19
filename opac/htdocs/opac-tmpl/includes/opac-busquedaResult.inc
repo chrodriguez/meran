@@ -125,7 +125,7 @@
                             [% END %]
                         </td>
 
-                        <td class="autor_result click" title="[% 'Filtrar por Autor' | i18n %]">
+                        <td class="autor_result" title="[% 'Autor' | i18n %]">
                             [% IF NIVEL.nomCompleto %]
                                 [% NIVEL.nomCompleto %]
                             [% ELSE %]

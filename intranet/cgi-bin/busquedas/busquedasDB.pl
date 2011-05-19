@@ -112,7 +112,7 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
         my $funcion                     = $obj->{'funcion'};
         my $ini                         = ($obj->{'ini'}||'');
         
-        my ($cantidad, $array_nivel1)   = C4::AR::Busquedas::busquedaPorTema($obj->{'tema'}, $session, $obj);
+        my ($cantidad, $array_nivel1)   = C4::AR::Busquedas::busquedaAvanzada_newTemp($obj, $session, $obj);
         
         $obj->{'cantidad'}              = $cantidad;
         $obj->{'loggedinuser'}          = $session->param('nro_socio');
@@ -124,6 +124,7 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
 
     #se arma el string para mostrar en el cliente lo que a buscado, ademas escapa para evitar XSS
     $t_params->{'buscoPor'} = Encode::encode('utf8' ,C4::AR::Busquedas::armarBuscoPor($obj));
+    C4::AR::Debug::debug("BUSCO POR===========================================================".$t_params->{'buscoPor'});
     my $elapsed             = Time::HiRes::tv_interval( $start );
     $t_params->{'timeSeg'}  = $elapsed;
     C4::AR::Busquedas::logBusqueda($t_params, $session);

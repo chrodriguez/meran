@@ -15,7 +15,7 @@ else if(jQuery.trim($('#isbn').val())!=''){if((jQuery.trim($('#isbn').val())).le
 else if(jQuery.trim($('#tema').val())!=''){if((jQuery.trim($('#tema').val())).length<limite_caracteres){cumple_limite=false;}else{buscarPorTema();}}
 else if((jQuery.trim($('#titulo').val())!='')){if((jQuery.trim($('#titulo').val())).length<limite_caracteres){cumple_limite=false;}else{busquedaCombinable();}}
 else if(jQuery.trim($('#autor').val())!=''){if((jQuery.trim($('#autor').val())).length<limite_caracteres){cumple_limite=false;}else{busquedaCombinable();}}
-else if(jQuery.trim($('#signatura').val())!=''){if((jQuery.trim($('#signatura').val())).length<limite_caracteres){cumple_limite=false;}else{busquedaCombinable();}}
+else if(jQuery.trim($('#signatura').val())!=''){if((jQuery.trim($('#signatura').val())).length<0){cumple_limite=false;}else{busquedaCombinable();}}
 else if($.trim($('#keyword').val())!=''){if((jQuery.trim($('#keyword').val())).length<limite_caracteres){cumple_limite=false;}else{busquedaPorKeyword();}}
 else if(jQuery.trim($('#keyword-bar').val())!=''){if((jQuery.trim($('#keyword-bar').val())).length<limite_caracteres){cumple_limite=false;}else{buscarBar();}}
 else{cumple_vacio=false;}

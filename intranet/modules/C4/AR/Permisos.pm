@@ -192,6 +192,7 @@ sub parsearPermisos{
         }
     }
     return (\%hash_permisos);
+#    return ($permiso);
 
 }
 
@@ -411,7 +412,7 @@ sub actualizarPermisosGeneral{
     
             $permiso->agregar($hash_permisos);
     
-            $permiso = C4::AR::Permisos::parsearPermisos($permiso);
+            C4::AR::Permisos::parsearPermisos($permiso);
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U317', 'params' => [$permiso->getNro_socio]});
     
             return ($msg_object);

@@ -117,7 +117,7 @@ function buscar(doScroll){
         } else {busquedaCombinable();}
     } 
     else if (jQuery.trim($('#signatura').val()) != '') {
-         if ( (jQuery.trim($('#signatura').val())).length < limite_caracteres ) {
+         if ( (jQuery.trim($('#signatura').val())).length < 0 ) {
             cumple_limite = false;
         } else {busquedaCombinable();}
     } 

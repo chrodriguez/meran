@@ -13,9 +13,14 @@ USER=$(grep ^userINTRA /etc/meran/meran.conf| awk '{split($0,a,"="); print a[2]}
 echo $BASE;
 echo $PASSWD;
 echo $USER;
-echo "Backupeando base en el directorio home del usuario $(whoami)"
 hasta=$(cat $pathRelativo/revision)
-mysqldump --default-character-set=utf8 $BASE -u$USER -p$PASSWD > ~/backup_base.sql.rev$anterior;
+if [ $1 ]
+then
+	echo "Backupeando base en el directorio home del usuario $(whoami)"
+	mysqldump --default-character-set=utf8 $BASE -u$USER -p$PASSWD > ~/backup_base.sql.rev$anterior;
+fi
+
+
 for i in `seq $anterior $hasta`; do
         echo $pathRelativo/sql.rev$i;
         if [ -e $pathRelativo/sql.rev$i ]; then

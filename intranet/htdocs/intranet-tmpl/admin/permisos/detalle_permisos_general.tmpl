@@ -113,4 +113,70 @@
     </fieldset>
 </div>
 
+<div>
+    <fieldset id="adq_opac">
+        <legend class="titulo_legend_resaltado"> Adquisiciones en OPAC </legend>
+        <ul class="permission_grant" >
+            <li class="inline_input">
+                <label for="permission_5"> TODOS </label>
+                <input type="checkbox" id="adq_opac_todos" name="adq_opac_todos" onChange="adviceGrant(this,'permisos','high');"
+                    [% IF permisos.adq_opac.TODOS %] checked="checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_2"> Baja </label>
+                <input type="checkbox" id="adq_opac_baja" name="adq_opac_baja" onChange="adviceGrant(this,'permisos','high');"
+                    [% IF permisos.adq_opac.BAJA %] checked="checked" [% END %]/>
+            </li>
+            <li class="inline_input">
+                <label for="permission_3"> Modificaci&oacute;n </label>
+                <input type="checkbox" id="adq_opac_modif" name="adq_opac_modif" onChange="adviceGrant(this,'permisos','high');"
+                    [% IF permisos.adq_opac.MODIFICACION %] checked="checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_1"> Alta </label>
+                <input type="checkbox" id="adq_opac_alta" name="adq_opac_alta" onChange="adviceGrant(this,'permisos','medium');"
+                    [% IF permisos.adq_opac.ALTA %] checked="checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_4"> Consulta </label>
+                <input type="checkbox" id="adq_opac_consulta" name="adq_opac_consulta" onChange="adviceGrant(this,'permisos','low');"
+                    [% IF permisos.adq_opac.CONSULTA %] checked="checked" [% END %]/>
+            </li>
+        </ul>
+    </fieldset>
+</div>
+
+<div>
+    <fieldset id="adq_intra">
+        <legend class="titulo_legend_resaltado"> Adquisiciones en Intranet </legend>
+        <ul class="permission_grant" >
+            <li class="inline_input">
+                <label for="permission_5"> TODOS </label>
+                <input type="checkbox" id="adq_intra_todos" name="adq_intra_todos" onChange="adviceGrant(this,'permisos','high');"
+                    [% IF permisos.adq_intra.TODOS %] checked="checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_2"> Baja </label>
+                <input type="checkbox" id="adq_intra_baja" name="adq_intra_baja" onChange="adviceGrant(this,'permisos','high');"
+                    [% IF permisos.adq_intra.BAJA %] checked="checked" [% END %]/>
+            </li>
+            <li class="inline_input">
+                <label for="permission_3"> Modificaci&oacute;n </label>
+                <input type="checkbox" id="adq_intra_modif" name="adq_intra_modif" onChange="adviceGrant(this,'permisos','high');"
+                    [% IF permisos.adq_intra.MODIFICACION %] checked="checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_1"> Alta </label>
+                <input type="checkbox" id="adq_intra_alta" name="adq_intra_alta" onChange="adviceGrant(this,'permisos','medium');"
+                    [% IF permisos.adq_intra.ALTA %] checked="checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_4"> Consulta </label>
+                <input type="checkbox" id="adq_intra_consulta" name="adq_intra_consulta" onChange="adviceGrant(this,'permisos','low');"
+                    [% IF permisos.adq_intra.CONSULTA %] checked="checked" [% END %]/>
+            </li>
+        </ul>
+    </fieldset>
+</div>
+
 [% INCLUDE 'partials/admin/_guardarPermisos.inc' %]

@@ -658,6 +658,8 @@ sub asignarReferenciaParaCatalogo{
   my ($clave,$tabla) = getTablaInstanceByAlias($alias_tabla);
   my $nombre_tabla = $tabla->meta->table;
 
+  use C4::AR::Sphinx;
+
   my $id_viejo = $referer_involved;
   my $id_nuevo = $related_id;
   my $nivel1 = C4::Modelo::CatRegistroMarcN1->new();
@@ -668,6 +670,7 @@ sub asignarReferenciaParaCatalogo{
       $marc =~ s/$nombre_tabla\@$id_viejo/$nombre_tabla\@$id_nuevo/g;
       $registro->setMarcRecord($marc);
       $registro->save();
+      C4::AR::Sphinx::generar_indice($registro->getId1(), 'R_PARTIAL', 'UPDATE');
   }
 }
 
@@ -677,12 +680,13 @@ sub eliminarReferencia{
     my ($alias_tabla,$referer_involved) = @_;
     my ($clave,$tabla) = getTablaInstanceByAlias($alias_tabla);
     my $status = 0;
+    C4::AR::Debug::debug("===============================SE VA A ELIMINAR LA REFERENCIA============================");
     if ($tabla){
-
         my ($used_or_not) = mostrarReferencias($alias_tabla,$referer_involved);
         if (!$used_or_not){
             my $old_pk = $tabla->getByPk($referer_involved);
             $status = $old_pk->delete();
+            C4::AR::Debug::debug("===============================SE ELIMINO LA REFERENCIA============================");
         }else{
             $status = 0;
         }
@@ -704,9 +708,11 @@ sub asignarYEliminarReferencia{
 
     my ($alias_tabla,$related_id,$referer_involved) = @_;
 
-    my $status = asignarReferencia($alias_tabla,$related_id,$referer_involved) && eliminarReferencia($alias_tabla,$referer_involved);
+    my $status_asignar = asignarReferencia($alias_tabla,$related_id,$referer_involved);
 
-    return ($status);
+    my $status_eliminar = eliminarReferencia($alias_tabla,$referer_involved);
+
+    return ($status_asignar && $status_eliminar);
 }
 
 sub editarReferencia{

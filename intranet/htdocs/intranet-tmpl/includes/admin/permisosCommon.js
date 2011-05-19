@@ -340,6 +340,8 @@ function armarArregloDePermisosSave_GENERAL(){
     arreglo[0] = new permiso('preferencias');
     arreglo[1] = new permiso('reportes');
     arreglo[2] = new permiso('permisos');
+    arreglo[3] = new permiso('adq_opac');
+    arreglo[4] = new permiso('adq_intra');
 
     return(arreglo);
 }
@@ -351,6 +353,8 @@ function armarArregloDePermisos_GENERAL(){
     arreglo[0] = 'preferencias';
     arreglo[1] = 'reportes';
     arreglo[2] = 'permisos';
+    arreglo[3] = 'adq_opac';
+    arreglo[4] = 'adq_intra';
 
     return(arreglo);
 }
