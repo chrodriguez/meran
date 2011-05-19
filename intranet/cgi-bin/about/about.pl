@@ -14,7 +14,7 @@ my $texto = $input->param('about');
 
 
 my ($template, $session, $t_params) = get_template_and_user({
-                 template_name      => "about.tmpl",
+                 template_name      => "about/about.tmpl",
 			     query              => $input,
 			     type               => "intranet",
 			     authnotrequired    => 0,
