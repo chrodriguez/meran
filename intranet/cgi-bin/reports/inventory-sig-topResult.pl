@@ -50,9 +50,13 @@ $t_params->{'cantR'}    = $obj->{'cantR'}   = $cantR;
 
 if ($accion eq "CONSULTA_POR_SIGNATURA") {
 
-    ($cant_total, $cat_nivel3, $array_hash_ref)   = C4::AR::Estadisticas::listarItemsDeInventarioPorSigTop($obj);
-
-#     my ($cant_total, $result) = C4::AR::Busquedas::busquedaSignaturaBetween($obj);
+       ($cant_total, $cat_nivel3, $array_hash_ref)   = C4::AR::Estadisticas::listarItemsDeInventarioPorSigTop($obj);
+    
+#     if ($sigtop){ 
+#         ($cant_total, $cat_nivel3, $array_hash_ref)   = C4::AR::Estadisticas::listarItemsDeInventarioPorSigTop($obj);
+#     } else {
+#         ($cant_total, $cat_nivel3, $array_hash_ref)   = C4::AR::Estadisticas::busquedaBetweenSigTop($obj);
+#     }
 
     my ($path, $filename)            = C4::AR::Reportes::toXLS($array_hash_ref,1,'Pagina 1','inventario');        
     $t_params->{'filename'}          = '/reports/'.$filename;
@@ -61,7 +65,16 @@ if ($accion eq "CONSULTA_POR_SIGNATURA") {
 }
 
 if ($accion eq "CONSULTA_POR_BARCODE") {
-    ($cant_total, $cat_nivel3, $array_hash_ref)  = C4::AR::Estadisticas::listarItemsDeInventorioPorBarcode($obj);
+    
+      ($cant_total, $cat_nivel3, $array_hash_ref)  = C4::AR::Estadisticas::listarItemsDeInventorioPorBarcode($obj); 
+
+
+#     if ($barcode){ 
+#         ($cant_total, $cat_nivel3, $array_hash_ref)  = C4::AR::Estadisticas::listarItemsDeInventorioPorBarcode($obj);
+#     } else {
+#         ($cant_total, $cat_nivel3, $array_hash_ref)   = C4::AR::Estadisticas::busquedaBetweenSigTop($obj);
+#     }
+    
     my ($path, $filename)           = C4::AR::Reportes::toXLS($array_hash_ref,1,'Pagina 1','inventario');
     $t_params->{'filename'}         = '/reports/'.$filename;
     $t_params->{'results'}          = $cat_nivel3;
