@@ -33,6 +33,7 @@ __PACKAGE__->meta->setup(
         theme_intra                      => { type => 'varchar', length => 255 },
         locale                           => { type => 'varchar', length => 32 },
         lastValidation                   => { type => 'timestamp'  },
+        recover_password_hash            => { type => 'varchar', length => 255 },
     ],
 
      relationships =>
@@ -1015,6 +1016,23 @@ sub setTelefono_autorizado{
     if (C4::AR::Utilidades::validateString($telefono_autorizado)){
       $self->telefono_autorizado($telefono_autorizado);
     }
+}
+
+
+sub getRecoverPasswordHash{
+    my ($self) = shift;
+    return ($self->recover_password_hash);
+}
+
+sub setRecoverPasswordHash{
+    my ($self) = shift;
+    my ($recover_password_hash) = @_;
+
+    if (C4::AR::Utilidades::validateString($recover_password_hash)){
+      $self->recover_password_hash($recover_password_hash);
+    }
+    
+    $self->save();
 }
 
 sub getDni_autorizado{
