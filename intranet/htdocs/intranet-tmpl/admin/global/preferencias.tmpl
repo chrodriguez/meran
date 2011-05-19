@@ -278,6 +278,7 @@ function buscarPreferencia(){
 	objAH.url           = "/cgi-bin/koha/admin/global/preferenciasDB.pl";
 	objAH.buscar        = $("#buscar").val();
 	objAH.accion        = "BUSCAR_PREFERENCIAS";
+	objAH.categoria     = 'sistema';
 	objAH.sendToServer();
 }
 
