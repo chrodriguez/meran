@@ -239,6 +239,7 @@ function guardarModificacion(){
     objAH.showOverlay       = true;
 	objAH.variable      = $("#variable").val();
 	objAH.valor         = $("#valor").val();
+    objAH.categoria     = 'sistema';
 
 	if ($("#tipoVar").val() == 'bool'){
 	    objAH.valor=(getRadioButtonSelectedValue( $("[name=valor]")));
@@ -271,17 +272,17 @@ function updateGuardarModificacion(responseText){
  * Busca todas las preferencias o las que se corresponden con el string ingresado para filtrar la busqueda.
  */
 function buscarPreferencia(){
-	objAH=new AjaxHelper(updateBuscarPreferencia);
-	objAH.debug= true;
-    objAH.showOverlay       = true;
-	objAH.url= "/cgi-bin/koha/admin/global/preferenciasDB.pl";
-	objAH.buscar=$("#buscar").val();
-	objAH.accion= "BUSCAR_PREFERENCIAS";
+	objAH               = new AjaxHelper(updateBuscarPreferencia);
+	objAH.debug         = true;
+    objAH.showOverlay   = true;
+	objAH.url           = "/cgi-bin/koha/admin/global/preferenciasDB.pl";
+	objAH.buscar        = $("#buscar").val();
+	objAH.accion        = "BUSCAR_PREFERENCIAS";
+	objAH.categoria     = 'sistema';
 	objAH.sendToServer();
 }
 
 function updateBuscarPreferencia(responseText){
-
 	mostrarCombos();
 	$("#divResultado").html(responseText);
 	tablaOrdenada();

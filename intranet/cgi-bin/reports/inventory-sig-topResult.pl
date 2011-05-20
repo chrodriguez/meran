@@ -4,7 +4,7 @@ use strict;
 use C4::AR::Auth;
 use CGI;
 use C4::AR::Reportes;
-
+use C4::AR::Estadisticas;
 #Genera un inventario a partir de la busqueda por signatura topografica
 
 my $input   = new CGI;
@@ -15,6 +15,8 @@ my $barcode = $obj->{'barcode'};
 my $accion  = $obj->{'accion'};
 my $orden   = $obj->{'orden'} || 'barcode';
 my $ini     = $obj->{'ini'};
+
+
 
 my ($template, $session, $t_params) = get_template_and_user({
                         template_name   => "reports/inventory-sig-topResult.tmpl",
@@ -42,7 +44,7 @@ $t_params->{'cantR'}    = $obj->{'cantR'}   = $cantR;
 # my $ini                         = ($obj->{'ini'}||'');
 
 if ($accion eq "CONSULTA_POR_SIGNATURA") {
-    ($cant_total, $cat_nivel3, $array_hash_ref)   = C4::AR::Estadisticas::listarItemsDeInventorioPorSigTop($obj);
+    ($cant_total, $cat_nivel3, $array_hash_ref)   = C4::AR::Estadisticas::listarItemsDeInventarioPorSigTop($obj);
     my ($path, $filename)            = C4::AR::Reportes::toXLS($array_hash_ref,1,'Pagina 1','inventario');        
     $t_params->{'filename'}          = '/reports/'.$filename;
     $t_params->{'results'}           = $cat_nivel3;

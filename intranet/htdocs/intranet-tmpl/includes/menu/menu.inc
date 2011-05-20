@@ -477,6 +477,14 @@
 		                    </li>
 		                    <li>
 		                                [% PERL %]
+		                                    print C4::AR::Filtros::link_to( text =>     "[% 'Preferencias Cat&aacute;logo' | i18n %]",
+		                                                                    url =>      "/cgi-bin/koha/admin/global/catalogo_config.pl", 
+		                                                                    title =>    "[% 'Preferencias Cat&aacute;logo' | i18n %]"
+		                                                                ) ;
+		                                [% END %]
+		                    </li>
+		                    <li>
+		                                [% PERL %]
 		                                    print C4::AR::Filtros::link_to( text =>     "[% 'Configuraci&oacute;n del Mail' | i18n %]",
 		                                                                    url =>      "/cgi-bin/koha/admin/global/mail_config.pl", 
 		                                                                    title =>    "[% 'Configuraci&oacute;n del Mail' | i18n %]"
@@ -542,7 +550,7 @@
                     <li>
                                  [% PERL %]
                                      print C4::AR::Filtros::link_to( text =>     "[% 'Acerca De...' | i18n %]",
-                                                                     url =>      "/cgi-bin/koha/about.pl",
+                                                                     url =>      "/cgi-bin/koha/about/about.pl",
                                                                      title =>    "[% 'Acerca De...' | i18n %]"
                                                                  ) ;
                                  [% END %]

@@ -12,6 +12,7 @@ use C4::Modelo::CircReserva;
 use C4::Modelo::CircReserva::Manager;
 use C4::Modelo::CatRegistroMarcN3::Manager;
 
+
 use vars qw($VERSION @ISA @EXPORT %EXPORT_TAGS);
 
 $VERSION = 3.0;
@@ -490,7 +491,11 @@ sub Enviar_Email_Asignacion_Reserva{
 sub Enviar_Email_Cancelacion_Reserva{
     my ($reserva,$loggedinuser)=@_;
 
-    if (C4::AR::Preferencias::getValorPreferencia("EnabledMailSystem") && C4::AR::Preferencias::getValorPreferencia("mail_cambio_disponibilidad_cancelacion")){
+
+   C4::AR::Debug::debug("Reservas => Enviar_Email_Cancelacion_Reserva => EnabledMailSystem => ".C4::AR::Preferencias::getValorPreferencia("EnabledMailSystem"));
+   C4::AR::Debug::debug("Reservas => Enviar_Email_Cancelacion_Reserva => enviar_mail_cambio_disponibilidad_cancelacion => ".C4::AR::Preferencias::getValorPreferencia("enviar_mail_cambio_disponibilidad_cancelacion"));
+
+    if (C4::AR::Preferencias::getValorPreferencia("EnabledMailSystem") && C4::AR::Preferencias::getValorPreferencia("enviar_mail_cambio_disponibilidad_cancelacion")){
 
         my $dateformat = C4::Date::get_date_format();
         my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($reserva->getNro_socio);
@@ -525,7 +530,9 @@ sub Enviar_Email_Cancelacion_Reserva{
         $mail{'mail_from'}             = $mailFrom;
         $mail{'mail_to'}               = $socio->persona->getEmail;
         $mail{'mail_subject'}          = $mailSubject;
-        $mail{'mail_message'}          = $mailMessage;
+	$mail{'mail_message'}          = $mailMessage;
+
+       C4::AR::Debug::debug("Reservas => Enviar_Email_Cancelacion_Reserva => Se envia el mail ".$mail{'mail_message'});
 
         my ($ok, $msg_error)           = C4::AR::Mail::send_mail(\%mail);
 
@@ -560,7 +567,7 @@ sub Enviar_Email_Cancelacion_Reserva{
 sub Enviar_Email_Reserva_A_Espera{
     my ($reserva,$loggedinuser)=@_;
 
-    if (C4::AR::Preferencias::getValorPreferencia("EnabledMailSystem") && C4::AR::Preferencias::getValorPreferencia("mail_cambio_disponibilidad_espera")){
+    if (C4::AR::Preferencias::getValorPreferencia("EnabledMailSystem") && C4::AR::Preferencias::getValorPreferencia("enviar_mail_cambio_disponibilidad_espera")){
 
         my $dateformat = C4::Date::get_date_format();
         my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($reserva->getNro_socio);

@@ -32,7 +32,13 @@ my ($template, $session, $t_params)  = get_template_and_user({
 
 	my $buscar                  = $obj->{'buscar'};
 	my $orden                   = $obj->{'orden'};
+	my $categoria               = $obj->{'categoria'};
 	my ($cant,$preferencias)    = C4::AR::Preferencias::getPreferenciaLike($buscar,$orden);
+	
+#      FIXME: asi se filtra por categoria 'sistema':
+#		my ($cant,$preferencias)    = C4::AR::Preferencias::getPreferenciaLikeConCategoria($buscar,$orden,$categoria);
+#      TODO:  Pero se pierden temas_intra y temas_opac (habria que hacer en el menu preferencias temas intra y opac)
+
 	$t_params->{'preferencias'} = $preferencias;
 	$t_params->{'cant'}         = $cant;
 	
@@ -149,9 +155,7 @@ if($accion eq "GUARDAR_MODIFICACION_VARIABLE"){
  	my $variable    = $obj->{'variable'};
  	my $valor       = &C4::AR::Utilidades::trim($obj->{'valor'});
  	my $expl        = $obj->{'explicacion'};
-    my $categoria   = 'sistema';#$obj->{'categoria'};
-
-# TODO falta la categoria
+    my $categoria   = $obj->{'categoria'};
 
 	my $Message_arrayref  = C4::AR::Preferencias::t_modificarVariable($variable,$valor,$expl,$categoria);
     
@@ -292,3 +296,23 @@ if($accion eq "GUARDAR_NUEVA_VARIABLE"){
 
 }#end GUARDAR_NUEVA_VARIABLE
 
+if($accion eq "ACTUALIZAR_TABLA_CATALOGO"){
+
+    my ($template, $session, $t_params) = 
+	                                get_template_and_user({
+				                                template_name   => "admin/global/catalogoResultConfig.tmpl",
+				                                query           => $input,
+				                                type            => "intranet",
+				                                authnotrequired => 0,
+				                                flagsrequired   => {    ui => 'ANY', 
+                                                                        tipo_documento => 'ANY', 
+                                                                        accion => 'CONSULTA', 
+                                                                        entorno => 'undefined'},
+				                                debug           => 1,
+				                                });
+
+    my $preferencias_catalogo       = C4::AR::Preferencias::getPreferenciasByCategoria('catalogo');
+    $t_params->{'preferencias'}     = $preferencias_catalogo;
+    $t_params->{'page_sub_title'}   = C4::AR::Filtros::i18n("Preferencias del Cat&aacute;logo");  
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+}#end ACTUALIZAR_TABLA_CATALOGO
