@@ -72,7 +72,7 @@ sub agregar {
     $self->setMarcRecord($params->{'marc_record'});
 
     C4::AR::Debug::debug("CatRegistroMarcN3 => agregar => tipo de ejemplar => ".$params->{'tipo_ejemplar'});
-    my ($MARC_result_array) = C4::AR::Catalogacion::marc_record_to_meran(MARC::Record->new_from_usmarc($params->{'marc_record'}), $params->{'tipo_ejemplar'});
+    my ($MARC_result_array) = C4::AR::Catalogacion::marc_record_to_meran($marc_record, $params->{'tipo_ejemplar'});
 
     $self->validar($msg_object, $MARC_result_array, $params, 'INSERT', $db);
   
