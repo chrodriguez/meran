@@ -30,6 +30,8 @@ __PACKAGE__->meta->setup(
         marc_record             => { type => 'text' },
         id1                     => { type => 'integer', not_null => 1 },
         id2                     => { type => 'integer', not_null => 1 },
+        codigo_barra            => { type => 'varchar' },
+        signatura               => { type => 'varchar' },
         updated_at              => { type => 'timestamp', not_null => 1 },
         created_at              => { type => 'varchar' },
         agregacion_temp         => { type => 'varchar' },
@@ -63,6 +65,8 @@ sub agregar {
 
     $self->setId2($params->{'id2'});
     $self->setId1($params->{'id1'});
+    $self->setCodigoBarra($params->{'codigo_barra'});
+    $self->setSignatura($params->{'signatura'});
     $self->setCreatedAt(C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"), $dateformat));
     $self->setMarcRecord($params->{'marc_record'});
 
@@ -75,10 +79,10 @@ sub agregar {
         $self->save();
 
     # verificar_alta
-     $params->{'id_ui'}= $self->getId_ui_poseedora();
-     $params->{'id3'}= $self->getId3();
-     $params->{'estado_nuevo'}            = $self->getIdEstado();          #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)      
-     $params->{'disponibilidad_nueva'}    = $self->getIdDisponibilidad(); #(DISPONIBLE, PRESTAMO, SALA LECTURA)
+     $params->{'id_ui'}                     = $self->getId_ui_poseedora();
+     $params->{'id3'}                       = $self->getId3();
+     $params->{'estado_nuevo'}              = $self->getIdEstado();          #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)      
+     $params->{'disponibilidad_nueva'}      = $self->getIdDisponibilidad(); #(DISPONIBLE, PRESTAMO, SALA LECTURA)
  
      $self->verificar_alta($db, $params, $msg_object);
 
@@ -238,8 +242,8 @@ sub modificar {
     my $marc_record_base    = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
     # verificar_cambio 
-    $params->{'id_ui'}= $self->getId_ui_poseedora();
-    $params->{'id3'}= $self->getId3();
+    $params->{'id_ui'}                      = $self->getId_ui_poseedora();
+    $params->{'id3'}                        = $self->getId3();
     $params->{'estado_anterior'}            = $self->getIdEstado();          #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)
     $params->{'estado_nuevo'}               = C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record_cliente->subfield("995","e")));        
     $params->{'disponibilidad_anterior'}    = $self->getIdDisponibilidad(); #(DISPONIBLE, PRESTAMO, SALA LECTURA)
@@ -277,6 +281,8 @@ sub modificar {
         }
 
         $self->setMarcRecord($marc_record_base->as_usmarc);
+        $self->setCodigoBarra($params->{'codigo_barra'});
+        $self->setSignatura($params->{'signatura'});
         C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => marc_record as_usmarc para la base ".$marc_record_base->as_usmarc);
         ($MARC_result_array) = C4::AR::Catalogacion::marc_record_to_meran(MARC::Record->new_from_usmarc($marc_record_base->as_usmarc), $params->{'tipo_ejemplar'});
 
@@ -417,6 +423,30 @@ sub setId2{
     $self->id2($id2);
 }
 
+
+sub setCodigoBarra{
+    my ($self)  = shift;
+    my ($codigo_barra)   = @_;
+
+    $self->codigo_barra($codigo_barra);
+}
+
+sub setSignatura{
+    my ($self)  = shift;
+    my ($signatura)   = @_;
+
+    $self->signatura($signatura);
+}
+
+sub getCodigoBarra{
+    my ($self) = shift;
+    return $self->codigo_barra;
+}
+
+sub getSignatura{
+    my ($self) = shift;
+    return $self->signatura;
+}
 
 sub getMarcRecord{
     my ($self) = shift;
