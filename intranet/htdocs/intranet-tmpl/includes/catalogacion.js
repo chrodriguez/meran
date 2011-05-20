@@ -468,6 +468,9 @@ function updateMostrarEstructuraDelNivel3(responseText){
     procesarInfoJson(objetos_array, null); 
     scrollTo('nivel3Tabla');
 	
+    if($('#cantEjemplares').val() > 0) {
+        $('#'+_getIdComponente('995','f')).removeClass('required');
+    } 
 	//asigno el handler para el validador
 	validateForm('formNivel3',guardarModificarDocumentoN3);
     if(MODIFICAR == 0){
@@ -491,6 +494,7 @@ function switchTipoBarcode(chosen, readOnly){
 
     readOnly.val('');
     readOnly.attr("readonly",true);
+    readOnly.removeClass("required");  
     chosen.val('');
     chosen.removeAttr("readonly");
     chosen.focus();
@@ -504,26 +508,27 @@ function registrarToggleOnChangeForBarcode(callFromBarcode){
     var barcode_val     = $.trim(barcode_comp.val());
 
     if (callFromBarcode){       
-        if ((cantidad_val.length)>0)
+        if ((cantidad_val.length)>0) {
             jConfirm(BORRAR_CANTIDAD_DE_EJEMPLARES, CATALOGO_ALERT_TITLE, function(confirmStatus){
                 if (confirmStatus){
                     switchTipoBarcode(barcode_comp,cantidad_comp);
                     $('#cantEjemplares').removeClass('required');
+                    $('#'+_getIdComponente('995','f')).addClass('required'); 
+                    $('#'+_getIdComponente('995','f')).attr("readonly",false);  
                 }
             })  
-        else
-            switchTipoBarcode(barcode_comp,cantidad_comp);
-    }
-    else{
-        if ((barcode_val.length)>0)
+        } else switchTipoBarcode(barcode_comp,cantidad_comp);
+    } else {
+        if ((barcode_val.length)>0){
             jConfirm(BORRAR_LISTA_DE_CODIGOS, CATALOGO_ALERT_TITLE, function(confirmStatus){
                 if (confirmStatus){
                     switchTipoBarcode(cantidad_comp,barcode_comp);
-                    $('#cantEjemplares').addClass('required');
+                    $('#cantEjemplares').addClass('required');    
+                    $('#'+_getIdComponente('995','f')).attr("readonly",true);  
                 }
             })  
-        else
-            switchTipoBarcode(cantidad_comp,barcode_comp);
+        } else
+            switchTipoBarcode(cantidad_comp,barcode_comp);        
     }
 }
 
