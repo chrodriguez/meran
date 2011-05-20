@@ -48,7 +48,7 @@ my ($template, $session, $t_params)  = get_template_and_user({
 if($accion eq "MODIFICAR_VARIABLE"){
 #Muestra el tmpl para modificar una preferencias
 
-my ($template, $session, $t_params) = get_template_and_user({
+    my ($template, $session, $t_params) = get_template_and_user({
 				template_name   => "admin/global/modificarPreferencia.tmpl",
 				query           => $input,
 				type            => "intranet",
