@@ -1156,15 +1156,14 @@ sub checkRecoverLink{
         $status = 1;
         my $socio          = $socio_array_ref->[0];
         my $dateformat     = C4::Date::get_date_format();
-        my $hoy            = C4::Date::format_date_in_iso( Date::Manip::ParseDate("now"), $dateformat );
+        my $hoy            = Date::Manip::ParseDate("now");
         my $fecha_link     = $socio->recover_date_of;        
         my $err;
 
         C4::AR::Debug::debug("FECHA LINK ===================================================================== >".$fecha_link);
-        $fecha_link        = C4::Date::format_date_in_iso( $fecha_link, $dateformat );
-        $hoy               = C4::Date::format_date_in_iso(Date::Manip::DateCalc( $hoy, "+ 1 day", \$err ), $dateformat );
+        my $maniana        = Date::Manip::DateCalc( $hoy, "+ 1 day", \$err );
 
-        C4::AR::Debug::debug("FECHA MANIANA ===================================================================== >".$hoy);
+        C4::AR::Debug::debug("FECHA MANIANA ===================================================================== >".$maniana);
         C4::AR::Debug::debug("FECHA LINK ===================================================================== >".$fecha_link);
         C4::AR::Debug::debug("COMPARACION DE FECHAS ===================================================================== >".Date::Manip::Date_Cmp(  $fecha_link, $hoy ));
          
