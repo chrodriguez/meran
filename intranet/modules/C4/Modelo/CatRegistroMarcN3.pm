@@ -65,8 +65,9 @@ sub agregar {
 
     $self->setId2($params->{'id2'});
     $self->setId1($params->{'id1'});
-    $self->setCodigoBarra($params->{'codigo_barra'});
-    $self->setSignatura($params->{'signatura'});
+    my $marc_record = MARC::Record->new_from_usmarc($params->{'marc_record'});
+    $self->setCodigoBarra($marc_record->subfield("995","f"));
+    $self->setSignatura($marc_record->subfield("995","t"));
     $self->setCreatedAt(C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"), $dateformat));
     $self->setMarcRecord($params->{'marc_record'});
 
@@ -281,8 +282,8 @@ sub modificar {
         }
 
         $self->setMarcRecord($marc_record_base->as_usmarc);
-        $self->setCodigoBarra($params->{'codigo_barra'});
-        $self->setSignatura($params->{'signatura'});
+        $self->setCodigoBarra($marc_record_cliente->subfield("995","f"));
+        $self->setSignatura($marc_record_cliente->subfield("995","t"));
         C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => marc_record as_usmarc para la base ".$marc_record_base->as_usmarc);
         ($MARC_result_array) = C4::AR::Catalogacion::marc_record_to_meran(MARC::Record->new_from_usmarc($marc_record_base->as_usmarc), $params->{'tipo_ejemplar'});
 
