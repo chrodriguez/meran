@@ -43,7 +43,6 @@
       <div class="column1-unit">
           <div class="contactform">
               <form id="datosAEnviar" method="post" action="/cgi-bin/koha/opac-main.pl" onsubmit="return enviar()" autocomplete="off">
-        <!-- <form id="datosAEnviar" method="post" action="/cgi-bin/koha/opac-main.pl">  -->
                 <p><input type="hidden" name="remember_me" value="0" /></p>
                 <fieldset>
                   <legend>&nbsp;[% 'Ingrese sus datos de autenticaci&oacute;n' | i18n %]&nbsp;</legend>
@@ -57,15 +56,16 @@
                     <input type="hidden" name="password" id="password" tabindex="2" class="field" value="" />
                   </p>
                   <p>
-                    <input type="checkbox" name="checkbox_1" id="checkbox_1" class="checkbox" tabindex="3" size="1" value="" />
-                    <label for="checkbox_1" class="right">[% 'Recordarme' | i18n %]</label>
-                  </p>
-                  <p>
                     <input type="submit" name="cmdweblogin" class="button" value="[% 'Enviar' | i18n %]"  />
-        <!--         <input type="button"  onclick="enviar()" name="cmdweblogin" class="button" value="[% 'Enviar' | i18n %]"  /> -->
                   </p>
                   <p>
-                    <a href="#" id="forgotpsswd_1">[% 'Olvid&eacute; mi contrase&ntilde;a' | i18n %]</a>
+                    [% PERL %]
+                        print C4::AR::Filtros::link_to( text =>     "[% 'Olvid&eacute; mi contrase&ntilde;a' | i18n %]",
+                                                        url =>      "/cgi-bin/koha/opac-forgot-password.pl", 
+                                                        title =>    "[% 'Olvid&eacute; mi contrase&ntilde;a' | i18n %]"
+                                                    ) ;
+                    [% END %]
+                    
                   </p>
                 </fieldset>
               </form>

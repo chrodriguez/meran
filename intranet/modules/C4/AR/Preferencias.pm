@@ -222,6 +222,23 @@ sub getPreferenciaLike {
     return (scalar($preferencias_array_ref), $preferencias_array_ref);
 }
 
+# busca el nombre de una preferencia dentro de la categoria recibida como parametro
+sub getPreferenciaLikeConCategoria {
+    my ($str,$orden,$categoria)=@_;
+
+    my $preferencias_array_ref;
+    my @filtros;
+    my $prefTemp = C4::Modelo::PrefPreferenciaSistema->new();
+  
+    $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( 
+                                        query => [  variable  => { like => '%'.$str.'%' },
+                                                    categoria => { eq => $categoria } ],
+                                        sort_by => ( $prefTemp->sortByString($orden) ),
+                                ); 
+
+    return (scalar($preferencias_array_ref), $preferencias_array_ref);
+}
+
 
 sub getPreferencia {
     my ($variable)  = @_;

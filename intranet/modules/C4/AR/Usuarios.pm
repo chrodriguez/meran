@@ -45,6 +45,7 @@ use C4::Modelo::UsrEstado::Manager;
 use C4::Modelo::UsrSocio;
 use C4::Modelo::UsrSocio::Manager;
 use C4::AR::Preferencias;
+use Digest::SHA qw(sha256_base64);
 use Switch;
 
 use vars qw(@EXPORT_OK @ISA);
@@ -75,6 +76,7 @@ use vars qw(@EXPORT_OK @ISA);
     needsDataValidation
     crearPersonaLDAP
     _verificarLibreDeuda
+    recoverPassword
 );
 
 =item
@@ -1024,6 +1026,65 @@ sub _verificarLibreDeuda {
     }
 
     return ($msg_object);
+}
+
+
+############################### PASSWORD RECOVERY SUBs #######################################
+
+sub _sendRecoveryPasswordMail{
+    my ($socio,$link) = @_;
+    
+}
+
+sub _buildPasswordRecoverLink{
+	my ($socio) = @_;
+	
+	my $link = "";
+	
+	my $hash = sha256_base64(localtime().$socio->getPassword().$socio->getLastValidation());
+	
+    my $link = "http://".$ENV{'SERVER_NAME'}."/cgi-bin/koha/opac-recover-password.pl?key=".$hash;
+    
+    return ($link,$hash);	
+	
+	
+}
+
+
+sub recoverPassword{
+	my ($user_id) = @_;
+
+    my $message     = undef;
+    my $socio       = undef;
+    my $link        = undef;
+    my $hash        = undef;
+    
+    my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
+                                                 query              => [ 'usr_persona.email' => { eq => $user_id } ],
+                                                 require_objects    => ['persona'],
+                                     );
+
+    if($socio_array_ref){
+         $socio =  ($socio_array_ref->[0]);
+    }else{
+         $socio =  C4::AR::Usuarios::getSocioInfoPorNroSocio($user_id);
+    }
+	
+	if ($socio){
+	
+		($link,$hash) = _buildPasswordRecoverLink($socio);
+		
+		$socio->setRecoverPasswordHash($hash);
+		
+		_sendRecoveryPasswordMail($socio,$link);
+		
+        $message = C4::AR::Mensajes::getMensaje('U600','opac');
+        		
+	}else{
+        $message = C4::AR::Mensajes::getMensaje('U601','opac');
+	}
+
+    return ($message);
 }
 
 END { }       # module clean-up code here (global destructor)
