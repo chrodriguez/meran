@@ -22,19 +22,13 @@ my ($template, $session, $t_params) = get_template_and_user({
 #preguntamos si esta guardando la informacion o mostrando el tmpl normalmente 
 if($input->param('adding') == 1){
 
-    # FIXME: armar una HASH envez de uno por uno
-
     C4::AR::Authldap::setVariableLdap('ldap_version',$input->param('version'));
     C4::AR::Authldap::setVariableLdap('ldap_server',$input->param('host_url'));
-    
-    # agregadas luego
     C4::AR::Authldap::setVariableLdap('ldap_port',$input->param('host_port'));
     C4::AR::Authldap::setVariableLdap('ldap_type',$input->param('host_type'));
     C4::AR::Authldap::setVariableLdap('ldap_user_prefijo',$input->param('user_prefijo'));
     C4::AR::Authldap::setVariableLdap('ldap_prefijo_base',$input->param('prefijo_base'));
-    C4::AR::Authldap::setVariableLdap('ldap_agregar_user',$input->param('agregar_user_ldap'));
-    # fin
-    
+    C4::AR::Authldap::setVariableLdap('ldap_agregar_user',$input->param('agregar_user_ldap'));    
     C4::AR::Authldap::setVariableLdap('ldap_encoding',$input->param('ldapencoding'));
     C4::AR::Authldap::setVariableLdap('ldap_preventpassindb',$input->param('preventpassindb'));
     C4::AR::Authldap::setVariableLdap('ldap_bind_dn',$input->param('bind_dn'));
@@ -123,7 +117,7 @@ if($input->param('adding') == 1){
 }
 # mostramos el template cargando los datos de configuracion ldap desde la db
 # lo hacemos siempre asi cuando se guardan los cambios se reflejan en el template tambien
-my $variables_ldap_hash              = C4::AR::Authldap::getLdapPreferences();
-$t_params->{'preferencias'}             = $variables_ldap_hash;
+my $variables_ldap_hash             = C4::AR::Authldap::getLdapPreferences();
+$t_params->{'preferencias'}         = $variables_ldap_hash;
 $t_params->{'page_sub_title'}       = C4::AR::Filtros::i18n("Configuraci&oacute;n Servidor LDAP");
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

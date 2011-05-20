@@ -39,7 +39,7 @@ sub setVariableLdap {
     my ($variable, $valor, $db) = @_;
     my  $preferencia;
     
-    $preferencia = C4::Modelo::PrefLdap::Manager->get_pref_ldap( query => [variable => {eq => $variable}] );
+    $preferencia = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( query => [variable => {eq => $variable}] );
     
     if(scalar(@$preferencia) > 0){
         $preferencia->[0]->setValue($valor);
@@ -48,17 +48,24 @@ sub setVariableLdap {
 }
 
 =item
-    Esta funcion devuelve en una HASH todas las variables de pref_ldap
+    Esta funcion devuelve en una HASH todas las variables de pref_ldap, se filtra por categoria='auth'
 =cut
 sub getLdapPreferences{
 
-    my $preferencias_array_ref = C4::Modelo::PrefLdap::Manager->get_pref_ldap();
+    my $preferencias_array_ref;
+    my @filtros;
+    my $prefTemp = C4::Modelo::PrefPreferenciaSistema->new();
+  
+    $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( 
+                                        query => [ categoria => { eq => 'auth' } ],
+                                ); 
+                                
     my %hash;
     foreach my $pref (@$preferencias_array_ref){
         $hash{$pref->getVariable} = $pref->getValue();
     }
 
-    return (\%hash);
+    return (\%hash);                    
 }
 
 =item
