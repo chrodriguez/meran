@@ -201,7 +201,52 @@ sub getMinYMaxSignaturaTopografica{
 }
 
 
+# sub busquedaBetweenSigTop{
+# 
+#     my ($params) = @_;
+# 
+#     use Sphinx::Search;
+#     
+#     my $sphinx  = Sphinx::Search->new();
+#     my $query   = '';
+#     my $tipo    = 'SPH_MATCH_EXTENDED';
+#     my $orden   = $params->{'orden'};
+# #     my $min= $params->{'desde_signatura'};
+# #     my $max= $params->{'hasta_signatura'};
+#     
+#     my $min= $params->{'desde_barcode'};
+#     my $max= $params->{'hasta_barcode'};
+#     
+#     $query .= '@string '.'barcode% '.'>= '.$min.'&'.' <= '.$max;
+#    
+# #     $sphinx->SetLimits($params->{'ini'}, $params->{'cantR'});
+#     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
+# #     $sphinx->SetIDRange($min, $max);
+#     
+#     # NOTA: sphinx necesita el string decode_utf8
+#     
+# #     $sphinx->SetFilterRange('string', $min, $max);
+#     my $results = $sphinx->Query($query);
+# 
+#       C4::AR::Debug::debug("QUERY".$query);
+#   
+#     C4::AR::Utilidades::printHASH($results);
+# 
+#     my $matches = $results->{'matches'};
+#     my $total_found = $results->{'total_found'};
+#   
+# 
+#     C4::AR::Debug::debug("TOTAL FOUND".$total_found);
+# 
+#     return ($total_found, $results );
+# 
+# }
+
+
+
+
 # TODO ver si se puede utilizar el sphix para no procesar todos los ejemplares
+
 sub listarItemsDeInventarioPorSigTop{
     my ($params_hash_ref) = @_;
 
@@ -283,28 +328,7 @@ sub listarItemsDeInventarioPorSigTop{
 }
 
 
-# sub listarItemsDeInventorioPorBarcode{
-#     my ($params_hash_ref) = @_;
-# 
-#     use Sphinx::Search;
-#     
-#     my $sphinx  = Sphinx::Search->new();
-#     my $query   = '';
-#     my $tipo    = 'SPH_MATCH_EXTENDED';
-#     my $orden       = $params->{'orden'};
-#    
-#     $query .=    $query .= ' @string "'."barcode%".$sphinx->EscapeString($params->{'codBarra'});
-# 
-#     $query .='*"';
-# 
-#    
-#     my @filtros;
-#     my @cat_nivel3_result;
-#     my @info_reporte;
-#     my $orden = $params_hash_ref->{'sort'} || 'barcode';
-# 
-# 
-# }
+
 
 
 sub listarItemsDeInventorioPorBarcode{

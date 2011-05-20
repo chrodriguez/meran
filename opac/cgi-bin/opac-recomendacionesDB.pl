@@ -30,7 +30,10 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_EDICIONES') {
                         query => $input,
                         type => "opac",
                         authnotrequired => 1,
-                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                        flagsrequired => {  ui => 'ANY', 
+                                            tipo_documento => 'ANY', 
+                                            accion => 'CONSULTA', 
+                                            entorno => 'undefined'},
                     });
  
     $t_params->{'combo_ediciones'} = $combo_ediciones;
@@ -96,7 +99,10 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_EDICIONES') {
                         query => $input,
                         type => "opac",
                         authnotrequired => 1,
-                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                        flagsrequired => {  ui => 'ANY', 
+                                            tipo_documento => 'ANY', 
+                                            accion => 'CONSULTA',   
+                                            entorno => 'undefined'},
                     });
 
    $t_params->{'cant_ejemplares_disp'} = $detalle_nivel_3->{'disponibles'};
@@ -116,7 +122,10 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_EDICIONES') {
                         query => $input,
                         type => "opac",
                         authnotrequired => 1,
-                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                        flagsrequired => {  ui => 'ANY', 
+                                            tipo_documento => 'ANY', 
+                                            accion => 'CONSULTA', 
+                                            entorno => 'undefined'},
                     });
 
     $t_params->{'datos_edicion'} = "";
