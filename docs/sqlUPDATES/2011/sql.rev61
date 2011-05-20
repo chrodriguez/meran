@@ -90,3 +90,5 @@ INSERT INTO `pref_preferencia_sistema` (`id`, `variable`, `value`, `explanation`
 (NULL, 'ldap_lockconfig_field_updatelocal_adress', '', 'Si esta activado, el campo debe ser actualizado (con autenticacion externa) cada vez que el usuario entra o se produce una sincronizacion de usuarios. Los campos a actualizar localmente deberian ser bloqueados.', '', '', 'auth'),
 (NULL, 'ldap_lockconfig_field_updateremote_adress', '', 'Si esta activado, la autenticacion externa sera actualizada cuando se actualice el registro del usuario. Los campos deberian estar desbloqueados para poder editarlos', '', '', 'auth'),
 (NULL, 'ldap_lockconfig_field_lock_adress', '', 'Si se activa, los usuarios y administradores de MERAN no podran editar directamente el campo. Utilice esta opcion si mantiene estos datos en el sistema de autentificacion externo.', '', '', 'auth');
+
+DROP TABLE `pref_ldap`;
