@@ -33,12 +33,7 @@ my ($template, $session, $t_params)  = get_template_and_user({
 	my $buscar                  = $obj->{'buscar'};
 	my $orden                   = $obj->{'orden'};
 	my $categoria               = $obj->{'categoria'};
-	my ($cant,$preferencias)    = C4::AR::Preferencias::getPreferenciaLike($buscar,$orden);
-	
-#      FIXME: asi se filtra por categoria 'sistema':
-#		my ($cant,$preferencias)    = C4::AR::Preferencias::getPreferenciaLikeConCategoria($buscar,$orden,$categoria);
-#      TODO:  Pero se pierden temas_intra y temas_opac (habria que hacer en el menu preferencias temas intra y opac)
-
+	my ($cant,$preferencias)    = C4::AR::Preferencias::getPreferenciaLikeConCategoria($buscar,$orden,$categoria);
 	$t_params->{'preferencias'} = $preferencias;
 	$t_params->{'cant'}         = $cant;
 	
@@ -48,7 +43,7 @@ my ($template, $session, $t_params)  = get_template_and_user({
 if($accion eq "MODIFICAR_VARIABLE"){
 #Muestra el tmpl para modificar una preferencias
 
-my ($template, $session, $t_params) = get_template_and_user({
+    my ($template, $session, $t_params) = get_template_and_user({
 				template_name   => "admin/global/modificarPreferencia.tmpl",
 				query           => $input,
 				type            => "intranet",
