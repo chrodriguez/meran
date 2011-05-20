@@ -19,7 +19,14 @@ my ($session) = C4::AR::Auth::inicializarAuth($t_params);
 my ($validLink) = C4::AR::Usuarios::checkRecoverLink($key);
 
 if ($validLink){
-	$t_params->{'partial_template'}= "opac-change-password-recovery.inc";
+    if ($query->param("newpassword1") && $query->param("newpassword1")){
+    	my $params = $query->Vars;
+
+    	$t_params->{'message'} = C4::AR::Usuarios::changePasswordFromRecover($params);
+        $t_params->{'partial_template'}= "_message.inc";
+    }else{
+	   $t_params->{'partial_template'}     = "opac-change-password-recovery.inc";
+    }
 }else{
     $t_params->{'partial_template'}= "_message.inc";
     $t_params->{'message'} = C4::AR::Mensajes::getMensaje('U602','opac');;

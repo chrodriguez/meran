@@ -78,6 +78,7 @@ use vars qw(@EXPORT_OK @ISA);
     _verificarLibreDeuda
     recoverPassword
     checkRecoverLink
+    changePasswordFromRecover
 );
 
 =item
@@ -1160,19 +1161,48 @@ sub checkRecoverLink{
         my $fecha_link     = $socio->recover_date_of;        
         my $err;
 
-        C4::AR::Debug::debug("FECHA LINK ===================================================================== >".$fecha_link);
-        my $maniana        = Date::Manip::DateCalc( $hoy, "+ 1 day", \$err );
+        my $fecha_link        = Date::Manip::DateCalc( $fecha_link, "+ 1 day", \$err );
 
-        C4::AR::Debug::debug("FECHA MANIANA ===================================================================== >".$maniana);
-        C4::AR::Debug::debug("FECHA LINK ===================================================================== >".$fecha_link);
-        C4::AR::Debug::debug("COMPARACION DE FECHAS ===================================================================== >".Date::Manip::Date_Cmp(  $fecha_link, $hoy ));
-         
+        my $cmp_result = Date::Manip::Date_Cmp($fecha_link,$hoy);
+        
+        $status = $cmp_result >= 0; 
+        
+        if (!$status){
+        	$socio->unsetRecoverPasswordHash();
+        }
+                
          
     }
 	
 	return ($status)
 }
 
+
+sub changePasswordFromRecover{
+	my ($params) = @_;
+    my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
+                                                 query              => [ 'recover_password_hash' => { eq => $params->{'key'} } ],
+                                     );
+
+    my $message;
+    
+    if(scalar(@$socio_array_ref)){
+    	my $socio = $socio_array_ref->[0];
+    	
+    	if ($params->{'newpassword1'} eq $params->{'newpassword2'}){
+    	   $socio->cambiarPassword($params->{'newpassword1'});
+    	   $socio->unsetRecoverPasswordHash();
+    	   $message = C4::AR::Mensajes::getMensaje('U603','opac');
+    	   
+    	}else{
+    		$message = C4::AR::Mensajes::getMensaje('U604','opac');
+    	}
+    }else{
+    	$message = C4::AR::Mensajes::getMensaje('U602','opac');
+    }
+
+    return ($message);
+}   
 
 
 END { }       # module clean-up code here (global destructor)

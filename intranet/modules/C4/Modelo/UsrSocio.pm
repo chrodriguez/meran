@@ -1040,6 +1040,14 @@ sub setRecoverPasswordHash{
     $self->save();
 }
 
+sub unsetRecoverPasswordHash{
+	
+    my ($self) = shift;
+    $self->recover_password_hash(undef);
+    
+    $self->save();
+}
+
 sub getDni_autorizado{
     my ($self) = shift;
     return ($self->dni_autorizado);

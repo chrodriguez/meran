@@ -22,7 +22,7 @@
     });
 </script>
     <!--    <h1 class="block">[% 'Modificar sus datos personales' | i18n%]</h1>-->
-        [% IF mensaje %]
+        [% IF message_info %]
             <h1 class="block error_field">[% 'Error en datos, s&iacute;rvase corregirlos' | i18n%]</h1>
         [% END %]
         <div class="column1-unit" style="width: 500px">
