@@ -34,6 +34,11 @@ __PACKAGE__->meta->setup(
         locale                           => { type => 'varchar', length => 32 },
         lastValidation                   => { type => 'timestamp'  },
         recover_password_hash            => { type => 'varchar', length => 255 },
+        #PARA ESTOS CAMPOS, NO HAY GETTER/SETTER
+        client_ip_recover_pwd            => { type => 'varchar', length => 255 },
+        recover_date_of                  => { type => 'timestamp'  },
+        login_attempts                   => { type => 'integer', not_null => 1, default => 0 },
+        
     ],
 
      relationships =>

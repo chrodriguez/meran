@@ -77,6 +77,7 @@ use vars qw(@EXPORT_OK @ISA);
     crearPersonaLDAP
     _verificarLibreDeuda
     recoverPassword
+    checkRecoverLink
 );
 
 =item
@@ -1033,7 +1034,44 @@ sub _verificarLibreDeuda {
 
 sub _sendRecoveryPasswordMail{
     my ($socio,$link) = @_;
+
+    use C4::AR::Mail;
+
+    my %mail;
     
+    $mail{'mail_from'}             = C4::AR::Preferencias::getValorPreferencia("reserveFrom");
+    $mail{'mail_to'}               = $socio->persona->getEmail;
+    $mail{'mail_subject'}          = C4::AR::Filtros::i18n("Instrucciones para reestablecer su clave");
+    
+    
+## Datos para el mail
+    use C4::Modelo::PrefUnidadInformacion;
+    
+    my $completo            = $socio->persona->getNombre." ".$socio->persona->getApellido;
+    my $nro_socio           = $socio->getNro_socio;
+
+    my $default_ui      = C4::AR::Preferencias::getValorPreferencia('defaultUI');
+    my $ui              = C4::Modelo::PrefUnidadInformacion->getByCode($default_ui);
+    my $nombre_ui       = $ui->getNombre();
+
+    my $mailMessage =
+                "
+		                Estimado $completo ($nro_socio), socio de $nombre_ui, recientemente UD ha solicitado reestablecer su clave.\n
+		                Para hacerlo, haga click en el siguiente enlace y siga los pasos que el sistema le va a indicar:\n
+		                            $link\n
+		                
+		                Si no puede abrir el enlace, copie y pegue la siguente URL en su navegador: $link\n
+		                
+		                Si UD no ha solicitado un reseteo de su clave, simplemente ignore este mail.\n
+		                
+		                Atte., $nombre_ui.
+                ";
+    
+    
+    $mail{'mail_message'}           = $mailMessage;
+    $mail{'html_content'}           = 1;
+    my ($ok, $msg_error)            = C4::AR::Mail::send_mail(\%mail);
+
 }
 
 sub _buildPasswordRecoverLink{
@@ -1050,6 +1088,20 @@ sub _buildPasswordRecoverLink{
 	
 }
 
+sub _logClientIpAddress{
+	my ($operation_type, $socio) = @_;
+	use Date::Manip;
+	my $client_id =  $ENV{'REMOTE_ADDR'}." <".$ENV{'REMOTE_NAME'}.">";
+    my $today = Date::Manip::ParseDate("now");
+
+    $socio->client_ip_recover_pwd($client_id);
+    $socio->recover_date_of($today);
+    
+    $socio->save();
+
+    
+	
+}
 
 sub recoverPassword{
 	my ($user_id) = @_;
@@ -1064,14 +1116,16 @@ sub recoverPassword{
                                                  require_objects    => ['persona'],
                                      );
 
-    if($socio_array_ref){
-         $socio =  ($socio_array_ref->[0]);
+    if(scalar(@$socio_array_ref)){
+         $socio =  $socio_array_ref->[0];
     }else{
          $socio =  C4::AR::Usuarios::getSocioInfoPorNroSocio($user_id);
     }
 	
 	if ($socio){
 	
+	    _logClientIpAddress('recover_password',$socio);
+	    
 		($link,$hash) = _buildPasswordRecoverLink($socio);
 		
 		$socio->setRecoverPasswordHash($hash);
@@ -1086,6 +1140,40 @@ sub recoverPassword{
 
     return ($message);
 }
+
+
+sub checkRecoverLink{
+	my ($key) = @_;
+
+    my $status = 0;
+    
+    
+    my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
+                                                 query              => [ 'recover_password_hash' => { eq => $key } ],
+                                     );
+
+    if(scalar(@$socio_array_ref)){
+        $status = 1;
+        my $socio          = $socio_array_ref->[0];
+        my $dateformat     = C4::Date::get_date_format();
+        my $hoy            = Date::Manip::ParseDate("now");
+        my $fecha_link     = $socio->recover_date_of;        
+        my $err;
+
+        C4::AR::Debug::debug("FECHA LINK ===================================================================== >".$fecha_link);
+        my $maniana        = Date::Manip::DateCalc( $hoy, "+ 1 day", \$err );
+
+        C4::AR::Debug::debug("FECHA MANIANA ===================================================================== >".$maniana);
+        C4::AR::Debug::debug("FECHA LINK ===================================================================== >".$fecha_link);
+        C4::AR::Debug::debug("COMPARACION DE FECHAS ===================================================================== >".Date::Manip::Date_Cmp(  $fecha_link, $hoy ));
+         
+         
+    }
+	
+	return ($status)
+}
+
+
 
 END { }       # module clean-up code here (global destructor)
 
