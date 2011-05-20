@@ -17,8 +17,6 @@ use Net::LDAP::LDIF;
 use Net::LDAP::Util qw(ldap_error_text);
 use Net::LDAP::Constant qw(LDAP_EXTENSION_START_TLS);
 use C4::AR::Preferencias;
-use C4::Modelo::PrefLdap;
-use C4::Modelo::PrefLdap::Manager;
 use vars qw(@ISA @EXPORT_OK );
 @ISA = qw(Exporter);
 @EXPORT_OK = qw(
@@ -74,7 +72,11 @@ sub getLdapPreferences{
 sub _getValorPreferenciaLdap{
 
     my ($variable)              = @_;
-    my $preferencia_ldap_array_ref   = C4::Modelo::PrefLdap::Manager->get_pref_ldap( query => [ variable => { eq => $variable} ]);
+    my $preferencia_ldap_array_ref   = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( 
+                                                            query => [  variable => { eq => $variable} ,
+                                                                        categoria => { eq => 'auth'}
+                                                                     ]
+                                                            );
 
     if ($preferencia_ldap_array_ref->[0]){
         return ($preferencia_ldap_array_ref->[0]->getValue);
