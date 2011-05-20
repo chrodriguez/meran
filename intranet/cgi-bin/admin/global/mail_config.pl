@@ -19,7 +19,7 @@ my ($template, $session, $t_params, $socio)  = get_template_and_user({
                             debug => 1,
                  });
 
-
+#FIXME: agregar categoria 'mail' y usar C4::AR::Preferencias::getPreferenciasByCategoria('mail');
 $t_params->{'smtp_server'}                              = C4::Context->preference("smtp_server");
 $t_params->{'smtp_metodo'}                              = C4::Context->preference("smtp_metodo")||1;
 $t_params->{'port_mail'}                                = C4::Context->preference("port_mail");
@@ -29,6 +29,5 @@ $t_params->{'mailFrom'}                                 = C4::Context->preferenc
 $t_params->{'reserveFrom'}                              = C4::Context->preference("reserveFrom");
 $t_params->{'smtp_server_sendmail'}                     = C4::Context->preference("smtp_server_sendmail");
 $t_params->{C4::Context->preference("smtp_metodo")}     = 1;
-
-    
+$t_params->{'page_sub_title'}                           = C4::AR::Filtros::i18n("Configuraci&oacute;n del Mail");
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

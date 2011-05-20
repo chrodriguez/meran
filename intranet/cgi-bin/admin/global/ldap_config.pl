@@ -22,6 +22,8 @@ my ($template, $session, $t_params) = get_template_and_user({
 #preguntamos si esta guardando la informacion o mostrando el tmpl normalmente 
 if($input->param('adding') == 1){
 
+#    FIXME: pasar a una hash     
+    
     C4::AR::Authldap::setVariableLdap('ldap_version',$input->param('version'));
     C4::AR::Authldap::setVariableLdap('ldap_server',$input->param('host_url'));
     C4::AR::Authldap::setVariableLdap('ldap_port',$input->param('host_port'));
