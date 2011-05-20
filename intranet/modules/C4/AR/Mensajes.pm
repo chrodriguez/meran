@@ -76,6 +76,7 @@ my %mensajesOPAC = (
     'U400' => 'UD. acaba de cambiar la password, debe ingresar nuevamente.',
     'U600' => 'Se ha enviado un e-mail con las instrucciones para que pueda reestablecer su acceso a MERAN.',
     'U601' => 'Los datos ingresados no han sido encontrados en nuestros registros. Intentelo nuevamente.',
+    'U602' => 'Imposible reestablecer la clave. El enlace ha vencido.',
 	'B400' => 'Error al intentar reservar desde OPAC, funcion C4::AR::Reservas::reservarOPAC.',
 	'B401' => '',
 	'B402' => '',

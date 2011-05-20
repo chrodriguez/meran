@@ -77,6 +77,7 @@ use vars qw(@EXPORT_OK @ISA);
     crearPersonaLDAP
     _verificarLibreDeuda
     recoverPassword
+    checkRecoverLink
 );
 
 =item
@@ -1071,9 +1072,6 @@ sub _sendRecoveryPasswordMail{
     $mail{'html_content'}           = 1;
     my ($ok, $msg_error)            = C4::AR::Mail::send_mail(\%mail);
 
-
-
-    
 }
 
 sub _buildPasswordRecoverLink{
@@ -1094,7 +1092,7 @@ sub _logClientIpAddress{
 	my ($operation_type, $socio) = @_;
 	use Date::Manip;
 	my $client_id =  $ENV{'REMOTE_ADDR'}." <".$ENV{'REMOTE_NAME'}.">";
-    my $today = Date::Manip::ParseDate("today");
+    my $today = Date::Manip::ParseDate("now");
 
     $socio->client_ip_recover_pwd($client_id);
     $socio->recover_date_of($today);
@@ -1142,6 +1140,40 @@ sub recoverPassword{
 
     return ($message);
 }
+
+
+sub checkRecoverLink{
+	my ($key) = @_;
+
+    my $status = 0;
+    
+    
+    my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
+                                                 query              => [ 'recover_password_hash' => { eq => $key } ],
+                                     );
+
+    if(scalar(@$socio_array_ref)){
+        $status = 1;
+        my $socio          = $socio_array_ref->[0];
+        my $dateformat     = C4::Date::get_date_format();
+        my $hoy            = Date::Manip::ParseDate("now");
+        my $fecha_link     = $socio->recover_date_of;        
+        my $err;
+
+        C4::AR::Debug::debug("FECHA LINK ===================================================================== >".$fecha_link);
+        my $maniana        = Date::Manip::DateCalc( $hoy, "+ 1 day", \$err );
+
+        C4::AR::Debug::debug("FECHA MANIANA ===================================================================== >".$maniana);
+        C4::AR::Debug::debug("FECHA LINK ===================================================================== >".$fecha_link);
+        C4::AR::Debug::debug("COMPARACION DE FECHAS ===================================================================== >".Date::Manip::Date_Cmp(  $fecha_link, $hoy ));
+         
+         
+    }
+	
+	return ($status)
+}
+
+
 
 END { }       # module clean-up code here (global destructor)
 
