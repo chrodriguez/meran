@@ -125,7 +125,6 @@ $(document).ready( function() {
             </label>
                 [% comboTipoDocumento %]
         
-<!-- antes se llamaba a =>   onClick => "mostrarEstructuraDelNivel1();",  -->
             [% PERL %]
                     print C4::AR::Filtros::to_Icon(   
                                                         boton   => "icon_buscar",
@@ -134,16 +133,6 @@ $(document).ready( function() {
                             ) ;
             [% END %]
         </li>
-<!--        <li>
-            [% PERL %]
-                    print C4::AR::Filtros::to_Button(   text    => "[% 'Aceptar' | i18n %]",
-                                                        boton   => "boton_guardar",
-                                                        onClick => "close_window_esquema()",
-                                                        title   => "[% 'Aceptar' | i18n %]",
-                                                        alternClass => "botonCentrado"
-                            ) ;
-            [% END %]    
-        </li>-->
     </ul>
 </fieldset>
 </div>
