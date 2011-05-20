@@ -79,14 +79,13 @@ sub agregar {
     if(!$msg_object->{'error'}){
         $self->save();
 
-    # verificar_alta
-     $params->{'id_ui'}                     = $self->getId_ui_poseedora();
-     $params->{'id3'}                       = $self->getId3();
-     $params->{'estado_nuevo'}              = $self->getIdEstado();          #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)      
-     $params->{'disponibilidad_nueva'}      = $self->getIdDisponibilidad(); #(DISPONIBLE, PRESTAMO, SALA LECTURA)
- 
-     $self->verificar_alta($db, $params, $msg_object);
-
+        $params->{'id_ui'}                     = $self->getId_ui_poseedora();
+        $params->{'id3'}                       = $self->getId3();
+        $params->{'estado_nuevo'}              = $self->getIdEstado();          #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)      
+        $params->{'disponibilidad_nueva'}      = $self->getIdDisponibilidad(); #(DISPONIBLE, PRESTAMO, SALA LECTURA)
+    
+        # verificar_alta
+        $self->verificar_alta($db, $params, $msg_object);
     }
 }
 
@@ -282,8 +281,6 @@ sub modificar {
         }
 
         $self->setMarcRecord($marc_record_base->as_usmarc);
-        $self->setCodigoBarra($marc_record_cliente->subfield("995","f"));
-        $self->setSignatura($marc_record_cliente->subfield("995","t"));
         C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => marc_record as_usmarc para la base ".$marc_record_base->as_usmarc);
         ($MARC_result_array) = C4::AR::Catalogacion::marc_record_to_meran(MARC::Record->new_from_usmarc($marc_record_base->as_usmarc), $params->{'tipo_ejemplar'});
 
@@ -291,6 +288,9 @@ sub modificar {
         $self->setMarcRecord($params->{'marc_record'});
         ($MARC_result_array) = C4::AR::Catalogacion::marc_record_to_meran(MARC::Record->new_from_usmarc($params->{'marc_record'}), $params->{'tipo_ejemplar'});
     }
+
+    $self->setCodigoBarra($marc_record_cliente->subfield("995","f"));
+    $self->setSignatura($marc_record_cliente->subfield("995","t"));
 
    C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => self->getId3() => ANTES ".$self->getId3());
 
