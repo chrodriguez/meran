@@ -44,7 +44,10 @@ elsif($tipo eq "VER_BUSQUEDAS"){
                     query => $input,
                     type => "intranet",
                     authnotrequired => 0,
-                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                    flagsrequired => {  ui => 'ANY', 
+                                        tipo_documento => 'ANY', 
+                                        accion => 'CONSULTA', 
+                                        entorno => 'undefined'},
                     });
 
     my $busquedas = C4::AR::Z3950::getBusquedas();
@@ -61,7 +64,10 @@ elsif($tipo eq "VER_RESULTADO"){
                     query => $input,
                     type => "intranet",
                     authnotrequired => 0,
-                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                    flagsrequired => {  ui => 'ANY', 
+                                        tipo_documento => 'ANY', 
+                                        accion => 'CONSULTA', 
+                                        entorno => 'undefined'},
                     });
 
     my $id_busqueda = $obj->{'id_busqueda'};
@@ -79,7 +85,10 @@ elsif($tipo eq "VER_DETALLE_MARC"){
                     query => $input,
                     type => "intranet",
                     authnotrequired => 0,
-                    flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                    flagsrequired => {  ui => 'ANY', 
+                                        tipo_documento => 'ANY', 
+                                        accion => 'CONSULTA', 
+                                        entorno => 'undefined'},
                     });
 
     my $id_resultado = $obj->{'id_resultado'};

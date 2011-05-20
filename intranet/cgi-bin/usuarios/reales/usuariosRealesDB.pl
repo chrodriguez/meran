@@ -17,7 +17,11 @@ if($editing){
                         query => $input,
                         type => "intranet",
                         authnotrequired => 0,
-                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'permisos', tipo_permiso => 'general'},
+                        flagsrequired => {  ui => 'ANY', 
+                                            tipo_documento => 'ANY', 
+                                            accion => 'CONSULTA', 
+                                            entorno => 'permisos',  
+                                            tipo_permiso => 'general'},
                         debug => 1,
                     });
     my %params = {};
@@ -121,7 +125,10 @@ if($editing){
                                         query => $input,
                                         type => "intranet",
                                         authnotrequired => 0,
-                                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'usuarios'},
+                                        flagsrequired => {  ui => 'ANY', 
+                                                            tipo_documento => 'ANY', 
+                                                            accion => 'CONSULTA', 
+                                                            entorno => 'usuarios'},
                                         debug => 1,
                     });
 
@@ -237,7 +244,10 @@ Se genra la ventana para modificar los datos del usuario
                                         query           => $input,
                                         type            => "intranet",
                                         authnotrequired => 0,
-                                        flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'MODIFICACION', entorno => 'usuarios'},
+                                        flagsrequired   => {    ui => 'ANY', 
+                                                                tipo_documento => 'ANY', 
+                                                                accion => 'MODIFICACION', 
+                                                                entorno => 'usuarios'},
                                         debug           => 1,
         });
 
@@ -302,7 +312,10 @@ Se genra la ventana para modificar los datos del usuario
                                         query => $input,
                                         type => "intranet",
                                         authnotrequired => 0,
-                                        flagsrequired => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+                                        flagsrequired => {  ui => 'ANY', 
+                                                            tipo_documento => 'ANY', 
+                                                            accion => 'CONSULTA', 
+                                                            entorno => 'undefined'},
                                         debug => 1,
         });
         C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
