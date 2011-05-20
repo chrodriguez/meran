@@ -245,7 +245,7 @@ sub prestar {
 
 	#Se verifica si ya se tiene la reserva sobre el grupo
 	my ( $reservas, $cant ) =
-	  C4::AR::Reservas::getReservasDeSocio( $nro_socio, $id2 );
+	  C4::AR::Reservas::getReservasDeSocio( $nro_socio, $id2 ,$self->db);
 
 #********************************        VER!!!!!!!!!!!!!! *************************************************
 # Si tiene un ejemplar prestado de ese grupo no devuelve la reserva porque en el where estado <> P, Salta error cuando se quiere crear una nueva reserva por el else de abajo. El error es el correcto, pero se puede detectar antes.
@@ -267,8 +267,7 @@ sub prestar {
 #se le esta entregando un item que es <> al que se le asigno al relizar la reserva
 #Se intercambiaron los id3 de las reservas, si el item que se quiere prestar esta prestado se devuelve el error.
 #Los ids son distintos, se intercambian.
-			$reservas->[0]->db = $self->db;
-			$reservas->[0]->intercambiarId3( $id3, $msg_object );
+			$reservas->[0]->intercambiarId3( $id3, $msg_object , $self->db);
 		}
 
 	}
@@ -290,21 +289,15 @@ sub prestar {
 		my $reserva = C4::AR::Reservas::getReservaDeId3($id3);
 
 		if ($reserva) {
-			$self->debug(
-"El item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario"
-			);
+			$self->debug("El item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario");
 
 #el item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario
 			my ($nivel3) =
-			  C4::AR::Reservas::getNivel3ParaReserva( $params->{'id2'},
-				$disponibilidad );
+			  C4::AR::Reservas::getNivel3ParaReserva( $params->{'id2'}, $disponibilidad,$self->db );
 			if ($nivel3) {
 
 		 #CAMBIAMOS EL ID3 A OTRO LIBRE Y ASI LIBERAMOS EL QUE SE QUIERE PRESTAR
-				$self->debug(
-"CAMBIAMOS EL ID3 A OTRO LIBRE Y ASI LIBERAMOS EL QUE SE QUIERE PRESTAR"
-				);
-				$reserva->db = $self->db;
+				$self->debug("CAMBIAMOS EL ID3 A OTRO LIBRE Y ASI LIBERAMOS EL QUE SE QUIERE PRESTAR");
 				$reserva->setId3( $nivel3->getId3 );
 				$reserva->save();
 
@@ -593,7 +586,7 @@ sub devolver {
 		my $daysissue = $self->tipo->getDias_prestamo;
 
 		use C4::AR::Sanciones;
-		my $diasSancion =  C4::AR::Sanciones::diasDeSancion( $fechaHoy, $fechaVencimiento,$self->socio->categoria->getCategory_code ,$self->getTipo_prestamo );
+		my $diasSancion =  C4::AR::Sanciones::diasDeSancion( $fechaHoy, $fechaVencimiento,$self->socio->getCod_categoria ,$self->getTipo_prestamo );
 
 		if ( $diasSancion > 0 ) {
 

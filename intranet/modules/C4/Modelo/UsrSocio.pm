@@ -400,6 +400,11 @@ sub setId_ui{
     $self->id_ui($id_ui);
 }
 
+sub getCod_categoria{
+    my ($self) = shift;
+    return ($self->categoria->getCategory_code);
+}
+
 sub getId_categoria{
     my ($self) = shift;
     return ($self->id_categoria);

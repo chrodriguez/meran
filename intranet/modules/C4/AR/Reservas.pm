@@ -103,7 +103,10 @@ sub getReservaActiva{
     Busca un nivel3 sin reservas para los prestamos y nuevas reservas.
 =cut
 sub getNivel3ParaReserva{
-    my ($id2, $disponibilidad) = @_;
+    my ($id2, $disponibilidad, $db) = @_;
+
+
+    $db = $db || C4::Modelo::CatRegistroMarcN3->new()->db;
 
     my $diponibilidad_filtro       = C4::AR::Referencias::getIdRefDisponibilidadDomiciliaria(); # 1 =  Domiciliario
     my $estado_disponible_filtro   = C4::AR::Referencias::getIdRefEstadoDisponible();           # 3 =  Disponible
@@ -114,7 +117,7 @@ sub getNivel3ParaReserva{
     push (  @filtros, ( marc_record => { like => '%'.$diponibilidad_filtro.'%' } ) );       #con esta disponibilidad
     push (  @filtros, ( marc_record => { like => '%'.$estado_disponible_filtro.'%' } ) );   #con estado disponible
 
-    my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => [ @filtros ] );
+    my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(  db => $db ,query => [ @filtros ] );
 
     foreach my $nivel3 (@$nivel3_array_ref){
 	C4::AR::Debug::debug("getNivel3ParaReserva=> id3: ".$nivel3->getId3);
@@ -318,92 +321,6 @@ sub cantReservasPorGrupoEnEspera{
     my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( query => \@filtros); 
 
     return ($reservas_count);
-}
-
-sub _chequeoParaPrestamo {
-    my($params,$msg_object)=@_;
-    my $dbh=C4::Context->dbh;
-
-    my $nro_socio= $params->{'nro_socio'};
-    my $id2= $params->{'id2'};
-    my $id3= $params->{'id3'};
-C4::AR::Debug::debug("_chequeoParaPrestamo=> id2: ".$id2);
-C4::AR::Debug::debug("_chequeoParaPrestamo=> id3: ".$id3);
-C4::AR::Debug::debug("_chequeoParaPrestamo=> nro_socio: ".$nro_socio);
-#Se verifica si ya se tiene la reserva sobre el grupo
-    my ($reservas, $cant)= C4::AR::Reservas::getReservasDeSocio($nro_socio, $id2);# ver lo que sigue.
-#   $params->{'reservenumber'}= $reservas->[0]->getId_reserva;
-
-# print A "reservenumber de reserva: $reservas->[0]->getId_reserva\n";
-
-#********************************        VER!!!!!!!!!!!!!! *************************************************
-# Si tiene un ejemplar prestado de ese grupo no devuelve la reserva porque en el where estado <> P, Salta error cuando se quiere crear una nueva reserva por el else de abajo. El error es el correcto, pero se puede detectar antes.
-# Tendria que devolver todas las reservas y despues verificar los tipos de prestamos de cada ejemplar (notforloan)
-# Si esta prestado la clase de prestamo que se quiere hacer en este momento. 
-# Si no esta prestado se puede hacer lo de abajo, lo que sigue (estaba pensado para esa situacion).
-# Tener en cuenta los prestamos especiales, $tipo_prestamo ==> ES ---> SA. **** VER!!!!!!
-    my $disponibilidad=C4::AR::Reservas::getDisponibilidad($id3);
-    if($cant == 1 && $disponibilidad eq "Domiciliario"){
-    #El usuario ya tiene la reserva, se le esta entregando un item que es <> al que se le asigno al relizar la reserva
-    #Se intercambiaron los id3 de las reservas, si el item que se quiere prestar esta prestado se devuelve el error.
-        if($id3 != $reservas->[0]->getId3){
-        #Los ids son distintos, se intercambian.
-            C4::AR::Reservas::intercambiarId3($nro_socio,$id2,$id3,$reservas->[0]->getId3,$msg_object);
-        }
-    }
-    elsif($cant==1 && $disponibilidad eq "Para Sala"){
-        #FALTA!!! SE PUEDE PONER EN EL ELSE???  
-        #llamar a la funcion verificaciones!!
-        #verificar disponibilidad del item??? ya esta prestado- hay libre para prestamo de SALA.
-        #es un prestamo ES ?????? ****VER****
-    }
-    else{
-        #Se verifca disponibilidad del item;
-        my $data=C4::AR::Reservas::getReservaDeId3($id3);
-        my $sePermiteReservaGrupo=1;
-        if ($data){
-        #el item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario
-            my $datosNivel3= C4::AR::Reservas::getNivel3ParaReserva($params->{'id2'},$disponibilidad);
-            if($datosNivel3){
-                C4::AR::Reservas::cambiarId3($datosNivel3->getId3,$data->getId_reserva);
-                # el id3 de params quedo libre para ser reservado
-            }
-            else{
-# NO HAY EJEMPLARES LIBRES PARA EL PRESTAMO, SE PONE EL ID3 EN "" PARA QUE SE
-# REALIZE UNA RESERVA DE GRUPO, SI SE PERMITE.
-                $params->{'id3'}="";
-                if(!C4::AR::Preferencias::getValorPreferencia('intranetGroupReserve')){
-                #NO SE PERMITE LA RESERVA DE GRUPO
-                    $sePermiteReservaGrupo=0;
-                    #Hay error no se permite realizar una reserva de grupo en intra.
-                    $msg_object->{'error'}= 1;
-                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R004', 'params' => []} ) ;
-                }else{
-                #SE PERMITE LA RESERVA DE GRUPO
-                    #No hay error, se realiza una reserva de grupo.
-                    $msg_object->{'error'}= 1;
-                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R005', 'params' => []} ) ;
-                }
-            }
-        }
-        #Se realiza una reserva
-        if($sePermiteReservaGrupo){
-            my ($reserva) = C4::Modelo::CircReserva->new();
-            $reserva->load();
-#           my $db = $reserva->db;
-# # FIXME faltan devolver los parametros
-#           my ($paraReservas)= reservar($params);
-#           $params->{'reservenumber'}= $paraReservas->{'reservenumber'};
-        }
-    }
-    
-    if(!$msg_object->{'error'}){
-    #No hay error, se realiza el pretamo
-        C4::AR::Reservas::insertarPrestamo($params);
-
-        #se realizan las verificacioines luego de realizar el prestamo
-        C4::AR::Reservas::_verificacionesPostPrestamo($params,$msg_object);
-    }
 }
 
 #para enviar un mail cuando al usuario se le asigna una reserva
@@ -727,14 +644,16 @@ sub _verificarTipoReserva {
     devuelve las reservas de grupo del usuario
 =cut
 sub getReservasDeSocio {
-    my ($nro_socio,$id2)=@_;
+    my ($nro_socio,$id2, $db)=@_;
+
+    $db = $db || C4::Modelo::CircReserva->new()->db;
 
     my @filtros;
     push(@filtros, ( id2        => { eq => $id2}));
     push(@filtros, ( nro_socio  => { eq => $nro_socio} ));
 #     push(@filtros, ( estado     => { ne => 'P'} ));
 
-    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros);
+    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(  db => $db, query => \@filtros);
 
    C4::AR::Debug::debug("getReservasDeSocio -->>  reservas de $id2 de grupo de $nro_socio = ".scalar(@$reservas_array_ref) );
 
@@ -1307,7 +1226,7 @@ sub reasignarNuevoEjemplarAReserva{
         if($nuevoId3){
             C4::AR::Debug::debug("Reservas => reasignarNuevoEjemplarAReserva => EXISTE ejemplar disponible");
             #EXISTE un ejemplar disponible
-            $reserva_asignada->intercambiarId3 ($db, $nuevoId3, $msg_object);
+            $reserva_asignada->intercambiarId3 ($nuevoId3, $msg_object, $db);
         }else{
             C4::AR::Debug::debug("Reservas => reasignarNuevoEjemplarAReserva => NO EXISTE");
             #NO EXISTE un ejemplar disponible del grupo
