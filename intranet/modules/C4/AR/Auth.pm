@@ -488,7 +488,7 @@ sub _verificarSession {
                     C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => sesion invalido => token invalido");    
                   } else {
                          if (C4::AR::Usuarios::needsDataValidation($session->param('userid')) != 0){
-                                 C4::AR::Debug::debug("ENTROOOOOOOOOOOOOOOOOO");
+                                
                                  $codeMSG='U309';            
                                  C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => datos censales invalidos");  
                                  return ($codeMSG,"datos_censales_invalidos");
@@ -644,6 +644,7 @@ sub checkauth {
                 #usuario o password invalida
                 if ($userid) {
                     #intento de loguin
+#                     C4::AR::Utilidades::printHASH($socio);
                     $template_params->{'loginAttempt'} = 1;
                     _destruirSession('U406', $template_params);
                 }
