@@ -23,7 +23,7 @@ INSERT INTO `pref_preferencia_sistema` (`id`, `variable`, `value`, `explanation`
 (NULL, 'ldap_passtype', '', 'Especifique el formato de las contraseñ o cambiadas en el servidor LDAP', '', '', 'auth'),
 (NULL, 'ldap_changepasswordurl', '', 'Aqui puede especificar donde pueden sus usuarios recuperar o cambiar su nombre de usuario/contraseñan olvidado. Para ello, aparecera un boton en la pagina de entrada. Si deja esto en blanco, este boton no se mostrara.', '', '', 'auth'),
 (NULL, 'ldap_expiration', '', 'Seleccione No para deshabilitar comprobar si la contraseñ caducado, o LDAP para leer el tiempo de caducidad de la contraseñctamente de LDAP.', '', '', 'auth'),
-(NULL, 'ldap_expiration_warning', '', 'Numero de dias antes de que aparezca la advertencia de caducidad de la contraseñ '', '', 'auth'),
+(NULL, 'ldap_expiration_warning', '', 'Numero de dias antes de que aparezca la advertencia de caducidad de la contraseña', '', '', 'auth'),
 (NULL, 'ldap_expireattr', '', 'Opcional: anula el atributo ldap que almacena el tiempo de caducidad de la contraseñdExpirationTime.', '', '', 'auth'),
 (NULL, 'ldap_gracelogins', '', 'Activar el soporte de entrada libre LDAP. Una ves que la contraseñcado, el usuario puede entrar hasta que la cuenta de acceso libre llega a cero. Si se activa esta opcion se mostrara un mensaje de acceso libre en el caso de que la contraseñducado.', '', '', 'auth'),
 (NULL, 'ldap_graceattr', '', 'Opcional: Anula el atributo gracelogin.', '', '', 'auth'),
