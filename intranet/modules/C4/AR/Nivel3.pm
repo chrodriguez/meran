@@ -644,7 +644,7 @@ Funcion interna al pm
 Genera el codigo de barras del item automanticamente por medio de una consulta a la base de datos, esta funcion es llamada desde una transaccion.
 Los parametros son el manejador de la base de datos y los parametros que necesita para generar el codigo de barra.
 =cut
-# FIXME no esta funcionando bien
+
 sub generaCodigoBarra{
     my($parametros, $cant) = @_;
 
@@ -663,13 +663,8 @@ sub generaCodigoBarra{
 		}
 	}
 
-C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => MAXIMO => like => ".$like);
-
     # Puede venir el db tambien!!
-    my $max_codigo = C4::Modelo::CatRegistroMarcN3::Manager->get_maximum_codigo_barra(like => $like.'%');
-
-    $max_codigo = $max_codigo || 0;
-    C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => MAXIMO => ". $max_codigo);
+    my $max_codigo = C4::Modelo::CatRegistroMarcN3::Manager->get_maximum_codigo_barra(like => $like.'%') || 0;
 
     my @barcodes_array_ref;
     for(my $i=1;$i<=$cant;$i++){
