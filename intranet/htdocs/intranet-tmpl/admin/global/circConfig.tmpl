@@ -1,8 +1,74 @@
 [% INCLUDE "intranet-top.inc" %]
 
-<fieldset id="reportes">
-    <legend class="titulo_legend"> [% "Configuraci&oacute;n Circulaci&oacute;n" | i18n %] </legend>
-    BLA BLA BLA
-</fieldset>
+<script type="text/javascript" language="javascript" charset="utf-8">
+
+$(document).ready(function() {
+    actualizarTabla()
+    zebra('datos_tabla')
+});
+
+function actualizarTabla(){
+    objAH               = new AjaxHelper(updateActualizarTabla)
+	objAH.debug         = true
+	objAH.url           = "/cgi-bin/koha/admin/global/preferenciasDB.pl"
+    objAH.showOverlay   = true
+	objAH.accion        = "ACTUALIZAR_TABLA_CIRCULACION"
+	objAH.sendToServer()
+}
+
+function updateActualizarTabla(responseText){
+    $("#result").html(responseText)
+    zebra('datos_tabla')
+}
+
+function modificarVariable(variable,tipo){
+
+	objAH                       = new AjaxHelper(updateModificarVariable)
+	objAH.debug                 = true
+    objAH.showOverlay           = true
+	objAH.url                   = "/cgi-bin/koha/admin/global/preferenciasDB.pl"
+	objAH.variable              = variable
+	objAH.accion                = "MODIFICAR_VARIABLE"
+	objAH.sendToServer();
+}
+
+function updateModificarVariable(responseText){
+    $("#divResultado").show()
+	$("#divResultado").html(responseText)
+}
+
+
+function guardarModificacion(){
+
+	objAH               = new AjaxHelper(updateGuardarModificacion)
+	objAH.debug         = true
+	objAH.url           = "/cgi-bin/koha/admin/global/preferenciasDB.pl"
+    objAH.showOverlay   = true
+	objAH.variable      = $("#variable").val()
+	objAH.valor         = $("#valor").val()
+    objAH.categoria     = 'circulacion'
+
+	if ($("#tipoVar").val() == 'bool'){
+	    objAH.valor=(getRadioButtonSelectedValue( $("[name=valor]")))
+	}
+
+	objAH.explicacion   = $("#explicacion").val()
+	objAH.accion        = "GUARDAR_MODIFICACION_VARIABLE"
+	objAH.sendToServer()
+
+}
+
+
+function updateGuardarModificacion(responseText){
+    actualizarTabla()
+    $("#divResultado").hide()
+	var Messages=JSONstring.toObject(responseText)
+	setMessages(Messages)
+}
+
+</script>
+
+<div id="result"></div>
+
 
 [% INCLUDE "intranet-bottom.inc" %]
