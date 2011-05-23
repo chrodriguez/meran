@@ -648,9 +648,7 @@ Los parametros son el manejador de la base de datos y los parametros que necesit
 sub generaCodigoBarra{
     my($parametros, $cant) = @_;
 
-    my $dbh   = C4::Context->dbh;
-
-	my $barcode;
+   my $barcode;
     my @estructurabarcode = split(',',C4::AR::Preferencias::getValorPreferencia("barcodeFormat"));
     
     my $like = '';
