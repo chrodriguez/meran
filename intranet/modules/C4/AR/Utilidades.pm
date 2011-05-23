@@ -19,7 +19,7 @@ use Encode;
 use POSIX qw(ceil floor); 
 use JSON;
 use C4::AR::Preferencias;
-
+use URI::Escape;
 # FIXME Matiasp: Comentado por error de carga de módulos (Attempt to reload %s aborted.)
 # use C4::AR::Presupuestos;
 # use C4::AR::PedidoCotizacion;
@@ -114,6 +114,7 @@ use vars qw(@EXPORT_OK @ISA);
     generarComboEstantes
     generarComboTipoDeDocConValuesIds
     isValidFile
+    escapeURL
 );
 
 # para los combos que no usan tablas de referencia
@@ -3982,7 +3983,13 @@ sub isValidFile{
     return ($return_value);
 }
 
-
+sub escapeURL{
+	my ($url) = @_;
+	
+	$url = URI::Escape::uri_escape_utf8($url);
+	
+	return ($url);
+}
 
 END { }       # module clean-up code here (global destructor)
 

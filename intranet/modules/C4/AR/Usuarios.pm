@@ -1043,7 +1043,6 @@ sub _sendRecoveryPasswordMail{
     $mail{'mail_from'}             = C4::AR::Preferencias::getValorPreferencia("reserveFrom");
     $mail{'mail_to'}               = $socio->persona->getEmail;
     
-    C4::AR::Debug::debug("SEND MAIL A ============================================================== >".$mail{'mail_to'});
     $mail{'mail_subject'}          = C4::AR::Filtros::i18n("Instrucciones para reestablecer su clave");
     
     
@@ -1081,14 +1080,17 @@ sub _sendRecoveryPasswordMail{
 
 sub _buildPasswordRecoverLink{
 	my ($socio) = @_;
-	
 	my $link = "";
 	
 	my $hash = sha256_base64(localtime().$socio->getPassword().$socio->getLastValidation());
+
+    my $encoded_hash    = C4::AR::Utilidades::escapeURL($hash);
+
 	
-    my $link = "http://".$ENV{'SERVER_NAME'}."/cgi-bin/koha/opac-recover-password.pl?key=".$hash;
+    my $link = "http://".$ENV{'SERVER_NAME'}."/cgi-bin/koha/opac-recover-password.pl?key=".$encoded_hash;
     
-    return ($link,$hash);	
+    
+    return ($link,$hash,$encoded_hash);	
 	
 	
 }
@@ -1113,12 +1115,11 @@ sub recoverPassword{
 
     my $message             = undef;
     my $socio               = undef;
-    my $link                = undef;
-    my $hash                = undef;
     my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
     my $reCaptchaChallenge  = $params->{'recaptcha_challenge_field'};
     my $reCaptchaResponse   = $params->{'recaptcha_response_field'};
     my $isError             = 0;
+    use HTML::Entities;
     
     use Captcha::reCAPTCHA;
     my $c = Captcha::reCAPTCHA->new;
@@ -1150,11 +1151,11 @@ sub recoverPassword{
 		    
 		    eval{
 			    _logClientIpAddress('recover_password',$socio);
-				($link,$hash) = _buildPasswordRecoverLink($socio);
-				($isError) = _sendRecoveryPasswordMail($socio,$link);
+				my ($link,$hash) = _buildPasswordRecoverLink($socio);
+				($isError)                      = _sendRecoveryPasswordMail($socio,$link);
                 $socio->setRecoverPasswordHash($hash);
 				$db->commit;
-                $message = C4::AR::Mensajes::getMensaje('U600','opac');
+                $message                    = C4::AR::Mensajes::getMensaje('U600','opac');
             };
 	        if (($@) || $isError){
 	        	$message = C4::AR::Mensajes::getMensaje('U606','opac');
@@ -1181,7 +1182,6 @@ sub checkRecoverLink{
 	my ($key) = @_;
 
     my $status = 0;
-    
     
     my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
                                                  query              => [ 'recover_password_hash' => { eq => $key } ],
