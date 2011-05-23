@@ -1042,6 +1042,8 @@ sub _sendRecoveryPasswordMail{
     
     $mail{'mail_from'}             = C4::AR::Preferencias::getValorPreferencia("reserveFrom");
     $mail{'mail_to'}               = $socio->persona->getEmail;
+    
+    C4::AR::Debug::debug("SEND MAIL A ============================================================== >".$mail{'mail_to'});
     $mail{'mail_subject'}          = C4::AR::Filtros::i18n("Instrucciones para reestablecer su clave");
     
     
@@ -1057,7 +1059,7 @@ sub _sendRecoveryPasswordMail{
 
     my $mailMessage =
                 "
-		                Estimado $completo ($nro_socio), socio de $nombre_ui, recientemente UD ha solicitado reestablecer su clave.\n
+		                Estimado/a $completo ($nro_socio), socio de $nombre_ui, recientemente UD ha solicitado reestablecer su clave.\n
 		                Para hacerlo, haga click en el siguiente enlace y siga los pasos que el sistema le va a indicar:\n
 		                            $link\n
 		                
@@ -1072,6 +1074,8 @@ sub _sendRecoveryPasswordMail{
     $mail{'mail_message'}           = $mailMessage;
     $mail{'html_content'}           = 1;
     my ($ok, $msg_error)            = C4::AR::Mail::send_mail(\%mail);
+    
+    return (!$ok,$msg_error);
 
 }
 
@@ -1105,41 +1109,71 @@ sub _logClientIpAddress{
 }
 
 sub recoverPassword{
-	my ($user_id) = @_;
+	my ($params) = @_;
 
-    my $message     = undef;
-    my $socio       = undef;
-    my $link        = undef;
-    my $hash        = undef;
+    my $message             = undef;
+    my $socio               = undef;
+    my $link                = undef;
+    my $hash                = undef;
+    my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
+    my $reCaptchaChallenge  = $params->{'recaptcha_challenge_field'};
+    my $reCaptchaResponse   = $params->{'recaptcha_response_field'};
+    my $isError             = 0;
     
-    my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
-                                                 query              => [ 'usr_persona.email' => { eq => $user_id } ],
-                                                 require_objects    => ['persona'],
-                                     );
+    use Captcha::reCAPTCHA;
+    my $c = Captcha::reCAPTCHA->new;
+    
+    my $captchaResult = $c->check_answer(
+        $reCaptchaPrivateKey, $ENV{'REMOTE_ADDR'},
+        $reCaptchaChallenge, $reCaptchaResponse
+    );
 
-    if(scalar(@$socio_array_ref)){
-         $socio =  $socio_array_ref->[0];
+    if ( $captchaResult->{is_valid} ) {
+
+	    my $user_id = $params->{'user-id'};
+	    my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
+	                                                 query              => [ 'usr_persona.email' => { eq => $user_id } ],
+	                                                 require_objects    => ['persona'],
+	                                                 select             => ['persona.*','usr_socio.*'],
+	                                     );
+	
+	    if(scalar(@$socio_array_ref)){
+	         $socio =  $socio_array_ref->[0];
+	    }else{
+	         $socio =  C4::AR::Usuarios::getSocioInfoPorNroSocio($user_id);
+	    }
+		
+		if ($socio){
+		    my $db = $socio->db;
+            $db->{connect_options}->{AutoCommit} = 0;
+            $db->begin_work;
+		    
+		    eval{
+			    _logClientIpAddress('recover_password',$socio);
+				($link,$hash) = _buildPasswordRecoverLink($socio);
+				($isError) = _sendRecoveryPasswordMail($socio,$link);
+                $socio->setRecoverPasswordHash($hash);
+				$db->commit;
+                $message = C4::AR::Mensajes::getMensaje('U600','opac');
+            };
+	        if (($@) || $isError){
+	        	$message = C4::AR::Mensajes::getMensaje('U606','opac');
+	            &C4::AR::Mensajes::printErrorDB($@, 'B423',"OPAC");
+	            $db->rollback;
+	        }
+
+	        $db->{connect_options}->{AutoCommit} = 1;
+	        		
+		}else{
+	        $message = C4::AR::Mensajes::getMensaje('U601','opac');
+	        $isError = 1;
+		}
     }else{
-         $socio =  C4::AR::Usuarios::getSocioInfoPorNroSocio($user_id);
+    	$message = C4::AR::Mensajes::getMensaje('U605','opac');
+    	$isError = 1;
     }
-	
-	if ($socio){
-	
-	    _logClientIpAddress('recover_password',$socio);
-	    
-		($link,$hash) = _buildPasswordRecoverLink($socio);
-		
-		$socio->setRecoverPasswordHash($hash);
-		
-		_sendRecoveryPasswordMail($socio,$link);
-		
-        $message = C4::AR::Mensajes::getMensaje('U600','opac');
-        		
-	}else{
-        $message = C4::AR::Mensajes::getMensaje('U601','opac');
-	}
 
-    return ($message);
+    return ($isError,$message);
 }
 
 

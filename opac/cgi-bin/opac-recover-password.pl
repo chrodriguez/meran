@@ -7,12 +7,16 @@ use C4::AR::Auth;
 use CGI;
 
 my $query = new CGI;
+my $params = $query->Vars;
 
 my ($template, $t_params)= C4::Output::gettemplate("opac-main.tmpl", 'opac',1);
 
 $t_params->{'type'}='opac';
 
-my $key = $t_params->{'key'} = $query->param("key");
+my $key = $t_params->{'key'} = $params->{"key"};
+
+my $recaptcha_challenge_field = $t_params->{'recaptcha_challenge_field'} = $query->param("key");
+my $recaptcha_response_field = $t_params->{'recaptcha_response_field'} = $query->param("key");
 
 my ($session) = C4::AR::Auth::inicializarAuth($t_params);
 
@@ -20,8 +24,6 @@ my ($validLink) = C4::AR::Usuarios::checkRecoverLink($key);
 
 if ($validLink){
     if ($query->param("newpassword1") && $query->param("newpassword1")){
-    	my $params = $query->Vars;
-
     	$t_params->{'message'} = C4::AR::Usuarios::changePasswordFromRecover($params);
         $t_params->{'partial_template'}= "_message.inc";
     }else{

@@ -7,9 +7,11 @@ use C4::AR::Auth;
 use CGI;
 
 my $query = new CGI;
+my $params = $query->Vars;
 
 my ($template, $t_params)= C4::Output::gettemplate("opac-main.tmpl", 'opac',1);
 
+$t_params->{'partial_template'}= "opac-forgot-password.inc";
 $t_params->{'type'}='opac';
 
 my $user_id = $t_params->{'user-id'} = $query->param("user-id");
@@ -17,7 +19,6 @@ my $user_id = $t_params->{'user-id'} = $query->param("user-id");
 my ($session) = C4::AR::Auth::inicializarAuth($t_params);
 
 if (!C4::AR::Utilidades::validateString($user_id)){
-	$t_params->{'partial_template'}= "opac-forgot-password.inc";
 	
 	$t_params->{'sessionClose'} = $query->param('sessionClose') || 0;
 	
@@ -36,7 +37,11 @@ if (!C4::AR::Utilidades::validateString($user_id)){
 	}
 	
 }else{
-	$t_params->{'partial_template'}= "_message.inc";
-	$t_params->{'message'} = C4::AR::Usuarios::recoverPassword($user_id);
+	my ($error, $msg) = C4::AR::Usuarios::recoverPassword($params);
+	$t_params->{'message'} = $msg;
+
+	if (!$error){
+		  $t_params->{'partial_template'}= "_message.inc";
+	}
 }
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
