@@ -45,6 +45,14 @@
 	                                                       ) ;
 	                       [% END %]
 	                   </li>
+	                   <li>
+		                                [% PERL %]
+		                                    print C4::AR::Filtros::link_to( text =>     "[% 'Preferencias Cat&aacute;logo' | i18n %]",
+		                                                                    url =>      "/cgi-bin/koha/admin/global/catalogo_config.pl", 
+		                                                                    title =>    "[% 'Preferencias Cat&aacute;logo' | i18n %]"
+		                                                                ) ;
+		                                [% END %]
+		              </li>
 	
 	                </ul>
 	               </li>
@@ -216,6 +224,15 @@
 	                                                      ) ;
 	                      [% END %]
 	            </li>
+	            </li>
+		                    		                    <li>
+		                                [% PERL %]
+		                                    print C4::AR::Filtros::link_to( text  => "[% 'Preferencias Circulaci&oacute;n' | i18n %]",
+		                                                                    url   => "/cgi-bin/koha/admin/global/circ_config.pl",
+		                                                                    title => "[% 'Preferencias Circulaci&oacute;n' | i18n %]"
+		                                                                ) ;
+		                                [% END %]
+		                    </li>
 	          </ul>
 	       </div>
 
@@ -477,14 +494,6 @@
 		                    </li>
 		                    <li>
 		                                [% PERL %]
-		                                    print C4::AR::Filtros::link_to( text =>     "[% 'Preferencias Cat&aacute;logo' | i18n %]",
-		                                                                    url =>      "/cgi-bin/koha/admin/global/catalogo_config.pl", 
-		                                                                    title =>    "[% 'Preferencias Cat&aacute;logo' | i18n %]"
-		                                                                ) ;
-		                                [% END %]
-		                    </li>
-		                    <li>
-		                                [% PERL %]
 		                                    print C4::AR::Filtros::link_to( text =>     "[% 'Configuraci&oacute;n del Mail' | i18n %]",
 		                                                                    url =>      "/cgi-bin/koha/admin/global/mail_config.pl", 
 		                                                                    title =>    "[% 'Configuraci&oacute;n del Mail' | i18n %]"
@@ -496,15 +505,6 @@
 		                                    print C4::AR::Filtros::link_to( text =>     "[% 'Configuraci&oacute;n LDAP' | i18n %]",
 		                                                                    url =>      "/cgi-bin/koha/admin/global/ldap_config.pl",
 		                                                                    title =>    "[% 'Feriados' | i18n %]"
-		                                                                ) ;
-		                                [% END %]
-		                    </li>
-		                    </li>
-		                    		                    <li>
-		                                [% PERL %]
-		                                    print C4::AR::Filtros::link_to( text  => "[% 'Configuraci&oacute;n Circulaci&oacute;n' | i18n %]",
-		                                                                    url   => "/cgi-bin/koha/admin/global/circ_config.pl",
-		                                                                    title => "[% 'Configuraci&oacute;n Circulaci&oacute;n' | i18n %]"
 		                                                                ) ;
 		                                [% END %]
 		                    </li>
