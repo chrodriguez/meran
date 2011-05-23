@@ -55,7 +55,7 @@ function mostrarCombos(){
  * agregarPreferencia
  * Muestra la parte de agregado de una variable con los componentes correspondientes con el tipo de variable que
  * se eligio.
- */
+
 function agregarPreferencia(){
 	var tipo=$("#tipoVar").val();
 	ocultarCombos();
@@ -92,7 +92,7 @@ function agregarPreferencia(){
 
 function updateAgregarPreferencia(responseText){
 	$("#divResultado").html(responseText);
-}
+}*/
 
 /*
  * selectOpcion
@@ -406,34 +406,6 @@ $(document).ready( function() {
         </li>
     </ul>
 </fieldset>
-
-<div id="divCombos" style="clear: both;">
-    <fieldset id="reportes">
-        <legend class="titulo_legend"> [% "Agregar" | i18n %] </legend>
-        <ul>
-            <li class="sub_item">
-                <select id="tipoVar" onChange="selectOpcion()">
-                    <option value="0">[% "Seleccionar ..." | i18n %]</option>
-                    <option value="bool">[% "Si-No" | i18n %]</option>
-                    <option value="texta">[% "Texto grande" | i18n %]</option>
-                    <option value="text">[% "Texto com&uacute;n" | i18n %]</option>
-                    <option value="referencia">[% "Referencia" | i18n %]</option>
-                    <option value="valAuto">[% "Valores autorizados" | i18n %]</option>
-                </select>
-            </li>
-        </ul>
-
-    <div id="divAgregar" style="clear: both;"></div>
-    [% PERL %]
-                        print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar' | i18n %]",
-                                                            boton   => "boton_agregar",
-                                                            onClick => "agregarPreferencia();",
-                                                            title   => "[% 'Agregar' | i18n %]",
-                                                            alternClass => "botonCentrado"
-                                ) ;
-    [% END %]
-</fieldset>
-</div>
 
 <div id="divResultado" style="clear: both;"></div>
 

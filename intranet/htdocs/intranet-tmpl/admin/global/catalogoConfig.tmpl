@@ -50,7 +50,7 @@ function guardarModificacion(){
  * todas las variables, si existe muestra un mensaje de error en la pantalla.
  */
 function updateGuardarModificacion(responseText){
-actualizarTabla()
+    actualizarTabla()
     $("#divResultado").hide()
 	var Messages=JSONstring.toObject(responseText)
 	setMessages(Messages)

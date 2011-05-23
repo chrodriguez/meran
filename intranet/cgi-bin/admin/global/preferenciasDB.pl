@@ -311,3 +311,24 @@ if($accion eq "ACTUALIZAR_TABLA_CATALOGO"){
     $t_params->{'page_sub_title'}   = C4::AR::Filtros::i18n("Preferencias del Cat&aacute;logo");  
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }#end ACTUALIZAR_TABLA_CATALOGO
+
+if($accion eq "ACTUALIZAR_TABLA_CIRCULACION"){
+
+    my ($template, $session, $t_params) = 
+	                                get_template_and_user({
+				                                template_name   => "admin/global/circResultConfig.tmpl",
+				                                query           => $input,
+				                                type            => "intranet",
+				                                authnotrequired => 0,
+				                                flagsrequired   => {    ui => 'ANY', 
+                                                                        tipo_documento => 'ANY', 
+                                                                        accion => 'CONSULTA', 
+                                                                        entorno => 'undefined'},
+				                                debug           => 1,
+				                                });
+
+    my $preferencias_circulacion       = C4::AR::Preferencias::getPreferenciasByCategoria('circulacion');
+    $t_params->{'preferencias'}        = $preferencias_circulacion;
+    $t_params->{'page_sub_title'}      = C4::AR::Filtros::i18n("Preferencias de Circulaci&oacute;n");  
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+}#end ACTUALIZAR_TABLA_CIRCULACION
