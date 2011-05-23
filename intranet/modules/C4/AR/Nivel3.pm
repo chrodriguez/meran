@@ -663,22 +663,17 @@ sub generaCodigoBarra{
 		}
 	}
 
-#FIXME está todo feo, muy fixeado, sobretodo la "t" al final y la "f" al principio.
-#El Mono prometió hacerlo (????)
+C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => MAXIMO => like => ".$like);
 
-     my $sth2 = $dbh->prepare("SELECT MAX(substring(marc_record,INSTR(marc_record, ?)+9, INSTR(substring(marc_record,INSTR(marc_record, ?)+9),'t')-1 )) 
-                               FROM cat_registro_marc_n3
-                               WHERE INSTR(marc_record, ?) <> 0");
+    # Puede venir el db tambien!!
+    my $max_codigo = C4::Modelo::CatRegistroMarcN3::Manager->get_maximum_codigo_barra(like => $like.'%');
 
-
-
-    $sth2->execute('f'.$like, 'f'.$like, 'f'.$like);
-	my $data2= $sth2->fetchrow_hashref;
-    my $numero = ($data2->{'maximo'});
+    $max_codigo = $max_codigo || 0;
+    C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => MAXIMO => ". $max_codigo);
 
     my @barcodes_array_ref;
     for(my $i=1;$i<=$cant;$i++){
-        $barcode  = $parametros->{'UI'}."-".$parametros->{'tipo_ejemplar'}."-".completarConCeros($numero + $i);
+        $barcode  = $parametros->{'UI'}."-".$parametros->{'tipo_ejemplar'}."-".completarConCeros($max_codigo + $i);
         C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => barcode => ".$barcode);
         push(@barcodes_array_ref, $barcode);
     }
