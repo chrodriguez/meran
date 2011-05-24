@@ -993,7 +993,7 @@ sub busquedaAvanzada_newTemp{
     }
     
     if ($params->{'signatura'}){
-        $query .= ' @string "'.$params->{'signatura'}.'*"';
+        $query .= ' @string "'."signatura%".$sphinx->EscapeString($params->{'signatura'}).'*"';
     }
     
     if ($params->{'tema'} ne ""){

@@ -7,11 +7,11 @@ var RecaptchaOptions = {
 </script>
 
 <div class="column1-unit">
+    <h1>[% message %]</h1>
     <div class="contactform">
-        <form id="datosAEnviar" method="post" action="/cgi-bin/koha/opac-forgot-password.pl" autocomplete="off">
+        <form id="datosAEnviar" method="post" action="/cgi-bin/koha/opac-forgot-password.pl" onsubmit="javascript:startOverlay();" autocomplete="off">
 	         <fieldset>
 	           <legend>&nbsp;[% 'Ingrese sus datos de autenticaci&oacute;n' | i18n %]&nbsp;</legend>
-               <h1>[% message %]</h1>
 	           <p>
 	             <label for="user-id" class="top">[% 'E-mail &oacute; Nro. de socio' | i18n %]:</label><br />
 	             <input type="user-id" name="user-id" id="user-id" tabindex="1" class="field" value="" />
