@@ -481,6 +481,19 @@ sub setLast_login{
 
 }
 
+sub getLogin_attempts{
+    my ($self) = shift;
+    return ($self->login_attempts);
+}
+
+sub setLogin_attempts{
+    my ($self) = shift;
+    my ($login_attempts) = @_;
+
+    $self->login_attempts($login_attempts);
+    $self->save();
+}
+
 sub getLast_change_password{
     my ($self) = shift;
     return ($self->last_change_password);
