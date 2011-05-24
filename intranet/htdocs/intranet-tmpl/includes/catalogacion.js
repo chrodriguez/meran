@@ -771,8 +771,8 @@ function guardarDocumentoN3(){
 		objAH.tipoAccion        = "GUARDAR_NIVEL_3";
 		objAH.tipo_documento    = $("#tipo_nivel3_id").val();
         objAH.esPorBarcode      = porBarcode;  
-        objAH.ui_origen         = _getIdComponente('995','d');
-        objAH.ui_duenio         = _getIdComponente('995','c');
+        objAH.ui_origen         = $('#' + _getIdComponente('995','d')).val();
+        objAH.ui_duenio         = $('#' + _getIdComponente('995','c')).val();
 
     if (porBarcode)
         objAH.BARCODES_ARRAY    = BARCODES_ARRAY;
@@ -947,9 +947,8 @@ function guardar(nivel){
 
 //esta funcion muestra la info en la barra laterarl del NIVEL 2 luego de ser guardado
 /*
-    Muestra el Nivel 3 para el Nivel 1 (id1) y Nivel 2 (idNivel2)
+    Muestra el Nivel 3 Nivel 2 (idNivel2)
 */
-// function mostrarInfoAltaNivel3(id1, idNivel2){
 function mostrarInfoAltaNivel3(idNivel2){
     if(idNivel2 != 0){
         objAH               = new AjaxHelper(updateMostrarInfoAltaNivel3);
