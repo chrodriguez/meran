@@ -40,7 +40,6 @@ function close_window_esquema(){
 $(document).ready( function() {
 	//oculto todas las tabls
 	_showAndHiddeEstructuraDelNivel(0);
-//     var _modificar = false;
 
     TIENE_NIVEL_2 = [% tiene_nivel_2 %];
 
@@ -53,32 +52,33 @@ $(document).ready( function() {
 		cargarNivel1(params);
         MODIFICAR = 1;
         FROM_DETALLE_REGISTRO = 1;
-//         _modificar = true;
-	[% ELSE %] 
-		[% IF tipoAccion == "MODIFICAR_NIVEL_2" %]
-			params= new objeto_params();
-			params.id1= [% id1 %];
-			params.id2= [% id2 %];
-			params.id3= [% id3 %];
-			params.tipoAccion= '[% tipoAccion %]';
-			cargarNivel1(params);
-            MODIFICAR = 1;
-            FROM_DETALLE_REGISTRO = 1;
-//             _modificar = true;
-		[% ELSE %]	
-			[% IF tipoAccion == "MODIFICAR_NIVEL_3" %]
-				params= new objeto_params();
-				params.id1= [% id1 %];
-				params.id2= [% id2 %];
-				params.id3= [% id3 %];
-				params.tipoAccion= '[% tipoAccion %]';
-				cargarNivel1(params);
-                MODIFICAR = 1;
-                FROM_DETALLE_REGISTRO = 1;
-//                 "Complete sólo el campo que desee modificar"
-//                 _modificar = true;
-			[% END %]
-		[% END %]
+	[% ELSIF tipoAccion == "MODIFICAR_NIVEL_2" %]
+        params= new objeto_params();
+        params.id1= [% id1 %];
+        params.id2= [% id2 %];
+        params.id3= [% id3 %];
+        params.tipoAccion= '[% tipoAccion %]';
+        cargarNivel1(params);
+        MODIFICAR = 1;
+        FROM_DETALLE_REGISTRO = 1;
+    [% ELSIF tipoAccion == "MODIFICAR_NIVEL_3" %]
+        params= new objeto_params();
+        params.id1= [% id1 %];
+        params.id2= [% id2 %];
+        params.id3= [% id3 %];
+        params.tipoAccion= '[% tipoAccion %]';
+        cargarNivel1(params);
+        MODIFICAR = 1;
+        FROM_DETALLE_REGISTRO = 1;
+    [% ELSIF tipoAccion == "MODIFICAR_NIVEL_3_ALL" %]
+        params= new objeto_params();
+        params.id1= [% id1 %];
+        params.id2= [% id2 %];
+        params.tipoAccion= '[% tipoAccion %]';
+        cargarNivel1(params);
+        MODIFICAR = 1;
+        FROM_DETALLE_REGISTRO = 1;
+        modificarEjemplaresN3('[% nivel3.getId3 %]')
 	[% END %]
 
 
@@ -88,7 +88,7 @@ $(document).ready( function() {
         $('#datos_del_leader').hide();
     } else {
         mostrarEstructuraDelNivel1();
-	$('#datos_del_leader').show();
+        $('#datos_del_leader').show();
     }
 
 } );

@@ -117,17 +117,17 @@ function _setFoco(){
 	}
 }
 
-function _recuperarSeleccionados(chckbox){
-	var chck=$("input[name="+chckbox+"]:checked");
-	var array= new Array;
-	var long=chck.length;
-
-	for(var i=0; i< long; i++){
-		array[i]=chck[i].value;
-	}
-	
-	return array;
-}
+// function _recuperarSeleccionados(chckbox){
+// 	var chck    = $("input[name="+chckbox+"]:checked");
+// 	var array   = new Array;
+// 	var long    = chck.length;
+// 
+// 	for(var i=0; i< long; i++){
+// 		array[i]    = chck[i].value;
+// 	}
+// 	
+// 	return array;
+// }
 
 function seleccionoAlgo(chckbox){
     var chck = $("input[name="+chckbox+"]:checked");
@@ -770,7 +770,9 @@ function guardarDocumentoN3(){
 		objAH.url               = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
 		objAH.tipoAccion        = "GUARDAR_NIVEL_3";
 		objAH.tipo_documento    = $("#tipo_nivel3_id").val();
-        objAH.esPorBarcode      = porBarcode;
+        objAH.esPorBarcode      = porBarcode;  
+        objAH.ui_origen         = _getIdComponente('995','d');
+        objAH.ui_duenio         = _getIdComponente('995','c');
 
     if (porBarcode)
         objAH.BARCODES_ARRAY    = BARCODES_ARRAY;
@@ -1904,7 +1906,7 @@ function updateBorrarN3(responseText){
     }
 }
 
-function borrarEjemplaresN3(id3){
+function borrarEjemplaresN3(){
 	
     jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_ALERT_TITLE, function(confirmStatus){
         if(confirmStatus){
@@ -1912,7 +1914,7 @@ function borrarEjemplaresN3(id3){
             objAH.showOverlay   = true;
 		    objAH.debug         = true;
 		    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
-		    var id3_array       = _recuperarSeleccionados("checkEjemplares");
+            var id3_array       = recuperarSeleccionados("checkEjemplares");
 		    objAH.id3_array     = id3_array;
 		    objAH.nivel         = 3;
 		    objAH.itemtype      = $("#id_tipo_doc").val();
@@ -2021,20 +2023,19 @@ se toma el 1er elemento del arreglo ID3_ARRAY como Ejemplar a modificar, ya
 que se puede haber seleccionado por ej. 3 ejemplares distintos, luego se envia
 lo modificado al servidor y a los 3 ID_N3 se les modifica esta informacion 
 */
-function modificarEjemplaresN3(id3){
+function modificarEjemplaresN3(){
 
     if(seleccionoAlgo("checkEjemplares")){
         //si selecciono los ejemplares para editar....
 	    inicializar();
-	    ID_N3               = id3;	
 	    objAH               = new AjaxHelper(updateModificarEjemplaresN3);
 	    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
 	    objAH.debug         = true;
         objAH.showOverlay   = true;
 	    objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
 	    objAH.itemtype      = $("#id_tipo_doc").val();
-	    //obtengo todos los ejemplares seleccionados para modificar
-	    ID3_ARRAY           = _recuperarSeleccionados("checkEjemplares");
+	    //obtengo todos los ejemplares seleccionados para modificarf
+        ID3_ARRAY           = recuperarSeleccionados("checkEjemplares");
 	    objAH.id3           = ID3_ARRAY[0]; //muestra la info del primer ejemplar en el arreglo de ejemplares
 	    objAH.nivel         = 3;
         EDICION_N3_GRUPAL   = 1;  

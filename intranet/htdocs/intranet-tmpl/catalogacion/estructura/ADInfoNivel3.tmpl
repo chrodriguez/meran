@@ -21,7 +21,7 @@
 [% FOREACH nivel3 IN nivel3_array %]
     <tr align="center">
             <td>
-                <input type="checkbox" id="checkEjemplares" name="checkEjemplares" class="icon_seleccionar" value="[% nivel3.getId3 %]">
+                <input type="checkbox" id="checkEjemplares" name="checkEjemplares" class="icon_seleccionar" value="[% nivel3.nivel3_obj.getId3 %]">
             </td>
             <td>[% nivel3.nivel3_obj.getSignatura_topografica %]</td>
             <td>
@@ -93,7 +93,7 @@
     [% PERL %]
             print C4::AR::Filtros::to_Icon(  
                                                 boton   => "icon_edicion",
-                                                onClick => "modificarEjemplaresN3('[% nivel3.getId3 %]');",
+                                                onClick => "modificarEjemplaresN3();",
                                                 title   => "[% 'Modificar Ejemplares' | i18n %]",
                     ) ;
     [% END %]
@@ -101,7 +101,7 @@
     [% PERL %]
             print C4::AR::Filtros::to_Icon(   
                                                 boton   => "icon_borrar",
-                                                onClick => "borrarEjemplaresN3('[% nivel3.getId3 %]');",
+                                                onClick => "borrarEjemplaresN3();",
                                                 title   => "[% 'Borrar Ejemplares' | i18n %]",
                     ) ;
     [% END %]
