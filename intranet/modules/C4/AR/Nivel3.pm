@@ -68,7 +68,7 @@ sub t_guardarNivel3 {
 C4::AR::Debug::debug("t_guardarNivel3 => ID 3 => ".$id3);
             #se agregaron los barcodes con exito
             if(!$msg_object->{'error'}){
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => [$id3]} );
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => [$catRegistroMarcN3->getBarcode]} );
             }
         }
 
@@ -876,6 +876,18 @@ sub _generarArregloDeBarcodesPorBarcodes{
     return @barcodes_para_agregar;
 }
 
+sub _selectBarcodeFormat{
+	my ($params) = @_;
+	
+    my $default_ui = C4::AR::Preferencias::getValorPreferencia("defaultUI");
+    my $UI_origen_object = $params->{'ui_origen'};
+    my $UI_duenio_object = $params->{'ui_duenio'};
+    
+    return ($UI_duenio_object || $default_ui || $UI_origen_object);
+    
+    	
+}
+
 =head2 sub _generarArregloDeBarcodesPorCantidad
 Esta funcion genera un arreglo de barcodes VALIDOS para agregar en la base de datos
 =cut
@@ -902,7 +914,7 @@ sub _generarArregloDeBarcodesPorCantidad {
     if( !$msg_object->{'error'} ){
 
         my %parametros;
-        $parametros{'UI'}               = C4::AR::Preferencias::getValorPreferencia("defaultUI");
+        $parametros{'UI'}               = _selectBarcodeFormat($params);
         $parametros{'tipo_ejemplar'}    = $params->{'tipo_ejemplar'};
 
         (@barcodes_para_agregar) = generaCodigoBarra(\%parametros, $cant);

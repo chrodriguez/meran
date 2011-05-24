@@ -4,23 +4,23 @@
 [% END %]
 
 <ul class="resumen_items">
-<li class="columna_izq">[% "Ejemplares Disponibles:"|i18n %]<strong> [% disponibles %]</strong><br>
-<li class="columna_der">[% "Reservas Realizadas:"|i18n %] <strong> [% cantReservas %]</strong><br>
-<li class="columna_izq">[% "Reservas en Espera:"|i18n %] <strong> [% cantReservasEnEspera %]</strong><br>
-<li class="columna_der">[% "Ejemplares Prestados:"|i18n %]<strong> [% cantPrestados %]</strong><br>
+<li class="columna_izq">[% "Ejemplares Disponibles:"|i18n %]<strong> [% disponibles %]</strong></li>
+<li class="columna_der">[% "Reservas Realizadas:"|i18n %] <strong> [% cantReservas %]</strong></li>
+<li class="columna_izq">[% "Reservas en Espera:"|i18n %] <strong> [% cantReservasEnEspera %]</strong></li>
+<li class="columna_der">[% "Ejemplares Prestados:"|i18n %]<strong> [% cantPrestados %]</strong></li>
 </ul>                
 <hr>
 <table cellspacing="0" cellpadding="0"  width="100%" class="tablaResult datos_tabla">
 		<tr align="center" cellpadding="0"  valign="middle" class="titulo_tabla_resultado">
             <td>
-				<strong>[% "Acciones" |i18n %]</strong>
-<!--				[% PERL %]
-					print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
-													url =>      "datosDocumento.pl", 
-													params =>   ["id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]","tipoAccion=MODIFICAR_NIVEL_3"],
-													title =>    "[% 'Editar Nivel 2' | i18n %]"
-												) ;
-				[% END %]-->
+                [% PERL %]
+                    print C4::AR::Filtros::to_Icon(   
+                                                            boton   => "icon_seleccionar",
+                                                            id      => "select_all",
+                                                            title   => "[% 'Seleccionar todos' | i18n %]",
+                                                            alternClass => "botonCentrado"
+                                ) ;
+                [% END %]
             </td>
 			<td><strong>[% "Sig. Top."|i18n %]</strong> </td>
 			<td><strong>[% "C&oacute;digo"|i18n %]</strong></td>
@@ -30,25 +30,16 @@
 			<td width="7%"><strong>[% "Circulaci&oacute;n"|i18n %]</strong></td>
 			<td><strong>[% "MARC" |i18n %]</strong></td>
             <td><strong>[% "Notas" |i18n %]</strong></td>
+            <td width="8%">
+                <strong>[% "Acciones" |i18n %]</strong>
+            </td>
 		</tr>
 
 [% FOREACH nivel3 %]
 
 		<tr align="center">
                 <td>
-                    [% PERL %]
-                        print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
-                                                        url =>      "/cgi-bin/koha/catalogacion/estructura/datosDocumento.pl", 
-                                                        params =>   ["id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]","tipoAccion=MODIFICAR_NIVEL_3"],
-                                                        title =>    "[% 'Editar Ejemplar' | i18n %]"
-                                                    ) ;
-                    [% END %]
-                    [% PERL %]
-                              print C4::AR::Filtros::to_Icon(        boton   => "icon_borrar",
-                                                                    onClick => "borrarN3('[% id2 %]','[% id3 %]');",
-                                                                    title   => "[% 'Borrar Ejemplar' | i18n %]"
-                              ) ;
-                    [% END %]
+                    <input type="checkbox" id="checkEjemplares" name="checkEjemplares" class="icon_seleccionar" value="[% nivel3_obj.getId3 %]">
                 </td>
                 <td>[% nivel3_obj.getSignatura_topografica %]</td>
                 <td>
@@ -177,7 +168,33 @@
                        ---
                     [% END %]
                 </td>
+                <td>
+                    [% PERL %]
+                        print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
+                                                        url =>      "/cgi-bin/koha/catalogacion/estructura/datosDocumento.pl", 
+                                                        params =>   ["id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]","tipoAccion=MODIFICAR_NIVEL_3"],
+                                                        title =>    "[% 'Editar Ejemplar' | i18n %]"
+                                                    ) ;
+                    [% END %]
+                    [% PERL %]
+                              print C4::AR::Filtros::to_Icon(        boton   => "icon_borrar",
+                                                                    onClick => "borrarN3('[% id2 %]','[% id3 %]');",
+                                                                    title   => "[% 'Borrar Ejemplar' | i18n %]"
+                              ) ;
+                    [% END %]
+                </td>
     </tr>
 [% END %]<!-- END FOREACH NIVEL 3 -->
 	
 	</table>
+
+<div class="horizontal">[% "Para los elementos que est&aacute;n marcados:" | i18n %]</div>
+
+
+                [% PERL %]
+                    print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
+                                                    url =>      "datosDocumento.pl", 
+                                                    params =>   ["id1=[% id1 %]","id2=[% id2 %]","tipoAccion=MODIFICAR_NIVEL_3_ALL"],
+                                                    title =>    "[% 'Modificar Ejemplares' | i18n %]"
+                                                ) ;
+                [% END %]
