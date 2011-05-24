@@ -4203,7 +4203,7 @@ form.signin .subchck .remember {
     float: left;
 }
 #logo a {
-    background: url("images/logo_horizontal.png") no-repeat scroll 20px 9px transparent;
+    background: url("images/logo_horizontal.png") no-repeat scroll -10px 5px transparent;
     color: #FFFFFF;
     display: block;
     height: 40px;

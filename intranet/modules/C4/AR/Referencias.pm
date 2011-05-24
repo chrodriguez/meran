@@ -601,7 +601,10 @@ sub mostrarReferencias{
       
             if ($tabla_referente){
                 my $involved_count;
+                C4::AR::Debug::debug("ENTERING INVOLVED COUNT ");
+                C4::AR::Debug::debug("TABLA REFERENTE ".$tabla_referente);
                 $involved_count = $tabla_referente->getInvolvedCount($tabla,$value_id);
+                C4::AR::Debug::debug("EXITING INVOLVED COUNT ");
                 $table_data{"tabla"} = $tabla->getTabla_referente;
                 $table_data{"tabla_object"} = $tabla;
                 $table_data{"cantidad"} = $involved_count;
@@ -735,16 +738,22 @@ sub editarReferencia{
 sub agregarRegistro{
 
     my ($alias,$filtro) = @_;
-    my $tabla = C4::Modelo::PrefTablaReferencia->new();
-       $tabla = $tabla->createFromAlias($alias);
-    my $object;
+    my $tabla  = C4::Modelo::PrefTablaReferencia->new();
+    my $object = $tabla = $tabla->createFromAlias($alias);
+       
+       
+       C4::AR::Debug::debug("ALIAS DE LA TABLA ADDNEWRECORD ======================== ".$alias);
+
     eval{
         $object = $tabla->addNewRecord();
     };
+
     $tabla = $tabla->createFromAlias($alias);
-#     my $datos = $tabla->getAll(100,0,0,$filtro);
+
     my @array;
+
     push (@array,$object);
+    C4::AR::Debug::debug("OBJECT TABLA ADDNEWRECORD ======================== ".$tabla);
     my $campos = $object->getCamposAsArray();
     my $clave = $object->meta->primary_key;
 
