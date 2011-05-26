@@ -39,10 +39,11 @@ if ($t_params->{'loginAttempt'}){
 # my $t1= Benchmark->new;
 # my $t2= timediff($t1, $t0);
 # warn timestr($t2);
-if ($session->param('mostrar_captcha')){
-    $t_params->{'mostrar_captcha'}=1;
+if ( $cgi->param('mostrarCaptcha') ){
+    $t_params->{'mostrar_captcha'}= 1;
 }
 
+C4::AR::Debug::debug($t_params->{'mostrar_captcha'});
 
 if ($session->param('codMsg')){
   $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje($session->param('codMsg'),'intranet');
