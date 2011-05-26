@@ -250,7 +250,9 @@ sub _destruirSession{
     my ($codMsg,$template_params) = @_;
     $codMsg = $codMsg || 'U406';
     my ($session) = CGI::Session->load();
-    
+#     
+#    C4::AR::Debug::debug("Template params". $template_params);   
+
     C4::AR::Debug::debug("CODMSG en destruirSession". $codMsg );
     
     $codMSG = $codMsg;
@@ -263,7 +265,8 @@ sub _destruirSession{
     $session->param('sessionID', undef);
     #redirecciono a loguin y genero una nueva session y nroRandom para que se loguee el usuario
     $session->param('codMsg', $codMsg);
-    if ($template_params('mostrar_captcha')){
+    
+    if ($template_params->{'mostrar_captcha'}){
       $session->param('mostrar_captcha', 1);
     }
 #     C4::AR::Debug::debug("WARNING: ¡¡¡¡Se destruye la session y la cookie!!!!!");
@@ -525,6 +528,7 @@ sub checkauth {
     my $type                = shift;
     my $change_password     = shift || 0;
     my $template_params     = shift;
+    C4::AR::Utilidades::printHASH($template_params);
     my $socio;
     $type                   = 'opac' unless $type;
     my $demo=C4::Context->config("demo") || 0;
@@ -547,17 +551,20 @@ sub checkauth {
     {
         #No es DEMO hay q hacer todas las comprobaciones de la sesion
         my ($codeMSG,$estado)=_verificarSession($session,$type,$token);
-        my $socio_data_temp = C4::AR::Usuarios:_getSocioInfoPorNroSocio($userid);
-        my $login_attempts = $socio->getLogin_attempts;
+        C4::AR::Debug::debug('SOCIO:   ' .$userid);
+        my $socio_data_temp = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
+        C4::AR::Debug::debug($socio_data_temp);
+        my $login_attempts = $socio_data_temp->getLogin_attempts;
+        my $captchaResult;
         if ($login_attempts > 2 ){
             my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
-            my $reCaptchaChallenge  = $params->{'recaptcha_challenge_field'};
-            my $reCaptchaResponse   = $params->{'recaptcha_response_field'};
+            my $reCaptchaChallenge  = $template_params->{'recaptcha_challenge_field'};
+            my $reCaptchaResponse   = $template_params->{'recaptcha_response_field'};
                         
             use Captcha::reCAPTCHA;
             my $c = Captcha::reCAPTCHA->new;
                         
-            my $captchaResult = $c->check_answer(
+            $captchaResult = $c->check_answer(
                         $reCaptchaPrivateKey, $ENV{'REMOTE_ADDR'},
                         $reCaptchaChallenge, $reCaptchaResponse
             );
@@ -678,9 +685,8 @@ sub checkauth {
                               my $cant_fallidos= $socio->getLogin_attempts + 1;
                               $socio->setLogin_attempts($cant_fallidos);
                               if ($cant_fallidos = 2){
-                                  $template_params('mostrar_captcha') = 1;
+                                  $template_params->{'mostrar_captcha'} = 1;
                               }
-
                               $template_params->{'loginAttempt'} = 1;
                               _destruirSession('U406', $template_params);
                           
@@ -693,7 +699,7 @@ sub checkauth {
       } else { 
 #            VER Q HACE SI ESTA MAL EL CAPTCHA       
       }
-    } #mostrar_captcha
+     #mostrar_captcha
     }# el else de DEMO
 }# end checkauth
 

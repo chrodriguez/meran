@@ -39,6 +39,9 @@ if ($t_params->{'loginAttempt'}){
 # my $t1= Benchmark->new;
 # my $t2= timediff($t1, $t0);
 # warn timestr($t2);
+if ($session->param('mostrar_captcha')){
+    $t_params->{'mostrar_captcha'}=1;
+}
 
 
 if ($session->param('codMsg')){
