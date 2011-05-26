@@ -16,7 +16,6 @@ my ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
                                                         tipo_documento => 'ANY', 
                                                         accion => 'CONSULTA', 
                                                         entorno => 'undefined'},
-			});
-
+});
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

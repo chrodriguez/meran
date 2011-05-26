@@ -252,23 +252,21 @@ sub _destruirSession{
     
     my ($codMsg,$template_params) = @_;
     $codMsg = $codMsg || 'U406';
+
     my ($session) = CGI::Session->load();
 #     
 #    C4::AR::Debug::debug("Template params". $template_params);   
-
-    C4::AR::Debug::debug("CODMSG en destruirSession". $codMsg );
-    
+ 
     $codMSG = $codMsg;
     
-    C4::AR::Debug::debug("CodMSG en destruirSession". $codMSG );
-
     _eliminarSession($session);
     
     $session = C4::AR::Auth::_generarSession();
     $session->param('sessionID', undef);
+
     #redirecciono a loguin y genero una nueva session y nroRandom para que se loguee el usuario
     $session->param('codMsg', $codMsg);
-
+  
 #     C4::AR::Debug::debug("WARNING: ¡¡¡¡Se destruye la session y la cookie!!!!!");
     redirectToAuth($template_params)
 
@@ -508,15 +506,17 @@ sub checkauth {
     my $type                = shift;
     my $change_password     = shift || 0;
     my $template_params     = shift;
-    C4::AR::Utilidades::printHASH($template_params);
+    
     my $socio;
     $type                   = 'opac' unless $type;
     my $demo=C4::Context->config("demo") || 0;
     my $token=_obtenerToken($query);
     my $loggedin = 0;
     my ($session) = CGI::Session->load();
+    
     my $userid= $session->param('userid');
     my $flags=0;
+    
     my $sin_captcha=0;
     my $time = localtime(time());
     if ($demo) {
@@ -528,7 +528,7 @@ sub checkauth {
         return ($userid, $session, $flags, $socio);
     } else {
         #No es DEMO hay q hacer todas las comprobaciones de la sesion
-        my ($codeMSG,$estado)=_verificarSession($session,$type,$token);
+                  my ($codeMSG,$estado)=_verificarSession($session,$type,$token);
                   if ($estado eq "sesion_valida"){ 
                       
                       C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_valida");
@@ -593,19 +593,22 @@ sub checkauth {
                       my $password        = $query->param('password');
                       my $nroRandom       = $session->param('nroRandom');
                       #se verifica la password ingresada
-
-
         
                       my $socio_data_temp = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
                       my $login_attempts = $socio_data_temp->getLogin_attempts;
                       my $captchaResult;
-                      
-                      if ($login_attempts > 3 ){
+
+                      if ($login_attempts > 2 ){
+                          
+                          C4::AR::Utilidades::printHASH($query);
 
                           my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
-                          my $reCaptchaChallenge  = $template_params->{'recaptcha_challenge_field'};
-                          my $reCaptchaResponse   = $template_params->{'recaptcha_response_field'};
-                                      
+                          my $reCaptchaChallenge  = $query->{'recaptcha_challenge_field'};
+                          my $reCaptchaResponse   = $query->{'recaptcha_response_field'};
+
+      
+                        
+                          
                           use Captcha::reCAPTCHA;
                           my $c = Captcha::reCAPTCHA->new;
                                       
@@ -618,6 +621,8 @@ sub checkauth {
                               $sin_captcha = 1; 
                       }
                   
+                    
+
                       if ($captchaResult->{is_valid} || $sin_captcha){
 
 
@@ -666,19 +671,23 @@ sub checkauth {
                                     #intento de loguin
                                     my $cant_fallidos= $socio->getLogin_attempts + 1;
                                     $socio->setLogin_attempts($cant_fallidos);
-                                    if ($cant_fallidos = 2){
-                                        $template_params->{'mostrar_captcha'} = 1;
+                                    C4::AR::Debug::debug($cant_fallidos);
+                                    if ($cant_fallidos == 3){
+                                        $template_params->{'mostrar_captcha'}=1;
                                     }
                                     $template_params->{'loginAttempt'} = 1;
                                     _destruirSession('U406', $template_params);
                                 
-
                                 }
                                 #genero una nueva session y redirecciono a auth.tmpl para que se loguee nuevamente
+                                
                                 redirectToAuth($template_params);
                             }#end else de if ($socio)
                       } else { 
-#                               VER Q HACE SI ESTA MAL EL CAPTCHA       
+                                $template_params->{'mostrar_captcha'}=1;
+                                $template_params->{'loginAttempt'} = 1;
+                                $session->param('codMsg', 'U422');
+                                _destruirSession('U406', $template_params);      
                       }
                   }# end unless ($userid)
     }# el else de DEMO
@@ -1072,16 +1081,17 @@ sub redirectTo {
 
 sub redirectToAuth {
     my ($template_params) = @_;
+
     my $url;
     $url = '/cgi-bin/koha/auth.pl';
     if($template_params->{'loginAttempt'}){
         $url = $url.'?loginAttempt=1'
     }elsif($template_params->{'sessionClose'}){
         $url = $url.'?sessionClose=1';
-    }elsif($template_params->{'mostrar_captcha'}){
-        $url = $url.'?loginAttempt=1'.'&mostrarCaptcha=1';
+    } 
+    if($template_params->{'mostrar_captcha'}){
+        $url = $url.'&mostrarCaptcha=1';
     }
-
 
     redirectTo($url);    
 }
