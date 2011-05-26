@@ -6,7 +6,6 @@ package C4::AR::Mail;
 
 use strict;
 require Exporter;
-use C4::Context;
 use Mail::Sendmail;
 use C4::AR::Debug;
 use Net::SMTP;
@@ -264,7 +263,7 @@ sub send_mail_TEST {
     my $ok          = 0;
     my $msg_error   = "Error inesperado";
 
-    $mail{'mail_from'}              = C4::Context->preference("mailFrom");
+    $mail{'mail_from'}              = C4::AR::Preferencias::getValorPreferencia('mailFrom');
     $mail{'mail_to'}                = $mail_to;
     $mail{'mail_subject'}           = Encode::decode('utf8', "Prueba de configuración de mail");
     $mail{'mail_message'}           = "Esta es una prueba de configuraci".chr(243)."n del mail";
@@ -330,12 +329,12 @@ sub send_mail {
       return (0, $msg_error);
     }
 
-    $info_smtp_hash_ref->{'smtp_server'}           = C4::Context->preference("smtp_server");
-    $info_smtp_hash_ref->{'smtp_metodo'}           = C4::Context->preference("smtp_metodo");
-    $info_smtp_hash_ref->{'smtp_port'}             = C4::Context->preference("port_mail");
-    $info_smtp_hash_ref->{'smtp_user'}             = C4::Context->preference("username_mail");
-    $info_smtp_hash_ref->{'smtp_pass'}             = C4::Context->preference("password_mail");
-    $info_smtp_hash_ref->{'smtp_server_sendmail'}  = C4::Context->preference("smtp_server_sendmail");
+    $info_smtp_hash_ref->{'smtp_server'}           = C4::AR::Preferencias::getValorPreferencia("smtp_server");
+    $info_smtp_hash_ref->{'smtp_metodo'}           = C4::AR::Preferencias::getValorPreferencia("smtp_metodo");
+    $info_smtp_hash_ref->{'smtp_port'}             = C4::AR::Preferencias::getValorPreferencia("port_mail");
+    $info_smtp_hash_ref->{'smtp_user'}             = C4::AR::Preferencias::getValorPreferencia("username_mail");
+    $info_smtp_hash_ref->{'smtp_pass'}             = C4::AR::Preferencias::getValorPreferencia("password_mail");
+    $info_smtp_hash_ref->{'smtp_server_sendmail'}  = C4::AR::Preferencias::getValorPreferencia("smtp_server_sendmail");
 
     if ($info_smtp_hash_ref->{'smtp_server_sendmail'}) {
         #se envia el mail con SENDMAIL

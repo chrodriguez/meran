@@ -286,7 +286,7 @@ sub getCamposAsArray{
 
 
 sub getCampos{
-    my ($self)=shift;
+    my ($self) = shift;
     my $fieldsString = C4::AR::Utilidades::joinArrayOfString($self->meta->columns);
 
     return($fieldsString);
@@ -294,7 +294,7 @@ sub getCampos{
 
 
 sub addNewRecord{
-    my ($self)=shift;
+    my ($self) = shift;
 
     my $fields = $self->getCamposAsArray();
 

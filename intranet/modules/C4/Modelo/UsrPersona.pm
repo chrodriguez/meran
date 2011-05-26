@@ -611,12 +611,10 @@ sub setCumple_condicion{
 sub getInvolvedCount{
  
     my ($self) = shift;
-
     my ($campo, $value)= @_;
-    
     my @filtros;
 
-    push (@filtros, ( $campo => $value ) );
+    push (@filtros, ( $campo->getCampo_referente => $value ) );
 
     my $count = C4::Modelo::UsrPersona::Manager->get_usr_persona_count( query => \@filtros );
 

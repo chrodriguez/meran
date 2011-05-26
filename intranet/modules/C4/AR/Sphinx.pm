@@ -282,6 +282,11 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 #                 C4::AR::Debug::debug("generar_indice => 995, f => dato ".$dato);
             }
 
+            if (($campo eq "995") && ($subcampo eq "t")){
+                $dato = 'signatura%'.$dato;  
+#                 C4::AR::Debug::debug("generar_indice => 995, f => dato ".$dato);
+            }
+
             if (($campo eq "650") && ($subcampo eq "a")){
                 $dato = 'cat_tema%'.$dato;  
 #                 C4::AR::Debug::debug("generar_indice => 650, a => dato ".$dato);
