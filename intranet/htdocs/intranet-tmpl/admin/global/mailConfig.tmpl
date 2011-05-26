@@ -21,29 +21,6 @@
         startOverlay();
     }    
 
-/*    function probarConfiguracion(){
-        objAH                           = new AjaxHelper(updateProbarConfiguracion);
-        objAH.debug                     = true;
-        objAH.showOverlay               = true;
-        objAH.url                       = "/cgi-bin/koha/admin/global/mail_configDB.pl";
-        objAH.smtp_server               = $('#smtp_server').val();
-        objAH.smtp_metodo               = $('#smtp_metodo').val();
-        objAH.mailFrom                  = $('#mailFrom').val();
-        objAH.reserveFrom               = $('#reserveFrom').val();
-        objAH.port_mail                 = $('#port_mail').val();
-        objAH.username_mail             = $('#username_mail').val();
-        objAH.password_mail             = $('#password_mail').val();
-        objAH.smtp_server_sendmail      = ($('#smtp_server_sendmail').attr('checked'))?1:0;
-        objAH.accion                    = "PROBAR_CONFIGURACION";
-        objAH.sendToServer();
-
-    }
-
-    function updateProbarConfiguracion(responseText){
-        var Messages = JSONstring.toObject(responseText);
-        setMessages(Messages);
-    }*/
-
     function toggleChckSendmail(){
         $('#smtp_server_sendmail').click(function() {
             enableDisableInputs();
