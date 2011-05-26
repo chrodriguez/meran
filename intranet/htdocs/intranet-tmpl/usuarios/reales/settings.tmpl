@@ -1,5 +1,6 @@
 [% INCLUDE "intranet-top.inc" %]
 
+
 <fieldset>
     <legend class="titulo_legend trigger">
         [% "Perfil de " | i18n %][% socio_data.usr_nro_socio %] ([% socio_data.usr_apellido %], [% socio_data.usr_nombre %])</legend>
@@ -9,28 +10,30 @@
             <div id="busqueda_combinada">
 	            <fieldset>
 	                <legend class="titulo_legend"><strong>[% "Opciones personales" | i18n %]</strong></legend>
-	                <ul id="simple">
-	                    <li class="sub_item">
-		                    <label for="languages">
-		                        <strong>[% "Idioma" | i18n %]</strong>
-		                    </label>
-		                    [% languages %]
-	                    </li>
-
-                        <li class="sub_item">
-                            <label for="email">
-                                <strong>[% "E-mail" | i18n %]</strong>
-                            </label>
-                            <input type="text" name="email" id="email" value="[% socio_data.usr_email %]" />
-                        </li>
-	                </ul>
+	                <form id="user-settings" method="POST" action="/cgi-bin/koha/usuarios/reales/settings.pl" onsubmit="javascript:startOverlay();"
+		                <ul id="simple">
+		                    <li class="sub_item">
+			                    <label for="languages">
+			                        <strong>[% "Idioma" | i18n %]</strong>
+			                    </label>
+			                    [% languages %]
+		                    </li>
+	
+	                        <li class="sub_item">
+	                            <label for="email">
+	                                <strong>[% "E-mail" | i18n %]</strong>
+	                            </label>
+	                            <input type="text" name="email" id="email" value="[% socio_data.usr_email %]" />
+	                        </li>
+		                </ul>
+		                <input type="hidden" name="token" value="[% token %]" />
 	            </fieldset>
             </div>
          </div>
     </div> 
 	<div class="buttonContainerHorizontal">
 	    <ul class="listaMenuBotones">
-            <input type="button" value="[% 'Guardar' | i18n %]" id="save_button" onclick="saveSettings()" class="submit-button" name="save_button">
+            <input type="submit" value="[% 'Guardar' | i18n %]" id="save_button" class="submit-button" name="save_button">
 	    </ul>
 	</div>    
 </fieldset>

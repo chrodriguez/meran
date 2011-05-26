@@ -369,7 +369,7 @@ sub getComboLang {
     my $user_lang = C4::AR::Auth::getUserLocale(); 
     my $default = "";
 
-    $html .="<select id='language' tabindex='-1' style='width:170px;'>";
+    $html .="<select id='language' name='language' tabindex='-1' style='width:170px;'>";
 
     foreach my $lang (@languages){
     	if ($user_lang eq $lang){

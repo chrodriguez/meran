@@ -79,6 +79,7 @@ use vars qw(@EXPORT_OK @ISA);
     recoverPassword
     checkRecoverLink
     changePasswordFromRecover
+    updateUserProfile
 );
 
 =item
@@ -1238,6 +1239,23 @@ sub changePasswordFromRecover{
     return ($message);
 }   
 
+sub updateUserProfile{
+	my ($params) = @_;
+	
+	my $socio  =   C4::AR::Auth::getSessionNroSocio();
+	
+	$socio     = getSocioInfoPorNroSocio($socio);
+	
+	eval{
+		$socio->persona->setEmail($params->{'email'});
+		$socio->setLocale($params->{'language'});
+        #SAVE DATA
+		$socio->persona->save();
+		$socio->save();
+	};
+	
+	return ($socio);
+}
 
 END { }       # module clean-up code here (global destructor)
 
