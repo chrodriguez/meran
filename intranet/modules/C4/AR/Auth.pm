@@ -78,6 +78,9 @@ $VERSION = 1.0;
         hashear_password
         get_html_content
         getMetodoEncriptacion
+        buildSocioDataHashFromSession
+        buildSocioData
+        updateLoggedUserTemplateParams
 );
 
 =item sub _generarNroRandom
@@ -313,7 +316,6 @@ sub inicializarAuth{
     return ($session);
 }
 
-
 =item get_template_and_user
 
   my ($template, $borrowernumber, $cookie)
@@ -369,26 +371,7 @@ sub get_template_and_user {
             $usuario_logueado = C4::Modelo::UsrSocio->new();
         }
     
-        # TODO pasar a una funcion
-        my %socio_data;
-        $socio_data{'usr_apellido'}             = $session->param('usr_apellido');
-        $socio_data{'usr_nombre'}               = $session->param('usr_nombre');
-        $socio_data{'usr_tiene_foto'}           = $session->param('usr_tiene_foto');
-        $socio_data{'usr_nro_socio'}            = $session->param('nro_socio');
-        $socio_data{'usr_documento_nombre'}     = $session->param('usr_documento_nombre');
-        $socio_data{'usr_documento_version'}    = $session->param('usr_documento_version');
-        $socio_data{'usr_nro_documento'}        = $session->param('usr_nro_documento');
-        $socio_data{'usr_calle'}                = $session->param('usr_calle');
-        $socio_data{'usr_ciudad_nombre'}        = $session->param('usr_ciudad_nombre');
-        $socio_data{'usr_categoria_desc'}       = $session->param('usr_categoria_desc');
-        $socio_data{'usr_fecha_nac'}            = $session->param('usr_fecha_nac');
-        $socio_data{'usr_sexo'}                 = $session->param('usr_sexo');
-        $socio_data{'usr_telefono'}             = $session->param('usr_telefono');
-        $socio_data{'usr_alt_telefono'}         = $session->param('usr_alt_telefono');
-        $socio_data{'usr_email'}                = $session->param('usr_email');
-        $socio_data{'usr_legajo'}               = $session->param('usr_legajo');
-        $socio_data{'ciudad_ref'}{'id'}         = $session->param('usr_ciudad_id');
-        $params->{'socio_data'}                 = \%socio_data;
+        $params->{'socio_data'}                 = buildSocioDataHashFromSession();
         $params->{'token'}                      = $session->param('token');
         #para mostrar o no algun submenu del menu principal
         $params->{'menu_preferences'}           = C4::AR::Preferencias::getMenuPreferences();
@@ -855,6 +838,7 @@ sub _isOPAC {
 sub buildSocioData{
 
     my ($session,$socio) = @_;
+    
     $session->param('urs_theme', $socio->getTheme());
     $session->param('usr_theme_intra', $socio->getThemeINTRA());
     $session->param('usr_locale', $socio->getLocale());
@@ -877,6 +861,38 @@ sub buildSocioData{
     $session->param('usr_credential_type', $socio->getCredentialType());
 }
 
+sub buildSocioDataHashFromSession{
+
+    my ($session) = CGI::Session->load();    
+    
+    my %socio_data;
+    $socio_data{'usr_apellido'}             = $session->param('usr_apellido');
+    $socio_data{'usr_nombre'}               = $session->param('usr_nombre');
+    $socio_data{'usr_tiene_foto'}           = $session->param('usr_tiene_foto');
+    $socio_data{'usr_nro_socio'}            = $session->param('nro_socio');
+    $socio_data{'usr_documento_nombre'}     = $session->param('usr_documento_nombre');
+    $socio_data{'usr_documento_version'}    = $session->param('usr_documento_version');
+    $socio_data{'usr_nro_documento'}        = $session->param('usr_nro_documento');
+    $socio_data{'usr_calle'}                = $session->param('usr_calle');
+    $socio_data{'usr_ciudad_nombre'}        = $session->param('usr_ciudad_nombre');
+    $socio_data{'usr_categoria_desc'}       = $session->param('usr_categoria_desc');
+    $socio_data{'usr_fecha_nac'}            = $session->param('usr_fecha_nac');
+    $socio_data{'usr_sexo'}                 = $session->param('usr_sexo');
+    $socio_data{'usr_telefono'}             = $session->param('usr_telefono');
+    $socio_data{'usr_alt_telefono'}         = $session->param('usr_alt_telefono');
+    $socio_data{'usr_email'}                = $session->param('usr_email');
+    $socio_data{'usr_legajo'}               = $session->param('usr_legajo');
+    $socio_data{'ciudad_ref'}{'id'}         = $session->param('usr_ciudad_id'); 
+    
+    return (\%socio_data);
+}
+
+sub updateLoggedUserTemplateParams{
+	my ($session,$t_params,$socio) = @_;
+	
+	buildSocioData($session,$socio);
+	$t_params->{'socio_data'} = buildSocioDataHashFromSession();
+}
 
 =item sub _getTimeOut
 
