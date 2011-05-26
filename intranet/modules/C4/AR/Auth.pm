@@ -366,7 +366,7 @@ sub get_template_and_user {
             $usuario_logueado = C4::Modelo::UsrSocio->new();
         }
     
-        $params->{'socio_data'}                 = buildSocioDataHashFromSession();
+        $params->{'socio_data'}                 = buildSocioDataHashFromSession($session);
         $params->{'token'}                      = $session->param('token');
         #para mostrar o no algun submenu del menu principal
         $params->{'menu_preferences'}           = C4::AR::Preferencias::getMenuPreferences();
@@ -811,11 +811,13 @@ sub buildSocioData{
     $session->param('usr_email', $socio->persona->getEmail());
     $session->param('usr_legajo', $socio->persona->getLegajo());
     $session->param('usr_credential_type', $socio->getCredentialType());
+    
+    return ($session);
 }
 
 sub buildSocioDataHashFromSession{
 
-    my ($session) = CGI::Session->load();    
+    my ($session) = @_;    
     
     my %socio_data;
     $socio_data{'usr_apellido'}             = $session->param('usr_apellido');
@@ -843,7 +845,7 @@ sub updateLoggedUserTemplateParams{
 	my ($session,$t_params,$socio) = @_;
 	
 	buildSocioData($session,$socio);
-	$t_params->{'socio_data'} = buildSocioDataHashFromSession();
+	$t_params->{'socio_data'} = buildSocioDataHashFromSession($session);
 }
 
 =item sub _getTimeOut
