@@ -29,7 +29,26 @@
                         [% END %]
                     [% ELSE %]
                         <strong class="[% IF nivel3.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">[% nivel3.getEstadoObject.getNombre  %]</strong>
-                    [% END %]
+                        [% FOREACH nivel2 %]
+                            [% FOREACH nivel3 %]
+                                <!-- preguntamos si ya se muestra el usuario en el prestamo, para no mostrarlo dos veces -->
+                                [% IF !prestamo.getNro_socio %]
+                                    [% IF reserva.getNro_socio %]
+                                        [% 'Reservado a:' | i18n  %] 
+                                        <strong>[% PERL %]
+                                            print C4::AR::Filtros::link_to(   text =>     "[% socio_reserva.persona.getApeYNom %]",
+                                                                              url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+                                                                              params =>   ["nro_socio=[% socio_reserva.getNro_socio %]"],
+                                                                              title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
+                                                                              blank =>  1,
+                                                                        );
+                                        [% END %]
+                                        </strong>
+                                    [% END %]
+                                [% END %]
+                        [% END %]
+                    [% END %] 
+                    [% END %]           
             </div>
         </li>
         </ul>
