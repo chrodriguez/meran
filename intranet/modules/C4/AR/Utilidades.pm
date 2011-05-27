@@ -4037,6 +4037,8 @@ sub getUrlPrefix{
 	return (C4::Context->config('url_prefix'));
 	
 }
+
+
 END { }       # module clean-up code here (global destructor)
 
 1;
