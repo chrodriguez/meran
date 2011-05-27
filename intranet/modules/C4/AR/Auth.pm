@@ -267,6 +267,7 @@ sub _destruirSession{
     #redirecciono a loguin y genero una nueva session y nroRandom para que se loguee el usuario
     $session->param('codMsg', $codMsg);
   
+
 #     C4::AR::Debug::debug("WARNING: ¡¡¡¡Se destruye la session y la cookie!!!!!");
     redirectToAuth($template_params)
 
@@ -599,19 +600,16 @@ sub checkauth {
                       my $captchaResult;
 
                       if ($login_attempts > 2 ){
-                          
-                          C4::AR::Utilidades::printHASH($query);
-
+                         
                           my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
-                          my $reCaptchaChallenge  = $query->{'recaptcha_challenge_field'};
-                          my $reCaptchaResponse   = $query->{'recaptcha_response_field'};
-
-      
-                        
-                          
+                          my $reCaptchaChallenge  = $query->param('recaptcha_challenge_field');
+                          my $reCaptchaResponse   = $query->param('recaptcha_response_field');
+                    
                           use Captcha::reCAPTCHA;
                           my $c = Captcha::reCAPTCHA->new;
-                                      
+  
+                          C4::AR::Debug::debug($reCaptchaResponse);
+
                           $captchaResult = $c->check_answer(
                                       $reCaptchaPrivateKey, $ENV{'REMOTE_ADDR'},
                                       $reCaptchaChallenge, $reCaptchaResponse
@@ -619,9 +617,7 @@ sub checkauth {
                     
                       } else { 
                               $sin_captcha = 1; 
-                      }
-                  
-                    
+                      }  
 
                       if ($captchaResult->{is_valid} || $sin_captcha){
 
@@ -671,7 +667,7 @@ sub checkauth {
                                     #intento de loguin
                                     my $cant_fallidos= $socio->getLogin_attempts + 1;
                                     $socio->setLogin_attempts($cant_fallidos);
-                                    C4::AR::Debug::debug($cant_fallidos);
+                 
                                     if ($cant_fallidos == 3){
                                         $template_params->{'mostrar_captcha'}=1;
                                     }
@@ -684,10 +680,9 @@ sub checkauth {
                                 redirectToAuth($template_params);
                             }#end else de if ($socio)
                       } else { 
-                                $template_params->{'mostrar_captcha'}=1;
-                                $template_params->{'loginAttempt'} = 1;
-                                $session->param('codMsg', 'U422');
-                                _destruirSession('U406', $template_params);      
+                                $template_params->{'mostrar_captcha'}= 1;
+                                $template_params->{'loginAttempt'} = 1;                
+                                _destruirSession('U422', $template_params);      
                       }
                   }# end unless ($userid)
     }# el else de DEMO
