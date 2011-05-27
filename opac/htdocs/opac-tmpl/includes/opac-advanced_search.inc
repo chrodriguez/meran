@@ -1,7 +1,7 @@
         <!--<h1 class="block">[% 'B&uacute;squeda Avanzada' | i18n %]</h1>-->
         <div class="column1-unit">
             <div class="contactform">
-                <form action="/cgi-bin/koha/opac-busquedasDB.pl" method="get">
+                <form action="[% url_prefix %]/opac-busquedasDB.pl" method="get">
                     <fieldset>
                         <legend>&nbsp;[% 'Complete lo necesario' | i18n %]&nbsp;</legend>
                         <p>

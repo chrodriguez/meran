@@ -8,7 +8,7 @@
 //     objAH.debug             = true;
 //     objAH.showOverlay       = true;
 //     //para busquedas combinables
-//     objAH.url               = '/cgi-bin/koha/opac-busquedasDB.pl';
+//     objAH.url               = 'URL_PREFIX/opac-busquedasDB.pl';
 //     objAH.string            = $('#string').val();
 //     objAH.only_available    = ( $('#only_available').attr('checked') )?1:0;
 // //     objAH.signatura         = $('#signatura').val();
@@ -86,7 +86,7 @@ function mostrarHistorialPrestamos(){
 	objAH=new AjaxHelper(mostrarHistorialUpdate);
   	objAH.debug= true;
     objAH.showOverlay       = true;
-	objAH.url= '/cgi-bin/koha/opac-HistorialPrestamos.pl';
+	objAH.url= 'URL_PREFIX/opac-HistorialPrestamos.pl';
 	//se setea la funcion para cambiar de pagina
 	objAH.funcion= 'changePage';
 	//se envia la consulta
@@ -100,7 +100,7 @@ function mostrarHistorialReservas(bornum){
   	objAH.debug= true;
     objAH.showOverlay       = true;
 	//para busquedas combinables
-	objAH.url= '/cgi-bin/koha/opac-HistorialReservas.pl';
+	objAH.url= 'URL_PREFIX/opac-HistorialReservas.pl';
 	objAH.bornum= bornum;
 	//se setea la funcion para cambiar de pagina
 	objAH.funcion= 'changePage';
@@ -142,7 +142,7 @@ function buscarPorAutor(){
 	objAH=new AjaxHelper(updateBuscarPorAutor);
   	objAH.debug= true;
     objAH.showOverlay       = true;
-	objAH.url= '/cgi-bin/koha/opac-busquedasDB.pl';
+	objAH.url= 'URL_PREFIX/opac-busquedasDB.pl';
 	objAH.searchField= $('#searchField').val();
 	objAH.tipo= 'normal';
 	objAH.tipoAccion= 'BUSQUEDA_SIMPLE_POR_AUTOR';
@@ -174,7 +174,7 @@ function buscarPorTitulo(){
     objAH=new AjaxHelper(updateBuscarPorTitulo);
     objAH.debug= true;
     objAH.showOverlay       = true;
-    objAH.url= '/cgi-bin/koha/opac-busquedasDB.pl';
+    objAH.url= 'URL_PREFIX/opac-busquedasDB.pl';
     objAH.searchinc= $('#searchField').val();
     objAH.tipo= 'normal';
     objAH.tipoAccion= 'BUSQUEDA_SIMPLE_POR_TITULO';
@@ -228,7 +228,7 @@ function busquedaCombinable(typeSearch){
     objAH.debug= true;
     objAH.showOverlay       = true;
     //para busquedas combinables
-    objAH.url= '/cgi-bin/koha/opac-busquedasDB.pl';
+    objAH.url= 'URL_PREFIX/opac-busquedasDB.pl';
     objAH.tipoAccion= 'BUSQUEDA_COMBINABLE';
     if (typeSearch != 'all'){
 //         objAH.codBarra= $('#codBarra').val();
@@ -278,7 +278,7 @@ function buscarPorCodigoBarra(){
     objAH=new AjaxHelper(updateInfo);
     objAH.showOverlay       = true;
     objAH.debug= true;
-    objAH.url= '/cgi-bin/koha/opac-busquedasDB.pl';
+    objAH.url= 'URL_PREFIX/opac-busquedasDB.pl';
     objAH.codBarra= $('#codBarra').val();
     objAH.tipoAccion= 'FILTRAR_POR_BARCODE';
     objAH.funcion= 'changePage';
@@ -290,7 +290,7 @@ function filtrarPorAutor(idAutor){
     objAH=new AjaxHelper(updateInfo);
     objAH.showOverlay       = true;
     objAH.debug= true;
-    objAH.url= '/cgi-bin/koha/opac-busquedasDB.pl';
+    objAH.url= 'URL_PREFIX/opac-busquedasDB.pl';
     objAH.idAutor= idAutor;	
     objAH.tipoAccion= 'FILTRAR_POR_AUTOR';
     objAH.funcion= 'changePage';

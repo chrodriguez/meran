@@ -19,7 +19,7 @@
 
     [% PERL %]
         print C4::AR::Filtros::link_to( text =>     "[% 'Volver al detalle' | i18n %]",
-                                        url =>      "/cgi-bin/koha/opac-detail.pl", 
+                                        url =>      "[% url_prefix %]/opac-detail.pl", 
                                         params =>   ["id1=[% id1 %]"],
                                         title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
                                     );
@@ -49,7 +49,7 @@
     <br />
 </div>
 [% IF socio_data %]
-    <form action="/cgi-bin/koha/reviews.pl" method="post">
+    <form action="[% url_prefix %]/reviews.pl" method="post">
         <textarea id="review" name="review" class="self_review" style="width: 88.3%"></textarea>
         <input type="hidden" name="token" value="[% token %]" />
         <input type="hidden" name="id2" value="[% HTML.escape(id2) %]" />

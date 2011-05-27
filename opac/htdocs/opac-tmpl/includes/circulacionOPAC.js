@@ -14,7 +14,7 @@ function reservar(id1, id2){
             objAH.debug         = true;
             objAH.showOverlay   = true;
             //para busquedas combinables
-            objAH.url           = '/cgi-bin/koha/opac-reservar.pl';
+            objAH.url           = 'URL_PREFIX/opac-reservar.pl';
             objAH.id1           = id1;
             objAH.id2           = id2;
             objAH.sendToServer();
@@ -52,7 +52,7 @@ function cancelarReserva(id_reserva){
             objAH               = new AjaxHelper(updateInfoCancelarReserva);
             objAH.debug         = true;
             objAH.showOverlay   = true;
-            objAH.url           = '/cgi-bin/koha/reservasDB.pl';
+            objAH.url           = 'URL_PREFIX/reservasDB.pl';
             objAH.id_reserva    = id_reserva;
             objAH.accion        = 'CANCELAR_RESERVA';
             
@@ -81,7 +81,7 @@ function cancelarYReservar(reserveNumber,id1Nuevo,id2Nuevo){
 
     objAH.debug         = true;
     objAH.showOverlay   = true;
-    objAH.url           = '/cgi-bin/koha/reservasDB.pl';
+    objAH.url           = 'URL_PREFIX/reservasDB.pl';
     objAH.reserveNumber = reserveNumber;
     objAH.id1Nuevo      = id1Nuevo;
     objAH.id2Nuevo      = id2Nuevo;
@@ -99,7 +99,7 @@ function renovar(id_prestamo){
     objAH.debug         = true;
     objAH.showOverlay   = true;
     //para busquedas combinables
-    objAH.url           = '/cgi-bin/koha/opac-renovar.pl';
+    objAH.url           = 'URL_PREFIX/opac-renovar.pl';
     objAH.id_prestamo   = id_prestamo;
     objAH.sendToServer();
 }
@@ -128,7 +128,7 @@ function DetalleReservas(){
     objAH.showOverlay       = true;
     objAH.debug     = true;
     //para busquedas combinables
-    objAH.url       = '/cgi-bin/koha/opac-info_reservas.pl';
+    objAH.url       = 'URL_PREFIX/opac-info_reservas.pl';
     objAH.action    = 'detalle_asignadas';
     objAH.sendToServer();
 }
@@ -156,7 +156,7 @@ function DetallePrestamos(){
     objAH.debug         = true;
     objAH.showOverlay   = true;
     //para busquedas combinables
-    objAH.url           = '/cgi-bin/koha/opac-DetallePrestamos.pl';
+    objAH.url           = 'URL_PREFIX/opac-DetallePrestamos.pl';
 //  objAH.borrowernumber= borrowernumber;
     objAH.sendToServer();
 }
@@ -175,7 +175,7 @@ function updateDetallePrestamo(responseText){
 function infoReservas(){
     objAH           = new AjaxHelper(updateInfoReservas);
     objAH.debug     = true;
-    objAH.url       = '/cgi-bin/koha/opac-info_reservas.pl';
+    objAH.url       = 'URL_PREFIX/opac-info_reservas.pl';
     objAH.action    = 'detalle_espera';
     objAH.bubble    = 1;
     objAH.sendToServer();
@@ -188,7 +188,7 @@ function updateInfoReservas(responseText){
 function infoSanciones(){
     objAH               = new AjaxHelper(updateInfoSanciones);
     objAH.debug         = true;
-    objAH.url           = '/cgi-bin/koha/opac-info_sanciones.pl';
+    objAH.url           = 'URL_PREFIX/opac-info_sanciones.pl';
     objAH.sendToServer();
 }
 
@@ -201,7 +201,7 @@ function addFavorite(id1){
     objAH               = new AjaxHelper(updateAddFavorite);
     objAH.debug         = true;
     objAH.showOverlay   = true;
-    objAH.url           = '/cgi-bin/koha/opac-favoritosDB.pl';
+    objAH.url           = 'URL_PREFIX/opac-favoritosDB.pl';
     objAH.action        = 'add_favorite';
     objAH.id1           = id1;
     objAH.sendToServer();
@@ -219,7 +219,7 @@ function deleteFavorite(id1){
     objAH                   = new AjaxHelper(updateDeleteFavorite);
     objAH.debug             = true;
     objAH.showOverlay       = true;
-    objAH.url               = '/cgi-bin/koha/opac-favoritosDB.pl';
+    objAH.url               = 'URL_PREFIX/opac-favoritosDB.pl';
     objAH.action            = 'delete_favorite';
     objAH.id1               = id1;
     objAH.sendToServer();

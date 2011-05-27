@@ -20,7 +20,7 @@ function consultarBar(filtro,doScroll){
     inicial = '0';
 
     if(jQuery.trim(busqueda).length > 0){
-        objAH.url= '/cgi-bin/koha/usuarios/reales/buscarUsuarioResult.pl';
+        objAH.url= 'URL_PREFIX/usuarios/reales/buscarUsuarioResult.pl';
         objAH.showOverlay       = true;
         objAH.debug= true;
 //      objAH.cache= true;
@@ -61,7 +61,7 @@ function consultar(filtro,doScroll){
            }
     }
     if(jQuery.trim(busqueda).length > 0){
-        objAH.url= '/cgi-bin/koha/usuarios/reales/buscarUsuarioResult.pl';
+        objAH.url= 'URL_PREFIX/usuarios/reales/buscarUsuarioResult.pl';
         objAH.showOverlay       = true;
         objAH.debug= true;
 //      objAH.cache= true;

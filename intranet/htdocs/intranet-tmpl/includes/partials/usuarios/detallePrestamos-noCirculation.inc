@@ -24,7 +24,7 @@
                 <td width="14%" >
 	                [% PERL %]
 	                    print C4::AR::Filtros::link_to( text => "[% prestamo.nivel3.nivel1.getTitulo %]",
-	                                            url =>  "/cgi-bin/koha/catalogacion/estructura/detalle.pl", 
+	                                            url =>  "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
 	                                            params =>   ["id1=[% prestamo.nivel3.nivel1.getId1 %]"],
 	                                          ) ;
 	                [% END %]
@@ -40,7 +40,7 @@
                 <td>
 	                [% PERL %]
 	                    print C4::AR::Filtros::link_to( text =>     "[% prestamo.nivel3.getBarcode %]",
-	                                                    url =>      "/cgi-bin/koha/catalogacion/estructura/detalleEjemplar.pl", 
+	                                                    url =>      "[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
 	                                                    params =>   ["id3=[% prestamo.getId3 %]"],
 	                                                    title =>    "[% 'Detalle del Ejemplar' | i18n %]"
 	                                                ) ;
@@ -51,7 +51,7 @@
                     [% IF prestamo.nivel3.getSignatura_topografica %] 
                         [% PERL %]
                             print C4::AR::Filtros::link_to( text =>     "[% prestamo.nivel3.getSignatura_topografica %]",
-                                                            url =>      "/cgi-bin/koha/detalle.pl", 
+                                                            url =>      "[% url_prefix %]/detalle.pl", 
                                                             params =>   ["id1=[% prestamo.nivel3.nivel1.getId1 %]"],
                                                 ) ;
                         [% END %]

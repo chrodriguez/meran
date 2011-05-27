@@ -29,7 +29,7 @@
 
         if (verificarDatos()){
             objAH                   = new AjaxHelper(updateConfirmarAgregarAutorizado);
-            objAH.url               = '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+            objAH.url               = '[% url_prefix %]/usuarios/reales/usuariosRealesDB.pl';
             objAH.debug             = true;
             objAH.showOverlay       = true;
             objAH.nro_socio         = NRO_SOCIO_AUTH; 

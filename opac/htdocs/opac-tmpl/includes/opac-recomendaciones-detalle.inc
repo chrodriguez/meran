@@ -40,7 +40,7 @@
             [% PERL %]
                 print C4::AR::Filtros::link_to( text    => [% completo %],
                                                 params  => "[authorid=[% idAutor %]]", 
-                                                url     => "/cgi-bin/koha/opac-searchresults.pl", 
+                                                url     => "[% url_prefix %]/opac-searchresults.pl", 
                                                 title   => "[% 'Mostrar Detalle' | i18n %]"
                                             ) ;
             [% END %]  

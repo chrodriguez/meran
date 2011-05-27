@@ -46,7 +46,7 @@
               [% INCLUDE 'rating.inc' %]
           [% END %]
           <h3>
-              <a href="/cgi-bin/koha/reviews.pl?token=[% token %]&amp;id2=[% id2 %]">
+              <a href="[% url_prefix %]/reviews.pl?token=[% token %]&amp;id2=[% id2 %]">
                   [% 'Revisiones' | i18n %] ([% cant_reviews %])
               </a>
           </h3>

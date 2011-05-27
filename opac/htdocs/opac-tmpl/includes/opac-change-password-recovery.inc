@@ -27,7 +27,7 @@
         [% END %]
         <div class="column1-unit" style="width: 500px">
           <div class="contactform" style="width: 100%">
-            <form method="post" action="/cgi-bin/koha/opac-recover-password.pl" onSubmit="return checkPassword()">
+            <form method="post" action="[% url_prefix %]/opac-recover-password.pl" onSubmit="return checkPassword()">
               <fieldset>
                 <legend>&nbsp;[% 'Restablecimiento de clave ' | i18n %]&nbsp;</legend>
                    <!-- CAMPOS PARA CAMBIO DE PASSWORD -->

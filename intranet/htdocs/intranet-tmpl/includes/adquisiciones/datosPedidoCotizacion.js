@@ -11,7 +11,7 @@ var test;
 
 function presupuestosParaPedidoCotizacion(){
                  objAH                     = new AjaxHelper(updatePresupuestosParaPedidoCotizacion);
-                 objAH.url                 = '/cgi-bin/koha/adquisiciones/mostrarComparacion.pl';
+                 objAH.url                 = 'URL_PREFIX/adquisiciones/mostrarComparacion.pl';
                  objAH.debug               = true;
                  objAH.showOverlay         = true;
                  objAH.pedido_cotizacion   = $('#combo_pedidos').val();

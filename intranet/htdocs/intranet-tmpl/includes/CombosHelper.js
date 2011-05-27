@@ -12,7 +12,7 @@ function getOptionsComboUI(){
     objAH=new AjaxHelper(updateGetOptionsComboUI);
     objAH.showOverlay       = true;
     objAH.debug= true;
-    objAH.url="/cgi-bin/koha/utils/utilsDB.pl";
+    objAH.url="URL_PREFIX/utils/utilsDB.pl";
     objAH.tipoAccion="GENERAR_ARREGLO_UI";
     objAH.sendToServer();
 }

@@ -8,7 +8,7 @@
 function usuariosConectados(){
 	objAH=new AjaxHelper(updateInfoUsuariosConectados);
     objAH.showOverlay       = true;
-	objAH.url= '/cgi-bin/koha/KohaDB.pl';
+	objAH.url= 'URL_PREFIX/KohaDB.pl';
 // 	objAH.borrowernumber= borrower;
 	//se envia la consulta
 	objAH.tipo= 'USUARIOS_CONECTADOS';

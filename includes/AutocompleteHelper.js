@@ -33,7 +33,7 @@ function= funcion a ejecutar luego de traer la respuesta del servidor
 		return 0;
 	}
 
-    url = "/cgi-bin/koha/autocompletablesDB.pl?accion="+options.accion+"&token="+token;
+    url = "URL_PREFIX/autocompletablesDB.pl?accion="+options.accion+"&token="+token;
 
     $("#"+options.IdInput).search();
     // q= valor de campoHelp
@@ -73,7 +73,7 @@ function= funcion a ejecutar luego de traer la respuesta del servidor
         return 0;
     }
 
-    url = "/cgi-bin/koha/autocompletablesDB.pl?accion="+options.accion+"&token="+token;
+    url = "URL_PREFIX/autocompletablesDB.pl?accion="+options.accion+"&token="+token;
 
     $("#"+options.IdInput).search();
     // q= valor de campoHelp

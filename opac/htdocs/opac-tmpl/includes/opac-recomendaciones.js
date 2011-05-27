@@ -64,7 +64,7 @@ function eliminarDetalle(idRecom){
         objAH                   = new AjaxHelper(updateEliminarDetalle);
         objAH.debug             = true;
         objAH.showOverlay       = true;
-        objAH.url               = '/cgi-bin/koha/opac-recomendacionesDB.pl'; 
+        objAH.url               = 'URL_PREFIX/opac-recomendacionesDB.pl'; 
         objAH.id_rec_det        = idRecom;
         objAH.tipoAccion        = 'ELIMINAR_DETALLE';
         objAH.sendToServer();
@@ -144,7 +144,7 @@ function crearRecomendacion(){
         objAH                   = new AjaxHelper(updateCrearRecomendacion);
         objAH.debug             = true;
         objAH.showOverlay       = true;
-        objAH.url               = '/cgi-bin/koha/opac-recomendacionesDB.pl';     
+        objAH.url               = 'URL_PREFIX/opac-recomendacionesDB.pl';     
         objAH.tipoAccion        = 'AGREGAR_RECOMENDACION';
         objAH.sendToServer();
 
@@ -159,7 +159,7 @@ function cancelarRecomendacion(){
         objAH                   = new AjaxHelper(updateCancelarRecomendacion);
         objAH.debug             = true;
         objAH.showOverlay       = true;
-        objAH.url               = '/cgi-bin/koha/opac-recomendacionesDB.pl';     
+        objAH.url               = 'URL_PREFIX/opac-recomendacionesDB.pl';     
         objAH.tipoAccion        = 'CANCELAR_RECOMENDACION';
         objAH.id_rec            = $('#id_recomendacion').val();
         objAH.sendToServer();
@@ -189,7 +189,7 @@ function agregarRenglon(){
         objAH                   = new AjaxHelper(updateAgregarRenglon);
         objAH.debug             = true;
         objAH.showOverlay       = true;
-        objAH.url               = '/cgi-bin/koha/opac-recomendacionesDB.pl';
+        objAH.url               = 'URL_PREFIX/opac-recomendacionesDB.pl';
         objAH.autor             = $('#autor').val();
         objAH.titulo            = $('#titulo').val();
         objAH.edicion           = $('#edicion').val();

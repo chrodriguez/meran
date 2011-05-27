@@ -49,7 +49,7 @@ function socioSearchEvent(event){
             <div class="top-bar-inside">
               <div class="static-links">
   <div id="logo">
-    <a href="/cgi-bin/koha/mainpage.pl?token=[% token %]" title="[% 'Inicio' | i18n %]"></a>
+    <a href="[% url_prefix %]/mainpage.pl?token=[% token %]" title="[% 'Inicio' | i18n %]"></a>
   </div>
 
 
@@ -78,7 +78,7 @@ function socioSearchEvent(event){
 	      <a href="#" class="profile-links">
 	        <span id="profile-image">
 	            <a title="[% socio_data.usr_nombre %], [% socio_data.usr_apellido %]" rel="contact" class="url" 
-	               href="/cgi-bin/koha/usuarios/reales/settings.pl?token=[% token %]&amp;nro_socio=[% socio_data.usr_nro_socio %]">
+	               href="[% url_prefix %]/usuarios/reales/settings.pl?token=[% token %]&amp;nro_socio=[% socio_data.usr_nro_socio %]">
 	               
 			      [% IF socio_data.usr_tiene_foto %]
 			          <img src="[% themelang %]/pictures/[% socio_data.usr_tiene_foto %]"  
@@ -92,7 +92,7 @@ function socioSearchEvent(event){
 	        </span>
 	      </a>
 	      <span id="screen-name">
-		      <a href="/cgi-bin/koha/usuarios/reales/settings.pl?token=[% token %]&amp;nro_socio=[% socio_data.usr_nro_socio %]"
+		      <a href="[% url_prefix %]/usuarios/reales/settings.pl?token=[% token %]&amp;nro_socio=[% socio_data.usr_nro_socio %]"
 		        style="color:#BABABA; display: inline-block;">
 		        [% socio_data.usr_nro_socio %] ([% socio_data.usr_apellido %], [% socio_data.usr_nombre %])
 		      </a>
@@ -103,7 +103,7 @@ function socioSearchEvent(event){
 
 	  <div id="global-nav">
 	    <ul>
-	      <li id="global-nav-profile"><a href="/cgi-bin/koha/logout.pl?token=[% token %]">[% 'Salir' | i18n %]</a></li>
+	      <li id="global-nav-profile"><a href="[% url_prefix %]/logout.pl?token=[% token %]">[% 'Salir' | i18n %]</a></li>
 	    </ul>
 	  </div>
   

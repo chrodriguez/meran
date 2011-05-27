@@ -32,7 +32,7 @@ function buscarDatosNivel2(){
     objAH.debug             = true
     objAH.showOverlay       = true
     
-    objAH.url               = '/cgi-bin/koha/adquisiciones/recomendacionesDB.pl'
+    objAH.url               = 'URL_PREFIX/adquisiciones/recomendacionesDB.pl'
     objAH.tipoAccion        = 'BUSQUEDA_RECOMENDACION'
     objAH.idCatalogoSearch  = $('#catalogo_search_hidden').val()
     objAH.sendToServer()
@@ -51,7 +51,7 @@ function cargarDatosEdicionSeleccionada(){
     objAH                   = new AjaxHelper(updateCargarDatosEdicionSeleccionada)
     objAH.debug             = true
     objAH.showOverlay       = true
-    objAH.url               = '/cgi-bin/koha/adquisiciones/recomendacionesDB.pl'
+    objAH.url               = 'URL_PREFIX/adquisiciones/recomendacionesDB.pl'
     objAH.tipoAccion        = 'CARGAR_DATOS_EDICION'
     objAH.edicion           = $('#edicion_id').val()
     objAH.idCatalogoSearch  = $('#catalogo_search_hidden').val()
@@ -114,7 +114,7 @@ function appendPedidoCotizacion(formId){
     objAH                       = new AjaxHelper(updateAppendPedidoCotizacion)
     objAH.debug                 = true
     objAH.showOverlay           = true
-    objAH.url                   = '/cgi-bin/koha/adquisiciones/pedidoCotizacionDB.pl'
+    objAH.url                   = 'URL_PREFIX/adquisiciones/pedidoCotizacionDB.pl'
     objAH.tipoAccion            = 'APPEND_PEDIDO_COTIZACION'
     
     objAH.pedido_cotizacion_id  = $('#pedido_cotizacion_id').val()

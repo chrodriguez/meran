@@ -33,7 +33,7 @@
         <td><h1><!-- TMPL_VAR Name="pagetitle" --></h1></td>
         
         <td align="right">
-        <a href="/cgi-bin/koha/opac-search.pl">
+        <a href="[% url_prefix %]/opac-search.pl">
         <img src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-search.png" alt="Buscar" hspace=0 vspace=0 border=0 name="menu-search">
         </a>
         
@@ -41,7 +41,7 @@
         <img src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-join.png"
         alt="Registrarse" hspace=0 vspace=0 border=0 name="menu-join"></a>
 
-        <a href="/cgi-bin/koha/opac-main.pl">
+        <a href="[% url_prefix %]/opac-main.pl">
         <img src="<!-- TMPL_VAR NAME='themelang' -->/images/menu-home.png"
         alt="Inicio" hspace=0 vspace=0 border=0 name="menu-home"></a></td>
 

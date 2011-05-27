@@ -39,7 +39,7 @@ $(document).ready( function() {
 <!--<h1 class="block">[% 'Formulario de contacto' | i18n %]</h1>-->
         <div class="column1-unit">
           <div class="contactform">
-            <form id="contactform" name="contactform" method="get" action="/cgi-bin/koha/opac-contact.pl">
+            <form id="contactform" name="contactform" method="get" action="[% url_prefix %]/opac-contact.pl">
               <fieldset><legend>&nbsp;[% 'Informaci&oacute;n de contacto' | i18n %]&nbsp;</legend>
                 <p><label for="trato" class="left">[% 'Trato' | i18n %]:</label>
                    <select name="trato" id="trato" class="combo" tabindex="5">

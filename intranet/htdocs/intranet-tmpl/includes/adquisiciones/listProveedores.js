@@ -44,7 +44,7 @@ function consultar(filtro,doScroll){
            }
     }
     if(jQuery.trim(busqueda).length > 0){
-        objAH.url               = '/cgi-bin/koha/adquisiciones/listProveedoresResult.pl';
+        objAH.url               = 'URL_PREFIX/adquisiciones/listProveedoresResult.pl';
         objAH.debug             = true;
         objAH.showOverlay       = true;
         objAH.funcion           = 'changePage';

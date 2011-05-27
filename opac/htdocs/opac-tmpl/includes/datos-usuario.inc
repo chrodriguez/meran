@@ -112,7 +112,7 @@
 
                 [% PERL %]
                         print C4::AR::Filtros::link_to( text =>     "[% 'Actualizar Registro' | i18n %]",
-                                                        url =>      "/cgi-bin/koha/opac-userupdate.pl", 
+                                                        url =>      "[% url_prefix %]/opac-userupdate.pl", 
                                                     ) ;
                 [% END %]
             </br>
@@ -128,7 +128,7 @@
         [% END %]
         [% IF foto_name %]
         [% ELSE %]
-            <form name="foto" method=post enctype="multipart/form-data"  action="/cgi-bin/koha/upload.pl" >
+            <form name="foto" method=post enctype="multipart/form-data"  action="[% url_prefix %]/upload.pl" >
                 <input type=file name="filepath" id="filepath">
                 <input type=hidden name="nro_socio" value='[% socio_data.getNro_socio %]'>
 

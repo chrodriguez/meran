@@ -9,13 +9,13 @@
         <div class="nav1">
           <ul>
             <li>
-                <a href="/cgi-bin/koha/opac-main.pl?token=[% token %]" title="[% 'Ir a la p&aacute;gina de inicio' | i18n %]">[% 'Inicio' | i18n %]</a>
+                <a href="[% url_prefix %]/opac-main.pl?token=[% token %]" title="[% 'Ir a la p&aacute;gina de inicio' | i18n %]">[% 'Inicio' | i18n %]</a>
             </li>
             <li>
-                <a href="/cgi-bin/koha/opac-about.pl?token=[% token %]" title="[% 'Sepa qui&eacute;nes somos' | i18n %]">[% 'Acerca de' | i18n %]</a>
+                <a href="[% url_prefix %]/opac-about.pl?token=[% token %]" title="[% 'Sepa qui&eacute;nes somos' | i18n %]">[% 'Acerca de' | i18n %]</a>
             </li>
             <li>
-                <a href="/cgi-bin/koha/opac-contact.pl?token=[% token %]" title="[% 'P&oacute;ngase en contacto con nosotros' | i18n %]">[% 'Contacto' | i18n %]</a>
+                <a href="[% url_prefix %]/opac-contact.pl?token=[% token %]" title="[% 'P&oacute;ngase en contacto con nosotros' | i18n %]">[% 'Contacto' | i18n %]</a>
             </li>
           </ul>
         </div>
@@ -30,7 +30,7 @@
                   <li>  
                     [% PERL %]
                             print C4::AR::Filtros::link_to( text    =>  "[% 'Cerrar Sesi&oacute;n' | i18n %]",
-                                                            url     =>  "/cgi-bin/koha/logout.pl",
+                                                            url     =>  "[% url_prefix %]/logout.pl",
                                                             title   =>  "[% 'Cerrar Sesi&oacute;n' | i18n %]"
                                     ) ;
                     [% END %]
@@ -46,7 +46,7 @@
         <div class="sitemessage">
           <h1>&bull; [% ui.getNombre %]</h1>
           <h2>[% ui.getDireccion %]</h2>
-          <h3><a href="/cgi-bin/koha/opac-ui_info.pl?token=[% token %]">&rsaquo;&rsaquo;&nbsp;[% 'M&aacute;s Informaci&oacute;n De La Unidad' | i18n %]</a></h3>
+          <h3><a href="[% url_prefix %]/opac-ui_info.pl?token=[% token %]">&rsaquo;&rsaquo;&nbsp;[% 'M&aacute;s Informaci&oacute;n De La Unidad' | i18n %]</a></h3>
         </div>
       </div>
       <!-- A.3 HEADER BOTTOM -->
@@ -58,7 +58,7 @@
               <li>
                   [% PERL %]
                       print C4::AR::Filtros::link_to( text    =>  "[% 'Inicio' | i18n %]",
-                                                      url     =>  "/cgi-bin/koha/opac-main.pl",
+                                                      url     =>  "[% url_prefix %]/opac-main.pl",
                                                       title   =>  "[% 'Inicio' | i18n %]",
                               ) ;
                   [% END %]
@@ -72,39 +72,39 @@
                   <li>
                       [% PERL %]
                           print C4::AR::Filtros::link_to( text    =>  "[% 'B&uacute;squeda Avanzada' | i18n %]",
-                                                          url     =>  '/cgi-bin/koha/opac-advanced_search.pl',
+                                                          url     =>  '[% url_prefix %]/opac-advanced_search.pl',
                                                           title   =>  "[% 'B&uacute;squeda Avanzada' | i18n %]",
                                   ) ;
                       [% END %]
                   </li>
                   [% IF !socio_data %]
-                      <li><a href='/cgi-bin/koha/login.pl'>[% 'Iniciar Sesi&oacute;n' | i18n %]</a></li>
+                      <li><a href='[% url_prefix %]/login.pl'>[% 'Iniciar Sesi&oacute;n' | i18n %]</a></li>
                   [% ELSE %]
                       <li>
-                          <a href='/cgi-bin/koha/opac-prestamos_vigentes.pl?token=[% token %]'>
+                          <a href='[% url_prefix %]/opac-prestamos_vigentes.pl?token=[% token %]'>
                               [% 'Pr&eacute;stamos vigentes' | i18n %]
                           </a>
                       </li>
                       <li>
-                          <a href='/cgi-bin/koha/opac-historial_prestamos.pl?token=[% token %]'>
+                          <a href='[% url_prefix %]/opac-historial_prestamos.pl?token=[% token %]'>
                               [% 'Historial de pr&eacute;stamos' | i18n %]
                           </a>
                       </li>
                       <li>
-                          <a href='/cgi-bin/koha/opac-historial_reservas.pl?token=[% token %]'>
+                          <a href='[% url_prefix %]/opac-historial_reservas.pl?token=[% token %]'>
                               [% 'Historial de reservas' | i18n %]
                           </a>
                       </li>
                       <li>
                           [% PERL %]
                               print C4::AR::Filtros::link_to( text    =>  "[% 'Recomendaciones' | i18n %]",
-                                                              url     =>  '/cgi-bin/koha/opac-recomendaciones.pl',
+                                                              url     =>  '[% url_prefix %]/opac-recomendaciones.pl',
                                                               title   =>  "[% 'Recomendaciones' | i18n %]",
                                       ) ;
                           [% END %]
                       </li>
                       <li>
-                          <a href='/cgi-bin/koha/opac-favoritos.pl?token=[% token %]'>
+                          <a href='[% url_prefix %]/opac-favoritos.pl?token=[% token %]'>
                               [% 'Mis favoritos' | i18n %]
                           </a>
                       </li>

@@ -22,7 +22,7 @@
                     <td >
                         [% PERL %]
                               print C4::AR::Filtros::link_to( text =>     "[% reserva.nivel2.nivel1.getTitulo %]",
-                                                              url =>      "/cgi-bin/koha/opac-detail.pl", 
+                                                              url =>      "[% url_prefix %]/opac-detail.pl", 
                                                               params =>   ["id1=[% reserva.nivel2.nivel1.getId1 %]"],
                                                               title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
                                                           ) ;

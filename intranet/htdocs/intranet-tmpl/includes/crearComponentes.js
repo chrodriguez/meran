@@ -31,7 +31,7 @@ var objJSON;
  * componentes. Cuando se completa se ejecuta la funcion que procesa el texto que viene de respuesta.
  */
 function consultarAjaxJSON(){
-	objJSON.url="/cgi-bin/koha/acqui.simple/agregarItemResultsDB.pl";
+	objJSON.url="URL_PREFIX/acqui.simple/agregarItemResultsDB.pl";
 	objJSON.onComplete=procesarInfoJson;
 	objJSON.sendToServer();
 }

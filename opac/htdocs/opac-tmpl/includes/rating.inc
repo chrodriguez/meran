@@ -4,7 +4,7 @@
         $("#rating[% id2 %]").stars({
             callback: function(ui, type, value)
             {
-                $.post("/cgi-bin/koha/rating.pl", {rate: value, id2: [% id2 %]}, function(data)
+                $.post("[% url_prefix %]/rating.pl", {rate: value, id2: [% id2 %]}, function(data)
                 {
                     $("#ajax_response[% id2 %]").html(data);
                 });
@@ -18,7 +18,7 @@
 
 <div class="rating">
     <label>[% "Valoraci&oacute;n" | i18n %]</label>
-    <form id="rating[% id2 %]" class="ratings" action="/cgi-bin/koha/rating.pl" method="post">
+    <form id="rating[% id2 %]" class="ratings" action="[% url_prefix %]/rating.pl" method="post">
         <input type="radio" name="rate" value="1" id="rate1" />
         <input type="radio" name="rate" value="2" id="rate2" />
         <input type="radio" name="rate" value="3" id="rate3" />

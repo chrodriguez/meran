@@ -40,7 +40,7 @@ function getTemplateAddPedidoCotizacion(){
     // traemos el template de busquedas de ejemplares para que se agreguen pedidos de cotizacion
     
     objAH                       = new AjaxHelper(updateGetTemplateAddPedidoCotizacion)
-    objAH.url                   = '/cgi-bin/koha/adquisiciones/pedidoCotizacionDB.pl'
+    objAH.url                   = 'URL_PREFIX/adquisiciones/pedidoCotizacionDB.pl'
     objAH.debug                 = true
     objAH.showOverlay           = true
  
@@ -61,7 +61,7 @@ function addPedidoCotizacion(){
     // nota: no es appendPedidoCotizacion que agrega pedidos_cotizacion nuevos desde la busqueda
     if(checkSeleccionados(true)){
         objAH                           = new AjaxHelper(updateAddPedidoCotizacion)
-        objAH.url                       = '/cgi-bin/koha/adquisiciones/pedidoCotizacionDB.pl'
+        objAH.url                       = 'URL_PREFIX/adquisiciones/pedidoCotizacionDB.pl'
         objAH.debug                     = true
         objAH.showOverlay               = true
         
@@ -83,7 +83,7 @@ function updateAddPedidoCotizacion(responseText){
     var Messages=JSONstring.toObject(responseText);
     setMessages(Messages);
     
-    location.href = '/cgi-bin/koha/adquisiciones/listPedidoCotizacion.pl'
+    location.href = 'URL_PREFIX/adquisiciones/listPedidoCotizacion.pl'
 
 }
 

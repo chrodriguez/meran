@@ -358,7 +358,7 @@ function mostrarEstructuraDelNivel1(){
     objAH.debug         = true;
     objAH.showOverlay   = true;
 // 	objAH.cache= true;
-    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url           = "URL_PREFIX/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
     objAH.nivel         = _NIVEL_ACTUAL;
     objAH.id_tipo_doc   = 'ALL';
@@ -394,7 +394,7 @@ function mostrarEstructuraDelNivel2(){
 // 	  objAH.cache= true;
 //     objAH.showStatusIn  = 'estructuraDelNivel2';
     objAH.showOverlay   = true;
-    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url           = "URL_PREFIX/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
     objAH.nivel         = 2;
     objAH.id_tipo_doc   = $("#tipo_nivel3_id").val();
@@ -439,7 +439,7 @@ function mostrarEstructuraDelNivel3(tipo_documento){
     objAH.debug         = true;
 // 	  objAH.cache= true;
     objAH.showOverlay   = true;
-    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url           = "URL_PREFIX/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
     objAH.nivel         = _NIVEL_ACTUAL;
     objAH.id_tipo_doc   = (tipo_documento)?tipo_documento:$("#tipo_nivel3_id").val();
@@ -587,7 +587,7 @@ function mostrarInfoAltaNivel1(id1){
     objAH.showOverlay       = true;
     objAH.debug= true;
     objAH.showStatusIn = 'nivel1';
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url="URL_PREFIX/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion= "MOSTRAR_INFO_NIVEL1_LATERARL";
     objAH.id1= ID_N1;
     objAH.sendToServer();
@@ -609,7 +609,7 @@ function mostrarInfoAltaNivel2(id2){
     objAH.showOverlay       = true;
     objAH.debug         = true;
     objAH.showStatusIn  = 'nivel2';
-    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url           = "URL_PREFIX/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion    = "MOSTRAR_INFO_NIVEL2_LATERARL";
     objAH.id2           = id2; //mostrar todos los nivel 2 del nivel1 con el q se esta trabajando, asi este vuela
     objAH.id1           = ID_N1;
@@ -671,7 +671,7 @@ function guardarDocumentoN1(){
     objAH                           = new AjaxHelper(updateGuardarDocumentoN1);
     objAH.debug                     = true;
     objAH.showOverlay               = true;
-    objAH.url                       = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url                       = "URL_PREFIX/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion                = "GUARDAR_NIVEL_1";
     objAH.id_tipo_doc               = $("#tipo_nivel3_id").val();
     objAH.id_nivel_bibliografico    = $("#id_nivel_bibliografico").val();
@@ -720,7 +720,7 @@ function guardarDocumentoN2(){
         objAH                   = new AjaxHelper(updateGuardarDocumentoN2);
         objAH.debug             = true;
         objAH.showOverlay       = true;
-        objAH.url               = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+        objAH.url               = "URL_PREFIX/catalogacion/estructura/estructuraCataloDB.pl";
         objAH.tipoAccion        = "GUARDAR_NIVEL_2";
         objAH.tipo_ejemplar     = $('#tipo_nivel3_id').val();
 	    _sacarOpciones();
@@ -755,7 +755,7 @@ function guardarDocumentoN3(){
 		objAH.debug             = true;
         objAH.showOverlay       = true;
         objAH.modificado        = 0;
-		objAH.url               = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+		objAH.url               = "URL_PREFIX/catalogacion/estructura/estructuraCataloDB.pl";
 		objAH.tipoAccion        = "GUARDAR_NIVEL_3";
 		objAH.tipo_documento    = $("#tipo_nivel3_id").val();
         objAH.esPorBarcode      = porBarcode;  
@@ -805,7 +805,7 @@ function guardarModificacionDocumentoN1(){
     objAH                           = new AjaxHelper(updateGuardarModificacionDocumentoN1);
     objAH.debug                     = true;
     objAH.showOverlay               = true;    
-    objAH.url                       = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url                       = "URL_PREFIX/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion                = "MODIFICAR_NIVEL_1";
     objAH.id_tipo_doc               = $("#tipo_nivel3_id").val();
     objAH.id_nivel_bibliografico    = $("#id_nivel_bibliografico").val();
@@ -842,7 +842,7 @@ function guardarModificacionDocumentoN2(){
     objAH                   = new AjaxHelper(updateGuardarModificacionDocumentoN2);
     objAH.debug             = true;
     objAH.showOverlay       = true;
-    objAH.url               = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url               = "URL_PREFIX/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion        = "MODIFICAR_NIVEL_2";
 	_sacarOpciones();
     objAH.infoArrayNivel2   = MARC_OBJECT_ARRAY;
@@ -879,7 +879,7 @@ function guardarModificacionDocumentoN3(){
     objAH                   = new AjaxHelper(updateGuardarModificacionDocumentoN3);
     objAH.debug             = true;
     objAH.showOverlay       = true;
-    objAH.url               = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url               = "URL_PREFIX/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion        = "MODIFICAR_NIVEL_3";
     objAH.tipo_documento    = $("#tipo_nivel3_id").val();
 	objAH.cantEjemplares    = $("#cantEjemplares").val();
@@ -941,7 +941,7 @@ function mostrarInfoAltaNivel3(idNivel2){
         objAH               = new AjaxHelper(updateMostrarInfoAltaNivel3);
         objAH.debug         = true;
         objAH.showOverlay   = true;
-        objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+        objAH.url           = "URL_PREFIX/catalogacion/estructura/estructuraCataloDB.pl";
         objAH.tipoAccion    = "MOSTRAR_INFO_NIVEL3_TABLA";
         objAH.id2           = idNivel2;
         ID_N2               = idNivel2;
@@ -963,7 +963,7 @@ function mostrarInfoAltaNivel3ParaEdicionGrupalFromRegistro(idNivel2){
         objAH               = new AjaxHelper(updateMostrarInfoAltaNivel3ParaEdicionGrupalFromRegistro);
         objAH.debug         = true;
         objAH.showOverlay   = true;
-        objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+        objAH.url           = "URL_PREFIX/catalogacion/estructura/estructuraCataloDB.pl";
         objAH.tipoAccion    = "MOSTRAR_INFO_NIVEL3_TABLA";
         objAH.id2           = idNivel2;
         ID_N2               = idNivel2;
@@ -1711,7 +1711,7 @@ function crearHidden(obj){
 function agregarTablaReferencias(tabla){
     objAH               = new AjaxHelper(updateAgregarTablaReferencias);
     objAH.showOverlay       = true;
-    objAH.url           = '/cgi-bin/koha/admin/referencias/referenciasDB.pl';
+    objAH.url           = 'URL_PREFIX/admin/referencias/referenciasDB.pl';
     objAH.accion        = "AGREGAR_REGISTRO";
     objAH.alias_tabla   = tabla;
     objAH.sendToServer();
@@ -1738,7 +1738,7 @@ function crearEditor(){
 //     makeDataTable('#tablaResult');
 //     zebraId('tablaResult');
     onEnter('search_tabla',obtenerTablaFiltrada);
-    $('.editable').editable('/cgi-bin/koha/admin/referencias/referenciasDB.pl', { 
+    $('.editable').editable('URL_PREFIX/admin/referencias/referenciasDB.pl', { 
             type      : 'text',
             cancel    : CANCELAR,
             submit    : OK,
@@ -1829,7 +1829,7 @@ function borrarN1(id1){
 		    objAH               = new AjaxHelper(updateBorrarN1);
             objAH.showOverlay       = true;
 		    objAH.debug         = true;
-		    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+		    objAH.url           = "URL_PREFIX/catalogacion/estructura/estructuraCataloDB.pl";
 		    objAH.id1           = id1;
 		    objAH.nivel         = 1; 
 		    objAH.itemtype      = $("#id_tipo_doc").val(); //creo q no es necesario
@@ -1861,7 +1861,7 @@ function borrarN2(id2){
 		    objAH                   = new AjaxHelper(updateBorrarN2);
             objAH.showOverlay       = true;
 		    objAH.debug             = true;
-		    objAH.url               = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+		    objAH.url               = "URL_PREFIX/catalogacion/estructura/estructuraCataloDB.pl";
 		    objAH.id2               = id2;
 		    objAH.nivel             = 2;
 		    objAH.itemtype          = $("#id_tipo_doc").val();
@@ -1892,7 +1892,7 @@ function borrarN3(id3){
 		    objAH                   = new AjaxHelper(updateBorrarN3);
             objAH.showOverlay       = true;
 		    objAH.debug             = true;
-		    objAH.url               = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+		    objAH.url               = "URL_PREFIX/catalogacion/estructura/estructuraCataloDB.pl";
             objAH.id3_array         = [id3];
 		    objAH.nivel             = 3;
 		    objAH.itemtype          = $("#id_tipo_doc").val();
@@ -1923,7 +1923,7 @@ function borrarEjemplaresN3(){
 		    objAH               = new AjaxHelper(updateBorrarEjemplaresN3);
             objAH.showOverlay   = true;
 		    objAH.debug         = true;
-		    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+		    objAH.url           = "URL_PREFIX/catalogacion/estructura/estructuraCataloDB.pl";
             var id3_array       = recuperarSeleccionados("checkEjemplares");
 		    objAH.id3_array     = id3_array;
 		    objAH.nivel         = 3;
@@ -1958,7 +1958,7 @@ function modificarN1(id1){
     ID_N1               = id1;
     _mostrarAccion("Modificando el metadato (" + ID_N1 + ")");
 	objAH               = new AjaxHelper(updateModificarN1);
-	objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+	objAH.url           = "URL_PREFIX/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;
 	objAH.debug         = true;
 //     objAH.cache = true;
@@ -1986,7 +1986,7 @@ function modificarN2(id2, tipo_ejemplar){
     _mostrarAccion("Modificando el grupo (" + ID_N2 + ")");
     ID_TIPO_EJEMPLAR    = tipo_ejemplar;
     objAH               = new AjaxHelper(updateModificarN2);
-    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url           = "URL_PREFIX/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;
     objAH.debug         = true;
 //     objAH.cache = true;
@@ -2010,7 +2010,7 @@ function modificarN3(id3, tipo_ejemplar){
     _mostrarAccion("Modificando el ejemplar (" + ID_N3 + ")");
     ID_TIPO_EJEMPLAR    = tipo_ejemplar;
 	objAH               = new AjaxHelper(updateModificarN3);
-	objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+	objAH.url           = "URL_PREFIX/catalogacion/estructura/estructuraCataloDB.pl";
 	objAH.debug         = true;
     objAH.showOverlay   = true;
 	objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
@@ -2039,7 +2039,7 @@ function modificarEjemplaresN3(){
         //si selecciono los ejemplares para editar....
 	    inicializar();
 	    objAH               = new AjaxHelper(updateModificarEjemplaresN3);
-	    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+	    objAH.url           = "URL_PREFIX/catalogacion/estructura/estructuraCataloDB.pl";
 	    objAH.debug         = true;
         objAH.showOverlay   = true;
 	    objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
@@ -2060,7 +2060,7 @@ function modificarEjemplaresN3FromRegistro(id1){
         inicializar();
         ID_N1               = id1;
         objAH               = new AjaxHelper(updateModificarEjemplaresN3);
-        objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+        objAH.url           = "URL_PREFIX/catalogacion/estructura/estructuraCataloDB.pl";
         objAH.debug         = true;
         objAH.showOverlay   = true;
         objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
@@ -2087,7 +2087,7 @@ function borrarGrupo(id1,id2){
 	objAH               = new AjaxHelper(updateBorrarGrupo);
     objAH.showOverlay       = true;
     objAH.debug         = true;
-	objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+	objAH.url           = "URL_PREFIX/catalogacion/estructura/estructuraCataloDB.pl";
 	objAH.id2           = id2;
 	objAH.nivel         = 2;
 	objAH.itemtype      = $("#id_tipo_doc").val();

@@ -42,7 +42,7 @@
 
       <div class="column1-unit">
           <div class="contactform">
-              <form id="datosAEnviar" method="post" action="/cgi-bin/koha/opac-main.pl" onsubmit="return enviar()" autocomplete="off">
+              <form id="datosAEnviar" method="post" action="[% url_prefix %]/opac-main.pl" onsubmit="return enviar()" autocomplete="off">
                 <p><input type="hidden" name="remember_me" value="0" /></p>
                 <fieldset>
                   <legend>&nbsp;[% 'Ingrese sus datos de autenticaci&oacute;n' | i18n %]&nbsp;</legend>
@@ -61,7 +61,7 @@
                   <p>
                     [% PERL %]
                         print C4::AR::Filtros::link_to( text =>     "[% 'Olvid&eacute; mi contrase&ntilde;a' | i18n %]",
-                                                        url =>      "/cgi-bin/koha/opac-forgot-password.pl", 
+                                                        url =>      "[% url_prefix %]/opac-forgot-password.pl", 
                                                         title =>    "[% 'Olvid&eacute; mi contrase&ntilde;a' | i18n %]"
                                                     ) ;
                     [% END %]

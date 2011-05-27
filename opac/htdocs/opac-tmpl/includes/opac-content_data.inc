@@ -9,11 +9,11 @@
                   <h1>[% 'Sin novedades' | i18n %]</h1>
           [% END %]
           [% FOREACH novedad IN novedades %]
-              <h1><a href='/cgi-bin/koha/ver_novedad.pl?id=[% novedad.getId %]&amp;token=[% token %]'>[% novedad.getTitulo %]</a></h1>
+              <h1><a href='[% url_prefix %]/ver_novedad.pl?id=[% novedad.getId %]&amp;token=[% token %]'>[% novedad.getTitulo %]</a></h1>
               <h3>[% novedad.getFechaLegible %] </h3>
               <p>
                   [% novedad.getResumen %]
-                  <a href='/cgi-bin/koha/ver_novedad.pl?id=[% novedad.getId %]&amp;token=[% token %]'>[% 'Leer m&aacute;s' | i18n %] &raquo;</a>
+                  <a href='[% url_prefix %]/ver_novedad.pl?id=[% novedad.getId %]&amp;token=[% token %]'>[% 'Leer m&aacute;s' | i18n %] &raquo;</a>
               </p>
           [% END %]
           

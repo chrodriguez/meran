@@ -9,7 +9,7 @@
 <div class="column1-unit">
     <h1>[% message %]</h1>
     <div class="contactform">
-        <form id="datosAEnviar" method="post" action="/cgi-bin/koha/opac-forgot-password.pl" onsubmit="javascript:startOverlay();" autocomplete="off">
+        <form id="datosAEnviar" method="post" action="[% url_prefix %]/opac-forgot-password.pl" onsubmit="javascript:startOverlay();" autocomplete="off">
 	         <fieldset>
 	           <legend>&nbsp;[% 'Ingrese sus datos de autenticaci&oacute;n' | i18n %]&nbsp;</legend>
 	           <p>

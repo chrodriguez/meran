@@ -11,7 +11,7 @@ function clearInput(){
 function obtenerSubCampos(){
 	objAH=new AjaxHelper(updateObtenerSubCampos);
     objAH.debug= true;
-    objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url="[% url_prefix %]/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.campo = $('#campoHelpId').val();
     objAH.tipoAccion= 'MOSTRAR_SUBCAMPOS_DE_CAMPO';
     objAH.sendToServer();

@@ -23,7 +23,7 @@
 	            <td width="16%">
 	                [% PERL %]
 	                    print C4::AR::Filtros::link_to( text =>     " [% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
-	                                                    url =>      "/cgi-bin/koha/catalogacion/estructura/detalle.pl", 
+	                                                    url =>      "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
 	                                                    params =>   ["id1=[% reserva.nivel2.nivel1.getId1 %]"],
 	                                                ) ;
 	                [% END %]
@@ -38,7 +38,7 @@
 	            <td>
 	                [% PERL %]
 	                    print C4::AR::Filtros::link_to( text =>     "[% reserva.nivel3.getBarcode %]",
-	                                                    url =>      "/cgi-bin/koha/catalogacion/estructura/detalleEjemplar.pl", 
+	                                                    url =>      "[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
 	                                                    params =>   ["id3=[% reserva.getId3 %]"],
 	                                                    title =>    "[% 'Mostrar Detalle de Disponibilidad' | i18n %]"
 	                                                ) ;
@@ -49,7 +49,7 @@
 	            [% IF reserva.nivel3.getSignatura_topografica %] 
 	                [% PERL %]
 	                    print C4::AR::Filtros::link_to( text =>     "[% reserva.nivel3.getSignatura_topografica %]",
-	                                                    url =>      "/cgi-bin/koha/detalle.pl", 
+	                                                    url =>      "[% url_prefix %]/detalle.pl", 
 	                                                    params =>   ["id1=[% reserva.nivel3.nivel1.getId1 %]"],
 	                                                ) ;
 	                [% END %]
@@ -102,7 +102,7 @@
 	                <td width="10%"> 
 	                [% PERL %]
 	                    print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
-	                                                    url =>      "/cgi-bin/koha/catalogacion/estructura/detalle.pl", 
+	                                                    url =>      "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
 	                                                    params =>   ["id1=[% reserva.nivel2.nivel1.getId1 %]"],
 	                                                ) ;
 	                [% END %]

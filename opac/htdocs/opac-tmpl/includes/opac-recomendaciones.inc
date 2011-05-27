@@ -14,7 +14,7 @@ function buscarDatosNivel2(){
         objAH                   = new AjaxHelper(updateBuscarDatosNivel2);
         objAH.debug             = true;
         objAH.showOverlay       = true;
-        objAH.url               = '/cgi-bin/koha/opac-recomendacionesDB.pl';
+        objAH.url               = '[% url_prefix %]/opac-recomendacionesDB.pl';
         objAH.tipoAccion        = 'BUSQUEDA_EDICIONES';
         objAH.idCatalogoSearch  = $('#catalogo_search_hidden').val();
         objAH.sendToServer();
@@ -24,7 +24,7 @@ function traerImputsVacios(){
         objAH                   = new AjaxHelper(updateTraerImputsVacios);
         objAH.debug             = true;
         objAH.showOverlay       = true;
-        objAH.url               = '/cgi-bin/koha/opac-recomendacionesDB.pl';
+        objAH.url               = '[% url_prefix %]/opac-recomendacionesDB.pl';
         objAH.tipoAccion        = 'BUSQUEDA_RECOMENDACION_SIN_RESULTADOS';
         objAH.sendToServer();
 }
@@ -46,7 +46,7 @@ function updateTraerImputsVacios(responseText){
 //             complete: function(x){
 //                 
 //                  objAH                     = new AjaxHelper(updateGuardarRecomendacion);
-//                  objAH.url                 = '/cgi-bin/koha/opac-recomendacionesAdd.pl';
+//                  objAH.url                 = '[% url_prefix %]/opac-recomendacionesAdd.pl';
 //                  objAH.debug               = true;
 //                  objAH.showOverlay         = true;
 //                  objAH.table               = JSONstring.toObject(x);
@@ -90,7 +90,7 @@ function cargarDatosEdicionSeleccionada(edicion){
         objAH                   = new AjaxHelper(updateCargarDatosEdicionSeleccionada);
         objAH.debug             = true;
         objAH.showOverlay       = true;
-        objAH.url               = '/cgi-bin/koha/opac-recomendacionesDB.pl';
+        objAH.url               = '[% url_prefix %]/opac-recomendacionesDB.pl';
         objAH.tipoAccion        = 'CARGAR_DATOS_EDICION';
         objAH.edicion_id        = $('#edicion_id').val();
         objAH.edicion           = edicion;

@@ -44,7 +44,7 @@
                 <li>
                     [% PERL %]
                             print C4::AR::Filtros::link_to( text    =>  "[% 'Modificar mis datos' | i18n %]",
-                                                            url     =>  "/cgi-bin/koha/modificarDatos.pl",
+                                                            url     =>  "[% url_prefix %]/modificarDatos.pl",
                                                             title   =>  "[% 'Modificar mis datos' | i18n %]",
                                     ) ;
                     [% END %]
