@@ -716,9 +716,9 @@ ESTADO
     my ($estado) = @_;
 
     if ($estado eq 3) { 
-        C4::AR::Debug::debug("CatRegistroMarcN3 => ESTADO DISPONIBLE");
+#         C4::AR::Debug::debug("CatRegistroMarcN3 => ESTADO DISPONIBLE");
     } else { 
-        C4::AR::Debug::debug("CatRegistroMarcN3 => ESTADO NO DISPONIBLE");
+#         C4::AR::Debug::debug("CatRegistroMarcN3 => ESTADO NO DISPONIBLE");
     }
 
     return ($estado eq 3);

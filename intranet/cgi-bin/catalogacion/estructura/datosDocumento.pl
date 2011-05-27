@@ -40,32 +40,25 @@ my %params_combo;
 if($tipoAccion eq "MODIFICAR_NIVEL_1"){
 # se verifica si tiene nivel 2, sino hay q mostrar el comboTiposNivel3 para q selecione el tipo de documento (esquema)
     $t_params->{'tiene_nivel_2'}        = C4::AR::Catalogacion::cantNivel2($t_params->{'id1'});
-#     $t_params->{'MODIFICAR_NIVEL_1'}    = 1;
+    my @n3_array;
+    my @split_array;
+
+    while ( my ($key, $value) = each(%$post_params) ) {
+
+          my $result = rindex($key, "n3_");
+
+          if( $result != -1){
+              push (@n3_array, $value);
+          }
+    }
+
+    $t_params->{'cant'}                             = $input->param('cant');
+    $t_params->{'n3_array'}                         = \@n3_array;
+
 }else{
 #     $params_combo{'onChange'}           = 'mostrarEstructuraDelNivel1()';
 #     $params_combo{'onChange'}           = 'seleccionar_esquema()';
 }
-
-my @n3_array;
-my @split_array;
-
-while ( my ($key, $value) = each(%$post_params) ) {
-      C4::AR::Debug::debug("key: $key => value: $value\n");
-
-      my $result = rindex($key, "n3_");
-
-      if( $result != -1){
-#           my %hash_temp;
-#           $hash_temp{$key} = $value
-          push (@n3_array, $value);
-      }
-}
-
-C4::AR::Debug::debug("cant n3_array ".scalar(@n3_array));
-
-$t_params->{'cant'}                             = $input->param('cant');
-$t_params->{'n3_array'}                         = \@n3_array;
-
 
 $params_combo{'onChange'}                       = 'seleccionar_esquema()';
 $params_combo{'default'}                        = 'SIN SELECCIONAR';

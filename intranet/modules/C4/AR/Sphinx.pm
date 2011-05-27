@@ -112,7 +112,6 @@ sub generar_indice {
     my $dato_con_tabla;
     my $campo;
     my $subcampo;
-    my $string_tabla_con_dato   = "";
     my $string_con_dato         = "";
     my $MARC_result_array;
 
@@ -155,11 +154,6 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 #             C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
 #             C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
             $string_con_dato = $string_con_dato." ".$s->{'dato'};   
-            if($s->{'referenciaTabla'} eq ""){
-                $string_tabla_con_dato = $string_tabla_con_dato." ".$s->{'dato'};
-            } else {
-                $string_tabla_con_dato = $string_tabla_con_dato." ".$s->{'referenciaTabla'}."@".$s->{'dato'};
-            }
         }
     }
 
@@ -190,11 +184,6 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 #                 C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
 #                 C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
                 $string_con_dato = $string_con_dato." ".$s->{'dato'};   
-                if($s->{'referenciaTabla'} eq ""){
-                    $string_tabla_con_dato = $string_tabla_con_dato." ".$s->{'dato'};
-                } else {
-                    $string_tabla_con_dato = $string_tabla_con_dato." ".$s->{'referenciaTabla'}."@".$s->{'dato'};
-                }
             }
         }
 
@@ -229,11 +218,6 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 #                     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
 #                     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
                     $string_con_dato = $string_con_dato." ".$s->{'dato'};   
-                    if($s->{'referenciaTabla'} eq ""){
-                        $string_tabla_con_dato = $string_tabla_con_dato." ".$s->{'dato'};
-                    } else {
-                        $string_tabla_con_dato = $string_tabla_con_dato." ".$s->{'referenciaTabla'}."@".$s->{'dato'};
-                    }
                 }
             }
 
@@ -315,8 +299,6 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
             if (($campo eq "995") && ($subcampo eq "e")){
                 $dato = 'ref_estado%'.getCodigoFromEstadoById($dato_ref);  
 #                 C4::AR::Debug::debug("generar_indice => 995, e => dato ".$dato);
-
-C4::AR::Debug::debug("estado codigo => ".getCodigoFromEstadoById($dato_ref));
             }
 
             if (($campo eq "995") && ($subcampo eq "f")){

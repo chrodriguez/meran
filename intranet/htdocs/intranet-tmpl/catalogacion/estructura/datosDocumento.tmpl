@@ -35,17 +35,23 @@ $(document).ready( function() {
     params.id1              = [% id1 %];
     params.id2              = [% id2 %];
     params.id3              = [% id3 %];
-    MODIFICAR               = 1;
-    FROM_DETALLE_REGISTRO   = 1;
     TIENE_NIVEL_2           = [% tiene_nivel_2 %];
 
 	[% IF tipoAccion == "MODIFICAR_NIVEL_1" %]
+        MODIFICAR               = 1;
+        FROM_DETALLE_REGISTRO   = 1;
 		cargarNivel1(params);
 	[% ELSIF tipoAccion == "MODIFICAR_NIVEL_2" %]
+        MODIFICAR               = 1;
+        FROM_DETALLE_REGISTRO   = 1;
         cargarNivel1(params);
     [% ELSIF tipoAccion == "MODIFICAR_NIVEL_3" %]
+        MODIFICAR               = 1;
+        FROM_DETALLE_REGISTRO   = 1;
         cargarNivel1(params);
     [% ELSIF tipoAccion == "MODIFICAR_NIVEL_3_ALL" %]
+        MODIFICAR               = 1;
+        FROM_DETALLE_REGISTRO   = 1;
         // edicion grupal!!!!!!
         [% FOREACH n3 IN n3_array %]
             ID3_ARRAY.push([% n3 %]);
