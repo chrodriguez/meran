@@ -9,8 +9,8 @@ __PACKAGE__->meta->setup(
 
     columns => [
         id_persona       => { type => 'serial', not_null => 1 },
-        legajo             => { type => 'varchar', length => 255, not_null => 1 },
-        version_documento => { type => 'character', default => 'P', length => 1, not_null => 1 },
+        legajo           => { type => 'varchar', length => 255, not_null => 1 },
+        version_documento=> { type => 'character', default => 'P', length => 1, not_null => 1 },
         nro_documento    => { type => 'varchar', length => 16, not_null => 1 },
         tipo_documento   => { type => 'character', length => 3, not_null => 1 },
         apellido         => { type => 'varchar', length => 255, not_null => 1 },
@@ -37,6 +37,10 @@ __PACKAGE__->meta->setup(
         telefono_laboral => { type => 'varchar', length => 50 },
         es_socio         => { type => 'integer', length => 1, default => 0 },
         cumple_condicion => { type => 'integer', default => '0', not_null => 1 },
+        institucion      => { type => 'varchar', length => 255 },
+        carrera          => { type => 'varchar', length => 255 },
+        anio             => { type => 'varchar', length => 255 },
+        division         => { type => 'varchar', length => 255 },
     ],
 
      relationships =>
@@ -140,10 +144,13 @@ sub agregar{
     $self->setEs_socio(0);
     $data_hash->{'id_persona'}=$self->getId_persona;
     $data_hash->{'categoria_socio_id'}=$data_hash->{'categoria_socio_id'};
+    $self->setInstitucion($data_hash->{'institucion'});
+    $self->setCarrera($data_hash->{'carrera'});
+    $self->setAnio($data_hash->{'anio'});
+    $self->setDivision($data_hash->{'division'});
     
     $self->save();
     $self->convertirEnSocio($data_hash);
-    
 
 }
 
@@ -195,8 +202,12 @@ sub modificar{
     $self->setFecha_alta($data_hash->{'fecha_alta'});
     $self->setSexo($data_hash->{'sexo'});
     $self->setTelefono_laboral($data_hash->{'telefono_laboral'});
+    $self->setInstitucion($data_hash->{'institucion'});
+    $self->setCarrera($data_hash->{'carrera'});
+    $self->setAnio($data_hash->{'anio'});
+    $self->setDivision($data_hash->{'division'});
 
-   $self->save();
+    $self->save();
 }
 
 sub modificarVisibilidadOPAC{
@@ -288,6 +299,50 @@ sub setLegajo{
     $self->legajo($legajo);
 }
 
+sub getInstitucion{
+    my ($self) = shift;
+    return ($self->institucion);
+}
+
+sub setInstitucion{
+    my ($self) = shift;
+    my ($institucion) = @_;
+    $self->institucion($institucion);
+}
+
+sub getCarrera{
+    my ($self) = shift;
+    return ($self->carrera);
+}
+
+sub setCarrera{
+    my ($self) = shift;
+    my ($carrera) = @_;
+    $self->carrera($carrera);
+}
+
+sub getAnio{
+    my ($self) = shift;
+    return ($self->anio);
+}
+
+sub setAnio{
+    my ($self) = shift;
+    my ($anio) = @_;
+    $self->anio($anio);
+}
+
+sub getDivision{
+    my ($self) = shift;
+    return ($self->division);
+}
+
+sub setDivision{
+    my ($self) = shift;
+    my ($division) = @_;
+    $self->division($division);
+}
+
 sub getId_persona{
     my ($self) = shift;
     return ($self->id_persona);
@@ -298,8 +353,6 @@ sub setId_persona{
     my ($id_persona) = @_;
     $self->id_persona($id_persona);
 }
-
-
 
 sub setEs_socio{
     my ($self) = shift;
