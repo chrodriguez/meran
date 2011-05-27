@@ -27,7 +27,7 @@ function updateInfo(responseText){
 
 function consultar(){
 	objAH                   = new AjaxHelper(updateInfo);
-	objAH.url               = "/cgi-bin/koha/reports/registroResult.pl";
+	objAH.url=URL_PREFIX+"/reports/registroResult.pl";
     objAH.debug             = true;
     objAH.showOverlay       = true;
 	objAH.chkfecha          = $("#chkfecha")[0].checked;
@@ -43,7 +43,7 @@ function consultar(){
 
 function guardarNota(registro){
     objAH                   = new AjaxHelper(updateGuardarNota);
-    objAH.url               = "/cgi-bin/koha/reports/reportesDB.pl";
+    objAH.url=URL_PREFIX+"/reports/reportesDB.pl";
     objAH.debug             = true;
     objAH.showOverlay       = true;
     objAH.tipoAccion        = "GUARDAR_NOTA";

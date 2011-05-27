@@ -17,7 +17,7 @@
         return;
 
         objAH=new AjaxHelper(updateInfo);
-        objAH.url= "/cgi-bin/koha/reports/generarEtiquetas-result.pl";
+        objAH.url=URL_PREFIX+"/reports/generarEtiquetas-result.pl";
         objAH.showOverlay       = true;
         objAH.inv_desde= $.trim($("#inv_desde").val());
         objAH.id_ui= $.trim($("#id_ui").val());

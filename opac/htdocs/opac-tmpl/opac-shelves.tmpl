@@ -106,7 +106,7 @@ function mandarArreglo(valores){
             
 </script>
 
-<form name="printform" action="/cgi-bin/koha/opac-shelfprint.pl">
+<form name="printform" href="[% url_prefix %]/opac-shelfprint.pl">
 <input TYPE="hidden" VALUE="shelfsContents" NAME="from" >
 <input TYPE="hidden" NAME="shelfnumber" VALUE="<!-- TMPL_VAR Name="shelfnumber" -->">
 <input TYPE="hidden" NAME="shelfname" VALUE="<!-- TMPL_VAR Name="shelfname" -->">
@@ -138,7 +138,7 @@ function mandarArreglo(valores){
         	<tr><!-- TMPL_IF NAME='loggedinuser' -->
                 	<td <!-- TMPL_IF name='even' --> class="impar" <!-- TMPL_ELSE -->class="par"<!-- /TMPL_IF --> valign="middle" align="center"><input type=checkbox name="<!-- TMPL_VAR Name='biblionumber'-->" id="<!-- TMPL_VAR NAME=biblionumber -->"></td>
 		    <!-- /TMPL_IF  -->
-			<!--<td <!-- TMPL_IF name="even" -->class="impar" <!-- TMPL_ELSE -->class="par"<!-- /TMPL_IF --> valign="middle"><a href=/cgi-bin/koha/<!-- TMPL_VAR name="script" -->?bib=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->><!-- TMPL_VAR NAME=title ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --></a></td>-->
+			<!--<td <!-- TMPL_IF name="even" -->class="impar" <!-- TMPL_ELSE -->class="par"<!-- /TMPL_IF --> valign="middle"><a href=[% url_prefix %]/<!-- TMPL_VAR name="script" -->?bib=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->><!-- TMPL_VAR NAME=title ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --></a></td>-->
 			<!--*************************Titulo**************************************-->
 			<td <!-- TMPL_IF name="even" -->class="impar" <!-- TMPL_ELSE -->class="par"<!-- /TMPL_IF --> valign="middle">
 				<a class="click" onClick="consultarDetail('<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->', '');"><!-- TMPL_VAR NAME=title ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF -->
@@ -146,7 +146,7 @@ function mandarArreglo(valores){
 			</td>
                 	
 			<!--****************************Borrar***********************************-->
-			<!--<td  <!-- TMPL_IF name="even" -->class="impar" <!-- TMPL_ELSE -->class="par"<!-- /TMPL_IF --> valign="middle"><a href="/cgi-bin/koha/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME=id -->"><!-- TMPL_VAR NAME="completo" --></a></td>-->
+			<!--<td  <!-- TMPL_IF name="even" -->class="impar" <!-- TMPL_ELSE -->class="par"<!-- /TMPL_IF --> valign="middle"><a href="[% url_prefix %]/opac-searchresults.pl?authorid=<!-- TMPL_VAR NAME=id -->"><!-- TMPL_VAR NAME="completo" --></a></td>-->
 			<!--   Autor	 -->
 			<td  <!-- TMPL_IF name='even' --> class="impar" <!-- TMPL_ELSE -->class="par"<!-- /TMPL_IF --> valign="middle">
 				<a class="click" onClick="consultarAutor(<!-- TMPL_VAR NAME=id -->);"><!-- TMPL_VAR NAME="completo" -->
@@ -180,7 +180,7 @@ function mandarArreglo(valores){
 
 		<!-- TMPL_IF NAME='loggedinuser' -->
 		<input type="hidden" value="" name="bookmarks" id="bookmarks"><a  onMouseOut="swap('ps','<!-- TMPL_VAR NAME='themelang' -->/images/favoritos.png')" onMouseOver="swap('ps','<!-- TMPL_VAR NAME='themelang' -->/images/favoritosbis.png')">  
-		<input onClick="printform.target='_self';printform.action='/cgi-bin/koha/opac-privateshelfs.pl'; mandarArreglo(printform.bookmarks);submit();"  name="ps" id="ps" type="image" value="publicshelf"  src="<!-- TMPL_VAR NAME='themelang' -->/images/favoritos.png" border="0" title="Agregar a favoritos"></a>
+		<input onClick="printform.target='_self';printform.href='[% url_prefix %]/opac-privateshelfs.pl'; mandarArreglo(printform.bookmarks);submit();"  name="ps" id="ps" type="image" value="publicshelf"  src="<!-- TMPL_VAR NAME='themelang' -->/images/favoritos.png" border="0" title="Agregar a favoritos"></a>
 		<!-- /TMPL_IF -->
 
 
@@ -249,7 +249,7 @@ function mandarArreglo(valores){
 
  <table border="0"  align="center"  width="100%" class="top">
         <tr><td align="center">
-<form name="printform" action="/cgi-bin/koha/opac-shelfprint.pl">
+<form name="printform" href="[% url_prefix %]/opac-shelfprint.pl">
 <input TYPE="hidden" VALUE="shelfs" NAME="from" >
 <input TYPE="hidden" VALUE="pdf" NAME="type" >
 <input TYPE="hidden" VALUE="<!-- TMPL_VAR NAME='loggedinuser' -->" NAME="borrower">
@@ -285,7 +285,7 @@ Resultados <b><i><!-- TMPL_VAR NAME="startfrom" --></i></b> a  <b><i><!-- TMPL_V
         B&uacute;squeda sin resultados. <br>
         <hr>
 <!-- /TMPL_IF -->
- Intentar una nueva <a href="/cgi-bin/koha/opac-search.pl">b&uacute;squeda</a>
+ Intentar una nueva <a href="[% url_prefix %]/opac-search.pl">b&uacute;squeda</a>
 
 </td></tr></table>
 

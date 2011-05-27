@@ -189,16 +189,16 @@
 		</script>
 	<!-- MENUS -->
 	<!-- TMPL_IF NAME="loggedinuser" -->
-		<p align="left">Logged in as: <!-- TMPL_VAR NAME="loggedinuser" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log Out</a>]</p>
+		<p align="left">Logged in as: <!-- TMPL_VAR NAME="loggedinuser" --> [<a href="[% url_prefix %]/mainpage.pl?logout.x=1">Log Out</a>]</p>
 	<!-- TMPL_ELSE -->
-		<p align="left"><a href="/cgi-bin/koha/opac-user.pl">Log In</a> to Koha</p>
+		<p align="left"><a href="[% url_prefix %]/opac-user.pl">Log In</a> to Koha</p>
 	<!-- /TMPL_IF --></head>
 	<div id="mainbloc">
 	<h1 class="catalogue" >KOHA : INTRANET : Catalogue </h1>
 	<!--TMPL_IF Name = "Search"-->
 		<div id="bloc25">
 		<h2 class="catalogue" > Search On  </h2>
-		<form name="f" method="post" action="/cgi-bin/koha/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl">
+		<form name="f" method="post" href="[% url_prefix %]/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl">
 	
 			<p>
 				<input type="hidden" name="plugin_name" value="unimarc_field_4XX.pl">
@@ -317,8 +317,8 @@
 
 		<h2 class="catalogue">Search results</h2>
 		<div id="resultnumber">
-			<p><!-- TMPL_IF NAME="displayprev" --> <a class="resultnumber" href="/cgi-bin/koha/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=<!--TMPL_VAR Name="index"-->&amp;startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;Previous</a><!-- /TMPL_IF -->
-				<!-- TMPL_LOOP NAME="numbers" --><!-- TMPL_IF NAME="highlight" --> <span class="highlight"><!-- TMPL_VAR NAME="number" --></span><!-- TMPL_ELSE --> <a class="resultnumber" href="/cgi-bin/koha/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=<!--TMPL_VAR Name="index"-->&amp;startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a><!-- /TMPL_IF --><!-- /TMPL_LOOP --> <!-- TMPL_IF NAME="displaynext" --><a class="resultnumber" href="/cgi-bin/koha/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=<!--TMPL_VAR Name="index"-->&amp;startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">Next&gt;&gt;</a><!-- /TMPL_IF --></p>
+			<p><!-- TMPL_IF NAME="displayprev" --> <a class="resultnumber" href="[% url_prefix %]/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=<!--TMPL_VAR Name="index"-->&amp;startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;Previous</a><!-- /TMPL_IF -->
+				<!-- TMPL_LOOP NAME="numbers" --><!-- TMPL_IF NAME="highlight" --> <span class="highlight"><!-- TMPL_VAR NAME="number" --></span><!-- TMPL_ELSE --> <a class="resultnumber" href="[% url_prefix %]/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=<!--TMPL_VAR Name="index"-->&amp;startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a><!-- /TMPL_IF --><!-- /TMPL_LOOP --> <!-- TMPL_IF NAME="displaynext" --><a class="resultnumber" href="[% url_prefix %]/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=<!--TMPL_VAR Name="index"-->&amp;startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">Next&gt;&gt;</a><!-- /TMPL_IF --></p>
 			<p class="resultcount"><!-- TMPL_IF NAME="total" -->Results <!-- TMPL_VAR NAME="from" --> to <!-- TMPL_VAR NAME="to" --> of <!-- TMPL_VAR NAME="total" --><!-- TMPL_ELSE -->No results found.<!-- /TMPL_IF --></p></div>
 		<div id="resultlist">
 			<table>
@@ -332,9 +332,9 @@
 				<tr>
 					<td<!-- TMPL_IF NAME="even" --> class="hilighted"<!-- /TMPL_IF -->>
 								<!-- TMPL_IF name="MARC_ON" -->
-									<a class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>
+									<a class="transparent resultlist" href="[% url_prefix %]/MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>
 								<!-- TMPL_ELSE -->
-									<a class="transparent resultlist" href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>				<!-- /TMPL_IF -->
+									<a class="transparent resultlist" href="[% url_prefix %]/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>				<!-- /TMPL_IF -->
 							<p><!-- TMPL_VAR NAME="author" -->
 							<!-- TMPL_IF NAME="publishercode" -->- <!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF -->
 							<!-- TMPL_IF NAME="place" --> ; <!-- TMPL_VAR NAME="place" --><!-- /TMPL_IF -->
@@ -373,8 +373,8 @@
 			</table>
 		</div>
 		<div id="resultnumber">
-			<p><!-- TMPL_IF NAME="displayprev" --> <a class="resultnumber" href="/cgi-bin/koha/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=<!--TMPL_VAR Name="index"-->&amp;startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;Previous</a><!-- /TMPL_IF -->
-				<!-- TMPL_LOOP NAME="numbers" --><!-- TMPL_IF NAME="highlight" --> <span class="highlight"><!-- TMPL_VAR NAME="number" --></span><!-- TMPL_ELSE --> <a class="resultnumber" href="/cgi-bin/koha/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=<!--TMPL_VAR Name="index"-->&amp;startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a><!-- /TMPL_IF --><!-- /TMPL_LOOP --> <!-- TMPL_IF NAME="displaynext" --><a class="resultnumber" href="/cgi-bin/koha/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=<!--TMPL_VAR Name="index"-->&amp;startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">Next&gt;&gt;</a><!-- /TMPL_IF --></p>
+			<p><!-- TMPL_IF NAME="displayprev" --> <a class="resultnumber" href="[% url_prefix %]/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=<!--TMPL_VAR Name="index"-->&amp;startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;Previous</a><!-- /TMPL_IF -->
+				<!-- TMPL_LOOP NAME="numbers" --><!-- TMPL_IF NAME="highlight" --> <span class="highlight"><!-- TMPL_VAR NAME="number" --></span><!-- TMPL_ELSE --> <a class="resultnumber" href="[% url_prefix %]/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=<!--TMPL_VAR Name="index"-->&amp;startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a><!-- /TMPL_IF --><!-- /TMPL_LOOP --> <!-- TMPL_IF NAME="displaynext" --><a class="resultnumber" href="[% url_prefix %]/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=<!--TMPL_VAR Name="index"-->&amp;startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">Next&gt;&gt;</a><!-- /TMPL_IF --></p>
 		</div>
 	
 		<script language="JavaScript" type="text/javascript">

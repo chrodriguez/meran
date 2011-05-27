@@ -37,7 +37,7 @@
 
         [% PERL %]
                 print C4::AR::Filtros::link_to( text =>     "[% prestamo.nivel3.nivel1.getTitulo%]",
-                                                url =>      "/cgi-bin/koha/opac-detail.pl", 
+                                                url=>"[% url_prefix %]/koha/opac-detail.pl", 
                                                 params => [ "id1=[% prestamo.nivel3.nivel1.getId1 %]", ],
                                             ) ;
         [% END %]
@@ -45,12 +45,12 @@
 	</td>
 	<td class="impar">
   	[% IF prestamo.nivel3.nivel1.getAutor %]
-		<!--<a href="/cgi-bin/koha/opac-searchresults.pl?authorid=[% prestamo.nivel3.nivel1.getAutor %]" >
+		<!--<a href="[% url_prefix %]/opac-searchresults.pl?authorid=[% prestamo.nivel3.nivel1.getAutor %]" >
 		[% prestamo.nivel3.nivel1.cat_autor.getCompleto %]
 		</a>-->
         [% PERL %]
                 print C4::AR::Filtros::link_to( text =>     "[% prestamo.nivel3.nivel1.cat_autor.getCompleto%]",
-                                                url =>      "/cgi-bin/koha/opac-searchresults.pl", 
+                                                url=>"[% url_prefix %]/koha/opac-searchresults.pl", 
                                                 params => [ "authorid=[% prestamo.nivel3.nivel1.getAutor %]", ],
                                             ) ;
         [% END %]

@@ -55,7 +55,7 @@
 
 <fieldset id="reportes">
     <legend class="titulo_legend"> [% "Configuraci&oacute;n del servidor de mail" | i18n %] </legend>
-<form action="/cgi-bin/koha/admin/global/mail_configDB.pl?token=[% token %]" name="form_mail_config" id="form_mail_config" method="post">
+<form href="[% url_prefix %]/admin/global/mail_configDB.pl?token=[% token %]" name="form_mail_config" id="form_mail_config" method="post">
         <input type="hidden" name="accion" id="accion" value=''>
     <ul>
 

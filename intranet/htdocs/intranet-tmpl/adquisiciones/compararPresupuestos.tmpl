@@ -27,7 +27,7 @@
                     returnElement: "#table",
                     complete: function(x){
                         objAH                     = new AjaxHelper(updateExportarMejorPresupuesto);
-                        objAH.url                 = '/cgi-bin/koha/adquisiciones/mostrarComparacion.pl';
+                        objAH.url=URL_PREFIX+'/adquisiciones/mostrarComparacion.pl';
                         objAH.debug               = true;
                         objAH.showOverlay         = true;
                         objAH.table               = JSONstring.toObject(x);

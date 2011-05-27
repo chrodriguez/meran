@@ -43,7 +43,7 @@
                         <td>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% busqueda.busqueda.socio.persona.getApeYNom %]",
-                                                                url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+                                                                url=>"[% url_prefix %]/koha/usuarios/reales/datosUsuario.pl", 
                                                                 params =>   ["nro_socio=[% busqueda.busqueda.socio.getNro_socio %]"],
                                                                 title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
                                                             ) ;

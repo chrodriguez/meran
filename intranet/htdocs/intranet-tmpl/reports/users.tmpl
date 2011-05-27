@@ -30,7 +30,7 @@ function consultar(){
 	objAH=new AjaxHelper(updateInfo);
     objAH.debug= true;
     objAH.showOverlay       = true;
-	objAH.url="/cgi-bin/koha/reports/usersResult.pl";
+	objAH.url=URL_PREFIX+"/reports/usersResult.pl";
 	objAH.ui=$("#ui_id").val();
 	objAH.year=$("#year").val();
 	objAH.usos=$("#usos").val();

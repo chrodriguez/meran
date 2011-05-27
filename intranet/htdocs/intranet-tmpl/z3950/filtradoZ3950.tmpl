@@ -11,7 +11,7 @@ function esconderResultadosZ3950(){
 function verResultadosZ3950 (id){
     objAH=new AjaxHelper(updateVerResultadosZ3950);
     objAH.showOverlay       = true;
-    objAH.url= "/cgi-bin/koha/z3950/filtradoZ3950DB.pl";
+    objAH.url=URL_PREFIX+"/z3950/filtradoZ3950DB.pl";
     objAH.tipo="VER_RESULTADO";
     objAH.id_busqueda= id;
     objAH.sendToServer();
@@ -28,7 +28,7 @@ function updateVerResultadosZ3950(responseText){
 function verBusquedas (){
     objAH=new AjaxHelper(updateVerBusquedas);
     objAH.showOverlay       = true;
-    objAH.url= "/cgi-bin/koha/z3950/filtradoZ3950DB.pl";
+    objAH.url=URL_PREFIX+"/z3950/filtradoZ3950DB.pl";
     objAH.tipo="VER_BUSQUEDAS";
     objAH.sendToServer();
 }
@@ -46,7 +46,7 @@ function agregarBusquedaZ3950(){
     $('#detalleMARC').hide();
 	objAH=new AjaxHelper(updateAgregarBusquedaZ3950);
     objAH.showOverlay       = true;
-	objAH.url= "/cgi-bin/koha/z3950/filtradoZ3950DB.pl";
+	objAH.url=URL_PREFIX+"/z3950/filtradoZ3950DB.pl";
     objAH.tipo="BUSCAR";
     
     var termino;
@@ -83,7 +83,7 @@ function updateAgregarBusquedaZ3950(responseText){
 
 function mostrarDetalleMARC (id_red){
     objAH=new AjaxHelper(updateMostrarDetalleMARC);
-    objAH.url= "/cgi-bin/koha/z3950/filtradoZ3950DB.pl";
+    objAH.url=URL_PREFIX+"/z3950/filtradoZ3950DB.pl";
     objAH.showOverlay       = true;
     objAH.id_resultado = id_red;
 
@@ -102,7 +102,7 @@ function updateMostrarDetalleMARC(responseText){
 function importarMARC(id_resultado){
     objAH=new AjaxHelper(updateImportarMARC);
     objAH.showOverlay       = true;
-    objAH.url= "/cgi-bin/koha/z3950/filtradoZ3950DB.pl";
+    objAH.url=URL_PREFIX+"/z3950/filtradoZ3950DB.pl";
     objAH.id_resultado = id_resultado;
     objAH.tipo="IMPORTAR_MARC";
     objAH.sendToServer();

@@ -74,7 +74,7 @@ function borrarN3(id2, id3){
 		objAH               = new AjaxHelper(updateBorrarN3);
 		objAH.debug         = true;
         objAH.showOverlay   = true;
-		objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+		objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
  		objAH.id3_array     = [id3];
 		objAH.nivel         = 3;
 		objAH.itemtype      = $("#id_tipo_doc").val();
@@ -99,7 +99,7 @@ function ejemplaresDelGrupo(id2){
 	objAH               = new AjaxHelper(updateEjemplaresDelGrupo);
 	objAH.debug         = true;
     objAH.showOverlay   = true;
-	objAH.url           = '/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl';
+	objAH.url=URL_PREFIX+'/catalogacion/estructura/estructuraCataloDB.pl';
 	objAH.id2           = id2;
 	objAH.tipoAccion    = 'MOSTRAR_DETALLE_NIVEL3';
 	//se envia la consulta
@@ -117,7 +117,7 @@ function buscarUsuario(id2, id3){
 	objAH                   = new AjaxHelper(updateBuscarUsuario);
 	objAH.debug             = true;
     objAH.showOverlay       = true;
-    objAH.url               = '/cgi-bin/koha/utils/pop_ups.pl';
+    objAH.url=URL_PREFIX+'/utils/pop_ups.pl';
     objAH.pop_up_template   = 'buscar_usuario'; 
 	objAH.debug             = true;
 	objAH.sendToServer();
@@ -146,7 +146,7 @@ function detalleMARC(id3){
 	objAH               = new AjaxHelper(updateInfoMARC);
 	objAH.debug         = true;
     objAH.showOverlay   = true;
-	objAH.url           = "/cgi-bin/koha/busquedas/MARCDetalle.pl";
+	objAH.url=URL_PREFIX+"/busquedas/MARCDetalle.pl";
 	objAH.id3           = id3;
 	//se envia la consulta
 	objAH.sendToServer();
@@ -190,7 +190,7 @@ function renovarPrestamo(userId,userNom,id2,id_prestamo){
 	objAH               = new AjaxHelper(generaDivRenovacion); //generaDivRenovacion esta en circulacion.js
 	objAH.debug         = true;
     objAH.showOverlay   = true;
-	objAH.url           = '/cgi-bin/koha/circ/circulacionDB.pl';
+	objAH.url=URL_PREFIX+'/circ/circulacionDB.pl';
 	objAH.tipoAccion    = 'RENOVACION';
 	array               = new Array;
 	array[0]            = id_prestamo;
@@ -213,7 +213,7 @@ function devolverPrestamo(userId,userNom,id2,id_prestamo){
 	objAH               = new AjaxHelper(generaDivDevolucion); //llama a generar div de ciculacion.js
 	objAH.debug         = true;
     objAH.showOverlay   = true;
-	objAH.url           = '/cgi-bin/koha/circ/circulacionDB.pl';
+	objAH.url=URL_PREFIX+'/circ/circulacionDB.pl';
 	objAH.tipoAccion    = 'DEVOLUCION';
 	objAH.datosArray    = array;
 	objAH.nro_socio     = USUARIO.ID;
@@ -265,7 +265,7 @@ function confirmarPrestamo(){
 		objAH               = new AjaxHelper(generaDivPrestamo);
 		objAH.debug         = true;
         objAH.showOverlay   = true;
-		objAH.url           = '/cgi-bin/koha/circ/circulacionDB.pl';
+		objAH.url=URL_PREFIX+'/circ/circulacionDB.pl';
 		objAH.tipoAccion    = 'CONFIRMAR_PRESTAMO';
 		objAH.datosArray    = items_array;
 		objAH.nro_socio     = USUARIO.ID;
@@ -328,7 +328,7 @@ $(document).ready(function(){
         <div class="botones_detalle_nivel1">
             [% PERL %]
                 print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
-                                                url =>      "datosDocumento.pl", 
+                                                url=>"datosDocumento.pl", 
                                                 params =>   ["id1=[% id1 %]","tipoAccion=MODIFICAR_NIVEL_1"],
                                                 title =>    "[% 'Editar Registro' | i18n %]"
                                             ) ;

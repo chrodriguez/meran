@@ -45,7 +45,7 @@
                 <td>
                 [% PERL %]
                     print C4::AR::Filtros::link_to( text => "[% nivel3_obj.getBarcode %]",
-                                                    url =>      "/cgi-bin/koha/catalogacion/estructura/detalleEjemplar.pl", 
+                                                    url=>"[% url_prefix %]/koha/catalogacion/estructura/detalleEjemplar.pl", 
                                                     params =>   ["id3=[% id3 %]&id1=[% id1 %]"],
                                                     title =>    "[% 'Detalle del ejemplar' | i18n %]"
                                                 ) ;
@@ -58,7 +58,7 @@
                         <strong class="[% IF nivel3_obj.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">[% 'Prestado a:' | i18n  %]</strong> 
                         [% PERL %]
                             print C4::AR::Filtros::link_to(   text =>     "[% socio_prestamo.persona.getApeYNom %]",
-                                                              url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+                                                              url=>"[% url_prefix %]/koha/usuarios/reales/datosUsuario.pl", 
                                                               params =>   ["nro_socio=[% socio_prestamo.getNro_socio %]"],
                                                               title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
                                                               blank =>  1,
@@ -73,7 +73,7 @@
                              <strong class="[% IF nivel3_obj.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">[% 'Reservado a:' | i18n  %]</strong> 
                             [% PERL %]
                                 print C4::AR::Filtros::link_to(   text =>     "[% socio_reserva.persona.getApeYNom %]",
-                                                                  url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+                                                                  url=>"[% url_prefix %]/koha/usuarios/reales/datosUsuario.pl", 
                                                                   params =>   ["nro_socio=[% socio_reserva.getNro_socio %]"],
                                                                   title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
                                                                   blank =>  1,
@@ -166,7 +166,7 @@
                 <td>
                     [% PERL %]
                         print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
-                                                        url =>      "/cgi-bin/koha/catalogacion/estructura/datosDocumento.pl", 
+                                                        url=>"[% url_prefix %]/koha/catalogacion/estructura/datosDocumento.pl", 
                                                         params =>   ["id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]","tipoAccion=MODIFICAR_NIVEL_3"],
                                                         title =>    "[% 'Editar Ejemplar' | i18n %]"
                                                     ) ;
@@ -185,7 +185,7 @@
 
 <div class="horizontal">[% "Para los elementos que est&aacute;n marcados:" | i18n %]</div>
 
-<form id="edicion_grupal" name="edicion_grupal" action="datosDocumento.pl" method="post">
+<form id="edicion_grupal" name="edicion_grupal" href="datosDocumento.pl" method="post">
   
     <input type="hidden" id="tipoAccion" name="tipoAccion" value="MODIFICAR_NIVEL_3_ALL" />
     <input type="hidden" id="token" name="token" value="[% token %]" />

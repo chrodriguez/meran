@@ -14,7 +14,7 @@
     function consultar(){
         objAH=new AjaxHelper(updateInfo);
         objAH.showOverlay       = true;
-        objAH.url= "/cgi-bin/koha/reports/inventoryResult.pl";
+        objAH.url=URL_PREFIX+"/reports/inventoryResult.pl";
         objAH.desde= $("#desde").val();
         objAH.hasta= $("#hasta").val();
         //se envia la consulta

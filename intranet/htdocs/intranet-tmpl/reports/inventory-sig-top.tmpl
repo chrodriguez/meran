@@ -40,7 +40,7 @@
         objAH                   = new AjaxHelper(updateInfo);
         objAH.debug             = true;
         objAH.showOverlay       = true;
-        objAH.url               = "/cgi-bin/koha/reports/inventory-sig-topResult.pl";
+        objAH.url=URL_PREFIX+"/reports/inventory-sig-topResult.pl";
         objAH.barcode           = $("#barcode").val();
         objAH.desde_barcode     = $("#desde_barcode").val();
         objAH.hasta_barcode     = $("#hasta_barcode").val();
@@ -72,7 +72,7 @@
 	    objAH                   = new AjaxHelper(updateInfo);
         objAH.debug             = true;
         objAH.showOverlay       = true;
-	    objAH.url               = "/cgi-bin/koha/reports/inventory-sig-topResult.pl";
+	    objAH.url=URL_PREFIX+"/reports/inventory-sig-topResult.pl";
 	    objAH.sigtop            = $("#sigtop").val();
         objAH.desde_signatura   = $("#desde_signatura").val();
         objAH.hasta_signatura   = $("#hasta_signatura").val();

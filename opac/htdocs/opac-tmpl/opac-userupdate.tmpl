@@ -21,7 +21,7 @@
                     <i>Por favor cambie lo que sea necesario. Un mail ser&aacute; enviado a la Unidad de Informaci&oacute;n. </i><br>
                 </p>
     
-        <form action="/cgi-bin/koha/opac-userupdate.pl" method="POST" class="formUpdateUsuario" id="formUpdateUsuario">
+        <form href="[% url_prefix %]/opac-userupdate.pl" method="POST" class="formUpdateUsuario" id="formUpdateUsuario">
                 <input type="hidden"  value="[% token %]" name="token">
                 <div>
                     <label class="inputFormLabel"> [% "Apellido" | i18n %] </label> <input type="text"  size="25" value="[% socio.persona.getApellido %]" name="apellido">

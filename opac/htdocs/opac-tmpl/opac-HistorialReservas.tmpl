@@ -29,7 +29,7 @@
                                             boton   => "boton_registrarse", 
                                             width   => "95",
                                             class   => "horizontal",
-                                            url     => "/join.html", 
+                                            url=>"/join.html", 
                                             title   => "[% 'Mostrar Detalle' | i18n %]"
                                         ) ;
         [% END %]  
@@ -42,7 +42,7 @@
         [% PERL %]
             print C4::AR::Filtros::link_to( text    => [% completo %],
                                             params  => "[authorid=[% idAutor %]]", 
-                                            url     => "/cgi-bin/koha/opac-searchresults.pl", 
+                                            url=>"[% url_prefix %]/koha/opac-searchresults.pl", 
                                             title   => "[% 'Mostrar Detalle' | i18n %]"
                                         ) ;
         [% END %]  

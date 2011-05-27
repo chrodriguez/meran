@@ -31,7 +31,7 @@
 		</tr>
 	</table>
 	
-	<form action="[% action %]" name="Aform" method="post">
+	<form href="[% action %]" name="Aform" method="post">
 	<input type="hidden" name="op" value="add_validate">
 	<table>
 		<tr>
@@ -116,12 +116,12 @@
 
 [% IF delete_confirm %]
 	Confirme borrado:
-	<form action="[% action %]" method="post">
+	<form href="[% action %]" method="post">
 		<input type="hidden" name="op" value="delete_confirmed">
 		<input type="hidden" name="branchcode" value="[% HTML.escape(branchcode) %]">
 		<input type="submit" value="SI" class="button">
 	</form>
-	<form action="[% action %]" method="post"><input type="hidden" name="op" value="">
+	<form href="[% action %]" method="post"><input type="hidden" name="op" value="">
 		<input type="submit" value="NO" class="button">
 	</form>
 [% ELSE %]
@@ -215,7 +215,7 @@
 					[% END %]
 				</td>
 				<td  class="[% clase %]" valign="middle" align="center">
-					<form action="[% action %]ss" method="post" name=form1>
+					<form href="[% action %]ss" method="post" name=form1>
 						<input type="hidden" name="op" value="edit">
 						<input type="hidden" name="branchcode" value="[% HTML.escape(value) %]ss">
 					<td  align="center" class="[% clase %]">
@@ -224,7 +224,7 @@
 					</form>
 					</td>
 					<td  class="[% clase %]" align="center" valign="middle">
-						<form action="[% action %]" method="post" name=form2>
+						<form href="[% action %]" method="post" name=form2>
 						<input type="hidden" name="branchcode" value="[% HTML.escape(value) %]">
 						<input type="hidden" name="op" value="delete"><input type="image" ALT="Eliminar"  src="[% interface %]/[% themelang %]/images/borrar.png" onclick="form2.submit">
 						</form>
@@ -239,7 +239,7 @@
 	<br>
 	
 	<center>
-	<form action="[% action %]" method="post" name=formUni>
+	<form href="[% action %]" method="post" name=formUni>
 		<input type="hidden" name="op" value="add">
 		<input type="image" alt="Agregar Nueva Unidad de Informaci&oacute;n"  src="[% interface %]/[% themelang %]/images/agregar.png" onclick="formUni.submit">
 			<!--<input type="submit" class="button" value="Agregar Nueva Unidad de Informaci&oacute;n">-->
@@ -271,14 +271,14 @@
 				<td class="[% clase %]" align="center" valign="top"> [%categorycode %]</td>
 				<td class="[% clase %]" align="left" valign="top">[% codedescription %]</td>
 				<td class="[% clase %]" align="center" valign="center">
-					<form action="[% action %]" method="post" name=form3>
+					<form href="[% action %]" method="post" name=form3>
 					<input type="hidden" name="op" value="editcategory">
 					<input type="hidden" name="categorycode" value="[% HTML.escape(categorycode) %]">
 					<input type="image" ALT="Editar"  src="[% interface %]/[% themelang %]/images/editar.png" onclick="form3.submit"> 
 					</form>
 				</td>
 				<td class="[% clase %]"align="center" valign="center">
-					<form action="[% action %]" method="post" name=form4>
+					<form href="[% action %]" method="post" name=form4>
 					<input type="hidden" name="categorycode" value="[% HTML.escape(categorycode) %]">
 					<input type="hidden" name="op" value="delete_category"><input type="image" ALT="Eliminar"  src="[% interface %]/[% themelang %]/images/borrar.png" onclick="form4.submit">
 					</form>
@@ -294,7 +294,7 @@
 	</table>
 		<br>
 		
-	<form name=formCat action="[% action %]" method="post">
+	<form name=formCat href="[% action %]" method="post">
 		<input type="hidden" name="op" value="editcategory">
 		<input type="image" alt="Agregar Nueva Categor&iacute;a" src="[% interface %]/[% themelang %]/images/agregar.png" onclick="formCat.submit">
 			<!--<input type="submit" class="button" value="Agregar Nueva Categor&iacute;a">-->
@@ -330,7 +330,7 @@
 		</tr>
 	
 	</table>
-	<form action="[% action %]" name="Aform" method="post">
+	<form href="[% action %]" name="Aform" method="post">
 		<input type="hidden" name="op" value="addcategory_validate">
 	
 	
@@ -368,12 +368,12 @@
 
 [% IF delete_category %]
 	Confirme borrado:
-	<form action="[% action %]" method="post">
+	<form href="[% action %]" method="post">
 		<input type="hidden" name="op" value="categorydelete_confirmed">
 		<input type="hidden" name="categorycode" value="[% HTML.escape(categorycode) %]">
 		<input type="submit" value="SI" class="button">
 	</form>
-	<form action="[% action %]" method="post"><input type="hidden" name="op" value="">
+	<form href="[% action %]" method="post"><input type="hidden" name="op" value="">
 		<input type="submit" value="NO" class="button">
 	</form>
 [% END %]

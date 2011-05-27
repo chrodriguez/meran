@@ -49,7 +49,7 @@
                       <td align='left' class="tarjetaId">
                           [% PERL %]
                               print C4::AR::Filtros::link_to(   text =>     "[% socio.getNro_socio %]",
-                                                                url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+                                                                url=>"[% url_prefix %]/koha/usuarios/reales/datosUsuario.pl", 
                                                                 params =>   ["nro_socio=[% socio.getNro_socio %]"],
                                                                 title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
                                                           );
@@ -75,7 +75,7 @@
                       <td width=250 align="left" class="nomCompleto">
                           [% PERL %]
                               print C4::AR::Filtros::link_to(   text =>     "[% socio.persona.getApeYNom %]",
-                                                                url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+                                                                url=>"[% url_prefix %]/koha/usuarios/reales/datosUsuario.pl", 
                                                                 params =>   ["nro_socio=[% socio.getNro_socio %]"],
                                                                 title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
                                                           );
@@ -113,7 +113,7 @@
         </div>
 </fieldset>
 
-<form id="exportPDF" action="/cgi-bin/koha/reports/usuariosResult.pl?token=[% token %]"  accept-charset="utf-8">
+<form id="exportPDF" href="[% url_prefix %]/reports/usuariosResult.pl?token=[% token %]"  accept-charset="utf-8">
         <input type="hidden" name="export" value="pdf" />
         <input type="hidden" name="year" value="[% param_anio %]" />
         <input type="hidden" name="ui" value="[% param_ui %]" />

@@ -62,7 +62,7 @@ function buscarUsuariosPotenciales(){
     objAH=new AjaxHelper(updateInfo);
     objAH.showOverlay       = true;
     objAH.debug= true;
-    objAH.url= "/cgi-bin/koha/usuarios/potenciales/buscarUsuarioResult.pl";
+    objAH.url=URL_PREFIX+"/usuarios/potenciales/buscarUsuarioResult.pl";
     objAH.funcion= "changePage";
 
     if (flag_armed){

@@ -33,23 +33,23 @@
                     [% FOREACH mensaje IN mensajes_contacto %]
                         <tr class="leido[% mensaje.getLeido %]">
                             <td>
-                                <a class="fancy_link" href="/cgi-bin/koha/admin/ver_mensaje.pl?token=[% token %]&id=[% mensaje.id %]">
+                                <a class="fancy_link" href="[% url_prefix %]/admin/ver_mensaje.pl?token=[% token %]&id=[% mensaje.id %]">
                                     10/10/1999
                                 </a>
                             </td>
                             <td>
-                                <a class="fancy_link" href="/cgi-bin/koha/admin/ver_mensaje.pl?token=[% token %]&id=[% mensaje.id %]">
+                                <a class="fancy_link" href="[% url_prefix %]/admin/ver_mensaje.pl?token=[% token %]&id=[% mensaje.id %]">
                                     [% mensaje.getAsunto %] 
                                 </a>
                             </td>
                             <td>
-                                <a class="fancy_link" href="/cgi-bin/koha/admin/ver_mensaje.pl?token=[% token %]&id=[% mensaje.id %]">
+                                <a class="fancy_link" href="[% url_prefix %]/admin/ver_mensaje.pl?token=[% token %]&id=[% mensaje.id %]">
                                     [% mensaje.getApellido %], [% mensaje.getNombre %] 
                                 </a>
                             </td>
                             <td>
                                 <a class="" 
-                                    href="/cgi-bin/koha/admin/mensajes_contacto.pl?token=[% token %]&id=[% mensaje.id %]&tipoAccion=marcar">
+                                    href="[% url_prefix %]/admin/mensajes_contacto.pl?token=[% token %]&id=[% mensaje.id %]&tipoAccion=marcar">
                                     [% IF mensaje.getLeido == 1%]
                                         [% 'No Leido' | i18n %]
                                     [% ELSE %]
@@ -59,7 +59,7 @@
                             </td>
                             <td>
                                 <a class="" 
-                                    href="/cgi-bin/koha/admin/mensajes_contacto.pl?token=[% token %]&id=[% mensaje.id %]&tipoAccion=eliminar">
+                                    href="[% url_prefix %]/admin/mensajes_contacto.pl?token=[% token %]&id=[% mensaje.id %]&tipoAccion=eliminar">
                                     [% 'Eliminar' | i18n %]
                                 </a>
                             </td>

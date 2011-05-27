@@ -30,7 +30,7 @@ $(document).ready(function() {
 
     function consultar(){
         objAH=new AjaxHelper(updateInfo);
-        objAH.url= '/cgi-bin/koha/reports/historicoCirculacionResult.pl';
+        objAH.url=URL_PREFIX+'/reports/historicoCirculacionResult.pl';
         objAH.showOverlay       = true;
         objAH.fechaIni=  $('#fechaIni').val();
         objAH.fechaFin= $('#fechaFin').val();
@@ -49,7 +49,7 @@ $(document).ready(function() {
         objAH.showOverlay       = true;
         objAH.id_historico= id_historico;
         objAH.nota= $('#'+id_historico).val();
-        objAH.url= '/cgi-bin/koha/reports/historicoCirculacionResult.pl';
+        objAH.url=URL_PREFIX+'/reports/historicoCirculacionResult.pl';
         //se setea la funcion para cambiar de pagina
         objAH.accion= 'NOTA_HISTORICO';
         objAH.sendToServer();

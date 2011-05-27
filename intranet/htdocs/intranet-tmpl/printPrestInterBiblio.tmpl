@@ -24,7 +24,7 @@ function imprimir(){
 <div class="titulos">[% 'Completar Datos' | i18n %]</div>
 
 <table class="inputFontNormal" align="center" height="100%" weight="100%">
-	<form name="info" id="info" action="/cgi-bin/koha/prestamoInterBiblio.pl">
+	<form name="info" id="info" href="[% url_prefix %]/prestamoInterBiblio.pl">
 		<input type="hidden" name="bornum" id="bornum" value="[% nro_socio %]">
 		<input type="hidden" name="accion" id="accion" value="imprimirPDF">
 		<input type="hidden" name="autores" id="autores" >

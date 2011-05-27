@@ -36,7 +36,7 @@ function consultar(){
 	objAH.socio= $('#socios').val();
 	objAH.tipoPrestamo= $('#tipo_prestamo_id').val();
 	objAH.tipoOperacion= $('#tipoOperacion').val();
-	objAH.url= "/cgi-bin/koha/reports/historicoSancionesResult.pl";
+	objAH.url=URL_PREFIX+"/reports/historicoSancionesResult.pl";
 	objAH.funcion="changePage";
 	objAH.sendToServer();
 }

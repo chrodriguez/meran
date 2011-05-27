@@ -22,7 +22,7 @@ function eleccionDeNivel(){
   objAH = new AjaxHelper(updateEleccionDeNivel);
   objAH.debug = true;
   objAH.showOverlay       = true;
-  objAH.url = "/cgi-bin/koha/herramientas/chequeo_importacionDB.pl";
+  objAH.url=URL_PREFIX+"/herramientas/chequeo_importacionDB.pl";
   objAH.nivel = $("#niveles_id").val();
   objAH.tipoAccion = 'MOSTRAR_DATOS_NIVEL_REPETIBLE';
   //se setea la funcion para cambiar de pagina
@@ -42,7 +42,7 @@ function eliminarCampo(id_rep){
     objAH = new AjaxHelper(updateEliminarCampo);
     objAH.showOverlay       = true;
     objAH.debug = true;
-    objAH.url = "/cgi-bin/koha/herramientas/chequeo_importacionDB.pl";
+    objAH.url=URL_PREFIX+"/herramientas/chequeo_importacionDB.pl";
     objAH.nivel = $("#niveles_id").val();
     objAH.id_rep_array = [id_rep];
     objAH.tipoAccion = 'ELIMINAR_NIVEL_REPETIBLE';
@@ -55,7 +55,7 @@ function eliminarCampos(){
     objAH = new AjaxHelper(updateEliminarCampo);
     objAH.showOverlay       = true;
     objAH.debug = true;
-    objAH.url = "/cgi-bin/koha/herramientas/chequeo_importacionDB.pl";
+    objAH.url=URL_PREFIX+"/herramientas/chequeo_importacionDB.pl";
     objAH.nivel = $("#niveles_id").val();;  
     objAH.id_rep_array = recuperarSeleccionados("checkNivelesRepetibles");
     objAH.tipoAccion = 'ELIMINAR_NIVEL_REPETIBLE';

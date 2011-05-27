@@ -52,7 +52,7 @@
                       <td align='left' class="tarjetaId">
                           [% PERL %]
                               print C4::AR::Filtros::link_to(   text =>     "[% socio.getNro_socio %]",
-                                                                url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+                                                                url=>"[% url_prefix %]/koha/usuarios/reales/datosUsuario.pl", 
                                                                 params =>   ["nro_socio=[% socio.getNro_socio %]"],
                                                                 title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
                                                           );

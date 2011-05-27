@@ -46,7 +46,7 @@ function eleccionDeNivel(){
 	objAH               = new AjaxHelper(updateEleccionDeNivel);
     objAH.debug         = true;
     objAH.showOverlay   = true;
-	objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+	objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
 	objAH.nivel         = nivel;
     objAH.tipoAccion    = 'MOSTRAR_CAMPOS';
 
@@ -70,7 +70,7 @@ function updateEleccionDeNivel(responseText){
 //     
 //     objAH=new AjaxHelper(updateModificarOrden);
 //     objAH.debug= true;
-//     objAH.url="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+//     objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
 //     objAH.idMod=id;
 //     objAH.itemtype_cliente = $('#tipo_nivel3_id').val();
 //     objAH.tipoAccion= accion; //SUBIR_ORDEN, BAJAR_ORDEN
@@ -85,7 +85,7 @@ function updateEleccionDeNivel(responseText){
 function visibilidad(id){
     objAH               = new AjaxHelper(eleccionDeNivel);
     objAH.debug         = true;
-    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.id            = id;
     objAH.showOverlay   = true;
     objAH.tipoAccion    = 'CAMBIAR_VISIBILIDAD';
@@ -95,7 +95,7 @@ function visibilidad(id){
 function edicionGrupal(id){
     objAH               = new AjaxHelper(eleccionDeNivel);
     objAH.debug         = true;
-    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.id            = id;
     objAH.showOverlay   = true;
     objAH.tipoAccion    = 'CAMBIAR_EDICION_GRUPAL';
@@ -106,7 +106,7 @@ function habilitado(id){
     objAH               = new AjaxHelper(eleccionDeNivel);
     objAH.debug         = true;
     objAH.showOverlay   = true;
-    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.id            = id;
     objAH.tipoAccion    = 'CAMBIAR_HABILITADO';
     objAH.sendToServer();
@@ -119,7 +119,7 @@ function eliminarCampo(id){
             objAH               = new AjaxHelper(eleccionDeNivel);
             objAH.debug         = true;
             objAH.showOverlay   = true;
-            objAH.url           ="/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+            objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
             objAH.id            = id;
 //             objAH.nivel         = $('#niveles_id').val();
             objAH.tipoAccion    = 'ELIMINAR_CAMPO';
@@ -132,7 +132,7 @@ function mostrarAgregarCampo(id){
     objAH               = new AjaxHelper(updateMostrarAgregarCampo);
     objAH.debug         = true;
     objAH.showOverlay   = true;
-    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion    = "MOSTRAR_FORM_AGREGAR_CAMPOS";
     objAH.sendToServer();
 }
@@ -150,7 +150,7 @@ function mostrarModificarCampo(id){
     objAH               = new AjaxHelper(updateMostrarModificarCampo);
     objAH.debug         = true;
     objAH.showOverlay   = true;
-    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion    = "MOSTRAR_FORM_MODIFICAR_CAMPOS";
     objAH.id            = id;
     objAH.sendToServer();
@@ -179,7 +179,7 @@ function mostrarTablaRef(){
     objAH               = new AjaxHelper(updateMostrarTablaRef);
     objAH.debug         = true;
     objAH.showOverlay   = true;
-    objAH.url           = "/cgi-bin/koha/utils/utilsDB.pl";
+    objAH.url=URL_PREFIX+"/utils/utilsDB.pl";
     objAH.tipoAccion    = "GENERAR_ARREGLO_TABLA_REF";
     objAH.sendToServer();
 }
@@ -207,7 +207,7 @@ function eleccionCampoX(){
         objAH                   = new AjaxHelper(updateEleccionCampoX);
 		objAH.debug             = true;
         objAH.showOverlay       = true;
-        objAH.url               = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+        objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
         objAH.campoX            = $('#campoX').val();
         objAH.nivel             = $('#niveles_id').val();
         objAH.tipoAccion        = "GENERAR_ARREGLO_CAMPOS";
@@ -241,7 +241,7 @@ function eleccionCampo(){
         objAH               = new AjaxHelper(updateEleccionCampo);
         objAH.debug         = true;
         objAH.showOverlay   = true;
-        objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+        objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
         objAH.campo         = $('#campo').val();
         objAH.nivel         = $('#niveles_id').val();
         objAH.tipoAccion    = "GENERAR_ARREGLO_SUBCAMPOS";
@@ -318,7 +318,7 @@ function armarComboCampos(){
     objAH               = new AjaxHelper(updateArmarComboCampos);
     objAH.debug         = true;
     objAH.showOverlay   = true;
-    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tableAlias    = $('#tablas_ref').val();
     objAH.tipoAccion    = "GENERAR_ARREGLO_CAMPOS_REFERENCIA";
     objAH.sendToServer();
@@ -470,7 +470,7 @@ function agregarEstructuraCatalogacion(){
     objAH               = new AjaxHelper(updateAgregarEstructuraCatalogacion);
     objAH.debug         = true;
     objAH.showOverlay   = true;
-    objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.nivel         = $('#niveles_id').val();
 
     ok                  = checkEstructuraCatalogacion();
@@ -499,7 +499,7 @@ function modificarEstructuraCatalogacion(id){
     objAH                   = new AjaxHelper(updateModificarEstructuraCatalogacion);
     objAH.debug             = true;
     objAH.showOverlay       = true;
-    objAH.url               = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.nivel             = $('#niveles_id').val();
     objAH.id                = id;
     objAH.obligatorio       = ($('#obligatorio_si')[0].checked)?1:0;

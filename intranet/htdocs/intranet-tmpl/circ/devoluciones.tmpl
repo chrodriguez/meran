@@ -69,7 +69,7 @@ function getSocioFromPrestamo(prestamo){
 	var objAH               = new AjaxHelper(updateGetSocioFromPrestamo);
 	objAH.debug             = true;
     objAH.showOverlay       = true;
-	objAH.url               = "/cgi-bin/koha/circ/circulacionDB.pl";
+	objAH.url=URL_PREFIX+"/circ/circulacionDB.pl";
 	objAH.prestamo          = prestamo;
 	objAH.tipoAccion        = "CIRCULACION_RAPIDA_OBTENER_SOCIO";
 	//se envia la consulta
@@ -91,7 +91,7 @@ function devolverPrestamo(){
 	var objAH           = new AjaxHelper(updateDevolverPrestamo);
 	objAH.debug         = true;
     objAH.showOverlay   = true;
-	objAH.url           = '/cgi-bin/koha/circ/circulacionDB.pl';
+	objAH.url=URL_PREFIX+'/circ/circulacionDB.pl';
 	objAH.tipoAccion    = 'DEVOLUCION';
 	objAH.datosArray    = [$('#prestamo_hidden').val()];
 	objAH.nro_socio     = USUARIO.ID;

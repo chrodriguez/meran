@@ -5,7 +5,7 @@
 function actualizarRecomendacion(){
 
       objAH                     = new AjaxHelper(updateActualizarRecomendacion)
-      objAH.url                 = '/cgi-bin/koha/adquisiciones/recomendacionesDB.pl'
+      objAH.url=URL_PREFIX+'/adquisiciones/recomendacionesDB.pl'
       objAH.debug               = true
       objAH.showOverlay         = true;
       objAH.id_recomendacion    = $('#recomendacion_id').val()

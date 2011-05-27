@@ -9,7 +9,7 @@
     });
 </script>
 
-<form id="export" method="POST" action="/cgi-bin/koha/adquisiciones/exportaciones.pl?token=[% token %]" accept-charset="utf-8">
+<form id="export" method="POST" href="[% url_prefix %]/adquisiciones/exportaciones.pl?token=[% token %]" accept-charset="utf-8">
     <input type="hidden" id="proveedores" name="proveedores" value="">
     <fieldset id="datos_proveedor">
     <legend class="titulo_legend">[% "Ejemplares Recomendados para la Compra" | i18n %]</legend>
@@ -62,8 +62,8 @@
                               [% PERL %]
                               print C4::AR::Filtros::link_to(
                                                             text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
-                                                            url =>  "/cgi-bin/koha/adquisiciones/recomendacionesDB.pl", 
-                                                            params =>   ["action=EDITAR_RECOMENDACION", "id_recomendacion=[% recomendacion.id %]"],
+                                                            url=>"[% url_prefix %]/koha/adquisiciones/recomendacionesDB.pl", 
+                                                            params =>   ["href=EDITAR_RECOMENDACION", "id_recomendacion=[% recomendacion.id %]"],
                                                             title =>    "[% 'Editar Recomendacion' | i18n %]"
                                                           );
                              [% END %]

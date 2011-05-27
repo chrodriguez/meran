@@ -25,7 +25,7 @@ function hacerSubmit(){
 <br>
 <table border=0 cellspacing=0 cellpadding=0 width="100%" align="left">
 
-  <form name="unidadInformacion" action=/cgi-bin/koha/reports/avail_year.pl method=post >
+  <form name="unidadInformacion" href=[% url_prefix %]/reports/avail_year.pl method=post >
     <input type="hidden" name="token" value="[% token %]">
     <tr>
     <td>[% "Seleccione una unidad de informaci&oacute;n:" | i18n %]</td>

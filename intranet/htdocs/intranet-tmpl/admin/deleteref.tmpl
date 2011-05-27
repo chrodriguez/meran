@@ -1,11 +1,11 @@
 <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 <SCRIPT>
 function enviarContenido(codigo){
-	document.getElementById("editandoCONTENIDO").action="editref.pl";
+	document.getElementById("editandoCONTENIDO").href="editref.pl";
 	document.getElementById("editandoCONTENIDO").submit();}
 function enviarContenido2(codigo){
 	document.getElementById("asignandoID").value=codigo;
-	document.getElementById("editandoCONTENIDO").action="asignar.pl";
+	document.getElementById("editandoCONTENIDO").href="asignar.pl";
 	document.getElementById("editandoCONTENIDO").submit();
 	}
 function enviarContenido3(codigo){
@@ -32,7 +32,7 @@ function enviarContenido3(codigo){
 	<!-- TMPL_IF NAME=searchfield -->
 		Ha Buscado por <!-- TMPL_VAR name=searchfield -->
 	<!-- /TMPL_IF -->
-	<FORM id="editandoCONTENIDO" action="">
+	<FORM id="editandoCONTENIDO" href="">
 	<input type="hidden" name="editandotabla" value="<!-- TMPL_VAR NAME="editandotabla" -->" >
 	<input type="hidden" name="editandoidentificador" value="<!-- TMPL_VAR NAME="editandoidentificador" -->" >
 	<INPUT type="hidden" name="editandocodigo" id="editandocodigo" value="<!-- TMPL_VAR NAME="editandocodigo" -->" >
@@ -47,7 +47,7 @@ function enviarContenido3(codigo){
 	<table>
 	<tr>
 
-	<form id="form1" action='<!-- TMPL_VAR NAME="script_name" -->' method=post name="form1">
+	<form id="form1" href='<!-- TMPL_VAR NAME="script_name" -->' method=post name="form1">
 		<!--Miguel 24-04-07 - Se saca por ahora ver si es necesario --->
 		<!--<td><input type=text class="inputFontNormal"name=description value=<!-- TMPL_VAR name="searchfield" -->></td>
 		<td> <-img name="go" id="go" alt="Comenzar b&uacute;squeda" src="<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png" border="0" onMouseOut="swap('go','<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscar.png')" onMouseOver="swap('go','<!-- TMPL_VAR NAME="themelang" -->/images/boton-buscarbis.png')" onClick="document.getElementById('form1').submit()">-->

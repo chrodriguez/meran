@@ -5,7 +5,7 @@
 function consultar(){
 	objAH=new AjaxHelper(updateInfo);
     objAH.showOverlay       = true;
-	objAH.url= "/cgi-bin/koha/reports/estantesResult.pl";
+	objAH.url=URL_PREFIX+"/reports/estantesResult.pl";
 	objAH.shelf= $("#shelf").val();
 	//se envia la consulta
 	objAH.sendToServer();

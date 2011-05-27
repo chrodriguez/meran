@@ -28,7 +28,7 @@ function verificarBarcode(){
 	objAH               = new AjaxHelper(updateVerificarBarcode);
 	objAH.debug         = true;
     objAH.showOverlay   = true;
-	objAH.url           = "/cgi-bin/koha/cir/circulacionDB.pl";
+	objAH.url=URL_PREFIX+"/cir/circulacionDB.pl";
 	objAH.id1           = id1;
 	objAH.id2           = id2;
 	objAH.tipoAccion    = "VERIFICAR_BARCODE";
@@ -48,7 +48,7 @@ function obtenerTiposDePrestamos(){
 	objAH.debug         = true;
     objAH.showOverlay   = true;
 //     objAH.cache         = true;
-	objAH.url           = "/cgi-bin/koha/circ/circulacionDB.pl";
+	objAH.url=URL_PREFIX+"/circ/circulacionDB.pl";
 	objAH.nro_socio     = NRO_SOCIO_AUTH;
 	objAH.barcode       = $('#barcode_hidden').val();
 	objAH.tipoAccion    = "CIRCULACION_RAPIDA_OBTENER_TIPOS_DE_PRESTAMO";
@@ -67,7 +67,7 @@ function obtenerDatosDelEjemplar(){
     objAH.debug         = true;
     objAH.showOverlay   = true;
 //     objAH.cache         = true;
-    objAH.url           = "/cgi-bin/koha/circ/circulacionDB.pl";
+    objAH.url=URL_PREFIX+"/circ/circulacionDB.pl";
     objAH.barcode       = barcode;
     objAH.tipoAccion    = "CIRCULACION_RAPIDA_OBTENER_DATOS_EJEMPLAR";
     //se envia la consulta
@@ -94,7 +94,7 @@ function realizarAccionCircRapida(){
     objAH                       = new AjaxHelper(updateRealizarAccion);
     objAH.debug                 = true;
     objAH.showOverlay           = true;
-    objAH.url                   = "/cgi-bin/koha/circ/circulacionDB.pl";
+    objAH.url=URL_PREFIX+"/circ/circulacionDB.pl";
     objAH.nro_socio             = $('#nro_socio_hidden').val();
     objAH.adicional_selected    = $('#auth_selected').is(':checked'); 
     objAH.barcode               = $('#barcode').val();
@@ -151,7 +151,7 @@ function tieneApoderado(){
 	objAH.debug             = true;
     objAH.showOverlay       = true;
 //     objAH.cache             = true;
-	objAH.url               = "/cgi-bin/koha/circ/circulacionDB.pl";
+	objAH.url=URL_PREFIX+"/circ/circulacionDB.pl";
 	objAH.nro_socio         = NRO_SOCIO_AUTH;
 	objAH.tipoAccion        = "CIRCULACION_RAPIDA_TIENE_AUTORIZADO";
 	//se envia la consulta
@@ -260,7 +260,7 @@ function esRegular(NRO_SOCIO_AUTH){
 	objAH                   = new AjaxHelper(updateEsRegular);
 	objAH.debug             = true;
     objAH.showOverlay       = true;
-	objAH.url               = "/cgi-bin/koha/circ/circulacionDB.pl";
+	objAH.url=URL_PREFIX+"/circ/circulacionDB.pl";
 	objAH.nro_socio         = NRO_SOCIO_AUTH;
 	objAH.tipoAccion        = "CIRCULACION_RAPIDA_ES_REGULAR";
 	//se envia la consulta

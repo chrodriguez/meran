@@ -17,7 +17,7 @@
 function siguiente(){
 
 	objAH=new AjaxHelper(updateSiguiente);
-	objAH.url= '/cgi-bin/koha/admin/instaladorDB.pl';
+	objAH.url=URL_PREFIX+'/admin/instaladorDB.pl';
 // 	objAH.debug= true;
     objAH.showOverlay  = true;
 	objAH.accion= 'SIGUIENTE';
@@ -35,7 +35,7 @@ function anterior(){
 	objAH=new AjaxHelper(updateAnterior);
 	objAH.debug= true;
     objAH.showOverlay       = true;
-	objAH.url= '/cgi-bin/koha/admin/instaladorDB.pl';
+	objAH.url=URL_PREFIX+'/admin/instaladorDB.pl';
 	objAH.accion= 'ANTERIOR';
 	//se envia la consulta
 	objAH.sendToServer();

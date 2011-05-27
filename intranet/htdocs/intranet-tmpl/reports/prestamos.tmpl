@@ -19,7 +19,7 @@ $(document).ready(function() {
 
 
 function enviarMails(){
-	location.href='/cgi-bin/koha/reports/mailvencidos.pl';
+	location.href='[% url_prefix %]/reports/mailvencidos.pl';
 }
 
 function ocultarBoton(estado){
@@ -45,7 +45,7 @@ function ordenar(orden){
 function consultar(){
 	objAH=new AjaxHelper(updateInfo);
     objAH.showOverlay       = true;
-	objAH.url="/cgi-bin/koha/reports/prestamosResult.pl";
+	objAH.url=URL_PREFIX+"/reports/prestamosResult.pl";
 	objAH.id_ui=$("#id_ui").val();
 	objAH.begindate=$("#begindate").val();
 	objAH.enddate=$("#enddate").val();

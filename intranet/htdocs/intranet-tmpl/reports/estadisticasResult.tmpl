@@ -102,11 +102,11 @@
     <input TYPE="hidden" VALUE="pdf" NAME="type" >
     
     <a  onMouseOut="swap('print','[% themelang %]/images/menu-imprimir.png')" onMouseOver="swap('print','[% themelang %]/images/menu-imprimirbis.png')">
-    <input onClick="unidad.action='/cgi-bin/koha/reports/printEstadisticas.pl';unidad.target='_blank';unidad.type.value='print';submit();"  name="print" id="print" type="image" value="Imprimir"  src="[% themelang %]/images/menu-imprimir.png" border="0" title="Imprimir Resultados">
+    <input onClick="unidad.href='[% url_prefix %]/reports/printEstadisticas.pl';unidad.target='_blank';unidad.type.value='print';submit();"  name="print" id="print" type="image" value="Imprimir"  src="[% themelang %]/images/menu-imprimir.png" border="0" title="Imprimir Resultados">
     </a>
     
     <a>
-        <input onClick="unidad.action='/cgi-bin/koha/reports/printEstadisticas.pl';unidad.target='_self'; unidad.type.value='pdf';submit();" name="pdf" id="pdf" type="image" value="Generar PDF"  src="[% themelang %]/images/pdf.png" border="0" title="Generar archivo PDF">
+        <input onClick="unidad.href='[% url_prefix %]/reports/printEstadisticas.pl';unidad.target='_self'; unidad.type.value='pdf';submit();" name="pdf" id="pdf" type="image" value="Generar PDF"  src="[% themelang %]/images/pdf.png" border="0" title="Generar archivo PDF">
     </a>
 </form>
 </center>

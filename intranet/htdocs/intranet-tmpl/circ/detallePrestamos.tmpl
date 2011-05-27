@@ -33,7 +33,7 @@
 			 <input type="checkbox" name="chkboxPrestamos" value="[% prestamo.getId_prestamo %]" id="[% prestamo.getId_prestamo %]">
 		</td>
                 <td>
-                <a href="/cgi-bin/koha/catalogacion/estructura/detalle.pl?id1=[% prestamo.nivel3.nivel1.getId1 %]">
+                <a href="[% url_prefix %]/catalogacion/estructura/detalle.pl?id1=[% prestamo.nivel3.nivel1.getId1 %]">
                     [% prestamo.nivel3.nivel1.getTitulo %]
                 </a>
 		</td>
@@ -45,7 +45,7 @@
                 [% END %]
 		</td>
             	<td align="center">
-                <a href='/cgi-bin/koha/catalogacion/estructura/detalleEjemplar.pl?id3=[% prestamo.getId3 %]' title='Detalle del Ejemplar'> 
+                <a href='[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl?id3=[% prestamo.getId3 %]' title='Detalle del Ejemplar'> 
                 [% prestamo.nivel3.getBarcode %]</a>
                 </td>
           	<td align="center">

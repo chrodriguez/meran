@@ -30,7 +30,7 @@ function updateInfo(responseText){
 
 function consultar(){
 	objAH                   = new AjaxHelper(updateInfo);
-	objAH.url               = "/cgi-bin/koha/reports/usuariosResult.pl";
+	objAH.url=URL_PREFIX+"/reports/usuariosResult.pl";
     objAH.debug             = true;
     objAH.showOverlay       = true;
 	objAH.year              = $("#year").val();

@@ -98,7 +98,7 @@
 <div id="resultHistoriales"></div>
 
 [% IF foto_name %]
-    <form action="/cgi-bin/koha/upload.pl" method=post style="display:none">
+    <form href="[% url_prefix %]/upload.pl" method=post style="display:none">
         <input type="hidden" name="foto_name" value='[% foto_name %]' >
         <input type="hidden" name="nro_socio" value='[% socio.getNro_socio %]'>
     </form>

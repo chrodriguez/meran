@@ -24,7 +24,7 @@
 
 <!-- TMPL_LOOP NAME="AUTHOR" -->
 	<b>Autor:</b><br>
-		<a href="/cgi-bin/koha/search.pl?authorid=<!-- TMPL_VAR NAME="id" ESCAPE="URL" -->&type=intra">
+		<a href="[% url_prefix %]/search.pl?authorid=<!-- TMPL_VAR NAME="id" ESCAPE="URL" -->&type=intra">
 			<!-- TMPL_VAR NAME="apellido" -->
 	<!-- TMPL_IF name="nombre" -->, <!-- TMPL_VAR NAME="nombre" -->
 	<!-- /TMPL_IF -->
@@ -34,7 +34,7 @@
 <!-- TMPL_IF name="ADDITIONAL" -->
 	<b>Autores Adicionales:</b> <br>
 	<!-- TMPL_LOOP NAME="ADDITIONAL" -->
-	<a href="/cgi-bin/koha/search.pl?authorid=<!-- TMPL_VAR NAME="id" ESCAPE="URL" -->&type=intra">
+	<a href="[% url_prefix %]/search.pl?authorid=<!-- TMPL_VAR NAME="id" ESCAPE="URL" -->&type=intra">
 			<!-- TMPL_VAR NAME="apellido" --> <!-- TMPL_IF name="nombre" -->, <!-- TMPL_VAR NAME="nombre" --><!-- /TMPL_IF -->
 	</a><br>
 	<!-- /TMPL_LOOP -->
@@ -43,7 +43,7 @@
 <!-- TMPL_IF name="COLABS" -->
 	<b>Colaboradores :</b><br>
 	<!-- TMPL_LOOP NAME="COLABS" -->
-	<a href="/cgi-bin/koha/search.pl?authorid=<!-- TMPL_VAR NAME='id' ESCAPE='URL' -->&type=intra">
+	<a href="[% url_prefix %]/search.pl?authorid=<!-- TMPL_VAR NAME='id' ESCAPE='URL' -->&type=intra">
 	<!-- TMPL_VAR NAME="apellido" --><!-- TMPL_IF name="nombre" -->, <!-- TMPL_VAR NAME="nombre" --><!-- /TMPL_IF --> (<!-- TMPL_VAR NAME="tipo" -->)
 	</a><br>
 	<!-- /TMPL_LOOP -->
@@ -62,6 +62,6 @@
 
 
 <br>
-<center><a href="/cgi-bin/koha/opac-detail.pl?type=opac&bib=<!-- TMPL_VAR Name='biblionumber' -->">Volver</a></center>
+<center><a href="[% url_prefix %]/opac-detail.pl?type=opac&bib=<!-- TMPL_VAR Name='biblionumber' -->">Volver</a></center>
 
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

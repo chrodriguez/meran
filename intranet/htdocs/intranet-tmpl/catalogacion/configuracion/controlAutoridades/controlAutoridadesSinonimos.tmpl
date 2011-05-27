@@ -57,7 +57,7 @@ function consultarTablaSinonimos(sinonimo){
 	objAH=new AjaxHelper(updateConsultarTablaSinonimos);
 	objAH.debug= true;
     objAH.showOverlay       = true;
-	objAH.url= '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
+	objAH.url=URL_PREFIX+'/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
 	objAH.tipo= 'consultaTablasSinonimos';
 	objAH.tabla= tabla;
 	objAH.sinonimo= sinonimo;
@@ -151,7 +151,7 @@ function guardarDatos(){
 	objAH=new AjaxHelper(updateGuadarDatos);
 	objAH.debug= true;
     objAH.showOverlay       = true;
-	objAH.url= '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
+	objAH.url=URL_PREFIX+'/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
 	objAH.tipo= 'insertarSinonimos';
 	objAH.tabla= $('#tabla').val();
 	objAH.sinonimos= OBJECTS_ARRAY;
@@ -177,7 +177,7 @@ jConfirm(CONFIRMA_LA_BAJA_DEL_SINONIMO,CONTROL_AUTORIDADES_TITLE, function(confi
 		objAH=new AjaxHelper(updateDeleteSinonimo);
 		objAH.debug= true;
         objAH.showOverlay       = true;
-		objAH.url= '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
+		objAH.url=URL_PREFIX+'/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
 		objAH.tipo= 'eliminarSinonimos';
 		objAH.tabla= $('#tabla').val();
 		objAH.sinonimoDelete_string= sinonimo_string;
@@ -203,7 +203,7 @@ function updateNombreSinonimo(idSinonimo, nombre, nombreViejo){
 	objAH=new AjaxHelper(updateGuadarDatos);
 	objAH.debug= true;
     objAH.showOverlay       = true;
-	objAH.url= '/cgi-bin/koha/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
+	objAH.url=URL_PREFIX+'/catalogacion/configuracion/controlAutoridades/controlAutoridadesDB.pl';
 	objAH.tipo= 'UpdateSinonimo';
 	objAH.tabla= $('#tabla').val();
 	objAH.idSinonimo= idSinonimo;

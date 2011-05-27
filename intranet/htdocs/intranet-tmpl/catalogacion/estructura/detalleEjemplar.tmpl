@@ -14,7 +14,7 @@
             objAH=new AjaxHelper(updateHistoricoDisponibilidad);
             objAH.debug= true;
             objAH.showOverlay = true;
-            objAH.url= 'detalleEjemplar.pl';
+            objAH.url='detalleEjemplar.pl';
             objAH.funcion = "changePage";
             objAH.id3= id3;
             objAH.tipo= 'VER_HISTORICO_DISPONIBILIDAD';
@@ -30,7 +30,7 @@
             objAH=new AjaxHelper(updateHistoricoCirculacion);
             objAH.debug= true;
             objAH.showOverlay = true;
-            objAH.url= 'detalleEjemplar.pl';
+            objAH.url='detalleEjemplar.pl';
             objAH.funcion = "changePage";
             objAH.fecha_inicial=  $('#fecha_inicial').val();
             objAH.fecha_final=  $('#fecha_final').val();
@@ -71,7 +71,7 @@
                             [% 'Reservado a:' | i18n  %] 
                             <strong>[% PERL %]
                                 print C4::AR::Filtros::link_to(   text =>     "[% socio_reserva.persona.getApeYNom %]",
-                                                                  url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
+                                                                  url=>"[% url_prefix %]/koha/usuarios/reales/datosUsuario.pl", 
                                                                   params =>   ["nro_socio=[% socio_reserva.getNro_socio %]"],
                                                                   title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
                                                                   blank =>  1,

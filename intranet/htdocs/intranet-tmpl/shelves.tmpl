@@ -4,7 +4,7 @@
     <!-- TMPL_INCLUDE NAME="intranet-top.inc" -->
 <!-- /TMPL_IF -->
 
-<form action="shelves.pl" name="shelfform">
+<form href="shelves.pl" name="shelfform">
      <input type=hidden name=tipo>
 
 <!-- TMPL_IF Name="mensaje" -->
@@ -62,7 +62,7 @@
 		<td class="impar"><b><i><!-- TMPL_VAR Name="shelfname" --></i></b> 
 		<input type="hidden" name="shelfname" value="<!-- TMPL_VAR NAME="shelfname" -->">
 		 <input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
-		<a href="#" onClick="shelfform.action='/cgi-bin/koha/modshelf.pl';shelfform.submit();" >
+		<a href="#" onClick="shelfform.href='[% url_prefix %]/modshelf.pl';shelfform.submit();" >
 		 <input type="image" name="pen" value="modify" border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/editar.png"  hspace=0 vspace=0 border=0 title="Editar Estante Virtual">
 		 </a>
 		<input type="submit" style="visibility:hidden">
@@ -80,7 +80,7 @@
 		 <input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">	
 		  <input type="hidden" name="shelfname" value="<!-- TMPL_VAR NAME="shelfname" -->">
 	
-		 <a href="#" onClick="shelfform.action='/cgi-bin/koha/modshelf.pl';shelfform.submit();" >
+		 <a href="#" onClick="shelfform.href='[% url_prefix %]/modshelf.pl';shelfform.submit();" >
 		 <input type="image" name="pen" value="modify" border="0" src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/editar.png"  hspace=0 vspace=0 border=0 title="Editar Estante Virtual">
 		</a>
 		<input type="submit" style="visibility:hidden">
@@ -154,11 +154,11 @@
         		<tr>
 				<td class="<!-- TMPL_VAR Name="clase" -->" width="1%">&nbsp;</td>
                                 <td class="<!-- TMPL_VAR Name="clase" -->"><input type=checkbox name="REM-<!-- TMPL_VAR Name="biblioitemnumber"-->"></td>
-				<td  class="<!-- TMPL_VAR Name="clase" -->"><a class="inputFontNormal" href=/cgi-bin/koha/<!-- TMPL_VAR name="script" -->?type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&bib=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->><!-- TMPL_VAR NAME=title ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --></a>
+				<td  class="<!-- TMPL_VAR Name="clase" -->"><a class="inputFontNormal" href=[% url_prefix %]/<!-- TMPL_VAR name="script" -->?type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&bib=<!-- TMPL_VAR NAME=biblionumber ESCAPE=URL -->><!-- TMPL_VAR NAME=title ESCAPE=HTML --><!-- TMPL_IF NAME="unititle" -->:&nbsp;<!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --></a>
 				</td>
 			
 		<td class="<!-- TMPL_VAR Name="clase" -->">
-		<a class="inputFontNormal" href="/cgi-bin/koha/search.pl?authorid=<!-- TMPL_VAR NAME="id" ESCAPE="URL" -->&type=intra">
+		<a class="inputFontNormal" href="[% url_prefix %]/search.pl?authorid=<!-- TMPL_VAR NAME="id" ESCAPE="URL" -->&type=intra">
 		<!-- TMPL_VAR NAME="completo" --></a>
 		</td>
 													 
@@ -253,7 +253,7 @@ window.open('searchdicshelf.pl','Buscar','width=640,height=500,toolbar=yes,scrol
         <tr align="center" cellpadding=0 cellspacing=0>
         <td>
         <!-- TMPL_IF NAME="displayprev" -->
-        <a href="/cgi-bin/koha/shelves.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/prev.gif" border="0" alt="P&aacute;gina Anterior" height="14" width="15"></a>
+        <a href="[% url_prefix %]/shelves.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/prev.gif" border="0" alt="P&aacute;gina Anterior" height="14" width="15"></a>
     <!-- TMPL_ELSE -->
         <img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" height="14" width="15" alt="" border="0">
     <!-- /TMPL_IF -->
@@ -264,7 +264,7 @@ window.open('searchdicshelf.pl','Buscar','width=640,height=500,toolbar=yes,scrol
         <!-- TMPL_IF NAME="highlight" -->
         <td class="highnumber"> <!-- TMPL_VAR NAME="number" --> </td>
         <!-- TMPL_ELSE -->
-<td nowrap class="number"> <a href="/cgi-bin/koha/shelves.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->"> <!-- TMPL_VAR NAME=number --></a></td>
+<td nowrap class="number"> <a href="[% url_prefix %]/shelves.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->"> <!-- TMPL_VAR NAME=number --></a></td>
         <!-- /TMPL_IF -->
 
         <!-- TMPL_IF NAME="break" -->
@@ -274,7 +274,7 @@ window.open('searchdicshelf.pl','Buscar','width=640,height=500,toolbar=yes,scrol
     <!-- /TMPL_LOOP -->
 <td>
 <!-- TMPL_IF NAME="displaynext" -->
-        <a href="/cgi-bin/koha/shelves.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/next.gif" border="0" height="14" width="15" alt="P&aacute;gina Siguiente"></a>
+        <a href="[% url_prefix %]/shelves.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/next.gif" border="0" height="14" width="15" alt="P&aacute;gina Siguiente"></a>
     <!-- TMPL_ELSE -->
         <img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" border="0" width="15" height="14" alt="">
     <!-- /TMPL_IF -->
@@ -325,7 +325,7 @@ window.open('searchdicshelf.pl','Buscar','width=640,height=500,toolbar=yes,scrol
         <tr align="center" cellpadding=0 cellspacing=0>
         <td>
         <!-- TMPL_IF NAME="displayprev" -->
-        <a href="/cgi-bin/koha/shelves.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/prev.gif" border="0" alt="P&aacute;gina Anterior" height="14" width="15"></a>
+        <a href="[% url_prefix %]/shelves.pl?startfrom=<!-- TMPL_VAR NAME="prevstartfrom" -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/prev.gif" border="0" alt="P&aacute;gina Anterior" height="14" width="15"></a>
     <!-- TMPL_ELSE -->
         <img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" height="14" width="15" alt="" border="0">
     <!-- /TMPL_IF -->
@@ -336,7 +336,7 @@ window.open('searchdicshelf.pl','Buscar','width=640,height=500,toolbar=yes,scrol
         <!-- TMPL_IF NAME="highlight" -->
         <td class="highnumber"> <!-- TMPL_VAR NAME="number" --> </td>
         <!-- TMPL_ELSE -->
-<td nowrap class="number"> <a href="/cgi-bin/koha/shelves.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->"> <!-- TMPL_VAR NAME=number --></a></td>
+<td nowrap class="number"> <a href="[% url_prefix %]/shelves.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->"> <!-- TMPL_VAR NAME=number --></a></td>
         <!-- /TMPL_IF -->
 
         <!-- TMPL_IF NAME="break" -->
@@ -346,7 +346,7 @@ window.open('searchdicshelf.pl','Buscar','width=640,height=500,toolbar=yes,scrol
     <!-- /TMPL_LOOP -->
 <td>
 <!-- TMPL_IF NAME="displaynext" -->
-        <a href="/cgi-bin/koha/shelves.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/next.gif" border="0" height="14" width="15" alt="P&aacute;gina Siguiente"></a>
+        <a href="[% url_prefix %]/shelves.pl?startfrom=<!-- TMPL_VAR NAME="nextstartfrom" -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/next.gif" border="0" height="14" width="15" alt="P&aacute;gina Siguiente"></a>
     <!-- TMPL_ELSE -->
         <img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" border="0" width="15" height="14" alt="">
     <!-- /TMPL_IF -->
@@ -363,7 +363,7 @@ window.open('searchdicshelf.pl','Buscar','width=640,height=500,toolbar=yes,scrol
 <script>alert("<!-- TMPL_VAR Name="textodelete" -->")</script>
 <!-- /TMPL_IF -->
 
-<a href="/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR Name='biblio' -->">Volver</a>
+<a href="[% url_prefix %]/detail.pl?type=intra&bib=<!-- TMPL_VAR Name='biblio' -->">Volver</a>
 
 <!-- TMPL_IF NAME="opac" -->
     <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

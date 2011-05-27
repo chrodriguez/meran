@@ -20,7 +20,7 @@
 			return false;
 		}
 	</script>
-	<form name="f_pop" action="plugin_launcher.pl" method="post">
+	<form name="f_pop" href="plugin_launcher.pl" method="post">
 		<input type="hidden" name="plugin_name" value="unimarc_field_60X.pl">
 		<textarea name="result" rows=5 cols=50><!-- TMPL_VAR name="result" --></textarea>
 		<br/><input type="button" value="OK" onClick="javascript:finish()">
@@ -98,7 +98,7 @@
 	</tr>
 	</table>
 <h2>Agregando</h2>
-<form name="f3_pop"  action="thesaurus_popup.pl" method="post">
+<form name="f3_pop"  href="thesaurus_popup.pl" method="post">
 	<input type="hidden" name="index" value="<!-- TMPL_VAR name="index" -->">
 	<input type="hidden" name="op" value="add">
 	<input type="hidden" name="category" value="<!-- TMPL_VAR name="category" -->">

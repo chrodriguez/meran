@@ -39,7 +39,7 @@
                     <td class="titulo_result">
                         [% PERL %]
                             print C4::AR::Filtros::link_to( text =>     "[% contenido_estante.nivel2.nivel1.getTitulo %]",
-                                                            url =>      "/cgi-bin/koha/catalogacion/estructura/detalle.pl", 
+                                                            url=>"[% url_prefix %]/koha/catalogacion/estructura/detalle.pl", 
                                                             params =>   ["id1=[% contenido_estante.nivel2.id1 %]"],
                                                             title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
                                                         ) ;
@@ -77,7 +77,7 @@
 
 
 
-<form id="exportPDF" action="/cgi-bin/koha/reports/estantes_virtuales_result.pl?token=[% token %]"  accept-charset="utf-8">
+<form id="exportPDF" href="[% url_prefix %]/reports/estantes_virtuales_result.pl?token=[% token %]"  accept-charset="utf-8">
         <input type="hidden" name="export" value="pdf" />
         <input type="hidden" name="estante" value="[% id_estante %]" />
 </form>

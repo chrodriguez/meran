@@ -3,7 +3,7 @@
 <title>Personal Authorities builder</title>
 </head>
 <body>
-	<form name="f_pop" action="plugin_launcher.pl" method="post">
+	<form name="f_pop" href="plugin_launcher.pl" method="post">
 	<input type="hidden" name="plugin_name" value="unimarc_field_700_701_702.pl">
 	<textarea name="result" rows=5 cols=60><!-- TMPL_VAR name="result" --></textarea></br>
 	<input type="button" value="FIN" onClick="javascript:report()">
@@ -17,7 +17,7 @@
 	<input type="submit" value="B&uacute;squeda">
 	</form>
 <!-- TMPL_IF name="search_string" -->
-	<form name="f2_pop"  action="plugin_launcher.pl" method="post">
+	<form name="f2_pop"  href="plugin_launcher.pl" method="post">
 	<input type="hidden" name="plugin_name" value="unimarc_field_700_701_702.pl">
 	<!-- TMPL_VAR name="select_list" -->
 	<input type="hidden" name="index" value="<!-- TMPL_VAR name="index" -->">
@@ -26,7 +26,7 @@
 	<input type="submit" name="OK" value="select">
 	</form>
 <!-- /TMPL_IF -->
-	<form name="f3_pop"  action="plugin_launcher.pl" method="post">
+	<form name="f3_pop"  href="plugin_launcher.pl" method="post">
 	<input type="hidden" name="plugin_name" value="unimarc_field_700_701_702.pl">
 	<input type="hidden" name="index" value="<!-- TMPL_VAR name="index" -->">
 	<input type="hidden" name="op" value="add">

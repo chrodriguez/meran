@@ -36,20 +36,20 @@ function consultar(){
     objAH.tipo_nivel3_id= $('#tipo_nivel3_id').val();
     objAH.tipo_prestamo= $('#tipo_prestamo_id').val();
     objAH.catUsuario= $('#categoria_socio_id').val();
-    objAH.url= "/cgi-bin/koha/reports/historico_PrestamosResult.pl";
+    objAH.url=URL_PREFIX+"/reports/historico_PrestamosResult.pl";
     objAH.funcion="changePage";
     objAH.sendToServer();
 }
 
 function generarPDF(){
-    $('#prestamos')[0].action= "/cgi-bin/koha/reports/printHistPrestamos.pl";
+    $('#prestamos')[0].href="[% url_prefix %]/reports/printHistPrestamos.pl";
     $('#prestamos')[0].target= "_self";
     $('#prestamos')[0].type.value= "pdf";
     $('#prestamos')[0].submit();
 }
 
 function imprimir(){
-    $('#prestamos')[0].action= "/cgi-bin/koha/reports/printHistPrestamos.pl";
+    $('#prestamos')[0].href="[% url_prefix %]/reports/printHistPrestamos.pl";
     $('#prestamos')[0].target= "_blank";
     $('#prestamos')[0].type.value= "print";
     $('#prestamos')[0].submit();

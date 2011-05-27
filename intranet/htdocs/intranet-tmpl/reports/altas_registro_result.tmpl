@@ -41,7 +41,7 @@
 	            
 	                        [% PERL %]
 	                            print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(titulo) %]",
-	                                                            url =>      "/cgi-bin/koha/catalogacion/estructura/detalle.pl", 
+	                                                            url=>"[% url_prefix %]/koha/catalogacion/estructura/detalle.pl", 
 	                                                            params =>   ["id1=[% id1 %]"],
 	                                                            title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
 	                                                        ) ;
@@ -97,7 +97,7 @@
 	        </div>
 	</fieldset>
 
-<form id="exportPDF" action="/cgi-bin/koha/reports/altas_registro_result.pl?token=[% token %]"  accept-charset="utf-8">
+<form id="exportPDF" href="[% url_prefix %]/reports/altas_registro_result.pl?token=[% token %]"  accept-charset="utf-8">
         <input type="hidden" name="export" value="pdf" />
         <input type="hidden" name="item_type" value="[% item_type %]" />
         <input type="hidden" name="date_begin" value="[% date_begin %]" />
