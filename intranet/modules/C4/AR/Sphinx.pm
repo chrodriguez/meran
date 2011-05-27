@@ -369,12 +369,12 @@ C4::AR::Debug::debug("estado codigo => ".getCodigoFromEstadoById($dato_ref));
             my $query4  =   " UPDATE indice_busqueda SET titulo = ?, autor = ?, string = ? ";
             $query4 .=      " WHERE id = ? ";
             my $sth4    = $dbh->prepare($query4);
-            $sth4->execute($titulo, $autor, $superstring, $string_tabla_con_dato, $string_con_dato, $registro_marc_n1->{'id'});
+            $sth4->execute($titulo, $autor, $superstring, $registro_marc_n1->{'id'});
         } else {
             my $query4  =   " INSERT INTO indice_busqueda (id, titulo, autor, string) ";
             $query4 .=      " VALUES (?,?,?,?) ";
             my $sth4    = $dbh->prepare($query4);
-            $sth4->execute($registro_marc_n1->{'id'}, $titulo, $autor, $superstring, $string_tabla_con_dato, $string_con_dato);
+            $sth4->execute($registro_marc_n1->{'id'}, $titulo, $autor, $superstring);
         }
 
         C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => UPDATE => id1 => ".$registro_marc_n1->{'id'});
