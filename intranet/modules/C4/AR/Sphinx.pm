@@ -357,7 +357,7 @@ C4::AR::Debug::debug("estado codigo => ".getCodigoFromEstadoById($dato_ref));
         my $query4  =   " INSERT INTO indice_busqueda (id, titulo, autor, string) ";
         $query4 .=      " VALUES (?,?,?,?) ";
         my $sth4    = $dbh->prepare($query4);
-        $sth4->execute($registro_marc_n1->{'id'}, $titulo, $autor, $superstring, $string_tabla_con_dato, $string_con_dato);
+        $sth4->execute($registro_marc_n1->{'id'}, $titulo, $autor, $superstring);
     } else {    
 
         my $query4  = "SELECT COUNT(*) as cant FROM indice_busqueda WHERE id = ?";
