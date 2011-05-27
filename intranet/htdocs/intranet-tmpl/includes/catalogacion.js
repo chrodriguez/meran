@@ -117,18 +117,6 @@ function _setFoco(){
 	}
 }
 
-// function _recuperarSeleccionados(chckbox){
-// 	var chck    = $("input[name="+chckbox+"]:checked");
-// 	var array   = new Array;
-// 	var long    = chck.length;
-// 
-// 	for(var i=0; i< long; i++){
-// 		array[i]    = chck[i].value;
-// 	}
-// 	
-// 	return array;
-// }
-
 function seleccionoAlgo(chckbox){
     var chck = $("input[name="+chckbox+"]:checked");
     var array = new Array;
@@ -969,6 +957,30 @@ function updateMostrarInfoAltaNivel3(responseText){
     checkedAll('select_all', 'checkEjemplares');
     
     scrollTo('detalleDelNivel3');
+}
+
+function mostrarInfoAltaNivel3ParaEdicionGrupalFromRegistro(idNivel2){
+    if(idNivel2 != 0){
+        objAH               = new AjaxHelper(updateMostrarInfoAltaNivel3ParaEdicionGrupalFromRegistro);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;
+        objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+        objAH.tipoAccion    = "MOSTRAR_INFO_NIVEL3_TABLA";
+        objAH.id2           = idNivel2;
+        ID_N2               = idNivel2;
+        objAH.sendToServer();
+    }
+}
+
+function updateMostrarInfoAltaNivel3ParaEdicionGrupalFromRegistro(responseText){
+//     $("#divCantEjemplares").show(); 
+//     $("#detalleDelNivel3").html(responseText);
+//     checkedAll("select_all", "checkEjemplares");  
+//     zebra('tablaResult');
+
+//     $("input[name=checkEjemplares]").each(function(){this.checked = true;});
+    
+    modificarEjemplaresN3();
 }
 
 function open_alta_indicador(id_div_alta_indicador){
@@ -2086,6 +2098,7 @@ function cargarNivel1(params){
 		modificarN2(params.id2);
 	}else	
 	if(params.tipoAccion == 'MODIFICAR_NIVEL_3'){
+// FIXME falta tipo documento
 		modificarN3(params.id3);
 	}else{
 		//por defecto se carga el Nivel 1 para modificar
