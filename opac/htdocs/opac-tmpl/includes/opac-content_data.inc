@@ -15,10 +15,6 @@
                   [% novedad.getResumen %]
                   <a href='/cgi-bin/koha/ver_novedad.pl?id=[% novedad.getId %]&amp;token=[% token %]'>[% 'Leer m&aacute;s' | i18n %] &raquo;</a>
               </p>
-              <p class="details">
-                 [% 'Categor&iacute;a' | i18n %]: 
-                  <span class="highlighted">[% novedad.getCategoria %]</span>
-              </p>
           [% END %]
           
         </div>

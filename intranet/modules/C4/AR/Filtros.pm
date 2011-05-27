@@ -373,8 +373,8 @@ sub getComboLang {
 
     foreach my $lang (@languages){
     	if ($user_lang eq $lang){
-    	   $default = "selected=selected";
-           $html .="<option value='$lang ' $default>".$languages_name{$lang}."</option>";
+    	   $default = "selected='selected'";
+           $html .="<option value='$lang' $default>".$languages_name{$lang}."</option>";
     	}else{
            $html .="<option value='$lang '>".$languages_name{$lang}."</option>";
     		

@@ -1,9 +1,9 @@
 [% USE HTML %]
 
 <script type="text/javascript">
-var RecaptchaOptions = {
-   lang : 'es',
-};
+	var RecaptchaOptions = {
+	   lang : 'es',
+	};
 </script>
 
 <div class="column1-unit">

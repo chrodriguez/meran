@@ -115,6 +115,7 @@ use vars qw(@EXPORT_OK @ISA);
     generarComboTipoDeDocConValuesIds
     isValidFile
     escapeURL
+    getUrlPrefix
 );
 
 # para los combos que no usan tablas de referencia
@@ -3991,6 +3992,10 @@ sub escapeURL{
 	return ($url);
 }
 
+sub getUrlPrefix{
+	return (C4::Context->config('url_prefix'));
+	
+}
 END { }       # module clean-up code here (global destructor)
 
 1;

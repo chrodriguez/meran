@@ -404,7 +404,10 @@ sub _obtenerToken{
 sub getUserLocale{
     my $session = CGI::Session->load();
 
-    return $session->param('usr_locale') || C4::Context->config("defaultLang") || 'es_ES';
+    my $locale = $session->param('usr_locale') || C4::Context->config("defaultLang") || 'es_ES';
+    
+    return C4::AR::Utilidades::trim($locale);
+    
 }
 
 =item
@@ -843,7 +846,6 @@ sub buildSocioDataHashFromSession{
 
 sub updateLoggedUserTemplateParams{
 	my ($session,$t_params,$socio) = @_;
-	
 	buildSocioData($session,$socio);
 	$t_params->{'socio_data'} = buildSocioDataHashFromSession($session);
 }
