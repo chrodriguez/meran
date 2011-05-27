@@ -41,7 +41,7 @@ Buscar registro: <input type="text" name="dictionary" id="dictionary" >  <input 
 
 
     <!-- TMPL_ELSE -->
-      <A HREF="/cgi-bin/koha/searchdicshelf.pl?dictionary=<!-- TMPL_VAR NAME="keyword2" -->&dicdetail=1"><b><!-- TMPL_VAR NAME="keyword" --></b></A>
+      <A HREF="[% url_prefix %]/searchdicshelf.pl?dictionary=<!-- TMPL_VAR NAME="keyword2" -->&dicdetail=1"><b><!-- TMPL_VAR NAME="keyword" --></b></A>
     <!-- /TMPL_IF -->
   </li>
   <!-- TMPL_IF NAME=jump -->

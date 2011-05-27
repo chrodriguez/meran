@@ -19,7 +19,7 @@
                     [% PERL %]
                     print C4::AR::Filtros::link_to( 
                           text =>     "[% 'Pr&eacute;stamos' | i18n %]",
-                          url=>"[% url_prefix %]/koha/circ/prestamos.pl", 
+                          url=>"[% url_prefix %]/circ/prestamos.pl", 
                           title =>    "[% 'Pr&eacute;stamos' | i18n %]"
                           );
                     [% END %]
@@ -27,7 +27,7 @@
         <li class="item">
                     [% PERL %]
                     print C4::AR::Filtros::link_to( text =>     "[% 'Devoluciones y Renovaciones' | i18n %]",
-                            url=>"[% url_prefix %]/koha/circ/devoluciones.pl", 
+                            url=>"[% url_prefix %]/circ/devoluciones.pl", 
                             title =>    "[% 'Devoluciones y Renovaciones' | i18n %]"
                             ) ;
                     [% END %]
@@ -40,7 +40,7 @@
         <li class="item">
                     [% PERL %]
                     print C4::AR::Filtros::link_to( text =>     "[% 'Mis datos' | i18n %]",
-                                                    url=>"[% url_prefix %]/koha/usuarios/reales/datosUsuario.pl", 
+                                                    url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
                                                     title =>    "[% 'Reportes' | i18n %]",
                                                     params =>   ["nro_socio=[% nro_socio %]"],
                             );

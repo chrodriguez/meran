@@ -62,7 +62,7 @@
                               [% PERL %]
                               print C4::AR::Filtros::link_to(
                                                             text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
-                                                            url=>"[% url_prefix %]/koha/adquisiciones/recomendacionesDB.pl", 
+                                                            url=>"[% url_prefix %]/adquisiciones/recomendacionesDB.pl", 
                                                             params =>   ["href=EDITAR_RECOMENDACION", "id_recomendacion=[% recomendacion.id %]"],
                                                             title =>    "[% 'Editar Recomendacion' | i18n %]"
                                                           );

@@ -41,7 +41,7 @@
 			    <td>
 				    [% PERL %]
 						    print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(prestamo.nivel3.nivel1.getTitulo) %]",
-		                                                    url=>"[% url_prefix %]/koha/catalogacion/estructura/detalle.pl",
+		                                                    url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl",
 														    params =>	[	"id1=[% HTML.escape(prestamo.nivel3.nivel1.id) %]"], 
 													    ) ;
 				    [% END %]
@@ -72,7 +72,7 @@
 			    <td align="center" >
 				    [% PERL %]
 						    print C4::AR::Filtros::link_to(	text => 	"[% prestamo.nivel3.getBarcode %]",
-														    url=>"[% url_prefix %]/koha/catalogacion/estructura/detalleEjemplar.pl", 
+														    url=>"[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
 														    params =>	["id3=[% prestamo.id3 %]"],
 														    title =>	"[% "Detalle del Ejemplar" | i18n %]"
 													    ) ;

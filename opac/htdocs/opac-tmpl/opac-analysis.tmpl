@@ -176,7 +176,7 @@
 <!-- TMPL_IF name="analyticalunititle" --><br>T&iacute;tulo Informativo:<b> <!-- TMPL_VAR NAME="analyticalunititle" --></b><!-- /TMPL_IF -->
  <!-- TMPL_IF name="subject" --><br>Temas:<b> 
  <!-- TMPL_LOOP NAME="SUBJECTS" -->                      
- <a href="/cgi-bin/koha/opac-searchresults.pl?type=<!-- TMPL_IF NAME=opac -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&subjectitems=<!-- TMPL_VAR NAME=subject -->"> <!-- TMPL_VAR NAME="subject" --></a><!-- TMPL_VAR NAME=separator -->
+ <a href="[% url_prefix %]/opac-searchresults.pl?type=<!-- TMPL_IF NAME=opac -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&subjectitems=<!-- TMPL_VAR NAME=subject -->"> <!-- TMPL_VAR NAME="subject" --></a><!-- TMPL_VAR NAME=separator -->
  <!-- /TMPL_LOOP --></b>
  <br><!-- /TMPL_IF -->
 																 

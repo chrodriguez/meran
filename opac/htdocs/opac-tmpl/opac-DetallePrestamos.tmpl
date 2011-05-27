@@ -37,7 +37,7 @@
 
         [% PERL %]
                 print C4::AR::Filtros::link_to( text =>     "[% prestamo.nivel3.nivel1.getTitulo%]",
-                                                url=>"[% url_prefix %]/koha/opac-detail.pl", 
+                                                url=>"[% url_prefix %]/opac-detail.pl", 
                                                 params => [ "id1=[% prestamo.nivel3.nivel1.getId1 %]", ],
                                             ) ;
         [% END %]
@@ -50,7 +50,7 @@
 		</a>-->
         [% PERL %]
                 print C4::AR::Filtros::link_to( text =>     "[% prestamo.nivel3.nivel1.cat_autor.getCompleto%]",
-                                                url=>"[% url_prefix %]/koha/opac-searchresults.pl", 
+                                                url=>"[% url_prefix %]/opac-searchresults.pl", 
                                                 params => [ "authorid=[% prestamo.nivel3.nivel1.getAutor %]", ],
                                             ) ;
         [% END %]

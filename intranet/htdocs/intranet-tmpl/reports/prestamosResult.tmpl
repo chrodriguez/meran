@@ -55,7 +55,7 @@
                         <td > 
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[%  prestamo.socio.persona.getNombre %]",
-                                                                url=>"[% url_prefix %]/koha/usuarios/reales/datosUsuario.pl", 
+                                                                url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
                                                                 params =>   ["nro_socio=[%  prestamo.socio.persona.getNro_socio %]"],
                                                                 title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
                                                             ) ;
@@ -119,7 +119,7 @@
         print C4::AR::Filtros::link_to(  text    => "[% 'Generar Planilla' | i18n %]",
                                          title    => "[% 'Generar Planilla' | i18n %]",
                                          boton   => "boton_buscar",
-                                         url=>"[% url_prefix %]/koha/reports/plantillas/generatesxc.pl?name=[% planilla %]",
+                                         url=>"[% url_prefix %]/reports/plantillas/generatesxc.pl?name=[% planilla %]",
                                         width => 150,
                 ) ;
     [% END %]

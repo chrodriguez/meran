@@ -39,7 +39,7 @@
                               <td align='left' class="tarjetaId">
                                   [% PERL %]
                                       print C4::AR::Filtros::link_to(   text =>     "[% historico.socio.persona.getApeYNom %]",
-                                                                        url=>"[% url_prefix %]/koha/usuarios/reales/datosUsuario.pl", 
+                                                                        url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
                                                                         params =>   ["nro_socio=[% historico.socio.getNro_socio %]"],
                                                                         title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
                                                                   );
@@ -48,7 +48,7 @@
                               <td align='left' class="tarjetaId">
                                   [% PERL %]
                                       print C4::AR::Filtros::link_to(   text =>     "[% historico.responsable_ref.persona.getApeYNom %]",
-                                                                        url=>"[% url_prefix %]/koha/usuarios/reales/datosUsuario.pl", 
+                                                                        url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
                                                                         params =>   ["nro_socio=[% historico.responsable_ref.getNro_socio %]"],
                                                                         title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
                                                                   );

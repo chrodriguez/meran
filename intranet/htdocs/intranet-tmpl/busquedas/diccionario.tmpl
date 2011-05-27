@@ -8,7 +8,7 @@ function detalleDiccionario(keyword2){
 var params= 	'dictionary=' + keyword2 + '&dicdetail=1' ; 
 
 	$.ajax({	type: "POST",
-			url: "/cgi-bin/koha/busquedas/diccionario.pl",
+			url: "[% url_prefix %]/busquedas/diccionario.pl",
 			data: params,
 			complete: function(ajax){
 					$('#resultBusqueda').html(ajax.responseText);

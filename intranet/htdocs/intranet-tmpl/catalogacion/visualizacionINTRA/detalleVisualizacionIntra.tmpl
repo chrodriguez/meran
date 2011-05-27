@@ -4,7 +4,7 @@
         makeToggle('divTablaVisualizacion','trigger',null,false);
         onEnter('lib_librarian',agregarVisualizacion);
         loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>'
-        $('.editable').editable('/cgi-bin/koha/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl', { 
+        $('.editable').editable(i'[% url_prefix %]/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl', { 
               type      : 'text',
               cancel    : CANCELAR,
               submit    : OK,

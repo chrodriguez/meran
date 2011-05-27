@@ -35,7 +35,7 @@
                         <td>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(hist.nivel1.getTitulo) %]",
-                                                                url=>"[% url_prefix %]/koha/busquedas/detalle.p", 
+                                                                url=>"[% url_prefix %]/busquedas/detalle.p", 
                                                                 params =>   ["id1=[% hist.getId1 %]"],
                                                                 title =>    "[% 'Mostrar Detalle' | i18n %]"
                                                             ) ;
@@ -45,7 +45,7 @@
                         <td>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% hist.nivel1.cat_autor.getCompleto %]",
-                                                                url=>"[% url_prefix %]/koha/busquedas/filtrado.pl", 
+                                                                url=>"[% url_prefix %]/busquedas/filtrado.pl", 
                                                                 params =>   ["origen=detalle&idAutor='[% hist.nivel1.autor %]"],
                                                                 title =>    "[% 'Buscar' | i18n %]"
                                                             ) ;
@@ -64,7 +64,7 @@
                         <td>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% hist.getNro_socio %]",
-                                                                url=>"[% url_prefix %]/koha/usuarios/reales/datosUsuario.pl", 
+                                                                url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
                                                                 params =>   ["nro_socio=[% hist.getNro_socio%]"],
                                                                 title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
                                                             ) ;
@@ -76,7 +76,7 @@
                                 <!--FIXME tira error ROSE con esta relacion, arreglar!!! -->
                                 [% PERL %]
                                     print C4::AR::Filtros::link_to( text =>     "[% hist.getResponsable %]",
-                                                                    url=>"[% url_prefix %]/koha/usuarios/reales/datosUsuario.pl", 
+                                                                    url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
                                                                     params =>   ["nro_socio=[% hist.getResponsable %]"],
                                                                     title =>    "[% 'Mostrar Detalle del Usuario Responsable' | i18n %]"
                                                                 ) ;

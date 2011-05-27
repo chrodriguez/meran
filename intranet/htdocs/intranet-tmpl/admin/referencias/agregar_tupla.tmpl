@@ -5,7 +5,7 @@
         makeToggle('datos_tabla_div','trigger',null,false);
         makeDataTable('#tablaResult');
         onEnter('search_tabla',obtenerTablaFiltrada);
-        $('.editable').editable('/cgi-bin/koha/admin/referencias/referenciasDB.pl', { 
+        $('.editable').editable(i'[% url_prefix %]/admin/referencias/referenciasDB.pl', { 
               type      : 'text',
               cancel    : CANCELAR,
               submit    : OK,

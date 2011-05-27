@@ -24,7 +24,7 @@
 
         $.ajax({
                     type: "POST",
-                    url: "/cgi-bin/koha/change_password.pl",
+                    url: "[% url_prefix %]/change_password.pl",
                     contentType: "text/x-www",
                     data: ({actualPassword:'ago'}),
                     success: function(msg){

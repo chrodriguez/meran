@@ -30,7 +30,7 @@
 			    <td>
 				    [% PERL %]
 						    print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
-		                                                    url => 		"/cgi-bin/koha/catalogacion/estructura/detalle.pl",
+		                                                    url => 		"[% url_prefix %]/catalogacion/estructura/detalle.pl",
 														    params =>	[	"id1=[% HTML.escape(reserva.nivel2.nivel1.getId1) %]"], 
 													    ) ;
 				    [% END %]
@@ -51,7 +51,7 @@
 	
 					    [% PERL %]
 							    print C4::AR::Filtros::link_to(	text => 	"[% barcode %]",
-															    url => 		"/cgi-bin/koha/catalogacion/estructura/detalleEjemplar.pl", 
+															    url => 		"[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
 															    params =>	["id3=[% reserva.getId3 %]"],
 															    title =>	"[% "Detalle del Ejemplar" | i18n %]"
 														    ) ;

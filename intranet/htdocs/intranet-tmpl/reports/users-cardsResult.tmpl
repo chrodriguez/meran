@@ -30,7 +30,7 @@
                         <td> 
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "[% socio.persona.getApeYNom %]",
-                                                                url=>"[% url_prefix %]/koha/usuarios/reales/datosUsuario.pl", 
+                                                                url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
                                                                 params =>   ["nro_socio=[% socio.getNro_socio %]"],
                                                                 title =>    "[% 'Ver datos de ' | i18n %] [% socio.persona.getApeYNom %]"
                                                             ) ;
