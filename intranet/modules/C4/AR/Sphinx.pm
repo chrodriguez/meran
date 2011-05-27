@@ -84,6 +84,20 @@ sub sphinx_start{
   }
 }
 
+
+sub getCodigoFromEstadoById{
+    my ($id)   = @_;
+
+    my $dbh         = C4::Context->dbh;
+    my $query       = " SELECT codigo
+                        FROM `ref_estado` WHERE id = ?";
+
+    my $sth0        = $dbh->prepare($query);
+    $sth0->execute($id);
+
+    return $sth0->fetchrow_hashref->{'codigo'};
+}
+
 =head2
     sub generar_indice
 =cut
@@ -105,19 +119,19 @@ sub generar_indice {
     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => flag => ".$flag);
     if($flag eq "R_FULL"){
         #Vaciamos el indice
-        my $truncate  =   " TRUNCATE TABLE `indice_busqueda`;";
+        my $truncate  = " TRUNCATE TABLE `indice_busqueda`;";
         my $sth0      = $dbh->prepare($truncate);
         $sth0->execute();
 
-        my $query1  =   " SELECT * FROM cat_registro_marc_n1";
-        $sth1       =   $dbh->prepare($query1);
+        my $query1  = " SELECT * FROM cat_registro_marc_n1";
+        $sth1       = $dbh->prepare($query1);
         $sth1->execute();
 
     } else {
 
         #se va a modificar un registro en particular
-        my $query1  =   " SELECT * FROM cat_registro_marc_n1 WHERE id = ?";
-        $sth1       =   $dbh->prepare($query1);
+        my $query1  = " SELECT * FROM cat_registro_marc_n1 WHERE id = ?";
+        $sth1       = $dbh->prepare($query1);
         $sth1->execute($id1);
     }
 
@@ -242,13 +256,10 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
     }
 
 
-
     #Titulo
-    my $titulo = $marc_record->subfield("245","a");
-
+    my $titulo                  = $marc_record->subfield("245","a");
     #Armo el superstring
-    my $superstring             = "";
-    
+    my $superstring             = "";    
 
     #recorro los campos
     foreach my $field ($marc_record->fields){
@@ -265,6 +276,30 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 #                 C4::AR::Debug::debug("generar_indice => dato ".$dato);
             $dato                           = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato_ref, "ALL");
 
+
+# my @reglas;
+# my $separador   = "%";
+# my $hash_indice{ "020, a" } = { pre_separador => "isbn", pos_separador_ref => 0 };
+# 
+# push(@reglas, $hash_indice);
+# 
+# my $hash_indice{ "995, o" } = { pre_separador => "ref_disponilidad", pos_separador_ref => 0 }
+# 
+# push(@reglas, $hash_indice);
+# 
+# # $dato = 'isbn%'.$dato; 
+# 
+# if ($hash_indice{"campo, subcampo"} eq $campo.", ".$subcampo) {
+#     C4::AR::Debug::debug("C4::AR::Sphinx => generar_indice => ".$campo.", ".$subcampo." => dato ".$dato);
+#     
+#     if($hash_indice{"campo, subcampo"}->{"pos_separador_ref"}){
+#         $dato = $dato_ref;
+#     }
+# 
+#     $dato = $hash_indice{"campo, subcampo"}->{"pre_separador"}.$separador.$dato;  
+# }
+
+
 # TODO modularizame!!!!!!!!!!!!!
             #aca van todas las excepciones que no son referencias pero son necesarios para las busquedas 
             if (($campo eq "020") && ($subcampo eq "a")){
@@ -275,6 +310,13 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
             if (($campo eq "995") && ($subcampo eq "o")){
                 $dato = 'ref_disponilidad%'.$dato;  
 #                 C4::AR::Debug::debug("generar_indice => 020, a => dato ".$dato);
+            }
+
+            if (($campo eq "995") && ($subcampo eq "e")){
+                $dato = 'ref_estado%'.getCodigoFromEstadoById($dato_ref);  
+#                 C4::AR::Debug::debug("generar_indice => 995, e => dato ".$dato);
+
+C4::AR::Debug::debug("estado codigo => ".getCodigoFromEstadoById($dato_ref));
             }
 
             if (($campo eq "995") && ($subcampo eq "f")){
@@ -303,10 +345,8 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
     
             if ($superstring eq "") {
                 $superstring            = $dato;
-#                 $string_tabla_con_dato  = $dato;
             } else {
                 $superstring .= " ".$dato;
-#                 $string_tabla_con_dato .= " ".$dato;
             }
         }
     }
@@ -314,8 +354,8 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 #     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => superstring!!!!!!!!!!!!!!!!!!! => ".$superstring);
 
     if($action eq "INSERT"){
-        my $query4  =   " INSERT INTO indice_busqueda (id, titulo, autor, string, string_tabla_con_dato, string_con_dato) ";
-        $query4 .=      " VALUES (?,?,?,?,?,?) ";
+        my $query4  =   " INSERT INTO indice_busqueda (id, titulo, autor, string) ";
+        $query4 .=      " VALUES (?,?,?,?) ";
         my $sth4    = $dbh->prepare($query4);
         $sth4->execute($registro_marc_n1->{'id'}, $titulo, $autor, $superstring, $string_tabla_con_dato, $string_con_dato);
     } else {    
@@ -326,18 +366,15 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
         my $data = $sth4->fetchrow_hashref;
 
         if($data->{'cant'}) {
-            my $query4  =   " UPDATE indice_busqueda SET titulo = ?, autor = ?, string = ?, string_tabla_con_dato = ?, string_con_dato = ? ";
+            my $query4  =   " UPDATE indice_busqueda SET titulo = ?, autor = ?, string = ? ";
             $query4 .=      " WHERE id = ? ";
             my $sth4    = $dbh->prepare($query4);
             $sth4->execute($titulo, $autor, $superstring, $string_tabla_con_dato, $string_con_dato, $registro_marc_n1->{'id'});
-
         } else {
-
-            my $query4  =   " INSERT INTO indice_busqueda (id, titulo, autor, string, string_tabla_con_dato, string_con_dato) ";
-            $query4 .=      " VALUES (?,?,?,?,?,?) ";
+            my $query4  =   " INSERT INTO indice_busqueda (id, titulo, autor, string) ";
+            $query4 .=      " VALUES (?,?,?,?) ";
             my $sth4    = $dbh->prepare($query4);
             $sth4->execute($registro_marc_n1->{'id'}, $titulo, $autor, $superstring, $string_tabla_con_dato, $string_con_dato);
-
         }
 
         C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => UPDATE => id1 => ".$registro_marc_n1->{'id'});
