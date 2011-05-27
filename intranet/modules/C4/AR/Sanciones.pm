@@ -304,6 +304,8 @@ sub getTipoSancion{
     }
 
     my $tipo_sancion=undef;
+    C4::AR::Debug::debug("sanciones array   :     ".$tipo_sanciones_array_ref);
+    C4::AR::Utilidades::printARRAY($tipo_sanciones_array_ref);
     if ($tipo_sanciones_array_ref->[0]){
         $tipo_sancion = $tipo_sanciones_array_ref->[0];
     }

@@ -1,9 +1,9 @@
-  	<table border=0 cellspacing=0 cellpadding=0 width="100%" align='center'>
-	<tr class="titulo_tabla_resultado">
-                <td>[% "Se aplica a" | i18n %]</td>
-	</tr>
+  <table border=0 cellspacing=0 cellpadding=0 width="100%" align='center'>
 
 	[% IF tipo_sancion %]
+	    <tr class="titulo_tabla_resultado">
+                <td>[% "Se aplica a" | i18n %]</td>
+	    </tr>
 	    [% FOREACH tipo_prestamo IN TIPOS_PRESTAMOS %]
 		<tr><td>
 			    <input type="checkbox" name="chkTP" id="chkTP" value="[% tipo_prestamo.getId_tipo_prestamo %]" [% IF tipo_sancion.aplicaAlTipoDePrestamo( tipo_prestamo.getId_tipo_prestamo ) %] checked="checked" [% END %] > [% tipo_prestamo.getDescripcion %]
@@ -19,4 +19,4 @@
                                 ) ;
     [% END %]
      </td></tr>
-    </table>
+</table>

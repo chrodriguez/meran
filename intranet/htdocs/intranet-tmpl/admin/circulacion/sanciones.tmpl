@@ -1,10 +1,9 @@
 [% INCLUDE "intranet-top.inc" %]
-
 [% INCLUDE "WindowHelper.inc" %]
 
 <script language="JavaScript" type="text/javascript">
 
-var objAH;//Objeto AjaxHelper.
+var objAH;
 
 /*
  * updateInfoConsultaJSON
@@ -20,8 +19,8 @@ function updateInfoConsultaJSON(responseText){
  * Borra el div que contiene la parte de agregado de variables.
  */
 function borrarDiv(){
-$("divSancionesTiposPrestamos").html("");
-$("divSancionesReglas").html("");
+    $("divSancionesTiposPrestamos").html("");
+    $("divSancionesReglas").html("");
 }
 
 /*
@@ -29,7 +28,6 @@ $("divSancionesReglas").html("");
  * Agrega los tipos de prestamos al prestamo y categoria seleccionada
  */
 function guardarTiposQueAplica(){
-
 
     objAH                   = new AjaxHelper(updateGuardarTiposQueAplica);
     objAH.url               = "/cgi-bin/koha/admin/circulacion/sancionesDB.pl";
@@ -63,10 +61,10 @@ function respuesta(responseText){
     var Messages=JSONstring.toObject(responseText);
     setMessages(Messages);
 }
+
 /*
  * buscarTiposPrestamosSancionados
  */
-
 function buscarTiposPrestamosSancionados(){
     
 	if( ( $("#tipo_prestamo_id").val() != 'SIN SELECCIONAR') && ( $("#categoria_socio_id").val() != 'SIN SELECCIONAR')) {
@@ -156,6 +154,7 @@ function updateEliminarReglaTipoSancion(responseText){
 
 
 //*********************************************Modificar Datos Usuario*********************************************
+
 function editarReglas(){
     objAH               = new AjaxHelper(updateEditarReglas);
     objAH.debug         = true;
@@ -176,9 +175,7 @@ function updateEditarReglas(responseText){
             width:650
         },
     });
-
 }
-
 
 
 /*
@@ -227,35 +224,33 @@ function updateAgregarReglaSancion(responseText){
      respuesta(responseText);
 }
 
-
-
-
 $(document).ready( function() {
    buscarTiposPrestamosSancionados();
 });
 
 </script>
 
-<div class="titulo">[% 'Tipos de sanciones' | i18n %]</div>
-<div>
-    <div id="divSanciones">
-        <div id="divSancionesTiposSocios">
-            <table border=0 cellspacing=0 cellpadding=0 align='center' width="100%" >
-	            <tr class="titulo_tabla_resultado">
-                            <td>[% "Tipos de pr&eacute;stamo" | i18n %]</td>
-                            <td>[% "Categorias de usuario" | i18n %]</td>
-	            </tr>
-                <tr valign=middle align='center'>
-				            <td>[% tipos_de_prestamos %]</td>
-				            <td>[% categorias_de_socio %]</td>
-	            </tr>
-            </table>
+<fieldset>
+    <legend class="titulo_legend">[% "Tipos de sanciones" | i18n %] </legend>
+    <div>
+        <div id="divSanciones">
+            <div id="divSancionesTiposSocios">
+                <table border=0 cellspacing=0 cellpadding=0 align='center' width="100%" >
+	                <tr class="titulo_tabla_resultado">
+                                <td>[% "Tipos de pr&eacute;stamo" | i18n %]</td>
+                                <td>[% "Categorias de usuario" | i18n %]</td>
+	                </tr>
+                    <tr valign=middle align='center'>
+				                <td>[% tipos_de_prestamos %]</td>
+				                <td>[% categorias_de_socio %]</td>
+	                </tr>
+                </table>
+            </div>
+            <div id="divSancionesTiposPrestamos">
+            </div>
         </div>
-        <div id="divSancionesTiposPrestamos">
+        <div id="divSancionesReglas">
         </div>
-    </div>
-    <div id="divSancionesReglas">
-    </div>
-</div>
+</fieldset>
 
 [% INCLUDE "intranet-bottom.inc" %]

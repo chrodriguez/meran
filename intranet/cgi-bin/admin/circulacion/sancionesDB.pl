@@ -18,24 +18,32 @@ my $authnotrequired= 0;
 
 if($accion eq "TIPOS_PRESTAMOS_SANCIONADOS"){
 		my ($template, $session, $t_params)  = get_template_and_user({
-								template_name => "admin/circulacion/sanciones_tipo_de_prestamos.tmpl",
-								query => $input,
-								type => "intranet",
+								template_name   => "admin/circulacion/sanciones_tipo_de_prestamos.tmpl",
+								query           => $input,
+								type            => "intranet",
 								authnotrequired => 0,
-								flagsrequired => {  ui => 'ANY', 
-                                                    tipo_documento => 'ANY', 
-                                                    accion => 'CONSULTA', 
-                                                    entorno => 'undefined'},
-								debug => 1,
+								flagsrequired   => {    ui => 'ANY', 
+                                                        tipo_documento => 'ANY', 
+                                                        accion => 'CONSULTA', 
+                                                        entorno => 'undefined'},
+								debug           => 1,
 					});
 	
-		my $tipo_prestamo=$obj->{'tipo_prestamo'};
-		my $categoria_socio=$obj->{'categoria_socio'};
-		my $tipo_sancion=&C4::AR::Sanciones::getTipoSancion($tipo_prestamo, $categoria_socio);
-		$t_params->{'tipo_sancion'}= $tipo_sancion;
+		my $tipo_prestamo               = $obj->{'tipo_prestamo'};
+		my $categoria_socio             = $obj->{'categoria_socio'};
+		my $tipo_sancion                = C4::AR::Sanciones::getTipoSancion($tipo_prestamo, $categoria_socio);
+		
+		C4::AR::Debug::debug("tipos sancion        ".$tipo_sancion);
+#		C4::AR::Utilidades::printHASH($tipo_prestamos);		
+		
+		$t_params->{'tipo_sancion'}     = $tipo_sancion;
 
-		my $tipo_prestamos=&C4::AR::Prestamos::getTiposDePrestamos();
-		$t_params->{'TIPOS_PRESTAMOS'}= $tipo_prestamos;
+		my $tipo_prestamos              = &C4::AR::Prestamos::getTiposDePrestamos();
+		
+#		C4::AR::Debug::debug("tipos prestamos        ".$tipo_prestamos);
+#		C4::AR::Utilidades::printHASH($tipo_prestamos);
+		
+		$t_params->{'TIPOS_PRESTAMOS'}  = $tipo_prestamos;
 
 		C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }#end if($accion eq "TIPOS_PRESTAMOS_SANCIONADOS")

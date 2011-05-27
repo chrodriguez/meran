@@ -44,16 +44,7 @@
 	                                                           title =>    "[% 'Estante virtual' | i18n %]"
 	                                                       ) ;
 	                       [% END %]
-	                   </li>
-	                   <li>
-		                                [% PERL %]
-		                                    print C4::AR::Filtros::link_to( text =>     "[% 'Preferencias Cat&aacute;logo' | i18n %]",
-		                                                                    url =>      "/cgi-bin/koha/admin/global/catalogo_config.pl", 
-		                                                                    title =>    "[% 'Preferencias Cat&aacute;logo' | i18n %]"
-		                                                                ) ;
-		                                [% END %]
-		              </li>
-	
+	                   </li>	
 	                </ul>
 	               </li>
 	               
@@ -224,15 +215,6 @@
 	                                                      ) ;
 	                      [% END %]
 	            </li>
-	            </li>
-		                    		                    <li>
-		                                [% PERL %]
-		                                    print C4::AR::Filtros::link_to( text  => "[% 'Preferencias Circulaci&oacute;n' | i18n %]",
-		                                                                    url   => "/cgi-bin/koha/admin/global/circ_config.pl",
-		                                                                    title => "[% 'Preferencias Circulaci&oacute;n' | i18n %]"
-		                                                                ) ;
-		                                [% END %]
-		                    </li>
 	          </ul>
 	       </div>
 
@@ -360,6 +342,14 @@
                 <h4 class="menu_intermedio"><a href="javascript:;">[% 'Cat&aacute;logo' | i18n %]</a></h4>
                  <ul>
                      <li>
+		                                [% PERL %]
+		                                    print C4::AR::Filtros::link_to( text =>     "[% 'Preferencias' | i18n %]",
+		                                                                    url =>      "/cgi-bin/koha/admin/global/catalogo_config.pl", 
+		                                                                    title =>    "[% 'Preferencias' | i18n %]"
+		                                                                ) ;
+		                                [% END %]
+		             </li>
+                     <li>
                          [% PERL %]
                              print C4::AR::Filtros::link_to( text =>     "[% 'Servidores Z39.50' | i18n %]",
                                                              url =>      "/cgi-bin/koha/admin/catalogo/MARC/z3950servers.pl",
@@ -448,6 +438,14 @@
                    <li>
                         <h4 class="head"><a href="javascript:;">[% 'Circulaci&oacute;n' | i18n %]</a></h4>
                         <ul>
+                            <li>
+		                                [% PERL %]
+		                                    print C4::AR::Filtros::link_to( text  => "[% 'Preferencias' | i18n %]",
+		                                                                    url   => "/cgi-bin/koha/admin/global/circ_config.pl",
+		                                                                    title => "[% 'Preferencias' | i18n %]"
+		                                                                ) ;
+		                                [% END %]
+		                    </li>
 		                    <li>
 		                                [% PERL %]
 		                                    print C4::AR::Filtros::link_to( text =>     "[% 'Sanciones' | i18n %]",

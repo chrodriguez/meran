@@ -29,6 +29,8 @@ use URI::Escape;
 use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
 @EXPORT_OK=qw(
+    generarComboCategoriasDeSocioConCodigoCat
+    generarComboCategoriasDeSocio
     setHeaders
     generarComboPresupuestos
     generarComboProveedoresMultiple
@@ -1822,7 +1824,49 @@ sub generarComboDeDisponibilidad{
     return $comboDeDisponibilidades;
 }
 
+#GENERA EL COMBO CON LAS CATEGORIAS, CON IDs EN EL LA LISTA EL CODIGO DE CATEGORIA (ES, DO, etc)
+sub generarComboCategoriasDeSocioConCodigoCat{
+    my ($params) = @_;
+
+    my @select_categorias_array;
+    my %select_categorias_hash;
+    my ($categorias_array_ref)  = &C4::AR::Referencias::obtenerCategoriaDeSocio();
+
+    foreach my $categoria (@$categorias_array_ref) {
+        push(@select_categorias_array, $categoria->getCategory_code);
+        $select_categorias_hash{$categoria->getCategory_code}= $categoria->description;
+    }
+
+    my %options_hash; 
+
+    if ( $params->{'onChange'} ){
+        $options_hash{'onChange'}   = $params->{'onChange'};
+    }
+    if ( $params->{'onFocus'} ){
+        $options_hash{'onFocus'}    = $params->{'onFocus'};
+    }
+    if ( $params->{'onBlur'} ){
+        $options_hash{'onBlur'}     = $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}       = $params->{'name'}||'categoria_socio_id';
+    $options_hash{'id'}         = $params->{'id'}||'categoria_socio_id';
+    $options_hash{'size'}       = $params->{'size'}||1;
+    $options_hash{'multiple'}   = $params->{'multiple'}||0;
+    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultCategoriaSocio");
+
+    push (@select_categorias_array, '');
+    $select_categorias_hash{''} = "SIN SELECCIONAR";
+    $options_hash{'values'}     = \@select_categorias_array;
+    $options_hash{'labels'}     = \%select_categorias_hash;
+
+    my $comboDeCategorias       = CGI::scrolling_list(\%options_hash);
+
+    return $comboDeCategorias;
+}
+
 #GENERA EL COMBO CON LAS CATEGORIAS, Y SETEA COMO DEFAULT EL PARAMETRO (QUE DEBE SER EL VALUE), SINO HAY PARAMETRO, SE TOMA LA PRIMERA
+#ID DE LA LISTA EL ID_CATEGORIA
 sub generarComboCategoriasDeSocio{
     my ($params) = @_;
 
@@ -1833,8 +1877,6 @@ sub generarComboCategoriasDeSocio{
     foreach my $categoria (@$categorias_array_ref) {
         push(@select_categorias_array, $categoria->getId);
         $select_categorias_hash{$categoria->getId}= $categoria->description;
-#        push(@select_categorias_array, $categoria->getCategory_code);
-#        $select_categorias_hash{$categoria->getCategory_code}= $categoria->description;
     }
 
     my %options_hash; 
