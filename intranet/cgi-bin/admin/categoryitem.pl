@@ -61,7 +61,7 @@ sub StringSearch  {
 
 my $input = new CGI;
 my $searchfield=$input->param('description');
-my $script_name="/cgi-bin/koha/admin/categorie.pl";
+my $script_name=C4::AR::Utilidades::getUrlPrefix()."/admin/categorie.pl";
 my $categorycode=$input->param('categorycode');
 my $op = $input->param('op');
 $searchfield=~ s/\,//g;

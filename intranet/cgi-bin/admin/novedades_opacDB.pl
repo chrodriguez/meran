@@ -12,7 +12,7 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 my $tipoAccion= $obj->{'tipoAccion'}||"";
 my $accion = $tipoAccion;
 my $ini = $obj->{'ini'} = $input->param('page') || 0;
-my $url = "/cgi-bin/koha/admin/novedades_opac.pl?token=".$obj->{'token'}."&tipoAccion=".$obj->{'tipoAccion'};
+my $url = C4::AR::Utilidades::getUrlPrefix()."/admin/novedades_opac.pl?token=".$obj->{'token'}."&tipoAccion=".$obj->{'tipoAccion'};
 
 if ($accion eq 'ELIMINAR'){
     my ($template, $session, $t_params) = get_template_and_user({

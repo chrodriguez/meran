@@ -326,9 +326,9 @@ sub setFlagsLang {
 
     my $url = $ENV{'REQUEST_URI'};
     if($type eq 'OPAC'){
-        $href = '/cgi-bin/koha/opac-language.pl?url='.$url.'&amp;';
+        $href = C4::AR::Utilidades::getUrlPrefix().'/opac-language.pl?url='.$url.'&amp;';
     }else{
-        $href = '/cgi-bin/koha/intra-language.pl?url='.$url.'&amp;';
+        $href = C4::AR::Utilidades::getUrlPrefix().'/intra-language.pl?url='.$url.'&amp;';
     }
 
     my $flags_dir = C4::Context->config('temasOPAC').'/'.$theme.'/imagenes/flags';

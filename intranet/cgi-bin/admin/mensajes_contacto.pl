@@ -25,7 +25,7 @@ my $obj = \%hash_temp;
 my $accion = $obj->{'tipoAccion'} = $input->param('tipoAccion');
 my $ini = $obj->{'ini'} = $input->param('page') || 0;
 my $id_mensaje = $input->param('id') || 0;
-my $url = "/cgi-bin/koha/admin/mensajes_contacto.pl?token=".$input->param('token')."&tipoAccion=".$obj->{'tipoAccion'};
+my $url = C4::AR::Utilidades::getUrlPrefix()."/admin/mensajes_contacto.pl?token=".$input->param('token')."&tipoAccion=".$obj->{'tipoAccion'};
 
 if ($accion eq 'marcar'){
     C4::AR::MensajesContacto::marcar($id_mensaje);

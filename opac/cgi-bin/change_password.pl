@@ -39,7 +39,7 @@ if(C4::AR::Preferencias::getValorPreferencia("permite_cambio_password_desde_opac
                                                         "opac",
                             );
 
-    C4::AR::Auth::redirectTo('/cgi-bin/koha/opac-user.pl?token='.$session->param('token'));
+    C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix().'/opac-user.pl?token='.$session->param('token'));
 }
 
 

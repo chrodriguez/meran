@@ -3819,8 +3819,7 @@ sub redirectAndAdvice{
     my ($session) = CGI::Session->load();
 
     $session->param('codMsg',$cod_msg);
-#     $session->param('redirectTo', '/cgi-bin/koha/informacion.pl');
-    C4::AR::Auth::redirectTo('/cgi-bin/koha/informacion.pl');
+    C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix().'/informacion.pl');
 #     exit;
 }
 

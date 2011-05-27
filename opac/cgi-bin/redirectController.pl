@@ -20,12 +20,12 @@ my $session = CGI::Session->load();
 #lo indicado en el session->param('redirectTo')
 C4::AR::Debug::debug("redirectContrller->redirect: ".$session->param('redirectTo'));
 
-# FIXME location esta fijo si no hay session '/cgi-bin/koha/auth.pl'
+# FIXME location esta fijo si no hay session C4::AR::Utilidades::getUrlPrefix().'/auth.pl'
 
 my $input = CGI->new(); 
 print $input->redirect( 
 #             -location => $session->param('redirectTo'), 
-            -location => $session->param('redirectTo')||'/cgi-bin/koha/auth.pl', 
+            -location => $session->param('redirectTo')||C4::AR::Utilidades::getUrlPrefix().'/auth.pl', 
             -status => 301,
 ); 
 exit;

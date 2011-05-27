@@ -11,8 +11,6 @@ use CGI::Session;
 
 my $input = new CGI;
 
-# $session->param('redirectTo', '/cgi-bin/koha/opac-user.pl');
-# C4::AR::Auth::redirectTo('/cgi-bin/koha/opac-user.pl');
 my $authnotrequired = 0;
  
 my ($nro_socio, $session, $flags) = checkauth( $input, 

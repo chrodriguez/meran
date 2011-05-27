@@ -1088,7 +1088,7 @@ sub _buildPasswordRecoverLink{
     my $encoded_hash    = C4::AR::Utilidades::escapeURL($hash);
 
 	
-    my $link = "http://".$ENV{'SERVER_NAME'}."/cgi-bin/koha/opac-recover-password.pl?key=".$encoded_hash;
+    my $link = "http://".$ENV{'SERVER_NAME'}.C4::AR::Utilidades::getUrlPrefix()."/opac-recover-password.pl?key=".$encoded_hash;
     
     
     return ($link,$hash,$encoded_hash);	
