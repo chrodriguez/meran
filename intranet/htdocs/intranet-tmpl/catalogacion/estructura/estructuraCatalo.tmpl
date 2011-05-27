@@ -328,8 +328,8 @@ function updateArmarComboCampos(responseText){
     //Arreglo de Objetos Global
     var camposSelect_array=JSONstring.toObject(responseText);
     //se inicializa el combo
-    $("#camposSelect").html(''); //???
-    $("#camposRef").html("");
+    $("#camposSelect").html(""); //orden
+    $("#camposRef").html("");   //campos tabla
     var options = "<option value='-1'>Seleccionar SubCampo</option>";
     var joinedFields = "";
     for (x=0;x < camposSelect_array.length;x++){
