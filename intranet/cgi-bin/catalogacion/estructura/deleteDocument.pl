@@ -45,7 +45,7 @@ $params->{'loggedinuser'} = $loggedinuser;
 
 my $msg = C4::AR::UploadFile::deleteDocument($input,$params);
 
-my $redirect_url = "/cgi-bin/koha/catalogacion/estructura/detalle.pl?id1=".$params->{'id1'}."&msg_file=".$msg;
+my $redirect_url = C4::AR::Utilidades::getUrlPrefix()."/catalogacion/estructura/detalle.pl?id1=".$params->{'id1'}."&msg_file=".$msg;
 
 C4::AR::Auth::redirectTo($redirect_url);
 

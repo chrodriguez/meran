@@ -57,7 +57,7 @@ if (!$obj){
                                 debug => 1,
                         });
 
-        $data_url = "/cgi-bin/koha/estadisticas/estantes_virtuales_data.pl?estante=".$obj->{'estante'};
+        $data_url = C4::AR::Utilidades::getUrlPrefix()."/estadisticas/estantes_virtuales_data.pl?estante=".$obj->{'estante'};
         $t_params->{'data'} = C4::AR::Reportes::getArrayHash('getEstantes',$obj);
 
         my ($data,$is_array_of_hash) = C4::AR::Reportes::getEstantes($obj,1);

@@ -326,9 +326,9 @@ sub setFlagsLang {
 
     my $url = $ENV{'REQUEST_URI'};
     if($type eq 'OPAC'){
-        $href = '/cgi-bin/koha/opac-language.pl?url='.$url.'&amp;';
+        $href = C4::AR::Utilidades::getUrlPrefix().'/opac-language.pl?url='.$url.'&amp;';
     }else{
-        $href = '/cgi-bin/koha/intra-language.pl?url='.$url.'&amp;';
+        $href = C4::AR::Utilidades::getUrlPrefix().'/intra-language.pl?url='.$url.'&amp;';
     }
 
     my $flags_dir = C4::Context->config('temasOPAC').'/'.$theme.'/imagenes/flags';
@@ -373,8 +373,8 @@ sub getComboLang {
 
     foreach my $lang (@languages){
     	if ($user_lang eq $lang){
-    	   $default = "selected=selected";
-           $html .="<option value='$lang ' $default>".$languages_name{$lang}."</option>";
+    	   $default = "selected='selected'";
+           $html .="<option value='$lang' $default>".$languages_name{$lang}."</option>";
     	}else{
            $html .="<option value='$lang '>".$languages_name{$lang}."</option>";
     		

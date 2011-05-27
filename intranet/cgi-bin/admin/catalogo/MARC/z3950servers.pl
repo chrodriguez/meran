@@ -45,7 +45,7 @@ sub StringSearch  {
 my $input = new CGI;
 my $searchfield=$input->param('searchfield');
 my $offset=$input->param('offset');
-my $script_name="/cgi-bin/koha/admin/catalogo/MARC/z3950servers.pl";
+my $script_name= C4::AR::Utilidades::getUrlPrefix()."/admin/catalogo/MARC/z3950servers.pl";
 
 my $pagesize=20;
 my $op = $input->param('op');

@@ -26,7 +26,7 @@ C4::AR::Debug::debug("redirectContrller=> redirect: ".$session->param('redirectT
 
 my $input = CGI->new(); 
 print $input->redirect( 
-            -location => $session->param('redirectTo')||'/cgi-bin/koha/auth.pl', 
+            -location => $session->param('redirectTo')||C4::AR::Utilidades::getUrlPrefix().'/auth.pl', 
             -status => 301,
 ); 
 exit;

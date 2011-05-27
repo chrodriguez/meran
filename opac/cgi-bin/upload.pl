@@ -11,4 +11,4 @@ my $socio= $input->param('userid');
 my $filepath= $input->param('filepath');
 my $msg_object= C4::AR::UploadFile::uploadPhoto($socio,$filepath);
 
-print $input->redirect("/cgi-bin/koha/opac-user.pl?msg=".$msg_object{'codMsg'});
+print $input->redirect(C4::AR::Utilidades::getUrlPrefix()."/opac-user.pl?msg=".$msg_object{'codMsg'});

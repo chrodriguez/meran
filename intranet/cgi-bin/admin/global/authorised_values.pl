@@ -47,7 +47,7 @@ my $searchfield=$input->param('searchfield');
 $searchfield=~ s/\,//g;
 my $id = $input->param('id');
 my $offset=$input->param('offset');
-my $script_name="/cgi-bin/koha/admin/authorised_values.pl";
+my $script_name=C4::AR::Utilidades::getUrlPrefix()."/admin/authorised_values.pl";
 my $dbh = C4::Context->dbh;
 
 my ($template, $session, $t_params) = C4::AR::Auth::get_template_and_user({

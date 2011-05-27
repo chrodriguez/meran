@@ -115,6 +115,7 @@ use vars qw(@EXPORT_OK @ISA);
     generarComboTipoDeDocConValuesIds
     isValidFile
     escapeURL
+    getUrlPrefix
 );
 
 # para los combos que no usan tablas de referencia
@@ -3818,8 +3819,7 @@ sub redirectAndAdvice{
     my ($session) = CGI::Session->load();
 
     $session->param('codMsg',$cod_msg);
-#     $session->param('redirectTo', '/cgi-bin/koha/informacion.pl');
-    C4::AR::Auth::redirectTo('/cgi-bin/koha/informacion.pl');
+    C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix().'/informacion.pl');
 #     exit;
 }
 
@@ -3991,6 +3991,10 @@ sub escapeURL{
 	return ($url);
 }
 
+sub getUrlPrefix{
+	return (C4::Context->config('url_prefix'));
+	
+}
 END { }       # module clean-up code here (global destructor)
 
 1;

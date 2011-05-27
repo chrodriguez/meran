@@ -360,7 +360,7 @@ Se genra la ventana para modificar los datos del usuario
         if (!($msg_object->{'error'})){
             # Se puede generar el Libre Deuda
             my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'nro_socio'});
-            my $url = '/cgi-bin/koha/usuarios/libreDeuda.pl?nro_socio='.$obj->{'nro_socio'}.'&token='.$session->param('token');
+            my $url = C4::AR::Utilidades::getUrlPrefix().'/usuarios/libreDeuda.pl?nro_socio='.$obj->{'nro_socio'}.'&token='.$session->param('token');
             my $boton ="<a href='".$url."'>Imprimir</a>";
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U423', 'params' => [$socio->persona->getApeYNom,$boton]} ) ;
         }

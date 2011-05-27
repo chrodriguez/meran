@@ -43,5 +43,5 @@ my $status = C4::AR::Recomendaciones::agregarRecomendacion($obj,$usr_socio_id);
 $t_params->{'message'}= $status->{'messages'}[0]->{'message'};
 
 # if ($status){
-#     C4::AR::Auth::redirectTo('/cgi-bin/koha/opac-recomendaciones.pl?token'.$input->param('token'));
+#     C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix().'/opac-recomendaciones.pl?token'.$input->param('token'));
 # }

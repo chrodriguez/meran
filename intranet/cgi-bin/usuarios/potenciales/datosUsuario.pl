@@ -36,5 +36,5 @@ $t_params->{'socio'}= $socio;
 if (!$socio->getActivo()){
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }else{
-    C4::AR::Auth::redirectTo("/cgi-bin/koha/usuarios/reales/datosUsuario.pl?nro_socio=".$socio->getNro_socio."&token=".$token);
+    C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix()."/usuarios/reales/datosUsuario.pl?nro_socio=".$socio->getNro_socio."&token=".$token);
 }

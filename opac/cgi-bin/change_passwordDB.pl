@@ -38,13 +38,13 @@ if(C4::AR::Preferencias::getValorPreferencia("permite_cambio_password_desde_opac
     if(C4::AR::Mensajes::hayError($Message_arrayref)){
         $session->param('codMsg', C4::AR::Mensajes::getFirstCodeError($Message_arrayref));
         #hay error vulve al mismo
-        C4::AR::Auth::redirectTo('/cgi-bin/koha/change_password.pl?token='.$input->param('token'));
+        C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix().'/change_password.pl?token='.$input->param('token'));
     }else{
         #se cambio la password exitosamente, se destruye la sesion y se obliga al socio a ingresar nuevamente
         C4::AR::Auth::session_destroy();
         $session->param('codMsg', 'U400');
         #redirecciono a auth.pl
-        C4::AR::Auth::redirectTo('/cgi-bin/koha/auth.pl');
+        C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix().'/auth.pl');
     }
 }else{
     #no se permite el cambio de passoword desde el OPAC
@@ -59,5 +59,5 @@ if(C4::AR::Preferencias::getValorPreferencia("permite_cambio_password_desde_opac
                                                         "opac",
                             );
 
-    C4::AR::Auth::redirectTo('/cgi-bin/koha/opac-user.pl?token='.$session->param('token'));
+    C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix().'/opac-user.pl?token='.$session->param('token'));
 }

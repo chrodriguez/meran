@@ -22,7 +22,7 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 my $nro_socio                       = C4::AR::Auth::getSessionNroSocio($session);
 my $ini                             = $input->param('page') || 0;
-my $url                             = "/cgi-bin/koha/opac-historial_reservas.pl?token=".$input->param('token');
+my $url                             = C4::AR::Utilidades::getUrlPrefix()."/opac-historial_reservas.pl?token=".$input->param('token');
 my $orden                           = 'titulo';
 my ($ini,$pageNumber,$cantR)        = C4::AR::Utilidades::InitPaginador($ini);
 my ($cantidad,$reservas_hashref)    = C4::AR::Reservas::getHistorialReservasParaTemplate($nro_socio,$ini,$cantR,$orden);

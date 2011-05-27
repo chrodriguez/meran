@@ -29,6 +29,7 @@
         //onEnter con foco en input, ejecuta la busqueda
           onEnter("username",enviar);
           onEnter("password_plain",enviar);
+          onEnter("recaptcha_response_field",enviar);
           $('#username').focus();
     });
 
@@ -50,33 +51,45 @@
     </div>
   </div>
 [% END %]
-
-<form action='/cgi-bin/koha/mainpage.pl' method="post" name="datosAEnviar" id="datosAEnviar">
-        <input type="hidden" name="userid" id="userid" >
-        <input type="hidden" name="password" id="password">
-</form>
-
-<div id="login">
-    <div id="contenido_login">
-        <div class="entry">     
-                <label for="username" class="login">[% 'Identificaci&oacute;n:' | i18n %]</label>
-                <input size=15  name="username" id="username" >
+<div style="margin-left: 40%; padding-top: 8%;" >
+        
+        <div id="login">
+            <div id="contenido_login">
+                <div class="entry">     
+                        <label for="username" class="login">[% 'Identificaci&oacute;n:' | i18n %]</label>
+                        <input size=15  name="username" id="username" >
+                </div>
+                <div class="entry">
+                        <label for="password_plain" class="login">[% 'Contrase&ntilde;a:' | i18n %]</label>
+                        <input  size=15 type="password" name="password_plain" id="password_plain">
+                </div>
+                <div id="boton_login">
+                    <ul>
+                    [% PERL %]
+                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Entrar' | i18n %]",
+                                                                            boton   => "boton_entrar",
+                                                                            onclick => "enviar(); return(false);",
+                                                                            title   => "[% 'Entrar' | i18n %]",
+                                                                            width   => "auto",
+                                                ) ;
+                    [% END %]
+                    
+                  </ul>
+                </div>
+            </div>
         </div>
-        <div class="entry">
-                <label for="password_plain" class="login">[% 'Contrase&ntilde;a:' | i18n %]</label>
-                <input  size=15 type="password" name="password_plain" id="password_plain">
-        </div>
-        <div id="boton_login">
-            <ul>
-            [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Entrar' | i18n %]",
-                                                                    boton   => "boton_entrar",
-                                                                    onclick => "enviar(); return(false);",
-                                                                    title   => "[% 'Entrar' | i18n %]",
-                                                                    width   => "auto",
-                                        ) ;
-            [% END %]
-           </ul>
-      </div>
-    </div>
+
+        <form action='/cgi-bin/koha/mainpage.pl' method="post" name="datosAEnviar" id="datosAEnviar">
+                <input type="hidden" name="userid" id="userid" >
+                <input type="hidden" name="password" id="password">
+                [%  IF mostrar_captcha  %]
+                      <div id=captcha>
+                        <script src="http://www.google.com/recaptcha/api/challenge?k=6LehoMQSAAAAAOhylvTt_7RrPKVdll7CN0jJRdaf" type="text/javascript"></script>
+                        <noscript><iframe frameborder="0" height="300" src="http://www.google.com/recaptcha/api/noscript?k=6LehoMQSAAAAAOhylvTt_7RrPKVdll7CN0jJRdaf" width="500"></iframe>
+                                  <textarea cols="40" name="recaptcha_challenge_field" rows="3"></textarea>
+                                  <input name="recaptcha_response_field" type="hidden" value="manual_challenge" />
+                        </noscript>
+                      </div>
+                [% END %]
+        </form>
 </div>

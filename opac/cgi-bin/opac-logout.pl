@@ -71,7 +71,7 @@ my $cookie=$query->cookie(-name => 'sessionID',
 
 # Should redirect to opac home page after logging out
 
-print $query->redirect("/cgi-bin/koha/opac-main.pl");
+print $query->redirect(C4::AR::Utilidades::getUrlPrefix()."/opac-main.pl");
 
 exit;
 if ($sessionID) {
