@@ -912,7 +912,6 @@ function updateGuardarModificacionDocumentoN3(responseText){
         //deja la misma estructura, solo borra el campo dato
         _clearDataFromComponentesArray();
         //muestra la tabla con los ejemplares agregados
-//         mostrarInfoAltaNivel3(ID_N1, ID_N2);
         mostrarInfoAltaNivel3(ID_N2);
         //se esta modificando desde el detalle del registro
         if (FROM_DETALLE_REGISTRO == 1) window.location = "detalle.pl?id1=" + ID_N1;
@@ -2051,6 +2050,25 @@ function modificarEjemplaresN3(){
 	    objAH.nivel         = 3;
         EDICION_N3_GRUPAL   = 1;  
 	    objAH.sendToServer();
+    }
+}
+
+function modificarEjemplaresN3FromRegistro(id1){
+
+    if(ID3_ARRAY.length > 0){
+        
+        inicializar();
+        ID_N1               = id1;
+        objAH               = new AjaxHelper(updateModificarEjemplaresN3);
+        objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+        objAH.debug         = true;
+        objAH.showOverlay   = true;
+        objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
+        objAH.itemtype      = $("#id_tipo_doc").val();
+        objAH.id3           = ID3_ARRAY[0]; //muestra la info del primer ejemplar en el arreglo de ejemplares
+        objAH.nivel         = 3;
+        EDICION_N3_GRUPAL   = 1;  
+        objAH.sendToServer();
     }
 }
 

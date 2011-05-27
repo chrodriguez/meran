@@ -7,7 +7,23 @@
  *
  */
 
+function startOverlay(){
+    $('#ajax-indicator').modal({   
+        closeHTML:"",
+        containerCss:{
+            backgroundColor:"#fff",
+            height: 50,
+            padding: 0,
+            width: 190,
+            opacity: 50,
+        },
+    });            
+}
 
+
+function closeModal(){
+	$.modal.close();
+}
 //Funciones Privadas para manejar el estado del la consulta de AJAX
 
 function _Init(options){
@@ -18,18 +34,7 @@ function _Init(options){
     }else{
 
         if(options.showOverlay){
-    
-            $('#ajax-indicator').modal({   
-                    closeHTML:"",
-                    containerCss:{
-                        backgroundColor:"#fff",
-                        height: 50,
-                        padding: 0,
-                        width: 190,
-                        opacity: 50,
-                    },
-            });            
-
+    		startOverlay();
         } else {
             _ShowState(options);
         }
@@ -71,7 +76,7 @@ function _HiddeState(options){
     if(options.showOverlay){
 //         $.modal.close();
 //         $('#ajax-indicator').ajaxStop($.modal.close());
-        $(document).ajaxStop($.modal.close());
+        $(document).ajaxStop(closeModal());
     }
 
 };

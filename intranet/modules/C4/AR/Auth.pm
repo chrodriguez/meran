@@ -78,6 +78,9 @@ $VERSION = 1.0;
         hashear_password
         get_html_content
         getMetodoEncriptacion
+        buildSocioDataHashFromSession
+        buildSocioData
+        updateLoggedUserTemplateParams
 );
 
 =item sub _generarNroRandom
@@ -308,7 +311,6 @@ sub inicializarAuth{
     return ($session);
 }
 
-
 =item get_template_and_user
 
   my ($template, $borrowernumber, $cookie)
@@ -364,26 +366,7 @@ sub get_template_and_user {
             $usuario_logueado = C4::Modelo::UsrSocio->new();
         }
     
-        # TODO pasar a una funcion
-        my %socio_data;
-        $socio_data{'usr_apellido'}             = $session->param('usr_apellido');
-        $socio_data{'usr_nombre'}               = $session->param('usr_nombre');
-        $socio_data{'usr_tiene_foto'}           = $session->param('usr_tiene_foto');
-        $socio_data{'usr_nro_socio'}            = $session->param('nro_socio');
-        $socio_data{'usr_documento_nombre'}     = $session->param('usr_documento_nombre');
-        $socio_data{'usr_documento_version'}    = $session->param('usr_documento_version');
-        $socio_data{'usr_nro_documento'}        = $session->param('usr_nro_documento');
-        $socio_data{'usr_calle'}                = $session->param('usr_calle');
-        $socio_data{'usr_ciudad_nombre'}        = $session->param('usr_ciudad_nombre');
-        $socio_data{'usr_categoria_desc'}       = $session->param('usr_categoria_desc');
-        $socio_data{'usr_fecha_nac'}            = $session->param('usr_fecha_nac');
-        $socio_data{'usr_sexo'}                 = $session->param('usr_sexo');
-        $socio_data{'usr_telefono'}             = $session->param('usr_telefono');
-        $socio_data{'usr_alt_telefono'}         = $session->param('usr_alt_telefono');
-        $socio_data{'usr_email'}                = $session->param('usr_email');
-        $socio_data{'usr_legajo'}               = $session->param('usr_legajo');
-        $socio_data{'ciudad_ref'}{'id'}         = $session->param('usr_ciudad_id');
-        $params->{'socio_data'}                 = \%socio_data;
+        $params->{'socio_data'}                 = buildSocioDataHashFromSession($session);
         $params->{'token'}                      = $session->param('token');
         #para mostrar o no algun submenu del menu principal
         $params->{'menu_preferences'}           = C4::AR::Preferencias::getMenuPreferences();
@@ -666,7 +649,7 @@ Funcion que realiza todas las operaciones asociadas a un inicio de sesion como s
 sub _realizarOperacionesLogin{
     my ($type,$socio)=@_;
      C4::AR::Debug::debug("_realizarOperacionesLOGIN=> LOGIN\n");
-    my $dateformat = 'iso';
+    my $dateformat = C4::Date::get_date_format();
     my $lastlogin= C4::AR::Usuarios::getLastLoginTime();
     if ($type eq 'intranet') {
         #Se entran a realizar las rutinas solo cuando es intranet
@@ -699,7 +682,11 @@ sub _realizarOperacionesLogin{
             }
             #Genera una comprobacion una vez al dia, cuando se loguea el primer usuario
             my $today = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"),$dateformat);
-            if (Date::Manip::Date_Cmp($lastlogin,$today)<0) {
+
+	    C4::AR::Debug::debug("_realizarOperaciones=> TODAY = ".$today);
+	    C4::AR::Debug::debug("_realizarOperaciones=> LASTLOGIN = ".$auxlastlogin);
+	    C4::AR::Debug::debug("_realizarOperaciones=> Date_Cmp = ".Date::Manip::Date_Cmp($auxlastlogin,$today));
+            if (Date::Manip::Date_Cmp($auxlastlogin,$today)<0) {
                 # lastlogin es anterior a hoy
                 ##Si es un usuario de intranet entonces se borran las reservas de todos los usuarios sancionados
                      C4::AR::Debug::debug("_realizarOperaciones=> t_operacionesDeINTRA\n");
@@ -807,6 +794,7 @@ sub _isOPAC {
 sub buildSocioData{
 
     my ($session,$socio) = @_;
+    
     $session->param('urs_theme', $socio->getTheme());
     $session->param('usr_theme_intra', $socio->getThemeINTRA());
     $session->param('usr_locale', $socio->getLocale());
@@ -827,8 +815,42 @@ sub buildSocioData{
     $session->param('usr_email', $socio->persona->getEmail());
     $session->param('usr_legajo', $socio->persona->getLegajo());
     $session->param('usr_credential_type', $socio->getCredentialType());
+    
+    return ($session);
 }
 
+sub buildSocioDataHashFromSession{
+
+    my ($session) = @_;    
+    
+    my %socio_data;
+    $socio_data{'usr_apellido'}             = $session->param('usr_apellido');
+    $socio_data{'usr_nombre'}               = $session->param('usr_nombre');
+    $socio_data{'usr_tiene_foto'}           = $session->param('usr_tiene_foto');
+    $socio_data{'usr_nro_socio'}            = $session->param('nro_socio');
+    $socio_data{'usr_documento_nombre'}     = $session->param('usr_documento_nombre');
+    $socio_data{'usr_documento_version'}    = $session->param('usr_documento_version');
+    $socio_data{'usr_nro_documento'}        = $session->param('usr_nro_documento');
+    $socio_data{'usr_calle'}                = $session->param('usr_calle');
+    $socio_data{'usr_ciudad_nombre'}        = $session->param('usr_ciudad_nombre');
+    $socio_data{'usr_categoria_desc'}       = $session->param('usr_categoria_desc');
+    $socio_data{'usr_fecha_nac'}            = $session->param('usr_fecha_nac');
+    $socio_data{'usr_sexo'}                 = $session->param('usr_sexo');
+    $socio_data{'usr_telefono'}             = $session->param('usr_telefono');
+    $socio_data{'usr_alt_telefono'}         = $session->param('usr_alt_telefono');
+    $socio_data{'usr_email'}                = $session->param('usr_email');
+    $socio_data{'usr_legajo'}               = $session->param('usr_legajo');
+    $socio_data{'ciudad_ref'}{'id'}         = $session->param('usr_ciudad_id'); 
+    
+    return (\%socio_data);
+}
+
+sub updateLoggedUserTemplateParams{
+	my ($session,$t_params,$socio) = @_;
+	
+	buildSocioData($session,$socio);
+	$t_params->{'socio_data'} = buildSocioDataHashFromSession($session);
+}
 
 =item sub _getTimeOut
 
@@ -1151,12 +1173,19 @@ sub _operacionesDeINTRA{
     my $userid = $socio->getNro_socio();
 	eval{
 		my $reserva=C4::Modelo::CircReserva->new(db=> $db);
-		#Se borran las reservas de todos los usuarios sancionados
-		$reserva->cancelar_reservas_sancionados($userid);
-		#Ademas, se borran las reservas de los usuarios que no son alumnos regulares
-		$reserva->cancelar_reservas_no_regulares($userid);
+
 		#Ademas, se borran las reservas vencidas
-		$reserva->cancelar_reservas_vencidas($userid, $db);	
+		C4::AR::Debug::debug("_operacionesDeINTRA=> Se borran las reservas vencidas ");
+		$reserva->cancelar_reservas_vencidas($userid);
+
+		#Se borran las reservas de todos los usuarios sancionados
+                C4::AR::Debug::debug("_operacionesDeINTRA=> Se borran las reservas de todos los usuarios sancionados ");
+		$reserva->cancelar_reservas_sancionados($userid);
+
+		#Ademas, se borran las reservas de los usuarios que no son alumnos regulares
+		C4::AR::Debug::debug("_operacionesDeINTRA=> Se borran las reservas de los usuarios que no son alumnos regulares ");
+		$reserva->cancelar_reservas_no_regulares($userid);
+	
 		$db->commit;
 	};
 	if ($@){

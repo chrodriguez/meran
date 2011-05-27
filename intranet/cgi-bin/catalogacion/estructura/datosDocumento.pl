@@ -46,12 +46,6 @@ if($tipoAccion eq "MODIFICAR_NIVEL_1"){
 #     $params_combo{'onChange'}           = 'seleccionar_esquema()';
 }
 
-
-
-# for my ($key, $value) ($post_params) {
-# C4::AR::Debug::debug("key: $key => value: $value\n");
-# } 
-
 my @n3_array;
 my @split_array;
 
@@ -67,7 +61,7 @@ while ( my ($key, $value) = each(%$post_params) ) {
       }
 }
 
-# die;
+C4::AR::Debug::debug("cant n3_array ".scalar(@n3_array));
 
 $t_params->{'cant'}                             = $input->param('cant');
 $t_params->{'n3_array'}                         = \@n3_array;

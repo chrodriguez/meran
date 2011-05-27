@@ -30,37 +30,28 @@ function close_window_esquema(){
 $(document).ready( function() {
 	//oculto todas las tabls
 	_showAndHiddeEstructuraDelNivel(0);
-    params              = new objeto_params();
-    params.tipoAccion   = '[% tipoAccion %]';
-    params.id1          = [% id1 %];
-    params.id2          = [% id2 %];
-    params.id3          = [% id3 %];
-
-
-    TIENE_NIVEL_2 = [% tiene_nivel_2 %];
+    params                  = new objeto_params();
+    params.tipoAccion       = "[% tipoAccion %]";
+    params.id1              = [% id1 %];
+    params.id2              = [% id2 %];
+    params.id3              = [% id3 %];
+    MODIFICAR               = 1;
+    FROM_DETALLE_REGISTRO   = 1;
+    TIENE_NIVEL_2           = [% tiene_nivel_2 %];
 
 	[% IF tipoAccion == "MODIFICAR_NIVEL_1" %]
 		cargarNivel1(params);
-        MODIFICAR               = 1;
-        FROM_DETALLE_REGISTRO   = 1;
 	[% ELSIF tipoAccion == "MODIFICAR_NIVEL_2" %]
         cargarNivel1(params);
-        MODIFICAR               = 1;
-        FROM_DETALLE_REGISTRO   = 1;
     [% ELSIF tipoAccion == "MODIFICAR_NIVEL_3" %]
         cargarNivel1(params);
-        MODIFICAR               = 1;
-        FROM_DETALLE_REGISTRO   = 1;
     [% ELSIF tipoAccion == "MODIFICAR_NIVEL_3_ALL" %]
-        MODIFICAR               = 1;
-        FROM_DETALLE_REGISTRO   = 1;
-
+        // edicion grupal!!!!!!
         [% FOREACH n3 IN n3_array %]
             ID3_ARRAY.push([% n3 %]);
         [% END %]
 
-        modificarEjemplaresN3();
-//         mostrarInfoAltaNivel3ParaEdicionGrupalFromRegistro(params.id2);  
+        modificarEjemplaresN3FromRegistro(params.id1);
 	[% END %]
 
     $('#datos_esquema').hide();

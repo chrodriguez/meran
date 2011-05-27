@@ -46,7 +46,7 @@
                 [% PERL %]
                     print C4::AR::Filtros::link_to( text => "[% nivel3_obj.getBarcode %]",
                                                     url =>      "/cgi-bin/koha/catalogacion/estructura/detalleEjemplar.pl", 
-                                                    params =>   ["id3=[% id3 %]"],
+                                                    params =>   ["id3=[% id3 %]&id1=[% id1 %]"],
                                                     title =>    "[% 'Detalle del ejemplar' | i18n %]"
                                                 ) ;
                 [% END %]
@@ -67,22 +67,10 @@
 
                     [% END %]
                     
-                    
-                    
-                    
-
-                        <div class="[% claseDisponibilidad %]">
-                            [% nivel3_obj.getDisponibilidadObject.getNombre %]
-                        </div>
-                </td>
-                <td>
-                    <span class="[% claseEstado %]">
-                        [% nivel3_obj.getEstadoObject.getNombre %]
-                    </span>
                     <!-- preguntamos si ya se muestra el usuario en el prestamo, para no mostrarlo dos veces -->
                     [% IF !prestamo.getNro_socio %]
                         [% IF reserva.getNro_socio %]
-                            (Asignado a:
+                             <strong class="[% IF nivel3_obj.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">[% 'Reservado a:' | i18n  %]</strong> 
                             [% PERL %]
                                 print C4::AR::Filtros::link_to(   text =>     "[% socio_reserva.persona.getApeYNom %]",
                                                                   url =>      "/cgi-bin/koha/usuarios/reales/datosUsuario.pl", 
@@ -91,9 +79,16 @@
                                                                   blank =>  1,
                                                             );
                             [% END %]
-                            )
                         [% END %]
                     [% END %]
+                    <div class="[% claseDisponibilidad %]">
+                        [% nivel3_obj.getDisponibilidadObject.getNombre %]
+                    </div>
+                </td>
+                <td>
+                    <span class="[% claseEstado %]">
+                        [% nivel3_obj.getEstadoObject.getNombre %]
+                    </span>
                 </td>
                 <td>
                     <span class="[% claseFecha %]">
@@ -196,7 +191,6 @@
     <input type="hidden" id="token" name="token" value="[% token %]" />
 </form>
 
-
       [% PERL %]
               print C4::AR::Filtros::to_Icon(   
                                                   boton   => "icon_edicion",
@@ -205,3 +199,4 @@
                                                   li => 1,
                       ) ;
       [% END %]
+

@@ -307,27 +307,24 @@ systempreferences table of the Koha database, and returns it. If the
 variable is not set, or in case of error, returns the undefined value.
 
 =cut
-#'
-# FIXME - The preferences aren't likely to change over the lifetime of
-# the script (and things might break if they did change), so perhaps
-# this function should cache the results it finds.
+# FIXME - No usar!
 sub preference
 {
-	my $self = shift;
-	my ($valueName) = @_;
-	my $dbh = C4::Context->dbh;
-	my $query;
-	my $sth;
-	
-	$query="SELECT value
-		FROM pref_preferencia_sistema
-		WHERE variable=?";
+#	my $self = shift;
+#	my ($valueName) = @_;
+#	my $dbh = C4::Context->dbh;
+#	my $query;
+#	my $sth;
+#	
+#	$query="SELECT value
+#		FROM pref_preferencia_sistema
+#		WHERE variable=?";
 
-	$sth = $dbh->prepare($query);
+#	$sth = $dbh->prepare($query);
 
-	$sth->execute($valueName);
+#	$sth->execute($valueName);
 
-	return ($sth->fetchrow);
+#	return ($sth->fetchrow);
 }
 
 sub preferences {

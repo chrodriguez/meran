@@ -192,8 +192,10 @@ sub getMenuPreferences{
     return (\%hash);
 }
 
-
-sub getPreferenciasByCategoria {
+=item
+    Devuelve una referencia con todas las preferencias filtradas por categoria
+=cut
+sub getPreferenciasByCategoria{
     my ($str)=@_;
     my $preferencias_array_ref;
     my $prefTemp = C4::Modelo::PrefPreferenciaSistema->new();
@@ -204,6 +206,25 @@ sub getPreferenciasByCategoria {
 
     return (scalar($preferencias_array_ref), $preferencias_array_ref);
 }
+
+=item
+    Misma funcion que arriba, pero devuelve una hash armada
+=cut
+sub getPreferenciasByCategoriaHash{
+    my ($str)=@_;
+    my $preferencias_array_ref;
+    my $prefTemp = C4::Modelo::PrefPreferenciaSistema->new();
+  
+    $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( 
+                                        query => [ categoria => { eq => $str }],
+                                );
+    my %hash;
+    foreach my $pref (@$preferencias_array_ref){
+        $hash{$pref->getVariable} = $pref->getValue();
+    }
+
+    return (\%hash); 
+} 
 
 sub getPreferenciaLike {
     my ($str,$orden)=@_;
@@ -240,7 +261,7 @@ sub getPreferenciaLikeConCategoria {
 }
 
 
-sub getPreferencia {
+sub getPreferencia{
     my ($variable)  = @_;
 
     my $preferencia_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( query => [ variable => { eq => $variable} ]);
