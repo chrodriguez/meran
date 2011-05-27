@@ -1248,7 +1248,8 @@ sub updateUserProfile{
 	
 	eval{
 		$socio->persona->setEmail($params->{'email'});
-		$socio->setLocale($params->{'language'});
+        $socio->setLocale($params->{'language'});
+        $socio->setThemeINTRA($params->{'temas_intra'});
         #SAVE DATA
 		$socio->persona->save();
 		$socio->save();
