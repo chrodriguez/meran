@@ -171,15 +171,15 @@ sub seRepiteBarcode {
     my ($self)      = shift;
     my($barcode)    = @_;
   
-    my $nivel_array_ref = C4::AR::Nivel3::getNivel3FromBarcode($barcode);
+    my $nivel3 = C4::AR::Nivel3::getNivel3FromBarcode($barcode);
 
 #     C4::AR::Debug::debug("CatRegistroMarcN3 => seRepiteBarcode => nivel_array_ref->getId3() => ".$nivel_array_ref->getId3()."  params->{'id3'} => ".$self->getId3());
 
-    if ($nivel_array_ref == 0){
+    if ($nivel3 == 0){
     #no existe el barcode
         return 0;
     } else {
-        if($nivel_array_ref->getId3() == $self->getId3()){
+        if($nivel3->getId3() == $self->getId3()){
             #estoy modificando el mismo ejemplar
             C4::AR::Debug::debug("CatRegistroMarcN3 => seRepiteBarcode => estoy modificando el mismo ejemplar ");
             return 0;
@@ -200,26 +200,16 @@ sub seRepiteSignatura {
     my ($self)      = shift;
     my ($signatura) = @_;
     
-# TODO Miguel ver si esto es eficiente, de todos modos no se si se puede hacer de otra manera!!!!!!!!!!
-# 1) parece q no queda otra, hay q "abrir" el marc_record y sacar el barcode para todos los ejemplares e ir comparando cada uno GARRONNNN!!!!
-# 2) se podria usar el indice??????????????
-
     my @filtros;
     my $existe = 0;
 
-    push(@filtros, ( id2 => { ne => $self->getId2() }) );
+    push(@filtros, ( id2        => { ne => $self->getId2() }) );
+    push(@filtros, ( signatura  => { eq => $signatura }) );
     
     my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => \@filtros ); 
 
-    foreach my $nivel3 (@$nivel3_array_ref){
-
-        #verifico si la signatura es igual a la signatura de otro grupo
-        if (($nivel3->getSignatura_topografica() eq $signatura) && ($nivel3->getId2() ne $self->getId2())){
-            $existe = 1;
-            last();
-        }
-    }
-
+    $existe = scalar (@$nivel3_array_ref);
+    
     C4::AR::Debug::debug("CatRegistroMarcN3 => seRepiteSignatura => EXISTE la signatura? => ".$existe);
     
     return $existe;
