@@ -21,8 +21,8 @@ my ($template, $session, $t_params, $socio)  = get_template_and_user({
                                                 accion => 'CONSULTA', 
                                                 entorno => 'undefined'},
                             debug => 1,
-                 });                                
-
+                 });
+                 
 my %hash_temp               = {};
 my $accion                  = $input->param('accion');
 my $smtp_server             = $input->param('smtp_server');
@@ -46,24 +46,30 @@ $Message_arrayref           = C4::AR::Preferencias::t_modificarVariable('smtp_se
 
 my $msg_object              = C4::AR::Mensajes::create();
 my $mail_to                 = $socio->persona->getEmail();
-my ($ok, $msg_error)        = C4::AR::Mail::send_mail_TEST($mail_to);    
+my $mensaje;
 
-if($ok){
-    $msg_object->{'error'}  = 0;
-    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U413', 'params' => [$mail_to]} ) ;
-} else {
-    $msg_object->{'error'}  = 1;
-    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U414', 'params' => [$mail_to, $msg_error]} ) ;
+if($accion eq 'PROBAR_CONFIGURACION'){
+#   solo si esta probando la configuracion mandamos el mail de prueba
+
+    my ($ok, $msg_error)        = C4::AR::Mail::send_mail_TEST($mail_to);    
+
+    if($ok){
+        $msg_object->{'error'}  = 0;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U413', 'params' => [$mail_to]} ) ;
+    } else {
+        $msg_object->{'error'}  = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U414', 'params' => [$mail_to, $msg_error]} ) ;
+    }
+    
+    $mensaje = $msg_object->{'messages'}[0]->{'message'};
 }
 
-
-my $mensaje = $msg_object->{'messages'}[0]->{'message'};
-
-
+elsif($accion eq 'MODIFICAR_CONFIGURACION'){
+    $mensaje = "Se guardaron los cambios con &eacute;xito"
+}
 
 my $preferencias_mail         = C4::AR::Preferencias::getPreferenciasByCategoriaHash('mail');
 $t_params->{'preferencias'}   = $preferencias_mail;
 $t_params->{'mensaje'}        = $mensaje;
-C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);                 
-
-#C4::AR::Auth::redirectTo('/cgi-bin/koha/admin/global/mail_config.pl?token='.$session->param('token').'&msj='.$men);
+$t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Configuraci&oacute;n del Mail");
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

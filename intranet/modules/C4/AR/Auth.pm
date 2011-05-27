@@ -704,7 +704,7 @@ Funcion que realiza todas las operaciones asociadas a un inicio de sesion como s
 sub _realizarOperacionesLogin{
     my ($type,$socio)=@_;
      C4::AR::Debug::debug("_realizarOperacionesLOGIN=> LOGIN\n");
-    my $dateformat = 'iso';
+    my $dateformat = C4::Date::get_date_format();
     my $lastlogin= C4::AR::Usuarios::getLastLoginTime();
     if ($type eq 'intranet') {
         #Se entran a realizar las rutinas solo cuando es intranet
@@ -737,7 +737,11 @@ sub _realizarOperacionesLogin{
             }
             #Genera una comprobacion una vez al dia, cuando se loguea el primer usuario
             my $today = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"),$dateformat);
-            if (Date::Manip::Date_Cmp($lastlogin,$today)<0) {
+
+	    C4::AR::Debug::debug("_realizarOperaciones=> TODAY = ".$today);
+	    C4::AR::Debug::debug("_realizarOperaciones=> LASTLOGIN = ".$auxlastlogin);
+	    C4::AR::Debug::debug("_realizarOperaciones=> Date_Cmp = ".Date::Manip::Date_Cmp($auxlastlogin,$today));
+            if (Date::Manip::Date_Cmp($auxlastlogin,$today)<0) {
                 # lastlogin es anterior a hoy
                 ##Si es un usuario de intranet entonces se borran las reservas de todos los usuarios sancionados
                      C4::AR::Debug::debug("_realizarOperaciones=> t_operacionesDeINTRA\n");
@@ -1227,12 +1231,19 @@ sub _operacionesDeINTRA{
     my $userid = $socio->getNro_socio();
 	eval{
 		my $reserva=C4::Modelo::CircReserva->new(db=> $db);
-		#Se borran las reservas de todos los usuarios sancionados
-		$reserva->cancelar_reservas_sancionados($userid);
-		#Ademas, se borran las reservas de los usuarios que no son alumnos regulares
-		$reserva->cancelar_reservas_no_regulares($userid);
+
 		#Ademas, se borran las reservas vencidas
-		$reserva->cancelar_reservas_vencidas($userid, $db);	
+		C4::AR::Debug::debug("_operacionesDeINTRA=> Se borran las reservas vencidas ");
+		$reserva->cancelar_reservas_vencidas($userid);
+
+		#Se borran las reservas de todos los usuarios sancionados
+                C4::AR::Debug::debug("_operacionesDeINTRA=> Se borran las reservas de todos los usuarios sancionados ");
+		$reserva->cancelar_reservas_sancionados($userid);
+
+		#Ademas, se borran las reservas de los usuarios que no son alumnos regulares
+		C4::AR::Debug::debug("_operacionesDeINTRA=> Se borran las reservas de los usuarios que no son alumnos regulares ");
+		$reserva->cancelar_reservas_no_regulares($userid);
+	
 		$db->commit;
 	};
 	if ($@){

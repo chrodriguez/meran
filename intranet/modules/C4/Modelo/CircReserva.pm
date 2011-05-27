@@ -280,7 +280,8 @@ C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde hash2 => ".$param
 		$paramsSancion{'nro_socio'}         = $params->{'nro_socio'};
 		$paramsSancion{'fecha_comienzo'}    = $startdate;
 		$paramsSancion{'fecha_final'}       = $enddate;
-		$paramsSancion{'dias_sancion'}      = undef;
+		$paramsSancion{'dias_sancion'}      = $daysOfSanctions;
+		$paramsSancion{'id3'}		    = $self->getId3;
 
 		$sancion->insertar_sancion(\%paramsSancion);
 	}
@@ -468,25 +469,23 @@ sub cancelar_reservas_sancionados {
 	#Se buscan los socios sancionados
 	my $dateformat = C4::Date::get_date_format();
 	my $hoy=C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"), $dateformat);
-  	my $tipo_prestamo=C4::AR::Preferencias::getValorPreferencia("defaultissuetype");
+
+        $self->debug("cancelar_reservas_sancionados => HOY = ".$hoy);
+
 	my $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion ( db=>$self->db, 
-																	query => [ 
-																			fecha_comienzo 	=> { le => $hoy },
-																			fecha_final    	=> { ge => $hoy},
-																			tipo_prestamo 	=> { eq => $tipo_prestamo },
-																			or   => [
-																				tipo_prestamo => { eq => 0 },
-                                                                            ],
-																		],
-																	select => ['nro_socio'],
-																	with_objects => [ 'ref_tipo_prestamo_sancion' ]
+									query => [ 
+											fecha_comienzo 	=> { le => $hoy },
+											fecha_final    	=> { ge => $hoy},
+										],
+									select => ['nro_socio'],
+									with_objects => [ 'ref_tipo_prestamo_sancion' ]
 									);
 
-  my @socios_sancionados;
-  foreach my $sancion (@$sanciones_array_ref){
-  	push (@socios_sancionados,$sancion->getNro_socio);
-  }
-
+	my @socios_sancionados;
+	foreach my $sancion (@$sanciones_array_ref){
+	      $self->debug("cancelar_reservas_sancionados => Usuario Sancionado = ".$sancion->getNro_socio);
+	      push (@socios_sancionados,$sancion->getNro_socio);
+	}
 
 	$self->cancelar_reservas($loggedinuser,\@socios_sancionados);
 }
@@ -497,19 +496,22 @@ cancelar_reservas_no_regulares
 Se cancelan todas las reservas de usuarios que perdieron la regularidad.
 =cut
 sub cancelar_reservas_no_regulares {
-	my ($self)=shift;
-	my ($loggedinuser)= @_;
+  my ($self)=shift;
+  my ($loggedinuser)= @_;
 
     my $params;
     $params->{'loggedinuser'}= $loggedinuser;
     $params->{'tipo'}= 'INTRA';
 
-	my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( db => $self->db,
-													          query => [ estado => {ne => 'P'}]);
+    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( db => $self->db,
+										    query => [ estado => {ne => 'P'}]);
 
-	foreach my $reserva (@$reservas_array_ref){
-        if(! $reserva->socio->estado->regular){$reserva->cancelar_reserva($params)};
-	}
+    foreach my $reserva (@$reservas_array_ref){
+	if(! $reserva->socio->estado->regular){
+	    $self->debug("cancelar_reservas_no_regulares => Usuario Irregular = ".$reserva->socio->getNro_socio." se cancela la reserva ".$reserva->getId_reserva );
+	    $reserva->cancelar_reserva($params);
+	  };
+    }
 }
 
 
@@ -554,7 +556,6 @@ sub cancelar_reservas_socio{
     $params->{'tipo'}= 'INTRA';
 
     my ($reservas_array_ref) = C4::Modelo::CircReserva::Manager->get_circ_reserva( 
-#                                                                 FIXME este db esta bien????
                                                                 db      => $self->db,
                                                                 query   => [    nro_socio   => { eq => $params->{'nro_socio'} }, 
                                                                                 estado      => { ne => 'P'} 
@@ -574,10 +575,12 @@ Elimina las reservas vencidas al dia de la fecha y actualiza la reservas de grup
 sub cancelar_reservas_vencidas {
     my ($self) = shift;
 
-    my ($loggedinuser, $db) = @_;
+    my ($loggedinuser) = @_;
 
     #Se buscan las reservas vencidas!!!!
-    my ($reservas_vencidas_array_ref) = getReservasVencidas($db);
+    my ($reservas_vencidas_array_ref) = $self->getReservasVencidas();
+
+   $self->debug("cancelar_reservas_vencidas => cant_reservas => ".scalar(@$reservas_vencidas_array_ref));
 
     #Se buscan si hay reservas esperando sobre el grupo que se va a elimninar la reservas vencidas
     foreach my $reserva (@$reservas_vencidas_array_ref){
@@ -599,11 +602,11 @@ sub cancelar_reservas_vencidas {
         $data_hash->{'tipo'} = 'cancelacion';
 
         use C4::Modelo::RepHistorialCirculacion;
-        my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db => $db);
+        my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db => $self->db);
 
         $historial_circulacion->agregar($data_hash);
         #*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
-
+        $self->debug("cancelar_reservas_vencidas => SE CANCELA LA RESERVA : ". $reserva->getId_reserva);
        $reserva->delete();
     }# END foreach my $reserva (@$reservasVencidas)
 }
@@ -614,21 +617,18 @@ sub cancelar_reservas_vencidas {
 sub getReservasVencidas {
     my ($self) = shift;
 
-    my ($db) = @_;
-
     my $dateformat  = C4::Date::get_date_format();
     my $hoy         = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"), $dateformat);
 
     #Se buscan las reservas vencidas!!!!
     my ($reservas_vencidas_array_ref) = C4::Modelo::CircReserva::Manager->get_circ_reserva(
-                                                                        db => $db,
+                                                                        db => $self->db,
                                                                         query => [ 
                                                                                 fecha_recordatorio  => { lt => $hoy }, 
                                                                                 estado              => { ne => 'P'},
                                                                                 id3                 => { ne => undef}
                                                                             ]
                                                         );
-
     return ($reservas_vencidas_array_ref);
 }
 
