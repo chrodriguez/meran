@@ -198,8 +198,31 @@
         </ul>
     </fieldset>
 [% END %]
+
 <fieldset>
-    <legend>&nbsp;[% 'Personalizacion de visualizaci&oacute;n' | i18n %]&nbsp;</legend>
+    <legend class="titulo_legend">[% 'Datos de Estudio' | i18n %]</legend>
+    <ul>
+        <li class="sub_item"> 
+            <label>[% "Instituci&oacute;n" | i18n %]</label>
+                <input  type=text id="institucion" name="institucion" value="[% socio_modificar.persona.getInstitucion %]" size="25" >
+        </li>
+        <li class="sub_item">
+            <label>[% "Carrera" | i18n %]</label>
+                <input  type="text" id="carrera" name="carrera" value="[% socio_modificar.persona.getCarrera %]" size="25" >
+        </li>
+        <li class="sub_item">
+                <label>[% "A&ntilde;o" | i18n %]</label>
+                        <input  type="text" id="anio" name="anio" value="[% socio_modificar.persona.getAnio %]" size="25" >
+        </li>
+        <li class="sub_item">
+                <label>[% "Divisi&oacute;n" | i18n %]</label>
+                        <input  type="text" id="division" name="division" value="[% socio_modificar.persona.getDivision %]" size="25" >
+        </li>
+    </ul>
+</fieldset>
+
+<fieldset>
+    <legend class="titulo_legend">[% 'Personalizacion de visualizaci&oacute;n' | i18n %]</legend>
     <p>
         <label for="temas_intra" class="left">[% 'Tema' | i18n %]:</label>
         [% combo_temas %]

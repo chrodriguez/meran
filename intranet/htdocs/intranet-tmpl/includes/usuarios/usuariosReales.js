@@ -38,32 +38,36 @@ function updateModificarDatosDeUsuario(responseText){
 
 function guardarModificacionUsuario(){
 
-	objAH=new AjaxHelper(updateGuardarModificacionUsuario);
-	objAH.url='/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
-	objAH.debug= true;
+	objAH                   = new AjaxHelper(updateGuardarModificacionUsuario);
+	objAH.url               = '/cgi-bin/koha/usuarios/reales/usuariosRealesDB.pl';
+	objAH.debug             = true;
     objAH.showOverlay       = true;
-	objAH.nro_socio= nro_socio_temp; 
-    objAH.sexo= $("input[@name=sexo]:checked").val();
-    objAH.calle= $('#calle').val();
-    objAH.nombre= $('#nombre').val();
-    objAH.nacimiento= $('#nacimiento').val();
-    objAH.email= $('#email').val();
-    objAH.telefono= $('#telefono').val();
-    objAH.cod_categoria= $('#categoria_socio_id').val();
-    objAH.ciudad= $('#id_ciudad').val();
-    objAH.alt_ciudad= $('#id_alt_ciudad').val();
-    objAH.alt_telefono= $('#alt_telefono').val();
-    objAH.apellido= $('#apellido').val();
-    objAH.id_ui= $('#id_ui').val();
-    objAH.tipo_documento= $('#tipo_documento_id').val();
-    objAH.nro_documento= $('#nro_documento').val();
-    objAH.legajo= $('#legajo').val();
-    objAH.changepassword= ( $('#changepassword').attr('checked') )?1:0;
-	objAH.tipoAccion= 'GUARDAR_MODIFICACION_USUARIO';
-    objAH.tema= $('#temas_intra').val();
-    objAH.auth_nombre= $('#auth_nombre').val();
-    objAH.auth_dni= $('#auth_dni').val();
-    objAH.auth_telefono= $('#auth_telefono').val();
+	objAH.nro_socio         = nro_socio_temp; 
+    objAH.sexo              = $("input[@name=sexo]:checked").val();
+    objAH.calle             = $('#calle').val();
+    objAH.nombre            = $('#nombre').val();
+    objAH.nacimiento        = $('#nacimiento').val();
+    objAH.email             = $('#email').val();
+    objAH.telefono          = $('#telefono').val();
+    objAH.cod_categoria     = $('#categoria_socio_id').val();
+    objAH.ciudad            = $('#id_ciudad').val();
+    objAH.alt_ciudad        = $('#id_alt_ciudad').val();
+    objAH.alt_telefono      = $('#alt_telefono').val();
+    objAH.apellido          = $('#apellido').val();
+    objAH.id_ui             = $('#id_ui').val();
+    objAH.tipo_documento    = $('#tipo_documento_id').val();
+    objAH.nro_documento     = $('#nro_documento').val();
+    objAH.legajo            = $('#legajo').val();
+    objAH.institucion       = $('#institucion').val();
+    objAH.carrera           = $('#carrera').val();
+    objAH.anio              = $('#anio').val();
+    objAH.division          = $('#division').val();
+    objAH.changepassword    = ( $('#changepassword').attr('checked') )?1:0;
+	objAH.tipoAccion        = 'GUARDAR_MODIFICACION_USUARIO';
+    objAH.tema              = $('#temas_intra').val();
+    objAH.auth_nombre       = $('#auth_nombre').val();
+    objAH.auth_dni          = $('#auth_dni').val();
+    objAH.auth_telefono     = $('#auth_telefono').val();
  	objAH.sendToServer();
 
 }
@@ -206,7 +210,11 @@ function agregarUsuario(){
       objAH.credential_type = $('#credential').val();
       objAH.nro_documento   = $('#nro_documento').val();
       objAH.legajo          = $('#legajo').val();
-      objAH.changepassword  = ( $('#changepassword').attr('checked') )?1:0;
+      objAH.institucion     = $('#institucion').val();
+      objAH.carrera         = $('#carrera').val();
+      objAH.anio            = $('#anio').val();
+      objAH.division        = $('#division').val();
+      objAH.changepassword  = ($('#changepassword').attr('checked') )?1:0;
       objAH.tipoAccion      = 'AGREGAR_USUARIO';
       objAH.tema            = $('#temas_intra').val();
 

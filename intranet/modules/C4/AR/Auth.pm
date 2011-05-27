@@ -598,31 +598,33 @@ sub checkauth {
                       my $nroRandom       = $session->param('nroRandom');
                       #se verifica la password ingresada
         
-                      my $socio_data_temp = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
-                      my $login_attempts = $socio_data_temp->getLogin_attempts;
-                      my $captchaResult;
-
-                      if ($login_attempts > 2 ){
-                         
-                          my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
-                          my $reCaptchaChallenge  = $query->param('recaptcha_challenge_field');
-                          my $reCaptchaResponse   = $query->param('recaptcha_response_field');
-                    
-                          use Captcha::reCAPTCHA;
-                          my $c = Captcha::reCAPTCHA->new;
-  
-                          C4::AR::Debug::debug($reCaptchaResponse);
-
-                          $captchaResult = $c->check_answer(
-                                      $reCaptchaPrivateKey, $ENV{'REMOTE_ADDR'},
-                                      $reCaptchaChallenge, $reCaptchaResponse
-                          );
-                    
-                      } else { 
+#  COMENTADO PORQUE DA ERROR - $userid  NO EXISTE ==>  unless ($userid) 
+#                       my $socio_data_temp = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
+#                       my $login_attempts = $socio_data_temp->getLogin_attempts;
+#                       my $captchaResult;
+# 
+#                       if ($login_attempts > 2 ){
+#                          
+#                           my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
+#                           my $reCaptchaChallenge  = $query->param('recaptcha_challenge_field');
+#                           my $reCaptchaResponse   = $query->param('recaptcha_response_field');
+#                     
+#                           use Captcha::reCAPTCHA;
+#                           my $c = Captcha::reCAPTCHA->new;
+#   
+#                           C4::AR::Debug::debug($reCaptchaResponse);
+# 
+#                           $captchaResult = $c->check_answer(
+#                                       $reCaptchaPrivateKey, $ENV{'REMOTE_ADDR'},
+#                                       $reCaptchaChallenge, $reCaptchaResponse
+#                           );
+#                     
+#                       } else { 
                               $sin_captcha = 1; 
-                      }  
+#                       }  
 
-                      if ($captchaResult->{is_valid} || $sin_captcha){
+#                       if ($sin_captcha || $captchaResult->{is_valid} ){
+			if ($sin_captcha){
 
 
                             my ($socio)         = _verificarPassword($userid,$password,$nroRandom);
@@ -667,16 +669,17 @@ sub checkauth {
                                 if ($userid) {
                 #        
                                     $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
-                                    #intento de loguin
-                                    my $cant_fallidos= $socio->getLogin_attempts + 1;
-                                    $socio->setLogin_attempts($cant_fallidos);
-                 
-                                    if ($cant_fallidos == 3){
-                                        $template_params->{'mostrar_captcha'}=1;
-                                    }
-                                    $template_params->{'loginAttempt'} = 1;
-                                    _destruirSession('U406', $template_params);
-                                
+				    if ($socio) {
+				      #intento de loguin
+				      my $cant_fallidos= $socio->getLogin_attempts + 1;
+				      $socio->setLogin_attempts($cant_fallidos);
+		  
+				      if ($cant_fallidos == 3){
+					  $template_params->{'mostrar_captcha'}=1;
+				      }
+				    }
+				       $template_params->{'loginAttempt'} = 1;
+				      _destruirSession('U406', $template_params);
                                 }
                                 #genero una nueva session y redirecciono a auth.tmpl para que se loguee nuevamente
                                 

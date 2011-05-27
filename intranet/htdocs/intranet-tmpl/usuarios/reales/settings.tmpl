@@ -12,13 +12,18 @@
 	                <legend class="titulo_legend"><strong>[% "Opciones personales" | i18n %]</strong></legend>
 	                <form id="user-settings" method="POST" href="[% url_prefix %]/usuarios/reales/settings.pl" onsubmit="javascript:startOverlay();"
 		                <ul id="simple">
-		                    <li class="sub_item">
-			                    <label for="languages">
-			                        <strong>[% "Idioma" | i18n %]</strong>
-			                    </label>
-			                    [% languages %]
-		                    </li>
-	
+                            <li class="sub_item">
+                                <label for="languages">
+                                    <strong>[% "Idioma" | i18n %]</strong>
+                                </label>
+                                [% languages %]
+                            </li>
+                            <li class="sub_item">
+                                <label for="temas_intra">
+                                    <strong>[% "Tema" | i18n %]</strong>
+                                </label>
+                                [% combo_temas_intra %]
+                            </li>
 	                        <li class="sub_item">
 	                            <label for="email">
 	                                <strong>[% "E-mail" | i18n %]</strong>
