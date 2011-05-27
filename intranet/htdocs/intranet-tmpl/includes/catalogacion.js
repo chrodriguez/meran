@@ -117,18 +117,6 @@ function _setFoco(){
 	}
 }
 
-// function _recuperarSeleccionados(chckbox){
-// 	var chck    = $("input[name="+chckbox+"]:checked");
-// 	var array   = new Array;
-// 	var long    = chck.length;
-// 
-// 	for(var i=0; i< long; i++){
-// 		array[i]    = chck[i].value;
-// 	}
-// 	
-// 	return array;
-// }
-
 function seleccionoAlgo(chckbox){
     var chck = $("input[name="+chckbox+"]:checked");
     var array = new Array;
@@ -924,7 +912,6 @@ function updateGuardarModificacionDocumentoN3(responseText){
         //deja la misma estructura, solo borra el campo dato
         _clearDataFromComponentesArray();
         //muestra la tabla con los ejemplares agregados
-//         mostrarInfoAltaNivel3(ID_N1, ID_N2);
         mostrarInfoAltaNivel3(ID_N2);
         //se esta modificando desde el detalle del registro
         if (FROM_DETALLE_REGISTRO == 1) window.location = "detalle.pl?id1=" + ID_N1;
@@ -969,6 +956,30 @@ function updateMostrarInfoAltaNivel3(responseText){
     checkedAll('select_all', 'checkEjemplares');
     
     scrollTo('detalleDelNivel3');
+}
+
+function mostrarInfoAltaNivel3ParaEdicionGrupalFromRegistro(idNivel2){
+    if(idNivel2 != 0){
+        objAH               = new AjaxHelper(updateMostrarInfoAltaNivel3ParaEdicionGrupalFromRegistro);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;
+        objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+        objAH.tipoAccion    = "MOSTRAR_INFO_NIVEL3_TABLA";
+        objAH.id2           = idNivel2;
+        ID_N2               = idNivel2;
+        objAH.sendToServer();
+    }
+}
+
+function updateMostrarInfoAltaNivel3ParaEdicionGrupalFromRegistro(responseText){
+//     $("#divCantEjemplares").show(); 
+//     $("#detalleDelNivel3").html(responseText);
+//     checkedAll("select_all", "checkEjemplares");  
+//     zebra('tablaResult');
+
+//     $("input[name=checkEjemplares]").each(function(){this.checked = true;});
+    
+    modificarEjemplaresN3();
 }
 
 function open_alta_indicador(id_div_alta_indicador){
@@ -2042,6 +2053,25 @@ function modificarEjemplaresN3(){
     }
 }
 
+function modificarEjemplaresN3FromRegistro(id1){
+
+    if(ID3_ARRAY.length > 0){
+        
+        inicializar();
+        ID_N1               = id1;
+        objAH               = new AjaxHelper(updateModificarEjemplaresN3);
+        objAH.url           = "/cgi-bin/koha/catalogacion/estructura/estructuraCataloDB.pl";
+        objAH.debug         = true;
+        objAH.showOverlay   = true;
+        objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
+        objAH.itemtype      = $("#id_tipo_doc").val();
+        objAH.id3           = ID3_ARRAY[0]; //muestra la info del primer ejemplar en el arreglo de ejemplares
+        objAH.nivel         = 3;
+        EDICION_N3_GRUPAL   = 1;  
+        objAH.sendToServer();
+    }
+}
+
 function updateModificarEjemplaresN3(responseText){
 	MODIFICAR = 1;
 	$('#divCantEjemplares').hide();	
@@ -2086,6 +2116,7 @@ function cargarNivel1(params){
 		modificarN2(params.id2);
 	}else	
 	if(params.tipoAccion == 'MODIFICAR_NIVEL_3'){
+// FIXME falta tipo documento
 		modificarN3(params.id3);
 	}else{
 		//por defecto se carga el Nivel 1 para modificar

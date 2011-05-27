@@ -252,21 +252,22 @@ sub _destruirSession{
     
     my ($codMsg,$template_params) = @_;
     $codMsg = $codMsg || 'U406';
+
     my ($session) = CGI::Session->load();
-    
-    C4::AR::Debug::debug("CODMSG en destruirSession". $codMsg );
-    
+#     
+#    C4::AR::Debug::debug("Template params". $template_params);   
+ 
     $codMSG = $codMsg;
     
-    C4::AR::Debug::debug("CodMSG en destruirSession". $codMSG );
-
     _eliminarSession($session);
     
     $session = C4::AR::Auth::_generarSession();
     $session->param('sessionID', undef);
+
     #redirecciono a loguin y genero una nueva session y nroRandom para que se loguee el usuario
     $session->param('codMsg', $codMsg);
-    
+  
+
 #     C4::AR::Debug::debug("WARNING: ¡¡¡¡Se destruye la session y la cookie!!!!!");
     redirectToAuth($template_params)
 
@@ -366,7 +367,7 @@ sub get_template_and_user {
             $usuario_logueado = C4::Modelo::UsrSocio->new();
         }
     
-        $params->{'socio_data'}                 = buildSocioDataHashFromSession($session);
+        $params->{'socio_data'}                 = buildSocioDataHashFromSession();
         $params->{'token'}                      = $session->param('token');
         #para mostrar o no algun submenu del menu principal
         $params->{'menu_preferences'}           = C4::AR::Preferencias::getMenuPreferences();
@@ -509,14 +510,18 @@ sub checkauth {
     my $type                = shift;
     my $change_password     = shift || 0;
     my $template_params     = shift;
+    
     my $socio;
     $type                   = 'opac' unless $type;
     my $demo=C4::Context->config("demo") || 0;
     my $token=_obtenerToken($query);
     my $loggedin = 0;
     my ($session) = CGI::Session->load();
+    
     my $userid= $session->param('userid');
     my $flags=0;
+    
+    my $sin_captcha=0;
     my $time = localtime(time());
     if ($demo) {
         #Quiere decir que no es necesario una autenticacion
@@ -525,119 +530,164 @@ sub checkauth {
         _actualizarSession($userid, $userid,$userid, $time, '', $type, $flagsrequired, _generarToken(), $session);
         $socio=C4::Modelo::UsrSocio->new();
         return ($userid, $session, $flags, $socio);
-    }
-    else
-    {
+    } else {
         #No es DEMO hay q hacer todas las comprobaciones de la sesion
-        my ($codeMSG,$estado)=_verificarSession($session,$type,$token);
-        if ($estado eq "sesion_valida"){ 
-            C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_valida");
-            $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
-            $flags=$socio->tienePermisos($flagsrequired);
-            if ($flags) {
-                $loggedin = 1;
-            } else {
-                #redirecciono a una pagina informando q no tiene  permisos
-                $session->param('codMsg', 'U354');
-                $session->param('redirectTo', '/cgi-bin/koha/informacion.pl');
-                redirectTo('/cgi-bin/koha/informacion.pl');
-           } 
-        }
-        elsif ($estado eq "datos_censales_invalidos"){
-            C4::AR::Debug::debug("C4::AR::Auth::checkauth => datos_censales_invalidos");
-#             _destruirSession('U309', $template_params);
-            $session->param('codMsg', $codeMSG);
-            $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
-            redirectTo('/cgi-bin/koha/auth.pl'); 
-        }
-        elsif ($estado eq "sesion_invalida") { 
-            C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_invalida");
-            _destruirSession('U406', $template_params);
-            $session->param('codMsg', $codeMSG);
-            $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
-            redirectTo('/cgi-bin/koha/auth.pl'); 
-        } 
-        elsif ($estado eq "sin_sesion") { 
-            C4::AR::Debug::debug("C4::AR::Auth::checkauth => sin_sesion");
-            #ESTO DEBERIA PASAR solo cuando la sesion esta sin iniciar
-            #_destruirSession('U406', $template_params);
-            $session->param('codMsg', $codeMSG);
-            }
-        else { 
-            #ESTO MENOS
-            C4::AR::Debug::debug("C4::AR::Auth::checkauth => ESTO MENOS ???");
-            _destruirSession('U406', $template_params);
-            $session->param('codMsg', $codeMSG);
-            $session->param('redirectTo', '/cgi-bin/koha/error.pl');
-            redirectTo('/cgi-bin/koha/error.pl'); 
-        }
+                  my ($codeMSG,$estado)=_verificarSession($session,$type,$token);
+                  if ($estado eq "sesion_valida"){ 
+                      
+                      C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_valida");
+                      $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
+                      $flags=$socio->tienePermisos($flagsrequired);
+                      $socio->setLogin_attempts(0);
+                      
+                      if ($flags) {
+                          $loggedin = 1;
+                      } else {
+                          #redirecciono a una pagina informando q no tiene  permisos
+                          $session->param('codMsg', 'U354');
+                          $session->param('redirectTo', '/cgi-bin/koha/informacion.pl');
+                          redirectTo('/cgi-bin/koha/informacion.pl');
+                    } 
+                  }
+                  elsif ($estado eq "datos_censales_invalidos"){
+                      C4::AR::Debug::debug("C4::AR::Auth::checkauth => datos_censales_invalidos");
+          #             _destruirSession('U309', $template_params);
+                      $session->param('codMsg', $codeMSG);
+                      $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
+                      redirectTo('/cgi-bin/koha/auth.pl'); 
+                  }
+                  elsif ($estado eq "sesion_invalida") { 
+                      C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_invalida");
+                      _destruirSession('U406', $template_params);
+                      $session->param('codMsg', $codeMSG);
+                      $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
+                      redirectTo('/cgi-bin/koha/auth.pl'); 
+                  } 
+                  elsif ($estado eq "sin_sesion") { 
+                      C4::AR::Debug::debug("C4::AR::Auth::checkauth => sin_sesion");
+                      #ESTO DEBERIA PASAR solo cuando la sesion esta sin iniciar
+                      #_destruirSession('U406', $template_params);
+                      $session->param('codMsg', $codeMSG);
+                      }
+                  else { 
+                      #ESTO MENOS
+                      C4::AR::Debug::debug("C4::AR::Auth::checkauth => ESTO MENOS ???");
+                      _destruirSession('U406', $template_params);
+                      $session->param('codMsg', $codeMSG);
+                      $session->param('redirectTo', '/cgi-bin/koha/error.pl');
+                      redirectTo('/cgi-bin/koha/error.pl'); 
+                  }
+                  
+                  #por aca se permite llegar a paginas que no necesitan autenticarse
+                  my $insecure = C4::AR::Preferencias::getValorPreferencia('insecure');
+                  if ($loggedin || $authnotrequired || (defined($insecure) && $insecure)) {
+                      #Se verifica si el usuario tiene que cambiar la password
+                      if ( ($userid) && ( new_password_is_needed($userid, $socio) ) && !$change_password ) {
+                          _change_Password_Controller($query, $userid, $type, $token);
+                      }
+                  return ($userid, $session, $flags, $socio);
+                  }
+                  unless ($userid) { 
+                      #si no hay userid, hay que autentificarlo y no existe sesion
+                      #No genero un nuevo sessionID
+                      #con este sessionID puedo recuperar el nroRandom (si existe) guardado en la base, para verificar la password
+                      my $sessionID       = $session->param('sessionID');
+                      #recupero el userid y la password desde el cliente
+                      $userid             = $query->param('userid');
+                      my $password        = $query->param('password');
+                      my $nroRandom       = $session->param('nroRandom');
+                      #se verifica la password ingresada
         
-        #por aca se permite llegar a paginas que no necesitan autenticarse
-        my $insecure = C4::AR::Preferencias::getValorPreferencia('insecure');
-        if ($loggedin || $authnotrequired || (defined($insecure) && $insecure)) {
-            #Se verifica si el usuario tiene que cambiar la password
-            if ( ($userid) && ( new_password_is_needed($userid, $socio) ) && !$change_password ) {
-                _change_Password_Controller($query, $userid, $type, $token);
-            }
-        return ($userid, $session, $flags, $socio);
-        }
-        unless ($userid) { 
-            #si no hay userid, hay que autentificarlo y no existe sesion
-            #No genero un nuevo sessionID
-            #con este sessionID puedo recuperar el nroRandom (si existe) guardado en la base, para verificar la password
-            my $sessionID       = $session->param('sessionID');
-            #recupero el userid y la password desde el cliente
-            $userid             = $query->param('userid');
-            my $password        = $query->param('password');
-            my $nroRandom       = $session->param('nroRandom');
-            #se verifica la password ingresada
-            my ($socio)         = _verificarPassword($userid,$password,$nroRandom);
-#             C4::AR::Debug::debug("la pass es valida?".$passwordValida);
-            if ($socio) {
-            #se valido la password y es valida
-            #setea loguins duplicados si existe, dejando logueado a un solo usuario a la vez
-                _setLoguinDuplicado($userid,  $ENV{'REMOTE_ADDR'});
-                #$socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
-                # TODO todo esto va en una funcion
-                $sessionID  = $session->param('sessionID');
-                $sessionID.="_".$socio->ui->getNombre;
-                _actualizarSession($sessionID, $userid, $socio->getNro_socio(), $time, '', $type, $flagsrequired, _generarToken(), $session);
-#                 C4::AR::Debug::debug("userid en actualizarSession actualizadoarafue".$session->param('userid'));
-                buildSocioData($session,$socio);
-#                 C4::AR::Debug::debug($session->param('usr_apellido'));
-                #Logueo una nueva sesion
-                _session_log(sprintf "%20s from %16s logged out at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},$time);
-                #por defecto no tiene permisos
-                if( $flags = $socio->tienePermisos($flagsrequired) ){
-                    _realizarOperacionesLogin($type,$socio);
-                }
+                      my $socio_data_temp = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
+                      my $login_attempts = $socio_data_temp->getLogin_attempts;
+                      my $captchaResult;
 
-                #Si se logueo correctamente en intranet entonces guardo la fecha
-                my $now = Date::Manip::ParseDate("now");
-                $socio->setLast_login($now);
-                $socio->save();
-                if ($type eq 'opac') {
-                              $session->param('redirectTo', '/cgi-bin/koha/opac-main.pl?token='.$session->param('token'));
-                              redirectToNoHTTPS('/cgi-bin/koha/opac-main.pl?token='.$session->param('token'));
-# #                               $session->secure(0);
-                
-                }else{
-                    $session->param('redirectTo', '/cgi-bin/koha/mainpage.pl?token='.$session->param('token'));
-                    redirectTo('/cgi-bin/koha/mainpage.pl?token='.$session->param('token'));
-                }
+                      if ($login_attempts > 2 ){
+                         
+                          my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
+                          my $reCaptchaChallenge  = $query->param('recaptcha_challenge_field');
+                          my $reCaptchaResponse   = $query->param('recaptcha_response_field');
+                    
+                          use Captcha::reCAPTCHA;
+                          my $c = Captcha::reCAPTCHA->new;
+  
+                          C4::AR::Debug::debug($reCaptchaResponse);
 
-            }else{
-                #usuario o password invalida
-                if ($userid) {
-                    #intento de loguin
-#                     C4::AR::Utilidades::printHASH($socio);
-                    $template_params->{'loginAttempt'} = 1;
-                    _destruirSession('U406', $template_params);
-                }
-                #genero una nueva session y redirecciono a auth.tmpl para que se loguee nuevamente
-                redirectToAuth($template_params);
-            }#end else de if ($socio)
-        }# end unless ($userid)
+                          $captchaResult = $c->check_answer(
+                                      $reCaptchaPrivateKey, $ENV{'REMOTE_ADDR'},
+                                      $reCaptchaChallenge, $reCaptchaResponse
+                          );
+                    
+                      } else { 
+                              $sin_captcha = 1; 
+                      }  
+
+                      if ($captchaResult->{is_valid} || $sin_captcha){
+
+
+                            my ($socio)         = _verificarPassword($userid,$password,$nroRandom);
+                #             C4::AR::Debug::debug("la pass es valida?".$passwordValida);
+                            if ($socio) {
+                            #se valido la password y es valida
+                            #setea loguins duplicados si existe, dejando logueado a un solo usuario a la vez
+                            
+
+                                _setLoguinDuplicado($userid,  $ENV{'REMOTE_ADDR'});
+                                #$socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
+                                # TODO todo esto va en una funcion
+                                $sessionID  = $session->param('sessionID');
+                                $sessionID.="_".$socio->ui->getNombre;
+                                _actualizarSession($sessionID, $userid, $socio->getNro_socio(), $time, '', $type, $flagsrequired, _generarToken(), $session);
+                #                 C4::AR::Debug::debug("userid en actualizarSession actualizadoarafue".$session->param('userid'));
+                                buildSocioData($session,$socio);
+                #                 C4::AR::Debug::debug($session->param('usr_apellido'));
+                                #Logueo una nueva sesion
+                                _session_log(sprintf "%20s from %16s logged out at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},$time);
+                                #por defecto no tiene permisos
+                                if( $flags = $socio->tienePermisos($flagsrequired) ){
+                                    _realizarOperacionesLogin($type,$socio);
+                                }
+
+                                #Si se logueo correctamente en intranet entonces guardo la fecha
+                                my $now = Date::Manip::ParseDate("now");
+                                $socio->setLast_login($now);
+                                $socio->save();
+                                if ($type eq 'opac') {
+                                              $session->param('redirectTo', '/cgi-bin/koha/opac-main.pl?token='.$session->param('token'));
+                                              redirectToNoHTTPS('/cgi-bin/koha/opac-main.pl?token='.$session->param('token'));
+                # #                               $session->secure(0);
+                                
+                                }else{
+                                    $session->param('redirectTo', '/cgi-bin/koha/mainpage.pl?token='.$session->param('token'));
+                                    redirectTo('/cgi-bin/koha/mainpage.pl?token='.$session->param('token'));
+                                }
+
+                            }else{
+                                #usuario o password invalida
+                                if ($userid) {
+                #        
+                                    $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
+                                    #intento de loguin
+                                    my $cant_fallidos= $socio->getLogin_attempts + 1;
+                                    $socio->setLogin_attempts($cant_fallidos);
+                 
+                                    if ($cant_fallidos == 3){
+                                        $template_params->{'mostrar_captcha'}=1;
+                                    }
+                                    $template_params->{'loginAttempt'} = 1;
+                                    _destruirSession('U406', $template_params);
+                                
+                                }
+                                #genero una nueva session y redirecciono a auth.tmpl para que se loguee nuevamente
+                                
+                                redirectToAuth($template_params);
+                            }#end else de if ($socio)
+                      } else { 
+                                $template_params->{'mostrar_captcha'}= 1;
+                                $template_params->{'loginAttempt'} = 1;                
+                                _destruirSession('U422', $template_params);      
+                      }
+                  }# end unless ($userid)
     }# el else de DEMO
 }# end checkauth
 
@@ -652,7 +702,7 @@ Funcion que realiza todas las operaciones asociadas a un inicio de sesion como s
 sub _realizarOperacionesLogin{
     my ($type,$socio)=@_;
      C4::AR::Debug::debug("_realizarOperacionesLOGIN=> LOGIN\n");
-    my $dateformat = 'iso';
+    my $dateformat = C4::Date::get_date_format();
     my $lastlogin= C4::AR::Usuarios::getLastLoginTime();
     if ($type eq 'intranet') {
         #Se entran a realizar las rutinas solo cuando es intranet
@@ -685,7 +735,11 @@ sub _realizarOperacionesLogin{
             }
             #Genera una comprobacion una vez al dia, cuando se loguea el primer usuario
             my $today = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"),$dateformat);
-            if (Date::Manip::Date_Cmp($lastlogin,$today)<0) {
+
+	    C4::AR::Debug::debug("_realizarOperaciones=> TODAY = ".$today);
+	    C4::AR::Debug::debug("_realizarOperaciones=> LASTLOGIN = ".$auxlastlogin);
+	    C4::AR::Debug::debug("_realizarOperaciones=> Date_Cmp = ".Date::Manip::Date_Cmp($auxlastlogin,$today));
+            if (Date::Manip::Date_Cmp($auxlastlogin,$today)<0) {
                 # lastlogin es anterior a hoy
                 ##Si es un usuario de intranet entonces se borran las reservas de todos los usuarios sancionados
                      C4::AR::Debug::debug("_realizarOperaciones=> t_operacionesDeINTRA\n");
@@ -814,13 +868,11 @@ sub buildSocioData{
     $session->param('usr_email', $socio->persona->getEmail());
     $session->param('usr_legajo', $socio->persona->getLegajo());
     $session->param('usr_credential_type', $socio->getCredentialType());
-    
-    return ($session);
 }
 
 sub buildSocioDataHashFromSession{
 
-    my ($session) = @_;    
+    my ($session) = CGI::Session->load();    
     
     my %socio_data;
     $socio_data{'usr_apellido'}             = $session->param('usr_apellido');
@@ -847,7 +899,7 @@ sub buildSocioDataHashFromSession{
 sub updateLoggedUserTemplateParams{
 	my ($session,$t_params,$socio) = @_;
 	buildSocioData($session,$socio);
-	$t_params->{'socio_data'} = buildSocioDataHashFromSession($session);
+	$t_params->{'socio_data'} = buildSocioDataHashFromSession();
 }
 
 =item sub _getTimeOut
@@ -1030,13 +1082,18 @@ sub redirectTo {
 
 sub redirectToAuth {
     my ($template_params) = @_;
+
     my $url;
     $url = '/cgi-bin/koha/auth.pl';
     if($template_params->{'loginAttempt'}){
         $url = $url.'?loginAttempt=1'
     }elsif($template_params->{'sessionClose'}){
         $url = $url.'?sessionClose=1';
+    } 
+    if($template_params->{'mostrar_captcha'}){
+        $url = $url.'&mostrarCaptcha=1';
     }
+
     redirectTo($url);    
 }
 
@@ -1171,12 +1228,19 @@ sub _operacionesDeINTRA{
     my $userid = $socio->getNro_socio();
 	eval{
 		my $reserva=C4::Modelo::CircReserva->new(db=> $db);
-		#Se borran las reservas de todos los usuarios sancionados
-		$reserva->cancelar_reservas_sancionados($userid);
-		#Ademas, se borran las reservas de los usuarios que no son alumnos regulares
-		$reserva->cancelar_reservas_no_regulares($userid);
+
 		#Ademas, se borran las reservas vencidas
-		$reserva->cancelar_reservas_vencidas($userid, $db);	
+		C4::AR::Debug::debug("_operacionesDeINTRA=> Se borran las reservas vencidas ");
+		$reserva->cancelar_reservas_vencidas($userid);
+
+		#Se borran las reservas de todos los usuarios sancionados
+                C4::AR::Debug::debug("_operacionesDeINTRA=> Se borran las reservas de todos los usuarios sancionados ");
+		$reserva->cancelar_reservas_sancionados($userid);
+
+		#Ademas, se borran las reservas de los usuarios que no son alumnos regulares
+		C4::AR::Debug::debug("_operacionesDeINTRA=> Se borran las reservas de los usuarios que no son alumnos regulares ");
+		$reserva->cancelar_reservas_no_regulares($userid);
+	
 		$db->commit;
 	};
 	if ($@){

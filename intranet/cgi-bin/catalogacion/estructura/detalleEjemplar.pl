@@ -106,13 +106,19 @@ else {
                                             debug => 1,
         });
 
-    my $id3=$input->param('id3');
-    my $nivel3 = C4::AR::Nivel3::getNivel3FromId3($id3);
+    my $id3     = $input->param('id3');
+    my $nivel3  = C4::AR::Nivel3::getNivel3FromId3($id3);
 
     if ($nivel3) {
         $t_params->{'nivel3'} = $nivel3;
-        }
+    }
+    
+    # recibimos el id1 para armar el detalle completo
+    my $id1     = $input->param('id1');
+    if ($id1) {
+        #genera el detalle para intra y setea los parametros para el template
+        C4::AR::Nivel3::detalleCompletoINTRA($id1, $t_params);
+    }
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
-

@@ -1,6 +1,7 @@
 [% INCLUDE  "intranet-top.inc" %]
 
 <script src="/intranet-tmpl/includes/circulacion-min.js"></script>
+<script src="/intranet-tmpl/includes/catalogacion-min.js"></script>
 
 <!-- Se incluyen las librerias necesarias para manejar autocomplete -->
 [% INCLUDE "AutocompleteHelper.inc" %]
@@ -9,6 +10,25 @@
 <script>
 
 /*=================================================================REVISADO===================================================================*/
+
+function generarForm(id1, id2){
+
+    if(seleccionoAlgo("checkEjemplares")){
+        var id3_array   = recuperarSeleccionados("checkEjemplares");
+        var html        = "";
+
+        for (i = 0; i < id3_array.length; i++){
+            html = html  + "<input type='hidden' id='n3_" + i + "' name='n3_" + i + "' value='" + id3_array[i] + "' />"
+        }
+
+        html = html  + "<input type='hidden' id='id1' name='id1' value='" + id1 + "' />"
+        html = html  + "<input type='hidden' id='id2' name='id2' value='" + id2 + "' />"
+      
+        $(html).appendTo($("#edicion_grupal"));
+
+        $("#edicion_grupal").submit();
+    }
+}
 
 function inicializar(){
 	ID_N1=0; //para saber el id del nivel 1
@@ -280,7 +300,7 @@ function updateInfoPrestarReserva(responseText){
 $(document).ready(function(){
 	inicializar();
 	zebra("tablaResult");
-    checkedAll('select_all', 'checkEjemplares');
+    checkedAll("select_all", "checkEjemplares");
 
 });
 
@@ -404,4 +424,5 @@ $(document).ready(function(){
 
 </div> <!-- Fin DIV detalleComun -->
 <div id='basic-modal-content'></div>
+
 [% INCLUDE  "intranet-bottom.inc" %]

@@ -22,10 +22,6 @@ my ($template, $session, $t_params, $socio)  = get_template_and_user({
                             debug => 1,
                  });
 
-if($input->Vars->{'msj'}){
-    $t_params->{'mensaje'}    = $input->Vars->{'msj'};
-    
-}
 my $preferencias_mail         = C4::AR::Preferencias::getPreferenciasByCategoriaHash('mail');
 $t_params->{'preferencias'}   = $preferencias_mail;
 $t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Configuraci&oacute;n del Mail");
