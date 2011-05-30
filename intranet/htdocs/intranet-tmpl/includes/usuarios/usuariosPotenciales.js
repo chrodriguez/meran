@@ -23,7 +23,7 @@ function updateEliminarUsuario(responseText){
     var Messages=JSONstring.toObject(responseText);
     setMessages(Messages);
     if (!(hayError(Messages))){
-        window.location.href = "URL_PREFIX/usuarios/potenciales/buscarUsuario.pl?token="+token;
+        window.location.href = URL_PREFIX+"/usuarios/potenciales/buscarUsuario.pl?token="+token;
     }
 }
 
@@ -35,7 +35,7 @@ nro_socio_temp = 0; //SOLO USADO PARA MODIFICAR_USUARIO
 
 function modificarDatosDeUsuario(){
     objAH=new AjaxHelper(updateModificarDatosDeUsuario);
-    objAH.url='URL_PREFIX/usuarios/reales/usuariosRealesDB.pl';
+    objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
     objAH.debug= true;
     objAH.showOverlay       = true;
     objAH.nro_socio= usuario.ID;
@@ -59,7 +59,7 @@ function guardarModificacioUsuario(){
 
     objAH=new AjaxHelper(updateGuardarModificacioUsuario);
     objAH.showOverlay       = true;
-    objAH.url='URL_PREFIX/usuarios/reales/usuariosRealesDB.pl';
+    objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
     objAH.debug= true;
     objAH.nro_socio= nro_socio_temp;
     objAH.sexo= $("input[@name=sexo]:checked").val();
@@ -92,7 +92,7 @@ function updateGuardarModificacioUsuario(responseText){
 
 function detalleUsuario(){
     objAH=new AjaxHelper(updateDetalleUsuario);
-    objAH.url='URL_PREFIX/usuarios/potenciales/detalleUsuario.pl';
+    objAH.url=URL_PREFIX+'/usuarios/potenciales/detalleUsuario.pl';
     objAH.debug= true;
     objAH.showOverlay       = true;
     objAH.nro_socio= usuario.ID;
@@ -134,7 +134,7 @@ function habilitarDesdeDetalle(nro_socio){
 
 function actualizarPersonas(cant,arrayPersonNumbers){
 	objAH=new AjaxHelper(updateInfoActualizar);
-	objAH.url= "URL_PREFIX/usuarios/potenciales/usuariosPotencialesDB.pl";
+	objAH.url= URL_PREFIX+"/usuarios/potenciales/usuariosPotencialesDB.pl";
 	objAH.debug= true;
 	objAH.cantidad= cant;
 	var tipoAccion = "HABILITAR_PERSON";

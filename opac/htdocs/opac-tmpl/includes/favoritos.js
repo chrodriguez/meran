@@ -103,7 +103,7 @@ function obtenerFavoritos(){
     objAH=new AjaxHelper(updateObtenerFavoritos);
     objAH.showOverlay       = true;
     objAH.debug= true;
-    objAH.url='URL_PREFIX/opac-favoritosDB.pl';
+    objAH.url=URL_PREFIX+'/opac-favoritosDB.pl';
     objAH.debug= true;
     objAH.action='get_favoritos';
     objAH.showStatusIn='ajax-indicator';
@@ -123,7 +123,7 @@ function eliminarFavorito(id_favorito){
             objAH=new AjaxHelper(updateEliminarFavorito);
             objAH.showOverlay       = true;
             objAH.debug= true;
-            objAH.url='URL_PREFIX/opac-favoritosDB.pl';
+            objAH.url=URL_PREFIX+'/opac-favoritosDB.pl';
             objAH.debug= true;
             objAH.action='delete_favorite';
             objAH.id1=id_favorito;

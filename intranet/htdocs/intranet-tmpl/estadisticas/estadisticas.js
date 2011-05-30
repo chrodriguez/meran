@@ -32,7 +32,7 @@ function consultarColecciones(){
     objAH=new AjaxHelper(updateInfo);
     objAH.debug= true;
     objAH.showOverlay = true;
-    objAH.url= "URL_PREFIX/estadisticas/colecciones.pl";
+    objAH.url= URL_PREFIX+"/estadisticas/colecciones.pl";
     objAH.ui= ui;
     objAH.item_type= item_type;
     //se envia la consulta
@@ -52,7 +52,7 @@ function consultarAccesosOPAC(){
     
     objAH=new AjaxHelper(updateInfo);
     objAH.debug= true;
-    objAH.url= "URL_PREFIX/estadisticas/consultas_opac.pl";
+    objAH.url= URL_PREFIX+"/estadisticas/consultas_opac.pl";
     objAH.showOverlay = true;
     objAH.total= total;
     objAH.registrados= registrados;
@@ -74,7 +74,7 @@ function consultarBusquedasOPAC(){
     objAH.debug= true;
     objAH.funcion="changePage";
     objAH.showOverlay = true;
-    objAH.url= "URL_PREFIX/reports/busquedas_opac.pl";
+    objAH.url= URL_PREFIX+"/reports/busquedas_opac.pl";
     objAH.total= total;
     objAH.registrados= registrados;
     objAH.tipo_socio= tipo_socio;
@@ -90,7 +90,7 @@ function consultarEstantesVirtuales(){
     objAH=new AjaxHelper(updateInfo);
     objAH.debug= true;
     objAH.funcion="changePage";
-    objAH.url= "URL_PREFIX/estadisticas/estantes_virtuales.pl";
+    objAH.url= URL_PREFIX+"/estadisticas/estantes_virtuales.pl";
     objAH.showOverlay = true;
 
     objAH.estante= estante;

@@ -347,6 +347,7 @@ sub inicializarAuth{
 =cut
 sub get_template_and_user {
     my $in = shift;
+    
     my ($user, $session, $flags, $usuario_logueado) = checkauth(         $in->{'query'}, 
                                                                          $in->{'authnotrequired'}, 
                                                                          $in->{'flagsrequired'}, 
@@ -503,7 +504,7 @@ sub _verificarSession {
 
 
 sub checkauth {
-#     C4::AR::Debug::debug("desde checkauth==================================================================================================");
+     C4::AR::Debug::debug("desde checkauth==================================================================================================");
     my $query               = shift;
     my $authnotrequired     = shift;
     my $flagsrequired       = shift;

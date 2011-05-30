@@ -97,7 +97,7 @@ function obtenerPermisos(){
 	
 	if ($.trim(usuario) != ""){	
 	    objAH               = new AjaxHelper(updateObtenerPermisos);
-	    objAH.url           = 'URL_PREFIX/admin/permisos/permisosDB.pl';
+	    objAH.url           = URL_PREFIX+'/admin/permisos/permisosDB.pl';
 	    objAH.cache         = false;
 	    objAH.showOverlay   = true;  
 	    objAH.nro_socio     = $('#nro_socio_hidden').val();
@@ -124,7 +124,7 @@ function obtenerPermisos(){
 
 function nuevoPermisoSHOW(){
     objAH               = new AjaxHelper(updateNuevoPermisoSHOW);
-    objAH.url           = 'URL_PREFIX/admin/permisos/permisosDB.pl';
+    objAH.url           = URL_PREFIX+'/admin/permisos/permisosDB.pl';
     objAH.cache         = false;
     objAH.showOverlay   = true;    
     objAH.accion        = "SHOW_NUEVO_PERMISO_"+tipoPermiso;
@@ -150,7 +150,7 @@ function permiso(nombre){
 
 function actualizarPermisos(){
     objAH               = new AjaxHelper(updateActualizarPermisos);
-    objAH.url           = 'URL_PREFIX/admin/permisos/permisosDB.pl';
+    objAH.url           = URL_PREFIX+'/admin/permisos/permisosDB.pl';
     objAH.cache         = false;
     objAH.showOverlay   = true;  
     objAH.nro_socio     = $('#nro_socio_hidden').val();
@@ -186,7 +186,7 @@ function nuevoPermiso(){
     usuario = $('#nro_socio_hidden').val();
     if ($.trim(usuario) != ""){
         objAH               = new AjaxHelper(updateNuevoPermiso);
-        objAH.url           = 'URL_PREFIX/admin/permisos/permisosDB.pl';
+        objAH.url           = URL_PREFIX+'/admin/permisos/permisosDB.pl';
         objAH.cache         = false;
         objAH.showOverlay   = true;  
         objAH.nro_socio     = $('#nro_socio_hidden').val();

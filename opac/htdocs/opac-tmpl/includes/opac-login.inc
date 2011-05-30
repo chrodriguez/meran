@@ -1,3 +1,6 @@
+<script language="javascript" type="text/javascript">
+    var URL_PREFIX  = '[% url_prefix %]';
+</script>
 <script src="/includes/util.js" type="text/javascript"></script>
 <script src="/includes/md5.js" type="text/javascript"></script>
 <script src="/includes/sha1.js" type="text/javascript"></script>
