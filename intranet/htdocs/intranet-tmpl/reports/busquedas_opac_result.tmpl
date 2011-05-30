@@ -87,7 +87,7 @@
                                                   );
           [% END %]
       </div>
-        <form id="exportPDF" href="[% url_prefix %]/reports/busquedas_opac.pl?token=[% token %]">
+        <form id="exportPDF" action="[% url_prefix %]/reports/busquedas_opac.pl?token=[% token %]">
                 <input type="hidden" name="export" value="pdf" />
                 <input type="hidden" name="total" value="[% param_total %]" />
                 <input type="hidden" name="registrados" value="[% param_registrados %]" />

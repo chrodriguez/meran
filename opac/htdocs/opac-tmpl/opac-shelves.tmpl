@@ -106,7 +106,7 @@ function mandarArreglo(valores){
             
 </script>
 
-<form name="printform" href="[% url_prefix %]/opac-shelfprint.pl">
+<form name="printform" action="[% url_prefix %]/opac-shelfprint.pl">
 <input TYPE="hidden" VALUE="shelfsContents" NAME="from" >
 <input TYPE="hidden" NAME="shelfnumber" VALUE="<!-- TMPL_VAR Name="shelfnumber" -->">
 <input TYPE="hidden" NAME="shelfname" VALUE="<!-- TMPL_VAR Name="shelfname" -->">
@@ -249,7 +249,7 @@ function mandarArreglo(valores){
 
  <table border="0"  align="center"  width="100%" class="top">
         <tr><td align="center">
-<form name="printform" href="[% url_prefix %]/opac-shelfprint.pl">
+<form name="printform" action="[% url_prefix %]/opac-shelfprint.pl">
 <input TYPE="hidden" VALUE="shelfs" NAME="from" >
 <input TYPE="hidden" VALUE="pdf" NAME="type" >
 <input TYPE="hidden" VALUE="<!-- TMPL_VAR NAME='loggedinuser' -->" NAME="borrower">

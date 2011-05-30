@@ -32,7 +32,7 @@ function desmarcar(chk){
       <br>
     <fieldset >
           <legend class="titulo_legend">[% "Por tener:" | i18n %]</legend>
-          <form name="adminLiDe" method="post" href="[% url_prefix %]/admin/usuarios/adminLibreDeuda.pl">
+          <form name="adminLiDe" method="post" action="[% url_prefix %]/admin/usuarios/adminLibreDeuda.pl">
               <input type=hidden name=newflags value=1>
               <ul>
                   <li><input type="checkbox" name="chk1" id="chk1" value="1" onclick="desmarcar(this)"> [% "reservas adjudicadas" | i18n %]<br></li>
