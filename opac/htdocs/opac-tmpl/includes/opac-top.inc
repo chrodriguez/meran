@@ -26,6 +26,8 @@
     var imagesForJS = '[% temas %]/[% tema %]/imagenes';
 // TODO no esta recuperando este valor
     var M_LIMITE_RESULTADOS = [% limite_resultados_autocompletables %] + "";
+    var URL_PREFIX  = '[% url_prefix %]';
+
   </script>
 
   [% INCLUDE 'message_OPAC.inc' %]

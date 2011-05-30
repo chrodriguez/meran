@@ -5,6 +5,9 @@
 <head>
 <title>Meran::UNLP</title>
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/login_screen.css">
+<script language="javascript" type="text/javascript">
+    var URL_PREFIX  = '[% url_prefix %]';
+</script>
 <script type="text/javascript" src="/includes/jquery/jquery-min.js"></script>
 <script type="text/javascript" src="/includes/util-min.js"></script>
 <script type="text/javascript" src="/includes/md5-min.js"></script>
@@ -79,7 +82,7 @@
             </div>
         </div>
 
-        <form href='[% url_prefix %]/mainpage.pl' method="post" name="datosAEnviar" id="datosAEnviar">
+        <form href=[% url_prefix %]/mainpage.pl method="post" name="datosAEnviar" id="datosAEnviar">
                 <input type="hidden" name="userid" id="userid" >
                 <input type="hidden" name="password" id="password">
                 [%  IF mostrar_captcha  %]

@@ -4034,7 +4034,7 @@ sub escapeURL{
 }
 
 sub getUrlPrefix{
-	return (C4::Context->config('url_prefix'));
+	return ("".C4::Context->config('url_prefix'));
 	
 }
 

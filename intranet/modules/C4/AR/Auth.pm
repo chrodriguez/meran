@@ -504,7 +504,7 @@ sub _verificarSession {
 
 
 sub checkauth {
-#     C4::AR::Debug::debug("desde checkauth==================================================================================================");
+     C4::AR::Debug::debug("desde checkauth==================================================================================================");
     my $query               = shift;
     my $authnotrequired     = shift;
     my $flagsrequired       = shift;
