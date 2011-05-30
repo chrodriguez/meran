@@ -15,7 +15,7 @@ $(document).ready( function() {
     <legend class="titulo_legend">[% "Usuarios por categorias" | i18n %]</legend>
     <ul>
         <li class="sub_item">[% "Seleccione una unidad de informaci&oacute;n:" | i18n %]</th>
-	<th><form name="unidadInformacion" href="[% url_prefix %]/reports/userEst.pl" method=post >
+	<th><form name="unidadInformacion" action="[% url_prefix %]/reports/userEst.pl" method=post >
           <input type="hidden" name="token" value="[% token %]" />
         	[% unidades %]
       </form>

@@ -9,7 +9,7 @@
     });
 </script>
 
-<form id="export" method="POST" href="[% url_prefix %]/adquisiciones/exportaciones.pl?token=[% token %]" accept-charset="utf-8">
+<form id="export" method="POST" action="[% url_prefix %]/adquisiciones/exportaciones.pl?token=[% token %]" accept-charset="utf-8">
     <input type="hidden" id="proveedores" name="proveedores" value="">
     <fieldset id="datos_proveedor">
     <legend class="titulo_legend">[% "Ejemplares Recomendados para la Compra" | i18n %]</legend>
