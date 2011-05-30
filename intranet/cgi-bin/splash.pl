@@ -13,8 +13,10 @@ my $cgi = new CGI;
 
 my ($template, $t_params)   = C4::Output::gettemplate("splash.tmpl", 'intranet');
 
-#se inicializa la session y demas parametros para autenticar
-my ($session)               = C4::AR::Auth::inicializarAuth($t_params);
+# Se inicializa la session y demas parametros para autenticar, si token está activado, es recomendable switchear las lineas siguientes 
+# para forzar re-inicio de sesion 
 
+#my ($session)               = C4::AR::Auth::inicializarAuth($t_params);
+my $session = CGI::Session->load();
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

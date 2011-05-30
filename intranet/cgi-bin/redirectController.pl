@@ -22,7 +22,7 @@ my $session = CGI::Session->load();
 C4::AR::Debug::debug("redirectContrller=> redirect: ".$session->param('redirectTo'));
 # C4::AR::Debug::debug("redirectController=> session->dump(): ".$session->dump());;
 
-# FIXME location esta fijo si no hay session '/cgi-bin/koha/auth.pl'
+# FIXME location esta fijo si no hay session '/auth.pl'
 
 my $input = CGI->new(); 
 print $input->redirect( 
