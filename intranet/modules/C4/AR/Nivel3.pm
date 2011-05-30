@@ -637,8 +637,6 @@ sub generaCodigoBarra{
 
    my $barcode;
     my @estructurabarcode = split(',',C4::AR::Preferencias::getValorPreferencia("barcodeFormat"));
-
-C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => barcodeFormat => ".C4::AR::Preferencias::getValorPreferencia("barcodeFormat"));
     
     my $like = '';
 
@@ -650,7 +648,6 @@ C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => barcodeFormat => ".C4::AR::
 		}
 	}
 
-C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => like => ".$like);
     # Puede venir el db tambien!!
     my $max_codigo = C4::Modelo::CatRegistroMarcN3::Manager->get_maximum_codigo_barra(like => $like.'%') || 0;
        C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => barcode máximo => ".$max_codigo);
@@ -661,7 +658,6 @@ C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => like => ".$like);
         C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => barcode => ".$barcode);
         push(@barcodes_array_ref, $barcode);
     }
-
     return (@barcodes_array_ref);
 }
 
@@ -908,9 +904,6 @@ sub _generarArregloDeBarcodesPorCantidad {
 
         my %parametros;
         $parametros{'UI'}               = _selectBarcodeFormat($params);
-
-C4::AR::Debug::debug("UI desde el cliente => ".$parametros{'UI'});
-
         $parametros{'tipo_ejemplar'}    = $params->{'tipo_ejemplar'};
 
         (@barcodes_para_agregar) = generaCodigoBarra(\%parametros, $cant);
