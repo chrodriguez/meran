@@ -14,7 +14,7 @@ sub get_maximum_codigo_barra {
     my ($class, %args) = @_;
 
     my $db = $args{'db'} || C4::Modelo::CatRegistroMarcN3->new()->db;
-    my $sth = $db->dbh->prepare("SELECT MAX(substr(codigo_barra,length(?))) FROM cat_registro_marc_n3 where codigo_barra like ? ");
+    my $sth = $db->dbh->prepare("SELECT MAX(CAST(substr(codigo_barra,length(?)) AS UNSIGNED)) FROM cat_registro_marc_n3 where codigo_barra like ? ");
     $sth->execute($args{'like'},$args{'like'});
     my  $max  = $sth->fetchrow;
     $sth->finish;
