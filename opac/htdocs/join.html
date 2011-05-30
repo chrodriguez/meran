@@ -37,7 +37,7 @@ document.getElementById(id).src=src;
 
      <td class="pagetitulo" valign="middle">Registro de usuarios</td>
                <td align="right" valign="middle">
-          <a  href='/cgi-bin/koha/opac-main.pl' onMouseOut="swap('menu-home','/opac-tmpl/default/es2/images/menu-home.png')" onMouseOver="swap('menu-home','/opac-tmpl/default/es2/images/menu-homebis.png')">
+          <a  href='[% url_prefix %]/opac-main.pl' onMouseOut="swap('menu-home','/opac-tmpl/default/es2/images/menu-home.png')" onMouseOver="swap('menu-home','/opac-tmpl/default/es2/images/menu-homebis.png')">
 <img name="menu-home" id="menu-home"  alt="Inicio"  src="/opac-tmpl/default/es2/images/menu-home.png" border="0"  hspace=0 vspace=0 ></a>
 </td>
         </TR>
@@ -52,9 +52,9 @@ name=mouseover></A></TD></TR>-->
 </TBODY></TABLE><!-------------------------MAIN BODY OF PAGE-------------------------->
 <BLOCKQUOTE><!-- Entrar prompt time-->
   <CENTER>
-    <FORM name=datosAEnviar action=/cgi-bin/koha/opac-user.pl method=post>
+    <FORM name=datosAEnviar action=[% url_prefix %]/opac-user.pl method=post>
   </FORM>
-  <FORM name=datos action=/cgi-bin/koha/opac-user.pl method=post>
+  <FORM name=datos action=[% url_prefix %]/opac-user.pl method=post>
   <SCRIPT language=javascript>
 	/*
  * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
