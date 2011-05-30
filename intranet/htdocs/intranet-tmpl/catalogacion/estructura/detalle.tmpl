@@ -14,7 +14,7 @@
 function generarForm(id1, id2){
 
     if(seleccionoAlgo("checkEjemplares"+id2)){
-        var id3_array   = recuperarSeleccionados("checkEjemplares");
+        var id3_array   = recuperarSeleccionados("checkEjemplares"+id2);
         var html        = "";
 
         for (i = 0; i < id3_array.length; i++){

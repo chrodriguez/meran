@@ -55,6 +55,8 @@ if(($tipoAccion eq "MODIFICAR_NIVEL_1")||($tipoAccion eq "MODIFICAR_NIVEL_3_ALL"
     $t_params->{'cant'}                             = $input->param('cant');
     $t_params->{'n3_array'}                         = \@n3_array;
 
+C4::AR::Debug::debug("cant de id3 => ".scalar(@n3_array));
+
 }else{
 #     $params_combo{'onChange'}           = 'mostrarEstructuraDelNivel1()';
 #     $params_combo{'onChange'}           = 'seleccionar_esquema()';
