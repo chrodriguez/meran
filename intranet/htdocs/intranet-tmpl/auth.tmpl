@@ -21,6 +21,7 @@
         [% END %]
         var username    = $.trim($("#username").val());
         $("#userid").val(username);
+    
         $("#datosAEnviar").submit();
     }
 
@@ -78,8 +79,7 @@
                 </div>
             </div>
         </div>
-
-        <form href='[% url_prefix %]/mainpage.pl' method="post" name="datosAEnviar" id="datosAEnviar">
+    <form href='[% url_prefix %]/mainpage.pl' method="post" name="datosAEnviar" id="datosAEnviar">
                 <input type="hidden" name="userid" id="userid" >
                 <input type="hidden" name="password" id="password">
                 [%  IF mostrar_captcha  %]

@@ -599,6 +599,7 @@ sub checkauth {
                       #se verifica la password ingresada
         
 #  COMENTADO PORQUE DA ERROR - $userid  NO EXISTE ==>  unless ($userid) 
+
 #                       my $socio_data_temp = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
 #                       my $login_attempts = $socio_data_temp->getLogin_attempts;
 #                       my $captchaResult;
