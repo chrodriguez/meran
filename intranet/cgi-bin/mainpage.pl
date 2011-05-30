@@ -3,7 +3,6 @@ use strict;
 require Exporter;
 use C4::AR::Auth;
 use CGI;
-C4::AR::Debug::debug("desde MAIN==================================================================================================");
 
 my $query = new CGI;
 
