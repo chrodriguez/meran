@@ -208,7 +208,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 						_HiddeState({showStatusIn: helper.showStatusIn, showOverlay: helper.showOverlay});
 						if(helper.onComplete){
 							if(ajax.responseText == 'CLIENT_REDIRECT'){
-                                    window.location = "URL_PREFIX/redirectController.pl";
+                                    window.location = URL_PREFIX+"/redirectController.pl";
 							}else{
 
 								if(helper.cache){

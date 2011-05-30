@@ -1,6 +1,6 @@
 function obtenerTabla(){
     objAH=new AjaxHelper(updateObtenerTabla);
-    objAH.url= 'URL_PREFIX/admin/referencias/referenciasDB.pl';
+    objAH.url= URL_PREFIX+'/admin/referencias/referenciasDB.pl';
     objAH.cache = false;
     objAH.showOverlay       = true;
     objAH.accion="OBTENER_TABLAS";
@@ -18,7 +18,7 @@ function updateObtenerTabla(responseText){
 
 function obtenerTablaFiltrada(){
     objAH=new AjaxHelper(updateObtenerTablaFiltrada);
-    objAH.url= 'URL_PREFIX/admin/referencias/referenciasDB.pl';
+    objAH.url= URL_PREFIX+'/admin/referencias/referenciasDB.pl';
     objAH.cache = false;
     objAH.showOverlay       = true;
     objAH.accion="OBTENER_TABLAS";
@@ -42,7 +42,7 @@ function eliminarReferencia(tabla,id){
     jConfirm(TITLE_DELETE_REFERENCE+id+"?","Titulo",function(confirmed){
         if (confirmed){
             objAH=new AjaxHelper(updateEliminarReferencia);
-            objAH.url= 'URL_PREFIX/admin/referencias/referenciasDB.pl';
+            objAH.url= URL_PREFIX+'/admin/referencias/referenciasDB.pl';
             objAH.cache = false;
             objAH.showOverlay       = true;
             objAH.accion="ELIMINAR_REFERENCIA";
@@ -63,7 +63,7 @@ function updateEliminarReferencia(responseText){
 
 function agregarRegistro(tabla){
     objAH=new AjaxHelper(updateAgregarRegistro);
-    objAH.url= 'URL_PREFIX/admin/referencias/referenciasDB.pl';
+    objAH.url= URL_PREFIX+'/admin/referencias/referenciasDB.pl';
     objAH.cache = false;
     objAH.showOverlay       = true;
     objAH.accion="AGREGAR_REGISTRO";
@@ -81,7 +81,7 @@ function updateAgregarRegistro(responseText){
 
 function mostrarReferencias(tabla,value_id){
     objAH=new AjaxHelper(updateObtenerTabla);
-    objAH.url= 'URL_PREFIX/admin/referencias/referenciasDB.pl';
+    objAH.url= URL_PREFIX+'/admin/referencias/referenciasDB.pl';
     objAH.cache = false;
     objAH.showOverlay       = true;
     objAH.accion="MOSTRAR_REFERENCIAS";
@@ -96,7 +96,7 @@ function asignarReferencia(tabla,related_id,referer_involved){
     jConfirm(TITLE_FIRST_ASSIGN_REFERENCIES+referer_involved+TITLE_TO_ASSIGN_REFERENCIES+related_id,"Titulo",function(confirmed){
         if (confirmed){
             objAH=new AjaxHelper(updateObtenerTabla);
-            objAH.url= 'URL_PREFIX/admin/referencias/referenciasDB.pl';
+            objAH.url= URL_PREFIX+'/admin/referencias/referenciasDB.pl';
             objAH.cache = false;
             objAH.accion="ASIGNAR_REFERENCIA";
             objAH.showOverlay       = true;
@@ -114,7 +114,7 @@ function asignarEliminarReferencia(tabla,related_id,referer_involved){
     jConfirm(TITLE_FIRST_ASSIGN_DELETE_REFERENCIES+referer_involved+TITLE_TO_ASSIGN_REFERENCIES+related_id,"Titulo",function(confirmed){
         if (confirmed){
             objAH=new AjaxHelper(updateObtenerTabla);
-            objAH.url= 'URL_PREFIX/admin/referencias/referenciasDB.pl';
+            objAH.url= URL_PREFIX+'/admin/referencias/referenciasDB.pl';
             objAH.cache = false;
             objAH.accion="ASIGNAR_Y_ELIMINAR_REFERENCIA";
             objAH.showOverlay       = true;

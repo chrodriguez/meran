@@ -12,7 +12,7 @@ function modificarDatosDeUsuario(){
 	objAH                   = new AjaxHelper(updateModificarDatosDeUsuario);
     objAH.showOverlay       = true;
 	objAH.debug             = true;
-	objAH.url               = 'URL_PREFIX/usuarios/reales/usuariosRealesDB.pl';
+	objAH.url               = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
 	objAH.debug             = true; 
 	objAH.nro_socio         = USUARIO.ID;
     nro_socio_temp          = objAH.nro_socio; // SETEO LA VARIABLE GLOBAL TEMP
@@ -39,7 +39,7 @@ function updateModificarDatosDeUsuario(responseText){
 function guardarModificacionUsuario(){
 
 	objAH                   = new AjaxHelper(updateGuardarModificacionUsuario);
-	objAH.url               = 'URL_PREFIX/usuarios/reales/usuariosRealesDB.pl';
+	objAH.url               = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
 	objAH.debug             = true;
     objAH.showOverlay       = true;
 	objAH.nro_socio         = nro_socio_temp; 
@@ -154,7 +154,7 @@ function eliminarUsuario(){
 	if (is_confirmed) {
 
 		objAH=new AjaxHelper(updateEliminarUsuario);
-		objAH.url='URL_PREFIX/usuarios/reales/usuariosRealesDB.pl';
+		objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
 		objAH.debug= true;
 	    objAH.showOverlay       = true;
 		objAH.nro_socio= USUARIO.ID;
@@ -174,7 +174,7 @@ function updateEliminarUsuario(responseText){
 	setMessages(Messages);
 	if (!(hayError(Messages))){
 // FIXME esta feo
-		window.location.href = "URL_PREFIX/usuarios/potenciales/buscarUsuario.pl?token="+token;
+		window.location.href = URL_PREFIX+"/usuarios/potenciales/buscarUsuario.pl?token="+token;
 	}
 }
 
@@ -185,7 +185,7 @@ function updateEliminarUsuario(responseText){
 function agregarUsuario(){
 
       objAH         = new AjaxHelper(updateAgregarUsuario);
-      objAH.url     = 'URL_PREFIX/usuarios/reales/usuariosRealesDB.pl';
+      objAH.url     = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
       objAH.showOverlay       = true;
       objAH.debug   = true;
       if ( (($.trim(nro_socio)).length == 0 ) || ( $('#nro_socio').val() == 'Auto-generar' ) ) {
@@ -246,7 +246,7 @@ function desautorizarTercero(claveUsuario, confirmeClave){
 	    	objAH=new AjaxHelper(updateDesautorizarTercero);
 	        objAH.debug= true;
 	        objAH.showOverlay       = true;
-	        objAH.url= 'URL_PREFIX/usuarios/reales/usuariosRealesDB.pl';
+	        objAH.url= URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
 	        objAH.nro_socio= USUARIO.ID;
 	        objAH.tipoAccion= 'ELIMINAR_AUTORIZADO';
 	        //se envia la consulta
@@ -270,7 +270,7 @@ function resetPassword(claveUsuario, confirmeClave){
         if (confirmStatus){
             objAH=new AjaxHelper(updateResetPassword);
             objAH.showOverlay       = true;
-            objAH.url= 'URL_PREFIX/usuarios/reales/usuariosRealesDB.pl';
+            objAH.url= URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
             objAH.nro_socio= USUARIO.ID;
             objAH.tipoAccion= 'RESET_PASSWORD';
             //se envia la consulta
@@ -306,7 +306,7 @@ function eliminarFoto(foto){
 			objAH               = new AjaxHelper(updateEliminarFoto);
 		 	objAH.debug         = true;
 		    objAH.showOverlay       = true;
-			objAH.url           = 'URL_PREFIX/usuarios/reales/usuariosRealesDB.pl';
+			objAH.url           = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
 			objAH.tipoAccion    = 'ELIMINAR_FOTO';
 			objAH.foto_name     = foto;
 			objAH.sendToServer();
@@ -331,7 +331,7 @@ function updateEliminarFoto(responseText){
 function agregarAutorizado(){
     objAH               = new AjaxHelper(updateAgregarAutorizado);
     objAH.showOverlay   = true;
-    objAH.url           = 'URL_PREFIX/usuarios/reales/usuariosRealesDB.pl';
+    objAH.url           = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
     objAH.tipoAccion    = "MOSTRAR_VENTANA_AGREGAR_AUTORIZADO";
     objAH.debug         = true;
     objAH.sendToServer();
@@ -356,7 +356,7 @@ function validarDatosCensales(){
 	objAH                   = new AjaxHelper(updateValidarDatosCensales);
 	objAH.debug             = true;
     objAH.showOverlay       = true;
-	objAH.url               = 'URL_PREFIX/usuarios/reales/usuariosRealesDB.pl';
+	objAH.url               = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
 	objAH.debug             = true; 
 	objAH.nro_socio         = USUARIO.ID;
     nro_socio_temp          = objAH.nro_socio; // SETEO LA VARIABLE GLOBAL TEMP

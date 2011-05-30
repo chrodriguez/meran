@@ -10,7 +10,7 @@ function eliminarVista(vista_id){
     objAH               = new AjaxHelper(updateAgregarVisualizacion);
     objAH.showOverlay       = true;
     objAH.debug         = true;
-    objAH.url           = "URL_PREFIX/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
+    objAH.url           = URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
     objAH.tipoAccion    = 'ELIMINAR_VISUALIZACION';
     objAH.showOverlay   = true;
     
@@ -30,7 +30,7 @@ function agregarVisualizacion(){
     objAH               = new AjaxHelper(updateAgregarVisualizacion);
     objAH.debug         = true;
     objAH.showOverlay   = true;
-    objAH.url           = "URL_PREFIX/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
+    objAH.url           = URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
     objAH.tipoAccion    = 'AGREGAR_VISUALIZACION';
     var ejemplar        = $("#tipo_nivel3_id").val();
     var campo           = $.trim($("#campo").val());
@@ -67,7 +67,7 @@ function eleccionDeEjemplar(){
         objAH               = new AjaxHelper(updateEleccionDeNivel);
         objAH.debug         = true;
         objAH.showOverlay   = true;  
-        objAH.url           = "URL_PREFIX/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
+        objAH.url           = URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
         objAH.tipoAccion    = 'MOSTRAR_VISUALIZACION';
         objAH.ejemplar      = ejemplar;
 
@@ -92,7 +92,7 @@ function eleccionCampoX(){
         objAH               = new AjaxHelper(updateEleccionCampoX);
         objAH.debug         = true;
         objAH.showOverlay   = true;  
-        objAH.url           = "URL_PREFIX/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
+        objAH.url           = URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
         objAH.campoX        = $('#campoX').val();
         objAH.tipoAccion    = "GENERAR_ARREGLO_CAMPOS";
         objAH.sendToServer();
@@ -125,7 +125,7 @@ function eleccionCampo(){
         objAH               = new AjaxHelper(updateEleccionCampo);
         objAH.debug         = true;
         objAH.showOverlay   = true;
-        objAH.url           = "URL_PREFIX/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
+        objAH.url           = URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
         objAH.campo         = $('#campo').val();
         objAH.tipoAccion    = "GENERAR_ARREGLO_SUBCAMPOS";
         objAH.sendToServer();
@@ -212,7 +212,7 @@ function mostrarTablaRef(){
     objAH=new AjaxHelper(updateMostrarTablaRef);
     objAH.showOverlay       = true;
     objAH.debug= true;
-    objAH.url="URL_PREFIX/utils/utilsDB.pl";
+    objAH.url=URL_PREFIX+"/utils/utilsDB.pl";
     objAH.tipoAccion="GENERAR_ARREGLO_TABLA_REF";
     objAH.sendToServer();
 }

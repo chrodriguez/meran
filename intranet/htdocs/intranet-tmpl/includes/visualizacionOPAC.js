@@ -10,7 +10,7 @@ function eliminarVista(vista_id){
     objAH               = new AjaxHelper(updateAgregarVisualizacion);
     objAH.debug         = true;
     objAH.showOverlay       = true;
-    objAH.url           = "URL_PREFIX/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+    objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
     objAH.tipoAccion    = 'ELIMINAR_VISUALIZACION';
     
     if ( vista_id ){
@@ -29,7 +29,7 @@ function agregarVisualizacion(){
     objAH               = new AjaxHelper(updateAgregarVisualizacion);
     objAH.debug         = true;
     objAH.showOverlay   = true;
-    objAH.url           = "URL_PREFIX/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+    objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
     objAH.tipoAccion    = 'AGREGAR_VISUALIZACION';
     var perfil          = $("#perfiles_ref").val();
     var campo           = $.trim($("#campo").val());
@@ -65,7 +65,7 @@ function eleccionDePerfil(){
         objAH               = new AjaxHelper(updateEleccionDeNivel);
         objAH.debug         = true;
         objAH.showOverlay   = true;  
-        objAH.url           = "URL_PREFIX/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+        objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
         objAH.tipoAccion    = 'MOSTRAR_VISUALIZACION';
         objAH.perfil        = perfil;
 
@@ -90,7 +90,7 @@ function eleccionCampoX(){
         objAH               = new AjaxHelper(updateEleccionCampoX);
         objAH.debug         = true;
         objAH.showOverlay   = true;
-        objAH.url           = "URL_PREFIX/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+        objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
         objAH.campoX        = $('#campoX').val();
         objAH.tipoAccion    = "GENERAR_ARREGLO_CAMPOS";
         objAH.sendToServer();
@@ -123,7 +123,7 @@ function eleccionCampo(){
         objAH               = new AjaxHelper(updateEleccionCampo);
         objAH.debug         = true;
         objAH.showOverlay   = true;  
-        objAH.url           = "URL_PREFIX/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+        objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
         objAH.campo         = $('#campo').val();
         objAH.tipoAccion    = "GENERAR_ARREGLO_SUBCAMPOS";
         objAH.sendToServer();
@@ -210,7 +210,7 @@ function mostrarTablaRef(){
     objAH               = new AjaxHelper(updateMostrarTablaRef);
     objAH.debug         = true;
     objAH.showOverlay   = true;
-    objAH.url           = "URL_PREFIX/utils/utilsDB.pl";
+    objAH.url           = URL_PREFIX+"/utils/utilsDB.pl";
     objAH.tipoAccion    = "GENERAR_ARREGLO_TABLA_REF";
     objAH.sendToServer();
 }

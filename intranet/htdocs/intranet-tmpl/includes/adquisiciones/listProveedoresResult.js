@@ -43,7 +43,7 @@ function consultar(filtro,doScroll){
            }
     }
     if(jQuery.trim(busqueda).length > 0){
-        objAH.url               = 'URL_PREFIX/adquisiciones/listProveedoresResult.pl';
+        objAH.url               = URL_PREFIX+'/adquisiciones/listProveedoresResult.pl';
         objAH.debug             = true;
         objAH.showOverlay       = true;
         objAH.funcion           = 'changePage';
@@ -107,7 +107,7 @@ function checkFilter(eventType){
                 objAH                   = new AjaxHelper(updateBorrarProveedor);
                 objAH.debug             = true;
                 objAH.showOverlay       = true;
-                objAH.url               = "URL_PREFIX/adquisiciones/proveedoresDB.pl";
+                objAH.url               = URL_PREFIX+"/adquisiciones/proveedoresDB.pl";
                 objAH.id_proveedor      = id
                 objAH.tipoAccion        = "ELIMINAR";
                 objAH.sendToServer();

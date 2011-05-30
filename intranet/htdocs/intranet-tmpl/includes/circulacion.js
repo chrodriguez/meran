@@ -48,7 +48,7 @@ function detalleUsuario(nro_socio){
 	objAH.debug         = true;
     objAH.cache         = true;
     objAH.showOverlay   = true;
-	objAH.url           = 'URL_PREFIX/circ/detalleUsuario.pl';
+	objAH.url           = URL_PREFIX+'/circ/detalleUsuario.pl';
 	objAH.nro_socio     = nro_socio;
 	//se envia la consulta
 	objAH.sendToServer();
@@ -73,7 +73,7 @@ function detalleSanciones(nro_socio){
 	objAH                   = new AjaxHelper(updateDetalleSanciones);
 	objAH.debug             = true;
     objAH.showOverlay       = true;
-	objAH.url               = 'URL_PREFIX/usuarios/reales/detalleSanciones.pl';
+	objAH.url               = URL_PREFIX+'/usuarios/reales/detalleSanciones.pl';
 	objAH.nro_socio         = nro_socio;
 	objAH.sendToServer();
 }
@@ -95,7 +95,7 @@ function detalleReservas(nro_socio,funcion){
 	objAH               = new AjaxHelper(funcion);
 	objAH.debug         = true;
     objAH.showOverlay   = true;
-	objAH.url           = 'URL_PREFIX/circ/detalleReservas.pl';
+	objAH.url           = URL_PREFIX+'/circ/detalleReservas.pl';
 	objAH.nro_socio     = nro_socio;
 	//se envia la consulta
 	objAH.sendToServer();
@@ -122,7 +122,7 @@ function detallePrestamos(nro_socio,funcion){
 	objAH               = new AjaxHelper(funcion);
 	objAH.debug         = true;
     objAH.showOverlay   = true;
-	objAH.url           = 'URL_PREFIX/circ/detallePrestamos.pl';
+	objAH.url           = URL_PREFIX+'/circ/detallePrestamos.pl';
 	objAH.nro_socio     = nro_socio;
 	//se envia la consulta
 	objAH.sendToServer();
@@ -164,7 +164,7 @@ function realizarAccion(accion,id_table,funcion) {
 		objAH                   = new AjaxHelper(funcion);
 		objAH.debug             = true;
         objAH.showOverlay       = true;
-		objAH.url               = "URL_PREFIX/circ/circulacionDB.pl";
+		objAH.url               = URL_PREFIX+"/circ/circulacionDB.pl";
 		objAH.tipoAccion        = accion;
 		objAH.datosArray        = array;
 		objAH.nro_socio         = USUARIO.ID;
@@ -264,7 +264,7 @@ function prestar(){
 	objAH               = new AjaxHelper(updateInfoPrestarReserva);
 	objAH.debug         = true;
     objAH.showOverlay   = true;
-	objAH.url           = 'URL_PREFIX/circ/circulacionDB.pl';
+	objAH.url           = URL_PREFIX+'/circ/circulacionDB.pl';
 	objAH.tipoAccion    = 'PRESTAMO';
 	objAH.datosArray    = INFO_PRESTAMOS_ARRAY;
 	objAH.nro_socio     = USUARIO.ID;
@@ -317,7 +317,7 @@ function cancelarReserva(reserveNumber){
             objAH               = new AjaxHelper(updateInfoCancelacion);
             objAH.debug         = true;
             objAH.showOverlay   = true;  
-            objAH.url           = 'URL_PREFIX/circ/circulacionDB.pl';
+            objAH.url           = URL_PREFIX+'/circ/circulacionDB.pl';
             objAH.tipoAccion    = 'CANCELAR_RESERVA';
             objAH.nro_socio     = USUARIO.ID;
             objAH.id_reserva    = reserveNumber;
@@ -440,7 +440,7 @@ function renovar(){
 	objAH               = new AjaxHelper(updateInfoRenovar);
 	objAH.debug         = true;
     objAH.showOverlay   = true;  
-	objAH.url           = 'URL_PREFIX/circ/circulacionDB.pl';
+	objAH.url           = URL_PREFIX+'/circ/circulacionDB.pl';
 	objAH.tipoAccion    = 'REALIZAR_RENOVACION';
 	objAH.datosArray    = INFO_PRESTAMOS_ARRAY;
 	objAH.nro_socio     = USUARIO.ID;
@@ -478,7 +478,7 @@ function devolver(){
 	objAH               = new AjaxHelper(updateInfoDevolver);
 	objAH.debug         = true;
     objAH.showOverlay   = true;
-	objAH.url           = 'URL_PREFIX/circ/circulacionDB.pl';
+	objAH.url           = URL_PREFIX+'/circ/circulacionDB.pl';
 	objAH.tipoAccion    = 'REALIZAR_DEVOLUCION';
 	objAH.datosArray    = INFO_PRESTAMOS_ARRAY;
 	objAH.nro_socio     = USUARIO.ID;
@@ -506,6 +506,6 @@ function imprimirTicket(ticket,num){
 
 	if(ticket != 0){
 		var obj=JSONstring.make(ticket);
-		window.open ("URL_PREFIX/circ/ticket.pl?token="+token+"&obj="+obj, "Boleta "+num,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
+		window.open (URL_PREFIX+"/circ/ticket.pl?token="+token+"&obj="+obj, "Boleta "+num,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
 	}
 }

@@ -27,7 +27,7 @@ function busquedaCombinable(){
     objAH.debug             = true;
     objAH.showOverlay       = true;
     //para busquedas combinables
-    objAH.url               = 'URL_PREFIX/busquedas/busquedasDB.pl';
+    objAH.url               = URL_PREFIX+'/busquedas/busquedasDB.pl';
     objAH.titulo            = $('#titulo').val();
     objAH.autor             = $('#autor').val();
     objAH.only_available 	= ( $('#only_available').attr('checked') )?1:0;
@@ -61,7 +61,7 @@ function buscarBar(){
     objAH=new AjaxHelper(updateInfoBusquedasBar);
     objAH.showOverlay       = true;
     objAH.debug= true;
-    objAH.url= 'URL_PREFIX/busquedas/busquedasDB.pl';
+    objAH.url= URL_PREFIX+'/busquedas/busquedasDB.pl';
     objAH.keyword= $('#keyword-bar').val();
     objAH.shouldScroll = true;
     objAH.tipoAccion= 'BUSQUEDA_COMBINADA';
@@ -147,7 +147,7 @@ function buscarPorTema(){
     objAH=new AjaxHelper(updateInfoBusquedas);
     objAH.debug= true;
     objAH.showOverlay       = true;
-    objAH.url= 'URL_PREFIX/busquedas/busquedasDB.pl';
+    objAH.url= URL_PREFIX+'/busquedas/busquedasDB.pl';
     objAH.tema= $('#tema').val();
     objAH.tipoAccion    = 'BUSQUEDA_POR_TEMA';
 
@@ -160,7 +160,7 @@ function buscarPorISBN(){
     objAH=new AjaxHelper(updateInfoBusquedas);
     objAH.showOverlay       = true;
     objAH.debug= true;
-    objAH.url= 'URL_PREFIX/busquedas/busquedasDB.pl';
+    objAH.url= URL_PREFIX+'/busquedas/busquedasDB.pl';
     objAH.isbn= $('#isbn').val();
     objAH.tipoAccion    = 'BUSQUEDA_POR_ISBN';
     objAH.only_available = ( $('#only_available').attr('checked') )?1:0;
@@ -171,7 +171,7 @@ function buscarPorDiccionario(){
     objAH=new AjaxHelper(updateInfoBusquedas);
     objAH.debug= true;
     objAH.showOverlay       = true;
-    objAH.url= 'URL_PREFIX/busquedas/diccionario.pl';
+    objAH.url= URL_PREFIX+'/busquedas/diccionario.pl';
     objAH.dictionary= $('#dictionary').val();
     objAH.only_available = ( $('#only_available').attr('checked') )?1:0;
     //se setea la funcion para cambiar de pagina
@@ -183,7 +183,7 @@ function buscarPorCodigoBarra(){
     objAH               = new AjaxHelper(updateInfoBusquedas);
     objAH.debug         = true;
     objAH.showOverlay   = true;
-    objAH.url           = 'URL_PREFIX/busquedas/busquedasDB.pl';
+    objAH.url           = URL_PREFIX+'/busquedas/busquedasDB.pl';
     objAH.codBarra      = $('#codBarra').val();
     objAH.only_available = ( $('#only_available').attr('checked') )?1:0;
     objAH.tipoAccion    = 'BUSQUEDA_POR_BARCODE';
@@ -212,7 +212,7 @@ function busquedaPorKeyword(suggested){
     objAH=new AjaxHelper(updateBusquedaPorKeyword);
     objAH.showOverlay = true;
     objAH.debug = true;
-    objAH.url= 'URL_PREFIX/busquedas/busquedasDB.pl';
+    objAH.url= URL_PREFIX+'/busquedas/busquedasDB.pl';
 
     if (suggested){
         objAH.keyword= suggested;
@@ -244,7 +244,7 @@ function buscarEstante(){
     objAH=new AjaxHelper(updateInfoBusquedas);
     objAH.showOverlay       = true;
     objAH.debug= true;
-    objAH.url= 'URL_PREFIX/busquedas/estante.pl';
+    objAH.url= URL_PREFIX+'/busquedas/estante.pl';
     objAH.viewShelfName= $('#estante').val();
     objAH.orden= 'title';
     objAH.only_available = ( $('#only_available').attr('checked') )?1:0;
@@ -323,7 +323,7 @@ function verTema(idtema,tema){
     objAH=new AjaxHelper(updateInfoBusquedas);
     objAH.debug= true;
     objAH.showOverlay       = true;
-    objAH.url= 'URL_PREFIX/busquedas/busqueda.pl';
+    objAH.url= URL_PREFIX+'/busquedas/busqueda.pl';
     objAH.idTema= idtema;
     objAH.tema= tema;
 
@@ -347,7 +347,7 @@ function cambiarEstadoCampos(campos, clase){
 function buscarPorAutor(completo){
     objAH               = new AjaxHelper(updateInfoBusquedas);
     objAH.showOverlay       = true;
-    objAH.url           = 'URL_PREFIX/busquedas/busquedasDB.pl';
+    objAH.url           = URL_PREFIX+'/busquedas/busquedasDB.pl';
     //se setea la funcion para cambiar de pagina
     objAH.debug         = true;
     objAH.funcion       = 'changePage';
@@ -365,5 +365,5 @@ function ordenar(ord){
 // FIXME DEPRECATEDDDDDDDDd
 // function mostrarDetalle(id1){
 //     var params="id1="+id1;
-//     crearForm("URL_PREFIX/busquedas/detalle.pl",params);
+//     crearForm(URL_PREFIX+"/busquedas/detalle.pl",params);
 // }

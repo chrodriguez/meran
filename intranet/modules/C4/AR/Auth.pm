@@ -347,6 +347,7 @@ sub inicializarAuth{
 =cut
 sub get_template_and_user {
     my $in = shift;
+    
     my ($user, $session, $flags, $usuario_logueado) = checkauth(         $in->{'query'}, 
                                                                          $in->{'authnotrequired'}, 
                                                                          $in->{'flagsrequired'}, 

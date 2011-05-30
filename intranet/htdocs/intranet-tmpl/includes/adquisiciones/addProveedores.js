@@ -109,7 +109,7 @@ function updateAgregarProveedor(responseText){
 function agregarProveedor(){
 
       objAH                     = new AjaxHelper(updateAgregarProveedor);
-      objAH.url                 = 'URL_PREFIX/adquisiciones/addProveedores.pl';
+      objAH.url                 = URL_PREFIX+'/adquisiciones/addProveedores.pl';
       objAH.debug               = true;
       objAH.showOverlay         = true;
       objAH.apellido            = $('#apellido').val();

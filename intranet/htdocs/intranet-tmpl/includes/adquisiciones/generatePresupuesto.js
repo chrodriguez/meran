@@ -15,7 +15,7 @@ var array_proveedores        = new Array() //global, arreglo de ids de proveedor
 function presupuestar(position){
     var pos = position
     objAH                       = new AjaxHelper(updatePresupuestar)
-    objAH.url                   = 'URL_PREFIX/adquisiciones/pedidoCotizacionDB.pl'
+    objAH.url                   = URL_PREFIX+'/adquisiciones/pedidoCotizacionDB.pl'
     objAH.debug                 = true
     objAH.showOverlay           = true
         
@@ -41,7 +41,7 @@ function generatePresupuesto(pedido_cotizacion_id){
     }
 
     objAH                       = new AjaxHelper(updateAgregarPresupuesto)
-    objAH.url                   = 'URL_PREFIX/adquisiciones/presupuestoDB.pl'
+    objAH.url                   = URL_PREFIX+'/adquisiciones/presupuestoDB.pl'
     objAH.debug                 = true
     objAH.showOverlay           = true
 
@@ -88,7 +88,7 @@ function exportar(){
     }
 
     objAH                       = new AjaxHelper(updateExportarPresupuesto)
-    objAH.url                   = 'URL_PREFIX/adquisiciones/presupuestoDB.pl'
+    objAH.url                   = URL_PREFIX+'/adquisiciones/presupuestoDB.pl'
     objAH.debug                 = true
     objAH.showOverlay           = true
 

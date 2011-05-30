@@ -191,7 +191,7 @@ function monedas(){
 // elimina la/s monedas seleccionadas, borra en la base por ajax y vuelve a cargarlas en el div
 function borrarMoneda(arreglo){
     objAH                     = new AjaxHelper(updateMonedasProveedor)
-    objAH.url                 = 'URL_PREFIX/adquisiciones/proveedoresDB.pl'
+    objAH.url                 = URL_PREFIX+'/adquisiciones/proveedoresDB.pl'
     objAH.debug               = true
     objAH.showOverlay         = true
 
@@ -205,7 +205,7 @@ function borrarMoneda(arreglo){
 // agregar la moneda en la base por ajax y vulve a cargarlas en el div
 function agregarMoneda(idMonedaNueva){
     objAH                     = new AjaxHelper(updateMonedasProveedor)
-    objAH.url                 = 'URL_PREFIX/adquisiciones/proveedoresDB.pl'
+    objAH.url                 = URL_PREFIX+'/adquisiciones/proveedoresDB.pl'
     objAH.debug               = true
     objAH.showOverlay         = true
 
@@ -253,7 +253,7 @@ function ocultarDatos(){
 
 function modificarDatosDeProveedor(){
     objAH                     = new AjaxHelper(updateDatosProveedor);
-    objAH.url                 = 'URL_PREFIX/adquisiciones/proveedoresDB.pl';
+    objAH.url                 = URL_PREFIX+'/adquisiciones/proveedoresDB.pl';
     objAH.debug               = true;
     objAH.showOverlay         = true;
 

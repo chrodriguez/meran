@@ -27,7 +27,7 @@ function consultarAltas() {
 	objAH 				= new AjaxHelper(updateInfo);
 	objAH.debug 		= true;
     objAH.showOverlay       = true;
-	objAH.url 			= "URL_PREFIX/reports/altas_registro_result.pl";
+	objAH.url 			= URL_PREFIX+"/reports/altas_registro_result.pl";
 	objAH.item_type 	= item_type;
 	objAH.date_begin 	= date_begin;
 	objAH.date_end 		= date_end;
@@ -43,7 +43,7 @@ function consultarEstantes() {
 	objAH 				= new AjaxHelper(updateInfo);
 	objAH.debug 		= true;
     objAH.showOverlay       = true;
-	objAH.url 			= "URL_PREFIX/reports/estantes_virtuales_result.pl";
+	objAH.url 			= URL_PREFIX+"/reports/estantes_virtuales_result.pl";
 	objAH.estante 	= estante;
 	objAH.funcion		= 'changePage';
 	// se envia la consulta

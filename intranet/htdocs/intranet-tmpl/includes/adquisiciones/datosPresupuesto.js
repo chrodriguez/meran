@@ -18,7 +18,7 @@ function modificarDatosDePresupuesto(){
             returnElement: "#table",
             complete: function(x){
                  objAH                     = new AjaxHelper(updateDatosPresupuesto);
-                 objAH.url                 = 'URL_PREFIX/adquisiciones/presupuestoDB.pl';
+                 objAH.url                 = URL_PREFIX+'/adquisiciones/presupuestoDB.pl';
                  objAH.debug               = true;
                  objAH.showOverlay         = true;
                  objAH.id_presupuesto      = $('#id_pres').val();
@@ -44,7 +44,7 @@ function modificarDatosDePresupuesto(){
 
 function procesarPlanilla(){
                  objAH                     = new AjaxHelper(updateDatosPresupuesto);
-                 objAH.url                 = 'URL_PREFIX/adquisiciones/presupuestoDB.pl';
+                 objAH.url                 = URL_PREFIX+'/adquisiciones/presupuestoDB.pl';
                  objAH.debug               = true;
                  objAH.showOverlay         = true;
                  objAH.id_proveedor        = $('#id_prov').val();
@@ -62,7 +62,7 @@ function updateDatosPresupuesto(responseText){
 
 function mostrarPresupuesto(){
                  objAH                     = new AjaxHelper(updateMostrarPresupuesto);
-                 objAH.url                 = 'URL_PREFIX/adquisiciones/presupuestoDB.pl';
+                 objAH.url                 = URL_PREFIX+'/adquisiciones/presupuestoDB.pl';
                  objAH.debug               = true;
                  objAH.showOverlay         = true;
                  objAH.filepath            = $('#myUploadFile').val();
@@ -77,7 +77,7 @@ function updateMostrarPresupuesto(responseText){
 
 function mostrarPresupuestoManual(){
                  objAH                     = new AjaxHelper(updateMostrarPresupuestoManual);
-                 objAH.url                 = 'URL_PREFIX/adquisiciones/presupuestoDB.pl';
+                 objAH.url                 = URL_PREFIX+'/adquisiciones/presupuestoDB.pl';
                  objAH.debug               = true;
                  objAH.showOverlay         = true;
                  objAH.id_presupuesto      = $('#combo_presupuesto').val();

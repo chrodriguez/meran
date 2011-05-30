@@ -7,7 +7,6 @@ use CGI;
 
 my $query = new CGI;
 
-
 my ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
 									template_name => "main.tmpl",
 									query => $query,
