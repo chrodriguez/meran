@@ -37,7 +37,7 @@ my $nivel=1;
 my %params_combo;
 
 
-if($tipoAccion eq "MODIFICAR_NIVEL_1"){
+if(($tipoAccion eq "MODIFICAR_NIVEL_1")||($tipoAccion eq "MODIFICAR_NIVEL_3_ALL")){
 # se verifica si tiene nivel 2, sino hay q mostrar el comboTiposNivel3 para q selecione el tipo de documento (esquema)
     $t_params->{'tiene_nivel_2'}        = C4::AR::Catalogacion::cantNivel2($t_params->{'id1'});
     my @n3_array;
