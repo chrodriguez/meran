@@ -751,14 +751,14 @@ DISPONIBILIDAD
 sub DISPONIBILIDAD_PRESTAMO{
     my ($estado) = @_;
 
-    C4::AR::Debug::debug("CatRegistroMarcN3 => DISPONIBILIDAD PRESTAMO");
+#     C4::AR::Debug::debug("CatRegistroMarcN3 => DISPONIBILIDAD PRESTAMO");
     return ($estado eq 0);
 }
 
 sub DISPONIBILIDAD_PARA_SALA{
     my ($estado) = @_;
 
-    C4::AR::Debug::debug("CatRegistroMarcN3 => DISPONIBILIDAD PARA SALA");
+#     C4::AR::Debug::debug("CatRegistroMarcN3 => DISPONIBILIDAD PARA SALA");
     return ($estado eq 1);
 }
 
