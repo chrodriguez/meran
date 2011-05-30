@@ -288,39 +288,9 @@ sub getNivel3FromId3{
 =item
     sub getNivel3FromBarcode
 
-    Esta funcion recupera (si existe) nivel3 segun el barcode pasado por parametro
+    Esta funcion recupera (si existe) nivel3 segun el barcode pasado por parametro, sin tener en cuenta los ejemplares COMPARTIDOS
+    Se utiliza para prestar o para verificar que no exista el barcode ingresado
 =cut
-#FIXME OLD VERSION - LENTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-#sub getNivel3FromBarcode {
-#    my ($barcode) = @_;
-#    
-## TODO Miguel ver si esto es eficiente, de todos modos no se si se puede hacer de otra manera!!!!!!!!!!
-## 1) parece q no queda otra, hay q "abrir" el marc_record y sacar el barcode para todos los ejemplares e ir comparando cada uno GARRONNNN!!!!
-## 2) se podria usar el indice??????????????
-#
-#    my @filtros;
-#    my @barcode_result;
-#    
-#    my $barcodes_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => \@filtros ); 
-#
-#    my $cant = scalar(@$barcodes_array_ref);
-#
-#    for(my $i=0; $i < $cant; $i++){
-#
-#        if($barcodes_array_ref->[$i]->getBarcode() eq $barcode){
-#            push(@barcode_result, $barcodes_array_ref->[$i]);
-#            last();
-#        }
-#    }
-#
-#    if(scalar(@barcode_result) > 0){
-#        C4::AR::Debug::debug("Nivel3 => getNivel3FromBarcode => EXISTE el barcode => ".$barcode);
-#        return (@barcode_result[0]);
-#    }else{
-#        C4::AR::Debug::debug("Nivel3 => getNivel3FromBarcode => NO EXISTE el barcode => ".$barcode);
-#        return (0);
-#    }
-#}
 
 sub getNivel3FromBarcode {
     my ($barcode) = @_;
@@ -328,14 +298,15 @@ sub getNivel3FromBarcode {
     my @filtros;
     
     push(@filtros, ( codigo_barra => { eq => $barcode }) );
-    
-    my $n3 = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => \@filtros ); 
 
-    if (scalar(@$n3)){
-    	return ($n3->[0]);
-    }else{
-        return (0);
+    my $nivel3 = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => \@filtros ); 
+
+    foreach my $n3 (@$nivel3){
+	if (! $n3->estadoCompartido) { #Sin compartidos
+	  return $n3;
+	}
     }
+    return (0);
 }
 
 sub getBarcodesLike {
@@ -666,6 +637,8 @@ sub generaCodigoBarra{
 
    my $barcode;
     my @estructurabarcode = split(',',C4::AR::Preferencias::getValorPreferencia("barcodeFormat"));
+
+C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => barcodeFormat => ".C4::AR::Preferencias::getValorPreferencia("barcodeFormat"));
     
     my $like = '';
 
@@ -677,8 +650,10 @@ sub generaCodigoBarra{
 		}
 	}
 
+C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => like => ".$like);
     # Puede venir el db tambien!!
     my $max_codigo = C4::Modelo::CatRegistroMarcN3::Manager->get_maximum_codigo_barra(like => $like.'%') || 0;
+       C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => barcode máximo => ".$max_codigo);
 
     my @barcodes_array_ref;
     for(my $i=1;$i<=$cant;$i++){
@@ -686,6 +661,7 @@ sub generaCodigoBarra{
         C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => barcode => ".$barcode);
         push(@barcodes_array_ref, $barcode);
     }
+
     return (@barcodes_array_ref);
 }
 
@@ -818,6 +794,7 @@ sub existeBarcode {
     }
 # 	return ( $nivel_array_ref != 0);
 }
+
 #=======================================================================ABM Nivel 3======================================================
 
 
@@ -931,6 +908,9 @@ sub _generarArregloDeBarcodesPorCantidad {
 
         my %parametros;
         $parametros{'UI'}               = _selectBarcodeFormat($params);
+
+C4::AR::Debug::debug("UI desde el cliente => ".$parametros{'UI'});
+
         $parametros{'tipo_ejemplar'}    = $params->{'tipo_ejemplar'};
 
         (@barcodes_para_agregar) = generaCodigoBarra(\%parametros, $cant);
