@@ -8,7 +8,8 @@ var loaderPath= "";
         makeDataTable('#tablaResult');
         zebraId('tablaResult');
         onEnter('search_tabla',obtenerTablaFiltrada);
-        $('.editable').editable(i'[% url_prefix %]/admin/referencias/referenciasDB.pl', { 
+        loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
+        $('.editable').editable('[% url_prefix %]/admin/referencias/referenciasDB.pl', { 
               type      : 'text',
               cancel    : CANCELAR,
               submit    : OK,

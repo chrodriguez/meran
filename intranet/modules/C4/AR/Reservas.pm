@@ -29,6 +29,7 @@ $VERSION = 3.0;
     getReservasDeGrupo
     cantReservasPorGrupo
     DatosReservas
+    getDatosReservaDeId3
     CheckWaiting
     tiene_reservas
     Enviar_Email_Asignacion_Reserva
@@ -269,7 +270,7 @@ sub eliminarReservas{
 
 =item
 Esta funcion reasigna todas las reservas de un borrower
-recibe como parametro un borrowernumber y el loggedinuser
+recibe como parametro un borrowernumber y el responsable
 Esta funcion se utiliza por ej. cuando se elimina un usuario
 =cut
 sub reasignarTodasLasReservasEnEspera{
@@ -279,7 +280,7 @@ sub reasignarTodasLasReservasEnEspera{
 
     foreach my $reserva (@$reservas){
 
-        $reserva->reasignarEjemplarASiguienteReservaEnEspera($reserva->{'loggedinuser'});
+        $reserva->reasignarEjemplarASiguienteReservaEnEspera($reserva->{'responsable'});
     }
 }
 
@@ -330,7 +331,7 @@ sub Enviar_Email_Asignacion_Reserva{
     my $fecha= $params->{'fecha'};
     my $apertura= $params->{'apertura'};
     my $cierre= $params->{'cierre'};
-    my $loggedinuser= $params->{'loggedinuser'};
+    my $responsable= $params->{'responsable'};
 
     if (C4::AR::Preferencias::getValorPreferencia("EnabledMailSystem")){
 
@@ -387,8 +388,7 @@ sub Enviar_Email_Asignacion_Reserva{
    $data_hash->{'id2'}=$reserva->getId2;
    $data_hash->{'id3'}=$reserva->getId3;
    $data_hash->{'nro_socio'}=$reserva->getNro_socio;
-   $data_hash->{'loggedinuser'}=$loggedinuser;
-   $data_hash->{'responsable'}=$loggedinuser;
+   $data_hash->{'responsable'}=$responsable;
    $data_hash->{'end_date'}=$fecha;
    $data_hash->{'issuesType'}='-';
    $data_hash->{'id_ui'}=$reserva->getId_ui;
@@ -405,7 +405,7 @@ sub Enviar_Email_Asignacion_Reserva{
 
 #para enviar un mail cuando al usuario se le cancela una reserva
 sub Enviar_Email_Cancelacion_Reserva{
-    my ($reserva,$loggedinuser)=@_;
+    my ($reserva,$responsable)=@_;
 
 
    C4::AR::Debug::debug("Reservas => Enviar_Email_Cancelacion_Reserva => EnabledMailSystem => ".C4::AR::Preferencias::getValorPreferencia("EnabledMailSystem"));
@@ -446,7 +446,7 @@ sub Enviar_Email_Cancelacion_Reserva{
         $mail{'mail_from'}             = $mailFrom;
         $mail{'mail_to'}               = $socio->persona->getEmail;
         $mail{'mail_subject'}          = $mailSubject;
-	$mail{'mail_message'}          = $mailMessage;
+        $mail{'mail_message'}          = $mailMessage;
 
        C4::AR::Debug::debug("Reservas => Enviar_Email_Cancelacion_Reserva => Se envia el mail ".$mail{'mail_message'});
 
@@ -461,8 +461,7 @@ sub Enviar_Email_Cancelacion_Reserva{
    $data_hash->{'id2'}=$reserva->getId2;
    $data_hash->{'id3'}=$reserva->getId3;
    $data_hash->{'nro_socio'}=$reserva->getNro_socio;
-   $data_hash->{'loggedinuser'}=$loggedinuser;
-   $data_hash->{'responsable'}=$loggedinuser;
+   $data_hash->{'responsable'}=$responsable;
    $data_hash->{'end_date'}=$fecha;
    $data_hash->{'issuesType'}='-';
    $data_hash->{'id_ui'}=$reserva->getId_ui;
@@ -481,7 +480,7 @@ sub Enviar_Email_Cancelacion_Reserva{
 
 #para enviar un mail cuando al usuario se le pasa una reserva a espera
 sub Enviar_Email_Reserva_A_Espera{
-    my ($reserva,$loggedinuser)=@_;
+    my ($reserva,$responsable)=@_;
 
     if (C4::AR::Preferencias::getValorPreferencia("EnabledMailSystem") && C4::AR::Preferencias::getValorPreferencia("enviar_mail_cambio_disponibilidad_espera")){
 
@@ -530,8 +529,7 @@ sub Enviar_Email_Reserva_A_Espera{
    $data_hash->{'id2'}=$reserva->getId2;
    $data_hash->{'id3'}=$reserva->getId3;
    $data_hash->{'nro_socio'}=$reserva->getNro_socio;
-   $data_hash->{'loggedinuser'}=$loggedinuser;
-   $data_hash->{'responsable'}=$loggedinuser;
+   $data_hash->{'responsable'}=$responsable;
    $data_hash->{'end_date'}=$fecha;
    $data_hash->{'issuesType'}='-';
    $data_hash->{'id_ui'}=$reserva->getId_ui;
@@ -869,7 +867,6 @@ sub _verificaciones {
     my $id3                 = $params->{'id3'};
     my $barcode             = $params->{'barcode'};
     my $nro_socio           = $params->{'nro_socio'};
-    my $loggedinuser        = $params->{'loggedinuser'};
     my $tipo_prestamo       = $params->{'tipo_prestamo'};
     my $msg_object          = C4::AR::Mensajes::create();
     $msg_object->{'tipo'}   = $tipo;
@@ -1097,7 +1094,7 @@ sub cancelarReservaDesdeGrupoYSocio{
 
     my $nro_socio               = $params->{'nro_socio'};
     my $id2                     = $params->{'id2'};
-    $params->{'loggedinuser'}   = $nro_socio;
+    $params->{'responsable'}   = $nro_socio;
     
     my $msg_object= C4::AR::Mensajes::create();
     my @filtros;
@@ -1236,7 +1233,7 @@ sub reasignarNuevoEjemplarAReserva{
 		C4::AR::Debug::debug("Reservas => reasignarNuevoEjemplarAReserva => NO hay disponibilidad para el grupo id2: ".$params->{'id2'}." se CANCELA la reserva asignada!!!");
 
 		#Se envia una notificacion al usuario avisando que se le cancelo la reserva por cambio de disponibilidad
-		C4::AR::Reservas::Enviar_Email_Cancelacion_Reserva($reserva_asignada,$params->{'loggedinuser'});
+		C4::AR::Reservas::Enviar_Email_Cancelacion_Reserva($reserva_asignada,$params->{'responsable'});
 
 		$reserva_asignada->cancelar_reserva($params);
 
@@ -1245,7 +1242,7 @@ sub reasignarNuevoEjemplarAReserva{
 		C4::AR::Debug::debug("Reservas => reasignarNuevoEjemplarAReserva => paso la reserva a ESPERA (estado = G)");
 
 		#Se envia una notificacion al usuario avisando que se le cancelo la reserva por cambio de disponibilidad
-		C4::AR::Reservas::Enviar_Email_Reserva_A_Espera($reserva_asignada,$params->{'loggedinuser'});
+		C4::AR::Reservas::Enviar_Email_Reserva_A_Espera($reserva_asignada,$params->{'responsable'});
 
 		$reserva_asignada->pasar_a_espera();
 
@@ -1317,7 +1314,7 @@ sub manejoDeDisponibilidadDomiciliaria{
     @Parametros:
         $params->{'id2'}: 
         $params->{'id3'}:
-        $params->{'loggedinuser'}: el usuario logueado
+        $params->{'responsable'}: el usuario logueado
 =cut
 sub asignarEjemplarASiguienteReservaEnEspera{
     my ($params, $db) = @_;
@@ -1328,7 +1325,7 @@ sub asignarEjemplarASiguienteReservaEnEspera{
         #Si hay al menos un ejemplar esperando se reasigna
         $reservaGrupo->setId3($params->{'id3'});
         $reservaGrupo->setId_ui($params->{'id_ui'});
-        $reservaGrupo->actualizarDatosReservaEnEspera($params->{'loggedinuser'});
+        $reservaGrupo->actualizarDatosReservaEnEspera($params->{'responsable'});
     }
 }
 

@@ -23,7 +23,7 @@ my %infoOperacion;
 my %params;
 $params{'nro_socio'}= $userid;
 $params{'id_prestamo'}= $obj->{'id_prestamo'};
-$params{'loggedinuser'}= $userid;
+$params{'responsable'}= $userid;
 $params{'tipo'}= 'OPAC';
 
 my ($msg_object) = C4::AR::Prestamos::t_renovarOPAC(\%params);

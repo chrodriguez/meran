@@ -302,13 +302,13 @@ sub actualizar_sancion {
 
 sub eliminar_sancion {
     my ($self)=shift;
-    my ($loggedinuser)=@_;
+    my ($responsable)=@_;
 
 
 #**********************************Se registra el movimiento en historicSanction***************************
     my $data_hash;
     $data_hash->{'nro_socio'}       = $self->getNro_socio;
-    $data_hash->{'loggedinuser'}    = $loggedinuser;
+    $data_hash->{'responsable'}    = $responsable;
     $data_hash->{'fecha_final'}     = $self->getFecha_final;
     $data_hash->{'fecha_comienzo'}  = $self->getFecha_comienzo;
     $data_hash->{'tipo_sancion'}    = $self->getTipo_sancion;
