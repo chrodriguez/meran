@@ -11,7 +11,6 @@ function obtenerTabla(){
 
 
 function updateObtenerTabla(responseText){
-
     $('#detalle_tabla').html(responseText);
     zebra('detalle_tabla');
 
