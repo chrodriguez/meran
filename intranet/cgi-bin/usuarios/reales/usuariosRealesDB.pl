@@ -190,7 +190,7 @@ Se elimina el usuario
 Se agrega el usuario
 =cut
     elsif($tipoAccion eq "AGREGAR_USUARIO"){
-        my ($loggedinuser, $session, $flags) = checkauth( $input, 
+        my ($user, $session, $flags) = checkauth( $input, 
                                             $authnotrequired,
                                             {   ui => 'ANY', 
                                                 tipo_documento => 'ANY', 
@@ -213,7 +213,7 @@ Se agrega el usuario
 Se guarda la modificacion los datos del usuario
 =cut
     elsif($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO"){
-        my ($loggedinuser, $session, $flags) = checkauth( 
+        my ($user, $session, $flags) = checkauth( 
                                                                 $input, 
                                                                 $authnotrequired,
                                                                 {   ui => 'ANY', 
@@ -283,7 +283,7 @@ Se genra la ventana para modificar los datos del usuario
     } #end if($tipoAccion eq "MODIFICAR_USUARIO")
 
     elsif($tipoAccion eq "ELIMINAR_FOTO"){
-        my ($loggedinuser, $session, $flags) = checkauth( 
+        my ($user, $session, $flags) = checkauth( 
                                                                 $input, 
                                                                 $authnotrequired,
                                                                 {   ui => 'ANY', 
@@ -337,7 +337,7 @@ Se genra la ventana para modificar los datos del usuario
     }
     elsif($tipoAccion eq "GENERAR_LIBRE_DEUDA"){
 
-        my ($loggedinuser, $session, $flags) = checkauth( 
+        my ($user, $session, $flags) = checkauth( 
                                                                 $input, 
                                                                 $authnotrequired,
                                                                 {   ui => 'ANY', 
