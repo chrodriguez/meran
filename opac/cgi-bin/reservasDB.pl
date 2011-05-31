@@ -25,7 +25,7 @@ $obj        = C4::AR::Utilidades::from_json_ISO($obj);
 my %params;
 $params{'id_reserva'}   = $obj->{'id_reserva'};
 $params{'nro_socio'}    = $nro_socio;
-$params{'loggedinuser'} = $nro_socio;
+$params{'responsable'}  = $nro_socio;
 $params{'type'}         = "opac";
 
 my $msg_object;

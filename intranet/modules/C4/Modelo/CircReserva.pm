@@ -218,7 +218,7 @@ sub reservar {
 
 
 	$self->debug("RESERVA: tipo: ".$params->{'tipo'}." id2: ".$params->{'id2'}." id3: ".$params->{'id3'}." tipo_p:".$params->{'tipo_prestamo'});
-	$self->debug("RESERVA: socio: ".$params->{'nro_socio'}." resp: ".$params->{'loggedinuser'});
+	$self->debug("RESERVA: socio: ".$params->{'nro_socio'}." resp: ".$params->{'responsable'});
 
 	my $dateformat = C4::Date::get_date_format();
 	my $id3= $params->{'id3'}||'';
@@ -239,8 +239,7 @@ sub reservar {
 	$paramsReserva{'id2'}                   = $params->{'id2'};
 	$paramsReserva{'id3'}                   = $id3;
 	$paramsReserva{'nro_socio'}             = $params->{'nro_socio'};
-	$paramsReserva{'loggedinuser'}          = $params->{'loggedinuser'};
-	$paramsReserva{'responsable'}           = $params->{'loggedinuser'};
+	$paramsReserva{'responsable'}           = $params->{'responsable'};
 	$paramsReserva{'fecha_reserva'}         = $desde;
 	$paramsReserva{'fecha_recordatorio'}    = $hasta;
 	$paramsReserva{'id_ui'}                 = C4::AR::Preferencias::getValorPreferencia("defaultUI");
@@ -274,7 +273,7 @@ C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde hash2 => ".$param
 		$enddate                = C4::Date::format_date_in_iso($enddate,$dateformat);
 		my  $sancion            = C4::Modelo::CircSancion->new(db => $self->db);
 		my %paramsSancion;
-		$paramsSancion{'loggedinuser'}      = $params->{'loggedinuser'};
+		$paramsSancion{'responsable'}       = $params->{'responsable'};
 		$paramsSancion{'tipo_sancion'}      = undef;
 		$paramsSancion{'id_reserva'}        = $self->getId_reserva;
 		$paramsSancion{'nro_socio'}         = $params->{'nro_socio'};
@@ -298,8 +297,8 @@ C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde hash2 => ".$param
 sub cancelar_reserva{
 	my ($self)=shift;
 	my ($params)=@_;
-	my $nro_socio=$params->{'nro_socio'};
-	my $loggedinuser=$params->{'loggedinuser'};
+	my $nro_socio = $params->{'nro_socio'};
+	my $responsable = $params->{'responsable'};
 
 	if($self->getId3){
 		$self->debug("Es una reserva asignada se trata de reasignar");
@@ -322,8 +321,7 @@ sub cancelar_reserva{
    $data_hash->{'id2'}=$self->getId2;
    $data_hash->{'id3'}=$self->getId3;
    $data_hash->{'nro_socio'}=$self->getNro_socio;
-   $data_hash->{'loggedinuser'}=$loggedinuser;
-   $data_hash->{'responsable'}=$loggedinuser;
+   $data_hash->{'responsable'}=$responsable;
    $data_hash->{'hasta'}=undef;
    $data_hash->{'tipo_prestamo'}='-';
    $data_hash->{'id_ui'}=$self->getId_ui;
@@ -344,7 +342,7 @@ Funcion que actualiza la reserva que estaba esperando por un ejemplar.
 sub actualizarDatosReservaEnEspera{
 	my ($self) = shift;
 
-	my ($loggedinuser) = @_;
+	my ($responsable) = @_;
 
 	my $dateformat = C4::Date::get_date_format();
 	my $hoy = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"), $dateformat);
@@ -375,7 +373,7 @@ sub actualizarDatosReservaEnEspera{
 	$paramsSancion{'fecha_comienzo'}= $startdate;
 	$paramsSancion{'fecha_final'}= $enddate;
 	$paramsSancion{'dias_sancion'}= undef;
-	$paramsSancion{'loggedinuser'}= $loggedinuser;
+	$paramsSancion{'responsable'}= $responsable;
 	$sancion->insertar_sancion(\%paramsSancion);
 	# Se registra la actualizacion
 	$paramsSancion{'id3'}= $self->getId3;
@@ -388,7 +386,7 @@ sub actualizarDatosReservaEnEspera{
 	$params->{'fecha'}= $hasta;
 	$params->{'desde'}= $desde;
 	$params->{'apertura'}= $apertura;
-	$params->{'loggedinuser'}= $loggedinuser;
+	$params->{'responsable'}= $responsable;
 	#Se envia una notificacion al usuario avisando que se le asigno una reserva
 
 	   C4::AR::Reservas::Enviar_Email_Asignacion_Reserva($self,$params);
@@ -441,10 +439,10 @@ sub cancelar_reservas_inmediatas{
 sub cancelar_reservas{
 # Este procedimiento cancela todas las reservas de los usuarios recibidos como parametro
 	my ($self)=shift;
-	my ($loggedinuser,$nro_socios)= @_;
+	my ($responsable,$nro_socios)= @_;
 	my $params;
 	
-	$params->{'loggedinuser'}= $loggedinuser;
+	$params->{'responsable'}= $responsable;
 	$params->{'tipo'}= 'INTRA';
 
 	foreach (@$nro_socios) {
@@ -464,7 +462,7 @@ Se cancelan todas las reservas de usuarios sancionados.
 =cut
 sub cancelar_reservas_sancionados {
 	my ($self)=shift;
-	my ($loggedinuser)= @_;
+	my ($responsable)= @_;
 
 	#Se buscan los socios sancionados
 	my $dateformat = C4::Date::get_date_format();
@@ -486,7 +484,7 @@ sub cancelar_reservas_sancionados {
 	      push (@socios_sancionados,$sancion->getNro_socio);
 	}
 
-	$self->cancelar_reservas($loggedinuser,\@socios_sancionados);
+	$self->cancelar_reservas($responsable,\@socios_sancionados);
 }
 
 
@@ -496,10 +494,10 @@ Se cancelan todas las reservas de usuarios que perdieron la regularidad.
 =cut
 sub cancelar_reservas_no_regulares {
   my ($self)=shift;
-  my ($loggedinuser)= @_;
+  my ($responsable)= @_;
 
     my $params;
-    $params->{'loggedinuser'}= $loggedinuser;
+    $params->{'responsable'}= $responsable;
     $params->{'tipo'}= 'INTRA';
 
     my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( db => $self->db,
@@ -523,12 +521,12 @@ sub cancelar_reservas_no_regulares {
     Esta reserva ya tenia el ejemplar asignado
 
     @Parametros:
-        $loggedinuser: el usuario logueado
+        $responsable: el usuario logueado
 =cut
 sub reasignarEjemplarASiguienteReservaEnEspera{
     my ($self) = shift;
 
-    my ($loggedinuser) = @_;
+    my ($responsable) = @_;
 
     my ($reservaGrupo) = $self->getReservaEnEspera(); #retorna la primer reserva en espera SI EXISTE
 
@@ -536,7 +534,7 @@ sub reasignarEjemplarASiguienteReservaEnEspera{
         #Si hay al menos un ejemplar esperando se reasigna
         $reservaGrupo->setId3($self->getId3);
         $reservaGrupo->setId_ui($self->getId_ui);
-        $reservaGrupo->actualizarDatosReservaEnEspera($loggedinuser);
+        $reservaGrupo->actualizarDatosReservaEnEspera($responsable);
     }
 }
 
@@ -545,7 +543,7 @@ sub reasignarEjemplarASiguienteReservaEnEspera{
     Este procedimiento cancela todas las reservas del usuario recibido como parametro
 
     @Parametros
-        loggedinuser = usuario logueado en el sistema
+        responsable = usuario logueado en el sistema
         nro_socio    = socio al que se le cancelan las reservas
 =cut
 sub cancelar_reservas_socio{
@@ -574,7 +572,7 @@ Elimina las reservas vencidas al dia de la fecha y actualiza la reservas de grup
 sub cancelar_reservas_vencidas {
     my ($self) = shift;
 
-    my ($loggedinuser) = @_;
+    my ($responsable) = @_;
 
     #Se buscan las reservas vencidas!!!!
     my ($reservas_vencidas_array_ref) = $self->getReservasVencidas();
@@ -583,7 +581,7 @@ sub cancelar_reservas_vencidas {
 
     #Se buscan si hay reservas esperando sobre el grupo que se va a elimninar la reservas vencidas
     foreach my $reserva (@$reservas_vencidas_array_ref){
-       $reserva->reasignarEjemplarASiguienteReservaEnEspera($loggedinuser);
+       $reserva->reasignarEjemplarASiguienteReservaEnEspera($responsable);
         #Haya o no uno esperando elimino el que existia porque la reserva se esta cancelando
 
         $self->debug("Se loguea en historico de circulacion la cancelacion");
@@ -593,8 +591,7 @@ sub cancelar_reservas_vencidas {
         $data_hash->{'id2'} = $reserva->getId2;
         $data_hash->{'id3'} = $reserva->getId3;
         $data_hash->{'nro_socio'} = $reserva->getNro_socio;
-        $data_hash->{'loggedinuser'} = $loggedinuser;
-        $data_hash->{'responsable'} = $loggedinuser;
+        $data_hash->{'responsable'} = $responsable;
         $data_hash->{'hasta'} = undef;
         $data_hash->{'tipo_prestamo'} = '-';
         $data_hash->{'id_ui'} = $reserva->getId_ui;
