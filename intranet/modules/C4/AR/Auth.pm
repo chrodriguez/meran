@@ -597,90 +597,24 @@ sub checkauth {
                       $userid             = $query->param('userid');
                       my $password        = $query->param('password');
                       my $nroRandom       = $session->param('nroRandom');
+                      my $error_login=0;
+                      my $mensaje;
+                      my $cant_fallidos;
                       #se verifica la password ingresada
-        
-#  COMENTADO PORQUE DA ERROR - $userid  NO EXISTE ==>  unless ($userid) 
 
-#                       my $socio_data_temp = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
-#                       my $login_attempts = $socio_data_temp->getLogin_attempts;
-#                       my $captchaResult;
-# 
-#                       if ($login_attempts > 2 ){
-#                          
-#                           my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
-#                           my $reCaptchaChallenge  = $query->param('recaptcha_challenge_field');
-#                           my $reCaptchaResponse   = $query->param('recaptcha_response_field');
-#                     
-#                           use Captcha::reCAPTCHA;
-#                           my $c = Captcha::reCAPTCHA->new;
-#   
-#                           C4::AR::Debug::debug($reCaptchaResponse);
-# 
-#                           $captchaResult = $c->check_answer(
-#                                       $reCaptchaPrivateKey, $ENV{'REMOTE_ADDR'},
-#                                       $reCaptchaChallenge, $reCaptchaResponse
-#                           );
-#                     
-#                       } else { 
-                              $sin_captcha = 1; 
-#                       }  
+                            my $socio_data_temp = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
 
-#                       if ($sin_captcha || $captchaResult->{is_valid} ){
-			if ($sin_captcha){
-
-
-                            my ($socio)         = _verificarPassword($userid,$password,$nroRandom);
-                #             C4::AR::Debug::debug("la pass es valida?".$passwordValida);
-                            if ($socio) {
-                            #se valido la password y es valida
-                            #setea loguins duplicados si existe, dejando logueado a un solo usuario a la vez
-                            
-
-                                _setLoguinDuplicado($userid,  $ENV{'REMOTE_ADDR'});
-                                #$socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
-                                # TODO todo esto va en una funcion
-                                $sessionID  = $session->param('sessionID');
-                                $sessionID.="_".$socio->ui->getNombre;
-                                _actualizarSession($sessionID, $userid, $socio->getNro_socio(), $time, '', $type, $flagsrequired, _generarToken(), $session);
-                #                 C4::AR::Debug::debug("userid en actualizarSession actualizadoarafue".$session->param('userid'));
-                                buildSocioData($session,$socio);
-                #                 C4::AR::Debug::debug($session->param('usr_apellido'));
-                                #Logueo una nueva sesion
-                                _session_log(sprintf "%20s from %16s logged out at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},$time);
-                                #por defecto no tiene permisos
-                                if( $flags = $socio->tienePermisos($flagsrequired) ){
-                                    _realizarOperacionesLogin($type,$socio);
-                                }
-
-                                #Si se logueo correctamente en intranet entonces guardo la fecha
-                                my $now = Date::Manip::ParseDate("now");
-                                $socio->setLast_login($now);
-                                $socio->save();
-                                if ($type eq 'opac') {
-                                              $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/opac-main.pl?token='.$session->param('token'));
-                                              redirectToNoHTTPS(C4::AR::Utilidades::getUrlPrefix().'/opac-main.pl?token='.$session->param('token'));
-                # #                               $session->secure(0);
+                            if ($socio_data_temp){          #ingreso un usuario y exite en la base
                                 
-                                }else{
-                                    $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/mainpage.pl?token='.$session->param('token'));
-                                    redirectTo(C4::AR::Utilidades::getUrlPrefix().'/mainpage.pl?token='.$session->param('token'));
-                                }
-
-
-                      my $socio_data_temp = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
-
-                      if ($socio_data_temp){
-                      
-# 			if ($sin_captcha){
                                     my ($socio)         = _verificarPassword($userid,$password,$nroRandom);
                                     #             C4::AR::Debug::debug("la pass es valida?".$passwordValida);
-                                    if ($socio) {
-
+                                    
+                                    if ($socio) {               #ingreso un usuario y pass y coincide
 
                                             my $login_attempts = $socio_data_temp->getLogin_attempts;
                                             my $captchaResult;
                                             
-                                            if ($login_attempts > 2 ){
+                                            if ($login_attempts > 2 ){      # se logueo mal mas de 3 veces, debo verificar captcha
                                               
                                                 my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
                                                 my $reCaptchaChallenge  = $query->param('recaptcha_challenge_field');
@@ -696,15 +630,16 @@ sub checkauth {
                                                             $reCaptchaChallenge, $reCaptchaResponse
                                                 );
                                           
-                                            } else { 
+                                            } else {  #else del  if ($login_attempts > 2 )
                                                     $sin_captcha = 1; 
                                             }  
 
-                                            if ($sin_captcha || $captchaResult->{is_valid} ){
-                                                        #se valido la password y es valida
+                                            if ($sin_captcha || $captchaResult->{is_valid}){
+
+                                                        C4::AR::Debug::debug("entreo al if sin captcah o captcha result");
+                                                        #se valido el captcha, la pass y el user y son validos
                                                         #setea loguins duplicados si existe, dejando logueado a un solo usuario a la vez
                                                         
-
                                                         _setLoguinDuplicado($userid,  $ENV{'REMOTE_ADDR'});
                                                         #$socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
                                                         # TODO todo esto va en una funcion
@@ -734,31 +669,44 @@ sub checkauth {
                                                                       $session->param('redirectTo', '/cgi-bin/koha/mainpage.pl?token='.$session->param('token'));
                                                                       redirectTo('/cgi-bin/koha/mainpage.pl?token='.$session->param('token'));
                                                         }
-                                            }else{
-                                #usuario o password invalida
-                                                  if ($userid) {
-                                  #        
-                                                      $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
-                                                      if ($socio) {
-                                                              #intento de loguin
-                                                              my $cant_fallidos= $socio->getLogin_attempts + 1;
-                                                              $socio->setLogin_attempts($cant_fallidos);
-                                                  
-                                                              if ($cant_fallidos == 3){
-                                                              $template_params->{'mostrar_captcha'}=1;
-                                                              }
-                                                      }
-                                                      $template_params->{'loginAttempt'} = 1;
-                                                      _destruirSession('U406', $template_params);
-                                                  }
-                                                  #genero una nueva session y redirecciono a auth.tmpl para que se loguee nuevamente
-                                                  redirectToAuth($template_params);
-                                            }#end else de if ($socio)
-                                  } else { 
-                                            $template_params->{'mostrar_captcha'}= 1;
-                                            $template_params->{'loginAttempt'} = 1;                
-                                            _destruirSession('U422', $template_params);      
-                                  }
+
+                                              } else {  # if ($sin_captcha || $captchaResult->{is_valid} ) - INGRESA CAPTCHA INVALIDO
+#                                                    
+                                                   
+                                                    $mensaje='U422';
+                                                    $cant_fallidos= $socio_data_temp->getLogin_attempts + 1;
+                                                    $socio_data_temp->setLogin_attempts($cant_fallidos);
+                                                    if ($cant_fallidos => 3){
+                                                            $template_params->{'mostrar_captcha'}=1;
+                                                           
+                                                    }
+                                                    
+                                                       
+                                              }
+                                   }  else   {    # else de if ($socio) -----  ingreso password invalida
+                                               
+                                                    $mensaje= 'U357';
+                                                    $cant_fallidos= $socio_data_temp->getLogin_attempts + 1;
+                                                    $socio_data_temp->setLogin_attempts($cant_fallidos);
+                                                    if ($cant_fallidos >= 3){
+                                                            $template_params->{'mostrar_captcha'}=1; 
+                                                    }
+                                                        
+#                                                     _destruirSession('U357', $template_params);  
+                                            
+                                   }
+                              
+                             }  else   {     # else de  if ($socio_data_temp) -----  ingreso usuario invalido      
+                                            $mensaje= 'U357';
+             
+                              }
+
+                              $template_params->{'loginAttempt'} = 1;  
+                              _destruirSession($mensaje, $template_params); 
+
+
+
+
                   }# end unless ($userid)
     }# el else de DEMO
 }# end checkauth
