@@ -63,27 +63,21 @@
                     <li> [% "C&oacute;digo"|i18n %]:    <strong>[% nivel3.getBarcode  %]</strong></li>
                     <li> [% "Disponibilidad"|i18n %]:   <strong class="[% IF nivel3.esParaSala %]salaLectura[% ELSE %]prestamo[% END %]">[% nivel3.getDisponibilidadObject.getNombre  %]</strong></li>
                     <li> [% "Estado"|i18n %]:           <strong class="[% IF nivel3.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">[% nivel3.getEstadoObject.getNombre  %]</strong></li>
-    [% FOREACH nivel2 %]
-        [% FOREACH nivel3 %]
-                    <!-- preguntamos si ya se muestra el usuario en el prestamo, para no mostrarlo dos veces -->
-                    [% IF !prestamo.getNro_socio %]
-                        [% IF reserva.getNro_socio %]
-                            [% 'Reservado a:' | i18n  %] 
-                            <strong>[% PERL %]
-                                print C4::AR::Filtros::link_to(   text =>     "[% socio_reserva.persona.getApeYNom %]",
-                                                                  url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
-                                                                  params =>   ["nro_socio=[% socio_reserva.getNro_socio %]"],
-                                                                  title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
-                                                                  blank =>  1,
-                                                            );
-                            [% END %]
-                            </strong>
-                        [% END %]
-                    [% END %]
-        [% END %]
-    [% END %]                    
 
-    </ul>
+    [% IF socio_reserva %]
+        [% 'Reservado a:' | i18n  %] 
+        <strong>[% PERL %]
+            print C4::AR::Filtros::link_to(   text =>     "[% socio_reserva.persona.getApeYNom %]",
+                                              url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+                                              params =>   ["nro_socio=[% socio_reserva.getNro_socio %]"],
+                                              title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
+                                              blank =>  1,
+                                        );
+        [% END %]
+        </strong>
+    [% END %]
+
+</ul>
 
 <div id="historicoDisponibilidad"></div>
 <div id="historicoCirculacion"></div>

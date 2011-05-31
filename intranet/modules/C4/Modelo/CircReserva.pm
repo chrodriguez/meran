@@ -303,7 +303,7 @@ sub cancelar_reserva{
 	if($self->getId3){
 		$self->debug("Es una reserva asignada se trata de reasignar");
 #Si la reserva que voy a cancelar estaba asociada a un item tengo que reasignar ese item a otra reserva para el mismo grupo
-		$self->reasignarEjemplarASiguienteReservaEnEspera($nro_socio);
+		$self->reasignarEjemplarASiguienteReservaEnEspera($responsable);
 # Se borra la sancion correspondiente a la reserva si es que la sancion todavia no entro en vigencia
 		$self->debug("Se borra la sancion de la reserva");
 		$self->borrar_sancion_de_reserva();
