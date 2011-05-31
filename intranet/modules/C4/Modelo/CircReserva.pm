@@ -478,7 +478,6 @@ sub cancelar_reservas_sancionados {
 											fecha_final    	=> { ge => $hoy},
 										],
 									select => ['nro_socio'],
-									with_objects => [ 'ref_tipo_prestamo_sancion' ]
 									);
 
 	my @socios_sancionados;
