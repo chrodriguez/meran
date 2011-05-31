@@ -24,7 +24,7 @@ $params{'tipo'}= 'OPAC';
 $params{'id1'}= $id1;
 $params{'id2'}= $id2;
 $params{'nro_socio'}= $nro_socio;
-$params{'loggedinuser'}= $nro_socio;
+$params{'responsable'}= $nro_socio;
 $params{'tipo_prestamo'}= 'DO';
 
 my ($msg_object)= C4::AR::Reservas::t_reservarOPAC(\%params);
