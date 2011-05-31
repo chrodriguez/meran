@@ -13,6 +13,7 @@ function obtenerTabla(){
 function updateObtenerTabla(responseText){
 
     $('#detalle_tabla').html(responseText);
+    zebra('detalle_tabla');
 
 }
 
@@ -32,7 +33,7 @@ function obtenerTablaFiltrada(){
 function updateObtenerTablaFiltrada(responseText){
 
     $('#detalle_tabla').html(responseText);
-
+    zebra('detalle_tabla');
 }
 
 
@@ -75,6 +76,7 @@ function agregarRegistro(tabla){
 function updateAgregarRegistro(responseText){
 
     $('#detalle_tabla').html(responseText);
+    zebra('detalle_tabla');
 
 }
 
