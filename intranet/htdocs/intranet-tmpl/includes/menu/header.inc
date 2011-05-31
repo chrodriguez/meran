@@ -75,10 +75,11 @@ function socioSearchEvent(event){
 </div>
 <div class="active-links">
 	  <div class="loggedin" id="session">
-	      <a href="#" class="profile-links">
 	        <span id="profile-image">
-	            <a title="[% socio_data.usr_nombre %], [% socio_data.usr_apellido %]" rel="contact" class="url" 
-	               href="[% url_prefix %]/usuarios/reales/settings.pl?token=[% token %]&amp;nro_socio=[% socio_data.usr_nro_socio %]">
+	            <a class="url" 
+	               href="[% url_prefix %]/usuarios/reales/settings.pl?token=[% token %]&amp;nro_socio=[% socio_data.usr_nro_socio %]"
+	               title="[% 'Opciones personales' | i18n %]"
+	               >
 	               
 			      [% IF socio_data.usr_tiene_foto %]
 			          <img src="[% themelang %]/pictures/[% socio_data.usr_tiene_foto %]"  
@@ -90,10 +91,11 @@ function socioSearchEvent(event){
 			      [% END %]
 	            </a>
 	        </span>
-	      </a>
 	      <span id="screen-name">
 		      <a href="[% url_prefix %]/usuarios/reales/settings.pl?token=[% token %]&amp;nro_socio=[% socio_data.usr_nro_socio %]"
-		        style="color:#BABABA; display: inline-block;">
+ 		         style="color:#BABABA; display: inline-block;"
+                 title="[% 'Opciones personales' | i18n %]"
+		        >
 		        [% socio_data.usr_nro_socio %] ([% socio_data.usr_apellido %], [% socio_data.usr_nombre %])
 		      </a>
 	      </span>

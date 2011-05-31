@@ -5,29 +5,31 @@
         
         <div class="contenedor_paginador">[% paginador %]</div>
         
-        <table class="tablaHistorialReservas datos_tabla" cellspacing=0  cellpadding=0 border=0 width="100%">
-            <tr class="titulo_tabla_resultado">
+        <table id="tablaResult" class="tabla_datos" cellspacing=0  cellpadding=0 border=0 width="100%">
+            <tr class="tablaresultadoTitle" >
             
-                <td >
+                <th>
                     [% "T&iacute;tulo" | i18n %]
-                </td>
-                <td >
+                </th>
+                <th>
                     [% "Autor" | i18n %]
-                </td>
-                <td>
+                </th>
+                <th>
                     [% "Edici&oacute;n" | i18n %]
-                </td>
-                <td >
+                </th>
+                <th>
                     [% "C&oacute;digo" | i18n %]
-                </td>
-                <td>[% "Fecha" | i18n %]</td>
+                </th>
+                <th>
+                    [% "Fecha" | i18n %]
+                </th>
             
             </tr>
             
             [% FOREACH reserva IN reservas %]
-            <tr valign=middle align="center">
+            <tr>
                 
-                <td>
+                <td class="titulo_result">
                     [% PERL %]
                             print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
                                                             url =>      "[% url_prefix %]/opac-detail.pl",
