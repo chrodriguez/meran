@@ -6,15 +6,17 @@ use CGI;
 use C4::AR::Reportes;
 use C4::AR::Estadisticas;
 use C4::AR::Busquedas;
+use JSON;
 #Genera un inventario a partir de la busqueda por signatura topografica
 
 my $input   = new CGI;
 
+C4::AR::Debug::debug($input->param('obj'));
+my $obj= $input->param('obj');
 my @results;
-my $obj     = C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 
+$obj = C4::AR::Utilidades::from_json_ISO($obj);
 
-C4::AR::Debug::debug($obj);
 my $sigtop  = $obj->{'sigtop'};
 my $barcode = $obj->{'barcode'};
 my $accion  = $obj->{'accion'};
