@@ -361,7 +361,6 @@ sub get_template_and_user {
     $in->{'template_params'}    = $params;
 
     if ( $session->param('userid') ) {
-        $params->{'loggedinuser'}       = $session->param('userid');
         $params->{'nro_socio'}          = $session->param('userid');
         $params->{'socio'}              = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
         if (!$usuario_logueado) {

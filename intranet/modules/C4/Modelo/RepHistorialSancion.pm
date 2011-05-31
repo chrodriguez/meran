@@ -187,7 +187,7 @@ sub agregar {
 
 	$self->setTipo_operacion($data_hash->{'tipo_operacion'});
     $self->setNro_socio($data_hash->{'nro_socio'});
-    $self->setResponsable($data_hash->{'loggedinuser'});
+    $self->setResponsable($data_hash->{'responsable'});
     $self->setFecha(C4::Date::format_date_in_iso($hoy, $dateformat));
     $self->setFecha_comienzo($data_hash->{'fecha_comienzo'});
     $self->setFecha_final($data_hash->{'fecha_final'});
