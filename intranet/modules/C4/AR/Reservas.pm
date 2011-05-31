@@ -49,20 +49,18 @@ $VERSION = 3.0;
 =item
 Esta funcion obtiene el socio del ejemplar prestado
 =cut
-# FIXME devuelve otro socio, me devuelve carbonemiguel cuando enrealidad lo reservo kohaadmin
 sub getSocioFromReserva {
     my ($id3)= @_;
 
     my @filtros;
     push(@filtros, ( id3 => { eq => $id3 } ));
-#    push(@filtros, ( fecha_devolucion => { eq => undef } ) );
+    push(@filtros, ( estado => { eq => 'E' } ));    
 
     my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(
                                                                                     query => \@filtros,
                                                                                     require_objects => ['socio', 'socio.persona'],
                                                                                     select          => ['socio.*','usr_persona.*']
                                                                                 );
-
     if(scalar(@$reservas_array_ref) > 0){
         return ($reservas_array_ref->[0]->socio);
     }else{

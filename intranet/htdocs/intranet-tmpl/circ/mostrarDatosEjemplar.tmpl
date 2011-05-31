@@ -27,9 +27,9 @@
                                                               blank =>  1,
                                                         );
                         [% END %]
-                    [% END %]
+                    [% ELSE %]
                         <strong class="[% IF nivel3.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">[% nivel3.getEstadoObject.getNombre  %]</strong>
-
+                    [% END %]
                     [% IF socio_reserva %]
                         [% 'Reservado a:' | i18n  %] 
                         <strong>
