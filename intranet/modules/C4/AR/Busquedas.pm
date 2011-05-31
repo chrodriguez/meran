@@ -1487,8 +1487,7 @@ sub busquedaPorBarcodeBySphinx{
 
 
 sub t_loguearBusqueda {
-#     require C4::Modelo::RepHistorialBusqueda;
-    my($loggedinuser,$desde,$http_user_agent,$search_array)=@_;
+    my($nro_socio,$desde,$http_user_agent,$search_array)=@_;
 
     my $msg_object= C4::AR::Mensajes::create();
     $desde = $desde || 'SIN_TIPO';
@@ -1497,7 +1496,7 @@ sub t_loguearBusqueda {
     my $msg_object= C4::AR::Mensajes::create();
     $db->{connect_options}->{AutoCommit} = 0;
     eval {
-        $historial->agregar($loggedinuser,$desde,$http_user_agent,$search_array);
+        $historial->agregar($nro_socio,$desde,$http_user_agent,$search_array);
         $db->commit;
     };
 
@@ -1523,7 +1522,6 @@ sub logBusqueda{
 
 	my @search_array;
 
-   $params->{'loggedinuser'}= $session->param('nro_socio');
 	my $valorOPAC= C4::AR::Preferencias::getValorPreferencia("logSearchOPAC");
 	my $valorINTRA= C4::AR::Preferencias::getValorPreferencia("logSearchINTRA");
    C4::AR::Debug::debug($params->{'type'});
@@ -1567,7 +1565,7 @@ sub logBusqueda{
 	}
 
 	my ($error, $codMsg, $message)= C4::AR::Busquedas::t_loguearBusqueda(
-																			$params->{'loggedinuser'},
+																			$session->param('nro_socio'),
 																			$params->{'type'},
                                                          					$session->param('browser'),
 																			\@search_array
