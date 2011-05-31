@@ -25,11 +25,11 @@ use Text::LevenshteinXS;
 # Compartido = STATE001 
 # Disponible = STATE002
 # Ejemplar deteriorado = STATE003 
-# En Encuadernación = STATE004
+# En EncuadernaciÃ³n = STATE004
 # Perdido = STATE005
 # En etiquetado = STATE0006
 # En impresiones = STATE007
-# En procesos técnicos = STATE008
+# En procesos tÃ©cnicos = STATE008
 ##################################################
 
 
