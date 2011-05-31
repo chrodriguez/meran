@@ -479,6 +479,8 @@ function updateMostrarEstructuraDelNivel3(responseText){
 }
 
 function switchTipoBarcode(chosen, readOnly){
+  
+//   alert("switchTipoBarcode => chosen: " + chosen + " readOnly: " + readOnly);
 
     readOnly.val('');
     readOnly.attr("readonly",true);
@@ -496,7 +498,9 @@ function registrarToggleOnChangeForBarcode(callFromBarcode){
     var barcode_val     = $.trim(barcode_comp.val());
 
     if (callFromBarcode){       
+// alert("callFromBarcode");
         if ((cantidad_val.length)>0) {
+//           alert("cant es > 0");
             jConfirm(BORRAR_CANTIDAD_DE_EJEMPLARES, CATALOGO_ALERT_TITLE, function(confirmStatus){
                 if (confirmStatus){
                     switchTipoBarcode(barcode_comp,cantidad_comp);
@@ -508,6 +512,7 @@ function registrarToggleOnChangeForBarcode(callFromBarcode){
         } else switchTipoBarcode(barcode_comp,cantidad_comp);
     } else {
         if ((barcode_val.length)>0){
+//           alert("not callFromBarcode => barcode_val > 0");
             jConfirm(BORRAR_LISTA_DE_CODIGOS, CATALOGO_ALERT_TITLE, function(confirmStatus){
                 if (confirmStatus){
                     switchTipoBarcode(cantidad_comp,barcode_comp);

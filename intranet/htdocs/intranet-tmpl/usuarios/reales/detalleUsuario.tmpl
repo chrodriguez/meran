@@ -182,7 +182,7 @@
                             </li>
                         [% ELSE %]
                             <li>  
-                                    <form href=[% url_prefix %]/usuarios/change_password.pl method=get id="formCambioPassword">
+                                    <form action=[% url_prefix %]/usuarios/change_password.pl method=get id="formCambioPassword">
                                         <input type=hidden name="token" value="[% token %]" >
                                     </form>        
       
@@ -195,7 +195,7 @@
                             </li>
                         [% END %]
                             <li>
-                                <form href=[% url_prefix %]/usuarios/cardGenerator.pl method=get name="formCarnet">
+                                <form action=[% url_prefix %]/usuarios/cardGenerator.pl method=get name="formCarnet">
                                     <input type=hidden name="nro_socio" value="[% socio.getNro_socio %]" >
                                     <input type=hidden name="token" value="[% token %]" >
                                 </form>

@@ -1,3 +1,11 @@
+<script>
+
+    $(document).ready(function(){
+        checkedAll("tabla_ejemplares"+"[% id2 %]", "checkEjemplares"+"[% id2 %]");
+
+    });
+
+</script>
 
 [% IF cantItems %]
 [% "Cantidad de Items:"|i18n %] [% cantItems %]<br>
@@ -10,7 +18,7 @@
 <li class="columna_der">[% "Ejemplares Prestados:"|i18n %]<strong> [% cantPrestados %]</strong></li>
 </ul>                
 <hr>
-<table cellspacing="0" cellpadding="0"  width="100%" class="tablaResult datos_tabla">
+<table id="tabla_ejemplares[% id2 %]" cellspacing="0" cellpadding="0"  width="100%" class="tablaResult datos_tabla">
 		<tr align="center" cellpadding="0"  valign="middle" class="titulo_tabla_resultado">
             <td>
                 [% PERL %]
@@ -39,7 +47,7 @@
 
 		<tr align="center">
                 <td>
-                    <input type="checkbox" id="checkEjemplares" name="checkEjemplares" class="icon_seleccionar" value="[% nivel3_obj.getId3 %]">
+                    <input type="checkbox" id="checkEjemplares" name="checkEjemplares[% id2 %]" class="icon_seleccionar" value="[% nivel3_obj.getId3 %]">
                 </td>
                 <td>[% nivel3_obj.getSignatura_topografica %]</td>
                 <td>
@@ -184,12 +192,6 @@
 	</table>
 
 <div class="horizontal">[% "Para los elementos que est&aacute;n marcados:" | i18n %]</div>
-
-<form id="edicion_grupal" name="edicion_grupal" href="datosDocumento.pl" method="post">
-  
-    <input type="hidden" id="tipoAccion" name="tipoAccion" value="MODIFICAR_NIVEL_3_ALL" />
-    <input type="hidden" id="token" name="token" value="[% token %]" />
-</form>
 
       [% PERL %]
               print C4::AR::Filtros::to_Icon(   

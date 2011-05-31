@@ -12,7 +12,7 @@
 
 <script type="text/javascript">
     function loginSuccess(response){
-    	window.location = "https://[% HOST %]/cgi-bin/koha/mainpage.pl";
+    	window.location = "https://[% HOST %][% url_prefix %]/mainpage.pl?token=[% token %]";
     }
 </script>
 

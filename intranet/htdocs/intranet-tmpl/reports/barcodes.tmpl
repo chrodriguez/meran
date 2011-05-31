@@ -10,7 +10,7 @@ function hacerSubmit(){
 <center>
 <table border=0 cellspacing=0 cellpadding=2>
 	<td>[% "Seleccione una unidad de informaci&oacute;n :" | i18n %]</td>
-	<td><form name="unidadInformacion" href=[% url_prefix %]/reports/barcodes.pl method=post >
+	<td><form name="unidadInformacion" action=[% url_prefix %]/reports/barcodes.pl method=post >
         [% unidades %]</form>
 	</td>
 </table>

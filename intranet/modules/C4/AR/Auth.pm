@@ -546,23 +546,23 @@ sub checkauth {
                       } else {
                           #redirecciono a una pagina informando q no tiene  permisos
                           $session->param('codMsg', 'U354');
-                          $session->param('redirectTo', '/cgi-bin/koha/informacion.pl');
-                          redirectTo('/cgi-bin/koha/informacion.pl');
+                          $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/informacion.pl');
+                          redirectTo(C4::AR::Utilidades::getUrlPrefix().'/informacion.pl');
                     } 
                   }
                   elsif ($estado eq "datos_censales_invalidos"){
                       C4::AR::Debug::debug("C4::AR::Auth::checkauth => datos_censales_invalidos");
           #             _destruirSession('U309', $template_params);
                       $session->param('codMsg', $codeMSG);
-                      $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
-                      redirectTo('/cgi-bin/koha/auth.pl'); 
+                      $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/auth.pl');
+                      redirectTo(C4::AR::Utilidades::getUrlPrefix().'/auth.pl'); 
                   }
                   elsif ($estado eq "sesion_invalida") { 
                       C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_invalida");
                       _destruirSession('U406', $template_params);
                       $session->param('codMsg', $codeMSG);
-                      $session->param('redirectTo', '/cgi-bin/koha/auth.pl');
-                      redirectTo('/cgi-bin/koha/auth.pl'); 
+                      $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/auth.pl');
+                      redirectTo(C4::AR::Utilidades::getUrlPrefix().'/auth.pl'); 
                   } 
                   elsif ($estado eq "sin_sesion") { 
                       C4::AR::Debug::debug("C4::AR::Auth::checkauth => sin_sesion");
@@ -575,8 +575,8 @@ sub checkauth {
                       C4::AR::Debug::debug("C4::AR::Auth::checkauth => ESTO MENOS ???");
                       _destruirSession('U406', $template_params);
                       $session->param('codMsg', $codeMSG);
-                      $session->param('redirectTo', '/cgi-bin/koha/error.pl');
-                      redirectTo('/cgi-bin/koha/error.pl'); 
+                      $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/error.pl');
+                      redirectTo(C4::AR::Utilidades::getUrlPrefix().'/error.pl'); 
                   }
                   
                   #por aca se permite llegar a paginas que no necesitan autenticarse
@@ -600,6 +600,72 @@ sub checkauth {
                       #se verifica la password ingresada
         
 #  COMENTADO PORQUE DA ERROR - $userid  NO EXISTE ==>  unless ($userid) 
+
+#                       my $socio_data_temp = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
+#                       my $login_attempts = $socio_data_temp->getLogin_attempts;
+#                       my $captchaResult;
+# 
+#                       if ($login_attempts > 2 ){
+#                          
+#                           my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
+#                           my $reCaptchaChallenge  = $query->param('recaptcha_challenge_field');
+#                           my $reCaptchaResponse   = $query->param('recaptcha_response_field');
+#                     
+#                           use Captcha::reCAPTCHA;
+#                           my $c = Captcha::reCAPTCHA->new;
+#   
+#                           C4::AR::Debug::debug($reCaptchaResponse);
+# 
+#                           $captchaResult = $c->check_answer(
+#                                       $reCaptchaPrivateKey, $ENV{'REMOTE_ADDR'},
+#                                       $reCaptchaChallenge, $reCaptchaResponse
+#                           );
+#                     
+#                       } else { 
+                              $sin_captcha = 1; 
+#                       }  
+
+#                       if ($sin_captcha || $captchaResult->{is_valid} ){
+			if ($sin_captcha){
+
+
+                            my ($socio)         = _verificarPassword($userid,$password,$nroRandom);
+                #             C4::AR::Debug::debug("la pass es valida?".$passwordValida);
+                            if ($socio) {
+                            #se valido la password y es valida
+                            #setea loguins duplicados si existe, dejando logueado a un solo usuario a la vez
+                            
+
+                                _setLoguinDuplicado($userid,  $ENV{'REMOTE_ADDR'});
+                                #$socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
+                                # TODO todo esto va en una funcion
+                                $sessionID  = $session->param('sessionID');
+                                $sessionID.="_".$socio->ui->getNombre;
+                                _actualizarSession($sessionID, $userid, $socio->getNro_socio(), $time, '', $type, $flagsrequired, _generarToken(), $session);
+                #                 C4::AR::Debug::debug("userid en actualizarSession actualizadoarafue".$session->param('userid'));
+                                buildSocioData($session,$socio);
+                #                 C4::AR::Debug::debug($session->param('usr_apellido'));
+                                #Logueo una nueva sesion
+                                _session_log(sprintf "%20s from %16s logged out at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},$time);
+                                #por defecto no tiene permisos
+                                if( $flags = $socio->tienePermisos($flagsrequired) ){
+                                    _realizarOperacionesLogin($type,$socio);
+                                }
+
+                                #Si se logueo correctamente en intranet entonces guardo la fecha
+                                my $now = Date::Manip::ParseDate("now");
+                                $socio->setLast_login($now);
+                                $socio->save();
+                                if ($type eq 'opac') {
+                                              $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/opac-main.pl?token='.$session->param('token'));
+                                              redirectToNoHTTPS(C4::AR::Utilidades::getUrlPrefix().'/opac-main.pl?token='.$session->param('token'));
+                # #                               $session->secure(0);
+                                
+                                }else{
+                                    $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/mainpage.pl?token='.$session->param('token'));
+                                    redirectTo(C4::AR::Utilidades::getUrlPrefix().'/mainpage.pl?token='.$session->param('token'));
+                                }
+
 
                       my $socio_data_temp = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
 
@@ -975,9 +1041,9 @@ sub desencriptar{
 sub _change_Password_Controller {
 	my ($query, $userid, $type, $token) = @_;
     if ($type eq 'opac') {
-            redirectTo('/cgi-bin/koha/change_password.pl?token='.$token);
+            redirectTo(C4::AR::Utilidades::getUrlPrefix().'/change_password.pl?token='.$token);
     } else {
-            redirectTo('/cgi-bin/koha/usuarios/change_password.pl?token='.$token);
+            redirectTo(C4::AR::Utilidades::getUrlPrefix().'/usuarios/change_password.pl?token='.$token);
     }
 }
 =item sub cerrarSesion
@@ -1090,7 +1156,7 @@ sub redirectToAuth {
     my ($template_params) = @_;
 
     my $url;
-    $url = '/cgi-bin/koha/auth.pl';
+    $url = C4::AR::Utilidades::getUrlPrefix().'/auth.pl';
     if($template_params->{'loginAttempt'}){
         $url = $url.'?loginAttempt=1'
     }elsif($template_params->{'sessionClose'}){
@@ -1144,9 +1210,9 @@ sub _opac_logout{
 
     if ( C4::AR::Preferencias::getValorPreferencia("habilitar_https") ){
     #se encuentra habilitado https
-        redirectToHTTPS('/cgi-bin/koha/login/auth.pl');
+        redirectToHTTPS(C4::AR::Utilidades::getUrlPrefix().'/login/auth.pl');
     }else{
-        redirectTo('/cgi-bin/koha/auth.pl');
+        redirectTo(C4::AR::Utilidades::getUrlPrefix().'/auth.pl');
     }
 }
 
@@ -1366,7 +1432,7 @@ sub redirectAndAdvice{
     $cod_msg = getMsgCode();
     $session->param('codMsg',$cod_msg);
     if(!$destination){
-        $destination='/cgi-bin/koha/informacion.pl';
+        $destination=C4::AR::Utilidades::getUrlPrefix().'/informacion.pl';
     }
     C4::AR::Auth::redirectTo($destination);
 }

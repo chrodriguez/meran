@@ -11,7 +11,7 @@ use CGI;
 
 my $cgi = new CGI;
 
-my ($template, $t_params)   = C4::Output::gettemplate("splash.tmpl", 'intranet');
+my ($template, $t_params)   = C4::Output::gettemplate("index.html", 'opac');
 
 # Se inicializa la session y demas parametros para autenticar, si token está activado, es recomendable switchear las lineas siguientes 
 # para forzar re-inicio de sesion 

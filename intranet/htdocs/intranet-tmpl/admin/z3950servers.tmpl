@@ -95,7 +95,7 @@
 	</tr>
  </table>
 						    
-        <form href="[% script_name %]" name=Aform method=post>
+        <form action="[% script_name %]" name=Aform method=post>
         <input type=hidden name=op value='add_validate'>
 
 <table>
@@ -176,7 +176,7 @@
 
  [% IF add_validate %]
         Registro de datos
-        <form href='[% script_name %]' method=post>
+        <form action='[% script_name %]' method=post>
         <input type=submit value=OK>
         </form>
  [% END %]
@@ -194,7 +194,7 @@
                                 [% searchfield %]
                         </td>
                 </tr>
-                <form href='[% script_name %]' method=post>
+                <form action='[% script_name %]' method=post>
                         <input type=hidden name=op value=delete_confirmed>
                         <input type=hidden name=searchfield value=[% id %]>
                 <tr>
@@ -230,7 +230,7 @@
                 </tr>
                 <tr>
                         <td><INPUT type=submit value='SI'></form></td>
-                        <td><form href='[% script_name %]' method=post><input type=submit value=NO></form></td>
+                        <td><form action='[% script_name %]' method=post><input type=submit value=NO></form></td>
                 </tr>
 	</table>
 
@@ -238,7 +238,7 @@
 
 [% IF delete_confirmed %]
         Borrado de datos
-        <form href='[% script_name %]' method=post>
+        <form action='[% script_name %]' method=post>
                 <input type=submit value=OK>
         </form>
  [% END %]
@@ -258,7 +258,7 @@
 
 <table>
 	<tr> 
-        	<form href='[% script_name %]' method=post name=form1>
+        	<form action='[% script_name %]' method=post name=form1>
                 <td><input class="inputFontNormal" type=text name=description value=[% searchfield %]></td>
 		<td><a href="#" onClick="form1.reset()" >
 		<img name="clear" id="clear" alt="Limpiar" src="[% themelang %]/images/borrar2.png" border="0"></a></td>
@@ -332,7 +332,7 @@
 
 <br><br>
 
-<form href='[% script_name %]' method=post name=form2>
+<form action='[% script_name %]' method=post name=form2>
         <input type=hidden name=op value=add_form>
 
 <table width=100%>

@@ -79,7 +79,7 @@
                 <b> [%  socio_data.usr_calle %]</b>
         </li>
 <!-- FIXME hacer preferencia para el cambio de password, para permitir o no cambio de pass desde OPAC-->
-        <form action=/cgi-bin/koha/change_password.pl method=get id="formCambioPassword">
+        <form action=[% url_prefix %]/change_password.pl method=get id="formCambioPassword">
             <input type=hidden name="token" value="[% token %]" >
         </form>
         [% PERL %]

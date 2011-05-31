@@ -139,8 +139,8 @@ sub validarBarcode {
             $msg_object->{'error'} = 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U402', 'params' => [$subcampo_hash_ref->{'dato'}]} ) ;
 
-        } elsif( !($msg_object->{'error'}) && C4::AR::Nivel3::existeBarcode($subcampo_hash_ref->{'dato'}) ){
-            #verifico en el INSERT si el barcode existe en la base de datos
+        } elsif( !($msg_object->{'error'}) && (! $self->estadoCompartido) && C4::AR::Nivel3::existeBarcode($subcampo_hash_ref->{'dato'}) ){
+            #verifico en el INSERT si el barcode existe en la base de datos (solo cuando el ejemplar no tiene estado COMPARTIDO)
             C4::AR::Debug::debug("CatRegistroMarcN3 => validarBarcode => el barcode ".$subcampo_hash_ref->{'dato'}." existe en la base");
             $msg_object->{'error'} = 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$subcampo_hash_ref->{'dato'}]} );
@@ -591,6 +591,16 @@ sub getEstado{
     return ('');
 }
 
+
+=head2 sub estadoDisponible
+
+=cut
+sub estadoCompartido{
+    my ($self) = shift;
+    
+    return (ESTADO_COMPARTIDO($self->getIdEstado()));    
+}
+
 =head2 sub estadoDisponible
 
 =cut
@@ -714,6 +724,23 @@ ESTADO
     return ($estado eq 3);
 }   
 
+sub ESTADO_COMPARTIDO {
+=item    
+ESTADO
+
+    1   Baja
+    2   Compartido
+    3   Disponible
+    4   Ejemplar deteriorado
+    5   En Encuadernación
+    6   Perdido
+=cut
+    
+    my ($estado) = @_;
+    return ($estado eq 2);
+}   
+
+
 =item
 DISPONIBILIDAD
 
@@ -724,14 +751,14 @@ DISPONIBILIDAD
 sub DISPONIBILIDAD_PRESTAMO{
     my ($estado) = @_;
 
-    C4::AR::Debug::debug("CatRegistroMarcN3 => DISPONIBILIDAD PRESTAMO");
+#     C4::AR::Debug::debug("CatRegistroMarcN3 => DISPONIBILIDAD PRESTAMO");
     return ($estado eq 0);
 }
 
 sub DISPONIBILIDAD_PARA_SALA{
     my ($estado) = @_;
 
-    C4::AR::Debug::debug("CatRegistroMarcN3 => DISPONIBILIDAD PARA SALA");
+#     C4::AR::Debug::debug("CatRegistroMarcN3 => DISPONIBILIDAD PARA SALA");
     return ($estado eq 1);
 }
 

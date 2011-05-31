@@ -13,8 +13,8 @@
 
 function generarForm(id1, id2){
 
-    if(seleccionoAlgo("checkEjemplares")){
-        var id3_array   = recuperarSeleccionados("checkEjemplares");
+    if(seleccionoAlgo("checkEjemplares"+id2)){
+        var id3_array   = recuperarSeleccionados("checkEjemplares"+id2);
         var html        = "";
 
         for (i = 0; i < id3_array.length; i++){
@@ -300,7 +300,7 @@ function updateInfoPrestarReserva(responseText){
 $(document).ready(function(){
 	inicializar();
 	zebra("tablaResult");
-    checkedAll("select_all", "checkEjemplares");
+//     checkedAll("select_all", "checkEjemplares");
 
 });
 
@@ -421,6 +421,12 @@ $(document).ready(function(){
         </div>
 
 [% END %]<!-- END FOREACH Nivel 2-->
+
+<form id="edicion_grupal" name="edicion_grupal" action="datosDocumento.pl" method="post">
+  
+    <input type="hidden" id="tipoAccion" name="tipoAccion" value="MODIFICAR_NIVEL_3_ALL" />
+    <input type="hidden" id="token" name="token" value="[% token %]" />
+</form>
 
 </div> <!-- Fin DIV detalleComun -->
 <div id='basic-modal-content'></div>
