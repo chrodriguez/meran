@@ -147,7 +147,6 @@ C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON E
 			$params{'id3Old'}                   = $id3Old;
 			$params{'descripcionTipoPrestamo'}  = $array_ids3->[$i]->{'descripcionTipoPrestamo'};
 			$params{'nro_socio'}                = $nro_socio;
-			$params{'loggedinuser'}             = $user;
 			$params{'responsable'}              = $user;
 			$params{'id_ui'}                    = C4::AR::Preferencias::getValorPreferencia('defaultUI');
 			$params{'id_ui_prestamo'}           = C4::AR::Preferencias::getValorPreferencia('defaultUI');
@@ -196,7 +195,7 @@ elsif($tipoAccion eq "REALIZAR_DEVOLUCION"){
                                 );
 
     $obj->{'nro_socio'}        = $nro_socio;
-	$obj->{'loggedinuser'}     = $user;
+	$obj->{'responsable'}      = $user;
 	my ($Message_arrayref)     = C4::AR::Prestamos::t_devolver($obj);
     
    	my %info;
@@ -217,10 +216,10 @@ elsif($tipoAccion eq "REALIZAR_RENOVACION"){
                                                                     'intranet'
                                 );
 
-    $obj->{'loggedinuser'}     = $user;
-    my $infoOperaciones = C4::AR::Prestamos::t_renovar($obj);
+    $obj->{'responsable'}   = $user;
+    my $infoOperaciones     = C4::AR::Prestamos::t_renovar($obj);
 
-    my $infoOperacionJSON = to_json $infoOperaciones;
+    my $infoOperacionJSON   = to_json $infoOperaciones;
     C4::AR::Auth::print_header($session);
 	print $infoOperacionJSON;
 }
@@ -240,10 +239,10 @@ elsif($tipoAccion eq "CANCELAR_RESERVA"){
                                 );
 		
 	my %params;
-	$params{'id_reserva'}= $obj->{'id_reserva'};
-	$params{'nro_socio'}= $obj->{'nro_socio'};
-	$params{'loggedinuser'}= $user;
-	$params{'tipo'}="INTRA";
+	$params{'id_reserva'}   = $obj->{'id_reserva'};
+	$params{'nro_socio'}    = $obj->{'nro_socio'};
+	$params{'responsable'}  = $user;
+	$params{'tipo'}         = "INTRA";
 	
 	my ($Message_arrayref)=C4::AR::Reservas::t_cancelar_reserva(\%params);
 	
@@ -270,7 +269,6 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
 	$params{'barcode'}              = $obj->{'barcode'};
 	$params{'nro_socio'}            = $obj->{'nro_socio'};
 	$params{'operacion'}            = $obj->{'operacion'};
-	$params{'loggedinuser'}         = $user;
 	$params{'responsable'}          = $user;
 	$params{'tipo_prestamo'}        = $obj->{'tipoPrestamo'};
 	$params{'datosArray'}           = $obj->{'datosArray'};
@@ -344,8 +342,8 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_DATOS_EJEMPLAR"){
     if($nivel3){
 
         my $socio                       = C4::AR::Prestamos::getSocioFromPrestamo($nivel3->getId3());
-        my $socio_reserva               = C4::AR::Reservas::getSocioFromReserva($nivel3->getId3()); 
-           
+        my $socio_reserva               = C4::AR::Reservas::getSocioFromReserva($nivel3->getId3());
+    
         $t_params->{'titulo'}           = $nivel3->nivel2->nivel1->getTitulo();
         $t_params->{'autor'}            = $nivel3->nivel2->nivel1->getAutor();
         $t_params->{'nivel3'}           = $nivel3;

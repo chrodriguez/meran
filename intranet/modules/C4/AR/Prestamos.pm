@@ -354,7 +354,7 @@ sub prestarYGenerarTicket{
     if(!$msg_object->{'error'}){
     #Se crean los ticket para imprimir.
         C4::AR::Debug::debug("Prestamos => prestarYGenerarTicket => SE PRESTO SIN ERROR --> SE CREA EL TICKET");
-        $ticketObj      = C4::AR::Prestamos::crearTicket($id3,$params->{'nro_socio'},$params->{'loggedinuser'},$params->{'adicional_selected'});
+        $ticketObj      = C4::AR::Prestamos::crearTicket($id3,$params->{'nro_socio'},$params->{'responsable'},$params->{'adicional_selected'});
     }
 
     push (@infoMessages, $msg_object);
@@ -599,7 +599,7 @@ sub t_renovar {
 
                         # Si la renovacion se pudo realizar
                         C4::AR::Debug::debug("SE RENOVO SIN ERROR --> SE CREA EL TICKET");
-                        my $ticketObj = C4::AR::Prestamos::crearTicket($data->{'id3'},$prestamo->getNro_socio,$params->{'loggedinuser'});
+                        my $ticketObj = C4::AR::Prestamos::crearTicket($data->{'id3'},$prestamo->getNro_socio,$params->{'responsable'});
                         my %infoOperacion = (
                                     ticket  => $ticketObj,
                         );
@@ -795,13 +795,13 @@ sub verificarCirculacionRapida {
 
 
 sub crearTicket {
-    my ($id3,$nro_socio,$loggedinuser,$adicional_selected)=@_;
+    my ($id3,$nro_socio,$responsable,$adicional_selected)=@_;
 
     my %ticket;
 
     $ticket{'adicional_selected'}       = $adicional_selected;
     $ticket{'socio'}                    = $nro_socio;
-    $ticket{'responsable'}              = $loggedinuser;
+    $ticket{'responsable'}              = $responsable;
     $ticket{'id3'}                      = $id3;
 
     return(\%ticket);

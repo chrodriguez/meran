@@ -1648,7 +1648,7 @@ input.file {
 }
 
 .editable:hover {
-	background: InfoBackground;
+	background: graytext;
 }
 
 .contenedor_paginador {

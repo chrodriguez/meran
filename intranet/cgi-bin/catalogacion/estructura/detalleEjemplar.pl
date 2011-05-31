@@ -116,8 +116,8 @@ else {
     # recibimos el id1 para armar el detalle completo
     my $id1     = $input->param('id1');
     if ($id1) {
-        #genera el detalle para intra y setea los parametros para el template
-        C4::AR::Nivel3::detalleCompletoINTRA($id1, $t_params);
+        my $socio_reserva               = C4::AR::Reservas::getSocioFromReserva($nivel3->getId3());
+        $t_params->{'socio_reserva'}    = $socio_reserva; 
     }
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
