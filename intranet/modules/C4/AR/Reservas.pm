@@ -29,7 +29,6 @@ $VERSION = 3.0;
     getReservasDeGrupo
     cantReservasPorGrupo
     DatosReservas
-    getDatosReservaDeId3
     CheckWaiting
     tiene_reservas
     Enviar_Email_Asignacion_Reserva
