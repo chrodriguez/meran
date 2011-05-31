@@ -79,21 +79,29 @@
                         jAlert(alertString2);
                 }
         }
-        </SCRIPT>
- <table width="100%" class="titulo" border="0" cellpadding="0" cellspacing="0" >
- 	<tr>
-		<td>
+        </script>
+<fieldset>
+    <legend>
         [% IF searchfield %]
  			Modificar server Z39.50
         [% ELSE %]
  			Agregar Servidor Z39.50
  		[% END %]
- 		</td>
-	</tr>
- 	<tr>
-		<td class="lineagruesa"  align="left" colspan="3"></td>
-	</tr>
- </table>
+ 	</legend>
+<!-- <table width="100%" class="titulo" border="0" cellpadding="0" cellspacing="0" >-->
+<!-- 	<tr>-->
+<!--		<td>-->
+<!--        [% IF searchfield %]-->
+<!-- 			Modificar server Z39.50-->
+<!--        [% ELSE %]-->
+<!-- 			Agregar Servidor Z39.50-->
+<!-- 		[% END %]-->
+<!-- 		</td>-->
+<!--	</tr>-->
+<!-- 	<tr>-->
+<!--		<td class="lineagruesa"  align="left" colspan="3"></td>-->
+<!--	</tr>-->
+<!-- </table>-->
 						    
         <form action="[% script_name %]" name=Aform method=post>
         <input type=hidden name=op value='add_validate'>
@@ -171,6 +179,7 @@
 	</tr>
 </table>
 </form>
+</fieldset>
 
  [% END %]
 
