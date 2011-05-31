@@ -14,7 +14,6 @@ my $query = new CGI;
 my ($template, $t_params)   = C4::Output::gettemplate("informacion/error.tmpl", 'intranet');
 
 my $session                 = CGI::Session->load();
-$t_params->{'loggedinuser'} = $session->param('userid');
 my $message_error           = "404";
 
 if ($ENV{'REDIRECT_STATUS'}  eq "404") {
