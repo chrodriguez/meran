@@ -700,9 +700,9 @@ sub checkauth {
                                             $mensaje= 'U357';
              
                              }
-                              C4::AR::Debug::debug("QUERY    ".$query->url_param('welcome'));
-                              if (!$query->url_param('welcome')){
-                                      $template_params->{'loginAttempt'} = 1;  
+                             if ($query->url_param('welcome')){
+                                      $template_params->{'loginAttempt'} = 0;
+                                      $mensaje = 'U000';
                               }
                               _destruirSession($mensaje, $template_params);
 
