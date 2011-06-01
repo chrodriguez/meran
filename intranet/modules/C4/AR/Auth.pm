@@ -700,9 +700,11 @@ sub checkauth {
                                             $mensaje= 'U357';
              
                              }
-                              
+                              if (!$query->url_param('welcome')){
                                       $template_params->{'loginAttempt'} = 1;  
-                                      _destruirSession($mensaje, $template_params); 
+                              }
+                                      _destruirSession($mensaje, $template_params);
+
 
                   }# end unless ($userid)
                   
