@@ -16,7 +16,12 @@ if ($t_params->{'sessionClose'}){
   $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje('U358','intranet');
 }
 
+C4::AR::Debug::debug($cgi->param('loginAttempt'));
+
 $t_params->{'loginAttempt'} = $cgi->param('loginAttempt') || 0;
+
+
+
 $t_params->{'mostrar_captcha'} = $cgi->param('mostrarCaptcha') || 0;
 
 if ($t_params->{'loginAttempt'} & !($t_params->{'mostrar_captcha'}) ){

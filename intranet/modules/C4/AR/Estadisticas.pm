@@ -253,10 +253,10 @@ sub listarItemsDeInventarioPorSigTop{
     my @filtros;
 #     my @cat_nivel3_result;
     my @info_reporte;
-    my $orden = $params_hash_ref->{'sort'} || 'signatura_topografica';
+    my $orden = $params_hash_ref->{'sort'} || 'signatura';
     my $signatura= $params_hash_ref->{'sigtop'};
   
-    push (@filtros, ( id => { eq => $signatura}));
+    push (@filtros, ( signatura => { eq => $signatura}));
 
 #     my $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
 #                                                                                             query => \@filtros,
@@ -267,7 +267,7 @@ sub listarItemsDeInventarioPorSigTop{
                                                                                             sort_by => $orden,
                                                                                           
                                                                                );
-
+    C4::AR::Utilidades::printARRAY($cat_nivel3_array_ref);
 
     my $cant  = scalar(@$cat_nivel3_array_ref);
 

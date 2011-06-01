@@ -503,7 +503,7 @@ sub _verificarSession {
 
 
 sub checkauth {
-     C4::AR::Debug::debug("desde checkauth==================================================================================================");
+    C4::AR::Debug::debug("desde checkauth==================================================================================================");
     my $query               = shift;
     my $authnotrequired     = shift;
     my $flagsrequired       = shift;
@@ -520,7 +520,6 @@ sub checkauth {
     
     my $userid= $session->param('userid');
     my $flags=0;
-    
     my $sin_captcha=0;
     my $time = localtime(time());
     if ($demo) {
@@ -587,6 +586,8 @@ sub checkauth {
                       }
                   return ($userid, $session, $flags, $socio);
                   }
+
+    
                   unless ($userid) { 
                       #si no hay userid, hay que autentificarlo y no existe sesion
                       #No genero un nuevo sessionID
@@ -600,11 +601,11 @@ sub checkauth {
                       my $mensaje;
                       my $cant_fallidos;
                       #se verifica la password ingresada
-
+     
                             my $socio_data_temp = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
 
                             if ($socio_data_temp){          #ingreso un usuario y exite en la base
-                                
+                                   
                                     my ($socio)         = _verificarPassword($userid,$password,$nroRandom);
                                     #             C4::AR::Debug::debug("la pass es valida?".$passwordValida);
                                     
@@ -668,7 +669,7 @@ sub checkauth {
                                                                       $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/mainpage.pl?token='.$session->param('token'));
                                                                       redirectTo(C4::AR::Utilidades::getUrlPrefix().'/mainpage.pl?token='.$session->param('token'));
                                                         }
-
+                                  
                                               } else {  # if ($sin_captcha || $captchaResult->{is_valid} ) - INGRESA CAPTCHA INVALIDO
 #                                                    
                                                    
@@ -698,15 +699,13 @@ sub checkauth {
                              }  else   {     # else de  if ($socio_data_temp) -----  ingreso usuario invalido      
                                             $mensaje= 'U357';
              
-                              }
-
-                              $template_params->{'loginAttempt'} = 1;  
-                              _destruirSession($mensaje, $template_params); 
-
-
-
+                             }
+                              
+                                      $template_params->{'loginAttempt'} = 1;  
+                                      _destruirSession($mensaje, $template_params); 
 
                   }# end unless ($userid)
+                  
     }# el else de DEMO
 }# end checkauth
 
