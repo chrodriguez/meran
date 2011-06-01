@@ -262,14 +262,22 @@ sub listarItemsDeInventarioPorSigTop{
 #                                                                                             query => \@filtros,
 #                                                                               );
 
+
     my $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
                                                                                             query => \@filtros,
-                                                                                            sort_by => $orden,
-                                                                                          
-                                                                               );
+                                                                          );
+
+#     my $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
+#                                                                                             query => \@filtros,
+#                                                                                             sort_by => $orden,
+#                                                                                           
+#                                                                                );
+
+    C4::AR::Debug::debug("kldskljdfkljsdklfjsdlkfjlksdjfklsdjfkl");
     C4::AR::Utilidades::printARRAY($cat_nivel3_array_ref);
 
     my $cant  = scalar(@$cat_nivel3_array_ref);
+
 
     my @result;
     
@@ -282,6 +290,8 @@ sub listarItemsDeInventarioPorSigTop{
           push(@info_reporte, \%hash_result);
           push(@result, \%hash_result);
     }
+
+
 #     my $signatura       = C4::AR::Utilidades::trim($params_hash_ref->{'sigtop'});
 #     my $desde_signatura = C4::AR::Utilidades::trim($params_hash_ref->{'desde_signatura'});
 #     my $hasta_signatura = C4::AR::Utilidades::trim($params_hash_ref->{'hasta_signatura'});
@@ -344,8 +354,6 @@ sub listarItemsDeInventarioPorSigTop{
 #     $params_hash_ref->{'cant_total'}    = $cant_total;
 #     @cat_nivel3_result                  = C4::AR::Utilidades::paginarArrayResult($params_hash_ref, @cat_nivel3_result);
 
-
-    C4::AR::Utilidades::printARRAY(\@result);
 
     return ($cant, \@result, \@info_reporte);
 }
