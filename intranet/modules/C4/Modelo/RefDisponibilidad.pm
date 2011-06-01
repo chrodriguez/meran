@@ -40,7 +40,7 @@ use Text::LevenshteinXS;
 
 sub paraPrestamoValue{
     
-    return (0);
+    return ('CIRC0000');
 }
 
 sub toString{

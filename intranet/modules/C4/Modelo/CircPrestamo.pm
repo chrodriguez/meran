@@ -518,7 +518,7 @@ sub devolver {
 
 	my $id3          = $params->{'id3'};
 	my $tipo         = $params->{'tipo'};
-	my $loggedinuser = $params->{'loggedinuser'};
+	my $responsable  = $params->{'responsable'};
 
 	#     my $msg_object= C4::AR::Mensajes::create();
 	#se setea el barcode para informar al usuario en la devolucion
@@ -549,7 +549,7 @@ sub devolver {
 
 		if ( $disponibilidad eq 'Domiciliario' ) {    #si no es para sala
 			$self->debug("reasignar Reserva En Espera");
-			$reserva->reasignarEjemplarASiguienteReservaEnEspera($loggedinuser);
+			$reserva->reasignarEjemplarASiguienteReservaEnEspera($responsable);
 		}
 
 		$self->debug("Se borra la reserva");
@@ -565,8 +565,8 @@ sub devolver {
 		$data_hash->{'id2'}         = $self->nivel3->nivel2->getId2;
 		$data_hash->{'id3'}         = $self->getId3;
 		$data_hash->{'nro_socio'}   = $self->getNro_socio;
-		$data_hash->{'responsable'} = $loggedinuser;
-		C4::AR::Debug::debug("CircPrestamo=> devolver => responsable" . $loggedinuser );
+		$data_hash->{'responsable'} = $responsable;
+		C4::AR::Debug::debug("CircPrestamo=> devolver => responsable" . $responsable );
 		$data_hash->{'hasta'}         = undef;
 		$data_hash->{'tipo_prestamo'} = $self->getTipo_prestamo;
 		$data_hash->{'id_ui'}         = $self->getId_ui_prestamo;
@@ -608,7 +608,7 @@ sub devolver {
 				use C4::Modelo::CircSancion;
 				my $sancion = C4::Modelo::CircSancion->new( db => $self->db );
 				my %paramsSancion;
-				$paramsSancion{'loggedinuser'} = $loggedinuser;
+				$paramsSancion{'responsable'} = $responsable;
 				$paramsSancion{'tipo_sancion'} = $tipo_sancion->getTipo_sancion;
 				$paramsSancion{'id_reserva'}   = undef;
 				$paramsSancion{'fecha_comienzo'} = undef;
@@ -637,7 +637,7 @@ sub devolver {
 				use C4::Modelo::CircSancion;
 				my $sancion = C4::Modelo::CircSancion->new( db => $self->db );
 				my %paramsSancion;
-				$paramsSancion{'loggedinuser'}   = $loggedinuser;
+				$paramsSancion{'responsable'}   = $responsable;
 				$paramsSancion{'tipo_sancion'}   = $tipo_sancion->getTipo_sancion;
 				$paramsSancion{'id_reserva'}     = undef;
 				$paramsSancion{'id3'}         = $self->getId3;
@@ -817,7 +817,7 @@ renovar
 
 sub renovar {
 	my ($self)         = shift;
-	my ($loggedinuser) = @_;
+	my ($responsable) = @_;
 
 	$self->setRenovaciones( $self->getRenovaciones + 1 );
     my $dateformat = C4::Date::get_date_format();
@@ -832,8 +832,8 @@ sub renovar {
 	$data_hash->{'id2'}         = $self->nivel3->nivel2->getId2;
 	$data_hash->{'id3'}         = $self->getId3;
 	$data_hash->{'nro_socio'}   = $self->getNro_socio;
-	$data_hash->{'responsable'} = $loggedinuser;
-	C4::AR::Debug::debug("CircPrestamo=> renovar => responsable" . $loggedinuser );
+	$data_hash->{'responsable'} = $responsable;
+	C4::AR::Debug::debug("CircPrestamo=> renovar => responsable" . $responsable );
 	$data_hash->{'hasta'}         = $self->getFecha_vencimiento;
 	$data_hash->{'tipo_prestamo'} = $self->getTipo_prestamo;
 	$data_hash->{'id_ui'}         = $self->getId_ui_prestamo;

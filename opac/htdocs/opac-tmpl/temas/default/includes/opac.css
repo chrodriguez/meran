@@ -72,9 +72,9 @@ body textarea:focus{
 .nav1 li a {display:block; float:left; padding:2px 5px 2px 5px; color:rgb(125,125,125) ; text-decoration:none; font-size:120%;}
 .nav1 a:hover {text-decoration:none; color:rgb(50,50,50);}
 
-.nav_logged {width:30%; position:relative; z-index:3; margin-right:2%; float: right; clear: both; text-align: right; color: #505050; font-size: 10pt;color: #467AA7;font-weight: bold;text-decoration: none;}
+.nav_logged {width:200px; position:relative; z-index:3; margin-right:2%; float: right; clear: both; text-align: right; color: #505050; font-size: 10pt;color: #467AA7;font-weight: bold;text-decoration: none;}
 
-.sitemessage {width:462px; height:100px; position:relative; z-index:1; margin-right:50px; float:right; color:rgb(234,239,247); /*xoverflow:visible !important /*Activate if Firefox print problems*/; overflow:hidden /*IE6*/;}
+.sitemessage {width:462px; height:100px; position:relative; z-index:1; margin-right:50px; float:right; color:rgb(234,239,247); /*xoverflow:visible !important /*Activate if Firefox print problems*/; overflow:hidden /*IE6*/; clear:both;}
 .sitemessage h1 {width:460px; text-align:right; font-size:230%; color:#666666; margin-top:8px;}
 .sitemessage h2 {float:right; width:330px; margin:8px 0 0 0; text-align:right; line-height:100%; font-size:130%;}
 .sitemessage h3 {float:right; width:270px; margin:10px 0 0 0; text-align:right; font-size:140%;}

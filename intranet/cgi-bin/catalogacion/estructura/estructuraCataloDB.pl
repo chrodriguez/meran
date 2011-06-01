@@ -576,7 +576,6 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_3"){
 												'intranet'
 											);
                
-    $obj->{'loggedinuser'}=$user;
 	#Se muestran la estructura de catalogacion para que el usuario agregue un documento
     my ($Message_arrayref, $nivel3) = C4::AR::Nivel3::t_guardarNivel3($obj);
     
@@ -651,7 +650,7 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_3"){
                                                     entorno => 'datos_nivel3'}, 
                                                 'intranet'
                                     );
-    $obj->{'loggedinuser'}=$user;
+
     my ($Message_arrayref, $nivel3) = C4::AR::Nivel3::t_modificarNivel3($obj);
     
     my %info;

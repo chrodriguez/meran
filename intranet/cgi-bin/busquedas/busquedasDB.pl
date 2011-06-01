@@ -78,7 +78,6 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
 	    my ($cantidad, $array_nivel1)   = C4::AR::Busquedas::busquedaAvanzada_newTemp($obj, $session);
 	    
 	    $obj->{'cantidad'}              = $cantidad;
-	    $obj->{'loggedinuser'}          = $session->param('nro_socio');
 	    $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 	    $t_params->{'SEARCH_RESULTS'}   = $array_nivel1;
         $t_params->{'cantidad'}         = $cantidad;
@@ -87,11 +86,9 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
         my $funcion                     = $obj->{'funcion'};
         my $ini                         = ($obj->{'ini'}||'');
         
-#         my ($cantidad, $array_nivel1)   = C4::AR::Busquedas::busquedaPorBarcode($obj->{'codBarra'}, $session, $obj);
         my ($cantidad, $array_nivel1)   = C4::AR::Busquedas::busquedaAvanzada_newTemp($obj, $session);
         
         $obj->{'cantidad'}              = $cantidad;
-        $obj->{'loggedinuser'}          = $session->param('nro_socio');
         $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
         $t_params->{'SEARCH_RESULTS'}   = $array_nivel1;
         $t_params->{'cantidad'}         = $cantidad;
@@ -103,7 +100,6 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
         my ($cantidad, $array_nivel1)   = C4::AR::Busquedas::busquedaPorISBN($obj->{'isbn'}, $session, $obj);
         
         $obj->{'cantidad'}              = $cantidad;
-        $obj->{'loggedinuser'}          = $session->param('nro_socio');
         $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
         $t_params->{'SEARCH_RESULTS'}   = $array_nivel1;
         $t_params->{'cantidad'}         = $cantidad;
@@ -115,7 +111,6 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
         my ($cantidad, $array_nivel1)   = C4::AR::Busquedas::busquedaAvanzada_newTemp($obj, $session, $obj);
         
         $obj->{'cantidad'}              = $cantidad;
-        $obj->{'loggedinuser'}          = $session->param('nro_socio');
         $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
         $t_params->{'SEARCH_RESULTS'}   = $array_nivel1;
         $t_params->{'cantidad'}         = $cantidad;

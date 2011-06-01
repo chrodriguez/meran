@@ -361,7 +361,6 @@ sub get_template_and_user {
     $in->{'template_params'}    = $params;
 
     if ( $session->param('userid') ) {
-        $params->{'loggedinuser'}       = $session->param('userid');
         $params->{'nro_socio'}          = $session->param('userid');
         $params->{'socio'}              = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
         if (!$usuario_logueado) {
@@ -661,13 +660,13 @@ sub checkauth {
                                                         $socio->setLast_login($now);
                                                         $socio->save();
                                                         if ($type eq 'opac') {
-                                                                      $session->param('redirectTo', '/cgi-bin/koha/opac-main.pl?token='.$session->param('token'));
-                                                                      redirectToNoHTTPS('/cgi-bin/koha/opac-main.pl?token='.$session->param('token'));
+                                                                      $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/opac-main.pl?token='.$session->param('token'));
+                                                                      redirectToNoHTTPS(C4::AR::Utilidades::getUrlPrefix().'/opac-main.pl?token='.$session->param('token'));
                                         # #                               $session->secure(0);
                                             
                                                         }else{
-                                                                      $session->param('redirectTo', '/cgi-bin/koha/mainpage.pl?token='.$session->param('token'));
-                                                                      redirectTo('/cgi-bin/koha/mainpage.pl?token='.$session->param('token'));
+                                                                      $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/mainpage.pl?token='.$session->param('token'));
+                                                                      redirectTo(C4::AR::Utilidades::getUrlPrefix().'/mainpage.pl?token='.$session->param('token'));
                                                         }
 
                                               } else {  # if ($sin_captcha || $captchaResult->{is_valid} ) - INGRESA CAPTCHA INVALIDO
