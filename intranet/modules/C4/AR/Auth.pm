@@ -622,13 +622,12 @@ sub checkauth {
                                           
                                                 use Captcha::reCAPTCHA;
                                                 my $c = Captcha::reCAPTCHA->new;
-                        
-                                                C4::AR::Debug::debug($reCaptchaResponse);
                       
                                                 $captchaResult = $c->check_answer(
                                                             $reCaptchaPrivateKey, $ENV{'REMOTE_ADDR'},
                                                             $reCaptchaChallenge, $reCaptchaResponse
                                                 );
+                                             
                                           
                                             } else {  #else del  if ($login_attempts > 2 )
                                                     $sin_captcha = 1; 
@@ -673,7 +672,7 @@ sub checkauth {
                                               } else {  # if ($sin_captcha || $captchaResult->{is_valid} ) - INGRESA CAPTCHA INVALIDO
 #                                                    
                                                    
-                                                    $mensaje='U422';
+                                                    $mensaje='U425';
                                                     $cant_fallidos= $socio_data_temp->getLogin_attempts + 1;
                                                     $socio_data_temp->setLogin_attempts($cant_fallidos);
                                                     if ($cant_fallidos => 3){
@@ -700,10 +699,11 @@ sub checkauth {
                                             $mensaje= 'U357';
              
                              }
+                              C4::AR::Debug::debug($query->url_param('welcome'));
                              if ($query->url_param('welcome')){
                                       $template_params->{'loginAttempt'} = 0;
                                       $mensaje = 'U000';
-                              }
+                             }
                               _destruirSession($mensaje, $template_params);
 
 

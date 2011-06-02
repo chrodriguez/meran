@@ -250,46 +250,38 @@ sub getMinYMaxSignaturaTopografica{
 sub listarItemsDeInventarioPorSigTop{
     my ($params_hash_ref) = @_;
 
-    my @filtros;
 #     my @cat_nivel3_result;
+    my @filtros;
     my @info_reporte;
     my $orden = $params_hash_ref->{'sort'} || 'signatura';
     my $signatura= $params_hash_ref->{'sigtop'};
-  
+    my $db= C4::Modelo::CatRegistroMarcN3->new()->db();
+    
     push (@filtros, ( signatura => { eq => $signatura}));
 
-#     my $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
-#                                                                                             query => \@filtros,
-#                                                                               );
-
-
     my $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
-                                                                                            query => \@filtros,
+                                                                                            db  => $db,
+                                                                                            query => [  
+                                                                                                  signatura => { eq => $signatura },
+                                                                                            ], 
+                                                                                            sort_by => $orden,
                                                                           );
 
-#     my $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
-#                                                                                             query => \@filtros,
-#                                                                                             sort_by => $orden,
-#                                                                                           
-#                                                                                );
-
-    C4::AR::Debug::debug("kldskljdfkljsdklfjsdlkfjlksdjfklsdjfkl");
+    C4::AR::Debug::debug("--------------------RESULTADOS---------------------------");
     C4::AR::Utilidades::printARRAY($cat_nivel3_array_ref);
 
     my $cant  = scalar(@$cat_nivel3_array_ref);
-
-
     my @result;
     
 
-    foreach my $reg_nivel_3 (@$cat_nivel3_array_ref){
-          my %hash_result;
-          $hash_result{'nivel1'}=  C4::AR::Nivel1::getNivel1FromId3($reg_nivel_3->getId);
-          $hash_result{'nivel2'}=  C4::AR::Nivel2::getNivel2FromId1($hash_result{'nivel1'}->getId);
-          $hash_result{'nivel3'}= $reg_nivel_3;
-          push(@info_reporte, \%hash_result);
-          push(@result, \%hash_result);
-    }
+#     foreach my $reg_nivel_3 (@$cat_nivel3_array_ref){
+#           my %hash_result;
+#           $hash_result{'nivel1'}=  C4::AR::Nivel1::getNivel1FromId3($reg_nivel_3->getId);
+#           $hash_result{'nivel2'}=  C4::AR::Nivel2::getNivel2FromId1($hash_result{'nivel1'}->getId);
+#           $hash_result{'nivel3'}= $reg_nivel_3;
+#           push(@info_reporte, \%hash_result);
+#           push(@result, \%hash_result);
+#     }
 
 
 #     my $signatura       = C4::AR::Utilidades::trim($params_hash_ref->{'sigtop'});
