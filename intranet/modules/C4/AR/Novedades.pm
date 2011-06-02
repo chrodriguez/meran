@@ -9,7 +9,7 @@ use C4::Modelo::SysNovedad::Manager;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw( 
-
+    &getNovedadesNoMostrar
     &getUltimasNovedades
     &getNovedad
     &listar
@@ -68,6 +68,26 @@ sub listar{
         return ($novedades_array_ref_count, $novedades_array_ref);
     }else{
         return (0,0);
+    }
+}
+
+=item
+    Esta funcion obtiene las novedades que no hay que mostrarle al socio recibido como parametro
+=cut
+sub getNovedadesNoMostrar{
+
+    my ($nro_socio) = @_;
+    
+    my @filtros;
+    
+    push (@filtros, (usuario_novedad => {eq => $id_novedad}) );
+
+    my $novedades_array_ref = C4::Modelo::SysNovedadNoMostrar::Manager->get_sys_novedad_no_mostrar( query => \@filtros,
+                                                                              );
+    if(scalar(@$novedades_array_ref) > 0){
+        return ($novedades_array_ref);
+    }else{
+        return (0);
     }
 }
 
