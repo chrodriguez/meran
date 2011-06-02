@@ -1793,7 +1793,7 @@ sub generarComboDeDisponibilidad{
 
     my @select_disponibilidades_array;
     my %select_disponibilidades_hash;
-    my ($disponibilidades_array_ref)= &C4::AR::Referencias::obtenerDisponibilidades();
+    my ($disponibilidades_array_ref)= C4::AR::Referencias::obtenerDisponibilidades();
 
     foreach my $disponibilidad (@$disponibilidades_array_ref) {
         push(@select_disponibilidades_array, $disponibilidad->getCodigo);

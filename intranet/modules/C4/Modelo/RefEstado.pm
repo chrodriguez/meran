@@ -32,6 +32,53 @@ use Text::LevenshteinXS;
 # En procesos técnicos = STATE008
 ##################################################
 
+
+sub paraBajaValue{
+    
+    return ('STATE000');
+}
+
+sub paraCompartidoValue{
+    
+    return ('STATE001');
+}
+
+sub paraDisponibleValue{
+    
+    return ('STATE002');
+}
+
+sub paraEjemplarDeterioradoValue{
+    
+    return ('STATE003');
+}
+
+sub paraEncuadernacionValue{
+    
+    return ('STATE004');
+}
+
+sub paraPerdidoValue{
+    
+    return ('STATE005');
+}
+
+sub paraImpresionesValue{
+    
+    return ('STATE006');
+}
+
+sub paraProcesosTecnicosValue{
+    
+    return ('STATE007');
+}
+
+sub paraEtiquetadoValue{
+    
+    return ('STATE008');
+}
+
+
 sub getId{
     my ($self) = shift;
 

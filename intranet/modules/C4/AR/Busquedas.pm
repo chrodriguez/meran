@@ -1162,7 +1162,7 @@ sub busquedaCombinada_newTemp{
 	
 	use Sphinx::Search;
 	
-    my ($string_utf8_encoded,$session,$obj_for_log,$only_sphinx) = @_;
+    my ($string_utf8_encoded,$session,$obj_for_log,$only_sphinx,$only_available) = @_;
 
     C4::AR::Debug::debug("STRING                      ".$string_utf8_encoded);
     C4::AR::Utilidades::printHASH($obj_for_log);
@@ -1206,6 +1206,9 @@ sub busquedaCombinada_newTemp{
 
     C4::AR::Debug::debug("Busquedas => query string ".$query);
 
+    if ($only_available){
+        $query .= ' @string "ref_disponibilidad%'.C4::Modelo::RefDisponibilidad::paraPrestamoValue.'"';
+    }
 
     $sphinx->SetMatchMode($tipo_match);
 

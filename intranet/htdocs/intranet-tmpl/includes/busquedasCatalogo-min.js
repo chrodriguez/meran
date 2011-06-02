@@ -30,7 +30,7 @@ $('#keyword-bar').val(suggested);}
 function busquedaPorKeyword(suggested){var keyword="";if($('#keyword').val())
 keyword=$('#keyword').val();else
 keyword=$('#keyword-bar').val();keyword=keyword.replace(/\&/g,"AND");objAH=new AjaxHelper(updateBusquedaPorKeyword);objAH.showOverlay=true;objAH.debug=true;objAH.url=URL_PREFIX+'/busquedas/busquedasDB.pl';if(suggested){objAH.keyword=suggested;objAH.from_suggested=1;}else{objAH.keyword=keyword;}
-objAH.match_mode=$('#match_mode').val();objAH.tipoAccion='BUSQUEDA_COMBINADA';objAH.funcion='changePage';objAH.sendToServer();}
+objAH.match_mode=$('#match_mode').val();objAH.only_available=($('#only_available').attr('checked'))?1:0;objAH.tipoAccion='BUSQUEDA_COMBINADA';objAH.funcion='changePage';objAH.sendToServer();}
 function updateBusquedaPorKeyword(responseText){updateInfoBusquedas(responseText);var keyword="";if($('#keyword').val())
 keyword=$('#keyword').val();else
 keyword=$('#keyword-bar').val();}
