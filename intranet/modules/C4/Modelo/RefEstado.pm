@@ -31,16 +31,12 @@ use Text::LevenshteinXS;
 # En procesos técnicos = STATE008
 ##################################################
 
-<<<<<<< HEAD
 sub paraBajaValue{
     
     return ('STATE000');
 }
 
-sub paraCompartidoValue{
-=======
 sub estadoCompartidoValue{
->>>>>>> c5dc2a811da75746ad5d89a812ffd1659dbe060d
     
     return ('STATE001');
 }
