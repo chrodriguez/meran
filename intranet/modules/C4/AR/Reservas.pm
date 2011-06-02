@@ -106,13 +106,13 @@ sub getNivel3ParaReserva{
 
     $db = $db || C4::Modelo::CatRegistroMarcN3->new()->db;
 
-    my $diponibilidad_filtro       = C4::AR::Referencias::getIdRefDisponibilidadDomiciliaria(); # 1 =  Domiciliario
-    my $estado_disponible_filtro   = C4::AR::Referencias::getIdRefEstadoDisponible();           # 3 =  Disponible
+    my $disponibilidad_filtro      = C4::Modelo::RefDisponibilidad::paraPrestamoReferencia(); #  Domiciliario
+    my $estado_disponible_filtro  = C4::Modelo::RefEstado::estadoDisponibleReferencia(); #Disponible
 
     my @filtros;
 
     push (  @filtros, ( id2         => { eq => $id2} ) );                                   #ejemplares del grupo
-    push (  @filtros, ( marc_record => { like => '%'.$diponibilidad_filtro.'%' } ) );       #con esta disponibilidad
+    push (  @filtros, ( marc_record => { like => '%'.$disponibilidad_filtro.'%' } ) );       #con esta disponibilidad
     push (  @filtros, ( marc_record => { like => '%'.$estado_disponible_filtro.'%' } ) );   #con estado disponible
 
     my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(  db => $db ,query => [ @filtros ] );
@@ -156,10 +156,11 @@ sub getDisponibilidadDeGrupoParaPrestamoDomiciliario{
     my ($db, $id2) = @_;
 
     my @filtros;
-    my $diponibilidad_filtro      = C4::AR::Referencias::getIdRefDisponibilidadDomiciliaria();      #Domiciliario
-    my $estado_disponible_filtro  = C4::AR::Referencias::getIdRefEstadoDisponible();                #Disponible
+    my $disponibilidad_filtro      = C4::Modelo::RefDisponibilidad::paraPrestamoReferencia(); #  Domiciliario
+    my $estado_disponible_filtro   = C4::Modelo::RefEstado::estadoDisponibleReferencia(); #Disponible
+
     push(@filtros, ( id2                => { eq => $id2 }) );
-    push(@filtros, ( marc_record        => { like => '%'.$diponibilidad_filtro.'%' } ) );       
+    push(@filtros, ( marc_record        => { like => '%'.$disponibilidad_filtro.'%' } ) );       
     push(@filtros, ( marc_record        => { like => '%'.$estado_disponible_filtro.'%' } ) );   
 
     my $cant = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count( db => $db, query => \@filtros);
@@ -178,10 +179,11 @@ sub getDisponibilidadDeGrupoParaPrestamoSala{
 
     my @filtros;
   
-    my $diponibilidad_filtro      = C4::AR::Referencias::getIdRefDisponibilidadSalaLectura();      #Para Sala
-    my $estado_disponible_filtro  = C4::AR::Referencias::getIdRefEstadoDisponible();               #Disponible
+    my $disponibilidad_filtro      = C4::Modelo::RefDisponibilidad::paraPrestamoReferencia(); #  Domiciliario
+    my $estado_disponible_filtro   = C4::Modelo::RefEstado::estadoDisponibleReferencia(); #Disponible
+
     push(@filtros, ( id2                => { eq => $id2}) );
-    push(@filtros, ( marc_record        => { like => '%'.$diponibilidad_filtro.'%' } ) );       
+    push(@filtros, ( marc_record        => { like => '%'.$disponibilidad_filtro.'%' } ) );       
     push(@filtros, ( marc_record        => { like => '%'.$estado_disponible_filtro.'%' } ) );   
 
     my $cant = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count( query => \@filtros);
@@ -1338,11 +1340,11 @@ sub getEjemplaresDeGrupoParaReserva{
     my ($id2)   = @_;
 
     my @filtros;
-    my $diponibilidad_filtro      = C4::AR::Referencias::getIdRefDisponibilidadDomiciliaria();      #Domiciliario
-    my $estado_disponible_filtro  = C4::AR::Referencias::getIdRefEstadoDisponible();                #Disponible
+    my $disponibilidad_filtro      = C4::Modelo::RefDisponibilidad::paraPrestamoReferencia(); #  Domiciliario
+    my $estado_disponible_filtro   = C4::Modelo::RefEstado::estadoDisponibleReferencia(); #Disponible
 
     push(@filtros, ( id2                => { eq => $id2 }) );
-    push(@filtros, ( marc_record        => { like => '%'.$diponibilidad_filtro.'%' } ) );       
+    push(@filtros, ( marc_record        => { like => '%'.$disponibilidad_filtro.'%' } ) );       
     push(@filtros, ( marc_record        => { like => '%'.$estado_disponible_filtro.'%' } ) );
 
     #Hay que sacar los ejemplares reservados o prestados
