@@ -85,19 +85,6 @@ sub sphinx_start{
 }
 
 
-sub getCodigoFromEstadoById{
-    my ($id)   = @_;
-
-    my $dbh         = C4::Context->dbh;
-    my $query       = " SELECT codigo
-                        FROM `ref_estado` WHERE id = ?";
-
-    my $sth0        = $dbh->prepare($query);
-    $sth0->execute($id);
-
-    return $sth0->fetchrow_hashref->{'codigo'};
-}
-
 =head2
     sub generar_indice
 =cut
@@ -298,7 +285,7 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
             if (($campo eq "995") && ($subcampo eq "e")){
                  C4::AR::Debug::debug(" ================================== generar_indice => 995, e => dato ".$dato);
-                $dato = 'ref_estado%'.getCodigoFromEstadoById($dato_ref);  
+                $dato = 'ref_estado%'.$dato_ref;  
             }
 
             if (($campo eq "995") && ($subcampo eq "f")){
