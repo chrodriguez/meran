@@ -613,21 +613,22 @@ sub checkauth {
 
                                             my $login_attempts = $socio_data_temp->getLogin_attempts;
                                             my $captchaResult;
-                                            
-                                            if ($login_attempts > 2 ){      # se logueo mal mas de 3 veces, debo verificar captcha
-                                              
-                                                my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
-                                                my $reCaptchaChallenge  = $query->param('recaptcha_challenge_field');
-                                                my $reCaptchaResponse   = $query->param('recaptcha_response_field');
                                           
-                                                use Captcha::reCAPTCHA;
-                                                my $c = Captcha::reCAPTCHA->new;
-                      
-                                                $captchaResult = $c->check_answer(
-                                                            $reCaptchaPrivateKey, $ENV{'REMOTE_ADDR'},
-                                                            $reCaptchaChallenge, $reCaptchaResponse
-                                                );
-                                             
+                                            if (($login_attempts > 2) && ($query->url_param('welcome')== 1)) {      # se logueo mal mas de 3 veces, debo verificar captcha
+                                              
+                                                    C4::AR::Debug::debug("Entra a captcha?");
+                                                    my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
+                                                    my $reCaptchaChallenge  = $query->param('recaptcha_challenge_field');
+                                                    my $reCaptchaResponse   = $query->param('recaptcha_response_field');
+                                              
+                                                    use Captcha::reCAPTCHA;
+                                                    my $c = Captcha::reCAPTCHA->new;
+                          
+                                                    $captchaResult = $c->check_answer(
+                                                                $reCaptchaPrivateKey, $ENV{'REMOTE_ADDR'},
+                                                                $reCaptchaChallenge, $reCaptchaResponse
+                                                    );
+                                                
                                           
                                             } else {  #else del  if ($login_attempts > 2 )
                                                     $sin_captcha = 1; 
@@ -635,7 +636,7 @@ sub checkauth {
 
                                             if ($sin_captcha || $captchaResult->{is_valid}){
 
-                                                        C4::AR::Debug::debug("entreo al if sin captcah o captcha result");
+                                                   
                                                         #se valido el captcha, la pass y el user y son validos
                                                         #setea loguins duplicados si existe, dejando logueado a un solo usuario a la vez
                                                         
@@ -699,7 +700,6 @@ sub checkauth {
                                             $mensaje= 'U357';
              
                              }
-                              C4::AR::Debug::debug($query->url_param('welcome'));
                              if ($query->url_param('welcome')){
                                       $template_params->{'loginAttempt'} = 0;
                                       $mensaje = 'U000';
