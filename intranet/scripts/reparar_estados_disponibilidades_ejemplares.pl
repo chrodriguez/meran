@@ -51,7 +51,7 @@ switch ($id) {
 return 0;
 }
 
-my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => \@filtros ); 
+my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(  ); 
 
 foreach my $n3 (@$nivel3_array_ref){
 

@@ -85,17 +85,21 @@ sub sphinx_start{
 }
 
 
-sub getCodigoFromEstadoByName{
-    my ($name)   = @_;
+sub getNombreFromEstadoByCodigo{
+    my ($codigo)   = @_;
 
-	    my $dbh         = C4::Context->dbh;
-	    my $query       = " SELECT codigo
-	                        FROM `ref_estado` WHERE nombre = ?";
+        use C4::Modelo::RefEstado;
+        use C4::Modelo::RefEstado::Manager;
+        C4::AR::Debug::debug("CODIGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO ================================= ".$codigo);
+	    
+	    my @filtros;
+	    
+	    push(@filtros, ( codigo => { eq => $codigo }) );
 	
-	    my $sth0        = $dbh->prepare($query);
-	    $sth0->execute($name);
-	
-	    return $sth0->fetchrow_hashref->{'codigo'};
+	    my $nivel3 = C4::Modelo::RefEstado::Manager->get_ref_estado( query => \@filtros ); 
+	    
+	    return ($nivel3->[0]->nombre);
+	    
 
 }
 
@@ -299,7 +303,7 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
             if (($campo eq "995") && ($subcampo eq "e")){
                  C4::AR::Debug::debug(" ================================== generar_indice => 995, e => dato ".$dato);
-                $dato = 'ref_estado%'.getCodigoFromEstadoByName($dato_ref);  
+                $dato = 'ref_estado%'.getNombreFromEstadoByCodigo($dato_ref);  
             }
 
             if (($campo eq "995") && ($subcampo eq "f")){
