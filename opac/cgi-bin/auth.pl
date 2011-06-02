@@ -18,13 +18,16 @@ $t_params->{'partial_template'}= "opac-login.inc";
 $t_params->{'sessionClose'} = $query->param('sessionClose') || 0;
 
 if ($t_params->{'sessionClose'}){
+  
   $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje('U358','intranet');
 }
 
+$t_params->{'mostrar_captcha'} = $query->param('mostrarCaptcha') || 0;
+
 $t_params->{'loginAttempt'} = $query->param('loginAttempt') || 0;
 
-if ($t_params->{'loginAttempt'}){
-  $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje('U357','intranet');
+if ($t_params->{'loginAttempt'} & !($t_params->{'mostrar_captcha'}) ){
+  $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje('U310','intranet');
 }
 
 if ($session->param('codMsg')){
