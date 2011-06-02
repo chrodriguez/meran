@@ -297,8 +297,8 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
             }
 
             if (($campo eq "995") && ($subcampo eq "e")){
+                 C4::AR::Debug::debug(" ================================== generar_indice => 995, e => dato ".$dato);
                 $dato = 'ref_estado%'.getCodigoFromEstadoById($dato_ref);  
-#                 C4::AR::Debug::debug("generar_indice => 995, e => dato ".$dato);
             }
 
             if (($campo eq "995") && ($subcampo eq "f")){
