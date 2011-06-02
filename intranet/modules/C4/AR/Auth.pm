@@ -1107,12 +1107,12 @@ sub redirectToAuth {
     my $url;
     $url = C4::AR::Utilidades::getUrlPrefix().'/auth.pl';
     if($template_params->{'loginAttempt'}){
-        $url = $url.'?loginAttempt=1'
+        $url = C4::AR::Utilidades::addParamToUrl($url,'loginAttempt',1);
     }elsif($template_params->{'sessionClose'}){
-        $url = $url.'?sessionClose=1';
+        $url = C4::AR::Utilidades::addParamToUrl($url,'sessionClose',1);
     } 
     if($template_params->{'mostrar_captcha'}){
-        $url = $url.'&mostrarCaptcha=1';
+        $url = C4::AR::Utilidades::addParamToUrl($url,'mostrarCaptcha',1);
     }
 
     redirectTo($url);    

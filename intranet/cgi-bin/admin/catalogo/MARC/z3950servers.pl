@@ -65,6 +65,8 @@ my ($template, $session, $t_params)= get_template_and_user({template_name => "ad
 $t_params->{'script_name'} = $script_name;
 $t_params->{'searchfield'} = $searchfield;
 
+#FIXME: sacar SQL!!
+
 
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record

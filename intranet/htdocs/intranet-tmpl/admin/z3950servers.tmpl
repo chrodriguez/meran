@@ -1,13 +1,13 @@
 [% INCLUDE "intranet-top.inc" %]
 
-       <script language="javascript" type="text/javascript">
-            function swap(id,src){
-		     document.getElementById(id).src=src;
-	    }
-      </script>
+<script language="javascript" type="text/javascript">
+function swap(id,src){
+    document.getElementById(id).src=src;
+}
+</script>
 										       
 [% IF add_form %]
-        <script>
+<script>
 	function swap(id,src){
 		document.getElementById(id).src=src;
 	}
@@ -79,87 +79,71 @@
                         jAlert(alertString2);
                 }
         }
-        </script>
-    <fieldset>
-        <legend>
-            [% IF searchfield %]
-     			Modificar server Z39.50
-            [% ELSE %]
-     			Agregar Servidor Z39.50
-     		[% END %]
-     	</legend>
-    <!-- <table width="100%" class="titulo" border="0" cellpadding="0" cellspacing="0" >-->
-    <!-- 	<tr>-->
-    <!--		<td>-->
-    <!--        [% IF searchfield %]-->
-    <!-- 			Modificar server Z39.50-->
-    <!--        [% ELSE %]-->
-    <!-- 			Agregar Servidor Z39.50-->
-    <!-- 		[% END %]-->
-    <!-- 		</td>-->
-    <!--	</tr>-->
-    <!-- 	<tr>-->
-    <!--		<td class="lineagruesa"  align="left" colspan="3"></td>-->
-    <!--	</tr>-->
-    <!-- </table>-->
-						        
-            <form action="[% script_name %]" name=Aform method=post>
-            <input type=hidden name=op value='add_validate'>
+</script>
+<fieldset>
+<legend>
+    [% IF searchfield %]
+		Modificar server Z39.50
+    [% ELSE %]
+		Agregar Servidor Z39.50
+	[% END %]
+</legend>						        
+<form action="[% script_name %]" name="Aform" method="post">
+    <input type="hidden" name="op" value='add_validate'>
 
     <table>
 	    <tr>
             [% IF searchfield %]
             	<td class="inputFontNormal">Servidor Z39.50</td>
                     <td class="inputFontNormal">
-                    <input type=hidden name=searchfield value='[% searchfield %]'>
+                    <input type="hidden" name="searchfield" value='[% searchfield %]'>
                         [% searchfield %]
                     </td>
             [% ELSE %]
             	<td class="inputFontNormal">Servidor Z39.50</td>
                     <td>
-                    	<input class="inputFontNormal" type=text name=searchfield size=100 maxlength=100 onBlur=toUC(this)>
+                    	<input class="inputFontNormal" type="text" name="searchfield" size="100" maxlength="100" onBlur="toUC(this)">
                     </td>
              [% END %]
 	    </tr>
-
 	    <tr>
 		    <td class="inputFontNormal">Hostname</td>
 		    <td class="inputFontNormal">
-			    <input type=text  class="inputFontNormal" name=host size=30 value='[% host %]'>
+			    <input type=text  class="inputFontNormal" name="host" size="30" value='[% host %]'>
 		    </td>
 	    </tr>
 	    <tr>
 		    <td class="inputFontNormal">Puerto</td>
 		    <td>
-			    <input class="inputFontNormal" type=text name=port size=5 value='[% port %]' onBlur=isNum(this)>
+			    <input class="inputFontNormal" type="text" name="port" size="5" value='[% port %]' onBlur="isNum(this)">
 		    </td>
 	    </tr>
 	    <tr>
 		    <td class="inputFontNormal">Base de datos</td>
 		    <td>
-			    <input class="inputFontNormal"type=text name=db value='[% db %]'>
+			    <input class="inputFontNormal"type="text" name="db" value='[% db %]'>
 		    </td>
 	    </tr>
 	    <tr>
 		    <td class="inputFontNormal">Userid</td>
 		    <td>
-			    <input class="inputFontNormal" type=text name=userid value='[% userid %]'>
+			    <input class="inputFontNormal" type="text" name="userid" value='[% userid %]'>
 		    </td>
 	    </tr>
 	    <tr>
 		    <td class="inputFontNormal">Contrase&ntilde;a</td>
 		    <td>
-			    <input type=text class="inputFontNormal" name=password value='[% password %]'>
+			    <input type=text class="inputFontNormal" name="password" value='[% password %]'>
 		    </td>
 	    </tr>
 	    <tr>
 		    <td class="inputFontNormal">Chequeado (searched by default)</td>
 		    <td>
-			    <input type=text class="inputFontNormal" size=1 name=checked value='[% checked %]' onBlur=isNum(this)>  
+			    <input type=text class="inputFontNormal" size="1" name="checked" value='[% checked %]' onBlur="isNum(this)">  
 	    <tr>
 		    <td class="inputFontNormal">Ranking (display order)</td>
 		    <td>
-			    <input type=text class="inputFontNormal" name=rank size=4 value='[% rank %]' onBlur=isNum(this)>
+			    <input type=text class="inputFontNormal" name="rank" size="4" value='[% rank %]' onBlur="isNum(this)">
 		    </td>
 	    </tr>
 	    <tr>
@@ -178,87 +162,86 @@
 		    </td>
 	    </tr>
     </table>
-    </form>
-    </fieldset>
+</form>
+</fieldset>
 
 [% END %]
 
  [% IF add_validate %]
         Registro de datos
-        <form action='[% script_name %]' method=post>
-        <input type=submit value=OK>
+        <form action='[% script_name %]' method="post">
+        <input type="submit" value="OK">
         </form>
  [% END %]
 
 [% IF delete_confirm %]
 
         [% reqsel %]
-	
-        <table border=0 cellspacing=0 cellpadding=5>
-                <tr class="titulo_tabla_resultado">
-                        <td >
-                                <b>Sitio</b>
-                        </td>
-                        <td >
-                                [% searchfield %]
-                        </td>
-                </tr>
-                <form action='[% script_name %]' method=post>
-                        <input type=hidden name=op value=delete_confirmed>
-                        <input type=hidden name=searchfield value=[% id %]>
-                <tr>
-                        <td class="inputFontNormal">Hostname</td>
-                        <td class="inputFontNormal">[% host %]</td>
-                </tr>
-                <tr>
-                        <td class="inputFontNormal">Puerto</td>
-                        <td class="inputFontNormal">[% port %]</td>
-                </tr>
-                <tr>
-                        <td class="inputFontNormal">Base de datos</td>
-                        <td class="inputFontNormal">[% db %]</td>
-                </tr>
-                <tr>
-                        <td class="inputFontNormal">Userid</td>
-                        <td class="inputFontNormal">[% userid %]</td>
-                </tr>
-                <tr>
-                        <td class="inputFontNormal">Contrase&ntilde;a</td>
-                        <td class="inputFontNormal">[% password %]</td>
-                </tr>
-                <tr>
-                        <td class="inputFontNormal">Chequeado</td>
-                        <td class="inputFontNormal">[% checked %]</td>
-                </tr>
-                <tr>
-                        <td class="inputFontNormal">Ranking</td>
-                        <td class="inputFontNormal">[% rank %]</td>
-                </tr>
-                <tr>
-                        <td class="inputFontNormal" colspan=2 align=center>CONFIRME BORRADO</td>
-                </tr>
-                <tr>
-                        <td><INPUT type=submit value='SI'></form></td>
-                        <td><form action='[% script_name %]' method=post><input type=submit value=NO></form></td>
-                </tr>
-	</table>
-
- [% END %]
+<fieldset>
+<table border="0" cellspacing="0" cellpadding="5">
+        <tr class="titulo_tabla_resultado">
+                <td >
+                        <b>Sitio</b>
+                </td>
+                <td >
+                        [% searchfield %]
+                </td>
+        </tr>
+        <form action='[% script_name %]' method=post>
+                <input type="hidden" name="op" value="delete_confirmed">
+                <input type="hidden" name="searchfield" value="[% id %]">
+        <tr>
+                <td class="inputFontNormal">Hostname</td>
+                <td class="inputFontNormal">[% host %]</td>
+        </tr>
+        <tr>
+                <td class="inputFontNormal">Puerto</td>
+                <td class="inputFontNormal">[% port %]</td>
+        </tr>
+        <tr>
+                <td class="inputFontNormal">Base de datos</td>
+                <td class="inputFontNormal">[% db %]</td>
+        </tr>
+        <tr>
+                <td class="inputFontNormal">Userid</td>
+                <td class="inputFontNormal">[% userid %]</td>
+        </tr>
+        <tr>
+                <td class="inputFontNormal">Contrase&ntilde;a</td>
+                <td class="inputFontNormal">[% password %]</td>
+        </tr>
+        <tr>
+                <td class="inputFontNormal">Chequeado</td>
+                <td class="inputFontNormal">[% checked %]</td>
+        </tr>
+        <tr>
+                <td class="inputFontNormal">Ranking</td>
+                <td class="inputFontNormal">[% rank %]</td>
+        </tr>
+        <tr>
+                <td class="inputFontNormal" colspan=2 align="center">CONFIRME BORRADO</td>
+        </tr>
+        <tr>
+                <td><INPUT type=submit value='SI'></form></td>
+                <td><form action='[% script_name %]' method="post"><input type="submit" value="NO"></form></td>
+        </tr>
+</table>
+</fieldset>
+[% END %]
 
 [% IF delete_confirmed %]
         Borrado de datos
-        <form action='[% script_name %]' method=post>
-                <input type=submit value=OK>
+        <form action='[% script_name %]' method="post">
+                <input type="submit" value="OK">
         </form>
  [% END %]
 
 [% IF else %]
+<fieldset>
+<legend>Administraci&oacute;n de Servidores Z39.50</legend>
 
 <table width="100%" class="titulo" border="0" cellpadding="0" cellspacing="0" >
-	<tr>
-		<td>Administraci&oacute;n de Servidores Z39.50</td>
-	</tr>
-        <tr>
+    <tr>
 		<td class="lineagruesa"  align="left" colspan="3"></td>
 	</tr>
 </table>
@@ -267,10 +250,10 @@
 
 <table>
 	<tr> 
-        	<form action='[% script_name %]' method=post name=form1>
-                <td><input class="inputFontNormal" type=text name=description value=[% searchfield %]></td>
-		<td><a href="#" onClick="form1.reset()" >
-		<img name="clear" id="clear" alt="Limpiar" src="[% themelang %]/images/borrar2.png" border="0"></a></td>
+        <form action='[% script_name %]' method=post name=form1>
+            <td><input class="inputFontNormal" type="text" name="description" value="[% searchfield %]"></td>
+		    <td><a href="#" onClick="form1.reset()" >
+		    <img name="clear" id="clear" alt="Limpiar" src="[% themelang %]/images/borrar2.png" border="0"></a></td>
 		</form>
 	</tr>
 </table>
@@ -325,10 +308,10 @@
                 [% syntax %]
 		</td>
                 <td class="[% clase %]" align="center">
-			<a class="inputFontNormal" href="[% script_name %]?op=add_form&searchfield=[% name %]"><img src="[% interface %]/[% theme %]/images/editar.png" ALT="Editar" title="edit" BORDER=0 ></a>
+			<a class="inputFontNormal" href="[% script_name %]?op=add_form&searchfield=[% name %]"><img src="[% interface %]/[% theme %]/images/editar.png" ALT="Editar" title="edit" BORDER="0" ></a>
 		</td>
                 <td align="center" class="[% clase %]">
-			<a class="inputFontNormal" href="[% script_name %]?op=delete_confirm&searchfield=[% name %]"><img src="[% interface %]/[% theme %]/images/borrar.png" ALT="Eliminar" title="delete" BORDER=0 ></a>
+			<a class="inputFontNormal" href="[% script_name %]?op=delete_confirm&searchfield=[% name %]"><img src="[% interface %]/[% theme %]/images/borrar.png" ALT="Eliminar" title="delete" BORDER="0" ></a>
 		</td>
 		<td height=25 class="[% clase %]">&nbsp;</td>
 	</tr>
@@ -365,7 +348,7 @@
 </table>
 
 </form>
-
- [% END %]
+</fieldset>
+[% END %]
 
 [% INCLUDE "intranet-bottom.inc" %]

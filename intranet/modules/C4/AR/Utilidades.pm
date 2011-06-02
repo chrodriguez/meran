@@ -118,6 +118,7 @@ use vars qw(@EXPORT_OK @ISA);
     isValidFile
     escapeURL
     getUrlPrefix
+    addParamToUrl
 );
 
 # para los combos que no usan tablas de referencia
@@ -4038,6 +4039,22 @@ sub getUrlPrefix{
 	
 }
 
+sub addParamToUrl{
+	my ($url,$param,$value) = @_;
+	
+	$param = $param."=".$value;
+	
+	my $status = index($url,'?');
+	
+	if ($status = -1){
+		$url .= '?'.$param;
+	}else{
+        $url .= '&'.$param;
+	}
+	
+	return ($url);
+	
+}
 
 END { }       # module clean-up code here (global destructor)
 
