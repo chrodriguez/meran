@@ -32,15 +32,6 @@ use Text::LevenshteinXS;
 # En procesos técnicos = STATE008
 ##################################################
 
-
-
-# 1   Baja
-# 2   Compartido
-# 3   Disponible
-# 4   Ejemplar deteriorado
-# 5   En Encuadernación
-# 6   Perdido
-
 sub getId{
     my ($self) = shift;
 

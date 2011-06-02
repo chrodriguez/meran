@@ -25,14 +25,6 @@ use Text::LevenshteinXS;
 ########## CODIGOS DE DISPONIBILIDAD #############
 # Domiciliario      = CIRC0000
 # Sala de lectura   = CIRC0001
-#
-#
-#
-#
-#
-#
-#
-#
 ##################################################
 
 # 0 =  Domiciliario
