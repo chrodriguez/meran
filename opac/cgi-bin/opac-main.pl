@@ -21,10 +21,12 @@ my ($template, $session, $t_params)= get_template_and_user({
                                                             entorno => 'undefined'},
             });
 
+my $nro_socio                           = $session->param('nro_socio');            
 my ($cantidad,$grupos)              = C4::AR::Nivel1::getUltimosGrupos();
 my ($cantidad_novedades,$novedades) = C4::AR::Novedades::getUltimasNovedades();
+my $novedades_no_mostrar            = C4::AR::Novedades::getNovedadesNoMostrar($nro_socio);
 
-$t_params->{'nro_socio'}        = $session->param('nro_socio');
+$t_params->{'nro_socio'}        = $nro_socio
 $t_params->{'SEARCH_RESULTS'}   = $grupos;
 $t_params->{'cantidad'}         = $cantidad_novedades;
 $t_params->{'novedades'}        = $novedades;
