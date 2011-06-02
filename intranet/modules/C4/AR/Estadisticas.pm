@@ -275,8 +275,11 @@ sub listarItemsDeInventarioPorSigTop{
 
     foreach my $reg_nivel_3 (@$cat_nivel3_array_ref){
           my %hash_result;
-          $hash_result{'nivel1'}=  C4::AR::Nivel1::getNivel1FromId3($reg_nivel_3->getId);
-          $hash_result{'nivel2'}=  C4::AR::Nivel2::getNivel2FromId1($hash_result{'nivel1'}->getId);
+          my $nivel1 = C4::AR::Nivel1::getNivel1FromId3($reg_nivel_3->getId3);
+          my $nivel2 = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
+
+          $hash_result{'nivel1'}= $nivel1; 
+          $hash_result{'nivel2'}=  @$nivel2[0];
           $hash_result{'nivel3'}= $reg_nivel_3;
           push(@info_reporte, \%hash_result);
           push(@result, \%hash_result);
@@ -284,7 +287,7 @@ sub listarItemsDeInventarioPorSigTop{
 
 
     C4::AR::Debug::debug("--------------------RESULTADOS---------------------------");
-    C4::AR::Utilidades::printARRAY(\@result);
+    C4::AR::Utilidades::printHASH(@result[0]);
 
 #     my $signatura       = C4::AR::Utilidades::trim($params_hash_ref->{'sigtop'});
 #     my $desde_signatura = C4::AR::Utilidades::trim($params_hash_ref->{'desde_signatura'});
@@ -344,7 +347,7 @@ sub listarItemsDeInventarioPorSigTop{
 #     }
 
 #     @cat_nivel3_result = sort { $a->{$orden} cmp $b->{$orden} } @info_reporte;
-    $params_hash_ref->{'cant_total'}    = $cant;
+#     $params_hash_ref->{'cant_total'}    = $cant;
 #     $params_hash_ref->{'cant_total'}    = $cant_total;
 #     @cat_nivel3_result                  = C4::AR::Utilidades::paginarArrayResult($params_hash_ref, @cat_nivel3_result);
 
