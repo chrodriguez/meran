@@ -1,4 +1,32 @@
 [% USE HTML %]
+    <style type="text/css" media="screen">
+        .del{
+		    float:right; font-weight:bold; color:#666666
+		}
+    </style>
+    <script type="text/javascript" language="javascript">
+        $(".delete").click(function(){
+        
+            var element = $(this);
+            var I = element.attr("id");
+            $('li#list'+I).fadeOut('slow', function() {$(this).remove();
+            
+            function eliminarPublicacion(){
+                objAH                   = new AjaxHelper(updateEliminarPublicacion)
+                objAH.showOverlay       = true
+		        objAH.debug             = true
+		        objAH.url               = 'opac-novedadesDB.pl'
+		        objAH.id_novedad        = array
+		        objAH.Accion            = 'DELETE_NOVEDAD'
+		        objAH.sendToServer()
+	        }
+	
+	        function updateEliminarPublicacion(responseText){
+	            
+	        }
+        })
+    </script>
+    
       <!-- Content unit - One column -->
         <h1 class="pagetitle">[% 'Novedades de la biblioteca' | i18n %]</h1>
         <hr class="clear-contentunit">
@@ -10,6 +38,7 @@
           [% END %]
           [% FOREACH novedad IN novedades %]
               <div class="novedad_opac" id="novedad_opac_[% novedad.getId %]">
+                  <span class="del"><a href="#" class="delete" title="No mostrar esta novedad de nuevo" id="[% novedad.getId %]">X</a></span>
 	              <h1>
 	                <a href='[% url_prefix %]/ver_novedad.pl?id=[% novedad.getId %]&amp;token=[% token %]'>[% novedad.getTitulo %]</a>
 	              </h1>

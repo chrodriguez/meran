@@ -5,6 +5,8 @@ use HTML::Entities;
 require Exporter;
 use C4::Modelo::SysNovedad;
 use C4::Modelo::SysNovedad::Manager;
+use C4::Modelo::SysNovedadNoMostrar;
+use C4::Modelo::SysNovedadNoMostrar::Manager;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -80,7 +82,7 @@ sub getNovedadesNoMostrar{
     
     my @filtros;
     
-    push (@filtros, (usuario_novedad => {eq => $id_novedad}) );
+    push (@filtros, (usuario_novedad => {eq => $nro_socio}) );
 
     my $novedades_array_ref = C4::Modelo::SysNovedadNoMostrar::Manager->get_sys_novedad_no_mostrar( query => \@filtros,
                                                                               );
