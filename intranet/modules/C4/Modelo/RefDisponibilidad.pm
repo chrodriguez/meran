@@ -43,6 +43,12 @@ sub paraPrestamoValue{
     return ('CIRC0000');
 }
 
+sub paraSalaValue{
+    
+    return ('CIRC0001');
+}
+
+
 sub toString{
 	my ($self) = shift;
 

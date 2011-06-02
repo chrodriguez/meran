@@ -91,47 +91,47 @@ use vars qw(@EXPORT_OK @ISA);
 # 
 
 sub getIdRefDisponibilidadDomiciliaria{
-    return 'ref_disponibilidad@0';
+     return 'ref_disponibilidad@'.C4::Modelo::RefDisponibilidad::paraPrestamoValue();
 }
 
 sub getIdRefDisponibilidadSalaLectura{
-    return 'ref_disponibilidad@1';
+     return 'ref_disponibilidad@'.C4::Modelo::RefDisponibilidad::paraSalaValue();
 }
 
 sub getIdRefEstadoBaja{
-    return 'ref_estado@4';
+    return 'ref_estado@'.C4::Modelo::RefEstado::paraBajaValue();
 }
 
 sub getIdRefEstadoCompartido{
-    return 'ref_estado@2';
+    return 'ref_estado@'.C4::Modelo::RefEstado::paraCompartidoValue();
 }
 
 sub getIdRefEstadoDisponible{
-    return 'ref_estado@3';
+    return 'ref_estado@'.C4::Modelo::RefEstado::paraDisponibleValue();
 }
 
 sub getIdRefEstadoDeteriorado{
-    return 'ref_estado@5';
+    return 'ref_estado@'.C4::Modelo::RefEstado::paraEjemplarDeterioradoValue();
 }
 
 sub getIdRefEstadoEncuadernacion{
-    return 'ref_estado@6';
+    return 'ref_estado@'.C4::Modelo::RefEstado::paraEncuadernacionValue();
 }
 
 sub getIdRefEstadoPerdido{
-    return 'ref_estado@1';
+    return 'ref_estado@'.C4::Modelo::RefEstado::paraPerdidoValue();
 }
 
 sub getIdRefEstadoImpresiones{
-    return 'ref_estado@8';
+    return 'ref_estado@'.C4::Modelo::RefEstado::paraImpresionesValue();
 }
 
 sub getIdRefEstadoProcesosTecnicos{
-    return 'ref_estado@9';
+    return 'ref_estado@'.C4::Modelo::RefEstado::paraProcesosTecnicosValue();
 }
 
 sub getIdRefEstadoEtiquetado{
-    return 'ref_estado@7';
+    return 'ref_estado@'.C4::Modelo::RefEstado::paraEtiquetadoValue();
 }
 =item
     sub getInformacionReferenciaFromId
