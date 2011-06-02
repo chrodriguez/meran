@@ -8,12 +8,11 @@ __PACKAGE__->meta->setup(
     table   => 'ref_disponibilidad',
 
     columns => [
-        id     => { type => 'serial', not_null => 1 },
         nombre => { type => 'varchar', default => '', length => 255, not_null => 1 },
         codigo => { type => 'varchar', default => '', length => 8, not_null => 1 },
     ],
 
-    primary_key_columns => [ 'id' ],
+    primary_key_columns => [ 'codigo' ],
     unique_key => [ 'nombre' ],
 
 );
@@ -69,20 +68,6 @@ sub setCodigo{
     $self->codigo($codigo);
 }
 
-sub getId{
-    my ($self) = shift;
-
-    return ($self->id);
-}
-    
-sub setId{
-    my ($self) = shift;
-    my ($id) = @_;
-
-    $self->id($id);
-}
-    
-
 sub getNombre{
     my ($self) = shift;
     return (C4::AR::Utilidades::trim($self->nombre));
@@ -98,13 +83,13 @@ sub obtenerValoresCampo {
 	my ($self)=shift;
     my ($campo, $orden)=@_;
  	my $ref_valores = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad
-						( select   => [ 'id',$campo],
+						( select   => [ $self->getPk ,$campo],
 						  sort_by => ($orden) );
     my @array_valores;
 
     for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
 		my $valor;
-		$valor->{"clave"}=$ref_valores->[$i]->getId;
+		$valor->{"clave"}=$ref_valores->[$i]->getPkValue;
 		$valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
         push (@array_valores, $valor);
     }
@@ -117,9 +102,8 @@ sub obtenerValorCampo {
     my ($campo,$id)=@_;
     my $ref_valores = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad
 						( select   => [$campo],
-						  query =>[ id => { eq => $id} ]);
+						  query =>[ $self->getPk => { eq => $id} ]);
     	
-# 	return ($ref_valores->[0]->getCampo($campo));
   if(scalar(@$ref_valores) > 0){
     return ($ref_valores->[0]->getCampo($campo));
   }else{
@@ -133,7 +117,7 @@ sub getCampo{
     my ($self) = shift;
 	my ($campo)=@_;
     
-	if ($campo eq "id") {return $self->getId;}
+	if ($campo eq "id") {return $self->getPkValue;}
 	if ($campo eq "nombre") {return $self->getNombre;}
 
 	return (0);
