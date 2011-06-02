@@ -93,6 +93,22 @@ sub getNovedadesNoMostrar{
     }
 }
 
+=item
+    Esta funcion "elimina" la novedad recibida como parametro, la agrega a la tabla para no motrarla mas al user
+=cut
+sub noMostrarNovedad{
+
+    my ($id_novedad) = @_;
+    my %params;
+    $params{'id_novedad'} = $id_novedad;
+    
+    my $novedad_no_borrar = C4::Modelo::SysNovedadNoMostrar->new();
+    
+    $novedad_no_borrar->agregar(%params);
+    
+    return "ok";
+}
+
 sub getUltimasNovedades{
 
     my $novedades_array_ref = C4::Modelo::SysNovedad::Manager->get_sys_novedad( 
