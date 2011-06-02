@@ -13,6 +13,7 @@ my $obj                 = $input->param('obj');
 $obj                    = C4::AR::Utilidades::from_json_ISO($obj);
 my $tipoAccion          = $obj->{'tipoAccion'}||"";
 
+
 if($tipoAccion eq "DELETE_NOVEDAD"){
 
     my ($loggedinuser, $session, $flags) = checkauth( 
@@ -25,13 +26,8 @@ if($tipoAccion eq "DELETE_NOVEDAD"){
                                                    "opac"
                                 );   
                                 
-    my $id_novedad          = $obj->{'tipoAccion'}||"";                                 
-
-    my ($Message_arrayref)  = C4::AR::Novedades::noMostrarNovedad($obj);   
-  
-    my $infoOperacionJSON   = to_json $Message_arrayref;
-        
-    C4::AR::Auth::print_header($session);
-    print $infoOperacionJSON;
+    my $id_novedad          = $obj->{'id_novedad'}||"";      
+    
+    my ($Message_arrayref)  = C4::AR::Novedades::noMostrarNovedad($id_novedad);   
 
 }

@@ -21,7 +21,7 @@ sub agregar{
     my ($self) = shift;
     my (%params) = @_;
     my $usuario = C4::AR::Auth::getSessionNroSocio();
-    $self->setIdNovedad($params{'id_categoria'});
+    $self->setIdNovedad($params{'id_novedad'});
     $self->setUsuarioNovedad($usuario);
 
     return($self->save());
@@ -50,7 +50,7 @@ sub setUsuarioNovedad{
     my ($self) = shift;
     my ($usuario_novedad) = @_;
 
-    $self->usuario($usuario_novedad);
+    $self->usuario_novedad($usuario_novedad);
 }
 
 1;
