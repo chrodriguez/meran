@@ -77,62 +77,6 @@ use vars qw(@EXPORT_OK @ISA);
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-# 
-# INSERT INTO `ref_estado` (`id`, `nombre`) VALUES
-# (4, 'Baja'),
-# (2, 'Compartido'),
-# (0, 'Disponible'),
-# (5, 'Ejemplar deteriorado'),
-# (6, 'En Encuadernación'),
-# (7, 'En Etiquetado'),
-# (8, 'En Impresiones'),
-# (9, 'En procesos técnicos'),
-# (1, 'Perdido');
-# 
-
-sub getIdRefDisponibilidadDomiciliaria{
-     return 'ref_disponibilidad@'.C4::Modelo::RefDisponibilidad::paraPrestamoValue();
-}
-
-sub getIdRefDisponibilidadSalaLectura{
-     return 'ref_disponibilidad@'.C4::Modelo::RefDisponibilidad::paraSalaValue();
-}
-
-sub getIdRefEstadoBaja{
-    return 'ref_estado@'.C4::Modelo::RefEstado::paraBajaValue();
-}
-
-sub getIdRefEstadoCompartido{
-    return 'ref_estado@'.C4::Modelo::RefEstado::paraCompartidoValue();
-}
-
-sub getIdRefEstadoDisponible{
-    return 'ref_estado@'.C4::Modelo::RefEstado::paraDisponibleValue();
-}
-
-sub getIdRefEstadoDeteriorado{
-    return 'ref_estado@'.C4::Modelo::RefEstado::paraEjemplarDeterioradoValue();
-}
-
-sub getIdRefEstadoEncuadernacion{
-    return 'ref_estado@'.C4::Modelo::RefEstado::paraEncuadernacionValue();
-}
-
-sub getIdRefEstadoPerdido{
-    return 'ref_estado@'.C4::Modelo::RefEstado::paraPerdidoValue();
-}
-
-sub getIdRefEstadoImpresiones{
-    return 'ref_estado@'.C4::Modelo::RefEstado::paraImpresionesValue();
-}
-
-sub getIdRefEstadoProcesosTecnicos{
-    return 'ref_estado@'.C4::Modelo::RefEstado::paraProcesosTecnicosValue();
-}
-
-sub getIdRefEstadoEtiquetado{
-    return 'ref_estado@'.C4::Modelo::RefEstado::paraEtiquetadoValue();
-}
 =item
     sub getInformacionReferenciaFromId
     

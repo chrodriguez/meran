@@ -715,13 +715,13 @@ sub toMARC_Intra{
 sub ESTADO_DISPONIBLE{
 
    my ($estado) = @_;
-   return ($estado eq 'STATE002');
+   return ($estado eq C4::Modelo::RefEstado::estadoDisponibleValue());
 }   
 
 sub ESTADO_COMPARTIDO {
     
     my ($estado) = @_;
-    return ($estado eq 'STATE001');
+    return ($estado eq C4::Modelo::RefEstado::estadoCompartidoValue());
 }   
 
 =item
@@ -734,15 +734,13 @@ DISPONIBILIDAD
 sub DISPONIBILIDAD_PRESTAMO{
     my ($disponibilidad) = @_;
 
-#     C4::AR::Debug::debug("CatRegistroMarcN3 => DISPONIBILIDAD PRESTAMO");
-    return ($disponibilidad eq 'CIRC0000');
+    return ($disponibilidad eq C4::Modelo::RefDisponibilidad::paraPrestamoValue());
 }
 
 sub DISPONIBILIDAD_PARA_SALA{
     my ($disponibilidad) = @_;
 
-#     C4::AR::Debug::debug("CatRegistroMarcN3 => DISPONIBILIDAD PARA SALA");
-    return ($disponibilidad eq 'CIRC0001');
+    return ($disponibilidad eq C4::Modelo::RefDisponibilidad::paraSalaValue());
 }
 
 sub verificar_cambio {

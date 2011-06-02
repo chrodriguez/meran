@@ -26,19 +26,18 @@ use Text::LevenshteinXS;
 # Sala de lectura   = CIRC0001
 ##################################################
 
-# 0 =  Domiciliario
-# 1 =  Sala de Lectura
-
-sub paraPrestamoValue{
-    
+sub paraPrestamoValue{   
     return ('CIRC0000');
 }
-
+sub paraPrestamoReferencia{
+  return ('ref_disponibilidad@'.C4::Modelo::RefDisponibilidad::paraPrestamoValue());
+}
 sub paraSalaValue{
-    
     return ('CIRC0001');
 }
-
+sub paraSalaReferencia{
+  return ('ref_disponibilidad@'.C4::Modelo::RefDisponibilidad::paraSalaValue());
+}
 
 sub toString{
 	my ($self) = shift;

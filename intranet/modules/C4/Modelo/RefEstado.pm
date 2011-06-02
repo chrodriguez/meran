@@ -31,49 +31,27 @@ use Text::LevenshteinXS;
 # En procesos técnicos = STATE008
 ##################################################
 
+<<<<<<< HEAD
 sub paraBajaValue{
     
     return ('STATE000');
 }
 
 sub paraCompartidoValue{
+=======
+sub estadoCompartidoValue{
+>>>>>>> c5dc2a811da75746ad5d89a812ffd1659dbe060d
     
     return ('STATE001');
 }
 
-sub paraDisponibleValue{
+sub estadoDisponibleValue{
     
     return ('STATE002');
 }
 
-sub paraEjemplarDeterioradoValue{
-    
-    return ('STATE003');
-}
-
-sub paraEncuadernacionValue{
-    
-    return ('STATE004');
-}
-
-sub paraPerdidoValue{
-    
-    return ('STATE005');
-}
-
-sub paraImpresionesValue{
-    
-    return ('STATE006');
-}
-
-sub paraProcesosTecnicosValue{
-    
-    return ('STATE007');
-}
-
-sub paraEtiquetadoValue{
-    
-    return ('STATE008');
+sub estadoDisponibleReferencia{
+  return ('ref_estado@'.C4::Modelo::RefEstado::estadoDisponibleValue());
 }
 
 
