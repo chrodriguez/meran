@@ -7,11 +7,11 @@
     <script type="text/javascript" language="javascript">
         $(".delete").click(function(){
         
-            var element = $(this);
-            var I = element.attr("id");
-            $('li#list'+I).fadeOut('slow', function() {$(this).remove();
+            var element     = $(this)
+            var I           = element.attr("id")
+            var id_novedad  = $('#del_novedad_'+I)
             
-            function eliminarPublicacion(){
+            function eliminarPublicacion(id_novedad){
                 objAH                   = new AjaxHelper(updateEliminarPublicacion)
                 objAH.showOverlay       = true
 		        objAH.debug             = true
@@ -38,7 +38,7 @@
           [% END %]
           [% FOREACH novedad IN novedades %]
               <div class="novedad_opac" id="novedad_opac_[% novedad.getId %]">
-                  <span class="del"><a href="#" class="delete" title="No mostrar esta novedad de nuevo" id="[% novedad.getId %]">X</a></span>
+                  <span class="del"><a href="#" class="delete" title="No mostrar esta novedad de nuevo" id="del_novedad_[% novedad.getId %]">X</a></span>
 	              <h1>
 	                <a href='[% url_prefix %]/ver_novedad.pl?id=[% novedad.getId %]&amp;token=[% token %]'>[% novedad.getTitulo %]</a>
 	              </h1>
