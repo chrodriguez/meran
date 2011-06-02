@@ -215,9 +215,12 @@ sub modificarDatosDeOPAC{
     my ($data_hash)=@_;
 
     #Asignando data...
+    $data_hash = C4::AR::Utilidades::escapeHashData($data_hash);
+    
     $self->setNombre($data_hash->{'nombre'});
     $self->setApellido($data_hash->{'apellido'});
     $self->setCalle($data_hash->{'calle'});
+    $self->setCiudad($data_hash->{'id_ciudad'});
     $self->setTelefono($data_hash->{'telefono'});
     $self->setEmail($data_hash->{'email'});
 
@@ -227,7 +230,10 @@ sub modificarDatosDeOPAC{
 sub modificarVisibilidadOPAC{
     my ($self)=shift;
     my ($data_hash)=@_;
+
     #Asignando data...
+    $data_hash = C4::AR::Utilidades::escapeHashData($data_hash);
+
     $self->setNombre($data_hash->{'nombre'});
     $self->setApellido($data_hash->{'apellido'});
     $self->setCalle($data_hash->{'direccion'});

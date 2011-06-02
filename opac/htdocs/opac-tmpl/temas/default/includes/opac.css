@@ -28,7 +28,6 @@ body input[type="text"]:focus{
 }
 
 body textarea:focus{
-  background: #F5DEB3;
 }
 .page-container {width:98%; margin:0px auto; margin-top:10px; margin-bottom:10px; border:solid 1px rgb(150,150,150); font-size:1.0em;}
 .main {clear:both; width:100%; padding-bottom:30px; margin-top: 2%;}
@@ -276,7 +275,7 @@ li.detalle_barra_circulacion{
 }
 
 .review{
-    background: Wheat;
+    background: infobackground;
     float: left;
     width: 90%;
 }

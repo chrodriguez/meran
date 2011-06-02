@@ -16,6 +16,7 @@ use C4::AR::Referencias;
 use C4::AR::ControlAutoridades;
 use C4::Date;
 use Encode;
+use HTML::Entities;
 use POSIX qw(ceil floor); 
 use JSON;
 use C4::AR::Preferencias;
@@ -119,6 +120,7 @@ use vars qw(@EXPORT_OK @ISA);
     escapeURL
     getUrlPrefix
     addParamToUrl
+    escapeHashData
 );
 
 # para los combos que no usan tablas de referencia
@@ -2879,6 +2881,23 @@ sub printHASH{
             }
     }
 }
+
+sub escapeHashData{
+
+    my ($hash_ref) = @_;
+    C4::AR::Debug::debug("ENTRO A escapeHashData ================================>");
+    if($hash_ref){
+        while ( my ($key, $value) = each(%$hash_ref) ) {
+        	    C4::AR::Debug::debug("key: $key => value: $value\n");
+        	    $value = encode_entities($value);
+                $hash_ref->{$key} = $value;
+                C4::AR::Debug::debug("ENCODED key: $key => value: $value\n");
+            }
+    }
+    
+    return ($hash_ref);
+}
+
 
 sub initHASH{
 

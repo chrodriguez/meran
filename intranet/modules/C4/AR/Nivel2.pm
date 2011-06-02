@@ -7,6 +7,7 @@ use C4::Modelo::CatRegistroMarcN2;
 use C4::Modelo::CatRegistroMarcN2::Manager;
 use C4::Modelo::CatRating::Manager;
 use C4::Modelo::CatRating;
+use HTML::Entities;
 use C4::AR::Sphinx qw(generar_indice);
 
 use POSIX qw(NULL ceil);
@@ -465,7 +466,6 @@ sub getCantReviews{
 
 sub getReviews{
     my($id2) = @_;
-
     my @filtros;
 
     push (@filtros, (id2 => {eq => $id2}));
@@ -483,10 +483,12 @@ sub getReviews{
 
 sub reviewNivel2{
     my ($id2,$review,$nro_socio) = @_;
-
     my $rating_obj = C4::Modelo::CatRating->new();
 
     $rating_obj = $rating_obj->getObjeto($nro_socio, $id2);
+    
+    $review = encode_entities($review);
+    
     $rating_obj->setReview($review);
     $rating_obj->save();
 }

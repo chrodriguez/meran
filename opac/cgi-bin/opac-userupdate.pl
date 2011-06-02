@@ -84,7 +84,8 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
 }
 
 $t_params->{'socio'}= $socio;
+$t_params->{'opac'} = 1;
 
-$t_params->{'opac'};
+C4::AR::Auth::updateLoggedUserTemplateParams($session,$t_params,$socio);
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
