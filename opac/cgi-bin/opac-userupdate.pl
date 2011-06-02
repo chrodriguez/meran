@@ -41,11 +41,14 @@ $data_hash{'actualPassword'} = $input->param('actual_password');
 $data_hash{'newpassword'} = $input->param('new_password1');
 $data_hash{'newpassword1'} = $input->param('new_password2');
 $data_hash{'tema'} = $input->param('temas_opac') || 0;
+
 my $fields_to_check = ['nombre','apellido','direccion','numero_telefono','id_ciudad','email'];
-my $update_password = 0;
-if ($update_password = C4::AR::Utilidades::validateString($data_hash{'actualPassword'})){
-  $fields_to_check = ['nombre','apellido','direccion','numero_telefono','id_ciudad','email', 'actualPassword','newpassword','newpassword1']
+my $update_password =  0;
+
+if ($update_password =  C4::AR::Utilidades::validateString($data_hash{'actualPassword'})){
+    $fields_to_check = ['nombre','apellido','direccion','numero_telefono','id_ciudad','email', 'actualPassword','newpassword','newpassword1'];
 }
+
 if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
     if ($update_password){
         $data_hash{'nro_socio'} = $socio->getNro_socio;
@@ -73,15 +76,10 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
 
     $t_params->{'partial_template'}= "informacion.inc";
 }else{
-    $socio->persona->nombre($data_hash{'nombre'});
-    $socio->persona->apellido($data_hash{'apellido'});
-    $socio->persona->telefono($data_hash{'numero_telefono'});
-    $socio->persona->ciudad($data_hash{'id_ciudad'});
-    $socio->persona->calle($data_hash{'direccion'});
-    $socio->persona->email($data_hash{'email'});
+    $socio->persona->modificarDatosDeOPAC(\%data_hash);
     $t_params->{'combo_temas'} = C4::AR::Utilidades::generarComboTemasOPAC();
     $t_params->{'socio'} = $socio;
-    $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje('VA002','intranet');
+    $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje('VA002','opac');
     $t_params->{'partial_template'}= "opac-modificar_datos.inc";
 }
 

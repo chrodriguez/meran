@@ -210,6 +210,20 @@ sub modificar{
     $self->save();
 }
 
+sub modificarDatosDeOPAC{
+    my ($self)=shift;
+    my ($data_hash)=@_;
+
+    #Asignando data...
+    $self->setNombre($data_hash->{'nombre'});
+    $self->setApellido($data_hash->{'apellido'});
+    $self->setCalle($data_hash->{'calle'});
+    $self->setTelefono($data_hash->{'telefono'});
+    $self->setEmail($data_hash->{'email'});
+
+    $self->save();
+}
+
 sub modificarVisibilidadOPAC{
     my ($self)=shift;
     my ($data_hash)=@_;

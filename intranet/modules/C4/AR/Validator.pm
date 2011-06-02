@@ -373,10 +373,13 @@ sub checkParams {
     if ($flag){
         foreach my $nombreParam (@$array_params_name){
             $flag = $flag && C4::AR::Utilidades::validateString($params_hash_ref->{$nombreParam});
+
+            #SOLO PARA DEBUG, QUITAR EN PRODUCCION
+            (!$flag) && C4::AR::Debug::debug("Error en (checkParams) ".$nombreParam);
+            
             if (!(C4::AR::Utilidades::validateString($params_hash_ref->{$nombreParam}))){
                 $params_hash_ref->{$nombreParam} = "";
             }
-#             C4::AR::Debug::debug("Analizando (checkParams)".$nombreParam.", con resultado ".$flag);
         }
     }
     return $flag;
