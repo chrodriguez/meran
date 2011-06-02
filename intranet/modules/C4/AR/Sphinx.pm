@@ -90,7 +90,7 @@ sub getCodigoFromEstadoByName{
 
 	    my $dbh         = C4::Context->dbh;
 	    my $query       = " SELECT codigo
-	                        FROM `ref_estado` WHERE name = ?";
+	                        FROM `ref_estado` WHERE nombre = ?";
 	
 	    my $sth0        = $dbh->prepare($query);
 	    $sth0->execute($name);
