@@ -445,16 +445,9 @@ width: 83%;
 	font-style: normal;
 }
 
-tr.par {
-	background-color: #4B5869;
-}
 
-tr.impar {
-	background-color: #C0C0C0;
-}
-
-tr.par td, tr.par td a{
-    color: #EAEBED;
+tr td a{
+    color: #35414F;
 }
 
 tr.impar td, tr.impar td a {
@@ -536,10 +529,6 @@ label.error_adv {
 	font-style: underline;
 }
 
-.par .prestamo {
-	font-size: 10pt;
-	color: #ADFF2F;
-}
 
 .impar .prestamo {
     font-size: 10pt;
@@ -554,11 +543,6 @@ label.error_adv {
 .impar .salaLectura {
     font-size: 10pt;
     color: #35414F;
-}
-
-.par .disponible {
-	font-size: 10pt;
-	color: #ADFF2F;
 }
 
 .impar .disponible {
@@ -1611,7 +1595,7 @@ input.file {
 
 
 .datos_tabla td a{
-    color: #EAEBED;
+    color: #35414F;
 }
 
 .datos_tabla {
@@ -4537,4 +4521,23 @@ body .latest-status-text a {
 	clear: both;	
 	
 	
+}
+
+
+tr.impar {
+background-color:#E7F3FA;
+}
+
+
+tr.par {
+background-color:#D4E3EB;
+
+.par .disponible {
+color:#35414F;
+font-size:10pt;
+}
+
+.par .prestamo {
+color:#35414F;
+font-size:10pt;
 }

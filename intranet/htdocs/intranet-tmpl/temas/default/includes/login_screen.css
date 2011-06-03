@@ -107,13 +107,9 @@ fieldset {
 #login {
 	background-image: url(../imagenes/meranLogin.png);
 	background-repeat: no-repeat;
-/*	position: absolute;*/
-	/*left: 50%;
-	top: 50%;*/
-	height: 200px;
-	/*margin-top: -100px;*/
-	width: 330px;
-	/*margin-left: -150px;*/
+	height: 300px;
+	width: 420px;
+	margin: 0 auto;
 }
 
 #login span {
@@ -141,6 +137,7 @@ fieldset {
 
 .entry {
 	padding-bottom: 2%;
+	font-family: Verdana;
 	margin: 0 auto;
 	float: left;
 	padding-left: 5%;
@@ -149,10 +146,9 @@ fieldset {
 
 #contenido_login {
 	display: block;
-	height: 70px;
 	width: 80%;
-	padding-top: 70px;
-	padding-left: 10px;
+	padding-top: 86px;
+	padding-left: 50px;
 	position: relative;
 	margin: 0 auto;
 	float: left;
@@ -161,7 +157,7 @@ fieldset {
 #boton_login {
 	display: block;
 	list-style-type: none;
-	margin: 0 auto;
+	padding-left: 70px;
 	width: 75px;
 }
 
