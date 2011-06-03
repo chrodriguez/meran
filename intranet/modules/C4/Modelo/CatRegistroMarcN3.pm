@@ -637,17 +637,6 @@ sub toMARC{
     $params->{'id_tipo_doc'}    = $self->nivel2->getTipoDocumento;
     my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_meran_por_nivel($marc_record, $params);
 
-
-#     my $MARC_result_array   = &C4::AR::Catalogacion::marc_record_to_meran($marc_record);
-
-#     foreach my $m (@$MARC_result_array){
-#         C4::AR::Debug::debug("CatRegistroMarcN3 => toMARC => campo => ".$m->{'campo'});
-#         foreach my $s (@{$m->{'subcampos_array'}}){
-#             C4::AR::Debug::debug("CatRegistroMarcN3 => toMARC => liblibrarian => ".$s->{'subcampo'});        
-#             C4::AR::Debug::debug("CatRegistroMarcN3 => toMARC => liblibrarian => ".$s->{'liblibrarian'});        
-#         }
-#     }
-
     return ($MARC_result_array);
 }
 
@@ -667,11 +656,6 @@ sub toMARC_Opac{
     $params->{'nivel'}          = '3';
     $params->{'id_tipo_doc'}    = $self->getTipoDocumento;
     my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_opac_view($marc_record, $params);
-
-#     my $orden = 'orden';
-#     my @return_array_sorted = sort{$b->{$orden} cmp $a->{$orden}} @$MARC_result_array;
-# 
-#     return (\@return_array_sorted);
 
     return ($MARC_result_array);
 }
@@ -693,6 +677,46 @@ sub toMARC_Intra{
     my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_intra_view($marc_record, $params);
 
     return ($MARC_result_array);
+}
+
+=item
+Esta funcion devuelve los campos de nivel 3 y nivel3Repetible mapeados en un arreglo de {campo, subcampo, dato}
+=cut
+sub nivel3CompletoToMARC{
+    my ($self) = shift;
+
+	my ($marc_array) = $self->toMARC;
+# 	my ($nivel3Repetible_object_array) = C4::Modelo::CatNivel3Repetible::Manager->get_cat_nivel3_repetible( query => [ id3 => { eq => $self->getId3 }]);
+# 	my $campo;
+# 	my $subcampo;
+# 	my $dato;	
+# 	my $id1 = $self->getId1;
+# 
+# 	foreach my $marc_object (@$nivel3Repetible_object_array){
+# 		$campo                  = $marc_object->getCampo;
+# 		$subcampo               = $marc_object->getSubcampo;
+# 		$dato                   = $marc_object->getDato;
+# 		my %hash;
+# 		$hash{'header'}         = C4::AR::Catalogacion::getHeader($campo);
+# 		$hash{'campo'}          = $campo;
+# 		$hash{'subcampo'}       = $subcampo;
+# 		$hash{'liblibrarian'}   = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo);
+# 		$hash{'dato'}           = $dato;
+#         $hash{'id1'}            = $id1;
+#     
+#         #obtengo el dato de la referencia solo si es un repetible, los campos fijos recuperan de otra forma el dato de la referencia 
+#         my $valor_referencia    = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato);
+#         $hash{'dato'}           = $valor_referencia;
+#     
+#         push(@$marc_array, \%hash);
+#         C4::AR::Debug::debug("CatNivel3 => nivel1CompletoToMARC => nivel1CompletoToMARC => campo, subcampo: ".$campo.", ".$subcampo);
+#         C4::AR::Debug::debug("CatNivel3 => nivel1CompletoToMARC => nivel1CompletoToMARC => id1: ".$id1);  
+# 
+#  		push(@$marc_array, \%hash);
+# 	}
+# 
+#     C4::AR::Debug::debug("nivel3CompletoToMARC => cant: ".scalar(@$marc_array));
+	return ($marc_array);
 }
 
 ########## CODIGOS DE DISPONIBILIDAD #############
