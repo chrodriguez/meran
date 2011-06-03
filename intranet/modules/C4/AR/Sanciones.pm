@@ -691,7 +691,7 @@ sub getHistorialSanciones{
 #                                                                                 fecha_final     => { lt => $hoy},
                                                                                 ],
                                                                  
-                                                                        with_objects => ['usr_responsable','usr_nro_socio','ref_tipo_sancion', 'nivel3'],
+                                                                        with_objects => ['usr_responsable','usr_nro_socio','ref_tipo_sancion', 'nivel3', 'nivel3.nivel1'],
                                                                         sort_by => $orden,
                                                                         limit   => $cantR,
                                                                         offset  => $ini,

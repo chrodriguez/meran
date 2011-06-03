@@ -422,7 +422,7 @@ width: 83%;
 	color: #FFFFFF;
 	font-size: 9pt;
 /*	background: url(../imagenes/tablaresultado.png) repeat-x; */ 
-    background: #35414F;
+    background: #E7F3FA;
 	text-align: center;
 	font-weight: bold;
 	height: 20px;
@@ -533,29 +533,35 @@ label.error_adv {
 .impar .prestamo {
     font-size: 10pt;
     color: #006400;
+    font-weight: bold;
 }
 
 .par .salaLectura {
     font-size: 10pt;
-    color: #FFEBCD;
+    color: #35414F;
+    font-weight: bold;
 }
 
 .impar .salaLectura {
     font-size: 10pt;
     color: #35414F;
+    font-weight: bold;
 }
 
 .impar .disponible {
     font-size: 10pt;
     color: #006400;
+    font-weight: bold;
 }
 
 .disponible {
     color: #006400;
+    font-weight: bold;
 }
 
 .nodisponible {
     color: red;
+    font-weight: bold;
 }
 
 .par .nodisponible {
@@ -566,6 +572,7 @@ label.error_adv {
 .impar .nodisponible {
     font-size: 10pt;
     color: red;
+    font-weight: bold;
 }
 
 .recuadroAyuda {
@@ -2090,6 +2097,7 @@ div.indicators {
 .datos_tabla_char td,th {
 	padding: .3em;
 	border: 1px #ccc solid;
+	color: #35414F;
 }
 
 .datos_tabla_char thead {
