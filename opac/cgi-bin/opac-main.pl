@@ -10,6 +10,11 @@ use HTML::Template;
 
 my $query = new CGI;
 
+
+C4::AR::Debug::debug("saflkjhasdlkfjaslkfjslakfj");
+
+C4::AR::Utilidades::printHASH($query->Vars);
+
 my ($template, $session, $t_params)= get_template_and_user({
 									template_name   => "opac-main.tmpl",
 								    query           => $query,

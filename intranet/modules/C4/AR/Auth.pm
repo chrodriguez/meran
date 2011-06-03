@@ -505,6 +505,8 @@ sub _verificarSession {
 sub checkauth {
     C4::AR::Debug::debug("desde checkauth==================================================================================================");
     my $query               = shift;
+
+    C4::AR::Utilidades::printHASH($query->Vars);
     my $authnotrequired     = shift;
     my $flagsrequired       = shift;
     my $type                = shift;
@@ -605,7 +607,7 @@ sub checkauth {
                             my $socio_data_temp = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
 
                             if ($socio_data_temp){          #ingreso un usuario y exite en la base
-                                   
+                                 
                                     my ($socio)         = _verificarPassword($userid,$password,$nroRandom);
                                     #             C4::AR::Debug::debug("la pass es valida?".$passwordValida);
                                     
@@ -615,8 +617,7 @@ sub checkauth {
                                             my $captchaResult;
                                           
                                             if (($login_attempts > 2) && ($query->url_param('welcome')== 1)) {      # se logueo mal mas de 3 veces, debo verificar captcha
-                                              
-                                                    C4::AR::Debug::debug("Entra a captcha?");
+                                             
                                                     my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
                                                     my $reCaptchaChallenge  = $query->param('recaptcha_challenge_field');
                                                     my $reCaptchaResponse   = $query->param('recaptcha_response_field');
@@ -700,7 +701,9 @@ sub checkauth {
                                             $mensaje= 'U357';
              
                              }
+                            
                              if ($query->url_param('welcome')){
+                                      C4::AR::Debug::debug("adentro del if welcome");
                                       $template_params->{'loginAttempt'} = 0;
                                       $mensaje = 'U000';
                              }
