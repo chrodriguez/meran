@@ -223,11 +223,6 @@ sub modificar {
     my $edicion_grupal;
 # FIXME no esta funcionando el currenttime de mysql
     $self->setUpdatedAt(Date::Manip::ParseDate("now"));
-
-#     Esto porque se modifica???? Alguna vez cambia??
-#     $self->setId2($params->{'id2'});
-#     $self->setId1($params->{'id1'});
-
     my $marc_record_cliente = MARC::Record->new_from_usmarc($params->{'marc_record'}); #marc_record que viene del cliente
     my $marc_record_base    = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
