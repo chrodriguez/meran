@@ -637,17 +637,6 @@ sub toMARC{
     $params->{'id_tipo_doc'}    = $self->nivel2->getTipoDocumento;
     my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_meran_por_nivel($marc_record, $params);
 
-
-#     my $MARC_result_array   = &C4::AR::Catalogacion::marc_record_to_meran($marc_record);
-
-#     foreach my $m (@$MARC_result_array){
-#         C4::AR::Debug::debug("CatRegistroMarcN3 => toMARC => campo => ".$m->{'campo'});
-#         foreach my $s (@{$m->{'subcampos_array'}}){
-#             C4::AR::Debug::debug("CatRegistroMarcN3 => toMARC => liblibrarian => ".$s->{'subcampo'});        
-#             C4::AR::Debug::debug("CatRegistroMarcN3 => toMARC => liblibrarian => ".$s->{'liblibrarian'});        
-#         }
-#     }
-
     return ($MARC_result_array);
 }
 
@@ -667,11 +656,6 @@ sub toMARC_Opac{
     $params->{'nivel'}          = '3';
     $params->{'id_tipo_doc'}    = $self->getTipoDocumento;
     my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_opac_view($marc_record, $params);
-
-#     my $orden = 'orden';
-#     my @return_array_sorted = sort{$b->{$orden} cmp $a->{$orden}} @$MARC_result_array;
-# 
-#     return (\@return_array_sorted);
 
     return ($MARC_result_array);
 }
