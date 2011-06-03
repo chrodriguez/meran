@@ -1,62 +1,56 @@
 
 [% USE HTML %]
 
-<br>
-
 <p  align="center">
     [% "La cantidad Total de ejemplares es:" | i18n %] [% cantidad %]
     <div class="contenedor_paginador">[% paginador %]</div>
 </p>
-
-<br>
-
-
 <table id="tablaResult" class="datos_tabla" border="0" cellspacing="0" cellpadding="0" width="100%">
     <tr class="titulo_tabla_resultado click">
 
-        <th onClick="ordenar('nro_inventario');">[% "Nro. de Inventario" | i18n %]</th>
+        <th onClick="ordenar('nro_inventario');">[% "C&oacute;digo de barra" | i18n %]</th>
         <th onClick="ordenar('signatura_topografica');">[% "Signatura Topogr&aacute;fica" | i18n %]</th>
         <th onClick="ordenar('autor');">[% "Autor" | i18n %]</th>
         <th onClick="ordenar('title');">[% "T&iacute;tulo" | i18n %]</th>
-        <th onClick="ordenar('publisher');">[% "Editor" | i18n %]</th>
+        <th onClick="ordenar('editor');">[% "Editor" | i18n %]</th>
         <th onClick="ordenar('edicion');">[% "Edici&oacute;n" | i18n %]</th>
-        <th onClick="ordenar('ui');">[% "UI" | i18n %]</th>
+        <th onClick="ordenar('ui_origen');">[% "UI Origen" | i18n %]</th>
+        <th onClick="ordenar('ui_poseedora');">[% "UI Poseedora" | i18n %]</th>
 
     </tr>
-
-    [% FOREACH cat_nivel3 IN results %]
+    
+    [% FOREACH res IN results %]
             <tr >
                     <td  align="center">
-                            [% cat_nivel3.nro_inventario %]
+                            [% res.nivel3.codigo_barra%]
                     </td>
                     <td align="center">
-                            [% cat_nivel3.signatura_topografica %]
+                            [% res.nivel3.signatura %]
                     </td>
                     <td align="center">
-                            [% cat_nivel3.autor %]
+                            [% res.nivel1.getAutor %]
                     </td>
                     <td align="center">
-                            [% HTML.escape(cat_nivel3.titulo) %]
-                            [% IF cat_nivel3.unititle %]:&nbsp;
-                                    [% HTML.escape(unititle) %]
+                            [% res.nivel1.getTitulo%]
+                    </td>
+                    <td align="center">
+                            [% IF res.nivel2.getEditor %]
+                                    [% res.nivel2.getEditor %]
                             [% END %]
                     </td>
                     <td align="center">
-                            [% cat_nivel3.publisher %]
-                    </td>
-                    <td align="center">
-                            [% IF cat_nivel3.edicion %]
-                              [% cat_nivel3.edicion %]
+                            [% IF res.nivel2.getEdicion %]
+                              [% res.nivel2.getEdicion %]
                             [% END %]
-                            [% IF cat_nivel3.anio_publicacion %]
-                              ([% cat_nivel3.anio_publicacion %])
-                            [% END %]
-                            [% IF cat_nivel3.volume %]
-                              t [% cat_nivel3.volume %]
+                            [% IF res.nivel2.getAnio_publicacion %]
+                              ([% res.nivel2.getAnio_publicacion %])
                             [% END %]
                     </td>
                     <td align="center">
-                            [% cat_nivel3.ui %]
+                            [% res.nivel3.getId_ui_origen %]
+                    </td>
+                    <td align="center">
+                            [% res.nivel3.getId_ui_poseedora %]
                     </td>
             </tr>
 

@@ -22,8 +22,7 @@ my $barcode = $obj->{'barcode'};
 my $accion  = $obj->{'accion'};
 my $orden   = $obj->{'orden'} || 'barcode';
 my $ini     = $obj->{'ini'};
-
-
+my $funcion = $obj->{'funcion'};
 
 my ($template, $session, $t_params) = get_template_and_user({
                         template_name   => "reports/inventory-sig-topResult.tmpl",
@@ -41,7 +40,7 @@ my ($template, $session, $t_params) = get_template_and_user({
 my $cat_nivel3;
 my $array_hash_ref;
 my $cant_total  = 0;
-my $ini         = $obj->{'ini'};
+my $ini = $obj->{'ini'};
 
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
@@ -52,7 +51,7 @@ $t_params->{'cantR'}    = $obj->{'cantR'}   = $cantR;
 
 if ($accion eq "CONSULTA_POR_SIGNATURA") {
 
-       ($cant_total, $cat_nivel3, $array_hash_ref)   = C4::AR::Estadisticas::listarItemsDeInventarioPorSigTop($obj);
+    ($cant_total, $cat_nivel3, $array_hash_ref)   = C4::AR::Estadisticas::listarItemsDeInventarioPorSigTop($obj);
     
 #     if ($sigtop){ 
 #         ($cant_total, $cat_nivel3, $array_hash_ref)   = C4::AR::Estadisticas::listarItemsDeInventarioPorSigTop($obj);
@@ -60,9 +59,9 @@ if ($accion eq "CONSULTA_POR_SIGNATURA") {
 #         ($cant_total, $cat_nivel3, $array_hash_ref)   = C4::AR::Estadisticas::busquedaBetweenSigTop($obj);
 #     }
 
-    my ($path, $filename)            = C4::AR::Reportes::toXLS($array_hash_ref,1,'Pagina 1','inventario');        
-    $t_params->{'filename'}          = '/reports/'.$filename;
-    $t_params->{'results'}           = $cat_nivel3;
+#     my ($path, $filename)            = C4::AR::Reportes::toXLS($array_hash_ref,1,'Pagina 1','inventario');        
+#     $t_params->{'filename'}          = '/reports/'.$filename;
+    $t_params->{'results'} = $cat_nivel3;
 
 }
 
@@ -82,7 +81,8 @@ if ($accion eq "CONSULTA_POR_BARCODE") {
     $t_params->{'results'}          = $cat_nivel3;
 }
 
-$t_params->{'paginador'}            = C4::AR::Utilidades::crearPaginador($cant_total,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
+$t_params->{'paginador'}            = C4::AR::Utilidades::crearPaginador($cant_total,$cantR, $pageNumber,$funcion,$t_params);
+
 $t_params->{'cantidad'}             = $cant_total;
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

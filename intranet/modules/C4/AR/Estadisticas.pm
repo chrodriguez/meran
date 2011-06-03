@@ -250,11 +250,15 @@ sub getMinYMaxSignaturaTopografica{
 sub listarItemsDeInventarioPorSigTop{
     my ($params_hash_ref) = @_;
 
-#     my @cat_nivel3_result;
     my @filtros;
     my @info_reporte;
     my $orden = $params_hash_ref->{'sort'} || 'signatura';
+   
+    my $ini=$params_hash_ref->{'ini'};
+    my $cantR=$params_hash_ref->{'cantR'};  
+    
     my $signatura= $params_hash_ref->{'sigtop'};
+   
     my $db= C4::Modelo::CatRegistroMarcN3->new()->db();
     
     push (@filtros, ( signatura => { eq => $signatura}));
@@ -265,9 +269,17 @@ sub listarItemsDeInventarioPorSigTop{
                                                                                                   signatura => { eq => $signatura },
                                                                                             ], 
                                                                                             sort_by => $orden,
+                                                                                            limit   => $cantR,
+                                                                                            offset  => $ini,
                                                                           );
 
-  
+   my $cat_nivel3_array_ref_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count( 
+                                                                                            db  => $db,
+                                                                                            query => [  
+                                                                                                  signatura => { eq => $signatura },
+                                                                                            ], 
+                                                                                            sort_by => $orden,
+                                                                          ); 
 
     my $cant  = scalar(@$cat_nivel3_array_ref);
     my @result;
@@ -281,78 +293,12 @@ sub listarItemsDeInventarioPorSigTop{
           $hash_result{'nivel1'}= $nivel1; 
           $hash_result{'nivel2'}=  @$nivel2[0];
           $hash_result{'nivel3'}= $reg_nivel_3;
+
           push(@info_reporte, \%hash_result);
           push(@result, \%hash_result);
     }
 
-
-    C4::AR::Debug::debug("--------------------RESULTADOS---------------------------");
-    C4::AR::Utilidades::printHASH(@result[0]);
-
-#     my $signatura       = C4::AR::Utilidades::trim($params_hash_ref->{'sigtop'});
-#     my $desde_signatura = C4::AR::Utilidades::trim($params_hash_ref->{'desde_signatura'});
-#     my $hasta_signatura = C4::AR::Utilidades::trim($params_hash_ref->{'hasta_signatura'});
- 
-
-#     for(my $i=0; $i < $cant; $i++){
-# 
-# 
-#         my %hash_info;
-# 
-#         $hash_info{'nro_inventario'}          = $cat_nivel3_array_ref->[$i]->getBarcode();
-#         $hash_info{'signatura_topografica'}   = $cat_nivel3_array_ref->[$i]->getSignatura_topografica();
-#         $hash_info{'autor'}                   = $cat_nivel3_array_ref->[$i]->nivel2->nivel1->getAutor();
-#         $hash_info{'titulo'}                  = $cat_nivel3_array_ref->[$i]->nivel2->nivel1->getTitulo();
-#         $hash_info{'edicion'}                 = $cat_nivel3_array_ref->[$i]->nivel2->getEdicion();
-#         $hash_info{'editor'}                  = $cat_nivel3_array_ref->[$i]->nivel2->getEditor();
-# # TODO falta implementar
-# #         $hash_info{'edicion'}                 = $cat_nivel3_array_ref->[$i]->nivel2->getVolumen();
-#         $hash_info{'anio_publicacion'}        = $cat_nivel3_array_ref->[$i]->nivel2->getAnio_publicacion();
-#         $hash_info{'ui'}                      = $cat_nivel3_array_ref->[$i]->getId_ui_poseedora();
-
-
-# TODO esto esta feooooooo despues lo acomodo
-#         if ($params_hash_ref->{'sigtop'} ne "" && $cat_nivel3_array_ref->[$i]->getSignatura_topografica() =~ m/^$signatura/i) {
-# 
-#             if($params_hash_ref->{'id_ui'} ne "" && $cat_nivel3_array_ref->[$i]->getId_ui_poseedora() eq $params_hash_ref->{'id_ui'}){
-#                 push(@info_reporte, \%hash_info);
-#                 push(@cat_nivel3_result, $cat_nivel3_array_ref->[$i]);
-#                 $cant_total++;
-#             }
-# 
-#            if($params_hash_ref->{'id_ui'} eq ""){
-#                 push(@info_reporte, \%hash_info);
-#                 push(@cat_nivel3_result, $cat_nivel3_array_ref->[$i]);
-#                 $cant_total++;
-#             }
-#         } 
-    
-# 
-#         if (($desde_signatura ne "")&&($cat_nivel3_array_ref->[$i]->getSignatura_topografica() ge $desde_signatura) && 
-#             ($hasta_signatura ne "")&&($cat_nivel3_array_ref->[$i]->getSignatura_topografica() le $hasta_signatura)) {
-# 
-#             if($params_hash_ref->{'id_ui'} ne "" && $cat_nivel3_array_ref->[$i]->getId_ui_poseedora() eq $params_hash_ref->{'id_ui'}){
-#                 push(@info_reporte, \%hash_info);
-#                 push(@cat_nivel3_result, $cat_nivel3_array_ref->[$i]);
-#                 $cant_total++;
-#             }
-# 
-#            if($params_hash_ref->{'id_ui'} eq ""){
-#                 push(@info_reporte, \%hash_info);
-#                 push(@cat_nivel3_result, $cat_nivel3_array_ref->[$i]);
-#                 $cant_total++;
-#             }
-#         }
-
-#     }
-
-#     @cat_nivel3_result = sort { $a->{$orden} cmp $b->{$orden} } @info_reporte;
-#     $params_hash_ref->{'cant_total'}    = $cant;
-#     $params_hash_ref->{'cant_total'}    = $cant_total;
-#     @cat_nivel3_result                  = C4::AR::Utilidades::paginarArrayResult($params_hash_ref, @cat_nivel3_result);
-
-
-    return ($cant, \@result, \@info_reporte);
+    return ($cat_nivel3_array_ref_count, \@result, \@info_reporte);
 }
 
 

@@ -1193,7 +1193,7 @@ sub armarPaginas{
     }else{
         $paginador .= "<span class='disabled' title='".$previous_text."'>".$previous_text."</span>";
     }
-
+    
     for (my $i=$limInf; ($totalPaginas >1 and $i <= $totalPaginas and $i <= $limSup) ; $i++ ) {
         my $onClick = "";
         if($actual == $i){
@@ -1210,11 +1210,14 @@ sub armarPaginas{
         $paginador .= "<a class='click next' onClick='".$funcion."(".$sig.")' title='".$next_text."'>".$next_text."</a>";
 
     }
+
     $paginador .= "</div></div>"; 
 
     if ($totalPaginas <= 1){
       $paginador="";
     }
+
+    
     return($paginador, $totalPaginas);
 }
 
