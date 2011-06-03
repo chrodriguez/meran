@@ -2,9 +2,6 @@
     $(document).ready(function() {
         $(function()
         {
-//             [% IF socio_data %]
-                $('#review').wysiwyg();
-//             [% END %]
             $('.fancylink').fancybox();
         });
     });
@@ -50,7 +47,7 @@
 </div>
 [% IF socio_data %]
     <form action="[% url_prefix %]/reviews.pl" method="post">
-        <textarea id="review" name="review" class="self_review" style="width: 88.3%"></textarea>
+        <textarea id="review" name="review" class="self_review" style="width: 88.3%;height: 150px;"></textarea>
         <input type="hidden" name="token" value="[% token %]" />
         <input type="hidden" name="id2" value="[% HTML.escape(id2) %]" />
         <input type="submit" value="[% 'Enviar' | i18n %]" />

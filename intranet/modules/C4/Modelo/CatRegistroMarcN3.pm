@@ -234,7 +234,7 @@ sub modificar {
     # verificar_cambio 
     $params->{'id_ui'}                      = $self->getId_ui_poseedora();
     $params->{'id3'}                        = $self->getId3();
-    $params->{'estado_anterior'}            = $self->getIdEstado();          #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)
+    $params->{'estado_anterior'}            = $self->getIdEstado();         #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)
     $params->{'estado_nuevo'}               = C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record_cliente->subfield("995","e")));        
     $params->{'disponibilidad_anterior'}    = $self->getIdDisponibilidad(); #(DISPONIBLE, PRESTAMO, SALA LECTURA)
     $params->{'disponibilidad_nueva'}       = C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record_cliente->subfield("995","o")));
@@ -700,66 +700,47 @@ sub toMARC_Intra{
     return ($MARC_result_array);
 }
 
-
-sub ESTADO_DISPONIBLE{
-=item    
-ESTADO
-
-    1   Baja
-    2   Compartido
-    3   Disponible
-    4   Ejemplar deteriorado
-    5   En Encuadernación
-    6   Perdido
-=cut
+########## CODIGOS DE DISPONIBILIDAD #############
+# Baja = STATE000
+# Compartido = STATE001 
+# Disponible = STATE002
+# Ejemplar deteriorado = STATE003 
+# En Encuadernación = STATE004
+# Perdido = STATE005
+# En etiquetado = STATE0006
+# En impresiones = STATE007
+# En procesos técnicos = STATE008
+##################################################
     
-    my ($estado) = @_;
+sub ESTADO_DISPONIBLE{
 
-    if ($estado eq 3) { 
-#         C4::AR::Debug::debug("CatRegistroMarcN3 => ESTADO DISPONIBLE");
-    } else { 
-#         C4::AR::Debug::debug("CatRegistroMarcN3 => ESTADO NO DISPONIBLE");
-    }
-
-    return ($estado eq 3);
+   my ($estado) = @_;
+   return ($estado eq C4::Modelo::RefEstado::estadoDisponibleValue());
 }   
 
 sub ESTADO_COMPARTIDO {
-=item    
-ESTADO
-
-    1   Baja
-    2   Compartido
-    3   Disponible
-    4   Ejemplar deteriorado
-    5   En Encuadernación
-    6   Perdido
-=cut
     
     my ($estado) = @_;
-    return ($estado eq 2);
+    return ($estado eq C4::Modelo::RefEstado::estadoCompartidoValue());
 }   
-
 
 =item
 DISPONIBILIDAD
 
-    1   Prestamo
-    2   Sala de Lectura
+    CIRC0000   Prestamo
+    CIRC0001   Sala de Lectura
 =cut
 
 sub DISPONIBILIDAD_PRESTAMO{
-    my ($estado) = @_;
+    my ($disponibilidad) = @_;
 
-#     C4::AR::Debug::debug("CatRegistroMarcN3 => DISPONIBILIDAD PRESTAMO");
-    return ($estado eq 0);
+    return ($disponibilidad eq C4::Modelo::RefDisponibilidad::paraPrestamoValue());
 }
 
 sub DISPONIBILIDAD_PARA_SALA{
-    my ($estado) = @_;
+    my ($disponibilidad) = @_;
 
-#     C4::AR::Debug::debug("CatRegistroMarcN3 => DISPONIBILIDAD PARA SALA");
-    return ($estado eq 1);
+    return ($disponibilidad eq C4::Modelo::RefDisponibilidad::paraSalaValue());
 }
 
 sub verificar_cambio {
@@ -777,12 +758,12 @@ sub verificar_cambio {
     C4::AR::Debug::debug("verificar_cambio => disponibilidad_nueva: ".$params->{'disponibilidad_nueva'});
 
     #  ESTADOS
-    #   wthdrawn = 0 => DISPONIBLE
-    #   wthdrawn > => NO DISPONIBLE
+    #  Disponible  = STATE002 => DISPONIBLE
+    #  Disponible != STATE002 => NO DISPONIBLE
 
     #  DISPONIBILIDADES
-    #   notforloan = 1 => PARA SALA
-    #   notforload = 0 => PARA PRESTAMO
+    # CIRC0000   Prestamo
+    # CIRC0001   Sala de Lectura
     
     if( ESTADO_DISPONIBLE($estado_anterior) && (!ESTADO_DISPONIBLE($estado_nuevo)) && DISPONIBILIDAD_PRESTAMO($disponibilidad_anterior) ){
     #pasa de NO DISPONIBLE a DISPONIBLE con disponibilidad_anterior PRESTAMO
@@ -856,6 +837,7 @@ sub verificar_historico_disponibilidad {
     my $estado_nuevo                = $params->{'estado_nuevo'};
     my $disponibilidad_anterior     = $params->{'disponibilidad_anterior'};  #(DISPONIBLE, PRESTAMO, SALA LECTURA)
     my $disponibilidad_nueva        = $params->{'disponibilidad_nueva'};
+
     #  ESTADOS
     #   wthdrawn = 0 => DISPONIBLE
     #   wthdrawn > => NO DISPONIBLE

@@ -5,11 +5,13 @@ use HTML::Entities;
 require Exporter;
 use C4::Modelo::SysNovedad;
 use C4::Modelo::SysNovedad::Manager;
+use C4::Modelo::SysNovedadNoMostrar;
+use C4::Modelo::SysNovedadNoMostrar::Manager;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw( 
-
+    &getNovedadesNoMostrar
     &getUltimasNovedades
     &getNovedad
     &listar
@@ -69,6 +71,42 @@ sub listar{
     }else{
         return (0,0);
     }
+}
+
+=item
+    Esta funcion obtiene las novedades que no hay que mostrarle al socio recibido como parametro
+=cut
+sub getNovedadesNoMostrar{
+
+    my ($nro_socio) = @_;
+    
+    my @filtros;
+    
+    push (@filtros, (usuario_novedad => {eq => $nro_socio}) );
+
+    my $novedades_array_ref = C4::Modelo::SysNovedadNoMostrar::Manager->get_sys_novedad_no_mostrar( query => \@filtros,
+                                                                              );
+    if(scalar(@$novedades_array_ref) > 0){
+        return ($novedades_array_ref);
+    }else{
+        return (0);
+    }
+}
+
+=item
+    Esta funcion "elimina" la novedad recibida como parametro, la agrega a la tabla para no motrarla mas al user
+=cut
+sub noMostrarNovedad{
+
+    my ($id_novedad) = @_;
+    my %params;
+    $params{'id_novedad'} = $id_novedad;
+    
+    my $novedad_no_borrar = C4::Modelo::SysNovedadNoMostrar->new();
+    
+    $novedad_no_borrar->agregar(%params);
+    
+    return "ok";
 }
 
 sub getUltimasNovedades{

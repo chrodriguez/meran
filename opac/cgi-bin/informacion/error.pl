@@ -21,7 +21,6 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 
 my $session                 = CGI::Session->load();
-$t_params->{'loggedinuser'} = $session->param('userid');
 my $message_error           = "404";
 
 if ($ENV{'REDIRECT_STATUS'}  eq "404") {

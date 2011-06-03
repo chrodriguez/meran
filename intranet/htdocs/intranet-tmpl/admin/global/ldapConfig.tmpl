@@ -914,8 +914,8 @@ MERAN, seleccione Si. Este ajuste pasa por alto *Cambiar contrase&ntilde;a URL*.
             [% END %]
         </label> 
         <select name="lockconfig_field_updateremote_address"> 
-           <option value="0" [% IF preferencias.ldap_lockconfig_field_updateremote_address == 0 %] selected="selected" [% END %]>Nunca</option> 
-           <option value="1" [% IF preferencias.ldap_lockconfig_field_updateremote_address == 1 %] selected="selected" [% END %]>Al actualizar</option> 
+           <option value="0" [% IF preferencias.ldap_lockconfig_field_updateremote_adress == 0 %] selected="selected" [% END %]>Nunca</option> 
+           <option value="1" [% IF preferencias.ldap_lockconfig_field_updateremote_adress == 1 %] selected="selected" [% END %]>Al actualizar</option> 
         </select> 
     </li>
     
@@ -927,9 +927,9 @@ MERAN, seleccione Si. Este ajuste pasa por alto *Cambiar contrase&ntilde;a URL*.
         [% END %]
         </label> 
         <select name="lockconfig_field_lock_address"> 
-           <option value="unlocked" [% IF preferencias.ldap_lockconfig_field_lock_address == 'unlocked' %] selected="selected" [% END %]>Desbloqueado</option> 
-           <option value="unlockedifempty" [% IF preferencias.ldap_lockconfig_field_lock_address == 'unlockedifempty' %] selected="selected" [% END %]>Desbloqueado si esta vacio</option> 
-           <option value="locked" [% IF preferencias.ldap_lockconfig_field_lock_address == 'locked' %] selected="selected" [% END %]>Bloqueado</option> 
+           <option value="unlocked" [% IF preferencias.ldap_lockconfig_field_lock_adress == 'unlocked' %] selected="selected" [% END %]>Desbloqueado</option> 
+           <option value="unlockedifempty" [% IF preferencias.ldap_lockconfig_field_lock_adress == 'unlockedifempty' %] selected="selected" [% END %]>Desbloqueado si esta vacio</option> 
+           <option value="locked" [% IF preferencias.ldap_lockconfig_field_lock_adress == 'locked' %] selected="selected" [% END %]>Bloqueado</option> 
         </select> 
     </li>
     

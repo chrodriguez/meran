@@ -128,7 +128,9 @@ sub getResumen{
 sub getFechaLegible{
     my ($self) = shift;
 
-    return ($self->fecha);
+    my $dateformat = C4::Date::get_date_format();
+    
+    return (C4::Date::format_date($self->fecha,$dateformat));
 }
 
 1;

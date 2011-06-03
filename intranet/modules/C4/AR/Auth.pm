@@ -503,7 +503,7 @@ sub _verificarSession {
 
 
 sub checkauth {
-     C4::AR::Debug::debug("desde checkauth==================================================================================================");
+    C4::AR::Debug::debug("desde checkauth==================================================================================================");
     my $query               = shift;
     my $authnotrequired     = shift;
     my $flagsrequired       = shift;
@@ -520,7 +520,6 @@ sub checkauth {
     
     my $userid= $session->param('userid');
     my $flags=0;
-    
     my $sin_captcha=0;
     my $time = localtime(time());
     if ($demo) {
@@ -587,6 +586,8 @@ sub checkauth {
                       }
                   return ($userid, $session, $flags, $socio);
                   }
+
+    
                   unless ($userid) { 
                       #si no hay userid, hay que autentificarlo y no existe sesion
                       #No genero un nuevo sessionID
@@ -600,11 +601,11 @@ sub checkauth {
                       my $mensaje;
                       my $cant_fallidos;
                       #se verifica la password ingresada
-
+     
                             my $socio_data_temp = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
 
                             if ($socio_data_temp){          #ingreso un usuario y exite en la base
-                                
+                                   
                                     my ($socio)         = _verificarPassword($userid,$password,$nroRandom);
                                     #             C4::AR::Debug::debug("la pass es valida?".$passwordValida);
                                     
@@ -612,22 +613,22 @@ sub checkauth {
 
                                             my $login_attempts = $socio_data_temp->getLogin_attempts;
                                             my $captchaResult;
-                                            
-                                            if ($login_attempts > 2 ){      # se logueo mal mas de 3 veces, debo verificar captcha
-                                              
-                                                my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
-                                                my $reCaptchaChallenge  = $query->param('recaptcha_challenge_field');
-                                                my $reCaptchaResponse   = $query->param('recaptcha_response_field');
                                           
-                                                use Captcha::reCAPTCHA;
-                                                my $c = Captcha::reCAPTCHA->new;
-                        
-                                                C4::AR::Debug::debug($reCaptchaResponse);
-                      
-                                                $captchaResult = $c->check_answer(
-                                                            $reCaptchaPrivateKey, $ENV{'REMOTE_ADDR'},
-                                                            $reCaptchaChallenge, $reCaptchaResponse
-                                                );
+                                            if (($login_attempts > 2) && ($query->url_param('welcome')== 1)) {      # se logueo mal mas de 3 veces, debo verificar captcha
+                                              
+                                                    C4::AR::Debug::debug("Entra a captcha?");
+                                                    my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
+                                                    my $reCaptchaChallenge  = $query->param('recaptcha_challenge_field');
+                                                    my $reCaptchaResponse   = $query->param('recaptcha_response_field');
+                                              
+                                                    use Captcha::reCAPTCHA;
+                                                    my $c = Captcha::reCAPTCHA->new;
+                          
+                                                    $captchaResult = $c->check_answer(
+                                                                $reCaptchaPrivateKey, $ENV{'REMOTE_ADDR'},
+                                                                $reCaptchaChallenge, $reCaptchaResponse
+                                                    );
+                                                
                                           
                                             } else {  #else del  if ($login_attempts > 2 )
                                                     $sin_captcha = 1; 
@@ -635,7 +636,7 @@ sub checkauth {
 
                                             if ($sin_captcha || $captchaResult->{is_valid}){
 
-                                                        C4::AR::Debug::debug("entreo al if sin captcah o captcha result");
+                                                   
                                                         #se valido el captcha, la pass y el user y son validos
                                                         #setea loguins duplicados si existe, dejando logueado a un solo usuario a la vez
                                                         
@@ -668,11 +669,11 @@ sub checkauth {
                                                                       $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/mainpage.pl?token='.$session->param('token'));
                                                                       redirectTo(C4::AR::Utilidades::getUrlPrefix().'/mainpage.pl?token='.$session->param('token'));
                                                         }
-
+                                  
                                               } else {  # if ($sin_captcha || $captchaResult->{is_valid} ) - INGRESA CAPTCHA INVALIDO
 #                                                    
                                                    
-                                                    $mensaje='U422';
+                                                    $mensaje='U425';
                                                     $cant_fallidos= $socio_data_temp->getLogin_attempts + 1;
                                                     $socio_data_temp->setLogin_attempts($cant_fallidos);
                                                     if ($cant_fallidos => 3){
@@ -698,15 +699,16 @@ sub checkauth {
                              }  else   {     # else de  if ($socio_data_temp) -----  ingreso usuario invalido      
                                             $mensaje= 'U357';
              
-                              }
-
-                              $template_params->{'loginAttempt'} = 1;  
-                              _destruirSession($mensaje, $template_params); 
-
-
+                             }
+                             if ($query->url_param('welcome')){
+                                      $template_params->{'loginAttempt'} = 0;
+                                      $mensaje = 'U000';
+                             }
+                              _destruirSession($mensaje, $template_params);
 
 
                   }# end unless ($userid)
+                  
     }# el else de DEMO
 }# end checkauth
 
@@ -1105,12 +1107,12 @@ sub redirectToAuth {
     my $url;
     $url = C4::AR::Utilidades::getUrlPrefix().'/auth.pl';
     if($template_params->{'loginAttempt'}){
-        $url = $url.'?loginAttempt=1'
+        $url = C4::AR::Utilidades::addParamToUrl($url,'loginAttempt',1);
     }elsif($template_params->{'sessionClose'}){
-        $url = $url.'?sessionClose=1';
+        $url = C4::AR::Utilidades::addParamToUrl($url,'sessionClose',1);
     } 
     if($template_params->{'mostrar_captcha'}){
-        $url = $url.'&mostrarCaptcha=1';
+        $url = C4::AR::Utilidades::addParamToUrl($url,'mostrarCaptcha',1);
     }
 
     redirectTo($url);    

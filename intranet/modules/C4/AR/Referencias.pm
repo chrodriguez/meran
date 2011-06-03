@@ -77,62 +77,6 @@ use vars qw(@EXPORT_OK @ISA);
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-# 
-# INSERT INTO `ref_estado` (`id`, `nombre`) VALUES
-# (4, 'Baja'),
-# (2, 'Compartido'),
-# (0, 'Disponible'),
-# (5, 'Ejemplar deteriorado'),
-# (6, 'En Encuadernación'),
-# (7, 'En Etiquetado'),
-# (8, 'En Impresiones'),
-# (9, 'En procesos técnicos'),
-# (1, 'Perdido');
-# 
-
-sub getIdRefDisponibilidadDomiciliaria{
-    return 'ref_disponibilidad@0';
-}
-
-sub getIdRefDisponibilidadSalaLectura{
-    return 'ref_disponibilidad@1';
-}
-
-sub getIdRefEstadoBaja{
-    return 'ref_estado@4';
-}
-
-sub getIdRefEstadoCompartido{
-    return 'ref_estado@2';
-}
-
-sub getIdRefEstadoDisponible{
-    return 'ref_estado@3';
-}
-
-sub getIdRefEstadoDeteriorado{
-    return 'ref_estado@5';
-}
-
-sub getIdRefEstadoEncuadernacion{
-    return 'ref_estado@6';
-}
-
-sub getIdRefEstadoPerdido{
-    return 'ref_estado@1';
-}
-
-sub getIdRefEstadoImpresiones{
-    return 'ref_estado@8';
-}
-
-sub getIdRefEstadoProcesosTecnicos{
-    return 'ref_estado@9';
-}
-
-sub getIdRefEstadoEtiquetado{
-    return 'ref_estado@7';
-}
 =item
     sub getInformacionReferenciaFromId
     

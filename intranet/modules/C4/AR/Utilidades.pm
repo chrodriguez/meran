@@ -16,6 +16,7 @@ use C4::AR::Referencias;
 use C4::AR::ControlAutoridades;
 use C4::Date;
 use Encode;
+use HTML::Entities;
 use POSIX qw(ceil floor); 
 use JSON;
 use C4::AR::Preferencias;
@@ -118,6 +119,8 @@ use vars qw(@EXPORT_OK @ISA);
     isValidFile
     escapeURL
     getUrlPrefix
+    addParamToUrl
+    escapeHashData
 );
 
 # para los combos que no usan tablas de referencia
@@ -1790,7 +1793,7 @@ sub generarComboDeDisponibilidad{
 
     my @select_disponibilidades_array;
     my %select_disponibilidades_hash;
-    my ($disponibilidades_array_ref)= &C4::AR::Referencias::obtenerDisponibilidades();
+    my ($disponibilidades_array_ref)= C4::AR::Referencias::obtenerDisponibilidades();
 
     foreach my $disponibilidad (@$disponibilidades_array_ref) {
         push(@select_disponibilidades_array, $disponibilidad->getCodigo);
@@ -2878,6 +2881,23 @@ sub printHASH{
             }
     }
 }
+
+sub escapeHashData{
+
+    my ($hash_ref) = @_;
+    C4::AR::Debug::debug("ENTRO A escapeHashData ================================>");
+    if($hash_ref){
+        while ( my ($key, $value) = each(%$hash_ref) ) {
+        	    C4::AR::Debug::debug("key: $key => value: $value\n");
+        	    $value = encode_entities($value);
+                $hash_ref->{$key} = $value;
+                C4::AR::Debug::debug("ENCODED key: $key => value: $value\n");
+            }
+    }
+    
+    return ($hash_ref);
+}
+
 
 sub initHASH{
 
@@ -4038,6 +4058,22 @@ sub getUrlPrefix{
 	
 }
 
+sub addParamToUrl{
+	my ($url,$param,$value) = @_;
+	
+	$param = $param."=".$value;
+	
+	my $status = index($url,'?');
+	
+	if ($status = -1){
+		$url .= '?'.$param;
+	}else{
+        $url .= '&'.$param;
+	}
+	
+	return ($url);
+	
+}
 
 END { }       # module clean-up code here (global destructor)
 

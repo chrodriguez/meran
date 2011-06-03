@@ -4251,7 +4251,6 @@ form.signin .subchck .remember {
     background-repeat: no-repeat;
 }
 #session {
-    cursor: pointer;
     float: right;
     padding: 10px 18px 10px 15px;
     vertical-align: top;
@@ -4291,7 +4290,7 @@ form.signin .subchck .remember {
 #session a.profile-links span#screen-name {
     background: url("../img/down-arrow.png") no-repeat scroll right center transparent;
     color: white;
-    cursor: pointer;
+    cursor: default;
     padding-right: 13px;
 }
 #session a.profile-links:hover, #session a:hover {
@@ -4436,11 +4435,11 @@ body.fr #top-bar ul.user-dropdown li a, body.es #top-bar ul.user-dropdown li a, 
 }
 #session #screen-name {
     color: #BABABA;
-    cursor: pointer;
+    cursor: default;
     font-weight: normal;
 }
 #session #screen-name:after {
-    background: url("../imagenes/sprite-icons.png") no-repeat scroll -79px -68px transparent;
+/*     background: url("../imagenes/sprite-icons.png") no-repeat scroll -79px -68px transparent; */
     content: "&darr";
     display: inline-block;
     height: 7px;

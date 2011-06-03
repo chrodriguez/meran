@@ -222,6 +222,7 @@ function busquedaPorKeyword(suggested){
     }
 
     objAH.match_mode = $('#match_mode').val();
+    objAH.only_available 	= ( $('#only_available').attr('checked') )?1:0;
     objAH.tipoAccion= 'BUSQUEDA_COMBINADA';
     //se setea la funcion para cambiar de pagina
     objAH.funcion= 'changePage';

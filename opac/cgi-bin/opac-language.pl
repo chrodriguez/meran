@@ -10,7 +10,7 @@ my $input = new CGI;
 my $session = CGI::Session->load();
 
 $session->param('usr_locale', $input->param('lang_server') );
-# C4::AR::Debug::debug("opac-language => obtengo locale de la session->param(usr_locale) => ".$session->param('usr_locale'));
+my $referer = $ENV{'HTTP_REFERER'};
 
 my $socio = C4::AR::Auth::getSessionNroSocio();
 if ($socio){
@@ -19,12 +19,11 @@ if ($socio){
 }
 
 #regreso a la pagina en la que estaba
+
 if($session->param('token')){
-#si hay sesion se le agrega el token
-# 	C4::AR::Auth::redirectTo($input->param('url')."?token=".$session->param('token'));
-    C4::AR::Auth::redirectTo($input->param('url'));
+    C4::AR::Auth::redirectTo($referer);
 }else{
-	C4::AR::Auth::redirectTo($input->param('url'));
+	C4::AR::Auth::redirectTo($referer);
 }
 
 

@@ -8,12 +8,11 @@ __PACKAGE__->meta->setup(
     table   => 'ref_estado',
 
     columns => [
-        id     => { type => 'serial', not_null => 1 },
         nombre => { type => 'varchar', default => '', length => 255, not_null => 1 },
         codigo => { type => 'varchar', default => '', length => 8, not_null => 1 },
     ],
 
-    primary_key_columns => [ 'id' ],
+    primary_key_columns => [ 'codigo' ],
     unique_key => [ 'nombre' ],
 );
 use C4::Modelo::RefLocalidad;
@@ -25,27 +24,31 @@ use Text::LevenshteinXS;
 # Compartido = STATE001 
 # Disponible = STATE002
 # Ejemplar deteriorado = STATE003 
-# En Encuadernación = STATE004
+# En EncuadernaciÃ³n = STATE004
 # Perdido = STATE005
 # En etiquetado = STATE0006
 # En impresiones = STATE007
-# En procesos técnicos = STATE008
+# En procesos tÃ©cnicos = STATE008
 ##################################################
 
+sub paraBajaValue{
+    
+    return ('STATE000');
+}
 
+sub estadoCompartidoValue{
+    
+    return ('STATE001');
+}
 
-# 1   Baja
-# 2   Compartido
-# 3   Disponible
-# 4   Ejemplar deteriorado
-# 5   En EncuadernaciÃ³n
-# 6   Perdido
+sub estadoDisponibleValue{
+    
+    return ('STATE002');
+}
 
-sub getId{
-    my ($self) = shift;
-
-    return ($self->id);
-}    
+sub estadoDisponibleReferencia{
+  return ('ref_estado@'.C4::Modelo::RefEstado::estadoDisponibleValue());
+}
 
 
 sub getCodigo{
@@ -77,13 +80,13 @@ sub obtenerValoresCampo {
     my ($self)=shift;
     my ($campo,$orden)=@_;
 	my $ref_valores = C4::Modelo::RefEstado::Manager->get_ref_estado
-						( select   => [ 'id' , $campo],
+						( select => [ $self->getPk  , $campo],
 						  sort_by => ($orden) );
     my @array_valores;
 
     for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
 		my $valor;
-		$valor->{"clave"}=$ref_valores->[$i]->getId;
+		$valor->{"clave"}=$ref_valores->[$i]->getPkValue;
 		$valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
         push (@array_valores, $valor);
     }
@@ -96,7 +99,7 @@ sub obtenerValorCampo {
     my ($campo,$id)=@_;
     my $ref_valores = C4::Modelo::RefEstado::Manager->get_ref_estado
 						( select   => [$campo],
-						  query =>[ id => { eq => $id} ]);
+						  query =>[ $self->getPk => { eq => $id} ]);
     	
 # 	return ($ref_valores->[0]->getCampo($campo));
   if(scalar(@$ref_valores) > 0){
@@ -112,7 +115,7 @@ sub getCampo{
     my ($self) = shift;
 	my ($campo)=@_;
     
-	if ($campo eq "id") {return $self->getId;}
+	if ($campo eq "id") {return $self->getPkValue;}
 	if ($campo eq "nombre") {return $self->getNombre;}
 
 	return (0);
@@ -132,7 +135,7 @@ sub getAll{
     if ($filtro){
         my @filtros_or;
         push(@filtros_or, (nombre => {like => '%'.$filtro.'%'}) );
-        push(@filtros_or, (id => {like => '%'.$filtro.'%'}) );
+        push(@filtros_or, ($self->getPk => {like => '%'.$filtro.'%'}) );
         push(@filtros, (or => \@filtros_or) );
     }
     my $ref_valores;
