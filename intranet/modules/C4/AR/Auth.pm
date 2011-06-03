@@ -506,7 +506,6 @@ sub checkauth {
     C4::AR::Debug::debug("desde checkauth==================================================================================================");
     my $query               = shift;
 
-    C4::AR::Utilidades::printHASH($query->Vars);
     my $authnotrequired     = shift;
     my $flagsrequired       = shift;
     my $type                = shift;
