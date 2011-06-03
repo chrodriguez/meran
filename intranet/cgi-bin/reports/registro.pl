@@ -33,7 +33,6 @@ my $dateformat              = C4::Date::get_date_format();
 my $fechaInicio             = format_date_in_iso($input->param('dateselected'),$dateformat);
 my $fechaFin                = format_date_in_iso($input->param('dateselectedEnd'),$dateformat);
 
-$t_params->{'select_usuarios'}  = C4::AR::Utilidades::generarComboDeSocios();
 $t_params->{'page_sub_title'}   = C4::AR::Filtros::i18n('Registro de actividades');
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session, $socio);

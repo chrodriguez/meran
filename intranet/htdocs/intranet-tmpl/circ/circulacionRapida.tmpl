@@ -298,11 +298,11 @@ $(document).ready(function() {
 	$('#divAutorizado').hide();
 	$('#divAgregarAutorizado').hide();
 
-	CrearAutocompleteUsuariosConRegularidad({	
+	CrearAutocompleteUsuarios({	
                                                 IdInput: 'usuario', 
 								                IdInputHidden: 'nro_socio_hidden', 
 								                callBackFunction: onCompleteUsuarios,
-						});
+				             });
 
 	CrearAutocompleteBarcodes({	
                                 IdInput: 'barcode', 
