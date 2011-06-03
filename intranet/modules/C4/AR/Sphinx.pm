@@ -119,7 +119,9 @@ sub generar_indice {
     my $subcampo;
     my $string_con_dato         = "";
     my $MARC_result_array;
-
+    
+    $id1 = $id1 || 0;
+    
     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => flag => ".$flag);
     if($flag eq "R_FULL"){
         #Vaciamos el indice
@@ -127,9 +129,9 @@ sub generar_indice {
         my $sth0      = $dbh->prepare($truncate);
         $sth0->execute();
 
-        my $query1  = " SELECT * FROM cat_registro_marc_n1";
+        my $query1  = " SELECT * FROM cat_registro_marc_n1 WHERE id >= ?";
         $sth1       = $dbh->prepare($query1);
-        $sth1->execute();
+        $sth1->execute($id1);
 
     } else {
 
