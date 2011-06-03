@@ -1,21 +1,9 @@
-/*************************************************************/
-/*   Design:   Multiflex-3 Update-2 / Layout-4               */
-/*   File:     Global layout structure                       */
-/*-----------------------------------------------------------*/
-/*   Author:   G. Wolfgang                                   */
-/*   Date:     November 29, 2006                             */
-/*   Homepage: wwww.1-2-3-4.info                             */
-/*-----------------------------------------------------------*/
-/*   License:  Fully open source without restrictions.       */
-/*             Please keep footer credits with a link to     */
-/*             G. Wolfgang (www.1-2-3-4.info). Thank you!    */
-/*************************************************************/
+@IMPORT url("/includes/css/fancybox.css");
+@IMPORT url("/includes/css/ui.stars.css");
+@IMPORT url("/includes/css/wysiwyg.css");
+@IMPORT url("jquery.alerts.css");
+	
 
-/************/
-/*  SETUP */
-/************/
-
-/* NON-HEADER */
 *{padding:0; margin:0;}
  body {font-size:62.5%; background-color:rgb(255,255,255); font-family:verdana,arial,sans-serif;} /*Font-size: 1.0em = 10px when browser default size is 16px*/
  
