@@ -12,7 +12,7 @@ __PACKAGE__->meta->setup(
         id1            => { type => 'integer', not_null => 1 },
         id2            => { type => 'integer', not_null => 1 },
         id3            => { type => 'integer', not_null => 1 },
-        tipo_operacion => { type => 'varchar', length => 15, not_null => 1 },
+        tipo_operacion => { type => 'varchar', length => 255, not_null => 1 },
         nro_socio      => { type => 'varchar', length => 16, default => '0', not_null => 1 },
         responsable    => { type => 'varchar', length => 16, not_null => 1 },
         id_ui	       => { type => 'varchar', length => 4 },
