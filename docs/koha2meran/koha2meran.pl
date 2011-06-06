@@ -307,6 +307,11 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
 
     &guardaNivel2MARC($biblio->{'biblionumber'},$biblioitem->{'biblioitemnumber'},\@ids2);
 
+#ACA HAY QUE PROCESAR LAS ANALITICAS DE ESTE NIVEL 2!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+#
+
 #---------------------------------------NIVEL3---------------------------------------#	
 
 	my $items=$dbh->prepare("SELECT * FROM items where biblioitemnumber= ?;");
@@ -319,17 +324,21 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
 
 		my $val='';
 
-        if($_->{'campoTabla'} eq 'notforloan'){   $val='ref_disponibilidad@'.$item->{$_->{'campoTabla'}}; }
+        if($_->{'campoTabla'} eq 'notforloan'){   
+	    my $disponibilidad = getDisponibilidad($item->{$_->{'campoTabla'}}) || $item->{$_->{'campoTabla'}};
+	    $val='ref_disponibilidad@'.$disponibilidad;
+	}
         elsif($_->{'campoTabla'} eq 'homebranch'){$val='pref_unidad_informacion@'.$item->{$_->{'campoTabla'}}; }
         elsif($_->{'campoTabla'} eq 'wthdrawn'){ 
                                             if ($item->{$_->{'campoTabla'}}){
                                                      # Si no es 0 va con el valor original
+							  my $estado = getEstado($item->{$_->{'campoTabla'}}) || $item->{$_->{'campoTabla'}};
                                                           $val='ref_estado@'.$item->{$_->{'campoTabla'}};
                                                     }
                                                     else {
-                                                     # Si es 0, está disponible, va con el nuevo estado que es 3
-                                                          $val='ref_estado@3';
-                                                    } #Esta disponible ==> 3
+                                                     # Si es 0, está disponible, va con el nuevo estado que es STATE002
+                                                          $val='ref_estado@STATE002';
+                                                    } #Esta disponible ==> STATE002
                                                  }
         elsif($_->{'campoTabla'} eq 'holdingbranch'){ $val='pref_unidad_informacion@'.$item->{$_->{'campoTabla'}}; }
           else { $val=$item->{$_->{'campoTabla'}}; }
@@ -513,6 +522,13 @@ $biblios->finish();
 
   sub crearRelacionUsuarioPersona    
   {
+
+#Default ui
+    my $q_ui=$dbh->prepare("SELECT value FROM pref_preferencia_sistema where variable ='defaultbranch';");
+    $q_ui->execute();
+    my $ui=$q_ui->fetchrow || 'DEO';
+
+
 # Le agrega el id_persona a usr_socio 
     my $usuarios=$dbh->prepare("SELECT * FROM usr_socio;");
     $usuarios->execute();
@@ -574,9 +590,9 @@ $biblios->finish();
  my $id_persona_kohaadmin=$personaka->fetchrow;
 
 my $kohaadmin_socio="INSERT INTO `usr_socio` (`id_persona`, `nro_socio`, `id_ui`, `cod_categoria`, `fecha_alta`, `expira`, `flags`, `password`, `last_login`, `last_change_password`, `change_password`, `cumple_requisito`, `nombre_apellido_autorizado`, `dni_autorizado`, `telefono_autorizado`, `is_super_user`, `credential_type`, `id_estado`, `activo`, `agregacion_temp`) VALUES
-(?, 'kohaadmin', 'DEO', 'DO', NULL, NULL, 1, 'a1q8oyiSjO02w1vpPlwscK+kQdDDbolevtC2ZsZX1Uc', '2010-01-13 00:00:00', '2009-12-13', 0, '0000-00-00', '', '', '', 1, '', 46, '1', 'id_persona');";
+(?, 'kohaadmin', ? , 'ES', NULL, NULL, 1, 'a1q8oyiSjO02w1vpPlwscK+kQdDDbolevtC2ZsZX1Uc', '2010-01-13 00:00:00', '2009-12-13', 0, '0000-00-00', '', '', '', 1, '', 46, '1', 'id_persona');";
  my $ks=$dbh->prepare($kohaadmin_socio);
-    $ks->execute($id_persona_kohaadmin);
+    $ks->execute($id_persona_kohaadmin,$ui);
 
 
 #habilitamos los socios
@@ -592,8 +608,8 @@ my $kohaadmin_socio="INSERT INTO `usr_socio` (`id_persona`, `nro_socio`, `id_ui`
     while (my $p=$persona->fetchrow_hashref) {
       if(!$p->{'es_socio'}){
            my $usu_0=$dbh->prepare("INSERT INTO usr_socio (id_persona,nro_socio,id_ui,cod_categoria,flags,change_password,is_super_user,id_estado,activo) VALUES
-                ( ? , ? ,'DEO','ES', 0, 1, 0, 20, 0);");
-             $usu_0->execute($p->{'id_persona'},$p->{'nro_documento'});
+                ( ? , ? ,?,'ES', 0, 1, 0, 20, 0);");
+             $usu_0->execute($p->{'id_persona'},$p->{'nro_documento'},$ui);
       }
 
     }
@@ -826,7 +842,7 @@ sub traduccionEstructuraMarc {
     my $cant_usr=$dbh->prepare("SELECT count(*) as cantidad FROM usr_socio ;");
     $cant_usr->execute();
     my $cantidad=$cant_usr->fetchrow;
-    my $usuario=1;
+    my $num_usuario=1;
     print "Se van a procesar $cantidad usuarios \n";
 
 
@@ -838,8 +854,8 @@ sub traduccionEstructuraMarc {
 
     while (my $usuario=$usuarios->fetchrow_hashref) {
 
-    my $porcentaje= int (($usuario * 100) / $cantidad );
-    print "Procesando usuario: $usuario de $cantidad ($porcentaje%) \r";
+    my $porcentaje= int (($num_usuario * 100) / $cantidad );
+    print "Procesando usuario: $num_usuario de $cantidad ($porcentaje%) \r";
 
         foreach $tabla (@refusrs)
       {
@@ -847,7 +863,7 @@ sub traduccionEstructuraMarc {
             $refusuario->execute();
       }
 
-    $usuario++;
+    $num_usuario++;
     }
 
 
@@ -874,3 +890,20 @@ sub traduccionEstructuraMarc {
 
     }
 
+  sub getEstado {
+    my ($id)=@_;
+
+    my $q_estado=$dbh->prepare("SELECT codigo FROM ref_estado where id = ? ;");
+    $q_estado->execute($id);
+    my $estado=$q_estado->fetchrow;
+    return $estado;
+    }
+
+  sub getDisponibilidad {
+    my ($id)=@_;
+
+    my $q_disp=$dbh->prepare("SELECT codigo FROM ref_disponibilidad where id = ? ;");
+    $q_disp->execute($id);
+    my $disp=$q_disp->fetchrow;
+    return $disp;
+    }

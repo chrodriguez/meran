@@ -516,19 +516,19 @@ CREATE TABLE IF NOT EXISTS `pref_servidor_z3950` (
 
 INSERT INTO `pref_servidor_z3950` (`servidor`, `puerto`, `base`, `usuario`, `password`, `nombre`, `id`, `habilitado`, `sintaxis`) VALUES ('z3950.loc.gov', 7090, 'voyager', NULL, NULL, 'Library of Congress', 1, 1, 'UNIMARC');
 
-DROP TABLE IF EXISTS `ref_disponibilidad`;
 
 CREATE TABLE IF NOT EXISTS `ref_disponibilidad` (
-  `id` int(11) NOT NULL auto_increment,
-  `nombre` varchar(255) NOT NULL default '',
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+  `nombre` varchar(255) NOT NULL DEFAULT '',
+  `codigo` varchar(255) NOT NULL,
+  PRIMARY KEY (`codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
- ALTER TABLE `ref_disponibilidad` CHANGE `id` `id` INT( 11 ) NOT NULL;
 
-INSERT INTO `ref_disponibilidad` (`id`, `nombre`) VALUES
-(0, 'Domiciliario'),
-(1, 'Sala de Lectura');
+INSERT INTO `ref_disponibilidad` (`nombre`, `codigo`) VALUES
+('Domiciliario', 'CIRC0000'),
+('Sala de Lectura', 'CIRC0001');
+
+
 
 DROP TABLE IF EXISTS `ref_estado`;
 
@@ -539,25 +539,29 @@ CREATE TABLE IF NOT EXISTS `ref_estado` (
   UNIQUE KEY `nombre` (`nombre`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+
+DROP TABLE IF EXISTS `ref_estado`;
 CREATE TABLE IF NOT EXISTS `ref_estado` (
-  `id` tinyint(5) NOT NULL auto_increment,
-  `nombre` varchar(30) NOT NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `nombre` (`nombre`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+  `id` tinyint(5) NOT NULL,
+  `nombre` varchar(255) NOT NULL DEFAULT '',
+  `codigo` varchar(8) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `nombre` (`nombre`),
+  UNIQUE KEY `nombre_2` (`nombre`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-ALTER TABLE `ref_estado` CHANGE `id` `id` TINYINT( 5 ) NOT NULL ;
 
-INSERT INTO `ref_estado` (`id`, `nombre`) VALUES
-(1, 'Perdido'),
-(2, 'Compartido'),
-(3, 'Disponible'),
-(4, 'Baja'),
-(5, 'Ejemplar deteriorado'),
-(6, 'En Encuadernación'),
-(7, 'En Etiquetado'),
-(8, 'En Impresiones'),
-(9, 'En procesos técnicos');
+INSERT INTO `ref_estado` (`id`, `nombre`, `codigo`) VALUES
+(1, 'Perdido', 'STATE005'),
+(2, 'Compartido', 'STATE001'),
+(3, 'Disponible', 'STATE002'),
+(4, 'Baja', 'STATE000'),
+(5, 'Ejemplar deteriorado', 'STATE003'),
+(6, 'En Encuadernacion', 'STATE004'),
+(7, 'En Etiquetado', 'STATE006'),
+(8, 'En Impresiones', 'STATE007'),
+(9, 'En procesos tecnicos', 'STATE008');
+
 
 CREATE TABLE IF NOT EXISTS `usr_ref_tipo_documento` (
   `id` int(11) NOT NULL auto_increment,
