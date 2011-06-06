@@ -34,9 +34,9 @@
                         </td>
                         <td>
                             [% IF resultado.getPortada %]
-                                <img name="cover"  VALUE="" BORDER=0 src="[% themelang %]/covers/[% resultado.getPortada.getSmall %]" title="Portada">
+                                <img name="cover"  VALUE="" BORDER=0 src="/uploads/covers/[% resultado.getPortada.getSmall %]" title="Portada">
                             [% ELSE %]
-                                <img src="[% themelang %]/covers/no_image.jpg" alt="[% 'Sin Portada' | i18n %]" title="[% 'Sin Portada' | i18n %]" />
+                                <img src="/uploads/covers/no_image.jpg" alt="[% 'Sin Portada' | i18n %]" title="[% 'Sin Portada' | i18n %]" />
                             [% END %]
                         </td>
                         <td width="15%">

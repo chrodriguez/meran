@@ -11,8 +11,6 @@ SSLProtocol -all +SSLv3 +TLSv1
 SSLCipherSuite HIGH:MEDIUM
 SSLCertificateFile /etc/apache2/ssl/apache.pem
 
-Alias /images/ "/usr/share/meran/intranet/htdocs/intranet-tmpl/blue/images/"
-Alias /pictures/ "/usr/share/meran/intranet/htdocs/intranet-tmpl/blue/pictures/"
 SetEnv PERL5LIB "/usr/share/meran/intranet/modules"
 
 #Enabling Compression
@@ -41,13 +39,8 @@ Allow from all
 Deny from all
 </Directory>
 
-
-<Directory /usr/share/meran/intranet/htdocs/intranet-tmpl/blue/images/ >
-Order allow,deny
-Allow from all
-</Directory>
-
-<Directory /usr/share/meran/intranet/htdocs/intranet-tmpl/blue/pictures/ >
+Alias /uploads/ "/usr/share/meran/intranet/htdocs/uploads/"
+<Directory /usr/share/meran/intranet/htdocs/uploads/ >
 Order allow,deny
 Allow from all
 </Directory>

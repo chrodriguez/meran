@@ -41,6 +41,12 @@ Alias /includes/ "/usr/share/meran/includes/"
  ExpiresActive On
  ExpiresDefault "access plus 1 month"
 </FilesMatch>
+
+Alias /uploads/ "/usr/share/meran/intranet/htdocs/uploads/"
+<Directory /usr/share/meran/intranet/htdocs/uploads/ >
+Order allow,deny
+Allow from all
+</Directory>
  
 </VirtualHost>
 
