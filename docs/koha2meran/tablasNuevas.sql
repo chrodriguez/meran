@@ -516,19 +516,17 @@ CREATE TABLE IF NOT EXISTS `pref_servidor_z3950` (
 
 INSERT INTO `pref_servidor_z3950` (`servidor`, `puerto`, `base`, `usuario`, `password`, `nombre`, `id`, `habilitado`, `sintaxis`) VALUES ('z3950.loc.gov', 7090, 'voyager', NULL, NULL, 'Library of Congress', 1, 1, 'UNIMARC');
 
-
+DROP TABLE IF EXISTS `ref_disponibilidad`;
 CREATE TABLE IF NOT EXISTS `ref_disponibilidad` (
+  `id` int(11) NOT NULL,
   `nombre` varchar(255) NOT NULL DEFAULT '',
   `codigo` varchar(255) NOT NULL,
-  PRIMARY KEY (`codigo`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-INSERT INTO `ref_disponibilidad` (`nombre`, `codigo`) VALUES
-('Domiciliario', 'CIRC0000'),
-('Sala de Lectura', 'CIRC0001');
-
-
+INSERT INTO `ref_disponibilidad` (`id`, `nombre`, `codigo`) VALUES
+(0, 'Domiciliario', 'CIRC0000'),
+(1, 'Sala de Lectura', 'CIRC0001');
 
 DROP TABLE IF EXISTS `ref_estado`;
 
