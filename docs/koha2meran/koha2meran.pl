@@ -668,39 +668,6 @@ guardaNivel1MARC
 Guarda los campos del nivel 1 en un MARC RECORD.
 =cut
 
-CREATE TABLE IF NOT EXISTS `usr_ref_categoria_socio` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `categorycode` char(2) NOT NULL DEFAULT '',
-  `description` text,
-  `enrolmentperiod` smallint(6) DEFAULT NULL,
-  `upperagelimit` smallint(6) DEFAULT NULL,
-  `dateofbirthrequired` tinyint(1) DEFAULT NULL,
-  `finetype` varchar(30) DEFAULT NULL,
-  `bulk` tinyint(1) DEFAULT NULL,
-  `enrolmentfee` decimal(28,6) DEFAULT NULL,
-  `overduenoticerequired` tinyint(1) DEFAULT NULL,
-  `issuelimit` smallint(6) DEFAULT NULL,
-  `reservefee` decimal(28,6) DEFAULT NULL,
-  `borrowingdays` smallint(30) NOT NULL DEFAULT '14',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `categorycode` (`categorycode`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
-
---
--- Dumping data for table `usr_ref_categoria_socio`
---
-
-INSERT INTO `usr_ref_categoria_socio` (`id`, `categorycode`, `description`, `enrolmentperiod`, `upperagelimit`, `dateofbirthrequired`, `finetype`, `bulk`, `enrolmentfee`, `overduenoticerequired`, `issuelimit`, `reservefee`, `borrowingdays`) VALUES
-(1, 'ES', 'Estudiante', 0, 55, 18, NULL, NULL, '0.000000', 1, 3, '0.000000', 14),
-(2, 'IN', 'Investigador', 15, 100, 0, NULL, NULL, '0.000000', 1, 3, '0.000000', 14),
-(3, 'DO', 'Docente', 10, 80, 0, NULL, NULL, '0.000000', 1, 3, '0.000000', 14),
-(4, 'ND', 'No Docente', 10, 0, 0, NULL, NULL, '0.000000', 1, 3, '0.000000', 14),
-(5, 'EG', 'Egresado', 10, 0, 0, NULL, NULL, '0.000000', 1, 3, '0.000000', 14),
-(6, 'PG', 'Postgrado', NULL, 90, NULL, NULL, NULL, NULL, 1, 3, NULL, 14),
-(7, 'EX', 'Usuario externo', 0, 0, 0, NULL, NULL, '0.000000', 1, 3, '0.000000', 0),
-(8, 'IB', 'Interbibliotecario', 0, 90, 17, NULL, NULL, '0.000000', 1, 3, '0.000000', 14),
-(9, 'BB', 'Bibliotecario', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0);
-
 sub guardaNivel1MARC {
     my ($biblionumber, $nivel1)=@_;
 
