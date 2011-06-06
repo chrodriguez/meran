@@ -73,13 +73,13 @@
                                     [% FOREACH NIVEL.portadas_grupo %]
                                         [% IF loop.count < 4 %]
                                             [% IF portada_registro %]
-                                                <a class="fancylink" rel="group" href="/covers/[% portada_registro_big %]">
+                                                <a class="fancylink" rel="group" href="/uploads/covers/[% portada_registro_big %]">
                                                     <img alt="cover"
-                                                        src="/covers/[% portada_registro %]" title="Portada" style="float:left"
+                                                        src="/uploads/covers/[% portada_registro %]" title="Portada" style="float:left"
                                                     />
                                                 </a>
                                             [% ELSE %]
-                                                  <img src="/covers/no_image.jpg" 
+                                                  <img src="/uploads/covers/no_image.jpg" 
                                                         alt="[% 'Sin Portada' | i18n %]"
                                                         title="[% 'Sin Portada' | i18n %]" style="float:left" 
                                                   />
@@ -89,20 +89,20 @@
                             [% ELSE %]
                                 [% IF NIVEL.portada_registro %]
                                     [% IF NIVEL.portada_registro_big %]
-                                        <a class="fancylink" rel="group" href="/covers/[% NIVEL.portada_registro_big %]">
-                                            <img alt="cover" src="/covers/[% NIVEL.portada_registro %]" title="Portada" />
+                                        <a class="fancylink" rel="group" href="/uploads/covers/[% NIVEL.portada_registro_big %]">
+                                            <img alt="cover" src="/uploads/covers/[% NIVEL.portada_registro %]" title="Portada" />
                                         </a>
                                     [% ELSE %]
                                         [% IF NIVEL.portada_registro_medium %]
-                                            <a class="fancylink" rel="group" href="/covers/[% NIVEL.portada_registro_medium %]">
-                                                <img alt="cover" src="/covers/[% NIVEL.portada_registro %]" title="Portada" />
+                                            <a class="fancylink" rel="group" href="/uploads/covers/[% NIVEL.portada_registro_medium %]">
+                                                <img alt="cover" src="/uploads/covers/[% NIVEL.portada_registro %]" title="Portada" />
                                             </a>
                                         [% ELSE %]
-                                                <img alt="cover" src="/covers/[% NIVEL.portada_registro %]" title="Portada" />
+                                                <img alt="cover" src="/uploads/covers/[% NIVEL.portada_registro %]" title="Portada" />
                                         [% END %]
                                     [% END %]
                                 [% ELSE %]
-                                      <img src="/covers/no_image.jpg" 
+                                      <img src="/uploads/covers/no_image.jpg" 
                                             alt="[% 'Sin Portada' | i18n %]"
                                             title="[% 'Sin Portada' | i18n %]" />
                                 [% END %]

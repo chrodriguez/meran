@@ -5,7 +5,7 @@
 
     <div id="divFoto" align="Center"> 
         [% IF foto_name %]
-            <img border="1" width="96" height="96"  src="/pictures/[% foto_name %]">
+            <img border="1" width="96" height="96"  src="/uploads/pictures/[% foto_name %]">
 
         [% END %]
     </div> 
