@@ -223,11 +223,6 @@ sub modificar {
     my $edicion_grupal;
 # FIXME no esta funcionando el currenttime de mysql
     $self->setUpdatedAt(Date::Manip::ParseDate("now"));
-
-#     Esto porque se modifica???? Alguna vez cambia??
-#     $self->setId2($params->{'id2'});
-#     $self->setId1($params->{'id1'});
-
     my $marc_record_cliente = MARC::Record->new_from_usmarc($params->{'marc_record'}); #marc_record que viene del cliente
     my $marc_record_base    = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
@@ -642,17 +637,6 @@ sub toMARC{
     $params->{'id_tipo_doc'}    = $self->nivel2->getTipoDocumento;
     my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_meran_por_nivel($marc_record, $params);
 
-
-#     my $MARC_result_array   = &C4::AR::Catalogacion::marc_record_to_meran($marc_record);
-
-#     foreach my $m (@$MARC_result_array){
-#         C4::AR::Debug::debug("CatRegistroMarcN3 => toMARC => campo => ".$m->{'campo'});
-#         foreach my $s (@{$m->{'subcampos_array'}}){
-#             C4::AR::Debug::debug("CatRegistroMarcN3 => toMARC => liblibrarian => ".$s->{'subcampo'});        
-#             C4::AR::Debug::debug("CatRegistroMarcN3 => toMARC => liblibrarian => ".$s->{'liblibrarian'});        
-#         }
-#     }
-
     return ($MARC_result_array);
 }
 
@@ -672,11 +656,6 @@ sub toMARC_Opac{
     $params->{'nivel'}          = '3';
     $params->{'id_tipo_doc'}    = $self->getTipoDocumento;
     my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_opac_view($marc_record, $params);
-
-#     my $orden = 'orden';
-#     my @return_array_sorted = sort{$b->{$orden} cmp $a->{$orden}} @$MARC_result_array;
-# 
-#     return (\@return_array_sorted);
 
     return ($MARC_result_array);
 }

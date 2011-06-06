@@ -3256,6 +3256,18 @@ sub uiAutocomplete{
     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
+sub nivel2Autocomplete{
+    my ($n2Str) = @_;
+
+    my $textout;
+    my $n2_array_ref= C4::AR::Referencias::obtenerNivel2Like($n2Str);
+
+    foreach my $n2 (@$n2_array_ref){
+        $textout.= $n2->getId."|".$n2->getId."\n";
+    }
+
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
+}
 
 sub bibliosAutocomplete{
 
@@ -3522,6 +3534,32 @@ sub catalogoAutocomplete{
      $textout= getTextOutSorted(\@data_array, {'DESC' => 1, 'ORDER_BY' => 'dato'});
 
      return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
+}
+
+
+
+sub temasAutocomplete{
+
+    my ($temaStr,$campos,$separador) = @_;
+    my $textout="";
+    my @result=C4::AR::Utilidades::obtenerTemas2($temaStr);
+    my @arrayCampos=split(",",$campos);
+    my $texto="";
+
+    foreach my $tema (@result){
+        foreach my $valor(@arrayCampos){
+            if($texto eq ""){
+                $texto.=$tema->{$valor};
+            }
+            else{
+                $texto.=$separador.$tema->{$valor};
+            }
+        }
+        $textout.=$texto."|".$tema->{'id'}."\n";
+        $texto="";
+    }
+    
+    return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
 sub soportesAutocomplete{

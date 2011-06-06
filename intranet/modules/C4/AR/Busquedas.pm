@@ -1675,20 +1675,20 @@ sub MARCDetail{
 	my ($nivel3_object)= C4::AR::Nivel3::getNivel3FromId3($id3);
 	if($nivel3_object ne 0){
 		C4::AR::Debug::debug('recupero el nivel3');
-		($marc_array_nivel3)= $nivel3_object->nivel3CompletoToMARC;
+		($marc_array_nivel3)= $nivel3_object->toMARC;
 	}
 
 	my ($nivel2_object)= C4::AR::Nivel2::getNivel2FromId2($nivel3_object->getId2);
 	
 	if($nivel2_object ne 0){
 		C4::AR::Debug::debug('recupero el nivel2');
-		($marc_array_nivel2)= $nivel2_object->nivel2CompletoToMARC;
+		($marc_array_nivel2)= $nivel2_object->toMARC;
 		C4::AR::Debug::debug('MARCDetail => cant '.scalar(@$marc_array_nivel2));
 	}
 	my ($nivel1_object)= C4::AR::Nivel1::getNivel1FromId1($nivel2_object->getId1);
 	if($nivel1_object ne 0){
 		C4::AR::Debug::debug('recupero el nivel1');
-		($marc_array_nivel1)= $nivel1_object->nivel1CompletoToMARC;
+		($marc_array_nivel1)= $nivel1_object->toMARC;
 	}
 
 	my @result;

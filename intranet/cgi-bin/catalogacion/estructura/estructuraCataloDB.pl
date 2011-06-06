@@ -530,7 +530,7 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
                                     );
-
+    $obj->{'responsable'}=$user;
 	#Se guarda informacion del NIVEL 1
     my ($Message_arrayref, $id1) = C4::AR::Nivel1::t_guardarNivel1($obj);
     
@@ -551,6 +551,7 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_2"){
                                                     entorno => 'datos_nivel2'}, 
                                                 'intranet'
                                     );
+    $obj->{'responsable'}=$user;
     #Se guarda informacion del NIVEL 2 relacionada con un ID de NIVEL 1
     my ($Message_arrayref, $id1, $id2) = C4::AR::Nivel2::t_guardarNivel2($obj);
     
@@ -575,8 +576,8 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_3"){
                                                     entorno => 'datos_nivel3'}, 
 												'intranet'
 											);
-               
-	#Se muestran la estructura de catalogacion para que el usuario agregue un documento
+    $obj->{'responsable'}=$user;
+    #Se muestran la estructura de catalogacion para que el usuario agregue un documento
     my ($Message_arrayref, $nivel3) = C4::AR::Nivel3::t_guardarNivel3($obj);
     
     my %info;
@@ -596,7 +597,7 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_1"){
                                                 'intranet'
                                     );
 
-
+    $obj->{'responsable'}=$user;
     my ($Message_arrayref, $id1) = C4::AR::Nivel1::t_modificarNivel1($obj);
     
     if($id1){    
@@ -624,6 +625,7 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_2"){
                                                 'intranet'
                                     );
 
+    $obj->{'responsable'}=$user;
     my ($Message_arrayref, $nivel2) = C4::AR::Nivel2::t_modificarNivel2($obj);
     
     if($nivel2){        
@@ -651,6 +653,7 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_3"){
                                                 'intranet'
                                     );
 
+    $obj->{'responsable'}=$user;
     my ($Message_arrayref, $nivel3) = C4::AR::Nivel3::t_modificarNivel3($obj);
     
     my %info;
@@ -690,7 +693,7 @@ elsif($tipoAccion eq "ELIMINAR_NIVEL"){
                                                     entorno => $entorno}, 
                                                 'intranet'
                                     );
-
+    $obj->{'responsable'}=$user;
     my $nivel= $obj->{'nivel'};
 	my $id= $obj->{'id1'} || $obj->{'id2'};
     my ($Message_arrayref);

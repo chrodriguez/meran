@@ -119,7 +119,9 @@ sub generar_indice {
     my $subcampo;
     my $string_con_dato         = "";
     my $MARC_result_array;
-
+    
+    $id1 = $id1 || 0;
+    
     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => flag => ".$flag);
     if($flag eq "R_FULL"){
         #Vaciamos el indice
@@ -127,9 +129,9 @@ sub generar_indice {
         my $sth0      = $dbh->prepare($truncate);
         $sth0->execute();
 
-        my $query1  = " SELECT * FROM cat_registro_marc_n1";
+        my $query1  = " SELECT * FROM cat_registro_marc_n1 WHERE id >= ?";
         $sth1       = $dbh->prepare($query1);
-        $sth1->execute();
+        $sth1->execute($id1);
 
     } else {
 
@@ -138,7 +140,6 @@ sub generar_indice {
         $sth1       = $dbh->prepare($query1);
         $sth1->execute($id1);
     }
-
 
 while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
@@ -156,8 +157,8 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 #         C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => campo ".$c->{'campo'});
 
         foreach my $s (@{$c->{'subcampos_array'}}){ 
-#             C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
-#             C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
+            C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
+            C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
             $string_con_dato = $string_con_dato." ".$s->{'dato'};   
         }
     }
@@ -183,11 +184,11 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
         my @resultEstYDatos = C4::AR::Catalogacion::getEstructuraYDatosDeNivel(\%params);
 
         foreach my $c (@resultEstYDatos){
-#             C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => campo ".$c->{'campo'});
+            C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => campo ".$c->{'campo'});
 
             foreach my $s (@{$c->{'subcampos_array'}}){ 
-#                 C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
-#                 C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
+                C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
+                C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
                 $string_con_dato = $string_con_dato." ".$s->{'dato'};   
             }
         }
@@ -201,7 +202,7 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
         $sth3->execute($registro_marc_n1->{'id'},$registro_marc_n2->{'id'});
 
         while (my $registro_marc_n3 = $sth3->fetchrow_hashref ){
-#             C4::AR::Debug::debug('C4::AR::Sphinx::generar_indice => ID3 '.$registro_marc_n3->{'id'});
+            C4::AR::Debug::debug('C4::AR::Sphinx::generar_indice => ID3 '.$registro_marc_n3->{'id'});
             my $marc_record3 = MARC::Record->new_from_usmarc($registro_marc_n3->{'marc_record'});
             $marc_record->add_fields($marc_record3->fields);
 
@@ -220,8 +221,8 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 #                 C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => campo ".$c->{'campo'});
 
                 foreach my $s (@{$c->{'subcampos_array'}}){ 
-#                     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
-#                     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
+                    C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
+                    C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
                     $string_con_dato = $string_con_dato." ".$s->{'dato'};   
                 }
             }

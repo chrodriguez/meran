@@ -95,6 +95,7 @@ sub gettemplate {
         $type       = 'OPAC';
     } else {
         $htdocs     = C4::Context->config('intrahtdocs');
+        $temas      = C4::Context->config('temas');
         $tema       = $tema_intra;
         $type       = 'INTRA';
     }

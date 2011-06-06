@@ -794,11 +794,6 @@ sub registroEntreFechas{
         push(@filtros, ( operacion => { eq => $params_obj->{'operacion'} }) );
     }
     
-#     if ($params_obj->{'tipo'} ne ''){
-#         push(@filtros, ( tipo => { eq => $params_obj->{'tipo'} }) );
-#     }
-    
-#     if ($params_obj->{'chkuser'} ne "false"){
     if ($params_obj->{'user'} ne "-1"){
         push(@filtros, ( responsable => { eq => $params_obj->{'user'} }) );
     }
@@ -807,18 +802,6 @@ sub registroEntreFechas{
         push(@filtros, ( tipo => { eq => $params_obj->{'nivel'} }) );
     }
     
-#     if ($params_obj->{'chknum'} ne "false"){
-#         push(@filtros, ( numero => {    eq  => $params_obj->{'numDesde'},
-#                                         gt  => $params_obj->{'numDesde'}, 
-#                                     } ) );
-#     
-#         push(@filtros, ( numero => {
-#                                         eq  => $params_obj->{'numHasta'},
-#                                         lt  => $params_obj->{'numHasta'}, 
-#                                     }
-#                         ) );
-#     }
-
     my $registros_count = C4::Modelo::RepRegistroModificacion::Manager->get_rep_registro_modificacion_count(
                                                                         query               => \@filtros,
                                                                         require_objects     => ['socio_responsable'],

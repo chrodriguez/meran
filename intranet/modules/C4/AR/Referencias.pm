@@ -243,6 +243,25 @@ sub obtenerAutoresLike {
 }
 
 =item
+Devuelve un arreglo de de objetos CatRegistroMarcN2
+=cut
+sub obtenerNivel2Like {
+    my ($nivel2) = @_;
+
+    my $n2_array_ref = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(
+                                                                query => [ id => { like => '%'.$nivel2.'%' } ],
+                                                                sort_by => 'id ASC',
+                                            );
+    my @results;
+
+    foreach my $objeto_n2 (@$n2_array_ref) {
+        push (@results, $objeto_n2);
+    }
+
+    return(\@results);
+}
+
+=item
 Devuelve un arreglo de objetos UI
 =cut
 sub obtenerUILike {

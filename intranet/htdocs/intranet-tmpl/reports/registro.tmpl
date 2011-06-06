@@ -1,9 +1,9 @@
 [% INCLUDE "intranet-top.inc" %]
 
 <script src="/includes/jquery/validate/jquery.validate.js"></script>
-
 [% INCLUDE  'WindowHelper.inc'  %]
 [% INCLUDE 'datePicker.inc' %]
+[% INCLUDE  'AutocompleteHelper.inc'  %]
 
 <script language="javascript" type="text/javascript">
 
@@ -35,7 +35,7 @@ function consultar(){
 	objAH.dateselectedEnd   = $("#dateselectedEnd").val();
     objAH.nivel             = $("#select_nivel").val();
     objAH.operacion         = $("#select_operacion").val();
-	objAH.user              = $("#socios").val();
+	objAH.user              = $("#nro_socio_hidden").val();
 	objAH.funcion           = "changePage";
 	objAH.sendToServer();
 }
@@ -69,21 +69,26 @@ function verNota(registro){
     $('#view_note_' + registro).dialog('open');
 }
 
+function clear_usuario(){
+    $('#socio').val('');
+}
 
 $(document).ready(function() {
-    crearDatePicker('dateselected');
-    crearDatePicker('dateselectedEnd');
+    CrearAutocompleteUsuariosConRegularidad({   
+        IdInput: 'socio', 
+        IdInputHidden: 'nro_socio_hidden', 
+    });
+	
+	 crearDatePicker('dateselected');
+	 crearDatePicker('dateselectedEnd');
 
 });
 
 </script>
 
-<!--<div class="titulos">[% "Registro de Actividades" | i18n %]</div>-->
-
 <fieldset>
     <legend class="titulo_legend"> <span class="titulos">[% "Registro de Actividades" | i18n %] </span> </legend>
-<!-- FIXME para los tipos, el script anda mal, los toma como el check de fecha o el radio operacion -->
-<fieldset>
+        <fieldset>
 
           <legend class="titulo_legend">[% "Filtrar por:" | i18n %]</legend>
           <ul>
@@ -113,10 +118,15 @@ $(document).ready(function() {
             </li>
                 <!-- ACA SE BUSCA POR USUARIO Y/O POR NUMERO DE ELEMENTOS -->
             <li class="sub_item">
-                <label for="socios">
+                <label for="socio">
                     [% "Nombre de usuario: " | i18n %]
+	                [% PERL %]
+	                    print C4::AR::Filtros::setHelpIcon( text => "[% 'Campo autocompletable, b&uacute;squeda por nombre, apellido, nro. de documento, legajo, nro. socio' | i18n %]",);
+	                [% END %]
                 </label>
-                    [% select_usuarios %]
+	            <input type='text' id='socio' name='socio' value='' size=32 tabindex='3' style="float: left" onclick="clear_usuario();">
+	            <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
+                    
             </li>
             <li class="sub_item">
                 

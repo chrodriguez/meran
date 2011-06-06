@@ -1,3 +1,7 @@
+@IMPORT url("forms.css");
+@IMPORT url("/includes/css/fancybox.css");
+@IMPORT url("menu.css");
+
 body,html {
 	height: 100%;
 	
@@ -418,7 +422,7 @@ width: 83%;
 	color: #FFFFFF;
 	font-size: 9pt;
 /*	background: url(../imagenes/tablaresultado.png) repeat-x; */ 
-    background: #35414F;
+    background: #E7F3FA;
 	text-align: center;
 	font-weight: bold;
 	height: 20px;
@@ -441,16 +445,9 @@ width: 83%;
 	font-style: normal;
 }
 
-tr.par {
-	background-color: #4B5869;
-}
 
-tr.impar {
-	background-color: #C0C0C0;
-}
-
-tr.par td, tr.par td a{
-    color: #EAEBED;
+tr td a{
+    color: #35414F;
 }
 
 tr.impar td, tr.impar td a {
@@ -532,42 +529,39 @@ label.error_adv {
 	font-style: underline;
 }
 
-.par .prestamo {
-	font-size: 10pt;
-	color: #ADFF2F;
-}
 
 .impar .prestamo {
     font-size: 10pt;
     color: #006400;
+    font-weight: bold;
 }
 
 .par .salaLectura {
     font-size: 10pt;
-    color: #FFEBCD;
+    color: #35414F;
+    font-weight: bold;
 }
 
 .impar .salaLectura {
     font-size: 10pt;
     color: #35414F;
-}
-
-.par .disponible {
-	font-size: 10pt;
-	color: #ADFF2F;
+    font-weight: bold;
 }
 
 .impar .disponible {
     font-size: 10pt;
     color: #006400;
+    font-weight: bold;
 }
 
 .disponible {
     color: #006400;
+    font-weight: bold;
 }
 
 .nodisponible {
     color: red;
+    font-weight: bold;
 }
 
 .par .nodisponible {
@@ -578,6 +572,7 @@ label.error_adv {
 .impar .nodisponible {
     font-size: 10pt;
     color: red;
+    font-weight: bold;
 }
 
 .recuadroAyuda {
@@ -1602,12 +1597,12 @@ input.file {
 
 .datos_tabla td {
 	text-align: center;
-	color: #EAEBED;
+	color: #35414F;
 }
 
 
 .datos_tabla td a{
-    color: #EAEBED;
+    color: #35414F;
 }
 
 .datos_tabla {
@@ -2102,6 +2097,7 @@ div.indicators {
 .datos_tabla_char td,th {
 	padding: .3em;
 	border: 1px #ccc solid;
+	color: #35414F;
 }
 
 .datos_tabla_char thead {
@@ -4533,4 +4529,23 @@ body .latest-status-text a {
 	clear: both;	
 	
 	
+}
+
+
+tr.impar {
+background-color:#E7F3FA;
+}
+
+
+tr.par {
+background-color:#D4E3EB;
+
+.par .disponible {
+color:#35414F;
+font-size:10pt;
+}
+
+.par .prestamo {
+color:#35414F;
+font-size:10pt;
 }
