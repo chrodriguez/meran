@@ -515,9 +515,9 @@ $biblios->finish();
   {
 
 #Default ui
-    my $q_ui=$dbh->prepare("SELECT value FROM systempreferences where variable ='defaultbranch';");
+    my $q_ui=$dbh->prepare("SELECT valor FROM pref_preferencia_sistema where variable ='defaultbranch';");
     $q_ui->execute();
-    my $ui=$q_ui->fetchrow;
+    my $ui=$q_ui->fetchrow || 'DEO';
 
 
 # Le agrega el id_persona a usr_socio 
