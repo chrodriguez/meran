@@ -53,12 +53,15 @@ print "Quitando tablas de mas \n";
  quitarTablasDeMas();
 print "Hasheando passwords \n";
    hashearPasswords();
+print "Limpiamos las tablas de circulacion \n";
+limpiarCirculacion();
 print "Referencias de usuarios en circulacion \n";
 my $st2 = time();
   repararReferenciasDeUsuarios();
 my $end2 = time();
 my $tardo2=($end2 - $st2);
 print "AL FIN TERMINARON LOS USUARIOS!!! Tardo $tardo2 segundos !!!\n";
+
 print "Relacion usuario-persona \n";
   crearRelacionUsuarioPersona();
 print "Creando nuevas claves foraneas \n";
@@ -511,7 +514,7 @@ $biblios->finish();
                   'marc_biblio', 'marc_blob_subfield', 'marc_breeding', 'marc_subfield_structure', 'marc_subfield_table', 'marc_tag_structure', 'marc_word', 
                   'printers', 'relationISO', 'reserveconstraints', 'statistics', 'virtual_itemtypes', 'virtual_request', 'websites', 'z3950queue', 
                   'z3950results', 'z3950servers', 'uploadedmarc','generic_report_joins','generic_report_tables','tablasDeReferencias','tablasDeReferenciasInfo',
-                  'additionalauthors','bibliosubtitle','bibliosubject','sessionqueries','analyticalkeyword','keyword');
+                  'additionalauthors','bibliosubtitle','bibliosubject','sessionqueries','analyticalkeyword','keyword','unavailable','users','categories','stopwords');
 
       foreach $tabla (@drops) {
         my $drop=$dbh->prepare(" DROP TABLE ".$tabla." ;");
@@ -872,6 +875,15 @@ sub traduccionEstructuraMarc {
       my $refusr=$dbh->prepare("ALTER TABLE $tabla DROP borrowernumber;");
       $refusr->execute();
     }
+
+    }
+
+
+#### Se limpian las tablas de circulacion ####
+
+  sub limpiarCirculacion {
+
+        aplicarSQL("limpiarCirculacion.sql");
 
     }
 

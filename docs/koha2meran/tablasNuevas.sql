@@ -774,4 +774,4 @@ INSERT INTO `usr_ref_categoria_socio` (`id`, `categorycode`, `description`, `enr
 (6, 'PG', 'Postgrado', NULL, 90, NULL, NULL, NULL, NULL, 1, 3, NULL, 14),
 (7, 'EX', 'Usuario externo', 0, 0, 0, NULL, NULL, '0.000000', 1, 3, '0.000000', 0),
 (8, 'IB', 'Interbibliotecario', 0, 90, 17, NULL, NULL, '0.000000', 1, 3, '0.000000', 14),
-(9, 'BB', 'Bibliotecario',  0, 90, 17, NULL, NULL, '0.000000', 1, 3, '0.000000', 14),
+(9, 'BB', 'Bibliotecario',  0, 90, 17, NULL, NULL, '0.000000', 1, 3, '0.000000', 14);
