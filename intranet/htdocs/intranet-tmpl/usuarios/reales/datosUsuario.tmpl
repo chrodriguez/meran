@@ -229,7 +229,7 @@ function createFileUploader(){
 }
 
 function onCompleteFileUpload(){
-    $('#foto').html("<img border='0' width='96px' height='96px' title='" + USUARIO.text + "(" + USUARIO.ID + ")' alt='" + USUARIO.text + "(" + USUARIO.ID + ")' src='[% themelang %]/pictures/" + USUARIO.ID + ".jpg'>");
+    $('#foto').html("<img border='0' width='96px' height='96px' title='" + USUARIO.text + "(" + USUARIO.ID + ")' alt='" + USUARIO.text + "(" + USUARIO.ID + ")' src='/uploads/pictures/" + USUARIO.ID + ".jpg'>");
     $('#div_uploader').hide();
     $('#fake_file').val('');
     $('#div_boton_eliminar_foto').show();

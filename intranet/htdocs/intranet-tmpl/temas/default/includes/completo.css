@@ -377,12 +377,9 @@ width: 83%;
 
 .item a:hover {
 	font-family: "Verdana", "Trebuchet MS", "Arial";
-	font-size: 8pt;
 	color: #4B5869;
 	list-style: none;
 	font-weight: bold;
-	padding: 0px;
-	margin: 2px;
 	text-decoration: none;
 }
 
@@ -421,8 +418,7 @@ width: 83%;
 	font-Family: Arial, Helvetica, sans-serif;
 	color: #FFFFFF;
 	font-size: 9pt;
-/*	background: url(../imagenes/tablaresultado.png) repeat-x; */ 
-    background: #E7F3FA;
+    background: #35414F;
 	text-align: center;
 	font-weight: bold;
 	height: 20px;
@@ -1597,7 +1593,6 @@ input.file {
 
 .datos_tabla td {
 	text-align: center;
-	color: #35414F;
 }
 
 
@@ -2097,7 +2092,6 @@ div.indicators {
 .datos_tabla_char td,th {
 	padding: .3em;
 	border: 1px #ccc solid;
-	color: #35414F;
 }
 
 .datos_tabla_char thead {

@@ -66,11 +66,11 @@
             
                     <td class="titulo_result">
                     [% IF portada_registro %]
-                        <a class="fancylink" rel="group" href="[% themelang %]/covers/[% portada_registro_big %]">
-                            <img name="cover"  VALUE="" BORDER=0 src="[% themelang %]/covers/[% portada_registro %]" title="Portada">
+                        <a class="fancylink" rel="group" href="/uploads/covers/[% portada_registro_big %]">
+                            <img name="cover"  VALUE="" BORDER=0 src="/uploads/covers/[% portada_registro %]" title="Portada">
                         </a>
                     [% ELSE %]
-                          <img src="[% themelang %]/covers/no_image.jpg" 
+                          <img src="/uploads/covers/no_image.jpg" 
                                 alt="[% 'Sin Portada' | i18n %]"
                                 title="[% 'Sin Portada' | i18n %]" />
                     [% END %]

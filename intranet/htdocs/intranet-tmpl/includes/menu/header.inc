@@ -82,7 +82,7 @@ function socioSearchEvent(event){
 	               >
 	               
 			      [% IF socio_data.usr_tiene_foto %]
-			          <img src="[% themelang %]/pictures/[% socio_data.usr_tiene_foto %]"  
+			          <img src="/uploads/pictures/[% socio_data.usr_tiene_foto %]"  
 			              alt="[% socio_data.usr_nombre %], [% socio_data.usr_apellido %]"/>
 			      [% ELSE %]
 			            <img  src="[% temas %]/[% tema %]/imagenes/no_foto.jpg" 

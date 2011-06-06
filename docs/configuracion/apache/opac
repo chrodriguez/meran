@@ -8,18 +8,6 @@ SetEnv MERAN_CONF "/etc/meran/meran.conf"
 DirectoryIndex /cgi-bin/koha/opac-main.pl
 
 Alias /cgi-bin/koha/ /usr/share/meran/opac/cgi-bin/
-Alias /pictures/ "/usr/share/meran/intranet/htdocs/intranet-tmpl/pictures/"
-<Directory /usr/share/meran/intranet/htdocs/intranet-tmpl/blue/pictures/ >
- Order allow,deny
- Allow from all
-</Directory>
-
-
-Alias /covers/ "/usr/share/meran/intranet/htdocs/intranet-tmpl/covers/"
-<Directory /usr/share/meran/intranet/htdocs/intranet-tmpl/covers/ >
- Order allow,deny
- Allow from all
-</Directory>
 
 <Location /cgi-bin/koha/ >
       SetHandler perl-script
@@ -53,6 +41,12 @@ Alias /includes/ "/usr/share/meran/includes/"
  ExpiresActive On
  ExpiresDefault "access plus 1 month"
 </FilesMatch>
+
+Alias /uploads/ "/usr/share/meran/intranet/htdocs/uploads/"
+<Directory /usr/share/meran/intranet/htdocs/uploads/ >
+Order allow,deny
+Allow from all
+</Directory>
  
 </VirtualHost>
 
