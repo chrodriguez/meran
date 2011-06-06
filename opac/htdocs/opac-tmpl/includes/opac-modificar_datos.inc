@@ -29,7 +29,7 @@
         [% END %]
         <div class="column1-unit" style="width: 500px">
           <div class="contactform" style="width: 100%">
-            <form method="post" action="[% url_prefix %]/opac-userupdate.pl" onSubmit="return checkPassword()">
+            <form method="post" action="[% url_prefix %]/opac-userupdate.pl" onSubmit="return (checkPassword() && startOverlay())">
               <fieldset>
                 <legend>&nbsp;[% 'Detalle de ' | i18n %] [% socio_data.usr_apellido %], [% socio_data.usr_nombre %]&nbsp;</legend>
                 <p><label for="contact_firstname" class="left">[% 'Nombres' |  i18n %]* :</label>
