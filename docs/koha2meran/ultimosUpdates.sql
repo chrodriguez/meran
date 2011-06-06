@@ -564,8 +564,6 @@ ALTER TABLE  `cat_ref_tipo_nivel3` ADD  `agregacion_temp` VARCHAR( 255 ) NULL ;
 
 ALTER TABLE  `rep_busqueda` ADD  `categoria_socio` VARCHAR( 255 ) NULL ;
 
-ALTER TABLE  `usr_ref_categoria_socio` ADD  `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
-
 ALTER TABLE  `rep_busqueda` CHANGE  `categoria_socio`  `categoria_socio` CHAR( 2 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 
 ALTER TABLE  `rep_busqueda` ADD  `agregacion_temp` VARCHAR( 255 ) NOT NULL ;
