@@ -107,7 +107,7 @@ fieldset {
 #login {
 	background-image: url(../imagenes/meranLogin.png);
 	background-repeat: no-repeat;
-	height: 300px;
+	height: 220px;
 	width: 420px;
 	margin: 0 auto;
 }
@@ -1998,7 +1998,10 @@ div.indicators {
 	border-style: dashed;
 }
 /* ==========================================================FIN==REPORTES =============================================================== */
-
+#captcha{
+    width: 334px;
+    margin: 0 auto;
+}
 
 
 
