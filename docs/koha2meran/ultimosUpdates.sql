@@ -151,11 +151,6 @@
       
       ALTER TABLE ref_idioma ADD `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
       
-      ALTER TABLE `ref_estado` CHANGE `code` `id` TINYINT( 5 ) NOT NULL AUTO_INCREMENT;
-      ALTER TABLE `ref_estado` CHANGE `description` `nombre` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_swedish_ci NOT NULL;
-      
-      ALTER TABLE `ref_estado` ADD UNIQUE ( `nombre` );
-      
       ALTER TABLE `circ_prestamo` CHANGE id `id_prestamo` INT( 11 ) NOT NULL AUTO_INCREMENT FIRST ;
        
         ALTER TABLE `circ_reserva` DROP `cancellationdate`;
@@ -663,5 +658,3 @@ ALTER TABLE `cat_registro_marc_n3` ADD `created_at` DATETIME NOT NULL AFTER `upd
 ALTER TABLE `cat_estructura_catalogacion` ADD `edicion_grupal` TINYINT NOT NULL DEFAULT '1' AFTER `visible` ;
 
 ALTER TABLE `usr_socio` ADD  `lastValidation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
-
-ALTER TABLE `ref_disponibilidad` ADD `codigo` VARCHAR( 255 ) NOT NULL AFTER `nombre`;
