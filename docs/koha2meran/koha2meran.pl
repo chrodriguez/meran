@@ -513,6 +513,13 @@ $biblios->finish();
 
   sub crearRelacionUsuarioPersona    
   {
+
+#Default ui
+    my $q_ui=$dbh->prepare("SELECT value FROM systempreferences where variable ='defaultbranch';");
+    $q_ui->execute();
+    my $ui=$q_ui->fetchrow;
+
+
 # Le agrega el id_persona a usr_socio 
     my $usuarios=$dbh->prepare("SELECT * FROM usr_socio;");
     $usuarios->execute();
@@ -574,9 +581,9 @@ $biblios->finish();
  my $id_persona_kohaadmin=$personaka->fetchrow;
 
 my $kohaadmin_socio="INSERT INTO `usr_socio` (`id_persona`, `nro_socio`, `id_ui`, `cod_categoria`, `fecha_alta`, `expira`, `flags`, `password`, `last_login`, `last_change_password`, `change_password`, `cumple_requisito`, `nombre_apellido_autorizado`, `dni_autorizado`, `telefono_autorizado`, `is_super_user`, `credential_type`, `id_estado`, `activo`, `agregacion_temp`) VALUES
-(?, 'kohaadmin', 'DEO', 'DO', NULL, NULL, 1, 'a1q8oyiSjO02w1vpPlwscK+kQdDDbolevtC2ZsZX1Uc', '2010-01-13 00:00:00', '2009-12-13', 0, '0000-00-00', '', '', '', 1, '', 46, '1', 'id_persona');";
+(?, 'kohaadmin', ? , 'ES', NULL, NULL, 1, 'a1q8oyiSjO02w1vpPlwscK+kQdDDbolevtC2ZsZX1Uc', '2010-01-13 00:00:00', '2009-12-13', 0, '0000-00-00', '', '', '', 1, '', 46, '1', 'id_persona');";
  my $ks=$dbh->prepare($kohaadmin_socio);
-    $ks->execute($id_persona_kohaadmin);
+    $ks->execute($id_persona_kohaadmin,$ui);
 
 
 #habilitamos los socios
@@ -592,8 +599,8 @@ my $kohaadmin_socio="INSERT INTO `usr_socio` (`id_persona`, `nro_socio`, `id_ui`
     while (my $p=$persona->fetchrow_hashref) {
       if(!$p->{'es_socio'}){
            my $usu_0=$dbh->prepare("INSERT INTO usr_socio (id_persona,nro_socio,id_ui,cod_categoria,flags,change_password,is_super_user,id_estado,activo) VALUES
-                ( ? , ? ,'DEO','ES', 0, 1, 0, 20, 0);");
-             $usu_0->execute($p->{'id_persona'},$p->{'nro_documento'});
+                ( ? , ? ,?,'ES', 0, 1, 0, 20, 0);");
+             $usu_0->execute($p->{'id_persona'},$p->{'nro_documento'},$ui);
       }
 
     }
