@@ -16,6 +16,8 @@ use vars qw(@EXPORT_OK @ISA);
   &registroDeUsuarios
   &altasRegistro
   &estantesVirtuales
+  &listarItemsDeInventarioPorSigTop
+  &listarItemsDeInventarioPorBarcode
 );
 
 sub altasRegistro {
@@ -231,6 +233,203 @@ sub getItemTypes {
 }
 
 
+
+sub listarItemsDeInventarioPorSigTop{
+    my ($params_hash_ref) = @_;
+
+    my @filtros;
+    my @info_reporte;
+    my $orden = $params_hash_ref->{'sort'} || 'signatura';
+   
+    my $ini=$params_hash_ref->{'ini'};
+    my $cantR=$params_hash_ref->{'cantR'};  
+    
+    my $signatura= $params_hash_ref->{'sigtop'};
+   
+    my $db= C4::Modelo::CatRegistroMarcN3->new()->db();
+
+    my $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
+                                                                                            db  => $db,
+                                                                                            query => [  
+                                                                                                  signatura => { eq => $signatura },
+                                                                                            ], 
+                                                                                            sort_by => $orden,
+                                                                                            limit   => $cantR,
+                                                                                            offset  => $ini,
+                                                                          );
+
+   my $cat_nivel3_array_ref_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count( 
+                                                                                            db  => $db,
+                                                                                            query => [  
+                                                                                                  signatura => { eq => $signatura },
+                                                                                            ], 
+                                                                                            sort_by => $orden,
+                                                                          ); 
+
+    my $cant  = scalar(@$cat_nivel3_array_ref);
+    
+    my($result, $info_reporte)= armarResult($cat_nivel3_array_ref);
+
+    return ($cat_nivel3_array_ref_count, $result, $info_reporte);
+}
+
+
+sub listarItemsDeInventarioEntreSigTops{
+    my ($params_hash_ref) = @_;
+
+    my @filtros;
+    my @info_reporte;
+    my $orden = $params_hash_ref->{'sort'} || 'signatura';
+   
+    my $ini=$params_hash_ref->{'ini'};
+    my $cantR=$params_hash_ref->{'cantR'};  
+    
+    my $desde_sigtop= $params_hash_ref->{'desde_signatura'};
+    my $hasta_sigtop= $params_hash_ref->{'hasta_signatura'};
+   
+    my $db= C4::Modelo::CatRegistroMarcN3->new()->db();
+
+    my $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
+                                                                                            db  => $db,
+                                                                                            query => [  
+                                                                                                    signatura => { between => [ $desde_sigtop, $hasta_sigtop ] },
+                                                                                                    
+                                                                                            ], 
+                                                                                            sort_by => $orden,
+                                                                                            limit   => $cantR,
+                                                                                            offset  => $ini,
+                                                                          );
+
+   my $cat_nivel3_array_ref_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count( 
+                                                                                            db  => $db,
+                                                                                            query => [  
+                                                                                                    signatura => { between => [ $desde_sigtop, $hasta_sigtop ] },
+                                                                                            ], 
+                                                                          ); 
+
+    my $cant  = scalar(@$cat_nivel3_array_ref);
+    
+    my($result, $info_reporte)= armarResult($cat_nivel3_array_ref);
+
+    return ($cat_nivel3_array_ref_count, $result, $info_reporte);
+}
+
+
+
+sub listarItemsDeInventarioPorBarcode{
+    my ($params_hash_ref) = @_;
+
+    my @filtros;
+    my @info_reporte;
+    my $orden = $params_hash_ref->{'sort'} || 'codigo_barra';
+   
+    my $ini=$params_hash_ref->{'ini'};
+    my $cantR=$params_hash_ref->{'cantR'};  
+    
+    my $codigo_barra= $params_hash_ref->{'barcode'};
+   
+    my $db= C4::Modelo::CatRegistroMarcN3->new()->db();
+
+    my $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
+                                                                                            db  => $db,
+                                                                                            query => [  
+                                                                                                  codigo_barra => { eq => $codigo_barra },
+                                                                                            ], 
+                                                                                            sort_by => $orden,
+                                                                                            limit   => $cantR,
+                                                                                            offset  => $ini,
+                                                                          );
+
+   my $cat_nivel3_array_ref_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count( 
+                                                                                            db  => $db,
+                                                                                            query => [  
+                                                                                                  codigo_barra => { eq => $codigo_barra },
+                                                                                            ], 
+                                                                                       
+                                                                          ); 
+
+    my $cant  = scalar(@$cat_nivel3_array_ref);
+    
+    my($result, $info_reporte)= armarResult($cat_nivel3_array_ref);
+
+    return ($cat_nivel3_array_ref_count, $result, $info_reporte);
+}
+
+
+sub listarItemsDeInventarioEntreBarcodes{
+    my ($params_hash_ref) = @_;
+
+    my @filtros;
+    my @info_reporte;
+    my $orden = $params_hash_ref->{'sort'} || 'codigo_barra';
+   
+    my $ini=$params_hash_ref->{'ini'};
+    my $cantR=$params_hash_ref->{'cantR'};  
+
+    my $desde_barcode= $params_hash_ref->{'desde_barcode'};
+    my $hasta_barcode= $params_hash_ref->{'hasta_barcode'};
+
+   
+    my $db= C4::Modelo::CatRegistroMarcN3->new()->db();
+
+    my $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
+                                                                                            db  => $db,
+                                                                                            query => [  
+                                                                                                   codigo_barra => { between => [ $desde_barcode, $hasta_barcode ] },
+#                                                                                                    codigo_barra => { ge => $desde_barcode },
+#                                                                                                    codigo_barra => { le =>  $hasta_barcode },
+                                                                                            ], 
+                                                                                            sort_by => $orden,
+                                                                                            limit   => $cantR,
+                                                                                            offset  => $ini,
+                                                                          );
+
+   my $cat_nivel3_array_ref_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count( 
+                                                                                            db  => $db,
+                                                                                            query => [  
+                                                                                                 codigo_barra => { between => [ $desde_barcode, $hasta_barcode ] }
+                                                                                            ], 
+                                                                                     
+                                                                          ); 
+
+
+    my $cant  = scalar(@$cat_nivel3_array_ref);
+    
+    my($result, $info_reporte)= armarResult($cat_nivel3_array_ref);
+
+    return ($cat_nivel3_array_ref_count, $result, $info_reporte);
+}
+
+
+
+
+
+sub armarResult{
+
+    my ($cat_nivel3_array_ref) = @_;
+
+    my @result;
+    my @info_reporte;
+
+    foreach my $reg_nivel_3 (@$cat_nivel3_array_ref){
+          my %hash_result;
+          my $nivel1 = C4::AR::Nivel1::getNivel1FromId3($reg_nivel_3->getId3);
+          my $nivel2 = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
+
+          $hash_result{'nivel1'}= $nivel1; 
+          $hash_result{'nivel2'}=  @$nivel2[0];
+          $hash_result{'nivel3'}= $reg_nivel_3;
+
+          push(@info_reporte, \%hash_result);
+          push(@result, \%hash_result);
+    }
+
+    return(\@result, \@info_reporte);
+}
+
+
+
+
 sub getEstantes {
     my ( $params, $return_arrays ) = @_;
 
@@ -307,6 +506,11 @@ sub getEstantes {
 
     return ( \@items, \@colours, \@cant );
 }
+
+
+
+
+
 
 
 sub getConsultasOPAC {

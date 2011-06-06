@@ -15,6 +15,29 @@
         objAH.changePage(ini);
     }
 
+    function exportarXLS(){
+   
+            $("#tablaResult").tabletojson({
+                    headers: "Código de barra, Signatura Topográfica, Autor, Título, Editor, Edición, UI Origen, UI Poseedora",
+                    attribHeaders: "{}",
+                    returnElement: "#table",
+                    complete: function(x){
+                        objAH                     = new AjaxHelper(updateExportarMejorPresupuesto);
+                        objAH.url                 = URL_PREFIX+'/adquisiciones/mostrarComparacion.pl';
+                        objAH.debug               = true;
+                        objAH.showOverlay         = true;
+                        objAH.table               = JSONstring.toObject(x);
+                        objAH.tipoAccion          = 'EXPORTAR_MEJOR_PRESUPUESTO';
+                        objAH.sendToServer();
+                    }
+              })
+    }
+
+    function updateExportarMejorPresupuesto(responseText){
+     
+    }
+
+
     function consultarPorBarcode(){
 
         //se busca por barcode
@@ -40,7 +63,7 @@
         objAH                   = new AjaxHelper(updateInfo);
         objAH.debug             = true;
         objAH.showOverlay       = true;
-        objAH.url=URL_PREFIX+"/reports/inventory-sig-topResult.pl";
+        objAH.url               = URL_PREFIX+"/reports/inventory-sig-topResult.pl";
         objAH.barcode           = $("#barcode").val();
         objAH.desde_barcode     = $("#desde_barcode").val();
         objAH.hasta_barcode     = $("#hasta_barcode").val();

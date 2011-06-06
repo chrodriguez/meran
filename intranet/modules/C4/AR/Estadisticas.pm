@@ -55,7 +55,6 @@ use vars qw(@EXPORT @ISA);
     getMinBarcode
     getMinBarcodeLike
     getMaxBarcodeLike
-    listarItemsDeInventarioPorSigTop
     barcodesPorTipo
     actualizarNotaHistoricoCirculacion
 );
@@ -246,64 +245,6 @@ sub getMinYMaxSignaturaTopografica{
 
 
 # TODO ver si se puede utilizar el sphix para no procesar todos los ejemplares
-
-sub listarItemsDeInventarioPorSigTop{
-    my ($params_hash_ref) = @_;
-
-    my @filtros;
-    my @info_reporte;
-    my $orden = $params_hash_ref->{'sort'} || 'signatura';
-   
-    my $ini=$params_hash_ref->{'ini'};
-    my $cantR=$params_hash_ref->{'cantR'};  
-    
-    my $signatura= $params_hash_ref->{'sigtop'};
-   
-    my $db= C4::Modelo::CatRegistroMarcN3->new()->db();
-    
-    push (@filtros, ( signatura => { eq => $signatura}));
-
-    my $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
-                                                                                            db  => $db,
-                                                                                            query => [  
-                                                                                                  signatura => { eq => $signatura },
-                                                                                            ], 
-                                                                                            sort_by => $orden,
-                                                                                            limit   => $cantR,
-                                                                                            offset  => $ini,
-                                                                          );
-
-   my $cat_nivel3_array_ref_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count( 
-                                                                                            db  => $db,
-                                                                                            query => [  
-                                                                                                  signatura => { eq => $signatura },
-                                                                                            ], 
-                                                                                            sort_by => $orden,
-                                                                          ); 
-
-    my $cant  = scalar(@$cat_nivel3_array_ref);
-    my @result;
-    
-
-    foreach my $reg_nivel_3 (@$cat_nivel3_array_ref){
-          my %hash_result;
-          my $nivel1 = C4::AR::Nivel1::getNivel1FromId3($reg_nivel_3->getId3);
-          my $nivel2 = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
-
-          $hash_result{'nivel1'}= $nivel1; 
-          $hash_result{'nivel2'}=  @$nivel2[0];
-          $hash_result{'nivel3'}= $reg_nivel_3;
-
-          push(@info_reporte, \%hash_result);
-          push(@result, \%hash_result);
-    }
-
-    return ($cat_nivel3_array_ref_count, \@result, \@info_reporte);
-}
-
-
-
-
 
 sub listarItemsDeInventorioPorBarcode{
     my ($params_hash_ref) = @_;
