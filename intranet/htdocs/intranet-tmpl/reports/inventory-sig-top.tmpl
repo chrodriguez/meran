@@ -16,24 +16,23 @@
     }
 
     function exportarXLS(){
-   
             $("#tablaResult").tabletojson({
                     headers: "Código de barra, Signatura Topográfica, Autor, Título, Editor, Edición, UI Origen, UI Poseedora",
                     attribHeaders: "{}",
                     returnElement: "#table",
                     complete: function(x){
-                        objAH                     = new AjaxHelper(updateExportarMejorPresupuesto);
-                        objAH.url                 = URL_PREFIX+'/adquisiciones/mostrarComparacion.pl';
+                        objAH                     = new AjaxHelper(updateExportarXLS);
+                        objAH.url                 = URL_PREFIX+"/reports/inventory-sig-topResult.pl";
                         objAH.debug               = true;
                         objAH.showOverlay         = true;
                         objAH.table               = JSONstring.toObject(x);
-                        objAH.tipoAccion          = 'EXPORTAR_MEJOR_PRESUPUESTO';
+                        objAH.accion               = 'EXPORTARXLS';
                         objAH.sendToServer();
                     }
               })
     }
 
-    function updateExportarMejorPresupuesto(responseText){
+    function updateExportarXLS(responseText){
      
     }
 

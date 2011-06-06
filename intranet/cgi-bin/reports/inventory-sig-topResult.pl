@@ -50,6 +50,62 @@ $t_params->{'cantR'}    = $obj->{'cantR'}   = $cantR;
 # $obj->{'fin'}   = $cantR;
 # my $ini                         = ($obj->{'ini'}||'');
 
+if ($accion eq "EXPORTARXLS"){
+
+
+        my $tabla_array_ref = $obj->{'table'}; 
+
+        my ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
+                              template_name   => "reports/inventory-sig-topResult.tmpl",
+                              query       => $input,
+                              type        => "intranet",
+                              authnotrequired => 0,
+                              flagsrequired   => {  ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'usuarios'}, # FIXME
+        });
+
+        my @reporte;
+        my $headers_tabla;
+        my $message;    
+
+        push(@$headers_tabla, 'Código de barra');
+        push(@$headers_tabla, 'Signatura Topográfica');
+        push(@$headers_tabla, 'Autor');
+        push(@$headers_tabla, 'Editor');
+        push(@$headers_tabla, 'Edición');
+        push(@$headers_tabla, 'UI Origen');
+        push(@$headers_tabla, 'UI Poseedora');
+   
+        foreach my $celda (@$tabla_array_ref){
+              my $celda_xls; 
+              
+              push(@$celda_xls, $celda->{'Código de barra'});
+              push(@$celda_xls, $celda->{'Signatura Topográfica'});
+              push(@$celda_xls, $celda->{'Autor'});
+              push(@$celda_xls, $celda->{'Editor'});
+              push(@$celda_xls, $celda->{'Edición'});
+              push(@$celda_xls, $celda->{'UI Origen'});
+              push(@$celda_xls, $celda->{'UI Poseedora'});
+
+              push (@reporte, $celda_xls);
+        }
+ 
+   
+        $message= C4::AR::XLSGenerator::exportarMejorPresupuesto(\@reporte, $headers_tabla);
+
+#         C4::AR::Debug::debug($message->{'codMsg'});
+
+
+        my $infoOperacionJSON   = to_json $message;
+        C4::AR::Auth::print_header($session);
+        print $infoOperacionJSON;
+
+#         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session); 
+}
+
+
 if ($accion eq "CONSULTA_POR_SIGNATURA") {
 
      if ($sigtop){ 
