@@ -198,7 +198,7 @@ if($to_pdf){
         push (@$presupuesto, $celda_xls);
     }
                
-    my $data = C4::AR::XLSGenerator::exportarPesupuesto($presupuesto, $headers_tabla, $headers_planilla, $campos_hidden, $nombre_proveedor); 
+    my $data = C4::AR::XLSGenerator::getXLS($presupuesto, $headers_tabla, $headers_planilla, $campos_hidden, $nombre_proveedor); 
         
     my %hash;
         
