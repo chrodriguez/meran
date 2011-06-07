@@ -61,29 +61,37 @@ sub eliminarDetalleRecomendacion {
 
 sub agregarDetalleARecomendacion{
   my ($obj, $recom_id) = @_;
-#   
+   
   my %datos_recomendacion;
 
   my $msg_object;
 
-  $datos_recomendacion{'id_recomendacion'}=$recom_id;
-  $datos_recomendacion{'nivel_2'}= $obj->{'idNivel2'};
-  $datos_recomendacion{'autor'}=$obj->{'autor'};
-  $datos_recomendacion{'titulo'}=$obj->{'titulo'};
-  $datos_recomendacion{'lugar_publicacion'}= $obj->{'lugar_publicacion'};
-  $datos_recomendacion{'editorial'}= $obj->{'editorial'};
-  $datos_recomendacion{'fecha'}= $obj->{'fecha'};
-  $datos_recomendacion{'isbn_issn'}= $obj->{'isbn_issn'};
-  $datos_recomendacion{'cantidad_ejemplares'}= $obj->{'cant_ejemplares'};
-  $datos_recomendacion{'motivo_propuesta'}= $obj->{'motivo_propuesta'};
-  $datos_recomendacion{'comentarios'}= $obj->{'comment'};
-  $datos_recomendacion{'idNivel1'}= $obj->{'catalogo_search_hidden'};
-  $datos_recomendacion{'reservar'}= $obj->{'reservar'} || 0;
-
+  $datos_recomendacion{'id_recomendacion'}      = $recom_id;
+  $datos_recomendacion{'nivel_2'}               = $obj->{'idNivel2'};
+  $datos_recomendacion{'autor'}                 = $obj->{'autor'};
+  $datos_recomendacion{'titulo'}                = $obj->{'titulo'};
+  $datos_recomendacion{'lugar_publicacion'}     = $obj->{'lugar_publicacion'};
+  $datos_recomendacion{'editorial'}             = $obj->{'editorial'};
+  $datos_recomendacion{'fecha'}                 = $obj->{'fecha'};
+  $datos_recomendacion{'isbn_issn'}             = $obj->{'isbn_issn'};
+  $datos_recomendacion{'cantidad_ejemplares'}   = $obj->{'cant_ejemplares'};
+  $datos_recomendacion{'motivo_propuesta'}      = $obj->{'motivo_propuesta'};
+  $datos_recomendacion{'comentarios'}           = $obj->{'comment'};
+  $datos_recomendacion{'idNivel1'}              = $obj->{'catalogo_search_hidden'};
+  $datos_recomendacion{'reservar'}              = $obj->{'reservar'} || 0;
+  
+  # checkeo de XSS
+  foreach my $dato (%datos_recomendacion){
+    if($dato =~ m/script/){
+      C4::AR::Debug::debug("entro a la expresion regular");
+      C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B410', 'params' => []} ) ;
+      $msg_object->{'error'}= 1;
+    }
+  }
+  
   my $recomendacion_detalle = C4::Modelo::AdqRecomendacionDetalle->new(); 
 
   my $db = $recomendacion_detalle->db;
-
   if (!($msg_object->{'error'})){
            
           # entro si no hay algun error, todos los campos ingresados son validos
@@ -105,7 +113,7 @@ sub agregarDetalleARecomendacion{
               }
               $db->{connect_options}->{AutoCommit} = 1;
     }
-    return ($recomendacion_detalle->getId());
+    return ($msg_object,$recomendacion_detalle->getId());
 }
 
 

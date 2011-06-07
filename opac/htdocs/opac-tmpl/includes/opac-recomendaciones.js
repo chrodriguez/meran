@@ -201,18 +201,16 @@ function agregarRenglon(){
         objAH.motivo_propuesta  = $('#motivo_propuesta').val();
         objAH.comment           = $('#comment').val();
         objAH.id_recomendacion  = $('#id_recomendacion').val();          
-         objAH.idNivel1          = $('#catalogo_search_hidden').val();
+         objAH.idNivel1         = $('#catalogo_search_hidden').val();
         objAH.idNivel2          = $('#edicion_id').val()
         objAH.tipoAccion        = 'AGREGAR_RENGLON';
         objAH.sendToServer();   
 }      
 
 function updateAgregarRenglon(responseText){
-  agregarRenglonATabla(responseText); 
-      $('#carga_manual').hide();
+    // si viene un 1 no paso la comprobacion de XSS en el server
+    if (responseText == '1')
+            return(0);
+    agregarRenglonATabla(responseText); 
+    $('#carga_manual').hide();
 }
-          
-          
-          
- 
- 
