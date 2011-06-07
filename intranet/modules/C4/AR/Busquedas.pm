@@ -1294,6 +1294,7 @@ sub armarInfoNivel1{
             @result_array_paginado[$i]->{'nomCompleto'}         = $autor_object->getCompleto();
             @result_array_paginado[$i]->{'idAutor'}             = $autor_object->getId();
             @result_array_paginado[$i]->{'esta_en_favoritos'}   = C4::AR::Nivel1::estaEnFavoritos($nivel1->getId1());
+            @result_array_paginado[$i]->{'signaturas'}          = $nivel1->getSignaturas();
             #aca se procesan solo los ids de nivel 1 que se van a mostrar
             #se generan los grupos para mostrar en el resultado de la consulta
             my $ediciones           = &C4::AR::Busquedas::obtenerGrupos(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name, "INTRA");

@@ -277,8 +277,9 @@ Se genra la ventana para modificar los datos del usuario
         $t_params->{'comboDeCategorias'}    = $comboDeCategorias;
         $t_params->{'comboDeUI'}            = $comboDeUI;
         $t_params->{'addBorrower'}          = 0;
-
-        #paso el objeto socio al cliente
+        
+        C4::AR::Auth::updateLoggedUserTemplateParams($session,$t_params,$socio);
+        
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
     } #end if($tipoAccion eq "MODIFICAR_USUARIO")
 
@@ -299,7 +300,7 @@ Se genra la ventana para modificar los datos del usuario
 
         my ($Message_arrayref)  = &C4::AR::UploadFile::deletePhoto($foto_name);
         my $infoOperacionJSON   = to_json $Message_arrayref;
-
+        
         C4::AR::Auth::print_header($session);
         print $infoOperacionJSON;
     }

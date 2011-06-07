@@ -104,6 +104,23 @@ sub eliminar{
 }
 
 
+sub getSignaturas{
+    my ($self)          = shift;
+
+    my $array_nivel3 = C4::AR::Nivel3::getNivel3FromId2($self->getId2);
+    
+    my @signaturas;
+    
+    foreach my $nivel3 (@$array_nivel3){
+    	my $signatura_nivel3 = $nivel3->getSignatura;
+    	if (!C4::AR::Utilidades::existeInArray($signatura_nivel3,@signaturas)){
+            push (@signaturas, $signatura_nivel3);
+    	}
+    }   
+    
+    return (\@signaturas);
+}
+
 =head2
 sub getISBN
 
