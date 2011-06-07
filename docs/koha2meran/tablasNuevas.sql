@@ -767,13 +767,13 @@ CREATE TABLE IF NOT EXISTS `usr_ref_categoria_socio` (
   UNIQUE KEY `categorycode` (`categorycode`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
 
-INSERT INTO `usr_ref_categoria_socio` (`id`, `categorycode`, `description`, `enrolmentperiod`, `upperagelimit`, `dateofbirthrequired`, `finetype`, `bulk`, `enrolmentfee`, `overduenoticerequired`, `issuelimit`, `reservefee`, `borrowingdays`) VALUES
-(1, 'ES', 'Estudiante', 0, 55, 18, NULL, NULL, '0.000000', 1, 3, '0.000000', 14),
-(2, 'IN', 'Investigador', 15, 100, 0, NULL, NULL, '0.000000', 1, 3, '0.000000', 14),
-(3, 'DO', 'Docente', 10, 80, 0, NULL, NULL, '0.000000', 1, 3, '0.000000', 14),
-(4, 'ND', 'No Docente', 10, 0, 0, NULL, NULL, '0.000000', 1, 3, '0.000000', 14),
-(5, 'EG', 'Egresado', 10, 0, 0, NULL, NULL, '0.000000', 1, 3, '0.000000', 14),
-(6, 'PG', 'Postgrado', NULL, 90, NULL, NULL, NULL, NULL, 1, 3, NULL, 14),
-(7, 'EX', 'Usuario externo', 0, 0, 0, NULL, NULL, '0.000000', 1, 3, '0.000000', 0),
-(8, 'IB', 'Interbibliotecario', 0, 90, 17, NULL, NULL, '0.000000', 1, 3, '0.000000', 14),
-(9, 'BB', 'Bibliotecario',  0, 90, 17, NULL, NULL, '0.000000', 1, 3, '0.000000', 14);
+INSERT INTO `usr_ref_categoria_socio` (`id`, `categorycode`, `description`) VALUES
+(1, 'ES', 'Estudiante'),
+(2, 'IN', 'Investigador'),
+(3, 'DO', 'Docente'),
+(4, 'ND', 'No Docente'),
+(5, 'EG', 'Egresado'),
+(6, 'PG', 'Postgrado'),
+(7, 'EX', 'Usuario externo'),
+(8, 'IB', 'Interbibliotecario'),
+(9, 'BB', 'Bibliotecario');

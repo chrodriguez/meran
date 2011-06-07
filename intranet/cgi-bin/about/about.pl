@@ -24,7 +24,12 @@ my ($template, $session, $t_params) = get_template_and_user({
 			
 # si esta editando, se guarda en la base pref_about
 if($texto){
-    my ($temp) = C4::AR::Preferencias::updateInfoAbout($texto);	
+    # evita XSS
+    if($texto =~ m/script/){
+        print "Se encontró la palabra: script.\n";
+    }else{
+        my ($temp) = C4::AR::Preferencias::updateInfoAbout($texto);	
+    }
 }
 
 # obtenemos lo guardado en la base de pref_about
