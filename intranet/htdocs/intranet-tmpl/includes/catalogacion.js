@@ -785,10 +785,6 @@ function updateGuardarDocumentoN3(responseText){
     var Messages    = info.Message_arrayref; //obtengo los mensajes para el usuario
     setMessages(Messages);
 
-//    //PARA LIMPIAR EL VALUE DE TODOS (ASI INGRESA UNO NUEVO)
-//    var allInputs = $('#estructuraDelNivel3 :input');
-//        for (x=0; x< allInputs.length; x++)
-//             allInputs[x].value="";
     if (! (hayError(Messages) ) ){
 		//inicializo el arreglo
 		_freeMemory(ID3_ARRAY);
@@ -1255,6 +1251,9 @@ function procesarSubCampo(objeto, marc_group){
             case "auto": 
                 crearAuto(marc_conf_obj);
             break;
+/*            case "auto_nivel2": 
+                crearAutoNivel2(marc_conf_obj);
+            break;*/
             case "calendar":
                 crearCalendar(marc_conf_obj);
             break;
@@ -1395,17 +1394,34 @@ function _cearAutocompleteParaCamponente(o){
         break;
         
 // TODO estoy probando el link de las analiticas
-        case "nivel2": CrearAutocompleteNivel2(       {IdInput: o.getIdCompCliente(), 
-                                                    IdInputHidden: o.getIdCompCliente() + '_hidden' }
+        case "nivel2": CrearAutocompleteNivel2(       { IdInput: o.getIdCompCliente(), 
+                                                        IdInputHidden: o.getIdCompCliente() + '_hidden',
+                                                        callBackFunction: buscarDatosNivel2                      
+                                                      }
                                     );
         break;
 	}
 }
 
 
+function buscarDatosNivel2(){
+        objAH                   = new AjaxHelper(updateBuscarDatosNivel2);
+        objAH.debug             = true;
+        objAH.showOverlay       = true;
+        objAH.url               = URL_PREFIX+'/catalogacion/estructura/estructuraCataloDB.pl';
+        objAH.tipoAccion        = 'BUSQUEDA_EDICIONES';
+        objAH.id1               = $('#'+_getIdComponente('773', 'a')+'_hidden').val();
+        objAH.sendToServer();
+}
+
+function updateBuscarDatosNivel2(responseText){
+//    $('#ediciones').html(responseText);
+//       $("#div" + obj.getIdCompCliente()).append(comp);
+//       $('#ediciones_'+_getIdComponente('773', 'a')).append(responseText)
+    $('#ediciones').html(responseText)
+}
+
 function generarIdComponente(){
-// TODO falta gerneralo
-//     return '789'+TAB_INDEX;
     return ID_COMPONENTE++;
 }
 
@@ -1695,22 +1711,16 @@ function newCombo(obj){
 function crearCombo(obj){
     var comp = newCombo(obj);
     $("#div" + obj.getIdCompCliente()).append(comp);
-//     $(crearBotonEliminarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
-//     $(crearBotonAgregarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
     crearBotones(obj);
 }
 
 function crearTextArea(obj){
-
-//     var comp = "<textarea id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' rows='4' tabindex=" + TAB_INDEX + ">" + obj.getOpciones() + "</textarea>";
     var comp = "<textarea id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' rows='4' tabindex=" + TAB_INDEX + ">" + obj.getDato() + "</textarea>";
     comp = comp + crearBotonAgregarSubcampoRepetible(obj);
 
     $("#div" + obj.getIdCompCliente()).append(comp);
 // FIXME     y esto???
     $("#texta" + obj.getIdCompCliente()).val(obj.getDatoReferencia());
-//     $(crearBotonEliminarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
-//     $(crearBotonAgregarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
     crearBotones(obj);
 }
 
@@ -1769,9 +1779,6 @@ function crearAuto(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='"+ obj.getIdCompCliente() +"' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+" class='horizontal' >";
 
     $("#div" + obj.getIdCompCliente()).append(comp);
-//     $(crearBotonEliminarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
-//     $(crearBotonAgregarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
-// TODO estoy probando
     crearBotones(obj);
     comp = "<div class='icon_agregar horizontal' onclick=agregarTablaReferencias('" + obj.getReferenciaTabla() + "') title='Agregar referencia al subcampo " + obj.getSubCampo() + " para el campo " + obj.getCampo() + "' />"
     $(comp).insertAfter("#div" + obj.getIdCompCliente());
@@ -1779,8 +1786,22 @@ function crearAuto(obj){
     //se crea un input hidden para guardar el ID del elemento de la lista que se selecciono
     comp = crearHidden(obj);
     $(comp).insertAfter("#div" + obj.getIdCompCliente());
-   
+    
+    
+    if((obj.getCampo() == '773')&&(obj.getSubCampo() == 'a')){
+        // FIXME parche para el doble combo de analiticas
+        var comp = "<div id='ediciones'></div>";
+        $(comp).insertAfter("#div" + obj.getIdCompCliente());
+    }      
 }
+
+// function crearAutoNivel2(obj){
+//     crearAuto(obj);
+//     
+// // FIXME parche para el doble combo de analiticas
+//     var comp = "<div id='ediciones'></div>";
+//     $(comp).insertAfter("#div" + obj.getIdCompCliente());
+// }
 
 function crearCalendar(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+" class='horizontal'>";
