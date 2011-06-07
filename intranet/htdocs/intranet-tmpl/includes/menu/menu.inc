@@ -502,7 +502,16 @@
 		                                [% PERL %]
 		                                    print C4::AR::Filtros::link_to( text =>     "[% 'Configuraci&oacute;n LDAP' | i18n %]",
 		                                                                    url =>      "[% url_prefix %]/admin/global/ldap_config.pl",
-		                                                                    title =>    "[% 'Feriados' | i18n %]"
+		                                                                    title =>    "[% 'Configuraci&oacute;n LDAP' | i18n %]"
+		                                                                ) ;
+		                                [% END %]
+		                    </li>
+		                    </li>
+		                    		                    <li>
+		                                [% PERL %]
+		                                    print C4::AR::Filtros::link_to( text =>     "[% 'Configuraci&oacute;n de Estilos' | i18n %]",
+		                                                                    url =>      "[% url_prefix %]/admin/global/estilos_config.pl",
+		                                                                    title =>    "[% 'Configuraci&oacute;n de Estilos' | i18n %]"
 		                                                                ) ;
 		                                [% END %]
 		                    </li>

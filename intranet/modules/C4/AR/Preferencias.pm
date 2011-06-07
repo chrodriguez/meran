@@ -208,6 +208,21 @@ sub getPreferenciasByCategoria{
 }
 
 =item
+    Devuelve una referencia con todas las preferencias filtradas por categoria, con like categoria
+=cut
+sub getPreferenciasLikeCategoria{
+    my ($str)=@_;
+    my $preferencias_array_ref;
+    my $prefTemp = C4::Modelo::PrefPreferenciaSistema->new();
+  
+    $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( 
+                                        query => [ categoria=> { like => '%'.$str.'%' }],
+                                ); 
+
+    return (scalar($preferencias_array_ref), $preferencias_array_ref);
+}
+
+=item
     Misma funcion que arriba, pero devuelve una hash armada
 =cut
 sub getPreferenciasByCategoriaHash{
