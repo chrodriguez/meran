@@ -29,6 +29,7 @@ use vars qw(@EXPORT_OK @ISA),qw($PREFERENCES);
     &getMenuPreferences
     &getPreferenciasByArray
     &verificar_preferencias
+    &getPreferenciasLikeCategoria
 );
 
 
