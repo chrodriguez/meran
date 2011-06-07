@@ -21,13 +21,6 @@ my ($template, $session, $t_params)= get_template_and_user({
 						});
 
 
-
-#Para mandar la dir de mail
-# getpatroninformation DEPRECATED
-# my ($borr, $flags) = getpatroninformation($t_params->{'loggedinuser'},"");
-# my $borr= $session->param('borrowernumber');
-# if ($borr and ($borr->{'emailaddress'})){  $template->param(MAIL =>$borr->{'emailaddress'} ); }
-
 my %shelflist;
 
 my $obj=$input->param('obj');

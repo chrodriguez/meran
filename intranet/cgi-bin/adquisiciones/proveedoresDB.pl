@@ -43,7 +43,7 @@ Se guarda la modificacion los datos del Proveedor
 =cut
 elsif($tipoAccion eq "GUARDAR_MODIFICACION_PROVEEDOR"){
 
-      my ($loggedinuser, $session, $flags) = checkauth( 
+      my ($nro_socio, $session, $flags) = checkauth( 
                                                $input, 
                                                $authnotrequired,
                                                {   ui               => 'ANY', 
