@@ -299,6 +299,8 @@ CREATE TABLE IF NOT EXISTS `cat_registro_marc_n3` (
   KEY `cat_registro_marc_n3_n2` (`id2`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
+ALTER TABLE `cat_registro_marc_n3` ADD `codigo_barra` VARCHAR( 255 ) NOT NULL AFTER `id1` , ADD `signatura` VARCHAR( 255 ) NOT NULL AFTER `codigo_barra` ;
+
 DROP TABLE IF EXISTS `cat_z3950_cola`;
 
 CREATE TABLE IF NOT EXISTS `cat_z3950_cola` (
