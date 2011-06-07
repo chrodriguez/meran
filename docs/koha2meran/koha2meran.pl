@@ -338,7 +338,7 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
                                             if ($item->{$_->{'campoTabla'}}){
                                                      # Si no es 0 va con el valor original
 							  my $estado = getEstado($item->{$_->{'campoTabla'}}) || 'STATE000'; #Si no se encuentra la disponibilidad, de baja.
-                                                          $val='ref_estado@'.$item->{$_->{'campoTabla'}};
+                                                          $val='ref_estado@'.$estado;
                                                     }
                                                     else {
                                                      # Si es 0, está disponible, va con el nuevo estado que es STATE002

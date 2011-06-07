@@ -8,7 +8,8 @@
  body {font-size:62.5%; background-color:rgb(255,255,255); font-family:verdana,arial,sans-serif;} /*Font-size: 1.0em = 10px when browser default size is 16px*/
  
 body input[type="text"]:focus{
-  background: Wheat;
+  background: #dae0ec;
+  border: 1px solid #C8C8C8;
 }
 
 .click {
@@ -39,7 +40,7 @@ body textarea:focus{
 /********************/
 /*  HEADER SECTION  */
 /********************/
-.sitelogo {width:60px; height:40px; position:absolute; z-index:1; margin:22px 0 0 20px; background:url(../imagenes/bg_head_top_logo.jpg); }
+.sitelogo {width:36px; height:40px; position:absolute; z-index:1; margin:22px 0 0 20px; background:url(../imagenes/bg_head_top_logo.jpg); }
 .sitename {width:300px; height:45px; position:absolute; z-index:1; margin:20px 0 0 90px; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
 .sitename h1 {font-size:240%;}
 .sitename h2 {margin:-4px 0 0 0; color:rgb(125,125,125); font-size:120%;}
@@ -62,7 +63,7 @@ body textarea:focus{
 .nav_logged {width:200px; position:relative; z-index:3; margin-right:2%; float: right; clear: both; text-align: right; color: #505050; font-size: 10pt;color: #467AA7;font-weight: bold;text-decoration: none;}
 
 .sitemessage {width:462px; height:100px; position:relative; z-index:1; margin-right:50px; float:right; color:rgb(234,239,247); /*xoverflow:visible !important /*Activate if Firefox print problems*/; overflow:hidden /*IE6*/; clear:both;}
-.sitemessage h1 {width:460px; text-align:right; font-size:230%; color:#666666; margin-top:8px;}
+.sitemessage h1 {width:460px; text-align:right; font-size:230%; color:#DAE0EC; margin-top:8px;}
 .sitemessage h2 {float:right; width:330px; margin:8px 0 0 0; text-align:right; line-height:100%; font-size:130%;}
 .sitemessage h3 {float:right; width:270px; margin:10px 0 0 0; text-align:right; font-size:140%;}
 .sitemessage h3 a {text-decoration:none; color:rgb(234,239,247);}
@@ -74,22 +75,22 @@ body textarea:focus{
 .nav2 ul li ul {display:none; border:none;}
 .nav2 ul li ul {margin-left:-30px; padding:0 30px 30px 30px; background:url(../imagenes/bg_head_bottom_nav_hover.gif) top center;} /*Sticky hover zones*/
 .nav2 ul li a {float:left; display:block; height:3.1em; line-height:3.1em; padding:0 16px 0 16px; text-decoration:none; font-weight:bold; color: rgb(100,100,100);}
-.nav2 ul li:hover {width:auto;}
+.nav2 ul li:hover {width:auto; background: #DAE0EC;}
 .nav2 table {position:absolute; z-index:999; top:0; left:0; border-collapse:collapse;}
 
 /*Non-IE6*/
-.nav2 ul li:hover a {background-color:rgb(210,210,210); text-decoration:none;} /*Color main cells hovering mode*/
+.nav2 ul li:hover a {background-color:#DAE0EC; text-decoration:none;} /*Color main cells hovering mode*/
 .nav2 ul li:hover ul {display:block; position:absolute; z-index:998; top:3.0em; margin-top:0.1em; left:0;}
 .nav2 ul li:hover ul li ul {display: none;}
 .nav2 ul li:hover ul li a {display:block; width:10em; height:auto; line-height:1.3em; margin-left:-1px; padding:4px 16px 4px 16px; border-left:solid 1px rgb(175,175,175); border-bottom: solid 1px rgb(175,175,175); background-color:rgb(237,237,237); font-weight:normal; color:rgb(50,50,50);} /*Color subcells normal mode*/
-.nav2 ul li:hover ul li a:hover {background-color:rgb(210,210,210); text-decoration:none;} /*Color subcells hovering mode*/
+.nav2 ul li:hover ul li a:hover {background-color:#DAE0EC; text-decoration:none;} /*Color subcells hovering mode*/
 
 /*IE6*/
-.nav2 ul li a:hover {background-color:rgb(210,210,210); text-decoration:none;} /*Color main cells hovering mode*/
+.nav2 ul li a:hover {background-color:#DAE0EC; text-decoration:none;} /*Color main cells hovering mode*/
 .nav2 ul li a:hover ul {display:block; position:absolute;z-index:997; top:3.1em; t\op:3.0em; left:0; marg\in-top:0.1em;}
 .nav2 ul li a:hover ul li a {display:block; w\idth:10em; height:1px; line-height:1.3em; padding:4px 16px 4px 16px; border-left:solid 1px rgb(175,175,175); border-bottom: solid 1px rgb(175,175,175); background-color:rgb(237,237,237); font-weight:normal; color:rgb(50,50,50);} /*Color subcells normal mode*/
 .nav2 ul li a:hover ul li a ul {visibility:hidden; height:0px; width:0px; position:absolute; z-index: 997;}
-.nav2 ul li a:hover ul li a:hover {background-color:rgb(210,210,210); text-decoration:none;} /*Color subcells hovering mode*/
+.nav2 ul li a:hover ul li a:hover {background-color:#DAE0EC; text-decoration:none;} /*Color subcells hovering mode*/
 
 .header-breadcrumbs ul {float:left; width:560px; list-style:none; padding:0 0 0 15px; font-family:verdana,arial,sans-serif;}
 .header-breadcrumbs ul li {display:inline; padding:0 0 0 10px; background:transparent url(../imagenes/bg_bullet_arrow.gif) no-repeat 0 50%; font-weight:bold; color:rgb(125,125,125); font-size:100%;}
@@ -120,10 +121,15 @@ body textarea:focus{
 .column3-unit-right {float:right; width:120px; margin-bottom:10px !important /*Non-IE6*/; margin-bottom:5px /*IE6*/;}
 
 /* MAIN SUBCONTENT */
-.subcontent-unit-border {width:183px; margin:0 0 2.0em 0; padding:0 0 5px 0; border:solid 1px rgb(254,154,46); background:rgb(251,245,239);}
-.subcontent-unit-border-green {width:183px; margin:0 0 2.5em 0; padding:0 0 10px 0; border:solid 1px rgb(160,214,81); background-color:rgb(227,246,206);}
+ .subcontent-unit-border {-moz-background-clip:border;-moz-background-inline-policy:continuous;-moz-background-origin:padding;background:#DAE0EC none repeat scroll 0 0;border:1px solid #4E6595;margin:0 0 2em;padding:0 0 5px;width:183px;}.subcontent-unit-border-green {width:183px; margin:0 0 2.5em 0; padding:0 0 10px 0; border:solid 1px rgb(160,214,81); background-color:rgb(227,246,206);}
 .subcontent-unit-border-blue  {width:183px; margin:0 0 2.5em 0; padding:0 0 10px 0; border:solid 1px rgb(137,170,214); background-color:rgb(213,225,240);}
-.subcontent-unit-border-orange {width:183px; margin:0 0 2.5em 0px; padding:0 0 10px 0; border:solid 1px rgb(232,177,13); background-color:rgb(248,224,150);}
+.subcontent-unit-border-orange {
+	background-color:#DAE0EC;
+	border:1px solid #4E6595;
+	margin:0 0 2.5em 0;
+	padding:0 0 10px;
+	width:183px;
+}
 
 .subcontent-unit-noborder {width:185px; margin:0 0 2.5em 0; padding:0 0 10px 0; background:rgb(235,235,235);}
 .subcontent-unit-noborder-green {width:185px; margin:0 0 2.5em 0; padding:0 0 10px 0; background-color:rgb(217,239,185);}
@@ -210,13 +216,12 @@ div.pagination span.current {
     padding: 2px 3px 2px 3px;
     margin: 2px;
     font-weight: bold;
-    background-color:#A0B355;
+    background-color:#DAE0EC;
     color: InfoBackground;
     }
 div.pagination span.disabled {
         padding: 2px 5px 2px 5px;
         margin: 2px;
-        background-color:#c1c1c1;
         color: #797979;
     }
 
@@ -450,7 +455,7 @@ li.detalle_barra_circulacion{
 .main-navigation ol li {list-style-position:outside; margin:0 0 0.4em 0; font-size:110%;}
 
 /* MAIN CONTENT */
-.main-content h1.pagetitle {margin:0 0 0 0px; padding:0 0 2px 0; font-family:"trebuchet ms",arial,sans-serif; color:#EDA45D; font-weight:normal; font-size:194%;}
+.main-content h1.pagetitle {margin:0 0 0 0px; padding:0 0 2px 0; font-family:"trebuchet ms",arial,sans-serif; color:#4E6595; font-weight:normal; font-size:194%;}
 .main-content h1.block {clear:both; margin:1.0em 0 0em 0; padding:2px 0 2px 2px; background:rgb(190,190,190); font-family:"trebuchet ms",arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:220%;}
 .main-content h1 {clear:both; margin:1.0em 0 0.5em 0; font-family:"trebuchet ms",arial,sans-serif; color:rgb(80,80,80); font-weight:normal; font-size:210%;}
 .main-content h2 {clear:both; margin:1.0em 0 0.5em 0; font-family:"trebuchet ms",arial,sans-serif; color:rgb(80,80,80); font-weight:normal; font-size:170%;}
@@ -470,8 +475,7 @@ li.detalle_barra_circulacion{
 
 .main-content table {clear:both; width:100%; /*margin:2.0em 0 0.2em 20px;*/ border-collapse:collapse; empty-cells:show; background-color:rgb(233,232,244);}
 .main-content table th.top {height:3.5em; padding:0 7px 0 7px; empty-cells:show; background-color:rgb(175,175,175); text-align:left; color:rgb(255,255,255); font-weight:bold; font-size:110%;}
-.main-content table th {height:3.0em; /*padding:2px 20px 2px 7px;*/ border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(237,164,93); text-align:center; color:rgb(80,80,80); font-weight:bold; font-size:10pt;}
-.main-content table td {padding:2px 10px 2px 10px; border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(220,220,220); text-align:left; font-weight:normal; color:rgb(80,80,80); font-size:10pt;}
+.main-content table th {background-color:#4E6595;border:2px solid #FFFFFF;color:#FFFFFF;font-size:10pt;font-weight:bold;height:3em;text-align:center;}.main-content table td {padding:2px 10px 2px 10px; border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(220,220,220); text-align:left; font-weight:normal; color:rgb(80,80,80); font-size:10pt;}
 p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,80,80); font-size:110%;}
 
 .main-content ul {list-style:none; margin:0.5em 0 1.0em 0;}
@@ -479,7 +483,7 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 .main-content ol {margin:0.5em 0 1.0em 20px !important /*Non-IE6*/; margin:0.5em 0 1.0em 25px /*IE6*/;}
 .main-content ol li {list-style-position:outside; margin:0 0 0.2em 0; line-height:1.4em; font-size:120%;}
 
-.contactform {width:440px; margin:2.0em 0 0 0; padding:10px 10px 0 10px; border:solid 1px rgb(237,164,93); background-color:rgb(244,244,244);}
+.contactform {width:440px; margin:2.0em 0 0 0; padding:10px 10px 0 10px; border:1px solid #4E6595; background-color:rgb(244,244,244);}
 .contactform fieldset {padding:20px 0 0 0 !important /*Non-IE6*/; padding:0 /*IE6*/; margin:0 0 20px 0; border:solid 1px rgb(220,220,220);}
 .contactform fieldset legend {margin:0 0 0 5px !important /*Non-IE*/; margin:0 0 20px 5px /*IE6*/; padding:0 2px 0 2px; color:rgb(80,80,80); font-weight:bold; font-size:130%;}
 .contactform label.left {float:left; width:30%; margin:0 0 0 10px; padding:2px; font-size:110%;}
@@ -487,16 +491,24 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 .contactform input.field {width:275px; padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
 .contactform textarea {width:275px; padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
 .contactform input.button {float:right; width:9.0em; margin-right:20px; padding:1px !important /*Non-IE6*/; padding:0 /*IE6*/; background:rgb(230,230,230); border:solid 1px rgb(150,150,150); text-align:center; font-family:verdana,arial,sans-serif; color:rgb(150,150,150); font-size:110%;}
-.contactform input.button:hover {cursor: pointer; border:solid 1px rgb(80,80,80); background:rgb(220,220,220); color:rgb(80,80,80);}
+.contactform input.button:hover {cursor: pointer; border:solid 1px grey; background:rgb(220,220,220); color:rgb(80,80,80);}
 
 
 
 /* MAIN SUBCONTENT */
-.main-subcontent h1 {clear:both; margin:0 0 10px 0; padding:4px 10px 3px 10px; background-color:rgb(237,164,93); font-family:"trebuchet ms",arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:140%;}
+.main-subcontent h1 {clear:both; margin:0 0 10px 0; padding:4px 10px 3px 10px; background-color:#4E6595; font-family:"trebuchet ms",arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:140%;}
 .main-subcontent h1.green {clear:both; margin:0 0 5px 0; padding:4px 10px 3px 10px; background-color:rgb(153, 204, 102); font-family:"trebuchet ms",verdana,arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:140%;}
 .main-subcontent h1.blue {clear:both; margin:0 0 5px 0; padding:4px 10px 3px 10px; background-color:rgb(137,170,214); font-family:"trebuchet ms",verdana,arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:140%;}
-.main-subcontent h1.orange {clear:both; margin:0 0 5px 0; padding:4px 10px 3px 10px; background-color:rgb(232,177,13); font-family:"trebuchet ms",verdana,arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:140%;}
- /* Note: h2 non-existent, to make HTML-code interchangeable between 'main-navigation' and 'main-subcontent' */
+.main-subcontent h1.orange {
+	background-color:#4E6595;
+	clear:both;
+	color:#FFFFFF;
+	font-family:"trebuchet ms",verdana,arial,sans-serif;
+	font-size:140%;
+	font-weight:bold;
+	margin:0 0 5px;
+	padding:4px 10px 3px;
+} /* Note: h2 non-existent, to make HTML-code interchangeable between 'main-navigation' and 'main-subcontent' */
 .main-subcontent h3 {clear:both; margin:1.0em 10px 0.5em 10px; color:rgb(80,80,80); font-weight:bold; font-size:110%;}
 .main-subcontent p {clear:both; margin:0 10px 1.0em 10px; color:rgb(80,80,80); line-height:1.3em; font-size:110%;}
 .main-subcontent p.center {text-align:center;}
@@ -526,7 +538,8 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 
 
 /* FORMULARIO RECOMENDACION */
-.recomendacionform {width:114%; margin:2.0em 0 0 0; padding:10px 10px 0 10px; border:solid 1px rgb(237,164,93); background-color:rgb(244,244,244);}
+
+.recomendacionform {width:114%; margin:2.0em 0 0 0; padding:10px 10px 0 10px; border:1px solid #4E6595; background-color:rgb(244,244,244);}
 .recomendacionform fieldset {padding:20px 0 0 0 !important /*Non-IE6*/; padding:0 /*IE6*/; margin:0 0 20px 0; border:solid 1px rgb(220,220,220);}
 .recomendacionform fieldset legend {margin:0 0 0 5px !important /*Non-IE*/; margin:0 0 20px 5px /*IE6*/; padding:0 2px 0 2px; color:rgb(80,80,80); font-weight:bold; font-size:130%;}
 .recomendacionform label.left {float:left; width:24%; margin:0 0 0 10px; padding:2px; font-size:110%;}
@@ -546,7 +559,7 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 .main img.right {clear:both; float:right; margin:3px 0 7px 10px; padding:1px; border:1px solid rgb(150,150,150);}
 
 .main a {color:rgb(70,122,167); font-weight:bold; text-decoration:none;}
-.main-content h1 a {color:#fca44f; font-weight:normal; text-decoration:none; margin:20px; }
+.main-content h1 a {color:#4E6595; font-weight:normal; text-decoration:none; margin:20px; }
 .main a:hover {color:rgb(42,90,138); text-decoration:underline;}
 .main a:visited {color:rgb(42,90,138);}
 

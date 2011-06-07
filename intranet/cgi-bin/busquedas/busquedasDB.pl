@@ -81,6 +81,7 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
 	    $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 	    $t_params->{'SEARCH_RESULTS'}   = $array_nivel1;
         $t_params->{'cantidad'}         = $cantidad;
+        $t_params->{'signatura_filter'} = $obj->{'signatura'} || 0;
 
     }elsif($tipoAccion eq "BUSQUEDA_POR_BARCODE"){
         my $funcion                     = $obj->{'funcion'};
