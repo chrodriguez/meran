@@ -7,4 +7,5 @@ UPDATE `usr_socio` SET id_categoria=5 WHERE cod_categoria='EG';
 UPDATE `usr_socio` SET id_categoria=6 WHERE cod_categoria='PG';
 UPDATE `usr_socio` SET id_categoria=7 WHERE cod_categoria='EX';
 UPDATE `usr_socio` SET id_categoria=8 WHERE cod_categoria='IB';
+UPDATE `usr_socio` SET id_categoria=9 WHERE cod_categoria='BB';
 ALTER TABLE `usr_socio` DROP `cod_categoria`;
