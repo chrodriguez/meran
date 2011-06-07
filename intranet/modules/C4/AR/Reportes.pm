@@ -18,6 +18,7 @@ use vars qw(@EXPORT_OK @ISA);
   &estantesVirtuales
   &listarItemsDeInventarioPorSigTop
   &listarItemsDeInventarioPorBarcode
+
 );
 
 sub altasRegistro {
@@ -311,6 +312,8 @@ sub listarItemsDeInventarioEntreSigTops{
     
     my($result, $info_reporte)= armarResult($cat_nivel3_array_ref);
 
+#     my($info_reporte)= armarInforme($cat_nivel3_array_ref);
+
     return ($cat_nivel3_array_ref_count, $result, $info_reporte);
 }
 
@@ -395,13 +398,14 @@ sub listarItemsDeInventarioEntreBarcodes{
 
     my $cant  = scalar(@$cat_nivel3_array_ref);
     
-    my($result, $info_reporte)= armarResult($cat_nivel3_array_ref);
+    my($result)= armarResult($cat_nivel3_array_ref);
+  
+    my ($info_reporte);
+
+#     my($info_reporte)= armarInforme($cat_nivel3_array_ref);
 
     return ($cat_nivel3_array_ref_count, $result, $info_reporte);
 }
-
-
-
 
 
 sub armarResult{
@@ -409,7 +413,6 @@ sub armarResult{
     my ($cat_nivel3_array_ref) = @_;
 
     my @result;
-    my @info_reporte;
 
     foreach my $reg_nivel_3 (@$cat_nivel3_array_ref){
           my %hash_result;
@@ -420,14 +423,44 @@ sub armarResult{
           $hash_result{'nivel2'}=  @$nivel2[0];
           $hash_result{'nivel3'}= $reg_nivel_3;
 
-          push(@info_reporte, \%hash_result);
           push(@result, \%hash_result);
     }
 
-    return(\@result, \@info_reporte);
+    return(\@result);
 }
 
 
+sub armarInforme{
+
+    my ($cat_nivel3_array_ref) = @_;
+
+    my @informe;
+
+#     my @headers= ("Código de barra", "Signatura Topográfica", "Autor", "Título", "Editor", "Edición", "UI Origen", "UI Poseedora");
+
+#     push(@informe,\@headers);
+
+    foreach my $reg_nivel_3 (@$cat_nivel3_array_ref){
+          my %hash_result;
+          my $nivel1 = C4::AR::Nivel1::getNivel1FromId3($reg_nivel_3->getId3);
+          my $nivel2 = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
+
+          $hash_result{'codigo_barra'}= $reg_nivel_3->getCodigoBarra; 
+          $hash_result{'signatura'}= $reg_nivel_3->getSignatura;
+# @$nivel2[0]
+
+          $hash_result{'autor'}= $nivel1->getAutor;
+          $hash_result{'titulo'}= $nivel1->getTitulo;
+          $hash_result{'editor'}= @$nivel2[0]->getEditor;
+          $hash_result{'edicion'}= @$nivel2[0]->getEdicion." ".@$nivel2[0]->getAnio_publicacion ;
+          $hash_result{'ui_origen'}= $reg_nivel_3->getId_ui_origen;
+          $hash_result{'ui_poseedora'}=$reg_nivel_3->getId_ui_poseedora;       
+              
+          push(@informe, \%hash_result);
+    }
+
+    return(\@informe);
+}
 
 
 sub getEstantes {
@@ -696,6 +729,7 @@ sub toXLS {
 
 	my $path      = $reports_dir . '/' . $filename;
 
+    C4::AR::Debug::debug($path);
     
 	my $workbook  = Spreadsheet::WriteExcel->new($path);
 	

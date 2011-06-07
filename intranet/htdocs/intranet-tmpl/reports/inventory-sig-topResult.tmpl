@@ -5,6 +5,7 @@
     [% "La cantidad Total de ejemplares es:" | i18n %] [% cantidad %]
     <div class="contenedor_paginador">[% paginador %]</div>
 </p>
+
 <table id="tablaResult" class="datos_tabla" border="0" cellspacing="0" cellpadding="0" width="100%">
     <tr class="titulo_tabla_resultado click">
 
@@ -57,9 +58,8 @@
     [% END %]
 </table>
 
-<br><br>
-
       <div class="buttonContainerHorizontal">
+     
           [% PERL %]
                   print C4::AR::Filtros::to_Button( 
                                                       text    =>  "[% "Exportar XLS" | i18n %]",
@@ -68,4 +68,5 @@
                                                       onClick =>  "exportarXLS();",
                                                   );
           [% END %]
+     
       </div>

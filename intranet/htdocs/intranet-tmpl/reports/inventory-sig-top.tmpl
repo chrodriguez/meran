@@ -1,6 +1,7 @@
 [% INCLUDE "intranet-top.inc" %]
 
 <script type="text/javascript" src="/intranet-tmpl/estadisticas/estadisticas.js"></script>
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/tabletojson.js"> </script>
 
 <script>
 
@@ -13,27 +14,6 @@
 
     function changePage(ini){
         objAH.changePage(ini);
-    }
-
-    function exportarXLS(){
-            $("#tablaResult").tabletojson({
-                    headers: "Código de barra, Signatura Topográfica, Autor, Título, Editor, Edición, UI Origen, UI Poseedora",
-                    attribHeaders: "{}",
-                    returnElement: "#table",
-                    complete: function(x){
-                        objAH                     = new AjaxHelper(updateExportarXLS);
-                        objAH.url                 = URL_PREFIX+"/reports/inventory-sig-topResult.pl";
-                        objAH.debug               = true;
-                        objAH.showOverlay         = true;
-                        objAH.table               = JSONstring.toObject(x);
-                        objAH.accion               = 'EXPORTARXLS';
-                        objAH.sendToServer();
-                    }
-              })
-    }
-
-    function updateExportarXLS(responseText){
-     
     }
 
 
@@ -104,8 +84,30 @@
         objAH.id_ui             = $("#combo_ui_signatura").val();
 	    //se envia la consulta
 	    objAH.sendToServer();
+      }
+    
+     function exportarXLS(){
+        objAH                   = new AjaxHelper(updateInfo);
+        objAH.debug             = true;
+        objAH.showOverlay       = true;
+        objAH.url               = URL_PREFIX+"/reports/inventory-sig-topResult.pl";
+        objAH.sigtop            = $("#sigtop").val();
+        objAH.desde_signatura   = $("#desde_signatura").val();
+        objAH.hasta_signatura   = $("#hasta_signatura").val();
+        objAH.barcode           = $("#barcode").val();
+        objAH.desde_barcode     = $("#desde_barcode").val();
+        objAH.hasta_barcode     = $("#hasta_barcode").val();
+        objAH.accion            = "EXPORTAR_XLS";
+        objAH.funcion           = "changePage";
+        objAH.id_ui             = $("#combo_ui_signatura").val();
+        //se envia la consulta
+        objAH.sendToServer();
     }
     
+
+   
+
+
     function updateInfo(responseText){
 	    $("#result").html(responseText);
 	    zebra("datos_tabla");

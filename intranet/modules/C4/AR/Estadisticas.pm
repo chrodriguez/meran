@@ -11,6 +11,7 @@ require Exporter;
 use C4::Date;
 use C4::AR::Busquedas;
 
+
 use vars qw(@EXPORT @ISA);
 
 @ISA=qw(Exporter);

@@ -20,6 +20,7 @@ use HTML::Entities;
 use POSIX qw(ceil floor); 
 use JSON;
 use C4::AR::Preferencias;
+use C4::AR::PedidoCotizacion;
 use URI::Escape;
 # FIXME Matiasp: Comentado por error de carga de módulos (Attempt to reload %s aborted.)
 # use C4::AR::Presupuestos;
