@@ -1788,6 +1788,7 @@ function crearAuto(obj){
     $(comp).insertAfter("#div" + obj.getIdCompCliente());
     
     
+// TODO parche FEO
     if((obj.getCampo() == '773')&&(obj.getSubCampo() == 'a')){
         // FIXME parche para el doble combo de analiticas
         var comp = "<div id='ediciones'></div>";

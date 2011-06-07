@@ -43,7 +43,7 @@ my @excluding = $query->param('excluding');
 my @operator = $query->param('operator');
 my @value = $query->param('value');
 
-my ($template, $loggedinuser, $cookie);
+my ($template, $nro_socio, $cookie);
 
 if ($op eq "do_search") { #HACER LA BUSQUEDA
 
@@ -62,7 +62,7 @@ if ($op eq "do_search") { #HACER LA BUSQUEDA
                                     debug => 1,
                             });
 
-        my ($results,$campos,$count,$filename) = reportSearch(\@fieldlist,\@value, \@operator, \@excluding , \@and_or , $startfrom , $loggedinuser );
+        my ($results,$campos,$count,$filename) = reportSearch(\@fieldlist,\@value, \@operator, \@excluding , \@and_or , $startfrom , $nro_socio );
         
         my @campos=split(/,/,$campos);
         my $fields='';

@@ -37,7 +37,7 @@ $obj->{'fechaFin'} = $obj->{'enddate'};
 C4::AR::Validator::validateParams('VA001',$obj,['id_ui','fechaIni','fechaFin']);
 
 
-my $loggedinuser = $session->param('loggedinuser');
+my $nro_socio = $session->param('nro_socio');
 
 my $ini= $obj->{'ini'};
 
@@ -63,8 +63,6 @@ $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, 
 
 
 # La planilla se debe generar si se la pide explicitamente!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-# my $planilla=C4::AR::SxcGenerator::generar_planilla_prestamos($resultsdata,$loggedinuser);
 
 
 $t_params->{'estado'}= $estado;

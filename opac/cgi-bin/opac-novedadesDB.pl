@@ -15,7 +15,7 @@ my $tipoAccion          = $obj->{'tipoAccion'}||"";
 
 if($tipoAccion eq "DELETE_NOVEDAD"){
 
-    my ($loggedinuser, $session, $flags) = checkauth( 
+    my ($nro_socio, $session, $flags) = checkauth( 
                                                $input, 
                                                $authnotrequired,
                                                {   ui               => 'ANY', 
