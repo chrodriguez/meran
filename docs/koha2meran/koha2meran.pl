@@ -808,7 +808,7 @@ sub guardaNivel3MARC {
     }
 
     my $reg_marc_3 =$dbh->prepare("INSERT INTO cat_registro_marc_n3 (marc_record,id1,id2,id,codigo_barra,signatura) VALUES (?,?,?,?,?,?	)");
-       $reg_marc_3->execute($marc->as_usmarc,$biblionumber,$biblioitemnumber,$itemnumber,C4::AR::Utilidades::trim($marc->subfield("995","f")),C4::AR::Utilidades::trim($marc->subfield("995","t")));
+       $reg_marc_3->execute($marc->as_usmarc,$biblionumber,$biblioitemnumber,$itemnumber,trim($marc->subfield("995","f")),trim($marc->subfield("995","t")));
 
 }
 
@@ -919,3 +919,12 @@ sub traduccionEstructuraMarc {
     my $disp=$q_disp->fetchrow;
     return $disp;
     }
+
+sub trim{
+    my ($string) = @_;
+
+    $string =~ s/^\s+//;
+    $string =~ s/\s+$//;
+
+    return $string;
+}
