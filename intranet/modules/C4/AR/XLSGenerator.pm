@@ -28,7 +28,7 @@ sub exportarPesupuesto{
     $spread_sheet->write_bold_row($headers_planilla); 
     
     # campo hidden, id_proveedor FIXME no lo oculta
-    $spread_sheet->write_hidden_row($campos_hidden);   
+    $spread_sheet->write_bold_row($campos_hidden);   
     
     # headers tabla
     $spread_sheet->write_bold_row($headers_tabla); 
