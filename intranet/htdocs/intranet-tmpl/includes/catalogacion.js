@@ -391,8 +391,6 @@ function mostrarEstructuraDelNivel2(){
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel2);
     objAH.debug         = true;
     objAH.showOverlay   = true;  
-// 	  objAH.cache= true;
-//     objAH.showStatusIn  = 'estructuraDelNivel2';
     objAH.showOverlay   = true;
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
@@ -407,12 +405,14 @@ function updateMostrarEstructuraDelNivel2(responseText){
     //proceso la info del servidor y se crean las componentes en el cliente
     var objetos_array = JSONstring.toObject(responseText);
     procesarInfoJson(objetos_array, null); 
-//     procesarInfoJson(responseText);
-// FIXME esto no es neceario, luego de agregar o modificar se muestra un mensaje y ya se hace un scrollTo al mendaje
-//     scrollTo('nivel2Tabla');
 	//asigno el handler para el validador
 	validateForm('formNivel2',guardarModificarDocumentoN2);
     addRules();
+    
+    //dejo seleccionado el tipo de documento segun el esquema  
+    $('#'+_getIdComponente('910','a')).val($('#tipo_nivel3_id').val());  
+    //se deshabilita  
+    $('#'+_getIdComponente('910','a')).attr('disabled', true);  
 }
 
 
@@ -526,34 +526,12 @@ function registrarToggleOnChangeForBarcode(callFromBarcode){
 }
 
 function agregarN2(){
-// FIXME parche!!!!!!!
-
     $('#datos_esquema').dialog({ width: 510, position: 'center', modal: true });
-    
-//     scrollTo('tipo_nivel3_id');
-    
-//     ID_TIPO_EJEMPLAR = $('#tipo_nivel3_id').val();
-//     if( (TIENE_NIVEL_2 == 0)&&($('#tipo_nivel3_id').val() == 'SIN SELECCIONAR') ){
-//         jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);
-//         $('#tipo_nivel3_id').focus();
-//     }else{
-//         if( $('#tipo_nivel3_id').val() == 'SIN SELECCIONAR') {
-//             jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);
-//             $('#tipo_nivel3_id').focus();
-//         }else{
-//             MODIFICAR           = 0;
-//             AGREGAR_COMPLETO    = 0;
-//             
-//             mostrarEstructuraDelNivel2();
-//             inicializarSideLayers();
-//         }
-//     }
 }
 
 function seleccionar_esquema(){
-//     if(MODIFICAR ==  1){
-        close_window_esquema();
-//     }
+    inicializar(); 
+    close_window_esquema();
     
     ID_TIPO_EJEMPLAR = $('#tipo_nivel3_id').val();
     
