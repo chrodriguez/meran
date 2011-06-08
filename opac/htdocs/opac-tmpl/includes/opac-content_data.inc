@@ -27,7 +27,7 @@
         });
 
         function actualizarTabla(){
-            $("#resultNovedades").append("<img src="+imagesForJS+"/loaders/facebook_style_green.gif alt='Cargando..' />");
+            $("#resultNovedades").append("<img src="+imagesForJS+"/loaders/facebook_style_green.gif alt='Cargando..' style='border:0;' />");
             objAH               = new AjaxHelper(updateActualizarTabla);
 	        objAH.debug         = true;
 	        objAH.url           = URL_PREFIX+'/opac-novedadesDB.pl';
