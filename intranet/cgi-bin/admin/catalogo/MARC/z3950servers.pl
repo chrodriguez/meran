@@ -51,7 +51,7 @@ my $pagesize=20;
 my $op = $input->param('op');
 $searchfield=~ s/\,//g;
 
-my ($template, $session, $t_params)= get_template_and_user({template_name => "admin/z3950servers.tmpl",
+my ($template, $session, $t_params)= get_template_and_user({template_name => "admin/z3950/z3950servers.tmpl",
                                     query => $input,
                                     type => "intranet",
                                     authnotrequired => 0,

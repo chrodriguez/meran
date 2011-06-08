@@ -1,9 +1,5 @@
 [% USE HTML %]
-    <style type="text/css" media="screen">
-        .del{
-		    float:right; font-weight:bold; color:#666666
-		}
-    </style>
+
     <script type="text/javascript" language="javascript">
             
         function eliminarPublicacion(id_novedad){
@@ -31,6 +27,7 @@
         });
 
         function actualizarTabla(){
+            $("#resultNovedades").append('<img id="imagen_loader" src="./temas/default/imagenes/loadersfacebook_style_green" alt="Cargando.." />')
             objAH               = new AjaxHelper(updateActualizarTabla)
 	        objAH.debug         = true
 	        objAH.url           = 'opac-novedadesDB.pl'
