@@ -86,7 +86,7 @@ function updateGuardarModificacionUsuario(responseText){
 
 
 function save(){
-
+	startOverlay();
    $('#userDataForm').submit();
 }
 
