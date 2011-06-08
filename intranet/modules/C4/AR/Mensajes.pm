@@ -154,6 +154,7 @@ my %mensajesINTRA = (
     'P127' => 'Disculpe, no se permiten realizar operaciones fuera del horario de apertura de la biblioteca.',
     'P128' => 'El ejemplar que se intenta prestar no est&aacute; disponible para pr&eacute;stamo.',
     'P129' => 'El usuario ya tiene un ejemplar prestado del mismo grupo',
+    'P130' => 'El ejemplar que intenta prestar se encuentra asignado a otro usuario',
     'S200' => 'El usuario no puede reservar porque esta sancionado hasta el *?*',
     'S201' => 'No es posible realizar el pr&eacute;stamo porque el usuario tiene una posible sanci&oacute;n pendiente.',
     'S202' => 'Se elimin&oacute; la sanci&oacute;n a *?*, *?*, *?* con &eacute;xito.',
