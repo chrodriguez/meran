@@ -5,6 +5,6 @@
 # *.[oa]
 *~
 intranet/htdocs/uploads/covers/*.jpg
-intranet/htdocs/uploads/edocsdir/*
+intranet/htdocs/private-uploads/edocsdir/*
 intranet/htdocs/uploads/picturesdir/*
 intranet/htdocs/uploads/reports_dir/*
