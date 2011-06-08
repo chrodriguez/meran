@@ -508,7 +508,37 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 	font-weight:bold;
 	margin:0 0 5px;
 	padding:4px 10px 3px;
-} /* Note: h2 non-existent, to make HTML-code interchangeable between 'main-navigation' and 'main-subcontent' */
+}
+
+.main-subcontent h1.warning {
+    background-color:#DB0909;
+    clear:both;
+    color:#FFFFFF;
+    font-family:"trebuchet ms",verdana,arial,sans-serif;
+    font-size:140%;
+    font-weight:bold;
+    margin:0 0 5px;
+    padding:4px 10px 3px;
+}
+
+.subcontent-unit-border-warning {
+    background-color:#f5e6e6;
+    border:1px solid #DB0909;
+    margin:0 0 2.5em 0;
+    padding:0 0 10px;
+    width:183px;
+}
+
+.subcontent-unit-border-warning p{
+    font-weight: bold;
+}
+
+.subcontent-unit-border-warning p a{
+    color: #DB0909;
+}
+
+
+/* Note: h2 non-existent, to make HTML-code interchangeable between 'main-navigation' and 'main-subcontent' */
 .main-subcontent h3 {clear:both; margin:1.0em 10px 0.5em 10px; color:rgb(80,80,80); font-weight:bold; font-size:110%;}
 .main-subcontent p {clear:both; margin:0 10px 1.0em 10px; color:rgb(80,80,80); line-height:1.3em; font-size:110%;}
 .main-subcontent p.center {text-align:center;}

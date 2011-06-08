@@ -1181,8 +1181,7 @@ li {
 }
 
 .horizontal {
-	float: left;
-	margin-right: 10px;
+    margin: 0 auto;
 }
 
 .horizontal_final {

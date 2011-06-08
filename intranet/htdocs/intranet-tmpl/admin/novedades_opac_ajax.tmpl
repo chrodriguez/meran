@@ -49,10 +49,7 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <a class="" 
-                                        href="[% url_prefix %]/admin/novedades_opac.pl?token=[% token %]&id=[% novedad.id %]">
-                                        [% novedad.getCategoria %]
-                                    </a>
+                                    <a href="#">[% novedad.getCategoria %]</a>
                                 </td>
                                 <td>
                                     [% PERL %]
@@ -65,10 +62,13 @@
                                     [% END %]
                                 </td>
                                 <td>
-                                    <a class="" 
-                                        href="[% url_prefix %]/admin/editar_novedad.pl?token=[% token %]&id=[% novedad.id %]">
-                                        [% 'Editar' | i18n %]
-                                    </a>
+                                    [% PERL %]
+			                                print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
+			                                                                url =>      "[% url_prefix %]/admin/editar_novedad.pl", 
+			                                                                params =>   ["id=[% novedad.id %]"],
+			                                                                title =>    "[% 'Editar novedad' | i18n %]"
+			                                                            ) ;
+                                    [% END %]
                                 </td>
                             </tr>
                         [% END %]
