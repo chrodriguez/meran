@@ -11,7 +11,7 @@ __PACKAGE__->meta->setup(
         id     => { type => 'serial', not_null => 1 },
         id_tipo_prestamo    => { type => 'character', length => 2, not_null => 1 },
         descripcion  => { type => 'text', length => 65535 },
-        id_disponibilidad   => { type => 'integer', default => '0', not_null => 1 },
+        codigo_disponibilidad   => { type => 'varchar', default => '', length => 8, not_null => 1 },
         prestamos    => { type => 'integer', default => '0', not_null => 1 },
         dias_prestamo   => { type => 'integer', default => '0', not_null => 1 },
         renovaciones        => { type => 'integer', default => '0', not_null => 1 },
@@ -26,7 +26,7 @@ __PACKAGE__->meta->setup(
 	relationships => [
 	    disponibilidad => {
             class      => 'C4::Modelo::RefDisponibilidad',
-            column_map => { id_disponibilidad => 'id' },
+            column_map => { codigo_disponibilidad => 'codigo' },
             type       => 'one to one',
         },
     ],
@@ -58,17 +58,17 @@ sub setDescripcion{
     $self->descripcion($descripcion);
 }
 
-sub getId_disponibilidad{
+sub getCodigo_disponibilidad{
     my ($self) = shift;
 
-    return ($self->id_disponibilidad);
+    return ($self->codigo_disponibilidad);
 }
     
-sub setId_disponibilidad{
+sub setCodigo_disponibilidad{
     my ($self) = shift;
-    my ($id_disponibilidad) = @_;
+    my ($disponibilidad) = @_;
 
-    $self->id_disponibilidad($id_disponibilidad);
+    $self->codigo_disponibilidad($disponibilidad);
 }
 
 sub getPrestamos{
@@ -179,7 +179,7 @@ sub getCampo{
 
 	if ($campo eq "id_tipo_prestamo") {return $self->getId_tipo_prestamo;}
 	if ($campo eq "descripcion") {return $self->getDescripcion;}
-	if ($campo eq "id_disponibilidad") {return $self->getId_disponibilidad;}
+	if ($campo eq "codigo_disponibilidad") {return $self->getCodigo_disponibilidad;}
 	if ($campo eq "prestamos") {return $self->getPrestamos;}
 	if ($campo eq "dias_prestamo") {return $self->getDias_prestamo;}
 	if ($campo eq "renovaciones") {return $self->getRenovaciones;}
@@ -207,7 +207,7 @@ sub modificar {
 
     $self->setId_tipo_prestamo($data_hash->{'id_tipo_prestamo'});
     $self->setDescripcion($data_hash->{'descripcion'});
-    $self->setId_disponibilidad($data_hash->{'disponibilidad'});
+    $self->setCodigo_disponibilidad($data_hash->{'disponibilidad'});
     $self->setPrestamos($data_hash->{'prestamos'});
     $self->setDias_prestamo($data_hash->{'dias_prestamo'});
     $self->setRenovaciones($data_hash->{'renovaciones'});
