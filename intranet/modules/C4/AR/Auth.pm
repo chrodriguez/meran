@@ -456,7 +456,14 @@ sub _verificarSession {
     $type               = C4::AR::Utilidades::capitalizarString($type);
     
     if ($type ne $type_session){
-        C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => SESSION INVALIDA, VENIA DESDE OPAC/INTRA HACIA INTRA/OPAC");    
+        C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => SESSION INVALIDA, VENIA DESDE OPAC/INTRA HACIA INTRA/OPAC");
+        
+        if ($type eq "Opac"){
+        	$codeMSG = "U607";
+        }else{
+        	$codeMSG = "U601";
+        }
+        	    
     	return ($codeMSG,"sesion_invalida");
     }
     
@@ -564,7 +571,7 @@ sub checkauth {
                   }
                   elsif ($estado eq "sesion_invalida") { 
                       C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_invalida");
-                      _destruirSession('U406', $template_params);
+                      #_destruirSession('U406', $template_params);
                       $session->param('codMsg', $codeMSG);
                       $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/auth.pl');
                       redirectTo(C4::AR::Utilidades::getUrlPrefix().'/auth.pl'); 
