@@ -184,8 +184,10 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
 		my $dn1;
 		$dn1->{'campo'}=$_->{'campo'};
 		$dn1->{'subcampo'}=$_->{'subcampo'};
-        if($_->{'campoTabla'} eq 'author'){ $dn1->{'valor'}='cat_autor@'.$biblio->{$_->{'campoTabla'}}; }
-          else { $dn1->{'valor'}=$biblio->{$_->{'campoTabla'}};}
+		if($_->{'campoTabla'} eq 'author'){ 
+		      $dn1->{'valor'}='cat_autor@'.$biblio->{$_->{'campoTabla'}}; 
+		  }
+		  else { $dn1->{'valor'}=$biblio->{$_->{'campoTabla'}};}
 
 		$dn1->{'simple'}=1;
 		if (($dn1->{'valor'} ne '') && ($dn1->{'valor'} ne null)){push(@ids1,$dn1);}
@@ -328,15 +330,15 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
 		my $val='';
 
         if($_->{'campoTabla'} eq 'notforloan'){   
-	    my $disponibilidad = getDisponibilidad($item->{$_->{'campoTabla'}}) || $item->{$_->{'campoTabla'}};
+	    my $disponibilidad = getDisponibilidad($item->{$_->{'campoTabla'}}) || 'CIRC0001'; # Para sala por defecto.
 	    $val='ref_disponibilidad@'.$disponibilidad;
 	}
         elsif($_->{'campoTabla'} eq 'homebranch'){$val='pref_unidad_informacion@'.$item->{$_->{'campoTabla'}}; }
         elsif($_->{'campoTabla'} eq 'wthdrawn'){ 
                                             if ($item->{$_->{'campoTabla'}}){
                                                      # Si no es 0 va con el valor original
-							  my $estado = getEstado($item->{$_->{'campoTabla'}}) || $item->{$_->{'campoTabla'}};
-                                                          $val='ref_estado@'.$item->{$_->{'campoTabla'}};
+							  my $estado = getEstado($item->{$_->{'campoTabla'}}) || 'STATE000'; #Si no se encuentra la disponibilidad, de baja.
+                                                          $val='ref_estado@'.$estado;
                                                     }
                                                     else {
                                                      # Si es 0, está disponible, va con el nuevo estado que es STATE002
@@ -484,7 +486,6 @@ $biblios->finish();
         $hash{ 'historicSanctions' } = 'rep_historial_sancion';
         $hash{ 'modificaciones' } = 'rep_registro_modificacion';
         $hash{ 'persons' } = 'usr_persona';
-        $hash{ 'categories' } = 'usr_ref_categoria_socio';
         $hash{ 'borrowers' } = 'usr_socio';
         $hash{ 'deletedborrowers' } = 'usr_socio_borrado';
         $hash{ 'historialBusqueda' } = 'rep_historial_busqueda';
@@ -808,7 +809,10 @@ sub guardaNivel3MARC {
     }
 
     my $reg_marc_3 =$dbh->prepare("INSERT INTO cat_registro_marc_n3 (marc_record,id1,id2,id,codigo_barra,signatura) VALUES (?,?,?,?,?,?	)");
-       $reg_marc_3->execute($marc->as_usmarc,$biblionumber,$biblioitemnumber,$itemnumber,trim($marc->subfield("995","f")),trim($marc->subfield("995","t")));
+	my $codigo=trim($marc->subfield("995","f"));
+	my $signatura=trim($marc->subfield("995","t")) || "Signatura ".$itemnumber;# LA SIGNATURA ES OBLIGATORIA!!!
+
+       $reg_marc_3->execute($marc->as_usmarc,$biblionumber,$biblioitemnumber,$itemnumber,$codigo,$signatura);
 
 }
 

@@ -187,7 +187,7 @@ sub getFieldsArray {
 }
 
 sub reportSearch {
-        my ( $fieldlist, $value, $operator,  $excluding, $and_or, $startfrom , $loggedinuser) = @_;
+        my ( $fieldlist, $value, $operator,  $excluding, $and_or, $startfrom , $nro_socio) = @_;
 
 	  my $results;
 	  my @tables = ();# Tablas involucrados
@@ -255,7 +255,7 @@ sub reportSearch {
 	       
 	       #Generar la planilla# 
 	       
-	       $filename=generar_planilla($rescount,$nombres,$loggedinuser);
+	       $filename=generar_planilla($rescount,$nombres,$nro_socio);
 
 	       #
 	      
@@ -404,7 +404,7 @@ sub searchjoin {
 
 
 sub generar_planilla {
-	my ($results,$nombres,$loggedinuser) = @_;
+	my ($results,$nombres,$nro_socio) = @_;
 #Genero la hoja de calculo Openoffice
 ## - start sxc document
 my $sheet=new ooolib("sxc");
@@ -451,7 +451,7 @@ $j++;
 $pos++;
 }
 ##
-my $name="reporte-generico-".$loggedinuser;
+my $name="reporte-generico-".$nro_socio;
 	 $sheet->oooGenerate($name);
 	return($name);
 	}

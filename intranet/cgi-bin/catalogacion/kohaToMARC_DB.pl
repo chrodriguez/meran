@@ -18,7 +18,7 @@ my $action= $obj->{'action'}||"";
 #******* Se arma una tabla con la catalogacion de OPAC y se muestra con un tmpl********************
 if(($tabla ne "")&&($action eq "TABLARESULT")){
 
-my ($template, $loggedinuser, $cookie)= get_templateexpr_and_user({
+my ($template, $nro_socio, $cookie)= get_templateexpr_and_user({
                         template_name => "catalogacion/kohaToMARCResult.tmpl",
 						query => $input,
 						type => "intranet",

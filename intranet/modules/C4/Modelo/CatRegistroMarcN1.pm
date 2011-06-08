@@ -33,6 +33,23 @@ sub setMarcRecord{
     $self->marc_record($marc_record);
 }
 
+sub getSignaturas{
+    my ($self)          = shift;
+    
+    use C4::Modelo::CatRegistroMarcN2;
+    
+    my $array_nivel2 = C4::AR::Nivel2::getNivel2FromId1($self->getId1);
+    
+    my @signaturas;
+    
+    foreach my $nivel2 (@$array_nivel2){
+    	my $signaturas_nivel2 = $nivel2->getSignaturas;
+    	push (@signaturas, @$signaturas_nivel2);
+    }	
+    
+    return (\@signaturas);
+}
+
 =item
   sub setearLeader
 

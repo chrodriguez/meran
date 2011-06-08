@@ -35,7 +35,7 @@ my ($cantidad,$resultsdata)= C4::AR::Estadisticas::userCategReport($ui);
 # my $barras=&userCategHBars($ui,$cantidad, @resultsdata);
 # 
 # #Generar planilla.
-my $planilla=C4::AR::SxcGenerator::generar_planilla_usuario($resultsdata,$session->{'loggedinuser'});
+my $planilla=C4::AR::SxcGenerator::generar_planilla_usuario($resultsdata,$session->{'nro_socio'});
 
 $t_params->{'resultsloop'}=$resultsdata;
 $t_params->{'unidades'}= $ComboUI;

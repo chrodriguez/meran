@@ -29,7 +29,7 @@ use C4::AR::UploadFile;
 
 my $input = new CGI;
 
-my ($loggedinuser, $session, $flags) = checkauth( 
+my ($nro_socio, $session, $flags) = checkauth( 
                                                         $input, 
                                                         0,
                                                         {   ui              => 'ANY', 
@@ -41,7 +41,7 @@ my ($loggedinuser, $session, $flags) = checkauth(
 
 my $params = $input->Vars;
 
-$params->{'loggedinuser'} = $loggedinuser;
+$params->{'nro_socio'} = $nro_socio;
 
 my $msg = C4::AR::UploadFile::deleteDocument($input,$params);
 

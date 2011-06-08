@@ -31,7 +31,7 @@ use C4::AR::ImportacionIsoMARC;
 my $input = new CGI;
 
 my $theme = $input->param('theme') || "default";
-my ($template, $loggedinuser, $cookie)
+my ($template, $nro_socio, $cookie)
     = get_template_and_user({template_name => "importacionMarc.tmpl",
 
 			     query => $input,

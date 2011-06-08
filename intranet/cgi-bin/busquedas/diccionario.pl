@@ -40,7 +40,7 @@ $search->{'dictionary'}=$dictionary;
 $search->{'dicdetail'}=$dicdetail;
 
 
-my ($template, $loggedinuser, $cookie)= get_template_and_user({
+my ($template, $nro_socio, $cookie)= get_template_and_user({
                 template_name => "busquedas/diccionario.tmpl",
 			    query => $query,
 			    type => "intranet",

@@ -28,7 +28,7 @@ my ($template, $session, $t_params) = get_template_and_user({
                         debug => 1,
 			    });
 
-my $loggedinuser = $session->param('loggedinuser');
+my $nro_socio = $session->param('nro_socio');
 my $env;
 my $titulostot=0;
 my $ejemplarestot=0;
@@ -60,7 +60,7 @@ foreach my $element (@key) {
 }
 
 
-my $name=generar_planilla_estantes(\@shelvesloopshelves,$loggedinuser,$nameShelf);
+my $name=generar_planilla_estantes(\@shelvesloopshelves,$nro_socio,$nameShelf);
 
 my $cant=scalar(@shelvesloopshelves);
 

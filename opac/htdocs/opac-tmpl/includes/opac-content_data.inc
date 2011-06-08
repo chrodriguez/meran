@@ -7,13 +7,19 @@
     <script type="text/javascript" language="javascript">
             
         function eliminarPublicacion(id_novedad){
-            objAH                   = new AjaxHelper(updateEliminarPublicacion)
-            objAH.showOverlay       = true
-	        objAH.debug             = true
-	        objAH.url               = 'opac-novedadesDB.pl'
-	        objAH.id_novedad        = id_novedad
-	        objAH.tipoAccion        = 'DELETE_NOVEDAD'
-	        objAH.sendToServer()
+        
+            jConfirm(SEGURO_OCULTAR_NOVEDAD,OPAC_ALERT_TITLE, function(confirmStatus){
+                if (confirmStatus){
+                    objAH                   = new AjaxHelper(updateEliminarPublicacion)
+                    objAH.showOverlay       = false
+	                objAH.debug             = true
+	                objAH.url               = 'opac-novedadesDB.pl'
+	                objAH.id_novedad        = id_novedad
+	                objAH.tipoAccion        = 'DELETE_NOVEDAD'
+	                objAH.sendToServer()
+                } 
+            
+            })
         }
 
         function updateEliminarPublicacion(responseText){
@@ -28,8 +34,8 @@
             objAH               = new AjaxHelper(updateActualizarTabla)
 	        objAH.debug         = true
 	        objAH.url           = 'opac-novedadesDB.pl'
-            objAH.showOverlay   = true
-	        objAH.tipoAccion        = "ACTUALIZAR_TABLA_NOVEDADES"
+            objAH.showOverlay   = false
+	        objAH.tipoAccion    = "ACTUALIZAR_TABLA_NOVEDADES"
 	        objAH.sendToServer()
         }
 
