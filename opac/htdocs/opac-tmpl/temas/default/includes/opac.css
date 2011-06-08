@@ -235,6 +235,10 @@ div.pagination span.disabled {
     background: #EFEFEF;    
 }
 
+.del{
+    float:right; font-weight:bold; color:#666666
+}
+
 #mensajes{
   position: relative;
   background:#ffc;
