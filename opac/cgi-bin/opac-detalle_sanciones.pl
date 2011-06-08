@@ -10,24 +10,24 @@ use CGI;
 my $query = new CGI;
 
 my ($template, $session, $t_params)= get_template_and_user({
-                                    template_name => "opac-main.tmpl",
-                                    query => $query,
-                                    type => "opac",
+                                    template_name   => "opac-main.tmpl",
+                                    query           => $query,
+                                    type            => "opac",
                                     authnotrequired => 0,
-                                    flagsrequired => {  ui => 'ANY', 
-                                                        tipo_documento => 'ANY', 
-                                                        accion => 'CONSULTA', 
-                                                        entorno => 'undefined'},
+                                    flagsrequired   => {  ui            => 'ANY', 
+                                                        tipo_documento  => 'ANY', 
+                                                        accion          => 'CONSULTA', 
+                                                        entorno         => 'undefined'},
             });
 
 $t_params->{'opac'};
 
-my $nro_socio = C4::AR::Auth::getSessionNroSocio();
-my $san= C4::AR::Sanciones::estaSancionado($nro_socio);
-my $dateformat = C4::Date::get_date_format();
+my $nro_socio   = C4::AR::Auth::getSessionNroSocio();
+my $san         = C4::AR::Sanciones::estaSancionado($nro_socio);
+my $dateformat  = C4::Date::get_date_format();
 if ($san){
     if ($san->{'id3'}) {
-        my $aux=C4::AR::Nivel1::getNivel1FromId3($san->{'id3'});
+        my $aux = C4::AR::Nivel1::getNivel1FromId3($san->{'id3'});
         #FALTA ARMAR EL TIPO DE PRESTAMO, DE DONDE LO SACAMOS???
         $san->{'description'}.=": ".$aux->getTitulo." (".$aux->getAutor.") ";
     }
