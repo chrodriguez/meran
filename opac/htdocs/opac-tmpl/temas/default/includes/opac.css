@@ -231,7 +231,9 @@ div.pagination span.disabled {
     text-align:center;
 }
 
-
+.novedad_opac:hover{
+    background: #EFEFEF;    
+}
 
 #mensajes{
   position: relative;
