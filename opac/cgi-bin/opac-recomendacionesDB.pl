@@ -7,6 +7,7 @@ use C4::Output;
 use JSON;
 use C4::AR::Nivel2;
 use C4::AR::Nivel3;
+use C4::AR::Recomendaciones;
 use C4::AR::RecomendacionDetalle;
 
 my $input = new CGI;
@@ -75,10 +76,18 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_EDICIONES') {
                                                 'opac'
                                 );
 
-  my $id_detalle_recomendacion= C4::AR::RecomendacionDetalle::agregarDetalleARecomendacion($obj, $recom_id);
+  my ($msg_object,$id_detalle_recomendacion) = C4::AR::RecomendacionDetalle::agregarDetalleARecomendacion($obj, $recom_id);
+  C4::AR::Debug::debug("msg object : ".$msg_object->{'error'});
   
-  C4::AR::Auth::print_header($session);
-  print $id_detalle_recomendacion;
+  # preguntamos si agrego sin errores
+  if($msg_object->{'error'}){
+      # si hay error mandamos un 1 como responseText
+      C4::AR::Auth::print_header($session);
+      print "1";
+  }else{
+      C4::AR::Auth::print_header($session);
+      print $id_detalle_recomendacion;
+  }
 
  } elsif ($obj->{'tipoAccion'} eq 'CARGAR_DATOS_EDICION')   {
 

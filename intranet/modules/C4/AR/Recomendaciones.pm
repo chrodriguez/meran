@@ -14,7 +14,6 @@ use vars qw(@EXPORT @ISA);
     &agregarRecomendacion;
     &getRecomendacionesActivas;
     &getRecomendacionDetallePorId;
-    
     &getRecomendaciones;
     &getRecomendacionDetalle;
     &editarCantidadEjemplares;

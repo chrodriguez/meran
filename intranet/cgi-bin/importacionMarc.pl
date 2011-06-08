@@ -34,7 +34,7 @@ my $input = new CGI;
 
 my $theme = $input->param('theme') || "default";
 my $campoIso = $input->param('code') || "1"; 
-my ($template, $loggedinuser, $cookie)
+my ($template, $nro_socio, $cookie)
     = get_template_and_user({template_name => "importacionMarc.tmpl",
 
 			     query => $input,
