@@ -87,9 +87,9 @@ sub getNovedadesNoMostrar{
     my $novedades_array_ref = C4::Modelo::SysNovedadNoMostrar::Manager->get_sys_novedad_no_mostrar( query => \@filtros,
                                                                               );
     if(scalar(@$novedades_array_ref) > 0){
-        return ($novedades_array_ref);
+        return (scalar(@$novedades_array_ref),$novedades_array_ref);
     }else{
-        return (0);
+        return (0,0);
     }
 }
 
