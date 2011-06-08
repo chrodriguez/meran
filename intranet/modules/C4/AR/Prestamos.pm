@@ -109,7 +109,7 @@ sub _verificarMaxTipoPrestamo{
     Esta funcion devuelve los tipos de prestamos permitidos para un usuario, en un arreglo de hash.
 =cut
 sub prestamosHabilitadosPorTipo {
-    my ($id_disponibilidad, $nro_socio) = @_;
+    my ($codigo_disponibilidad, $nro_socio) = @_;
 
     #Se buscan todas las sanciones de un usuario
     my $sanciones= C4::AR::Sanciones::tieneSanciones($nro_socio);
@@ -117,7 +117,7 @@ sub prestamosHabilitadosPorTipo {
     #Trae todos los tipos de prestamos que estan habilitados
     my $tipos_habilitados_array_ref = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo(   
                                                                         query => [ 
-                                                                                id_disponibilidad   => { eq => $id_disponibilidad },
+                                                                                codigo_disponibilidad   => { eq => $codigo_disponibilidad },
                                                                                 habilitado          => { eq => 1}
                                                                             ], 
                                         );

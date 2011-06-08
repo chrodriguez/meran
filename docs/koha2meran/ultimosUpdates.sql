@@ -656,3 +656,5 @@ ALTER TABLE `cat_registro_marc_n3` ADD `created_at` DATETIME NOT NULL AFTER `upd
 ALTER TABLE `cat_estructura_catalogacion` ADD `edicion_grupal` TINYINT NOT NULL DEFAULT '1' AFTER `visible` ;
 
 ALTER TABLE `usr_socio` ADD  `lastValidation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+UPDATE `usr_persona` SET `ciudad` =1 WHERE ciudad IS NULL OR ciudad = '';
