@@ -207,6 +207,10 @@ sub modificar {
 
     $self->setId_tipo_prestamo($data_hash->{'id_tipo_prestamo'});
     $self->setDescripcion($data_hash->{'descripcion'});
+
+    if($data_hash->{'disponibilidad'} eq '0'){ $data_hash->{'disponibilidad'}='CIRC0000'; }
+    elsif($data_hash->{'disponibilidad'} eq '1'){$data_hash->{'disponibilidad'}='CIRC0001';}
+
     $self->setCodigo_disponibilidad($data_hash->{'disponibilidad'});
     $self->setPrestamos($data_hash->{'prestamos'});
     $self->setDias_prestamo($data_hash->{'dias_prestamo'});
