@@ -55,7 +55,7 @@ if($tipoAccion eq "GUARDAR_NOTA"){
 Aca se maneja el cambio de permisos para el usuario
 =cut
 elsif($tipoAccion eq "GUARDAR_PERMISOS"){
-my ($loggedinuser, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
+my ($nro_socio, $session, $flags) = checkauth($input, $authnotrequired,{borrowers=> 1},"intranet");
 	my %params;
 	$params{'id_socio'}= $obj->{'usuario'};
 	$params{'array_permisos'}= $obj->{'array_permisos'};

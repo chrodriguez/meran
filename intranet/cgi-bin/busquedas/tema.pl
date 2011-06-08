@@ -29,7 +29,7 @@ $search->{'tema'}=$tema;
 $search->{'detalle'}=$detalle;
 
 
-my ($template, $loggedinuser, $cookie)
+my ($template, $nro_socio, $cookie)
     = get_template_and_user({template_name => "busquedas/tema.tmpl",
 			     query => $query,
 			     type => "intranet",

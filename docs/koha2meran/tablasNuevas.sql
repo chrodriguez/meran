@@ -299,6 +299,8 @@ CREATE TABLE IF NOT EXISTS `cat_registro_marc_n3` (
   KEY `cat_registro_marc_n3_n2` (`id2`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
+ALTER TABLE `cat_registro_marc_n3` ADD `codigo_barra` VARCHAR( 255 ) NOT NULL AFTER `id1` , ADD `signatura` VARCHAR( 255 ) NOT NULL AFTER `codigo_barra` ;
+
 DROP TABLE IF EXISTS `cat_z3950_cola`;
 
 CREATE TABLE IF NOT EXISTS `cat_z3950_cola` (
@@ -517,18 +519,16 @@ CREATE TABLE IF NOT EXISTS `pref_servidor_z3950` (
 INSERT INTO `pref_servidor_z3950` (`servidor`, `puerto`, `base`, `usuario`, `password`, `nombre`, `id`, `habilitado`, `sintaxis`) VALUES ('z3950.loc.gov', 7090, 'voyager', NULL, NULL, 'Library of Congress', 1, 1, 'UNIMARC');
 
 DROP TABLE IF EXISTS `ref_disponibilidad`;
-
 CREATE TABLE IF NOT EXISTS `ref_disponibilidad` (
-  `id` int(11) NOT NULL auto_increment,
-  `nombre` varchar(255) NOT NULL default '',
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+  `id` int(11) NOT NULL,
+  `nombre` varchar(255) NOT NULL DEFAULT '',
+  `codigo` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
- ALTER TABLE `ref_disponibilidad` CHANGE `id` `id` INT( 11 ) NOT NULL;
-
-INSERT INTO `ref_disponibilidad` (`id`, `nombre`) VALUES
-(0, 'Domiciliario'),
-(1, 'Sala de Lectura');
+INSERT INTO `ref_disponibilidad` (`id`, `nombre`, `codigo`) VALUES
+(0, 'Domiciliario', 'CIRC0000'),
+(1, 'Sala de Lectura', 'CIRC0001');
 
 DROP TABLE IF EXISTS `ref_estado`;
 
@@ -539,25 +539,29 @@ CREATE TABLE IF NOT EXISTS `ref_estado` (
   UNIQUE KEY `nombre` (`nombre`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+
+DROP TABLE IF EXISTS `ref_estado`;
 CREATE TABLE IF NOT EXISTS `ref_estado` (
-  `id` tinyint(5) NOT NULL auto_increment,
-  `nombre` varchar(30) NOT NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `nombre` (`nombre`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+  `id` tinyint(5) NOT NULL,
+  `nombre` varchar(255) NOT NULL DEFAULT '',
+  `codigo` varchar(8) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `nombre` (`nombre`),
+  UNIQUE KEY `nombre_2` (`nombre`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-ALTER TABLE `ref_estado` CHANGE `id` `id` TINYINT( 5 ) NOT NULL ;
 
-INSERT INTO `ref_estado` (`id`, `nombre`) VALUES
-(1, 'Perdido'),
-(2, 'Compartido'),
-(3, 'Disponible'),
-(4, 'Baja'),
-(5, 'Ejemplar deteriorado'),
-(6, 'En Encuadernación'),
-(7, 'En Etiquetado'),
-(8, 'En Impresiones'),
-(9, 'En procesos técnicos');
+INSERT INTO `ref_estado` (`id`, `nombre`, `codigo`) VALUES
+(1, 'Perdido', 'STATE005'),
+(2, 'Compartido', 'STATE001'),
+(3, 'Disponible', 'STATE002'),
+(4, 'Baja', 'STATE000'),
+(5, 'Ejemplar deteriorado', 'STATE003'),
+(6, 'En Encuadernacion', 'STATE004'),
+(7, 'En Etiquetado', 'STATE006'),
+(8, 'En Impresiones', 'STATE007'),
+(9, 'En procesos tecnicos', 'STATE008');
+
 
 CREATE TABLE IF NOT EXISTS `usr_ref_tipo_documento` (
   `id` int(11) NOT NULL auto_increment,
@@ -743,3 +747,33 @@ CREATE TABLE  `ref_estado_presupuesto` (
 `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `nombre` VARCHAR( 255 ) NOT NULL
 ) ENGINE = MYISAM ;
+
+DROP TABLE IF EXISTS `usr_ref_categoria_socio`;
+CREATE TABLE IF NOT EXISTS `usr_ref_categoria_socio` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `categorycode` char(2) NOT NULL DEFAULT '',
+  `description` text,
+  `enrolmentperiod` smallint(6) DEFAULT NULL,
+  `upperagelimit` smallint(6) DEFAULT NULL,
+  `dateofbirthrequired` tinyint(1) DEFAULT NULL,
+  `finetype` varchar(30) DEFAULT NULL,
+  `bulk` tinyint(1) DEFAULT NULL,
+  `enrolmentfee` decimal(28,6) DEFAULT NULL,
+  `overduenoticerequired` tinyint(1) DEFAULT NULL,
+  `issuelimit` smallint(6) DEFAULT NULL,
+  `reservefee` decimal(28,6) DEFAULT NULL,
+  `borrowingdays` smallint(30) NOT NULL DEFAULT '14',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `categorycode` (`categorycode`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+
+INSERT INTO `usr_ref_categoria_socio` (`id`, `categorycode`, `description`) VALUES
+(1, 'ES', 'Estudiante'),
+(2, 'IN', 'Investigador'),
+(3, 'DO', 'Docente'),
+(4, 'ND', 'No Docente'),
+(5, 'EG', 'Egresado'),
+(6, 'PG', 'Postgrado'),
+(7, 'EX', 'Usuario externo'),
+(8, 'IB', 'Interbibliotecario'),
+(9, 'BB', 'Bibliotecario');

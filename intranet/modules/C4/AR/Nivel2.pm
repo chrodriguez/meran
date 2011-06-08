@@ -177,7 +177,7 @@ sub getNivel2FromId1
 sub getNivel2FromId1{
     my ($id1, $db) = @_;
     
-    $db = $db || C4::Modelo::CatRegistroMarcN3->new()->db();
+    $db = $db || C4::Modelo::CatRegistroMarcN2->new()->db();
 
     my $nivel2_array_ref = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(
                                                                         db => $db,

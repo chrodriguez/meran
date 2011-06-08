@@ -11,7 +11,7 @@ my $input = new CGI;
 
 my $mensajeError = $input->param('mensajeError')||"";
 
-my ($template, $loggedinuser, $cookie)= get_template_and_user({
+my ($template, $nro_socio, $cookie)= get_template_and_user({
                     template_name => "catalogacion/kohaToMARC.tmpl",
 			        query => $input,
 			        type => "intranet",

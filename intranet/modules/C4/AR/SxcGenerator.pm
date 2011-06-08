@@ -25,7 +25,7 @@ $VERSION = 0.01;
 #Genera la planilla del reporte  "Pr�stamos sin devolver"
 
 sub generar_planilla_prestamos {
-	my ($results,$loggedinuser) = @_;
+	my ($results,$nro_socio) = @_;
 #Genero la hoja de calculo Openoffice
 ## - start sxc document
 my $sheet=new ooolib("sxc");
@@ -92,7 +92,7 @@ foreach my $prestamo (@$results){
    $pos++;
 }
 ##
-my $name="prestamos-vencidos-".$loggedinuser;
+my $name="prestamos-vencidos-".$nro_socio;
 	 $sheet->oooGenerate($name);
 	return($name);
 
@@ -101,7 +101,7 @@ my $name="prestamos-vencidos-".$loggedinuser;
 #Genera la planilla del reporte  "Inventario"
 
 sub generar_planilla_inventario {
-my ($results,$loggedinuser) = @_;
+my ($results,$nro_socio) = @_;
 #Genero la hoja de calculo Openoffice
 ## - start sxc document
 
@@ -179,7 +179,7 @@ if ( @$results[$i]) {
 $pos++;
 }
 ##
-my $name="inventario-".$loggedinuser;
+my $name="inventario-".$nro_socio;
  $sheet->oooGenerate($name);
 return($name);
 
@@ -189,7 +189,7 @@ return($name);
 #Genera la planilla del reporte  "Estantes"
 
 sub generar_planilla_estantes {
-my ($results,$loggedinuser,$shelfname) = @_;
+my ($results,$nro_socio,$shelfname) = @_;
 
 my $titulostot=0;
 my $ejemplarestot=0;
@@ -282,7 +282,7 @@ $pos++;
 #
 
 
-my $name="estantes-".$loggedinuser;
+my $name="estantes-".$nro_socio;
  $sheet->oooGenerate($name);
 return($name);
 }
@@ -292,7 +292,7 @@ return($name);
 #Genera la planilla del reporte  "Usuarios por Categor�a"
 
 sub generar_planilla_usuario {
-	my ($results,$loggedinuser) = @_;
+	my ($results,$nro_socio) = @_;
 #Genero la hoja de calculo Openoffice
 ## - start sxc document
 #Genero la hoja de calculo Openoffice
@@ -332,7 +332,7 @@ foreach my $prestamo (@$results){
    $pos++;
 }
 
-my $name='usuarioEstadistica-'.$loggedinuser;
+my $name='usuarioEstadistica-'.$nro_socio;
 $sheet->oooGenerate($name);
 return($name);
 }
@@ -340,7 +340,7 @@ return($name);
 #Genera la planilla del reporte  "Inventario Signatura Topograficca"
 
 sub generar_planilla_inventario_sig_top {
-my ($results,$loggedinuser) = @_;
+my ($results,$nro_socio) = @_;
 #Genero la hoja de calculo Openoffice
 ## - start sxc document
 
@@ -417,7 +417,7 @@ if ( @$results[$i]) {
 $pos++;
 }
 ##
-my $name="inventario-sig-top-".$loggedinuser;
+my $name="inventario-sig-top-".$nro_socio;
  $sheet->oooGenerate($name);
 return($name);
 

@@ -72,9 +72,27 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS_REFERENCIA"){
     C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 
-}
+} elsif ($obj->{'tipoAccion'} eq 'BUSQUEDA_EDICIONES') {
+    
+    my $idNivel1=  $obj->{'id1'};
 
-elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS"){
+    my $combo_ediciones = C4::AR::Utilidades::generarComboNivel2($idNivel1);
+
+    my ($template, $session, $t_params)= get_template_and_user({
+                        template_name => "/includes/combo_ediciones.inc",
+                        query => $input,
+                        type => "intranet",
+                        authnotrequired => 1,
+                        flagsrequired => {  ui => 'ANY', 
+                                            tipo_documento => 'ANY', 
+                                            accion => 'CONSULTA', 
+                                            entorno => 'undefined'},
+                    });
+ 
+    $t_params->{'combo_ediciones'} = $combo_ediciones;
+      
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+} elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS"){
      my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
                                                 {   ui => 'ANY', 

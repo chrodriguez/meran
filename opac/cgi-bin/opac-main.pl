@@ -23,13 +23,9 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 my $nro_socio                       = $session->param('nro_socio');            
 my ($cantidad,$grupos)              = C4::AR::Nivel1::getUltimosGrupos();
-my ($cantidad_novedades,$novedades) = C4::AR::Novedades::getUltimasNovedades();
-my $novedades_no_mostrar            = C4::AR::Novedades::getNovedadesNoMostrar($nro_socio);
-
 $t_params->{'nro_socio'}            = $nro_socio;
 $t_params->{'SEARCH_RESULTS'}       = $grupos;
-$t_params->{'cantidad'}             = $cantidad_novedades;
-$t_params->{'novedades'}            = $novedades;
+$t_params->{'cantidad'}             = $cantidad;
 $t_params->{'partial_template'}     = "opac-content_data.inc";
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

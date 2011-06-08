@@ -35,6 +35,8 @@
     POR_FAVOR_INGRESE_UNA_DIR_DE_EMAIL_VALIDA= "[% 'Por favor, ingrese una direcci\u00f3n de email v\u00e1lida' | i18n %]";
     
     POR_FAVOR_INGRESE_DEPARTAMENTO= "[% 'Por favor, ingrese un departamento' | i18n %]";
+    
+    SEGURO_OCULTAR_NOVEDAD="[% 'Esta seguro que quiere ocultar esta novedad?' | i18n %]";
 
     //Mensajes para recomendaciones
 

@@ -378,7 +378,6 @@ sub _new_dbh
 		# FIXME - It should be possible to use "MySQL" instead
 		# of "mysql", "PostgreSQL" instead of "Pg", and so
 		# forth.
-	C4::AR::Debug::debug("ENTRO??");
 =item
 	my $session = CGI::Session->load();
 	my $db_name   = $context->{"config"}{"database"};

@@ -45,7 +45,7 @@ $Message_arrayref           = C4::AR::Preferencias::t_modificarVariable('reserve
 $Message_arrayref           = C4::AR::Preferencias::t_modificarVariable('smtp_server_sendmail', $smtp_server_sendmail, '',$categoria);
 
 my $msg_object              = C4::AR::Mensajes::create();
-my $mail_to                 = $socio->persona->getEmail();
+my $mail_to                 = $mailFrom; 
 my $mensaje;
 
 if($accion eq 'PROBAR_CONFIGURACION'){

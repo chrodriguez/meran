@@ -17,7 +17,7 @@ C4::AR::Debug::debug("NRO SOCIO FOTO:                 ".$nro_socio);
 
 
 
-my ($loggedinuser, $session, $flags) = checkauth( 
+my ($nro_socio, $session, $flags) = checkauth( 
                                                         $query, 
                                                         $authnotrequired,
                                                         {   ui              => 'ANY', 

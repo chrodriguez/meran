@@ -2800,6 +2800,7 @@ sub generarComboNiveles{
 
 # GENERA COMBO CON LAS EDICIONES PARA UN ID DADO
 
+# FIXME debe recibir una hash con parametros
 sub generarComboNivel2{
     my ($params) = @_;
 
@@ -2815,6 +2816,7 @@ sub generarComboNivel2{
 
     my %options_hash; 
 
+# FIXME esto tiene q estar
 #     if ( $params->{'onChange'} ){
 #         $options_hash{'onChange'}   = $params->{'onChange'};
 #     }
@@ -3500,14 +3502,14 @@ sub catalogoAutocomplete{
 
      my ($string_utf8_encoded) = @_;
 
-     $string_utf8_encoded = Encode::decode_utf8($string_utf8_encoded);
+     $string_utf8_encoded       = Encode::decode_utf8($string_utf8_encoded);
      my @data_array;
-     my %params = {};
+     my %params                 = {};
 
-     $params{'tipo'}="normal";
-     $params{'ini'}=0;
-     $params{'cantR'}=20;
-     $params{'from_suggested'}=1;
+     $params{'tipo'}            = "normal";
+     $params{'ini'}             = 0;
+     $params{'cantR'}           = 20;
+     $params{'from_suggested'}  = 1;
 
      my $session = CGI::Session->load();
      my ($cantidad, $resultado_busquedas, $suggested)= C4::AR::Busquedas::busquedaCombinada_newTemp($string_utf8_encoded, $session, \%params, 0);
@@ -3515,7 +3517,7 @@ sub catalogoAutocomplete{
      my $textout = "";
 
 
-     foreach my $documento (@$resultado_busquedas){
+      foreach my $documento (@$resultado_busquedas){
             my %has_temp;
             $has_temp{'id'}= $documento->{'id1'};
             

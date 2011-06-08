@@ -1181,8 +1181,8 @@ li {
 }
 
 .horizontal {
-	float: left;
-	margin-right: 10px;
+    margin: 0 auto;
+    float: left;
 }
 
 .horizontal_final {
@@ -2625,7 +2625,8 @@ ul.stream-tabs li.open, ul.stream-tabs li.open:hover, ul.stream-tabs li.open .ta
 body {
     font: 13px/1.5 Helvetica Neue,Arial,Helvetica,'Liberation Sans',FreeSans,sans-serif;
 }
-a {
+
+a{
     color: #2D76B9;
     text-decoration: none;
 }
@@ -4542,4 +4543,8 @@ font-size:10pt;
 .par .prestamo {
 color:#35414F;
 font-size:10pt;
+}
+
+.resultBusqueda{
+	min-width: 900px;
 }

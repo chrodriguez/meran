@@ -615,7 +615,7 @@ sub checkauth {
                                             my $login_attempts = $socio_data_temp->getLogin_attempts;
                                             my $captchaResult;
                                           
-                                            if (($login_attempts > 2) && ($query->url_param('welcome')== 1)) {      # se logueo mal mas de 3 veces, debo verificar captcha
+                                            if (($login_attempts > 2) && (!$query->url_param('welcome'))) {      # se logueo mal mas de 3 veces, debo verificar captcha
                                              
                                                     my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
                                                     my $reCaptchaChallenge  = $query->param('recaptcha_challenge_field');
@@ -633,7 +633,6 @@ sub checkauth {
                                             } else {  #else del  if ($login_attempts > 2 )
                                                     $sin_captcha = 1; 
                                             }  
-
                                             if ($sin_captcha || $captchaResult->{is_valid}){
 
                                                    

@@ -111,9 +111,11 @@ sub noMostrarNovedad{
 
 sub getUltimasNovedades{
 
+    my $pref_limite = C4::AR::Preferencias::getValorPreferencia('limite_novedades');
+
     my $novedades_array_ref = C4::Modelo::SysNovedad::Manager->get_sys_novedad( 
                                                                                 sort_by => ['id DESC'],
-                                                                                limit   => 3,
+                                                                                limit   => $pref_limite,
                                                                               );
 
     #Obtengo la cant total de sys_novedads para el paginador

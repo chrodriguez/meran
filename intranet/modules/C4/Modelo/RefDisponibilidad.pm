@@ -29,6 +29,29 @@ use Text::LevenshteinXS;
 sub paraPrestamoValue{   
     return ('CIRC0000');
 }
+
+sub getRefDisponibilidadByCodigo{
+	my ($codigo) = @_;
+	
+     my $ref_disponibilidad = C4::Modelo::RefDisponibilidad::Manager->get_ref_disponibilidad( 
+                                                 query => [ codigo => { eq => $codigo } ],
+                                     );
+
+     if($ref_disponibilidad){
+         return ($ref_disponibilidad->[0]);
+     }else{
+         return 0;
+     }
+	
+}
+sub paraPrestamoValueSearch{   
+    
+    my $ref_disponibilidad = getRefDisponibilidadByCodigo(paraPrestamoValue());
+    
+    return ($ref_disponibilidad->getNombre);
+    
+}
+
 sub paraPrestamoReferencia{
   return ('ref_disponibilidad@'.C4::Modelo::RefDisponibilidad::paraPrestamoValue());
 }

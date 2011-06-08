@@ -1,0 +1,38 @@
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend">[% "Preferencias de Estilos" | i18n %]</legend>
+    <div class="tablaResultado_preferencias" id="tablaResultado_preferencias" >
+        <table name="tablaResult" class="datos_tabla" cellspacing="0" cellpadding="0" border="0" width="100%">
+            <thead>
+                <tr class="titulo_tabla_resultado">
+                    <th width="13%">[% "Variable" | i18n %]</th>
+                    <th width="25%">[% "Valor" | i18n %]</th>
+                    <th width="39%">[% "Explicaci&oacute;n" | i18n %]</th>
+                    <th width="3%">[% "Editar" | i18n %]</th>
+                </tr>
+            </thead>
+        <tbody>
+        [% FOREACH preferencia IN preferencias %]
+            <tr>
+                <td >[% preferencia.getVariable %]</td>
+                <td >[% preferencia.getShowValue %]</td>
+                <td >[% preferencia.getExplanation %]</td>
+                <td>
+                    [% PERL %]
+                            print C4::AR::Filtros::to_Icon(    
+                                            boton   => "icon_edicion",
+                                            onClick => "modificarVariable('[% preferencia.getVariable %]','[% preferencia.getCategoria %]');",
+                                            title   => "[% 'Modificar Preferencia' | i18n %]",
+                                            alternClass => "botonCentradoTabla"
+                                    ) ;
+                    [% END %]
+                </td>
+            
+            </tr>
+        [% END %]
+        
+            </tbody>
+        </table>
+    </div>
+</fieldset>
+
+<div id="divResultado" style="clear: both;"></div>
