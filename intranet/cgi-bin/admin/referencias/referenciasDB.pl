@@ -12,7 +12,7 @@ use JSON;
 my $input = new CGI;
 my $obj=$input->param('obj');
 
-
+sleep 90;
 
 my $editing = $input->param('value') && $input->param('id');
 
