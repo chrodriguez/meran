@@ -5,59 +5,60 @@
     [% "La cantidad Total de ejemplares es:" | i18n %] [% cantidad %]
     <div class="contenedor_paginador">[% paginador %]</div>
 </p>
+      
+ 
+            <table id="tablaResult" class="datos_tabla" border="0" cellspacing="0" cellpadding="0" width="100%">
+                <tr class="titulo_tabla_resultado click">
 
-<table id="tablaResult" class="datos_tabla" border="0" cellspacing="0" cellpadding="0" width="100%">
-    <tr class="titulo_tabla_resultado click">
+                    <th onClick="ordenar('nro_inventario');">[% "C&oacute;digo de barra" | i18n %]</th>
+                    <th onClick="ordenar('signatura_topografica');">[% "Signatura Topogr&aacute;fica" | i18n %]</th>
+                    <th onClick="ordenar('autor');">[% "Autor" | i18n %]</th>
+                    <th onClick="ordenar('title');">[% "T&iacute;tulo" | i18n %]</th>
+                    <th onClick="ordenar('editor');">[% "Editor" | i18n %]</th>
+                    <th onClick="ordenar('edicion');">[% "Edici&oacute;n" | i18n %]</th>
+                    <th onClick="ordenar('ui_origen');">[% "UI Origen" | i18n %]</th>
+                    <th onClick="ordenar('ui_poseedora');">[% "UI Poseedora" | i18n %]</th>
 
-        <th onClick="ordenar('nro_inventario');">[% "C&oacute;digo de barra" | i18n %]</th>
-        <th onClick="ordenar('signatura_topografica');">[% "Signatura Topogr&aacute;fica" | i18n %]</th>
-        <th onClick="ordenar('autor');">[% "Autor" | i18n %]</th>
-        <th onClick="ordenar('title');">[% "T&iacute;tulo" | i18n %]</th>
-        <th onClick="ordenar('editor');">[% "Editor" | i18n %]</th>
-        <th onClick="ordenar('edicion');">[% "Edici&oacute;n" | i18n %]</th>
-        <th onClick="ordenar('ui_origen');">[% "UI Origen" | i18n %]</th>
-        <th onClick="ordenar('ui_poseedora');">[% "UI Poseedora" | i18n %]</th>
+                </tr>
+                
+                [% FOREACH res IN results %]
+                        <tr >
+                                <td  align="center">
+                                        [% res.nivel3.codigo_barra%]
+                                </td>
+                                <td align="center">
+                                        [% res.nivel3.signatura %]
+                                </td>
+                                <td align="center">
+                                        [% res.nivel1.getAutor %]
+                                </td>
+                                <td align="center">
+                                        [% res.nivel1.getTitulo%]
+                                </td>
+                                <td align="center">
+                                        [% IF res.nivel2.getEditor %]
+                                                [% res.nivel2.getEditor %]
+                                        [% END %]
+                                </td>
+                                <td align="center">
+                                        [% IF res.nivel2.getEdicion %]
+                                          [% res.nivel2.getEdicion %]
+                                        [% END %]
+                                        [% IF res.nivel2.getAnio_publicacion %]
+                                          ([% res.nivel2.getAnio_publicacion %])
+                                        [% END %]
+                                </td>
+                                <td align="center">
+                                        [% res.nivel3.getId_ui_origen %]
+                                </td>
+                                <td align="center">
+                                        [% res.nivel3.getId_ui_poseedora %]
+                                </td>
+                        </tr>
 
-    </tr>
-    
-    [% FOREACH res IN results %]
-            <tr >
-                    <td  align="center">
-                            [% res.nivel3.codigo_barra%]
-                    </td>
-                    <td align="center">
-                            [% res.nivel3.signatura %]
-                    </td>
-                    <td align="center">
-                            [% res.nivel1.getAutor %]
-                    </td>
-                    <td align="center">
-                            [% res.nivel1.getTitulo%]
-                    </td>
-                    <td align="center">
-                            [% IF res.nivel2.getEditor %]
-                                    [% res.nivel2.getEditor %]
-                            [% END %]
-                    </td>
-                    <td align="center">
-                            [% IF res.nivel2.getEdicion %]
-                              [% res.nivel2.getEdicion %]
-                            [% END %]
-                            [% IF res.nivel2.getAnio_publicacion %]
-                              ([% res.nivel2.getAnio_publicacion %])
-                            [% END %]
-                    </td>
-                    <td align="center">
-                            [% res.nivel3.getId_ui_origen %]
-                    </td>
-                    <td align="center">
-                            [% res.nivel3.getId_ui_poseedora %]
-                    </td>
-            </tr>
-
-    [% END %]
-</table>
-
+                [% END %]
+            </table>
+  
       <div class="buttonContainerHorizontal">
      
           [% PERL %]

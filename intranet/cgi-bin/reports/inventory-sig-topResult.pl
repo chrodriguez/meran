@@ -26,8 +26,9 @@ my $desde_signatura  = $obj->{'desde_signatura'};
 my $hasta_signatura  = $obj->{'hasta_signatura'};
 
 
+
 my $accion  = $obj->{'accion'};
-my $orden   = $obj->{'orden'} || 'barcode';
+
 my $ini     = $obj->{'ini'};
 my $funcion = $obj->{'funcion'};
 
@@ -57,25 +58,15 @@ $t_params->{'cantR'}    = $obj->{'cantR'}   = $cantR;
 # my $ini                         = ($obj->{'ini'}||'');
 
 
-
-
-
 if ($accion eq "EXPORTAR_XLS") {
 
-     if ($sigtop){ 
-         ($cant_total, $cat_nivel3, $array_hash_ref)   = C4::AR::Reportes::listarItemsDeInventarioPorSigTop($obj);
-     } elsif ($barcode){
-         ($cant_total, $cat_nivel3, $array_hash_ref)   = C4::AR::Reportes::listarItemsDeInventaroPorBarcode($obj);
-     } else {
-           if ($desde_signatura){
-                    ($cant_total, $cat_nivel3, $array_hash_ref)   = C4::AR::Reportes::listarItemsDeInventarioEntreSigTops($obj);
-           } else {
-                    ($cant_total, $cat_nivel3, $array_hash_ref)  = C4::AR::Reportes::listarItemsDeInventarioEntreBarcodes($obj);
-           }
+    ($cant_total, $cat_nivel3) = C4::AR::Reportes::consultaParaReporte($obj);
 
-      }
+    C4::AR::Debug::debug("xsfsdfsdfsdfsdfsdf".   $cat_nivel3);
+   
+    C4::AR::Utilidades::printARRAY($cat_nivel3);
 
-    my ($path, $filename)            = C4::AR::Reportes::toXLS($cant_total,1,'Pagina 1','inventario');        
+    my ($path, $filename)            = C4::AR::Reportes::toXLS($cat_nivel3,1,'Pagina 1','inventario');        
     $t_params->{'filename'}          = '/uploads/reports/'.$filename;
 
 }
@@ -84,12 +75,14 @@ if ($accion eq "EXPORTAR_XLS") {
 
 if ($accion eq "CONSULTA_POR_SIGNATURA") {
 
+     
      if ($sigtop){ 
          ($cant_total, $cat_nivel3, $array_hash_ref)   = C4::AR::Reportes::listarItemsDeInventarioPorSigTop($obj);
      } else {
          ($cant_total, $cat_nivel3, $array_hash_ref)   = C4::AR::Reportes::listarItemsDeInventarioEntreSigTops($obj);
      }
-
+     
+    
 #     my ($path, $filename)            = C4::AR::Reportes::toXLS($array_hash_ref,1,'Pagina 1','inventario');        
 #     $t_params->{'filename'}          = '/uploads/reports/'.$filename;
     $t_params->{'results'} = $cat_nivel3;
@@ -97,13 +90,14 @@ if ($accion eq "CONSULTA_POR_SIGNATURA") {
 }
 
 if ($accion eq "CONSULTA_POR_BARCODE") {
-    
+     
      if ($barcode){ 
          ($cant_total, $cat_nivel3, $array_hash_ref)  = C4::AR::Reportes::listarItemsDeInventarioPorBarcode($obj); 
      } else {
          ($cant_total, $cat_nivel3, $array_hash_ref)  = C4::AR::Reportes::listarItemsDeInventarioEntreBarcodes($obj);
      }
 #     
+      my $ui_barcode=  $obj->{'id_ui'};
 #     my ($path, $filename)           = C4::AR::Reportes::toXLS($array_hash_ref,1,'Pagina 1','inventario');
 #     $t_params->{'filename'}         = '/uploads/reports/'.$filename;
 
