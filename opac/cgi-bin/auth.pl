@@ -11,6 +11,13 @@ my $query = new CGI;
 my ($template, $t_params)= C4::Output::gettemplate("opac-main.tmpl", 'opac',1);
 
 $t_params->{'type'}='opac';
+
+my $session                 = CGI::Session->load();
+
+if ($session->param('codMsg')){
+  $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje($session->param('codMsg'),'Opac');
+}
+
 my ($session) = C4::AR::Auth::inicializarAuth($t_params);
 
 $t_params->{'partial_template'}= "opac-login.inc";
@@ -28,10 +35,6 @@ $t_params->{'loginAttempt'} = $query->param('loginAttempt') || 0;
 
 if ($t_params->{'loginAttempt'} & !($t_params->{'mostrar_captcha'}) ){
   $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje('U310','intranet');
-}
-
-if ($session->param('codMsg')){
-  $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje($session->param('codMsg'),'opac');
 }
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

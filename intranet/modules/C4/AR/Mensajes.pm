@@ -83,6 +83,7 @@ my %mensajesOPAC = (
     'U604' => 'Las claves no concuerdan.',
     'U605' => 'Compruebe el texto de verificaci&oacute;n.',
     'U606' => 'Hubo un problema en el proceso de restablecer su clave. Int&eacute;ntelo de nuevo. Si el problema persiste, dir&iacute;jase a la biblioteca.',
+    'U607' => 'Para operar en el cat&aacute;logo p&uacute;blico, debe iniciar sesi&oacute; nuevamente. Disculpe las molestias.',
 	'B400' => 'Error al intentar reservar desde OPAC, funcion C4::AR::Reservas::reservarOPAC.',
 	'B401' => '',
 	'B402' => '',
@@ -294,6 +295,7 @@ my %mensajesINTRA = (
     'U502' => 'Los permisos del usuario (*?*) no se pudieron cambiar.',
     'U503' => 'Los permisos del usuario (*?*) se agregaron con &eacute;xito.',
     'U504' => 'Los permisos del usuario (*?*) no se pudieron agregar.',
+    'U601' => 'Para operar en INTRANET, debe iniciar sesi&oacute;n nuevamente. Disculpe las molestias.',
 
     'B400' => '',
     'B401' => 'Error al intentar prestar desde INTRA, funcion C4::AR::Reservas::t_realizarPrestamo.',
@@ -462,9 +464,12 @@ sub getMensaje {
 	my($codigo,$tipo,$param)=@_;
 	my $msj="";
     
-	(($tipo eq "opac")||($tipo eq "OPAC")) ? ($msj=$mensajesOPAC{$codigo}) : ($msj=$mensajesINTRA{$codigo});
+    $tipo = C4::AR::Utilidades::capitalizarString($tipo);
+    
+	(($tipo eq "Opac")) ? ($msj=$mensajesOPAC{$codigo}):($msj=$mensajesINTRA{$codigo});
 		
     my $p;
+    
 	foreach $p (@$param){
 		$msj=~ s/\*\?\*/$p/o;
 	}
