@@ -80,8 +80,6 @@ UPDATE `pref_preferencia_sistema` SET value='1' WHERE `type` =  'bool' AND  valu
  INSERT INTO `pref_preferencia_sistema` (`variable`, `value`, `explanation`, `options`, `type`, `categoria`) VALUES
 ( 'detalle_resumido', '1', 'Muestra el detalle desde el OPAC en forma resumida', NULL, NULL, 'sistema');
  INSERT INTO `pref_preferencia_sistema` (`variable`, `value`, `explanation`, `options`, `type`, `categoria`) VALUES
-( 'defaultUI', 'DEO', 'Unidad de informacion por defecto', NULL, 'text', 'sistema');
- INSERT INTO `pref_preferencia_sistema` (`variable`, `value`, `explanation`, `options`, `type`, `categoria`) VALUES
 ( 'google_map', '', '', NULL, NULL, 'sistema');
  INSERT INTO `pref_preferencia_sistema` (`variable`, `value`, `explanation`, `options`, `type`, `categoria`) VALUES
 ( 'tema_opac_test', 'test', 'Un tema para el OPAC', NULL, NULL, 'temas_opac');
@@ -109,3 +107,5 @@ UPDATE `pref_preferencia_sistema` SET value='1' WHERE `type` =  'bool' AND  valu
 ( 'indexado', '1', '=1 indica que el indice se encuentra actualizado, 0 caso contrario (NO TOCAR)', NULL , 'bool', 'sistema');
  INSERT INTO `pref_preferencia_sistema` (`variable`, `value`, `explanation`, `options`, `type`, `categoria`) VALUES
 ( 'operacion_fuera_horario', '0', 'Se permiten las operaciones de la INTRANET fuera de horario?', NULL , 'bool', 'sistema');
+
+UPDATE pref_preferencia_sistema SET variable='defaultUI' where variable = 'defaultbranch';
