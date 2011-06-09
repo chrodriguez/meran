@@ -12,18 +12,235 @@ use vars qw($VERSION @ISA @EXPORT);
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
+    editarServidorZ3950
+    getServidorPorId
+    eliminarServidorZ3950
+    agregarServidorZ3950
 	getServidoresZ3950
 	buscarEnZ3950
 	encolarBusquedaZ3950
 	busquedasEncoladas
 	limpiarBusquedas
 	efectuarBusquedaZ3950
+	_verificarDatosServidor
 );
+
+#TODO $prov->desactivar; DESACTIVAR EL SERVIDOR
+
+
+=item
+    Esta funcion agrega un nuevo servidor z3950 a la base
+=cut
+sub editarServidorZ3950 {
+
+    use C4::Modelo::PrefServidorZ3950;
+    use C4::Modelo::PrefServidorZ3950::Manager;
+    
+    my ($id_servidor,$params)     = @_;
+    my $servidor    = getServidorPorId($id_servidor);
+    my $msg_object  = C4::AR::Mensajes::create();
+    my $db          = $servidor->db;
+    
+#    _verificarDatosServidor($param,$msg_object);
+
+    if (!($msg_object->{'error'})){
+          # entro si no hay algun error, todos los campos ingresados son validos
+          $db->{connect_options}->{AutoCommit} = 0;
+          $db->begin_work;
+
+           eval{
+              $servidor->editarServidorZ3950($params);
+              $msg_object->{'error'} = 0;
+              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S004', 'params' => []});
+              $db->commit;
+           };
+           if ($@){
+           # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
+               &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
+               $msg_object->{'error'}= 1;
+               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S005', 'params' => []} ) ;
+               $db->rollback;
+           }
+
+          $db->{connect_options}->{AutoCommit} = 1;
+    }
+    return ($msg_object);
+}
+
+=item
+    Devuelve la informacion del servidor recibido como parametro (id_servidor)
+=cut
+sub getServidorPorId{
+
+    use C4::Modelo::PrefServidorZ3950;
+    use C4::Modelo::PrefServidorZ3950::Manager;
+    
+    my ($id_servidor)     = @_;
+
+    my @filtros;
+    push(@filtros, ( id    => { eq => $id_servidor}));
+
+    my $servidor_array_ref = C4::Modelo::PrefServidorZ3950::Manager->get_pref_servidor_z3950( query => \@filtros);
+    return ($servidor_array_ref->[0]);
+
+}
+
+=item
+    Esta funcion elimina un servidor z3950. 
+    Parametros: { id_servidor }
+=cut
+sub eliminarServidorZ3950{
+
+    my ($id_servidor)       = @_;
+    my $msg_object          = C4::AR::Mensajes::create();
+    my $servidor            = getServidorPorId($id_servidor);
+    
+    eval {
+         $servidor->delete();
+         $msg_object->{'error'}= 0;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S002', 'params' => []} ) ;
+     };
+     
+     if ($@){
+         #Se loguea error de Base de Datos
+         &C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
+         #Se setea error para el usuario
+         $msg_object->{'error'}= 1;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S003', 'params' => []} ) ;
+     }
+     return ($msg_object);
+}
+
+=item
+    Esta funcion agrega un nuevo servidor z3950 a la base
+=cut
+sub agregarServidorZ3950 {
+
+    use C4::Modelo::PrefServidorZ3950;
+    use C4::Modelo::PrefServidorZ3950::Manager;
+    
+    my ($param)     = @_;
+    my $servidor    = C4::Modelo::PrefServidorZ3950->new();
+    my $msg_object  = C4::AR::Mensajes::create();
+    my $db          = $servidor->db;
+    
+#    _verificarDatosServidor($param,$msg_object);
+
+    if (!($msg_object->{'error'})){
+          # entro si no hay algun error, todos los campos ingresados son validos
+          $db->{connect_options}->{AutoCommit} = 0;
+          $db->begin_work;
+
+           eval{
+              $servidor->agregarServidorZ3950($param);
+              $msg_object->{'error'} = 0;
+              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S000', 'params' => []});
+              $db->commit;
+           };
+           if ($@){
+           # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
+               &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
+               $msg_object->{'error'}= 1;
+               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S001', 'params' => []} ) ;
+               $db->rollback;
+           }
+
+          $db->{connect_options}->{AutoCommit} = 1;
+    }
+    return ($msg_object);
+}
+
+=item
+    Esta funcion verifica los parametros cuando se agrega un nuevo servidor
+=cut
+sub _verificarDatosServidor{
+
+    my ($data, $msg_object) = @_;
+    my $servidor            = $data->{'servidor'};
+    my $puerto              = $data->{'puerto'};
+    my $base                = $data->{'base'};
+    my $usuario             = $data->{'usuario'};
+    my $password            = $data->{'password'};
+    my $nombre              = $data->{'nombre'};
+    my $sintaxis            = $data->{'sintaxis'};
+
+    if($servidor ne ""){
+        if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($servidor)))){
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A007', 'params' => []} ) ;
+        }
+    } else {
+          $msg_object->{'error'}= 1;
+          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A002', 'params' => []} ) ;
+    }
+    
+    if($puerto ne ""){
+        if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($servidor)))){
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A007', 'params' => []} ) ;
+        }
+    } else {
+          $msg_object->{'error'}= 1;
+          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A002', 'params' => []} ) ;
+    }
+    
+    if($base ne ""){
+        if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($servidor)))){
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A007', 'params' => []} ) ;
+        }
+    } else {
+          $msg_object->{'error'}= 1;
+          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A002', 'params' => []} ) ;
+    }
+    
+    if($usuario ne ""){
+        if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($servidor)))){
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A007', 'params' => []} ) ;
+        }
+    } else {
+          $msg_object->{'error'}= 1;
+          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A002', 'params' => []} ) ;
+    }
+    
+    if($password ne ""){
+        if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($servidor)))){
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A007', 'params' => []} ) ;
+        }
+    } else {
+          $msg_object->{'error'}= 1;
+          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A002', 'params' => []} ) ;
+    }
+    
+    if($nombre ne ""){
+        if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($servidor)))){
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A007', 'params' => []} ) ;
+        }
+    } else {
+          $msg_object->{'error'}= 1;
+          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A002', 'params' => []} ) ;
+    }
+    
+    if($sintaxis ne ""){
+        if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($servidor)))){
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A007', 'params' => []} ) ;
+        }
+    } else {
+          $msg_object->{'error'}= 1;
+          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A002', 'params' => []} ) ;
+    }
+
+}
 
 sub getServidoresZ3950 {
 
     use C4::Modelo::PrefServidorZ3950;
     use C4::Modelo::PrefServidorZ3950::Manager;
+    
     my @filtros;
     push(@filtros, ( habilitado    => { eq => '1'}));
 
