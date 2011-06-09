@@ -1040,15 +1040,16 @@ sub _sendRecoveryPasswordMail{
     use C4::AR::Mail;
 
     my %mail;
+
+    my $mail_from       = $mail{'mail_from'}  = C4::AR::Preferencias::getValorPreferencia("reserveFrom");
+    my $mail_to         = $mail{'mail_to'}    = $socio->persona->getEmail;
     
-    $mail{'mail_from'}             = C4::AR::Preferencias::getValorPreferencia("reserveFrom");
-    $mail{'mail_to'}               = $socio->persona->getEmail;
-    
-    $mail{'mail_subject'}          = C4::AR::Filtros::i18n("Instrucciones para reestablecer su clave");
+    my $mail_subject    = $mail{'mail_subject'}          = C4::AR::Filtros::i18n("Instrucciones para reestablecer su clave");
     
     
 ## Datos para el mail
     use C4::Modelo::PrefUnidadInformacion;
+    use MIME::Lite::TT::HTML;
     
     my $completo            = $socio->persona->getNombre." ".$socio->persona->getApellido;
     my $nro_socio           = $socio->getNro_socio;
@@ -1078,8 +1079,26 @@ sub _sendRecoveryPasswordMail{
 
     my $out= C4::AR::Auth::get_html_content($template, $t_params);
     
-    $mail{'mail_message'}           = $out;
     $mail{'html_content'}           = 1;
+
+    open FILE, ">/tmp/mail.html" or die $!;
+    print FILE $out;
+    close FILE;
+
+        
+    my $msg = MIME::Lite::TT::HTML->new(
+         From         => $mail_from,
+         To           => $mail_to,
+         Subject      => $mail_subject,
+         Template     => {
+              html    => "/tmp/mail.html",
+         },
+         TmplOptions => {ABSOLUTE => 1,},
+         Charset      => 'utf8',
+    );
+    
+    $mail{'mail_message'}           = $msg;
+    
     my ($ok, $msg_error)            = C4::AR::Mail::send_mail(\%mail);
     
     return (!$ok,$msg_error);
@@ -1157,14 +1176,14 @@ sub recoverPassword{
             $db->{connect_options}->{AutoCommit} = 0;
             $db->begin_work;
 		    
-#		    eval{
+		    eval{
 			    _logClientIpAddress('recover_password',$socio);
 				my ($link,$hash) = _buildPasswordRecoverLink($socio);
 				($isError)                      = _sendRecoveryPasswordMail($socio,$link);
                 $socio->setRecoverPasswordHash($hash);
 				$db->commit;
                 $message                    = C4::AR::Mensajes::getMensaje('U600','opac');
-#            };
+            };
 	        if (($@) || $isError){
 	        	$message = C4::AR::Mensajes::getMensaje('U606','opac');
 	            &C4::AR::Mensajes::printErrorDB($@, 'U606',"opac");
