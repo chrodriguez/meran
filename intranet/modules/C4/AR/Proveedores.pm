@@ -23,7 +23,7 @@ use vars qw(@EXPORT @ISA);
     &agregarMoneda;
     &agregarProveedor;
     &eliminarProveedor;
-    &modificarProveedor;
+    &editarProveedor;
     &getProveedorLike;
     &getMonedasProveedor;
     &getFormasEnvioProveedor;
