@@ -286,18 +286,17 @@ sub prestar {
 		my $seReserva = 1;
 
 		#Se verifica disponibilidad del item;
-		my $reserva = C4::AR::Reservas::getReservaDeId3($id3);
+		my $reserva = C4::AR::Reservas::getReservaDeId3($id3,$self->db);
 
 		if ($reserva) {
 			$self->debug("El item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario");
 
 #el item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario
-			my ($nivel3) =
-			  C4::AR::Reservas::getNivel3ParaReserva( $params->{'id2'}, $disponibilidad,$self->db );
+			my ($nivel3) = C4::AR::Reservas::getNivel3ParaReserva( $params->{'id2'},$self->db );
 			if ($nivel3) {
 
 		 #CAMBIAMOS EL ID3 A OTRO LIBRE Y ASI LIBERAMOS EL QUE SE QUIERE PRESTAR
-				$self->debug("CAMBIAMOS EL ID3 A OTRO LIBRE Y ASI LIBERAMOS EL QUE SE QUIERE PRESTAR");
+				$self->debug("CAMBIAMOS EL ID3 A OTRO LIBRE Y ASI LIBERAMOS EL QUE SE QUIERE PRESTAR : Reserva: ".$reserva->getId_reserva." Nuevo id3: ".$nivel3->getId3);
 				$reserva->setId3( $nivel3->getId3 );
 				$reserva->save();
 

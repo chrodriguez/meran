@@ -223,7 +223,7 @@ sub reservar {
 	my $dateformat = C4::Date::get_date_format();
 	my $id3= $params->{'id3'}||'';
 	if($params->{'tipo'} eq 'OPAC'){
-		my $nivel3= C4::AR::Reservas::getNivel3ParaReserva($params->{'id2'},'Domiciliario');
+		my $nivel3= C4::AR::Reservas::getNivel3ParaReserva($params->{'id2'},$self->db);
 		if($nivel3){ $id3=$nivel3->getId3;}
 		$self->debug("RESERVA: es para OPAC se buscan algún nivel 3 para reservar");
 	}
