@@ -6,7 +6,7 @@ package C4::AR::Mail;
 
 use strict;
 require Exporter;
-use Mail::Sendmail;
+use Mail::Sendmail 0.75;
 use C4::AR::Debug;
 use Net::SMTP;
 use Net::SMTP::SSL;
@@ -22,25 +22,25 @@ use vars qw(@EXPORT @ISA);
 
 use constant SMTP_TIME_OUT  => 5;
 use constant DEBUG          => 1;
+use MIME::Lite::TT::HTML;
 
 sub send_mail_TLS {
     my ($mail_hash_ref) = @_;
 
 
-    my $mailer  = 0;
-    my $ok      = 0;
-    my $msg_error;
-    C4::AR::Debug::debug("Mail => send_mail_TLS => smtp_server:     ".$mail_hash_ref->{'smtp_server'});
-    C4::AR::Debug::debug("Mail => send_mail_TLS => mail_metodo:     ".$mail_hash_ref->{'smtp_metodo'});
-    C4::AR::Debug::debug("Mail => send_mail_TLS => smtp_port:       ".$mail_hash_ref->{'smtp_port'});
-    C4::AR::Debug::debug("Mail => send_mail_TLS => smtp_user:       ".$mail_hash_ref->{'smtp_user'});
-#     C4::AR::Debug::debug("Mail => send_mail_TLS => smtp_pass:       ".$mail_hash_ref->{'smtp_pass'});
-    C4::AR::Debug::debug("Mail => send_mail_TLS => mail_from:       ".$mail_hash_ref->{'mail_from'});
-    C4::AR::Debug::debug("Mail => send_mail_TLS => mail_to:         ".$mail_hash_ref->{'mail_to'});
-    C4::AR::Debug::debug("Mail => send_mail_TLS => mail_subject:    ".$mail_hash_ref->{'mail_subject'});
-    C4::AR::Debug::debug("Mail => send_mail_TLS => mail_message:    ".$mail_hash_ref->{'mail_message'});
-
-    eval {
+    my $mailer          = 0;
+    my $ok              = 0;
+    my $msg_error       = 0;
+    my $html_mail       = $mail_hash_ref->{'html_content'};
+    my $mail_from       = $mail_hash_ref->{'mail_from'};
+    my $mail_to         = $mail_hash_ref->{'mail_to'};
+    my $mail_subject    = $mail_hash_ref->{'mail_subject'};    
+    my $mail_data       = $mail_hash_ref->{'mail_message'};
+    
+    open FILE, ">/tmp/mail.html" or die $!;
+    print FILE $mail_data;
+    close FILE;
+#    eval {
         $mailer = new Net::SMTP::TLS (  
                                             $mail_hash_ref->{'smtp_server'},  
                                             Hello       => $mail_hash_ref->{'smtp_server'},  
@@ -51,6 +51,17 @@ sub send_mail_TLS {
                                             Debug       => DEBUG,
                                     );
     
+		my $msg = MIME::Lite::TT::HTML->new(
+			From         => $mail_from,
+			To           => $mail_to,
+			Subject      => $mail_subject,
+			Template     => {
+			     html    => "/tmp/mail.html",
+			},
+			TmplOptions => {ABSOLUTE => 1,},
+			Charset      => 'utf8',
+		);
+
         if ( not $mailer ) {
             $ok = 0;
             $msg_error = "Mail => send_mail_TLS => No se pudo conectar con el servidor: ".$mail_hash_ref->{'smtp_server'};
@@ -58,17 +69,18 @@ sub send_mail_TLS {
         } else {
             $mailer->mail($mail_hash_ref->{'mail_from'});
             $mailer->to($mail_hash_ref->{'mail_to'});
-            $mailer->data;  
-            $mailer->datasend("From: " . $mail_hash_ref->{'mail_from'} . "\n");
-            $mailer->datasend("To: " . $mail_hash_ref->{'mail_to'} . "\n");
-            $mailer->datasend("Subject: " . $mail_hash_ref->{'mail_subject'} . "\n");
-            $mailer->datasend("\n");
-            $mailer->datasend($mail_hash_ref->{'mail_message'}. "\n");
+            $mailer->data();  
+
+            if ($html_mail){
+                $mailer->datasend( $msg->as_string());
+            }else{
+            	$mailer->datasend($mail_data);
+            }
             $mailer->dataend;  
             $mailer->quit;
             $ok = 1;
         }  
-    };
+#    };
 
     if($@){
         $msg_error = "Mail => send_mail_TLS => error => $@";
@@ -270,7 +282,7 @@ sub send_mail_TEST {
 
     eval {
 
-        ($ok, $msg_error)           = &C4::AR::Mail::send_mail(\%mail);
+        ($ok, $msg_error)           = C4::AR::Mail::send_mail(\%mail);
 
         if($ok){    
             $msg_error              = Encode::decode('utf8',"Se envió el mail a la cuenta (".$mail_to.")");

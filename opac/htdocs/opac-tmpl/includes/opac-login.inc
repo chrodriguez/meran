@@ -30,15 +30,11 @@
 <!-- Login -->
 [% IF !socio_data %]
     <div class="round-border-topright"></div>
-    [% IF show_navlink %]
         <h1 class="pagetitle">[% 'Ingresar' | i18n %]</h1>
         <hr class="clear-contentunit">
-
-    [% ELSE %]
-            <h1 class="pagetitle">[% 'Ingresar' | i18n %]</h1>
-            <hr class="clear-contentunit">
-            <br />
-    [% END %]
+	    [% IF !show_navlink %]
+	            <br />
+	    [% END %]
     [% IF mensaje %]
             
         <h1>[% mensaje %]</h1>
