@@ -5,6 +5,7 @@ require Exporter;
 use strict;
 use CGI;
 use C4::Context;
+use C4::AR::Auth;
 use PDF::Report;
 use C4::AR::PdfGenerator;
 
