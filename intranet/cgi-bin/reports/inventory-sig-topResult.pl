@@ -32,17 +32,7 @@ my $accion  = $obj->{'accion'};
 my $ini     = $obj->{'ini'};
 my $funcion = $obj->{'funcion'};
 
-my ($template, $session, $t_params) = get_template_and_user({
-                        template_name   => "reports/inventory-sig-topResult.tmpl",
-                        query           => $input,
-                        type            => "intranet",
-                        authnotrequired => 0,
-                        flagsrequired   => {    ui => 'ANY', 
-                                                tipo_documento => 'ANY', 
-                                                accion => 'CONSULTA', 
-                                                entorno => 'undefined'},
-                        debug           => 1,
-             });
+
 
 #Buscar
 my $cat_nivel3;
@@ -52,22 +42,33 @@ my $ini = $obj->{'ini'};
 
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
-$t_params->{'ini'}      = $obj->{'ini'}     = $ini;
-$t_params->{'cantR'}    = $obj->{'cantR'}   = $cantR;
+my ($template, $session, $t_params);
 # $obj->{'fin'}   = $cantR;
 # my $ini                         = ($obj->{'ini'}||'');
 
 
 if ($accion eq "EXPORTAR_XLS") {
 
+    ($template, $session, $t_params) = get_template_and_user({
+                        template_name   => "reports/inventory-sig-top-ExportMsj.tmpl",
+                        query           => $input,
+                        type            => "intranet",
+                        authnotrequired => 0,
+                        flagsrequired   => {    ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'CONSULTA', 
+                                                entorno => 'undefined'},
+                        debug           => 1,
+             });    
+
+    $t_params->{'ini'}      = $obj->{'ini'}     = $ini;
+    $t_params->{'cantR'}    = $obj->{'cantR'}   = $cantR; 
+  
     ($cant_total, $cat_nivel3) = C4::AR::Reportes::consultaParaReporte($obj);
-
-    C4::AR::Debug::debug("xsfsdfsdfsdfsdfsdf".   $cat_nivel3);
    
-    C4::AR::Utilidades::printARRAY($cat_nivel3);
-
-    my ($path, $filename)            = C4::AR::Reportes::toXLS($cat_nivel3,1,'Pagina 1','inventario');        
-    $t_params->{'filename'}          = '/uploads/reports/'.$filename;
+    my ($path, $filename) = C4::AR::Reportes::toXLS($cat_nivel3,1,'Pagina 1','inventario');   
+    
+    $t_params->{'filename'}= "/uploads/report/".$filename 
 
 }
 
@@ -75,7 +76,21 @@ if ($accion eq "EXPORTAR_XLS") {
 
 if ($accion eq "CONSULTA_POR_SIGNATURA") {
 
-     
+  ($template, $session, $t_params) = get_template_and_user({
+                        template_name   => "reports/inventory-sig-topResult.tmpl",
+                        query           => $input,
+                        type            => "intranet",
+                        authnotrequired => 0,
+                        flagsrequired   => {    ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'CONSULTA', 
+                                                entorno => 'undefined'},
+                        debug           => 1,
+             });     
+    
+    $t_params->{'ini'}      = $obj->{'ini'}     = $ini;
+    $t_params->{'cantR'}    = $obj->{'cantR'}   = $cantR; 
+
      if ($sigtop){ 
          ($cant_total, $cat_nivel3, $array_hash_ref)   = C4::AR::Reportes::listarItemsDeInventarioPorSigTop($obj);
      } else {
@@ -90,7 +105,24 @@ if ($accion eq "CONSULTA_POR_SIGNATURA") {
 }
 
 if ($accion eq "CONSULTA_POR_BARCODE") {
-     
+    
+
+    ($template, $session, $t_params) = get_template_and_user({
+                        template_name   => "reports/inventory-sig-topResult.tmpl",
+                        query           => $input,
+                        type            => "intranet",
+                        authnotrequired => 0,
+                        flagsrequired   => {    ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'CONSULTA', 
+                                                entorno => 'undefined'},
+                        debug           => 1,
+             });
+
+    $t_params->{'ini'}      = $obj->{'ini'}     = $ini;
+    $t_params->{'cantR'}    = $obj->{'cantR'}   = $cantR; 
+
+
      if ($barcode){ 
          ($cant_total, $cat_nivel3, $array_hash_ref)  = C4::AR::Reportes::listarItemsDeInventarioPorBarcode($obj); 
      } else {

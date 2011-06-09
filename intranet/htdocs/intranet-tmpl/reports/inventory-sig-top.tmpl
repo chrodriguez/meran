@@ -49,7 +49,7 @@
         objAH.accion            = "CONSULTA_POR_BARCODE";
         objAH.funcion           = "changePage";
         objAH.id_ui            = $("#combo_ui_barcode").val();
-        objAH.tipoUI            = $("input[@name='uibarcode']:checked").val();
+        objAH.tipoUI            = $("input[name=uibarcode]:checked").val();
         //se envia la consulta
         objAH.sendToServer();
         $('#result').show();
@@ -86,7 +86,7 @@
         objAH.accion            = "CONSULTA_POR_SIGNATURA";
         objAH.funcion           = "changePage";
         objAH.id_ui             = $("#combo_ui_signatura").val();
-        objAH.tipoUI            = $("input[@name='uisignatura']:checked").val();
+        objAH.tipoUI            = $("input[name='uisignatura']:checked").val();
 	    //se envia la consulta
 	    objAH.sendToServer();
         $('#result').show();
@@ -94,7 +94,7 @@
       }
     
      function exportarXLS(){
-        objAH                   = new AjaxHelper(updateInfo);
+        objAH                   = new AjaxHelper(updateExportarXLS);
         objAH.debug             = true;
         objAH.showOverlay       = true;
         objAH.url               = URL_PREFIX+"/reports/inventory-sig-topResult.pl";
@@ -116,9 +116,11 @@
         $('#reporteCreado').show();
     }
     
+    function updateExportarXLS(responseText){
+        $("#reporteCreado").html(responseText);
+    }
 
-   
-
+  
 
     function updateInfo(responseText){
 	    $("#result").html(responseText);
@@ -190,6 +192,7 @@
         onClickDesdeHastaBarcode();
         onClickDesdeHastaSignatura();
         $('#reporteCreado').hide();
+      
     });
 
 </script>
@@ -221,7 +224,7 @@
                 <input type="radio" name="uisignatura" value="Origen" checked>Origen
                 <input type="radio" name="uisignatura" value="Poseedora" >Poseedora<br>
                 <label for="ui"></label>
-                  [% combo_ui_signatura %]      
+                  [% combo_ui_signatura %]
             </li>
         
 
@@ -271,8 +274,8 @@
 
 <br>
 <div id="reporteCreado" style="border: 1px solid #7E94AF; text-align:center; background-color: #CCCCCC; color:#505050; padding:10px 0 0 0; margin: 0 0 10px 0">
-         <p> [% 'El reporte ha sido exportado correctamente en' | i18n %]</p> [% filename %] 
 </div>
+
 <div id="result"></div>
 </fieldset>
 

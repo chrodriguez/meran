@@ -2,11 +2,11 @@
 [% USE HTML %]
 
 <p  align="center">
-    [% "La cantidad Total de ejemplares es:" | i18n %] [% cantidad %]
+    [% "La cantidad Total de ejemplares encontrados es:" | i18n %] [% cantidad %]
     <div class="contenedor_paginador">[% paginador %]</div>
 </p>
       
- 
+      [% IF cantidad > 0 %]
             <table id="tablaResult" class="datos_tabla" border="0" cellspacing="0" cellpadding="0" width="100%">
                 <tr class="titulo_tabla_resultado click">
 
@@ -20,7 +20,7 @@
                     <th onClick="ordenar('ui_poseedora');">[% "UI Poseedora" | i18n %]</th>
 
                 </tr>
-                
+       [% END %]        
                 [% FOREACH res IN results %]
                         <tr >
                                 <td  align="center">
@@ -59,15 +59,19 @@
                 [% END %]
             </table>
   
-      <div class="buttonContainerHorizontal">
-     
-          [% PERL %]
-                  print C4::AR::Filtros::to_Button( 
-                                                      text    =>  "[% "Exportar XLS" | i18n %]",
-                                                      title    =>  "[% 'Exportar XLS' | i18n %]",
-                                                      boton   =>  "boton_guardar",
-                                                      onClick =>  "exportarXLS();",
-                                                  );
-          [% END %]
-     
-      </div>
+      [% IF cantidad > 0 %]
+
+            <div class="buttonContainerHorizontal" style="margin-top:10px;">
+          
+                [% PERL %]
+                        print C4::AR::Filtros::to_Button( 
+                                                            text    =>  "[% "Exportar XLS" | i18n %]",
+                                                            title    =>  "[% 'Exportar XLS' | i18n %]",
+                                                            boton   =>  "boton_guardar",
+                                                            onClick =>  "exportarXLS();",
+                                                        );
+                [% END %]
+            
+
+            </div>
+      [% END %]
