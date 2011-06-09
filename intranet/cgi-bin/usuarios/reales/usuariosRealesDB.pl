@@ -278,7 +278,9 @@ Se genra la ventana para modificar los datos del usuario
         $t_params->{'comboDeUI'}            = $comboDeUI;
         $t_params->{'addBorrower'}          = 0;
         
-        C4::AR::Auth::updateLoggedUserTemplateParams($session,$t_params,$socio);
+        if ($socio->getNro_socio eq C4::AR::Auth::getSessionNroSocio() ){
+            C4::AR::Auth::updateLoggedUserTemplateParams($session,$t_params,$socio);
+        }
         
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
     } #end if($tipoAccion eq "MODIFICAR_USUARIO")

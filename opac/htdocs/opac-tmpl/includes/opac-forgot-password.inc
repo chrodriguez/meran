@@ -6,8 +6,8 @@
 	};
 </script>
 
-<div class="column1-unit">
-    <h1>[% message %]</h1>
+<div class="column1-unit" style="width:50%;">
+    <h1 >[% message %]</h1>
     <div class="contactform">
         <form id="datosAEnviar" method="post" action="[% url_prefix %]/opac-forgot-password.pl" onsubmit="javascript:startOverlay();" autocomplete="off">
 	         <fieldset>

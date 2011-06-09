@@ -45,7 +45,10 @@ $Message_arrayref           = C4::AR::Preferencias::t_modificarVariable('reserve
 $Message_arrayref           = C4::AR::Preferencias::t_modificarVariable('smtp_server_sendmail', $smtp_server_sendmail, '',$categoria);
 
 my $msg_object              = C4::AR::Mensajes::create();
-my $mail_to                 = $mailFrom; 
+
+my $default_ui          = C4::AR::Preferencias::getValorPreferencia('defaultUI');
+my $ui                  = C4::Modelo::PrefUnidadInformacion->getByCode($default_ui);
+my $mail_to             = $ui->getEmail; 
 my $mensaje;
 
 if($accion eq 'PROBAR_CONFIGURACION'){

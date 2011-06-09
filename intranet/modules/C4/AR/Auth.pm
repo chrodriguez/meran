@@ -1401,7 +1401,7 @@ sub redirectAndAdvice{
 }
 
 sub get_html_content {
-    my($template, $params, $session) = @_;
+    my($template, $params) = @_;
     my $out = '';
     $template->process($params->{'template_name'},$params,\$out) || die "Template process failed: ", $template->error(), "\n";
     return($out);

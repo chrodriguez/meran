@@ -1058,20 +1058,27 @@ sub _sendRecoveryPasswordMail{
     my $nombre_ui       = $ui->getNombre();
 
     my $mailMessage =
-                "
-		                Estimado/a $completo ($nro_socio), socio de $nombre_ui, recientemente UD ha solicitado reestablecer su clave.\n
-		                Para hacerlo, haga click en el siguiente enlace y siga los pasos que el sistema le va a indicar:\n
-		                            $link\n
+                C4::AR::Filtros::i18n("
+		                Estimado/a ")."<b>$completo ($nro_socio)</b>, ".C4::AR::Filtros::i18n("socio de")." $nombre_ui, ".C4::AR::Filtros::i18n("recientemente UD ha solicitado reestablecer su clave.<br />
+		                Para hacerlo, haga click en el siguiente enlace y siga los pasos que el sistema le va a indicar").":<br />
+		                            <a href='$link'> $link </a> <br /><br /><br /><br /><br /><br />".
 		                
-		                Si no puede abrir el enlace, copie y pegue la siguente URL en su navegador: $link\n
+		                C4::AR::Filtros::i18n("Si no puede abrir el enlace, copie y pegue la siguente URL en su navegador").": <br /> $link <br />".
 		                
-		                Si UD no ha solicitado un reseteo de su clave, simplemente ignore este mail.\n
+		                C4::AR::Filtros::i18n("<br /><br />Si UD no ha solicitado un reseteo de su clave, simplemente ignore este mail. <br />
 		                
-		                Atte., $nombre_ui.
+		                Atte.,")." $nombre_ui.
                 ";
     
     
-    $mail{'mail_message'}           = $mailMessage;
+    
+    my ($template, $t_params)     = C4::Output::gettemplate("includes/opac-mail.tmpl", "OPAC", 1);
+    
+    $t_params->{'mail_content'} = $mailMessage;
+
+    my $out= C4::AR::Auth::get_html_content($template, $t_params);
+    
+    $mail{'mail_message'}           = $out;
     $mail{'html_content'}           = 1;
     my ($ok, $msg_error)            = C4::AR::Mail::send_mail(\%mail);
     
@@ -1150,17 +1157,17 @@ sub recoverPassword{
             $db->{connect_options}->{AutoCommit} = 0;
             $db->begin_work;
 		    
-		    eval{
+#		    eval{
 			    _logClientIpAddress('recover_password',$socio);
 				my ($link,$hash) = _buildPasswordRecoverLink($socio);
 				($isError)                      = _sendRecoveryPasswordMail($socio,$link);
                 $socio->setRecoverPasswordHash($hash);
 				$db->commit;
                 $message                    = C4::AR::Mensajes::getMensaje('U600','opac');
-            };
+#            };
 	        if (($@) || $isError){
 	        	$message = C4::AR::Mensajes::getMensaje('U606','opac');
-	            &C4::AR::Mensajes::printErrorDB($@, 'B423',"OPAC");
+	            &C4::AR::Mensajes::printErrorDB($@, 'U606',"opac");
 	            $db->rollback;
 	        }
 

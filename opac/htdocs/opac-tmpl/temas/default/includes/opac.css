@@ -1920,39 +1920,6 @@ border:1px solid #BBBBBB;
 
 }
 
-
-
-
-/*#ajax_state{display:none;
-background:url(../imagenes/loaders/ajax-loader.gif) no-repeat scroll center;
-height:35px;
-position:relative;
-margin:5px}
-#ajax-indicator {font-weight:bold;
-left:10%;
-padding:0.6em;
-position:relative;
-text-align:;
-top:-18%;
-width:30%;
-z-index:100;
-}
-#ajax-indicator span {background-image:url(../imagenes/loaders/ajax-loader.gif);
-background-position:0 20%;
-background-repeat:no-repeat;
-padding-left:40px;
-vertical-align:bottom;
-}
-#ajax-indicator div {background-image:url(../imagenes/loaders/ajax-loader.gif);
-background-position:0 20%;
-background-repeat:no-repeat;
-padding-left:40px;
-vertical-align:bottom;
- height: 49px}
-#ajax-indicator div p {padding:18px 0 0 10px;
-   width: 100px;
-}*/
-
 .advice{background-color: #A0B355;
  text-align: center;
 }
