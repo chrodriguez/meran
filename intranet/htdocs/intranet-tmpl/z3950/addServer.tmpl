@@ -1,0 +1,85 @@
+[% IF editing %]
+    <fieldset class="resultados_busqueda">
+    <legend class="titulo_legend">[% "Agregar Nuevo Servidor z3950" | i18n %]</legend>
+        <ul>
+            <li class="sub_item">
+                <label>[% "Servidor" | i18n %]</label> 
+                <input  type="text" id="server" value="[% servidor.servidor %]">
+            </li>
+            <li class="sub_item">
+                <label>[% "Puerto" | i18n %]</label> 
+                <input  type="text" id="puerto" value="[% servidor.puerto %]">
+            </li>
+            <li class="sub_item">
+                <label>[% "Base de Datos" | i18n %]</label> 
+                <input  type="text" id="base" value="[% servidor.base %]">
+            </li>
+            <li class="sub_item">
+                <label>[% "Usuario" | i18n %]</label> 
+                <input  type="text" id="usuario" value="[% servidor.usuario %]">
+            </li>
+            <li class="sub_item">
+                <label>[% "Password" | i18n %]</label> 
+                <input  type="password" id="password" value="[% servidor.password %]">
+            </li>
+            <li class="sub_item">
+                <label>[% "Nombre" | i18n %]</label> 
+                <input  type="text" id="nombre" value="[% servidor.nombre %]">
+            </li>
+            <li class="sub_item">
+                <label>[% "Sintaxis" | i18n %]</label> 
+                <input  type="text" id="sintaxis" value="[% servidor.sintaxis %]">
+            </li>
+        </ul>
+        [% PERL %]
+            print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
+                                                boton   => "boton_agregar",
+                                                onClick => "guardarServer([% servidor.id %]);",
+                                                title   => "[% 'Guardar Cambios' | i18n %]",
+                                                alternClass => "botonCentrado"
+                    ) ;
+        [% END %]
+    </fieldset>
+[% ELSE %]
+    <fieldset class="resultados_busqueda">
+    <legend class="titulo_legend">[% "Agregar Nuevo Servidor z3950" | i18n %]</legend>
+        <ul>
+            <li class="sub_item">
+                <label>[% "Servidor" | i18n %]</label> 
+                <input  type="text" id="server">
+            </li>
+            <li class="sub_item">
+                <label>[% "Puerto" | i18n %]</label> 
+                <input  type="text" id="puerto">
+            </li>
+            <li class="sub_item">
+                <label>[% "Base de Datos" | i18n %]</label> 
+                <input  type="text" id="base">
+            </li>
+            <li class="sub_item">
+                <label>[% "Usuario" | i18n %]</label> 
+                <input  type="text" id="usuario">
+            </li>
+            <li class="sub_item">
+                <label>[% "Password" | i18n %]</label> 
+                <input  type="password" id="password">
+            </li>
+            <li class="sub_item">
+                <label>[% "Nombre" | i18n %]</label> 
+                <input  type="text" id="nombre">
+            </li>
+            <li class="sub_item">
+                <label>[% "Sintaxis" | i18n %]</label> 
+                <input  type="text" id="sintaxis">
+            </li>
+        </ul>
+        [% PERL %]
+            print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
+                                                boton   => "boton_agregar",
+                                                onClick => "guardarNewServer();",
+                                                title   => "[% 'Guardar Cambios' | i18n %]",
+                                                alternClass => "botonCentrado"
+                    ) ;
+        [% END %]
+    </fieldset>
+[% END %]

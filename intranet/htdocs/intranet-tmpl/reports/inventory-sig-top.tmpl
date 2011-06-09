@@ -1,6 +1,7 @@
 [% INCLUDE "intranet-top.inc" %]
 
 <script type="text/javascript" src="/intranet-tmpl/estadisticas/estadisticas.js"></script>
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/tabletojson.js"> </script>
 
 <script>
 
@@ -15,8 +16,9 @@
         objAH.changePage(ini);
     }
 
-    function consultarPorBarcode(){
 
+    function consultarPorBarcode(){
+    
         //se busca por barcode
         if ( ($("#barcode").val() == "")&&(($("#desde_barcode").val() == "")||($("#hasta_barcode").val() == "")) ){
             jAlert(DEBE_INGRESAR_EL_BARCODE);
@@ -40,18 +42,22 @@
         objAH                   = new AjaxHelper(updateInfo);
         objAH.debug             = true;
         objAH.showOverlay       = true;
-        objAH.url=URL_PREFIX+"/reports/inventory-sig-topResult.pl";
+        objAH.url               = URL_PREFIX+"/reports/inventory-sig-topResult.pl";
         objAH.barcode           = $("#barcode").val();
         objAH.desde_barcode     = $("#desde_barcode").val();
         objAH.hasta_barcode     = $("#hasta_barcode").val();
         objAH.accion            = "CONSULTA_POR_BARCODE";
         objAH.funcion           = "changePage";
-        objAH.id_ui             = $("#combo_ui_barcode").val();
+        objAH.id_ui            = $("#combo_ui_barcode").val();
+        objAH.tipoUI            = $("input[name=uibarcode]:checked").val();
         //se envia la consulta
         objAH.sendToServer();
+        $('#result').show();
+        $('#reporteCreado').hide();
     }
     
     function consultarPorSignatura(){
+     
 
         //se busca por signatura
         if ( ($("#sigtop").val() == "")&&(($("#desde_signatura").val() == "")||($("#hasta_signatura").val() == "")) ){
@@ -80,10 +86,42 @@
         objAH.accion            = "CONSULTA_POR_SIGNATURA";
         objAH.funcion           = "changePage";
         objAH.id_ui             = $("#combo_ui_signatura").val();
+        objAH.tipoUI            = $("input[name='uisignatura']:checked").val();
 	    //se envia la consulta
 	    objAH.sendToServer();
+        $('#result').show();
+        $('#reporteCreado').hide();
+      }
+    
+     function exportarXLS(){
+        objAH                   = new AjaxHelper(updateExportarXLS);
+        objAH.debug             = true;
+        objAH.showOverlay       = true;
+        objAH.url               = URL_PREFIX+"/reports/inventory-sig-topResult.pl";
+        objAH.sigtop            = $("#sigtop").val();
+        objAH.desde_signatura   = $("#desde_signatura").val();
+        objAH.hasta_signatura   = $("#hasta_signatura").val();
+        objAH.barcode           = $("#barcode").val();
+        objAH.desde_barcode     = $("#desde_barcode").val();
+        objAH.hasta_barcode     = $("#hasta_barcode").val();
+        objAH.accion            = "EXPORTAR_XLS";
+        objAH.funcion           = "changePage";
+        objAH.id_uisignatura    = $("#combo_ui_signatura").val();
+        objAH.id_uibarcode      = $("#combo_ui_barcode").val();
+        objAH.tipoUISignatura   = $("input[@name='uisignatura']:checked").val();
+        objAH.tipoUIBarcode     = $("input[@name='uibarcode']:checked").val();
+        //se envia la consulta
+        objAH.sendToServer();
+        $('#result').hide();
+        $('#reporteCreado').show();
     }
     
+    function updateExportarXLS(responseText){
+        $("#reporteCreado").html(responseText);
+    }
+
+  
+
     function updateInfo(responseText){
 	    $("#result").html(responseText);
 	    zebra("datos_tabla");
@@ -93,16 +131,25 @@
         $('#barcode').click(function() {
             $('#desde_barcode').val('');
             $('#hasta_barcode').val('');
+            $('#sigtop').val('');
+            $('#hasta_signatura').val('');
+            $('#desde_signatura').val('');
         });
     }
 
     function onClickDesdeHastaBarcode(){
         $('#desde_barcode').click(function() {
             $('#barcode').val('');
+            $('#sigtop').val('');
+            $('#hasta_signatura').val('');
+            $('#desde_signatura').val('');
         });
 
         $('#hasta_barcode').click(function() {
             $('#barcode').val('');
+            $('#sigtop').val('');
+            $('#hasta_signatura').val('');
+            $('#desde_signatura').val('');
         });
     }
 
@@ -110,16 +157,25 @@
         $('#sigtop').click(function() {
             $('#desde_signatura').val('');
             $('#hasta_signatura').val('');
+            $('#barcode').val('');
+            $('#hasta_barcode').val('');
+            $('#desde_barcode').val('');
         });
     }
 
     function onClickDesdeHastaSignatura(){
         $('#desde_signatura').click(function() {
             $('#sigtop').val('');
+            $('#barcode').val('');
+            $('#hasta_barcode').val('');
+            $('#desde_barcode').val('');
         });
 
         $('#hasta_signatura').click(function() {
             $('#sigtop').val('');
+            $('#barcode').val('');
+            $('#hasta_barcode').val('');
+            $('#desde_barcode').val('');
         });
     }
 
@@ -135,6 +191,8 @@
         onClickSignatura();
         onClickDesdeHastaBarcode();
         onClickDesdeHastaSignatura();
+        $('#reporteCreado').hide();
+      
     });
 
 </script>
@@ -162,9 +220,13 @@
               <input type="text" id="hasta_signatura" value="[% hasta_signatura %]"> Max: [% signatura_max %] 
             </li>
             <li class="sub_item">
-              <label for="ui">[% "Unidad de Informaci&oacute;n" | i18n %]</label>
-              [% combo_ui_signatura %]
+                <label for="radio">[% "Unidad de Informacion" | i18n %]</label>
+                <input type="radio" name="uisignatura" value="Origen" checked>Origen
+                <input type="radio" name="uisignatura" value="Poseedora" >Poseedora<br>
+                <label for="ui"></label>
+                  [% combo_ui_signatura %]
             </li>
+        
 
             [% PERL %]
                             print C4::AR::Filtros::to_Button( 
@@ -191,10 +253,14 @@
               <label for="hasta_barcode">[% "Hasta" | i18n %]</label>
               <input type="text" id="hasta_barcode" value="[% hasta_barcode %]"> Max: [% barcode_max %] 
             </li>
-            <li class="sub_item">
-              <label for="ui">[% "Unidad de Informaci&oacute;n" | i18n %]</label>
-              [% combo_ui_barcode %]
+         <li class="sub_item">
+                <label for="radio">[% "Unidad de Informacion" | i18n %]</label>
+                <input type="radio" name="uibarcode" value="Origen" checked>Origen
+                <input type="radio" name="uibarcode" value="Poseedora" >Poseedora<br>
+                <label for="ui"></label>
+                  [% combo_ui_barcode %]      
             </li>
+         
 
             [% PERL %]
                             print C4::AR::Filtros::to_Button( 
@@ -207,6 +273,8 @@
 </fieldset>
 
 <br>
+<div id="reporteCreado" style="border: 1px solid #7E94AF; text-align:center; background-color: #CCCCCC; color:#505050; padding:10px 0 0 0; margin: 0 0 10px 0">
+</div>
 
 <div id="result"></div>
 </fieldset>

@@ -12,6 +12,7 @@ use vars qw(@EXPORT @ISA);
     &marcarLeido
     &marcarNoLeido
     &eliminar
+    &noLeidos
     &ver
     &listar
     &marcar
@@ -32,6 +33,26 @@ sub marcarLeido{
     }
 
 }
+
+sub noLeidos{
+
+    my ($params) = @_;
+    my @filtros;
+
+    push (@filtros, (leido => {eq =>0}) );
+
+    my  $noLeidos = C4::Modelo::Contacto::Manager->get_contacto(query => \@filtros,
+                                                                sort_by => ['id'] );
+    
+
+    
+    my $cant_noLeidos= scalar(@$noLeidos);
+
+
+    return ($noLeidos, $cant_noLeidos);
+
+}
+
 
 sub marcarNoLeido{
 

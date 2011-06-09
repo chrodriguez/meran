@@ -16,6 +16,9 @@ use vars qw(@EXPORT_OK @ISA);
   &registroDeUsuarios
   &altasRegistro
   &estantesVirtuales
+  &listarItemsDeInventarioPorSigTop
+  &listarItemsDeInventarioPorBarcode
+
 );
 
 sub altasRegistro {
@@ -231,6 +234,406 @@ sub getItemTypes {
 }
 
 
+
+sub listarItemsDeInventarioPorSigTop{
+    my ($params_hash_ref) = @_;
+
+    my @filtros;
+    my @info_reporte;
+   
+    my $ini=$params_hash_ref->{'ini'};
+    my $cantR=$params_hash_ref->{'cantR'};  
+    
+    my $signatura= $params_hash_ref->{'sigtop'};
+    
+    my $ui_signatura = $params_hash_ref->{'id_ui'};
+    my $tipo_ui= $params_hash_ref->{'tipoUI'};
+
+    my $campoRegMARC;
+
+    C4::AR::Debug::debug($tipo_ui);
+
+    if ($tipo_ui eq "Origen"){
+        $campoRegMARC= 'dpref_unidad_informacion@'.$ui_signatura;
+    } else {
+        $campoRegMARC= 'cpref_unidad_informacion@'.$ui_signatura;
+    }
+    
+   
+   
+    my $db= C4::Modelo::CatRegistroMarcN3->new()->db();
+
+    my $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
+                                                                                            db  => $db,
+                                                                                            query => [  
+                                                                                                  signatura => { eq => $signatura },
+                                                                                                  marc_record => { like => '%'.$campoRegMARC.'%' }
+                                                                                            ], 
+                                                                                            limit   => $cantR,
+                                                                                            offset  => $ini,
+                                                                                            sort_by => ['signatura'],
+                                                                          );
+
+   my $cat_nivel3_array_ref_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count( 
+                                                                                            db  => $db,
+                                                                                            query => [  
+                                                                                                  signatura => { eq => $signatura },
+                                                                                                  marc_record => { like => '%'.$campoRegMARC.'%' }
+                                                                                            ], 
+                                                                                     
+                                                                          ); 
+
+    
+    my($result)= armarResult($cat_nivel3_array_ref);
+
+    return ($cat_nivel3_array_ref_count, $result);
+}
+
+
+sub listarItemsDeInventarioEntreSigTops{
+    my ($params_hash_ref) = @_;
+
+    my @filtros;
+    my @info_reporte;
+   
+    my $ini=$params_hash_ref->{'ini'};
+    my $cantR=$params_hash_ref->{'cantR'};  
+    
+    my $desde_sigtop= $params_hash_ref->{'desde_signatura'};
+    my $hasta_sigtop= $params_hash_ref->{'hasta_signatura'};
+   
+    my $ui_signatura = $params_hash_ref->{'id_ui'};
+    my $tipo_ui= $params_hash_ref->{'tipoUI'};
+
+    my $campoRegMARC;
+
+    C4::AR::Debug::debug($tipo_ui);
+
+    if ($tipo_ui eq "Origen"){
+        $campoRegMARC= 'dpref_unidad_informacion@'.$ui_signatura;
+    } else {
+        $campoRegMARC= 'cpref_unidad_informacion@'.$ui_signatura;
+    }
+
+    my $db= C4::Modelo::CatRegistroMarcN3->new()->db();
+
+    my $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
+                                                                                            db  => $db,
+                                                                                            query => [  
+                                                                                                    signatura => { between => [ $desde_sigtop, $hasta_sigtop ] },
+                                                                                                    marc_record => { like => '%'.$campoRegMARC.'%' }
+                                                                                                    
+                                                                                            ], 
+                                                                                            sort_by => ['signatura'],
+                                                                                            limit   => $cantR,
+                                                                                            offset  => $ini,
+                                                                             ,
+                                                                          );
+
+   my $cat_nivel3_array_ref_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count( 
+                                                                                            db  => $db,
+                                                                                            query => [  
+                                                                                                    signatura => { between => [ $desde_sigtop, $hasta_sigtop ] },
+                                                                                                    marc_record => { like => '%'.$campoRegMARC.'%' }
+                                                                                            ], 
+                                                                          ); 
+
+    
+    my($result)= armarResult($cat_nivel3_array_ref);
+
+
+#     my($info_reporte)= armarInforme($cat_nivel3_array_ref);
+
+    return ($cat_nivel3_array_ref_count, $result);
+}
+
+
+
+sub listarItemsDeInventarioPorBarcode{
+    my ($params_hash_ref) = @_;
+
+    my @filtros;
+    my @info_reporte;
+
+   
+    my $ini=$params_hash_ref->{'ini'};
+    my $cantR=$params_hash_ref->{'cantR'};  
+    
+    my $codigo_barra= $params_hash_ref->{'barcode'};
+   
+    my $ui_barcode = $params_hash_ref->{'id_ui'};
+    my $tipo_ui= $params_hash_ref->{'tipoUI'};
+
+    my $campoRegMARC;
+
+    if ($tipo_ui eq "Origen"){
+        $campoRegMARC= 'dpref_unidad_informacion@'.$ui_barcode;
+    } else {
+        $campoRegMARC= 'cpref_unidad_informacion@'.$ui_barcode;
+    }
+
+    my $db= C4::Modelo::CatRegistroMarcN3->new()->db();
+
+    my $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
+                                                                                            db  => $db,
+                                                                                            query => [  
+                                                                                                  codigo_barra => { eq => $codigo_barra },
+                                                                                                  marc_record => { like => '%'.$campoRegMARC.'%' }
+                                                                                            ], 
+                                                                                            sort_by => ['codigo_barra'],
+                                                                                            limit   => $cantR,
+                                                                                            offset  => $ini,
+                                                                              
+                                                                          );
+
+   my $cat_nivel3_array_ref_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count( 
+                                                                                            db  => $db,
+                                                                                            query => [  
+                                                                                                  codigo_barra => { eq => $codigo_barra },
+                                                                                                  marc_record => { like => '%'.$campoRegMARC.'%' }
+                                                                                            ], 
+                                                                                       
+                                                                          ); 
+
+
+    
+    my($result)= armarResult($cat_nivel3_array_ref);
+
+    return ($cat_nivel3_array_ref_count, $result);
+}
+
+
+sub listarItemsDeInventarioEntreBarcodes{
+    my ($params_hash_ref) = @_;
+
+    my @filtros;
+    my @info_reporte;
+
+   
+    my $ini=$params_hash_ref->{'ini'};
+    my $cantR=$params_hash_ref->{'cantR'};  
+
+    my $desde_barcode= $params_hash_ref->{'desde_barcode'};
+    my $hasta_barcode= $params_hash_ref->{'hasta_barcode'};
+
+    my $ui_barcode = $params_hash_ref->{'id_ui'};
+    my $tipo_ui= $params_hash_ref->{'tipoUI'};
+
+    my $campoRegMARC;
+
+    if ($tipo_ui eq "Origen"){
+        $campoRegMARC= 'dpref_unidad_informacion@'.$ui_barcode;
+     } else {
+        $campoRegMARC= 'cpref_unidad_informacion@'.$ui_barcode;
+    }
+
+
+   
+    my $db= C4::Modelo::CatRegistroMarcN3->new()->db();
+
+    my $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
+                                                                                            db  => $db,
+                                                                                            query => [  
+                                                                                                   codigo_barra => { between => [ $desde_barcode, $hasta_barcode ] },
+                                                                                                   marc_record => { like => '%'.$campoRegMARC.'%' }
+#                                                                                                    codigo_barra => { ge => $desde_barcode },
+#                                                                                                    codigo_barra => { le =>  $hasta_barcode },
+                                                                                            ], 
+                                                                                            sort_by => ['codigo_barra'],
+                                                                                            limit   => $cantR,
+                                                                                            offset  => $ini,
+                                                                                        
+                                                                          );
+
+   my $cat_nivel3_array_ref_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count( 
+                                                                                            db  => $db,
+                                                                                            query => [  
+                                                                                                 codigo_barra => { between => [ $desde_barcode, $hasta_barcode ] }
+                                                                                            ], 
+                                                                                     
+                                                                          ); 
+
+    
+    my($result)= armarResult($cat_nivel3_array_ref);
+  
+
+    return ($cat_nivel3_array_ref_count, $result);
+}
+
+
+
+sub consultaParaReporte {
+    my ($params) = @_;
+
+    my $db= C4::Modelo::CatRegistroMarcN3->new()->db();
+
+    my $cat_nivel3_array_ref;
+
+    if ($params->{'sigtop'}){
+            
+          my $ui_sigtop = $params->{'id_uisignatura'};
+          my $tipo_ui= $params->{'tipoUISignatura'};
+
+          my $campoRegMARC;
+
+          if ($tipo_ui eq "Origen"){
+              $campoRegMARC= 'dpref_unidad_informacion@'.$ui_sigtop;
+           } else {
+              $campoRegMARC= 'cpref_unidad_informacion@'.$ui_sigtop;
+           }
+
+        
+           $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
+                                                                                            db  => $db,
+                                                                                            query => [  
+                                                                                                  signatura => { eq => $params->{'sigtop'} },
+                                                                                                   marc_record => { like => '%'.$campoRegMARC.'%' }
+                                                                                                  
+                                                                                            ], 
+                                                                                            sort_by => ['signatura'],
+                                                                          );
+    } elsif ($params->{'barcode'}){
+
+          my $ui_barcode = $params->{'id_uibarcode'};
+          my $tipo_ui= $params->{'tipoUIBarcode'};
+
+          my $campoRegMARC;
+
+          if ($tipo_ui eq "Origen"){
+              $campoRegMARC= 'dpref_unidad_informacion@'.$ui_barcode;
+          } else {
+              $campoRegMARC= 'cpref_unidad_informacion@'.$ui_barcode;
+          }
+
+           $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
+                                                                                            db  => $db,
+                                                                                            query => [  
+                                                                                                  codigo_barra => { eq => $params->{'barcode'} },
+                                                                                                   marc_record => { like => '%'.$campoRegMARC.'%' }
+                                                                                            ], 
+                                                                                            sort_by => ['codigo_barra'],
+                                                                          );
+
+    } else {
+           if ($params->{'desde_signatura'}){
+                
+                  my $ui_sigtop = $params->{'id_uisignatura'};
+                  my $tipo_ui= $params->{'tipoUISignatura'};
+
+                  my $campoRegMARC;
+
+                  if ($tipo_ui eq "Origen"){
+                      $campoRegMARC= 'dpref_unidad_informacion@'.$ui_sigtop;
+                   } else {
+                        $campoRegMARC= 'cpref_unidad_informacion@'.$ui_sigtop;
+                    }
+  
+                  my $orden = $params->{'sort'} || 'signatura';
+                  $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
+                                                                                            db  => $db,
+                                                                                            query => [  
+                                                                                                    signatura => { between => [ $params->{'desde_signatura'}, $params->{'hasta_signatura'} ] },
+                                                                                                    marc_record => { like => '%'.$campoRegMARC.'%' }  
+                                                                                            ], 
+                                                                                            sort_by => ['signatura'],
+                                                                          );
+           } elsif ($params->{'desde_barcode'}){
+
+                    my $ui_barcode = $params->{'id_uibarcode'};
+                    my $tipo_ui= $params->{'tipoUIBarcode'};
+
+                    my $campoRegMARC;
+
+                    if ($tipo_ui eq "Origen"){
+                        $campoRegMARC= 'dpref_unidad_informacion@'.$ui_barcode;
+                    } else {
+                        $campoRegMARC= 'cpref_unidad_informacion@'.$ui_barcode;
+                    }
+
+                    my $orden = $params->{'sort'} || 'codigo_barra';
+                    $cat_nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
+                                                                                            db  => $db,
+                                                                                            query => [  
+                                                                                                   codigo_barra => { between => [ $params->{'desde_barcode'}, $params->{'hasta_barcode'} ] },
+                                                                                                    marc_record => { like => '%'.$campoRegMARC.'%' }
+                                                                                            ], 
+                                                                                            sort_by => ['codigo_barra'],
+                                                                                       
+                                                                          );
+
+           }
+
+
+    }
+
+    my $cant_total= scalar(@$cat_nivel3_array_ref);
+
+    C4::AR::Debug::debug($cant_total);
+
+    my ($info_reporte);
+
+    my($info_reporte)= armarInforme($cat_nivel3_array_ref);
+
+    return($cant_total,$info_reporte);
+}
+
+
+
+sub armarResult{
+
+    my ($cat_nivel3_array_ref) = @_;
+
+    my @result;
+
+    foreach my $reg_nivel_3 (@$cat_nivel3_array_ref){
+          my %hash_result;
+          my $nivel1 = C4::AR::Nivel1::getNivel1FromId3($reg_nivel_3->getId3);
+          my $nivel2 = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
+
+          $hash_result{'nivel1'}= $nivel1; 
+          $hash_result{'nivel2'}=  @$nivel2[0];
+          $hash_result{'nivel3'}= $reg_nivel_3;
+
+          push(@result, \%hash_result);
+    }
+
+    return(\@result);
+}
+
+
+sub armarInforme{
+
+    my ($cat_nivel3_array_ref) = @_;
+
+    my @informe;
+
+#     my @headers= ("Código de barra", "Signatura Topográfica", "Autor", "Título", "Editor", "Edición", "UI Origen", "UI Poseedora");
+
+#     push(@informe,\@headers);
+
+    foreach my $reg_nivel_3 (@$cat_nivel3_array_ref){
+          my %hash_result;
+          my $nivel1 = C4::AR::Nivel1::getNivel1FromId3($reg_nivel_3->getId3);
+          my $nivel2 = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
+
+          $hash_result{'codigo_barra'}= $reg_nivel_3->getCodigoBarra; 
+          $hash_result{'signatura'}= $reg_nivel_3->getSignatura;
+# @$nivel2[0]
+
+          $hash_result{'autor'}= $nivel1->getAutor;
+          $hash_result{'titulo'}= $nivel1->getTitulo;
+          $hash_result{'editor'}= @$nivel2[0]->getEditor;
+          $hash_result{'edicion'}= @$nivel2[0]->getEdicion." ".@$nivel2[0]->getAnio_publicacion ;
+          $hash_result{'ui_origen'}= $reg_nivel_3->getId_ui_origen;
+          $hash_result{'ui_poseedora'}=$reg_nivel_3->getId_ui_poseedora;       
+              
+          push(@informe, \%hash_result);
+    }
+
+    return(\@informe);
+}
+
+
 sub getEstantes {
     my ( $params, $return_arrays ) = @_;
 
@@ -307,6 +710,11 @@ sub getEstantes {
 
     return ( \@items, \@colours, \@cant );
 }
+
+
+
+
+
 
 
 sub getConsultasOPAC {
@@ -492,6 +900,7 @@ sub toXLS {
 
 	my $path      = $reports_dir . '/' . $filename;
 
+    C4::AR::Debug::debug($path);
     
 	my $workbook  = Spreadsheet::WriteExcel->new($path);
 	

@@ -68,16 +68,10 @@
                 </div>
                 <div id="boton_login">
                     <ul>
-                    [% PERL %]
-                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Entrar' | i18n %]",
-                                                                            boton   => "boton_entrar",
-                                                                            onclick => "enviar(); return(false);",
-                                                                            title   => "[% 'Entrar' | i18n %]",
-                                                                            width   => "auto",
-                                                ) ;
-                    [% END %]
-                    
-                  </ul>
+                        <li class="click horizontal " onclick="enviar(); return(false);" style="width:10ex" title="Entrar">     
+                            <div class="boton_entrar"></div>    
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

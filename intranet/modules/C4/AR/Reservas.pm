@@ -101,12 +101,12 @@ sub getReservaActiva{
     Busca un nivel3 sin reservas para los prestamos y nuevas reservas.
 =cut
 sub getNivel3ParaReserva{
-    my ($id2, $disponibilidad, $db) = @_;
+    my ($id2, $db) = @_;
 
 
     $db = $db || C4::Modelo::CatRegistroMarcN3->new()->db;
 
-    my $disponibilidad_filtro      = C4::Modelo::RefDisponibilidad::paraPrestamoReferencia(); #  Domiciliario
+    my $disponibilidad_filtro      = C4::Modelo::RefDisponibilidad::paraPrestamoReferencia(); #  Domiciliario 
     my $estado_disponible_filtro  = C4::Modelo::RefEstado::estadoDisponibleReferencia(); #Disponible
 
     my @filtros;
@@ -909,9 +909,12 @@ sub _verificaciones {
         C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if que verifica si el ejemplar se encuentra prestado");
     }
 
-#Se verifica que el EJEMPLAR no se encuentre asignado a otro usuario!!.
+#Se verifica que el EJEMPLAR no se encuentre asignado a otro usuario y no hay más ejemplares libres!!.
 #SOLO PARA INTRA, ES UN PRESTAMO INMEDIATO.
-    if( !($msg_object->{'error'}) && $tipo eq "INTRA" &&  C4::AR::Reservas::estaAsignadoAOtroUsuario($id3,$nro_socio) ){
+    if( !($msg_object->{'error'}) && $tipo eq "INTRA" &&  
+      ( C4::AR::Reservas::estaAsignadoAOtroUsuario($id3,$nro_socio) && 
+       !C4::AR::Reservas::tieneReservaAsignadaDeGrupo($id2,$nro_socio) && 
+       !C4::AR::Reservas::getNivel3ParaReserva($id2))){
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P130', 'params' => []} ) ;
         C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if que verifica si el ejemplar se encuentra asignado a otro usuario");
@@ -1515,6 +1518,25 @@ sub estaAsignadoAOtroUsuario {
                                                                 query => [  estado  => { eq => 'E' }, 
 									    nro_socio => { ne => $nro_socio }, 
                                                                             id3  => { eq => $id3 }
+                                                                ]
+                                ); 
+
+    return (scalar(@$reserva_array_ref) > 0);
+}
+
+=item
+Esta funcion retorna si el usuario tiene algun ejemplar asignado en el grupo
+=cut
+sub tieneReservaAsignadaDeGrupo {
+    my ($id2,$nro_socio) = @_;
+    
+    use C4::Modelo::CircReserva;
+    use C4::Modelo::CircReserva::Manager;
+
+    my $reserva_array_ref= C4::Modelo::CircReserva::Manager->get_circ_reserva( 
+                                                                query => [  estado  => { eq => 'E' }, 
+									    nro_socio => { eq => $nro_socio }, 
+                                                                            id2  => { eq => $id2 }
                                                                 ]
                                 ); 
 

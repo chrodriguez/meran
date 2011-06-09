@@ -5,6 +5,7 @@ use strict;
 use C4::AR::Auth;
 use Spreadsheet::WriteExcel::Simple;
 
+
 my $input = new CGI;
 my $authnotrequired= 0;
 
@@ -43,8 +44,6 @@ sub getXLS{
 
     return ($data);
 }
-
-
 
 
 # ----- Exporta los datos de la tabla a un archivo .xls, recibe como parametros un array con los datos y otro con los headers de la tabla ---- 

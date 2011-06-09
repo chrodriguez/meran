@@ -10,20 +10,60 @@ __PACKAGE__->meta->setup(
     table   => 'pref_servidor_z3950',
 
     columns => [
-        servidor => { type => 'varchar', length => 255 },
-        puerto   => { type => 'integer' },
-        base     => { type => 'varchar', length => 255 },
-        usuario  => { type => 'varchar', length => 255 },
-        password => { type => 'varchar', length => 255 },
-        nombre   => { type => 'text', length => 65535 },
-        id       => { type => 'serial', not_null => 1 },
-        habilitado => { type => 'integer', not_null => 1 },
-        sintaxis => { type => 'varchar', length => 80 },
+        servidor    => { type => 'varchar', length => 255 },
+        puerto      => { type => 'integer' },
+        base        => { type => 'varchar', length => 255 },
+        usuario     => { type => 'varchar', length => 255 },
+        password    => { type => 'varchar', length => 255 },
+        nombre      => { type => 'text', length => 65535 },
+        id          => { type => 'serial', not_null => 1 },
+        habilitado  => { type => 'integer', not_null => 1 },
+        sintaxis    => { type => 'varchar', length => 80 },
     ],
 
     primary_key_columns => [ 'id' ],
 );
 
+sub agregarServidorZ3950{
+
+    my ($self)   = shift;
+    my ($params) = @_;
+
+    $self->setNombre($params->{'nombre'});
+    $self->setServidor($params->{'servidor'});
+    $self->setPuerto($params->{'puerto'});
+    $self->setBase($params->{'base'});
+    $self->setUsuario($params->{'usuario'});
+    $self->setPassword($params->{'password'});
+    $self->setHabilitado(1);
+    $self->setSintaxis($params->{'sintaxis'});
+
+    $self->save();
+}
+
+sub editarServidorZ3950{
+
+    my ($self)   = shift;
+    my ($params) = @_;
+
+    $self->setNombre($params->{'nombre'});
+    $self->setServidor($params->{'servidor'});
+    $self->setPuerto($params->{'puerto'});
+    $self->setBase($params->{'base'});
+    $self->setUsuario($params->{'usuario'});
+    $self->setPassword($params->{'password'});
+    $self->setHabilitado(1);
+    $self->setSintaxis($params->{'sintaxis'});
+
+    $self->save();
+}
+
+sub desactivar{
+
+    my ($self) = shift;
+    $self->setHabilitado(0);
+    $self->save();
+}
 
 sub nextMember{
     return(C4::Modelo::RefColaborador->new());
