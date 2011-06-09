@@ -106,7 +106,7 @@ sub getNivel3ParaReserva{
 
     $db = $db || C4::Modelo::CatRegistroMarcN3->new()->db;
 
-    my $disponibilidad_filtro      = C4::Modelo::RefDisponibilidad::paraPrestamoReferencia(); #  Domiciliario
+    my $disponibilidad_filtro      = C4::Modelo::RefDisponibilidad::paraPrestamoReferencia(); #  Domiciliario 
     my $estado_disponible_filtro  = C4::Modelo::RefEstado::estadoDisponibleReferencia(); #Disponible
 
     my @filtros;

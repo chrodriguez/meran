@@ -1,77 +1,77 @@
 
 [% USE HTML %]
 
-<br>
-
 <p  align="center">
-    [% "La cantidad Total de ejemplares es:" | i18n %] [% cantidad %]
+    [% "La cantidad Total de ejemplares encontrados es:" | i18n %] [% cantidad %]
     <div class="contenedor_paginador">[% paginador %]</div>
 </p>
+      
+      [% IF cantidad > 0 %]
+            <table id="tablaResult" class="datos_tabla" border="0" cellspacing="0" cellpadding="0" width="100%">
+                <tr class="titulo_tabla_resultado click">
 
-<br>
+                    <th onClick="ordenar('nro_inventario');">[% "C&oacute;digo de barra" | i18n %]</th>
+                    <th onClick="ordenar('signatura_topografica');">[% "Signatura Topogr&aacute;fica" | i18n %]</th>
+                    <th onClick="ordenar('autor');">[% "Autor" | i18n %]</th>
+                    <th onClick="ordenar('title');">[% "T&iacute;tulo" | i18n %]</th>
+                    <th onClick="ordenar('editor');">[% "Editor" | i18n %]</th>
+                    <th onClick="ordenar('edicion');">[% "Edici&oacute;n" | i18n %]</th>
+                    <th onClick="ordenar('ui_origen');">[% "UI Origen" | i18n %]</th>
+                    <th onClick="ordenar('ui_poseedora');">[% "UI Poseedora" | i18n %]</th>
 
+                </tr>
+       [% END %]        
+                [% FOREACH res IN results %]
+                        <tr >
+                                <td  align="center">
+                                        [% res.nivel3.codigo_barra%]
+                                </td>
+                                <td align="center">
+                                        [% res.nivel3.signatura %]
+                                </td>
+                                <td align="center">
+                                        [% res.nivel1.getAutor %]
+                                </td>
+                                <td align="center">
+                                        [% res.nivel1.getTitulo%]
+                                </td>
+                                <td align="center">
+                                        [% IF res.nivel2.getEditor %]
+                                                [% res.nivel2.getEditor %]
+                                        [% END %]
+                                </td>
+                                <td align="center">
+                                        [% IF res.nivel2.getEdicion %]
+                                          [% res.nivel2.getEdicion %]
+                                        [% END %]
+                                        [% IF res.nivel2.getAnio_publicacion %]
+                                          ([% res.nivel2.getAnio_publicacion %])
+                                        [% END %]
+                                </td>
+                                <td align="center">
+                                        [% res.nivel3.getId_ui_origen %]
+                                </td>
+                                <td align="center">
+                                        [% res.nivel3.getId_ui_poseedora %]
+                                </td>
+                        </tr>
 
-<table id="tablaResult" class="datos_tabla" border="0" cellspacing="0" cellpadding="0" width="100%">
-    <tr class="titulo_tabla_resultado click">
+                [% END %]
+            </table>
+  
+      [% IF cantidad > 0 %]
 
-        <th onClick="ordenar('nro_inventario');">[% "Nro. de Inventario" | i18n %]</th>
-        <th onClick="ordenar('signatura_topografica');">[% "Signatura Topogr&aacute;fica" | i18n %]</th>
-        <th onClick="ordenar('autor');">[% "Autor" | i18n %]</th>
-        <th onClick="ordenar('title');">[% "T&iacute;tulo" | i18n %]</th>
-        <th onClick="ordenar('publisher');">[% "Editor" | i18n %]</th>
-        <th onClick="ordenar('edicion');">[% "Edici&oacute;n" | i18n %]</th>
-        <th onClick="ordenar('ui');">[% "UI" | i18n %]</th>
+            <div class="buttonContainerHorizontal" style="margin-top:10px;">
+          
+                [% PERL %]
+                        print C4::AR::Filtros::to_Button( 
+                                                            text    =>  "[% "Exportar XLS" | i18n %]",
+                                                            title    =>  "[% 'Exportar XLS' | i18n %]",
+                                                            boton   =>  "boton_guardar",
+                                                            onClick =>  "exportarXLS();",
+                                                        );
+                [% END %]
+            
 
-    </tr>
-
-    [% FOREACH cat_nivel3 IN results %]
-            <tr >
-                    <td  align="center">
-                            [% cat_nivel3.nro_inventario %]
-                    </td>
-                    <td align="center">
-                            [% cat_nivel3.signatura_topografica %]
-                    </td>
-                    <td align="center">
-                            [% cat_nivel3.autor %]
-                    </td>
-                    <td align="center">
-                            [% HTML.escape(cat_nivel3.titulo) %]
-                            [% IF cat_nivel3.unititle %]:&nbsp;
-                                    [% HTML.escape(unititle) %]
-                            [% END %]
-                    </td>
-                    <td align="center">
-                            [% cat_nivel3.publisher %]
-                    </td>
-                    <td align="center">
-                            [% IF cat_nivel3.edicion %]
-                              [% cat_nivel3.edicion %]
-                            [% END %]
-                            [% IF cat_nivel3.anio_publicacion %]
-                              ([% cat_nivel3.anio_publicacion %])
-                            [% END %]
-                            [% IF cat_nivel3.volume %]
-                              t [% cat_nivel3.volume %]
-                            [% END %]
-                    </td>
-                    <td align="center">
-                            [% cat_nivel3.ui %]
-                    </td>
-            </tr>
-
-    [% END %]
-</table>
-
-<br><br>
-
-      <div class="buttonContainerHorizontal">
-          [% PERL %]
-                  print C4::AR::Filtros::to_Button( 
-                                                      text    =>  "[% "Exportar XLS" | i18n %]",
-                                                      title    =>  "[% 'Exportar XLS' | i18n %]",
-                                                      boton   =>  "boton_guardar",
-                                                      onClick =>  "tableToXLS('[% filename %]');",
-                                                  );
-          [% END %]
-      </div>
+            </div>
+      [% END %]

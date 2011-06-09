@@ -714,7 +714,7 @@ sub checkauth {
                              }
                             
                              if ($query->url_param('welcome')){
-                                      C4::AR::Debug::debug("adentro del if welcome");
+                               
                                       $template_params->{'loginAttempt'} = 0;
                                       $mensaje = 'U000';
                              }

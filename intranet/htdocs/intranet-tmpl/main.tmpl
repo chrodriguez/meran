@@ -12,6 +12,8 @@
 	});
 </script>
 
+
+
 <fieldset class="main">
     <legend class="titulo_legend"><strong>[% "Circulaci&oacute;n:" | i18n %]</strong></legend>
     <ul>
@@ -45,6 +47,25 @@
                                                     params =>   ["nro_socio=[% nro_socio %]"],
                             );
                     [% END %]
+        </li>
+    </ul>
+</fieldset>
+
+<fieldset class="mensajes">
+    <legend class="titulo_legend"><strong>[% "Mensajes de Contacto :" | i18n %]</strong></legend>
+    <ul>
+        <li class="item"> 
+              [% IF cant_noleidos %]
+                    [% PERL %]
+                    print C4::AR::Filtros::link_to( 
+                          text =>     "[% 'Mensajes' | i18n %]",
+                          url=>"[% url_prefix %]/admin/mensajes_contacto.pl", 
+                          title =>    "[% 'Pr&eacute;stamos' | i18n %]"
+                          );
+                    [% END %]
+              [% ELSE %]
+                        <p> No hay mensajes sin leer</p>
+              [% END %]
         </li>
     </ul>
 </fieldset>

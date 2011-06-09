@@ -332,13 +332,13 @@ sub getCiudadPublicacion{
 =head2 sub getEditor
 Recupera la Editor segun el MARC 260,b
 =cut
-sub getEditor{
-    my ($self)      = shift;
-    
-    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
-
-    return $marc_record->subfield("260","b");
-}
+# sub getEditor{
+#     my ($self)      = shift;
+#     
+#     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+# 
+#     return $marc_record->subfield("260","b");
+# }
 
 =head2 getCiudadObject
 
@@ -541,6 +541,7 @@ sub getEdicion{
 
     return $marc_record->subfield("250","a");
 }
+
 
 sub getPais{
     my ($self)      = shift;
