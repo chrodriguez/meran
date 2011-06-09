@@ -458,6 +458,13 @@ my %mensajesINTRA = (
     'A040' => 'Los materiales seleccionados son inv&aacute;lidos.',  
     'A041' => 'El pedido de cotizaci&oacute;n fue agregado exitosamente.',       
     'A042' => 'Alguno de los ejemplares seleccionados ya se encuentran dentro del Pedido de Cotizaci&oacute;n.',   
+    #mensajes de servidores z3950
+    'S000' => 'Se agrego el servidor z3950 con &eacute;xito.',   
+    'S001' => 'Hubo un error cuando se intentaba agregar el servidor z3950.',   
+    'S002' => 'Se elimino el servidor z3950 con &eacute;xito.',   
+    'S003' => 'Hubo un error cuando se intentaba eliminar el servidor z3950.',   
+    'S004' => 'Se modifico el servidor z3950 con &eacute;xito.',   
+    'S005' => 'Hubo un error cuando se intentaba modificar el servidor z3950.',   
 );
 
 sub getMensaje {
