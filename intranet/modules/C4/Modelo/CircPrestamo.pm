@@ -851,6 +851,8 @@ sub getInvolvedCount {
 	my ( $campo, $value ) = @_;
 	my @filtros;
     push( @filtros, ( $campo => $value ) );
+    C4::AR::Debug::debug("CircPrestamo=> getInvolvedCount => $campo || $value" );
+    
 	my $circ_prestamo_count =  C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(query => \@filtros );
 	return ($circ_prestamo_count);
 }
