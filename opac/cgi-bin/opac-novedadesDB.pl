@@ -45,14 +45,17 @@ elsif($tipoAccion eq "ACTUALIZAR_TABLA_NOVEDADES"){
             });
 
 
-    my $nro_socio                       = $session->param('nro_socio');            
-    my ($cantidad,$grupos)              = C4::AR::Nivel1::getUltimosGrupos();
-    my ($cantidad_novedades,$novedades) = C4::AR::Novedades::getUltimasNovedades();
-    my $novedades_no_mostrar            = C4::AR::Novedades::getNovedadesNoMostrar($nro_socio);
+    my $nro_socio                                               = $session->param('nro_socio');            
+    my ($cantidad,$grupos)                                      = C4::AR::Nivel1::getUltimosGrupos();
+    my ($cantidad_novedades,$novedades)                         = C4::AR::Novedades::getUltimasNovedades();
+    my ($cantidad_novedades_no_mostrar, $novedades_no_mostrar)  = C4::AR::Novedades::getNovedadesNoMostrar($nro_socio);
     my @novedadesOK;
     my $ok = 0; 
 
+    my $pref_limite = C4::AR::Preferencias::getValorPreferencia('limite_novedades');
 
+    $cantidad_novedades = $pref_limite - $cantidad_novedades_no_mostrar;
+    
     foreach my $nov (@$novedades){
         $ok = 0;
         if($novedades_no_mostrar){

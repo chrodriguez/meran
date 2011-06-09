@@ -72,6 +72,8 @@ print "Traducción Estructura MARC \n";
   traduccionEstructuraMarc();
 print "Agregando preferencias del sistema \n";
   agregarPreferenciasDelSistema();
+print "Dando permisos a los usuarios \n";
+  dandoPermisosUsuarios();
 print "FIN!!! \n";
 my $tt2 = time();
 print "\n GRACIAS DICO!!! \n";
@@ -931,4 +933,27 @@ sub trim{
     $string =~ s/\s+$//;
 
     return $string;
+}
+
+sub dandoPermisosUsuarios {
+
+    use C4::Modelo::UsrSocio::Manager;
+    use C4::Modelo::UsrSocio;
+    my  $socios = C4::Modelo::UsrSocio::Manager->get_usr_socio();
+        foreach my $socio (@$socios){
+	  my $flag = $socio->getFlags;
+	  if ($flag){
+	    #Si tiene flags seteados NO es un estudiante
+	     if($flag % 2){
+		#Da 1 entonces era IMPAR => tenia el 1er bit en 1 => es SUPERLIBRARIAN
+		$socio->convertirEnSuperLibrarian;
+  	     }else{
+		#Da 0 entonces era PAR => tenia el 1er bit en 0 => NO es SUPERLIBRARIAN
+		$socio->convertirEnLibrarian;
+	     }
+	  }else{
+	    #Si NO tiene flags seteados es un estudiante
+	    $socio->convertirEnEstudiante;
+	  }
+        }
 }

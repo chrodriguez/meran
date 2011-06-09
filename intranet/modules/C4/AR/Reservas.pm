@@ -909,6 +909,15 @@ sub _verificaciones {
         C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if que verifica si el ejemplar se encuentra prestado");
     }
 
+#Se verifica que el EJEMPLAR no se encuentre asignado a otro usuario!!.
+#SOLO PARA INTRA, ES UN PRESTAMO INMEDIATO.
+    if( !($msg_object->{'error'}) && $tipo eq "INTRA" &&  C4::AR::Reservas::estaAsignadoAOtroUsuario($id3,$nro_socio) ){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P130', 'params' => []} ) ;
+        C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if que verifica si el ejemplar se encuentra asignado a otro usuario");
+    }
+
+
 #Se verifica que el usuario no tenga el maximo de prestamos permitidos para el tipo de prestamo.
 #SOLO PARA INTRA, ES UN PRESTAMO INMEDIATO.
     if( !($msg_object->{'error'}) && $tipo eq "INTRA" &&  C4::AR::Prestamos::_verificarMaxTipoPrestamo($nro_socio, $tipo_prestamo) ){
@@ -1493,7 +1502,24 @@ sub getHistorialReservasParaTemplate {
 }
 
 
+=item
+Esta funcion retorna si el ejemplar segun el id3 pasado por parametro esta asignado a otra persona
+=cut
+sub estaAsignadoAOtroUsuario {
+    my ($id3,$nro_socio) = @_;
+    
+    use C4::Modelo::CircReserva;
+    use C4::Modelo::CircReserva::Manager;
 
+    my $reserva_array_ref= C4::Modelo::CircReserva::Manager->get_circ_reserva( 
+                                                                query => [  estado  => { eq => 'E' }, 
+									    nro_socio => { ne => $nro_socio }, 
+                                                                            id3  => { eq => $id3 }
+                                                                ]
+                                ); 
+
+    return (scalar(@$reserva_array_ref) > 0);
+}
 
 
 END { }       # module clean-up code here (global destructor)

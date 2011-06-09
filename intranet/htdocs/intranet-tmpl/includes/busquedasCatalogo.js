@@ -66,6 +66,7 @@ function buscarBar(){
     objAH.shouldScroll = true;
     objAH.tipoAccion= 'BUSQUEDA_COMBINADA';
     //se setea la funcion para cambiar de pagina
+    objAH.match_mode = "SPH_MATCH_ALL";
     objAH.funcion= 'changePage';
   
     if (jQuery.trim(objAH.keyword).length > 0)

@@ -12,8 +12,6 @@ use JSON;
 my $input = new CGI;
 my $obj=$input->param('obj');
 
-
-
 my $editing = $input->param('value') && $input->param('id');
 
 $obj=C4::AR::Utilidades::from_json_ISO($obj);

@@ -46,6 +46,28 @@ sub estadoDisponibleValue{
     return ('STATE002');
 }
 
+sub getRefEstadoByCodigo{
+    my ($codigo) = @_;
+    
+     my $ref_estado = C4::Modelo::RefEstado::Manager->get_ref_estado( 
+                                                 query => [ codigo => { eq => $codigo } ],
+                                     );
+
+     if($ref_estado){
+         return ($ref_estado->[0]);
+     }else{
+         return 0;
+     }
+    
+}
+sub disponibleValueSearch{   
+    
+    my $ref_disponibilidad = getRefEstadoByCodigo(estadoDisponibleValue());
+    
+    return ($ref_disponibilidad->getNombre);
+    	
+}
+
 sub estadoDisponibleReferencia{
   return ('ref_estado@'.C4::Modelo::RefEstado::estadoDisponibleValue());
 }

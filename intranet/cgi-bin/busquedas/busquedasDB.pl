@@ -59,14 +59,16 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
 	    my $search;
 	    $search->{'keyword'}            = $keyword;
 	    $search->{'class'}              = $tipo_documento;
+	    my %sphinx_options              = {};
+
+        $sphinx_options{'only_sphinx'}       = 0;
+        $sphinx_options{'only_available'}    = $only_available;
 	    
-	    my ($cantidad, $resultId1, $suggested)      = C4::AR::Busquedas::busquedaCombinada_newTemp($search->{'keyword'}, $session, $obj,0,$only_available);
+	    my ($cantidad, $resultId1, $suggested)      = C4::AR::Busquedas::busquedaCombinada_newTemp($search->{'keyword'}, $session, $obj,\%sphinx_options);
 	    $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad, $cantR, $pageNumber, $obj->{'funcion'}, $t_params);
         $t_params->{'suggested'}        = $suggested;
-	    $obj->{'cantidad'}              = $cantidad;  #????????
 	    $t_params->{'SEARCH_RESULTS'}   = $resultId1;
         $t_params->{'cantidad'}         = $cantidad;
-
 	    if($outside) {
             $t_params->{'HEADERS'}      = 1;
 	    }
@@ -123,7 +125,7 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
     C4::AR::Debug::debug("BUSCO POR===========================================================".$t_params->{'buscoPor'});
     my $elapsed             = Time::HiRes::tv_interval( $start );
     $t_params->{'timeSeg'}  = $elapsed;
-    C4::AR::Busquedas::logBusqueda($t_params, $session);
+    #C4::AR::Busquedas::logBusqueda($t_params, $session);
     
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

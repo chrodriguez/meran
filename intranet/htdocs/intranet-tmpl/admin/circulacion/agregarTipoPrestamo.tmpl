@@ -87,7 +87,7 @@ function Check(f) {
                 </li>
                 <li class="sub_item">
                      <label for="sala">[% "Para Sala" | i18n %]</label>
-                    [% IF tipo_prestamo.disponibilidad.getId %]
+                    [% IF tipo_prestamo.codigo_disponibilidad == 'CIRC0001' %]
                         <input type=checkbox id='disponibilidad' checked value=1>
                     [% ELSE %]
                         <input type=checkbox id='disponibilidad' value=1>

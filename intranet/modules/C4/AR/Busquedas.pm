@@ -453,7 +453,7 @@ sub obtenerGrupos {
 
 
 sub obtenerDisponibilidadTotal{
-	my ($id1, $itemtype, $only_available) = @_;
+	my ($id1, $itemtype) = @_;
 
 	my @disponibilidad;
 	my $dbh = C4::Context->dbh;
@@ -916,12 +916,23 @@ sub index_update{
 }
 
 sub getSuggestion{
-    my ($search,$cant_result_busqueda,$intra,$obj_for_log) = @_;
+    my ($search,$cant_result_busqueda,$obj_for_log,$sphinx_options) = @_;
     my $speller = Text::Aspell->new;
     my $lang = C4::AR::Auth::getUserLocale();
     C4::AR::Debug::debug("******************* USER LANG DE SUGGESTIONS: ".$lang);
 
+    my $only_sphinx        = 0;
+    my $only_available     = 0;
+    my $session = CGI::Session->load();
+    
+    if ($sphinx_options){
+        $only_sphinx        = $sphinx_options->{'only_sphinx'} || 0;
+        $only_available     = $sphinx_options->{'only_available'} || 0;
+    }
+
     $speller->set_option('lang',$lang);
+    
+    $obj_for_log->{'from_suggested'} = 1;
     my $suggestion = "";
     my @words = split(/ /,$search);
     my $total_found = 0;
@@ -932,11 +943,8 @@ sub getSuggestion{
             my @suggestions = $speller->suggest($word);
             $suggestion.= @suggestions[$cont]." ";
         }
-        my %hash = {};
-#         if (!$intra){
-            $suggestion = Encode::encode_utf8($suggestion);
-#         }
-        ($total_found) = C4::AR::Busquedas::busquedaCombinada_newTemp($suggestion,\%hash,$obj_for_log,1);
+        $suggestion = Encode::encode_utf8($suggestion);
+        ($total_found) = C4::AR::Busquedas::busquedaCombinada_newTemp($suggestion,$session,$obj_for_log,$sphinx_options);
         $cont++;
     }
 
@@ -1156,24 +1164,29 @@ sub busquedaPorAutor{
 }
 
 sub busquedaCombinada_newTemp{
-	
-	
-################### FIXME hacer el filtro de disponible con ref_disponibilidad%	
-	
+
+    my ($string_utf8_encoded,$session,$obj_for_log,$sphinx_options) = @_;
+
 	use Sphinx::Search;
 	
-    my ($string_utf8_encoded,$session,$obj_for_log,$only_sphinx,$only_available) = @_;
-
-    C4::AR::Debug::debug("STRING                      ".$string_utf8_encoded);
-    C4::AR::Utilidades::printHASH($obj_for_log);
-    C4::AR::Debug::debug("SPHINX                    ".$only_sphinx);
-
-
     $string_utf8_encoded = Encode::decode_utf8($string_utf8_encoded);
     my $from_suggested = $obj_for_log->{'from_suggested'} || 0;
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
     my $string_suggested;
-    $only_sphinx = $only_sphinx || 0;
+    
+    my $only_sphinx        = 0;
+    my $only_available     = 0;
+    
+    if ($sphinx_options){
+	    $only_sphinx        = $sphinx_options->{'only_sphinx'} || 0;
+	    $only_available     = $sphinx_options->{'only_available'} || 0;
+    }
+
+#    C4::AR::Debug::debug("STRING                      ".$string_utf8_encoded);
+#    C4::AR::Utilidades::printHASH($obj_for_log);
+#    C4::AR::Debug::debug("SPHINX                    ".$only_sphinx);
+
+    
     my $sphinx = Sphinx::Search->new();
     my $query = "";
     my @boolean_ops = ("&","|","!","-");
@@ -1193,22 +1206,22 @@ sub busquedaCombinada_newTemp{
             if ($string eq "AND"){
             	$string = "&";
             }
-             
-             if (C4::AR::Utilidades::existeInArray($string,@boolean_ops)){
-                $query .=  " ".$string;
-             }else{
-             	$query .=  " ".$string."*";
-             }
+            if (C4::AR::Utilidades::existeInArray($string,@boolean_ops)){
+               $query .=  " ".$string;
+            }else{
+               $query .=  " ".$string."*";
+            }
         }else{
             $query .=  " ".$string."*";
         }
     }
 
-    C4::AR::Debug::debug("Busquedas => query string ".$query);
-
+    C4::AR::Debug::debug("=================================================== ONLY AVAILABLE: ".$only_available);
     if ($only_available){
-        $query .= ' @string "ref_disponibilidad%'.C4::Modelo::RefDisponibilidad::paraPrestamoValue.'"';
+        $query .= ' @string "ref_estado%'.C4::Modelo::RefEstado::disponibleValueSearch.'"';
     }
+
+    C4::AR::Debug::debug("Busquedas => query string ".$query);
 
     $sphinx->SetMatchMode($tipo_match);
 
@@ -1260,7 +1273,7 @@ sub busquedaCombinada_newTemp{
     C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
 
     if ( (!$from_suggested) && ($total_found == 0) && ($tipo ne 'SPH_MATCH_PHRASE') ){
-        $string_suggested = getSuggestion($string_utf8_encoded,$total_found,1,$obj_for_log);
+        $string_suggested = getSuggestion($string_utf8_encoded,$total_found,$obj_for_log,$sphinx_options);
     }
     
 
@@ -1330,7 +1343,7 @@ sub armarInfoNivel1{
             #se obtine la disponibilidad total 
             @result_array_paginado[$i]->{'rating'}              =  C4::AR::Nivel2::getRatingPromedio($nivel2_array_ref);
 
-            my @disponibilidad = &C4::AR::Busquedas::obtenerDisponibilidadTotal(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name,$only_available);
+            my @disponibilidad = C4::AR::Busquedas::obtenerDisponibilidadTotal(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name);
         
             @result_array_paginado[$i]->{'disponibilidad'}= 0;
           
@@ -1525,10 +1538,11 @@ sub logBusqueda{
 	#la preferencia de la INTRA es 1 y estoy buscando desde la INTRA
 
 	my @search_array;
-
 	my $valorOPAC= C4::AR::Preferencias::getValorPreferencia("logSearchOPAC");
 	my $valorINTRA= C4::AR::Preferencias::getValorPreferencia("logSearchINTRA");
-   C4::AR::Debug::debug($params->{'type'});
+
+    $session = $session || CGI::Session->load();
+    
 	if( (($valorOPAC == 1)&&($params->{'type'} eq 'OPAC')) || (($valorINTRA == 1)&&($params->{'type'} eq 'INTRA')) ){
 		if($params->{'codBarra'} ne ""){
 			my $search;

@@ -36,7 +36,7 @@
                 [% tipo_prestamo.getDias_antes_renovacion %]
         </td>
         <td align="center">
-                [% IF tipo_prestamo.disponibilidad.getId %]
+                [% IF tipo_prestamo.codigo_disponibilidad == 'CIRC0001' %]
                         [% "Si" | i18n %]
                 [% ELSE %]
                         [% "No" | i18n %]

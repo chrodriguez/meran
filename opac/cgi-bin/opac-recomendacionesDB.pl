@@ -7,6 +7,7 @@ use C4::Output;
 use JSON;
 use C4::AR::Nivel2;
 use C4::AR::Nivel3;
+use C4::AR::Recomendaciones;
 use C4::AR::RecomendacionDetalle;
 
 my $input = new CGI;
