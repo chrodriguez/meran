@@ -35,17 +35,22 @@
                                             boton   => "icon_edicion",
                                             onClick => "editServer([% server.id %]);",
                                             title   => "[% 'Editar Servidor' | i18n %]",
-                                            alternClass => "botonCentradoTabla"
                                     ) ;
                 [% END %]
                 [% PERL %]
                             print C4::AR::Filtros::to_Icon(    
                                             boton   => "icon_borrar",
+                                            onClick => "disableServer([% server.id %]);",
+                                            title   => "[% 'Deshabilitar Servidor' | i18n %]",
+                                    ) ;
+                [% END %] 
+                [% PERL %]
+                            print C4::AR::Filtros::to_Icon(    
+                                            boton   => "icon_borrar",
                                             onClick => "deleteServer([% server.id %]);",
                                             title   => "[% 'Eliminar Servidor' | i18n %]",
-                                            alternClass => "botonCentradoTabla"
                                     ) ;
-                [% END %]  
+                [% END %] 
                 </td>
             </tr>
         

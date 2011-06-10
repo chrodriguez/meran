@@ -27,7 +27,7 @@ if($accion eq "ACTUALIZAR_TABLA_SERVERS"){
 							debug           => 1,
 			     });
 			     
-	my $servers_array_ref           = C4::AR::Z3950::getServidoresZ3950();
+	my $servers_array_ref           = C4::AR::Z3950::getAllServidoresZ3950();
 
 	$t_params->{'servers'}          = $servers_array_ref;
 	
@@ -136,3 +136,25 @@ elsif($accion eq "GUARDAR_MODIFICACION_SERVIDOR"){
 
 
 }#end if($accion eq "GUARDAR_MODIFICACION_SERVIDOR")
+
+elsif ($accion eq "DESHABILITAR_SERVIDOR"){
+
+    my ($userid, $session, $flags) = checkauth( $input, 
+                                            $authnotrequired,
+                                            {   ui              => 'ANY', 
+                                                tipo_documento  => 'ANY', 
+                                                accion          => 'BAJA', 
+                                                entorno         => 'undefined'},
+                                            "intranet"
+                                );
+                                
+
+
+
+    my $Message_arrayref    = C4::AR::Z3950::deshabilitarServerZ3950($obj->{'id_servidor'});
+    my $infoOperacionJSON   = to_json $Message_arrayref;
+    C4::AR::Auth::print_header($session);
+    print $infoOperacionJSON;
+
+
+}#end if($accion eq "DESHABILITAR_SERVIDOR")

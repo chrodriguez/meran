@@ -12,6 +12,7 @@ use vars qw($VERSION @ISA @EXPORT);
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
+    deshabilitarServerZ3950
     editarServidorZ3950
     getServidorPorId
     eliminarServidorZ3950
@@ -25,7 +26,45 @@ use vars qw($VERSION @ISA @EXPORT);
 	_verificarDatosServidor
 );
 
-#TODO $prov->desactivar; DESACTIVAR EL SERVIDOR
+
+=item
+    Esta funcion deshabilita un servidor z3950, le marca el flag activo=0
+=cut
+sub deshabilitarServerZ3950 {
+
+    use C4::Modelo::PrefServidorZ3950;
+    use C4::Modelo::PrefServidorZ3950::Manager;
+    
+    my ($id_servidor)   = @_;
+    my $servidor        = getServidorPorId($id_servidor);
+    my $msg_object      = C4::AR::Mensajes::create();
+    my $db              = $servidor->db;
+    
+#    _verificarDatosServidor($param,$msg_object);
+
+    if (!($msg_object->{'error'})){
+          # entro si no hay algun error, todos los campos ingresados son validos
+          $db->{connect_options}->{AutoCommit} = 0;
+          $db->begin_work;
+
+           eval{
+              $servidor->desactivar();
+              $msg_object->{'error'} = 0;
+              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S006', 'params' => []});
+              $db->commit;
+           };
+           if ($@){
+           # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
+               &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
+               $msg_object->{'error'}= 1;
+               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S007', 'params' => []} ) ;
+               $db->rollback;
+           }
+
+          $db->{connect_options}->{AutoCommit} = 1;
+    }
+    return ($msg_object);
+}
 
 
 =item
@@ -236,6 +275,21 @@ sub _verificarDatosServidor{
 
 }
 
+=item
+    Esta funcion devuelve todos los servidores z3950, aun los desactivados
+=cut
+sub getAllServidoresZ3950 {
+
+    use C4::Modelo::PrefServidorZ3950;
+    use C4::Modelo::PrefServidorZ3950::Manager;
+
+    my $servidores_array_ref = C4::Modelo::PrefServidorZ3950::Manager->get_pref_servidor_z3950();
+    return ($servidores_array_ref);
+}
+
+=item
+    Esta funcion devuelve los servidores z3950 con flag activado=1
+=cut
 sub getServidoresZ3950 {
 
     use C4::Modelo::PrefServidorZ3950;

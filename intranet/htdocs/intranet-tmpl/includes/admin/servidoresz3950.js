@@ -1,0 +1,126 @@
+$(document).ready(function() {
+    actualizarTabla();
+});
+
+function actualizarTabla(){
+    objAH               = new AjaxHelper(updateActualizarTabla);
+	objAH.debug         = true;
+	objAH.url           = URL_PREFIX+"/admin/catalogo/MARC/z3950DB.pl";
+    objAH.showOverlay   = true;
+	objAH.tipoAccion    = "ACTUALIZAR_TABLA_SERVERS";
+	objAH.sendToServer();
+}
+
+function updateActualizarTabla(responseText){
+    $("#result").html(responseText);
+    zebra('datos_tabla');
+}
+
+function addServer(){
+    objAH               = new AjaxHelper(updateAddServer);
+	objAH.debug         = true;
+	objAH.url           = URL_PREFIX+"/admin/catalogo/MARC/z3950DB.pl";
+    objAH.showOverlay   = true;
+	objAH.tipoAccion    = "AGREGAR_SERVIDOR";
+	objAH.sendToServer();
+}
+
+function updateAddServer(responseText){
+    $("#addServer").show();
+    $("#addServer").html(responseText);
+}
+
+function guardarServer(id_server){
+    objAH               = new AjaxHelper(updateGuardarServer);
+	objAH.debug         = true;
+	objAH.url           = URL_PREFIX+"/admin/catalogo/MARC/z3950DB.pl";
+    objAH.showOverlay   = true;
+    objAH.servidor      = $('#server').val();
+    objAH.puerto        = $('#puerto').val();
+    objAH.base          = $('#base').val();
+    objAH.usuario       = $('#usuario').val();
+    objAH.password      = $('#password').val();
+    objAH.nombre        = $('#nombre').val();
+    objAH.sintaxis      = $('#sintaxis').val();
+    objAH.id_servidor   = id_server;
+	objAH.tipoAccion    = "GUARDAR_MODIFICACION_SERVIDOR";
+	objAH.sendToServer();
+}
+
+function updateGuardarServer(responseText){
+    var Messages=JSONstring.toObject(responseText);
+	setMessages(Messages);
+	$('#addServer').hide();
+    actualizarTabla();
+}
+
+function guardarNewServer(){
+    objAH               = new AjaxHelper(updateGuardarNewServer);
+	objAH.debug         = true;
+	objAH.url           = URL_PREFIX+"/admin/catalogo/MARC/z3950DB.pl";
+    objAH.showOverlay   = true;
+    objAH.servidor      = $('#server').val();
+    objAH.puerto        = $('#puerto').val();
+    objAH.base          = $('#base').val();
+    objAH.usuario       = $('#usuario').val();
+    objAH.password      = $('#password').val();
+    objAH.nombre        = $('#nombre').val();
+    objAH.sintaxis      = $('#sintaxis').val();
+	objAH.tipoAccion    = "GUARDAR_NUEVO_SERVIDOR";
+	objAH.sendToServer();
+
+}
+
+function updateGuardarNewServer(responseText){
+    var Messages=JSONstring.toObject(responseText);
+	setMessages(Messages);
+	$('#addServer').hide();
+    actualizarTabla();
+}
+
+function editServer(id_server){
+    objAH               = new AjaxHelper(updateEditServer);
+	objAH.debug         = true;
+	objAH.url           = URL_PREFIX+"/admin/catalogo/MARC/z3950DB.pl";
+    objAH.showOverlay   = true;
+    objAH.id_servidor   = id_server;
+    objAH.tipoAccion    = "EDITAR_SERVIDOR";
+	objAH.sendToServer();
+}
+
+function updateEditServer(responseText){
+    $('#addServer').show();
+    $('#addServer').html(responseText);
+}
+
+function deleteServer(id_server){
+    objAH               = new AjaxHelper(updateDeleteServer);
+	objAH.debug         = true;
+	objAH.url           = URL_PREFIX+"/admin/catalogo/MARC/z3950DB.pl";
+    objAH.showOverlay   = true;
+    objAH.id_servidor   = id_server;
+    objAH.tipoAccion    = "ELIMINAR_SERVIDOR";
+	objAH.sendToServer();
+}
+
+function updateDeleteServer(responseText){
+    var Messages=JSONstring.toObject(responseText);
+	setMessages(Messages);
+    actualizarTabla();
+}
+
+function disableServer(id_server){
+    objAH               = new AjaxHelper(updateDisableServer);
+	objAH.debug         = true;
+	objAH.url           = URL_PREFIX+"/admin/catalogo/MARC/z3950DB.pl";
+    objAH.showOverlay   = true;
+    objAH.id_servidor   = id_server;
+    objAH.tipoAccion    = "DESHABILITAR_SERVIDOR";
+	objAH.sendToServer();
+}
+
+function updateDisableServer(responseText){
+    var Messages=JSONstring.toObject(responseText);
+	setMessages(Messages);
+    actualizarTabla();
+}

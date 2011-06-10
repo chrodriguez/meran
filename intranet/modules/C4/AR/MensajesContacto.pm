@@ -34,6 +34,9 @@ sub marcarLeido{
 
 }
 
+
+
+# Devuelve los mensajes no leidos
 sub noLeidos{
 
     my ($params) = @_;
@@ -42,7 +45,7 @@ sub noLeidos{
     push (@filtros, (leido => {eq =>0}) );
 
     my  $noLeidos = C4::Modelo::Contacto::Manager->get_contacto(query => \@filtros,
-                                                                sort_by => ['id'] );
+                                                                sort_by => ['id']);
     
 
     
@@ -51,6 +54,23 @@ sub noLeidos{
 
     return ($noLeidos, $cant_noLeidos);
 
+}
+
+
+
+# Devuelve los ultimos mensajes sin leer para mostrar en mainpage (3 o menos)
+sub ultimosNoLeidos {
+    my ($no_leidos)= @_;
+
+    my @ultimos_no_leidos;
+
+    my $i;
+    for($i = 1; $i < 4; $i++) {
+        if (scalar(@$no_leidos) > 0){
+            push(@ultimos_no_leidos, pop(@$no_leidos));
+        }
+    }
+    return(\@ultimos_no_leidos);
 }
 
 

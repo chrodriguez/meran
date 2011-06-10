@@ -51,23 +51,35 @@
     </ul>
 </fieldset>
 
-<fieldset class="mensajes">
-    <legend class="titulo_legend"><strong>[% "Mensajes de Contacto :" | i18n %]</strong></legend>
-    <ul>
-        <li class="item"> 
-              [% IF cant_noleidos %]
-                    [% PERL %]
-                    print C4::AR::Filtros::link_to( 
-                          text =>     "[% 'Mensajes' | i18n %]",
-                          url=>"[% url_prefix %]/admin/mensajes_contacto.pl", 
-                          title =>    "[% 'Pr&eacute;stamos' | i18n %]"
-                          );
-                    [% END %]
-              [% ELSE %]
-                        <p> No hay mensajes sin leer</p>
-              [% END %]
-        </li>
-    </ul>
-</fieldset>
+
+[% IF cant_noleidos > 0 %]
+    <fieldset class="mensajes">
+        <legend class="titulo_legend"><strong>[% "Mensajes de Contacto :" | i18n %]</strong></legend>    
+           
+               
+                  <ul>
+                      [% FOREACH mens IN ultimos_no_leidos %]
+                          <li  class="msj_main"> 
+                                <span class="msj_main_nombre">[% mens.nombre %] [% mens.apellido %]</span>
+                                <span class="msj_main_mail">([% mens.email %])</span>
+                                <span class="msj_main_asunto">[% mens.asunto %]</span>
+                          </li>
+                      [% END %]
+                  </ul>
+          
+                  <ul>
+                      <li class="item"> 
+                                  [% PERL %]
+                                  print C4::AR::Filtros::link_to( 
+                                        text =>     "[% 'Ver Mensajes' | i18n %]",
+                                        url=>"[% url_prefix %]/admin/mensajes_contacto.pl", 
+                                        title =>    "[% 'Mensajes' | i18n %]"
+                                        );
+                                  [% END %]           
+                        
+                      </li>
+                  </ul>
+    </fieldset>
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
 

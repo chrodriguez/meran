@@ -1,3 +1,4 @@
+
 package C4::AR::Usuarios;
 
 =head1 NAME
@@ -461,7 +462,6 @@ sub cambiarPassword {
             $cambioDePasswordForzado= 1;
         }
 
-#         if ( $cambioDePasswordForzado && ( $password_actual_desde_DB eq $password_actual_desde_cliente_hasheada) ){
         if ( $password_actual_desde_DB eq $password_actual_desde_cliente_hasheada){
             C4::AR::Debug::debug("Auth => cambiarPassword => cambioForzado ");
             #es un cambio forzado de la password, se obliga al usuario a cambiar la password, no se compara con la pass actual
@@ -1040,15 +1040,15 @@ sub _sendRecoveryPasswordMail{
     use C4::AR::Mail;
 
     my %mail;
-    
-    $mail{'mail_from'}             = C4::AR::Preferencias::getValorPreferencia("reserveFrom");
-    $mail{'mail_to'}               = $socio->persona->getEmail;
-    
-    $mail{'mail_subject'}          = C4::AR::Filtros::i18n("Instrucciones para reestablecer su clave");
+
+    my $mail_from       = $mail{'mail_from'}  = C4::AR::Preferencias::getValorPreferencia("reserveFrom");
+    my $mail_to         = $mail{'mail_to'}    = $socio->persona->getEmail;
+    my $mail_subject    = $mail{'mail_subject'}          = C4::AR::Filtros::i18n("Instrucciones para reestablecer su clave");
     
     
 ## Datos para el mail
     use C4::Modelo::PrefUnidadInformacion;
+    use MIME::Lite::TT::HTML;
     
     my $completo            = $socio->persona->getNombre." ".$socio->persona->getApellido;
     my $nro_socio           = $socio->getNro_socio;
@@ -1071,15 +1071,8 @@ sub _sendRecoveryPasswordMail{
                 ";
     
     
+    $mail{'mail_message'}           = $mailMessage;
     
-    my ($template, $t_params)     = C4::Output::gettemplate("includes/opac-mail.tmpl", "OPAC", 1);
-    
-    $t_params->{'mail_content'} = $mailMessage;
-
-    my $out= C4::AR::Auth::get_html_content($template, $t_params);
-    
-    $mail{'mail_message'}           = $out;
-    $mail{'html_content'}           = 1;
     my ($ok, $msg_error)            = C4::AR::Mail::send_mail(\%mail);
     
     return (!$ok,$msg_error);
@@ -1140,8 +1133,17 @@ sub recoverPassword{
     if ( $captchaResult->{is_valid} ) {
 
 	    my $user_id = $params->{'user-id'};
+	    my @filtros;
+	    
+        push (@filtros, (or   => [
+                                   'usr_persona.email' => { eq => $user_id }, 
+                                   'usr_persona.nro_documento' => { eq => $user_id },
+                                   ])
+              );
+	    
+	    
 	    my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
-	                                                 query              => [ 'usr_persona.email' => { eq => $user_id } ],
+	                                                 query              => \@filtros,
 	                                                 require_objects    => ['persona'],
 	                                                 select             => ['persona.*','usr_socio.*'],
 	                                     );
@@ -1157,14 +1159,14 @@ sub recoverPassword{
             $db->{connect_options}->{AutoCommit} = 0;
             $db->begin_work;
 		    
-#		    eval{
+		    eval{
 			    _logClientIpAddress('recover_password',$socio);
 				my ($link,$hash) = _buildPasswordRecoverLink($socio);
 				($isError)                      = _sendRecoveryPasswordMail($socio,$link);
                 $socio->setRecoverPasswordHash($hash);
 				$db->commit;
                 $message                    = C4::AR::Mensajes::getMensaje('U600','opac');
-#            };
+            };
 	        if (($@) || $isError){
 	        	$message = C4::AR::Mensajes::getMensaje('U606','opac');
 	            &C4::AR::Mensajes::printErrorDB($@, 'U606',"opac");
