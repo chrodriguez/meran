@@ -45,7 +45,7 @@ sub noLeidos{
     push (@filtros, (leido => {eq =>0}) );
 
     my  $noLeidos = C4::Modelo::Contacto::Manager->get_contacto(query => \@filtros,
-                                                                sort_by => ['id'] DESC);
+                                                                sort_by => ['id']);
     
 
     
@@ -64,9 +64,10 @@ sub ultimosNoLeidos {
 
     my @ultimos_no_leidos;
 
+    my $i;
     for($i = 1; $i < 4; $i++) {
         if (scalar(@$no_leidos) > 0){
-            push(@$ultimos_no_leidos, pop($no_leidos));
+            push(@ultimos_no_leidos, pop(@$no_leidos));
         }
     }
     return(\@ultimos_no_leidos);
