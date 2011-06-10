@@ -11,6 +11,7 @@ __PACKAGE__->meta->setup(
         id                  => { type => 'serial'},
         id_ui               => { type => 'varchar', not_null => 1 , length => 4},
         nombre              => { type => 'varchar', not_null => 1 , length => 255},
+        ciudad              => { type => 'varchar', not_null => 1 , length => 255, default => "La Plata"},
         titulo_formal       => { type => 'varchar', not_null => 1 , length => 255, default => "Universidad Nacional de La Plata"},
         direccion           => { type => 'varchar', not_null => 1 , length => 255},
         alt_direccion       => { type => 'varchar', not_null => 1 , length => 255},
@@ -40,6 +41,19 @@ sub setId_ui{
     my ($self) = shift;
     my ($id_ui) = @_;
     return ($self->id_ui($id_ui));
+}  
+
+sub getCiudad{
+    my ($self) = shift;
+
+    return ($self->ciudad);
+}  
+
+
+sub setCiudad{
+    my ($self) = shift;
+    my ($ciudad_name) = @_;
+    return ($self->ciudad($ciudad_name));
 }  
 
 sub getTituloFormal{

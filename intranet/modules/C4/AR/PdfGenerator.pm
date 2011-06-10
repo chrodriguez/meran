@@ -21,22 +21,23 @@ $VERSION = 0.01;
 # as the old-style API and the NEW one are the only public functions.
 #
 @EXPORT_OK = qw(
-  &searchGenerator
-  &availPdfGenerator
-  &searchShelfGenerator
-  &shelfContentsGenerator
-  &estadisticasPdfGenerator
-  &hitoricoPrestamosPdfGenerator
-  &cardGenerator
-  &batchCardsGenerator
-  &generateCard
-  &libreDeuda
-  &prestInterBiblio
-  &generateBookLabel
-  &batchBookLabelGenerator
-  &pdfFromHTML
-  &pdfHeader
-  &printPDF
+  searchGenerator
+  availPdfGenerator
+  searchShelfGenerator
+  shelfContentsGenerator
+  estadisticasPdfGenerator
+  hitoricoPrestamosPdfGenerator
+  cardGenerator
+  batchCardsGenerator
+  generateCard
+  libreDeuda
+  prestInterBiblio
+  generateBookLabel
+  batchBookLabelGenerator
+  pdfFromHTML
+  pdfHeader
+  printPDF
+  datosBiblio
 );
 
 sub newPdf {
@@ -553,8 +554,7 @@ sub datosBiblio {
 	my $biblio = 0;
 
 	eval {
-		$biblio =
-		  C4::Modelo::PrefUnidadInformacion->new( id_ui => $branchcode );
+		$biblio = C4::Modelo::PrefUnidadInformacion->new( id_ui => $branchcode );
 		$biblio->load();
 	};
 
@@ -603,7 +603,7 @@ sub libreDeuda {
 		" validez de 10 días corridos a partir de su fecha de emisión.");
 
 	($pdf) =
-	  &imprimirEncabezado( $pdf, $categ, $branchname, $x, $pagewidth,
+	  &imprimirEncabezado( $pdf, $branchname, $x, $pagewidth,
 		$pageheight, \%titulo, );
 	( $pdf, $y ) =
 	  &imprimirContenido( $pdf, $x, $y, $pageheight, 15, \@parrafo );
@@ -623,9 +623,8 @@ sub prestInterBiblio {
 	my $nombre      = $socio->persona->getApeYNom;
 	my $dni         = $socio->persona->getNro_documento;
 	my $branchcode  = $socio->getId_ui;
-	my $biblio      = &datosBiblio($branchcode);
-	my $categ       = $biblio->{'categ'};
-	my $branchname  = $biblio->{'branchname'};
+	my $biblio      = datosBiblio($branchcode);
+	my $branchname  = $biblio->getNombre;
 
 	my ( $pdf, $pagewidth, $pageheight ) = &inicializarPDF();
 
@@ -636,7 +635,7 @@ sub prestInterBiblio {
 	$titulo{'posx'}   = 100;
 	my @parrafo;
 	$parrafo[0] = ("Sr. Director de la Biblioteca");
-	$parrafo[1] = ( "de la " . Encode::decode_utf8($biblioDestino) );
+	$parrafo[1] = ( "de la " . Encode::decode_utf8($biblioDestino->getNombre) );
 	$parrafo[2] = (Encode::decode_utf8($director));
 	$parrafo[3] = ("S/D");
 	$parrafo[4] = (
@@ -645,8 +644,8 @@ sub prestInterBiblio {
 	$parrafo[5] = "interbibliotecario los siguientes items:";
 
 	($pdf) =
-	  &imprimirEncabezado( $pdf, $categ, $branchname, $x, $pagewidth,
-		$pageheight, \%titulo );
+	  &imprimirEncabezado( $pdf,$branchname, $x, $pagewidth,
+		$pageheight, \%titulo, $biblio );
 	( $pdf, $y ) =
 	  &imprimirContenido( $pdf, $x, $y, $pageheight, 15, \@parrafo );
 	my $cant = scalar(@$datos);
@@ -705,7 +704,7 @@ Imprime el encabezado del documento, con el escudo del la universidad nacional d
 =cut
 
 sub imprimirEncabezado {
-	my ( $pdf, $categ, $branchname, $x, $pagewidth, $pageheight, $titulo ) = @_;
+	my ( $pdf, $branchname, $x, $pagewidth, $pageheight, $titulo, $ui_object ) = @_;
 
 	#fecha
 	my @datearr = localtime(time);
@@ -722,18 +721,18 @@ sub imprimirEncabezado {
 #         $pdf->addImg( C4::Context->config('intrahtdocs').'/'.C4::AR::Preferencias::getValorPreferencia('template').'/images/escudo-uni.png', $x, $pageheight - 160);
 	$pdf->setFont("Arial-Bold");
 	$pdf->setSize(10);
-	$pdf->addRawText( uc($categ),      $x, $pageheight - 180 );
-	$pdf->addRawText( uc($branchname), $x, $pageheight - 190 );
-	$pdf->addRawText( "BIBLIOTECA",    $x, $pageheight - 200 );
+    $pdf->addRawText( _format(uc($ui_object->getTituloFormal)), $x, $pageheight - 180 );
+    $pdf->addRawText( _format(uc($ui_object->getNombre)), $x, $pageheight - 190 );
+	$pdf->addRawText( _format(C4::AR::Filtros::i18n("BIBLIOTECA")),    $x, $pageheight - 200 );
 	$pdf->setFont("Verdana-Bold");
 	$pdf->setSize(14);
 	#Se pone solamente Encode::decode_utf8 porque ya viene en UTF-8
-	$pdf->addRawText( Encode::decode_utf8($titulo->{'titulo'}), Encode::decode_utf8($titulo->{'posx'}),
+	$pdf->addRawText( _format($titulo->{'titulo'}), _format($titulo->{'posx'}),
 		$pageheight - 240 );
 	$pdf->setFont("Verdana");
 	$pdf->setSize(10);
 	$pdf->addRawText(
-		"La Plata, " . $dia . " de " . $mes . " de " . $anio,
+		_format($ui_object->getCiudad) . $dia . " de " . $mes . " de " . $anio,
 		$pagewidth - 250,
 		$pageheight - 270
 	);
@@ -840,16 +839,16 @@ Imprime el pie de pagina del documento con la info de la biblioteca.
 sub imprimirPiePag {
 	my ( $pdf, $y, $pageheight, $biblio ) = @_;
 	my @texto;
-	$texto[0] = _format("Biblioteca: ") . $biblio->{'branchname'};
-	$texto[1] = "Calle " . $biblio->{'branchaddress1'};
+	$texto[0] = _format(C4::AR::Filtros::i18n("Biblioteca: ")) . $biblio->getNombre;
+	$texto[1] = C4::AR::Filtros::i18n("Calle ") . $biblio->getDireccion;
 	$texto[2] =
-	  "Tel/Fax: " . $biblio->{'branchphone'} . "/" . $biblio->{'branchfax'};
+	  C4::AR::Filtros::i18n("Tel/Fax: ") . $biblio->getTelefono . "/" . $biblio->getFax;
 	$texto[3] =
-	    _format("Atención: lunes a viernes, ")
+	    _format(C4::AR::Filtros::i18n("Atención: lunes a viernes, "))
 	  . C4::AR::Preferencias::getValorPreferencia('open') . " a "
 	  . C4::AR::Preferencias::getValorPreferencia('close');
-	$texto[4] = "E-mail: " . $biblio->{'branchemail'};
-	$texto[5] = "Sitios web: " . $biblio->{'branchaddress3'};
+	$texto[4] = "E-mail: " . $biblio->getEmail;
+	$texto[5] = C4::AR::Filtros::i18n("Sitio web: ") . $ENV{'SERVER_NAME'};
 	$texto[6] = "";
 	$y        = $y + 15;
 	( $pdf, $y ) =

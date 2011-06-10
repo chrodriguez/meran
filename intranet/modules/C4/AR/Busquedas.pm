@@ -877,11 +877,8 @@ getBranch
 =cut
 sub getBranch{
     my($branch) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = "SELECT * FROM pref_unidad_informacion WHERE id_ui=?";
-    my $sth   = $dbh->prepare($query);
-    $sth->execute($branch);
-    return $sth->fetchrow_hashref;
+
+    return C4::AR::PdfGenerator::datosBiblio($branch);
 }
 
 
