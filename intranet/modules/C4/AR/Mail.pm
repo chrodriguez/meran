@@ -12,6 +12,7 @@ use Net::SMTP;
 use Net::SMTP::SSL;
 use Net::SMTP::TLS;
 use C4::AR::Preferencias;
+use Digest::SHA qw(sha256_base64);
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -327,6 +328,38 @@ sub send_mail {
     $info_smtp_hash_ref->{'smtp_user'}             = C4::AR::Preferencias::getValorPreferencia("username_mail");
     $info_smtp_hash_ref->{'smtp_pass'}             = C4::AR::Preferencias::getValorPreferencia("password_mail");
     $info_smtp_hash_ref->{'smtp_server_sendmail'}  = C4::AR::Preferencias::getValorPreferencia("smtp_server_sendmail");
+
+    my ($template, $t_params)     = C4::Output::gettemplate("includes/opac-mail.tmpl", "OPAC", 1);
+    
+    $t_params->{'mail_content'} = $info_smtp_hash_ref->{'mail_message'};
+
+    my $out= C4::AR::Auth::get_html_content($template, $t_params);
+    
+    $info_smtp_hash_ref->{'html_content'}           = 1;
+
+    my $unique_hash = sha256_base64(localtime());
+    
+    open FILE, ">/tmp/mail.html.$unique_hash" or die $!;
+    print FILE $out;
+    close FILE;
+
+    my $mail_from       = $info_smtp_hash_ref->{'mail_from'};
+    my $mail_to         = $info_smtp_hash_ref->{'mail_to'};
+    my $mail_subject    = $info_smtp_hash_ref->{'mail_subject'};
+    
+        
+    my $msg = MIME::Lite::TT::HTML->new(
+         From         => $mail_from,
+         To           => $mail_to,
+         Subject      => $mail_subject,
+         Template     => {
+              html    => "/tmp/mail.html.$unique_hash",
+         },
+         TmplOptions => {ABSOLUTE => 1,},
+         Charset      => 'utf8',
+    );
+
+    $info_smtp_hash_ref->{'mail_message'} = $msg;
 
     if ($info_smtp_hash_ref->{'smtp_server_sendmail'}) {
         #se envia el mail con SENDMAIL

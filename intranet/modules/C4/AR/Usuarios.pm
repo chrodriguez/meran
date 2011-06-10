@@ -1,3 +1,4 @@
+
 package C4::AR::Usuarios;
 
 =head1 NAME
@@ -461,7 +462,6 @@ sub cambiarPassword {
             $cambioDePasswordForzado= 1;
         }
 
-#         if ( $cambioDePasswordForzado && ( $password_actual_desde_DB eq $password_actual_desde_cliente_hasheada) ){
         if ( $password_actual_desde_DB eq $password_actual_desde_cliente_hasheada){
             C4::AR::Debug::debug("Auth => cambiarPassword => cambioForzado ");
             #es un cambio forzado de la password, se obliga al usuario a cambiar la password, no se compara con la pass actual
@@ -1043,7 +1043,6 @@ sub _sendRecoveryPasswordMail{
 
     my $mail_from       = $mail{'mail_from'}  = C4::AR::Preferencias::getValorPreferencia("reserveFrom");
     my $mail_to         = $mail{'mail_to'}    = $socio->persona->getEmail;
-    
     my $mail_subject    = $mail{'mail_subject'}          = C4::AR::Filtros::i18n("Instrucciones para reestablecer su clave");
     
     
@@ -1072,32 +1071,7 @@ sub _sendRecoveryPasswordMail{
                 ";
     
     
-    
-    my ($template, $t_params)     = C4::Output::gettemplate("includes/opac-mail.tmpl", "OPAC", 1);
-    
-    $t_params->{'mail_content'} = $mailMessage;
-
-    my $out= C4::AR::Auth::get_html_content($template, $t_params);
-    
-    $mail{'html_content'}           = 1;
-
-    open FILE, ">/tmp/mail.html" or die $!;
-    print FILE $out;
-    close FILE;
-
-        
-    my $msg = MIME::Lite::TT::HTML->new(
-         From         => $mail_from,
-         To           => $mail_to,
-         Subject      => $mail_subject,
-         Template     => {
-              html    => "/tmp/mail.html",
-         },
-         TmplOptions => {ABSOLUTE => 1,},
-         Charset      => 'utf8',
-    );
-    
-    $mail{'mail_message'}           = $msg;
+    $mail{'mail_message'}           = $mailMessage;
     
     my ($ok, $msg_error)            = C4::AR::Mail::send_mail(\%mail);
     
@@ -1159,8 +1133,17 @@ sub recoverPassword{
     if ( $captchaResult->{is_valid} ) {
 
 	    my $user_id = $params->{'user-id'};
+	    my @filtros;
+	    
+        push (@filtros, (or   => [
+                                   'usr_persona.email' => { eq => $user_id }, 
+                                   'usr_persona.nro_documento' => { eq => $user_id },
+                                   ])
+              );
+	    
+	    
 	    my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
-	                                                 query              => [ 'usr_persona.email' => { eq => $user_id } ],
+	                                                 query              => \@filtros,
 	                                                 require_objects    => ['persona'],
 	                                                 select             => ['persona.*','usr_socio.*'],
 	                                     );

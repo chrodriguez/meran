@@ -45,6 +45,7 @@ if($editing){
 
     my $tipoAccion= $obj->{'tipoAccion'}||"";
 
+    my $nro_socio                   = $obj->{'nro_socio'};
 
 =item
     Aca se maneja el resteo de password del usuario
@@ -251,7 +252,6 @@ Se genra la ventana para modificar los datos del usuario
                                         debug           => 1,
         });
 
-        my $nro_socio                   = $obj->{'nro_socio'};
         $t_params->{'nro_socio'}        = $nro_socio;
         C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
         #Obtenemos los datos del borrower
@@ -302,6 +302,12 @@ Se genra la ventana para modificar los datos del usuario
 
         my ($Message_arrayref)  = &C4::AR::UploadFile::deletePhoto($foto_name);
         my $infoOperacionJSON   = to_json $Message_arrayref;
+
+        my $socio                       = &C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+
+        if ($socio->getNro_socio eq C4::AR::Auth::getSessionNroSocio() ){
+            C4::AR::Auth::updateLoggedUserTemplateParams($session,$obj,$socio);
+        }
         
         C4::AR::Auth::print_header($session);
         print $infoOperacionJSON;

@@ -43,7 +43,7 @@
                       <input type="password" name="newpassword2" id="newpassword2" class="field" autocomplete="off" />
                   </p>
               </fieldset>
-              <p><input type="submit" name="submit" id="submit" class="button" value="[% 'Modificar datos' |  i18n %]" tabindex="12" /></p>
+              <p><input type="submit" name="submit" id="submit" class="button" value="[% 'Confirme contrase&ntilde;a' |  i18n %]" tabindex="12" /></p>
             </form>
           </div>
         </div>
