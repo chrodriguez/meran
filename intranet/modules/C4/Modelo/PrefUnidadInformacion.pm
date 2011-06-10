@@ -11,6 +11,7 @@ __PACKAGE__->meta->setup(
         id                  => { type => 'serial'},
         id_ui               => { type => 'varchar', not_null => 1 , length => 4},
         nombre              => { type => 'varchar', not_null => 1 , length => 255},
+        titulo_formal       => { type => 'varchar', not_null => 1 , length => 255, default => "Universidad Nacional de La Plata"},
         direccion           => { type => 'varchar', not_null => 1 , length => 255},
         alt_direccion       => { type => 'varchar', not_null => 1 , length => 255},
         telefono            => { type => 'varchar', not_null => 1 , length => 255},
@@ -40,6 +41,19 @@ sub setId_ui{
     my ($id_ui) = @_;
     return ($self->id_ui($id_ui));
 }  
+
+sub getTituloFormal{
+    my ($self) = shift;
+
+    return ($self->titulo_formal);
+}  
+
+
+sub setTituloFormal{
+    my ($self) = shift;
+    my ($titulo_formal) = @_;
+    return ($self->titulo_formal($titulo_formal));
+} 
 
 sub getNombrePDF{
     my ($self) = shift;

@@ -485,7 +485,7 @@ sub generateCard {
 	#Write the borrower data into the pdf file
 	$pdf->setSize(7);
 	$pdf->setFont("Arial-Bold");
-	$pdf->addRawText( _unformat( uc( $socio->categoria->getDescription ) ),
+	$pdf->addRawText( _unformat( uc( $socio->ui->getTituloFormal) ),
 		$x, $pageheight - ( $y + 4 ) );
 	$pdf->addRawText( _unformat( uc( $socio->ui->getNombre ) ),
 		$x, $pageheight - ( $y + 11 ) );
