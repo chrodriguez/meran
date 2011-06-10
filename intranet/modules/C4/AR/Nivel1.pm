@@ -68,7 +68,15 @@ sub verificar_Alta_Nivel1 {
 
     if (($cant_titulo > 0)&&($cant_autor > 0)){
         $msg_object->{'error'} = 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U501', 'params' => [$titulo." - ".$nombre_completo]} ) ;
+  
+        my %params_hash;
+        %params_hash    = ('id1' => $id1_array_ref->[0]->{'id1'});
+        my $url         = C4::AR::Utilidades::url_for("/catalogacion/estructura/detalle.pl", \%params_hash);
+        my $link        = C4::AR::Filtros::link_to( text    => $id1_array_ref->[0]->{'id1'},
+                                                    url     => $url 
+                                              );
+
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U501', 'params' => [$titulo." - ".$nombre_completo, $link]} ) ;
     }
 }
 

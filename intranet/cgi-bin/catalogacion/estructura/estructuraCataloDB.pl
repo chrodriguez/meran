@@ -79,7 +79,7 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS_REFERENCIA"){
     my $combo_ediciones = C4::AR::Utilidades::generarComboNivel2($idNivel1);
 
     my ($template, $session, $t_params)= get_template_and_user({
-                        template_name => "/includes/combo_ediciones.inc",
+                        template_name => "/includes/partials/catalogo/combo_ediciones.inc",
                         query => $input,
                         type => "intranet",
                         authnotrequired => 1,

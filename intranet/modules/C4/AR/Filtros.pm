@@ -44,35 +44,26 @@ en cada link.
 sub link_to {
 	my (%params_hash_ref) = @_;
 
-	my $link= '';
-	my $params= $params_hash_ref{'params'} || []; #obtengo los paraametros
-	my $text= $params_hash_ref{'text'}; #obtengo el texto a mostrar
-	my $url= $params_hash_ref{'url'}; #obtengo la url
-	my $title= $params_hash_ref{'title'}; #obtengo el title a mostrar
-	my $class= $params_hash_ref{'class'}; #obtengo la clase
-    my $boton= $params_hash_ref{'boton'}; #obtengo el title a mostrar
-    my $width= $params_hash_ref{'width'};
-    my $blank= $params_hash_ref{'blank'} || 0;
-	my $cant= scalar(@$params);
-# C4::AR::Debug::debug("link_to => cant params: ".$cant);
+	my $link    = '';
+	my $params  = $params_hash_ref{'params'} || []; #obtengo los paraametros
+	my $text    = $params_hash_ref{'text'}; #obtengo el texto a mostrar
+	my $url     = $params_hash_ref{'url'}; #obtengo la url
+	my $title   = $params_hash_ref{'title'}; #obtengo el title a mostrar
+	my $class   = $params_hash_ref{'class'}; #obtengo la clase
+    my $boton   = $params_hash_ref{'boton'}; #obtengo el title a mostrar
+    my $width   = $params_hash_ref{'width'};
+    my $blank   = $params_hash_ref{'blank'} || 0;
+	my $cant    = scalar(@$params);
+    my @result;
+    
+    foreach my $p (@$params){
+        @result = split(/=/,$p);
 
-	if($cant > 0){$url .= "?";
-	#lleva parametros
-		for(my $i=0; $i < $cant; $i++ ){
-			if($i > 0){
-			#se procesan el resto de los parametros
-# 				$url .= '&'.@$params->[$i];
-                $url .= '&amp;'.@$params->[$i];  
-			}else{
-			#se procesa el primer parametro
-				$url .= @$params->[$i];
-			}
-		}
-	}
+        $url = C4::AR::Utilidades::addParamToUrl($url,@result[0],@result[1]);
+    }
 
 	my $session = CGI::Session->load();
  	if($session->param('token')){
-# 	if(defined $session){
 	#si hay sesion se usa el token, sino no tiene sentido
          #SI NO HUBO PARAMETROS, EL TOKEN ES EL UNICO EN LA URL, O SEA QUE SE PONE ? EN VEZ DE &
         if ($cant > 0){

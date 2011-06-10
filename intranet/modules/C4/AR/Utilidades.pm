@@ -124,6 +124,7 @@ use vars qw(@EXPORT_OK @ISA);
     escapeHashData
 );
 
+
 # para los combos que no usan tablas de referencia
 my @VALUES_COMPONENTS = (   "-1", "text", "texta", "combo", "auto", "calendar", "anio", "rango_anio" );
 my %LABELS_COMPONENTS = (   "-1" => "SIN SELECCIONAR" => "text" => "Texto" , "texta" => "Texto Area", "combo" => "ComoBox", 
@@ -4104,12 +4105,12 @@ sub getUrlPrefix{
 
 sub addParamToUrl{
 	my ($url,$param,$value) = @_;
-	
+
 	$param = $param."=".$value;
 	
 	my $status = index($url,'?');
 	
-	if ($status = -1){
+	if ($status == -1){
 		$url .= '?'.$param;
 	}else{
         $url .= '&'.$param;
@@ -4117,6 +4118,30 @@ sub addParamToUrl{
 	
 	return ($url);
 	
+}
+
+sub hash_params_to_url_params{
+    my ($url, $hash_ref) = @_;
+
+    if($hash_ref){
+        while ( my ($key, $value) = each(%$hash_ref) ) {
+                $url = addParamToUrl($url, $key, $value);
+        }
+    }
+
+    return $url;
+}
+
+sub url_for{
+    my ($url_base, $hash_ref) = @_;
+
+    my $url         = hash_params_to_url_params($url_base, $hash_ref);
+    my $server      = $ENV{'SERVER_NAME'};
+    my $proto       = ($ENV{'SERVER_PORT'} eq 443)?"https://":"http://";
+    my $url_final   = $proto.$server.getUrlPrefix().$url;
+    
+# C4::AR::Debug::debug("url_final => ".$url_final);
+    return $url_final;
 }
 
 END { }       # module clean-up code here (global destructor)

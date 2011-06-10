@@ -531,6 +531,9 @@ sub checkauth {
     my $token=_obtenerToken($query);
     my $loggedin = 0;
     my ($session) = CGI::Session->load();
+
+
+# C4::AR::Utilidades::printHASH(\%ENV);
     
     my $userid= $session->param('userid');
     my $flags=0;
