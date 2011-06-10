@@ -1166,7 +1166,7 @@ sub recoverPassword{
 
     if ( $captchaResult->{is_valid} ) {
 
-	    my $user_id = $params->{'user-id'};
+	    my $user_id = C4::AR::Utilidades::trim($params->{'user-id'});
         my $socio   = getSocioInfoPorMixed($user_id);		
 		if ($socio){
 		    my $db = $socio->db;
