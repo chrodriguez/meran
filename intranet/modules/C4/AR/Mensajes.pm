@@ -466,7 +466,8 @@ my %mensajesINTRA = (
     'S004' => 'Se modifico el servidor z3950 con &eacute;xito.',   
     'S005' => 'Hubo un error cuando se intentaba modificar el servidor z3950.',   
     'S006' => 'Se deshabilit&oacute; el servidor z3950 con &eacute;xito.',   
-    'S007' => 'Hubo un error cuando se intentaba deshabilitar el servidor z3950.',   
+    'S007' => 'Hubo un error cuando se intentaba deshabilitar el servidor z3950.', 
+    'S008' => 'Por favor verifique que los datos ingresados sean correctos.',   
 );
 
 sub getMensaje {
