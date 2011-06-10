@@ -339,7 +339,7 @@ sub send_mail {
 
     my $unique_hash = md5_hex(localtime());
     my $mail_file   = "/tmp/mail.html.".$unique_hash;
-C4::AR::Debug::debug("____________________MAIL FILE________________________ ".$mail_file);    
+
     open FILE, ">".$mail_file or die $!;
     print FILE $out;
     close FILE;
