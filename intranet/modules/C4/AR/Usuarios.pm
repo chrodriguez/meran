@@ -1166,21 +1166,21 @@ sub recoverPassword{
 
     if ( $captchaResult->{is_valid} ) {
 
-	    my $user_id = $params->{'user-id'};
+	    my $user_id = C4::AR::Utilidades::trim($params->{'user-id'});
         my $socio   = getSocioInfoPorMixed($user_id);		
 		if ($socio){
 		    my $db = $socio->db;
             $db->{connect_options}->{AutoCommit} = 0;
             $db->begin_work;
 		    
-		    eval{
+#		    eval{
 			    _logClientIpAddress('recover_password',$socio);
 				my ($link,$hash) = _buildPasswordRecoverLink($socio);
 				($isError)                      = _sendRecoveryPasswordMail($socio,$link);
                 $socio->setRecoverPasswordHash($hash);
 				$db->commit;
                 $message                    = C4::AR::Mensajes::getMensaje('U600','opac');
-            };
+#            };
 	        if (($@) || $isError){
 	        	$message = C4::AR::Mensajes::getMensaje('U606','opac');
 	            &C4::AR::Mensajes::printErrorDB($@, 'U606',"opac");

@@ -365,7 +365,7 @@ z-index:997;
 }
 
 .header-breadcrumbs .searchform {float:right;
- width:285px;
+ width:400px;
  padding:0 17px 0px 0px !important /*Non-IE6*/;
  padding:0 12px 0px 0px /*IE6*/;
 }
