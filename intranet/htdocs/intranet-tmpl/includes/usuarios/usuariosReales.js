@@ -309,6 +309,7 @@ function eliminarFoto(foto){
 			objAH.url           = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
 			objAH.tipoAccion    = 'ELIMINAR_FOTO';
 			objAH.foto_name     = foto;
+			objAH.nro_socio     = USUARIO.ID;
 			objAH.sendToServer();
     	}
     });
