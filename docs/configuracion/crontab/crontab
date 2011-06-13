@@ -1,5 +1,5 @@
 # m h  dom mon dow   command
-5 * * * * export MERAN_CONF=/etc/meran/meran.conf;cd /usr/share/meran/intranet/modules/;perl /usr/share/meran/intranet/scripts/z3950daemon/procesarColaZ3950.pl &
-0 3 * * 0 export MERAN_CONF=/etc/meran/meran.conf;cd /usr/share/meran/intranet/modules/;perl /usr/share/meran/intranet/scripts/obtener_portadas_de_registros.pl &
-0 2 * * 0 export MERAN_CONF=/etc/meran/meran.conf;cd /usr/share/meran/intranet/modules/;perl /usr/share/meran/intranet/scripts/generar_indice.pl &
-* * * * *  wget -q -O  /dev/null https://127.0.0.1/meran/cron/reindexar.pl  --no-check-certificate 2>&1
+* * * * * wget -q -O  /dev/null https://127.0.0.1/meran/cron/procesarColaZ3950.pl --no-check-certificate 2>&1
+* * * * * wget -q -O  /dev/null https://127.0.0.1/meran/cron/reindexar.pl  --no-check-certificate 2>&1
+0 3 * * 0 wget -q -O  /dev/null https://127.0.0.1/meran/cron/obtener_portadas_de_registros.pl --no-check-certificate 2>&1
+0 2 * * 0 wget -q -O  /dev/null https://127.0.0.1/meran/cron/generar_indice.pl --no-check-certificate 2>&1
