@@ -1,0 +1,80 @@
+[% INCLUDE 'intranet-top.inc' %]
+<link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/wysiwyg.css" />
+<script src="/includes/jquery/jquery.wysiwyg.js"></script>
+<script>
+    function modificar(){
+        $('#form_novedad').submit();
+    }
+        
+    function agregar(){
+        $('#form_novedad').submit();
+    }
+
+//     $(document).ready(function() {
+//         $(function()
+//         {
+// //             $('#contenido').wysiwyg();
+//         });
+//     });
+</script>
+
+[% USE HTML %]
+
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend trigger click">[% "Agregar novedad de INTRA" | i18n %]:</legend>
+        <div class="form">
+            [% IF editing %]
+                <form id="form_novedad" action="[% url_prefix %]/admin/global/editar_novedad_intra.pl" method="POST">
+                    <input type="hidden" id="action" name="action" value="editar">
+                    <input type="hidden" id="token" name="token" value="[% token %]">
+                    <input type="hidden" id="novedad_id" name="novedad_id" value="[% novedad.id %]">
+            [% ELSE %]
+                <form id="form_novedad" action="[% url_prefix %]/admin/global/agregar_novedad_intra.pl" method="POST">
+                    <input type="hidden" id="action" name="action" value="agregar">
+            [% END %]
+                <ul>
+                    <li class="sub_item">
+                        <label for="titulo">[% "Titulo" | i18n %]</label>
+                          <input type="text" id="titulo" name="titulo" value="[% novedad.getTitulo %]">
+                    </li>
+                    <li class="sub_item">
+                        <label for="categoria">[% "Categor&iacute;a" | i18n %]</label>
+                          <input type="text" id="categoria" name="categoria" value="[% novedad.getCategoria %]">
+                    </li>
+                     <li class="sub_item">
+                       <label for="contenido">[% "Contenido" | i18n %]</label>
+                          <textarea id="contenido" name="contenido" style="width: 88.3%" >[%novedad.getContenido %]</textarea>
+                    </li>
+
+                        <input type="hidden" id="token" name="token" value="[% token %]">
+                        [% IF editing %]
+                            [% PERL %]
+                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Modificar' | i18n %]",
+                                                boton   => "boton_edicion",
+                                                onClick => "modificar();",
+                                                width => "auto",
+                                                title   => "[% 'Modificar novedad' | i18n %]",
+                                                ) ;
+                            [% END %]
+                        [% ELSE %]
+                            [% PERL %]
+                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar' | i18n %]",
+                                                boton   => "boton_agregar",
+                                                onClick => "agregar();",
+                                                width => "auto",
+                                                title   => "[% 'Agreagr novedad' | i18n %]",
+                                                ) ;
+                            [% END %]
+                        [% END %]
+                </ul>
+            </form>
+        </div>
+</fieldset>
+[% PERL %]
+        print C4::AR::Filtros::link_to( text    =>  "[% 'Volver al listado' | i18n %]",
+                                        url=>"[% url_prefix %]/admin/global/novedades_intra.pl",
+                                        title   =>  "[% 'Volver al listado' | i18n %]"
+                ) ;
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

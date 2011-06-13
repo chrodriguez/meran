@@ -1,0 +1,10 @@
+[% USE HTML %]
+<div class="novedad_contacto">
+    <h2>[% 'Titulo' | i18n %]: [% novedad.getTitulo %]</h2>
+    <fieldset>
+        <legend>[% 'Cuerpo de la novedad' | i18n %]:</legend>
+        <h3>[% novedad.getContenido %]</h3>
+        <h4> [% novedad.getFechaLegible %]</h4>
+    </fieldset>
+    <a href="#">[% novedad.getFechaLegible %] </a>
+</div>
