@@ -1087,8 +1087,7 @@ sub _sendRecoveryPasswordMail{
     my $completo            = $socio->persona->getNombre." ".$socio->persona->getApellido;
     my $nro_socio           = $socio->getNro_socio;
 
-    my $default_ui      = C4::AR::Preferencias::getValorPreferencia('defaultUI');
-    my $ui              = C4::Modelo::PrefUnidadInformacion->getByCode($default_ui);
+    my $ui              = C4::AR::Referencias::obtenerDefaultUI();
     my $nombre_ui       = $ui->getNombre();
 
     my $mailMessage =

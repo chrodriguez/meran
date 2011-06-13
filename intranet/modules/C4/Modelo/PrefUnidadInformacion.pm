@@ -97,7 +97,7 @@ sub getDireccion{
 sub getDireccion{
     my ($self) = shift;
 
-    return (C4::AR::Utilidades::trim(Encode::decode_utf8($self->getDireccion)));
+    return (C4::AR::Utilidades::trim($self->direccion));
 } 
     
 sub setDireccion{
