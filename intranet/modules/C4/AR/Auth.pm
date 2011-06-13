@@ -450,7 +450,7 @@ sub _verificarSession {
 
     my ($session,$type,$token)=@_;
     my $valido_token=C4::Context->config("token") || 0;
-    my $codeMSG;
+    my $code_MSG;
 
     my $type_session    = C4::AR::Utilidades::capitalizarString($session->param('type'));
     $type               = C4::AR::Utilidades::capitalizarString($type);
@@ -459,17 +459,17 @@ sub _verificarSession {
         C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => SESSION INVALIDA, VENIA DESDE OPAC/INTRA HACIA INTRA/OPAC");
         
         if ($type eq "Opac"){
-        	$codeMSG = "U607";
+        	$code_MSG = "U607";
         }else{
-        	$codeMSG = "U601";
+        	$code_MSG = "U601";
         }
         	    
-    	return ($codeMSG,"sesion_invalida");
+    	return ($code_MSG,"sesion_invalida");
     }
     
     if(defined $session and $session->is_expired()){
         #EXPIRO LA SESION
-        $codeMSG='U355';     
+        $code_MSG='U355';     
         C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => expiro");    
     } else {
         #NO EXPIRO LA SESION
@@ -478,34 +478,34 @@ sub _verificarSession {
 #             C4::AR::Debug::debug("no hay userid");    
             #Quiere decir que la sesion existe ahora hay q Verificar condiciones
             if (_cambioIp($session)){
-                $codeMSG='U356';             
+                $code_MSG='U356';             
                 C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => sesion invalido => cambio la ip");  
             } elsif ($session->param('flag') eq 'LOGUIN_DUPLICADO'){
-                $codeMSG='U359';            
+                $code_MSG='U359';            
                     C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => sesion invalido => loguin duplicado");  
             } elsif (($session->param('token') ne $token) and ($valido_token)){
-                    $codeMSG='U354';            
+                    $code_MSG='U354';            
                     C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => sesion invalido => token invalido");    
                   } else {
                          if (C4::AR::Usuarios::needsDataValidation($session->param('userid')) != 0){
                                 
-                                 $codeMSG='U309';            
+                                 $code_MSG='U309';            
                                  C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => datos censales invalidos");  
-                                 return ($codeMSG,"datos_censales_invalidos");
+                                 return ($code_MSG,"datos_censales_invalidos");
                          } else {
                          #ESTA TODO OK
 #                        C4::AR::Debug::debug("valida");    
-                         return ($codeMSG,"sesion_valida"); }
+                         return ($code_MSG,"sesion_valida"); }
                   }
 
         } else {
             #Esto quiere decir que la sesion esta bien pero que no hay nadie logueado
     #         C4::AR::Debug::debug("no hay sesion");    
-            return ($codeMSG,"sin_sesion");
+            return ($code_MSG,"sin_sesion");
         }
     }
 #     C4::AR::Debug::debug("sesion invalida");    
-    return ($codeMSG,"sesion_invalida");
+    return ($code_MSG,"sesion_invalida");
 }
 
 =item sub checkauth
@@ -524,6 +524,7 @@ sub checkauth {
     my $type                = shift;
     my $change_password     = shift || 0;
     my $template_params     = shift;
+    my $url                 = '';
     
     my $socio;
     $type                   = 'opac' unless $type;
@@ -548,7 +549,7 @@ sub checkauth {
         return ($userid, $session, $flags, $socio);
     } else {
         #No es DEMO hay q hacer todas las comprobaciones de la sesion
-                  my ($codeMSG,$estado)=_verificarSession($session,$type,$token);
+                  my ($code_MSG,$estado)=_verificarSession($session,$type,$token);
                   if ($estado eq "sesion_valida"){ 
                       
                       C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_valida");
@@ -568,28 +569,31 @@ sub checkauth {
                   elsif ($estado eq "datos_censales_invalidos"){
                       C4::AR::Debug::debug("C4::AR::Auth::checkauth => datos_censales_invalidos");
           #             _destruirSession('U309', $template_params);
-                      $session->param('codMsg', $codeMSG);
-                      $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/auth.pl');
-                      redirectTo(C4::AR::Utilidades::getUrlPrefix().'/auth.pl'); 
+                      $url = C4::AR::Utilidades::getUrlPrefix().'/auth.pl';
+                      $url = C4::AR::Utilidades::addParamToUrl($url,'codMSG','U309');
+                      $session->param('codMsg', $code_MSG);
+                      $session->param('redirectTo', $url);
+                      redirectTo($url); 
                   }
                   elsif ($estado eq "sesion_invalida") { 
                       C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_invalida");
-                      #_destruirSession('U406', $template_params);
-                      $session->param('codMsg', $codeMSG);
-                      $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/auth.pl');
-                      redirectTo(C4::AR::Utilidades::getUrlPrefix().'/auth.pl'); 
+                      $url = C4::AR::Utilidades::getUrlPrefix().'/auth.pl';
+                      $url = C4::AR::Utilidades::addParamToUrl($url,'codMSG',$codMSG);
+                      $session->param('codMsg', $code_MSG);
+                      $session->param('redirectTo', $url);
+                      redirectTo($url); 
                   } 
                   elsif ($estado eq "sin_sesion") { 
                       C4::AR::Debug::debug("C4::AR::Auth::checkauth => sin_sesion");
                       #ESTO DEBERIA PASAR solo cuando la sesion esta sin iniciar
                       #_destruirSession('U406', $template_params);
-                      $session->param('codMsg', $codeMSG);
+                      $session->param('codMsg', $code_MSG);
                       }
                   else { 
                       #ESTO MENOS
                       C4::AR::Debug::debug("C4::AR::Auth::checkauth => ESTO MENOS ???");
-                      _destruirSession('U406', $template_params);
-                      $session->param('codMsg', $codeMSG);
+                      _destruirSession(($code_MSG || 'U406'), $template_params);
+                      $session->param('codMsg', $code_MSG);
                       $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/error.pl');
                       redirectTo(C4::AR::Utilidades::getUrlPrefix().'/error.pl'); 
                   }
@@ -673,8 +677,10 @@ sub checkauth {
 
                                                         #Si se logueo correctamente en intranet entonces guardo la fecha
                                                         my $now = Date::Manip::ParseDate("now");
-                                                        $socio->setLast_login($now);
-                                                        $socio->save();
+                                                        if ($session->param('type') eq "intranet"){
+                                                            $socio->setLast_login($now);
+                                                            $socio->save();
+                                                        }
                                                         if ($type eq 'opac') {
                                                                       $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/opac-main.pl?token='.$session->param('token'));
                                                                       redirectToNoHTTPS(C4::AR::Utilidades::getUrlPrefix().'/opac-main.pl?token='.$session->param('token'));
