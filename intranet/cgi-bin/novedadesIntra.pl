@@ -39,19 +39,25 @@ if($tipoAccion eq "MOSTRAR_NOVEDADES"){
 
     $cantidad_novedades = $pref_limite - $cantidad_novedades_no_mostrar;
     
-    foreach my $nov (@$novedades){
-        $ok = 0;
-        if($novedades_no_mostrar){
-            foreach my $nov_no_mostrar (@$novedades_no_mostrar){  
-                if($nov->getId() == $nov_no_mostrar->getIdNovedad){
-                    $ok = 1;
-                }        
-            }
-        }    
-        if(!$ok){
-            push(@novedadesOK, $nov);
-        }
-    }
+   
+    
+    if ($novedades){
+      foreach my $nov (@$novedades){
+          $ok = 0;
+          if($novedades_no_mostrar){
+              foreach my $nov_no_mostrar (@$novedades_no_mostrar){  
+                  if($nov->getId() == $nov_no_mostrar->getIdNovedad){
+                      $ok = 1;
+                  }        
+              }
+          }    
+          if(!$ok){
+              push(@novedadesOK, $nov);
+          }
+      }
+    } 
+
+    C4::AR::Utilidades::printARRAY(@novedadesOK);
 
     $t_params->{'nro_socio'}            = $nro_socio;
     $t_params->{'SEARCH_RESULTS'}       = $grupos;
