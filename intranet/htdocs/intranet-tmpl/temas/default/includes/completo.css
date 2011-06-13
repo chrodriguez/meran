@@ -430,6 +430,29 @@ width: 83%;
 	float: right;
 }
 
+
+.msj_main {
+    color:#35414F;
+    margin: 6px;
+}
+
+.msj_main .msj_main_asunto {
+    font-style: italic;
+    font-weight:bold;
+}
+
+.msj_main .msj_main_asunto a {
+    color: #7E94AF;
+}
+
+
+
+
+
+
+
+
+
 .click {
 	cursor: pointer;
 }
@@ -4526,6 +4549,29 @@ body .latest-status-text a {
 	
 }
 
+.novedad_intra .titulo_novedad a{
+    color: #46848F;
+    font-family: "Verdana","Trebuchet MS","Arial";
+    font-size: 12pt;
+    font-weight: bold;
+    list-style: none outside none;
+    text-decoration: none;
+}
+
+.novedad_intra .fecha_novedad{
+    color: #4B5869;
+    font-family: "Verdana","Trebuchet MS","Arial";
+    font-size: 8pt;
+    font-weight: normal;
+}
+
+.novedad_intra .resumen_novedad{
+    color: #4B5869;
+    font-family: "Verdana","Trebuchet MS","Arial";
+    font-size: 8pt;
+    font-weight: normal;
+}
+
 
 tr.impar {
 background-color:#E7F3FA;
@@ -4548,6 +4594,8 @@ font-size:10pt;
 .resultBusqueda{
 	min-width: 900px;
 }
+
+
 
 
 /* Estilo mensaje de contacto (mainpage) */

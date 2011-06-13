@@ -531,6 +531,14 @@
 		                                                                ) ;
 		                                [% END %]
 		                    </li>
+                            <li>
+                                      [% PERL %]
+                                          print C4::AR::Filtros::link_to( text =>     "[% 'Novedades de INTRA' | i18n %]",
+                                                                          url =>      "[% url_prefix %]/admin/global/novedades_intra.pl",
+                                                                          title =>    "[% 'Novedades de INTRA' | i18n %]"
+                                                                      ) ;
+                                      [% END %]
+                            </li>
                         </ul>
                   </li>           
                     

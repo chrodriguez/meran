@@ -9,7 +9,40 @@
 		    IdInputHidden: 'catalogo_search_hidden', 
 		    //callBackFunction: updateAutocompleteBarcodes
 		});
-	});
+
+
+        $('.fancy_link').fancybox({
+            'frameWidth':   600,
+            'frameHeight':  500,
+        });
+
+      });
+
+    $(document).ready(function() {
+          mostrarNovedades();
+        
+    }
+    );
+  
+    function mostrarNovedades(){
+            objAH               = new AjaxHelper(updateActualizarTabla);
+            objAH.debug         = true;
+            objAH.url           = URL_PREFIX+'/novedadesIntra.pl';
+            objAH.showOverlay   = true;
+            objAH.tipoAccion    = "MOSTRAR_NOVEDADES";
+            objAH.sendToServer();
+        }
+
+        function updateActualizarTabla(responseText){
+            $("#resultNovedades").html(responseText);
+              $('.fancy_link').fancybox({
+            'frameWidth':   600,
+            'frameHeight':  500,
+        });
+
+        }
+     
+	
 </script>
 
 
@@ -52,6 +85,16 @@
 </fieldset>
 
 
+<fieldset class="main">
+    <legend class="titulo_legend">[% "Novedades:" | i18n %]</legend>
+    <ul>
+        <li class="item">
+                 <div id="resultNovedades"></div>
+        </li>
+    </ul>
+</fieldset>
+
+
 [% IF cant_noleidos > 0 %]
     <fieldset class="mensajes">
         <legend class="titulo_legend"><strong>[% "Mensajes de Contacto :" | i18n %]</strong></legend>    
@@ -62,11 +105,17 @@
                           <li  class="msj_main"> 
                                 <span class="msj_main_nombre">[% mens.nombre %] [% mens.apellido %]</span>
                                 <span class="msj_main_mail">([% mens.email %])</span>
-                                <span class="msj_main_asunto">[% mens.asunto %]</span>
+                       
+                                 <span class="msj_main_asunto">
+                                        <a class="fancy_link" href="[% url_prefix %]/admin/ver_mensaje.pl?token=[% token %]&id=[% mens.id %]">
+                                        [% mens.asunto %]
+                                        </a>
+                                </span>
+                            </td>
                           </li>
                       [% END %]
                   </ul>
-          
+                 <br>
                   <ul>
                       <li class="item"> 
                                   [% PERL %]
