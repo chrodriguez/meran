@@ -57,7 +57,6 @@ if($tipoAccion eq "MOSTRAR_NOVEDADES"){
       }
     } 
 
-    C4::AR::Utilidades::printARRAY(@novedadesOK);
 
     $t_params->{'nro_socio'}            = $nro_socio;
     $t_params->{'SEARCH_RESULTS'}       = $grupos;
