@@ -1753,34 +1753,44 @@ function crearEditor(){
     $('#tablaResult').attr('style', 'width: 100%');
 }
 
+
+function cambiarValorEnHidden(id){
+  
+    var valor = $('#ediciones').val();
+  
+    $(id + "_hidden").val(valor);
+}
+
 function crearAuto(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='"+ obj.getIdCompCliente() +"' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+" class='horizontal' >";
 
     $("#div" + obj.getIdCompCliente()).append(comp);
     crearBotones(obj);
+    
+    // TODO parche FEO, falta cambiar el ID, el que se tiene q guardar es el del combo
+    if((obj.getCampo() == '773')&&(obj.getSubCampo() == 'a')){
+        // FIXME parche para el doble combo de analiticas
+        var comp = "<div id='ediciones'></div>";
+        $(comp).insertAfter("#div" + obj.getIdCompCliente());
+        
+        
+        $('#edicion_id').change(function() {
+//             cambiarValorEnHidden(obj.getIdCompCliente());  
+
+            var valor = $('#edicion_id').val();
+            $(obj.getIdCompCliente() + "_hidden").val(valor);
+        
+        });
+    }      
+    
     comp = "<div class='icon_agregar horizontal' onclick=agregarTablaReferencias('" + obj.getReferenciaTabla() + "') title='Agregar referencia al subcampo " + obj.getSubCampo() + " para el campo " + obj.getCampo() + "' />"
     $(comp).insertAfter("#div" + obj.getIdCompCliente());
     _cearAutocompleteParaCamponente(obj);
     //se crea un input hidden para guardar el ID del elemento de la lista que se selecciono
     comp = crearHidden(obj);
     $(comp).insertAfter("#div" + obj.getIdCompCliente());
-    
-    
-// TODO parche FEO
-    if((obj.getCampo() == '773')&&(obj.getSubCampo() == 'a')){
-        // FIXME parche para el doble combo de analiticas
-        var comp = "<div id='ediciones'></div>";
-        $(comp).insertAfter("#div" + obj.getIdCompCliente());
-    }      
-}
 
-// function crearAutoNivel2(obj){
-//     crearAuto(obj);
-//     
-// // FIXME parche para el doble combo de analiticas
-//     var comp = "<div id='ediciones'></div>";
-//     $(comp).insertAfter("#div" + obj.getIdCompCliente());
-// }
+}
 
 function crearCalendar(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+" class='horizontal'>";

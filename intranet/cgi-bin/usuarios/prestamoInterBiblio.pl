@@ -28,8 +28,8 @@ my %t_params;
 C4::AR::Validator::validateParams('U389',\%t_params,['nro_socio'] );
 
 my $accion = $input->param('tipoAccion');
-my $biblioDestino = C4::AR::Busquedas::getBranch($input->param('branchcode'));
-$biblioDestino = $biblioDestino->{'branchname'};
+my $biblioDestino = C4::AR::Busquedas::getBranch($input->param('name_ui'));
+
 my $director = $input->param('director')||"___________________";
 
 

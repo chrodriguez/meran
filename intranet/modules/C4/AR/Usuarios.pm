@@ -66,6 +66,7 @@ use vars qw(@EXPORT_OK @ISA);
     actualizarSocio
     getSocioInfo
     getSocioInfoPorNroSocio
+    getSocioInfoPorMixed
     existeSocio
     getSocioLike
     llegoMaxReservas
@@ -647,6 +648,39 @@ sub getSocioInfoPorNroSocio {
 }
 
 =item
+    Este funcion devuelve la informacion del usuario segun un nro_socio, su e-mail o su DNI
+=cut
+sub getSocioInfoPorMixed{
+        my ($user_id) = @_;
+        my @filtros;
+        
+        my $socio = undef;
+        
+        push (@filtros, (or   => [
+                                   'usr_persona.email' => { eq => $user_id }, 
+                                   'usr_persona.nro_documento' => { eq => $user_id },
+                                   ])
+        );
+        
+        
+        my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
+                                                     query              => \@filtros,
+                                                     require_objects    => ['persona'],
+                                                     select             => ['persona.*','usr_socio.*'],
+                                         );
+    
+        if(scalar(@$socio_array_ref)){
+             $socio =  $socio_array_ref->[0];
+        }else{
+             $socio =  C4::AR::Usuarios::getSocioInfoPorNroSocio($user_id);
+        }
+        
+        return ($socio);
+        
+	
+}
+
+=item
     Este funcion devuelve 1 si existe el socio y 0 si no existe
 =cut
 sub existeSocio {
@@ -1132,28 +1166,8 @@ sub recoverPassword{
 
     if ( $captchaResult->{is_valid} ) {
 
-	    my $user_id = $params->{'user-id'};
-	    my @filtros;
-	    
-        push (@filtros, (or   => [
-                                   'usr_persona.email' => { eq => $user_id }, 
-                                   'usr_persona.nro_documento' => { eq => $user_id },
-                                   ])
-              );
-	    
-	    
-	    my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
-	                                                 query              => \@filtros,
-	                                                 require_objects    => ['persona'],
-	                                                 select             => ['persona.*','usr_socio.*'],
-	                                     );
-	
-	    if(scalar(@$socio_array_ref)){
-	         $socio =  $socio_array_ref->[0];
-	    }else{
-	         $socio =  C4::AR::Usuarios::getSocioInfoPorNroSocio($user_id);
-	    }
-		
+	    my $user_id = C4::AR::Utilidades::trim($params->{'user-id'});
+        my $socio   = getSocioInfoPorMixed($user_id);		
 		if ($socio){
 		    my $db = $socio->db;
             $db->{connect_options}->{AutoCommit} = 0;

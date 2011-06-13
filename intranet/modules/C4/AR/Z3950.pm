@@ -39,8 +39,6 @@ sub deshabilitarServerZ3950 {
     my $servidor        = getServidorPorId($id_servidor);
     my $msg_object      = C4::AR::Mensajes::create();
     my $db              = $servidor->db;
-    
-#    _verificarDatosServidor($param,$msg_object);
 
     if (!($msg_object->{'error'})){
           # entro si no hay algun error, todos los campos ingresados son validos
@@ -80,7 +78,7 @@ sub editarServidorZ3950 {
     my $msg_object  = C4::AR::Mensajes::create();
     my $db          = $servidor->db;
     
-#    _verificarDatosServidor($param,$msg_object);
+    _verificarDatosServidor($params,$msg_object);
 
     if (!($msg_object->{'error'})){
           # entro si no hay algun error, todos los campos ingresados son validos
@@ -163,7 +161,7 @@ sub agregarServidorZ3950 {
     my $msg_object  = C4::AR::Mensajes::create();
     my $db          = $servidor->db;
     
-#    _verificarDatosServidor($param,$msg_object);
+    _verificarDatosServidor($param,$msg_object);
 
     if (!($msg_object->{'error'})){
           # entro si no hay algun error, todos los campos ingresados son validos
@@ -203,74 +201,71 @@ sub _verificarDatosServidor{
     my $nombre              = $data->{'nombre'};
     my $sintaxis            = $data->{'sintaxis'};
 
+#C4::AR::Validator::countSymbolChars
+
     if($servidor ne ""){
-        if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($servidor)))){
+        if (!($msg_object->{'error'}) && (&C4::AR::Validator::countSymbolChars($servidor) != 0)){
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A007', 'params' => []} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S008', 'params' => []} ) ;
         }
     } else {
           $msg_object->{'error'}= 1;
-          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A002', 'params' => []} ) ;
+          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S008', 'params' => []} ) ;
     }
     
     if($puerto ne ""){
-        if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($servidor)))){
+        if (!($msg_object->{'error'}) && (&C4::AR::Validator::countAlphaChars($puerto) != 0)){
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A007', 'params' => []} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S008', 'params' => []} ) ;
         }
     } else {
           $msg_object->{'error'}= 1;
-          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A002', 'params' => []} ) ;
+          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S008', 'params' => []} ) ;
     }
     
     if($base ne ""){
-        if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($servidor)))){
+        if (!($msg_object->{'error'}) && (&C4::AR::Validator::countSymbolChars($base) != 0)){
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A007', 'params' => []} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S008', 'params' => []} ) ;
         }
     } else {
           $msg_object->{'error'}= 1;
-          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A002', 'params' => []} ) ;
+          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S008', 'params' => []} ) ;
     }
     
     if($usuario ne ""){
-        if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($servidor)))){
+        if (!($msg_object->{'error'}) && (&C4::AR::Validator::countSymbolChars($usuario) != 0)){
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A007', 'params' => []} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S008', 'params' => []} ) ;
         }
     } else {
           $msg_object->{'error'}= 1;
-          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A002', 'params' => []} ) ;
+          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S008', 'params' => []} ) ;
     }
     
-    if($password ne ""){
-        if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($servidor)))){
+    if($password eq ""){
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A007', 'params' => []} ) ;
-        }
-    } else {
-          $msg_object->{'error'}= 1;
-          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A002', 'params' => []} ) ;
-    }
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S008', 'params' => []} ) ;
+    } 
     
     if($nombre ne ""){
-        if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($servidor)))){
+        if (!($msg_object->{'error'}) && (&C4::AR::Validator::countSymbolChars($nombre) != 0)){
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A007', 'params' => []} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S008', 'params' => []} ) ;
         }
     } else {
           $msg_object->{'error'}= 1;
-          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A002', 'params' => []} ) ;
+          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S008', 'params' => []} ) ;
     }
     
     if($sintaxis ne ""){
-        if (!($msg_object->{'error'}) && (!(&C4::AR::Utilidades::validateString($servidor)))){
+        if (!($msg_object->{'error'}) && (&C4::AR::Validator::countSymbolChars($sintaxis))){
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A007', 'params' => []} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S008', 'params' => []} ) ;
         }
     } else {
           $msg_object->{'error'}= 1;
-          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A002', 'params' => []} ) ;
+          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S008', 'params' => []} ) ;
     }
 
 }

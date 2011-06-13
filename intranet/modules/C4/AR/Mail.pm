@@ -12,7 +12,7 @@ use Net::SMTP;
 use Net::SMTP::SSL;
 use Net::SMTP::TLS;
 use C4::AR::Preferencias;
-use Digest::SHA qw(sha256_base64);
+use Digest::MD5 qw(md5_hex);
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -37,7 +37,7 @@ sub send_mail_TLS {
     my $mail_to         = $mail_hash_ref->{'mail_to'};
     my $mail_data       = $mail_hash_ref->{'mail_message'};
     
-    eval {
+    eval{
         $mailer = new Net::SMTP::TLS (  
                                             $mail_hash_ref->{'smtp_server'},  
                                             Hello       => $mail_hash_ref->{'smtp_server'},  
@@ -337,9 +337,10 @@ sub send_mail {
     
     $info_smtp_hash_ref->{'html_content'}           = 1;
 
-    my $unique_hash = sha256_base64(localtime());
-    
-    open FILE, ">/tmp/mail.html.$unique_hash" or die $!;
+    my $unique_hash = md5_hex(localtime());
+    my $mail_file   = "/tmp/mail.html.".$unique_hash;
+
+    open FILE, ">".$mail_file or die $!;
     print FILE $out;
     close FILE;
 
@@ -353,7 +354,7 @@ sub send_mail {
          To           => $mail_to,
          Subject      => $mail_subject,
          Template     => {
-              html    => "/tmp/mail.html.$unique_hash",
+              html    => $mail_file,
          },
          TmplOptions => {ABSOLUTE => 1,},
          Charset      => 'utf8',
@@ -374,6 +375,8 @@ sub send_mail {
         }#END if($mail_metodo eq "PLANO")
     }
 
+    unlink($mail_file);
+    
     return ($ok, $msg_error);
 }
 

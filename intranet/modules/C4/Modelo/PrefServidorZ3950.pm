@@ -35,7 +35,13 @@ sub agregarServidorZ3950{
     $self->setBase($params->{'base'});
     $self->setUsuario($params->{'usuario'});
     $self->setPassword($params->{'password'});
-    $self->setHabilitado(1);
+        my $habilitado;
+    if($params->{'habilitado'} == 'true'){
+        $habilitado = 1
+    }else{
+        $habilitado = 0
+    }
+    $self->setHabilitado($habilitado);
     $self->setSintaxis($params->{'sintaxis'});
 
     $self->save();
@@ -52,7 +58,14 @@ sub editarServidorZ3950{
     $self->setBase($params->{'base'});
     $self->setUsuario($params->{'usuario'});
     $self->setPassword($params->{'password'});
-    $self->setHabilitado(1);
+    my $habilitado;
+    if($params->{'habilitado'} eq 'true'){
+        $habilitado = 1
+    }else{
+        $habilitado = 0
+    }
+    C4::AR::Debug::debug("habilitado : ".$params->{'habilitado'});
+    $self->setHabilitado($habilitado);
     $self->setSintaxis($params->{'sintaxis'});
 
     $self->save();
