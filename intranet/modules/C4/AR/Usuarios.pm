@@ -1106,6 +1106,7 @@ sub _sendRecoveryPasswordMail{
     
     
     $mail{'mail_message'}           = $mailMessage;
+    $mail{'page_title'}             = C4::AR::Filtros::i18n("Olvido de su contrase&ntilde;a");
     
     my ($ok, $msg_error)            = C4::AR::Mail::send_mail(\%mail);
     

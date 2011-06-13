@@ -42,9 +42,9 @@ else{
     $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
     #tipoAccion = Insert, Update, Select
-    my $tipoAccion= $obj->{'tipoAccion'} || "";
-    my $componente= $obj->{'componente'} || "";
-    my $ejemplar= $obj->{'ejemplar'} || "";
+    my $tipoAccion      = $obj->{'tipoAccion'} || "";
+    my $componente      = $obj->{'componente'} || "";
+    my $ejemplar        = $obj->{'ejemplar'} || "";
     my $result;
     my %infoRespuesta;
     my $authnotrequired = 0;
@@ -64,7 +64,7 @@ else{
                             debug => 1,
         });
 
-        $t_params->{'visualizacion'} = C4::AR::VisualizacionIntra::getConfiguracion($ejemplar);
+        $t_params->{'visualizacion'} = C4::AR::VisualizacionIntra::getConfiguracionByOrder($ejemplar);
         $t_params->{'selectCampoX'} = C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
 
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
@@ -147,6 +147,22 @@ else{
 
       C4::AR::Auth::print_header($session);
       print $infoOperacionJSON;
+    }
+    
+    elsif($tipoAccion eq "ACTUALIZAR_ORDEN"){
+        my ($user, $session, $flags)= checkauth(  $input, 
+                                                  $authnotrequired, 
+                                                  {   ui                => 'ANY', 
+                                                      tipo_documento    => 'ANY', 
+                                                      accion            => 'CONSULTA', 
+                                                      entorno           => 'datos_nivel1'}, 
+                                                  'intranet'
+                                      );
+        my $newOrderArray       = $obj->{'newOrderArray'};
+        my $info                = C4::AR::VisualizacionIntra::updateNewOrder($newOrderArray);
+        my $infoOperacionJSON   = to_json $info;
+        C4::AR::Auth::print_header($session);
+        print $infoOperacionJSON;  
     }
     #**************************************************************************************************
 }

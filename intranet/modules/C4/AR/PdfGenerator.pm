@@ -711,7 +711,7 @@ sub imprimirEncabezado {
 	my $anio    = 1900 + $datearr[5];
 	my $mes     = &C4::Date::mesString( $datearr[4] + 1 );
 	my $dia     = $datearr[3];
-
+    $ui_object  = $ui_object || C4::AR::Referencias::obtenerDefaultUI();
 	#fin fecha
 	C4::AR::Debug::debug( C4::Context->config('intrahtdocs') . '/'
 		  . C4::AR::Preferencias::getValorPreferencia('template')
@@ -721,18 +721,18 @@ sub imprimirEncabezado {
 #         $pdf->addImg( C4::Context->config('intrahtdocs').'/'.C4::AR::Preferencias::getValorPreferencia('template').'/images/escudo-uni.png', $x, $pageheight - 160);
 	$pdf->setFont("Arial-Bold");
 	$pdf->setSize(10);
-    $pdf->addRawText( _format(uc($ui_object->getTituloFormal)), $x, $pageheight - 180 );
-    $pdf->addRawText( _format(uc($ui_object->getNombre)), $x, $pageheight - 190 );
+    $pdf->addRawText( _unformat(uc($ui_object->getTituloFormal)), $x, $pageheight - 180 );
+    $pdf->addRawText( _unformat(uc($ui_object->getNombre)), $x, $pageheight - 190 );
 	$pdf->addRawText( _format(C4::AR::Filtros::i18n("BIBLIOTECA")),    $x, $pageheight - 200 );
 	$pdf->setFont("Verdana-Bold");
 	$pdf->setSize(14);
 	#Se pone solamente Encode::decode_utf8 porque ya viene en UTF-8
-	$pdf->addRawText( _format($titulo->{'titulo'}), _format($titulo->{'posx'}),
+	$pdf->addRawText( _unformat($titulo->{'titulo'}), _unformat($titulo->{'posx'}),
 		$pageheight - 240 );
 	$pdf->setFont("Verdana");
 	$pdf->setSize(10);
 	$pdf->addRawText(
-		_format($ui_object->getCiudad." ") . $dia . " de " . $mes . " de " . $anio,
+		_unformat($ui_object->getCiudad." ") . $dia . " de " . $mes . " de " . $anio,
 		$pagewidth - 250,
 		$pageheight - 270
 	);
@@ -779,7 +779,7 @@ sub imprimirFirma {
 	$pdf->addRawText( $linea, 330, $pageheight - $y );
 	$y = $y + 10;
 	$pdf->addRawText( "Firma",                160, $pageheight - $y );
-	$pdf->addRawText( _format("Aclaración"), 360, $pageheight - $y );
+	$pdf->addRawText( _unformat("Aclaración"), 360, $pageheight - $y );
 	return ( $pdf, $y );
 }
 
