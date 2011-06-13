@@ -17,6 +17,28 @@
         });
     });
 </script>
+<script type="text/javascript" language="javascript" src="/includes/jquery/jquery-ui-1.8.13.sortable.min.js"></script>
+<script type="text/javascript" language="javascript" charset="utf-8">
+    $(function() {
+		    $("#sortable").sortable({
+                stop: function(event, ui) { 
+                    objAH               = new AjaxHelper(updateSortable);
+	                objAH.debug         = true;
+	                objAH.url           = URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
+                    objAH.showOverlay   = true;
+	                objAH.tipoAccion    = "ACTUALIZAR_ORDEN";
+	                objAH.newOrderArray = $('#sortable').sortable('toArray');
+	                objAH.sendToServer(); 
+                }
+            });
+		    $("#sortable").disableSelection();
+		    
+		    function updateSortable(responseText){
+		        zebra('tabla_datos_visualizacion_intra')
+		    }
+	    });
+</script>
+
 
 <fieldset>
     <legend class="titulo_legend trigger click"><strong>[% "Agregar Visualizaci&oacute;n:" | i18n %]</strong></legend>
@@ -62,7 +84,7 @@
 <fieldset>
     <legend class="titulo_legend trigger click"><strong>[% "Configuraci&oacute;n de la Visualizaci&oacute;n:" | i18n %]</strong></legend>
     <div id="divTablaVisualizacion" class="divTablaVisualizacion"></div>
-      <table class="tabla_datos" cellspacing=0 border="0" cellpadding=0 style="width:100%;">
+      <table id="tabla_datos_visualizacion_intra" class="tabla_datos" cellspacing=0 border="0" cellpadding=0 style="width:100%;">
             <thead>
                 <tr class="titulo_tabla_resultado">
                     <td>[% "Campo" | i18n %]</td>
@@ -71,9 +93,9 @@
                     <td>[% "Eliminar" | i18n %]</td>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="sortable">
                 [% FOREACH campo IN visualizacion %]
-                    <tr align="center">
+                    <tr id="[% campo.getOrden %]" align="center">
                         <td>[% campo.getCampo %]</td>
                         <td>[% campo.getSubCampo %]</td>
                         <td class="editable" id="[% campo.id %]">[% campo.getVistaIntra %]</td>
