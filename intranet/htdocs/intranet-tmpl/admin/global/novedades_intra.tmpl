@@ -1,0 +1,60 @@
+[% INCLUDE 'intranet-top.inc' %]
+
+<script type="text/javascript">
+
+    function obtenerNovedades(){
+        objAH=new AjaxHelper(updateObtenerNovedades);
+        objAH.debug= true;
+        objAH.showOverlay = true;
+        objAH.url=URL_PREFIX+'/admin/global/novedades_intraDB.pl';
+        objAH.tipoAccion='LISTAR';
+        objAH.funcion= 'changePage';
+        objAH.sendToServer();
+    }
+
+    function updateObtenerNovedades(responseText){
+            if (!verificarRespuesta(responseText))
+                return(0);
+            $('#novedades_intra_ajax').html(responseText);
+            zebra('datos_tabla');
+    }
+
+
+    
+    function eliminarNovedad(id_novedad){
+        jConfirm(ELIMINAR_NOVEDAD, NOVEDAD_TITLE, function(confirmStatus){
+            if (confirmStatus){
+                objAH=new AjaxHelper(updateEliminarNovedad);
+                objAH.debug= true;
+                objAH.url=URL_PREFIX+'/admin/global/novedades_intraDB.pl';
+                objAH.showOverlay       = true;
+                objAH.tipoAccion='ELIMINAR';
+                objAH.id=id_novedad;
+                objAH.sendToServer();
+            }
+        });
+    }
+
+    function updateEliminarNovedad(responseText){
+            if (!verificarRespuesta(responseText))
+                return(0);
+            $('#novedades_intra_ajax').html(responseText);
+            zebra('datos_tabla');
+    }
+    
+
+</script>
+<link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/css/fancybox/jquery.fancybox.css">
+<script src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
+<script src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js"></script>
+
+<script type="text/javascript">
+      $(document).ready(function() {
+        obtenerNovedades();
+      });
+</script>
+
+<div id="novedades_intra_ajax"></div>
+
+
+[% INCLUDE 'intranet-bottom.inc' %]

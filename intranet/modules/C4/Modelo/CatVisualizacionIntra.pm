@@ -13,6 +13,7 @@ __PACKAGE__->meta->setup(
         subcampo        => { type => 'character', length => 1, not_null => 1 },
         vista_intra     => { type => 'varchar', length => 255 },
         tipo_ejemplar   => { type => 'char', length => 3 },
+        orden           => { type => 'integer', length => 11, not_null => 1 }
     ],
 
     primary_key_columns => [ 'id' ],
@@ -41,8 +42,18 @@ sub modificar{
 
     my ($self)=shift;
     my ($string) = @_;
-
+    $string = Encode::decode_utf8($string);
     $self->setVistaIntra($string);
+
+    $self->save();
+}
+
+sub setOrder{
+
+    my ($self)=shift;
+    my ($orden) = @_;
+
+    $self->orden($orden);
 
     $self->save();
 }
@@ -82,6 +93,18 @@ sub setCampo{
     my ($self) = shift;
     my ($campo) = @_;
     $self->campo($campo);
+}
+
+sub getOrden{
+    my ($self)=shift;
+
+    return $self->orden;
+}
+
+sub setOrden{
+    my ($self) = shift;
+    my ($orden) = @_;
+    $self->orden($orden);
 }
 
 sub getTipoEjemplar{

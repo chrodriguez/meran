@@ -20,11 +20,66 @@ $VERSION = 0.01;
 @ISA=qw(Exporter);
 
 @EXPORT_OK=qw(
-
+    &updateNewOrder
+    &getConfiguracionByOrder
 	&getConfiguracion
     &deleteConfiguracion
 
 );
+
+
+=item
+    Funcion que actializa el orden de los campos. 
+    Parametros: array con los ids en el orden nuevo
+=cut
+sub updateNewOrder{
+    my ($newOrderArray) = @_;
+    my $msg_object      = C4::AR::Mensajes::create();
+    
+    # ordeno los ids que llegan desordenados primero, para usarlo como id de cat_visualizacion_intra
+    # porque no todos los campos de cat_visualizacion_intra se muestran en el template a ordenar ( ej 8 y 9 )
+    # entonces no puedo usar un simple indice como id.
+    my @array = sort { $a <=> $b } @$newOrderArray;
+    
+    my $i = 0;
+    my @filtros;
+    
+    # hay que hacer update de todos los campos porque si viene un nuevo orden y es justo ordenado (igual que @array : 1,2,3...)
+    # tambien hay que actualizarlo
+    foreach my $campo (@$newOrderArray){
+    
+        my $config_temp = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(
+                                                                    query   => [ id => { eq => @array[$i]}], 
+                               );
+        my $configuracion = $config_temp->[0];
+        
+        $configuracion->setOrder($campo);
+    
+        $i++;
+    }
+    
+    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'M000', 'params' => []} ) ;
+
+    return ($msg_object);
+}
+
+
+=item
+    Funcion que devuelve TODOS los campos ordenados por orden
+=cut
+sub getConfiguracionByOrder{
+    my ($ejemplar) = @_;
+
+    my @filtros;
+    
+    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $ejemplar }, 
+                                tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS
+    );
+
+    my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros, sort_by => ('orden'),);
+
+    return ($configuracion);
+}
 
 
 sub getConfiguracion{

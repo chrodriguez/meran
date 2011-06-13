@@ -15,7 +15,7 @@ my ($nro_socio, $session, $flags) = checkauth( $input,
                                             accion          => 'MODIFICACION', 
                                             entorno         => 'usuarios'
                                         },
-                                        "intranet"
+                                        "opac"
                             );
 
 my $session = CGI::Session->load();

@@ -1087,8 +1087,7 @@ sub _sendRecoveryPasswordMail{
     my $completo            = $socio->persona->getNombre." ".$socio->persona->getApellido;
     my $nro_socio           = $socio->getNro_socio;
 
-    my $default_ui      = C4::AR::Preferencias::getValorPreferencia('defaultUI');
-    my $ui              = C4::Modelo::PrefUnidadInformacion->getByCode($default_ui);
+    my $ui              = C4::AR::Referencias::obtenerDefaultUI();
     my $nombre_ui       = $ui->getNombre();
 
     my $mailMessage =
@@ -1106,6 +1105,7 @@ sub _sendRecoveryPasswordMail{
     
     
     $mail{'mail_message'}           = $mailMessage;
+    $mail{'page_title'}             = C4::AR::Filtros::i18n("Olvido de su contrase&ntilde;a");
     
     my ($ok, $msg_error)            = C4::AR::Mail::send_mail(\%mail);
     

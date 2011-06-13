@@ -467,7 +467,9 @@ my %mensajesINTRA = (
     'S005' => 'Hubo un error cuando se intentaba modificar el servidor z3950.',   
     'S006' => 'Se deshabilit&oacute; el servidor z3950 con &eacute;xito.',   
     'S007' => 'Hubo un error cuando se intentaba deshabilitar el servidor z3950.', 
-    'S008' => 'Por favor verifique que los datos ingresados sean correctos.',   
+    'S008' => 'Por favor verifique que los datos ingresados sean correctos.',  
+    #mensajes visualizacion INTRA y OPAC
+    'M000' => 'Se modifico el orden con &eacute;xito.',  
 );
 
 sub getMensaje {

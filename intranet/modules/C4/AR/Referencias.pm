@@ -41,18 +41,19 @@ use Switch;
 use vars qw(@EXPORT_OK @ISA);
 @ISA        = qw(Exporter);
 @EXPORT_OK  = qw(
-                    &obtenerFormasDeEnvio
-                    &obtenerTiposDeMaterial
-                    &obtenerTiposDeDocumentos
-                    &obtenerCategoriaDeSocio
-                    &getCamposDeTablaRef
-                    &obtenerValoresTablaRef
-                    &obtenerTablasDeReferencia
-                    &obtenerTiposNivel3
-                    &obtenerProveedores
-                    &translateTipoNivel3
-                    &obtenerEstantes
-                    &obtenerUIByIdUi
+                    obtenerFormasDeEnvio
+                    obtenerTiposDeMaterial
+                    obtenerTiposDeDocumentos
+                    obtenerCategoriaDeSocio
+                    getCamposDeTablaRef
+                    obtenerValoresTablaRef
+                    obtenerTablasDeReferencia
+                    obtenerTiposNivel3
+                    obtenerProveedores
+                    translateTipoNivel3
+                    obtenerEstantes
+                    obtenerUIByIdUi
+                    obtenerDefaultUI
                     
         );
 
@@ -194,6 +195,21 @@ sub obtenerUnidadesDeInformacion {
     return(\@results);
 }
 
+=item
+Devuelve un objeto PrefUnidadInformacion con la defaultUI
+=cut
+sub obtenerDefaultUI {
+
+    my @filtros;
+    my $defaultUI =  C4::AR::Preferencias::getValorPreferencia("defaultUI");
+     
+    push (@filtros, (id_ui => {eq =>$defaultUI}) );
+    my $unidades_array_ref = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion(
+                                                                                                        query => \@filtros,
+                                                                                                    );
+
+    return ($unidades_array_ref->[0]);
+}
 =item
 Devuelve un arreglo de objetos Nivel Bibliografico
 =cut

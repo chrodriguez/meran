@@ -93,6 +93,12 @@ sub getDireccion{
 
     return (C4::AR::Utilidades::trim($self->direccion));
 } 
+
+sub getDireccion{
+    my ($self) = shift;
+
+    return (C4::AR::Utilidades::trim($self->direccion));
+} 
     
 sub setDireccion{
     my ($self) = shift;

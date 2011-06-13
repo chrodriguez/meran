@@ -1152,7 +1152,7 @@ sub InitPaginador{
 }
 
 sub crearPaginador{
-     
+
     my ($cantResult, $cantRenglones, $pagActual, $funcion,$t_params)=@_;
 
     my ($paginador, $cantPaginas)=C4::AR::Utilidades::armarPaginas($pagActual, $cantResult, $cantRenglones,$funcion,$t_params);
