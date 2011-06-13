@@ -56,23 +56,27 @@ elsif($tipoAccion eq "ACTUALIZAR_TABLA_NOVEDADES"){
 
     $cantidad_novedades = $pref_limite - $cantidad_novedades_no_mostrar;
     
-    foreach my $nov (@$novedades){
-        $ok = 0;
-        if($novedades_no_mostrar){
-            foreach my $nov_no_mostrar (@$novedades_no_mostrar){  
-                if($nov->getId() == $nov_no_mostrar->getIdNovedad){
-                    $ok = 1;
-                }        
+    if($novedades){
+        foreach my $nov (@$novedades){
+            $ok = 0;
+            if($novedades_no_mostrar){
+                foreach my $nov_no_mostrar (@$novedades_no_mostrar){  
+                    if($nov->getId() == $nov_no_mostrar->getIdNovedad){
+                        $ok = 1;
+                    }        
+                }
+            }    
+            if(!$ok){
+                push(@novedadesOK, $nov);
             }
-        }    
-        if(!$ok){
-            push(@novedadesOK, $nov);
         }
+        $t_params->{'cantidad'}             = $cantidad_novedades;
+    }else{
+        # si no hay novedades ponemos la cantidad en 0 para mostrar el mensaje en el tmpl
+        $t_params->{'cantidad'}             = 0;
     }
-
     $t_params->{'nro_socio'}            = $nro_socio;
     $t_params->{'SEARCH_RESULTS'}       = $grupos;
-    $t_params->{'cantidad'}             = $cantidad_novedades;
     $t_params->{'novedades'}            = \@novedadesOK;
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
