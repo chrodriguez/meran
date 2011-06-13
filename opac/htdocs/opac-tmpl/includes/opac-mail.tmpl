@@ -45,9 +45,9 @@
 			      <div class="header-middle">    
 			        <!-- Site message --> 
 			        <div class="sitemessage"> 
-			          <h1>&bull; Facultad de Ciencias Económicas</h1> 
-			          <h2>6 entre  47 y 48. 1° subsuelo 2</h2> 
-			          <h3><a href="http://[% SERVER_ADDRESS %]/[% url_prefix %]/opac-ui_info.pl">&rsaquo;&rsaquo;&nbsp;[% 'M&aacute;s Informaci&oacute;n De La Unidad' | i18n %]'</a></h3> 
+			          <h1>&bull; [% ui.getNombrePDF %]</h1> 
+			          <h2>[% ui.getDireccionPDF %]</h2> 
+			          <h3><a href="http://[% SERVER_ADDRESS %]/[% url_prefix %]/opac-ui_info.pl">&rsaquo;&rsaquo;&nbsp;[% 'M&aacute;s Informaci&oacute;n De La Unidad' | i18n %]</a></h3> 
 			        </div> 
 			      </div> 
 			      <!-- A.3 HEADER BOTTOM --> 
@@ -73,7 +73,13 @@
 	        <div class="main"> 
 		        <div class="main-content"> 
 				    <div class="round-border-topright"></div> 
-			            <h1 class="pagetitle">[% 'Olvido de su contrase&ntilde;a' | i18n %]</h1> 
+			            <h1 class="pagetitle">
+			                 [% IF page_title %] 
+			                     [% page_title %]
+		                     [% ELSE %]
+		                         [% 'Informaci&oacute;n Importante' | i18n %]
+		                     [% END %]
+                        </h1> 
 			            <hr class="clear-contentunit"> 
 			            <br /> 
 				        <h1>[% mail_content %]</h1> 
@@ -82,7 +88,7 @@
 	    	</div>
 
 		    <div class="footer">
-		      <p>@2011 - Facultad de Ciencias Económicas | Biblioteca P&uacute;blica</p>
+		      <p>@2011 - [% ui.getNombrePDF %] | Biblioteca P&uacute;blica</p>
 		      <p class="credits">
 		
 		          Powered by <a href="http://meran.linti.unlp.edu.ar" target="_blank" title="MERAN">MERAN</a> 

@@ -331,8 +331,9 @@ sub send_mail {
 
     my ($template, $t_params)     = C4::Output::gettemplate("includes/opac-mail.tmpl", "OPAC", 1);
     
-    $t_params->{'mail_content'} = $info_smtp_hash_ref->{'mail_message'};
-
+    $t_params->{'mail_content'} = Encode::decode_utf8($info_smtp_hash_ref->{'mail_message'});
+    $t_params->{'page_title'}   = $info_smtp_hash_ref->{'page_title'};
+    
     my $out= C4::AR::Auth::get_html_content($template, $t_params);
     
     $info_smtp_hash_ref->{'html_content'}           = 1;
@@ -357,6 +358,7 @@ sub send_mail {
               html    => $mail_file,
          },
          TmplOptions => {ABSOLUTE => 1,},
+         Encoding     =>  '8bit',
          Charset      => 'utf8',
     );
 

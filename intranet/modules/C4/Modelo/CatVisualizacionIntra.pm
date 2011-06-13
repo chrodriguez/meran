@@ -42,7 +42,7 @@ sub modificar{
 
     my ($self)=shift;
     my ($string) = @_;
-
+    $string = Encode::decode_utf8($string);
     $self->setVistaIntra($string);
 
     $self->save();
