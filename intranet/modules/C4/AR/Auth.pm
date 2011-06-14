@@ -938,8 +938,6 @@ sub buildSocioDataHashFromSession{
     $socio_data{'usr_legajo'}               = $session->param('usr_legajo');
     $socio_data{'ciudad_ref'}{'id'}         = $session->param('usr_ciudad_id'); 
 
-C4::AR::Utilidades::printHASH(\%socio_data);
-    
     return (\%socio_data);
 }
 
