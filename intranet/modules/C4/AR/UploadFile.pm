@@ -37,12 +37,56 @@ use vars qw(@EXPORT @ISA);
 my $picturesDir = C4::Context->config("picturesdir");
 
 sub uploadPhoto{
-	my ($bornum, $filepath) = @_;
+	my ($query) = @_;
 
-    C4::AR::Debug::debug("UploadFile => uploadPhoto");    
+    use C4::Modelo::UsrSocio;
+    
+    my $uploaddir       = C4::Context->config("picturesdir");
+    my $maxFileSize     = 2048 * 2048; # 1/2mb max file size...
+    my $file            = $query->param('POSTDATA');
+    my $nro_socio       = $query->url_param('nro_socio'); 
+    my $name            = $nro_socio;
+    my $type            = '';
+     
+    if ($file =~ /^GIF/i) {
+        $type = "gif";
+    } elsif ($file =~ /PNG/i) {
+        $type = "png";
+    } elsif ($file =~ /JFIF/i) {
+        $type = "jpg";
+    } else {
+        $type = "jpg";
+    }
 
+    if (!$type) {
+        print qq|{ "success": false, "error": "Invalid file type..." }|;
+        print STDERR "file has been NOT been uploaded... \n";
+    }
 
+    open(WRITEIT, ">$uploaddir/$name.$type") or die "Cant write to $uploaddir/$name.$type. Reason: $!";
+        print WRITEIT $file;
+    close(WRITEIT);
 
+    my $check_size = -s "$uploaddir/$name.$type";
+
+    print STDERR qq|Main filesize: $check_size  Max Filesize: $maxFileSize \n\n|;
+
+    print $query->header();
+    
+    if ($check_size < 1) {
+        print STDERR "ooops, its empty - gonna get rid of it!\n";
+        print qq|{ "success": false, "error": "File is empty..." }|;
+        print STDERR "file has been NOT been uploaded... \n";
+    } elsif ($check_size > $maxFileSize) {
+        print STDERR "ooops, its too large - gonna get rid of it!\n";
+        print qq|{ "success": false, "error": "File is too large..." }|;
+        print STDERR "file has been NOT been uploaded... \n";
+    } else  {
+        print qq|{ "success": true }|;
+        print STDERR "file has been successfully uploaded... thank you.\n";
+ 
+    }
+    
 
 }
 

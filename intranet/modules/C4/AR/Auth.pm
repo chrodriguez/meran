@@ -891,6 +891,7 @@ sub _isOPAC {
 sub buildSocioData{
 
     my ($session,$socio) = @_;
+    use C4::Modelo::UsrSocio;
     
     $session->param('urs_theme', $socio->getTheme());
     $session->param('usr_theme_intra', $socio->getThemeINTRA());
@@ -936,6 +937,8 @@ sub buildSocioDataHashFromSession{
     $socio_data{'usr_email'}                = $session->param('usr_email');
     $socio_data{'usr_legajo'}               = $session->param('usr_legajo');
     $socio_data{'ciudad_ref'}{'id'}         = $session->param('usr_ciudad_id'); 
+
+C4::AR::Utilidades::printHASH(\%socio_data);
     
     return (\%socio_data);
 }
