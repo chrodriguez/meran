@@ -253,7 +253,6 @@ sub updateForHoliday{
 #30/03/2007 - Damian - Se Agregaron las dos funciones proximoHabil y proximosHabiles porque se repetia en dos modulos Issues.pm y Reserves.pm.
 
 sub proximoHabil{
-#funcion que recibe como parametro una cantidad de dias y devuelve el proximo d�a h�bil a partir de hoy + esa cantidad, ejemplo si recibe 2, devuelve el dia habil que sigue a pasado ma�ana. El segundo parametro que recibe es una variable que indica si todos los dias dentro del rango deben ser habiles o no. El tercer parametro es opcional, si se recibe se calcula el perido desde ese dia, sino se hace desde el dia de hoy
 	my ($cantidad,$todosHabiles,$desde)=@_;
 	my $err= "Error con la fecha";
 	my $hoy= (ParseDate($desde) || ParseDate("today"));
@@ -287,7 +286,6 @@ sub proximoHabil{
 }
 
 sub proximosHabiles{
-#funcion que recibe como parametro una cantidad de dias y devuelve el proximo d�a h�bil a partir de hoy y el dia habil correspondiente a esa cantidad, ejemplo si recibe 2, devuelve el dia habil que corresponde a hoy y el que corresponde a 2 dias siguientes. El segundo parametro que recibe es una variable que indica si todos los dias dentro del rango deben ser habiles.
 	my ($cantidad,$todosHabiles)=@_;
 	my $apertura=C4::AR::Preferencias::getValorPreferencia("open");
 	my $cierre=C4::AR::Preferencias::getValorPreferencia("close");
@@ -302,7 +300,6 @@ sub proximosHabiles{
 	my $hoy=ParseDate("today");
 
 	if ($desde eq $hoy && $apertura gt $actual) {#entonces hoy no es habil, o la biblioteca no abrio aun
-#si todavia no abrio el usuario tiene desde el dia de hoy para retirar, asi que le resto 1 a la cantidad de dias que ser� valido el pedido
 		$cantidad--;
 	} 
 	elsif($cierre lt $actual){#si ya paso el horario de cierre entonces lo tengo que tener disponible desde el dia siguiente
@@ -345,21 +342,36 @@ sub proximosHabiles{
 	);
 }
 
-sub mesString(){
+sub mesString{
 	my ($mes)=@_;
-	if ($mes eq "1") {$mes='Enero'}
-	elsif ($mes eq "2") {$mes='Febrero'}
-	elsif ($mes eq "3") {$mes='Marzo'}
-	elsif ($mes eq "4") {$mes='Abril'}
-	elsif ($mes eq "5") {$mes='Mayo'}
-	elsif ($mes eq "6") {$mes='Junio'}
-	elsif ($mes eq "7") {$mes='Julio'}
-	elsif ($mes eq "8") {$mes='Agosto'}
-	elsif ($mes eq "9") {$mes='Septiembre'}
-	elsif ($mes eq "10") {$mes='Octubre'}
-	elsif ($mes eq "11") {$mes='Noviembre'}
-	elsif ($mes eq "12") {$mes='Diciembre'};
+	
+	if ($mes eq "1") {$mes=C4::AR::Filtros::i18n('Enero')}
+	elsif ($mes eq "2") {$mes=C4::AR::Filtros::i18n('Febrero')}
+	elsif ($mes eq "3") {$mes=C4::AR::Filtros::i18n('Marzo')}
+	elsif ($mes eq "4") {$mes=C4::AR::Filtros::i18n('Abril')}
+	elsif ($mes eq "5") {$mes=C4::AR::Filtros::i18n('Mayo')}
+	elsif ($mes eq "6") {$mes=C4::AR::Filtros::i18n('Junio')}
+	elsif ($mes eq "7") {$mes=C4::AR::Filtros::i18n('Julio')}
+	elsif ($mes eq "8") {$mes=C4::AR::Filtros::i18n('Agosto')}
+	elsif ($mes eq "9") {$mes=C4::AR::Filtros::i18n('Septiembre')}
+	elsif ($mes eq "10") {$mes=C4::AR::Filtros::i18n('Octubre')}
+	elsif ($mes eq "11") {$mes=C4::AR::Filtros::i18n('Noviembre')}
+	elsif ($mes eq "12") {$mes=C4::AR::Filtros::i18n('Diciembre')};
 	return ($mes);
+}
+
+sub diaString{
+    my ($dia)=@_;
+    
+    if ($dia eq "0") {$dia=C4::AR::Filtros::i18n('Domingo')}
+    elsif ($dia eq "1") {$dia=C4::AR::Filtros::i18n('Lunes')}
+    elsif ($dia eq "2") {$dia=C4::AR::Filtros::i18n('Martes')}
+    elsif ($dia eq "3") {$dia=C4::AR::Filtros::i18n('Miercoles')}
+    elsif ($dia eq "4") {$dia=C4::AR::Filtros::i18n('Jueves')}
+    elsif ($dia eq "5") {$dia=C4::AR::Filtros::i18n('Viernes')}
+    elsif ($dia eq "6") {$dia=C4::AR::Filtros::i18n('S&aacute;bado')}
+
+    return ($dia);
 }
 
 sub getCurrentTimestamp(){

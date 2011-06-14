@@ -426,6 +426,11 @@ width: 83%;
 	vertical-align: top;
 }
 
+.titulo_tabla_resultado th{
+	border: none;
+    background: #35414F;
+}
+
 .tabla_der {
 	float: right;
 }
@@ -4580,10 +4585,11 @@ background-color:#E7F3FA;
 
 tr.par {
 background-color:#D4E3EB;
+}
 
 .par .disponible {
-color:#35414F;
-font-size:10pt;
+	color:#35414F;
+	font-size:10pt;
 }
 
 .par .prestamo {
@@ -4595,7 +4601,9 @@ font-size:10pt;
 	min-width: 900px;
 }
 
-
+#label-file-uploader h6{
+	display: none;
+}
 
 
 /* Estilo mensaje de contacto (mainpage) */

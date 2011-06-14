@@ -3853,11 +3853,14 @@ sub armarPaginasOPAC{
 
 sub getDate{
 
-    my ($second, $minute, $hour, $dayOfMonth, $month, $yearOffset, $dayOfWeek, $dayOfYear, $daylightSavings) = localtime();
+    my @datearr = localtime(time);
     my %date_hash = {};
 
-    $date_hash{'year'} = 1900 + $yearOffset;
-    $date_hash{'month'} = $month;
+    $date_hash{'year'}          = 1900 + $datearr[5];
+    $date_hash{'month'}         = $datearr[4] + 1;
+    $date_hash{'month_name'}    = C4::Date::mesString( $date_hash{'month'} );
+    $date_hash{'day'}           = $datearr[3];
+    $date_hash{'day_name'}      = C4::Date::diaString( $datearr[6] );
 
     return (\%date_hash);
 }

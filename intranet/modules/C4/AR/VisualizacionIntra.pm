@@ -36,8 +36,8 @@ sub updateNewOrder{
     my ($newOrderArray) = @_;
     my $msg_object      = C4::AR::Mensajes::create();
     
-    # ordeno los ids que llegan desordenados primero, para usarlo como id de cat_visualizacion_intra
-    # porque no todos los campos de cat_visualizacion_intra se muestran en el template a ordenar ( ej 8 y 9 )
+    # ordeno los ids que llegan desordenados primero, para obtener un clon de los ids, y ahora usarlo de indice para el orden
+    # esto es porque no todos los campos de cat_visualizacion_intra se muestran en el template a ordenar ( ej 8 y 9 )
     # entonces no puedo usar un simple indice como id.
     my @array = sort { $a <=> $b } @$newOrderArray;
     
@@ -49,11 +49,13 @@ sub updateNewOrder{
     foreach my $campo (@$newOrderArray){
     
         my $config_temp = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(
-                                                                    query   => [ id => { eq => @array[$i]}], 
+                                                                    query   => [ id => { eq => $campo}], 
                                );
         my $configuracion = $config_temp->[0];
         
-        $configuracion->setOrder($campo);
+#        C4::AR::Debug::debug("nuevo orden de id : ".$campo." es :  ".@array[$i]);
+        
+        $configuracion->setOrder(@array[$i]);
     
         $i++;
     }

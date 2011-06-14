@@ -20,11 +20,72 @@ $VERSION = 0.01;
 @ISA=qw(Exporter);
 
 @EXPORT_OK=qw(
-
+    &addConfiguracion
+    &updateNewOrder
+    &getConfiguracionByOrder
 	&getConfiguracion
     &deleteConfiguracion
-
+    &editConfiguracion
+    &getSubCamposLike
+    &getCamposXLike
+    &getVisualizacionFromCampoSubCampo
 );
+
+
+=item
+    Funcion que actializa el orden de los campos. 
+    Parametros: array con los ids en el orden nuevo
+=cut
+sub updateNewOrder{
+    my ($newOrderArray) = @_;
+    my $msg_object      = C4::AR::Mensajes::create();
+    
+    # ordeno los ids que llegan desordenados primero, para obtener un clon de los ids, y ahora usarlo de indice para el orden
+    # esto es porque no todos los campos de cat_visualizacion_opac se muestran en el template a ordenar 
+    # entonces no puedo usar un simple indice como id.
+    my @array = sort { $a <=> $b } @$newOrderArray;
+    
+    my $i = 0;
+    my @filtros;
+    
+    # hay que hacer update de todos los campos porque si viene un nuevo orden y es justo ordenado (igual que @array : 1,2,3...)
+    # tambien hay que actualizarlo
+    foreach my $campo (@$newOrderArray){
+    
+        my $config_temp = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(
+                                                                    query   => [ id => { eq => $campo}], 
+                               );
+        my $configuracion = $config_temp->[0];
+        
+#        C4::AR::Debug::debug("nuevo orden de id : ".@array[$i]." es :  ".$campo);
+        
+        $configuracion->setOrder(@array[$i]);
+    
+        $i++;
+    }
+    
+    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'M000', 'params' => []} ) ;
+
+    return ($msg_object);
+}
+
+
+=item
+    Funcion que devuelve TODOS los campos ordenados por orden
+=cut
+sub getConfiguracionByOrder{
+    my ($perfil) = @_;
+
+    my @filtros;
+    
+    push ( @filtros, ( or   => [    id_perfil   => { eq => $perfil }, 
+                                    id_perfil   => { eq => '0'     } ]) #PERFIL TODOS
+                );
+
+    my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros, sort_by => ('orden'),);
+
+    return ($configuracion);
+}
 
 
 sub getConfiguracion{
