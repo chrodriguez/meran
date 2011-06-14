@@ -170,6 +170,8 @@ sub gettemplate {
             timeInterval        => C4::AR::Preferencias::getValorPreferencia('timeInterval'),
             url_prefix          => C4::AR::Utilidades::getUrlPrefix(),
             SERVER_ADDRESS      => $ENV{'SERVER_NAME'},
+            socio_data          => C4::AR::Auth::buildSocioDataHashFromSession(),
+            
         );
 
     return ($template, \%params);
