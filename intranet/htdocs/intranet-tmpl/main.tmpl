@@ -21,8 +21,7 @@
     $(document).ready(function() {
           mostrarNovedades();
         
-    }
-    );
+    });
   
     function mostrarNovedades(){
             objAH               = new AjaxHelper(updateActualizarTabla);
@@ -33,16 +32,13 @@
             objAH.sendToServer();
         }
 
-        function updateActualizarTabla(responseText){
-            $("#resultNovedades").html(responseText);
-              $('.fancy_link').fancybox({
+    function updateActualizarTabla(responseText){
+        $("#resultNovedades").html(responseText);
+        $('.fancy_link').fancybox({
             'frameWidth':   600,
             'frameHeight':  500,
         });
-
-        }
-     
-	
+    }
 </script>
 
 
@@ -131,4 +127,3 @@
     </fieldset>
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
-
