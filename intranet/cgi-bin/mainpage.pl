@@ -18,6 +18,7 @@ my ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
                                                         entorno         => 'undefined'},
 });
 
+C4::AR::Auth::checkBrowser();
 my ($msjNoLeidos, $cant)            = C4::AR::MensajesContacto::noLeidos();
 my ($ultimos_no_leidos)             = C4::AR::MensajesContacto::ultimosNoLeidos($msjNoLeidos);
 $t_params->{'ultimos_no_leidos'}    = $ultimos_no_leidos;

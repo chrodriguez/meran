@@ -36,8 +36,8 @@ sub updateNewOrder{
     my ($newOrderArray) = @_;
     my $msg_object      = C4::AR::Mensajes::create();
     
-    # ordeno los ids que llegan desordenados primero, para usarlo como id de cat_visualizacion_intra
-    # porque no todos los campos de cat_visualizacion_intra se muestran en el template a ordenar ( ej 8 y 9 )
+    # ordeno los ids que llegan desordenados primero, para obtener un clon de los ids, y ahora usarlo de indice para el orden
+    # esto es porque no todos los campos de cat_visualizacion_intra se muestran en el template a ordenar ( ej 8 y 9 )
     # entonces no puedo usar un simple indice como id.
     my @array = sort { $a <=> $b } @$newOrderArray;
     
