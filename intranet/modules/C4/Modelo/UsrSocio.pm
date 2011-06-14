@@ -1099,7 +1099,6 @@ sub tieneFoto{
     my $picturesDir = C4::Context->config("picturesdir");
     my $foto;
   
-# TODO si hay dos fotos con el mismo patron ej. 26320.jpg   26320.jpg.old las concatena
     if (opendir(DIR, $picturesDir)) {
         my $pattern = $self->getNro_socio."[.].";
         my @file    = grep { /$pattern/ } readdir(DIR);

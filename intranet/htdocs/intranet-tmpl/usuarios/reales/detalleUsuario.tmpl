@@ -16,7 +16,7 @@
 
         //Inicializacion del FileUploader
         [% IF !foto_name %]  
-        
+            $('#label-file-uploader').show();
 	        var uploader = new qq.FileUploader({
 	            element: document.getElementById('file-uploader'),
 	            action: '[% url_prefix %]/usuarios/reales/uploadPicture.pl',
@@ -28,6 +28,8 @@
 	            debug: true,
 	            multiple: false,
 	        });
+        [% ELSE %]
+            $('#label-file-uploader').hide();
         [% END %]
         
     });
@@ -246,6 +248,9 @@
                           </li>
                         </div>
                         <li>
+                            <label for="file-uploader" id="label-file-uploader">
+                                <h6>[% 'Seleccione una im&aacute;gen' | i18n %]</h6>
+                            </label>
 	                        <div id="file-uploader">
 							    <noscript>          
 							        <p>[% 'Please enable JavaScript to use file uploader.' | i18n %]</p>

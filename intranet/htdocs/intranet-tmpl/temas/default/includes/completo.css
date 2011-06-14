@@ -4595,7 +4595,9 @@ font-size:10pt;
 	min-width: 900px;
 }
 
-
+#label-file-uploader h6{
+	display: none;
+}
 
 
 /* Estilo mensaje de contacto (mainpage) */
