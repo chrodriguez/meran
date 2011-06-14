@@ -39,6 +39,7 @@ $t_params->{'loginAttempt'} = $query->param('loginAttempt') || 0;
 if ($t_params->{'loginAttempt'} & !($t_params->{'mostrar_captcha'}) ){
   $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje('U310','intranet');
 }
+
 if (!C4::AR::Utilidades::validateString($t_params->{'mensaje'})){
 	
 	$t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje($codMensaje,'OPAC') || C4::AR::Mensajes::getMensaje($codMensaje,'INTRA'); 

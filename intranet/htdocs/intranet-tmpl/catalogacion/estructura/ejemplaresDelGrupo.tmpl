@@ -18,9 +18,9 @@
 <li class="columna_der">[% "Ejemplares Prestados:"|i18n %]<strong> [% cantPrestados %]</strong></li>
 </ul>                
 <hr>
-<table id="tabla_ejemplares[% id2 %]" cellspacing="0" cellpadding="0"  width="100%" class="tablaResult datos_tabla">
-		<tr align="center" cellpadding="0"  valign="middle" class="titulo_tabla_resultado">
-            <td>
+<table id="tabla_ejemplares[% id2 %]" cellspacing="0" cellpadding="0"  width="100%" class="tablaResult">
+		<tr class="titulo_tabla_resultado">
+            <th>
                 [% PERL %]
                     print C4::AR::Filtros::to_Icon(   
                                                             boton   => "icon_seleccionar",
@@ -29,18 +29,18 @@
                                                             alternClass => "botonCentrado"
                                 ) ;
                 [% END %]
-            </td>
-			<td><strong>[% "Sig. Top."|i18n %]</strong> </td>
-			<td><strong>[% "C&oacute;digo"|i18n %]</strong></td>
-			<td><strong>[% "Tipo de Pr&eacute;stamo"|i18n %]</strong></td>
- 			<td><strong>[% "Estado"|i18n %]</strong></td>
-			<td><strong>[% "Vencimiento"|i18n %]</strong></td>
-			<td width="7%"><strong>[% "Circulaci&oacute;n"|i18n %]</strong></td>
-			<td><strong>[% "MARC" |i18n %]</strong></td>
-            <td><strong>[% "Notas" |i18n %]</strong></td>
-            <td width="8%">
+            </th>
+			<th><strong>[% "Sig. Top."|i18n %]</strong> </th>
+			<th><strong>[% "C&oacute;digo"|i18n %]</strong></th>
+			<th><strong>[% "Tipo de Pr&eacute;stamo"|i18n %]</strong></th>
+ 			<th><strong>[% "Estado"|i18n %]</strong></th>
+			<th><strong>[% "Vencimiento"|i18n %]</strong></th>
+			<th width="7%"><strong>[% "Circulaci&oacute;n"|i18n %]</strong></th>
+			<th><strong>[% "MARC" |i18n %]</strong></th>
+            <th><strong>[% "Notas" |i18n %]</strong></th>
+            <th width="8%">
                 <strong>[% "Acciones" |i18n %]</strong>
-            </td>
+            </th>
 		</tr>
 
 [% FOREACH nivel3 %]

@@ -69,7 +69,6 @@ my $codMSG = 'U000';
 $VERSION = 1.0;
 @ISA = qw(Exporter);
 @EXPORT = qw(
-        checkBrowser
         checkauth		
         get_template_and_user
         output_html_with_http_headers
@@ -82,21 +81,19 @@ $VERSION = 1.0;
         buildSocioDataHashFromSession
         buildSocioData
         updateLoggedUserTemplateParams
+        checkBrowser
 );
 
-=item 
-    Funcion que checkea que el browser sea uno soportado
-    Browsers NO soportados:
-        IE 6, IE 7, FF 2, FF 3, Chrome 7, 8 y 9.
-=cut
-sub checkBrowser{
-     my ($session) = CGI::Session->load();
-     C4::AR::Debug::debug("browser : ".$ENV{'HTTP_USER_AGENT'});
 
+sub checkBrowser{
+	return (1);
 }
 
 =item sub _generarNroRandom
+
     Función que devuelve un nro random entre 0 100000
+    
+
 =cut
 
 sub _generarNroRandom {
@@ -312,12 +309,15 @@ sub inicializarAuth{
     $params{'borrowernumber'}       = undef;
     $params{'type'}                 = $t_params->{'type'}; #OPAC o INTRA
     $params{'flagsrequired'}        = '';
+    $params{'socio_data'}           = undef;
     $session                        = C4::AR::Auth::_generarSession(\%params);
 
     #Guardo la sesion en la base
     #FIXME C4::AR::Auth::_save_session_db($session->param('sessionID'), undef, $params{'ip'} , $params{'nroRandom'}, $params{'token'});
     $t_params->{"nroRandom"}=$params{'nroRandom'};
     $t_params->{"authMERAN"}=C4::Context->config('authMERAN');
+    $t_params->{'socio_data'}=undef;
+    
     return ($session);
 }
 
