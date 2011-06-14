@@ -163,6 +163,7 @@ sub gettemplate {
             template_name       => "$htdocs/$tmplbase", #se setea el nombre del tmpl
             ui                  => $ui,
             actual_year         => $date->{'year'},
+            date                => $date,
             localization_FLAGS  => C4::AR::Filtros::setFlagsLang($type,$user_theme),
             HOST                => $ENV{HTTP_HOST},
             user_theme          => $user_theme,
@@ -171,7 +172,7 @@ sub gettemplate {
             url_prefix          => C4::AR::Utilidades::getUrlPrefix(),
             SERVER_ADDRESS      => $ENV{'SERVER_NAME'},
             socio_data          => C4::AR::Auth::buildSocioDataHashFromSession(),
-            
+            date_separator      => C4::AR::Filtros::i18n("de"),            
         );
 
     return ($template, \%params);

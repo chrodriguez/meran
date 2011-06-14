@@ -864,7 +864,24 @@ sub print_header {
                                 -value      =>$session->id, 
                                 -expires    => '+' .$session->expire. 's', 
                             );
-    print $query->header(-cookie=>$cookie, -type=>'text/html', charset => C4::Context->config("charset")||'UTF-8', "Cache-control: public");
+                            
+#En el header podría ir esto para la parte de las user pictures, 
+# pero no vale la pena no cachear me parece por algo que se hace una vez cada tanto
+#                         -Cache_Control => join(', ', qw(
+#                                                            private
+#                                                            no-cache
+#                                                            no-store
+#                                                            must-revalidate
+#                                                            max-age=0
+#                                                            pre-check=0
+#                                                            post-check=0
+#                                                        )),
+                            
+    print $query->header(   -cookie=>$cookie, 
+                            -type=>'text/html', 
+                             charset => C4::Context->config("charset")||'UTF-8', 
+                             "Cache-control: public",
+                         );
 }
 
 
