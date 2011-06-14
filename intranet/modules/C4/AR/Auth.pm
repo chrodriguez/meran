@@ -81,7 +81,13 @@ $VERSION = 1.0;
         buildSocioDataHashFromSession
         buildSocioData
         updateLoggedUserTemplateParams
+        checkBrowser
 );
+
+
+sub checkBrowser{
+	return (1);
+}
 
 =item sub _generarNroRandom
 
@@ -303,12 +309,15 @@ sub inicializarAuth{
     $params{'borrowernumber'}       = undef;
     $params{'type'}                 = $t_params->{'type'}; #OPAC o INTRA
     $params{'flagsrequired'}        = '';
+    $params{'socio_data'}           = undef;
     $session                        = C4::AR::Auth::_generarSession(\%params);
 
     #Guardo la sesion en la base
     #FIXME C4::AR::Auth::_save_session_db($session->param('sessionID'), undef, $params{'ip'} , $params{'nroRandom'}, $params{'token'});
     $t_params->{"nroRandom"}=$params{'nroRandom'};
     $t_params->{"authMERAN"}=C4::Context->config('authMERAN');
+    $t_params->{'socio_data'}=undef;
+    
     return ($session);
 }
 
@@ -864,7 +873,24 @@ sub print_header {
                                 -value      =>$session->id, 
                                 -expires    => '+' .$session->expire. 's', 
                             );
-    print $query->header(-cookie=>$cookie, -type=>'text/html', charset => C4::Context->config("charset")||'UTF-8', "Cache-control: public");
+                            
+#En el header podría ir esto para la parte de las user pictures, 
+# pero no vale la pena no cachear me parece por algo que se hace una vez cada tanto
+#                         -Cache_Control => join(', ', qw(
+#                                                            private
+#                                                            no-cache
+#                                                            no-store
+#                                                            must-revalidate
+#                                                            max-age=0
+#                                                            pre-check=0
+#                                                            post-check=0
+#                                                        )),
+                            
+    print $query->header(   -cookie=>$cookie, 
+                            -type=>'text/html', 
+                             charset => C4::Context->config("charset")||'UTF-8', 
+                             "Cache-control: public",
+                         );
 }
 
 

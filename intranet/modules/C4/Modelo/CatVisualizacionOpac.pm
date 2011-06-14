@@ -13,7 +13,7 @@ __PACKAGE__->meta->setup(
         subcampo     => { type => 'character', length => 1, not_null => 1 },
         vista_opac   => { type => 'varchar', length => 255 },
         id_perfil    => { type => 'integer', default => 1, not_null => 1 },
-#         orden        => { type => 'integer', default => 1, not_null => 1 },
+        orden        => { type => 'integer', length => 11, not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -21,6 +21,8 @@ __PACKAGE__->meta->setup(
 
 use utf8;
 sub agregar{
+
+#TODO agregar con orden ultimo
 
     my ($self)=shift;
     my ($params) = @_;
@@ -75,6 +77,12 @@ sub getCampo{
     return $self->campo;
 }
 
+sub getId{
+    my ($self)=shift;
+
+    return $self->id;
+}
+
 sub setCampo{
     my ($self) = shift;
     my ($campo) = @_;
@@ -93,17 +101,17 @@ sub setIdPerfil{
     $self->id_perfil($id_perfil);
 }
 
-# sub getOrden{
-#     my ($self) = shift;
-# 
-#     return $self->orden;
-# }
-# 
-# sub setOrden{
-#     my ($self) = shift;
-#     my ($orden) = @_;
-#     $self->orden($orden);
-# }
+sub getOrden{
+    my ($self) = shift;
+
+    return $self->orden;
+}
+
+sub setOrder{
+    my ($self) = shift;
+    my ($orden) = @_;
+    $self->orden($orden);
+    $self->save();
+}
 
 1;
-

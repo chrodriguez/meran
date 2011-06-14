@@ -22,6 +22,8 @@ use utf8;
 
 sub agregar{
 
+#TODO agregar con orden ultimo
+
     my ($self)=shift;
     my ($params) = @_;
 
@@ -99,6 +101,12 @@ sub getOrden{
     my ($self)=shift;
 
     return $self->orden;
+}
+
+sub getId{
+    my ($self)=shift;
+
+    return $self->id;
 }
 
 sub setOrden{

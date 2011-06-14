@@ -17,6 +17,25 @@
         });
     });
 </script>
+<script type="text/javascript" language="javascript" src="/includes/jquery/jquery-ui-1.8.13.sortable.min.js"></script>
+<script type="text/javascript" language="javascript">
+    $(function() {
+		    $("#sortable").sortable({
+                stop: function(event, ui) { 
+                    objAH               = new AjaxHelper(updateSortable);
+	                objAH.debug         = true;
+	                objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+                    objAH.showOverlay   = true;
+	                objAH.tipoAccion    = "ACTUALIZAR_ORDEN";
+	                objAH.newOrderArray = $('#sortable').sortable('toArray');
+	                objAH.sendToServer(); 
+                }
+            });
+		    $("#sortable").disableSelection();
+		    
+		    function updateSortable(responseText){ }
+	    });
+</script>
 
 <fieldset>
     <legend class="titulo_legend trigger click"><strong>[% "Agregar Visualizaci&oacute;n:" | i18n %]</strong></legend>
@@ -71,9 +90,9 @@
                     <td>[% "Eliminar" | i18n %]</td>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="sortable">
                 [% FOREACH campo IN visualizacion %]
-                    <tr align="center">
+                    <tr id="[% campo.getId %]" align="center">
                         <td>[% campo.getCampo %]</td>
                         <td>[% campo.getSubCampo %]</td>
                         <td class="editable" id="[% campo.id %]">[% campo.getVistaOpac %]</td>

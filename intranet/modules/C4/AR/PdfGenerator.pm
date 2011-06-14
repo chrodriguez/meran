@@ -965,18 +965,20 @@ sub generateBookLabel {
 
 sub pdfFromHTML {
 
-	my ($out) = @_;
+	my ($out,$params) = @_;
 	
-	$out = _unformat($out);
-	
-	my $htmldoc = new HTML::HTMLDoc( 'mode' => 'file', 'tmpdir' => '/tmp' );
+	$out               = _unformat($out);
+	my $is_report      = $params->{'is_report'} || 1;   
+	my $htmldoc        = new HTML::HTMLDoc( 'mode' => 'file', 'tmpdir' => '/tmp' );
 
 	$htmldoc->set_html_content($out);
-	$htmldoc->landscape();
-	$htmldoc->set_header( 't', '.', 'D' );
+	if (!$is_report){
+		$htmldoc->landscape();
+		$htmldoc->set_header( 't', '.', 'D' );
+	}
 	$htmldoc->color_on();
 	$htmldoc->no_links();
-	$htmldoc->path(C4::Context->config('intrahtdocs'));
+	$htmldoc->path(C4::Context->config('intra_for_pdf'));
 
 	my $pdf = $htmldoc->generate_pdf();
 
