@@ -18,7 +18,7 @@
     });
 </script>
 <script type="text/javascript" language="javascript" src="/includes/jquery/jquery-ui-1.8.13.sortable.min.js"></script>
-<script type="text/javascript" language="javascript" charset="utf-8">
+<script type="text/javascript" language="javascript">
     $(function() {
 		    $("#sortable").sortable({
                 stop: function(event, ui) { 
@@ -33,9 +33,7 @@
             });
 		    $("#sortable").disableSelection();
 		    
-		    function updateSortable(responseText){
-		        zebra('tabla_datos_visualizacion_intra');
-		    }
+		    function updateSortable(responseText){ }
 	    });
 </script>
 
@@ -95,7 +93,7 @@
             </thead>
             <tbody id="sortable">
                 [% FOREACH campo IN visualizacion %]
-                    <tr id="[% campo.getOrden %]" align="center">
+                    <tr id="[% campo.getId %]" align="center">
                         <td>[% campo.getCampo %]</td>
                         <td>[% campo.getSubCampo %]</td>
                         <td class="editable" id="[% campo.id %]">[% campo.getVistaIntra %]</td>

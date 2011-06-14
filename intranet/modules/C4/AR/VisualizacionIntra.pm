@@ -49,11 +49,13 @@ sub updateNewOrder{
     foreach my $campo (@$newOrderArray){
     
         my $config_temp = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(
-                                                                    query   => [ id => { eq => @array[$i]}], 
+                                                                    query   => [ id => { eq => $campo}], 
                                );
         my $configuracion = $config_temp->[0];
         
-        $configuracion->setOrder($campo);
+#        C4::AR::Debug::debug("nuevo orden de id : ".$campo." es :  ".@array[$i]);
+        
+        $configuracion->setOrder(@array[$i]);
     
         $i++;
     }

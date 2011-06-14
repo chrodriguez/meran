@@ -64,7 +64,7 @@ else{
                             debug => 1,
         });
 
-        $t_params->{'visualizacion'}    = C4::AR::VisualizacionOpac::getConfiguracion($perfil);
+        $t_params->{'visualizacion'}    = C4::AR::VisualizacionOpac::getConfiguracionByOrder($perfil);
         $t_params->{'selectCampoX'}     = C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
 
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
@@ -147,6 +147,22 @@ else{
 
       C4::AR::Auth::print_header($session);
       print $infoOperacionJSON;
+    }
+    
+    elsif($tipoAccion eq "ACTUALIZAR_ORDEN"){
+        my ($user, $session, $flags)= checkauth(  $input, 
+                                                  $authnotrequired, 
+                                                  {   ui                => 'ANY', 
+                                                      tipo_documento    => 'ANY', 
+                                                      accion            => 'CONSULTA', 
+                                                      entorno           => 'datos_nivel1'}, 
+                                                  'intranet'
+                                      );
+        my $newOrderArray       = $obj->{'newOrderArray'};
+        my $info                = C4::AR::VisualizacionOpac::updateNewOrder($newOrderArray);
+        my $infoOperacionJSON   = to_json $info;
+        C4::AR::Auth::print_header($session);
+        print $infoOperacionJSON;  
     }
     #**************************************************************************************************
 }
