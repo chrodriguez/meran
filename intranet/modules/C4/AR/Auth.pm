@@ -63,7 +63,7 @@ use C4::Modelo::PrefFeriado;
 use C4::AR::Authldap;
 
 use vars qw($VERSION @ISA @EXPORT %EXPORT_TAGS);
-my $codMSG = 'U000';
+my $defaultCodMSG = 'U000';
 # set the version for version checking
 
 $VERSION = 1.0;
@@ -105,7 +105,7 @@ sub _generarNroRandom {
 
 sub getMsgCode{
     my ($session) = CGI::Session->load();
-    return ($session->param('codMsg') || $codMSG);
+    return ($session->param('codMsg') or $defaultCodMSG);
  
 }
 
@@ -256,22 +256,21 @@ Funcion que destruye la sesion actual, genera una nueva vacia y despues redirige
 
 sub _destruirSession{
     
-    my ($codMsg,$template_params) = @_;
-    $codMsg = $codMsg || 'U406';
+    my ($cod_Msg,$template_params) = @_;
+
+    $cod_Msg = $cod_Msg || 'U406';
 
     my ($session) = CGI::Session->load();
 #     
 #    C4::AR::Debug::debug("Template params". $template_params);   
  
-    $codMSG = $codMsg;
-    
     _eliminarSession($session);
     
     $session = C4::AR::Auth::_generarSession();
     $session->param('sessionID', undef);
 
     #redirecciono a loguin y genero una nueva session y nroRandom para que se loguee el usuario
-    $session->param('codMsg', $codMsg);
+    $session->param('codMsg', $cod_Msg);
   
 
 #     C4::AR::Debug::debug("WARNING: ¡¡¡¡Se destruye la session y la cookie!!!!!");
@@ -543,9 +542,14 @@ sub checkauth {
     my ($session) = CGI::Session->load();
 
 
-# C4::AR::Utilidades::printHASH(\%ENV);
+    my $userid= undef;
     
-    my $userid= $session->param('userid');
+    if ($session){
+        $userid= $session->param('userid');
+    }else{
+    	$session = _generarSession();
+    }
+    
     my $flags=0;
     my $sin_captcha=0;
     my $time = localtime(time());
@@ -579,7 +583,6 @@ sub checkauth {
                       C4::AR::Debug::debug("C4::AR::Auth::checkauth => datos_censales_invalidos");
           #             _destruirSession('U309', $template_params);
                       $url = C4::AR::Utilidades::getUrlPrefix().'/auth.pl';
-                      $url = C4::AR::Utilidades::addParamToUrl($url,'codMSG','U309');
                       $session->param('codMsg', $code_MSG);
                       $session->param('redirectTo', $url);
                       redirectTo($url); 
@@ -587,7 +590,6 @@ sub checkauth {
                   elsif ($estado eq "sesion_invalida") { 
                       C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_invalida");
                       $url = C4::AR::Utilidades::getUrlPrefix().'/auth.pl';
-                      $url = C4::AR::Utilidades::addParamToUrl($url,'codMSG',$codMSG);
                       $session->param('codMsg', $code_MSG);
                       $session->param('redirectTo', $url);
                       redirectTo($url); 
@@ -664,7 +666,7 @@ sub checkauth {
                                             }  
                                             if ($sin_captcha || $captchaResult->{is_valid}){
 
-                                                   
+
                                                         #se valido el captcha, la pass y el user y son validos
                                                         #setea loguins duplicados si existe, dejando logueado a un solo usuario a la vez
                                                         
@@ -706,10 +708,11 @@ sub checkauth {
                                                     $mensaje='U425';
                                                     $cant_fallidos= $socio_data_temp->getLogin_attempts + 1;
                                                     $socio_data_temp->setLogin_attempts($cant_fallidos);
-                                                    if ($cant_fallidos => 3){
+                                                    if ($cant_fallidos >= 3){
                                                             $template_params->{'mostrar_captcha'}=1;
                                                            
                                                     }
+                                                    _destruirSession($mensaje, $template_params);
                                                     
                                                        
                                               }
@@ -722,7 +725,7 @@ sub checkauth {
                                                             $template_params->{'mostrar_captcha'}=1; 
                                                     }
                                                         
-#                                                     _destruirSession('U357', $template_params);  
+                                                     _destruirSession('U357', $template_params);  
                                             
                                    }
                               
@@ -1057,7 +1060,7 @@ sub cerrarSesion{
     my $nroRandom       = C4::AR::Auth::_generarNroRandom();
     #genero una nueva session
     my ($session)           = CGI::Session->load();
-    my $msjCode             = getMsgCode();
+    my $msjCode             = 'U358';
     $t_params->{'mensaje'}  = C4::AR::Mensajes::getMensaje($msjCode,'INTRA',[]);
     #se destruye la session anterior
     _eliminarSession($session);
@@ -1427,8 +1430,8 @@ sub new_password_is_needed {
 sub redirectAndAdvice{
     my ($cod_msg,$destination)= @_;
     my ($session) = CGI::Session->load();
-    $codMSG = $cod_msg;
-    $cod_msg = getMsgCode();
+    $defaultCodMSG = $cod_msg;
+
     $session->param('codMsg',$cod_msg);
     if(!$destination){
         $destination=C4::AR::Utilidades::getUrlPrefix().'/informacion.pl';
