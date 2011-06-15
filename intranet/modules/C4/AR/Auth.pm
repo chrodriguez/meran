@@ -69,6 +69,7 @@ my $codMSG = 'U000';
 $VERSION = 1.0;
 @ISA = qw(Exporter);
 @EXPORT = qw(
+        checkBrowser
         checkauth		
         get_template_and_user
         output_html_with_http_headers
@@ -85,8 +86,31 @@ $VERSION = 1.0;
 );
 
 
+=item 
+    Checkea si el browser es uno ideal
+    Browser NO soportados:
+        FF: 3, IE: 7, Google Chrome 7, 8 y 9, Chromium Browser 5
+=cut
 sub checkBrowser{
-	return (1);
+
+    my @blacklist = qw(
+        Firefox_4
+        Chrome_7
+        MSIE_7
+        IceWeasel_3
+    );
+    
+#TODO: cuando clickea en ok se setea: $session->param('check_browser_allowed', '1');
+
+
+	my $browser         = HTTP::BrowserDetect->new($ENV{'HTTP_USER_AGENT'});
+	my $browser_string  = $browser->browser_string();
+	my $browser_major   = $browser->major();
+	my $search          = $browser_string."_".$browser_major;
+	
+	if ($search ~~ @blacklist){
+	    #redirectTo(C4::AR::Utilidades::getUrlPrefix().'/informacion.pl');
+	}
 }
 
 =item sub _generarNroRandom
