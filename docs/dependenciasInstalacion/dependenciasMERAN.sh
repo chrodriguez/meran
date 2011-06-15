@@ -6,6 +6,7 @@ apt-get install apache2 mysql-server libpdf-report-perl libhtml-template-expr-pe
 apt-get install libjson-perl libjson-xs-perl librose-db-perl librose-db-object-perl sphinxsearch libsphinx-search-perl libdigest-sha-perl libcrypt-cbc-perl libtext-levenshtein-perl  libnet-smtp-tls-perl libnet-ssleay-perl libnet-twitter-perl libwww-facebook-api-perl libspreadsheet-read-perl -y
 
 apt-get install libcgi-session-perl libdate-manip-perl liblocale-maketext-gettext-perl libspreadsheet-writeexcel-perl libfile-libmagic-perl -y
+apt-get install libhttp-browserdetect-perl -y
 
 # OTROS AUN NO!!!
 apt-get install make gcc -y
@@ -21,4 +22,3 @@ cpan -i WWW::Shorten::Bitly
 cpan -i HTML::HTMLDoc
 cpan -i MARC::File::XML
 cpan -i DateTime::Format::DateManip
-cpan -i HTTP::BrowserDetect
