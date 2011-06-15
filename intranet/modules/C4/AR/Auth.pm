@@ -83,7 +83,6 @@ $VERSION = 1.0;
         buildSocioDataHashFromSession
         buildSocioData
         updateLoggedUserTemplateParams
-        checkBrowser
 );
 
 
