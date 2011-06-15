@@ -22,7 +22,7 @@
             <td> 
                     [% IF prestamo.nivel3.nivel1.getId1 %]
                         [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% prestamo.nivel3.nivel1.getTitulo | i18n %]",
+                                print C4::AR::Filtros::link_to( text =>     "[% prestamo.nivel3.nivel1.getTitulo %]",
                                                                 url =>      "[% url_prefix %]/opac-detail.pl", 
                                                                 params => [ "id1=[% prestamo.nivel3.nivel1.getId1 %]", ],
                                                             ) ;
