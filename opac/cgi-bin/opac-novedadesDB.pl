@@ -54,7 +54,11 @@ elsif($tipoAccion eq "ACTUALIZAR_TABLA_NOVEDADES"){
 
     my $pref_limite = C4::AR::Preferencias::getValorPreferencia('limite_novedades');
 
-    $cantidad_novedades = $pref_limite - $cantidad_novedades_no_mostrar;
+    if($cantidad_novedades < $pref_limite){
+        $cantidad_novedades = $cantidad_novedades - $cantidad_novedades_no_mostrar;
+    }else{
+        $cantidad_novedades = $pref_limite - $cantidad_novedades_no_mostrar;
+    }
     
     if($novedades){
         foreach my $nov (@$novedades){
