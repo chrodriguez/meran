@@ -4,27 +4,66 @@
             <div class="subcontent-unit-border-green" style="width:100%;">
                 <div class="round-border-topleft" style="width:90%;"></div>
                 <h1 class="green">[% "Detalle del Grupo" | i18n %]</h1>
-                    <ul class="listado_sin_margen">
-                        [% FOREACH nivel2_array %]
-                            [% FOREACH subcampos_array %]
-                                    [% IF liblibrarian %]
-                                        [% IF dato %]
-                                        <li> [% liblibrarian %]: <strong>[% dato %]</strong></li>
-                                        [% END %]
-                                    [% END %]
 
-                            [% END %] <!-- END FOREACH nivel2_array -->
-                        [% END %] <!-- END FOREACH subcampos_array-->
-                    </ul>
-            </div>
-        </div>
-    [% END %]
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        $('.fancylink').fancybox();
+                    });
+                </script>
+                <div class="main-subcontent" style="width:15%; float:left; margin: 1%">
+                    [% IF portada_registro %]
+                        <a class="fancylink" href="/uploads/covers/[% portada_registro_big %]">
+                            <img src="/uploads/covers/[% portada_registro_medium %]" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" />
+                        </a>
+                    [% ELSE %]
+                          <img src="/uploads/covers/no_image_medium.jpg" alt="[% 'Sin Portada' | i18n %]" title="[% 'Sin Portada' | i18n %]" />
+                    [% END %]
+                </div>
+
+                <div class="main-subcontent" style="width:80%; float:left; margin: 1%">
+                          <ul class="listado_sin_margen">
+                              [% FOREACH nivel2_array %]
+                                  [% FOREACH subcampos_array %]
+                                          [% IF liblibrarian %]
+                                              [% IF dato %]
+                                              <li> [% liblibrarian %]: <strong>[% dato %]</strong></li>
+                                              [% END %]
+                                          [% END %]
+
+                                  [% END %] <!-- END FOREACH nivel2_array -->
+                              [% END %] <!-- END FOREACH subcampos_array-->
+                          </ul>
+                  </div> <!-- END <div class="main-subcontent">-->
+
+          </div> <!-- END <div class="subcontent-unit-border-green">-->
+
+        </div> <!-- END <div class="main-subcontent">-->
+
+    [% END %]  <!--END  IF nivel2_array -->
+
     <div id="[% DivDetalle %]">
         <div class="main-subcontent" style="width:100%; float:left">
         <div class="subcontent-unit-border-orange" style="width:100%;">
             <div class="round-border-topleft" style="width:90%;"></div>
             <h1 class="orange">[% "Detalle del Ejemplar" | i18n %]</h1>
-            <table id="tablaDetalleNivel" class="tablaDetalleNivel3" cellspacing=0 border="0" cellpadding=0 style="width:95%;">
+
+                <div class="main-subcontent" style="width:100%; float:left; margin: 1%">
+                          <ul class="listado_sin_margen">
+                          [% FOREACH nivel3 %]
+                              [% FOREACH nivel3_array %]
+                                  [% FOREACH subcampos_array %]
+                                          [% IF liblibrarian %]
+                                              [% IF dato %]
+                                              <li> [% liblibrarian %]: <strong>[% dato %]</strong></li>
+                                              [% END %]
+                                          [% END %]
+                                  [% END %] <!-- END FOREACH subcampos_array-->
+                              [% END %] <!-- END FOREACH nivel3_array -->
+                          [% END %] <!-- END FOREACH nivel3 -->  
+                          </ul>
+                  </div> <!-- END <div class="main-subcontent">-->
+
+            <table id="tablaDetalleNivel" class="tablaDetalleNivel3" cellspacing=0 border="0" cellpadding=0 style="width:95%;margin: 0 auto">
                 <thead>
                 <tr class="bordetabla" align="center">
                     <td>[% "C&oacute;digo" | i18n %]</td>
@@ -46,9 +85,14 @@
                             <td>[% nivel3_obj.getEstado %]</td>
                             <td>[% nivel3_obj.getDisponibilidadObject.getNombre %]</td>
                             <td>
-                                <a class="click" onClick="MARCDetail('[% id3 %]', '[% DivDetalle %]', '[% DivMARC %]');">
-                                <img src="[% themelang %]/images/MARC.png" border="0" alt="[% 'Detalle MARC' | i18n %]" title="[% 'Detalle MARC' | i18n %]">
-                                </a>
+                          [% PERL %]
+                                  print C4::AR::Filtros::to_Icon( 
+                                                                  boton         => "icon_marc",
+                                                                  onClick       => "MARCDetail('[% id3 %]', '[% DivDetalle %]', '[% DivMARC %]');", 
+                                                                  title         => "[% 'Detalle MARC' | i18n %]",
+                                                                  alternClass   => "botonCentradoTabla",
+                                                              ) ;
+                          [% END %]
                             </td>
                         </tr>
                     [% END %]
@@ -62,4 +106,4 @@
           </div>
       </div>
   </div>
-[% END %]
+[% END %]  <!--END FOREACH nivel2 -->

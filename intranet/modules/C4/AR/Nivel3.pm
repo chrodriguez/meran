@@ -478,7 +478,7 @@ sub detalleDisponibilidadNivel3{
         # un ejemplar del grupo.
         # con el debug no veo el nro_socio luego de my $socio, o sea lo que se esta mamando es el template, va haber q inicializar los flags
         # que van hacia el template.
-        
+        $hash_nivel3{'nivel3_array'}        = ($nivel3_array_ref->[$i])->toMARC_Opac; #arreglo de los campos fijos de Nivel 3 mapeado a MARC
         $hash_nivel3{'nro_socio'}           = undef;
         $hash_nivel3{'nivel3_obj'}          = $nivel3_array_ref->[$i]; 
         $hash_nivel3{'id3'}                 = $nivel3_array_ref->[$i]->getId3;

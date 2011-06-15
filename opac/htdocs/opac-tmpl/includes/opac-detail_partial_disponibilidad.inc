@@ -1,18 +1,5 @@
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('.fancylink').fancybox();
-    });
-</script>
-          <div class="main-subcontent" style="width:15%; float:left; margin: 1%">
-              [% IF portada_registro %]
-                  <a class="fancylink" href="/uploads/covers/[% portada_registro_big %]">
-                      <img src="/uploads/covers/[% portada_registro_medium %]" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" />
-                  </a>
-              [% ELSE %]
-                    <img src="/uploads/covers/no_image_medium.jpg" alt="[% 'Sin Portada' | i18n %]" title="[% 'Sin Portada' | i18n %]" />
-              [% END %]
-          </div>
-          <div class="main-subcontent" style="width:80%; float:left">
+
+          <div class="main-subcontent" style="width:100%; float:left">
                 <div class="subcontent-unit-border-orange" style="width:100%;">
                     <h1 class="orange">[% "Informaci&oacute;n de disponibilidad" | i18n %]</h1>
                     <div  style="width:95%;">
@@ -46,8 +33,12 @@
               [% INCLUDE 'rating.inc' %]
           [% END %]
           <h3>
-              <a href="[% url_prefix %]/reviews.pl?token=[% token %]&amp;id2=[% id2 %]">
-                  [% 'Revisiones' | i18n %] ([% cant_reviews %])
-              </a>
+            [% PERL %]
+                print C4::AR::Filtros::link_to( text    => "[% 'Revisiones' | i18n %] ([% cant_reviews %])",
+                                                url     => "reviews.pl", 
+                                                params  => ["id2=[% id2 %]"],
+                                                title   => "[% 'Revisiones' | i18n %]"
+                                            ) ;
+            [% END %]
           </h3>
 

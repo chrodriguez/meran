@@ -471,7 +471,7 @@ sub filtrarVisualizacion{
     subcampos_array => [ {subcampo => 'a', dato => 'dato'}, {subcampo => 'b', dato => 'dato'}, ...]
 =cut
 sub marc_record_to_meran {
-    my ($marc_record, $itemtype) = @_;
+    my ($marc_record, $itemtype, $type) = @_;
 
 #     C4::AR::Debug::debug("Catalogacion => marc_record_to_meran ");
 #     C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => itemtype: ".$itemtype);
@@ -497,6 +497,8 @@ sub marc_record_to_meran {
             $hash_temp{'subcampo'}              = $subcampo;
             $hash_temp{'liblibrarian'}          = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo, $itemtype);
 #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => vista intra: ".$hash_temp{'liblibrarian'});
+            $hash_temp{'orden'}                 = getOrdenFromCampoSubcampo($campo, $subcampo, $itemtype, $type);
+#             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => orden: ".$hash_temp{'orden'});
             $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype);
             $hash_temp{'datoReferencia'}        = $dato;
 #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => dato despues de getRefFromStringConArrobasByCampoSubcampo: ".$dato);
@@ -510,6 +512,10 @@ sub marc_record_to_meran {
             $hash{'indicador_primario_dato'}    = $indicador_primario_dato;
             $hash{'indicador_secundario_dato'}  = $indicador_secundario_dato;
             $hash{'header'}                     = C4::AR::Catalogacion::getHeader($campo);
+
+            #ordeno segun orden ASC
+            @subcampos_array                    = sort{$a->{'orden'} cmp $b->{'orden'}} @subcampos_array;
+
             $hash{'subcampos_array'}            = \@subcampos_array;
 
             push(@MARC_result_array, \%hash);
@@ -1376,39 +1382,6 @@ sub _verificar_campo_subcampo_to_estructura{
 ###############################################################A PARTIR DE ESTE PUNTO ES LO VIEJO########################################
 
 
-
-=item sub subirOrden
-Esta funcion sube el orden como se va a mostrar del campo, subcampo catalogado
-=cut
-# FIXME esto no se va a usar mas, lo dejo para reusar en la visualizacion de la INTRA
-# sub subirOrden{
-#     my ($id,$itemtype) = @_;
-# 
-#     my $catAModificar = getEstructuraCatalogacionById($id);
-# 
-#     if($catAModificar){
-#         $catAModificar->subirOrden($itemtype);
-#     }else{
-#         C4::AR::Debug::debug("Catalogacion => subirOrden => NO EXISTE EL ID DE LA ESTRUCTURA QUE SE INTENTA MODIFICAR");
-#     }
-# }
-
-=item sub bajarOrden
-Esta funcion baja el orden como se va a mostrar del campo, subcampo catalogado
-=cut
-# FIXME esto no se va a usar mas, lo dejo para reusar en la visualizacion de la INTRA
-# sub bajarOrden{
-#     my ($id,$itemtype) = @_;
-# 
-#     my $catAModificar = getEstructuraCatalogacionById($id);
-# 
-#     if($catAModificar){
-#         $catAModificar->bajarOrden($itemtype);
-#      }else{
-#         C4::AR::Debug::debug("Catalogacion => subirOrden => NO EXISTE EL ID DE LA ESTRUCTURA QUE SE INTENTA MODIFICAR");
-#     }
-# }
-
 =item sub cambiarVisibilidad
 Esta funcion cambia la visibilidad de la estructura de catalogacion que se indica segun parametro ID
 =cut
@@ -1789,6 +1762,49 @@ sub getEstructuraCatalogacionById{
 }
 
 
+sub getOrdenFromCampoSubcampo{
+    my ($campo, $subcampo, $itemtype, $type) = @_;
+
+
+    if($type eq "INTRA"){
+
+        my $conf_visualizacion = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($campo, $subcampo, $itemtype);
+
+        if($conf_visualizacion){
+            return $conf_visualizacion->getOrden();
+        }
+
+    } else {
+        # TODO falta ver lo del perfil por ahora lo deje FIXEEEEEEEEDD
+        my $conf_visualizacion = C4::AR::VisualizacionOpac::getVisualizacionFromCampoSubCampo($campo, $subcampo, C4::AR::Preferencias::getValorPreferencia("perfil_opac"));
+
+        if($conf_visualizacion){
+            return $conf_visualizacion->getOrden();
+        }
+    }
+
+#     #primero busca en estructura_catalogacion
+#     my $estructura_array = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo, $itemtype);
+# 
+# 
+#     if($estructura_array){
+#         return $estructura_array->getLiblibrarian;
+#     }else{
+#         my ($pref_estructura_sub_campo_marc_array) = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc( 
+#                                                                                     query => [  campo       => { eq => $campo },
+#                                                                                                 subcampo    => { eq => $subcampo }
+#                                                                                              ]
+#                                                                     );
+#         #si no lo encuentra en estructura_catalogacion, lo busca en estructura_sub_campo_marc
+#         if(scalar(@$pref_estructura_sub_campo_marc_array) > 0){
+#             return  $pref_estructura_sub_campo_marc_array->[0]->getLiblibrarian
+#         }else{
+#             return 0;
+#         }
+#     }
+}
+
+
 sub getLiblibrarian{
     my ($campo, $subcampo, $itemtype, $type) = @_;
 
@@ -1830,6 +1846,7 @@ sub getLiblibrarian{
         }
     }
 }
+
 
 
 sub getDocumentById{
