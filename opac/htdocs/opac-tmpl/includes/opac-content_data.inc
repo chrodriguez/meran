@@ -22,9 +22,6 @@
             actualizarTabla();
         }
         
-        $(document).ready(function() {
-            actualizarTabla();
-        });
 
         function actualizarTabla(){
             $("#resultNovedades").append("<img src="+imagesForJS+"/loaders/facebook_style_green.gif alt=[% 'Cargando..' | i18n %] style='border:0;' />");
@@ -41,13 +38,28 @@
         }
 
     </script>
+    <script type="text/javascript" language="javascript">
+
+	    $(document).ready(function() {
+	            actualizarTabla();
+	            setInterval(actualizarTabla,[% IF timeInterval %]
+							                [% timeInterval %]
+							             [% ELSE %]
+							                300000
+							             [% END %]
+							             );
+	            
+        });
+
+    </script>
+
+
     
       <!-- Content unit - One column -->
         <hr class="clear-contentunit">
         <div class="column1-unit novedades_opac">
             <div id="resultNovedades"></div>
         </div>
-        <hr class="clear-contentunit" />
         <!-- Content unit - Two columns -->
         <br />
         <h1 class="pagetitle"> [% 'Ultimos ejemplares adquiridos por la biblioteca' | i18n %]</h1>
