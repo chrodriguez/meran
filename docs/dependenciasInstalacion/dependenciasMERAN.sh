@@ -21,3 +21,4 @@ cpan -i WWW::Shorten::Bitly
 cpan -i HTML::HTMLDoc
 cpan -i MARC::File::XML
 cpan -i DateTime::Format::DateManip
+cpan -i HTTP::BrowserDetect

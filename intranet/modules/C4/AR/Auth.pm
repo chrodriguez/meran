@@ -61,6 +61,7 @@ use C4::Modelo::CircReserva;
 use C4::Modelo::UsrSocio;
 use C4::Modelo::PrefFeriado;
 use C4::AR::Authldap;
+use HTTP::BrowserDetect;
 
 use vars qw($VERSION @ISA @EXPORT %EXPORT_TAGS);
 my $codMSG = 'U000';
@@ -94,22 +95,23 @@ $VERSION = 1.0;
 sub checkBrowser{
 
     my @blacklist = qw(
-        Firefox_4
-        Chrome_7
+        Firefox_3
+        Chrome_5
         MSIE_7
         IceWeasel_3
     );
     
-#TODO: cuando clickea en ok se setea: $session->param('check_browser_allowed', '1');
-
-
 	my $browser         = HTTP::BrowserDetect->new($ENV{'HTTP_USER_AGENT'});
 	my $browser_string  = $browser->browser_string();
 	my $browser_major   = $browser->major();
 	my $search          = $browser_string."_".$browser_major;
+	my ($session)       = CGI::Session->load();
 	
 	if ($search ~~ @blacklist){
-	    #redirectTo(C4::AR::Utilidades::getUrlPrefix().'/informacion.pl');
+	    if (!$session->param('check_browser_allowed')){
+	        redirectTo(C4::AR::Utilidades::getUrlPrefix().'/checkBrowser.pl?token='.$session->param('token'));
+	    }
+	    
 	}
 }
 
