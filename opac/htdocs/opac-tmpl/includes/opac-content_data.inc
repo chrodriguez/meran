@@ -43,7 +43,6 @@
     </script>
     
       <!-- Content unit - One column -->
-        <h1 class="pagetitle">[% 'Novedades de la biblioteca' | i18n %]</h1>
         <hr class="clear-contentunit">
         <div class="column1-unit novedades_opac">
             <div id="resultNovedades"></div>
