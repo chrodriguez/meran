@@ -13,9 +13,10 @@
 
  input,  textarea, select {
 	padding: 5px;
-	font-family: Helvetica, sans-serif;
+    font-family: verdana;
 	margin: 0px 0px 10px 0px;
 	border: 2px solid #ccc;
+    font-size:12px;  
 	max-width: 300px;
 }
 
@@ -28,6 +29,7 @@
 	background: white;
 	font-family: verdana;
 	font-weight: bold;
+    font-size:12px;
 	color: #35414F;
 }
 
