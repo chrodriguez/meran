@@ -10,12 +10,11 @@ my $cgi = new CGI;
 
 my ($template, $t_params)   = C4::Output::gettemplate("auth.tmpl", 'intranet');
 
-my $session                 = CGI::Session->load();
+my $session                 = CGI::Session->load() || CGI::Session->new();
 
 if ($session->param('codMsg')){
   $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje($session->param('codMsg'),'intranet');
 }
-
 
 my ($session)               = C4::AR::Auth::inicializarAuth($t_params);
 
