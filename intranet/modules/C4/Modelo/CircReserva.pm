@@ -507,7 +507,7 @@ sub cancelar_reservas_no_regulares {
 	if(! $reserva->socio->estado->regular){
 	    $self->debug("cancelar_reservas_no_regulares => Usuario Irregular = ".$reserva->socio->getNro_socio." se cancela la reserva ".$reserva->getId_reserva );
 	    $reserva->cancelar_reserva($params);
-	  };
+	  }
     }
 }
 
@@ -606,6 +606,36 @@ sub cancelar_reservas_vencidas {
        $reserva->delete();
     }# END foreach my $reserva (@$reservasVencidas)
 }
+
+=item
+cancelar_reservas_usuarios_morosos
+Se cancelan las reservas de usuarios con prestamos vencidos
+=cut
+sub cancelar_reservas_usuarios_morosos {
+  my ($self)=shift;
+  my ($responsable)= @_;
+
+    my $params;
+    $params->{'responsable'}= $responsable;
+    $params->{'tipo'}= 'INTRA';
+
+    my $socios_reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( db => $self->db,
+										 distinct => 1,
+										 select   => [ 'nro_socio' ],
+										 query => [ estado => {ne => 'P'}]);
+
+    foreach my $reserva (@$socios_reservas_array_ref){
+        my ($vencidos,$prestados) = C4::AR::Prestamos::cantidadDePrestamosPorUsuario($reserva->nro_socio);
+	if( $vencidos ){
+	    $self->debug("cancelar_reservas_usuarios_morosos => Usuario Moroso = ".$reserva->nro_socio." se cancelan sus reservas ");
+	    $params->{'nro_socio'}= $reserva->nro_socio;
+	    $self->cancelar_reservas_socio($params);
+	  }
+
+    }
+}
+
+
 
 =item sub getReservasVencidas
     Retorna un arreglo de objetos reserva que se encuentran VENCIDAS

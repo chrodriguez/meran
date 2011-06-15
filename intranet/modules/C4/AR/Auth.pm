@@ -1303,16 +1303,20 @@ sub _operacionesDeINTRA{
 	eval{
 		my $reserva=C4::Modelo::CircReserva->new(db=> $db);
 
-		#Ademas, se borran las reservas vencidas
-		C4::AR::Debug::debug("_operacionesDeINTRA=> Se borran las reservas vencidas ");
+		#Se borran las reservas vencidas
+		C4::AR::Debug::debug("_operacionesDeINTRA=> Se cancelan las reservas vencidas ");
 		$reserva->cancelar_reservas_vencidas($userid);
 
-		#Se borran las reservas de todos los usuarios sancionados
-                C4::AR::Debug::debug("_operacionesDeINTRA=> Se borran las reservas de todos los usuarios sancionados ");
+		#Ademas, se borran las reservas vencidas de usuarios con prestamos vencidos
+		C4::AR::Debug::debug("_operacionesDeINTRA=> Se cancelan las reservas de usuarios con prestamos vencidos ");
+		$reserva->cancelar_reservas_usuarios_morosos($userid);
+
+		#Ademas, se borran las reservas de todos los usuarios sancionados
+                C4::AR::Debug::debug("_operacionesDeINTRA=> Se cancelan las reservas de todos los usuarios sancionados ");
 		$reserva->cancelar_reservas_sancionados($userid);
 
 		#Ademas, se borran las reservas de los usuarios que no son alumnos regulares
-		C4::AR::Debug::debug("_operacionesDeINTRA=> Se borran las reservas de los usuarios que no son alumnos regulares ");
+		C4::AR::Debug::debug("_operacionesDeINTRA=> Se cancelan las reservas de los usuarios que no son alumnos regulares ");
 		$reserva->cancelar_reservas_no_regulares($userid);
 	
 		$db->commit;
