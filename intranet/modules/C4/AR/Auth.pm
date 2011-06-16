@@ -105,6 +105,8 @@ sub checkBrowser{
 	my $browser_string  = $browser->browser_string();
 	my $browser_major   = $browser->major();
 	my $search          = $browser_string."_".$browser_major;
+	
+	C4::AR::Debug::debug("HTTP USER AGENT ===================================> ".$search);
 	my ($session)       = CGI::Session->load();
 	
 	if ($search ~~ @blacklist){
@@ -405,6 +407,8 @@ sub get_template_and_user {
             $usuario_logueado = C4::Modelo::UsrSocio->new();
         }
     
+        C4::AR::Auth::updateLoggedUserTemplateParams($session,$params, $usuario_logueado);
+    
         $params->{'socio_data'}                 = buildSocioDataHashFromSession();
         $params->{'token'}                      = $session->param('token');
         #para mostrar o no algun submenu del menu principal
@@ -413,6 +417,7 @@ sub get_template_and_user {
 
     #se cargan todas las variables de entorno de las preferencias del sistema
     $params->{'limite_resultados_autocompletables'} = C4::AR::Preferencias::getValorPreferencia("limite_resultados_autocompletables");
+
 
     return ($template, $session, $params, $usuario_logueado);
 }
@@ -871,7 +876,7 @@ sub getSessionUserID {
 =cut
 sub getSessionNroSocio {
     my $session= CGI::Session->load();
-    return $session->param('nro_socio');
+    return $session->param('nro_socio') || undef;
 }
 
 
@@ -1004,7 +1009,7 @@ sub buildSocioDataHashFromSession{
     $socio_data{'usr_email'}                = $session->param('usr_email');
     $socio_data{'usr_legajo'}               = $session->param('usr_legajo');
     $socio_data{'ciudad_ref'}{'id'}         = $session->param('usr_ciudad_id'); 
-
+    
     return (\%socio_data);
 }
 
@@ -1112,8 +1117,9 @@ sub cerrarSesion{
     $params{'type'}                 = $t_params->{'type'}; #OPAC o INTRA
     $params{'flagsrequired'}        = '';
     $t_params->{'sessionClose'}     = 1;
-    $session->param('codMsg', 'U358');
     $session = C4::AR::Auth::_generarSession(\%params);
+    $session->param('codMsg', 'U358');
+
     redirectToAuth($t_params);
 }
 

@@ -7,25 +7,22 @@ use C4::AR::Auth;       # get_template_and_user
 my $input = new CGI;
 
 ##Aca se controlo el cambio de idioma
-my $session = CGI::Session->load();
+my $session =   CGI::Session->load();
+my $locale  =   $input->param('lang_server');
+$session->param('usr_locale', $locale );
 
-$session->param('usr_locale', $input->param('lang_server') );
+C4::AR::Debug::debug("USR_LOCALE ELEGIDOOOOOOOOOOOOOOOOOOOOOOOO => ".$locale);
+
 my $referer = $ENV{'HTTP_REFERER'};
+my %params = {};
 
-my $socio = C4::AR::Auth::getSessionNroSocio();
-if ($socio){
-    $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
-    $socio->setLocale($input->param('lang_server'));
+my $nro_socio_logged = C4::AR::Auth::getSessionNroSocio();
+my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio_logged) || C4::Modelo::UsrSocio->new();
+
+if ($nro_socio_logged){
+    $socio->setLocale($locale);
+    C4::AR::Debug::debug("USR_LOCALE DE SOCIO => ".$socio->getLocale);
 }
 
 #regreso a la pagina en la que estaba
-
-if($session->param('token')){
-    C4::AR::Auth::redirectTo($referer);
-}else{
-	C4::AR::Auth::redirectTo($referer);
-}
-
-
-
-
+C4::AR::Auth::redirectTo($referer);
