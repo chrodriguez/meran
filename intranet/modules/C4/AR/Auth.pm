@@ -90,6 +90,7 @@ $VERSION = 1.0;
     Checkea si el browser es uno ideal
     Browser NO soportados:
         FF: 3, IE: 7, Google Chrome 7, 8 y 9, Chromium Browser 5
+        Chromium Browser y Google Chrome lo detecta con el mismo user agent
 =cut
 sub checkBrowser{
 
@@ -99,7 +100,7 @@ sub checkBrowser{
         MSIE_7
         IceWeasel_3
     );
-    
+    my $session         = CGI::Session->load();
 	my $browser         = HTTP::BrowserDetect->new($ENV{'HTTP_USER_AGENT'});
 	my $browser_string  = $browser->browser_string();
 	my $browser_major   = $browser->major();
@@ -108,7 +109,11 @@ sub checkBrowser{
 	
 	if ($search ~~ @blacklist){
 	    if (!$session->param('check_browser_allowed')){
-	        redirectTo(C4::AR::Utilidades::getUrlPrefix().'/checkBrowser.pl?token='.$session->param('token'));
+            if($session->param('type') eq "opac"){
+                redirectTo(C4::AR::Utilidades::getUrlPrefix().'/checkBrowser.pl?token='.$session->param('token'));
+            }else{
+                redirectTo(C4::AR::Utilidades::getUrlPrefix().'/checkBrowser.pl?token='.$session->param('token'));
+            }    
 	    }
 	    
 	}
