@@ -17,6 +17,11 @@
         }
     </script>
 
+	<script type="text/javascript">
+	     var RecaptchaOptions = {
+	     };
+	</script>
+
     <script type="text/javascript">
 
         $(document).ready(function() {

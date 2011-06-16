@@ -113,12 +113,12 @@ body textarea:focus{
 /********************/
 /*  HEADER SECTION  */
 /********************/
-.sitelogo {width:36px;
- height:40px;
+.sitelogo {width:56px;
+ height:56px;
  position:absolute;
  z-index:1;
- margin:22px 0 0 20px;
- background:url(../imagenes/bg_head_top_logo.jpg);
+ margin:14px 0 0 20px;
+ background:url(../imagenes/bg_head_top_logo.png) no-repeat;
  }
 .sitename {width:300px;
  height:45px;
@@ -161,7 +161,7 @@ body textarea:focus{
 }
 .nav0 a:hover {text-decoration:none;
 }
-.nav0 a img {height:14px;
+.nav0 a img {height:20px;
  border:none;
 }
 
@@ -203,6 +203,20 @@ color: #467AA7;
 font-weight: bold;
 text-decoration: none;
 }
+
+.nav_logged a{
+	color:#4E6595;
+	font-family:Arial;
+	font-weight:bold;
+	text-decoration: none ;
+}	
+
+.nav_logged a:hover{
+    color:#666666;
+    font-family:Arial;
+    font-weight:bold;
+    text-decoration: none ;
+}   
 
 .sitemessage {width:462px;
  height:100px;
@@ -391,8 +405,8 @@ z-index:997;
 }
 .header-breadcrumbs .searchform input.button:hover {cursor:pointer;
  border:solid 1px rgb(80,80,80);
- background:rgb(220,220,220);
- color:rgb(80,80,80);
+ background:url(../imagenes/botones/boton_medio_hover.png);
+ color:#FFFFFF;
 }
 
 /* --- For alternative headers END PASTE here --- */
@@ -666,6 +680,20 @@ html {filter: expression(document.execCommand("BackgroundImageCache", false, tru
 
 }
 
+.icon_marc {
+    background: transparent url(../imagenes/iconos/marc.png) no-repeat;
+    height: 25px;
+    width: 25px;
+    cursor: pointer;
+}
+
+.botonCentradoTabla {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    clear: both;
+}
 
 
 .contenedor_paginador{

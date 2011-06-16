@@ -13,9 +13,9 @@ my ($template, $t_params)= C4::Output::gettemplate("opac-main.tmpl", 'opac',1);
 
 $t_params->{'type'}='opac';
 
-my $session                 = CGI::Session->load();
+my $session                 = CGI::Session->load() || CGI::Session->new();
 
-my $codMensaje = $query->param('codMSG') || $session->param('codMsg') || $session->param('codMSG') || 0;
+my $codMensaje = $session->param('codMsg') || $session->param('codMSG') || 0;
 
 if ($session->param('codMsg')){
   $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje($session->param('codMsg'),'Opac');

@@ -56,15 +56,15 @@ sub verificar_Alta_Nivel1 {
     my $titulo      = $marc_record->subfield("245","a");
 
     my ($cant_titulo, $id1_array_ref) = C4::AR::Busquedas::busquedaPorTitulo($titulo);
-    C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => cantidad titulos => ".$cant_titulo);
+#     C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => cantidad titulos => ".$cant_titulo);
 
     my $id_autor        = C4::AR::Catalogacion::getRefFromStringConArrobas($ref_autor);
     my $autor           = C4::Modelo::CatAutor->getByPk($id_autor);
     my $nombre_completo = $autor->getCompleto();
 
     my ($cant_autor, $id1_array_ref)    = C4::AR::Busquedas::busquedaPorAutor($nombre_completo);
-    C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => autor 100, a => ".$nombre_completo);
-    C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => cantidad autores 100, a => ".$cant_autor);
+#     C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => autor 100, a => ".$nombre_completo);
+#     C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => cantidad autores 100, a => ".$cant_autor);
 
     if (($cant_titulo > 0)&&($cant_autor > 0)){
         $msg_object->{'error'} = 1;

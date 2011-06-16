@@ -27,7 +27,7 @@
             objAH               = new AjaxHelper(updateActualizarTabla);
             objAH.debug         = true;
             objAH.url           = URL_PREFIX+'/novedadesIntra.pl';
-            objAH.showOverlay   = true;
+
             objAH.tipoAccion    = "MOSTRAR_NOVEDADES";
             objAH.sendToServer();
         }
@@ -81,14 +81,7 @@
 </fieldset>
 
 
-<fieldset class="main">
-    <legend class="titulo_legend">[% "Novedades:" | i18n %]</legend>
-    <ul>
-        <li class="item">
-                 <div id="resultNovedades"></div>
-        </li>
-    </ul>
-</fieldset>
+<div id="resultNovedades"></div>
 
 
 [% IF cant_noleidos > 0 %]
