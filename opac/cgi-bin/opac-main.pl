@@ -15,12 +15,13 @@ my ($template, $session, $t_params)= get_template_and_user({
 								    query           => $query,
                                     type            => "opac",
 									authnotrequired => 0,
-									flagsrequired   => {    ui => 'ANY', 
-                                                            tipo_documento => 'ANY', 
-                                                            accion => 'CONSULTA', 
-                                                            entorno => 'undefined'},
+									flagsrequired   => {    ui              => 'ANY', 
+                                                            tipo_documento  => 'ANY', 
+                                                            accion          => 'CONSULTA', 
+                                                            entorno         => 'undefined'},
             });
 
+C4::AR::Auth::checkBrowser();
 my $nro_socio                       = $session->param('nro_socio');            
 my ($cantidad,$grupos)              = C4::AR::Nivel1::getUltimosGrupos();
 $t_params->{'nro_socio'}            = $nro_socio;

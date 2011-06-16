@@ -99,7 +99,8 @@ sub checkBrowser{
         MSIE_7
         IceWeasel_3
     );
-    
+    my $session         = CGI::Session->load();
+    C4::AR::Debug::debug("session tipo   : ".$session->param('type'));
 	my $browser         = HTTP::BrowserDetect->new($ENV{'HTTP_USER_AGENT'});
 	my $browser_string  = $browser->browser_string();
 	my $browser_major   = $browser->major();
@@ -108,7 +109,11 @@ sub checkBrowser{
 	
 	if ($search ~~ @blacklist){
 	    if (!$session->param('check_browser_allowed')){
-	        redirectTo(C4::AR::Utilidades::getUrlPrefix().'/checkBrowser.pl?token='.$session->param('token'));
+            if($session->param('type') eq "opac"){
+                redirectTo(C4::AR::Utilidades::getUrlPrefix().'/checkBrowser.pl?token='.$session->param('token'));
+            }else{
+                redirectTo(C4::AR::Utilidades::getUrlPrefix().'/checkBrowser.pl?token='.$session->param('token'));
+            }    
 	    }
 	    
 	}
