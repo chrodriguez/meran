@@ -17,16 +17,21 @@ function generarForm(id1, id2){
         var id3_array   = recuperarSeleccionados("checkEjemplares"+id2);
         var html        = "";
 
-        for (i = 0; i < id3_array.length; i++){
-            html = html  + "<input type='hidden' id='n3_" + i + "' name='n3_" + i + "' value='" + id3_array[i] + "' />"
+        if(id3_array.length > 1){
+
+            for (i = 0; i < id3_array.length; i++){
+                html = html  + "<input type='hidden' id='n3_" + i + "' name='n3_" + i + "' value='" + id3_array[i] + "' />"
+            }
+
+            html = html  + "<input type='hidden' id='id1' name='id1' value='" + id1 + "' />"
+            html = html  + "<input type='hidden' id='id2' name='id2' value='" + id2 + "' />"
+          
+            $(html).appendTo($("#edicion_grupal"+id2));
+
+            $("#edicion_grupal"+id2).submit();
+        } else {
+            jAlert(DEBE_SELECCIONAR_MAS_DE_UN_EJEMPLAR);
         }
-
-        html = html  + "<input type='hidden' id='id1' name='id1' value='" + id1 + "' />"
-        html = html  + "<input type='hidden' id='id2' name='id2' value='" + id2 + "' />"
-      
-        $(html).appendTo($("#edicion_grupal"+id2));
-
-        $("#edicion_grupal"+id2).submit();
     }
 }
 

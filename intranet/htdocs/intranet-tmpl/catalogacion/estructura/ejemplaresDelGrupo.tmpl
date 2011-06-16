@@ -187,24 +187,32 @@
                     [% END %]
                 </td>
     </tr>
+
+[%   IF loop.last %]
+</table>
+
+    [%   IF loop.count > 1 %]
+<!--     si hay mas de una fila se muestra esto -->
+        <div class="horizontal">[% "Para los elementos que est&aacute;n marcados:" | i18n %]</div>
+              [% PERL %]
+                      print C4::AR::Filtros::to_Icon(   
+                                                          boton   => "icon_edicion",
+                                                          onClick => "generarForm('[% id1 %]','[% id2 %]');",
+                                                          title   => "[% 'Modificar Ejemplares' | i18n %]",
+                                                          li => 1,
+                              ) ;
+              [% END %]
+
+        <form id="edicion_grupal[% id2 %]" name="edicion_grupal" action="datosDocumento.pl" method="post">
+          
+            <input type="hidden" id="tipoAccion" name="tipoAccion" value="MODIFICAR_NIVEL_3_ALL" />
+            <input type="hidden" id="token" name="token" value="[% token %]" />
+        </form>
+
+    [% END %]
+
+
+[% END %]<!-- END IF loop.last -->
+
+
 [% END %]<!-- END FOREACH NIVEL 3 -->
-	
-	</table>
-
-<div class="horizontal">[% "Para los elementos que est&aacute;n marcados:" | i18n %]</div>
-
-      [% PERL %]
-              print C4::AR::Filtros::to_Icon(   
-                                                  boton   => "icon_edicion",
-                                                  onClick => "generarForm('[% id1 %]','[% id2 %]');",
-                                                  title   => "[% 'Modificar Ejemplares' | i18n %]",
-                                                  li => 1,
-                      ) ;
-      [% END %]
-
-<form id="edicion_grupal[% id2 %]" name="edicion_grupal" action="datosDocumento.pl" method="post">
-  
-    <input type="hidden" id="tipoAccion" name="tipoAccion" value="MODIFICAR_NIVEL_3_ALL" />
-    <input type="hidden" id="token" name="token" value="[% token %]" />
-</form>
-
