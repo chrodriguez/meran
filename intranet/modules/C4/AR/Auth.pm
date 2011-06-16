@@ -100,7 +100,6 @@ sub checkBrowser{
         IceWeasel_3
     );
     my $session         = CGI::Session->load();
-    C4::AR::Debug::debug("session tipo   : ".$session->param('type'));
 	my $browser         = HTTP::BrowserDetect->new($ENV{'HTTP_USER_AGENT'});
 	my $browser_string  = $browser->browser_string();
 	my $browser_major   = $browser->major();
