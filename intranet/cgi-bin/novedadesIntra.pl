@@ -36,10 +36,18 @@ if($tipoAccion eq "MOSTRAR_NOVEDADES"){
     my $ok = 0; 
 
     my $pref_limite = C4::AR::Preferencias::getValorPreferencia('limite_novedades');
-
-    $cantidad_novedades = $pref_limite - $cantidad_novedades_no_mostrar;
     
-   
+
+    if ($cantidad_novedades){
+        if($cantidad_novedades < $pref_limite){
+            $cantidad_novedades = $cantidad_novedades - $cantidad_novedades_no_mostrar;
+        }else{
+            $cantidad_novedades = $pref_limite - $cantidad_novedades_no_mostrar;
+        }
+    }   
+  
+    
+    C4::AR::Debug::debug($cantidad_novedades);
     
     if ($novedades){
       foreach my $nov (@$novedades){
@@ -58,9 +66,11 @@ if($tipoAccion eq "MOSTRAR_NOVEDADES"){
     } 
 
 
+
     $t_params->{'nro_socio'}            = $nro_socio;
     $t_params->{'SEARCH_RESULTS'}       = $grupos;
     $t_params->{'cantidad'}             = $cantidad_novedades;
     $t_params->{'novedades'}            = \@novedadesOK;
+
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

@@ -490,6 +490,7 @@ sub _verificarSession {
     my $valido_token=C4::Context->config("token") || 0;
     my $code_MSG;
 
+
     my $type_session    = C4::AR::Utilidades::capitalizarString($session->param('type'));
     $type               = C4::AR::Utilidades::capitalizarString($type);
     
@@ -519,7 +520,7 @@ sub _verificarSession {
                 $code_MSG='U356';             
                 C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => sesion invalido => cambio la ip");  
             } elsif ($session->param('flag') eq 'LOGUIN_DUPLICADO'){
-                $code_MSG='U359';            
+                    $code_MSG='U359';            
                     C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => sesion invalido => loguin duplicado");  
             } elsif (($session->param('token') ne $token) and ($valido_token)){
                     $code_MSG='U354';            
@@ -539,10 +540,13 @@ sub _verificarSession {
         } else {
             #Esto quiere decir que la sesion esta bien pero que no hay nadie logueado
     #         C4::AR::Debug::debug("no hay sesion");    
-            return ($code_MSG,"sin_sesion");
+              $code_MSG='U358';
+              return ($code_MSG,"sin_sesion");
         }
     }
-#     C4::AR::Debug::debug("sesion invalida");    
+
+#     C4::AR::Debug::debug("sesion invalida");
+    $code_MSG='U357';
     return ($code_MSG,"sesion_invalida");
 }
 
@@ -593,6 +597,7 @@ sub checkauth {
     } else {
         #No es DEMO hay q hacer todas las comprobaciones de la sesion
                   my ($code_MSG,$estado)=_verificarSession($session,$type,$token);
+                  C4::AR::Debug::debug("MENSAJE".$code_MSG);
                   if ($estado eq "sesion_valida"){ 
                       
                       C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_valida");
@@ -733,34 +738,37 @@ sub checkauth {
                                                         }
                                   
                                               } else {  # if ($sin_captcha || $captchaResult->{is_valid} ) - INGRESA CAPTCHA INVALIDO
-#                                                    
-                                                   
-                                                    $mensaje='U425';
+                                                    $code_MSG='U425';
+                                                    $session->param('codMsg', $code_MSG);
+                                                    
                                                     $cant_fallidos= $socio_data_temp->getLogin_attempts + 1;
                                                     $socio_data_temp->setLogin_attempts($cant_fallidos);
                                                     if ($cant_fallidos >= 3){
                                                             $template_params->{'mostrar_captcha'}=1;
                                                            
                                                     }
-                                                    _destruirSession($mensaje, $template_params);
+#                                                     _destruirSession($mensaje, $template_params);
                                                     
                                                        
                                               }
                                    }  else   {    # else de if ($socio) -----  ingreso password invalida
+                                                    $code_MSG='U357';
+                                                    $session->param('codMsg', $code_MSG);
                                                
-                                                    $mensaje= 'U357';
                                                     $cant_fallidos= $socio_data_temp->getLogin_attempts + 1;
                                                     $socio_data_temp->setLogin_attempts($cant_fallidos);
                                                     if ($cant_fallidos >= 3){
                                                             $template_params->{'mostrar_captcha'}=1; 
                                                     }
                                                         
-                                                     _destruirSession('U357', $template_params);  
+#                                                      _destruirSession('U357', $template_params);  
                                             
                                    }
                               
                              }  else   {     # else de  if ($socio_data_temp) -----  ingreso usuario invalido      
-                                            $mensaje= 'U357';
+#                                             $mensaje= 'U357';
+                                                    $code_MSG='U357';
+                                                    $session->param('codMsg', $code_MSG);
              
                              }
                             

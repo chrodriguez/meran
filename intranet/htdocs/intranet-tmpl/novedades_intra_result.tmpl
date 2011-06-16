@@ -1,6 +1,10 @@
 
-[% IF novedades.size > 0 %]
-    [% FOREACH novedad IN novedades %]
+[% IF cantidad %]
+  <fieldset class="main">
+      <legend class="titulo_legend">[% "Novedades:" | i18n %]</legend>
+      <ul>
+          <li class="item">
+              [% FOREACH novedad IN novedades %]
                       <div class="novedad_intra" id="novedad_intra_[% novedad.getId %]">
                           <p class="titulo_novedad">
                             <a class="fancy_link" href='[% url_prefix %]/admin/global/ver_novedad_intra.pl?id=[% novedad.getId %]&amp;token=[% token %]'>[% novedad.getTitulo %]</a>
@@ -15,8 +19,8 @@
                           </p>
                       </div>
                       <hr style="color:red;">
-    [% END %]
-[% ELSE %]
-                      
-                        <p class="sin_novedad" >[% 'Sin novedades' | i18n %]</p>
+              [% END %]
+          </li>
+      </ul>
+  </fieldset>
 [% END %]
