@@ -12,6 +12,7 @@ function detalleDelUsuario(){
 	USUARIO.text= $('#usuarioAutocomplete').val();
 	USUARIO.ID= nro_socio;
 	//detalleUsuario esta implementado en circulacion,js
+	startOverlay();
 	detalleUsuario(nro_socio);
 	detalleReservas(nro_socio, updateInfoReservas);
 	detalleSanciones(nro_socio);
