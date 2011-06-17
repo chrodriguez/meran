@@ -23,15 +23,14 @@ use utf8;
 sub agregar{
 
 #TODO agregar con orden ultimo
-
-    my ($self)=shift;
-    my ($params) = @_;
+    my ($self)      = shift;
+    my ($params)    = @_;
 
     $self->setCampo($params->{'campo'});
     $self->setSubCampo($params->{'subcampo'});
     $self->setVistaOpac($params->{'liblibrarian'});
     $self->setIdPerfil($params->{'perfil'});
-#     $self->setOrden($params->{'orden'});
+    $self->setOrder($self->getId());
 
     $self->save();
 }
