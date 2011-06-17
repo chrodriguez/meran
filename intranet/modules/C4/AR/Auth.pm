@@ -303,7 +303,6 @@ sub _destruirSession{
 
     #redirecciono a loguin y genero una nueva session y nroRandom para que se loguee el usuario
     $session->param('codMsg', $cod_Msg);
-  
 
 #     C4::AR::Debug::debug("WARNING: ¡¡¡¡Se destruye la session y la cookie!!!!!");
     redirectToAuth($template_params)
@@ -544,7 +543,7 @@ sub _verificarSession {
 
         } else {
             #Esto quiere decir que la sesion esta bien pero que no hay nadie logueado
-    #         C4::AR::Debug::debug("no hay sesion");    
+    
               $code_MSG='U358';
               return ($code_MSG,"sin_sesion");
         }
@@ -579,16 +578,15 @@ sub checkauth {
     my $token=_obtenerToken($query);
     my $loggedin = 0;
     my ($session) = CGI::Session->load();
-
-
+  
     my $userid= undef;
-    
+   
     if ($session){
         $userid= $session->param('userid');
+
     }else{
     	$session = _generarSession();
     }
-    
     my $flags=0;
     my $sin_captcha=0;
     my $time = localtime(time());
@@ -597,19 +595,21 @@ sub checkauth {
         $userid="demo";
         $flags=1;
         _actualizarSession($userid, $userid,$userid, $time, '', $type, $flagsrequired, _generarToken(), $session);
+
         $socio=C4::Modelo::UsrSocio->new();
         return ($userid, $session, $flags, $socio);
     } else {
         #No es DEMO hay q hacer todas las comprobaciones de la sesion
+ 
                   my ($code_MSG,$estado)=_verificarSession($session,$type,$token);
-                  C4::AR::Debug::debug("MENSAJE".$code_MSG);
+           
                   if ($estado eq "sesion_valida"){ 
-                      
+                
                       C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_valida");
                       $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
                       $flags=$socio->tienePermisos($flagsrequired);
                       $socio->setLogin_attempts(0);
-                      
+                           
                       if ($flags) {
                           $loggedin = 1;
                       } else {
@@ -656,6 +656,7 @@ sub checkauth {
                       if ( ($userid) && ( new_password_is_needed($userid, $socio) ) && !$change_password ) {
                           _change_Password_Controller($query, $userid, $type, $token);
                       }
+      
                   return ($userid, $session, $flags, $socio);
                   }
 
@@ -765,8 +766,8 @@ sub checkauth {
                                                     if ($cant_fallidos >= 3){
                                                             $template_params->{'mostrar_captcha'}=1; 
                                                     }
-                                                        
-#                                                      _destruirSession('U357', $template_params);  
+#                                                               $mensaje= 'U357';
+#                                                       _destruirSession('U357', $template_params);  
                                             
                                    }
                               
@@ -783,7 +784,6 @@ sub checkauth {
                                       $mensaje = 'U000';
                              }
                               _destruirSession($mensaje, $template_params);
-
 
                   }# end unless ($userid)
                   
@@ -1099,6 +1099,8 @@ Funcion que cierra la sesion generando una nueva
 
 sub cerrarSesion{
     my ($t_params) = @_;
+
+ 
     #se genera un nuevo nroRandom para que se autentique el usuario
     my $nroRandom       = C4::AR::Auth::_generarNroRandom();
     #genero una nueva session

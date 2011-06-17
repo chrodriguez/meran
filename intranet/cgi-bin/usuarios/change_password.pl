@@ -29,7 +29,9 @@ if ( $socio->getChange_password() ){
     $t_params->{'cambioForzado'}=1;
 }
 
-$t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($session->param("codMsg"),'INTRA',[]);
+if ($input->param('error')){
+    $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($session->param("codMsg"),'INTRA',[]);
+}
 
 &C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
