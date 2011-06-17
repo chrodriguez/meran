@@ -24,9 +24,8 @@
 	height: 90px;
 }
 
- textarea:focus,  input:focus {
+textarea:focus,  input:focus {
 	border: 2px solid #4B5869;
-	background: white;
 	font-family: verdana;
 	font-weight: bold;
     font-size:12px;
@@ -36,10 +35,6 @@
 .ayuda_marc{    
     width:100%;
 }
-
-
-
-
 
  input.submit-button {
 	width: 140px;
