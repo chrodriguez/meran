@@ -59,7 +59,7 @@ sub updateNewOrder{
         
 #        C4::AR::Debug::debug("nuevo orden de id : ".@array[$i]." es :  ".$campo);
         
-        $configuracion->setOrder(@array[$i]);
+        $configuracion->setOrden(@array[$i]);
     
         $i++;
     }

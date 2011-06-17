@@ -22,20 +22,19 @@ use utf8;
 
 sub agregar{
 
-#TODO agregar con orden ultimo
-
     my ($self)=shift;
     my ($params) = @_;
 
     $self->setCampo($params->{'campo'});
     $self->setSubCampo($params->{'subcampo'});
     $self->setVistaIntra($params->{'liblibrarian'});
-    $self->setTipoEjemplar($params->{'ejemplar'});
-# C4::AR::Debug::debug("CatVisualizacionIntra => agregar => nivel => ".C4::AR::EstructuraCatalogacionBase::getNivelFromEstructuraBaseByCampo($params->{'campo'}));
 
     if(C4::AR::EstructuraCatalogacionBase::getNivelFromEstructuraBaseByCampoSubcampo($params->{'campo'}, $params->{'subcampo'}) <= 1){
         $self->setTipoEjemplar('ALL');
     }
+    
+    my $orden = C4::Modelo::CatVisualizacionIntra::Manager->get_max_orden() + 1;
+    $self->setOrden($orden);
 
     $self->save();
 }
@@ -50,15 +49,6 @@ sub modificar{
     $self->save();
 }
 
-sub setOrder{
-
-    my ($self)=shift;
-    my ($orden) = @_;
-
-    $self->orden($orden);
-
-    $self->save();
-}
 
 sub getVistaIntra{
     my ($self)=shift;
@@ -113,6 +103,7 @@ sub setOrden{
     my ($self) = shift;
     my ($orden) = @_;
     $self->orden($orden);
+    $self->save();
 }
 
 sub getTipoEjemplar{
