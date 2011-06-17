@@ -1714,20 +1714,15 @@ sub MARCDetail{
 		C4::AR::Debug::debug("Proceso todos los subcampos del campo: ".$campo);
 		if(!_existeEnArregloDeCampoMARC(\@MARC_result_array, $campo) ){
 			#proceso todos los subcampos del campo
-			for(my $j=$i;$j < scalar(@result);$j++){
-				my %hash_temp;
-				$hash_temp{'subcampo'}= @result[$j]->{'subcampo'};
-				$hash_temp{'liblibrarian'}= @result[$j]->{'liblibrarian'};
-				$hash_temp{'dato'}= @result[$j]->{'dato'};
-	
-				if(@result[$j]->{'campo'} eq $campo){
-					push(@info_campo_array, \%hash_temp);
-# 					C4::AR::Debug::debug("agrego el subcampo: ".@result[$j]->{'subcampo'});
-				}
-
-        C4::AR::Debug::debug("campo, subcampo, dato: ".@result[$j]->{'campo'}.", ".@result[$j]->{'subcampo'}." : ".@result[$j]->{'dato'});
+		my $subcampos=$result[$i]->{'subcampos_array'};
+			for(my $j=0;$j < @$subcampos;$j++){
+ 				my %hash_temp;
+ 				$hash_temp{'subcampo'}= $subcampos->[$j]{'subcampo'};
+ 				$hash_temp{'liblibrarian'}= $subcampos->[$j]{'liblibrarian'};
+ 				$hash_temp{'dato'}= $subcampos->[$j]{'dato'};
+				push(@info_campo_array, \%hash_temp);
+			      C4::AR::Debug::debug("campo, subcampo, dato: ".$result[$i]->{'campo'}.", ".$subcampos->[$j]{'subcampo'}.", ".$subcampos->[$j]{'liblibrarian'});
 			}
-		
 			$hash{'campo'}= $campo;
 			$hash{'header'}= @result[$i]->{'header'};
 			$hash{'info_campo_array'}= \@info_campo_array;
