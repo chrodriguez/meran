@@ -23,20 +23,26 @@ function updateInfoBusquedasBar(responseText){
 
 function busquedaCombinable(){
 
+    var radio               = $("#tipo:checked");
+    var tipo                = radio[0].value;
+
     objAH                   = new AjaxHelper(updateBusquedaCombinable);
     objAH.debug             = true;
     objAH.showOverlay       = true;
     //para busquedas combinables
     objAH.url               = URL_PREFIX+'/busquedas/busquedasDB.pl';
     objAH.titulo            = $('#titulo').val();
+    objAH.tipo              = tipo;
     objAH.autor             = $('#autor').val();
     objAH.only_available 	= ( $('#only_available').attr('checked') )?1:0;
     objAH.signatura         = $('#signatura').val();
     objAH.tipo_nivel3_name  = $('#tipo_nivel3_id').val();
+    objAH.tema				= $('#tema').val();
+    objAH.codBarra      	= $('#codBarra').val();
+    objAH.isbn				= $('#isbn').val();
+    objAH.viewShelfName		= $('#estante').val();
+    
     objAH.tipoAccion        = 'BUSQUEDA_AVANZADA';
-    var radio               = $("#tipo:checked");
-    var tipo                = radio[0].value;
-    objAH.tipo              = tipo;
     //se setea la funcion para cambiar de pagina
     objAH.funcion           = 'changePage';
     //se envia la consulta
@@ -82,46 +88,11 @@ function buscar(doScroll){
     if (doScroll)
         shouldScroll = doScroll;
 
-    if (jQuery.trim($('#estante').val()) != '') {
-        if ( (jQuery.trim($('#estante').val())).length < limite_caracteres ){
-            cumple_limite = false;
-        } else {buscarEstante();}
-    } 
-    else if (jQuery.trim($('#dictionary').val()) != '') {
-        if ( (jQuery.trim($('#dictionary').val())).length < limite_caracteres ){
-            cumple_limite = false;
-        } else {buscarPorDiccionario(ini);}
-    } 
-    else if (jQuery.trim($('#codBarra').val()) != '') {
-        if ( (jQuery.trim($('#codBarra').val())).length < limite_caracteres ){
-            cumple_limite = false;
-        } else {buscarPorCodigoBarra();}
-    } 
-    else if (jQuery.trim($('#isbn').val()) != '') {
-        if ( (jQuery.trim($('#isbn').val())).length < limite_caracteres ){
-            cumple_limite = false;
-        } else {buscarPorISBN();}
-    } 
-    else if (jQuery.trim($('#tema').val()) != '') {
-        if ( (jQuery.trim($('#tema').val())).length < limite_caracteres ){
-            cumple_limite = false;
-        } else {buscarPorTema();}
-    } 
-    else if( (jQuery.trim($('#titulo').val()) != '') ) {
+    if( (jQuery.trim($('#titulo').val()) != '') ) {
         if ( (jQuery.trim($('#titulo').val())).length < limite_caracteres ) {
             cumple_limite = false;
         } else {busquedaCombinable();}
-    } 
-    else if(jQuery.trim($('#autor').val()) != '') {
-        if((jQuery.trim($('#autor').val())).length < limite_caracteres ){
-            cumple_limite = false;
-        } else {busquedaCombinable();}
-    } 
-    else if (jQuery.trim($('#signatura').val()) != '') {
-         if ( (jQuery.trim($('#signatura').val())).length < 0 ) {
-            cumple_limite = false;
-        } else {busquedaCombinable();}
-    } 
+    }     
     else if ($.trim($('#keyword').val()) != '') {
         if ( (jQuery.trim($('#keyword').val())).length < limite_caracteres ){
     		cumple_limite = false;
@@ -131,7 +102,7 @@ function buscar(doScroll){
         if ( (jQuery.trim($('#keyword-bar').val())).length < limite_caracteres ){
             cumple_limite = false;
         } else {buscarBar();}
-    }
+    }    
     else {
 	       cumple_vacio = false;
 	    }
@@ -144,52 +115,6 @@ function buscar(doScroll){
 
 }
 
-function buscarPorTema(){
-    objAH=new AjaxHelper(updateInfoBusquedas);
-    objAH.debug= true;
-    objAH.showOverlay       = true;
-    objAH.url= URL_PREFIX+'/busquedas/busquedasDB.pl';
-    objAH.tema= $('#tema').val();
-    objAH.tipoAccion    = 'BUSQUEDA_POR_TEMA';
-
-    //se setea la funcion para cambiar de pagina
-    objAH.funcion= 'changePage';
-    objAH.sendToServer();
-}
-
-function buscarPorISBN(){
-    objAH=new AjaxHelper(updateInfoBusquedas);
-    objAH.showOverlay       = true;
-    objAH.debug= true;
-    objAH.url= URL_PREFIX+'/busquedas/busquedasDB.pl';
-    objAH.isbn= $('#isbn').val();
-    objAH.tipoAccion    = 'BUSQUEDA_POR_ISBN';
-    objAH.only_available = ( $('#only_available').attr('checked') )?1:0;
-    objAH.sendToServer();
-}
-
-function buscarPorDiccionario(){
-    objAH=new AjaxHelper(updateInfoBusquedas);
-    objAH.debug= true;
-    objAH.showOverlay       = true;
-    objAH.url= URL_PREFIX+'/busquedas/diccionario.pl';
-    objAH.dictionary= $('#dictionary').val();
-    objAH.only_available = ( $('#only_available').attr('checked') )?1:0;
-    //se setea la funcion para cambiar de pagina
-    objAH.funcion= 'changePage';
-    objAH.sendToServer();
-}
-
-function buscarPorCodigoBarra(){
-    objAH               = new AjaxHelper(updateInfoBusquedas);
-    objAH.debug         = true;
-    objAH.showOverlay   = true;
-    objAH.url           = URL_PREFIX+'/busquedas/busquedasDB.pl';
-    objAH.codBarra      = $('#codBarra').val();
-    objAH.only_available = ( $('#only_available').attr('checked') )?1:0;
-    objAH.tipoAccion    = 'BUSQUEDA_POR_BARCODE';
-    objAH.sendToServer();
-}
 
 function buscarSuggested(suggested){
     busquedaPorKeyword(suggested);
@@ -239,20 +164,6 @@ function updateBusquedaPorKeyword(responseText){
 	else
 		keyword = $('#keyword-bar').val();
 
-}
-
-function buscarEstante(){
-
-    objAH=new AjaxHelper(updateInfoBusquedas);
-    objAH.showOverlay       = true;
-    objAH.debug= true;
-    objAH.url= URL_PREFIX+'/busquedas/estante.pl';
-    objAH.viewShelfName= $('#estante').val();
-    objAH.orden= 'title';
-    objAH.only_available = ( $('#only_available').attr('checked') )?1:0;
-    //se setea la funcion para cambiar de pagina
-    objAH.funcion= 'changePage';
-    objAH.sendToServer();
 }
 
 /******************************************Estantes**********************************************/

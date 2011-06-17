@@ -1001,12 +1001,17 @@ sub busquedaAvanzada_newTemp{
         $query .= ' @string "'."signatura%".$sphinx->EscapeString($params->{'signatura'}).'*"';
     }
     
+    if ($params->{'isbn'}){
+        $query .= ' @string "'."isbn%".$sphinx->EscapeString($params->{'isbn'}).'*"';
+    }
+
     if ($params->{'tema'} ne ""){
         $query .= ' @string "'."cat_tema%".$sphinx->EscapeString($params->{'tema'}).'"';
     }
 
     
-    C4::AR::Debug::debug("tipo_nivel3_name tipo_nivel3_name tipo_nivel3_name =>=> ".$params->{'tipo_nivel3_name'});
+    
+    C4::AR::Debug::debug("tipo_nivel3_name BUSQUEDA_AVANZADA =================> ".$params->{'tipo_nivel3_name'});
 
     C4::AR::Debug::debug("Busquedas => query string => ".$query);
 
@@ -1600,13 +1605,11 @@ sub armarBuscoPor{
 	
 	if(C4::AR::Utilidades::validateString($params->{'keyword'})){
         $str      = C4::AR::Utilidades::verificarValor($params->{'keyword'});
-#         $buscoPor.= Encode::encode('UTF-8',(Encode::decode('UTF-8', C4::AR::Filtros::i18n("B&uacute;squeda combinada: ")))).$str."&";
         $buscoPor.= $str."&";
 	}
 	
 
 	if( $params->{'tipo_nivel3_name'} != -1 &&  C4::AR::Utilidades::validateString($params->{'tipo_nivel3_name'})){
-# 		$buscoPor.= C4::AR::Filtros::i18n("Tipo de documento: ").C4::AR::Utilidades::verificarValor($params->{'tipo_nivel3_name'})."&";
         if ($params->{'tipo_nivel3_name'} eq 'ALL'){
         	$buscoPor.= C4::AR::Utilidades::verificarValor(C4::AR::Filtros::i18n("TODOS"))."&";
         }else{
@@ -1615,38 +1618,31 @@ sub armarBuscoPor{
 	}
 
 	if( C4::AR::Utilidades::validateString($params->{'titulo'})){
-# 		$buscoPor.= Encode::decode_utf8("Título: ".C4::AR::Utilidades::verificarValor($params->{'titulo'}))."&";
         $buscoPor.= Encode::decode_utf8(C4::AR::Utilidades::verificarValor($params->{'titulo'}))."&";  
 	}
 	
 	if( C4::AR::Utilidades::validateString($params->{'completo'})){
-# 		$buscoPor.= "Autor: ".C4::AR::Utilidades::verificarValor($params->{'autor'})."&";
         $buscoPor.= C4::AR::Utilidades::verificarValor($params->{'completo'})."&";
 	}
 
     if( C4::AR::Utilidades::validateString($params->{'autor'})){
-#       $buscoPor.= "Autor: ".C4::AR::Utilidades::verificarValor($params->{'autor'})."&";
         $buscoPor.= C4::AR::Utilidades::verificarValor($params->{'autor'})."&";
     }
 
 	if( C4::AR::Utilidades::validateString($params->{'signatura'})){
-# 		$buscoPor.= "Signatura: ".C4::AR::Utilidades::verificarValor($params->{'signatura'})."&";
         $buscoPor.= C4::AR::Utilidades::verificarValor(C4::AR::Filtros::i18n("Signatura").": ".$params->{'signatura'})."&";
 	}
 
     if( C4::AR::Utilidades::validateString($params->{'isbn'})){
-#       $buscoPor.= "ISBN: ".C4::AR::Utilidades::verificarValor($params->{'isbn'})."&";
         $buscoPor.= "ISBN: ".C4::AR::Utilidades::verificarValor($params->{'isbn'})."&";
     }       
 
     if( C4::AR::Utilidades::validateString($params->{'tema'})){
-#       $buscoPor.= "ISBN: ".C4::AR::Utilidades::verificarValor($params->{'isbn'})."&";
         $buscoPor.= "Tema: ".C4::AR::Utilidades::verificarValor($params->{'tema'})."&";
     }       
 
 	if( C4::AR::Utilidades::validateString($params->{'codBarra'})){
-# 		$buscoPor.= Encode::decode_utf8("Código de Barra: ".C4::AR::Utilidades::verificarValor($params->{'codBarra'}))."&";
-        $buscoPor.= Encode::decode_utf8(C4::AR::Utilidades::verificarValor($params->{'codBarra'}))."&";
+        $buscoPor.= Encode::decode_utf8(C4::AR::Utilidades::verificarValor(C4::AR::Filtros::i18n("Barcode").": ".$params->{'codBarra'}))."&";
 	}		
 
     if( C4::AR::Utilidades::validateString($params->{'date_begin'})){
