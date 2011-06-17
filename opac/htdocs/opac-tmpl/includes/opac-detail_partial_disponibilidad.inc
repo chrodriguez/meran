@@ -1,6 +1,6 @@
 
           <div class="main-subcontent" style="width:100%; float:left">
-                <div class="subcontent-unit-border-orange" style="width:100%;">
+                <div style="width:100%;">
                     <h1 class="orange">[% "Informaci&oacute;n de disponibilidad" | i18n %]</h1>
                     <div  style="width:95%;">
                         <ul>

@@ -28,6 +28,7 @@
     DEBE_SELECCIONAR_TODOS_LOS_CAMPOS_REQUERIDOS = "[% 'Debe seleccionar todos los campos requeridos.' %]";
     DEBE_SELECCIONAR_UNA_TABLA_DE_REFERENCIA = "[% 'Debe seleccionar una tabla de referencia.' %]";
     DEBE_SELECCIONAR_AL_MENOS_UN_CAMPO = "[% 'Debe seleccionar al menos un campo.' %]";
+    DEBE_SELECCIONAR_MAS_DE_UN_EJEMPLAR = "[% 'Debe seleccionar m&aacute;s de un ejemplar.' %]";
     /*=============================================Fin===Catalogacion=================================================*/
 
     ELIMINAR_NOVEDAD = "[% 'Elminar la novedad?' %]";
@@ -200,7 +201,7 @@
 
      /*=================================================File Uploader=========================================================*/
     TYPE_ERROR  = " Error en {file}: Solamente se permiten extensiones {extensions}";
-    SIZE_ERROR  = "{file} es muy grande, el maximo tamaño es {sizeLimit}.";
+    SIZE_ERROR  = "{file} es muy grande, el maximo tama&ntilde;o es {sizeLimit}.";
     EMPTY_ERROR = "{file} esta vacio. Elija un archivo con contenido, por favor.";
     ON_LEAVE    = "[% 'The files are being uploaded, if you leave now the upload will be cancelled.' | i18n %]";  
      /*=================================================Fin File Uploader=========================================================*/

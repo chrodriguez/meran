@@ -22,8 +22,4 @@ my ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
             loging_out      => 1,
     });
 
-my ($session)= C4::AR::Auth::cerrarSesion();
-
-$t_params->{'partial_template'}= "opac-content_data.inc";
-
-C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+C4::AR::Auth::cerrarSesion();

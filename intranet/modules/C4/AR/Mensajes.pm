@@ -291,7 +291,7 @@ my %mensajesINTRA = (
     'U425' => 'El valor ingresado en el Captcha es invalido, por favor intente nuevamente',
 
     'U500' => 'La tarjeda de identificaci&oacute;n ingresada (Nro. de socio) ya pertenece a otro usuario.',
-    'U501' => 'El t&iacute;tulo, autor ya existe *?*. Usted desea agregar nuevos ejemplares al registro *?* ? ',
+    'U501' => 'El libro cuyo t&iacute;tulo y autor es:  *?* ya existe.  Desea agregar nuevos ejemplares al registro *?* ? ',
 #     'U405' => 'No existe la estructura de catalogaci&oacute;n que se intentando recuperar.',
     'U502' => 'Los permisos del usuario (*?*) no se pudieron cambiar.',
     'U503' => 'Los permisos del usuario (*?*) se agregaron con &eacute;xito.',

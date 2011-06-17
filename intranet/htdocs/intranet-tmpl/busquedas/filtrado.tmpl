@@ -32,11 +32,6 @@ function limpiarArriba(){
 
 function limpiarCentro(){
 
-	$('#isbn').val('');
-    $('#dictionary').val('');
-    $('#codBarra').val('');
-    $('#tema').val('');
-    $('#estante').val('');
 }
 
 function limpiarAbajo(){
@@ -44,6 +39,11 @@ function limpiarAbajo(){
 	$('#titulo').val('');
     $('#autor').val('');
     $('#signatura').val('');
+    $('#isbn').val('');
+    $('#dictionary').val('');
+    $('#codBarra').val('');
+    $('#tema').val('');
+    $('#estante').val('');
 }
 
 function limpiarCampos(side){
@@ -51,9 +51,6 @@ function limpiarCampos(side){
     if (side == 'arriba'){
         limpiarCentro();
         limpiarAbajo();
-    }else if (side == 'centro'){
-    	limpiarArriba();
-    	limpiarAbajo();
     }else{
     	limpiarArriba();
         limpiarCentro();
@@ -91,83 +88,68 @@ function limpiarCampos(side){
           </div> 
             <div id="busqueda_simple">
 	            <fieldset>
-	            <legend class="titulo_legend"><strong>[% "B&uacute;squeda simple" | i18n %]</strong></legend>
+	            <legend class="titulo_legend"><strong>[% "B&uacute;squeda espec&iacute;fica" | i18n %]</strong></legend>
 	                <ul>
-	                <li class="sub_item">
-	                    <label for="isbn">
-	                        <strong>ISBN</strong>   
-	                    </label>
-	                    <input type="text" id="isbn" size="25"  onkeypress="limpiarCampos('centro')">
-	                </li>
-	                
-	                <li class="sub_item">
-	                    <label for="dictionary">
-	                        <strong>[% "B&uacute;squeda por diccionario" | i18n %]</strong>
-	                    </label>
-	                    <input type="text" size="25" id="dictionary" readonly onkeypress="limpiarCampos('centro')">
-	                    ### FALTA IMPLEMENTAR
-	                </li>		
-	                <li class="sub_item">
-	                    <label for="codBarra">
-	                        <strong>[% "C&oacute;digo de barras" | i18n %]</strong>
-	                    </label>
-	                    <!--<input type="text" size="25" id="codBarra" readonly onkeypress="limpiarCampos('derecha')">-->
-	                    <input type="text" size="25" id="codBarra" onkeypress="limpiarCampos('centro')">
-	                </li>
-	                <li class="sub_item">
-	                    <label for="tema">
-	                        <strong>Tema</strong>
-	                    </label>
-	                    <input type="text" size="25" id="tema"  onkeypress="limpiarCampos('centro')">
-	                </li>
-	                <li class="sub_item">
-	                    <label for="estante">
-	                        <strong>[% "Estantes Virtuales" | i18n %]</strong>
-	                    </label>
-	                    <input type="text" size="25" id="estante" readonly onkeypress="limpiarCampos('centro')">
-	                    ### FALTA IMPLEMENTAR
-	                </li>
-	              </ul>
-	            </fieldset>
-          </div>
-    
-          <div id="busqueda_especifica">
-          <fieldset>
-                <legend class="titulo_legend"><strong>[% "B&uacute;squeda espec&iacute;fica" | i18n %]</strong></legend>
-                <ul id="combinada">
-                  <li class="sub_item"> 
-                    <label for="tipo_nivel3_id">
-                        <strong>[% "Tipo de documento" | i18n %]</strong> 
-                    </label>
-                            [% comboTipoDocumento %]
-                    </li>
-        
-                  <li class="sub_item">
-                        <label for="titulo"> 
-                            <strong>[% "T&iacute;tulo" %]</strong>
-                        </label>
-                        <input type="text"  size="25" id="titulo" onkeypress="limpiarCampos('abajo')">
-              
-                        <input name="tipo" type=radio id=tipo value="normal" checked>
-                                        [% "Normal" | i18n %]
-                        <label for="tipo">
-                        </label>    
-                        <input name="tipo" type=radio id=tipo value="exacto">
-                                        [% "Exacto" | i18n %]
-                    </li>
-                  <li class="sub_item"> 
-                        <label for="autor">
-                            <strong>[% "Autor" %]</strong>
-                        </label>
-                        <input type="text" size="25" id="autor" onkeypress="limpiarCampos('abajo')">
-                    </li>
-        
-                  <li class="sub_item"> 
-                        <label for="signatura">
-                            <strong>[% "Signatura Topogr&aacute;fica" | i18n %]</strong>
-                        </label>
-                        <input type="text" size="25" id="signatura"  onkeypress="limpiarCampos('abajo')">
-                    </li>
+							<li class="sub_item">
+							      <label for="titulo"> 
+							          <strong>[% "T&iacute;tulo" %]</strong>
+							      </label>
+							      <input type="text"  size="25" id="titulo" onkeypress="limpiarCampos('abajo')">
+							
+							    <input name="tipo" type=radio id=tipo value="normal" checked>
+							                    [% "Normal" | i18n %]
+							    <label for="tipo">
+							    </label>    
+							    <input name="tipo" type=radio id=tipo value="exacto">
+							                    [% "Exacto" | i18n %]
+							</li>
+		                  <li class="sub_item"> 
+		                        <label for="autor">
+		                            <strong>[% "Autor" %]</strong>
+		                        </label>
+		                       <input type="text" size="25" id="autor" onkeypress="limpiarCampos('abajo')">
+		                  </li>
+			                <li class="sub_item">
+			                    <label for="isbn">
+			                        <strong>ISBN</strong>   
+			                    </label>
+			                    <input type="text" id="isbn" size="25"  onkeypress="limpiarCampos('abajo')">
+			                </li>
+		                  <li class="sub_item"> 
+		                    <label for="tipo_nivel3_id">
+		                        <strong>[% "Tipo de documento" | i18n %]</strong> 
+		                    </label>
+		                            [% comboTipoDocumento %]
+		                  </li>
+	                    <li class="sub_item">
+	                        <label for="tema">
+	                            <strong>[% "Tema" | i18n %]</strong>
+	                        </label>
+	                        <input type="text" size="25" id="tema"  onkeypress="limpiarCampos('centro')">
+	                    </li>
+	                    <li class="sub_item">
+	                        <label for="estante">
+	                            <strong>[% "Estantes Virtuales" | i18n %]</strong>
+	                        </label>
+	                        <input type="text" size="25" id="estante" readonly onkeypress="limpiarCampos('centro')">
+	                        ### FALTA IMPLEMENTAR
+	                    </li>
+
+		                <li class="sub_item">
+		                    <label for="codBarra">
+		                        <strong>[% "C&oacute;digo de barras" | i18n %]</strong>
+		                    </label>
+		                    <!--<input type="text" size="25" id="codBarra" readonly onkeypress="limpiarCampos('derecha')">-->
+		                    <input type="text" size="25" id="codBarra" onkeypress="limpiarCampos('centro')">
+		                </li>
+	        
+	        
+	                  <li class="sub_item"> 
+	                        <label for="signatura">
+	                            <strong>[% "Signatura Topogr&aacute;fica" | i18n %]</strong>
+	                        </label>
+	                        <input type="text" size="25" id="signatura"  onkeypress="limpiarCampos('abajo')">
+	                    </li>
                         
                 </ul>
           </fieldset>
