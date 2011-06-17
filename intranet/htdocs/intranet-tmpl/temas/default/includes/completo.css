@@ -14,8 +14,11 @@ body,html {
 }
 	
 .focusInput {
+    background: white;
+}
+
+.textInput {
     background: #EAEBED;
-    
 }
 
 fieldset {

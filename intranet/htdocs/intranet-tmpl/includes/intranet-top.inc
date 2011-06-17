@@ -89,8 +89,12 @@
 	
 	$(document).ready(function(){
 		mainmenu();
-		$("input[type=text]").addClass('focusInput');
-	});
+		 $('input[type="text"]').focus(function() {  
+		        $(this).removeClass("textInput").addClass("focusInput");  
+		    });
+         $('input[type="text"]').addClass("textInput");  
+		      	
+    });
 
 
 </script>
