@@ -16,7 +16,7 @@ my $obj=$input->param('obj');
 
 my ($template, $session, $t_params);
 
-my %hash_temp = {};
+my %hash_temp = $input->Vars;
 $obj = \%hash_temp;
 $obj->{'tipoAccion'} = $input->param('tipoAccion');
 $obj->{'string'} = Encode::decode_utf8($input->param('string'));
@@ -69,10 +69,16 @@ my $token;
 if  ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
 
 
-    $obj->{'autor'}= $obj->{'searchField'};
-    
     $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&titulo=".$obj->{'titulo'}."&tipo=".$obj->{'tipo'}."&tipo_nivel3_name=".$obj->{'tipo_nivel3_name'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
-    $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&titulo=".$obj->{'titulo'}."&tipo=".$obj->{'tipo'}."&tipo_nivel3_name=".$obj->{'tipo_nivel3_name'}."&tipoAccion=".$obj->{'tipoAccion'};
+    $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'};
+    
+    C4::AR::Utilidades::addParamToUrl($url_todos,"titulo",$obj->{'titulo'});
+    C4::AR::Utilidades::addParamToUrl($url_todos,"tipo_nivel3_name",$obj->{'tipo_nivel3_name'});
+    C4::AR::Utilidades::addParamToUrl($url_todos,"tipoAccion",$obj->{'tipoAccion'});
+    C4::AR::Utilidades::addParamToUrl($url_todos,"isbn",$obj->{'isbn'});
+    C4::AR::Utilidades::addParamToUrl($url_todos,"tema",$obj->{'tema'});
+    C4::AR::Utilidades::addParamToUrl($url_todos,"autor",$obj->{'autor'});
+    
 
     ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
 

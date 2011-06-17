@@ -28,7 +28,7 @@ use vars qw(@EXPORT_OK @ISA);
   &guardarCampoTemporal
   &getRefFromStringConArrobas
   &getDocumentById
-  $saveEDocument
+  &saveEDocument
 );
 
 =head1 NAME
