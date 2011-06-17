@@ -22,27 +22,15 @@ __PACKAGE__->meta->setup(
 use utf8;
 sub agregar{
 
-<<<<<<< HEAD
-#TODO agregar con orden ultimo
-    my ($self)      = shift;
-    my ($params)    = @_;
-=======
     my ($self)=shift;
     my ($params) = @_;
->>>>>>> e7fe981022b9f8509ef1774cdf567c3732172296
 
     $self->setCampo($params->{'campo'});
     $self->setSubCampo($params->{'subcampo'});
     $self->setVistaOpac($params->{'liblibrarian'});
-<<<<<<< HEAD
-    $self->setIdPerfil($params->{'perfil'});
-    $self->setOrder($self->getId());
-=======
     $self->setIdPerfil($params->{'perfil'});    
     my $orden = C4::Modelo::CatVisualizacionOpac::Manager->get_max_orden() + 1;
     $self->setOrden($orden);
-
->>>>>>> e7fe981022b9f8509ef1774cdf567c3732172296
 
     $self->save();
 }
