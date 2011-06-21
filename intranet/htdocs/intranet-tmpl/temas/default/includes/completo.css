@@ -1497,8 +1497,16 @@ fieldset.accionesUsuarios {
 .titulo_legend {
 	font-weight: bold;
 	font-size: 12px;
+	border: none;
 	color: #FFF9E7;
 	font-family: Arial, Helvetica, sans-serif;
+/* Nuevo, con el acabado abrazador. Si no gusta, sacar desde acá para abajo */ 
+	background: url("images/fondo_label.png") repeat-x scroll 0 0 transparent;
+    height: 36px;
+    max-width: 427;
+	margin-left: -20px;
+    margin-top: -4px;
+	
 }
 
 .titulo_legend_resaltado {

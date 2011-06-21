@@ -18,9 +18,10 @@ use vars qw(@EXPORT_OK @ISA);
 @ISA    = qw(Exporter);
 
 @EXPORT_OK = qw(
-		&getNivel1FromId2
-		&getCantPrestados
-        &getNivel2FromId1
+		getNivel1FromId2
+		getCantPrestados
+        getNivel2FromId1
+        getFirstItemTypeFromN1
         
 );
 
@@ -188,7 +189,18 @@ sub getNivel2FromId1{
     return $nivel2_array_ref;
 }
 
-
+sub getFirstItemTypeFromN1{
+    my ($id1) = @_;
+    
+    my $nivel2 = getNivel2FromId1($id1);
+    
+    if (scalar(@$nivel2)){
+    	return ($nivel2->[0]->getTipoDocumento);
+    }
+    
+    return ('DEFAULT');
+        
+}
 
 =head2 sub getNivel2FromId2
     Recupero un nivel 2 a partir de un id2

@@ -5,7 +5,7 @@
          <div id="seccion_catalogo">
 	          <ul class="accordion">
 	              <li>
-	               <h4 class="head"><a href="javascript:;">[% 'B&uacute;squedas' | i18n %]</a></h4>
+	               <h4 class=""><a href="javascript:;">[% 'B&uacute;squedas' | i18n %]</a></h4>
 	                   <ul>
 	                    <li>
 	                        [% PERL %]
@@ -27,7 +27,7 @@
 	              </li>
 	              
 	              <li>
-	               <h4 class="head"><a href="javascript:;">[% 'Cat&aacute;logo' | i18n %]</a></h4>
+	               <h4 class=""><a href="javascript:;">[% 'Cat&aacute;logo' | i18n %]</a></h4>
 	                <ul>
 	                   <li>
 	                       [% PERL %]
@@ -50,7 +50,7 @@
 	               
 	               
 	               <li>
-	                <h4 class="head"><a href="javascript:;">[% 'Adquisiciones' | i18n %]</a></h4>
+	                <h4 class=""><a href="javascript:;">[% 'Adquisiciones' | i18n %]</a></h4>
 	                <ul>
 	                   <li>
 	
@@ -110,7 +110,7 @@
 	             </li>
 	                
 	             <li>
-	                 <h4 class="head"><a href="javascript:;">[% 'Control de autoridades' | i18n %]</a></h4>
+	                 <h4 class=""><a href="javascript:;">[% 'Control de autoridades' | i18n %]</a></h4>
 	                 <ul>
 	                   <li>
 	                                   [% PERL %]
