@@ -27,7 +27,6 @@ $VERSION = 0.01;
 
 );
 
-
 =item
     Funcion que actializa el orden de los campos. 
     Parametros: array con los ids en el orden nuevo
@@ -48,14 +47,14 @@ sub updateNewOrder{
     # tambien hay que actualizarlo
     foreach my $campo (@$newOrderArray){
     
-        my $config_temp = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(
+        my $config_temp   = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(
                                                                     query   => [ id => { eq => $campo}], 
                                );
         my $configuracion = $config_temp->[0];
         
 #        C4::AR::Debug::debug("nuevo orden de id : ".$campo." es :  ".@array[$i]);
         
-        $configuracion->setOrder(@array[$i]);
+        $configuracion->setOrden(@array[$i]);
     
         $i++;
     }

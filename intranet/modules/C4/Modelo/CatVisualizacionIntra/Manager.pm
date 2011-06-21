@@ -10,5 +10,13 @@ sub object_class { 'C4::Modelo::CatVisualizacionIntra' }
 
 __PACKAGE__->make_manager_methods('cat_visualizacion_intra');
 
-1;
+sub get_max_orden {
+    my $db          = C4::Modelo::CatVisualizacionIntra->new()->db;
+    my $sth         = $db->dbh->prepare("SELECT MAX(orden) FROM cat_visualizacion_intra");
+    $sth->execute();
+    my $max         = $sth->fetchrow;
+    $sth->finish;
+    return $max;
+}
 
+1;

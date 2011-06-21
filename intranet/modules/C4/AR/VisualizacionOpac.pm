@@ -59,7 +59,7 @@ sub updateNewOrder{
         
 #        C4::AR::Debug::debug("nuevo orden de id : ".@array[$i]." es :  ".$campo);
         
-        $configuracion->setOrder(@array[$i]);
+        $configuracion->setOrden(@array[$i]);
     
         $i++;
     }
@@ -103,8 +103,9 @@ sub getConfiguracion{
     return ($configuracion);
 }
 
-sub addConfiguracion{
+sub addConfiguracion {
     my ($params) = @_;
+
     my @filtros;
 
     my $configuracion = C4::Modelo::CatVisualizacionOpac->new();

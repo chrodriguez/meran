@@ -1957,3 +1957,11 @@ border:1px solid #BBBBBB;
     clear:both;
 
 }
+.resultados_consulta{
+    font-family: verdana;
+    font-size: 20px;	
+}
+
+.bold{
+    font-weight: bold;    
+}
