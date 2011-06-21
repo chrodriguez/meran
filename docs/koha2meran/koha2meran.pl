@@ -32,48 +32,53 @@ my $dbh = C4::Context->dbh;
 
 print "INICIO \n";
 my $tt1 = time();
-print "Creando tablas necesarias \n";
-    crearTablasNecesarias();
+# print "Creando tablas necesarias \n";
+#     crearTablasNecesarias();
+# 
+# print "Creando nuevas referencias \n";
+#     crearNuevasReferencias();
+# 
+# #################
+# print "Procesando los 3 niveles (va a tardar!!! ...MUCHO!!! mas de lo que te imaginas) \n";
+# my $st1 = time();
+#     procesarV2_V3();
+# my $end1 = time();
+# my $tardo1=($end1 - $st1);
+# print "AL FIN TERMINO!!! Tardo $tardo1 segundos !!!\n";
+# #################
 
-print "Creando nuevas referencias \n";
-    crearNuevasReferencias();
+# print "Renombrando tablas \n";
+#   renombrarTablas();
+# print "Quitando tablas de mas \n";
+#  quitarTablasDeMas();
+# print "Hasheando passwords \n";
+#    hashearPasswords();
+# print "Limpiamos las tablas de circulacion \n";
+# limpiarCirculacion();
+# print "Referencias de usuarios en circulacion \n";
+# my $st2 = time();
+#   repararReferenciasDeUsuarios();
+# my $end2 = time();
+# my $tardo2=($end2 - $st2);
+# print "AL FIN TERMINARON LOS USUARIOS!!! Tardo $tardo2 segundos !!!\n";
+# 
+# print "Relacion usuario-persona \n";
+#   crearRelacionUsuarioPersona();
+# print "Creando nuevas claves foraneas \n";
+#   crearClaves();
+# print "Creando la estructura MARC \n";
+#  crearEstructuraMarc();
+# print "Traducción Estructura MARC \n";
+#   traduccionEstructuraMarc();
+# print "Agregando preferencias del sistema \n";
+#   agregarPreferenciasDelSistema();
+# print "Dando permisos a los usuarios \n";
+#   dandoPermisosUsuarios();
+print "Procesando Analíticas \n";
+  procesarAnaliticas();
+print "Cambiar codificación a UTF8 \n";
+  pasarBaseUTF8();
 
-#################
-print "Procesando los 3 niveles (va a tardar!!! ...MUCHO!!! mas de lo que te imaginas) \n";
-my $st1 = time();
-    procesarV2_V3();
-my $end1 = time();
-my $tardo1=($end1 - $st1);
-print "AL FIN TERMINO!!! Tardo $tardo1 segundos !!!\n";
-#################
-
-print "Renombrando tablas \n";
-  renombrarTablas();
-print "Quitando tablas de mas \n";
- quitarTablasDeMas();
-print "Hasheando passwords \n";
-   hashearPasswords();
-print "Limpiamos las tablas de circulacion \n";
-limpiarCirculacion();
-print "Referencias de usuarios en circulacion \n";
-my $st2 = time();
-  repararReferenciasDeUsuarios();
-my $end2 = time();
-my $tardo2=($end2 - $st2);
-print "AL FIN TERMINARON LOS USUARIOS!!! Tardo $tardo2 segundos !!!\n";
-
-print "Relacion usuario-persona \n";
-  crearRelacionUsuarioPersona();
-print "Creando nuevas claves foraneas \n";
-  crearClaves();
-print "Creando la estructura MARC \n";
- crearEstructuraMarc();
-print "Traducción Estructura MARC \n";
-  traduccionEstructuraMarc();
-print "Agregando preferencias del sistema \n";
-  agregarPreferenciasDelSistema();
-print "Dando permisos a los usuarios \n";
-  dandoPermisosUsuarios();
 print "FIN!!! \n";
 my $tt2 = time();
 print "\n GRACIAS DICO!!! \n";
@@ -1005,9 +1010,6 @@ sub dandoPermisosUsuarios {
 
 sub procesarAnaliticas {
 
-	my @analitica_n1=();
-	my @analitica_n2=();
-
 	my $cant_analiticas=$dbh->prepare("SELECT count(*) as cantidad FROM cat_analitica ;");
 	$cant_analiticas->execute();
 	my $cantidad=$cant_analiticas->fetchrow;
@@ -1021,7 +1023,9 @@ sub procesarAnaliticas {
  		print "Procesando registro: $registro de $cantidad ($porcentaje%) \r";
 
 	#---------------------------------------NIVEL1---------------------------------------#
- 
+		my @analitica_n1=();
+		my @analitica_n2=();
+
 		my $an1;
         	$an1->{'campo'}='245';
         	$an1->{'subcampo'}='a';
@@ -1049,23 +1053,24 @@ sub procesarAnaliticas {
 		$temas->execute($analitica->{'analyticalnumber'});
 		my $dn1tema;
 		my @ar1;
-		$dn1tema->{'campo'}='650'
+		$dn1tema->{'campo'}='650';
 		$dn1tema->{'subcampo'}='a';
 
 		while (my $tema_analitica=$temas->fetchrow_hashref ) {
 			#FIXME HAY QUE BUSCAR EL TEMA Y OBTENER EL ID O AGREGAR UNO NUEVO!!
 			my $tema_final='';
 			my $tt=$dbh->prepare("SELECT * FROM cat_tema where nombre = ?;");
-			$tt->execute($analitica->{'subject'});
+			$tt->execute($tema_analitica->{'subject'});
 			$tema_final=$tt->fetchrow_hashref;
 
 			if(!$tema_final){
-			#Hay que agregar el tema nuevo
+			#Hay que agregar el tema nueva
+			    print "TEMA NUEVO ".$tema_analitica->{'subject'}." \n";
 			    my $tn=$dbh->prepare("INSERT INTO cat_tema (nombre) VALUES (?);");
-			    $tn->execute($analitica->{'subject'});
+			    $tn->execute($tema_analitica->{'subject'});
 			    
 			    my $tt2=$dbh->prepare("SELECT * FROM cat_tema where nombre = ?;");
-			    $tt2->execute($analitica->{'subject'});
+			    $tt2->execute($tema_analitica->{'subject'});
 			    $tema_final=$tt2->fetchrow_hashref;
 			}
 
@@ -1107,6 +1112,14 @@ sub procesarAnaliticas {
                 $relacion->{'simple'}=1;
                 if (($relacion->{'valor'} ne '') && ($relacion->{'valor'} ne null)){push(@analitica_n2,$relacion);}
 
+		#Tipo ANALITICA
+		my $tipo;
+        	$tipo->{'campo'}='910';
+        	$tipo->{'subcampo'}='a';
+        	$tipo->{'valor'}='cat_ref_tipo_nivel3@ANA';
+                $tipo->{'simple'}=1;
+                if (($tipo->{'valor'} ne '') && ($tipo->{'valor'} ne null)){push(@analitica_n2,$tipo);}
+
 		my $an1;
         	$an1->{'campo'}='300';
         	$an1->{'subcampo'}='a';
@@ -1123,9 +1136,10 @@ sub procesarAnaliticas {
 
 	#########################################################################
 	my($error,$codMsg);
-	my $nuevo_id2 = guardaNuevoNivel2MARC($nuevo_id,\@analitica_n2);
+	my $nuevo_id2 = guardaNuevoNivel2MARC($nuevo_id1,\@analitica_n2);
 	#---------------------------------------FIN NIVEL2---------------------------------------#
 
+	$registro++;
 	}
 
 }
@@ -1240,5 +1254,45 @@ sub guardaNuevoNivel2MARC {
     my $id2=$nuevo_id2->fetchrow;
 
     return $id2;  
+
+}
+
+
+sub pasarBaseUTF8 {
+
+my $base = C4::Context->config('database');
+
+my $dbh = C4::Context->dbh;
+my @tables = $dbh->tables;
+
+my $sql_base = "ALTER DATABASE $base DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;";
+my $sth0=$dbh->prepare($sql_base);
+   $sth0->execute();
+
+foreach my $table (@tables){
+	my @t = split(/\./,$table);
+	chop($t[1]);
+	my $tabla=substr($t[1],1);
+
+	my $sql_tabla = "ALTER TABLE $tabla CONVERT TO CHARACTER SET utf8;";
+  	my $sth1=$dbh->prepare($sql_tabla);
+  	$sth1->execute();
+
+	my $desc = $dbh->selectall_arrayref("DESCRIBE $tabla", { Columns=>{} });
+  	foreach my $row (@$desc) {
+       		my $tipo = $row->{'Type'};
+       		my $columna = $row->{'Field'};
+		if(($tipo =~ m/char/) || ($mystring =~ m/text/)){
+			my $sql_columna1="ALTER TABLE $tabla CHANGE $columna $columna BLOB;";
+			my $sth2=$dbh->prepare($sql_columna1);
+  			$sth2->execute();
+
+			my $sql_columna2="ALTER TABLE $tabla CHANGE $columna $columna $tipo CHARACTER SET utf8 COLLATE utf8_general_ci ;";
+			my $sth3=$dbh->prepare($sql_columna2);
+  			$sth3->execute();
+		}
+   	}
+}
+
 
 }
