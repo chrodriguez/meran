@@ -34,18 +34,20 @@ sub getCamposXLike{
     push(@filtros, ( campo => { like => $campoX.'%'} ) );
     push(@filtros, ( nivel => { eq => $nivel } ) );
 
-#     my $db_campos_MARC = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
-#                                                                                         query => \@filtros,
-#                                                                                         sort_by => ('campo'),
-#                                                                                         select   => [ 'campo', 'liblibrarian'],
-#                                                                                         group_by => [ 'campo'],
-#                                                                        );
-    my $db_campos_MARC = C4::Modelo::PrefEstructuraCampoMarc::Manager->get_pref_estructura_campo_marc(
-                                                                                        query => \@filtros,
-                                                                                        sort_by => ('campo'),
-                                                                                        select   => [ 'campo', 'liblibrarian'],
-                                                                                        group_by => [ 'campo'],
-                                                                       );
+     my $db_campos_MARC = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                         query => \@filtros,
+                                                                                         sort_by => ('campo'),
+                                                                                         select   => [ 'campo', 'liblibrarian'],
+                                                                                         group_by => [ 'campo'],
+                                                                        );
+
+
+#    my $db_campos_MARC = C4::Modelo::PrefEstructuraCampoMarc::Manager->get_pref_estructura_campo_marc(
+#                                                                                        query => \@filtros,
+#                                                                                        sort_by => ('campo'),
+#                                                                                        select   => [ 'campo', 'liblibrarian'],
+#                                                                                        group_by => [ 'campo'],
+#                                                                       );
 
     return($db_campos_MARC);
 }

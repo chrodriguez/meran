@@ -122,11 +122,12 @@
 		        [% PERL %]
 		            print C4::AR::Filtros::to_Icon(  
 		                                                boton   => "icon_renovar",
-		                                                onClick => "realizarAccion('RENOVACION','table_tablaPrestamos',generaDivRenovacion);",
+                                                        onClick => "realizarAccion('RENOVACION','chkboxPrestamos',generaDivRenovacion);",
 		                                                title   => "[% 'Renovar' | i18n %]",
 		                                                alternClass => "botonCentrado"
 		                    ) ;
 		        [% END %]
+<!--                                                        onClick => "realizarAccion('RENOVACION','table_tablaPrestamos',generaDivRenovacion);", -->
 			[% END %]
 		
 		</fieldset>

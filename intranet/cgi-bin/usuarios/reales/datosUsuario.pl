@@ -32,6 +32,7 @@ if ($socio->getActivo()){
 	
 	
 	if ($mensaje_desde_pdf){
+       
 	    $t_params->{'mensaje'} = $mensaje_desde_pdf;
 	}
 	

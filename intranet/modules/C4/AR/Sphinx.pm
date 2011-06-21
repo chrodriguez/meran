@@ -132,6 +132,12 @@ sub generar_indice {
         my $query1  = " SELECT * FROM cat_registro_marc_n1 WHERE id >= ?";
         $sth1       = $dbh->prepare($query1);
         $sth1->execute($id1);
+    } elsif($flag eq "R_ACUMULATIVE") {
+
+        #se va a modificar un registro en adelante, SIN TRUNCAR
+        my $query1  = " SELECT * FROM cat_registro_marc_n1 WHERE id >= ?";
+        $sth1       = $dbh->prepare($query1);
+        $sth1->execute($id1);
 
     } else {
 

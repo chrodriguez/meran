@@ -13,9 +13,10 @@ my ($template, $t_params)= C4::Output::gettemplate("opac-main.tmpl", 'opac',1);
 
 $t_params->{'type'}='opac';
 
-my $session                 = CGI::Session->load() || CGI::Session->new();
+my $session = CGI::Session->load() || CGI::Session->new();
 
 my $codMensaje = $session->param('codMsg') || $session->param('codMSG') || 0;
+
 
 my ($session) = C4::AR::Auth::inicializarAuth($t_params);
 
@@ -23,8 +24,8 @@ $t_params->{'partial_template'}= "opac-login.inc";
 
 $t_params->{'sessionClose'} = $query->param('sessionClose') || 0;
 
-if ($t_params->{'sessionClose'}){
-  
+
+if ($t_params->{'sessionClose'}){ 
   $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje('U358','intranet');
 }
 

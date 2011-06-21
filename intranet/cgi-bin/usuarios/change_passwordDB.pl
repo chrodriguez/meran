@@ -34,9 +34,10 @@ $params{'token'}= $input->param('token');
 my ($Message_arrayref)= C4::AR::Usuarios::cambiarPassword(\%params);
 
 if(C4::AR::Mensajes::hayError($Message_arrayref)){
+    $params{'error'}= 1;
     $session->param('codMsg', C4::AR::Mensajes::getFirstCodeError($Message_arrayref));
     #hay error vulve al mismo
-    C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix().'/usuarios/change_password.pl?token='.$input->param('token'));
+    C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix().'/usuarios/change_password.pl?error=1&token='.$input->param('token'));
 }
 
 C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix().'/sessionDestroy.pl');
