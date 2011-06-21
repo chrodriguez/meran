@@ -199,49 +199,49 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
 	# subject
 	my $temas=$dbh->prepare("SELECT * FROM bibliosubject where biblionumber= ?;");
 	$temas->execute($biblio->{'biblionumber'});
-	my $dn1;
+	my $dn1tema;
 	my @ar1;
-	$dn1->{'campo'}=$subject->{'campo'};
-	$dn1->{'subcampo'}=$subject->{'subcampo'};
+	$dn1tema->{'campo'}=$subject->{'campo'};
+	$dn1tema->{'subcampo'}=$subject->{'subcampo'};
 
 	while (my $biblosubject=$temas->fetchrow_hashref ) {
-		push (@ar1,$biblosubject->{'cat_tema@'.$subject->{'campoTabla'}});
-		}
-	$dn1->{'simple'}=0;
-	$dn1->{'valor'}=\@ar1;
-	push(@ids1,$dn1);
+		push (@ar1,'cat_tema@'.$biblosubject->{$subject->{'campoTabla'}});
+	}
+	$dn1tema->{'simple'}=0;
+	$dn1tema->{'valor'}=\@ar1;
+	push(@ids1,$dn1tema);
 	$temas->finish();
 
 	# subtitle
 	my $subtitulos=$dbh->prepare("SELECT * FROM bibliosubtitle where biblionumber= ?;");
 	$subtitulos->execute($biblio->{'biblionumber'});
 
-	my $dn1;
+	my $dn1sub;
 	my @ar1;
-	$dn1->{'campo'}=$subtitle->{'campo'};
-	$dn1->{'subcampo'}=$subtitle->{'subcampo'};
+	$dn1sub->{'campo'}=$subtitle->{'campo'};
+	$dn1sub->{'subcampo'}=$subtitle->{'subcampo'};
 	while (my $biblosubtitle=$subtitulos->fetchrow_hashref ) {
 	push(@ar1,$biblosubtitle->{$subtitle->{'campoTabla'}});
 	}
-	$dn1->{'simple'}=0;
-	$dn1->{'valor'}=\@ar1;
-	push(@ids1,$dn1);
+	$dn1sub->{'simple'}=0;
+	$dn1sub->{'valor'}=\@ar1;
+	push(@ids1,$dn1sub);
 	$subtitulos->finish();
 
 	# additionalauthor
 	
 	my $additionalauthors=$dbh->prepare("SELECT * FROM additionalauthors where id1= ?;");
 	$additionalauthors->execute($biblio->{'biblionumber'});
-	my $dn1;
+	my $dn1add;
 	my @ar1;
-	$dn1->{'campo'}=$additionalauthor->{'campo'};
-	$dn1->{'subcampo'}=$additionalauthor->{'subcampo'};
+	$dn1add->{'campo'}=$additionalauthor->{'campo'};
+	$dn1add->{'subcampo'}=$additionalauthor->{'subcampo'};
 	while (my $aauthors=$additionalauthors->fetchrow_hashref ) {
 	push(@ar1,'cat_autor@'.$aauthors->{$additionalauthor->{'campoTabla'}});
 	}
-	$dn1->{'simple'}=0;
-	$dn1->{'valor'}=\@ar1;
-	push(@ids1,$dn1);
+	$dn1add->{'simple'}=0;
+	$dn1add->{'valor'}=\@ar1;
+	push(@ids1,$dn1add);
 	$additionalauthors->finish();
 
 	#########################################################################
@@ -810,12 +810,12 @@ sub guardaNivel3MARC {
         }
     }
 
-    my $reg_marc_3 =$dbh->prepare("INSERT INTO cat_registro_marc_n3 (marc_record,id1,id2,id,codigo_barra,signatura) VALUES (?,?,?,?,?,?	)");
+    if(trim($marc->subfield("995","f"))){ #SIN CODIGO DE BARRAS NO SE PUEDE AGREGAR
+	my $reg_marc_3 =$dbh->prepare("INSERT INTO cat_registro_marc_n3 (marc_record,id1,id2,id,codigo_barra,signatura) VALUES (?,?,?,?,?,?	)");
 	my $codigo=trim($marc->subfield("995","f"));
 	my $signatura=trim($marc->subfield("995","t")) || "Signatura ".$itemnumber;# LA SIGNATURA ES OBLIGATORIA!!!
-
        $reg_marc_3->execute($marc->as_usmarc,$biblionumber,$biblioitemnumber,$itemnumber,$codigo,$signatura);
-
+    }
 }
 
 
@@ -919,26 +919,6 @@ sub traduccionEstructuraMarc {
 
   sub getDisponibilidad {
     my ($id)=@_;
-
-    my $q_disp=$dbh->prepare("SELECT codigo FROM ref_disponibilidad where id = ? ;");
-    $q_disp->execute($id);
-    my $disp=$q_disp->fetchrow;
-    return $disp;
-    }
-
-sub trim{
-    my ($string) = @_;
-
-    $string =~ s/^\s+//;
-    $string =~ s/\s+$//;
-
-    return $string;
-}
-
-sub dandoPermisosUsuarios {
-
-    use C4::Modelo::UsrSocio::Manager;
-    use C4::Modelo::UsrSocio;
     my  $socios = C4::Modelo::UsrSocio::Manager->get_usr_socio();
         foreach my $socio (@$socios){
 	  my $flag = $socio->getFlags;
@@ -956,4 +936,309 @@ sub dandoPermisosUsuarios {
 	    $socio->convertirEnEstudiante;
 	  }
         }
+
+    my $q_disp=$dbh->prepare("SELECT codigo FROM ref_disponibilidad where id = ? ;");
+    $q_disp->execute($id);
+    my $disp=$q_disp->fetchrow;
+    return $disp;
+    }
+
+sub trim{
+    my ($string) = @_;
+
+    $string =~ s/^\s+//;
+    $string =~ s/\s+$//;
+
+    return $string;
+}
+
+sub dandoPermisosUsuarios {
+# PERDI AUN NO TENGO ROSE :( :(
+#     my  $socios = C4::Modelo::UsrSocio::Manager->get_usr_socio();
+#         foreach my $socio (@$socios){
+# 	  my $flag = $socio->getFlags;
+# 	  if ($flag){
+# 	    #Si tiene flags seteados NO es un estudiante
+# 	     if($flag % 2){
+# 		#Da 1 entonces era IMPAR => tenia el 1er bit en 1 => es SUPERLIBRARIAN
+# 		$socio->convertirEnSuperLibrarian;
+#   	     }else{
+# 		#Da 0 entonces era PAR => tenia el 1er bit en 0 => NO es SUPERLIBRARIAN
+# 		$socio->convertirEnLibrarian;
+# 	     }
+# 	  }else{
+# 	    #Si NO tiene flags seteados es un estudiante
+# 	    $socio->convertirEnEstudiante;
+# 	  }
+#         }
+}
+
+
+    ###########################################################################################################
+    #		                                 PROCESAR ANALITICAS                                          #
+    #           Hay que agregar las anliticas como registros nuevos con su relación al registro padre.        #
+    #                                           cat_analitica                                                 #
+    #                                           cat_autor_analitica                                           #
+    #                                           cat_tema_analitica                                            #
+    # TABLA: cat_analitica
+    #
+    # id1
+    # id2 => RELACIÓN
+    # analyticaltitle =>N1 245 a
+    # analyticalunititle =>N1 245 b
+    # parts => N2 300 a
+    # timestamp
+    # analyticalnumber
+    # classification => ??? es la signatura SE USA?
+    # resumen => N1 520 a
+    # url => N2 856 u
+    #
+    # TABLA: cat_autor_analitica
+    #
+    # analyticalnumber 
+    # author => id autor => N1 100 a
+    #
+    # TABLA: cat_tema_analitica
+    # analyticalnumber
+    # subject => cat_tema => N1 650 a
+    ###########################################################################################################
+
+sub procesarAnaliticas {
+
+	my @analitica_n1=();
+	my @analitica_n2=();
+
+	my $cant_analiticas=$dbh->prepare("SELECT count(*) as cantidad FROM cat_analitica ;");
+	$cant_analiticas->execute();
+	my $cantidad=$cant_analiticas->fetchrow;
+	my $registro=1;
+	print "Se van a procesar $cantidad analiticas \n";
+	my $analiticas=$dbh->prepare("SELECT * FROM cat_analitica ;");
+	$analiticas->execute();
+	while (my $analitica = $analiticas->fetchrow_hashref ) {
+	
+		my $porcentaje= int (($registro * 100) / $cantidad );
+ 		print "Procesando registro: $registro de $cantidad ($porcentaje%) \r";
+
+	#---------------------------------------NIVEL1---------------------------------------#
+ 
+		my $an1;
+        	$an1->{'campo'}='245';
+        	$an1->{'subcampo'}='a';
+        	$an1->{'valor'}=$analitica->{'analyticaltitle'};
+                $an1->{'simple'}=1;
+                if (($an1->{'valor'} ne '') && ($an1->{'valor'} ne null)){push(@analitica_n1,$an1);}
+
+                my $an2;
+                $an2->{'campo'}='245';
+                $an2->{'subcampo'}='b';
+                $an2->{'valor'}=$analitica->{'analyticalunititle'};
+                $an2->{'simple'}=1;
+                if (($an2->{'valor'} ne '') && ($an2->{'valor'} ne null)){push(@analitica_n1,$an2);}
+
+                my $an3;
+                $an3->{'campo'}='520';
+                $an3->{'subcampo'}='a';
+                $an3->{'valor'}=$analitica->{'resumen'};
+                $an3->{'simple'}=1;
+		if (($an3->{'valor'} ne '') && ($an3->{'valor'} ne null)){push(@analitica_n1,$an3);}
+
+		##########################TEMAS##########################
+		# cat_tema_analitica
+		my $temas=$dbh->prepare("SELECT * FROM cat_tema_analitica where analyticalnumber = ?;");
+		$temas->execute($analitica->{'analyticalnumber'});
+		my $dn1tema;
+		my @ar1;
+		$dn1tema->{'campo'}='650'
+		$dn1tema->{'subcampo'}='a';
+
+		while (my $tema_analitica=$temas->fetchrow_hashref ) {
+			#FIXME HAY QUE BUSCAR EL TEMA Y OBTENER EL ID O AGREGAR UNO NUEVO!!
+			my $tema_final='';
+			my $tt=$dbh->prepare("SELECT * FROM cat_tema where nombre = ?;");
+			$tt->execute($analitica->{'subject'});
+			$tema_final=$tt->fetchrow_hashref;
+
+			if(!$tema_final){
+			#Hay que agregar el tema nuevo
+			    my $tn=$dbh->prepare("INSERT INTO cat_tema (nombre) VALUES (?);");
+			    $tn->execute($analitica->{'subject'});
+			    
+			    my $tt2=$dbh->prepare("SELECT * FROM cat_tema where nombre = ?;");
+			    $tt2->execute($analitica->{'subject'});
+			    $tema_final=$tt2->fetchrow_hashref;
+			}
+
+			push (@ar1,'cat_tema@'.$tema_final->{'id'});
+		}
+
+		$dn1tema->{'simple'}=0;
+		$dn1tema->{'valor'}=\@ar1;
+		push(@analitica_n1,$dn1tema);
+		$temas->finish();
+		##########################AUTORES##########################
+		# cat_autor_analitica
+		
+		my $autores_analiticas=$dbh->prepare("SELECT * FROM cat_autor_analitica where analyticalnumber = ?;");
+		$autores_analiticas->execute($analitica->{'analyticalnumber'});
+
+		my $dn1add;
+		my @ar1;
+		$dn1add->{'campo'}='100';
+		$dn1add->{'subcampo'}='a';
+		my $aauthor=$autores_analiticas->fetchrow_hashref;
+		$dn1add->{'simple'}=1;
+		$dn1add->{'valor'}='cat_autor@'.$aauthor->{'author'};
+		push(@analitica_n1,$dn1add);
+		$autores_analiticas->finish();
+
+	#########################################################################
+	my($error,$codMsg);
+	my $nuevo_id1 = guardaNuevoNivel1MARC(\@analitica_n1);
+	#---------------------------------------FIN NIVEL1---------------------------------------#	
+
+	#---------------------------------------NIVEL2---------------------------------------#
+
+		#Primero la relación
+		my $relacion;
+        	$relacion->{'campo'}='773';
+        	$relacion->{'subcampo'}='a';
+        	$relacion->{'valor'}=$analitica->{'id2'};
+                $relacion->{'simple'}=1;
+                if (($relacion->{'valor'} ne '') && ($relacion->{'valor'} ne null)){push(@analitica_n2,$relacion);}
+
+		my $an1;
+        	$an1->{'campo'}='300';
+        	$an1->{'subcampo'}='a';
+        	$an1->{'valor'}=$analitica->{'parts'};
+                $an1->{'simple'}=1;
+                if (($an1->{'valor'} ne '') && ($an1->{'valor'} ne null)){push(@analitica_n2,$an1);}
+
+                my $an2;
+                $an2->{'campo'}='856';
+                $an2->{'subcampo'}='u';
+                $an2->{'valor'}=$analitica->{'url'};
+                $an2->{'simple'}=1;
+                if (($an2->{'valor'} ne '') && ($an2->{'valor'} ne null)){push(@analitica_n2,$an2);}
+
+	#########################################################################
+	my($error,$codMsg);
+	my $nuevo_id2 = guardaNuevoNivel2MARC($nuevo_id,\@analitica_n2);
+	#---------------------------------------FIN NIVEL2---------------------------------------#
+
+	}
+
+}
+
+
+=item
+guardaNuevoNivel1MARC
+Guarda los campos del nivel 1 en un MARC RECORD y retorna su id
+=cut
+
+sub guardaNuevoNivel1MARC {
+    my ($nivel1)=@_;
+
+    my $marc = MARC::Record->new();
+
+    foreach my $obj(@$nivel1){
+        my $campo=$obj->{'campo'};
+        my $subcampo=$obj->{'subcampo'};
+
+        if ($obj->{'simple'}){
+            my $valor=$obj->{'valor'};
+            if ($valor ne ''){
+
+                    my $field;
+                     if ($field=$marc->field($campo)){ #Ya existe el campo, se agrega el subcampo
+                         $field->add_subfields( $subcampo => $valor );
+                     } else { #NO existe el campo, se agrega uno nuevo
+                         $field = MARC::Field->new($campo,'','',$subcampo => $valor);
+                         $marc->append_fields($field);
+                     }
+
+                }
+       }
+       else {
+            my $arr=$obj->{'valor'};
+             foreach my $valor (@$arr){
+                if ($valor ne ''){
+                    my $field;
+                     if ($field=$marc->field($campo)){ #Ya existe el campo, se agrega el subcampo
+                         $field->add_subfields( $subcampo => $valor );
+                     } else { #NO existe el campo, se agrega uno nuevo
+                         $field = MARC::Field->new($campo,'','',$subcampo => $valor);
+                         $marc->append_fields($field);
+                     }
+                }
+            }
+        }
+    }
+
+    my $reg_marc_1 =$dbh->prepare("INSERT INTO cat_registro_marc_n1 (marc_record) VALUES (?) ");
+       $reg_marc_1->execute($marc->as_usmarc);
+
+    my $nuevo_id1 =$dbh->prepare("SELECT MAX(id) FROM cat_registro_marc_n1; ");
+       $nuevo_id1->execute();
+
+    my $id1=$nuevo_id1->fetchrow;
+
+    return $id1;  
+}
+
+
+
+
+=item
+guardaNuevoNivel2MARC
+Guarda los campos del nivel 2 en un MARC RECORD y retorna su id
+=cut
+
+sub guardaNuevoNivel2MARC {
+    my ($id1, $nivel2)=@_;
+
+    my $marc = MARC::Record->new();
+
+    foreach my $obj(@$nivel2){
+        my $campo=$obj->{'campo'};
+        my $subcampo=$obj->{'subcampo'};
+
+        if ($obj->{'simple'}){
+            my $valor=$obj->{'valor'};
+            if ($valor ne ''){
+                    my $field;
+                     if ($field=$marc->field($campo)){ #Ya existe el campo, se agrega el subcampo
+                         $field->add_subfields( $subcampo => $valor );
+                     } else { #NO existe el campo, se agrega uno nuevo
+                         $field = MARC::Field->new($campo,'','',$subcampo => $valor);
+                         $marc->append_fields($field);
+                     }
+                }
+       }
+       else {
+            my $arr=$obj->{'valor'};
+             foreach my $valor (@$arr){
+                if ($valor ne ''){
+                    my $field;
+                     if ($field=$marc->field($campo)){ #Ya existe el campo, se agrega el subcampo
+                         $field->add_subfields( $subcampo => $valor );
+                     } else { #NO existe el campo, se agrega uno nuevo
+                         $field = MARC::Field->new($campo,'','',$subcampo => $valor);
+                         $marc->append_fields($field);
+                     }
+                }
+            }
+        }
+    }
+
+    my $reg_marc_2 =$dbh->prepare("INSERT INTO cat_registro_marc_n2 (marc_record,id1) VALUES (?,?) ");
+       $reg_marc_2->execute($marc->as_usmarc,$id1);
+
+    my $nuevo_id2 =$dbh->prepare("SELECT MAX(id) FROM cat_registro_marc_n2; ");
+       $nuevo_id2->execute();
+
+    my $id2=$nuevo_id2->fetchrow;
+
+    return $id2;  
+
 }

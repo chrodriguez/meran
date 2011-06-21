@@ -201,14 +201,8 @@ sub _verificarDatosServidor{
     my $nombre              = $data->{'nombre'};
     my $sintaxis            = $data->{'sintaxis'};
 
-#C4::AR::Validator::countSymbolChars
 
-    if($servidor ne ""){
-        if (!($msg_object->{'error'}) && (&C4::AR::Validator::countSymbolChars($servidor) != 0)){
-            $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S008', 'params' => []} ) ;
-        }
-    } else {
+    if($servidor eq ""){
           $msg_object->{'error'}= 1;
           C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S008', 'params' => []} ) ;
     }

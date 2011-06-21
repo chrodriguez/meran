@@ -32,7 +32,6 @@ sub agregar{
     my $orden = C4::Modelo::CatVisualizacionOpac::Manager->get_max_orden() + 1;
     $self->setOrden($orden);
 
-
     $self->save();
 }
 
