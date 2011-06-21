@@ -4585,9 +4585,29 @@ tr.impar {
 background-color:#E7F3FA;
 }
 
+/*hover de las tablas con checkbox*/
+.impar:hover {
+    background:   #CCFFCC;
+    color:   #000000;
+}
+
+.par:hover {
+    background:   #CCFFCC;
+    color:   #000000;
+}
+
+.par.marked {
+    background:     #FFCC99;
+    color:          #000000;
+}
+
+.impar.marked {
+    background:     #FFCC99;
+    color:          #000000;
+}
 
 tr.par {
-background-color:#D4E3EB;
+    background-color:#D4E3EB;
 }
 
 .par .disponible {

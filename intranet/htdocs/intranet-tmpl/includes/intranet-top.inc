@@ -89,13 +89,24 @@
 	
 	$(document).ready(function(){
 		mainmenu();
-		 $('input[type="text"]').focus(function() {  
-		        $(this).removeClass("textInput").addClass("focusInput");  
-		    });
-         $('input[type="text"]').addClass("textInput");  
+		$('input[type="text"]').focus(function() {  
+		    $(this).removeClass("textInput").addClass("focusInput");  
+		});
+        $('input[type="text"]').addClass("textInput");  
+
+        // agrega class a los input para darle estilos
+        $('input[type="checkbox"]').click(function() {
+            //$('input[type="checkbox"]').parent().parent().addClass('marked');
+            var clase = $(this).parent().parent().attr('class').split(' ');
+            //alert(clase[1]);
+            if(clase[1] == 'marked'){
+                $(this).parent().parent().removeClass("marked"); 
+            }else{
+                $(this).parent().parent().addClass("marked");
+            }
+        });
 		      	
     });
-
 
 </script>
 
