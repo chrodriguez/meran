@@ -758,7 +758,7 @@ sub getSocioLike {
     if(scalar(@$socios_array_ref) > 0){
         return ($socios_array_ref_count, $socios_array_ref);
     }else{
-        return (0,0);
+        return (0,());
     }
 }
 

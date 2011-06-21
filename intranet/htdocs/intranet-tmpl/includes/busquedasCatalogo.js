@@ -88,24 +88,30 @@ function buscar(doScroll){
     if (doScroll)
         shouldScroll = doScroll;
 
-    if( (jQuery.trim($('#titulo').val()) != '') ) {
-        if ( (jQuery.trim($('#titulo').val())).length < limite_caracteres ) {
-            cumple_limite = false;
-        } else {busquedaCombinable();}
+    if( (jQuery.trim($('#titulo').val()) != '') ||
+    	(jQuery.trim($('#autor').val()) != '') ||
+    	(jQuery.trim($('#signatura').val()) != '') ||
+    	(jQuery.trim($('#dictionary').val()) != '') ||
+    	(jQuery.trim($('#isbn').val()) != '') ||
+    	(jQuery.trim($('#codBarra').val()) != '') ||
+    	(jQuery.trim($('#tema').val()) != '') ||
+    	(jQuery.trim($('#estante').val()) != '')
+     ){ 
+        busquedaCombinable();
     }     
     else if ($.trim($('#keyword').val()) != '') {
         if ( (jQuery.trim($('#keyword').val())).length < limite_caracteres ){
     		cumple_limite = false;
         } else {busquedaPorKeyword();}
     } 
-    else if (jQuery.trim($('#keyword-bar').val()) != '') {
+    else if ( (jQuery.trim($('#keyword-bar').val()) != '') ) {
         if ( (jQuery.trim($('#keyword-bar').val())).length < limite_caracteres ){
             cumple_limite = false;
-        } else {buscarBar();}
+        } else{buscarBar();}
     }    
     else {
 	       cumple_vacio = false;
-	    }
+	}
 
      if (!cumple_limite) {
         jAlert(INGRESE_AL_MENOS_TRES_CARACTERES_PARA_REALIZAR_LA_BUSQUEDA,CATALOGO_ALERT_TITLE);

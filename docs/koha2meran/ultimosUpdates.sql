@@ -230,7 +230,7 @@
                 ('995', 'a', 'LIB', 'Nombre del vendedor'),
                 ('084', 'a', 'ALL', 'Otro Número de Clasificación R'),
                 ('995', 'u', 'LIB', 'Notas del item'),
-                ('022', 'a', 'LIB', 'Año'),
+                ('022', 'a', 'LIB', 'ISSN'),
                 ('082', '2', 'ALL', 'No. de la edición'),
                 ('440', 'a', 'LIB', 'Serie - título de la serie'),
                 ('020', 'a', 'LIB', 'ISBN'),
