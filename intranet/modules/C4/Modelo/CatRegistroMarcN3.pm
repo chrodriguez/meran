@@ -587,7 +587,7 @@ sub getEstado{
 }
 
 
-=head2 sub estadoDisponible
+=head2 sub estadoCompartido
 
 =cut
 sub estadoCompartido{
