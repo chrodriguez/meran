@@ -28,6 +28,8 @@ my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 
 my $orden=$obj->{'orden'}||'apellido';
 my $socio=$obj->{'socio'};
+my $string = $socio;
+ 
 $obj->{'ini'} = $obj->{'ini'} || 1;
 my $ini=$obj->{'ini'};
 my $funcion=$obj->{'funcion'};
@@ -45,39 +47,26 @@ if ($inicial){
     ($cantidad,$socios)= C4::AR::Usuarios::getSocioLike($socio,$orden,$ini,$cantR,1,0);
 }
 
-if($socios){
-	$t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
-	my @resultsdata;
+$t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
+my @resultsdata;
 
-  	for my $socio (@$socios){
-		my $clase="";
-		my ($od,$issue)=C4::AR::Prestamos::cantidadDePrestamosPorUsuario($socio->getNro_socio);
-		my $regular= &C4::AR::Usuarios::esRegular($socio->getNro_socio);
+foreach my $socio (@$socios){
+    my $clase="";
+	my ($od,$issue)=C4::AR::Prestamos::cantidadDePrestamosPorUsuario($socio->getNro_socio);
+	my $regular= $socio->esRegular;
 	
-		if ($regular eq 1){$regular="Regular"; $clase="prestamo";}  
-		else{
-			if($regular eq 0){$regular="Irregular";$clase="fechaVencida";}
-			else{
-				$regular="---";
-			}
-		}
+	my %row = (
+			clase=>$clase,
+			socio => $socio,
+			issue => $issue,
+			od => $od,
+			regular => $regular,
+	);
+	push(@resultsdata, \%row);
+}
 	
-		my %row = (
-				clase=>$clase,
-				socio => $socio,
-				issue => "$issue",
-				od => "$od",
-				regular => $regular,
-		);
-		push(@resultsdata, \%row);
-	}
-	
-	$t_params->{'resultsloop'}= \@resultsdata;
-	$t_params->{'cantidad'}= $cantidad;
-    $t_params->{'socio_busqueda'}=$socio;
+$t_params->{'resultsloop'}= \@resultsdata;
+$t_params->{'cantidad'}= $cantidad;
+$t_params->{'socio_busqueda'}=$string;
 
-}#END if($socios)
-
-# print $session->header();
-# print "LISTO";
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -10,8 +10,16 @@
 
 $(document).ready(function() {
 
-    registrarKeypress('INPUT');
-
+    onEnter('keyword',buscar,true);
+    onEnter('titulo',buscar,true);
+    onEnter('autor',buscar,true);
+    onEnter('signatura',buscar,true);
+    onEnter('dictionary',buscar,true);
+    onEnter('isbn',buscar,true);
+    onEnter('codBarra',buscar,true);
+    onEnter('tema',buscar,true);
+    onEnter('estante',buscar,true);
+    
     $("#volver").hide();
 
     $("#volver").click(function(){
