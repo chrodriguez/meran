@@ -485,7 +485,7 @@ sub obtenerDisponibilidadTotal{
 
     foreach my $n3 (@$cat_ref_tipo_nivel3_array_ref){
         if($n3->estadoDisponible){
-            if ($n3->esParaPrestamo) {
+            if (($n3->esParaPrestamo)&&(!$n3->estaReservado())) {
             #DOMICILIO    
                 # C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => DOMICILIO");
                 $cant_para_domicilio++;
@@ -512,7 +512,7 @@ sub obtenerDisponibilidadTotal{
     #     $disponibilidad[$i]->{'tipoPrestamo'}   = "Circulaci&oacute;n";
     #     $disponibilidad[$i]->{'cantTotal'}      = $cant_para_domicilio + $cant_para_sala;
 
-    $disponibilidad[$i]->{'nodisponibles'}      = "No Disponibles: ".$cant_no_disponible;
+    $disponibilidad[$i]->{'nodisponibles'}  = "No Disponibles: ".$cant_no_disponible;
     $disponibilidad[$i]->{'prestados'}      = "Prestados: ".C4::AR::Prestamos::getCountPrestamosDelRegistro($id1);
     $disponibilidad[$i]->{'reservados'}     = "Reservados: ".C4::AR::Reservas::cantReservasPorNivel1($id1);
 
