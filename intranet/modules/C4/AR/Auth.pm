@@ -325,9 +325,9 @@ sub inicializarAuth{
 #     C4::AR::Debug::debug("inicializarAuth => ".$msjCode);
 #     $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($msjCode,'INTRA',[]);
 
-     $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($msjCode,$t_params->{'type'},[]);
+    $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($msjCode,$t_params->{'type'},[]);
 
-
+    C4::AR::Debug::debug($t_params->{'mensaje'});
     #se destruye la session anterior
     _eliminarSession($session);
     #Genero una nueva sesion.
@@ -494,7 +494,7 @@ sub _verificarSession {
     my $valido_token=C4::Context->config("token") || 0;
     my $code_MSG;
 
-
+ 
     my $type_session    = C4::AR::Utilidades::capitalizarString($session->param('type'));
     $type               = C4::AR::Utilidades::capitalizarString($type);
     
@@ -518,6 +518,7 @@ sub _verificarSession {
         #NO EXPIRO LA SESION
         _init_i18n({ type => $type });
         if ($session->param('userid')) {
+
 #             C4::AR::Debug::debug("no hay userid");    
             #Quiere decir que la sesion existe ahora hay q Verificar condiciones
             if (_cambioIp($session)){
@@ -548,7 +549,7 @@ sub _verificarSession {
               return ($code_MSG,"sin_sesion");
         }
     }
-
+         C4::AR::Debug::debug("entra por aca?");
 #     C4::AR::Debug::debug("sesion invalida");
     $code_MSG='U357';
     return ($code_MSG,"sesion_invalida");
@@ -1121,7 +1122,7 @@ sub cerrarSesion{
     $t_params->{'sessionClose'}     = 1;
     $session = C4::AR::Auth::_generarSession(\%params);
     $session->param('codMsg', 'U358');
-
+   
     redirectToAuth($t_params);
 }
 
@@ -1189,6 +1190,8 @@ sub redirectTo {
         print 'CLIENT_REDIRECT';
         exit;
 	}else{
+              my $session = CGI::Session->load();  
+        C4::AR::Debug::debug($url);   
 #        C4::AR::Debug::debug("redirectTo=> SERVER_REDIRECT");       
         my $input = CGI->new(); 
         print $input->redirect( 
@@ -1202,7 +1205,7 @@ sub redirectTo {
 
 sub redirectToAuth {
     my ($template_params) = @_;
-
+        
     my $url;
     $url = C4::AR::Utilidades::getUrlPrefix().'/auth.pl';
     if($template_params->{'loginAttempt'}){

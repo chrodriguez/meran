@@ -10,6 +10,7 @@ use CGI::Session;
 
 my $input=new CGI;
 
+
 my ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
             template_name   => 'opac-main.tmpl',
             query       => $input,
@@ -21,5 +22,5 @@ my ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
                                     entorno => 'undefined'},
             loging_out      => 1,
     });
-
+ 
 C4::AR::Auth::cerrarSesion();
