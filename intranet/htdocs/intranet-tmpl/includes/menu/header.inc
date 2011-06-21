@@ -1,3 +1,7 @@
+<script type="text/javascript">
+   var placeholder='[% "Buscar en el cat&aacute;logo" | i18n %]'
+</script>
+
 <script type="text/javascript" src="/intranet-tmpl/includes/busquedasCatalogo-min.js"> </script>
 <script type="text/javascript" src="/intranet-tmpl/includes/busquedasUsuarios-min.js"></script>
 
@@ -55,7 +59,7 @@ function socioSearchEvent(event){
 
   <div class="search-form" >
     <span class="glass right" onclick="buscarBar();"><i></i></span>
-    <input type="text" id="keyword-bar" class="search-query" name="keyword-bar" placeholder="Buscar en el cat&aacute;logo">
+    <input type="text" id="keyword-bar" class="search-query" name="keyword-bar" placeholder='[% "Buscar en el cat&aacute;logo" | i18n %]'>
   </div>
 
   <div id="global-nav">
