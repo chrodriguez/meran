@@ -82,7 +82,7 @@ if  ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
 
     ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
 
-}   elsif   ($obj->{'tipoAccion'} eq 'BUSQUEDA_COMBINABLE') {
+}   else {
 
     $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
     $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'};
@@ -100,6 +100,7 @@ $t_params->{'tipoAccion'}               = $obj->{'tipoAccion'};
 $t_params->{'url_todos'}                = $url_todos;
 $t_params->{'only_available'}           = $obj->{'only_available'};
 $t_params->{'paginador'}                = C4::AR::Utilidades::crearPaginadorOPAC($cantidad,$cantR, $pageNumber,$url,$t_params);
+$t_params->{'combo_tipo_documento'}     = C4::AR::Utilidades::generarComboTipoNivel3();
 
 #se arma el arreglo con la info para mostrar en el template
 
