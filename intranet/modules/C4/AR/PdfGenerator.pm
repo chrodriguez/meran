@@ -904,16 +904,16 @@ sub generateBookLabel {
 	my $posy = 105;
 	my $escudo =
 	    C4::Context->config('intrahtdocs') . '/'
-	  . C4::AR::Preferencias::getValorPreferencia('template') . '/'
-	  . C4::AR::Preferencias::getValorPreferencia('opaclanguages')
+	  . C4::AR::Preferencias::getValorPreferencia('temas') . '/'
+	  . C4::AR::Preferencias::getValorPreferencia('tema')
 	  . '/images/escudo-'
 	  . $branchcode . '.png';
 
 	if ( !( ( -e $escudo ) && ( -r $escudo ) ) ) {
 		$escudo =
-		    C4::Context->config('intrahtdocs') . '/'
-		  . C4::AR::Preferencias::getValorPreferencia('template') . '/'
-		  . C4::AR::Preferencias::getValorPreferencia('opaclanguages')
+	        C4::Context->config('intrahtdocs') . '/'
+	      . C4::AR::Preferencias::getValorPreferencia('temas') . '/'
+	      . C4::AR::Preferencias::getValorPreferencia('tema')
 		  . '/images/escudo-uni.png';
 	}
 
@@ -925,17 +925,18 @@ sub generateBookLabel {
 
 	#      $pdf->addRawText($branch->{'categ'},$x+135,$pageheight + ($y-$posy));
 	$posy = $posy + 7;
-	$pdf->addRawText( $branch->getNombre, $x + 135,
-		$pageheight + ( $y - $posy ) );
+    $pdf->addRawText( _unformat($branch->getTituloFormal), $x + 135, $pageheight + ( $y - $posy ) );
 	$posy = $posy + 7;
+    $pdf->addRawText( _unformat($branch->getNombre), $x + 135, $pageheight + ( $y - $posy ) );
+    $posy = $posy + 7;
 	$pdf->setSize(6);
-	$pdf->addRawText( "Biblioteca", $x + 135, $pageheight + ( $y - $posy ) );
+	$pdf->addRawText( C4::AR::Filtros::i18n("Biblioteca"), $x + 135, $pageheight + ( $y - $posy ) );
 	$posy = $posy + 7;
 	$pdf->setFont("Arial");
 
 	my $cantdir = 1;                       #Cuantas direcciones tiene?
-	my $address = $branch->getDireccion;
-	$address .= "\n" . $branch->getAlt_direccion;
+	my $address = _unformat($branch->getDireccion);
+	$address .= "\n" . _unformat($branch->getAlt_direccion);
 	$pdf->addRawText( $address, $x + 135, $pageheight + ( $y - $posy ) );
 	$posy = $posy + ( 7 * $cantdir );
 
@@ -944,13 +945,13 @@ sub generateBookLabel {
 	$posy = $posy + 7;
 
 	my $phone_fax = "";
-	$phone_fax = " Tel " . $branch->getTelefono || 'No dispone';
-	$phone_fax = " Fax " . $branch->getFax      || 'No dispone';
+	$phone_fax = " Tel " . $branch->getTelefono || C4::AR::Filtros::i18n('No dispone');
+	$phone_fax = " Fax " . $branch->getFax      || C4::AR::Filtros::i18n('No dispone');
 
 	$pdf->addRawText( $phone_fax, $x + 135, $pageheight + ( $y - $posy ) );
 
 	#AHORA DIBUJAMOS LA SIGNATURA SEPARADA POR ' '
-	$pdf->setSize(14);
+	$pdf->setSize(8);
 	$pdf->setFont("Arial-Bold");
 	my @sigs = split( / /, $signatura );
 	my $posicion = 0;
