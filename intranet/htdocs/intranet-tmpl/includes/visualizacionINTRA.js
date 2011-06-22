@@ -51,9 +51,12 @@ function agregarVisualizacion(){
 
 function updateAgregarVisualizacion(responseText){
 
-    //Informar mensajes
-    eleccionDeEjemplar();
-
+    var Messages        = JSONstring.toObject(responseText);
+    
+    setMessages(Messages);
+    if (! (hayError(Messages) ) ){
+        eleccionDeEjemplar();
+    }  
 }
 
 function eleccionDeEjemplar(){

@@ -71,22 +71,23 @@ else{
     }
     elsif($tipoAccion eq "AGREGAR_VISUALIZACION"){
 
-        my ($template, $session, $t_params) = get_template_and_user({
-                            template_name => "catalogacion/visualizacionINTRA/detalleVisualizacionIntra.tmpl",
-                            query => $input,
-                            type => "intranet",
-                            authnotrequired => 0,
-                            flagsrequired => {  ui => 'ANY', 
-                                                tipo_documento => 'ANY', 
-                                                accion => 'CONSULTA', 
-                                                entorno => 'undefined'},
-                            debug => 1,
-        });
+        my ($user, $session, $flags)= checkauth(  $input, 
+                                                  $authnotrequired, 
+                                                  {   ui => 'ANY', 
+                                                      tipo_documento => 'ANY', 
+                                                      accion => 'CONSULTA', 
+                                                      entorno => 'datos_nivel1'}, 
+                                                  'intranet'
+                                      );
 
-        my ($messages)                  = C4::AR::VisualizacionIntra::addConfiguracion($obj);
-        $t_params->{'visualizacion'}    = C4::AR::VisualizacionIntra::getConfiguracion($ejemplar);
+        my ($Message_arrayref)  = C4::AR::VisualizacionIntra::t_agregar_configuracion($obj);
+        my $infoOperacionJSON   = to_json $Message_arrayref;
 
-        C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+        C4::AR::Auth::print_header($session);
+        print $infoOperacionJSON;          
+# $t_params->{'visualizacion'}    = C4::AR::VisualizacionIntra::getConfiguracion($ejemplar);
+
+#         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
     }
     elsif($tipoAccion eq "ELIMINAR_VISUALIZACION"){
 

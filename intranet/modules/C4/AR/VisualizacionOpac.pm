@@ -104,11 +104,11 @@ sub getConfiguracion{
 }
 
 sub addConfiguracion {
-    my ($params) = @_;
+    my ($params, $db) = @_;
 
     my @filtros;
 
-    my $configuracion = C4::Modelo::CatVisualizacionOpac->new();
+    my $configuracion = C4::Modelo::CatVisualizacionOpac->new( db => $db );
 
     $configuracion->agregar($params);
     
@@ -129,7 +129,7 @@ sub deleteConfiguracion{
         return(0);
     }
 }
-
+ 
 sub editConfiguracion{
     my ($vista_id,$value) = @_;
     my @filtros;
