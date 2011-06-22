@@ -31,6 +31,8 @@ sub agregar{
 
     if(C4::AR::EstructuraCatalogacionBase::getNivelFromEstructuraBaseByCampoSubcampo($params->{'campo'}, $params->{'subcampo'}) <= 1){
         $self->setTipoEjemplar('ALL');
+    }else{
+    	$self->setTipoEjemplar($params->{'ejemplar'});
     }
     
     my $orden = C4::Modelo::CatVisualizacionIntra::Manager->get_max_orden() + 1;
