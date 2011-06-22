@@ -87,8 +87,8 @@
         [% IF algunoSeRenueva %]
             [% PERL %]
                         print C4::AR::Filtros::to_Icon(     text    => "[% 'Renovar' | i18n %]",
-                                                            boton   => "icon_renovar",
-                                                            onClick => "realizarAccion('RENOVACION','chkboxPrestamos',generaDivRenovacion);",
+                                                            boton   => "icon_renovar",                                                            
+                                                            onClick => "realizarAccion('RENOVACION','table_tablaPrestamos',generaDivRenovacion);",
                                                             title   => "[% 'Renovar' | i18n %]",
                                                             alternClass => "botonCentrado"
                                 ) ;
