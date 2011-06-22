@@ -4,6 +4,7 @@ use strict;
 use CGI;
 use C4::AR::Utilidades;
 use C4::AR::Auth;
+use Encode;
 
 my $input = new CGI;
 my $authnotrequired = 0;
@@ -39,6 +40,6 @@ elsif ($accion eq 'autocomplete_catalogo'){
 }
 
 print $session->header;
-print $result;
+print Encode::decode_utf8($result);
 
 1;
