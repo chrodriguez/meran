@@ -79,18 +79,15 @@
                             [% IF NIVEL.portadas_grupo %]
                                     [% FOREACH NIVEL.portadas_grupo %]
                                         [% IF loop.count < 4 %]
-                                            [% IF portada_registro %]
-                                                <a class="fancylink" rel="group" href="/uploads/covers/[% portada_registro_big %]">
-                                                    <img alt="cover"
-                                                        src="/uploads/covers/[% portada_registro %]" title="Portada" style="float:left"
-                                                    />
-                                                </a>
-                                            [% ELSE %]
-                                                  <img src="/uploads/covers/no_image.jpg" 
-                                                        alt="[% 'Sin Portada' | i18n %]"
-                                                        title="[% 'Sin Portada' | i18n %]" style="float:left" 
-                                                  />
-                                            [% END %]
+						                    [% IF portada_registro %]
+						                        <a class="fancylink" rel="group" href="/uploads/covers/[% portada_registro_big %]">
+						                            <img name="cover"  VALUE="" BORDER=0 src="/uploads/covers/[% portada_registro %]" title="Portada">
+						                        </a>
+						                    [% ELSE %]
+						                          <img src="/uploads/covers/[% cat_ref_tipo_nivel3 %].png" 
+						                                alt="[% 'Sin Portada para' | i18n %]&nbsp;[% cat_ref_tipo_nivel3 %]"
+						                                title="[% 'Sin Portada para' | i18n %]&nbsp;[% cat_ref_tipo_nivel3 %]" />
+						                    [% END %]
                                         [% END %]
                                     [% END %]
                             [% ELSE %]
@@ -109,9 +106,9 @@
                                         [% END %]
                                     [% END %]
                                 [% ELSE %]
-                                      <img src="/uploads/covers/no_image.jpg" 
-                                            alt="[% 'Sin Portada' | i18n %]"
-                                            title="[% 'Sin Portada' | i18n %]" />
+                                         <img src="/uploads/covers/[% cat_ref_tipo_nivel3 %].png" 
+                                              alt="[% 'Sin Portada para' | i18n %]&nbsp;[% cat_ref_tipo_nivel3 %]"
+                                              title="[% 'Sin Portada para' | i18n %]&nbsp;[% cat_ref_tipo_nivel3 %]" />
                                 [% END %]
                             [% END %]
                         </td>
