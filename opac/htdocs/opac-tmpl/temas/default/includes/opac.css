@@ -104,7 +104,8 @@ body textarea:focus{
  padding:1.0em 0 1.5em 0;
  background:transparent url(../imagenes/bg_head_breadcrumbs.jpg) repeat-y;
 } */
-.header-breadcrumbs {float:left;
+.header-breadcrumbs {
+float:right;
  width:15%;
  padding:1.0em 0 1.5em 0;
 }
@@ -257,7 +258,7 @@ text-decoration: none;
 }
 
 .nav2 {float:left;
- width:85%;
+ width:70%;
  border:none;
  /*background:rgb(220,220,220) url(../imagenes/bg_head_bottom_nav.jpg) repeat-x*/;
  color:rgb(75,75,75);
