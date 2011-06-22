@@ -286,6 +286,26 @@ function updateInfoPrestarReserva(responseText){
 	ejemplaresDelGrupo(ID_N2);
 }
 
+/*
+function generarEtiqueta(id3,barcode){
+ 
+        objAH               = new AjaxHelper(generaDivPrestamo);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;
+        objAH.url           = URL_PREFIX+'/catalogacion/barcode_gen.pl';
+        objAH.tipoAccion    = 'GENERAR_ETIQUETA';
+        objAH.datosArray    = items_array;
+        objAH.nro_socio     = USUARIO.ID;
+        //se envia la consulta
+        objAH.sendToServer();
+        $.modal.close();
+  
+     
+}
+
+
+*/
+
 function generarEtiqueta(id3,barcode){
 	window.open (URL_PREFIX+"/catalogacion/barcode_gen.pl?token="+token+"&id="+id3, "Barcode "+barcode,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
 	
