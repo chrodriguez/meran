@@ -176,7 +176,6 @@ elsif($tipoAccion eq "MOSTRAR_FORM_AGREGAR_CAMPOS"){
 
 
     my %params_combo;
-#     $params_combo{'default'}            = $catalogacion->getTablaFromReferencia()||'-1';
     $params_combo{'onChange'}           = 'eleccionTablaRef()';
     $t_params->{'tabla_referencias'}    = C4::AR::Utilidades::generarComboTablasDeReferencia(\%params_combo);
 

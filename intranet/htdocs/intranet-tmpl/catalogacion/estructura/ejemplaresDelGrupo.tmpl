@@ -149,7 +149,7 @@
                           [% PERL %]
                                   print C4::AR::Filtros::to_Icon( 
                                                                   boton   =>  "icon_marc",
-                                                                  onClick =>   "detalleMARC('[% id3 %]');", 
+                                                                  onClick =>   "detalleMARC('[% id3 %]','[%  %]');", 
                                                                   title   =>   "[% 'Detalle MARC' | i18n %]",
                                                                       alternClass=> "botonCentradoTabla",
                                                               ) ;
@@ -185,6 +185,12 @@
                                                                     title   => "[% 'Borrar Ejemplar' | i18n %]"
                               ) ;
                     [% END %]
+                    [% PERL %]
+                              print C4::AR::Filtros::to_Icon(        boton   => "icon_borrar",
+                                                                    onClick => "generarEtiqueta('[% id3 %]','[% nivel3_obj.getBarcode %]');",
+                                                                    title   => "[% 'Generar etiqueta de ejemplar' | i18n %]"
+                              ) ;
+                    [% END %]
                 </td>
     </tr>
 
@@ -199,6 +205,14 @@
                                                           boton   => "icon_edicion",
                                                           onClick => "generarForm('[% id1 %]','[% id2 %]');",
                                                           title   => "[% 'Modificar Ejemplares' | i18n %]",
+                                                          li => 1,
+                              ) ;
+              [% END %]
+              [% PERL %]
+                      print C4::AR::Filtros::to_Icon(   
+                                                          boton   => "icon_edicion",
+                                                          onClick => "generarEtiquetas('[% id1 %]','[% id2 %]');",
+                                                          title   => "[% 'Generar etiquetas de ejemplares' | i18n %]",
                                                           li => 1,
                               ) ;
               [% END %]
