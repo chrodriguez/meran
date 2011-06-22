@@ -1,5 +1,4 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-
 <html>
 <head>
 [% INCLUDE "message_INTRA.inc" %]
@@ -21,21 +20,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <META HTTP-EQUIV="cache-control" content="public">
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme_intra %]/includes/completo.css">
-
 <script type="text/javascript" src="/includes/json/jsonStringify.js"></script>
-
 <script type="text/javascript" src="/includes/completo-intranet-top.js"></script>
 <script type="text/javascript" src="/includes/jquery/modal/jquery.simplemodal.js"></script>
 <link media="screen" rel="stylesheet" href="/includes/jquery/modal/basic-min.css" type="text/css">
-
 <script type="text/javascript" src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
 <script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js"></script>
-
-
-
 <script type="text/javascript" src="/includes/jquery/jquery-ui-1.8.9.custom.min.js"></script>
-
-
 <script language="javascript" type="text/javascript">
 
 	function swap(id,src){
@@ -95,27 +86,30 @@
         $('input[type="text"]').addClass("textInput");  
 
         // agrega class a los input para darle estilos
-        $('input[type="checkbox"]').click(function() {
-            //$('input[type="checkbox"]').parent().parent().addClass('marked');
+        $('tr input[type="text"]').click(function() {
             var clase = $(this).parent().parent().attr('class').split(' ');
-            //alert(clase[1]);
             if(clase[1] == 'marked'){
                 $(this).parent().parent().removeClass("marked"); 
             }else{
                 $(this).parent().parent().addClass("marked");
             }
         });
+        // click sobre el tr, para darle estilos
+        $('tr').click(function() {
+            var clase = $(this).attr('class').split(' ');
+            if(clase[1] == 'marked'){
+                $(this).removeClass("marked"); 
+                $(this).children(':first-child').children(':first-child').removeAttr('checked');
+            }else{
+                $(this).addClass("marked");
+                $(this).children(':first-child').children(':first-child').attr('checked','true');
+            }
+        });
 		      	
     });
 
 </script>
-
-
-
-
 </head>
-
-
 <body>
   <noscript>
       <div class='tableMsgUser'>
