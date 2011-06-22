@@ -32,48 +32,48 @@ my $dbh = C4::Context->dbh;
 
 print "INICIO \n";
 my $tt1 = time();
-# print "Creando tablas necesarias \n";
-#     crearTablasNecesarias();
-# 
-# print "Creando nuevas referencias \n";
-#     crearNuevasReferencias();
-# 
+ print "Creando tablas necesarias \n";
+     crearTablasNecesarias();
+ 
+ print "Creando nuevas referencias \n";
+     crearNuevasReferencias();
+ 
 # #################
-# print "Procesando los 3 niveles (va a tardar!!! ...MUCHO!!! mas de lo que te imaginas) \n";
-# my $st1 = time();
-#     procesarV2_V3();
-# my $end1 = time();
-# my $tardo1=($end1 - $st1);
-# print "AL FIN TERMINO!!! Tardo $tardo1 segundos !!!\n";
+ print "Procesando los 3 niveles (va a tardar!!! ...MUCHO!!! mas de lo que te imaginas) \n";
+ my $st1 = time();
+     procesarV2_V3();
+ my $end1 = time();
+ my $tardo1=($end1 - $st1);
+ print "AL FIN TERMINO!!! Tardo $tardo1 segundos !!!\n";
 # #################
 
-# print "Renombrando tablas \n";
-#   renombrarTablas();
-# print "Quitando tablas de mas \n";
-#  quitarTablasDeMas();
-# print "Hasheando passwords \n";
-#    hashearPasswords();
-# print "Limpiamos las tablas de circulacion \n";
-# limpiarCirculacion();
-# print "Referencias de usuarios en circulacion \n";
-# my $st2 = time();
-#   repararReferenciasDeUsuarios();
-# my $end2 = time();
-# my $tardo2=($end2 - $st2);
-# print "AL FIN TERMINARON LOS USUARIOS!!! Tardo $tardo2 segundos !!!\n";
-# 
-# print "Relacion usuario-persona \n";
-#   crearRelacionUsuarioPersona();
-# print "Creando nuevas claves foraneas \n";
-#   crearClaves();
-# print "Creando la estructura MARC \n";
-#  crearEstructuraMarc();
-# print "Traducción Estructura MARC \n";
-#   traduccionEstructuraMarc();
-# print "Agregando preferencias del sistema \n";
-#   agregarPreferenciasDelSistema();
-# print "Dando permisos a los usuarios \n";
-#   dandoPermisosUsuarios();
+ print "Renombrando tablas \n";
+   renombrarTablas();
+ print "Quitando tablas de mas \n";
+  quitarTablasDeMas();
+ print "Hasheando passwords \n";
+    hashearPasswords();
+ print "Limpiamos las tablas de circulacion \n";
+ limpiarCirculacion();
+ print "Referencias de usuarios en circulacion \n";
+ my $st2 = time();
+   repararReferenciasDeUsuarios();
+ my $end2 = time();
+ my $tardo2=($end2 - $st2);
+ print "AL FIN TERMINARON LOS USUARIOS!!! Tardo $tardo2 segundos !!!\n";
+ 
+ print "Relacion usuario-persona \n";
+   crearRelacionUsuarioPersona();
+ print "Creando nuevas claves foraneas \n";
+   crearClaves();
+ print "Creando la estructura MARC \n";
+ crearEstructuraMarc();
+ print "Traducción Estructura MARC \n";
+   traduccionEstructuraMarc();
+ print "Agregando preferencias del sistema \n";
+   agregarPreferenciasDelSistema();
+ print "Dando permisos a los usuarios \n";
+   dandoPermisosUsuarios();
 print "Procesando Analíticas \n";
   procesarAnaliticas();
 print "Cambiar codificación a UTF8 \n";
@@ -1141,6 +1141,9 @@ sub procesarAnaliticas {
 
 	$registro++;
 	}
+
+my $drop_analiticas=$dbh->prepare("DROP TABLE `cat_analitica`,`cat_autor_analitica`,`cat_tema_analitica` ;");
+ $drop_analiticas->execute();
 
 }
 
