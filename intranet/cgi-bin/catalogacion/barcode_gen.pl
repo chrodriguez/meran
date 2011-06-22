@@ -4,7 +4,7 @@ use strict;
 use CGI;
 use C4::AR::Auth;
 use C4::AR::Nivel3;
-use GD::Barcode;
+use GD::Barcode::UPCE;
 
 
 my $input = new CGI;
@@ -23,10 +23,19 @@ my ($template, $session, $t_params) =  get_template_and_user ({
 
 my $id3             = $input->param('id');
 my $nivel3          = C4::AR::Nivel3::getNivel3FromId3($id3);
-my $barcode         = GD::Barcode->new('UPCE', $nivel3->getBarcode);
+my $bar=$nivel3->getBarcode;
+# binmode(STDOUT);
+# 
+# my $barcode= GD::Barcode::UPCE->new('UPCE', $nivel3->getBarcode);
+# 
+# 
+# 
+# print $session->header();
+# print "Content-Type: image/png\n\n";
+# 
+# print $barcode->plot->png;
 
 binmode(STDOUT);
-print $session->header();
-print "Content-Type: image/png\n\n";
-
-print $barcode->plot->png;
+my $oGdB = GD::Barcode::UPCE->new($bar);
+my $oGD = $oGdB->plot->png;
+print $oGD;
