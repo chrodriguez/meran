@@ -186,7 +186,7 @@
                               ) ;
                     [% END %]
                     [% PERL %]
-                              print C4::AR::Filtros::to_Icon(        boton   => "icon_borrar",
+                              print C4::AR::Filtros::to_Icon(        boton   => "icon_exportar",
                                                                     onClick => "generarEtiqueta('[% id3 %]','[% nivel3_obj.getBarcode %]');",
                                                                     title   => "[% 'Generar etiqueta de ejemplar' | i18n %]"
                               ) ;
@@ -210,7 +210,7 @@
               [% END %]
               [% PERL %]
                       print C4::AR::Filtros::to_Icon(   
-                                                          boton   => "icon_edicion",
+                                                          boton   => "icon_exportar",
                                                           onClick => "generarEtiquetas('[% id1 %]','[% id2 %]');",
                                                           title   => "[% 'Generar etiquetas de ejemplares' | i18n %]",
                                                           li => 1,
