@@ -84,9 +84,9 @@
 						                            <img name="cover"  VALUE="" BORDER=0 src="/uploads/covers/[% portada_registro %]" title="Portada">
 						                        </a>
 						                    [% ELSE %]
-						                          <img src="/uploads/covers/[% cat_ref_tipo_nivel3 %].png" 
-						                                alt="[% 'Sin Portada para' | i18n %]&nbsp;[% cat_ref_tipo_nivel3 %]"
-						                                title="[% 'Sin Portada para' | i18n %]&nbsp;[% cat_ref_tipo_nivel3 %]" />
+						                          <img src="/uploads/covers/[% NIVEL.cat_ref_tipo_nivel3 %].png" 
+						                                alt="[% 'Sin Portada para' | i18n %]&nbsp;[% NIVEL.cat_ref_tipo_nivel3 %]"
+						                                title="[% 'Sin Portada para' | i18n %]&nbsp;[% NIVEL.cat_ref_tipo_nivel3 %]" />
 						                    [% END %]
                                         [% END %]
                                     [% END %]
@@ -106,9 +106,9 @@
                                         [% END %]
                                     [% END %]
                                 [% ELSE %]
-                                         <img src="/uploads/covers/[% cat_ref_tipo_nivel3 %].png" 
-                                              alt="[% 'Sin Portada para' | i18n %]&nbsp;[% cat_ref_tipo_nivel3 %]"
-                                              title="[% 'Sin Portada para' | i18n %]&nbsp;[% cat_ref_tipo_nivel3 %]" />
+                                         <img src="/uploads/covers/[% NIVEL.cat_ref_tipo_nivel3 %].png" 
+                                              alt="[% 'Sin Portada para' | i18n %]&nbsp;[% NIVEL.cat_ref_tipo_nivel3 %]"
+                                              title="[% 'Sin Portada para' | i18n %]&nbsp;[% NIVEL.cat_ref_tipo_nivel3 %]" />
                                 [% END %]
                             [% END %]
                         </td>

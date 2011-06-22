@@ -1752,7 +1752,8 @@ p.caption {clear:both;
  float:left;
  margin:3px 10px 7px 0;
  padding:1px;
- border:1px solid rgb(150,150,150);
+ border:0;
+ 
 }
 .main img.center {clear:both;
  float:none;
@@ -1965,4 +1966,8 @@ border:1px solid #BBBBBB;
 
 .bold{
     font-weight: bold;    
+}
+
+.titulo_result img{
+	border: 0;
 }
