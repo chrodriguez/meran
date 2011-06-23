@@ -211,7 +211,7 @@
               [% PERL %]
                       print C4::AR::Filtros::to_Icon(   
                                                           boton   => "icon_exportar",
-                                                          onClick => "generarEtiquetas('[% id1 %]','[% id2 %]');",
+                                                          onClick => "generarVariasEtiquetas();",
                                                           title   => "[% 'Generar etiquetas de ejemplares' | i18n %]",
                                                           li => 1,
                               ) ;
