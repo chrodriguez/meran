@@ -878,6 +878,7 @@ sub batchBookLabelGenerator {
 		$pag++;
 	}
 	my $tmpFileName = "etiquetas.pdf";
+
 	&imprimirFinal( $pdf, $tmpFileName );
 }
 
