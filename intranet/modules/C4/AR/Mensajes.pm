@@ -297,6 +297,9 @@ my %mensajesINTRA = (
     'U503' => 'Los permisos del usuario (*?*) se agregaron con &eacute;xito.',
     'U504' => 'Los permisos del usuario (*?*) no se pudieron agregar.',
     'U601' => 'Para operar en INTRANET, debe iniciar sesi&oacute;n nuevamente. Disculpe las molestias.',
+    'U602' => 'La configuraci&oacute;n (campo, subcampo, tipo de ejemplar) (*?*, *?*, *?*) ya existe.',
+    'U603' => 'Disculpe, error al intentar agregar la configuraci&oacute;n (campo, subcampo, tipo de ejemplar) (*?*, *?*, *?*).',
+    'U604' => 'La configuraci&oacute;n (campo, subcampo, tipo de ejemplar) (*?*, *?*, *?*) se agreg&oacute; con &eacute;xito.',
 
     'B400' => '',
     'B401' => 'Error al intentar prestar desde INTRA, funcion C4::AR::Reservas::t_realizarPrestamo.',

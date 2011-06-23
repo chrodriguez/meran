@@ -27,6 +27,7 @@
 <script type="text/javascript" src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
 <script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js"></script>
 <script type="text/javascript" src="/includes/jquery/jquery-ui-1.8.9.custom.min.js"></script>
+<script type="text/javascript" src="/includes/shiftSelectTr.js"></script>
 <script language="javascript" type="text/javascript">
 
 	function swap(id,src){
@@ -77,25 +78,22 @@
         object.value='';
 
 	}
+
+    $(function() {
+        $('tr').shiftClick();
+    }); 
 	
 	$(document).ready(function(){
 		mainmenu();
 		$('input[type="text"]').focus(function() {  
 		    $(this).removeClass("textInput").addClass("focusInput");  
 		});
-        $('input[type="text"]').addClass("textInput");  
+        $('input[type="text"]').addClass("textInput");    
 
-        // agrega class a los input para darle estilos
-        $('tr input[type="text"]').click(function() {
-            var clase = $(this).parent().parent().attr('class').split(' ');
-            if(clase[1] == 'marked'){
-                $(this).parent().parent().removeClass("marked"); 
-            }else{
-                $(this).parent().parent().addClass("marked");
-            }
-        });
         // click sobre el tr, para darle estilos
-        $('tr').click(function() {
+        var lastSelected;
+        $('tr').click(function(e) {
+            //seleccion con shift
             var clase = $(this).attr('class').split(' ');
             if(clase[1] == 'marked'){
                 $(this).removeClass("marked"); 
@@ -104,10 +102,9 @@
                 $(this).addClass("marked");
                 $(this).children(':first-child').children(':first-child').attr('checked','true');
             }
-        });
-		      	
-    });
 
+        });  	
+    });
 </script>
 </head>
 <body>

@@ -770,6 +770,9 @@ sub llegoMaxReservas {
     my ($nro_socio)=@_;
     my $cant= &C4::AR::Reservas::cant_reservas($nro_socio);
 
+C4::AR::Debug::debug("cant: ".$cant);
+C4::AR::Debug::debug("maxreserves: ".C4::AR::Preferencias::getValorPreferencia("maxreserves"));
+
     return ( $cant >= C4::AR::Preferencias::getValorPreferencia("maxreserves") );
 }
 
