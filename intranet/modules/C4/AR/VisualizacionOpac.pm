@@ -210,6 +210,72 @@ sub getVisualizacionFromCampoSubCampo{
 }
 
 
+sub existeConfiguracion{
+    my ($params) = @_;
+
+    my @filtros;
+
+    push(@filtros, ( campo          => { eq => $params->{'campo'} } ));
+    push(@filtros, ( subcampo       => { eq => $params->{'subcampo'} } ));
+    push(@filtros, ( id_perfil      => { eq => $params->{'perfil'} } ));
+
+
+    my $cat_estruct_info_array = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(  
+                                                                                query           =>  \@filtros, 
+
+                                        );  
+
+    if(scalar(@$cat_estruct_info_array) > 0){
+      return 1;
+    }else{
+      return 0;
+    }
+}
+
+=head2 sub t_agregar_configuracion
+   
+=cut
+sub t_agregar_configuracion {
+    my ($params) = @_;
+
+    my $visualizacion_intra = C4::Modelo::CatVisualizacionOpac->new();  
+    my $db                  = $visualizacion_intra->db;
+    my $msg_object          = C4::AR::Mensajes::create();
+
+    if(existeConfiguracion($params)){
+
+        $msg_object->{'error'} = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U605', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}]} ) ;
+
+    } else {
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
+    
+        eval {
+
+            C4::AR::VisualizacionOpac::addConfiguracion($params, $db);
+            $msg_object->{'error'} = 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U607', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}]} ) ;
+
+            $db->commit;
+        };
+
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B432',"INTRA");
+            $db->rollback;
+            #Se setea error para el usuario
+            $msg_object->{'error'} = 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U606', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}]} ) ;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
+
+    }
+
+    return ($msg_object);
+}
+
 
 END { }       # module clean-up code here (global destructor)
 

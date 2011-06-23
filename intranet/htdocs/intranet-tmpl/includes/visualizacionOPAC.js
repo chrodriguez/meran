@@ -50,8 +50,12 @@ function agregarVisualizacion(){
 
 function updateAgregarVisualizacion(responseText){
 
-    //Informar mensajes
-    eleccionDePerfil();
+    var Messages        = JSONstring.toObject(responseText);
+    
+    setMessages(Messages);
+    if (! (hayError(Messages) ) ){
+        eleccionDePerfil();
+    }  
 
 }
 

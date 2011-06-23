@@ -99,9 +99,9 @@ sub _meran_to_marc{
                 if ( ($value ne '')&&(C4::AR::Utilidades::existeInArray($key, @{$autorizados{$campo}} ) )) {
                 #el subcampo $key, esta autorizado para el campo $campo
                     push(@subcampos_array, ($key => $value));
-#                     C4::AR::Debug::debug("campo ".$campo." ACEPTADO clave = ".$key." valor: ".$value);
+                    C4::AR::Debug::debug("campo ".$campo." ACEPTADO clave = ".$key." valor: ".$value);
                 } else {
-#                     C4::AR::Debug::debug("campo ".$campo." NO ACEPTADO clave = ".$key." valor: ".$value);
+                    C4::AR::Debug::debug("campo ".$campo." NO ACEPTADO clave = ".$key." valor: ".$value);
                 }
 
 #                 C4::AR::Debug::debug("_meran_to_marc => value de campo, subcampo => ".$key.", ".$campo." => ".$value);
@@ -1684,20 +1684,38 @@ sub getEstructuraCatalogacionFromDBCompleta{
 
     use C4::Modelo::CatEstructuraCatalogacion::Manager;
 
+#     my $catalogaciones_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
+#                                                                 query => [ 
+#                                                                                 nivel => { eq => $nivel },
+# 
+#                                                                     or   => [ 	
+#                                                                                 itemtype => { eq => $itemType },
+#                                                                             	itemtype => { eq => 'ALL' },    
+#                                                                             ],
+# 
+# #                                                                         		intranet_habilitado => { gt => 0 }, 
+#                                                                         ],
+#                                                                 select          => ['*'],  
+#                                                                 with_objects    => [ 'infoReferencia' ],  #LEFT OUTER JOIN
+#                                                                 require_objects => [ 'camposBase', 'subCamposBase' ],
+# #                                                                 sort_by => ( 'intranet_habilitado' ),
+#                                                                 sort_by => ( 'campo' ),
+#                                                              );
+
     my $catalogaciones_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
                                                                 query => [ 
                                                                                 nivel => { eq => $nivel },
 
-                                                                    or   => [ 	
+                                                                    or   => [   
                                                                                 itemtype => { eq => $itemType },
-                                                                            	itemtype => { eq => 'ALL' },    
+                                                                                itemtype => { eq => 'ALL' },    
                                                                             ],
 
-#                                                                         		intranet_habilitado => { gt => 0 }, 
+#                                                                               intranet_habilitado => { gt => 0 }, 
                                                                         ],
-                                                                select          => ['*'],  
-                                                                with_objects    => [ 'infoReferencia' ],  #LEFT OUTER JOIN
-                                                                require_objects => [ 'camposBase', 'subCamposBase' ],
+#                                                                 select          => ['*'],  
+#                                                                 with_objects    => [ 'infoReferencia' ],  #LEFT OUTER JOIN
+#                                                                 require_objects => [ 'camposBase', 'subCamposBase' ],
 #                                                                 sort_by => ( 'intranet_habilitado' ),
                                                                 sort_by => ( 'campo' ),
                                                              );
