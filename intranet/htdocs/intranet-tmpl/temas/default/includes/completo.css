@@ -333,11 +333,11 @@ body {
 	background: #EAEBED;
 	float: left;
 	/*width: 88%;*/
-    width: 82%;
+    width: 80%;
 	min-height: 420px;
 	margin-top: 39px;
 	height: auto;
-	margin-left: 222px;
+	margin-left: 8px;
 /*	margin: 0 auto; */
 }
 
@@ -403,7 +403,7 @@ body {
 	padding-right: 10px;
 	position: relative;
 	text-align: right;
-	width: 21%;
+	width: 30%;
 	font-size: 12px
 }
 
