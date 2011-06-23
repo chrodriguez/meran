@@ -27,7 +27,7 @@
 <script type="text/javascript" src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
 <script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js"></script>
 <script type="text/javascript" src="/includes/jquery/jquery-ui-1.8.9.custom.min.js"></script>
-<script type="text/javascript" src="/includes/shiftSelect.js"></script>
+<script type="text/javascript" src="/includes/shiftSelectTr.js"></script>
 <script language="javascript" type="text/javascript">
 
 	function swap(id,src){
@@ -80,7 +80,7 @@
 	}
 
     $(function() {
-        $('input[type=checkbox]').shiftClick();
+        $('tr').shiftClick();
     }); 
 	
 	$(document).ready(function(){
