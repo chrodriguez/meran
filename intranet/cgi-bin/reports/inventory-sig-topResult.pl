@@ -132,7 +132,7 @@ if ($accion eq "CONSULTA_POR_BARCODE") {
       my $ui_barcode=  $obj->{'id_ui'};
 #     my ($path, $filename)           = C4::AR::Reportes::toXLS($array_hash_ref,1,'Pagina 1','inventario');
 #     $t_params->{'filename'}         = '/uploads/reports/'.$filename;
-
+      C4::AR::Utilidades::printHASH(@$cat_nivel3[0]);
     $t_params->{'results'}          = $cat_nivel3;
 }
 

@@ -9,7 +9,16 @@
       [% IF cantidad > 0 %]
             <table id="tablaResult" class="datos_tabla" border="0" cellspacing="0" cellpadding="0" width="100%">
                 <tr class="titulo_tabla_resultado click">
-
+                    <th>
+                          [% PERL %]
+                              print C4::AR::Filtros::to_Icon(   
+                                                                      boton   => "icon_seleccionar",
+                                                                      id      => "select_all[% id2 %]",
+                                                                      title   => "[% 'Seleccionar todos' | i18n %]",
+                                                                      alternClass => "botonCentrado"
+                                          ) ;
+                          [% END %]
+                    </th>
                     <th onClick="ordenar('nro_inventario');">[% "C&oacute;digo de barra" | i18n %]</th>
                     <th onClick="ordenar('signatura_topografica');">[% "Signatura Topogr&aacute;fica" | i18n %]</th>
                     <th onClick="ordenar('autor');">[% "Autor" | i18n %]</th>
@@ -23,6 +32,9 @@
        [% END %]        
                 [% FOREACH res IN results %]
                         <tr >
+                                <td>
+                                    <input type="checkbox" id="checkEjemplares" name="checkEjemplares[% res.nivel2.getId2 %]" class="icon_seleccionar" value="[% res.nivel3.getId3 %]">
+                                </td>
                                 <td  align="center">
                                         [% res.nivel3.codigo_barra%]
                                 </td>
@@ -53,6 +65,14 @@
                                 </td>
                                 <td align="center">
                                         [% res.nivel3.getId_ui_poseedora %]
+                                </td>
+                                <td>
+                                [% PERL %]
+                                          print C4::AR::Filtros::to_Icon(        boton   => "icon_exportar",
+                                                                                onClick => "generarEtiqueta('[% res.nivel3.getId3 %]','[% res.nivel3.codigo_barra %]');",
+                                                                                title   => "[% 'Generar etiqueta de ejemplar' | i18n %]"
+                                          ) ;
+                                [% END %]
                                 </td>
                         </tr>
 
