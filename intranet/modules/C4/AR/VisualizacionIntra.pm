@@ -250,9 +250,9 @@ sub t_agregar_configuracion {
     
         eval {
 
-            C4::AR::VisualizacionIntra::addConfiguracion($params, $db);
+            C4::AR::VisualizacionIntra::deleteConfiguracion($params, $db);
             $msg_object->{'error'} = 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U604', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U608', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}]} ) ;
 
             $db->commit;
         };
@@ -263,7 +263,7 @@ sub t_agregar_configuracion {
             $db->rollback;
             #Se setea error para el usuario
             $msg_object->{'error'} = 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U603', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U609', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}]} ) ;
         }
 
         $db->{connect_options}->{AutoCommit} = 1;
@@ -273,6 +273,43 @@ sub t_agregar_configuracion {
     return ($msg_object);
 }
 
+=head2 sub t_delete_configuracion
+   
+=cut
+sub t_delete_configuracion {
+    my ($params) = @_;
+
+    my $visualizacion_intra = C4::Modelo::CatVisualizacionIntra->new();  
+    my $db                  = $visualizacion_intra->db;
+    my $msg_object          = C4::AR::Mensajes::create();
+
+   
+    # enable transactions, if possible
+    $db->{connect_options}->{AutoCommit} = 0;
+
+    eval {
+
+        C4::AR::VisualizacionIntra::deleteConfiguracion($params, $db);
+        $msg_object->{'error'} = 0;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U608', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}]} ) ;
+
+        $db->commit;
+    };
+
+    if ($@){
+        #Se loguea error de Base de Datos
+        &C4::AR::Mensajes::printErrorDB($@, 'B432',"INTRA");
+        $db->rollback;
+        #Se setea error para el usuario
+        $msg_object->{'error'} = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U609', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}]} ) ;
+    }
+
+    $db->{connect_options}->{AutoCommit} = 1;
+
+
+    return ($msg_object);
+}
 
 
 END { }       # module clean-up code here (global destructor)

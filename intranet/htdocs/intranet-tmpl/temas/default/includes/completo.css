@@ -319,9 +319,9 @@ body {
 }
 
 #marco_contenido_datos {
-	margin-left: 3%;
-	margin-right: 3%;
-    margin-top: 4%;
+	margin-left: 10px;
+	margin-right: 10px;
+    margin-top: 30px;
 }
 
 #marco_contenido_datos li.item {
@@ -332,18 +332,18 @@ body {
 #marco_principal {
 	background: #EAEBED;
 	float: left;
-	/*width: 88%;*/
-width: 83%;
+    width: 81%;
 	min-height: 420px;
 	margin-top: 39px;
 	height: auto;
-	margin-left: 222px;
+/* 	margin-left: 8px; */
 /*	margin: 0 auto; */
 }
 
 
 .container_test{
     height: 93.2%;
+    min-width: 1264px;
 }
 
 
@@ -403,7 +403,7 @@ width: 83%;
 	padding-right: 10px;
 	position: relative;
 	text-align: right;
-	width: 21%;
+	width: 30%;
 	font-size: 12px
 }
 
@@ -1358,7 +1358,7 @@ ul.horizontal-list li {
 }
 
 fieldset.main {
-	width: 100%;
+	width: 98%;
 }
 
 ul.listado_sin_margen {
@@ -4605,12 +4605,12 @@ background-color:#E7F3FA;
 
 /*hover de las tablas con checkbox*/
 .impar:hover {
-    background:   #CCFFCC;
+    background:   #5C82B5;
     color:   #000000;
 }
 
 .par:hover {
-    background:   #CCFFCC;
+    background:   #5C82B5;
     color:   #000000;
 }
 

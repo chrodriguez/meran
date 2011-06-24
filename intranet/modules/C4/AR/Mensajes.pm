@@ -300,6 +300,11 @@ my %mensajesINTRA = (
     'U602' => 'La configuraci&oacute;n (campo, subcampo, tipo de ejemplar) (*?*, *?*, *?*) ya existe.',
     'U603' => 'Disculpe, error al intentar agregar la configuraci&oacute;n (campo, subcampo, tipo de ejemplar) (*?*, *?*, *?*).',
     'U604' => 'La configuraci&oacute;n (campo, subcampo, tipo de ejemplar) (*?*, *?*, *?*) se agreg&oacute; con &eacute;xito.',
+    'U605' => 'La configuraci&oacute;n (campo, subcampo, perfil) (*?*, *?*, *?*) ya existe.',
+    'U606' => 'Disculpe, error al intentar agregar la configuraci&oacute;n (campo, subcampo, perfil) (*?*, *?*, *?*).',
+    'U607' => 'La configuraci&oacute;n (campo, subcampo, prefil) (*?*, *?*, *?*) se agreg&oacute; con &eacute;xito.',
+    'U608' => 'Se elimin&oacute; con &eacute;xito la configuraci&oacute;n (campo, subcampo, prefil) (*?*, *?*, *?*).',
+    'U609' => 'Disculpe, no se pudo eliminar la configuraci&oacute;n (campo, subcampo, prefil) (*?*, *?*, *?*).',
 
     'B400' => '',
     'B401' => 'Error al intentar prestar desde INTRA, funcion C4::AR::Reservas::t_realizarPrestamo.',
