@@ -1335,7 +1335,7 @@ var seconds=currentTime.getSeconds();if(minutes<10)
 minutes="0"+minutes
 if(seconds<10)
 seconds="0"+seconds;return hours+":"+minutes+" "+" "+seconds;}
-function checkedAll(id,nombreCheckbox){$("#"+id).toggle(function(){$("input[name="+nombreCheckbox+"]").each(function(){this.checked=true;$(this).parent().parent().addClass("marked");})},function(){$("input[name="+nombreCheckbox+"]").each(function(){this.checked=false;$(this).parent().parent().removeClass("marked");})});}
+function checkedAll(id,nombreCheckbox){$("#"+id).toggle(function(){$("input[name="+nombreCheckbox+"]").each(function(){this.checked=true;})},function(){$("input[name="+nombreCheckbox+"]").each(function(){this.checked=false;})});}
 function recuperarSeleccionados(chckbox){var chck=$("input[name="+chckbox+"]:checked");var array=new Array;var long=chck.length;for(var i=0;i<long;i++){array[i]=chck[i].value;}
 return array;}
 function checkedAllById(id){$("#"+id+" input[type='checkbox']").each(function(){this.checked=!this.checked;});}

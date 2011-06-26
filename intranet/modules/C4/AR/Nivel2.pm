@@ -93,8 +93,6 @@ sub guardarRealmente{
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U369', 'params' => [$id2]} ) ;
         };
 
-#         C4::AR::Sphinx::reindexar();
-
     
         if ($@){
             #Se loguea error de Base de Datos
@@ -110,6 +108,49 @@ sub guardarRealmente{
     }
 
     return ($msg_object, $id2);
+}
+
+=head2
+sub guardarRealmente
+
+Esta funcion realmente guarda el elemento en la base
+=cut
+sub t_guardarIndice{
+    my ($params) = @_;
+
+        my $catRegistroMarcN2   = getNivel2FromId2($params->{'id2'});
+        my $msg_object          = C4::AR::Mensajes::create(); 
+        my $db                  = $catRegistroMarcN2->db;
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
+        $db->begin_work;
+    
+        eval {
+            $catRegistroMarcN2->setIndice($params->{'indice'});
+            $catRegistroMarcN2->save();
+            $db->commit;
+            C4::AR::Sphinx::generar_indice($catRegistroMarcN2->getId1, 'R_PARTIAL', 'INSERT');
+            #ahora el indice se encuentra DESACTUALIZADO
+            C4::AR::Preferencias::setVariable('indexado', 0, $db);
+
+            #se cambio el permiso con exito
+            $msg_object->{'error'} = 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U610', 'params' => []} ) ;
+        };
+
+    
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B428',"INTRA");
+            eval {$db->rollback};
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U611', 'params' => []} ) ;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
+
+    return ($msg_object);
 }
 
 =head2 sub t_eliminarNivel2

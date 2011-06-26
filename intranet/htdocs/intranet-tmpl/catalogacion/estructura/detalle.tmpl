@@ -94,6 +94,14 @@ $(document).ready(function(){
 												                title =>	"[% 'Editar Grupo' | i18n %]"
 											                ) ;
 			                [% END %]
+
+                            [% PERL %]
+                                                print C4::AR::Filtros::to_Icon(  
+                                                                                    boton   => "icon_edicion",
+                                                                                    onClick => "mostrarIndice([% id2 %]);",
+                                                                                    title   => "[% 'Ver &iacute;ndice' | i18n %]",
+                                                        ) ;
+                            [% END %]
 		                
 		                <div>
 		                    [% PERL %]
@@ -143,5 +151,7 @@ $(document).ready(function(){
 
 </div> <!-- Fin DIV detalleComun -->
 <div id='basic-modal-content'></div>
+<!-- para mostrar el contenido del indice -->
+<div id="contenido_indice"></div>
 
 [% INCLUDE  "intranet-bottom.inc" %]
