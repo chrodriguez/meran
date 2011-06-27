@@ -1047,7 +1047,7 @@ sub procesarAnaliticas {
 
 			if(!$tema_final){
 			#Hay que agregar el tema nueva
-			    print "TEMA NUEVO ".$tema_analitica->{'subject'}." \n";
+# 			    print "TEMA NUEVO ".$tema_analitica->{'subject'}." \n";
 			    my $tn=$dbh->prepare("INSERT INTO cat_tema (nombre) VALUES (?);");
 			    $tn->execute($tema_analitica->{'subject'});
 			    

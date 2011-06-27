@@ -658,3 +658,5 @@ ALTER TABLE `cat_estructura_catalogacion` ADD `edicion_grupal` TINYINT NOT NULL 
 ALTER TABLE `usr_socio` ADD  `lastValidation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
 
 UPDATE `usr_persona` SET `ciudad` =1 WHERE ciudad IS NULL OR ciudad = '';
+
+INSERT INTO cat_ref_tipo_nivel3( id_tipo_doc, nombre, notforloan ) VALUES ('ANA', 'Analítica', 1 );
