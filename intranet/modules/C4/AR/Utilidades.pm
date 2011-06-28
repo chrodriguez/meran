@@ -122,6 +122,7 @@ use vars qw(@EXPORT_OK @ISA);
     getUrlPrefix
     addParamToUrl
     escapeHashData
+    armarIniciales
 );
 
 
@@ -4145,6 +4146,27 @@ sub url_for{
     
 # C4::AR::Debug::debug("url_final => ".$url_final);
     return $url_final;
+}
+
+sub armarIniciales{
+	my ($params) = @_;
+	
+	my @split_nombre   = split(/ /,$params->{'nombre'});
+    my @split_apellido = split(/ /,$params->{'apellido'}); 
+    my $iniciales = '';
+    
+    foreach my $name (@split_nombre){
+    	$name  = uc trim($name);
+    	$iniciales.= substr($name,0,1); 
+    }
+    
+    foreach my $surname (@split_apellido){
+        $surname  = uc trim($surname);
+        $iniciales.= substr($surname,0,1); 
+    }
+    
+    return ($iniciales);
+
 }
 
 END { }       # module clean-up code here (global destructor)
