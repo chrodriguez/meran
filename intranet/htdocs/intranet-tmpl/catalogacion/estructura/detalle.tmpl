@@ -20,6 +20,9 @@ $(document).ready(function(){
 	inicializar();
 	zebra("tablaResult");
 //     checkedAll("select_all", "checkEjemplares");
+/*$("#contenido_indice").fancybox();
+$("#inline").fancybox();    
+$(".indice").fancybox();  */  
 
 });
 
@@ -103,6 +106,10 @@ $(document).ready(function(){
                                                         ) ;
                             [% END %]
 		                
+
+<!--                            <a class="inline" href="#indice_data[% id2 %]">Indice</a>-->
+                            <div style="display:none"><div id="indice_data[% id2 %]">[% indice %]</div></div>
+
 		                <div>
 		                    [% PERL %]
 		                                        print C4::AR::Filtros::to_Icon(  
@@ -152,6 +159,6 @@ $(document).ready(function(){
 </div> <!-- Fin DIV detalleComun -->
 <div id='basic-modal-content'></div>
 <!-- para mostrar el contenido del indice -->
-<div id="contenido_indice"></div>
+
 
 [% INCLUDE  "intranet-bottom.inc" %]

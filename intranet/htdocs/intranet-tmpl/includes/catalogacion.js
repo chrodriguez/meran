@@ -558,20 +558,25 @@ function agregarIndice(id2){
     $('#datos_indice').dialog({ width: 800, position: 'center', modal: true });
 }
 
-function mostrarIndice(id2){
-    objAH               = new AjaxHelper(updateMostrarIndice);
-    objAH.showOverlay   = true;
-    objAH.debug         = true;
-    objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
-    objAH.id2           = id2;
-    objAH.tipoAccion    = "MOSTRAR_INDICE";
-    objAH.sendToServer();
-}
+// function mostrarIndice(id2){
+//     objAH               = new AjaxHelper(updateMostrarIndice);
+//     objAH.showOverlay   = true;
+//     objAH.debug         = true;
+//     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+//     objAH.id2           = id2;
+//     objAH.tipoAccion    = "MOSTRAR_INDICE";
+//     objAH.sendToServer();
+// }
 
-function updateMostrarIndice(responseText){
-  
-    $("#contenido_indice").html(responseText);
-    $("#contenido_indice").dialog({ width: 800, position: 'center', modal: true });  
+// function updateMostrarIndice(responseText){
+//   
+//     $("#contenido_indice").html(responseText);
+// //     $("#contenido_indice").dialog({ width: 800, position: 'center', modal: true });  
+//     $("#contenido_indice").fancybox();  
+// }
+
+function mostrarIndice(id2){
+    $("#indice_data" + id2).dialog({ width: 800, position: 'center', modal: true }); 
 }
 
 function guardarIndice(){
