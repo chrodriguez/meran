@@ -11,6 +11,7 @@ __PACKAGE__->meta->setup(
         id              => { type => 'serial', not_null => 1 },
         marc_record     => { type => 'text' },
         id1             => { type => 'integer', not_null => 1 },
+        indice          => { type => 'text' },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -67,6 +68,18 @@ sub setMarcRecord{
     my ($marc_record)   = @_;
 
     $self->marc_record($marc_record);
+}
+
+sub getIndice{
+    my ($self) = shift;
+    return (C4::AR::Utilidades::trim($self->indice));
+}
+
+sub setIndice{
+    my ($self)          = shift;
+    my ($indice)   = @_;
+
+    $self->indice($indice);
 }
 
 sub agregar{

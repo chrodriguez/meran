@@ -61,6 +61,7 @@ $(document).ready( function() {
 	[% END %]
 
     $('#datos_esquema').hide();
+    $('#datos_indice').hide()
 
     if(MODIFICAR) {
         $('#datos_del_leader').hide();
@@ -108,6 +109,31 @@ $(document).ready( function() {
                                                         boton   => "icon_buscar",
                                                         onClick => "seleccionar_esquema();",
                                                         title   => "[% 'Buscar' | i18n %]",
+                            ) ;
+            [% END %]
+        </li>
+    </ul>
+</fieldset>
+</div>
+
+<div id="datos_indice" style="display: none;">
+<fieldset>
+    <legend class="titulo_legend">[% "Datos del Indice" | i18n %]</legend>
+    <ul style="clear:both">
+        <li class="sub_item" >
+            <label for="indice_id">
+                [% "Ingrese el &iacute;ndice:" | i18n %]
+            </label>
+
+            <textarea id="indice_id" rows="10" cols="120" style="width:400px; height: 202px;">
+            </textarea>
+        
+            [% PERL %]
+                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Indice' | i18n %]",
+                                                        boton   => "boton_guardar",
+                                                        onClick => "guardarIndice();",
+                                                        title   => "[% 'Guardar el Indice' | i18n %]",
+                                                        alternClass => "botonCentrado"
                             ) ;
             [% END %]
         </li>

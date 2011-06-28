@@ -20,6 +20,9 @@ $(document).ready(function(){
 	inicializar();
 	zebra("tablaResult");
 //     checkedAll("select_all", "checkEjemplares");
+/*$("#contenido_indice").fancybox();
+$("#inline").fancybox();    
+$(".indice").fancybox();  */  
 
 });
 
@@ -94,7 +97,19 @@ $(document).ready(function(){
 												                title =>	"[% 'Editar Grupo' | i18n %]"
 											                ) ;
 			                [% END %]
+
+                            [% PERL %]
+                                                print C4::AR::Filtros::to_Icon(  
+                                                                                    boton   => "icon_edicion",
+                                                                                    onClick => "mostrarIndice([% id2 %]);",
+                                                                                    title   => "[% 'Ver &iacute;ndice' | i18n %]",
+                                                        ) ;
+                            [% END %]
 		                
+
+<!--                            <a class="inline" href="#indice_data[% id2 %]">Indice</a>-->
+                            <div style="display:none"><div id="indice_data[% id2 %]">[% indice %]</div></div>
+
 		                <div>
 		                    [% PERL %]
 		                                        print C4::AR::Filtros::to_Icon(  
@@ -143,5 +158,7 @@ $(document).ready(function(){
 
 </div> <!-- Fin DIV detalleComun -->
 <div id='basic-modal-content'></div>
+<!-- para mostrar el contenido del indice -->
+
 
 [% INCLUDE  "intranet-bottom.inc" %]

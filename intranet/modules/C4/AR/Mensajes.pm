@@ -305,6 +305,8 @@ my %mensajesINTRA = (
     'U607' => 'La configuraci&oacute;n (campo, subcampo, prefil) (*?*, *?*, *?*) se agreg&oacute; con &eacute;xito.',
     'U608' => 'Se elimin&oacute; con &eacute;xito la configuraci&oacute;n (campo, subcampo, prefil) (*?*, *?*, *?*).',
     'U609' => 'Disculpe, no se pudo eliminar la configuraci&oacute;n (campo, subcampo, prefil) (*?*, *?*, *?*).',
+    'U610' => 'Se agreg&oacute; con &eacute;xito el &iacute;ndice',
+    'U611' => 'Disculpe, no se pudo agregar el &iacute;ndice',
 
     'B400' => '',
     'B401' => 'Error al intentar prestar desde INTRA, funcion C4::AR::Reservas::t_realizarPrestamo.',
