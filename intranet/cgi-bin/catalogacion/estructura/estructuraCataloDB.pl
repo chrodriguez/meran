@@ -679,6 +679,47 @@ elsif($tipoAccion eq "MODIFICAR_NIVEL_3"){
     C4::AR::Auth::print_header($session);
     print to_json \%info;
 }
+
+elsif($tipoAccion eq "GUARDAR_INDICE"){
+     my ($user, $session, $flags)= checkauth(   $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'ALTA', 
+                                                    entorno => 'datos_nivel1'}, 
+                                                'intranet'
+                                    );
+    my ($Message_arrayref) = C4::AR::Nivel2::t_guardarIndice($obj);
+    
+    my %info;
+    $info{'Message_arrayref'} = $Message_arrayref;
+
+    C4::AR::Auth::print_header($session);
+    print to_json \%info;
+}
+elsif($tipoAccion eq "MOSTRAR_INDICE"){
+
+    my ($template, $session, $t_params) = get_template_and_user({
+                            template_name => "/includes/partials/catalogo/contenido_indice.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => {      ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'datos_nivel1' },
+                            debug => 1,
+                    });
+
+    $t_params->{'indice'}       = "";
+    my ($catRegistroMarcN2)     = C4::AR::Nivel2::getNivel2FromId2($obj->{'id2'});
+
+    if($catRegistroMarcN2){
+        $t_params->{'indice'}   = $catRegistroMarcN2->getIndice();
+    }
+ 
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+}
 elsif($tipoAccion eq "IMPORTAR_DESDE_KOHA"){
      my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 

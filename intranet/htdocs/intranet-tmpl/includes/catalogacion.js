@@ -552,6 +552,52 @@ function seleccionar_esquema(){
     }
 }
 
+function agregarIndice(id2){
+    ID_N2 = id2;
+  
+    $('#datos_indice').dialog({ width: 800, position: 'center', modal: true });
+}
+
+function mostrarIndice(id2){
+    objAH               = new AjaxHelper(updateMostrarIndice);
+    objAH.showOverlay   = true;
+    objAH.debug         = true;
+    objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.id2           = id2;
+    objAH.tipoAccion    = "MOSTRAR_INDICE";
+    objAH.sendToServer();
+}
+
+function updateMostrarIndice(responseText){
+  
+    $("#contenido_indice").html(responseText);
+    $("#contenido_indice").dialog({ width: 800, position: 'center', modal: true });  
+}
+
+function guardarIndice(){
+
+    objAH               = new AjaxHelper(updateGuadarIndice);
+    objAH.showOverlay   = true;
+    objAH.debug         = true;
+    objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.tipoAccion    = "GUARDAR_INDICE";
+    objAH.id2           = ID_N2;
+    objAH.indice        = $("#indice_id").val();
+    objAH.sendToServer();
+    close_window_indice();    
+}
+
+function updateGuadarIndice(responseText){    
+    var info        = JSONstring.toObject(responseText);
+    var Messages    = info.Message_arrayref;
+    
+    setMessages(Messages);  
+}
+
+function close_window_indice(){
+    $('#datos_indice').dialog('close');
+}  
+
 function agregarN3(id2, tipo_documento){
     ID_N2               = id2; 
     ID_TIPO_EJEMPLAR    = tipo_documento;
