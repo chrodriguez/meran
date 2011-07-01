@@ -4,8 +4,9 @@ function updateInfoBusquedasBar(responseText){$('#marco_contenido_datos').html("
 function busquedaCombinable(){var radio=$("#tipo:checked");var tipo=radio[0].value;objAH=new AjaxHelper(updateBusquedaCombinable);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/busquedas/busquedasDB.pl';objAH.titulo=$('#titulo').val();objAH.tipo=tipo;objAH.autor=$('#autor').val();objAH.only_available=($('#only_available').attr('checked'))?1:0;objAH.signatura=$('#signatura').val();objAH.tipo_nivel3_name=$('#tipo_nivel3_id').val();objAH.tema=$('#tema').val();objAH.codBarra=$('#codBarra').val();objAH.isbn=$('#isbn').val();objAH.viewShelfName=$('#estante').val();objAH.tipoAccion='BUSQUEDA_AVANZADA';objAH.funcion='changePage';objAH.sendToServer();}
 function updateBusquedaCombinable(responseText){updateInfoBusquedas(responseText);}
 function changePage(ini){objAH.changePage(ini);}
-function ordenarPor(ord){objAH.sort(ord);}
-function buscarBar(){objAH=new AjaxHelper(updateInfoBusquedasBar);objAH.showOverlay=true;objAH.debug=true;objAH.url=URL_PREFIX+'/busquedas/busquedasDB.pl';objAH.keyword=$('#keyword-bar').val();objAH.shouldScroll=true;objAH.tipoAccion='BUSQUEDA_COMBINADA';objAH.match_mode="SPH_MATCH_ALL";objAH.funcion='changePage';if(jQuery.trim(objAH.keyword).length>0)
+function ordenarPor(ord){objAH.sort(ord);
+function json_sanitize($string){return json_encode(json_decode($string));}}
+function buscarBar(){objAH=new AjaxHelper(updateInfoBusquedasBar);objAH.showOverlay=true;objAH.debug=true;objAH.url=URL_PREFIX+'/busquedas/busquedasDB.pl';objAH.keyword=json_sanitize($('#keyword-bar').val());objAH.shouldScroll=true;objAH.tipoAccion='BUSQUEDA_COMBINADA';objAH.match_mode="SPH_MATCH_ALL";objAH.funcion='changePage';if(jQuery.trim(objAH.keyword).length>0)
 objAH.sendToServer();}
 function buscar(doScroll){var limite_caracteres=3;var cumple_limite=true;var cumple_vacio=true;if(doScroll)
 shouldScroll=doScroll;if((jQuery.trim($('#titulo').val())!='')||(jQuery.trim($('#autor').val())!='')||(jQuery.trim($('#signatura').val())!='')||(jQuery.trim($('#dictionary').val())!='')||(jQuery.trim($('#isbn').val())!='')||(jQuery.trim($('#codBarra').val())!='')||(jQuery.trim($('#tema').val())!='')||(jQuery.trim($('#estante').val())!='')){busquedaCombinable();}

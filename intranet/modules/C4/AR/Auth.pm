@@ -433,6 +433,7 @@ sub _obtenerToken{
         #PREGUNTO Si ES PARA LAS LLAMADAS AJAX QUE PASSAN UN OBJETO JSON (HELPER DE AJAX)
         if ( defined($obj) ){
             $obj=C4::AR::Utilidades::from_json_ISO($obj);
+        	C4::AR::Debug::debug("C4::AR::Auth::OBJ".$obj);
             return $obj->{'token'};
         }
     }
