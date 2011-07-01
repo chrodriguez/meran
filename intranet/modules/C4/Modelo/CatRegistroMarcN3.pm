@@ -96,6 +96,7 @@ sub validar {
     C4::AR::Debug::debug("CatRegistroMarcN3 => validar => action => ".$action);
 
     $msg_object->{'error'} = 0;
+    my $marc_record = MARC::Record->new_from_usmarc($params->{'marc_record'});
 
     foreach my $campo_hash_ref (@$MARC_array){
 
@@ -109,8 +110,9 @@ sub validar {
             #validaciones para el BARCODE
                 $self->validarBarcode($msg_object, $subcampo_hash_ref, $action);
             } elsif(($campo_hash_ref->{'campo'} eq '995')&&($subcampo_hash_ref->{'subcampo'} eq 't')){
-            #validaciones para la signatura topografica, la signatura es unica en el grupo
-                if ($self->seRepiteSignatura($subcampo_hash_ref->{'dato'})){
+            #validaciones para la signatura topografica, la signatura es unica en el registro (no hay que chequear si el ejemplar es compartido)
+	    
+                if ($self->seRepiteSignatura($subcampo_hash_ref->{'dato'}) && (! ESTADO_COMPARTIDO( C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record->subfield("995","e"))))) ) {
                     C4::AR::Debug::debug("CatRegistroMarcN3 => validar => se repite la signatura");
                     $msg_object->{'error'} = 1;
                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U417', 'params' => [$subcampo_hash_ref->{'dato'}]} ) ;
@@ -194,7 +196,7 @@ sub seRepiteBarcode {
 =item
     sub seRepiteSignatura
 
-    Verifica si se repite la signatura topografica en otro grupo, esto se usa cuandos se tiene q modificar
+    Verifica si se repite la signatura topografica en otro registro, esto se usa cuando se tiene q modificar (aca hay que ignorar los que tienen estado compartido)
 =cut
 sub seRepiteSignatura {
     my ($self)      = shift;
@@ -203,8 +205,9 @@ sub seRepiteSignatura {
     my @filtros;
     my $existe = 0;
 
-    push(@filtros, ( id2        => { ne => $self->getId2() }) );
-    push(@filtros, ( signatura  => { eq => $signatura }) );
+    push(@filtros, ( id1        => { ne => $self->getId1() }) ); #Saco los del mismo registro
+    push(@filtros, ( id1        => { ne => C4::Modelo::RefEstado::estadoDisponibleValue()})); #Saco los compartidos
+    push(@filtros, ( signatura  => { eq => $signatura }));
     
     my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => \@filtros ); 
 
