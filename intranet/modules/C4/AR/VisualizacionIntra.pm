@@ -109,12 +109,13 @@ sub addConfiguracion{
 }
 
 sub deleteConfiguracion{
-    my ($params) = @_;
+    my ($params, $db) = @_;
     my @filtros;
     my $vista_id = $params->{'vista_id'};
 
     push (@filtros, (id => { eq => $vista_id }) );
-    my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros,);
+
+    my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(db => $db, query => \@filtros,);
 
     if ($configuracion->[0]){
         return ( $configuracion->[0]->delete() );
@@ -250,9 +251,9 @@ sub t_agregar_configuracion {
     
         eval {
 
-            C4::AR::VisualizacionIntra::deleteConfiguracion($params, $db);
+            C4::AR::VisualizacionIntra::addConfiguracion($params, $db);
             $msg_object->{'error'} = 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U608', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U604', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}]} ) ;
 
             $db->commit;
         };
@@ -263,7 +264,7 @@ sub t_agregar_configuracion {
             $db->rollback;
             #Se setea error para el usuario
             $msg_object->{'error'} = 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U609', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U606', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}]} ) ;
         }
 
         $db->{connect_options}->{AutoCommit} = 1;
@@ -283,29 +284,36 @@ sub t_delete_configuracion {
     my $db                  = $visualizacion_intra->db;
     my $msg_object          = C4::AR::Mensajes::create();
 
-   
-    # enable transactions, if possible
-    $db->{connect_options}->{AutoCommit} = 0;
+    my $v = $visualizacion_intra->getByPk($params->{'vista_id'});
 
-    eval {
+    if($v){
 
-        C4::AR::VisualizacionIntra::deleteConfiguracion($params, $db);
-        $msg_object->{'error'} = 0;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U608', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}]} ) ;
+        my $campo      = $v->getCampo();
+        my $subcampo   = $v->getSubCampo();
+        my $ejemplar   = $v->getTipoEjemplar();
 
-        $db->commit;
-    };
+        # enable transactions, if possible
+        $db->{connect_options}->{AutoCommit} = 0;
 
-    if ($@){
-        #Se loguea error de Base de Datos
-        &C4::AR::Mensajes::printErrorDB($@, 'B432',"INTRA");
-        $db->rollback;
-        #Se setea error para el usuario
-        $msg_object->{'error'} = 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U609', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}]} ) ;
+        eval {
+            C4::AR::VisualizacionIntra::deleteConfiguracion($params, $db);
+            $msg_object->{'error'} = 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U608', 'params' => [$campo, $subcampo, $ejemplar]} ) ;
+
+            $db->commit;
+        };
+
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B432',"INTRA");
+            $db->rollback;
+            #Se setea error para el usuario
+            $msg_object->{'error'} = 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U609', 'params' => [$campo, $subcampo, $ejemplar]} ) ;
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
     }
-
-    $db->{connect_options}->{AutoCommit} = 1;
 
 
     return ($msg_object);
