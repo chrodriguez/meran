@@ -24,6 +24,7 @@ require Exporter;
 use C4::Context;
 use C4::AR::Mensajes;
 use C4::AR::Utilidades;
+use C4::AR::Preferencias;
 use Image::Resize;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -174,7 +175,7 @@ sub uploadDocument {
 #if ($check_size > $maxFileSize) { blabla }
 
 
-    if (C4::Context->preference("e_documents")){
+    if (C4::AR::Preferencias::getPreferencia("e_documents")){
 
         my @extensiones_permitidas=("bmp","jpg","gif","png","jpeg","doc","docx","odt","pdf","xls","zip");
         my $size = scalar(@nombreYextension) - 1;
@@ -233,7 +234,7 @@ sub deleteDocument {
     my $msg='';
     my $file_id = $params->{'id'};
 
-    if (C4::Context->preference("e_documents")){
+    if (C4::AR::Preferencias::getPreferencia("e_documents")){
         my $file = C4::AR::Catalogacion::getDocumentById($file_id);
 
         my $write_file= $eDocsDir."/".$file->getFilename;
