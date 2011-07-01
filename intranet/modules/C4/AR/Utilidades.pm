@@ -1395,21 +1395,24 @@ sub UTF8toISO {
 =cut
 sub from_json_ISO {
     my ($data)=@_;
-
+    
 #      C4::AR::Debug::debug("Utilidades => from_json_ISO => data => ".$data);
-
-    eval {
+# LIMPIAR SOLAMENTE TAB
+#    eval {
         
-#         $data= UTF8toISO($data);
+         $data= UTF8toISO($data);
 #         return from_json($data, {ascii => 0});
-        return from_json($data, {utf8 => 1});
-    }
-    or do{
+        C4::AR::Debug::debug("Data JSON ===> ".$data);
+#	my $prueba=encode_json $data;
+     #   C4::AR::Debug::debug("Data JSON ===> ".$prueba);
+	return from_json($data, {latin1 => 1});
+ #   }
+  #  or do{
 # FIXME falta generar un codigo de error para error de sistema
-        C4::AR::Debug::debug("Utilidades => from_json_ISO => ERROR");
-        &C4::AR::Mensajes::printErrorDB($@, 'UT001','INTRA');
-        return "0";
-    }
+   #     C4::AR::Debug::debug("Utilidades => from_json_ISO => ERROR");
+    #    &C4::AR::Mensajes::printErrorDB($@, 'UT001','INTRA');
+     #   return "0";
+    #}
 }
 
 =head2

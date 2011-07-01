@@ -122,7 +122,7 @@ sub getResumen{
     my ($self) = shift;
 
     my $string_sub = substr ($self->contenido,0,75);
-    return ($string_sub."...");
+    return (($string_sub."..."));
 }
 
 sub getFechaLegible{

@@ -28,7 +28,6 @@ sub agregar{
     my $contenido = $input->param('contenido');
 
 #   Escapa codigo HTML
-    encode_entities($contenido);
 #     C4::AR::Debug::debug($contenido);
 
     %params = $input->Vars;

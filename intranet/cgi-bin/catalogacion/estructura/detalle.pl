@@ -27,5 +27,7 @@ my $id1=$input->param('id1');
 C4::AR::Nivel3::detalleCompletoINTRA($id1, $t_params);
 $t_params->{'page_sub_title'}   = C4::AR::Filtros::i18n("Catalogaci&oacute;n - Detalle del &iacute;tem");
 $t_params->{'mensaje'}          = $input->url_param('msg_file');
+$t_params->{'pref_e_documents'}  = C4::AR::Preferencias::getPreferencia("e_documents");
 
+C4::AR::Debug::debug("HABILITADA E_DOCUMENTS =========> ".$t_params->{'pref_e_documents'});
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

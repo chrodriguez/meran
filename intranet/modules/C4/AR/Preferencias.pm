@@ -280,7 +280,7 @@ sub getPreferenciaLikeConCategoria {
 sub getPreferencia{
     my ($variable)  = @_;
 
-    my $preferencia_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( query => [ variable => { eq => $variable} ]);
+    my $preferencia_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( query => [ variable => { eq => "".$variable} ]);
 
     if ($preferencia_array_ref->[0]){
         return ($preferencia_array_ref->[0]);

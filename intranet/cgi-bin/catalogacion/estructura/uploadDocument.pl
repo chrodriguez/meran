@@ -38,6 +38,7 @@ my ($msg) = C4::AR::UploadFile::uploadDocument($file_name,$name,$id2,$file_data)
 C4::AR::Nivel3::detalleCompletoINTRA($id1, $t_params);
 
 $t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Catalogaci&oacute;n - Detalle del &iacute;tem");
+$t_params->{'pref_e_documents'}  = C4::AR::Preferencias::getPreferencia("e_documents");
 $t_params->{'mensaje'} = $msg;
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
