@@ -1,8 +1,8 @@
 package C4::AR::Utilidades;
 
-#Este modulo provee funcionalidades varias sobre las tablas de referencias en general, además de funciones que sirven como 
+#Este modulo provee funcionalidades varias sobre las tablas de referencias en general, ademas de funciones que sirven como 
 #apoyo a la funcionalidad de Meran. No existe una division clara de lo que incluye y lo que no, por lo tanto resta leer los comentarios de
-#cada función.
+#cada funcion.
 #Escrito el 8/9/2006 por einar@info.unlp.edu.ar
 #Update por Carbone Migue, Rajoy Gaspar
 #
@@ -22,7 +22,7 @@ use JSON;
 use C4::AR::Preferencias;
 use C4::AR::PedidoCotizacion;
 use URI::Escape;
-# FIXME Matiasp: Comentado por error de carga de módulos (Attempt to reload %s aborted.)
+# FIXME Matiasp: Comentado por error de carga de modulos (Attempt to reload %s aborted.)
 # use C4::AR::Presupuestos;
 # use C4::AR::PedidoCotizacion;
 
@@ -1385,7 +1385,7 @@ sub quitarduplicados{
 sub UTF8toISO {
 
     my ($data)=@_;
-#POR QUE ROMPE LOS ACENTOS???? VERRRRRRRRRRRRRRRRRRRRRRR
+#TODO: POR QUE ROMPE LOS ACENTOS???? VERRRRRRRRRRRRRRRRRRRRRRR
     return $data= Encode::decode('utf8', $data);
     return ($data);
 }
@@ -1394,25 +1394,20 @@ sub UTF8toISO {
     sub from_json_ISO
 =cut
 sub from_json_ISO {
-    my ($data)=@_;
-    
-#      C4::AR::Debug::debug("Utilidades => from_json_ISO => data => ".$data);
-# LIMPIAR SOLAMENTE TAB
-#    eval {
-        
-         $data= UTF8toISO($data);
-#         return from_json($data, {ascii => 0});
-        C4::AR::Debug::debug("Data JSON ===> ".$data);
-#	my $prueba=encode_json $data;
-     #   C4::AR::Debug::debug("Data JSON ===> ".$prueba);
-	return from_json($data, {latin1 => 1});
- #   }
-  #  or do{
-# FIXME falta generar un codigo de error para error de sistema
-   #     C4::AR::Debug::debug("Utilidades => from_json_ISO => ERROR");
-    #    &C4::AR::Mensajes::printErrorDB($@, 'UT001','INTRA');
-     #   return "0";
-    #}
+    my ($data) = @_;
+    eval {
+        #quita el caracter tab en todo el string $data
+        $data =~ s/\t//g;
+        $data = UTF8toISO($data);
+        #C4::AR::Debug::debug("Data JSON ===> ".$data);
+	    return from_json($data, {latin1 => 1});
+    }
+    or do{
+        #FIXME falta generar un codigo de error para error de sistema
+        C4::AR::Debug::debug("Utilidades => from_json_ISO => ERROR");
+        &C4::AR::Mensajes::printErrorDB($@, 'UT001','INTRA');
+        return "0";
+    }
 }
 
 =head2
