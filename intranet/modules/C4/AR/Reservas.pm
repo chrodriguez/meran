@@ -1488,6 +1488,7 @@ sub getReservaById{
 }
 
 sub getHistorialReservasParaTemplate {
+#TODO: cambiar la tabla de la busqueda, se debe hacer sobre rep_historial_circulacion. Porque ahora se borra de circ_reserva!!!
     my ($nro_socio)=@_;
 
     my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( 
