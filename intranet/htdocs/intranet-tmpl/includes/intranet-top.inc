@@ -79,6 +79,7 @@
 
 	}
 
+    //seleccion con shift
     $(function() {
         $('tr').shiftClick();
     }); 
@@ -93,7 +94,6 @@
         // click sobre el tr, para darle estilos
         var lastSelected;
         $('tr').click(function(e) {
-            //seleccion con shift
             var clase = $(this).attr('class').split(' ');
             if(clase[1] == 'marked'){
                 $(this).removeClass("marked"); 
