@@ -165,11 +165,9 @@
 <input type="checkbox" id="changepassword" name="changepassword" [% socio_modificar.getChange_password %] checked>
 </li>
 
-    [% IF course %]
-<li class="sub_item"><label for="usercourse">&iquest;[% "Realiz&oacute; curso" | i18n %]?</label>
-                <input  class="required" type="checkbox" id="usercourse" [% usercourse %]  checked>
+<li class="sub_item"><label for="cumple_requisito">&iquest;[% "Cumple requisito" | i18n %]?</label>
+   <input  type="checkbox" name="cumple_requisito" id="cumple_requisito" [% IF socio_modificar.cumpleRequisito %]  checked [% END %]>
 </li>
-    [% END %]
 
 <li class="sub_item"><label for="id_ui">[% "Unidad de Informaci&oacute;n" | i18n %]</label>
                 [% comboDeUI %]

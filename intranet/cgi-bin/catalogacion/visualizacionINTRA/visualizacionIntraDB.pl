@@ -88,23 +88,6 @@ else{
     }
     elsif($tipoAccion eq "ELIMINAR_VISUALIZACION"){
 
-#         my ($template, $session, $t_params) = get_template_and_user({
-#                             template_name => "catalogacion/visualizacionINTRA/detalleVisualizacionIntra.tmpl",
-#                             query => $input,
-#                             type => "intranet",
-#                             authnotrequired => 0,
-#                             flagsrequired => {  ui => 'ANY', 
-#                                                 tipo_documento => 'ANY', 
-#                                                 accion => 'CONSULTA', 
-#                                                 entorno => 'undefined'},
-#                             debug => 1,
-#         });
-# 
-#         my ($status) = C4::AR::VisualizacionIntra::deleteConfiguracion($obj);
-#         $t_params->{'visualizacion'} = C4::AR::VisualizacionIntra::getConfiguracion($ejemplar);
-# 
-#         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
-
         my ($user, $session, $flags)= checkauth(  $input, 
                                                   $authnotrequired, 
                                                   {   ui => 'ANY', 
@@ -121,6 +104,7 @@ else{
         my $infoOperacionJSON   = to_json $Message_arrayref;
 
         C4::AR::Auth::print_header($session);
+        print $infoOperacionJSON;
     }
     elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS"){
         my ($user, $session, $flags)= checkauth(    $input, 

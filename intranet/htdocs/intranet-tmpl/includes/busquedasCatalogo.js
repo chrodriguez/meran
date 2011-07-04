@@ -140,6 +140,8 @@ function busquedaPorKeyword(suggested){
 		keyword = $('#keyword-bar').val();
 
     keyword = keyword.replace(/\&/g,"AND");
+    keyword = keyword.replace(/\|/g,"OR");
+    keyword = keyword.replace(/\-/g,"NOT");
 	
     objAH=new AjaxHelper(updateBusquedaPorKeyword);
     objAH.showOverlay = true;

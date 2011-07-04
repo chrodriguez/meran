@@ -20,7 +20,7 @@ __PACKAGE__->meta->setup(
         last_login                       => { type => 'timestamp' },
         last_change_password             => { type => 'date' },
         change_password                  => { type => 'integer', default => '0', not_null => 1 },
-        cumple_requisito                 => { type => 'integer', not_null => 1, default => '0'},
+        cumple_requisito                 => { type => 'varchar', length=>32, not_null => 1, default => '0'},
         id_estado                        => { type => 'integer', not_null => 1 },
         activo                           => { type => 'integer', default => 0, not_null => 1 },
         agregacion_temp                  => { type => 'varchar', length => 255 },
@@ -132,7 +132,16 @@ sub agregar{
     $self->setPassword(C4::AR::Auth::hashear_password(C4::AR::Auth::hashear_password($self->persona->getNro_documento, 'MD5_B64'), 'SHA_256_B64'));
 #     $self->setLast_login($data_hash->{'last_login'});
     $self->setChange_password($data_hash->{'changepassword'});
-    $self->setCumple_requisito($data_hash->{'cumple_requisito'});
+
+    my $today = Date::Manip::ParseDate("today");
+    my $cumple_requisito = $data_hash->{'cumple_requisito'};
+    
+    if ($cumple_requisito){
+        $self->setCumple_requisito($today);
+    }else{
+    	$self->setCumple_requisito("0000000000:00:00");
+    }
+
     $self->setId_estado($data_hash->{'id_estado'});
 
     if (C4::AR::Preferencias::getValorPreferencia("autoActivarPersona")){
@@ -203,6 +212,19 @@ sub modificar{
 
     $self->setId_ui($data_hash->{'id_ui'});
     $self->setId_categoria($data_hash->{'cod_categoria'});
+
+    my $today = Date::Manip::ParseDate("today");
+    C4::AR::Debug::debug("TODAY ==================================== >".$today);
+    my $cumple_requisito = $data_hash->{'cumple_requisito'};
+    
+    if ($cumple_requisito){
+    	if (!$self->cumpleRequisito){
+            $self->setCumple_requisito($today);
+    	}
+    }else{
+        $self->setCumple_requisito("0000000000:00:00");
+    }
+    
     $self->persona->modificar($data_hash);
     $self->agregarAutorizado($data_hash);
     $self->save();
@@ -545,6 +567,11 @@ sub setChange_password{
     $self->change_password($change_password);
 }
 
+sub cumpleRequisito{
+    my ($self) = shift;
+    return ( ($self->cumple_requisito ne "0000000000:00:00") && ($self->cumple_requisito) );
+	
+}
 sub getCumple_requisito{
     my ($self) = shift;
     return ($self->cumple_requisito);
