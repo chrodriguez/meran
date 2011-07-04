@@ -403,7 +403,7 @@ body {
 	padding-right: 10px;
 	position: relative;
 	text-align: right;
-	width: 30%;
+	width: 36%;
 	font-size: 12px
 }
 
@@ -1509,6 +1509,7 @@ fieldset.accionesUsuarios {
 	border: none;
 	color: #FFF9E7;
 	font-family: Arial, Helvetica, sans-serif;
+	padding-right: 20px;
 /* Nuevo, con el acabado abrazador. Si no gusta, sacar desde acá para abajo */ 
 	background: url("images/fondo_label.png") repeat-x scroll 0 0 transparent;
     height: 36px;
@@ -4605,13 +4606,19 @@ background-color:#E7F3FA;
 
 /*hover de las tablas con checkbox*/
 .impar:hover {
-    background:   #5C82B5;
-    color:   #000000;
+    background:         #5C82B5;
+    color:              #000000;
+    user-select:        none; /* CSS3 */
+    -moz-user-select:   none; /* Gecko (Firefox) */
+    -khtml-user-select: none; /* Webkit (Safari, Chrome) */
 }
 
 .par:hover {
-    background:   #5C82B5;
-    color:   #000000;
+    background:         #5C82B5;
+    color:              #000000;
+    user-select:        none; /* CSS3 */
+    -moz-user-select:   none; /* Gecko (Firefox) */
+    -khtml-user-select: none; /* Webkit (Safari, Chrome) */
 }
 
 .par.marked {

@@ -49,6 +49,14 @@
                                                             li => 1,
                                 ) ;
                 [% END %]
+                [% PERL %]
+                        print C4::AR::Filtros::to_Icon(   
+                                                            boton   => "icon_edicion",
+                                                            onClick => "agregarIndice('[% nivel2.getId2 %]');",
+                                                            title   => "[% 'Agregar Indice (CAMBIAR ICONO!!!!!!!!)' | i18n %]",
+                                                            li => 1,
+                                ) ;
+                [% END %]
             </ul>
             </li>
             <li>

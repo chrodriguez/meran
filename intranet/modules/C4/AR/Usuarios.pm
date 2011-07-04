@@ -138,7 +138,7 @@ sub agregarPersona {
     _verificarDatosBorrower($params,$msg_object);
     if (!($msg_object->{'error'})){
 
-        $params->{'iniciales'} = "DGR";
+        $params->{'iniciales'} = C4::AR::Utilidades::armarIniciales($params);
         #genero un estado de ALTA para la persona para una fuente de informacion
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;

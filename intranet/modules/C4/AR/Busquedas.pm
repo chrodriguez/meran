@@ -1202,11 +1202,15 @@ sub busquedaCombinada_newTemp{
     foreach my $string (@searchstring_array){
 
         if($tipo eq 'SPH_MATCH_PHRASE'){
-            $query .=  " ".$string;
+            $query .=  " '".$string."'";
         } 
         elsif ($tipo eq 'SPH_MATCH_BOOLEAN'){
             if ($string eq "AND"){
             	$string = "&";
+            }elsif ($string eq "OR"){
+                $string = "|";
+            }elsif ($string eq "NOT"){
+                $string = "-";
             }
             if (C4::AR::Utilidades::existeInArray($string,@boolean_ops)){
                $query .=  " ".$string;
@@ -1613,7 +1617,7 @@ sub armarBuscoPor{
         if ($params->{'tipo_nivel3_name'} eq 'ALL'){
         	$buscoPor.= C4::AR::Utilidades::verificarValor(C4::AR::Filtros::i18n("TODOS"))."&";
         }else{
-            $buscoPor.= C4::AR::Utilidades::verificarValor(C4::AR::Referencias::translateTipoNivel3($params->{'tipo_nivel3_name'}))."&";
+            $buscoPor.= Encode::decode_utf8(C4::AR::Utilidades::verificarValor(C4::AR::Referencias::translateTipoNivel3($params->{'tipo_nivel3_name'}))."&");
         }
 	}
 

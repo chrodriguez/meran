@@ -280,7 +280,7 @@ my %mensajesINTRA = (
     'U414' => 'Error al intentar enviar el mail de prueba a la cuenta (*?*) <br/> (*?*).',                
     'U415' => 'Se han verificado los datos censales del socio.',                
     'U416' => 'No se han verificado los datos censales del socio, intentelo nuevamente.',
-    'U417' => 'No se puede repetir la signatura topogr&aacute;fica, existe en otro grupo.',
+    'U417' => 'No se puede repetir la signatura topogr&aacute;fica, existe en otro registro.',
     'U418' => 'No se puede extender el libre deuda porque el usuario tiene reservas asignadas.',
     'U419' => 'No se puede extender el libre deuda porque el usuario tiene reservas en espera.',
     'U420' => 'No se puede extender el libre deuda porque el usuario tiene pr&eacute;stamos vencidos.',
@@ -305,6 +305,8 @@ my %mensajesINTRA = (
     'U607' => 'La configuraci&oacute;n (campo, subcampo, prefil) (*?*, *?*, *?*) se agreg&oacute; con &eacute;xito.',
     'U608' => 'Se elimin&oacute; con &eacute;xito la configuraci&oacute;n (campo, subcampo, prefil) (*?*, *?*, *?*).',
     'U609' => 'Disculpe, no se pudo eliminar la configuraci&oacute;n (campo, subcampo, prefil) (*?*, *?*, *?*).',
+    'U610' => 'Se agreg&oacute; con &eacute;xito el &iacute;ndice',
+    'U611' => 'Disculpe, no se pudo agregar el &iacute;ndice',
 
     'B400' => '',
     'B401' => 'Error al intentar prestar desde INTRA, funcion C4::AR::Reservas::t_realizarPrestamo.',

@@ -433,6 +433,7 @@ sub _obtenerToken{
         #PREGUNTO Si ES PARA LAS LLAMADAS AJAX QUE PASSAN UN OBJETO JSON (HELPER DE AJAX)
         if ( defined($obj) ){
             $obj=C4::AR::Utilidades::from_json_ISO($obj);
+        	C4::AR::Debug::debug("C4::AR::Auth::OBJ".$obj);
             return $obj->{'token'};
         }
     }
@@ -1146,6 +1147,14 @@ sub session_destroy {
     return $session;
 }
 
+
+sub _checkRequisito{
+	my ($nro_socio) = @_;
+	
+	my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+	my $cumple_condicion = $socio->getCumple_requisito;
+	return ($cumple_condicion && ($cumple_condicion ne "0000000000:00:00"));
+}
 =item sub _verificarPassword
 
     Esta funcion verifica si el usuario y la password ingresada son valida, ya se en LDAP o en la base, segun configuracion de preferencia
@@ -1155,22 +1164,28 @@ sub session_destroy {
 =cut
 sub _verificarPassword {
     my ($userid, $password, $nroRandom) = @_;
-    my ($socio);
-    ## FIXME falta verificar la pass en LDAP si esta esta usando
-    if (C4::AR::Preferencias::getValorPreferencia('ldapenabled')){
-    #se esta usando LDAP
-        if (C4::Context->config('authMERAN')){
-            #Autenticacion propia de MERAN
-            ($socio) = C4::AR::Authldap::checkpwldap($userid,$password,$nroRandom);
-        }
-        else { 
-            #Autenticacion propia de LDAP, en este caso es recomendable HTTPS
-            ($socio) = C4::AR::Authldap::checkpwDC($userid,$password);
-        }
-     }
-    else {
-        #Si no se usa LDAP
-        ($socio) = _checkpw($userid,$password,$nroRandom); 
+    my ($socio) = undef;
+
+    my ($cumple_requisito) = _checkRequisito($userid);
+    
+    if ($cumple_requisito){
+    	
+	    ## FIXME falta verificar la pass en LDAP si esta esta usando    
+	    if (C4::AR::Preferencias::getValorPreferencia('ldapenabled')){
+	    #se esta usando LDAP
+	        if (C4::Context->config('authMERAN')){
+	            #Autenticacion propia de MERAN
+	            ($socio) = C4::AR::Authldap::checkpwldap($userid,$password,$nroRandom);
+	        }
+	        else { 
+	            #Autenticacion propia de LDAP, en este caso es recomendable HTTPS
+	            ($socio) = C4::AR::Authldap::checkpwDC($userid,$password);
+	        }
+	     }
+	    else {
+	        #Si no se usa LDAP
+	        ($socio) = _checkpw($userid,$password,$nroRandom); 
+	    }
     }
     return ($socio);
 }
