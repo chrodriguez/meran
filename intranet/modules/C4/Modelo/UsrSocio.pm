@@ -218,7 +218,9 @@ sub modificar{
     my $cumple_requisito = $data_hash->{'cumple_requisito'};
     
     if ($cumple_requisito){
-        $self->setCumple_requisito($today);
+    	if (!$self->cumpleRequisito){
+            $self->setCumple_requisito($today);
+    	}
     }else{
         $self->setCumple_requisito("0000000000:00:00");
     }
