@@ -27,13 +27,14 @@
                     <th onClick="ordenar('edicion');">[% "Edici&oacute;n" | i18n %]</th>
                     <th onClick="ordenar('ui_origen');">[% "UI Origen" | i18n %]</th>
                     <th onClick="ordenar('ui_poseedora');">[% "UI Poseedora" | i18n %]</th>
-
+                    <th onClick="ordenar('ui_poseedora');">[% "Acciones" | i18n %]</th>
                 </tr>
        [% END %]        
+                <form id="tablaEjemplares" name="tablaEjemplares" action="[% url_prefix %]/catalogacion/barcode_gen.pl" method="post">
                 [% FOREACH res IN results %]
                         <tr >
                                 <td>
-                                    <input type="checkbox" id="checkEjemplares" name="checkEjemplares[% res.nivel2.getId2 %]" class="icon_seleccionar" value="[% res.nivel3.getId3 %]">
+                                    <input type="checkbox" id="checkEjemplares" name="checkEjemplares[% res.nivel2.getId2 %]" class="icon_seleccionar" value="[% res.nivel3.codigo_barra%]">
                                 </td>
                                 <td  align="center">
                                         [% res.nivel3.codigo_barra%]
@@ -77,10 +78,20 @@
                         </tr>
 
                 [% END %]
+            </form>
             </table>
-  
+   
       [% IF cantidad > 0 %]
-
+              <div class="horizontal">[% "Para los elementos que est&aacute;n marcados:" | i18n %]</div>
+         
+              [% PERL %]
+                      print C4::AR::Filtros::to_Icon(   
+                                                          boton   => "icon_exportar",
+                                                          onClick => "generarVariasEtiquetas();",
+                                                          title   => "[% 'Generar etiquetas de ejemplares' | i18n %]",
+                                                          li => 1,
+                              ) ;
+              [% END %]
             <div class="buttonContainerHorizontal" style="margin-top:10px;">
           
                 [% PERL %]
