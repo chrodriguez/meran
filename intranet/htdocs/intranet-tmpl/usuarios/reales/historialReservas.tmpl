@@ -21,7 +21,7 @@
 				    [% "C&oacute;digo" | i18n %]
 		        </td>
 			    <td>[% "Fecha" | i18n %]</td>
-		    
+		        <td>[% "Operacion" | i18n %]</td>
 		    </tr>
 		    
 		    [% FOREACH reserva IN loop_reading %]
@@ -61,7 +61,10 @@
 				    [% END %]
 			    </td>
 			    <td>
-				    &nbsp;[% reserva.getFecha_reserva_formateada %]&nbsp;
+				    &nbsp;[% reserva.getFecha_formateada %]&nbsp;
+			    </td>
+			    <td>
+                    [% reserva.getTipo_operacion %]
 			    </td>
 		    [% END %] <!-- FOREACH PRIMERO -->
 		

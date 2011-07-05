@@ -1488,19 +1488,37 @@ sub getReservaById{
 }
 
 sub getHistorialReservasParaTemplate {
+#TODO: cambiar la tabla de la busqueda, se debe hacer sobre rep_historial_circulacion. Porque ahora se borra de circ_reserva!!!
     my ($nro_socio)=@_;
 
-    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( 
-                                          query => [ nro_socio  => { eq => $nro_socio }],
-                                          with_objects      => ['nivel2', 'nivel3','socio','ui', 'nivel3.nivel2.nivel1'],
+# viejo, se hacia la consulta sobre circ_reserva, pero esta todo en rep_historial_circulacion ahora.
+#    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( 
+#                                          query => [ nro_socio  => { eq => $nro_socio }],
+#                                          with_objects      => ['nivel2', 'nivel3','socio','ui', 'nivel3.nivel2.nivel1'],
+#                                          sorty_by          => ['id_reserva DESC'],
+
+#                                ); 
+#    my $reservas_array_ref_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( 
+#                                          query => [ nro_socio  => { eq => $nro_socio }],
+#                                          with_objects => ['nivel3','socio','ui'],
+
+#                                );     
+
+use C4::Modelo::RepHistorialCirculacion;
+use C4::Modelo::RepHistorialCirculacion::Manager;
+
+    my $reservas_array_ref = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
+                                          query             => [ nro_socio  => { eq => $nro_socio }],
+                                          with_objects      => ['nivel2', 'nivel3','socio', 'nivel3.nivel2.nivel1'],
                                           sorty_by          => ['id_reserva DESC'],
+#                                          TODO: mostrar las operaciones: reservar,cancelar y cambiar en la base las operaciones
 
                                 ); 
-    my $reservas_array_ref_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( 
-                                          query => [ nro_socio  => { eq => $nro_socio }],
-                                          with_objects => ['nivel3','socio','ui'],
+    my $reservas_array_ref_count = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count( 
+                                          query         => [ nro_socio  => { eq => $nro_socio }],
+                                          with_objects  => ['nivel3','socio'],
 
-                                );     
+                                );  
     return ($reservas_array_ref_count, $reservas_array_ref);
 }
 

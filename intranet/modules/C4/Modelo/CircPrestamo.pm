@@ -506,9 +506,11 @@ sub getFecha_vencimiento_formateada {
 	return C4::Date::format_date( $self->getFecha_vencimiento, $dateformat );
 }
 
-=item 
-la funcion devolver recibe una hash y actualiza la tabla de CircPrestamo,la tabla de CircReserva , de RepHistorialCirculacion y RepHistorialPrestamo. Realiza las comprobaciones para saber si hay reservas esperando en ese momento para ese item, si las hay entonces realiza las actualizaciones y envia un mail al socio correspondiente.
-=cut 
+=item
+la funcion devolver recibe una hash y actualiza la tabla de CircPrestamo,la tabla de CircReserva , de RepHistorialCirculacion y
+RepHistorialPrestamo. Realiza las comprobaciones para saber si hay reservas esperando en ese momento para ese item, si
+las hay entonces realiza las actualizaciones y envia un mail al socio correspondiente.
+=cut
 
 sub devolver {
 	my ($self)   = shift;
