@@ -10,6 +10,7 @@
       $(document).ready(function() {
         makeToggle('datos_tabla_div','trigger',null,false);
         $('.fancylink').fancybox();
+        $('.link_to_detail').click(function(){startOverlay();});
 
       });
 </script>
@@ -63,7 +64,8 @@
                             print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(titulo) %]",
                                                             url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
                                                             params =>   ["id1=[% id1 %]"],
-                                                            title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
+                                                            title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]",
+                                                            class => "link_to_detail"
                                                         ) ;
                         [% END %]
             

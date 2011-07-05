@@ -677,7 +677,7 @@ sub toMARC_Intra{
     my $params;
     $params->{'nivel'}          = '3';
     $params->{'id_tipo_doc'}    = $self->getTipoDocumento;
-    my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_intra_view($marc_record, $params);
+    my $MARC_result_array       = C4::AR::Catalogacion::marc_record_to_intra_view($marc_record, $params,$self->db);
 
     return ($MARC_result_array);
 }

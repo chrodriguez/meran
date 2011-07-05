@@ -298,13 +298,15 @@ sub cant_reservas{
 
 sub cantReservasPorGrupo{
 #Devuelve la cantidad de reservas realizadas (SIN PRESTAR) sobre un GRUPO
-    my ($id2)=@_;
+    my ($id2,$db)=@_;
 
+        $db = $db || C4::Modelo::CircPrestamo->new()->db;
+        
         my @filtros;
         push(@filtros, ( id2    => { eq => $id2}));
         push(@filtros, ( estado => { ne => 'P'} ));
 
-        my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( query => \@filtros); 
+        my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( query => \@filtros, db   => $db,); 
 
         return ($reservas_count);
 }

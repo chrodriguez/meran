@@ -302,9 +302,12 @@ sub _verificarDeleteNivel2 {
     retorna la canitdad de items prestados para el grupo pasado por parametro
 =cut
 sub getCantPrestados{
-    my ($id2) = @_;
+    my ($id2,$db) = @_;
+    
+    $db = $db || C4::Modelo::CircPrestamo->new()->db;
 # FIXME falta arreglar las ref
     my $cantPrestamos_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(
+                                                                db      => $db,
                                                                 query => [  't2.id2' => { eq => $id2 },
                                                                             fecha_devolucion => { eq => undef }  
                                                                          ],

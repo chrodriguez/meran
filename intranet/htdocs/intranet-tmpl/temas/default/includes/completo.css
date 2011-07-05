@@ -17,6 +17,10 @@ body,html {
     background: white;
 }
 
+.close_modal_link{
+    margin: 0 auto;	
+}
+
 .textInput {
     background: #EAEBED;
 }

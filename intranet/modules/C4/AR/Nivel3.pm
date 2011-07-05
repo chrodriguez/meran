@@ -366,11 +366,15 @@ sub getBarcodesPrestadoLike {
     $id2, id de nivel2
 =cut
 sub detalleNivel3{
-    my ($id2) = @_;
+    my ($id2,$db) = @_;
 
     my %hash_nivel2;	
     #recupero el nivel1 segun el id1 pasado por parametro
-    my $nivel2_object = C4::AR::Nivel2::getNivel2FromId2($id2);
+    if (!$db){
+	    my $n3_temp = C4::Modelo::CatRegistroMarcN3->new();
+	    $db      = $n3_temp->db;
+    }
+    my $nivel2_object = C4::AR::Nivel2::getNivel2FromId2($id2,$db);
 
     if($nivel2_object){
 
@@ -379,7 +383,7 @@ sub detalleNivel3{
         $hash_nivel2{'indice'}                  = $nivel2_object->getIndice();
 	    $hash_nivel2{'nivel2_array'}            = $nivel2_object->toMARC_Intra; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
     
-	    my ($totales_nivel3, @result)           = detalleDisponibilidadNivel3($id2);
+	    my ($totales_nivel3, @result)           = detalleDisponibilidadNivel3($id2,$nivel2_object->db);
     
 	    $hash_nivel2{'nivel3'}                  = \@result;
 	    $hash_nivel2{'cantPrestados'}           = $totales_nivel3->{'cantPrestados'};
@@ -427,23 +431,22 @@ sub detalleCompletoINTRA{
 	my ($id1, $t_params) = @_;
 	
 	#recupero el nivel1 segun el id1 pasado por parametro
-	my $nivel1              = &C4::AR::Nivel1::getNivel1FromId1($id1);
+	my $nivel1              = C4::AR::Nivel1::getNivel1FromId1($id1);
 	#recupero todos los nivel2 segun el id1 pasado por parametro
-	my $nivel2_array_ref    = &C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
+	my $nivel2_array_ref    = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1,$nivel1->db);
 
 	my @nivel2;
 	
 	for(my $i=0;$i<scalar(@$nivel2_array_ref);$i++){
 
-		my ($hash_nivel2) = detalleNivel3($nivel2_array_ref->[$i]->getId2);
+		my ($hash_nivel2) = detalleNivel3($nivel2_array_ref->[$i]->getId2,$nivel1->db);
 
 	
 		push(@nivel2, $hash_nivel2);
 	}
-
 	$t_params->{'nivel1'}       = $nivel1->toMARC_Intra,
 	$t_params->{'id1'}	        = $id1;
-    $t_params->{'cantItemN1'}   = &C4::AR::Nivel3::cantNiveles3FromId1($id1);
+    $t_params->{'cantItemN1'}   = C4::AR::Nivel3::cantNiveles3FromId1($id1,$nivel1->db);
 	$t_params->{'nivel2'}       = \@nivel2,
 	#se ferifica si la preferencia "circularDesdeDetalleDelRegistro" esta seteada
 	$t_params->{'circularDesdeDetalleDelRegistro'}  = C4::AR::Preferencias::getValorPreferencia('circularDesdeDetalleDelRegistro');
@@ -454,10 +457,12 @@ sub detalleCompletoINTRA{
     Busca los datos del nivel 3 a partir de un id2 correspondiente a nivel 2.
 =cut
 sub detalleDisponibilidadNivel3{
-    my ($id2,$params) = @_;
+    my ($id2,$db) = @_;
+    
+    $db = $db || C4::Modelo::CatRegistroMarcN3->new->db;
     
     #recupero todos los nivel3 segun el id2 pasado por parametro
-    my $nivel3_array_ref                = &C4::AR::Nivel3::getNivel3FromId2($id2);
+    my $nivel3_array_ref                = C4::AR::Nivel3::getNivel3FromId2($id2,$db);
     my @result;
     my %hash_nivel2;
     my $i                               = 0;
@@ -467,9 +472,9 @@ sub detalleDisponibilidadNivel3{
     $infoNivel3{'cantParaSala'}         = 0;
     $infoNivel3{'cantParaPrestamo'}     = 0;
     $infoNivel3{'disponibles'}          = 0;
-    $infoNivel3{'cantPrestados'}        = C4::AR::Nivel2::getCantPrestados($id2);
-    $infoNivel3{'cantReservas'}         = C4::AR::Reservas::cantReservasPorGrupo($id2);
-    $infoNivel3{'cantReservasEnEspera'} = C4::AR::Reservas::cantReservasPorGrupoEnEspera($id2);
+    $infoNivel3{'cantPrestados'}        = C4::AR::Nivel2::getCantPrestados($id2,$db);
+    $infoNivel3{'cantReservas'}         = C4::AR::Reservas::cantReservasPorGrupo($id2,$db);
+    $infoNivel3{'cantReservasEnEspera'} = C4::AR::Reservas::cantReservasPorGrupoEnEspera($id2,$db);
 
 
     for(my $i=0;$i<scalar(@$nivel3_array_ref);$i++){
