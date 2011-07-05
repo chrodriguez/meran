@@ -29,6 +29,11 @@ fieldset {
 	clear: both;
 }
 
+#e_docs_upload_form{
+	float: right;
+	width: 200px;
+	text-align: justify;
+}
 
 fieldset {
   background-color:#FCFFFF;
