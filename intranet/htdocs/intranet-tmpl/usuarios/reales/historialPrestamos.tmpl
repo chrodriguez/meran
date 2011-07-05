@@ -1,6 +1,6 @@
 [% USE HTML %]
 
-[% IF historial %]
+[% IF cant %]
 		<div class="resultados_consulta">[% "Cantidad de pr&eacute;stamos realizados" | i18n %]: &nbsp;[% cant %]</div> 
 		
 		<div class="contenedor_paginador">[% paginador %]</div>
@@ -110,5 +110,5 @@
 		
 		</table>
 [% ELSE %]
-    <div class="resultados_consulta">[% "No se han realizado pr&eacute;stamos." | i18n %] &nbsp;[% cant %]</div>
+    <div class="resultados_consulta">[% "No se han realizado pr&eacute;stamos." | i18n %]</div>
 [% END %] 
