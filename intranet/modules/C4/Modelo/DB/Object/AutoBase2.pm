@@ -204,7 +204,7 @@ sub createFromAlias{
         case 'perfiles_opac' {return C4::Modelo::CatPerfilOpac->new()}
 # TODO para el link de analiticas
         case 'nivel2' {return C4::Modelo::CatRegistroMarcN2->new()}
-	    else {C4:AR::Debug::debug("NO EXISTE LA TABLA DE REFERENCIA ".$classAlias) }
+	    else {C4::AR::Debug::debug("NO EXISTE LA TABLA DE REFERENCIA ".$classAlias) }
     }
 }
 

@@ -673,10 +673,13 @@ sub getTablaFromReferencia{
     my ($self) = shift;
 
     if($self->tieneReferencia()){
-        return $self->infoReferencia->getReferencia();
-    }else{
-        return undef;
+
+        if($self->infoReferencia){
+            return $self->infoReferencia->getReferencia();
+        } 
     }
+
+    return undef;
 }
 
 
