@@ -41,7 +41,7 @@
                 </td>
 			    <td>
                     [% IF reserva.nivel2.getEdicion %]
-                        HTML.escape(reserva.nivel2.getEdicion)
+                        [% HTML.escape(reserva.nivel2.getEdicion) %]
                     [% ELSE %]
                         --
                     [% END %]
