@@ -611,7 +611,7 @@ sub checkauth {
                       $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
                       $flags=$socio->tienePermisos($flagsrequired);
                       $socio->setLogin_attempts(0);
-                           
+                      _init_i18n();
                       if ($flags) {
                           $loggedin = 1;
                       } else {

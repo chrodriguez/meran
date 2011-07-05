@@ -29,7 +29,7 @@ __PACKAGE__->meta->setup(
       {
 #         class       => 'C4::Modelo::CatNivel1',
         class       => 'C4::Modelo::CatRegistroMarcN1',
-        key_columns => { id1 => 'id1' },
+        key_columns => { id1 => 'id' },
         type        => 'one to one',
       },
 
@@ -37,7 +37,7 @@ __PACKAGE__->meta->setup(
       {
 #         class       => 'C4::Modelo::CatNivel2',
         class       => 'C4::Modelo::CatRegistroMarcN2',
-        key_columns => { id2 => 'id2' },
+        key_columns => { id2 => 'id' },
         type        => 'one to one',
       },
 
@@ -45,7 +45,7 @@ __PACKAGE__->meta->setup(
       {
 #         class       => 'C4::Modelo::CatNivel3',
         class       => 'C4::Modelo::CatRegistroMarcN3',
-        key_columns => { id3 => 'id3' },
+        key_columns => { id3 => 'id' },
         type        => 'one to one',
       },
 

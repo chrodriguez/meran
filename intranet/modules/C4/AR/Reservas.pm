@@ -1489,21 +1489,29 @@ sub getReservaById{
     }
 }
 
+=item
+    Funcion que trae el historial de reservas de un socio.
+    La consulta se hace sobre rep_historial_circulacion porque en circ_reserva se borran las reservas pasadas
+    Se filtra por las operaciones: cancelacion, devolucion y reserva
+=cut
 sub getHistorialReservasParaTemplate {
-    my ($nro_socio)=@_;
 
-    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( 
-                                          query => [ nro_socio  => { eq => $nro_socio }],
-                                          with_objects      => ['nivel2', 'nivel3','socio','ui', 'nivel3.nivel2.nivel1'],
-                                          sorty_by          => ['id_reserva DESC'],
+    my ($nro_socio) = @_;
+    use C4::Modelo::RepHistorialCirculacion;
+    use C4::Modelo::RepHistorialCirculacion::Manager;
+    
+    my @filtros;
+    push(@filtros, ( nro_socio => { eq => $nro_socio }));
+    push(@filtros, ( tipo_operacion => { eq => ['cancelacion','devolucion','reserva' ] } ) );
+
+    my $reservas_array_ref = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
+                                          query             => \@filtros,
+                                          with_objects      => ['nivel2', 'nivel3','socio', 'nivel3.nivel2.nivel1'],
+                                          sorty_by          => ['id DESC'],
 
                                 ); 
-    my $reservas_array_ref_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( 
-                                          query => [ nro_socio  => { eq => $nro_socio }],
-                                          with_objects => ['nivel3','socio','ui'],
 
-                                );     
-    return ($reservas_array_ref_count, $reservas_array_ref);
+    return (scalar(@$reservas_array_ref), $reservas_array_ref);
 }
 
 
