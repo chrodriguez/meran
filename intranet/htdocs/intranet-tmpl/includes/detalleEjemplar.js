@@ -13,7 +13,8 @@ function generarForm(id1, id2){
             html = html  + "<input type='hidden' id='id1' name='id1' value='" + id1 + "' />"
             html = html  + "<input type='hidden' id='id2' name='id2' value='" + id2 + "' />"
           
-            $(html).appendTo($("#edicion_grupal"+id2));
+//             $(html).appendTo($("#edicion_grupal"+id2));
+            $("#edicion_grupal"+id2).html(html);
 
             $("#edicion_grupal"+id2).submit();
         } else {
