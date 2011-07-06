@@ -388,7 +388,7 @@ sub marc_record_to_opac_view {
     my ($marc_record_salida) = filtrarVisualizacion($marc_record, $params);
 
     #se procesa el marc_record filtrado
-    my ($MARC_result_array) = marc_record_to_meran($marc_record_salida, $params->{'id_tipo_doc'}, 'OPAC',$db);
+    my ($MARC_result_array) = marc_record_to_meran_to_detail_view($marc_record_salida, $params->{'id_tipo_doc'}, 'OPAC',$db);
 
     return $MARC_result_array;
 }
@@ -406,7 +406,7 @@ sub marc_record_to_intra_view {
     my ($marc_record_salida)    = filtrarVisualizacion($marc_record, $params,$db);
 
     #se procesa el marc_record filtrado
-    my ($MARC_result_array)     = marc_record_to_meran($marc_record_salida, $params->{'id_tipo_doc'}, 'INTRA',$db);
+    my ($MARC_result_array)     = marc_record_to_meran_to_detail_view($marc_record_salida, $params->{'id_tipo_doc'}, 'INTRA',$db);
 
     return $MARC_result_array;
 }
@@ -464,9 +464,69 @@ sub filtrarVisualizacion{
 
 
 =head2
+    sub marc_record_to_meran_to_detail_view
+    
+    pasa la informacion de un marc_record a una estructura para utilizar en el cliente
+    ESTO ES PARA LA VISTA DEL DETALLE
+
+    campo => "campo"
+    indicador_primario =>
+    indicador_secundario => 
+    subcampos_array => [ {subcampo => 'a', dato => 'dato'}, {subcampo => 'b', dato => 'dato'}, ...]
+=cut
+sub marc_record_to_meran_to_detail_view {
+    my ($marc_record, $itemtype, $type,$db) = @_;
+
+#     C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view ");
+#     C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view => itemtype: ".$itemtype);
+    my @MARC_result_array;
+    
+    $type = $type || "__NO_TYPE";
+    
+    foreach my $field ($marc_record->fields) {
+        if(! $field->is_control_field){
+            my %hash;
+            my $campo                       = $field->tag;
+            my $indicador_primario_dato     = $field->indicator(1);
+            my $indicador_secundario_dato   = $field->indicator(2);
+            #proceso todos los subcampos del campo
+            foreach my $subfield ($field->subfields()) {
+                my %hash_temp;
+
+                my $subcampo                        = $subfield->[0];
+                my $dato                            = $subfield->[1];
+    #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view => campo: ".$campo);
+    #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view => subcampo: ".$subcampo);
+    #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view => dato: ".$dato);
+                $hash_temp{'campo'}                 = $campo;
+                $hash_temp{'subcampo'}              = $subcampo;
+                $hash_temp{'liblibrarian'}          = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo, $itemtype,$type,$db);
+    #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view => vista intra: ".$hash_temp{'liblibrarian'});
+                $hash_temp{'orden'}                 = getOrdenFromCampoSubcampo($campo, $subcampo, $itemtype, $type,$db);
+                C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view => orden: ".$hash_temp{'orden'});
+                $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype);
+                $hash_temp{'datoReferencia'}        = $dato;
+    #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view => dato despues de getRefFromStringConArrobasByCampoSubcampo: ".$dato);
+                my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype);
+                $hash_temp{'dato'}                  = $valor_referencia;
+    #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view => dato de la referencia: ".$hash_temp{'dato'});
+
+                push(@MARC_result_array, \%hash_temp);
+            }
+
+        }
+    }
+
+    @MARC_result_array = sort{$a->{'orden'} <=> $b->{'orden'}} @MARC_result_array;
+
+    return (\@MARC_result_array);
+}
+
+=head2
     sub marc_record_to_meran
     
     pasa la informacion de un marc_record a una estructura para utilizar en el cliente
+    ESTO SE USA PARA MOSTRAR LOS CAMPOS EN EL FORMULARIO DINAMICO
 
     campo => "campo"
     indicador_primario =>
@@ -499,6 +559,7 @@ sub marc_record_to_meran {
 #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => campo: ".$campo);
 #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => subcampo: ".$subcampo);
 #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => dato: ".$dato);
+            $hash_temp{'campo'}                 = $campo;
             $hash_temp{'subcampo'}              = $subcampo;
             $hash_temp{'liblibrarian'}          = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo, $itemtype,$type,$db);
 #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => vista intra: ".$hash_temp{'liblibrarian'});
@@ -518,13 +579,11 @@ sub marc_record_to_meran {
             $hash{'indicador_secundario_dato'}  = $indicador_secundario_dato;
             $hash{'header'}                     = C4::AR::Catalogacion::getHeader($campo);
 
-            #ordeno segun orden ASC
-            @subcampos_array                    = sort{$a->{'orden'} cmp $b->{'orden'}} @subcampos_array;
-
             $hash{'subcampos_array'}            = \@subcampos_array;
 
             push(@MARC_result_array, \%hash);
         }
+
     }
 
     return (\@MARC_result_array);

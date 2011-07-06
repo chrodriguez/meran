@@ -67,13 +67,13 @@ $(".indice").fancybox();  */
 	    
 	    <ul class="listado_sin_margen">
 		    [% FOREACH nivel1 %]
-		        [% FOREACH subcampos_array %]
+
 		            [% IF liblibrarian %]
 		                [% IF dato %]
 		                <li>    [% liblibrarian %]: <strong>[% dato %]</strong> </li>
 		                [% END %]
 		            [% END %]
-		        [% END %]
+
 		    [% END %]
 	    </ul>
 
@@ -128,15 +128,12 @@ $(".indice").fancybox();  */
 			                [% END %]
 			                <ul class="listado_sin_margen">
 				                [% FOREACH nivel2_array %]
-			                        [% FOREACH subcampos_array %]
-						                    [% IF liblibrarian %]
-							                    [% IF dato %]
-								                <li> [% liblibrarian %]: <strong>[% dato %]</strong></li>
-							                    [% END %]
-						                    [% END %]
-			                    
-				                    [% END %] <!-- END FOREACH nivel2_array -->
-			                    [% END %] <!-- END FOREACH subcampos_array-->
+                                    [% IF liblibrarian %]
+                                        [% IF dato %]
+                                        <li> [% liblibrarian %]: <strong>[% dato %]</strong></li>
+                                        [% END %]
+                                    [% END %]
+                                [% END %] <!-- END FOREACH nivel2_array -->
 			                    <li>
 				                    <fieldset>
 					                    <legend class="trigger trigger_2_[% id2 %] click">[% "Ejemplares del grupo" | i18n %] [% id2 %]</legend>
