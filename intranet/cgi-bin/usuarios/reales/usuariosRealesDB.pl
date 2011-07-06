@@ -263,9 +263,9 @@ Se genra la ventana para modificar los datos del usuario
         #se genera el combo de categorias de usuario
         my $comboDeCategorias           = &C4::AR::Utilidades::generarComboCategoriasDeSocio(\%params);
 
-        $params{'default'}              = $socio->persona->getTipo_documento;
+        $params{'default'}              = $socio->persona->documento->getId;
         #se genera el combo de tipos de documento
-        my $comboDeTipoDeDoc            = &C4::AR::Utilidades::generarComboTipoDeDoc(\%params);
+        my $comboDeTipoDeDoc            = &C4::AR::Utilidades::generarComboTipoDeDocConValuesIds(\%params);
         #se genera el combo de las bibliotecas
         my $comboDeUI                   = &C4::AR::Utilidades::generarComboUI(\%params);
 
