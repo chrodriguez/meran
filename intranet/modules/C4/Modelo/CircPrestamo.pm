@@ -479,10 +479,18 @@ la fecha en que vence el prestamo
 sub getFecha_vencimiento {
 	my ($self) = shift;
 
+
+		$self->debug( "getFecha_vencimiento!!!"); 
 	my $plazo_actual;
 	if ( $self->getRenovaciones > 0 )
 	{ #quiere decir que ya fue renovado entonces tengo que calcular sobre los dias de un prestamo renovado para saber si estoy en fecha
+
+		$self->debug( "getFecha_vencimiento => SE RENOVO ".$self->getRenovaciones." VECES, LA ULTIMA ".$self->getFecha_ultima_renovacion ); 
 		$plazo_actual = $self->tipo->getDias_renovacion;
+		$self->debug( "getFecha_vencimiento => DIAS A AGREGAR ".$self->tipo->getDias_renovacion); 
+		$self->debug( "getFecha_vencimiento => VENCE  ".			C4::Date::proximoHabil(
+				$plazo_actual, 0, $self->getFecha_ultima_renovacion
+			)); 
 		return (
 			C4::Date::proximoHabil(
 				$plazo_actual, 0, $self->getFecha_ultima_renovacion
@@ -791,6 +799,19 @@ sub _verificarParaRenovar {
 		C4::AR::Mensajes::add( $msg_object,
 			{ 'codMsg' => 'P118', 'params' => [] } );
 	}
+
+	#Tiene algún ejemplar prestado vencido?? 
+	my ($vencidos,$prestados) = C4::AR::Prestamos::cantidadDePrestamosPorUsuario($self->getNro_socio);
+
+	if ( !( $msg_object->{'error'} ) && ( $vencidos > 0 ) ) {
+
+		# Tiene algún ejempĺar vencido
+		$self->debug("_verificarParaRenovar - tiene prestamo vencido");
+		$msg_object->{'error'} = 1;
+		C4::AR::Mensajes::add( $msg_object,
+			{ 'codMsg' => 'P131', 'params' => [] } );
+	}
+
 
     #Se verifica que la operación este dentro del horario de funcionamiento de la biblioteca.
     #SOLO PARA INTRA

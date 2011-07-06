@@ -116,7 +116,9 @@
       </div>
   </noscript>
   
-  <div style="display: none;" id="ajax-indicator"><div><p>[% 'Cargando...' | i18n %]</p></div></div>
+  <div style="display: none;" id="ajax-indicator">
+    <div><p>[% 'Cargando...' | i18n %]</p></div>
+  </div>
   <div class="container_test">
 <!--  <div id="menu-container" class="main-header"> -->
   

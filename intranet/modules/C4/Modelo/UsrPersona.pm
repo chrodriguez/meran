@@ -12,7 +12,7 @@ __PACKAGE__->meta->setup(
         legajo           => { type => 'varchar', length => 255, not_null => 1 },
         version_documento=> { type => 'character', default => 'P', length => 1, not_null => 1 },
         nro_documento    => { type => 'varchar', length => 16, not_null => 1 },
-        tipo_documento   => { type => 'character', length => 3, not_null => 1 },
+        tipo_documento   => { type => 'integer', length => 11, not_null => 1 },
         apellido         => { type => 'varchar', length => 255, not_null => 1 },
         nombre           => { type => 'varchar', length => 255, not_null => 1 },
         titulo           => { type => 'varchar', length => 255 },
@@ -60,7 +60,7 @@ __PACKAGE__->meta->setup(
      documento => 
       {
         class       => 'C4::Modelo::UsrRefTipoDocumento',
-        key_columns => { tipo_documento => 'nombre' },
+        key_columns => { tipo_documento => 'id' },
         type        => 'one to one',
       },
     ],

@@ -19,7 +19,7 @@ my ($template, $session, $t_params) = get_template_and_user({
                 });
 
 my $comboDeCategorias           = &C4::AR::Utilidades::generarComboCategoriasDeSocio();
-my $comboDeTipoDeDoc            = &C4::AR::Utilidades::generarComboTipoDeDoc();
+my $comboDeTipoDeDoc            = &C4::AR::Utilidades::generarComboTipoDeDocConValuesIds();
 my $comboDeUI                   = &C4::AR::Utilidades::generarComboUI();
 my $comboDeCredentials          = &C4::AR::Utilidades::generarComboDeCredentials();
 

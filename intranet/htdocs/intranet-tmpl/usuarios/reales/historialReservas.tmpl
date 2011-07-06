@@ -2,12 +2,9 @@
 
 [% IF cantidad %]
 		<div class="resultados_consulta">[% "Cantidad de reservas realizadas" | i18n %]: &nbsp;[% cantidad %]</div> 
-		
 		<div class="contenedor_paginador">[% paginador %]</div>
-		
 		<table class="tablaHistorialReservas datos_tabla" cellspacing=0  cellpadding=0 border=0 width="100%">
 		    <tr class="titulo_tabla_resultado">
-		    
 			    <td >
 				    [% "T&iacute;tulo" | i18n %]
 			    </td>
@@ -20,13 +17,15 @@
 	            <td >
 				    [% "C&oacute;digo" | i18n %]
 		        </td>
-			    <td>[% "Fecha" | i18n %]</td>
-		        <td>[% "Operacion" | i18n %]</td>
-		    </tr>
-		    
+			    <td>
+			        [% "Fecha" | i18n %]
+			     </td>
+		        <td>
+		            [% "Operaci&oacute;n" | i18n %]
+		        </td>
+		    </tr>	    
 		    [% FOREACH reserva IN loop_reading %]
-		    <tr valign=middle align="center">
-			    
+		    <tr valign=middle align="center">  
 			    <td>
 				    [% PERL %]
 						    print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
@@ -34,19 +33,20 @@
 														    params =>	[	"id1=[% HTML.escape(reserva.nivel2.nivel1.getId1) %]"], 
 													    ) ;
 				    [% END %]
-			    </td>
-			    
+			    </td>   
                 <td class="autor_result">
                     <a class="click" onClick="buscarPorAutor('[% reserva.nivel2.nivel1.getAutor %]')" title="[% 'Filtrar por Autor' | i18n %]">
                         [% reserva.nivel2.nivel1.getAutor %]
                     </a>
                 </td>
-			    
 			    <td>
-                    [% HTML.escape(reserva.nivel2.getEdicion) %]
+                    [% IF reserva.nivel2.getEdicion %]
+                        [% HTML.escape(reserva.nivel2.getEdicion) %]
+                    [% ELSE %]
+                        --
+                    [% END %]
 			    </td>
 			    <td align="center" >
-
                     [% IF reserva.nivel2.nivel3.getBarcode %]
 	
 					    [% PERL %]
@@ -61,7 +61,7 @@
 				    [% END %]
 			    </td>
 			    <td>
-				    &nbsp;[% reserva.getFecha_formateada %]&nbsp;
+				    [% reserva.getFecha_formateada %]
 			    </td>
 			    <td>
                     [% reserva.getTipo_operacion %]

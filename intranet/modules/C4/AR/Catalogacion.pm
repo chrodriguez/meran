@@ -381,14 +381,14 @@ sub marc_record_to_meran_por_nivel {
     sub marc_record_to_opac_view
 =cut
 sub marc_record_to_opac_view {
-    my ($marc_record, $params) = @_;
+    my ($marc_record, $params,$db) = @_;
 
     $params->{'tipo'} = 'OPAC';
     #obtengo los campo, subcampo que se pueden mostrar
     my ($marc_record_salida) = filtrarVisualizacion($marc_record, $params);
 
     #se procesa el marc_record filtrado
-    my ($MARC_result_array) = marc_record_to_meran($marc_record_salida, $params->{'id_tipo_doc'}, 'OPAC');
+    my ($MARC_result_array) = marc_record_to_meran($marc_record_salida, $params->{'id_tipo_doc'}, 'OPAC',$db);
 
     return $MARC_result_array;
 }
@@ -397,15 +397,16 @@ sub marc_record_to_opac_view {
     sub marc_record_to_intra_view
 =cut
 sub marc_record_to_intra_view {
-    my ($marc_record, $params) = @_;
+    my ($marc_record, $params,$db) = @_;
 
+    $db = $db || C4::Modelo::CatVisualizacionIntra->new()->db;
     
     $params->{'tipo'}           = 'INTRA';
     #obtengo los campo, subcampo que se pueden mostrar
-    my ($marc_record_salida)    = filtrarVisualizacion($marc_record, $params);
+    my ($marc_record_salida)    = filtrarVisualizacion($marc_record, $params,$db);
 
     #se procesa el marc_record filtrado
-    my ($MARC_result_array)     = marc_record_to_meran($marc_record_salida, $params->{'id_tipo_doc'}, 'INTRA');
+    my ($MARC_result_array)     = marc_record_to_meran($marc_record_salida, $params->{'id_tipo_doc'}, 'INTRA',$db);
 
     return $MARC_result_array;
 }
@@ -416,14 +417,16 @@ sub marc_record_to_intra_view {
     filtra la visualizacion del opac, se muestra lo indicado en cat_visualizacion_opac
 =cut
 sub filtrarVisualizacion{
-    my ($marc_record, $params) = @_;
+    my ($marc_record, $params,$db) = @_;
 
+    $db = $db || C4::Modelo::CatEstructuraCatalogacion->new()->db;
+    
     my $visulizacion_array_ref;
 
     if($params->{'tipo'} eq 'OPAC'){
         ($visulizacion_array_ref) = C4::AR::VisualizacionOpac::getConfiguracion();
     } else {
-        ($visulizacion_array_ref) = &C4::AR::VisualizacionIntra::getConfiguracion($params->{'id_tipo_doc'});
+        ($visulizacion_array_ref) = C4::AR::VisualizacionIntra::getConfiguracion($params->{'id_tipo_doc'},$db);
     }
 
     my %autorizados;
@@ -471,12 +474,14 @@ sub filtrarVisualizacion{
     subcampos_array => [ {subcampo => 'a', dato => 'dato'}, {subcampo => 'b', dato => 'dato'}, ...]
 =cut
 sub marc_record_to_meran {
-    my ($marc_record, $itemtype, $type) = @_;
+    my ($marc_record, $itemtype, $type,$db) = @_;
 
 #     C4::AR::Debug::debug("Catalogacion => marc_record_to_meran ");
 #     C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => itemtype: ".$itemtype);
     my @MARC_result_array;
-
+    
+    $type = $type || "__NO_TYPE";
+    
     foreach my $field ($marc_record->fields) {
      if(! $field->is_control_field){
         my %hash;
@@ -495,9 +500,9 @@ sub marc_record_to_meran {
 #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => subcampo: ".$subcampo);
 #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => dato: ".$dato);
             $hash_temp{'subcampo'}              = $subcampo;
-            $hash_temp{'liblibrarian'}          = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo, $itemtype);
+            $hash_temp{'liblibrarian'}          = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo, $itemtype,$type,$db);
 #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => vista intra: ".$hash_temp{'liblibrarian'});
-            $hash_temp{'orden'}                 = getOrdenFromCampoSubcampo($campo, $subcampo, $itemtype, $type);
+            $hash_temp{'orden'}                 = getOrdenFromCampoSubcampo($campo, $subcampo, $itemtype, $type,$db);
 #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => orden: ".$hash_temp{'orden'});
             $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype);
             $hash_temp{'datoReferencia'}        = $dato;
@@ -1731,7 +1736,7 @@ sub getEstructuraCatalogacionFromDBCompleta{
 sub _getEstructuraFromCampoSubCampo{
     my ($campo, $subcampo, $itemtype, $db) = @_;
 
-    $db = $db || C4::Modelo::PermCatalogo->new()->db;   
+    $db = $db || C4::Modelo::CatEstructuraCatalogacion->new()->db;   
     my @filtros;
 
     push(@filtros, ( campo      => { eq => $campo } ) );
@@ -1781,12 +1786,13 @@ sub getEstructuraCatalogacionById{
 
 
 sub getOrdenFromCampoSubcampo{
-    my ($campo, $subcampo, $itemtype, $type) = @_;
+    my ($campo, $subcampo, $itemtype, $type,$db) = @_;
 
-
+    $db = $db || C4::Modelo::CatEstructuraCatalogacion->new()->db;
+    
     if($type eq "INTRA"){
 
-        my $conf_visualizacion = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($campo, $subcampo, $itemtype);
+        my $conf_visualizacion = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($campo, $subcampo, $itemtype,$db);
 
         if($conf_visualizacion){
             return $conf_visualizacion->getOrden();
@@ -1794,7 +1800,7 @@ sub getOrdenFromCampoSubcampo{
 
     } else {
         # TODO falta ver lo del perfil por ahora lo deje FIXEEEEEEEEDD
-        my $conf_visualizacion = C4::AR::VisualizacionOpac::getVisualizacionFromCampoSubCampo($campo, $subcampo, C4::AR::Preferencias::getValorPreferencia("perfil_opac"));
+        my $conf_visualizacion = C4::AR::VisualizacionOpac::getVisualizacionFromCampoSubCampo($campo, $subcampo, C4::AR::Preferencias::getValorPreferencia("perfil_opac"),$db);
 
         if($conf_visualizacion){
             return $conf_visualizacion->getOrden();
@@ -1824,12 +1830,13 @@ sub getOrdenFromCampoSubcampo{
 
 
 sub getLiblibrarian{
-    my ($campo, $subcampo, $itemtype, $type) = @_;
-
+    my ($campo, $subcampo, $itemtype, $type,$db) = @_;
+    
+    $db = $db || C4::Modelo::CatEstructuraCatalogacion->new()->db;
 
     if($type eq "INTRA"){
 
-        my $conf_visualizacion = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($campo, $subcampo, $itemtype);
+        my $conf_visualizacion = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($campo, $subcampo, $itemtype,$db);
 
         if($conf_visualizacion){
             return $conf_visualizacion->getVistaIntra();
@@ -1837,7 +1844,7 @@ sub getLiblibrarian{
 
     } else {
         # TODO falta ver lo del perfil por ahora lo deje FIXEEEEEEEEDD
-        my $conf_visualizacion = C4::AR::VisualizacionOpac::getVisualizacionFromCampoSubCampo($campo, $subcampo, C4::AR::Preferencias::getValorPreferencia("perfil_opac"));
+        my $conf_visualizacion = C4::AR::VisualizacionOpac::getVisualizacionFromCampoSubCampo($campo, $subcampo, C4::AR::Preferencias::getValorPreferencia("perfil_opac"),$db);
 
         if($conf_visualizacion){
             return $conf_visualizacion->getVistaOpac();
@@ -1845,16 +1852,17 @@ sub getLiblibrarian{
     }
 
     #primero busca en estructura_catalogacion
-    my $estructura_array = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo, $itemtype);
+    my $estructura_array = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo, $itemtype,$db);
 
 
     if($estructura_array){
         return $estructura_array->getLiblibrarian;
     }else{
         my ($pref_estructura_sub_campo_marc_array) = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc( 
-                                                                                    query => [  campo       => { eq => $campo },
+                                                                                    query   => [  campo       => { eq => $campo },
                                                                                                 subcampo    => { eq => $subcampo }
-                                                                                             ]
+                                                                                                ],
+                                                                                    db      => $db,
                                                                     );
         #si no lo encuentra en estructura_catalogacion, lo busca en estructura_sub_campo_marc
         if(scalar(@$pref_estructura_sub_campo_marc_array) > 0){
