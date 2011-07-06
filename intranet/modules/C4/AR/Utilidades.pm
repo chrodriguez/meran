@@ -1988,7 +1988,7 @@ sub generarComboTipoDeDocConValuesIds{
     $options_hash{'size'}       = $params->{'size'}||1;
     $options_hash{'class'}      = 'required';
     $options_hash{'multiple'}   = $params->{'multiple'}||0;
-    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultTipoDoc");
+    $options_hash{'defaults'}   = $params->{'default'} || 1;
 
     push (@select_docs_array, '');
     $options_hash{'values'}     = \@select_docs_array;
