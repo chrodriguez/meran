@@ -28,18 +28,25 @@ my ($template, $session, $t_params) =  get_template_and_user ({
 my $id = $input->param('id');
 my @arreglo = ();
 
+
 if ($id){
     my $nivel3          = C4::AR::Nivel3::getNivel3FromId3($id);
     push (@arreglo, $nivel3);
 } else {
-    my $hash= $input->{'param'};
-   
-    for my $clave (keys %{$hash}) {
 
-           my $nivel3 = C4::AR::Nivel3::getNivel3FromId3($hash->{$clave}[0]);
-           push (@arreglo, $nivel3);
+    my $hash=$input->{'param'};
+
+    my @keys=keys %$hash;
+    my $key_string= @keys[0];
+  
+    my $array_ref= $hash->{$key_string};
+
+    foreach my $id3 (@$array_ref) {
+                my $nivel3 = C4::AR::Nivel3::getNivel3FromId3($id3);
+                push (@arreglo, $nivel3);
     }
 }
+
 
 
 # my $id1 = $input->param('id1');
