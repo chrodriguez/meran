@@ -38,29 +38,31 @@
 		
 		        </ul>
 		    </div>
-		    
-		    <div id="file-uploader_[% id2 %]" class="fileUploader_catalogo">
-		         <form  action="[% url_prefix %]/catalogacion/estructura/uploadDocument.pl" 
-		                enctype="multipart/form-data" method="post">
-		               <input type="hidden" name="id2" id="id2" value="[% id2 %]" /><br />
-		               <input type="hidden" name="id1" id="id1" value="[% id1 %]" /><br />
-		               
-		               <ul>
-		                   <li class="sub_item">
-				               <label for="filename">[% "T&iacute;tulo del arhivo"| i18n %]: </label>
-				               <input type="text" name="filename" id="filename" /><br />
-			               </li>
-			               <li class="sub_item">
-		                       <label for="file">[% "Arhivo"| i18n %]: </label>
-				               <input type="file" name="file" id="file" />
-			               </li>
-			               <li class="sub_item">
-			                   <input type="submit" value='[% "Enviar"| i18n %]''>
-			                   <input type="reset">
-			               </li>
-		               </ul>
-		         </form>        
-		    </div>
+		    <fieldset id="e_docs_upload_form">
+		        <legend class="titulo_legend">[% 'Agregar documento' | i18n %]</legend>
+			    <div id="file-uploader_[% id2 %]" class="fileUploader_catalogo">
+			         <form  action="[% url_prefix %]/catalogacion/estructura/uploadDocument.pl" 
+			                enctype="multipart/form-data" method="post">
+			               <input type="hidden" name="id2" id="id2" value="[% id2 %]" /><br />
+			               <input type="hidden" name="id1" id="id1" value="[% id1 %]" /><br />
+			               
+			               <ul>
+			                   <li class="sub_item">
+					               <label for="filename">[% "T&iacute;tulo del arhivo"| i18n %]: </label>
+					               <input type="text" name="filename" id="filename" /><br />
+				               </li>
+				               <li class="sub_item">
+			                       <label for="file">[% "Arhivo"| i18n %]: </label>
+					               <input type="file" name="file" id="file" />
+				               </li>
+				               <li class="sub_item">
+				                   <input type="submit" value='[% "Enviar"| i18n %]''>
+				                   <input type="reset">
+				               </li>
+			               </ul>
+			         </form>        
+			    </div>
+		    </fieldset>
 		    <script type="text/javascript">
 		    </script>
 		        

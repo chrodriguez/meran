@@ -17,6 +17,10 @@ body,html {
     background: white;
 }
 
+.close_modal_link{
+    margin: 0 auto;	
+}
+
 .textInput {
     background: #EAEBED;
 }
@@ -25,6 +29,11 @@ fieldset {
 	clear: both;
 }
 
+#e_docs_upload_form{
+	float: right;
+	width: 200px;
+	text-align: justify;
+}
 
 fieldset {
   background-color:#FCFFFF;

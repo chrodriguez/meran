@@ -8,7 +8,7 @@ use base 'Rose::DB::Object';
 use C4::Modelo::DB::AutoBase1;
 use base qw(Rose::DB::Object::Helpers);
 # sub init_db { C4::Modelo::DB::AutoBase1->new}
-sub init_db {
+#sub init_db {
 #      if($ENV{'MOD_PERL'})
 #     {
 #         C4::AR::Debug::debug("AutoBase2 => init_db => CACHED");
@@ -19,10 +19,11 @@ sub init_db {
 #     else # act "normally" when not under mod_perl
 #     {
 #         C4::AR::Debug::debug("AutoBase2 => init_db => NO CACHED");
-      *init_db = sub { C4::Modelo::DB::AutoBase1->new };
+#      *init_db = sub { C4::Modelo::DB::AutoBase1->new };
 #     }
-}
+#}
 
+sub init_db { C4::Modelo::DB::AutoBase1->new_or_cached }
 =item
     Returns true (1) if the row was loaded successfully
     undef if the row could not be loaded due to an error, 
