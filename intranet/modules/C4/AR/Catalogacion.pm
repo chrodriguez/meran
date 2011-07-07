@@ -477,8 +477,6 @@ sub filtrarVisualizacion{
 sub marc_record_to_meran_to_detail_view {
     my ($marc_record, $itemtype, $type,$db) = @_;
 
-#     C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view ");
-#     C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view => itemtype: ".$itemtype);
     my @MARC_result_array;
     
     $type = $type || "__NO_TYPE";
@@ -495,21 +493,14 @@ sub marc_record_to_meran_to_detail_view {
 
                 my $subcampo                        = $subfield->[0];
                 my $dato                            = $subfield->[1];
-    #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view => campo: ".$campo);
-    #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view => subcampo: ".$subcampo);
-    #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view => dato: ".$dato);
                 $hash_temp{'campo'}                 = $campo;
                 $hash_temp{'subcampo'}              = $subcampo;
                 $hash_temp{'liblibrarian'}          = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo, $itemtype,$type,$db);
-    #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view => vista intra: ".$hash_temp{'liblibrarian'});
                 $hash_temp{'orden'}                 = getOrdenFromCampoSubcampo($campo, $subcampo, $itemtype, $type,$db);
-                C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view => orden: ".$hash_temp{'orden'});
                 $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype);
                 $hash_temp{'datoReferencia'}        = $dato;
-    #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view => dato despues de getRefFromStringConArrobasByCampoSubcampo: ".$dato);
                 my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype);
                 $hash_temp{'dato'}                  = $valor_referencia;
-    #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view => dato de la referencia: ".$hash_temp{'dato'});
 
                 push(@MARC_result_array, \%hash_temp);
             }
@@ -549,28 +540,20 @@ sub marc_record_to_meran {
         my $indicador_primario_dato     = $field->indicator(1);
         my $indicador_secundario_dato   = $field->indicator(2);
         my @subcampos_array;
-#         C4::AR::Debug::debug("Proceso todos los subcampos del campo: ".$campo);
         #proceso todos los subcampos del campo
         foreach my $subfield ($field->subfields()) {
             my %hash_temp;
 
             my $subcampo                        = $subfield->[0];
             my $dato                            = $subfield->[1];
-#             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => campo: ".$campo);
-#             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => subcampo: ".$subcampo);
-#             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => dato: ".$dato);
             $hash_temp{'campo'}                 = $campo;
             $hash_temp{'subcampo'}              = $subcampo;
             $hash_temp{'liblibrarian'}          = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo, $itemtype,$type,$db);
-#             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => vista intra: ".$hash_temp{'liblibrarian'});
             $hash_temp{'orden'}                 = getOrdenFromCampoSubcampo($campo, $subcampo, $itemtype, $type,$db);
-#             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => orden: ".$hash_temp{'orden'});
             $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype);
             $hash_temp{'datoReferencia'}        = $dato;
-#             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => dato despues de getRefFromStringConArrobasByCampoSubcampo: ".$dato);
             my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype);
             $hash_temp{'dato'}                  = $valor_referencia;
-#             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran => dato de la referencia: ".$hash_temp{'dato'});
 
             push(@subcampos_array, \%hash_temp);
         }
