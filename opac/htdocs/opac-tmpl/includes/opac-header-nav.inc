@@ -23,7 +23,7 @@
         <div class="nav_logged">
             <ul>
 
-              [% IF socio_data %]
+              [% IF socio_data.usr_nro_socio %]
                   <li>    
                     [% HTML.escape(socio_data.usr_nombre) %] ([% HTML.escape(socio_data.usr_nro_socio) %])
                   </li>

@@ -640,6 +640,7 @@ sub checkauth {
                       C4::AR::Debug::debug("C4::AR::Auth::checkauth => sin_sesion");
                       #ESTO DEBERIA PASAR solo cuando la sesion esta sin iniciar
                       #_destruirSession('U406', $template_params);
+                      inicializarAuth($template_params);
                       $session->param('codMsg', $code_MSG);
                       }
                   else { 

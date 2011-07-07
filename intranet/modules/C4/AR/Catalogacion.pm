@@ -385,7 +385,7 @@ sub marc_record_to_opac_view {
 
     $params->{'tipo'} = 'OPAC';
     #obtengo los campo, subcampo que se pueden mostrar
-    my ($marc_record_salida) = filtrarVisualizacion($marc_record, $params);
+    my ($marc_record_salida) = filtrarVisualizacion($marc_record, $params,$db);
 
     #se procesa el marc_record filtrado
     my ($MARC_result_array) = marc_record_to_meran_to_detail_view($marc_record_salida, $params->{'id_tipo_doc'}, 'OPAC',$db);
@@ -424,7 +424,7 @@ sub filtrarVisualizacion{
     my $visulizacion_array_ref;
 
     if($params->{'tipo'} eq 'OPAC'){
-        ($visulizacion_array_ref) = C4::AR::VisualizacionOpac::getConfiguracion();
+        ($visulizacion_array_ref) = C4::AR::VisualizacionOpac::getConfiguracion($db);
     } else {
         ($visulizacion_array_ref) = C4::AR::VisualizacionIntra::getConfiguracion($params->{'id_tipo_doc'},$db);
     }
@@ -504,10 +504,10 @@ sub marc_record_to_meran_to_detail_view {
     #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view => vista intra: ".$hash_temp{'liblibrarian'});
                 $hash_temp{'orden'}                 = getOrdenFromCampoSubcampo($campo, $subcampo, $itemtype, $type,$db);
                 C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view => orden: ".$hash_temp{'orden'});
-                $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype);
+                $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype,$db);
                 $hash_temp{'datoReferencia'}        = $dato;
     #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view => dato despues de getRefFromStringConArrobasByCampoSubcampo: ".$dato);
-                my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype);
+                my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype,$db);
                 $hash_temp{'dato'}                  = $valor_referencia;
     #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view => dato de la referencia: ".$hash_temp{'dato'});
 
@@ -760,7 +760,7 @@ sub getImportacionSinEstructura{
     Siempre devuelve el dato.
 =cut
 sub getDatoFromReferencia{
-    my ($campo, $subcampo, $dato, $itemtype) = @_;
+    my ($campo, $subcampo, $dato, $itemtype, $db) = @_;
     
 #     my $valor_referencia = '';
     my $valor_referencia = 'NULL';
@@ -771,7 +771,7 @@ sub getDatoFromReferencia{
 #     if(($dato ne '')&&($campo ne '')&&($subcampo ne '')&&($dato ne '')&&($dato ne '0')){
     if(($dato ne '')&&($campo ne '')&&($subcampo ne '')&&($dato ne '')&&($dato ne "NULL")){
 
-        my ($estructura) = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo, $itemtype);
+        my ($estructura) = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo, $itemtype,$db);
         
         if($estructura){
 
@@ -845,9 +845,9 @@ sub getRefFromStringConArrobas{
     Si no es una referencia, se devuelve el dato pasado por parametro
 =cut
 sub getRefFromStringConArrobasByCampoSubcampo{
-    my ($campo, $subcampo, $dato, $itemtype) = @_;
+    my ($campo, $subcampo, $dato, $itemtype,$db) = @_;
 
-    my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo, $itemtype);
+    my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo, $itemtype,$db);
 
     if($estructura){
         if($estructura->getReferencia){

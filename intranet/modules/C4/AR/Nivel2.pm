@@ -459,13 +459,15 @@ sub t_modificarNivel2 {
 }
 
 sub getRating{
-    my($id2) = @_;
+    my($id2,$db) = @_;
 
     my @filtros;
 
+    $db = $db || C4::Modelo::CatRating->new()->db;
+    
     push (@filtros, (id2 => {eq => $id2}));
-    my $rating = C4::Modelo::CatRating::Manager->get_cat_rating(query => \@filtros,);
-    my $rating_count = C4::Modelo::CatRating::Manager->get_cat_rating_count(query => \@filtros,);
+    my $rating = C4::Modelo::CatRating::Manager->get_cat_rating(query => \@filtros, db => $db,);
+    my $rating_count = C4::Modelo::CatRating::Manager->get_cat_rating_count(query => \@filtros, db => $db,);
     my $count = 0;
 
     foreach my $rate (@$rating){
@@ -486,7 +488,7 @@ sub getRatingPromedio{
     if ($cant > 0){
         my $ratings = 0;
         foreach my $nivel2 (@$nivel2_array_ref){
-            $ratings+= getRating($nivel2->getId2);
+            $ratings+= getRating($nivel2->getId2,$nivel2->db);
         }
         my $rating_count = POSIX::ceil($ratings/$cant);
         return $rating_count;
@@ -509,24 +511,29 @@ sub rate{
 
 
 sub getCantReviews{
-    my($id2) = @_;
+    my($id2,$db) = @_;
 
     my @filtros;
-
+    
+    $db = $db || C4::Modelo::CatRating->new()->db;
+    
     push (@filtros, (id2 => {eq => $id2}));
     push (@filtros, (review => {ne => NULL}));
-    my $reviews = C4::Modelo::CatRating::Manager->get_cat_rating_count(query => \@filtros,);
+    my $reviews = C4::Modelo::CatRating::Manager->get_cat_rating_count(query => \@filtros, db => $db,);
 
     return $reviews;
 }
 
 sub getReviews{
-    my($id2) = @_;
+    my($id2,$db) = @_;
     my @filtros;
-
+  
+    $db = $db || C4::Modelo::CatRating->new()->db;
+    
     push (@filtros, (id2 => {eq => $id2}));
     push (@filtros, (review => {ne => NULL}));
     my $reviews = C4::Modelo::CatRating::Manager->get_cat_rating(query => \@filtros,
+                                                                    db => $db,
                                                                  include_objects => ['socio'],
                                                                  );
     if (scalar(@$reviews) > 0){
