@@ -273,14 +273,16 @@ C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde hash2 => ".$param
 		$enddate                = C4::Date::format_date_in_iso($enddate,$dateformat);
 		my  $sancion            = C4::Modelo::CircSancion->new(db => $self->db);
 		my %paramsSancion;
-		$paramsSancion{'responsable'}       = $params->{'responsable'};
+		#Responsable ahora es: 'Sistema', ticket #2645. Por reserva no retirada en el rep_historial_sancion
+		#$paramsSancion{'responsable'} = $params->{'responsable'};
+		$paramsSancion{'responsable'}       = "Sistema";
 		$paramsSancion{'tipo_sancion'}      = undef;
 		$paramsSancion{'id_reserva'}        = $self->getId_reserva;
 		$paramsSancion{'nro_socio'}         = $params->{'nro_socio'};
 		$paramsSancion{'fecha_comienzo'}    = $startdate;
 		$paramsSancion{'fecha_final'}       = $enddate;
 		$paramsSancion{'dias_sancion'}      = $daysOfSanctions;
-		$paramsSancion{'id3'}		    = $self->getId3;
+		$paramsSancion{'id3'}		        = $self->getId3;
 
 		$sancion->insertar_sancion(\%paramsSancion);
 	}

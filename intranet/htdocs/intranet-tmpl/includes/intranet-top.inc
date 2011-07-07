@@ -40,7 +40,6 @@
 		$('#formLang').submit();
 	}
 
-
 	function mainmenu(){
 	
 	    var options = {minWidth: 140};  
@@ -52,14 +51,11 @@
         };
 
         $('.accordion').accordion({
-
             autoHeight: false,
             navigation: true,
             clearStyle: true,
-            //icons: icons,
-            
-        });
-	    
+            //icons: icons, 
+        });  
 	}
 	
 	function searchesText(objectId){
@@ -73,37 +69,38 @@
         }
 	}
 	
-	function searchBoxFocus(object){
-		
+	function searchBoxFocus(object){	
         object.value='';
-
 	}
-
-    //seleccion con shift
-    $(function() {
-        $('tr').shiftClick();
-    }); 
+	
+    function checkTr(){
+        // click sobre los <tr>, para darle estilo
+        $('tr').click(function() {
+            var clase = $(this).attr('class').split(' ');
+            //solo los <tr> que tengan en el primer <td> un input checkbox
+            if($(this).children(':first-child').children(':first-child').attr('type') == 'checkbox'){
+                if(clase[1] == 'marked'){
+                    $(this).removeClass("marked"); 
+                    $(this).children(':first-child').children(':first-child').removeAttr('checked');
+                }else{
+                    $(this).addClass("marked");
+                    $(this).children(':first-child').children(':first-child').attr('checked','true');
+                }
+            }
+        });     
+        //seleccion con shift
+        $(function() {
+            $('tr').shiftClick();
+        }); 
+    }
 	
 	$(document).ready(function(){
 		mainmenu();
+		checkTr();
 		$('input[type="text"]').focus(function() {  
 		    $(this).removeClass("textInput").addClass("focusInput");  
 		});
         $('input[type="text"]').addClass("textInput");    
-
-        // click sobre el tr, para darle estilos
-        var lastSelected;
-        $('tr').click(function(e) {
-            var clase = $(this).attr('class').split(' ');
-            if(clase[1] == 'marked'){
-                $(this).removeClass("marked"); 
-                $(this).children(':first-child').children(':first-child').removeAttr('checked');
-            }else{
-                $(this).addClass("marked");
-                $(this).children(':first-child').children(':first-child').attr('checked','true');
-            }
-
-        });  	
     });
 </script>
 </head>

@@ -58,7 +58,7 @@
   </title>
   
   <script type="text/javascript">
-      [% IF socio_data %]
+      [% IF socio_data.usr_nro_socio %]
           $(document).ready(function() {
             infoReservas();
             infoSanciones();

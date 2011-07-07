@@ -476,7 +476,6 @@ sub detalleDisponibilidadNivel3{
     $infoNivel3{'cantReservas'}         = C4::AR::Reservas::cantReservasPorGrupo($id2,$db);
     $infoNivel3{'cantReservasEnEspera'} = C4::AR::Reservas::cantReservasPorGrupoEnEspera($id2,$db);
 
-
     for(my $i=0;$i<scalar(@$nivel3_array_ref);$i++){
         my %hash_nivel3;
 
@@ -592,13 +591,11 @@ Genera el detalle
 =cut
 sub detalleCompletoOPAC{
 	my ($id1, $t_params) = @_;
-	
 	#recupero el nivel1 segun el id1 pasado por parametro
-	my $nivel1= &C4::AR::Nivel1::getNivel1FromId1OPAC($id1);
-    my $config_visualizacion= &C4::AR::Preferencias::getConfigVisualizacionOPAC();
+	my $nivel1= C4::AR::Nivel1::getNivel1FromId1OPAC($id1);
+    my $config_visualizacion= C4::AR::Preferencias::getConfigVisualizacionOPAC();
 	#recupero todos los nivel2 segun el id1 pasado por parametro
-	my $nivel2_array_ref= &C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
-
+	my $nivel2_array_ref= C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1,$nivel1->db);
 	my @nivel2;
 	for(my $i=0;$i<scalar(@$nivel2_array_ref);$i++){
  		my $hash_nivel2;
@@ -606,8 +603,7 @@ sub detalleCompletoOPAC{
 		$hash_nivel2->{'id2'}                       = $nivel2_array_ref->[$i]->getId2;
  		$hash_nivel2->{'tipo_documento'}            = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getNombre();
 		$hash_nivel2->{'nivel2_array'}              = ($nivel2_array_ref->[$i])->toMARC_Opac; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
-		my ($totales_nivel3,@result)                = detalleDisponibilidadNivel3($nivel2_array_ref->[$i]->getId2,$config_visualizacion);
-
+		my ($totales_nivel3,@result)                = detalleDisponibilidadNivel3($nivel2_array_ref->[$i]->getId2,$nivel1->db);
 		$hash_nivel2->{'nivel3'}                    = \@result;
 		$hash_nivel2->{'cantPrestados'}             = $totales_nivel3->{'cantPrestados'};
 		$hash_nivel2->{'cantReservas'}              = $totales_nivel3->{'cantReservas'};
@@ -620,8 +616,8 @@ sub detalleCompletoOPAC{
 		$hash_nivel2->{'cantParaPrestamo'}          = $totales_nivel3->{'cantParaPrestamo'};
 		$hash_nivel2->{'DivMARC'}                   = "MARCDetail".$i;
 		$hash_nivel2->{'DivDetalle'}                = "Detalle".$i;
-		$hash_nivel2->{'rating'}                    = C4::AR::Nivel2::getRating($hash_nivel2->{'id2'});;
-		$hash_nivel2->{'cant_reviews'}              = C4::AR::Nivel2::getCantReviews($hash_nivel2->{'id2'});;
+		$hash_nivel2->{'rating'}                    = C4::AR::Nivel2::getRating($hash_nivel2->{'id2'},$nivel1->db);
+		$hash_nivel2->{'cant_reviews'}              = C4::AR::Nivel2::getCantReviews($hash_nivel2->{'id2'}, $nivel1->db);
 		push(@nivel2, $hash_nivel2);
 	}
 

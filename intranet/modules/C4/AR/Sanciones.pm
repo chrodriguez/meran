@@ -696,8 +696,11 @@ sub getHistorialSanciones{
                                                                         limit   => $cantR,
                                                                         offset  => $ini,
                                 );
-
-    return (scalar(@$historial_sanciones_array_ref), $historial_sanciones_array_ref);
+    my $historial_sanciones_array_ref_count = C4::Modelo::RepHistorialSancion::Manager->get_rep_historial_sancion_count( query => [ 
+                                                                                nro_socio       => { eq => $nro_socio},
+                                                                                fecha_final     => { lt => $hoy},
+                                                                                ],);
+    return ($historial_sanciones_array_ref_count, $historial_sanciones_array_ref);
 
   }
   return 0;

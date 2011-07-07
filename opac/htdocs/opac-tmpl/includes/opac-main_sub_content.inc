@@ -1,4 +1,4 @@
-    [% IF socio_data %]
+ [% IF socio_data.usr_nro_socio %]
       <div class="main-subcontent">
         <!-- Subcontent unit -->
         <div id="info_reservas"></div>

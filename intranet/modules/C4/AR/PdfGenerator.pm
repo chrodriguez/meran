@@ -904,21 +904,31 @@ sub generateBookLabel {
 
 	my $posy = 105;
 	my $escudo =
-	    C4::Context->config('intrahtdocs') . '/'
-	  . C4::AR::Preferencias::getValorPreferencia('temas') . '/'
-	  . C4::AR::Preferencias::getValorPreferencia('tema')
-	  . '/images/escudo-'
-	  . $branchcode . '.png';
+	    C4::Context->config('intrahtdocs') . '/temas/'
+      . C4::AR::Preferencias::getValorPreferencia('tema_intra')
+	  . '/imagenes/escudo-'
+	  . $branchcode . '.jpg';
+    
+    
 
-	if ( !( ( -e $escudo ) && ( -r $escudo ) ) ) {
-		$escudo =
-	        C4::Context->config('intrahtdocs') . '/'
-	      . C4::AR::Preferencias::getValorPreferencia('temas') . '/'
-	      . C4::AR::Preferencias::getValorPreferencia('tema')
-		  . '/images/escudo-uni.png';
-	}
+# 	if ( !( ( -e $escudo ) && ( -r $escudo ) ) ) {
+# 		$escudo =
+# 	        C4::Context->config('intrahtdocs') . '/'
+# 	      . C4::AR::Preferencias::getValorPreferencia('temas') . '/'
+# 	      . C4::AR::Preferencias::getValorPreferencia('tema')
+# 		  . '/images/escudo-uni.png';
+# 	}
 
-#      $pdf->addImgScaled($escudo, $x + 96 , $pageheight + ($y-30-$posy) , 32/100);
+    if ( !( ( -e $escudo ) && ( -r $escudo ) ) ) {
+        $escudo =
+            C4::Context->config('intrahtdocs') . '/temas/'
+          . C4::AR::Preferencias::getValorPreferencia('tema_intra')
+          . '/images/escudo-uni.png';
+    }
+
+    C4::AR::Debug::debug($escudo);
+#     $pdf->addImgScaled($escudo, $x + 96 , $pageheight + ($y-30-$posy) , 32/100);
+    $pdf->addImgScaled($escudo, $x + 105 , $pageheight + ($y-30-$posy) , 1/100);
 
 	#Write the borrower data into the pdf file
 	$pdf->setSize(7);

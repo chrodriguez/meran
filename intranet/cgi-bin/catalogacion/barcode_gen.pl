@@ -49,25 +49,6 @@ if ($id){
 
 
 
-# my $id1 = $input->param('id1');
-# my $id2 = $input->param('id2');
-# my $id3 = $input->param('id');
-# my @arreglo = ();
-# 
-# 
-# if ($id3){
-#     my $id3             = $input->param('id');
-#     my $nivel3          = C4::AR::Nivel3::getNivel3FromId3($id3);
-#     push (@arreglo, $nivel3);
-# } else {
-#     
-#     my $i;
-# 
-#     for($i = $id1; $i < $id2 + 1; $i++) { 
-#           my $nivel3 = C4::AR::Nivel3::getNivel3FromId3($i);
-#           push (@arreglo, $nivel3);
-#     }
-# }
 
 C4::AR::PdfGenerator::batchBookLabelGenerator(scalar(@arreglo),\@arreglo);
 

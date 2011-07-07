@@ -1496,7 +1496,11 @@ sub getReservaById{
 =cut
 sub getHistorialReservasParaTemplate {
 
-    my ($nro_socio) = @_;
+    my ($nro_socio,$ini,$cantR,$orden) = @_;
+    
+    $cantR  = $cantR || 10;
+    $ini    = $ini || 0;
+    
     use C4::Modelo::RepHistorialCirculacion;
     use C4::Modelo::RepHistorialCirculacion::Manager;
     
@@ -1507,11 +1511,12 @@ sub getHistorialReservasParaTemplate {
     my $reservas_array_ref = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                           query             => \@filtros,
                                           with_objects      => ['nivel2', 'nivel3','socio', 'nivel3.nivel2.nivel1'],
-                                          sorty_by          => ['id DESC'],
-
+                                          sort_by           => $orden,
+                                          limit             => $cantR,
+                                          offset            => $ini,
                                 ); 
-
-    return (scalar(@$reservas_array_ref), $reservas_array_ref);
+    my $reservas_array_ref_count = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(query => \@filtros,); 
+    return ($reservas_array_ref_count, $reservas_array_ref);
 }
 
 

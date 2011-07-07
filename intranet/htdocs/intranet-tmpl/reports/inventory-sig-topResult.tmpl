@@ -17,6 +17,7 @@
                                                                       id      => "select_all",
                                                                       title   => "[% 'Seleccionar todos' | i18n %]",
                                                                       alternClass => "botonCentrado",
+                                                                      
                                           ) ;
                           [% END %]
                     </th>
@@ -35,7 +36,7 @@
                 [% FOREACH res IN results %]
                         <tr >
                                 <td>
-                                    <input type="checkbox" id="checkEjemplares[% res.nivel2.getId2 %]" name="checkEjemplares" class="icon_seleccionar" value="[% res.nivel3.getId3 %]">
+                                    <input type="checkbox" id="checkEjemplares" name="checkEjemplares" class="icon_seleccionar" value="[% res.nivel3.getId3 %]">
                                
                               </td>
                                 <td align="center">
@@ -93,7 +94,8 @@
                                                          
                               ) ;
               [% END %]
-            <div class="buttonContainerHorizontal" style="margin-top:10px;">
+  
+            <div class="buttonContainerHorizontal" style="margin-top:30px; clear:left;">
           
                 [% PERL %]
                         print C4::AR::Filtros::to_Button( 

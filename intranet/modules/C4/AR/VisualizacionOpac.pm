@@ -89,11 +89,11 @@ sub getConfiguracionByOrder{
 
 
 sub getConfiguracion{
-    my ($perfil,$db) = @_;
+    my ($db) = @_;
     my @filtros;
     $db = $db || C4::Modelo::CatVisualizacionOpac->new()->db;
     
-    $perfil = $perfil || C4::AR::Preferencias::getValorPreferencia('perfil_opac');
+    my $perfil = C4::AR::Preferencias::getValorPreferencia('perfil_opac');
 
     push ( @filtros, ( or   => [    id_perfil   => { eq => $perfil }, 
                                     id_perfil   => { eq => '0'     } ]) #PERFIL TODOS

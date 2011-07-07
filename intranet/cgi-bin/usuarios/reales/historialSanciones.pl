@@ -21,20 +21,15 @@ my ($template, $session, $t_params) =  get_template_and_user ({
 
 
 my $obj = C4::AR::Utilidades::from_json_ISO($input->param('obj'));
-
 C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
 
-my $nro_socio   = $obj->{'nro_socio'};
-my $orden       = $obj->{'orden'}||'fecha desc';
-my $ini         = $obj->{'ini'};
-my $funcion     = $obj->{'funcion'};
+my $nro_socio                       = $obj->{'nro_socio'};
+my $orden                           = $obj->{'orden'}||'fecha desc';
+my $ini                             = $obj->{'ini'};
+my $funcion                         = $obj->{'funcion'};
 
-my ($ini,$pageNumber,$cantR)    = C4::AR::Utilidades::InitPaginador($ini);
-
-my ($cant,$sanciones_array_ref) = C4::AR::Sanciones::getHistorialSanciones($nro_socio,$ini,$cantR,$orden);
-
-C4::AR::Utilidades::printARRAY($sanciones_array_ref);
-C4::AR::Utilidades::printHASH(@$sanciones_array_ref[0]);
+my ($ini,$pageNumber,$cantR)        = C4::AR::Utilidades::InitPaginador($ini);
+my ($cant,$sanciones_array_ref)     = C4::AR::Sanciones::getHistorialSanciones($nro_socio,$ini,$cantR,$orden);
 
 $t_params->{'paginador'}            = C4::AR::Utilidades::crearPaginador($cant,$cantR, $pageNumber,$funcion,$t_params);
 $t_params->{'cant'}                 = $cant;
