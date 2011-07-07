@@ -497,17 +497,10 @@ sub marc_record_to_meran_to_detail_view {
                 $hash_temp{'subcampo'}              = $subcampo;
                 $hash_temp{'liblibrarian'}          = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo, $itemtype,$type,$db);
                 $hash_temp{'orden'}                 = getOrdenFromCampoSubcampo($campo, $subcampo, $itemtype, $type,$db);
-<<<<<<< HEAD
-                $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype);
-                $hash_temp{'datoReferencia'}        = $dato;
-                my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype);
-=======
                 C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view => orden: ".$hash_temp{'orden'});
                 $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype,$db);
                 $hash_temp{'datoReferencia'}        = $dato;
-    #             C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view => dato despues de getRefFromStringConArrobasByCampoSubcampo: ".$dato);
                 my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype,$db);
->>>>>>> 60399ff79c58a5a0cefa8dee8e734d41971e2b05
                 $hash_temp{'dato'}                  = $valor_referencia;
 
                 push(@MARC_result_array, \%hash_temp);
