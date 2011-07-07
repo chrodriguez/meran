@@ -2,18 +2,13 @@
 
 [% IF cant %]
 		<div class="resultados_consulta">[% "Cantidad de registros en el hisotrial de sanciones" | i18n %]: &nbsp;[% cant %]</div> 
-		
 		<div class="contenedor_paginador">[% paginador %]</div>
-		
 		<table class="tablaHistorialSanciones datos_tabla" cellspacing=0  cellpadding=0 border=0 width="100%">
 		    <tr class="titulo_tabla_resultado">
                 <td class="click" onclick="ordenar('usr_responsable.nro_socio')" 
                         Title='[% "Ordenar por Responsable" | i18n %]'>
                     [% "Responsable" | i18n %]
                 </td>
-		        <td>
-		                [% "Operaci&oacute;n" | i18n %]
-		        </td>
 		            <td class="click" onclick="ordenar('fecha_comienzo')" 
 		                Title='[% "Ordenar por Fecha Inicial" | i18n %]'>
 				    [% "Fecha Inicial" | i18n %]
@@ -43,11 +38,12 @@
             [% FOREACH historial_sancion IN HISTORIAL_SANCIONES %]
 		    <tr valign="middle" align="center">
                 <td>
-                    [% historial_sancion.usr_responsable.persona.getApeYNom %]
+                    [% IF historial_sancion.responsable == "Sistema" %]
+                        Sistema 
+                    [% ELSE %]
+                        [% historial_sancion.usr_responsable.persona.getApeYNom %]
+                    [% END %]
                 </td>
-			    <td>
-				    [% historial_sancion.getTipo_operacion %]
-			    </td>
                 <td>
                     [% historial_sancion.getFecha_comienzo_formateada %]
                 </td>
@@ -68,10 +64,17 @@
                    [% historial_sancion.dias_sancion %]
                 </td>
                 <td>
-                   [% historial_sancion.nivel3.nivel1.getAutor %]
+                   <a class="click" onClick="buscarPorAutor('[%  historial_sancion.nivel3.nivel1.getAutor %]')" title="[% 'Filtrar por Autor' | i18n %]">
+                    [%  historial_sancion.nivel3.nivel1.getAutor %]
+                    </a>
                 </td>
                 <td>
-                   [% historial_sancion.nivel3.nivel1.getTitulo %]
+                   [% PERL %]
+						    print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(historial_sancion.nivel3.nivel1.getTitulo) %]",
+		                                                    url => 		"[% url_prefix %]/catalogacion/estructura/detalle.pl",
+														    params =>	[	"id1=[% HTML.escape(historial_sancion.nivel3.nivel1.getId1) %]"], 
+													    ) ;
+				    [% END %]
                 </td>
                 <td>
                    [% historial_sancion.nivel3.nivel2.getEdicion %] [%historial_sancion.nivel3.nivel2.getAnio_publicacion %]
