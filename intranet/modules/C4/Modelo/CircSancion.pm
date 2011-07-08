@@ -103,6 +103,11 @@ sub getId_reserva{
     return ($self->id_reserva);
 }
 
+sub getTipo_operacion{
+    my ($self) = shift;
+    return ($self->tipo_sancion);
+}
+
 sub setId_reserva{
     my ($self) = shift;
     my ($id_reserva) = @_;

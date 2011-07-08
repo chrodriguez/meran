@@ -36,7 +36,12 @@
 		    </tr>
 		    
             [% FOREACH historial_sancion IN HISTORIAL_SANCIONES %]
-		    <tr valign="middle" align="center">
+            
+            [% IF historial_sancion.tipo_operacion == "Borrado"  %]
+                <tr valign="middle" align="center" color="red">
+            [% ELSE %]
+		        <tr valign="middle" align="center">
+		    [% END %]
                 <td>
                     [% IF historial_sancion.responsable == "Sistema" %]
                         Sistema 
