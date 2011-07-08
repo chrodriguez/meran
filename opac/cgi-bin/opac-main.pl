@@ -31,7 +31,7 @@ my $orden                       = 'date_due desc';
 my $ini                         = 1;
 # my $funcion                     = ;
 my ($ini,$pageNumber,$cantR)    = C4::AR::Utilidades::InitPaginador($ini);
-my ($cant,$prestamos_array_ref) = C4::AR::Prestamos::getHistorialPrestamosParaTemplate($nro_socio,$ini,$cantR, $orden);
+my ($cant,$prestamos_array_ref) = C4::AR::Prestamos::getHistorialPrestamosVigentesParaTemplate($nro_socio,$ini,$cantR, $orden);
 
 
 $t_params->{'historial'}            = $prestamos_array_ref;

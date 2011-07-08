@@ -62,7 +62,7 @@
         </div>
    
         <div>
-               [% INCLUDE 'opac-prestamos.inc' %]
+               [% INCLUDE 'opac-prestamos_vigentes.inc' %]
         </div>
    
         <!-- Content unit - Two columns -->
