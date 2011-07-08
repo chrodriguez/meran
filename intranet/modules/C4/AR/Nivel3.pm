@@ -432,17 +432,32 @@ sub detalleCompletoINTRA{
 	
 	#recupero el nivel1 segun el id1 pasado por parametro
 	my $nivel1              = C4::AR::Nivel1::getNivel1FromId1($id1);
+	
+    my $page_number = $t_params->{'page'} || 0;
+    my $cant_grupos = C4::Context->config("cant_grupos_per_query") || 5;
+	
 	#recupero todos los nivel2 segun el id1 pasado por parametro
 	my $nivel2_array_ref    = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1,$nivel1->db);
 
 	my @nivel2;
-	
-	for(my $i=0;$i<scalar(@$nivel2_array_ref);$i++){
 
-		my ($hash_nivel2) = detalleNivel3($nivel2_array_ref->[$i]->getId2,$nivel1->db);
+    my $cantidad_total = scalar(@$nivel2_array_ref);
+    my $inicio = (($page_number) * $cant_grupos);
+    my $cantidad = $inicio + $cant_grupos;  
+    
+    
+    for(my $i=$inicio;$i<$cantidad;$i++){
 
+		eval{
+			my ($hash_nivel2) = detalleNivel3($nivel2_array_ref->[$i]->getId2,$nivel1->db);
 	
-		push(@nivel2, $hash_nivel2);
+			push(@nivel2, $hash_nivel2);
+		};
+		
+        if ($i >= ($cantidad_total-1)){
+            last;
+        }
+		
 	}
 	$t_params->{'nivel1'}       = $nivel1->toMARC_Intra,
 	$t_params->{'id1'}	        = $id1;
@@ -450,6 +465,9 @@ sub detalleCompletoINTRA{
 	$t_params->{'nivel2'}       = \@nivel2,
 	#se ferifica si la preferencia "circularDesdeDetalleDelRegistro" esta seteada
 	$t_params->{'circularDesdeDetalleDelRegistro'}  = C4::AR::Preferencias::getValorPreferencia('circularDesdeDetalleDelRegistro');
+
+    return ($cantidad_total);
+	
 }
 
 =head2 sub detalleDisponibilidadNivel3
@@ -595,35 +613,51 @@ sub detalleCompletoOPAC{
 	my $nivel1= C4::AR::Nivel1::getNivel1FromId1OPAC($id1);
     my $config_visualizacion= C4::AR::Preferencias::getConfigVisualizacionOPAC();
 	#recupero todos los nivel2 segun el id1 pasado por parametro
-	my $nivel2_array_ref= C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1,$nivel1->db);
+    my $page_number = $t_params->{'page'} || 0;
+    my $cant_grupos = C4::Context->config("cant_grupos_per_query") || 5;
+
+	my ($nivel2_array_ref) = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1,$nivel1->db);
+
 	my @nivel2;
-	for(my $i=0;$i<scalar(@$nivel2_array_ref);$i++){
- 		my $hash_nivel2;
-		$nivel2_array_ref->[$i]->load();
-		$hash_nivel2->{'id2'}                       = $nivel2_array_ref->[$i]->getId2;
- 		$hash_nivel2->{'tipo_documento'}            = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getNombre();
-		$hash_nivel2->{'nivel2_array'}              = ($nivel2_array_ref->[$i])->toMARC_Opac; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
-		my ($totales_nivel3,@result)                = detalleDisponibilidadNivel3($nivel2_array_ref->[$i]->getId2,$nivel1->db);
-		$hash_nivel2->{'nivel3'}                    = \@result;
-		$hash_nivel2->{'cantPrestados'}             = $totales_nivel3->{'cantPrestados'};
-		$hash_nivel2->{'cantReservas'}              = $totales_nivel3->{'cantReservas'};
-		$hash_nivel2->{'portada_registro'}          = C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'S');
-		$hash_nivel2->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'M');
-		$hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'L');
-		$hash_nivel2->{'cantReservasEnEspera'}      = $totales_nivel3->{'cantReservasEnEspera'};
-		$hash_nivel2->{'disponibles'}               = $totales_nivel3->{'disponibles'};
-		$hash_nivel2->{'cantParaSala'}              = $totales_nivel3->{'cantParaSala'};
-		$hash_nivel2->{'cantParaPrestamo'}          = $totales_nivel3->{'cantParaPrestamo'};
-		$hash_nivel2->{'DivMARC'}                   = "MARCDetail".$i;
-		$hash_nivel2->{'DivDetalle'}                = "Detalle".$i;
-		$hash_nivel2->{'rating'}                    = C4::AR::Nivel2::getRating($hash_nivel2->{'id2'},$nivel1->db);
-		$hash_nivel2->{'cant_reviews'}              = C4::AR::Nivel2::getCantReviews($hash_nivel2->{'id2'}, $nivel1->db);
-		push(@nivel2, $hash_nivel2);
+
+	my $cantidad_total = scalar(@$nivel2_array_ref);
+    my $inicio = (($page_number) * $cant_grupos);
+    my $cantidad = $inicio + $cant_grupos;	
+	
+	
+	for(my $i=$inicio;$i<$cantidad;$i++){
+		eval{
+	 		my $hash_nivel2;
+			$nivel2_array_ref->[$i]->load();
+			$hash_nivel2->{'id2'}                       = $nivel2_array_ref->[$i]->getId2;
+	 		$hash_nivel2->{'tipo_documento'}            = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getNombre();
+			$hash_nivel2->{'nivel2_array'}              = ($nivel2_array_ref->[$i])->toMARC_Opac; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
+			my ($totales_nivel3,@result)                = detalleDisponibilidadNivel3($nivel2_array_ref->[$i]->getId2,$nivel1->db);
+			$hash_nivel2->{'nivel3'}                    = \@result;
+			$hash_nivel2->{'cantPrestados'}             = $totales_nivel3->{'cantPrestados'};
+			$hash_nivel2->{'cantReservas'}              = $totales_nivel3->{'cantReservas'};
+			$hash_nivel2->{'portada_registro'}          = C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'S');
+			$hash_nivel2->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'M');
+			$hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'L');
+			$hash_nivel2->{'cantReservasEnEspera'}      = $totales_nivel3->{'cantReservasEnEspera'};
+			$hash_nivel2->{'disponibles'}               = $totales_nivel3->{'disponibles'};
+			$hash_nivel2->{'cantParaSala'}              = $totales_nivel3->{'cantParaSala'};
+			$hash_nivel2->{'cantParaPrestamo'}          = $totales_nivel3->{'cantParaPrestamo'};
+			$hash_nivel2->{'DivMARC'}                   = "MARCDetail".$i;
+			$hash_nivel2->{'DivDetalle'}                = "Detalle".$i;
+			$hash_nivel2->{'rating'}                    = C4::AR::Nivel2::getRating($hash_nivel2->{'id2'},$nivel1->db);
+			$hash_nivel2->{'cant_reviews'}              = C4::AR::Nivel2::getCantReviews($hash_nivel2->{'id2'}, $nivel1->db);
+			push(@nivel2, $hash_nivel2);
+		};		
+		if ($i >= ($cantidad_total-1)){
+			last;
+		}
 	}
 
 	$t_params->{'nivel1'}   = $nivel1->toMARC_Opac,
 	$t_params->{'id1'}	    = $id1;
-	$t_params->{'nivel2'}   = \@nivel2,
+	$t_params->{'nivel2'}   = \@nivel2;
+	return ($cantidad_total);
 }
 
 

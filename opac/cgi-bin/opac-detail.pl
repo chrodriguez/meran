@@ -6,9 +6,9 @@ use C4::AR::Auth;
 
 
 my $input=new CGI;
-
+my $ajax = $input->param('ajax') || 0;
 my ($template, $session, $t_params)= get_template_and_user({
-								template_name => "opac-main.tmpl",
+								template_name => ($ajax?"includes/opac-detail.inc":"opac-main.tmpl"),
 								query => $input,
 								type => "opac",
 								authnotrequired => 1,
@@ -18,12 +18,19 @@ my ($template, $session, $t_params)= get_template_and_user({
                                                     entorno => 'undefined'},
 			     });
 
+if ($ajax){sleep(5);}
 
 my $idNivel1= $input->param('id1');
 
-C4::AR::Nivel3::detalleCompletoOPAC($idNivel1, $t_params);
+$t_params->{'page'} = $input->param('page') || 0;
+
+eval{ 
+    my ($cant_total)    =   C4::AR::Nivel3::detalleCompletoOPAC($idNivel1, $t_params);
+    $t_params->{'cant_total'}           = $cant_total;
+};
 
 $t_params->{'partial_template'}     = "opac-detail.inc";
 $t_params->{'preferencias'}         = C4::AR::Preferencias::getConfigVisualizacionOPAC();
-
+$t_params->{'per_page'}             = C4::Context->config("cant_grupos_per_query") || 5;
+$t_params->{'ajax'}                 = $ajax;
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

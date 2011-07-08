@@ -40,12 +40,12 @@
   <script src="/opac-tmpl/includes/circulacionOPAC.js" type="text/javascript"></script>
   <script src="/includes/jquery/fancybox/jquery.easing.1.3.js" type="text/javascript"></script>
   <script src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js" type="text/javascript"></script>
-
   <script type="text/javascript" src="/includes/jquery/modal/jquery.simplemodal.js"></script>
+  <script src="/opac-tmpl/includes/favoritos.js" type="text/javascript"></script>
+
   <link media="screen" rel="stylesheet" href="/includes/jquery/modal/basic-min.css" type="text/css">
 
 
-  <script src="/opac-tmpl/includes/favoritos.js" type="text/javascript"></script>
 
   [% INCLUDE 'WindowHelper.inc' %]
 
@@ -95,4 +95,6 @@
         [% INCLUDE 'opac-top-header.inc' %]
         [% INCLUDE 'opac-main_content.inc' %]
         [% INCLUDE 'opac-main_sub_content.inc' %]
+        <div id="loading_items" class="loading_items"><br /></div>
+        
   </div>

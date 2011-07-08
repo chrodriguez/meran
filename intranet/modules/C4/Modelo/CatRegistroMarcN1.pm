@@ -38,7 +38,7 @@ sub getSignaturas{
     
     use C4::Modelo::CatRegistroMarcN2;
     
-    my $array_nivel2 = C4::AR::Nivel2::getNivel2FromId1($self->getId1);
+    my $array_nivel2 = C4::AR::Nivel2::getNivel2FromId1($self->getId1,$self->db);
     
     my @signaturas;
     
