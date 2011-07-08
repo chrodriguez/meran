@@ -33,6 +33,7 @@
     right: 1%; 
     z-index: 10001; 
     bottom: 0;
+    width: 400px;
 }
 
 .jqpageflow-loadertext {
