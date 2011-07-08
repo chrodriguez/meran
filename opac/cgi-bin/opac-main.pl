@@ -24,6 +24,17 @@ my ($template, $session, $t_params)= get_template_and_user({
 C4::AR::Auth::checkBrowser();
 my $nro_socio                       = $session->param('nro_socio');            
 my ($cantidad,$grupos)              = C4::AR::Nivel1::getUltimosGrupos();
+
+
+
+my $orden                       = 'date_due desc';
+my $ini                         = 1;
+# my $funcion                     = ;
+my ($ini,$pageNumber,$cantR)    = C4::AR::Utilidades::InitPaginador($ini);
+my ($cant,$prestamos_array_ref) = C4::AR::Prestamos::getHistorialPrestamosParaTemplate($nro_socio,$ini,$cantR, $orden);
+
+
+$t_params->{'historial'}            = $prestamos_array_ref;
 $t_params->{'nro_socio'}            = $nro_socio;
 $t_params->{'SEARCH_RESULTS'}       = $grupos;
 $t_params->{'cantidad'}             = $cantidad;

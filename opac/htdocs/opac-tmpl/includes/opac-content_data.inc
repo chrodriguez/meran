@@ -60,6 +60,11 @@
         <div class="column1-unit novedades_opac">
             <div id="resultNovedades"></div>
         </div>
+   
+        <div>
+               [% INCLUDE 'opac-prestamos.inc' %]
+        </div>
+   
         <!-- Content unit - Two columns -->
         <br />
         <h1 class="pagetitle"> [% 'Ultimos ejemplares adquiridos por la biblioteca' | i18n %]</h1>
