@@ -1,18 +1,12 @@
 #!/usr/bin/perl
-
 use strict;
-
 require Exporter;
-
 use CGI;
 use C4::AR::Auth;
 use C4::AR::Nivel3 qw(detalleCompletoINTRA);
 
-
 my $input=new CGI;
-
 my $ajax = $input->param('ajax') || 0;
-
 my ($template, $session, $t_params) = get_template_and_user({
 							template_name   => ('catalogacion/estructura/detalle.tmpl'),
 							query           => $input,

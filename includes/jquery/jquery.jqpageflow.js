@@ -37,7 +37,6 @@
 			var append_loader = config.append_loader;
 			// create and append our progress indicator div to the body content, then make sure our css is applied
    			$(append_loader).append("<div id='jqpageflow-block'><img src='" + config.loaderImgPath + "' /><span id='jqpageflow-text'></span></div>");
-   			$('#jqpageflow-block').fadeIn();	
 			$("#jqpageflow-block").addClass("jqpageflow-loader");
 			$("#jqpageflow-text").addClass("jqpageflow-loadertext");
    			 
@@ -89,6 +88,7 @@
 		                   if ( html ) {
 		                       $(config.container).append( html );
 		                       config.currentPage++;
+    	              		   $('#jqpageflow-block').fadeIn();	
 		                       
 							} else {
 								// prevent any further attempts to execute the ajax call since the backend is not returning a useable result.

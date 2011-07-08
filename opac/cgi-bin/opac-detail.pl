@@ -18,8 +18,6 @@ my ($template, $session, $t_params)= get_template_and_user({
                                                     entorno => 'undefined'},
 			     });
 
-if ($ajax){sleep(5);}
-
 my $idNivel1= $input->param('id1');
 
 $t_params->{'page'} = $input->param('page') || 0;
