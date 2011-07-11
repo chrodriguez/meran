@@ -33,6 +33,7 @@ my ($cant,$sanciones_array_ref)     = C4::AR::Sanciones::getHistorialSanciones($
 
 C4::AR::Debug::debug("sancion 1 : ".@$sanciones_array_ref[0]);
 C4::AR::Utilidades::printHASH(@$sanciones_array_ref[0]);
+#C4::AR::Debug::debug("timestamp : ".@$sanciones_array_ref[0].imestamp);
 
 $t_params->{'paginador'}            = C4::AR::Utilidades::crearPaginador($cant,$cantR, $pageNumber,$funcion,$t_params);
 $t_params->{'cant'}                 = $cant;
