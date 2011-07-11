@@ -25,6 +25,9 @@ SHOW_PREVIOUS = "[% 'Mostrar anterior' | i18n %]";
 SHOW_NEXT = "[% 'Mostrar siguiente' | i18n %]";
 SHOW_DIFERENT = "[% 'Mostrar uno diferente' | i18n %]";
 
+
+LOADING_RESULTS = "[% 'Cargando resultados' | i18n %]";
+OF = "[% 'de' | i18n %]";
 // END VARIABLES PARA ui.datepicker.js
 
 //Para DataTables

@@ -31,6 +31,9 @@ my $funcion                         = $obj->{'funcion'};
 my ($ini,$pageNumber,$cantR)        = C4::AR::Utilidades::InitPaginador($ini);
 my ($cant,$sanciones_array_ref)     = C4::AR::Sanciones::getHistorialSanciones($nro_socio,$ini,$cantR,$orden);
 
+C4::AR::Debug::debug("sancion 1 : ".@$sanciones_array_ref[0]);
+C4::AR::Utilidades::printHASH(@$sanciones_array_ref[0]);
+
 $t_params->{'paginador'}            = C4::AR::Utilidades::crearPaginador($cant,$cantR, $pageNumber,$funcion,$t_params);
 $t_params->{'cant'}                 = $cant;
 $t_params->{'nro_socio'}            = $nro_socio;

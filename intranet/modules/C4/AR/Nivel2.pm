@@ -225,9 +225,10 @@ sub getNivel2FromId1{
                                                                         db => $db,
                                                                         query => [
                                                                                         id1 => { eq => $id1 },
-                                                                                ]
+                                                                                ],
                                                                 );
-    return $nivel2_array_ref;
+                                                                
+    return ($nivel2_array_ref);
 }
 
 sub getFirstItemTypeFromN1{

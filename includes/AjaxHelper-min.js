@@ -1,4 +1,4 @@
-function startOverlay(){$('#ajax-indicator').modal({close:true,escClose:false,overlayClose:false,containerCss:{backgroundColor:"#fff",height:50,padding:0,width:190,opacity:50,},});return(true);}
+function startOverlay(){$('#ajax-indicator').modal({close:false,containerCss:{backgroundColor:"#fff",height:50,padding:0,width:190,opacity:50,},});return(true);}
 function closeModal(){$.modal.close();}
 function _Init(options){if(options.showStatusIn!=''){$('#'+options.showStatusIn).addClass('cargando');}else{if(options.showOverlay){startOverlay();}else{_ShowState(options);}}}
 function _AddDiv(){var contenedor=$('#state')[0];if(contenedor==null){$('body').append("<div id='state' class='loading' style='position:absolute'>&nbsp;</div>");$('#state').css('top','0px');$('#state').css('left','0px');}}

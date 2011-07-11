@@ -6,7 +6,42 @@
 
 @IMPORT url("jquery.alerts.css");
 
-	
+.loading_results {
+    background:#c1c39a;
+    color:#303030;
+    font-size:20px;
+    padding:5px 10px;
+    text-align:center;
+    width:450px;
+    margin:0px auto;
+    display:none;
+    border-radius: 5px;
+}
+
+.loading_items{
+    margin: 0 auto;
+    width: 300px;	
+}
+
+#jqpageflow-block img{
+	clear: none;
+}
+
+.jqpageflow-loader {
+    position: relative; 
+    display: none; 
+    right: 1%; 
+    z-index: 10001; 
+    bottom: 0;
+    width: 400px;
+}
+
+.jqpageflow-loadertext {
+    font-size: 18px; 
+    width: 100%;  
+    text-align: center; 
+    position: relative; 
+}
 
 *{padding:0;
  margin:0;

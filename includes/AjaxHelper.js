@@ -9,9 +9,7 @@
 
 function startOverlay(){
     $('#ajax-indicator').modal({   
-        close: true,
-        escClose: false,
-    	overlayClose: false,
+       	close: false,
         containerCss:{
             backgroundColor:"#fff",
             height: 50,
