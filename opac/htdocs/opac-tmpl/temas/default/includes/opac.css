@@ -46,9 +46,12 @@
 *{padding:0;
  margin:0;
 }
- body {font-size:62.5%;
+ body {
+ font-size:62.5%;
  background-color:rgb(255,255,255);
  font-family:verdana,arial,sans-serif;
+ min-width: 1024px;
+ overflow: auto;
 } /*Font-size: 1.0em = 10px when browser default size is 16px*/
  
 body input[type="text"]:focus{
@@ -73,7 +76,7 @@ body textarea:focus{
  font-size:1.0em;
 }
 .main {clear:both;
- width:100%;
+ width:98%;
  padding-bottom:30px;
  margin-top: 2%;
 }
@@ -93,8 +96,8 @@ body textarea:focus{
 }
 .main-subcontent {display:inline /*Fix IE floating margin bug*/;
  float:right;
- /*width:185px;
-*/ margin:0 15px 0 0;
+ margin-right:12px;
+ width: 15%;
  overflow:visible !important /*Firefox*/;
  overflow:hidden /*IE6*/;
 }
@@ -501,8 +504,9 @@ background:#DAE0EC none repeat scroll 0 0;
 border:1px solid #4E6595;
 margin:0 0 2em;
 padding:0 0 5px;
-width:183px;
-}.subcontent-unit-border-green {width:183px;
+width:175px;
+}.subcontent-unit-border-green {
+ width:175px;
  margin:0 0 2.5em 0;
  padding:0 0 10px 0;
  border:solid 1px rgb(160,214,81);

@@ -443,7 +443,9 @@ sub obtenerGrupos {
 	my $res=0;
 	foreach my $nivel2 (@$niveles2){
 	    $result[$res]->{'id2'}=$nivel2->getId2;
-            $result[$res]->{'edicion'}= $nivel2->getEdicion;
+        $result[$res]->{'edicion'}= $nivel2->getEdicion;
+        $result[$res]->{'nro_revista'}= $nivel2->getNroSerie;
+        
 	    $result[$res]->{'anio_publicacion'}=$nivel2->getAnio_publicacion;
 	    $res++;
 	}

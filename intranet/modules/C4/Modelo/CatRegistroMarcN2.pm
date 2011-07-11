@@ -555,6 +555,14 @@ sub getEdicion{
     return $marc_record->subfield("250","a");
 }
 
+sub getNroSerie{
+    my ($self)      = shift;
+
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+    return $marc_record->subfield("440","v");
+}
+
 
 sub getPais{
     my ($self)      = shift;

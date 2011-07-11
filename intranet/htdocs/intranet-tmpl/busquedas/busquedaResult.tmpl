@@ -92,12 +92,13 @@
                             [% IF edicion %]
                                 [% edicion %] &nbsp;
                             [% END %]
-                            [% IF anio_publicacion %]
-                                ([% anio_publicacion %])
-                            [% END %]
-                            [% IF volume %]
-                                t [% volume %]
-                            [% END %]<br>
+                            [% IF loop.prev.anio_publicacion != anio_publicacion %]
+                                <br />
+	                            [% IF anio_publicacion %]
+	                                ([% anio_publicacion %])
+	                            [% END %]
+	                        [% END %]
+	                            
                         [% END %]
                     </td>
             

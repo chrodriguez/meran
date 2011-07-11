@@ -10,7 +10,10 @@
                 });
             },
             cancelShow: false,
-            split: 2
+            split: 2,
+            [% IF !socio_data.usr_nro_socio %]
+               disabled: true,
+            [% END %]
         });
         $("#rating[% id2 %]").stars("select",[% rating %]);
     });

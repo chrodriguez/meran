@@ -135,22 +135,18 @@
                         </td>
 
                         <td>
-                            [% IF NIVEL.grupos %]
-                                [% FOREACH NIVEL.grupos %]
-                                    [% IF edicion %]
-                                        [% edicion %] &nbsp;
-                                    [% END %]
-                                    [% IF anio_publicacion %]
-                                        ([% anio_publicacion %])
-                                    [% END %]
-                                    [% IF volume %] 
-                                        t [% volume %]
-                                    [% END %]
-                                    <br />
-                                [% END %]
-                            [% ELSE %]
-                                &nbsp;
+                        [% FOREACH NIVEL.grupos %]
+                            [% IF edicion %]
+                                [% edicion %] &nbsp;
                             [% END %]
+                            [% IF loop.prev.anio_publicacion != anio_publicacion %]
+                                <br />
+                                [% IF anio_publicacion %]
+                                    ([% anio_publicacion %])
+                                [% END %]
+                            [% END %]
+                                
+                        [% END %]
                         </td>
 
                         <td>

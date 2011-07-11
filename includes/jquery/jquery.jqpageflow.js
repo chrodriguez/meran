@@ -88,7 +88,7 @@
 		                   if ( html ) {
 		                       $(config.container).append( html );
 		                       config.currentPage++;
-    	              		   $('#jqpageflow-block').fadeIn();	
+    	              		   $('#jqpageflow-block').fadeIn("slow");	
 		                       
 							} else {
 								// prevent any further attempts to execute the ajax call since the backend is not returning a useable result.
@@ -105,7 +105,7 @@
 		               complete: function(){
 		               		// allow ajax call to be executed again if necessary and hide the loader
 		                   loading = false;
-		                   $("#jqpageflow-block").fadeOut();
+		                   $("#jqpageflow-block").fadeOut("slow");
 		                   
 		               }
 		           });
