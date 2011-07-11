@@ -33,11 +33,40 @@ my $ini                         = 1;
 my ($ini,$pageNumber,$cantR)    = C4::AR::Utilidades::InitPaginador($ini);
 my ($cant,$prestamos_array_ref) = C4::AR::Prestamos::getHistorialPrestamosVigentesParaTemplate($nro_socio,$ini,$cantR, $orden);
 
+my $reservas                     = C4::AR::Reservas::obtenerReservasDeSocio($nro_socio);
 
-$t_params->{'historial'}            = $prestamos_array_ref;
+my $racount                      = 0;
+my $recount                      = 0;
+
+if ($reservas){
+    my @reservas_asignadas;
+    my @reservas_espera;
+
+    foreach my $reserva (@$reservas) {
+        if ($reserva->getId3) {
+            #Reservas para retirar
+            push @reservas_asignadas, $reserva;
+            $racount++;
+        }else{
+            #Reservas en espera
+            push @reservas_espera, $reserva;
+            $recount++;
+        }
+    }
+    $t_params->{'RESERVAS_ASIGNADAS'}   = \@reservas_asignadas;
+    $t_params->{'RESERVAS_ESPERA'}      = \@reservas_espera;
+}
+
+$t_params->{'reservas_asignadas_count'} = $racount;
+$t_params->{'reservas_espera_count'}    = $recount;
+
+$t_params->{'prestamos'}            = $prestamos_array_ref;
 $t_params->{'nro_socio'}            = $nro_socio;
 $t_params->{'SEARCH_RESULTS'}       = $grupos;
-$t_params->{'cantidad'}             = $cantidad;
+$t_params->{'cantidad_prestamos'}             = $cant;
+
+$t_params->{'cantidad'}       = $cantidad;
+
 $t_params->{'partial_template'}     = "opac-content_data.inc";
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

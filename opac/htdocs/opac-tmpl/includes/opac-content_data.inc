@@ -53,20 +53,32 @@
 
     </script>
 
-
-    
       <!-- Content unit - One column -->
         <hr class="clear-contentunit">
         <div class="column1-unit novedades_opac">
             <div id="resultNovedades"></div>
         </div>
-   
-        <div>
-               [% INCLUDE 'opac-prestamos_vigentes.inc' %]
-        </div>
-   
+        [% IF cantidad_prestamos > 0  %]
+       
+                  [% INCLUDE 'opac-prestamos.inc' %]
+
+        [% END %]
+
+        [% IF reservas_asignadas_count > 0 %]
+            <div class="reservas_vigentes">
+                  [% INCLUDE 'opac-reservas_asignadas.inc' %]
+            </div>
+        [% END %]
+
+        [% IF reservas_espera_count > 0 %]
+            <div class="reservas_espera">
+                  [% INCLUDE 'opac-reservas_espera.inc' %]
+            </div>
+        [% END %]
         <!-- Content unit - Two columns -->
         <br />
-        <h1 class="pagetitle"> [% 'Ultimos ejemplares adquiridos por la biblioteca' | i18n %]</h1>
-        <hr class="clear-contentunit" />
-        [% INCLUDE 'opac-busquedaResult.inc' %]
+        [% IF (!cantidad_prestamos > 0) && (!reservas_asignadas_count  > 0) && (!reservas_espera_count > 0) %]
+            <h1 class="pagetitle"> [% 'Ultimos ejemplares adquiridos por la biblioteca' | i18n %]</h1>
+            <hr class="clear-contentunit" />
+              [% INCLUDE 'opac-busquedaResult.inc' %]
+        [% END %]
