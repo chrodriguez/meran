@@ -28,6 +28,8 @@
 <script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js"></script>
 <script type="text/javascript" src="/includes/jquery/jquery-ui-1.8.9.custom.min.js"></script>
 <script type="text/javascript" src="/includes/shiftSelectTr.js"></script>
+<script type="text/javascript" src="/includes/jquery/jquery.expander.js"></script>
+
 <script language="javascript" type="text/javascript">
 
 	function swap(id,src){

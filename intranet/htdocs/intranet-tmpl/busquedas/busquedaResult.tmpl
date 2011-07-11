@@ -88,18 +88,20 @@
                     </td>
             
                     <td>
-                        [% FOREACH grupos %]
-                            [% IF edicion %]
-                                [% edicion %] &nbsp;
-                            [% END %]
-                            [% IF loop.prev.anio_publicacion != anio_publicacion %]
-                                <br />
-	                            [% IF anio_publicacion %]
-	                                ([% anio_publicacion %])
+                        <span id="grupos_[% id1 %]">
+	                        [% FOREACH grupos %]
+	                            [% IF edicion %]
+	                                [% edicion %] &nbsp;
 	                            [% END %]
+	                            [% IF loop.prev.anio_publicacion != anio_publicacion %]
+	                                <br />
+		                            [% IF anio_publicacion %]
+		                                ([% anio_publicacion %])
+		                            [% END %]
+		                        [% END %]
+		                            
 	                        [% END %]
-	                            
-                        [% END %]
+	                    </span>
                     </td>
             
                     <td>
@@ -118,6 +120,14 @@
                         </td>
                     [% END %]
                 </tr>
+             <script type="text/javascript">$("#grupos_[% id1 %]").expander({
+            	  slicePoint: 2000, 
+            	  widow: 10,
+            	  expandEffect: 'fadeIn', 
+            	  expandText: "<br />[% 'M&aacute;s ediciones' | i18n %]",
+            	  userCollapseText: '[^]'
+            	});
+             </script>
             [% END %]
             </table>
         </div>
