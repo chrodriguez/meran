@@ -876,7 +876,7 @@ sub traduccionEstructuraMarc {
             my $refusuario=$dbh->prepare("UPDATE $tabla  SET nro_socio='".$usuario->{'nro_socio'}."' WHERE borrowernumber='". $usuario->{'id_socio'} ."' ;");
             $refusuario->execute();
       
-	    if(($tabla eq 'rep_historial_sancion')||('rep_historial_circulacion')){
+	    if ($tabla eq 'rep_historial_circulacion'){
 	      #Estas tablas tienen responsable
 		my $refresponsable=$dbh->prepare("UPDATE $tabla  SET responsable='".$usuario->{'nro_socio'}."' WHERE responsable='". $usuario->{'id_socio'} ."' ;");
 		$refresponsable->execute();
@@ -896,7 +896,7 @@ sub traduccionEstructuraMarc {
       my $refclean=$dbh->prepare("DELETE FROM $tabla WHERE nro_socio=0 OR nro_socio='';");
       $refclean->execute();
 
-	    if(($tabla eq 'rep_historial_sancion')||('rep_historial_circulacion')){
+	    if(($tabla eq 'rep_historial_sancion')||($tabla eq 'rep_historial_circulacion')){
 	      #Estas tablas tienen responsable
 	      my $refclean2=$dbh->prepare("DELETE FROM $tabla WHERE responsable=0 OR responsable='';");
 	      $refclean2->execute();
