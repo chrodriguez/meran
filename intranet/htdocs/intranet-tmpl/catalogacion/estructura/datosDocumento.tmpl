@@ -49,7 +49,8 @@ $(document).ready( function() {
         MODIFICAR               = 1;
         FROM_DETALLE_REGISTRO   = 1;
         cargarNivel1(params);
-    [% ELSIF tipoAccion == "MODIFICAR_NIVEL_3_ALL" %]
+    [% ELSIF tipoAccion == "MODIFICAR_NIVEL_3_ALL" %]  
+        $("#ejemplares").hide();
         MODIFICAR               = 1;
         FROM_DETALLE_REGISTRO   = 1;
         // edicion grupal!!!!!!
@@ -242,11 +243,13 @@ $(document).ready( function() {
 
 </div> <!--END <div class="centro">-->
 
-<fieldset>
-<legend class="titulo_legend">[% "Ejemplares" | i18n %]</legend>
-<!-- detalle del Nivel 3, segun Nivel 2 seleccionado -->
-<div id="detalleDelNivel3" class="nivel3Footer"></div>
-</fieldset>
+<div id="ejemplares">
+  <fieldset>
+      <legend class="titulo_legend">[% "Ejemplares" | i18n %]</legend>
+      <!-- detalle del Nivel 3, segun Nivel 2 seleccionado -->
+      <div id="detalleDelNivel3" class="nivel3Footer"></div>
+  </fieldset>
+</div>
 
 </div> <!--END <div class="todo">-->
 
