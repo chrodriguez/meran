@@ -42,6 +42,7 @@
   <script src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js" type="text/javascript"></script>
   <script type="text/javascript" src="/includes/jquery/modal/jquery.simplemodal.js"></script>
   <script src="/opac-tmpl/includes/favoritos.js" type="text/javascript"></script>
+  <script type="text/javascript" src="/includes/jquery/jquery.expander.js"></script>
 
   <link media="screen" rel="stylesheet" href="/includes/jquery/modal/basic-min.css" type="text/css">
 

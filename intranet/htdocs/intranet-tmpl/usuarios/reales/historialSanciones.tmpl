@@ -5,6 +5,9 @@
 		<div class="contenedor_paginador">[% paginador %]</div>
 		<table class="tablaHistorialSanciones datos_tabla" cellspacing=0  cellpadding=0 border=0 width="100%">
 		    <tr class="titulo_tabla_resultado">
+		        <td>
+                    [% "Operaci&oacute;n" | i18n %]
+                </td>
                 <td class="click" onclick="ordenar('usr_responsable.nro_socio')" 
                         Title='[% "Ordenar por Responsable" | i18n %]'>
                     [% "Responsable" | i18n %]
@@ -36,12 +39,15 @@
 		    </tr>
 		    
             [% FOREACH historial_sancion IN HISTORIAL_SANCIONES %]
-            
-            [% IF historial_sancion.tipo_operacion == "Borrado"  %]
-                <tr valign="middle" align="center" color="red">
-            [% ELSE %]
-		        <tr valign="middle" align="center">
-		    [% END %]
+            <tr valign="middle" align="center">
+                    [% IF historial_sancion.getTipo_operacion == "Borrado"  %]
+                        <td style="color:red;">
+                        Borrado, el [% historial_sancion.getTimestamp %]
+                    [% ELSE %]
+		                <td>
+		                --
+		            [% END %]
+                </td>
                 <td>
                     [% IF historial_sancion.responsable == "Sistema" %]
                         Sistema 

@@ -134,22 +134,20 @@
                         </td>
 
                         <td>
-                            [% IF NIVEL.grupos %]
-                                [% FOREACH NIVEL.grupos %]
-                                    [% IF edicion %]
-                                        [% edicion %] &nbsp;
-                                    [% END %]
-                                    [% IF anio_publicacion %]
-                                        ([% anio_publicacion %])
-                                    [% END %]
-                                    [% IF volume %] 
-                                        t [% volume %]
-                                    [% END %]
-                                    <br />
-                                [% END %]
-                            [% ELSE %]
-                                &nbsp;
-                            [% END %]
+                        <span id="grupos_[% NIVEL.id1 %]">
+	                        [% FOREACH NIVEL.grupos %]
+	                            [% IF edicion %]
+	                                [% edicion %] &nbsp;
+	                            [% END %]
+	                            [% IF loop.prev.anio_publicacion != anio_publicacion %]
+	                                <br />
+	                                [% IF anio_publicacion %]
+	                                    ([% anio_publicacion %])
+	                                [% END %]
+	                            [% END %]
+	                                
+	                        [% END %]
+	                    </span>
                         </td>
 
                         <td>
@@ -210,6 +208,15 @@
                             [% END %]
                         </td>
                     </tr>
+	             <script type="text/javascript">$("#grupos_[% NIVEL.id1 %]").expander({
+	                  slicePoint: 2000, 
+	                  widow: 10,
+	                  expandEffect: 'fadeIn', 
+	                  expandText: "<br />[% 'M&aacute;s ediciones' | i18n %]",
+	                  userCollapseText: '[^]'
+	                });
+	             </script>
+                    
                 [% END %]
         </table>
         <br />
