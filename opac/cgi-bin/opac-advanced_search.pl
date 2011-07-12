@@ -19,7 +19,7 @@ my ($template, $session, $t_params)= get_template_and_user({
 			     });
 
 
-$t_params->{'combo_tipo_documento'} = &C4::AR::Utilidades::generarComboTipoNivel3();
+$t_params->{'combo_tipo_documento'} = C4::AR::Utilidades::generarComboTipoNivel3();
 $t_params->{'partial_template'}     = "opac-advanced_search.inc";
 $t_params->{'content_title'} = C4::AR::Filtros::i18n("Busqueda avanzada");
 
