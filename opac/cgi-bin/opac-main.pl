@@ -61,9 +61,14 @@ if ($reservas){
     $t_params->{'RESERVAS_ESPERA'}      = \@reservas_espera;
 }
 
+if ($sanciones){
+    $t_params->{'sanciones'} = $sanciones;
+    $t_params->{'cant_sanciones'} = scalar(@$sanciones) ;
+} else {
+    $t_params->{'cant_sanciones'} = 0;
+}
 
-$t_params->{'sanciones'} = $sanciones;
-$t_params->{'cant_sanciones'} = scalar(@$sanciones);
+
 
 $t_params->{'reservas_asignadas_count'} = $racount;
 $t_params->{'reservas_espera_count'}    = $recount;
