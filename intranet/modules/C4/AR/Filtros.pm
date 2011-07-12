@@ -250,39 +250,32 @@ sub show_componente {
     my $itemtype    = $params_hash_ref{'itemtype'};
     my $type        = $params_hash_ref{'type'};
 
+C4::AR::Debug::debug("Filtros => show_componente => type => ".$type);
+
     if($type eq "INTRA"){
-        if(($campo eq "773")&&($campo eq "a")){
-C4::AR::Debug::debug("INTRA => ");
+        if(($campo eq "773")&&($subcampo eq "a")){
+            my $catRegistroMarcN2 = C4::AR::Nivel2::getNivel2FromId2($dato);
+    
+# TODO FIXEDDDDDDDDDD en el futuro esto se debe levantar de la configuracion
+            if($catRegistroMarcN2){
+                
+                my %params_hash;
+                my $text        = $catRegistroMarcN2->nivel1->getTitulo()." - ".$catRegistroMarcN2->nivel1->getAutor(); 
+                %params_hash    = ('id1' => $catRegistroMarcN2->getId1());
+                my $url         = C4::AR::Utilidades::url_for("/catalogacion/estructura/detalle.pl", \%params_hash);
+
+                return C4::AR::Filtros::link_to( text => $text, url => $url );
+            }
+        }
+    } else {
+# TODO FIXEDDDDDDDDDD en el futuro esto se debe levantar de la configuracion
+        if(($campo eq "773")&&($subcampo eq "a")){
             my $catRegistroMarcN2 = C4::AR::Nivel2::getNivel2FromId2($dato);
     
             if($catRegistroMarcN2){
-
-C4::AR::Debug::debug("INTRA => totulo ".$catRegistroMarcN2->nivel1->getTitulo());
                 return $catRegistroMarcN2->nivel1->getTitulo()." - ".$catRegistroMarcN2->nivel1->getAutor();
             }
         }
-
-#         my $conf_visualizacion = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($campo, $subcampo, $itemtype,$db);
-# 
-#         if($conf_visualizacion){
-# 
-#         } 
-
-    } else {
-
-        if(($campo eq "773")&&($campo eq "a")){
-            my $catRegistroMarcN2 = getNivel2FromId2($dato);
-    
-            if($catRegistroMarcN2){
-                return $catRegistroMarcN2->nivel1->getTitulo()." - ".$catRegistroMarcN2->nivel1->getAutor();
-            }
-        }
-
-#         my $conf_visualizacion = C4::AR::VisualizacionOpac::getVisualizacionFromCampoSubCampo($campo, $subcampo, C4::AR::Preferencias::getValorPreferencia("perfil_opac"),$db);
-# 
-#         if($conf_visualizacion){
-# 
-#         }
     }
 
     return $dato;

@@ -456,8 +456,8 @@ sub obtenerValorCampo {
                         ( select   => [$campo],
                           query =>[ id => { eq => $id} ]);
 
-  C4::AR::Debug::debug("CatRgistroMarcN2 => obtenerValorCampo => campo tabla => ".$campo);
-  C4::AR::Debug::debug("CatRgistroMarcN2 => obtenerValorCampo => id tabla => ".$id);  
+#   C4::AR::Debug::debug("CatRgistroMarcN2 => obtenerValorCampo => campo tabla => ".$campo);
+#   C4::AR::Debug::debug("CatRgistroMarcN2 => obtenerValorCampo => id tabla => ".$id);  
 
 
   if(scalar(@$ref_valores) > 0){
@@ -472,7 +472,7 @@ sub getCampo{
     my ($self) = shift;
     my ($campo)=@_;
     
-    if ($campo eq "id") {return $self->getId;}
+    if ($campo eq "id") {return $self->getId2;}
 #     if ($campo eq "nombre") {return $self->getNombre;}
 
     return (0);

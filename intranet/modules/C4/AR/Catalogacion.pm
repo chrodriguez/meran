@@ -510,8 +510,6 @@ sub marc_record_to_meran_to_detail_view {
                                                                         type        => $type
                                                                   );
 
-#                 $hash_temp{'dato'}                  = $valor_referencia;
-
                 push(@MARC_result_array, \%hash_temp);
             }
 
@@ -755,12 +753,11 @@ sub getImportacionSinEstructura{
 sub getDatoFromReferencia{
     my ($campo, $subcampo, $dato, $itemtype, $db) = @_;
     
-#     my $valor_referencia = '';
     my $valor_referencia = 'NULL';
-    C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia ============================ ");
-    C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => campo:                    ".$campo);
-    C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => subcampo:                 ".$subcampo);
-    C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => dato:                     ".$dato);
+#     C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia ============================ ");
+#     C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => campo:                    ".$campo);
+#     C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => subcampo:                 ".$subcampo);
+#     C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => dato:                     ".$dato);
     
 #     if(($dato ne '')&&($campo ne '')&&($subcampo ne '')&&($dato ne '')&&($dato ne '0')){
     if(($dato ne '')&&($campo ne '')&&($subcampo ne '')&&($dato ne '')&&($dato ne "NULL")){
@@ -776,21 +773,21 @@ sub getDatoFromReferencia{
 
                   eval{
 
-                        C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => getReferencia:       ".$estructura->infoReferencia->getReferencia);
-                        C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => dato entrada:        ".$dato);
+#                         C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => getReferencia:       ".$estructura->infoReferencia->getReferencia);
+#                         C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => dato entrada:        ".$dato);
                     
 
 
                         my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
                         my $obj_generico    = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
-                        C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => campo tabla:                 ".$estructura->infoReferencia->getCampos);
-                        C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => id tabla:                    ".$dato);  
+#                         C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => campo tabla:                 ".$estructura->infoReferencia->getCampos);
+#                         C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => id tabla:                    ".$dato);  
                                                                                         #campo_tabla,                   id_tabla
                         $valor_referencia   = $obj_generico->obtenerValorCampo($estructura->infoReferencia->getCampos, $dato);
 
-                        C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Tabla:               ".$obj_generico->getTableName);
-                        C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Modulo:              ".$obj_generico->toString);
-                        C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Valor referencia:    ".$valor_referencia);
+#                         C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Tabla:               ".$obj_generico->getTableName);
+#                         C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Modulo:              ".$obj_generico->toString);
+#                         C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Valor referencia:    ".$valor_referencia);
 
                         $dato = $valor_referencia;
 
