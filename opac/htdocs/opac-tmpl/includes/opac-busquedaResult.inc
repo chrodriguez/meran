@@ -22,7 +22,6 @@
      [% END %]
 [% END %]
 
-
 [% IF (cantidad > 0) || ( (!from_suggested) && (suggested) )%]
     [% FOREACH NIVEL IN SEARCH_RESULTS %]
         <script type="text/javascript">

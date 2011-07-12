@@ -1,6 +1,6 @@
 [% USE HTML %]
-[% IF cantidad %]
-    <div class="resultados_consulta">[% "Cantidad de pr&eacute;stamos vigentes:" | i18n %]&nbsp;[% cantidad %]</div>
+[% IF cantidad_prestamos %]
+    <div class="resultados_consulta">[% "Cantidad de pr&eacute;stamos vigentes:" | i18n %]&nbsp;[% cantidad_prestamos %]</div>
 
     <div class="contenedor_paginador">[% paginador %]</div>
 

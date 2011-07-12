@@ -29,7 +29,10 @@ my ($cantidad,$prestamos)=C4::AR::Prestamos::getHistorialPrestamosVigentesParaTe
 
 $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginadorOPAC($cantidad, $cantR, $pageNumber,$url,$t_params);
 $t_params->{'prestamos'}= $prestamos;
-$t_params->{'cantidad'}= $cantidad;
+$t_params->{'cantidad_prestamos'}= $cantidad;
+
+
+
 $t_params->{'content_title'}= C4::AR::Filtros::i18n("Pr&eacute;stamos Vigentes");
 $t_params->{'partial_template'}= "opac-prestamos_vigentes.inc";
 

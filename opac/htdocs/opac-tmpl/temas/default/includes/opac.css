@@ -1875,6 +1875,31 @@ p.caption {clear:both;
 
 }
 
+
+.sanciones_opac_main .main-subcontent h1{
+    background-color: #FE2E2E;
+}
+
+.sanciones_opac_main .subcontent-unit-border{
+    border: 1px solid #FE2E2E;
+    background: none repeat scroll 0 0 #F5E6E6;
+}
+
+.sanciones_opac_main hr{
+   color: #FE2E2E;
+}
+
+
+.fecha_cumple {
+    color: green;
+    font-weight: bold;
+}
+
+.fecha_vencida {
+    font-size: 10pt;
+    color: red;
+}
+
 /* mensajes de error */
 em.error_adv{background:transparent url(../imagenes/error.gif) no-repeat scroll 0 0;
 padding-left:16px;
