@@ -316,6 +316,14 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_TIPOS_DE_PRESTAMO"){
     
 	    my %tiposPrestamos;
 	    $tiposPrestamos{'tipoPrestamo'}     = $tipoPrestamos_array_hash_ref;
+        # checkeamos si el socio tiene sanciones, para mostrar un mensaje en el template
+	    my $sanciones_array_ref             = C4::AR::Sanciones::tieneSanciones($obj->{'nro_socio'});
+	    if($sanciones_array_ref eq "0"){
+	        # no tiene sanciones
+	        $tiposPrestamos{'tieneSancion'} = "0";
+	    }else{
+	        $tiposPrestamos{'tieneSancion'} = "1";
+        }
 	    my $infoOperacionJSON               = to_json \%tiposPrestamos;
     
         C4::AR::Auth::print_header($session);
