@@ -250,8 +250,6 @@ sub show_componente {
     my $itemtype    = $params_hash_ref{'itemtype'};
     my $type        = $params_hash_ref{'type'};
 
-C4::AR::Debug::debug("Filtros => show_componente => type => ".$type);
-
     if($type eq "INTRA"){
         if(($campo eq "773")&&($subcampo eq "a")){
             my $catRegistroMarcN2 = C4::AR::Nivel2::getNivel2FromId2($dato);
