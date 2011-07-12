@@ -593,9 +593,9 @@ sub checkauth {
     my $sin_captcha=0;
     my $time = localtime(time());
     
-#     if($authnotrequired) {
-#         return ($userid, $session, $flags, $socio);
-#     }
+    if($authnotrequired) {
+        return ($userid, $session, $flags, getSessionSocioObject());
+    }
 
     if ($demo) {
         #Quiere decir que no es necesario una autenticacion
@@ -858,6 +858,21 @@ sub _realizarOperacionesLogin{
         #Si es un usuario de opac que esta sancionado entonces se borran sus reservas
         _operacionesDeOPAC($socio);
     } 
+}
+
+
+sub getSessionSocioObject {
+    my ($session) = @_;
+    unless($session){
+        $session = CGI::Session->load();
+    }
+    
+    
+    if ($session->param('nro_socio')){
+    	return C4::AR::Usuarios::getSocioInfoPorNroSocio(getSessionNroSocio());
+    }else{
+    	return C4::Modelo::UsrSocio->new();
+    }
 }
 
 =item sub getSessionUserID
