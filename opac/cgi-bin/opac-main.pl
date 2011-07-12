@@ -35,6 +35,10 @@ my ($cant,$prestamos_array_ref) = C4::AR::Prestamos::getHistorialPrestamosVigent
 
 my $reservas                     = C4::AR::Reservas::obtenerReservasDeSocio($nro_socio);
 
+my $sanciones   = C4::AR::Sanciones::tieneSanciones($nro_socio);
+
+
+
 my $racount                      = 0;
 my $recount                      = 0;
 
@@ -56,6 +60,10 @@ if ($reservas){
     $t_params->{'RESERVAS_ASIGNADAS'}   = \@reservas_asignadas;
     $t_params->{'RESERVAS_ESPERA'}      = \@reservas_espera;
 }
+
+
+$t_params->{'sanciones'} = $sanciones;
+$t_params->{'cant_sanciones'} = scalar(@$sanciones);
 
 $t_params->{'reservas_asignadas_count'} = $racount;
 $t_params->{'reservas_espera_count'}    = $recount;

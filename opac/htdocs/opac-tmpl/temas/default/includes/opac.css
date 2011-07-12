@@ -1876,6 +1876,15 @@ p.caption {clear:both;
 }
 
 
+.sanciones_opac_main .main-subcontent h1{
+    background-color: #FE2E2E;
+}
+
+.sanciones_opac_main .subcontent-unit-border{
+    border: 1px solid #FE2E2E;
+    background: none repeat scroll 0 0 #F5E6E6;
+}
+
 
 
 
