@@ -374,7 +374,7 @@ body {
 #marco_principal {
 	background: #EAEBED;
 	float: left;
-    width: 81%;
+    width: 76%;
 	min-height: 420px;
 	margin-top: 39px;
 	height: auto;
@@ -384,8 +384,8 @@ body {
 
 
 .container_test{
-    height: 93.2%;
-    min-width: 1264px;
+    height: 86%;
+    min-width: 1023px;
 }
 
 
@@ -4298,7 +4298,8 @@ form.signin .subchck .remember {
 }
 #top-bar .active-links {
     min-width: 250px;
-    position: absolute;
+/*     TODO antes era absolute, guarda */
+    position: fixed;
     right: 0;
     top: 0;
     float: right;
