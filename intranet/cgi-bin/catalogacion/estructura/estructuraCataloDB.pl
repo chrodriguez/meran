@@ -184,7 +184,7 @@ elsif($tipoAccion eq "MOSTRAR_FORM_AGREGAR_CAMPOS"){
     my %params_combo;
     $params_combo{'default'}            = 'SIN SELECCIONAR';
     $params_combo{'id'}                 = 'tipoInput';
-    $t_params->{'comboComponentes'}     = &C4::AR::Utilidades::generarComboComponentes(\%params_combo);
+    $t_params->{'comboComponentes'}     = C4::AR::Utilidades::generarComboComponentes(\%params_combo);
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
