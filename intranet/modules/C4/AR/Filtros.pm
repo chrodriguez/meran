@@ -241,6 +241,53 @@ sub to_Icon{
     return $button;
 }
 
+sub show_componente {
+    my (%params_hash_ref) = @_;
+
+    my $campo       = $params_hash_ref{'campo'};
+    my $subcampo    = $params_hash_ref{'subcampo'};
+    my $dato        = $params_hash_ref{'dato'};
+    my $itemtype    = $params_hash_ref{'itemtype'};
+    my $type        = $params_hash_ref{'type'};
+
+    if($type eq "INTRA"){
+        if(($campo eq "773")&&($campo eq "a")){
+C4::AR::Debug::debug("INTRA => ");
+            my $catRegistroMarcN2 = C4::AR::Nivel2::getNivel2FromId2($dato);
+    
+            if($catRegistroMarcN2){
+
+C4::AR::Debug::debug("INTRA => totulo ".$catRegistroMarcN2->nivel1->getTitulo());
+                return $catRegistroMarcN2->nivel1->getTitulo()." - ".$catRegistroMarcN2->nivel1->getAutor();
+            }
+        }
+
+#         my $conf_visualizacion = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($campo, $subcampo, $itemtype,$db);
+# 
+#         if($conf_visualizacion){
+# 
+#         } 
+
+    } else {
+
+        if(($campo eq "773")&&($campo eq "a")){
+            my $catRegistroMarcN2 = getNivel2FromId2($dato);
+    
+            if($catRegistroMarcN2){
+                return $catRegistroMarcN2->nivel1->getTitulo()." - ".$catRegistroMarcN2->nivel1->getAutor();
+            }
+        }
+
+#         my $conf_visualizacion = C4::AR::VisualizacionOpac::getVisualizacionFromCampoSubCampo($campo, $subcampo, C4::AR::Preferencias::getValorPreferencia("perfil_opac"),$db);
+# 
+#         if($conf_visualizacion){
+# 
+#         }
+    }
+
+    return $dato;
+}
+
 sub ayuda_marc{
 
     my $icon= to_Icon(  
@@ -390,6 +437,7 @@ sub getComboValidadores {
 
     return $html;
 }
+
 
 END { }       # module clean-up code here (global destructor)
 

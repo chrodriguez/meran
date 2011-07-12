@@ -593,9 +593,9 @@ sub checkauth {
     my $sin_captcha=0;
     my $time = localtime(time());
     
-    if($authnotrequired) {
-        return ($userid, $session, $flags, $socio);
-    }
+#     if($authnotrequired) {
+#         return ($userid, $session, $flags, $socio);
+#     }
 
     if ($demo) {
         #Quiere decir que no es necesario una autenticacion

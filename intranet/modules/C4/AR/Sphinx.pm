@@ -6,6 +6,8 @@ require Exporter;
 
 use C4::AR::Catalogacion;
 use MARC::Record;
+use C4::Modelo::RefEstado;
+use C4::Modelo::RefEstado::Manager;
 
 use vars qw(@EXPORT @ISA);
 @ISA = qw(Exporter);
@@ -87,20 +89,18 @@ sub sphinx_start{
 
 sub getNombreFromEstadoByCodigo{
     my ($codigo)   = @_;
+    
+    my @filtros;
+    
+    push(@filtros, ( codigo => { eq => $codigo }) );
 
-        use C4::Modelo::RefEstado;
-        use C4::Modelo::RefEstado::Manager;
-        C4::AR::Debug::debug("CODIGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO ================================= ".$codigo);
-	    
-	    my @filtros;
-	    
-	    push(@filtros, ( codigo => { eq => $codigo }) );
-	
-	    my $nivel3 = C4::Modelo::RefEstado::Manager->get_ref_estado( query => \@filtros ); 
-	    
-	    return ($nivel3->[0]->nombre);
-	    
+    my $nivel3 = C4::Modelo::RefEstado::Manager->get_ref_estado( query => \@filtros ); 
 
+    if(scalar($nivel3) > 0){
+        return ($nivel3->[0]->nombre);
+    } else {
+        return "NULL";
+    }
 }
 
 =head2

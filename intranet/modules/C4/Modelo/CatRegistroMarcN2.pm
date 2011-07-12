@@ -30,6 +30,8 @@ use C4::Modelo::CircReserva::Manager;
 use MARC::Record; #FIXME creo que esta funcion es interna qw(new_from_usmarc);
 use C4::AR::Catalogacion qw(getRefFromStringConArrobas);
 use C4::Modelo::CatRegistroMarcN3::Manager qw(get_cat_registro_marc_n3_count);
+# use C4::Modelo::CatRegistroMarcN2::Manager qw(get_cat_registro_marc_n2);
+use C4::Modelo::CatRegistroMarcN2::Manager;
 # use vars qw(@EXPORT_OK @ISA);
 # 
 # @ISA=qw(Exporter);
@@ -442,18 +444,39 @@ sub toMARC{
     $params->{'id_tipo_doc'}    = $self->getTipoDocumento;
     my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_meran_por_nivel($marc_record, $params);
 
-    #     my $MARC_result_array   = &C4::AR::Catalogacion::marc_record_to_meran($marc_record);
-#     foreach my $m (@$MARC_result_array){
-#         C4::AR::Debug::debug("campo => ".$m->{'campo'});
-#         foreach my $s (@{$m->{'subcampos_array'}}){
-#             C4::AR::Debug::debug("liblibrarian => ".$s->{'subcampo'});        
-#             C4::AR::Debug::debug("liblibrarian => ".$s->{'liblibrarian'});        
-#         }
-#     }
-
     return ($MARC_result_array);
 }
 
+
+sub obtenerValorCampo {
+  my ($self) = shift;
+  my ($campo,$id) = @_;
+
+  my $ref_valores = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2
+                        ( select   => [$campo],
+                          query =>[ id => { eq => $id} ]);
+
+  C4::AR::Debug::debug("CatRgistroMarcN2 => obtenerValorCampo => campo tabla => ".$campo);
+  C4::AR::Debug::debug("CatRgistroMarcN2 => obtenerValorCampo => id tabla => ".$id);  
+
+
+  if(scalar(@$ref_valores) > 0){
+    return ($ref_valores->[0]->getCampo($campo));
+  }else{
+    C4::AR::Debug::debug("CatRegistroMarcN2 => obtenerValorCampo => no se pudo recuperar el objeto");
+    return 'NO TIENE';
+  }
+}
+
+sub getCampo{
+    my ($self) = shift;
+    my ($campo)=@_;
+    
+    if ($campo eq "id") {return $self->getId;}
+#     if ($campo eq "nombre") {return $self->getNombre;}
+
+    return (0);
+}
 
 =head2 sub toMARC_Opac
 
