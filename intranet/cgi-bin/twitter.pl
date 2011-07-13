@@ -9,6 +9,8 @@ my $password = 'pato123@';
 
 my $consumer_key        = "JGvcBxH5n8IgYO7q9BWWjw";
 my $consumer_secret     = "qYBXyVEIMJNQmvt3kHURcuKkG6UmCKu9wKszlJdUuN4";
+my $token               = "148446079-6piw6kAePtptOnAQK3hIxWxKXXhPhW95u4gxRuBE";
+my $token_secret        = "rPyA0Xkdl05ehFOEXkVA0ENlAGsnyZAiN2WKZb1zOw"; 
 
 my $url = "http://www.google.com";
 
@@ -21,13 +23,9 @@ my $nt = Net::Twitter->new(
     traits              => ['API::REST', 'OAuth'],
     consumer_key        => $consumer_key,
     consumer_secret     => $consumer_secret,
+    access_token        => $token,
+    access_token_secret => $token_secret,
 );
-
-my($access_token, $access_token_secret) = restore_tokens();
-  if ($access_token && $access_token_secret) {
-      $nt->access_token($access_token);
-      $nt->access_token_secret($access_token_secret);
-  }
 
 
 my $result = $nt->update($ARGV[0]);
