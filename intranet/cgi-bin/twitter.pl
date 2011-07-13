@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
-use Net::Twitter::OAuth;
+use Net::Twitter;
+use Net::Twitter::Role::OAuth;
 use Scalar::Util 'blessed';
 use WWW::Shorten::Bitly;
 use CGI;
@@ -9,8 +10,6 @@ my $password = 'pato123@';
 
 my $consumer_key        = "JGvcBxH5n8IgYO7q9BWWjw";
 my $consumer_secret     = "qYBXyVEIMJNQmvt3kHURcuKkG6UmCKu9wKszlJdUuN4";
-my $token               = "148446079-6piw6kAePtptOnAQK3hIxWxKXXhPhW95u4gxRuBE";
-my $token_secret        = "rPyA0Xkdl05ehFOEXkVA0ENlAGsnyZAiN2WKZb1zOw"; 
 
 my $url = "http://www.google.com";
 
@@ -19,17 +18,22 @@ my $short_url = makeashorterlink($url, 'gaspo53', 'R_2123296565094a87c392b184d2a
 
 print "\n Short Url: ".$short_url."\n";
 
-my $nt = Net::Twitter::OAuth->new(
-    traits   => [qw/OAuth API::REST/],
+my $nt = Net::Twitter->new(
+    traits              => ['API::REST', 'OAuth'],
     consumer_key        => $consumer_key,
     consumer_secret     => $consumer_secret,
-    #access_token        => $token,
-    #access_token_secret => $token_secret,
+
 );
+
+my($access_token) = request_token();
+  if ($access_token && $access_token_secret) {
+      $nt->access_token($access_token);
+      $nt->access_token_secret($access_token_secret);
+  }
 
 
 my $result = $nt->update($ARGV[0]);
-
+    
 
 if ( my $err = $@ ) {
     die $@ unless blessed $err && $err->isa('Net::Twitter::Error');
