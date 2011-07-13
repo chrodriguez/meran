@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-use Net::Twitter;
+use Net::Twitter::OAuth;
 use Scalar::Util 'blessed';
 use WWW::Shorten::Bitly;
 use CGI;
@@ -19,12 +19,12 @@ my $short_url = makeashorterlink($url, 'gaspo53', 'R_2123296565094a87c392b184d2a
 
 print "\n Short Url: ".$short_url."\n";
 
-my $nt = Net::Twitter->new(
+my $nt = Net::Twitter::OAuth->new(
     traits   => [qw/OAuth API::REST/],
     consumer_key        => $consumer_key,
     consumer_secret     => $consumer_secret,
-    access_token        => $token,
-    access_token_secret => $token_secret,
+    #access_token        => $token,
+    #access_token_secret => $token_secret,
 );
 
 
