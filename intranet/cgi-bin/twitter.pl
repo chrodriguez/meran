@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 use Net::Twitter;
+use Net::Twitter::Role::OAuth;
 use Scalar::Util 'blessed';
 use WWW::Shorten::Bitly;
 use CGI;
@@ -9,8 +10,8 @@ my $password = 'pato123@';
 
 my $consumer_key        = "JGvcBxH5n8IgYO7q9BWWjw";
 my $consumer_secret     = "qYBXyVEIMJNQmvt3kHURcuKkG6UmCKu9wKszlJdUuN4";
-my $token               = "148446079-6piw6kAePtptOnAQK3hIxWxKXXhPhW95u4gxRuBE";
-my $token_secret        = "rPyA0Xkdl05ehFOEXkVA0ENlAGsnyZAiN2WKZb1zOw"; 
+my $token               = "148446079-IL4MsMqXzKU24xMr32No58H5meHmsqLMZHk4qZ0";
+my $token_secret        = "fSCpzZELbLFYQPJtP7nRJFQjgfGXvR0538a0i0AIcj0"; 
 
 my $url = "http://www.google.com";
 
