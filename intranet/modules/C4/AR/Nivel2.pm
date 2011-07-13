@@ -18,9 +18,9 @@ use vars qw(@EXPORT_OK @ISA);
 @ISA    = qw(Exporter);
 
 @EXPORT_OK = qw(
-		getNivel1FromId2
 		getCantPrestados
         getNivel2FromId1
+        getNivel2FromId2
         getFirstItemTypeFromN1
         
 );

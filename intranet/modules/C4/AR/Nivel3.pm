@@ -15,7 +15,7 @@ use C4::Modelo::CatHistoricoDisponibilidad::Manager;
 use C4::Modelo::RepHistorialCirculacion;
 use C4::Modelo::RepHistorialCirculacion::Manager;
 use C4::AR::Nivel1 qw(getNivel1FromId1); 
-use C4::AR::Nivel2 qw(getNivel1FromId2);
+use C4::AR::Nivel2 qw(getNivel2FromId1 getNivel2FromId2);
 use C4::AR::Reservas qw(cantReservasPorGrupo);
 use C4::AR::Sphinx qw(generar_indice);
 

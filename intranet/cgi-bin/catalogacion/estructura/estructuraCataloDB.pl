@@ -82,7 +82,6 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS_REFERENCIA"){
                         template_name => "/includes/partials/catalogo/combo_ediciones.inc",
                         query => $input,
                         type => "intranet",
-                        authnotrequired => 1,
                         flagsrequired => {  ui => 'ANY', 
                                             tipo_documento => 'ANY', 
                                             accion => 'CONSULTA', 
