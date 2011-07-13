@@ -5,8 +5,6 @@ use Net::Twitter::Role::OAuth;
 use Scalar::Util 'blessed';
 use WWW::Shorten::Bitly;
 use CGI;
-my $user = 'koha_unlp';
-my $password = 'pato123@'; 
 
 my $consumer_key        = "ee4q1gf165jmFQTObJVY2w";
 my $consumer_secret     = "F4TEnfC1SjYm3XG6vHZ0aJmsYQIFysyu9bwjG9BDdQ";
