@@ -8,8 +8,8 @@ use CGI;
 my $user = 'koha_unlp';
 my $password = 'pato123@'; 
 
-my $consumer_key        = "JGvcBxH5n8IgYO7q9BWWjw";
-my $consumer_secret     = "qYBXyVEIMJNQmvt3kHURcuKkG6UmCKu9wKszlJdUuN4";
+my $consumer_key        = "ee4q1gf165jmFQTObJVY2w";
+my $consumer_secret     = "F4TEnfC1SjYm3XG6vHZ0aJmsYQIFysyu9bwjG9BDdQ";
 my $token               = "148446079-IL4MsMqXzKU24xMr32No58H5meHmsqLMZHk4qZ0";
 my $token_secret        = "fSCpzZELbLFYQPJtP7nRJFQjgfGXvR0538a0i0AIcj0"; 
 
