@@ -304,7 +304,8 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
             }
 
             if (($campo eq "995") && ($subcampo eq "o")){
-                $dato = 'ref_disponilidad%'.$dato;  
+                $dato = 'ref_disponilidad%'.$dato;
+                $dato .= ' ref_disponilidad_code%'.$dato_ref;  
 #                 C4::AR::Debug::debug("generar_indice => 020, a => dato ".$dato);
             }
 

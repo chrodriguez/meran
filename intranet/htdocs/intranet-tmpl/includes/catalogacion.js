@@ -1430,7 +1430,19 @@ function updateBuscarDatosNivel2(responseText){
 //    $('#ediciones').html(responseText);
 //       $("#div" + obj.getIdCompCliente()).append(comp);
 //       $('#ediciones_'+_getIdComponente('773', 'a')).append(responseText)
-    $('#ediciones').html(responseText)
+    var idComponenteCliente = _getIdComponente('773', 'a');
+
+    $('#ediciones').html(responseText);
+    
+//     $('#edicion_id').change(function() {
+//       var valor = $('#edicion_id').val();
+//       
+//            alert("HOLA valor => " + valor + " id => " + idComponenteCliente + "_hidden"); 
+//       $(idComponenteCliente + "_hidden").val(valor);
+//   
+//     });
+//     
+    
 }
 
 function generarIdComponente(){
@@ -1808,15 +1820,15 @@ function crearAuto(obj){
         $(comp).insertAfter("#div" + obj.getIdCompCliente());
         
         
-        $('#edicion_id').change(function() {
-//             cambiarValorEnHidden(obj.getIdCompCliente());  
-
-            var valor = $('#edicion_id').val();
-            
-           alert("HOLA valor => " + valor + " id => " + obj.getIdCompCliente() + "_hidden"); 
-            $(obj.getIdCompCliente() + "_hidden").val(valor);
-        
-        });
+//         $('#edicion_id').change(function() {
+// //             cambiarValorEnHidden(obj.getIdCompCliente());  
+// 
+//             var valor = $('#edicion_id').val();
+//             
+// //            alert("HOLA valor => " + valor + " id => " + obj.getIdCompCliente() + "_hidden"); 
+//             $(obj.getIdCompCliente() + "_hidden").val(valor);
+//         
+//         });
     }      
     
     comp = "<div class='icon_agregar horizontal' onclick=agregarTablaReferencias('" + obj.getReferenciaTabla() + "') title='Agregar referencia al subcampo " + obj.getSubCampo() + " para el campo " + obj.getCampo() + "' />"
