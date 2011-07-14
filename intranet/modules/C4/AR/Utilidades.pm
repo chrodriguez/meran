@@ -2188,10 +2188,11 @@ sub generarComboProveedores{
 
 sub generarComboPresupuestos{
     my ($params) = @_;
+    use C4::AR::Presupuestos;
 
     my @select_presupuestos_array;
     my %select_presupuestos;
-    my $presupuestos  = &C4::AR::Presupuestos::getAdqPresupuestos();
+    my $presupuestos  = C4::AR::Presupuestos::getAdqPresupuestos();
 
     push (@select_presupuestos_array, '');
     
