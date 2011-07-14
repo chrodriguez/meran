@@ -55,8 +55,9 @@
 
 <fieldset id="reportes">
     <legend class="titulo_legend"> [% "Configuraci&oacute;n del servidor de mail" | i18n %] </legend>
-<form action="[% url_prefix %]/admin/global/mail_configDB.pl?token=[% token %]" name="form_mail_config" id="form_mail_config" method="post">
+<form action="[% url_prefix %]/admin/global/mail_config.pl?token=[% token %]" name="form_mail_config" id="form_mail_config" method="post">
         <input type="hidden" name="accion" id="accion" value=''>
+        <input type="hidden" name="post_form" value='1'>
     <ul>
 
         <li class="sub_item">
