@@ -1434,14 +1434,14 @@ function updateBuscarDatosNivel2(responseText){
 
     $('#ediciones').html(responseText);
     
-//     $('#edicion_id').change(function() {
-//       var valor = $('#edicion_id').val();
-//       
-//            alert("HOLA valor => " + valor + " id => " + idComponenteCliente + "_hidden"); 
-//       $(idComponenteCliente + "_hidden").val(valor);
-//   
-//     });
-//     
+    $('#edicion_id').change(function() {
+      var valor = $('#edicion_id').val();
+      
+           alert("HOLA valor => " + valor + " id => " + idComponenteCliente + "_hidden"); 
+      $("#" + idComponenteCliente + "_hidden").val(valor);
+  
+    });
+    
     
 }
 
