@@ -1427,22 +1427,17 @@ function buscarDatosNivel2(){
 }
 
 function updateBuscarDatosNivel2(responseText){
-//    $('#ediciones').html(responseText);
-//       $("#div" + obj.getIdCompCliente()).append(comp);
-//       $('#ediciones_'+_getIdComponente('773', 'a')).append(responseText)
     var idComponenteCliente = _getIdComponente('773', 'a');
 
     $('#ediciones').html(responseText);
     
+    //cambio el ID  
     $('#edicion_id').change(function() {
       var valor = $('#edicion_id').val();
       
-           alert("HOLA valor => " + valor + " id => " + idComponenteCliente + "_hidden"); 
       $("#" + idComponenteCliente + "_hidden").val(valor);
   
     });
-    
-    
 }
 
 function generarIdComponente(){
