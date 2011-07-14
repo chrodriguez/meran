@@ -107,11 +107,13 @@ function checkedAll(id,nombreCheckbox){
 
 	$("#"+id).toggle(function(){
 		$("input[name="+nombreCheckbox+"]").each(function(){
-			this.checked=true;})
+			this.checked=true;
+			$(this).parent().parent().addClass("marked");})
 		},
 		function(){
 			$("input[name="+nombreCheckbox+"]").each(function(){
-			this.checked=false;})
+			this.checked=false;
+			$(this).parent().parent().removeClass("marked");})
 		}
 	);
 }

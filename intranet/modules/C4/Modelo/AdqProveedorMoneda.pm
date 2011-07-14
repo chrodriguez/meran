@@ -8,11 +8,11 @@ use C4::AR::Utilidades;
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
-    table   => 'adq_proveedor_moneda',
+    table   => 'adq_ref_proveedor_moneda',
 
     columns => [
-        proveedor_id    => { type => 'integer', length => 11, not_null => 1 },
-        moneda_id       => { type => 'integer', length => 11, not_null => 1},
+        adq_proveedor_id    => { type => 'integer', length => 11, not_null => 1 },
+        adq_ref_moneda_id   => { type => 'integer', length => 11, not_null => 1},
     ],
 
     relationships =>
@@ -20,19 +20,19 @@ __PACKAGE__->meta->setup(
           moneda_ref => 
           {
             class       => 'C4::Modelo::RefAdqMoneda',
-            key_columns => { moneda_id => 'id' },
+            key_columns => { adq_ref_moneda_id => 'id' },
             type        => 'one to one',
           },
           proveedor_ref => 
           {
             class       => 'C4::Modelo::AdqProveedor',
-            key_columns => { proveedor_id => 'id' },
+            key_columns => { adq_proveedor_id => 'id' },
             type        => 'one to one',
           },
       ],
 
 
-    primary_key_columns => [ 'proveedor_id' ,'moneda_id'],
+    primary_key_columns => [ 'adq_proveedor_id' ,'adq_ref_moneda_id'],
 
 );
 
@@ -71,13 +71,13 @@ sub agregarMonedaProveedor{
 sub setProveedorId{
     my ($self)         = shift;
     my ($id_proveedor) = @_;
-    $self->proveedor_id($id_proveedor);
+    $self->adq_proveedor_id($id_proveedor);
 }
 
 sub setMonedaId{
     my ($self)      = shift;
     my ($id_moneda) = @_;
-    $self->moneda_id($id_moneda);
+    $self->adq_ref_moneda_id($id_moneda);
 }
 
 # ******************************************************FIN Getter y Setter*******************************************************************

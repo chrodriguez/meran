@@ -63,7 +63,7 @@
                                                                               text =>     C4::AR::Filtros::to_Icon( boton   => "icon_mas" ),
                                                                               url=>"[% url_prefix %]/adquisiciones/datosProveedor.pl", 
                                                                               params =>   ["id_proveedor=[% proveedor.getId %]",
-                                                                                          "href=DETALLE"],
+                                                                                          "action=DETALLE"],
                                                                               title =>    "[% 'Ver datos de contacto' | i18n %]"
                                                                         );
                               [% END %]
@@ -72,7 +72,7 @@
                               [% PERL %]
                               print C4::AR::Filtros::link_to(   text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
                                                                 url=>"[% url_prefix %]/adquisiciones/datosProveedor.pl", 
-                                                                params =>   ["href=EDITAR", "id_proveedor=[% proveedor.getId %]"],
+                                                                params =>   ["action=EDITAR", "id_proveedor=[% proveedor.getId %]"],
                                                                 title =>    "[% 'Editar Proveedor' | i18n %]"
                                                           );
                              [% END %]
