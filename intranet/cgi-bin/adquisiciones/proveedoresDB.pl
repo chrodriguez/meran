@@ -9,8 +9,8 @@ use JSON;
 my $input           = new CGI;
 my $authnotrequired = 0;
 my $obj             = $input->param('obj');
-my $tipoAccion      = $obj->{'tipoAccion'}||"";
 $obj                = C4::AR::Utilidades::from_json_ISO($obj);
+my $tipoAccion      = $obj->{'tipoAccion'}||"";
 
 =item
     Se elimina el Proveedor
@@ -26,8 +26,7 @@ if($tipoAccion eq "ELIMINAR"){
                                                 entorno         => 'usuarios'},
                                                 "intranet"
                                     );
-
-        my %params;
+                                    
         my $id_proveedor        = $obj->{'id_proveedor'};
 
         my ($Message_arrayref)  = C4::AR::Proveedores::eliminarProveedor($id_proveedor);
