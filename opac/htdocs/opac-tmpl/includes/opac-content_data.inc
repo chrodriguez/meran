@@ -91,7 +91,7 @@
             <hr class="clear-contentunit" />
               [% INCLUDE 'opac-busquedaResult.inc' %]
         [% ELSE %]
-              <h1 id="ultimos_ejemplares_adq" class="pagetitle" style="text-decoration:underline; font-size: 17px;"> [% 'Ultimos ejemplares adquiridos por la biblioteca' | i18n %]</h1>
+              <h1 id="ultimos_ejemplares_adq" class="pagetitle" style="text-decoration:underline; font-size: 17px; cursor:pointer;"> [% 'Ultimos ejemplares adquiridos por la biblioteca' | i18n %]</h1>
               <div class="ultimos_ejemplares_adq">
                     [% INCLUDE 'opac-busquedaResult.inc' %]
               </div>
