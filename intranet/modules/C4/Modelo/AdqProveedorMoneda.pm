@@ -71,13 +71,13 @@ sub agregarMonedaProveedor{
 sub setProveedorId{
     my ($self)         = shift;
     my ($id_proveedor) = @_;
-    $self->proveedor_id($id_proveedor);
+    $self->adq_proveedor_id($id_proveedor);
 }
 
 sub setMonedaId{
     my ($self)      = shift;
     my ($id_moneda) = @_;
-    $self->moneda_id($id_moneda);
+    $self->adq_ref_moneda_id($id_moneda);
 }
 
 # ******************************************************FIN Getter y Setter*******************************************************************
