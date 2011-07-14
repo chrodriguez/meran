@@ -996,7 +996,7 @@ sub busquedaAvanzada_newTemp{
 
 
     if ($params->{'only_available'}){
-        $query .= ' @string "ref_disponibilidad%'.C4::Modelo::RefDisponibilidad::paraPrestamoValue.'"';
+        $query .= ' @string "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValue.'"';
     }
     
     if ($params->{'signatura'}){
