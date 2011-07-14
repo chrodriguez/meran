@@ -48,7 +48,7 @@ elsif($tipoAccion eq "GUARDAR_MODIFICACION_PROVEEDOR"){
                                                {   ui               => 'ANY', 
                                                    tipo_documento   => 'ANY', 
                                                    accion           => 'MODIFICACION', 
-                                                   entorno          => 'adquisiciones'},   
+                                                   entorno          => 'usuarios'},   
                                                    "intranet"
                                 );    
 
@@ -73,7 +73,7 @@ elsif($tipoAccion eq "GUARDAR_MONEDA_PROVEEDOR"){
                         flagsrequired   => {    ui => 'ANY', 
                                                 tipo_documento => 'ANY', 
                                                 accion => 'MODIFICAR', 
-                                                entorno => 'adquisiciones'},
+                                                entorno => 'usuarios'},
                         debug           => 1,
                     });
 
@@ -104,7 +104,7 @@ elsif($tipoAccion eq "ELIMINAR_MONEDA_PROVEEDOR"){
                         flagsrequired   => {    ui => 'ANY', 
                                                 tipo_documento => 'ANY', 
                                                 accion => 'BAJA', 
-                                                entorno => 'adquisiciones'},
+                                                entorno => 'usuarios'},
                         debug           => 1,
     });
 
