@@ -2829,9 +2829,9 @@ sub generarComboNivel2{
     my %options_hash; 
 
 # FIXME esto tiene q estar
-#     if ( $params->{'onChange'} ){
-#         $options_hash{'onChange'}   = $params->{'onChange'};
-#     }
+    if ( $params->{'onChange'} ){
+        $options_hash{'onChange'}   = $params->{'onChange'};
+    }
 #     if ( $params->{'onFocus'} ){
 #         $options_hash{'onFocus'}    = $params->{'onFocus'};
 #     }

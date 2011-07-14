@@ -1790,7 +1790,7 @@ function crearEditor(){
 
 function cambiarValorEnHidden(id){
   
-    var valor = $('#ediciones').val();
+    var valor = $('#edicion_id').val();
   
     $(id + "_hidden").val(valor);
 }
@@ -1812,6 +1812,8 @@ function crearAuto(obj){
 //             cambiarValorEnHidden(obj.getIdCompCliente());  
 
             var valor = $('#edicion_id').val();
+            
+           alert("HOLA valor => " + valor + " id => " + obj.getIdCompCliente() + "_hidden"); 
             $(obj.getIdCompCliente() + "_hidden").val(valor);
         
         });
