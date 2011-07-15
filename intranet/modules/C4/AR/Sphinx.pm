@@ -122,7 +122,7 @@ sub generar_indice {
     
     $id1 = $id1 || 0;
     
-    C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => flag => ".$flag);
+#     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => flag => ".$flag);
     if($flag eq "R_FULL"){
         #Vaciamos el indice
         my $truncate  = " TRUNCATE TABLE `indice_busqueda`;";
@@ -157,14 +157,14 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
     my @resultEstYDatos = C4::AR::Catalogacion::getEstructuraYDatosDeNivel(\%params);
 
-     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => generando indice del id ".$registro_marc_n1->{'id'});
+#      C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => generando indice del id ".$registro_marc_n1->{'id'});
 
     foreach my $c (@resultEstYDatos){
 #         C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => campo ".$c->{'campo'});
 
         foreach my $s (@{$c->{'subcampos_array'}}){ 
-            C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
-            C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
+#             C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
+#             C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
             $string_con_dato = $string_con_dato." ".$s->{'dato'};   
         }
     }
@@ -190,11 +190,11 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
         my @resultEstYDatos = C4::AR::Catalogacion::getEstructuraYDatosDeNivel(\%params);
 
         foreach my $c (@resultEstYDatos){
-            C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => campo ".$c->{'campo'});
+#             C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => campo ".$c->{'campo'});
 
             foreach my $s (@{$c->{'subcampos_array'}}){ 
-                C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
-                C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
+#                 C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
+#                 C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
                 $string_con_dato = $string_con_dato." ".$s->{'dato'};   
             }
         }
@@ -208,7 +208,7 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
         $sth3->execute($registro_marc_n1->{'id'},$registro_marc_n2->{'id'});
 
         while (my $registro_marc_n3 = $sth3->fetchrow_hashref ){
-            C4::AR::Debug::debug('C4::AR::Sphinx::generar_indice => ID3 '.$registro_marc_n3->{'id'});
+#             C4::AR::Debug::debug('C4::AR::Sphinx::generar_indice => ID3 '.$registro_marc_n3->{'id'});
             my $marc_record3 = MARC::Record->new_from_usmarc($registro_marc_n3->{'marc_record'});
             $marc_record->add_fields($marc_record3->fields);
 
@@ -227,8 +227,8 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 #                 C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => campo ".$c->{'campo'});
 
                 foreach my $s (@{$c->{'subcampos_array'}}){ 
-                    C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
-                    C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
+#                     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
+#                     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
                     $string_con_dato = $string_con_dato." ".$s->{'dato'};   
                 }
             }
@@ -373,7 +373,7 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
             $sth4->execute($registro_marc_n1->{'id'}, $titulo, $autor, $superstring);
         }
 
-        C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => UPDATE => id1 => ".$registro_marc_n1->{'id'});
+#         C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => UPDATE => id1 => ".$registro_marc_n1->{'id'});
     }
 }
 
