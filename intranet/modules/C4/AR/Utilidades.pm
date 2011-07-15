@@ -1235,16 +1235,7 @@ sub armarPaginas{
 #
 #Cantidad de renglones seteado en las preferencias del sistema para ver por cada pagina
 sub cantidadRenglones{
-
-    my $dbh = C4::Context->dbh;
-    my $query="	SELECT value
-                FROM pref_preferencia_sistema
-                WHERE variable='renglones'";
-    my $sth=$dbh->prepare($query);
-
-    $sth->execute();
-
-    return($sth->fetchrow_array);
+    return(C4::AR::Preferencias::getValorPreferencia("renglones"));
 }
 
 #**************************************Fins***Paginador*********************************
@@ -3535,8 +3526,9 @@ sub catalogoAutocomplete{
             $has_temp{'id'}= $documento->{'id1'};
             
             C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
-            $has_temp{'dato'} = $documento->{'titulo'}."\n";
-          
+            $has_temp{'dato'} = $documento->{'titulo'};
+ 	    if($documento->{'nomCompleto'}){ $has_temp{'dato'} .= " (".$documento->{'nomCompleto'}.")";}
+	    $has_temp{'dato'} .= "\n";
             push (@data_array, \%has_temp); 
 
 #              C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);

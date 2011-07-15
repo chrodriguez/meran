@@ -1106,7 +1106,7 @@ sub procesarAnaliticas {
 		my $relacion;
         	$relacion->{'campo'}='773';
         	$relacion->{'subcampo'}='a';
-        	$relacion->{'valor'}=$analitica->{'id2'};
+        	$relacion->{'valor'}='cat_registo_marc_n2@'.$analitica->{'id2'};
                 $relacion->{'simple'}=1;
                 if (($relacion->{'valor'} ne '') && ($relacion->{'valor'} ne null)){push(@analitica_n2,$relacion);}
 
