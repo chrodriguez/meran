@@ -3535,8 +3535,9 @@ sub catalogoAutocomplete{
             $has_temp{'id'}= $documento->{'id1'};
             
             C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
-            $has_temp{'dato'} = $documento->{'titulo'}."\n";
-          
+            $has_temp{'dato'} = $documento->{'titulo'};
+ 	    if($documento->{'nomCompleto'}){ $has_temp{'dato'} .= " (".$documento->{'nomCompleto'}.")";}
+	    $has_temp{'dato'} .= "\n";
             push (@data_array, \%has_temp); 
 
 #              C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
