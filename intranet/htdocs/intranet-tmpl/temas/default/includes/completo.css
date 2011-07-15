@@ -4716,6 +4716,10 @@ font-size:10pt;
 	display: none;
 }
 
+.ejemplares_grupo{
+	text-align: center;
+	background: #99CC66;
+}
 
 /* Estilo mensaje de contacto (mainpage) */
 

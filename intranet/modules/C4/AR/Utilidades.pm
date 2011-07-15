@@ -4136,6 +4136,8 @@ sub hash_params_to_url_params{
 
     if($hash_ref){
         while ( my ($key, $value) = each(%$hash_ref) ) {
+        	       C4::AR::Debug::debug("ADDING $key :: $value");
+        	       C4::AR::Debug::debug("A URL $url");
                 $url = addParamToUrl($url, $key, $value);
         }
     }
@@ -4150,7 +4152,7 @@ sub url_for{
     my $server      = $ENV{'SERVER_NAME'};
     my $proto       = ($ENV{'SERVER_PORT'} eq 443)?"https://":"http://";
     my $url_final   = $proto.$server.getUrlPrefix().$url;
-    
+    die;
 # C4::AR::Debug::debug("url_final => ".$url_final);
     return $url_final;
 }
