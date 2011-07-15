@@ -409,10 +409,12 @@ function updateMostrarEstructuraDelNivel2(responseText){
 	validateForm('formNivel2',guardarModificarDocumentoN2);
     addRules();
     
-    //dejo seleccionado el tipo de documento segun el esquema  
-    $('#'+_getIdComponente('910','a')).val($('#tipo_nivel3_id').val());  
+    if(!MODIFICAR){
+        //dejo seleccionado el tipo de documento segun el esquema  
+        $('#'+_getIdComponente('910','a')).val($('#tipo_nivel3_id').val());
+    }      
     //se deshabilita  
-    $('#'+_getIdComponente('910','a')).attr('disabled', true);  
+//     $('#'+_getIdComponente('910','a')).attr('disabled', true);  
 }
 
 
@@ -1428,15 +1430,14 @@ function buscarDatosNivel2(){
 
 function updateBuscarDatosNivel2(responseText){
     var idComponenteCliente = _getIdComponente('773', 'a');
-
+     
     $('#ediciones').html(responseText);
+   
+    $("#" + idComponenteCliente + "_hidden").val($('#edicion_id').val());
     
     //cambio el ID  
     $('#edicion_id').change(function() {
-      var valor = $('#edicion_id').val();
-      
-      $("#" + idComponenteCliente + "_hidden").val(valor);
-  
+        $("#" + idComponenteCliente + "_hidden").val($('#edicion_id').val());
     });
 }
 
