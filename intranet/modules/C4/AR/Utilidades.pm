@@ -2848,6 +2848,33 @@ sub generarComboNivel2{
 }
 
 
+# GENERA COMBO CON LAS EDICIONES PARA UN ID DADO. POR AHORA SE USA EN ANALITICAS
+
+sub generarComboNivel2Detalle{
+    my ($params) = @_;
+
+    my @select_ediciones_array;
+    my %select_ediciones_hash;
+
+    my ($ediciones_array_ref)= C4::AR::Nivel2::getNivel2FromId1($params);
+
+    foreach my $edicion (@$ediciones_array_ref) {
+        push(@select_ediciones_array, $edicion->getId2);
+        $select_ediciones_hash{$edicion->getId2}= $edicion->toString;
+    }
+
+    my %options_hash; 
+    $options_hash{'name'}       = 'edicion_id';
+    $options_hash{'id'}         = 'edicion_id';
+    $options_hash{'size'}       = 1;
+    $options_hash{'multiple'}   = 0;
+    $options_hash{'values'}     = \@select_ediciones_array;
+    $options_hash{'labels'}     = \%select_ediciones_hash;
+
+    my $comboDeEdiciones       = CGI::scrolling_list(\%options_hash);
+
+    return $comboDeEdiciones;
+}
 
 
 
@@ -4128,8 +4155,6 @@ sub hash_params_to_url_params{
 
     if($hash_ref){
         while ( my ($key, $value) = each(%$hash_ref) ) {
-        	       C4::AR::Debug::debug("ADDING $key :: $value");
-        	       C4::AR::Debug::debug("A URL $url");
                 $url = addParamToUrl($url, $key, $value);
         }
     }
@@ -4144,7 +4169,7 @@ sub url_for{
     my $server      = $ENV{'SERVER_NAME'};
     my $proto       = ($ENV{'SERVER_PORT'} eq 443)?"https://":"http://";
     my $url_final   = $proto.$server.getUrlPrefix().$url;
-    die;
+    
 # C4::AR::Debug::debug("url_final => ".$url_final);
     return $url_final;
 }

@@ -621,5 +621,14 @@ sub getReferenced{
 }
 
 
+
+sub toString {
+    my ($self) = shift;
+    my $string;
+
+    $string.= $self->getEdicion."(".$self->getAnio_publicacion.")";
+    return ($string);
+}
+
 1;
 

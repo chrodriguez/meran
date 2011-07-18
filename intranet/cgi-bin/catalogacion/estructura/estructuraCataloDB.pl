@@ -79,7 +79,7 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS_REFERENCIA"){
 #     my %params_combo;
 #     $params_combo{'onChange'}       = 'cambiarValorEnHidden()';
 
-    my $combo_ediciones = C4::AR::Utilidades::generarComboNivel2($idNivel1);
+    my $combo_ediciones = C4::AR::Utilidades::generarComboNivel2Detalle($idNivel1);
 #     my $combo_ediciones = C4::AR::Utilidades::generarComboNivel2($params_combo);  
 
     my ($template, $session, $t_params)= get_template_and_user({
