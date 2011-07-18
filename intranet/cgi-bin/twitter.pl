@@ -2,6 +2,7 @@
 
 use strict;
 use CGI;
+use C4::AR::Auth;
 require Exporter;
 use Net::Twitter;
 use Net::Twitter::Role::OAuth;
@@ -14,43 +15,42 @@ use C4::AR::Social;
 # my $token               = "148446079-IL4MsMqXzKU24xMr32No58H5meHmsqLMZHk4qZ0";
 # my $token_secret        = "fSCpzZELbLFYQPJtP7nRJFQjgfGXvR0538a0i0AIcj0"; 
 
-my $url = "http://www.google.com";
+my $input = new CGI;
 
-my $short_url = makeashorterlink($url, 'gaspo53', 'R_2123296565094a87c392b184d2a0910f');
+my ($template, $session, $t_params) = get_template_and_user({
+                                    template_name => "/main.tmpl",
+                                    query => $input,
+                                    type => "intranet",
+                                    authnotrequired => 0,
+                                    flagsrequired => {  ui => 'ANY', 
+                                                        tipo_documento => 'ANY', 
+                                                        accion => 'CONSULTA', 
+                                                        entorno => 'usuarios'},
+                                    debug => 1,
+                });
 
-print "\n Short Url: ".$short_url."\n";
+
+
+my $post=$input->param('post_twitter');
 
 my $nt= C4::AR::Social::connectTwitter();
 
-my $result = $nt->update($ARGV[0]);
+my $result = $nt->update($post);
     
-    if ( my $err = $@ ) {
-        die $@ unless blessed $err && $err->isa('Net::Twitter::Error');
-
-        warn "HTTP Response Code: ", $err->code, "\n",
-              "HTTP Message......: ", $err->message, "\n",
-              "Twitter error.....: ", $err->error, "\n";
+if ( my $err = $@ ) {
+      $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje('SC001','intranet').$err->isa('Net::Twitter::Error') ;
+    
+#     $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje('SC000'.':' $@ unless blessed $err && $err->isa('Net::Twitter::Error') ,'intranet');
+#         warn "HTTP Response Code: ", $err->code, "\n",
+#              "HTTP Message......: ", $err->message, "\n",
+#              "Twitter error.....: ", $err->error, "\n";
+} else {
+    $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje('SC000','intranet');
+    
+#     $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje('SC000','intranet');
 }
 
-# my $nt = Net::Twitter->new(
-#     traits              => ['API::REST', 'OAuth'],
-#     consumer_key        => $consumer_key,
-#     consumer_secret     => $consumer_secret,
-#     access_token        => $token,
-#     access_token_secret => $token_secret,
-# );
-# 
-
-# my $result = $nt->update($ARGV[0]);
-#     
-# if ( my $err = $@ ) {
-#     die $@ unless blessed $err && $err->isa('Net::Twitter::Error');
-# 
-#     warn "HTTP Response Code: ", $err->code, "\n",
-#           "HTTP Message......: ", $err->message, "\n",
-#           "Twitter error.....: ", $err->error, "\n";
-# }
-
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 
 

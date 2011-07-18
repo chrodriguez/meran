@@ -1718,7 +1718,6 @@ p.caption {clear:both;
 }
 
 
-
 /* FORMULARIO RECOMENDACION */
 
 .recomendacionform {width:114%;
@@ -2035,3 +2034,17 @@ border:1px solid #BBBBBB;
 .titulo_result img{
 	border: 0;
 }
+
+
+/* FancyBox */
+
+/*.fancybox_wrap .fancybox-wrap{
+    width:350px;
+}
+
+
+.fancybox_wrap .fancybox-content{
+    width:340px;
+}*/
+
+

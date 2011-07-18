@@ -483,6 +483,11 @@ my %mensajesINTRA = (
     'S008' => 'Por favor verifique que los datos ingresados sean correctos.',  
     #mensajes visualizacion INTRA y OPAC
     'M000' => 'Se modifico el orden con &eacute;xito.',  
+
+    #Mensajes Social     
+    'SC000' => 'El mensaje ha sido publicado en Twitter',
+    'SC001' => 'El mensaje no pudo ser publicado a causa del siguiente error: ',
+
 );
 
 sub getMensaje {

@@ -34,7 +34,7 @@ sub twitterConsumerKey{
     return $valor_consumer_key;
 }
 
-sub twitterConsumerKey{
+sub twitterConsumerSecret{
     my ($self) = shift;
     my $valor_consumer_secret= C4::AR::Preferencias::getValorPreferencia("twitter_consumer_secret");
     return $valor_consumer_secret;
@@ -55,7 +55,7 @@ sub twitterTokenSecret{
 sub connectTwitter{
     my ($self) = shift;
     my $consumer_key= twitterConsumerKey();
-    my $consumer_secret= twitterConsumerKey();
+    my $consumer_secret= twitterConsumerSecret();
     my $token= twitterToken();
     my $token_secret= twitterTokenSecret();
 
