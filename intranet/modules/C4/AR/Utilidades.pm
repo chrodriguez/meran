@@ -2815,7 +2815,7 @@ sub generarComboNivel2{
 
     foreach my $edicion (@$ediciones_array_ref) {
         push(@select_ediciones_array, $edicion->getId2);
-        $select_ediciones_hash{$edicion->getId2}= $edicion->getEdicion;
+        $select_ediciones_hash{$edicion->getId2}= $edicion->toString;
     }
 
     my %options_hash; 

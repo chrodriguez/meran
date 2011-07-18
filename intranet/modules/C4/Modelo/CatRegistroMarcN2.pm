@@ -624,9 +624,33 @@ sub getReferenced{
 
 sub toString {
     my ($self) = shift;
-    my $string;
+    my $string="";
 
-    $string.= $self->getEdicion."(".$self->getAnio_publicacion.")";
+    if ($self->getTipoDocumento){
+	if($string){$string.=" ";}
+	$string.= $self->getTipoDocumentoObject->getNombre." -";
+    }
+    
+    if ($self->getNroSerie){
+	if($string){$string.=" ";}
+	$string.= $self->getNroSerie;
+    }
+
+    if ($self->getEdicion){
+	if($string){$string.=" ";}
+	$string.= $self->getEdicion;
+    }
+
+    if ($self->getVolumen){
+	if($string){$string.=" ";}
+	$string.= $self->getVolumen;
+    }
+
+    if ($self->getAnio_publicacion){
+	if($string){$string.=" ";}
+	$string.= "(".$self->getAnio_publicacion.")";
+    }
+    
     return ($string);
 }
 
