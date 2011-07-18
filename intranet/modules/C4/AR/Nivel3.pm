@@ -649,8 +649,8 @@ sub detalleCompletoOPAC{
 			$hash_nivel2->{'rating'}                    = C4::AR::Nivel2::getRating($hash_nivel2->{'id2'},$nivel1->db);
 			$hash_nivel2->{'cant_reviews'}              = C4::AR::Nivel2::getCantReviews($hash_nivel2->{'id2'}, $nivel1->db);
 			push(@nivel2, $hash_nivel2);
-		};		
-		if ($i >= ($cantidad_total-1)){
+		};
+        if ($i >= ($cantidad_total-1)){
 			last;
 		}
 	}
