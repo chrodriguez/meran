@@ -256,10 +256,10 @@ sub send_mail_TEST {
     my $ok          = 0;
     my $msg_error   = "Error inesperado";
 
-    $mail{'mail_from'}              = C4::AR::Preferencias::getValorPreferencia('mailFrom');
+    $mail{'mail_from'}              =   Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('mailFrom'));
     $mail{'mail_to'}                = $mail_to;
-    $mail{'mail_subject'}           = Encode::decode('utf8', "Prueba de configuración de mail");
-    $mail{'mail_message'}           = "Esta es una prueba de configuraci".chr(243)."n del mail";
+    $mail{'mail_subject'}           = "Prueba de configuración de mail";
+    $mail{'mail_message'}           = "Esta es una prueba de configuración del mail";
 
     eval {
 

@@ -385,7 +385,8 @@ sub detalleNivel3{
     
 	    my ($totales_nivel3, @result)           = detalleDisponibilidadNivel3($id2,$nivel2_object->db);
     
-	    $hash_nivel2{'nivel3'}                  = \@result;
+        $hash_nivel2{'nivel3'}                  = \@result;
+        $hash_nivel2{'cant_nivel3'}             = scalar(@result);
 	    $hash_nivel2{'cantPrestados'}           = $totales_nivel3->{'cantPrestados'};
 	    $hash_nivel2{'cantReservas'}            = $totales_nivel3->{'cantReservas'};
 	    $hash_nivel2{'cantReservasEnEspera'}    = $totales_nivel3->{'cantReservasEnEspera'};

@@ -302,7 +302,7 @@ sub addNewRecord{
     my $fields = $self->getCamposAsArray();
 
     foreach my $field (@$fields){
-      $self->{$field} = '11## EDITAR ##11';
+      $self->{$field} = C4::AR::Filtros::i18n('_SIN_VALOR_');
     }
 
     $self->save();

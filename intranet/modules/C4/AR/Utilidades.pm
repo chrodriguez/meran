@@ -1235,16 +1235,7 @@ sub armarPaginas{
 #
 #Cantidad de renglones seteado en las preferencias del sistema para ver por cada pagina
 sub cantidadRenglones{
-
-    my $dbh = C4::Context->dbh;
-    my $query="	SELECT value
-                FROM pref_preferencia_sistema
-                WHERE variable='renglones'";
-    my $sth=$dbh->prepare($query);
-
-    $sth->execute();
-
-    return($sth->fetchrow_array);
+    return(C4::AR::Preferencias::getValorPreferencia("renglones"));
 }
 
 #**************************************Fins***Paginador*********************************
@@ -2188,10 +2179,11 @@ sub generarComboProveedores{
 
 sub generarComboPresupuestos{
     my ($params) = @_;
+    use C4::AR::Presupuestos;
 
     my @select_presupuestos_array;
     my %select_presupuestos;
-    my $presupuestos  = &C4::AR::Presupuestos::getAdqPresupuestos();
+    my $presupuestos  = C4::AR::Presupuestos::getAdqPresupuestos();
 
     push (@select_presupuestos_array, '');
     
@@ -3534,8 +3526,9 @@ sub catalogoAutocomplete{
             $has_temp{'id'}= $documento->{'id1'};
             
             C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
-            $has_temp{'dato'} = $documento->{'titulo'}."\n";
-          
+            $has_temp{'dato'} = $documento->{'titulo'};
+ 	    if($documento->{'nomCompleto'}){ $has_temp{'dato'} .= " (".$documento->{'nomCompleto'}.")";}
+	    $has_temp{'dato'} .= "\n";
             push (@data_array, \%has_temp); 
 
 #              C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
@@ -4135,6 +4128,8 @@ sub hash_params_to_url_params{
 
     if($hash_ref){
         while ( my ($key, $value) = each(%$hash_ref) ) {
+        	       C4::AR::Debug::debug("ADDING $key :: $value");
+        	       C4::AR::Debug::debug("A URL $url");
                 $url = addParamToUrl($url, $key, $value);
         }
     }
@@ -4149,7 +4144,7 @@ sub url_for{
     my $server      = $ENV{'SERVER_NAME'};
     my $proto       = ($ENV{'SERVER_PORT'} eq 443)?"https://":"http://";
     my $url_final   = $proto.$server.getUrlPrefix().$url;
-    
+    die;
 # C4::AR::Debug::debug("url_final => ".$url_final);
     return $url_final;
 }
