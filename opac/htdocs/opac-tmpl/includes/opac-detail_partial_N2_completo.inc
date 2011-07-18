@@ -23,14 +23,11 @@
                 <div class="main-subcontent" style="width:80%; float:left; margin: 1%">
                           <ul class="listado_sin_margen">
                               [% FOREACH nivel2_array %]
-                                  [% FOREACH subcampos_array %]
                                           [% IF liblibrarian %]
                                               [% IF dato %]
                                               <li> [% liblibrarian %]: <strong>[% dato %]</strong></li>
                                               [% END %]
                                           [% END %]
-
-                                  [% END %] <!-- END FOREACH nivel2_array -->
                               [% END %] <!-- END FOREACH subcampos_array-->
                           </ul>
                   </div> <!-- END <div class="main-subcontent">-->
