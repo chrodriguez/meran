@@ -461,8 +461,8 @@ sub detalleCompletoINTRA{
 		
 	}
 	$t_params->{'nivel1'}       = $nivel1->toMARC_Intra,
-	$t_params->{'id1'}	        = $id1;
-    $t_params->{'cantItemN1'}   = C4::AR::Nivel3::cantNiveles3FromId1($id1,$nivel1->db);
+	$t_params->{'id1'}	    = $id1;
+	$t_params->{'cantItemN1'}   = C4::AR::Nivel3::cantNiveles3FromId1($id1,$nivel1->db);
 	$t_params->{'nivel2'}       = \@nivel2,
 	#se ferifica si la preferencia "circularDesdeDetalleDelRegistro" esta seteada
 	$t_params->{'circularDesdeDetalleDelRegistro'}  = C4::AR::Preferencias::getValorPreferencia('circularDesdeDetalleDelRegistro');
@@ -649,8 +649,8 @@ sub detalleCompletoOPAC{
 			$hash_nivel2->{'rating'}                    = C4::AR::Nivel2::getRating($hash_nivel2->{'id2'},$nivel1->db);
 			$hash_nivel2->{'cant_reviews'}              = C4::AR::Nivel2::getCantReviews($hash_nivel2->{'id2'}, $nivel1->db);
 			push(@nivel2, $hash_nivel2);
-		};		
-		if ($i >= ($cantidad_total-1)){
+		};
+        if ($i >= ($cantidad_total-1)){
 			last;
 		}
 	}

@@ -258,7 +258,7 @@ sub show_componente {
             if($catRegistroMarcN2){
                 
                 my %params_hash;
-                my $text        = $catRegistroMarcN2->nivel1->getTitulo()." - ".$catRegistroMarcN2->nivel1->getAutor(); 
+                my $text        = $catRegistroMarcN2->nivel1->getTitulo()." (".$catRegistroMarcN2->nivel1->getAutor().") - ".$catRegistroMarcN2->toString; 
                 %params_hash    = ('id1' => $catRegistroMarcN2->getId1());
                 my $url         = C4::AR::Utilidades::url_for("/catalogacion/estructura/detalle.pl", \%params_hash);
 
@@ -271,7 +271,7 @@ sub show_componente {
             my $catRegistroMarcN2 = C4::AR::Nivel2::getNivel2FromId2($dato);
     
             if($catRegistroMarcN2){
-                return $catRegistroMarcN2->nivel1->getTitulo()." - ".$catRegistroMarcN2->nivel1->getAutor();
+                return $catRegistroMarcN2->nivel1->getTitulo()." (".$catRegistroMarcN2->nivel1->getAutor().") - ".$catRegistroMarcN2->toString; 
             }
         }
     }

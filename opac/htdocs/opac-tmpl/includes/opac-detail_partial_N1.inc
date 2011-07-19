@@ -5,13 +5,11 @@
         <div class="detalle">
             <ul class="listado_sin_margen">
                 [% FOREACH nivel1 %]
-                    [% FOREACH subcampos_array %]
                         [% IF liblibrarian %]
                             [% IF dato %]
                             <li>    [% liblibrarian %]: <strong>[% dato %]</strong></li>
                             [% END %]
                         [% END %]
-                    [% END %]
                 [% END %]
             </ul>
         </div>

@@ -383,7 +383,7 @@ sub toMARC_Opac{
     my $params;
     $params->{'nivel'}          = '1';
     $params->{'id_tipo_doc'}    = 'ALL';
-    my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_opac_view($marc_record, $params);
+    my $MARC_result_array       = C4::AR::Catalogacion::marc_record_to_opac_view($marc_record, $params);
 
 #     my $orden = 'orden';
 #     my @return_array_sorted = sort{$b->{$orden} cmp $a->{$orden}} @$MARC_result_array;
