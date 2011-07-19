@@ -19,6 +19,7 @@ use vars qw(@EXPORT_OK @ISA);
           &twitterToken
           &twitterTokenSecret
           &connectTwitter
+          &sendPost
 );
 
 # my $consumer_key        = "ee4q1gf165jmFQTObJVY2w";
@@ -26,7 +27,27 @@ use vars qw(@EXPORT_OK @ISA);
 # my $token               = "148446079-IL4MsMqXzKU24xMr32No58H5meHmsqLMZHk4qZ0";
 # my $token_secret        = "fSCpzZELbLFYQPJtP7nRJFQjgfGXvR0538a0i0AIcj0"; 
 
+sub sendPost{
+    my ($post) = @_;
+    
 
+    my $mensaje;
+    my $nt= connectTwitter();
+    my $result = $nt->update($post);
+    if ( my $err = $@ ) {
+       $mensaje = C4::AR::Mensajes::getMensaje('SC001','intranet').$err->isa('Net::Twitter::Error') ;
+        
+    #     $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje('SC000'.':' $@ unless blessed $err && $err->isa('Net::Twitter::Error') ,'intranet');
+    #         warn "HTTP Response Code: ", $err->code, "\n",
+    #              "HTTP Message......: ", $err->message, "\n",
+    #              "Twitter error.....: ", $err->error, "\n";
+    } else {
+       $mensaje = C4::AR::Mensajes::getMensaje('SC000','intranet');
+        
+    #     $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje('SC000','intranet');
+    }
+    return $mensaje;
+}
 
 sub twitterConsumerKey{
     my ($self) = shift;

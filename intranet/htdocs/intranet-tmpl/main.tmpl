@@ -4,7 +4,7 @@
 
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/css/fancybox/jquery.fancybox.css">
 <script src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js"></script>
-<script src="/includes/jquery/jquery.textareaCounter.js"></script>
+<script src="/includes/jquery/jquery.charCount.js"></script>
 
 
 <script type="text/javascript">
@@ -21,21 +21,10 @@
             'frameHeight':  500,
         });
 
-      mostrarNovedades();
-
-     var options2 = {
-                        'maxCharacterSize': 140,
-                        'originalStyle': 'originalTextareaInfo',
-                        'warningStyle' : 'warningTextareaInfo',
-                        'warningNumber': 40,
-                        'displayFormat' : '#input/#max | #words words'
-                };
-     $('#post_twitter').textareaCount(options2);
-  });
+     mostrarNovedades();
+    });
 
 
-  
-  
     function mostrarNovedades(){
             objAH               = new AjaxHelper(updateActualizarTabla);
             objAH.debug         = true;
