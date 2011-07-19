@@ -9,7 +9,17 @@
         <div class="main-subcontent" style="width:100%; float:left">
             <div class="subcontent-unit-border-green" style="width:100%;">
                 <div class="round-border-topleft" style="width:90%;"></div>
-                <h1 class="green">[% "Detalle del Grupo" | i18n %]</h1>
+		        <h1 class="green">[% "Detalle del Grupo" | i18n %]
+		                        [% IF tiene_indice %]
+		                            [% PERL %]
+		                                                print C4::AR::Filtros::to_Icon(  
+		                                                                                    boton   => "icon_indice",
+		                                                                                    onClick => "mostrarIndice([% id2 %]);",
+		                                                                                    title   => "[% 'Ver &iacute;ndice' | i18n %]",
+		                                                        ) ;
+		                            [% END %]
+		                        [% END %]
+		        </h1>
                 <div class="main-subcontent" style="width:15%; float:left; margin: 1%">
                     [% IF portada_registro %]
                         <a class="fancylink" href="/uploads/covers/[% portada_registro_big %]">
@@ -30,6 +40,7 @@
                                           [% END %]
                               [% END %] <!-- END FOREACH subcampos_array-->
                           </ul>
+                  <div style="display:none"><div id="indice_data[% id2 %]" style="white-space: pre;" title="[% 'Indice del grupo' | i18n %]">[% indice %]</div></div>
                   </div> <!-- END <div class="main-subcontent">-->
 
           </div> <!-- END <div class="subcontent-unit-border-green">-->

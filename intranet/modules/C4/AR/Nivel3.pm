@@ -380,8 +380,9 @@ sub detalleNivel3{
 
 	    $hash_nivel2{'id2'}                     = $id2;
 	    $hash_nivel2{'tipo_documento'}          = $nivel2_object->getTipoDocumentoObject->getNombre();
-        $hash_nivel2{'indice'}                  = $nivel2_object->getIndice();
 	    $hash_nivel2{'nivel2_array'}            = $nivel2_object->toMARC_Intra; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
+        $hash_nivel2{'tiene_indice'}            = $nivel2_object->tiene_indice;
+        $hash_nivel2{'indice'}                  = $hash_nivel2{'tiene_indice'}?$nivel2_object->getIndice:0;
     
 	    my ($totales_nivel3, @result)           = detalleDisponibilidadNivel3($id2,$nivel2_object->db);
     
@@ -631,7 +632,9 @@ sub detalleCompletoOPAC{
 	 		my $hash_nivel2;
 			$nivel2_array_ref->[$i]->load();
 			$hash_nivel2->{'id2'}                       = $nivel2_array_ref->[$i]->getId2;
-	 		$hash_nivel2->{'tipo_documento'}            = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getNombre();
+            $hash_nivel2->{'tipo_documento'}            = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getNombre();
+            $hash_nivel2->{'tiene_indice'}              = $nivel2_array_ref->[$i]->tiene_indice;
+            $hash_nivel2->{'indice'}                    = $hash_nivel2->{'tiene_indice'}?$nivel2_array_ref->[$i]->getIndice:0;
 			$hash_nivel2->{'nivel2_array'}              = ($nivel2_array_ref->[$i])->toMARC_Opac; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
 			my ($totales_nivel3,@result)                = detalleDisponibilidadNivel3($nivel2_array_ref->[$i]->getId2,$nivel1->db);
 			$hash_nivel2->{'nivel3'}                    = \@result;

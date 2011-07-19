@@ -101,17 +101,19 @@
 											                ) ;
 			                [% END %]
 
-                            [% PERL %]
-                                                print C4::AR::Filtros::to_Icon(  
-                                                                                    boton   => "icon_indice",
-                                                                                    onClick => "mostrarIndice([% id2 %]);",
-                                                                                    title   => "[% 'Ver &iacute;ndice' | i18n %]",
-                                                        ) ;
-                            [% END %]
+	                        [% IF tiene_indice %]
+	                            [% PERL %]
+	                                                print C4::AR::Filtros::to_Icon(  
+	                                                                                    boton   => "icon_indice",
+	                                                                                    onClick => "mostrarIndice([% id2 %]);",
+	                                                                                    title   => "[% 'Ver &iacute;ndice' | i18n %]",
+	                                                        ) ;
+	                            [% END %]
+	                        [% END %]
 		                
 
 <!--                            <a class="inline" href="#indice_data[% id2 %]">Indice</a>-->
-                            <div style="display:none"><div id="indice_data[% id2 %]" style="white-space: pre;">[% indice %]</div></div>
+                            <div style="display:none"><div id="indice_data[% id2 %]" style="white-space: pre;" title="[% 'Indice del grupo' | i18n %]">[% indice %]</div></div>
 
 		                <div>
 		                    [% PERL %]

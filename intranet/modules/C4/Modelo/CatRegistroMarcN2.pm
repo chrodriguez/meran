@@ -84,6 +84,12 @@ sub setIndice{
     $self->indice($indice);
 }
 
+sub tiene_indice{
+    my ($self)      = shift;
+
+    return (C4::AR::Utilidades::validateString($self->getIndice));	
+}
+
 sub agregar{
     my ($self)      = shift;
     my ($id1,$marc_record)    = @_;

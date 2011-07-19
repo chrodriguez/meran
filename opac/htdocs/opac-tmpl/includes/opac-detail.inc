@@ -1,4 +1,11 @@
 [% INCLUDE 'localized_messages.inc' %]
+[% INCLUDE  'WindowHelper.inc'  %]
+
+<script type="text/javascript">
+	function mostrarIndice(id2){
+	    $("#indice_data" + id2).dialog({ width: 800, position: 'center', modal: true }); 
+	}
+</script>
 
 [% IF !ajax %]
     <script src="/includes/jquery/jquery.jqpageflow.js" type="text/javascript"></script>
