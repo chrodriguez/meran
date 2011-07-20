@@ -12,6 +12,15 @@
                                 [% END %]
                             [% END %]
                 [% END %] <!-- END FOREACH subcampos_array-->
+                                [% IF tiene_indice %]
+                                    [% PERL %]
+                                                        print C4::AR::Filtros::to_Icon(  
+                                                                                            boton   => "icon_indice",
+                                                                                            onClick => "mostrarIndice([% id2 %]);",
+                                                                                            title   => "[% 'Ver &iacute;ndice' | i18n %]",
+                                                                ) ;
+                                    [% END %]
+                                [% END %]
             </ul>
             <div style="float:left; width:100%;" >
                 [% INCLUDE 'opac-detail_partial_disponibilidad.inc' %]
