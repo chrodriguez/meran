@@ -115,6 +115,7 @@ function validateForm(func){
                   sexo: "required",
                   calle: "required",
                   ciudad: "required",
+                  id_ciudad: "required",
                   id_ui: "required",
 
                   nacimiento: {
@@ -135,6 +136,7 @@ function validateForm(func){
                   sexo: POR_FAVOR_INGRESE_EL_SEXO,
                   calle: POR_FAVOR_INGRESE_LA_CALLE_DONDE_VIVE,
                   ciudad: POR_FAVOR_INGRESE_LA_CIUDAD_EN_DONDE_VIVE,
+                  id_ciudad: POR_FAVOR_INGRESE_LA_CIUDAD_EN_DONDE_VIVE,
                   nacimiento: POR_FAVOR_INGRESE_LA_FECHA_DE_NACIMIENTO,
                   telefono: POR_FAVOR_INGRESE_EL_TELEFONO,
                   nro_documento: {
