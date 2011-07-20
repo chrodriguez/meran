@@ -4730,3 +4730,14 @@ font-size:10pt;
 .charleft{
       width:300px;
 }
+
+
+
+.textareaCounterwarning{
+      color:red;
+}
+
+.textareaCounterExceeded{
+      color:red;
+}
+

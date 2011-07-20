@@ -23,4 +23,5 @@ my ($msjNoLeidos, $cant)            = C4::AR::MensajesContacto::noLeidos();
 my ($ultimos_no_leidos)             = C4::AR::MensajesContacto::ultimosNoLeidos($msjNoLeidos);
 $t_params->{'ultimos_no_leidos'}    = $ultimos_no_leidos;
 $t_params->{'cant_noleidos'}        = $cant;
+
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -487,7 +487,8 @@ my %mensajesINTRA = (
     #Mensajes Social     
     'SC000' => 'El mensaje ha sido publicado en Twitter',
     'SC001' => 'El mensaje no pudo ser publicado a causa del siguiente error: ',
-
+    'SC002' => 'Se ha excedido en la cantidad de caracteres ingresados. El mensaje no ha sido publicado en Twitter ',
+    'SC003' => 'No esta habilitada la preferencia para publicar en Twitter',
 );
 
 sub getMensaje {

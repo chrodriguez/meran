@@ -4,6 +4,7 @@ use strict;
 require Exporter;
 use C4::Context;
 use Net::Twitter;
+use C4::AR::Preferencias;
 use Net::Twitter::Role::OAuth;
 use Scalar::Util 'blessed';
 use WWW::Shorten::Bitly;
@@ -20,6 +21,7 @@ use vars qw(@EXPORT_OK @ISA);
           &twitterTokenSecret
           &connectTwitter
           &sendPost
+          &twitterEnabled
 );
 
 # my $consumer_key        = "ee4q1gf165jmFQTObJVY2w";
@@ -27,25 +29,47 @@ use vars qw(@EXPORT_OK @ISA);
 # my $token               = "148446079-IL4MsMqXzKU24xMr32No58H5meHmsqLMZHk4qZ0";
 # my $token_secret        = "fSCpzZELbLFYQPJtP7nRJFQjgfGXvR0538a0i0AIcj0"; 
 
+
+sub twitterEnabled{
+    
+    my $twitter_enabled= C4::AR::Preferencias::getValorPreferencia("twitter_enabled");
+    
+    return $twitter_enabled;
+}
+
 sub sendPost{
     my ($post) = @_;
     
+    my $cant_caracteres= length($post);
+    my $mensaje=C4::AR::Mensajes::create();
 
-    my $mensaje;
-    my $nt= connectTwitter();
-    my $result = $nt->update($post);
-    if ( my $err = $@ ) {
-       $mensaje = C4::AR::Mensajes::getMensaje('SC001','intranet').$err->isa('Net::Twitter::Error') ;
-        
-    #     $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje('SC000'.':' $@ unless blessed $err && $err->isa('Net::Twitter::Error') ,'intranet');
-    #         warn "HTTP Response Code: ", $err->code, "\n",
-    #              "HTTP Message......: ", $err->message, "\n",
-    #              "Twitter error.....: ", $err->error, "\n";
+    if (twitterEnabled()){
+        if ($cant_caracteres < 140){
+
+                  my $nt= connectTwitter();
+                  my $result = $nt->update($post);
+                  if ( my $err = $@ ) {
+              #        $mensaje = C4::AR::Mensajes::getMensaje('SC001','intranet').$err->isa('Net::Twitter::Error') ;
+                    C4::AR::Mensajes::add($mensaje, {'codMsg'=> 'SC001'.$err->isa('Net::Twitter::Error') , 'params' => []} ) ;
+                  #     $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje('SC000'.':' $@ unless blessed $err && $err->isa('Net::Twitter::Error') ,'intranet');
+                  #         warn "HTTP Response Code: ", $err->code, "\n",
+                  #              "HTTP Message......: ", $err->message, "\n",
+                  #              "Twitter error.....: ", $err->error, "\n";
+                  } else {
+              #        $mensaje = C4::AR::Mensajes::getMensaje('SC000','intranet');
+                    C4::AR::Mensajes::add($mensaje, {'codMsg'=> 'SC000' , 'params' => []} ) ;
+                  #     $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje('SC000','intranet');
+                  }
+
+        } else {
+              C4::AR::Mensajes::add($mensaje, {'codMsg'=> 'SC002' , 'params' => []} ) ;
+      
+        }
     } else {
-       $mensaje = C4::AR::Mensajes::getMensaje('SC000','intranet');
-        
-    #     $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje('SC000','intranet');
+        C4::AR::Mensajes::add($mensaje, {'codMsg'=> 'SC003' , 'params' => []} ) ;
     }
+
+
     return $mensaje;
 }
 
