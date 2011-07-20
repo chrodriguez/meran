@@ -267,11 +267,15 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
         if($_->{'campoTabla'} eq 'itemtype'){ $dn2->{'valor'}='cat_ref_tipo_nivel3@'.$biblioitem->{$_->{'campoTabla'}}; }
         elsif($_->{'campoTabla'} eq 'idLanguage'){ $dn2->{'valor'}='ref_idioma@'.$biblioitem->{$_->{'campoTabla'}}; }
         elsif($_->{'campoTabla'} eq 'idCountry'){ $dn2->{'valor'}='ref_pais@'.$biblioitem->{$_->{'campoTabla'}}; }
-# LA Localidad pasa como texto
-#         elsif($_->{'campoTabla'} eq 'place'){ #Esto no se puede pasar sin buscar la referencia
-#                      my $idLocalidad= buscarLocalidadParecida($biblioitem->{$_->{'campoTabla'}});
-#                       $dn2->{'valor'}='ref_localidad@'.$idLocalidad; 
-#               } 
+	  # LA Localidad pasa como texto
+        elsif($_->{'campoTabla'} eq 'place'){ #Esto no se puede pasar sin buscar la referencia
+                      my $idLocalidad= buscarLocalidadParecida($biblioitem->{$_->{'campoTabla'}});
+                       if($idLocalidad){
+			    $dn2->{'valor'}='ref_localidad@'.$idLocalidad; 
+		       } else {
+			    $dn2->{'valor'}=$biblioitem->{$_->{'campoTabla'}};
+		      }
+        }
         elsif($_->{'campoTabla'} eq 'idSupport'){ $dn2->{'valor'}='ref_soporte@'.$biblioitem->{$_->{'campoTabla'}}; }
         elsif($_->{'campoTabla'} eq 'classification'){ $dn2->{'valor'}='ref_nivel_bibliografico@'.$biblioitem->{$_->{'campoTabla'}}; }
           else { $dn2->{'valor'}=$biblioitem->{$_->{'campoTabla'}}; }
