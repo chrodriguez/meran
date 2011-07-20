@@ -376,11 +376,11 @@ sub getComboMatchMode {
     my $html= '';
 
     $html .="<select id='match_mode' tabindex='-1'>";
-    $html .="<option value='SPH_MATCH_PHRASE'>Coincidir con la frase exacta</option>";
-    $html .="<option value='SPH_MATCH_ANY'>Coincidir con cualquier palabra</option>";
-    $html .="<option value='SPH_MATCH_BOOLEAN'>Coincidir con valores booleanos (&), OR (|), NOT (!,-)</option>";
-    $html .="<option value='SPH_MATCH_EXTENDED' selected='selected'>Coincidencia Extendida</option>";
-    $html .="<option value='SPH_MATCH_ALL'>Coincidir con todas las palabras</option>";
+    $html .="<option value='SPH_MATCH_PHRASE'>".i18n("Coincidir con la frase exacta")."</option>";
+    $html .="<option value='SPH_MATCH_ANY'>".i18n("Coincidir con cualquier palabra")."</option>";
+    $html .="<option value='SPH_MATCH_BOOLEAN'>".i18n("Coincidir con valores booleanos (&), OR (|), NOT (!,-)")."</option>";
+    $html .="<option value='SPH_MATCH_EXTENDED' selected='selected'>".i18n("Coincidencia Extendida")."</option>";
+    $html .="<option value='SPH_MATCH_ALL'>".i18n("Coincidir con todas las palabras")."</option>";
     $html .="</select>";
 
     return $html;

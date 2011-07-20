@@ -47,6 +47,7 @@ sub uploadPhoto{
     my $file            = $query->param('POSTDATA');
     my $nro_socio       = $query->url_param('nro_socio'); 
     my $name            = $nro_socio;
+    my $socio           = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
     my $type            = '';
      
     if ($file =~ /^GIF/i) {
@@ -59,6 +60,10 @@ sub uploadPhoto{
         $type = "jpg";
     }
 
+    if ($socio->tieneFoto){
+    	C4::AR::Debug::debug("SOCIO TIEEN FOTOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO ".$socio->tieneFoto);
+    	unlink($socio->tieneFoto);
+    }
     if (!$type) {
         print qq|{ "success": false, "error": "Invalid file type..." }|;
         print STDERR "file has been NOT been uploaded... \n";

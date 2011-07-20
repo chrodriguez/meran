@@ -431,7 +431,7 @@ sub _verificarPassword {
 sub cambiarPassword {
     my ($params)=@_;
 
-    my $msg_object;
+    my  $msg_object = C4::AR::Mensajes::create();
     my  $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
 
     if ($socio){
@@ -446,7 +446,6 @@ sub cambiarPassword {
 
         ($msg_object) = _verificarPassword($params);
     }else{
-        $msg_object = C4::AR::Mensajes::create();
         #Se setea error para el usuario
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U313', 'params' => [$params->{'nro_socio'}]} ) ;
