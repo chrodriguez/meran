@@ -18,9 +18,6 @@
                     [% "Edici&oacute;n" | i18n %]
                 </th>
                 <th>
-                    [% "C&oacute;digo" | i18n %]
-                </th>
-                <th>
                     [% "Fecha" | i18n %]
                 </th>
             
@@ -46,21 +43,6 @@
                 
                 <td>
                     [% HTML.escape(reserva.nivel2.getEdicion) %]
-                </td>
-                <td align="center" >
-
-                    [% IF reserva.nivel2.nivel3.getBarcode %]
-    
-                        [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% barcode %]",
-                                                                url =>      "[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
-                                                                params =>   ["id3=[% reserva.getId3 %]"],
-                                                                title =>    "[% "Detalle del Ejemplar" | i18n %]"
-                                                            ) ;
-                        [% END %]   
-                    [% ELSE %]
-                        ([% 'Reserva de grupo' | i18n %])
-                    [% END %]
                 </td>
                 <td>
                     &nbsp;[% reserva.getFecha_reserva_formateada %]&nbsp;
