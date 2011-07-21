@@ -131,12 +131,12 @@ use vars qw(@EXPORT_OK @ISA);
 my @VALUES_COMPONENTS = (   "-1", "text", "texta", "combo", "auto", "calendar", "anio", "rango_anio" );
 my %LABELS_COMPONENTS = (   "-1"            => C4::AR::Filtros::i18n("SIN SELECCIONAR"),
                             "text"          => C4::AR::Filtros::i18n("Texto simple"), 
-                            "texta"         => C4::AR::Filtros::i18n("Texto grande"), 
-                            "combo"         => C4::AR::Filtros::i18n("Referencia en modo lista"), 
-                            "auto"          => C4::AR::Filtros::i18n("Referencia en modo Auto"), 
+                            "texta"         => C4::AR::Filtros::i18n("Texto ampliado"), 
+                            "combo"         => C4::AR::Filtros::i18n("Lista desplegable"), 
+                            "auto"          => C4::AR::Filtros::i18n("Autocompletable"), 
                             "calendar"      => C4::AR::Filtros::i18n("Calendario"), 
-                            "anio"          => C4::AR::Filtros::i18n("Anal simple"), 
-                            "rango_anio"    => C4::AR::Filtros::i18n("Anales en rango") 
+                            "anio"          => C4::AR::Filtros::i18n("Anual"), 
+                            "rango_anio"    => C4::AR::Filtros::i18n("Anual rango") 
                         );
   
   
