@@ -9,6 +9,7 @@
             objAH.tipoAccion    = "PUBLICAR_TWITTER";
             objAH.post          = $("#post_twitter").val();
             objAH.sendToServer();
+
     }
 
    function updatePublicarTwitter(responseText){
@@ -21,25 +22,27 @@
   $(document).ready(function() {
         $('#publicar_twitter').click(function() {
              publicar_twitter();
+             $.fancybox.close();
+        });      
+        
+        $("#post_twitter").charCount({
+            limit: 140,        
+            warning: 20,
+            counterElement: 'p',
+            css: 'textareaCounter',
+            cssWarning: 'textareaCounterwarning',
+            cssExceeded: 'textareaCounterExceeded',
+            counterText: 'Caraceteres restantes: '    
         });
-      $("#post_twitter").charCount({
-          limit: 140,        
-          warning: 20,
-          counterElement: 'p',
-          css: 'textareaCounter',
-          cssWarning: 'textareaCounterwarning',
-          cssExceeded: 'textareaCounterExceeded',
-          counterText: 'Caraceteres restantes: '    
-      });
  });
 
 </script>
-<div class="fancybox_twitter">
+<div class="fancybox_twitter" id="fancybox_twitter">
     <fieldset>
      <!--    <form action="[% url_prefix %]/twitter.pl" method="post">-->
 
             <legend>[% 'Cuerpo del mensaje' | i18n %]:</legend>
-            <textarea id="post_twitter" name="textarea_twitter" style="padding:5px" rows="5" cols="25"></textarea>
+            <textarea id="post_twitter" name="textarea_twitter" style="padding:5px" rows="5" cols="50"></textarea>
             <input id="publicar_twitter" type="button" value="Enviar">
          <!--</form>-->
     </fieldset>

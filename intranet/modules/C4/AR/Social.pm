@@ -44,7 +44,7 @@ sub sendPost{
     my $mensaje=C4::AR::Mensajes::create();
 
     if (twitterEnabled()){
-        if ($cant_caracteres < 140){
+        if ($cant_caracteres <= 140){
 
                   my $nt= connectTwitter();
                   my $result = $nt->update($post);

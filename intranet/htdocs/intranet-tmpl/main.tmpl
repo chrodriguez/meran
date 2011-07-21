@@ -17,8 +17,8 @@
 
 
         $('.fancy_link').fancybox({
-            'frameWidth':   800,
-            'frameHeight':  700,
+            'width':   800,
+            'height':  700,
         });
 
      mostrarNovedades();
@@ -37,8 +37,8 @@
     function updateActualizarTabla(responseText){
         $("#resultNovedades").html(responseText);
         $('.fancy_link').fancybox({
-            'frameWidth':   600,
-            'frameHeight':  500,
+            'width':   800,
+            'height':  700,
         });
     }
 </script>
@@ -119,10 +119,14 @@
                         
                       </li>
                   </ul>
-    </fieldset>   
+    </fieldset> 
+    [% IF twitter_enabled %]
+  
     <a class="fancy_link" href="[% url_prefix %]/admin/publicar_twitter.pl?token=[% token %]">
                                    Publicar en Twitter
     </a>
+  
+    [% END %]
   
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]
