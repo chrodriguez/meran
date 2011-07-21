@@ -619,7 +619,7 @@ sub hayError {
 sub getFirstCodeError {
     my($msg_object)=@_;
 
-    return $msg_object->{'messages'}->[0]->{'codMsg'};
+    return $msg_object->{'messages'}->[0]->{'codMsg'} || 0;
 }
 
 #Esta funcion agrega un mensaje al arreglo de objetos mensajes

@@ -1,4 +1,7 @@
 [% INCLUDE 'ChangePasswordHelper.inc' %]
+<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme %]/includes/fileuploader.css">
+
+<script type="text/javascript" src="/includes/jquery/fileuploader.js"></script>
 
 <script type="text/javascript">
 
@@ -21,6 +24,35 @@
             $("link").attr("href","[% temas %]/"+$("#temas_opac").val()+"/includes/opac.css");
             return false;
         });
+        $('.fancylink').fancybox();
+        
+        
+        [% IF !foto_name %] 
+            $('#div_uploader').show();
+        [% ELSE %]
+            $('#div_boton_eliminar_foto').show();
+        [% END %]
+
+        $('.fancylink').fancybox();
+
+        //Inicializacion del FileUploader
+        [% IF !foto_name %]  
+            $('#label-file-uploader').show();
+            var uploader = new qq.FileUploader({
+                element: document.getElementById('file-uploader'),
+                action: '[% url_prefix %]/uploadPicture.pl',
+                params: {
+                    nro_socio: '[% socio_data.usr_nro_socio %]',
+                },
+                allowedExtensions: ["bmp","jpg","gif","png","jpeg"],
+                debug: true,
+                multiple: false,
+            });
+        [% ELSE %]
+            $('#label-file-uploader').hide();
+        [% END %]
+        
+        
     });
 </script>
     <!--    <h1 class="block">[% 'Modificar sus datos personales' | i18n%]</h1>-->
@@ -31,21 +63,64 @@
           <div class="contactform" style="width: 100%">
             <form method="post" action="[% url_prefix %]/opac-userupdate.pl" onSubmit="return (checkPassword() && startOverlay())">
               <fieldset>
-                <legend>&nbsp;[% 'Detalle de ' | i18n %] [% socio_data.usr_apellido %], [% socio_data.usr_nombre %]&nbsp;</legend>
+
+                <legend>&nbsp;
+                            <span id="name_card">
+                                [% 'Detalle de ' | i18n %] [% socio_data.usr_apellido %], [% socio_data.usr_nombre %]
+                            </span>
+                        &nbsp;
+                </legend>
+
                 <p><label for="contact_firstname" class="left">[% 'Nombres' |  i18n %]* :</label>
                    <input type="text" name="nombre" id="nombre" class="field [% IF !socio_data.usr_nombre %] error_field [% END %]" value="[% socio_data.usr_nombre %]" tabindex="6" /></p>
+
                 <p><label for="apellido" class="left">[% 'Apellido/s' |  i18n %]* :</label>
                    <input type="text" name="apellido" id="apellido" class="field [% IF !socio_data.usr_apellido %] error_field [% END %]" value="[% socio_data.usr_apellido %]" tabindex="7" /></p>
+
                 <p><label for="ciudad" class="left">[% 'Ciudad' |  i18n %]* :</label>
                    <input type="text" name="ciudad" id="ciudad" class="field [% IF !socio_data.usr_ciudad_nombre %] error_field [% END %]" value="[% socio_data.usr_ciudad_nombre %]" tabindex="8" />
                    <input type="hidden" name="id_ciudad" id="id_ciudad" class="field" value="[% socio_data.ciudad_ref.id %]"/> </p>
+
                 <p><label for="direccion" class="left">[% 'Direcci&oacute;n' |  i18n %]* :</label>
                    <input type="text" name="direccion" id="direccion" class="field [% IF !socio_data.usr_calle %] error_field [% END %]" value="[% socio_data.usr_calle %]" tabindex="9" /></p>
+
                 <p><label for="telefono" class="left">[% 'Tel&eacute;fono' |  i18n %]* :</label>
                    <input type="text" name="telefono" id="telefono" class="field [% IF !socio_data.usr_telefono %] error_field [% END %]" value="[% socio_data.usr_telefono %]" tabindex="10" /></p>
+
                 <p><label for="email" class="left">[% 'E-mail' |  i18n %]* :</label>
                    <input type="text" name="email" id="email" class="field [% IF !socio_data.usr_email %] error_field [% END %]" value="[% socio_data.usr_email %]" tabindex="11" /></p>
                    <input type="hidden" name="token" id="token" value="[% token %]" />
+<!--                 Cambio de foto -->
+
+                      [% IF mensaje_error_foto %] 
+                        <li>
+                                <font color="red">[% mensaje_error_foto %]</font>
+                        </li>
+                      [% END %]
+
+                       <div id="div_boton_eliminar_foto" style="display: none">
+                          <li>
+                                [% PERL %]
+                                            print C4::AR::Filtros::to_Button(   text    => "[% 'Eliminar Foto' | i18n %]",
+                                                                                boton   => "boton_borrar",
+                                                                                onClick => "eliminarFoto('[% foto_name %] ');",
+                                                                             );
+                                [% END %]
+                          </li>
+                        </div>
+                        <li style="margin: 0 auto; width: 60%; list-style: none">
+                            <label for="file-uploader" id="label-file-uploader">
+                                <h4>[% 'Seleccione una im&aacute;gen apropiada' | i18n %]</h4>
+                            </label>
+                            <div id="file-uploader">
+                                <noscript>          
+                                    <p>[% 'Please enable JavaScript to use file uploader.' | i18n %]</p>
+                                    <!-- or put a simple form for upload here -->
+                                </noscript>                          
+                            </div>
+                        </li>
+                    </ul>
+
                    <!-- CAMPOS PARA CAMBIO DE PASSWORD -->
                    <input type="hidden" name="new_password1" id="new_password1" />
                    <input type="hidden" name="new_password2" id="new_password2" />

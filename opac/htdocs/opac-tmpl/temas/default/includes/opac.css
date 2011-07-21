@@ -23,6 +23,10 @@
     width: 300px;	
 }
 
+.fancylink img{
+	border: none;
+}
+
 #jqpageflow-block img{
 	clear: none;
 }
@@ -230,6 +234,10 @@ float:right;
  color:rgb(50,50,50);
 }
 
+.nav_logged li {display:block;
+ list-style:none;
+}
+
 .nav_logged {width:200px;
  position:relative;
  z-index:3;
@@ -243,6 +251,7 @@ color: #467AA7;
 font-weight: bold;
 text-decoration: none;
 }
+
 
 .nav_logged a{
 	color:#4E6595;
@@ -1828,10 +1837,11 @@ p.caption {clear:both;
 .main a:visited {color:rgb(42,90,138);
 }
 
-.main a img {border:solid 1px rgb(150,150,150);
-}
-.main a:hover img {border:solid 1px rgb(220,220,220);
-}
+/* .main a img {border:solid 1px rgb(150,150,150);} */
+
+/* .main a:hover img { */
+/* 	border:solid 1px rgb(220,220,220); */
+/* } */
 
 .message_text{
   font-size: 17px;

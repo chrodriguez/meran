@@ -43,19 +43,19 @@ $data_hash{'newpassword1'} = $input->param('new_password2');
 $data_hash{'tema'} = $input->param('temas_opac') || 0;
 
 my $fields_to_check = ['nombre','apellido','direccion','numero_telefono','id_ciudad','email'];
-my $update_password =  0;
+my $update_password = C4::AR::Utilidades::validateString($data_hash{'actualPassword'});
 
-if ($update_password =  C4::AR::Utilidades::validateString($data_hash{'actualPassword'})){
+if ($update_password){
     $fields_to_check = ['nombre','apellido','direccion','numero_telefono','id_ciudad','email', 'actualPassword','newpassword','newpassword1'];
 }
 
 if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
+	my $cod_msg = undef;
+	
     if ($update_password){
         $data_hash{'nro_socio'} = $socio->getNro_socio;
         $msg_object = C4::AR::Usuarios::cambiarPassword(\%data_hash);
     }
-
-    $t_params->{'mensaje'} = C4::AR::Filtros::i18n("Se modificaron sus datos correctamente");
 
     if (!$msg_object->{'error'}){
         $socio->persona->modificarVisibilidadOPAC(\%data_hash);
