@@ -925,6 +925,16 @@ li.detalle_barra_circulacion{
 
 }
 
+.icon_renovar {
+    background: transparent url(../imagenes/iconos/renovar.png) no-repeat;
+
+    height: 25px;
+
+    width: 25px;
+
+    cursor: pointer;
+
+}
 
 .boton_buscar {
     background: transparent  url(../imagenes/botones/boton_buscar.png) no-repeat;
