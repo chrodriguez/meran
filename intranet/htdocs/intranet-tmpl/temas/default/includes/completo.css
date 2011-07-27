@@ -9,7 +9,7 @@ body,html {
 }
 
 .novedad_contacto{
-    width: 300px;	
+	min-width: 500px;
 }
 
 .loading_items{
@@ -128,7 +128,7 @@ fieldset legend {
   padding-right:5px;
   padding-top:2px;
   position:relative;
-  top:-12px;
+  top:0px;
 }
 
 .header-bottom{
