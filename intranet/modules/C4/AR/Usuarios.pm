@@ -1077,7 +1077,7 @@ sub _sendRecoveryPasswordMail{
 
     my %mail;
 
-    my $mail_from       = $mail{'mail_from'}  = C4::AR::Preferencias::getValorPreferencia("reserveFrom");
+    my $mail_from       = $mail{'mail_from'}  = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveFrom"));
     my $mail_to         = $mail{'mail_to'}    = $socio->persona->getEmail;
     my $mail_subject    = $mail{'mail_subject'}          = C4::AR::Filtros::i18n("Instrucciones para reestablecer su clave");
     
