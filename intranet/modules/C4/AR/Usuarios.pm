@@ -309,7 +309,7 @@ sub eliminarUsuario {
             $error = $error || 0;
             $cod_msg = $cod_msg || 'U320'; 
             $msg_object->{'error'}= $error;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> $cod_msg, 'params' => [$socio->getNro_socio]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> $cod_msg, 'params' => [($socio->getNro_socio)]} ) ;
         };
 
         if ($@){
@@ -317,7 +317,7 @@ sub eliminarUsuario {
             &C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U319', 'params' => [$socio->getNro_socio]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U319', 'params' => [($socio->getNro_socio)]} ) ;
         }
     }
 
