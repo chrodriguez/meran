@@ -116,13 +116,14 @@
                       </li>
                   </ul>
     </fieldset> 
-    [% IF twitter_enabled %]
-  
-    <a class="fancy_link" href="[% url_prefix %]/admin/publicar_twitter.pl?token=[% token %]">
-                                   Publicar en Twitter
-    </a>
-  
-    [% END %]
-  
 [% END %]
+
+[% IF twitter_enabled %]
+
+<a class="fancy_link" href="[% url_prefix %]/admin/publicar_twitter.pl?token=[% token %]">
+                               Publicar en Twitter
+</a>
+
+[% END %]
+  
 [% INCLUDE 'intranet-bottom.inc' %]
