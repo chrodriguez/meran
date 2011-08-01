@@ -31,7 +31,7 @@ JSONstring={
 		//esto no se permite, segun lo que indica el patron
 //		x =  temp.replace(/[\@áéíóúàèìòù|#;'?!¡¿ü]+/g,'');
 // 		x =  temp.replace(/[\@|#;'?¿]+/g,'');
-        x =  temp.replace(/[|#;'?¿\t]+/g,'');
+        x =  temp.replace(/[|#;'\t]+/g,'');
         x =  x.replace(/"/,'\"');
 
 		this.log("jsconStringify => clearData: "+x);
