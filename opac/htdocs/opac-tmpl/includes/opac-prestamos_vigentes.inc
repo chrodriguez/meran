@@ -1,8 +1,13 @@
+<div id="detallePrestamos">
+
 [% USE HTML %]
 [% IF cantidad_prestamos %]
+
     <div class="resultados_consulta">[% "Cantidad de pr&eacute;stamos vigentes:" | i18n %]&nbsp;[% cantidad_prestamos %]</div>
 
     <div class="contenedor_paginador">[% paginador %]</div>
+
+
 
     <table id="tablaHistorial" class="tablaHistorial tabla_datos" cellspacing="0" cellpadding="4" style="width:98%; text-align:center; border: 1;">
         <tr class="tablaResultadoTitulo" >
@@ -60,7 +65,10 @@
         [% END %]
 
     </table>
+
 [% ELSE %]
     <h1> [% 'Ud. no tiene pr&eacute;stamos vigentes.' | i18n %] </h1>
 
 [% END %]
+
+</div>
