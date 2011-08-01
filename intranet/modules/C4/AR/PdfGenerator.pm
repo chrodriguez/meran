@@ -899,7 +899,7 @@ sub generateBookLabel {
 	$pdf->drawLine( 95, $pageheight + ( $y - 97 ), 95, $y );
 
 	#Insert a barcode to the card
-	$pdf->drawBarcode( $x + 150, $y, 50 / 100, 1, "3of9", $codigo, undef, 10,
+	$pdf->drawBarcode( $x + 135, $y, 50 / 100, 1, "3of9", $codigo, undef, 10,
 		10, 25, 10 );
 
 	my $posy = 105;
@@ -928,38 +928,38 @@ sub generateBookLabel {
 
     C4::AR::Debug::debug($escudo);
 #     $pdf->addImgScaled($escudo, $x + 96 , $pageheight + ($y-30-$posy) , 32/100);
-    $pdf->addImgScaled($escudo, $x + 105 , $pageheight + ($y-30-$posy) , 1/100);
+    $pdf->addImgScaled($escudo, $x + 100 , $pageheight + ($y-40-$posy) , 2/100);
 
 	#Write the borrower data into the pdf file
-	$pdf->setSize(7);
+	$pdf->setSize(5);
 	$pdf->setFont("Arial-Bold");
 
 	#      $pdf->addRawText($branch->{'categ'},$x+135,$pageheight + ($y-$posy));
 	$posy = $posy + 7;
-    $pdf->addRawText( _unformat($branch->getTituloFormal), $x + 135, $pageheight + ( $y - $posy ) );
+    $pdf->addRawText( _unformat($branch->getTituloFormal), $x + 165, $pageheight + ( $y - $posy ) );
 	$posy = $posy + 7;
-    $pdf->addRawText( _unformat($branch->getNombre), $x + 135, $pageheight + ( $y - $posy ) );
+    $pdf->addRawText( _unformat($branch->getNombre), $x + 165, $pageheight + ( $y - $posy ) );
     $posy = $posy + 7;
-	$pdf->setSize(6);
-	$pdf->addRawText( C4::AR::Filtros::i18n("Biblioteca"), $x + 135, $pageheight + ( $y - $posy ) );
+	$pdf->setSize(4);
+	$pdf->addRawText( C4::AR::Filtros::i18n("Biblioteca"), $x + 165, $pageheight + ( $y - $posy ) );
 	$posy = $posy + 7;
 	$pdf->setFont("Arial");
 
 	my $cantdir = 1;                       #Cuantas direcciones tiene?
 	my $address = _unformat($branch->getDireccion);
 	$address .= "\n" . _unformat($branch->getAlt_direccion);
-	$pdf->addRawText( $address, $x + 135, $pageheight + ( $y - $posy ) );
+	$pdf->addRawText( $address, $x + 165, $pageheight + ( $y - $posy ) );
 	$posy = $posy + ( 7 * $cantdir );
 
 	my $mail = $branch->getEmail;
-	$pdf->addRawText( $mail, $x + 135, $pageheight + ( $y - $posy ) );
+	$pdf->addRawText( $mail, $x + 165, $pageheight + ( $y - $posy ) );
 	$posy = $posy + 7;
 
 	my $phone_fax = "";
 	$phone_fax = " Tel " . $branch->getTelefono || C4::AR::Filtros::i18n('No dispone');
 	$phone_fax = " Fax " . $branch->getFax      || C4::AR::Filtros::i18n('No dispone');
 
-	$pdf->addRawText( $phone_fax, $x + 135, $pageheight + ( $y - $posy ) );
+	$pdf->addRawText( $phone_fax, $x + 164, $pageheight + ( $y - $posy ) );
 
 	#AHORA DIBUJAMOS LA SIGNATURA SEPARADA POR ' '
 	$pdf->setSize(8);
