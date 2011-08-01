@@ -5,6 +5,7 @@ require Exporter;
 use C4::Context;
 use Net::Twitter;
 use C4::AR::Preferencias;
+use WWW::Google::URLShortener;
 use Net::Twitter::Role::OAuth;
 use Scalar::Util 'blessed';
 use WWW::Shorten::Bitly;
@@ -28,6 +29,16 @@ use vars qw(@EXPORT_OK @ISA);
 # my $consumer_secret     = "F4TEnfC1SjYm3XG6vHZ0aJmsYQIFysyu9bwjG9BDdQ";
 # my $token               = "148446079-IL4MsMqXzKU24xMr32No58H5meHmsqLMZHk4qZ0";
 # my $token_secret        = "fSCpzZELbLFYQPJtP7nRJFQjgfGXvR0538a0i0AIcj0"; 
+
+
+sub shortenUrl{
+          my ($id) = @_; 
+          my $api_key = C4::AR::Preferencias::getValorPreferencia("google_shortener_api_key");
+          my $novedad_url  = WWW::Google::URLShortener->new($api_key);
+          my $link= $novedad_url->shorten_url("http://".$ENV{'SERVER_NAME'}.C4::AR::Utilidades::getUrlPrefix().'/ver_novedad.pl?id='.$id);
+
+          return $link;
+}
 
 
 sub twitterEnabled{

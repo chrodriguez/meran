@@ -38,8 +38,9 @@ my $post;
 my $mensaje;
 
 if($obj){
+     
       $obj = C4::AR::Utilidades::from_json_ISO($obj);
-  
+      C4::AR::Debug::debug($obj);
       my $action= $obj->{'tipoAccion'};
     
       if ($action = "PUBLICAR_TWITTER"){
@@ -51,6 +52,8 @@ if($obj){
       $post =$input->param('textarea_twitter');
 
 }
+
+C4::AR::Debug::debug($post);
 
 $mensaje= C4::AR::Social::sendPost($post);
 
