@@ -461,9 +461,11 @@ sub getUserLocale{
 sub _init_i18n {
     my($params) = @_;
     my $locale = C4::AR::Auth::getUserLocale();
+
     Locale::Maketext::Gettext::Functions::bindtextdomain($params->{'type'}, C4::Context->config("locale"));
     Locale::Maketext::Gettext::Functions::textdomain($params->{'type'});
     Locale::Maketext::Gettext::Functions::get_handle($locale);
+
 }
 
 =item sub _cambioIp
@@ -616,7 +618,7 @@ sub checkauth {
                       $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
                       $flags=$socio->tienePermisos($flagsrequired);
                       $socio->setLogin_attempts(0);
-                      _init_i18n();
+		      _init_i18n({ type => $type });
                       if ($flags) {
                           $loggedin = 1;
                       } else {
