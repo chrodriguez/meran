@@ -33,9 +33,9 @@ function ordenar(orden){
 		    objAH.showOverlay       = true;
 		    $('#nuevo_sub_estante').modal({   containerCss:{
 			    backgroundColor:"#fff",
-			    height:100,
+			    height:170,
 			    padding:0,
-			    width:215
+			    width:300
 			},
 		    });
 	}
@@ -164,9 +164,9 @@ function ordenar(orden){
 	    objAH.showOverlay       = true;
 	    $('#nuevo_estante').modal({   containerCss:{
 		    backgroundColor:"#fff",
-		    height:100,
+		    height:170,
 		    padding:0,
-		    width:215
+		    width:300
 		},
 	    });
 	}
@@ -203,9 +203,9 @@ function ordenar(orden){
 		    objAH.showOverlay       = true;
 		    $('#editar_estante').modal({   containerCss:{
 			    backgroundColor:"#fff",
-			    height:100,
+			    height:170,
 			    padding:0,
-			    width:215
+			    width:300
 			},
 		    });
         }
