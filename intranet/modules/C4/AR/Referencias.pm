@@ -746,11 +746,11 @@ sub getValidadores{
     $validadores{'solo_texto'}          = C4::AR::Filtros::i18n('Solo letras');
     $validadores{'digits'}              = C4::AR::Filtros::i18n('Solo numeros');
     $validadores{'alphanumeric_total'}  = C4::AR::Filtros::i18n('Letras y numeros');
-    $validadores{'combo'}               = C4::AR::Filtros::i18n('Lista de valores');
-    $validadores{'anio'}                = C4::AR::Filtros::i18n('Anal');
-    $validadores{'rango_anio'}          = C4::AR::Filtros::i18n('Anales en rango');
+    $validadores{'combo'}               = C4::AR::Filtros::i18n('Lista desplegable');
+    $validadores{'anio'}                = C4::AR::Filtros::i18n('Anual');
+    $validadores{'rango_anio'}          = C4::AR::Filtros::i18n('Anual rango');
     $validadores{'calendar'}            = C4::AR::Filtros::i18n('Calendario');
-    $validadores{'auto'}                = C4::AR::Filtros::i18n('Referencia en modo Auto');
+    $validadores{'auto'}                = C4::AR::Filtros::i18n('Autocompletable');
     $validadores{'texto_area'}          = C4::AR::Filtros::i18n('Texto grande');
 
     return \%validadores;
