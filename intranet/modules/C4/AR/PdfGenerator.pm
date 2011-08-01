@@ -557,7 +557,6 @@ sub datosBiblio {
 		$biblio = C4::Modelo::PrefUnidadInformacion->new( id_ui => $branchcode );
 		$biblio->load();
 	};
-
 	return ($biblio);
 }
 
@@ -871,10 +870,8 @@ sub batchBookLabelGenerator {
 	foreach my $nivel3 (@$results) {
 		$pdf->newpage($pag);
 		$pdf->openpage($pag);
-		&generateBookLabel( $nivel3->getSignatura_topografica,
-			$nivel3->getBarcode, $nivel3->getId_ui_origen, 0, 97, $pdf );
-		&generateBookLabel( $nivel3->getSignatura_topografica,
-			$nivel3->getBarcode, $nivel3->getId_ui_origen, 0, 97, $pdf );
+		&generateBookLabel( $nivel3->getSignatura_topografica, $nivel3->getBarcode, $nivel3->getId_ui_origen, 0, 97, $pdf );
+		&generateBookLabel( $nivel3->getSignatura_topografica, $nivel3->getBarcode, $nivel3->getId_ui_origen, 0, 0, $pdf );
 		$pag++;
 	}
 	my $tmpFileName = "etiquetas.pdf";
@@ -885,8 +882,6 @@ sub batchBookLabelGenerator {
 #genera a partir de una coordenada
 sub generateBookLabel {
 	my ( $signatura, $codigo, $branchcode, $x, $y, $pdf ) = @_;
-
-	my $dbh = C4::Context->dbh;
 
 	#Datos de la biblioteca
 	my $branch = &datosBiblio($branchcode);
@@ -899,25 +894,16 @@ sub generateBookLabel {
 	$pdf->drawLine( 95, $pageheight + ( $y - 97 ), 95, $y );
 
 	#Insert a barcode to the card
-	$pdf->drawBarcode( $x + 135, $y, 50 / 100, 1, "3of9", $codigo, undef, 10,
+	$pdf->drawBarcode( $x + 110, $y, 70 / 100, 1, "3of9", $codigo, undef, 10,
 		10, 25, 10 );
 
-	my $posy = 105;
+	my $posy = 100;
 	my $escudo =
 	    C4::Context->config('intrahtdocs') . '/temas/'
       . C4::AR::Preferencias::getValorPreferencia('tema_intra')
 	  . '/imagenes/escudo-'
 	  . $branchcode . '.jpg';
-    
-    
 
-# 	if ( !( ( -e $escudo ) && ( -r $escudo ) ) ) {
-# 		$escudo =
-# 	        C4::Context->config('intrahtdocs') . '/'
-# 	      . C4::AR::Preferencias::getValorPreferencia('temas') . '/'
-# 	      . C4::AR::Preferencias::getValorPreferencia('tema')
-# 		  . '/images/escudo-uni.png';
-# 	}
 
     if ( !( ( -e $escudo ) && ( -r $escudo ) ) ) {
         $escudo =
@@ -926,12 +912,10 @@ sub generateBookLabel {
           . '/images/escudo-uni.png';
     }
 
-    C4::AR::Debug::debug($escudo);
-#     $pdf->addImgScaled($escudo, $x + 96 , $pageheight + ($y-30-$posy) , 32/100);
     $pdf->addImgScaled($escudo, $x + 100 , $pageheight + ($y-40-$posy) , 2/100);
 
 	#Write the borrower data into the pdf file
-	$pdf->setSize(5);
+	$pdf->setSize(6);
 	$pdf->setFont("Arial-Bold");
 
 	#      $pdf->addRawText($branch->{'categ'},$x+135,$pageheight + ($y-$posy));
@@ -940,14 +924,14 @@ sub generateBookLabel {
 	$posy = $posy + 7;
     $pdf->addRawText( _unformat($branch->getNombre), $x + 165, $pageheight + ( $y - $posy ) );
     $posy = $posy + 7;
-	$pdf->setSize(4);
+	$pdf->setSize(5);
 	$pdf->addRawText( C4::AR::Filtros::i18n("Biblioteca"), $x + 165, $pageheight + ( $y - $posy ) );
 	$posy = $posy + 7;
 	$pdf->setFont("Arial");
 
 	my $cantdir = 1;                       #Cuantas direcciones tiene?
 	my $address = _unformat($branch->getDireccion);
-	$address .= "\n" . _unformat($branch->getAlt_direccion);
+	$address .= ", " . _unformat($branch->getAlt_direccion); 
 	$pdf->addRawText( $address, $x + 165, $pageheight + ( $y - $posy ) );
 	$posy = $posy + ( 7 * $cantdir );
 
@@ -956,10 +940,13 @@ sub generateBookLabel {
 	$posy = $posy + 7;
 
 	my $phone_fax = "";
-	$phone_fax = " Tel " . $branch->getTelefono || C4::AR::Filtros::i18n('No dispone');
+	my $phone_tel = " Tel " . $branch->getTelefono || C4::AR::Filtros::i18n('No dispone');
 	$phone_fax = " Fax " . $branch->getFax      || C4::AR::Filtros::i18n('No dispone');
 
 	$pdf->addRawText( $phone_fax, $x + 164, $pageheight + ( $y - $posy ) );
+	
+	$posy = $posy + 7;
+	$pdf->addRawText( $phone_tel, $x + 164, $pageheight + ( $y - $posy ) );
 
 	#AHORA DIBUJAMOS LA SIGNATURA SEPARADA POR ' '
 	$pdf->setSize(8);
