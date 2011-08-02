@@ -1309,6 +1309,7 @@ sub armarInfoNivel1{
 #                 C4::AR::Debug::debug("NIVEL 1 PARA FAVORITOS: ".($nivel1->toMARC)->as_formatted);
         # TODO ver si esto se puede sacar del resultado del indice asi no tenemos q ir a buscarlo
             @result_array_paginado[$i]->{'titulo'}              = $nivel1->getTitulo();
+            @result_array_paginado[$i]->{'titulo'}              .= ($nivel1->getRestoDelTitulo() ne "")?": ".$nivel1->getRestoDelTitulo():"";
             my $autor_object                                    = $nivel1->getAutorObject();
 #             @result_array_paginado[$i]->{'nomCompleto'}         = $nivel1->getAutorObject->getCompleto();
 #             @result_array_paginado[$i]->{'idAutor'}             = $nivel1->getAutorObject->getId();

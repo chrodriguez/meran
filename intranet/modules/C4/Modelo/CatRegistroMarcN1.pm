@@ -296,6 +296,14 @@ sub getTitulo{
     return $marc_record->subfield("245","a");
 }
 
+sub getRestoDelTitulo{
+    my ($self)      = shift;
+    
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+    return $marc_record->subfield("245","b");
+}
+
 sub getAutorObject{
     my ($self)      = shift;
     
