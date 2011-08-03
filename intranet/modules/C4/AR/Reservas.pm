@@ -1510,7 +1510,7 @@ sub getHistorialReservasParaTemplate {
     
     my @filtros;
     push(@filtros, ( nro_socio => { eq => $nro_socio }));
-    push(@filtros, ( tipo_operacion => { eq => ['cancelacion','devolucion','reserva' ] } ) );
+    push(@filtros, ( tipo_operacion => { eq => ['cancelacion','reserva' ] } ) );
 
     my $reservas_array_ref = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                           query             => \@filtros,
