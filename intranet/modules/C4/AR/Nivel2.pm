@@ -80,7 +80,7 @@ sub guardarRealmente{
         $db->begin_work;
     
         eval {
-            $catRegistroMarcN2->agregar($id1,$marc_record->as_usmarc);
+            $catRegistroMarcN2->agregar($id1, $marc_record->as_usmarc, $db);
             $db->commit;
             #recupero el id1 recien agregado
             $id2 = $catRegistroMarcN2->getId2;
@@ -209,6 +209,27 @@ sub t_eliminarNivel2{
     }
 
     return ($msg_object);
+}
+
+
+=head2
+sub getAllNivel2
+
+    Recupero TODOS los catRegistroMarcN2 que existen 
+=cut
+sub getAllNivel2{
+    my ($id1, $db) = @_;
+    
+    $db = $db || C4::Modelo::CatRegistroMarcN2->new()->db();
+
+    my $nivel2_array_ref = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(
+                                                                        db => $db,
+                                                                        query => [
+#                                                                                         id1 => { eq => $id1 },
+                                                                                ],
+                                                                );
+                                                                
+    return ($nivel2_array_ref);
 }
 
 =head2

@@ -131,6 +131,7 @@
 				                </div>
 				                <br>
 			                [% END %]
+
 			                <ul class="listado_sin_margen">
 				                [% FOREACH nivel2_array %]
                                     [% IF liblibrarian %]
@@ -142,7 +143,10 @@
 			                    <li>
 					                    [% INCLUDE "estructura/ejemplaresDelGrupo.tmpl" %]
 			                    </li>
-			                 </ul>
+                                <li>
+                                        [% INCLUDE "estructura/analiticasDelGrupo.tmpl" %]
+                                </li>
+                            </ul>
 	                </div>
                 [% INCLUDE  "partials/e-docs_grupo.inc" %]
 	            </div> <!--Fin <div id="grupo TMPL_VAR NAME='id2'-->

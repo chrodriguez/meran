@@ -368,6 +368,8 @@ sub getBarcodesPrestadoLike {
 sub detalleNivel3{
     my ($id2,$db) = @_;
 
+    C4::AR::Debug::debug("detalleNivel3 ");
+
     my %hash_nivel2;	
     #recupero el nivel1 segun el id1 pasado por parametro
     if (!$db){
@@ -399,9 +401,65 @@ sub detalleNivel3{
 	    
         $hash_nivel2{'lista_docs'}              = $e_docs;
         $hash_nivel2{'cant_docs'}               = $cant_docs;
+
+
+
+        #otengo las analiticas
+        my  $cat_reg_marc_n2_analiticas = $nivel2_object->getAnaliticas();
+        C4::AR::Debug::debug("SCALAR ============= ".scalar(@$cat_reg_marc_n2_analiticas));
+
+        my @nive1_analitica_array;
+        my @nive2_analitica_array;
+        foreach my $n2 (@$cat_reg_marc_n2_analiticas){
+            my %hash_nivel1_aux;
+            my %hash_nivel2_aux;    
+    
+            C4::AR::Debug::debug("id 2 ============= ".$n2->getId2Hijo());
+            my $n2_object = C4::AR::Nivel2::getNivel2FromId2($n2->getId2Hijo(),$db);
+            my $n1_object = C4::AR::Nivel1::getNivel1FromId1($n2_object->getId1(),$db);
+
+#             $hash_nivel2{'nivel1_analiticas_array'} = $n1_object->toMARC_Intra; 
+            $hash_nivel1_aux{'nivel1_analitica'} = $n1_object->toMARC_Intra;
+            push(@nive1_analitica_array, \%hash_nivel1_aux);
+#             $hash_nivel2{'nivel2_analiticas_array'} = $n2_object->toMARC_Intra;
+            my %hash_nivel1_aux;
+#             $hash_nivel2_aux{'nivel2_analitica'} = $n2_object->toMARC_Intra;
+#             push(@nive2_analitica_array, \%hash_nivel2_aux);
+            $hash_nivel1_aux{'nivel1_analitica'} = $n2_object->toMARC_Intra;
+            push(@nive1_analitica_array, \%hash_nivel1_aux);
+
+#             push(@nive1_analitica_array, \%hash_nivel2_aux);
+        }
+
+        $hash_nivel2{'nivel1_analiticas_array'} = \@nive1_analitica_array; 
+#         $hash_nivel2{'nivel1_analiticas_array'} = \@nive2_analitica_array;
     }
 
 	return (\%hash_nivel2);
+}
+
+
+# TODO Miguel estoy probando sería SOLO para la migracion
+sub migrarAnaliticas{
+
+    my $nivel2_array_ref = C4::AR::Nivel2::getAllNivel2();
+
+    foreach my $nivel2_object (@$nivel2_array_ref){
+
+        my $cat_reg_marc_n2_analitica_id = $nivel2_object->getAnalitica();
+  
+        if($cat_reg_marc_n2_analitica_id ne ""){
+
+            C4::AR::Debug::debug("ANALITICA? ============= ".$cat_reg_marc_n2_analitica_id);
+
+
+            my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new();
+            $cat_registro_n2_analitica->setId2Padre($cat_reg_marc_n2_analitica_id);
+            $cat_registro_n2_analitica->setId2Hijo($nivel2_object->getId2());
+
+            $cat_registro_n2_analitica->save();
+        }
+    }
 }
 
 =head2
@@ -462,7 +520,7 @@ sub detalleCompletoINTRA{
 		
 	}
 	$t_params->{'nivel1'}       = $nivel1->toMARC_Intra,
-	$t_params->{'id1'}	    = $id1;
+	$t_params->{'id1'}	        = $id1;
 	$t_params->{'cantItemN1'}   = C4::AR::Nivel3::cantNiveles3FromId1($id1,$nivel1->db);
 	$t_params->{'nivel2'}       = \@nivel2,
 	#se ferifica si la preferencia "circularDesdeDetalleDelRegistro" esta seteada

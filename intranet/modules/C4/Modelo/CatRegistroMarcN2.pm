@@ -32,6 +32,7 @@ use C4::AR::Catalogacion qw(getRefFromStringConArrobas);
 use C4::Modelo::CatRegistroMarcN3::Manager qw(get_cat_registro_marc_n3_count);
 # use C4::Modelo::CatRegistroMarcN2::Manager qw(get_cat_registro_marc_n2);
 use C4::Modelo::CatRegistroMarcN2::Manager;
+use C4::Modelo::CatRegistroMarcN2Analitica::Manager;
 # use vars qw(@EXPORT_OK @ISA);
 # 
 # @ISA=qw(Exporter);
@@ -92,11 +93,20 @@ sub tiene_indice{
 
 sub agregar{
     my ($self)      = shift;
-    my ($id1,$marc_record)    = @_;
+    my ($id1, $marc_record, $db)    = @_;
 
     $self->setId1($id1);    
     $self->setMarcRecord($marc_record);
 
+    my $mr = MARC::Record->new_from_usmarc($marc_record);    
+
+#     $self->save();
+
+    my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $db );
+    $cat_registro_n2_analitica->setId2Padre(C4::AR::Catalogacion::getRefFromStringConArrobas($mr->subfield("773","a")));
+    $cat_registro_n2_analitica->setId2Hijo($self->getId2());
+
+    $cat_registro_n2_analitica->save();
     $self->save();
 }
 
@@ -105,6 +115,14 @@ sub modificar{
     my ($marc_record)    = @_;
 
     $self->setMarcRecord($marc_record);
+    
+    my $mr = MARC::Record->new_from_usmarc($marc_record);  
+
+    my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $self->db );
+    $cat_registro_n2_analitica->setId2Padre(C4::AR::Catalogacion::getRefFromStringConArrobas($mr->subfield("773","a")));
+    $cat_registro_n2_analitica->setId2Hijo($self->getId2());
+
+    $cat_registro_n2_analitica->save();
 
     $self->save();
 }
@@ -121,9 +139,43 @@ sub eliminar{
       $n3->eliminar();
     }
 
+# TODO que se hace con la analítica
+
     $self->delete();    
 }
 
+sub getAnalitica{
+    my ($self)      = shift;
+     
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+ 
+    C4::AR::Debug::debug("getAnalitica =>>>>>>>>>>>>>>> ".$marc_record->subfield("773","a"));
+
+    return C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("773","a"));
+}
+
+sub getAnaliticas(){
+    my ($self)      = shift;
+
+    C4::AR::Debug::debug("C4::AR::CatRegistroMarcN2::getAnaliticas del grupo ".$self->getId2());
+    
+    my $db = C4::Modelo::CatRegistroMarcN2->new()->db();
+    
+    my $nivel2_analiticas_array_ref = C4::Modelo::CatRegistroMarcN2Analitica::Manager->get_cat_registro_marc_n2_analitica(
+                                                                        db => $db,    
+                                                                        query => [ 
+                                                                                    cat_registro_marc_n2_id => { eq => $self->getId2() },
+                                                                            ]
+                                                                );
+
+    C4::AR::Debug::debug("C4::AR::CatRegistroMarcN2::getAnaliticas => el grupo ".$self->getId2()." tiene ".scalar(@$nivel2_analiticas_array_ref)." analiticas");
+  
+    if( scalar(@$nivel2_analiticas_array_ref) > 0){
+        return ($nivel2_analiticas_array_ref);
+    }else{
+        return 0;
+    }
+}
 
 sub getSignaturas{
     my ($self)          = shift;
