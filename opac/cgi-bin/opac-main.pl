@@ -24,9 +24,62 @@ my ($template, $session, $t_params)= get_template_and_user({
 C4::AR::Auth::checkBrowser();
 my $nro_socio                       = $session->param('nro_socio');            
 my ($cantidad,$grupos)              = C4::AR::Nivel1::getUltimosGrupos();
+
+
+
+my $orden                       = 'date_due desc';
+my $ini                         = 1;
+# my $funcion                     = ;
+my ($ini,$pageNumber,$cantR)    = C4::AR::Utilidades::InitPaginador($ini);
+my ($cant,$prestamos_array_ref) = C4::AR::Prestamos::getHistorialPrestamosVigentesParaTemplate($nro_socio,$ini,$cantR, $orden);
+
+my $reservas                     = C4::AR::Reservas::obtenerReservasDeSocio($nro_socio);
+
+my $sanciones   = C4::AR::Sanciones::tieneSanciones($nro_socio);
+
+
+
+my $racount                      = 0;
+my $recount                      = 0;
+
+if ($reservas){
+    my @reservas_asignadas;
+    my @reservas_espera;
+
+    foreach my $reserva (@$reservas) {
+        if ($reserva->getId3) {
+            #Reservas para retirar
+            push @reservas_asignadas, $reserva;
+            $racount++;
+        }else{
+            #Reservas en espera
+            push @reservas_espera, $reserva;
+            $recount++;
+        }
+    }
+    $t_params->{'RESERVAS_ASIGNADAS'}   = \@reservas_asignadas;
+    $t_params->{'RESERVAS_ESPERA'}      = \@reservas_espera;
+}
+
+if ($sanciones){
+    $t_params->{'sanciones'} = $sanciones;
+    $t_params->{'cant_sanciones'} = scalar(@$sanciones) ;
+} else {
+    $t_params->{'cant_sanciones'} = 0;
+}
+
+
+
+$t_params->{'reservas_asignadas_count'} = $racount;
+$t_params->{'reservas_espera_count'}    = $recount;
+
+$t_params->{'prestamos'}            = $prestamos_array_ref;
 $t_params->{'nro_socio'}            = $nro_socio;
 $t_params->{'SEARCH_RESULTS'}       = $grupos;
-$t_params->{'cantidad'}             = $cantidad;
+$t_params->{'cantidad_prestamos'}             = $cant;
+
+$t_params->{'cantidad'}       = $cantidad;
+
 $t_params->{'partial_template'}     = "opac-content_data.inc";
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

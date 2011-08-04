@@ -12,8 +12,10 @@ function generarForm(id1, id2){
 
             html = html  + "<input type='hidden' id='id1' name='id1' value='" + id1 + "' />"
             html = html  + "<input type='hidden' id='id2' name='id2' value='" + id2 + "' />"
+            html = html  + "<input type='hidden' id='tipoAccion' name='tipoAccion' value='MODIFICAR_NIVEL_3_ALL' />";
+            html = html  + "<input type='hidden' id='token' name='token' value='[% token %]' />";
           
-            $(html).appendTo($("#edicion_grupal"+id2));
+            $("#edicion_grupal"+id2).html(html);
 
             $("#edicion_grupal"+id2).submit();
         } else {
@@ -288,18 +290,28 @@ function updateInfoPrestarReserva(responseText){
 
 
  function generarVariasEtiquetas(){
-            var selectedItems = new Array();
-            $('#checkEjemplares:checked').each(function(){
-                                                  selectedItems.push($(this).val());
-                                            });
-                                            
-            if (selectedItems.length == 0) {
-                  jAlert('Debe seleccionar al menos un ejemplar','Advertencia de catalogo');
-            } else {  
-                var id1= selectedItems[0];
-                var id2= selectedItems[selectedItems.length - 1];
-                window.open (URL_PREFIX+"/catalogacion/barcode_gen.pl?token="+token+"&id1="+id1+"&id2="+id2,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
-            }
+//             var selectedItems = new Array();
+//             $('#checkEjemplares:checked').each(function(){
+//                                                   selectedItems.push($(this).val());
+//                                             });
+//                                             
+//             if (selectedItems.length == 0) {
+//                   jAlert('Debe seleccionar al menos un ejemplar','Advertencia de catalogo');
+//             } else {  
+//                 var id1= selectedItems[0];
+//                 var id2= selectedItems[selectedItems.length - 1];
+//                 window.open (URL_PREFIX+"/catalogacion/barcode_gen.pl?token="+token+"&id1="+id1+"&id2="+id2,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
+//             }
+             var selectedItems = new Array();
+                $('.icon_seleccionar:checked').each(function(){
+                                                      selectedItems.push($(this).val());
+                                                });
+             if (selectedItems.length == 0) {
+                        jAlert('Debe seleccionar al menos un ejemplar','Advertencia de catalogo');
+             }else{  
+                    $('#tablaEjemplares').submit();
+             }
+
  }
 
 

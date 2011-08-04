@@ -4,7 +4,6 @@
 use strict;
 use CGI;
 use C4::AR::Auth;
-
 use C4::AR::Catalogacion;
 
 my $input = new CGI;

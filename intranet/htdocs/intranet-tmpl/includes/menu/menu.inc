@@ -109,7 +109,7 @@
 	                </ul>
 	             </li>
 	                
-	             <li>
+<!--  	             <li>
 	                 <h4 class=""><a href="javascript:;">[% 'Control de autoridades' | i18n %]</a></h4>
 	                 <ul>
 	                   <li>
@@ -130,6 +130,7 @@
 	                         </li>
 	                 </ul>
 	             </li>
+-->
 	          </ul>
           </div> <!-- FIN CATALOGO -->
 
@@ -179,9 +180,9 @@
 	                      [% END %]
 	            [% ELSE %]
 	                    [% PERL %]
-	                          print C4::AR::Filtros::link_to( text =>     "[% 'Circulaci&oacute;n R&aacute;pida' | i18n %]",
+	                          print C4::AR::Filtros::link_to( text =>     "[% 'Pr&eacute;stamos, Devoluciones y Renovaciones' | i18n %]",
 	                                                          url =>      "[% url_prefix %]/circ/circulacionRapida.pl", 
-	                                                          title =>    "[% 'Circulaci&oacute;n R&aacute;pida' | i18n %]"
+	                                                          title =>    "[% 'Pr&eacute;stamos, Devoluciones y Renovaciones' | i18n %]"
 	                                                      ) ;
 	                      [% END %]
 	            
@@ -408,20 +409,6 @@
 
                   </ul>
                 </li>
-                    <li>
-	                    <h4 class="head"><a href="javascript:;">[% 'Acomodar' | i18n %]</a></h4>
-	                    <ul>
-		                     <li>
-		                         [% PERL %]
-		                             print C4::AR::Filtros::link_to( text =>     "[% 'Mapeo KOHA a MARC' | i18n %]",
-		                                                             url =>      "[% url_prefix %]/catalogacion/kohaToMARC.pl", 
-		                                                             title =>    "[% 'Mapeo KOHA a MARC' | i18n %]"
-		                                                         ) ;
-		                         [% END %]
-		                     </li>
-	                     </ul>
-                    </li>
-                    
                    <li>
                         <h4 class="head"><a href="javascript:;">[% 'Usuarios' | i18n %]</a></h4>
 		                <ul>
@@ -539,6 +526,14 @@
                                                                       ) ;
                                       [% END %]
                             </li>
+		                    <li>
+		                                 [% PERL %]
+		                                     print C4::AR::Filtros::link_to( text =>     "[% 'Acerca De...' | i18n %]",
+		                                                                     url =>      "[% url_prefix %]/about/about.pl",
+		                                                                     title =>    "[% 'Acerca De...' | i18n %]"
+		                                                                 ) ;
+		                                 [% END %]
+		                    </li>
                         </ul>
                   </li>           
                     
@@ -566,22 +561,6 @@
                   </li>           
             </ul>
        </div>
-       
-       
-        <h3 class="head"><a href="javascript:;">[% 'La biblioteca' | i18n %]</a></h3>
-        <div id="seccion_acerca_de">
-                 <ul>
-                    <li>
-                                 [% PERL %]
-                                     print C4::AR::Filtros::link_to( text =>     "[% 'Acerca De...' | i18n %]",
-                                                                     url =>      "[% url_prefix %]/about/about.pl",
-                                                                     title =>    "[% 'Acerca De...' | i18n %]"
-                                                                 ) ;
-                                 [% END %]
-                    </li>
-                 </ul>
-        </div>
-	       
        
        
     </div> <!-- FIN MENU -->

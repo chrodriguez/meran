@@ -8,7 +8,6 @@ posibles cambios.
 
 Terrble BUG en /busquedas/adminEjemplares.pl, anda mal el result!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-
 Cuando funcionalmente este todo terminado, tener en cuenta la insuficiencia de datos, para que no haya un error 500 (hacer algo si lo buscado no existe en la base)
 
 Filtro en Historial de prestamos de usuario

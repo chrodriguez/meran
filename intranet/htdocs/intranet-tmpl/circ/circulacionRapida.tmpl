@@ -81,12 +81,19 @@ function updateObtenerDatosDelEjemplar(responseText){
 function updateObtenerTiposDePrestamos(responseText){
 	var infoHash                    = JSONstring.toObject(responseText);
 	var tipoPrestamo_array_hash_ref = infoHash.tipoPrestamo;
+	var tieneSancion                = infoHash.tieneSancion;
 
 //     if (tipoPrestamo_array_hash_ref.length != 0){
-        var comboTipoPrestamo_html      = crearComboDeItems(tipoPrestamo_array_hash_ref, 'comboTipoPrestamo');
-
+    var comboTipoPrestamo_html      = crearComboDeItems(tipoPrestamo_array_hash_ref, 'comboTipoPrestamo');
+    //dependiendo si tiene sanciones o no, mostramos el combo de prestamos o un mensaje
+    if(tieneSancion == "1"){
+        $('#spanComboTipoPrestamo').html("<span style='color:red;margin-left:40%;'>El usuario tiene una sanci&oacute;n del sistema</span>");
+        $('#cambo_tipo_prestamo label').fadeOut(0);
+    }else{
         $('#spanComboTipoPrestamo').html(comboTipoPrestamo_html);
+        $('#cambo_tipo_prestamo label').fadeIn(0);
         mostrarBotonAceptar();
+    }
 //     }
 }
 

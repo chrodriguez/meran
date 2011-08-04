@@ -107,11 +107,13 @@ function checkedAll(id,nombreCheckbox){
 
 	$("#"+id).toggle(function(){
 		$("input[name="+nombreCheckbox+"]").each(function(){
-			this.checked=true;})
+			this.checked=true;
+			$(this).parent().parent().addClass("marked");})
 		},
 		function(){
 			$("input[name="+nombreCheckbox+"]").each(function(){
-			this.checked=false;})
+			this.checked=false;
+			$(this).parent().parent().removeClass("marked");})
 		}
 	);
 }
@@ -195,7 +197,7 @@ function scrollTo(idObj){
 	if(result_array.length == 0)return; //alert('util.js=> scrollTo => No existe la componte con ID: '+idObj);
 
 	var divOffset = $('#'+idObj).offset().top - 40;
-	$('html,body').animate({scrollTop: divOffset}, 1000);
+	$('html,body').animate({scrollTop: divOffset}, 200);
 }
 
 

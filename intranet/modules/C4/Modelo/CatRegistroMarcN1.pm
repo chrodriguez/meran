@@ -38,7 +38,7 @@ sub getSignaturas{
     
     use C4::Modelo::CatRegistroMarcN2;
     
-    my $array_nivel2 = C4::AR::Nivel2::getNivel2FromId1($self->getId1);
+    my $array_nivel2 = C4::AR::Nivel2::getNivel2FromId1($self->getId1,$self->db);
     
     my @signaturas;
     
@@ -296,6 +296,14 @@ sub getTitulo{
     return $marc_record->subfield("245","a");
 }
 
+sub getRestoDelTitulo{
+    my ($self)      = shift;
+    
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+    return $marc_record->subfield("245","b");
+}
+
 sub getAutorObject{
     my ($self)      = shift;
     
@@ -366,17 +374,6 @@ sub toMARC{
     $params->{'id_tipo_doc'}    = 'ALL';
     my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_meran_por_nivel($marc_record, $params);
 
-
-#     my $MARC_result_array   = &C4::AR::Catalogacion::marc_record_to_meran($marc_record);
-
-#     foreach my $m (@$MARC_result_array){
-#         C4::AR::Debug::debug("campo => ".$m->{'campo'});
-#         foreach my $s (@{$m->{'subcampos_array'}}){
-#             C4::AR::Debug::debug("liblibrarian => ".$s->{'subcampo'});        
-#             C4::AR::Debug::debug("liblibrarian => ".$s->{'liblibrarian'});        
-#         }
-#     }
-
     return ($MARC_result_array);
 }
 
@@ -394,7 +391,7 @@ sub toMARC_Opac{
     my $params;
     $params->{'nivel'}          = '1';
     $params->{'id_tipo_doc'}    = 'ALL';
-    my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_opac_view($marc_record, $params);
+    my $MARC_result_array       = C4::AR::Catalogacion::marc_record_to_opac_view($marc_record, $params);
 
 #     my $orden = 'orden';
 #     my @return_array_sorted = sort{$b->{$orden} cmp $a->{$orden}} @$MARC_result_array;

@@ -13,7 +13,7 @@ var seconds=currentTime.getSeconds();if(minutes<10)
 minutes="0"+minutes
 if(seconds<10)
 seconds="0"+seconds;return hours+":"+minutes+" "+" "+seconds;}
-function checkedAll(id,nombreCheckbox){$("#"+id).toggle(function(){$("input[name="+nombreCheckbox+"]").each(function(){this.checked=true;})},function(){$("input[name="+nombreCheckbox+"]").each(function(){this.checked=false;})});}
+function checkedAll(id,nombreCheckbox){$("#"+id).toggle(function(){$("input[name="+nombreCheckbox+"]").each(function(){this.checked=true;$(this).parent().parent().addClass("marked");})},function(){$("input[name="+nombreCheckbox+"]").each(function(){this.checked=false;$(this).parent().parent().removeClass("marked");})});}
 function recuperarSeleccionados(chckbox){var chck=$("input[name="+chckbox+"]:checked");var array=new Array;var long=chck.length;for(var i=0;i<long;i++){array[i]=chck[i].value;}
 return array;}
 function checkedAllById(id){$("#"+id+" input[type='checkbox']").each(function(){this.checked=!this.checked;});}
@@ -22,7 +22,7 @@ funcion(param);else
 funcion();}}});}
 function registrarKeypress(typeObject){var componentes=["input","INPUT"];var bool1=componentes[0]==typeObject;var bool2=componentes[1]==typeObject;var result=bool1||bool2;if(result==-1)
 return;$(typeObject).keypress(function(e){if(e.which==13){if(this.value!=''){buscar();}}});}
-function scrollTo(idObj){var result_array=$("#"+idObj);if(result_array.length==0)return;var divOffset=$('#'+idObj).offset().top-40;$('html,body').animate({scrollTop:divOffset},1000);}
+function scrollTo(idObj){var result_array=$("#"+idObj);if(result_array.length==0)return;var divOffset=$('#'+idObj).offset().top-40;$('html,body').animate({scrollTop:divOffset},200);}
 function getRadioButtonSelectedValue(ctrl){for(i=0;i<ctrl.length;i++)
 if(ctrl[i].checked)return ctrl[i].value;}
 function highlight(classesArray,idKeywordsArray){for(x=0;x<idKeywordsArray.length;x++){stringArray=($('#'+idKeywordsArray[x]).val()).split(' ');for(y=0;y<stringArray.length;y++){if($.trim(stringArray[y]).length!=0){for(z=0;z<classesArray.length;z++){$('.'+classesArray[z]).highlight(stringArray[y]);}}}}}

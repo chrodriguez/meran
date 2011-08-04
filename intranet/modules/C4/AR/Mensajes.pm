@@ -59,9 +59,10 @@ my %mensajesOPAC = (
 	'P112' => 'El ejemplar con c&oacute;digo de barras *?* no pudo ser renovado',
 	'P113' => 'Disculpe, no se pudo renovar el pr&eacute;stamo, intente nuevamente.',
 	'P114' => 'Disculpe, no puede efectuar renovaciones porque usted no cumple condici&oacute;n.',
-    'P118' => 'El ejemplar que intenta renovar esta vencido',
-    'P119' => 'Renovaci&oacute;n fuera de fecha',
-    'P120' => 'Disculpe, no se pudo renovar el pr&eacute;stamo, el grupo posee reservas.',
+	'P118' => 'El ejemplar que intenta renovar esta vencido',
+	'P119' => 'Renovaci&oacute;n fuera de fecha',
+        'P120' => 'Disculpe, no se pudo renovar el pr&eacute;stamo, el grupo posee reservas.',
+	'P131' => 'Disculpe, no puede efectuar la renovación porque el usuario tiene ejemplar/es vencido/s.',
 	'S200' => 'Disculpe, no puede efectuar reservas porque usted esta sancionado hasta el *?*',
     'S204' => 'Disculpe, no puede efectuar el pr&eacute;stamo porque el usuario tiene un ejemplar vencido.',
 	'S201' => 'Disculpe, no puede efectuar reservas porque usted tiene una posible sanci&oacute;n pendiente.',
@@ -156,6 +157,7 @@ my %mensajesINTRA = (
     'P128' => 'El ejemplar que se intenta prestar no est&aacute; disponible para pr&eacute;stamo.',
     'P129' => 'El usuario ya tiene un ejemplar prestado del mismo grupo',
     'P130' => 'El ejemplar que intenta prestar se encuentra asignado a otro usuario y no hay ning&uacute;n otro libre.',
+    'P131' => 'Disculpe, no puede efectuar la renovación porque el usuario tiene ejemplar/es vencido/s.',
     'S200' => 'El usuario no puede reservar porque esta sancionado hasta el *?*',
     'S201' => 'No es posible realizar el pr&eacute;stamo porque el usuario tiene una posible sanci&oacute;n pendiente.',
     'S202' => 'Se elimin&oacute; la sanci&oacute;n a *?*, *?*, *?* con &eacute;xito.',
@@ -481,6 +483,12 @@ my %mensajesINTRA = (
     'S008' => 'Por favor verifique que los datos ingresados sean correctos.',  
     #mensajes visualizacion INTRA y OPAC
     'M000' => 'Se modifico el orden con &eacute;xito.',  
+
+    #Mensajes Social     
+    'SC000' => 'El mensaje ha sido publicado en Twitter',
+    'SC001' => 'El mensaje no pudo ser publicado a causa del siguiente error: ',
+    'SC002' => 'Se ha excedido en la cantidad de caracteres ingresados. El mensaje no ha sido publicado en Twitter ',
+    'SC003' => 'No esta habilitada la preferencia para publicar en Twitter',
 );
 
 sub getMensaje {
@@ -611,7 +619,7 @@ sub hayError {
 sub getFirstCodeError {
     my($msg_object)=@_;
 
-    return $msg_object->{'messages'}->[0]->{'codMsg'};
+    return $msg_object->{'messages'}->[0]->{'codMsg'} || 0;
 }
 
 #Esta funcion agrega un mensaje al arreglo de objetos mensajes

@@ -18,7 +18,9 @@
                                     
                           </p>
                       </div>
-                      <hr style="color:red;">
+                      [% IF loop.count != loop.size %]
+                        <hr class="divisor_novedades">
+                      [% END %]
               [% END %]
           </li>
       </ul>

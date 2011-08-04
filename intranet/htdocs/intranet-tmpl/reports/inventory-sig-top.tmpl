@@ -17,8 +17,30 @@
     }
 
 
+    function generarVariasEtiquetas(){
+              var selectedItems = new Array();
+                $('.icon_seleccionar:checked').each(function(){
+                                                      selectedItems.push($(this).val());
+                                                });
+             if (selectedItems.length == 0) {
+                        jAlert('Debe seleccionar al menos un ejemplar','Advertencia de catalogo');
+             }else{     
+                    $('#tablaEjemplares').submit();
+             }
+
+
+    }
+
+
+    function generarEtiqueta(id3,barcode){
+        window.open (URL_PREFIX+"/catalogacion/barcode_gen.pl?token="+token+"&id="+id3, "Barcode "+barcode,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
+    }
+
+
+
     function consultarPorBarcode(){
-    
+
+
         //se busca por barcode
         if ( ($("#barcode").val() == "")&&(($("#desde_barcode").val() == "")||($("#hasta_barcode").val() == "")) ){
             jAlert(DEBE_INGRESAR_EL_BARCODE);
@@ -56,6 +78,9 @@
         $('#reporteCreado').hide();
     }
     
+    
+
+
     function consultarPorSignatura(){
      
 
@@ -112,7 +137,7 @@
         objAH.tipoUIBarcode     = $("input[@name='uibarcode']:checked").val();
         //se envia la consulta
         objAH.sendToServer();
-        $('#result').hide();
+//         $('#result').hide();
         $('#reporteCreado').show();
     }
     
@@ -125,6 +150,7 @@
     function updateInfo(responseText){
 	    $("#result").html(responseText);
 	    zebra("datos_tabla");
+        checkedAll("select_all", "checkEjemplares");
     }
 
     function onClickBarcode(){
@@ -179,8 +205,10 @@
         });
     }
 
+
     $(document).ready(function() {
         //onEnter con foco en input, ejecuta la busqueda
+
         onEnter("barcode",consultarPorBarcode);
         onEnter("desde_barcode",consultarPorBarcode);
         onEnter("hasta_barcode",consultarPorBarcode);
@@ -192,7 +220,7 @@
         onClickDesdeHastaBarcode();
         onClickDesdeHastaSignatura();
         $('#reporteCreado').hide();
-      
+        
     });
 
 </script>
@@ -241,6 +269,7 @@
 <fieldset>
     <legend class="titulo_legend">[% "Buscar nro. inventario: &nbsp;" | i18n %]</legend>
         <ul>
+              
             <li class="sub_item">
               <label for="barcode">Nro. Inventario</label>
               <input type="text" id="barcode" value="[% barcode %]">
@@ -277,6 +306,7 @@
 </div>
 
 <div id="result"></div>
+
 </fieldset>
 
 [% INCLUDE "intranet-bottom.inc" %]

@@ -461,9 +461,11 @@ sub getUserLocale{
 sub _init_i18n {
     my($params) = @_;
     my $locale = C4::AR::Auth::getUserLocale();
+
     Locale::Maketext::Gettext::Functions::bindtextdomain($params->{'type'}, C4::Context->config("locale"));
     Locale::Maketext::Gettext::Functions::textdomain($params->{'type'});
     Locale::Maketext::Gettext::Functions::get_handle($locale);
+
 }
 
 =item sub _cambioIp
@@ -592,6 +594,11 @@ sub checkauth {
     my $flags=0;
     my $sin_captcha=0;
     my $time = localtime(time());
+    
+    if($authnotrequired) {
+        return ($userid, $session, $flags, getSessionSocioObject());
+    }
+
     if ($demo) {
         #Quiere decir que no es necesario una autenticacion
         $userid="demo";
@@ -611,7 +618,7 @@ sub checkauth {
                       $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
                       $flags=$socio->tienePermisos($flagsrequired);
                       $socio->setLogin_attempts(0);
-                           
+		      _init_i18n({ type => $type });
                       if ($flags) {
                           $loggedin = 1;
                       } else {
@@ -640,6 +647,7 @@ sub checkauth {
                       C4::AR::Debug::debug("C4::AR::Auth::checkauth => sin_sesion");
                       #ESTO DEBERIA PASAR solo cuando la sesion esta sin iniciar
                       #_destruirSession('U406', $template_params);
+                      inicializarAuth($template_params);
                       $session->param('codMsg', $code_MSG);
                       }
                   else { 
@@ -852,6 +860,21 @@ sub _realizarOperacionesLogin{
         #Si es un usuario de opac que esta sancionado entonces se borran sus reservas
         _operacionesDeOPAC($socio);
     } 
+}
+
+
+sub getSessionSocioObject {
+    my ($session) = @_;
+    unless($session){
+        $session = CGI::Session->load();
+    }
+    
+    
+    if ($session->param('nro_socio')){
+    	return C4::AR::Usuarios::getSocioInfoPorNroSocio(getSessionNroSocio());
+    }else{
+    	return C4::Modelo::UsrSocio->new();
+    }
 }
 
 =item sub getSessionUserID

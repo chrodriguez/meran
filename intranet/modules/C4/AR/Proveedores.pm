@@ -105,7 +105,7 @@ sub getAdqProveedorMoneda{
     my ($id_moneda, $id_proveedor, $db) = @_;
 
     $db = $db || C4::Modelo::AdqProveedorMoneda->new()->db;
-    my $adq_proveedor_moneda = C4::Modelo::AdqProveedorMoneda::Manager->get_adq_proveedor_moneda(   
+    my $adq_proveedor_moneda = C4::Modelo::AdqProveedorMoneda::Manager->get_adq_ref_proveedor_moneda(   
                                                                     db => $db,
                                                                     query   => [ proveedor_id => { eq => $id_proveedor} , moneda_id => { eq => $id_moneda }], 
                                                                 );
@@ -498,8 +498,8 @@ sub getMonedasProveedor{
    my ($params) = @_;
    my $id_proveedor = $params;
 
-   my $monedas_array_ref = C4::Modelo::AdqProveedorMoneda::Manager->get_adq_proveedor_moneda(   query =>  [ 
-                                                                                                proveedor_id  => { eq => $id_proveedor  },
+   my $monedas_array_ref = C4::Modelo::AdqProveedorMoneda::Manager->get_adq_ref_proveedor_moneda(   query =>  [ 
+                                                                                                adq_proveedor_id  => { eq => $id_proveedor  },
                                                                                    ],
                                                                                     require_objects => ['moneda_ref'],
    

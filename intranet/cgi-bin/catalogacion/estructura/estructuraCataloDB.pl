@@ -76,13 +76,16 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS_REFERENCIA"){
     
     my $idNivel1=  $obj->{'id1'};
 
-    my $combo_ediciones = C4::AR::Utilidades::generarComboNivel2($idNivel1);
+#     my %params_combo;
+#     $params_combo{'onChange'}       = 'cambiarValorEnHidden()';
+
+    my $combo_ediciones = C4::AR::Utilidades::generarComboNivel2Detalle($idNivel1);
+#     my $combo_ediciones = C4::AR::Utilidades::generarComboNivel2($params_combo);  
 
     my ($template, $session, $t_params)= get_template_and_user({
                         template_name => "/includes/partials/catalogo/combo_ediciones.inc",
                         query => $input,
                         type => "intranet",
-                        authnotrequired => 1,
                         flagsrequired => {  ui => 'ANY', 
                                             tipo_documento => 'ANY', 
                                             accion => 'CONSULTA', 
@@ -184,7 +187,7 @@ elsif($tipoAccion eq "MOSTRAR_FORM_AGREGAR_CAMPOS"){
     my %params_combo;
     $params_combo{'default'}            = 'SIN SELECCIONAR';
     $params_combo{'id'}                 = 'tipoInput';
-    $t_params->{'comboComponentes'}     = &C4::AR::Utilidades::generarComboComponentes(\%params_combo);
+    $t_params->{'comboComponentes'}     = C4::AR::Utilidades::generarComboComponentes(\%params_combo);
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

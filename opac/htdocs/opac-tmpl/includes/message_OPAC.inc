@@ -47,4 +47,11 @@
     POR_FAVOR_INGRESE_UNA_CANTIDAD = "[% 'Por favor, ingrese una cantidad v\u00e1lida' | i18n %]";
     POR_FAVOR_INGRESE_UN_MOTIVO = "[% 'Por favor, ingrese un motivo' | i18n %]";
 
+    /*=================================================File Uploader=========================================================*/
+    TYPE_ERROR  = " Error en {file}: Solamente se permiten extensiones {extensions}";
+    SIZE_ERROR  = "{file} es muy grande, el maximo tama&ntilde;o es {sizeLimit}.";
+    EMPTY_ERROR = "{file} esta vacio. Elija un archivo con contenido, por favor.";
+    ON_LEAVE    = "[% 'The files are being uploaded, if you leave now the upload will be cancelled.' | i18n %]";  
+     /*=================================================Fin File Uploader=========================================================*/
+
 </script>

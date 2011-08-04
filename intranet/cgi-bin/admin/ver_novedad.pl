@@ -17,6 +17,8 @@ my ($template, $session, $t_params) = get_template_and_user({
                                                         entorno => 'usuarios'},
 									debug => 1,
 			    });
+
+
 my ($id_novedad) = $input->param('id');
 my ($novedad) = C4::AR::Novedades::getNovedad($id_novedad);
 $t_params->{'novedad'} = $novedad;

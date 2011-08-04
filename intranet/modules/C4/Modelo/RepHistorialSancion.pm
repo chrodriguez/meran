@@ -98,6 +98,15 @@ sub getFecha_formateada{
     return ( C4::Date::format_date($self->fecha, $dateformat) );
 }
 
+sub getTimestamp{
+    #devuelve la fecha formateada del timestamp
+    my ($self)      = shift;
+    my $timestamp   = $self->timestamp;
+    my @array_temp  = split(/T/, $timestamp);
+    my $dateformat = C4::Date::get_date_format();
+    return (C4::Date::format_date(@array_temp[0], $dateformat));
+}
+
 sub getFecha{
     my ($self) = shift;
     return ($self->fecha);
@@ -199,4 +208,3 @@ sub agregar {
 }
 
 1;
-

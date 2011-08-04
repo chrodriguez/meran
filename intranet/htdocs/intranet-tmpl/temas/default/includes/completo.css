@@ -8,6 +8,42 @@ body,html {
 	background-color: #EAEBED;
 }
 
+.novedad_contacto{
+	min-width: 500px;
+}
+
+.loading_items{
+    margin: 0 auto;
+    width: 300px;   
+}
+
+#jqpageflow-block{
+    width: 600px;
+    clear: both;
+    margin: 0 auto;
+    display: none;
+}
+
+#jqpageflow-block img{
+    clear: both;
+}
+
+.jqpageflow-loader {
+    position: relative; 
+    display: none; 
+    right: 1%; 
+    z-index: 10001; 
+    bottom: 0;
+}
+
+.jqpageflow-loadertext {
+    font-size: 18px; 
+    width: 100%;  
+    text-align: center; 
+    position: relative; 
+}
+
+
 .info_paginador{
     margin: 0 auto;
     width: 40%;
@@ -15,6 +51,10 @@ body,html {
 	
 .focusInput {
     background: white;
+}
+
+.close_modal_link{
+    margin: 0 auto;	
 }
 
 .textInput {
@@ -25,6 +65,11 @@ fieldset {
 	clear: both;
 }
 
+#e_docs_upload_form{
+	float: right;
+	width: 200px;
+	text-align: justify;
+}
 
 fieldset {
   background-color:#FCFFFF;
@@ -83,7 +128,7 @@ fieldset legend {
   padding-right:5px;
   padding-top:2px;
   position:relative;
-  top:-12px;
+  top:0px;
 }
 
 .header-bottom{
@@ -332,7 +377,7 @@ body {
 #marco_principal {
 	background: #EAEBED;
 	float: left;
-    width: 81%;
+    width: 76%;
 	min-height: 420px;
 	margin-top: 39px;
 	height: auto;
@@ -342,8 +387,8 @@ body {
 
 
 .container_test{
-    height: 93.2%;
-    min-width: 1264px;
+    height: 86%;
+    min-width: 1023px;
 }
 
 
@@ -1511,13 +1556,13 @@ fieldset.accionesUsuarios {
 	font-family: Arial, Helvetica, sans-serif;
 	padding-right: 20px;
 /* Nuevo, con el acabado abrazador. Si no gusta, sacar desde acá para abajo */ 
-	background: url("images/fondo_label.png") repeat-x scroll 0 0 transparent;
-    height: 36px;
-    max-width: 427;
-	margin-left: -17px;
-    margin-top: 9px;
-    padding-left: 15px;
-    top:0.9px;  	
+/* 	background: url("images/fondo_label.png") repeat-x scroll 0 0 transparent; */
+/*     height: 36px; */
+/*     max-width: 427; */
+/* 	margin-left: -17px; */
+/*     margin-top: 9px; */
+/*     padding-left: 15px; */
+/*     top:0.9px;  	 */
 }
 
 .titulo_legend_resaltado {
@@ -1648,6 +1693,7 @@ input.file {
 
 .datos_tabla td a{
     color: #35414F;
+    margin-left: 2px;
 }
 
 .datos_tabla {
@@ -1692,7 +1738,7 @@ input.file {
 }
 
 .contenedor_paginador {
-	width: 45%;
+	width: 48%;
 	margin: 0 auto;
 	padding: 4px;
 }
@@ -4255,7 +4301,8 @@ form.signin .subchck .remember {
 }
 #top-bar .active-links {
     min-width: 250px;
-    position: absolute;
+/*     TODO antes era absolute, guarda */
+    position: fixed;
     right: 0;
     top: 0;
     float: right;
@@ -4621,6 +4668,22 @@ background-color:#E7F3FA;
     -khtml-user-select: none; /* Webkit (Safari, Chrome) */
 }
 
+.impar.marked:hover {
+    background:         #5C82B5;
+    color:              #000000;
+    user-select:        none; /* CSS3 */
+    -moz-user-select:   none; /* Gecko (Firefox) */
+    -khtml-user-select: none; /* Webkit (Safari, Chrome) */
+}
+
+.par.marked:hover {
+    background:         #5C82B5;
+    color:              #000000;
+    user-select:        none; /* CSS3 */
+    -moz-user-select:   none; /* Gecko (Firefox) */
+    -khtml-user-select: none; /* Webkit (Safari, Chrome) */
+}
+
 .par.marked {
     background:     #FFCC99;
     color:          #000000;
@@ -4653,9 +4716,31 @@ font-size:10pt;
 	display: none;
 }
 
+.ejemplares_grupo{
+	text-align: center;
+	background: #99CC66;
+}
 
+.fancybox_twitter{
+  width: 350px;
+}
 /* Estilo mensaje de contacto (mainpage) */
 
 /*.msj_main{
     color:#819FF7;
 }*/
+
+.charleft{
+      width:300px;
+}
+
+
+
+.textareaCounterwarning{
+      color:red;
+}
+
+.textareaCounterExceeded{
+      color:red;
+}
+

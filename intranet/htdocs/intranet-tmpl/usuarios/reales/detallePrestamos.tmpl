@@ -1,3 +1,6 @@
+<script type="text/javascript" language="javascript" charset="utf-8">
+checkTr();
+</script>
 [% IF circularDesdeDetalleUsuario == 0 %]
     [% INCLUDE 'partials/usuarios/detallePrestamos-noCirculation.inc' %]
 [% ELSE %]
@@ -118,7 +121,7 @@
 		                    ) ;
 		        [% END %]
 			[% END %]	
-			[% IF algunoSeRenueva %]
+			[% IF algunoSeRenueva>0 && vencidos == 0 %]
 		        [% PERL %]
 		            print C4::AR::Filtros::to_Icon(  
 		                                                boton   => "icon_renovar",

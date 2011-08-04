@@ -177,8 +177,9 @@ sub getNivel1FromId1{
 =head2 
 sub getNivel1Completo
 
-Se recupera el nivel 1 completo
+Se recupera TODOS los nivel 1
 =cut
+# FIXME getAllNivel1
 sub getNivel1Completo {
     my ($db) = @_;
 

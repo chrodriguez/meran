@@ -45,7 +45,11 @@
                        <label for="contenido">[% "Contenido" | i18n %]</label>
                           <textarea id="contenido" name="contenido" style="width: 88.3%" >[%novedad.getContenido %]</textarea>
                     </li>
-
+                    [% IF twitter_enabled %]
+                      <li class="sub_item">     
+                          <input type="checkbox" id="check_publicar" name="check_publicar" value="publicar">[% " Publicar en Twitter" | i18n %]
+                      </li>
+                    [% END %]
                         <input type="hidden" id="token" name="token" value="[% token %]">
                         [% IF editing %]
                             [% PERL %]
@@ -66,7 +70,9 @@
                                                 ) ;
                             [% END %]
                         [% END %]
-                </ul>
+                        
+                  </ul>
+              
             </form>
         </div>
 </fieldset>

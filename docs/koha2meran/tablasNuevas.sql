@@ -595,7 +595,7 @@ CREATE TABLE IF NOT EXISTS `pref_tabla_referencia` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `nombre_tabla` varchar(40) NOT NULL,
   `alias_tabla` varchar(20) NOT NULL default '0',
-  `campo_busqueda` varchar(255) NOT NULL default 'jmmj',
+  `campo_busqueda` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `campo_busqueda` (`campo_busqueda`)
 ) ENGINE=MyISAM ;

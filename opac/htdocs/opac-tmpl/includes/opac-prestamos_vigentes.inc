@@ -1,8 +1,13 @@
+<div id="detallePrestamos">
+
 [% USE HTML %]
-[% IF cantidad %]
-    <div class="resultados_consulta">[% "Cantidad de pr&eacute;stamos vigentes:" | i18n %]&nbsp;[% cantidad %]</div>
+[% IF cantidad_prestamos %]
+
+    <div class="resultados_consulta">[% "Cantidad de pr&eacute;stamos vigentes:" | i18n %]&nbsp;[% cantidad_prestamos %]</div>
 
     <div class="contenedor_paginador">[% paginador %]</div>
+
+
 
     <table id="tablaHistorial" class="tablaHistorial tabla_datos" cellspacing="0" cellpadding="4" style="width:98%; text-align:center; border: 1;">
         <tr class="tablaResultadoTitulo" >
@@ -11,6 +16,7 @@
             <th>[% "Edici&oacute;n" | i18n %]</th>
             <th>[% "Fecha de Pr&eacute;stamo" | i18n %]</th>
             <th>[% "Fecha de Vencimiento" | i18n %]</th>
+            <th>&nbsp;</th>
         </tr>
         <!-- ESTE LOOP MUESTRA LOS PRESTAMOS -->
         [% FOREACH prestamo IN prestamos %]
@@ -43,11 +49,26 @@
                       [% prestamo.getFecha_vencimiento_formateada %]
                   </td>
 
+                  <td align=center>
+                  [% IF prestamo.sePuedeRenovar %]
+		    [% PERL %]
+				print C4::AR::Filtros::to_Icon(     text    => "[% 'Renovar' | i18n %]",
+								    boton   => "icon_renovar",                                                            
+								    onClick => "renovar('[% prestamo.getId_prestamo %]');",
+								    title   => "[% 'Renovar' | i18n %]",
+								    alternClass => "botonCentradoTabla"
+					) ;
+		    [% END %]
+                  [% END %]
+                  </td>
             </tr>
         [% END %]
 
     </table>
+
 [% ELSE %]
     <h1> [% 'Ud. no tiene pr&eacute;stamos vigentes.' | i18n %] </h1>
 
 [% END %]
+
+</div>

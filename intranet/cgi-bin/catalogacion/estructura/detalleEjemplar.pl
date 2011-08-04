@@ -113,12 +113,12 @@ else {
         $t_params->{'nivel3'} = $nivel3;
     }
     
-    # recibimos el id1 para armar el detalle completo
-    my $id1     = $input->param('id1');
-    if ($id1) {
-        my $socio_reserva               = C4::AR::Reservas::getSocioFromReserva($nivel3->getId3());
-        $t_params->{'socio_reserva'}    = $socio_reserva; 
-    }
+    #traemos el socio de la reserva, si es que existe
+    my $socio_reserva               = C4::AR::Reservas::getSocioFromReserva($nivel3->getId3());
+    $t_params->{'socio_reserva'}    = $socio_reserva; 
+    
+    C4::AR::Debug::debug("socio reserva : ".$socio_reserva);
+
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

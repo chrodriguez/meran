@@ -7,19 +7,27 @@ __PACKAGE__->meta->setup(
     table   => 'cat_ref_tipo_nivel3',
 
     columns => [
-        id_tipo_doc           => { type => 'varchar', length => 4, not_null => 1 },
-        nombre                => { type => 'varchar', length => 255, not_null => 1 },
-        agregacion_temp       => { type => 'varchar', length => 250 },
+        id                      => { type => 'serial', length => 11, not_null => 1 },
+        id_tipo_doc             => { type => 'varchar', length => 4, not_null => 1 },
+        nombre                  => { type => 'varchar', length => 255, not_null => 1 },
+        agregacion_temp         => { type => 'varchar', length => 250 },
 
     ],
 
-    primary_key_columns => [ 'id_tipo_doc' ],
+    primary_key_columns => [ 'id' ],
+    unique_key => [ 'id_tipo_doc' ],
+    
 );
 
 use C4::Modelo::PrefUnidadInformacion;
 use C4::Modelo::CatRefTipoNivel3::Manager;
 use Text::LevenshteinXS;
 
+
+sub getId{
+    my ($self) = shift;
+    return ($self->id);
+}
 
 sub getId_tipo_doc{
     my ($self) = shift;

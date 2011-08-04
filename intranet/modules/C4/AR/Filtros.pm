@@ -120,17 +120,7 @@ y hacer la traduccion del mismo, obteniedola del binario correspondiente, por ej
 =cut
 sub i18n {
 	my ($text)      = @_;
-# TODO se paso todo a auth => checkauth
-
-# 	my $session     = CGI::Session->load();#si esta definida
-# 	my $type        = $session->param('type') || 'opac';
-#     my $locale      = C4::AR::Auth::getUserLocale();
-# 	my $setlocale   = setlocale(LC_MESSAGES, $locale); #puede ser LC_ALL
-
-# 	Locale::Maketext::Gettext::Functions::bindtextdomain($type, C4::Context->config("locale"));
-# 	Locale::Maketext::Gettext::Functions::textdomain($type);
-# 	Locale::Maketext::Gettext::Functions::get_handle($locale);
-
+# La inicializacion se paso toda a auth => checkauth
  	return __($text);
 }
 
@@ -241,6 +231,44 @@ sub to_Icon{
     return $button;
 }
 
+sub show_componente {
+    my (%params_hash_ref) = @_;
+
+    my $campo       = $params_hash_ref{'campo'};
+    my $subcampo    = $params_hash_ref{'subcampo'};
+    my $dato        = $params_hash_ref{'dato'};
+    my $itemtype    = $params_hash_ref{'itemtype'};
+    my $type        = $params_hash_ref{'type'};
+
+    if($type eq "INTRA"){
+        if(($campo eq "773")&&($subcampo eq "a")){
+            my $catRegistroMarcN2 = C4::AR::Nivel2::getNivel2FromId2($dato);
+    
+# TODO FIXEDDDDDDDDDD en el futuro esto se debe levantar de la configuracion
+            if($catRegistroMarcN2){
+                
+                my %params_hash;
+                my $text        = $catRegistroMarcN2->nivel1->getTitulo()." (".$catRegistroMarcN2->nivel1->getAutor().") - ".$catRegistroMarcN2->toString; 
+                %params_hash    = ('id1' => $catRegistroMarcN2->getId1());
+                my $url         = C4::AR::Utilidades::url_for("/catalogacion/estructura/detalle.pl", \%params_hash);
+
+                return C4::AR::Filtros::link_to( text => $text, url => $url );
+            }
+        }
+    } else {
+# TODO FIXEDDDDDDDDDD en el futuro esto se debe levantar de la configuracion
+        if(($campo eq "773")&&($subcampo eq "a")){
+            my $catRegistroMarcN2 = C4::AR::Nivel2::getNivel2FromId2($dato);
+    
+            if($catRegistroMarcN2){
+                return $catRegistroMarcN2->nivel1->getTitulo()." (".$catRegistroMarcN2->nivel1->getAutor().") - ".$catRegistroMarcN2->toString; 
+            }
+        }
+    }
+
+    return $dato;
+}
+
 sub ayuda_marc{
 
     my $icon= to_Icon(  
@@ -338,11 +366,11 @@ sub getComboMatchMode {
     my $html= '';
 
     $html .="<select id='match_mode' tabindex='-1'>";
-    $html .="<option value='SPH_MATCH_PHRASE'>Coincidir con la frase exacta</option>";
-    $html .="<option value='SPH_MATCH_ANY'>Coincidir con cualquier palabra</option>";
-    $html .="<option value='SPH_MATCH_BOOLEAN'>Coincidir con valores booleanos (&), OR (|), NOT (!,-)</option>";
-    $html .="<option value='SPH_MATCH_EXTENDED' selected='selected'>Coincidencia Extendida</option>";
-    $html .="<option value='SPH_MATCH_ALL'>Coincidir con todas las palabras</option>";
+    $html .="<option value='SPH_MATCH_PHRASE'>".i18n("Coincidir con la frase exacta")."</option>";
+    $html .="<option value='SPH_MATCH_ANY'>".i18n("Coincidir con cualquier palabra")."</option>";
+    $html .="<option value='SPH_MATCH_BOOLEAN'>".i18n("Coincidir con valores booleanos (&), OR (|), NOT (!,-)")."</option>";
+    $html .="<option value='SPH_MATCH_EXTENDED' selected='selected'>".i18n("Coincidencia Extendida")."</option>";
+    $html .="<option value='SPH_MATCH_ALL'>".i18n("Coincidir con todas las palabras")."</option>";
     $html .="</select>";
 
     return $html;
@@ -390,6 +418,7 @@ sub getComboValidadores {
 
     return $html;
 }
+
 
 END { }       # module clean-up code here (global destructor)
 

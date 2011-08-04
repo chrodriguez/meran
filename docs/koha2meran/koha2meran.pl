@@ -267,11 +267,15 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
         if($_->{'campoTabla'} eq 'itemtype'){ $dn2->{'valor'}='cat_ref_tipo_nivel3@'.$biblioitem->{$_->{'campoTabla'}}; }
         elsif($_->{'campoTabla'} eq 'idLanguage'){ $dn2->{'valor'}='ref_idioma@'.$biblioitem->{$_->{'campoTabla'}}; }
         elsif($_->{'campoTabla'} eq 'idCountry'){ $dn2->{'valor'}='ref_pais@'.$biblioitem->{$_->{'campoTabla'}}; }
-# LA Localidad pasa como texto
-#         elsif($_->{'campoTabla'} eq 'place'){ #Esto no se puede pasar sin buscar la referencia
-#                      my $idLocalidad= buscarLocalidadParecida($biblioitem->{$_->{'campoTabla'}});
-#                       $dn2->{'valor'}='ref_localidad@'.$idLocalidad; 
-#               } 
+	  # LA Localidad pasa como texto
+        elsif($_->{'campoTabla'} eq 'place'){ #Esto no se puede pasar sin buscar la referencia
+                      my $idLocalidad= buscarLocalidadParecida($biblioitem->{$_->{'campoTabla'}});
+                       if($idLocalidad){
+			    $dn2->{'valor'}='ref_localidad@'.$idLocalidad; 
+		       } else {
+			    $dn2->{'valor'}=$biblioitem->{$_->{'campoTabla'}};
+		      }
+        }
         elsif($_->{'campoTabla'} eq 'idSupport'){ $dn2->{'valor'}='ref_soporte@'.$biblioitem->{$_->{'campoTabla'}}; }
         elsif($_->{'campoTabla'} eq 'classification'){ $dn2->{'valor'}='ref_nivel_bibliografico@'.$biblioitem->{$_->{'campoTabla'}}; }
           else { $dn2->{'valor'}=$biblioitem->{$_->{'campoTabla'}}; }
@@ -875,16 +879,32 @@ sub traduccionEstructuraMarc {
       {
             my $refusuario=$dbh->prepare("UPDATE $tabla  SET nro_socio='".$usuario->{'nro_socio'}."' WHERE borrowernumber='". $usuario->{'id_socio'} ."' ;");
             $refusuario->execute();
+      
+	    if ($tabla eq 'rep_historial_circulacion'){
+	      #Estas tablas tienen responsable
+		my $refresponsable=$dbh->prepare("UPDATE $tabla  SET responsable='".$usuario->{'nro_socio'}."' WHERE responsable='". $usuario->{'id_socio'} ."' ;");
+		$refresponsable->execute();
+	    }
+
       }
 
     $num_usuario++;
     }
 
-
+    #LIMPIAMOS!!!
     foreach $tabla (@refusrs)
     {
       my $refusr=$dbh->prepare("ALTER TABLE $tabla DROP borrowernumber;");
       $refusr->execute();
+
+      my $refclean=$dbh->prepare("DELETE FROM $tabla WHERE nro_socio=0 OR nro_socio='';");
+      $refclean->execute();
+
+	    if(($tabla eq 'rep_historial_sancion')||($tabla eq 'rep_historial_circulacion')){
+	      #Estas tablas tienen responsable
+	      my $refclean2=$dbh->prepare("DELETE FROM $tabla WHERE responsable=0 OR responsable='';");
+	      $refclean2->execute();
+	    }
     }
 
     }
@@ -1090,7 +1110,7 @@ sub procesarAnaliticas {
 		my $relacion;
         	$relacion->{'campo'}='773';
         	$relacion->{'subcampo'}='a';
-        	$relacion->{'valor'}=$analitica->{'id2'};
+        	$relacion->{'valor'}='cat_registo_marc_n2@'.$analitica->{'id2'};
                 $relacion->{'simple'}=1;
                 if (($relacion->{'valor'} ne '') && ($relacion->{'valor'} ne null)){push(@analitica_n2,$relacion);}
 

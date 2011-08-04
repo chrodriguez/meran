@@ -1,0 +1,27 @@
+		<script>
+		
+		    $(document).ready(function(){
+		        checkedAll("select_all"+"[% id2 %]", "checkEjemplares"+"[% id2 %]");
+		
+		    });
+		
+		</script>
+		
+		<fieldset>
+		    <legend class="trigger trigger_2_[% id2 %] click">[% "Anal&iacute;ticas del grupo" | i18n %] [% id2 %]</legend>
+		    <div id="ejemplaresDelGrupo[% id2 %]" class="ejemplaresDelGrupo[% id2 %]" >
+                    <ul class="listado_sin_margen">
+                        [% FOREACH nivel1_analiticas_array %]
+                            [% FOREACH nivel1_analitica %]
+                                [% IF liblibrarian %]
+                                    [% IF dato %]
+                                    <li> [% liblibrarian %]: <strong>[% dato %]</strong></li>
+                                    [% END %]
+                                [% END %]
+                            [% END %] <!-- END FOREACH nivel1_analiticas_array -->
+                            
+                        [% END %]  <!-- END FOREACH nivel2_analiticas_array -->      
+                    </ul>
+		    </div> <!--end <div id="ejemplaresDelGrupo -->
+		</fieldset>
+		<script type="text/javascript">makeToggle('ejemplaresDelGrupo[% id2 %]','trigger_2_[% id2 %]',null,false);</script>

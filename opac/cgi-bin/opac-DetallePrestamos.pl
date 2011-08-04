@@ -22,22 +22,22 @@ my ($template, $session, $t_params)= get_template_and_user({
 								debug => 1,
 			     });
 
+my $ini = $input->param('page') || 0;
+my $orden = 'titulo';
+my $url = C4::AR::Utilidades::getUrlPrefix()."/opac-prestamos_vigentes.pl?token=".$input->param('token');
+my $nro_socio = C4::AR::Auth::getSessionNroSocio($session);
+my ($ini,$pageNumber,$cantR)= &C4::AR::Utilidades::InitPaginador($ini);
+
+my ($cantidad,$prestamos)=C4::AR::Prestamos::getHistorialPrestamosVigentesParaTemplate($nro_socio,$ini,$cantR,$orden);
+
+$t_params->{'paginador'}= C4::AR::Utilidades::crearPaginadorOPAC($cantidad, $cantR, $pageNumber,$url,$t_params);
+$t_params->{'prestamos'}= $prestamos;
+$t_params->{'cantidad_prestamos'}= $cantidad;
 
 
-my $obj=$input->param('obj');
-$obj=C4::AR::Utilidades::from_json_ISO($obj);
 
-my $prestamos = C4::AR::Prestamos::obtenerPrestamosDeSocio($session->param('userid'));
-my $vencidos=0;
-foreach my $prestamo (@$prestamos) {
-if($prestamo->estaVencido){$vencidos++;}
-}
-
-$t_params->{'vencidos'}= $vencidos;
-$t_params->{'PRESTAMOS'}= $prestamos;
-$t_params->{'prestamos_cant'}= scalar(@$prestamos);
-
-$t_params->{'CirculationEnabled'}= C4::AR::Preferencias::getValorPreferencia("circulation");
-
+$t_params->{'content_title'}= C4::AR::Filtros::i18n("Pr&eacute;stamos Vigentes");
+$t_params->{'partial_template'}= "opac-prestamos_vigentes.inc";
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+;

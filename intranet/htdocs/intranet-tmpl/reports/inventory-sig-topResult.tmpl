@@ -7,9 +7,20 @@
 </p>
       
       [% IF cantidad > 0 %]
+        <form id="tablaEjemplares" name="tablaEjemplares" action="[% url_prefix %]/catalogacion/barcode_gen.pl" method="post">
             <table id="tablaResult" class="datos_tabla" border="0" cellspacing="0" cellpadding="0" width="100%">
-                <tr class="titulo_tabla_resultado click">
-
+                 <tr class="titulo_tabla_resultado click">
+                    <th>
+                          [% PERL %]
+                              print C4::AR::Filtros::to_Icon(   
+                                                                      boton   => "icon_seleccionar",
+                                                                      id      => "select_all",
+                                                                      title   => "[% 'Seleccionar todos' | i18n %]",
+                                                                      alternClass => "botonCentrado",
+                                                                      
+                                          ) ;
+                          [% END %]
+                    </th>
                     <th onClick="ordenar('nro_inventario');">[% "C&oacute;digo de barra" | i18n %]</th>
                     <th onClick="ordenar('signatura_topografica');">[% "Signatura Topogr&aacute;fica" | i18n %]</th>
                     <th onClick="ordenar('autor');">[% "Autor" | i18n %]</th>
@@ -18,12 +29,17 @@
                     <th onClick="ordenar('edicion');">[% "Edici&oacute;n" | i18n %]</th>
                     <th onClick="ordenar('ui_origen');">[% "UI Origen" | i18n %]</th>
                     <th onClick="ordenar('ui_poseedora');">[% "UI Poseedora" | i18n %]</th>
-
+                    <th onClick="ordenar('ui_poseedora');">[% "Acciones" | i18n %]</th>
                 </tr>
        [% END %]        
+                
                 [% FOREACH res IN results %]
                         <tr >
-                                <td  align="center">
+                                <td>
+                                    <input type="checkbox" id="checkEjemplares" name="checkEjemplares" class="icon_seleccionar" value="[% res.nivel3.getId3 %]">
+                               
+                              </td>
+                                <td align="center">
                                         [% res.nivel3.codigo_barra%]
                                 </td>
                                 <td align="center">
@@ -54,14 +70,32 @@
                                 <td align="center">
                                         [% res.nivel3.getId_ui_poseedora %]
                                 </td>
+                                <td>
+                                [% PERL %]
+                                          print C4::AR::Filtros::to_Icon(        boton   => "icon_exportar",
+                                                                                onClick => "generarEtiqueta('[% res.nivel3.getId3 %]','[% res.nivel3.codigo_barra %]');",
+                                                                                title   => "[% 'Generar etiqueta de ejemplar' | i18n %]"
+                                          ) ;
+                                [% END %]
+                                </td>
                         </tr>
 
                 [% END %]
             </table>
-  
+           </form>
       [% IF cantidad > 0 %]
-
-            <div class="buttonContainerHorizontal" style="margin-top:10px;">
+              <div class="horizontal">[% "Para los elementos que est&aacute;n marcados:" | i18n %]</div>
+         
+              [% PERL %]
+                      print C4::AR::Filtros::to_Icon(   
+                                                          boton   => "icon_exportar",
+                                                          onClick => "generarVariasEtiquetas();",
+                                                          title   => "[% 'Generar etiquetas de ejemplares' | i18n %]",
+                                                         
+                              ) ;
+              [% END %]
+  
+            <div class="buttonContainerHorizontal" style="margin-top:30px; clear:left;">
           
                 [% PERL %]
                         print C4::AR::Filtros::to_Button( 

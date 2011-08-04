@@ -110,7 +110,7 @@ sub setDireccion{
 sub getAlt_direccion{
     my ($self) = shift;
 
-    return (C4::AR::Utilidades::trim($self->direccion));
+    return (C4::AR::Utilidades::trim($self->alt_direccion));
 }
     
 sub setAlt_direccion{

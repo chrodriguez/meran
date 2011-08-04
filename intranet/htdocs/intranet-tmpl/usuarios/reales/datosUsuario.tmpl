@@ -1,6 +1,5 @@
 [% INCLUDE "intranet-top.inc" %] 
 
-
 <script type="text/javascript">
       TYPE_FILE= "picture";
 </script>
@@ -15,7 +14,8 @@
 
 <script type="text/javascript">
 
-var objAH;
+//muchos objetos AJAX para que funcionen los paginadores a la vez en el mismo tmpl
+var objAH,objAHSanciones,objAHPrestamos,objAHReservas;
 NRO_SOCIO_AUTH = '[% nro_socio %]';
 
 //*************************************Para manejar el historial de prestamos***********************************
@@ -27,15 +27,29 @@ function changePage(ini){
 	objAH.changePage(ini);
 }
 
+//lo mismo con los changePage, uno por cada objeto
+function changePagePrestamos(ini){
+	objAHPrestamos.changePage(ini);
+}
+
+function changePageReservas(ini){
+	objAHReservas.changePage(ini);
+}
+
+function changePageSanciones(ini){
+	objAHSanciones.changePage(ini);
+}
+
+
 function mostrarHistorialDePrestamos(){
-	objAH               = new AjaxHelper(updateMostrarHistorialDePrestamos);
-	objAH.debug         = true;
-    objAH.cache         = true;
-    objAH.showOverlay   = true;
-	objAH.url=URL_PREFIX+'/usuarios/reales/historialPrestamos.pl';
-	objAH.nro_socio     = USUARIO.ID;
-	objAH.funcion       = 'changePage';
-	objAH.sendToServer();
+	objAHPrestamos               = new AjaxHelper(updateMostrarHistorialDePrestamos);
+	objAHPrestamos.debug         = true;
+    objAHPrestamos.cache         = true;
+    objAHPrestamos.showOverlay   = true;
+	objAHPrestamos.url           = URL_PREFIX+'/usuarios/reales/historialPrestamos.pl';
+	objAHPrestamos.nro_socio     = USUARIO.ID;
+	objAHPrestamos.funcion       = 'changePagePrestamos';
+	objAHPrestamos.sendToServer();
 }
 
 function updateMostrarHistorialDePrestamos(responseText){
@@ -45,14 +59,14 @@ function updateMostrarHistorialDePrestamos(responseText){
 }
 
 function mostrarHistorialDeReservas(){
-    objAH               = new AjaxHelper(updateMostrarHistorialDeReservas);
-    objAH.debug         = true;
-    objAH.cache         = true;
-    objAH.showOverlay   = true;
-    objAH.url=URL_PREFIX+'/usuarios/reales/historialReservas.pl';
-    objAH.nro_socio     = USUARIO.ID;
-    objAH.funcion       = 'changePage';
-    objAH.sendToServer();
+    objAHReservas               = new AjaxHelper(updateMostrarHistorialDeReservas);
+    objAHReservas.debug         = true;
+    objAHReservas.cache         = true;
+    objAHReservas.showOverlay   = true;
+    objAHReservas.url           = URL_PREFIX+'/usuarios/reales/historialReservas.pl';
+    objAHReservas.nro_socio     = USUARIO.ID;
+    objAHReservas.funcion       = 'changePageReservas';
+    objAHReservas.sendToServer();
 }
 
 function updateMostrarHistorialDeReservas(responseText){
@@ -66,14 +80,14 @@ function updateMostrarHistorialDeReservas(responseText){
 //*************************************Para manejar el historial de sanciones***********************************
 
 function mostrarHistorialDeSanciones(){
-    objAH               = new AjaxHelper(updateMostrarHistorialDeSanciones);
-    objAH.debug         = true;
-    objAH.cache         = true;
-    objAH.showOverlay   = true;
-    objAH.url=URL_PREFIX+'/usuarios/reales/historialSanciones.pl';
-    objAH.nro_socio     = USUARIO.ID;
-    objAH.funcion       = 'changePage';
-    objAH.sendToServer();
+    objAHSanciones               = new AjaxHelper(updateMostrarHistorialDeSanciones);
+    objAHSanciones.debug         = true;
+    objAHSanciones.cache         = true;
+    objAHSanciones.showOverlay   = true;
+    objAHSanciones.url           = URL_PREFIX+'/usuarios/reales/historialSanciones.pl';
+    objAHSanciones.nro_socio     = USUARIO.ID;
+    objAHSanciones.funcion       = 'changePageSanciones';
+    objAHSanciones.sendToServer();
 }
 
 function updateMostrarHistorialDeSanciones(responseText){
@@ -140,7 +154,7 @@ function updateInfoCancelacion(responseText){
 
 function detalleUsuario(){
 	objAH               = new AjaxHelper(updateDetalleUsuario);
-	objAH.url=URL_PREFIX+'/usuarios/reales/detalleUsuario.pl';
+	objAH.url           = URL_PREFIX+'/usuarios/reales/detalleUsuario.pl';
 	objAH.debug         = true;
     objAH.showOverlay   = true;
 	objAH.nro_socio     = USUARIO.ID;
@@ -156,7 +170,7 @@ function updateDetalleUsuario(responseText){
 
 function prestamosInterBibliotecarios(){
     objAH               = new AjaxHelper(updatePrestamosInterBibliotecarios);
-    objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
+    objAH.url           = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
     objAH.debug         = true;
     objAH.showOverlay   = true;
     objAH.nro_socio     = USUARIO.ID;
@@ -183,7 +197,7 @@ function updatePrestamosInterBibliotecarios(responseText){
 
 function generarLibreDeuda(){
     objAH               = new AjaxHelper(updateGenerarLibreDeuda);
-    objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
+    objAH.url           = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
     objAH.debug         = true;
     objAH.showOverlay   = true;
     objAH.nro_socio     = USUARIO.ID;
@@ -205,7 +219,7 @@ function updateGenerarLibreDeuda(responseText){
 function detallePrestamos(socio){
 
 	objAH               = new AjaxHelper(updateDetallePrestamos);
-	objAH.url=URL_PREFIX+'/usuarios/reales/detallePrestamos.pl';
+	objAH.url           = URL_PREFIX+'/usuarios/reales/detallePrestamos.pl';
     objAH.showOverlay   = true;
 	objAH.nro_socio     = socio;
 	objAH.sendToServer();
@@ -221,7 +235,7 @@ function updateDetallePrestamos(responseText){
 function detalleReservas(socio){
 
 	objAH               = new AjaxHelper(updateDetalleReservas);
-	objAH.url=URL_PREFIX+'/usuarios/reales/detalleReservas.pl';
+	objAH.url           = URL_PREFIX+'/usuarios/reales/detalleReservas.pl';
     objAH.showOverlay   = true;
 	objAH.nro_socio     = socio;
 	objAH.sendToServer();
@@ -256,7 +270,7 @@ function detalleSanciones(socio){
 
     objAH               = new AjaxHelper(updateDetalleSanciones);
     objAH.showOverlay   = true;
-    objAH.url=URL_PREFIX+'/usuarios/reales/detalleSanciones.pl';
+    objAH.url           = URL_PREFIX+'/usuarios/reales/detalleSanciones.pl';
     objAH.nro_socio     = socio;
     objAH.sendToServer();
 }
@@ -318,7 +332,7 @@ $(document).ready(function(){
 
     <div>
         <fieldset>
-            <legend class="titulo_legend_resaltado trigger2 click titulo_legend" title='[% "click para acceder al Historial de Reservas" | i18n %]'>
+            <legend class="titulo_legend_resaltado trigger2 click titulo_legend" title='[% "click para acceder al Historial de Sanciones" | i18n %]'>
                             [% "Historial de Sanciones" | i18n %]
             </legend>   
             <!-- DETALLE DEL HISTORICO DE SANCIONES DEL USUARIO -->

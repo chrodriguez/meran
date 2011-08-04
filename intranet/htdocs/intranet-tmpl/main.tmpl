@@ -2,6 +2,11 @@
 
 [% INCLUDE  'AutocompleteHelper.inc'  %]
 
+<link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/css/fancybox/jquery.fancybox.css">
+<script src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js"></script>
+<script src="/includes/jquery/jquery.charCount.js"></script>
+
+
 <script type="text/javascript">
 	$(document).ready(function() {
 		CrearAutocompleteCatalogo({ 
@@ -12,33 +17,32 @@
 
 
         $('.fancy_link').fancybox({
-            'frameWidth':   600,
-            'frameHeight':  500,
         });
 
+        mostrarNovedades();
       });
-
-    $(document).ready(function() {
-          mostrarNovedades();
-        
-    });
   
+
     function mostrarNovedades(){
             objAH               = new AjaxHelper(updateActualizarTabla);
             objAH.debug         = true;
             objAH.url           = URL_PREFIX+'/novedadesIntra.pl';
-
             objAH.tipoAccion    = "MOSTRAR_NOVEDADES";
             objAH.sendToServer();
-        }
+    }
 
     function updateActualizarTabla(responseText){
         $("#resultNovedades").html(responseText);
         $('.fancy_link').fancybox({
-            'frameWidth':   600,
-            'frameHeight':  500,
+                        onStart:function(){
+                              $('#state').css('display','');
+                        },
+                        onComplete:function(){
+                              $('#state').css('display','none');     
+                        }
         });
     }
+
 </script>
 
 
@@ -117,6 +121,15 @@
                         
                       </li>
                   </ul>
-    </fieldset>
+    </fieldset> 
 [% END %]
+
+[% IF twitter_enabled %]
+
+<a class="fancy_link" href="[% url_prefix %]/admin/publicar_twitter.pl?token=[% token %]">
+                               Publicar en Twitter
+</a>
+
+[% END %]
+  
 [% INCLUDE 'intranet-bottom.inc' %]

@@ -365,6 +365,8 @@ sub desactivar{
     $self->persona->desactivar;
     $self->setActivo(0);
     $self->save();
+    
+    return (0,'U320')
 }
 
 sub getActivo{

@@ -89,16 +89,17 @@ sub getConfiguracionByOrder{
 
 
 sub getConfiguracion{
-    my ($perfil) = @_;
+    my ($db) = @_;
     my @filtros;
-
-    $perfil = $perfil || C4::AR::Preferencias::getValorPreferencia('perfil_opac');
+    $db = $db || C4::Modelo::CatVisualizacionOpac->new()->db;
+    
+    my $perfil = C4::AR::Preferencias::getValorPreferencia('perfil_opac');
 
     push ( @filtros, ( or   => [    id_perfil   => { eq => $perfil }, 
                                     id_perfil   => { eq => '0'     } ]) #PERFIL TODOS
                 );
 
-    my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros, sort_by => ('campo, subcampo'),);
+    my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros, sort_by => ('campo, subcampo'), db => $db,);
 
     return ($configuracion);
 }
@@ -187,10 +188,11 @@ sub getCamposXLike{
     Este funcion devuelve la configuracion de la estructura de catalogacion de un campo, subcampo, realizada por el usuario
 =cut
 sub getVisualizacionFromCampoSubCampo{
-    my ($campo, $subcampo, $perfil) = @_;
+    my ($campo, $subcampo, $perfil,$db) = @_;
 
+    $db = $db || C4::Modelo::CatVisualizacionOpac->new()->db;
     my @filtros;
-
+    
     push(@filtros, ( campo          => { eq => $campo } ) );
     push(@filtros, ( subcampo       => { eq => $subcampo } ) );
 #     push (@filtros,( tipo_ejemplar  => { eq => 'ALL' })); 
@@ -198,7 +200,8 @@ sub getVisualizacionFromCampoSubCampo{
 
 
     my $cat_estruct_info_array = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(  
-                                                                                query           =>  \@filtros, 
+                                                                                query           =>  \@filtros,
+                                                                                db              => $db, 
 
                                         );  
 

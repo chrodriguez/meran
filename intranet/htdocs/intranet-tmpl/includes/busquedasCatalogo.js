@@ -7,9 +7,9 @@ var shouldScroll    = true;
 function updateInfoBusquedas(responseText){
 
     $("#volver").hide();
-    $("#filtrosBusqueda").slideUp('slow');  
+    $("#filtrosBusqueda").slideUp('fast');  
     $('#resultBusqueda').html(responseText);
-    $("#resultBusqueda").slideDown("slow");
+    $("#resultBusqueda").slideDown("fast");
     zebra('datos_tabla');
     if (shouldScroll)
       scrollTo('resultBusqueda');

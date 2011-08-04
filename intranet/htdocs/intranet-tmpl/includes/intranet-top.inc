@@ -25,9 +25,12 @@
 <script type="text/javascript" src="/includes/jquery/modal/jquery.simplemodal.js"></script>
 <link media="screen" rel="stylesheet" href="/includes/jquery/modal/basic-min.css" type="text/css">
 <script type="text/javascript" src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
-<script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js"></script>
+<script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox.js"></script>
+<script type="text/javascript" src="/includes/jquery/fancybox/jquery.mousewheel.js"></script>
 <script type="text/javascript" src="/includes/jquery/jquery-ui-1.8.9.custom.min.js"></script>
 <script type="text/javascript" src="/includes/shiftSelectTr.js"></script>
+<script type="text/javascript" src="/includes/jquery/jquery.expander.js"></script>
+
 <script language="javascript" type="text/javascript">
 
 	function swap(id,src){
@@ -40,7 +43,6 @@
 		$('#formLang').submit();
 	}
 
-
 	function mainmenu(){
 	
 	    var options = {minWidth: 140};  
@@ -52,14 +54,11 @@
         };
 
         $('.accordion').accordion({
-
             autoHeight: false,
             navigation: true,
             clearStyle: true,
-            //icons: icons,
-            
-        });
-	    
+            //icons: icons, 
+        });  
 	}
 	
 	function searchesText(objectId){
@@ -73,37 +72,38 @@
         }
 	}
 	
-	function searchBoxFocus(object){
-		
+	function searchBoxFocus(object){	
         object.value='';
-
 	}
-
-    //seleccion con shift
-    $(function() {
-        $('tr').shiftClick();
-    }); 
+	
+    function checkTr(){
+        // click sobre los <tr>, para darle estilo
+        $('tr').click(function() {
+            var clase = $(this).attr('class').split(' ');
+            //solo los <tr> que tengan en el primer <td> un input checkbox
+            if($(this).children(':first-child').children(':first-child').attr('type') == 'checkbox'){
+                if(clase[1] == 'marked'){
+                    $(this).removeClass("marked"); 
+                    $(this).children(':first-child').children(':first-child').removeAttr('checked');
+                }else{
+                    $(this).addClass("marked");
+                    $(this).children(':first-child').children(':first-child').attr('checked','true');
+                }
+            }
+        });     
+        //seleccion con shift
+        $(function() {
+            $('tr').shiftClick();
+        }); 
+    }
 	
 	$(document).ready(function(){
 		mainmenu();
+		checkTr();
 		$('input[type="text"]').focus(function() {  
 		    $(this).removeClass("textInput").addClass("focusInput");  
 		});
         $('input[type="text"]').addClass("textInput");    
-
-        // click sobre el tr, para darle estilos
-        var lastSelected;
-        $('tr').click(function(e) {
-            var clase = $(this).attr('class').split(' ');
-            if(clase[1] == 'marked'){
-                $(this).removeClass("marked"); 
-                $(this).children(':first-child').children(':first-child').removeAttr('checked');
-            }else{
-                $(this).addClass("marked");
-                $(this).children(':first-child').children(':first-child').attr('checked','true');
-            }
-
-        });  	
     });
 </script>
 </head>
@@ -116,7 +116,9 @@
       </div>
   </noscript>
   
-  <div style="display: none;" id="ajax-indicator"><div><p>[% 'Cargando...' | i18n %]</p></div></div>
+  <div style="display: none;" id="ajax-indicator">
+    <div><p>[% 'Cargando...' | i18n %]</p></div>
+  </div>
   <div class="container_test">
 <!--  <div id="menu-container" class="main-header"> -->
   

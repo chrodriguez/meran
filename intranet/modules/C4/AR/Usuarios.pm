@@ -309,7 +309,7 @@ sub eliminarUsuario {
             $error = $error || 0;
             $cod_msg = $cod_msg || 'U320'; 
             $msg_object->{'error'}= $error;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> $cod_msg, 'params' => [$socio->getNro_socio]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> $cod_msg, 'params' => [($socio->getNro_socio)]} ) ;
         };
 
         if ($@){
@@ -317,7 +317,7 @@ sub eliminarUsuario {
             &C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U319', 'params' => [$socio->getNro_socio]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U319', 'params' => [($socio->getNro_socio)]} ) ;
         }
     }
 
@@ -431,7 +431,7 @@ sub _verificarPassword {
 sub cambiarPassword {
     my ($params)=@_;
 
-    my $msg_object;
+    my  $msg_object = C4::AR::Mensajes::create();
     my  $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
 
     if ($socio){
@@ -446,7 +446,6 @@ sub cambiarPassword {
 
         ($msg_object) = _verificarPassword($params);
     }else{
-        $msg_object = C4::AR::Mensajes::create();
         #Se setea error para el usuario
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U313', 'params' => [$params->{'nro_socio'}]} ) ;
@@ -1078,7 +1077,7 @@ sub _sendRecoveryPasswordMail{
 
     my %mail;
 
-    my $mail_from       = $mail{'mail_from'}  = C4::AR::Preferencias::getValorPreferencia("reserveFrom");
+    my $mail_from       = $mail{'mail_from'}  = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveFrom"));
     my $mail_to         = $mail{'mail_to'}    = $socio->persona->getEmail;
     my $mail_subject    = $mail{'mail_subject'}          = C4::AR::Filtros::i18n("Instrucciones para reestablecer su clave");
     

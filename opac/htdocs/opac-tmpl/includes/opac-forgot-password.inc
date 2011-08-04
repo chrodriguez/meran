@@ -13,7 +13,7 @@
 	         <fieldset>
 	           <legend>&nbsp;[% 'Ingrese sus datos de autenticaci&oacute;n' | i18n %]&nbsp;</legend>
 	           <p>
-	             <label for="user-id" class="top">[% 'E-mail , Nro. de socio &oacute; DNI' | i18n %]:</label><br />
+	             <label for="user-id" class="top">[% 'E-mail , Usuario &oacute; DNI' | i18n %]:</label><br />
 	             <input type="user-id" name="user-id" id="user-id" tabindex="1" class="field" value="" />
 	           </p>
 	           <p>

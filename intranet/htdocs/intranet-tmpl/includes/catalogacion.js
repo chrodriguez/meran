@@ -409,10 +409,12 @@ function updateMostrarEstructuraDelNivel2(responseText){
 	validateForm('formNivel2',guardarModificarDocumentoN2);
     addRules();
     
-    //dejo seleccionado el tipo de documento segun el esquema  
-    $('#'+_getIdComponente('910','a')).val($('#tipo_nivel3_id').val());  
+    if(!MODIFICAR){
+        //dejo seleccionado el tipo de documento segun el esquema  
+        $('#'+_getIdComponente('910','a')).val($('#tipo_nivel3_id').val());
+    }      
     //se deshabilita  
-    $('#'+_getIdComponente('910','a')).attr('disabled', true);  
+//     $('#'+_getIdComponente('910','a')).attr('disabled', true);  
 }
 
 
@@ -1427,10 +1429,16 @@ function buscarDatosNivel2(){
 }
 
 function updateBuscarDatosNivel2(responseText){
-//    $('#ediciones').html(responseText);
-//       $("#div" + obj.getIdCompCliente()).append(comp);
-//       $('#ediciones_'+_getIdComponente('773', 'a')).append(responseText)
-    $('#ediciones').html(responseText)
+    var idComponenteCliente = _getIdComponente('773', 'a');
+     
+    $('#ediciones').html(responseText);
+   
+    $("#" + idComponenteCliente + "_hidden").val($('#edicion_id').val());
+    
+    //cambio el ID  
+    $('#edicion_id').change(function() {
+        $("#" + idComponenteCliente + "_hidden").val($('#edicion_id').val());
+    });
 }
 
 function generarIdComponente(){
@@ -1790,7 +1798,7 @@ function crearEditor(){
 
 function cambiarValorEnHidden(id){
   
-    var valor = $('#ediciones').val();
+    var valor = $('#edicion_id').val();
   
     $(id + "_hidden").val(valor);
 }
@@ -1808,13 +1816,15 @@ function crearAuto(obj){
         $(comp).insertAfter("#div" + obj.getIdCompCliente());
         
         
-        $('#edicion_id').change(function() {
-//             cambiarValorEnHidden(obj.getIdCompCliente());  
-
-            var valor = $('#edicion_id').val();
-            $(obj.getIdCompCliente() + "_hidden").val(valor);
-        
-        });
+//         $('#edicion_id').change(function() {
+// //             cambiarValorEnHidden(obj.getIdCompCliente());  
+// 
+//             var valor = $('#edicion_id').val();
+//             
+// //            alert("HOLA valor => " + valor + " id => " + obj.getIdCompCliente() + "_hidden"); 
+//             $(obj.getIdCompCliente() + "_hidden").val(valor);
+//         
+//         });
     }      
     
     comp = "<div class='icon_agregar horizontal' onclick=agregarTablaReferencias('" + obj.getReferenciaTabla() + "') title='Agregar referencia al subcampo " + obj.getSubCampo() + " para el campo " + obj.getCampo() + "' />"

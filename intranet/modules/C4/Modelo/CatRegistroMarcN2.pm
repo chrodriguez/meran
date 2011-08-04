@@ -30,6 +30,9 @@ use C4::Modelo::CircReserva::Manager;
 use MARC::Record; #FIXME creo que esta funcion es interna qw(new_from_usmarc);
 use C4::AR::Catalogacion qw(getRefFromStringConArrobas);
 use C4::Modelo::CatRegistroMarcN3::Manager qw(get_cat_registro_marc_n3_count);
+# use C4::Modelo::CatRegistroMarcN2::Manager qw(get_cat_registro_marc_n2);
+use C4::Modelo::CatRegistroMarcN2::Manager;
+use C4::Modelo::CatRegistroMarcN2Analitica::Manager;
 # use vars qw(@EXPORT_OK @ISA);
 # 
 # @ISA=qw(Exporter);
@@ -82,13 +85,28 @@ sub setIndice{
     $self->indice($indice);
 }
 
+sub tiene_indice{
+    my ($self)      = shift;
+
+    return (C4::AR::Utilidades::validateString($self->getIndice));	
+}
+
 sub agregar{
     my ($self)      = shift;
-    my ($id1,$marc_record)    = @_;
+    my ($id1, $marc_record, $db)    = @_;
 
     $self->setId1($id1);    
     $self->setMarcRecord($marc_record);
 
+    my $mr = MARC::Record->new_from_usmarc($marc_record);    
+
+#     $self->save();
+
+    my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $db );
+    $cat_registro_n2_analitica->setId2Padre(C4::AR::Catalogacion::getRefFromStringConArrobas($mr->subfield("773","a")));
+    $cat_registro_n2_analitica->setId2Hijo($self->getId2());
+
+    $cat_registro_n2_analitica->save();
     $self->save();
 }
 
@@ -97,6 +115,14 @@ sub modificar{
     my ($marc_record)    = @_;
 
     $self->setMarcRecord($marc_record);
+    
+    my $mr = MARC::Record->new_from_usmarc($marc_record);  
+
+    my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $self->db );
+    $cat_registro_n2_analitica->setId2Padre(C4::AR::Catalogacion::getRefFromStringConArrobas($mr->subfield("773","a")));
+    $cat_registro_n2_analitica->setId2Hijo($self->getId2());
+
+    $cat_registro_n2_analitica->save();
 
     $self->save();
 }
@@ -113,9 +139,43 @@ sub eliminar{
       $n3->eliminar();
     }
 
+# TODO que se hace con la analítica
+
     $self->delete();    
 }
 
+sub getAnalitica{
+    my ($self)      = shift;
+     
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+ 
+    C4::AR::Debug::debug("getAnalitica =>>>>>>>>>>>>>>> ".$marc_record->subfield("773","a"));
+
+    return C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("773","a"));
+}
+
+sub getAnaliticas(){
+    my ($self)      = shift;
+
+    C4::AR::Debug::debug("C4::AR::CatRegistroMarcN2::getAnaliticas del grupo ".$self->getId2());
+    
+    my $db = C4::Modelo::CatRegistroMarcN2->new()->db();
+    
+    my $nivel2_analiticas_array_ref = C4::Modelo::CatRegistroMarcN2Analitica::Manager->get_cat_registro_marc_n2_analitica(
+                                                                        db => $db,    
+                                                                        query => [ 
+                                                                                    cat_registro_marc_n2_id => { eq => $self->getId2() },
+                                                                            ]
+                                                                );
+
+    C4::AR::Debug::debug("C4::AR::CatRegistroMarcN2::getAnaliticas => el grupo ".$self->getId2()." tiene ".scalar(@$nivel2_analiticas_array_ref)." analiticas");
+  
+    if( scalar(@$nivel2_analiticas_array_ref) > 0){
+        return ($nivel2_analiticas_array_ref);
+    }else{
+        return 0;
+    }
+}
 
 sub getSignaturas{
     my ($self)          = shift;
@@ -442,18 +502,39 @@ sub toMARC{
     $params->{'id_tipo_doc'}    = $self->getTipoDocumento;
     my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_meran_por_nivel($marc_record, $params);
 
-    #     my $MARC_result_array   = &C4::AR::Catalogacion::marc_record_to_meran($marc_record);
-#     foreach my $m (@$MARC_result_array){
-#         C4::AR::Debug::debug("campo => ".$m->{'campo'});
-#         foreach my $s (@{$m->{'subcampos_array'}}){
-#             C4::AR::Debug::debug("liblibrarian => ".$s->{'subcampo'});        
-#             C4::AR::Debug::debug("liblibrarian => ".$s->{'liblibrarian'});        
-#         }
-#     }
-
     return ($MARC_result_array);
 }
 
+
+sub obtenerValorCampo {
+  my ($self) = shift;
+  my ($campo,$id) = @_;
+
+  my $ref_valores = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2
+                        ( select   => [$campo],
+                          query =>[ id => { eq => $id} ]);
+
+#   C4::AR::Debug::debug("CatRgistroMarcN2 => obtenerValorCampo => campo tabla => ".$campo);
+#   C4::AR::Debug::debug("CatRgistroMarcN2 => obtenerValorCampo => id tabla => ".$id);  
+
+
+  if(scalar(@$ref_valores) > 0){
+    return ($ref_valores->[0]->getCampo($campo));
+  }else{
+    C4::AR::Debug::debug("CatRegistroMarcN2 => obtenerValorCampo => no se pudo recuperar el objeto");
+    return 'NO TIENE';
+  }
+}
+
+sub getCampo{
+    my ($self) = shift;
+    my ($campo)=@_;
+    
+    if ($campo eq "id") {return $self->getId2;}
+#     if ($campo eq "nombre") {return $self->getNombre;}
+
+    return (0);
+}
 
 =head2 sub toMARC_Opac
 
@@ -468,7 +549,7 @@ sub toMARC_Opac{
     my $params;
     $params->{'nivel'} = '2';
     $params->{'id_tipo_doc'}    = $self->getTipoDocumento;
-    my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_opac_view($marc_record, $params);
+    my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_opac_view($marc_record, $params,$self->db);
 
 #     my $orden = 'orden';
 #     my @return_array_sorted = sort{$b->{$orden} cmp $a->{$orden}} @$MARC_result_array;
@@ -490,7 +571,7 @@ sub toMARC_Intra{
     my $marc_record             = MARC::Record->new_from_usmarc($self->getMarcRecord());
     $params->{'nivel'}          = '2';
     $params->{'id_tipo_doc'}    = $self->getTipoDocumento;
-    my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_intra_view($marc_record, $params);
+    my $MARC_result_array       = C4::AR::Catalogacion::marc_record_to_intra_view($marc_record, $params,$self->db);
 
     return ($MARC_result_array);
 }
@@ -555,6 +636,14 @@ sub getEdicion{
     return $marc_record->subfield("250","a");
 }
 
+sub getNroSerie{
+    my ($self)      = shift;
+
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+    return $marc_record->subfield("440","v");
+}
+
 
 sub getPais{
     my ($self)      = shift;
@@ -589,6 +678,39 @@ sub getReferenced{
     return ($cat_registro_marc_n2);
 }
 
+
+
+sub toString {
+    my ($self) = shift;
+    my $string="";
+
+    if ($self->getTipoDocumento){
+	if($string){$string.=" ";}
+	$string.= $self->getTipoDocumentoObject->getNombre." -";
+    }
+    
+    if ($self->getNroSerie){
+	if($string){$string.=" ";}
+	$string.= $self->getNroSerie;
+    }
+
+    if ($self->getEdicion){
+	if($string){$string.=" ";}
+	$string.= $self->getEdicion;
+    }
+
+    if ($self->getVolumen){
+	if($string){$string.=" ";}
+	$string.= $self->getVolumen;
+    }
+
+    if ($self->getAnio_publicacion){
+	if($string){$string.=" ";}
+	$string.= "(".$self->getAnio_publicacion.")";
+    }
+    
+    return ($string);
+}
 
 1;
 

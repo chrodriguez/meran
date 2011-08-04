@@ -298,13 +298,15 @@ sub cant_reservas{
 
 sub cantReservasPorGrupo{
 #Devuelve la cantidad de reservas realizadas (SIN PRESTAR) sobre un GRUPO
-    my ($id2)=@_;
+    my ($id2,$db)=@_;
 
+        $db = $db || C4::Modelo::CircPrestamo->new()->db;
+        
         my @filtros;
         push(@filtros, ( id2    => { eq => $id2}));
         push(@filtros, ( estado => { ne => 'P'} ));
 
-        my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( query => \@filtros); 
+        my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( query => \@filtros, db   => $db,); 
 
         return ($reservas_count);
 }
@@ -337,9 +339,9 @@ sub Enviar_Email_Asignacion_Reserva{
 
         my $dateformat = C4::Date::get_date_format();
         my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($reserva->getNro_socio);
-        
-        my $mailFrom=C4::AR::Preferencias::getValorPreferencia("reserveFrom");
-        my $mailSubject =C4::AR::Preferencias::getValorPreferencia("reserveSubject");
+
+        my $mailFrom        = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveFrom"));
+        my $mailSubject     = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveSubject"));
         my $mailMessage =C4::AR::Preferencias::getValorPreferencia("reserveMessage");
         
         my $nombreUI = $reserva->ui->getNombre;
@@ -416,9 +418,9 @@ sub Enviar_Email_Cancelacion_Reserva{
         my $dateformat = C4::Date::get_date_format();
         my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($reserva->getNro_socio);
         
-        my $mailFrom=C4::AR::Preferencias::getValorPreferencia("mailFrom");
-        my $mailSubject =C4::AR::Preferencias::getValorPreferencia("subject_mail_cambio_disponibilidad_cancelacion");
-        my $mailMessage =C4::AR::Preferencias::getValorPreferencia("mensaje_mail_cambio_disponibilidad_cancelacion");
+        my $mailFrom        = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveFrom"));
+        my $mailSubject     = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("subject_mail_cambio_disponibilidad_cancelacion"));
+        my $mailMessage     = C4::AR::Preferencias::getValorPreferencia("mensaje_mail_cambio_disponibilidad_cancelacion");
         
         my $nombreUI = $reserva->ui->getNombre;
         $mailSubject =~ s/BRANCH/$nombreUI/;
@@ -441,6 +443,8 @@ sub Enviar_Email_Cancelacion_Reserva{
         
         my $edicion  =  $reserva->nivel2->getEdicion;
         $mailMessage =~ s/EDICION/$edicion/;
+
+        $mailMessage     = Encode::decode_utf8($mailMessage);
 
         my %mail;
         $mail{'mail_from'}             = $mailFrom;
@@ -487,9 +491,9 @@ sub Enviar_Email_Reserva_A_Espera{
         my $dateformat = C4::Date::get_date_format();
         my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($reserva->getNro_socio);
         
-        my $mailFrom=C4::AR::Preferencias::getValorPreferencia("mailFrom");
-        my $mailSubject =C4::AR::Preferencias::getValorPreferencia("subject_mail_cambio_disponibilidad_espera");
-        my $mailMessage =C4::AR::Preferencias::getValorPreferencia("mensaje_mail_cambio_disponibilidad_espera");
+        my $mailFrom        = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveFrom"));
+        my $mailSubject     = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("subject_mail_cambio_disponibilidad_espera"));
+        my $mailMessage     = C4::AR::Preferencias::getValorPreferencia("mensaje_mail_cambio_disponibilidad_espera");
         
         my $nombreUI = $reserva->ui->getNombre;
         $mailSubject =~ s/BRANCH/$nombreUI/;
@@ -512,6 +516,8 @@ sub Enviar_Email_Reserva_A_Espera{
         
         my $edicion  =  $reserva->nivel2->getEdicion;
         $mailMessage =~ s/EDICION/$edicion/;
+
+        $mailMessage     = Encode::decode_utf8($mailMessage);
 
         my %mail;
         $mail{'mail_from'}             = $mailFrom;
@@ -1487,20 +1493,33 @@ sub getReservaById{
     }
 }
 
+=item
+    Funcion que trae el historial de reservas de un socio.
+    La consulta se hace sobre rep_historial_circulacion porque en circ_reserva se borran las reservas pasadas
+    Se filtra por las operaciones: cancelacion, devolucion y reserva
+=cut
 sub getHistorialReservasParaTemplate {
-    my ($nro_socio)=@_;
 
-    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( 
-                                          query => [ nro_socio  => { eq => $nro_socio }],
-                                          with_objects      => ['nivel2', 'nivel3','socio','ui', 'nivel3.nivel2.nivel1'],
-                                          sorty_by          => ['id_reserva DESC'],
+    my ($nro_socio,$ini,$cantR,$orden) = @_;
+    
+    $cantR  = $cantR || 10;
+    $ini    = $ini || 0;
+    
+    use C4::Modelo::RepHistorialCirculacion;
+    use C4::Modelo::RepHistorialCirculacion::Manager;
+    
+    my @filtros;
+    push(@filtros, ( nro_socio => { eq => $nro_socio }));
+    push(@filtros, ( tipo_operacion => { eq => ['cancelacion','reserva' ] } ) );
 
+    my $reservas_array_ref = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
+                                          query             => \@filtros,
+                                          with_objects      => ['nivel2', 'nivel3','socio', 'nivel3.nivel2.nivel1'],
+                                          sort_by           => $orden,
+                                          limit             => $cantR,
+                                          offset            => $ini,
                                 ); 
-    my $reservas_array_ref_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( 
-                                          query => [ nro_socio  => { eq => $nro_socio }],
-                                          with_objects => ['nivel3','socio','ui'],
-
-                                );     
+    my $reservas_array_ref_count = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(query => \@filtros,); 
     return ($reservas_array_ref_count, $reservas_array_ref);
 }
 

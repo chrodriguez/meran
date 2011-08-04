@@ -7,6 +7,8 @@
 </div></div>
 	
 </div>
+      <div id="loading_items" class="loading_items"><br /></div>
+
 </div>
 <div id="marca"> 
     <div id="footer-info">

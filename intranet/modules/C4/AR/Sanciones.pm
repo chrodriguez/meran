@@ -327,7 +327,7 @@ sub sanciones {
                                                                             fecha_final     => { ge => $hoy},
                                                                               ],
                                                                     select  => ['circ_sancion.*'],
-                                                                    with_objects => ['socio','socio.persona','ref_tipo_sancion','nivel3'],
+                                                                    with_objects => ['socio','socio.persona','ref_tipo_sancion','nivel3', 'reserva'],
                                                                     sort_by => $orden,
                                                                     limit   => $cantR,
                                                                     offset  => $ini,
@@ -683,21 +683,22 @@ sub getHistorialSanciones{
     my $err         = "Error con la fecha";
     my $dateformat  = C4::Date::get_date_format();
     my $hoy         = C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days",\$err),$dateformat);
+    
+    my @filtros;
+    push(@filtros, or   => [ tipo_operacion => { eq => 'Borrado' },
+                   and  => [ nro_socio      => { eq => $nro_socio }, 
+                             fecha_final    => { lt => $hoy } ] ] );
 
     use C4::Modelo::RepHistorialSancion::Manager;
     my $historial_sanciones_array_ref = C4::Modelo::RepHistorialSancion::Manager->get_rep_historial_sancion (   
-                                                                        query => [ 
-                                                                                nro_socio       => { eq => $nro_socio},
-                                                                                fecha_final     => { lt => $hoy},
-                                                                                ],
-                                                                 
+                                                                        query => \@filtros,
                                                                         with_objects => ['usr_responsable','usr_nro_socio','ref_tipo_sancion', 'nivel3', 'nivel3.nivel1'],
                                                                         sort_by => $orden,
                                                                         limit   => $cantR,
                                                                         offset  => $ini,
                                 );
-
-    return (scalar(@$historial_sanciones_array_ref), $historial_sanciones_array_ref);
+    my $historial_sanciones_array_ref_count = C4::Modelo::RepHistorialSancion::Manager->get_rep_historial_sancion_count(query => \@filtros,);
+    return ($historial_sanciones_array_ref_count, $historial_sanciones_array_ref);
 
   }
   return 0;

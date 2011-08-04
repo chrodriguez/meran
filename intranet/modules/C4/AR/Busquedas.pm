@@ -443,7 +443,9 @@ sub obtenerGrupos {
 	my $res=0;
 	foreach my $nivel2 (@$niveles2){
 	    $result[$res]->{'id2'}=$nivel2->getId2;
-            $result[$res]->{'edicion'}= $nivel2->getEdicion;
+        $result[$res]->{'edicion'}= $nivel2->getEdicion;
+        $result[$res]->{'nro_revista'}= $nivel2->getNroSerie;
+        
 	    $result[$res]->{'anio_publicacion'}=$nivel2->getAnio_publicacion;
 	    $res++;
 	}
@@ -994,7 +996,7 @@ sub busquedaAvanzada_newTemp{
 
 
     if ($params->{'only_available'}){
-        $query .= ' @string "ref_disponibilidad%'.C4::Modelo::RefDisponibilidad::paraPrestamoValue.'"';
+        $query .= ' @string "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValue.'"';
     }
     
     if ($params->{'signatura'}){
@@ -1307,6 +1309,7 @@ sub armarInfoNivel1{
 #                 C4::AR::Debug::debug("NIVEL 1 PARA FAVORITOS: ".($nivel1->toMARC)->as_formatted);
         # TODO ver si esto se puede sacar del resultado del indice asi no tenemos q ir a buscarlo
             @result_array_paginado[$i]->{'titulo'}              = $nivel1->getTitulo();
+            @result_array_paginado[$i]->{'titulo'}              .= ($nivel1->getRestoDelTitulo() ne "")?": ".$nivel1->getRestoDelTitulo():"";
             my $autor_object                                    = $nivel1->getAutorObject();
 #             @result_array_paginado[$i]->{'nomCompleto'}         = $nivel1->getAutorObject->getCompleto();
 #             @result_array_paginado[$i]->{'idAutor'}             = $nivel1->getAutorObject->getId();

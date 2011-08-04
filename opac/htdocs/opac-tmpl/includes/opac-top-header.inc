@@ -13,7 +13,7 @@
         <!-- B. MAIN -->
         <div class="main">
           <div class="main-navigation">
-              [% IF socio_data %]
+              [% IF socio_data.usr_nro_socio %]
                   [% INCLUDE 'opac-login.inc' %]
               [% END %]
 <!--              <h1>[% 'Buscar' | i18n %]:</h1>

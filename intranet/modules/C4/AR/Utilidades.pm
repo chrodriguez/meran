@@ -21,6 +21,7 @@ use POSIX qw(ceil floor);
 use JSON;
 use C4::AR::Preferencias;
 use C4::AR::PedidoCotizacion;
+use C4::AR::Filtros;
 use URI::Escape;
 # FIXME Matiasp: Comentado por error de carga de modulos (Attempt to reload %s aborted.)
 # use C4::AR::Presupuestos;
@@ -128,8 +129,15 @@ use vars qw(@EXPORT_OK @ISA);
 
 # para los combos que no usan tablas de referencia
 my @VALUES_COMPONENTS = (   "-1", "text", "texta", "combo", "auto", "calendar", "anio", "rango_anio" );
-my %LABELS_COMPONENTS = (   "-1" => "SIN SELECCIONAR" => "text" => "Texto" , "texta" => "Texto Area", "combo" => "ComoBox", 
-                            "auto" => "Autocompletable", "calendar" => "Calendario", "anio" => "A&ntilde;o", "rango_anio" => "A&ntilde;o Rango" );
+my %LABELS_COMPONENTS = (   "-1"            => C4::AR::Filtros::i18n("SIN SELECCIONAR"),
+                            "text"          => C4::AR::Filtros::i18n("Texto simple"), 
+                            "texta"         => C4::AR::Filtros::i18n("Texto ampliado"), 
+                            "combo"         => C4::AR::Filtros::i18n("Lista desplegable"), 
+                            "auto"          => C4::AR::Filtros::i18n("Autocompletable"), 
+                            "calendar"      => C4::AR::Filtros::i18n("Calendario"), 
+                            "anio"          => C4::AR::Filtros::i18n("Anual"), 
+                            "rango_anio"    => C4::AR::Filtros::i18n("Anual rango") 
+                        );
   
   
 =item 
@@ -182,7 +190,7 @@ sub generarComboComponentes{
     }
 
     $options_hash{'name'}           = $params->{'name'}||'disponibilidad_name';
-    $options_hash{'id'}             = $params->{'id'}||'disponibilidad_id';
+    $options_hash{'id'}             = $params->{'id'}||'tipo_input';
     $options_hash{'size'}           = $params->{'size'}||1;
     $options_hash{'multiple'}       = $params->{'multiple'}||0;
     $options_hash{'defaults'}       = $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultComboComponentes");
@@ -1227,16 +1235,7 @@ sub armarPaginas{
 #
 #Cantidad de renglones seteado en las preferencias del sistema para ver por cada pagina
 sub cantidadRenglones{
-
-    my $dbh = C4::Context->dbh;
-    my $query="	SELECT value
-                FROM pref_preferencia_sistema
-                WHERE variable='renglones'";
-    my $sth=$dbh->prepare($query);
-
-    $sth->execute();
-
-    return($sth->fetchrow_array);
+    return(C4::AR::Preferencias::getValorPreferencia("renglones"));
 }
 
 #**************************************Fins***Paginador*********************************
@@ -1988,7 +1987,7 @@ sub generarComboTipoDeDocConValuesIds{
     $options_hash{'size'}       = $params->{'size'}||1;
     $options_hash{'class'}      = 'required';
     $options_hash{'multiple'}   = $params->{'multiple'}||0;
-    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultTipoDoc");
+    $options_hash{'defaults'}   = $params->{'default'} || 1;
 
     push (@select_docs_array, '');
     $options_hash{'values'}     = \@select_docs_array;
@@ -2180,10 +2179,11 @@ sub generarComboProveedores{
 
 sub generarComboPresupuestos{
     my ($params) = @_;
+    use C4::AR::Presupuestos;
 
     my @select_presupuestos_array;
     my %select_presupuestos;
-    my $presupuestos  = &C4::AR::Presupuestos::getAdqPresupuestos();
+    my $presupuestos  = C4::AR::Presupuestos::getAdqPresupuestos();
 
     push (@select_presupuestos_array, '');
     
@@ -2815,7 +2815,7 @@ sub generarComboNivel2{
 
     foreach my $edicion (@$ediciones_array_ref) {
         push(@select_ediciones_array, $edicion->getId2);
-        $select_ediciones_hash{$edicion->getId2}= $edicion->getEdicion;
+        $select_ediciones_hash{$edicion->getId2}= $edicion->toString;
     }
 
     my %options_hash; 
@@ -2848,6 +2848,33 @@ sub generarComboNivel2{
 }
 
 
+# GENERA COMBO CON LAS EDICIONES PARA UN ID DADO. POR AHORA SE USA EN ANALITICAS
+
+sub generarComboNivel2Detalle{
+    my ($params) = @_;
+
+    my @select_ediciones_array;
+    my %select_ediciones_hash;
+
+    my ($ediciones_array_ref)= C4::AR::Nivel2::getNivel2FromId1($params);
+
+    foreach my $edicion (@$ediciones_array_ref) {
+        push(@select_ediciones_array, $edicion->getId2);
+        $select_ediciones_hash{$edicion->getId2}= $edicion->toString;
+    }
+
+    my %options_hash; 
+    $options_hash{'name'}       = 'edicion_id';
+    $options_hash{'id'}         = 'edicion_id';
+    $options_hash{'size'}       = 1;
+    $options_hash{'multiple'}   = 0;
+    $options_hash{'values'}     = \@select_ediciones_array;
+    $options_hash{'labels'}     = \%select_ediciones_hash;
+
+    my $comboDeEdiciones       = CGI::scrolling_list(\%options_hash);
+
+    return $comboDeEdiciones;
+}
 
 
 
@@ -2895,8 +2922,11 @@ sub escapeHashData{
     if($hash_ref){
         while ( my ($key, $value) = each(%$hash_ref) ) {
         	    C4::AR::Debug::debug("key: $key => value: $value\n");
-        	    $value = encode_entities($value);
+        	    if($value =~ /[<>]/){
+            	    $value = encode_entities($value);
+        	    }
                 $hash_ref->{$key} = $value;
+                
                 C4::AR::Debug::debug("ENCODED key: $key => value: $value\n");
             }
     }
@@ -3526,8 +3556,9 @@ sub catalogoAutocomplete{
             $has_temp{'id'}= $documento->{'id1'};
             
             C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
-            $has_temp{'dato'} = $documento->{'titulo'}."\n";
-          
+            $has_temp{'dato'} = $documento->{'titulo'};
+ 	    if($documento->{'nomCompleto'}){ $has_temp{'dato'} .= " (".$documento->{'nomCompleto'}.")";}
+	    $has_temp{'dato'} .= "\n";
             push (@data_array, \%has_temp); 
 
 #              C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
