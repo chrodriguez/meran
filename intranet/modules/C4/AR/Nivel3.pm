@@ -406,7 +406,6 @@ sub detalleNivel3{
 
         #otengo las analiticas
         my  $cat_reg_marc_n2_analiticas = $nivel2_object->getAnaliticas();
-        C4::AR::Debug::debug("SCALAR ============= ".scalar(@$cat_reg_marc_n2_analiticas));
 
         my @nive1_analitica_array;
         my @nive2_analitica_array;
