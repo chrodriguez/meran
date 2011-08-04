@@ -47,18 +47,6 @@ if($input->param('adding') == 1){
     C4::AR::Authldap::setVariableLdap('ldap_stdchangepassword',$input->param('stdchangepassword'));
     C4::AR::Authldap::setVariableLdap('ldap_passtype',$input->param('passtype'));
     C4::AR::Authldap::setVariableLdap('ldap_changepasswordurl',$input->param('changepasswordurl'));
-    C4::AR::Authldap::setVariableLdap('ldap_expiration',$input->param('expiration'));
-    C4::AR::Authldap::setVariableLdap('ldap_expiration_warning',$input->param('expiration_warning'));
-    C4::AR::Authldap::setVariableLdap('ldap_expireattr',$input->param('expireattr'));
-    C4::AR::Authldap::setVariableLdap('ldap_gracelogins',$input->param('gracelogins'));
-    C4::AR::Authldap::setVariableLdap('ldap_graceattr',$input->param('graceattr'));
-    C4::AR::Authldap::setVariableLdap('ldap_auth_user_create',$input->param('auth_user_create'));
-    C4::AR::Authldap::setVariableLdap('ldap_create_context',$input->param('create_context'));
-    C4::AR::Authldap::setVariableLdap('ldap_creators',$input->param('creators'));
-    C4::AR::Authldap::setVariableLdap('ldap_removeuser',$input->param('removeuser'));
-    C4::AR::Authldap::setVariableLdap('ldap_ntlmsso_enabled',$input->param('ntlmsso_enabled'));
-    C4::AR::Authldap::setVariableLdap('ldap_ntlmsso_subnet',$input->param('ntlmsso_subnet'));
-    C4::AR::Authldap::setVariableLdap('ldap_ntlmsso_ie_fastpath',$input->param('ntlmsso_ie_fastpath'));
     C4::AR::Authldap::setVariableLdap('ldap_lockconfig_field_map_firstnames',$input->param('lockconfig_field_map_firstnames'));
     C4::AR::Authldap::setVariableLdap('ldap_lockconfig_field_updatelocal_firstname',$input->param('lockconfig_field_updatelocal_firstname'));
     C4::AR::Authldap::setVariableLdap('ldap_lockconfig_field_updateremote_firstname',$input->param('lockconfig_field_updateremote_firstname'));
