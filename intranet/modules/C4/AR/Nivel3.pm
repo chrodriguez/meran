@@ -390,9 +390,6 @@ sub detalleNivel3{
     
         $hash_nivel2{'nivel3'}                  = \@result;
 
-C4::AR::Debug::debug("Nivel3 => detalleNivel3 => ".scalar(@result));
-C4::AR::Debug::debug("Nivel3 => detalleNivel3 =>  hash_nivel2{'nivel2_array'} => ".scalar(@{$nivel2_object->toMARC_Intra}));
-
         $hash_nivel2{'cant_nivel3'}             = scalar(@result);
 	    $hash_nivel2{'cantPrestados'}           = $totales_nivel3->{'cantPrestados'};
 	    $hash_nivel2{'cantReservas'}            = $totales_nivel3->{'cantReservas'};
@@ -441,8 +438,6 @@ C4::AR::Debug::debug("Nivel3 => detalleNivel3 =>  hash_nivel2{'nivel2_array'} =>
         }
 #         $hash_nivel2{'nivel1_analiticas_array'} = \@nive2_analitica_array;
     }
-
-C4::AR::Debug::debug("Nivel3 => detalleNivel3 =>  hash_nivel2{'nivel2_array'} => ".scalar(@{$nivel2_object->toMARC_Intra}));
 
 	return (\%hash_nivel2);
 }
