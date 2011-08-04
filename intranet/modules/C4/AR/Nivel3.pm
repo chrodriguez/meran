@@ -389,6 +389,10 @@ sub detalleNivel3{
 	    my ($totales_nivel3, @result)           = detalleDisponibilidadNivel3($id2,$nivel2_object->db);
     
         $hash_nivel2{'nivel3'}                  = \@result;
+
+C4::AR::Debug::debug("Nivel3 => detalleNivel3 => ".scalar(@result));
+C4::AR::Debug::debug("Nivel3 => detalleNivel3 =>  hash_nivel2{'nivel2_array'} => ".scalar(@{$nivel2_object->toMARC_Intra}));
+
         $hash_nivel2{'cant_nivel3'}             = scalar(@result);
 	    $hash_nivel2{'cantPrestados'}           = $totales_nivel3->{'cantPrestados'};
 	    $hash_nivel2{'cantReservas'}            = $totales_nivel3->{'cantReservas'};
@@ -409,30 +413,36 @@ sub detalleNivel3{
 
         my @nive1_analitica_array;
         my @nive2_analitica_array;
-        foreach my $n2 (@$cat_reg_marc_n2_analiticas){
-            my %hash_nivel1_aux;
-            my %hash_nivel2_aux;    
-    
-            C4::AR::Debug::debug("id 2 ============= ".$n2->getId2Hijo());
-            my $n2_object = C4::AR::Nivel2::getNivel2FromId2($n2->getId2Hijo(),$db);
-            my $n1_object = C4::AR::Nivel1::getNivel1FromId1($n2_object->getId1(),$db);
+  
+        if($cat_reg_marc_n2_analiticas){
+  
+            foreach my $n2 (@$cat_reg_marc_n2_analiticas){
+                my %hash_nivel1_aux;
+                my %hash_nivel2_aux;    
+        
+                C4::AR::Debug::debug("id 2 ============= ".$n2->getId2Hijo());
+                my $n2_object = C4::AR::Nivel2::getNivel2FromId2($n2->getId2Hijo(),$db);
+                my $n1_object = C4::AR::Nivel1::getNivel1FromId1($n2_object->getId1(),$db);
 
-#             $hash_nivel2{'nivel1_analiticas_array'} = $n1_object->toMARC_Intra; 
-            $hash_nivel1_aux{'nivel1_analitica'} = $n1_object->toMARC_Intra;
-            push(@nive1_analitica_array, \%hash_nivel1_aux);
-#             $hash_nivel2{'nivel2_analiticas_array'} = $n2_object->toMARC_Intra;
-            my %hash_nivel1_aux;
-#             $hash_nivel2_aux{'nivel2_analitica'} = $n2_object->toMARC_Intra;
-#             push(@nive2_analitica_array, \%hash_nivel2_aux);
-            $hash_nivel1_aux{'nivel1_analitica'} = $n2_object->toMARC_Intra;
-            push(@nive1_analitica_array, \%hash_nivel1_aux);
+    #             $hash_nivel2{'nivel1_analiticas_array'} = $n1_object->toMARC_Intra; 
+                $hash_nivel1_aux{'nivel1_analitica'} = $n1_object->toMARC_Intra;
+                push(@nive1_analitica_array, \%hash_nivel1_aux);
+    #             $hash_nivel2{'nivel2_analiticas_array'} = $n2_object->toMARC_Intra;
+                my %hash_nivel1_aux;
+    #             $hash_nivel2_aux{'nivel2_analitica'} = $n2_object->toMARC_Intra;
+    #             push(@nive2_analitica_array, \%hash_nivel2_aux);
+                $hash_nivel1_aux{'nivel1_analitica'} = $n2_object->toMARC_Intra;
+                push(@nive1_analitica_array, \%hash_nivel1_aux);
 
-#             push(@nive1_analitica_array, \%hash_nivel2_aux);
+    #             push(@nive1_analitica_array, \%hash_nivel2_aux);
+            }
+
+            $hash_nivel2{'nivel1_analiticas_array'} = \@nive1_analitica_array;
         }
-
-        $hash_nivel2{'nivel1_analiticas_array'} = \@nive1_analitica_array; 
 #         $hash_nivel2{'nivel1_analiticas_array'} = \@nive2_analitica_array;
     }
+
+C4::AR::Debug::debug("Nivel3 => detalleNivel3 =>  hash_nivel2{'nivel2_array'} => ".scalar(@{$nivel2_object->toMARC_Intra}));
 
 	return (\%hash_nivel2);
 }
