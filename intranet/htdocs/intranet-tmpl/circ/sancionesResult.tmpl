@@ -55,9 +55,22 @@
 		</td>
 		<td>[% sancion.getFecha_comienzo_formateada %]</td>
 		<td>[% sancion.getFecha_final_formateada %]</td>
-		<td>[% sancion.nivel3.nivel1.getAutor %]</td>
-		<td>[% sancion.nivel3.nivel1.getTitulo %]</td>
-		<td>[% sancion.nivel3.nivel2.getEdicion %]</td>
+
+        [% IF sancion.nivel3.getId %]
+			<td>[% sancion.nivel3.nivel1.getAutor %]</td>
+			<td>[% sancion.nivel3.nivel1.getTitulo %]</td>
+			<td>[% sancion.nivel3.nivel2.getEdicion %]</td>
+        [% ELSE %]
+	        [% IF sancion.reserva.nivel3.getId %]
+		        <td>[% sancion.reserva.nivel3.nivel1.getAutor %]</td>
+		        <td>[% sancion.reserva.nivel3.nivel1.getTitulo %]</td>
+		        <td>[% sancion.reserva.nivel3.nivel2.getEdicion %]</td>
+	        [% ELSE %]
+	            <td>[% '---' | i18n %]</td>
+	            <td>[% '---' | i18n %]</td>
+	            <td>[% '---' | i18n %]</td>
+	        [% END %]
+	    [% END %]    
 	</tr>
   [% END %]
     <tr>

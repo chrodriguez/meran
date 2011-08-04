@@ -418,9 +418,9 @@ sub Enviar_Email_Cancelacion_Reserva{
         my $dateformat = C4::Date::get_date_format();
         my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($reserva->getNro_socio);
         
-        my $mailFrom=C4::AR::Preferencias::getValorPreferencia("mailFrom");
-        my $mailSubject =C4::AR::Preferencias::getValorPreferencia("subject_mail_cambio_disponibilidad_cancelacion");
-        my $mailMessage =C4::AR::Preferencias::getValorPreferencia("mensaje_mail_cambio_disponibilidad_cancelacion");
+        my $mailFrom        = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveFrom"));
+        my $mailSubject     = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("subject_mail_cambio_disponibilidad_cancelacion"));
+        my $mailMessage     = C4::AR::Preferencias::getValorPreferencia("mensaje_mail_cambio_disponibilidad_cancelacion");
         
         my $nombreUI = $reserva->ui->getNombre;
         $mailSubject =~ s/BRANCH/$nombreUI/;
@@ -443,6 +443,8 @@ sub Enviar_Email_Cancelacion_Reserva{
         
         my $edicion  =  $reserva->nivel2->getEdicion;
         $mailMessage =~ s/EDICION/$edicion/;
+
+        $mailMessage     = Encode::decode_utf8($mailMessage);
 
         my %mail;
         $mail{'mail_from'}             = $mailFrom;
@@ -489,9 +491,9 @@ sub Enviar_Email_Reserva_A_Espera{
         my $dateformat = C4::Date::get_date_format();
         my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($reserva->getNro_socio);
         
-        my $mailFrom=C4::AR::Preferencias::getValorPreferencia("mailFrom");
-        my $mailSubject =C4::AR::Preferencias::getValorPreferencia("subject_mail_cambio_disponibilidad_espera");
-        my $mailMessage =C4::AR::Preferencias::getValorPreferencia("mensaje_mail_cambio_disponibilidad_espera");
+        my $mailFrom        = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveFrom"));
+        my $mailSubject     = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("subject_mail_cambio_disponibilidad_espera"));
+        my $mailMessage     = C4::AR::Preferencias::getValorPreferencia("mensaje_mail_cambio_disponibilidad_espera");
         
         my $nombreUI = $reserva->ui->getNombre;
         $mailSubject =~ s/BRANCH/$nombreUI/;
@@ -514,6 +516,8 @@ sub Enviar_Email_Reserva_A_Espera{
         
         my $edicion  =  $reserva->nivel2->getEdicion;
         $mailMessage =~ s/EDICION/$edicion/;
+
+        $mailMessage     = Encode::decode_utf8($mailMessage);
 
         my %mail;
         $mail{'mail_from'}             = $mailFrom;
@@ -1506,7 +1510,7 @@ sub getHistorialReservasParaTemplate {
     
     my @filtros;
     push(@filtros, ( nro_socio => { eq => $nro_socio }));
-    push(@filtros, ( tipo_operacion => { eq => ['cancelacion','devolucion','reserva' ] } ) );
+    push(@filtros, ( tipo_operacion => { eq => ['cancelacion','reserva' ] } ) );
 
     my $reservas_array_ref = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                           query             => \@filtros,

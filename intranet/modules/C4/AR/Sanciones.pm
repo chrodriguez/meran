@@ -327,7 +327,7 @@ sub sanciones {
                                                                             fecha_final     => { ge => $hoy},
                                                                               ],
                                                                     select  => ['circ_sancion.*'],
-                                                                    with_objects => ['socio','socio.persona','ref_tipo_sancion','nivel3'],
+                                                                    with_objects => ['socio','socio.persona','ref_tipo_sancion','nivel3', 'reserva'],
                                                                     sort_by => $orden,
                                                                     limit   => $cantR,
                                                                     offset  => $ini,

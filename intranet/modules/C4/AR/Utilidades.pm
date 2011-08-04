@@ -2922,8 +2922,11 @@ sub escapeHashData{
     if($hash_ref){
         while ( my ($key, $value) = each(%$hash_ref) ) {
         	    C4::AR::Debug::debug("key: $key => value: $value\n");
-        	    $value = encode_entities($value);
+        	    if($value =~ /[<>]/){
+            	    $value = encode_entities($value);
+        	    }
                 $hash_ref->{$key} = $value;
+                
                 C4::AR::Debug::debug("ENCODED key: $key => value: $value\n");
             }
     }

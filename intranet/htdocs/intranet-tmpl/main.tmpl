@@ -19,15 +19,14 @@
         $('.fancy_link').fancybox({
         });
 
-     mostrarNovedades();
-    });
-
+        mostrarNovedades();
+      });
+  
 
     function mostrarNovedades(){
             objAH               = new AjaxHelper(updateActualizarTabla);
             objAH.debug         = true;
             objAH.url           = URL_PREFIX+'/novedadesIntra.pl';
-
             objAH.tipoAccion    = "MOSTRAR_NOVEDADES";
             objAH.sendToServer();
     }
@@ -35,8 +34,15 @@
     function updateActualizarTabla(responseText){
         $("#resultNovedades").html(responseText);
         $('.fancy_link').fancybox({
+                        onStart:function(){
+                              $('#state').css('display','');
+                        },
+                        onComplete:function(){
+                              $('#state').css('display','none');     
+                        }
         });
     }
+
 </script>
 
 

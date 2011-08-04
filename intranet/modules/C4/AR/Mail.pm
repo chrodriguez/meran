@@ -12,6 +12,7 @@ use Net::SMTP;
 use Net::SMTP::SSL;
 use Net::SMTP::TLS;
 use C4::AR::Preferencias;
+use C4::Output;
 use Digest::MD5 qw(md5_hex);
 
 use vars qw(@EXPORT @ISA);
