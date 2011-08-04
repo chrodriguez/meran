@@ -339,9 +339,9 @@ sub Enviar_Email_Asignacion_Reserva{
 
         my $dateformat = C4::Date::get_date_format();
         my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($reserva->getNro_socio);
-        
-        my $mailFrom=C4::AR::Preferencias::getValorPreferencia("reserveFrom");
-        my $mailSubject =C4::AR::Preferencias::getValorPreferencia("reserveSubject");
+
+        my $mailFrom        = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveFrom"));
+        my $mailSubject     = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveSubject"));
         my $mailMessage =C4::AR::Preferencias::getValorPreferencia("reserveMessage");
         
         my $nombreUI = $reserva->ui->getNombre;
