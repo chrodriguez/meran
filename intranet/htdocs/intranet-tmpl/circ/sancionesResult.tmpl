@@ -56,6 +56,7 @@
 		<td>[% sancion.getFecha_comienzo_formateada %]</td>
 		<td>[% sancion.getFecha_final_formateada %]</td>
 
+	[% IF sancion.getId3 %]<td>[% sancion.getId3 %] </td>[% END %]    
         [% IF sancion.nivel3.getId %]
 			<td>[% sancion.nivel3.nivel1.getAutor %]</td>
 			<td>[% sancion.nivel3.nivel1.getTitulo %]</td>
