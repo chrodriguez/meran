@@ -1184,13 +1184,7 @@ sub busquedaCombinada_newTemp{
     if ($sphinx_options){
 	    $only_sphinx        = $sphinx_options->{'only_sphinx'} || 0;
 	    $only_available     = $sphinx_options->{'only_available'} || 0;
-    }
-
-#    C4::AR::Debug::debug("STRING                      ".$string_utf8_encoded);
-#    C4::AR::Utilidades::printHASH($obj_for_log);
-#    C4::AR::Debug::debug("SPHINX                    ".$only_sphinx);
-
-    
+    }    
     my $sphinx = Sphinx::Search->new();
     my $query = "";
     my @boolean_ops = ("&","|","!","-");
@@ -1224,7 +1218,6 @@ sub busquedaCombinada_newTemp{
         }
     }
 
-    C4::AR::Debug::debug("=================================================== ONLY AVAILABLE: ".$only_available);
     if ($only_available){
         $query .= ' @string "ref_estado%'.C4::Modelo::RefEstado::disponibleValueSearch.'"';
     }
