@@ -7,13 +7,18 @@ use base qw(C4::Modelo::DB::Object::AutoBase2);
 __PACKAGE__->meta->setup(
     table   => 'ref_localidad',
 
+
     columns => [
         id                    => { type => 'serial', not_null => 1 },
+        LOCALIDAD             => { type => 'varchar', length => 11, not_null => 1 },
         NOMBRE                => { type => 'varchar', length => 100 },
         NOMBRE_ABREVIADO      => { type => 'varchar', length => 40 },
+        ref_dpto_partido_id   => { type => 'varchar', length => 11 },
+        DDN                   => { type => 'varchar', length => 11 },
     ],
 
     primary_key_columns => [ 'id' ],
+    unique_key => [ 'LOCALIDAD' ],
 );
 
 use C4::Modelo::CatPerfilOpac;
