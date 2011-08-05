@@ -6,18 +6,19 @@
  */
 function modificarVariable(variable,tipo){
 
-	objAH                       = new AjaxHelper(updateModificarVariable)
-	objAH.debug                 = true
-    objAH.showOverlay           = true
-	objAH.url=URL_PREFIX+"/admin/global/preferenciasDB.pl"
-	objAH.variable              = variable
-	objAH.accion                = "MODIFICAR_VARIABLE"
+	objAH                       = new AjaxHelper(updateModificarVariable);
+	objAH.debug                 = true;
+    objAH.showOverlay           = true;
+	objAH.url                   = URL_PREFIX+"/admin/global/preferenciasDB.pl";
+	objAH.variable              = variable;
+	objAH.accion                = "MODIFICAR_VARIABLE";
 	objAH.sendToServer();
 }
 
 function updateModificarVariable(responseText){
-    $("#divResultado").show()
-	$("#divResultado").html(responseText)
+    $("#divResultado").show();
+	$("#divResultado").html(responseText);
+	scrollTo('divResultado');
 }
 
 /*
@@ -26,21 +27,21 @@ function updateModificarVariable(responseText){
  */
 function guardarModificacion(){
 
-	objAH               = new AjaxHelper(updateGuardarModificacion)
-	objAH.debug         = true
-	objAH.url=URL_PREFIX+"/admin/global/preferenciasDB.pl"
-    objAH.showOverlay   = true
-	objAH.variable      = $("#variable").val()
-	objAH.valor         = $("#valor").val()
-    objAH.categoria     = 'catalogo'
+	objAH               = new AjaxHelper(updateGuardarModificacion);
+	objAH.debug         = true;
+	objAH.url           = URL_PREFIX+"/admin/global/preferenciasDB.pl";
+    objAH.showOverlay   = true;
+	objAH.variable      = $("#variable").val();
+	objAH.valor         = $("#valor").val();
+    objAH.categoria     = 'catalogo';
 
 	if ($("#tipoVar").val() == 'bool'){
-	    objAH.valor=(getRadioButtonSelectedValue( $("[name=valor]")))
+	    objAH.valor=(getRadioButtonSelectedValue( $("[name=valor]")));
 	}
 
-	objAH.explicacion   = $("#explicacion").val()
-	objAH.accion        = "GUARDAR_MODIFICACION_VARIABLE"
-	objAH.sendToServer()
+	objAH.explicacion   = $("#explicacion").val();
+	objAH.accion        = "GUARDAR_MODIFICACION_VARIABLE";
+	objAH.sendToServer();
 
 }
 
@@ -50,30 +51,30 @@ function guardarModificacion(){
  * todas las variables, si existe muestra un mensaje de error en la pantalla.
  */
 function updateGuardarModificacion(responseText){
-    actualizarTabla()
-    $("#divResultado").hide()
-	var Messages=JSONstring.toObject(responseText)
-	setMessages(Messages)
+    actualizarTabla();
+    $("#divResultado").hide();
+	var Messages=JSONstring.toObject(responseText);
+	setMessages(Messages);
 }
 
 
 $(document).ready(function() {
-    actualizarTabla()
-    zebra('datos_tabla')
+    actualizarTabla();
+    zebra('datos_tabla');
 });
 
 function actualizarTabla(){
-    objAH               = new AjaxHelper(updateActualizarTabla)
-	objAH.debug         = true
-	objAH.url=URL_PREFIX+"/admin/global/preferenciasDB.pl"
-    objAH.showOverlay   = true
-	objAH.accion        = "ACTUALIZAR_TABLA_CATALOGO"
-	objAH.sendToServer()
+    objAH               = new AjaxHelper(updateActualizarTabla);
+	objAH.debug         = true;
+	objAH.url           = URL_PREFIX+"/admin/global/preferenciasDB.pl";
+    objAH.showOverlay   = true;
+	objAH.accion        = "ACTUALIZAR_TABLA_CATALOGO";
+	objAH.sendToServer();
 }
 
 function updateActualizarTabla(responseText){
-    $("#result").html(responseText)
-    zebra('datos_tabla')
+    $("#result").html(responseText);
+    zebra('datos_tabla');
 }
 
 </script>

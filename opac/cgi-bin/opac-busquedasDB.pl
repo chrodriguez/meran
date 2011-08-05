@@ -42,6 +42,8 @@ $obj->{'session'}= $session;
 
 # PAGINADOR
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
+#actualizamos el ini del $obj para que pagine correctamente
+$obj->{'ini'} = $ini;
 
 $obj->{'cantR'}= $obj->{'cantR'} || $cantR;
 
