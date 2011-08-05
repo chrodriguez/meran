@@ -7,6 +7,7 @@ use base qw(C4::Modelo::DB::Object::AutoBase2);
 __PACKAGE__->meta->setup(
     table   => 'ref_localidad',
 
+
     columns => [
         id                    => { type => 'serial', not_null => 1 },
         LOCALIDAD             => { type => 'varchar', length => 11, not_null => 1 },
@@ -34,7 +35,7 @@ sub getObjeto{
 	my ($self) = shift;
 	my ($id) = @_;
 
-	my $objecto= C4::Modelo::RefLocalidad->new(LOCALIDAD => $id);
+	my $objecto= C4::Modelo::RefLocalidad->new(id => $id);
 	$objecto->load();
 	return $objecto;
 }
@@ -42,7 +43,7 @@ sub getObjeto{
 
 sub getIdLocalidad{
     my ($self) = shift;
-    return (C4::AR::Utilidades::trim($self->LOCALIDAD));
+    return (C4::AR::Utilidades::trim($self->id));
 }
 
 sub getNombre{
@@ -50,25 +51,9 @@ sub getNombre{
     return (C4::AR::Utilidades::trim($self->NOMBRE));
 }
 
-sub getDptoPartido{
-    my ($self) = shift;
-    return (C4::AR::Utilidades::trim($self->DPTO_PARTIDO));
-}
-
-sub getDDN{
-    my ($self) = shift;
-    return (C4::AR::Utilidades::trim($self->DDN));
-}
-
 sub getNombre_abreviado{
     my ($self) = shift;
     return (C4::AR::Utilidades::trim($self->NOMBRE_ABREVIADO));
-}
-
-sub setId_persona{
-    my ($self) = shift;
-    my ($nombre) = @_;
-    $self->NOMBRE($nombre);
 }
 
 
@@ -76,7 +61,7 @@ sub obtenerValoresCampo {
     my ($self)=shift;
     my ($campo,$orden)=@_;
 	my $ref_valores = C4::Modelo::RefLocalidad::Manager->get_ref_localidad
-						( select   => ['LOCALIDAD' , $campo],
+						( select   => ['id' , $campo],
 						  sort_by => ($orden) );
     my @array_valores;
 
@@ -113,8 +98,6 @@ sub getCampo{
 	if ($campo eq "LOCALIDAD") {return $self->getIdLocalidad;}
 	if ($campo eq "NOMBRE") {return $self->getNombre;}
 	if ($campo eq "NOMBRE_ABREVIADO") {return $self->getNombre_abreviado;}
-	if ($campo eq "DPTO_PARTIDO") {return $self->getDptoPartido;}
-	if ($campo eq "DDN") {return $self->getDDN;}
 	return (0);
 }
 

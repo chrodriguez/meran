@@ -26,10 +26,10 @@
                 <td width="4%">[% 'Fijo' | i18n %]</td>
                 <td width="5%">[% 'Obligatorio' | i18n %]</td>
                 <td width="5%">[% 'Visible' | i18n %]</td>
-                <td width="5%">[% 'Edici&oacute;n Grupal' | i18n %]</td>
-                <td width="5%">[% 'Habilitado' | i18n %]</td>
-                <td width="5%">[% 'Editar' | i18n %]</td>
-                <td width="5%">[% 'Eliminar' | i18n %]</td>
+<!--                <td width="5%">[% 'Edici&oacute;n Grupal' | i18n %]</td>-->
+<!--                <td width="5%">[% 'Habilitado' | i18n %]</td>-->
+                <td width="5%">[% 'Acciones' | i18n %]</td>
+<!--                <td width="5%">[% 'Eliminar' | i18n %]</td>-->
 	        </tr>
         [% FOREACH catalogacion IN catalogaciones %]
 	        <tr align="center" >
@@ -119,24 +119,24 @@
                     >
                 [% END %]
                 </td>
-                <td>
-                [% IF catalogacion.getObligatorio != 1 %]
-                    <input type="checkbox" id="[% id %]" value="[% catalogacion.getEdicionGrupal %]" onChange="edicionGrupal('[% catalogacion.getId %]')" 
-                    value="[% catalogacion.getEdicionGrupal %]"   [% IF catalogacion.getEdicionGrupal %] 
-                                                                checked
-                                                            [% END %] 
-                    >
-                [% END %]
-                </td>
-                <td>
-                [% IF catalogacion.getObligatorio != 1 %]
-                    <input type="checkbox" id="[% id %]" value="[% catalogacion.getHabilitado %]" onChange="habilitado('[% catalogacion.getId %]')" 
-                    value="[% catalogacion.getHabilitado %]"   [% IF catalogacion.getHabilitado %] 
-                                                                checked
-                                                            [% END %] 
-                    >
-                [% END %]
-                </td>
+<!--                <td>-->
+<!--                [% IF catalogacion.getObligatorio != 1 %]-->
+<!--                    <input type="checkbox" id="[% id %]" value="[% catalogacion.getEdicionGrupal %]" onChange="edicionGrupal('[% catalogacion.getId %]')" -->
+<!--                    value="[% catalogacion.getEdicionGrupal %]"   [% IF catalogacion.getEdicionGrupal %] -->
+<!--                                                                checked-->
+<!--                                                            [% END %] -->
+<!--                    >-->
+<!--                [% END %]-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                [% IF catalogacion.getObligatorio != 1 %]-->
+<!--                    <input type="checkbox" id="[% id %]" value="[% catalogacion.getHabilitado %]" onChange="habilitado('[% catalogacion.getId %]')" -->
+<!--                    value="[% catalogacion.getHabilitado %]"   [% IF catalogacion.getHabilitado %] -->
+<!--                                                                checked-->
+<!--                                                            [% END %] -->
+<!--                    >-->
+<!--                [% END %]-->
+<!--                </td>-->
                 <td>
                 
                 [% IF catalogacion.soyFijo != 1 %]
@@ -150,8 +150,8 @@
                         [% END %]
                 [% END %]
                 
-                </td>
-                <td>
+<!--                </td>-->
+<!--                <td>-->
 <!-- # FIXME esto no se va a usar mas, lo dejo para reusar en la visualizacion de la INTRA                 -->
                 [% IF catalogacion.soyFijo != 1 %]
                         [% PERL %]
