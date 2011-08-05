@@ -47,7 +47,7 @@
 
 
 
-<fieldset class="main">
+<!--<fieldset class="main">
     <legend class="titulo_legend"><strong>[% "Circulaci&oacute;n:" | i18n %]</strong></legend>
     <ul>
         <li class="item">
@@ -68,7 +68,18 @@
                     [% END %]
         </li>
     </ul>
-</fieldset>
+</fieldset>-->
+
+<!--<ul>
+        <li class="main_usuario_binvenida">
+            [% IF socio_data.sexo == 'f' %]
+                      <span>[% "Bienvenida" | i18n %]</span>
+            [% ELSE %]   
+                      <span>[% "Bienvenido" | i18n %]</span>
+            [% END %]
+            [%socio_data.usr_nombre %], [% socio_data.usr_apellido %][%'!'%]
+        </li>
+</ul>-->
 <fieldset class="main">
     <legend class="titulo_legend">[% "Personal:" | i18n %]</legend>
     <ul>
@@ -128,8 +139,14 @@
 
 <a class="fancy_link" href="[% url_prefix %]/admin/publicar_twitter.pl?token=[% token %]">
                                Publicar en Twitter
+
 </a>
 
+<span id="tweet-button" class="tb-container">
+<span class="tb">
+    <a id="btn" tabindex="1" href="https://twitter.com/share?original_referer=http%3A%2F%2Fmultiamerican.scpr.org%2F2011%2F04%2Fthe-cultural-mashup-dictionary-twittear-and-feisbuk%2F&source=tweetbutton&text=Via%20%40Multi_American%3A%20The%20cultural%20mashup%20dictionary%3A%20Twittear%20and%20Feisbuk%20%7C&url=http%3A%2F%2Fmultiamerican.scpr.org%2F2011%2F04%2Fthe-cultural-mashup-dictionary-twittear-and-feisbuk%2F" aria-describedby="btn-desc">
+</span>
+</span>
 [% END %]
   
 [% INCLUDE 'intranet-bottom.inc' %]

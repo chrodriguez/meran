@@ -4730,6 +4730,32 @@ font-size:10pt;
     color:#819FF7;
 }*/
 
+/*.main_usuario_binvenida{
+    background-color:#7E94AF; 
+    color: #FFFFFF;
+    font-family:Verdana,Trebuchet MS,Arial;
+    font-size:10pt;
+    font-weight:bold;
+    font-style:italic;
+    margin-left:0;
+}*/
+
+.tb a {
+    height: 20px;
+}
+
+a {
+    background: none repeat scroll 0 0 transparent;
+    border: medium none;
+    display: block;
+    margin: 0;
+    outline: medium none;
+    overflow: visible;
+    padding: 0;
+    text-decoration: none;
+}
+
+
 .charleft{
       width:300px;
 }
@@ -4743,4 +4769,7 @@ font-size:10pt;
 .textareaCounterExceeded{
       color:red;
 }
+
+
+
 
