@@ -172,7 +172,11 @@ sub gettemplate {
             url_prefix          => C4::AR::Utilidades::getUrlPrefix(),
             SERVER_ADDRESS      => $ENV{'SERVER_NAME'},
             socio_data          => C4::AR::Auth::buildSocioDataHashFromSession(),
-            date_separator      => C4::AR::Filtros::i18n("de"),            
+            date_separator      => C4::AR::Filtros::i18n("de"),
+            CirculationEnabled  => C4::AR::Preferencias::getValorPreferencia("CirculationEnabled"),
+            LibraryName         => C4::AR::Preferencias::getValorPreferencia("LibraryName"),
+            
+                        
         );
 
     return ($template, \%params);

@@ -13,16 +13,19 @@
                             <li>
                                 [% "Cantidad Actual de Reservas:" | i18n %] <b>[% cantReservas %]</b>
                             </li>  
-                            <li class="detalle_barra_circulacion">  
-                                [% IF socio_data %]
-                                    [% PERL %]
-                                        print C4::AR::Filtros::to_Icon(   text    => "[% 'Reservar' | i18n %]",
-                                                                            boton   => "icon_reservar",
-                                                                            width   => "100",
-                                                                            onClick => "reservar([% id1 %],[% id2 %])",
-                                                                            title   => "[% 'Reservar' | i18n %]"
-                                                                    );
-                                    [% END %]
+                            <li class="detalle_barra_circulacion">
+                                  
+                                [% IF CirculationEnabled %]
+	                                [% IF socio_data %]
+	                                    [% PERL %]
+	                                        print C4::AR::Filtros::to_Icon(   text    => "[% 'Reservar' | i18n %]",
+	                                                                            boton   => "icon_reservar",
+	                                                                            width   => "100",
+	                                                                            onClick => "reservar([% id1 %],[% id2 %])",
+	                                                                            title   => "[% 'Reservar' | i18n %]"
+	                                                                    );
+	                                    [% END %]
+	                                [% END %]
                                 [% END %]
                             </li>
                         </ul>

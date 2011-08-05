@@ -234,8 +234,9 @@ float:right;
  color:rgb(50,50,50);
 }
 
-.nav_logged li {display:block;
- list-style:none;
+.nav_logged li {
+	display: inline;
+    list-style:none;
 }
 
 .nav_logged {width:200px;
