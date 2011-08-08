@@ -870,9 +870,70 @@ sub batchBookLabelGenerator {
 	foreach my $nivel3 (@$results) {
 		$pdf->newpage($pag);
 		$pdf->openpage($pag);
-		&generateBookLabel( $nivel3->getSignatura_topografica, $nivel3->getBarcode, $nivel3->getId_ui_origen, 0, 97, $pdf );
-		&generateBookLabel( $nivel3->getSignatura_topografica, $nivel3->getBarcode, $nivel3->getId_ui_origen, 0, 0, $pdf );
-		$pag++;
+
+        if (C4::AR::Preferencias::getValorPreferencia('BookLabelFormat') ne "A4"){
+
+            &generateBookLabel( $nivel3->getSignatura_topografica, $nivel3->getBarcode, $nivel3->getId_ui_origen, 0, 97, $pdf );
+            &generateBookLabel( $nivel3->getSignatura_topografica, $nivel3->getBarcode, $nivel3->getId_ui_origen, 0, 0, $pdf );
+            $pag++;
+
+        }else{
+
+
+        while ( $i < $count ) {
+              $pdf->newpage($pag);
+              $pdf->openpage($pag);
+
+              #Hoja A4 :  X diferencia 254 - Y diferencia 160
+              if ( $i < $count ) {
+                  &generateBookLabel( @$socios[$i]->getNro_socio, 14, 14, $pdf );
+                  $i++;
+              }
+              if ( $i < $count ) {
+                  &generateBookLabel( @$socios[$i]->getNro_socio, 14, 174, $pdf );
+                  $i++;
+              }
+              if ( $i < $count ) {
+                  &generateBookLabel( @$socios[$i]->getNro_socio, 14, 334, $pdf );
+                  $i++;
+              }
+              if ( $i < $count ) {
+                  &generateBookLabel( @$socios[$i]->getNro_socio, 14, 494, $pdf );
+                  $i++;
+              }
+              if ( $i < $count ) {
+                  &generateBookLabel( @$socios[$i]->getNro_socio, 14, 654, $pdf );
+                  $i++;
+              }
+              if ( $i < $count ) {
+                  &generateBookLabel( @$socios[$i]->getNro_socio, 270, 14, $pdf );
+                  $i++;
+              }
+              if ( $i < $count ) {
+                  &generateBookLabel( @$socios[$i]->getNro_socio, 270, 174, $pdf );
+                  $i++;
+              }
+              if ( $i < $count ) {
+                  &generateBookLabel( @$socios[$i]->getNro_socio, 270, 334, $pdf );
+                  $i++;
+              }
+              if ( $i < $count ) {
+                  &generateBookLabel( @$socios[$i]->getNro_socio, 270, 494, $pdf );
+                  $i++;
+              }
+              if ( $i < $count ) {
+                  &generateBookLabel( @$socios[$i]->getNro_socio, 270, 654, $pdf );
+                  $i++;
+              }
+              $pag++;
+
+            
+            
+              
+            
+        }
+
+        
 	}
 	my $tmpFileName = "etiquetas.pdf";
 
@@ -886,12 +947,13 @@ sub generateBookLabel {
 	#Datos de la biblioteca
 	my $branch = &datosBiblio($branchcode);
 
-	my ( $pagewidth, $pageheight ) = $pdf->getPageDimensions();    #(200x300)
+	my ( $pagewidth, $pageheight ) = $pdf->getPageDimensions();    #(210x297 - A4)
 	$pdf->setSize(7);
 
-	#Insert a rectangle to delimite the card
-	$pdf->drawRect( $pagewidth, $pageheight + ( $y - 97 ), 0, $y );
-	$pdf->drawLine( 95, $pageheight + ( $y - 97 ), 95, $y );
+    #Insert a rectangle to delimite the card
+    
+    $pdf->drawRect( $pagewidth, $pageheight + ( $y - 97 ), 0, $y );
+    $pdf->drawLine( 95, $pageheight + ( $y - 97 ), 95, $y );
 
 	#Insert a barcode to the card
 	$pdf->drawBarcode( $x + 110, $y, 70 / 100, 1, "3of9", $codigo, undef, 10,
