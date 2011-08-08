@@ -65,10 +65,14 @@ fieldset {
 	clear: both;
 }
 
-#e_docs_upload_form{
+fieldset .e_docs_upload_form{
 	float: right;
-	width: 200px;
+	width: 60%;
 	text-align: justify;
+}
+
+.fileUploader_catalogo ul li{
+	width: 98%;
 }
 
 fieldset {
@@ -4616,11 +4620,8 @@ body .latest-status-text a {
 
 .fileUploader_catalogo{
 	
-	width: 500px;
-	float: right;
+	width: 550px;
 	clear: both;	
-	
-	
 }
 
 .novedad_intra .titulo_novedad a{
