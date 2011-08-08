@@ -23,6 +23,8 @@ use C4::AR::Preferencias;
 use C4::AR::PedidoCotizacion;
 use C4::AR::Filtros;
 use URI::Escape;
+use C4::Modelo::RefLocalidad;
+
 # FIXME Matiasp: Comentado por error de carga de modulos (Attempt to reload %s aborted.)
 # use C4::AR::Presupuestos;
 # use C4::AR::PedidoCotizacion;
@@ -83,7 +85,6 @@ use vars qw(@EXPORT_OK @ISA);
     checkdigit
     checkvalidisbn
     quitarduplicados
-    buscarCiudades
     trim
     validateString
     joinArrayOfString
@@ -653,6 +654,34 @@ sub obtenerPaises{
     );
 
     return (scalar(@$paises_array_ref), $paises_array_ref);
+
+    
+}
+
+=head2
+    sub obtenerCiudades
+=cut
+sub obtenerCiudades{
+    my ($ciudad) = @_;
+
+    my @filtros;
+        my @filtros_or;
+        push(@filtros_or, (NOMBRE => {like => '%'.$ciudad.'%'}) );
+        push(@filtros_or, (NOMBRE_ABREVIADO => {like => '%'.$ciudad.'%'}) );
+	push(@filtros, (or => \@filtros_or) );
+
+    my $limit = C4::AR::Preferencias::getValorPreferencia('limite_resultados_autocompletables') || 20;
+     
+    my $ciudades_array_ref = C4::Modelo::RefLocalidad::Manager->get_ref_localidad(
+
+        query   => \@filtros,
+        select  => ['*'],
+        sort_by => 'nombre ASC',
+        limit   => $limit,
+        offset  => 0,
+    );
+
+    return (scalar(@$ciudades_array_ref), $ciudades_array_ref);
 
     
 }
@@ -1554,45 +1583,6 @@ sub buscarMonedas{
     $sth->finish;
     return ($cant, \@results);
 }
-
-=item
-buscarCiudades
-Busca las ciudades con todas la relaciones. Se usa para el autocomplete en la parte de agregar usuario.
-=cut
-# TODO usar Ros::DB
-sub buscarCiudades{
-
-    my ($ciudad) = @_;
-    my $dbh = C4::Context->dbh;
-    my $limit = C4::AR::Preferencias::getValorPreferencia('limite_resultados_autocompletables') || 20;
-    
-    my $query = "   SELECT  ref_localidad.id, ref_pais.nombre AS pais, ref_provincia.nombre AS provincia, 
-                            ref_dpto_partido.nombre AS partido, ref_localidad.localidad AS localidad,
-                            ref_localidad.nombre AS nombre 
-
-                    FROM ref_localidad LEFT JOIN ref_dpto_partido ON 
-                                (ref_localidad.ref_dpto_partido_id = ref_dpto_partido.id) 
-                                    LEFT JOIN ref_provincia ON 
-                                        (ref_dpto_partido.ref_provincia_id = ref_provincia.id) LEFT JOIN ref_pais ON 
-                                            (ref_pais.id = ref_provincia.ref_pais_id)
-
-                    WHERE (ref_localidad.nombre LIKE ?) OR (ref_localidad.nombre LIKE ?)
-                    ORDER BY (ref_localidad.nombre)
-                    LIMIT 0,".$limit;
-    my $sth = $dbh->prepare($query);
-
-    $sth->execute($ciudad.'%', '% '.$ciudad.'%');
-    my @results;
-    my $cant;
-
-    while (my $data=$sth->fetchrow_hashref){ 
-        push(@results,$data); 
-        $cant++;
-    }
-    $sth->finish;
-    return ($cant, \@results);
-}
-
 
 =item
 buscarLenguajes
@@ -3444,16 +3434,13 @@ sub paisesAutocomplete{
 sub ciudadesAutocomplete{
 
     my ($ciudad)= @_;
-    my $textout;
-    my @result;
-    if ($ciudad){
-        my($cant, $result) = C4::AR::Utilidades::buscarCiudades($ciudad);# agregado sacar
-        C4::AR::Debug::debug("CANTIDAD DE CIUDADES: ".$cant);
-        $textout= "";
-        for (my $i; $i<$cant; $i++){
-            $textout.= $result->[$i]->{'id'}."|".$result->[$i]->{'nombre'}."\n";
-        }
+    my $textout="";
+    my ($cant, $ciudades_array_ref)=C4::AR::Utilidades::obtenerCiudades($ciudad);
+
+    foreach my $localidad (@$ciudades_array_ref){
+        $textout.=$localidad->getIdLocalidad."|".$localidad->getNombre."\n";
     }
+
     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 

@@ -79,9 +79,7 @@ if ($reservas){
 $t_params->{'reservas_asignadas_count'} = $racount;
 $t_params->{'prestamos_count'}          = $cant_prestamos;
 $t_params->{'reservas_espera_count'}    = $recount;
-$t_params->{'LibraryName'}              = C4::AR::Preferencias::getValorPreferencia("LibraryName");
 $t_params->{'pagetitle'}                = "Usuarios";
-$t_params->{'CirculationEnabled'}       = C4::AR::Preferencias::getValorPreferencia("circulation");
 $t_params->{'content_title'}            = C4::AR::Filtros::i18n("Reservas");
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
