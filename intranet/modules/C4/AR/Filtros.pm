@@ -246,6 +246,15 @@ sub show_componente {
     
 # TODO FIXEDDDDDDDDDD en el futuro esto se debe levantar de la configuracion
             if($catRegistroMarcN2){
+
+                #obtengo las analiticas
+#                 my $cat_reg_marc_n2_analiticas = $catRegistroMarcN2->getAnaliticas();
+#   
+#                 $catRegistroMarcN2->getId2()
+
+#                 aca tengo que identificar si este nivel 2 es padre o hijo de una analitica para cambiar el link
+
+                
                 
                 my %params_hash;
                 my $text        = $catRegistroMarcN2->nivel1->getTitulo()." (".$catRegistroMarcN2->nivel1->getAutor().") - ".$catRegistroMarcN2->toString; 
