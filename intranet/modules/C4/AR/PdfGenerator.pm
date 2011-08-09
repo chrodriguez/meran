@@ -868,11 +868,12 @@ sub batchBookLabelGenerator {
 	$pdf->{PageHeight} = '190';
 
 	foreach my $nivel3 (@$results) {
-		$pdf->newpage($pag);
-		$pdf->openpage($pag);
+	
 
         if (C4::AR::Preferencias::getValorPreferencia('BookLabelFormat') ne "A4"){
 
+            $pdf->newpage($pag);
+            $pdf->openpage($pag);
             &generateBookLabel( $nivel3->getSignatura_topografica, $nivel3->getBarcode, $nivel3->getId_ui_origen, 0, 97, $pdf );
             &generateBookLabel( $nivel3->getSignatura_topografica, $nivel3->getBarcode, $nivel3->getId_ui_origen, 0, 0, $pdf );
             $pag++;
@@ -886,45 +887,48 @@ sub batchBookLabelGenerator {
 
               #Hoja A4 :  X diferencia 254 - Y diferencia 160
               if ( $i < $count ) {
-                  &generateBookLabel( @$socios[$i]->getNro_socio, 14, 14, $pdf );
+                  &generateBookLabel( $nivel3->getSignatura_topografica, $nivel3->getBarcode, $nivel3->getId_ui_origen, 14, 14, $pdf);
+                  &generateBookLabel( $nivel3->getSignatura_topografica, $nivel3->getBarcode, $nivel3->getId_ui_origen, 14, 50, $pdf);
+#                   &generateBookLabel( @$socios[$i]->getNro_socio, 14, 14, $pdf );
                   $i++;
               }
-              if ( $i < $count ) {
-                  &generateBookLabel( @$socios[$i]->getNro_socio, 14, 174, $pdf );
-                  $i++;
-              }
-              if ( $i < $count ) {
-                  &generateBookLabel( @$socios[$i]->getNro_socio, 14, 334, $pdf );
-                  $i++;
-              }
-              if ( $i < $count ) {
-                  &generateBookLabel( @$socios[$i]->getNro_socio, 14, 494, $pdf );
-                  $i++;
-              }
-              if ( $i < $count ) {
-                  &generateBookLabel( @$socios[$i]->getNro_socio, 14, 654, $pdf );
-                  $i++;
-              }
-              if ( $i < $count ) {
-                  &generateBookLabel( @$socios[$i]->getNro_socio, 270, 14, $pdf );
-                  $i++;
-              }
-              if ( $i < $count ) {
-                  &generateBookLabel( @$socios[$i]->getNro_socio, 270, 174, $pdf );
-                  $i++;
-              }
-              if ( $i < $count ) {
-                  &generateBookLabel( @$socios[$i]->getNro_socio, 270, 334, $pdf );
-                  $i++;
-              }
-              if ( $i < $count ) {
-                  &generateBookLabel( @$socios[$i]->getNro_socio, 270, 494, $pdf );
-                  $i++;
-              }
-              if ( $i < $count ) {
-                  &generateBookLabel( @$socios[$i]->getNro_socio, 270, 654, $pdf );
-                  $i++;
-              }
+        }
+#               if ( $i < $count ) {
+#                   &generateBookLabel( @$socios[$i]->getNro_socio, 14, 174, $pdf );
+#                   $i++;
+#               }
+#               if ( $i < $count ) {
+#                   &generateBookLabel( @$socios[$i]->getNro_socio, 14, 334, $pdf );
+#                   $i++;
+#               }
+#               if ( $i < $count ) {
+#                   &generateBookLabel( @$socios[$i]->getNro_socio, 14, 494, $pdf );
+#                   $i++;
+#               }
+#               if ( $i < $count ) {
+#                   &generateBookLabel( @$socios[$i]->getNro_socio, 14, 654, $pdf );
+#                   $i++;
+#               }
+#               if ( $i < $count ) {
+#                   &generateBookLabel( @$socios[$i]->getNro_socio, 270, 14, $pdf );
+#                   $i++;
+#               }
+#               if ( $i < $count ) {
+#                   &generateBookLabel( @$socios[$i]->getNro_socio, 270, 174, $pdf );
+#                   $i++;
+#               }
+#               if ( $i < $count ) {
+#                   &generateBookLabel( @$socios[$i]->getNro_socio, 270, 334, $pdf );
+#                   $i++;
+#               }
+#               if ( $i < $count ) {
+#                   &generateBookLabel( @$socios[$i]->getNro_socio, 270, 494, $pdf );
+#                   $i++;
+#               }
+#               if ( $i < $count ) {
+#                   &generateBookLabel( @$socios[$i]->getNro_socio, 270, 654, $pdf );
+#                   $i++;
+#               }
               $pag++;
 
             
