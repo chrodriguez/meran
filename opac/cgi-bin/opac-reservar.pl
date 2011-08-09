@@ -39,7 +39,7 @@ $params{'nro_socio'}        = $socio;
 $params{'responsable'}     = $socio;
 $params{'tipo_prestamo'}    = 'DO';
 
-my ($msg_object)            = &C4::AR::Reservas::t_reservarOPAC(\%params);
+my ($msg_object)            = C4::AR::Reservas::t_reservarOPAC(\%params);
 
 my $infoOperacionJSON       = to_json $msg_object;
   

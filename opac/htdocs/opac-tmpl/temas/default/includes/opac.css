@@ -234,8 +234,9 @@ float:right;
  color:rgb(50,50,50);
 }
 
-.nav_logged li {display:block;
- list-style:none;
+.nav_logged li {
+	display: inline;
+    list-style:none;
 }
 
 .nav_logged {width:200px;
@@ -720,11 +721,11 @@ html {filter: expression(document.execCommand("BackgroundImageCache", false, tru
 
 
 .icon_reservar {
-    background: transparent url(../imagenes/iconos/renovar.png) no-repeat;
+    background: transparent url(../imagenes/iconos/reservar.png) no-repeat;
 
-    height: 25px;
+    height: 65px;
 
-    width: 25px;
+    width: 55px;
 
     cursor: pointer;
 

@@ -327,6 +327,15 @@ sub getId3
 Obteniendo el id del elemento
 =cut
 
+
+sub getId{
+    my ($self)  = shift;
+
+    return $self->id;
+}
+
+# Se ponen 2 por compatibilidad
+
 sub getId3{
     my ($self)  = shift;
 

@@ -339,9 +339,9 @@ sub Enviar_Email_Asignacion_Reserva{
 
         my $dateformat = C4::Date::get_date_format();
         my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($reserva->getNro_socio);
-        
-        my $mailFrom=C4::AR::Preferencias::getValorPreferencia("reserveFrom");
-        my $mailSubject =C4::AR::Preferencias::getValorPreferencia("reserveSubject");
+
+        my $mailFrom        = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveFrom"));
+        my $mailSubject     = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveSubject"));
         my $mailMessage =C4::AR::Preferencias::getValorPreferencia("reserveMessage");
         
         my $nombreUI = $reserva->ui->getNombre;
@@ -997,6 +997,11 @@ sub _verificaciones {
         C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de maximo de reservas desde OPAC");
     }
 
+    if( !($msg_object->{'error'}) && ($tipo eq "OPAC") && (!C4::AR::Preferencias::getValorPreferencia('CirculationEnabled'))){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R900', 'params' => []} ) ;
+        C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de maximo de reservas desde OPAC");
+    }
 
 #Se verifica que el usuario no tenga un prestamo sobre el mismo grupo para el mismo tipo prestamo (o no, depende de la preferencia "prestar_mismo_grupo_distintos_tipos_prestamo")
     if( !($msg_object->{'error'}) && (&C4::AR::Prestamos::getCountPrestamosDeGrupoPorUsuario($nro_socio, $id2, $tipo_prestamo)) ){
@@ -1157,38 +1162,44 @@ Transaccion que cancela una reserva.
 sub t_cancelar_reserva{
     my ($params)=@_;
 
-    my $tipo = $params->{'tipo'};
+    my $tipo = $params->{'tipo'} || 'OPAC';
     my $msg_object= C4::AR::Mensajes::create();
     $msg_object->{'tipo'}=$tipo;
     my $db = undef;
-    my ($reserva) = C4::AR::Reservas::getReserva($params->{'id_reserva'});
-#     if ($reserva){
-        $db = $reserva->db;
-        $db->{connect_options}->{AutoCommit} = 0;
-            $db->begin_work;
-#         eval{
-            C4::AR::Debug::debug("VAMOS A CANCELAR LA RESERVA");
-            $reserva->cancelar_reserva($params);
-            $db->commit;
-            $msg_object->{'error'}= 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U308', 'params' => []} ) ;
-            C4::AR::Debug::debug("LA RESERVA SE CANCELO CON EXITO");
-#         };
-#     }else{
-#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R010', 'params' => []} ) ;
-#     }
-# 
-#     if ($@){
-#         C4::AR::Debug::debug("ERROR");
-#         #Se loguea error de Base de Datos
-#         C4::AR::Mensajes::printErrorDB($@, 'B404',$tipo);
-#         eval {$db->rollback};
-#         #Se setea error para el usuario
-#         $msg_object->{'error'}= 1;
-#         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R010', 'params' => []} ) ;
-#     }
-    $db->{connect_options}->{AutoCommit} = 1;
-
+    
+    if( (!$msg_object->{'error'}) && ($tipo eq 'OPAC') && (!C4::AR::Preferencias::getValorPreferencia('CirculationEnabled'))){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'R900', 'params' => []} ) ;
+    }else{
+	    
+	     my ($reserva) = C4::AR::Reservas::getReserva($params->{'id_reserva'});
+	     if ($reserva){
+	        $db = $reserva->db;
+	        $db->{connect_options}->{AutoCommit} = 0;
+	            $db->begin_work;
+	         eval{
+	            C4::AR::Debug::debug("VAMOS A CANCELAR LA RESERVA");
+	            $reserva->cancelar_reserva($params);
+	            $db->commit;
+	            $msg_object->{'error'}= 0;
+	            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U308', 'params' => []} ) ;
+	            C4::AR::Debug::debug("LA RESERVA SE CANCELO CON EXITO");
+	         };
+	     }else{
+	         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R010', 'params' => []} ) ;
+	     }
+	 
+	     if ($@){
+	         C4::AR::Debug::debug("ERROR");
+	         #Se loguea error de Base de Datos
+	         C4::AR::Mensajes::printErrorDB($@, 'B404',$tipo);
+	         eval {$db->rollback};
+	         #Se setea error para el usuario
+	         $msg_object->{'error'}= 1;
+	         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'R010', 'params' => []} ) ;
+	     }
+	    $db->{connect_options}->{AutoCommit} = 1;
+    }
     return ($msg_object);
 }
 

@@ -15,11 +15,16 @@
 		    //callBackFunction: updateAutocompleteBarcodes
 		});
 
-
+        
         $('.fancy_link').fancybox({
         });
 
         mostrarNovedades();
+
+        $("#button_twitter").hover(twitter_hover, twitter_normal);
+ 
+        $("#button_twitter").click(twitter_click);
+        
       });
   
 
@@ -43,11 +48,23 @@
         });
     }
 
+    function twitter_hover(){
+        $("#button_twitter").attr("src","[% temas %]/[% tema %]/imagenes/botones/button_twitter_hover.png");
+    }
+  
+    function twitter_normal(){
+        $("#button_twitter").attr("src","[% temas %]/[% tema %]/imagenes/botones/button_twitter_normal.png");
+    }
+
+    function twitter_click(){
+        $("#button_twitter").attr("src","[% temas %]/[% tema %]/imagenes/botones/button_twitter_click.png");
+    }
+
 </script>
 
 
 
-<fieldset class="main">
+<!--<fieldset class="main">
     <legend class="titulo_legend"><strong>[% "Circulaci&oacute;n:" | i18n %]</strong></legend>
     <ul>
         <li class="item">
@@ -68,7 +85,18 @@
                     [% END %]
         </li>
     </ul>
-</fieldset>
+</fieldset>-->
+
+<!--<ul>
+        <li class="main_usuario_binvenida">
+            [% IF socio_data.sexo == 'f' %]
+                      <span>[% "Bienvenida" | i18n %]</span>
+            [% ELSE %]   
+                      <span>[% "Bienvenido" | i18n %]</span>
+            [% END %]
+            [%socio_data.usr_nombre %], [% socio_data.usr_apellido %][%'!'%]
+        </li>
+</ul>-->
 <fieldset class="main">
     <legend class="titulo_legend">[% "Personal:" | i18n %]</legend>
     <ul>
@@ -126,9 +154,10 @@
 
 [% IF twitter_enabled %]
 
-<a class="fancy_link" href="[% url_prefix %]/admin/publicar_twitter.pl?token=[% token %]">
-                               Publicar en Twitter
+<a class="fancy_link" href="[% url_prefix %]/admin/publicar_twitter.pl?token=[% token %]" > 
+  <img id="button_twitter" src="[% temas %]/[% tema %]/imagenes/botones/button_twitter_normal.png" alt="Twitter"/>
 </a>
+
 
 [% END %]
   

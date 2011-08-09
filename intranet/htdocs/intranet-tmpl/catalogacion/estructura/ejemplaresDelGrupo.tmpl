@@ -36,10 +36,14 @@
 								<th><strong>[% "Tipo de Pr&eacute;stamo"|i18n %]</strong></th>
 					 			<th><strong>[% "Estado"|i18n %]</strong></th>
 								<th><strong>[% "Vencimiento"|i18n %]</strong></th>
-								<th width="7%"><strong>[% "Circulaci&oacute;n"|i18n %]</strong></th>
+                                [% IF circularDesdeDetalleDelRegistro %]
+									<th width="7%">
+									    <strong>[% "Circulaci&oacute;n"|i18n %]</strong>
+								    </th>
+								[% END %]
 								<th><strong>[% "MARC" |i18n %]</strong></th>
 					            <th><strong>[% "Notas" |i18n %]</strong></th>
-					            <th width="8%">
+					            <th width="8%">    
 					                <strong>[% "Acciones" |i18n %]</strong>
 					            </th>
 							</tr>
@@ -109,44 +113,43 @@
 					                        [% END %]
 					                    </span>
 					                </td>
-					                <td valign="middle">
-					
-					                      [% IF circularDesdeDetalleDelRegistro %]
-					                          [% IF disponible %]
-					                              [% IF paraPrestamo %]
-					                                  [% PERL %]
-					                                      print C4::AR::Filtros::to_Icon( 
-					                                          boton   =>  "icon_devolver",
-					                                          onClick =>   "devolverPrestamo('[% socio_prestamo.getNro_socio %]','[% socio_prestamo.persona.getApeYNom %]','[% id2 %]','[% prestamo.getId_prestamo %]');", 
-					                                          title   =>   "[% 'Devolver' | i18n %]",
-					                                          alternClass=> "botonCentradoTabla",
-					                                          ) ;
-					                                  [% END %]
-					                                  [% IF prestamo.sePuedeRenovar %]
-					                                      [% PERL %]
-					                                          print C4::AR::Filtros::to_Icon( 
-					                                                                              boton   =>  "icon_renovar",
-					                                                                              onClick =>   "renovarPrestamo('[% socio_prestamo.getNro_socio %]','[% socio_prestamo.persona.getApeYNom %]','[% id2 %]','[% prestamo.getId_prestamo %]');", 
-					                                                                              title   =>   "[% 'Renovar' | i18n %]",
-					                                                                              alternClass=> "botonCentradoTabla",
-					                                                                      ) ;
-					                                      [% END %]
-					                                  [% END %]
-					                              [% ELSE %]
-					                                  [% PERL %]
-					                                          print C4::AR::Filtros::to_Icon( 
-					                                                                          boton   =>  "icon_prestar",
-					                                                                          onClick =>   "buscarUsuario('[% id2 %]','[% id3 %]');", 
-					                                                                          title   =>   "[% 'Realizar pr&eacute;stamo' | i18n %]",
-					                                                                              alternClass=> "botonCentradoTabla",
-					                                                                      ) ;
-					                                  [% END %]
-					                              [% END %]
-					                          [% END %]
-					                      [% ELSE %]
-					                          [% 'NO SE PERMITE CIRCULAR' | i18n %]
-					                      [% END %] <!--END IF permiso_para_circular -->
-					                </td>
+                                    [% IF circularDesdeDetalleDelRegistro %]
+						                <td valign="middle">
+						
+						                          [% IF disponible %]
+						                              [% IF paraPrestamo %]
+						                                  [% PERL %]
+						                                      print C4::AR::Filtros::to_Icon( 
+						                                          boton   =>  "icon_devolver",
+						                                          onClick =>   "devolverPrestamo('[% socio_prestamo.getNro_socio %]','[% socio_prestamo.persona.getApeYNom %]','[% id2 %]','[% prestamo.getId_prestamo %]');", 
+						                                          title   =>   "[% 'Devolver' | i18n %]",
+						                                          alternClass=> "botonCentradoTabla",
+						                                          ) ;
+						                                  [% END %]
+						                                  [% IF prestamo.sePuedeRenovar %]
+						                                      [% PERL %]
+						                                          print C4::AR::Filtros::to_Icon( 
+						                                                                              boton   =>  "icon_renovar",
+						                                                                              onClick =>   "renovarPrestamo('[% socio_prestamo.getNro_socio %]','[% socio_prestamo.persona.getApeYNom %]','[% id2 %]','[% prestamo.getId_prestamo %]');", 
+						                                                                              title   =>   "[% 'Renovar' | i18n %]",
+						                                                                              alternClass=> "botonCentradoTabla",
+						                                                                      ) ;
+						                                      [% END %]
+						                                  [% END %]
+						                              [% ELSE %]
+						                                  [% PERL %]
+						                                          print C4::AR::Filtros::to_Icon( 
+						                                                                          boton   =>  "icon_prestar",
+						                                                                          onClick =>   "buscarUsuario('[% id2 %]','[% id3 %]');", 
+						                                                                          title   =>   "[% 'Realizar pr&eacute;stamo' | i18n %]",
+						                                                                              alternClass=> "botonCentradoTabla",
+						                                                                      ) ;
+						                                  [% END %]
+						                              [% END %]
+						                          [% END %]
+						                      [% ELSE %]
+						                </td>
+                                    [% END %] <!--END IF permiso_para_circular -->
 					                <td> 
 					                          [% PERL %]
 					                                  print C4::AR::Filtros::to_Icon( 

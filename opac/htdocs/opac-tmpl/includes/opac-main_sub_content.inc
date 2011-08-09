@@ -10,7 +10,7 @@
               <div class="round-border-topright"></div>
               <h1>[% 'Datos Personales' | i18n %]</h1>
 
-              <p>
+              <div>
                 [% IF socio_data.usr_tiene_foto %]
                     <img width="50" height="50" src="/uploads/pictures/[% socio_data.usr_tiene_foto %]"
                         alt="[% socio_data.usr_apellido %], [% socio_data.usr_apellido %]"/>
@@ -19,20 +19,20 @@
                             alt="[% 'Usuario sin foto' | i18n %]"
                             title="[% 'Usuario sin foto' | i18n %]" />
                 [% END %]
-                    Alguna idea para este texto?
-              </p>
-
-              <h3>[% 'Apellido y Nombre' | i18n %]</h3>
-              <p>[% socio_data.usr_apellido %], [% socio_data.usr_nombre %]</p>
+                    <span style="vertical-align: middle;">[% socio_data.usr_apellido %], [% socio_data.usr_nombre %]</span>
+              </div>
 
               <h3>[% 'Tipo y Nro. de Documento' | i18n %]</h3>
               <p>[% socio_data.usr_documento_nombre %]: [% socio_data.usr_nro_documento %]</p>
 
-              <h3>[% 'Nro. de Socio' | i18n %]</h3>
+              <h3>[% 'Tarjeta de Id.' | i18n %]</h3>
               <p>[% socio_data.usr_nro_socio %]</p>
 
               <h3>[% 'Direcci&oacute;n' | i18n %]</h3>
               <p>[% socio_data.usr_calle %], [% socio_data.usr_ciudad_nombre %]</p>
+
+              <h3>[% 'E-mail' | i18n %]</h3>
+              <p>[% socio_data.usr_email %]</p>
 
               <h3>[% 'Categor&iacute;a' | i18n %]</h3>
               <p>[% socio_data.usr_categoria_desc %]</p>

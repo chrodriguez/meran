@@ -1389,6 +1389,7 @@ sub t_guardarEnEstructuraCatalogacion {
         };
     
         if ($@){
+        	$msg_object          = C4::AR::Mensajes::create();
             #Se loguea error de Base de Datos
             &C4::AR::Mensajes::printErrorDB($@, 'B426',"INTRA");
             $db->rollback;
