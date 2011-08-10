@@ -502,13 +502,18 @@ sub marc_record_to_meran_to_detail_view {
                 $hash_temp{'datoReferencia'}        = $dato;
                 my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype,$db);
 
-                $hash_temp{'dato'}                  = C4::AR::Filtros::show_componente(   
-                                                                        campo       => $hash_temp{'campo'},
-                                                                        subcampo    => $hash_temp{'subcampo'},
-                                                                        dato        => $valor_referencia,  
-                                                                        itemtype    => $itemtype,
-                                                                        type        => $type
-                                                                  );
+# C4::AR::Debug::debug("itemType => ".$itemtype);
+
+#                 if($itemtype ne "ANA"){
+
+                    $hash_temp{'dato'}                  = C4::AR::Filtros::show_componente(   
+                                                                            campo       => $hash_temp{'campo'},
+                                                                            subcampo    => $hash_temp{'subcampo'},
+                                                                            dato        => $valor_referencia,  
+                                                                            itemtype    => $itemtype,
+                                                                            type        => $type
+                                                                      );
+#                 }
 
                 push(@MARC_result_array, \%hash_temp);
             }
