@@ -5,33 +5,28 @@
 <script src="/includes/md5.js" type="text/javascript"></script>
 <script src="/includes/sha1.js" type="text/javascript"></script>
 [% USE HTML %]
-[% IF nroRandom %]
     <script type="text/javascript">
         function enviar(){
-            var nroRandom= [% nroRandom %];
-            var username = $.trim($("#userid").val());
-            var hash= b64_sha256(b64_sha256(b64_md5($("#password_plain").val()))+nroRandom);
-            $("#password").val(hash);
-            $("#userid").val(username);
-            return true;
+           [% IF authMERAN == 1 %]
+	      var nroRandom   = [% nroRandom %];
+	      var hash        = b64_sha256(b64_sha256(b64_md5($("#password_plain").val()))+nroRandom);
+	      $("#password").val(hash);
+	  [% ELSE %]
+	      $("#password").val($("#password_plain").val());
+	  [% END %]
+	  var username    = $.trim($("#username").val());
+	  $("#userid").val(username);
+	  $("#datosAEnviar").submit();
+          return true;
         }
-    </script>
-
-	<script type="text/javascript">
-	     var RecaptchaOptions = {
+      var RecaptchaOptions = {
 	     };
-	</script>
-
-    <script type="text/javascript">
-
-        $(document).ready(function() {
+       $(document).ready(function() {
             //onEnter con foco en input, ejecuta la busqueda
               onEnter("password",enviar);
               $("#userid").focus();
         });
-
-    </script>
-[% END %]
+</script>
 <!-- Login -->
 [% IF !socio_data %]
     <div class="round-border-topright"></div>

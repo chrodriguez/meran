@@ -143,9 +143,11 @@
 			                    <li>
 					                    [% INCLUDE "estructura/ejemplaresDelGrupo.tmpl" %]
 			                    </li>
-                                <li>
-                                        [% INCLUDE "estructura/analiticasDelGrupo.tmpl" %]
-                                </li>
+			                    [% IF nivel1_analiticas_cant %]
+	                                <li>
+	                                        [% INCLUDE "estructura/analiticasDelGrupo.tmpl" %]
+	                                </li>
+                                [% END %]
                             </ul>
 	                </div>
                 [% INCLUDE  "partials/e-docs_grupo.inc" %]
