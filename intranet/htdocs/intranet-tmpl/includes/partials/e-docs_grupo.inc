@@ -35,12 +35,11 @@
 		                           [% END %]
 		                    </li>
 		            [% END %]
-		
 		        </ul>
-			    <fieldset id="e_docs_upload_form">
+			    <fieldset class="e_docs_upload_form">
 			        <legend class="titulo_legend">[% 'Agregar documento' | i18n %]</legend>
 				    <div id="file-uploader_[% id2 %]" class="fileUploader_catalogo">
-				         <form  action="[% url_prefix %]/catalogacion/estructura/uploadDocument.pl" 
+				         <form action="[% url_prefix %]/catalogacion/estructura/uploadDocument.pl" 
 				                enctype="multipart/form-data" method="post">
 				               <input type="hidden" name="id2" id="id2" value="[% id2 %]" /><br />
 				               <input type="hidden" name="id1" id="id1" value="[% id1 %]" /><br />

@@ -20,6 +20,7 @@
 <script type="text/javascript" language="javascript" src="/includes/jquery/jquery-ui-1.8.13.sortable.min.js"></script>
 <script type="text/javascript" language="javascript">
     $(function() {
+
 		    $("#sortable").sortable({
                 stop: function(event, ui) { 
                     objAH               = new AjaxHelper(updateSortable);
@@ -31,7 +32,9 @@
 	                objAH.sendToServer(); 
                 }
             });
+            
 		    $("#sortable").disableSelection();
+		    
 		    
 		    function updateSortable(responseText){ }
 	    });
@@ -42,7 +45,7 @@
     <div class="divTablaAgregarVisualizacion" id="divTablaAgregarVisualizacion">
         <ul>
             <li class="sub_item">
-                <label for="campoX">[% 'Seleccion' | i18n %]:</label> 
+                <label for="campoX">[% 'Selecci&oacute;n' | i18n %]:</label> 
                 [% selectCampoX %]
             </li>
             <li class="sub_item">
