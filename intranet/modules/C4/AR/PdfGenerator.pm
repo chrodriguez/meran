@@ -864,12 +864,13 @@ sub batchBookLabelGenerator {
 	my ( $count, $results ) = @_;
 	my $i   = 0;
 	my $pag = 1;
-	my $pdf = new PDF::Report();
+    my $pdf; 
+# 	my $pdf = new PDF::Report();
 	
-
+    C4::AR::Debug::debug($count);
 
        if (C4::AR::Preferencias::getValorPreferencia('BookLabelPage') ne "A4"){
-       
+          $pdf= new PDF::Report();
           $pdf->{PageWidth}  = '270';
           $pdf->{PageHeight} = '190';
           foreach my $nivel3 (@$results) {
@@ -882,26 +883,58 @@ sub batchBookLabelGenerator {
           }
 
         } else {
-                 C4::AR::Debug::debug("Entrsaaaasdfasf");
 #               while ( $i < $count ) {
-              $pdf->{PageWidth}  = '297';
-              $pdf->{PageHeight} = '210';
-
-              foreach my $nivel3 (@$results){
-                    $pdf->newpage($pag);
-                    $pdf->openpage($pag);
-
-                    #Hoja A4 :  X diferencia 254 - Y diferencia 160
-#                     if ( $i < $count ) {
-                         &generateBookLabelA4( $nivel3->getSignatura_topografica, $nivel3->getBarcode, $nivel3->getId_ui_origen, 14, 14, $pdf );
-#                         $i++;
+#               $pdf->{PageWidth}  = '297';
+#               $pdf->{PageHeight} = '210';
+              $pdf= new PDF::Report( PageSize => "A4");
+              my $i=0;
+#               foreach my $nivel3 (@$results){
+#                     $i=$i + 2;
+#                     if ($i > $nro_page * 12){
+#                             $pdf->newpage($pag);
+#                             $pdf->openpage($pag);
 #                     }
-#                     if ( $i < $count ) {
-                         &generateBookLabelA4( $nivel3->getSignatura_topografica, $nivel3->getBarcode, $nivel3->getId_ui_origen, 14, 100, $pdf );
-#                         $i++;
-#                     }
-#                     
-              } 
+#                    
+#                     &generateBookLabelA4( $nivel3->getSignatura_topografica, $nivel3->getBarcode, $nivel3->getId_ui_origen, 14, 14, $pdf );
+#                     &generateBookLabelA4( $nivel3->getSignatura_topografica, $nivel3->getBarcode, $nivel3->getId_ui_origen, 14, 100, $pdf );
+#                  
+#               } 
+                
+                    while ( $i < $count - 1 ) {
+                            $pdf->newpage($pag);
+                            $pdf->openpage($pag);
+
+                            #Hoja A4 :  X diferencia 254 - Y diferencia 160
+                            if ( $i < $count ) {
+                                &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 14, 14, $pdf);
+                                &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 312, 14, $pdf );
+                                $i++;
+                            }
+                            if ( $i < $count ) {
+                                
+                                &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 14, 174, $pdf );
+                                &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 312, 174, $pdf );
+                                $i++;
+                            }
+                            if ( $i < $count ) {
+                                &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 14, 334, $pdf );
+                                &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 312, 334, $pdf );
+                                $i++;
+                            }
+                            if ( $i < $count ) {
+                                &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen,14, 494, $pdf );
+                                &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 312, 494, $pdf );    
+                                $i++;
+                            }
+                            if ( $i < $count ) {
+                                &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 14, 654, $pdf );
+                                &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 312, 654, $pdf );
+                                $i++;
+                            }
+                  
+                            $pag++;
+                        }
+
 	}
 	my $tmpFileName = "etiquetas.pdf";
 
@@ -909,89 +942,91 @@ sub batchBookLabelGenerator {
 
 }
 
-# sub generateBookLabelA4 {
-#     my ( $signatura, $codigo, $branchcode, $x, $y, $pdf ) = @_;
-# 
-#     #Datos de la biblioteca
-#     my $branch = &datosBiblio($branchcode);
-# 
-#     my ( $pagewidth, $pageheight ) = $pdf->getPageDimensions();    #(210x297 - A4)
-#     $pdf->setSize(7);
-# 
-# 
-#     #Insert a rectangle to delimite the card
-#     
-#     $pdf->drawRect( $pagewidth, $pageheight + ( $y - 97 ), 0, $y );
-#     $pdf->drawLine( 95, $pageheight + ( $y - 97 ), 95, $y );
-# 
-#     #Insert a barcode to the card
-#     $pdf->drawBarcode( $x + 110, $y, 70 / 100, 1, "3of9", $codigo, undef, 10,
-#         10, 25, 10 );
-# 
-#     my $posy = 100;
-#     my $escudo =
-#         C4::Context->config('intrahtdocs') . '/temas/'
-#       . C4::AR::Preferencias::getValorPreferencia('tema_intra')
-#       . '/imagenes/escudo-'
-#       . $branchcode . '.jpg';
-# 
-# 
-#     if ( !( ( -e $escudo ) && ( -r $escudo ) ) ) {
-#         $escudo =
-#             C4::Context->config('intrahtdocs') . '/temas/'
-#           . C4::AR::Preferencias::getValorPreferencia('tema_intra')
-#           . '/images/escudo-uni.png';
-#     }
-# 
-#     $pdf->addImgScaled($escudo, $x + 100 , $pageheight + ($y-40-$posy) , 2/100);
-# 
-#     #Write the borrower data into the pdf file
-#     $pdf->setSize(6);
-#     $pdf->setFont("Arial-Bold");
-# 
-#     #      $pdf->addRawText($branch->{'categ'},$x+135,$pageheight + ($y-$posy));
-#     $posy = $posy + 7;
-#     $pdf->addRawText( _unformat($branch->getTituloFormal), $x + 165, $pageheight + ( $y - $posy ) );
-#     $posy = $posy + 7;
-#     $pdf->addRawText( _unformat($branch->getNombre), $x + 165, $pageheight + ( $y - $posy ) );
-#     $posy = $posy + 7;
-#     $pdf->setSize(5);
-#     $pdf->addRawText( C4::AR::Filtros::i18n("Biblioteca"), $x + 165, $pageheight + ( $y - $posy ) );
-#     $posy = $posy + 7;
-#     $pdf->setFont("Arial");
-# 
-#     my $cantdir = 1;                       #Cuantas direcciones tiene?
-#     my $address = _unformat($branch->getDireccion);
-#     $address .= ", " . _unformat($branch->getAlt_direccion); 
-#     $pdf->addRawText( $address, $x + 165, $pageheight + ( $y - $posy ) );
-#     $posy = $posy + ( 7 * $cantdir );
-# 
-#     my $mail = $branch->getEmail;
-#     $pdf->addRawText( $mail, $x + 165, $pageheight + ( $y - $posy ) );
-#     $posy = $posy + 7;
-# 
-#     my $phone_fax = "";
-#     my $phone_tel = " Tel " . $branch->getTelefono || C4::AR::Filtros::i18n('No dispone');
-#     $phone_fax = " Fax " . $branch->getFax      || C4::AR::Filtros::i18n('No dispone');
-# 
-#     $pdf->addRawText( $phone_fax, $x + 164, $pageheight + ( $y - $posy ) );
-#     
-#     $posy = $posy + 7;
-#     $pdf->addRawText( $phone_tel, $x + 164, $pageheight + ( $y - $posy ) );
-# 
-#     #AHORA DIBUJAMOS LA SIGNATURA SEPARADA POR ' '
-#     $pdf->setSize(8);
-#     $pdf->setFont("Arial-Bold");
-#     my @sigs = split( / /, $signatura );
-#     my $posicion = 0;
-#     foreach my $sig (@sigs) {
-#         $pdf->addRawText( "$sig", $x + 15,
-#             $pageheight + ( $y - 120 ) - $posicion );
-#         $posicion += 15;
-#     }
-#     $pdf->setFont("Arial");
-# }
-# 
+sub generateBookLabelA4 {
+    my ( $signatura, $codigo, $branchcode, $x, $y, $pdf ) = @_;
+
+    #Datos de la biblioteca
+    my $branch = &datosBiblio($branchcode);
+
+    my ( $pagewidth, $pageheight ) = $pdf->getPageDimensions();    #(210x297 - A4)
+    $pdf->setSize(7);
+
+
+    #Insert a rectangle to delimite the card
+    $pdf->drawRect( $x - 12, $pageheight - ( $y), $x + 278, $pageheight - ( $y + 142 ) );
+#     $pdf->drawLine( $pagewidth-205, 100, $pagewidth-205, $y );
+
+#     $pdf->drawRect( 300, $pageheight + ( $y - 97 ), $pagewidth, $y );
+#     $pdf->drawLine( $pagewidth-205, $pageheight + ( $y - 97 ),$pagewidth-205, $y );
+
+    #Insert a barcode to the card
+    $pdf->drawBarcode( $x + 110, $y + 40, 73 / 100, 1, "3of9", $codigo, undef, 10,
+        10, 25, 10 );
+
+    my $posy = 100;
+    my $escudo =
+        C4::Context->config('intrahtdocs') . '/temas/'
+      . C4::AR::Preferencias::getValorPreferencia('tema_intra')
+      . '/imagenes/escudo-'
+      . $branchcode . '.jpg';
+
+
+    if ( !( ( -e $escudo ) && ( -r $escudo ) ) ) {
+        $escudo =
+            C4::Context->config('intrahtdocs') . '/temas/'
+          . C4::AR::Preferencias::getValorPreferencia('tema_intra')
+          . '/images/escudo-uni.png';
+    }
+
+    $pdf->addImgScaled($escudo, $x + 80 , $pageheight + 27 + ($y-$posy) , 2/100);
+
+    #Write the borrower data into the pdf file
+    $pdf->setSize(6);
+    $pdf->setFont("Arial-Bold");
+
+    #      $pdf->addRawText($branch->{'categ'},$x+135,$pageheight + ($y-$posy));
+    $posy = $posy + 7;
+    $pdf->addRawText( _unformat($branch->getTituloFormal), $x + 145, $pageheight + 65   + ( $y - $posy ) );
+    $posy = $posy + 7;
+    $pdf->addRawText( _unformat($branch->getNombre), $x + 145, $pageheight + 65 + ( $y - $posy ) );
+    $posy = $posy + 7;
+    $pdf->setSize(5);
+    $pdf->addRawText( C4::AR::Filtros::i18n("Biblioteca"), $x + 145, $pageheight + 65  + ( $y - $posy ) );
+    $posy = $posy + 7;
+    $pdf->setFont("Arial");
+
+    my $cantdir = 1;                       #Cuantas direcciones tiene?
+    my $address = _unformat($branch->getDireccion);
+    $address .= ", " . _unformat($branch->getAlt_direccion); 
+    $pdf->addRawText( $address, $x + 145, $pageheight + 65  + ( $y - $posy ) );
+    $posy = $posy + ( 7 * $cantdir );
+
+    my $mail = $branch->getEmail;
+    $pdf->addRawText( $mail, $x + 145, $pageheight + 65 + ( $y - $posy ) );
+    $posy = $posy + 7;
+
+    my $phone_fax = "";
+    my $phone_tel = " Tel " . $branch->getTelefono || C4::AR::Filtros::i18n('No dispone');
+    $phone_fax = " Fax " . $branch->getFax      || C4::AR::Filtros::i18n('No dispone');
+
+    $pdf->addRawText( $phone_fax, $x + 144, $pageheight + 65 + ( $y - $posy ) );
+    
+    $posy = $posy + 7;
+    $pdf->addRawText( $phone_tel, $x + 144, $pageheight + 65 + ( $y - $posy ) );
+
+    #AHORA DIBUJAMOS LA SIGNATURA SEPARADA POR ' '
+    $pdf->setSize(8);
+    $pdf->setFont("Arial-Bold");
+    my @sigs = split( / /, $signatura );
+    my $posicion = 0;
+    foreach my $sig (@sigs) {
+        $pdf->addRawText( "$sig", $x + 15,
+            $pageheight + 50 + ( $y - 120 ) - $posicion );
+        $posicion += 15;
+    }
+    $pdf->setFont("Arial");
+}
+
 
 
 
