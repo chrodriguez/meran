@@ -8,7 +8,7 @@ use C4::AR::Auth;
 my $input=new CGI;
 
 my ($template, $session, $t_params)= get_template_and_user({
-								template_name => "opac-main.tmpl",
+								template_name => "informacion/error.tmpl",
 								query => $input,
 								type => "opac",
 								authnotrequired => 1,
@@ -30,6 +30,6 @@ if ($ENV{'REDIRECT_STATUS'}  eq "404") {
 }  
 
 $t_params->{'message_error'}        = $message_error;
-$t_params->{'partial_template'}     = "informacion/error.tmpl";
+
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
