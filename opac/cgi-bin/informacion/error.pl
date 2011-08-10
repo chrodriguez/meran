@@ -24,9 +24,9 @@ my $session                 = CGI::Session->load();
 my $message_error           = "404";
 
 if ($ENV{'REDIRECT_STATUS'}  eq "404") {
-    $message_error = C4::Context->preference("404_error_message") || $message_error;
+    $message_error = C4::AR::Preferencias::getValorPreferencia('404_error_message') || $message_error;
 } elsif ($ENV{'REDIRECT_STATUS'}  eq "500") {
-    $message_error = C4::Context->preference("500_error_message") || $message_error;
+    $message_error = C4::AR::Preferencias::getValorPreferencia('500_error_message') || $message_error;
 }  
 
 $t_params->{'message_error'}        = $message_error;

@@ -7,20 +7,19 @@
 [% USE HTML %]
     <script type="text/javascript">
         function enviar(){
-           [% IF authMERAN == 1 %]
-	      var nroRandom   = [% nroRandom %];
-	      var hash        = b64_sha256(b64_sha256(b64_md5($("#password_plain").val()))+nroRandom);
-	      $("#password").val(hash);
-	  [% ELSE %]
-	      $("#password").val($("#password_plain").val());
-	  [% END %]
-	  var username    = $.trim($("#username").val());
-	  $("#userid").val(username);
-	  $("#datosAEnviar").submit();
-          return true;
-        }
-      var RecaptchaOptions = {
-	     };
+		      [% IF authMERAN == 1 %]
+			      var nroRandom   = [% nroRandom %];
+			      var hash        = b64_sha256(b64_sha256(b64_md5($("#password_plain").val()))+nroRandom);
+		          $("#password").val(hash);
+			  [% ELSE %]
+			      $("#password").val($("#password_plain").val());
+			  [% END %]
+
+			  $("#datosAEnviar").submit();
+		      return true;
+      }
+      var RecaptchaOptions = {};
+      
        $(document).ready(function() {
             //onEnter con foco en input, ejecuta la busqueda
               onEnter("password",enviar);
@@ -52,7 +51,7 @@
                   </p>
                   <p>
                     <label for="password_plain" class="top">[% 'Contrase&ntilde;a' | i18n %]:</label><br />
-                    <input type="password" name="password_plain" id="password_plain" tabindex="2" class="field" value="" />
+                    <input type="password" name="" id="password_plain" tabindex="2" class="field" value="" />
                     <input type="hidden" name="password" id="password" tabindex="2" class="field" value="" />
                   </p>
                   <p>

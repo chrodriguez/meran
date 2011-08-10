@@ -9,7 +9,7 @@ use CGI;
 use HTML::Template;
 
 my $query = new CGI;
-
+sdfdsfdsfsd
 my ($template, $session, $t_params)= get_template_and_user({
 									template_name   => "opac-main.tmpl",
 								    query           => $query,
