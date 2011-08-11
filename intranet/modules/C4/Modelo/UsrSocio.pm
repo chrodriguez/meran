@@ -294,9 +294,30 @@ sub cambiarPassword{
 sub resetPassword{
     my ($self)=shift;
 
-    $self->setPassword(C4::AR::Auth::hashear_password(C4::AR::Auth::hashear_password($self->persona->getNro_documento, 'MD5_B64'), 'SHA_256_B64'));
-    $self->forzarCambioDePassword();
-    $self->save();
+
+    if (C4::AR::Preferencias::getValorPreferencia('ldapenabled')){
+    #se esta usando LDAP
+      #  if (C4::Context->config('authMERAN')){
+            #Autenticacion propia de MERAN
+       #     my ($socio) = C4::AR::Authldap::checkpwldap($userid,$password,$nroRandom);
+       # }
+       # else { 
+            #Autenticacion propia de LDAP, en este caso es recomendable HTTPS
+        #    ($socio) = C4::AR::Authldap::checkpwDC($userid,$password);
+         #   }
+     }
+    else {
+	   $self->setPassword(C4::AR::Auth::hashear_password(C4::AR::Auth::hashear_password($self->persona->getNro_documento, 'MD5_B64'), 'SHA_256_B64'));
+	   $self->forzarCambioDePassword();
+	   $self->save();
+   }
+
+
+
+
+
+
+
 }
 
 sub forzarCambioDePassword{

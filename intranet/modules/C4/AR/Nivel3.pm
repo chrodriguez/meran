@@ -435,6 +435,7 @@ sub detalleNivel3{
             }
 
             $hash_nivel2{'nivel1_analiticas_array'} = \@nive1_analitica_array;
+            $hash_nivel2{'nivel1_analiticas_cant'}  = scalar(@nive1_analitica_array);
         }
 #         $hash_nivel2{'nivel1_analiticas_array'} = \@nive2_analitica_array;
     }
