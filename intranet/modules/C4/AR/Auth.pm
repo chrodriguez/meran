@@ -1188,34 +1188,36 @@ sub _checkRequisito{
 sub _verificarPassword {
     my ($userid, $password, $nroRandom) = @_;
     my ($socio) = undef;
-C4::AR::Debug::debug("rapoooooooddddddddddddddd44444444ooooooooo1".$userid.$password);
-    my ($cumple_requisito) = 1;
-#_checkRequisito($userid);
-    
-    if ($cumple_requisito){
-    	
-	    ## FIXME falta verificar la pass en LDAP si esta esta usando    
-	    if (C4::AR::Preferencias::getValorPreferencia('ldapenabled')){
-	    #se esta usando LDAP
-C4::AR::Debug::debug("rapoooooooooooooooo1".$userid.$password);
-	        if (C4::Context->config('authMERAN')){
-		    C4::AR::Debug::debug("rapoooooooooooooooo2".$userid.$password);
-	            #Autenticacion propia de MERAN
-	            ($socio) = C4::AR::Authldap::checkpwldap($userid,$password,$nroRandom);
-	        }
-	        else { 
-	            #Autenticacion propia de LDAP, en este caso es recomendable HTTPS
-		    C4::AR::Debug::debug("rapoooooooooooooooo".$userid.$password);  
-	            ($socio) = C4::AR::Authldap::checkpwDC($userid,$password);
-	        }
-	     }
-	    else {
-	        #Si no se usa LDAP
-C4::AR::Debug::debug("rapoooooooooooooooo3".$userid.$password);
-	        ($socio) = _checkpw($userid,$password,$nroRandom); 
-	    }
+	
+	my ($cumple_requisito) = _checkRequisito($userid);
+	
+	my @metodosDeAutenticacion= ("ldap","mysql");
+	my $metodo;
+	while (pop(@metodosDeAutenticacion,$metodo) || !$socio ) {
+			#$socio=_autheticar($metodo);
+			C4::AR::Debug::debug("rapoooooooooooooooo1".$metodo);
+		}
+    if (C4::AR::Preferencias::getValorPreferencia('ldapenabled')){
+		#se esta usando LDAP
+		C4::AR::Debug::debug("rapoooooooooooooooo1".$userid.$password);
+	    if (C4::Context->config('authMERAN')){
+			C4::AR::Debug::debug("rapoooooooooooooooo2".$userid.$password);
+	        #Autenticacion propia de MERAN
+			($socio) = C4::AR::Authldap::checkpwldap($userid,$password,$nroRandom);
+		}
+		else{ 
+		#Autenticacion propia de LDAP, en este caso es recomendable HTTPS
+		C4::AR::Debug::debug("rapoooooooooooooooo".$userid.$password);  
+		($socio) = C4::AR::Authldap::checkpwDC($userid,$password);
+		}
+	}
+	#if (C4::AR::Preferencias::getValorPreferencia('meranenabled')){
+	else {
+		#Si no se usa LDAP
+		C4::AR::Debug::debug("rapoooooooooooooooo3".$userid.$password);
+		($socio) = _checkpw($userid,$password,$nroRandom); 
     }
-    return ($socio);
+	return ($socio);
 }
 
 sub redirectTo {
