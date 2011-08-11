@@ -3023,6 +3023,18 @@ sub existeInArray{
     return 0;
 }
 
+sub getIndexFromArrayByString{
+    my ($string, $array_ref) = @_;
+# TODO mejorarlo!!!!!!!!!
+    for(my $i=0;$i< scalar(@$array_ref);$i++){
+        if(trim($array_ref->[$i]->{'campo'}) eq trim($string)){
+            return $i;
+        }
+    }
+
+    return -1;
+}
+
 =item
 Esta funcion verifica si el user_agent es un browser
 =cut
