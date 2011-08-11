@@ -74,6 +74,8 @@ my %mensajesOPAC = (
 	<br><i> *?* </i><br>Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.',
 	'U304' => 'Disculpe, no puede reservar porque no hizo el curso para usuarios.',
 	'U308' => 'Se cancel&oacute; la reserva con &eacute;xito.',
+    'U338' => 'Se modificaron los datos del usuario correctamente.',
+    'U339' => 'Disculpe, no se pudo modificar los datos del usuario, intente nuevamente.',
     'U309' => 'No puede iniciar sesi&oacute;n porque sus datos censales est&aacute;n desactualizados, debe dirigirse a la biblioteca para actualizarlos.',
     'U357' => 'Ha ingresado un nombre de usuario o password incorrecto. Por favor intente nuevamente.',
     'U400' => 'UD. acaba de cambiar la password, debe ingresar nuevamente.',

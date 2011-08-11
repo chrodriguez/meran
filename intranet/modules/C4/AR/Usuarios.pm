@@ -448,7 +448,7 @@ sub cambiarPassword {
     }else{
         #Se setea error para el usuario
         $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U313', 'params' => [$params->{'nro_socio'}]} ) ;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U339', 'params' => [$params->{'nro_socio'}]} ) ;
     }
 
     if(!$msg_object->{'error'}){

@@ -219,9 +219,9 @@ sub modificarDatosDeOPAC{
     
     $self->setNombre($data_hash->{'nombre'});
     $self->setApellido($data_hash->{'apellido'});
-    $self->setCalle($data_hash->{'calle'});
+    $self->setCalle($data_hash->{'direccion'});
     $self->setCiudad($data_hash->{'id_ciudad'});
-    $self->setTelefono($data_hash->{'telefono'});
+    $self->setTelefono($data_hash->{'numero_telefono'});
     $self->setEmail($data_hash->{'email'});
 
     $self->save();
