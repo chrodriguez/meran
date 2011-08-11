@@ -58,23 +58,24 @@
   
   <script type="text/javascript">
       [% IF socio_data.usr_nro_socio %]
-          $(document).ready(function() {
-            infoReservas();
-            infoSanciones();
-            // TODO: no recupera el valor de timeInterval
-            setInterval(infoReservas,[% IF timeInterval %]
-                                        [% timeInterval %]
-                                     [% ELSE %]
-                                        300000
-                                     [% END %]
-                                     );
-            setInterval(infoSanciones,[% IF timeInterval %]
-                                        [% timeInterval %]
-                                     [% ELSE %]
-                                        300000
-                                     [% END %]
-                                     );
-          });
+	      [% IF !noAjaxRequests %]
+	          $(document).ready(function() {
+	            infoReservas();
+	            infoSanciones();
+	            setInterval(infoReservas,[% IF timeInterval %]
+	                                        [% timeInterval %]
+	                                     [% ELSE %]
+	                                        300000
+	                                     [% END %]
+	                                     );
+	            setInterval(infoSanciones,[% IF timeInterval %]
+	                                        [% timeInterval %]
+	                                     [% ELSE %]
+	                                        300000
+	                                     [% END %]
+	                                     );
+	          });
+	      [% END %]
       [% END %]
   </script>
 

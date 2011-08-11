@@ -130,9 +130,11 @@ sub agregar{
 #     $self->setPassword($data_hash->{'password'});
     
     $self->setPassword(C4::AR::Auth::hashear_password(C4::AR::Auth::hashear_password($self->persona->getNro_documento, 'MD5_B64'), 'SHA_256_B64'));
-#     $self->setLast_login($data_hash->{'last_login'});
-    $self->setChange_password($data_hash->{'changepassword'});
 
+    if ($data_hash->{'changepassword'}){
+        $self->forzarCambioDePassword(1);
+    }
+    
     my $today = Date::Manip::ParseDate("today");
     my $cumple_requisito = $data_hash->{'cumple_requisito'};
     
@@ -311,21 +313,20 @@ sub resetPassword{
 	   $self->forzarCambioDePassword();
 	   $self->save();
    }
-
-
-
-
-
-
-
 }
 
 sub forzarCambioDePassword{
     my ($self)=shift;
-
+    my ($es_alta) = @_;
+    
+    $es_alta = $es_alta || 0;
+    
     $self->setChange_password(1);
-    $self->setLast_change_password('0000-00-00');
-    $self->save();
+    $self->last_change_password('0000-00-00');
+    
+    if (!$es_alta){
+        $self->save();
+    }
 }
 
 # FIXME DEPRECATED

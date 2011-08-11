@@ -325,7 +325,7 @@ sub generarComboDeCredentials{
 
 #     if ($socio){
 #         $default_credential = $socio->getCredentialType;
-        my $default_credential = $session->param('usr_credential_type')||'estudiante';
+        my $default_credential = $params-{'default'} || 'estudiante';
 #     }
 
     my $CGIregular = CGI::scrolling_list(       -name      => 'credential',
