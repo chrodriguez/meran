@@ -456,27 +456,37 @@ sub cambiarPassword {
 # FIXME si cambia la pass que pasa con LDAP??
         my $password_actual_desde_DB = $socio->getPassword;
         my $cambioDePasswordForzado;
-        my $password_actual_desde_cliente_hasheada = C4::AR::Auth::prepare_password($params->{'actualPassword'});
+        my $password_actual_desde_cliente_hasheada  = C4::AR::Auth::prepare_password($params->{'actualPassword'});
+        my $newPasswordHasheado                     = C4::AR::Auth::prepare_password($params->{'newpassword'});
 
         if( ($params->{'changePassword'} eq 1) && ($socio->getChange_password) ){
             $cambioDePasswordForzado= 1;
         }
 
-        if ( $password_actual_desde_DB eq $password_actual_desde_cliente_hasheada){
-            C4::AR::Debug::debug("Auth => cambiarPassword => cambioForzado ");
-            #es un cambio forzado de la password, se obliga al usuario a cambiar la password, no se compara con la pass actual
-            my $newPassword = $params->{'newpassword'};
-            C4::AR::Debug::debug("Auth => cambiarPassword => nueva password=> ".$newPassword);
-            C4::AR::Debug::debug("Auth => cambiarPassword => sha256_base64(md5_base64 actualpassword ".$password_actual_desde_cliente_hasheada);
-            $socio->cambiarPassword($newPassword);
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U312', 'params' => [$params->{'nro_socio'}]} ) ;
-        }else{
-            #El password actual NO coincide con el suyo    
+        my $newPassword = $params->{'newpassword'};
+
+        if ($socio->getPassword eq $newPasswordHasheado ){
+            #El password actual es igual al nuevo
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U361', 'params' => [$params->{'nro_socio'}]} ) ;
-            C4::AR::Debug::debug("Auth => cambiarPassword => la password son <> ");
-            C4::AR::Debug::debug("Auth => cambiarPassword => password_actual_desde_cliente_hasheada=> ".$password_actual_desde_cliente_hasheada);
-            C4::AR::Debug::debug("Auth => cambiarPassword => password_actual_desde_DB=> ".$password_actual_desde_DB);
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U499', 'params' => []} ) ;
+            C4::AR::Debug::debug("Auth => cambiarPassword => la password son ======== ");
+        }else{
+	        if( $password_actual_desde_DB eq $password_actual_desde_cliente_hasheada){
+	            C4::AR::Debug::debug("Auth => cambiarPassword => cambioForzado ");
+	            #es un cambio forzado de la password, se obliga al usuario a cambiar la password, no se compara con la pass actual
+	            C4::AR::Debug::debug("Auth => cambiarPassword => nueva password=> ".$newPassword);
+	            C4::AR::Debug::debug("Auth => cambiarPassword => sha256_base64(md5_base64 actualpassword ".$password_actual_desde_cliente_hasheada);
+	            $socio->cambiarPassword($newPassword);
+	            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U312', 'params' => [$params->{'nro_socio'}]} ) ;
+	        }else{
+	        	C4
+	            #El password actual NO coincide con el suyo    
+	            $msg_object->{'error'}= 1;
+	            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U361', 'params' => [$params->{'nro_socio'}]} ) ;
+	            C4::AR::Debug::debug("Auth => cambiarPassword => la password son <> ");
+	            C4::AR::Debug::debug("Auth => cambiarPassword => password_actual_desde_cliente_hasheada=> ".$password_actual_desde_cliente_hasheada);
+	            C4::AR::Debug::debug("Auth => cambiarPassword => password_actual_desde_DB=> ".$password_actual_desde_DB);
+	        }
         }
     }
 
