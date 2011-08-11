@@ -62,7 +62,6 @@
 	          $(document).ready(function() {
 	            infoReservas();
 	            infoSanciones();
-	            // TODO: no recupera el valor de timeInterval
 	            setInterval(infoReservas,[% IF timeInterval %]
 	                                        [% timeInterval %]
 	                                     [% ELSE %]

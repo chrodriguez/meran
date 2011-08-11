@@ -1,5 +1,3 @@
-[% INCLUDE   'opac-top.inc'  %]
-
 [% INCLUDE   'ChangePasswordHelper.inc'  %]
 
 <script type="text/javascript">
@@ -37,8 +35,7 @@ $(document).ready(function() {
 });
 
 </script>
-
-<form action='[% url_prefix %]/change_passwordDB.pl' method="post" name="datosAEnviar">
+<form action='[% url_prefix %]/change_passwordDB.pl?token=[% token %]' method="post" name="datosAEnviar">
         <input type="hidden" name="new_password1">
         <input type="hidden" name="new_password2">
         <input type="hidden" name="usuario">
@@ -47,7 +44,7 @@ $(document).ready(function() {
         <input type="hidden" name="token" value="[% token %]">
 </form>
 
-<div class="titulos">[% 'Cambio de contrase&ntilde;a obligatorio' | i18n %]
+<div class="contactform" style="width: 50%">
 
 <div class='tableMsgUser'>
     <font class='fontMsgUser'>
@@ -58,33 +55,20 @@ $(document).ready(function() {
         </b>
     </font>
 </div>
-
-<table border="0" cellpadding="0" cellspacing="0" width="60%">
-    <tr><td align="center" valign="middle">
-
-    <table border="0"  cellpadding="0" cellspacing="0">
-    <tr>
-        <td> <b>Contrase&ntilde;a Actual:</b></td>
-            <td><input type="password" name="actualpassword" id="actualpassword"></td>
-    </tr>
-
-
-	<tr>
-		<td> <b>Nueva Contrase&ntilde;a:</b></td>
-	     	<td><input type="password" name="newpassword1" id="newpassword1"></td>
-    </tr>
-	
-	<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-	<tr>
-        <td><b>Repetir Contrase&ntilde;a:&nbsp;</b></td>
-        <td><input type="password" name="newpassword2"  id="newpassword2"></td>
-    </tr>
-	<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-	<tr><td colspan="2" align="center"><input type="button" value="Entrar" onClick="guardarCambiarPassword()"></td></tr>
-    </table>
-    </td></tr>
-</table>
-
-
-[% INCLUDE 'opac-bottom.inc' %]
-
+<fieldset>
+    <legend>
+        &nbsp;
+        <span id="name_card">
+            [% 'Cambio de contrase&ntilde;a obligatorio' | i18n %]
+        </span>
+        &nbsp;
+    </legend>
+        <p><label for="pass" class="left">Contrase&ntilde;a Actual:&nbsp;</label>
+        <input type="password" name="actualpassword" id="actualpassword"></p>
+        <p><label for="pass" class="left">Nueva Contrase&ntilde;a:&nbsp;</label>
+        <input type="password" name="newpassword1" id="newpassword1"></p>
+        <p><label for="pass" class="left">Repetir Contrase&ntilde;a:&nbsp;</label>
+        <input type="password" name="newpassword2"  id="newpassword2"></p>
+	    <p><input type="button" value="Aceptar" onClick="guardarCambiarPassword()"></p>
+</fieldset>
+</div>
