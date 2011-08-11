@@ -12,9 +12,10 @@ my $input = new CGI;
 if(C4::AR::Preferencias::getValorPreferencia("permite_cambio_password_desde_opac")){
     
     my $session = CGI::Session->load();
-    my ($template, $t_params)= C4::Output::gettemplate("opac-changepassword.tmpl", 'intranet');
+    my ($template, $t_params)= C4::Output::gettemplate("opac-main.tmpl", 'opac');
 
     $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($session->param("codMsg"),'OPAC',[]);
+    $t_params->{'partial_template'}     = "opac-changepassword.inc";
     $t_params->{'noAjaxRequests'}= 1;
 
     
