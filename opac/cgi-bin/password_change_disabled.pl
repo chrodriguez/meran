@@ -18,4 +18,6 @@ my $session = CGI::Session->new();
 #sin destruir la sesion del usuario, permitiendo asi que navegue por donde tiene permisos
 $t_params->{'mensaje'}= C4::AR::Filtros::i18n("Dir&iacute;jase a la Bilblioteca para realizar el cambio de contrase&ntilde;a. Disculpe las molestias.");
 $t_params->{'partial_template'}= "informacion.inc";
-&C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+$t_params->{'noAjaxRequests'}= 1;
+
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
