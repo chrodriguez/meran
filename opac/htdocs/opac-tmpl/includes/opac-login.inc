@@ -5,33 +5,27 @@
 <script src="/includes/md5.js" type="text/javascript"></script>
 <script src="/includes/sha1.js" type="text/javascript"></script>
 [% USE HTML %]
-[% IF nroRandom %]
     <script type="text/javascript">
         function enviar(){
-            var nroRandom= [% nroRandom %];
-            var username = $.trim($("#userid").val());
-            var hash= b64_sha256(b64_sha256(b64_md5($("#password_plain").val()))+nroRandom);
-            $("#password").val(hash);
-            $("#userid").val(username);
-            return true;
-        }
-    </script>
+		      [% IF authMERAN == 1 %]
+			      var nroRandom   = [% nroRandom %];
+			      var hash        = b64_sha256(b64_sha256(b64_md5($("#password_plain").val()))+nroRandom);
+		          $("#password").val(hash);
+			  [% ELSE %]
+			      $("#password").val($("#password_plain").val());
+			  [% END %]
 
-	<script type="text/javascript">
-	     var RecaptchaOptions = {
-	     };
-	</script>
-
-    <script type="text/javascript">
-
-        $(document).ready(function() {
+			  $("#datosAEnviar").submit();
+		      return true;
+      }
+      var RecaptchaOptions = {};
+      
+       $(document).ready(function() {
             //onEnter con foco en input, ejecuta la busqueda
               onEnter("password",enviar);
               $("#userid").focus();
         });
-
-    </script>
-[% END %]
+</script>
 <!-- Login -->
 [% IF !socio_data %]
     <div class="round-border-topright"></div>
@@ -57,7 +51,7 @@
                   </p>
                   <p>
                     <label for="password_plain" class="top">[% 'Contrase&ntilde;a' | i18n %]:</label><br />
-                    <input type="password" name="password_plain" id="password_plain" tabindex="2" class="field" value="" />
+                    <input type="password" name="" id="password_plain" tabindex="2" class="field" value="" />
                     <input type="hidden" name="password" id="password" tabindex="2" class="field" value="" />
                   </p>
                   <p>

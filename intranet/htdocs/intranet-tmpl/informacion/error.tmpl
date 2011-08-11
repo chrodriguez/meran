@@ -1,4 +1,17 @@
-[% INCLUDE "intranet-top.inc" %] 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+
+	[% IF page_sub_title %]
+	    <title>Meran::UNLP::[% page_sub_title %]</title>
+	[% ELSE %]
+	    <title>Meran::UNLP</title>
+	[% END %]
+	<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme_intra %]/includes/completo.css">
+
+</head>
+
+<body>
 
 <div class='tableMsgUser'>
     <font class='fontMsgUser'>
@@ -10,5 +23,4 @@
     </font>
 </div>
 
-
-[% INCLUDE "intranet-bottom.inc" %]
+</body>

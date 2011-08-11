@@ -52,11 +52,7 @@ my $msgFoto=$query->param('msg');
 $t_params->{'foto_name'} = $foto;
 $t_params->{'mensaje_error_foto'} = $msgFoto;
 
-if (C4::AR::Preferencias::getValorPreferencia("UploadPictureFromOPAC")) {
-	$t_params->{'UploadPictureFromOPAC'}=1;
-} else {
-	$t_params->{'UploadPictureFromOPAC'}=0;
-}
+$t_params->{'UploadPictureFromOPAC'}= C4::AR::Preferencias::getValorPreferencia("UploadPictureFromOPAC");
 
 # FIXME falta 
 =item
@@ -71,7 +67,7 @@ if ($san->{'id3'}) {
 }
 if (scalar(@$sanc) > 0){$t_params->{'sanciones_loop'}= $sanc;}
 =cut
-$t_params->{'updatedata'}= (!C4::AR::Preferencias::getValorPreferencia('CheckUpdateDataEnabled'));
+$t_params->{'updatedata'} =(!C4::AR::Preferencias::getValorPreferencia('CheckUpdateDataEnabled'));
 $t_params->{'LibraryName'}= C4::AR::Preferencias::getValorPreferencia("LibraryName");
 $t_params->{'pagetitle'}= "Usuarios";
 #se verifica la preferencia showHistoricReserves, para mostrar o no el historico de las Reservas

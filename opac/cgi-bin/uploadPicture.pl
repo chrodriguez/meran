@@ -22,7 +22,10 @@ my ($nro_socio, $session, $flags) = checkauth(
                                                             "opac"
                         );  
 
+my $uploadFromOPAC              =  C4::AR::Preferencias::getValorPreferencia("UploadPictureFromOPAC");
 
-my ($error,$codMsg,$message) = C4::AR::UploadFile::uploadPhoto($query);
+if ($uploadFromOPAC){ 
+    my ($error,$codMsg,$message)    = C4::AR::UploadFile::uploadPhoto($query);
+}
 
 

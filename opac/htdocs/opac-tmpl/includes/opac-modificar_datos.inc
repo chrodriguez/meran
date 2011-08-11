@@ -24,33 +24,36 @@
             $("link").attr("href","[% temas %]/"+$("#temas_opac").val()+"/includes/opac.css");
             return false;
         });
+
         $('.fancylink').fancybox();
         
         
-        [% IF !foto_name %] 
-            $('#div_uploader').show();
-        [% ELSE %]
-            $('#div_boton_eliminar_foto').show();
-        [% END %]
+        [% IF UploadPictureFromOPAC %] 
 
-        $('.fancylink').fancybox();
-
-        //Inicializacion del FileUploader
-        [% IF !foto_name %]  
-            $('#label-file-uploader').show();
-            var uploader = new qq.FileUploader({
-                element: document.getElementById('file-uploader'),
-                action: '[% url_prefix %]/uploadPicture.pl',
-                params: {
-                    nro_socio: '[% socio_data.usr_nro_socio %]',
-                },
-                allowedExtensions: ["bmp","jpg","gif","png","jpeg"],
-                debug: true,
-                multiple: false,
-            });
-        [% ELSE %]
-            $('#label-file-uploader').hide();
-        [% END %]
+	        [% IF !foto_name %] 
+	            $('#div_uploader').show();
+	        [% ELSE %]
+	            $('#div_boton_eliminar_foto').show();
+	        [% END %]
+	
+	
+	        //Inicializacion del FileUploader
+	        [% IF !foto_name %]  
+	            $('#label-file-uploader').show();
+	            var uploader = new qq.FileUploader({
+	                element: document.getElementById('file-uploader'),
+	                action: '[% url_prefix %]/uploadPicture.pl',
+	                params: {
+	                    nro_socio: '[% socio_data.usr_nro_socio %]',
+	                },
+	                allowedExtensions: ["bmp","jpg","gif","png","jpeg"],
+	                debug: true,
+	                multiple: false,
+	            });
+	        [% ELSE %]
+	            $('#label-file-uploader').hide();
+	        [% END %]
+	    [% END %]
         
         
     });
@@ -91,36 +94,36 @@
                    <input type="text" name="email" id="email" class="field [% IF !socio_data.usr_email %] error_field [% END %]" value="[% socio_data.usr_email %]" tabindex="11" /></p>
                    <input type="hidden" name="token" id="token" value="[% token %]" />
 <!--                 Cambio de foto -->
-
-                      [% IF mensaje_error_foto %] 
-                        <li>
-                                <font color="red">[% mensaje_error_foto %]</font>
-                        </li>
-                      [% END %]
-
-                       <div id="div_boton_eliminar_foto" style="display: none">
-                          <li>
-                                [% PERL %]
-                                            print C4::AR::Filtros::to_Button(   text    => "[% 'Eliminar Foto' | i18n %]",
-                                                                                boton   => "boton_borrar",
-                                                                                onClick => "eliminarFoto('[% foto_name %] ');",
-                                                                             );
-                                [% END %]
-                          </li>
-                        </div>
-                        <li style="margin: 0 auto; width: 60%; list-style: none">
-                            <label for="file-uploader" id="label-file-uploader">
-                                <h4>[% 'Seleccione una im&aacute;gen apropiada' | i18n %]</h4>
-                            </label>
-                            <div id="file-uploader">
-                                <noscript>          
-                                    <p>[% 'Please enable JavaScript to use file uploader.' | i18n %]</p>
-                                    <!-- or put a simple form for upload here -->
-                                </noscript>                          
-                            </div>
-                        </li>
-                    </ul>
-
+                   [% IF UploadPictureFromOPAC %] 
+	                      [% IF mensaje_error_foto %] 
+	                        <li>
+	                                <font color="red">[% mensaje_error_foto %]</font>
+	                        </li>
+	                      [% END %]
+	
+	                       <div id="div_boton_eliminar_foto" style="display: none">
+	                          <li>
+	                                [% PERL %]
+	                                            print C4::AR::Filtros::to_Button(   text    => "[% 'Eliminar Foto' | i18n %]",
+	                                                                                boton   => "boton_borrar",
+	                                                                                onClick => "eliminarFoto('[% foto_name %] ');",
+	                                                                             );
+	                                [% END %]
+	                          </li>
+	                        </div>
+	                        <li style="margin: 0 auto; width: 60%; list-style: none">
+	                            <label for="file-uploader" id="label-file-uploader">
+	                                <h4>[% 'Seleccione una im&aacute;gen apropiada' | i18n %]</h4>
+	                            </label>
+	                            <div id="file-uploader">
+	                                <noscript>          
+	                                    <p>[% 'Please enable JavaScript to use file uploader.' | i18n %]</p>
+	                                    <!-- or put a simple form for upload here -->
+	                                </noscript>                          
+	                            </div>
+	                        </li>
+	                    </ul>
+                    [% END %]
                    <!-- CAMPOS PARA CAMBIO DE PASSWORD -->
                    <input type="hidden" name="new_password1" id="new_password1" />
                    <input type="hidden" name="new_password2" id="new_password2" />

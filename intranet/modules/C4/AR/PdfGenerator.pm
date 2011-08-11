@@ -271,15 +271,16 @@ sub imprimirLinea {
 		$pdf->setSize(12);
 		$pos = $pos - 15;
 ## FIXME esta funcion es llamada dentro de un loop, de manera q consulta demasiado a la base a travez del ##context(), o sea q estos valores se deben recibir como parametro
-		$pdf->addImg(
-			C4::AR::Preferencias::getValorPreferencia('opacdir')
-			  . '/htdocs/opac-tmpl/'
-			  . C4::AR::Preferencias::getValorPreferencia('opacthemes') . '/'
-			  . C4::AR::Preferencias::getValorPreferencia('opaclanguages')
-			  . '/images/escudo-print.png',
-			500,
-			$pageheight - 77
-		);
+# Preferencias viejas, actualizar a lo nuevo.
+#		$pdf->addImg(
+#			C4::AR::Preferencias::getValorPreferencia('opacdir')
+#			  . '/htdocs/opac-tmpl/'
+#			  . C4::AR::Preferencias::getValorPreferencia('opacthemes') . '/'
+#			  . C4::AR::Preferencias::getValorPreferencia('opaclanguages')
+#			  . '/images/escudo-print.png',
+#			500,
+#			$pageheight - 77
+#		);
 		$pdf->setFont("Verdana");
 		$pdf->setSize(10);
 		$pos = $pos - 40;
@@ -713,12 +714,9 @@ sub imprimirEncabezado {
 	my $dia     = $datearr[3];
     $ui_object  = $ui_object || C4::AR::Referencias::obtenerDefaultUI();
 	#fin fecha
-	C4::AR::Debug::debug( C4::Context->config('intrahtdocs') . '/'
-		  . C4::AR::Preferencias::getValorPreferencia('template')
-		  . '/images/escudo-uni.png' );
-
 # FIXME si le dejo esto se rompe, como se va a cambiar el manejador de PDFs lo dejo asi
-#         $pdf->addImg( C4::Context->config('intrahtdocs').'/'.C4::AR::Preferencias::getValorPreferencia('template').'/images/escudo-uni.png', $x, $pageheight - 160);
+# my $tema_intra  = C4::AR::Preferencias::getValorPreferencia('tema_intra') || 'default';
+#         $pdf->addImg( C4::Context->config('intrahtdocs').'/'.$tema_intra.'/images/escudo-uni.png', $x, $pageheight - 160);
 	$pdf->setFont("Arial-Bold");
 	$pdf->setSize(10);
     $pdf->addRawText( _unformat(uc($ui_object->getTituloFormal)), $x, $pageheight - 180 );
