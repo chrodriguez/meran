@@ -1041,7 +1041,7 @@ sub generateBookLabelA4 {
     }
 
 # Inserto el barcode debajo de signatura
-    $pdf->addRawText( "$codigo", $x - 1, 200 + ( $y));
+    $pdf->addRawText( "$codigo", $x - 1, $y + 40);
     
     $pdf->setFont("Arial");
 }
