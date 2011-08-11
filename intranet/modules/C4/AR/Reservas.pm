@@ -654,7 +654,7 @@ sub getReservasDeSocio {
     my @filtros;
     push(@filtros, ( id2        => { eq => $id2}));
     push(@filtros, ( nro_socio  => { eq => $nro_socio} ));
-#     push(@filtros, ( estado     => { ne => 'P'} ));
+    push(@filtros, ( estado     => { ne => 'P'} ));
 
     my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(  db => $db, query => \@filtros);
 
@@ -1213,7 +1213,8 @@ sub cantReservasPorNivel1{
     
     my @filtros;
     
-    push (@filtros, ('nivel2.id1' => {eq => $id1}));    
+    push (@filtros, ('nivel2.id1' => {eq => $id1}));
+    push (@filtros, ('estado' => {ne => 'P'}));
 
     my ($count) = C4::Modelo::CircReserva::Manager->get_circ_reserva_count(
                                                                     query => \@filtros, 
