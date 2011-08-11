@@ -1141,7 +1141,7 @@ sub cerrarSesion{
     $params{'token'}                = '';
     $params{'nroRandom'}            = '';
     $params{'borrowernumber'}       = '';
-    $params{'type'}                 = $t_params->{'type'}; #OPAC o INTRA
+    $params{'type'}                 = $t_params->{'type'} || 'OPAC'; #OPAC o INTRA
     $params{'flagsrequired'}        = '';
     $t_params->{'sessionClose'}     = 1;
     $session = C4::AR::Auth::_generarSession(\%params);
