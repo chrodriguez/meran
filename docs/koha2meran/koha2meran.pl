@@ -931,7 +931,7 @@ sub traduccionEstructuraMarc {
             my $refusuario=$dbh->prepare("UPDATE $tabla  SET nro_socio='".$usuario->{'nro_socio'}."' WHERE borrowernumber='". $usuario->{'id_socio'} ."' ;");
             $refusuario->execute();
       
-	    if ($tabla eq 'rep_historial_circulacion'){
+	    if (($tabla eq 'rep_historial_circulacion')||($tabla eq 'rep_historial_sancion')){
 	      #Estas tablas tienen responsable
 		my $refresponsable=$dbh->prepare("UPDATE $tabla  SET responsable='".$usuario->{'nro_socio'}."' WHERE responsable='". $usuario->{'id_socio'} ."' ;");
 		$refresponsable->execute();
