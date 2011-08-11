@@ -3,7 +3,6 @@ use strict;
 require Exporter;
 use CGI;
 use C4::AR::Auth;         # checkauth, getnro_socio.
-use C4::Circulation::Circ2;
 
 use C4::Date;
 
