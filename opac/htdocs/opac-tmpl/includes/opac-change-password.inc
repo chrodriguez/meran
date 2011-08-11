@@ -1,5 +1,3 @@
-[% INCLUDE   'opac-top.inc'  %]
-
 [% INCLUDE   'ChangePasswordHelper.inc'  %]
 
 <script type="text/javascript">
@@ -85,6 +83,4 @@ $(document).ready(function() {
     </td></tr>
 </table>
 
-
-[% INCLUDE 'opac-bottom.inc' %]
 

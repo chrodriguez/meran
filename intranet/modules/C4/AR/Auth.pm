@@ -1111,7 +1111,13 @@ sub desencriptar{
 sub _change_Password_Controller {
 	my ($query, $userid, $type, $token) = @_;
     if ($type eq 'opac') {
-            redirectTo(C4::AR::Utilidades::getUrlPrefix().'/change_password.pl?token='.$token);
+            # si no esta habilitada esta preferencia, tiene que redirigir a un pl
+            # para evitar entrar en un loop al hacer el checkauth
+            if(!C4::AR::Preferencias::getValorPreferencia("permite_cambio_password_desde_opac")){
+                redirectTo(C4::AR::Utilidades::getUrlPrefix().'/password_change_disabled.pl?token='.$token);
+            }else{
+                redirectTo(C4::AR::Utilidades::getUrlPrefix().'/change_password.pl?token='.$token);
+            }    
     } else {
             redirectTo(C4::AR::Utilidades::getUrlPrefix().'/usuarios/change_password.pl?token='.$token);
     }
