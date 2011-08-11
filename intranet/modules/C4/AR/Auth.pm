@@ -18,8 +18,8 @@ package C4::AR::Auth;
  Hay algunas variables que se deben configurar para controlar el funcionamiento de este modulo:
 
     charset: controla el charset, en caso de no estar definida utiliza utf8
-    authMERAN: controla si se usa la authenticacion de MERAN utilizando el sistema definido internamente con el nroRandom o si utiliza un sistema tradicional simplemente utilizando la password y chequeandola contra un repositorio normal. Por defecto es 0.
-    ldapenabled: Define si se utiliza un ldap para la authenticacion, en combinacion con la variables authMERAN se define si es un ldap especialmente formado para soportar el manejo del nroRandom o si es un ldap comun como ser un dominio
+    plainPassword: controla si se usa la authenticacion de MERAN utilizando el sistema definido internamente con el nroRandom o si utiliza un sistema tradicional simplemente utilizando la password y chequeandola contra un repositorio normal. Por defecto es 0.
+    ldapenabled: Define si se utiliza un ldap para la authenticacion, en combinacion con la variables plainPassword se define si es un ldap especialmente formado para soportar el manejo del nroRandom o si es un ldap comun como ser un dominio
     defaultLang: el idioma del sistema, por defecto si no esta definido es es_ES
     expire: controla si las sesiones expiran o no.
     timeout: define el tiempo que demora una sesion en dar timeout. Se usa en conjunto con expire. Si no esta definida, la busca en las preferencias del sistema, y si no esta alli la setea en 600 segundos.
@@ -344,9 +344,9 @@ sub inicializarAuth{
 
     #Guardo la sesion en la base
     #FIXME C4::AR::Auth::_save_session_db($session->param('sessionID'), undef, $params{'ip'} , $params{'nroRandom'}, $params{'token'});
-    $t_params->{"nroRandom"}=$params{'nroRandom'};
-    $t_params->{"authMERAN"}=C4::Context->config('authMERAN');
-    $t_params->{'socio_data'}=undef;
+    $t_params->{"nroRandom"}        = $params{'nroRandom'};
+    $t_params->{"plainPassword"}    = C4::Context->config('plainPassword');
+    $t_params->{'socio_data'}       = undef;
     
     return ($session);
 }
@@ -1111,13 +1111,7 @@ sub desencriptar{
 sub _change_Password_Controller {
 	my ($query, $userid, $type, $token) = @_;
     if ($type eq 'opac') {
-            # si no esta habilitada esta preferencia, tiene que redirigir a un pl
-            # para evitar entrar en un loop al hacer el checkauth
-            if(!C4::AR::Preferencias::getValorPreferencia("permite_cambio_password_desde_opac")){
-                redirectTo(C4::AR::Utilidades::getUrlPrefix().'/password_change_disabled.pl?token='.$token);
-            }else{
-                redirectTo(C4::AR::Utilidades::getUrlPrefix().'/change_password.pl?token='.$token);
-            }    
+            redirectTo(C4::AR::Utilidades::getUrlPrefix().'/change_password.pl?token='.$token);
     } else {
             redirectTo(C4::AR::Utilidades::getUrlPrefix().'/usuarios/change_password.pl?token='.$token);
     }
@@ -1192,38 +1186,51 @@ sub _checkRequisito{
 
 =cut
 sub _verificarPassword {
-    my ($userid, $password, $nroRandom) = @_;
     my ($socio) = undef;
-	
-	my ($cumple_requisito) = _checkRequisito($userid);
-	
-	my @metodosDeAutenticacion= ("ldap","mysql");
+	my $metodosDeAutenticacion= C4::AR::Preferencias::getMetodosAuth();
 	my $metodo;
-	while (pop(@metodosDeAutenticacion,$metodo) || !$socio ) {
-			#$socio=_autheticar($metodo);
-			C4::AR::Debug::debug("rapoooooooooooooooo1".$metodo);
+	while (scalar(@$metodosDeAutenticacion) && !(defined $socio)) {
+			
+			$metodo=shift(@$metodosDeAutenticacion);
+			
+			$socio=_autenticar(@_,$metodo);
 		}
-    if (C4::AR::Preferencias::getValorPreferencia('ldapenabled')){
-		#se esta usando LDAP
-		C4::AR::Debug::debug("rapoooooooooooooooo1".$userid.$password);
-	    if (C4::Context->config('authMERAN')){
-			C4::AR::Debug::debug("rapoooooooooooooooo2".$userid.$password);
-	        #Autenticacion propia de MERAN
-			($socio) = C4::AR::Authldap::checkpwldap($userid,$password,$nroRandom);
+	return $socio;
+}
+
+sub _autenticar{
+	use Switch;
+	my ($userid, $password, $nroRandom,$metodo) = @_;
+	my $socio;
+	C4::AR::Debug::debug("metodo".$metodo);
+	switch ($metodo){
+		case "ldap" {
+			#se esta usando LDAP
+			if (!C4::Context->config('plainPassword')){
+				C4::AR::Debug::debug("metodo ldap sin plainPassword con userid".$userid." y password ".$password);
+	        	($socio) = C4::AR::Authldap::checkpwldap($userid,$password,$nroRandom);
+	        }
+	        else{
+				#Autenticacion propia de LDAP, en este caso es recomendable HTTPS
+				C4::AR::Debug::debug("metodo ldap con plainPassword userid".$userid." y password ".$password);
+				($socio) = C4::AR::Authldap::checkpwDC($userid,$password);		
+			}
 		}
-		else{ 
-		#Autenticacion propia de LDAP, en este caso es recomendable HTTPS
-		C4::AR::Debug::debug("rapoooooooooooooooo".$userid.$password);  
-		($socio) = C4::AR::Authldap::checkpwDC($userid,$password);
+		case "mysql"{
+			if (!C4::Context->config('plainPassword')){
+				C4::AR::Debug::debug("metodo mysql sin plainPassword userid".$userid." y password ".$password);
+				($socio) = _checkpw($userid,$password,$nroRandom); 
+			}
+	        else{
+				C4::AR::Debug::debug("metodo mysql con plainPassword userid".$userid." y password ".$password);
+				($socio) = _checkpw($userid,$password,$nroRandom); 
+			}
 		}
-	}
-	#if (C4::AR::Preferencias::getValorPreferencia('meranenabled')){
-	else {
-		#Si no se usa LDAP
-		C4::AR::Debug::debug("rapoooooooooooooooo3".$userid.$password);
-		($socio) = _checkpw($userid,$password,$nroRandom); 
-    }
-	return ($socio);
+		else{
+			}
+	   }
+	#my ($cumple_requisito) = _checkRequisito($userid);
+    return ($socio);
 }
 
 sub redirectTo {

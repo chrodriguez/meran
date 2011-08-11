@@ -167,8 +167,8 @@ sub checkpwDC{
     my $userDN              = $LDAP_U_PREF.'='.$userid.','.$LDAP_DB_PREF;
     my $ldap                =_conectarLDAP();
     my $ldapMsg             = $ldap->bind($userDN, password => $password);
-    C4::AR::Debug::debug("Authldap => smsj ". $ldapMsg->error );
-    my $socio               = 0;
+    C4::AR::Debug::debug("Authldap => smsj ". $ldapMsg->error. "codigo". $ldapMsg->code() );
+    my $socio               = undef;
     if (!$ldapMsg->code()) {
             $socio = datosUsuario($userid,$ldap);
     }

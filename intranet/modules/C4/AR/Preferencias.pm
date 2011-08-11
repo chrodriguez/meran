@@ -18,18 +18,20 @@ use vars qw(@EXPORT_OK @ISA),qw($PREFERENCES);
 @ISA=qw(Exporter);
 
 @EXPORT_OK=qw(
-    &updateInfoAbout
-    &getInfoAbout
-    &getPreferencia
-    &setVariable
-    &getValorPreferencia
-    &getPreferenciaLike
-    &t_guardarVariable
-    &t_modificarVariable
-    &getMenuPreferences
-    &getPreferenciasByArray
-    &verificar_preferencias
-    &getPreferenciasLikeCategoria
+    updateInfoAbout
+    getInfoAbout
+    getPreferencia
+    setVariable
+    getValorPreferencia
+    getPreferenciaLike
+    t_guardarVariable
+    t_modificarVariable
+    getMenuPreferences
+    getPreferenciasByArray
+    verificar_preferencias
+    getPreferenciasLikeCategoria
+    getMetodosAuth
+    
 );
 
 
@@ -438,6 +440,15 @@ sub getConfigVisualizacionOPAC{
     $hash_config{'perfil_visual'}       = C4::AR::Preferencias::getValorPreferencia("perfil_visual") || 0;
 
     return (\%hash_config);
+}
+
+sub getMetodosAuth{
+	my @arreglo_temp;
+
+    push (@arreglo_temp,'mysql');
+    push (@arreglo_temp,'ldap');
+
+	return (\@arreglo_temp);
 }
 
 END { }       # module clean-up code here (global destructor)
