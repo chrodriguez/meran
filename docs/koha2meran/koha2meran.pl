@@ -37,6 +37,12 @@ my $tt1 = time();
  
  print "Creando nuevas referencias \n";
      crearNuevasReferencias();
+
+ print "Modificando ciudades \n";
+    modificarCiudades();
+
+ print "Agregando ciudades \n";
+     agregarCiudades();
  
 # #################
  print "Procesando los 3 niveles (va a tardar!!! ...MUCHO!!! mas de lo que te imaginas) \n";
@@ -92,11 +98,21 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
 #-----------------------------------------------------------------------------------------------------------------------------------#-----------------------------------------------------------------------------------------------------------------------------------#-----------------------------------------------------------------------------------------------------------------------------------
     sub buscarLocalidadParecida 
     { my ($localidad) = @_;
-      my $loc=$dbh->prepare("SELECT id  FROM localidades where nombre sounds like ? ;");
-         $loc->execute($localidad);
-      my $id=$loc->fetchrow;
-        $loc->finish();
-      return $id;
+
+      my $loc1=$dbh->prepare("SELECT id  FROM localidades where nombre = ? ;");
+         $loc1->execute($localidad);
+      my $id=$loc1->fetchrow;
+        $loc1->finish();
+
+      unless ($id){
+	#busco parecidas
+	my $loc2=$dbh->prepare("SELECT id  FROM localidades where nombre sounds like ? ;");
+        $loc2->execute($localidad);
+	$id=$loc2->fetchrow;
+        $loc2->finish();
+	}
+
+	return $id;
     }
 
     sub buscarLocalidadDesdeId
@@ -677,6 +693,41 @@ my $kohaadmin_socio="INSERT INTO `usr_socio` (`id_persona`, `nro_socio`, `id_ui`
     aplicarSQL("preferenciasSistema.sql");
     }
 
+    sub properName {
+    my ($title)=@_;
+
+    # split the string and place it into an array
+    my @title = split / /, $title;
+    # now let’s iterate through the array
+    foreach (@title) {
+      $_ = lc;
+      $_ = ucfirst;
+    }
+    # convert the array to a space-delimited string
+    $title = join(" ", @title);
+    return  $title;
+    }
+
+    sub modificarCiudades
+    {
+    #########################################################################
+    #           CIUDADES en mayuscula a properName         #
+    #########################################################################
+      my $localidades=$dbh->prepare("SELECT * FROM localidades;");
+      $localidades->execute();
+      while (my $localidad=$localidades->fetchrow_hashref) {
+	    my $uploc=$dbh->prepare(" UPDATE localidades SET NOMBRE='".properName($localidad->{'NOMBRE'})."', NOMBRE_ABREVIADO ='".properName($localidad->{'NOMBRE_ABREVIADO'})."' where id = '".$localidad->{'id'}."';");
+	    $uploc->execute();
+	}
+    }
+
+    sub agregarCiudades
+    {
+    #########################################################################
+    #           CIUDADES          #
+    #########################################################################
+    aplicarSQL("ciudades.sql");
+    }
 
 =item
 guardaNivel1MARC
