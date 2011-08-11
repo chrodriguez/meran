@@ -865,8 +865,7 @@ sub batchBookLabelGenerator {
     my $pdf; 
 # 	my $pdf = new PDF::Report();
 	
-    C4::AR::Debug::debug($count);
-
+ 
        if (C4::AR::Preferencias::getValorPreferencia('BookLabelPage') ne "A4"){
           $pdf= new PDF::Report();
           $pdf->{PageWidth}  = '270';
@@ -904,13 +903,15 @@ sub batchBookLabelGenerator {
 
                             #Hoja A4 :  X diferencia 254 - Y diferencia 160
                             if ( $i < $count ) {
-                                &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 14, 14, $pdf);
-                                &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 312, 14, $pdf );
+#                                 &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 14, 14, $pdf);
+#                                 &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 312, 14, $pdf );
+                                &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 14, 654, $pdf );
+                                &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 312, 654, $pdf );
                                 $i++;
                             }
                             if ( $i < $count ) {
-                                &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 14, 174, $pdf );
-                                &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 312, 174, $pdf );             
+                                &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen,14, 494, $pdf );
+                                &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 312, 494, $pdf );
                                 $i++;
                             }
                             if ( $i < $count ) { 
@@ -919,14 +920,15 @@ sub batchBookLabelGenerator {
                                 $i++;
                             }
                             if ( $i < $count ) {
-                                &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen,14, 494, $pdf );
-                                &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 312, 494, $pdf );    
+#                                     
+                                  &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 14, 174, $pdf );
+                                 &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 312, 174, $pdf );    
                                 $i++;
                             }
                             if ( $i < $count ) {
-                                 
-                                &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 14, 654, $pdf );
-                                &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 312, 654, $pdf );
+                                 &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 14, 14, $pdf);
+                                 &generateBookLabelA4(@$results[$i]->getSignatura_topografica,@$results[$i]->getBarcode,@$results[$i]->getId_ui_origen, 312, 14, $pdf );
+#                               
                                  
                                 $i++;
                             }
@@ -952,10 +954,11 @@ sub generateBookLabelA4 {
       
 
     #Insert a rectangle to delimite the card
-    $pdf->drawRect( $x - 12, $pageheight - ( $y), $x + 278, $pageheight - ( $y + 142 ) );
+    $pdf->drawRect( $x - 12, $y, $x + 278, ( $y + 142 ) );
  
+    C4::AR::Debug::debug($pageheight);
 
-    $pdf->drawLine( $x + 70, $pageheight - 143 - ($y), $x + 70, $pageheight - ($y) );
+    $pdf->drawLine( $x + 70, $y, $x + 70, $y +  142 );
 
 
     #Insert a barcode to the card
