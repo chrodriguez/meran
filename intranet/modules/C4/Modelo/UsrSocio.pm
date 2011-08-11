@@ -299,7 +299,7 @@ sub resetPassword{
 
     if (C4::AR::Preferencias::getValorPreferencia('ldapenabled')){
     #se esta usando LDAP
-      #  if (C4::Context->config('authMERAN')){
+      #  if (C4::Context->config('plainPassword')){
             #Autenticacion propia de MERAN
        #     my ($socio) = C4::AR::Authldap::checkpwldap($userid,$password,$nroRandom);
        # }
