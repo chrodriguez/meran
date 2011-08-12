@@ -41,6 +41,7 @@ sub setOrden{
     my ($number) = @_;    
     
     $self->orden($number);
+    $self->save();
 }
 
 1;
