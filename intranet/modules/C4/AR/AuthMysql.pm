@@ -11,11 +11,6 @@ package C4::AR::AuthMysql;
 
 require Exporter;
 use strict;
-use Net::LDAP;
-use Net::LDAPS;
-use Net::LDAP::LDIF;
-use Net::LDAP::Util qw(ldap_error_text);
-use Net::LDAP::Constant qw(LDAP_EXTENSION_START_TLS);
 use C4::AR::Preferencias;
 use vars qw(@ISA @EXPORT_OK );
 @ISA = qw(Exporter);
@@ -39,6 +34,8 @@ sub checkPwPlana{
 =cut
 sub checkPwEncriptada{
     my ($userid, $password, $nroRandom) = @_;
+    C4::AR::Debug::debug("_checkpw=> busco el socio ".$userid."\n");
+    C4::AR::Debug::debug("_checkpw=> busco el socio ".$password."\n");
     my ($socio)= C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
     if ($socio){
          C4::AR::Debug::debug("_checkpw=> busco el socio ".$userid."\n");

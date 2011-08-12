@@ -731,6 +731,7 @@ sub checkauth {
 						else { $code_MSG='U357';}
 						$session->param('codMsg', $code_MSG);
                         loginFailed($userid);
+                        $cant_fallidos = getSocioAttempts($userid);
 						if ($cant_fallidos >= 3){
 								$template_params->{'mostrar_captcha'}=1;
 						}  
@@ -1137,6 +1138,7 @@ sub _checkRequisito{
 sub _verificarPassword {
     my ($socio) = undef;
 	my $metodosDeAutenticacion= C4::AR::Preferencias::getMetodosAuth();
+            C4::AR::Debug::debug("CANTIDAD DE METODOS AUTH ================================================ /////////////// ".scalar(@$metodosDeAutenticacion));
 	my $metodo;
 	while (scalar(@$metodosDeAutenticacion) && !(defined $socio)) {
 			$metodo=shift(@$metodosDeAutenticacion);
