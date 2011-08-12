@@ -1602,12 +1602,11 @@ sub armarBuscoPor{
 	
 	my $buscoPor="";
     my $str;
-	
+
 	if(C4::AR::Utilidades::validateString($params->{'keyword'})){
         $str      = C4::AR::Utilidades::verificarValor($params->{'keyword'});
         $buscoPor.= $str."&";
 	}
-	
 
 	if( $params->{'tipo_nivel3_name'} != -1 &&  C4::AR::Utilidades::validateString($params->{'tipo_nivel3_name'})){
         if ($params->{'tipo_nivel3_name'} eq 'ALL'){
