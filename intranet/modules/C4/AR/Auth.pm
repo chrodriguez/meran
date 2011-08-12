@@ -1142,8 +1142,6 @@ sub _verificarPassword {
 
 	while (scalar(@$metodosDeAutenticacion) && (!(defined $socio)) ) {
 			$metodo=shift(@$metodosDeAutenticacion);
-            C4::AR::Debug::debug("METODO AUTH ================================================ /////////////// ".$metodo);
-			
 			$socio=_autenticar(@_,$metodo);
 		}
 
@@ -1181,7 +1179,13 @@ sub _autenticar{
 		else{
 			}
 	   }
-	if (! _checkRequisito($socio)){ $socio=undef};
+	if (! _checkRequisito($socio)){ 
+		$socio=undef ;
+
+	}elsif (defined $socio){
+        $socio->setLastAuthMethod($metodo);
+	}
+	
     return ($socio);
 }
 

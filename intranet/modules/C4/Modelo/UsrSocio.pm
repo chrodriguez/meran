@@ -37,6 +37,7 @@ __PACKAGE__->meta->setup(
         #PARA ESTOS CAMPOS, NO HAY GETTER/SETTER
         client_ip_recover_pwd            => { type => 'varchar', length => 255 },
         recover_date_of                  => { type => 'timestamp'  },
+        last_auth_method                 => { type => 'varchar', defualt => 'mysql', length => 255 },
         
     ],
 
@@ -98,6 +99,21 @@ sub getCredentialType{
     my ($self)=shift;
 
     return($self->credential_type || C4::AR::Filtros::i18n("Indefinido"));
+}
+
+sub getLastAuthMethod{
+	my ($self) = shift;
+	
+	return ($self->last_auth_method);
+}
+
+sub setLastAuthMethod{
+	my ($self) = shift;
+	my ($method) = shift;
+	
+	$self->last_auth_method($method);
+	
+	$self->save();
 }
 
 sub agregar{

@@ -12,6 +12,7 @@ __PACKAGE__->meta->setup(
         id          => { type => 'serial', length => 12, not_null => 1 },
         metodo      => { type => 'varchar', length => 255, not_null => 1 },
         orden       => { type => 'integer', length => 12, not_null => 1 },
+        enabled     => { type => 'integer', length => 12, default => 1, not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -29,6 +30,7 @@ sub setMetodo{
     my ($string) = @_;    
     
     $self->metodo($string);
+    $self->save();    
 }
 
 sub getOrden{
@@ -41,6 +43,28 @@ sub setOrden{
     my ($number) = @_;    
     
     $self->orden($number);
+    $self->save();    
+}
+
+sub isEnabled{
+    my ($self) = shift;
+    return ($self->enabled);
+}
+
+sub enable{
+    my ($self) = shift;
+    my ($number) = @_;    
+    
+    $self->enabled(1);
+    $self->save();    
+}
+
+sub disable{
+    my ($self) = shift;
+    my ($number) = @_;    
+    
+    $self->enabled(0);
+    $self->save();    
 }
 
 1;

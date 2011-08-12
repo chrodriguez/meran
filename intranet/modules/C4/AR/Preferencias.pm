@@ -447,14 +447,16 @@ sub getMetodosAuth{
 	my @arreglo_temp;
     use C4::Modelo::SysMetodoAuth::Manager;
     
-    my $metodos_auth = C4::Modelo::SysMetodoAuth::Manager::get_sys_metodo_auth( query => [], 
+    push (@filtros, ('enabled' => {eq => 1}) );
+    
+    my $metodos_auth = C4::Modelo::SysMetodoAuth::Manager::get_sys_metodo_auth( query => \@filtros, 
                                                                                 sort_by => 'orden ASC',
                                                                               );
     
     foreach my $metodo (@$metodos_auth){
     	push (@arreglo_temp, $metodo->getMetodo);
     }
-    
+
 	return (\@arreglo_temp);
 }
 
