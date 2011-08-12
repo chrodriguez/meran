@@ -931,7 +931,7 @@ sub traduccionEstructuraMarc {
             my $refusuario=$dbh->prepare("UPDATE $tabla  SET nro_socio='".$usuario->{'nro_socio'}."' WHERE borrowernumber='". $usuario->{'id_socio'} ."' ;");
             $refusuario->execute();
       
-	    if ($tabla eq 'rep_historial_circulacion'){
+	    if (($tabla eq 'rep_historial_circulacion')||($tabla eq 'rep_historial_sancion')){
 	      #Estas tablas tienen responsable
 		my $refresponsable=$dbh->prepare("UPDATE $tabla  SET responsable='".$usuario->{'nro_socio'}."' WHERE responsable='". $usuario->{'id_socio'} ."' ;");
 		$refresponsable->execute();
@@ -967,6 +967,22 @@ sub traduccionEstructuraMarc {
 
         aplicarSQL("limpiarCirculacion.sql");
 
+
+ #Ahora limpiamos reservas y prestamos sin id_ui
+ #Default ui
+    my $q_ui=$dbh->prepare("SELECT value FROM pref_preferencia_sistema where variable ='defaultbranch';");
+    $q_ui->execute();
+    my $ui=$q_ui->fetchrow || 'DEO';
+
+
+    my $q1=$dbh->prepare("UPDATE circ_reserva SET id_ui = ? WHERE id_ui = '';");
+    $q1->execute($ui);
+
+    my $q2=$dbh->prepare("UPDATE circ_prestamo SET id_ui_origen = ? WHERE id_ui_origen = '';");
+    $q2->execute($ui);
+
+    my $q3=$dbh->prepare("UPDATE circ_prestamo SET id_ui_prestamo = ? WHERE id_ui_prestamo = '';");
+    $q3->execute($ui);
     }
 
     #########################################################################

@@ -22,9 +22,9 @@ use vars qw(@ISA @EXPORT_OK );
 @EXPORT_OK = qw(
     &getLdapPreferences
     &setVariableLdap
-    &checkpwldap 
+    &checkPwEncriptada
     &getldappassword 
-    &checkpwDC
+    &checkPwPlana
     &_getValorPreferenciaLdap
     &datosUsuario
     &_conectarLDAP
@@ -159,7 +159,7 @@ sub _conectarLDAP{
 =item 
     Funcion que recibe un userid y un password e intenta autenticarse ante un ldap, si lo logra devuelve un objeto Socio.
 =cut
-sub checkpwDC{
+sub checkPwPlana{
     my ($userid, $password) = @_;
     my $preferencias_ldap   = getLdapPreferences();
     my $LDAP_DB_PREF        = $preferencias_ldap->{'ldap_prefijo_base'};
@@ -167,8 +167,8 @@ sub checkpwDC{
     my $userDN              = $LDAP_U_PREF.'='.$userid.','.$LDAP_DB_PREF;
     my $ldap                =_conectarLDAP();
     my $ldapMsg             = $ldap->bind($userDN, password => $password);
-    C4::AR::Debug::debug("Authldap => smsj ". $ldapMsg->error );
-    my $socio               = 0;
+    C4::AR::Debug::debug("Authldap => smsj ". $ldapMsg->error. "codigo". $ldapMsg->code() );
+    my $socio               = undef;
     if (!$ldapMsg->code()) {
             $socio = datosUsuario($userid,$ldap);
     }
@@ -179,11 +179,9 @@ sub checkpwDC{
 =item
     Funcion que recibe un userid, un nroRandom y un password e intenta validarlo ante un ldap utilizando el mecanismo interno de Meran, si      lo logra devuelve un objeto Socio.
 =cut
-sub checkpwldap{
-    my ($userid, $passwordCliente, $random_number) = @_;
-    
+sub checkPwEncriptada{
+    my ($userid, $password, $nroRandom) = @_;
     my $preferencias_ldap   = getLdapPreferences();
-    
     my $LDAP_DB_PREF    = $preferencias_ldap->{'ldap_prefijo_base'};
     my $LDAP_U_PREF     = $preferencias_ldap->{'ldap_user_prefijo'};
     my $LDAP_ROOT       = $preferencias_ldap->{'ldap_bind_dn'};
@@ -199,20 +197,36 @@ sub checkpwldap{
             base   => $LDAP_DB_PREF,
             filter => "($LDAP_FILTER)"
         );
-        my $entry;
         my $entry       = $entries->entry(0);
         $passwordLDAP   = $entry->get_value("userPassword");
-        
-        #FIXME
-        my $metodo      = C4::AR::Auth::getMetodoEncriptacion();
-        $passwordLDAP   = hashear_password($passwordLDAP.$random_number,$metodo);
-        if (($passwordLDAP eq $passwordCliente)){
-            $socio = datosUsuario($userid,$ldap);
-        }
+        $socio=_verificar_password_con_metodo($userid,$password, $passwordLDAP, $nroRandom, $ldap);
         $ldap->unbind;
     }
     return $socio;
 }
+
+=item sub _verificar_password_con_metodo
+
+    Verifica la password ingresada por el usuario con la password recuperada de la base, todo esto con el metodo indicado por parametros   
+    Parametros:
+    $passwordLDAP: el pass obtenido del LDAP
+    $ldap: la conexion al ldap
+    $nroRandom: el nroRandom previamente generado
+    $password: ingresada por el usuario
+    $userid: usuario
+
+=cut
+sub _verificar_password_con_metodo {
+    my ($userid, $password, $passwordLDAP, $nroRandom, $ldap) = @_;
+    if ($password eq C4::AR::Auth::hashear_password($passwordLDAP.$nroRandom,C4::AR::Auth::getMetodoEncriptacion() )) {
+        #PASSWORD VALIDA
+        return datosUsuario($userid,$ldap);
+    }else {
+        #PASSWORD INVALIDA
+        return undef;
+    }
+}
+
 
 END { }       # module clean-up code here (global destructor)
 1;

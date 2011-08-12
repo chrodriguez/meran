@@ -325,7 +325,7 @@ sub generarComboDeCredentials{
 
 #     if ($socio){
 #         $default_credential = $socio->getCredentialType;
-        my $default_credential = $session->param('usr_credential_type')||'estudiante';
+        my $default_credential = $params-{'default'} || 'estudiante';
 #     }
 
     my $CGIregular = CGI::scrolling_list(       -name      => 'credential',
@@ -3021,6 +3021,18 @@ sub existeInArray{
     
 #         C4::AR::Debug::debug("Utilidades => existeInArray => NO EXISTE => ".$string." en el arreglo");
     return 0;
+}
+
+sub getIndexFromArrayByString{
+    my ($string, $array_ref) = @_;
+# TODO mejorarlo!!!!!!!!!
+    for(my $i=0;$i< scalar(@$array_ref);$i++){
+        if(trim($array_ref->[$i]->{'campo'}) eq trim($string)){
+            return $i;
+        }
+    }
+
+    return -1;
 }
 
 =item

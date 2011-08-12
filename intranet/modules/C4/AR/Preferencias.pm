@@ -18,18 +18,20 @@ use vars qw(@EXPORT_OK @ISA),qw($PREFERENCES);
 @ISA=qw(Exporter);
 
 @EXPORT_OK=qw(
-    &updateInfoAbout
-    &getInfoAbout
-    &getPreferencia
-    &setVariable
-    &getValorPreferencia
-    &getPreferenciaLike
-    &t_guardarVariable
-    &t_modificarVariable
-    &getMenuPreferences
-    &getPreferenciasByArray
-    &verificar_preferencias
-    &getPreferenciasLikeCategoria
+    updateInfoAbout
+    getInfoAbout
+    getPreferencia
+    setVariable
+    getValorPreferencia
+    getPreferenciaLike
+    t_guardarVariable
+    t_modificarVariable
+    getMenuPreferences
+    getPreferenciasByArray
+    verificar_preferencias
+    getPreferenciasLikeCategoria
+    getMetodosAuth
+    
 );
 
 
@@ -438,6 +440,20 @@ sub getConfigVisualizacionOPAC{
     $hash_config{'perfil_visual'}       = C4::AR::Preferencias::getValorPreferencia("perfil_visual") || 0;
 
     return (\%hash_config);
+}
+
+sub getMetodosAuth{
+	my @filtros;
+	my @arreglo_temp;
+    use C4::Modelo::SysMetodoAuth::Manager;
+    
+    my $metodos_auth = C4::Modelo::SysMetodoAuth::Manager::get_sys_metodo_auth(sort_by => ['orden']);
+    
+    foreach my $metodo (@$metodos_auth){
+    	push (@arreglo_temp, $metodo->getMetodo);
+    }
+    
+	return (\@arreglo_temp);
 }
 
 END { }       # module clean-up code here (global destructor)

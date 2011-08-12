@@ -7,7 +7,7 @@
 [% USE HTML %]
     <script type="text/javascript">
         function enviar(){
-		      [% IF authMERAN == 1 %]
+		      [% IF plainPassword == 0 %]
 			      var nroRandom   = [% nroRandom %];
 			      var hash        = b64_sha256(b64_sha256(b64_md5($("#password_plain").val()))+nroRandom);
 		          $("#password").val(hash);

@@ -2,9 +2,7 @@
 use strict;
 require Exporter;
 use CGI;
-use C4::AR::Auth;         # checkauth, getnro_socio.
-use C4::Circulation::Circ2;
-
+use C4::AR::Auth;
 use C4::Date;
 
 my $query = new CGI;
@@ -58,14 +56,23 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
     }
 
     if (!$msg_object->{'error'}){
-        $socio->persona->modificarVisibilidadOPAC(\%data_hash);
-        $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio->getNro_socio);
-        C4::AR::Auth::buildSocioData($session,$socio);
-
+    	eval {
+	        $socio->persona->modificarVisibilidadOPAC(\%data_hash);
+	        $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio->getNro_socio);
+	        C4::AR::Auth::buildSocioData($session,$socio);
+            $cod_msg = 'U338';
+    	};
+    	
+    	if (@$){
+    		$cod_msg = 'U339';
+    	}
     }else{
-        my $cod_msg = C4::AR::Mensajes::getFirstCodeError($msg_object);
-        $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje($cod_msg,'opac');
+       $cod_msg = C4::AR::Mensajes::getFirstCodeError($msg_object);
     }
+
+
+    C4::AR::Mensajes::add($msg_object, {'codMsg'=> $cod_msg, 'params' => []} ) ;
+    $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje($cod_msg,'opac');
     
     if ($data_hash{'tema'}){
         $socio->setThemeSave($data_hash{'tema'});
@@ -76,7 +83,6 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
 
     $t_params->{'partial_template'}= "informacion.inc";
 }else{
-    $socio->persona->modificarDatosDeOPAC(\%data_hash);
     $t_params->{'combo_temas'} = C4::AR::Utilidades::generarComboTemasOPAC();
     $t_params->{'socio'} = $socio;
     $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje('VA002','opac');

@@ -149,15 +149,15 @@ sub getAnalitica{
      
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
  
-    C4::AR::Debug::debug("getAnalitica =>>>>>>>>>>>>>>> ".$marc_record->subfield("773","a"));
+#     C4::AR::Debug::debug("getAnalitica =>>>>>>>>>>>>>>> ".$marc_record->subfield("773","a"));
 
     return C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("773","a"));
 }
 
-sub getAnaliticas(){
+sub getAnaliticas{
     my ($self)      = shift;
 
-    C4::AR::Debug::debug("C4::AR::CatRegistroMarcN2::getAnaliticas del grupo ".$self->getId2());
+#     C4::AR::Debug::debug("C4::AR::CatRegistroMarcN2::getAnaliticas del grupo ".$self->getId2());
     
     my $db = C4::Modelo::CatRegistroMarcN2->new()->db();
     
@@ -168,7 +168,7 @@ sub getAnaliticas(){
                                                                             ]
                                                                 );
 
-    C4::AR::Debug::debug("C4::AR::CatRegistroMarcN2::getAnaliticas => el grupo ".$self->getId2()." tiene ".scalar(@$nivel2_analiticas_array_ref)." analiticas");
+#     C4::AR::Debug::debug("C4::AR::CatRegistroMarcN2::getAnaliticas => el grupo ".$self->getId2()." tiene ".scalar(@$nivel2_analiticas_array_ref)." analiticas");
   
     if( scalar(@$nivel2_analiticas_array_ref) > 0){
         return ($nivel2_analiticas_array_ref);

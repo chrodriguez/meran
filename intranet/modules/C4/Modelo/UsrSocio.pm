@@ -37,7 +37,6 @@ __PACKAGE__->meta->setup(
         #PARA ESTOS CAMPOS, NO HAY GETTER/SETTER
         client_ip_recover_pwd            => { type => 'varchar', length => 255 },
         recover_date_of                  => { type => 'timestamp'  },
-        login_attempts                   => { type => 'integer', not_null => 1, default => 0 },
         
     ],
 
@@ -130,9 +129,11 @@ sub agregar{
 #     $self->setPassword($data_hash->{'password'});
     
     $self->setPassword(C4::AR::Auth::hashear_password(C4::AR::Auth::hashear_password($self->persona->getNro_documento, 'MD5_B64'), 'SHA_256_B64'));
-#     $self->setLast_login($data_hash->{'last_login'});
-    $self->setChange_password($data_hash->{'changepassword'});
 
+    if ($data_hash->{'changepassword'}){
+        $self->forzarCambioDePassword(1);
+    }
+    
     my $today = Date::Manip::ParseDate("today");
     my $cumple_requisito = $data_hash->{'cumple_requisito'};
     
@@ -297,7 +298,7 @@ sub resetPassword{
 
     if (C4::AR::Preferencias::getValorPreferencia('ldapenabled')){
     #se esta usando LDAP
-      #  if (C4::Context->config('authMERAN')){
+      #  if (C4::Context->config('plainPassword')){
             #Autenticacion propia de MERAN
        #     my ($socio) = C4::AR::Authldap::checkpwldap($userid,$password,$nroRandom);
        # }
@@ -311,21 +312,20 @@ sub resetPassword{
 	   $self->forzarCambioDePassword();
 	   $self->save();
    }
-
-
-
-
-
-
-
 }
 
 sub forzarCambioDePassword{
     my ($self)=shift;
-
+    my ($es_alta) = @_;
+    
+    $es_alta = $es_alta || 0;
+    
     $self->setChange_password(1);
-    $self->setLast_change_password('0000-00-00');
-    $self->save();
+    $self->last_change_password('0000-00-00');
+    
+    if (!$es_alta){
+        $self->save();
+    }
 }
 
 # FIXME DEPRECATED
@@ -528,16 +528,10 @@ sub setLast_login{
 
 sub getLogin_attempts{
     my ($self) = shift;
-    return ($self->login_attempts);
+    
+    return (C4::AR::Auth::getSocioAttempts($self->nro_socio));
 }
 
-sub setLogin_attempts{
-    my ($self) = shift;
-    my ($login_attempts) = @_;
-
-    $self->login_attempts($login_attempts);
-    $self->save();
-}
 
 sub getLast_change_password{
     my ($self) = shift;

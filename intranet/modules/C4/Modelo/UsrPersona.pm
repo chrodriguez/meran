@@ -29,9 +29,7 @@ __PACKAGE__->meta->setup(
         alt_barrio       => { type => 'varchar', length => 255 },
         alt_ciudad       => { type => 'integer', length => 11, not_null => 0 },
         alt_telefono     => { type => 'varchar', length => 255 },
-#         nacimiento       => { type => 'date' },
         nacimiento       => { type => 'varchar', length => 255},
-#         fecha_alta       => { type => 'date' },
         fecha_alta       => { type => 'varchar', length => 255},
         sexo             => { type => 'character', length => 1 },
         telefono_laboral => { type => 'varchar', length => 50 },
@@ -219,9 +217,9 @@ sub modificarDatosDeOPAC{
     
     $self->setNombre($data_hash->{'nombre'});
     $self->setApellido($data_hash->{'apellido'});
-    $self->setCalle($data_hash->{'calle'});
+    $self->setCalle($data_hash->{'direccion'});
     $self->setCiudad($data_hash->{'id_ciudad'});
-    $self->setTelefono($data_hash->{'telefono'});
+    $self->setTelefono($data_hash->{'numero_telefono'});
     $self->setEmail($data_hash->{'email'});
 
     $self->save();

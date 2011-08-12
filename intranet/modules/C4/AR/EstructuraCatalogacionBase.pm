@@ -110,6 +110,31 @@ sub getEstructuraBaseFromCampo{
     }
 }
 
+=head2 sub getEstructuraBaseFromCampo
+    Esta funcion retorna la estructura BASE de MARC segun un campo
+=cut
+sub getLabelByCampo{
+    my ($campo) = @_;
+
+    my @filtros;
+    C4::AR::Debug::debug("getLabelByCampo => ".$campo);
+
+    push(@filtros, ( campo  => { eq => $campo } ) );
+
+    my $estructura_base = C4::Modelo::PrefEstructuraCampoMarc::Manager->get_pref_estructura_campo_marc(
+                                                                                        query    => \@filtros,
+                                                                       );
+
+
+    if(scalar(@$estructura_base) > 0){  
+        C4::AR::Debug::debug("getLabelByCampo => getLiblibrarian => ".$estructura_base->[0]->getLiblibrarian);
+
+        return $estructura_base->[0]->getLiblibrarian;
+    }else{
+        return 0;
+    }
+}
+
 =head2 sub getEstructuraBaseFromCampoSubCampo
     Esta funcion retorna la estructura BASE de MARC segun un campo y subcampo
 =cut

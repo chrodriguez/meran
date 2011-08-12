@@ -15,7 +15,6 @@ use C4::Modelo::RepHistorialPrestamo::Manager;
 # use C4::Modelo::CatRegistroMarcN2::Manager;
 use Date::Manip;
 use C4::Modelo::RepHistorialPrestamo::Manager;
-#use C4::Circulation::Circ2;
 use C4::AR::Sanciones;
 #use Date::Manip;
 #use Thread;
