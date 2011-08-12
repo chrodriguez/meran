@@ -863,6 +863,23 @@ sub getSessionSocioObject {
     }
 }
 
+sub getSessionNroRandom {
+    my ($session) = @_;
+    unless($session){
+        $session = CGI::Session->load();
+    }
+    
+    
+    if ($session->param('nroRandom')){
+        return $session->param('nroRandom');
+    }else{
+    	my $nroRandom = _generarNroRandom();
+    	$session->param('nroRandom',$nroRandom);
+        return $nroRandom;
+    }
+}
+
+
 =item sub getSessionUserID
 
     obtiene el userid de la session
@@ -876,6 +893,15 @@ sub getSessionUserID {
         $session = CGI::Session->load();
     }
     return $session->param('userid');
+}
+
+#Este método retorna el método utilizado por el socio para iniciar sesión (el efectivo)
+sub getSessionAuthMethod{
+    my ($session) = @_;
+    unless($session){
+        $session = CGI::Session->load();
+    }
+    return $session->param('last_auth_method');
 }
 
 =item sub getSessionNroSocio
@@ -978,6 +1004,7 @@ sub buildSocioData{
     
     $session->param('urs_theme', $socio->getTheme());
     $session->param('usr_theme_intra', $socio->getThemeINTRA());
+    $session->param('last_auth_method', $socio->getLastAuthMethod());
     $session->param('usr_locale', $socio->getLocale());
     $session->param('usr_apellido', $socio->persona->getApellido());
     $session->param('usr_nombre', $socio->persona->getNombre());
@@ -1195,26 +1222,10 @@ sub _autenticar{
 	C4::AR::Debug::debug("metodo".$metodo);
 	switch ($metodo){
 		case "ldap" {
-			#se esta usando LDAP
-			if (!C4::Context->config('plainPassword')){
-				C4::AR::Debug::debug("metodo ldap sin plainPassword con userid".$userid." y password ".$password);
-	        	($socio) = C4::AR::Authldap::checkPwEncriptada($userid,$password,$nroRandom);
-	        }
-	        else{
-				#Autenticacion propia de LDAP, en este caso es recomendable HTTPS
-				C4::AR::Debug::debug("metodo ldap con plainPassword userid".$userid." y password ".$password);
-				($socio) = C4::AR::Authldap::checkPwPlana($userid,$password);		
-			}
+                ($socio) = C4::AR::Authldap::checkPassword($userid,$password,$nroRandom);       
 		}
 		case "mysql"{
-			if (!C4::Context->config('plainPassword')){
-				C4::AR::Debug::debug("metodo mysql sin plainPassword userid".$userid." y password ".$password);
-				($socio) = C4::AR::AuthMysql::checkPwEncriptada($userid,$password,$nroRandom); 
-			}
-	        else{
-				C4::AR::Debug::debug("metodo mysql con plainPassword userid".$userid." y password ".$password);
-				($socio) = C4::AR::AuthMysql::checkPwPlana($userid,$password,$nroRandom); 
-			}
+			($socio) = C4::AR::AuthMysql::checkPassword($userid,$password,$nroRandom);       
 		}
 		else{
 			}
@@ -1541,7 +1552,9 @@ sub loginFailed{
     
     my $attempts_object = _getAttemptsObject($nro_socio);
     
-    $attempts_object->increase;
+    eval{    
+        $attempts_object->increase;
+    };
     
 }
 
@@ -1587,6 +1600,117 @@ sub getSocioAttempts{
     
     return ($object->attempts);
 }
+
+=item
+    Modulo que persiste el cambio de password de un usuario por el nuevo.
+    Parametros:
+                HASH: con los datos de un socio.
+=cut
+sub cambiarPassword {
+    my ($params)=@_;
+    my  ($msg_object,$socio) = _validarCambioPassword($params);
+    if(!$msg_object->{'error'}){
+        #No hay error la validacion del password esta ok!
+        if( ($params->{'changePassword'} eq 1) && ($socio->getChange_password) ){
+            my $cambioDePasswordForzado= 1;
+        }
+    }
+    return ($msg_object);
+}
+
+=item
+    Modulo que recibe una hash con newpassword y  newpassword1, para checkear que sean iguales. 
+    Retortan 0 en caso de exito y 1 en error.
+    Retorna la hash usada $msg_object
+=cut
+sub _validarCambioPassword {
+    my ($params)=@_;
+    C4::AR::Debug::debug("================????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????ESTOY POR LLAMAR AL CAMBIAR PASSWORD ");
+    my $socio=undef;
+    my $msg_object=C4::AR::Mensajes::create();
+    if($params->{'new_password2'} eq $params->{'new_password1'}){
+        #quiere decir que la password y la comprobacion son iguales
+        $socio=_validarPasswordActual($params->{'actual_password'},C4::AR::Auth::getSessionNroSocio(),$params->{'new_password1'},C4::AR::Auth::getSessionNroRandom());
+        if ($socio) { 
+            #quiere decir que la password que se ingreso para validar esta ok porque coincide con la que tiene el usuario registrada
+            ($msg_object)= C4::AR::Validator::checkPassword($params->{'new_password1'});
+        }
+        else{
+        	#no es valida la pass actual
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U357', 'params' => []} ) ;            }
+        }
+    else{
+    	#las nuevas password son distintas
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U315', 'params' => [$params->{'cardnumber'}]} ) ;
+    }          
+
+    if ( !($msg_object->{'error'}) && ( C4::AR::Auth::getSessionNroSocio() != $params->{'nro_socio'} ) ){
+        #no coincide el usuario logueado con el usuario al que se le va a cambiar la password
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U362', 'params' => [$params->{'nro_socio'}]} ) ;
+    }
+    if (!($msg_object->{'error'})) { _setearPassword($socio,$params->{'new_password1'},C4::AR::Auth::getSessionNroRandom())}
+       
+    return ($msg_object);
+}
+
+
+=item
+sub _validarPasswordActual
+
+Funcion que recibe $password,$nroRandom,$socio y verifica si el password es el que corresponde con el actual del usuario
+
+=cut
+sub _validarPasswordActual{
+	my ($password,$userid,$nuevaPassword,$nroRandom) = @_;
+    my $auth_method = getSessionAuthMethod();
+    my $msg_object= C4::AR::Mensajes::create();
+    my $socio=undef;
+    use Switch;
+    C4::AR::Debug::debug($auth_method. "En el validaPasswordActual pass ". $password." nroRandom ".$nroRandom." nro_socio ".$userid." newpass ".$nuevaPassword);
+    switch ($auth_method){
+        case "ldap" {
+                ($socio) = C4::AR::Authldap::validarPassword($userid,$password,$nroRandom,$nuevaPassword);       
+        }
+        case "mysql"{
+                ($socio) = C4::AR::AuthMysql::validarPassword($userid,$password,$nuevaPassword,$nroRandom);       
+            
+        }
+        else{}
+    }
+    
+    return $socio;
+}
+
+=item
+sub _cambiarPassword
+
+Funcion que recibe $password,$nroRandom,$socio y verifica si el password es el que corresponde con el actual del usuario
+
+=cut
+sub _setearPassword{
+	my ($socio,$nuevaPassword,$nroRandom) = @_;
+    my $auth_method = getSessionAuthMethod();
+    my $msg_object= C4::AR::Mensajes::create();
+    use Switch;
+    C4::AR::Debug::debug("ESTOY EN CAMBIAR PASSWORDEn el validaPasswordActual pass ". $socio->getNombre());
+    switch ($auth_method){
+        case "ldap" {
+                ($socio) = C4::AR::Authldap::setearPassword($socio,$nuevaPassword,$nroRandom);       
+        }
+        case "mysql"{
+                ($socio) = C4::AR::AuthMysql::setearPassword($socio,$nuevaPassword,$nroRandom);       
+            
+        }
+        else{}
+    }
+    
+    return $socio;
+}
+
+
 
 
 END { }       # module clean-up code here (global destructor)

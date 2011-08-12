@@ -37,7 +37,7 @@ __PACKAGE__->meta->setup(
         #PARA ESTOS CAMPOS, NO HAY GETTER/SETTER
         client_ip_recover_pwd            => { type => 'varchar', length => 255 },
         recover_date_of                  => { type => 'timestamp'  },
-        last_auth_method                 => { type => 'varchar', defualt => 'mysql', length => 255 },
+        last_auth_method                 => { type => 'varchar', default => 'mysql', length => 255 },
         
     ],
 
@@ -526,6 +526,7 @@ sub getPassword{
 sub setPassword{
     my ($self) = shift;
     my ($password) = @_;
+    C4::AR::Debug::debug("NUEVO PASSWORD EN SOCIOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO ".$password);
     $self->password($password);
 }
 

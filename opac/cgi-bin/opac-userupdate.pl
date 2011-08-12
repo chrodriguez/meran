@@ -4,6 +4,7 @@ require Exporter;
 use CGI;
 use C4::AR::Auth;
 use C4::Date;
+use C4::Context;
 
 my $query = new CGI;
 
@@ -22,29 +23,28 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 
 my $nro_socio = C4::AR::Auth::getSessionNroSocio();
-
 my ($socio, $flags) = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
 C4::AR::Validator::validateObjectInstance($socio);
 
 my %data_hash;
-my $msg_object = C4::AR::Mensajes::create();
-$data_hash{'nombre'} = $input->param('nombre');
-$data_hash{'apellido'} = $input->param('apellido');
-$data_hash{'direccion'} = $input->param('direccion');
-$data_hash{'numero_telefono'} = $input->param('telefono');
-$data_hash{'id_ciudad'} = $input->param('id_ciudad');
-$data_hash{'email'} = $input->param('email');
-$data_hash{'actualPassword'} = $input->param('actual_password');
-$data_hash{'newpassword'} = $input->param('new_password1');
-$data_hash{'newpassword1'} = $input->param('new_password2');
-$data_hash{'tema'} = $input->param('temas_opac') || 0;
+my $msg_object                  = C4::AR::Mensajes::create();
+$data_hash{'nombre'}            = $input->param('nombre');
+$data_hash{'apellido'}          = $input->param('apellido');
+$data_hash{'direccion'}         = $input->param('direccion');
+$data_hash{'numero_telefono'}   = $input->param('telefono');
+$data_hash{'id_ciudad'}         = $input->param('id_ciudad');
+$data_hash{'email'}             = $input->param('email');
+$data_hash{'actual_password'}   = $input->param('actual_password');
+$data_hash{'new_password1'}     = $input->param('new_password1');
+$data_hash{'new_password2'}     = $input->param('new_password2');
+$data_hash{'tema'}              = $input->param('temas_opac') || 0;
 
 my $fields_to_check = ['nombre','apellido','direccion','numero_telefono','id_ciudad','email'];
-my $update_password = C4::AR::Utilidades::validateString($data_hash{'actualPassword'});
+my $update_password = C4::AR::Utilidades::validateString($data_hash{'actual_password'});
 
 if ($update_password){
-    $fields_to_check = ['nombre','apellido','direccion','numero_telefono','id_ciudad','email', 'actualPassword','newpassword','newpassword1'];
+    $fields_to_check = ['nombre','apellido','direccion','numero_telefono','id_ciudad','email', 'actual_password','new_password1','new_password2'];
 }
 
 if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
@@ -52,7 +52,7 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
 	
     if ($update_password){
         $data_hash{'nro_socio'} = $socio->getNro_socio;
-        $msg_object = C4::AR::Usuarios::cambiarPassword(\%data_hash);
+        $msg_object = C4::AR::Auth::cambiarPassword(\%data_hash);
     }
 
     if (!$msg_object->{'error'}){
