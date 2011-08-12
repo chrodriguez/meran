@@ -406,7 +406,7 @@ sub marc_record_to_intra_view {
     my ($marc_record_salida)    = filtrarVisualizacion($marc_record, $params,$db);
 
     #se procesa el marc_record filtrado
-    my ($MARC_result_array)     = marc_record_to_meran_to_detail_view($marc_record_salida, $params->{'id_tipo_doc'}, 'INTRA',$db);
+    my ($MARC_result_array)     = marc_record_to_meran_to_detail_view2($marc_record_salida, $params->{'id_tipo_doc'}, 'INTRA',$db);
 
     return $MARC_result_array;
 }
@@ -475,7 +475,7 @@ sub filtrarVisualizacion{
     subcampos_array => [ {subcampo => 'a', dato => 'dato'}, {subcampo => 'b', dato => 'dato'}, ...]
 =cut
 sub marc_record_to_meran_to_detail_view {
-    my ($marc_record, $itemtype, $type,$db) = @_;
+    my ($marc_record, $itemtype, $type, $db) = @_;
 
     my @MARC_result_array;
     
@@ -495,31 +495,98 @@ sub marc_record_to_meran_to_detail_view {
                 my $dato                            = $subfield->[1];
                 $hash_temp{'campo'}                 = $campo;
                 $hash_temp{'subcampo'}              = $subcampo;
-                $hash_temp{'liblibrarian'}          = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo, $itemtype,$type,$db);
+                $hash_temp{'liblibrarian'}          = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo, $itemtype, $type, $db);
                 $hash_temp{'orden'}                 = getOrdenFromCampoSubcampo($campo, $subcampo, $itemtype, $type,$db);
                 #C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view => orden: ".$hash_temp{'orden'});
-                $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype,$db);
+                $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype, $db);
                 $hash_temp{'datoReferencia'}        = $dato;
                 my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype,$db);
 
-# C4::AR::Debug::debug("itemType => ".$itemtype);
-
-#                 if($itemtype ne "ANA"){
-
-                    $hash_temp{'dato'}                  = C4::AR::Filtros::show_componente(   
-                                                                            campo       => $hash_temp{'campo'},
-                                                                            subcampo    => $hash_temp{'subcampo'},
-                                                                            dato        => $valor_referencia,  
-                                                                            itemtype    => $itemtype,
-                                                                            type        => $type
-                                                                      );
-#                 }
+                $hash_temp{'dato'}                  = C4::AR::Filtros::show_componente(   
+                                                                        campo       => $hash_temp{'campo'},
+                                                                        subcampo    => $hash_temp{'subcampo'},
+                                                                        dato        => $valor_referencia,
+                                                                        itemtype    => $itemtype,
+                                                                        type        => $type
+                                                                  );
 
                 push(@MARC_result_array, \%hash_temp);
             }
 
         }
     }
+
+    @MARC_result_array = sort{$a->{'orden'} <=> $b->{'orden'}} @MARC_result_array;
+
+    return (\@MARC_result_array);
+}
+
+# sub getLabelByCampo{
+#     my ($campo) = @_;
+# 
+#     return "LABEL GENERICO";
+# }
+
+sub marc_record_to_meran_to_detail_view2 {
+    my ($marc_record, $itemtype, $type, $db) = @_;
+
+    my @MARC_result_array;
+    
+    $type = $type || "__NO_TYPE";
+
+#     C4::AR::Debug::debug("marc_record->as_usmarc => ".$marc_record->as_formatted);
+    my %hash_temp_aux;
+    my $index;
+    foreach my $field ($marc_record->fields) {
+        my %hash_temp_aux;
+        if(! $field->is_control_field){
+    #             C4::AR::Debub::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => field->as_string => ".$field->as_string);
+            my %hash;
+            my $campo                       = $field->tag;
+            my $campo_ant                   = $field->tag;
+            my $indicador_primario_dato     = $field->indicator(1);
+            my $indicador_secundario_dato   = $field->indicator(2);
+#             C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => campo => ".$campo);
+    #             #proceso todos los subcampos del campo
+            foreach my $subfield ($field->subfields()) {
+                my %hash_temp;
+                my %hash_temp_aux;
+                my $subcampo                        = $subfield->[0];
+                my $dato                            = $subfield->[1];
+    #                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => subcampo => ".$subcampo);
+                $hash_temp{'campo'}                 = $campo;
+                $hash_temp{'subcampo'}              = $subcampo;
+    # TODO tengo q mostrar el nombre del campo de la biblia de la tabla de campos
+                $hash_temp{'liblibrarian'}          = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo, $itemtype, $type, $db);
+                $hash_temp{'orden'}                 = getOrdenFromCampoSubcampo($campo, $subcampo, $itemtype, $type, $db);
+                $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype, $db);
+                $hash_temp{'datoReferencia'}        = $dato;
+                my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $db);
+                $hash_temp{'dato'}                  = $valor_referencia;
+    # TODO falta ver que separador lleva cada $valor_referencia dependiendo del campo y subcampo que se este procesando
+                $field->update( $subcampo => $valor_referencia );
+            }
+
+            $hash_temp_aux{'campo'}             = $campo;
+# TODO falta el orden from campo
+#             $hash_temp_aux{'orden'}             = getOrdenFromCampo($campo,$itemtype, $type, $db);
+            $hash_temp_aux{'liblibrarian'}      = C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
+            $hash_temp_aux{'dato'}              = ($hash_temp_aux{'dato'} ne "")?$hash_temp_aux{'dato'}.";".$field->as_string:$field->as_string;
+
+            $index = C4::AR::Utilidades::getIndexFromArrayByString($campo,\@MARC_result_array);
+
+            if($index == -1){
+            #NO EXISTE EL CAMPO
+#                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => NO EXISTE el campo => ".$campo);
+                push(@MARC_result_array, \%hash_temp_aux);
+            } else {
+            #EXISTE EL CAMPO
+#                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => EXISTE el campo => ".$campo);
+                @MARC_result_array[$index]->{'dato'} = (@MARC_result_array[$index]->{'dato'} ne "")?@MARC_result_array[$index]->{'dato'}.";".$field->as_string:$field->as_string;
+            }
+
+        } #END if(! $field->is_control_field)
+    } #END foreach my $field ($marc_record->fields)
 
     @MARC_result_array = sort{$a->{'orden'} <=> $b->{'orden'}} @MARC_result_array;
 
@@ -810,9 +877,16 @@ sub getDatoFromReferencia{
 
     }#END if(($dato ne '')&&($campo ne '')&&($subcampo ne '')&&($dato != 0)&&($dato ne ''))
 
-   return $dato;
+    return getNullValue($dato);
+#     return $dato;
 }
 
+
+sub getNullValue {
+    my ($dato) = @_;
+
+    return ($dato eq "NULL")?"[SIN VALOR]":$dato;
+}
 
 =head2
     sub getRefFromStringConArrobas

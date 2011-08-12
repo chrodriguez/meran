@@ -480,25 +480,26 @@ sub obtenerDisponibilidadTotal{
     my ($cat_ref_tipo_nivel3_array_ref) = C4::AR::Nivel3::getNivel3FromId1($id1);
 
 	
-	my $cant_para_domicilio = 0;
-    my $cant_para_sala = 0;
-    my $cant_no_disponible = 0;
-    my $i = 0;
+	my $cant_para_domicilio     = 0;
+    my $cant_para_sala          = 0;
+    my $cant_no_disponible      = 0;
+    my $i                       = 0;
 
     foreach my $n3 (@$cat_ref_tipo_nivel3_array_ref){
+        C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => BARCODE => ".$n3->getBarcode());
         if($n3->estadoDisponible){
             if (($n3->esParaPrestamo)&&(!$n3->estaReservado())) {
             #DOMICILIO    
-                # C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => DOMICILIO");
+                C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => DOMICILIO");
                 $cant_para_domicilio++;
             } elsif($n3->esParaSala) {
             #PARA SALA
-                # C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => PARA SALA");
+                C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => PARA SALA");
                 $cant_para_sala++;
             }
-        }
-        else{
+        } else {
             #NO DISPONIBLE
+            C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => NO DISPONIBLE ");
             $cant_no_disponible++;
         }
 	}
@@ -1173,7 +1174,15 @@ sub busquedaCombinada_newTemp{
 
 	use Sphinx::Search;
 	
+	
+    use Text::Unaccent;
+
+ # Se agregó para sacar los acentos y que no se mame el suggest, total es lo mismo porque
+ # Sphinx busca con o sin acentos
+	$string_utf8_encoded = unac_string('utf8',$string_utf8_encoded);
+
     $string_utf8_encoded = Encode::decode_utf8($string_utf8_encoded);
+
     my $from_suggested = $obj_for_log->{'from_suggested'} || 0;
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
     my $string_suggested;
@@ -1602,12 +1611,11 @@ sub armarBuscoPor{
 	
 	my $buscoPor="";
     my $str;
-	
+
 	if(C4::AR::Utilidades::validateString($params->{'keyword'})){
         $str      = C4::AR::Utilidades::verificarValor($params->{'keyword'});
         $buscoPor.= $str."&";
 	}
-	
 
 	if( $params->{'tipo_nivel3_name'} != -1 &&  C4::AR::Utilidades::validateString($params->{'tipo_nivel3_name'})){
         if ($params->{'tipo_nivel3_name'} eq 'ALL'){

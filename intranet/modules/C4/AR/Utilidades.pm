@@ -1156,7 +1156,7 @@ sub verificarValor {
 
   # C4::AR::Debug::debug("antes de limpiar => ".$valor);
 
-    $valor=~ s/\b(SELECT|SHOW|ALL|WHERE|INSERT|SHUTDOWN|DROP|UNION|DELETE|UPDATE|FROM|AND|OR|BETWEEN|information_schema|table_name)\b/ /gi;
+    $valor=~ s/\b(SELECT|SHOW|ALL|WHERE|INSERT|SHUTDOWN|DROP|UNION|DELETE|UPDATE|FROM|BETWEEN|information_schema|table_name)\b/ /gi;
     
 #     C4::AR::Debug::debug("despues de limpiar => ".$valor);
 
@@ -1264,7 +1264,7 @@ sub armarPaginas{
 #
 #Cantidad de renglones seteado en las preferencias del sistema para ver por cada pagina
 sub cantidadRenglones{
-    return(C4::AR::Preferencias::getValorPreferencia('renglones'));
+    return(C4::AR::Preferencias::getValorPreferencia('renglones') || 10);
 }
 
 #**************************************Fins***Paginador*********************************
@@ -3021,6 +3021,18 @@ sub existeInArray{
     
 #         C4::AR::Debug::debug("Utilidades => existeInArray => NO EXISTE => ".$string." en el arreglo");
     return 0;
+}
+
+sub getIndexFromArrayByString{
+    my ($string, $array_ref) = @_;
+# TODO mejorarlo!!!!!!!!!
+    for(my $i=0;$i< scalar(@$array_ref);$i++){
+        if(trim($array_ref->[$i]->{'campo'}) eq trim($string)){
+            return $i;
+        }
+    }
+
+    return -1;
 }
 
 =item

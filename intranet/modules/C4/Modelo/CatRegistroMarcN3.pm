@@ -615,6 +615,7 @@ sub estadoDisponible{
     my ($self) = shift;
     
 #     return (C4::Modelo::RefEstado->getByPk($self->getIdEstado())->getNombre() eq "Disponible");
+    C4::AR::Debug::debug("CatRegistroMarcN3 => getIdEstado => ".$self->getIdEstado());
     return (ESTADO_DISPONIBLE($self->getIdEstado()));    
 }
 
@@ -704,8 +705,9 @@ sub toMARC_Intra{
 ##################################################
     
 sub ESTADO_DISPONIBLE{
-
    my ($estado) = @_;
+
+    C4::AR::Debug::debug("CatRegistroMarcN3 => ESTADO_DISPONIBLE => ==".C4::Modelo::RefEstado::estadoDisponibleValue()."==> ".($estado eq C4::Modelo::RefEstado::estadoDisponibleValue()));
    return ($estado eq C4::Modelo::RefEstado::estadoDisponibleValue());
 }   
 

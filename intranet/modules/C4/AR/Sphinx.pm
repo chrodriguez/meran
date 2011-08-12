@@ -96,7 +96,7 @@ sub getNombreFromEstadoByCodigo{
 
     my $nivel3 = C4::Modelo::RefEstado::Manager->get_ref_estado( query => \@filtros ); 
 
-    if(scalar($nivel3) > 0){
+    if(scalar(@$nivel3) > 0){
         return ($nivel3->[0]->nombre);
     } else {
         return "NULL";
