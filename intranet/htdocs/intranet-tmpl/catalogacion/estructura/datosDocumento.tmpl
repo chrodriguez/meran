@@ -145,14 +145,15 @@ $(document).ready( function() {
 <div id="nivel1"></div>
 
 <div class="todo classform">
+[% IF !ocultarDivLateral %]
+    <div class="lateral">
+        <div class="nivel2Barra">
+            <div id="nivel2" class="nivel2Lateral"></div>
+        </div>
+    </div>   <!--END <div class="lateral">-->
+[% END %]
 
-<div class="lateral">
-    <div class="nivel2Barra">
-        <div id="nivel2" class="nivel2Lateral"></div>
-    </div>
-</div>   <!--END <div class="lateral">-->
-
-<div id="centro" class="centro">
+<div id="centro" [% IF !ocultarDivLateral %] class="centro" [% END %]>
 <!-- aca se va mostrando la accion que se va realizando -->
 <div id="estado_accion" class="titulos" style="display:none"></div>
 <!--            Manejo del Nivel 1 -->
