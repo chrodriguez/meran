@@ -9,16 +9,23 @@
 
         var changed = $.trim($('#actualpassword').val());
         if (changed != ''){
-            var key= b64_sha256(b64_md5($('#actualpassword').val()));
-            $('#actual_password').val(encriptar($('#actualpassword').val(), key));
-            $('#new_password1').val(encriptar($('#newpassword1').val(), key));
-            $('#new_password2').val(encriptar($('#newpassword2').val(), key));
-            $('#changePassword').val(1);
-        }
-        return true;
+            [% IF plainPassword == 0 %]
+                var nroRandom   = [% nroRandom %];
+	            var hash_actual = b64_sha256(b64_sha256(b64_md5($("#actualpassword").val()))+nroRandom);
+	            var hash_new1   = b64_sha256(b64_sha256(b64_md5($("#newpassword1").val()))+nroRandom);
+	            var hash_new2   = b64_sha256(b64_sha256(b64_md5($("#newpassword2").val()))+nroRandom);
+	            $("#actual_password").val(hash_actual);
+	            $('#new_password1').val(hash_new1);
+	            $('#new_password2').val(hash_new1);
+	        [% END %]
+	        $("#datosAEnviar").submit();
+	        return true;
+	     }        	
+      
     }
 
     $(document).ready(function() {
+    	
         CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'});
         $("#temas_opac").change(function() {
             $("link").attr("href","[% temas %]/"+$("#temas_opac").val()+"/includes/opac.css");
@@ -134,15 +141,15 @@
                   <legend>&nbsp;[% 'Cambio de contrase&ntilde;a' | i18n %] ([% 'Dejar en blanco para descartar' | i18n %])&nbsp;</legend>
                   <p>
                       <label for="actualpassword" class="left">[% 'Contrase&ntilde;a Actual' | i18n %]:</label>
-                      <input type="password" name="actualpassword" id="actualpassword" class="field" autocomplete="off" />
+                      <input type="password" name="" id="actualpassword" class="field" autocomplete="off" />
                   </p>
                   <p>
                       <label for="newpassword1" class="left">[% 'Nueva Contrase&ntilde;a' | i18n %]:</label>
-                      <input type="password" name="newpassword1" id="newpassword1" class="field" autocomplete="off" />
+                      <input type="password" name="" id="newpassword1" class="field" autocomplete="off" />
                   </p>
                   <p>
                       <label for="newpassword2" class="left">[% 'Repetir contrase&ntilde;a' | i18n %]:</label>
-                      <input type="password" name="newpassword2" id="newpassword2" class="field" autocomplete="off" />
+                      <input type="password" name="" id="newpassword2" class="field" autocomplete="off" />
                   </p>
               </fieldset>
               <fieldset>

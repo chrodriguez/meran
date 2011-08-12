@@ -175,7 +175,6 @@ sub gettemplate {
             date_separator      => C4::AR::Filtros::i18n("de"),
             CirculationEnabled  => C4::AR::Preferencias::getValorPreferencia("CirculationEnabled"),
             LibraryName         => C4::AR::Preferencias::getValorPreferencia("LibraryName"),
-            
                         
         );
 

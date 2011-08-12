@@ -31,7 +31,7 @@ $params{'changePassword'}= $input->param('changePassword');
 $params{'token'}= $input->param('token');
 
 
-my ($Message_arrayref)= C4::AR::Usuarios::cambiarPassword(\%params);
+my ($Message_arrayref)= C4::AR::Auth::cambiarPassword(\%params);
 
 if(C4::AR::Mensajes::hayError($Message_arrayref)){
     $params{'error'}= 1;

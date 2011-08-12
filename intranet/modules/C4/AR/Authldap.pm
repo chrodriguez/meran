@@ -20,14 +20,15 @@ use C4::AR::Preferencias;
 use vars qw(@ISA @EXPORT_OK );
 @ISA = qw(Exporter);
 @EXPORT_OK = qw(
-    &getLdapPreferences
-    &setVariableLdap
-    &checkPwEncriptada
-    &getldappassword 
-    &checkPwPlana
-    &_getValorPreferenciaLdap
-    &datosUsuario
-    &_conectarLDAP
+    getLdapPreferences
+    setVariableLdap
+    checkPwEncriptada
+    getldappassword 
+    checkPwPlana
+    _getValorPreferenciaLdap
+    datosUsuario
+    _conectarLDAP
+    checkPassword
 );
 
 =item
@@ -225,6 +226,31 @@ sub _verificar_password_con_metodo {
         #PASSWORD INVALIDA
         return undef;
     }
+}
+
+sub checkPassword{
+    my ($userid,$password,$nroRandom) = @_;
+	my $socio=undef;
+    if (!C4::Context->config('plainPassword')){
+	    ($socio) = C4::AR::Authldap::checkPwEncriptada($userid,$password,$nroRandom);
+	}else{
+	    ($socio) = C4::AR::Authldap::checkPwPlana($userid,$password);       
+	}
+    return $socio;
+	
+}	
+
+sub validarPassword{
+    my( $userid,$password,$nuevaPassword,$nroRandom)= @_;
+	my $socio=undef;
+     C4::AR::Debug::debug("ESTOS SON LOS VALORES QUE LLEGAN ".$userid.$password.$nroRandom.$nuevaPassword);
+     C4::AR::Debug::debug(C4::AR::Auth::hashear_password($nuevaPassword.$nroRandom,C4::AR::Auth::getMetodoEncriptacion()));
+    if ((!C4::Context->config('plainPassword') )&& ($password ne C4::AR::Auth::hashear_password($nuevaPassword.$nroRandom,C4::AR::Auth::getMetodoEncriptacion() ))){
+            ($socio) = checkPwEncriptada($userid,$password,$nroRandom);
+        }elsif ($password eq $nuevaPassword){
+            ($socio) = checkPwPlana($userid,$password);       
+        }
+	return $socio;
 }
 
 

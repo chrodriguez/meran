@@ -43,7 +43,6 @@ sub setOrden{
     my ($number) = @_;    
     
     $self->orden($number);
-<<<<<<< HEAD
     $self->save();    
 }
 
@@ -66,9 +65,6 @@ sub disable{
     
     $self->enabled(0);
     $self->save();    
-=======
-    $self->save();
->>>>>>> 82d5484444439e354a93bcbf04a67f7e619165ee
 }
 
 1;

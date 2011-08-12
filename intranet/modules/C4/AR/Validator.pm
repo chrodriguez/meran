@@ -210,7 +210,7 @@ sub checkLength{
 sub checkPassword{
 
     my($password)=@_;
-    my $msg_object= C4::AR::Mensajes::create();
+    my $msg_object=C4::AR::Mensajes::create();
 
     if (!(C4::AR::Utilidades::validateString($password))){
         $msg_object->{'error'}= 1;
