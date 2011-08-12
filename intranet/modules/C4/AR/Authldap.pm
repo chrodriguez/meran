@@ -191,7 +191,7 @@ sub checkPwEncriptada{
     my $ldap            = _conectarLDAP();
     my $ldapMsg         = $ldap->bind( $LDAP_ROOT , password => $LDAP_PASS) or die "$@";
     C4::AR::Debug::debug("Authldap => smsj ". $ldapMsg->code() );
-    my $socio           = 0;
+    my $socio           = undef;
     if (!$ldapMsg->code()) {
         my $entries = $ldap->search(
             base   => $LDAP_DB_PREF,

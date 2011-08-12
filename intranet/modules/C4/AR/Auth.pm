@@ -1138,21 +1138,22 @@ sub _checkRequisito{
 sub _verificarPassword {
     my ($socio) = undef;
 	my $metodosDeAutenticacion= C4::AR::Preferencias::getMetodosAuth();
-            C4::AR::Debug::debug("CANTIDAD DE METODOS AUTH ================================================ /////////////// ".scalar(@$metodosDeAutenticacion));
 	my $metodo;
-	while (scalar(@$metodosDeAutenticacion) && !(defined $socio)) {
+
+	while (scalar(@$metodosDeAutenticacion) && (!(defined $socio)) ) {
 			$metodo=shift(@$metodosDeAutenticacion);
             C4::AR::Debug::debug("METODO AUTH ================================================ /////////////// ".$metodo);
 			
 			$socio=_autenticar(@_,$metodo);
 		}
+
 	return $socio;
 }
 
 sub _autenticar{
 	use Switch;
 	my ($userid, $password, $nroRandom,$metodo) = @_;
-	my $socio;
+	my $socio = undef;
 	C4::AR::Debug::debug("metodo".$metodo);
 	switch ($metodo){
 		case "ldap" {
