@@ -954,11 +954,15 @@ sub generateBookLabelA4 {
       
 
     #Insert a rectangle to delimite the card
-    $pdf->drawRect( $x - 12, $y, $x + 278, ( $y + 142 ) );
+#     $pdf->drawRect( $x - 12, $y, $x + 278, ( $y + 142 ) );
  
+
+     $pdf->drawRect( $x - 12, $y + 30, $x + 278, ( $y + 172 ) );
+
+
     C4::AR::Debug::debug($pageheight);
 
-    $pdf->drawLine( $x + 70, $y, $x + 70, $y +  142 );
+    $pdf->drawLine( $x + 70, $y + 30, $x + 70, $y +  172 );
 
 
     #Insert a barcode to the card
