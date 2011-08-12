@@ -48,7 +48,5 @@ if ($id){
 }
 
 
-
-
 C4::AR::PdfGenerator::batchBookLabelGenerator(scalar(@arreglo),\@arreglo);
 

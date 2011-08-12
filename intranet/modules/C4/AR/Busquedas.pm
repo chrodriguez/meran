@@ -1174,7 +1174,15 @@ sub busquedaCombinada_newTemp{
 
 	use Sphinx::Search;
 	
+	
+    use Text::Unaccent;
+
+ # Se agregó para sacar los acentos y que no se mame el suggest, total es lo mismo porque
+ # Sphinx busca con o sin acentos
+	$string_utf8_encoded = unac_string('utf8',$string_utf8_encoded);
+
     $string_utf8_encoded = Encode::decode_utf8($string_utf8_encoded);
+
     my $from_suggested = $obj_for_log->{'from_suggested'} || 0;
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
     my $string_suggested;
@@ -1603,12 +1611,11 @@ sub armarBuscoPor{
 	
 	my $buscoPor="";
     my $str;
-	
+
 	if(C4::AR::Utilidades::validateString($params->{'keyword'})){
         $str      = C4::AR::Utilidades::verificarValor($params->{'keyword'});
         $buscoPor.= $str."&";
 	}
-	
 
 	if( $params->{'tipo_nivel3_name'} != -1 &&  C4::AR::Utilidades::validateString($params->{'tipo_nivel3_name'})){
         if ($params->{'tipo_nivel3_name'} eq 'ALL'){
