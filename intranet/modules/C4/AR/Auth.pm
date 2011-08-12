@@ -60,6 +60,7 @@ use C4::Modelo::SistSesion::Manager;
 use C4::Modelo::CircReserva;
 use C4::Modelo::UsrSocio;
 use C4::Modelo::PrefFeriado;
+use C4::Modelo::UsrLoginAttempts;
 use C4::AR::Authldap;
 use C4::AR::AuthMysql;
 use HTTP::BrowserDetect;
@@ -618,7 +619,7 @@ sub checkauth {
                       C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_valida");
                       $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
                       $flags=$socio->tienePermisos($flagsrequired);
-                      C4::Modelo::UsrLoginAttempts::loginSuccess($socio->getNro_socio);
+                      loginSuccess($socio->getNro_socio);
 					  _init_i18n({ type => $type });
                       if ($flags) {
                           $loggedin = 1;
@@ -683,7 +684,7 @@ sub checkauth {
 					my $cant_fallidos;
 					#se verifica la password ingresada
 					my ($socio)         = _verificarPassword($userid,$password,$nroRandom);
-					my $login_attempts =C4::Modelo::UsrLoginAttempts::getSocioAttempts($userid); 
+					my $login_attempts = getSocioAttempts($userid); 
 					my $captchaResult;
 					if (($login_attempts > 2) && (!$query->url_param('welcome'))) {      # se logueo mal mas de 3 veces, debo verificar captcha
 						my $reCaptchaPrivateKey =  C4::AR::Preferencias::getValorPreferencia('re_captcha_private_key');
@@ -729,7 +730,7 @@ sub checkauth {
 						if ($socio) {$code_MSG='U425';}
 						else { $code_MSG='U357';}
 						$session->param('codMsg', $code_MSG);
-                        C4::Modelo::UsrLoginAttempts::loginFailed($userid);
+                        loginFailed($userid);
 						if ($cant_fallidos >= 3){
 								$template_params->{'mostrar_captcha'}=1;
 						}  
@@ -1479,6 +1480,65 @@ sub get_html_content {
     my $out = '';
     $template->process($params->{'template_name'},$params,\$out) || die "Template process failed: ", $template->error(), "\n";
     return($out);
+}
+
+
+
+
+#LOGIN ATTEMPTS DE USUARIOS
+
+
+#METODO STATIC
+sub loginFailed{
+    my ($nro_socio) = shift;
+    
+    my $attempts_object = _getAttemptsObject($nro_socio);
+    
+    $attempts_object->increase;
+    
+}
+
+#METODO STATIC
+sub _getAttemptsObject{
+    
+    my ($nro_socio) = shift;
+
+    use C4::Modelo::UsrLoginAttempts::Manager;
+    
+    my @filtros;
+    
+    push (@filtros, (nro_socio => {eq => $nro_socio}));
+    
+    my ($socio_array) = C4::Modelo::UsrLoginAttempts::Manager->get_usr_login_attempts(query => \@filtros,);
+    
+    
+    if (scalar(@$socio_array)){
+        return ($socio_array->[0]);
+    }else{
+        my $object = C4::Modelo::UsrLoginAttempts->new(nro_socio => $nro_socio);
+        
+        return ($object);
+    }
+}
+
+#METODO STATIC
+sub loginSuccess{
+    my ($nro_socio) = shift;
+    
+    my $attempts_object = _getAttemptsObject($nro_socio);
+    
+    $attempts_object->reset;
+    
+}
+
+#METODO STATIC
+sub getSocioAttempts{
+    
+    my ($nro_socio) = shift;
+    
+    my $object = C4::Modelo::UsrLoginAttempts->new(nro_socio => $nro_socio);
+    
+    return ($object->attempts);
 }
 
 

@@ -9,7 +9,6 @@ __PACKAGE__->meta->setup(
     table   => 'usr_login_attempts',
 
     columns => [
-        id           => { type => 'varchar', length => 255, not_null => 1 },
         nro_socio    => { type => 'varchar', length => 16, not_null => 1 },
         attempts     => { type => 'integer', length => 32, default => 0 },
     ],
@@ -39,43 +38,5 @@ sub reset{
     $self->save();
 }
 
-#METODO STATIC
-sub loginFailed{
-	my ($nro_socio) = shift;
-	
-	my $attempts_object = _getAttemptsObject($nro_socio);
-	
-	$attempts_object->increase;
-	
-}
 
-#METODO STATIC
-sub _getAttemptsObject{
-	
-	my ($nro_socio) = shift;
-	
-	my $object = C4::Modelo::UsrLoginAttempts->new(nro_socio => $nro_socio);
-	
-	return ($object);
-}
-
-#METODO STATIC
-sub loginSuccess{
-    my ($nro_socio) = shift;
-    
-    my $attempts_object = _getAttemptsObject($nro_socio);
-    
-    $attempts_object->reset;
-    
-}
-
-#METODO STATIC
-sub getSocioAttempts{
-    
-    my ($nro_socio) = shift;
-    
-    my $object = C4::Modelo::UsrLoginAttempts->new(nro_socio => $nro_socio);
-    
-    return ($object->attempts);
-}
 1;
