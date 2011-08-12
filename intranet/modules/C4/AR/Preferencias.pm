@@ -458,6 +458,16 @@ sub getMetodosAuth{
 	return (\@arreglo_temp);
 }
 
+sub getMetodosAuthAll{
+    use C4::Modelo::SysMetodoAuth::Manager;
+    my $metodos_auth = C4::Modelo::SysMetodoAuth::Manager::get_sys_metodo_auth( query => [], 
+                                                                                sort_by => 'orden ASC',
+                                                                              );
+
+    
+	return ($metodos_auth);
+}
+
 END { }       # module clean-up code here (global destructor)
 
 1;
