@@ -480,25 +480,26 @@ sub obtenerDisponibilidadTotal{
     my ($cat_ref_tipo_nivel3_array_ref) = C4::AR::Nivel3::getNivel3FromId1($id1);
 
 	
-	my $cant_para_domicilio = 0;
-    my $cant_para_sala = 0;
-    my $cant_no_disponible = 0;
-    my $i = 0;
+	my $cant_para_domicilio     = 0;
+    my $cant_para_sala          = 0;
+    my $cant_no_disponible      = 0;
+    my $i                       = 0;
 
     foreach my $n3 (@$cat_ref_tipo_nivel3_array_ref){
+        C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => BARCODE => ".$n3->getBarcode());
         if($n3->estadoDisponible){
             if (($n3->esParaPrestamo)&&(!$n3->estaReservado())) {
             #DOMICILIO    
-                # C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => DOMICILIO");
+                C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => DOMICILIO");
                 $cant_para_domicilio++;
             } elsif($n3->esParaSala) {
             #PARA SALA
-                # C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => PARA SALA");
+                C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => PARA SALA");
                 $cant_para_sala++;
             }
-        }
-        else{
+        } else {
             #NO DISPONIBLE
+            C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => NO DISPONIBLE ");
             $cant_no_disponible++;
         }
 	}

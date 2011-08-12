@@ -558,17 +558,18 @@ sub marc_record_to_meran_to_detail_view2 {
                 $hash_temp{'subcampo'}              = $subcampo;
     # TODO tengo q mostrar el nombre del campo de la biblia de la tabla de campos
                 $hash_temp{'liblibrarian'}          = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo, $itemtype, $type, $db);
-                $hash_temp{'orden'}                 = getOrdenFromCampoSubcampo($campo, $subcampo, $itemtype, $type,$db);
+                $hash_temp{'orden'}                 = getOrdenFromCampoSubcampo($campo, $subcampo, $itemtype, $type, $db);
                 $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype, $db);
                 $hash_temp{'datoReferencia'}        = $dato;
-                my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype,$db);
-    #                 $hash_temp{'dato'}                  = $field->as_string;
+                my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $db);
                 $hash_temp{'dato'}                  = $valor_referencia;
     # TODO falta ver que separador lleva cada $valor_referencia dependiendo del campo y subcampo que se este procesando
                 $field->update( $subcampo => $valor_referencia );
             }
 
             $hash_temp_aux{'campo'}             = $campo;
+# TODO falta el orden from campo
+#             $hash_temp_aux{'orden'}             = getOrdenFromCampo($campo,$itemtype, $type, $db);
             $hash_temp_aux{'liblibrarian'}      = C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
             $hash_temp_aux{'dato'}              = ($hash_temp_aux{'dato'} ne "")?$hash_temp_aux{'dato'}.";".$field->as_string:$field->as_string;
 
@@ -876,9 +877,16 @@ sub getDatoFromReferencia{
 
     }#END if(($dato ne '')&&($campo ne '')&&($subcampo ne '')&&($dato != 0)&&($dato ne ''))
 
-   return $dato;
+    return getNullValue($dato);
+#     return $dato;
 }
 
+
+sub getNullValue {
+    my ($dato) = @_;
+
+    return ($dato eq "NULL")?"[SIN VALOR]":$dato;
+}
 
 =head2
     sub getRefFromStringConArrobas
