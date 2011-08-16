@@ -43,7 +43,7 @@ if(C4::AR::Preferencias::getValorPreferencia("permite_cambio_password_desde_opac
                                                         $authnotrequired,
                                                         {   ui              => 'ANY', 
                                                             tipo_documento  => 'ANY', 
-                                                            accion          => 'MODIFICACION', 
+                                                            accion          => 'CONSULTA', 
                                                             entorno         => 'usuarios'
                                                         },
                                                         "opac",
