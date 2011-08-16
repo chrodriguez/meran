@@ -11,14 +11,30 @@ function objeto_usuario(){
      //muestra los ejemplares del grupo
 function guardarCambiarPassword(){
 
-    var key= b64_sha256(b64_md5($('#actualpassword').val()));
+    var changed = $.trim($('#actualpassword').val());
+    if (changed != ''){
+        [% IF plainPassword == 0 %]
+            var nroRandom   = [% nroRandom %];
+            var hash_actual = b64_sha256(b64_sha256(b64_md5($("#actualpassword").val()))+nroRandom);
+            var hash_new1   = encriptar((b64_sha256(b64_md5($("#newpassword1").val()))),b64_sha256(b64_md5($("#actualpassword").val())));
+            var hash_new2   = encriptar((b64_sha256(b64_md5($("#newpassword2").val()))),b64_sha256(b64_md5($("#actualpassword").val())));
 
-    document.datosAEnviar.actual_password.value = encriptar($('#actualpassword').val(), key);
-    document.datosAEnviar.new_password1.value = encriptar($('#newpassword1').val(), key);
-    document.datosAEnviar.new_password2.value = encriptar($('#newpassword2').val(), key);
-    document.datosAEnviar.usuario.value = usuario.ID;
-    document.datosAEnviar.changePassword.value = 1;
-    document.datosAEnviar.submit();
+            $("#actual_password").val(hash_actual);
+            $('#new_password1').val(hash_new1);
+            $('#new_password2').val(hash_new2);
+        [% ELSE %]
+            var hash_actual = $("#actualpassword").val();
+            var hash_new1   = encriptar($("#newpassword1").val(),hash_actual);
+            var hash_new2   = encriptar($("#newpassword2").val(),hash_actual);
+
+            $("#actual_password").val(hash_actual);
+            $('#new_password1').val(hash_new1);
+            $('#new_password2').val(hash_new2);
+        [% END %]
+        $("#datosAEnviar").submit();
+        return true;
+     }          
+  
 }
 
 function updateGuardarCambiarPassword(responseText){
@@ -35,12 +51,12 @@ $(document).ready(function() {
 });
 
 </script>
-<form action='[% url_prefix %]/change_passwordDB.pl?token=[% token %]' method="post" name="datosAEnviar">
-        <input type="hidden" name="new_password1">
-        <input type="hidden" name="new_password2">
-        <input type="hidden" name="usuario">
-        <input type="hidden" name="changePassword">
-        <input type="hidden" name="actual_password">
+<form action='[% url_prefix %]/change_passwordDB.pl?token=[% token %]' method="post" name="datosAEnviar" id="datosAEnviar">
+        <input type="hidden" name="new_password1" id="new_password1">
+        <input type="hidden" name="new_password2" id="new_password2">
+        <input type="hidden" value="[% nro_socio %]" name="usuario" id="usuario">
+        <input type="hidden" name="changePassword" id="changePassword">
+        <input type="hidden" name="actual_password" id="actual_password">
         <input type="hidden" name="token" value="[% token %]">
 </form>
 
@@ -64,11 +80,11 @@ $(document).ready(function() {
         &nbsp;
     </legend>
         <p><label for="pass" class="left">Contrase&ntilde;a Actual:&nbsp;</label>
-        <input type="password" name="actualpassword" id="actualpassword"></p>
+        <input type="password" name="" id="actualpassword"></p>
         <p><label for="pass" class="left">Nueva Contrase&ntilde;a:&nbsp;</label>
-        <input type="password" name="newpassword1" id="newpassword1"></p>
+        <input type="password" name="" id="newpassword1"></p>
         <p><label for="pass" class="left">Repetir Contrase&ntilde;a:&nbsp;</label>
-        <input type="password" name="newpassword2"  id="newpassword2"></p>
+        <input type="password" name=""  id="newpassword2"></p>
 	    <p><input type="button" value="Aceptar" onClick="guardarCambiarPassword()"></p>
 </fieldset>
 </div>

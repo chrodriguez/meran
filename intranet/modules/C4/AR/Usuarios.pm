@@ -264,25 +264,11 @@ sub resetPassword {
 
     my ($params)=@_;
     my $nro_socio = $params->{'nro_socio'};
-    my $msg_object= C4::AR::Mensajes::create();
-    my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
-
-# FIXME esa funcion debe cambiar, porque cambiaron los parametros
-#     $msg_object = _verficarEliminarUsuario($params,$msg_object);
-
+    my $msg_object;
+    
         eval {
-            $socio->resetPassword;
-            $msg_object->{'error'}= 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U359', 'params' => [$socio->getNro_socio]} ) ;
+            $msg_object = C4::AR::Auth::resetUserPassword($nro_socio);
         };
-
-        if ($@){
-            #Se loguea error de Base de Datos
-            &C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
-            #Se setea error para el usuario
-            $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U360', 'params' => [$socio->getNro_socio]} ) ;
-        }
 
     return ($msg_object);
 }

@@ -89,6 +89,10 @@ $VERSION = 1.0;
         changeEnable
         addMethod
         updateNameMetodo
+        resetUserPassword
+        changePasswordFromRecover
+        checkRecoverLink
+        
 );
 
 =item
@@ -1747,6 +1751,9 @@ sub _validarCambioPassword {
     }
     if (!($msg_object->{'error'})) {
     	_setearPassword($socio,$new_password_1,C4::AR::Auth::getSessionNroRandom());
+	    my $today = Date::Manip::ParseDate("today");
+	    $socio->setLast_change_password($today);
+	    $socio->setChange_password(0);
     }
        
     return ($msg_object);
@@ -2015,6 +2022,26 @@ sub changePasswordFromRecover{
     }
 
     return ($message);
+}   
+
+
+sub resetUserPassword{
+    my ($nro_socio) = @_;
+    my $msg_object= C4::AR::Mensajes::create();
+    
+    my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+    if($socio){
+    	   my $password_dni = C4::AR::Auth::hashear_password(C4::AR::Auth::hashear_password($socio->persona->getNro_documento, 'MD5_B64'), 'SHA_256_B64');
+
+           cambiarPasswordPropagado($socio,$password_dni);
+           $socio->forzarCambioDePassword();
+	       C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U359', 'params' => [($socio->getNro_socio)]} ) ;
+    }else{
+	    $msg_object->{'error'}= 1;
+	    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U360', 'params' => [($socio->getNro_socio)]} ) ;
+    }
+
+    return ($msg_object);
 }   
 
 sub cambiarPasswordPropagado{
