@@ -34,7 +34,7 @@ if ($tipoAccion eq 'CAMBIAR_PASSWORD'){
                                             $authnotrequired,
                                             {   ui => 'ANY', 
                                                 tipo_documento => 'ANY', 
-                                                accion => 'MODIFICACION', 
+                                                accion => 'CONSULTA', 
                                                 entorno => 'usuarios'
                                             },
                                             "opac"

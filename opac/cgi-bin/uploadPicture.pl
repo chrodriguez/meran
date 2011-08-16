@@ -17,7 +17,7 @@ my ($nro_socio, $session, $flags) = checkauth(
                                                         $authnotrequired,
                                                         {   ui              => 'ANY', 
                                                             tipo_documento  => 'ANY', 
-                                                            accion          => 'MODIFICACION', 
+                                                            accion          => 'CONSULTA', 
                                                             entorno         => 'usuarios'},
                                                             "opac"
                         );  
