@@ -11,6 +11,7 @@
           <h3>[% 'Tel&eacute;fono' | i18n %]: [% ui.getTelefono %]</h3>
           <p>Puede comunicarse de 8:00 a 19:00 hs.</p>
         </div>
+	[% twitter_follow_button %]
         <hr class="clear-contentunit" />
         <!-- Content unit - Two columns -->
         [% google_map %]
