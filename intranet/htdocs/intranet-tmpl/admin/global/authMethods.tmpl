@@ -1,20 +1,9 @@
 [% INCLUDE "intranet-top.inc" %]
 
-<script type="text/javascript" src="/includes/jquery/jquery.jeditable-min.js"></script>
 <script type="text/javascript" language="javascript" src="/includes/jquery/jquery-ui-1.8.13.sortable.min.js"></script>
 <script language="JavaScript" type="text/javascript">
     $(document).ready(function() {    
-	    loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
-        $('.editable').editable('[% url_prefix %]/admin/global/auth_methodsDB.pl', { 
-            type        : 'text',
-            cancel      : CANCELAR,
-            submit      : OK,
-            tooltip     : EDITABLE_MSG,
-            placeholder : EDITABLE_MSG,
-            style       : 'display: inline',
-            submitdata  : {token: "[% token %]", edit: 1},
-            indicator   : loaderPath,
-        });	   
+	    zebra('tabla_datos'); 
     });
     
     $(function() {
@@ -97,7 +86,7 @@
             <tbody id="sortable">
                 [% FOREACH metodo IN metodos %]
                     <tr id="[% metodo.id %]" align="center">
-                        <td class="editable" id="[% metodo.id %]" >[% metodo.metodo %]</td>
+                        <td>[% metodo.metodo %]</td>
                         <td><input onclick="changeMethod([% metodo.id %])" type="checkbox" id="enable[% metodo.id %]" name="metodo_enabled" [% IF metodo.enabled == '1' %] checked="true" [% ELSE %] [% END %] value="[% metodo.enabled %]"/></td>
                     </tr>
                 [% END %]
