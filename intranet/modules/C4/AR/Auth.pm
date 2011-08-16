@@ -86,8 +86,77 @@ $VERSION = 1.0;
         buildSocioData
         updateLoggedUserTemplateParams
         updateAuthOrder
+        changeEnable
+        addMethod
+        updateNameMetodo
 );
 
+=item
+    Agrega un metodo
+=cut
+sub addMethod{
+    my ($nameMetodo)    = @_;
+    my $metodo          = C4::Modelo::SysMetodoAuth->new();
+    my $msg_object      = C4::AR::Mensajes::create();
+    my $db              = $metodo->db;
+    $db->begin_work;
+    
+    eval{
+        $metodo->agregarMetodo($nameMetodo);
+        $msg_object->{'error'} = 0;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'MA000', 'params' => []});
+        $db->commit;
+    };
+    if ($@){
+        # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
+        &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'MA001', 'params' => []} ) ;
+        $db->rollback;
+    }
+    return ($msg_object);
+}
+
+=item
+    Actualiza el nombre del metodo
+=cut
+sub updateNameMetodo{
+    my ($idMetodo,$value)    = @_;
+    
+    my $metodo = C4::Modelo::SysMetodoAuth::Manager::get_sys_metodo_auth( 
+                                     query   => [ id => { eq => $idMetodo}], 
+                               );
+                               
+    $metodo->[0]->setMetodo($value);
+}
+
+
+=item
+    Actualiza si el metodo esta habilitado o no
+=cut
+sub changeEnable{
+    my ($newValue,$idMetodo)    = @_;
+    my $msg_object      = C4::AR::Mensajes::create();
+    
+    C4::AR::Debug::debug("entro : id : ".$idMetodo. "  : newValue : ".$newValue);
+    
+    my $metodo = C4::Modelo::SysMetodoAuth::Manager::get_sys_metodo_auth( 
+                                     query   => [ id => { eq => $idMetodo}], 
+                               );
+                               
+    C4::AR::Debug::debug("metodo : ".$metodo->[0]);
+    my $objMetodo;
+    $objMetodo = $metodo->[0];
+    if($newValue eq "1"){
+        $objMetodo->enable();
+    }else{
+        $objMetodo->disable();
+    }    
+    
+    
+    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'M000', 'params' => []} ) ;
+    return ($msg_object);              
+}
 
 =item
     Actualiza el orden de los metodos de autenticacion, la tabla sys_metodo_auth

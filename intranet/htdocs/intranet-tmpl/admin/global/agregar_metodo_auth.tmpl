@@ -1,0 +1,32 @@
+<fieldset>
+<legend>[% "Modificar Preferencia:" | i18n %]</legend>
+<ul>
+    <li class="sub_item" >
+	    <label for="variable">
+		    [% "Metodo" | i18n %]:
+	    </label>
+    </li>
+</ul>
+
+<ul>
+	    <li>
+            <input id="name_metodo" type="text">
+	    </li>
+</ul>
+
+    <div style="clear:both">
+        <p>[% "NOTA: El M&eacute;todo se agrega deshabilitado por defecto." | i18n %]</p>
+    </div>
+    
+    [% PERL %]
+                print C4::AR::Filtros::to_Button(   
+                                    text    => "[% 'Guardar M&eacute;todo' | i18n %]",
+                                    boton   => "boton_agregar",
+                                    onClick => "guardarMetodo();",
+                                    width   => "auto",
+                                    title   => "[% 'Guardar M&eoacute;todo' | i18n %]", 
+                                    alternClass   => "botonCentrado"
+                        ) ;
+    [% END %]
+
+</fieldset>
