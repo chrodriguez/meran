@@ -63,7 +63,7 @@ my $tt1 = time();
  limpiarCirculacion();
  print "Referencias de usuarios en circulacion \n";
  my $st2 = time();
- #  repararReferenciasDeUsuarios();
+   repararReferenciasDeUsuarios();
  my $end2 = time();
  my $tardo2=($end2 - $st2);
  print "AL FIN TERMINARON LOS USUARIOS!!! Tardo $tardo2 segundos !!!\n";
