@@ -12,12 +12,21 @@
             [% IF plainPassword == 0 %]
                 var nroRandom   = [% nroRandom %];
 	            var hash_actual = b64_sha256(b64_sha256(b64_md5($("#actualpassword").val()))+nroRandom);
-	            var hash_new1   = b64_sha256(b64_sha256(b64_md5($("#newpassword1").val()))+nroRandom);
-	            var hash_new2   = b64_sha256(b64_sha256(b64_md5($("#newpassword2").val()))+nroRandom);
+	            var hash_new1   = encriptar((b64_sha256(b64_md5($("#newpassword1").val()))),b64_sha256(b64_md5($("#actualpassword").val())));
+	            var hash_new2   = encriptar((b64_sha256(b64_md5($("#newpassword2").val()))),b64_sha256(b64_md5($("#actualpassword").val())));
+
 	            $("#actual_password").val(hash_actual);
 	            $('#new_password1').val(hash_new1);
-	            $('#new_password2').val(hash_new1);
-	        [% END %]
+	            $('#new_password2').val(hash_new2);
+	        [% ELSE %]
+	            var hash_actual = $("#actualpassword").val();
+	            var hash_new1   = encriptar($("#newpassword1").val(),hash_actual);
+                var hash_new2   = encriptar($("#newpassword2").val(),hash_actual);
+
+                $("#actual_password").val(hash_actual);
+                $('#new_password1').val(hash_new1);
+                $('#new_password2').val(hash_new2);
+            [% END %]
 	        $("#datosAEnviar").submit();
 	        return true;
 	     }        	
@@ -25,7 +34,6 @@
     }
 
     $(document).ready(function() {
-    	
         CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'});
         $("#temas_opac").change(function() {
             $("link").attr("href","[% temas %]/"+$("#temas_opac").val()+"/includes/opac.css");

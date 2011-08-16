@@ -10,14 +10,14 @@ my  $socios = C4::Modelo::UsrSocio::Manager->get_usr_socio();
 	#Si tiene flags seteados NO es un estudiante
 	  if($flag % 2){
 	    #Da 1 entonces era IMPAR => tenia el 1er bit en 1 => es SUPERLIBRARIAN
-	    $socio->convertirEnSuperLibrarian;
+	    $socio->setCredentials('superLibrarian');
 	  }else{
 	    #Da 0 entonces era PAR => tenia el 1er bit en 0 => NO es SUPERLIBRARIAN
-	    $socio->convertirEnLibrarian;
+        $socio->setCredentials('librarian');
 	  }
       }else{
 	#Si NO tiene flags seteados es un estudiante
-	$socio->convertirEnEstudiante;
+        $socio->setCredentials('estudiante');
       }
     }
 

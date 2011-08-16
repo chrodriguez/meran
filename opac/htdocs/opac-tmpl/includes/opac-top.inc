@@ -57,7 +57,7 @@
   </title>
   
   <script type="text/javascript">
-      [% IF socio_data.usr_nro_socio %]
+      [% IF socio_data.usr_permisos_opac %]
 	      [% IF !noAjaxRequests %]
 	          $(document).ready(function() {
 	            infoReservas();

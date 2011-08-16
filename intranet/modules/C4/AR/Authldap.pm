@@ -23,7 +23,6 @@ use vars qw(@ISA @EXPORT_OK );
     getLdapPreferences
     setVariableLdap
     checkPwEncriptada
-    getldappassword 
     checkPwPlana
     _getValorPreferenciaLdap
     datosUsuario
@@ -96,6 +95,7 @@ sub _getValorPreferenciaLdap{
 sub datosUsuario{
     my ($userid,$ldap)  = @_;
     my $socio           = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
+
 
     if ($socio) { 
         return $socio;
@@ -219,7 +219,8 @@ sub checkPwEncriptada{
 =cut
 sub _verificar_password_con_metodo {
     my ($userid, $password, $passwordLDAP, $nroRandom, $ldap) = @_;
-    if ($password eq C4::AR::Auth::hashear_password($passwordLDAP.$nroRandom,C4::AR::Auth::getMetodoEncriptacion() )) {
+    my $passwordParaComparar=C4::AR::Auth::hashear_password(C4::AR::Auth::hashear_password($passwordLDAP.$nroRandom,C4::AR::Auth::getMetodoEncriptacion()),C4::AR::Auth::getMetodoEncriptacion());
+    if ($password eq $passwordParaComparar) {
         #PASSWORD VALIDA
         return datosUsuario($userid,$ldap);
     }else {
@@ -240,17 +241,66 @@ sub checkPassword{
 	
 }	
 
+
+
 sub validarPassword{
     my( $userid,$password,$nuevaPassword,$nroRandom)= @_;
 	my $socio=undef;
-     C4::AR::Debug::debug("ESTOS SON LOS VALORES QUE LLEGAN ".$userid.$password.$nroRandom.$nuevaPassword);
-     C4::AR::Debug::debug(C4::AR::Auth::hashear_password($nuevaPassword.$nroRandom,C4::AR::Auth::getMetodoEncriptacion()));
+    my $msg_object= C4::AR::Mensajes::create();
+    C4::AR::Debug::debug("ESTOS SON LOS VALORES QUE LLEGAN ".$userid.$password.$nroRandom.$nuevaPassword);
+    C4::AR::Debug::debug(C4::AR::Auth::hashear_password($nuevaPassword.$nroRandom,C4::AR::Auth::getMetodoEncriptacion()));
     if ((!C4::Context->config('plainPassword') )&& ($password ne C4::AR::Auth::hashear_password($nuevaPassword.$nroRandom,C4::AR::Auth::getMetodoEncriptacion() ))){
+         C4::AR::Debug::debug("NO TENGO IDEA DONDE CARAJO ESTOY");
             ($socio) = checkPwEncriptada($userid,$password,$nroRandom);
-        }elsif ($password eq $nuevaPassword){
+    }elsif((C4::Context->config('plainPassword')) && ($password ne (C4::AR::Auth::desencriptar($nuevaPassword,'mono')))){
+            
             ($socio) = checkPwPlana($userid,$password);       
         }
-	return $socio;
+        else{
+            #esto quiere decir que el password actual es igual al nuevo
+           C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U499', 'params' => []} ) ; 
+           $msg_object->{'error'}=1;
+        }
+	return ($socio,$msg_object);
+}
+
+=item
+    Función que setea el password de un socio, es independiente del tipo de authtencacion q se use, simplemente desencripta el password que viene encriptado con la password vieja del usuario
+    y lo setea en la base
+    FIXME
+    FIXME
+    FIXME
+    FIXME
+    FIXME
+    FIXME
+    FIXME
+    FIXME
+    FIXME
+    FIXME
+    FIXME
+    
+    QUEDA QUE VALIDE LAS CREDENCIALES
+    BUSCAR LOGINS DE LDAP QUE PODAMOS USAR
+    RESET PASSWORD EN AMBOS (MYSQL/LDAP) --- OK EN MYSQL
+    SET PASSWORD EN LDAP (ESTE DE ACA ABAJO)
+    CAPTCHA --- OK
+    
+    
+=cut
+sub setearPassword{
+    
+    my ($socio,$nuevaPassword,$nroRandom) = @_;
+    my $preferencias_ldap   = getLdapPreferences();
+#    $nuevaPassword=C4::AR::Auth::desencriptar($nuevaPassword,'mono');#_getPassword($socio));
+#    $socio->setPassword($nuevaPassword);	
+    return $socio;
+    my $LDAP_DB_PREF    = $preferencias_ldap->{'ldap_prefijo_base'};
+    my $LDAP_U_PREF     = $preferencias_ldap->{'ldap_user_prefijo'};
+    my $LDAP_USER     = $LDAP_U_PREF.'='.$socio->getNro_socio().','.$LDAP_DB_PREF;
+    my $ldap = _conectarLDAP();
+    my $mesg = $ldap->set_password( user =>$LDAP_USER, newpassword => $nuevaPassword );
+    C4::AR::Debug::debug("LDAP USER".$LDAP_USER." NEW PASS ".$nuevaPassword." MENSAJE ". $mesg);
+
 }
 
 
