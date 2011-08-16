@@ -20,6 +20,7 @@ $VERSION = 0.01;
 @ISA=qw(Exporter);
 
 @EXPORT_OK=qw(
+    &getItemsByOrden
     &addConfiguracion
     &updateNewOrder
     &getConfiguracionByOrder
@@ -33,38 +34,85 @@ $VERSION = 0.01;
 
 
 =item
-    Funcion que actializa el orden de los campos. 
-    Parametros: array con los ids en el orden nuevo
+    Esta funcion devuelve los items que tengan el orden recibido como parametro
 =cut
-sub updateNewOrder{
-    my ($newOrderArray) = @_;
-    my $msg_object      = C4::AR::Mensajes::create();
+sub getItemsByOrden{
+    my ($orden,$menor_equal) = @_;
     
-    # ordeno los ids que llegan desordenados primero, para obtener un clon de los ids, y ahora usarlo de indice para el orden
-    # esto es porque no todos los campos de cat_visualizacion_opac se muestran en el template a ordenar 
-    # entonces no puedo usar un simple indice como id.
-    my @array = sort { $a <=> $b } @$newOrderArray;
-    
-    my $i = 0;
     my @filtros;
     
-    # hay que hacer update de todos los campos porque si viene un nuevo orden y es justo ordenado (igual que @array : 1,2,3...)
-    # tambien hay que actualizarlo
-    foreach my $campo (@$newOrderArray){
-    
-        my $config_temp = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(
-                                                                    query   => [ id => { eq => $campo}], 
-                               );
-        my $configuracion = $config_temp->[0];
-        
-#        C4::AR::Debug::debug("nuevo orden de id : ".@array[$i]." es :  ".$campo);
-        
-        $configuracion->setOrden(@array[$i]);
-    
-        $i++;
+#    si el orden es 1 (el menor que puede haber), debe buscarse por igual si o si
+    if($orden eq "1"){
+        $menor_equal = 0;        
     }
     
-    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'M000', 'params' => []} ) ;
+#    si la consulta es por menor igual o no
+    if($menor_equal){
+        push (@filtros, (orden => { lt => $orden }));
+    }else{
+        push (@filtros, (orden => { eq => $orden }));
+    }   
+    
+
+    my $items = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros);
+
+    return ($items);
+}
+
+
+=item
+    Funcion que actializa el orden de los campos. 
+    Parametros: orden que tenia el item que se movio, y el id del item
+=cut
+sub updateNewOrder{
+    my ($ordenViejo,$idItem) = @_;
+    
+    my $msg_object      = C4::AR::Mensajes::create();
+    
+#    los items que tengan orden menor a $ordenViejo hay que actualizar el orden (sumado en 1)
+#    aca los obtengo, pero solo si el ordenViejo es distinto a 1, porque si es 1 no hay que actualizar nada
+
+    if($ordenViejo ne "1"){
+        my $items_a_mover   = getItemsByOrden($ordenViejo,1);
+    
+#    actualizo el orden de estos elementos, sumandoselo en 1
+        foreach my $item (@$items_a_mover){
+            C4::AR::Debug::debug("orden item : ".$item->getOrden);
+#        C4::AR::Utilidades::printHASH($item);
+#        $item->setOrden($item->getOrden+1);
+
+#TODO: guardar el nuevo orden al item nuevo y a todos los items que compartan ese orden
+#ver como obtener en que posicion se guardo ahora
+            
+        }
+    
+    }
+    
+#    # ordeno los ids que llegan desordenados primero, para obtener un clon de los ids, y ahora usarlo de indice para el orden
+#    # esto es porque no todos los campos de cat_visualizacion_opac se muestran en el template a ordenar 
+#    # entonces no puedo usar un simple indice como id.
+#    my @array = sort { $a <=> $b } @$newOrderArray;
+#    
+#    my $i = 0;
+#    my @filtros;
+#    
+#    # hay que hacer update de todos los campos porque si viene un nuevo orden y es justo ordenado (igual que @array : 1,2,3...)
+#    # tambien hay que actualizarlo
+#    foreach my $campo (@$newOrderArray){
+#    
+#        my $config_temp = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(
+#                                                                    query   => [ id => { eq => $campo}], 
+#                               );
+#        my $configuracion = $config_temp->[0];
+#        
+##        C4::AR::Debug::debug("nuevo orden de id : ".@array[$i]." es :  ".$campo);
+#        
+#        $configuracion->setOrden(@array[$i]);
+#    
+#        $i++;
+#    }
+#    
+    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'M000', 'params' => []} );
 
     return ($msg_object);
 }

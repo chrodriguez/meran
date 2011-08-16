@@ -496,6 +496,11 @@ my %mensajesINTRA = (
     'SC001' => 'El mensaje no pudo ser publicado a causa del siguiente error: ',
     'SC002' => 'Se ha excedido en la cantidad de caracteres ingresados. El mensaje no ha sido publicado en Twitter ',
     'SC003' => 'No esta habilitada la preferencia para publicar en Twitter',
+    
+     #Metodos Auth     
+    'MA000' => 'El Metodo fue agregado exitosamente',
+    'MA001' => 'El Metodo no pudo ser agregado',
+
 );
 
 sub getMensaje {

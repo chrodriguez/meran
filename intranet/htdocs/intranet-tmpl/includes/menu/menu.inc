@@ -479,6 +479,14 @@
 		                    </li>
 		                    <li>
 		                                [% PERL %]
+		                                    print C4::AR::Filtros::link_to( text =>     "[% 'M&eacute;todos de Autenticaci&oacute;n' | i18n %]",
+		                                                                    url =>      "[% url_prefix %]/admin/global/auth_methods.pl", 
+		                                                                    title =>    "[% 'Configuraci&oacute;n del Mail' | i18n %]"
+		                                                                ) ;
+		                                [% END %]
+		                    </li>
+		                    <li>
+		                                [% PERL %]
 		                                    print C4::AR::Filtros::link_to( text =>     "[% 'Configuraci&oacute;n del Mail' | i18n %]",
 		                                                                    url =>      "[% url_prefix %]/admin/global/mail_config.pl", 
 		                                                                    title =>    "[% 'Configuraci&oacute;n del Mail' | i18n %]"
