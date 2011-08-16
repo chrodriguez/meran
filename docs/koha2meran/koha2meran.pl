@@ -63,7 +63,7 @@ my $tt1 = time();
  limpiarCirculacion();
  print "Referencias de usuarios en circulacion \n";
  my $st2 = time();
-   repararReferenciasDeUsuarios();
+ #  repararReferenciasDeUsuarios();
  my $end2 = time();
  my $tardo2=($end2 - $st2);
  print "AL FIN TERMINARON LOS USUARIOS!!! Tardo $tardo2 segundos !!!\n";
@@ -737,8 +737,16 @@ sub guardaNivel1MARC {
             if ($valor ne ''){
 
                     my $field;
-                     if ($field=$marc->field($campo)){ #Ya existe el campo, se agrega el subcampo
-                         $field->add_subfields( $subcampo => $valor );
+                     if ($field=$marc->field($campo)){ #Ya existe el campo
+
+		         if ($field->subfield($subcampo)){ #Existe el subcampo se agrega a un campo nuevo
+			    $field = MARC::Field->new($campo,'','',$subcampo => $valor);
+			    $marc->append_fields($field);
+			  }
+			  else{# se agrega el subcampo
+			    $field->add_subfields( $subcampo => $valor );
+			 }
+
                      } else { #NO existe el campo, se agrega uno nuevo
                          $field = MARC::Field->new($campo,'','',$subcampo => $valor);
                          $marc->append_fields($field);
@@ -751,8 +759,16 @@ sub guardaNivel1MARC {
              foreach my $valor (@$arr){
                 if ($valor ne ''){
                     my $field;
-                     if ($field=$marc->field($campo)){ #Ya existe el campo, se agrega el subcampo
-                         $field->add_subfields( $subcampo => $valor );
+                     if ($field=$marc->field($campo)){ #Ya existe el campo
+
+		         if ($field->subfield($subcampo)){ #Existe el subcampo se agrega a un campo nuevo
+			    $field = MARC::Field->new($campo,'','',$subcampo => $valor);
+			    $marc->append_fields($field);
+			  }
+			  else{# se agrega el subcampo
+			    $field->add_subfields( $subcampo => $valor );
+			 }
+
                      } else { #NO existe el campo, se agrega uno nuevo
                          $field = MARC::Field->new($campo,'','',$subcampo => $valor);
                          $marc->append_fields($field);
@@ -786,9 +802,17 @@ sub guardaNivel2MARC {
         if ($obj->{'simple'}){
             my $valor=$obj->{'valor'};
             if ($valor ne ''){
-                    my $field;
-                     if ($field=$marc->field($campo)){ #Ya existe el campo, se agrega el subcampo
-                         $field->add_subfields( $subcampo => $valor );
+                      my $field;
+                     if ($field=$marc->field($campo)){ #Ya existe el campo
+
+		         if ($field->subfield($subcampo)){ #Existe el subcampo se agrega a un campo nuevo
+			    $field = MARC::Field->new($campo,'','',$subcampo => $valor);
+			    $marc->append_fields($field);
+			  }
+			  else{# se agrega el subcampo
+			    $field->add_subfields( $subcampo => $valor );
+			 }
+
                      } else { #NO existe el campo, se agrega uno nuevo
                          $field = MARC::Field->new($campo,'','',$subcampo => $valor);
                          $marc->append_fields($field);
@@ -800,8 +824,16 @@ sub guardaNivel2MARC {
              foreach my $valor (@$arr){
                 if ($valor ne ''){
                     my $field;
-                     if ($field=$marc->field($campo)){ #Ya existe el campo, se agrega el subcampo
-                         $field->add_subfields( $subcampo => $valor );
+                     if ($field=$marc->field($campo)){ #Ya existe el campo
+
+		         if ($field->subfield($subcampo)){ #Existe el subcampo se agrega a un campo nuevo
+			    $field = MARC::Field->new($campo,'','',$subcampo => $valor);
+			    $marc->append_fields($field);
+			  }
+			  else{# se agrega el subcampo
+			    $field->add_subfields( $subcampo => $valor );
+			 }
+
                      } else { #NO existe el campo, se agrega uno nuevo
                          $field = MARC::Field->new($campo,'','',$subcampo => $valor);
                          $marc->append_fields($field);
@@ -835,8 +867,16 @@ sub guardaNivel3MARC {
             my $valor=$obj->{'valor'};
             if ($valor ne ''){
                     my $field;
-                     if ($field=$marc->field($campo)){ #Ya existe el campo, se agrega el subcampo
-                         $field->add_subfields( $subcampo => $valor );
+                     if ($field=$marc->field($campo)){ #Ya existe el campo
+
+		         if ($field->subfield($subcampo)){ #Existe el subcampo se agrega a un campo nuevo
+			    $field = MARC::Field->new($campo,'','',$subcampo => $valor);
+			    $marc->append_fields($field);
+			  }
+			  else{# se agrega el subcampo
+			    $field->add_subfields( $subcampo => $valor );
+			 }
+
                      } else { #NO existe el campo, se agrega uno nuevo
                          $field = MARC::Field->new($campo,'','',$subcampo => $valor);
                          $marc->append_fields($field);
@@ -848,8 +888,16 @@ sub guardaNivel3MARC {
              foreach my $valor (@$arr){
                 if ($valor ne ''){
                     my $field;
-                     if ($field=$marc->field($campo)){ #Ya existe el campo, se agrega el subcampo
-                         $field->add_subfields( $subcampo => $valor );
+                     if ($field=$marc->field($campo)){ #Ya existe el campo
+
+		         if ($field->subfield($subcampo)){ #Existe el subcampo se agrega a un campo nuevo
+			    $field = MARC::Field->new($campo,'','',$subcampo => $valor);
+			    $marc->append_fields($field);
+			  }
+			  else{# se agrega el subcampo
+			    $field->add_subfields( $subcampo => $valor );
+			 }
+
                      } else { #NO existe el campo, se agrega uno nuevo
                          $field = MARC::Field->new($campo,'','',$subcampo => $valor);
                          $marc->append_fields($field);
@@ -1225,8 +1273,16 @@ sub guardaNuevoNivel1MARC {
             if ($valor ne ''){
 
                     my $field;
-                     if ($field=$marc->field($campo)){ #Ya existe el campo, se agrega el subcampo
-                         $field->add_subfields( $subcampo => $valor );
+                     if ($field=$marc->field($campo)){ #Ya existe el campo
+
+		         if ($field->subfield($subcampo)){ #Existe el subcampo se agrega a un campo nuevo
+			    $field = MARC::Field->new($campo,'','',$subcampo => $valor);
+			    $marc->append_fields($field);
+			  }
+			  else{# se agrega el subcampo
+			    $field->add_subfields( $subcampo => $valor );
+			 }
+
                      } else { #NO existe el campo, se agrega uno nuevo
                          $field = MARC::Field->new($campo,'','',$subcampo => $valor);
                          $marc->append_fields($field);
@@ -1239,8 +1295,16 @@ sub guardaNuevoNivel1MARC {
              foreach my $valor (@$arr){
                 if ($valor ne ''){
                     my $field;
-                     if ($field=$marc->field($campo)){ #Ya existe el campo, se agrega el subcampo
-                         $field->add_subfields( $subcampo => $valor );
+                     if ($field=$marc->field($campo)){ #Ya existe el campo
+
+		         if ($field->subfield($subcampo)){ #Existe el subcampo se agrega a un campo nuevo
+			    $field = MARC::Field->new($campo,'','',$subcampo => $valor);
+			    $marc->append_fields($field);
+			  }
+			  else{# se agrega el subcampo
+			    $field->add_subfields( $subcampo => $valor );
+			 }
+
                      } else { #NO existe el campo, se agrega uno nuevo
                          $field = MARC::Field->new($campo,'','',$subcampo => $valor);
                          $marc->append_fields($field);
@@ -1282,8 +1346,16 @@ sub guardaNuevoNivel2MARC {
             my $valor=$obj->{'valor'};
             if ($valor ne ''){
                     my $field;
-                     if ($field=$marc->field($campo)){ #Ya existe el campo, se agrega el subcampo
-                         $field->add_subfields( $subcampo => $valor );
+                     if ($field=$marc->field($campo)){ #Ya existe el campo
+
+		         if ($field->subfield($subcampo)){ #Existe el subcampo se agrega a un campo nuevo
+			    $field = MARC::Field->new($campo,'','',$subcampo => $valor);
+			    $marc->append_fields($field);
+			  }
+			  else{# se agrega el subcampo
+			    $field->add_subfields( $subcampo => $valor );
+			 }
+
                      } else { #NO existe el campo, se agrega uno nuevo
                          $field = MARC::Field->new($campo,'','',$subcampo => $valor);
                          $marc->append_fields($field);
@@ -1295,8 +1367,16 @@ sub guardaNuevoNivel2MARC {
              foreach my $valor (@$arr){
                 if ($valor ne ''){
                     my $field;
-                     if ($field=$marc->field($campo)){ #Ya existe el campo, se agrega el subcampo
-                         $field->add_subfields( $subcampo => $valor );
+                     if ($field=$marc->field($campo)){ #Ya existe el campo
+
+		         if ($field->subfield($subcampo)){ #Existe el subcampo se agrega a un campo nuevo
+			    $field = MARC::Field->new($campo,'','',$subcampo => $valor);
+			    $marc->append_fields($field);
+			  }
+			  else{# se agrega el subcampo
+			    $field->add_subfields( $subcampo => $valor );
+			 }
+
                      } else { #NO existe el campo, se agrega uno nuevo
                          $field = MARC::Field->new($campo,'','',$subcampo => $valor);
                          $marc->append_fields($field);
