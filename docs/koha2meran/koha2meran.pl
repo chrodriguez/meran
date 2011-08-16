@@ -220,49 +220,43 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
 	# subject
 	my $temas=$dbh->prepare("SELECT * FROM bibliosubject where biblionumber= ?;");
 	$temas->execute($biblio->{'biblionumber'});
-	my $dn1tema;
-	my @ar1;
-	$dn1tema->{'campo'}=$subject->{'campo'};
-	$dn1tema->{'subcampo'}=$subject->{'subcampo'};
 
 	while (my $biblosubject=$temas->fetchrow_hashref ) {
-		push (@ar1,'cat_tema@'.$biblosubject->{$subject->{'campoTabla'}});
+	    my $dn1tema;
+	    $dn1tema->{'campo'}=$subject->{'campo'};
+	    $dn1tema->{'subcampo'}=$subject->{'subcampo'};
+	    $dn1tema->{'simple'}=1;
+	    $dn1tema->{'valor'}='cat_tema@'.$biblosubject->{$subject->{'campoTabla'}};
+	    push(@ids1,$dn1tema);
 	}
-	$dn1tema->{'simple'}=0;
-	$dn1tema->{'valor'}=\@ar1;
-	push(@ids1,$dn1tema);
 	$temas->finish();
 
 	# subtitle
 	my $subtitulos=$dbh->prepare("SELECT * FROM bibliosubtitle where biblionumber= ?;");
 	$subtitulos->execute($biblio->{'biblionumber'});
 
-	my $dn1sub;
-	my @ar1;
-	$dn1sub->{'campo'}=$subtitle->{'campo'};
-	$dn1sub->{'subcampo'}=$subtitle->{'subcampo'};
 	while (my $biblosubtitle=$subtitulos->fetchrow_hashref ) {
-	push(@ar1,$biblosubtitle->{$subtitle->{'campoTabla'}});
+	  my $dn1sub;
+	  $dn1sub->{'campo'}=$subtitle->{'campo'};
+	  $dn1sub->{'subcampo'}=$subtitle->{'subcampo'};
+	  $dn1sub->{'simple'}=1;
+	  $dn1sub->{'valor'}=$biblosubtitle->{$subtitle->{'campoTabla'}};
+	  push(@ids1,$dn1sub);
 	}
-	$dn1sub->{'simple'}=0;
-	$dn1sub->{'valor'}=\@ar1;
-	push(@ids1,$dn1sub);
 	$subtitulos->finish();
 
 	# additionalauthor
 	
 	my $additionalauthors=$dbh->prepare("SELECT * FROM additionalauthors where id1= ?;");
 	$additionalauthors->execute($biblio->{'biblionumber'});
-	my $dn1add;
-	my @ar1;
-	$dn1add->{'campo'}=$additionalauthor->{'campo'};
-	$dn1add->{'subcampo'}=$additionalauthor->{'subcampo'};
 	while (my $aauthors=$additionalauthors->fetchrow_hashref ) {
-	push(@ar1,'cat_autor@'.$aauthors->{$additionalauthor->{'campoTabla'}});
+	  my $dn1add;
+	  $dn1add->{'campo'}=$additionalauthor->{'campo'};
+	  $dn1add->{'subcampo'}=$additionalauthor->{'subcampo'};
+	  $dn1add->{'simple'}=1;
+	  $dn1add->{'valor'}='cat_autor@'.$aauthors->{$additionalauthor->{'campoTabla'}};
+	  push(@ids1,$dn1add);
 	}
-	$dn1add->{'simple'}=0;
-	$dn1add->{'valor'}=\@ar1;
-	push(@ids1,$dn1add);
 	$additionalauthors->finish();
 
 	#########################################################################
@@ -305,35 +299,30 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
 	
 	my $sth15=$dbh->prepare("SELECT * FROM publisher where biblioitemnumber= ?;");
 	$sth15->execute($biblioitem->{'biblioitemnumber'});
-		my $dn2;
-		my @ar2;
-		$dn2->{'campo'}=$publisher->{'campo'};
-		$dn2->{'subcampo'}=$publisher->{'subcampo'};	
 	while (my $pub=$sth15->fetchrow_hashref ) {
-		push(@ar2,$pub->{$publisher->{'campoTabla'}});
-		}
-	$dn2->{'simple'}=0;
-	$dn2->{'valor'}=\@ar2;
-	push(@ids2,$dn2);
+		my $dn2;
+		$dn2->{'campo'}=$publisher->{'campo'};
+		$dn2->{'subcampo'}=$publisher->{'subcampo'};
+		$dn2->{'simple'}=1;
+		$dn2->{'valor'}=$pub->{$publisher->{'campoTabla'}};
+		push(@ids2,$dn2);
+	}
 	$sth15->finish();
 	
 	# isbn
 
 	my $sth16=$dbh->prepare("SELECT * FROM isbns where biblioitemnumber= ?;");
 	$sth16->execute($biblioitem->{'biblioitemnumber'});
-		my $dn2;
-		my @ar2;
-		$dn2->{'campo'}=$isbn->{'campo'};
-		$dn2->{'subcampo'}=$isbn->{'subcampo'};
 
 	while (my $is =$sth16->fetchrow_hashref ) {
-
-		push(@ar2,$is->{$isbn->{'campoTabla'}});	
+		my $dn2;
+		$dn2->{'campo'}=$isbn->{'campo'};
+		$dn2->{'subcampo'}=$isbn->{'subcampo'};
+		$dn2->{'simple'}=1;
+		$dn2->{'valor'}=$is->{$isbn->{'campoTabla'}};
+		push(@ids2,$dn2);
 	}
 
-	$dn2->{'simple'}=0;
-	$dn2->{'valor'}=\@ar2;
-	push(@ids2,$dn2);
 	$sth16->finish();
 	########################################################################
 
@@ -1120,12 +1109,13 @@ sub procesarAnaliticas {
 		# cat_tema_analitica
 		my $temas=$dbh->prepare("SELECT * FROM cat_tema_analitica where analyticalnumber = ?;");
 		$temas->execute($analitica->{'analyticalnumber'});
-		my $dn1tema;
-		my @ar1;
-		$dn1tema->{'campo'}='650';
-		$dn1tema->{'subcampo'}='a';
 
 		while (my $tema_analitica=$temas->fetchrow_hashref ) {
+
+		    my $dn1tema;
+		    $dn1tema->{'campo'}='650';
+		    $dn1tema->{'subcampo'}='a';
+
 			#FIXME HAY QUE BUSCAR EL TEMA Y OBTENER EL ID O AGREGAR UNO NUEVO!!
 			my $tema_final='';
 			my $tt=$dbh->prepare("SELECT * FROM cat_tema where nombre = ?;");
@@ -1143,12 +1133,11 @@ sub procesarAnaliticas {
 			    $tema_final=$tt2->fetchrow_hashref;
 			}
 
-			push (@ar1,'cat_tema@'.$tema_final->{'id'});
+		    $dn1tema->{'simple'}=1;
+		    $dn1tema->{'valor'}='cat_tema@'.$tema_final->{'id'};
+		    push(@analitica_n1,$dn1tema);
 		}
 
-		$dn1tema->{'simple'}=0;
-		$dn1tema->{'valor'}=\@ar1;
-		push(@analitica_n1,$dn1tema);
 		$temas->finish();
 		##########################AUTORES##########################
 		# cat_autor_analitica
