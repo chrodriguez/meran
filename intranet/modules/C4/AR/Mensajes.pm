@@ -78,6 +78,7 @@ my %mensajesOPAC = (
     'U338' => 'Se modificaron los datos del usuario correctamente.',
     'U339' => 'Disculpe, no se pudo modificar los datos del usuario, intente nuevamente.',
     'U309' => 'No puede iniciar sesi&oacute;n porque sus datos censales est&aacute;n desactualizados, debe dirigirse a la biblioteca para actualizarlos.',
+    'U354' => 'Disculpe, usted no tiene permisos suficientes para acceder a esta p&aacute;gina.',
     'U357' => 'Ha ingresado un nombre de usuario o password incorrecto. Por favor intente nuevamente.',
     'U361' => 'El password actual NO coincide con el suyo.',
     'U400' => 'UD. acaba de cambiar la password, debe ingresar nuevamente.',
@@ -225,7 +226,7 @@ my %mensajesINTRA = (
     'U351' => 'El usuario no se puede borrar ya que cuenta con prestamos activos y/o vencidos!!!',
     'U352' => 'El usuario no se puede borrar ya que es el mismo que est&aacute; activo en la sesi&oacute;n.',
     'U353' => 'El usuario solicitado no existe.',
-    'U354' => 'Disculpe, MERAN cree que usted no tenga permiso para esta p&aacute;gina.',
+    'U354' => 'Disculpe, usted no tiene permisos suficientes para acceder a esta p&aacute;gina.',
     'U355' => 'Disculpe, su sesi&oacute;n ha caducado. Por favor ingrese nuevamente.',
     'U356' => 'Esta accediendo a MERAN desde una direcci&oacute;n IP diferente! Por favor ingrese nuevamente.',
     'U357' => 'Ha ingresado un nombre de usuario o password incorrecto. Por favor intente nuevamente.',
@@ -496,6 +497,11 @@ my %mensajesINTRA = (
     'SC001' => 'El mensaje no pudo ser publicado a causa del siguiente error: ',
     'SC002' => 'Se ha excedido en la cantidad de caracteres ingresados. El mensaje no ha sido publicado en Twitter ',
     'SC003' => 'No esta habilitada la preferencia para publicar en Twitter',
+    
+     #Metodos Auth     
+    'MA000' => 'El Metodo fue agregado exitosamente',
+    'MA001' => 'El Metodo no pudo ser agregado',
+
 );
 
 sub getMensaje {

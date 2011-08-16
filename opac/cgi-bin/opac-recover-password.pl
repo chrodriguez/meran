@@ -20,11 +20,11 @@ my $recaptcha_response_field = $t_params->{'recaptcha_response_field'} = $query-
 
 my ($session) = C4::AR::Auth::inicializarAuth($t_params);
 
-my ($validLink) = C4::AR::Usuarios::checkRecoverLink($key);
+my ($validLink) = C4::AR::Auth::checkRecoverLink($key);
 
 if ($validLink){
-    if ($query->param("newpassword1") && $query->param("newpassword1")){
-    	$t_params->{'message'} = C4::AR::Usuarios::changePasswordFromRecover($params);
+    if ($query->param("new_password1") && $query->param("new_password2")){
+    	$t_params->{'message'} = C4::AR::Auth::changePasswordFromRecover($params);
         $t_params->{'partial_template'}= "_message.inc";
     }else{
 	   $t_params->{'partial_template'}     = "opac-change-password-recovery.inc";

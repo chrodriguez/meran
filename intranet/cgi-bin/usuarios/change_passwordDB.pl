@@ -24,9 +24,10 @@ my ($template, $session, $t_params) = checkauth(    $input,
 
 my %params;
 $params{'nro_socio'}= $input->param('usuario');
-$params{'actualPassword'}= $input->param('actual_password');
-$params{'newpassword'}= $input->param('new_password1');
-$params{'newpassword1'}= $input->param('new_password2');
+$params{'actual_password'}= $input->param('actual_password');
+$params{'new_password1'}= $input->param('new_password1');
+$params{'new_password2'}= $input->param('new_password2');
+
 $params{'changePassword'}= $input->param('changePassword');
 $params{'token'}= $input->param('token');
 

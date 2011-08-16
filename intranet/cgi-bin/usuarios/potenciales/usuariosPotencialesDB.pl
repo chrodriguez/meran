@@ -9,7 +9,6 @@ use strict;
 use C4::AR::Auth;
 
 use CGI;
-use C4::AR::Persons_Members;
 use JSON;
 
 my $input = new CGI;

@@ -54,8 +54,9 @@ sub _checkPwEncriptada{
 
 sub _verificar_password_con_metodo {
     my ($password, $socio, $nroRandom) = @_;
-    C4::AR::Debug::debug($password. " nro random ".$nroRandom. " ".C4::AR::Auth::hashear_password($socio->getPassword.$nroRandom, C4::AR::Auth::getMetodoEncriptacion()). " original ".$socio->getPassword());
-    if ($password eq C4::AR::Auth::hashear_password($socio->getPassword.$nroRandom, C4::AR::Auth::getMetodoEncriptacion())) {
+    my $socio_password  = C4::AR::Auth::hashear_password($socio->getPassword().$nroRandom, C4::AR::Auth::getMetodoEncriptacion());
+     C4::AR::Debug::debug("Password del socio $socio_password --- password ingresado $password --- Nro_random $nroRandom");
+    if ($password eq $socio_password) {
         C4::AR::Debug::debug("ES VALIDO");
         #PASSWORD VALIDA
         return $socio;
@@ -80,24 +81,34 @@ sub checkPassword{
 
 sub validarPassword{
    my( $userid,$password,$nuevaPassword,$nroRandom)= @_;
-	my $socio=undef;
-    C4::AR::Debug::debug("ACCCCCCCCCCCCCCCCCAAAAAAAAA userid".$userid." password ".$password." nroRandom ".$nroRandom." nuevaPass ".$nuevaPassword);
-     C4::AR::Debug::debug("ACCCCCCCCCCCCCCCCCAAAAAAAAA2".C4::AR::Auth::hashear_password($nuevaPassword.$nroRandom,C4::AR::Auth::getMetodoEncriptacion()));
-    
-    if ((!C4::Context->config('plainPassword') )&& ($password ne C4::AR::Auth::hashear_password($nuevaPassword.$nroRandom,C4::AR::Auth::getMetodoEncriptacion() ))){
+   my $socio=undef;
+   my $msg_object= C4::AR::Mensajes::create();
+   C4::AR::Debug::debug("\nPassword actual ".$password."\nNuevo password ".$nuevaPassword);
+   if (!C4::Context->config('plainPassword')){
             ($socio) = _checkPwEncriptada($userid,$password,$nroRandom);
-        }elsif ($password eq $nuevaPassword){
-            ($socio) = _checkPwPlana($userid,$password);       
+            if (($socio) && ($password eq C4::AR::Auth::hashear_password(C4::AR::Auth::desencriptar($nuevaPassword,$socio->getPassword).$nroRandom,C4::AR::Auth::getMetodoEncriptacion() ))){
+                $msg_object->{'error'}=1;
+                }
+   }elsif($password ne $nuevaPassword){
+            ($socio) = checkPwPlana($userid,$password);       
         }
-	return $socio;
+    else{
+            #esto quiere decir que el password actual es igual al nuevo
+           
+           $msg_object->{'error'}=1; 
+         }
+    if ($msg_object->{'error'}) { C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U499', 'params' => []} ) ;}
+	
+    return ($socio,$msg_object);
 }
 
-
+=item
+    Función que setea el password de un socio, es independiente del tipo de authtencacion q se use, simplemente desencripta el password que viene encriptado con la password vieja del usuario
+    y lo setea en la base
+=cut
 sub setearPassword{
+    
     my ($socio,$nuevaPassword,$nroRandom) = @_;
-	if (!C4::Context->config('plainPassword') ){
-        $nuevaPassword=C4::AR::Auth::hashear_password($nuevaPassword.$nroRandom,C4::AR::Auth::getMetodoEncriptacion() );
-    }
     $socio->setPassword($nuevaPassword);	
     return $socio;
 }

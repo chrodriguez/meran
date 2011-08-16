@@ -19,6 +19,18 @@ __PACKAGE__->meta->setup(
     unique_key          => [ 'metodo' ],
 );
 
+sub agregarMetodo{
+    my ($self)      = shift;
+    my ($string)    = @_; 
+    my $orden       = C4::Modelo::SysMetodoAuth::Manager->get_max_orden() + 1;
+    
+    $self->metodo($string);
+    $self->enabled("0");
+    $self->orden($orden);
+    
+    $self->save();
+}
+
 
 sub getMetodo{
     my ($self) = shift;
@@ -53,18 +65,14 @@ sub isEnabled{
 
 sub enable{
     my ($self) = shift;
-    my ($number) = @_;    
-    
-    $self->enabled(1);
+    $self->enabled("1");
     $self->save();    
 }
 
 sub disable{
     my ($self) = shift;
-    my ($number) = @_;    
-    
-    $self->enabled(0);
-    $self->save();    
+    $self->enabled("0"); 
+    $self->save();     
 }
 
 1;

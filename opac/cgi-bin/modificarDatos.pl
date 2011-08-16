@@ -25,6 +25,8 @@ my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio(C4::AR::Auth::getSessionNr
 
 C4::AR::Auth::buildSocioData($session,$socio);
 
+$t_params->{'nroRandom'} = C4::AR::Auth::getSessionNroRandom();
+
 $t_params->{'combo_temas'}  = C4::AR::Utilidades::generarComboTemasOPAC();
 $t_params->{'nroRandom'}    = C4::AR::Auth::getSessionNroRandom();
 $t_params->{'plainPassword'}= C4::Context->config('plainPassword');

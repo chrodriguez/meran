@@ -32,8 +32,9 @@ if ( $socio->getChange_password() ){
 if ($input->param('error')){
     $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($session->param("codMsg"),'INTRA',[]);
 }
-
-&C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+$t_params->{'plainPassword'}= C4::Context->config('plainPassword');
+$t_params->{'nroRandom'}    = C4::AR::Auth::getSessionNroRandom();
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 
 

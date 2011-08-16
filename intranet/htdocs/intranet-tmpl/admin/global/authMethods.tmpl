@@ -1,0 +1,108 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script type="text/javascript" language="javascript" src="/includes/jquery/jquery-ui-1.8.13.sortable.min.js"></script>
+<script language="JavaScript" type="text/javascript">
+    $(document).ready(function() {    
+	    zebra('tabla_datos'); 
+    });
+    
+    $(function() {
+
+		    $("#sortable").sortable({
+                stop: function(event, ui) { 
+                    objAH               = new AjaxHelper(updateSortable);
+	                objAH.debug         = true;
+	                objAH.url           = URL_PREFIX+"/admin/global/auth_methodsDB.pl";
+                    objAH.showOverlay   = true;
+	                objAH.tipoAccion    = "ACTUALIZAR_ORDEN";
+	                objAH.newOrderArray = $('#sortable').sortable('toArray');
+	                objAH.sendToServer(); 
+                }
+            });
+            
+		    $("#sortable").disableSelection();
+    
+		    function updateSortable(responseText){ }
+	    });
+    
+    function changeMethod(id){
+        var newValue = $('#enable'+id).val();
+        objAH               = new AjaxHelper(updateChangeMethod);
+        objAH.debug         = true;
+        objAH.url           = URL_PREFIX+"/admin/global/auth_methodsDB.pl";
+        objAH.showOverlay   = true;
+        objAH.idMetodo      = id;
+        if(newValue == "1"){ 
+            $('#enable'+id).val("0");   
+            objAH.newValue  = "0"; 
+        }else{
+            $('#enable'+id).val("1");
+            objAH.newValue  = "1"; 
+        }
+        objAH.tipoAccion    = "CHANGE_ENABLE";
+        objAH.sendToServer(); 
+    }
+    
+    function updateChangeMethod(responseText){ }
+    
+    function agregarMetodo(){
+        objAH               = new AjaxHelper(updateAgregarOrden);
+        objAH.debug         = true;
+        objAH.url           = URL_PREFIX+"/admin/global/auth_methodsDB.pl";
+        objAH.showOverlay   = true;
+        objAH.tipoAccion    = "MOSTRAR_AGREGAR_METODO";
+        objAH.sendToServer();     
+    }
+    
+    function updateAgregarOrden(responseText){ 
+        $('#agregar_metodo').html(responseText);
+    }
+        
+    function guardarMetodo(){
+        objAH               = new AjaxHelper(updateGuardarMetodo);
+        objAH.debug         = true;
+        objAH.url           = URL_PREFIX+"/admin/global/auth_methodsDB.pl";
+        objAH.showOverlay   = true;
+        objAH.metodo        = $('#name_metodo').val();
+        objAH.tipoAccion    = "AGREGAR_METODO";
+        objAH.sendToServer();     
+    }
+    
+    function updateGuardarMetodo(responseText){ 
+       location.reload();
+    }
+
+</script>
+
+<fieldset id="reportes">
+    <legend class="titulo_legend"> [% "M&eacute;todos de Autenticaci&oacute;n" | i18n %]</legend>
+        <table class="tabla_datos" cellspacing=0 border="0" cellpadding=0 style="width:100%;">
+            <thead>
+                <tr class="titulo_tabla_resultado">
+                    <td>[% "Nombre" | i18n %]</td>
+                    <td>[% "Habilitado" | i18n %]</td>
+                </tr>
+            </thead>
+            <tbody id="sortable">
+                [% FOREACH metodo IN metodos %]
+                    <tr id="[% metodo.id %]" align="center">
+                        <td>[% metodo.metodo %]</td>
+                        <td><input onclick="changeMethod([% metodo.id %])" type="checkbox" id="enable[% metodo.id %]" name="metodo_enabled" [% IF metodo.enabled == '1' %] checked="true" [% ELSE %] [% END %] value="[% metodo.enabled %]"/></td>
+                    </tr>
+                [% END %]
+            </tbody>
+        </table>
+
+</fieldset>
+[% PERL %]
+    print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar M&eacute;todo' | i18n %]",
+                                        boton   => "boton_buscar",
+                                        onClick => "agregarMetodo()",
+                                        title   => "[% 'Agregar Metodo' | i18n %]",
+                                        width => "auto",
+                                        alternClass => "botonCentrado",
+    ) ;
+[% END %]
+<div id="agregar_metodo"></div>
+
+[% INCLUDE "intranet-bottom.inc" %]

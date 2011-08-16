@@ -4,12 +4,12 @@
 
     function checkPassword(){
 
-        var changed = $.trim($('#actualpassword').val());
-        if (changed != ''){
-            var key= b64_sha256(b64_md5($('#actualpassword').val()));
-            $('#new_password1').val(encriptar($('#newpassword1').val(), key));
-            $('#new_password2').val(encriptar($('#newpassword2').val(), key));
-        }
+        $('#new_password1').val(b64_sha256(b64_md5($("#newpassword1").val())));
+        $('#new_password2').val(b64_sha256(b64_md5($("#newpassword2").val())));
+        
+        $("#newpassword1").val('');
+        $("#newpassword2").val('');
+
         return true;
     }
 
@@ -36,11 +36,11 @@
                    <input type="hidden" name="key" id="key" value="[% key %]"/>
                   <p>
                       <label for="newpassword1" class="left">[% 'Nueva Contrase&ntilde;a' | i18n %]:</label>
-                      <input type="password" name="newpassword1" id="newpassword1" class="field" autocomplete="off" />
+                      <input type="password" name="" id="newpassword1" class="field" autocomplete="off" />
                   </p>
                   <p>
                       <label for="newpassword2" class="left">[% 'Repetir contrase&ntilde;a' | i18n %]:</label>
-                      <input type="password" name="newpassword2" id="newpassword2" class="field" autocomplete="off" />
+                      <input type="password" name="" id="newpassword2" class="field" autocomplete="off" />
                   </p>
               </fieldset>
               <p><input type="submit" name="submit" id="submit" class="button" value="[% 'Confirme contrase&ntilde;a' |  i18n %]" tabindex="12" /></p>

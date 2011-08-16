@@ -299,8 +299,7 @@ sub defaultSort{
 sub cambiarPassword{
     my ($self)=shift;
     my ($password)=@_;
-    C4::AR::Debug::debug("UsrSocio => cambiarPassword => ".C4::AR::Auth::prepare_password(C4::AR::Utilidades::trim($password)) );
-    $self->setPassword( C4::AR::Auth::prepare_password(C4::AR::Utilidades::trim($password)) );
+    $self->setPassword($password,C4::AR::Auth::getMetodoEncriptacion());
     my $today = Date::Manip::ParseDate("today");
     $self->setLast_change_password($today);
     $self->setChange_password(0);
@@ -516,7 +515,10 @@ sub setFlags{
 
 sub getPassword{
     my ($self) = shift;
-    if (C4::AR::Utilidades::validateString($self->password)){
+    if($self->getLastAuthMethod ne 'mysql'){
+        return C4::AR::Auth::getPassword($self);
+        }
+    elsif (C4::AR::Utilidades::validateString($self->password)){
       return ($self->password);
     }else{
       return (C4::AR::Auth::prepare_password($self->persona->getNro_documento));
@@ -528,6 +530,7 @@ sub setPassword{
     my ($password) = @_;
     C4::AR::Debug::debug("NUEVO PASSWORD EN SOCIOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO ".$password);
     $self->password($password);
+    $self->save();
 }
 
 sub getLast_login{
@@ -1043,7 +1046,12 @@ sub tienePermisos {
     }
 }
 
-
+sub tienePermisosOPAC{
+	my ($self) = shift;
+	
+	return (C4::AR::Utilidades::validateString($self->getCredentialType));
+	
+}
 =item
 Retorna la persona que corresponde al socio
 =cut
@@ -1187,6 +1195,13 @@ sub needsValidation{
 	                          
 	return ($needsDataValidation);
 	
+}
+
+sub tienePermisosOPAC{
+
+    my ($self) = shift;
+
+    return (0);	
 }
 
 sub getInvolvedCount{
