@@ -12,16 +12,17 @@
             [% IF plainPassword == 0 %]
                 var nroRandom   = [% nroRandom %];
 	            var hash_actual = b64_sha256(b64_sha256(b64_md5($("#actualpassword").val()))+nroRandom);
-	            var hash_new1   = encriptar((b64_sha256(b64_md5($("#newpassword1").val()))),b64_sha256(b64_md5($("#actualpassword").val())));
-	            var hash_new2   = encriptar((b64_sha256(b64_md5($("#newpassword2").val()))),b64_sha256(b64_md5($("#actualpassword").val())));
+	            var key         = b64_sha256(b64_md5($("#actualpassword").val()));
+	            var hash_new1   = encriptar(b64_md5($("#newpassword1").val()),key);
+	            var hash_new2   = encriptar(b64_md5($("#newpassword2").val()),key);
 
 	            $("#actual_password").val(hash_actual);
 	            $('#new_password1').val(hash_new1);
 	            $('#new_password2').val(hash_new2);
 	        [% ELSE %]
 	            var hash_actual = $("#actualpassword").val();
-	            var hash_new1   = encriptar($("#newpassword1").val(),hash_actual);
-                var hash_new2   = encriptar($("#newpassword2").val(),hash_actual);
+	            var hash_new1   = $("#newpassword1").val();
+	            var hash_new2   = $("#newpassword2").val();
 
                 $("#actual_password").val(hash_actual);
                 $('#new_password1').val(hash_new1);

@@ -12,6 +12,7 @@ package C4::AR::Authldap;
 require Exporter;
 use strict;
 use Net::LDAP;
+use Net::LDAP::Extension::SetPassword;
 use Net::LDAPS;
 use Net::LDAP::LDIF;
 use Net::LDAP::Util qw(ldap_error_text);
@@ -28,6 +29,7 @@ use vars qw(@ISA @EXPORT_OK );
     datosUsuario
     _conectarLDAP
     checkPassword
+    obtenerPassword
 );
 
 =item
@@ -96,8 +98,9 @@ sub datosUsuario{
     my ($userid,$ldap)  = @_;
     my $socio           = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
 
-
+C4::AR::Debug::debug("Estoy por buscar el socio".$socio);
     if ($socio) { 
+        C4::AR::Debug::debug("Encontre el socio".$socio);
         return $socio;
     }
     else {
@@ -182,25 +185,35 @@ sub checkPwPlana{
 =cut
 sub checkPwEncriptada{
     my ($userid, $password, $nroRandom) = @_;
+    C4::AR::Debug::debug("EN CHECKAUT LDAP ".$userid.$password.$nroRandom);
     my $preferencias_ldap   = getLdapPreferences();
     my $LDAP_DB_PREF    = $preferencias_ldap->{'ldap_prefijo_base'};
     my $LDAP_U_PREF     = $preferencias_ldap->{'ldap_user_prefijo'};
     my $LDAP_ROOT       = $preferencias_ldap->{'ldap_bind_dn'};
     my $LDAP_PASS       = $preferencias_ldap->{'ldap_bind_pw'};
+    my $LDAP_OU         = $preferencias_ldap->{'ldap_grupo'};
     my $LDAP_FILTER     = $LDAP_U_PREF.'='.$userid;
     my $passwordLDAP;
+    my $ldapMsg=undef;
     my $ldap            = _conectarLDAP();
-    my $ldapMsg         = $ldap->bind( $LDAP_ROOT , password => $LDAP_PASS) or die "$@";
-    C4::AR::Debug::debug("Authldap => smsj ". $ldapMsg->code() );
+    C4::AR::Debug::debug("LDAPFILTER ". $LDAP_FILTER  );
+    if ($LDAP_ROOT ne ''){
+        $ldapMsg= $ldap->bind( $LDAP_ROOT , password => $LDAP_PASS) or die "$@";
+    }else{
+        $ldapMsg= $ldap->bind() or die "$@";
+        }
     my $socio           = undef;
-    if (!$ldapMsg->code()) {
+    if ((defined $ldapMsg )&& (!$ldapMsg->code()) ) {
         my $entries = $ldap->search(
             base   => $LDAP_DB_PREF,
             filter => "($LDAP_FILTER)"
         );
+        
         my $entry       = $entries->entry(0);
-        $passwordLDAP   = $entry->get_value("userPassword");
-        $socio=_verificar_password_con_metodo($userid,$password, $passwordLDAP, $nroRandom, $ldap);
+        if (defined $entry){
+            $passwordLDAP   = $entry->get_value("userPassword");
+            $socio=_verificar_password_con_metodo($userid,$password, $passwordLDAP, $nroRandom, $ldap);
+            }
         $ldap->unbind;
     }
     return $socio;
@@ -219,7 +232,8 @@ sub checkPwEncriptada{
 =cut
 sub _verificar_password_con_metodo {
     my ($userid, $password, $passwordLDAP, $nroRandom, $ldap) = @_;
-    my $passwordParaComparar=C4::AR::Auth::hashear_password(C4::AR::Auth::hashear_password($passwordLDAP.$nroRandom,C4::AR::Auth::getMetodoEncriptacion()),C4::AR::Auth::getMetodoEncriptacion());
+    C4::AR::Debug::debug("q raro esto ".$password. " y ademas ".$passwordLDAP);
+    my $passwordParaComparar=C4::AR::Auth::hashear_password((C4::AR::Auth::hashear_password($passwordLDAP,C4::AR::Auth::getMetodoEncriptacion()).$nroRandom),C4::AR::Auth::getMetodoEncriptacion());
     if ($password eq $passwordParaComparar) {
         #PASSWORD VALIDA
         return datosUsuario($userid,$ldap);
@@ -231,9 +245,10 @@ sub _verificar_password_con_metodo {
 
 sub checkPassword{
     my ($userid,$password,$nroRandom) = @_;
-	my $socio=undef;
+    my $socio=undef;
     if (!C4::Context->config('plainPassword')){
 	    ($socio) = C4::AR::Authldap::checkPwEncriptada($userid,$password,$nroRandom);
+        C4::AR::Debug::debug("Devolviendo el socio".$socio);
 	}else{
 	    ($socio) = C4::AR::Authldap::checkPwPlana($userid,$password);       
 	}
@@ -247,21 +262,35 @@ sub validarPassword{
     my( $userid,$password,$nuevaPassword,$nroRandom)= @_;
 	my $socio=undef;
     my $msg_object= C4::AR::Mensajes::create();
+
     C4::AR::Debug::debug("ESTOS SON LOS VALORES QUE LLEGAN ".$userid.$password.$nroRandom.$nuevaPassword);
     C4::AR::Debug::debug(C4::AR::Auth::hashear_password($nuevaPassword.$nroRandom,C4::AR::Auth::getMetodoEncriptacion()));
-    if ((!C4::Context->config('plainPassword') )&& ($password ne C4::AR::Auth::hashear_password($nuevaPassword.$nroRandom,C4::AR::Auth::getMetodoEncriptacion() ))){
-         C4::AR::Debug::debug("NO TENGO IDEA DONDE CARAJO ESTOY");
+
+    if ((!C4::Context->config('plainPassword') )){
             ($socio) = checkPwEncriptada($userid,$password,$nroRandom);
-    }elsif((C4::Context->config('plainPassword')) && ($password ne (C4::AR::Auth::desencriptar($nuevaPassword,'mono')))){
+
+            if (!$socio){
+                return undef;
+            }
             
-            ($socio) = checkPwPlana($userid,$password);       
-        }
-        else{
-            #esto quiere decir que el password actual es igual al nuevo
-           C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U499', 'params' => []} ) ; 
-           $msg_object->{'error'}=1;
-        }
-	return ($socio,$msg_object);
+            my $key = C4::AR::Auth::hashear_password($socio->getPassword,C4::AR::Auth::getMetodoEncriptacion());
+            
+            $nuevaPassword = C4::AR::Auth::desencriptar($nuevaPassword,$key);
+
+            $nuevaPassword = C4::AR::Auth::hashear_password($nuevaPassword,C4::AR::Auth::getMetodoEncriptacion());
+            $nuevaPassword = C4::AR::Auth::hashear_password($nuevaPassword.$nroRandom,C4::AR::Auth::getMetodoEncriptacion());
+            
+            if (($socio) && ($password eq $nuevaPassword)){
+                $msg_object->{'error'}=1;
+               #esto quiere decir que el password actual es igual al nuevo
+               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U499', 'params' => []} ) ; 
+            }
+    }else{ #FIXME esto no esta funcionando, lo descartamos para la salida a produccion
+           ($socio) = checkPwPlana($userid,$password);       
+
+    }
+   
+   return ($socio,$msg_object);
 }
 
 =item
@@ -289,21 +318,103 @@ sub validarPassword{
 =cut
 sub setearPassword{
     
-    my ($socio,$nuevaPassword,$nroRandom) = @_;
+    my ($socio,$nuevaPassword,$isReset) = @_;
     my $preferencias_ldap   = getLdapPreferences();
-#    $nuevaPassword=C4::AR::Auth::desencriptar($nuevaPassword,'mono');#_getPassword($socio));
-#    $socio->setPassword($nuevaPassword);	
-    return $socio;
+
     my $LDAP_DB_PREF    = $preferencias_ldap->{'ldap_prefijo_base'};
     my $LDAP_U_PREF     = $preferencias_ldap->{'ldap_user_prefijo'};
     my $LDAP_USER     = $LDAP_U_PREF.'='.$socio->getNro_socio().','.$LDAP_DB_PREF;
-    my $ldap = _conectarLDAP();
-    my $mesg = $ldap->set_password( user =>$LDAP_USER, newpassword => $nuevaPassword );
-    C4::AR::Debug::debug("LDAP USER".$LDAP_USER." NEW PASS ".$nuevaPassword." MENSAJE ". $mesg);
+    my $LDAP_ROOT       = $preferencias_ldap->{'ldap_bind_dn'};
+    my $LDAP_PASS       = $preferencias_ldap->{'ldap_bind_pw'};
+    my $LDAP_OU         = $preferencias_ldap->{'ldap_grupo'};
+    my $LDAP_FILTER     = $LDAP_U_PREF.'='.$socio->getNro_socio();
+    my $ldapMsg=undef;
+    my $ldap                =_conectarLDAP();
+
+    $isReset = $isReset || 0;
+    
+    if ($LDAP_ROOT ne ''){
+        $ldapMsg= $ldap->bind( $LDAP_ROOT , password => $LDAP_PASS) or die "$@";
+    }else{
+        $ldapMsg= $ldap->bind() or die "$@";
+        }
+    
+    my $user_ldap_password = _obtenerPassword($ldap,$LDAP_DB_PREF,$LDAP_FILTER);
+    my $nroRandom = C4::AR::Auth::getSessionNroRandom();
+
+    C4::AR::Debug::debug("PASSWORD DE LDAP ".$user_ldap_password);
+
+    #si esto da error, es porque la codificacion falla, lo cual, seguramente no esté encriptada por ser un reseteo de password
+    if (!$isReset){
+        $user_ldap_password = C4::AR::Auth::hashear_password($user_ldap_password, 'SHA_256_B64');
+        $nuevaPassword=C4::AR::Auth::desencriptar($nuevaPassword,$user_ldap_password);
+    }
+    
+    C4::AR::Debug::debug("PASSWORDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD ".$nuevaPassword);
+    $ldapMsg = my $result = $ldap->modify(dn=>$LDAP_USER, replace=>{'userPassword'=>$nuevaPassword}); 
+    #LEER http://comments.gmane.org/gmane.comp.lang.perl.modules.ldap/2028
+    #$ldap->set_password( user =>$LDAP_USER, newpassword => "{MD5}".$nuevaPassword );
+    
+    C4::AR::Debug::debug("LDAP USER".$LDAP_USER." NEW PASS ".$nuevaPassword." MENSAJE ". $ldapMsg);
 
 }
 
 
+sub _obtenerPassword{
+    
+    my ($ldap,$LDAP_DB_PREF,$LDAP_FILTER) = @_;
+    my $entries = $ldap->search(
+            base   => $LDAP_DB_PREF,
+            filter => "($LDAP_FILTER)"
+    );
+    my $passwordLDAP;
+    my $entry       = $entries->entry(0);
+    if (defined $entry){
+            $passwordLDAP   = $entry->get_value("userPassword");
+    }
+    return $passwordLDAP;
+
+}
+
+
+sub obtenerPassword{
+    
+    my ($socio) = @_;
+    my $preferencias_ldap   = getLdapPreferences();
+
+    my $LDAP_DB_PREF    = $preferencias_ldap->{'ldap_prefijo_base'};
+    my $LDAP_U_PREF     = $preferencias_ldap->{'ldap_user_prefijo'};
+    my $LDAP_USER       = $LDAP_U_PREF.'='.$socio->getNro_socio().','.$LDAP_DB_PREF;
+    my $LDAP_ROOT       = $preferencias_ldap->{'ldap_bind_dn'};
+    my $LDAP_PASS       = $preferencias_ldap->{'ldap_bind_pw'};
+    my $LDAP_OU         = $preferencias_ldap->{'ldap_grupo'};
+    my $LDAP_FILTER     = $LDAP_U_PREF.'='.$socio->getNro_socio();
+    my $ldapMsg=undef;
+    my $ldap                =_conectarLDAP();
+
+    if ($LDAP_ROOT ne ''){
+        $ldapMsg= $ldap->bind( $LDAP_ROOT , password => $LDAP_PASS) or die "$@";
+    }else{
+        $ldapMsg= $ldap->bind() or die "$@";
+        }
+    
+    #FIXME ESTO ES UNA PORQUERIA SE REHACE TODA LA CONEXION
+    return _obtenerPassword($ldap,$LDAP_DB_PREF,$LDAP_FILTER);
+}
+
+
+sub passwordsIguales{
+	my ($nuevaPassword1,$nuevaPassword2,$socio) = @_;
+
+    my $user_ldap_password = obtenerPassword($socio);
+
+    $user_ldap_password = C4::AR::Auth::hashear_password($user_ldap_password, 'SHA_256_B64');
+    
+    $nuevaPassword1 = C4::AR::Auth::desencriptar($nuevaPassword1,$user_ldap_password);
+    $nuevaPassword2 = C4::AR::Auth::desencriptar($nuevaPassword2,$user_ldap_password);
+
+    return ($nuevaPassword1 eq $nuevaPassword2);	
+}
 END { }       # module clean-up code here (global destructor)
 1;
 __END__

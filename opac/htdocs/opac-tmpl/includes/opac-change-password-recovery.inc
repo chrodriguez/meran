@@ -4,8 +4,8 @@
 
     function checkPassword(){
 
-        $('#new_password1').val(b64_sha256(b64_md5($("#newpassword1").val())));
-        $('#new_password2').val(b64_sha256(b64_md5($("#newpassword2").val())));
+        $('#new_password1').val(b64_md5($("#newpassword1").val()));
+        $('#new_password2').val(b64_md5($("#newpassword2").val()));
         
         $("#newpassword1").val('');
         $("#newpassword2").val('');

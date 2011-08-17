@@ -78,20 +78,45 @@ sub checkPassword{
 	
 }	
 	
-
+sub passwordsIguales{
+	my ($nuevaPassword1,$nuevaPassword2,$socio) = @_;
+	
+    my $key = $socio->getPassword;
+	
+    $nuevaPassword1 = C4::AR::Auth::desencriptar($nuevaPassword1,$key);
+    $nuevaPassword2 = C4::AR::Auth::desencriptar($nuevaPassword2,$key);
+	
+	return ($nuevaPassword1 eq $nuevaPassword2);
+	
+	
+}
 sub validarPassword{
    my( $userid,$password,$nuevaPassword,$nroRandom)= @_;
    my $socio=undef;
    my $msg_object= C4::AR::Mensajes::create();
+
    C4::AR::Debug::debug("\nPassword actual ".$password."\nNuevo password ".$nuevaPassword);
+   
    if (!C4::Context->config('plainPassword')){
             ($socio) = _checkPwEncriptada($userid,$password,$nroRandom);
-            if (($socio) && ($password eq C4::AR::Auth::hashear_password(C4::AR::Auth::desencriptar($nuevaPassword,$socio->getPassword).$nroRandom,C4::AR::Auth::getMetodoEncriptacion() ))){
+            
+            if (!$socio){
+            	return undef;
+            }
+            
+		    my $key = $socio->getPassword;
+		    
+		    $nuevaPassword = C4::AR::Auth::desencriptar($nuevaPassword,$key);
+
+            $nuevaPassword = C4::AR::Auth::hashear_password($nuevaPassword,C4::AR::Auth::getMetodoEncriptacion());
+            $nuevaPassword = C4::AR::Auth::hashear_password($nuevaPassword.$nroRandom,C4::AR::Auth::getMetodoEncriptacion());
+            
+            if (($socio) && ($password eq $nuevaPassword)){
                 $msg_object->{'error'}=1;
-                }
+            }
    }elsif($password ne $nuevaPassword){
             ($socio) = checkPwPlana($userid,$password);       
-        }
+   }
     else{
             #esto quiere decir que el password actual es igual al nuevo
            
@@ -108,7 +133,12 @@ sub validarPassword{
 =cut
 sub setearPassword{
     
-    my ($socio,$nuevaPassword,$nroRandom) = @_;
+    my ($socio,$nuevaPassword) = @_;
+    my $key = $socio->getPassword;
+            
+    $nuevaPassword = C4::AR::Auth::desencriptar($nuevaPassword,$key);
+    $nuevaPassword = C4::AR::Auth::hashear_password($nuevaPassword,C4::AR::Auth::getMetodoEncriptacion());
+
     $socio->setPassword($nuevaPassword);	
     return $socio;
 }
