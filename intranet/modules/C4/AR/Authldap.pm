@@ -199,6 +199,7 @@ sub checkPwEncriptada{
     C4::AR::Debug::debug("LDAPFILTER ". $LDAP_FILTER  );
     if ($LDAP_ROOT ne ''){
         $ldapMsg= $ldap->bind( $LDAP_ROOT , password => $LDAP_PASS) or die "$@";
+        C4::AR::Debug::debug("ERROR DEL LDAP con ".$LDAP_ROOT ." y ".$LDAP_PASS. "dio".$ldapMsg->error);
     }else{
         $ldapMsg= $ldap->bind() or die "$@";
         }
