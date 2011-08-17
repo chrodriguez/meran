@@ -589,7 +589,7 @@ sub libreDeuda {
 	my @parrafo;
 	$parrafo[0] =
 	  Encode::decode_utf8( "       Certificamos que " 
-		  . $nombre
+		  . Encode::decode_utf8($nombre)
 		  . ", de la "
 		  . $branchname
 		  . ", " );
