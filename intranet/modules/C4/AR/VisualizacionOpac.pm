@@ -120,15 +120,25 @@ sub deleteConfiguracion{
     my ($params) = @_;
     my @filtros;
     my $vista_id = $params->{'vista_id'};
+    my $msg_object;
+
+    C4::AR::Utilidades::printHASH($params);
 
     push (@filtros, (id => { eq => $vista_id }) );
     my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros,);
 
     if ($configuracion->[0]){
-        return ( $configuracion->[0]->delete() );
+        $configuracion->[0]->delete();
+        $msg_object->{'error'} = 0;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U608'} ) ;
+
     }else{
-        return(0);
+        $msg_object->{'error'} = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U609'} ) ;
+
+        
     }
+    return($msg_object);
 }
  
 sub editConfiguracion{

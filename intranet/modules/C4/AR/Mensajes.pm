@@ -313,8 +313,8 @@ my %mensajesINTRA = (
     'U605' => 'La configuraci&oacute;n (campo, subcampo, perfil) (*?*, *?*, *?*) ya existe.',
     'U606' => 'Disculpe, error al intentar agregar la configuraci&oacute;n (campo, subcampo, perfil) (*?*, *?*, *?*).',
     'U607' => 'La configuraci&oacute;n (campo, subcampo, prefil) (*?*, *?*, *?*) se agreg&oacute; con &eacute;xito.',
-    'U608' => 'Se elimin&oacute; con &eacute;xito la configuraci&oacute;n (campo, subcampo, prefil) (*?*, *?*, *?*).',
-    'U609' => 'Disculpe, no se pudo eliminar la configuraci&oacute;n (campo, subcampo, prefil) (*?*, *?*, *?*).',
+    'U608' => 'Se elimin&oacute; con &eacute;xito la configuraci&oacute;n.',
+    'U609' => 'Disculpe, no se pudo eliminar la configuraci&oacute;n.',
     'U610' => 'Se agreg&oacute; con &eacute;xito el &iacute;ndice',
     'U611' => 'Disculpe, no se pudo agregar el &iacute;ndice',
 

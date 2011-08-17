@@ -6,7 +6,6 @@ SUBCAMPOS_ARRAY= new Array();
 
 
 function eliminarVista(vista_id){
-
     objAH               = new AjaxHelper(updateAgregarVisualizacion);
     objAH.debug         = true;
     objAH.showOverlay       = true;
@@ -18,10 +17,11 @@ function eliminarVista(vista_id){
             if (confirmStatus){
                 objAH.vista_id= vista_id;
                 objAH.sendToServer();
+            
             }
         });
     }
-
+ 
 }
 
 function agregarVisualizacion(){
@@ -49,14 +49,11 @@ function agregarVisualizacion(){
 }
 
 function updateAgregarVisualizacion(responseText){
-
     var Messages        = JSONstring.toObject(responseText);
-    
     setMessages(Messages);
     if (! (hayError(Messages) ) ){
-        eleccionDePerfil();
-    }  
-
+       eleccionDePerfil(); 
+    }   
 }
 
 function eleccionDePerfil(){
@@ -72,14 +69,13 @@ function eleccionDePerfil(){
         objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
         objAH.tipoAccion    = 'MOSTRAR_VISUALIZACION';
         objAH.perfil        = perfil;
-
         objAH.sendToServer();
     }
 }
 
 function updateEleccionDeNivel(responseText){
     $("#result").html(responseText);
-    zebra("tabla_datos");
+    zebra("tabla_datos");       
 }
 
 
