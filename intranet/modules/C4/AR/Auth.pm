@@ -1265,7 +1265,9 @@ sub session_destroy {
 
 sub _checkRequisito{
 	my ($socio) = @_;
-    
+
+return(1);
+
     if (C4::AR::Preferencias::getValorPreferencia("requisito") ){
 	    my $cumple_condicion = $socio->getCumple_requisito;
 	
@@ -1302,7 +1304,8 @@ sub _autenticar{
 	C4::AR::Debug::debug("metodo".$metodo);
 	switch ($metodo){
 		case "ldap" {
-                ($socio) = C4::AR::Authldap::checkPassword($userid,$password,$nroRandom);       
+                ($socio) = C4::AR::Authldap::checkPassword($userid,$password,$nroRandom); 
+                C4::AR::Debug::debug("Devolviendo casi al final el socio".$socio);      
 		}
 		case "mysql"{
 			($socio) = C4::AR::AuthMysql::checkPassword($userid,$password,$nroRandom);       
@@ -1311,6 +1314,7 @@ sub _autenticar{
 			}
 	   }
 	if ( (defined $socio) && (! _checkRequisito($socio))  ){
+        C4::AR::Debug::debug("Gaspo me esta rompiendo las pelotas".$socio);      
 		$socio=undef ;
 
 	}elsif (defined $socio){
@@ -1708,7 +1712,8 @@ sub cambiarPassword {
 =cut
 sub _validarCambioPassword {
     my ($params)=@_;
- my $new_password_1;
+    my $new_password_1;
+    my $new_password_2;
     my $socio=undef;
     my $msg_object=C4::AR::Mensajes::create();
     
@@ -1722,14 +1727,14 @@ sub _validarCambioPassword {
        else{
            $key=$socio->getPassword();
            }
-        $new_password_1 = C4::AR::Auth::desencriptar($params->{'new_password1'},$key);
-        my $new_password_2 = C4::AR::Auth::desencriptar($params->{'new_password2'},$key);
+        $new_password_1 = $params->{'new_password1'};
+        $new_password_2 = $params->{'new_password2'};
         
         C4::AR::Debug::debug("--------------------------------------NUEVO PASSWORD 1---------------- ".$new_password_1);
         C4::AR::Debug::debug("--------------------------------------NUEVO PASSWORD 2---------------- ".$new_password_2);
         C4::AR::Debug::debug("--------------------------------------ACTUAL PASSWORD---------------- ".$socio->getPassword());
         C4::AR::Debug::debug("--------------------------------------ACTUAL PASSWORD---------------- ".$socio->getPassword());
-        if ( ($new_password_1 eq $new_password_2) ) {
+        if ( _passwordsIguales($new_password_1, $new_password_2,$socio)) {
    	        #quiere decir que la password y la comprobacion son iguales
 	        #quiere decir que la password que se ingreso para validar esta ok porque coincide con la que tiene el usuario registrada
 	        ($msg_object)= C4::AR::Validator::checkPassword($params->{'new_password1'});
@@ -1799,10 +1804,10 @@ sub _setearPassword{
     use Switch;
     switch ($auth_method){
         case "ldap" {
-                ($socio) = C4::AR::Authldap::setearPassword($socio,$nuevaPassword,$nroRandom);       
+                ($socio) = C4::AR::Authldap::setearPassword($socio,$nuevaPassword);       
         }
         case "mysql"{
-                ($socio) = C4::AR::AuthMysql::setearPassword($socio,$nuevaPassword,$nroRandom);       
+                ($socio) = C4::AR::AuthMysql::setearPassword($socio,$nuevaPassword);       
             
         }
         else{}
@@ -1810,6 +1815,29 @@ sub _setearPassword{
     
     return $socio;
 }
+
+
+sub _passwordsIguales{
+    my ($nuevaPassword1,$nuevaPassword2,$socio) = @_;
+    my $auth_method = $socio->getLastAuthMethod();
+    my $result = 0;
+    
+    use Switch;
+    switch ($auth_method){
+        case "ldap" {
+                ($result) = C4::AR::Authldap::passwordsIguales($nuevaPassword1,$nuevaPassword2,$socio);       
+        }
+        case "mysql"{
+                ($result) = C4::AR::AuthMysql::passwordsIguales($nuevaPassword1,$nuevaPassword2,$socio);       
+            
+        }
+        else{}
+    }
+    
+    return $result;
+}
+
+
  sub getPassword{
     my ($socio)=@_;
     my $auth_method = $socio->getLastAuthMethod;
@@ -1818,7 +1846,10 @@ sub _setearPassword{
     use Switch;
     switch ($auth_method){
         case "ldap" {
-                ($password) = C4::AR::Authldap::obetenerPassword($socio);   
+                ($password) = C4::AR::Authldap::obtenerPassword($socio);   
+        };
+        case "mysql" {
+                ($password) = $socio->password;   
         }
         else{}
     }
@@ -2010,8 +2041,8 @@ sub changePasswordFromRecover{
         my $socio = $socio_array_ref->[0];
         
         if ($params->{'new_password1'} eq $params->{'new_password2'}){
-           cambiarPasswordPropagado($socio,$params->{'new_password1'});
-           #$socio->unsetRecoverPasswordHash();
+           cambiarPasswordPropagado($socio,$params->{'new_password1'},1);
+           $socio->unsetRecoverPasswordHash();
            $message = C4::AR::Mensajes::getMensaje('U603','opac');
            
         }else{
@@ -2031,7 +2062,7 @@ sub resetUserPassword{
     
     my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
     if($socio){
-    	   my $password_dni = C4::AR::Auth::hashear_password(C4::AR::Auth::hashear_password($socio->persona->getNro_documento, 'MD5_B64'), 'SHA_256_B64');
+    	   my $password_dni = C4::AR::Auth::hashear_password($socio->persona->getNro_documento, 'MD5_B64');;
 
            cambiarPasswordPropagado($socio,$password_dni);
            $socio->forzarCambioDePassword();
@@ -2045,21 +2076,18 @@ sub resetUserPassword{
 }   
 
 sub cambiarPasswordPropagado{
-    my ($socio,$password_sha64_256)=@_;
+    my ($socio,$password_md5_b64,$isReset)=@_;
     my $msg_object= C4::AR::Mensajes::create();
-    my $password = $password_sha64_256;
-=item
-
-#CODIGO PARA CAMBIAR EL PASS EN TODOS LOS AUTH METHODS
-  
-=cut    
+    my $password = $password_md5_b64;
     my $metodosDeAutenticacion= C4::AR::Preferencias::getMetodosAuth();
     my $metodo;
 
+    $isReset = $isReset || 0;
+
     while (scalar(@$metodosDeAutenticacion) ) {
         $metodo=shift(@$metodosDeAutenticacion);
-        cambiarPasswordForzadoEnMetodo($socio,$password_sha64_256,$metodo);
-        C4::AR::Debug::debug("Socio ".$socio." PASSWORD ".$password_sha64_256." METODO ".$metodo);
+        cambiarPasswordForzadoEnMetodo($socio,$password_md5_b64,$metodo,$isReset);
+        C4::AR::Debug::debug("Socio ".$socio." PASSWORD ".$password_md5_b64." METODO ".$metodo);
     }
  
 }  
@@ -2085,14 +2113,17 @@ sub cambiarPasswordPropagado{
  
 
 sub cambiarPasswordForzadoEnMetodo{
-    my ($socio,$password_sha64_256,$auth_method) = @_;
+    my ($socio,$password_md5_b64,$auth_method,$isReset) = @_;
+
+    $isReset = $isReset || 0;
     
     switch ($auth_method){
         case "ldap" {
-                #C4::AR::Authldap::obetenerPassword($socio);   
+                C4::AR::Authldap::setearPassword($socio,$password_md5_b64,$isReset);   
         }
         case "mysql" {
-                $socio->cambiarPassword($password_sha64_256);   
+        	    $password_md5_b64 =  C4::AR::Auth::hashear_password($password_md5_b64,'SHA_256_B64');
+                $socio->cambiarPassword($password_md5_b64);   
         }
 
         else{}

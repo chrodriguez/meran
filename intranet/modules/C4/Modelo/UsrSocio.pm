@@ -12,7 +12,8 @@ __PACKAGE__->meta->setup(
         id_socio                         => { type => 'serial', not_null => 1 , length => 11},
         nro_socio                        => { type => 'varchar', length => 16, not_null => 1 },
         id_ui                            => { type => 'varchar', length => 4, not_null => 1 },
-        id_categoria                     => { type => 'integer', length =>2, not_null => 1 },
+        #id_categoria = 1 es Estudiante en la 17.10
+        id_categoria                     => { type => 'integer', length =>2, not_null => 1, default => 8 },
         fecha_alta                       => { type => 'date' },
         expira                           => { type => 'date' },
         flags                            => { type => 'integer' },
@@ -21,7 +22,7 @@ __PACKAGE__->meta->setup(
         last_change_password             => { type => 'date' },
         change_password                  => { type => 'integer', default => '0', not_null => 1 },
         cumple_requisito                 => { type => 'varchar', length=>32, not_null => 1, default => '0'},
-        id_estado                        => { type => 'integer', not_null => 1 },
+        id_estado                        => { type => 'integer', not_null => 1,  default => 20 },
         activo                           => { type => 'integer', default => 0, not_null => 1 },
         agregacion_temp                  => { type => 'varchar', length => 255 },
         nombre_apellido_autorizado       => { type => 'varchar', length => 255, not_null => 0 },
@@ -299,7 +300,8 @@ sub defaultSort{
 sub cambiarPassword{
     my ($self)=shift;
     my ($password)=@_;
-    $self->setPassword($password,C4::AR::Auth::getMetodoEncriptacion());
+    
+    $self->setPassword($password);
     my $today = Date::Manip::ParseDate("today");
     $self->setLast_change_password($today);
     $self->setChange_password(0);
