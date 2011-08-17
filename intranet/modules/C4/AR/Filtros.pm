@@ -5,6 +5,7 @@ require Exporter;
 #use POSIX;
 use Locale::Maketext::Gettext::Functions qw(__);
 use Template::Plugin::Filter;
+use CGI::Session;
 use base qw( Template::Plugin::Filter );
 
 use vars qw(@EXPORT_OK @ISA);
@@ -240,6 +241,9 @@ sub show_componente {
     my $itemtype            = $params_hash_ref{'itemtype'};
     my $type                = $params_hash_ref{'type'};
 
+    my $session             = CGI::Session->load();
+    my $session_type        = $session->param('type') || 'opac';
+     
     if(($campo eq "245")&&($subcampo eq "a")) {
 
       my $catRegistroMarcN2   = C4::AR::Nivel2::getNivel2FromId2($dato);
@@ -252,7 +256,13 @@ sub show_componente {
             my %params_hash;
             my $text        = $catRegistroMarcN2->nivel1->getTitulo()." (".$catRegistroMarcN2->nivel1->getAutor().") - ".$catRegistroMarcN2->toString; 
             %params_hash    = ('id1' => $catRegistroMarcN2->getId1());
-            my $url         = C4::AR::Utilidades::url_for("/catalogacion/estructura/detalle.pl", \%params_hash);
+            my $url;
+
+            if ($session_type eq 'intranet'){
+            	$url         = C4::AR::Utilidades::url_for("/catalogacion/estructura/detalle.pl", \%params_hash);
+            }else{
+                $url         = C4::AR::Utilidades::url_for("/opac-detail.pl", \%params_hash);
+            }
 
             return C4::AR::Filtros::link_to( text => $text, url => $url );
         }

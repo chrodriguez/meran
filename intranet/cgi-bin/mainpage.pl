@@ -24,7 +24,6 @@ my ($ultimos_no_leidos)             = C4::AR::MensajesContacto::ultimosNoLeidos(
 
 my $twitter_enabled= C4::AR::Preferencias::getValorPreferencia("twitter_enabled");
 
-
 $t_params->{'ultimos_no_leidos'}    = $ultimos_no_leidos;
 $t_params->{'cant_noleidos'}        = $cant;
 
