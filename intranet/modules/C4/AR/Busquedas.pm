@@ -458,24 +458,6 @@ sub obtenerDisponibilidadTotal{
 	my ($id1, $itemtype) = @_;
 
 	my @disponibilidad;
-	my $dbh = C4::Context->dbh;
-=item
-	my $query = " SELECT count(*) as cant, id_disponibilidad FROM cat_nivel3 WHERE id1=? ";
-	my $sth;
-
-	if ($itemtype == -1 || $itemtype eq "" || $itemtype eq "ALL") {
-	    $query .=" GROUP BY id_disponibilidad";
-    
-	    $sth = $dbh->prepare($query);
-	    $sth->execute($id1);
-	} else {
-        #Filtro tb por tipo de item
-	    $query .= " AND id2 IN ( SELECT id2 FROM cat_nivel2 WHERE tipo_documento = ? )  GROUP BY id_disponibilidad";
-    
-	    $sth = $dbh->prepare($query);
-	    $sth->execute($id1, $itemtype);
-	}
-=cut
 
     my ($cat_ref_tipo_nivel3_array_ref) = C4::AR::Nivel3::getNivel3FromId1($id1);
 

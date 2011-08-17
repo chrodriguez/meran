@@ -5,13 +5,16 @@
                     <div  style="width:95%;">
                         <ul>
                             <li>
-                                [% "Disponibilidad Actual Para Pr&eacute;stamo:" | i18n %] <b>[% cantParaPrestamo %]</b>
+                                [% "Disponibilidad Actual Para Pr&eacute;stamo:" | i18n %] <b>[% cantParaPrestamoActual %]</b>
                             </li>
                             <li>
-                                [% "Disponibilidad Actual Para Sala de Lectura:" | i18n %] <b>[% cantParaSala %]</b>
+                                [% "Disponibilidad Actual Para Sala de Lectura:" | i18n %] <b>[% cantParaSalaActual %]</b>
                             </li>
                             <li>
                                 [% "Cantidad Actual de Reservas:" | i18n %] <b>[% cantReservas %]</b>
+                            </li>  
+                            <li>
+                                [% "Cantidad Actual de Pr&eacute;stamos:" | i18n %] <b>[% cantPrestados %]</b>
                             </li>  
                             <li class="detalle_barra_circulacion">
                                   
