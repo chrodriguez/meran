@@ -7,7 +7,7 @@
      <li>Javier D&iacute;az</li>
      <li>Einar Lanfranco</li>
      <li>Mat&iacute;as Pagano</li>
-     <li>Augusto Pérez</li>
+     <li>Augusto Perez</li>
      <li>Miguel Carbone</li>
      <li>Gaspar Rajoy</li>
      <li>Magal&iacute; Defalco</li>
@@ -16,7 +16,7 @@
 
 <br><br>
 
-<h1 class="pagetitle">Datos de la Biblioteca</h1>
+<h1 class="pagetitle">[% 'Datos de la Biblioteca' | i18n %]</h1>
 <hr class="clear-contentunit">
 
 <ul> 
