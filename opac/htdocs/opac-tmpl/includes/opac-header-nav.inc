@@ -77,7 +77,7 @@
                                   ) ;
                       [% END %]
                   </li>
-                  [% IF !socio_data %]
+                  [% IF !socio_data.usr_nro_socio %]
                       <li><a href='[% url_prefix %]/login.pl'>[% 'Iniciar Sesi&oacute;n' | i18n %]</a></li>
                   [% ELSE %]
                       <li>
