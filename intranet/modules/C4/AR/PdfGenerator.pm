@@ -582,7 +582,7 @@ sub libreDeuda {
 
 	my $x = 50;
 	my $y =
-	  300;  #pos 'y' a partir de donde se van a escribir la parte del contenido.
+	  180;  #pos 'y' a partir de donde se van a escribir la parte del contenido.
 	my %titulo;
 	$titulo{'titulo'} = "CERTIFICADO DE LIBRE DEUDA";
 	$titulo{'posx'}   = 170;
@@ -603,9 +603,7 @@ sub libreDeuda {
 	$parrafo[3] = Encode::decode_utf8(
 		" validez de 10 días corridos a partir de su fecha de emisión.");
 
-	($pdf) =
-	  &imprimirEncabezado( $pdf, $branchname, $x, $pagewidth,
-		$pageheight, \%titulo, );
+	($pdf) = &imprimirEncabezado( $pdf, $branchname, $x, $pagewidth, $pageheight + 120, \%titulo, );
 	( $pdf, $y ) =
 	  &imprimirContenido( $pdf, $x, $y, $pageheight, 15, \@parrafo );
 	( $pdf, $y ) = &imprimirFirma( $pdf, $y + 50, $pageheight );
