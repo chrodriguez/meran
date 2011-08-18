@@ -1,28 +1,17 @@
 [% INCLUDE "intranet-top.inc" %]
-[% INCLUDE 'AutocompleteHelper.inc'  %]
-
-<script type="text/javascript">
- $(document).ready(function() {
-         CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'})
- });
-</script>
     
 <fieldset width="100%">
     <legend class="titulo_legend"> [% "Configuraci&oacute;n del servidor LDAP" | i18n %] </legend>
     <div>
         <h2>Usar un servidor LDAP</h2>
         <p>Este método proporciona autenticaci&oacute;n contra un servidor LDAP externo. Si el nombre de usuario y contraseña facilitados son validos, MERAN crea una nueva entrada para el usuario en su base de datos.</p>
-    </div>
-        
-        
+    </div>  
 <br>
-<!--form-->
 <form action="[% url_prefix %]/admin/global/ldap_config.pl?token=[% token %]" method="post">
 <input type="hidden" name="adding" value="1"/>
 <h4>Ajustes de servidor LDAP </h4> 
 <ul>
     <li class="sub_item">
-    <!-- aca usamos una pref_preferencia_sistema que ya existe -->
         <label>[% "URL del servidor" | i18n %]
             [% PERL %]
                 print C4::AR::Filtros::setHelpIcon(text => "[% 'Direccion del servidor LDAP.' | i18n %]",);

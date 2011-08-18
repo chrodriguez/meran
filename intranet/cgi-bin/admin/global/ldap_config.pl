@@ -99,7 +99,7 @@ if($input->param('adding') == 1){
     C4::AR::Authldap::setVariableLdap('ldap_lockconfig_field_updatelocal_adress',$input->param('lockconfig_field_updatelocal_adress'));
     C4::AR::Authldap::setVariableLdap('ldap_lockconfig_field_updateremote_adress',$input->param('lockconfig_field_updateremote_adress'));
     C4::AR::Authldap::setVariableLdap('ldap_lockconfig_field_lock_adress',$input->param('lockconfig_field_lock_adress'));
-
+    $t_params->{'mensaje'} = "Las preferencias de LDAP se modificaron con exito";
 }
 # mostramos el template cargando los datos de configuracion ldap desde la db
 # lo hacemos siempre asi cuando se guardan los cambios se reflejan en el template tambien
