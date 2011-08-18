@@ -14,8 +14,6 @@
 			  [% ELSE %]
 			      $("#password").val($("#password_plain").val());
 			  [% END %]
-
-			  $("#datosAEnviar").submit();
 		      return true;
       }
       var RecaptchaOptions = {};
