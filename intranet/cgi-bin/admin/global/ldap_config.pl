@@ -32,7 +32,6 @@ if($input->param('adding') == 1){
     C4::AR::Authldap::setVariableLdap('ldap_prefijo_base',$input->param('prefijo_base'));
     C4::AR::Authldap::setVariableLdap('ldap_agregar_user',$input->param('agregar_user_ldap'));    
     C4::AR::Authldap::setVariableLdap('ldap_encoding',$input->param('ldapencoding'));
-    C4::AR::Authldap::setVariableLdap('ldap_preventpassindb',$input->param('preventpassindb'));
     C4::AR::Authldap::setVariableLdap('ldap_bind_dn',$input->param('bind_dn'));
     C4::AR::Authldap::setVariableLdap('ldap_bind_pw',$input->param('bind_pw'));
     C4::AR::Authldap::setVariableLdap('ldap_user_type',$input->param('user_type'));
@@ -43,10 +42,7 @@ if($input->param('adding') == 1){
     C4::AR::Authldap::setVariableLdap('ldap_memberattribute',$input->param('memberattribute'));
     C4::AR::Authldap::setVariableLdap('ldap_memberattribute_isdn',$input->param('memberattribute_isdn'));
     C4::AR::Authldap::setVariableLdap('ldap_objectclass',$input->param('objectclass'));
-    C4::AR::Authldap::setVariableLdap('ldap_forcechangepassword',$input->param('forcechangepassword'));
-    C4::AR::Authldap::setVariableLdap('ldap_stdchangepassword',$input->param('stdchangepassword'));
     C4::AR::Authldap::setVariableLdap('ldap_passtype',$input->param('passtype'));
-    C4::AR::Authldap::setVariableLdap('ldap_changepasswordurl',$input->param('changepasswordurl'));
     C4::AR::Authldap::setVariableLdap('ldap_lockconfig_field_map_firstnames',$input->param('lockconfig_field_map_firstnames'));
     C4::AR::Authldap::setVariableLdap('ldap_lockconfig_field_updatelocal_firstname',$input->param('lockconfig_field_updatelocal_firstname'));
     C4::AR::Authldap::setVariableLdap('ldap_lockconfig_field_updateremote_firstname',$input->param('lockconfig_field_updateremote_firstname'));

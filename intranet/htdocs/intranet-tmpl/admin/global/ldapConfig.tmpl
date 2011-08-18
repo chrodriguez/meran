@@ -36,7 +36,7 @@
                 print C4::AR::Filtros::setHelpIcon(text => "[% 'Indique el numero de puerto del servidor.' | i18n %]",);
             [% END %]
         </label> 
-        <input name="host_port" size="10" value="[% preferencias.ldap_port %]" type="text">
+        <input name="host_port" size="30" value="[% preferencias.ldap_port %]" type="text">
     </li>
     <li class="sub_item">
         <label>[% "Tipo de comunicaci&oacute;n" | i18n %]
@@ -56,7 +56,7 @@
                 print C4::AR::Filtros::setHelpIcon(text => "[% 'La versi&oacute;n del protocolo LDAP que su servidor est&aacute; utilizando.' | i18n %]",);
             [% END %]
         </label>
-        <select id="menuversion" class="select menuversion" name="version"> 
+        <select id="menuversion" name="version"> 
            <option value="2" [% IF preferencias.ldap_version == 2 %] selected="selected" [% END %]>2</option> 
            <option value="3" [% IF preferencias.ldap_version == 3 %] selected="selected" [% END %]>3</option> 
         </select> 
@@ -67,7 +67,7 @@
                 print C4::AR::Filtros::setHelpIcon(text => "[% 'Especifique la codificaci&oacute;n usada por el servidor LDAP. Muy probablemente utf-8, MS AD v2 utiliza codificaci&oacute;n de plataforma por defecto como cp1252, cp1250, etc.' | i18n %]",);
             [% END %]
         </label> 
-        <input id="ldapencoding" name="ldapencoding" value="[% preferencias.ldap_encoding %]" type="text"> 
+        <input id="ldapencoding" size="30" name="ldapencoding" value="[% preferencias.ldap_encoding %]" type="text"> 
     </li>
     <li class="sub_item">
         <label>[% "Sufijo de la base de datos" | i18n %]
@@ -75,7 +75,7 @@
                 print C4::AR::Filtros::setHelpIcon(text => "[% 'Sufijo de la Base de Datos Ldap que se usa para completar el usuario. Ej: dc=unlp,dc=edu,dc=ar.' | i18n %]",);
             [% END %]
         </label> 
-        <input name="prefijo_base" size="10" value="[% preferencias.ldap_prefijo_base %]" type="text">
+        <input name="prefijo_base" size="30" value="[% preferencias.ldap_prefijo_base %]" type="text">
     </li>
     <br>
     <h4>Fijar ajustes </h4> 
@@ -89,18 +89,7 @@
             <option value="0" [% IF preferencias.ldap_agregar_user == 0 %] selected="selected" [% END %]>No</option>
             <option value="1" [% IF preferencias.ldap_agregar_user == 1 %] selected="selected" [% END %]>Si</option>
         </select>
-    </li>
-    <li class="sub_item">
-        <label>[% "Ocultar contrase&ntilde;as" | i18n %]
-            [% PERL %]
-                print C4::AR::Filtros::setHelpIcon(text => "[% 'Seleccione *s&iacute;* para evitar que las contrase&ntilde;as se almacenen en la base de datos de MERAN.' | i18n %]",);
-            [% END %]
-        </label> 
-        <select id="menupreventpassindb" name="preventpassindb"> 
-           <option value="0" [% IF preferencias.ldap_preventpassindb == 0 %] selected="selected" [% END %]>No</option> 
-           <option value="1" [% IF preferencias.ldap_preventpassindb == 1 %] selected="selected" [% END %]>S&iacute;</option> 
-        </select> 
-    </li>    
+    </li> 
     <li class="sub_item">
         <label>[% "Nombre distinguido" | i18n %]
             [% PERL %]
@@ -205,30 +194,7 @@
         <input name="objectclass" id="objectclass" value="[% preferencias.ldap_objectclass %]" size="30" type="text"> 
     </li>
     <br>
-    <h4>Forzar cambio de contraseña </h4> 
-    <li class="sub_item">
-        <label>[% "Forzar cambio de contrase&ntilde;a" | i18n %]
-            [% PERL %]
-                print C4::AR::Filtros::setHelpIcon(text => "[% 'Forzar a los usuarios a cambiar la contraseña la primera vez que accedan a MERAN.' | i18n %]",);
-            [% END %]
-        </label> 
-        <select id="menuforcechangepassword" class="select menuforcechangepassword" name="forcechangepassword"> 
-           <option value="0" [% IF preferencias.ldap_forcechangepassword == 0 %] selected="selected" [% END %]>No</option> 
-           <option value="1" [% IF preferencias.ldap_forcechangepassword == 1 %] selected="selected" [% END %]>Si</option> 
-        </select>  
-    </li>
-    <li class="sub_item">
-        <label>[% "Utilizar P&aacute;gina de cambio de contrase&ntilde;a est&aacute;ndar" | i18n %]
-            [% PERL %]
-                print C4::AR::Filtros::setHelpIcon(text => "[% 'Si el sistema de autenticaci&oacute;n externa permite cambios de contrase&ntilde;a en
-MERAN, seleccione Si. Este ajuste pasa por alto *Cambiar contrase&ntilde;a URL*. NOTA: Se recomienda que utilice LDAP sobre un t&uacute;nel encriptado SSL (ldaps://) si el servidor LDAP es remoto' | i18n %]",);
-            [% END %]
-        </label> 
-        <select id="menustdchangepassword" class="select menustdchangepassword" name="stdchangepassword"> 
-           <option value="0" [% IF preferencias.ldap_stdchangepassword == 0 %] selected="selected" [% END %]>No</option> 
-           <option value="1" [% IF preferencias.ldap_stdchangepassword == 1 %] selected="selected" [% END %]>Si</option> 
-        </select> 
-    </li>
+    <h4>Contrase&ntilde;as</h4> 
     <li class="sub_item">
         <label>[% "Formato de contrase&ntilde;a" | i18n %]
             [% PERL %]
@@ -240,14 +206,6 @@ MERAN, seleccione Si. Este ajuste pasa por alto *Cambiar contrase&ntilde;a URL*.
            <option value="md5" [% IF preferencias.ldap_passtype == 'md5' %] selected="selected" [% END %]>Encriptaci&oacute;n M5</option> 
            <option value="sha1" [% IF preferencias.ldap_passtype == 'sha1' %] selected="selected" [% END %]>SHA-1 hash</option> 
         </select> 
-    </li>
-    <li class="sub_item">
-        <label>[% "URL para cambio de contrase&ntilde;a" | i18n %]
-            [% PERL %]
-                print C4::AR::Filtros::setHelpIcon(text => "[% 'Aqui puede especificar donde pueden sus usuarios recuperar o cambiar su nombre de usuario/contrase&ntilde;a si lo han olvidado. Para ello, aparecera un boton en la pagina de entrada. Si deja esto en blanco, este boton no se mostrara.' | i18n %]",);
-            [% END %]
-        </label> 
-        <input name="changepasswordurl" id="changepasswordurl" value="[% preferencias.ldap_changepasswordurl %]" type="text"> 
     </li>
     <br>
     <h4>Mapeado de datos</h4> 
