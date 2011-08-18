@@ -58,16 +58,16 @@
                     <th align="center" >
                         [% "Autor" | i18n %]
                     </th>
-                    <th align="center">
+                    <th align="center" style="width: 80px;">
                         [% "Edici&oacute;n/A&ntilde;o" | i18n %]
                     </th>
-                    <th align="center">
+                    <th align="center" style="width: 110px;">
                         [% "Disponibilidad" | i18n %]
                     </th>
-                    <th align="center">
+                    <th align="center" style="width: 110px;">
                         [% "Valoraci&oacute;n" | i18n %]
                     </th>
-                    <th align="center">
+                    <th align="center" style="width: 80px;">
                         [% "Favoritos" | i18n %]
                     </th>
                 </tr>
@@ -167,24 +167,28 @@
                             [% END %]
                         </td>
                         <td>
-                            <div class="rating">
-                                <form id="rating[% NIVEL.id1 %]" class="ratings" action="">
-                                    <div>
-                                      <input type="radio" name="rate" value="1" />
-                                      <input type="radio" name="rate" value="2" />
-                                      <input type="radio" name="rate" value="3" />
-                                      <input type="radio" name="rate" value="4" />
-                                      <input type="radio" name="rate" value="5" />
-                                      <input type="radio" name="rate" value="6" />
-                                      <input type="radio" name="rate" value="7" />
-                                      <input type="radio" name="rate" value="8" />
-                                      <input type="radio" name="rate" value="9" />
-                                      <input type="radio" name="rate" value="10" />
-                                      <input type="submit" value="Enviar" />
-                                    </div>
-                                </form>
-                                <br style="clear:both" />
-                            </div>
+                            [% IF NIVEL.rating > 0 %]
+	                            <div class="rating">
+	                                <form id="rating[% NIVEL.id1 %]" class="ratings" action="">
+	                                    <div>
+	                                      <input type="radio" name="rate" value="1" />
+	                                      <input type="radio" name="rate" value="2" />
+	                                      <input type="radio" name="rate" value="3" />
+	                                      <input type="radio" name="rate" value="4" />
+	                                      <input type="radio" name="rate" value="5" />
+	                                      <input type="radio" name="rate" value="6" />
+	                                      <input type="radio" name="rate" value="7" />
+	                                      <input type="radio" name="rate" value="8" />
+	                                      <input type="radio" name="rate" value="9" />
+	                                      <input type="radio" name="rate" value="10" />
+	                                      <input type="submit" value="Enviar" />
+	                                    </div>
+	                                </form>
+	                                <br style="clear:both" />
+	                            </div>
+	                         [% ELSE %]
+	                           <p> [% 'A&uacute;n sin valoraci&oacute;n' %]
+	                         [% END %]
                         </td>
                         <td class="titulo_result">
                             [% IF NIVEL.esta_en_favoritos %]

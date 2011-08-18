@@ -35,6 +35,16 @@ $params{'id2'}          = $input->param('id2');
 $params{'nro_socio'}    = $nro_socio;
 
 if ($review){
+	my ($template, $session, $t_params)= get_template_and_user({
+                                    template_name => "opac-main.tmpl",
+                                    query => $query,
+                                    type => "opac",
+                                    authnotrequired => 0,
+                                    flagsrequired => {  ui => 'ANY', 
+                                                        tipo_documento => 'ANY', 
+                                                        accion => 'CONSULTA', 
+                                                        entorno => 'undefined'},
+             });
     C4::AR::Validator::validateParams('VA002',\%params,['nro_socio', 'id2', 'review']);
     C4::AR::Nivel2::reviewNivel2($id2,$review,$nro_socio);
 }
