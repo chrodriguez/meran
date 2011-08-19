@@ -1041,7 +1041,7 @@ sub tienePermisos {
 sub tienePermisosOPAC{
 	my ($self) = shift;
 	
-	return (C4::AR::Utilidades::validateString($self->getCredentialType));
+	return (C4::AR::Utilidades::validateString($self->credential_type));
 	
 }
 =item
@@ -1189,19 +1189,11 @@ sub needsValidation{
 	
 }
 
-sub tienePermisosOPAC{
-
-    my ($self) = shift;
-
-    return (0);	
-}
-
 sub getInvolvedCount{
  
     my ($self) = shift;
 
     my ($campo, $value)= @_;
-    C4::AR::Debug::debug("usr_socio ///////// CAMPO: ".$campo." VALUE: ".$value);
     my @filtros;
 
     push (@filtros, ( $campo->getCampo_referente => $value ) );

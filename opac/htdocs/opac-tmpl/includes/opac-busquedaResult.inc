@@ -9,7 +9,7 @@
         $('.fancylink').fancybox();
     });
 </script>
-
+[% USE HTML %]
 [% IF show_search_details %]
      <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda:" | i18n %] [% buscoPor %]</div>
      <br />
@@ -114,7 +114,7 @@
                         <td class="titulo_result">	
                             [% IF NIVEL.titulo %]
                                 [% PERL %]
-                                    print C4::AR::Filtros::link_to( text =>     "[% NIVEL.titulo %]",
+                                    print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(NIVEL.titulo) %]",
                                                                     url =>      "[% url_prefix %]/opac-detail.pl", 
                                                                     params =>   ["id1=[% NIVEL.id1 %]"],
                                                                     title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"

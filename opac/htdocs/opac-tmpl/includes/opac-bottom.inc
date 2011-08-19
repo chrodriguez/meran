@@ -1,5 +1,5 @@
     <div class="footer">
-      <p>@[% actual_year %] - [% ui.getNombre %] | [% 'Biblioteca P&uacute;blica' | i18n %]</p>
+      <p>@[% actual_year %] - [% ui.getNombre %]</p>
       <p class="credits">
           [% 'Powered by' | i18n %] <a href="http://koha.linti.unlp.edu.ar" target="_blank" title="MERAN">MERAN</a> 
           | <a href="http://validator.w3.org/check?uri=referer" target="_blank" title="Validate XHTML code">W3C XHTML 1.0</a> 

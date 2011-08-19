@@ -19,6 +19,8 @@ my ($template, $session, $t_params)= get_template_and_user({
                  });
 
 $t_params->{'opac'};
+my $info_about_hash = C4::AR::Preferencias::getInfoAbout();  
 
+$t_params->{'info_about'}     = $info_about_hash;
 $t_params->{'partial_template'}= "opac-about.inc";
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

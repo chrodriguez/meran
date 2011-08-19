@@ -51,9 +51,9 @@ sub uploadPhoto{
     my $type            = '';
      
     if ($file =~ /^GIF/i) {
-        $type = "gif";
+        $type = "jpg";
     } elsif ($file =~ /PNG/i) {
-        $type = "png";
+        $type = "jpg";
     } elsif ($file =~ /JFIF/i) {
         $type = "jpg";
     } else {
@@ -61,14 +61,15 @@ sub uploadPhoto{
     }
 
     if ($socio->tieneFoto){
-    	C4::AR::Debug::debug("SOCIO TIEEN FOTOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO ".$socio->tieneFoto);
     	unlink($socio->tieneFoto);
     }
     if (!$type) {
         print qq|{ "success": false, "error": "Invalid file type..." }|;
         print STDERR "file has been NOT been uploaded... \n";
     }
-
+    
+    $type = "jpg";
+    
     open(WRITEIT, ">$uploaddir/$name.$type") or die "Cant write to $uploaddir/$name.$type. Reason: $!";
         print WRITEIT $file;
     close(WRITEIT);

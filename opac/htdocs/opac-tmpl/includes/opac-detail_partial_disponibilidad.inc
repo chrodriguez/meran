@@ -19,7 +19,7 @@
                             <li class="detalle_barra_circulacion">
                                   
                                 [% IF CirculationEnabled %]
-	                                [% IF socio_data %]
+	                                [% IF socio_data.usr_nro_socio %]
 	                                    [% PERL %]
 	                                        print C4::AR::Filtros::to_Icon(   text    => "[% 'Reservar' | i18n %]",
 	                                                                            boton   => "icon_reservar",
