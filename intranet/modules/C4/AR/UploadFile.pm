@@ -45,7 +45,7 @@ sub uploadPhoto{
     my $uploaddir       = C4::Context->config("picturesdir");
     my $maxFileSize     = 2048 * 2048; # 1/2mb max file size...
     my $file            = $query->param('POSTDATA');
-    my $nro_socio       = $query->url_param('nro_socio'); 
+    my $nro_socio       = C4::AR::Auth::getSessionNroSocio();
     my $name            = $nro_socio;
     my $socio           = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
     my $type            = '';

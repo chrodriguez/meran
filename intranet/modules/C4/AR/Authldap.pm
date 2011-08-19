@@ -122,7 +122,7 @@ C4::AR::Debug::debug("Estoy por buscar el socio".$socio);
                 my $entry           = $entries->entry(0);
 
                 if ($entry){
-                    $socio = C4::AR::Usuarios::crearPersonaLDAP($userid);
+                    $socio = C4::AR::Usuarios::crearPersonaLDAP($userid,$entry);
                     C4::AR::Debug::debug("Authldap =>datosUsuario".$LDAP_FILTER . ' entry '.$entry->ldif); 
                 }                
         }
@@ -199,7 +199,7 @@ sub checkPwEncriptada{
     C4::AR::Debug::debug("LDAPFILTER ". $LDAP_FILTER  );
     if ($LDAP_ROOT ne ''){
         $ldapMsg= $ldap->bind( $LDAP_ROOT , password => $LDAP_PASS) or die "$@";
-        C4::AR::Debug::debug("ERROR DEL LDAP con ".$LDAP_ROOT ." y ".$LDAP_PASS. "dio".$ldapMsg->error);
+        C4::AR::Debug::debug("ERROR DEL LDAP con ".$LDAP_ROOT ." y ".$LDAP_PASS. " dio ".$ldapMsg->error);
     }else{
         $ldapMsg= $ldap->bind() or die "$@";
         }
@@ -209,10 +209,12 @@ sub checkPwEncriptada{
             base   => $LDAP_DB_PREF,
             filter => "($LDAP_FILTER)"
         );
-        
-        my $entry       = $entries->entry(0);
+        my $entry       = $entries->entries;
+        C4::AR::Debug::debug("entry : ".$entry);
+        C4::AR::Utilidades::printHASH($entries);
         if (defined $entry){
             $passwordLDAP   = $entry->get_value("userPassword");
+            C4::AR::Debug::debug("entro al if de entry, pass : ".$passwordLDAP);
             $socio=_verificar_password_con_metodo($userid,$password, $passwordLDAP, $nroRandom, $ldap);
             }
         $ldap->unbind;

@@ -888,8 +888,9 @@ sub getLastLoginTime{
 
 sub crearPersonaLDAP{
     
-    my ($nro_socio)                 = @_;
-    use C4::AR::Preferencias;   
+    my ($nro_socio,$entry)                 = @_;
+    C4::AR::Debug::debug("entry : ".$entry); 
+#    use C4::AR::Preferencias;   
     
     my %params                      = {};
     $params{'id_ui'}                = C4::AR::Preferencias::getValorPreferencia("defaultUI");
