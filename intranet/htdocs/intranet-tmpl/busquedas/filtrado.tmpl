@@ -44,7 +44,7 @@ function limpiarCentro(){
 
 function limpiarAbajo(){
 
-	$('#titulo').val('');
+    $('#titulo').val('');
     $('#autor').val('');
     $('#signatura').val('');
     $('#isbn').val('');
@@ -139,8 +139,7 @@ function limpiarCampos(side){
 	                        <label for="estante">
 	                            <strong>[% "Estantes Virtuales" | i18n %]</strong>
 	                        </label>
-	                        <input type="text" size="25" id="estante" readonly onkeypress="limpiarCampos('centro')">
-	                        ### FALTA IMPLEMENTAR
+	                        <input type="text" size="25" id="estante" onkeypress="limpiarCampos('centro')">
 	                    </li>
 
 		                <li class="sub_item">
