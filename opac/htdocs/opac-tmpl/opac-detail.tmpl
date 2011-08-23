@@ -133,7 +133,7 @@ LOOP2
                     [% ELSE %]
                             [% IF cantParaPrestamo %]
                                 [% IF CirculationEnabled %]  <!-- si es 0 -->
-	                                [% IF socio_data.usr_permisos_opac %] 
+	                                [% IF socio_data.usr_permisos_opac %]
 	                                    [% PERL %]
 	                                        print C4::AR::Filtros::to_Icon(   text    => "[% 'Reservar' | i18n %]",
 	                                                                            boton   => "icon_reservar",

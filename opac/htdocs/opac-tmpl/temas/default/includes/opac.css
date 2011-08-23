@@ -145,7 +145,8 @@ body textarea:focus {
 
 .header-middle {
 	width: 100%;
-	height: 100px;
+	height: 20px;
+	float: left;
 	background: rgb(230, 230, 230) url(../imagenes/bg_head_middle.jpg);
 	overflow: visible !important /*Firefox*/;
 	overflow: hidden /*IE6*/;
@@ -156,6 +157,7 @@ body textarea:focus {
 }*/
 .header-bottom {
 	width: 100%;
+	float: left;
 	height: 40px;
 	background: url("../imagenes/bg_head_bottom_nav.jpg") repeat-x scroll 0
 		0 #DCDCDC;
@@ -274,7 +276,7 @@ body textarea:focus {
 	padding: 2px 5px 2px 5px;
 	color: rgb(125, 125, 125);
 	text-decoration: none;
-	font-size: 120%;
+	font-size: 12px;
 }
 
 .nav1 a:hover {
@@ -288,7 +290,7 @@ body textarea:focus {
 }
 
 .nav_logged {
-	width: 200px;
+	max-width: 300px;
 	position: relative;
 	z-index: 3;
 	margin-right: 2%;
@@ -371,7 +373,7 @@ body textarea:focus {
 	/*background:rgb(220,220,220) url(../imagenes/bg_head_bottom_nav.jpg) repeat-x*/;
 	color: rgb(75, 75, 75);
 	font-size: 1.0em;
-	font-size: 130%;
+	font-size: 12px;
 } /*Color navigation bar normal mode*/
 .nav2 ul {
 	list-style-type: none;
@@ -381,6 +383,7 @@ body textarea:focus {
 	float: left;
 	position: relative;
 	z-index: 1000;
+	height: 40px;
 	border-right: solid 1px rgb(175, 175, 175);
 }
 
@@ -389,6 +392,9 @@ body textarea:focus {
 	border: none;
 }
 
+.nav2 ul li ul li{
+    height: 100%;
+}
 .nav2 ul li ul {
 	margin-left: -30px;
 	padding: 0 30px 30px 30px;
@@ -1007,10 +1013,6 @@ div.pagination span.disabled {
 .rating {
 	float: right;
 	margin-right: 4%;
-}
-
-li.detalle_barra_circulacion {
-	float: right;
 }
 
 .review {
@@ -1988,7 +1990,7 @@ p.caption {
 	margin: 0 0 0 5px !important /*Non-IE*/;
 	margin: 0 0 20px 5px /*IE6*/;
 	padding: 0 2px 0 2px;
-	color: rgb(80, 80, 80);
+	color: white;
 	font-weight: bold;
 	font-size: 130%;
 }
@@ -2254,8 +2256,7 @@ border:1px solid #BBBBBB;
 }
 
 .resultados_consulta {
-	font-family: verdana;
-	font-size: 20px;
+	font-size: 12px;
 }
 
 .bold {
@@ -3460,4 +3461,30 @@ fieldset legend {
   padding-top:2px;
   position:relative;
   top:0px;
+}
+
+.tabla_datos tr{
+	height: 32px;
+}
+
+li.detalle_barra_circulacion {
+    clear: both;
+    width: 100px;
+    margin: 0 auto;
+}
+
+.autor_result a{
+	color: rgb(42, 90, 138);
+}
+
+.autor_result a:visited{
+    color: rgb(42, 90, 138);
+}
+
+.autor_result a:hover{
+    color: #467AA7;
+}
+
+.detalle_registro_edicion{
+	white-space: nowrap;
 }

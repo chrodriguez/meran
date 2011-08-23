@@ -20,12 +20,14 @@
                                   
                                 [% IF CirculationEnabled %]
 	                                [% IF socio_data.usr_nro_socio %]
+                                        <br />
+                                        <br />	                                
 	                                    [% PERL %]
 	                                        print C4::AR::Filtros::to_Icon(   text    => "[% 'Reservar' | i18n %]",
 	                                                                            boton   => "icon_reservar",
-	                                                                            width   => "100",
+	                                                                            width   => "100px",
 	                                                                            onClick => "reservar([% id1 %],[% id2 %])",
-	                                                                            title   => "[% 'Reservar' | i18n %]"
+	                                                                            title   => "[% 'Reservar' | i18n %]",
 	                                                                    );
 	                                    [% END %]
 	                                [% END %]

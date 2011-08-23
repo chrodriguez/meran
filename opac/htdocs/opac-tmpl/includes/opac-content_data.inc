@@ -57,7 +57,6 @@
     </script>
 
       <!-- Content unit - One column -->
-        <hr class="clear-contentunit">
         <div class="column1-unit novedades_opac">
             <div id="resultNovedades"></div>
         </div>

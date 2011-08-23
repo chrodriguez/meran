@@ -120,6 +120,7 @@ sub agregar{
     $self->setVersion_documento($data_hash->{'version_documento'});
     $self->setNro_documento($data_hash->{'nro_documento'});
     $self->setTipo_documento($data_hash->{'tipo_documento'});
+    C4::AR::Debug::debug("tipo documento ursPersona : ".$data_hash->{'tipo_documento'});
     $self->setTitulo($data_hash->{'titulo'});
     $self->setOtros_nombres($data_hash->{'otros_nombres'});
     $self->setIniciales($data_hash->{'iniciales'});
@@ -154,7 +155,7 @@ sub agregar{
 
 sub convertirEnSocio{
     my ($self)=shift;
-    my ($data_hash)=@_;
+    my ($data_hash,$vienePassword)=@_;
 
     $self->log($data_hash,'convertirEnSocio');
     my $db = $self->db;
