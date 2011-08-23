@@ -132,10 +132,10 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 	this.onBeforeSend   = fncInit;		    //se ejecuta antes de consultar al servidor con ajax
 	this.showState      = true;
 	this.cache          = false; 			//para cachear los resultados
-    this.showStatusIn   = '';               //muestra el estado del AJAX en el DIV pasado por parametro
-    this.showOverlay    = false;            //muestra el overlay y bloquea la pantalla luego de hacer una peticion AJAX
-    this.autoClose      = true;             //cierra automaticamente el overlay
-
+	this.showStatusIn   = '';               //muestra el estado del AJAX en el DIV pasado por parametro
+	this.showOverlay    = false;            //muestra el overlay y bloquea la pantalla luego de hacer una peticion AJAX
+	this.autoClose      = true;             //cierra automaticamente el overlay
+	this.async          = true;             //asincronico por defecto
 
 	this.sendToServer= function(){
 
@@ -191,6 +191,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 					type: "POST", 
 					url: helper.url,
 					data: params,
+					async: helper.async,
  					beforeSend: function(){
                       
 						if(helper.showState){

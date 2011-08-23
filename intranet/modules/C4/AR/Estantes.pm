@@ -34,6 +34,7 @@ Este módulo provee funciones para manipular estantes virtuales, incluyendo la c
         &agregarSubEstante
         &buscarNombreDuplicado
         &agregarEstante
+	&buscarEstante
 );
 
 sub getListaEstantesPublicos {
@@ -286,6 +287,50 @@ sub buscarNombreDuplicado {
     my $estantes_array_ref = C4::Modelo::CatEstante::Manager->get_cat_estante( query => \@filtros, sort_by => 'estante');
 
     return ($estantes_array_ref->[0]);
+}
+
+
+sub buscarEstante {
+# Se buscan los estantes
+    my ($estante, $ini, $cantR) = @_;
+
+    my @filtros;
+    push(@filtros, ( estante => { like => '%'.$estante.'%' }) );
+    push(@filtros, ( tipo => { eq => 'public' }));
+
+    my $estantes_array_ref = C4::Modelo::CatEstante::Manager->get_cat_estante( query => \@filtros, 
+									       sort_by => 'estante',
+									       limit   => $cantR,
+									       offset  => $ini,);
+
+    my $cant= C4::Modelo::CatEstante::Manager->get_cat_estante_count( query => \@filtros, 
+									       sort_by => 'estante');
+
+    C4::AR::Debug::debug("BUSQUEDA ESTANTE ==> ".$estante."  resultados: ".$cant." limit = ".$cantR." offset = ".$ini);
+
+	if($cant > 0){
+		return ($cant, $estantes_array_ref);
+	}else{
+		return ($cant, 0);
+	}
+}
+
+
+sub getEstantesById2 {
+# TODO  se obtienen los estantes de en los que se se encuentra un grupo
+    my ($id2) = @_;
+
+#     my @filtros;
+#     push(@filtros, ( estante => { like => '%'.$estante.'%' }) );
+#     my $estantes_array_ref = C4::Modelo::CatEstante::Manager->get_cat_estante( query => \@filtros, sort_by => 'estante');
+# 
+#     my $cant= scalar(@$estantes_array_ref);
+# 
+# 	if($cant > 0){
+# 		return ($cant, $estantes_array_ref);
+# 	}else{
+# 		return ($cant, 0);
+# 	}
 }
 
 sub agregarSubEstante  {

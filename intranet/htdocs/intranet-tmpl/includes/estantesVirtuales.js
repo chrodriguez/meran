@@ -12,6 +12,20 @@ function ordenar(orden){
             objAH.sort(orden);
         }
 
+        function verEstanteDesdeBusqueda(idEstante){
+                objAH=new AjaxHelper(updateVerEstanteDesdeBusqueda);
+                objAH.debug= true;
+		objAH.estante= idEstante;
+                objAH.url= '../estantes/estanteDB.pl';
+                objAH.tipo= 'VER_ESTANTE_BY_ID';
+                objAH.sendToServer();
+        }
+
+        function updateVerEstanteDesdeBusqueda(responseText){
+                $('#estante').html(responseText);
+		$('.datos_tabla_div').hide();
+        }
+
         function verEstantes(){
                 objAH=new AjaxHelper(updateVerEstantes);
                 objAH.debug= true;
@@ -65,10 +79,12 @@ function ordenar(orden){
         function verSubEstantes(estante,padre){
                 objAH=new AjaxHelper(updateVerSubEstantes);
                 objAH.debug= true;
+		objAH.showOverlay= true;
                 objAH.url= 'estanteDB.pl';
                 objAH.estante= estante;
 		objAH.padre= padre;
                 objAH.tipo= 'VER_SUBESTANTE';
+		objAH.async = false;
                 objAH.sendToServer();
         }
 

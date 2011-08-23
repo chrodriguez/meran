@@ -9,8 +9,22 @@ use C4::AR::Busquedas qw(busquedaPorBarcode armarBuscoPor busquedaCombinada_newT
 
 my $input = new CGI;
 
+my $template_name ='busquedas/busquedaResult.tmpl';
+
+my $authnotrequired= 0;
+my $obj=$input->param('obj');
+$obj = C4::AR::Utilidades::from_json_ISO($obj);
+my $ini= $obj->{'ini'};
+
+my $tipoAccion= $obj->{'tipoAccion'}||"";
+
+if($tipoAccion eq "BUSQUEDA_POR_ESTANTE"){
+    $template_name = 'busquedas/estante.tmpl';
+}
+
+
 my ($template, $session, $t_params) = get_template_and_user ({
-                            template_name   => 'busquedas/busquedaResult.tmpl',
+                            template_name   => $template_name,
                             query           => $input,
                             type            => "intranet",
                             authnotrequired => 0,
@@ -20,17 +34,10 @@ my ($template, $session, $t_params) = get_template_and_user ({
                                                     entorno => 'undefined'},
                         });
 
-my $authnotrequired= 0;
-my $obj=$input->param('obj');
-
-
-$obj = C4::AR::Utilidades::from_json_ISO($obj);
 
 my $start = [ Time::HiRes::gettimeofday( ) ]; #se toma el tiempo de inicio de la busqueda
-my $tipoAccion= $obj->{'tipoAccion'}||"";
-my $dateformat = C4::Date::get_date_format();
-my $ini= $obj->{'ini'};
 
+my $dateformat = C4::Date::get_date_format();
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 $t_params->{'ini'}      = $obj->{'ini'} = $ini;
@@ -61,27 +68,28 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
 	    $search->{'class'}              = $tipo_documento;
 	    my %sphinx_options              = {};
 
-        $sphinx_options{'only_sphinx'}       = 0;
-        $sphinx_options{'only_available'}    = $only_available;
+	    $sphinx_options{'only_sphinx'}       = 0;
+	    $sphinx_options{'only_available'}    = $only_available;
 	    
 	    my ($cantidad, $resultId1, $suggested)      = C4::AR::Busquedas::busquedaCombinada_newTemp($search->{'keyword'}, $session, $obj,\%sphinx_options);
 	    $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad, $cantR, $pageNumber, $obj->{'funcion'}, $t_params);
-        $t_params->{'suggested'}        = $suggested;
+	    $t_params->{'suggested'}        = $suggested;
 	    $t_params->{'SEARCH_RESULTS'}   = $resultId1;
-        $t_params->{'cantidad'}         = $cantidad;
+	    $t_params->{'cantidad'}         = $cantidad;
 	    if($outside) {
             $t_params->{'HEADERS'}      = 1;
 	    }
 	    
     }elsif($tipoAccion eq "BUSQUEDA_AVANZADA"){
-	    my $funcion                     = $obj->{'funcion'};
-	    my $ini                         = ($obj->{'ini'}||'');
+
+	my $funcion                     = $obj->{'funcion'};
+	my $ini                         = ($obj->{'ini'}||'');
 	    
-	    my ($cantidad, $array_nivel1)   = C4::AR::Busquedas::busquedaAvanzada_newTemp($obj, $session);
+	my ($cantidad, $array_nivel1)   = C4::AR::Busquedas::busquedaAvanzada_newTemp($obj, $session);
 	    
-	    $obj->{'cantidad'}              = $cantidad;
-	    $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
-	    $t_params->{'SEARCH_RESULTS'}   = $array_nivel1;
+	$obj->{'cantidad'}              = $cantidad;
+	$t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
+	$t_params->{'SEARCH_RESULTS'}   = $array_nivel1;
         $t_params->{'cantidad'}         = $cantidad;
         $t_params->{'signatura_filter'} = $obj->{'signatura'} || 0;
 
@@ -118,6 +126,15 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
         $t_params->{'SEARCH_RESULTS'}   = $array_nivel1;
         $t_params->{'cantidad'}         = $cantidad;
 
+    }elsif($tipoAccion eq "BUSQUEDA_POR_ESTANTE"){
+        my $funcion                     = $obj->{'funcion'};
+        
+        my ($cantidad, $array_estantes)   = C4::AR::Busquedas::busquedaPorEstante($obj->{'estante'}, $session, $obj);
+        
+        $obj->{'cantidad'}              = $cantidad;
+        $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
+        $t_params->{'SEARCH_RESULTS'}   = $array_estantes;
+        $t_params->{'cantidad'}         = $cantidad;
     }
 
     #se arma el string para mostrar en el cliente lo que a buscado, ademas escapa para evitar XSS

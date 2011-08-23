@@ -1694,6 +1694,10 @@ input.file {
 	text-align: center;
 }
 
+.datos_tabla_estantes td {
+	text-align: left;
+	padding-left: 50px;
+}
 
 .datos_tabla td a{
     color: #35414F;
