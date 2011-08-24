@@ -43,10 +43,9 @@
   <script type="text/javascript" src="/includes/jquery/modal/jquery.simplemodal.js"></script>
   <script src="/opac-tmpl/includes/favoritos.js" type="text/javascript"></script>
   <script type="text/javascript" src="/includes/jquery/jquery.expander.js"></script>
-
+  <script src="/includes/drop_down_login/javascripts/jquery.tipsy.js" type="text/javascript"></script>
+  
   <link media="screen" rel="stylesheet" href="/includes/jquery/modal/basic-min.css" type="text/css">
-
-
 
   <title>
     [% IF titulo_nombre_ui %]
@@ -75,9 +74,41 @@
 	                                     [% END %]
 	                                     );
 	          });
-	      [% END %]
       [% END %]
+      [% END %]
+      
+
+	
   </script>
+
+  <script type="text/javascript">
+        $(document).ready(function() {
+
+            $(".signin").click(function(e) {          
+                e.preventDefault();
+                $("fieldset#signin_menu").toggle();
+                $(".signin").toggleClass("menu-open");
+            });
+            
+            $("fieldset#signin_menu").mouseup(function() {
+                return false
+            });
+            $(document).mouseup(function(e) {
+                if($(e.target).parent("a.signin").length==0) {
+                    $(".signin").removeClass("menu-open");
+                    $("fieldset#signin_menu").hide();
+                }
+            });         
+            
+        });
+</script>
+<script src="javascripts/jquery.tipsy.js" type="text/javascript"></script>
+<!--<script type='text/javascript'>
+    $(function() {
+      $('#forgot_username_link').tipsy({gravity: 'w'});   
+    });
+  </script>-->
+
 
 </head>
 
