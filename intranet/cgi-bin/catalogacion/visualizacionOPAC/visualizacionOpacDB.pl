@@ -165,7 +165,23 @@ else{
       print $infoOperacionJSON;
     }
     
-    elsif($tipoAccion eq "ACTUALIZAR_ORDEN"){
+    elsif($tipoAccion eq "ACTUALIZAR_ORDEN_AGRUPANDO"){
+        my ($user, $session, $flags)= checkauth(  $input, 
+                                                  $authnotrequired, 
+                                                  {   ui                => 'ANY', 
+                                                      tipo_documento    => 'ANY', 
+                                                      accion            => 'CONSULTA', 
+                                                      entorno           => 'datos_nivel1'}, 
+                                                  'intranet'
+                                      );
+        my $newOrderArray       = $obj->{'newOrderArray'};
+        my $info                = C4::AR::VisualizacionOpac::updateNewOrderGroup($newOrderArray);
+        my $infoOperacionJSON   = to_json $info;
+        C4::AR::Auth::print_header($session);
+        print $infoOperacionJSON;  
+    }
+    
+        elsif($tipoAccion eq "ACTUALIZAR_ORDEN"){
         my ($user, $session, $flags)= checkauth(  $input, 
                                                   $authnotrequired, 
                                                   {   ui                => 'ANY', 

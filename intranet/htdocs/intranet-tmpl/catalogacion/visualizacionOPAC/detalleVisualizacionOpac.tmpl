@@ -38,7 +38,12 @@
         objAH.debug         = true;
         objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
         objAH.showOverlay   = true;
-        objAH.tipoAccion    = "ACTUALIZAR_ORDEN";
+        // si estamos agrupando por campo o no
+        if($("#ordenar_campos").is(':checked')){
+            objAH.tipoAccion    = "ACTUALIZAR_ORDEN_AGRUPANDO";
+        }else{
+            objAH.tipoAccion    = "ACTUALIZAR_ORDEN";
+        }
         objAH.newOrderArray = $('#sortable').sortable('toArray');
         objAH.sendToServer(); 
     }

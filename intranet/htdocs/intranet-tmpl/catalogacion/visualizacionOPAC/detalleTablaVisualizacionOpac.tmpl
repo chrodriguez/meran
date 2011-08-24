@@ -5,13 +5,13 @@
 		    $("#sortable").sortable({
                 stop: function(event, ui) {
                     actualizarOrden($('#sortable').sortable('toArray'));
-
                 }
             });
 	    });
 </script>
 <fieldset>
     <legend class="titulo_legend trigger click"><strong>[% "Configuraci&oacute;n de la Visualizaci&oacute;n:" | i18n %]</strong></legend>
+    <input type="checkbox" name="ordenar_campos" id="ordenar_campos"/>Agrupar por campo
     <div id="divTablaVisualizacion" class="divTablaVisualizacion"></div>
       <table class="tabla_datos" cellspacing=0 border="0" cellpadding=0 style="width:100%;">
             <thead>
