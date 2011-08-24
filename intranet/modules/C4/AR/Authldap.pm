@@ -98,9 +98,7 @@ sub datosUsuario{
     my ($userid,$ldap)  = @_;
     my $socio           = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
 
-    C4::AR::Debug::debug("Estoy por buscar el socio ".$userid);
     if ($socio) { 
-        C4::AR::Debug::debug("Encontre el socio".$socio);
         return $socio;
     }
     else {
@@ -108,7 +106,7 @@ sub datosUsuario{
         # nro_socio , id_ui, cod_categoria, change_password (dejala en 0), id_estado (uno de UsrEstado), is_super_user 
 
         my $preferencias_ldap   = getLdapPreferences();
-        my $agregar_ldap        = $preferencias_ldap->{'ldap_agregar_user'}||0; # esta en 0
+        my $agregar_ldap        = $preferencias_ldap->{'ldap_agregar_user'} || 0; 
         
         if ($agregar_ldap){
         
