@@ -2,7 +2,7 @@
 <html>
 <head>
 [% INCLUDE "message_INTRA.inc" %]
-<script language="javascript" type="text/javascript">
+<script type="text/javascript">
 //     <!-- variables de entorno sacadas de las preferencias del sistema -->
     token       = '[% token %]';
     imagesForJS = '[% temas %]/[% tema %]/imagenes';
@@ -31,7 +31,7 @@
 <script type="text/javascript" src="/includes/shiftSelectTr.js"></script>
 <script type="text/javascript" src="/includes/jquery/jquery.expander.js"></script>
 
-<script language="javascript" type="text/javascript">
+<script type="text/javascript">
 
 	function swap(id,src){
 		   document.getElementById(id).src=src;

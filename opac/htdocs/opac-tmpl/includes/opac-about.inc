@@ -1,6 +1,6 @@
 
 <h1 class="pagetitle">Equipo Central</h1>
-<hr class="clear-contentunit">
+<hr class="clear-contentunit" />
 
  <h4><a href="http://www.cespi.unlp.edu.ar" target="_blank">CESPI</a> - <a href="http://www.linti.unlp.edu.ar" target="_blank">LINTI</a> - <a href="http://www.info.unlp.edu.ar" target="_blank">Facultad de Informática</a></h4> 
  <ul> 
@@ -17,7 +17,7 @@
 <br><br>
 
 <h1 class="pagetitle">[% 'Datos de la Biblioteca' | i18n %]</h1>
-<hr class="clear-contentunit">
+<hr class="clear-contentunit" />
 
 <ul> 
     <li>

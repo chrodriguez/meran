@@ -8,7 +8,7 @@
         [% END %]
 </title>
 
-<script language="javascript" type="text/javascript">
+<script type="text/javascript">
     token= '[% token %]';
 </script>
 
@@ -28,7 +28,7 @@
 <link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/opac.css">
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/opac.css">
 </head>
-<script language="javascript" type="text/javascript">
+<script type="text/javascript">
     // FIXME esto esta repetido en el opac-top.inc, ver si se puede unificar
     function cambiarIdioma() {
         $('#lang_server').val($('#language').val());
@@ -62,7 +62,7 @@
     </font>
 </div>
 
-<script language="javascript"> 
+<script> 
 
     function enviar(){
         var nro_socio = $.trim($("#nro_socio").val());

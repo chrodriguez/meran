@@ -1,5 +1,5 @@
 [% INCLUDE 'opac-top-login.inc' %]
-<script language="javascript">
+<script>
     function enviar(){
         var nroRandom= [% nroRandom %];
         var username = $.trim($("#username").val());
@@ -10,7 +10,7 @@
     }
 </script>
 
-<script language="javascript" type="text/javascript">
+<script type="text/javascript">
 
     $(document).ready(function() {
         //onEnter con foco en input, ejecuta la busqueda

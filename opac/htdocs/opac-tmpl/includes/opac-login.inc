@@ -1,4 +1,4 @@
-<script language="javascript" type="text/javascript">
+<script type="text/javascript">
     var URL_PREFIX  = '[% url_prefix %]';
 </script>
 <script src="/includes/util.js" type="text/javascript"></script>

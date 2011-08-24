@@ -1,4 +1,4 @@
-<script language="javascript">
+<script>
     function clearInput(){
         $('#newpassword').val('');
         $('#newpassword1').val('');

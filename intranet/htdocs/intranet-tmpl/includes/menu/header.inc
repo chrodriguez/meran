@@ -5,7 +5,7 @@
 <script type="text/javascript" src="/intranet-tmpl/includes/busquedasCatalogo-min.js"> </script>
 <script type="text/javascript" src="/intranet-tmpl/includes/busquedasUsuarios-min.js"></script>
 
-<script language="javascript" type="text/javascript"> 
+<script type="text/javascript"> 
 
 function socioSearchEvent(event){
     if(event.keyCode==13)

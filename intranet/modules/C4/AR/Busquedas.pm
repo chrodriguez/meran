@@ -1048,13 +1048,6 @@ sub busquedaAvanzada_newTemp{
 
 
 
-
-
-
-
-
-
-
 sub busquedaPorTema{
     
     my ($tema, $session, $obj_for_log) = @_;
@@ -1625,11 +1618,11 @@ sub armarBuscoPor{
 	}
 	
 	if( C4::AR::Utilidades::validateString($params->{'completo'})){
-        $buscoPor.= C4::AR::Utilidades::verificarValor($params->{'completo'})."&";
+        $buscoPor.= C4::AR::Utilidades::verificarValor(C4::AR::Filtros::i18n("Autor").": ".$params->{'completo'})."&";
 	}
 
     if( C4::AR::Utilidades::validateString($params->{'autor'})){
-        $buscoPor.= C4::AR::Utilidades::verificarValor($params->{'autor'})."&";
+        $buscoPor.= C4::AR::Utilidades::verificarValor(C4::AR::Filtros::i18n("Autor").": ".$params->{'autor'})."&";
     }
 
 	if( C4::AR::Utilidades::validateString($params->{'signatura'})){

@@ -4,17 +4,17 @@
                 <form action="[% url_prefix %]/opac-busquedasDB.pl" method="get">
                     <fieldset>
                         <p>
-                            <label for="contact_firstname" class="left">[% 'T&iacute;tulo' | i18n %]:</label>
+                            <label for="titulo" class="left">[% 'T&iacute;tulo' | i18n %]:</label>
                             <input type="text" name="titulo" id="titulo" class="field" tabindex="1" />
                         </p>
 
                         <p>
-                            <label for="contact_firstname" class="left">[% 'Autor' | i18n %]:</label>
+                            <label for="autor" class="left">[% 'Autor' | i18n %]:</label>
                             <input type="text" name="autor" id="autor" class="field" tabindex="1" />
                         </p>
 
                         <p>
-                            <label for="contact_firstname" class="left">[% 'ISBN' | i18n %]:</label>
+                            <label for="isbn" class="left">[% 'ISBN' | i18n %]:</label>
                             <input type="text" name="isbn" id="isbn" class="field" tabindex="1" />
                         </p>
 
@@ -24,12 +24,12 @@
                         </p>
 
                         <p>
-                            <label for="contact_firstname" class="left">[% 'Tema' | i18n %]:</label>
+                            <label for="tema" class="left">[% 'Tema' | i18n %]:</label>
                             <input type="text" name="tema" id="tema" class="field" tabindex="1" />
                         </p>
 
                         <p>
-                            <label for="contact_firstname" class="left">[% 'Estantes Virtuales' | i18n %]:</label>
+                            <label for="estantes" class="left">[% 'Estantes Virtuales' | i18n %]:</label>
                             <input type="text" name="estantes" id="estantes" class="field" tabindex="1" />
                         </p>
 

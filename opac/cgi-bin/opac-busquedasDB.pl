@@ -20,7 +20,11 @@ my %hash_temp = $input->Vars;
 $obj = \%hash_temp;
 $obj->{'tipoAccion'} = $input->param('tipoAccion');
 $obj->{'string'} = Encode::decode_utf8($input->param('string'));
-$obj->{'titulo'} = $input->param('titulo');
+$obj->{'titulo'} = Encode::decode_utf8($input->param('titulo'));
+$obj->{'autor'} = Encode::decode_utf8($input->param('autor'));
+$obj->{'isbn'} = Encode::decode_utf8($input->param('isbn'));
+$obj->{'estantes'} = Encode::decode_utf8($input->param('estantes'));
+$obj->{'tema'} = Encode::decode_utf8($input->param('tema'));
 $obj->{'tipo'} = $input->param('tipo');    
 $obj->{'only_available'} = $input->param('only_available') || 0;
 $obj->{'from_suggested'} = $input->param('from_suggested');
@@ -71,7 +75,7 @@ my $token;
 if  ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
 
 
-    $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&titulo=".$obj->{'titulo'}."&tipo=".$obj->{'tipo'}."&tipo_nivel3_name=".$obj->{'tipo_nivel3_name'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
+    $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&titulo=".$obj->{'titulo'}."&autor=".$obj->{'autor'}."&tipo=".$obj->{'tipo'}."&tipo_nivel3_name=".$obj->{'tipo_nivel3_name'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
     $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&titulo=".$obj->{'titulo'}."&tipo=".$obj->{'tipo'}."&tipo_nivel3_name=".$obj->{'tipo_nivel3_name'}."&tipoAccion=".$obj->{'tipoAccion'};
     
     C4::AR::Utilidades::addParamToUrl($url_todos,"titulo",$obj->{'titulo'});
