@@ -125,6 +125,7 @@ use vars qw(@EXPORT_OK @ISA);
     addParamToUrl
     escapeHashData
     armarIniciales
+    generarComboCamposPersona
 );
 
 
@@ -140,6 +141,63 @@ my %LABELS_COMPONENTS = (   "-1"            => C4::AR::Filtros::i18n("SIN SELECC
                             "rango_anio"    => C4::AR::Filtros::i18n("Anual rango") 
                         );
   
+  
+=item
+    Genera un combo con los campos que tiene una persona, de usr_persona
+=cut
+sub generarComboCamposPersona{
+    my ($params) = @_;
+    
+    use CGI::Session;
+
+    my @select_campos_array;
+    my %select_campos_hash;
+    my ($categorias_array_ref)  = C4::AR::Referencias::obtenerCategoriaDeSocio();
+    my $session                 = CGI::Session->load();
+    my $persona                 = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('nro_socio'));
+
+    my $campos_persona          = C4::Modelo::UsrPersona::Manager->get_usr_persona(
+                                                query => [ id_persona  => { eq => $persona->getId_persona() } ],
+    );
+    
+    my %hash = @$campos_persona[0]; 
+
+    foreach my $campo (@$campos_persona) {  
+        while (my ($key,$value) = each(%$campo)) {  
+                push(@select_campos_array, $key);
+                $select_campos_hash{$key} = $key;
+        }
+    }
+    
+    shift(@select_campos_array);
+
+    my %options_hash; 
+
+    if ( $params->{'onChange'} ){
+        $options_hash{'onChange'}   = $params->{'onChange'};
+    }
+    if ( $params->{'onFocus'} ){
+        $options_hash{'onFocus'}    = $params->{'onFocus'};
+    }
+    if ( $params->{'onBlur'} ){
+        $options_hash{'onBlur'}     = $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}       = $params->{'name'} || 'campos_persona';
+    $options_hash{'id'}         = $params->{'id'} || 'campos_persona';
+    $options_hash{'size'}       = $params->{'size'} || 1;
+    $options_hash{'multiple'}   = $params->{'multiple'} || 0;
+    $options_hash{'defaults'}   = $params->{'default'} || "";
+
+    push (@select_campos_array, '');
+    $select_campos_hash{''}     = "SIN SELECCIONAR";
+    $options_hash{'values'}     = \@select_campos_array;
+    $options_hash{'labels'}     = \%select_campos_hash;
+
+    my $comboDeCamposPersona    = CGI::scrolling_list(\%options_hash);
+
+    return $comboDeCamposPersona;
+}  
   
 =item 
     Devuelve los headers con aplicacion y nombre de archivo recibidos por parametros
