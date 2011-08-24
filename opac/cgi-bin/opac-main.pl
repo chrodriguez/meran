@@ -82,4 +82,8 @@ $t_params->{'cantidad'}       = $cantidad;
 
 $t_params->{'partial_template'}     = "opac-content_data.inc";
 
+
+$t_params->{'noAjaxRequests'}       = 0;
+
+
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
