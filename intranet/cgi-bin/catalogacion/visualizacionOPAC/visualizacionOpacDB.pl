@@ -15,20 +15,20 @@ my $editing = $input->param('value') && $input->param('id');
 if($editing){
 
     my ($template, $session, $t_params)  = get_template_and_user({  
-                        template_name => "includes/partials/modificar_value.tmpl",
-                        query => $input,
-                        type => "intranet",
+                        template_name   => "includes/partials/modificar_value.tmpl",
+                        query           => $input,
+                        type            => "intranet",
                         authnotrequired => 0,
-                        flagsrequired => {  ui => 'ANY', 
-                                            tipo_documento => 'ANY', 
-                                            accion => 'CONSULTA', 
-                                            entorno => 'permisos', 
-                                            tipo_permiso => 'general'},
+                        flagsrequired => {  ui              => 'ANY', 
+                                            tipo_documento  => 'ANY', 
+                                            accion          => 'CONSULTA', 
+                                            entorno         => 'permisos', 
+                                            tipo_permiso    => 'general'},
                         debug => 1,
                     });
 
-    my $value = $input->param('value');
-    my $vista_id = $input->param('id');
+    my $value           = $input->param('value');
+    my $vista_id        = $input->param('id');
     my ($configuracion) = C4::AR::VisualizacionOpac::editConfiguracion($vista_id,$value);
 
     $t_params->{'value'} = $configuracion;
@@ -42,9 +42,9 @@ else{
     $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
     #tipoAccion = Insert, Update, Select
-    my $tipoAccion= $obj->{'tipoAccion'} || "";
-    my $componente= $obj->{'componente'} || "";
-    my $perfil= $obj->{'perfil'} || "";
+    my $tipoAccion  = $obj->{'tipoAccion'} || "";
+    my $componente  = $obj->{'componente'} || "";
+    my $perfil      = $obj->{'perfil'} || "";
     my $result;
     my %infoRespuesta;
     my $authnotrequired = 0;
@@ -53,21 +53,38 @@ else{
     if($tipoAccion eq "MOSTRAR_VISUALIZACION"){
 
         my ($template, $session, $t_params) = get_template_and_user({
-                            template_name => "catalogacion/visualizacionOPAC/detalleVisualizacionOpac.tmpl",
-                            query => $input,
-                            type => "intranet",
+                            template_name   => "catalogacion/visualizacionOPAC/detalleVisualizacionOpac.tmpl",
+                            query           => $input,
+                            type            => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => {  ui => 'ANY', 
-                                                tipo_documento => 'ANY', 
-                                                accion => 'CONSULTA', 
-                                                entorno => 'undefined'},
+                            flagsrequired => {  ui              => 'ANY', 
+                                                tipo_documento  => 'ANY', 
+                                                accion          => 'CONSULTA', 
+                                                entorno         => 'undefined'},
+                            debug => 1,
+        });
+
+        $t_params->{'selectCampoX'}     = C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
+
+        C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+    }
+    elsif($tipoAccion eq "MOSTRAR_TABLA_VISUALIZACION"){
+
+        my ($template, $session, $t_params) = get_template_and_user({
+                            template_name   => "catalogacion/visualizacionOPAC/detalleTablaVisualizacionOpac.tmpl",
+                            query           => $input,
+                            type            => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => {  ui              => 'ANY', 
+                                                tipo_documento  => 'ANY', 
+                                                accion          => 'CONSULTA', 
+                                                entorno         => 'undefined'},
                             debug => 1,
         });
 
         $t_params->{'visualizacion'}    = C4::AR::VisualizacionOpac::getConfiguracionByOrder($perfil);
-        $t_params->{'selectCampoX'}     = C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
 
-        C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+        C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);     
     }
     elsif($tipoAccion eq "AGREGAR_VISUALIZACION"){
 
@@ -88,27 +105,14 @@ else{
     }
     elsif($tipoAccion eq "ELIMINAR_VISUALIZACION"){
 
-#         my ($template, $session, $t_params) = get_template_and_user({
-#                             template_name => "catalogacion/visualizacionOPAC/detalleVisualizacionOpac.tmpl",
-#                             query => $input,
-#                             type => "intranet",
-#                             authnotrequired => 0,
-#                             flagsrequired => {  ui => 'ANY', 
-#                                                 tipo_documento => 'ANY', 
-#                                                 accion => 'CONSULTA',  
-#                                                 entorno => 'undefined'},
-#                             debug => 1,
-#         });
           my ($user, $session, $flags)= checkauth(  $input, 
                                                   $authnotrequired, 
-                                                  {   ui => 'ANY', 
-                                                      tipo_documento => 'ANY', 
-                                                      accion => 'CONSULTA', 
-                                                      entorno => 'datos_nivel1'}, 
+                                                  {   ui                => 'ANY', 
+                                                      tipo_documento    => 'ANY', 
+                                                      accion            => 'CONSULTA', 
+                                                      entorno           => 'datos_nivel1'}, 
                                                   'intranet'
                                       );
-#         my ($status) = C4::AR::VisualizacionOpac::deleteConfiguracion($obj);
-#         $t_params->{'visualizacion'} = C4::AR::VisualizacionOpac::getConfiguracion($perfil);
 
 
         my ($Message_arrayref)  = C4::AR::VisualizacionOpac::deleteConfiguracion($obj);
@@ -118,17 +122,14 @@ else{
         C4::AR::Auth::print_header($session);
         print $infoOperacionJSON; 
 
-
-# 
-#         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
     }
     elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS"){
         my ($user, $session, $flags)= checkauth(    $input, 
                                                   $authnotrequired, 
-                                                  {   ui => 'ANY', 
-                                                      tipo_documento => 'ANY', 
-                                                      accion => 'CONSULTA', 
-                                                      entorno => 'datos_nivel1'}, 
+                                                  {   ui                => 'ANY', 
+                                                      tipo_documento    => 'ANY', 
+                                                      accion            => 'CONSULTA', 
+                                                      entorno           => 'datos_nivel1'}, 
                                                   'intranet'
                                       );
       my $campoX = $obj->{'campoX'};
@@ -146,10 +147,10 @@ else{
     elsif($tipoAccion eq "GENERAR_ARREGLO_SUBCAMPOS"){
         my ($user, $session, $flags)= checkauth(    $input, 
                                                   $authnotrequired, 
-                                                  {   ui => 'ANY', 
-                                                      tipo_documento => 'ANY', 
-                                                      accion => 'CONSULTA', 
-                                                      entorno => 'datos_nivel1'}, 
+                                                  {   ui                => 'ANY', 
+                                                      tipo_documento    => 'ANY', 
+                                                      accion            => 'CONSULTA', 
+                                                      entorno           => 'datos_nivel1'}, 
                                                   'intranet'
                                       );
       my $campo = $obj->{'campo'};

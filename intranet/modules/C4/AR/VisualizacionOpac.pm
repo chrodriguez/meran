@@ -29,7 +29,23 @@ $VERSION = 0.01;
     &getSubCamposLike
     &getCamposXLike
     &getVisualizacionFromCampoSubCampo
+    &updateNewOrder
+    &getItemsByCampo
 );
+
+=item
+    Esta funcion devuelve los items que tengan el campo recibido como parametro
+=cut
+sub getItemsByCampo{
+    my ($campo) = @_;
+    
+    my @filtros;
+    push (@filtros, (campo => { eq => $campo }));
+
+    my $items = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros);
+
+    return ($items);
+}
 
 
 =item
@@ -40,13 +56,14 @@ sub updateNewOrder{
     my ($newOrderArray) = @_;
     my $msg_object      = C4::AR::Mensajes::create();
     
+    my @worked; # array con los ids de los items que ya trabaje 
+    
     # ordeno los ids que llegan desordenados primero, para obtener un clon de los ids, y ahora usarlo de indice para el orden
     # esto es porque no todos los campos de cat_visualizacion_opac se muestran en el template a ordenar 
     # entonces no puedo usar un simple indice como id.
     my @array = sort { $a <=> $b } @$newOrderArray;
     
     my $i = 0;
-    my @filtros;
     
     # hay que hacer update de todos los campos porque si viene un nuevo orden y es justo ordenado (igual que @array : 1,2,3...)
     # tambien hay que actualizarlo
@@ -57,11 +74,17 @@ sub updateNewOrder{
                                );
         my $configuracion = $config_temp->[0];
         
-#        C4::AR::Debug::debug("nuevo orden de id : ".@array[$i]." es :  ".$campo);
-        
-        $configuracion->setOrden(@array[$i]);
-    
-        $i++;
+        # si ya lo trabaje o no
+        if (!($configuracion->getId() ~~ @worked)){
+            my $items = getItemsByCampo($configuracion->getCampo());
+            
+            foreach my $item (@$items){
+                $item->setOrden(@array[$i]);
+                push (@worked, $item->getId());
+#                C4::AR::Debug::debug("nuevo orden a item : ".$item->getId()." es : ".@array[$i]);
+            }    
+            $i++;   
+        }
     }
     
     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'M000', 'params' => []} ) ;
