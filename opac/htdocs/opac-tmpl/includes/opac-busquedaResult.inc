@@ -12,9 +12,9 @@
 [% USE HTML %]
 [% IF show_search_details %]
      <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda:" | i18n %] [% buscoPor %]</div>
-     <br />
-     <div class="resultados_consulta bold">[% "Cantidad de Registros:" | i18n %] [% cantidad %] en ([% timeSeg %] segundos)</div>
-     <br />
+  
+     <div class="resultados_consulta">[% "Cantidad de Registros:" | i18n %] [% cantidad %] en ([% timeSeg %] segundos)</div>
+   
      <div class="contenedor_paginador">[% paginador %]</div>
      <br />
      [% IF only_available %]

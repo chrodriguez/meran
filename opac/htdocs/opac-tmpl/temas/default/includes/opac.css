@@ -212,12 +212,12 @@ float:right;
 .nav1 {width:350px;
  position:relative;
  z-index:3;
- margin-right:0;
+ margin-right:3px;
  float: right;
  clear: both;
  }
 .nav1 ul {float:right;
- padding:0 15px 0 0;
+ padding:0 13px 0 0;
  font-weight:bold;
 }   
 .nav1 li {display:inline;
@@ -242,7 +242,7 @@ float:right;
 .nav_logged {width:200px;
  position:relative;
  z-index:3;
- margin-right:2%;
+ margin-right:1%;
  float: right;
  clear: both;
  text-align: right;
@@ -2051,8 +2051,9 @@ border:1px solid #BBBBBB;
 
 }
 .resultados_consulta{
-    font-family: verdana;
-    font-size: 20px;	
+    font-family: Helvetica;
+    font-size: 12px;	
+    color:#505050; 
 }
 
 .bold{
@@ -3366,7 +3367,7 @@ a.signin.menu-open span {
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
     border:1px solid #4f6596;
-    font-size:8px;
+    font-size:11px;
     margin:0 0 5px;
     padding:5px;
     width:203px;
@@ -3443,7 +3444,40 @@ border:0;
 .tipsy-west { background-image: url(../images/tipsy-west.gif); background-position: left center; }
 
 
+#searchform_main{
+    margin:76px 0 93px 71px;
+}
 
+
+#searchform_main_button{
+    background-color: #F5F5F5;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 2px 2px 2px 2px;
+    color: #666666;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: bold;
+    height: 29px;
+    line-height: 27px;
+    margin: 11px 6px;
+    min-width: 54px;
+    padding: 0 8px;
+    text-align: center;
+}
+
+#searchform_main_button:hover {
+    background-color: #F8F8F8;
+    border: 1px solid #C6C6C6;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    color: #333333;
+}
+
+#searchform_main_button:focus {
+    border: 1px solid #4D90FE;
+    outline: medium none;
+}
+    
+}
 
 
 

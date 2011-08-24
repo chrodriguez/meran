@@ -35,10 +35,10 @@
        <!--  <a class="sitelogo" style="margin-left:430px; margin-top:100px" title="Meran"></a>-->
        
        <div class="searchform" >
-         
-          <form action="[% url_prefix %]/opac-busquedasDB.pl" method="get">
-              <input type="text" name="string" class="field"  value="[% search_string %]" tabindex="-1" style="width:300px; margin-left:277px;" />
-              <input type="submit" name="button" class="button" value="[% 'Buscar' | i18n %]" style="width: 125px;" />
+       
+          <form id="searchform_main" action="[% url_prefix %]/opac-busquedasDB.pl" method="get">
+              <input type="text" name="string" class="field"  value="[% search_string %]" tabindex="-1" style="width:428px; margin-left:277px;" />
+              <input type="submit" id="searchform_main_button" name="button" class="button" value="[% 'Buscar' | i18n %]" style="width: 125px;" />
               <input type="hidden" name="tipoAccion" value="BUSQUEDA_COMBINABLE" />
               <input type="hidden" name="token" value="[% token %]" />
           </form>
