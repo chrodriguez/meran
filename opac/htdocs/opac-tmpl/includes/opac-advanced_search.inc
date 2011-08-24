@@ -3,7 +3,6 @@
             <div class="contactform">
                 <form action="[% url_prefix %]/opac-busquedasDB.pl" method="get">
                     <fieldset>
-                        <legend>&nbsp;[% 'Complete lo necesario' | i18n %]&nbsp;</legend>
                         <p>
                             <label for="contact_firstname" class="left">[% 'T&iacute;tulo' | i18n %]:</label>
                             <input type="text" name="titulo" id="titulo" class="field" tabindex="1" />

@@ -53,10 +53,10 @@
                     <th align="center" style="width: 350px;">
                         [% "T&iacute;tulo" | i18n %]
                     </th>
-                    <th align="center" style="width: 130px;">
+                    <th align="center" style="width: 150px;">
                         [% "Autor" | i18n %]
                     </th>
-                    <th align="center" style="width: 80px;">
+                    <th align="center" style="width: 140px;">
                         [% "Edici&oacute;n/A&ntilde;o" | i18n %]
                     </th>
                     <th align="center" style="width: 110px;">
