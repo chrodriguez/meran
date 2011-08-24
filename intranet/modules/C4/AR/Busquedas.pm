@@ -29,6 +29,7 @@ use C4::AR::Nivel1;
 use C4::AR::Nivel2;
 use C4::AR::Nivel3;
 use C4::AR::PortadasRegistros;
+use C4::AR::Estantes;
 use Text::Aspell;
 use C4::Modelo::RepHistorialBusqueda;
 use Sphinx::Search  qw(SPH_MATCH_ANY SPH_MATCH_PHRASE SPH_MATCH_BOOLEAN SPH_MATCH_EXTENDED SPH_MATCH_ALL SPH_SORT_RELEVANCE);
@@ -53,6 +54,7 @@ use vars qw(@EXPORT_OK @ISA);
     &buscarDatoDeCampoRepetible
     &buscarTema
     &busquedaSignaturaBetween
+    &busquedaPorEstante
 
     &filtrarPorAutor
     &MARCDetail
@@ -1082,6 +1084,12 @@ sub busquedaPorISBN{
     return ($cantidad, $resultId1, $suggested);	
 }
 
+sub busquedaPorEstante{
+	
+	my ($estante, $session, $obj) = @_;
+	my ($cantidad, $resultEstante) = C4::AR::Estantes::buscarEstante($estante,$obj->{'ini'},$obj->{'cantR'});
+	return ($cantidad, $resultEstante, 0);	
+}
 
 # TODO ver si se puede centralizar 
 sub busquedaPorTitulo{
@@ -1576,11 +1584,11 @@ sub logBusqueda{
 	}
 
 	my ($error, $codMsg, $message)= C4::AR::Busquedas::t_loguearBusqueda(
-																			$session->param('nro_socio'),
-																			$params->{'type'},
-                                                         					$session->param('browser'),
-																			\@search_array
-														);
+										$session->param('nro_socio'),
+										$params->{'type'},
+                                                         			$session->param('browser'),
+										\@search_array
+										);
 }
 
 
@@ -1630,6 +1638,10 @@ sub armarBuscoPor{
     if( C4::AR::Utilidades::validateString($params->{'tema'})){
         $buscoPor.= "Tema: ".C4::AR::Utilidades::verificarValor($params->{'tema'})."&";
     }       
+
+    if( C4::AR::Utilidades::validateString($params->{'estante'})){
+        $buscoPor.= "Estantes Virtuales: ".C4::AR::Utilidades::verificarValor($params->{'estante'})."&";
+    }   
 
 	if( C4::AR::Utilidades::validateString($params->{'codBarra'})){
         $buscoPor.= Encode::decode_utf8(C4::AR::Utilidades::verificarValor(C4::AR::Filtros::i18n("Barcode").": ".$params->{'codBarra'}))."&";

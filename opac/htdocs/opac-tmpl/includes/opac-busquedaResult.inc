@@ -84,8 +84,8 @@
 						                        </a>
 						                    [% ELSE %]
 						                          <img src="/uploads/covers/[% NIVEL.cat_ref_tipo_nivel3 %].png" 
-						                                alt="[% 'Sin Portada para' | i18n %]&nbsp;[% NIVEL.cat_ref_tipo_nivel3 %]"
-						                                title="[% 'Sin Portada para' | i18n %]&nbsp;[% NIVEL.cat_ref_tipo_nivel3 %]" />
+						                                alt="[% 'Sin Portada' | i18n %]"
+						                                title="[% 'Sin Portada' | i18n %]" />
 						                    [% END %]
                                         [% END %]
                                     [% END %]
@@ -106,8 +106,8 @@
                                     [% END %]
                                 [% ELSE %]
                                          <img src="/uploads/covers/[% NIVEL.cat_ref_tipo_nivel3 %].png" 
-                                              alt="[% 'Sin Portada para' | i18n %]&nbsp;[% NIVEL.cat_ref_tipo_nivel3 %]"
-                                              title="[% 'Sin Portada para' | i18n %]&nbsp;[% NIVEL.cat_ref_tipo_nivel3 %]" />
+                                              alt="[% 'Sin Portada' | i18n %]"
+                                              title="[% 'Sin Portada' | i18n %]" />
                                 [% END %]
                             [% END %]
                         </td>

@@ -34,13 +34,12 @@ function busquedaCombinable(){
     objAH.titulo            = $('#titulo').val();
     objAH.tipo              = tipo;
     objAH.autor             = $('#autor').val();
-    objAH.only_available 	= ( $('#only_available').attr('checked') )?1:0;
+    objAH.only_available	= ( $('#only_available').attr('checked') )?1:0;
     objAH.signatura         = $('#signatura').val();
     objAH.tipo_nivel3_name  = $('#tipo_nivel3_id').val();
-    objAH.tema				= $('#tema').val();
-    objAH.codBarra      	= $('#codBarra').val();
-    objAH.isbn				= $('#isbn').val();
-    objAH.viewShelfName		= $('#estante').val();
+    objAH.tema		= $('#tema').val();
+    objAH.codBarra      = $('#codBarra').val();
+    objAH.isbn		= $('#isbn').val();
     
     objAH.tipoAccion        = 'BUSQUEDA_AVANZADA';
     //se setea la funcion para cambiar de pagina
@@ -94,11 +93,15 @@ function buscar(doScroll){
     	(jQuery.trim($('#dictionary').val()) != '') ||
     	(jQuery.trim($('#isbn').val()) != '') ||
     	(jQuery.trim($('#codBarra').val()) != '') ||
-    	(jQuery.trim($('#tema').val()) != '') ||
-    	(jQuery.trim($('#estante').val()) != '')
+    	(jQuery.trim($('#tema').val()) != '')
      ){ 
         busquedaCombinable();
     }     
+    else if ($.trim($('#estante').val()) != '') {
+        if ( (jQuery.trim($('#estante').val())).length < limite_caracteres ){
+    		cumple_limite = false;
+        } else {busquedaPorEstante();}
+    } 
     else if ($.trim($('#keyword').val()) != '') {
         if ( (jQuery.trim($('#keyword').val())).length < limite_caracteres ){
     		cumple_limite = false;
@@ -174,70 +177,17 @@ function updateBusquedaPorKeyword(responseText){
 
 }
 
-/******************************************Estantes**********************************************/
-
-function mostrarEstantes(){
-
-    objAH=new AjaxHelper(updateMostrarEstantes);
+function busquedaPorEstante(){
+    objAH               = new AjaxHelper(updateInfoBusquedas);
     objAH.showOverlay       = true;
-    objAH.debug= true;
-    objAH.url= '../estanteVirtual.pl';
+    objAH.url           = URL_PREFIX+'/busquedas/busquedasDB.pl';
     //se setea la funcion para cambiar de pagina
-    objAH.funcion= 'changePage';
-    //se envia la consulta
-    objAH.sendToServer();
-
-}
-
-function updateMostrarEstantes(responseText){
-    
-//  $("#volver").hide();
-    $("#filtrosBusqueda").slideUp('slow');  
-    $('#resultBusqueda').html(responseText);
-    $("#resultBusqueda").slideDown("slow");
-    zebra('tablaresultado');
-}
-
-
-function verEstanteVirtual(shelf){
-    
-    objAH=new AjaxHelper(updateVerEstanteVirtual);
-    objAH.debug= true;
-    objAH.showOverlay       = true;
-    objAH.url= '../estanteVirtualDB.pl';
-    objAH.shelves= shelf;
-    objAH.tipo= 'VER_ESTANTE';
-    //se setea la funcion para cambiar de pagina
-    objAH.funcion= 'changePage';
-    //se envia la consulta
+    objAH.debug         = true;
+    objAH.funcion       = 'changePage';
+    objAH.estante	= $('#estante').val();
+    objAH.tipoAccion    = "BUSQUEDA_POR_ESTANTE";
     objAH.sendToServer();
 }
-
-function verSubEstanteVirtual(shelf){
-    
-    objAH=new AjaxHelper(updateVerEstanteVirtual);
-    objAH.debug= true;
-    objAH.showOverlay       = true;
-    objAH.url= '../estanteVirtualDB.pl';
-    objAH.shelves= shelf;
-    objAH.tipo= 'VER_SUBESTANTE';
-    //se setea la funcion para cambiar de pagina
-    objAH.funcion= 'changePage';
-    //se envia la consulta
-    objAH.sendToServer();
-
-}
-
-function updateVerEstanteVirtual(responseText){
-    
-    $('#resultBusqueda').html(responseText);
-    zebra('tablaresultado');
-    $("#volver").hide();
-    $("#busqueda").slideUp('fast'); 
-    $("#resultBusqueda").slideDown("fast");
-}
-
-/**************************************Fin****Estantes**********************************************/
 
 function verTema(idtema,tema){
 
