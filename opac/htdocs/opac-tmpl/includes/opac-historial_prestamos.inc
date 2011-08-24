@@ -1,6 +1,6 @@
 [% USE HTML %]
 
-[% IF prestamos %]
+[% IF cantidad %]
 
     <div class="resultados_consulta">[% "Cantidad de pr&eacute;stamos realizadas:" | i18n %]&nbsp;[% cantidad %]</div>
     

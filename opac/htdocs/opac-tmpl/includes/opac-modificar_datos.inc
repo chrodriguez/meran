@@ -59,9 +59,6 @@
 	            var uploader = new qq.FileUploader({
 	                element: document.getElementById('file-uploader'),
 	                action: '[% url_prefix %]/uploadPicture.pl',
-	                params: {
-	                    nro_socio: '[% socio_data.usr_nro_socio %]',
-	                },
 	                allowedExtensions: ["bmp","jpg","gif","png","jpeg"],
 	                debug: true,
 	                multiple: false,

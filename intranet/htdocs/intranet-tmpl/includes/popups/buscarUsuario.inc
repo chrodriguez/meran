@@ -1,6 +1,5 @@
 
 [% INCLUDE  'AutocompleteHelper.inc'  %]
-<script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox-1.2.1.pack.js"></script>
 
 <!-- *********************************Window Help********************************************* -->
 <script>

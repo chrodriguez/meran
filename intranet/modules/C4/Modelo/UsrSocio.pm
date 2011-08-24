@@ -143,7 +143,6 @@ sub agregar{
 
     $self->setExpira($data_hash->{'expira'});
     $self->setFlags($data_hash->{'flags'});
-#     $self->setPassword($data_hash->{'password'});
     
     $self->setPassword(C4::AR::Auth::hashear_password(C4::AR::Auth::hashear_password($self->persona->getNro_documento, 'MD5_B64'), 'SHA_256_B64'));
 

@@ -33,10 +33,10 @@ sub getPortadaByIsbn {
 
    my $portada_array_ref = C4::Modelo::CatPortadaRegistro::Manager->get_cat_portada_registro( query => \@filtros);
 
-    if (scalar(@$portada_array_ref) == 0){
-        return 0;
-    }else{
+    if (scalar(@$portada_array_ref)){
         return $portada_array_ref->[0];
+    }else{
+        return 0;
     }
 }
 

@@ -140,7 +140,7 @@ my %LABELS_COMPONENTS = (   "-1"            => C4::AR::Filtros::i18n("SIN SELECC
                             "anio"          => C4::AR::Filtros::i18n("Anual"), 
                             "rango_anio"    => C4::AR::Filtros::i18n("Anual rango") 
                         );
-  
+
   
 =item
     Genera un combo con los campos que tiene una persona, de usr_persona

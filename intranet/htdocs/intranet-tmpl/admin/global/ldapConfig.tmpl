@@ -203,7 +203,7 @@
 
     <li class="sub_item">
         <label>[% "Nombre" | i18n %]</label>
-        <input name="lockconfig_field_map_firstnames" size="30" value="[% preferencias.ldap_lockconfig_field_map_firstnames %]" type="text"> 
+        [% lockconfig_field_map_firstnames %]
     </li>
     <li class="sub_item">
         <label>[% "Actualizar datos locales" | i18n %]
@@ -242,7 +242,7 @@
     <hr>
     <li class="sub_item">
         <label>[% "Apellidos" | i18n %]</label>
-        <input name="lockconfig_field_map_lastname" id="name_map_datos" size="30" value="[% preferencias.ldap_lockconfig_field_map_lastname %]" type="text"> 
+        [% lockconfig_field_map_lastname %]
     </li>
     <li class="sub_item">
         <label>[% "Actualizar datos locales" | i18n %]
@@ -281,7 +281,7 @@
     <hr>
     <li class="sub_item">
         <label>[% "Correo electr&oacute;nico" | i18n %]</label>
-        <input name="lockconfig_field_map_email" id="name_map_datos" size="30" value="[% preferencias.ldap_lockconfig_field_map_email %]" type="text"> 
+        [% lockconfig_field_map_email %]
     </li>
     <li class="sub_item">
         <label>[% "Actualizar datos locales" | i18n %]
@@ -320,9 +320,7 @@
     <hr>
     <li class="sub_item">
         <label>[% "Ciudad" | i18n %]</label>
-<!--        <input name="lockconfig_field_map_city" id="name_map_datos" size="30" value="[% preferencias.ldap_lockconfig_field_map_city %]" type="text"> -->
-        <input  id="ciudad" name="ciudad" type="text" size="15">
-        <input  id="id_ciudad" type="hidden" name="lockconfig_field_map_city" value="[% preferencias.ldap_lockconfig_field_map_city %]" class="required" type="text" size="15">
+        [% lockconfig_field_map_city %]
     </li>
     <li class="sub_item">
         <label>[% "Actualizar datos locales" | i18n %]
@@ -361,7 +359,7 @@
     <hr>
     <li class="sub_item">
         <label>[% "Pa&iacute;s" | i18n %]</label>
-        <input name="lockconfig_field_map_country" id="name_map_datos" size="30" value="[% preferencias.ldap_lockconfig_field_map_country %]" type="text"> 
+        [% lockconfig_field_map_country %]
     </li>
     <li class="sub_item">
         <label>[% "Actualizar datos locales" | i18n %]
@@ -400,7 +398,7 @@
     <hr>
     <li class="sub_item">
         <label>[% "Idioma" | i18n %]</label>
-        <input name="lockconfig_field_map_lang" id="name_map_datos" size="30" value="[% preferencias.ldap_lockconfig_field_map_lang %]" type="text"> 
+        [% lockconfig_field_map_lang %]
     </li>
     <li class="sub_item">
         <label>[% "Actualizar datos locales" | i18n %]
@@ -439,7 +437,7 @@
     <hr>
     <li class="sub_item">
         <label>[% "Descripci&oacute;n" | i18n %]</label>
-        <input name="lockconfig_field_map_description" id="name_map_datos" size="30" value="[% preferencias.ldap_lockconfig_field_map_description %]" type="text"> 
+        [% lockconfig_field_map_description %]
     </li>
     <li class="sub_item">
         <label>[% "Actualizar datos locales" | i18n %]
@@ -478,7 +476,7 @@
     <hr>
     <li class="sub_item">
         <label>[% "Pagina web" | i18n %]</label>
-        <input name="lockconfig_field_map_url" id="name_map_datos" size="30" value="[% preferencias.ldap_lockconfig_field_map_url %]" type="text"> 
+        [% lockconfig_field_map_url %]
     </li>
     <li class="sub_item">
         <label>[% "Actualizar datos locales" | i18n %]
@@ -517,7 +515,7 @@
     <hr>
     <li class="sub_item">
         <label>[% "Numero de id" | i18n %]</label>
-        <input name="lockconfig_field_map_idnumber" id="name_map_datos" size="30" value="[% preferencias.ldap_lockconfig_field_map_idnumber %]" type="text"> 
+        [% lockconfig_field_map_idnumber %]
     </li>
     <li class="sub_item">
         <label>[% "Actualizar datos locales" | i18n %]
@@ -556,7 +554,7 @@
     <hr>
     <li class="sub_item">
         <label>[% "Instituci&oacute;n" | i18n %]</label>
-        <input name="lockconfig_field_map_institution" id="name_map_datos" size="30" value="[% preferencias.ldap_lockconfig_field_map_institution %]" type="text"> 
+        [% lockconfig_field_map_institution %]
     </li> 
     <li class="sub_item">
         <label>[% "Actualizar datos locales" | i18n %]
@@ -595,7 +593,7 @@
     <hr>
     <li class="sub_item">
         <label>[% "Departamento" | i18n %]</label>
-        <input name="lockconfig_field_map_departament" id="name_map_datos" size="30" value="[% preferencias.ldap_lockconfig_field_map_departament %]" type="text"> 
+        [% lockconfig_field_map_departament %]
     </li> 
     <li class="sub_item">
         <label>[% "Actualizar datos locales" | i18n %]
@@ -634,7 +632,7 @@
     <hr>
     <li class="sub_item">
         <label>[% "Telefono 1" | i18n %]</label>
-        <input name="lockconfig_field_map_phone1" id="name_map_datos" size="30" value="[% preferencias.ldap_lockconfig_field_map_phone1 %]" type="text"> 
+        [% lockconfig_field_map_phone1 %]
     </li>
     <li class="sub_item">
         <label>[% "Actualizar datos locales" | i18n %]
@@ -673,7 +671,7 @@
     <hr>
     <li class="sub_item">
         <label>[% "Telefono 2" | i18n %]</label>
-        <input name="lockconfig_field_map_phone2" id="name_map_datos" size="30" value="[% preferencias.ldap_lockconfig_field_map_phone2 %]" type="text"> 
+        [% lockconfig_field_map_phone2 %]
     </li>
     <li class="sub_item">
         <label>[% "Actualizar datos locales" | i18n %]
@@ -712,7 +710,7 @@
     <hr>
     <li class="sub_item">
         <label>[% "Direcci&oacute;n" | i18n %]</label>
-        <input name="lockconfig_field_map_adress" id="name_map_datos" size="30" value="[% preferencias.ldap_lockconfig_field_map_adress %]" type="text"> 
+        [% lockconfig_field_map_adress %] 
     </li>
     
     
@@ -754,8 +752,8 @@
            <option value="locked" [% IF preferencias.ldap_lockconfig_field_lock_adress == 'locked' %] selected="selected" [% END %]>Bloqueado</option> 
         </select> 
     </li>
-    
-<p style="text-align: center;"><input value="Guardar cambios" type="submit"></p> 
+    <hr>
+    <p style="text-align: center;"><input value="Guardar cambios" type="submit"></p> 
 
 </form> 
 </fieldset>

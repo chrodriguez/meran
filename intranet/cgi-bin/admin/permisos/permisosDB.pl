@@ -17,6 +17,7 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 my $accion;
 if ($obj != 0){
     $accion = $obj->{'accion'};
+    $obj->{'tipo_documento'} = 'ALL'; #FIX PARA FERNANDA QUE DICE QUE ESTO NO HACE FALTA
 }else{
     $accion = $input->param('action') || undef;
 }

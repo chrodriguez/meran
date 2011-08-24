@@ -40,12 +40,12 @@
             </div>
         [% END %]
     [% ELSE %]
-        <h1> [% 'Este ejemplar no tiene ninguna revisi&oacute;n, sea el primero en crear una!' | i18n %]</h1>
+        <h1> [% 'Este ejemplar no tiene ninguna revisi&oacute;n' | i18n %]</h1>
     [% END %]
     <br />
     <br />
 </div>
-[% IF socio_data %]
+[% IF socio_data.usr_permisos_opac %]
     <form action="[% url_prefix %]/reviews.pl" method="post">
         <textarea id="review" name="review" class="self_review" style="width: 88.3%;height: 150px;"></textarea>
         <input type="hidden" name="token" value="[% token %]" />

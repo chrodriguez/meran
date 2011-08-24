@@ -5,7 +5,7 @@
         <!-- Sitelogo and sitename -->
         <a class="sitelogo" href="[% url_prefix %]/opac-main.pl?token=[% token %]" title="[% 'Ir al inicio' | i18n %]"></a>
         <div class="sitename">
-          <h1><a href="[% url_prefix %]/opac-main.pl?token=[% token %]" title="[% 'Ir al inicio' | i18n %]">[% 'MERAN' | i18n %] &bull; 
+          <h1><a href="[% url_prefix %]/opac-ui_info.pl?token=[% token %]" title="[% 'Informaci&oacute;n de la Biblioteca' | i18n %]">[% 'MERAN' | i18n %] &bull; 
           <span style="font-weight:normal;font-size:50%;">&nbsp;[% ui.getNombre %]</span></a></h1>
           <h2>[% 'Cat&aacute;logo P&uacute;blico' | i18n %]</h2>
         </div>

@@ -23,6 +23,7 @@ my $template = ($action && (!$from_bubble))?"opac-main.tmpl":"includes/opac-rese
 
 if ( ($obj) && (!$from_bubble) ){
 
+    $template = "includes/opac-detalle_reservas_espera.inc"; #caso default
     if ($action eq "detalle_espera"){
         $template = "includes/opac-detalle_reservas_espera.inc";
     }
