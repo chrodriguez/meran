@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="cache-control" content="no-cache" />
   <meta http-equiv="expires" content="3600" />
   <meta name="revisit-after" content="2 days" />
@@ -43,9 +43,8 @@
   <script type="text/javascript" src="/includes/jquery/modal/jquery.simplemodal.js"></script>
   <script src="/opac-tmpl/includes/favoritos.js" type="text/javascript"></script>
   <script type="text/javascript" src="/includes/jquery/jquery.expander.js"></script>
-  <script src="/includes/drop_down_login/javascripts/jquery.tipsy.js" type="text/javascript"></script>
   
-  <link media="screen" rel="stylesheet" href="/includes/jquery/modal/basic-min.css" type="text/css">
+  <link media="screen" rel="stylesheet" href="/includes/jquery/modal/basic-min.css" type="text/css" />
 
   <title>
     [% IF titulo_nombre_ui %]
@@ -102,12 +101,6 @@
             
         });
 </script>
-<script src="javascripts/jquery.tipsy.js" type="text/javascript"></script>
-<!--<script type='text/javascript'>
-    $(function() {
-      $('#forgot_username_link').tipsy({gravity: 'w'});   
-    });
-  </script>-->
 
 
 </head>
@@ -120,7 +113,7 @@
   <noscript> 
       <p>[% 'DEBE HABILITAR SOPORTE PARA JAVASCRIPT EN SU NAVEGADOR, DE LO CONTRARIO NO PODRA NAVEGAR EL SITIO.' | i18n %]</p> 
   </noscript>
-  <div style="display: none; height: 50px;" id="ajax-indicator"><div><p>Cargando...</p></div></div>
+
   <div class="page-container">
     <!-- For alternative headers START PASTE here -->
         [% INCLUDE 'opac-top-header.inc' %]

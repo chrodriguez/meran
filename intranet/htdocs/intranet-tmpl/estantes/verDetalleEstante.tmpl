@@ -1,11 +1,11 @@
 [% INCLUDE "intranet-top.inc" %]
-<script language="javascript" type="text/javascript" src="/intranet-tmpl/includes/estantesVirtuales.js"></script>
+<script type="text/javascript" src="/intranet-tmpl/includes/estantesVirtuales.js"></script>
 
 <div id="nuevo_estante" style="display:none">
 <fieldset class="resultados_busqueda">
 <legend class="titulo_legend trigger click">  [% "Nuevo Estante" | i18n %] </legend>
             <input type="text" id="input_nuevo_estante">
-            <script language="javascript" type="text/javascript">
+            <script type="text/javascript">
             $(document).ready(function() {
 		$('#input_nuevo_estante').keypress(function(e){if(e.which==13){if(this.value!=''){agregarEstante();}}});
             });
@@ -27,7 +27,7 @@
 	    <input type="hidden" id="estante_nuevo_sub_estante">
 	    <input type="hidden" id="padre_nuevo_sub_estante">
             <input type="text" id="input_nuevo_sub_estante">
-            <script language="javascript" type="text/javascript">
+            <script type="text/javascript">
             $(document).ready(function() {
 		$('#input_nuevo_sub_estante').keypress(function(e){if(e.which==13){if(this.value!=''){agregarSubEstante();}}});
             });
@@ -50,7 +50,7 @@
             <input type="hidden" id="input_padre_estante">
             <input type="hidden" id="input_abuelo_estante">
             <input type="text" id="input_valor_estante">
-           <script language="javascript" type="text/javascript">
+           <script type="text/javascript">
             $(document).ready(function() {
 		$('#input_valor_estante').keypress(function(e){if(e.which==13){if(this.value!=''){modificarEstante();}}});
             });
@@ -75,7 +75,7 @@
             <input type="hidden" id="input_contenido_id_padre_estante">
             <input class="horizontal" type="text" id="input_busqueda_contenido">
             
-            <script language="javascript" type="text/javascript">
+            <script type="text/javascript">
             $(document).ready(function() {
 		$('#input_busqueda_contenido').keypress(function(e){if(e.which==13){if(this.value!=''){buscarContenido();}}});
             });

@@ -1432,7 +1432,7 @@ li.detalle_barra_circulacion{
 .main-content table th {background-color:#4E6595;
 border:2px solid #FFFFFF;
 color:#FFFFFF;
-font-size:10pt;
+font-size:11px;
 font-weight:bold;
 height:3em;
 text-align:center;
@@ -1445,7 +1445,7 @@ text-align:center;
  text-align:left;
  font-weight:normal;
  color:rgb(80,80,80);
- font-size:10pt;
+ font-size:11px;
 }
 p.caption {clear:both;
  margin:0.5em 0 2.0em 20px;
@@ -1612,7 +1612,7 @@ p.caption {clear:both;
 
     padding:0 0 10px;
 
-    width:183px;
+    width:173px;
 
 }
 
@@ -3248,42 +3248,6 @@ border:1px solid #BBBBBB;
 /* FORM DROP_DOWN_LOGIN */
 
 
-.tipsy {
-    opacity:.8;
-    filter:alpha(opacity=80);
-    background-repeat:no-repeat;
-    padding:5px;
-}
-.tipsy-inner {
-    padding:8px 8px;
-    max-width:200px;
-    font:11px 'Lucida Grande', sans-serif;
-    font-weight:bold;
-    -moz-border-radius:4px;
-    -khtml-border-radius:4px;
-    -webkit-border-radius:4px;
-    border-radius:4px;
-    background-color:#000;
-    color:white;
-    text-align:left;
-}
-.tipsy-north {
-    background-image:url(http://s.twimg.com/a/1249943174/images/tipsy/tipsy-north.gif);
-    background-position:top center;
-}
-.tipsy-south {
-    background-image:url(http://s.twimg.com/a/1249943174/images/tipsy/tipsy-south.gif);
-    background-position:bottom center;
-}
-.tipsy-east {
-    background-image:url(http://s.twimg.com/a/1249943174/images/tipsy/tipsy-east.gif);
-    background-position:right center;
-}
-.tipsy-west {
-    background-image:url(http://s.twimg.com/a/1249943174/images/tipsy/tipsy-west.gif);
-    background-position:left center;
-}
-
 #drop_down_login {
     font-size: 11px;
     line-height: 23px;
@@ -3300,13 +3264,11 @@ border:1px solid #BBBBBB;
     -webkit-border-radius:4px;
     -moz-border-radius:4px;
     border-radius:4px;
-    *background:transparent url("http://s.twimg.com/a/1249943174/images/signin-nav-bg-ie.png") no-repeat 0 0;
     *padding:4px 12px 6px;
 }
 #drop_down_login a.signin:hover {
     background:#4f6596;
     color:#fff;
-    *background:transparent url("http://s.twimg.com/a/1249943174/images/signin-nav-bg-hover-ie.png") no-repeat 0 0;
     *padding:4px 12px 6px;
 }
 #drop_down_login a.signin, #drop_down_login a.signin:hover {
@@ -3318,7 +3280,6 @@ a.signin {
     margin-left:3px;
 }
 a.signin span {
-    background-image:url("http://s.twimg.com/a/1249943174/images/toggle_down_light.png");
     background-repeat:no-repeat;
     background-position:100% 50%;
 /*    padding:4px 16px 6px 0;*/
@@ -3336,7 +3297,6 @@ a.signin span {
     width:170px;
 }
 a.signin.menu-open span {
-    background-image:url("http://s.twimg.com/a/1249943174/images/toggle_up_dark.png");
     color:#789;
 }
 
@@ -3399,7 +3359,7 @@ a.signin.menu-open span {
 #signin_submit {
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
-    background:#4f6596 url('http://s.twimg.com/a/1249943174/images/bg-btn-blue.png') repeat-x scroll 0 0;
+    background:#4f6596;
     border:1px solid #4f6596;
     color:#fff;
     text-shadow:0 -1px 0 #4f6596;
@@ -3419,14 +3379,6 @@ border:0;
     cursor:pointer;
 }
 
-.tipsy-inner {
-    padding:10px 15px;
-    line-height:1.5em;
-    font-weight:bold;
-}
-.ie6 .tipsy {
-    width:250px;
-}
 .signup-tip {
     line-height:18px;
     margin:30px 0;
@@ -3435,15 +3387,6 @@ border:0;
 .signup-tip a {
     font-weight:bold;
 }
-
-
-.tipsy { padding: 5px; font-size: 10px; opacity: 0.8; filter: alpha(opacity=80); background-repeat: no-repeat; }
-.tipsy-inner { padding: 4px 5px; background-color: black; color: white; max-width: 200px; text-align: center; }
-.tipsy-north { background-image: url(../images/tipsy-north.gif); background-position: top center; }
-.tipsy-south { background-image: url(../images/tipsy-south.gif); background-position: bottom center; }
-.tipsy-east { background-image: url(../images/tipsy-east.gif); background-position: right center; }
-.tipsy-west { background-image: url(../images/tipsy-west.gif); background-position: left center; }
-
 
 #searchform_main{
     margin:76px 0 93px 71px;
@@ -3478,6 +3421,16 @@ border:0;
     outline: medium none;
 }
     
+
+
+
+
+
+
+
+
+
+
 
 
 

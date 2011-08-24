@@ -1,6 +1,6 @@
 [% USE HTML %]
 
-    <script type="text/javascript" language="javascript">
+    <script type="text/javascript">
             
         function eliminarPublicacion(id_novedad){
         
@@ -38,7 +38,7 @@
         }
 
     </script>
-    <script type="text/javascript" language="javascript">
+    <script type="text/javascript">
 
 	    $(document).ready(function() {
 	            actualizarTabla();

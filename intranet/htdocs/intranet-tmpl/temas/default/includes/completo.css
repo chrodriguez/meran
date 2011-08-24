@@ -2460,7 +2460,7 @@ div.indicators {
     background: url("../imagenes/sprite-icons.png") no-repeat scroll -320px -64px transparent;
 }
 .stream-item .arrow {
-    background: url("../img/pointer-right-hover.png") repeat scroll 0 0 transparent;
+    background: url("../imagenes/pointer-right-hover.png") repeat scroll 0 0 transparent;
     display: none;
     height: 29px;
     margin-top: 3px;
@@ -2495,7 +2495,7 @@ div.indicators {
     text-align: center;
 }
 .stream-loading .spinner {
-    background-image: url("../img/loader.gif");
+    background-image: url("../imagenes/loader.gif");
     display: block;
     height: 32px;
     margin: 10px auto;
@@ -2583,7 +2583,7 @@ div.indicators {
     margin: 4px 3px 0;
 }
 .more-button {
-    background: url("../img/more.gif") repeat-x scroll left top #FFFFFF;
+    background: url("../imagenes/more.gif") repeat-x scroll left top #FFFFFF;
     border-color: #DDDDDD #AAAAAA #AAAAAA #DDDDDD;
     border-radius: 5px 5px 5px 5px;
     border-style: solid;
@@ -2986,7 +2986,7 @@ html[xmlns] .clearfix {
     height: 1%;
 }
 body.user-style-twttr {
-    background: url("../img/bg-clouds.png") repeat-x scroll left 40px #C0DEED;
+    background: url("../imagenes/bg-clouds.png") repeat-x scroll left 40px #C0DEED;
     color: #333333;
 }
 body.user-style-twttr a, body.user-style-twttr ul.stream-tabs li, body.user-style-twttr .component .promo strong, body.user-style-twttr .message-thread-preview:hover .message-count {
@@ -3076,16 +3076,16 @@ a.places-nearby {
     z-index: 10000;
 }
 #geo_browser_help_banner.geo_firefox {
-    background: url("../img/geo_firefox_help_banner_back.png") no-repeat scroll right center #333333;
+    background: url("../imagenes/geo_firefox_help_banner_back.png") no-repeat scroll right center #333333;
     border-bottom-left-radius: 4px;
     height: 108px;
 }
 #geo_browser_help_banner.geo_chrome {
-    background: url("../img/geo_chrome_help_banner_back.png") no-repeat scroll right center #333333;
+    background: url("../imagenes/geo_chrome_help_banner_back.png") no-repeat scroll right center #333333;
     height: 65px;
 }
 #geo_browser_help_banner.geo_ie_gtb {
-    background: url("../img/geo_ie_gtb_help_banner_back.png") no-repeat scroll right center #333333;
+    background: url("../imagenes/geo_ie_gtb_help_banner_back.png") no-repeat scroll right center #333333;
     height: 108px;
 }
 #geo_browser_help_banner.geo_firefox > div {
@@ -3325,7 +3325,7 @@ body.es #place_search_form input {
     outline: medium none;
 }
 .place_search_submit {
-    background: url("../img/nav_search_submit.png") repeat scroll -2px 0 transparent !important;
+    background: url("../imagenes/nav_search_submit.png") repeat scroll -2px 0 transparent !important;
     border-bottom-right-radius: 3px;
     border-color: #999999 !important;
     border-style: solid;
@@ -3340,13 +3340,13 @@ body.es #place_search_form input {
     vertical-align: middle;
 }
 .place_search_submit:hover {
-    background: url("../img/nav_search_submit.png") repeat scroll -2px -25px transparent !important;
+    background: url("../imagenes/nav_search_submit.png") repeat scroll -2px -25px transparent !important;
 }
 .place_search_submit:active {
-    background: url("../img/nav_search_submit.png") repeat scroll -2px -50px transparent !important;
+    background: url("../imagenes/nav_search_submit.png") repeat scroll -2px -50px transparent !important;
 }
 .place_search_submit.loading, .place_search_submit.loading:hover, .place_search_submit.loading:active {
-    background: url("../img/spinner-small.gif") no-repeat scroll 5px 5px #EEEEEE !important;
+    background: url("../imagenes/spinner-small.gif") no-repeat scroll 5px 5px #EEEEEE !important;
 }
 #place_search_results li {
     line-height: 1.2em;
@@ -3469,7 +3469,7 @@ div.geo_add_place a {
     outline: medium none;
 }
 .geo-query-map span {
-    background: url("../img/nav_search_submit.png") repeat scroll -2px 0 transparent !important;
+    background: url("../imagenes/nav_search_submit.png") repeat scroll -2px 0 transparent !important;
     border-bottom-right-radius: 3px;
     border-color: #999999 !important;
     border-style: solid;
@@ -3502,7 +3502,7 @@ div.geo_add_place a {
     width: 250px;
 }
 .geo-creation-hint-arrow {
-    background-image: url("../img/geo_creation_hint_arrow.gif");
+    background-image: url("../imagenes/geo_creation_hint_arrow.gif");
     height: 11px;
     margin: 0 auto;
     width: 21px;
@@ -3524,7 +3524,7 @@ div.geo_add_place a {
     margin: 12px 10px;
 }
 .geo-droppable-pin {
-    background-image: url("../img/poi-pin.png");
+    background-image: url("../imagenes/poi-pin.png");
     display: none;
     height: 32px;
     position: absolute;
@@ -3534,7 +3534,7 @@ div.geo_add_place a {
     margin-bottom: 0;
 }
 .button.geo-submit.disabled {
-    background: url("../img/buttons/bg-btn.gif") repeat-x scroll 0 0 #DDDDDD;
+    background: url("../imagenes/buttons/bg-btn.gif") repeat-x scroll 0 0 #DDDDDD;
     border-color: #CCCCCC;
     box-shadow: 0 1px 0 #F8F8F8;
     color: #BBBBBB !important;
@@ -3542,7 +3542,7 @@ div.geo_add_place a {
     text-shadow: 0 1px #F0F0F0;
 }
 .geo-spinner {
-    background: url("../img/spinner-small.gif") repeat scroll 0 0 transparent;
+    background: url("../imagenes/spinner-small.gif") repeat scroll 0 0 transparent;
     display: inline-block;
     height: 14px;
     line-height: 1.9em;
@@ -3581,7 +3581,7 @@ div.geo_add_place a {
     z-index: 20;
 }
 .geo-map-place-bubble span {
-    background-image: url("../img/geo_creation_hint_arrow.gif");
+    background-image: url("../imagenes/geo_creation_hint_arrow.gif");
     background-repeat: no-repeat;
     display: inline-block;
     height: 11px;
@@ -3708,7 +3708,7 @@ body.front-page {
     background: url("data:image/jpeg;base64,%2F9j%2F4AAQSkZJRgABAgAAZABkAAD%2F7AARRHVja3kAAQAEAAAASQAA%2F%2B4ADkFkb2JlAGTAAAAAAf%2FbAIQABAICAgMCBAMDBAUDAwMFBgQEBAQGBwYGBgYGBwkHCAcHCAcJCQoLCwsKCQwMDAwMDA8PDw8PEREREREREREREQEEBAQHBgcNCQkNEw4NDhMUERERERQRERERERERERERERERERERERERERERERERERERERERERERERERERERERER%2F8AAEQgBoQA3AwERAAIRAQMRAf%2FEAG8AAQEBAQEAAAAAAAAAAAAAAAEAAgMGAQEBAAAAAAAAAAAAAAAAAAAABhABAAEDAwIEBAUDBAMAAAAAAREAIQIxQRJRYXGBkSKhsTID8MHRQhPxciPhUrIz0gQ0EQEAAAAAAAAAAAAAAAAAAAAA%2F9oADAMBAAIRAxEAPwDyLBkO8WvD1qkTgIizMQmwR3oLP6ke8vQjRigvc4zltETEQ2vQOHOw2x24n6UB%2FHEuSRjawbeVBcDi22kxOk386BynjFhfbx6u0lqCwcjLKJ5Y%2FtISWgDIMcpZx%2Bm9qCxwcnE4kMx%2BJ70CTxLh%2B2CLLcZoL2FlbEordWgsRckQbSE2nzoIcUjL%2B56E%2BNBZWgyMYdWIb3vtQawHl2ddHTX40GLGE2gL3br09KDU%2FwCOMYePUnWgL4xkTybAMRQLkMNrSByt6%2BVBlnKcbDgJGPTxoNExpruu%2FTegxEBtOktkig19vgZDjd%2F3X9IKCcXFyW%2BmMl7tBH22RNdTvB5b0BGKRNh870C8Fd%2B5fbpQRkS8dxMeLEdO%2B1BMJGi%2FTc0Yt1oGPamUiik%2B6Hx2SgyZ5ZTY9s2d7fOglOy65Da2%2FrQT%2FIYExfTTolBMuRN1VIH470DwxWDeQi8x2oDHHLJ0ZdNtelA8sJknHJmbx86DI5ZWd274daDY8mJm2sTvGhegDLHlJqM62ifTSg1YU2xLQtj86DEqXDJj6rT%2BtBvHEsBqSa7nzmgwccMrsxbi2nx8GgZmOMa2hIZ7NBKZOWOMAXjrG1BOb19uk%2Bfe9BPGeKnt7QeYUCQ6M5EzBDDvQCLK3yjWbx3KCyAxcj6mYt3%2FAEKAlbntbXA2nwoGPbLY0lmSTy60DhkwykbNomJ2tQGQ8ZZbuUGuNBBxyieQd1oIynQ4w%2B6TT870Fi48pAvLxFnqfKgIyEbSjxVt86B4ol%2BJjMw9OtBXc9YQmTTrNBGWRNol9xpPhQOIuTxUiY2LUGZyW6ZDsT8dKBtiyQwpe1Bfx6GQoheL%2FEoLK1voddTebfGgAQmYnfrvN%2B9A5Ze%2FRg2T19ZoLFyNLN%2Fbfx260FyDI3i7OtpdqByYL2Mi8xee9BmZxjXaz0%2BNBSB7z2vn%2BdAy8TCdCIj8daAcMTK5HQn9VoNCaBdNU9DQtQUat7PIiC29AMbSZsya%2BlulAZZRiRvdOshrK0DjkA4yQ3t1bUBKkP0bM%2F6UHQ%2B79mQcMfdeFz6azyoMuf2oMT7eDMN8so6acqBfu%2FY4n%2BPHumWSf8qA5%2Fbv%2FiwxP7s47OtA%2FwAn2mJ%2B0cYGJz%2F8u9AGf22eP2sbwwOaj391A%2FzfYiP4yXR98f8AOgw4vB6O4a%2BdqBOLkEcR21idrUEFpnkKyecE%2BtAK4nJZYiMr70F9zPJejkR7f1O9Az7cWecapNigv3cCIx8N38FBaJjoagdZsXv50FnkTBjM343%2FAKa0Ep9JfQDQZvpQR7nkJOs6M0FOpkQDL4SECRQWOEjliLDp38POgzjjGTe7e2nrQORyx5WJjrBaKCYjSf3Mak3PnQOFiVJB8SJnegyw%2B5u6Ws6akUG5ZHItls3oMuWUHKcnLZ10Q9ZoNF7suJfvHz70BJlkZe76Y1J7%2BVBZXOOMdmTzigsS8uv7XR6aTQBlkZKsjBdn50Cynu0xfl1oJniEaDIfn03oJvZVcXa7e96A%2B5bK5N5XWZny60DK4RKLcj5WoDJDGAJdyzbb%2BtAs8l8L6flpQNpY9rlu72OrQZW5E6Ft%2BvQ%2BFBrMOIcW4SdOh12oM85mZMdWL7%2BW9A8pP7pY27dNaCb5BxWIevqFAYwW1m0JpFoeuu1BrTMMTXSB07a7UGU9qZWMmeXGe8TQKD7iLX5HbtQWMS%2B1tAMTt%2FpQB9w5TIMzx1POWgXDG8RqMbWfOaAHE%2BMxJpQaeLqookF3yoDFyuGxZnQ6npQUBlAnFdV0n46UGTGMRSJ%2Bmf0mgdSW49b%2BfnQXGEGCHedvnYoL26TEKdLXjSgco%2Fjgst%2Fy6FAsjOULoby%2BPhrQGUASTaYe%2Fbt40E4s%2B8iDUtebO1BTDOltYv4a0BEzlqrebNrbUDiGJPhMGnYoJywbk445QdiPxpQZjMLvGzO2s%2BVAwxEA6FiJmF9aBxWIhxxbkEa0BgpZti6rMNvzoBy90hjxxet2LUGzKRmccsYjL9WgMchh%2BmC2s%2BVAnsAmNUS5b0oMuDHFRAib6unpQMGAWvuX8LFAEP2zixbi2V86DUOmIs2H1aCcgA%2Bmbr87d6AV3mFiAny1%2BFAguSkwMTl0oMnKcoffY0%2BM0GkwbQTlcYm%2FSgzji4nKG7pv52mgccc3IfonT92l7dKDOOvubP7e0zJFBriY%2B3G%2BTDB17a6UBg5y2A14aUCIPJvj1IUlsdKAyXJYyYW5p57X8KCQgSCNUtL8taBcN8gTRd6AXB6RjJHT0oEJ%2B42JmxLNqBwAxmOUTjG%2FSgoAP9v5Pl56UGVx4OKe4JGemxrQai0wdbdO7j0oMl0fp4m%2Bq9XzoHkLxZjG3i9x60EZZ8SLJZjr4FATmE3QfMenlFBpMrHJMJ2ux18aDE48cYu3DZ7fGg6ZZM8kmNpv0l8qDOcPIQtrDc2oLLLJV%2BlBviOtn40Fjnky8mMtVj8adKCNUEnQlv4DQHLKBm31R1XfSg1aIy9wXL6b0GcTEJ%2BPfTegXDDJAIWydHv60ErMzrIx%2Bb0oGRyhbxGsxG21BkQJAJsW8rNAuHLLjLImheC1%2FwBaBcX%2BNmMW19J6N%2F1oMscgBxttprvNAoC7uP1dNNYoAFzCzAuMjfb8poJB11%2BlIYibeFBr7eJfYszrZ2oIeWSrpcNrd6DOJkhOkSWnSPhQCqiCSzyBWenrQaXJGZXSG3n2oAyBk%2BmNG9As5TkFsiPhvpQHINLJ3m2gCUD7CHIteDf0oL3IJC6WbaRE0A4KKAl7hpEUFkYyjj7nwUj8RQLnkyABezdmHegsMZyCHWIsNu9AkA3JjuT0b96AY5XWddtW8FtdKCgibQaGt3Qts0BjmR7QlsoaT0oNK8DjixBfXXWO80AcXii9INTYmgPcYx%2Fu14uvpegc2RbI9762b0FwYAJyuPjGtBkft433neX8RQKYjYjix49YltQTCrK8dCNfWWg3GWn1ccbce0ROrQF45KCgHnQHLFmyq6s3%2FSgeJMpOK8QHSO9Bky2JyYu9egFA8EZ4%2B3aL67%2BdBcsrY5X42nc66RQOX25VXjGhO3lFBTlk3PcRad9TWgzmY8YBTytLtQaXPmLdi17w7x1oMw6xfIbdNW%2BtBMn3J0G56bdqCx5qp9Tc%2FPvtQactRjlnrCrEdIoDixBkesaeHegeS4MIcgH5delAGf7tce2sUA2G8DMvh5PwoEgFtxbk7x2oAymxrOveguSu3JGx321vQUZkLILP49aBcUMoE3Ftt3oA4GEBON5WW%2Bk6UCuLsri8wNb7X70CpbGZDWV8S8PSgDi5HHKV2GL%2FAI7UF7XIVvJ%2BDegceLGJcu%2B1sDbegokCExyuuVpnwoDnh9Zd%2BpPx6UFy%2Fai5G8z5%2BVBY3uclIWJs2trQUOulrxMH4daB4JE2h5M9%2B%2Fagzinhkb2i%2FnQOZ70n3NtOtAGOV8WwkRL4bdaDWDHEdXS2xo2oDDHPhEWy7iWtQWGXt0THGGB18KAQcXQTWd%2FW9A7kGNptOw6zrQWOOM9Z1HqPTegjLOZJAOTMRKLQXLLICPbCy9pigEeQzIbvaaB9riSyOto9Y8KAjLHLI4sZaR4UGsZJuTjY3jZ3n1oMZmWGQje3unUjxoNTDqS3hd%2Bt%2FWgkylhG1vP5UBnyxwsJilx7%2FwBaDWeDETw4ljeO2nSgzghNmG8ZeVu1BqYJC%2BWx8qDOLLb28Zvl%2Be1BY5BOTj1SbmtAmSziOsEw3NIv3oJ%2Fjgsrrf5S9u1AMv1LGpr16X3oNcsRY035FofGgMubl7vbjsTEdWguKZooRF8S1%2BwlAy8nZbvW22m7QAxbLImIH0jxoH7n3P8AJ3tpp8aDOe8tp001e9AwLleL3xG%2BvVoBxcnTaOt9KBw4gy6EbaFA5Aw%2FuNpf6zQFtZi%2FGNk70Ce7H3RHY3dr9KCnIs3GxsbUEGWG5jc4j1YKAIkyhxJTW%2FSaA454Foe97RqfGg0GS6mKXmPG540ApHHERyN09KCyyxlswzidIKAM8XL2hj12ekWOtBOeXKDL25b2mLmtAjOSSC6b%2BVBJOTFjEk7kdqA90TEOpsRaaBxiX2toBidv9KAPuHKZBmeOp5y0C4Y3iNRjaz5zQA4nxmJNKDTxdVFEgu%2BVAYuVw2LM6HU9KCgMoE4rquk%2FHSgyYxiKRP0z%2Bk0DqS3Hrfz86C4wgwQ7zt87FBe3SYhTpa8aUDlH8cFlv%2BXQoFkZyhdDeXx8NaAygCSbTD37dvGgnFn3kQalrzZ2oKYZ0trF%2FDWgImctVbzZtbagcQxJ8Jg07FBOWDcnHHKDsR%2BNKDMZhd42Z21nyoGGIgHQsRMwvrQOKxEOOLcgjWgMFLNsXVZht%2BdAOXukMeOL1uxag2ZSMzjljEZfq0BjkMP0wW1nyoE9gExqiXLelBlwY4qIETfV09KBgwC19y%2FhYoAh%2B2cWLcWyvnQah0xFmw%2BrQTkAH0zdfnbvQCu8wsQE%2BWvwoEFyUmBiculBk5TlD77Gnxmg0mDaCcrjE36UGccXE5Q3dN%2FO00Djjm5D9E6fu0vbpQZx19zZ%2Fb2mZIoNcTH243yYYOvbXSgMHOWwGvDSgRB5N8epCktjpQbf%2BnP%2B7P5NBx%2Bz%2BePzoD%2F2P%2B58vlQWf%2FTh45flQbP%2FAKMfL50EfSf2PyoLD%2FqP7c6D%2F9k%3D") repeat-x scroll 0 0 #FFFFFF;
 }
 .front-page #doc {
-    background: url("../img/front/map.png") no-repeat scroll center 0 transparent;
+    background: url("../imagenes/front/map.png") no-repeat scroll center 0 transparent;
     min-width: 1000px;
     overflow: hidden;
 }
@@ -3778,7 +3778,7 @@ body.front-page {
     width: 520px;
 }
 .front-page .leftside h1 {
-    background: url("../img/front/logo.png") no-repeat scroll 0 0 transparent;
+    background: url("../imagenes/front/logo.png") no-repeat scroll 0 0 transparent;
     height: 39px;
     width: 184px;
 }
@@ -4342,7 +4342,7 @@ form.signin .subchck .remember {
     font-weight: bold;
 }
 #global-nav .new a {
-    background-image: url("../img/light.png");
+    background-image: url("../imagenes/light.png");
     background-position: center bottom;
     background-repeat: no-repeat;
 }
@@ -4384,7 +4384,7 @@ form.signin .subchck .remember {
     margin: 6px 3px 1px;
 }
 #session a.profile-links span#screen-name {
-    background: url("../img/down-arrow.png") no-repeat scroll right center transparent;
+    background: url("../imagenes/down-arrow.png") no-repeat scroll right center transparent;
     color: white;
     cursor: default;
     padding-right: 13px;
@@ -4563,7 +4563,7 @@ a#signin-link strong {
     color: #FFFFFF;
 }
 a#signin-link i {
-    background: url("../img/toggle_down_light.png") no-repeat scroll 0 0 transparent;
+    background: url("../imagenes/toggle_down_light.png") no-repeat scroll 0 0 transparent;
     display: inline-block;
     height: 13px;
     margin-left: 4px;
@@ -4572,7 +4572,7 @@ a#signin-link i {
     width: 13px;
 }
 .active a#signin-link i {
-    background: url("../img/toggle_up_light.png") no-repeat scroll 0 0 transparent;
+    background: url("../imagenes/toggle_up_light.png") no-repeat scroll 0 0 transparent;
 }
 #signin-dropdown form {
     background: none repeat scroll 0 0 rgba(255, 255, 255, 0.1);

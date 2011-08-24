@@ -17,37 +17,37 @@
         });
         mostrarTabla();
     });
-        function mostrarTabla(){
-            objAH               = new AjaxHelper(updateMostrarTabla);
-            objAH.debug         = true;
-            objAH.showOverlay   = true;  
-            objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
-            objAH.tipoAccion    = 'MOSTRAR_TABLA_VISUALIZACION';
-            objAH.perfil        = $("#perfiles_ref").val();
-            objAH.sendToServer();
-        }
-        
-        function updateMostrarTabla(responseText){
-            $("#tablaResultCampos").html(responseText);
-            zebra("tabla_datos");  
-        }
-        
-        function actualizarOrden(){
-            objAH               = new AjaxHelper(updateSortable);
-            objAH.debug         = true;
-            objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
-            objAH.showOverlay   = true;
-            objAH.tipoAccion    = "ACTUALIZAR_ORDEN";
-            objAH.newOrderArray = $('#sortable').sortable('toArray');
-            objAH.sendToServer(); 
-        }
-        
-        function updateSortable(){
-            mostrarTabla();        
-        }
+    
+    function mostrarTabla(){
+        objAH               = new AjaxHelper(updateMostrarTabla);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;  
+        objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+        objAH.tipoAccion    = 'MOSTRAR_TABLA_VISUALIZACION';
+        objAH.perfil        = $("#perfiles_ref").val();
+        objAH.sendToServer();
+    }
+    
+    function updateMostrarTabla(responseText){
+        $("#tablaResultCampos").html(responseText);
+        zebra("tabla_datos");  
+    }
+    
+    function actualizarOrden(){
+        objAH               = new AjaxHelper(updateSortable);
+        objAH.debug         = true;
+        objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+        objAH.showOverlay   = true;
+        objAH.tipoAccion    = "ACTUALIZAR_ORDEN";
+        objAH.newOrderArray = $('#sortable').sortable('toArray');
+        objAH.sendToServer(); 
+    }
+    
+    function updateSortable(){
+        mostrarTabla();        
+    }
 
 </script>
-
 
 <fieldset>
     <legend class="titulo_legend trigger click"><strong>[% "Agregar Visualizaci&oacute;n:" | i18n %]</strong></legend>

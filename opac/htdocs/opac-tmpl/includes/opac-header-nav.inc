@@ -42,7 +42,7 @@
                         <div id="drop_down_login" class="drop_down_login"> <a href="login" class="signin"><span>Iniciar Sesion</span></a>
                             <fieldset id="signin_menu">
                                     <!-- ORIGINAL  <form id="datosAEnviar" method="post" action="[% url_prefix %]/opac-main.pl" onsubmit="return enviar()" autocomplete="off">-->
-                                    <form method="post" id="signin" action="[% url_prefix %]/opac-main.pl" onsubmit="return enviar()" autocomplete="off">
+                                    <form method="post" id="signin" action="[% url_prefix %]/opac-main.pl" onsubmit="return enviar()">
                                           <p><input type="hidden" name="remember_me" value="0" /></p>
                                           <label for="userid">[% 'Usuario' | i18n %]</label>
                                           <input name="userid" id="userid" value="" title="username" tabindex="4" type="text">
