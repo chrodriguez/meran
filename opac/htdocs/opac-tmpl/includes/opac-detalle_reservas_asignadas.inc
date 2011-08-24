@@ -1,16 +1,12 @@
+<h2> [% 'Material para retirar' | i18n %] </h2>
 <div id="detalleReservas">
     [% IF reservas_asignadas_count %]
         <table  class="tabla_datos" width="100%" border="1" class="tope" cellspacing="0" cellpadding="4" align="center" valign="top">
-          <tr valign="top">
-            <td colspan="7" align="center" borde=1>
-                <b>[% "Material para retirar" | i18n %]</b>
-            </td>
-          </tr>
 
           <tr class="tablaResultadoTitulo">
             <th>[% "T&iacute;tulo" | i18n %]</th>
             <th>[% "Autor" | i18n %]</th>
-            <th>[% "Edici&oacute;n" | i18n %]</th>
+            <th style="width: 50px;">[% "Edici&oacute;n" | i18n %]</th>
             <th>[% "Disponible desde" | i18n %]</th>
             <th>[% "Disponible hasta" | i18n %]</th> 
             <th>[% "Retira en" | i18n %]</th>
@@ -29,33 +25,29 @@
                         [% END %]
                     </td>
                     <td >
-                    [% IF reserva.nivel2.nivel1.getAutor %]
-                        [% reserva.nivel2.nivel1.getAutor %]
-                        </a>
-                    [% ELSE %]
-                        &nbsp;
-                    [% END %]
+	                    [% IF reserva.nivel2.nivel1.getAutor %]
+	                        [% reserva.nivel2.nivel1.getAutor %]
+	                        </a>
+	                    [% ELSE %]
+	                        &nbsp;
+	                    [% END %]
                     </td> 
                     <td align=center >  
-                    [% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
-                    <!-- [% IF rpublicationyear %]&nbsp;([% rpublicationyear %])[% END %]-->
-                    <!-- [% IF reserva.nivel2.getVolumen %] t [% reserva.nivel2.getVolumen %] 
-                        [% IF reserva.nivel2.getVolumenDesc %] ([% reserva.nivel2.getVolumenDesc %])  [% END %] 
-                    [% END %] -->
+	                    [% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
                     </td>
                     <td  align="center">
-                    [% IF reserva.getFecha_reserva_formateada %] 
-                        [% reserva.getFecha_reserva_formateada %]
-                    [% ELSE %]
-                        - 
-                    [% END %]
+	                    [% IF reserva.getFecha_reserva_formateada %] 
+	                        [% reserva.getFecha_reserva_formateada %]
+	                    [% ELSE %]
+	                        - 
+	                    [% END %]
                     </td>
                     <td  align="center">
-                    [% IF reserva.getFecha_recordatorio_formateada %]
-                        <font  [% IF reserva.estaVencida %] color="red" [% END %] >[% reserva.getFecha_recordatorio_formateada %]</font>
-                    [% ELSE %]
-                        - 
-                    [% END %]
+	                    [% IF reserva.getFecha_recordatorio_formateada %]
+	                        <font  [% IF reserva.estaVencida %] color="red" [% END %] >[% reserva.getFecha_recordatorio_formateada %]</font>
+	                    [% ELSE %]
+	                        - 
+	                    [% END %]
                     </td>
                 
                     <td >

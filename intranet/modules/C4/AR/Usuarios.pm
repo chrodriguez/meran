@@ -887,29 +887,69 @@ sub getLastLoginTime{
 
 
 sub crearPersonaLDAP{
+
+# campos que vienen desde LDAP
+
+#    unidad_academica,              *
+#    identificacion,
+#    clave,                         no se guarda en MERAN
+#    apellido,                      *
+#    nombres,                       *
+#    fecha_nacimiento,              *
+#    sexo,                          *
+#    calle_per_lect,                *
+#    numero_per_lect,
+#    piso_per_lect,
+#    dpto_per_lect,
+#    unidad_per_lect,
+#    loc_per_lect,                  FIXME: viene el id de la ciudad o el nombre en un string ??
+#    cp_per_lect,
+#    te_per_lect,                   *
+#    e_mail,                        *
+#    carrera,                       *
+#    legajo,                        *
+#    calidad, A= Activo - E= Egresado, N = No activo
+#    regular,                       * FIXME: como viene ?1 o 0 , S o N ?
+#    tipo_documento,                *
+#    nro_documento                  *
+
+                                    
+    my ($nro_socio,$entry)          = @_;
+
+#   TODO: en ldapConfig.tmpl mostrar un combo con los posibles campos, que no se puedan editar
     
-    my ($nro_socio)                 = @_;
-    use C4::AR::Preferencias;   
+    # mapeo en estas variables los nombres de los campos de MERAN
+    # pueden no tener valor, porque son opcionales en la conf de LDAP
+    my $ldap_field_name             = C4::AR::Authldap::_getValorPreferenciaLdap('ldap_lockconfig_field_map_firstnames') || "nombre";
+    my $ldap_field_lastname         = C4::AR::Authldap::_getValorPreferenciaLdap('ldap_lockconfig_field_map_lastname') || "apellido";
+    my $ldap_field_city             = C4::AR::Authldap::_getValorPreferenciaLdap('ldap_lockconfig_field_map_city') || "ciudad";
+    my $ldap_field_mail             = C4::AR::Authldap::_getValorPreferenciaLdap('ldap_lockconfig_field_map_email') || "email";
     
     my %params                      = {};
-    $params{'id_ui'}                = C4::AR::Preferencias::getValorPreferencia("defaultUI");
+    
+    $params{'id_ui'}                = $entry->get_value("unidad_academica") || "DEO"; # C4::AR::Preferencias::getValorPreferencia("defaultUI");
     $params{'changepassword'}       = 0;
-    $params{'apellido'}             = C4::AR::Authldap::_getValorPreferenciaLdap('ldap_lockconfig_field_map_lastname');
-    $params{'nombre'}               = C4::AR::Authldap::_getValorPreferenciaLdap('ldap_lockconfig_field_map_firstnames');
-    $params{'tipo_documento'}       = "DNI";
-    $params{'nro_documento'}        = "999999999";
-    $params{'legajo'}               = "99999";
-    $params{'cumple_condicion'}     = 0;
-    $params{'password'}             = "123456";  
-    $params{'ciudad'}               = C4::AR::Authldap::_getValorPreferenciaLdap('ldap_lockconfig_field_map_city');
+    $params{$ldap_field_lastname}   = $entry->get_value("apellido") || "";
+    $params{$ldap_field_mail}       = $entry->get_value("e_mail") || "";
+    $params{$ldap_field_name}       = $entry->get_value("nombres") || ""; 
+    $params{'tipo_documento'}       = $entry->get_value("tipo_documento") || "1"; # 1 es DNI
+    $params{'nro_documento'}        = $entry->get_value("nro_documento") || "99999999"; 
+    $params{'legajo'}               = $entry->get_value("legajo") || "99999";
+    $params{'cumple_condicion'}     = $entry->get_value("regular") || 0;
+    $params{'password'}             = "";   # la password no se guarda en la base 
+    $params{$ldap_field_city}       = "1";  # id de ciudad 1 o $entry->get_value("loc_per_lect");
     $params{'credential_type'}      = "estudiante";
     $params{'nro_socio'}            = $nro_socio;
-    $params{'id_categoria'}        = "1";
+    $params{'id_categoria'}         = "1";
+    $params{'calle'}                = $entry->get_value("calle_per_lect") || "";
+    $params{'telefono'}             = $entry->get_value("te_per_lect") || "";
+    $params{'carrera'}              = $entry->get_value("carrera") || "";
+    $params{'sexo'}                 = $entry->get_value("sexo") || "";
+    $params{'nacimiento'}           = $entry->get_value("fecha_nacimiento") || "";
     
-    my $person = C4::Modelo::UsrPersona->new();
-
+    my $person                      = C4::Modelo::UsrPersona->new();
+    
     $person->agregar(\%params);
-    
 }
 
 =item

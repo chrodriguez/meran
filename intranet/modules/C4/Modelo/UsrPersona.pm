@@ -154,7 +154,7 @@ sub agregar{
 
 sub convertirEnSocio{
     my ($self)=shift;
-    my ($data_hash)=@_;
+    my ($data_hash,$vienePassword)=@_;
 
     $self->log($data_hash,'convertirEnSocio');
     my $db = $self->db;

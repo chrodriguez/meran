@@ -1289,8 +1289,8 @@ sub _verificarPassword {
 	my $metodo;
 
 	while (scalar(@$metodosDeAutenticacion) && (!(defined $socio)) ) {
-			$metodo=shift(@$metodosDeAutenticacion);
-			$socio=_autenticar(@_,$metodo);
+			$metodo = shift(@$metodosDeAutenticacion);
+			$socio  = _autenticar(@_,$metodo);
 			C4::AR::Debug::debug("Socio ".$socio." METODO ".$metodo);
     }
 
@@ -1301,7 +1301,7 @@ sub _autenticar{
 	use Switch;
 	my ($userid, $password, $nroRandom,$metodo) = @_;
 	my $socio = undef;
-	C4::AR::Debug::debug("metodo".$metodo);
+	C4::AR::Debug::debug("metodo ".$metodo." userid ".$userid);
 	switch ($metodo){
 		case "ldap" {
                 ($socio) = C4::AR::Authldap::checkPassword($userid,$password,$nroRandom); 

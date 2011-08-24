@@ -19,12 +19,7 @@
                 <li class="sub_item">
                     <label for="usuario"> Usuario: </label>
                     <input type="text" name="usuario" id="usuario" />
-                </li>
-
-                <li class="sub_item">
                     <input type="hidden" name="nro_socio_hidden" id="nro_socio_hidden" />
-                    <label for="tipo_documento_id"> Tipo de Documento: </label>
-                    [% combo_tipoDoc %]
                 </li>
 
                 <li class="sub_item">

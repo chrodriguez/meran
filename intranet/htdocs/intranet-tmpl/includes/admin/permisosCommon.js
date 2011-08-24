@@ -110,7 +110,6 @@ function obtenerPermisos(){
 	        objAH.perfil=comboPerfiles.val();
 	    }
 	    objAH.accion            = "OBTENER_PERMISOS_"+tipoPermiso;
-	    objAH.tipo_documento    = $('#tipo_nivel3_id').val();
 	    objAH.permiso           = $('#permisos').val();
 	    objAH.sendToServer();
     }else{
@@ -161,7 +160,6 @@ function actualizarPermisos(){
         objAH.id_ui = 0;
 
     objAH.accion="ACTUALIZAR_PERMISOS_"+tipoPermiso;
-    objAH.tipo_documento = $('#tipo_nivel3_id').val();
     objAH.permisos = armarArregloDePermisosSave();
     confirmMessage = "\n\n";
     if (superUserGranted == 1)
@@ -197,7 +195,6 @@ function nuevoPermiso(){
             objAH.id_ui = 0;
 
         objAH.accion="NUEVO_PERMISO_"+tipoPermiso;
-        objAH.tipo_documento = $('#tipo_nivel3_id').val();
         objAH.permisos = armarArregloDePermisosSave();
         confirmMessage = NEW_GRANT+"\n\n";
         if (superUserGranted == 1)

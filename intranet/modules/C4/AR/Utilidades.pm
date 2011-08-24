@@ -140,7 +140,6 @@ my %LABELS_COMPONENTS = (   "-1"            => C4::AR::Filtros::i18n("SIN SELECC
                             "rango_anio"    => C4::AR::Filtros::i18n("Anual rango") 
                         );
   
-  
 =item 
     Devuelve los headers con aplicacion y nombre de archivo recibidos por parametros
     parametros: HASH (para que se pueda extender)

@@ -10,8 +10,8 @@
                     <li>
                     [% PERL %]
                               print C4::AR::Filtros::link_to( text =>     "[% reserva.nivel2.nivel1.getTitulo %]",
-                                                              url =>      "[% url_prefix %]/opac-detail.pl", 
-                                                              params =>   ["id1=[% reserva.nivel2.nivel1.getId1 %]"],
+                                                              url =>      "[% url_prefix %]/opac-info_reservas.pl", 
+                                                              params =>   ["action=detalle_asignadas"],
                                                               title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
                                                           ) ;
                     [% END %]

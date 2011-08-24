@@ -227,22 +227,18 @@ sub getAllImage {
     
     my %result;
     my $isbn            = $self->getISBN();
-    
     if ($isbn) {
         my $portada     = C4::AR::PortadasRegistros::getPortadaByIsbn($isbn);
     
-        if($portada){    
+        if ($portada){    
             $result{'S'}    = $portada->getSmall();
             $result{'M'}    = $portada->getMedium();
             $result{'L'}    = $portada->getLarge();
-        } else {
-            $result{'S'}    = '';
-            $result{'M'}    = '';
-            $result{'L'}    = '';
+            return \%result;    
         }
     }
     
-    return \%result;
+    return undef;
 }
 
 =head2

@@ -98,9 +98,7 @@ sub datosUsuario{
     my ($userid,$ldap)  = @_;
     my $socio           = C4::AR::Usuarios::getSocioInfoPorNroSocio($userid);
 
-C4::AR::Debug::debug("Estoy por buscar el socio".$socio);
     if ($socio) { 
-        C4::AR::Debug::debug("Encontre el socio".$socio);
         return $socio;
     }
     else {
@@ -108,7 +106,7 @@ C4::AR::Debug::debug("Estoy por buscar el socio".$socio);
         # nro_socio , id_ui, cod_categoria, change_password (dejala en 0), id_estado (uno de UsrEstado), is_super_user 
 
         my $preferencias_ldap   = getLdapPreferences();
-        my $agregar_ldap        = $preferencias_ldap->{'ldap_agregar_user'}||0; # esta en 0
+        my $agregar_ldap        = $preferencias_ldap->{'ldap_agregar_user'} || 0; 
         
         if ($agregar_ldap){
         
@@ -122,7 +120,7 @@ C4::AR::Debug::debug("Estoy por buscar el socio".$socio);
                 my $entry           = $entries->entry(0);
 
                 if ($entry){
-                    $socio = C4::AR::Usuarios::crearPersonaLDAP($userid);
+                    $socio = C4::AR::Usuarios::crearPersonaLDAP($userid,$entry);
                     C4::AR::Debug::debug("Authldap =>datosUsuario".$LDAP_FILTER . ' entry '.$entry->ldif); 
                 }                
         }
@@ -194,14 +192,14 @@ sub checkPwEncriptada{
     my $LDAP_OU         = $preferencias_ldap->{'ldap_grupo'};
     my $LDAP_FILTER     = $LDAP_U_PREF.'='.$userid;
     my $passwordLDAP;
-    my $ldapMsg=undef;
+    my $ldapMsg         = undef;
     my $ldap            = _conectarLDAP();
     C4::AR::Debug::debug("LDAPFILTER ". $LDAP_FILTER  );
     if ($LDAP_ROOT ne ''){
-        $ldapMsg= $ldap->bind( $LDAP_ROOT , password => $LDAP_PASS) or die "$@";
-        C4::AR::Debug::debug("ERROR DEL LDAP con ".$LDAP_ROOT ." y ".$LDAP_PASS. "dio".$ldapMsg->error);
+        $ldapMsg = $ldap->bind( $LDAP_ROOT , password => $LDAP_PASS) or die "$@";
+        C4::AR::Debug::debug("ERROR DEL LDAP con ".$LDAP_ROOT ." y ".$LDAP_PASS. " dio ".$ldapMsg->error);
     }else{
-        $ldapMsg= $ldap->bind() or die "$@";
+        $ldapMsg = $ldap->bind() or die "$@";
         }
     my $socio           = undef;
     if ((defined $ldapMsg )&& (!$ldapMsg->code()) ) {
@@ -209,11 +207,11 @@ sub checkPwEncriptada{
             base   => $LDAP_DB_PREF,
             filter => "($LDAP_FILTER)"
         );
-        
-        my $entry       = $entries->entry(0);
+        my $entry = $entries->entry(0);
+      
         if (defined $entry){
-            $passwordLDAP   = $entry->get_value("userPassword");
-            $socio=_verificar_password_con_metodo($userid,$password, $passwordLDAP, $nroRandom, $ldap);
+            $passwordLDAP = $entry->get_value("userPassword");
+            $socio        =_verificar_password_con_metodo($userid,$password, $passwordLDAP, $nroRandom, $ldap);
             }
         $ldap->unbind;
     }
@@ -234,7 +232,7 @@ sub checkPwEncriptada{
 sub _verificar_password_con_metodo {
     my ($userid, $password, $passwordLDAP, $nroRandom, $ldap) = @_;
     C4::AR::Debug::debug("q raro esto ".$password. " y ademas ".$passwordLDAP);
-    my $passwordParaComparar=C4::AR::Auth::hashear_password((C4::AR::Auth::hashear_password($passwordLDAP,C4::AR::Auth::getMetodoEncriptacion()).$nroRandom),C4::AR::Auth::getMetodoEncriptacion());
+    my $passwordParaComparar = C4::AR::Auth::hashear_password((C4::AR::Auth::hashear_password($passwordLDAP,C4::AR::Auth::getMetodoEncriptacion()).$nroRandom),C4::AR::Auth::getMetodoEncriptacion());
     if ($password eq $passwordParaComparar) {
         #PASSWORD VALIDA
         return datosUsuario($userid,$ldap);

@@ -11,12 +11,12 @@
 </script>
 [% USE HTML %]
 [% IF show_search_details %]
+
      <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda:" | i18n %] [% buscoPor %]</div>
   
      <div class="resultados_consulta">[% "Cantidad de Registros:" | i18n %] [% cantidad %] en ([% timeSeg %] segundos)</div>
-   
+
      <div class="contenedor_paginador">[% paginador %]</div>
-     <br />
      [% IF only_available %]
         <h2 class="advice"> [% ' Solo se muestran ejemplares disponibles.' | i18n %] <a href="[% url_todos %]">([% ' Mostrar todos' | i18n %])</a></h2>
      [% END %]
@@ -37,7 +37,6 @@
         </script>
     [% END %]
 
-    [% IF SEARCH_RESULTS %]
         [% IF !from_suggested %]
             [% IF suggested %]
                     <div class="suggested_search">
@@ -47,35 +46,38 @@
                     </div>
             [% END %]
         [% END %]
+    [% IF cantidad > 0 %]
         <table id="tablaResult" class="tabla_datos" cellspacing='0' cellpadding='0' style="text-align:center; width:100%; border:1;">
                 <tr class="tablaresultadoTitle" >
                     <th align="center">
                         [% "Im&aacute;gen" | i18n %]
                     </th>
-                    <th align="center" >
+                    <th align="center" style="width: 350px;">
                         [% "T&iacute;tulo" | i18n %]
                     </th>
-                    <th align="center" >
+                    <th align="center" style="width: 130px;">
                         [% "Autor" | i18n %]
                     </th>
-                    <th align="center">
+                    <th align="center" style="width: 80px;">
                         [% "Edici&oacute;n/A&ntilde;o" | i18n %]
                     </th>
-                    <th align="center">
+                    <th align="center" style="width: 110px;">
                         [% "Disponibilidad" | i18n %]
                     </th>
-                    <th align="center">
+                    <th align="center" style="width: 110px;">
                         [% "Valoraci&oacute;n" | i18n %]
                     </th>
-                    <th align="center">
-                        [% "Favoritos" | i18n %]
-                    </th>
+                    [% IF socio_data.usr_permisos_opac %]
+	                    <th align="center" style="width: 80px;">
+	                        [% "Favoritos" | i18n %]
+	                    </th>
+	                [% END %]
                 </tr>
         <!-- Resultados de la busqueda -->
                 [% FOREACH NIVEL IN SEARCH_RESULTS %]
                     <tr>
                         <td class="titulo_result">
-                            [% IF NIVEL.portadas_grupo %]
+                            [% IF NIVEL.portadas_grupo_cant > 0 %]
                                     [% FOREACH NIVEL.portadas_grupo %]
                                         [% IF loop.count < 4 %]
 						                    [% IF portada_registro %]
@@ -110,6 +112,8 @@
                                               title="[% 'Sin Portada' | i18n %]" />
                                 [% END %]
                             [% END %]
+                            <br />
+                            <center><div style="font-weight: bold; font-size: 10px; clear:both;" >[% NIVEL.cat_ref_tipo_nivel3_name %] </div></center>
                         </td>
                         <td class="titulo_result">	
                             [% IF NIVEL.titulo %]
@@ -127,22 +131,28 @@
 
                         <td class="autor_result" title="[% 'Autor' | i18n %]">
                             [% IF NIVEL.nomCompleto %]
-                                [% NIVEL.nomCompleto %]
+                                [% PERL %]
+                                    print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(NIVEL.nomCompleto) %]",
+                                                                    url =>      "[% url_prefix %]/opac-busquedasDB.pl", 
+                                                                    params =>   ["tipoAccion=BUSQUEDA_AVANZADA","autor=[% NIVEL.nomCompleto %]"],
+                                                                    title =>    "[% 'Buscar de este autor' | i18n %]"
+                                                                ) ;
+                                [% END %]                                
                             [% ELSE %]
                                 &nbsp;
                             [% END %]
                         </td>
 
                         <td>
-                        <span id="grupos_[% NIVEL.id1 %]">
+                        <span id="grupos_[% NIVEL.id1 %]" class="detalle_registro_edicion">
 	                        [% FOREACH NIVEL.grupos %]
 	                            [% IF edicion %]
 	                                [% edicion %] &nbsp;
 	                            [% END %]
 	                            [% IF loop.prev.anio_publicacion != anio_publicacion %]
-	                                <br />
 	                                [% IF anio_publicacion %]
 	                                    ([% anio_publicacion %])
+                                        <br />
 	                                [% END %]
 	                            [% END %]
 	                                
@@ -154,59 +164,68 @@
                             [% IF NIVEL.disponibilidad %]
                                 [% FOREACH NIVEL.disponibilidad %]
                                     <b>[% tipoPrestamo %]</b> [% cantTotal %]
-                                    <br />
                                     <div style="margin-right:4px">
-                                        [% reservados %]
-                                        <br /> 
-                                        [% prestados %]
-                                        <br />
+                                        [% IF reservados != 0 %]
+                                            [% reservados %]
+                                        [% END %] 
+                                        
+                                        [% IF prestados != 0 %]
+                                            [% prestados %]
+                                        [% END %] 
                                     </div>
+                                    <br />
                                 [% END %]
                             [% ELSE %]
                                 &nbsp;
                             [% END %]
                         </td>
                         <td>
-                            <div class="rating">
-                                <form id="rating[% NIVEL.id1 %]" class="ratings" action="">
-                                    <div>
-                                      <input type="radio" name="rate" value="1" />
-                                      <input type="radio" name="rate" value="2" />
-                                      <input type="radio" name="rate" value="3" />
-                                      <input type="radio" name="rate" value="4" />
-                                      <input type="radio" name="rate" value="5" />
-                                      <input type="radio" name="rate" value="6" />
-                                      <input type="radio" name="rate" value="7" />
-                                      <input type="radio" name="rate" value="8" />
-                                      <input type="radio" name="rate" value="9" />
-                                      <input type="radio" name="rate" value="10" />
-                                      <input type="submit" value="Enviar" />
-                                    </div>
-                                </form>
-                                <br style="clear:both" />
-                            </div>
+                            [% IF NIVEL.rating > 0 %]
+	                            <div class="rating">
+	                                <form id="rating[% NIVEL.id1 %]" class="ratings" action="">
+	                                    <div>
+	                                      <input type="radio" name="rate" value="1" />
+	                                      <input type="radio" name="rate" value="2" />
+	                                      <input type="radio" name="rate" value="3" />
+	                                      <input type="radio" name="rate" value="4" />
+	                                      <input type="radio" name="rate" value="5" />
+	                                      <input type="radio" name="rate" value="6" />
+	                                      <input type="radio" name="rate" value="7" />
+	                                      <input type="radio" name="rate" value="8" />
+	                                      <input type="radio" name="rate" value="9" />
+	                                      <input type="radio" name="rate" value="10" />
+	                                      <input type="submit" value="Enviar" />
+	                                    </div>
+	                                </form>
+	                                <br style="clear:both" />
+	                            </div>
+	                         [% ELSE %]
+	                           <p> [% 'A&uacute;n sin valoraci&oacute;n' %]
+	                         [% END %]
                         </td>
-                        <td class="titulo_result">
-                            [% IF NIVEL.esta_en_favoritos %]
-                                [% PERL %]
-                                    print C4::AR::Filtros::to_Icon(
-                                                                        boton   => "icon_borrar",
-                                                                        onclick => "eliminarFavorito('[% NIVEL.id1 %]');",
-                                                                        title   => "[% 'Eliminar favorito' | i18n %]",
-                                                                        alternClass => "botonCentradoTabla"
-                                            ) ;
-                                [% END %]
-                            [% ELSE %]
-                                [% PERL %]
-                                    print C4::AR::Filtros::to_Icon(
-                                                                        boton   => "icon_agregar",
-                                                                        onclick => "addFavorite('[% NIVEL.id1 %]');",
-                                                                        title   => "[% 'Agregar a Favoritos' | i18n %]",
-                                                                        alternClass => "botonCentradoTabla"
-                                            ) ;
-                                [% END %]
-                            [% END %]
-                        </td>
+                        [% IF socio_data.usr_permisos_opac %]
+	                        <td class="titulo_result">
+	                            [% IF NIVEL.esta_en_favoritos %]
+	                                [% PERL %]
+	                                    print C4::AR::Filtros::to_Icon(
+	                                                                        boton   => "icon_borrar",
+	                                                                        onclick => "eliminarFavorito('[% NIVEL.id1 %]');",
+	                                                                        title   => "[% 'Eliminar favorito' | i18n %]",
+	                                                                        alternClass => "botonCentradoTabla"
+	                                            ) ;
+	                                [% END %]
+	                            [% ELSE %]
+	                                [% PERL %]
+	                                    print C4::AR::Filtros::to_Icon(
+	                                                                        boton   => "icon_agregar",
+	                                                                        onclick => "addFavorite('[% NIVEL.id1 %]');",
+	                                                                        title   => "[% 'Agregar a Favoritos' | i18n %]",
+	                                                                        alternClass => "botonCentradoTabla"
+	                                            ) ;
+	                                [% END %]
+	                            [% END %]
+	                        </td>
+	                     [% END %]
                     </tr>
 	             <script type="text/javascript">$("#grupos_[% NIVEL.id1 %]").expander({
 	                  slicePoint: 2000, 
