@@ -15,6 +15,7 @@ use C4::AR::VisualizacionOpac;
 use C4::AR::VisualizacionIntra;
 use C4::Modelo::PrefEstructuraSubcampoMarc;
 use C4::Modelo::PrefEstructuraSubcampoMarc::Manager;
+use C4::Modelo::CatEstructuraCatalogacion::Manager;
 
 use vars qw(@EXPORT_OK @ISA);
 
@@ -370,7 +371,7 @@ sub marc_record_to_meran_por_nivel {
     
     #obtengo la estructura y se verifica si falta agregar un campo, subcampo a la estructura de los datos    
     my ($cant, $catalogaciones_array_ref) = getEstructuraSinDatos($params);
-    agregarCamposVacios($marc_record, $catalogaciones_array_ref);
+    agregarCamposVacios2($marc_record, $catalogaciones_array_ref);
 
     my ($MARC_result_array) = marc_record_to_meran($marc_record, $params->{'id_tipo_doc'});
         
@@ -1094,17 +1095,17 @@ sub getEstructuraYDatosDeNivel{
     if( $params->{'nivel'} eq '1'){
         $nivel          = C4::AR::Nivel1::getNivel1FromId1($params->{'id'});
         $tipo_ejemplar  = 'ALL';
-#         C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel1FromId1 => ID1 ".$params->{'id'});
+        C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel1FromId1 => ID1 ".$params->{'id'});
     }
     elsif( $params->{'nivel'} eq '2'){
         $nivel          = C4::AR::Nivel2::getNivel2FromId2($params->{'id'});
         $tipo_ejemplar  = $nivel->getTipoDocumento;
-#         C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel2FromId2 => ID2 ".$params->{'id'});
+        C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel2FromId2 => ID2 ".$params->{'id'});
     }
     elsif( $params->{'nivel'} eq '3'){
         $nivel          = C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
         $tipo_ejemplar  = $nivel->nivel2->getTipoDocumento;
-#         C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel3FromId3 => ID3 ".$params->{'id3'});
+        C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel3FromId3 => ID3 ".$params->{'id3'});
     }
 
     #paso todo a MARC
@@ -1170,11 +1171,11 @@ sub getEstructuraYDatosDeNivel{
                         $hash_temp{'dato'}              = $subcampo->{'dato'};
                         $hash_temp{'datoReferencia'}    = $subcampo->{'datoReferencia'};
         
-#                         C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => campo => ".$nivel_info_marc_array->[$i]->{'campo'});
-#                         C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => subcampo => ".$subcampo->{'subcampo'});
-#                         C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => liblibrarian => ".$subcampo->{'liblibrarian'});
-#                         C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => dato => ".$subcampo->{'dato'});
-#                         C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => datoReferencia => ".$subcampo->{'datoReferencia'});
+                        C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => campo => ".$nivel_info_marc_array->[$i]->{'campo'});
+                        C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => subcampo => ".$subcampo->{'subcampo'});
+                        C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => liblibrarian => ".$subcampo->{'liblibrarian'});
+                        C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => dato => ".$subcampo->{'dato'});
+                        C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => datoReferencia => ".$subcampo->{'datoReferencia'});
             
                         my $hash_result = _setDatos_de_estructura($cat_estruct_array, \%hash_temp);
                       
@@ -1235,6 +1236,60 @@ sub getEstructuraYDatosDeNivel{
 }
 
 
+sub countFieldInMarcRecord{
+    my ($marc_record, $campo) = @_;
+
+    my $cant = 0;  
+
+    foreach my $field ($marc_record->fields()){ 
+        if($campo eq $field->tag){
+          $cant++;
+        }
+    }
+
+    C4::AR::Debug::debug("Catalogacion => countFieldInMarcRecord => cant => ".$cant);
+    return $cant;
+}
+
+sub getSubcamposFaltantes {
+    my ($marc_record_field, $estructura_array_ref) = @_;
+
+    my @subcampos_array;
+
+#     my ($cant, $subcampos_array_ref) = getSubCamposFromEstructuraByCampo($c->getCampo, $nivel, $itemType);
+# 
+#         foreach my $sc  (@$subcampos_array_ref){
+#             my %hash;
+#         
+#             $hash{'tiene_estructura'}  = '1';
+#             $hash{'dato'}              = '';
+# #             $hash{'datoReferencia'}    = 0;
+#             $hash{'datoReferencia'}    = "NULL";
+#             
+#             my ($hash_temp) = _setDatos_de_estructura($sc, \%hash);
+# #             C4::AR::Debug::debug("getEstructuraSinDatos => campo, subcampo: ".$c->getCampo.", ".$sc->getSubcampo);
+#             
+#             push (@result, $hash_temp);
+#         }
+
+
+    #recorro el arreglo con la estructura de catalogcion base pasada por parámetro
+    #verifico que subcampos del campo pasado por parámetro no existen en $estructura_array_ref
+}
+
+sub agregarCamposVacios2 {
+    my ($marc_record, $estructura_array_ref) = @_;
+    
+    #recorro la estructura de catalogacion en busca de campos vacios que debe tener el marc_record
+    foreach my $field ($marc_record->fields()){ 
+        C4::AR::Debug::debug("Catalogacion => agregarCamposVacios2 => proceso el campo => ===========================".$field->tag."==================================");
+        C4::AR::Debug::debug("Catalogacion => agregarCamposVacios2 => subfields => ".$field->subfields());    
+    }# END for(my $j=0;$j<scalar(@$catalogaciones_array_ref);$j++)
+
+#     C4::AR::Debug::debug("Catalogacion => agregarCamposVacios => as_usmarc => ".$marc_record->as_usmarc);
+    C4::AR::Debug::debug("Catalogacion => agregarCamposVacios2 => as_formatted => ".$marc_record->as_formatted);
+}
+
 =head2
     sub agregarCamposVacios
 
@@ -1246,39 +1301,43 @@ sub agregarCamposVacios {
     #recorro la estructura de catalogacion en busca de campos vacios que debe tener el marc_record
     for(my $j=0;$j<scalar(@$estructura_array_ref);$j++){ 
 
-        my %hash_campos;
-        my @subcampos_array;
-        my $campo = $estructura_array_ref->[$j]->{'campo'};
-        
-        #recorro los subcampos del campo que se esta procesando
-        foreach my $subcampo (@{$estructura_array_ref->[$j]->{'subcampos_array'}}){
-#             C4::AR::Debug::debug("Catalogacion => agregarCamposVacios => campo, subcampo => ".$campo.", ".$subcampo->{'subcampo'});
-            #setedo el dato para cada (campo, subcampo) en estructura_array_ref                            
+            my %hash_campos;
+            my @subcampos_array;
+            my $campo = $estructura_array_ref->[$j]->{'campo'};
 
-            if ($marc_record->field($campo)) {
-                #C4::AR::Debug::debug("EXISTE el campo ".$campo);
-                my $field = $marc_record->field( $campo );
-                if ( !$field->subfield( $subcampo->{'subcampo'} ) ) {
-                    #C4::AR::Debug::debug("NO EXISTE el subcampo ".$subcampo->{'subcampo'}." => dato => ".$marc_record->field($campo)->subfield( $subcampo->{'subcampo'}));
-                    $field->add_subfields( $subcampo->{'subcampo'} => " " );
+            C4::AR::Debug::debug("Catalogacion => agregarCamposVacios => proceso el campo => ===========================".$campo."==================================");
+            
+            #recorro los subcampos del campo que se esta procesando
+            foreach my $subcampo (@{$estructura_array_ref->[$j]->{'subcampos_array'}}){
+                C4::AR::Debug::debug("Catalogacion => agregarCamposVacios => cant subcampos => ".scalar(@{$estructura_array_ref->[$j]->{'subcampos_array'}}));
+    #             C4::AR::Debug::debug("Catalogacion => agregarCamposVacios => campo, subcampo => ".$campo.", ".$subcampo->{'subcampo'});
+                #setedo el dato para cada (campo, subcampo) en estructura_array_ref                            
 
-                }else{
-                    #C4::AR::Debug::debug("EXISTE el subcampo => ".$subcampo->{'subcampo'}." => dato => ".$marc_record->field($campo)->subfield( $subcampo->{'subcampo'}));
+                if ($marc_record->field($campo)) {
+    #                 C4::AR::Debug::debug("EXISTE el campo ".$campo);
+                    my $field = $marc_record->field( $campo );
+                    if ( !$field->subfield( $subcampo->{'subcampo'} ) ) {
+                        C4::AR::Debug::debug("NO EXISTE el subcampo ".$subcampo->{'subcampo'}." => dato => ".$marc_record->field($campo)->subfield( $subcampo->{'subcampo'}));
+                        $field->add_subfields( $subcampo->{'subcampo'} => " " );
+
+                    }else{
+                        C4::AR::Debug::debug("EXISTE el subcampo => ".$subcampo->{'subcampo'}." => dato => ".$marc_record->field($campo)->subfield( $subcampo->{'subcampo'}));
+                    }
+                } else {
+                    C4::AR::Debug::debug("NO EXISTE el campo ".$campo);
+                    #no existe el campo, se genera un nuevo campo y subcampo vacio
+                    my $campo_subcampo = MARC::Field->new(
+                                        $campo, " ", " ", $subcampo->{'subcampo'} => " "
+                            );
+                    
+                    $marc_record->append_fields( $campo_subcampo );    
                 }
-            } else {
-                #C4::AR::Debug::debug("NO EXISTE el campo ".$campo);
-                #no existe el campo, se genera un nuevo campo y subcampo vacio
-                my $campo_subcampo = MARC::Field->new(
-                                    $campo, " ", " ", $subcampo->{'subcampo'} => " "
-                        );
-                
-                $marc_record->append_fields( $campo_subcampo );    
-            }
-        }# END foreach my $subcampo (@{$estructura_array_ref->[$j]->{'subcampos_array'}})
+            }# END foreach my $subcampo (@{$estructura_array_ref->[$j]->{'subcampos_array'}})
+
     }# END for(my $j=0;$j<scalar(@$catalogaciones_array_ref);$j++)
 
 #     C4::AR::Debug::debug("Catalogacion => agregarCamposVacios => as_usmarc => ".$marc_record->as_usmarc);
-#     C4::AR::Debug::debug("Catalogacion => agregarCamposVacios => as_formatted => ".$marc_record->as_formatted);
+    C4::AR::Debug::debug("Catalogacion => agregarCamposVacios => as_formatted => ".$marc_record->as_formatted);
 }
 
 sub getEstructuraSinDatos {
@@ -1310,7 +1369,7 @@ sub getEstructuraSinDatos {
             $hash{'tiene_estructura'}  = '1';
             $hash{'dato'}              = '';
 #             $hash{'datoReferencia'}    = 0;
-$hash{'datoReferencia'}    = "NULL";
+            $hash{'datoReferencia'}    = "NULL";
             
             my ($hash_temp) = _setDatos_de_estructura($sc, \%hash);
 #             C4::AR::Debug::debug("getEstructuraSinDatos => campo, subcampo: ".$c->getCampo.", ".$sc->getSubcampo);
@@ -1324,11 +1383,9 @@ $hash{'datoReferencia'}    = "NULL";
         $hash_campos{'repetible'}               = $c->camposBase->getRepeatable;
         $hash_campos{'nombre'}                  = $c->camposBase->getLiblibrarian;
         $hash_campos{'indicador_primario'}      = $c->camposBase->getIndicadorPrimario;
-        $hash_campos{'indicadores_primarios'}   = C4::AR::EstructuraCatalogacionBase::getIndicadorPrimarioFromEstructuraBaseByCampo($c->getCampo);
+        $hash_campos{'indicadores_primarios'}   = C4::AR::EstructuraCatalogacionBase::getIndicadorPrimarioFromEstructuraBaseByCampo( $c->getCampo );
         $hash_campos{'indicador_secundario'}    = $c->camposBase->getIndicadorSecundario;
-        $hash_campos{'indicadores_secundarios'} = C4::AR::EstructuraCatalogacionBase::getIndicadorSecundarioFromEstructuraBaseByCampo(
-                                                                                                                                      $c->getCampo
-                                                                                                                                    );
+        $hash_campos{'indicadores_secundarios'} = C4::AR::EstructuraCatalogacionBase::getIndicadorSecundarioFromEstructuraBaseByCampo( $c->getCampo );
         $hash_campos{'descripcion_campo'}       = $c->camposBase->getDescripcion.' - '.$c->getCampo;
         $hash_campos{'ayuda_campo'}             = 'esta es la ayuda del campo '.$c->getCampo;
         $hash_campos{'subcampos_array'}         = \@result;
@@ -1719,9 +1776,7 @@ sub getSubCamposFromEstructuraByCampo
 =cut
 
 sub getSubCamposFromEstructuraByCampo{
-    my ($campo, $nivel, $itemType) = @_;
-
-    use C4::Modelo::CatEstructuraCatalogacion::Manager;
+    my ($campo, $nivel, $itemType) = @_;    
 
     my $catalogaciones_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
                                                                 query => [ 
@@ -1753,8 +1808,6 @@ ademas trae los indicadores Primero y Segundo (SI ES QUE EXISTE)
 =cut
 sub getCamposFromEstructura{
     my ($nivel, $itemType) = @_;
-
-    use C4::Modelo::CatEstructuraCatalogacion::Manager;
 
     my $catalogaciones_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
                                                                 distinct => 1,
@@ -1818,26 +1871,7 @@ sub getDatosFromNivel{
 =cut
 sub getEstructuraCatalogacionFromDBCompleta{
     my ($nivel, $itemType) = @_;
-
-    use C4::Modelo::CatEstructuraCatalogacion::Manager;
-
-#     my $catalogaciones_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
-#                                                                 query => [ 
-#                                                                                 nivel => { eq => $nivel },
-# 
-#                                                                     or   => [ 	
-#                                                                                 itemtype => { eq => $itemType },
-#                                                                             	itemtype => { eq => 'ALL' },    
-#                                                                             ],
-# 
-# #                                                                         		intranet_habilitado => { gt => 0 }, 
-#                                                                         ],
-#                                                                 select          => ['*'],  
-#                                                                 with_objects    => [ 'infoReferencia' ],  #LEFT OUTER JOIN
-#                                                                 require_objects => [ 'camposBase', 'subCamposBase' ],
-# #                                                                 sort_by => ( 'intranet_habilitado' ),
-#                                                                 sort_by => ( 'campo' ),
-#                                                              );
+C4::AR::Debug::debug("getEstructuraCatalogacionFromDBCompleta => itemType => ".$itemType);
 
     my $catalogaciones_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
                                                                 query => [ 
@@ -1848,12 +1882,8 @@ sub getEstructuraCatalogacionFromDBCompleta{
                                                                                 itemtype => { eq => 'ALL' },    
                                                                             ],
 
-#                                                                               intranet_habilitado => { gt => 0 }, 
                                                                         ],
-#                                                                 select          => ['*'],  
-#                                                                 with_objects    => [ 'infoReferencia' ],  #LEFT OUTER JOIN
-#                                                                 require_objects => [ 'camposBase', 'subCamposBase' ],
-#                                                                 sort_by => ( 'intranet_habilitado' ),
+
                                                                 sort_by => ( 'campo' ),
                                                              );
 

@@ -13,7 +13,9 @@ __PACKAGE__->meta->setup(
         subcampo        => { type => 'character', length => 1, not_null => 1 },
         vista_intra     => { type => 'varchar', length => 255 },
         tipo_ejemplar   => { type => 'char', length => 3 },
-        orden           => { type => 'integer', length => 11, not_null => 1 }
+        orden           => { type => 'integer', length => 11, not_null => 1 },
+        pre             => { type => 'varchar', length => 12 },
+        post            => { type => 'varchar', length => 12 }
     ],
 
     primary_key_columns => [ 'id' ],
@@ -22,10 +24,12 @@ use utf8;
 
 sub agregar{
 
-    my ($self)=shift;
+    my ($self)   = shift;
     my ($params) = @_;
 
     $self->setCampo($params->{'campo'});
+    $self->setPre($params->{'pre'});
+    $self->setPost($params->{'post'});
     $self->setSubCampo($params->{'subcampo'});
     $self->setVistaIntra($params->{'liblibrarian'});
 
@@ -47,6 +51,26 @@ sub modificar{
     my ($string) = @_;
     $string = Encode::decode_utf8($string);
     $self->setVistaIntra($string);
+
+    $self->save();
+}
+
+sub modificarPre{
+
+    my ($self)=shift;
+    my ($string) = @_;
+    $string = Encode::decode_utf8($string);
+    $self->setPre($string);
+
+    $self->save();
+}
+
+sub modificarPost{
+
+    my ($self)=shift;
+    my ($string) = @_;
+    $string = Encode::decode_utf8($string);
+    $self->setPost($string);
 
     $self->save();
 }
@@ -87,6 +111,30 @@ sub setCampo{
     my ($self) = shift;
     my ($campo) = @_;
     $self->campo($campo);
+}
+
+sub getPre{
+    my ($self)=shift;
+
+    return $self->pre;
+}
+
+sub setPre{
+    my ($self) = shift;
+    my ($pre) = @_;
+    $self->pre($pre);
+}
+
+sub getPost{
+    my ($self)=shift;
+
+    return $self->post;
+}
+
+sub setPost{
+    my ($self) = shift;
+    my ($post) = @_;
+    $self->post($post);
 }
 
 sub getOrden{
