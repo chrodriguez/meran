@@ -37,7 +37,42 @@
               indicator : loaderPath,
 
         });
+        mostrarTabla();
     });
+    
+    function mostrarTabla(){
+        objAH               = new AjaxHelper(updateMostrarTabla);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;  
+        objAH.url           = URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
+        objAH.tipoAccion    = 'MOSTRAR_TABLA_VISUALIZACION';
+        objAH.perfil        = $("#perfiles_ref").val();
+        objAH.sendToServer();
+    }
+    
+    function updateMostrarTabla(responseText){
+        $("#tablaResultCampos").html(responseText);
+        zebra("tabla_datos");  
+    }
+    
+    function actualizarOrden(){
+        objAH               = new AjaxHelper(updateSortable);
+        objAH.debug         = true;
+        objAH.url           = URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
+        objAH.showOverlay   = true;
+        // si estamos agrupando por campo o no
+        if($("#ordenar_campos").is(':checked')){
+            objAH.tipoAccion    = "ACTUALIZAR_ORDEN_AGRUPANDO";
+        }else{
+            objAH.tipoAccion    = "ACTUALIZAR_ORDEN";
+        }
+        objAH.newOrderArray = $('#sortable').sortable('toArray');
+        objAH.sendToServer(); 
+    }
+    
+    function updateSortable(){
+        mostrarTabla();        
+    }
 </script>
 <script type="text/javascript" src="/includes/jquery/jquery-ui-1.8.13.sortable.min.js"></script>
 <script type="text/javascript">
@@ -108,40 +143,4 @@
 </fieldset>
 
 <div id="divAgregarModificarVisualizacion"></div>
-
-<fieldset>
-    <legend class="titulo_legend trigger click"><strong>[% "Configuraci&oacute;n de la Visualizaci&oacute;n:" | i18n %]</strong></legend>
-    <div id="divTablaVisualizacion" class="divTablaVisualizacion"></div>
-      <table id="tabla_datos_visualizacion_intra" class="tabla_datos" cellspacing=0 border="0" cellpadding=0 style="width:100%;">
-            <thead>
-                <tr class="titulo_tabla_resultado">
-                    <td>[% "Campo" | i18n %]</td>
-                    <td>[% "Subcampo" | i18n %]</td>
-                    <td>[% "Pre" | i18n %]</td>
-                    <td>[% "Vista en INTRANET " | i18n %]</td>
-                    <td>[% "Post" | i18n %]</td>
-                    <td>[% "Eliminar" | i18n %]</td>
-                </tr>
-            </thead>
-            <tbody id="sortable">
-                [% FOREACH campo IN visualizacion %]
-                    <tr id="[% campo.getId %]" align="center">
-                        <td>[% campo.getCampo %]</td>
-                        <td>[% campo.getSubCampo %]</td>
-                        <td class="pre" id="[% campo.id %]">[% campo.getPre %]</td>
-                        <td class="editable" id="[% campo.id %]">[% campo.getVistaIntra %]</td>
-                        <td class="post" id="[% campo.id %]">[% campo.getPost %]</td>
-                        <td align="center">
-                            [% PERL %]
-                                print C4::AR::Filtros::to_Icon( text =>     "[% 'Eliminar Vista' | i18n %]",
-                                                                onClick => "eliminarVista('[% campo.id %]')",
-                                                                boton   => "icon_cancelar",
-                                                                title =>    "[% 'Eliminar Vista' | i18n %]"
-                                                            ) ;
-                            [% END %]
-                        </td>
-                    </tr>
-                [% END %]
-            </tbody>
-        </table>
-</fieldset>
+<div id="tablaResultCampos"></div>
