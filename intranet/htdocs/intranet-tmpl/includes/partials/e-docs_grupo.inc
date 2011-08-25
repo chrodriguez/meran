@@ -4,8 +4,7 @@
 		<script type="text/javascript">
 		
 		function refreshPage(fileName, responseJSON){
-		    
-		    //$("body").html("rock");
+		   
 		    jAlert(responseJSON.error,fileName);
 		    
 		}

@@ -307,3 +307,23 @@ function ordenar(orden){
                 }
         }
 	
+	
+	function mostrarEstantesVirtualesDeGrupo(id2){
+	  objAH               = new AjaxHelper(updateInfoEstantesVirtualesDeGrupo);
+	  objAH.showOverlay       = true;
+	  objAH.url           = URL_PREFIX+'/busquedas/busquedasDB.pl';
+	  //se setea la funcion para cambiar de pagina
+	  objAH.debug         = true;
+	  objAH.funcion       = 'changePage';
+	  objAH.estantes_grupo	= id2;
+	  objAH.tipoAccion    = "BUSQUEDA_ESTANTE_DE_GRUPO";
+	  objAH.sendToServer();
+      }
+      
+      function updateInfoEstantesVirtualesDeGrupo(responseText){
+	$('#estantes_'+objAH.estantes_grupo).html(responseText);
+	$('#estantes_'+objAH.estantes_grupo).slideDown("fast");
+	zebra('datos_tabla');
+	$('#grupo_estantes_'+objAH.estantes_grupo).show();
+	scrollTo('grupo_estantes_'+objAH.estantes_grupo);
+}

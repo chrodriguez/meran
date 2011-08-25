@@ -55,6 +55,7 @@ use vars qw(@EXPORT_OK @ISA);
     &buscarTema
     &busquedaSignaturaBetween
     &busquedaPorEstante
+    &busquedaEstanteDeGrupo
 
     &filtrarPorAutor
     &MARCDetail
@@ -1084,6 +1085,13 @@ sub busquedaPorEstante{
 	return ($cantidad, $resultEstante, 0);	
 }
 
+sub busquedaEstanteDeGrupo{
+	
+	my ($id2, $session, $obj) = @_;
+	my ($cantidad, $resultEstante) = C4::AR::Estantes::getEstantesById2($id2,$obj->{'ini'},$obj->{'cantR'});
+	return ($cantidad, $resultEstante, 0);	
+}
+
 # TODO ver si se puede centralizar 
 sub busquedaPorTitulo{
     my ($titulo) = @_;
@@ -1639,6 +1647,10 @@ sub armarBuscoPor{
 
     if( C4::AR::Utilidades::validateString($params->{'estante'})){
         $buscoPor.= "Estantes Virtuales: ".C4::AR::Utilidades::verificarValor($params->{'estante'})."&";
+    }   
+
+    if( C4::AR::Utilidades::validateString($params->{'estantes_grupo'})){
+        $buscoPor.= "Estantes virtuales del grupo: ".C4::AR::Utilidades::verificarValor($params->{'estantes_grupo'})."&";
     }   
 
 	if( C4::AR::Utilidades::validateString($params->{'codBarra'})){

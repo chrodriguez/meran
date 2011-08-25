@@ -35,6 +35,7 @@ Este módulo provee funciones para manipular estantes virtuales, incluyendo la c
         &buscarNombreDuplicado
         &agregarEstante
 	&buscarEstante
+	&estaEnEstanteVirtual
 );
 
 sub getListaEstantesPublicos {
@@ -317,20 +318,43 @@ sub buscarEstante {
 
 
 sub getEstantesById2 {
-# TODO  se obtienen los estantes de en los que se se encuentra un grupo
+#  se obtienen los estantes de en los que se se encuentra un grupo
+    my ($id2, $ini, $cantR) = @_;
+
+    my @filtros;
+    push(@filtros, ( 'contenido.id2' => { eq => $id2 }) );
+    push(@filtros, ( 'tipo' => { eq => 'public' }));
+
+    my $estantes_array_ref = C4::Modelo::CatEstante::Manager->get_cat_estante( query => \@filtros, 
+									       sort_by => 'estante',
+ 									       require_objects    => ['contenido'],
+									       limit   => $cantR,
+									       offset  => $ini,);
+
+    my $cant= C4::Modelo::CatEstante::Manager->get_cat_estante_count( query => \@filtros, 
+									      require_objects    => ['contenido'],
+									       sort_by => 'estante');
+
+    C4::AR::Debug::debug("BUSQUEDA ESTANTES de ID2 ==> ".$id2."  resultados: ".$cant." limit = ".$cantR." offset = ".$ini);
+
+	if($cant > 0){
+		return ($cant, $estantes_array_ref);
+	}else{
+		return ($cant, 0);
+	}
+}
+
+sub estaEnEstanteVirtual {
+# Obtienen si un grupo esta en algún estante
     my ($id2) = @_;
 
-#     my @filtros;
-#     push(@filtros, ( estante => { like => '%'.$estante.'%' }) );
-#     my $estantes_array_ref = C4::Modelo::CatEstante::Manager->get_cat_estante( query => \@filtros, sort_by => 'estante');
-# 
-#     my $cant= scalar(@$estantes_array_ref);
-# 
-# 	if($cant > 0){
-# 		return ($cant, $estantes_array_ref);
-# 	}else{
-# 		return ($cant, 0);
-# 	}
+    my @filtros;
+    push(@filtros, ( 'contenido.id2' => { eq => $id2 }) );
+    push(@filtros, ( 'tipo' => { eq => 'public' }));
+
+    my $cant = C4::Modelo::CatEstante::Manager->get_cat_estante_count( query => \@filtros,require_objects    => ['contenido'],);
+
+    return ($cant > 0);
 }
 
 sub agregarSubEstante  {

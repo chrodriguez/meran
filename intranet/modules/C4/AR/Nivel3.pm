@@ -17,6 +17,7 @@ use C4::Modelo::RepHistorialCirculacion::Manager;
 use C4::AR::Nivel1 qw(getNivel1FromId1); 
 use C4::AR::Nivel2 qw(getNivel2FromId1 getNivel2FromId2);
 use C4::AR::Reservas qw(cantReservasPorGrupo);
+use C4::AR::Estantes;
 use C4::AR::Sphinx qw(generar_indice);
 
 use vars qw(@EXPORT_OK @ISA);
@@ -383,14 +384,12 @@ sub detalleNivel3{
 	    $hash_nivel2{'id2'}                     = $id2;
 	    $hash_nivel2{'tipo_documento'}          = $nivel2_object->getTipoDocumentoObject->getNombre();
 	    $hash_nivel2{'nivel2_array'}            = $nivel2_object->toMARC_Intra; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
-        $hash_nivel2{'tiene_indice'}            = $nivel2_object->tiene_indice;
-        $hash_nivel2{'indice'}                  = $hash_nivel2{'tiene_indice'}?$nivel2_object->getIndice:0;
-    
+	    $hash_nivel2{'tiene_indice'}            = $nivel2_object->tiene_indice;
+	    $hash_nivel2{'indice'}                  = $hash_nivel2{'tiene_indice'}?$nivel2_object->getIndice:0;
+ 	    $hash_nivel2{'esta_en_estante_virtual'} = C4::AR::Estantes::estaEnEstanteVirtual($id2);
 	    my ($totales_nivel3, @result)           = detalleDisponibilidadNivel3($id2,$nivel2_object->db);
-    
-        $hash_nivel2{'nivel3'}                  = \@result;
-
-        $hash_nivel2{'cant_nivel3'}             = scalar(@result);
+	    $hash_nivel2{'nivel3'}                  = \@result;
+	    $hash_nivel2{'cant_nivel3'}             = scalar(@result);
 	    $hash_nivel2{'cantPrestados'}           = $totales_nivel3->{'cantPrestados'};
 	    $hash_nivel2{'cantReservas'}            = $totales_nivel3->{'cantReservas'};
 	    $hash_nivel2{'cantReservasEnEspera'}    = $totales_nivel3->{'cantReservasEnEspera'};
@@ -515,11 +514,11 @@ sub detalleCompletoINTRA{
     
     for(my $i=$inicio;$i<$cantidad;$i++){
 
-		eval{
+ 		eval{
 			my ($hash_nivel2) = detalleNivel3($nivel2_array_ref->[$i]->getId2,$nivel1->db);
 	
 			push(@nivel2, $hash_nivel2);
-		};
+ 		};
 		
         if ($i >= ($cantidad_total-1)){
             last;

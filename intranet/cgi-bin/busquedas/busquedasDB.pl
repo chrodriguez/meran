@@ -18,7 +18,7 @@ my $ini= $obj->{'ini'};
 
 my $tipoAccion= $obj->{'tipoAccion'}||"";
 
-if($tipoAccion eq "BUSQUEDA_POR_ESTANTE"){
+if(($tipoAccion eq "BUSQUEDA_POR_ESTANTE")||($tipoAccion eq "BUSQUEDA_ESTANTE_DE_GRUPO")){
     $template_name = 'busquedas/estante.tmpl';
 }
 
@@ -130,6 +130,16 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
         my $funcion                     = $obj->{'funcion'};
         
         my ($cantidad, $array_estantes)   = C4::AR::Busquedas::busquedaPorEstante($obj->{'estante'}, $session, $obj);
+        
+        $obj->{'cantidad'}              = $cantidad;
+        $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
+        $t_params->{'SEARCH_RESULTS'}   = $array_estantes;
+        $t_params->{'cantidad'}         = $cantidad;
+    }
+    elsif($tipoAccion eq "BUSQUEDA_ESTANTE_DE_GRUPO"){
+        my $funcion                     = $obj->{'funcion'};
+        
+        my ($cantidad, $array_estantes)   = C4::AR::Busquedas::busquedaEstanteDeGrupo($obj->{'estantes_grupo'}, $session, $obj);
         
         $obj->{'cantidad'}              = $cantidad;
         $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
