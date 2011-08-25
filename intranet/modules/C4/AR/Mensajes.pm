@@ -31,7 +31,7 @@ $VERSION = 0.01;
 
 # %mensajes mapea codigo de mensaje con la descripcion del mismo
 my %mensajesOPAC = (
-    	'000' => 'No hay error',
+    	'000' => '',
     	'R001' => 'Disculpe, usted no puede realizar m&aacute;s de *?* reservas',
     	'R002' => 'Disculpe, no puede efectuar reservas porque ya tiene una reserva para el mismo grupo y tipo de prestamo ',
 	'R003' => 'Disculpe, usted no puede tener m&aacute;s de *?* reservas en espera.',
@@ -80,6 +80,7 @@ my %mensajesOPAC = (
     'U309' => 'No puede iniciar sesi&oacute;n porque sus datos censales est&aacute;n desactualizados, debe dirigirse a la biblioteca para actualizarlos.',
     'U354' => 'Disculpe, usted no tiene permisos suficientes para acceder a esta p&aacute;gina.',
     'U357' => 'Ha ingresado un nombre de usuario o password incorrecto. Por favor intente nuevamente.',
+    'U358' => 'Ud. ha cerrado su sesion. Gracias por usar MERAN.',
     'U361' => 'El password actual NO coincide con el suyo.',
     'U400' => 'UD. acaba de cambiar la password, debe ingresar nuevamente.',
     'U425' => 'El valor ingresado en el Captcha es invalido, por favor intente nuevamente',
@@ -120,7 +121,7 @@ my %mensajesOPAC = (
 );
 
 my %mensajesINTRA = (
-    '000' => 'No hay error',
+    '000' => '',
     'R001' => 'El usuario lleg&oacute; al m&acute;ximo de reservas permitidas (*?*).',
     'R002' => 'El usuario ya tiene una reserva para el mismo tipo de prestamo ',
     'R003' => 'El usuario lleg&oacute; al m&acute;ximo de reservas en espera (*?*).',
