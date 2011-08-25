@@ -3388,41 +3388,75 @@ border:0;
     font-weight:bold;
 }
 
+
+/* ====================================  */
+
+fieldset { border: none }
 #searchform_main{
-    margin:76px 0 93px 71px;
+    width: 554px;
+    position: relative;
+    border: 1px solid #7e94af;
+    border-radius: 13px;
+    -moz-border-radius: 13px;
+    -webkit-border-radius: 13px;
+    height: 49px;
 }
 
+#divsearchform{
 
-#searchform_main_button{
-    background-color: #F5F5F5;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 2px 2px 2px 2px;
-    color: #666666;
-    cursor: pointer;
-    font-size: 11px;
-    font-weight: bold;
-    height: 29px;
-    line-height: 27px;
-    margin: 11px 6px;
-    min-width: 54px;
-    padding: 0 8px;
-    text-align: center;
+    width:900px;
+    height:154px;
+    padding-top:58px;
+    padding-left:348px;
+
 }
 
-#searchform_main_button:hover {
-    background-color: #F8F8F8;
-    border: 1px solid #C6C6C6;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-    color: #333333;
+#search {
+    background: #cacfd7;
+    border: 1px solid #cacfd7;
+    color: #646464;
+    height: 27px;
+    line-height: 20px;
+    width: 489px;
+    padding: 2px 4px;
+    position: absolute;
+    top: 8px;
+    left: 1;
+    right:50px;
 }
 
-#searchform_main_button:focus {
-    border: 1px solid #4D90FE;
-    outline: medium none;
+#search-submit {
+    background: url(../imagenes/search-main.png) no-repeat 5px 4px;
+    border:none;
+    height: 30px;
+    position: absolute;
+    right: 0;
+    top: 10px;
+    width: 42px;
+    cursor:pointer;
+   
 }
-    
 
+.empty {
+    color: #524630;
+}
 
+/* CSS3 */
+#search { border-radius: 8px;
+          -moz-border-radius: 8px;
+          -webkit-border-radius: 8px;
+          background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#9a9da2));
+          background: -moz-linear-gradient(top, #ffffff, #d2d3d7);
+          text-shadow: rgba(0,0,0,.2) 0 0 5px;
+
+}
+
+#search-submit {
+    -mox-box-shadow: 0 0 5px black;
+    -webkit-transition-property: background-color;
+    -webkit-transition-duration: 0.4s, 0.4s;
+    -webkit-transition-timing-function: linear, ease-in;    
+}
 
 
 
