@@ -312,6 +312,22 @@ sub obtenerUIByIdUi{
     }
 }
 
+=item
+Devuelve un objeto UI o 0 sino lo encuentra
+=cut
+sub obtenerEsquemaById{
+    my ($id) = @_;
+
+    my $esquema_array_ref = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3(
+                                                                query => [ id => { eq => $id } ]
+                                            );
+    if(scalar($esquema_array_ref) > 0){
+#         C4::AR::Debug::debug("ESQUEMA => ".$esquema_array_ref->[0]->getId_tipo_doc());
+        return ($esquema_array_ref->[0]->getId_tipo_doc());
+    }else{
+        return 0;
+    }
+}
 
 =item
 Devuelve un arreglo de objetos Unidades de Informacion

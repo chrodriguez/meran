@@ -10,6 +10,7 @@ __PACKAGE__->meta->setup(
     columns => [
         id             => { type => 'serial', not_null => 1 },
         marc_record    => { type => 'text' },
+        tipo_documento => { type => 'integer', not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ]
@@ -50,6 +51,30 @@ sub getSignaturas{
     return (\@signaturas);
 }
 
+=item sub getEsquema
+
+  retorna el esquema/template utilizado para la carga de datos
+=cut
+sub getEsquema{
+    my ($self)  = shift;
+
+#     return C4::AR::Referencias::obtenerEsquemaById($self->tipo_documento);
+    return $self->tipo_documento;
+}
+
+sub setEsquemaId{
+    my ($self)      = shift;
+    my ($params)   = @_;
+
+    $self->tipo_documento($params->{'id_tipo_doc'});
+}
+
+sub getEsquemaId{
+    my ($self)  = shift;
+
+    return $self->tipo_documento;
+}
+
 =item
   sub setearLeader
 
@@ -78,6 +103,7 @@ sub agregar{
     my ($marc_record, $params)  = @_;
 
     $self->setMarcRecord($marc_record);
+    $self->setEsquemaId($params);
     $self->save();
 
     #seteo datos del LEADER
@@ -371,7 +397,7 @@ sub toMARC{
 
     my $params;
     $params->{'nivel'}          = '1';
-#     $params->{'id_tipo_doc'}    = 'ALL';
+    $params->{'id_tipo_doc'}    = $self->getEsquema()||'ALL';
     my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_meran_por_nivel($marc_record, $params);
 
     return ($MARC_result_array);

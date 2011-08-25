@@ -932,17 +932,17 @@ sub getEstructuraYDatosDeNivel{
 
     if( $params->{'nivel'} eq '1'){
         $nivel          = C4::AR::Nivel1::getNivel1FromId1($params->{'id'});
-        $tipo_ejemplar  = 'ALL';
+        $tipo_ejemplar  = $nivel->getEsquema()||'ALL';
         C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel1FromId1 => ID1 ".$params->{'id'});
     }
     elsif( $params->{'nivel'} eq '2'){
         $nivel          = C4::AR::Nivel2::getNivel2FromId2($params->{'id'});
-        $tipo_ejemplar  = $nivel->getTipoDocumento;
+        $tipo_ejemplar  = $nivel->getEsquema()||'ALL';
         C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel2FromId2 => ID2 ".$params->{'id'});
     }
     elsif( $params->{'nivel'} eq '3'){
         $nivel          = C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
-        $tipo_ejemplar  = $nivel->nivel2->getTipoDocumento;
+        $tipo_ejemplar  = $nivel->getEsquema()||'ALL';
         C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel3FromId3 => ID3 ".$params->{'id3'});
     }
 

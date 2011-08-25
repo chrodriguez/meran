@@ -636,6 +636,13 @@ sub esParaPrestamo{
     return (DISPONIBILIDAD_PRESTAMO($self->getIdDisponibilidad));
 }
 
+sub getEsquema{
+    my ($self) = shift;
+
+    return $self->nivel2->nivel1->getEsquema();
+}
+
+
 =head2 sub toMARC
 
 =cut
@@ -647,7 +654,7 @@ sub toMARC{
 
     my $params;
     $params->{'nivel'}          = '3';
-    $params->{'id_tipo_doc'}    = $self->nivel2->getTipoDocumento;
+    $params->{'id_tipo_doc'}    = $self->getEsquema()||'ALL';
     my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_meran_por_nivel($marc_record, $params);
 
     return ($MARC_result_array);
