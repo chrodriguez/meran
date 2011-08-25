@@ -8,28 +8,43 @@ use C4::AR::VisualizacionIntra;
 use C4::AR::Utilidades;
 use JSON;
 
-my $input = new CGI;
+my $input   = new CGI;
 
 my $editing = $input->param('value') && $input->param('id');
+
+my $type    = $input->param('type');
 
 if($editing){
 
     my ($template, $session, $t_params)  = get_template_and_user({  
-                        template_name => "includes/partials/modificar_value.tmpl",
-                        query => $input,
-                        type => "intranet",
-                        authnotrequired => 0,
-                        flagsrequired => {  ui => 'ANY', 
-                                            tipo_documento => 'ANY', 
-                                            accion => 'CONSULTA', 
-                                            entorno => 'permisos', 
-                                            tipo_permiso => 'general'},
-                        debug => 1,
-                    });
+                            template_name   => "includes/partials/modificar_value.tmpl",
+                            query           => $input,
+                            type            => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired   => {  ui            => 'ANY', 
+                                                tipo_documento  => 'ANY', 
+                                                accion          => 'CONSULTA', 
+                                                entorno         => 'permisos', 
+                                                tipo_permiso    => 'general'},
+                            debug => 1,
+                        });
+    my $configuracion;                        
 
-    my $value = $input->param('value');
-    my $vista_id = $input->param('id');
-    my ($configuracion) = C4::AR::VisualizacionIntra::editConfiguracion($vista_id,$value);
+    if($type eq "pre"){
+        my $value           = $input->param('value');
+        my $vista_id        = $input->param('id');
+        $configuracion      = C4::AR::VisualizacionIntra::editConfiguracion($vista_id,$value,'pre');
+    }
+    elsif($type eq "post"){
+        my $value           = $input->param('value');
+        my $vista_id        = $input->param('id');
+        $configuracion      = C4::AR::VisualizacionIntra::editConfiguracion($vista_id,$value,'post');
+    }
+    elsif($type eq "nombre"){
+        my $value       = $input->param('value');
+        my $vista_id    = $input->param('id');
+        $configuracion  = C4::AR::VisualizacionIntra::editConfiguracion($vista_id,$value);
+    }
 
     $t_params->{'value'} = $configuracion;
 
