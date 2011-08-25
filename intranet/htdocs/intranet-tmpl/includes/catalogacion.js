@@ -350,18 +350,16 @@ function mostrarEstructuraDelNivel1(){
     if(MODIFICAR == 0){
         _mostrarAccion("Agregando metadatos");
     } 
-// else {
-//         
-//     }
+
+
     _NIVEL_ACTUAL       = 1;
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel1);
     objAH.debug         = true;
     objAH.showOverlay   = true;
-// 	objAH.cache= true;
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
     objAH.nivel         = _NIVEL_ACTUAL;
-    objAH.id_tipo_doc   = $('#tipo_nivel3_id').val();//'ALL';
+    objAH.id_tipo_doc   = $('#tipo_nivel3_id').val();
     objAH.sendToServer();
 }
 
@@ -527,10 +525,6 @@ function registrarToggleOnChangeForBarcode(callFromBarcode){
     }
 }
 
-function agregarN2(){
-//     $('#datos_esquema').dialog({ width: 510, position: 'center', modal: true });
-}
-
 function seleccionar_esquema(){
     inicializar(); 
 //     close_window_esquema();
@@ -548,7 +542,8 @@ function seleccionar_esquema(){
             MODIFICAR           = 0;
             AGREGAR_COMPLETO    = 0;
             
-            mostrarEstructuraDelNivel2();
+            mostrarEstructuraDelNivel1();
+// TODO dejar deshabilitado el combo tipo de ejemplares?
             inicializarSideLayers();
         }
     }
@@ -601,14 +596,14 @@ function agregarN3(id2, tipo_documento){
 //esta funcion muestra la info en la barra laterarl del NIVEL 1 luego de ser guardado
 function mostrarInfoAltaNivel1(id1){
 
-	ID_N1= id1;
-    objAH=new AjaxHelper(updateMostrarInfoAltaNivel1);
+	ID_N1                   = id1;
+    objAH                   = new AjaxHelper(updateMostrarInfoAltaNivel1);
     objAH.showOverlay       = true;
-    objAH.debug= true;
-    objAH.showStatusIn = 'nivel1';
-    objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
-    objAH.tipoAccion= "MOSTRAR_INFO_NIVEL1_LATERARL";
-    objAH.id1= ID_N1;
+    objAH.debug             = true;
+    objAH.showStatusIn      = 'nivel1';
+    objAH.url               = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.tipoAccion        = "MOSTRAR_INFO_NIVEL1_LATERAL";
+    objAH.id1               = ID_N1;
     objAH.sendToServer();
 }
 
@@ -625,7 +620,7 @@ function updateMostrarInfoAltaNivel1(responseText){
 //esta funcion muestra la info en la barra laterarl del NIVEL 2 luego de ser guardado
 function mostrarInfoAltaNivel2(id2){
     objAH               = new AjaxHelper(updateMostrarInfoAltaNivel2);
-    objAH.showOverlay       = true;
+    objAH.showOverlay   = true;
     objAH.debug         = true;
     objAH.showStatusIn  = 'nivel2';
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
@@ -711,11 +706,9 @@ function updateGuardarDocumentoN1(responseText){
     if (! (hayError(Messages) ) ){
         inicializar();
         $('#datos_del_leader').hide();  
-//         $('#datos_esquema').show();
         //carga la barra lateral con info de nivel 1
         mostrarInfoAltaNivel1(ID_N1);
-//         mostrarEstructuraDelNivel2();
-        agregarN2();
+        mostrarEstructuraDelNivel2();
     } else {
         setMessages(Messages);
     }
@@ -2019,14 +2012,13 @@ function updateBorrarEjemplaresN3(responseText){
 function modificarN1(id1){
      $('#datos_del_leader').show();
 	inicializar();
-    ID_TIPO_EJEMPLAR    = "ALL";
+    ID_TIPO_EJEMPLAR    = $("#tipo_nivel3_id").val();
     ID_N1               = id1;
     _mostrarAccion("Modificando el metadato (" + ID_N1 + ")");
 	objAH               = new AjaxHelper(updateModificarN1);
 	objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;
 	objAH.debug         = true;
-//     objAH.cache = true;
 	objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
 	objAH.itemtype      = ID_TIPO_EJEMPLAR;
 	objAH.id            = ID_N1;
@@ -2054,7 +2046,6 @@ function modificarN2(id2, tipo_ejemplar){
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;
     objAH.debug         = true;
-//     objAH.cache = true;
     objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
     objAH.id            = ID_N2;
     objAH.id_tipo_doc   = ID_TIPO_EJEMPLAR;

@@ -209,6 +209,13 @@ elsif($tipoAccion eq "MOSTRAR_FORM_MODIFICAR_CAMPOS"){
     my $catalogacion                    = C4::AR::Catalogacion::getEstructuraCatalogacionById($id);
 
     my %params_combo;
+    $params_combo{'class'}              = 'horizontal';
+    $params_combo{'id'}                 = 'tipo_nivel3_id_nuevo';
+    $params_combo{'default'}            = $catalogacion->getItemType();
+    my $comboTiposNivel3                = C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
+    $t_params->{'selectItemType'}       = $comboTiposNivel3;
+
+    my %params_combo;
     $params_combo{'default'}            = $catalogacion->getTablaFromReferencia()||'-1';
     $params_combo{'onChange'}           = 'eleccionTablaRef()';
     $t_params->{'tabla_referencias'}    = C4::AR::Utilidades::generarComboTablasDeReferencia(\%params_combo);
@@ -425,7 +432,7 @@ elsif($tipoAccion eq "MOSTRAR_SUBCAMPOS_DE_CAMPO"){
 	print $sub_campos_string;
 }
 
-elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL1_LATERARL"){
+elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL1_LATERAL"){
 #Se muestran las catalogaciones
 
     my ($template, $session, $t_params) = get_template_and_user({

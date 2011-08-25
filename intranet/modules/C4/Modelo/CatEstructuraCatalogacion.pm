@@ -157,10 +157,6 @@ sub modificar{
         $self->setReferencia($data_hash->{'referencia'});
         $self->setNivel($data_hash->{'nivel'});
 
-		if( $self->getNivel == 1){
-			$self->setItemType('ALL');
-		}
-
         #verifico si tiene informacion de referencia, si la tiene la elimino
         my $pref_info_ref = C4::AR::Referencias::getInformacionReferenciaFromId($self->db, $self->getIdInfoRef);
 
