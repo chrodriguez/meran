@@ -79,7 +79,7 @@ else{
                             debug => 1,
         });
 
-        $t_params->{'visualizacion'} = C4::AR::VisualizacionIntra::getConfiguracionByOrder($ejemplar);
+#        $t_params->{'visualizacion'} = C4::AR::VisualizacionIntra::getConfiguracionByOrder($ejemplar);
         $t_params->{'selectCampoX'} = C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
 
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
@@ -112,9 +112,6 @@ else{
                                                   'intranet'
                                       );
 
-
-#         my ($status) = C4::AR::VisualizacionIntra::deleteConfiguracion($obj);
-#         $t_params->{'visualizacion'} = C4::AR::VisualizacionIntra::getConfiguracion($ejemplar);
         my ($Message_arrayref)  = C4::AR::VisualizacionIntra::t_delete_configuracion($obj);
         my $infoOperacionJSON   = to_json $Message_arrayref;
 
@@ -177,6 +174,40 @@ else{
         my $infoOperacionJSON   = to_json $info;
         C4::AR::Auth::print_header($session);
         print $infoOperacionJSON;  
+    }
+    
+     elsif($tipoAccion eq "ACTUALIZAR_ORDEN_AGRUPANDO"){
+        my ($user, $session, $flags)= checkauth(  $input, 
+                                                  $authnotrequired, 
+                                                  {   ui                => 'ANY', 
+                                                      tipo_documento    => 'ANY', 
+                                                      accion            => 'CONSULTA', 
+                                                      entorno           => 'datos_nivel1'}, 
+                                                  'intranet'
+                                      );
+        my $newOrderArray       = $obj->{'newOrderArray'};
+        my $info                = C4::AR::VisualizacionIntra::updateNewOrderGroup($newOrderArray);
+        my $infoOperacionJSON   = to_json $info;
+        C4::AR::Auth::print_header($session);
+        print $infoOperacionJSON;  
+    }
+    elsif($tipoAccion eq "MOSTRAR_TABLA_VISUALIZACION"){
+
+        my ($template, $session, $t_params) = get_template_and_user({
+                            template_name   => "catalogacion/visualizacionINTRA/detalleTablaVisualizacionIntra.tmpl",
+                            query           => $input,
+                            type            => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => {  ui              => 'ANY', 
+                                                tipo_documento  => 'ANY', 
+                                                accion          => 'CONSULTA', 
+                                                entorno         => 'undefined'},
+                            debug => 1,
+        });
+
+        $t_params->{'visualizacion'}    = C4::AR::VisualizacionIntra::getConfiguracionByOrder($ejemplar);
+
+        C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);     
     }
     #**************************************************************************************************
 }
