@@ -22,21 +22,22 @@ my ($session) = C4::AR::Auth::inicializarAuth($t_params);
 
 $t_params->{'partial_template'}= "opac-login.inc";
 
-$t_params->{'sessionClose'} = $query->param('sessionClose') || 0;
+my $sessionClose = $t_params->{'sessionClose'} = $query->param('sessionClose') || 0;
 
-
-if ($t_params->{'sessionClose'}){ 
-  $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje('U358','intranet');
-}
 
 $t_params->{'mostrar_captcha'} = $query->param('mostrarCaptcha') || 0;
 
 $t_params->{'loginAttempt'} = $query->param('loginAttempt') || 0;
 
 if ($t_params->{'loginAttempt'} & !($t_params->{'mostrar_captcha'}) ){
-  $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje('U310','intranet');
+  $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje('U310','opac');
 }
 
-$t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje($codMensaje,'OPAC') || C4::AR::Mensajes::getMensaje($codMensaje,'INTRA'); 
+$t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje($codMensaje,'OPAC'); 
+
+if ($t_params->{'sessionClose'}){ 
+  $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje('U358','opac');
+}
+
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -391,7 +391,7 @@ body {
 
 
 .container_test{
-    height: 86%;
+    height: 90%;
     min-width: 1023px;
 }
 
@@ -1392,8 +1392,11 @@ ul.horizontal-list li {
 
 #marca {
 	background-color: #35414F;
-	height: 62px;
-	clear: both;
+	 clear:both;
+	 width:100%;
+	 height:4.7em;
+	 padding:0;
+	 bottom: 0;
 }
 
 #footer-info{
@@ -1996,11 +1999,11 @@ li.MARCHeader input {
 }
 
 .leido0 {
-	background: red;
+	background: PowderBlue;
 }
 
 .leido1 {
-	background: green;
+	background: none;
 }
 
 .mensaje_contacto {

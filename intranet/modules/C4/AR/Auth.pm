@@ -438,7 +438,7 @@ sub inicializarAuth{
     my ($session) = CGI::Session->load();
     my $msjCode = getMsgCode();
 
-     C4::AR::Debug::debug("FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU inicializarAuth => ");
+     C4::AR::Debug::debug("FUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU inicializarAuth => ".$t_params->{'type'});
      
 #     $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($msjCode,'INTRA',[]);
 
@@ -665,12 +665,14 @@ sub _verificarSession {
         } else {
             #Esto quiere decir que la sesion esta bien pero que no hay nadie logueado
     
-              $code_MSG='U358';
+              $code_MSG='000';
               return ($code_MSG,"sin_sesion");
         }
     }
          C4::AR::Debug::debug("entra por aca?");
 #     C4::AR::Debug::debug("sesion invalida");
+    C4::AR::Debug::debug("ENTRA EN _verificarSession");
+
     $code_MSG='U357';
     return ($code_MSG,"sesion_invalida");
 }
@@ -843,7 +845,10 @@ sub checkauth {
 						}
 					} else {  # if ($sin_captcha || $captchaResult->{is_valid} ) - INGRESA CAPTCHA INVALIDO
 						if ($socio) {$code_MSG='U425';}
-						else { $code_MSG='U357';}
+						elsif ($userid) {     
+					           C4::AR::Debug::debug("ENTRA EN linea 849");
+							   $code_MSG='U357';
+						}
 						$session->param('codMsg', $code_MSG);
                         loginFailed($userid);
                         $cant_fallidos = getSocioAttempts($userid);
@@ -1223,7 +1228,9 @@ sub cerrarSesion{
     #genero una nueva session
     my ($session)           = CGI::Session->load();
     my $msjCode             = 'U358';
-    $t_params->{'mensaje'}  = C4::AR::Mensajes::getMensaje($msjCode,'INTRA',[]);
+    my $type                = $t_params->{'type'} || 'OPAC';
+    
+    $t_params->{'mensaje'}  = C4::AR::Mensajes::getMensaje($msjCode,$type,[]);
     #se destruye la session anterior
     _eliminarSession($session);
     #se genera una nueva session
@@ -1233,7 +1240,7 @@ sub cerrarSesion{
     $params{'token'}                = '';
     $params{'nroRandom'}            = '';
     $params{'borrowernumber'}       = '';
-    $params{'type'}                 = $t_params->{'type'} || 'OPAC'; #OPAC o INTRA
+    $params{'type'}                 = $type;
     $params{'flagsrequired'}        = '';
     $t_params->{'sessionClose'}     = 1;
     $session = C4::AR::Auth::_generarSession(\%params);
@@ -1746,6 +1753,7 @@ sub _validarCambioPassword {
     }else{
       	#no es valida la pass actual
          $msg_object->{'error'}= 1;
+         C4::AR::Debug::debug("ENTRA EN #no es valida la pass actual");
          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U357', 'params' => []} ) ;            
     }
 

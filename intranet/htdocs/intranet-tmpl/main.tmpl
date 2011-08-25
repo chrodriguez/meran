@@ -61,41 +61,6 @@
 
 </script>
 
-
-
-<!--<fieldset class="main">
-    <legend class="titulo_legend"><strong>[% "Circulaci&oacute;n:" | i18n %]</strong></legend>
-    <ul>
-        <li class="item">
-                    [% PERL %]
-                    print C4::AR::Filtros::link_to( 
-                          text =>     "[% 'Pr&eacute;stamos' | i18n %]",
-                          url=>"[% url_prefix %]/circ/prestamos.pl", 
-                          title =>    "[% 'Pr&eacute;stamos' | i18n %]"
-                          );
-                    [% END %]
-        </li>
-        <li class="item">
-                    [% PERL %]
-                    print C4::AR::Filtros::link_to( text =>     "[% 'Devoluciones y Renovaciones' | i18n %]",
-                            url=>"[% url_prefix %]/circ/devoluciones.pl", 
-                            title =>    "[% 'Devoluciones y Renovaciones' | i18n %]"
-                            ) ;
-                    [% END %]
-        </li>
-    </ul>
-</fieldset>-->
-
-<!--<ul>
-        <li class="main_usuario_binvenida">
-            [% IF socio_data.sexo == 'f' %]
-                      <span>[% "Bienvenida" | i18n %]</span>
-            [% ELSE %]   
-                      <span>[% "Bienvenido" | i18n %]</span>
-            [% END %]
-            [%socio_data.usr_nombre %], [% socio_data.usr_apellido %][%'!'%]
-        </li>
-</ul>-->
 <fieldset class="main">
     <legend class="titulo_legend">[% "Personal:" | i18n %]</legend>
     <ul>
@@ -152,12 +117,9 @@
 [% END %]
 
 [% IF twitter_enabled %]
-
-<a class="fancy_link" href="[% url_prefix %]/admin/publicar_twitter.pl?token=[% token %]" > 
-  <img id="button_twitter" src="[% temas %]/[% tema %]/imagenes/botones/button_twitter_normal.png" alt="Twitter"/>
-</a>
-
-
+	<a class="fancy_link" href="[% url_prefix %]/admin/publicar_twitter.pl?token=[% token %]" > 
+	  <img id="button_twitter" src="[% temas %]/[% tema %]/imagenes/botones/button_twitter_normal.png" alt="Twitter"/>
+	</a>
 [% END %]
   
 [% INCLUDE 'intranet-bottom.inc' %]
