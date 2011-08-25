@@ -366,7 +366,7 @@ sub getNivelBibliograficoObject{
 sub toMARC{
     my ($self) = shift;
 
-    #obtengo el marc_record del NIVEL 2
+    #obtengo el marc_record del NIVEL 1
     my $marc_record         = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
     my $params;

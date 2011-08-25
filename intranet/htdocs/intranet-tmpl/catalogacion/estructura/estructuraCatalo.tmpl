@@ -35,28 +35,25 @@ function changePage(ini){
 
 //Muestra lo catalogado seguen el nivel y el tipo de item seleccionado (nivel > 1)
 function eleccionDeNivel(){
-	var nivel=$("#niveles_id").val();
-	var ObjDiv = $("#content_combo_tipo_nivel3_id");
-	if((nivel == '1') || (nivel == 'SIN SELECCIONAR')){
-        ObjDiv.hide();
-    }else{
-        ObjDiv.show();
-    }
+	var nivel           = $("#niveles_id").val();
+	var tipo_ejemplar   = $("#tipo_nivel3_id").val()
+
+	if(nivel == 'SIN SELECCIONAR'){
+        jAlert("Seleccione el nivel",CATALOGO_ALERT_TITLE);
+    } else if(tipo_ejemplar == 'SIN SELECCIONAR'){
+        jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);
+    } else {
 	
-	objAH               = new AjaxHelper(updateEleccionDeNivel);
-    objAH.debug         = true;
-    objAH.showOverlay   = true;
-	objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
-	objAH.nivel         = nivel;
-    objAH.tipoAccion    = 'MOSTRAR_CAMPOS';
+        objAH               = new AjaxHelper(updateEleccionDeNivel);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;
+        objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+        objAH.nivel         = nivel;
+        objAH.tipoAccion    = 'MOSTRAR_CAMPOS';
+        objAH.itemtype      = $('#tipo_nivel3_id').val();  
 
-    if (nivel == 1){
-        objAH.itemtype  = 'ALL';
-    }else {
-        objAH.itemtype  = $('#tipo_nivel3_id').val();
+        objAH.sendToServer();
     }
-
-	objAH.sendToServer();
 }
 
 function updateEleccionDeNivel(responseText){
@@ -65,27 +62,10 @@ function updateEleccionDeNivel(responseText){
     zebra("tabla_datos");
 }
 
-// FIXME esto no se va a usar mas, lo dejo para reusar en la visualizacion de la INTRA
-// function modificarOrden(id, accion){    
-//     
-//     objAH=new AjaxHelper(updateModificarOrden);
-//     objAH.debug= true;
-//     objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
-//     objAH.idMod=id;
-//     objAH.itemtype_cliente = $('#tipo_nivel3_id').val();
-//     objAH.tipoAccion= accion; //SUBIR_ORDEN, BAJAR_ORDEN
-//     objAH.sendToServer();
-// }
-// 
-// function updateModificarOrden(responseText){
-// 
-//     eleccionDeNivel();
-// }
-
 function visibilidad(id){
     objAH               = new AjaxHelper(eleccionDeNivel);
     objAH.debug         = true;
-    objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.id            = id;
     objAH.showOverlay   = true;
     objAH.tipoAccion    = 'CAMBIAR_VISIBILIDAD';
@@ -95,7 +75,7 @@ function visibilidad(id){
 function edicionGrupal(id){
     objAH               = new AjaxHelper(eleccionDeNivel);
     objAH.debug         = true;
-    objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.id            = id;
     objAH.showOverlay   = true;
     objAH.tipoAccion    = 'CAMBIAR_EDICION_GRUPAL';
@@ -106,7 +86,7 @@ function habilitado(id){
     objAH               = new AjaxHelper(eleccionDeNivel);
     objAH.debug         = true;
     objAH.showOverlay   = true;
-    objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.id            = id;
     objAH.tipoAccion    = 'CAMBIAR_HABILITADO';
     objAH.sendToServer();
@@ -119,7 +99,7 @@ function eliminarCampo(id){
             objAH               = new AjaxHelper(eleccionDeNivel);
             objAH.debug         = true;
             objAH.showOverlay   = true;
-            objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+            objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
             objAH.id            = id;
 //             objAH.nivel         = $('#niveles_id').val();
             objAH.tipoAccion    = 'ELIMINAR_CAMPO';
@@ -132,7 +112,7 @@ function mostrarAgregarCampo(id){
     objAH               = new AjaxHelper(updateMostrarAgregarCampo);
     objAH.debug         = true;
     objAH.showOverlay   = true;
-    objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion    = "MOSTRAR_FORM_AGREGAR_CAMPOS";
     objAH.sendToServer();
 }
@@ -150,7 +130,7 @@ function mostrarModificarCampo(id){
     objAH               = new AjaxHelper(updateMostrarModificarCampo);
     objAH.debug         = true;
     objAH.showOverlay   = true;
-    objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion    = "MOSTRAR_FORM_MODIFICAR_CAMPOS";
     objAH.id            = id;
     objAH.sendToServer();
@@ -179,7 +159,7 @@ function mostrarTablaRef(){
     objAH               = new AjaxHelper(updateMostrarTablaRef);
     objAH.debug         = true;
     objAH.showOverlay   = true;
-    objAH.url=URL_PREFIX+"/utils/utilsDB.pl";
+    objAH.url           = URL_PREFIX+"/utils/utilsDB.pl";
     objAH.tipoAccion    = "GENERAR_ARREGLO_TABLA_REF";
     objAH.sendToServer();
 }
@@ -207,7 +187,7 @@ function eleccionCampoX(){
         objAH                   = new AjaxHelper(updateEleccionCampoX);
 		objAH.debug             = true;
         objAH.showOverlay       = true;
-        objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+        objAH.url               = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
         objAH.campoX            = $('#campoX').val();
         objAH.nivel             = $('#niveles_id').val();
         objAH.tipoAccion        = "GENERAR_ARREGLO_CAMPOS";
@@ -241,7 +221,7 @@ function eleccionCampo(){
         objAH               = new AjaxHelper(updateEleccionCampo);
         objAH.debug         = true;
         objAH.showOverlay   = true;
-        objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+        objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
         objAH.campo         = $('#campo').val();
         objAH.nivel         = $('#niveles_id').val();
         objAH.tipoAccion    = "GENERAR_ARREGLO_SUBCAMPOS";
@@ -318,7 +298,7 @@ function armarComboCampos(){
     objAH               = new AjaxHelper(updateArmarComboCampos);
     objAH.debug         = true;
     objAH.showOverlay   = true;
-    objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tableAlias    = $('#tablas_ref').val();
     objAH.tipoAccion    = "GENERAR_ARREGLO_CAMPOS_REFERENCIA";
     objAH.sendToServer();
@@ -499,7 +479,7 @@ function modificarEstructuraCatalogacion(id){
     objAH                   = new AjaxHelper(updateModificarEstructuraCatalogacion);
     objAH.debug             = true;
     objAH.showOverlay       = true;
-    objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url               = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.nivel             = $('#niveles_id').val();
     objAH.id                = id;
     objAH.obligatorio       = ($('#obligatorio_si')[0].checked)?1:0;
@@ -561,7 +541,7 @@ function updateModificarEstructuraCatalogacion(responseText){
             [% END %]
         </li>
     
-        <li id="content_combo_tipo_nivel3_id" class="sub_item" style="display:none;">
+        <li id="content_combo_tipo_nivel3_id" class="sub_item">
             <label for="tipo_nivel3_id">
                 [% 'Esquema:' | i18n %] 
             </label>

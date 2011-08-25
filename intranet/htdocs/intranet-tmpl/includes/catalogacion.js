@@ -361,7 +361,7 @@ function mostrarEstructuraDelNivel1(){
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
     objAH.nivel         = _NIVEL_ACTUAL;
-    objAH.id_tipo_doc   = 'ALL';
+    objAH.id_tipo_doc   = $('#tipo_nivel3_id').val();//'ALL';
     objAH.sendToServer();
 }
 
@@ -528,12 +528,12 @@ function registrarToggleOnChangeForBarcode(callFromBarcode){
 }
 
 function agregarN2(){
-    $('#datos_esquema').dialog({ width: 510, position: 'center', modal: true });
+//     $('#datos_esquema').dialog({ width: 510, position: 'center', modal: true });
 }
 
 function seleccionar_esquema(){
     inicializar(); 
-    close_window_esquema();
+//     close_window_esquema();
     
     ID_TIPO_EJEMPLAR = $('#tipo_nivel3_id').val();
     
