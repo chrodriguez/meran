@@ -1999,11 +1999,11 @@ li.MARCHeader input {
 }
 
 .leido0 {
-	background: red;
+	background: PowderBlue;
 }
 
 .leido1 {
-	background: green;
+	background: none;
 }
 
 .mensaje_contacto {

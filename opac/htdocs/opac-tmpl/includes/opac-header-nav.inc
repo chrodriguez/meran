@@ -1,4 +1,8 @@
-      
+<script type="text/javascript">
+	$(document).ready(function() {
+	    $("#userid").attr("autocomplete","off");
+	});
+</script>
 [% USE HTML %]
   
       <!-- Navigation Level 0 -->
@@ -72,56 +76,6 @@
                                 </form>
                           </fieldset>
                     </div>
-                
-
-
-
-
-
-
-
-                      <!--  <div id="login" style="float:left;">
-                            <div class="column1-unit" style="width:122px;">
-                                  <div class="contactform" style="width:187px;">
-                                      <form id="datosAEnviar" method="post" action="[% url_prefix %]/opac-main.pl" onsubmit="return enviar()" autocomplete="off">
-                                        <p><input type="hidden" name="remember_me" value="0" /></p>
-                                        <fieldset>
-                                          <legend>&nbsp;[% 'Iniciar Sesi&oacute;n' | i18n %]&nbsp;</legend>
-                                          <p>
-                                            <label for="userid" class="top">[% 'Usuario' | i18n %]:</label><br />
-                                            <input type="text" name="userid" id="userid" tabindex="1" class="field" value="" style="width:176px; margin:2px" />
-                                          </p>
-                                          <p>
-                                            <label for="password_plain" class="top">[% 'Contrase&ntilde;a' | i18n %]:</label><br />
-                                            <input type="password" name="" id="password_plain" tabindex="2" class="field" value=""  style="width:176px; margin:2px;" />
-                                            <input type="hidden" name="password" id="password" tabindex="2" class="field" value="" />
-                                          </p>
-                                          <p>
-                                            <input type="submit" name="cmdweblogin" class="button"  style="margin-right:3px;" value="[% 'Enviar' | i18n %]"  />
-                                          </p>
-                                            [%  IF mostrar_captcha  %]
-                                              <div id=captcha>
-                                                <script src="http://www.google.com/recaptcha/api/challenge?k=6LehoMQSAAAAAOhylvTt_7RrPKVdll7CN0jJRdaf" type="text/javascript"></script>
-                                                <noscript><iframe frameborder="0" height="300" src="http://www.google.com/recaptcha/api/noscript?k=6LehoMQSAAAAAOhylvTt_7RrPKVdll7CN0jJRdaf" width="500"></iframe>
-                                                          <textarea cols="40" name="recaptcha_challenge_field" rows="3"></textarea>
-                                                          <input name="recaptcha_response_field" type="hidden" value="manual_challenge" />
-                                                </noscript>
-                                              </div>
-                                            [% END %]
-                                          <p>
-                                            [% PERL %]
-                                                print C4::AR::Filtros::link_to( text =>     "[% 'Olvid&eacute; mi contrase&ntilde;a' | i18n %]",
-                                                                                url =>      "[% url_prefix %]/opac-forgot-password.pl", 
-                                                                                title =>    "[% 'Olvid&eacute; mi contrase&ntilde;a' | i18n %]"
-                                                                            ) ;
-                                            [% END %]
-                                            
-                                          </p>
-                                        </fieldset>
-                                      </form>
-                                  </div>
-                                </div>-->
-  
              [% END %]
             </ul>
         </div>
