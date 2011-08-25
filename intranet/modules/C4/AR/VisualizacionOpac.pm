@@ -133,13 +133,13 @@ sub updateNewOrderGroup{
     Funcion que devuelve TODOS los campos ordenados por orden
 =cut
 sub getConfiguracionByOrder{
-    my ($perfil) = @_;
+    my ($ejemplar) = @_;
 
     my @filtros;
     
-    push ( @filtros, ( or   => [    id_perfil   => { eq => $perfil }, 
-                                    id_perfil   => { eq => '0'     } ]) #PERFIL TODOS
-                );
+    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $ejemplar }, 
+                                tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS
+    );                
 
     my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros, sort_by => ('orden'),);
 
@@ -201,15 +201,24 @@ sub deleteConfiguracion{
 }
  
 sub editConfiguracion{
-    my ($vista_id,$value) = @_;
+    my ($vista_id,$value,$type) = @_;
     my @filtros;
 
     push (@filtros, (id => { eq => $vista_id }) );
     my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros,);
 
     if ($configuracion->[0]){
-        $configuracion->[0]->modificar($value);
-        return ( $configuracion->[0]->getVistaOpac() );
+        if($type eq "pre"){
+            $configuracion->[0]->modificarPre($value);
+            return ($configuracion->[0]->getPre());
+        }
+        elsif($type eq "post"){
+            $configuracion->[0]->modificarPost($value);
+            return ($configuracion->[0]->getPost());
+        }else{
+            $configuracion->[0]->modificar($value);
+            return ($configuracion->[0]->getVistaIntra());
+        }
     }else{
         return(0);
     }
@@ -289,7 +298,10 @@ sub existeConfiguracion{
 
     push(@filtros, ( campo          => { eq => $params->{'campo'} } ));
     push(@filtros, ( subcampo       => { eq => $params->{'subcampo'} } ));
-    push(@filtros, ( id_perfil      => { eq => $params->{'perfil'} } ));
+#    push(@filtros, ( tipo_ejemplar  => { eq => $params->{'ejemplar'} } ));
+    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $params->{'ejemplar'} }, 
+                                    tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS
+    );
 
 
     my $cat_estruct_info_array = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(  

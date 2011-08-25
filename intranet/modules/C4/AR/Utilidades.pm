@@ -2528,7 +2528,7 @@ sub generarComboTablasDeReferencia{
     return $comboTipoNivel3;
 }
 
-
+# deprecated
 sub generarComboDePerfilesOPAC{
 
     my ($params) = @_;

@@ -7,7 +7,7 @@
 <!-- para manejar la ventana de campos MARC -->
 <script src="/intranet-tmpl/includes/popups/helpCamposMARC-min.js"></script>
 <script src="/intranet-tmpl/includes/visualizacionOPAC-min.js"></script>
-<script type="text/javascript" src="/includes/jquery/jquery.jeditable-min.js"></script>
+<script src="/includes/jquery/jquery.jeditable-min.js"></script>
 
 <script>
 //Init Form
@@ -34,13 +34,13 @@ $(document).ready(function() {
 <div class="titulos" >[% 'Visualizaci&oacute;n de campos MARC en OPAC' | i18n %]</div>
 
 <fieldset>
-    <legend><strong>[% "Seleccione un perfil:" | i18n %]</strong></legend>
+    <legend><strong>[% "Seleccione un tipo de ejemplar:" | i18n %]</strong></legend>
     [% combo_perfiles %]
 
     [% PERL %]
             print C4::AR::Filtros::to_Icon(   
                                                 boton   => "icon_buscar",
-                                                onClick => "eleccionDePerfil();",
+                                                onClick => "eleccionDeEjemplar();",
                                                 title   => "[% 'Buscar' | i18n %]",
                     ) ;
     [% END %]

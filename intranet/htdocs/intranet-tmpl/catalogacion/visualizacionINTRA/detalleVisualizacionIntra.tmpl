@@ -74,27 +74,6 @@
         mostrarTabla();        
     }
 </script>
-<script type="text/javascript" src="/includes/jquery/jquery-ui-1.8.13.sortable.min.js"></script>
-<script type="text/javascript">
-    $(function() {
-		    $("#sortable").sortable({
-                stop: function(event, ui) { 
-                    objAH               = new AjaxHelper(updateSortable);
-	                objAH.debug         = true;
-	                objAH.url           = URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
-                    objAH.showOverlay   = true;
-	                objAH.tipoAccion    = "ACTUALIZAR_ORDEN";
-	                objAH.newOrderArray = $('#sortable').sortable('toArray');
-	                objAH.sendToServer(); 
-                }
-            });
-		    $("#sortable").disableSelection();
-		    
-		    function updateSortable(responseText){ }
-	    });
-</script>
-
-
 <fieldset>
     <legend class="titulo_legend trigger click"><strong>[% "Agregar Visualizaci&oacute;n:" | i18n %]</strong></legend>
     <div class="divTablaAgregarVisualizacion" id="divTablaAgregarVisualizacion">

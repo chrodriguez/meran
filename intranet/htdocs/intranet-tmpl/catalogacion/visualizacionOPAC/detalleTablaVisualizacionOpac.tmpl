@@ -18,7 +18,9 @@
                 <tr class="titulo_tabla_resultado">
                     <td>[% "Campo" | i18n %]</td>
                     <td>[% "Subcampo" | i18n %]</td>
+                    <td>[% "Pre" | i18n %]</td>
                     <td>[% "Vista en OPAC " | i18n %]</td>
+                    <td>[% "Post" | i18n %]</td>
                     <td>[% "Eliminar" | i18n %]</td>
                 </tr>
             </thead>
@@ -27,7 +29,9 @@
                     <tr id="[% campo.getId %]" align="center">
                         <td>[% campo.getCampo %]</td>
                         <td>[% campo.getSubCampo %]</td>
+                        <td class="pre" id="[% campo.id %]">[% campo.getPre %]</td>
                         <td class="editable" id="[% campo.id %]">[% campo.getVistaOpac %]</td>
+                        <td class="post" id="[% campo.id %]">[% campo.getPost %]</td>
                         <td align="center">
                             [% PERL %]
                                 print C4::AR::Filtros::to_Icon( text =>     "[% 'Eliminar Vista' | i18n %]",
