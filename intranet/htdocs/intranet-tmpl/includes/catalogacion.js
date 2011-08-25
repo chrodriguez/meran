@@ -346,11 +346,10 @@ function getDivDelNivel(){
 
 // FIXME esto podria ser generico para los 3 niveles
 function mostrarEstructuraDelNivel1(){
-    
+   
     if(MODIFICAR == 0){
         _mostrarAccion("Agregando metadatos");
     } 
-
 
     _NIVEL_ACTUAL       = 1;
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel1);
@@ -371,11 +370,6 @@ function updateMostrarEstructuraDelNivel1(responseText){
     //ademas se carga el arreglo MARC_OBJECT_ARRAY donde se hace el mapeo de componente del cliente y dato
     var objetos_array = JSONstring.toObject(responseText);
     procesarInfoJson(objetos_array, null); 
-//     procesarInfoJson(responseText); 
-    //carga los datos en los campos solo si se esta modificando
-//     FIXME esto no es neceario, luego de agregar o modificar se muestra un mensaje y ya se hace un scrollTo al mendaje
-//     scrollTo('nivel1Tabla');
-    
 	//asigno el handler para el validador
 	validateForm('formNivel1',guardarModificarDocumentoN1);
     addRules();
@@ -411,8 +405,7 @@ function updateMostrarEstructuraDelNivel2(responseText){
         //dejo seleccionado el tipo de documento segun el esquema  
         $('#'+_getIdComponente('910','a')).val($('#tipo_nivel3_id').val());
     }      
-    //se deshabilita  
-//     $('#'+_getIdComponente('910','a')).attr('disabled', true);  
+    
 }
 
 
@@ -437,7 +430,6 @@ function mostrarEstructuraDelNivel3(tipo_documento){
 
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel3);
     objAH.debug         = true;
-// 	  objAH.cache= true;
     objAH.showOverlay   = true;
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
@@ -480,8 +472,6 @@ function updateMostrarEstructuraDelNivel3(responseText){
 
 function switchTipoBarcode(chosen, readOnly){
   
-//   alert("switchTipoBarcode => chosen: " + chosen + " readOnly: " + readOnly);
-
     readOnly.val('');
     readOnly.attr("readonly",true);
     readOnly.removeClass("required");  
@@ -498,9 +488,7 @@ function registrarToggleOnChangeForBarcode(callFromBarcode){
     var barcode_val     = $.trim(barcode_comp.val());
 
     if (callFromBarcode){       
-// alert("callFromBarcode");
         if ((cantidad_val.length)>0) {
-//           alert("cant es > 0");
             jConfirm(BORRAR_CANTIDAD_DE_EJEMPLARES, CATALOGO_ALERT_TITLE, function(confirmStatus){
                 if (confirmStatus){
                     switchTipoBarcode(barcode_comp,cantidad_comp);
@@ -512,7 +500,6 @@ function registrarToggleOnChangeForBarcode(callFromBarcode){
         } else switchTipoBarcode(barcode_comp,cantidad_comp);
     } else {
         if ((barcode_val.length)>0){
-//           alert("not callFromBarcode => barcode_val > 0");
             jConfirm(BORRAR_LISTA_DE_CODIGOS, CATALOGO_ALERT_TITLE, function(confirmStatus){
                 if (confirmStatus){
                     switchTipoBarcode(cantidad_comp,barcode_comp);
@@ -527,14 +514,13 @@ function registrarToggleOnChangeForBarcode(callFromBarcode){
 
 function seleccionar_esquema(){
     inicializar(); 
-//     close_window_esquema();
     
     ID_TIPO_EJEMPLAR = $('#tipo_nivel3_id').val();
     
     if( (TIENE_NIVEL_2 == 0)&&($('#tipo_nivel3_id').val() == 'SIN SELECCIONAR') ){
         jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);
         $('#tipo_nivel3_id').focus();
-    }else{
+    } else {
         if( $('#tipo_nivel3_id').val() == 'SIN SELECCIONAR') {
             jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);
             $('#tipo_nivel3_id').focus();
@@ -701,7 +687,6 @@ function updateGuardarDocumentoN1(responseText){
     var info        = JSONstring.toObject(responseText);
     var Messages    = info.Message_arrayref;
     ID_N1           = info.id1; //recupero el id desde el servidor
-//     setMessages(Messages);
 
     if (! (hayError(Messages) ) ){
         inicializar();
@@ -979,14 +964,7 @@ function mostrarInfoAltaNivel3ParaEdicionGrupalFromRegistro(idNivel2){
     }
 }
 
-function updateMostrarInfoAltaNivel3ParaEdicionGrupalFromRegistro(responseText){
-//     $("#divCantEjemplares").show(); 
-//     $("#detalleDelNivel3").html(responseText);
-//     checkedAll("select_all", "checkEjemplares");  
-//     zebra('tablaResult');
-
-//     $("input[name=checkEjemplares]").each(function(){this.checked = true;});
-    
+function updateMostrarInfoAltaNivel3ParaEdicionGrupalFromRegistro(responseText){    
     modificarEjemplaresN3();
 }
 
@@ -1806,18 +1784,7 @@ function crearAuto(obj){
     if((obj.getCampo() == '773')&&(obj.getSubCampo() == 'a')){
         // FIXME parche para el doble combo de analiticas
         var comp = "<div id='ediciones'></div>";
-        $(comp).insertAfter("#div" + obj.getIdCompCliente());
-        
-        
-//         $('#edicion_id').change(function() {
-// //             cambiarValorEnHidden(obj.getIdCompCliente());  
-// 
-//             var valor = $('#edicion_id').val();
-//             
-// //            alert("HOLA valor => " + valor + " id => " + obj.getIdCompCliente() + "_hidden"); 
-//             $(obj.getIdCompCliente() + "_hidden").val(valor);
-//         
-//         });
+        $(comp).insertAfter("#div" + obj.getIdCompCliente());        
     }      
     
     comp = "<div class='icon_agregar horizontal' onclick=agregarTablaReferencias('" + obj.getReferenciaTabla() + "') title='Agregar referencia al subcampo " + obj.getSubCampo() + " para el campo " + obj.getCampo() + "' />"
@@ -2185,7 +2152,6 @@ function cargarNivel1(params){
 }
 
 function validateForm(formID, func){
-
     //se setea el handler para el error
     $.validator.setDefaults({
         submitHandler:  func ,

@@ -20,8 +20,7 @@ my ($template, $session, $t_params) = get_template_and_user ({
     					});
 
 
-my $post_params = $input->Vars;
-
+my $post_params                 = $input->Vars;
 #estos parametros se usan cuando se viene desde otra pagina y se intenta modificar algun nivel
 my $id1                         = $input->param('id1')||0;
 my $id2                         = $input->param('id2')||0;
@@ -32,8 +31,7 @@ $t_params->{'id2'}              = $id2;
 $t_params->{'id3'}              = $id3;
 $t_params->{'tipoAccion'}       = $tipoAccion;
 $t_params->{'tiene_nivel_2'}    = 0;
-
-my $nivel=1;
+my $nivel                       = 1;
 my %params_combo;
 
 
@@ -66,12 +64,11 @@ $params_combo{'onChange'}                       = '';
 $params_combo{'default'}                        = 'SIN SELECCIONAR';
 $t_params->{'comboTipoNivelBibliografico'}      = &C4::AR::Utilidades::generarComboNivelBibliografico(\%params_combo);
 $t_params->{'page_sub_title'}                   = C4::AR::Filtros::i18n("Catalogaci&oacute;n - Datos del documento");
+
 if($id1){
     $t_params->{'ocultarDivLateral'}            = 0;
 }else{
     $t_params->{'ocultarDivLateral'}            = 1;
 }
-
-C4::AR::Debug::debug("param: ".$t_params->{'ocultarDivLateral'});
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
