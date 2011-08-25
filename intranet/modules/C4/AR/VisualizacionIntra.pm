@@ -127,15 +127,25 @@ sub deleteConfiguracion{
 }
 
 sub editConfiguracion{
-    my ($vista_id,$value) = @_;
+    my ($vista_id,$value,$type) = @_;
     my @filtros;
 
     push (@filtros, (id => { eq => $vista_id }) );
     my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros,);
 
     if ($configuracion->[0]){
-        $configuracion->[0]->modificar($value);
-        return ( $configuracion->[0]->getVistaIntra() );
+        if($type eq "pre"){
+            $configuracion->[0]->modificarPre($value);
+            return ($configuracion->[0]->getPre());
+        }
+        elsif($type eq "post"){
+            $configuracion->[0]->modificarPost($value);
+            return ($configuracion->[0]->getPost());
+        }else{
+            $configuracion->[0]->modificar($value);
+            return ($configuracion->[0]->getVistaIntra());
+        }
+
     }else{
         return(0);
     }

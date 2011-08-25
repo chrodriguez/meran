@@ -11,7 +11,29 @@
               tooltip   : EDITABLE_MSG,
               placeholder: EDITABLE_MSG,
               style   : 'display: inline',
-              submitdata : {token: "[% token %]", edit: 1},
+              submitdata : {token: "[% token %]", edit: 1, type: 'nombre'},
+              indicator : loaderPath,
+
+        });
+        $('.pre').editable('[% url_prefix %]/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl', { 
+              type      : 'text',
+              cancel    : CANCELAR,
+              submit    : OK,
+              tooltip   : EDITABLE_MSG,
+              placeholder: EDITABLE_MSG,
+              style   : 'display: inline',
+              submitdata : {token: "[% token %]", edit: 1, type: 'pre'},
+              indicator : loaderPath,
+
+        });
+        $('.post').editable('[% url_prefix %]/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl', { 
+              type      : 'text',
+              cancel    : CANCELAR,
+              submit    : OK,
+              tooltip   : EDITABLE_MSG,
+              placeholder: EDITABLE_MSG,
+              style   : 'display: inline',
+              submitdata : {token: "[% token %]", edit: 1, type: 'post'},
               indicator : loaderPath,
 
         });
@@ -60,9 +82,17 @@
                     </select>
             </li>
             <li class="sub_item" id="lib_librarian">
+                <label for="pre">[% 'Pre' | i18n %]:</label> 
+                <input id="pre" type="text" value="" size="50">
+            </li>
+            <li class="sub_item" id="lib_librarian">
                 <label for="liblibrarian">[% 'Vista en Intranet' | i18n %]:</label> 
                 <input id="liblibrarian" type="text" value="" size="90">
             </li> 
+            <li class="sub_item" id="lib_librarian">
+                <label for="post">[% 'Post' | i18n %]:</label> 
+                <input id="post" type="text" value="" size="50">
+            </li>
             [% PERL %]
                     print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Vista' | i18n %]",
                                                         boton   => "boton_buscar",
@@ -87,7 +117,9 @@
                 <tr class="titulo_tabla_resultado">
                     <td>[% "Campo" | i18n %]</td>
                     <td>[% "Subcampo" | i18n %]</td>
+                    <td>[% "Pre" | i18n %]</td>
                     <td>[% "Vista en INTRANET " | i18n %]</td>
+                    <td>[% "Post" | i18n %]</td>
                     <td>[% "Eliminar" | i18n %]</td>
                 </tr>
             </thead>
@@ -96,7 +128,9 @@
                     <tr id="[% campo.getId %]" align="center">
                         <td>[% campo.getCampo %]</td>
                         <td>[% campo.getSubCampo %]</td>
+                        <td class="pre" id="[% campo.id %]">[% campo.getPre %]</td>
                         <td class="editable" id="[% campo.id %]">[% campo.getVistaIntra %]</td>
+                        <td class="post" id="[% campo.id %]">[% campo.getPost %]</td>
                         <td align="center">
                             [% PERL %]
                                 print C4::AR::Filtros::to_Icon( text =>     "[% 'Eliminar Vista' | i18n %]",

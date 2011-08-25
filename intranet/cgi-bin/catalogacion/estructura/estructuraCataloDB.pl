@@ -10,18 +10,15 @@ use C4::AR::Utilidades;
 use C4::AR::Catalogacion;
 use JSON;
 
-my $input = new CGI;
+my $input           = new CGI;
+my $authnotrequired = 0;
+my $obj             = $input->param('obj');
+$obj                = C4::AR::Utilidades::from_json_ISO($obj);
+my $tipoAccion      = $obj->{'tipoAccion'}||"";
+my $nivel           = $obj->{'nivel'};
+my $orden           = $obj->{'orden'}||"intranet_habilitado";
+my $itemType        = $obj->{'itemtype'}||'ALL';
 
-my $authnotrequired= 0;
-my $obj=$input->param('obj');
-
-$obj=C4::AR::Utilidades::from_json_ISO($obj);
-
-my $tipoAccion= $obj->{'tipoAccion'}||"";
-
-my $nivel=$obj->{'nivel'};
-my $orden=$obj->{'orden'}||"intranet_habilitado";
-my $itemType='ALL';
 if($nivel > 1){
     $itemType=$obj->{'itemtype'};
 }
@@ -42,8 +39,9 @@ if($tipoAccion eq "MOSTRAR_CAMPOS"){
 			        });
 
 
+C4::AR::Debug::debug("getEstructuraCatalogacionFromDBCompleta => itemType FROM PL => ".$itemType);
 # TODO en el template esta haciendo una consulta por cada fila
-    my ($cant, $catalogaciones_array_ref) = C4::AR::Catalogacion::getEstructuraCatalogacionFromDBCompleta($nivel,$itemType,$orden);
+    my ($cant, $catalogaciones_array_ref) = C4::AR::Catalogacion::getEstructuraCatalogacionFromDBCompleta($nivel, $itemType, $orden);
     
     #Se pasa al cliente el arreglo de objetos estructura_catalogacion   
     $t_params->{'catalogaciones'}   = $catalogaciones_array_ref;
@@ -264,48 +262,9 @@ elsif($tipoAccion eq "MODIFICAR_ESTRUCTURA_CATALOGACION"){
     C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }
-# FIXME esto no se va a usar mas, lo dejo para reusar en la visualizacion de la INTRA
-#Sube el orden en la vista del campo seleccionado
-# elsif($tipoAccion eq "SUBIR_ORDEN"){
-#      my ($user, $session, $flags)= checkauth(    $input, 
-#                                                 $authnotrequired, 
-#                                                 {   ui => 'ANY', 
-#                                                     tipo_documento => 'ANY', 
-#                                                     accion => 'CONSULTA', 
-#                                                     entorno => 'datos_nivel1'}, 
-#                                                 'intranet'
-#                                     );
-#     my $id = $obj->{'idMod'};
-#     my $itemtype = $obj->{'itemtype_cliente'};
-# 
-#     C4::AR::Validator::validateParams('U389', $obj,['idMod', 'itemtype_cliente']);
-# 
-#     C4::AR::Catalogacion::subirOrden($id,$itemtype);
-#     C4::AR::Auth::print_header($session);
-#     print 1;
-# }
-# FIXME esto no se va a usar mas, lo dejo para reusar en la visualizacion de la INTRA
-#Baja el orden en la vista del campo seleccionado
-# elsif($tipoAccion eq "BAJAR_ORDEN"){
-#      my ($user, $session, $flags)= checkauth(    $input, 
-#                                                 $authnotrequired, 
-#                                                 {   ui => 'ANY', 
-#                                                     tipo_documento => 'ANY', 
-#                                                     accion => 'CONSULTA', 
-#                                                     entorno => 'datos_nivel1'}, 
-#                                                 'intranet'
-#                                     );
-#     my $id = $obj->{'idMod'};
-#     my $itemtype = $obj->{'itemtype_cliente'};
-# 
-#     C4::AR::Validator::validateParams('U389', $obj,['idMod', 'itemtype_cliente']);
-# 
-#     C4::AR::Catalogacion::bajarOrden($id,$itemtype);
-#     C4::AR::Auth::print_header($session);
-# }
 
-#Se cambia la visibilidad del campo.
 elsif($tipoAccion eq "CAMBIAR_VISIBILIDAD"){
+#Se cambia la visibilidad del campo.
      my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 
                                                 {   ui => 'ANY', 
