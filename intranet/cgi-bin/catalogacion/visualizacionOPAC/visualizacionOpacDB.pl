@@ -8,28 +8,43 @@ use C4::AR::VisualizacionOpac;
 use C4::AR::Utilidades;
 use JSON;
 
-my $input = new CGI;
+my $input   = new CGI;
 
 my $editing = $input->param('value') && $input->param('id');
+
+my $type    = $input->param('type');
 
 if($editing){
 
     my ($template, $session, $t_params)  = get_template_and_user({  
-                        template_name   => "includes/partials/modificar_value.tmpl",
-                        query           => $input,
-                        type            => "intranet",
-                        authnotrequired => 0,
-                        flagsrequired => {  ui              => 'ANY', 
-                                            tipo_documento  => 'ANY', 
-                                            accion          => 'CONSULTA', 
-                                            entorno         => 'permisos', 
-                                            tipo_permiso    => 'general'},
-                        debug => 1,
-                    });
+                            template_name   => "includes/partials/modificar_value.tmpl",
+                            query           => $input,
+                            type            => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired   => {  ui            => 'ANY', 
+                                                tipo_documento  => 'ANY', 
+                                                accion          => 'CONSULTA', 
+                                                entorno         => 'permisos', 
+                                                tipo_permiso    => 'general'},
+                            debug => 1,
+                        });
+    my $configuracion;                        
 
-    my $value           = $input->param('value');
-    my $vista_id        = $input->param('id');
-    my ($configuracion) = C4::AR::VisualizacionOpac::editConfiguracion($vista_id,$value);
+    if($type eq "pre"){
+        my $value           = $input->param('value');
+        my $vista_id        = $input->param('id');
+        $configuracion      = C4::AR::VisualizacionOpac::editConfiguracion($vista_id,$value,'pre');
+    }
+    elsif($type eq "post"){
+        my $value           = $input->param('value');
+        my $vista_id        = $input->param('id');
+        $configuracion      = C4::AR::VisualizacionOpac::editConfiguracion($vista_id,$value,'post');
+    }
+    elsif($type eq "nombre"){
+        my $value       = $input->param('value');
+        my $vista_id    = $input->param('id');
+        $configuracion  = C4::AR::VisualizacionOpac::editConfiguracion($vista_id,$value);
+    }
 
     $t_params->{'value'} = $configuracion;
 
@@ -44,7 +59,7 @@ else{
     #tipoAccion = Insert, Update, Select
     my $tipoAccion  = $obj->{'tipoAccion'} || "";
     my $componente  = $obj->{'componente'} || "";
-    my $perfil      = $obj->{'perfil'} || "";
+    my $ejemplar    = $obj->{'ejemplar'} || "";
     my $result;
     my %infoRespuesta;
     my $authnotrequired = 0;
@@ -82,7 +97,7 @@ else{
                             debug => 1,
         });
 
-        $t_params->{'visualizacion'}    = C4::AR::VisualizacionOpac::getConfiguracionByOrder($perfil);
+        $t_params->{'visualizacion'}    = C4::AR::VisualizacionOpac::getConfiguracionByOrder($ejemplar);
 
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);     
     }

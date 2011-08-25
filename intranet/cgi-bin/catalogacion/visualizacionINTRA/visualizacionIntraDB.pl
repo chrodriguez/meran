@@ -79,7 +79,6 @@ else{
                             debug => 1,
         });
 
-#        $t_params->{'visualizacion'} = C4::AR::VisualizacionIntra::getConfiguracionByOrder($ejemplar);
         $t_params->{'selectCampoX'} = C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
 
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
