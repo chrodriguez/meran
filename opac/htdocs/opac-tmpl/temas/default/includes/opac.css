@@ -3428,10 +3428,10 @@ fieldset { border: none }
 #search-submit {
     background: url(../imagenes/search-main.png) no-repeat 5px 4px;
     border:none;
-    height: 30px;
+    height: 34px;
     position: absolute;
-    right: 0;
-    top: 10px;
+    right: 4px;
+    top: 6px;
     width: 42px;
     cursor:pointer;
    
