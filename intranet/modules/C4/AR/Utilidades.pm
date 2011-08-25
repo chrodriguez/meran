@@ -2405,11 +2405,11 @@ sub generarComboTipoNivel3{
       $options_hash{'onBlur'}   = $params->{'onBlur'};
     }
 
-    $options_hash{'name'}= $params->{'name'}||'tipo_nivel3_name';
-    $options_hash{'id'}= $params->{'id'}||'tipo_nivel3_id';
-    $options_hash{'size'}=  $params->{'size'}||1;
-    $options_hash{'multiple'}= $params->{'multiple'}||0;
-    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
+    $options_hash{'name'}       = $params->{'name'}||'tipo_nivel3_name';
+    $options_hash{'id'}         = $params->{'id'}||'tipo_nivel3_id';
+    $options_hash{'size'}       = $params->{'size'}||1;
+    $options_hash{'multiple'}   = $params->{'multiple'}||0;
+    $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
 
     push (@select_tipo_nivel3_array, 'ALL');
     $select_tipo_nivel3_hash{'ALL'} = 'TODOS';

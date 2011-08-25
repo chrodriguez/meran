@@ -101,7 +101,6 @@ function eliminarCampo(id){
             objAH.showOverlay   = true;
             objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
             objAH.id            = id;
-//             objAH.nivel         = $('#niveles_id').val();
             objAH.tipoAccion    = 'ELIMINAR_CAMPO';
             objAH.sendToServer();
         }
@@ -329,7 +328,7 @@ function updateArmarComboCampos(responseText){
 		$('#camposSelect')[0].selectedIndex = 2;
 		$('#camposRef')[0].selectedIndex = 2;
 	}
-//     $("#camposRef").val(joinedFields);
+
     $("#divCamposRef").show();
     enable_disableSelects();
 }
@@ -483,13 +482,10 @@ function modificarEstructuraCatalogacion(id){
     objAH.nivel             = $('#niveles_id').val();
     objAH.id                = id;
     objAH.obligatorio       = ($('#obligatorio_si')[0].checked)?1:0;
-    objAH.itemtype          = $('#tipo_nivel3_id').val();
-//     objAH.campo             = $('#campo').val();
-//     objAH.subcampo          = $('#subcampo').val();
+    objAH.itemtype          = $('#tipo_nivel3_id_nuevo').val();
     objAH.liblibrarian      = $('#liblibrarian').val();
     objAH.tipoInput         = $('#tipoInput').val();
     objAH.combo_validate    = $('#combo_validate').val();
-//     objAH.tabla             = $('#tablas_ref').val();
 
     if( ( $('#tablas_ref').val() != -1)&&($('#tablas_ref').val()) ){
         objAH.referencia    = 1;

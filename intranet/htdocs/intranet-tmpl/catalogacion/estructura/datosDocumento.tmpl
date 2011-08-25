@@ -11,25 +11,22 @@
 
 [% INCLUDE 'datePicker.inc' %]
 
-[% INCLUDE "FormValidateHelper.inc" %]
+[% INCLUDE 'FormValidateHelper.inc' %]
 
-[% INCLUDE  'WindowHelper.inc'  %]
+[% INCLUDE 'WindowHelper.inc' %]
 
-[% INCLUDE  'AutocompleteHelper.inc'  %] 
+[% INCLUDE 'AutocompleteHelper.inc' %] 
 
 
 <script type="text/javascript">
 
 var TIENE_NIVEL_2 = 0;
 
-/*function close_window_esquema(){
-    $('#datos_esquema').dialog('close');
-} */ 
 
 //Funcion que se ejecuta cuando se carga la pagina, dependiendo de donde viene ejecuta las funciones correspondientes.
 $(document).ready( function() {
 	//oculto todas las tabls
-	_showAndHiddeEstructuraDelNivel(0);
+    _showAndHiddeEstructuraDelNivel(0);
     params                  = new objeto_params();
     params.tipoAccion       = "[% tipoAccion %]";
     params.id1              = [% id1 %];
@@ -37,11 +34,11 @@ $(document).ready( function() {
     params.id3              = [% id3 %];
     TIENE_NIVEL_2           = [% tiene_nivel_2 %];
 
-	[% IF tipoAccion == "MODIFICAR_NIVEL_1" %]
+    [% IF tipoAccion == "MODIFICAR_NIVEL_1" %]
         MODIFICAR               = 1;
         FROM_DETALLE_REGISTRO   = 1;
-		cargarNivel1(params);
-	[% ELSIF tipoAccion == "MODIFICAR_NIVEL_2" %]
+        cargarNivel1(params);
+    [% ELSIF tipoAccion == "MODIFICAR_NIVEL_2" %]
         MODIFICAR               = 1;
         FROM_DETALLE_REGISTRO   = 1;
         cargarNivel1(params);
@@ -59,10 +56,9 @@ $(document).ready( function() {
         [% END %]
 
         modificarEjemplaresN3FromRegistro(params.id1);
-	[% END %]
+    [% END %]
 
-//     $('#datos_esquema').hide();
-    $('#datos_indice').hide()
+    $('#datos_indice').hide();
 
     if(MODIFICAR) {
         $('#datos_del_leader').hide();
@@ -70,6 +66,7 @@ $(document).ready( function() {
         mostrarEstructuraDelNivel1();
         $('#datos_del_leader').show();
     }
+
 
 } );
 
