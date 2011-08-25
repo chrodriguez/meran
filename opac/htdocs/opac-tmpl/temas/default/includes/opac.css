@@ -105,12 +105,10 @@ body textarea:focus{
  overflow:visible !important /*Firefox*/;
  overflow:hidden /*IE6*/;
 }
-.footer {
- clear:both;
+.footer {clear:both;
  width:100%;
- height:4.7em;
- padding:0;
- bottom: 0;
+ height:3.7em;
+ padding:1.1em 0 0;
  background:rgb(225,225,225) url(../imagenes/bg_foot.jpg) repeat;
  font-size:1.0em;
  overflow:visible !important /*Firefox*/;
@@ -3329,7 +3327,6 @@ a.signin.menu-open span {
     display:block;
     -moz-border-radius:4px;
     -webkit-border-radius:4px;
-    border-radius: 4px;
     border:1px solid #4f6596;
     font-size:11px;
     margin:0 0 5px;
