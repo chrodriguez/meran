@@ -71,4 +71,7 @@ if($id1){
     $t_params->{'ocultarDivLateral'}            = 1;
 }
 
+# ????????????????
+$t_params->{'ocultarDivLateral'}            = 0;
+
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

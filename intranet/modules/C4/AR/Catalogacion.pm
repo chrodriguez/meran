@@ -426,7 +426,8 @@ sub filtrarVisualizacion{
     my $visulizacion_array_ref;
 
     if($params->{'tipo'} eq 'OPAC'){
-        ($visulizacion_array_ref) = C4::AR::VisualizacionOpac::getConfiguracion($db);
+#         ($visulizacion_array_ref) = C4::AR::VisualizacionOpac::getConfiguracion($db);
+        ($visulizacion_array_ref) = C4::AR::VisualizacionOpac::getConfiguracion($params->{'id_tipo_doc'},$db);
     } else {
         ($visulizacion_array_ref) = C4::AR::VisualizacionIntra::getConfiguracion($params->{'id_tipo_doc'},$db);
     }

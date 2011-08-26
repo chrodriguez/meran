@@ -143,11 +143,11 @@ sub modificar{
     
     my $mr = MARC::Record->new_from_usmarc($marc_record);  
 
-    my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $self->db );
-    $cat_registro_n2_analitica->setId2Padre(C4::AR::Catalogacion::getRefFromStringConArrobas($mr->subfield("773","a")));
-    $cat_registro_n2_analitica->setId2Hijo($self->getId2());
-
-    $cat_registro_n2_analitica->save();
+# TODO ver si tiene analica
+#     my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $self->db );
+#     $cat_registro_n2_analitica->setId2Padre(C4::AR::Catalogacion::getRefFromStringConArrobas($mr->subfield("773","a")));
+#     $cat_registro_n2_analitica->setId2Hijo($self->getId2());
+#     $cat_registro_n2_analitica->save();
 
     $self->save();
 }

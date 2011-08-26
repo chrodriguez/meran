@@ -576,6 +576,7 @@ function close_window_indice(){
 }  
 
 function agregarN2(){
+    _NIVEL_ACTUAL       = 2;
     ID_TIPO_EJEMPLAR    = $("#tipo_nivel3_id").val();
     MODIFICAR           = 0;
     inicializar();  
@@ -583,13 +584,15 @@ function agregarN2(){
 }
 
 function agregarN3(id2, tipo_documento){
+    _NIVEL_ACTUAL       = 3;
     ID_N2               = id2; 
     ID_TIPO_EJEMPLAR    = tipo_documento;
 	MODIFICAR           = 0;
     inicializar();  
     _mostrarAccion("Agregando ejemplares");
 	$('#divCantEjemplares').show();
-	mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
+// 	mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
+    open_esquema();
 }
 
 //esta funcion muestra la info en la barra laterarl del NIVEL 1 luego de ser guardado
