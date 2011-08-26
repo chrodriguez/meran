@@ -30,6 +30,9 @@ my $funcion                     = $obj->{'funcion'};
 
 my ($ini,$pageNumber,$cantR)    = C4::AR::Utilidades::InitPaginador($ini);
 my ($cant,$reservas_array_ref)  = C4::AR::Reservas::getHistorialReservasParaTemplate($nro_socio,$ini,$cantR,$orden);
+C4::AR::Debug::debug("reserva : ".@$reservas_array_ref[0]);
+C4::AR::Utilidades::printHASH(@$reservas_array_ref[0]);
+C4::AR::Debug::debug("id3 : ".@$reservas_array_ref[0]->{'id3'});
 
 $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cant,$cantR, $pageNumber,$funcion,$t_params);
 $t_params->{'cantidad'}         = $cant;
