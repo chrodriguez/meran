@@ -346,12 +346,12 @@ function getDivDelNivel(){
 
 // FIXME esto podria ser generico para los 3 niveles
 function mostrarEstructuraDelNivel1(){
+    _NIVEL_ACTUAL       = 1;
    
     if(MODIFICAR == 0){
         _mostrarAccion("Agregando metadatos");
     } 
 
-    _NIVEL_ACTUAL       = 1;
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel1);
     objAH.debug         = true;
     objAH.showOverlay   = true;
@@ -377,9 +377,11 @@ function updateMostrarEstructuraDelNivel1(responseText){
 
 function mostrarEstructuraDelNivel2(){
     _NIVEL_ACTUAL       = 2;
+    
     if(MODIFICAR == 0){
         _mostrarAccion("Agregando grupo");
     }
+    
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel2);
     objAH.debug         = true;
     objAH.showOverlay   = true;  
@@ -424,6 +426,7 @@ function _seleccionarTipoDocumentoYDeshabilitarCombo(){
 
 function mostrarEstructuraDelNivel3(tipo_documento){
     _NIVEL_ACTUAL       = 3;
+    
     if(MODIFICAR == 0){
         _mostrarAccion("Agregando ejemplares");
     }
@@ -530,6 +533,7 @@ function seleccionar_esquema(){
             
             if(_NIVEL_ACTUAL == 1){  
                 mostrarEstructuraDelNivel1();
+                $('#datos_del_leader').hide();    
             } else if(_NIVEL_ACTUAL == 2){
                 mostrarEstructuraDelNivel2();
             } else {
@@ -626,7 +630,7 @@ function mostrarInfoAltaNivel2(id2){
     objAH               = new AjaxHelper(updateMostrarInfoAltaNivel2);
     objAH.showOverlay   = true;
     objAH.debug         = true;
-    objAH.showStatusIn  = 'nivel2';
+//     objAH.showStatusIn  = 'nivel2';
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion    = "MOSTRAR_INFO_NIVEL2_LATERARL";
     objAH.id2           = id2; //mostrar todos los nivel 2 del nivel1 con el q se esta trabajando, asi este vuela
@@ -777,10 +781,12 @@ function guardarDocumentoN3(){
         objAH.ui_origen         = $('#' + _getIdComponente('995','d')).val();
         objAH.ui_duenio         = $('#' + _getIdComponente('995','c')).val();
 
-    if (porBarcode)
-        objAH.BARCODES_ARRAY    = BARCODES_ARRAY;
-    else
-        objAH.cantEjemplares    = $("#cantEjemplares").val();
+        if (porBarcode){
+            objAH.BARCODES_ARRAY    = BARCODES_ARRAY;
+        } else {
+            objAH.cantEjemplares    = $("#cantEjemplares").val();
+        }
+    
 		_sacarOpciones();
 		objAH.infoArrayNivel3   = MARC_OBJECT_ARRAY;
 		objAH.id1 = ID_N1;
@@ -837,6 +843,7 @@ function updateGuardarModificacionDocumentoN1(responseText){
 
     if (! (hayError(Messages) ) ){
         inicializar();
+        $('#datos_del_leader').hide();    
         //carga la barra lateral con info de nivel 1
         mostrarInfoAltaNivel1(ID_N1);
         mostrarEstructuraDelNivel2();
@@ -844,6 +851,7 @@ function updateGuardarModificacionDocumentoN1(responseText){
         if (FROM_DETALLE_REGISTRO == 1) {
             window.location = "detalle.pl?id1=" + ID_N1;
         }
+        
         MODIFICAR = 0;
     }
 }
@@ -963,6 +971,7 @@ function mostrarInfoAltaNivel3(idNivel2){
 function updateMostrarInfoAltaNivel3(responseText){
 	$('#divCantEjemplares').show();	
     $('#detalleDelNivel3').html(responseText);
+    $('#ejemplares_nive2_id_'+ID_N2).html(responseText);  
     zebra('tablaResult');
     checkedAll('select_all', 'checkEjemplares');
     

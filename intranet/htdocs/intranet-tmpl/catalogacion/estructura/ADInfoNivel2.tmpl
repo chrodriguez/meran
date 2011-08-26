@@ -10,101 +10,87 @@
     [% ELSE %]
 
         [% FOREACH nivel2 IN nivel2_array %]    
-        <fieldset><legend class="nivel2Selected">
-            <strong>[% 'Grupo:' | i18n %] [% nivel2.getId2 %] - [% nivel2.getTipoDocumentoObject.getNombre %]</strong>
-            </legend>
-        <ul class="listado_sin_margen">
-        <li class="botonera_horizontal">
+        <div id="nive2_id_[% nivel2.getId2 %]">
+            <fieldset><legend class="nivel2Selected">
+                <strong>[% 'Grupo:' | i18n %] [% nivel2.getId2 %] - [% nivel2.getTipoDocumentoObject.getNombre %]</strong>
+                </legend>
             <ul class="listado_sin_margen">
+            <li class="botonera_horizontal">
+                <ul class="listado_sin_margen">
 
-                [% PERL %]
-                        print C4::AR::Filtros::to_Icon(   
-                                                            boton   => "icon_edicion",
-                                                            onClick => "modificarN2('[% nivel2.getId2 %]', '[% nivel2.getTipoDocumento %]');",
-                                                            title   => "[% 'Modificar nivel 2' | i18n %]",
-                                                            li => 1,
-                                ) ;
-                [% END %]
-                [% PERL %]
-                        print C4::AR::Filtros::to_Icon(   
-                                                            boton   => "icon_agregar",
-                                                            onClick => "agregarN3('[% nivel2.getId2 %]','[% nivel2.getTipoDocumento %]');",
-                                                            title   => "[% 'Agregar nivel 3' | i18n %]",
-                                                            li => 1,
-                                ) ;
-                [% END %]
-                [% PERL %]
-                        print C4::AR::Filtros::to_Icon( 
-                                                            boton   => "icon_borrar",
-                                                            onClick => "borrarN2('[% nivel2.getId2 %]');",
-                                                            title   => "[% 'Borrar nivel 2' | i18n %]",
-                                                            li => 1,
-                                ) ;
-                [% END %]
-                [% PERL %]
-                        print C4::AR::Filtros::to_Icon(   
-                                                            boton   => "icon_edicion",
-                                                            onClick => "mostrarInfoAltaNivel3('[% nivel2.getId2 %]');",
-                                                            title   => "[% 'Mostrar ejemplares del grupo (CAMBIAR ICONO!!!!!!!!)' | i18n %]",
-                                                            li => 1,
-                                ) ;
-                [% END %]
-                [% PERL %]
-                        print C4::AR::Filtros::to_Icon(   
-                                                            boton   => "icon_indice",
-                                                            onClick => "agregarIndice('[% nivel2.getId2 %]');",
-                                                            title   => "[% 'Agregar Indice' | i18n %]",
-                                                            li => 1,
-                                ) ;
-                [% END %]
+                    [% PERL %]
+                            print C4::AR::Filtros::to_Icon(   
+                                                                boton   => "icon_edicion",
+                                                                onClick => "modificarN2('[% nivel2.getId2 %]', '[% nivel2.getTipoDocumento %]');",
+                                                                title   => "[% 'Modificar nivel 2' | i18n %]",
+                                                                li => 1,
+                                    ) ;
+                    [% END %]
+                    [% PERL %]
+                            print C4::AR::Filtros::to_Icon(   
+                                                                boton   => "icon_agregar",
+                                                                onClick => "agregarN3('[% nivel2.getId2 %]','[% nivel2.getTipoDocumento %]');",
+                                                                title   => "[% 'Agregar nivel 3' | i18n %]",
+                                                                li => 1,
+                                    ) ;
+                    [% END %]
+                    [% PERL %]
+                            print C4::AR::Filtros::to_Icon( 
+                                                                boton   => "icon_borrar",
+                                                                onClick => "borrarN2('[% nivel2.getId2 %]');",
+                                                                title   => "[% 'Borrar nivel 2' | i18n %]",
+                                                                li => 1,
+                                    ) ;
+                    [% END %]
+                    [% PERL %]
+                            print C4::AR::Filtros::to_Icon(   
+                                                                boton   => "icon_edicion",
+                                                                onClick => "mostrarInfoAltaNivel3('[% nivel2.getId2 %]');",
+                                                                title   => "[% 'Mostrar ejemplares del grupo (CAMBIAR ICONO!!!!!!!!)' | i18n %]",
+                                                                li => 1,
+                                    ) ;
+                    [% END %]
+                    [% PERL %]
+                            print C4::AR::Filtros::to_Icon(   
+                                                                boton   => "icon_indice",
+                                                                onClick => "agregarIndice('[% nivel2.getId2 %]');",
+                                                                title   => "[% 'Agregar Indice' | i18n %]",
+                                                                li => 1,
+                                    ) ;
+                    [% END %]
+                </ul>
+                </li>
+                <li>
+                    <strong>[% 'Edici&oacute;n:' | i18n %]</strong> [% nivel2.getEdicion %]
+                </li>
+                <li>
+                    <strong>[% 'Fecha:' | i18n %]</strong>
+                        [% FOREACH fecha IN nivel2.getAnio_publicacion %] 
+                            [% fecha %] [% IF !loop.last() %],[% END %] 
+                        [% END %]
+                </li>
+                <li>
+                    <strong>[% 'Soporte:' | i18n %]</strong> [% nivel2.getSoporteObject.getDescription %]
+                </li>
+                <li>
+                    <strong>[% 'Lugar:' | i18n %]</strong> [% nivel2.getCiudadObject.getNombre %]
+                </li>
+                <li>
+                    <strong>[% 'Volumen:' | i18n %]</strong> [% nivel2.getVolumen %]
+                </li>
+                <li>
+                    <strong>[% 'Idioma:' | i18n %]</strong> [% nivel2.getIdiomaObject.getDescription %]
+                </li>
+
             </ul>
-            </li>
-            <li>
-                <strong>[% 'Edici&oacute;n:' | i18n %]</strong> [% nivel2.getEdicion %]
-            </li>
-            <li>
-                <strong>[% 'Fecha:' | i18n %]</strong>
-                    [% FOREACH fecha IN nivel2.getAnio_publicacion %] 
-                        [% fecha %] [% IF !loop.last() %],[% END %] 
-                    [% END %]
-            </li>
-            <li>
-                <strong>[% 'Soporte:' | i18n %]</strong> [% nivel2.getSoporteObject.getDescription %]
-            </li>
-            <li>
-                <strong>[% 'Lugar:' | i18n %]</strong> [% nivel2.getCiudadObject.getNombre %]
-            </li>
-            <li>
-                <strong>[% 'Volumen:' | i18n %]</strong> [% nivel2.getVolumen %]
-            </li>
-<!--            <li>
-                <strong>[% 'Editor:' | i18n %]</strong> NO ESTA IMPLEMENTADO
-            </li>-->
-            <li>
-                <strong>[% 'Idioma:' | i18n %]</strong> [% nivel2.getIdiomaObject.getDescription %]
-            </li>
-<!--            <li>
-                <strong>[% 'Descripci&oacute;n F&iacute;sica:' | i18n %]</strong>
-                    [% FOREACH descripcion IN nivel2.getDescripcionFisica %] 
-                        [% descripcion %][% IF !loop.last() %],[% END %] 
-                    [% END %]
-            </li>-->
-<!--            <li>
-                <strong>[% 'T&iacute;tulo de la Serie:' | i18n %]</strong> [% nivel2.getSeriesTitulo %]
-            </li>-->
-<!--            <li>
-                <strong>[% 'N&uacute;mero de la serie:' | i18n %]</strong> [% nivel2.getNumeroSerie %]
-            </li>-->
-<!--            <li>
-                <strong>[% 'Nombre de la subserie:' | i18n %]</strong> [% nivel2.getNombreSubSerie %]
-            </li>-->
-<!--            <li>
-                <strong>[% 'Nota General:' | i18n %]</strong> [% nivel2.getNotaGeneral %]
-            </li>-->
- <!--           <li>
-                <strong>[% 'Cantidad Ejemplares:' | i18n %]</strong> [% nivel2.getCantEjemplares %]
-            </li>-->
-        </ul>
+            </fieldset>
+        </div>
+
+        <fieldset>
+            <legend class="titulo_legend">[% "Ejemplares" | i18n %]</legend>
+            <!-- detalle del Nivel 3, segun Nivel 2 seleccionado -->
+            <div id="ejemplares_nive2_id_[% nivel2.getId2 %]"></div>
+<!--             <div id="detalleDelNivel3" class="nivel3Footer"></div> -->
         </fieldset>
         [% END %]
 

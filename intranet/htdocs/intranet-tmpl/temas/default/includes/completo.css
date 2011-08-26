@@ -1486,7 +1486,7 @@ h2.trigger {
 /* 	border: 1px solid; */
 	overflow: auto;
 	width: 100%;
-	height: 600px;
+/* 	height: 600px; */
 }
 
 .nivel1Barra {
@@ -1503,8 +1503,8 @@ h2.trigger {
 
 .lateral {
 	clear: left;
-	float: left;
-	width: 22%;
+/* 	float: left; */
+	width: 100%;
 	margin-bottom: 15px;
 }
 
@@ -1512,8 +1512,8 @@ h2.trigger {
 	margin-bottom: 10px;
 	margin-left: 1%;
 	text-align: justify;
-	width: 76%;
-	float: right;
+	width: 100%;
+/* 	float: right; */
 }
 
 #sanciones {
