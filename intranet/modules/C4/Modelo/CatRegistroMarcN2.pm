@@ -12,6 +12,7 @@ __PACKAGE__->meta->setup(
         marc_record     => { type => 'text' },
         id1             => { type => 'integer', not_null => 1 },
         indice          => { type => 'text' },
+        template        => { type => 'varchar', not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -61,6 +62,30 @@ sub setId1{
     $self->id1($id1);
 }
 
+=item sub getTemplate
+
+  retorna el esquema/template utilizado para la carga de datos
+=cut
+sub getTemplate{
+    my ($self)  = shift;
+
+#     return C4::AR::Referencias::obtenerEsquemaById($self->template);
+    return $self->template;
+}
+
+sub setTemplateId{
+    my ($self)      = shift;
+    my ($params)   = @_;
+
+    $self->template($params->{'id_tipo_doc'});
+}
+
+sub getTemplateId{
+    my ($self)  = shift;
+
+    return $self->template;
+}
+
 sub getMarcRecord{
     my ($self) = shift;
     return (C4::AR::Utilidades::trim($self->marc_record));
@@ -85,28 +110,28 @@ sub setIndice{
     $self->indice($indice);
 }
 
-sub tiene_indice{
-    my ($self)      = shift;
+sub tiene_indice {
+    my ($self) = shift;
 
     return (C4::AR::Utilidades::validateString($self->getIndice));	
 }
 
 sub agregar{
-    my ($self)      = shift;
-    my ($id1, $marc_record, $db)    = @_;
+    my ($self) = shift;
+    my ($params, $marc_record, $db)    = @_;
 
-    $self->setId1($id1);    
+    $self->setId1($params->{'id1'});    
     $self->setMarcRecord($marc_record);
+    $self->setTemplateId($params);
 
     my $mr = MARC::Record->new_from_usmarc($marc_record);    
 
-#     $self->save();
+# TODO ver si tiene analica
+#     my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $db );
+#     $cat_registro_n2_analitica->setId2Padre(C4::AR::Catalogacion::getRefFromStringConArrobas($mr->subfield("773","a")));
+#     $cat_registro_n2_analitica->setId2Hijo($self->getId2());
+#     $cat_registro_n2_analitica->save();
 
-    my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $db );
-    $cat_registro_n2_analitica->setId2Padre(C4::AR::Catalogacion::getRefFromStringConArrobas($mr->subfield("773","a")));
-    $cat_registro_n2_analitica->setId2Hijo($self->getId2());
-
-    $cat_registro_n2_analitica->save();
     $self->save();
 }
 
@@ -484,10 +509,10 @@ sub tienePrestamos {
 }
 
 
-sub getEsquema{
+sub getTemplate{
     my ($self) = shift;
 
-    return $self->nivel1->getEsquema();
+    return $self->nivel1->getTemplate();
 }
 
 =head2 sub toMARC
@@ -501,7 +526,7 @@ sub toMARC{
 
     my $params;
     $params->{'nivel'}          = '2';
-    $params->{'id_tipo_doc'}    = $self->getEsquema()||'ALL';
+    $params->{'id_tipo_doc'}    = $self->getTemplate()||'ALL';
     my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_meran_por_nivel($marc_record, $params);
 
     return ($MARC_result_array);

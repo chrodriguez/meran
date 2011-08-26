@@ -266,7 +266,7 @@ sub getCamposXLike{
     Este funcion devuelve la configuracion de la estructura de catalogacion de un campo, subcampo, realizada por el usuario
 =cut
 sub getVisualizacionFromCampoSubCampo{
-    my ($campo, $subcampo, $perfil,$db) = @_;
+    my ($campo, $subcampo, $tipo_ejemplar, $db) = @_;
 
     $db = $db || C4::Modelo::CatVisualizacionOpac->new()->db;
     my @filtros;
@@ -274,7 +274,7 @@ sub getVisualizacionFromCampoSubCampo{
     push(@filtros, ( campo          => { eq => $campo } ) );
     push(@filtros, ( subcampo       => { eq => $subcampo } ) );
 #     push (@filtros,( tipo_ejemplar  => { eq => 'ALL' })); 
-    push (  @filtros, ( or   => [   id_perfil   => { eq => $perfil } ]) );
+    push (  @filtros, ( or   => [   tipo_ejemplar   => { eq => $tipo_ejemplar } ]) );
 
 
     my $cat_estruct_info_array = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(  

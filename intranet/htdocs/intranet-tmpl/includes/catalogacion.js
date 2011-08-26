@@ -528,7 +528,13 @@ function seleccionar_esquema(){
             MODIFICAR           = 0;
             AGREGAR_COMPLETO    = 0;
             
-            mostrarEstructuraDelNivel1();
+            if(_NIVEL_ACTUAL == 1){  
+                mostrarEstructuraDelNivel1();
+            } else if(_NIVEL_ACTUAL == 2){
+                mostrarEstructuraDelNivel2();
+            } else {
+                mostrarEstructuraDelNivel3();
+            }
 // TODO dejar deshabilitado el combo tipo de ejemplares?
             inicializarSideLayers();
         }
@@ -568,6 +574,13 @@ function updateGuadarIndice(responseText){
 function close_window_indice(){
     $('#datos_indice').dialog('close');
 }  
+
+function agregarN2(){
+    ID_TIPO_EJEMPLAR    = $("#tipo_nivel3_id").val();
+    MODIFICAR           = 0;
+    inicializar();  
+    open_esquema();
+}
 
 function agregarN3(id2, tipo_documento){
     ID_N2               = id2; 
@@ -719,7 +732,7 @@ function guardarDocumentoN2(){
         objAH.showOverlay       = true;
         objAH.url               = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
         objAH.tipoAccion        = "GUARDAR_NIVEL_2";
-        objAH.tipo_ejemplar     = $('#tipo_nivel3_id').val();
+        objAH.id_tipo_doc       = $("#tipo_nivel3_id").val();  
 	    _sacarOpciones();
         objAH.infoArrayNivel2   = MARC_OBJECT_ARRAY;
         objAH.id1               = ID_N1;
@@ -754,7 +767,7 @@ function guardarDocumentoN3(){
         objAH.modificado        = 0;
 		objAH.url               = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
 		objAH.tipoAccion        = "GUARDAR_NIVEL_3";
-		objAH.tipo_documento    = $("#tipo_nivel3_id").val();
+		objAH.id_tipo_doc       = $("#tipo_nivel3_id").val();
         objAH.esPorBarcode      = porBarcode;  
         objAH.ui_origen         = $('#' + _getIdComponente('995','d')).val();
         objAH.ui_duenio         = $('#' + _getIdComponente('995','c')).val();
@@ -983,6 +996,24 @@ function open_alta_indicador(id_div_alta_indicador){
 
 function close_alta_indicador(){
     $.modal.close(); //cirro la ventana
+}
+
+function open_esquema(){
+    $("#datos_esquema").modal({   
+            containerCss:{
+                backgroundColor:"#fff",
+        //         borderColor:"#0063dc",
+                height: 150,
+                padding: 0,
+                width: 530,
+    //             opacity: 50,
+            },
+    });
+}
+
+function close_esquema(){
+    $.modal.close(); //cirro la ventana
+    mostrarEstructuraDelNivel2(ID_TIPO_EJEMPLAR);  
 }
 
 function guardar_indicadores(id_div_indicadores, i){

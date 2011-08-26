@@ -56,7 +56,7 @@ sub t_guardarNivel2 {
     if(!$msg_object->{'error'}){
     #No hay error
         my $marc_record     = C4::AR::Catalogacion::meran_nivel2_to_meran($params);
-        ($msg_object,$id2)  = guardarRealmente($msg_object,$params->{'id1'},$marc_record);
+        ($msg_object,$id2)  = guardarRealmente($msg_object, $params, $marc_record);
     }
     return ($msg_object, $params->{'id1'}, $id2);
 }
@@ -69,7 +69,7 @@ sub guardarRealmente
 Esta funcion realmente guarda el elemento en la base
 =cut
 sub guardarRealmente{
-    my ($msg_object,$id1,$marc_record)=@_;
+    my ($msg_object, $params, $marc_record)=@_;
     my $id2;
     my $catRegistroMarcN2;
     if(!$msg_object->{'error'}){
@@ -80,11 +80,11 @@ sub guardarRealmente{
         $db->begin_work;
     
         eval {
-            $catRegistroMarcN2->agregar($id1, $marc_record->as_usmarc, $db);
+            $catRegistroMarcN2->agregar($params, $marc_record->as_usmarc, $db);
             $db->commit;
             #recupero el id1 recien agregado
             $id2 = $catRegistroMarcN2->getId2;
-            C4::AR::Sphinx::generar_indice($catRegistroMarcN2->getId1, 'R_PARTIAL', 'INSERT');
+#             C4::AR::Sphinx::generar_indice($catRegistroMarcN2->getId1, 'R_PARTIAL', 'INSERT');
             #ahora el indice se encuentra DESACTUALIZADO
             C4::AR::Preferencias::setVariable('indexado', 0, $db);
 

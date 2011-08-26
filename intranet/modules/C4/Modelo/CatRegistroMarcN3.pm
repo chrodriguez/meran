@@ -35,6 +35,7 @@ __PACKAGE__->meta->setup(
         updated_at              => { type => 'timestamp', not_null => 1 },
         created_at              => { type => 'varchar' },
         agregacion_temp         => { type => 'varchar' },
+        template                => { type => 'varchar', not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -58,7 +59,7 @@ __PACKAGE__->meta->setup(
     sub agregar
 =cut
 sub agregar {
-    my ($self)          = shift;
+    my ($self) = shift;
     my ($db, $params, $msg_object)   = @_;
 
     my $dateformat = C4::Date::get_date_format();
@@ -70,6 +71,7 @@ sub agregar {
     $self->setSignatura($marc_record->subfield("995","t"));
     $self->setCreatedAt(C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"), $dateformat));
     $self->setMarcRecord($params->{'marc_record'});
+    $self->setTemplateId($params);
 
     C4::AR::Debug::debug("CatRegistroMarcN3 => agregar => tipo de ejemplar => ".$params->{'tipo_ejemplar'});
     my ($MARC_result_array) = C4::AR::Catalogacion::marc_record_to_meran($marc_record, $params->{'tipo_ejemplar'});
@@ -164,6 +166,31 @@ sub validarBarcode {
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P125', 'params' => [$self->getId3()]} );
         }
     }
+}
+
+
+=item sub getTemplate
+
+  retorna el esquema/template utilizado para la carga de datos
+=cut
+sub getTemplate{
+    my ($self)  = shift;
+
+#     return C4::AR::Referencias::obtenerEsquemaById($self->template);
+    return $self->template;
+}
+
+sub setTemplateId{
+    my ($self)      = shift;
+    my ($params)   = @_;
+
+    $self->template($params->{'id_tipo_doc'});
+}
+
+sub getTemplateId{
+    my ($self)  = shift;
+
+    return $self->template;
 }
 
 =head2 sub seRepiteBarcode
@@ -636,10 +663,10 @@ sub esParaPrestamo{
     return (DISPONIBILIDAD_PRESTAMO($self->getIdDisponibilidad));
 }
 
-sub getEsquema{
+sub getTemplate{
     my ($self) = shift;
 
-    return $self->nivel2->nivel1->getEsquema();
+    return $self->nivel2->nivel1->getTemplate();
 }
 
 

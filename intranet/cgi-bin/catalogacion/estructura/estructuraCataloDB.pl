@@ -393,11 +393,11 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
 # TODO esta feo, ver si se puede meter mas adentro en un modulo
     if($obj->{'nivel'} eq '1'){
         my $nivel1 = C4::AR::Nivel1::getNivel1FromId1($obj->{'id'});
-        $obj->{'id_tipo_doc'} = $nivel1->getEsquema()||'ALL';
+        $obj->{'id_tipo_doc'} = $nivel1->getTemplate()||'ALL';
     }elsif($obj->{'nivel'} eq '2'){
         my $nivel2 = C4::AR::Nivel2::getNivel2FromId2($obj->{'id'});
         if($nivel2){
-          $obj->{'id_tipo_doc'} = $nivel2->getEsquema();#$nivel2->getTipoDocumentoObject()->getId_tipo_doc();
+          $obj->{'id_tipo_doc'} = $nivel2->getTemplate();#$nivel2->getTipoDocumentoObject()->getId_tipo_doc();
         }
     }elsif($obj->{'nivel'} eq '3'){
       my $nivel3 = C4::AR::Nivel3::getNivel3FromId3($obj->{'id3'});
@@ -405,7 +405,7 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
       if($nivel3){
           my $nivel2 = C4::AR::Nivel2::getNivel2FromId2($nivel3->getId2);
           if($nivel2){
-              $obj->{'id_tipo_doc'} = $nivel2->getEsquema();#$nivel2->getTipoDocumentoObject()->getId_tipo_doc();
+              $obj->{'id_tipo_doc'} = $nivel2->getTemplate();#$nivel2->getTipoDocumentoObject()->getId_tipo_doc();
           }
       }
     }

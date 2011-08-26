@@ -98,8 +98,6 @@ sub t_guardarNivel1 {
         ($msg_object, $id1) = guardarRealmente($msg_object,$marc_record,$params);
     }
 
-#     C4::AR::Debug::debug("Nivel1 => t_guardarNivel1 => return msg_object => ".$msg_object);
-#     C4::AR::Debug::debug("Nivel1 => t_guardarNivel1 => return id1 => ".$id1);
     return ($msg_object, $id1);
 }
 
@@ -124,7 +122,7 @@ sub guardarRealmente{
             $db->commit;            
             #recupero el id1 recien agregado
             $id1 = $catRegistroMarcN1->getId1;
-            C4::AR::Sphinx::generar_indice($id1, 'R_PARTIAL', 'INSERT');
+#             C4::AR::Sphinx::generar_indice($id1, 'R_PARTIAL', 'INSERT');
             #ahora el indice se encuentra DESACTUALIZADO
             C4::AR::Preferencias::setVariable('indexado', 0, $db);
             #se cambio el permiso con exito
@@ -137,7 +135,7 @@ sub guardarRealmente{
             &C4::AR::Mensajes::printErrorDB($@, 'B427',"INTRA");
             $db->rollback;
             #Se setea error para el usuario
-            $msg_object->{'error'}= 1;
+            $msg_object->{'error'} = 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U371', 'params' => []} ) ;
         }
 

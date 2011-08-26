@@ -8,9 +8,9 @@ __PACKAGE__->meta->setup(
     table   => 'cat_registro_marc_n1',
 
     columns => [
-        id             => { type => 'serial', not_null => 1 },
-        marc_record    => { type => 'text' },
-        tipo_documento => { type => 'integer', not_null => 1 },
+        id              => { type => 'serial', not_null => 1 },
+        marc_record     => { type => 'text' },
+        template        => { type => 'varchar', not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ]
@@ -51,28 +51,28 @@ sub getSignaturas{
     return (\@signaturas);
 }
 
-=item sub getEsquema
+=item sub getTemplate
 
   retorna el esquema/template utilizado para la carga de datos
 =cut
-sub getEsquema{
+sub getTemplate{
     my ($self)  = shift;
 
-#     return C4::AR::Referencias::obtenerEsquemaById($self->tipo_documento);
-    return $self->tipo_documento;
+#     return C4::AR::Referencias::obtenerEsquemaById($self->template);
+    return $self->template;
 }
 
-sub setEsquemaId{
+sub setTemplateId{
     my ($self)      = shift;
     my ($params)   = @_;
 
-    $self->tipo_documento($params->{'id_tipo_doc'});
+    $self->template($params->{'id_tipo_doc'});
 }
 
-sub getEsquemaId{
+sub getTemplateId{
     my ($self)  = shift;
 
-    return $self->tipo_documento;
+    return $self->template;
 }
 
 =item
@@ -103,7 +103,7 @@ sub agregar{
     my ($marc_record, $params)  = @_;
 
     $self->setMarcRecord($marc_record);
-    $self->setEsquemaId($params);
+    $self->setTemplateId($params);
     $self->save();
 
     #seteo datos del LEADER
@@ -397,7 +397,7 @@ sub toMARC{
 
     my $params;
     $params->{'nivel'}          = '1';
-    $params->{'id_tipo_doc'}    = $self->getEsquema()||'ALL';
+    $params->{'id_tipo_doc'}    = $self->getTemplate()||'ALL';
     my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_meran_por_nivel($marc_record, $params);
 
     return ($MARC_result_array);

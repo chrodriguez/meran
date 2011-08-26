@@ -131,8 +131,9 @@ sub meran_nivel1_to_meran{
     my ($data_hash) = @_;
 
     my $campos_autorizados          = C4::AR::EstructuraCatalogacionBase::getSubCamposByNivel(1);
-    $data_hash->{'tipo_ejemplar'}   = 'ALL';
-    my $marc_record                 = _meran_to_marc($data_hash->{'infoArrayNivel1'},$campos_autorizados,$data_hash->{'tipo_ejemplar'}, 1);
+    $data_hash->{'tipo_ejemplar'}   = $data_hash->{'id_tipo_doc'}||'ALL';
+#     C4::AR::Debug::debug("Catalogacion => meran_nivel1_to_meran => tipo_ejemplar => ".$data_hash->{'id_tipo_doc'});
+    my $marc_record                 = _meran_to_marc($data_hash->{'infoArrayNivel1'}, $campos_autorizados, $data_hash->{'id_tipo_doc'}, 1);
 
     return($marc_record);
 }
@@ -932,25 +933,25 @@ sub getEstructuraYDatosDeNivel{
 
     if( $params->{'nivel'} eq '1'){
         $nivel          = C4::AR::Nivel1::getNivel1FromId1($params->{'id'});
-        $tipo_ejemplar  = $nivel->getEsquema()||'ALL';
+        $tipo_ejemplar  = $nivel->getTemplate()||'ALL';
         C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel1FromId1 => ID1 ".$params->{'id'});
     }
     elsif( $params->{'nivel'} eq '2'){
         $nivel          = C4::AR::Nivel2::getNivel2FromId2($params->{'id'});
-        $tipo_ejemplar  = $nivel->getEsquema()||'ALL';
+        $tipo_ejemplar  = $nivel->getTemplate()||'ALL';
         C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel2FromId2 => ID2 ".$params->{'id'});
     }
     elsif( $params->{'nivel'} eq '3'){
         $nivel          = C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
-        $tipo_ejemplar  = $nivel->getEsquema()||'ALL';
+        $tipo_ejemplar  = $nivel->getTemplate()||'ALL';
         C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel3FromId3 => ID3 ".$params->{'id3'});
     }
 
     #paso todo a MARC
     my $nivel_info_marc_array = undef;
-    eval{
+#     eval{
       $nivel_info_marc_array = $nivel->toMARC; #mapea los campos de la tabla nivel 1, 2, o 3 a MARC
-    };
+#     };
 
     my $campo;
     my $repetible;
