@@ -291,22 +291,22 @@ C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde hash2 => ".$param
 }
 
 
-# 
-# =item
-# cancelar_reserva
-# Funcion que cancela una reserva
-# =cut
+ 
+=item
+ cancelar_reserva
+ Funcion que cancela una reserva
+=cut
 sub cancelar_reserva{
-	my ($self)=shift;
-	my ($params)=@_;
-	my $nro_socio = $params->{'nro_socio'};
+	my ($self)      = shift;
+	my ($params)    = @_;
+	my $nro_socio   = $params->{'nro_socio'};
 	my $responsable = $params->{'responsable'};
 
 	if($self->getId3){
 		$self->debug("Es una reserva asignada se trata de reasignar");
-#Si la reserva que voy a cancelar estaba asociada a un item tengo que reasignar ese item a otra reserva para el mismo grupo
+        # Si la reserva que voy a cancelar estaba asociada a un item tengo que reasignar ese item a otra reserva para el mismo grupo
 		$self->reasignarEjemplarASiguienteReservaEnEspera($responsable);
-# Se borra la sancion correspondiente a la reserva si es que la sancion todavia no entro en vigencia
+        # Se borra la sancion correspondiente a la reserva si es que la sancion todavia no entro en vigencia
 		$self->debug("Se borra la sancion de la reserva");
 		$self->borrar_sancion_de_reserva();
 	}
@@ -319,16 +319,16 @@ sub cancelar_reserva{
 	$self->debug("Se loguea en historico de circulacion la cancelacion");
 #**********************************Se registra el movimiento en rep_historial_circulacion***************************
    my $data_hash;
-   $data_hash->{'id1'}=$self->nivel2->nivel1->getId1;
-   $data_hash->{'id2'}=$self->getId2;
-   $data_hash->{'id3'}=$self->getId3;
-   $data_hash->{'nro_socio'}=$self->getNro_socio;
-   $data_hash->{'responsable'}=$responsable;
-   $data_hash->{'hasta'}=undef;
+   $data_hash->{'id1'}          = $self->nivel2->nivel1->getId1;
+   $data_hash->{'id2'}          = $self->getId2;
+   $data_hash->{'id3'}          = $self->getId3;
+   $data_hash->{'nro_socio'}    = $self->getNro_socio;
+   $data_hash->{'responsable'}  = 'Sistema'; #ticket #3054, se pone responsable sistema. $responsable;
+   $data_hash->{'hasta'}        = undef;
    $data_hash->{'tipo_prestamo'}='-';
-   $data_hash->{'id_ui'}=$self->getId_ui;
-   $data_hash->{'tipo'}='cancelacion';
-   my ($historial_circulacion) = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);
+   $data_hash->{'id_ui'}        = $self->getId_ui;
+   $data_hash->{'tipo'}         = 'cancelacion';
+   my ($historial_circulacion)  = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);
    $historial_circulacion->agregar($data_hash);
 #*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
 	$self->debug("Se cancela efectivamente");

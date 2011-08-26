@@ -5,16 +5,19 @@
 		<div class="contenedor_paginador">[% paginador %]</div>
 		<table class="tablaHistorialReservas datos_tabla" cellspacing=0  cellpadding=0 border=0 width="100%">
 		    <tr class="titulo_tabla_resultado">
-			    <td >
+		        <td>
+		            [% "Responsable" | i18n %]
+			    </td>
+			    <td>
 				    [% "T&iacute;tulo" | i18n %]
 			    </td>
-			    <td >
+			    <td>
 		            [% "Autor" | i18n %]
 			    </td>
 		        <td>
 		            [% "Edici&oacute;n" | i18n %]
 		        </td>
-	            <td >
+	            <td>
 				    [% "C&oacute;digo" | i18n %]
 		        </td>
 			    <td>
@@ -26,11 +29,18 @@
 		    </tr>	    
 		    [% FOREACH reserva IN loop_reading %]
 		    <tr valign=middle align="center">  
+		        <td>
+				    [% IF reserva.responsable == "Sistema" %]
+                        Sistema 
+                    [% ELSE %]
+                        [% reserva.responsable_ref.persona.getApeYNom %]
+                    [% END %]
+			    </td>
 			    <td>
 				    [% PERL %]
 						    print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
 		                                                    url => 		"[% url_prefix %]/catalogacion/estructura/detalle.pl",
-														    params =>	[	"id1=[% HTML.escape(reserva.nivel2.nivel1.getId1) %]"], 
+														    params =>	["id1=[% HTML.escape(reserva.nivel2.nivel1.getId1) %]"], 
 													    ) ;
 				    [% END %]
 			    </td>   
@@ -47,15 +57,16 @@
                     [% END %]
 			    </td>
 			    <td align="center" >
-                    [% IF reserva.nivel2.nivel3.getBarcode %]
-	
+                    [% IF reserva.id3 %]
+
 					    [% PERL %]
-							    print C4::AR::Filtros::link_to(	text => 	"[% barcode %]",
+							    print C4::AR::Filtros::link_to(	text => 	"[% reserva.nivel3.getBarcode %]",
 															    url => 		"[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
 															    params =>	["id3=[% reserva.getId3 %]"],
 															    title =>	"[% "Detalle del Ejemplar" | i18n %]"
-														    ) ;
+														    );
 					    [% END %]	
+					    
 				    [% ELSE %]
 				        ([% 'Reserva de grupo' | i18n %])
 				    [% END %]
