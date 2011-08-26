@@ -98,6 +98,14 @@
                             ) ;
                 [% END %]
             </li>
+            <li>
+                [% PERL %]
+                    print C4::AR::Filtros::link_to( text    =>  "[% 'Estantes Virtuales' | i18n %]",
+                                                    url     =>  '[% url_prefix %]/opac-estante.pl',
+                                                    title   =>  "[% 'Estantes Virtuales' | i18n %]",
+                            ) ;
+                [% END %]
+            </li>
             [% IF socio_data.usr_nro_socio %]
 		            <li><a href="#">[% 'Mi cuenta' | i18n %]<!--[if IE 7]><!--></a><!--<![endif]-->
 		              <!--[if lte IE 6]><table><tr><td><![endif]-->
