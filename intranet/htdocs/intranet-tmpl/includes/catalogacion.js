@@ -539,6 +539,8 @@ function seleccionar_esquema(){
             inicializarSideLayers();
         }
     }
+    
+    close_esquema();
 }
 
 function agregarIndice(id2){
@@ -1015,8 +1017,7 @@ function open_esquema(){
 }
 
 function close_esquema(){
-    $.modal.close(); //cirro la ventana
-    mostrarEstructuraDelNivel2(ID_TIPO_EJEMPLAR);  
+    $.modal.close(); //cirro la ventana 
 }
 
 function guardar_indicadores(id_div_indicadores, i){
