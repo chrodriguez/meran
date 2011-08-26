@@ -148,12 +148,12 @@ sub getConfiguracionByOrder{
 
 
 sub getConfiguracion{
-#     my ($db) = @_;
-    my ($ejemplar,$db) = @_;
+    my ($ejemplar, $db) = @_;
+
     my @filtros;
     $db = $db || C4::Modelo::CatVisualizacionOpac->new()->db;
     
-    my $perfil = C4::AR::Preferencias::getValorPreferencia('perfil_opac');
+#     my $perfil = C4::AR::Preferencias::getValorPreferencia('perfil_opac');
 
 #     push ( @filtros, ( or   => [    id_perfil   => { eq => $perfil }, 
 #                                     id_perfil   => { eq => '0'     } ]) #PERFIL TODOS
@@ -167,22 +167,6 @@ sub getConfiguracion{
 
     return ($configuracion);
 }
-
-# sub getConfiguracion{
-#     my ($ejemplar,$db) = @_;
-# 
-#     $db = $db || C4::Modelo::CatVisualizacionIntra->new()->db;
-# 
-#     my @filtros;
-# 
-#     push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $ejemplar }, 
-#                                     tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS
-#                 );
-# 
-#     my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros, sort_by => ('campo, subcampo'), db => $db,);
-# 
-#     return ($configuracion);
-# }
 
 sub addConfiguracion {
     my ($params, $db) = @_;
