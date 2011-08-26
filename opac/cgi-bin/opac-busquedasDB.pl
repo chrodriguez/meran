@@ -74,6 +74,18 @@ my $token;
 
 if  ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
 
+if ($obj->{'estantes'}){
+  #Busqueda por Estante Virtual
+    $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&estantes=".$obj->{'estantes'};
+    $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&estantes=".$obj->{'estantes'};
+    C4::AR::Utilidades::addParamToUrl($url_todos,"estantes",$obj->{'estantes'});
+
+    ($cantidad, $resultsarray)   = C4::AR::Busquedas::busquedaPorEstante($obj->{'estantes'}, $session, $obj);
+
+    #Sino queda en el buscoPor
+    $obj->{'tipo_nivel3_name'} = -1; 
+  }
+  else {
 
     $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&titulo=".$obj->{'titulo'}."&autor=".$obj->{'autor'}."&tipo=".$obj->{'tipo'}."&tipo_nivel3_name=".$obj->{'tipo_nivel3_name'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
     $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&titulo=".$obj->{'titulo'}."&tipo=".$obj->{'tipo'}."&tipo_nivel3_name=".$obj->{'tipo_nivel3_name'}."&tipoAccion=".$obj->{'tipoAccion'};
@@ -87,7 +99,7 @@ if  ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
     
 
     ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
-
+  }
 }   else {
 
     $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
@@ -98,8 +110,13 @@ if  ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
 
 } 
 
+if ($obj->{'estantes'}){
+  $t_params->{'partial_template'}         = "opac-busquedaEstantes.inc";
+}
+else{
+  $t_params->{'partial_template'}         = "opac-busquedaResult.inc";
+}
 
-$t_params->{'partial_template'}         = "opac-busquedaResult.inc";
 $t_params->{'content_title'}            = C4::AR::Filtros::i18n("Resultados de la b&uacute;squeda");
 $t_params->{'suggested'}                = $suggested;
 $t_params->{'tipoAccion'}               = $obj->{'tipoAccion'};
