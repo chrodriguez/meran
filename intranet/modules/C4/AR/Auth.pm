@@ -846,12 +846,15 @@ sub checkauth {
 					} else {  # if ($sin_captcha || $captchaResult->{is_valid} ) - INGRESA CAPTCHA INVALIDO
 						if ($socio) {$code_MSG='U425';}
 						elsif ($userid) {     
-					           C4::AR::Debug::debug("ENTRA EN linea 849");
+					           
 							   $code_MSG='U357';
 						}
 						$session->param('codMsg', $code_MSG);
                         loginFailed($userid);
                         $cant_fallidos = getSocioAttempts($userid);
+                        if ($cant_fallidos > 0){
+                                $template_params->{'loginFailed'}=1;
+                        }
 						if ($cant_fallidos >= 3){
 								$template_params->{'mostrar_captcha'}=1;
 						}  
@@ -1371,6 +1374,9 @@ sub redirectToAuth {
     } 
     if($template_params->{'mostrar_captcha'}){
         $url = C4::AR::Utilidades::addParamToUrl($url,'mostrarCaptcha',1);
+    } 
+    if($template_params->{'loginFailed'}){
+        $url = C4::AR::Utilidades::addParamToUrl($url,'loginFailed',1);
     }
 
     redirectTo($url);    
