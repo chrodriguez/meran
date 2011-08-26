@@ -1,42 +1,5 @@
-<script>
+<script type="text/javascript" language="javascript">
     $(document).ready(function() {
-        makeToggle('divTablaAgregarVisualizacion','trigger',null,false);
-        makeToggle('divTablaVisualizacion','trigger',null,false);
-        onEnter('lib_librarian',agregarVisualizacion);
-        loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
-        $('.editable').editable('[% url_prefix %]/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl', { 
-              type      : 'text',
-              cancel    : CANCELAR,
-              submit    : OK,
-              tooltip   : EDITABLE_MSG,
-              placeholder: EDITABLE_MSG,
-              style   : 'display: inline',
-              submitdata : {token: "[% token %]", edit: 1, type: 'nombre'},
-              indicator : loaderPath,
-
-        });
-        $('.pre').editable('[% url_prefix %]/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl', { 
-              type      : 'text',
-              cancel    : CANCELAR,
-              submit    : OK,
-              tooltip   : EDITABLE_MSG,
-              placeholder: EDITABLE_MSG,
-              style   : 'display: inline',
-              submitdata : {token: "[% token %]", edit: 1, type: 'pre'},
-              indicator : loaderPath,
-
-        });
-        $('.post').editable('[% url_prefix %]/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl', { 
-              type      : 'text',
-              cancel    : CANCELAR,
-              submit    : OK,
-              tooltip   : EDITABLE_MSG,
-              placeholder: EDITABLE_MSG,
-              style   : 'display: inline',
-              submitdata : {token: "[% token %]", edit: 1, type: 'post'},
-              indicator : loaderPath,
-
-        });
         mostrarTabla();
     });
     
@@ -73,9 +36,7 @@
     function updateSortable(){
         mostrarTabla();        
     }
-
 </script>
-
 <fieldset>
     <legend class="titulo_legend trigger click"><strong>[% "Agregar Visualizaci&oacute;n:" | i18n %]</strong></legend>
     <div class="divTablaAgregarVisualizacion" id="divTablaAgregarVisualizacion">
