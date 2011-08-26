@@ -1,4 +1,4 @@
-ALTER TABLE `cat_registro_marc_n1` CHANGE `tipo_documento` `tiemplate` CHAR( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ;
+ALTER TABLE `cat_registro_marc_n1` CHANGE `tipo_documento` `template` CHAR( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ;
 ALTER TABLE `cat_registro_marc_n1` CHANGE `template` `template` CHAR( 3 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ;
 
 
