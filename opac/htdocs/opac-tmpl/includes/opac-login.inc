@@ -91,8 +91,9 @@
             </form>
         </div>
 [% ELSE %]
-        
-          <form method="post" id="signin" action="[% url_prefix %]/opac-main.pl" onsubmit="return enviar()">
+       <div class="login_main" >
+          <p id="titulo_login_main">Ingresar a MERAN</p>
+          <form method="post" id="signin_main" action="[% url_prefix %]/opac-main.pl"  onsubmit="return enviar()">
                <p>
                   <input type="hidden" name="remember_me" value="0"/>
                </p>
@@ -106,7 +107,7 @@
                   <input type="hidden" name="password" id="password" tabindex="2" class="field" value="" />
                </p>
                <p class="remember">
-                  <input id="signin_submit" name="cmdweblogin" value="[% 'Enviar' | i18n %]" tabindex="6" type="submit">
+                  <input id="signin_submit_main" name="cmdweblogin" value="[% 'Enviar' | i18n %]" tabindex="6" type="submit">
                </p>
 
 
@@ -122,7 +123,7 @@
 
                 <p class="forgot"> <a href="[% url_prefix %]/opac-forgot-password.pl" id="resend_password_link">[% 'Olvid&eacute; mi contrase&ntilde;a' | i18n %]</a> </p>                                 
           </form>
-
+        </div>
 [% END %]
 
 [% END %]
