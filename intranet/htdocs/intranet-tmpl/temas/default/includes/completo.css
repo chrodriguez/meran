@@ -481,6 +481,7 @@ body {
 .titulo_tabla_resultado th{
 	border: none;
     background: #35414F;
+    width: 21px;
 }
 
 .tabla_der {

@@ -18,8 +18,13 @@ my ($template, $session, $t_params);
 
 my %hash_temp = $input->Vars;
 $obj = \%hash_temp;
+
+#Se usa $params_hash para guardar los originales y hacer la URL del paginador, sino pasa que se hace encode de encode y rompe
+my $params_hash =   $input->Vars;
+my $string = $input->param('string') || "";
+
 $obj->{'tipoAccion'} = $input->param('tipoAccion');
-$obj->{'string'} = Encode::decode_utf8($input->param('string'));
+$obj->{'string'} = Encode::decode_utf8($string);
 $obj->{'titulo'} = Encode::decode_utf8($input->param('titulo'));
 $obj->{'autor'} = Encode::decode_utf8($input->param('autor'));
 $obj->{'isbn'} = Encode::decode_utf8($input->param('isbn'));
@@ -48,8 +53,9 @@ $obj->{'session'}= $session;
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 #actualizamos el ini del $obj para que pagine correctamente
 $obj->{'ini'} = $ini;
+$obj->{'cantR'} = $cantR;
 
-$obj->{'cantR'}= $obj->{'cantR'} || $cantR;
+C4::AR::Debug::debug(" CANTIDAD REGISTROS A MOSTRAR EN BUSQUEDAAAAAAAAAAAAAAAAAAAAAAAA ".$cantR);
 
 C4::AR::Validator::validateParams('U389',$obj,['tipoAccion']);
 
@@ -76,8 +82,8 @@ if  ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
 
 if ($obj->{'estantes'}){
   #Busqueda por Estante Virtual
-    $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&estantes=".$obj->{'estantes'};
-    $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&estantes=".$obj->{'estantes'};
+    $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&estantes=".$obj->{'estantes'}."&tipoAccion=".$obj->{'tipoAccion'};
+    $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&estantes=".$obj->{'estantes'}."&tipoAccion=".$obj->{'tipoAccion'};
     C4::AR::Utilidades::addParamToUrl($url_todos,"estantes",$obj->{'estantes'});
 
     ($cantidad, $resultsarray)   = C4::AR::Busquedas::busquedaPorEstante($obj->{'estantes'}, $session, $obj);
@@ -105,7 +111,7 @@ if ($obj->{'estantes'}){
     $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
     $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'};
     
-    ($cantidad, $resultsarray,$suggested)  = C4::AR::Busquedas::busquedaCombinada_newTemp($input->param('string'),$session,$obj);
+    ($cantidad, $resultsarray,$suggested)  = C4::AR::Busquedas::busquedaCombinada_newTemp($string,$session,$obj);
 
 
 } 

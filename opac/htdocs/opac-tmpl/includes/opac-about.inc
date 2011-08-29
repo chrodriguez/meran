@@ -16,6 +16,17 @@
 
 <br><br>
 
+ <h4><a href="http://www.econo.unlp.edu.ar" target="_blank">Facultad de Ciencias Econ&oacute;micas</a></h4>
+ <ul>
+     <li>Mar&iacute;a Fernanda Pietroboni</li>
+     <li>Mar&iacute;a Laura Asenjo</li>
+     <li>Paula Gabriela Gonzalez</li>
+     <li>Ana Mar&iacute;a Ca&ntilde;edo</li>
+     
+ </ul>
+
+<br><br>
+
 <h1 class="pagetitle">[% 'Datos de la Biblioteca' | i18n %]</h1>
 <hr class="clear-contentunit" />
 

@@ -21,6 +21,10 @@
                                                                 ) ;
                                     [% END %]
                                 [% END %]
+                            [% IF indice %]
+                                <div style="display:none"><div id="indice_data[% id2 %]" style="white-space: pre;" title="[% 'Indice del grupo' | i18n %]">[% indice %]</div></div>
+                            [% END %]
+
             </ul>
             <div style="float:left; width:100%;" >
                 [% INCLUDE 'opac-detail_partial_disponibilidad.inc' %]

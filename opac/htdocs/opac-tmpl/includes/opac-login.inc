@@ -5,7 +5,12 @@
 <script src="/includes/md5.js" type="text/javascript"></script>
 <script src="/includes/sha1.js" type="text/javascript"></script>
 [% USE HTML %]
-    <script type="text/javascript">
+
+    <script type="text/javascript">    
+
+
+
+
         function enviar(){
 		      [% IF plainPassword == 0 %]
 			      var nroRandom   = [% nroRandom %];
@@ -16,12 +21,39 @@
 			  [% END %]
 		      return true;
       }
-      var RecaptchaOptions = {};
+      var RecaptchaOptions = {
+   
+        theme : 'white',
+//         lang : 'es,   
+        
+      }
       
       $(document).ready(function() {
+
+
+                    $(function () {
+                        var $alert = $('#alert_msg_main');
+                        if($alert.length)
+                        {
+//                             var alerttimer = window.setTimeout(function () {
+//                                 $alert.trigger('click');
+//                             }, 3000);
+                            $alert.animate({height: $alert.css('line-height') || '50px'}, 200)
+                            .click(function () {
+                                window.close;
+                                $alert.animate({height: '0'}, 200);
+                            });
+                        }
+                    });
+
+
                   //onEnter con foco en input, ejecuta la busqueda
+                    var RecaptchaOptions = {
+                        theme : 'blue', /* tema color blanco */
+                        lang : 'es' /* idioma español */
+                    };    
+
                     onEnter("password",enviar);
-                    $("#userid").focus();
 
                     // Add the value of "Search..." to the input field and a class of .empty
                     $("#search").val("Buscar...").addClass("empty");
@@ -48,36 +80,16 @@
 
                     });
 
+                    $("#search").focus();
 
       });
 
-
-
-
-
-
 </script>
+
+
 <!-- Login -->
 [% IF !socio_data %]
-        [% IF !show_navlink %]
-                <br />
-        [% END %]
-        [% IF mensaje %]      
-            <h1>[% mensaje %]</h1>
-
-
-        [% END %]
-       <!--  <a class="sitelogo" style="margin-left:430px; margin-top:100px" title="Meran"></a>-->
-       
-
- <!--<div id="divsearchform" >
-          <form id="searchform_main" action="[% url_prefix %]/opac-busquedasDB.pl" method="get">
-              <input type="text" name="string" class="field"  value="[% search_string %]" tabindex="-1" style="width:428px; margin-left:277px; height:22px;" />
-              <input type="submit" id="searchform_main_button" name="button" class="button" value="[% 'Buscar' | i18n %]" style="width: 125px;" />
-              <input type="hidden" name="tipoAccion" value="BUSQUEDA_COMBINABLE" />
-              <input type="hidden" name="token" value="[% token %]" />
-          </form>
- </div> -->
+     
 
 [% IF !loginFailed  %]
         <div id="divsearchform" >
@@ -91,8 +103,9 @@
             </form>
         </div>
 [% ELSE %]
+       <p id="titulo_login_main">Ingresar a MERAN</p>
        <div class="login_main" >
-          <p id="titulo_login_main">Ingresar a MERAN</p>
+   
           <form method="post" id="signin_main" action="[% url_prefix %]/opac-main.pl"  onsubmit="return enviar()">
                <p>
                   <input type="hidden" name="remember_me" value="0"/>
@@ -110,7 +123,8 @@
                   <input id="signin_submit_main" name="cmdweblogin" value="[% 'Enviar' | i18n %]" tabindex="6" type="submit">
                </p>
 
-
+              <p class="forgot"> <a href="[% url_prefix %]/opac-forgot-password.pl" id="resend_password_link">[% 'Olvid&eacute; mi contrase&ntilde;a' | i18n %]</a> </p>                                      
+              
               [%  IF mostrar_captcha  %]
                   <div id=captcha>
                     <script src="http://www.google.com/recaptcha/api/challenge?k=6LehoMQSAAAAAOhylvTt_7RrPKVdll7CN0jJRdaf" type="text/javascript"></script>
@@ -121,8 +135,9 @@
                   </div>
                 [% END %]
 
-                <p class="forgot"> <a href="[% url_prefix %]/opac-forgot-password.pl" id="resend_password_link">[% 'Olvid&eacute; mi contrase&ntilde;a' | i18n %]</a> </p>                                 
+
           </form>
+                
         </div>
 [% END %]
 

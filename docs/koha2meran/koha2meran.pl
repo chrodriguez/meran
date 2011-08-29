@@ -96,7 +96,7 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
 
 #-----------------------------------------------------------------------------------------------------------------------------------#-----------------------------------------------------------------------------------------------------------------------------------#-----------------------------------------------------------------------------------------------------------------------------------#-----------------------------------------------------------------FUNCIONES---------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------------------#-----------------------------------------------------------------------------------------------------------------------------------#-----------------------------------------------------------------------------------------------------------------------------------
-    sub buscarLocalidadParecida 
+    sub buscarLocalidad
     { my ($localidad) = @_;
 
       my $loc1=$dbh->prepare("SELECT id  FROM localidades where nombre = ? ;");
@@ -105,11 +105,15 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
         $loc1->finish();
 
       unless ($id){
-	#busco parecidas
-	my $loc2=$dbh->prepare("SELECT id  FROM localidades where nombre sounds like ? ;");
+	#la agrego si no existe
+	my $loc2=$dbh->prepare("INSERT INTO localidades (`LOCALIDAD`, `NOMBRE`, DPTO_PARTIDO, `DDN`) VALUES ('9999', ?, '9999', '');");
         $loc2->execute($localidad);
-	$id=$loc2->fetchrow;
         $loc2->finish();
+
+      my $loc3=$dbh->prepare("SELECT id  FROM localidades where nombre = ? ;");
+         $loc3->execute($localidad);
+         $id=$loc3->fetchrow;
+        $loc3->finish();
 	}
 
 	return $id;
@@ -279,7 +283,7 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
         elsif($_->{'campoTabla'} eq 'idCountry'){ $dn2->{'valor'}='ref_pais@'.$biblioitem->{$_->{'campoTabla'}}; }
 	  # LA Localidad pasa como texto
         elsif($_->{'campoTabla'} eq 'place'){ #Esto no se puede pasar sin buscar la referencia
-                      my $idLocalidad= buscarLocalidadParecida($biblioitem->{$_->{'campoTabla'}});
+                      my $idLocalidad= buscarLocalidad($biblioitem->{$_->{'campoTabla'}});
                        if($idLocalidad){
 			    $dn2->{'valor'}='ref_localidad@'.$idLocalidad; 
 		       } else {

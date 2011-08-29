@@ -92,6 +92,7 @@ $VERSION = 1.0;
         resetUserPassword
         changePasswordFromRecover
         checkRecoverLink
+        _init_i18n
         
 );
 
@@ -446,6 +447,15 @@ sub inicializarAuth{
 
     C4::AR::Debug::debug($t_params->{'mensaje'});
     #se destruye la session anterior
+    
+    my $locale                      =  $session->param('usr_locale');
+
+    $locale                         = $locale || C4::Context->config('defaultLang');
+    
+    
+    
+    
+    C4::AR::Debug::debug("LOCALE ANTES DE ELIMIAR LA SESSION: ".$locale);
     _eliminarSession($session);
     #Genero una nueva sesion.
     my %params;
@@ -465,6 +475,8 @@ sub inicializarAuth{
     $t_params->{"plainPassword"}    = C4::Context->config('plainPassword');
     $t_params->{'socio_data'}       = undef;
     
+    $session->param('usr_locale',$locale);
+
     return ($session);
 }
 
@@ -566,7 +578,7 @@ sub getUserLocale{
     my $session = CGI::Session->load();
 
     my $locale = $session->param('usr_locale') || C4::Context->config("defaultLang") || 'es_ES';
-    
+
     return C4::AR::Utilidades::trim($locale);
     
 }
@@ -1098,8 +1110,10 @@ sub buildSocioData{
     $session->param('usr_documento_version', $socio->persona->getVersion_documento());
     $session->param('usr_nro_documento', $socio->persona->getNro_documento());
     $session->param('usr_calle', $socio->persona->getCalle());
-    $session->param('usr_ciudad_nombre', $socio->persona->ciudad_ref->getNombre());
-    $session->param('usr_ciudad_id',$socio->persona->ciudad_ref->id);
+    if($socio->persona->ciudad_ref){
+        $session->param('usr_ciudad_nombre', $socio->persona->ciudad_ref->getNombre());
+        $session->param('usr_ciudad_id',$socio->persona->ciudad_ref->id);
+    } 
     $session->param('usr_categoria_desc', $socio->categoria->getDescription());
     $session->param('usr_fecha_nac', $socio->persona->getNacimiento());
     $session->param('usr_sexo', $socio->persona->getSexo());

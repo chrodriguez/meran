@@ -16,7 +16,7 @@
                             <li>
                                 [% "Cantidad Actual de Pr&eacute;stamos:" | i18n %] <b>[% cantPrestados %]</b>
                             </li>  
-                            <li class="detalle_barra_circulacion">
+                            <li class="detalle_barra_circulacion" style="float:left">
                                   
                                 [% IF CirculationEnabled %]
 	                                [% IF socio_data.usr_nro_socio %]
