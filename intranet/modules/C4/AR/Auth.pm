@@ -1110,8 +1110,10 @@ sub buildSocioData{
     $session->param('usr_documento_version', $socio->persona->getVersion_documento());
     $session->param('usr_nro_documento', $socio->persona->getNro_documento());
     $session->param('usr_calle', $socio->persona->getCalle());
-    $session->param('usr_ciudad_nombre', $socio->persona->ciudad_ref->getNombre());
-    $session->param('usr_ciudad_id',$socio->persona->ciudad_ref->id);
+    if($socio->persona->ciudad_ref){
+        $session->param('usr_ciudad_nombre', $socio->persona->ciudad_ref->getNombre());
+        $session->param('usr_ciudad_id',$socio->persona->ciudad_ref->id);
+    } 
     $session->param('usr_categoria_desc', $socio->categoria->getDescription());
     $session->param('usr_fecha_nac', $socio->persona->getNacimiento());
     $session->param('usr_sexo', $socio->persona->getSexo());
