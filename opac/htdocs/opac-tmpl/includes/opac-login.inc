@@ -89,15 +89,7 @@
 
 <!-- Login -->
 [% IF !socio_data %]
-        [% IF !show_navlink %]
-                <br />
-        [% END %]
-        [% IF mensaje %]      
-            <h1 id="alert_msg_main">[% mensaje %]</h1>
-
-
-        [% END %]
-
+     
 
 [% IF !loginFailed  %]
         <div id="divsearchform" >

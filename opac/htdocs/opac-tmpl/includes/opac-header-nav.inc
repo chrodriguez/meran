@@ -143,7 +143,7 @@
                 </li>
             [% END %]
         </div>
-
+ 
       <!-- A.4 HEADER BREADCRUMBS -->
 
       <!-- Breadcrumbs -->
@@ -153,8 +153,12 @@
         </div>
 
       </div>
-
+        
     </div>
-    <div id="mensajes"></div>
+    <div class="msg_main_div">   
+          [% IF mensaje %]      
+            <h1 id="alert_msg_main">[% mensaje %]</h1>
+          [% END %] 
+    </div>
 
     <!-- For alternative headers END PASTE here -->
