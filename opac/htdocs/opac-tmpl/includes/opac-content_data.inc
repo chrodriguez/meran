@@ -61,9 +61,7 @@
             <div id="resultNovedades"></div>
         </div>
         [% IF cant_sanciones > 0 %]
-            <div class="sanciones_opac_main">
-                  [% INCLUDE 'opac-sanciones.inc' %]
-            </div>
+              [% INCLUDE 'opac-sanciones.inc' %]
         [% END %]
         [% IF cantidad_prestamos > 0  %]
             <div class="prestamos_opac_main">
