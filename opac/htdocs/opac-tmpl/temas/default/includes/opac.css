@@ -3463,14 +3463,14 @@ fieldset { border: none }
 
 
 .login_main form{
-   margin-left: 46%;
- 
+/*   margin-left: 46%;
+    padding-bottom: 5px;
     border: 1px solid #7E94AF;
    border-radius: 13px 13px 13px 13px;
    color: #646464;
     background-color:#dddee2;
     padding-right: 12px;
-    width: 294px;
+    width: 30%;*/
 }
 
 #titulo_login_main{
@@ -3496,7 +3496,7 @@ fieldset { border: none }
     font-size:11px;
     margin:0 0 5px;
     padding:5px;
-    width:270px;
+    width:96%;
 }
 
 #signin_submit_main{
@@ -3516,4 +3516,42 @@ fieldset { border: none }
 .login_main input[type=text]:focus,.login_main input[type=password]:focus{
   background: #ffffff;
   border: 1px solid #34a9a3;
+}
+
+.login_main #captcha{
+      margin-left:2px;
+}
+
+.login_main{
+    margin-left: 46%;
+    padding-bottom: 5px;
+    border: 1px solid #7E94AF;
+    border-radius: 13px 13px 13px 13px;
+    color: #646464;
+    background-color:#dddee2;
+    padding-right: 12px;
+    width: 30%;
+    min-width: 310px;
+
+}
+
+#alert_msg_main
+        {
+            overflow: hidden;
+            width: 80%;
+            border-radius: 0px 0px 13px 13px;
+            text-align: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color:#4F6596;
+           /* border: 1px solid  #DDDEE2;*/
+            height: 0;
+            color: #fff;
+            font: 16px arial, sans-serif;
+            font-weight:bold;
+            font-style:italic;
+            opacity: .9;
+            margin-top:17.2%;
+            margin-left:11%
 }
