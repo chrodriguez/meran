@@ -359,10 +359,9 @@ sub send_mail {
               html    => $mail_file,
          },
          TmplOptions => {ABSOLUTE => 1,},
+         Charset      => 'utf8',
     );
 
-    $msg->attr("content-type" => "text/html");
-    
     $info_smtp_hash_ref->{'mail_message'} = $msg;
 
     if ($info_smtp_hash_ref->{'smtp_server_sendmail'}) {
