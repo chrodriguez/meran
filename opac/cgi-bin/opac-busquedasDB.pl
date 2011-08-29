@@ -82,8 +82,8 @@ if  ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
 
 if ($obj->{'estantes'}){
   #Busqueda por Estante Virtual
-    $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&estantes=".$obj->{'estantes'};
-    $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&estantes=".$obj->{'estantes'};
+    $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&estantes=".$obj->{'estantes'}."&tipoAccion=".$obj->{'tipoAccion'};
+    $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&estantes=".$obj->{'estantes'}."&tipoAccion=".$obj->{'tipoAccion'};
     C4::AR::Utilidades::addParamToUrl($url_todos,"estantes",$obj->{'estantes'});
 
     ($cantidad, $resultsarray)   = C4::AR::Busquedas::busquedaPorEstante($obj->{'estantes'}, $session, $obj);
@@ -93,8 +93,8 @@ if ($obj->{'estantes'}){
   }
   else {
 
-    $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&titulo=".$params_hash->{'titulo'}."&autor=".$params_hash->{'autor'}."&tipo=".$params_hash->{'tipo'}."&tipo_nivel3_name=".$params_hash->{'tipo_nivel3_name'}."&tipoAccion=".$params_hash->{'tipoAccion'}."&only_available=".$params_hash->{'only_available'};
-    $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$params_hash->{'token'}."&titulo=".$params_hash->{'titulo'}."&tipo=".$params_hash->{'tipo'}."&tipo_nivel3_name=".$params_hash->{'tipo_nivel3_name'}."&tipoAccion=".$params_hash->{'tipoAccion'};
+    $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&titulo=".$obj->{'titulo'}."&autor=".$obj->{'autor'}."&tipo=".$obj->{'tipo'}."&tipo_nivel3_name=".$obj->{'tipo_nivel3_name'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
+    $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&titulo=".$obj->{'titulo'}."&tipo=".$obj->{'tipo'}."&tipo_nivel3_name=".$obj->{'tipo_nivel3_name'}."&tipoAccion=".$obj->{'tipoAccion'};
     
     C4::AR::Utilidades::addParamToUrl($url_todos,"titulo",$obj->{'titulo'});
     C4::AR::Utilidades::addParamToUrl($url_todos,"tipo_nivel3_name",$obj->{'tipo_nivel3_name'});
