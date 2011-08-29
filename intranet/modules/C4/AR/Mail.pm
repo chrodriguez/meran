@@ -361,7 +361,7 @@ sub send_mail {
          TmplOptions => {ABSOLUTE => 1,},
     );
 
-    $msg->attr("content-type" => "multipart/mixed");
+    $msg->attr("content-type" => "text/html");
     
     $info_smtp_hash_ref->{'mail_message'} = $msg;
 
