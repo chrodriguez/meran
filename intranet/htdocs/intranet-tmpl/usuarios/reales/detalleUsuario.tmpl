@@ -177,7 +177,7 @@
                             [% END %]
                             </li>
                         [% END %]
-                        [% IF nroSocioLoggeado != nro_socio %]
+                        [% IF socio_data.usr_nro_socio != nro_socio %]
                             <li>
                             [% PERL %]
                                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Reestablecer contrase&ntilde;a' | i18n %]",
