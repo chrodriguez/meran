@@ -359,8 +359,6 @@ sub send_mail {
               html    => $mail_file,
          },
          TmplOptions => {ABSOLUTE => 1,},
-         Encoding     =>  '8bit',
-         Charset      => 'utf8',
     );
 
     $msg->attr("content-type" => "multipart/mixed");
