@@ -349,7 +349,7 @@ function mostrarEstructuraDelNivel1(){
     _NIVEL_ACTUAL       = 1;
    
     if(MODIFICAR == 0){
-        _mostrarAccion("Agregando metadatos");
+        _mostrarAccion("Agregando metadatos => Template: " + $('#tipo_nivel3_id').val());
     } 
 
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel1);
@@ -373,13 +373,15 @@ function updateMostrarEstructuraDelNivel1(responseText){
 	//asigno el handler para el validador
 	validateForm('formNivel1',guardarModificarDocumentoN1);
     addRules();
+    
+    scrollTo('nivel1Tabla');  
 }
 
 function mostrarEstructuraDelNivel2(){
     _NIVEL_ACTUAL       = 2;
     
     if(MODIFICAR == 0){
-        _mostrarAccion("Agregando grupo");
+        _mostrarAccion("Agregando grupo => Template: " + $('#tipo_nivel3_id').val());
     }
     
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel2);
@@ -408,6 +410,8 @@ function updateMostrarEstructuraDelNivel2(responseText){
         $('#'+_getIdComponente('910','a')).val($('#tipo_nivel3_id').val());
     }      
     
+    scrollTo('nivel2Tabla');  
+    
 }
 
 
@@ -428,7 +432,7 @@ function mostrarEstructuraDelNivel3(tipo_documento){
     _NIVEL_ACTUAL       = 3;
     
     if(MODIFICAR == 0){
-        _mostrarAccion("Agregando ejemplares");
+        _mostrarAccion("Agregando ejemplares => Template: " + $('#tipo_nivel3_id').val());
     }
 
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel3);
@@ -2025,7 +2029,7 @@ function modificarN1(id1){
 	inicializar();
     ID_TIPO_EJEMPLAR    = $("#tipo_nivel3_id").val();
     ID_N1               = id1;
-    _mostrarAccion("Modificando el metadato (" + ID_N1 + ")");
+    _mostrarAccion("Modificando el metadato (" + ID_N1 + ") => Template: " + ID_TIPO_EJEMPLAR);
 	objAH               = new AjaxHelper(updateModificarN1);
 	objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;
@@ -2051,8 +2055,8 @@ function updateModificarN1(responseText){
 function modificarN2(id2, tipo_ejemplar){
     inicializar();
     ID_N2               = id2;
-    _mostrarAccion("Modificando el grupo (" + ID_N2 + ")");
     ID_TIPO_EJEMPLAR    = tipo_ejemplar;
+    _mostrarAccion("Modificando el grupo (" + ID_N2 + ") => Template: " + ID_TIPO_EJEMPLAR);  
     objAH               = new AjaxHelper(updateModificarN2);
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;
@@ -2074,8 +2078,8 @@ function updateModificarN2(responseText){
 function modificarN3(id3, tipo_ejemplar){
 	inicializar();
 	ID_N3               = id3;	
-    _mostrarAccion("Modificando el ejemplar (" + ID_N3 + ")");
     ID_TIPO_EJEMPLAR    = tipo_ejemplar;
+    _mostrarAccion("Modificando el ejemplar (" + ID_N3 + ") => Template: " + ID_TIPO_EJEMPLAR);  
 	objAH               = new AjaxHelper(updateModificarN3);
 	objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
 	objAH.debug         = true;

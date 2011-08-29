@@ -20,42 +20,11 @@
             [% END %]
     </legend>
             <ul class="listado_sin_margen">
-<!--            <li>
-                <strong>Regitro de Nivel 1:</strong> [% nivel1.getId1 %]
-            </li>-->
             <li class="titulos"> [% nivel1.getTitulo %] </li>
             <li> <strong>[% "Autor:" | i18n %] </strong> [% nivel1.getAutorObject.getCompleto %]  </li>
             <li>
                 <strong>[% 'Nivel bibliogr&aacute;fico:' | i18n %]</strong> [% nivel1.getNivelBibliograficoObject.getDescription %]
             </li>
-<!--            <li>
-                <strong>[% 'Autores secundarios:' | i18n %]</strong>
-                [% FOREACH autor_secundario IN nivel1.getAutoresSecundarios %] 
-                    [% autor_secundario %][% IF !loop.last() %],[% END %] 
-                [% END %]
-            </li>-->
-<!--            <li>
-                <strong>[% 'T&eacute;rmino no controlado:' | i18n %]</strong> 
-                    [% FOREACH entrada IN nivel1.getTerminoNoControlado %] 
-                        [% entrada %][% IF !loop.last() %],[% END %] 
-                    [% END %]
-            </li>-->
-<!--            <li>
-                <strong>[% 'Entrada no controlado:' | i18n %]</strong> [% nivel1.getEntradaNoControlado %]
-            </li>-->
-<!--            <li>
-                <strong>[% 'CDU:' | i18n %]</strong> [% nivel1.getCDU %]
-            </li>-->
-<!--            <li>
-                <strong>[% 'Temas:' | i18n %]</strong> 
-                    [% FOREACH tema IN nivel1.getTemas %] 
-                        [% tema.getNombre %][% IF !loop.last() %],[% END %] 
-                    [% END %]
-            </li>-->
- <!--           <li>
-                <strong>[% 'Nombre Geogr&aacute;fico:' | i18n %]</strong> [% nivel1.getNombreGeograficoObject.getNombre %]
-            </li>-->
-
             <li class="botonera_horizontal">
                 <ul class="listado_sin_margen">
                 [% PERL %]

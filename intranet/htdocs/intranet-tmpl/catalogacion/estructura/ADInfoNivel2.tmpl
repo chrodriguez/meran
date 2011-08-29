@@ -10,10 +10,11 @@
     [% ELSE %]
 
         [% FOREACH nivel2 IN nivel2_array %]    
-        <div id="nive2_id_[% nivel2.getId2 %]">
-            <fieldset><legend class="nivel2Selected">
+        <fieldset><legend class="nivel2Selected trigger trigger_n2_[% nivel2.getId2 %] click">
                 <strong>[% 'Grupo:' | i18n %] [% nivel2.getId2 %] - [% nivel2.getTipoDocumentoObject.getNombre %]</strong>
                 </legend>
+          <div id="nive2_id_[% nivel2.getId2 %]" class="nive2_id_[% nivel2.getId2 %]">
+            
             <ul class="listado_sin_margen">
             <li class="botonera_horizontal">
                 <ul class="listado_sin_margen">
@@ -87,11 +88,13 @@
         </div>
 
         <fieldset>
-            <legend class="titulo_legend">[% "Ejemplares" | i18n %]</legend>
+            <legend class="titulo_legend trigger trigger_n3_[% nivel2.getId2 %] click">[% "Ejemplares" | i18n %]</legend>
             <!-- detalle del Nivel 3, segun Nivel 2 seleccionado -->
-            <div id="ejemplares_nive2_id_[% nivel2.getId2 %]"></div>
+            <div id="ejemplares_nive2_id_[% nivel2.getId2 %]" class="ejemplares_nive2_id_[% nivel2.getId2 %]"></div>
 <!--             <div id="detalleDelNivel3" class="nivel3Footer"></div> -->
         </fieldset>
+        <script type="text/javascript">makeToggle("nive2_id_[% nivel2.getId2 %]","trigger_n2_[% nivel2.getId2 %]",null,false);</script>
+        <script type="text/javascript">makeToggle("ejemplares_nive2_id_[% nivel2.getId2 %]","trigger_n3_[% nivel2.getId2 %]",null,false);</script>
         [% END %]
 
     [% END %]
