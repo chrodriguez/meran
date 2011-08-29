@@ -29,6 +29,11 @@ body input[type="text"]:focus {
     border: 1px solid #C8C8C8;
 }
 
+body input[type="text"] {
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+}
 
 .loading_results {
 	background: #c1c39a;
@@ -159,7 +164,7 @@ body textarea:focus {
 
 .header-middle {
 	width: 100%;
-	height: 12px;
+	height: 25px;
 	background: rgb(230, 230, 230) url(../imagenes/bg_head_middle.png);
 	overflow: visible !important /*Firefox*/;
 	overflow: hidden /*IE6*/;
@@ -554,10 +559,7 @@ body textarea:focus {
 	border: 1px solid rgb(200, 200, 200);
 	font-family: verdana, arial, sans-serif;
 	font-size: 120%;
-	border-radius: 8px;
-	-moz-border-radius: 8px;
-  margin-top: 10px;
-	-webkit-border-radius: 8px;
+    margin-top: 10px;
 }
 
 .header-breadcrumbs .searchform input.button {
@@ -1721,9 +1723,6 @@ p.caption {
 	border: solid 1px rgb(200, 200, 200);
 	font-family: verdana, arial, sans-serif;
 	font-size: 110%;
-    border-radius: 8px;
-    -moz-border-radius: 8px;
-    -webkit-border-radius: 8px;
 
 }
 
@@ -1812,7 +1811,7 @@ p.caption {
 }
 
 .main-subcontent h1.warning {
-	background-color: #DB0909;
+	background-color: #F15656;
 	clear: both;
 	color: #FFFFFF;
 	font-family: "trebuchet ms", verdana, arial, sans-serif;
@@ -3619,14 +3618,15 @@ fieldset {
 }
 
 #searchform_main {
-	width: 554px;
-	position: relative;
-	border: 1px solid #7e94af;
-	border-radius: 13px;
-	-moz-border-radius: 13px;
-	-webkit-border-radius: 13px;
-	height: 49px;
+    width: 554px;
+    position: relative;
+    border: 1px solid #7e94af;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    height: 49px;
 }
+
 
 #divsearchform {
 	height: 154px;
@@ -3645,6 +3645,9 @@ fieldset {
 	position: absolute;
 	font-size: 16px;
 	top: 8px;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;	
 	left: 1;
 	right: 50px;
 }
@@ -3666,9 +3669,6 @@ fieldset {
 
 /* CSS3 */
 #search {
-	border-radius: 8px;
-	-moz-border-radius: 8px;
-	-webkit-border-radius: 8px;
 	background: -webkit-gradient(linear, left top, left bottom, from(#ffffff),
 		to(#9a9da2) );
 	background: -moz-linear-gradient(top, #ffffff, #d2d3d7);
@@ -3684,9 +3684,9 @@ fieldset {
 
 
 .button{
-    border-radius: 8px;
-    -moz-border-radius: 8px;
-    -webkit-border-radius: 8px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
 	
 }
 
