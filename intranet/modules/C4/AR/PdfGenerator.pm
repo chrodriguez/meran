@@ -578,6 +578,8 @@ sub libreDeuda {
 
 	my $branchname = $socio->ui->getNombrePDF;
 
+    my $branchcode= C4::AR::Preferencias::getValorPreferencia('defaultbranch');
+
 	my ( $pdf, $pagewidth, $pageheight ) = &inicializarPDF();
 
 	my $x = 50;
@@ -602,8 +604,27 @@ sub libreDeuda {
 	);
 	$parrafo[3] = Encode::decode_utf8(
 		" validez de 10 días corridos a partir de su fecha de emisión.");
+    
+     my $escudo =
+        C4::Context->config('intrahtdocs') . '/temas/'
+      . C4::AR::Preferencias::getValorPreferencia('tema_intra')
+      . '/imagenes/escudo-DEFAULT'
+      . '.jpg';
 
-	($pdf) = &imprimirEncabezado( $pdf, $branchname, $x, $pagewidth, $pageheight + 120, \%titulo, );
+    my $escudoUI =
+        C4::Context->config('intrahtdocs') . '/temas/'
+      . C4::AR::Preferencias::getValorPreferencia('tema_intra')
+      . '/imagenes/escudo-'
+      . $branchcode
+      . '.jpg';
+
+      
+     C4::AR::Debug::debug($escudoUI);
+
+    $pdf->addImgScaled($escudo, $x ,  ($y) + 570 , 5/100);
+    $pdf->addImgScaled($escudoUI, $x + 400 ,  ($y) + 570 , 3/100);
+
+	($pdf) = &imprimirEncabezado( $pdf, $branchname, $x + 50, $pagewidth, $pageheight + 120, \%titulo, );
 	( $pdf, $y ) =
 	  &imprimirContenido( $pdf, $x, $y, $pageheight, 15, \@parrafo );
 	( $pdf, $y ) = &imprimirFirma( $pdf, $y + 50, $pageheight );
