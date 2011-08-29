@@ -66,7 +66,7 @@ sub t_guardarNivel3 {
             $catRegistroMarcN3->agregar($db, $params, $msg_object);
             #recupero el id3 recien agregado
             $id3 = $catRegistroMarcN3->getId3;
-	    C4::AR::Debug::debug("t_guardarNivel3 => ID 3 => ".$id3);
+            C4::AR::Debug::debug("t_guardarNivel3 => ID 3 => ".$id3);
             #se agregaron los barcodes con exito
             if(!$msg_object->{'error'}){
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U370', 'params' => [$catRegistroMarcN3->getBarcode]} );
@@ -74,7 +74,7 @@ sub t_guardarNivel3 {
         }
 
         if(defined $id3){
-            C4::AR::Sphinx::generar_indice($catRegistroMarcN3->getId1, 'R_PARTIAL', 'INSERT');
+#             C4::AR::Sphinx::generar_indice($catRegistroMarcN3->getId1, 'R_PARTIAL', 'INSERT');
             #ahora el indice se encuentra DESACTUALIZADO
             C4::AR::Preferencias::setVariable('indexado', 0, $db);
         }

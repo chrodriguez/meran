@@ -1,24 +1,64 @@
 <script type="text/javascript" language="javascript" src="/includes/jquery/jquery-ui-1.8.13.sortable.min.js"></script>
 <script type="text/javascript" language="javascript">
     $(function() {
+	    $("#sortable").sortable({
+            stop: function(event, ui) {
+                actualizarOrden($('#sortable').sortable('toArray'));
+            }
+        });
+    });
+</script>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function() {
+        makeToggle('divTablaAgregarVisualizacion','trigger',null,false);
+        onEnter('lib_librarian',agregarVisualizacion);
+        loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
+        $('.editable').editable('[% url_prefix %]/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl', { 
+              type      : 'text',
+              cancel    : CANCELAR,
+              submit    : OK,
+              tooltip   : EDITABLE_MSG,
+              placeholder: EDITABLE_MSG,
+              style   : 'display: inline',
+              submitdata : {token: "[% token %]", edit: 1, type: 'nombre'},
+              indicator : loaderPath,
 
-		    $("#sortable").sortable({
-                stop: function(event, ui) {
-                    actualizarOrden($('#sortable').sortable('toArray'));
-                }
-            });
-	    });
+        });
+        $('.pre').editable('[% url_prefix %]/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl', { 
+              type      : 'text',
+              cancel    : CANCELAR,
+              submit    : OK,
+              tooltip   : EDITABLE_MSG,
+              placeholder: EDITABLE_MSG,
+              style   : 'display: inline',
+              submitdata : {token: "[% token %]", edit: 1, type: 'pre'},
+              indicator : loaderPath,
+
+        });
+        $('.post').editable('[% url_prefix %]/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl', { 
+              type      : 'text',
+              cancel    : CANCELAR,
+              submit    : OK,
+              tooltip   : EDITABLE_MSG,
+              placeholder: EDITABLE_MSG,
+              style   : 'display: inline',
+              submitdata : {token: "[% token %]", edit: 1, type: 'post'},
+              indicator : loaderPath,
+
+        });
+    });
 </script>
 <fieldset>
     <legend class="titulo_legend trigger click"><strong>[% "Configuraci&oacute;n de la Visualizaci&oacute;n:" | i18n %]</strong></legend>
     <input type="checkbox" name="ordenar_campos" id="ordenar_campos"/>Agrupar por campo
-    <div id="divTablaVisualizacion" class="divTablaVisualizacion"></div>
       <table class="tabla_datos" cellspacing=0 border="0" cellpadding=0 style="width:100%;">
             <thead>
                 <tr class="titulo_tabla_resultado">
                     <td>[% "Campo" | i18n %]</td>
                     <td>[% "Subcampo" | i18n %]</td>
+                    <td>[% "Pre" | i18n %]</td>
                     <td>[% "Vista en OPAC " | i18n %]</td>
+                    <td>[% "Post" | i18n %]</td>
                     <td>[% "Eliminar" | i18n %]</td>
                 </tr>
             </thead>
@@ -27,7 +67,9 @@
                     <tr id="[% campo.getId %]" align="center">
                         <td>[% campo.getCampo %]</td>
                         <td>[% campo.getSubCampo %]</td>
+                        <td class="pre" id="[% campo.id %]">[% campo.getPre %]</td>
                         <td class="editable" id="[% campo.id %]">[% campo.getVistaOpac %]</td>
+                        <td class="post" id="[% campo.id %]">[% campo.getPost %]</td>
                         <td align="center">
                             [% PERL %]
                                 print C4::AR::Filtros::to_Icon( text =>     "[% 'Eliminar Vista' | i18n %]",

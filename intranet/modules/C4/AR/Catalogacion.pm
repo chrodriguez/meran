@@ -131,8 +131,9 @@ sub meran_nivel1_to_meran{
     my ($data_hash) = @_;
 
     my $campos_autorizados          = C4::AR::EstructuraCatalogacionBase::getSubCamposByNivel(1);
-    $data_hash->{'tipo_ejemplar'}   = 'ALL';
-    my $marc_record                 = _meran_to_marc($data_hash->{'infoArrayNivel1'},$campos_autorizados,$data_hash->{'tipo_ejemplar'}, 1);
+    $data_hash->{'tipo_ejemplar'}   = $data_hash->{'id_tipo_doc'}||'ALL';
+#     C4::AR::Debug::debug("Catalogacion => meran_nivel1_to_meran => tipo_ejemplar => ".$data_hash->{'id_tipo_doc'});
+    my $marc_record                 = _meran_to_marc($data_hash->{'infoArrayNivel1'}, $campos_autorizados, $data_hash->{'id_tipo_doc'}, 1);
 
     return($marc_record);
 }
@@ -371,7 +372,7 @@ sub marc_record_to_meran_por_nivel {
     
     #obtengo la estructura y se verifica si falta agregar un campo, subcampo a la estructura de los datos    
     my ($cant, $catalogaciones_array_ref) = getEstructuraSinDatos($params);
-    agregarCamposVacios2($marc_record, $catalogaciones_array_ref);
+    agregarCamposVacios($marc_record, $catalogaciones_array_ref);
 
     my ($MARC_result_array) = marc_record_to_meran($marc_record, $params->{'id_tipo_doc'});
         
@@ -425,7 +426,8 @@ sub filtrarVisualizacion{
     my $visulizacion_array_ref;
 
     if($params->{'tipo'} eq 'OPAC'){
-        ($visulizacion_array_ref) = C4::AR::VisualizacionOpac::getConfiguracion($db);
+#         ($visulizacion_array_ref) = C4::AR::VisualizacionOpac::getConfiguracion($db);
+        ($visulizacion_array_ref) = C4::AR::VisualizacionOpac::getConfiguracion($params->{'id_tipo_doc'},$db);
     } else {
         ($visulizacion_array_ref) = C4::AR::VisualizacionIntra::getConfiguracion($params->{'id_tipo_doc'},$db);
     }
@@ -547,14 +549,14 @@ sub marc_record_to_meran_to_detail_view2 {
             my $campo_ant                   = $field->tag;
             my $indicador_primario_dato     = $field->indicator(1);
             my $indicador_secundario_dato   = $field->indicator(2);
-#             C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => campo => ".$campo);
+            C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => campo => ".$campo);
     #             #proceso todos los subcampos del campo
             foreach my $subfield ($field->subfields()) {
                 my %hash_temp;
                 my %hash_temp_aux;
                 my $subcampo                        = $subfield->[0];
                 my $dato                            = $subfield->[1];
-    #                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => subcampo => ".$subcampo);
+                C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => subcampo => ".$subcampo);
                 $hash_temp{'campo'}                 = $campo;
                 $hash_temp{'subcampo'}              = $subcampo;
     # TODO tengo q mostrar el nombre del campo de la biblia de la tabla de campos
@@ -651,168 +653,6 @@ sub marc_record_to_meran {
     }
 
     return (\@MARC_result_array);
-}
-
-=item sub getCatRegistroMarcN1SinEstructura
-  Esta funcion retorn un arreglo de objetos, donde los mismos no tiene configurada la estructura de catalogacion, o sea
-  no se van a poder mostrar en el sistema
-=cut
-# FIXME DEPRECATEDDDDDDDDDDD
-sub getCatRegistroMarcN1SinEstructura{
-    my ($nivel, $ini, $cantR) = @_;
-
-    my $dbh   = C4::Context->dbh;
-
-    my $sth = $dbh->prepare(" SELECT count(*) as cant
-                              FROM cat_registro_marc_n1 crmn1
-                              WHERE (crmn1.campo, crmn1.subcampo) NOT IN 
-
-                              (SELECT cec.campo, cec.subcampo
-                              FROM cat_estructura_catalogacion cec
-                              WHERE cec.nivel = ?) ");
-    $sth->execute($nivel);
-    my $data = $sth->fetchrow_hashref;
-    my $cant = $data->{'cant'};
-
-    my $sth = $dbh->prepare(" SELECT *
-                              FROM cat_registro_marc_n1 crmn1
-                              WHERE (crmn1.campo, crmn1.subcampo) NOT IN 
-
-                              (SELECT cec.campo, cec.subcampo
-                              FROM cat_estructura_catalogacion cec
-                              WHERE cec.nivel = ?) LIMIT ?, ?");
-
-    $sth->execute($nivel, $ini, $cantR);
-    my @array_objects;
-
-    while (my $data = $sth->fetchrow_hashref) {
-        my $nivel_array_ref = C4::AR::Nivel1::getNivel1FromId1($data->{'id'});
-
-        if($nivel_array_ref){
-            push (@array_objects, $nivel_array_ref);
-        }
-    } # while
-
-    return ($cant, @array_objects);
-}
-
-=item sub getCatRegistroMarcN2SinEstructura
-  Esta funcion retorn un arreglo de objetos, donde los mismos no tiene configurada la estructura de catalogacion, o sea
-  no se van a poder mostrar en el sistema
-=cut
-# FIXME DEPRECATEDDDDDDDDDDD
-sub getCatRegistroMarcN2SinEstructura{
-    my ($nivel, $ini, $cantR) = @_;
-
-    my $dbh   = C4::Context->dbh;
-
-    my $sth = $dbh->prepare(" SELECT count(*) as cant
-                              FROM cat_registro_marc_n2 crmn2
-                              WHERE (crmn2.campo, crmn2.subcampo) NOT IN 
-
-                              (SELECT cec.campo, cec.subcampo
-                              FROM cat_estructura_catalogacion cec
-                              WHERE cec.nivel = ?) ");
-    $sth->execute($nivel);
-    my $data = $sth->fetchrow_hashref;
-    my $cant = $data->{'cant'};
-
-    my $sth = $dbh->prepare(" SELECT *
-                              FROM cat_registro_marc_n2 crmn2
-                              WHERE (crmn2.campo, crmn2.subcampo) NOT IN 
-
-                              (SELECT cec.campo, cec.subcampo
-                              FROM cat_estructura_catalogacion cec
-                              WHERE cec.nivel = ?) LIMIT ?, ?");
-
-    $sth->execute($nivel, $ini, $cantR);
-    my @array_objects;
-
-    while (my $data = $sth->fetchrow_hashref) {
-        my $nivel_array_ref = C4::AR::Nivel2::getNivel2FromId2($data->{'id'});
-
-        if($nivel_array_ref){
-            push (@array_objects, $nivel_array_ref);
-        }
-    } # while
-
-    return ($cant, @array_objects);
-}
-
-
-=item sub getCatRegistroMarcN3SinEstructura
-  Esta funcion retorn un arreglo de objetos, donde los mismos no tiene configurada la estructura de catalogacion, o sea
-  no se van a poder mostrar en el sistema
-=cut
-# FIXME DEPRECATEDDDDDDDDDDD
-sub getCatRegistroMarcN3SinEstructura{
-    my ($nivel, $ini, $cantR) = @_;
-
-    my $dbh   = C4::Context->dbh;
-
-    my $sth = $dbh->prepare(" SELECT count(*) as cant
-                              FROM cat_registro_marc_n3 crmn3
-                              WHERE (crmn3.campo, crmn3.subcampo) NOT IN 
-
-                              (SELECT cec.campo, cec.subcampo
-                              FROM cat_estructura_catalogacion cec
-                              WHERE cec.nivel = ?) ");
-    $sth->execute($nivel);
-    my $data = $sth->fetchrow_hashref;
-    my $cant = $data->{'cant'};
-
-    my $sth = $dbh->prepare(" SELECT *
-                              FROM cat_registro_marc_n3 crmn3
-                              WHERE (crmn3.campo, crmn3.subcampo) NOT IN 
-
-                              (SELECT cec.campo, cec.subcampo
-                              FROM cat_estructura_catalogacion cec
-                              WHERE cec.nivel = ?) LIMIT ?, ?");
-
-    $sth->execute($nivel, $ini, $cantR);
-    my @array_objects;
-
-    while (my $data = $sth->fetchrow_hashref) {
-        my $nivel_array_ref = C4::AR::Nivel3::getNivel3FromId3($data->{'id'});
-
-        if($nivel_array_ref){
-            push (@array_objects, $nivel_array_ref);
-        }
-    } # while
-
-    return ($cant, @array_objects);
-}
-
-
-=item sub getImportacionSinEstructura
-  Retorna un arreglo de objetos, campo, subcampo y dato, los cuales no se encuentran en la cat_estructura_catalogacion
-=cut
-sub getImportacionSinEstructura{
-    my ($params) = @_;
-
-    my $nivel = $params->{'nivel'};
-    my $ini = $params->{'ini'};
-    my $cantR = $params->{'cantR'};
-
-    my @nivel_array_ref;
-    my $cant;
-
-    if($nivel eq '1'){
-      ($cant, @nivel_array_ref) = getCatRegistroMarcN1SinEstructura($nivel, $ini, $cantR);
-    }elsif($nivel eq '2'){
-      ($cant, @nivel_array_ref) = getCatRegistroMarcN2SinEstructura($nivel, $ini, $cantR);
-    }elsif($nivel eq '3'){
-      ($cant, @nivel_array_ref) = getCatRegistroMarcN3SinEstructura($nivel, $ini, $cantR);
-    }
-
-
-
-    if(scalar(@nivel_array_ref) > 0){
-        C4::AR::Debug::debug("Catalogacion => getImportacionSinEstructura => cant: ".scalar(@nivel_array_ref));
-        return ($cant, @nivel_array_ref);
-    }else{
-        return 0;
-    }
 }
 
 
@@ -1094,25 +934,26 @@ sub getEstructuraYDatosDeNivel{
 
     if( $params->{'nivel'} eq '1'){
         $nivel          = C4::AR::Nivel1::getNivel1FromId1($params->{'id'});
-        $tipo_ejemplar  = 'ALL';
+        $tipo_ejemplar  = $nivel->getTemplate()||'ALL';
         C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel1FromId1 => ID1 ".$params->{'id'});
     }
     elsif( $params->{'nivel'} eq '2'){
         $nivel          = C4::AR::Nivel2::getNivel2FromId2($params->{'id'});
-        $tipo_ejemplar  = $nivel->getTipoDocumento;
+        $tipo_ejemplar  = $nivel->getTemplate()||'ALL';
         C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel2FromId2 => ID2 ".$params->{'id'});
     }
     elsif( $params->{'nivel'} eq '3'){
         $nivel          = C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
-        $tipo_ejemplar  = $nivel->nivel2->getTipoDocumento;
+        $tipo_ejemplar  = $nivel->getTemplate()||'ALL';
         C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel3FromId3 => ID3 ".$params->{'id3'});
     }
 
     #paso todo a MARC
     my $nivel_info_marc_array = undef;
-    eval{
+# FIXME lo saque para poder encontrar el error
+#     eval{
       $nivel_info_marc_array = $nivel->toMARC; #mapea los campos de la tabla nivel 1, 2, o 3 a MARC
-    };
+#     };
 
     my $campo;
     my $repetible;

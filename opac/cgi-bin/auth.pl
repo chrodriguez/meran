@@ -26,8 +26,9 @@ my $sessionClose = $t_params->{'sessionClose'} = $query->param('sessionClose') |
 
 
 $t_params->{'mostrar_captcha'} = $query->param('mostrarCaptcha') || 0;
-
+$t_params->{'loginFailed'} =  $query->param('loginFailed')|| 0;
 $t_params->{'loginAttempt'} = $query->param('loginAttempt') || 0;
+
 
 if ($t_params->{'loginAttempt'} & !($t_params->{'mostrar_captcha'}) ){
   $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje('U310','opac');

@@ -8,8 +8,9 @@ __PACKAGE__->meta->setup(
     table   => 'cat_registro_marc_n1',
 
     columns => [
-        id             => { type => 'serial', not_null => 1 },
-        marc_record    => { type => 'text' },
+        id              => { type => 'serial', not_null => 1 },
+        marc_record     => { type => 'text' },
+        template        => { type => 'varchar', not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ]
@@ -50,6 +51,30 @@ sub getSignaturas{
     return (\@signaturas);
 }
 
+=item sub getTemplate
+
+  retorna el esquema/template utilizado para la carga de datos
+=cut
+sub getTemplate{
+    my ($self)  = shift;
+
+#     return C4::AR::Referencias::obtenerEsquemaById($self->template);
+    return $self->template;
+}
+
+sub setTemplateId{
+    my ($self)      = shift;
+    my ($params)   = @_;
+
+    $self->template($params->{'id_tipo_doc'});
+}
+
+sub getTemplateId{
+    my ($self)  = shift;
+
+    return $self->template;
+}
+
 =item
   sub setearLeader
 
@@ -78,6 +103,7 @@ sub agregar{
     my ($marc_record, $params)  = @_;
 
     $self->setMarcRecord($marc_record);
+    $self->setTemplateId($params);
     $self->save();
 
     #seteo datos del LEADER
@@ -371,7 +397,7 @@ sub toMARC{
 
     my $params;
     $params->{'nivel'}          = '1';
-    $params->{'id_tipo_doc'}    = 'ALL';
+    $params->{'id_tipo_doc'}    = $self->getTemplate()||'ALL';
     my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_meran_por_nivel($marc_record, $params);
 
     return ($MARC_result_array);
@@ -390,7 +416,7 @@ sub toMARC_Opac{
 
     my $params;
     $params->{'nivel'}          = '1';
-    $params->{'id_tipo_doc'}    = 'ALL';
+#     $params->{'id_tipo_doc'}    = 'ALL';
     my $MARC_result_array       = C4::AR::Catalogacion::marc_record_to_opac_view($marc_record, $params);
 
 #     my $orden = 'orden';

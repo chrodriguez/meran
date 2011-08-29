@@ -42,7 +42,7 @@
                   </li>
          
               [% ELSE %]
-                   
+                   [% IF !loginFailed  %]
                         <div id="drop_down_login" class="drop_down_login"> <a href="login" class="signin"><span>Iniciar Sesion</span></a>
                             <fieldset id="signin_menu">
                                     <!-- ORIGINAL  <form id="datosAEnviar" method="post" action="[% url_prefix %]/opac-main.pl" onsubmit="return enviar()" autocomplete="off">-->
@@ -76,6 +76,7 @@
                                 </form>
                           </fieldset>
                     </div>
+                 [% END %]
              [% END %]
             </ul>
         </div>
@@ -94,6 +95,14 @@
                     print C4::AR::Filtros::link_to( text    =>  "[% 'B&uacute;squeda Avanzada' | i18n %]",
                                                     url     =>  '[% url_prefix %]/opac-advanced_search.pl',
                                                     title   =>  "[% 'B&uacute;squeda Avanzada' | i18n %]",
+                            ) ;
+                [% END %]
+            </li>
+            <li>
+                [% PERL %]
+                    print C4::AR::Filtros::link_to( text    =>  "[% 'Estantes Virtuales' | i18n %]",
+                                                    url     =>  '[% url_prefix %]/opac-estante.pl',
+                                                    title   =>  "[% 'Estantes Virtuales' | i18n %]",
                             ) ;
                 [% END %]
             </li>

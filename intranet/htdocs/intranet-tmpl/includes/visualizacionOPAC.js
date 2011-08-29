@@ -31,16 +31,20 @@ function agregarVisualizacion(){
     objAH.showOverlay   = true;
     objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
     objAH.tipoAccion    = 'AGREGAR_VISUALIZACION';
-    var perfil          = $("#perfiles_ref").val();
+    var ejemplar        = $("#tipo_nivel3_id").val();
     var campo           = $.trim($("#campo").val());
     var subcampo        = $.trim($("#subcampo").val());
     var liblibrarian    = $.trim($("#liblibrarian").val());
+    var pre             = $.trim($("#pre").val());
+    var post            = $.trim($("#post").val());    
       
-    if ( (perfil) && (campo) && (subcampo) && (liblibrarian) ){
-        objAH.perfil        = perfil;
+    if ( (ejemplar) && (campo) && (subcampo) && (liblibrarian) ){
+        objAH.ejemplar      = ejemplar;
         objAH.campo         = campo;
         objAH.subcampo      = subcampo;
         objAH.liblibrarian  = liblibrarian;
+        objAH.pre           = pre;
+        objAH.post          = post;        
         objAH.sendToServer();
     }else{
         jAlert(SELECCIONE_VISTA_OPAC,CATALOGO_ALERT_TITLE);
@@ -56,10 +60,10 @@ function updateAgregarVisualizacion(responseText){
     }   
 }
 
-function eleccionDePerfil(){
-    var perfil  = $("#perfiles_ref").val();
-    var ObjDiv  = $("#result");
-    if (isNaN(perfil)){
+function eleccionDeEjemplar(){
+    var ejemplar    = $("#tipo_nivel3_id").val();
+    var ObjDiv      = $("#result");
+    if (!isNaN(ejemplar)){
         ObjDiv.hide();
     }else{
         ObjDiv.show();
@@ -68,7 +72,8 @@ function eleccionDePerfil(){
         objAH.showOverlay   = true;  
         objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
         objAH.tipoAccion    = 'MOSTRAR_VISUALIZACION';
-        objAH.perfil        = perfil;
+        objAH.ejemplar      = ejemplar;
+
         objAH.sendToServer();
     }
 }

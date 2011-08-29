@@ -1,42 +1,5 @@
 <script>
     $(document).ready(function() {
-        makeToggle('divTablaAgregarVisualizacion','trigger',null,false);
-        makeToggle('divTablaVisualizacion','trigger',null,false);
-        onEnter('lib_librarian',agregarVisualizacion);
-        loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
-        $('.editable').editable('[% url_prefix %]/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl', { 
-              type      : 'text',
-              cancel    : CANCELAR,
-              submit    : OK,
-              tooltip   : EDITABLE_MSG,
-              placeholder: EDITABLE_MSG,
-              style   : 'display: inline',
-              submitdata : {token: "[% token %]", edit: 1, type: 'nombre'},
-              indicator : loaderPath,
-
-        });
-        $('.pre').editable('[% url_prefix %]/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl', { 
-              type      : 'text',
-              cancel    : CANCELAR,
-              submit    : OK,
-              tooltip   : EDITABLE_MSG,
-              placeholder: EDITABLE_MSG,
-              style   : 'display: inline',
-              submitdata : {token: "[% token %]", edit: 1, type: 'pre'},
-              indicator : loaderPath,
-
-        });
-        $('.post').editable('[% url_prefix %]/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl', { 
-              type      : 'text',
-              cancel    : CANCELAR,
-              submit    : OK,
-              tooltip   : EDITABLE_MSG,
-              placeholder: EDITABLE_MSG,
-              style   : 'display: inline',
-              submitdata : {token: "[% token %]", edit: 1, type: 'post'},
-              indicator : loaderPath,
-
-        });
         mostrarTabla();
     });
     
@@ -74,27 +37,6 @@
         mostrarTabla();        
     }
 </script>
-<script type="text/javascript" src="/includes/jquery/jquery-ui-1.8.13.sortable.min.js"></script>
-<script type="text/javascript">
-    $(function() {
-		    $("#sortable").sortable({
-                stop: function(event, ui) { 
-                    objAH               = new AjaxHelper(updateSortable);
-	                objAH.debug         = true;
-	                objAH.url           = URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
-                    objAH.showOverlay   = true;
-	                objAH.tipoAccion    = "ACTUALIZAR_ORDEN";
-	                objAH.newOrderArray = $('#sortable').sortable('toArray');
-	                objAH.sendToServer(); 
-                }
-            });
-		    $("#sortable").disableSelection();
-		    
-		    function updateSortable(responseText){ }
-	    });
-</script>
-
-
 <fieldset>
     <legend class="titulo_legend trigger click"><strong>[% "Agregar Visualizaci&oacute;n:" | i18n %]</strong></legend>
     <div class="divTablaAgregarVisualizacion" id="divTablaAgregarVisualizacion">

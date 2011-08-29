@@ -1648,6 +1648,9 @@ sub armarBuscoPor{
     if( C4::AR::Utilidades::validateString($params->{'estante'})){
         $buscoPor.= "Estantes Virtuales: ".C4::AR::Utilidades::verificarValor($params->{'estante'})."&";
     }   
+    if( C4::AR::Utilidades::validateString($params->{'estantes'})){
+        $buscoPor.= "Estantes Virtuales: ".C4::AR::Utilidades::verificarValor($params->{'estantes'})."&";
+    }
 
     if( C4::AR::Utilidades::validateString($params->{'estantes_grupo'})){
         $buscoPor.= "Estantes virtuales del grupo: ".C4::AR::Utilidades::verificarValor($params->{'estantes_grupo'})."&";

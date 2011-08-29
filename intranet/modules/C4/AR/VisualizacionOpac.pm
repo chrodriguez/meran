@@ -133,13 +133,13 @@ sub updateNewOrderGroup{
     Funcion que devuelve TODOS los campos ordenados por orden
 =cut
 sub getConfiguracionByOrder{
-    my ($perfil) = @_;
+    my ($ejemplar) = @_;
 
     my @filtros;
     
-    push ( @filtros, ( or   => [    id_perfil   => { eq => $perfil }, 
-                                    id_perfil   => { eq => '0'     } ]) #PERFIL TODOS
-                );
+    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $ejemplar }, 
+                                tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS
+    );                
 
     my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros, sort_by => ('orden'),);
 
@@ -148,14 +148,19 @@ sub getConfiguracionByOrder{
 
 
 sub getConfiguracion{
-    my ($db) = @_;
+    my ($ejemplar, $db) = @_;
+
     my @filtros;
     $db = $db || C4::Modelo::CatVisualizacionOpac->new()->db;
     
-    my $perfil = C4::AR::Preferencias::getValorPreferencia('perfil_opac');
+#     my $perfil = C4::AR::Preferencias::getValorPreferencia('perfil_opac');
 
-    push ( @filtros, ( or   => [    id_perfil   => { eq => $perfil }, 
-                                    id_perfil   => { eq => '0'     } ]) #PERFIL TODOS
+#     push ( @filtros, ( or   => [    id_perfil   => { eq => $perfil }, 
+#                                     id_perfil   => { eq => '0'     } ]) #PERFIL TODOS
+#                 );
+
+    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $ejemplar }, 
+                                    tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS
                 );
 
     my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros, sort_by => ('campo, subcampo'), db => $db,);
@@ -201,15 +206,24 @@ sub deleteConfiguracion{
 }
  
 sub editConfiguracion{
-    my ($vista_id,$value) = @_;
+    my ($vista_id,$value,$type) = @_;
     my @filtros;
 
     push (@filtros, (id => { eq => $vista_id }) );
     my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros,);
 
     if ($configuracion->[0]){
-        $configuracion->[0]->modificar($value);
-        return ( $configuracion->[0]->getVistaOpac() );
+        if($type eq "pre"){
+            $configuracion->[0]->modificarPre($value);
+            return ($configuracion->[0]->getPre());
+        }
+        elsif($type eq "post"){
+            $configuracion->[0]->modificarPost($value);
+            return ($configuracion->[0]->getPost());
+        }else{
+            $configuracion->[0]->modificar($value);
+            return ($configuracion->[0]->getVistaIntra());
+        }
     }else{
         return(0);
     }
@@ -257,7 +271,7 @@ sub getCamposXLike{
     Este funcion devuelve la configuracion de la estructura de catalogacion de un campo, subcampo, realizada por el usuario
 =cut
 sub getVisualizacionFromCampoSubCampo{
-    my ($campo, $subcampo, $perfil,$db) = @_;
+    my ($campo, $subcampo, $tipo_ejemplar, $db) = @_;
 
     $db = $db || C4::Modelo::CatVisualizacionOpac->new()->db;
     my @filtros;
@@ -265,7 +279,7 @@ sub getVisualizacionFromCampoSubCampo{
     push(@filtros, ( campo          => { eq => $campo } ) );
     push(@filtros, ( subcampo       => { eq => $subcampo } ) );
 #     push (@filtros,( tipo_ejemplar  => { eq => 'ALL' })); 
-    push (  @filtros, ( or   => [   id_perfil   => { eq => $perfil } ]) );
+    push (  @filtros, ( or   => [   tipo_ejemplar   => { eq => $tipo_ejemplar } ]) );
 
 
     my $cat_estruct_info_array = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(  
@@ -289,7 +303,10 @@ sub existeConfiguracion{
 
     push(@filtros, ( campo          => { eq => $params->{'campo'} } ));
     push(@filtros, ( subcampo       => { eq => $params->{'subcampo'} } ));
-    push(@filtros, ( id_perfil      => { eq => $params->{'perfil'} } ));
+#    push(@filtros, ( tipo_ejemplar  => { eq => $params->{'ejemplar'} } ));
+    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $params->{'ejemplar'} }, 
+                                    tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS
+    );
 
 
     my $cat_estruct_info_array = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(  

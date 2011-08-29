@@ -1,20 +1,5 @@
-<script>
+<script type="text/javascript" language="javascript">
     $(document).ready(function() {
-        makeToggle('divTablaAgregarVisualizacion','trigger',null,false);
-        makeToggle('divTablaVisualizacion','trigger',null,false);
-        onEnter('lib_librarian',agregarVisualizacion);
-        loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
-        $('.editable').editable('[% url_prefix %]/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl', { 
-              type      : 'text',
-              cancel    : CANCELAR,
-              submit    : OK,
-              tooltip   : EDITABLE_MSG,
-              placeholder: EDITABLE_MSG,
-              style   : 'display: inline',
-              submitdata : {token: "[% token %]", edit: 1},
-              indicator : loaderPath,
-
-        });
         mostrarTabla();
     });
     
@@ -51,9 +36,7 @@
     function updateSortable(){
         mostrarTabla();        
     }
-
 </script>
-
 <fieldset>
     <legend class="titulo_legend trigger click"><strong>[% "Agregar Visualizaci&oacute;n:" | i18n %]</strong></legend>
     <div class="divTablaAgregarVisualizacion" id="divTablaAgregarVisualizacion">
@@ -76,9 +59,17 @@
                     </select>
             </li>
             <li class="sub_item" id="lib_librarian">
+                <label for="pre">[% 'Pre' | i18n %]:</label> 
+                <input id="pre" type="text" value="" size="50">
+            </li>
+            <li class="sub_item" id="lib_librarian">
                 <label for="liblibrarian">[% 'Vista en Intranet' | i18n %]:</label> 
                 <input id="liblibrarian" type="text" value="" size="90">
             </li> 
+            <li class="sub_item" id="lib_librarian">
+                <label for="post">[% 'Post' | i18n %]:</label> 
+                <input id="post" type="text" value="" size="50">
+            </li>
             [% PERL %]
                     print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Vista' | i18n %]",
                                                         boton   => "boton_buscar",
