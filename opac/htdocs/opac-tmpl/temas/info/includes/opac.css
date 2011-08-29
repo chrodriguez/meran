@@ -957,11 +957,10 @@ div.pagination {
 }
 
 div.pagination a {
-    padding: 2px 2px 2px 2px;
+    color: #496E6D;
     margin: 2px;
+    padding: 2px;
     text-decoration: none;
-    /* no underline */
-    color: #2A5A8A;
 }
 
 div.pagination a:hover,div.pagination a:active,div.pagination a:visited
@@ -970,11 +969,11 @@ div.pagination a:hover,div.pagination a:active,div.pagination a:visited
 }
 
 div.pagination span.current {
-    padding: 2px 3px 2px 3px;
-    margin: 2px;
+    background-color: #496E6D;
+    color: infobackground;
     font-weight: bold;
-    background-color: #DAE0EC;
-    color: InfoBackground;
+    margin: 2px;
+    padding: 2px 3px;
 }
 
 div.pagination span.disabled {
@@ -1491,12 +1490,12 @@ li.detalle_barra_circulacion {
 
 /* MAIN CONTENT */
 .main-content h1.pagetitle {
-    margin: 0 0 0 0px;
-    padding: 0 0 2px 0;
-    font-family: "trebuchet ms", arial, sans-serif;
     color: #496E6D;
-    font-weight: normal;
+    font-family: "trebuchet ms",arial,sans-serif;
     font-size: 194%;
+    font-weight: normal;
+    margin: 0 0 0 0;
+    padding: 0 0 2px;
 }
 
 .main-content h1.block {
@@ -1610,14 +1609,13 @@ li.detalle_barra_circulacion {
 }
 
 .main-content table th.top {
-    height: 3.5em;
-    padding: 0 7px 0 7px;
-    empty-cells: show;
-    background-color: rgb(175, 175, 175);
-    text-align: left;
-    color: rgb(255, 255, 255);
+    background-color: #496E6D;
+    border: 2px solid #FFFFFF;
+    color: #FFFFFF;
+    font-size: 11px;
     font-weight: bold;
-    font-size: 110%;
+    height: 3em;
+    text-align: center;
 }
 
 .main-content table th {
@@ -2105,7 +2103,7 @@ p.caption {
 }
 
 .main a {
-    color: rgb(70, 122, 167);
+    color: #496E6D;
     font-weight: bold;
     text-decoration: none;
 }
@@ -3619,11 +3617,11 @@ fieldset {
 #searchform_main {
     width: 554px;
     position: relative;
-    border: 1px solid #7e94af;
+    border: 2px solid #7e94af;
+    height: 49px;
     border-radius: 4px;
     -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    height: 49px;
+    -webkit-border-radius: 4px;    
 }
 
 #divsearchform {
