@@ -363,6 +363,8 @@ sub send_mail {
          Charset      => 'utf8',
     );
 
+    $msg->attr("content-type" => "multipart/mixed");
+    
     $info_smtp_hash_ref->{'mail_message'} = $msg;
 
     if ($info_smtp_hash_ref->{'smtp_server_sendmail'}) {
