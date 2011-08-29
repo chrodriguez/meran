@@ -49,19 +49,19 @@
     [% IF cantidad > 0 %]
         <table id="tablaResult" class="tabla_datos" cellspacing='0' cellpadding='0' style="text-align:center; width:100%; border:1;">
                 <tr class="tablaresultadoTitle" >
-                    <th align="center">
+                    <th align="center" style="width: 80px;"> 
                         [% "Im&aacute;gen" | i18n %]
                     </th>
-                    <th align="center" style="width: 350px;">
+                    <th align="center" style="width: 400px;">
                         [% "T&iacute;tulo" | i18n %]
                     </th>
                     <th align="center" style="width: 150px;">
                         [% "Autor" | i18n %]
                     </th>
-                    <th align="center" style="width: 140px;">
+                    <th align="center" style="width: 140px; min-width: 140px;">
                         [% "Edici&oacute;n/A&ntilde;o" | i18n %]
                     </th>
-                    <th align="center" style="width: 110px;">
+                    <th align="center" style="width: 110px;  min-width: 110px;">
                         [% "Disponibilidad" | i18n %]
                     </th>
                     <th align="center" style="width: 110px;">

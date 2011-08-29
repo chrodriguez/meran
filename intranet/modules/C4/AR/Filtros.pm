@@ -363,7 +363,7 @@ sub setFlagsLang {
     my ($type,$theme) = @_;
     my $session = CGI::Session->load();
     my $html= '<ul class="culture_selection">';
-    my $lang_Selected= $session->param('locale');
+    my $lang_Selected= $session->param('usr_locale');
 ## FIXME falta recuperar esta info desde la base es_ES => Español, ademas estaria bueno agregarle la banderita
     my @array_lang;
 

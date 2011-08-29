@@ -1,4 +1,3 @@
-        <!--<h1 class="block">[% 'B&uacute;squeda Avanzada' | i18n %]</h1>-->
         <div class="column1-unit">
             <div class="contactform">
                 <form action="[% url_prefix %]/opac-busquedasDB.pl" method="get">

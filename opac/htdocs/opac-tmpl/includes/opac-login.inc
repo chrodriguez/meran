@@ -21,7 +21,6 @@
       $(document).ready(function() {
                   //onEnter con foco en input, ejecuta la busqueda
                     onEnter("password",enviar);
-                    $("#userid").focus();
 
                     // Add the value of "Search..." to the input field and a class of .empty
                     $("#search").val("Buscar...").addClass("empty");
@@ -48,13 +47,9 @@
 
                     });
 
+                    $("#search").focus();
 
       });
-
-
-
-
-
 
 </script>
 <!-- Login -->
@@ -65,17 +60,7 @@
         [% IF mensaje %]      
             <h1>[% mensaje %]</h1>
         [% END %]
-       <!--  <a class="sitelogo" style="margin-left:430px; margin-top:100px" title="Meran"></a>-->
-       
 
- <!--<div id="divsearchform" >
-          <form id="searchform_main" action="[% url_prefix %]/opac-busquedasDB.pl" method="get">
-              <input type="text" name="string" class="field"  value="[% search_string %]" tabindex="-1" style="width:428px; margin-left:277px; height:22px;" />
-              <input type="submit" id="searchform_main_button" name="button" class="button" value="[% 'Buscar' | i18n %]" style="width: 125px;" />
-              <input type="hidden" name="tipoAccion" value="BUSQUEDA_COMBINABLE" />
-              <input type="hidden" name="token" value="[% token %]" />
-          </form>
- </div> -->
 
         <div id="divsearchform" >
             <form id="searchform_main" action="[% url_prefix %]/opac-busquedasDB.pl" method="get" >
