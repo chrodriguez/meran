@@ -10,7 +10,7 @@ use JSON;
 
 my $input   = new CGI;
 
-my $editing = $input->param('value') && $input->param('id');
+my $editing = $input->param('id');
 
 my $type    = $input->param('type');
 
