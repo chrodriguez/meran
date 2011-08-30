@@ -922,6 +922,11 @@ body textarea:focus {
 	cursor: pointer;
 }
 
+.icon_estvirtuales {
+    background: transparent url(../imagenes/iconos/estvirtuales.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
 .icon_indice {
 	background: transparent url(../imagenes/iconos/indice.png) no-repeat;
 	height: 25px;
