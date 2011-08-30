@@ -3625,9 +3625,13 @@ fieldset {
 }
 
 #divsearchform {
-    height: 154px;
-    padding-top: 58px;
-    padding-left: 348px;
+    height: 57px;
+    margin: auto;
+    padding-bottom: 13%;
+    padding-left: 20%;
+    padding-top: 10%;
+    width: 560px;
+
 }
 
 #search {

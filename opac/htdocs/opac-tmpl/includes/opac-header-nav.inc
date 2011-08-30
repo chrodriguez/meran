@@ -25,21 +25,19 @@
         </div>
       <!-- Navigation Level 1.1 -->
         <div class="nav_logged">
-            <ul>
-
-              [% IF socio_data.usr_nro_socio %]
-                  <li>    
+            
+	      [% IF socio_data.usr_nro_socio %]
+                  <p style="float:right;">    
                     [% HTML.escape(socio_data.usr_nombre) %]&nbsp;[% HTML.escape(socio_data.usr_apellido) %]
-                  </li>
-                  <br />
-                  <li>  
-                    [% PERL %]
+                  </p>
+		  <p>  
+		    [% PERL %]
                             print C4::AR::Filtros::link_to( text    =>  "[% 'Cerrar Sesi&oacute;n' | i18n %]",
                                                             url     =>  "[% url_prefix %]/logout.pl",
                                                             title   =>  "[% 'Cerrar Sesi&oacute;n' | i18n %]"
                                     ) ;
                     [% END %]
-                  </li>
+		  </p>
          
               [% ELSE %]
                    [% IF !loginFailed  %]
@@ -78,7 +76,7 @@
                     </div>
                  [% END %]
              [% END %]
-            </ul>
+            <!--</ul>-->
         </div>
       </div>
       <!-- A.2 HEADER MIDDLE -->

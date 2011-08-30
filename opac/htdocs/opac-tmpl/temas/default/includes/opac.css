@@ -652,6 +652,7 @@ body textarea:focus {
 	margin: 0 0 2em;
 	padding: 0 0 5px;
 	width: 175px;
+	word-wrap:break-word;
 }
 
 .subcontent-unit-border-green {
@@ -3627,10 +3628,15 @@ fieldset {
     -webkit-border-radius: 4px;    
 }
 
+
 #divsearchform {
-	height: 154px;
-	padding-top: 58px;
-	padding-left: 348px;
+    height: 57px;
+    margin: auto;
+    padding-bottom: 13%;
+    padding-left: 20%;
+    padding-top: 10%;
+    width: 560px;
+
 }
 
 #search {
@@ -3787,3 +3793,8 @@ fieldset {
             padding:0;
 }
 
+    .subcontent-unit-border{
+
+ 
+
+    }
