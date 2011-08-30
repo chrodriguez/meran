@@ -1,6 +1,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 	    $("#userid").attr("autocomplete","off");
+        $("#iniciar_sesion").click(function(){$("#userid").focus()});
 	});
 </script>
 [% USE HTML %]
@@ -41,7 +42,7 @@
          
               [% ELSE %]
                    [% IF !loginFailed  %]
-                        <div id="drop_down_login" class="drop_down_login"> <a href="login" class="signin"><span>Iniciar Sesion</span></a>
+                        <div id="drop_down_login" class="drop_down_login"> <a id="iniciar_sesion" href="login" class="signin"><span>Iniciar Sesion</span></a>
                             <fieldset id="signin_menu">
                                     <!-- ORIGINAL  <form id="datosAEnviar" method="post" action="[% url_prefix %]/opac-main.pl" onsubmit="return enviar()" autocomplete="off">-->
                                     <form method="post" id="signin" action="[% url_prefix %]/opac-main.pl" onsubmit="return enviar()">

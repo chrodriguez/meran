@@ -4,5 +4,13 @@
         <legend>[% 'Cuerpo del mensaje' | i18n %]:</legend>
         <h3>[% mensaje.getMensaje %]</h3>
     </fieldset>
-    <a href="mailto:[% mensaje.getEmail %]">[% 'De' | i18n %]: [% mensaje.getApellido %], [% mensaje.getNombre %]
+    <a href="mailto:[% mensaje.getEmail %]">[% 'De' | i18n %]: [% mensaje.getApellido %], [% mensaje.getNombre %] 
+    <p id="responder">Responder</p>
+    <div>
+          <form method="post" action="">
+              <div class="wysiwyg" style="width: 300px;">
+                  <textarea id="textarea_responder" class="self_review" style="width: 88.3%; display:none"; name="responder"></textarea>
+          </form>
+
+    </div>
 </div>
