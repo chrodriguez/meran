@@ -709,6 +709,7 @@ sub detalleCompletoOPAC{
 			$hash_nivel2->{'id2'}                       = $nivel2_array_ref->[$i]->getId2;
 			$hash_nivel2->{'tipo_documento'}            = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getNombre();
 			$hash_nivel2->{'tiene_indice'}              = $nivel2_array_ref->[$i]->tiene_indice;
+			$hash_nivel2->{'esta_en_estante_virtual'}   = C4::AR::Estantes::estaEnEstanteVirtual($nivel2_array_ref->[$i]->getId2);
 			$hash_nivel2->{'indice'}                    = $hash_nivel2->{'tiene_indice'}?$nivel2_array_ref->[$i]->getIndice:0;
 			$hash_nivel2->{'nivel2_array'}              = ($nivel2_array_ref->[$i])->toMARC_Opac; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
 			my ($totales_nivel3,@result)                = detalleDisponibilidadNivel3($nivel2_array_ref->[$i]->getId2,$nivel1->db);

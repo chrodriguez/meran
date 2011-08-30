@@ -136,12 +136,13 @@
 	                        [% END %]
 
 			                <br>
-			                [% IF amazon_cover %]
-				                <div class='amazon_cover_detail' style="position: relative; float:right;">
-						                <img name="cover"  VALUE="" BORDER=0 src="[% themelang %]/[% lang %]/[% amazon_cover %]" title="Tapa" >
-				                </div>
-				                <br>
-			                [% END %]
+                <div class="main-subcontent" style="width:15%; float:left; margin: 1%">
+                    [% IF portada_registro %]
+                        <a class="fancylink" href="/uploads/covers/[% portada_registro_big %]">
+                            <img src="/uploads/covers/[% portada_registro_medium %]" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" />
+                        </a>
+                    [% END %]
+                </div>
 
 			                <ul class="listado_sin_margen">
 				                [% FOREACH nivel2_array %]
