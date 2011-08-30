@@ -18,6 +18,7 @@ function startOverlay(){
             opacity: 50,
         },
     });   
+    
     return (true);
 }
 

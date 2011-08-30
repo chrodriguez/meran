@@ -346,12 +346,12 @@ function getDivDelNivel(){
 
 // FIXME esto podria ser generico para los 3 niveles
 function mostrarEstructuraDelNivel1(){
+    _NIVEL_ACTUAL       = 1;
    
     if(MODIFICAR == 0){
-        _mostrarAccion("Agregando metadatos");
+        _mostrarAccion("Agregando metadatos => Template: " + $('#tipo_nivel3_id').val());
     } 
 
-    _NIVEL_ACTUAL       = 1;
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel1);
     objAH.debug         = true;
     objAH.showOverlay   = true;
@@ -373,13 +373,17 @@ function updateMostrarEstructuraDelNivel1(responseText){
 	//asigno el handler para el validador
 	validateForm('formNivel1',guardarModificarDocumentoN1);
     addRules();
+    
+    scrollTo('nivel1Tabla');  
 }
 
 function mostrarEstructuraDelNivel2(){
     _NIVEL_ACTUAL       = 2;
+    
     if(MODIFICAR == 0){
-        _mostrarAccion("Agregando grupo");
+        _mostrarAccion("Agregando grupo => Template: " + $('#tipo_nivel3_id').val());
     }
+    
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel2);
     objAH.debug         = true;
     objAH.showOverlay   = true;  
@@ -406,6 +410,8 @@ function updateMostrarEstructuraDelNivel2(responseText){
         $('#'+_getIdComponente('910','a')).val($('#tipo_nivel3_id').val());
     }      
     
+    scrollTo('nivel2Tabla');  
+    
 }
 
 
@@ -424,8 +430,9 @@ function _seleccionarTipoDocumentoYDeshabilitarCombo(){
 
 function mostrarEstructuraDelNivel3(tipo_documento){
     _NIVEL_ACTUAL       = 3;
+    
     if(MODIFICAR == 0){
-        _mostrarAccion("Agregando ejemplares");
+        _mostrarAccion("Agregando ejemplares => Template: " + $('#tipo_nivel3_id').val());
     }
 
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel3);
@@ -530,6 +537,7 @@ function seleccionar_esquema(){
             
             if(_NIVEL_ACTUAL == 1){  
                 mostrarEstructuraDelNivel1();
+                $('#datos_del_leader').hide();    
             } else if(_NIVEL_ACTUAL == 2){
                 mostrarEstructuraDelNivel2();
             } else {
@@ -626,7 +634,7 @@ function mostrarInfoAltaNivel2(id2){
     objAH               = new AjaxHelper(updateMostrarInfoAltaNivel2);
     objAH.showOverlay   = true;
     objAH.debug         = true;
-    objAH.showStatusIn  = 'nivel2';
+//     objAH.showStatusIn  = 'nivel2';
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion    = "MOSTRAR_INFO_NIVEL2_LATERARL";
     objAH.id2           = id2; //mostrar todos los nivel 2 del nivel1 con el q se esta trabajando, asi este vuela
@@ -777,10 +785,12 @@ function guardarDocumentoN3(){
         objAH.ui_origen         = $('#' + _getIdComponente('995','d')).val();
         objAH.ui_duenio         = $('#' + _getIdComponente('995','c')).val();
 
-    if (porBarcode)
-        objAH.BARCODES_ARRAY    = BARCODES_ARRAY;
-    else
-        objAH.cantEjemplares    = $("#cantEjemplares").val();
+        if (porBarcode){
+            objAH.BARCODES_ARRAY    = BARCODES_ARRAY;
+        } else {
+            objAH.cantEjemplares    = $("#cantEjemplares").val();
+        }
+    
 		_sacarOpciones();
 		objAH.infoArrayNivel3   = MARC_OBJECT_ARRAY;
 		objAH.id1 = ID_N1;
@@ -837,6 +847,7 @@ function updateGuardarModificacionDocumentoN1(responseText){
 
     if (! (hayError(Messages) ) ){
         inicializar();
+        $('#datos_del_leader').hide();    
         //carga la barra lateral con info de nivel 1
         mostrarInfoAltaNivel1(ID_N1);
         mostrarEstructuraDelNivel2();
@@ -844,6 +855,7 @@ function updateGuardarModificacionDocumentoN1(responseText){
         if (FROM_DETALLE_REGISTRO == 1) {
             window.location = "detalle.pl?id1=" + ID_N1;
         }
+        
         MODIFICAR = 0;
     }
 }
@@ -963,6 +975,7 @@ function mostrarInfoAltaNivel3(idNivel2){
 function updateMostrarInfoAltaNivel3(responseText){
 	$('#divCantEjemplares').show();	
     $('#detalleDelNivel3').html(responseText);
+    $('#ejemplares_nive2_id_'+ID_N2).html(responseText);  
     zebra('tablaResult');
     checkedAll('select_all', 'checkEjemplares');
     
@@ -1235,9 +1248,11 @@ function procesarSubCampo(objeto, marc_group){
     var vista_intra         = marc_conf_obj.getVistaIntra();
     var tipo                = marc_conf_obj.getTipo();
     var comp;
+    var divLabel;
     var strComp;
     var divComp             = crearDivComponente("div"+marc_conf_obj.getIdCompCliente());
     var tiene_estructura    = marc_conf_obj.getTieneEstructura(); //falta q los niveles 1, 2, 3 mantengan esta estructura
+      
 
     if(marc_conf_obj.getObligatorio() == "1"){  
         vista_intra = vista_intra + "<b> * </b>";
@@ -1246,14 +1261,19 @@ function procesarSubCampo(objeto, marc_group){
     if(marc_conf_obj.getTieneEstructura() == '0'){ 
         //no existe estructura de catalogacion configurada para este campo, subcampo
 // TODO armar una funcion q genere esto
-        vista_intra = vista_intra + "<div class='divComponente'><input type='text' id='" + marc_conf_obj.getIdCompCliente() + "' value='" + marc_conf_obj.getDato() + "' size='55' disabled></div>";
-        vista_intra = vista_intra + crearIconWarning(marc_conf_obj);
-        tiene_estructura = 0;
+//         vista_intra         = vista_intra + "<div class='divComponente'><input type='text' id='" + marc_conf_obj.getIdCompCliente() + "' value='" + marc_conf_obj.getDato() + "' size='55' disabled></div>";
+        vista_intra         = "<div class='divComponente'><input type='text' id='" + marc_conf_obj.getIdCompCliente() + "' value='" + marc_conf_obj.getDato() + "' size='55' disabled></div>";
+        vista_intra         = vista_intra + crearIconWarning(marc_conf_obj);
+        tiene_estructura    = 0;
+//         vista_intra         =  marc_conf_obj.getCampo() + '^' + marc_conf_obj.getSubCampo() + " - " + vista_intra
+        divLabel            = crearDivLabel(marc_conf_obj.getCampo() + '^' + marc_conf_obj.getSubCampo() + " - " + marc_conf_obj.getVistaIntra(), marc_conf_obj.getIdCompCliente());  
+        strComp             = "<li id='LI" + marc_conf_obj.getIdCompCliente() + "' class='sub_item'> " + divLabel + vista_intra + "</li>";  
+    } else {
+        vista_intra         =  marc_conf_obj.getCampo() + '^' + marc_conf_obj.getSubCampo() + " - " + vista_intra
+        divLabel            = crearDivLabel(vista_intra, marc_conf_obj.getIdCompCliente());
+        strComp             = "<li id='LI" + marc_conf_obj.getIdCompCliente() + "' class='sub_item'> " + divLabel + divComp + "</li>";    
     }
-
-    vista_intra =  marc_conf_obj.getCampo() + '^' + marc_conf_obj.getSubCampo() + ' - ' + vista_intra
-    var divLabel = crearDivLabel(vista_intra, marc_conf_obj.getIdCompCliente());
-    strComp = "<li id='LI" + marc_conf_obj.getIdCompCliente() + "' class='sub_item'> " + divLabel + divComp + "</li>";
+    
     $("#" + marc_group).append(strComp);
 
     if(tiene_estructura == 1){
@@ -2016,7 +2036,7 @@ function modificarN1(id1){
 	inicializar();
     ID_TIPO_EJEMPLAR    = $("#tipo_nivel3_id").val();
     ID_N1               = id1;
-    _mostrarAccion("Modificando el metadato (" + ID_N1 + ")");
+    _mostrarAccion("Modificando el metadato (" + ID_N1 + ") => Template: " + ID_TIPO_EJEMPLAR);
 	objAH               = new AjaxHelper(updateModificarN1);
 	objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;
@@ -2042,8 +2062,8 @@ function updateModificarN1(responseText){
 function modificarN2(id2, tipo_ejemplar){
     inicializar();
     ID_N2               = id2;
-    _mostrarAccion("Modificando el grupo (" + ID_N2 + ")");
     ID_TIPO_EJEMPLAR    = tipo_ejemplar;
+    _mostrarAccion("Modificando el grupo (" + ID_N2 + ") => Template: " + ID_TIPO_EJEMPLAR);  
     objAH               = new AjaxHelper(updateModificarN2);
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;
@@ -2065,8 +2085,8 @@ function updateModificarN2(responseText){
 function modificarN3(id3, tipo_ejemplar){
 	inicializar();
 	ID_N3               = id3;	
-    _mostrarAccion("Modificando el ejemplar (" + ID_N3 + ")");
     ID_TIPO_EJEMPLAR    = tipo_ejemplar;
+    _mostrarAccion("Modificando el ejemplar (" + ID_N3 + ") => Template: " + ID_TIPO_EJEMPLAR);  
 	objAH               = new AjaxHelper(updateModificarN3);
 	objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
 	objAH.debug         = true;

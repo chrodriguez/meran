@@ -74,7 +74,7 @@ sub t_guardarNivel3 {
         }
 
         if(defined $id3){
-#             C4::AR::Sphinx::generar_indice($catRegistroMarcN3->getId1, 'R_PARTIAL', 'INSERT');
+            C4::AR::Sphinx::generar_indice($catRegistroMarcN3->getId1, 'R_PARTIAL', 'INSERT');
             #ahora el indice se encuentra DESACTUALIZADO
             C4::AR::Preferencias::setVariable('indexado', 0, $db);
         }

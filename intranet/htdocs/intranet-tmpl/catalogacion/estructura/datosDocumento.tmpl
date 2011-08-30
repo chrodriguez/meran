@@ -140,13 +140,11 @@ $(document).ready( function() {
 <div id="nivel1"></div>
 
 <div class="todo classform">
-[% IF !ocultarDivLateral %]
     <div class="lateral">
         <div class="nivel2Barra">
             <div id="nivel2" class="nivel2Lateral"></div>
         </div>
     </div>   <!--END <div class="lateral">-->
-[% END %]
 
 <div id="centro" [% IF !ocultarDivLateral %] class="centro" [% END %]>
 <!-- aca se va mostrando la accion que se va realizando -->
@@ -179,27 +177,27 @@ $(document).ready( function() {
 
 <!--            Manejo del Nivel 2 -->
 <div id="nivel2Tabla" style="display:none">
-<fieldset>
-<legend class="titulo_legend">[% "Datos del grupo" | i18n %]</legend>
-    
-<form id="formNivel2" name="formNivel2">
-<!--     CAMPOS DINAMICOS DEL NIVEL 2 -->
-    <div id= "estructuraDelNivel2"></div>
-    <input type="hidden" name="token" value="[% token %]" />
-</form>
+  <fieldset>
+    <legend class="titulo_legend">[% "Datos del grupo" | i18n %]</legend>
+        
+    <form id="formNivel2" name="formNivel2">
+    <!--     CAMPOS DINAMICOS DEL NIVEL 2 -->
+        <div id= "estructuraDelNivel2"></div>
+        <input type="hidden" name="token" value="[% token %]" />
+    </form>
 
     <div class="textoCentrado">* [% "Campos obligatorios" | i18n %]</div>
 
-                        [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 2' | i18n %]",
-                                                                    boton   => "boton_guardar",
-                                                                    onClick => "guardar(2);",
-                                                                    title   => "[% 'Guardar el nivel 2' | i18n %]",
-                                                                    alternClass => "botonCentrado"
-                                        ) ;
-                        [% END %]
+    [% PERL %]
+            print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 2' | i18n %]",
+                                                boton   => "boton_guardar",
+                                                onClick => "guardar(2);",
+                                                title   => "[% 'Guardar el nivel 2' | i18n %]",
+                                                alternClass => "botonCentrado"
+                    ) ;
+    [% END %]
 
-</fieldset>
+  </fieldset>
 </div>
 
 
@@ -239,13 +237,13 @@ $(document).ready( function() {
 
 </div> <!--END <div class="centro">-->
 
-<div id="ejemplares">
-  <fieldset>
-      <legend class="titulo_legend">[% "Ejemplares" | i18n %]</legend>
+<!-- <div id="ejemplares"> -->
+<!--   <fieldset> -->
+<!--       <legend class="titulo_legend">[% "Ejemplares" | i18n %]</legend> -->
       <!-- detalle del Nivel 3, segun Nivel 2 seleccionado -->
-      <div id="detalleDelNivel3" class="nivel3Footer"></div>
-  </fieldset>
-</div>
+<!--       <div id="detalleDelNivel3" class="nivel3Footer"></div> -->
+<!--   </fieldset> -->
+<!-- </div> -->
 
 </div> <!--END <div class="todo">-->
 

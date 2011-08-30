@@ -90,8 +90,7 @@
 	        <fieldset>
 	            <legend class="trigger trigger_3_[% id2 %] click">[% "Detalles de Nivel 2 para registro" | i18n %] [% id2 %] [% "GRUPO" | i18n %] - [% tipo_documento %]</legend>
 	                <div id="grupo[% id2 %]" class="grupo[% id2 %]">
-	                
-	                <div id="grupo[% id2 %]" class="grupo[% id2 %]">
+
 		                <!-- NIVEL 2 -->
 			                <div id="[% id2 %]" style="position: relative; float:right;"></div>
 			                [% PERL %]
@@ -157,15 +156,15 @@
 			                    </li>
 			                    [% IF nivel1_analiticas_cant %]
 	                                <li>
-	                                        [% INCLUDE "estructura/analiticasDelGrupo.tmpl" %]
+                                        [% INCLUDE "estructura/analiticasDelGrupo.tmpl" %]
 	                                </li>
                                 [% END %]
                             </ul>
-	                </div>
-                [% INCLUDE  "partials/e-docs_grupo.inc" %]
-		[% INCLUDE  "partials/estantes_grupo.inc" %]
 
-	            </div> <!--Fin <div id="grupo TMPL_VAR NAME='id2'-->
+                [% INCLUDE  "partials/e-docs_grupo.inc" %]
+                [% INCLUDE  "partials/estantes_grupo.inc" %]
+
+	            </div> <!--Fin <div id="grupo[  id2 ]-->
 	        </fieldset>
 	        <script type="text/javascript">makeToggle('grupo[% id2 %]','trigger_3_[% id2 %]',null,false);</script>
         </div>

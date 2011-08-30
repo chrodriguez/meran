@@ -65,13 +65,5 @@ $params_combo{'default'}                        = 'SIN SELECCIONAR';
 $t_params->{'comboTipoNivelBibliografico'}      = &C4::AR::Utilidades::generarComboNivelBibliografico(\%params_combo);
 $t_params->{'page_sub_title'}                   = C4::AR::Filtros::i18n("Catalogaci&oacute;n - Datos del documento");
 
-if($id1){
-    $t_params->{'ocultarDivLateral'}            = 0;
-}else{
-    $t_params->{'ocultarDivLateral'}            = 1;
-}
-
-# ????????????????
-$t_params->{'ocultarDivLateral'}            = 0;
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

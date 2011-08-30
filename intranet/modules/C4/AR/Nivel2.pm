@@ -84,7 +84,7 @@ sub guardarRealmente{
             $db->commit;
             #recupero el id1 recien agregado
             $id2 = $catRegistroMarcN2->getId2;
-#             C4::AR::Sphinx::generar_indice($catRegistroMarcN2->getId1, 'R_PARTIAL', 'INSERT');
+            C4::AR::Sphinx::generar_indice($catRegistroMarcN2->getId1, 'R_PARTIAL', 'INSERT');
             #ahora el indice se encuentra DESACTUALIZADO
             C4::AR::Preferencias::setVariable('indexado', 0, $db);
 
