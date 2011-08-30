@@ -30,7 +30,7 @@
                   <p style="float:right;">    
                     [% HTML.escape(socio_data.usr_nombre) %]&nbsp;[% HTML.escape(socio_data.usr_apellido) %]
                   </p>
-		  <p>  
+		  <p> <br> 
 		    [% PERL %]
                             print C4::AR::Filtros::link_to( text    =>  "[% 'Cerrar Sesi&oacute;n' | i18n %]",
                                                             url     =>  "[% url_prefix %]/logout.pl",
