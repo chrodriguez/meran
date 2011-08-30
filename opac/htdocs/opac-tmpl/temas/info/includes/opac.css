@@ -651,6 +651,7 @@ body textarea:focus {
     margin: 0 0 2em;
     padding: 0 0 5px;
     width: 175px;
+    word-wrap:break-word;
 }
 
 .subcontent-unit-border-green {
