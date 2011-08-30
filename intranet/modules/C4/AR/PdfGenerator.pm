@@ -611,6 +611,7 @@ sub libreDeuda {
       . '/imagenes/escudo-DEFAULT'
       . '.jpg';
 
+
     my $escudoUI =
         C4::Context->config('intrahtdocs') . '/temas/'
       . C4::AR::Preferencias::getValorPreferencia('tema_intra')
@@ -618,14 +619,22 @@ sub libreDeuda {
       . $branchcode
       . '.jpg';
 
-      
-     C4::AR::Debug::debug($escudoUI);
+    
 
-    $pdf->addImgScaled($escudo, $x ,  ($y) + 570 , 5/100);
-    $pdf->addImgScaled($escudoUI, $x + 400 ,  ($y) + 570 , 3/100);
+    if (-e $escudo){
+        $pdf->addImgScaled($escudo, $x ,  ($y) + 570 , 5/100);
+        ($pdf) = &imprimirEncabezado( $pdf, $branchname, $x + 50, $pagewidth, $pageheight + 120, \%titulo, );
+    }  else{
+        ($pdf) = &imprimirEncabezado( $pdf, $branchname, $x, $pagewidth, $pageheight + 120, \%titulo, );
+    
+    }
 
-	($pdf) = &imprimirEncabezado( $pdf, $branchname, $x + 50, $pagewidth, $pageheight + 120, \%titulo, );
-	( $pdf, $y ) =
+    if (-e $escudoUI){
+        $pdf->addImgScaled($escudoUI, $x + 400 ,  ($y) + 570 , 3/100);
+    }
+
+        
+    ( $pdf, $y ) =
 	  &imprimirContenido( $pdf, $x, $y, $pageheight, 15, \@parrafo );
 	( $pdf, $y ) = &imprimirFirma( $pdf, $y + 50, $pageheight );
 	&imprimirFinal( $pdf, $tmpFileName );
