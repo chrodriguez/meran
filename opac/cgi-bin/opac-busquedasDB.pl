@@ -29,6 +29,7 @@ $obj->{'titulo'} = Encode::decode_utf8($input->param('titulo'));
 $obj->{'autor'} = Encode::decode_utf8($input->param('autor'));
 $obj->{'isbn'} = Encode::decode_utf8($input->param('isbn'));
 $obj->{'estantes'} = Encode::decode_utf8($input->param('estantes'));
+$obj->{'estantes_grupo'} = Encode::decode_utf8($input->param('estantes_grupo'));
 $obj->{'tema'} = Encode::decode_utf8($input->param('tema'));
 $obj->{'tipo'} = $input->param('tipo');    
 $obj->{'only_available'} = $input->param('only_available') || 0;
@@ -91,6 +92,20 @@ if ($obj->{'estantes'}){
     #Sino queda en el buscoPor
     $obj->{'tipo_nivel3_name'} = -1; 
   }
+else{
+if($obj->{'estantes_grupo'}){
+
+  #Busqueda por Estante Virtual
+    $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&estantes_grupo=".$obj->{'estantes_grupo'}."&tipoAccion=".$obj->{'tipoAccion'};
+    $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&estantes_grupo=".$obj->{'estantes_grupo'}."&tipoAccion=".$obj->{'tipoAccion'};
+    C4::AR::Utilidades::addParamToUrl($url_todos,"estantes_grupo",$obj->{'estantes_grupo'});
+
+    ($cantidad, $resultsarray)   = C4::AR::Busquedas::busquedaEstanteDeGrupo($obj->{'estantes_grupo'}, $session, $obj);
+
+    #Sino queda en el buscoPor
+    $obj->{'tipo_nivel3_name'} = -1; 
+
+ }
   else {
 
     $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&titulo=".$obj->{'titulo'}."&autor=".$obj->{'autor'}."&tipo=".$obj->{'tipo'}."&tipo_nivel3_name=".$obj->{'tipo_nivel3_name'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
@@ -106,6 +121,7 @@ if ($obj->{'estantes'}){
 
     ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
   }
+}
 }   else {
 
     $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
@@ -116,7 +132,7 @@ if ($obj->{'estantes'}){
 
 } 
 
-if ($obj->{'estantes'}){
+if ($obj->{'estantes'}||$obj->{'estantes_grupo'}){
   $t_params->{'partial_template'}         = "opac-busquedaEstantes.inc";
 }
 else{

@@ -47,7 +47,7 @@
 	                        [% IF esta_en_estante_virtual %]
 	                            [% PERL %]
 	                                                print C4::AR::Filtros::to_Icon(  
-	                                                                                    boton   => "icon_indice",
+	                                                                                    boton   => "icon_estvirtuales",
 	                                                                                    onClick => "mostrarEstantesVirtualesDeGrupo([% id2 %]);",
 	                                                                                    title   => "[% 'Ver estantes virtuales en los que se encuentra' | i18n %]",
 	                                                        ) ;
