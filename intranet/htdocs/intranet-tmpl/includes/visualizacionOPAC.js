@@ -56,7 +56,7 @@ function updateAgregarVisualizacion(responseText){
     var Messages        = JSONstring.toObject(responseText);
     setMessages(Messages);
     if (! (hayError(Messages) ) ){
-       eleccionDePerfil(); 
+       mostrarTabla(); 
     }   
 }
 
