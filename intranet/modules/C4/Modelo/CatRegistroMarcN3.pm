@@ -854,6 +854,23 @@ sub verificar_alta {
     }
 }
 
+sub getUiPoseedoraName{
+    my ($self) = shift;
+	
+	use C4::AR::Referencias;
+	
+	
+	return C4::AR::Referencias::obtenerUIByIdUi($self->getId_ui_poseedora)->getNombre;
+}
+
+sub getUiOrigenName{
+    my ($self) = shift;
+    
+    use C4::AR::Referencias;
+    
+    
+    return C4::AR::Referencias::obtenerUIByIdUi($self->getId_ui_origen)->getNombre;
+}
 
 sub verificar_historico_disponibilidad {
     my ($self) = shift;

@@ -88,8 +88,8 @@
                         <tr align="center">
                             <td>[% nivel3_obj.getBarcode %]</td>
                             <td>[% nivel3_obj.getSignatura_topografica %]</td>
-                            <td>[% nivel3_obj.getId_ui_poseedora %]</td>   
-                            <td>[% nivel3_obj.getId_ui_origen %]</td>  
+                            <td>[% nivel3_obj.getUiPoseedoraName %]</td>   
+                            <td>[% nivel3_obj.getUiOrigenName %]</td>  
                             <td>[% nivel3_obj.getEstado %]</td>
                             <td>[% nivel3_obj.getDisponibilidadObject.getNombre %]</td>
                             <td>
