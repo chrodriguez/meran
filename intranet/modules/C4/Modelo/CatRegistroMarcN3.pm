@@ -663,13 +663,6 @@ sub esParaPrestamo{
     return (DISPONIBILIDAD_PRESTAMO($self->getIdDisponibilidad));
 }
 
-sub getTemplate{
-    my ($self) = shift;
-
-    return $self->nivel2->nivel1->getTemplate();
-}
-
-
 =head2 sub toMARC
 
 =cut

@@ -2031,11 +2031,14 @@ function updateBorrarEjemplaresN3(responseText){
  * Funcion que obtiene los datos ingresados en el nivel 1 para poder crear los componentes con los valores
  * guardados en la base de datos y poder modificarlos.
  */
-function modificarN1(id1){
+function modificarN1(id1, template){
      $('#datos_del_leader').show();
 	inicializar();
-    ID_TIPO_EJEMPLAR    = $("#tipo_nivel3_id").val();
+   
+    ID_TIPO_EJEMPLAR    = template;
     ID_N1               = id1;
+    
+// TODO falta agregar boton para modificar el template
     _mostrarAccion("Modificando el metadato (" + ID_N1 + ") => Template: " + ID_TIPO_EJEMPLAR);
 	objAH               = new AjaxHelper(updateModificarN1);
 	objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
@@ -2059,10 +2062,11 @@ function updateModificarN1(responseText){
     updateMostrarEstructuraDelNivel1(responseText);
 }
 
-function modificarN2(id2, tipo_ejemplar){
+function modificarN2(id2, template){
     inicializar();
     ID_N2               = id2;
-    ID_TIPO_EJEMPLAR    = tipo_ejemplar;
+    ID_TIPO_EJEMPLAR    = template;
+// TODO falta agregar boton para modificar el template
     _mostrarAccion("Modificando el grupo (" + ID_N2 + ") => Template: " + ID_TIPO_EJEMPLAR);  
     objAH               = new AjaxHelper(updateModificarN2);
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
@@ -2082,10 +2086,11 @@ function updateModificarN2(responseText){
 // fin prueba
 }
 
-function modificarN3(id3, tipo_ejemplar){
+function modificarN3(id3, template){
 	inicializar();
 	ID_N3               = id3;	
-    ID_TIPO_EJEMPLAR    = tipo_ejemplar;
+    ID_TIPO_EJEMPLAR    = template;
+// TODO falta agregar boton para modificar el template
     _mostrarAccion("Modificando el ejemplar (" + ID_N3 + ") => Template: " + ID_TIPO_EJEMPLAR);  
 	objAH               = new AjaxHelper(updateModificarN3);
 	objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
@@ -2191,12 +2196,14 @@ function cargarNivel1(params){
 	ID_N2= params.id2;
 
 	if(params.tipoAccion == 'MODIFICAR_NIVEL_2'){
+// FIXME falta template
 		modificarN2(params.id2);
 	}else	
 	if(params.tipoAccion == 'MODIFICAR_NIVEL_3'){
-// FIXME falta tipo documento
+// FIXME falta template
 		modificarN3(params.id3);
 	}else{
+// FIXME falta template
 		//por defecto se carga el Nivel 1 para modificar
 		modificarN1(params.id1);
 	}

@@ -22,7 +22,7 @@
                     [% PERL %]
                             print C4::AR::Filtros::to_Icon(   
                                                                 boton   => "icon_edicion",
-                                                                onClick => "modificarN2('[% nivel2.getId2 %]', '[% nivel2.getTipoDocumento %]');",
+                                                                onClick => "modificarN2('[% nivel2.getId2 %]', '[% nivel2.getTemplate %]');",
                                                                 title   => "[% 'Modificar nivel 2' | i18n %]",
                                                                 li => 1,
                                     ) ;
