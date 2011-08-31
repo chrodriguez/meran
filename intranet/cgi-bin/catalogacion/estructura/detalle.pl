@@ -21,10 +21,10 @@ my ($template, $session, $t_params) = get_template_and_user({
 my $id1             = $input->param('id1');
 $t_params->{'page'} = $input->param('page') || 0;
 
-eval{ 
+# eval{ 
     my ($cant_total)            =  C4::AR::Nivel3::detalleCompletoINTRA($id1, $t_params);
     $t_params->{'cant_total'}   = $cant_total;
-};
+# };
 
 
 $t_params->{'per_page'}         = C4::Context->config("cant_grupos_per_query") || 5;

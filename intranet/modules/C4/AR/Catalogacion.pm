@@ -530,6 +530,37 @@ sub marc_record_to_meran_to_detail_view {
 #     return "LABEL GENERICO";
 # }
 
+
+# TODO ver tema de performance, habria q llamar a getVisualizacionFromCampo y levantar toda la conf una vez
+sub as_stringReloaded {
+    my ($field, $itemtype) = @_;
+
+    
+    my @subs;
+    my $db      = undef;
+    my $subs    = $field->subfields();
+
+    foreach my $subfield ($field->subfields()) {
+        my %hash_temp;
+        my %hash_temp_aux;
+        my $subcampo                        = $subfield->[0];
+        my $dato                            = $subfield->[1];
+        C4::AR::Debug::debug("Catalogacion => as_stringReloaded => subcampo => ".$subcampo." dato => ".$dato);
+        my $cat_estruct_info_array          = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($field->tag, $subcampo, $itemtype, $db);
+        my $text                            = "";
+        if($cat_estruct_info_array){
+            C4::AR::Debug::debug("getPre => ".$cat_estruct_info_array->getPre());
+            C4::AR::Debug::debug("getPost => ".$cat_estruct_info_array->getPost());
+            $text                           = $cat_estruct_info_array->getPre().$dato.$cat_estruct_info_array->getPost();
+        }
+
+        C4::AR::Debug::debug("Catalogacion => as_stringReloaded => text => ".$text);
+        push( @subs, $text );
+    } # foreach
+
+    return join( " ", @subs );
+}
+
 sub marc_record_to_meran_to_detail_view2 {
     my ($marc_record, $itemtype, $type, $db) = @_;
 
@@ -566,7 +597,7 @@ sub marc_record_to_meran_to_detail_view2 {
                 $hash_temp{'datoReferencia'}        = $dato;
                 my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $db);
                 $hash_temp{'dato'}                  = $valor_referencia;
-    # TODO falta ver que separador lleva cada $valor_referencia dependiendo del campo y subcampo que se este procesando
+
                 $field->update( $subcampo => $valor_referencia );
             }
 
@@ -574,7 +605,11 @@ sub marc_record_to_meran_to_detail_view2 {
 # TODO falta el orden from campo
 #             $hash_temp_aux{'orden'}             = getOrdenFromCampo($campo,$itemtype, $type, $db);
             $hash_temp_aux{'liblibrarian'}      = C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
-            $hash_temp_aux{'dato'}              = ($hash_temp_aux{'dato'} ne "")?$hash_temp_aux{'dato'}.";".$field->as_string:$field->as_string;
+#             $hash_temp_aux{'dato'}              = ($hash_temp_aux{'dato'} ne "")?$hash_temp_aux{'dato'}.";".$field->as_string:$field->as_string;
+
+            # veo que separador lleva cada subcampo para el $field dependiendo del campo y subcampo que se este procesando
+            my $field_as_string                 = as_stringReloaded($field, $itemtype);
+            $hash_temp_aux{'dato'}              = ($hash_temp_aux{'dato'} ne "")?$hash_temp_aux{'dato'}.";".$field_as_string:$field_as_string;
 
             $index = C4::AR::Utilidades::getIndexFromArrayByString($campo,\@MARC_result_array);
 
@@ -583,7 +618,7 @@ sub marc_record_to_meran_to_detail_view2 {
 #                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => NO EXISTE el campo => ".$campo);
                 push(@MARC_result_array, \%hash_temp_aux);
             } else {
-            #EXISTE EL CAMPO
+            #EXISTE EL CAMPO => campo, subcampo REPETIBLE
 #                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => EXISTE el campo => ".$campo);
                 @MARC_result_array[$index]->{'dato'} = (@MARC_result_array[$index]->{'dato'} ne "")?@MARC_result_array[$index]->{'dato'}.";".$field->as_string:$field->as_string;
             }

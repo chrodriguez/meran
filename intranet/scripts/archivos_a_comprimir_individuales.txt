@@ -25,4 +25,5 @@
 /includes/sha1
 /intranet/htdocs/intranet-tmpl/includes/popups/helpCamposMARC
 /intranet/htdocs/intranet-tmpl/includes/visualizacionOPAC
+/intranet/htdocs/intranet-tmpl/includes/visualizacionINTRA
 /intranet/htdocs/intranet-tmpl/includes/usuarios/usuariosPotenciales

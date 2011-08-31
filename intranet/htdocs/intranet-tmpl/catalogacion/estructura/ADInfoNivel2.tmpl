@@ -22,7 +22,7 @@
                     [% PERL %]
                             print C4::AR::Filtros::to_Icon(   
                                                                 boton   => "icon_edicion",
-                                                                onClick => "modificarN2('[% nivel2.getId2 %]', '[% nivel2.getTipoDocumento %]');",
+                                                                onClick => "modificarN2('[% nivel2.getId2 %]', '[% nivel2.getTemplate %]');",
                                                                 title   => "[% 'Modificar nivel 2' | i18n %]",
                                                                 li => 1,
                                     ) ;
@@ -45,9 +45,9 @@
                     [% END %]
                     [% PERL %]
                             print C4::AR::Filtros::to_Icon(   
-                                                                boton   => "icon_edicion",
+                                                                boton   => "icon_ejemplares",
                                                                 onClick => "mostrarInfoAltaNivel3('[% nivel2.getId2 %]');",
-                                                                title   => "[% 'Mostrar ejemplares del grupo (CAMBIAR ICONO!!!!!!!!)' | i18n %]",
+                                                                title   => "[% 'Mostrar ejemplares del grupo' | i18n %]",
                                                                 li => 1,
                                     ) ;
                     [% END %]
@@ -84,8 +84,6 @@
                 </li>
 
             </ul>
-            </fieldset>
-        </div>
 
         <fieldset>
             <legend class="titulo_legend trigger trigger_n3_[% nivel2.getId2 %] click">[% "Ejemplares" | i18n %]</legend>
@@ -95,6 +93,9 @@
         </fieldset>
         <script type="text/javascript">makeToggle("nive2_id_[% nivel2.getId2 %]","trigger_n2_[% nivel2.getId2 %]",null,false);</script>
         <script type="text/javascript">makeToggle("ejemplares_nive2_id_[% nivel2.getId2 %]","trigger_n3_[% nivel2.getId2 %]",null,false);</script>
+
+            </fieldset>
+        </div>
         [% END %]
 
     [% END %]
