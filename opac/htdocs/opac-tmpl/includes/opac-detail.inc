@@ -5,9 +5,6 @@
 	function mostrarIndice(id2){
 	    $("#indice_data" + id2).dialog({ width: 800, position: 'center', modal: true }); 
 	}
-	function mostrarEstantesVirtualesDeGrupo(id2){
-	     window.location = "[% url_prefix %]/opac-busquedasDB.pl?tipoAccion=BUSQUEDA_AVANZADA&estantes_grupo="+id2+"&token=[% token %]";
-	}
 </script>
 
 [% IF !ajax %]
