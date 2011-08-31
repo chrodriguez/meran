@@ -45,13 +45,14 @@
                             [% END %]
 
 	                        [% IF esta_en_estante_virtual %]
+				  <a href="[% url_prefix %]/opac-busquedasDB.pl?tipoAccion=BUSQUEDA_AVANZADA&estantes_grupo=[% id2 %]" class="contenedor_boton">
 	                            [% PERL %]
-	                                                print C4::AR::Filtros::to_Icon(  
-	                                                                                    boton   => "icon_estvirtuales",
-	                                                                                    onClick => "mostrarEstantesVirtualesDeGrupo([% id2 %]);",
-	                                                                                    title   => "[% 'Ver estantes virtuales en los que se encuentra' | i18n %]",
-	                                                        ) ;
+					 print  C4::AR::Filtros::to_Icon(  
+	                                                       boton   => "icon_estvirtuales",
+	                                                       title   => "[% 'Ver estantes virtuales en los que se encuentra' | i18n %]",
+	                                 );
 	                            [% END %]
+				  </a>
 	                        [% END %]
 
                   </div> <!-- END <div class="main-subcontent">-->
