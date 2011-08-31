@@ -299,6 +299,11 @@ my %mensajesINTRA = (
     'U423' => 'Se puede imprimir el certificado de libre deuda para *?*. <br/> *?*',
     'U421' => 'No se puede eliminar el usuario porque tiene pr&eacute;stamos vigentes y/o vencidos.',
     'U425' => 'El valor ingresado en el Captcha es invalido, por favor intente nuevamente',
+   
+    'U426' => 'El mail ha sido enviado',
+    'U427' => 'El mail no ha sido enviado por el siguiente motivo (*?*)',
+
+
     'U499' => 'El password actual no puede ser igual al nuevo.',
     
     'U500' => 'La tarjeda de identificaci&oacute;n ingresada (Nro. de socio) ya pertenece a otro usuario.',

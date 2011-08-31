@@ -1,16 +1,47 @@
-<div class="mensaje_contacto">
-    <h2>[% 'Asunto' | i18n %]: [% mensaje.getAsunto %]</h2>
-    <fieldset>
-        <legend>[% 'Cuerpo del mensaje' | i18n %]:</legend>
-        <h3>[% mensaje.getMensaje %]</h3>
-    </fieldset>
-    <a href="mailto:[% mensaje.getEmail %]">[% 'De' | i18n %]: [% mensaje.getApellido %], [% mensaje.getNombre %] 
-    <p id="responder">Responder</p>
-    <div>
-          <form method="post" action="">
-              <div class="wysiwyg" style="width: 300px;">
-                  <textarea id="textarea_responder" class="self_review" style="width: 88.3%; display:none"; name="responder"></textarea>
-          </form>
+<script type="text/javascript" src="/includes/jquery/jquery.wysiwyg.js"></script>
+<link rel="stylesheet" href="/includes/css/wysiwyg.css" type="text/css" media="screen"/>
 
-    </div>
+<script type="text/javascript"> 
+      
+        function responderMail(){
+                  objAH                     = new AjaxHelper(updateResponderMail);
+                  objAH.url                 = URL_PREFIX+'/admin/rta_mensaje_contacto.pl';
+                  objAH.debug               = true;
+                  objAH.showOverlay         = true;
+                  objAH.texto               = $('#respuesta').val();
+                  objAH.asunto              = $('#asunto').val();
+                  objAH.email               = $('#email').val();
+                  objAH.sendToServer();
+              
+        }
+        
+        
+        function updateResponderMail(responseText){
+            if (!verificarRespuesta(responseText))
+                    return(0);
+            var Messages=JSONstring.toObject(responseText);
+            setMessages(Messages);
+        }
+
+</script>
+
+
+
+<div class="mensaje_contacto" style="width:400px;">
+<!--    <form style="width: 388px" action="rta_mensaje_contacto.pl?token=[% token %]" method="post">-->
+        <h2>[% 'Asunto' | i18n %]: [% mensaje.getAsunto %]</h2>
+        <input type="hidden" id="asunto" name="asunto" value="[% mensaje.getAsunto %]">
+        <fieldset>
+            <legend>[% 'Cuerpo del mensaje' | i18n %]:</legend>
+            <div>[% mensaje.getMensaje %]</div>
+        </fieldset>
+        <p>[% 'De' | i18n %]: [% mensaje.getApellido %], [% mensaje.getNombre %]</p>
+        <input type="hidden" name="email" id="email" value="[% mensaje.getEmail %]">
+        <h1 id="responder" class="pagetitle" onclick="responder()" style="text-decoration:underline; font-size: 12px; cursor:pointer;"> [% 'Responder mensaje' | i18n %]</h1>
+                  <div class="responder" style="display:none;">
+                             <textarea id="respuesta" name="respuesta" class="self_review" style="width: 388px"></textarea>
+                             <p><input type="submit" onclick="responderMail()"  value="Aceptar"/></p>
+                  </div>
+        
+  <!--  </form>  -->          
 </div>

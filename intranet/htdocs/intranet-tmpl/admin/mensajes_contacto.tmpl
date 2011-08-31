@@ -2,6 +2,9 @@
 [% USE HTML %]
 
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/css/fancybox/jquery.fancybox.css">
+<script type="text/javascript" src="/includes/jquery/jquery.wysiwyg.js"></script>
+<link rel="stylesheet" href="/includes/css/wysiwyg.css" type="text/css" media="screen"/>
+
 <script type="text/javascript">
       $(document).ready(function() {
         $('.fancy_link').fancybox({
@@ -9,10 +12,17 @@
             'frameHeight':  500,
         });
 
-        $("#responder").click(function(){
-               $("textarea_responder").show();
-        })
       });
+
+
+      function responder(){
+            $("#respuesta").wysiwyg();
+            $(".responder").show(); 
+            $(".wysiwyg").css('width','388px');   
+            $("#respuestaIFrame").css('width','388px');
+            $("#responder").attr('onclick', ' '); 
+      }
+    
 </script>
 
 
