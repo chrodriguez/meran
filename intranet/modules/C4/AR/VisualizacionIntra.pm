@@ -128,16 +128,21 @@ sub updateNewOrder{
 
 
 =item
-    Funcion que devuelve TODOS los campos ordenados por orden
+    Funcion que devuelve TODOS los campos ordenados por orden y por nivel si recibe el parametro nivel
 =cut
 sub getConfiguracionByOrder{
-    my ($ejemplar) = @_;
+    my ($ejemplar,$nivel) = @_;
 
     my @filtros;
     
     push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $ejemplar }, 
-                                tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS
+                                    tipo_ejemplar   => { eq => 'ALL'     } ]),
+                                
     );
+    
+    if($nivel){
+        push (@filtros, (nivel => { eq => $nivel }) );
+    }
 
     my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros, sort_by => ('orden'),);
 

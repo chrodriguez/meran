@@ -59,6 +59,7 @@
                     <td>[% "Pre" | i18n %]</td>
                     <td>[% "Vista en INTRANET " | i18n %]</td>
                     <td>[% "Post" | i18n %]</td>
+                    <td>[% "Nivel" | i18n %]</td>
                     <td>[% "Eliminar" | i18n %]</td>
                 </tr>
             </thead>
@@ -70,12 +71,14 @@
                         <td class="pre" id="[% campo.id %]">[% campo.getPre %]</td>
                         <td class="editable" id="[% campo.id %]">[% campo.getVistaIntra %]</td>
                         <td class="post" id="[% campo.id %]">[% campo.getPost %]</td>
+                        <td>[% campo.getNivel %]</td>
                         <td align="center">
                             [% PERL %]
-                                print C4::AR::Filtros::to_Icon( text =>     "[% 'Eliminar Vista' | i18n %]",
+                                print C4::AR::Filtros::to_Icon( text    => "[% 'Eliminar Vista' | i18n %]",
                                                                 onClick => "eliminarVista('[% campo.id %]')",
                                                                 boton   => "icon_cancelar",
-                                                                title =>    "[% 'Eliminar Vista' | i18n %]"
+                                                                title   => "[% 'Eliminar Vista' | i18n %]",
+                                                                alternClass => "botonCentradoTabla"
                                                             ) ;
                             [% END %]
                         </td>
