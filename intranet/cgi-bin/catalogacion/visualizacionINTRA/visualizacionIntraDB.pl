@@ -60,6 +60,7 @@ else{
     my $tipoAccion      = $obj->{'tipoAccion'} || "";
     my $componente      = $obj->{'componente'} || "";
     my $ejemplar        = $obj->{'ejemplar'} || "";
+    my $nivel           = $obj->{'nivel'} || "";
     my $result;
     my %infoRespuesta;
     my $authnotrequired = 0;
@@ -68,14 +69,14 @@ else{
     if($tipoAccion eq "MOSTRAR_VISUALIZACION"){
 
         my ($template, $session, $t_params) = get_template_and_user({
-                            template_name => "catalogacion/visualizacionINTRA/detalleVisualizacionIntra.tmpl",
-                            query => $input,
-                            type => "intranet",
+                            template_name   => "catalogacion/visualizacionINTRA/detalleVisualizacionIntra.tmpl",
+                            query           => $input,
+                            type            => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => {  ui => 'ANY', 
-                                                tipo_documento => 'ANY', 
-                                                accion => 'CONSULTA', 
-                                                entorno => 'undefined'},
+                            flagsrequired   => {  ui            => 'ANY', 
+                                                tipo_documento  => 'ANY', 
+                                                accion          => 'CONSULTA', 
+                                                entorno         => 'undefined'},
                             debug => 1,
         });
 
@@ -204,7 +205,7 @@ else{
                             debug => 1,
         });
 
-        $t_params->{'visualizacion'}    = C4::AR::VisualizacionIntra::getConfiguracionByOrder($ejemplar);
+        $t_params->{'visualizacion'}    = C4::AR::VisualizacionIntra::getConfiguracionByOrder($ejemplar,$nivel);
 
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);     
     }

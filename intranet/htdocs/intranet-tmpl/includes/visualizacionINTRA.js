@@ -33,6 +33,7 @@ function agregarVisualizacion(){
     objAH.url           = URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
     objAH.tipoAccion    = 'AGREGAR_VISUALIZACION';
     var ejemplar        = $("#tipo_nivel3_id").val();
+    var nivel           = $("#eleccion_nivel").val();
     var campo           = $.trim($("#campo").val());
     var subcampo        = $.trim($("#subcampo").val());
     var liblibrarian    = $.trim($("#liblibrarian").val());
@@ -41,6 +42,7 @@ function agregarVisualizacion(){
     
     if ( (ejemplar) && (campo) && (subcampo) && (liblibrarian) ){
         objAH.ejemplar      = ejemplar;
+        objAH.nivel         = nivel;
         objAH.campo         = campo;
         objAH.subcampo      = subcampo;
         objAH.liblibrarian  = liblibrarian;
