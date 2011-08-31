@@ -1118,10 +1118,10 @@ a.signin.menu-open span {
     -webkit-border-top-left-radius: 5px;
     -webkit-border-bottom-left-radius: 5px;
     -webkit-border-bottom-right-radius: 5px;
-    background-color: #cacfd7;
+    background-color: #DCE7E7;
     border: 1px solid;
-    border-color: #4F6596;
-    color: #789;
+    border-color: #496E6D;
+    color: #496E6D;
 }
 
 #signin_menu input[type=text],#signin_menu input[type=password] {
@@ -1135,7 +1135,7 @@ a.signin.menu-open span {
 }
 
 #signin_menu label {
-    color: #4f6596;
+    color: #496E6D;
 }
 
 #signin_menu p a {
@@ -1145,14 +1145,15 @@ a.signin.menu-open span {
 #signin_submit {
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
-    background: #4f6596;
-    border: 1px solid #4f6596;
-    color: #fff;
-    text-shadow: 0 -1px 0 #4f6596;
+    background: #496E6D;
+    border: 1px solid #4F6596;
+    color: #FFFFFF;
+    text-shadow: 0 -1px 0 #496E6D;
 }
 
 /* ====================================  */
 #searchform_main {
+	border: 2px solid #496E6D;
     border-radius: 4px;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
