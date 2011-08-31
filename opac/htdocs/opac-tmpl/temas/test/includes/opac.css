@@ -223,6 +223,16 @@ body input[type="text"] {
 }
 
 /* MAIN SUBCONTENT */
+
+
+.round-border-topleft {
+    background: url("../imagenes/bg_corner_topleft.gif") no-repeat scroll 0 0 transparent;
+ }
+.round-border-topright{
+    background: url("../imagenes/bg_corner_topright.gif") no-repeat scroll 0 0 transparent;
+	
+}
+
 .subcontent-unit-border {
 	-moz-background-clip: border;
 	-moz-background-inline-policy: continuous;
