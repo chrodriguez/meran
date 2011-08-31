@@ -73,11 +73,11 @@ sub getTemplate{
     return $self->template;
 }
 
-sub setTemplateId{
+sub setTemplate{
     my ($self)      = shift;
-    my ($params)   = @_;
+    my ($template)  = @_;
 
-    $self->template($params->{'id_tipo_doc'});
+    $self->template($template);
 }
 
 sub getTemplateId{
@@ -122,7 +122,7 @@ sub agregar{
 
     $self->setId1($params->{'id1'});    
     $self->setMarcRecord($marc_record);
-    $self->setTemplateId($params);
+    $self->setTemplate($params->{'id_tipo_doc'});
 
     my $mr = MARC::Record->new_from_usmarc($marc_record);    
 

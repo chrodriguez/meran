@@ -111,6 +111,16 @@ $(document).ready( function() {
                             ) ;
             [% END %]
         </li>
+        <li>
+            [% PERL %]
+                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar esquema' | i18n %]",
+                                                        boton   => "boton_guardar",
+                                                        onClick => "guardarEsquema();",
+                                                        title   => "[% 'Guardar esquema' | i18n %]",
+                                                        alternClass => "botonCentrado"
+                            ) ;
+            [% END %]
+        </li>
     </ul>
 </fieldset>
 </div>

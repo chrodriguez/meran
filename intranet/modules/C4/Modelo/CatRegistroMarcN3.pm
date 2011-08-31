@@ -71,7 +71,7 @@ sub agregar {
     $self->setSignatura($marc_record->subfield("995","t"));
     $self->setCreatedAt(C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"), $dateformat));
     $self->setMarcRecord($params->{'marc_record'});
-    $self->setTemplateId($params);
+    $self->setTemplate($params->{'id_tipo_doc'});
 
     C4::AR::Debug::debug("CatRegistroMarcN3 => agregar => tipo de ejemplar => ".$params->{'tipo_ejemplar'});
     my ($MARC_result_array) = C4::AR::Catalogacion::marc_record_to_meran($marc_record, $params->{'tipo_ejemplar'});
@@ -180,11 +180,11 @@ sub getTemplate{
     return $self->template;
 }
 
-sub setTemplateId{
+sub setTemplate{
     my ($self)      = shift;
-    my ($params)   = @_;
+    my ($template)  = @_;
 
-    $self->template($params->{'id_tipo_doc'});
+    $self->template($template);
 }
 
 sub getTemplateId{

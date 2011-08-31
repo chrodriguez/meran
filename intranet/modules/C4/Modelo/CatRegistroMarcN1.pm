@@ -62,11 +62,11 @@ sub getTemplate{
     return $self->template;
 }
 
-sub setTemplateId{
+sub setTemplate{
     my ($self)      = shift;
-    my ($params)   = @_;
+    my ($template)  = @_;
 
-    $self->template($params->{'id_tipo_doc'});
+    $self->template($template);
 }
 
 sub getTemplateId{
@@ -103,7 +103,7 @@ sub agregar{
     my ($marc_record, $params)  = @_;
 
     $self->setMarcRecord($marc_record);
-    $self->setTemplateId($params);
+    $self->setTemplate($params->{'id_tipo_doc'});
     $self->save();
 
     #seteo datos del LEADER

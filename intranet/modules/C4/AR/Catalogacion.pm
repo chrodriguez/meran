@@ -561,6 +561,48 @@ sub as_stringReloaded {
     return join( " ", @subs );
 }
 
+sub guardarEsquema{
+    my ($params) = @_;
+
+# TODO ver si es necesario informar que se cambio el esquema
+
+    my $msg_object = C4::AR::Mensajes::create();
+
+    if ($params->{'nivel'} eq 1) {
+        my $nivel1 = C4::AR::Nivel1::getNivel1FromId1($params->{'id1'});
+
+        if($nivel1){
+            $nivel1->setTemplate($params->{'template'});
+            $nivel1->save();
+        }
+
+        $msg_object->{'error'} = 0;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U368', 'params' => []} ) ;
+    } elsif ($params->{'nivel'} eq 2) {
+        my $nivel2 = C4::AR::Nivel2::getNivel2FromId2($params->{'id2'});
+
+        if($nivel2){
+            $nivel2->setTemplate($params->{'template'});
+            $nivel2->save();
+        }
+
+        $msg_object->{'error'} = 0;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U368', 'params' => []} ) ;
+    } elsif ($params->{'nivel'} eq 3) {
+        my $nivel3 = C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
+
+        if($nivel3){
+            $nivel3->setTemplate($params->{'template'});
+            $nivel3->save();
+        }
+
+        $msg_object->{'error'} = 0;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U368', 'params' => []} ) ;
+    }
+
+    return ($msg_object);
+}
+
 sub marc_record_to_meran_to_detail_view2 {
     my ($marc_record, $itemtype, $type, $db) = @_;
 
