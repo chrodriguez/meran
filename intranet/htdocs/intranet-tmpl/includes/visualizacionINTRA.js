@@ -59,7 +59,7 @@ function updateAgregarVisualizacion(responseText){
     
     setMessages(Messages);
     if (! (hayError(Messages) ) ){
-        eleccionDeEjemplar();
+        mostrarTabla();
     }  
 }
 

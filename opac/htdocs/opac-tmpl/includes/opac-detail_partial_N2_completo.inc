@@ -29,6 +29,8 @@
                                               [% END %]
                                           [% END %]
                               [% END %] <!-- END FOREACH subcampos_array-->
+                          </ul>
+
                                 [% IF tiene_indice %]
                                     [% PERL %]
                                                         print C4::AR::Filtros::to_Icon(  
@@ -38,9 +40,20 @@
                                                                 ) ;
                                     [% END %]
                                 [% END %]
-                              
-                          </ul>
-                  <div style="display:none"><div id="indice_data[% id2 %]" style="white-space: pre;" title="[% 'Indice del grupo' | i18n %]">[% indice %]</div></div>
+                            [% IF indice %]
+                                <div style="display:none"><div id="indice_data[% id2 %]" style="white-space: pre;" title="[% 'Indice del grupo' | i18n %]">[% indice %]</div></div>
+                            [% END %]
+
+	                        [% IF esta_en_estante_virtual %]
+	                            [% PERL %]
+	                                                print C4::AR::Filtros::to_Icon(  
+	                                                                                    boton   => "icon_indice",
+	                                                                                    onClick => "mostrarEstantesVirtualesDeGrupo([% id2 %]);",
+	                                                                                    title   => "[% 'Ver estantes virtuales en los que se encuentra' | i18n %]",
+	                                                        ) ;
+	                            [% END %]
+	                        [% END %]
+
                   </div> <!-- END <div class="main-subcontent">-->
 
           </div> <!-- END <div class="subcontent-unit-border-green">-->

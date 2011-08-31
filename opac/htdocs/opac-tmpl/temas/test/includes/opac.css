@@ -312,10 +312,492 @@ round-border-topleft {
 }
 
 .clear-contentunit {
-    border: none;
-    background: rgb(210, 210, 210);
-    color: rgb(210, 210, 210);
+	clear: both;
+	width: 540px;
+	height: 0.1em;
+	border: none;
+	background: rgb(210, 210, 210);
+	color: rgb(210, 210, 210);
+	margin: 0 0 0 0;
 }
+
+
+.icon_reservar {
+    background: transparent url(../imagenes/iconos/reservar.png) no-repeat;
+}
+
+.icon_indice {
+    background: transparent url(../imagenes/iconos/indice.png) no-repeat;
+}
+
+.icon_marc {
+    background: transparent url(../imagenes/iconos/marc.png) no-repeat;
+}
+
+div.pagination a:hover,div.pagination a:active,div.pagination a:visited{
+    color: #2A5A8A;
+}
+
+div.pagination a {
+    text-decoration: none;
+    color: #2A5A8A;
+}
+
+div.pagination span.current {
+    background-color: #DAE0EC;
+    color: InfoBackground;
+}
+
+div.pagination span.disabled {
+    color: #797979;
+}
+
+.novedad_opac:hover {
+    background: #EFEFEF;
+}
+
+.del {
+    float: right;
+    font-weight: bold;
+    color: #666666
+}
+
+#mensajes {
+    background: #ffc;
+    border: 1px solid #CCCCCC;
+    color: #666600;
+}
+
+.mensajes_informacion {
+    background-color: #000000;
+    text-decoration: none;
+    color: #f2f2f2;
+}
+
+.review {
+    background: infobackground;
+}
+
+
+
+.icon_borrar {
+    background: transparent url(../imagenes/iconos/borrar.png) no-repeat;
+}
+
+.icon_agregar {
+    background: transparent url(../imagenes/iconos/agregar.png) no-repeat;
+}
+
+.icon_cancelar {
+    background: transparent url(../imagenes/iconos/cancelar.png) no-repeat;
+}
+
+.icon_renovar {
+    background: transparent url(../imagenes/iconos/renovar.png) no-repeat;
+}
+
+.boton_buscar {
+    background: transparent url(../imagenes/botones/boton_buscar.png) no-repeat;
+}
+
+.boton_salir {
+    background: transparent url(../imagenes/botones/boton_salir.png) no-repeat;
+}
+
+.boton_favoritos {
+    background: transparent url(../imagenes/botones/boton_favoritos.png) no-repeat;
+}
+
+.boton_inicio {
+    background: transparent url(../imagenes/botones/boton_inicio.png) no-repeat;
+}
+
+.boton_registrarse {
+    background: transparent url(../imagenes/botones/boton_registrarse.png) no-repeat;
+}
+
+.boton_miembros {
+    background: transparent url(../imagenes/botones/boton_miembros.png) no-repeat;
+}
+
+.boton_medio {
+    background: url(../imagenes/botones/boton_medio.png) repeat-x scroll center;
+}
+
+.boton_der {
+    background: transparent url(../imagenes/botones/boton_der.png) no-repeat;
+}
+
+.boton_entrar {
+    background: transparent url(../imagenes/botones/boton_entrar.png) no-repeat;
+}
+
+.boton_borrar {
+    background: transparent url(../imagenes/botones/boton_borrar.png) no-repeat;
+}
+
+/* MAIN NAVIGATION */
+
+.main-navigation .loginform input.field {
+    border: solid 1px rgb(200, 200, 200);
+    font-family: verdana, arial, sans-serif;
+}
+
+.main-navigation .loginform input.button {
+    background: rgb(230, 230, 230);
+    border: solid 1px rgb(150, 150, 150);
+    font-family: verdana, arial, sans-serif;
+    color: rgb(150, 150, 150);
+}
+
+.main-navigation .loginform input.button:hover {
+    border: solid 1px rgb(80, 80, 80);
+    background: rgb(220, 220, 220);
+    color: rgb(80, 80, 80);
+}
+
+.main-navigation .searchform input.field {
+    border: 1px solid rgb(200, 200, 200);
+    font-family: verdana, arial, sans-serif;
+}
+
+.main-navigation .searchform input.button {
+    background: rgb(230, 230, 230);
+    border: solid 1px rgb(150, 150, 150);
+    font-family: verdana, arial, sans-serif;
+    color: rgb(150, 150, 150);
+}
+
+.main-navigation .searchform input.button:hover {
+    border: solid 1px rgb(80, 80, 80);
+    background: rgb(220, 220, 220);
+    color: rgb(80, 80, 80);
+}
+
+.main-navigation h1.first {
+    background-color: rgb(190, 190, 190);
+    font-family: "trebuchet ms", arial, sans-serif;
+    color: rgb(255, 255, 255);
+}
+
+.main-navigation h1 {
+    background: rgb(190, 190, 190);
+    font-family: "trebuchet ms", arial, sans-serif;
+    color: rgb(255, 255, 255);
+}
+
+.main-navigation h2 {
+    font-family: "trebuchet ms", arial, sans-serif;
+    color: rgb(100, 100, 100);
+}
+
+.main-navigation h3 {
+    color: rgb(80, 80, 80);
+}
+
+.main-navigation p {
+    color: rgb(80, 80, 80);
+}
+
+.main-navigation ul li {
+    background: url(../imagenes/bg_bullet_full_1.gif) no-repeat 0 0.4em;
+}
+
+/* MAIN CONTENT */
+
+.main-content h1.pagetitle {
+    font-family: "trebuchet ms", arial, sans-serif;
+    color: #4E6595;
+}
+
+.main-content h1.block {
+    background: rgb(190, 190, 190);
+    font-family: "trebuchet ms", arial, sans-serif;
+    color: rgb(255, 255, 255);
+}
+
+.main-content h1 {
+    font-family: "trebuchet ms", arial, sans-serif;
+    color: rgb(80, 80, 80);
+}
+
+.main-content h2 {
+    font-family: "trebuchet ms", arial, sans-serif;
+    color: rgb(80, 80, 80);
+}
+
+.main-content h3 {
+    font-family: "trebuchet ms", arial, sans-serif;
+    color: rgb(125, 125, 125);
+}
+
+.main-content h4 {
+    color: rgb(80, 80, 80);
+    font-family: "trebuchet ms", arial, sans-serif;
+}
+
+.main-content h5 {
+    color: rgb(80, 80, 80);
+    font-family: "trebuchet ms", arial, sans-serif;
+}
+
+.main-content h6 {
+    color: rgb(80, 80, 80);
+    font-family: "trebuchet ms", verdana, arial, sans-serif;
+}
+
+.main-content table {
+    border-collapse: collapse;
+    background-color: rgb(233, 232, 244);
+}
+
+.main-content table th.top {
+    background-color: rgb(175, 175, 175);
+    color: rgb(255, 255, 255);
+}
+
+.main-content table th {
+    background-color: #4E6595;
+    border: 2px solid #FFFFFF;
+    color: #FFFFFF;
+}
+
+.main-content table td {
+    border-left: solid 2px rgb(255, 255, 255);
+    border-right: solid 2px rgb(255, 255, 255);
+    border-top: solid 2px rgb(255, 255, 255);
+    border-bottom: solid 2px rgb(255, 255, 255);
+    background-color: rgb(220, 220, 220);
+    color: rgb(80, 80, 80);
+}
+
+p.caption {
+    color: rgb(80, 80, 80);
+}
+
+.main-content ul li {
+    margin: 0 0 0.2em 2px;
+    padding: 0 0 0 12px;
+    line-height: 1.4em;
+    font-size: 120%;
+}
+
+.contactform {
+    border: 1px solid #4E6595;
+    background-color: rgb(244, 244, 244);
+}
+
+.contactform fieldset {
+    border: solid 1px rgb(220, 220, 220);
+}
+
+.contactform fieldset legend {
+    color: rgb(80, 80, 80);
+}
+
+.contactform select.combo {
+    border: solid 1px rgb(200, 200, 200);
+    font-family: verdana, arial, sans-serif;
+}
+
+.contactform input.field {
+    border: solid 1px rgb(200, 200, 200);
+    font-family: verdana, arial, sans-serif;
+}
+
+.contactform textarea {
+    border: solid 1px rgb(200, 200, 200);
+    font-family: verdana, arial, sans-serif;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+}
+
+.contactform input.button {
+    background-image: url(../imagenes/botones/boton_medio.png);
+    border: solid 1px rgb(150, 150, 150);
+    font-family: verdana, arial, sans-serif;
+    color: #FFFFFF;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+}
+
+.contactform input.button:hover {
+    cursor: pointer;
+    border: solid 1px grey;
+    background: rgb(220, 220, 220);
+    color: rgb(80, 80, 80);
+}
+
+/* MAIN SUBCONTENT */
+
+.main-subcontent h1 {
+    background-color: #4E6595;
+    font-family: "trebuchet ms", arial, sans-serif;
+    color: rgb(255, 255, 255);
+}
+
+.main-subcontent h1.green {
+    background-color: rgb(153, 204, 102);
+    font-family: "trebuchet ms", verdana, arial, sans-serif;
+    color: rgb(255, 255, 255);
+}
+
+.main-subcontent h1.blue {
+    background-color: rgb(137, 170, 214);
+    font-family: "trebuchet ms", verdana, arial, sans-serif;
+    color: rgb(255, 255, 255);
+}
+
+.main-subcontent h1.orange {
+    background-color: #4E6595;
+    color: #FFFFFF;
+    font-family: "trebuchet ms", verdana, arial, sans-serif;
+}
+
+.main-subcontent h1.warning {
+    background-color: #F15656;
+    color: #FFFFFF;
+    font-family: "trebuchet ms", verdana, arial, sans-serif;
+}
+
+.subcontent-unit-border-warning {
+    background-color: #f5e6e6;
+    border: 1px solid #DB0909;
+}
+
+.subcontent-unit-border-warning p a {
+    color: #DB0909;
+}
+
+
+.main-subcontent h3 {
+    color: rgb(80, 80, 80);
+}
+
+.main-subcontent p {
+    color: rgb(80, 80, 80);
+}
+
+.main-subcontent .loginform fieldset {
+    border: none;
+}
+
+.main-subcontent .loginform input.field {
+    border: solid 1px rgb(200, 200, 200);
+    font-family: verdana, arial, sans-serif;
+}
+
+.main-subcontent .loginform input.checkbox {
+    border: none;
+}
+
+.main-subcontent .loginform input.button {
+    background: rgb(230, 230, 230);
+    border: solid 1px rgb(150, 150, 150);
+    font-family: verdana, arial, sans-serif;
+    color: rgb(150, 150, 150);
+}
+
+.main-subcontent .loginform input.button:hover {
+    cursor: pointer;
+    border: solid 1px rgb(80, 80, 80);
+    background: rgb(220, 220, 220);
+    color: rgb(80, 80, 80);
+}
+
+.main-subcontent .searchform fieldset {
+    border: none;
+}
+
+.main-subcontent .searchform input.field {
+    border: 1px solid rgb(200, 200, 200);
+    font-family: verdana, arial, sans-serif;
+}
+
+.main-subcontent .searchform input.button {
+    background: rgb(230, 230, 230);
+    border: solid 1px rgb(150, 150, 150);
+    font-family: verdana, arial, sans-serif;
+    color: rgb(150, 150, 150);
+}
+
+.main-subcontent .searchform input.button:hover {
+    cursor: pointer;
+    border: solid 1px rgb(80, 80, 80);
+    background: rgb(220, 220, 220);
+    color: rgb(80, 80, 80);
+}
+
+/* FORMULARIO RECOMENDACION */
+
+.recomendacionform {
+    border: 1px solid #4E6595;
+    background-color: rgb(244, 244, 244);
+}
+
+.recomendacionform fieldset {
+    border: solid 1px rgb(220, 220, 220);
+}
+
+.recomendacionform fieldset legend {
+    color: rgb(80, 80, 80);
+}
+
+.recomendacionform select.combo {
+    border: solid 1px rgb(200, 200, 200);
+    font-family: verdana, arial, sans-serif;
+}
+
+.recomendacionform input.field {
+    border: solid 1px rgb(200, 200, 200);
+    font-family: verdana, arial, sans-serif;
+}
+
+.recomendacionform textarea {
+    border: solid 1px rgb(200, 200, 200);
+    font-family: verdana, arial, sans-serif;
+}
+
+.recomendacionform input.button {
+    background: rgb(230, 230, 230);
+    border: solid 1px rgb(150, 150, 150);
+    font-family: verdana, arial, sans-serif;
+    color: rgb(150, 150, 150);
+}
+
+.recomendacionform input.button:hover {
+    cursor: pointer;
+    border: solid 1px rgb(80, 80, 80);
+    background: rgb(220, 220, 220);
+    color: rgb(80, 80, 80);
+}
+
+/********************/
+/*  COMMON CLASSES  */
+/********************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
