@@ -597,7 +597,7 @@ sub marc_record_to_meran_to_detail_view2 {
                 $hash_temp{'datoReferencia'}        = $dato;
                 my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $db);
                 $hash_temp{'dato'}                  = $valor_referencia;
-    # TODO falta ver que separador lleva cada $valor_referencia dependiendo del campo y subcampo que se este procesando
+
                 $field->update( $subcampo => $valor_referencia );
             }
 
@@ -606,7 +606,8 @@ sub marc_record_to_meran_to_detail_view2 {
 #             $hash_temp_aux{'orden'}             = getOrdenFromCampo($campo,$itemtype, $type, $db);
             $hash_temp_aux{'liblibrarian'}      = C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
 #             $hash_temp_aux{'dato'}              = ($hash_temp_aux{'dato'} ne "")?$hash_temp_aux{'dato'}.";".$field->as_string:$field->as_string;
-#             C4::AR::Debug::debug("field => ".$field);
+
+            # veo que separador lleva cada subcampo para el $field dependiendo del campo y subcampo que se este procesando
             my $field_as_string                 = as_stringReloaded($field, $itemtype);
             $hash_temp_aux{'dato'}              = ($hash_temp_aux{'dato'} ne "")?$hash_temp_aux{'dato'}.";".$field_as_string:$field_as_string;
 
@@ -617,7 +618,7 @@ sub marc_record_to_meran_to_detail_view2 {
 #                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => NO EXISTE el campo => ".$campo);
                 push(@MARC_result_array, \%hash_temp_aux);
             } else {
-            #EXISTE EL CAMPO
+            #EXISTE EL CAMPO => campo, subcampo REPETIBLE
 #                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => EXISTE el campo => ".$campo);
                 @MARC_result_array[$index]->{'dato'} = (@MARC_result_array[$index]->{'dato'} ne "")?@MARC_result_array[$index]->{'dato'}.";".$field->as_string:$field->as_string;
             }
