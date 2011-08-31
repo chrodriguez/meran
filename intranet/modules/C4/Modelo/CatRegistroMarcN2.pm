@@ -508,13 +508,6 @@ sub tienePrestamos {
     return ($cant > 0)?1:0;
 }
 
-
-sub getTemplate{
-    my ($self) = shift;
-
-    return $self->nivel1->getTemplate();
-}
-
 =head2 sub toMARC
 
 =cut
