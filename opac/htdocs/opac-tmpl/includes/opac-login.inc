@@ -80,7 +80,11 @@
 
                     });
 
-                    $("#search").focus();
+                    [% IF !loginFailed  %]
+                        $("#search").focus();
+                    [% ELSE %]
+                        $("#userid").focus();
+                    [% END %]
 
       });
 
