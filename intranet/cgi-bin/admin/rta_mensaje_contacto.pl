@@ -17,8 +17,10 @@ $obj  = C4::AR::Utilidades::from_json_ISO($obj);
 my $asunto  = $obj->{'asunto'};
 my $email = $obj->{'email'};
 my $texto = $obj->{'texto'};
+my $mensaje_contacto= $obj->{'mensaje_contacto'};
 
-C4::AR::Debug::debug($email);
+
+C4::AR::Debug::debug($mensaje_contacto);
 
 
     my ($template, $session, $t_params) = get_template_and_user({
@@ -44,7 +46,15 @@ C4::AR::Debug::debug($email);
     my $ui              = C4::AR::Referencias::obtenerDefaultUI();
     my $nombre_ui       = $ui->getNombre();
 
-    my $mailMessage = Encode::decode_utf8($texto);
+
+
+
+
+    my $mailMessage = C4::AR::Filtros::i18n("Estimado/a: ")."<br/><br/>".$texto."<br/><br/><br/><hr>"
+                                            .C4::AR::Filtros::i18n("Este mensaje es enviado en respuesta al mensaje que aparece a continuacion:").
+                                            "<br /><br /> $mensaje_contacto<br /><br />"
+                                            
+
              
     $mail{'mail_message'}           = $mailMessage;
 

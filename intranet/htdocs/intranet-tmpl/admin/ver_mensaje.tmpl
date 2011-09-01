@@ -4,13 +4,15 @@
 <script type="text/javascript"> 
       
         function responderMail(){
+                  
                   objAH                     = new AjaxHelper(updateResponderMail);
                   objAH.url                 = URL_PREFIX+'/admin/rta_mensaje_contacto.pl';
                   objAH.debug               = true;
-                  objAH.showOverlay         = true;
+//                   objAH.showOverlay         = true;
                   objAH.texto               = $('#respuesta').val();
                   objAH.asunto              = $('#asunto').val();
                   objAH.email               = $('#email').val();
+                  objAH.mensaje_contacto    = $('#mensaje_contacto').val();
                   objAH.sendToServer();
               
         }
@@ -36,6 +38,8 @@
         
             <legend>[% 'Cuerpo del mensaje' | i18n %]:</legend>
             <div>[% mensaje.getMensaje %]</div>
+            <input type="hidden" name="mensaje_contacto" id="mensaje_contacto" value="[% mensaje.getMensaje %]">
+            
         </fieldset>
         <p>[% 'De' | i18n %]: [% mensaje.getApellido %], [% mensaje.getNombre %] ([% mensaje.getEmail %])</p>
         <input type="hidden" name="email" id="email" value="[% mensaje.getEmail %]">
