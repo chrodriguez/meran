@@ -33,6 +33,9 @@ body input[type="text"] {
 
 .page-container {
     border: solid 1px rgb(150, 150, 150);
+}
+
+.page-container-background {
     background: url(../imagenes/fondo_home.png) no-repeat #FFFFFF;
 }
 
