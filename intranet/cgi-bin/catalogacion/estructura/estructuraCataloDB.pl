@@ -416,6 +416,26 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
     C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }
+elsif($tipoAccion eq "GUARDAR_ESQUEMA"){
+     my ($user, $session, $flags)= checkauth(    $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'datos_nivel1'}, 
+                                                'intranet'
+                                    );
+
+
+    my ($Message_arrayref)      = C4::AR::Catalogacion::guardarEsquema($obj);
+    
+    my %info;
+    $info{'Message_arrayref'}   = $Message_arrayref;
+
+    C4::AR::Auth::print_header($session);
+    print to_json \%info;
+}
+
 elsif($tipoAccion eq "MOSTRAR_SUBCAMPOS_DE_CAMPO"){
      my ($user, $session, $flags)= checkauth(    $input, 
                                                 $authnotrequired, 

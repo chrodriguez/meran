@@ -15,7 +15,8 @@ __PACKAGE__->meta->setup(
         tipo_ejemplar   => { type => 'char', length => 3 },
         orden           => { type => 'integer', length => 11, not_null => 1 },
         pre             => { type => 'varchar', length => 12 },
-        post            => { type => 'varchar', length => 12 }
+        post            => { type => 'varchar', length => 12 },
+        nivel           => { type => 'integer', length => 1 }
     ],
 
     primary_key_columns => [ 'id' ],
@@ -28,6 +29,7 @@ sub agregar{
     my ($params) = @_;
 
     $self->setCampo($params->{'campo'});
+    $self->setNivel($params->{'nivel'});
     $self->setPre($params->{'pre'});
     $self->setPost($params->{'post'});
     $self->setSubCampo($params->{'subcampo'});
@@ -47,9 +49,9 @@ sub agregar{
 
 sub modificar{
 
-    my ($self)=shift;
-    my ($string) = @_;
-    $string = Encode::decode_utf8($string);
+    my ($self)      = shift;
+    my ($string)    = @_;
+    $string         = Encode::decode_utf8($string);
     $self->setVistaIntra($string);
 
     $self->save();
@@ -57,9 +59,9 @@ sub modificar{
 
 sub modificarPre{
 
-    my ($self)=shift;
-    my ($string) = @_;
-    $string = Encode::decode_utf8($string);
+    my ($self)      = shift;
+    my ($string)    = @_;
+    $string         = Encode::decode_utf8($string);
     $self->setPre($string);
 
     $self->save();
@@ -67,9 +69,9 @@ sub modificarPre{
 
 sub modificarPost{
 
-    my ($self)=shift;
-    my ($string) = @_;
-    $string = Encode::decode_utf8($string);
+    my ($self)      = shift;
+    my ($string)    = @_;
+    $string         = Encode::decode_utf8($string);
     $self->setPost($string);
 
     $self->save();
@@ -77,56 +79,56 @@ sub modificarPost{
 
 
 sub getVistaIntra{
-    my ($self)=shift;
+    my ($self) = shift;
 
     return $self->vista_intra;
 }
 
 sub setVistaIntra{
-    my ($self) = shift;
-    my ($vista_intra) = @_;
+    my ($self)          = shift;
+    my ($vista_intra)   = @_;
     utf8::encode($vista_intra);
     $self->vista_intra($vista_intra);
 }
 
 sub getSubCampo{
-    my ($self)=shift;
+    my ($self) = shift;
 
     return $self->subcampo;
 }
 
 sub setSubCampo{
-    my ($self) = shift;
-    my ($subcampo) = @_;
+    my ($self)      = shift;
+    my ($subcampo)  = @_;
     $self->subcampo($subcampo);
 }
 
 sub getCampo{
-    my ($self)=shift;
+    my ($self) = shift;
 
     return $self->campo;
 }
 
 sub setCampo{
-    my ($self) = shift;
+    my ($self)  = shift;
     my ($campo) = @_;
     $self->campo($campo);
 }
 
 sub getPre{
-    my ($self)=shift;
+    my ($self) = shift;
 
     return $self->pre;
 }
 
 sub setPre{
-    my ($self) = shift;
-    my ($pre) = @_;
+    my ($self)  = shift;
+    my ($pre)   = @_;
     $self->pre($pre);
 }
 
 sub getPost{
-    my ($self)=shift;
+    my ($self) = shift;
 
     return $self->post;
 }
@@ -137,20 +139,32 @@ sub setPost{
     $self->post($post);
 }
 
+sub getNivel{
+    my ($self) = shift;
+
+    return $self->nivel;
+}
+
+sub setNivel{
+    my ($self)  = shift;
+    my ($nivel) = @_;
+    $self->nivel($nivel);
+}
+
 sub getOrden{
-    my ($self)=shift;
+    my ($self) = shift;
 
     return $self->orden;
 }
 
 sub getId{
-    my ($self)=shift;
+    my ($self) = shift;
 
     return $self->id;
 }
 
 sub setOrden{
-    my ($self) = shift;
+    my ($self)  = shift;
     my ($orden) = @_;
     $self->orden($orden);
     $self->save();

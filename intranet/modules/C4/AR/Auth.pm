@@ -1290,16 +1290,20 @@ sub session_destroy {
 sub _checkRequisito{
 	my ($socio) = @_;
 
-return(1);
-
+    my $status = 1;
+    
     if (C4::AR::Preferencias::getValorPreferencia("requisito") ){
 	    my $cumple_condicion = $socio->getCumple_requisito;
-	
-		return ($cumple_condicion && ($cumple_condicion ne "0000000000:00:00"));
-    }else{
-    	return(1);
+
+		$status = $status && ($cumple_condicion && ($cumple_condicion ne "0000000000:00:00"));
     }
+    
+    $status = $status && ($socio->getActivo);
+
+    return($status);
+    
 }
+
 =item sub _verificarPassword
 
     Esta funcion verifica si el usuario y la password ingresada son valida, ya se en LDAP o en la base, segun configuracion de preferencia
