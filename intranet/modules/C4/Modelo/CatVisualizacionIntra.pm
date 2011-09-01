@@ -77,6 +77,15 @@ sub modificarPost{
     $self->save();
 }
 
+sub modificarNivel{
+
+    my ($self)      = shift;
+    my ($string)    = @_;
+    $self->setNivel($string);
+
+    $self->save();
+}
+
 
 sub getVistaIntra{
     my ($self) = shift;

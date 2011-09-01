@@ -208,7 +208,12 @@ sub editConfiguracion{
         elsif($type eq "post"){
             $configuracion->[0]->modificarPost($value);
             return ($configuracion->[0]->getPost());
-        }else{
+        }
+        elsif($type eq "nivel"){
+            $configuracion->[0]->modificarNivel($value);
+            return ($configuracion->[0]->getNivel());
+        }
+        else{
             $configuracion->[0]->modificar($value);
             return ($configuracion->[0]->getVistaIntra());
         }

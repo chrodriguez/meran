@@ -46,6 +46,17 @@
               indicator : loaderPath,
 
         });
+        $('.nivel').editable('[% url_prefix %]/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl', { 
+              type      : 'text',
+              cancel    : CANCELAR,
+              submit    : OK,
+              tooltip   : EDITABLE_MSG,
+              placeholder: EDITABLE_MSG,
+              style   : 'display: inline',
+              submitdata : {token: "[% token %]", edit: 1, type: 'nivel'},
+              indicator : loaderPath,
+
+        });
     });
 </script>
 <fieldset>
@@ -71,7 +82,7 @@
                         <td class="pre" id="[% campo.id %]">[% campo.getPre %]</td>
                         <td class="editable" id="[% campo.id %]">[% campo.getVistaIntra %]</td>
                         <td class="post" id="[% campo.id %]">[% campo.getPost %]</td>
-                        <td>[% campo.getNivel %]</td>
+                        <td class="nivel" id="[% campo.id %]">[% campo.getNivel %]</td>
                         <td align="center">
                             [% PERL %]
                                 print C4::AR::Filtros::to_Icon( text    => "[% 'Eliminar Vista' | i18n %]",
