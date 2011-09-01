@@ -33,6 +33,11 @@ body input[type="text"] {
 
 .page-container {
     border: solid 1px rgb(150, 150, 150);
+    background: url(../imagenes/fondo_home.png) no-repeat #FFFFFF;
+}
+
+.page-container-mail {
+    border: solid 1px rgb(150, 150, 150);
 }
 
 .footer {

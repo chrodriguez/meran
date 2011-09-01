@@ -36,6 +36,10 @@ body input[type="text"] {
     background: url(../imagenes/fondo_home.png) no-repeat #FFFFFF;
 }
 
+.page-container-mail {
+    border: solid 1px rgb(150, 150, 150);
+}
+
 .footer {
 	background: rgb(225, 225, 225) url(../imagenes/bg_foot.jpg) repeat;
 }
