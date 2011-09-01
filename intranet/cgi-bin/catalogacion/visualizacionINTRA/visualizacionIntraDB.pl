@@ -28,22 +28,29 @@ if($editing){
                                                 tipo_permiso    => 'general'},
                             debug => 1,
                         });
-    my $configuracion;                        
+    my $configuracion; 
+    my $value;   
+    my $vista_id;                    
 
     if($type eq "pre"){
-        my $value           = $input->param('value');
-        my $vista_id        = $input->param('id');
-        $configuracion      = C4::AR::VisualizacionIntra::editConfiguracion($vista_id,$value,'pre');
+        $value          = $input->param('value');
+        $vista_id       = $input->param('id');
+        $configuracion  = C4::AR::VisualizacionIntra::editConfiguracion($vista_id,$value,'pre');
     }
     elsif($type eq "post"){
-        my $value           = $input->param('value');
-        my $vista_id        = $input->param('id');
-        $configuracion      = C4::AR::VisualizacionIntra::editConfiguracion($vista_id,$value,'post');
+        $value          = $input->param('value');
+        $vista_id       = $input->param('id');
+        $configuracion  = C4::AR::VisualizacionIntra::editConfiguracion($vista_id,$value,'post');
     }
     elsif($type eq "nombre"){
-        my $value       = $input->param('value');
-        my $vista_id    = $input->param('id');
+        $value          = $input->param('value');
+        $vista_id       = $input->param('id');
         $configuracion  = C4::AR::VisualizacionIntra::editConfiguracion($vista_id,$value);
+    }
+    elsif($type eq "nivel"){
+        $value          = $input->param('value');
+        $vista_id       = $input->param('id');
+        $configuracion  = C4::AR::VisualizacionIntra::editConfiguracion($vista_id,$value,'nivel');
     }
 
     $t_params->{'value'} = $configuracion;
@@ -52,9 +59,9 @@ if($editing){
 }
 else{
 
-    my $obj=$input->param('obj');
+    my $obj = $input->param('obj');
 
-    $obj=C4::AR::Utilidades::from_json_ISO($obj);
+    $obj    = C4::AR::Utilidades::from_json_ISO($obj);
 
     #tipoAccion = Insert, Update, Select
     my $tipoAccion      = $obj->{'tipoAccion'} || "";
@@ -127,11 +134,11 @@ else{
                                                       entorno => 'datos_nivel1'}, 
                                                   'intranet'
                                       );
-      my $campoX = $obj->{'campoX'};
+      my $campoX            = $obj->{'campoX'};
 
-      my ($campos_array) = C4::AR::VisualizacionIntra::getCamposXLike($campoX);
+      my ($campos_array)    = C4::AR::VisualizacionIntra::getCamposXLike($campoX);
 
-      my $info = C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
+      my $info              = C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
 
       my $infoOperacionJSON = $info;
 
@@ -148,11 +155,11 @@ else{
                                                       entorno => 'datos_nivel1'}, 
                                                   'intranet'
                                       );
-      my $campo = $obj->{'campo'};
+      my $campo             = $obj->{'campo'};
 
-      my ($campos_array) = C4::AR::VisualizacionIntra::getSubCamposLike($campo);
+      my ($campos_array)    = C4::AR::VisualizacionIntra::getSubCamposLike($campo);
 
-      my $info = C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
+      my $info              = C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
 
       my $infoOperacionJSON = $info;
 
