@@ -93,6 +93,7 @@ $VERSION = 1.0;
         changePasswordFromRecover
         checkRecoverLink
         _init_i18n
+        getSessionSocioObject
         
 );
 

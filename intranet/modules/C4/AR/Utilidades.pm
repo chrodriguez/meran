@@ -313,10 +313,11 @@ sub generarComboTemasOPAC{
     }
 
     my ($session) = CGI::Session->load();    
+    my $socio     = C4::AR::Auth::getSessionSocioObject();
     
     $options_hash{'values'}     = \@values;
     $options_hash{'labels'}     = \%labels;
-    $options_hash{'defaults'}   = $session->param('usr_theme') || 'default';
+    $options_hash{'defaults'}   = $socio->getTheme() || C4::AR::Preferencias::getPreferenciasByCategoria('defaultUI') || 'default';
     $options_hash{'size'}       = 1;
     $options_hash{'name'}       = 'temas_opac';
     $options_hash{'id'}         = 'temas_opac';
