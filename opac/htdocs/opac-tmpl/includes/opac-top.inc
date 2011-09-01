@@ -15,7 +15,7 @@
   <meta name="keywords" content="Your keywords, keywords, keywords, here ..." />
   <link rel="stylesheet" type="text/css" media="screen,projection,print" href="[% temas %]/[% user_theme %]/includes/opac.css" />
 
-  <link rel="icon" type="image/x-icon" href="[% temas %]/default/imagenes/favicon.ico" />
+  <link rel="icon" type="image/x-icon" href="[% temas %]/[% user_theme %]/imagenes/favicon.ico" />
 <!-- variables de entorno sacadas de las preferencias del sistema -->
   <script type="text/javascript">
     var token= '[% token %]';
