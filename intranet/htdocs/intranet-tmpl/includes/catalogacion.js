@@ -356,6 +356,7 @@ function mostrarEstructuraDelNivel1(){
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel1);
     objAH.debug         = true;
     objAH.showOverlay   = true;
+    objAH.showState     = true;  
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
     objAH.nivel         = _NIVEL_ACTUAL;
@@ -546,7 +547,7 @@ function seleccionar_esquema(){
         
         if(_NIVEL_ACTUAL == 1){  
             mostrarEstructuraDelNivel1();
-            $('#datos_del_leader').hide();    
+//             $('#datos_del_leader').hide();    
         } else if(_NIVEL_ACTUAL == 2){
             mostrarEstructuraDelNivel2();
         } else {
@@ -1064,6 +1065,12 @@ function open_esquema(){
     //             opacity: 50,
             },
     });
+    
+    if(MODIFICAR == 1){
+        $("#boton_guardar_esquema").show();
+    } else {
+        $("#boton_guardar_esquema").hide();
+    } 
 }
 
 function close_esquema(){
@@ -1235,7 +1242,7 @@ function crearBotonAyudaCampo(campo){
 }
 
 function crearBotonEsquema(){
-    return "<div title='Seleccione el esquema' style='' onclick='open_esquema();' class='click horizontal icon_buscar'> </div>"
+    return "<div title='Cambiar el esquema' style='' onclick='open_esquema();' class='click horizontal icon_buscar'> </div>"
 }
 
 function ayudaParaCampo(campo){

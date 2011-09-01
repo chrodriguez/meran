@@ -577,7 +577,7 @@ sub guardarEsquema{
         }
 
         $msg_object->{'error'} = 0;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U368', 'params' => []} ) ;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U612', 'params' => []} ) ;
     } elsif ($params->{'nivel'} eq 2) {
         my $nivel2 = C4::AR::Nivel2::getNivel2FromId2($params->{'id2'});
 
@@ -587,7 +587,7 @@ sub guardarEsquema{
         }
 
         $msg_object->{'error'} = 0;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U368', 'params' => []} ) ;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U612', 'params' => []} ) ;
     } elsif ($params->{'nivel'} eq 3) {
         my $nivel3 = C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
 
@@ -597,7 +597,7 @@ sub guardarEsquema{
         }
 
         $msg_object->{'error'} = 0;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U368', 'params' => []} ) ;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U612', 'params' => []} ) ;
     }
 
     return ($msg_object);
