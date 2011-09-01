@@ -29,13 +29,7 @@ function updateInfoReserva(responseText){
   
     var Messages = JSONstring.toObject(responseText);
     setMessages(Messages);
-
-    //si estoy logueado, oculta la informacion del usuario
-//     $('#resultadoReserva').html(responseText);
-//     $('#resultadoReserva').slideDown('slow');
-//     scrollTo('resultadoReserva');
-//     var Messages=JSONstring.toObject(responseText);
-//     setMessages(Messages);
+    
     infoReservas();
     infoSanciones();
 }

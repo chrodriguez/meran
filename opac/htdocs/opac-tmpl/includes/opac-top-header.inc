@@ -10,6 +10,7 @@
           <h2>[% 'Cat&aacute;logo P&uacute;blico' | i18n %]</h2>
         </div>
         [% INCLUDE 'opac-header-nav.inc' %]
+        <div id="mensajes"></div>
         <!-- B. MAIN -->
         <div class="main">
           <div class="main-navigation">
