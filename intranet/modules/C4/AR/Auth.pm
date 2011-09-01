@@ -2096,7 +2096,7 @@ sub resetUserPassword{
     if($socio){
     	   my $password_dni = C4::AR::Auth::hashear_password($socio->persona->getNro_documento, 'MD5_B64');;
 
-           cambiarPasswordPropagado($socio,$password_dni);
+           cambiarPasswordPropagado($socio,$password_dni,1);
            $socio->forzarCambioDePassword();
 	       C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U359', 'params' => [($socio->getNro_socio)]} ) ;
     }else{

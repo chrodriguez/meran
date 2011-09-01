@@ -20,7 +20,8 @@ body {
 	font-family: verdana, arial, sans-serif;
 	min-width: 1024px;
 	overflow: auto;
-} /*Font-size: 1.0em = 10px when browser default size is 16px*/
+} 
+
 * {
 	margin: 0;
 	padding: 0;

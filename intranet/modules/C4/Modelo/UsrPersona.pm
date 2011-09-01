@@ -20,7 +20,7 @@ __PACKAGE__->meta->setup(
         iniciales        => { type => 'varchar', length => 255, not_null => 1 },
         calle            => { type => 'varchar', length => 255, not_null => 1 },
         barrio           => { type => 'varchar', length => 255 },
-        ciudad           => { type => 'integer', length => 11 },
+        ciudad           => { type => 'integer', length => 11, not_null => 1, default => 1 },
         telefono         => { type => 'varchar', length => 255 },
         email            => { type => 'varchar', length => 255 },
         fax              => { type => 'varchar', length => 255 },

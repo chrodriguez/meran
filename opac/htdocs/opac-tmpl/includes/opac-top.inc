@@ -114,7 +114,11 @@
       <p>[% 'DEBE HABILITAR SOPORTE PARA JAVASCRIPT EN SU NAVEGADOR, DE LO CONTRARIO NO PODRA NAVEGAR EL SITIO.' | i18n %]</p> 
   </noscript>
 
+[% IF mostrar_fondo_home %]
+  <div class="page-container page-container-background">
+[% ELSE %]
   <div class="page-container">
+[% END %]
     <!-- For alternative headers START PASTE here -->
         [% INCLUDE 'opac-top-header.inc' %]
         [% INCLUDE 'opac-main_content.inc' %]

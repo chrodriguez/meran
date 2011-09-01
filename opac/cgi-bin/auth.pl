@@ -25,9 +25,10 @@ $t_params->{'partial_template'}= "opac-login.inc";
 my $sessionClose = $t_params->{'sessionClose'} = $query->param('sessionClose') || 0;
 
 
-$t_params->{'mostrar_captcha'} = $query->param('mostrarCaptcha') || 0;
-$t_params->{'loginFailed'} =  $query->param('loginFailed')|| 0;
-$t_params->{'loginAttempt'} = $query->param('loginAttempt') || 0;
+$t_params->{'mostrar_captcha'}      = $query->param('mostrarCaptcha') || 0;
+$t_params->{'loginFailed'}          =  $query->param('loginFailed')|| 0;
+$t_params->{'loginAttempt'}         = $query->param('loginAttempt') || 0;
+$t_params->{'mostrar_fondo_home'}   = 1;
 
 
 if ($t_params->{'loginAttempt'} & !($t_params->{'mostrar_captcha'}) ){

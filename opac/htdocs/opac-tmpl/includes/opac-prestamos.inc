@@ -13,7 +13,7 @@
                       [% IF prestamo.nivel3.nivel2.id1 %]
                           [% PERL %]
                                   print C4::AR::Filtros::link_to( text =>     "[% prestamo.nivel3.nivel2.nivel1.getTitulo %]",
-                                                                  url =>      "[% url_prefix %]/opac-detail.pl", 
+                                                                  url =>      "[% url_prefix %]/opac-prestamos_vigentes.pl", 
                                                                   params => [ "id1=[% prestamo.nivel3.nivel2.id1 %]", ],
                                                               ) ;
                           [% END %]
