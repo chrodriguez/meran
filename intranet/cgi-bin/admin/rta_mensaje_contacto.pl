@@ -52,7 +52,7 @@ C4::AR::Debug::debug($mensaje_contacto);
 
     my $mailMessage = C4::AR::Filtros::i18n("Estimado/a: ")."<br/><br/>".$texto."<br/><br/><br/><hr>"
                                             .C4::AR::Filtros::i18n("Este mensaje es enviado en respuesta al mensaje que aparece a continuacion:").
-                                            "<br /><br /> $mensaje_contacto<br /><br />"
+                                            "<br /><br /> $mensaje_contacto<br /><br />";
                                             
 
              
