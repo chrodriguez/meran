@@ -82,8 +82,8 @@ sub gettemplate {
 # C4::AR::Debug::debug("tema_opac ".$preferencias_hash_ref->{'tema_opac'});
 
     my $htdocs;
-    my $tema_opac   = C4::AR::Preferencias::getValorPreferencia('tema_opac') || 'default';
-    my $tema_intra  = C4::AR::Preferencias::getValorPreferencia('tema_intra') || 'default';
+    my $tema_opac   = C4::AR::Preferencias::getValorPreferencia('defaultUI');
+    my $tema_intra  = C4::AR::Preferencias::getValorPreferencia('defaultUI');
     my $temas       = C4::Context->config('temas');
     my $tema;
     my $type;

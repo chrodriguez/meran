@@ -301,7 +301,7 @@ sub generarComboDeAnios{
 
 
 sub generarComboTemasOPAC{
-    my ($params) = @_;
+
     my (@label,@values);
     my $temas = C4::AR::Preferencias::getPreferenciasByCategoria("temas_opac");
     my %labels;
@@ -313,13 +313,9 @@ sub generarComboTemasOPAC{
     }
 
     my ($session) = CGI::Session->load();    
-
-#     my $socio = C4::AR::Auth::getSessionNroSocio();
-#     $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
-
+    
     $options_hash{'values'}     = \@values;
     $options_hash{'labels'}     = \%labels;
-#     $options_hash{'defaults'}= $socio->getTheme() || 'default';
     $options_hash{'defaults'}   = $session->param('usr_theme') || 'default';
     $options_hash{'size'}       = 1;
     $options_hash{'name'}       = 'temas_opac';
@@ -333,8 +329,6 @@ sub generarComboTemasOPAC{
 
 
 sub generarComboTemasINTRA{
-#     my ($nro_socio) = @_;
-
     my (@label,@values);
     my $temas = C4::AR::Preferencias::getPreferenciasByCategoria("temas_intra");
     my %labels;
@@ -344,14 +338,11 @@ sub generarComboTemasINTRA{
         push (@values,$pref->getValue());
         $labels{$pref->getValue()} = $pref->getValue();
     }
-  
-#     FIXME llama a al socio, la info esta ahora en la session  
-#     my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio) || C4::Modelo::UsrSocio->new();
-    my ($session) = CGI::Session->load();
 
+    my ($session) = CGI::Session->load();    
+     
     $options_hash{'values'}     = \@values;
     $options_hash{'labels'}     = \%labels;
-#     $options_hash{'defaults'}   = $socio->getThemeINTRA() || 'default';
     $options_hash{'defaults'}   = $session->param('usr_theme_intra') || 'default';
     $options_hash{'size'}       = 1;
     $options_hash{'name'}       = 'temas_intra';
