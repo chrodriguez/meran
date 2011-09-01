@@ -854,7 +854,10 @@ sub reservasEnEspera {
     push(@filtros, ( id3 => undef ));
 
     my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva( query => \@filtros, sort_by => 'timestamp',
-                                                                                  require_objects => ['nivel3','nivel2']);
+                                                                                   with_objects => ['nivel3','nivel2']
+  );
+
+      C4::AR::Debug::debug("Reservas.pm => reservasEnEspera => id2: $id2 ".scalar(@$reservas_array_ref));
 
   if (scalar(@$reservas_array_ref) == 0){
         return 0;

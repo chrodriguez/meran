@@ -767,16 +767,12 @@ sub _verificarParaRenovar {
 		);
 	}
 
-	if ( !( $msg_object->{'error'} )
-		&& ( C4::AR::Reservas::reservasEnEspera( $self->nivel3->nivel2->getId2 )
-		) )
+	if (!( $msg_object->{'error'})&&( C4::AR::Reservas::reservasEnEspera( $self->nivel3->nivel2->getId2 )))
 	{
-
 		#Hay alguna reserva pendiente?
 		$self->debug("_verificarParaRenovar - grupo con reserva pendiente");
 		$msg_object->{'error'} = 1;
-		C4::AR::Mensajes::add( $msg_object,
-			{ 'codMsg' => 'P120', 'params' => [] } );
+		C4::AR::Mensajes::add( $msg_object,{ 'codMsg' => 'P120', 'params' => [] } );
 	}
 
 	if (  !( $msg_object->{'error'} )
