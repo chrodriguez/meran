@@ -21,6 +21,7 @@
                     return(0);
             var Messages=JSONstring.toObject(responseText);
             setMessages(Messages);
+            $.fancybox.close();
         }
 
 </script>
@@ -28,20 +29,20 @@
 
 
 <div class="mensaje_contacto" style="width:400px;">
-<!--    <form style="width: 388px" action="rta_mensaje_contacto.pl?token=[% token %]" method="post">-->
+
         <h2>[% 'Asunto' | i18n %]: [% mensaje.getAsunto %]</h2>
         <input type="hidden" id="asunto" name="asunto" value="[% mensaje.getAsunto %]">
         <fieldset>
+        
             <legend>[% 'Cuerpo del mensaje' | i18n %]:</legend>
             <div>[% mensaje.getMensaje %]</div>
         </fieldset>
-        <p>[% 'De' | i18n %]: [% mensaje.getApellido %], [% mensaje.getNombre %]</p>
+        <p>[% 'De' | i18n %]: [% mensaje.getApellido %], [% mensaje.getNombre %] ([% mensaje.getEmail %])</p>
         <input type="hidden" name="email" id="email" value="[% mensaje.getEmail %]">
         <h1 id="responder" class="pagetitle" onclick="responder()" style="text-decoration:underline; font-size: 12px; cursor:pointer;"> [% 'Responder mensaje' | i18n %]</h1>
                   <div class="responder" style="display:none;">
                              <textarea id="respuesta" name="respuesta" class="self_review" style="width: 388px"></textarea>
                              <p><input type="submit" onclick="responderMail()"  value="Aceptar"/></p>
                   </div>
-        
-  <!--  </form>  -->          
+                
 </div>

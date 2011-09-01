@@ -301,7 +301,7 @@ my %mensajesINTRA = (
     'U425' => 'El valor ingresado en el Captcha es invalido, por favor intente nuevamente',
    
     'U426' => 'El mail ha sido enviado',
-    'U427' => 'El mail no ha sido enviado por el siguiente motivo (*?*)',
+    'U427' => 'Ha ocurrido un error, el mail no ha sido enviado',
 
 
     'U499' => 'El password actual no puede ser igual al nuevo.',
