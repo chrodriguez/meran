@@ -41,6 +41,32 @@ body {
 	width: 300px;
 }
 
+#jqpageflow-block{
+    width: 600px;
+    clear: both;
+    margin: 0 auto;
+    display: none;
+}
+
+#jqpageflow-block img{
+    clear: both;
+}
+
+.jqpageflow-loader {
+    position: relative; 
+    display: none; 
+    right: 1%; 
+    z-index: 10001; 
+    bottom: 0;
+}
+
+.jqpageflow-loadertext {
+    font-size: 18px; 
+    width: 100%;  
+    text-align: center; 
+    position: relative; 
+}
+
 .page-container {
 	width: 98%;
 	margin: 0px auto;

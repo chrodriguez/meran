@@ -21,9 +21,10 @@ my ($template, $session, $t_params)= get_template_and_user({
 my $idNivel1= $input->param('id1');
 
 $t_params->{'page'} = $input->param('page') || 0;
+my $cant_total      = 0;
 
 eval{ 
-    my ($cant_total)    =   C4::AR::Nivel3::detalleCompletoOPAC($idNivel1, $t_params);
+    ($cant_total)    =   C4::AR::Nivel3::detalleCompletoOPAC($idNivel1, $t_params);
     $t_params->{'cant_total'}           = $cant_total;
 };
 

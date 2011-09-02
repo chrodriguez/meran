@@ -637,9 +637,9 @@ p.caption {
     border: solid 1px rgb(150, 150, 150);
     font-family: verdana, arial, sans-serif;
     color: #FFFFFF;
-    border-radius: 8px;
-    -moz-border-radius: 8px;
-    -webkit-border-radius: 8px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
 }
 
 .contactform input.button:hover {
