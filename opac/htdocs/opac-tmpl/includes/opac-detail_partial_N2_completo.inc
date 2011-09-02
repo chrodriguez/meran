@@ -16,8 +16,10 @@
                             <img src="/uploads/covers/[% portada_registro_medium %]" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" />
                         </a>
                     [% ELSE %]
-                          <img src="/uploads/covers/no_image_medium.jpg" alt="[% 'Sin Portada' | i18n %]" title="[% 'Sin Portada' | i18n %]" />
+                          <img src="/uploads/covers/[% cat_ref_tipo_nivel3 %].png" alt="[% 'Sin Portada' | i18n %]" title="[% 'Sin Portada' | i18n %]" />
                     [% END %]
+                    <br />
+                    <center><div style="font-weight: bold; font-size: 10px; clear:both;" >[% cat_ref_tipo_nivel3_name %] </div></center>
                 </div>
 
                 <div class="main-subcontent" style="width:80%; float:left; margin: 1%">
