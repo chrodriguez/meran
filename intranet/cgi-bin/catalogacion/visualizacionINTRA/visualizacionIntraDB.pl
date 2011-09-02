@@ -52,6 +52,11 @@ if($editing){
         $vista_id       = $input->param('id');
         $configuracion  = C4::AR::VisualizacionIntra::editConfiguracion($vista_id,$value,'nivel');
     }
+    elsif($type eq "vista_campo"){
+        $value          = $input->param('value');
+        $vista_id       = $input->param('id');
+        $configuracion  = C4::AR::VisualizacionIntra::editVistaGrupo($vista_id,$value);
+    }
 
     $t_params->{'value'} = $configuracion;
 

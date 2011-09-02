@@ -31,7 +31,26 @@ $VERSION = 0.01;
     &getCampos
     &getSubCamposByCampo
     &updateNewOrderSubCampos
+    &editVistaGrupo
 );
+
+=item
+    Esta funcion edita la vista_campo de un grupo recibido como parametro
+=cut
+sub editVistaGrupo{
+    my ($campo,$value)  = @_;
+
+    my @filtros;
+    push (@filtros, (campo => { eq => $campo }) );
+    
+    my $configuracion   = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros,);
+    
+    foreach my $conf (@$configuracion){
+        $conf->setVistaCampo($value);    
+    }
+    return ($configuracion->[0]->getVistaCampo());
+    
+}
 
 =item
     Esta funcion devuelve los items que tengan el campo recibido como parametro
@@ -199,7 +218,8 @@ sub getSubCamposByCampo{
 
 
 =item
-    Funcion que devuelve TODOS los campos ordenados por orden y por nivel si recibe el parametro nivel y agrupados por campo
+    Funcion que devuelve TODOS los campos ordenados por orden y por nivel si recibe el parametro nivel y agrupados por campo.
+    Si no tiene seteado el campo vista_campo lo saca desde la base
 =cut
 sub getConfiguracionByOrderGroupCampo{
     my ($ejemplar,$nivel) = @_;
@@ -216,12 +236,18 @@ sub getConfiguracionByOrderGroupCampo{
     }
 
     my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros, sort_by => ('orden'), group_by => ('campo'));
+    
+    foreach my $conf (@$configuracion){
+        if($conf->getVistaCampo() eq ""){
+            $conf->{'vista_campo'} = C4::AR::EstructuraCatalogacionBase::getLabelByCampo($conf->getCampo());
+        }
+    }
 
     return ($configuracion);
 }
 
 =item
-    Funcion que devuelve TODOS los campos
+    Funcion que devuelve TODOS los campos de un ejemplar recibido como parametro
 =cut
 sub getCampos{
     my ($ejemplar) = @_;

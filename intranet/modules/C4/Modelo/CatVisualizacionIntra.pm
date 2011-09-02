@@ -135,7 +135,9 @@ sub getVistaCampo{
 sub setVistaCampo{
     my ($self)          = shift;
     my ($vista_campo)   = @_;
+    utf8::encode($vista_campo);
     $self->vista_campo($vista_campo);
+    $self->save();
 }
 
 sub getPre{

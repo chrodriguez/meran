@@ -8,8 +8,22 @@
         });
     });
 </script>
+<script type="text/javascript" language="javascript">
+    loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
+    $('.vista_campo').editable('[% url_prefix %]/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl', { 
+          type      : 'text',
+          cancel    : CANCELAR,
+          submit    : OK,
+          tooltip   : EDITABLE_MSG,
+          placeholder: EDITABLE_MSG,
+          style   : 'display: inline',
+          submitdata : {token: "[% token %]", edit: 1, type: 'vista_campo'},
+          indicator : loaderPath,
+
+    });
+</script>
 <fieldset>
-    <legend class="titulo_legend trigger click"><strong>[% "Configuraci&oacute;n de la Visualizaci&oacute;n por Campo:" | i18n %]</strong></legend> 
+    <legend class="titulo_legend trigger click"><strong>[% "Configuraci&oacute;n de la Visualizaci&oacute;n de Campo:" | i18n %]</strong></legend> 
       <table id="tabla_datos_visualizacion_intra" class="tabla_datos" cellspacing=0 border="0" cellpadding=0 style="width:100%;">
             <thead>
                 <tr class="titulo_tabla_resultado">
@@ -22,7 +36,7 @@
                 [% FOREACH campo IN visualizacion %]
                     <tr id="[% campo.getId %]" align="center">
                         <td>[% campo.getCampo %]</td>
-                        <td>[% campo.getVistaCampo %]</td>
+                        <td class="vista_campo" id="[% campo.getCampo %]">[% campo.getVistaCampo %]</td>
                         <td align="center">
                             [% PERL %]
                                 print C4::AR::Filtros::to_Icon( text    => "[% 'Editar Subcampos' | i18n %]",
