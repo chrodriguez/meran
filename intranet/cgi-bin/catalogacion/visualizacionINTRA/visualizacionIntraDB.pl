@@ -198,6 +198,21 @@ else{
         C4::AR::Auth::print_header($session);
         print $infoOperacionJSON;  
     }
+    elsif($tipoAccion eq "ACTUALIZAR_ORDEN_SUBCAMPOS"){
+        my ($user, $session, $flags)= checkauth(  $input, 
+                                                  $authnotrequired, 
+                                                  {   ui                => 'ANY', 
+                                                      tipo_documento    => 'ANY', 
+                                                      accion            => 'CONSULTA', 
+                                                      entorno           => 'datos_nivel1'}, 
+                                                  'intranet'
+                                      );
+        my $newOrderArray       = $obj->{'newOrderArray'};
+        my $info                = C4::AR::VisualizacionIntra::updateNewOrderSubCampos($newOrderArray);
+        my $infoOperacionJSON   = to_json $info;
+        C4::AR::Auth::print_header($session);
+        print $infoOperacionJSON;  
+    }
     elsif($tipoAccion eq "MOSTRAR_TABLA_VISUALIZACION"){
 
         my ($template, $session, $t_params) = get_template_and_user({
@@ -211,8 +226,29 @@ else{
                                                 entorno         => 'undefined'},
                             debug => 1,
         });
+        
+        my $campo                       = $obj->{'campo'} || "";
 
-        $t_params->{'visualizacion'}    = C4::AR::VisualizacionIntra::getConfiguracionByOrder($ejemplar,$nivel);
+        $t_params->{'visualizacion'}    = C4::AR::VisualizacionIntra::getSubCamposByCampo($campo);
+
+        C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);     
+    }
+    elsif($tipoAccion eq "MOSTRAR_TABLA_CAMPO"){
+
+        my ($template, $session, $t_params) = get_template_and_user({
+                            template_name   => "catalogacion/visualizacionINTRA/detalleTablaCampoVisualizacionIntra.tmpl",
+                            query           => $input,
+                            type            => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => {  ui              => 'ANY', 
+                                                tipo_documento  => 'ANY', 
+                                                accion          => 'CONSULTA', 
+                                                entorno         => 'undefined'},
+                            debug => 1,
+        });
+
+#        $t_params->{'visualizacion'}    = C4::AR::VisualizacionIntra::getCampos($ejemplar);
+        $t_params->{'visualizacion'}    = C4::AR::VisualizacionIntra::getConfiguracionByOrderGroupCampo($ejemplar,$nivel);
 
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);     
     }

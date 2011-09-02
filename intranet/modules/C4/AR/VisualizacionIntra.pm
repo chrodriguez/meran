@@ -26,7 +26,11 @@ $VERSION = 0.01;
     &deleteConfiguracion
     &updateNewOrderGroup
     &getItemsByCampo
-
+    &updateNewOrder
+    &getConfiguracionByOrderGroupCampo
+    &getCampos
+    &getSubCamposByCampo
+    &updateNewOrderSubCampos
 );
 
 =item
@@ -43,6 +47,33 @@ sub getItemsByCampo{
     return ($items);
 }
 
+
+=item
+    Funcion que actializa el orden de los subcampos. 
+    Parametros: array con los ids en el orden nuevo
+=cut
+sub updateNewOrderSubCampos{
+    my ($newOrderArray) = @_;
+    my $msg_object      = C4::AR::Mensajes::create();
+    
+    my $i = 1;
+    
+    foreach my $campo (@$newOrderArray){
+        my $config_temp = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(
+                                                                    query   => [ id => { eq => $campo}], 
+                               );
+        my $configuracion = $config_temp->[0];
+        
+        $configuracion->setOrdenSubCampo($i);
+    
+        $i++;
+    }
+    
+    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'M000', 'params' => []} ) ;
+
+    return ($msg_object);
+
+}
 
 =item
     Funcion que actializa el orden de los campos. 
@@ -77,7 +108,7 @@ sub updateNewOrderGroup{
             foreach my $item (@$items){
                 $item->setOrden(@array[$i]);
                 push (@worked, $item->getId());
-#                C4::AR::Debug::debug("nuevo orden a item : ".$item->getId()." es : ".@array[$i]);
+                C4::AR::Debug::debug("nuevo orden a item : ".$item->getId()." es : ".@array[$i]);
             }    
             $i++;   
         }
@@ -128,7 +159,7 @@ sub updateNewOrder{
 
 
 =item
-    Funcion que devuelve TODOS los campos ordenados por orden y por nivel si recibe el parametro nivel
+    Funcion que devuelve TODOS los campos-subcampos ordenados por orden y por nivel si recibe el parametro nivel
 =cut
 sub getConfiguracionByOrder{
     my ($ejemplar,$nivel) = @_;
@@ -145,6 +176,64 @@ sub getConfiguracionByOrder{
     }
 
     my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros, sort_by => ('orden'),);
+
+    return ($configuracion);
+}
+
+=item
+    Funcion que devuelve TODOS los subcampos de un campo y ordenados por orden 
+=cut
+sub getSubCamposByCampo{
+    my ($campo) = @_;
+
+    my @filtros;
+    
+    push ( @filtros, ( or   => [    campo   => { eq => $campo },]),
+                                
+    );
+
+    my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros, sort_by => ('orden_subcampo'),);
+
+    return ($configuracion);
+}
+
+
+=item
+    Funcion que devuelve TODOS los campos ordenados por orden y por nivel si recibe el parametro nivel y agrupados por campo
+=cut
+sub getConfiguracionByOrderGroupCampo{
+    my ($ejemplar,$nivel) = @_;
+
+    my @filtros;
+    
+    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $ejemplar }, 
+                                    tipo_ejemplar   => { eq => 'ALL'     } ]),
+                                
+    );
+    
+    if($nivel){
+        push (@filtros, (nivel => { eq => $nivel }) );
+    }
+
+    my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros, sort_by => ('orden'), group_by => ('campo'));
+
+    return ($configuracion);
+}
+
+=item
+    Funcion que devuelve TODOS los campos
+=cut
+sub getCampos{
+    my ($ejemplar) = @_;
+
+    my @filtros;
+
+    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $ejemplar }, 
+                                    tipo_ejemplar   => { eq => 'ALL'     } ]),
+                                
+    );
+
+    my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros, group_by => ('campo'),);
 
     return ($configuracion);
 }
