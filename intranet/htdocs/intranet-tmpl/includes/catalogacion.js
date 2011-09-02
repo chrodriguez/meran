@@ -523,8 +523,8 @@ function registrarToggleOnChangeForBarcode(callFromBarcode){
 
 function seleccionar_esquema(){
     inicializar(); 
-    ID_TIPO_EJEMPLAR = $('#tipo_nivel3_id').val();
-    TEMPLATE_ACTUAL = $('#tipo_nivel3_id').val();
+    ID_TIPO_EJEMPLAR    = $('#tipo_nivel3_id').val();
+    TEMPLATE_ACTUAL     = $('#tipo_nivel3_id').val();
     
     if( (TIENE_NIVEL_2 == 0)&&($('#tipo_nivel3_id').val() == 'SIN SELECCIONAR') ){
         jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);
@@ -540,6 +540,7 @@ function seleccionar_esquema(){
         //estoy modificando
 //         alert("estoy modificando => " + MODIFICAR); 
     } else {
+        close_esquema();
         //estoy agregando
         MODIFICAR           = 0;
         AGREGAR_COMPLETO    = 0;
@@ -555,7 +556,6 @@ function seleccionar_esquema(){
         }
 
         inicializarSideLayers();
-        close_esquema();
     }
 }
 
@@ -1062,6 +1062,7 @@ function open_esquema(){
                 height: 150,
                 padding: 0,
                 width: 530,
+                /*margin: '0 auto',     */         
     //             opacity: 50,
             },
     });

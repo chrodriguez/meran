@@ -16,7 +16,9 @@ __PACKAGE__->meta->setup(
         orden           => { type => 'integer', length => 11, not_null => 1 },
         pre             => { type => 'varchar', length => 12 },
         post            => { type => 'varchar', length => 12 },
-        nivel           => { type => 'integer', length => 1 }
+        nivel           => { type => 'integer', length => 1 },
+        vista_campo     => { type => 'varchar', length => 255 },
+        orden_subcampo  => { type => 'integer', length => 11, not_null => 1 }
     ],
 
     primary_key_columns => [ 'id' ],
@@ -124,6 +126,18 @@ sub setCampo{
     $self->campo($campo);
 }
 
+sub getVistaCampo{
+    my ($self) = shift;
+
+    return $self->vista_campo;
+}
+
+sub setVistaCampo{
+    my ($self)          = shift;
+    my ($vista_campo)   = @_;
+    $self->vista_campo($vista_campo);
+}
+
 sub getPre{
     my ($self) = shift;
 
@@ -158,6 +172,19 @@ sub setNivel{
     my ($self)  = shift;
     my ($nivel) = @_;
     $self->nivel($nivel);
+}
+
+sub getOrdenSubCampo{
+    my ($self) = shift;
+
+    return $self->orden_subcampo;
+}
+
+sub setOrdenSubCampo{
+    my ($self)  = shift;
+    my ($orden) = @_;
+    $self->orden_subcampo($orden);
+    $self->save();
 }
 
 sub getOrden{

@@ -48,8 +48,8 @@ function registrarToggleOnChangeForBarcode(callFromBarcode){var cantidad_comp=$(
 switchTipoBarcode(cantidad_comp,barcode_comp);}}
 function seleccionar_esquema(){inicializar();ID_TIPO_EJEMPLAR=$('#tipo_nivel3_id').val();TEMPLATE_ACTUAL=$('#tipo_nivel3_id').val();if((TIENE_NIVEL_2==0)&&($('#tipo_nivel3_id').val()=='SIN SELECCIONAR')){jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);$('#tipo_nivel3_id').focus();}
 if($('#tipo_nivel3_id').val()=='SIN SELECCIONAR'){jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);$('#tipo_nivel3_id').focus();}
-if(MODIFICAR==1){}else{MODIFICAR=0;AGREGAR_COMPLETO=0;if(_NIVEL_ACTUAL==1){mostrarEstructuraDelNivel1();}else if(_NIVEL_ACTUAL==2){mostrarEstructuraDelNivel2();}else{mostrarEstructuraDelNivel3();}
-inicializarSideLayers();close_esquema();}}
+if(MODIFICAR==1){}else{close_esquema();MODIFICAR=0;AGREGAR_COMPLETO=0;if(_NIVEL_ACTUAL==1){mostrarEstructuraDelNivel1();}else if(_NIVEL_ACTUAL==2){mostrarEstructuraDelNivel2();}else{mostrarEstructuraDelNivel3();}
+inicializarSideLayers();}}
 function guardarEsquema(){objAH=new AjaxHelper(updateGuardarEsquema);objAH.showOverlay=true;objAH.debug=true;objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";objAH.tipoAccion="GUARDAR_ESQUEMA";objAH.id1=ID_N1;objAH.id2=ID_N2;objAH.id3=ID_N3;objAH.nivel=_NIVEL_ACTUAL;objAH.template=$("#tipo_nivel3_id").val();objAH.sendToServer();}
 function updateGuardarEsquema(responseText){var info=JSONstring.toObject(responseText);var Messages=info.Message_arrayref;setMessages(Messages);if(_NIVEL_ACTUAL==1){modificarN1(ID_N1,TEMPLATE_ACTUAL);}else if(_NIVEL_ACTUAL==2){modificarN2(ID_N2,TEMPLATE_ACTUAL);}else{modificarN3(ID_N3,TEMPLATE_ACTUAL);}}
 function agregarIndice(id2){ID_N2=id2;$('#datos_indice').dialog({width:800,position:'center',modal:true});}
