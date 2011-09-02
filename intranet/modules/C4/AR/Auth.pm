@@ -1666,9 +1666,9 @@ sub get_html_content {
 sub loginFailed{
     my ($nro_socio) = shift;
     
-    my $attempts_object = _getAttemptsObject($nro_socio);
-    
     eval{    
+        my $attempts_object = _getAttemptsObject($nro_socio);
+    
         $attempts_object->increase;
     };
     

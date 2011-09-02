@@ -31,7 +31,7 @@ subcampos_hash[s]=subcampo_valor;}
 MARC_OBJECT_ARRAY[i].cant_subcampos=subcampos_array.length;}}
 function getDivDelNivel(){switch(_NIVEL_ACTUAL){case 1:return'estructuraDelNivel1';break;case 2:return'estructuraDelNivel2';break;case 3:return'estructuraDelNivel3';break;}}
 function mostrarEstructuraDelNivel1(){_NIVEL_ACTUAL=1;if(MODIFICAR==0){_mostrarAccion("Agregando metadatos => Template: "+$('#tipo_nivel3_id').val()+crearBotonEsquema());}
-objAH=new AjaxHelper(updateMostrarEstructuraDelNivel1);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL";objAH.nivel=_NIVEL_ACTUAL;objAH.id_tipo_doc=$('#tipo_nivel3_id').val();objAH.sendToServer();}
+objAH=new AjaxHelper(updateMostrarEstructuraDelNivel1);objAH.debug=true;objAH.showOverlay=true;objAH.showState=true;objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL";objAH.nivel=_NIVEL_ACTUAL;objAH.id_tipo_doc=$('#tipo_nivel3_id').val();objAH.sendToServer();}
 function updateMostrarEstructuraDelNivel1(responseText){_clearContentsEstructuraDelNivel();_showAndHiddeEstructuraDelNivel(1);var objetos_array=JSONstring.toObject(responseText);procesarInfoJson(objetos_array,null);validateForm('formNivel1',guardarModificarDocumentoN1);addRules();scrollTo('nivel1Tabla');}
 function mostrarEstructuraDelNivel2(){_NIVEL_ACTUAL=2;if(MODIFICAR==0){_mostrarAccion("Agregando grupo => Template: "+$('#tipo_nivel3_id').val()+crearBotonEsquema());}
 objAH=new AjaxHelper(updateMostrarEstructuraDelNivel2);objAH.debug=true;objAH.showOverlay=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";objAH.tipoAccion="MOSTRAR_ESTRUCTURA_DEL_NIVEL";objAH.nivel=2;objAH.id_tipo_doc=$("#tipo_nivel3_id").val();objAH.sendToServer();}
@@ -48,8 +48,8 @@ function registrarToggleOnChangeForBarcode(callFromBarcode){var cantidad_comp=$(
 switchTipoBarcode(cantidad_comp,barcode_comp);}}
 function seleccionar_esquema(){inicializar();ID_TIPO_EJEMPLAR=$('#tipo_nivel3_id').val();TEMPLATE_ACTUAL=$('#tipo_nivel3_id').val();if((TIENE_NIVEL_2==0)&&($('#tipo_nivel3_id').val()=='SIN SELECCIONAR')){jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);$('#tipo_nivel3_id').focus();}
 if($('#tipo_nivel3_id').val()=='SIN SELECCIONAR'){jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);$('#tipo_nivel3_id').focus();}
-if(MODIFICAR==1){}else{MODIFICAR=0;AGREGAR_COMPLETO=0;if(_NIVEL_ACTUAL==1){mostrarEstructuraDelNivel1();$('#datos_del_leader').hide();}else if(_NIVEL_ACTUAL==2){mostrarEstructuraDelNivel2();}else{mostrarEstructuraDelNivel3();}
-inicializarSideLayers();close_esquema();}}
+if(MODIFICAR==1){}else{close_esquema();MODIFICAR=0;AGREGAR_COMPLETO=0;if(_NIVEL_ACTUAL==1){mostrarEstructuraDelNivel1();}else if(_NIVEL_ACTUAL==2){mostrarEstructuraDelNivel2();}else{mostrarEstructuraDelNivel3();}
+inicializarSideLayers();}}
 function guardarEsquema(){objAH=new AjaxHelper(updateGuardarEsquema);objAH.showOverlay=true;objAH.debug=true;objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";objAH.tipoAccion="GUARDAR_ESQUEMA";objAH.id1=ID_N1;objAH.id2=ID_N2;objAH.id3=ID_N3;objAH.nivel=_NIVEL_ACTUAL;objAH.template=$("#tipo_nivel3_id").val();objAH.sendToServer();}
 function updateGuardarEsquema(responseText){var info=JSONstring.toObject(responseText);var Messages=info.Message_arrayref;setMessages(Messages);if(_NIVEL_ACTUAL==1){modificarN1(ID_N1,TEMPLATE_ACTUAL);}else if(_NIVEL_ACTUAL==2){modificarN2(ID_N2,TEMPLATE_ACTUAL);}else{modificarN3(ID_N3,TEMPLATE_ACTUAL);}}
 function agregarIndice(id2){ID_N2=id2;$('#datos_indice').dialog({width:800,position:'center',modal:true});}
@@ -94,7 +94,7 @@ function mostrarInfoAltaNivel3ParaEdicionGrupalFromRegistro(idNivel2){if(idNivel
 function updateMostrarInfoAltaNivel3ParaEdicionGrupalFromRegistro(responseText){modificarEjemplaresN3();}
 function open_alta_indicador(id_div_alta_indicador){$('#'+id_div_alta_indicador).modal({containerCss:{backgroundColor:"#fff",height:150,padding:0,width:530,},});}
 function close_alta_indicador(){$.modal.close();}
-function open_esquema(){$("#datos_esquema").modal({containerCss:{backgroundColor:"#fff",height:150,padding:0,width:530,},});}
+function open_esquema(){$("#datos_esquema").modal({containerCss:{backgroundColor:"#fff",height:150,padding:0,width:530,},});if(MODIFICAR==1){$("#boton_guardar_esquema").show();}else{$("#boton_guardar_esquema").hide();}}
 function close_esquema(){$.modal.close();}
 function guardar_indicadores(id_div_indicadores,i){var key_indicador_primario=$("#select_indicador_primario"+i).val();var key_indicador_secundario=$("#select_indicador_secundario"+i).val();var str="<span>"+key_indicador_primario+"</span>";str=str+"<span class='indSeparator'>|</span><span>"+key_indicador_secundario+"</span>";$('#'+id_div_indicadores).html(str);$.modal.close();$("#select_indicador_primario"+i).val(key_indicador_primario);$("#select_indicador_secundario"+i).val(key_indicador_secundario);}
 function procesarInfoJson(marc_object_array,id_padre){var objetos=marc_object_array;var campo_ant='';var campo;var strComp;var strIndicadores;var marc_group;for(var i=0;i<objetos.length;i++){strComp="";strIndicadores="";var campo_marc_conf_obj=new campo_marc_conf(objetos[i]);var subcampos_array=campo_marc_conf_obj.getSubCamposArray();var id_temp=generarIdComponente();var id_div_alta_indicador=generarIdComponente();var id_div_indicadores=+id_div_alta_indicador+campo_marc_conf_obj.getCampo();var id_aux=MARC_OBJECT_ARRAY.length;strComp=strComp+"<ul id='"+id_div_alta_indicador+"' style='display:none'>";if(campo_marc_conf_obj.getIndicadorPrimario()!=''){strIndicadores="<li class='sub_item'>Indicador Primero: "+campo_marc_conf_obj.getIndicadorPrimario()+"</li>";strIndicadores=strIndicadores+"<li>"+crearSelectIndicadoresPrimarios(campo_marc_conf_obj,id_aux)+"</li>";}
@@ -108,7 +108,7 @@ if(objetos.length!=1){_setFoco();}
 if(MODIFICAR==0&&_NIVEL_ACTUAL==2){_seleccionarTipoDocumentoYDeshabilitarCombo();$('#'+_getIdComponente('910','a')).val($('#tipo_nivel3_id').val());}
 if(MODIFICAR==1){$('#tipo_nivel3_id').change(function(){$('#'+_getIdComponente('910','a')).val($('#tipo_nivel3_id').val());});}}
 function crearBotonAyudaCampo(campo){var funcion="ayudaParaCampo('"+campo+"')";return"<div class='icon_ayuda' onclick="+funcion+"> </div>";}
-function crearBotonEsquema(){return"<div title='Seleccione el esquema' style='' onclick='open_esquema();' class='click horizontal icon_buscar'> </div>"}
+function crearBotonEsquema(){return"<div title='Cambiar el esquema' style='' onclick='open_esquema();' class='click horizontal icon_buscar'> </div>"}
 function ayudaParaCampo(campo){alert("crear ventana con ayuda para campo "+campo);}
 function generarOpcionesParaSelect(array_options){var op;for(var i=0;i<array_options.length;i++){op=op+"<option value='"+array_options[i].clave+"'>"+array_options[i].valor+"</option>\n";}
 return op;}

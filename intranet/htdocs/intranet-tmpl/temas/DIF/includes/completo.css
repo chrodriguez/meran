@@ -1749,7 +1749,7 @@ input.file {
 }
 
 .contenedor_paginador {
-	width: 48%;
+	width: 54%;
 	margin: 0 auto;
 	padding: 4px;
 }
@@ -1758,7 +1758,6 @@ div.pagination {
 	font-size: 11px;
 	font-family: Tahoma, Arial, Helvetica, Sans-serif;
 	padding: 2px;
-/*	background-color: #c1c1c1;*/
 	width: 100%;
     border: 1px solid #35414F;
 }
@@ -1766,7 +1765,6 @@ div.pagination {
 div.pagination a {
 	padding: 2px 5px 2px 5px;
 	margin: 2px;
-/*	background-color: #c1c1c1;*/
 	text-decoration: none;
 	color: #000;
 }

@@ -344,7 +344,7 @@ sub generarComboTemasINTRA{
      
     $options_hash{'values'}     = \@values;
     $options_hash{'labels'}     = \%labels;
-    $options_hash{'defaults'}   = $session->param('usr_theme_intra') || 'default';
+    $options_hash{'defaults'}   = $session->param('usr_theme_intra') || C4::AR::Preferencias::getPreferenciasByCategoria('defaultUI') || 'default';
     $options_hash{'size'}       = 1;
     $options_hash{'name'}       = 'temas_intra';
     $options_hash{'id'}         = 'temas_intra';

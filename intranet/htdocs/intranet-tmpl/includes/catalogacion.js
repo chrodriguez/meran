@@ -356,6 +356,7 @@ function mostrarEstructuraDelNivel1(){
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel1);
     objAH.debug         = true;
     objAH.showOverlay   = true;
+    objAH.showState     = true;  
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
     objAH.nivel         = _NIVEL_ACTUAL;
@@ -522,8 +523,8 @@ function registrarToggleOnChangeForBarcode(callFromBarcode){
 
 function seleccionar_esquema(){
     inicializar(); 
-    ID_TIPO_EJEMPLAR = $('#tipo_nivel3_id').val();
-    TEMPLATE_ACTUAL = $('#tipo_nivel3_id').val();
+    ID_TIPO_EJEMPLAR    = $('#tipo_nivel3_id').val();
+    TEMPLATE_ACTUAL     = $('#tipo_nivel3_id').val();
     
     if( (TIENE_NIVEL_2 == 0)&&($('#tipo_nivel3_id').val() == 'SIN SELECCIONAR') ){
         jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);
@@ -539,6 +540,7 @@ function seleccionar_esquema(){
         //estoy modificando
 //         alert("estoy modificando => " + MODIFICAR); 
     } else {
+        close_esquema();
         //estoy agregando
         MODIFICAR           = 0;
         AGREGAR_COMPLETO    = 0;
@@ -546,7 +548,7 @@ function seleccionar_esquema(){
         
         if(_NIVEL_ACTUAL == 1){  
             mostrarEstructuraDelNivel1();
-            $('#datos_del_leader').hide();    
+//             $('#datos_del_leader').hide();    
         } else if(_NIVEL_ACTUAL == 2){
             mostrarEstructuraDelNivel2();
         } else {
@@ -554,7 +556,6 @@ function seleccionar_esquema(){
         }
 
         inicializarSideLayers();
-        close_esquema();
     }
 }
 
@@ -1061,9 +1062,16 @@ function open_esquema(){
                 height: 150,
                 padding: 0,
                 width: 530,
+                /*margin: '0 auto',     */         
     //             opacity: 50,
             },
     });
+    
+    if(MODIFICAR == 1){
+        $("#boton_guardar_esquema").show();
+    } else {
+        $("#boton_guardar_esquema").hide();
+    } 
 }
 
 function close_esquema(){
@@ -1235,7 +1243,7 @@ function crearBotonAyudaCampo(campo){
 }
 
 function crearBotonEsquema(){
-    return "<div title='Seleccione el esquema' style='' onclick='open_esquema();' class='click horizontal icon_buscar'> </div>"
+    return "<div title='Cambiar el esquema' style='' onclick='open_esquema();' class='click horizontal icon_buscar'> </div>"
 }
 
 function ayudaParaCampo(campo){

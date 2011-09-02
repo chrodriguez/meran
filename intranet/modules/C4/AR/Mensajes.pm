@@ -323,6 +323,7 @@ my %mensajesINTRA = (
     'U609' => 'Disculpe, no se pudo eliminar la configuraci&oacute;n.',
     'U610' => 'Se agreg&oacute; con &eacute;xito el &iacute;ndice',
     'U611' => 'Disculpe, no se pudo agregar el &iacute;ndice',
+    'U612' => 'Se modifico el esquema correctamente',
 
     'B400' => '',
     'B401' => 'Error al intentar prestar desde INTRA, funcion C4::AR::Reservas::t_realizarPrestamo.',

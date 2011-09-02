@@ -1,9 +1,9 @@
-<script type="text/javascript" language="javascript" src="/includes/jquery/jquery-ui-1.8.13.sortable.min.js"></script>
+<!--<script type="text/javascript" language="javascript" src="/includes/jquery/jquery-ui-1.8.13.sortable.min.js"></script>-->
 <script type="text/javascript" language="javascript">
     $(function() {
-	    $("#sortable").sortable({
+	    $("#sortable_subcampo").sortable({
             stop: function(event, ui) {
-                actualizarOrden($('#sortable').sortable('toArray'));
+                actualizarOrdenSubCampos($('#sortable_subcampo').sortable('toArray'));
             }
         });
     });
@@ -60,9 +60,8 @@
     });
 </script>
 <fieldset>
-    <legend class="titulo_legend trigger click"><strong>[% "Configuraci&oacute;n de la Visualizaci&oacute;n:" | i18n %]</strong></legend>
-    <input type="checkbox" name="ordenar_campos" id="ordenar_campos"/>Agrupar por campo
-      <table id="tabla_datos_visualizacion_intra" class="tabla_datos" cellspacing=0 border="0" cellpadding=0 style="width:100%;">
+    <legend class="titulo_legend trigger click"><strong>[% "Configuraci&oacute;n de la Visualizaci&oacute;n de SubCampos:" | i18n %]</strong></legend>
+      <table id="tabla_datos_visualizacion_intra" class="tabla_datos_sub_campos" cellspacing=0 border="0" cellpadding=0 style="width:100%;">
             <thead>
                 <tr class="titulo_tabla_resultado">
                     <td>[% "Campo" | i18n %]</td>
@@ -71,10 +70,10 @@
                     <td>[% "Vista en INTRANET " | i18n %]</td>
                     <td>[% "Post" | i18n %]</td>
                     <td>[% "Nivel" | i18n %]</td>
-                    <td>[% "Eliminar" | i18n %]</td>
+                    <td>[% "Acciones" | i18n %]</td>
                 </tr>
             </thead>
-            <tbody id="sortable">
+            <tbody id="sortable_subcampo">
                 [% FOREACH campo IN visualizacion %]
                     <tr id="[% campo.getId %]" align="center">
                         <td>[% campo.getCampo %]</td>

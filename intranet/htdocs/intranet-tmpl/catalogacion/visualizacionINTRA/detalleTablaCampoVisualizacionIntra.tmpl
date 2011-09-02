@@ -1,0 +1,54 @@
+<script type="text/javascript" language="javascript" src="/includes/jquery/jquery-ui-1.8.13.sortable.min.js"></script>
+<script type="text/javascript" language="javascript">
+    $(function() {
+	    $("#sortable").sortable({
+            stop: function(event, ui) {
+                actualizarOrdenCampo($('#sortable').sortable('toArray'));
+            }
+        });
+    });
+</script>
+<script type="text/javascript" language="javascript">
+    loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
+    $('.vista_campo').editable('[% url_prefix %]/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl', { 
+          type      : 'text',
+          cancel    : CANCELAR,
+          submit    : OK,
+          tooltip   : EDITABLE_MSG,
+          placeholder: EDITABLE_MSG,
+          style   : 'display: inline',
+          submitdata : {token: "[% token %]", edit: 1, type: 'vista_campo'},
+          indicator : loaderPath,
+
+    });
+</script>
+<fieldset>
+    <legend class="titulo_legend trigger click"><strong>[% "Configuraci&oacute;n de la Visualizaci&oacute;n de Campo:" | i18n %]</strong></legend> 
+      <table id="tabla_datos_visualizacion_intra" class="tabla_datos" cellspacing=0 border="0" cellpadding=0 style="width:100%;">
+            <thead>
+                <tr class="titulo_tabla_resultado">
+                    <td>[% "Campo" | i18n %]</td>
+                    <td>[% "Vista Campo" | i18n %]</td>
+                    <td>[% "Acciones" | i18n %]</td>
+                </tr>
+            </thead>
+            <tbody id="sortable">
+                [% FOREACH campo IN visualizacion %]
+                    <tr id="[% campo.getId %]" align="center">
+                        <td>[% campo.getCampo %]</td>
+                        <td class="vista_campo" id="[% campo.getCampo %]">[% campo.getVistaCampo %]</td>
+                        <td align="center">
+                            [% PERL %]
+                                print C4::AR::Filtros::to_Icon( text    => "[% 'Editar Subcampos' | i18n %]",
+                                                                onClick => "editSubcampos('[% campo.getCampo %]')",
+                                                                boton   => "icon_edicion",
+                                                                title   => "[% 'Editar Subcampos' | i18n %]",
+                                                                alternClass => "botonCentradoTabla"
+                                                            ) ;
+                            [% END %]
+                        </td>
+                    </tr>
+                [% END %]
+            </tbody>
+        </table>
+</fieldset>
