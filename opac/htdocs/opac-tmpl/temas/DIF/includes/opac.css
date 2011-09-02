@@ -95,7 +95,7 @@ body input[type="text"] {
 }
 
 .nav_logged a {
-    color: #4E6595;
+    color: #496E6D;
     font-family: Arial;
     font-weight: bold;
     text-decoration: none;
@@ -246,7 +246,7 @@ body input[type="text"] {
     -moz-background-inline-policy: continuous;
     -moz-background-origin: padding;
     background: #DAE0EC none repeat scroll 0 0;
-    border: 1px solid #4E6595;
+    border: 1px solid #496E6D;
 }
 
 .subcontent-unit-border-green {
@@ -261,7 +261,7 @@ body input[type="text"] {
 
 .subcontent-unit-border-orange {
     background-color: #DAE0EC;
-    border: 1px solid #4E6595;
+    border: 1px solid #496E6D;
 }
 
 .subcontent-unit-noborder {
@@ -526,7 +526,7 @@ div.pagination span.disabled {
 /* MAIN CONTENT */
 .main-content h1.pagetitle {
     font-family: "trebuchet ms", arial, sans-serif;
-    color: #4E6595;
+    color: #496E6D;
 }
 
 .main-content h1.block {
@@ -576,7 +576,7 @@ div.pagination span.disabled {
 }
 
 .main-content table th {
-    background-color: #4E6595;
+    background-color: #496E6D;
     border: 2px solid #FFFFFF;
     color: #FFFFFF;
 }
@@ -602,7 +602,7 @@ p.caption {
 }
 
 .contactform {
-    border: 1px solid #4E6595;
+    border: 1px solid #496E6D;
     background-color: rgb(244, 244, 244);
 }
 
@@ -650,7 +650,7 @@ p.caption {
 
 /* MAIN SUBCONTENT */
 .main-subcontent h1 {
-    background-color: #4E6595;
+    background-color: #496E6D;
     font-family: "trebuchet ms", arial, sans-serif;
     color: rgb(255, 255, 255);
 }
@@ -668,7 +668,7 @@ p.caption {
 }
 
 .main-subcontent h1.orange {
-    background-color: #4E6595;
+    background-color: #496E6D;
     color: #FFFFFF;
     font-family: "trebuchet ms", verdana, arial, sans-serif;
 }
@@ -748,7 +748,7 @@ p.caption {
 
 /* FORMULARIO RECOMENDACION */
 .recomendacionform {
-    border: 1px solid #4E6595;
+    border: 1px solid #496E6D;
     background-color: rgb(244, 244, 244);
 }
 
@@ -806,7 +806,7 @@ p.caption {
 }
 
 .main-content h1 a {
-    color: #4E6595;
+    color: #496E6D;
     text-decoration: none;
 }
 
@@ -1102,7 +1102,7 @@ label.error_adv {
 }
 
 #drop_down_login a.signin:hover {
-    background: #4f6596;
+    background: #496E6D;
     color: #fff;
 }
 
@@ -1120,12 +1120,12 @@ a.signin.menu-open span {
 }
 
 #signin_menu {
-    -moz-border-radius-topleft: 5px;
-    -moz-border-radius-bottomleft: 5px;
-    -moz-border-radius-bottomright: 5px;
-    -webkit-border-top-left-radius: 5px;
-    -webkit-border-bottom-left-radius: 5px;
-    -webkit-border-bottom-right-radius: 5px;
+    -moz-border-radius-topleft: 3px;
+    -moz-border-radius-bottomleft: 3px;
+    -moz-border-radius-bottomright: 3px;
+    -webkit-border-top-left-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
+    -webkit-border-bottom-right-radius: 3px;
     background-color: #DCE7E7;
     border: 1px solid;
     border-color: #496E6D;
@@ -1244,6 +1244,6 @@ a.signin.menu-open span {
 
 #alert_msg_main {
     border-radius: 0px 0px 13px 13px;
-    background-color: #4F6596;
     color: #fff;
+    background-color: #496E6D;;
 }
