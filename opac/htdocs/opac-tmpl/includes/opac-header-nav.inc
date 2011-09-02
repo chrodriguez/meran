@@ -7,9 +7,11 @@
 [% USE HTML %]
   
       <!-- Navigation Level 0 -->
-        <div class="nav0">
-          [% localization_FLAGS %]
-        </div>
+        [% IF enable_localization_flags %]
+	        <div class="nav0">
+	          [% localization_FLAGS %]
+	        </div>
+	    [% END %]    
         <!-- Navigation Level 1 -->
         <div class="nav1">
           <ul>
