@@ -67,21 +67,37 @@
 
 #fancybox-outer {
     position: relative;
-    width: 100%;
+    border-radius: 5px 5px 5px 5px;
+    width: 98%;
     height: 100%;
     background: #fff;
+    padding:5px;
 }
 
-#fancybox-content {
-    width: 0;
+/*#fancybox-content {*/
+/*    width: 0;
     height: 0;
     padding: 0;
     outline: none;
     position: relative;
     overflow: hidden;
     z-index: 1102;
-    border: 0px solid #fff;
+    border: 0px solid #fff;*/
+/*}*/
+
+#fancybox-content {
+    background-color:rgba(0, 0, 0, 0.8);
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 3px 0 rgba(0, 0, 0, 0.1);
+    left: 0;
+    padding: 6px;
+  /*  position: fixed;*/
+    top: 0;
+    width: 600px;
+    z-index: 11;
 }
+
+
 
 #fancybox-hide-sel-frame {
     position: absolute;
