@@ -43,9 +43,9 @@
         <p>[% 'De' | i18n %]: [% mensaje.getApellido %], [% mensaje.getNombre %] ([% mensaje.getEmail %])</p>
         <input type="hidden" name="email" id="email" value="[% mensaje.getEmail %]">
         <h1 id="responder" class="pagetitle" onclick="responder()"> [% 'Responder mensaje' | i18n %]</h1>
-                  <div class="responder" style="display:none;">
+                  <div class="responder" style="display:none; padding-top:10px;">
                             <textarea id="respuesta" name="respuesta" class="self_review" style="width: 377px"></textarea>
-                            <p><input type="submit" onclick="responderMail()"  value="Aceptar"/></p>
+                            <p style="width:20px; padding-top:15px;"><input class="fancybox_button" type="submit" onclick="responderMail()"  value="Aceptar"/></p>
                   </div>
 </div>
 

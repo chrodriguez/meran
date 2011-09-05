@@ -4729,7 +4729,11 @@ font-size:10pt;
 
 .fancybox_twitter{
   width: 350px;
+  margin:0 auto 0 auto;
 }
+
+
+
 /* Estilo mensaje de contacto (mainpage) */
 
 /*.msj_main{
@@ -4779,13 +4783,32 @@ a {
 
 /* DESDE ACA */
 
-/*#fancybox-outer{
-    min-width: 402px;
+#fancybox-outer{
+    min-width: 413px;
 }
 
 #fancybox-content{
-    min-width: 389px;
-}*/
+    min-width: 401px;
+}
+
+
+.fancybox_button{
+/*    background: url("../img/buttons/bg-btn.gif") repeat-x scroll 0 0 #DDDDDD*/;
+    border-color: #BBBBBB #BBBBBB #999999;
+    border-radius: 4px 4px 4px 4px;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 1px 0 #F8F8F8;
+    color: #333333 !important;
+    cursor: pointer;
+    display: inline-block;
+    font: 12px/15px Helvetica Neue,Arial,"Lucida Grande",Sans-serif;
+    margin: 0;
+    overflow: hidden;
+    padding: 5px 9px;
+    text-shadow: 0 1px #F0F0F0;
+
+}
 
 #fancybox-content fieldset{
 
@@ -4880,7 +4903,8 @@ a {
 }
 
 
-
+.wysiwyg{
+    margin: 0 auto
 
 /*  HASTA ACA*/
 
