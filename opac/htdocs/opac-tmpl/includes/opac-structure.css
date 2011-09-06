@@ -2882,3 +2882,12 @@ fieldset {
 	float: left;
 	width: 45%;
 }
+
+.lista_docs .item img{
+	clear: none;
+	margin: 0;
+}
+
+.lista_docs .item{
+    clear: both;
+}

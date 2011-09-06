@@ -733,6 +733,12 @@ sub detalleCompletoOPAC{
             $hash_nivel2->{'cat_ref_tipo_nivel3_name'}  = C4::AR::Referencias::translateTipoNivel3($hash_nivel2->{'cat_ref_tipo_nivel3'});
 			$hash_nivel2->{'rating'}                    = C4::AR::Nivel2::getRating($hash_nivel2->{'id2'},$nivel1->db);
 			$hash_nivel2->{'cant_reviews'}              = C4::AR::Nivel2::getCantReviews($hash_nivel2->{'id2'}, $nivel1->db);
+
+	        my ($cant_docs,$e_docs)                 = getListaDeDocs($hash_nivel2->{'id2'});  
+	        
+	        $hash_nivel2->{'lista_docs'}              = $e_docs;
+	        $hash_nivel2->{'cant_docs'}               = $cant_docs;
+
 			push(@nivel2, $hash_nivel2);
 		};
         if ($i >= ($cantidad_total-1)){

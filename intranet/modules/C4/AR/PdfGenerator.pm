@@ -578,7 +578,7 @@ sub libreDeuda {
 
 	my $branchname = $socio->ui->getNombrePDF;
 
-    my $branchcode= C4::AR::Preferencias::getValorPreferencia('defaultbranch');
+    my $branchcode= C4::AR::Preferencias::getValorPreferencia('defaultUI');
 
 	my ( $pdf, $pagewidth, $pageheight ) = &inicializarPDF();
 
