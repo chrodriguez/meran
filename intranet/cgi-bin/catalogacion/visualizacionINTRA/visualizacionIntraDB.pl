@@ -252,7 +252,6 @@ else{
                             debug => 1,
         });
 
-#        $t_params->{'visualizacion'}    = C4::AR::VisualizacionIntra::getCampos($ejemplar);
         $t_params->{'visualizacion'}    = C4::AR::VisualizacionIntra::getConfiguracionByOrderGroupCampo($ejemplar,$nivel);
 
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);     
