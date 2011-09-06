@@ -578,7 +578,7 @@ sub libreDeuda {
 
 	my $branchname = $socio->ui->getNombrePDF;
 
-    my $branchcode= C4::AR::Preferencias::getValorPreferencia('defaultbranch');
+    my $branchcode= C4::AR::Preferencias::getValorPreferencia('defaultUI');
 
 	my ( $pdf, $pagewidth, $pageheight ) = &inicializarPDF();
 
@@ -607,14 +607,14 @@ sub libreDeuda {
     
      my $escudo =
         C4::Context->config('intrahtdocs') . '/temas/'
-      . C4::AR::Preferencias::getValorPreferencia('tema_intra')
+      . C4::AR::Preferencias::getValorPreferencia('defaultUI')
       . '/imagenes/escudo-DEFAULT'
       . '.jpg';
 
 
     my $escudoUI =
         C4::Context->config('intrahtdocs') . '/temas/'
-      . C4::AR::Preferencias::getValorPreferencia('tema_intra')
+      . C4::AR::Preferencias::getValorPreferencia('defaultUI')
       . '/imagenes/escudo-'
       . $branchcode
       . '.jpg';
@@ -1001,7 +1001,7 @@ sub generateBookLabelA4 {
     my $posy = 100;
     my $escudo =
         C4::Context->config('intrahtdocs') . '/temas/'
-      . C4::AR::Preferencias::getValorPreferencia('tema_intra')
+      . C4::AR::Preferencias::getValorPreferencia('defaultUI')
       . '/imagenes/escudo-'
       . $branchcode . '.jpg';
 
@@ -1009,8 +1009,8 @@ sub generateBookLabelA4 {
     if ( !( ( -e $escudo ) && ( -r $escudo ) ) ) {
         $escudo =
             C4::Context->config('intrahtdocs') . '/temas/'
-          . C4::AR::Preferencias::getValorPreferencia('tema_intra')
-          . '/images/escudo-uni.png';
+          . C4::AR::Preferencias::getValorPreferencia('defaultUI')
+          . '/imagenes/escudo-DEFAULT.png';
     }
 # 
 #     $pdf->addImgScaled($escudo, $x + 80 , $pageheight + 27 + ($y-$posy) , 2/100);
@@ -1105,16 +1105,16 @@ sub generateBookLabel {
 	my $posy = 100;
 	my $escudo =
 	    C4::Context->config('intrahtdocs') . '/temas/'
-      . C4::AR::Preferencias::getValorPreferencia('tema_intra')
+      . C4::AR::Preferencias::getValorPreferencia('defaultUI')
 	  . '/imagenes/escudo-'
 	  . $branchcode . '.jpg';
 
-
+C4::AR::Debug::debug("----------------------------- ESCUDO -------------------------------------- ".$escudo);
     if ( !( ( -e $escudo ) && ( -r $escudo ) ) ) {
         $escudo =
             C4::Context->config('intrahtdocs') . '/temas/'
-          . C4::AR::Preferencias::getValorPreferencia('tema_intra')
-          . '/images/escudo-uni.png';
+          . C4::AR::Preferencias::getValorPreferencia('defaultUI')
+          . '/imagenes/escudo-DEFAULT.png';
     }
 
     $pdf->addImgScaled($escudo, $x + 100 , $pageheight + ($y-40-$posy) , 2/100);

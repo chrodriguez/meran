@@ -98,7 +98,7 @@ if($to_pdf){
         $hash{'aplicacion'}   = "application/msword";
         $hash{'file_name'}    = "orden_de_compra.doc";
         
-        my $ui_id = C4::AR::Preferencias::getValorPreferencia('defaultbranch');
+        my $ui_id = C4::AR::Preferencias::getValorPreferencia('defaultUI');
         
         my $ui    = C4::AR::Referencias::obtenerUIByIdUi($ui_id); 
 

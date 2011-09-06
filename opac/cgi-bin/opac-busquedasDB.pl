@@ -9,6 +9,7 @@ use C4::AR::Busquedas;
 use Time::HiRes;
 use Encode;
 use URI::Escape;
+use HTML::StripTags qw(strip_tags);
 
 my $input                   = new CGI;
 my $obj                     = $input->param('obj');
@@ -30,12 +31,23 @@ $obj->{'estantes'}          = Encode::decode_utf8($input->param('estantes'));
 $obj->{'estantes_grupo'}    = Encode::decode_utf8($input->param('estantes_grupo'));
 $obj->{'tema'}              = Encode::decode_utf8($input->param('tema'));
 $obj->{'tipo'}              = $input->param('tipo');    
+
+#la primera vez que ingresa a opac-busquedasDB only_available no existe
+#por lo tanto no puedo hacer strip_tags
 $obj->{'only_available'}    = $input->param('only_available') || 0;
+if($obj->{'only_available'}){
+    #escapamos todos los tabs html para evitar XSS
+    $obj->{'only_available'}    = strip_tags($input->param('only_available'));
+}
+
 $obj->{'from_suggested'}    = $input->param('from_suggested');
 $obj->{'tipo_nivel3_name'}  = $input->param('tipo_nivel3_name');
 $obj->{'tipoBusqueda'}      = 'all';
 $obj->{'token'}             = $input->param('token');
-my $ini                     = $obj->{'ini'} = $input->param('page') || 0;
+
+#se corta el parametro page en 6 numeros nada mas, sino rompe error 500
+my $ini                     = $obj->{'ini'} = substr($input->param('page'),0,5);
+C4::AR::Debug::debug("pageeeeeeee : ".$ini);
 my $start                   = [ Time::HiRes::gettimeofday() ]; #se toma el tiempo de inicio de la búsqueda
 
 my $cantidad;
@@ -132,10 +144,7 @@ $t_params->{'suggested'}                = $suggested;
 $t_params->{'tipoAccion'}               = $obj->{'tipoAccion'};
 $t_params->{'url_todos'}                = $url_todos;
 $t_params->{'only_available'}           = $obj->{'only_available'};
-C4::AR::Debug::debug("url antes de entrar a paginadoropac : ".$url);
 $t_params->{'paginador'}                = C4::AR::Utilidades::crearPaginadorOPAC($cantidad,$cantR, $pageNumber,$url,$t_params);
-C4::AR::Debug::debug("url despues de entrar a paginadoropac : ".$url);
-C4::AR::Debug::debug("paginador : ".$t_params->{'paginador'});
 $t_params->{'combo_tipo_documento'}     = C4::AR::Utilidades::generarComboTipoNivel3();
 
 #se arma el arreglo con la info para mostrar en el template

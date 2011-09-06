@@ -15,7 +15,7 @@
                    <p><label for="edicion" class="left">[% 'Edici&oacute;n*' | i18n %]:</label>
                             <input type="text" class="required" name="edicion" id="edicion" class="field" value="[% edicion %]" tabindex="10" /></p>
                   <p><label for="lugar_publicacion" class="left">[% 'Lugar de Publicaci&oacute;n*' | i18n %]:</label>
-                            <input type="text"  name="lugar_publicacion" id="lugar_publicacion" class="field" value="[% datos_edicion.getCiudadPublicacion %]" tabindex="10"/></p>     
+                            <input type="text"  name="lugar_publicacion" id="lugar_publicacion" class="field" value="[% datos_edicion.getCiudadObject.getNombre %]" tabindex="10"/></p>     
                   <p><label for="editorial" class="left">[% 'Editorial*' | i18n %]:</label>
                             <input type="text" class="required" name="editorial" id="editorial" class="field" value="[% datos_edicion.getEditor %]" tabindex="10" /></p>
                   <p><label for="fecha" class="left">[% 'Fecha*' | i18n %]:</label>

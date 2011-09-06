@@ -200,7 +200,7 @@
 	                                <br style="clear:both" />
 	                            </div>
 	                         [% ELSE %]
-	                           <p> [% 'A&uacute;n sin valoraci&oacute;n' %]
+	                           <p> [% '----------' %]
 	                         [% END %]
                         </td>
                         [% IF socio_data.usr_permisos_opac %]

@@ -1,8 +1,24 @@
-
           <div class="main-subcontent" style="width:100%; float:left">
                 <div style="width:100%;">
                     <h1 class="orange">[% "Informaci&oacute;n de disponibilidad" | i18n %]</h1>
-                    <div  style="width:95%;">
+                            <li class="detalle_barra_circulacion" style="float:left; margin-left: 40px;">
+                                [% IF CirculationEnabled %]
+                                    [% IF socio_data.usr_nro_socio %]
+                                        <br />
+                                        <br />                                  
+                                        [% PERL %]
+                                            print C4::AR::Filtros::to_Icon(   text    => "[% 'Reservar' | i18n %]",
+                                                                                boton   => "icon_reservar",
+                                                                                width   => "100px",
+                                                                                onClick => "reservar([% id1 %],[% id2 %])",
+                                                                                title   => "[% 'Reservar' | i18n %]",
+                                                                        );
+                                        [% END %]
+                                    [% END %]
+                                [% END %]
+                            </li>
+
+                    <div class="detalle_total">
                         <ul>
                             <li>
                                 [% "Disponibilidad Actual Para Pr&eacute;stamo:" | i18n %] <b>[% cantParaPrestamoActual %]</b>
@@ -16,23 +32,6 @@
                             <li>
                                 [% "Cantidad Actual de Pr&eacute;stamos:" | i18n %] <b>[% cantPrestados %]</b>
                             </li>  
-                            <li class="detalle_barra_circulacion" style="float:left">
-                                  
-                                [% IF CirculationEnabled %]
-	                                [% IF socio_data.usr_nro_socio %]
-                                        <br />
-                                        <br />	                                
-	                                    [% PERL %]
-	                                        print C4::AR::Filtros::to_Icon(   text    => "[% 'Reservar' | i18n %]",
-	                                                                            boton   => "icon_reservar",
-	                                                                            width   => "100px",
-	                                                                            onClick => "reservar([% id1 %],[% id2 %])",
-	                                                                            title   => "[% 'Reservar' | i18n %]",
-	                                                                    );
-	                                    [% END %]
-	                                [% END %]
-                                [% END %]
-                            </li>
                         </ul>
                     </div>
                 </div>

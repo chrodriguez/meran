@@ -19,4 +19,15 @@ sub get_max_orden {
     return $max;
 }
 
+sub get_max_orden_subcampo {
+    my ($campo) = @_;
+    my $db          = C4::Modelo::CatVisualizacionIntra->new()->db;
+    my $sql         = "SELECT MAX(orden_subcampo) FROM cat_visualizacion_intra WHERE campo='".$campo."'";
+    my $sth         = $db->dbh->prepare($sql);
+    $sth->execute();
+    my $max         = $sth->fetchrow;
+    $sth->finish;
+    return $max;
+}
+
 1;
