@@ -34,6 +34,7 @@ use Text::Aspell;
 use C4::Modelo::RepHistorialBusqueda;
 use Sphinx::Search  qw(SPH_MATCH_ANY SPH_MATCH_PHRASE SPH_MATCH_BOOLEAN SPH_MATCH_EXTENDED SPH_MATCH_ALL SPH_SORT_RELEVANCE);
 use Sphinx::Manager qw(new);
+use URI::Escape;
 
 use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
@@ -1625,42 +1626,42 @@ sub armarBuscoPor{
 	}
 
 	if( C4::AR::Utilidades::validateString($params->{'titulo'})){
-        $buscoPor.= Encode::decode_utf8(C4::AR::Utilidades::verificarValor($params->{'titulo'}))."&";  
+        $buscoPor.= ($params->{'titulo'})."&";  
 	}
 	
 	if( C4::AR::Utilidades::validateString($params->{'completo'})){
-        $buscoPor.= C4::AR::Utilidades::verificarValor(C4::AR::Filtros::i18n("Autor").": ".$params->{'completo'})."&";
+        $buscoPor.= (C4::AR::Filtros::i18n("Autor").": ".$params->{'completo'})."&";
 	}
 
     if( C4::AR::Utilidades::validateString($params->{'autor'})){
-        $buscoPor.= C4::AR::Utilidades::verificarValor(C4::AR::Filtros::i18n("Autor").": ".$params->{'autor'})."&";
+        $buscoPor.= (C4::AR::Filtros::i18n("Autor").": ".$params->{'autor'})."&";
     }
 
 	if( C4::AR::Utilidades::validateString($params->{'signatura'})){
-        $buscoPor.= C4::AR::Utilidades::verificarValor(C4::AR::Filtros::i18n("Signatura").": ".$params->{'signatura'})."&";
+        $buscoPor.= (C4::AR::Filtros::i18n("Signatura").": ".$params->{'signatura'})."&";
 	}
 
     if( C4::AR::Utilidades::validateString($params->{'isbn'})){
-        $buscoPor.= "ISBN: ".C4::AR::Utilidades::verificarValor($params->{'isbn'})."&";
+        $buscoPor.= "ISBN: ".($params->{'isbn'})."&";
     }       
 
     if( C4::AR::Utilidades::validateString($params->{'tema'})){
-        $buscoPor.= "Tema: ".C4::AR::Utilidades::verificarValor($params->{'tema'})."&";
+        $buscoPor.= "Tema: ".($params->{'tema'})."&";
     }       
 
     if( C4::AR::Utilidades::validateString($params->{'estante'})){
-        $buscoPor.= "Estantes Virtuales: ".C4::AR::Utilidades::verificarValor($params->{'estante'})."&";
+        $buscoPor.= "Estantes Virtuales: ".($params->{'estante'})."&";
     }   
     if( C4::AR::Utilidades::validateString($params->{'estantes'})){
-        $buscoPor.= "Estantes Virtuales: ".C4::AR::Utilidades::verificarValor($params->{'estantes'})."&";
+        $buscoPor.= "Estantes Virtuales: ".($params->{'estantes'})."&";
     }
 
     if( C4::AR::Utilidades::validateString($params->{'estantes_grupo'})){
-        $buscoPor.= "Estantes virtuales del grupo: ".C4::AR::Utilidades::verificarValor($params->{'estantes_grupo'})."&";
+        $buscoPor.= "Estantes virtuales del grupo: ".($params->{'estantes_grupo'})."&";
     }   
 
 	if( C4::AR::Utilidades::validateString($params->{'codBarra'})){
-        $buscoPor.= Encode::decode_utf8(C4::AR::Utilidades::verificarValor(C4::AR::Filtros::i18n("Barcode").": ".$params->{'codBarra'}))."&";
+        $buscoPor.= Encode::decode_utf8((C4::AR::Filtros::i18n("Barcode").": ".$params->{'codBarra'}))."&";
 	}		
 
     if( C4::AR::Utilidades::validateString($params->{'date_begin'})){
@@ -1672,7 +1673,7 @@ sub armarBuscoPor{
     }
 
     if(($params->{'only_available'})){
-        $buscoPor.= Encode::decode_utf8(C4::AR::Filtros::i18n("Solo disponibles"))."&";  
+        $buscoPor.= C4::AR::Filtros::i18n("Solo disponibles")."&";  
     }
 
 	my @busqueda    = split(/&/,$buscoPor);

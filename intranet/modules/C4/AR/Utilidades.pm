@@ -1210,9 +1210,9 @@ sub verificarValor {
     
 #     C4::AR::Debug::debug("despues de limpiar => ".$valor);
 
-    $valor=~ s/%|"|=|\*|-(<,>)//g;  
-    $valor=~ s/%3b|%3d|%27|%25//g;#Por aca no entra llegan los caracteres ya traducidos
-    $valor=~ s/\<SCRIPT>|\<\/SCRIPT>//gi;
+#    $valor=~ s/%|"|=|\*|-(<,>)//g;  
+#    $valor=~ s/%3b|%3d|%27|%25//g;#Por aca no entra llegan los caracteres ya traducidos
+#    $valor=~ s/\<SCRIPT>|\<\/SCRIPT>//gi;
 
     return $valor;
 }

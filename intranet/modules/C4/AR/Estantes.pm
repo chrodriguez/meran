@@ -279,7 +279,7 @@ sub _verificacionesParaAgregarContenido {
 sub buscarNombreDuplicado {
     my ($padre,$estante,$valor) = @_;
 
- my @filtros;
+    my @filtros;
 
     if ($estante){push(@filtros, ( id  => { ne => $estante->getId} ));}
     push(@filtros, ( padre  => { eq => $padre} ));
@@ -292,7 +292,7 @@ sub buscarNombreDuplicado {
 
 
 sub buscarEstante {
-# Se buscan los estantes
+    # Se buscan los estantes
     my ($estante, $ini, $cantR) = @_;
 
     my @filtros;

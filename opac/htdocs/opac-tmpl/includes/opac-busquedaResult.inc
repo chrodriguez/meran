@@ -12,7 +12,7 @@
 [% USE HTML %]
 [% IF show_search_details %]
 
-     <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda:" | i18n %] <strong>[% buscoPor %]</strong></div>
+     <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda:" | i18n %] <strong>[% buscoPor | html %]</strong></div>
   
      <div class="resultados_consulta">[% "Cantidad de Registros:" | i18n %] [% cantidad %] en ([% timeSeg %] segundos)</div>
 
@@ -40,7 +40,7 @@
         [% IF !from_suggested %]
             [% IF suggested %]
                     <div class="suggested_search">
-                        <a href="[% url_prefix %]/opac-busquedasDB.pl?string=[% suggested %]&tipoAccion=[% tipoAccion %]&from_suggested=1&only_available=[% only_available %]&token=[% token %]">
+                        <a href="[% url_prefix %]/opac-busquedasDB.pl?string=[% suggested | html %]&tipoAccion=[% tipoAccion | html %]&from_suggested=1&only_available=[% only_available | html %]&token=[% token | html %]">
                             [% "Usted quiso decir" | i18n %] <span style="font-style: italic">[% suggested %]</span>?
                         </a>
                     </div>
