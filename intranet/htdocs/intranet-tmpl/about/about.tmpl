@@ -18,46 +18,56 @@ function updateEdit(responseText){
 }
 </script>
 
-<fieldset><legend class="titulo_legend">Equipo Central</legend>
-<table width="100%" border=1>
-    <tr>
-        <td width="50%">
-            <h4><a href="http://www.cespi.unlp.edu.ar" target="_blank">CESPI</a> - <a href="http://www.linti.unlp.edu.ar" target="_blank">LINTI</a> - <a href="http://www.info.unlp.edu.ar" target="_blank">Facultad de Informática</a></h4> 
-	        <ul> 
-	            <li>Javier D&iacute;az</li>
-	            <li>Einar Lanfranco</li>
-	            <li>Mat&iacute;as Pagano</li>
-	            <li>Augusto Perez</li>
-	            <li>Miguel Carbone</li>
-	            <li>Gaspar Rajoy</li>
-	            <li>Magal&iacute; Defalco</li>
-	            <li>Francisco Raposeiras</li>
-	        </ul>
-        </td>
-    </tr>
-</table>
-</fieldset>
-<br><br>
-<fieldset><legend class="titulo_legend">Datos de la Biblioteca</legend>
 
-<table width="100%">
-    <tr>
-        <td width="50%">[% info_about.descripcion %]</td>
-    </tr>
-</table>
-</fieldset>
-<br><br>
-[% PERL %]
-    print C4::AR::Filtros::to_Button(   text    => "[% 'Editar Informacion' | i18n %]",
-                                                          boton   => "boton_buscar",
-                                                          onClick => "edit()",
-                                                          title   => "[% 'Editar Informacion' | i18n %]",
-                                                          id      => "[% 'edit_about' %]",
-                                                                ) ;
-[% END %]
-<br><br>
-<div id="edicion_about">
-</div>
+
+<fieldset><legend class="titulo_legend">Datos de la Biblioteca</legend>
     
+    <table width="100%">
+        <tr>
+            <td width="50%">[% info_about.descripcion %]</td>
+        </tr>
+    </table>
+    
+</fieldset>
+
+<div style="float: right;">
+	[% PERL %]
+	    print C4::AR::Filtros::to_Button(   text    => "[% 'Editar Informacion' | i18n %]",
+	                                                          boton   => "boton_buscar",
+	                                                          onClick => "edit()",
+	                                                          title   => "[% 'Editar Informacion' | i18n %]",
+	                                                          id      => "[% 'edit_about' %]",
+	                                                                ) ;
+	[% END %]
 </div>
+<div id="edicion_about"></div>
+
+
+<fieldset><legend class="titulo_legend">Equipo Central</legend>
+<div >
+     <h4><a href="http://www.cespi.unlp.edu.ar" target="_blank">CESPI</a> - <a href="http://www.linti.unlp.edu.ar" target="_blank">LINTI</a> - <a href="http://www.info.unlp.edu.ar" target="_blank">Facultad de Informática</a></h4> 
+     <ul> 
+         <li>Javier D&iacute;az</li>
+         <li>Einar Lanfranco</li>
+         <li>Mat&iacute;as Pagano</li>
+         <li>Augusto Perez</li>
+         <li>Miguel Carbone</li>
+         <li>Gaspar Rajoy</li>
+         <li>Magal&iacute; Defalco</li>
+         <li>Francisco Raposeiras</li>
+     </ul>
+</div>
+<div >
+     <h4><a href="http://www.econo.unlp.edu.ar" target="_blank">Facultad de Ciencias Econ&oacute;micas</a></h4>
+     <ul>
+         <li>Mar&iacute;a Fernanda Pietroboni</li>
+         <li>Mar&iacute;a Laura Asenjo</li>
+         <li>Paula Gabriela Gonzalez</li>
+         <li>Ana Mar&iacute;a Ca&ntilde;edo</li>
+         
+     </ul>
+</div>
+
+</fieldset>
+    
 [% INCLUDE "intranet-bottom.inc" %]

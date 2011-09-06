@@ -818,6 +818,7 @@ div.pagination span.disabled {
 
 li.detalle_barra_circulacion {
 	float: right;
+    list-style: none outside none;
 }
 
 .review {
@@ -2868,13 +2869,14 @@ fieldset {
 
 .detalle_total {
 	float: right;
-	width: 85%;
+	width: 80%;
 }
 
 .cover_detalle_container {
 	height: 100%;
 	clear: both;
 	float: left;
+	width: 15%;
 }
 
 .cover_detalle_container a{

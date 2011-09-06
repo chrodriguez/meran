@@ -34,10 +34,6 @@ $obj->{'tipo'}              = $input->param('tipo');
 #la primera vez que ingresa a opac-busquedasDB only_available no existe
 #por lo tanto no puedo hacer strip_tags
 $obj->{'only_available'}    = $input->param('only_available') || 0;
-if($obj->{'only_available'}){
-    #escapamos todos los tabs html para evitar XSS
-    $obj->{'only_available'}    = strip_tags($input->param('only_available'));
-}
 
 $obj->{'from_suggested'}    = $input->param('from_suggested');
 $obj->{'tipo_nivel3_name'}  = $input->param('tipo_nivel3_name');

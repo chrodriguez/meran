@@ -64,7 +64,7 @@
                     <th align="center" style="width: 110px;  min-width: 110px;">
                         [% "Disponibilidad" | i18n %]
                     </th>
-                    <th align="center" style="width: 110px;">
+                    <th align="center" style="width: 120px;">
                         [% "Valoraci&oacute;n" | i18n %]
                     </th>
                     [% IF socio_data.usr_permisos_opac %]
