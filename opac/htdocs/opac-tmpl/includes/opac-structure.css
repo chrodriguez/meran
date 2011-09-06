@@ -1,6 +1,4 @@
 /* Estructura de posicionamiento, tamaños de fuente y medidas */
-
-
 @IMPORT url("/includes/css/fancybox.css");
 
 @IMPORT url("/includes/css/ui.stars.css");
@@ -20,7 +18,7 @@ body {
 	font-family: verdana, arial, sans-serif;
 	min-width: 1024px;
 	overflow: auto;
-} 
+}
 
 * {
 	margin: 0;
@@ -41,30 +39,30 @@ body {
 	width: 300px;
 }
 
-#jqpageflow-block{
-    width: 600px;
-    clear: both;
-    margin: 0 auto;
-    display: none;
+#jqpageflow-block {
+	width: 600px;
+	clear: both;
+	margin: 0 auto;
+	display: none;
 }
 
-#jqpageflow-block img{
-    clear: both;
+#jqpageflow-block img {
+	clear: both;
 }
 
 .jqpageflow-loader {
-    position: relative; 
-    display: none; 
-    right: 1%; 
-    z-index: 10001; 
-    bottom: 0;
+	position: relative;
+	display: none;
+	right: 1%;
+	z-index: 10001;
+	bottom: 0;
 }
 
 .jqpageflow-loadertext {
-    font-size: 18px; 
-    width: 100%;  
-    text-align: center; 
-    position: relative; 
+	font-size: 18px;
+	width: 100%;
+	text-align: center;
+	position: relative;
 }
 
 .page-container {
@@ -649,7 +647,7 @@ body {
 
 .clear-contentunit {
 	clear: both;
-	width: 540px;
+	width: 100%;
 	height: 0.1em;
 	margin: 0 0 0 0;
 }
@@ -1347,6 +1345,8 @@ p.caption {
 	width: 173px;
 }
 
+
+
 .subcontent-unit-border-warning p {
 	font-weight: bold;
 }
@@ -1731,7 +1731,7 @@ label.error_adv {
 	left: 0;
 	position: absolute;
 	opacity: 0;
-	filter: Alpha(Opacity =     0);
+	filter: Alpha(Opacity =       0);
 }
 
 /* Interaction Cues
@@ -2854,4 +2854,31 @@ fieldset {
 	margin-left: 11%;
 	margin-top: 0;
 	padding: 0;
+}
+
+.detalle_completo_niveles {
+	width: 100%;
+}
+
+.detalle_total {
+	float: right;
+	width: 85%;
+}
+
+.cover_detalle_container {
+	height: 100%;
+	clear: both;
+	float: left;
+}
+
+.cover_detalle_container a{
+	margin: 0 auto;
+}
+
+.cover_detalle_container img{
+    margin-left: 50%;
+}
+.central_left{
+	float: left;
+	width: 45%;
 }

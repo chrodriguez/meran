@@ -326,13 +326,9 @@ round-border-topleft {
 }
 
 .clear-contentunit {
-    clear: both;
-    width: 540px;
-    height: 0.1em;
     border: none;
     background: rgb(210, 210, 210);
     color: rgb(210, 210, 210);
-    margin: 0 0 0 0;
 }
 
 .icon_reservar {

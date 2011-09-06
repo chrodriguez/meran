@@ -1,47 +1,55 @@
 [% FOREACH nivel2 %]
-<div class="main-subcontent" style="width:100%; float:left">
-    <div class="subcontent-unit-border-green" style="width:100%;">
-        <div class="round-border-topleft" style="width:90%;"></div>
-        <h1 class="green">[% "Detalle del Grupo" | i18n %]</h1>
-        
-            <ul class="listado_sin_margen"> 
-                [% FOREACH nivel2_array %]
-                            [% IF liblibrarian %]
-                                [% IF dato %]
-                                <li> [% liblibrarian %]: <strong>[% dato %]</strong></li>
-                                [% END %]
-                            [% END %]
-                [% END %] <!-- END FOREACH subcampos_array-->
-            </ul>
-                                [% IF tiene_indice %]
-                                    [% PERL %]
-                                                        print C4::AR::Filtros::to_Icon(  
-                                                                                            boton   => "icon_indice",
-                                                                                            onClick => "mostrarIndice([% id2 %]);",
-                                                                                            title   => "[% 'Ver &iacute;ndice' | i18n %]",
-                                                                ) ;
-                                    [% END %]
-                                [% END %]
-                            [% IF indice %]
-                                <div style="display:none"><div id="indice_data[% id2 %]" style="white-space: pre;" title="[% 'Indice del grupo' | i18n %]">[% indice %]</div></div>
-                            [% END %]
+    <div class="detalle_completo_niveles">
+    
+		[% INCLUDE 'opac-detail_partial_N1.inc' %]
+		
+		        <h2 class="green">[% "Detalle del Grupo" | i18n %]</h2>
+		        
+		            <ul class="listado_sin_margen"> 
+		                [% FOREACH nivel2_array %]
+		                            [% IF liblibrarian %]
+		                                [% IF dato %]
+		                                <li> [% liblibrarian %]: <strong>[% dato %]</strong></li>
+		                                [% END %]
+		                            [% END %]
+		                [% END %] <!-- END FOREACH subcampos_array-->
+		            </ul>
+		            
+                    [% IF tiene_indice %]
+                        [% PERL %]
+                               print C4::AR::Filtros::to_Icon(  
+                                                                   boton   => "icon_indice",
+                                                                   onClick => "mostrarIndice([% id2 %]);",
+                                                                   title   => "[% 'Ver &iacute;ndice' | i18n %]",
+                                       ) ;
+                        [% END %]
+                    [% END %]
+                    
+                    [% IF indice %]
+                        <div style="display:none"><div id="indice_data[% id2 %]" style="white-space: pre;" title="[% 'Indice del grupo' | i18n %]">[% indice %]</div></div>
+                    [% END %]
 
-	                        [% IF esta_en_estante_virtual %]
-				  <a href="[% url_prefix %]/opac-busquedasDB.pl?tipoAccion=BUSQUEDA_AVANZADA&estantes_grupo=[% id2 %]" class="contenedor_boton">
-	                            [% PERL %]
-					 print  C4::AR::Filtros::to_Icon(  
-	                                                       boton   => "icon_estvirtuales",
-	                                                       title   => "[% 'Ver estantes virtuales en los que se encuentra' | i18n %]",
-	                                 );
-	                            [% END %]
-				  </a>
-	                        [% END %]
+                      [% IF esta_en_estante_virtual %]
+						  <a href="[% url_prefix %]/opac-busquedasDB.pl?tipoAccion=BUSQUEDA_AVANZADA&estantes_grupo=[% id2 %]" class="contenedor_boton">
+			                            [% PERL %]
+							 print  C4::AR::Filtros::to_Icon(  
+			                                                       boton   => "icon_estvirtuales",
+			                                                       title   => "[% 'Ver estantes virtuales en los que se encuentra' | i18n %]",
+			                                 );
+			                            [% END %]
+						  </a>
+                      [% END %]
+		
+		
+		            <div style="float:left; width:100%;" >
+		                [% INCLUDE 'opac-detail_partial_disponibilidad.inc' %]
+		            </div>
+	
+	<br />
+	
+	<hr class="separador-detalle-item" />
+	
+	<br />
 
-
-            <div style="float:left; width:100%;" >
-                [% INCLUDE 'opac-detail_partial_disponibilidad.inc' %]
-            </div>
-        
-    </div>
 </div>
 [% END %] <!-- FOREACH de nivel2 -->
