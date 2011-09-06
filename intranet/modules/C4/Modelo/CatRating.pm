@@ -10,7 +10,7 @@ __PACKAGE__->meta->setup(
     columns => [
         nro_socio     => { type => 'varchar', not_null => 1, length => 32 },
         id2           => { type => 'integer', not_null => 1, length => 11 },
-        rate          => { type => 'float' },
+        rate          => { type => 'float', not_null => 0, },
         review        => { type => 'text' },
     ],
 

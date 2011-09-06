@@ -1914,7 +1914,7 @@ sub _sendRecoveryPasswordMail{
     my $nro_socio           = $socio->getNro_socio;
 
     my $ui              = C4::AR::Referencias::obtenerDefaultUI();
-    my $nombre_ui       = $ui->getNombre();
+    my $nombre_ui       = Encode::decode_utf8($ui->getNombre());
 
     my $mailMessage =
                 C4::AR::Filtros::i18n("
@@ -1923,6 +1923,51 @@ sub _sendRecoveryPasswordMail{
                                     <a href='$link'> $link </a> <br /><br /><br /><br /><br /><br />".
                         
                         C4::AR::Filtros::i18n("Si no puede abrir el enlace, copie y pegue la siguente URL en su navegador").": <br /> $link <br />".
+                        
+                        C4::AR::Filtros::i18n("<br /><br />Si UD no ha solicitado un reseteo de su clave, simplemente ignore este mail. <br />
+                        
+                        Atte.,")." $nombre_ui.
+                ";
+    
+    
+    $mail{'mail_message'}           = $mailMessage;
+    $mail{'page_title'}             = C4::AR::Filtros::i18n("Olvido de su contrase&ntilde;a");
+    
+    my ($ok, $msg_error)            = C4::AR::Mail::send_mail(\%mail);
+    
+    return (!$ok,$msg_error);
+
+}
+
+sub _sendRecoveryPasswordMail_Unactive{
+    my ($socio) = @_;
+
+    use C4::AR::Mail;
+
+    my %mail;
+
+    my $mail_from       = $mail{'mail_from'}  = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveFrom"));
+    my $mail_to         = $mail{'mail_to'}    = $socio->persona->getEmail;
+    my $mail_subject    = $mail{'mail_subject'}          = C4::AR::Filtros::i18n("Instrucciones para reestablecer su clave");
+    
+    
+## Datos para el mail
+    use C4::Modelo::PrefUnidadInformacion;
+    use MIME::Lite::TT::HTML;
+    
+    my $completo            = $socio->persona->getNombre." ".$socio->persona->getApellido;
+    my $nro_socio           = $socio->getNro_socio;
+
+    my $ui              = C4::AR::Referencias::obtenerDefaultUI();
+    my $nombre_ui       = Encode::decode_utf8($ui->getNombre());
+
+    my $mailMessage =
+                C4::AR::Filtros::i18n("
+                        Estimado/a ")."<b>$completo ($nro_socio)</b>, ".C4::AR::Filtros::i18n("socio de")." $nombre_ui, ".C4::AR::Filtros::i18n("recientemente UD ha solicitado reestablecer su clave.<br />
+                        Para hacerlo, debe dirigirse a la biblioteca, ya que UD. no cumple las condiciones necesarias de regularidad").":<br />
+                                    <br />".
+                        C4::AR::Filtros::i18n(  "<br /><br />Puede dirigirse a $nombre_ui, ".Encode::decode_utf8($ui->getDireccion).", ".
+                                                Encode::decode_utf8($ui->getCiudad)."<br />").
                         
                         C4::AR::Filtros::i18n("<br /><br />Si UD no ha solicitado un reseteo de su clave, simplemente ignore este mail. <br />
                         
@@ -1984,37 +2029,48 @@ sub recoverPassword{
     
     use Captcha::reCAPTCHA;
     my $c = Captcha::reCAPTCHA->new;
-    
+
     my $captchaResult = $c->check_answer(
         $reCaptchaPrivateKey, $ENV{'REMOTE_ADDR'},
         $reCaptchaChallenge, $reCaptchaResponse
     );
 
-    if ( $captchaResult->{is_valid} ) {
-
+    if ( $captchaResult->{is_valid} ){
         my $user_id = C4::AR::Utilidades::trim($params->{'user-id'});
         my $socio   = C4::AR::Usuarios::getSocioInfoPorMixed($user_id);       
         if ($socio){
-            my $db = $socio->db;
-            $db->{connect_options}->{AutoCommit} = 0;
-            $db->begin_work;
-            
-            eval{
-                _logClientIpAddress('recover_password',$socio);
-                my ($link,$hash) = _buildPasswordRecoverLink($socio);
-                ($isError)                      = _sendRecoveryPasswordMail($socio,$link);
-                $socio->setRecoverPasswordHash($hash);
-                $db->commit;
-                $message                    = C4::AR::Mensajes::getMensaje('U600','opac');
-            };
-            if (($@) || $isError){
-                $message = C4::AR::Mensajes::getMensaje('U606','opac');
-                &C4::AR::Mensajes::printErrorDB($@, 'U606',"opac");
-                $db->rollback;
-            }
-
-            $db->{connect_options}->{AutoCommit} = 1;
+            if ($socio->getActivo()){
+	            my $db = $socio->db;
+	            $db->{connect_options}->{AutoCommit} = 0;
+	            $db->begin_work;
+	            
+	            eval{
+	                _logClientIpAddress('recover_password',$socio);
+	                my ($link,$hash) = _buildPasswordRecoverLink($socio);
+	                ($isError)                      = _sendRecoveryPasswordMail($socio,$link);
+	                $socio->setRecoverPasswordHash($hash);
+	                $db->commit;
+	                $message                    = C4::AR::Mensajes::getMensaje('U600','opac');
+	            };
+	            if (($@) || $isError){
+	                $message = C4::AR::Mensajes::getMensaje('U606','opac');
+	                &C4::AR::Mensajes::printErrorDB($@, 'U606',"opac");
+	                $db->rollback;
+	            }
+	            $db->{connect_options}->{AutoCommit} = 1;
+            }else{
+	            #NO ES ACTIVO, LE MANDO UN MAIL DICIENDOLE QUE VAYA A LA BIBLIOTECA
                     
+                eval{
+                    _logClientIpAddress('recover_password',$socio);
+		            $message                    = C4::AR::Mensajes::getMensaje('U600','opac');
+	                ($isError)                      = _sendRecoveryPasswordMail_Unactive($socio);
+	            };    
+                if (($@) || $isError){
+                    $message = C4::AR::Mensajes::getMensaje('U606','opac');
+                }
+            	
+            }
         }else{
             $message = C4::AR::Mensajes::getMensaje('U601','opac');
             $isError = 1;

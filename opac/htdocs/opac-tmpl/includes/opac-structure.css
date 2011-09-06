@@ -733,6 +733,12 @@ body {
 	cursor: pointer;
 }
 
+.icon_estvirtuales {
+    height: 25px;
+    width: 25px;
+    cursor: pointer;
+}
+
 .icon_indice {
 	height: 25px;
 	width: 25px;
@@ -812,6 +818,7 @@ div.pagination span.disabled {
 
 li.detalle_barra_circulacion {
 	float: right;
+    list-style: none outside none;
 }
 
 .review {
@@ -2862,13 +2869,14 @@ fieldset {
 
 .detalle_total {
 	float: right;
-	width: 85%;
+	width: 80%;
 }
 
 .cover_detalle_container {
 	height: 100%;
 	clear: both;
 	float: left;
+	width: 15%;
 }
 
 .cover_detalle_container a{
@@ -2878,6 +2886,7 @@ fieldset {
 .cover_detalle_container img{
     margin-left: 50%;
 }
+
 .central_left{
 	float: left;
 	width: 45%;

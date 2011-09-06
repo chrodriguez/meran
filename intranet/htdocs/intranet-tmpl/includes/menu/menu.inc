@@ -105,7 +105,15 @@
 	                                                           title =>    "[% 'Listado de Pedidos Cotizacion' | i18n %]"
 	                                                       ) ;
 	                       [% END %]
-	                   </li>	  	                               
+	                   </li>	  
+                       <li>
+                           [% PERL %]
+                               print C4::AR::Filtros::link_to( text =>     "[% 'Recomendaciones' | i18n %]",
+                                                               url =>      "[% url_prefix %]/adquisiciones/recomendaciones.pl", 
+                                                               title =>    "[% 'Estante virtual' | i18n %]"
+                                                           ) ;
+                           [% END %]
+                       </li>    	                               
 	                </ul>
 	             </li>
 	                

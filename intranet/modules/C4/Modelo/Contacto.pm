@@ -20,6 +20,7 @@ __PACKAGE__->meta->setup(
         email          => { type => 'varchar', length => 255, not_null => 1 },
         asunto         => { type => 'varchar', length => 255, not_null => 1 },
         mensaje        => { type => 'text', not_null => 1 },
+        fecha          => { type => 'varchar', length => 255, not_null => 0 },
         leido          => { type => 'integer', not_null => 1, default => 0 },
     ],
     primary_key_columns => [ 'id' ],
@@ -40,9 +41,11 @@ sub agregar{
     $self->setEmail($data_hash->{'email'});
     $self->setAsunto($data_hash->{'asunto'});
     $self->setMensaje($data_hash->{'mensaje'});
+    $self->setFecha();
 
     $self->save();
 }
+
 
 
 sub getObjeto{
@@ -67,6 +70,23 @@ sub setTrato{
     $self->trato($trato);
 }
 
+sub getFecha{
+    my ($self) = shift;
+    my $dateformat = C4::Date::get_date_format();
+
+    return ( C4::Date::format_date($self->fecha,$dateformat) );
+}
+
+sub setFecha{
+    my ($self) = shift;
+
+    my $dateformat = C4::Date::get_date_format();
+
+    my $fecha = C4::Date::format_date_in_iso(C4::AR::Utilidades::getToday(),$dateformat);
+
+    $self->fecha($fecha);
+	
+}
 sub getNombre{
     my ($self) = shift;
 
