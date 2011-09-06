@@ -451,23 +451,23 @@ sub t_agregar_configuracion {
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
     
-#        eval {
+        eval {
 
             C4::AR::VisualizacionIntra::addConfiguracion($params, $db);
             $msg_object->{'error'} = 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U604', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}]} ) ;
 
             $db->commit;
-#        };
+        };
 
-#        if ($@){
-#            #Se loguea error de Base de Datos
-#            &C4::AR::Mensajes::printErrorDB($@, 'B432',"INTRA");
-#            $db->rollback;
-#            #Se setea error para el usuario
-#            $msg_object->{'error'} = 1;
-#            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U606', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}]} ) ;
-#        }
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B432',"INTRA");
+            $db->rollback;
+            #Se setea error para el usuario
+            $msg_object->{'error'} = 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U606', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}]} ) ;
+        }
 
         $db->{connect_options}->{AutoCommit} = 1;
 
