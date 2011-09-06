@@ -1168,11 +1168,14 @@ sub busquedaCombinada_newTemp{
 	
     use Text::Unaccent;
 
- # Se agregó para sacar los acentos y que no se mame el suggest, total es lo mismo porque
- # Sphinx busca con o sin acentos
-	$string_utf8_encoded = unac_string('utf8',$string_utf8_encoded);
 
-    $string_utf8_encoded = Encode::decode_utf8($string_utf8_encoded);
+    # Se agregó para sacar los acentos y que no se mame el suggest, total es lo mismo porque
+    # Sphinx busca con o sin acentos
+	$string_utf8_encoded    = unac_string('utf8',$string_utf8_encoded);
+	
+    #no se encodea nunca a utf8 antes de llegar aca	
+    #$string_utf8_encoded    = Encode::decode_utf8($string_utf8_encoded);
+
 
     my $from_suggested = $obj_for_log->{'from_suggested'} || 0;
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);

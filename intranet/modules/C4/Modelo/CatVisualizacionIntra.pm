@@ -29,22 +29,34 @@ sub agregar{
 
     my ($self)   = shift;
     my ($params) = @_;
-
-    $self->setCampo($params->{'campo'});
-    $self->setNivel($params->{'nivel'});
-    $self->setPre($params->{'pre'});
-    $self->setPost($params->{'post'});
-    $self->setSubCampo($params->{'subcampo'});
-    $self->setVistaIntra($params->{'liblibrarian'});
-
-    if(C4::AR::EstructuraCatalogacionBase::getNivelFromEstructuraBaseByCampoSubcampo($params->{'campo'}, $params->{'subcampo'}) <= 1){
-        $self->setTipoEjemplar('ALL');
-    }else{
-        $self->setTipoEjemplar($params->{'ejemplar'});
-    }
     
-    my $orden = C4::Modelo::CatVisualizacionIntra::Manager->get_max_orden() + 1;
-    $self->setOrden($orden);
+    C4::AR::Debug::debug("ejemplar en modelor catvisualizacionitra : ".$params->{'ejemplar'});
+
+    $self->campo($params->{'campo'});
+    $self->nivel($params->{'nivel'});
+    $self->pre($params->{'pre'});
+    $self->post($params->{'post'});
+    $self->subcampo($params->{'subcampo'});
+    $self->vista_intra($params->{'liblibrarian'});
+    
+    my $vista_campo_temp = C4::AR::EstructuraCatalogacionBase::getLabelByCampo($params->{'campo'});
+    C4::AR::Debug::debug("vista_campo en el modelo, agregando : ".$vista_campo_temp);
+    $self->vista_campo($vista_campo_temp);
+
+#   este chequeo no se para que serviria ahora. Se agrega el tipo de ejemplar de una con el nivel que ya viene
+#    if(C4::AR::EstructuraCatalogacionBase::getNivelFromEstructuraBaseByCampoSubcampo($params->{'campo'}, $params->{'subcampo'}) <= 1){
+#        $self->tipo_ejemplar('ALL');
+#    }else{
+#        $self->tipo_ejemplar($params->{'ejemplar'});
+#    }
+
+    $self->tipo_ejemplar($params->{'ejemplar'});
+    
+    my $orden           = C4::Modelo::CatVisualizacionIntra::Manager->get_max_orden() + 1;
+    $self->orden($orden);
+    
+    my $orden_subcampo  = C4::Modelo::CatVisualizacionIntra::Manager->get_max_orden_subcampo($params->{'campo'}) + 1;
+    $self->orden_subcampo($orden);
 
     $self->save();
 }
