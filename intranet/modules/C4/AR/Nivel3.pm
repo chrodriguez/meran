@@ -713,11 +713,13 @@ sub detalleCompletoOPAC{
 			$hash_nivel2->{'indice'}                    = $hash_nivel2->{'tiene_indice'}?$nivel2_array_ref->[$i]->getIndice:0;
 			$hash_nivel2->{'nivel2_array'}              = ($nivel2_array_ref->[$i])->toMARC_Opac; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
 			my ($totales_nivel3,@result)                = detalleDisponibilidadNivel3($nivel2_array_ref->[$i]->getId2,$nivel1->db);
-			$hash_nivel2->{'nivel3'}                    = \@result;
+            $hash_nivel2->{'nivel3'}                    = \@result;
+            $hash_nivel2->{'cant_nivel3'}                = scalar(@result);
 			$hash_nivel2->{'cantPrestados'}             = $totales_nivel3->{'cantPrestados'};
 			$hash_nivel2->{'cantReservas'}              = $totales_nivel3->{'cantReservas'};
 			$hash_nivel2->{'portada_registro'}          = C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'S');
 			$hash_nivel2->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'M');
+            $hash_nivel2->{'primer_signatura'}= $nivel2_array_ref->[0]->getSignaturas->[0];
 			$hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'L');
 			$hash_nivel2->{'cantReservasEnEspera'}      = $totales_nivel3->{'cantReservasEnEspera'};
 			$hash_nivel2->{'disponibles'}               = $totales_nivel3->{'disponibles'};
@@ -727,8 +729,8 @@ sub detalleCompletoOPAC{
 			$hash_nivel2->{'cantParaPrestamoActual'}    = $totales_nivel3->{'cantParaPrestamoActual'};
 			$hash_nivel2->{'DivMARC'}                   = "MARCDetail".$i;
 			$hash_nivel2->{'DivDetalle'}                = "Detalle".$i;
-            $hash_nivel2->{'cat_ref_tipo_nivel3'}     = C4::AR::Nivel2::getFirstItemTypeFromN1($id1);
-            $hash_nivel2->{'cat_ref_tipo_nivel3_name'}= C4::AR::Referencias::translateTipoNivel3($hash_nivel2->{'cat_ref_tipo_nivel3'});
+            $hash_nivel2->{'cat_ref_tipo_nivel3'}       = C4::AR::Nivel2::getFirstItemTypeFromN1($id1);
+            $hash_nivel2->{'cat_ref_tipo_nivel3_name'}  = C4::AR::Referencias::translateTipoNivel3($hash_nivel2->{'cat_ref_tipo_nivel3'});
 			$hash_nivel2->{'rating'}                    = C4::AR::Nivel2::getRating($hash_nivel2->{'id2'},$nivel1->db);
 			$hash_nivel2->{'cant_reviews'}              = C4::AR::Nivel2::getCantReviews($hash_nivel2->{'id2'}, $nivel1->db);
 			push(@nivel2, $hash_nivel2);

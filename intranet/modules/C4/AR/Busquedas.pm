@@ -1164,7 +1164,10 @@ sub busquedaCombinada_newTemp{
     my ($string_utf8_encoded,$session,$obj_for_log,$sphinx_options) = @_;
 
 	use Sphinx::Search;
+	
+	
     use Text::Unaccent;
+
 
     # Se agregó para sacar los acentos y que no se mame el suggest, total es lo mismo porque
     # Sphinx busca con o sin acentos
@@ -1173,23 +1176,24 @@ sub busquedaCombinada_newTemp{
     #no se encodea nunca a utf8 antes de llegar aca	
     #$string_utf8_encoded    = Encode::decode_utf8($string_utf8_encoded);
 
-    my $from_suggested      = $obj_for_log->{'from_suggested'} || 0;
-    my @searchstring_array  = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
+
+    my $from_suggested = $obj_for_log->{'from_suggested'} || 0;
+    my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
     my $string_suggested;
-                                
-    my $only_sphinx         = 0;
-    my $only_available      = 0;
+    
+    my $only_sphinx        = 0;
+    my $only_available     = 0;
     
     if ($sphinx_options){
 	    $only_sphinx        = $sphinx_options->{'only_sphinx'} || 0;
 	    $only_available     = $sphinx_options->{'only_available'} || 0;
     }    
-    my $sphinx              = Sphinx::Search->new();
-    my $query               = "";
-    my @boolean_ops         = ("&","|","!","-");
-    my $tipo                = $obj_for_log->{'match_mode'}||'SPH_MATCH_ALL';
-    my $orden               = $obj_for_log->{'orden'};
-    my $tipo_match          = C4::AR::Utilidades::getSphinxMatchMode($tipo);
+    my $sphinx = Sphinx::Search->new();
+    my $query = "";
+    my @boolean_ops = ("&","|","!","-");
+    my $tipo        = $obj_for_log->{'match_mode'}||'SPH_MATCH_ALL';
+    my $orden       = $obj_for_log->{'orden'};
+    my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
     C4::AR::Debug::debug("Busquedas => match_mode ".$tipo);
 
@@ -1271,10 +1275,11 @@ sub busquedaCombinada_newTemp{
     ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log, @id1_array);
     #se loquea la busqueda
     C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
-    
+
     if ( (!$from_suggested) && ($total_found == 0) && ($tipo ne 'SPH_MATCH_PHRASE') ){
         $string_suggested = getSuggestion($string_utf8_encoded,$total_found,$obj_for_log,$sphinx_options);
     }
+    
 
     return ($total_found, $resultsarray,$string_suggested);
 }

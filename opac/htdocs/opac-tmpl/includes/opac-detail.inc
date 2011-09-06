@@ -23,8 +23,6 @@
 	        });	});
 	</script>
     
-    [% INCLUDE 'opac-detail_partial_N1.inc' %]
-
 [% END %]
 
 [% IF preferencias.resumido %]

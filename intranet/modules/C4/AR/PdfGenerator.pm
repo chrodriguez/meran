@@ -1010,7 +1010,7 @@ sub generateBookLabelA4 {
         $escudo =
             C4::Context->config('intrahtdocs') . '/temas/'
           . C4::AR::Preferencias::getValorPreferencia('tema_intra')
-          . '/images/escudo-uni.png';
+          . '/imagenes/escudo-DEFAULT.png';
     }
 # 
 #     $pdf->addImgScaled($escudo, $x + 80 , $pageheight + 27 + ($y-$posy) , 2/100);
@@ -1114,7 +1114,7 @@ sub generateBookLabel {
         $escudo =
             C4::Context->config('intrahtdocs') . '/temas/'
           . C4::AR::Preferencias::getValorPreferencia('tema_intra')
-          . '/images/escudo-uni.png';
+          . '/imagenes/escudo-DEFAULT.png';
     }
 
     $pdf->addImgScaled($escudo, $x + 100 , $pageheight + ($y-40-$posy) , 2/100);
