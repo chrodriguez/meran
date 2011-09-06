@@ -4783,6 +4783,16 @@ a {
 
 /* DESDE ACA */
 
+
+.detalle_recom #fancybox-outer{
+    min-width: 500px;
+}
+
+
+.detalle_recom #fancybox-content{
+    min-width: 489px;
+}
+
 #fancybox-outer{
     min-width: 413px;
 }

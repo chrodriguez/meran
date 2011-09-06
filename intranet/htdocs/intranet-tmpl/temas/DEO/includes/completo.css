@@ -4810,6 +4810,15 @@ a {
 
 /* DESDE ACA */
 
+.div_detalle_recom{
+  color:#111;
+  border-radius: 5px 5px 5px 5px;
+  background-color:#fff;
+
+
+
+}
+
 #fancybox-outer{
     min-width: 413px;
 }
