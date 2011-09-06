@@ -339,6 +339,10 @@ round-border-topleft {
     background: transparent url(../imagenes/iconos/indice.png) no-repeat;
 }
 
+.icon_estvirtuales {
+    background: transparent url(../imagenes/iconos/estvirtuales.png) no-repeat;
+}
+
 .icon_marc {
     background: transparent url(../imagenes/iconos/marc.png) no-repeat;
 }

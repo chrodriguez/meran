@@ -42,7 +42,7 @@ if ($t_params->{'sessionClose'}){
 }
 
 
-
+$t_params->{'prueba'}       = '<script>alert("hola");</script>';
 
 C4::AR::Debug::debug("LOCALE ACTUAL EN AUTH: ".$session->param('usr_locale'));
 

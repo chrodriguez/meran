@@ -9,7 +9,6 @@ use C4::AR::Busquedas;
 use Time::HiRes;
 use Encode;
 use URI::Escape;
-use HTML::StripTags qw(strip_tags);
 
 my $input                   = new CGI;
 my $obj                     = $input->param('obj');

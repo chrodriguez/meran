@@ -9,6 +9,8 @@
         [% IF partial_template %]
               [% INCLUDE $partial_template %]
         [% END %]
-<div id="ajax-indicator"><br /></div></div>
-
+      <div style="display: none;" id="ajax-indicator">
+        <div><p>[% 'Cargando...' | i18n %]</p></div>
+      </div>
+</div>
       

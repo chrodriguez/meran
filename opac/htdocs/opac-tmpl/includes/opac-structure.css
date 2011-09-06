@@ -733,6 +733,12 @@ body {
 	cursor: pointer;
 }
 
+.icon_estvirtuales {
+    height: 25px;
+    width: 25px;
+    cursor: pointer;
+}
+
 .icon_indice {
 	height: 25px;
 	width: 25px;
@@ -2878,6 +2884,7 @@ fieldset {
 .cover_detalle_container img{
     margin-left: 50%;
 }
+
 .central_left{
 	float: left;
 	width: 45%;
