@@ -607,14 +607,14 @@ sub libreDeuda {
     
      my $escudo =
         C4::Context->config('intrahtdocs') . '/temas/'
-      . C4::AR::Preferencias::getValorPreferencia('tema_intra')
+      . C4::AR::Preferencias::getValorPreferencia('defaultUI')
       . '/imagenes/escudo-DEFAULT'
       . '.jpg';
 
 
     my $escudoUI =
         C4::Context->config('intrahtdocs') . '/temas/'
-      . C4::AR::Preferencias::getValorPreferencia('tema_intra')
+      . C4::AR::Preferencias::getValorPreferencia('defaultUI')
       . '/imagenes/escudo-'
       . $branchcode
       . '.jpg';
@@ -1001,7 +1001,7 @@ sub generateBookLabelA4 {
     my $posy = 100;
     my $escudo =
         C4::Context->config('intrahtdocs') . '/temas/'
-      . C4::AR::Preferencias::getValorPreferencia('tema_intra')
+      . C4::AR::Preferencias::getValorPreferencia('defaultUI')
       . '/imagenes/escudo-'
       . $branchcode . '.jpg';
 
@@ -1009,7 +1009,7 @@ sub generateBookLabelA4 {
     if ( !( ( -e $escudo ) && ( -r $escudo ) ) ) {
         $escudo =
             C4::Context->config('intrahtdocs') . '/temas/'
-          . C4::AR::Preferencias::getValorPreferencia('tema_intra')
+          . C4::AR::Preferencias::getValorPreferencia('defaultUI')
           . '/imagenes/escudo-DEFAULT.png';
     }
 # 
@@ -1105,15 +1105,15 @@ sub generateBookLabel {
 	my $posy = 100;
 	my $escudo =
 	    C4::Context->config('intrahtdocs') . '/temas/'
-      . C4::AR::Preferencias::getValorPreferencia('tema_intra')
+      . C4::AR::Preferencias::getValorPreferencia('defaultUI')
 	  . '/imagenes/escudo-'
 	  . $branchcode . '.jpg';
 
-
+C4::AR::Debug::debug("----------------------------- ESCUDO -------------------------------------- ".$escudo);
     if ( !( ( -e $escudo ) && ( -r $escudo ) ) ) {
         $escudo =
             C4::Context->config('intrahtdocs') . '/temas/'
-          . C4::AR::Preferencias::getValorPreferencia('tema_intra')
+          . C4::AR::Preferencias::getValorPreferencia('defaultUI')
           . '/imagenes/escudo-DEFAULT.png';
     }
 
