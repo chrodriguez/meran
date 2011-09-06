@@ -2900,3 +2900,7 @@ fieldset {
 .lista_docs .item{
     clear: both;
 }
+
+.contenedor_boton{
+	float: left;
+}
