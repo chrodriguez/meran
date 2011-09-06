@@ -132,10 +132,7 @@ $t_params->{'suggested'}                = $suggested;
 $t_params->{'tipoAccion'}               = $obj->{'tipoAccion'};
 $t_params->{'url_todos'}                = $url_todos;
 $t_params->{'only_available'}           = $obj->{'only_available'};
-C4::AR::Debug::debug("url antes de entrar a paginadoropac : ".$url);
 $t_params->{'paginador'}                = C4::AR::Utilidades::crearPaginadorOPAC($cantidad,$cantR, $pageNumber,$url,$t_params);
-C4::AR::Debug::debug("url despues de entrar a paginadoropac : ".$url);
-C4::AR::Debug::debug("paginador : ".$t_params->{'paginador'});
 $t_params->{'combo_tipo_documento'}     = C4::AR::Utilidades::generarComboTipoNivel3();
 
 #se arma el arreglo con la info para mostrar en el template
