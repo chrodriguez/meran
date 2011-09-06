@@ -946,13 +946,16 @@ sub busquedaAvanzada_newTemp{
     my ($params,$session) = @_;
 
     use Sphinx::Search;
+    use Text::Unaccent;
     
     my $sphinx  = Sphinx::Search->new();
     my $query   = '';
     my $tipo    = 'SPH_MATCH_EXTENDED';
-    my $orden       = $params->{'orden'};
+    my $orden   = $params->{'orden'};
    
     if($params->{'titulo'} ne ""){
+        #le sacamos los acentos para que busque indistintamente
+        $params->{'titulo'} = unac_string('utf8',$params->{'titulo'});
         $query .= ' @titulo "'.$params->{'titulo'};
 	    if($params->{'tipo'} eq "normal"){
 	        $query .= "*";
