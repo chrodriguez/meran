@@ -17,7 +17,7 @@ if($obj){
     $obj                    = C4::AR::Utilidades::from_json_ISO($obj);
     my $tipoAccion          = $obj->{'tipoAccion'};
     
-    if($tipoAccion eq "ACTUALIZAR_RECOMENDACION"){
+    if($tipoAccion eq 'ACTUALIZAR_RECOMENDACION'){
     
         ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
             template_name       => '/adquisiciones/datosRecomendacion.tmpl',
@@ -30,16 +30,59 @@ if($obj){
                                         entorno => 'usuarios'},
         });   
            
-    my ($ok) = C4::AR::Recomendaciones::updateRecomendacionDetalle($obj);
+        my ($ok) = C4::AR::Recomendaciones::updateRecomendacionDetalle($obj);
+        
+        my $infoOperacionJSON = to_json $ok;
     
-    my $infoOperacionJSON = to_json $ok;
+        C4::AR::Auth::print_header($session);
+        print $infoOperacionJSON;
+    
+    } elsif ($tipoAccion eq 'ELIMINAR') {
  
-    C4::AR::Auth::print_header($session);
-    print $infoOperacionJSON;
-    
-    }
-    
-    elsif ($tipoAccion eq 'BUSQUEDA_RECOMENDACION') {
+
+      my ($template, $session, $t_params)  = get_template_and_user({  
+                        template_name   => "/adquisiciones/recomendaciones.tmpl",
+                        query           => $input,
+                        type            => "intranet",
+                        authnotrequired => 0,
+                        flagsrequired   => {    ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'MODIFICAR', 
+                                                entorno => 'undefined'},
+                        debug           => 1,
+                    });
+
+        my $id_recomendacion = $obj->{'id_rec'};
+
+        my $ok= C4::AR::Recomendaciones::eliminarRecomendacion($id_recomendacion);  
+        
+        my $infoOperacionJSON = to_json $ok;
+ 
+        C4::AR::Auth::print_header($session);
+        print $infoOperacionJSON;
+        
+    } elsif ($tipoAccion eq 'MAS_DETALLE') {
+        
+        my $id_recomendacion          = $obj->{'id_rec'};
+        
+        ($template, $session, $t_params)= get_template_and_user({
+                            template_name   => "includes/partials/recomendaciones/detalle_recom.inc",
+                            query           => $input,
+                            type            => "intranet",
+                            authnotrequired => 1,
+                            flagsrequired   => {    ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'undefined'},
+         });
+
+        my $recom_detalle= C4::AR::Recomendaciones::getRecomendacionDetallePorId($id_recomendacion);
+       
+         $t_params->{'recomendacion'}  = $recom_detalle;
+
+        C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+
+    } elsif ($tipoAccion eq 'BUSQUEDA_RECOMENDACION') {
 
         my $idNivel1        =  $obj->{'idCatalogoSearch'};
         my $combo_ediciones = C4::AR::Utilidades::generarComboNivel2($idNivel1);
@@ -81,32 +124,54 @@ if($obj){
 
         $t_params->{'datos_edicion'} = $datos_edicion;
         $t_params->{'datos_nivel1'}  = $datos_nivel1;
-    }
 
-    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+    }   
 
 }else{
 #   trabajamos con CGI
-
-    my $id_recomendacion    = $input->param('id_recomendacion');
+    my $id_recomendacion = $input->param('id_recomendacion');
     my $tipoAccion          = $input->param('action')||"";
+      
 
-    if($tipoAccion eq "EDITAR_RECOMENDACION"){
+    if($tipoAccion eq 'EDITAR_RECOMENDACION'){
+
 
         ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
-            template_name       => '/adquisiciones/datosRecomendacion.tmpl',
-            query               => $input,
-            type                => "intranet",
-            authnotrequired     => 0,
-            flagsrequired       => {    ui => 'ANY', 
-                                        tipo_documento => 'ANY',   
-                                        accion => 'ALTA', 
-                                        entorno => 'usuarios'},
-        });   
-           
+                    template_name       => '/adquisiciones/datosRecomendacion.tmpl',
+                    query               => $input,
+                    type                => "intranet",
+                    authnotrequired     => 0,
+                    flagsrequired       => {    ui => 'ANY', 
+                                                tipo_documento => 'ANY',   
+                                                accion => 'ALTA', 
+                                                entorno => 'usuarios'},
+        }); 
+
         my $recomendaciones             = C4::AR::Recomendaciones::getRecomendacionDetallePorId($id_recomendacion);
         
         $t_params->{'recomendaciones'}  = $recomendaciones;
+    
+    } elsif ($tipoAccion eq 'DETALLE'){
+     
+       ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
+                    template_name       => '/adquisiciones/detalle_recomendacion.tmpl',
+                    query               => $input,
+                    type                => "intranet",
+                    authnotrequired     => 0,
+                    flagsrequired       => {    ui => 'ANY', 
+                                                tipo_documento => 'ANY',   
+                                                accion => 'ALTA', 
+                                                entorno => 'usuarios'},
+        }); 
+      
+
+        my $recom_detalle= C4::AR::Recomendaciones::getRecomendacionDetalle($id_recomendacion);
+      
+      
+        $t_params->{'recomendaciones'}  = $recom_detalle;
+
     }
+
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

@@ -25,16 +25,23 @@ use vars qw(@EXPORT @ISA);
 
 sub eliminarDetallesRecomendacion{
       my ($params, $msg_object) = @_;
+  
+      C4::AR::Debug::debug($params);
 
       my $detalles =  C4::AR::Recomendaciones::getRecomendacionDetalle($params);
       
-      C4::AR::Debug::debug($detalles);
-      for my $det (@$detalles){
-          if ($msg_object->{'error'} == 0){
-              $msg_object = C4::AR::RecomendacionDetalle::eliminarDetalleRecomendacion($det->getId());
-          } else {
-              return $msg_object;
+      if ($detalles){
+  
+          for my $det ($detalles){
+              if ($msg_object->{'error'} == 0){
+                  $msg_object = C4::AR::RecomendacionDetalle::eliminarDetalleRecomendacion($det->getId());
+              } else {
+                  return $msg_object;
+              }
           }
+
+      } else {
+            $msg_object->{'error'}= 0;
       }
       return $msg_object;
 }
@@ -64,7 +71,7 @@ sub eliminarRecomendacion {
               $msg_object->{'error'}= 1;
               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'RC03', 'params' => []} ) ;
           }
-         
+          
           return ($msg_object);
      }
      return ($msg_object);
