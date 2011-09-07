@@ -1332,20 +1332,22 @@ sub armarInfoNivel1{
             @result_array_paginado[$i]->{'portada_registro'}        =  $images_n1_hash_ref->{'S'};
             @result_array_paginado[$i]->{'portada_registro_medium'} =  $images_n1_hash_ref->{'M'};
             @result_array_paginado[$i]->{'portada_registro_big'}    =  $images_n1_hash_ref->{'L'};
+                        C4::AR::Debug::debug("HASH DE PORTADA EN LINEA 1329 ".$nivel1->getTitulo);
+                        C4::AR::Utilidades::printHASH($images_n1_hash_ref);
 
             
             my @nivel2_portadas;
             if (scalar(@$nivel2_array_ref)>1){
                 for(my $i=0;$i<scalar(@$nivel2_array_ref);$i++){
                     my %hash_nivel2;
-# TODO preguntar al mono pq se busca la imagen por nivel 1 y 2 ??????????????????????????????????????????
-#                     my $images_n2_hash_ref = C4::AR::PortadasRegistros::getAllImageForId2($nivel2_array_ref->[$i]->getId2);
                     my $images_n2_hash_ref                      = $nivel2_array_ref->[$i]->getAllImage();
                     
                     if ($images_n2_hash_ref){
 	                    $hash_nivel2{'portada_registro'}          =  $images_n2_hash_ref->{'S'};
 	                    $hash_nivel2{'portada_registro_medium'}   =  $images_n2_hash_ref->{'M'};
 	                    $hash_nivel2{'portada_registro_big'}      =  $images_n2_hash_ref->{'L'};
+                        C4::AR::Debug::debug("HASH DE PORTADA EN LINEA 1348");
+                        C4::AR::Utilidades::printHASH(\%hash_nivel2);
 
                         push(@nivel2_portadas, \%hash_nivel2);
                     }
