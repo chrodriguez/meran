@@ -7,6 +7,7 @@ use C4::Modelo::AdqRecomendacion;
 use C4::Modelo::AdqRecomendacion::Manager;
 use C4::Modelo::AdqRecomendacionDetalle;
 use C4::Modelo::AdqRecomendacionDetalle::Manager;
+use C4::AR::RecomendacionDetalle;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -26,15 +27,14 @@ use vars qw(@EXPORT @ISA);
 sub eliminarDetallesRecomendacion{
       my ($params, $msg_object) = @_;
   
-      C4::AR::Debug::debug($params);
-
       my $detalles =  C4::AR::Recomendaciones::getRecomendacionDetalle($params);
       
       if ($detalles){
   
-          for my $det ($detalles){
+          foreach my $det (@$detalles){
+              C4::AR::Utilidades::printHASH($det);
               if ($msg_object->{'error'} == 0){
-                  $msg_object = C4::AR::RecomendacionDetalle::eliminarDetalleRecomendacion($det->getId());
+                  $msg_object = C4::AR::RecomendacionDetalle::eliminarDetalleRecomendacion($det->getId()); 
               } else {
                   return $msg_object;
               }

@@ -14,6 +14,7 @@ use vars qw(@EXPORT @ISA);
     &agregarDetalleARecomendacion;
     &getDetalleRecomendacionPorId;
     &eliminarDetalleRecomendacion;
+   
 );
 
 
