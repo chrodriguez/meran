@@ -1293,7 +1293,7 @@ sub _checkRequisito{
 
     my $status = 1;
     
-    if (C4::AR::Preferencias::getValorPreferencia("requisito") ){
+    if (C4::AR::Preferencias::getValorPreferencia("requisito_necesario") ){
 	    my $cumple_condicion = $socio->getCumple_requisito;
 
 		$status = $status && ($cumple_condicion && ($cumple_condicion ne "0000000000:00:00"));
@@ -1963,7 +1963,7 @@ sub _sendRecoveryPasswordMail_Unactive{
 
     my $mailMessage =
                 C4::AR::Filtros::i18n("
-                        Estimado/a ")."<b>$completo ($nro_socio)</b>, ".C4::AR::Filtros::i18n("socio de")." $nombre_ui, ".C4::AR::Filtros::i18n("recientemente UD ha solicitado reestablecer su clave.<br />
+                        Estimado/a ")."<b>$completo ($nro_socio)</b>, ".C4::AR::Filtros::i18n("socio de")." $nombre_ui, ".C4::AR::Filtros::i18n("recientemente UD ha solicitado reestablecer su clave.<br /><br />
                         Para hacerlo, debe dirigirse a la biblioteca, ya que UD. no cumple las condiciones necesarias de regularidad").":<br />
                                     <br />".
                         C4::AR::Filtros::i18n(  "<br /><br />Puede dirigirse a $nombre_ui, ".Encode::decode_utf8($ui->getDireccion).", ".
@@ -2039,7 +2039,7 @@ sub recoverPassword{
         my $user_id = C4::AR::Utilidades::trim($params->{'user-id'});
         my $socio   = C4::AR::Usuarios::getSocioInfoPorMixed($user_id);       
         if ($socio){
-            if ($socio->getActivo()){
+            if ( _checkRequisito($socio) ){
 	            my $db = $socio->db;
 	            $db->{connect_options}->{AutoCommit} = 0;
 	            $db->begin_work;

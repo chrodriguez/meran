@@ -4192,11 +4192,13 @@ sub addParamToUrl{
 	
 	my $status = index($url,'?');
 	
-	if ($status == -1){
-		$url .= '?'.$param;
-	}else{
-        $url .= '&'.$param;
-	}
+	if (C4::AR::Utilidades::validateString($value)){
+		if ($status == -1){
+			$url .= '?'.$param;
+		}else{
+	        $url .= '&'.$param;
+		}
+    }
 	
 	return ($url);
 	
