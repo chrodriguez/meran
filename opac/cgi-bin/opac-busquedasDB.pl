@@ -68,48 +68,48 @@ my $token;
                 });
 
 
+
 if  ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
 
-if ($obj->{'estantes'}){
-    #Busqueda por Estante Virtual
-    $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&estantes=".$obj->{'estantes'}."&tipoAccion=".$obj->{'tipoAccion'};
-    $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&estantes=".$obj->{'estantes'}."&tipoAccion=".$obj->{'tipoAccion'};
-    C4::AR::Utilidades::addParamToUrl($url_todos,"estantes",$obj->{'estantes'});
+      if ($obj->{'estantes'}){
+          #Busqueda por Estante Virtual
+          $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&estantes=".$obj->{'estantes'}."&tipoAccion=".$obj->{'tipoAccion'};
+          $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&estantes=".$obj->{'estantes'}."&tipoAccion=".$obj->{'tipoAccion'};
+          C4::AR::Utilidades::addParamToUrl($url_todos,"estantes",$obj->{'estantes'});
 
-    ($cantidad, $resultsarray)   = C4::AR::Busquedas::busquedaPorEstante($obj->{'estantes'}, $session, $obj);
+          ($cantidad, $resultsarray)   = C4::AR::Busquedas::busquedaPorEstante($obj->{'estantes'}, $session, $obj);
 
-    #Sino queda en el buscoPor
-    $obj->{'tipo_nivel3_name'} = -1; 
-  }
-else{
-if($obj->{'estantes_grupo'}){
-    #Busqueda por Estante Virtual
-    $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&estantes_grupo=".$obj->{'estantes_grupo'}."&tipoAccion=".$obj->{'tipoAccion'};
-    $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&estantes_grupo=".$obj->{'estantes_grupo'}."&tipoAccion=".$obj->{'tipoAccion'};
-    C4::AR::Utilidades::addParamToUrl($url_todos,"estantes_grupo",$obj->{'estantes_grupo'});
+          #Sino queda en el buscoPor
+          $obj->{'tipo_nivel3_name'} = -1; 
+        } else {
+              if($obj->{'estantes_grupo'}){
+                    #Busqueda por Estante Virtual
+                    $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&estantes_grupo=".$obj->{'estantes_grupo'}."&tipoAccion=".$obj->{'tipoAccion'};
+                    $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&estantes_grupo=".$obj->{'estantes_grupo'}."&tipoAccion=".$obj->{'tipoAccion'};
+                    C4::AR::Utilidades::addParamToUrl($url_todos,"estantes_grupo",$obj->{'estantes_grupo'});
 
-    ($cantidad, $resultsarray)   = C4::AR::Busquedas::busquedaEstanteDeGrupo($obj->{'estantes_grupo'}, $session, $obj);
+                    ($cantidad, $resultsarray)   = C4::AR::Busquedas::busquedaEstanteDeGrupo($obj->{'estantes_grupo'}, $session, $obj);
 
-    #Sino queda en el buscoPor
-    $obj->{'tipo_nivel3_name'} = -1; 
+                    #Sino queda en el buscoPor
+                    $obj->{'tipo_nivel3_name'} = -1; 
 
- }
-  else {
+                } else {
 
-    $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&titulo=".$obj->{'titulo'}."&autor=".$obj->{'autor'}."&tipo=".$obj->{'tipo'}."&tipo_nivel3_name=".$obj->{'tipo_nivel3_name'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
-    $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&titulo=".$obj->{'titulo'}."&tipo=".$obj->{'tipo'}."&tipo_nivel3_name=".$obj->{'tipo_nivel3_name'}."&tipoAccion=".$obj->{'tipoAccion'};
-    
-    C4::AR::Utilidades::addParamToUrl($url_todos,"titulo",$obj->{'titulo'});
-    C4::AR::Utilidades::addParamToUrl($url_todos,"tipo_nivel3_name",$obj->{'tipo_nivel3_name'});
-    C4::AR::Utilidades::addParamToUrl($url_todos,"tipoAccion",$obj->{'tipoAccion'});
-    C4::AR::Utilidades::addParamToUrl($url_todos,"isbn",$obj->{'isbn'});
-    C4::AR::Utilidades::addParamToUrl($url_todos,"tema",$obj->{'tema'});
-    C4::AR::Utilidades::addParamToUrl($url_todos,"autor",$obj->{'autor'});
-    
-    ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
-  }
-}
+                      $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&titulo=".$obj->{'titulo'}."&autor=".$obj->{'autor'}."&tipo=".$obj->{'tipo'}."&tipo_nivel3_name=".$obj->{'tipo_nivel3_name'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
+                      $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&titulo=".$obj->{'titulo'}."&tipo=".$obj->{'tipo'}."&tipo_nivel3_name=".$obj->{'tipo_nivel3_name'}."&tipoAccion=".$obj->{'tipoAccion'};
+                      
+                      C4::AR::Utilidades::addParamToUrl($url_todos,"titulo",$obj->{'titulo'});
+                      C4::AR::Utilidades::addParamToUrl($url_todos,"tipo_nivel3_name",$obj->{'tipo_nivel3_name'});
+                      C4::AR::Utilidades::addParamToUrl($url_todos,"tipoAccion",$obj->{'tipoAccion'});
+                      C4::AR::Utilidades::addParamToUrl($url_todos,"isbn",$obj->{'isbn'});
+                      C4::AR::Utilidades::addParamToUrl($url_todos,"tema",$obj->{'tema'});
+                      C4::AR::Utilidades::addParamToUrl($url_todos,"autor",$obj->{'autor'});
+                      
+                      ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
+                }
+        }
 }   else {
+
     $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
     $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'};
     
@@ -117,9 +117,10 @@ if($obj->{'estantes_grupo'}){
 } 
 
 if ($obj->{'estantes'}||$obj->{'estantes_grupo'}){
-    $t_params->{'partial_template'}     = "opac-busquedaEstantes.inc";
-}
-else{
+    
+        $t_params->{'partial_template'}     = "opac-busquedaEstantes.inc";
+
+} else {
     $t_params->{'partial_template'}     = "opac-busquedaResult.inc";
 }
 
@@ -141,5 +142,6 @@ $t_params->{'keyword'}                  = $obj->{'string'};
 $t_params->{'buscoPor'}                 = C4::AR::Busquedas::armarBuscoPor($obj);
 $t_params->{'cantidad'}                 = $cantidad || 0;
 $t_params->{'show_search_details'}      = 1;
+# $t_params->{'url_export_pdf'}= $url_todos;
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
