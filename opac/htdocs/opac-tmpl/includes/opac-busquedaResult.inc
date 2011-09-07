@@ -8,36 +8,66 @@
     $(document).ready(function() {
         $('.fancylink').fancybox();
     });
+
+
+    
+//      function exportarXLS(url){
+//         window.open (url);
+/*
+        objAH                   = new AjaxHelper(updateExportarXLS);
+        objAH.debug             = true;
+        objAH.showOverlay       = true;
+        objAH.url               = URL_PREFIX+"/opac-busquedasDB.pl";
+        objAH.termino_buscado   = $("#termino_buscado").val();
+       
+        objAH.accion            = "EXPORTAR_XLS";
+        objAH.funcion           = "changePage";
+     
+        //se envia la consulta
+        objAH.sendToServer();
+        $('#reporteCreado').show();*/
+//     }
+    
+   
+
+
+
+
 </script>
 [% USE HTML %]
 [% IF show_search_details %]
 
      <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda:" | i18n %] <strong>[% buscoPor | html %]</strong></div>
-  
+     <!-- <input type="hidden" id="termino_buscado" value="[% buscoPor %]">-->
      <div class="resultados_consulta">[% "Cantidad de Registros:" | i18n %] [% cantidad %] en ([% timeSeg %] segundos)</div>
 
      <div class="contenedor_paginador">[% paginador %]</div>
-     [% IF only_available %]
-        <h2 class="advice"> [% ' Solo se muestran ejemplares disponibles.' | i18n %] <a href="[% url_todos %]">([% ' Mostrar todos' | i18n %])</a></h2>
-     [% END %]
+     
+          [% IF only_available %]
+                    
+                      <h2 class="advice"> [% ' Solo se muestran ejemplares disponibles.' | i18n %] <a href="[% url_todos %]">([% ' Mostrar todos' | i18n %])</a></h2>
+          [% END %]
+
 [% END %]
 
 [% IF (cantidad > 0) || ( (!from_suggested) && (suggested) )%]
-    [% FOREACH NIVEL IN SEARCH_RESULTS %]
-        <script type="text/javascript">
-            $(function(){
-                $("#rating[% NIVEL.id1 %]").children().not(":radio").hide();
-                $("#rating[% NIVEL.id1 %]").stars({
-                    cancelShow: false,
-                    split: 2,
-                    disabled: true
-                });
-                $("#rating[% NIVEL.id1 %]").stars("select",[% NIVEL.rating %]);
-            });
-        </script>
+    
+      [% FOREACH NIVEL IN SEARCH_RESULTS %]
+                <script type="text/javascript">
+                    $(function(){
+                        $("#rating[% NIVEL.id1 %]").children().not(":radio").hide();
+                        $("#rating[% NIVEL.id1 %]").stars({
+                            cancelShow: false,
+                            split: 2,
+                            disabled: true
+                        });
+                        $("#rating[% NIVEL.id1 %]").stars("select",[% NIVEL.rating %]);
+                    });
+                </script>
     [% END %]
 
-        [% IF !from_suggested %]
+    [% IF !from_suggested %]
+            
             [% IF suggested %]
                     <div class="suggested_search">
                         <a href="[% url_prefix %]/opac-busquedasDB.pl?string=[% suggested | html %]&tipoAccion=[% tipoAccion | html %]&from_suggested=1&only_available=[% only_available | html %]&token=[% token | html %]">
@@ -45,9 +75,12 @@
                         </a>
                     </div>
             [% END %]
-        [% END %]
+    
+    [% END %]
+    
     [% IF cantidad > 0 %]
-        <table id="tablaResult" class="tabla_datos" cellspacing='0' cellpadding='0' style="text-align:center; width:100%; border:1;">
+        
+          <table id="tablaResult" class="tabla_datos" cellspacing='0' cellpadding='0' style="text-align:center; width:100%; border:1;">
                 <tr class="tablaresultadoTitle" >
                     <th align="center" style="width: 80px;"> 
                         [% "Im&aacute;gen" | i18n %]
@@ -240,9 +273,15 @@
         </table>
         <br />
         <div class="contenedor_paginador">[% paginador %]</div>
-    [% END %]
+
+    
+      <!--  <div class="boton_texto" onclick="exportarXLS('[% url_todos %]')">Exportar XLS</div>-->
+       
+  
+  [% END %]
     <!-- FIX PARA W3C PORQUE NO SE PERMITEN SCRIPT DENTRO DE TABLAS -->
-[% ELSE %]
+  [% ELSE %]
+    
     [% IF no_content_message %]
         <h1> [% no_content_message %] </h1>  
     [% ELSE %]

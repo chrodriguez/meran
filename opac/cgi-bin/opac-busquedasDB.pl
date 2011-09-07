@@ -122,9 +122,10 @@ if  ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
 } 
 
 if ($obj->{'estantes'}||$obj->{'estantes_grupo'}){
-    $t_params->{'partial_template'}     = "opac-busquedaEstantes.inc";
-}
-else{
+    
+        $t_params->{'partial_template'}     = "opac-busquedaEstantes.inc";
+
+} else {
     $t_params->{'partial_template'}     = "opac-busquedaResult.inc";
 }
 
@@ -146,5 +147,6 @@ $t_params->{'keyword'}                  = $obj->{'string'};
 $t_params->{'buscoPor'}                 = (C4::AR::Busquedas::armarBuscoPor($obj));
 $t_params->{'cantidad'}                 = $cantidad || 0;
 $t_params->{'show_search_details'}      = 1;
+# $t_params->{'url_export_pdf'}= $url_todos;
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
