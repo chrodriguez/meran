@@ -146,8 +146,11 @@ elsif($tipo eq "AGREGAR_ESTANTE"){
                                                     entorno => 'undefined' },
                                                 'intranet'
                                );
-
+use Encode;
     my $valor= $obj->{'estante'};
+    C4::AR::Debug::debug("valor como viene : ".$valor);
+    C4::AR::Debug::debug("valor decodeado : ".utf8::decode($valor));
+    C4::AR::Debug::debug("decodeado desde ISO : ".decode("iso-8859-1",$valor));
     ($Messages_arrayref)= &C4::AR::Estantes::agregarEstante($valor);
 
     my $infoOperacionJSON=to_json $Messages_arrayref;
