@@ -11,7 +11,9 @@
 
 
     
-//      function exportarXLS(url){
+     function exportarXLS(url){
+        alert(url)
+}
 //         window.open (url);
 /*
         objAH                   = new AjaxHelper(updateExportarXLS);
@@ -274,9 +276,35 @@
         <br />
         <div class="contenedor_paginador">[% paginador %]</div>
 
-    
-      <!--  <div class="boton_texto" onclick="exportarXLS('[% url_todos %]')">Exportar XLS</div>-->
-       
+        <form id="exportPDF" action="[% url_prefix %]/opac-busquedasResult_XLS.pl?token=[% token %]"  accept-charset="utf-8">
+                
+                <input type="hidden" name="export" value="pdf" />
+                <input type="hidden" name="string" value="[% param_string %]" />
+                <input type="hidden" name="tipo_accion" value="[% param_tipoAccion %]" />
+                <input type="hidden" name="titulo" value="[% param_titulo %]" />
+                <input type="hidden" name="autor" value="[% param_autor %]" />
+                <input type="hidden" name="isbn" value="[% param_isbn %]" />   
+                <input type="hidden" name="estantes" value="[% param_estantes%]"/>
+                <input type="hidden" name="estantes_grupo"  value="[% param_estantes_grupo %]"/>
+                <input type="hidden" name="tema"  value="[% param_tema %]" />
+                <input type="hidden" name="tipo" value="[% param_tipo %]"/>
+                <input type="hidden" name="only_available"  value="[% param_onlyAvailable %]" />
+                <input type="hidden" name="tipo_nivel3_name" value="[% param_tipoNivel3Name %]" />
+                <input type="hidden" name="hide_legajo"  value="[% param_isbn %]" />
+                <input type="hidden" name="token"  value="[% param_token %]" />
+   
+        </form>
+        <div class="buttonContainerHorizontal">
+                [% PERL %]
+                    print C4::AR::Filtros::to_Button( 
+                                                        text    =>  "[% 'Exportar a PDF' | i18n %]",
+                                                        boton   =>  "boton_buscar",
+                                                        onClick =>  "submitForm('exportPDF');",
+                            ) ;
+                [% END %]
+        </div>
+
+      
   
   [% END %]
     <!-- FIX PARA W3C PORQUE NO SE PERMITEN SCRIPT DENTRO DE TABLAS -->
