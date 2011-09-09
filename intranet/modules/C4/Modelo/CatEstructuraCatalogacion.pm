@@ -8,25 +8,25 @@ __PACKAGE__->meta->setup(
     table   => 'cat_estructura_catalogacion',
 
     columns => [
-        id                  => { type => 'serial', not_null => 1 },
-        campo               => { type => 'character', length => 3, not_null => 1 },
-        subcampo            => { type => 'character', length => 1, not_null => 1 },
+        id                  => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        campo               => { type => 'character', overflow => 'truncate', length => 3, not_null => 1 },
+        subcampo            => { type => 'character', overflow => 'truncate', length => 1, not_null => 1 },
         itemtype            => { type => 'varchar', overflow => 'truncate', length => 4, not_null => 1 },
         liblibrarian        => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         rules               => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 0 },
         tipo                => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
-        referencia          => { type => 'integer', default => '0', not_null => 1 },
-        nivel               => { type => 'integer', not_null => 1 },
-        obligatorio         => { type => 'integer', default => '0', not_null => 1 },
-        intranet_habilitado => { type => 'integer', default => '1' },
-        visible             => { type => 'integer', default => 1, not_null => 1 },
-        edicion_grupal      => { type => 'integer', default => 1, not_null => 1 },
-#         repetible           => { type => 'integer', default => 1},
-        idinforef           => { type => 'integer', length => 11, not_null => 0 },
+        referencia          => { type => 'integer', overflow => 'truncate', default => '0', not_null => 1 },
+        nivel               => { type => 'integer', overflow => 'truncate', not_null => 1 },
+        obligatorio         => { type => 'integer', overflow => 'truncate', default => '0', not_null => 1 },
+        intranet_habilitado => { type => 'integer', overflow => 'truncate', default => '1' },
+        visible             => { type => 'integer', overflow => 'truncate', default => 1, not_null => 1 },
+        edicion_grupal      => { type => 'integer', overflow => 'truncate', default => 1, not_null => 1 },
+#         repetible           => { type => 'integer', overflow => 'truncate', default => 1},
+        idinforef           => { type => 'integer', overflow => 'truncate', length => 11, not_null => 0 },
 # NO SE USA MAS, AL USAR MARC_RECORD
-#         grupo               => { type => 'integer', length => 11, not_null => 0 },
+#         grupo               => { type => 'integer', overflow => 'truncate', length => 11, not_null => 0 },
         idCompCliente       => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
-        fijo                => { type => 'integer', length => 1, not_null => 1 },  #modificable = 0 / no modificable = 1
+        fijo                => { type => 'integer', overflow => 'truncate', length => 1, not_null => 1 },  #modificable = 0 / no modificable = 1
     ],
 
     

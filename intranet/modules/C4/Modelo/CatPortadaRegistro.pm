@@ -8,7 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'cat_portada_registro',
 
     columns => [
-        id       => { type => 'serial'},
+        id       => { type => 'serial', overflow => 'truncate'},
         isbn => { type => 'varchar', overflow => 'truncate', length => 50,not_null => 1},
         small => { type => 'varchar', overflow => 'truncate', length => 500},
         medium => { type => 'varchar', overflow => 'truncate', length => 500},

@@ -14,9 +14,9 @@ __PACKAGE__->meta->setup(
 
     columns => [  
 
-          id                    => { type => 'integer', not_null => 1 },  
-          adq_recomendacion_id  => { type => 'integer', not_null => 1 },  
-          cat_nivel2_id         => { type => 'integer', not_null => 1 },
+          id                    => { type => 'integer', overflow => 'truncate', not_null => 1 },  
+          adq_recomendacion_id  => { type => 'integer', overflow => 'truncate', not_null => 1 },  
+          cat_nivel2_id         => { type => 'integer', overflow => 'truncate', not_null => 1 },
           autor                 => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1},
           titulo                => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1},
           lugar_publicacion     => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1},
@@ -24,10 +24,10 @@ __PACKAGE__->meta->setup(
           fecha_publicacion     => { type => 'varchar', overflow => 'truncate'},
           coleccion             => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1},
           isbn_issn             => { type => 'varchar', overflow => 'truncate', length => 45, not_null => 1},
-          cantidad_ejemplares   => { type => 'integer', length => 5, not_null => 1 },  
+          cantidad_ejemplares   => { type => 'integer', overflow => 'truncate', length => 5, not_null => 1 },  
           motivo_propuesta      => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1},
           comentario            => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1},
-          reserva_material      => { type => 'integer', not_null => 1 },
+          reserva_material      => { type => 'integer', overflow => 'truncate', not_null => 1 },
         
     ],
 

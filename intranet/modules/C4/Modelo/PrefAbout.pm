@@ -8,8 +8,8 @@ __PACKAGE__->meta->setup(
     table   => 'pref_about',
 
     columns => [
-        id              => { type => 'int', length => 11, not_null => 1 },
-        descripcion     => { type => 'text', length => 65535 },
+        id              => { type => 'int', overflow => 'truncate', length => 11, not_null => 1 },
+        descripcion     => { type => 'text', overflow => 'truncate', length => 65535 },
     ],
 
     primary_key_columns => [ 'id' ],

@@ -14,7 +14,7 @@ __PACKAGE__->meta->setup(
         nroRandom    => { type => 'varchar', overflow => 'truncate', length => 255 },
 		token    => { type => 'varchar', overflow => 'truncate', length => 255 },
         ip        => { type => 'varchar', overflow => 'truncate', length => 16 },
-        lasttime  => { type => 'integer', length => 11 },
+        lasttime  => { type => 'integer', overflow => 'truncate', length => 11 },
         flag  => { type => 'varchar', overflow => 'truncate', length => 255 },
     ],
 

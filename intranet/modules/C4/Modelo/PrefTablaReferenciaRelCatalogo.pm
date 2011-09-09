@@ -8,7 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'pref_tabla_referencia_rel_catalogo',
 
     columns => [
-        id              => { type => 'serial'},
+        id              => { type => 'serial', overflow => 'truncate'},
         alias_tabla     => { type => 'varchar', overflow => 'truncate', length => 32, not_null => 1 },
         tabla_referente => { type => 'varchar', overflow => 'truncate', length => 32, not_null => 1 },
         campo_referente => { type => 'varchar', overflow => 'truncate', length => 32, not_null => 1 },

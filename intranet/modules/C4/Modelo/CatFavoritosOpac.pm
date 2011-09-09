@@ -9,7 +9,7 @@ __PACKAGE__->meta->setup(
 
     columns => [
         nro_socio     => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 16 },
-        id1           => { type => 'integer', not_null => 1, length => 11 },
+        id1           => { type => 'integer', overflow => 'truncate', not_null => 1, length => 11 },
     ],
 
     primary_key_columns => [ 'nro_socio','id1' ],

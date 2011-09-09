@@ -8,11 +8,11 @@ __PACKAGE__->meta->setup(
     table   => 'pref_preferencia_sistema',
 
     columns => [
-        id          => { type => 'serial' },
+        id          => { type => 'serial', overflow => 'truncate' },
         variable    => { type => 'varchar', overflow => 'truncate', length => 50, not_null => 1 },
-        value       => { type => 'text', length => 65535 },
+        value       => { type => 'text', overflow => 'truncate', length => 65535 },
         explanation => { type => 'varchar', overflow => 'truncate', default => '', length => 255, not_null => 1 },
-        options     => { type => 'text', length => 65535 },
+        options     => { type => 'text', overflow => 'truncate', length => 65535 },
         type        => { type => 'varchar', overflow => 'truncate', length => 20 },
         categoria   => { type => 'varchar', overflow => 'truncate', length => 20 },
     ],

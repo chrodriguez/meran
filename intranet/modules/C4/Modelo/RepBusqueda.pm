@@ -8,10 +8,10 @@ __PACKAGE__->meta->setup(
     table   => 'rep_busqueda',
 
     columns => [
-        idBusqueda      => { type => 'serial', not_null => 1 },
+        idBusqueda      => { type => 'serial', overflow => 'truncate', not_null => 1 },
         nro_socio       => { type => 'varchar', overflow => 'truncate' , length => 16},
         fecha           => { type => 'varchar', overflow => 'truncate', length => 32, not_null => 1 },
-        categoria_socio => { type => 'char', not_null => 1 , length => 2},
+        categoria_socio => { type => 'char', overflow => 'truncate', not_null => 1 , length => 2},
         agregacion_temp => { type => 'varchar', overflow => 'truncate' , length => 255},
         
     ],

@@ -23,7 +23,7 @@ __PACKAGE__->meta->setup(
         usuarios => { type => 'varchar', overflow => 'truncate', length => 8, not_null => 1 },
         sistema => { type => 'varchar', overflow => 'truncate', length => 8, not_null => 1 },
         undefined => { type => 'varchar', overflow => 'truncate', length => 8, not_null => 1 },
-        id => { type => 'integer', length => 11, not_null => 1 }
+        id => { type => 'integer', overflow => 'truncate', length => 11, not_null => 1 }
     ],
 
     primary_key_columns => [ 'nro_socio','ui','tipo_documento' ],

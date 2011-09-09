@@ -10,7 +10,7 @@ __PACKAGE__->meta->setup(
 
     columns => [
         nro_socio    => { type => 'varchar', overflow => 'truncate', length => 16, not_null => 1, overflow => 'truncate' },
-        attempts     => { type => 'integer', length => 32, default => 0, overflow => 'truncate' },
+        attempts     => { type => 'integer', overflow => 'truncate', length => 32, default => 0, overflow => 'truncate' },
     ],
 
     primary_key_columns => [ 'nro_socio' ],

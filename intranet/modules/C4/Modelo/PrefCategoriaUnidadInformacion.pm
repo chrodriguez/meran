@@ -9,8 +9,8 @@ __PACKAGE__->meta->setup(
 
     columns => [
         categorycode    => { type => 'varchar', overflow => 'truncate', length => 4, not_null => 1 },
-        categoryname    => { type => 'text', length => 65535 },
-        codedescription => { type => 'text', length => 65535 },
+        categoryname    => { type => 'text', overflow => 'truncate', length => 65535 },
+        codedescription => { type => 'text', overflow => 'truncate', length => 65535 },
     ],
 
     primary_key_columns => [ 'categorycode' ],

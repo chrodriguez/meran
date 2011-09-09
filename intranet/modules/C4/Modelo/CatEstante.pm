@@ -8,10 +8,10 @@ __PACKAGE__->meta->setup(
     table   => 'cat_estante',
 
     columns => [
-        id        => { type => 'integer', not_null => 1 },
+        id        => { type => 'integer', overflow => 'truncate', not_null => 1 },
         estante   => { type => 'varchar', overflow => 'truncate', length => 255 },
         tipo      => { type => 'varchar', overflow => 'truncate', length => 255 },
-        padre     => { type => 'integer', default => '0', not_null => 1 },
+        padre     => { type => 'integer', overflow => 'truncate', default => '0', not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],

@@ -11,7 +11,7 @@ __PACKAGE__->meta->setup(
         id                  => { type => 'varchar', overflow => 'truncate', length => 11, not_null => 1 },
         NOMBRE              => { type => 'varchar', overflow => 'truncate', length => 60 },
         ref_provincia_id    => { type => 'varchar', overflow => 'truncate', length => 11 },
-        ESTADO              => { type => 'character', length => 1 },
+        ESTADO              => { type => 'character', overflow => 'truncate', length => 1 },
     ],
 
     primary_key_columns => [ 'DPTO_PARTIDO' ],

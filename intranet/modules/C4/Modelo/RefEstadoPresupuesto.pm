@@ -13,7 +13,7 @@ __PACKAGE__->meta->setup(
     table   => 'ref_estado_presupuesto',
 
     columns => [
-        id                              => { type => 'integer', not_null => 1 },
+        id                              => { type => 'integer', overflow => 'truncate', not_null => 1 },
         nombre                          => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1},
     ],
 

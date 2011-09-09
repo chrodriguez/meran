@@ -8,10 +8,10 @@ __PACKAGE__->meta->setup(
     table   => 'rep_historial_circulacion',
 
     columns => [
-        id             => { type => 'serial', not_null => 1 },
-        id1            => { type => 'integer', not_null => 1 },
-        id2            => { type => 'integer', not_null => 1 },
-        id3            => { type => 'integer', not_null => 1 },
+        id             => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        id1            => { type => 'integer', overflow => 'truncate', not_null => 1 },
+        id2            => { type => 'integer', overflow => 'truncate', not_null => 1 },
+        id3            => { type => 'integer', overflow => 'truncate', not_null => 1 },
         tipo_operacion => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         nro_socio      => { type => 'varchar', overflow => 'truncate', length => 16, default => '0', not_null => 1 },
         responsable    => { type => 'varchar', overflow => 'truncate', length => 16, not_null => 1 },
@@ -20,7 +20,7 @@ __PACKAGE__->meta->setup(
         fecha          => { type => 'varchar', overflow => 'truncate', not_null => 1 },
         nota           => { type => 'varchar', overflow => 'truncate', length => 255 },
         fecha_fin      => { type => 'varchar', overflow => 'truncate' },
-        tipo_prestamo  => { type => 'character', length => 2 },
+        tipo_prestamo  => { type => 'character', overflow => 'truncate', length => 2 },
     ],
 
     relationships =>

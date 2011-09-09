@@ -8,7 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'contacto',
 
     columns => [
-        id                    => { type => 'serial', not_null => 1 },
+        id                    => { type => 'serial', overflow => 'truncate', not_null => 1 },
         trato          => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         nombre         => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         apellido       => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
@@ -19,9 +19,9 @@ __PACKAGE__->meta->setup(
         telefono       => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 0 },
         email          => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         asunto         => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
-        mensaje        => { type => 'text', not_null => 1 },
+        mensaje        => { type => 'text', overflow => 'truncate', not_null => 1 },
         fecha          => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 0 },
-        leido          => { type => 'integer', not_null => 1, default => 0 },
+        leido          => { type => 'integer', overflow => 'truncate', not_null => 1, default => 0 },
     ],
     primary_key_columns => [ 'id' ],
 );

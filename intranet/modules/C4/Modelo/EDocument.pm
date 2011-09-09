@@ -22,10 +22,10 @@ __PACKAGE__->meta->setup(
     table   => 'e_document',
 
     columns => [
-        id              => { type => 'serial', length => 11, },
+        id              => { type => 'serial', overflow => 'truncate', length => 11, },
         filename        => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         title           => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
-        id2             => { type => 'int', length => 11, not_null => 1 },
+        id2             => { type => 'int', overflow => 'truncate', length => 11, not_null => 1 },
         file_type       => { type => 'varchar', overflow => 'truncate', length => 64, not_null => 1, default=>"pdf" },
     ],
 

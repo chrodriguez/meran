@@ -9,9 +9,9 @@ __PACKAGE__->meta->setup(
 
     columns => [
         nro_socio     => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 32 },
-        id2           => { type => 'integer', not_null => 1, length => 11 },
+        id2           => { type => 'integer', overflow => 'truncate', not_null => 1, length => 11 },
         rate          => { type => 'float', not_null => 0, },
-        review        => { type => 'text' },
+        review        => { type => 'text', overflow => 'truncate' },
     ],
 
     primary_key_columns => [ 'nro_socio','id2' ],

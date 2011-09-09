@@ -8,7 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'adq_forma_envio',
 
     columns => [
-        id      => { type => 'integer', length => 11, not_null => 1 },
+        id      => { type => 'integer', overflow => 'truncate', length => 11, not_null => 1 },
         nombre  => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1},
     ],
 

@@ -8,7 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'cat_pref_mapeo_koha_marc',
 
     columns => [
-        idmap      => { type => 'serial', not_null => 1 },
+        idmap      => { type => 'serial', overflow => 'truncate', not_null => 1 },
         tabla      => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         campoTabla => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         nombre     => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },

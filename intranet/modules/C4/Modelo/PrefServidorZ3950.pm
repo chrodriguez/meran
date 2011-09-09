@@ -11,13 +11,13 @@ __PACKAGE__->meta->setup(
 
     columns => [
         servidor    => { type => 'varchar', overflow => 'truncate', length => 255 },
-        puerto      => { type => 'integer' },
+        puerto      => { type => 'integer', overflow => 'truncate' },
         base        => { type => 'varchar', overflow => 'truncate', length => 255 },
         usuario     => { type => 'varchar', overflow => 'truncate', length => 255 },
         password    => { type => 'varchar', overflow => 'truncate', length => 255 },
-        nombre      => { type => 'text', length => 65535 },
-        id          => { type => 'serial', not_null => 1 },
-        habilitado  => { type => 'integer', not_null => 1 },
+        nombre      => { type => 'text', overflow => 'truncate', length => 65535 },
+        id          => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        habilitado  => { type => 'integer', overflow => 'truncate', not_null => 1 },
         sintaxis    => { type => 'varchar', overflow => 'truncate', length => 80 },
     ],
 

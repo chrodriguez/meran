@@ -8,8 +8,8 @@ __PACKAGE__->meta->setup(
     table   => 'rep_historial_busqueda',
 
     columns => [
-        idHistorial        => { type => 'serial', not_null => 1 },
-        idBusqueda         => { type => 'integer', not_null => 1 },
+        idHistorial        => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        idBusqueda         => { type => 'integer', overflow => 'truncate', not_null => 1 },
         campo              => { type => 'varchar', overflow => 'truncate', length => 100, not_null => 1 },
         valor              => { type => 'varchar', overflow => 'truncate', length => 100, not_null => 1 },
         tipo               => { type => 'varchar', overflow => 'truncate', length => 10 },

@@ -8,7 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'pref_feriado',
 
     columns => [
-        id               => { type => 'serial', not_null => 1 },
+        id               => { type => 'serial', overflow => 'truncate', not_null => 1 },
         fecha            => { type => 'varchar', overflow => 'truncate', default => '0000-00-00', length => 10, not_null => 1 },
         feriado          => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 0 },
     ],

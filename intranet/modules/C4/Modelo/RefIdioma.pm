@@ -8,8 +8,8 @@ __PACKAGE__->meta->setup(
     table   => 'ref_idioma',
 
     columns => [
-        id                    => { type => 'serial', not_null => 1 },
-        idLanguage   => { type => 'character',length => 2 ,not_null => 1 },
+        id                    => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        idLanguage   => { type => 'character', overflow => 'truncate',length => 2 ,not_null => 1 },
         description  => { type => 'varchar', overflow => 'truncate', length => 30, not_null => 1 },
     ],
 

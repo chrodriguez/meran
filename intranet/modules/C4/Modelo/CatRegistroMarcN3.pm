@@ -26,10 +26,10 @@ __PACKAGE__->meta->setup(
     table   => 'cat_registro_marc_n3',
 
     columns => [
-        id                      => { type => 'serial', not_null => 1 },
-        marc_record             => { type => 'text' },
-        id1                     => { type => 'integer', not_null => 1 },
-        id2                     => { type => 'integer', not_null => 1 },
+        id                      => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        marc_record             => { type => 'text', overflow => 'truncate' },
+        id1                     => { type => 'integer', overflow => 'truncate', not_null => 1 },
+        id2                     => { type => 'integer', overflow => 'truncate', not_null => 1 },
         codigo_barra            => { type => 'varchar', overflow => 'truncate' },
         signatura               => { type => 'varchar', overflow => 'truncate' },
         updated_at              => { type => 'timestamp', not_null => 1 },

@@ -8,8 +8,8 @@ __PACKAGE__->meta->setup(
     table   => 'circ_tipo_prestamo_sancion',
 
     columns => [
-        tipo_sancion    => { type => 'integer', not_null => 1 },
-        tipo_prestamo   => { type => 'character', length => 2, not_null => 1 }
+        tipo_sancion    => { type => 'integer', overflow => 'truncate', not_null => 1 },
+        tipo_prestamo   => { type => 'character', overflow => 'truncate', length => 2, not_null => 1 }
     ],
 
     primary_key_columns => [ 'tipo_sancion', 'tipo_prestamo' ],

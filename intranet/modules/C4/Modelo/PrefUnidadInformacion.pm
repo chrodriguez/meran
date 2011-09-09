@@ -8,7 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'pref_unidad_informacion',
 
     columns => [
-        id                  => { type => 'serial'},
+        id                  => { type => 'serial', overflow => 'truncate'},
         id_ui               => { type => 'varchar', overflow => 'truncate', not_null => 1 , length => 4},
         nombre              => { type => 'varchar', overflow => 'truncate', not_null => 1 , length => 255},
         ciudad              => { type => 'varchar', overflow => 'truncate', not_null => 1 , length => 255, default => "La Plata"},

@@ -8,7 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'pref_tabla_referencia',
 
     columns => [
-        id                  => { type => 'serial'},
+        id                  => { type => 'serial', overflow => 'truncate'},
         nombre_tabla        => { type => 'varchar', overflow => 'truncate', length => 40, not_null => 1 },
         alias_tabla         => { type => 'varchar', overflow => 'truncate', length => 20, not_null => 1 },
         campo_busqueda      => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },

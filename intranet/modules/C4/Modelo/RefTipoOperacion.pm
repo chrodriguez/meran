@@ -8,7 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'ref_tipo_operacion',
 
     columns => [
-        id => { type => 'serial', not_null => 1 },
+        id => { type => 'serial', overflow => 'truncate', not_null => 1 },
         descripcion => { type => 'varchar', overflow => 'truncate', length => 40, not_null => 1 },
     ],
 

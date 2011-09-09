@@ -9,7 +9,7 @@ __PACKAGE__->meta->setup(
 
 
     columns => [
-        id                    => { type => 'serial', not_null => 1 },
+        id                    => { type => 'serial', overflow => 'truncate', not_null => 1 },
         LOCALIDAD             => { type => 'varchar', overflow => 'truncate', length => 11, not_null => 1 },
         NOMBRE                => { type => 'varchar', overflow => 'truncate', length => 100 },
         NOMBRE_ABREVIADO      => { type => 'varchar', overflow => 'truncate', length => 40 },

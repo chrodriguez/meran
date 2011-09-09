@@ -8,7 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'rep_historial_sancion',
 
     columns => [
-        id                    => { type => 'serial', not_null => 1 },
+        id                    => { type => 'serial', overflow => 'truncate', not_null => 1 },
         tipo_operacion        => { type => 'varchar', overflow => 'truncate', default => '', length => 50, not_null => 1 },
         nro_socio		      => { type => 'varchar', overflow => 'truncate', length => 16, not_null => 1 },
         responsable           => { type => 'varchar', overflow => 'truncate', length => 16, not_null => 1 },
@@ -16,9 +16,9 @@ __PACKAGE__->meta->setup(
         fecha                 => { type => 'varchar', overflow => 'truncate', default => '0000-00-00', not_null => 1 },
         fecha_comienzo        => { type => 'varchar', overflow => 'truncate' },
         fecha_final           => { type => 'varchar', overflow => 'truncate' },
-        tipo_sancion          => { type => 'integer', default => '0' },
-        dias_sancion          => { type => 'integer', default => '0' },
-        id3                   => { type => 'integer' },
+        tipo_sancion          => { type => 'integer', overflow => 'truncate', default => '0' },
+        dias_sancion          => { type => 'integer', overflow => 'truncate', default => '0' },
+        id3                   => { type => 'integer', overflow => 'truncate' },
     ],
 
     primary_key_columns => [ 'id' ],

@@ -12,7 +12,7 @@ __PACKAGE__->meta->setup(
     table   => 'adq_ref_tipo_recomendacion',
 
     columns => [
-        id                              => { type => 'integer', not_null => 1 },
+        id                              => { type => 'integer', overflow => 'truncate', not_null => 1 },
         tipo_recomendacion              => { type => 'varchar', overflow => 'truncate',length => 255, not_null => 1},
     ],
 
