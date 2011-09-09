@@ -13,11 +13,11 @@ __PACKAGE__->meta->setup(
     table   => 'adq_recomendacion',
 
     columns => [
-        id                                  => { type => 'integer', not_null => 1 },
-        usr_socio_id                        => { type => 'integer', not_null => 1},
-        fecha                               => { type => 'varchar', length => 255, not_null => 1},
-        activa                              => { type => 'integer', length => 4, not_null => 1},
-        adq_ref_tipo_recomendacion_id       => { type => 'varchar', length => 50,not_null => 1},
+        id                                  => { type => 'integer', overflow => 'truncate', not_null => 1 },
+        usr_socio_id                        => { type => 'integer', overflow => 'truncate', not_null => 1},
+        fecha                               => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1},
+        activa                              => { type => 'integer', overflow => 'truncate', length => 4, not_null => 1},
+        adq_ref_tipo_recomendacion_id       => { type => 'varchar', overflow => 'truncate', length => 50,not_null => 1},
     ],
 
 

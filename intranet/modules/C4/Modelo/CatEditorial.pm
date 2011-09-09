@@ -7,8 +7,8 @@ __PACKAGE__->meta->setup(
     table   => 'cat_editorial',
 
     columns => [
-        id          => { type => 'serial', not_null => 1 },
-        editorial   => { type => 'text', length => 255, not_null => 1 },
+        id          => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        editorial   => { type => 'text', overflow => 'truncate', length => 255, not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],

@@ -1251,7 +1251,7 @@ sub busquedaCombinada_newTemp{
     }
 
     if (!$only_sphinx){
-        $sphinx->SetLimits($obj_for_log->{'ini'}, $obj_for_log->{'cantR'});
+        $sphinx->SetLimits($obj_for_log->{'ini'}, $obj_for_log->{'cantR'},100000);
     }
   
     C4::AR::Debug::debug("C4::AR::Busquedas::busquedaCombinada_newTemp => ini => ".$obj_for_log->{'ini'});

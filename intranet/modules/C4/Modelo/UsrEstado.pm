@@ -12,10 +12,10 @@ __PACKAGE__->meta->setup
   (
     table   => 'usr_estado',
     columns => [
-        id_estado        => { type => 'serial', not_null => 1, length => 11 },
-        regular          => { type => 'integer', not_null => 1, length => 1 },
-        categoria        => { type => 'character', length => 2, not_null => 1 },
-        fuente           => { type => 'varchar', length => 255, not_null => 1 },
+        id_estado        => { type => 'serial', overflow => 'truncate', not_null => 1, length => 11 },
+        regular          => { type => 'integer', overflow => 'truncate', not_null => 1, length => 1 },
+        categoria        => { type => 'character', overflow => 'truncate', length => 2, not_null => 1 },
+        fuente           => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
     ],
 
     primary_key_columns => [ 'id_estado' ],

@@ -317,7 +317,7 @@ sub proximosHabiles{
 	my $apertura=C4::AR::Preferencias::getValorPreferencia("open");
 	my $cierre=C4::AR::Preferencias::getValorPreferencia("close");
 	my ($actual,$min,$hora)= localtime;
-	$actual=($hora+2).':'.$min;
+	$actual=($hora).':'.$min;
 	Date_Init("WorkDayBeg=".$apertura,"WorkDayEnd=".$cierre);
     Date_Init("WorkWeekBeg=1","WorkWeekEnd=5");
 
@@ -336,7 +336,6 @@ sub proximosHabiles{
 	   $desde = Date_NextWorkDay($desde);
 	}elsif ( ($apertura gt $actual) || ($cierre gt $actual) ){
 		$desde = $hoy;
-		$cantidad--;
 	}elsif (($cierre lt $actual)){
 		$desde = Date_NextWorkDay($desde,1); 
 	}
@@ -347,12 +346,14 @@ sub proximosHabiles{
 #Los dias Habiles se contolan desde el archivo .DateManip.pm que lee el modulo Date.pm, habria que ver como esquematizarlo
 		
 		$hasta=DateCalc($desde,"+ ".$cantidad. " days",\$err,2);
+C4::AR::Debug::debug("_______________________________________DESDE __________________________________ ".$desde);
+C4::AR::Debug::debug("_______________________________________HASTA CANT______________________________ ".$cantidad);
+C4::AR::Debug::debug("_______________________________________HASTA___________________________________ ".$hasta);
 	}else{
 #esto es si no importa quetodos los dias del periodo sean habiles, los que deben ser habiles son el 1ero y el ultimo		
 		   $hasta = DateCalc($desde,"+ ".$cantidad. " days",\$err);  
 		   $hasta = Date_NextWorkDay($hasta,$cantidad);
 	}
-
 
 	my $dateformat= C4::Date::get_date_format();
 	#Damian- 26/03/2007 ----Agregado para que se sume un dia si es feriado el ultimo dia.

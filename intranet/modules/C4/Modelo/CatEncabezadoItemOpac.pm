@@ -8,8 +8,8 @@ __PACKAGE__->meta->setup(
     table   => 'cat_encabezado_item_opac',
 
     columns => [
-        idencabezado => { type => 'integer', not_null => 1 },
-        itemtype     => { type => 'varchar', length => 4, not_null => 1 },
+        idencabezado => { type => 'integer', overflow => 'truncate', not_null => 1 },
+        itemtype     => { type => 'varchar', overflow => 'truncate', length => 4, not_null => 1 },
     ],
 
     primary_key_columns => [ 'idencabezado', 'itemtype' ],

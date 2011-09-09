@@ -8,11 +8,11 @@ __PACKAGE__->meta->setup(
     table   => 'cat_historico_disponibilidad',
 
     columns => [
-         id_detalle     => { type => 'serial', not_null => 1 },
-         id3            => { type => 'integer', length => 11, not_null => 1 },
-         detalle        => { type => 'varchar', length => 30, not_null => 1 },
+         id_detalle     => { type => 'serial', overflow => 'truncate', not_null => 1 },
+         id3            => { type => 'integer', overflow => 'truncate', length => 11, not_null => 1 },
+         detalle        => { type => 'varchar', overflow => 'truncate', length => 30, not_null => 1 },
          timestamp      => { type => 'timestamp', not_null => 1 },
-         tipo_prestamo  => { type => 'varchar', length => 40, not_null => 1},
+         tipo_prestamo  => { type => 'varchar', overflow => 'truncate', length => 40, not_null => 1},
     ],
 
     primary_key_columns => ['id_detalle'],

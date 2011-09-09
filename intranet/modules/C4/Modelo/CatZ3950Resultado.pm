@@ -8,10 +8,10 @@ __PACKAGE__->meta->setup(
     table   => 'cat_z3950_resultado',
 
     columns => [
-        id              => { type => 'serial', not_null => 1 },
-        servidor_id     => { type => 'serial', not_null => 1 },
-        registro       => { type => 'text', default => 0},
-        cola_id         => { type => 'serial', not_null => 1 },
+        id              => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        servidor_id     => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        registro       => { type => 'text', overflow => 'truncate', default => 0},
+        cola_id         => { type => 'serial', overflow => 'truncate', not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],

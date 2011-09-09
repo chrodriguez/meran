@@ -8,14 +8,14 @@ __PACKAGE__->meta->setup(
     table   => 'rep_registro_modificacion',
 
     columns => [
-        idModificacion  => { type => 'serial', not_null => 1 },
-        operacion       => { type => 'varchar', length => 15 },
+        idModificacion  => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        operacion       => { type => 'varchar', overflow => 'truncate', length => 15 },
         fecha           => { type => 'date' },
-        responsable     => { type => 'varchar', length => 16, not_null => 1 },
-        nota            => { type => 'text' },
-        tipo            => { type => 'varchar', length => 15 },
+        responsable     => { type => 'varchar', overflow => 'truncate', length => 16, not_null => 1 },
+        nota            => { type => 'text', overflow => 'truncate' },
+        tipo            => { type => 'varchar', overflow => 'truncate', length => 15 },
         timestamp       => { type => 'timestamp', not_null => 1 },
-        agregacion_temp => { type => 'varchar', length => 255 },
+        agregacion_temp => { type => 'varchar', overflow => 'truncate', length => 255 },
     ],
 
     primary_key_columns => [ 'idModificacion' ],

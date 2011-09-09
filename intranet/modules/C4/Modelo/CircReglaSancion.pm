@@ -8,9 +8,9 @@ __PACKAGE__->meta->setup(
     table   => 'circ_regla_sancion',
 
     columns => [
-        regla_sancion => { type => 'serial', not_null => 1 },
-        dias_sancion     => { type => 'integer', default => '0', not_null => 1 },
-        dias_demora        => { type => 'integer', default => '0', not_null => 1 },
+        regla_sancion => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        dias_sancion     => { type => 'integer', overflow => 'truncate', default => '0', not_null => 1 },
+        dias_demora        => { type => 'integer', overflow => 'truncate', default => '0', not_null => 1 },
     ],
 
     primary_key_columns => [ 'regla_sancion' ],

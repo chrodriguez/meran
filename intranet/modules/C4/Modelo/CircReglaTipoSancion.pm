@@ -7,10 +7,10 @@ __PACKAGE__->meta->setup(
     table   => 'circ_regla_tipo_sancion',
 
     columns => [
-        tipo_sancion     => { type => 'integer', not_null => 1 },
-        regla_sancion    => { type => 'integer', not_null => 1 },
-        orden            => { type => 'integer', default => 1, not_null => 1 },
-        cantidad         => { type => 'integer', default => 1, not_null => 1 },
+        tipo_sancion     => { type => 'integer', overflow => 'truncate', not_null => 1 },
+        regla_sancion    => { type => 'integer', overflow => 'truncate', not_null => 1 },
+        orden            => { type => 'integer', overflow => 'truncate', default => 1, not_null => 1 },
+        cantidad         => { type => 'integer', overflow => 'truncate', default => 1, not_null => 1 },
     ],
 
     primary_key_columns => [ 'tipo_sancion', 'regla_sancion' ],

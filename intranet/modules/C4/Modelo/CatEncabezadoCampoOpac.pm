@@ -9,12 +9,12 @@ __PACKAGE__->meta->setup(
     table   => 'cat_encabezado_campo_opac',
 
     columns => [
-        idencabezado => { type => 'serial', not_null => 1 },
-        nombre       => { type => 'varchar', length => 255, not_null => 1 },
-        orden        => { type => 'integer', not_null => 1 },
-        linea        => { type => 'integer', default => '0', not_null => 1 },
-		visible      => { type => 'integer', default => '1', not_null => 1 },
-        nivel        => { type => 'integer', not_null => 1 },
+        idencabezado => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        nombre       => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
+        orden        => { type => 'integer', overflow => 'truncate', not_null => 1 },
+        linea        => { type => 'integer', overflow => 'truncate', default => '0', not_null => 1 },
+		visible      => { type => 'integer', overflow => 'truncate', default => '1', not_null => 1 },
+        nivel        => { type => 'integer', overflow => 'truncate', not_null => 1 },
     ],
 
     primary_key_columns => [ 'idencabezado' ],
@@ -34,10 +34,10 @@ __PACKAGE__->meta->setup(
 
 # TODO
 =item
-  orden        => { type => 'integer', not_null => 1 },
-        linea        => { type => 'integer', default => '0', not_null => 1 },
-        visible      => { type => 'integer', default => '1', not_null => 1 },
-        nivel        => { type => 'integer', not_null => 1 },
+  orden        => { type => 'integer', overflow => 'truncate', not_null => 1 },
+        linea        => { type => 'integer', overflow => 'truncate', default => '0', not_null => 1 },
+        visible      => { type => 'integer', overflow => 'truncate', default => '1', not_null => 1 },
+        nivel        => { type => 'integer', overflow => 'truncate', not_null => 1 },
 =cut
 # va en la tabla cat_encabezado_item_opac, pq si se le configura a un encabezado q sea visible, será para todos los tipos de items
 

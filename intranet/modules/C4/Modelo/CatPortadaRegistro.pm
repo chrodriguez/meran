@@ -8,11 +8,11 @@ __PACKAGE__->meta->setup(
     table   => 'cat_portada_registro',
 
     columns => [
-        id       => { type => 'serial'},
-        isbn => { type => 'varchar', length => 50,not_null => 1},
-        small => { type => 'varchar', length => 500},
-        medium => { type => 'varchar', length => 500},
-        large  => { type => 'varchar', length => 500},
+        id       => { type => 'serial', overflow => 'truncate'},
+        isbn => { type => 'varchar', overflow => 'truncate', length => 50,not_null => 1},
+        small => { type => 'varchar', overflow => 'truncate', length => 500},
+        medium => { type => 'varchar', overflow => 'truncate', length => 500},
+        large  => { type => 'varchar', overflow => 'truncate', length => 500},
     ],
 
     primary_key_columns => [ 'id' ],

@@ -8,8 +8,8 @@ __PACKAGE__->meta->setup(
     table   => 'cat_contenido_estante',
 
     columns => [
-        id_estante  => { type => 'integer', not_null => 1 },
-        id2         => { type => 'integer', not_null => 1 },
+        id_estante  => { type => 'integer', overflow => 'truncate', not_null => 1 },
+        id2         => { type => 'integer', overflow => 'truncate', not_null => 1 },
     ],
 
   primary_key_columns => [ 'id_estante','id2' ],
