@@ -68,7 +68,10 @@ if ($sanciones){
     $t_params->{'cant_sanciones'} = 0;
 }
 
-
+my $apertura=C4::AR::Preferencias::getValorPreferencia("open");
+my $cierre=C4::AR::Preferencias::getValorPreferencia("close");
+$t_params->{'cierre_ui'} = $cierre;
+$t_params->{'apertura_ui'} = $apertura;
 
 $t_params->{'reservas_asignadas_count'} = $racount;
 $t_params->{'reservas_espera_count'}    = $recount;
