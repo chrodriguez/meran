@@ -30,12 +30,24 @@ $VERSION = 0.01;
     getCurrentTimestamp
     get_date_format
     format_date_complete
+    esHabil
 );
 
 sub get_date_format
 {
 	#Get the database handle
 	return C4::AR::Preferencias::getValorPreferencia('dateformat');
+}
+
+sub esHabil{
+    my ($date) = @_;
+    use Date::Manip::Date;
+    my $date_manip = new Date::Manip::Date;
+     
+    $date_manip->parse($date);
+    
+    return $date_manip->is_business_day;
+	
 }
 
 sub display_date_format
@@ -256,14 +268,30 @@ sub proximoHabil{
 	my ($cantidad,$todosHabiles,$desde)=@_;
 	my $err= "Error con la fecha";
 	my $hoy= (ParseDate($desde) || ParseDate("today"));
+		
 	my $hasta;
 	my $dateformat = C4::Date::get_date_format();
 
+
+    my $apertura            = C4::AR::Preferencias::getValorPreferencia("open");
+    my $cierre              = C4::AR::Preferencias::getValorPreferencia("close");
+    
+    my ($actual,$min,$hora) = localtime;
+    my $dateformat = get_date_format();
+
+    $actual=($hora+2).':'.$min;
+
+    Date_Init("WorkDayBeg=".$apertura,"WorkDayEnd=".$cierre);
+    Date_Init("WorkWeekBeg=1","WorkWeekEnd=5");
+
+
+    if ($actual gt $cierre){
+    	$cantidad++;
+    }   
+
 	if ($todosHabiles) {#esto es si todos los dias del periodo deben ser habiles
 #Los dias Habiles se controlan desde el archivo .DateManip.pm que lee el modulo Date.pm, habria que ver como esquematizarlo
-	
-	
-	$hasta=DateCalc($hoy,"+ ".$cantidad. " days",\$err,2);  
+	   $hasta=DateCalc($hoy,"+ ".$cantidad. " days",\$err,2);  	   
 	}
 	else{#esto es si no importa que todos los dias del periodo sean habiles, los que deben ser habiles son el 1ero y el ultimo
 		$hasta=DateCalc($hoy,"+ ".$cantidad. " days",\$err);  
@@ -280,7 +308,6 @@ sub proximoHabil{
 			$hasta=DateCalc($hasta,"+ 1 days",\$err,2);
 		}
 	}
-	#######hasta aca
 
 	return (C4::Date::format_date_in_iso($hasta, $dateformat));
 }
@@ -290,35 +317,42 @@ sub proximosHabiles{
 	my $apertura=C4::AR::Preferencias::getValorPreferencia("open");
 	my $cierre=C4::AR::Preferencias::getValorPreferencia("close");
 	my ($actual,$min,$hora)= localtime;
-	$actual=$hora.':'.$min;
+	$actual=($hora+2).':'.$min;
 	Date_Init("WorkDayBeg=".$apertura,"WorkDayEnd=".$cierre);
+    Date_Init("WorkWeekBeg=1","WorkWeekEnd=5");
+
 #proximoHabil es una funcion que devuelve la fecha del proximo dia habil y un numero que indica la cantidad de dias que faltan para el proximo habil, si es 0 quiere decir que hoy es habil, la voy a poner aca para evitar invocar una nueva funcion. 
 # begin proximoHabil
 	my $err= "Error con la fecha";
 #Esto habria que ver si es mejor sacarlo de la exclusion para no trabar todo.
-	my $desde= DateCalc("today","+ 0 days",\$err,2);  
 	my $hoy=ParseDate("today");
+    my $desde= DateCalc("today","+ 0 days",\$err,2);  
 
-	if ($desde eq $hoy && $apertura gt $actual) {#entonces hoy no es habil, o la biblioteca no abrio aun
+    
+    my $hoy_es_habil = esHabil($hoy);
+    my $desde_es_habil = esHabil($desde);
+    
+	if (!$desde_es_habil){
+	   $desde = Date_NextWorkDay($desde);
+	}elsif ( ($apertura gt $actual) || ($cierre gt $actual) ){
+		$desde = $hoy;
 		$cantidad--;
-	} 
-	elsif($cierre lt $actual){#si ya paso el horario de cierre entonces lo tengo que tener disponible desde el dia siguiente
-		$desde= DateCalc("today","+ 0 days",\$err,2);
-		$cantidad--;
+	}elsif (($cierre lt $actual)){
+		$desde = Date_NextWorkDay($desde,1); 
 	}
-	else {$apertura=$actual;}
 
 	my $hasta;
 
 	if ($todosHabiles) {#esto es si todos los dias del periodo deben ser habiles
 #Los dias Habiles se contolan desde el archivo .DateManip.pm que lee el modulo Date.pm, habria que ver como esquematizarlo
-		$hasta=DateCalc($desde,"+ ".$cantidad. " days",\$err,2);  
+		
+		$hasta=DateCalc($desde,"+ ".$cantidad. " days",\$err,2);
+	}else{
+#esto es si no importa quetodos los dias del periodo sean habiles, los que deben ser habiles son el 1ero y el ultimo		
+		   $hasta = DateCalc($desde,"+ ".$cantidad. " days",\$err);  
+		   $hasta = Date_NextWorkDay($hasta,$cantidad);
+	}
 
-	}
-	else{#esto es si no importa quetodos los dias del periodo sean habiles, los que deben ser habiles son el 1ero y el ultimo
-		$hasta=DateCalc($desde,"+ ".$cantidad. " days",\$err);  
-		$hasta=DateCalc($hasta,"+ 0 days",\$err,2);  
-	}
 
 	my $dateformat= C4::Date::get_date_format();
 	#Damian- 26/03/2007 ----Agregado para que se sume un dia si es feriado el ultimo dia.
@@ -329,11 +363,9 @@ sub proximosHabiles{
 	while ((my $date= $sth->fetchrow_hashref)) {
 		if( C4::Date::format_date_in_iso($hasta, $dateformat) eq $date->{'fecha'}) {
 			$hasta=DateCalc($hasta,"+ 1 days",\$err,2);
-			
 		}
 	}
 	#######hasta aca
-
 
     return (	C4::Date::format_date_in_iso($desde, $dateformat),
                 C4::Date::format_date_in_iso($hasta, $dateformat),
