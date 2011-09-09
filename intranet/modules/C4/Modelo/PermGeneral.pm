@@ -8,14 +8,14 @@ __PACKAGE__->meta->setup(
     table   => 'perm_general',
 
     columns => [
-        nro_socio       => { type => 'varchar', length => 16, not_null => },
-        ui              => { type => 'varchar', length => 4, not_null => 1 },
-        tipo_documento  => { type => 'varchar', length => 4, not_null => 1 }, 
-        preferencias    => { type => 'varchar', length => 8, not_null => 1 },
-        reportes        => { type => 'varchar', length => 8, not_null => 1 },
-        permisos        => { type => 'varchar', length => 8, not_null => 1 },
-        adq_opac        => { type => 'varchar', length => 8, not_null => 1 },
-        adq_intra       => { type => 'varchar', length => 8, not_null => 1 },
+        nro_socio       => { type => 'varchar', overflow => 'truncate', length => 16, not_null => },
+        ui              => { type => 'varchar', overflow => 'truncate', length => 4, not_null => 1 },
+        tipo_documento  => { type => 'varchar', overflow => 'truncate', length => 4, not_null => 1 }, 
+        preferencias    => { type => 'varchar', overflow => 'truncate', length => 8, not_null => 1 },
+        reportes        => { type => 'varchar', overflow => 'truncate', length => 8, not_null => 1 },
+        permisos        => { type => 'varchar', overflow => 'truncate', length => 8, not_null => 1 },
+        adq_opac        => { type => 'varchar', overflow => 'truncate', length => 8, not_null => 1 },
+        adq_intra       => { type => 'varchar', overflow => 'truncate', length => 8, not_null => 1 },
     ],
 
     primary_key_columns => [ 'nro_socio','ui','tipo_documento' ],

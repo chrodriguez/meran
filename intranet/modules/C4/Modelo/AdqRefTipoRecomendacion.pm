@@ -13,7 +13,7 @@ __PACKAGE__->meta->setup(
 
     columns => [
         id                              => { type => 'integer', not_null => 1 },
-        tipo_recomendacion              => { type => 'varchar',length => 255, not_null => 1},
+        tipo_recomendacion              => { type => 'varchar', overflow => 'truncate',length => 255, not_null => 1},
     ],
 
 

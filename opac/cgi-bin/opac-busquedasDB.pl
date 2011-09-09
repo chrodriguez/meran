@@ -36,6 +36,9 @@ $obj->{'token'}             = CGI::escapeHTML($input->param('token'));
 my $page                    = ($input->param('page'));
 my $ini                     = $obj->{'ini'} = substr($page,0,5);
 
+
+C4::AR::Debug::debug("/////////////////////////////////////////////////////////////////////////////////////// ".$ini);
+
 my $start                   = [ Time::HiRes::gettimeofday() ]; #se toma el tiempo de inicio de la búsqueda
 
 my $cantidad;

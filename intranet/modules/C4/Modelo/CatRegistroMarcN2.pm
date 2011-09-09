@@ -12,7 +12,7 @@ __PACKAGE__->meta->setup(
         marc_record     => { type => 'text' },
         id1             => { type => 'integer', not_null => 1 },
         indice          => { type => 'text' },
-        template        => { type => 'varchar', not_null => 1 },
+        template        => { type => 'varchar', overflow => 'truncate', not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],

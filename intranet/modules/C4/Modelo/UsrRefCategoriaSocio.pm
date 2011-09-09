@@ -9,11 +9,11 @@ __PACKAGE__->meta->setup
         [
             id                      => { type => 'integer', not_null => 1 }, 
             categorycode            => { type => 'char', not_null => 1 , length => 2},
-            description             => { type => 'varchar', length => 255, not_null => 1 },
+            description             => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
             enrolmentperiod         => { type => 'integer', length => 6 },
             upperagelimit           => { type => 'integer', length => 6 },
             dateofbirthrequired     => { type => 'integer', length => 128 },
-            finetype                => { type => 'varchar', length => 30 },
+            finetype                => { type => 'varchar', overflow => 'truncate', length => 30 },
             bulk                    => { type => 'integer', length => 128 },
             enrolmentfee            => { type => 'decimal' },
             overduenoticerequired   => { type => 'integer', length => 128 },

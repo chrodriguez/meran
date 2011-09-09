@@ -1087,6 +1087,12 @@ C4::AR::Debug::debug("ORDEN EN RESERVASSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
     elsif($tipo eq "EJ"){
         push (@filtros, ( estado => { eq => 'E'}) );
     }
+    else{
+        push (@filtros,( or   => [   
+                                                estado => { eq => 'E'},
+                                                estado => { eq => 'G'}  
+                                            ]));
+    }
     
     my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count(   query => \@filtros,
                                                                                 );

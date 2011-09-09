@@ -9,11 +9,11 @@ __PACKAGE__->meta->setup(
 
     columns => [
         idmap      => { type => 'serial', not_null => 1 },
-        tabla      => { type => 'varchar', length => 255, not_null => 1 },
-        campoTabla => { type => 'varchar', length => 255, not_null => 1 },
-        nombre     => { type => 'varchar', length => 255, not_null => 1 },
-        campo      => { type => 'varchar', length => 3, not_null => 1 },
-        subcampo   => { type => 'varchar', length => 1, not_null => 1 },
+        tabla      => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
+        campoTabla => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
+        nombre     => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
+        campo      => { type => 'varchar', overflow => 'truncate', length => 3, not_null => 1 },
+        subcampo   => { type => 'varchar', overflow => 'truncate', length => 1, not_null => 1 },
     ],
 
     primary_key_columns => [ 'idmap' ],

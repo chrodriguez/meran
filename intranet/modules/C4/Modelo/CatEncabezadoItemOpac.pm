@@ -9,7 +9,7 @@ __PACKAGE__->meta->setup(
 
     columns => [
         idencabezado => { type => 'integer', not_null => 1 },
-        itemtype     => { type => 'varchar', length => 4, not_null => 1 },
+        itemtype     => { type => 'varchar', overflow => 'truncate', length => 4, not_null => 1 },
     ],
 
     primary_key_columns => [ 'idencabezado', 'itemtype' ],

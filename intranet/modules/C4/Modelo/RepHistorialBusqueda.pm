@@ -10,11 +10,11 @@ __PACKAGE__->meta->setup(
     columns => [
         idHistorial        => { type => 'serial', not_null => 1 },
         idBusqueda         => { type => 'integer', not_null => 1 },
-        campo              => { type => 'varchar', length => 100, not_null => 1 },
-        valor              => { type => 'varchar', length => 100, not_null => 1 },
-        tipo               => { type => 'varchar', length => 10 },
-        agent              => { type => 'varchar', length => 500},
-        agregacion_temp     => { type => 'varchar', length => 255},
+        campo              => { type => 'varchar', overflow => 'truncate', length => 100, not_null => 1 },
+        valor              => { type => 'varchar', overflow => 'truncate', length => 100, not_null => 1 },
+        tipo               => { type => 'varchar', overflow => 'truncate', length => 10 },
+        agent              => { type => 'varchar', overflow => 'truncate', length => 500},
+        agregacion_temp     => { type => 'varchar', overflow => 'truncate', length => 255},
     ],
 
    primary_key_columns => [ 'idHistorial' ],

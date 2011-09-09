@@ -11,7 +11,7 @@ __PACKAGE__->meta->setup(
         id     => { type => 'serial', not_null => 1 },
         id_tipo_prestamo    => { type => 'character', length => 2, not_null => 1 },
         descripcion  => { type => 'text', length => 65535 },
-        codigo_disponibilidad   => { type => 'varchar', default => '', length => 8, not_null => 1 },
+        codigo_disponibilidad   => { type => 'varchar', overflow => 'truncate', default => '', length => 8, not_null => 1 },
         prestamos    => { type => 'integer', default => '0', not_null => 1 },
         dias_prestamo   => { type => 'integer', default => '0', not_null => 1 },
         renovaciones        => { type => 'integer', default => '0', not_null => 1 },

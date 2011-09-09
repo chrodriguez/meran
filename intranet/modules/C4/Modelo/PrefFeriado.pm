@@ -9,8 +9,8 @@ __PACKAGE__->meta->setup(
 
     columns => [
         id               => { type => 'serial', not_null => 1 },
-        fecha            => { type => 'varchar', default => '0000-00-00', length => 10, not_null => 1 },
-        feriado          => { type => 'varchar', length => 255, not_null => 0 },
+        fecha            => { type => 'varchar', overflow => 'truncate', default => '0000-00-00', length => 10, not_null => 1 },
+        feriado          => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 0 },
     ],
 
     primary_key_columns => [ 'id' ],

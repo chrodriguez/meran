@@ -11,11 +11,11 @@ __PACKAGE__->meta->setup(
         id              => { type => 'serial', not_null => 1 },
         campo           => { type => 'character', length => 3, not_null => 1 },
         subcampo        => { type => 'character', length => 1, not_null => 1 },
-        vista_opac      => { type => 'varchar', length => 255 },
+        vista_opac      => { type => 'varchar', overflow => 'truncate', length => 255 },
         tipo_ejemplar   => { type => 'char', length => 3 },
         orden           => { type => 'integer', length => 11, not_null => 1 },
-        pre             => { type => 'varchar', length => 12 },
-        post            => { type => 'varchar', length => 12 }
+        pre             => { type => 'varchar', overflow => 'truncate', length => 12 },
+        post            => { type => 'varchar', overflow => 'truncate', length => 12 }
     ],
                     
     primary_key_columns => [ 'id' ],

@@ -11,10 +11,10 @@ __PACKAGE__->meta->setup(
         id                  => { type => 'serial', not_null => 1 },
         campo               => { type => 'character', length => 3, not_null => 1 },
         subcampo            => { type => 'character', length => 1, not_null => 1 },
-        itemtype            => { type => 'varchar', length => 4, not_null => 1 },
-        liblibrarian        => { type => 'varchar', length => 255, not_null => 1 },
-        rules               => { type => 'varchar', length => 255, not_null => 0 },
-        tipo                => { type => 'varchar', length => 255, not_null => 1 },
+        itemtype            => { type => 'varchar', overflow => 'truncate', length => 4, not_null => 1 },
+        liblibrarian        => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
+        rules               => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 0 },
+        tipo                => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         referencia          => { type => 'integer', default => '0', not_null => 1 },
         nivel               => { type => 'integer', not_null => 1 },
         obligatorio         => { type => 'integer', default => '0', not_null => 1 },
@@ -25,7 +25,7 @@ __PACKAGE__->meta->setup(
         idinforef           => { type => 'integer', length => 11, not_null => 0 },
 # NO SE USA MAS, AL USAR MARC_RECORD
 #         grupo               => { type => 'integer', length => 11, not_null => 0 },
-        idCompCliente       => { type => 'varchar', length => 255, not_null => 1 },
+        idCompCliente       => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         fijo                => { type => 'integer', length => 1, not_null => 1 },  #modificable = 0 / no modificable = 1
     ],
 

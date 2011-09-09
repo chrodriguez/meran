@@ -9,7 +9,7 @@ __PACKAGE__->meta->setup(
 
     columns => [
         id_estado   => { type => 'serial', not_null => 1 },
-        descripcion => { type => 'varchar', length => 255, not_null => 1 },
+        descripcion => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
     ],
 
     primary_key_columns => [ 'id_estado' ],

@@ -15,7 +15,7 @@ __PACKAGE__->meta->setup(
     columns => [
         id                              => { type => 'integer', not_null => 1 },
         proveedor_id                    => { type => 'integer', not_null => 1},
-        fecha                           => { type => 'varchar', length => 255, not_null => 1},
+        fecha                           => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1},
         ref_estado_presupuesto_id       => { type => 'integer', not_null => 1},
         ref_pedido_cotizacion_id        => { type => 'integer', not_null => 1},
 

@@ -9,7 +9,7 @@ __PACKAGE__->meta->setup(
 
     columns => [
         id   => { type => 'serial', not_null => 1 },
-        tema => { type => 'varchar', length => 255, not_null => 1 },
+        tema => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
     ],
 
     primary_key_columns => [ 'id', 'tema' ],

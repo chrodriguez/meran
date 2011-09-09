@@ -3890,6 +3890,8 @@ sub armarPaginasOPAC{
     my $limSup=$limInf + $pagAMostrar;
     my $previous_text = "« ".C4::AR::Filtros::i18n('Anterior');
     my $next_text = C4::AR::Filtros::i18n('Siguiente')." »";
+    my $first_text = "« ".C4::AR::Filtros::i18n('Primero');
+    my $last_text = C4::AR::Filtros::i18n('&Uacute;ltimo')." »";
 
     if($limInf == 0){
         $limInf= 1;
@@ -3905,6 +3907,7 @@ sub armarPaginasOPAC{
     if($actual > 1){
         #a la primer pagina
         my $ant= $actual-1;
+        $paginador .= "<a href='".$url."&page=1' class='previous' title='".$first_text."'> ".$first_text."</a>";
         $paginador .= "<a href='".$url."&page=".$ant."' class='previous' title='".$previous_text."'> ".$previous_text."</a>";
 
     }else{
@@ -3924,6 +3927,7 @@ sub armarPaginasOPAC{
     if($actual >= 1 && ($actual < $totalPaginas)){
         my $sig= $actual+1;
         $paginador .= "<a href='".$url."&page=".$sig."' class='next' title='".$next_text."'>".$next_text."</a>";
+        $paginador .= "<a href='".$url."&page=".$totalPaginas."' class='next' title='".$last_text."'>".$last_text."</a>";
 
     }
     $paginador .= "</div></div>"; 
@@ -4158,7 +4162,7 @@ sub isValidFile{
 
     $file_type = $flm->checktype_filename($file_path);    
  
-    my @extensiones_permitidas=("bmp","jpg","gif","png","jpeg","msword","docx","odt","pdf","xls","zip");
+    my @extensiones_permitidas=("bmp","jpg","gif","png","jpeg","msword","docx","odt","pdf","xls","zip","rar");
     my @nombreYextension=split('\.',$file_path);
 
     C4::AR::Debug::debug("UploadDocument ====== > FileType: ".$file_type);

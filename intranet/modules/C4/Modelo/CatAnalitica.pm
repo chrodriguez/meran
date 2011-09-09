@@ -15,7 +15,7 @@ __PACKAGE__->meta->setup(
         parts              => { type => 'text', length => 65535, not_null => 1 },
         timestamp          => { type => 'timestamp', not_null => 1 },
         analyticalnumber   => { type => 'integer', not_null => 1 },
-        classification     => { type => 'varchar', length => 25 },
+        classification     => { type => 'varchar', overflow => 'truncate', length => 25 },
     ],
 
     primary_key_columns => [ 'analyticalnumber' ],

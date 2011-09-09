@@ -10,7 +10,7 @@ __PACKAGE__->meta->setup(
 
     columns => [
         idencabezado => { type => 'serial', not_null => 1 },
-        nombre       => { type => 'varchar', length => 255, not_null => 1 },
+        nombre       => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         orden        => { type => 'integer', not_null => 1 },
         linea        => { type => 'integer', default => '0', not_null => 1 },
 		visible      => { type => 'integer', default => '1', not_null => 1 },

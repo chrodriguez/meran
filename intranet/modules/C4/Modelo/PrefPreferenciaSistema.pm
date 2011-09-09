@@ -9,12 +9,12 @@ __PACKAGE__->meta->setup(
 
     columns => [
         id          => { type => 'serial' },
-        variable    => { type => 'varchar', length => 50, not_null => 1 },
+        variable    => { type => 'varchar', overflow => 'truncate', length => 50, not_null => 1 },
         value       => { type => 'text', length => 65535 },
-        explanation => { type => 'varchar', default => '', length => 255, not_null => 1 },
+        explanation => { type => 'varchar', overflow => 'truncate', default => '', length => 255, not_null => 1 },
         options     => { type => 'text', length => 65535 },
-        type        => { type => 'varchar', length => 20 },
-        categoria   => { type => 'varchar', length => 20 },
+        type        => { type => 'varchar', overflow => 'truncate', length => 20 },
+        categoria   => { type => 'varchar', overflow => 'truncate', length => 20 },
     ],
 
     primary_key_columns => [ 'id' ],

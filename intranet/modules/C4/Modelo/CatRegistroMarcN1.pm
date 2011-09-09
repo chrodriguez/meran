@@ -10,7 +10,7 @@ __PACKAGE__->meta->setup(
     columns => [
         id              => { type => 'serial', not_null => 1 },
         marc_record     => { type => 'text' },
-        template        => { type => 'varchar', not_null => 1 },
+        template        => { type => 'varchar', overflow => 'truncate', not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ]

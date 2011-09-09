@@ -8,9 +8,9 @@ __PACKAGE__->meta->setup(
 
     columns => [
         id                      => { type => 'serial', length => 11, not_null => 1 },
-        id_tipo_doc             => { type => 'varchar', length => 4, not_null => 1 },
-        nombre                  => { type => 'varchar', length => 255, not_null => 1 },
-        agregacion_temp         => { type => 'varchar', length => 250 },
+        id_tipo_doc             => { type => 'varchar', overflow => 'truncate', length => 4, not_null => 1 },
+        nombre                  => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
+        agregacion_temp         => { type => 'varchar', overflow => 'truncate', length => 250 },
 
     ],
 

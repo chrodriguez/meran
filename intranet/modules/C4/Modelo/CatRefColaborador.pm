@@ -8,8 +8,8 @@ __PACKAGE__->meta->setup(
     table   => 'cat_ref_colaborador',
 
     columns => [
-        descripcion => { type => 'varchar', length => 35, not_null => 1 },
-        codigo      => { type => 'varchar', default => '', length => 8, not_null => 1 },
+        descripcion => { type => 'varchar', overflow => 'truncate', length => 35, not_null => 1 },
+        codigo      => { type => 'varchar', overflow => 'truncate', default => '', length => 8, not_null => 1 },
         index       => { type => 'serial', not_null => 1 },
     ],
 

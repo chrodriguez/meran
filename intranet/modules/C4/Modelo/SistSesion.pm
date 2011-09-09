@@ -9,13 +9,13 @@ __PACKAGE__->meta->setup(
     table   => 'sist_sesion',
 
     columns => [
-        sessionID => { type => 'varchar', length => 255, not_null => 1 },
-        userid    => { type => 'varchar', length => 255 },
-        nroRandom    => { type => 'varchar', length => 255 },
-		token    => { type => 'varchar', length => 255 },
-        ip        => { type => 'varchar', length => 16 },
+        sessionID => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
+        userid    => { type => 'varchar', overflow => 'truncate', length => 255 },
+        nroRandom    => { type => 'varchar', overflow => 'truncate', length => 255 },
+		token    => { type => 'varchar', overflow => 'truncate', length => 255 },
+        ip        => { type => 'varchar', overflow => 'truncate', length => 16 },
         lasttime  => { type => 'integer', length => 11 },
-        flag  => { type => 'varchar', length => 255 },
+        flag  => { type => 'varchar', overflow => 'truncate', length => 255 },
     ],
 
     primary_key_columns => [ 'sessionID' ],

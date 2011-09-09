@@ -8,7 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'cat_favoritos_opac',
 
     columns => [
-        nro_socio     => { type => 'varchar', not_null => 1, length => 16 },
+        nro_socio     => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 16 },
         id1           => { type => 'integer', not_null => 1, length => 11 },
     ],
 

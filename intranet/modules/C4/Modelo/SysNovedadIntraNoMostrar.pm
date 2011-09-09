@@ -9,7 +9,7 @@ __PACKAGE__->meta->setup(
 
     columns => [
         id_novedad      => { type => 'integer', not_null => 1, length => 16 },
-        usuario_novedad => { type => 'varchar', not_null => 1, length => 16 },
+        usuario_novedad => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 16 },
     ],
 
     primary_key_columns => [ 'id_novedad', 'usuario_novedad' ],

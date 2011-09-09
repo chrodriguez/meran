@@ -9,10 +9,10 @@ __PACKAGE__->meta->setup(
 
     columns => [
         id              => { type => 'serial'},
-        alias_tabla     => { type => 'varchar', length => 32, not_null => 1 },
-        tabla_referente => { type => 'varchar', length => 32, not_null => 1 },
-        campo_referente => { type => 'varchar', length => 32, not_null => 1 },
-        sub_campo_referente => { type => 'varchar', length => 32, not_null => 0, default => 'NULL' },
+        alias_tabla     => { type => 'varchar', overflow => 'truncate', length => 32, not_null => 1 },
+        tabla_referente => { type => 'varchar', overflow => 'truncate', length => 32, not_null => 1 },
+        campo_referente => { type => 'varchar', overflow => 'truncate', length => 32, not_null => 1 },
+        sub_campo_referente => { type => 'varchar', overflow => 'truncate', length => 32, not_null => 0, default => 'NULL' },
     ],
 
     primary_key_columns => [ 'id' ],

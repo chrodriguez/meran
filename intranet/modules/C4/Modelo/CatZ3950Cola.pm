@@ -9,7 +9,7 @@ __PACKAGE__->meta->setup(
 
     columns => [
         id       => { type => 'serial', not_null => 1 },
-        busqueda => { type => 'varchar', length => 255 },
+        busqueda => { type => 'varchar', overflow => 'truncate', length => 255 },
         cola => { type => 'datetime' },
         comienzo => { type => 'datetime' },
         fin  => { type => 'datetime' },

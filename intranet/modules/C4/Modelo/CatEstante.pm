@@ -9,8 +9,8 @@ __PACKAGE__->meta->setup(
 
     columns => [
         id        => { type => 'integer', not_null => 1 },
-        estante   => { type => 'varchar', length => 255 },
-        tipo      => { type => 'varchar', length => 255 },
+        estante   => { type => 'varchar', overflow => 'truncate', length => 255 },
+        tipo      => { type => 'varchar', overflow => 'truncate', length => 255 },
         padre     => { type => 'integer', default => '0', not_null => 1 },
     ],
 

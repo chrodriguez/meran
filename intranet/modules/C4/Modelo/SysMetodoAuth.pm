@@ -10,7 +10,7 @@ __PACKAGE__->meta->setup(
 
     columns => [
         id          => { type => 'serial', length => 12, not_null => 1 },
-        metodo      => { type => 'varchar', length => 255, not_null => 1 },
+        metodo      => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         orden       => { type => 'integer', length => 12, not_null => 1 },
         enabled     => { type => 'integer', length => 12, default => 1, not_null => 1 },
     ],

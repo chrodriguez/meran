@@ -8,7 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'pref_categoria_unidad_informacion',
 
     columns => [
-        categorycode    => { type => 'varchar', length => 4, not_null => 1 },
+        categorycode    => { type => 'varchar', overflow => 'truncate', length => 4, not_null => 1 },
         categoryname    => { type => 'text', length => 65535 },
         codedescription => { type => 'text', length => 65535 },
     ],
