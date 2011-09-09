@@ -8,9 +8,9 @@ __PACKAGE__->meta->setup(
     table   => 'cat_registro_marc_n1',
 
     columns => [
-        id              => { type => 'serial', not_null => 1 },
-        marc_record     => { type => 'text' },
-        template        => { type => 'varchar', not_null => 1 },
+        id              => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        marc_record     => { type => 'text', overflow => 'truncate' },
+        template        => { type => 'varchar', overflow => 'truncate', not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ]

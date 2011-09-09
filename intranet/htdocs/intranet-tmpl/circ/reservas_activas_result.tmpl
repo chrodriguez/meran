@@ -1,0 +1,73 @@
+<script type="text/javascript">
+      $(document).ready(function() {
+        makeToggle('datos_tabla_div','trigger',null,false);
+      });
+</script>
+
+<fieldset class="resultados_busqueda">
+    <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda" | i18n %]:</legend>
+        <div class="datos_tabla_div" id="datos_tabla_div">
+            <div class="resultados_consulta">[% "Total de registros" | i18n %]: [% cantidad %]</div>
+            <div class="contenedor_paginador">[% paginador %]</div>
+                <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
+                    <tr class="titulo_tabla_resultado">
+                
+                        <td title="[% 'Apellido del solicitante' | i18n %]"> [% "Apellido" | i18n %]</td>
+                        <td title="[% 'Nombre del solicitante' | i18n %]"> [% "Nombre" | i18n %]</td>
+                        <td class="click" onclick="ordenar('nro_socio')" title="[% 'Ordenar por numero de socio' | i18n %]">
+                            [% "N&uacute;mero de socio" | i18n %]
+                        </td>
+                        <td class=""  title="[% 'E-mail del solicitante' | i18n %]">[% "E-mail" | i18n %]</td>
+                        <td class="click" onclick="ordenar('fecha_reserva')" title="[% 'Ordenar por fecha de reserva' | i18n %]">[% "Fecha de reserva" | i18n %]</td>
+                        <td class="click" onclick="ordenar('fecha_recordatorio')" title="[% 'Ordenar por fecha de vencimiento' | i18n %]">
+                            [% "Fecha de vencimiento" | i18n %]
+                        </td>
+                        <td class="" title="[% 'C&oacute;digo de barra del ejemplar' | i18n %]">
+                            [% "C&oacute;digo de barra" | i18n %]
+                        </td>
+                
+                    </tr>
+                [% FOREACH reserva IN reservas %]
+                    <tr align='center'>
+                        <td> 
+                            <a href="[% url_prefix %]/usuarios/reales/datosUsuario.pl?nro_socio=[% reserva.socio.getNro_socio %]">
+                                [% reserva.socio.persona.getApellido %]
+                            </a>
+                        </td>
+                        <td> 
+                            <a href="[% url_prefix %]/usuarios/reales/datosUsuario.pl?nro_socio=[% reserva.socio.getNro_socio %]">
+                                [% reserva.socio.persona.getNombre%]
+                            </a>
+                        </td>
+                        <td> 
+                            <a href="[% url_prefix %]/usuarios/reales/datosUsuario.pl?nro_socio=[% reserva.socio.getNro_socio %]">
+                                [% reserva.socio.getNro_socio%]
+                            </a>
+                        </td>
+                        <td> 
+                            <a  href="mailto:[% reserva.socio.persona.getEmail %]">[% reserva.socio.persona.getEmail %] </a>
+                        </td>
+                        <td> 
+                            [% reserva.getFecha_reserva_formateada %]
+                        </td>
+                        <td> 
+                            [% reserva.getFecha_recordatorio_formateada %]
+                        </td>
+                        <td> 
+                            [% IF reserva.getId3 %]
+                                <a href="[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl?id3=[% reserva.nivel3.getId %]&token=[% token %]">[% reserva.nivel3.getBarcode %]</a>
+                            [% ELSE %]
+                                <a href="[% url_prefix %]/catalogacion/estructura/detalle.pl?id1=[% reserva.nivel2.getId1 %]&token=[% token %]">Grupo [% reserva.nivel2.getId2 %]</a>
+                            [% END %]
+                        </td>
+                    </tr>
+                [% END %]
+                </table>
+      </div>
+</fieldset>
+<br>
+
+<!-- <a href="mail.pl?branch=[% branch %]&tipo=1">  -->
+<!--     <input id="contacto" type="image" src="[% themelang %]/images/contactar.png" title="[% 'Enviar mail a usuarios con reservas asignadas' | i18n %]" > -->
+<!-- </a>  -->
+

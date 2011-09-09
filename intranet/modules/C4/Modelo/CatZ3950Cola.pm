@@ -8,8 +8,8 @@ __PACKAGE__->meta->setup(
     table   => 'cat_z3950_cola',
 
     columns => [
-        id       => { type => 'serial', not_null => 1 },
-        busqueda => { type => 'varchar', length => 255 },
+        id       => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        busqueda => { type => 'varchar', overflow => 'truncate', length => 255 },
         cola => { type => 'datetime' },
         comienzo => { type => 'datetime' },
         fin  => { type => 'datetime' },

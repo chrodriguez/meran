@@ -224,6 +224,14 @@
 	                                                      ) ;
 	                      [% END %]
 	            </li>
+                <li>
+                          [% PERL %]
+                              print C4::AR::Filtros::link_to( text =>     "[% 'Reservas' | i18n %]",
+                                                              url =>      "[% url_prefix %]/circ/reservas_activas.pl", 
+                                                              title =>    "[% 'Reservas' | i18n %]"
+                                                          ) ;
+                          [% END %]
+                </li>
 	          </ul>
 	       </div>
 

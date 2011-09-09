@@ -1,0 +1,65 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script>
+
+var objAH;
+
+function ordenar(orden){
+	objAH.sort(orden);
+}
+
+var tipoReserva; // Para poder ocultar el boton ya que si realiza la consulta por Grupo o todas y cambia el combo por ejemplar el boton de contactar por mail se hace visible, con esta variable me aseguro que eso no pase. Se setea cuando se hace la consulta.
+
+function updateInfo(responseText){
+	$("#result").html(responseText);
+	zebra("datos_tabla");
+}
+
+function changePage(ini){
+	objAH.changePage(ini);
+}
+
+
+function consultar(){
+	tipoReserva=$("#tipoReserva").val();
+	objAH=new AjaxHelper(updateInfo);
+    objAH.showOverlay       = true;
+	
+    objAH.url=URL_PREFIX+"/circ/reservas_activas_result.pl";
+	
+	objAH.tipoReserva=tipoReserva;
+	objAH.funcion= "changePage";
+	
+	objAH.sendToServer();
+}
+
+</script>
+
+<div class="titulos" >[% "Reservas activas" | i18n %]</div>
+
+<fieldset>
+    <legend class="titulo_legend">[% "Tipo de reserva" | i18n %]</legend>
+    <ul>
+        <li class="sub_item">
+            <label for="tipoReserva">[% "Seleccione el tipo de reserva" | i18n %]</label>
+            <select name="tipoReserva" id="tipoReserva" onchange="consultar();">
+                <option selected="selected" value="EJ" id="EJ">[% "Por ejemplar" | i18n %]</option>
+                <option value="GR" id="GR">[% "Por grupo" | i18n %]</option>
+                <option value="TO" id="TO">[% "Todas" | i18n %]</option>
+            </select>
+        </li>
+    </ul>
+    <div class="buttonContainerHorizontal">
+        [% PERL %]
+                        print C4::AR::Filtros::to_Button( 
+                                                            text    =>  "[% 'Buscar' | i18n %]",
+                                                            boton   =>  "boton_buscar",
+                                                            onClick =>  "consultar();",
+                                ) ;
+        [% END %]
+    </div>
+</fieldset>
+
+<div id="result"></div>
+
+[% INCLUDE "intranet-bottom.inc" %]

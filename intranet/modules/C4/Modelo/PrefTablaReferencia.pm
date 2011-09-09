@@ -8,11 +8,11 @@ __PACKAGE__->meta->setup(
     table   => 'pref_tabla_referencia',
 
     columns => [
-        id                  => { type => 'serial'},
-        nombre_tabla        => { type => 'varchar', length => 40, not_null => 1 },
-        alias_tabla         => { type => 'varchar', length => 20, not_null => 1 },
-        campo_busqueda      => { type => 'varchar', length => 255, not_null => 1 },
-        client_title        => { type => 'varchar', length => 255},
+        id                  => { type => 'serial', overflow => 'truncate'},
+        nombre_tabla        => { type => 'varchar', overflow => 'truncate', length => 40, not_null => 1 },
+        alias_tabla         => { type => 'varchar', overflow => 'truncate', length => 20, not_null => 1 },
+        campo_busqueda      => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
+        client_title        => { type => 'varchar', overflow => 'truncate', length => 255},
     ],
 
     primary_key_columns => [ 'id' ],

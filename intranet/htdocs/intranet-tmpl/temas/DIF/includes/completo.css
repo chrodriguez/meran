@@ -445,6 +445,16 @@ body {
 	clear: both;
 }
 
+.sub_item input[type="radio"]{
+  margin-top:10px;
+
+}
+
+.sub_item input[type="checkbox"]{
+  margin-top:11px;
+
+}
+
 .sub_item label {
 	display: block;
 	float: left;
@@ -453,7 +463,8 @@ body {
 	position: relative;
 	text-align: right;
 	width: 36%;
-	font-size: 12px
+	font-size: 12px;
+    margin-top: 10px;
 }
 
 .titulo_tabla {
@@ -1749,7 +1760,7 @@ input.file {
 }
 
 .contenedor_paginador {
-	width: 54%;
+	width: 70%;
 	margin: 0 auto;
 	padding: 4px;
 }
@@ -4413,6 +4424,20 @@ form.signin .subchck .remember {
     outline: medium none;
     padding: 3px 6px 3px 5px;
 }
+
+.static-links .search-form {
+    float: left;
+    margin: 6px 0.8em 0 0;
+    opacity: 1;
+    position: relative;
+}
+
+.static-links .search-form input, textarea, select{
+    font-family: verdana;
+    font-size: 12px;
+    margin: 0 0 10px;
+    max-width: 300px;}
+
 .search-form {
     float: left;
     margin: 6px 0 0;
@@ -4420,6 +4445,7 @@ form.signin .subchck .remember {
     opacity: 1;
     position: relative;
 }
+
 .search-form .search-query {
     background: none repeat scroll 0 0 #666666;
     border: 1px solid black;
@@ -4782,6 +4808,32 @@ a {
 
 
 /* DESDE ACA */
+
+
+#titulo_detalle_rec{
+  border-radius: 5px 5px 5px 5px;
+  background-color:#fff;
+  
+
+}
+
+.div_detalle_recom{
+  color:#111;
+  border-radius: 5px 5px 5px 5px;
+    background-color:#fff;
+
+}
+
+.div_detalle_recom p{
+    font-weight:bold;
+    margin-left:10px;
+    border-radius: 5px 5px 5px 5px;
+
+}
+
+.div_detalle_recom p span{
+    font-weight:lighter;
+}
 
 
 .detalle_recom #fancybox-outer{

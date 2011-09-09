@@ -8,9 +8,9 @@ __PACKAGE__->meta->setup(
     table   => 'circ_tipo_sancion',
 
     columns => [
-        tipo_sancion        => { type => 'serial', not_null => 1 },
-        categoria_socio     => { type => 'integer', length => 2, not_null => 1 },
-        tipo_prestamo       => { type => 'character', default => '', length => 2, not_null => 1 },
+        tipo_sancion        => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        categoria_socio     => { type => 'integer', overflow => 'truncate', length => 2, not_null => 1 },
+        tipo_prestamo       => { type => 'character', overflow => 'truncate', default => '', length => 2, not_null => 1 },
     ],
 
     primary_key_columns => [ 'tipo_sancion' ],

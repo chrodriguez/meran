@@ -8,8 +8,8 @@ __PACKAGE__->meta->setup(
     table   => 'cat_control_seudonimo_tema',
 
     columns => [
-        id_tema             => { type => 'integer', not_null => 1 },
-        id_tema_seudonimo   => { type => 'integer', not_null => 1 },
+        id_tema             => { type => 'integer', overflow => 'truncate', not_null => 1 },
+        id_tema_seudonimo   => { type => 'integer', overflow => 'truncate', not_null => 1 },
     ],
 
     primary_key_columns => [ 'id_tema', 'id_tema_seudonimo' ],

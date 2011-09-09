@@ -8,9 +8,9 @@ __PACKAGE__->meta->setup
     table   => 'usr_ref_categorias_socio',
     columns =>
         [
-#             id                    => { type => 'serial', not_null => 1 }, MAS ADELANTE DESCOMENTAAR; CUANDO LA DB SE HAGA NUEVA
-            categorycode    => { type => 'char', not_null => 1 , length => 2},
-            description  => { type => 'varchar', length => 255, not_null => 1 },
+#             id                    => { type => 'serial', overflow => 'truncate', not_null => 1 }, MAS ADELANTE DESCOMENTAAR; CUANDO LA DB SE HAGA NUEVA
+            categorycode    => { type => 'char', overflow => 'truncate', not_null => 1 , length => 2},
+            description  => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         ],
 #     primary_key_columns => ['id'],MAS ADELANTE DESCOMENTAAR; CUANDO LA DB SE HAGA NUEVA
     primary_key_columns => ['categorycode'], #MAS ADELANTE ELIMINAR; CUANDO LA DB SE HAGA NUEVA

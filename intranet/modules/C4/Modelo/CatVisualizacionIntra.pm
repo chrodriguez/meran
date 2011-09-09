@@ -8,17 +8,17 @@ __PACKAGE__->meta->setup(
     table   => 'cat_visualizacion_intra',
 
     columns => [
-        id              => { type => 'serial', not_null => 1 },
-        campo           => { type => 'character', length => 3, not_null => 1 },
-        subcampo        => { type => 'character', length => 1, not_null => 1 },
-        vista_intra     => { type => 'varchar', length => 255 },
-        tipo_ejemplar   => { type => 'char', length => 3 },
-        orden           => { type => 'integer', length => 11, not_null => 1 },
-        pre             => { type => 'varchar', length => 12 },
-        post            => { type => 'varchar', length => 12 },
-        nivel           => { type => 'integer', length => 1 },
-        vista_campo     => { type => 'varchar', length => 255 },
-        orden_subcampo  => { type => 'integer', length => 11, not_null => 1 }
+        id              => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        campo           => { type => 'character', overflow => 'truncate', length => 3, not_null => 1 },
+        subcampo        => { type => 'character', overflow => 'truncate', length => 1, not_null => 1 },
+        vista_intra     => { type => 'varchar', overflow => 'truncate', length => 255 },
+        tipo_ejemplar   => { type => 'char', overflow => 'truncate', length => 3 },
+        orden           => { type => 'integer', overflow => 'truncate', length => 11, not_null => 1 },
+        pre             => { type => 'varchar', overflow => 'truncate', length => 12 },
+        post            => { type => 'varchar', overflow => 'truncate', length => 12 },
+        nivel           => { type => 'integer', overflow => 'truncate', length => 1 },
+        vista_campo     => { type => 'varchar', overflow => 'truncate', length => 255 },
+        orden_subcampo  => { type => 'integer', overflow => 'truncate', length => 11, not_null => 1 }
     ],
 
     primary_key_columns => [ 'id' ],

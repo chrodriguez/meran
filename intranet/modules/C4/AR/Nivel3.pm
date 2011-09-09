@@ -384,6 +384,7 @@ sub detalleNivel3{
 	    $hash_nivel2{'id2'}                     = $id2;
 	    $hash_nivel2{'tipo_documento'}          = $nivel2_object->getTipoDocumentoObject->getNombre();
 	    $hash_nivel2{'nivel2_array'}            = $nivel2_object->toMARC_Intra; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
+        $hash_nivel2{'nivel2_template'}         = $nivel2_object->getTemplate();
 	    $hash_nivel2{'tiene_indice'}            = $nivel2_object->tiene_indice;
 	    $hash_nivel2{'indice'}                  = $hash_nivel2{'tiene_indice'}?$nivel2_object->getIndice:0;
  	    $hash_nivel2{'esta_en_estante_virtual'} = C4::AR::Estantes::estaEnEstanteVirtual($id2);
@@ -525,10 +526,12 @@ sub detalleCompletoINTRA{
         }
 		
 	}
-	$t_params->{'nivel1'}       = $nivel1->toMARC_Intra,
-	$t_params->{'id1'}	        = $id1;
-	$t_params->{'cantItemN1'}   = C4::AR::Nivel3::cantNiveles3FromId1($id1,$nivel1->db);
-	$t_params->{'nivel2'}       = \@nivel2,
+
+	$t_params->{'nivel1'}           = $nivel1->toMARC_Intra;
+    $t_params->{'nivel1_template'}  = $nivel1->getTemplate();
+	$t_params->{'id1'}	            = $id1;
+	$t_params->{'cantItemN1'}       = C4::AR::Nivel3::cantNiveles3FromId1($id1,$nivel1->db);
+	$t_params->{'nivel2'}           = \@nivel2;
 	#se ferifica si la preferencia "circularDesdeDetalleDelRegistro" esta seteada
 	$t_params->{'circularDesdeDetalleDelRegistro'}  = C4::AR::Preferencias::getValorPreferencia('circularDesdeDetalleDelRegistro');
 

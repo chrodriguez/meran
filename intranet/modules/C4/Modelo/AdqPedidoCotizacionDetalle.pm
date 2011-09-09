@@ -11,20 +11,20 @@ __PACKAGE__->meta->setup(
 
     columns => [
 
-          id                            => { type => 'integer', not_null => 1 },  
-          adq_pedido_cotizacion_id      => { type => 'integer', not_null => 1 },  
-          cat_nivel2_id                 => { type => 'integer', not_null => 1 },
-          autor                         => { type => 'varchar', length => 255 },
-          titulo                        => { type => 'varchar', length => 255 },
-          lugar_publicacion             => { type => 'varchar', length => 255 },
-          editorial                     => { type => 'varchar', length => 255 },
-          fecha_publicacion             => { type => 'varchar'},
-          coleccion                     => { type => 'varchar', length => 255 },
-          isbn_issn                     => { type => 'varchar', length => 45 },
-          cantidad_ejemplares           => { type => 'integer', length => 5, not_null => 1 },  
+          id                            => { type => 'integer', overflow => 'truncate', not_null => 1 },  
+          adq_pedido_cotizacion_id      => { type => 'integer', overflow => 'truncate', not_null => 1 },  
+          cat_nivel2_id                 => { type => 'integer', overflow => 'truncate', not_null => 1 },
+          autor                         => { type => 'varchar', overflow => 'truncate', length => 255 },
+          titulo                        => { type => 'varchar', overflow => 'truncate', length => 255 },
+          lugar_publicacion             => { type => 'varchar', overflow => 'truncate', length => 255 },
+          editorial                     => { type => 'varchar', overflow => 'truncate', length => 255 },
+          fecha_publicacion             => { type => 'varchar', overflow => 'truncate'},
+          coleccion                     => { type => 'varchar', overflow => 'truncate', length => 255 },
+          isbn_issn                     => { type => 'varchar', overflow => 'truncate', length => 45 },
+          cantidad_ejemplares           => { type => 'integer', overflow => 'truncate', length => 5, not_null => 1 },  
           precio_unitario               => { type => 'float', length => 5, not_null => 1},
-          adq_recomendacion_detalle_id  => { type => 'varchar', length => 255 },
-          nro_renglon                   => { type => 'integer', length => 5, not_null => 1 },  
+          adq_recomendacion_detalle_id  => { type => 'varchar', overflow => 'truncate', length => 255 },
+          nro_renglon                   => { type => 'integer', overflow => 'truncate', length => 5, not_null => 1 },  
 
     ],
    

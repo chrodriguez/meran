@@ -8,12 +8,12 @@ __PACKAGE__->meta->setup(
     table   => 'sys_novedad',
 
     columns => [
-        id            => { type => 'serial', length => 16 },
-        usuario       => { type => 'varchar', not_null => 1, length => 16 },
-        fecha         => { type => 'integer', not_null => 1, length => 16 },
-        titulo        => { type => 'varchar', not_null => 1, length => 255 },
-        categoria     => { type => 'varchar', not_null => 1, length => 255 },
-        contenido     => { type => 'text', not_null => 1 },
+        id            => { type => 'serial', overflow => 'truncate', length => 16 },
+        usuario       => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 16 },
+        fecha         => { type => 'integer', overflow => 'truncate', not_null => 1, length => 16 },
+        titulo        => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 255 },
+        categoria     => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 255 },
+        contenido     => { type => 'text', overflow => 'truncate', not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],

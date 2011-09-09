@@ -8,8 +8,8 @@ __PACKAGE__->meta->setup(
     table   => 'adq_tipo_material',
 
     columns => [
-        id   => { type => 'integer', length => 11, not_null => 1 },
-        nombre  => { type => 'varchar', length => 45, not_null => 1},
+        id   => { type => 'integer', overflow => 'truncate', length => 11, not_null => 1 },
+        nombre  => { type => 'varchar', overflow => 'truncate', length => 45, not_null => 1},
     ],
 
     primary_key_columns => [ 'id' ],

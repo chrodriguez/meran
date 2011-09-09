@@ -8,8 +8,8 @@ __PACKAGE__->meta->setup(
     table   => 'ref_disponibilidad',
 
     columns => [
-        nombre => { type => 'varchar', default => '', length => 255, not_null => 1 },
-        codigo => { type => 'varchar', default => '', length => 8, not_null => 1 },
+        nombre => { type => 'varchar', overflow => 'truncate', default => '', length => 255, not_null => 1 },
+        codigo => { type => 'varchar', overflow => 'truncate', default => '', length => 8, not_null => 1 },
     ],
 
     primary_key_columns => [ 'codigo' ],

@@ -56,7 +56,6 @@
             <!-- Actual Resultados de la b&uacute;squeda -->
             [% FOREACH SEARCH_RESULTS %]
                 <tr>
-
                         <td class="titulo_result">
                             [% IF portadas_grupo_cant > 0 %]
                                     [% FOREACH portadas_grupo %]
@@ -76,7 +75,7 @@
                                 [% IF portada_registro %]
                                     [% IF portada_registro_big %]
                                         <a class="fancylink" rel="group" href="/uploads/covers/[% portada_registro_big %]">
-                                            <img alt="cover" src="/uploads/covers/[% NIVEL.portada_registro %]" title="Portada" />
+                                            <img alt="cover" src="/uploads/covers/[% portada_registro %]" title="Portada" />
                                         </a>
                                     [% ELSE %]
                                         [% IF portada_registro_medium %]
