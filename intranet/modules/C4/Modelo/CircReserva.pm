@@ -734,5 +734,11 @@ sub intercambiarId3{
 
 }
 
+sub defaultSort{
+
+    return ("fecha_recordatorio DESC");
+}
+
+
 1;
 

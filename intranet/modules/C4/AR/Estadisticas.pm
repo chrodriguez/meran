@@ -1073,6 +1073,10 @@ sub reservas{
     my $dateformat = C4::Date::get_date_format();
     my @filtros;
     my @results;
+    my $reservaTemp = C4::Modelo::CircReserva->new();
+    my $ordenAux    = $reservaTemp->sortByString($orden);
+    
+C4::AR::Debug::debug("ORDEN EN RESERVASSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS   ".$ordenAux);
     
     push (@filtros, ( id_ui => { eq => $id_ui}) );
     
@@ -1083,19 +1087,17 @@ sub reservas{
     elsif($tipo eq "EJ"){
         push (@filtros, ( estado => { eq => 'E'}) );
     }
-    else {
-        push (@filtros, ( estado => { eq => 'E', eq => 'G'}) );
-    }
     
     my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count(   query => \@filtros,
                                                                                 );
     
-    my $reservas = C4::Modelo::CircReserva::Manager->get_circ_reserva(   query => \@filtros,
-                                                                            sorty_by => [$orden],
+    my $reservas = C4::Modelo::CircReserva::Manager->get_circ_reserva(      query => \@filtros,
+                                                                            sort_by => $ordenAux,
                                                                             limit => $cantR,
                                                                             offset => $ini,
-                                                                            require_objects => ['socio','nivel3'],
-                                                                        );
+                                                                            with_objects => ['socio','nivel3','nivel3.nivel2'],
+    );
+    
     return ($reservas_count,$reservas);
 }
 

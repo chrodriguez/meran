@@ -1264,6 +1264,8 @@ sub armarPaginas{
     my $limSup=$limInf + $pagAMostrar;
     my $previous_text = "« ".C4::AR::Filtros::i18n('Anterior');
     my $next_text = C4::AR::Filtros::i18n('Siguiente')." »";
+    my $first_text = "« ".C4::AR::Filtros::i18n('Primero');
+    my $last_text = C4::AR::Filtros::i18n('&Uacute;ltimo')." »";
     if($limInf == 0){
         $limInf= 1;
         $limSup=$limInf + $pagAMostrar -1;
@@ -1278,6 +1280,7 @@ sub armarPaginas{
     if($actual > 1){
         #a la primer pagina
         my $ant= $actual-1;
+        $paginador .= "<a class='click previous' onClick='".$funcion."(1)' title='".$first_text."'> ".$first_text."</a>";
         $paginador .= "<a class='click previous' onClick='".$funcion."(".$ant.")' title='".$previous_text."'> ".$previous_text."</a>";
 
     }else{
@@ -1298,6 +1301,7 @@ sub armarPaginas{
     if($actual >= 1 && $actual < $totalPaginas){
         my $sig= $actual+1;
         $paginador .= "<a class='click next' onClick='".$funcion."(".$sig.")' title='".$next_text."'>".$next_text."</a>";
+        $paginador .= "<a class='click next' onClick='".$funcion."(".$totalPaginas.")' title='".$last_text."'>".$last_text."</a>";
 
     }
 

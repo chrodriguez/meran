@@ -20,7 +20,7 @@ my $obj;
 $obj->{'string'}            = ($string);
 $obj->{'tipoAccion'}        = CGI::escapeHTML($input->param('tipoAccion'));
 $obj->{'titulo'}            = ($input->param('titulo'));
-$obj->{'autor'}             = Encode::decode_utf8($input->param('autor'));
+$obj->{'autor'}             = ($input->param('autor'));
 $obj->{'isbn'}              = ($input->param('isbn'));
 $obj->{'estantes'}          = ($input->param('estantes'));
 $obj->{'estantes_grupo'}    = CGI::escapeHTML($input->param('estantes_grupo'));
@@ -104,12 +104,22 @@ if  ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
 		    $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&titulo=".$obj->{'titulo'}."&autor=".$obj->{'autor'}."&tipo=".$obj->{'tipo'}."&tipo_nivel3_name=".$obj->{'tipo_nivel3_name'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
 		    $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'};
 		    
+
+            $url = C4::AR::Utilidades::addParamToUrl($url,"titulo",$obj->{'titulo'});
+            $url = C4::AR::Utilidades::addParamToUrl($url,"tipo_nivel3_name",$obj->{'tipo_nivel3_name'});
+            $url = C4::AR::Utilidades::addParamToUrl($url,"tipoAccion",$obj->{'tipoAccion'});
+            $url = C4::AR::Utilidades::addParamToUrl($url,"isbn",$obj->{'isbn'});
+            $url = C4::AR::Utilidades::addParamToUrl($url,"tema",$obj->{'tema'});
+            $url = C4::AR::Utilidades::addParamToUrl($url,"autor",$obj->{'autor'});
+            $url = C4::AR::Utilidades::addParamToUrl($url,"only_available",$obj->{'only_available'});
+
 		    $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"titulo",$obj->{'titulo'});
 		    $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"tipo_nivel3_name",$obj->{'tipo_nivel3_name'});
 		    $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"tipoAccion",$obj->{'tipoAccion'});
 		    $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"isbn",$obj->{'isbn'});
 		    $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"tema",$obj->{'tema'});
-		    $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"autor",$obj->{'autor'});
+            $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"autor",$obj->{'autor'});
+            $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"only_available",0);
 		    
 		    ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
 		  }
@@ -134,6 +144,7 @@ $t_params->{'suggested'}                = $suggested;
 $t_params->{'tipoAccion'}               = $obj->{'tipoAccion'};
 $t_params->{'url_todos'}                = $url_todos;
 $t_params->{'only_available'}           = $obj->{'only_available'};
+#$url                                    = Encode::decode_utf8($url);
 $t_params->{'paginador'}                = (C4::AR::Utilidades::crearPaginadorOPAC($cantidad,$cantR, $pageNumber,$url,$t_params));
 $t_params->{'combo_tipo_documento'}     = C4::AR::Utilidades::generarComboTipoNivel3();
 
