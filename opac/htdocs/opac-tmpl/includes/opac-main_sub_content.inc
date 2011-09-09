@@ -15,7 +15,7 @@
                     <img width="50" height="50" src="/uploads/pictures/[% socio_data.usr_tiene_foto %]"
                         alt="[% socio_data.usr_apellido %], [% socio_data.usr_apellido %]"/>
                 [% ELSE %]
-                      <img  width="50" height="50" src="[% temas %]/default/imagenes/no_foto.jpg" 
+                      <img  width="50" height="50" src="[% temas %]/[% user_theme %]/imagenes/no_foto.jpg" 
                             alt="[% 'Usuario sin foto' | i18n %]"
                             title="[% 'Usuario sin foto' | i18n %]" />
                 [% END %]

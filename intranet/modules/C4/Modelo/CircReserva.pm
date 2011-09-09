@@ -269,7 +269,7 @@ C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde hash2 => ".$param
 		my $startdate           = C4::Date::proximoHabil(1,0,$hasta);
 		$startdate              = C4::Date::format_date_in_iso($startdate,$dateformat);
 		my $daysOfSanctions     = C4::AR::Preferencias::getValorPreferencia("daysOfSanctionReserves");
-		my $enddate             = C4::Date::proximoHabil($daysOfSanctions,0,$startdate);
+		my $enddate             = C4::Date::proximoHabil($daysOfSanctions,0,$hasta);
 		$enddate                = C4::Date::format_date_in_iso($enddate,$dateformat);
 		my  $sancion            = C4::Modelo::CircSancion->new(db => $self->db);
 		my %paramsSancion;
