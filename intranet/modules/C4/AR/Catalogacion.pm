@@ -405,10 +405,13 @@ sub marc_record_to_intra_view {
     
     $params->{'tipo'}           = 'INTRA';
     #obtengo los campo, subcampo que se pueden mostrar
+    my $MARC_result_array;
     my ($marc_record_salida)    = filtrarVisualizacion($marc_record, $params,$db);
 
-    #se procesa el marc_record filtrado
-    my ($MARC_result_array)     = marc_record_to_meran_to_detail_view_as_extended($marc_record_salida, $params->{'id_tipo_doc'}, 'INTRA',$db);
+    if(!C4::AR::Preferencias::getValorPreferencia("detalle_INTRA_extendido")){
+	#se procesa el marc_record filtrado
+	($MARC_result_array)     = marc_record_to_meran_to_detail_view_as_not_extended($marc_record_salida, $params, 'INTRA',$db);
+    }
 
     return $MARC_result_array;
 }
@@ -603,12 +606,13 @@ sub guardarEsquema{
     return ($msg_object);
 }
 
-sub marc_record_to_meran_to_detail_view_as_extended {
-    my ($marc_record, $itemtype, $type, $db) = @_;
+sub marc_record_to_meran_to_detail_view_as_not_extended {
+    my ($marc_record, $params, $type, $db) = @_;
 
     my @MARC_result_array;
     
     $type = $type || "__NO_TYPE";
+    my $itemtype = $params->{'id_tipo_doc'};
 
 #     C4::AR::Debug::debug("marc_record->as_usmarc => ".$marc_record->as_formatted);
     my %hash_temp_aux;
@@ -633,8 +637,8 @@ sub marc_record_to_meran_to_detail_view_as_extended {
                 $hash_temp{'campo'}                 = $campo;
                 $hash_temp{'subcampo'}              = $subcampo;
     # TODO tengo q mostrar el nombre del campo de la biblia de la tabla de campos
-                $hash_temp{'liblibrarian'}          = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo, $itemtype, $type, $db);
-                $hash_temp{'orden'}                 = getOrdenFromCampoSubcampo($campo, $subcampo, $itemtype, $type, $db);
+#                 $hash_temp{'liblibrarian'}          = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo, $itemtype, $type, $db);
+#                 $hash_temp{'orden'}                 = getOrdenFromCampoSubcampo($campo, $subcampo, $itemtype, $type, $db);
                 $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype, $db);
                 $hash_temp{'datoReferencia'}        = $dato;
                 my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $db);
@@ -646,7 +650,7 @@ sub marc_record_to_meran_to_detail_view_as_extended {
             $hash_temp_aux{'campo'}             = $campo;
 # TODO falta el orden from campo
 #             $hash_temp_aux{'orden'}             = getOrdenFromCampo($campo,$itemtype, $type, $db);
-            $hash_temp_aux{'liblibrarian'}      = C4::AR::VisualizacionIntra::getVistaCampo($campo, $itemtype, 1)||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
+            $hash_temp_aux{'liblibrarian'}      = C4::AR::VisualizacionIntra::getVistaCampo($campo, $itemtype, $params->{'nivel'})||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
 #               $hash_temp_aux{'liblibrarian'}      = C4::AR::VisualizacionIntra::getVistaCampo($campo, $itemtype, 1);
 #             $hash_temp_aux{'dato'}              = ($hash_temp_aux{'dato'} ne "")?$hash_temp_aux{'dato'}.";".$field->as_string:$field->as_string;
 
@@ -1917,7 +1921,7 @@ sub getLiblibrarian{
 
     if($type eq "INTRA"){
 
-        my $conf_visualizacion = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($campo, $subcampo, $itemtype,$db);
+        my $conf_visualizacion = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($campo, $subcampo, $itemtype, $db);
 
         if($conf_visualizacion){
             return $conf_visualizacion->getVistaIntra();
