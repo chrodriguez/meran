@@ -1015,7 +1015,6 @@ sub generateBookLabelA4 {
     }
 # 
 #     $pdf->addImgScaled($escudo, $x + 80 , $pageheight + 27 + ($y-$posy) , 2/100);
-    $pdf->addImgScaled($escudo, $x + 80 , 110 + ($y) , 3/100);
    
     #Write the borrower data into the pdf file
     $pdf->setSize(6);
