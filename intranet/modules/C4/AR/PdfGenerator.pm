@@ -1107,7 +1107,7 @@ sub generateBookLabel {
 	    C4::Context->config('intrahtdocs') . '/temas/'
       . C4::AR::Preferencias::getValorPreferencia('defaultUI')
 	  . '/imagenes/escudo-'
-	  . $branchcode . '.jpg';
+	  . $branchcode . '.png';
 
 C4::AR::Debug::debug("----------------------------- ESCUDO -------------------------------------- ".$escudo);
     if ( !( ( -e $escudo ) && ( -r $escudo ) ) ) {
