@@ -1116,6 +1116,7 @@ C4::AR::Debug::debug("----------------------------- ESCUDO ---------------------
           . C4::AR::Preferencias::getValorPreferencia('defaultUI')
           . '/imagenes/escudo-DEFAULT.png';
     }
+C4::AR::Debug::debug("----------------------------- ESCUDO -------------------------------------- ".$escudo);
 
     $pdf->addImgScaled($escudo, $x + 100 , $pageheight + ($y-40-$posy) , 2/100);
 
