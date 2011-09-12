@@ -374,6 +374,8 @@ sub AUTOLOAD
 # returns it.
 sub _new_dbh
 {
+	use CGI::Session;
+	
 	my $db_driver = $context->{"config"}{"db_scheme"} || "mysql";
 		# FIXME - It should be possible to use "MySQL" instead
 		# of "mysql", "PostgreSQL" instead of "Pg", and so
