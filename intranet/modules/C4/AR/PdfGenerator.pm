@@ -544,6 +544,16 @@ sub _formatArrayOfStrings {
 	return ($array);
 }
 
+sub _unformatArrayOfStrings {
+    my ($array) = @_;
+
+    foreach my $string (@$array) {
+        $string = _unformat($string);
+    }
+
+    return ($array);
+}
+
 =item
 datosBiblio
 Busca todos los datos de la biblioteca en que se encuentra asociado el usuario.
@@ -651,26 +661,25 @@ sub prestInterBiblio {
 	my $tmpFileName = "prestInterBiblio" . $nro_socio . ".pdf";
 	my $nombre      = $socio->persona->getApeYNom;
 	my $dni         = $socio->persona->getNro_documento;
-	my $branchcode  = $socio->getId_ui;
+	my $branchcode  = C4::AR::Preferencias::getValorPreferencia("defaultUI");
 	my $biblio      = datosBiblio($branchcode);
 	my $branchname  = $biblio->getNombre;
 
 	my ( $pdf, $pagewidth, $pageheight ) = &inicializarPDF();
-
 	my $x = 50;
 	my $y = 300;
 	my %titulo;
-	$titulo{'titulo'} = C4::AR::Filtros::i18n("SOLICITUD DE PRESTAMO INTERBIBLIOTECARIO");
+	$titulo{'titulo'} = Encode::decode_utf8("SOLICITUD DE PRESTAMO INTERBIBLIOTECARIO");
 	$titulo{'posx'}   = 100;
 	my @parrafo;
-	$parrafo[0] = (C4::AR::Filtros::i18n(_format("Sr. Director de la Biblioteca")));
-	$parrafo[1] = (C4::AR::Filtros::i18n(_format("de la ")) . _format($biblioDestino->getNombre) );
-	$parrafo[2] = (Encode::decode_utf8($director));
+	$parrafo[0] = Encode::decode_utf8((("Sr. Director de la Biblioteca")));
+	$parrafo[1] = Encode::decode_utf8((("de la ")) . ($biblioDestino->getNombre) );
+	$parrafo[2] = Encode::decode_utf8($director);
 	$parrafo[3] = ("S/D");
-	$parrafo[4] = C4::AR::Filtros::i18n(
+	$parrafo[4] = Encode::decode_utf8((
 "          Tengo el agrado de dirigirme a Ud. a fin de solicitarle en carácter de préstamo"
-	);
-	$parrafo[5] = C4::AR::Filtros::i18n(_format("interbibliotecario los siguientes items:"));
+	));
+	$parrafo[5] = Encode::decode_utf8((("interbibliotecario los siguientes items:")));
 
 	($pdf) =
 	  &imprimirEncabezado( $pdf,$branchname, $x, $pagewidth,
@@ -680,23 +689,21 @@ sub prestInterBiblio {
 	my $cant = scalar(@$datos);
 	( $pdf, $y ) = &imprimirTabla( $pdf, $y, $pageheight, $cant, $datos );
 
-	$parrafo[0] = C4::AR::Filtros::i18n(("La(s) misma(s) sería(n) retirada(s) por:"));
-	$parrafo[1] = C4::AR::Filtros::i18n(("Nombre y apellido: ")).$nombre;
-	$parrafo[2] = C4::AR::Filtros::i18n(("DNI:")) . $dni;
+	$parrafo[0] = Encode::decode_utf8((("La(s) misma(s) sería(n) retirada(s) por:")));
+	$parrafo[1] = Encode::decode_utf8(("Nombre y apellido: ").$nombre);
+	$parrafo[2] = Encode::decode_utf8(("DNI:")) . $dni;
 	$parrafo[3] =
-	    C4::AR::Filtros::i18n(("Dirección:"))
-	  . $socio->persona->getCalle . ", "
-	  . $socio->persona->ciudad_ref->getNombre;
-	$parrafo[4] = C4::AR::Filtros::i18n(("Teléfono:")) . $socio->persona->getTelefono;
-	$parrafo[5] = C4::AR::Filtros::i18n(("Correo electrónico:")) . $socio->persona->getEmail;
+	    Encode::decode_utf8(("Dirección:")). Encode::decode_utf8($socio->persona->getCalle . ", ". $socio->persona->ciudad_ref->getNombre);
+	$parrafo[4] = Encode::decode_utf8((("Teléfono:"))) . $socio->persona->getTelefono;
+	$parrafo[5] = Encode::decode_utf8(((("Correo electrónico:"))) . $socio->persona->getEmail);
 	$parrafo[6] = "";
-	$parrafo[7] = C4::AR::Filtros::i18n((
+	$parrafo[7] = Encode::decode_utf8(((
 "          Sin otro particular y agradeciendo desde ya su amabilidad, saludo a Ud. muy"
-	));
-	$parrafo[8] = C4::AR::Filtros::i18n(("atentamente."));
+	)));
+	$parrafo[8] = Encode::decode_utf8((("atentamente.")));
 	
 	
-	_formatArrayOfStrings( \@parrafo );
+	#_formatArrayOfStrings( \@parrafo );
 
 	( $pdf, $y ) = &imprimirContenido( $pdf, $x, $y, $pageheight, 15, \@parrafo );
 	( $pdf, $y ) = &imprimirFirma( $pdf, $y, $pageheight );
@@ -781,7 +788,7 @@ Imprime el contenido de del documento.
 sub imprimirContenido {
 	my ( $pdf, $x, $y, $pageheight, $tamRenglon, $parrafo ) = @_;
 	for ( my $i = 0 ; $i < scalar(@$parrafo) ; $i++ ) {
-		$pdf->addRawText( _format($parrafo->[$i]), $x, $pageheight - $y );
+		$pdf->addRawText( ($parrafo->[$i]), $x, $pageheight - $y );
 		$y = $y + $tamRenglon;
 	}
 	return ( $pdf, $y );
@@ -865,16 +872,20 @@ Imprime el pie de pagina del documento con la info de la biblioteca.
 sub imprimirPiePag {
 	my ( $pdf, $y, $pageheight, $biblio ) = @_;
 	my @texto;
-	$texto[0] = _format(C4::AR::Filtros::i18n("Biblioteca: ")) . $biblio->getNombre;
-	$texto[1] = C4::AR::Filtros::i18n("Calle ") . $biblio->getDireccion;
+	
+    #my $info_about_hash = C4::AR::Preferencias::getInfoAbout();
+    #push (@texto, $info_about_hash);
+	
+	$texto[0] = Encode::decode_utf8(("Biblioteca: ")) . $biblio->getNombre;
+	$texto[1] = Encode::decode_utf8("Calle ") . $biblio->getDireccion;
 	$texto[2] =
 	  C4::AR::Filtros::i18n("Tel/Fax: ") . $biblio->getTelefono . "/" . $biblio->getFax;
 	$texto[3] =
-	    _format(C4::AR::Filtros::i18n("Atención: lunes a viernes, "))
+	    Encode::decode_utf8("Atención: lunes a viernes, ")
 	  . C4::AR::Preferencias::getValorPreferencia('open') . " a "
 	  . C4::AR::Preferencias::getValorPreferencia('close');
 	$texto[4] = "E-mail: " . $biblio->getEmail;
-	$texto[5] = C4::AR::Filtros::i18n("Sitio web: ") . $ENV{'SERVER_NAME'};
+	$texto[5] = Encode::decode_utf8("Sitio web: ") . $ENV{'SERVER_NAME'};
 	$texto[6] = "";
 	$y        = $y + 15;
 	( $pdf, $y ) =
@@ -1010,11 +1021,11 @@ sub generateBookLabelA4 {
         $escudo =
             C4::Context->config('intrahtdocs') . '/temas/'
           . C4::AR::Preferencias::getValorPreferencia('defaultUI')
-          . '/imagenes/escudo-DEFAULT.png';
+          . '/imagenes/escudo-DEFAULT.jpg';
+        $pdf->addImgScaled($escudo, $x + 80 , 110 + ($y) , 3/100);
     }
 # 
-#     $pdf->addImgScaled($escudo, $x + 80 , $pageheight + 27 + ($y-$posy) , 2/100);
-    $pdf->addImgScaled($escudo, $x + 80 , 110 + ($y) , 3/100);
+     $pdf->addImgScaled($escudo, $x + 80 , $pageheight + 27 + ($y-$posy) , 2/100);
    
     #Write the borrower data into the pdf file
     $pdf->setSize(6);
@@ -1103,21 +1114,22 @@ sub generateBookLabel {
 		10, 25, 10 );
 
 	my $posy = 100;
+	my $scale = 2/100;
 	my $escudo =
 	    C4::Context->config('intrahtdocs') . '/temas/'
       . C4::AR::Preferencias::getValorPreferencia('defaultUI')
 	  . '/imagenes/escudo-'
 	  . $branchcode . '.jpg';
 
-C4::AR::Debug::debug("----------------------------- ESCUDO -------------------------------------- ".$escudo);
     if ( !( ( -e $escudo ) && ( -r $escudo ) ) ) {
         $escudo =
             C4::Context->config('intrahtdocs') . '/temas/'
           . C4::AR::Preferencias::getValorPreferencia('defaultUI')
-          . '/imagenes/escudo-DEFAULT.png';
+          . '/imagenes/escudo-DEFAULT.jpg';
+        $scale = 4/100;
     }
 
-    $pdf->addImgScaled($escudo, $x + 100 , $pageheight + ($y-40-$posy) , 2/100);
+    $pdf->addImgScaled($escudo, $x + 100 , $pageheight + ($y-40-$posy) , $scale);
 
 	#Write the borrower data into the pdf file
 	$pdf->setSize(6);

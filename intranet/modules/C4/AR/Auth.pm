@@ -190,7 +190,7 @@ sub updateAuthOrder{
         
 #        C4::AR::Debug::debug("nuevo orden de id : ".$campo." es :  ".@array[$i]);
         
-        $configuracion->setOrden(@array[$i]);
+        $configuracion->setOrden($array[$i]);
     
         $i++;
     }
@@ -224,7 +224,6 @@ sub checkBrowser{
 	my $search          = $browser_string."_".$browser_major;
 	
 	C4::AR::Debug::debug("HTTP USER AGENT ===================================> ".$search);
-	my ($session)       = CGI::Session->load();
 	
 	if ($search ~~ @blacklist){
 	    if (!$session->param('check_browser_allowed')){
@@ -657,7 +656,7 @@ sub _verificarSession {
             if (_cambioIp($session)){
                 $code_MSG='U356';             
                 C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => sesion invalido => cambio la ip");  
-            } elsif ($session->param('flag') eq 'LOGUIN_DUPLICADO'){
+            } elsif (defined($session->param('flag')) && ($session->param('flag') eq 'LOGUIN_DUPLICADO')){
                     $code_MSG='U359';            
                     C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => sesion invalido => loguin duplicado");  
             } elsif (($session->param('token') ne $token) and ($valido_token)){
@@ -1986,16 +1985,9 @@ sub _sendRecoveryPasswordMail_Unactive{
 
 sub _buildPasswordRecoverLink{
     my ($socio) = @_;
-    my $link = "";
-    
     my $hash = sha256_base64(localtime().$socio->getPassword().$socio->getLastValidation());
-
     my $encoded_hash    = C4::AR::Utilidades::escapeURL($hash);
-
-    
     my $link = "http://".$ENV{'SERVER_NAME'}.C4::AR::Utilidades::getUrlPrefix()."/opac-recover-password.pl?key=".$encoded_hash;
-    
-    
     return ($link,$hash,$encoded_hash); 
     
     
@@ -2101,7 +2093,7 @@ sub checkRecoverLink{
         my $fecha_link     = $socio->recover_date_of;        
         my $err;
 
-        my $fecha_link        = Date::Manip::DateCalc( $fecha_link, "+ 1 day", \$err );
+        $fecha_link        = Date::Manip::DateCalc( $fecha_link, "+ 1 day", \$err );
 
         my $cmp_result = Date::Manip::Date_Cmp($fecha_link,$hoy);
         

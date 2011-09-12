@@ -1005,7 +1005,7 @@ sub busquedaAvanzada_newTemp{
     if ($params->{'tema'} ne ""){
         C4::AR::Debug::debug("tema en el pm : ".$params->{'tema'});
         $keyword = unac_string('utf8',$params->{'tema'});
-        $query .= "cat_tema%".$sphinx->EscapeString($keyword);
+        $query .= ' @string "'."cat_tema%".$sphinx->EscapeString($keyword).'*"';
     }
 
     

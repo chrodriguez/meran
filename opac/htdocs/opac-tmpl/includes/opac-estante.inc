@@ -26,20 +26,20 @@
 </div>
 [% END %]
 [% IF SUBESTANTES %]
-  [% IF cant_estantes > 0 %]
+  [% IF cant_subestantes > 0 %]
   <div id='subestantes'>
     <table id="tablaHistorial" class="tablaHistorial tabla_datos" cellspacing="0" cellpadding="4" style="width:98%; text-align:center; border: 1;">
         <tr class="tablaResultadoTitulo" >
             <th>[% "Estantes" | i18n %]</th>
         </tr>
         <!-- ESTE LOOP MUESTRA LOS ESTANTES -->
-        [% FOREACH estante IN SUBESTANTES %]
+        [% FOREACH subestante IN SUBESTANTES %]
             <tr>
               <td> 
                 [% PERL %]
-                    print C4::AR::Filtros::link_to( text    =>  "[% estante.getEstante %]",
+                    print C4::AR::Filtros::link_to( text    =>  "[% subestante.getEstante %]",
                                                     url     =>  '[% url_prefix %]/opac-estante.pl',
-						    params =>   ["id_estante=[% estante.getId %]"],
+						    params =>   ["id_estante=[% subestante.getId %]"],
 						    title =>    "[% 'Mostrar Detalle del Estante' | i18n %]",
 						    class => "link_to_detail"
                             ) ;
