@@ -75,5 +75,9 @@ sub setTipo {
     my ($tipo) = @_;
     $self->tipo($tipo);
 }
+sub getContenido{
+    my ($self) = shift;
+    return ($self->contenido);
+}
 1;
 
