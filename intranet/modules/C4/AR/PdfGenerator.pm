@@ -1011,10 +1011,10 @@ sub generateBookLabelA4 {
             C4::Context->config('intrahtdocs') . '/temas/'
           . C4::AR::Preferencias::getValorPreferencia('defaultUI')
           . '/imagenes/escudo-DEFAULT.png';
+        $pdf->addImgScaled($escudo, $x + 80 , 110 + ($y) , 3/100);
     }
 # 
 #     $pdf->addImgScaled($escudo, $x + 80 , $pageheight + 27 + ($y-$posy) , 2/100);
-    $pdf->addImgScaled($escudo, $x + 80 , 110 + ($y) , 3/100);
    
     #Write the borrower data into the pdf file
     $pdf->setSize(6);
@@ -1107,7 +1107,7 @@ sub generateBookLabel {
 	    C4::Context->config('intrahtdocs') . '/temas/'
       . C4::AR::Preferencias::getValorPreferencia('defaultUI')
 	  . '/imagenes/escudo-'
-	  . $branchcode . '.jpg';
+	  . $branchcode . '.png';
 
 C4::AR::Debug::debug("----------------------------- ESCUDO -------------------------------------- ".$escudo);
     if ( !( ( -e $escudo ) && ( -r $escudo ) ) ) {
@@ -1116,6 +1116,7 @@ C4::AR::Debug::debug("----------------------------- ESCUDO ---------------------
           . C4::AR::Preferencias::getValorPreferencia('defaultUI')
           . '/imagenes/escudo-DEFAULT.png';
     }
+C4::AR::Debug::debug("----------------------------- ESCUDO -------------------------------------- ".$escudo);
 
     $pdf->addImgScaled($escudo, $x + 100 , $pageheight + ($y-40-$posy) , 2/100);
 
