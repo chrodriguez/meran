@@ -146,7 +146,7 @@ elsif($tipo eq "AGREGAR_ESTANTE"){
                                                     entorno => 'undefined' },
                                                 'intranet'
                                );
-use Encode;
+
     my $valor= $obj->{'estante'};
     ($Messages_arrayref)= &C4::AR::Estantes::agregarEstante($valor);
 
