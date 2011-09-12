@@ -690,14 +690,12 @@ sub prestInterBiblio {
 	( $pdf, $y ) = &imprimirTabla( $pdf, $y, $pageheight, $cant, $datos );
 
 	$parrafo[0] = Encode::decode_utf8((("La(s) misma(s) sería(n) retirada(s) por:")));
-	$parrafo[1] = Encode::decode_utf8(("Nombre y apellido: ")).$nombre;
+	$parrafo[1] = Encode::decode_utf8(("Nombre y apellido: ").$nombre);
 	$parrafo[2] = Encode::decode_utf8(("DNI:")) . $dni;
 	$parrafo[3] =
-	    Encode::decode_utf8(("Dirección:"))
-	  . $socio->persona->getCalle . ", "
-	  . $socio->persona->ciudad_ref->getNombre;
+	    Encode::decode_utf8(("Dirección:")). Encode::decode_utf8($socio->persona->getCalle . ", ". $socio->persona->ciudad_ref->getNombre);
 	$parrafo[4] = Encode::decode_utf8((("Teléfono:"))) . $socio->persona->getTelefono;
-	$parrafo[5] = Encode::decode_utf8(((("Correo electrónico:")))) . $socio->persona->getEmail;
+	$parrafo[5] = Encode::decode_utf8(((("Correo electrónico:"))) . $socio->persona->getEmail);
 	$parrafo[6] = "";
 	$parrafo[7] = Encode::decode_utf8(((
 "          Sin otro particular y agradeciendo desde ya su amabilidad, saludo a Ud. muy"
