@@ -51,4 +51,4 @@ for(my $i=0;$i<scalar(@titulos);$i++){
 
 my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 # $socio->persona->getApellido;
-&C4::AR::PdfGenerator::prestInterBiblio($nro_socio,$socio,$biblioDestino,$director,\@datos);
+C4::AR::PdfGenerator::prestInterBiblio($nro_socio,$socio,$biblioDestino,$director,\@datos);

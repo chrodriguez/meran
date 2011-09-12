@@ -13,6 +13,7 @@ $VERSION = 0.01;
 @EXPORT = qw(
 	&getMensaje
 	&getAccion
+	&encodeUtf8Msj
 );
 
 #000 - Todo normal
@@ -647,6 +648,21 @@ sub getFirstCodeError {
     return $msg_object->{'messages'}->[0]->{'codMsg'} || 0;
 }
 
+
+=item
+    Esta funcion encodea el mensaje en utf8 para mostrar correctamente los acentos en el cliente
+=cut
+sub encodeUtf8Msj{
+
+    my($hash) = @_;
+    
+    use Encode;
+    
+    foreach my $value (@$hash) {
+        $value = encode("utf8",$value);
+    }
+}
+
 #Esta funcion agrega un mensaje al arreglo de objetos mensajes
 sub add {
 	my($Message_hashref, $msg_hashref)=@_;
@@ -656,6 +672,9 @@ sub add {
 #   	my $messageString= &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'},$Message_hashref->{'tipo'},$msg_hashref->{'params'});
     my $session         = CGI::Session->load();
     my $tipo            = $session->param('type')||'INTRA';
+
+    #encodeamos en utf8 para mostrar bien los acentros
+    encodeUtf8Msj($msg_hashref->{'params'});
 
     my $messageString   = &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'}, $tipo, $msg_hashref->{'params'});     
 	$msg_hashref->{'message'}= $messageString;
