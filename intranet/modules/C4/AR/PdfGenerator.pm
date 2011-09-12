@@ -1103,6 +1103,7 @@ sub generateBookLabel {
 		10, 25, 10 );
 
 	my $posy = 100;
+	my $scale = "2/100";
 	my $escudo =
 	    C4::Context->config('intrahtdocs') . '/temas/'
       . C4::AR::Preferencias::getValorPreferencia('defaultUI')
@@ -1115,10 +1116,11 @@ C4::AR::Debug::debug("----------------------------- ESCUDO ---------------------
             C4::Context->config('intrahtdocs') . '/temas/'
           . C4::AR::Preferencias::getValorPreferencia('defaultUI')
           . '/imagenes/escudo-DEFAULT.jpg';
+        $scale = "10/100"
     }
 C4::AR::Debug::debug("----------------------------- ESCUDO -------------------------------------- ".$escudo);
 
-    $pdf->addImgScaled($escudo, $x + 100 , $pageheight + ($y-40-$posy) , 2/100);
+    $pdf->addImgScaled($escudo, $x + 100 , $pageheight + ($y-40-$posy) , $scale);
 
 	#Write the borrower data into the pdf file
 	$pdf->setSize(6);
