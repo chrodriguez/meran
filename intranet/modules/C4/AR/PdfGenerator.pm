@@ -1110,7 +1110,6 @@ sub generateBookLabel {
 	  . '/imagenes/escudo-'
 	  . $branchcode . '.jpg';
 
-C4::AR::Debug::debug("----------------------------- ESCUDO -------------------------------------- ".$escudo);
     if ( !( ( -e $escudo ) && ( -r $escudo ) ) ) {
         $escudo =
             C4::Context->config('intrahtdocs') . '/temas/'
@@ -1118,7 +1117,6 @@ C4::AR::Debug::debug("----------------------------- ESCUDO ---------------------
           . '/imagenes/escudo-DEFAULT.jpg';
         $scale = 4/100;
     }
-C4::AR::Debug::debug("----------------------------- ESCUDO -------------------------------------- ".$escudo);
 
     $pdf->addImgScaled($escudo, $x + 100 , $pageheight + ($y-40-$posy) , $scale);
 
