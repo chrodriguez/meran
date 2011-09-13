@@ -1099,7 +1099,7 @@ sub generateBookLabel {
 	my ( $signatura, $codigo, $branchcode, $x, $y, $pdf ) = @_;
 
 	#Datos de la biblioteca
-	my $branch = &datosBiblio($branchcode);
+	my $branch = datosBiblio($branchcode);
 
 	my ( $pagewidth, $pageheight ) = $pdf->getPageDimensions();    #(210x297 - A4)
 	$pdf->setSize(7);
