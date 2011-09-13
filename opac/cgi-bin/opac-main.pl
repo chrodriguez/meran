@@ -22,6 +22,7 @@ my ($template, $session, $t_params)= get_template_and_user({
                                     });
 
 C4::AR::Auth::checkBrowser();
+
 my $nro_socio                       = $session->param('nro_socio');            
 my ($cantidad,$grupos)              = C4::AR::Nivel1::getUltimosGrupos();
 

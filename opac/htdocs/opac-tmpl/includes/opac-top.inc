@@ -43,6 +43,9 @@
   <script type="text/javascript" src="/includes/jquery/modal/jquery.simplemodal.js"></script>
   <script src="/opac-tmpl/includes/favoritos.js" type="text/javascript"></script>
   <script type="text/javascript" src="/includes/jquery/jquery.expander.js"></script>
+  <script src="/includes/util.js" type="text/javascript"></script>
+  <script src="/includes/md5.js" type="text/javascript"></script>
+  <script src="/includes/sha1.js" type="text/javascript"></script>
   
   <link media="screen" rel="stylesheet" href="/includes/jquery/modal/basic-min.css" type="text/css" />
 
@@ -80,9 +83,80 @@
 	
   </script>
 
-  <script type="text/javascript">
-        $(document).ready(function() {
-
+    <script type="text/javascript">    
+
+        function enviar(){
+              [% IF plainPassword == 0 %]
+                  var nroRandom   = [% nroRandom %];
+                  var hash        = b64_sha256(b64_sha256(b64_md5($("#password_plain").val()))+nroRandom);
+                  $("#password").val(hash);
+              [% ELSE %]
+                  $("#password").val($("#password_plain").val());
+              [% END %]
+              return true;
+      }
+      var RecaptchaOptions = {
+   
+        theme : 'white',
+//         lang : 'es,   
+        
+      }
+      
+      $(document).ready(function() {
+
+
+                    $(function () {
+                        var $alert = $('#alert_msg_main');
+                        if($alert.length)
+                        {
+                            $alert.animate({height: $alert.css('line-height') || '50px'}, 200)
+                            .click(function () {
+                                window.close;
+                                $alert.animate({height: '0'}, 200);
+                            });
+                        }
+                    });
+
+
+                  //onEnter con foco en input, ejecuta la busqueda
+                    var RecaptchaOptions = {
+                        theme : 'blue', /* tema color blanco */
+                        lang : 'es' /* idioma español */
+                    };    
+
+                    onEnter("password",enviar);
+
+                    // Add the value of "Search..." to the input field and a class of .empty
+                    $("#search").val("Buscar...").addClass("empty");
+
+                    // When you click on #search
+                    $("#search").focus(function(){
+
+                        // If the value is equal to "Search..."
+                        if($(this).val() == "Buscar...") {
+                            // remove all the text and the class of .empty
+                            $(this).val("").removeClass("empty");;
+                        }
+
+                    });
+
+                    // When the focus on #search is lost
+                    $("#search").blur(function(){
+
+                        // If the input field is empty
+                        if($(this).val() == "") {
+                            // Add the text "Search..." and a class of .empty
+                            $(this).val("Buscar...").addClass("empty");
+                        }
+
+                    });
+
+                    [% IF !loginFailed  %]
+                        try {$("#search").focus();} catch (e){}
+                    [% ELSE %]
+                    try {$("#userid").focus();} catch (e){}
+                    [% END %]
+
             $(".signin").click(function(e) {          
                 e.preventDefault();
                 $("fieldset#signin_menu").toggle();

@@ -79,11 +79,11 @@
 				    [% END %]	
 			    </td>
 			    <td>
-				    &nbsp;[% prestamo.fecha_prestamo %]&nbsp;
+				    &nbsp;[% prestamo.getFecha_prestamo_formateada %]&nbsp;
 			    </td>
 			    <td>
 		            [% IF prestamo.fecha_ultima_renovacion %]
-				        &nbsp;[% prestamo.fecha_ultima_renovacion %]&nbsp;
+				        &nbsp;[% prestamo.getFecha_devolucion_formateada %]&nbsp;
 		            [% ELSE %]
 		                --------
 		            [% END %]
@@ -93,14 +93,14 @@
                 </td>
 			    <td>
 		            [% IF estaVencido %]
-				        &nbsp;<span class="fecha_critica">[% prestamo.fecha_vencimiento %]</span>&nbsp;
+				        &nbsp;<span class="fecha_critica">[% prestamo.getFecha_vencimiento_formateada %]</span>&nbsp;
 		            [% ELSE %]
-		                &nbsp;<span class="fecha_cumple">[% prestamo.fecha_vencimiento %]</span>&nbsp;
+		                &nbsp;<span class="fecha_cumple">[% prestamo.getFecha_vencimiento_formateada %]</span>&nbsp;
 		            [% END %]
 			    </td>
 			    <td>
 		            [% IF prestamo.fecha_devolucion%]
-				        &nbsp;[% prestamo.fecha_devolucion %]&nbsp;
+				        &nbsp;[% prestamo.getFecha_devolucion_formateada %]&nbsp;
 		            [% ELSE %]
 		                --------
 		            [% END %]

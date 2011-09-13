@@ -309,7 +309,7 @@ sub toValidDate {
 sub isValidMail{
 
     my ($address) = @_;
-    if($address =~ /^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$/){ 
+    if($address =~ /^[a-zA-Z][\w\.-]*[a-zA-Z0-9][_-]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$/){ 
         return 1;
     }
     return 0;

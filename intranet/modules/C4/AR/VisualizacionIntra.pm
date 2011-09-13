@@ -428,6 +428,36 @@ sub getVisualizacionFromCampoSubCampo{
     }
 }
 
+=item sub getVisualizacionFromCampoAndNivel
+
+  el campo puede estar repedido ya q se agrupa campo y subcampo, pero todo los campos iguales y del mismo nivel deben tener el mismo orden
+=cut
+sub getVisualizacionFromCampoAndNivel{
+    my ($campo, $nivel, $itemtype, $db) = @_;
+    $db = $db || C4::Modelo::CatVisualizacionIntra->new()->db;
+    my @filtros;
+
+    push(@filtros, ( campo 	=> { eq => $campo } ) );
+    push(@filtros, ( nivel 	=> { eq => $nivel } ) );
+    push (  @filtros, ( or   => [   tipo_ejemplar   => { eq => $itemtype }, 
+                                    tipo_ejemplar   => { eq => 'ALL'     } ])
+                     );
+
+
+    my $cat_estruct_info_array = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(  
+                                                                                query           =>  \@filtros,
+                                                                                db              => $db, 
+
+                                        );  
+
+    if(scalar(@$cat_estruct_info_array) > 0){
+      C4::AR::Debug::debug("VisualizacionIntra => getVisualizacionFromCampoSubCampo => lo encontre!!!");
+      return $cat_estruct_info_array->[0];
+    }else{
+      return 0;
+    }
+}
+
 sub existeConfiguracion{
     my ($params) = @_;
 
