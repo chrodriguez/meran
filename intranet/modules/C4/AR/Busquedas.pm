@@ -1180,7 +1180,6 @@ sub busquedaCombinada_newTemp{
     #no se encodea nunca a utf8 antes de llegar aca	
     #$string_utf8_encoded    = Encode::decode_utf8($string_utf8_encoded);
 
-
     my $from_suggested = $obj_for_log->{'from_suggested'} || 0;
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
     my $string_suggested;
@@ -1262,7 +1261,9 @@ sub busquedaCombinada_newTemp{
     my $total_found = $results->{'total_found'};
 
     if ($only_sphinx){
-        return ($total_found);
+        C4::AR::Debug::debug("total_found: ".$total_found);
+        C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
+        return ($total_found,$matches);
     }
 #arma y ordena el arreglo para enviar al cliente
     $obj_for_log->{'total_found'} = $total_found;

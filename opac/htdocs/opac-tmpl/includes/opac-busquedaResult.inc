@@ -10,6 +10,10 @@
     });
 
 
+    function submitForm(form_id) {
+        $('#' + form_id).submit();
+    }
+
     
      function exportarXLS(url){
         alert(url)
@@ -276,22 +280,21 @@
         <br />
         <div class="contenedor_paginador">[% paginador %]</div>
 
-        <form id="exportPDF" action="[% url_prefix %]/opac-busquedasResult_XLS.pl?token=[% token %]"  accept-charset="utf-8">
+        <form id="exportPDF" action="[% url_prefix %]/opac-busquedasDB.pl?token=[% token %]"  accept-charset="utf-8">
                 
-                <input type="hidden" name="export" value="pdf" />
-                <input type="hidden" name="string" value="[% param_string %]" />
-                <input type="hidden" name="tipo_accion" value="[% param_tipoAccion %]" />
-                <input type="hidden" name="titulo" value="[% param_titulo %]" />
-                <input type="hidden" name="autor" value="[% param_autor %]" />
-                <input type="hidden" name="isbn" value="[% param_isbn %]" />   
-                <input type="hidden" name="estantes" value="[% param_estantes%]"/>
-                <input type="hidden" name="estantes_grupo"  value="[% param_estantes_grupo %]"/>
-                <input type="hidden" name="tema"  value="[% param_tema %]" />
-                <input type="hidden" name="tipo" value="[% param_tipo %]"/>
-                <input type="hidden" name="only_available"  value="[% param_onlyAvailable %]" />
-                <input type="hidden" name="tipo_nivel3_name" value="[% param_tipoNivel3Name %]" />
-                <input type="hidden" name="hide_legajo"  value="[% param_isbn %]" />
-                <input type="hidden" name="token"  value="[% param_token %]" />
+                <input type="hidden" name="export" value="1" />
+                <input type="hidden" name="string" value="[% keyword %]" />
+                <input type="hidden" name="tipoAccion" value="[% tipoAccion %]" />
+                <input type="hidden" name="titulo" value="[% pdf_titulo %]" />
+                <input type="hidden" name="autor" value="[% pdf_autor %]" />
+                <input type="hidden" name="isbn" value="[% pdf_isbn %]" />   
+                <input type="hidden" name="estantes" value="[% pdf_estantes%]"/>
+                <input type="hidden" name="estantes_grupo"  value="[% pdf_estantes_grupo %]"/>
+                <input type="hidden" name="tema"  value="[% pdf_tema %]" />
+                <input type="hidden" name="tipo" value="[% pdf_tipo %]"/>
+                <input type="hidden" name="only_available"  value="[% pdf_onlyAvailable %]" />
+                <input type="hidden" name="tipo_nivel3_name" value="[% pdf_tipoNivel3Name %]" />
+                <input type="hidden" name="token"  value="[% pdf_token %]" />
    
         </form>
         <div class="buttonContainerHorizontal">
