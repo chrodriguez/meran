@@ -118,7 +118,7 @@ sub permisoParaPrestamo {
     my $cod_error;
 
   	if (tieneLibroVencido($nro_socio)) {
-        $deudaOsancion  = 1; #Tiene biblos vencidos 
+        $deudaOsancion  = 1; #Tiene libros vencidos 
         C4::AR::Debug::debug("Sanciones::permisoParaPrestamo => tieneLibroVencido ");
         $cod_error      = 'S204';
   	}
