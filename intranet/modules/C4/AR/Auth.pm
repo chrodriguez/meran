@@ -847,9 +847,17 @@ sub checkauth {
 							$socio->setLast_login($now);
 							$socio->save();
 						}
+						my $referer  = $ENV{'HTTP_REFERER'};
+                        my $fromAuth = index($referer,'auth.pl');
+                        $referer     = C4::AR::Utilidades::addParamToUrl($referer,"token",$session->param('token'));
+                          
 						if ($type eq 'opac') {
 							$session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/opac-main.pl?token='.$session->param('token'));
-							redirectToNoHTTPS(C4::AR::Utilidades::getUrlPrefix().'/opac-main.pl?token='.$session->param('token'));
+							if ($fromAuth eq "-1"){
+                                redirectTo($referer);
+							}else{                                								
+							    redirectToNoHTTPS(C4::AR::Utilidades::getUrlPrefix().'/opac-main.pl?token='.$session->param('token'));
+							}
 							# #                               $session->secure(0);
 						}else{
 							$session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/mainpage.pl?token='.$session->param('token'));
