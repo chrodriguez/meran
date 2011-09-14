@@ -555,16 +555,16 @@ sub as_stringReloaded {
         my %hash_temp_aux;
         my $subcampo                        = $subfield->[0];
         my $dato                            = $subfield->[1];
-        C4::AR::Debug::debug("Catalogacion => as_stringReloaded => subcampo => ".$subcampo." dato => ".$dato);
+#         C4::AR::Debug::debug("Catalogacion => as_stringReloaded => subcampo => ".$subcampo." dato => ".$dato);
         my $cat_estruct_info_array          = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($field->tag, $subcampo, $itemtype, $db);
         my $text                            = "";
         if($cat_estruct_info_array){
-            C4::AR::Debug::debug("getPre =>|".$cat_estruct_info_array->getPre()."|");
-            C4::AR::Debug::debug("getPost =>|".$cat_estruct_info_array->getPost()."|");
+#             C4::AR::Debug::debug("getPre =>|".$cat_estruct_info_array->getPre()."|");
+#             C4::AR::Debug::debug("getPost =>|".$cat_estruct_info_array->getPost()."|");
             $text                           = $cat_estruct_info_array->getPre().$dato.$cat_estruct_info_array->getPost();
         }
 
-        C4::AR::Debug::debug("Catalogacion => as_stringReloaded => text => ".$text);
+#         C4::AR::Debug::debug("Catalogacion => as_stringReloaded => text => ".$text);
         push( @subs, $text );
     } # foreach
 
@@ -633,20 +633,22 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
             my $campo_ant                   = $field->tag;
             my $indicador_primario_dato     = $field->indicator(1);
             my $indicador_secundario_dato   = $field->indicator(2);
-#             C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => campo => ".$campo);
+            C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => campo => ".$campo);
             #proceso todos los subcampos del campo
             foreach my $subfield ($field->subfields()) {
                 my %hash_temp;
                 my %hash_temp_aux;
                 my $subcampo                        = $subfield->[0];
                 my $dato                            = $subfield->[1];
-#                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => subcampo => ".$subcampo);
+                C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => subcampo => ".$subcampo);
                 $hash_temp{'campo'}                 = $campo;
                 $hash_temp{'subcampo'}              = $subcampo;
                 $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype, $db);
                 $hash_temp{'datoReferencia'}        = $dato;
                 my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $db);
                 $hash_temp{'dato'}                  = $valor_referencia;
+
+		C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => dato => ".$valor_referencia);
 
                 $field->update( $subcampo => $valor_referencia );
             }
@@ -867,10 +869,10 @@ Esta funcion recibe un campo, un subcampo y un dato y busca en la tabla de refer
 sub _procesar_referencia {
     my ($campo, $subcampo, $dato, $itemtype) = @_;
 
-#     C4::AR::Debug::debug("Catalogacion => _procesar_referencia");
-#     C4::AR::Debug::debug("Catalogacion => _procesar_referencia => campo => ".$campo);
-#     C4::AR::Debug::debug("Catalogacion => _procesar_referencia => subcampo => ".$subcampo);
-#     C4::AR::Debug::debug("Catalogacion => _procesar_referencia => itemype => ".$itemtype);
+    C4::AR::Debug::debug("Catalogacion => _procesar_referencia");
+    C4::AR::Debug::debug("Catalogacion => _procesar_referencia => campo => ".$campo);
+    C4::AR::Debug::debug("Catalogacion => _procesar_referencia => subcampo => ".$subcampo);
+    C4::AR::Debug::debug("Catalogacion => _procesar_referencia => itemype => ".$itemtype);
 
     my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo, $itemtype);
     if($estructura) {
@@ -884,11 +886,11 @@ sub _procesar_referencia {
                 #se genera el nuevo dato => tabla@dato para poder obtener el dato de la referencia luego
                 my $string_result           = $obj_generico->getTableName.'@'.$dato;
 
-#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => getReferencia:    ".$estructura->infoReferencia->getReferencia);
-#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => dato entrada:     ".$dato);
-#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => Tabla:            ".$obj_generico->getTableName);
-#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => Modulo:           ".$obj_generico->toString);
-#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => string_result:    ".$string_result);
+                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => getReferencia:    ".$estructura->infoReferencia->getReferencia);
+                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => dato entrada:     ".$dato);
+                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => Tabla:            ".$obj_generico->getTableName);
+                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => Modulo:           ".$obj_generico->toString);
+                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => string_result:    ".$string_result);
 
                 $dato = $string_result;
             };
@@ -1023,17 +1025,17 @@ sub getEstructuraYDatosDeNivel{
     if( $params->{'nivel'} eq '1'){
         $nivel          = C4::AR::Nivel1::getNivel1FromId1($params->{'id'});
         $tipo_ejemplar  = $nivel->getTemplate()||'ALL';
-        C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel1FromId1 => ID1 ".$params->{'id'});
+#         C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel1FromId1 => ID1 ".$params->{'id'});
     }
     elsif( $params->{'nivel'} eq '2'){
         $nivel          = C4::AR::Nivel2::getNivel2FromId2($params->{'id'});
         $tipo_ejemplar  = $nivel->getTemplate()||'ALL';
-        C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel2FromId2 => ID2 ".$params->{'id'});
+#         C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel2FromId2 => ID2 ".$params->{'id'});
     }
     elsif( $params->{'nivel'} eq '3'){
         $nivel          = C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
         $tipo_ejemplar  = $nivel->getTemplate()||'ALL';
-        C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel3FromId3 => ID3 ".$params->{'id3'});
+#         C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel3FromId3 => ID3 ".$params->{'id3'});
     }
 
     #paso todo a MARC
@@ -1089,10 +1091,10 @@ sub getEstructuraYDatosDeNivel{
     
                         } else {
 
-                            $liblibrarian           = "Catalogacion => getEstructuraYDatosDeNivel => NO EXISTE EL CAMPO (".$campo.")";
-                            $indicador_primario     = "Catalogacion => getEstructuraYDatosDeNivel => NO EXISTE EL CAMPO (".$campo.")";
-                            $indicador_secundario   = "Catalogacion => getEstructuraYDatosDeNivel => NO EXISTE EL CAMPO (".$campo.")";
-                            $descripcion_campo      = "Catalogacion => getEstructuraYDatosDeNivel => NO EXISTE EL CAMPO (".$campo.")";  
+#                             $liblibrarian           = "Catalogacion => getEstructuraYDatosDeNivel => NO EXISTE EL CAMPO (".$campo.")";
+#                             $indicador_primario     = "Catalogacion => getEstructuraYDatosDeNivel => NO EXISTE EL CAMPO (".$campo.")";
+#                             $indicador_secundario   = "Catalogacion => getEstructuraYDatosDeNivel => NO EXISTE EL CAMPO (".$campo.")";
+#                             $descripcion_campo      = "Catalogacion => getEstructuraYDatosDeNivel => NO EXISTE EL CAMPO (".$campo.")";  
 
                         }
             
@@ -1100,11 +1102,11 @@ sub getEstructuraYDatosDeNivel{
                         $hash_temp{'dato'}              = $subcampo->{'dato'};
                         $hash_temp{'datoReferencia'}    = $subcampo->{'datoReferencia'};
         
-                        C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => campo => ".$nivel_info_marc_array->[$i]->{'campo'});
-                        C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => subcampo => ".$subcampo->{'subcampo'});
-                        C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => liblibrarian => ".$subcampo->{'liblibrarian'});
-                        C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => dato => ".$subcampo->{'dato'});
-                        C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => datoReferencia => ".$subcampo->{'datoReferencia'});
+#                         C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => campo => ".$nivel_info_marc_array->[$i]->{'campo'});
+#                         C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => subcampo => ".$subcampo->{'subcampo'});
+#                         C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => liblibrarian => ".$subcampo->{'liblibrarian'});
+#                         C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => dato => ".$subcampo->{'dato'});
+#                         C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => datoReferencia => ".$subcampo->{'datoReferencia'});
             
                         my $hash_result = _setDatos_de_estructura($cat_estruct_array, \%hash_temp);
                       

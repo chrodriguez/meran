@@ -125,6 +125,7 @@ sub modificar{
     
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
 #     C4::AR::Debug::debug("CatRegistroMarcN1 => agregar => LEADER modificado !!!!!!!!!!!!! ".$marc_record->leader());
+# die;
 }
 
 
