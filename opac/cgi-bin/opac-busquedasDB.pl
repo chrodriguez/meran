@@ -82,27 +82,28 @@ if ($to_pdf){
          
      });
 
-    if ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
-              if ($obj->{'estantes'}){
-                         ($cantidad, $resultsarray)   = C4::AR::Busquedas::busquedaPorEstante($obj->{'estantes'}, $session, $obj);
-              } else {
-                        if($obj->{'estantes_grupo'}){
-                                 ($cantidad, $resultsarray) = C4::AR::Busquedas::busquedaEstanteDeGrupo($obj->{'estantes_grupo'}, $session, $obj);
-                        }   else {
-                                 ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
-                        }
+#     if ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
+#               if ($obj->{'estantes'}){
+#                          ($cantidad, $resultsarray)   = C4::AR::Busquedas::busquedaPorEstante($obj->{'estantes'}, $session, $obj);
+#               } else {
+#                         if($obj->{'estantes_grupo'}){
+#                                  ($cantidad, $resultsarray) = C4::AR::Busquedas::busquedaEstanteDeGrupo($obj->{'estantes_grupo'}, $session, $obj);
+#                         }   else {
+# # ----------------------------- BUSQUEDA AVANZADA
+            ($cantidad, $resultsarray)=C4::AR::Busquedas::busquedaSinPaginar($session, $obj);
+#                         }
                           
-              }
-    } else {
+#               
+#     } else {
 
-        
-        my %hash;
-        $hash{'only_sphinx'}            = 1;
-       ($cantidad, $resultsarray)  = C4::AR::Busquedas::busquedaCombinada_newTemp($string,$session,$obj,\%hash);
+#           ($cantidad, $resultsarray)  = C4::AR::Busquedas::busquedaSinPaginar($obj,$session,$obj);
   
-        C4::AR::Utilidades::printARRAY($resultsarray);
 
-    }
+#         foreach my $res ($resultsarray){
+#                   C4::AR::Utilidades::printHASH(@$res[0]);
+#         }
+       
+#     }
 
 
     $t_params->{'SEARCH_RESULTS'}       = $resultsarray;
