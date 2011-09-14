@@ -117,7 +117,6 @@ sub getLabelByCampo{
     my ($campo) = @_;
 
     my @filtros;
-    C4::AR::Debug::debug("getLabelByCampo => ".$campo);
 
     push(@filtros, ( campo  => { eq => $campo } ) );
 
@@ -127,8 +126,6 @@ sub getLabelByCampo{
 
 
     if(scalar(@$estructura_base) > 0){  
-        C4::AR::Debug::debug("getLabelByCampo => getLiblibrarian => ".$estructura_base->[0]->getLiblibrarian);
-
         return $estructura_base->[0]->getLiblibrarian;
     }else{
         return 0;
