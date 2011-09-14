@@ -628,11 +628,11 @@ sub cancelar_reservas_usuarios_morosos {
 
     foreach my $reserva (@$socios_reservas_array_ref){
         my ($vencidos,$prestados) = C4::AR::Prestamos::cantidadDePrestamosPorUsuario($reserva->nro_socio);
-	if( $vencidos ){
-	    $self->debug("cancelar_reservas_usuarios_morosos => Usuario Moroso = ".$reserva->nro_socio." se cancelan sus reservas ");
-	    $params->{'nro_socio'}= $reserva->nro_socio;
-	    $self->cancelar_reservas_socio($params);
-	  }
+		if( $vencidos ){
+		    $self->debug("cancelar_reservas_usuarios_morosos => Usuario Moroso = ".$reserva->nro_socio." se cancelan sus reservas ");
+		    $params->{'nro_socio'}= $reserva->nro_socio;
+		    $self->cancelar_reservas_socio($params);
+		  }
 
     }
 }

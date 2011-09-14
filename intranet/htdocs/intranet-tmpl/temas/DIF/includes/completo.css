@@ -445,6 +445,18 @@ body {
 	clear: both;
 }
 
+.sub_item label {
+	display: block;
+    margin-top: 10px;
+	float: left;
+	margin-right: 13px;
+	padding-right: 10px;
+	position: relative;
+	text-align: right;
+	width: 36%;
+	font-size: 12px
+}
+
 .sub_item input[type="radio"]{
   margin-top:10px;
 
@@ -453,18 +465,6 @@ body {
 .sub_item input[type="checkbox"]{
   margin-top:11px;
 
-}
-
-.sub_item label {
-	display: block;
-	float: left;
-	margin-right: 13px;
-	padding-right: 10px;
-	position: relative;
-	text-align: right;
-	width: 36%;
-	font-size: 12px;
-    margin-top: 10px;
 }
 
 .titulo_tabla {
@@ -492,6 +492,7 @@ body {
 .titulo_tabla_resultado th{
 	border: none;
     background: #35414F;
+    width: 21px;
 }
 
 .tabla_der {
@@ -1133,6 +1134,12 @@ li {
 	width: 25px;
 }
 
+.icon_ejemplares {
+    background: transparent url(../imagenes/iconos/ejemplares.png) no-repeat;
+    height: 25px;
+    width: 25px;
+}
+
 .icon_inicio {
 	background: transparent url(../imagenes/iconos/inicio.png) no-repeat;
 	height: 25px;
@@ -1497,7 +1504,7 @@ h2.trigger {
 /* 	border: 1px solid; */
 	overflow: auto;
 	width: 100%;
-	height: 600px;
+/* 	height: 600px; */
 }
 
 .nivel1Barra {
@@ -1514,8 +1521,8 @@ h2.trigger {
 
 .lateral {
 	clear: left;
-	float: left;
-	width: 22%;
+/* 	float: left; */
+	width: 100%;
 	margin-bottom: 15px;
 }
 
@@ -1523,8 +1530,8 @@ h2.trigger {
 	margin-bottom: 10px;
 	margin-left: 1%;
 	text-align: justify;
-	width: 76%;
-	float: right;
+	width: 100%;
+/* 	float: right; */
 }
 
 #sanciones {
@@ -1769,6 +1776,7 @@ div.pagination {
 	font-size: 11px;
 	font-family: Tahoma, Arial, Helvetica, Sans-serif;
 	padding: 2px;
+/*	background-color: #c1c1c1;*/
 	width: 100%;
     border: 1px solid #35414F;
 }
@@ -1776,6 +1784,7 @@ div.pagination {
 div.pagination a {
 	padding: 2px 5px 2px 5px;
 	margin: 2px;
+/*	background-color: #c1c1c1;*/
 	text-decoration: none;
 	color: #000;
 }
@@ -4445,7 +4454,6 @@ form.signin .subchck .remember {
     opacity: 1;
     position: relative;
 }
-
 .search-form .search-query {
     background: none repeat scroll 0 0 #666666;
     border: 1px solid black;
@@ -4758,8 +4766,23 @@ font-size:10pt;
   margin:0 auto 0 auto;
 }
 
+.fancybox_button{
+/*    background: url("../img/buttons/bg-btn.gif") repeat-x scroll 0 0 #DDDDDD*/;
+    border-color: #BBBBBB #BBBBBB #999999;
+    border-radius: 4px 4px 4px 4px;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 1px 0 #F8F8F8;
+    color: #333333 !important;
+    cursor: pointer;
+    display: inline-block;
+    font: 12px/15px Helvetica Neue,Arial,"Lucida Grande",Sans-serif;
+    margin: 0;
+    overflow: hidden;
+    padding: 5px 9px;
+    text-shadow: 0 1px #F0F0F0;
 
-
+}
 /* Estilo mensaje de contacto (mainpage) */
 
 /*.msj_main{
@@ -4807,8 +4830,10 @@ a {
 }
 
 
-/* DESDE ACA */
 
+
+
+/* DESDE ACA */
 
 #titulo_detalle_rec{
   border-radius: 5px 5px 5px 5px;
@@ -4835,41 +4860,12 @@ a {
     font-weight:lighter;
 }
 
-
-.detalle_recom #fancybox-outer{
-    min-width: 500px;
-}
-
-
-.detalle_recom #fancybox-content{
-    min-width: 489px;
-}
-
 #fancybox-outer{
     min-width: 413px;
 }
 
 #fancybox-content{
     min-width: 401px;
-}
-
-
-.fancybox_button{
-/*    background: url("../img/buttons/bg-btn.gif") repeat-x scroll 0 0 #DDDDDD*/;
-    border-color: #BBBBBB #BBBBBB #999999;
-    border-radius: 4px 4px 4px 4px;
-    border-style: solid;
-    border-width: 1px;
-    box-shadow: 0 1px 0 #F8F8F8;
-    color: #333333 !important;
-    cursor: pointer;
-    display: inline-block;
-    font: 12px/15px Helvetica Neue,Arial,"Lucida Grande",Sans-serif;
-    margin: 0;
-    overflow: hidden;
-    padding: 5px 9px;
-    text-shadow: 0 1px #F0F0F0;
-
 }
 
 #fancybox-content fieldset{
@@ -4891,7 +4887,7 @@ a {
     color:#111;
     font-size:14px;
     border-radius: 5px 5px 5px 5px;
-    background-color:#fff;
+  background-color:#fff;
 }
 
 #fancybox-content h3{
@@ -4942,7 +4938,12 @@ a {
     z-index: 11;
 }
 
-.mensaje_contacto h2{
+
+.wysiwyg{
+    margin: 0 auto;
+}
+
+/*.mensaje_contacto h2{
     font-family: Arial;
     font-size: 14px;
     color:#fff;
@@ -4962,12 +4963,13 @@ a {
 #contenido_mensaje p, h1{
       padding-left:5px;
         padding-bottom:5px;
-}
+}*/
 
 
-.wysiwyg{
-    margin: 0 auto
+
 
 /*  HASTA ACA*/
+
+
 
 

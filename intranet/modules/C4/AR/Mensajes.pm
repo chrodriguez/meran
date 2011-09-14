@@ -499,6 +499,9 @@ my %mensajesINTRA = (
     'S008' => 'Por favor verifique que los datos ingresados sean correctos.',  
     #mensajes visualizacion INTRA y OPAC
     'M000' => 'Se modifico el orden con &eacute;xito.',  
+    'M001' => 'Se eliminaron todas las visualizaciones del campo "*?*", nivel "*?*" y ejemplar "*?*" con &eacute;xito.', 
+    'M002' => 'Error al intentar eliminar las visualizaciones con campo "*?*" y nivel "*?*".', 
+    'M003' => 'Error en la funcion eliminarTodoElCampo.', 
 
     #Mensajes Social     
     'SC000' => 'El mensaje ha sido publicado en Twitter',

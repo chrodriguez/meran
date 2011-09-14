@@ -130,6 +130,23 @@ else{
         C4::AR::Auth::print_header($session);
         print $infoOperacionJSON;
     }
+     elsif($tipoAccion eq "ELIMINAR_TODO_EL_CAMPO"){
+
+        my ($user, $session, $flags)= checkauth(  $input, 
+                                                  $authnotrequired, 
+                                                  {   ui => 'ANY', 
+                                                      tipo_documento => 'ANY', 
+                                                      accion => 'CONSULTA', 
+                                                      entorno => 'datos_nivel1'}, 
+                                                  'intranet'
+                                      );
+
+        my ($Message_arrayref)  = C4::AR::VisualizacionIntra::eliminarTodoElCampo($obj);
+        my $infoOperacionJSON   = to_json $Message_arrayref;
+
+        C4::AR::Auth::print_header($session);
+        print $infoOperacionJSON;
+    }
     elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS"){
         my ($user, $session, $flags)= checkauth(    $input, 
                                                   $authnotrequired, 
