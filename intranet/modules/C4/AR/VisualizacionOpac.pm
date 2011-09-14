@@ -168,6 +168,28 @@ sub getConfiguracion{
     return ($configuracion);
 }
 
+sub getVistaCampo{
+    my ($campo, $template, $nivel, $db) = @_;
+
+    $db = $db || C4::Modelo::CatVisualizacionIntra->new()->db;
+
+    my @filtros;
+
+    push ( @filtros, ( nivel   => { eq => $nivel } ));
+    push ( @filtros, ( campo   => { eq => $campo } ));
+    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $template }, 
+                                    tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS
+                );
+
+    my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros, db => $db,);
+
+    if(scalar(@$configuracion) > 0){
+        return $configuracion->[0]->getVistaCampo;
+    } else {
+        return 0;
+    }
+}
+
 sub addConfiguracion {
     my ($params, $db) = @_;
 
@@ -222,7 +244,7 @@ sub editConfiguracion{
             return ($configuracion->[0]->getPost());
         }else{
             $configuracion->[0]->modificar($value);
-            return ($configuracion->[0]->getVistaIntra());
+            return ($configuracion->[0]->getVistaOpac());
         }
     }else{
         return(0);
@@ -304,9 +326,9 @@ sub getVisualizacionFromCampoAndNivel{
     $db = $db || C4::Modelo::CatVisualizacionOpac->new()->db;
     my @filtros;
 
-    push(@filtros, ( campo 	=> { eq => $campo } ) );
-    push(@filtros, ( nivel 	=> { eq => $nivel } ) );
-    push (  @filtros, ( or   => [   tipo_ejemplar   => { eq => $itemtype }, 
+    push( @filtros, ( campo 	=> { eq => $campo } ) );
+    push( @filtros, ( nivel 	=> { eq => $nivel } ) );
+    push ( @filtros, ( or   => [   tipo_ejemplar   => { eq => $itemtype }, 
                                     tipo_ejemplar   => { eq => 'ALL'     } ])
                      );
 

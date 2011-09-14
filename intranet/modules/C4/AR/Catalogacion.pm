@@ -386,11 +386,18 @@ sub marc_record_to_opac_view {
     my ($marc_record, $params,$db) = @_;
 
     $params->{'tipo'} = 'OPAC';
+    my $MARC_result_array;
     #obtengo los campo, subcampo que se pueden mostrar
     my ($marc_record_salida) = filtrarVisualizacion($marc_record, $params,$db);
 
-    #se procesa el marc_record filtrado
-    my ($MARC_result_array) = marc_record_to_meran_to_detail_view($marc_record_salida, $params->{'id_tipo_doc'}, 'OPAC',$db);
+
+    if(!C4::AR::Preferencias::getValorPreferencia("detalle_OPAC_extendido")){
+	#se procesa el marc_record filtrado
+	($MARC_result_array)     = marc_record_to_meran_to_detail_view_as_not_extended($marc_record_salida, $params, 'OPAC',$db);
+    } else {
+	#se procesa el marc_record filtrado
+	($MARC_result_array) = marc_record_to_meran_to_detail_view($marc_record_salida, $params->{'id_tipo_doc'}, 'OPAC',$db);
+    }
 
     return $MARC_result_array;
 }
@@ -552,8 +559,8 @@ sub as_stringReloaded {
         my $cat_estruct_info_array          = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($field->tag, $subcampo, $itemtype, $db);
         my $text                            = "";
         if($cat_estruct_info_array){
-            C4::AR::Debug::debug("getPre => ".$cat_estruct_info_array->getPre());
-            C4::AR::Debug::debug("getPost => ".$cat_estruct_info_array->getPost());
+            C4::AR::Debug::debug("getPre =>|".$cat_estruct_info_array->getPre()."|");
+            C4::AR::Debug::debug("getPost =>|".$cat_estruct_info_array->getPost()."|");
             $text                           = $cat_estruct_info_array->getPre().$dato.$cat_estruct_info_array->getPost();
         }
 
@@ -646,8 +653,12 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
 
             $hash_temp_aux{'campo'}             = $campo;
 	    $hash_temp_aux{'orden'} 		= getOrdenFromCampo($campo, $params->{'nivel'}, $itemtype, $type, $db);
-	    #muestro el label configurado, si no existe muestro el label de la BIBLIA
-            $hash_temp_aux{'liblibrarian'}      = C4::AR::VisualizacionIntra::getVistaCampo($campo, $itemtype, $params->{'nivel'})||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
+	    if($type eq "INTRA"){
+		#muestro el label configurado, si no existe muestro el label de la BIBLIA
+		$hash_temp_aux{'liblibrarian'}      = C4::AR::VisualizacionIntra::getVistaCampo($campo, $itemtype, $params->{'nivel'})||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
+	    } else {
+		$hash_temp_aux{'liblibrarian'}      = C4::AR::VisualizacionOpac::getVistaCampo($campo, $itemtype, $params->{'nivel'})||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
+	    }
 
             # veo que separador lleva cada subcampo para el $field dependiendo del campo y subcampo que se este procesando
             my $field_as_string                 = as_stringReloaded($field, $itemtype);

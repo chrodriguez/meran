@@ -15,7 +15,10 @@ __PACKAGE__->meta->setup(
         tipo_ejemplar   => { type => 'char', overflow => 'truncate', length => 3 },
         orden           => { type => 'integer', overflow => 'truncate', length => 11, not_null => 1 },
         pre             => { type => 'varchar', overflow => 'truncate', length => 12 },
-        post            => { type => 'varchar', overflow => 'truncate', length => 12 }
+        post            => { type => 'varchar', overflow => 'truncate', length => 12 },
+	nivel           => { type => 'integer', overflow => 'truncate', length => 1 },
+	vista_campo     => { type => 'varchar', overflow => 'truncate', length => 255 },
+	orden_subcampo  => { type => 'integer', overflow => 'truncate', length => 11, not_null => 1 }
     ],
                     
     primary_key_columns => [ 'id' ],
@@ -102,6 +105,21 @@ sub getVistaOpac{
 
     return $self->vista_opac;
 }
+
+sub getVistaCampo{
+    my ($self) = shift;
+
+    return $self->vista_campo;
+}
+
+sub setVistaCampo{
+    my ($self)          = shift;
+    my ($vista_campo)   = @_;
+    utf8::encode($vista_campo);
+    $self->vista_campo($vista_campo);
+    $self->save();
+}
+
 
 sub setVistaOpac{
     my ($self) = shift;
