@@ -437,9 +437,9 @@ sub filtrarVisualizacion{
 
     if($params->{'tipo'} eq 'OPAC'){
 #         ($visulizacion_array_ref) = C4::AR::VisualizacionOpac::getConfiguracion($db);
-        ($visulizacion_array_ref) = C4::AR::VisualizacionOpac::getConfiguracion($params->{'id_tipo_doc'},$db);
+        ($visulizacion_array_ref) = C4::AR::VisualizacionOpac::getConfiguracion($params->{'nivel'}, $params->{'id_tipo_doc'},$db);
     } else {
-        ($visulizacion_array_ref) = C4::AR::VisualizacionIntra::getConfiguracion($params->{'id_tipo_doc'},$db);
+        ($visulizacion_array_ref) = C4::AR::VisualizacionIntra::getConfiguracion($params->{'nivel'}, $params->{'id_tipo_doc'},$db);
     }
 
     my %autorizados;
@@ -459,10 +459,11 @@ sub filtrarVisualizacion{
                     if ( ($sub_campo ne '')&&(C4::AR::Utilidades::existeInArray($sub_campo, @{$autorizados{$field->tag}} ) )) {
                         #el subcampo $sub_campo, esta autorizado para el campo $field
                         push(@subcampos_array, ($sub_campo => $dato));
-#                         C4::AR::Debug::debug("C4::AR::Catalogacion::filtrarVisualizacion => ACEPTADO campo,subcampo => dato ".$field->tag.",".$sub_campo." => ".$dato);
+                        C4::AR::Debug::debug("C4::AR::Catalogacion::filtrarVisualizacion => ACEPTADO campo,subcampo => dato ".$field->tag.",".$sub_campo." => ".$dato);
                     }else{
     #                     $msg_object->{'error'} = 1;
     #                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U412', 'params' => [$campo.", ".$key." valor: ".$value]} ) ;
+			C4::AR::Debug::debug("C4::AR::Catalogacion::filtrarVisualizacion => NO ACEPTADO campo,subcampo => dato ".$field->tag.",".$sub_campo." => ".$dato);
                     }
                 }
                 if (scalar(@subcampos_array)){
