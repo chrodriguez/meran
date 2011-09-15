@@ -948,30 +948,22 @@ sub busquedaAvanzada_newTemp{
     use Sphinx::Search;
     use Text::Unaccent;
     
+    my $only_sphinx= $params->{'only_sphinx'};
 
-
-# VER-----MAGUI
-    my $only_sphinx        = $params->{'only_sphinx'} || 0;
-#     $only_available     = $sphinx_options->{'only_available'} || 0;
-# ----FIN VER MAGUI
-
-
+    C4::AR::Debug::debug("ONLY SPHINX ".$only_sphinx);
 
     my $sphinx  = Sphinx::Search->new();
 
-# VER-----MAGUI
-#     if ($only_sphinx){
-#            if ($params->{'report'}){ 
-#         
-#                 $sphinx->SetLimits($params->{'ini'}, 100000);
-#  
-#            } else {
-#                     $sphinx->SetLimits($params->{'ini'}, C4::AR::Preferencias::getValorPreferencia('renglones_autocomplete'));  
-#            }
-# 
-#     }
-# ----FIN VER MAGUI
 
+    if ($only_sphinx){
+           if ($params->{'report'}){ 
+                $sphinx->SetLimits($params->{'ini'}, 100000);
+ 
+           } else {
+                $sphinx->SetLimits($params->{'ini'}, C4::AR::Preferencias::getValorPreferencia('renglones_autocomplete'));  
+           }
+
+    }
 
     my $query   = '';
     my $tipo    = 'SPH_MATCH_EXTENDED';
@@ -1058,17 +1050,18 @@ sub busquedaAvanzada_newTemp{
     C4::AR::Debug::debug("MATCH_MODE => ".$tipo);
     
     foreach my $hash (@$matches){
-      my %hash_temp = {};
-      $hash_temp{'id1'} = $hash->{'doc'};
-      $hash_temp{'hits'} = $hash->{'weight'};
+        my %hash_temp = {};
+        $hash_temp{'id1'} = $hash->{'doc'};
+        $hash_temp{'hits'} = $hash->{'weight'};
 
-      push (@id1_array, \%hash_temp);
+        push (@id1_array, \%hash_temp);
     }
 
     my ($total_found_paginado, $resultsarray);
     #arma y ordena el arreglo para enviar al cliente
     ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params, @id1_array);
     #se loquea la busqueda
+
     C4::AR::Busquedas::logBusqueda($params, $session);
 
     return ($total_found, $resultsarray);
@@ -1192,8 +1185,7 @@ sub busquedaCombinada_newTemp{
     my ($string_utf8_encoded,$session,$obj_for_log,$sphinx_options) = @_;
 
 	use Sphinx::Search;
-	
-	
+
     use Text::Unaccent;
 
 
@@ -1217,7 +1209,6 @@ sub busquedaCombinada_newTemp{
     }    
     my $sphinx = Sphinx::Search->new();
 
-
     if ($only_sphinx){
            if ($sphinx_options->{'report'}){ 
         
@@ -1229,7 +1220,6 @@ sub busquedaCombinada_newTemp{
             
     }
 
- 
     my $query = "";
     my @boolean_ops = ("&","|","!","-");
     my $tipo        = $obj_for_log->{'match_mode'}||'SPH_MATCH_ALL';
@@ -1319,8 +1309,6 @@ sub busquedaCombinada_newTemp{
         push (@id1_array, \%hash_temp);
     }
 
-
-
     ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log, @id1_array);
     #se loquea la busqueda
     
@@ -1330,8 +1318,7 @@ sub busquedaCombinada_newTemp{
         $string_suggested = getSuggestion($string_utf8_encoded,$total_found,$obj_for_log,$sphinx_options);
     }
     
-   
-
+  
     return ($total_found, $resultsarray,$string_suggested);
 }
 
@@ -1341,36 +1328,46 @@ sub busquedaSinPaginar {
 
      my %sphinx_options;
      
-     $sphinx_options{'only_sphinx'} = 1;
-     $sphinx_options{'report'} = 1;
-     
 
+     
+     my  ($total_found,$matches);
+ 
      C4::AR::Debug::debug($obj->{'string'});
 
-#      if ($obj->{'tipoAccion'} eq "BUSQUEDA_COMBINADA"){
-     my  ($total_found,$matches) = C4::AR::Busquedas::busquedaCombinada_newTemp($obj->{'string'},$session,$obj,\%sphinx_options);
-#      } else {
-#           $obj->{'only_sphinx'}=1;
-#           $obj->{'only_report'}=1;
-#           my  ($total_found,$matches) = C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
-#      }
+     if ($obj->{'tipoAccion'} eq "BUSQUEDA_COMBINADA"){
+                $sphinx_options{'only_sphinx'} = 1;
+                $sphinx_options{'report'} = 1;
+               ($total_found,$matches) = C4::AR::Busquedas::busquedaCombinada_newTemp($obj->{'string'},$session,$obj,\%sphinx_options);
+      } else {
+            $obj->{'only_sphinx'}=1;
+            $obj->{'report'}=1;
+     
+            ($total_found,$matches) = C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
+      }
     
 
-     my @id1_array=();
+    my @id1_array=();
 
     C4::AR::Debug::debug("total_found SIN PAGINAR: ".$total_found);
     
-    foreach my $hash (@$matches){
-        my %hash_temp = {};
-        $hash_temp{'id1'} = $hash->{'doc'};
-        $hash_temp{'hits'} = $hash->{'weight'};
-        push (@id1_array, \%hash_temp);
+   
+    my ($total_found_paginado, $resultsarray);
+
+    if ($obj->{'tipoAccion'} eq "BUSQUEDA_COMBINADA"){
+        foreach my $hash (@$matches){
+              my %hash_temp = {};
+              $hash_temp{'id1'} = $hash->{'doc'};
+              $hash_temp{'hits'} = $hash->{'weight'};
+              push (@id1_array, \%hash_temp);
+        }
+        ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj, @id1_array);      
+        C4::AR::Debug::debug("total_found_paginado: ".$total_found_paginado);
+    } else  {
+           $total_found_paginado=$total_found;
+           $resultsarray= $matches; 
     }
-
-
-
-    my ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj, @id1_array);      
-    C4::AR::Debug::debug("total_found_paginado: ".$total_found_paginado);
+        
+  
 
     return ($total_found, $resultsarray);
 }

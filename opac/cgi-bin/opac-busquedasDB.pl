@@ -67,6 +67,10 @@ my $url_todos;
 my $token;
 
 
+
+
+C4::AR::Debug::debug("SFGSDFGDFGHGDHFGHFJFGJGHJGF ".$to_pdf);
+
 if ($to_pdf){
     $obj->{'ini'}               = 0;
     $obj->{'cantR'}             = "";
@@ -82,28 +86,15 @@ if ($to_pdf){
          
      });
 
-#     if ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
+#      if ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
 #               if ($obj->{'estantes'}){
 #                          ($cantidad, $resultsarray)   = C4::AR::Busquedas::busquedaPorEstante($obj->{'estantes'}, $session, $obj);
 #               } else {
 #                         if($obj->{'estantes_grupo'}){
 #                                  ($cantidad, $resultsarray) = C4::AR::Busquedas::busquedaEstanteDeGrupo($obj->{'estantes_grupo'}, $session, $obj);
-#                         }   else {
-# # ----------------------------- BUSQUEDA AVANZADA
-            ($cantidad, $resultsarray)=C4::AR::Busquedas::busquedaSinPaginar($session, $obj);
-#                         }
-                          
-#               
-#     } else {
-
-#           ($cantidad, $resultsarray)  = C4::AR::Busquedas::busquedaSinPaginar($obj,$session,$obj);
   
 
-#         foreach my $res ($resultsarray){
-#                   C4::AR::Utilidades::printHASH(@$res[0]);
-#         }
-       
-#     }
+    ($cantidad, $resultsarray)=C4::AR::Busquedas::busquedaSinPaginar($session, $obj);
 
 
     $t_params->{'SEARCH_RESULTS'}       = $resultsarray;
@@ -170,7 +161,7 @@ if ($to_pdf){
                                     ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
                               }
                       }
-              }   else {
+              } else {
 
                   $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
                   $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'};
@@ -187,11 +178,8 @@ if ($to_pdf){
                       $t_params->{'partial_template'}     = "opac-busquedaResult.inc";
               }
 
-
-
-
-
-
+              C4::AR::Debug::debug("RESULT ARRAY CONTENT");
+              C4::AR::Utilidades::printARRAY($resultsarray);
 
 
               $t_params->{'content_title'}            = C4::AR::Filtros::i18n("Resultados de la b&uacute;squeda");
@@ -199,7 +187,7 @@ if ($to_pdf){
               $t_params->{'tipoAccion'}               = $obj->{'tipoAccion'};
               $t_params->{'url_todos'}                = $url_todos;
               $t_params->{'only_available'}           = $obj->{'only_available'};
-              $t_params->{'paginador'}            = C4::AR::Utilidades::crearPaginadorOPAC($cantidad,$cantR, $pageNumber,$url,$t_params);
+              $t_params->{'paginador'}                = C4::AR::Utilidades::crearPaginadorOPAC($cantidad,$cantR, $pageNumber,$url,$t_params);
 
 
               $t_params->{'combo_tipo_documento'}     = C4::AR::Utilidades::generarComboTipoNivel3();

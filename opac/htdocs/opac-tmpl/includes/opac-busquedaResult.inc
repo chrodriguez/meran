@@ -297,15 +297,9 @@
                 <input type="hidden" name="token"  value="[% pdf_token %]" />
    
         </form>
-        <div class="buttonContainerHorizontal">
-                [% PERL %]
-                    print C4::AR::Filtros::to_Button( 
-                                                        text    =>  "[% 'Exportar a PDF' | i18n %]",
-                                                        boton   =>  "boton_buscar",
-                                                        onClick =>  "submitForm('exportPDF');",
-                            ) ;
-                [% END %]
-        </div>
+
+
+        <input class="" type="button" style="width:125px;" onclick="submitForm('exportPDF');" value="Exportar a PDF" name="button">
 
       
   
