@@ -2086,19 +2086,19 @@ function updateBorrarEjemplaresN3(responseText){
 function modificarN1(id1, template){
      $('#datos_del_leader').show();
 	inicializar();
-   
-    ID_TIPO_EJEMPLAR    = template;
-    TEMPLATE_ACTUAL	= template;
+  
+    TEMPLATE_ACTUAL	    = template;
     ID_N1               = id1;
     
 // TODO falta agregar boton para modificar el template
-    _mostrarAccion("Modificando el metadato (" + ID_N1 + ") => Template: " + ID_TIPO_EJEMPLAR + crearBotonEsquema());
+    _mostrarAccion("Modificando el metadato (" + ID_N1 + ") => Template: " + TEMPLATE_ACTUAL + crearBotonEsquema());
     objAH               = new AjaxHelper(updateModificarN1);
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;
     objAH.debug         = true;
     objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
-    objAH.itemtype      = ID_TIPO_EJEMPLAR;
+// FIXME esto es necesario???
+    objAH.itemtype      = TEMPLATE_ACTUAL;
     objAH.id            = ID_N1;
     objAH.nivel         = 1;
     objAH.sendToServer();
@@ -2245,25 +2245,25 @@ function cargarNivel1(params){
 	params.id3
 	params.tipoAccion= ('MODIFICAR_NIVEL_1'|'MODIFICAR_NIVEL_2'|'MODIFICAR_NIVEL_3') por defecto 'MODIFICAR_NIVEL_1'
 */
-	ID_N1= params.id1;
-	ID_N2= params.id2;
+	ID_N1   = params.id1;
+	ID_N2   = params.id2;
 
 	if(params.tipoAccion == 'MODIFICAR_NIVEL_2'){
 // FIXME falta template
-		modificarN2(params.id2);
+		modificarN2(params.id2, TEMPLATE_ACTUAL);
 	}else	
 	if(params.tipoAccion == 'MODIFICAR_NIVEL_3'){
 // FIXME falta template
-		modificarN3(params.id3);
+		modificarN3(params.id3, TEMPLATE_ACTUAL);
 	}else{
 // FIXME falta template
 		//por defecto se carga el Nivel 1 para modificar
-		modificarN1(params.id1);
+		modificarN1(params.id1, TEMPLATE_ACTUAL);
 	}
 
-	mostrarInfoAltaNivel1(params.id1);
-	mostrarInfoAltaNivel2(params.id2);	
-    mostrarInfoAltaNivel3(params.id2);  
+	mostrarInfoAltaNivel1(params.id1, TEMPLATE_ACTUAL);
+	mostrarInfoAltaNivel2(params.id2, TEMPLATE_ACTUAL);	
+    mostrarInfoAltaNivel3(params.id2, TEMPLATE_ACTUAL);  
 }
 
 function validateForm(formID, func){
