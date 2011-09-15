@@ -2238,7 +2238,7 @@ function updateBorrarGrupo(){
 /*
 Esta funcion es usada cuando se quiere editar N1, N2 o N3 desde otra ventana, se redirecciona aqui
 */
-function cargarNivel1(params){
+function cargarNivel1(params, TEMPLATE_ACTUAL){
 /*
 	params.id1
 	params.id2

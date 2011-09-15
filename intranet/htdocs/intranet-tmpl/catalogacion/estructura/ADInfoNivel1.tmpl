@@ -10,7 +10,7 @@
 
     [% ELSE %]
     <fieldset>
-    <legend class="titulo_legend">[% "Regitro:" | i18n %] 
+    <legend class="titulo_legend">[% "Regitro:" | i18n %]
             [% PERL %]
                 print C4::AR::Filtros::link_to( text =>     [% nivel1.getId1 %],
                                                 url=>"detalle.pl", 
@@ -18,6 +18,8 @@
                                                 title =>    "[% 'Editar Registro' | i18n %]"
                                             ) ;
             [% END %]
+
+            ([% nivel1.getTemplate %]) 
     </legend>
             <ul class="listado_sin_margen">
             <li class="titulos"> [% nivel1.getTitulo %] </li>

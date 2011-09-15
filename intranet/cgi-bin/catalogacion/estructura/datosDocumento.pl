@@ -33,6 +33,7 @@ $t_params->{'tipoAccion'}       = $tipoAccion;
 $t_params->{'tiene_nivel_2'}    = 0;
 my $nivel                       = 1;
 my %params_combo;
+my $template_catalogo           = "ALL";
 
 
 if(($tipoAccion eq "MODIFICAR_NIVEL_1")||($tipoAccion eq "MODIFICAR_NIVEL_3_ALL")){
@@ -52,10 +53,31 @@ if(($tipoAccion eq "MODIFICAR_NIVEL_1")||($tipoAccion eq "MODIFICAR_NIVEL_3_ALL"
 
     $t_params->{'cant'}                             = $input->param('cant');
     $t_params->{'n3_array'}                         = \@n3_array;
-
-
 }
 
+if($tipoAccion eq "MODIFICAR_NIVEL_1"){
+    my $nivel1      = C4::AR::Nivel1::getNivel1FromId1($id1);
+
+    if($nivel1){
+        $template_catalogo = $nivel1->getTemplate();
+    }
+
+}elsif($tipoAccion eq "MODIFICAR_NIVEL_2"){
+    my $nivel2  = C4::AR::Nivel2::getNivel2FromId2($id2);
+
+    if($nivel2){
+        $template_catalogo = $nivel2->getTemplate();
+    }
+
+}elsif($tipoAccion eq "MODIFICAR_NIVEL_3"){
+    my $nivel3  = C4::AR::Nivel3::getNivel3FromId3($id3);
+
+    if($nivel3){
+        $template_catalogo = $nivel3->getTemplate();
+    }
+}
+
+$t_params->{'template_catalogo'}                = $template_catalogo;
 $params_combo{'onChange'}                       = 'seleccionar_esquema()';
 $params_combo{'default'}                        = 'SIN SELECCIONAR';
 $t_params->{'comboTipoDocumento'}               = &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
