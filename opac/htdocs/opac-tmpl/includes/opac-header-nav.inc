@@ -13,38 +13,28 @@
 	        </div>
 	    [% END %]    
         <!-- Navigation Level 1 -->
-        <div class="nav1">
-          <ul>
-            <li>
-                <a href="[% url_prefix %]/opac-main.pl?token=[% token %]" title="[% 'Ir a la p&aacute;gina de inicio' | i18n %]">[% 'Inicio' | i18n %]</a>
-            </li>
-            <li>
-                <a href="[% url_prefix %]/opac-about.pl?token=[% token %]" title="[% 'Sepa qui&eacute;nes somos' | i18n %]">[% 'Acerca de' | i18n %]</a>
-            </li>
-            <li>
-                <a href="[% url_prefix %]/opac-contact.pl?token=[% token %]" title="[% 'P&oacute;ngase en contacto con nosotros' | i18n %]">[% 'Contacto' | i18n %]</a>
-            </li>
-          </ul>
-        </div>
       <!-- Navigation Level 1.1 -->
         <div class="nav_logged">
             
+          <a class="meranlogo" href="[% url_prefix %]/opac-about.pl?token=[% token %]" title="[% 'Ir al inicio' | i18n %]"></a>
+            
 	      [% IF socio_data.usr_nro_socio %]
-                  <p style="float:right;">    
-                    [% HTML.escape(socio_data.usr_nombre) %]&nbsp;[% HTML.escape(socio_data.usr_apellido) %]
-                  </p>
-		  <p> <br> 
-		    [% PERL %]
-                            print C4::AR::Filtros::link_to( text    =>  "[% 'Cerrar Sesi&oacute;n' | i18n %]",
-                                                            url     =>  "[% url_prefix %]/logout.pl",
-                                                            title   =>  "[% 'Cerrar Sesi&oacute;n' | i18n %]"
-                                    ) ;
-                    [% END %]
-		  </p>
+                <div id="drop_down_login" class="drop_down_login"> 
+	                <a class="single_link" href="[% url_prefix %]/opac-main.pl?token=[% token %]" title="[% 'Ir a la p&aacute;gina de inicio' | i18n %]">[% 'Inicio' | i18n %]</a>
+	                &nbsp;|&nbsp;
+	                <a class="single_link" href="[% url_prefix %]/opac-contact.pl?token=[% token %]" title="[% 'P&oacute;ngase en contacto con nosotros' | i18n %]">[% 'Contacto' | i18n %]</a>
+	                &nbsp;|&nbsp;
+	                <a href="[% url_prefix %]/logout.pl" class="signout"><span>[% 'Cerrar sei&oacute;n' | i18n %]</span></a>
+                </div>
          
               [% ELSE %]
                    [% IF !loginFailed  %]
-                        <div id="drop_down_login" class="drop_down_login"> <a id="iniciar_sesion" href="login" class="signin"><span>Iniciar Sesion</span></a>
+                        <div id="drop_down_login" class="drop_down_login"> 
+                            <a class="single_link" href="[% url_prefix %]/opac-main.pl?token=[% token %]" title="[% 'Ir a la p&aacute;gina de inicio' | i18n %]">[% 'Inicio' | i18n %]</a>
+                            &nbsp;|&nbsp;
+                            <a class="single_link" href="[% url_prefix %]/opac-contact.pl?token=[% token %]" title="[% 'P&oacute;ngase en contacto con nosotros' | i18n %]">[% 'Contacto' | i18n %]</a>
+                            &nbsp;|&nbsp;
+                            <a id="iniciar_sesion" href="login" class="signin"><span>Iniciar Sesion</span></a>
                             <fieldset id="signin_menu">
                                     <!-- ORIGINAL  <form id="datosAEnviar" method="post" action="[% url_prefix %]/opac-main.pl" onsubmit="return enviar()" autocomplete="off">-->
                                     <form method="post" id="signin" action="[% url_prefix %]/opac-main.pl" onsubmit="return enviar()">

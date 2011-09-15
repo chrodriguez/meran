@@ -125,6 +125,7 @@ sub modificar{
     
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
 #     C4::AR::Debug::debug("CatRegistroMarcN1 => agregar => LEADER modificado !!!!!!!!!!!!! ".$marc_record->leader());
+# die;
 }
 
 
@@ -439,7 +440,7 @@ sub toMARC_Intra{
 
     my $params;
     $params->{'nivel'}          = '1';
-    $params->{'id_tipo_doc'}    = 'ALL';
+    $params->{'id_tipo_doc'}    = $self->getTemplate()||'ALL';
     my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_intra_view($marc_record, $params);
 
     return ($MARC_result_array);

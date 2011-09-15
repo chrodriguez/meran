@@ -190,6 +190,19 @@ sub agregar{
     $self->save();
 }
 
+sub getSiglasTituloFormal{
+    my ($self)=shift;
+
+    my @titulo_formal_array = split(/ /,$self->getTituloFormal());
+    my $siglas = "";
+    
+    foreach my $word (@titulo_formal_array){
+        $word = uc $word;
+        $siglas .= substr ($word,0,1);	
+    }
+    
+    return ($siglas);
+}
 
 sub nextMember{
     return(C4::Modelo::RefIdioma->new());

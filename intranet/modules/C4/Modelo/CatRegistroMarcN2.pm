@@ -250,11 +250,11 @@ sub getVolumen{
 sub getAllImage {
     my ($self)      = shift;
     
-    my %result;
+    my %result  = {};
     my $isbn            = $self->getISBN();
-    if ($isbn) {
+    if (C4::AR::Utilidades::validateString($isbn)) {
         my $portada     = C4::AR::PortadasRegistros::getPortadaByIsbn($isbn);
-    
+
         if ($portada){    
             $result{'S'}    = $portada->getSmall();
             $result{'M'}    = $portada->getMedium();

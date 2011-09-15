@@ -905,7 +905,7 @@ sub batchBookLabelGenerator {
 # 	my $pdf = new PDF::Report();
 	
  
-       if (C4::AR::Preferencias::getValorPreferencia('BookLabelPage') ne "A4"){
+       if (!(C4::AR::Preferencias::getValorPreferencia('BookLabelPage'))){
           $pdf= new PDF::Report();
           $pdf->{PageWidth}  = '270';
           $pdf->{PageHeight} = '190';
@@ -1039,6 +1039,7 @@ sub generateBookLabelA4 {
     C4::AR::Debug::debug($address);
 
      $pdf->addRawText($address, $x + 165, 265  + ( $y - $posy ));
+
 
 
 #     $pdf->addRawText( $address, $x + 145, $pageheight + 65  + ( $y - $posy ) );

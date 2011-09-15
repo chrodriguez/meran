@@ -129,6 +129,7 @@
     INGRESE_EL_TEXTO_SUCESOR= "[% 'Ingrese el texto sucesor' | i18n %]";
     INGRESE_EL_SEPERADOR= "[% 'Ingrese el separador' | i18n %]";
     SELECCIONE_VISTA_INTRA= "[% 'Seleccione una opcion en todos los campos' | i18n %]";
+    SEGURO_QUE_DESEA_ELIMINAR_TODO_EL_CAMPO= "&iquest;[% 'Est\u00e1 seguro que desea eliminar el campo y todas sus visualizaciones' | i18n %]?";
     /*=============================================Fin===Visualizacion Opac===========================================*/
     /*================================================Busquedas==============================================*/
     INGRESE_DATOS_PARA_LA_BUSQUEDA = "[% 'Ingrese datos para la b\u00fasqueda' | i18n %]";
