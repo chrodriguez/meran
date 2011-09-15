@@ -568,8 +568,9 @@ sub toMARC_Opac{
 
     my $params;
     $params->{'nivel'} = '2';
+    
     $params->{'id_tipo_doc'}    = $self->getTipoDocumento;
-    my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_opac_view($marc_record, $params,$self->db);
+    my $MARC_result_array       = C4::AR::Catalogacion::marc_record_to_opac_view($marc_record, $params,$self->db);
 
 #     my $orden = 'orden';
 #     my @return_array_sorted = sort{$b->{$orden} cmp $a->{$orden}} @$MARC_result_array;
