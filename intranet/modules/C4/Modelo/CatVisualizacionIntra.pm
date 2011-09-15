@@ -155,7 +155,8 @@ sub setVistaCampo{
 sub getPre{
     my ($self) = shift;
 
-    return $self->pre;
+C4::AR::Debug::debug("CatVisualizacionIntra => getPre =>|".$self->pre."|");
+    return $self->pre();
 }
 
 sub setPre{
