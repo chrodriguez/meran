@@ -8,8 +8,8 @@ __PACKAGE__->meta->setup(
     table   => 'cat_registro_marc_n2_analitica',
 
     columns => [
-        cat_registro_marc_n2_id             => { type => 'integer', not_null => 1 },
-       	cat_registro_marc_n2_hijo_id        => { type => 'integer', not_null => 1 },
+        cat_registro_marc_n2_id             => { type => 'integer', overflow => 'truncate', not_null => 1 },
+       	cat_registro_marc_n2_hijo_id        => { type => 'integer', overflow => 'truncate', not_null => 1 },
     ],
 
 #     primary_key_columns => [ 'cat_registro_marc_n2_id', 'cat_registro_marc_n2_hijo_id' ],

@@ -8,8 +8,8 @@ __PACKAGE__->meta->setup(
     table   => 'adq_proveedor_tipo_material',
 
     columns => [
-        proveedor_id        => { type => 'integer', length => 11, not_null => 1},
-        tipo_material_id    => { type => 'integer', length => 11, not_null => 1},
+        proveedor_id        => { type => 'integer', overflow => 'truncate', length => 11, not_null => 1},
+        tipo_material_id    => { type => 'integer', overflow => 'truncate', length => 11, not_null => 1},
     ],
     
      relationships =>

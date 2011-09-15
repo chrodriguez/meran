@@ -13,12 +13,12 @@ __PACKAGE__->meta->setup(
     table   => 'adq_presupuesto_detalle',
 
     columns => [
-        id                                 => { type => 'integer', not_null => 1 },
-        adq_presupuesto_id                 => { type => 'integer', not_null => 1 },
+        id                                 => { type => 'integer', overflow => 'truncate', not_null => 1 },
+        adq_presupuesto_id                 => { type => 'integer', overflow => 'truncate', not_null => 1 },
         precio_unitario                    => { type => 'float', not_null => 1},
-        cantidad                           => { type => 'integer', not_null => 1},
-        seleccionado                       => { type => 'integer', length => 11, not_null => 1 },
-        nro_renglon                        => { type => 'integer', length => 11, not_null => 1 },
+        cantidad                           => { type => 'integer', overflow => 'truncate', not_null => 1},
+        seleccionado                       => { type => 'integer', overflow => 'truncate', length => 11, not_null => 1 },
+        nro_renglon                        => { type => 'integer', overflow => 'truncate', length => 11, not_null => 1 },
 
     ],
 

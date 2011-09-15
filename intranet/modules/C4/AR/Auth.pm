@@ -190,7 +190,7 @@ sub updateAuthOrder{
         
 #        C4::AR::Debug::debug("nuevo orden de id : ".$campo." es :  ".@array[$i]);
         
-        $configuracion->setOrden(@array[$i]);
+        $configuracion->setOrden($array[$i]);
     
         $i++;
     }
@@ -224,7 +224,6 @@ sub checkBrowser{
 	my $search          = $browser_string."_".$browser_major;
 	
 	C4::AR::Debug::debug("HTTP USER AGENT ===================================> ".$search);
-	my ($session)       = CGI::Session->load();
 	
 	if ($search ~~ @blacklist){
 	    if (!$session->param('check_browser_allowed')){
@@ -657,7 +656,7 @@ sub _verificarSession {
             if (_cambioIp($session)){
                 $code_MSG='U356';             
                 C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => sesion invalido => cambio la ip");  
-            } elsif ($session->param('flag') eq 'LOGUIN_DUPLICADO'){
+            } elsif (defined($session->param('flag')) && ($session->param('flag') eq 'LOGUIN_DUPLICADO')){
                     $code_MSG='U359';            
                     C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => sesion invalido => loguin duplicado");  
             } elsif (($session->param('token') ne $token) and ($valido_token)){
@@ -848,9 +847,17 @@ sub checkauth {
 							$socio->setLast_login($now);
 							$socio->save();
 						}
+						my $referer  = $ENV{'HTTP_REFERER'};
+                        my $fromAuth = index($referer,'auth.pl');
+                        $referer     = C4::AR::Utilidades::addParamToUrl($referer,"token",$session->param('token'));
+                          
 						if ($type eq 'opac') {
 							$session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/opac-main.pl?token='.$session->param('token'));
-							redirectToNoHTTPS(C4::AR::Utilidades::getUrlPrefix().'/opac-main.pl?token='.$session->param('token'));
+							if ($fromAuth eq "-1"){
+                                redirectTo($referer);
+							}else{                                								
+							    redirectToNoHTTPS(C4::AR::Utilidades::getUrlPrefix().'/opac-main.pl?token='.$session->param('token'));
+							}
 							# #                               $session->secure(0);
 						}else{
 							$session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/mainpage.pl?token='.$session->param('token'));
@@ -1293,7 +1300,7 @@ sub _checkRequisito{
 
     my $status = 1;
     
-    if (C4::AR::Preferencias::getValorPreferencia("requisito") ){
+    if (C4::AR::Preferencias::getValorPreferencia("requisito_necesario") ){
 	    my $cumple_condicion = $socio->getCumple_requisito;
 
 		$status = $status && ($cumple_condicion && ($cumple_condicion ne "0000000000:00:00"));
@@ -1963,7 +1970,7 @@ sub _sendRecoveryPasswordMail_Unactive{
 
     my $mailMessage =
                 C4::AR::Filtros::i18n("
-                        Estimado/a ")."<b>$completo ($nro_socio)</b>, ".C4::AR::Filtros::i18n("socio de")." $nombre_ui, ".C4::AR::Filtros::i18n("recientemente UD ha solicitado reestablecer su clave.<br />
+                        Estimado/a ")."<b>$completo ($nro_socio)</b>, ".C4::AR::Filtros::i18n("socio de")." $nombre_ui, ".C4::AR::Filtros::i18n("recientemente UD ha solicitado reestablecer su clave.<br /><br />
                         Para hacerlo, debe dirigirse a la biblioteca, ya que UD. no cumple las condiciones necesarias de regularidad").":<br />
                                     <br />".
                         C4::AR::Filtros::i18n(  "<br /><br />Puede dirigirse a $nombre_ui, ".Encode::decode_utf8($ui->getDireccion).", ".
@@ -1986,16 +1993,9 @@ sub _sendRecoveryPasswordMail_Unactive{
 
 sub _buildPasswordRecoverLink{
     my ($socio) = @_;
-    my $link = "";
-    
     my $hash = sha256_base64(localtime().$socio->getPassword().$socio->getLastValidation());
-
     my $encoded_hash    = C4::AR::Utilidades::escapeURL($hash);
-
-    
     my $link = "http://".$ENV{'SERVER_NAME'}.C4::AR::Utilidades::getUrlPrefix()."/opac-recover-password.pl?key=".$encoded_hash;
-    
-    
     return ($link,$hash,$encoded_hash); 
     
     
@@ -2039,7 +2039,7 @@ sub recoverPassword{
         my $user_id = C4::AR::Utilidades::trim($params->{'user-id'});
         my $socio   = C4::AR::Usuarios::getSocioInfoPorMixed($user_id);       
         if ($socio){
-            if ($socio->getActivo()){
+            if ( _checkRequisito($socio) ){
 	            my $db = $socio->db;
 	            $db->{connect_options}->{AutoCommit} = 0;
 	            $db->begin_work;
@@ -2101,7 +2101,7 @@ sub checkRecoverLink{
         my $fecha_link     = $socio->recover_date_of;        
         my $err;
 
-        my $fecha_link        = Date::Manip::DateCalc( $fecha_link, "+ 1 day", \$err );
+        $fecha_link        = Date::Manip::DateCalc( $fecha_link, "+ 1 day", \$err );
 
         my $cmp_result = Date::Manip::Date_Cmp($fecha_link,$hoy);
         

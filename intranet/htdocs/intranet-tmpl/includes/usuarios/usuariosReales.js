@@ -70,6 +70,7 @@ function guardarModificacionUsuario(){
     objAH.auth_dni          = $('#auth_dni').val();
     objAH.auth_telefono     = $('#auth_telefono').val();
  	objAH.sendToServer();
+	startOverlay();
 
 }
 
@@ -87,7 +88,6 @@ function updateGuardarModificacionUsuario(responseText){
 
 
 function save(){
-	startOverlay();
    $('#userDataForm').submit();
 }
 
@@ -163,7 +163,7 @@ function eliminarUsuario(){
 		objAH.nro_socio= USUARIO.ID;
 		objAH.tipoAccion= 'ELIMINAR_USUARIO';
 		objAH.sendToServer();
-
+		startOverlay();
 	}
 }
 
@@ -223,6 +223,8 @@ function agregarUsuario(){
       objAH.tema            = $('#temas_intra').val();
 
       objAH.sendToServer();
+      startOverlay();
+
 }
 
 function checkUserData(){

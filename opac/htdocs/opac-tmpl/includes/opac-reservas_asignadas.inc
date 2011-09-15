@@ -27,7 +27,7 @@
 
                         [% IF reserva.getFecha_recordatorio_formateada %]
                           <span class="[% IF reserva.estaVencida %]fecha_vencida[% ELSE %]fecha_cumple[% END %]">
-                              Retirar antes del: [% reserva.getFecha_recordatorio_formateada %]
+                              [% "Tiene tiempo de retirar el ejemplar asignado hasta el d&iacute;a" | i18n %] [% reserva.getFecha_recordatorio_formateada %] [% "a las" | i18n %] [% cierre_ui %]  [% "horas." | i18n %] 
                           </span>
                         [% ELSE %]
                               - 

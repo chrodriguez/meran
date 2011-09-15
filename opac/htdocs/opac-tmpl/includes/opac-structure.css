@@ -2869,7 +2869,7 @@ fieldset {
 
 .detalle_total {
 	float: right;
-	width: 80%;
+	width: 75%;
 }
 
 .cover_detalle_container {
@@ -2884,7 +2884,7 @@ fieldset {
 }
 
 .cover_detalle_container img{
-    margin-left: 50%;
+    margin-left: 14%;
 }
 
 .central_left{
@@ -2903,4 +2903,8 @@ fieldset {
 
 .contenedor_boton{
 	float: left;
+}
+
+.cover_detalle_container{
+	width: 25%;
 }

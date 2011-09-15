@@ -13,8 +13,8 @@ __PACKAGE__->meta->setup(
 
     columns => [
 
-        adq_proveedor_id    => { type => 'integer', length => 11, not_null => 1 },
-        adq_forma_envio_id  => { type => 'integer', length => 11, not_null => 1},
+        adq_proveedor_id    => { type => 'integer', overflow => 'truncate', length => 11, not_null => 1 },
+        adq_forma_envio_id  => { type => 'integer', overflow => 'truncate', length => 11, not_null => 1},
     ],
 
     relationships =>

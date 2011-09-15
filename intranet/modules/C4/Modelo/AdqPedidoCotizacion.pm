@@ -10,7 +10,7 @@ __PACKAGE__->meta->setup(
     table   => 'adq_pedido_cotizacion',
 
     columns => [
-        id                       => { type => 'integer', not_null => 1 },
+        id                       => { type => 'integer', overflow => 'truncate', not_null => 1 },
         fecha                    => { type => 'timestamp', not_null => 1},
     ],
     

@@ -7,12 +7,12 @@ __PACKAGE__->meta->setup(
     table   => 'pref_informacion_referencia',
 
     columns => [
-        idinforef  => { type => 'serial', not_null => 1 },
-        idestcat   => { type => 'integer', not_null => 1 },
-        referencia => { type => 'varchar', length => 255, not_null => 1 },
-        orden      => { type => 'varchar', length => 255, not_null => 1 },
-        campos     => { type => 'varchar', length => 255, not_null => 1 },
-        separador  => { type => 'varchar', length => 3 },
+        idinforef  => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        idestcat   => { type => 'integer', overflow => 'truncate', not_null => 1 },
+        referencia => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
+        orden      => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
+        campos     => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
+        separador  => { type => 'varchar', overflow => 'truncate', length => 3 },
     ],
 
     primary_key_columns => [ 'idinforef' ],

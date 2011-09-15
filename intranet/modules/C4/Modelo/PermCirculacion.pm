@@ -8,11 +8,11 @@ __PACKAGE__->meta->setup(
     table   => 'perm_circulacion',
 
     columns => [
-        nro_socio => { type => 'varchar', length => 16, not_null => },
-        ui  => { type => 'varchar', length => 4, not_null => 1 },
-        tipo_documento => { type => 'varchar', length => 4, not_null => 1 }, 
-        prestamos => { type => 'varchar', length => 8, not_null => 1 },
-        circ_opac => { type => 'varchar', length => 8, not_null => 1 },
+        nro_socio => { type => 'varchar', overflow => 'truncate', length => 16, not_null => },
+        ui  => { type => 'varchar', overflow => 'truncate', length => 4, not_null => 1 },
+        tipo_documento => { type => 'varchar', overflow => 'truncate', length => 4, not_null => 1 }, 
+        prestamos => { type => 'varchar', overflow => 'truncate', length => 8, not_null => 1 },
+        circ_opac => { type => 'varchar', overflow => 'truncate', length => 8, not_null => 1 },
 
     ],
 

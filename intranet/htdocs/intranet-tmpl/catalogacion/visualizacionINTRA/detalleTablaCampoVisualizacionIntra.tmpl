@@ -43,8 +43,15 @@
                                                                 onClick => "editSubcampos('[% campo.getCampo %]')",
                                                                 boton   => "icon_edicion",
                                                                 title   => "[% 'Editar Subcampos' | i18n %]",
-                                                                alternClass => "botonCentradoTabla"
-                                                            ) ;
+                                                                
+                                                            );
+                            [% END %]
+                            [% PERL %]
+                            print C4::AR::Filtros::to_Icon( text    => "[% 'Eliminar Campo' | i18n %]",
+                                                                onClick => "eliminarTodoElCampo('[% campo.getCampo %]')",
+                                                                boton   => "icon_borrar",
+                                                                title   => "[% 'Eliminar Campo' | i18n %]",
+                                                            );
                             [% END %]
                         </td>
                     </tr>

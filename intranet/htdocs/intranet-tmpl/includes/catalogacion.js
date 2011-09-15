@@ -866,7 +866,7 @@ function guardarModificacionDocumentoN1(){
     objAH.showOverlay               = true;    
     objAH.url                       = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion                = "MODIFICAR_NIVEL_1";
-    objAH.id_tipo_doc               = $("#tipo_nivel3_id").val();
+    objAH.id_tipo_doc               = TEMPLATE_ACTUAL;
     objAH.id_nivel_bibliografico    = $("#id_nivel_bibliografico").val();
 	_sacarOpciones();
     objAH.infoArrayNivel1           = MARC_OBJECT_ARRAY;
@@ -907,6 +907,7 @@ function guardarModificacionDocumentoN2(){
     objAH.tipoAccion        = "MODIFICAR_NIVEL_2";
 	_sacarOpciones();
     objAH.infoArrayNivel2   = MARC_OBJECT_ARRAY;
+// TODO unificar todo a objAH.id_tipo_doc               = TEMPLATE_ACTUAL;    
     objAH.tipo_ejemplar     = ID_TIPO_EJEMPLAR;
     objAH.id1               = ID_N1;
     objAH.id2               = ID_N2; //por si se modificó
@@ -942,15 +943,17 @@ function guardarModificacionDocumentoN3(){
     objAH.showOverlay       = true;
     objAH.url               = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion        = "MODIFICAR_NIVEL_3";
+// FIXME para q esta?
     objAH.tipo_documento    = $("#tipo_nivel3_id").val();
-	objAH.cantEjemplares    = $("#cantEjemplares").val();
-	_sacarOpciones();
+    objAH.cantEjemplares    = $("#cantEjemplares").val();
+    _sacarOpciones();
     objAH.infoArrayNivel3   = MARC_OBJECT_ARRAY;
+// TODO unificar todo objAH.id_tipo_doc               = TEMPLATE_ACTUAL;    
     objAH.tipo_ejemplar     = ID_TIPO_EJEMPLAR;
     objAH.id1               = ID_N1;
     objAH.id2               = ID_N2;
     objAH.EDICION_N3_GRUPAL = EDICION_N3_GRUPAL;
-	objAH.ID3_ARRAY         = ID3_ARRAY;
+    objAH.ID3_ARRAY         = ID3_ARRAY;
     objAH.sendToServer();
 }
 
@@ -2085,19 +2088,20 @@ function modificarN1(id1, template){
 	inicializar();
    
     ID_TIPO_EJEMPLAR    = template;
+    TEMPLATE_ACTUAL	= template;
     ID_N1               = id1;
     
 // TODO falta agregar boton para modificar el template
     _mostrarAccion("Modificando el metadato (" + ID_N1 + ") => Template: " + ID_TIPO_EJEMPLAR + crearBotonEsquema());
-	objAH               = new AjaxHelper(updateModificarN1);
-	objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH               = new AjaxHelper(updateModificarN1);
+    objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;
-	objAH.debug         = true;
-	objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
-	objAH.itemtype      = ID_TIPO_EJEMPLAR;
-	objAH.id            = ID_N1;
-	objAH.nivel         = 1;
-	objAH.sendToServer();
+    objAH.debug         = true;
+    objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
+    objAH.itemtype      = ID_TIPO_EJEMPLAR;
+    objAH.id            = ID_N1;
+    objAH.nivel         = 1;
+    objAH.sendToServer();
 }
 
 function _mostrarAccion(mensaje){

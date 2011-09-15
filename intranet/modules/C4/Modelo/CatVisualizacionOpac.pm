@@ -8,14 +8,17 @@ __PACKAGE__->meta->setup(
     table   => 'cat_visualizacion_opac',
 
     columns => [
-        id              => { type => 'serial', not_null => 1 },
-        campo           => { type => 'character', length => 3, not_null => 1 },
-        subcampo        => { type => 'character', length => 1, not_null => 1 },
-        vista_opac      => { type => 'varchar', length => 255 },
-        tipo_ejemplar   => { type => 'char', length => 3 },
-        orden           => { type => 'integer', length => 11, not_null => 1 },
-        pre             => { type => 'varchar', length => 12 },
-        post            => { type => 'varchar', length => 12 }
+        id              => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        campo           => { type => 'character', overflow => 'truncate', length => 3, not_null => 1 },
+        subcampo        => { type => 'character', overflow => 'truncate', length => 1, not_null => 1 },
+        vista_opac      => { type => 'varchar', overflow => 'truncate', length => 255 },
+        tipo_ejemplar   => { type => 'char', overflow => 'truncate', length => 3 },
+        orden           => { type => 'integer', overflow => 'truncate', length => 11, not_null => 1 },
+        pre             => { type => 'varchar', overflow => 'truncate', length => 12 },
+        post            => { type => 'varchar', overflow => 'truncate', length => 12 },
+	nivel           => { type => 'integer', overflow => 'truncate', length => 1 },
+	vista_campo     => { type => 'varchar', overflow => 'truncate', length => 255 },
+	orden_subcampo  => { type => 'integer', overflow => 'truncate', length => 11, not_null => 1 }
     ],
                     
     primary_key_columns => [ 'id' ],
@@ -102,6 +105,21 @@ sub getVistaOpac{
 
     return $self->vista_opac;
 }
+
+sub getVistaCampo{
+    my ($self) = shift;
+
+    return $self->vista_campo;
+}
+
+sub setVistaCampo{
+    my ($self)          = shift;
+    my ($vista_campo)   = @_;
+    utf8::encode($vista_campo);
+    $self->vista_campo($vista_campo);
+    $self->save();
+}
+
 
 sub setVistaOpac{
     my ($self) = shift;

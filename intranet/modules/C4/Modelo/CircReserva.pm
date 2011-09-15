@@ -8,15 +8,15 @@ __PACKAGE__->meta->setup(
     table   => 'circ_reserva',
 
     columns => [
-        id2              => { type => 'integer', not_null => 1 },
-        id3              => { type => 'integer' },
-        id_reserva       => { type => 'serial', not_null => 1 },
-        nro_socio    	 => { type => 'varchar', length => 16, not_null => 1 },
-        fecha_reserva    => { type => 'varchar', default => '0000-00-00', not_null => 1 },
-        estado           => { type => 'character', length => 1 },
-        id_ui	      	 => { type => 'varchar', length => 4 },
-        fecha_notificacion => { type => 'varchar' },
-        fecha_recordatorio  => { type => 'varchar' },
+        id2              => { type => 'integer', overflow => 'truncate', not_null => 1 },
+        id3              => { type => 'integer', overflow => 'truncate' },
+        id_reserva       => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        nro_socio    	 => { type => 'varchar', overflow => 'truncate', length => 16, not_null => 1 },
+        fecha_reserva    => { type => 'varchar', overflow => 'truncate', default => '0000-00-00', not_null => 1 },
+        estado           => { type => 'character', overflow => 'truncate', length => 1 },
+        id_ui	      	 => { type => 'varchar', overflow => 'truncate', length => 4 },
+        fecha_notificacion => { type => 'varchar', overflow => 'truncate' },
+        fecha_recordatorio  => { type => 'varchar', overflow => 'truncate' },
         timestamp        => { type => 'timestamp', not_null => 1 },
     ],
 
@@ -269,7 +269,7 @@ C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde hash2 => ".$param
 		my $startdate           = C4::Date::proximoHabil(1,0,$hasta);
 		$startdate              = C4::Date::format_date_in_iso($startdate,$dateformat);
 		my $daysOfSanctions     = C4::AR::Preferencias::getValorPreferencia("daysOfSanctionReserves");
-		my $enddate             = C4::Date::proximoHabil($daysOfSanctions,0,$startdate);
+		my $enddate             = C4::Date::proximoHabil($daysOfSanctions,0,$hasta);
 		$enddate                = C4::Date::format_date_in_iso($enddate,$dateformat);
 		my  $sancion            = C4::Modelo::CircSancion->new(db => $self->db);
 		my %paramsSancion;
@@ -628,11 +628,11 @@ sub cancelar_reservas_usuarios_morosos {
 
     foreach my $reserva (@$socios_reservas_array_ref){
         my ($vencidos,$prestados) = C4::AR::Prestamos::cantidadDePrestamosPorUsuario($reserva->nro_socio);
-	if( $vencidos ){
-	    $self->debug("cancelar_reservas_usuarios_morosos => Usuario Moroso = ".$reserva->nro_socio." se cancelan sus reservas ");
-	    $params->{'nro_socio'}= $reserva->nro_socio;
-	    $self->cancelar_reservas_socio($params);
-	  }
+		if( $vencidos ){
+		    $self->debug("cancelar_reservas_usuarios_morosos => Usuario Moroso = ".$reserva->nro_socio." se cancelan sus reservas ");
+		    $params->{'nro_socio'}= $reserva->nro_socio;
+		    $self->cancelar_reservas_socio($params);
+		  }
 
     }
 }
@@ -733,6 +733,12 @@ sub intercambiarId3{
     }
 
 }
+
+sub defaultSort{
+
+    return ("fecha_recordatorio DESC");
+}
+
 
 1;
 

@@ -32,6 +32,7 @@ $VERSION = 0.01;
     &getSubCamposByCampo
     &updateNewOrderSubCampos
     &editVistaGrupo
+    &eliminarTodoElCampo
 );
 
 =item
@@ -266,7 +267,7 @@ sub getCampos{
 
 
 sub getConfiguracion{
-    my ($ejemplar,$db) = @_;
+    my ($nivel, $ejemplar, $db) = @_;
 
     $db = $db || C4::Modelo::CatVisualizacionIntra->new()->db;
 
@@ -275,10 +276,33 @@ sub getConfiguracion{
     push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $ejemplar }, 
                                     tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS
                 );
+    push ( @filtros, ( nivel   => { eq => $nivel } ));
 
     my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros, sort_by => ('campo, subcampo'), db => $db,);
 
     return ($configuracion);
+}
+
+sub getVistaCampo{
+    my ($campo, $template, $nivel, $db) = @_;
+
+    $db = $db || C4::Modelo::CatVisualizacionIntra->new()->db;
+
+    my @filtros;
+
+    push ( @filtros, ( nivel   => { eq => $nivel } ));
+    push ( @filtros, ( campo   => { eq => $campo } ));
+    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $template }, 
+                                    tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS
+                );
+
+    my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros, db => $db,);
+
+    if(scalar(@$configuracion) > 0){
+        return $configuracion->[0]->getVistaCampo;
+    } else {
+        return 0;
+    }
 }
 
 sub addConfiguracion{
@@ -387,6 +411,36 @@ sub getVisualizacionFromCampoSubCampo{
     push(@filtros, ( campo          => { eq => $campo } ) );
     push(@filtros, ( subcampo       => { eq => $subcampo } ) );
 #     push (@filtros,( tipo_ejemplar  => { eq => 'ALL' })); 
+    push (  @filtros, ( or   => [   tipo_ejemplar   => { eq => $itemtype }, 
+                                    tipo_ejemplar   => { eq => 'ALL'     } ])
+                     );
+
+
+    my $cat_estruct_info_array = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(  
+                                                                                query           =>  \@filtros,
+                                                                                db              => $db, 
+
+                                        );  
+
+    if(scalar(@$cat_estruct_info_array) > 0){
+      C4::AR::Debug::debug("VisualizacionIntra => getVisualizacionFromCampoSubCampo => lo encontre!!!");
+      return $cat_estruct_info_array->[0];
+    }else{
+      return 0;
+    }
+}
+
+=item sub getVisualizacionFromCampoAndNivel
+
+  el campo puede estar repedido ya q se agrupa campo y subcampo, pero todo los campos iguales y del mismo nivel deben tener el mismo orden
+=cut
+sub getVisualizacionFromCampoAndNivel{
+    my ($campo, $nivel, $itemtype, $db) = @_;
+    $db = $db || C4::Modelo::CatVisualizacionIntra->new()->db;
+    my @filtros;
+
+    push(@filtros, ( campo 	=> { eq => $campo } ) );
+    push(@filtros, ( nivel 	=> { eq => $nivel } ) );
     push (  @filtros, ( or   => [   tipo_ejemplar   => { eq => $itemtype }, 
                                     tipo_ejemplar   => { eq => 'ALL'     } ])
                      );
@@ -519,6 +573,71 @@ sub t_delete_configuracion {
 
 
     return ($msg_object);
+}
+
+=item
+   Esta funcion elimina todo un campo con sus respectivos subcampos de un nivel recibido por parametro
+=cut
+sub eliminarTodoElCampo{
+    my ($params) = @_;
+
+    my $visualizacion_intra = C4::Modelo::CatVisualizacionIntra->new();  
+    my $db                  = $visualizacion_intra->db;
+    my $msg_object          = C4::AR::Mensajes::create();
+    my $campo               = $params->{'campo'};
+    my $nivel               = $params->{'nivel'};
+    my $ejemplar            = $params->{'ejemplar'};
+
+    $db->{connect_options}->{AutoCommit} = 0;
+
+    eval {
+        C4::AR::VisualizacionIntra::_eliminarTodoElCampo($params, $db);
+        $msg_object->{'error'} = 0;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'M001', 'params' => [$campo, $nivel, $ejemplar]} ) ;
+
+        $db->commit;
+    };
+
+    if ($@){
+        #Se loguea error de Base de Datos
+        C4::AR::Mensajes::printErrorDB($@, 'M003',"INTRA");
+        $db->rollback;
+        #Se setea error para el usuario
+        $msg_object->{'error'} = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'M002', 'params' => [$campo, $nivel, $ejemplar]} ) ;
+    }
+
+    $db->{connect_options}->{AutoCommit} = 1;
+
+    return ($msg_object);
+}
+
+
+=item
+    Funcion interna que elimina todos los campos-subcampos de un nivel
+=cut
+sub _eliminarTodoElCampo{
+    my ($params, $db) = @_;
+    my @filtros;
+    my $campo       = $params->{'campo'};
+    my $nivel       = $params->{'nivel'};
+    my $ejemplar    = $params->{'ejemplar'};
+
+    push (@filtros, (campo      => { eq => $campo }) );
+    push (@filtros, (nivel      => { eq => $nivel }) );
+    
+    #FIXME: esta con un 'OR' porque cuando se muestran los campos se hace lo mismo: sub getConfiguracionByOrderGroupCampo
+    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $ejemplar }, 
+                                    tipo_ejemplar   => { eq => 'ALL'     } ]),
+                                
+    );
+#    push (@filtros, (ejemplar   => { eq => $ejemplar }) );
+
+    my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(db => $db, query => \@filtros,);
+
+    foreach my $conf (@$configuracion){
+        $conf->delete();    
+    }
 }
 
 

@@ -968,11 +968,13 @@ sub busquedaAvanzada_newTemp{
     my $query   = '';
     my $tipo    = 'SPH_MATCH_EXTENDED';
     my $orden   = $params->{'orden'};
+    my $keyword;
    
     if($params->{'titulo'} ne ""){
+        $keyword = unac_string('utf8',$params->{'titulo'});
         #le sacamos los acentos para que busque indistintamente
-        $params->{'titulo'} = unac_string('utf8',$params->{'titulo'});
-        $query .= ' @titulo "'.$params->{'titulo'};
+#        $params->{'titulo'} = unac_string('utf8',$params->{'titulo'});
+        $query .= ' @titulo "'.$keyword;
 	    if($params->{'tipo'} eq "normal"){
 	        $query .= "*";
 	    }
@@ -980,7 +982,10 @@ sub busquedaAvanzada_newTemp{
     }
 
     if($params->{'autor'} ne ""){
-        $query .= ' @autor "'.$params->{'autor'};
+        $keyword = unac_string('utf8',$params->{'autor'});
+#        $params->{'autor'} = unac_string('utf8',$params->{'autor'});
+#        C4::AR::Debug::debug("autorrrrrrrrrrrr --------------------------- : ".$params->{'autor'});
+        $query .= ' @autor "'.$keyword;
 
         if($params->{'tipo'} eq "normal"){
             $query .= "*";
@@ -1014,7 +1019,9 @@ sub busquedaAvanzada_newTemp{
     }
 
     if ($params->{'tema'} ne ""){
-        $query .= ' @string "'."cat_tema%".$sphinx->EscapeString($params->{'tema'}).'"';
+        C4::AR::Debug::debug("tema en el pm : ".$params->{'tema'});
+        $keyword = unac_string('utf8',$params->{'tema'});
+        $query .= ' @string "'."cat_tema%".$sphinx->EscapeString($keyword).'*"';
     }
 
     
@@ -1187,14 +1194,12 @@ sub busquedaCombinada_newTemp{
 	use Sphinx::Search;
 
     use Text::Unaccent;
-
-
     # Se agregó para sacar los acentos y que no se mame el suggest, total es lo mismo porque
     # Sphinx busca con o sin acentos
-	$string_utf8_encoded    = unac_string('utf8',$string_utf8_encoded);
-	
-    #no se encodea nunca a utf8 antes de llegar aca	
-    #$string_utf8_encoded    = Encode::decode_utf8($string_utf8_encoded);
+    $string_utf8_encoded    = unac_string('utf8',$string_utf8_encoded);
+    # no se encodea nunca a utf8 antes de llegar aca	
+    # $string_utf8_encoded    = Encode::decode_utf8($string_utf8_encoded);
+
 
     my $from_suggested = $obj_for_log->{'from_suggested'} || 0;
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
@@ -1249,6 +1254,7 @@ sub busquedaCombinada_newTemp{
             }
         }else{
             $query .=  " ".$string."*";
+C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      -----------------------------> : ".$string);
         }
     }
 
@@ -1274,7 +1280,7 @@ sub busquedaCombinada_newTemp{
     }
 
     if (!$only_sphinx){
-        $sphinx->SetLimits($obj_for_log->{'ini'}, $obj_for_log->{'cantR'});
+        $sphinx->SetLimits($obj_for_log->{'ini'}, $obj_for_log->{'cantR'},100000);
     }
   
     C4::AR::Debug::debug("C4::AR::Busquedas::busquedaCombinada_newTemp => ini => ".$obj_for_log->{'ini'});
@@ -1332,9 +1338,9 @@ sub busquedaSinPaginar {
      
      my  ($total_found,$matches);
  
-     C4::AR::Debug::debug($obj->{'string'});
+     C4::AR::Debug::debug("stringgg : ----------------------------------------------------------ffffffffffffffffffffffffffff----- : ".$obj->{'string'});
 
-     if ($obj->{'tipoAccion'} eq "BUSQUEDA_COMBINADA"){
+     if ($obj->{'tipoAccion'} eq "BUSQUEDA_COMBINABLE"){
                 $sphinx_options{'only_sphinx'} = 1;
                 $sphinx_options{'report'} = 1;
                ($total_found,$matches) = C4::AR::Busquedas::busquedaCombinada_newTemp($obj->{'string'},$session,$obj,\%sphinx_options);
@@ -1353,7 +1359,7 @@ sub busquedaSinPaginar {
    
     my ($total_found_paginado, $resultsarray);
 
-    if ($obj->{'tipoAccion'} eq "BUSQUEDA_COMBINADA"){
+    if ($obj->{'tipoAccion'} eq "BUSQUEDA_COMBINABLE"){
         foreach my $hash (@$matches){
               my %hash_temp = {};
               $hash_temp{'id1'} = $hash->{'doc'};
@@ -1415,14 +1421,11 @@ sub armarInfoNivel1{
             @result_array_paginado[$i]->{'portada_registro'}        =  $images_n1_hash_ref->{'S'};
             @result_array_paginado[$i]->{'portada_registro_medium'} =  $images_n1_hash_ref->{'M'};
             @result_array_paginado[$i]->{'portada_registro_big'}    =  $images_n1_hash_ref->{'L'};
-
-            
             my @nivel2_portadas;
+
             if (scalar(@$nivel2_array_ref)>1){
                 for(my $i=0;$i<scalar(@$nivel2_array_ref);$i++){
                     my %hash_nivel2;
-# TODO preguntar al mono pq se busca la imagen por nivel 1 y 2 ??????????????????????????????????????????
-#                     my $images_n2_hash_ref = C4::AR::PortadasRegistros::getAllImageForId2($nivel2_array_ref->[$i]->getId2);
                     my $images_n2_hash_ref                      = $nivel2_array_ref->[$i]->getAllImage();
                     
                     if ($images_n2_hash_ref){

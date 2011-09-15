@@ -9,12 +9,12 @@ __PACKAGE__->meta->setup(
     table   => 'ref_pais',
 
     columns => [
-        id           => { type => 'serial', not_null => 1 },
-        iso          => { type => 'character', length => 2, not_null => 1 },
-        iso3         => { type => 'character', default => '', length => 3, not_null => 1 },
-        nombre       => { type => 'varchar', length => 80, not_null => 1 },
-        nombre_largo => { type => 'varchar', length => 80, not_null => 1 },
-        codigo       => { type => 'varchar', length => 11, not_null => 1 },
+        id           => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        iso          => { type => 'character', overflow => 'truncate', length => 2, not_null => 1 },
+        iso3         => { type => 'character', overflow => 'truncate', default => '', length => 3, not_null => 1 },
+        nombre       => { type => 'varchar', overflow => 'truncate', length => 80, not_null => 1 },
+        nombre_largo => { type => 'varchar', overflow => 'truncate', length => 80, not_null => 1 },
+        codigo       => { type => 'varchar', overflow => 'truncate', length => 11, not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],

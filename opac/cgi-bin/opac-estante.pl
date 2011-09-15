@@ -23,21 +23,26 @@ my ($template, $session, $t_params) = get_template_and_user ({
                  });
 
 my $id_estante=$input->param('id_estante');
+    C4::AR::Debug::debug("OPAC ESTANTE ==> ".$id_estante);
 
 if(!$id_estante){
   #Si no viene estante se ven los Estantes Principales (Padre = 0)
+      C4::AR::Debug::debug("OPAC ESTANTE ==> PUBLICOS");
+  
   my $estantes_publicos = C4::AR::Estantes::getListaEstantesPublicos();
-  $t_params->{'cant_estantes'}= @$estantes_publicos;
+  $t_params->{'cant_subestantes'}= @$estantes_publicos;
   $t_params->{'SUBESTANTES'}= $estantes_publicos;
 }
 else{
   #Se ve un estante en particular con su contenido
+        
     my $estante= C4::AR::Estantes::getEstante($id_estante);
     my $subEstantes= C4::AR::Estantes::getSubEstantes($id_estante);
+    my $nombre=$estante->getEstante;
 
     $t_params->{'estante'}= $estante;
-    $t_params->{'SUBESTANTES'}= $subEstantes;
-    $t_params->{'cant_estantes'}= @$subEstantes;
+    $t_params->{'SUBESTANTES'}=$subEstantes ;
+    $t_params->{'cant_subestantes'}= @$subEstantes;
 }
 
 $t_params->{'content_title'}        = C4::AR::Filtros::i18n("Estantes Virtuales");

@@ -1767,7 +1767,7 @@ input.file {
 }
 
 .contenedor_paginador {
-	width: 54%;
+	width: 70%;
 	margin: 0 auto;
 	padding: 4px;
 }
@@ -4433,6 +4433,20 @@ form.signin .subchck .remember {
     outline: medium none;
     padding: 3px 6px 3px 5px;
 }
+
+.static-links .search-form {
+    float: left;
+    margin: 6px 0.8em 0 0;
+    opacity: 1;
+    position: relative;
+}
+
+.static-links .search-form input, textarea, select{
+    font-family: verdana;
+    font-size: 12px;
+    margin: 0 0 10px;
+    max-width: 300px;}
+
 .search-form {
     float: left;
     margin: 6px 0 0;

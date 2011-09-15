@@ -22,6 +22,7 @@ my ($template, $session, $t_params)= get_template_and_user({
                                     });
 
 C4::AR::Auth::checkBrowser();
+
 my $nro_socio                       = $session->param('nro_socio');            
 my ($cantidad,$grupos)              = C4::AR::Nivel1::getUltimosGrupos();
 
@@ -68,7 +69,10 @@ if ($sanciones){
     $t_params->{'cant_sanciones'} = 0;
 }
 
-
+my $apertura=C4::AR::Preferencias::getValorPreferencia("open");
+my $cierre=C4::AR::Preferencias::getValorPreferencia("close");
+$t_params->{'cierre_ui'} = $cierre;
+$t_params->{'apertura_ui'} = $apertura;
 
 $t_params->{'reservas_asignadas_count'} = $racount;
 $t_params->{'reservas_espera_count'}    = $recount;

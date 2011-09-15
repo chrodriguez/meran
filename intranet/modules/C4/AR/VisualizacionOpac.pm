@@ -168,6 +168,28 @@ sub getConfiguracion{
     return ($configuracion);
 }
 
+sub getVistaCampo{
+    my ($campo, $template, $nivel, $db) = @_;
+
+    $db = $db || C4::Modelo::CatVisualizacionIntra->new()->db;
+
+    my @filtros;
+
+    push ( @filtros, ( nivel   => { eq => $nivel } ));
+    push ( @filtros, ( campo   => { eq => $campo } ));
+    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $template }, 
+                                    tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS
+                );
+
+    my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros, db => $db,);
+
+    if(scalar(@$configuracion) > 0){
+        return $configuracion->[0]->getVistaCampo;
+    } else {
+        return 0;
+    }
+}
+
 sub addConfiguracion {
     my ($params, $db) = @_;
 
@@ -222,7 +244,7 @@ sub editConfiguracion{
             return ($configuracion->[0]->getPost());
         }else{
             $configuracion->[0]->modificar($value);
-            return ($configuracion->[0]->getVistaIntra());
+            return ($configuracion->[0]->getVistaOpac());
         }
     }else{
         return(0);
@@ -289,6 +311,36 @@ sub getVisualizacionFromCampoSubCampo{
                                         );  
 
     if(scalar(@$cat_estruct_info_array) > 0){
+      return $cat_estruct_info_array->[0];
+    }else{
+      return 0;
+    }
+}
+
+=item sub getVisualizacionFromCampoAndNivel
+
+  el campo puede estar repedido ya q se agrupa campo y subcampo, pero todo los campos iguales y del mismo nivel deben tener el mismo orden
+=cut
+sub getVisualizacionFromCampoAndNivel{
+    my ($campo, $nivel, $itemtype, $db) = @_;
+    $db = $db || C4::Modelo::CatVisualizacionOpac->new()->db;
+    my @filtros;
+
+    push( @filtros, ( campo 	=> { eq => $campo } ) );
+    push( @filtros, ( nivel 	=> { eq => $nivel } ) );
+    push ( @filtros, ( or   => [   tipo_ejemplar   => { eq => $itemtype }, 
+                                    tipo_ejemplar   => { eq => 'ALL'     } ])
+                     );
+
+
+    my $cat_estruct_info_array = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(  
+                                                                                query           =>  \@filtros,
+                                                                                db              => $db, 
+
+                                        );  
+
+    if(scalar(@$cat_estruct_info_array) > 0){
+      C4::AR::Debug::debug("VisualizacionOpac => getVisualizacionFromCampoAndNivel => lo encontre!!!");
       return $cat_estruct_info_array->[0];
     }else{
       return 0;

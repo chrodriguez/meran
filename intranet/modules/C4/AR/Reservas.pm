@@ -954,7 +954,7 @@ sub _verificaciones {
         C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de operacion fuera de horario");
     }
 
-#Se verfica si el usuario esta sancionado
+#Se verfica si el usuario esta sancionado o tiene libros vencidos 
     my ($sancionado, $fechaFin, $cod_error) = C4::AR::Sanciones::permisoParaPrestamo($nro_socio, $tipo_prestamo);
     C4::AR::Debug::debug("Reservas.pm => _verificaciones => sancionado: $sancionado ------ fechaFin: $fechaFin\n");
     if( !($msg_object->{'error'}) && ($sancionado||$fechaFin) ){
@@ -1051,8 +1051,6 @@ sub t_reservarOPAC {
             #SE RESERVO CON EXITO UN EJEMPLAR
                 $msg_object->{'error'} = 0;
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U302', 'params' => [    
-                                                                                        $paramsReserva->{'desde'},
-                                                                                        $paramsReserva->{'desdeh'},
                                                                                         $paramsReserva->{'hasta'},
                                                                                         $paramsReserva->{'hastah'}
                                 ]} ) ;

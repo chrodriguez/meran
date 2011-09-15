@@ -8,9 +8,9 @@ __PACKAGE__->meta->setup(
     table   => 'ref_nivel_bibliografico',
 
     columns => [
-        id          => { type => 'serial', not_null => 1 },
-        code        => { type => 'varchar', length => 4, not_null => 1 },
-        description => { type => 'varchar', default => '', length => 20, not_null => 1 },
+        id          => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        code        => { type => 'varchar', overflow => 'truncate', length => 4, not_null => 1 },
+        description => { type => 'varchar', overflow => 'truncate', default => '', length => 20, not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],

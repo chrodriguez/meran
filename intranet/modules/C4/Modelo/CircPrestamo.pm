@@ -9,20 +9,20 @@ __PACKAGE__->meta->setup(
 	table => 'circ_prestamo',
 
 	columns => [
-		id_prestamo => { type => 'serial', not_null => 1 },
-		id3         => { type => 'integer' },
-		nro_socio => { type => 'varchar', length => 16, not_null => 1 },
+		id_prestamo => { type => 'serial', overflow => 'truncate', not_null => 1 },
+		id3         => { type => 'integer', overflow => 'truncate' },
+		nro_socio => { type => 'varchar', overflow => 'truncate', length => 16, not_null => 1 },
 		tipo_prestamo =>
-		  { type => 'character', length => 2, default => 'DO', not_null => 1 }
+		  { type => 'character', overflow => 'truncate', length => 2, default => 'DO', not_null => 1 }
 		,
-		fecha_prestamo   => { type => 'varchar', not_null => 1 },
-		id_ui_origen     => { type => 'varchar', length   => 4 },
-		id_ui_prestamo   => { type => 'varchar', length   => 4 },
-		fecha_devolucion => { type => 'varchar' },
-		renovaciones => { type => 'integer', default => '0', not_null => 1 },
-		fecha_ultima_renovacion => { type => 'varchar' },
+		fecha_prestamo   => { type => 'varchar', overflow => 'truncate', not_null => 1 },
+		id_ui_origen     => { type => 'varchar', overflow => 'truncate', length   => 4 },
+		id_ui_prestamo   => { type => 'varchar', overflow => 'truncate', length   => 4 },
+		fecha_devolucion => { type => 'varchar', overflow => 'truncate' },
+		renovaciones => { type => 'integer', overflow => 'truncate', default => '0', not_null => 1 },
+		fecha_ultima_renovacion => { type => 'varchar', overflow => 'truncate' },
 		timestamp               => { type => 'timestamp', not_null => 1 },
-		agregacion_temp => { type => 'varchar', length => 255, not_null => 0 },
+		agregacion_temp => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 0 },
 	],
 
 	primary_key_columns => ['id_prestamo'],
@@ -868,7 +868,7 @@ sub getInvolvedCount {
 	my ($self) = shift;
 	my ( $campo, $value ) = @_;
 	my @filtros;
-    push( @filtros, ( $campo => $value ) );
+    push (@filtros, ( $campo->getCampo_referente => $value ) );
     C4::AR::Debug::debug("CircPrestamo=> getInvolvedCount => $campo || $value" );
     
 	my $circ_prestamo_count =  C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(query => \@filtros );

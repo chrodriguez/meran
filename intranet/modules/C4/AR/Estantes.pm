@@ -75,10 +75,6 @@ sub getEstante {
                                                                                 );
     
     my $estante=  $estantes_array_ref->[0];
-
-    if($estante) {
-    	C4::AR::Debug::debug("Se obtiene el estante  ".$estante->getEstante);
-    }
     
     return ($estante);
 }

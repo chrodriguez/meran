@@ -13,6 +13,7 @@ $VERSION = 0.01;
 @EXPORT = qw(
 	&getMensaje
 	&getAccion
+	&encodeUtf8Msj
 );
 
 #000 - Todo normal
@@ -69,7 +70,7 @@ my %mensajesOPAC = (
 	'S201' => 'Disculpe, no puede efectuar reservas porque usted tiene una posible sanci&oacute;n pendiente.',
 	'U300' => 'Disculpe, no puede efectuar reservas porque usted no es un alumno regular.',
 	'U301' => 'Disculpe, no puede efectuar reservas porque usted no ha realizado a&uacute;n el curso para usuarios.',
-	'U302' => 'El libro que acaba de reservar deber&aacute; ser retirado desde el d&iacute;a  *?* a las *?* hasta el d&iacute;a: *?* hasta las *?*',
+	'U302' => 'El libro que acaba de reservar deber&aacute; ser retirado antes del d&iacute;a: *?* hasta las *?*',
 	'U303' => 'En este momento no hay ejemplares disponibles para el pr&eacute;stamo inmediato. Cuando haya alg&uacute;n ejemplar a su disposici&oacute;n se le informar&aacute; a su cuenta de usuario y a su mail:
 	<br><i> *?* </i><br>Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.',
 	'U304' => 'Disculpe, no puede reservar porque no hizo el curso para usuarios.',
@@ -498,6 +499,9 @@ my %mensajesINTRA = (
     'S008' => 'Por favor verifique que los datos ingresados sean correctos.',  
     #mensajes visualizacion INTRA y OPAC
     'M000' => 'Se modifico el orden con &eacute;xito.',  
+    'M001' => 'Se eliminaron todas las visualizaciones del campo "*?*", nivel "*?*" y ejemplar "*?*" con &eacute;xito.', 
+    'M002' => 'Error al intentar eliminar las visualizaciones con campo "*?*" y nivel "*?*".', 
+    'M003' => 'Error en la funcion eliminarTodoElCampo.', 
 
     #Mensajes Social     
     'SC000' => 'El mensaje ha sido publicado en Twitter',
@@ -647,6 +651,21 @@ sub getFirstCodeError {
     return $msg_object->{'messages'}->[0]->{'codMsg'} || 0;
 }
 
+
+=item
+    Esta funcion encodea el mensaje en utf8 para mostrar correctamente los acentos en el cliente
+=cut
+sub encodeUtf8Msj{
+
+    my($hash) = @_;
+    
+    use Encode;
+    
+    foreach my $value (@$hash) {
+        $value = encode("utf8",$value);
+    }
+}
+
 #Esta funcion agrega un mensaje al arreglo de objetos mensajes
 sub add {
 	my($Message_hashref, $msg_hashref)=@_;
@@ -656,6 +675,9 @@ sub add {
 #   	my $messageString= &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'},$Message_hashref->{'tipo'},$msg_hashref->{'params'});
     my $session         = CGI::Session->load();
     my $tipo            = $session->param('type')||'INTRA';
+
+    #encodeamos en utf8 para mostrar bien los acentros
+    encodeUtf8Msj($msg_hashref->{'params'});
 
     my $messageString   = &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'}, $tipo, $msg_hashref->{'params'});     
 	$msg_hashref->{'message'}= $messageString;

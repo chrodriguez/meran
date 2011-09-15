@@ -9,8 +9,8 @@ __PACKAGE__->meta->setup(
     table   => 'usr_login_attempts',
 
     columns => [
-        nro_socio    => { type => 'varchar', length => 16, not_null => 1, overflow => 'truncate' },
-        attempts     => { type => 'integer', length => 32, default => 0, overflow => 'truncate' },
+        nro_socio    => { type => 'varchar', overflow => 'truncate', length => 16, not_null => 1, overflow => 'truncate' },
+        attempts     => { type => 'integer', overflow => 'truncate', length => 32, default => 0, overflow => 'truncate' },
     ],
 
     primary_key_columns => [ 'nro_socio' ],

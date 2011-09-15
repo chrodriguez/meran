@@ -8,8 +8,8 @@ __PACKAGE__->meta->setup(
     table   => 'cat_control_seudonimo_autor',
 
     columns => [
-        id_autor            => { type => 'integer', not_null => 1 },
-        id_autor_seudonimo  => { type => 'integer', not_null => 1 },
+        id_autor            => { type => 'integer', overflow => 'truncate', not_null => 1 },
+        id_autor_seudonimo  => { type => 'integer', overflow => 'truncate', not_null => 1 },
     ],
 
     primary_key_columns => [ 'id_autor', 'id_autor_seudonimo' ],

@@ -8,8 +8,8 @@ __PACKAGE__->meta->setup(
     table   => 'cat_control_sinonimo_autor',
 
     columns => [
-        id    => { type => 'integer', not_null => 1 },
-        autor => { type => 'varchar', length => 255, not_null => 1 },
+        id    => { type => 'integer', overflow => 'truncate', not_null => 1 },
+        autor => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
     ],
 
     primary_key_columns => [ 'id', 'autor' ],
