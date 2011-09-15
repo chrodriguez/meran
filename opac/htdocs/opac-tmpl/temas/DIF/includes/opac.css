@@ -66,20 +66,21 @@ body input[type="text"] {
 /********************/
 /*  HEADER SECTION  */
 /********************/
+
 .sitelogo {
-    background: url(../imagenes/bg_head_top_logo.png) no-repeat;
+    background: url(../imagenes/logo_ui.png) no-repeat;
+}
+
+.meranlogo {
+    background: url(../imagenes/logo_meran.png) no-repeat;
 }
 
 .sitename h2 {
     color: rgb(125, 125, 125);
 }
 
-.sitename a {
-    color: rgb(125, 125, 125);
-}
-
-.sitename a:hover {
-    color: rgb(50, 50, 50);
+.sitename{
+    color: rgb(0, 103, 116);
 }
 
 .nav1 li a {
@@ -1090,6 +1091,9 @@ label.error_adv {
 .ui-accordion .ui-accordion-content-active {
     /*  background: #DEF6BA; ACA VA EL COLOR DE FONDO SELECCIONADO */
     
+}
+
+.signout{
 }
 
 /* FORM DROP_DOWN_LOGIN */

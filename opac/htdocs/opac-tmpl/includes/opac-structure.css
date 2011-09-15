@@ -155,21 +155,34 @@ body {
 /*  HEADER SECTION  */
 /********************/
 .sitelogo {
-	width: 56px;
+	width: 380px;
 	height: 56px;
 	position: absolute;
 	z-index: 1;
 	margin: 14px 0 0 20px;
 }
 
+.meranlogo {
+    width: 125px;
+    height: 36px;
+    position: relative;
+    float: left;
+    clear: both;
+    z-index: 1;
+    margin: 14px 0 0 55px;
+}
+
 .sitename {
-	width: 300px;
+	width: auto;
+	max-width: 400px;
 	height: 45px;
 	position: absolute;
 	z-index: 1;
-	margin: 10px 0 0 90px;
+	margin: 32px 0 0 15px;
 	overflow: visible !important /*Firefox*/;
 	overflow: hidden /*IE6*/;
+	text-decoration: none;
+	font-size: 22px;
 }
 
 .sitename h1 {
@@ -194,7 +207,8 @@ body {
 	position: relative;
 	z-index: 2;
 	margin-right: 0;
-	margin-top: 5px;
+	margin-top: 2px;
+	margin-bottom: -19px;
 	clear: both;
 	float: right;
 	margin-left: 10px !important /*Non-IE6*/;
@@ -262,7 +276,8 @@ body {
 }
 
 .nav_logged {
-	width: 200px;
+	width: auto;
+	max-width: 400px;
 	position: relative;
 	z-index: 3;
 	margin-right: 1%;
@@ -2660,6 +2675,7 @@ label.error_adv {
 	line-height: 23px;
 	padding: 4px 0 0;
 	text-align: right;
+	clear: both;
 }
 
 #drop_down_login a.signin {
@@ -2707,7 +2723,7 @@ a.signin span {
 	border: 1px solid;
 	text-align: left;
 	padding: 10px;
-	margin-left: -22px;
+	margin-left: -34px;
 	margin-top: 5px;
 	font-size: 11px;
 }

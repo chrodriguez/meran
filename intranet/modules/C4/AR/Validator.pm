@@ -14,6 +14,7 @@ Synopsis:   Este PM tiene como fin contener todas las funciones que estén dedic
 use strict;
 use C4::AR::Utilidades qw(validateString trim);
 use C4::AR::Address;
+use C4::AR::MailChecker;
 #EINAR use CGI::Session;
 
 use vars qw(@EXPORT @ISA);
@@ -309,10 +310,8 @@ sub toValidDate {
 sub isValidMail{
 
     my ($address) = @_;
-    if($address =~ /^[a-zA-Z][\w\.-]*[a-zA-Z0-9][_-]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$/){ 
-        return 1;
-    }
-    return 0;
+
+    return C4::AR::MailChecker::valid($address);
 }
 
 ################################# FIN FUNCIONES PARA MAIL ##################################
