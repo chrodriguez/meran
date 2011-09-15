@@ -350,7 +350,7 @@ function mostrarEstructuraDelNivel1(){
     _NIVEL_ACTUAL       = 1;
    
     if(MODIFICAR == 0){
-        _mostrarAccion("Agregando metadatos => Template: " + $('#tipo_nivel3_id').val() + crearBotonEsquema());
+        _mostrarAccion("Agregando metadatos => Template: " + TEMPLATE_ACTUAL + crearBotonEsquema());
     } 
 
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel1);
@@ -360,7 +360,7 @@ function mostrarEstructuraDelNivel1(){
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
     objAH.nivel         = _NIVEL_ACTUAL;
-    objAH.id_tipo_doc   = $('#tipo_nivel3_id').val();
+    objAH.id_tipo_doc   = TEMPLATE_ACTUAL;//$('#tipo_nivel3_id').val();
     objAH.sendToServer();
 }
 
@@ -383,7 +383,7 @@ function mostrarEstructuraDelNivel2(){
     _NIVEL_ACTUAL       = 2;
     
     if(MODIFICAR == 0){
-        _mostrarAccion("Agregando grupo => Template: " + $('#tipo_nivel3_id').val() + crearBotonEsquema());
+        _mostrarAccion("Agregando grupo => Template: " + TEMPLATE_ACTUAL + crearBotonEsquema());
     }
     
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel2);
@@ -393,7 +393,7 @@ function mostrarEstructuraDelNivel2(){
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
     objAH.nivel         = 2;
-    objAH.id_tipo_doc   = $("#tipo_nivel3_id").val();
+    objAH.id_tipo_doc   = TEMPLATE_ACTUAL;//$("#tipo_nivel3_id").val();
     objAH.sendToServer();
 }
 
@@ -803,7 +803,7 @@ function updateGuardarDocumentoN2(responseText){
         inicializar();
         //carga la barra lateral con info de nivel 2
         mostrarInfoAltaNivel2(ID_N2);
-        mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
+        mostrarEstructuraDelNivel3(TEMPLATE_ACTUAL);
     }
 }
 
@@ -929,7 +929,7 @@ function updateGuardarModificacionDocumentoN2(responseText){
         inicializar();
         //carga la barra lateral con info de nivel 2
         mostrarInfoAltaNivel2(ID_N2);
-        mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
+        mostrarEstructuraDelNivel3(TEMPLATE_ACTUAL);
         //se esta modificando desde el detalle del registro
         if (FROM_DETALLE_REGISTRO == 1) window.location = "detalle.pl?id1=" + ID_N1;
         MODIFICAR = 0;
@@ -2041,7 +2041,7 @@ function updateBorrarN3(responseText){
 
     if (! (hayError(Messages) ) ){
         inicializar();
-        mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
+        mostrarEstructuraDelNivel3(TEMPLATE_ACTUAL);
         //acutalizo los datos de nivel 2
         mostrarInfoAltaNivel2(ID_N2);
         mostrarInfoAltaNivel3(ID_N2);
@@ -2073,7 +2073,7 @@ function updateBorrarEjemplaresN3(responseText){
     
     if (! (hayError(Messages) ) ){
 	    inicializar();
-	    mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
+	    mostrarEstructuraDelNivel3(TEMPLATE_ACTUAL);
         mostrarInfoAltaNivel2(ID_N2);
         mostrarInfoAltaNivel3(ID_N2);
     }
@@ -2211,7 +2211,7 @@ function modificarEjemplaresN3FromRegistro(id1){
 function updateModificarEjemplaresN3(responseText){
 	MODIFICAR = 1;
 	$('#divCantEjemplares').hide();	
-	mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);  
+	mostrarEstructuraDelNivel3(TEMPLATE_ACTUAL);  
 }
 
 /*

@@ -158,6 +158,8 @@ sub getConfiguracion{
 #     push ( @filtros, ( or   => [    id_perfil   => { eq => $perfil }, 
 #                                     id_perfil   => { eq => '0'     } ]) #PERFIL TODOS
 #                 );
+    push ( @filtros, ( nivel   => { eq => $nivel } ));
+
     push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $ejemplar }, 
                                     tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS
                 );
