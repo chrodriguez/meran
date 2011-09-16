@@ -5,6 +5,7 @@
 </script>
 
 [% FOREACH nivel2 %]
+
 	<div class="detalle_completo_niveles">
 		<div class="main-subcontent" style="width:100%; float:left">
 		    <div class="subcontent-unit-border" style="width:100%;">

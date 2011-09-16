@@ -148,7 +148,7 @@ sub getConfiguracionByOrder{
 
 
 sub getConfiguracion{
-    my ($ejemplar, $db) = @_;
+    my ($nivel, $ejemplar, $db) = @_;
 
     my @filtros;
     $db = $db || C4::Modelo::CatVisualizacionOpac->new()->db;
@@ -158,6 +158,7 @@ sub getConfiguracion{
 #     push ( @filtros, ( or   => [    id_perfil   => { eq => $perfil }, 
 #                                     id_perfil   => { eq => '0'     } ]) #PERFIL TODOS
 #                 );
+    push ( @filtros, ( nivel   => { eq => $nivel } ));
 
     push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $ejemplar }, 
                                     tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS

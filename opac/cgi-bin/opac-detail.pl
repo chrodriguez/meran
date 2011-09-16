@@ -34,4 +34,5 @@ $t_params->{'per_page'}             = C4::Context->config("cant_grupos_per_query
 $t_params->{'ajax'}                 = $ajax;
 $t_params->{'pref_e_documents'} = C4::AR::Preferencias::getPreferencia("e_documents");
 
+
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -120,7 +120,7 @@
                                     [% FOREACH NIVEL.portadas_grupo %]
                                         [% IF loop.count < 4 %]
 						                    [% IF portada_registro %]
-						                        <a class="fancylink" rel="group" href="/uploads/covers/[% portada_registro_big %]">
+						                        <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada_registro_big %]">
 						                            <img name="cover"  VALUE="" BORDER=0 src="/uploads/covers/[% portada_registro %]" title="Portada">
 						                        </a>
 						                    [% ELSE %]
@@ -133,12 +133,12 @@
                             [% ELSE %]
                                 [% IF NIVEL.portada_registro %]
                                     [% IF NIVEL.portada_registro_big %]
-                                        <a class="fancylink" rel="group" href="/uploads/covers/[% NIVEL.portada_registro_big %]">
+                                        <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% NIVEL.portada_registro_big %]">
                                             <img alt="cover" src="/uploads/covers/[% NIVEL.portada_registro %]" title="Portada" />
                                         </a>
                                     [% ELSE %]
                                         [% IF NIVEL.portada_registro_medium %]
-                                            <a class="fancylink" rel="group" href="/uploads/covers/[% NIVEL.portada_registro_medium %]">
+                                            <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% NIVEL.portada_registro_medium %]">
                                                 <img alt="cover" src="/uploads/covers/[% NIVEL.portada_registro %]" title="Portada" />
                                             </a>
                                         [% ELSE %]

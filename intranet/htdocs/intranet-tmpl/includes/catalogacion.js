@@ -350,7 +350,7 @@ function mostrarEstructuraDelNivel1(){
     _NIVEL_ACTUAL       = 1;
    
     if(MODIFICAR == 0){
-        _mostrarAccion("Agregando metadatos => Template: " + $('#tipo_nivel3_id').val() + crearBotonEsquema());
+        _mostrarAccion("Agregando metadatos => Template: " + TEMPLATE_ACTUAL + crearBotonEsquema());
     } 
 
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel1);
@@ -360,7 +360,7 @@ function mostrarEstructuraDelNivel1(){
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
     objAH.nivel         = _NIVEL_ACTUAL;
-    objAH.id_tipo_doc   = $('#tipo_nivel3_id').val();
+    objAH.id_tipo_doc   = TEMPLATE_ACTUAL;//$('#tipo_nivel3_id').val();
     objAH.sendToServer();
 }
 
@@ -383,7 +383,7 @@ function mostrarEstructuraDelNivel2(){
     _NIVEL_ACTUAL       = 2;
     
     if(MODIFICAR == 0){
-        _mostrarAccion("Agregando grupo => Template: " + $('#tipo_nivel3_id').val() + crearBotonEsquema());
+        _mostrarAccion("Agregando grupo => Template: " + TEMPLATE_ACTUAL + crearBotonEsquema());
     }
     
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel2);
@@ -393,7 +393,7 @@ function mostrarEstructuraDelNivel2(){
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
     objAH.nivel         = 2;
-    objAH.id_tipo_doc   = $("#tipo_nivel3_id").val();
+    objAH.id_tipo_doc   = TEMPLATE_ACTUAL;//$("#tipo_nivel3_id").val();
     objAH.sendToServer();
 }
 
@@ -803,7 +803,7 @@ function updateGuardarDocumentoN2(responseText){
         inicializar();
         //carga la barra lateral con info de nivel 2
         mostrarInfoAltaNivel2(ID_N2);
-        mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
+        mostrarEstructuraDelNivel3(TEMPLATE_ACTUAL);
     }
 }
 
@@ -929,7 +929,7 @@ function updateGuardarModificacionDocumentoN2(responseText){
         inicializar();
         //carga la barra lateral con info de nivel 2
         mostrarInfoAltaNivel2(ID_N2);
-        mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
+        mostrarEstructuraDelNivel3(TEMPLATE_ACTUAL);
         //se esta modificando desde el detalle del registro
         if (FROM_DETALLE_REGISTRO == 1) window.location = "detalle.pl?id1=" + ID_N1;
         MODIFICAR = 0;
@@ -2041,7 +2041,7 @@ function updateBorrarN3(responseText){
 
     if (! (hayError(Messages) ) ){
         inicializar();
-        mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
+        mostrarEstructuraDelNivel3(TEMPLATE_ACTUAL);
         //acutalizo los datos de nivel 2
         mostrarInfoAltaNivel2(ID_N2);
         mostrarInfoAltaNivel3(ID_N2);
@@ -2073,7 +2073,7 @@ function updateBorrarEjemplaresN3(responseText){
     
     if (! (hayError(Messages) ) ){
 	    inicializar();
-	    mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
+	    mostrarEstructuraDelNivel3(TEMPLATE_ACTUAL);
         mostrarInfoAltaNivel2(ID_N2);
         mostrarInfoAltaNivel3(ID_N2);
     }
@@ -2086,19 +2086,19 @@ function updateBorrarEjemplaresN3(responseText){
 function modificarN1(id1, template){
      $('#datos_del_leader').show();
 	inicializar();
-   
-    ID_TIPO_EJEMPLAR    = template;
-    TEMPLATE_ACTUAL	= template;
+  
+    TEMPLATE_ACTUAL	    = template;
     ID_N1               = id1;
     
 // TODO falta agregar boton para modificar el template
-    _mostrarAccion("Modificando el metadato (" + ID_N1 + ") => Template: " + ID_TIPO_EJEMPLAR + crearBotonEsquema());
+    _mostrarAccion("Modificando el metadato (" + ID_N1 + ") => Template: " + TEMPLATE_ACTUAL + crearBotonEsquema());
     objAH               = new AjaxHelper(updateModificarN1);
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;
     objAH.debug         = true;
     objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS";
-    objAH.itemtype      = ID_TIPO_EJEMPLAR;
+// FIXME esto es necesario???
+    objAH.itemtype      = TEMPLATE_ACTUAL;
     objAH.id            = ID_N1;
     objAH.nivel         = 1;
     objAH.sendToServer();
@@ -2211,7 +2211,7 @@ function modificarEjemplaresN3FromRegistro(id1){
 function updateModificarEjemplaresN3(responseText){
 	MODIFICAR = 1;
 	$('#divCantEjemplares').hide();	
-	mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);  
+	mostrarEstructuraDelNivel3(TEMPLATE_ACTUAL);  
 }
 
 /*
@@ -2238,32 +2238,32 @@ function updateBorrarGrupo(){
 /*
 Esta funcion es usada cuando se quiere editar N1, N2 o N3 desde otra ventana, se redirecciona aqui
 */
-function cargarNivel1(params){
+function cargarNivel1(params, TEMPLATE_ACTUAL){
 /*
 	params.id1
 	params.id2
 	params.id3
 	params.tipoAccion= ('MODIFICAR_NIVEL_1'|'MODIFICAR_NIVEL_2'|'MODIFICAR_NIVEL_3') por defecto 'MODIFICAR_NIVEL_1'
 */
-	ID_N1= params.id1;
-	ID_N2= params.id2;
+	ID_N1   = params.id1;
+	ID_N2   = params.id2;
 
 	if(params.tipoAccion == 'MODIFICAR_NIVEL_2'){
 // FIXME falta template
-		modificarN2(params.id2);
+		modificarN2(params.id2, TEMPLATE_ACTUAL);
 	}else	
 	if(params.tipoAccion == 'MODIFICAR_NIVEL_3'){
 // FIXME falta template
-		modificarN3(params.id3);
+		modificarN3(params.id3, TEMPLATE_ACTUAL);
 	}else{
 // FIXME falta template
 		//por defecto se carga el Nivel 1 para modificar
-		modificarN1(params.id1);
+		modificarN1(params.id1, TEMPLATE_ACTUAL);
 	}
 
-	mostrarInfoAltaNivel1(params.id1);
-	mostrarInfoAltaNivel2(params.id2);	
-    mostrarInfoAltaNivel3(params.id2);  
+	mostrarInfoAltaNivel1(params.id1, TEMPLATE_ACTUAL);
+	mostrarInfoAltaNivel2(params.id2, TEMPLATE_ACTUAL);	
+    mostrarInfoAltaNivel3(params.id2, TEMPLATE_ACTUAL);  
 }
 
 function validateForm(formID, func){
