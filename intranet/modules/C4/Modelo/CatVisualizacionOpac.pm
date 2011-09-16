@@ -16,9 +16,9 @@ __PACKAGE__->meta->setup(
         orden           => { type => 'integer', overflow => 'truncate', length => 11, not_null => 1 },
         pre             => { type => 'varchar', overflow => 'truncate', length => 12 },
         post            => { type => 'varchar', overflow => 'truncate', length => 12 },
-	nivel           => { type => 'integer', overflow => 'truncate', length => 1 },
-	vista_campo     => { type => 'varchar', overflow => 'truncate', length => 255 },
-	orden_subcampo  => { type => 'integer', overflow => 'truncate', length => 11, not_null => 1 }
+	    nivel           => { type => 'integer', overflow => 'truncate', length => 1 },
+	    vista_campo     => { type => 'varchar', overflow => 'truncate', length => 255 },
+	    orden_subcampo  => { type => 'integer', overflow => 'truncate', length => 11, not_null => 1 }
     ],
                     
     primary_key_columns => [ 'id' ],
@@ -30,18 +30,31 @@ sub agregar{
     my ($self)=shift;
     my ($params) = @_;
 
-    $self->setCampo($params->{'campo'});
-    $self->setPre($params->{'pre'});
-    $self->setPost($params->{'post'});    
-    $self->setSubCampo($params->{'subcampo'});
-    $self->setVistaOpac($params->{'liblibrarian'});  
-    if(C4::AR::EstructuraCatalogacionBase::getNivelFromEstructuraBaseByCampoSubcampo($params->{'campo'}, $params->{'subcampo'}) <= 1){
-        $self->setTipoEjemplar('ALL');
-    }else{
-        $self->setTipoEjemplar($params->{'ejemplar'});
-    }
+    $self->campo($params->{'campo'});
+    $self->nivel($params->{'nivel'});
+    $self->pre($params->{'pre'});
+    $self->post($params->{'post'});    
+    $self->subcampo($params->{'subcampo'});
+    $self->vista_opac($params->{'liblibrarian'});  
+    
+    my $vista_campo_temp = C4::AR::EstructuraCatalogacionBase::getLabelByCampo($params->{'campo'});
+    C4::AR::Debug::debug("vista_campo en el modelo, agregando : ".$vista_campo_temp);
+    $self->vista_campo($vista_campo_temp);
+    
+#   este chequeo no se para que serviria ahora. Se agrega el tipo de ejemplar de una con el nivel que ya viene
+#    if(C4::AR::EstructuraCatalogacionBase::getNivelFromEstructuraBaseByCampoSubcampo($params->{'campo'}, $params->{'subcampo'}) <= 1){
+#        $self->setTipoEjemplar('ALL');
+#    }else{
+#        $self->setTipoEjemplar($params->{'ejemplar'});
+#    }
+
+    $self->tipo_ejemplar($params->{'ejemplar'});
+
     my $orden = C4::Modelo::CatVisualizacionOpac::Manager->get_max_orden() + 1;
-    $self->setOrden($orden);
+    $self->orden($orden);
+    
+    my $orden_subcampo  = C4::Modelo::CatVisualizacionOpac::Manager->get_max_orden_subcampo($params->{'campo'}) + 1;
+    $self->orden_subcampo($orden);
 
     $self->save();
 }
@@ -52,6 +65,15 @@ sub modificar{
     my ($string) = @_;
     $string = Encode::decode_utf8($string);
     $self->setVistaOpac($string);
+
+    $self->save();
+}
+
+sub modificarNivel{
+
+    my ($self)      = shift;
+    my ($string)    = @_;
+    $self->setNivel($string);
 
     $self->save();
 }
@@ -100,6 +122,18 @@ sub setPost{
     $self->post($post);
 }
 
+sub getNivel{
+    my ($self) = shift;
+
+    return $self->nivel;
+}
+
+sub setNivel{
+    my ($self)  = shift;
+    my ($nivel) = @_;
+    $self->nivel($nivel);
+}
+
 sub getVistaOpac{
     my ($self)=shift;
 
@@ -115,8 +149,14 @@ sub getVistaCampo{
 sub setVistaCampo{
     my ($self)          = shift;
     my ($vista_campo)   = @_;
-    utf8::encode($vista_campo);
     $self->vista_campo($vista_campo);
+    $self->save();
+}
+
+sub setOrdenSubCampo{
+    my ($self)  = shift;
+    my ($orden) = @_;
+    $self->orden_subcampo($orden);
     $self->save();
 }
 
@@ -182,6 +222,12 @@ sub setOrden{
     my ($orden) = @_;
     $self->orden($orden);
     $self->save();
+}
+
+sub getOrdenSubCampo{
+    my ($self) = shift;
+
+    return $self->orden_subcampo;
 }
 
 1;

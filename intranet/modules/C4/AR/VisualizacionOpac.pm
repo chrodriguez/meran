@@ -32,7 +32,138 @@ $VERSION = 0.01;
     &updateNewOrder
     &getItemsByCampo
     &updateNewOrderGroup
+    &getConfiguracionByOrderGroupCampo
+    &editVistaGrupo
+    &getSubCamposByCampo
+    &updateNewOrderSubCampos
+    &eliminarTodoElCampo
 );
+
+=item
+   Esta funcion elimina todo un campo con sus respectivos subcampos de un nivel recibido por parametro
+=cut
+sub eliminarTodoElCampo{
+    my ($params) = @_;
+
+    my $visualizacion_opac  = C4::Modelo::CatVisualizacionOpac->new();  
+    my $db                  = $visualizacion_opac->db;
+    my $msg_object          = C4::AR::Mensajes::create();
+    my $campo               = $params->{'campo'};
+    my $nivel               = $params->{'nivel'};
+    my $ejemplar            = $params->{'ejemplar'};
+
+    $db->{connect_options}->{AutoCommit} = 0;
+
+    eval {
+        C4::AR::VisualizacionOpac::_eliminarTodoElCampo($params, $db);
+        $msg_object->{'error'} = 0;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'M001', 'params' => [$campo, $nivel, $ejemplar]} ) ;
+
+        $db->commit;
+    };
+
+    if ($@){
+        #Se loguea error de Base de Datos
+        C4::AR::Mensajes::printErrorDB($@, 'M003',"INTRA");
+        $db->rollback;
+        #Se setea error para el usuario
+        $msg_object->{'error'} = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'M002', 'params' => [$campo, $nivel, $ejemplar]} ) ;
+    }
+
+    $db->{connect_options}->{AutoCommit} = 1;
+
+    return ($msg_object);
+}
+
+=item
+    Funcion interna que elimina todos los campos-subcampos de un nivel
+=cut
+sub _eliminarTodoElCampo{
+    my ($params, $db) = @_;
+    my @filtros;
+    my $campo       = $params->{'campo'};
+    my $nivel       = $params->{'nivel'};
+    my $ejemplar    = $params->{'ejemplar'};
+
+    push (@filtros, (campo      => { eq => $campo }) );
+    push (@filtros, (nivel      => { eq => $nivel }) );
+    
+    #FIXME: esta con un 'OR' porque cuando se muestran los campos se hace lo mismo: sub getConfiguracionByOrderGroupCampo
+    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $ejemplar }, 
+                                    tipo_ejemplar   => { eq => 'ALL'     } ]),
+                                
+    );
+#    push (@filtros, (ejemplar   => { eq => $ejemplar }) );
+
+    my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(db => $db, query => \@filtros,);
+
+    foreach my $conf (@$configuracion){
+        $conf->delete();    
+    }
+}
+
+=item
+    Funcion que actializa el orden de los subcampos. 
+    Parametros: array con los ids en el orden nuevo
+=cut
+sub updateNewOrderSubCampos{
+    my ($newOrderArray) = @_;
+    my $msg_object      = C4::AR::Mensajes::create();
+    
+    my $i = 1;
+    
+    foreach my $campo (@$newOrderArray){
+        my $config_temp = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(
+                                                                    query   => [ id => { eq => $campo}], 
+                               );
+        my $configuracion = $config_temp->[0];
+        
+        $configuracion->setOrdenSubCampo($i);
+    
+        $i++;
+    }
+    
+    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'M000', 'params' => []} ) ;
+
+    return ($msg_object);
+
+}
+
+=item
+    Funcion que devuelve TODOS los subcampos de un campo y ordenados por orden 
+=cut
+sub getSubCamposByCampo{
+    my ($campo) = @_;
+
+    my @filtros;
+    
+    push ( @filtros, ( or   => [    campo   => { eq => $campo },]),
+                                
+    );
+
+    my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros, sort_by => ('orden_subcampo'),);
+
+    return ($configuracion);
+}
+
+=item
+    Esta funcion edita la vista_campo de un grupo recibido como parametro
+=cut
+sub editVistaGrupo{
+    my ($campo,$value)  = @_;
+
+    my @filtros;
+    push (@filtros, (campo => { eq => $campo }) );
+    
+    my $configuracion   = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros,);
+    
+    foreach my $conf (@$configuracion){
+        $conf->setVistaCampo($value);    
+    }
+    return ($configuracion->[0]->getVistaCampo());
+    
+}
 
 =item
     Funcion que actializa el orden de los campos. 
@@ -172,7 +303,7 @@ sub getConfiguracion{
 sub getVistaCampo{
     my ($campo, $template, $nivel, $db) = @_;
 
-    $db = $db || C4::Modelo::CatVisualizacionIntra->new()->db;
+    $db = $db || C4::Modelo::CatVisualizacionOpac->new()->db;
 
     my @filtros;
 
@@ -243,7 +374,12 @@ sub editConfiguracion{
         elsif($type eq "post"){
             $configuracion->[0]->modificarPost($value);
             return ($configuracion->[0]->getPost());
-        }else{
+        }
+        elsif($type eq "nivel"){
+            $configuracion->[0]->modificarNivel($value);
+            return ($configuracion->[0]->getNivel());
+        }
+        else{
             $configuracion->[0]->modificar($value);
             return ($configuracion->[0]->getVistaOpac());
         }
@@ -380,8 +516,8 @@ sub existeConfiguracion{
 sub t_agregar_configuracion {
     my ($params) = @_;
 
-    my $visualizacion_intra = C4::Modelo::CatVisualizacionOpac->new();  
-    my $db                  = $visualizacion_intra->db;
+    my $visualizacion_opac  = C4::Modelo::CatVisualizacionOpac->new();  
+    my $db                  = $visualizacion_opac->db;
     my $msg_object          = C4::AR::Mensajes::create();
 
     if(existeConfiguracion($params)){
@@ -416,6 +552,35 @@ sub t_agregar_configuracion {
     }
 
     return ($msg_object);
+}
+
+=item
+    Funcion que devuelve TODOS los campos ordenados por orden y por nivel si recibe el parametro nivel y agrupados por campo.
+    Si no tiene seteado el campo vista_campo lo saca desde la base
+=cut
+sub getConfiguracionByOrderGroupCampo{
+    my ($ejemplar,$nivel) = @_;
+
+    my @filtros;
+    
+    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $ejemplar }, 
+                                    tipo_ejemplar   => { eq => 'ALL'     } ]),
+                                
+    );
+    
+    if($nivel){
+        push (@filtros, (nivel => { eq => $nivel }) );
+    }
+
+    my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros, sort_by => ('orden'), group_by => ('campo'));
+    
+    foreach my $conf (@$configuracion){
+        if($conf->getVistaCampo() eq ""){
+            $conf->{'vista_campo'} = C4::AR::EstructuraCatalogacionBase::getLabelByCampo($conf->getCampo());
+        }
+    }
+
+    return ($configuracion);
 }
 
 
