@@ -593,7 +593,7 @@ sub _verificarHorario{
     my $end = ParseDate(C4::AR::Preferencias::getValorPreferencia("close"));
     my $offset = C4::AR::Preferencias::getValorPreferencia("offset_operacion_fuera_horario");
     
-    $end =  DateCalc($end,"+ $offset minutes",\$err);
+    $end =  DateCalc($end,"+ $offset minutes");
     
     my $begin =ParseDate(C4::AR::Preferencias::getValorPreferencia("open"));
     my $actual=ParseDate("now");
