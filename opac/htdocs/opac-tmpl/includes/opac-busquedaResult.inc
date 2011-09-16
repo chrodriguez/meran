@@ -297,10 +297,13 @@
                 <input type="hidden" name="token"  value="[% pdf_token %]" />
    
         </form>
-
-
+ 
+  <!-- Si no hubo una busqueda  -->
+  [% IF buscoPor  %]
+        
         <input class="" type="button" style="width:125px;" onclick="submitForm('exportPDF');" value="Exportar a PDF" name="button">
-
+  
+  [% END %]
       
   
   [% END %]
