@@ -444,6 +444,7 @@ sub estaVencido {
 	my $cierre = C4::AR::Preferencias::getValorPreferencia("close");
 	my $close  = Date::Manip::ParseDate($cierre);
 	my $err;
+
 	if ( Date::Manip::Date_Cmp( $close, Date::Manip::ParseDate("today") ) < 0 )
 	{    #Se paso la hora de cierre
 		$hoy =
