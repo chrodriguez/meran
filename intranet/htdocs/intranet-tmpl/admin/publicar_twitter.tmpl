@@ -21,29 +21,16 @@
 
   function verificarCantCar(){
         var limit = 140; 
-//         var post=$('#post_twitter').val();
-// 
-// $(document).ready(function() {
-// 
-//     $('#click').click(function(){
-// 
-//  var one = document.getElementById('one');       
-//     one.value.match(/url ={([^}]*)}/,"");
-//     alert( RegExp.$1);
-// 
-// 
-//     })    
-// })
-
-
+        var post=$('#post_twitter').val();
+      
         if ($('#post_twitter').val().length > limit){
-            $('#publicar_twitter').attr('disabled', 'disabled');
+             $('#publicar_twitter').attr('disabled', 'disabled');
         } else {
-            $('#publicar_twitter').removeAttr("disabled");
-
+             $('#publicar_twitter').removeAttr("disabled");
+ 
         }
     
-  }
+}
 
 
   $(document).ready(function() {
