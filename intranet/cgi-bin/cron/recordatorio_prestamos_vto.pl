@@ -3,6 +3,7 @@
 use strict;
 require Exporter;
 use C4::Context;
+use C4::Date;
 use CGI;
 
 my $input       = new CGI;
