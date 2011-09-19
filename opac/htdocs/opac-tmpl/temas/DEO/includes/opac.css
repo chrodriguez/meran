@@ -1251,3 +1251,10 @@ a.signin.menu-open span {
 	background-color: #4F6596;
 	color: #fff;
 }
+
+
+.prestamo_vencido{
+    background-color:#f15656;
+    border:1px solid red;
+
+}

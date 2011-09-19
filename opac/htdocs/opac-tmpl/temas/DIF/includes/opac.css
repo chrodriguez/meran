@@ -1249,5 +1249,12 @@ a.signin.menu-open span {
 #alert_msg_main {
     border-radius: 0px 0px 13px 13px;
     color: #fff;
-    background-color: #496E6D;;
+    background-color: #496E6D;
+}
+
+
+.prestamo_vencido{
+    background-color:#f15656;
+    border:1px solid red;
+
 }

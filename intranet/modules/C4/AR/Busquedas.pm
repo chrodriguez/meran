@@ -948,7 +948,23 @@ sub busquedaAvanzada_newTemp{
     use Sphinx::Search;
     use Text::Unaccent;
     
+    my $only_sphinx= $params->{'only_sphinx'};
+
+    C4::AR::Debug::debug("ONLY SPHINX ".$only_sphinx);
+
     my $sphinx  = Sphinx::Search->new();
+
+
+    if ($only_sphinx){
+           if ($params->{'report'}){ 
+                $sphinx->SetLimits($params->{'ini'}, 100000);
+ 
+           } else {
+                $sphinx->SetLimits($params->{'ini'}, C4::AR::Preferencias::getValorPreferencia('renglones_autocomplete'));  
+           }
+
+    }
+
     my $query   = '';
     my $tipo    = 'SPH_MATCH_EXTENDED';
     my $orden   = $params->{'orden'};
@@ -1025,7 +1041,7 @@ sub busquedaAvanzada_newTemp{
     }
     
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
-    $sphinx->SetLimits($params->{'ini'}, $params->{'cantR'});
+#     $sphinx->SetLimits($params->{'ini'}, $params->{'cantR'});
 
     # NOTA: sphinx necesita el string decode_utf8
    
@@ -1041,17 +1057,18 @@ sub busquedaAvanzada_newTemp{
     C4::AR::Debug::debug("MATCH_MODE => ".$tipo);
     
     foreach my $hash (@$matches){
-      my %hash_temp = {};
-      $hash_temp{'id1'} = $hash->{'doc'};
-      $hash_temp{'hits'} = $hash->{'weight'};
+        my %hash_temp = {};
+        $hash_temp{'id1'} = $hash->{'doc'};
+        $hash_temp{'hits'} = $hash->{'weight'};
 
-      push (@id1_array, \%hash_temp);
+        push (@id1_array, \%hash_temp);
     }
 
     my ($total_found_paginado, $resultsarray);
     #arma y ordena el arreglo para enviar al cliente
     ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params, @id1_array);
     #se loquea la busqueda
+
     C4::AR::Busquedas::logBusqueda($params, $session);
 
     return ($total_found, $resultsarray);
@@ -1175,7 +1192,7 @@ sub busquedaCombinada_newTemp{
     my ($string_utf8_encoded,$session,$obj_for_log,$sphinx_options) = @_;
 
 	use Sphinx::Search;
-	
+
     use Text::Unaccent;
     # Se agregó para sacar los acentos y que no se mame el suggest, total es lo mismo porque
     # Sphinx busca con o sin acentos
@@ -1183,7 +1200,6 @@ sub busquedaCombinada_newTemp{
     # no se encodea nunca a utf8 antes de llegar aca	
     # $string_utf8_encoded    = Encode::decode_utf8($string_utf8_encoded);
 
-    C4::AR::Debug::debug("string en el pm : ".$string_utf8_encoded);
 
     my $from_suggested = $obj_for_log->{'from_suggested'} || 0;
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
@@ -1197,6 +1213,18 @@ sub busquedaCombinada_newTemp{
 	    $only_available     = $sphinx_options->{'only_available'} || 0;
     }    
     my $sphinx = Sphinx::Search->new();
+
+    if ($only_sphinx){
+           if ($sphinx_options->{'report'}){ 
+        
+                $sphinx->SetLimits($obj_for_log->{'ini'}, 100000);
+ 
+           } else {
+                    $sphinx->SetLimits($obj_for_log->{'ini'}, C4::AR::Preferencias::getValorPreferencia('renglones_autocomplete'));  
+           }
+            
+    }
+
     my $query = "";
     my @boolean_ops = ("&","|","!","-");
     my $tipo        = $obj_for_log->{'match_mode'}||'SPH_MATCH_ALL';
@@ -1226,6 +1254,7 @@ sub busquedaCombinada_newTemp{
             }
         }else{
             $query .=  " ".$string."*";
+C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      -----------------------------> : ".$string);
         }
     }
 
@@ -1265,8 +1294,14 @@ sub busquedaCombinada_newTemp{
     my $matches = $results->{'matches'};
     my $total_found = $results->{'total_found'};
 
+    C4::AR::Debug::debug("RESULT->MATCHES");
+    C4::AR::Utilidades::printARRAY(($results->{'matches'}));
+
     if ($only_sphinx){
-        return ($total_found);
+        C4::AR::Debug::debug("total_found: ".$total_found);
+        C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
+ 
+        return ($total_found,$matches);
     }
 #arma y ordena el arreglo para enviar al cliente
     $obj_for_log->{'total_found'} = $total_found;
@@ -1282,18 +1317,66 @@ sub busquedaCombinada_newTemp{
 
     ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log, @id1_array);
     #se loquea la busqueda
+    
     C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
 
     if ( (!$from_suggested) && ($total_found == 0) && ($tipo ne 'SPH_MATCH_PHRASE') ){
         $string_suggested = getSuggestion($string_utf8_encoded,$total_found,$obj_for_log,$sphinx_options);
     }
     
-
+  
     return ($total_found, $resultsarray,$string_suggested);
 }
 
+sub busquedaSinPaginar {
 
+     my ($session,$obj) = @_;
 
+     my %sphinx_options;
+     
+
+     
+     my  ($total_found,$matches);
+ 
+     C4::AR::Debug::debug("stringgg : ----------------------------------------------------------ffffffffffffffffffffffffffff----- : ".$obj->{'string'});
+
+     if ($obj->{'tipoAccion'} eq "BUSQUEDA_COMBINABLE"){
+                $sphinx_options{'only_sphinx'} = 1;
+                $sphinx_options{'report'} = 1;
+               ($total_found,$matches) = C4::AR::Busquedas::busquedaCombinada_newTemp($obj->{'string'},$session,$obj,\%sphinx_options);
+      } else {
+            $obj->{'only_sphinx'}=1;
+            $obj->{'report'}=1;
+     
+            ($total_found,$matches) = C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
+      }
+    
+
+    my @id1_array=();
+
+    C4::AR::Debug::debug("total_found SIN PAGINAR: ".$total_found);
+    
+   
+    my ($total_found_paginado, $resultsarray);
+
+    if ($obj->{'tipoAccion'} eq "BUSQUEDA_COMBINABLE"){
+        foreach my $hash (@$matches){
+              my %hash_temp = {};
+              $hash_temp{'id1'} = $hash->{'doc'};
+              $hash_temp{'hits'} = $hash->{'weight'};
+              push (@id1_array, \%hash_temp);
+        }
+        ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj, @id1_array);      
+        C4::AR::Debug::debug("total_found_paginado: ".$total_found_paginado);
+    } else  {
+           $total_found_paginado=$total_found;
+           $resultsarray= $matches; 
+    }
+        
+  
+
+    return ($total_found, $resultsarray);
+}
 
 sub armarInfoNivel1{
     my ($params, @resultId1)    = @_;
@@ -1302,6 +1385,8 @@ sub armarInfoNivel1{
     my $only_available          = $params->{'only_available'};
     my @result_array_paginado   = @resultId1;
     my $cant_total              = scalar(@resultId1);
+
+
     my @result_array_paginado_temp;
 
     for(my $i=0;$i<scalar(@result_array_paginado);$i++ ) {

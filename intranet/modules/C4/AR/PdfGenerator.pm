@@ -1229,7 +1229,8 @@ sub printPDF {
 	while ( read( INF, $buffer, 65536 ) and print $buffer ) { }
 
 	close INF;
-}
+}    
+
 
 END { }    # module clean-up code here (global destructor)
 

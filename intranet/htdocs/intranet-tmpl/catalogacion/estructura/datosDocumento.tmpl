@@ -33,19 +33,23 @@ $(document).ready( function() {
     params.id2              = [% id2 %];
     params.id3              = [% id3 %];
     TIENE_NIVEL_2           = [% tiene_nivel_2 %];
+    TEMPLATE_ACTUAL         = $('#tipo_nivel3_id').val();
 
     [% IF tipoAccion == "MODIFICAR_NIVEL_1" %]
         MODIFICAR               = 1;
         FROM_DETALLE_REGISTRO   = 1;
-        cargarNivel1(params);
+        TEMPLATE_ACTUAL         = '[% template_catalogo %]';
+        cargarNivel1(params, TEMPLATE_ACTUAL);
     [% ELSIF tipoAccion == "MODIFICAR_NIVEL_2" %]
         MODIFICAR               = 1;
         FROM_DETALLE_REGISTRO   = 1;
-        cargarNivel1(params);
+        TEMPLATE_ACTUAL         = '[% template_catalogo %]';
+        cargarNivel1(params, TEMPLATE_ACTUAL);
     [% ELSIF tipoAccion == "MODIFICAR_NIVEL_3" %]
         MODIFICAR               = 1;
         FROM_DETALLE_REGISTRO   = 1;
-        cargarNivel1(params);
+        TEMPLATE_ACTUAL         = '[% template_catalogo %]';
+        cargarNivel1(params, TEMPLATE_ACTUAL);
     [% ELSIF tipoAccion == "MODIFICAR_NIVEL_3_ALL" %]  
         $("#ejemplares").hide();
         MODIFICAR               = 1;
@@ -247,14 +251,6 @@ $(document).ready( function() {
 </div>
 
 </div> <!--END <div class="centro">-->
-
-<!-- <div id="ejemplares"> -->
-<!--   <fieldset> -->
-<!--       <legend class="titulo_legend">[% "Ejemplares" | i18n %]</legend> -->
-      <!-- detalle del Nivel 3, segun Nivel 2 seleccionado -->
-<!--       <div id="detalleDelNivel3" class="nivel3Footer"></div> -->
-<!--   </fieldset> -->
-<!-- </div> -->
 
 </div> <!--END <div class="todo">-->
 

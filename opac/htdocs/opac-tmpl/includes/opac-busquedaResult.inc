@@ -10,8 +10,14 @@
     });
 
 
+    function submitForm(form_id) {
+        $('#' + form_id).submit();
+    }
+
     
-//      function exportarXLS(url){
+     function exportarXLS(url){
+        alert(url)
+}
 //         window.open (url);
 /*
         objAH                   = new AjaxHelper(updateExportarXLS);
@@ -274,9 +280,31 @@
         <br />
         <div class="contenedor_paginador">[% paginador %]</div>
 
-    
-      <!--  <div class="boton_texto" onclick="exportarXLS('[% url_todos %]')">Exportar XLS</div>-->
-       
+        <form id="exportPDF" action="[% url_prefix %]/opac-busquedasDB.pl?token=[% token %]"  accept-charset="utf-8">
+                
+                <input type="hidden" name="export" value="1" />
+                <input type="hidden" name="string" value="[% keyword %]" />
+                <input type="hidden" name="tipoAccion" value="[% tipoAccion %]" />
+                <input type="hidden" name="titulo" value="[% pdf_titulo %]" />
+                <input type="hidden" name="autor" value="[% pdf_autor %]" />
+                <input type="hidden" name="isbn" value="[% pdf_isbn %]" />   
+                <input type="hidden" name="estantes" value="[% pdf_estantes%]"/>
+                <input type="hidden" name="estantes_grupo"  value="[% pdf_estantes_grupo %]"/>
+                <input type="hidden" name="tema"  value="[% pdf_tema %]" />
+                <input type="hidden" name="tipo" value="[% pdf_tipo %]"/>
+                <input type="hidden" name="only_available"  value="[% pdf_onlyAvailable %]" />
+                <input type="hidden" name="tipo_nivel3_name" value="[% pdf_tipoNivel3Name %]" />
+                <input type="hidden" name="token"  value="[% pdf_token %]" />
+   
+        </form>
+ 
+  <!-- Si no hubo una busqueda  -->
+  [% IF buscoPor  %]
+        
+        <input class="" type="button" style="width:125px;" onclick="submitForm('exportPDF');" value="Exportar a PDF" name="button">
+  
+  [% END %]
+      
   
   [% END %]
     <!-- FIX PARA W3C PORQUE NO SE PERMITEN SCRIPT DENTRO DE TABLAS -->
