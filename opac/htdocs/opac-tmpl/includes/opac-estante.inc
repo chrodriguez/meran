@@ -57,6 +57,16 @@
 
 [% IF estante %]
   [% IF estante.contenido %]
+    <script type="text/javascript" language="javascript" src="/opac-tmpl/includes/tablesorter.js"></script>
+    <script type="text/javascript" language="javascript">
+    $(document).ready(function() 
+        { 
+            $("#tablaResult").tablesorter(); 
+            // le sacamos la clase 'header' que el plugin le pone a los <th>
+            $('th').removeClass('header');
+        }  
+    ); 
+  </script>
   <div id='contenido'>
            <table id="tablaResult" class="tablaHistorial tabla_datos" border=0 cellspacing="0" cellpadding="4" style="width:98%; text-align:center; border: 1;">
                 <thead>
@@ -64,7 +74,7 @@
 		    <th colspan="4">[% "Contenido" | i18n %]</th>
 		</tr>
                 <tr class="tablaResultadoTitulo">
-                    <th Title="[% 'Ordenar por título' | i18n %]" width="33%">[% "T&iacute;tulo" | i18n %]
+                    <th Title="[% 'Ordenar por t&iacute;tulo' | i18n %]" width="33%">[% "T&iacute;tulo" | i18n %]
                     </th>
 
                     <th Title="[% 'Ordenar por autor' | i18n %]" align="left" width="23%">[% "Autor" | i18n %]
