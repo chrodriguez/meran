@@ -62,9 +62,9 @@
                                 <a class="" 
                                     href="[% url_prefix %]/admin/mensajes_contacto.pl?token=[% token %]&id=[% mensaje.id %]&tipoAccion=marcar">
                                     [% IF mensaje.getLeido == 1%]
-                                        [% 'No Leido' | i18n %]
-                                    [% ELSE %]
                                         [% 'Leido' | i18n %]
+                                    [% ELSE %]
+                                        [% 'No Leido' | i18n %]
                                     [% END %]
                                 </a>
                             </td>
