@@ -279,7 +279,7 @@ sub proximoHabil{
     my ($actual,$min,$hora) = localtime;
     my $dateformat = get_date_format();
 
-    $actual=($hora+2).':'.$min;
+    $actual=($hora).':'.$min;
 
     Date_Init("WorkDayBeg=".$apertura,"WorkDayEnd=".$cierre);
     Date_Init("WorkWeekBeg=1","WorkWeekEnd=5");
@@ -317,6 +317,7 @@ sub proximosHabiles{
 	my $apertura=C4::AR::Preferencias::getValorPreferencia("open");
 	my $cierre=C4::AR::Preferencias::getValorPreferencia("close");
 	my ($actual,$min,$hora)= localtime;
+	
 	$actual=($hora).':'.$min;
 	Date_Init("WorkDayBeg=".$apertura,"WorkDayEnd=".$cierre);
     Date_Init("WorkWeekBeg=1","WorkWeekEnd=5");

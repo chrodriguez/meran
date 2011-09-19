@@ -28,22 +28,34 @@ if($editing){
                                                 tipo_permiso    => 'general'},
                             debug => 1,
                         });
-    my $configuracion;                        
+    my $configuracion; 
+    my $value;   
+    my $vista_id;                        
 
     if($type eq "pre"){
-        my $value           = $input->param('value');
-        my $vista_id        = $input->param('id');
+        $value           = $input->param('value');
+        $vista_id        = $input->param('id');
         $configuracion      = C4::AR::VisualizacionOpac::editConfiguracion($vista_id,$value,'pre');
     }
     elsif($type eq "post"){
-        my $value           = $input->param('value');
-        my $vista_id        = $input->param('id');
+        $value           = $input->param('value');
+        $vista_id        = $input->param('id');
         $configuracion      = C4::AR::VisualizacionOpac::editConfiguracion($vista_id,$value,'post');
     }
     elsif($type eq "nombre"){
-        my $value       = $input->param('value');
-        my $vista_id    = $input->param('id');
+        $value       = $input->param('value');
+        $vista_id    = $input->param('id');
         $configuracion  = C4::AR::VisualizacionOpac::editConfiguracion($vista_id,$value);
+    }
+    elsif($type eq "vista_campo"){
+        $value          = $input->param('value');
+        $vista_id       = $input->param('id');
+        $configuracion  = C4::AR::VisualizacionOpac::editVistaGrupo($vista_id,$value);
+    }
+    elsif($type eq "nivel"){
+        $value          = $input->param('value');
+        $vista_id       = $input->param('id');
+        $configuracion  = C4::AR::VisualizacionOpac::editConfiguracion($vista_id,$value,'nivel');
     }
 
     $t_params->{'value'} = $configuracion;
@@ -57,9 +69,10 @@ else{
     $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
     #tipoAccion = Insert, Update, Select
-    my $tipoAccion  = $obj->{'tipoAccion'} || "";
-    my $componente  = $obj->{'componente'} || "";
-    my $ejemplar    = $obj->{'ejemplar'} || "";
+    my $tipoAccion      = $obj->{'tipoAccion'} || "";
+    my $componente      = $obj->{'componente'} || "";
+    my $ejemplar        = $obj->{'ejemplar'} || "";
+    my $nivel           = $obj->{'nivel'} || "";
     my $result;
     my %infoRespuesta;
     my $authnotrequired = 0;
@@ -97,7 +110,9 @@ else{
                             debug => 1,
         });
 
-        $t_params->{'visualizacion'}    = C4::AR::VisualizacionOpac::getConfiguracionByOrder($ejemplar);
+        my $campo                       = $obj->{'campo'} || "";
+
+        $t_params->{'visualizacion'}    = C4::AR::VisualizacionOpac::getSubCamposByCampo($campo);
 
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);     
     }
@@ -211,6 +226,57 @@ else{
         C4::AR::Auth::print_header($session);
         print $infoOperacionJSON;  
     }
+    elsif($tipoAccion eq "MOSTRAR_TABLA_CAMPO"){
+
+        my ($template, $session, $t_params) = get_template_and_user({
+                            template_name   => "catalogacion/visualizacionOPAC/detalleTablaCampoVisualizacionOpac.tmpl",
+                            query           => $input,
+                            type            => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => {  ui              => 'ANY', 
+                                                tipo_documento  => 'ANY', 
+                                                accion          => 'CONSULTA', 
+                                                entorno         => 'undefined'},
+                            debug => 1,
+        });
+
+        $t_params->{'visualizacion'}    = C4::AR::VisualizacionOpac::getConfiguracionByOrderGroupCampo($ejemplar,$nivel);
+
+        C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);     
+    }
+    elsif($tipoAccion eq "ACTUALIZAR_ORDEN_SUBCAMPOS"){
+        my ($user, $session, $flags)= checkauth(  $input, 
+                                                  $authnotrequired, 
+                                                  {   ui                => 'ANY', 
+                                                      tipo_documento    => 'ANY', 
+                                                      accion            => 'CONSULTA', 
+                                                      entorno           => 'datos_nivel1'}, 
+                                                  'intranet'
+                                      );
+        my $newOrderArray       = $obj->{'newOrderArray'};
+        my $info                = C4::AR::VisualizacionOpac::updateNewOrderSubCampos($newOrderArray);
+        my $infoOperacionJSON   = to_json $info;
+        C4::AR::Auth::print_header($session);
+        print $infoOperacionJSON;  
+    }
+    elsif($tipoAccion eq "ELIMINAR_TODO_EL_CAMPO"){
+
+        my ($user, $session, $flags)= checkauth(  $input, 
+                                                  $authnotrequired, 
+                                                  {   ui => 'ANY', 
+                                                      tipo_documento => 'ANY', 
+                                                      accion => 'CONSULTA', 
+                                                      entorno => 'datos_nivel1'}, 
+                                                  'intranet'
+                                      );
+
+        my ($Message_arrayref)  = C4::AR::VisualizacionOpac::eliminarTodoElCampo($obj);
+        my $infoOperacionJSON   = to_json $Message_arrayref;
+
+        C4::AR::Auth::print_header($session);
+        print $infoOperacionJSON;
+    }
+    
     #**************************************************************************************************
 }
 
