@@ -1414,14 +1414,15 @@ sub _obtenerOpciones{
 
 #     C4::AR::Debug::debug("_obtenerOpciones => es un combo, se setean las opciones para => ".$cat_estruct_object->infoReferencia->getReferencia);
 #     C4::AR::Debug::debug("_obtenerOpciones => getCampos => ".$cat_estruct_object->infoReferencia->getCampos);
-    my $orden = $cat_estruct_object->infoReferencia->getCampos;
-    my ($cantidad, $valores) = &C4::AR::Referencias::obtenerValoresTablaRef(   
+	if ($cat_estruct_object->infoReferencia) {
+		my $orden = $cat_estruct_object->infoReferencia->getCampos;
+		my ($cantidad, $valores) = &C4::AR::Referencias::obtenerValoresTablaRef(   
                                                                 $cat_estruct_object->infoReferencia->getReferencia,  #tabla  
                                                                 $cat_estruct_object->infoReferencia->getCampos,  #campo
                                                                 $orden
                                                 );
-    $hash_ref->{'opciones'} = $valores;
-
+		$hash_ref->{'opciones'} = $valores;
+	}
 #     C4::AR::Debug::debug("_obtenerOpciones => opciones => ".$valores);
 }
 
