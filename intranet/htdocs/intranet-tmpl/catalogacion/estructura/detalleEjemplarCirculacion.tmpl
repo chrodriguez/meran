@@ -46,13 +46,18 @@
                                   [% END %]
                               </td>
                               <td align='left' class="tarjetaId">
-                                  [% PERL %]
-                                      print C4::AR::Filtros::link_to(   text =>     "[% historico.responsable_ref.persona.getApeYNom %]",
-                                                                        url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
-                                                                        params =>   ["nro_socio=[% historico.responsable_ref.getNro_socio %]"],
-                                                                        title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
-                                                                  );
-                                  [% END %]
+                                    [% IF historico.responsable_ref == "Sistema" %]
+										Sistema 
+									[% ELSE %]
+									  [% PERL %]
+										  print C4::AR::Filtros::link_to(   text =>     "[% historico.responsable_ref.persona.getApeYNom %]",
+																			url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+																			params =>   ["nro_socio=[% historico.responsable_ref.getNro_socio %]"],
+																			title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
+																	  );
+									  [% END %]
+									[% END %]
+                                  
                               </td>
                             <td>
                                 [% historico.getFecha_formateada %]
