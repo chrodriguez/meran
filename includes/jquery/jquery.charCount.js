@@ -32,18 +32,19 @@
 		
 		function calculate(obj){
             var count = $(obj).val().length;
-          /*  
+            var url_count= 0; 
             var url_match = /https?:\/\/([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?/;
-   
-            var url=$(obj).val().match(url_match);
-               
+            var url = new String($(obj).val().match(url_match));
+            url = url.split(',');
+
+            
             if (url != "null"){
-                if (url.length > 20){
-                    count= 20;
-                } else {
-                    available = url.length;
-                }
-            } */
+                 if (url[0].length > 20){
+                      count= count - (url[0].length) + 20;
+
+                 } 
+                 
+            } 
      
             available = options.allowed - count;
 			if(available <= options.warning && available >= 0){
