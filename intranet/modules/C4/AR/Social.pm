@@ -55,7 +55,7 @@ sub sendPost{
     my $mensaje=C4::AR::Mensajes::create();
 
     if (twitterEnabled()){
-        if ($cant_caracteres <= 140){
+#         if ($cant_caracteres <= 140){
 
                   my $nt= connectTwitter();
                   my $result = $nt->update($post);
@@ -72,10 +72,10 @@ sub sendPost{
                   #     $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje('SC000','intranet');
                   }
 
-        } else {
-              C4::AR::Mensajes::add($mensaje, {'codMsg'=> 'SC002' , 'params' => []} ) ;
+#         } else {
+#               C4::AR::Mensajes::add($mensaje, {'codMsg'=> 'SC002' , 'params' => []} ) ;
       
-        }
+#         }
     } else {
         C4::AR::Mensajes::add($mensaje, {'codMsg'=> 'SC003' , 'params' => []} ) ;
     }
