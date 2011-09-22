@@ -921,11 +921,9 @@ sub batchBookLabelGenerator {
         } else {
               $pdf= new PDF::Report( PageSize => "A4");
               my $i=0;
-<<<<<<< HEAD
+
                     while ( $i <= $count - 1 ) {
-=======
-                    while ( $i < ($count - 1) ) {
->>>>>>> 460a5b4d7e1d50a3e48d72db89c3e2a332deac32
+
                             $pdf->newpage($pag);
                             $pdf->openpage($pag);
 
