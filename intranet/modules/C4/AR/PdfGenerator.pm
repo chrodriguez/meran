@@ -904,7 +904,7 @@ sub batchBookLabelGenerator {
     my $pdf; 
 # 	my $pdf = new PDF::Report();
 	
- 
+ C4::AR::Debug::debug($count);
        if (!(C4::AR::Preferencias::getValorPreferencia('BookLabelPage'))){
           $pdf= new PDF::Report();
           $pdf->{PageWidth}  = '270';
@@ -921,7 +921,9 @@ sub batchBookLabelGenerator {
         } else {
               $pdf= new PDF::Report( PageSize => "A4");
               my $i=0;
-                    while ( $i < ($count - 1) ) {
+
+                    while ( $i <= $count - 1 ) {
+
                             $pdf->newpage($pag);
                             $pdf->openpage($pag);
 

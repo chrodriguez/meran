@@ -31,8 +31,22 @@
 		var options = $.extend(defaults, options); 
 		
 		function calculate(obj){
-			var count = $(obj).val().length;
-			var available = options.allowed - count;
+            var count = $(obj).val().length;
+            var url_count= 0; 
+            var url_match = /https?:\/\/([-\w\.]+)+(:\d+)?(\/([\w/_\.]*(\?\S+)?)?)?/;
+            var url = new String($(obj).val().match(url_match));
+            url = url.split(',');
+
+            
+            if (url != "null"){
+                 if (url[0].length > 20){
+                      count= count - (url[0].length) + 20;
+
+                 } 
+                 
+            } 
+     
+            available = options.allowed - count;
 			if(available <= options.warning && available >= 0){
 				$(obj).next().addClass(options.cssWarning);
 			} else {
