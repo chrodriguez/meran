@@ -33,6 +33,14 @@ if($accion eq "TIPOS_PRESTAMOS_SANCIONADOS"){
 		my $categoria_socio             = $obj->{'categoria_socio'};
 		my $tipo_sancion                = C4::AR::Sanciones::getTipoSancion($tipo_prestamo, $categoria_socio);
 		
+		if(!$tipo_sancion){
+		#Para que no dé mas error por falta de datos, cuando no se encuentra el tipo de sación, se crea una automaticamente
+			 $tipo_sancion = C4::Modelo::CircTipoSancion->new();
+			 $tipo_sancion->setCategoria_socio($categoria_socio);
+			 $tipo_sancion->setTipo_prestamo($tipo_prestamo);
+			 $tipo_sancion->save();
+		}
+		
 		C4::AR::Debug::debug("tipos sancion        ".$tipo_sancion);
 #		C4::AR::Utilidades::printHASH($tipo_prestamos);		
 		
