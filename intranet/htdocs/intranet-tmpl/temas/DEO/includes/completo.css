@@ -8,6 +8,42 @@ body,html {
 	background-color: #EAEBED;
 }
 
+#fancybox-content{
+    min-width: 401px;
+}
+
+#fancybox-content fieldset{
+
+  border-radius: 5px 5px 5px 5px;
+  background-color:#fff;
+  border-color:none;
+  border-style:hidden;
+  
+}
+
+#fancybox-content h2{
+    padding-left:5px;
+    color:#111;
+    font-size:14px;
+    border-radius: 5px 5px 5px 5px;
+  background-color:#fff;
+}
+
+#fancybox-content h3{
+    font-size:13px;
+}
+
+#fancybox-content h4{
+    font-size:12px;
+}
+
+#fancybox-content legend{
+    border-radius: 4px 4px 4px 4px;
+    background-color:#fff;
+    color:#111;
+}
+
+
 .novedad_contacto{
 	min-width: 500px;
 }
@@ -4864,45 +4900,6 @@ a {
     min-width: 413px;
 }
 
-#fancybox-content{
-    min-width: 401px;
-}
-
-#fancybox-content fieldset{
-
-  border-radius: 5px 5px 5px 5px;
-  background-color:#fff;
-  border-color:none;
-  border-style:hidden;
-  
-}
-
-#fancybox-content a{
-    color:#fff;
-
-}
-
-#fancybox-content h2{
-    padding-left:5px;
-    color:#111;
-    font-size:14px;
-    border-radius: 5px 5px 5px 5px;
-  background-color:#fff;
-}
-
-#fancybox-content h3{
-    font-size:13px;
-}
-
-#fancybox-content h4{
-    font-size:12px;
-}
-
-#fancybox-content legend{
-    border-radius: 4px 4px 4px 4px;
-    background-color:#fff;
-    color:#111;
-}
 
 .msj_contacto #fancybox-wrap{
     width: 424px;

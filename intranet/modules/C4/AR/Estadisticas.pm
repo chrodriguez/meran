@@ -23,6 +23,7 @@ use vars qw(@EXPORT @ISA);
 	renovacionesDiarias
 	prestamos
 	reservas
+	reservasEdicion
 	cantUsuarios
 	registroActividadesDiarias
 	registroEntreFechas
@@ -1076,8 +1077,6 @@ sub reservas{
     my $reservaTemp = C4::Modelo::CircReserva->new();
     my $ordenAux    = $reservaTemp->sortByString($orden);
     
-C4::AR::Debug::debug("ORDEN EN RESERVASSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS   ".$ordenAux);
-    
     push (@filtros, ( id_ui => { eq => $id_ui}) );
     
     if($tipo eq "GR"){
@@ -1101,6 +1100,38 @@ C4::AR::Debug::debug("ORDEN EN RESERVASSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
                                                                             sort_by => $ordenAux,
                                                                             limit => $cantR,
                                                                             offset => $ini,
+                                                                            with_objects => ['socio','nivel3','nivel3.nivel2'],
+    );
+    
+    return ($reservas_count,$reservas);
+}
+
+sub reservasEdicion{
+
+    my ($id_ui,$ini,$cantR,$tipo,$id2)=@_;
+    my $dateformat = C4::Date::get_date_format();
+    my @filtros;
+    my @results;
+
+    my $ordenAux    = 'timestamp ASC';
+    
+    push (@filtros, ( id_ui => { eq => $id_ui}) );
+    push (@filtros, ( id2 => { eq => $id2}) );
+    
+    if($tipo eq "GR"){
+        push (@filtros, ( estado => { eq => 'G'}) );
+        $ordenAux    = 'timestamp DESC';
+    
+    }
+    else{
+        push (@filtros, ( estado => { eq => 'E'}) );
+    }
+    
+    my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count(   query => \@filtros,
+                                                                                );
+    
+    my $reservas = C4::Modelo::CircReserva::Manager->get_circ_reserva(      query => \@filtros,
+                                                                            sort_by => $ordenAux,
                                                                             with_objects => ['socio','nivel3','nivel3.nivel2'],
     );
     

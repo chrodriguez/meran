@@ -1,0 +1,68 @@
+<script type="text/javascript">
+      $(document).ready(function() {
+        makeToggle('datos_tabla_div','trigger',null,false);
+        zebra('datos_tabla');
+      });
+</script>
+[% IF cantidad > 0%]
+	<fieldset class="resultados_busqueda" style="width: 680px;">
+	    <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda" | i18n %]:</legend>
+	        <div class="datos_tabla_div" id="datos_tabla_div">
+	            <div class="resultados_consulta">[% "Total de registros" | i18n %]: [% cantidad %]</div>
+	            <div class="contenedor_paginador">[% paginador %]</div>
+	                <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
+	                    <tr class="titulo_tabla_resultado">
+	                
+	                        <td > [% "Apellido" | i18n %]</td>
+	                        <td > [% "Nombre" | i18n %]</td>
+	                        <td >
+	                            [% "N&uacute;mero de socio" | i18n %]
+	                        </td>
+	                        <td >[% "Fecha de reserva" | i18n %]</td>
+	                        <td >
+	                            [% "Fecha de vencimiento" | i18n %]
+	                        </td>
+	                        <td title="[% 'C&oacute;digo de barra del ejemplar' | i18n %]">
+	                            [% "C&oacute;digo de barra" | i18n %]
+	                        </td>
+	                
+	                    </tr>
+	                [% FOREACH reserva IN reservas %]
+	                    <tr align='center'>
+	                        <td> 
+	                            <a href="[% url_prefix %]/usuarios/reales/datosUsuario.pl?nro_socio=[% reserva.socio.getNro_socio %]">
+	                                [% reserva.socio.persona.getApellido %]
+	                            </a>
+	                        </td>
+	                        <td> 
+	                            <a href="[% url_prefix %]/usuarios/reales/datosUsuario.pl?nro_socio=[% reserva.socio.getNro_socio %]">
+	                                [% reserva.socio.persona.getNombre%]
+	                            </a>
+	                        </td>
+	                        <td> 
+	                            <a href="[% url_prefix %]/usuarios/reales/datosUsuario.pl?nro_socio=[% reserva.socio.getNro_socio %]">
+	                                [% reserva.socio.getNro_socio%]
+	                            </a>
+	                        </td>
+	                        <td> 
+	                            [% reserva.getFecha_reserva_formateada %]
+	                        </td>
+	                        <td> 
+	                            [% reserva.getFecha_recordatorio_formateada %]
+	                        </td>
+	                        <td> 
+	                            [% IF reserva.getId3 %]
+	                                <a href="[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl?id3=[% reserva.nivel3.getId %]&token=[% token %]">[% reserva.nivel3.getBarcode %]</a>
+	                            [% ELSE %]
+	                                <a href="[% url_prefix %]/catalogacion/estructura/detalle.pl?id1=[% reserva.nivel2.getId1 %]&token=[% token %]">Grupo [% reserva.nivel2.getId2 %]</a>
+	                            [% END %]
+	                        </td>
+	                    </tr>
+	                [% END %]
+	                </table>
+	      </div>
+	</fieldset>
+	<br>
+[% ELSE %]
+<h2>[% 'Nadie ha reservado sobre este grupo/ejemplar' | i18n %]</h2>
+[% END %]

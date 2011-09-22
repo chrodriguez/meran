@@ -344,17 +344,23 @@ sub proximosHabiles{
 	my $hasta;
 
 	if ($todosHabiles) {#esto es si todos los dias del periodo deben ser habiles
-#Los dias Habiles se contolan desde el archivo .DateManip.pm que lee el modulo Date.pm, habria que ver como esquematizarlo
+        #Los dias Habiles se contolan desde el archivo .DateManip.pm que lee el modulo Date.pm, habria que ver como esquematizarlo
+        #OLD WAY anda mejor con 		Date_NextWorkDay
+		#$hasta=DateCalc($desde,"+ ".$cantidad. " days",\$err,2);
 		
-		$hasta=DateCalc($desde,"+ ".$cantidad. " days",\$err,2);
-C4::AR::Debug::debug("_______________________________________DESDE __________________________________ ".$desde);
-C4::AR::Debug::debug("_______________________________________HASTA CANT______________________________ ".$cantidad);
-C4::AR::Debug::debug("_______________________________________HASTA___________________________________ ".$hasta);
+		$hasta = $desde;
+		for (my $iter_habil = 1; $iter_habil <= $cantidad; $iter_habil++ ){
+			$hasta = Date_NextWorkDay($hasta);
+		}
 	}else{
-#esto es si no importa quetodos los dias del periodo sean habiles, los que deben ser habiles son el 1ero y el ultimo		
-		   $hasta = DateCalc($desde,"+ ".$cantidad. " days",\$err);  
-		   $hasta = Date_NextWorkDay($hasta,$cantidad);
+        #esto es si no importa quetodos los dias del periodo sean habiles, los que deben ser habiles son el 1ero y el ultimo		
+		$hasta = DateCalc($desde,"+ ".$cantidad. " days",\$err);  
+		$hasta = Date_NextWorkDay($hasta,$cantidad);
 	}
+
+    C4::AR::Debug::debug("_______________________________________DESDE __________________________________ ".$desde);
+    C4::AR::Debug::debug("_______________________________________HASTA CANT______________________________ ".$cantidad);
+    C4::AR::Debug::debug("_______________________________________HASTA___________________________________ ".$hasta);
 
 	my $dateformat= C4::Date::get_date_format();
 	#Damian- 26/03/2007 ----Agregado para que se sume un dia si es feriado el ultimo dia.
