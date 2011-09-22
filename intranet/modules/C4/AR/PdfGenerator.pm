@@ -921,7 +921,7 @@ sub batchBookLabelGenerator {
         } else {
               $pdf= new PDF::Report( PageSize => "A4");
               my $i=0;
-                    while ( $i < $count - 1 ) {
+                    while ( $i < ($count - 1) ) {
                             $pdf->newpage($pag);
                             $pdf->openpage($pag);
 
@@ -968,7 +968,6 @@ sub batchBookLabelGenerator {
 sub generateBookLabelA4 {
     my ( $nivel3, $x, $y, $pdf ) = @_;
 
-
     my $signatura   = $nivel3->getSignatura_topografica; 
     my $codigo      = $nivel3->getBarcode;
     my $branchcode  = $nivel3->getId_ui_origen;
@@ -981,10 +980,7 @@ sub generateBookLabelA4 {
       
 
     #Insert a rectangle to delimite the card
-#     $pdf->drawRect( $x - 12, $y, $x + 278, ( $y + 142 ) );
- 
-
-     $pdf->drawRect( $x - 12, $y + 30, $x + 278, ( $y + 172 ) );
+    $pdf->drawRect( $x - 12, $y + 30, $x + 278, ( $y + 172 ) );
 
 
     C4::AR::Debug::debug($pageheight);
