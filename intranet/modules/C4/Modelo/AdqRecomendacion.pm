@@ -45,6 +45,21 @@ __PACKAGE__->meta->setup(
 
 );
 
+
+# sub getInvolvedCount {
+# 
+#     my ($self) = shift;
+#     my ( $campo, $value ) = @_;
+#     my @filtros;
+#     push (@filtros, ( $campo->getCampo_referente => $value ) );
+#     C4::AR::Debug::debug("CircPrestamo=> getInvolvedCount => $campo || $value" );
+#     
+#     my $adq_recomendacion_count =  C4::Modelo::AdqRecomendacion::Manager->get_adq_recomendacion_count(query => \@filtros );
+#     return ($adq_recomendacion_count);
+# }
+
+
+
 sub desactivar{
     my ($self) = shift;
     $self->setActiva(0);
@@ -81,6 +96,9 @@ sub agregarRecomendacion{
 
 
 #----------------------------------- GETTERS y SETTERS------------------------------------------------
+
+
+
 
 sub setUsrSocioId{
     my ($self)  = shift;
