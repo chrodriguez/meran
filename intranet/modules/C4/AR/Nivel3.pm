@@ -1093,7 +1093,7 @@ sub getHistoricoCirculacion {
                                                                             query => \@filtros, 
                                                                             limit   => $cantR,
                                                                             offset  => $ini,
-                                                                            sort_by => ['timestamp DESC']
+                                                                            sort_by => ['fecha DESC']
      );
 
     #Obtengo la cant total en el histórico para el paginador
