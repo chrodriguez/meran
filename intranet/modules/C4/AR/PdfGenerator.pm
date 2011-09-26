@@ -974,6 +974,8 @@ sub generateBookLabelA4 {
     my $codigo      = $nivel3->getBarcode;
     my $branchcode  = $nivel3->getId_ui_origen;
     
+
+    
     #Datos de la biblioteca
     my $branch = &datosBiblio($branchcode);
 
@@ -985,9 +987,9 @@ sub generateBookLabelA4 {
     $pdf->drawRect( $x - 12, $y + 30, $x + 278, ( $y + 172 ) );
 
 
-    C4::AR::Debug::debug($pageheight);
+    C4::AR::Debug::debug($branchcode);
 
-    $pdf->drawLine( $x + 70, $y + 30, $x + 70, $y +  172 );
+    $pdf->drawLine( $x + 80, $y + 30, $x + 80, $y +  172 );
 
 
     #Insert a barcode to the card
@@ -1000,15 +1002,18 @@ sub generateBookLabelA4 {
       . '/imagenes/escudo-'
       . $branchcode . '.jpg';
 
+      C4::AR::Debug::debug($escudo);
 
     if ( !( ( -e $escudo ) && ( -r $escudo ) ) ) {
+
+      C4::AR::Debug::debug("ENTRA???????");
         $escudo =
             C4::Context->config('intrahtdocs') . '/temas/'
           . C4::AR::Preferencias::getValorPreferencia('defaultUI')
           . '/imagenes/escudo-DEFAULT.jpg';
-        $pdf->addImgScaled($escudo, $x + 120 , 40 + ($y) , 5/100);
+        $pdf->addImgScaled($escudo, $x + 120 , 110 + ($y) , 5/100);
     }else{
-        $pdf->addImgScaled($escudo, $x + 80 , $pageheight + 27 + ($y-$posy) , 2/100);
+        $pdf->addImgScaled($escudo,  $x + 100 , 125 + ($y) , 2/100);
     }
    
     #Write the borrower data into the pdf file
@@ -1050,15 +1055,20 @@ sub generateBookLabelA4 {
 
     my $phone_fax = "";
     my $phone_tel = " Tel " . $branch->getTelefono || C4::AR::Filtros::i18n('No dispone');
-    $phone_fax = " Fax " . $branch->getFax      || C4::AR::Filtros::i18n('No dispone');
-
+    
+    $pdf->addRawText( $phone_tel, $x + 164, 265 + ( $y - $posy ) );
+    
+    if (C4::AR::Preferencias::getValorPreferencia('incluir_fax_etiquetas')){
+        $phone_fax = " Fax " . $branch->getFax      || C4::AR::Filtros::i18n('No dispone');
+        $pdf->addRawText( $phone_fax, $x + 164, 258 + ( $y - $posy ) );
+    }
 #     $pdf->addRawText( $phone_fax, $x + 144, $pageheight + 65 + ( $y - $posy ) );
-    $pdf->addRawText( $phone_fax, $x + 164, 265 + ( $y - $posy ) );
+   
 
 
     $posy = $posy + 7;
 #     $pdf->addRawText( $phone_tel, $x + 144, $pageheight + 65 + ( $y - $posy ) );
-    $pdf->addRawText( $phone_tel, $x + 164, 265 + ( $y - $posy ) );
+  
 
     #AHORA DIBUJAMOS LA SIGNATURA SEPARADA POR ' '
     $pdf->setSize(8);
@@ -1073,10 +1083,10 @@ sub generateBookLabelA4 {
 
     $pdf->addRawText( $codigo, $x + 15, $pageheight + ( $y - 120 ) - $posicion );
     $posicion += 15;
-    $pdf->addRawText( $nivel3->getDisponibilidadObject()->getNombre(), $x + 15, $pageheight + ( $y - 120 ) - $posicion );
+    $pdf->addRawText( $nivel3->getDisponibilidadObject()->getNombre(), $x + 10, $pageheight - ( $y - 133 ) - $posicion );
 
 # Inserto el barcode debajo de signatura
-    $pdf->addRawText( "$codigo", $x - 1, $y + 40);
+    $pdf->addRawText( "$codigo", $x + 5, $y + 40);
     
     $pdf->setFont("Arial");
 }
