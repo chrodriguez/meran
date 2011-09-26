@@ -1,13 +1,8 @@
-
-
 [% INCLUDE "FormValidateHelper.inc" %]
 
 <script type="text/javascript">
 
 function validateForm(){
-
-   
-
             $("#contactform").validate({
     
                 errorElement: "em",
@@ -35,8 +30,6 @@ $(document).ready( function() {
 });
 
 </script>        
-
-<!--<h1 class="block">[% 'Formulario de contacto' | i18n %]</h1>-->
         <div class="column1-unit">
           <div class="contactform">
             <form id="contactform" name="contactform" method="get" action="[% url_prefix %]/opac-contact.pl">

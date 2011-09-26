@@ -50,12 +50,12 @@
                             </td>
                             <td>
                                 <a class="fancy_link" href="[% url_prefix %]/admin/ver_mensaje.pl?token=[% token %]&id=[% mensaje.id %]">
-                                    [% mensaje.getAsunto %] 
+                                    [% HTML.escape(mensaje.getAsunto) %] 
                                 </a>
                             </td>
                             <td>
                                 <a class="fancy_link" href="[% url_prefix %]/admin/ver_mensaje.pl?token=[% token %]&id=[% mensaje.id %]">
-                                    [% mensaje.getApellido %], [% mensaje.getNombre %] 
+                                    [% HTML.escape(mensaje.getApellido) %], [% HTML.escape(mensaje.getNombre) %] 
                                 </a>
                             </td>
                             <td>
