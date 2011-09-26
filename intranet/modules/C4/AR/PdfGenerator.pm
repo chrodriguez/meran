@@ -1056,11 +1056,11 @@ sub generateBookLabelA4 {
     my $phone_fax = "";
     my $phone_tel = " Tel " . $branch->getTelefono || C4::AR::Filtros::i18n('No dispone');
     
-    $pdf->addRawText( $phone_tel, $x + 164, 265 + ( $y - $posy ) );
+    $pdf->addRawText( $phone_tel, $x + 164, 264 + ( $y - $posy ) );
     
     if (C4::AR::Preferencias::getValorPreferencia('incluir_fax_etiquetas')){
         $phone_fax = " Fax " . $branch->getFax      || C4::AR::Filtros::i18n('No dispone');
-        $pdf->addRawText( $phone_fax, $x + 164, 258 + ( $y - $posy ) );
+        $pdf->addRawText( $phone_fax, $x + 164, 257 + ( $y - $posy ) );
     }
 #     $pdf->addRawText( $phone_fax, $x + 144, $pageheight + 65 + ( $y - $posy ) );
    
@@ -1083,7 +1083,7 @@ sub generateBookLabelA4 {
 
     $pdf->addRawText( $codigo, $x + 15, $pageheight + ( $y - 120 ) - $posicion );
     $posicion += 15;
-    $pdf->addRawText( $nivel3->getDisponibilidadObject()->getNombre(), $x + 10, $pageheight - ( $y - 133 ) - $posicion );
+    $pdf->addRawText( $nivel3->getDisponibilidadObject()->getNombre(), $x + 10, ( $y + 148 ) - $posicion );
 
 # Inserto el barcode debajo de signatura
     $pdf->addRawText( "$codigo", $x + 5, $y + 40);
@@ -1130,7 +1130,7 @@ sub generateBookLabel{
           . '/imagenes/escudo-DEFAULT.jpg';
         $pdf->addImgScaled($escudo, $x + 120 , 40 + ($y) , 5/100);
     }else{
-        $pdf->addImgScaled($escudo, $x + 80 , $pageheight + 27 + ($y-$posy) , 2/100);
+        $pdf->addImgScaled($escudo, $x + 110 , 50 + ($y) , 2/100);
     }
 
 	#Write the borrower data into the pdf file
@@ -1159,12 +1159,16 @@ sub generateBookLabel{
 	$posy = $posy + 7;
 
 	my $phone_fax = "";
-	my $phone_tel = " Tel " . $branch->getTelefono || C4::AR::Filtros::i18n('No dispone');
-	$phone_fax = " Fax " . $branch->getFax      || C4::AR::Filtros::i18n('No dispone');
-
-	$pdf->addRawText( $phone_fax, $x + 164, $pageheight + ( $y - $posy ) );
+    my $phone_tel = " Tel " . $branch->getTelefono || C4::AR::Filtros::i18n('No dispone');
 	
-	$posy = $posy + 7;
+    if (C4::AR::Preferencias::getValorPreferencia('incluir_fax_etiquetas')){
+            $posy = $posy + 7 ;
+            $phone_fax = " Fax " . $branch->getFax      || C4::AR::Filtros::i18n('No dispone');
+            $pdf->addRawText( $phone_fax, $x + 164, $pageheight + ( $y - $posy ) );
+            $posy = $posy - 7 ;
+	}
+
+	$posy = $posy ;
 	$pdf->addRawText( $phone_tel, $x + 164, $pageheight + ( $y - $posy ) );
 
 	#AHORA DIBUJAMOS LA SIGNATURA SEPARADA POR ' '
@@ -1177,9 +1181,9 @@ sub generateBookLabel{
 		$posicion += 15;
 	}
 	
-    $pdf->addRawText( $codigo, $x + 15, $pageheight + ( $y - 120 ) - $posicion );
+    $pdf->addRawText( $codigo, $x + 15, $pageheight + ( $y - 131 ) - $posicion  );
     $posicion += 15;
-    $pdf->addRawText( $nivel3->getDisponibilidadObject()->getNombre(), $x + 15, $pageheight + ( $y - 120 ) - $posicion );
+    $pdf->addRawText( $nivel3->getDisponibilidadObject()->getNombre(), $x + 15, $pageheight + ( $y - 103 ) - $posicion);
 	
 	$pdf->setFont("Arial");
 }

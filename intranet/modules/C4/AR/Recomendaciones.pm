@@ -158,15 +158,29 @@ sub getRecomendacionesActivas{
 
 sub getRecomendaciones{
 
-    my ($params) = @_;
+    my ($ini,$cantR)=@_;
+    
+#     my ($params) = @_;
 
     my $db                                      = C4::Modelo::AdqRecomendacion->new()->db;
+    
     my $recomendaciones_activas_array_ref       = C4::Modelo::AdqRecomendacion::Manager->get_adq_recomendacion(   
                                                                     db => $db,
                                                                     query   => [ activa => 1 ],
+                                                                    limit   => $cantR,
+                                                                    offset  => $ini,
                                                                 );
 
-    return ($recomendaciones_activas_array_ref);
+    
+    my $cantidad= C4::Modelo::AdqRecomendacion::Manager->get_adq_recomendacion_count(   
+                                                                    db => $db,
+                                                                    query   => [ activa => 1 ],
+                                                                );
+     
+
+    return($cantidad,$recomendaciones_activas_array_ref);
+
+#     return ($recomendaciones_activas_array_ref);
 }
 
 =item
