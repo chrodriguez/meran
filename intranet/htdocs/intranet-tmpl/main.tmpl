@@ -2,9 +2,12 @@
 
 [% INCLUDE  'AutocompleteHelper.inc'  %]
 
+[% USE HTML %]
+
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/css/fancybox/jquery.fancybox.css">
 <script src="/includes/jquery/jquery.charCount.js"></script>
-
+<script type="text/javascript" src="/includes/jquery/jquery.wysiwyg.js"></script>
+<link rel="stylesheet" href="/includes/css/wysiwyg.css" type="text/css" media="screen"/>
 
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -58,6 +61,15 @@
     function twitter_click(){
         $("#button_twitter").attr("src","[% temas %]/[% tema %]/imagenes/botones/button_twitter_click.png");
     }
+    
+    function responder(){
+        $("#respuesta").wysiwyg();
+        $(".responder").show(); 
+        $(".wysiwyg").css('width','388px');   
+        $("#fancybox-wrap").css('top','25px');
+        $("#respuestaIFrame").css('width','388px');
+        $("#responder").attr('onclick', ' '); 
+    }
 
 </script>
 
@@ -88,12 +100,12 @@
                   <ul>
                       [% FOREACH mens IN ultimos_no_leidos %]
                           <li  class="msj_main"> 
-                                <span class="msj_main_nombre">[% mens.nombre %] [% mens.apellido %]</span>
-                                <span class="msj_main_mail">([% mens.email %])</span>
+                                <span class="msj_main_nombre">[% HTML.escape(mens.nombre) %] [% HTML.escape(mens.apellido) %]</span>
+                                <span class="msj_main_mail">([% HTML.escape(mens.email) %])</span>
                        
                                  <span class="msj_main_asunto">
                                         <a class="fancy_link" href="[% url_prefix %]/admin/ver_mensaje.pl?token=[% token %]&id=[% mens.id %]">
-                                        [% mens.asunto %]
+                                        [% HTML.escape(mens.asunto) %]
                                         </a>
                                 </span>
                             </td>
