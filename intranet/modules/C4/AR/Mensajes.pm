@@ -172,7 +172,8 @@ my %mensajesINTRA = (
     'S202' => 'Se elimin&oacute; la sanci&oacute;n a *?*, *?*, *?* con &eacute;xito.',
     'S203' => 'No se pudo eliminar la sanci&oacute;n a *?*, *?*, *?*.',
     'S204' => 'Disculpe, no puede efectuar el pr&eacute;stamo porque el usuario tiene un ejemplar vencido.',
-
+    'S205' => 'No es posible realizar el pr&eacute;stamo porque el usuario tiene una sanci&oacute;n para ese tipo de pr&eacute;stamo hasta el *?*.',
+    
     'U300' => 'El usuario no puede reservar porque no es un alumno regular.',
     'U301' => 'El usuario no puede reservar porque no ha realizado a&uacute;n el curso para usuarios.',
     'U302' => '',

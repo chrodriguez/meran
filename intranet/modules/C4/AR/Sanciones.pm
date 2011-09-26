@@ -125,7 +125,7 @@ sub permisoParaPrestamo {
 	elsif (my $sancion = estaSancionado($nro_socio, $tipo_prestamo)) {
         $deudaOsancion  = 1; #Tiene una sancion vigente
         $hasta          = $sancion->getFecha_final;
-        $cod_error      = 'S201';
+        $cod_error      = 'S205';
         C4::AR::Debug::debug("Sanciones::permisoParaPrestamo => estaSancionado ");
   	}
 
@@ -149,12 +149,14 @@ sub estaSancionado {
                                                                                 require_objetcs => ['ref_tipo_sancion','reserva','ref_tipo_sancion.ref_tipo_prestamo'],
                                                                                 select => ['*'],
                                                                                 );
-  if (scalar($sanciones_array_ref->[0])){
-      return($sanciones_array_ref->[0] || 0);
-  }else{
-      return (0);
+                                                                                
+  foreach my $sancion (@$sanciones_array_ref){
+	foreach my $tipo ($sancion->ref_tipo_prestamo_sancion){
+			if ( $tipo->getTipo_prestamo eq $tipo_prestamo ){ return $sancion; }
+		}
   }
-
+  
+  return (0);
 }
 
 sub tieneLibroVencido {
