@@ -266,7 +266,7 @@ C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde hash2 => ".$param
 	#es una reserva de ITEM, se le agrega una SANCION al usuario al comienzo del dia siguiente
 	#al ultimo dia que tiene el usuario para ir a retirar el libro
 	
-	    my ($startdate,$enddate,$apertura,$cierre) = C4::Date::proximosHabiles
+	    my ($startdate,$enddate,$apertura,$cierre) = C4::Date::proximosHabiles($numeroDias,0,$hasta);
 		
 		my $err= "Error con la fecha";
 
