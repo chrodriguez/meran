@@ -31,7 +31,7 @@ function traerImputsVacios(){
 
 
 function aceptarRecomendacion(user_id){
-
+//         $('tabla_recomendacion').empty(); 
         objAH                   = new AjaxHelper(updateAceptarRecomendacion);
         objAH.debug             = true;
         objAH.showOverlay       = true;
@@ -46,7 +46,9 @@ function aceptarRecomendacion(user_id){
 
 
 function updateAceptarRecomendacion(responseText){
-  $('tabla_recomendacion').remove();
+//   $('tabla_recomendacion').remove;
+
+
   $('#ediciones').hide();
   $('#recomendacion').hide();
   $('#datos_material').hide();
