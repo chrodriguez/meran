@@ -8,18 +8,18 @@
 		<table class="tablaHistorialPrestamos datos_tabla" cellspacing=0  cellpadding=0 border=0 width="100%">
 		    <tr class="titulo_tabla_resultado">
 		    
-			    <td class="click" onclick="ordenar('titulo')" 
+			    <td class="click" onclick="ordenarHistorialPrestamos('titulo')" 
 		            Title='[% "Ordenar por t&iacute;tulo" | i18n %]'>
 				    [% "T&iacute;tulo" | i18n %]
 			    </td>
-			    <td class="click" onclick="ordenar('autor')" 
+			    <td class="click" onclick="ordenarHistorialPrestamos('autor')" 
 		            Title='[% "Ordenar por Autor" | i18n %]'>
 		            [% "Autor" | i18n %]
 			    </td>
 		        <td>
 		                [% "Edici&oacute;n" | i18n %]
 		        </td>
-		            <td class="click" onclick="ordenar('barcode')" 
+		            <td class="click" onclick="ordenarHistorialPrestamos('barcode')" 
 		                Title='[% "Ordenar por C&oacute;digo" | i18n %]'>
 				    [% "C&oacute;digo" | i18n %]
 		        </td>
@@ -27,7 +27,7 @@
 		        <td>[% "Renovaci&oacute;n" | i18n %]</td>
                 <td>[% "Catidad de Renovaciones" | i18n %]</td>
 			    <td>[% "Vencimiento" | i18n %]</td>
-			    <td class="click" onclick="ordenar('fecha_devolucion')" 
+			    <td class="click" onclick="ordenarHistorialPrestamos('fecha_devolucion')" 
 		                Title='[% "Ordenar por Fecha de devoluci&oacute;n" | i18n %]'>
 				    [% "Devoluci&oacute;n" | i18n %]
 			    </td>
