@@ -275,9 +275,6 @@ sub proximosHabiles{
     my $desde= DateCalc("today","+ 0 days",\$err,2);  
 
     
-    my $hoy_es_habil = esHabil($hoy);
-    my $desde_es_habil = esHabil($desde);
-    
 	my $hasta;
 
 	if ($todosHabiles) {#esto es si todos los dias del periodo deben ser habiles
@@ -292,7 +289,9 @@ sub proximosHabiles{
 	}else{
         #esto es si no importa quetodos los dias del periodo sean habiles, los que deben ser habiles son el 1ero y el ultimo		
 		$hasta = DateCalc($desde,"+ ".$cantidad. " days",\$err);  
-		$hasta = Date_NextWorkDay($hasta,$cantidad);
+        if (!esHabil($hasta)){
+            $hasta = Date_NextWorkDay($hasta,$cantidad);
+        } 
 	}
 
     C4::AR::Debug::debug("_______________________________________DESDE __________________________________ ".$desde);

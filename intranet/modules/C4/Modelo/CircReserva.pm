@@ -255,7 +255,7 @@ C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde hash => ".$params
 
     $self->debug("RESERVA: estado: ".$paramsReserva{'estado'}." id_ui: ".	$paramsReserva{'id_ui'});
 
-	#$self->agregar(\%paramsReserva);
+	$self->agregar(\%paramsReserva);
 
 C4::AR::Debug::debug("C4::AR::CircReserva => reservar => hasta hash2 => ".$paramsReserva{'hasta'});
 C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde hash2 => ".$paramsReserva{'desde'});
@@ -287,7 +287,7 @@ C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde hash2 => ".$param
 		$paramsSancion{'dias_sancion'}      = $daysOfSanctions;
 		$paramsSancion{'id3'}		        = $self->getId3;
 
-		#$sancion->insertar_sancion(\%paramsSancion);
+		$sancion->insertar_sancion(\%paramsSancion);
 	}
 
 	return (\%paramsReserva);
