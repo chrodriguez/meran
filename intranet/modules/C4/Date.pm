@@ -280,11 +280,11 @@ sub proximosHabiles{
     
 	my $hasta;
 
-	if ($todosHabiles) {#esto es si todos los dias del periodo deben ser habiles
+	if ($todosHabiles) {
+		#esto es si todos los dias del periodo deben ser habiles
         #Los dias Habiles se contolan desde el archivo .DateManip.pm que lee el modulo Date.pm, habria que ver como esquematizarlo
         #OLD WAY anda mejor con 		Date_NextWorkDay
 		#$hasta=DateCalc($desde,"+ ".$cantidad. " days",\$err,2);
-		
 		$hasta = $desde;
 		for (my $iter_habil = 1; $iter_habil <= $cantidad; $iter_habil++ ){
 			$hasta = DateCalc($hasta,"+ ".$iter_habil. " days",\$err,2);
