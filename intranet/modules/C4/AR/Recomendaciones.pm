@@ -20,7 +20,8 @@ use vars qw(@EXPORT @ISA);
     &editarCantidadEjemplares;
     &getRecomendacionPorId;
     &updateRecomendacionDetalle;
-    &eliminarRecomendacion
+    &eliminarRecomendacion;
+    &getRecomendacionesDeUsuario
 );
 
 
@@ -155,6 +156,24 @@ sub getRecomendacionesActivas{
 
     return ($recomendaciones_activas_array_ref);
 }
+
+
+sub getRecomendacionesDeUsuario{
+
+    my ($userid) = @_;
+    
+
+    my $db                                      = C4::Modelo::AdqRecomendacion->new()->db;
+    my $recomendaciones_de_usuario       = C4::Modelo::AdqRecomendacion::Manager->get_adq_recomendacion(   
+                                                                    db => $db,
+                                                                    query   => [ usr_socio_id => $userid ],
+                                                         
+                                                                );
+
+    return ($recomendaciones_de_usuario);
+}
+
+
 
 sub getRecomendaciones{
 

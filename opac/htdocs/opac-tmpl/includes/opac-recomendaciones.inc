@@ -30,6 +30,36 @@ function traerImputsVacios(){
 }
 
 
+function aceptarRecomendacion(user_id){
+
+        objAH                   = new AjaxHelper(updateAceptarRecomendacion);
+        objAH.debug             = true;
+        objAH.showOverlay       = true;
+        objAH.url               = '[% url_prefix %]/opac-recomendacionesDB.pl';
+        objAH.id_rec            = $('#id_recomendacion').val();
+        objAH.user_id           = user_id;
+        objAH.tipoAccion        = 'ACTIVAR_RECOMENDACION';
+        objAH.sendToServer();
+                
+
+}
+
+
+function updateAceptarRecomendacion(responseText){
+  $('tabla_recomendacion').remove();
+  $('#ediciones').hide();
+  $('#recomendacion').hide();
+  $('#datos_material').hide();
+  $('#catalogo_search').val('');
+  if (!verificarRespuesta(responseText))
+            return(0);
+  var Messages=JSONstring.toObject(responseText);
+  setMessages(Messages);
+
+
+}
+
+
 function updateTraerImputsVacios(responseText){
   $('#datos_edicion_seleccionada').html(responseText); 
 }
@@ -230,11 +260,11 @@ $(document).ready( function() {
                       </table>
                       <div id="acciones" style="float:left; margin: 20px 10px 10px 10px;" >
                           
-                          <form method="post" action="opac-recomendaciones.pl?token=[% token %]">
-                            <input type="hidden" name="mensaje" value="La recomendacion fue enviada con exito">
-                            <input type="submit" style="float:left;" value="Aceptar Recomendacion">
+                  <!--        <form method="post" id="form_recom" action="opac-recomendaciones.pl?token=[% token %]">-->
+                           <!-- <input type="hidden" name="mensaje" value="La recomendacion fue enviada con exito">-->
+                            <input type="button" style="float:left;" onclick="aceptarRecomendacion('[% user_id %]')" value="Aceptar Recomendacion">
                               <input type="button" style="float:left" onclick="cancelarRecomendacion()" value="Cancelar Recomendacion">
-                          </form>
+                      <!--    </form>-->
                         
                       </div>
                       </fieldset>
