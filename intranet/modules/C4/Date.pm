@@ -260,7 +260,7 @@ sub updateForHoliday{
 }
 
 
-sub proximosHabiles{
+sub proximosHabiles {
 	my ($cantidad,$todosHabiles,$desde)=@_;
 	my $apertura=C4::AR::Preferencias::getValorPreferencia("open");
 	my $cierre=C4::AR::Preferencias::getValorPreferencia("close");
@@ -298,18 +298,21 @@ sub proximosHabiles{
     C4::AR::Debug::debug("_______________________________________HASTA CANT______________________________ ".$cantidad);
     C4::AR::Debug::debug("_______________________________________HASTA___________________________________ ".$hasta);
 
+	
+	
+	#Se sume un dia si es feriado el ultimo dia.
 	my $dateformat= C4::Date::get_date_format();
-	#Damian- 26/03/2007 ----Agregado para que se sume un dia si es feriado el ultimo dia.
 	$hasta = C4::Date::format_date_in_iso($hasta, $dateformat);
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("SELECT * FROM pref_feriado WHERE fecha >= ?");
-	$sth->execute($hasta);
-	while ((my $date= $sth->fetchrow_hashref)) {
-		if( C4::Date::format_date_in_iso($hasta, $dateformat) eq $date->{'fecha'}) {
+	
+	my $proximos_feriados = C4::AR::Utilidades::getProximosFeriados();
+	
+	foreach my $feriado (@$proximos_feriados) {
+		C4::AR::Debug::debug("FERIADO ".$feriado->getFecha);
+		
+		if( C4::Date::format_date($hasta,$dateformat) eq $feriado->getFecha ) {
 			$hasta=DateCalc($hasta,"+ 1 days",\$err,2);
 		}
 	}
-	#######hasta aca
 
     return (	C4::Date::format_date_in_iso($desde, $dateformat),
                 C4::Date::format_date_in_iso($hasta, $dateformat),

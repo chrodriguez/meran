@@ -46,7 +46,7 @@ sub setFecha{
         $self->fecha($fecha);
         $self->feriado($feriado);
         $self->save();
-    }elsif ($status eq "false"){
+    }else {
         $self->delete();
     }
 }
