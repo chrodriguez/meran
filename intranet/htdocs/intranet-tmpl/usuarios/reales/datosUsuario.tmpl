@@ -27,6 +27,14 @@ function changePage(ini){
 	objAH.changePage(ini);
 }
 
+function ordenarHistorialSanciones(orden){
+    objAHSanciones.sort(orden);
+}
+
+function ordenarHistorialPrestamos(orden){
+    objAHPrestamos.sort(orden);
+}
+
 //lo mismo con los changePage, uno por cada objeto
 function changePagePrestamos(ini){
 	objAHPrestamos.changePage(ini);

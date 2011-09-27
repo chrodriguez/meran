@@ -1074,7 +1074,7 @@ sub getHistoricoDisponibilidad {
 
 sub getHistoricoCirculacion {
 
-    my ($id3,$ini,$cantR,$fecha_inicial,$fecha_final) = @_;
+    my ($id3,$ini,$cantR,$fecha_inicial,$fecha_final,$orden) = @_;
 
     my @filtros;
     my $dateformat = C4::Date::get_date_format();
@@ -1093,7 +1093,7 @@ sub getHistoricoCirculacion {
                                                                             query => \@filtros, 
                                                                             limit   => $cantR,
                                                                             offset  => $ini,
-                                                                            sort_by => ['fecha DESC']
+                                                                            sort_by => $orden
      );
 
     #Obtengo la cant total en el histórico para el paginador

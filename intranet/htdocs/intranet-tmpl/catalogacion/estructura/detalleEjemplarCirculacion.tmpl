@@ -24,13 +24,31 @@
         <div class="datos_tabla_div_user">
             <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
                 <thead>
-                <tr class="titulo_tabla_resultado">
-                    <th>[% "Usuario" | i18n %]</th>
-                    <th>[% "Responsable" | i18n %]</th>
-                    <th>[% "Fecha" | i18n %]</th>
-                    <th>[% "Fecha Fin" | i18n %]</th>
-                    <th>[% "Operaci&oacute;n" | i18n %]</th>
-                    <th>[% "Tipo de Pr&eacute;stamo" | i18n %]</th>
+                <tr id="tr_sin_clase" class="titulo_tabla_resultado">
+                    <th class="click" onclick="ordenarHistorialCirculacion('nro_socio')" 
+		                Title='[% "Ordenar por Usuario" | i18n %]'>
+		                [% "Usuario" | i18n %]
+			        </th>
+			        <th class="click" onclick="ordenarHistorialCirculacion('responsable')" 
+		                Title='[% "Ordenar por Responsable" | i18n %]'>
+		                [% "Responsable" | i18n %]
+			        </th>
+			        <th class="click" onclick="ordenarHistorialCirculacion('fecha')" 
+		                Title='[% "Ordenar por Fecha" | i18n %]'>
+		                [% "Fecha" | i18n %]
+			        </th>
+			        <th class="click" onclick="ordenarHistorialCirculacion('fecha_fin')" 
+		                Title='[% "Ordenar por Fecha Fin" | i18n %]'>
+		                [% "Fecha Fin" | i18n %]
+			        </th>
+			        <th class="click" onclick="ordenarHistorialCirculacion('tipo_operacion')" 
+		                Title='[% "Ordenar por Operaci&oacute;n" | i18n %]'>
+		                [% "Operaci&oacute;n" | i18n %]
+			        </th>
+			        <th class="click" onclick="ordenarHistorialCirculacion('tipo_prestamo')" 
+		                Title='[% "Ordenar por Tipo de Pr&eacute;stamo" | i18n %]'>
+		                [% "Tipo de Pr&eacute;stamo" | i18n %]
+			        </th>
                 </tr>
                 </thead>
                 <tbody>

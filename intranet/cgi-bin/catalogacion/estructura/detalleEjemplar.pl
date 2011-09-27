@@ -59,14 +59,14 @@ if($obj) {
     elsif($tipo eq "VER_HISTORICO_CIRCULACION"){
 
     my ($template, $session, $t_params) = get_template_and_user({
-                                            template_name => "catalogacion/estructura/detalleEjemplarCirculacion.tmpl",
-                                            query => $input,
-                                            type => "intranet",
+                                            template_name   => "catalogacion/estructura/detalleEjemplarCirculacion.tmpl",
+                                            query           => $input,
+                                            type            => "intranet",
                                             authnotrequired => 0,
-                                            flagsrequired   => {    ui => 'ANY', 
-                                                                    tipo_documento => 'ANY', 
-                                                                    accion => 'CONSULTA', 
-                                                                    entorno => 'datos_nivel3'},
+                                            flagsrequired   => {    ui              => 'ANY', 
+                                                                    tipo_documento  => 'ANY', 
+                                                                    accion          => 'CONSULTA', 
+                                                                    entorno         => 'datos_nivel3'},
                                             debug => 1,
         });
 
@@ -75,18 +75,19 @@ if($obj) {
     my $nivel3 = C4::AR::Nivel3::getNivel3FromId3($id3);
 
     if ($nivel3) {
-        my $fecha_inicial = $obj->{'fecha_inicial'};
-        my $fecha_final = $obj->{'fecha_final'};
+        my $fecha_inicial   = $obj->{'fecha_inicial'};
+        my $fecha_final     = $obj->{'fecha_final'};
+        my $orden           = $obj->{'orden'} || 'fecha DESC';
 
         my ($ini,$pageNumber,$cantR)    =   C4::AR::Utilidades::InitPaginador($ini);
-        my ($cant_historico,$historico_circulacion) = C4::AR::Nivel3::getHistoricoCirculacion($id3,$ini,$cantR,$fecha_inicial,$fecha_final);
+        my ($cant_historico,$historico_circulacion) = C4::AR::Nivel3::getHistoricoCirculacion($id3,$ini,$cantR,$fecha_inicial,$fecha_final,$orden);
 
         $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cant_historico,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
-        $t_params->{'nivel3'} = $nivel3;
-        $t_params->{'fecha_inicial'} = $fecha_inicial;
-        $t_params->{'fecha_final'} = $fecha_final;
-        $t_params->{'historico_circulacion'} = $historico_circulacion;
-        $t_params->{'cant_historico'} = $cant_historico;
+        $t_params->{'nivel3'}                   = $nivel3;
+        $t_params->{'fecha_inicial'}            = $fecha_inicial;
+        $t_params->{'fecha_final'}              = $fecha_final;
+        $t_params->{'historico_circulacion'}    = $historico_circulacion;
+        $t_params->{'cant_historico'}           = $cant_historico;
     }
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
