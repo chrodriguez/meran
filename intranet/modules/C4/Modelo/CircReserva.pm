@@ -255,7 +255,7 @@ C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde hash => ".$params
 
     $self->debug("RESERVA: estado: ".$paramsReserva{'estado'}." id_ui: ".	$paramsReserva{'id_ui'});
 
-	$self->agregar(\%paramsReserva);
+	#$self->agregar(\%paramsReserva);
 
 C4::AR::Debug::debug("C4::AR::CircReserva => reservar => hasta hash2 => ".$paramsReserva{'hasta'});
 C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde hash2 => ".$paramsReserva{'desde'});
@@ -265,11 +265,14 @@ C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde hash2 => ".$param
 	if( ($id3 ne '')&&($params->{'tipo'} eq 'OPAC') ){
 	#es una reserva de ITEM, se le agrega una SANCION al usuario al comienzo del dia siguiente
 	#al ultimo dia que tiene el usuario para ir a retirar el libro
+	
+	    my ($startdate,$enddate,$apertura,$cierre) = C4::Date::proximosHabiles
+		
 		my $err= "Error con la fecha";
-		my $startdate           = C4::Date::proximoHabil(1,0,$hasta);
+
 		$startdate              = C4::Date::format_date_in_iso($startdate,$dateformat);
 		my $daysOfSanctions     = C4::AR::Preferencias::getValorPreferencia("daysOfSanctionReserves");
-		my $enddate             = C4::Date::proximoHabil($daysOfSanctions,0,$hasta);
+
 		$enddate                = C4::Date::format_date_in_iso($enddate,$dateformat);
 		my  $sancion            = C4::Modelo::CircSancion->new(db => $self->db);
 		my %paramsSancion;
@@ -284,7 +287,7 @@ C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde hash2 => ".$param
 		$paramsSancion{'dias_sancion'}      = $daysOfSanctions;
 		$paramsSancion{'id3'}		        = $self->getId3;
 
-		$sancion->insertar_sancion(\%paramsSancion);
+		#$sancion->insertar_sancion(\%paramsSancion);
 	}
 
 	return (\%paramsReserva);
