@@ -272,7 +272,7 @@ sub proximosHabiles {
 
 	my $err= "Error con la fecha";
 	my $hoy= (ParseDate($desde) || ParseDate("today"));
-    my $desde= DateCalc("today","+ 0 days",\$err,2);  
+    $desde= ($desde || DateCalc("today","+ 0 days",\$err,2));
 
     
 	my $hasta;
@@ -307,8 +307,6 @@ sub proximosHabiles {
 	my $proximos_feriados = C4::AR::Utilidades::getProximosFeriados();
 	
 	foreach my $feriado (@$proximos_feriados) {
-		C4::AR::Debug::debug("FERIADO ".$feriado->getFecha);
-		
 		if( C4::Date::format_date($hasta,$dateformat) eq $feriado->getFecha ) {
 			$hasta=DateCalc($hasta,"+ 1 days",\$err,2);
 		}
