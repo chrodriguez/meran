@@ -84,7 +84,7 @@ sub _write_debug{
     if (C4::AR::Utilidades::validateString($nro_socio)){
     	$nro_socio.=" -- ";
     }
-	print Z "$nro_socioDEBUG -- $type --("._str_debug_date_time().") => ".$data."\n";
+	print Z $nro_socio."DEBUG -- $type --("._str_debug_date_time().") => ".$data."\n";
 	close(Z);        
 }
 
