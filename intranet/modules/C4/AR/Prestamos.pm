@@ -595,7 +595,7 @@ sub t_renovar {
     
             if(!$msg_object->{'error'}){
                     eval{
-                        $prestamo->renovar($params->{'nro_socio'});
+                        $prestamo->renovar($params->{'responsable'});
                         $db->commit;
 
                         # Si la renovacion se pudo realizar
