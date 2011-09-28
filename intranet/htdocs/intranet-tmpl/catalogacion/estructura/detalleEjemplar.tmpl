@@ -61,7 +61,10 @@
 
 <div id="detalleEjemplar">
 <fieldset>
-<strong><legend>[% "Detalles del ejemplar" | i18n %] [% nivel3.id %]</legend></strong>
+<strong><legend>[% "Detalles del ejemplar" | i18n %] [% nivel3.id %] 
+                ([% "del grupo" | i18n %] <a href="[% url_prefix %]/catalogacion/estructura/detalle.pl?id1=[% nivel3.nivel2.getId1 %]&token=[% token %]">[% nivel3.getId2 %]</a>)
+        </legend>
+</strong>
 
     <ul class="listado_sin_margen">
                     <li> [% "Sig. Top."|i18n %]:        <strong>[% nivel3.getSignatura_topografica %]</strong></li>

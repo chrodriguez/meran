@@ -394,7 +394,8 @@ sub detalleNivel3{
 	$hash_nivel2{'cant_nivel3'}             = scalar(@result);
 	$hash_nivel2{'cantPrestados'}           = $totales_nivel3->{'cantPrestados'};
 	$hash_nivel2{'cantReservas'}            = $totales_nivel3->{'cantReservas'};
-	$hash_nivel2{'cantReservasEnEspera'}    = $totales_nivel3->{'cantReservasEnEspera'};
+    $hash_nivel2{'cantReservasEnEspera'}    = $totales_nivel3->{'cantReservasEnEspera'};
+    $hash_nivel2{'cantReservasAsignadas'}   = $totales_nivel3->{'cantReservasAsignadas'};
 	$hash_nivel2{'disponibles'}             = $totales_nivel3->{'disponibles'};
 	$hash_nivel2{'cantParaSala'}            = $totales_nivel3->{'cantParaSala'};
 	$hash_nivel2{'cantParaPrestamo'}        = $totales_nivel3->{'cantParaPrestamo'};
@@ -562,6 +563,7 @@ sub detalleDisponibilidadNivel3{
     $infoNivel3{'cantPrestados'}        = C4::AR::Nivel2::getCantPrestados($id2,$db);
     $infoNivel3{'cantReservas'}         = C4::AR::Reservas::cantReservasPorGrupo($id2,$db);
     $infoNivel3{'cantReservasEnEspera'} = C4::AR::Reservas::cantReservasPorGrupoEnEspera($id2,$db);
+    $infoNivel3{'cantReservasAsignadas'}= C4::AR::Reservas::cantReservasPorGrupoAsignadas($id2,$db);
 
     for(my $i=0;$i<scalar(@$nivel3_array_ref);$i++){
         my %hash_nivel3;
