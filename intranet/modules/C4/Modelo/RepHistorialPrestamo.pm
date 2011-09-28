@@ -9,7 +9,7 @@ __PACKAGE__->meta->setup(
     columns => [
         id_historial_prestamo    => { type => 'serial', overflow => 'truncate', not_null => 1 },
         id3                      => { type => 'integer', overflow => 'truncate' },
-        nro_socio	          => { type => 'varchar', overflow => 'truncate', length => 16, not_null => 1 },
+        nro_socio	             => { type => 'varchar', overflow => 'truncate', length => 16, not_null => 1 },
         tipo_prestamo            => { type => 'character', overflow => 'truncate', length => 2, default => 'DO', not_null => 1 },
         fecha_prestamo           => { type => 'varchar', overflow => 'truncate', not_null => 1 },
         id_ui_origen             => { type => 'varchar', overflow => 'truncate', length => 4 },

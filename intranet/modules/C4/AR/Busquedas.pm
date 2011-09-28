@@ -1253,6 +1253,8 @@ sub busquedaCombinada_newTemp{
                $query .=  " ".$string."*";
             }
         }else{
+#            $string = $sphinx->EscapeString($string);
+        	
             $query .=  " ".$string."*";
 C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      -----------------------------> : ".$string);
         }

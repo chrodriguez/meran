@@ -3,6 +3,7 @@
 		
 		    $(document).ready(function(){
 		        checkedAll("select_all"+"[% id2 %]", "checkEjemplares"+"[% id2 %]");
+		        $('.fancylink').fancybox();
 		
 		    });
 		
@@ -13,8 +14,12 @@
 		    <div id="ejemplaresDelGrupo[% id2 %]" class="ejemplaresDelGrupo[% id2 %]" >
 					<ul class="resumen_items">
 					<li class="columna_izq">[% "Ejemplares Disponibles:"|i18n %]<strong> [% disponibles %]</strong></li>
-					<li class="columna_der">[% "Reservas Realizadas:"|i18n %] <strong> [% cantReservas %]</strong></li>
-					<li class="columna_izq">[% "Reservas en Espera:"|i18n %] <strong> [% cantReservasEnEspera %]</strong></li>
+					<li class="columna_der">[% "Reservas Realizadas:"|i18n %] 
+					       <strong> <a class="fancylink" href="[% url_prefix %]/circ/reservas_activas_edicion.pl?token=[% token %]&id2=[% id2 %]&tipoReserva=EJ">[% cantReservasAsignadas %]</a></strong>
+			        </li>
+					<li class="columna_izq">[% "Reservas en Espera:"|i18n %] 
+					       <strong> <a class="fancylink" href="[% url_prefix %]/circ/reservas_activas_edicion.pl?token=[% token %]&id2=[% id2 %]&tipoReserva=GR">[% cantReservasEnEspera %]</a></strong>
+			        </li>
 					<li class="columna_der">[% "Ejemplares Prestados:"|i18n %]<strong> [% cantPrestados %]</strong></li>
 					</ul>                
 					<hr>

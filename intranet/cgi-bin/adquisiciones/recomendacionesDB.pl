@@ -149,20 +149,27 @@ if($obj){
                                           });
 
 
-                          # my $ini  = 1;
-                          # 
-                          # my ($ini,$pageNumber,$cantR) = C4::AR::Utilidades::InitPaginador($ini);
+                   
 
-                          # my $funcion   = $obj->{'funcion'};
-
-                          my $recomendaciones= C4::AR::Recomendaciones::getRecomendaciones();
-                          # my $cantidad= scalar(@$recomendaciones);
+                          my $inicial   = $obj->{'inicial'};
+                          my $ini       = $obj->{'ini'} || 1;
+                          my $funcion   = $obj->{'funcion'};
+                          my ($recomendaciones, $cantidad);
+                          my ($ini,$pageNumber,$cantR) = C4::AR::Utilidades::InitPaginador($ini);
+                        
+                          if ($inicial){
+                            ($cantidad, $recomendaciones) = C4::AR::Recomendaciones::getRecomendaciones($inicial,$cantR);
+                          }else{
+                            ($cantidad, $recomendaciones) = &C4::AR::Recomendaciones::getRecomendaciones($ini,$cantR);
+                          }
 
                           $t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Listado de Recomendaciones");
-                          # $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
+                          $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 
                           $t_params->{'recom_activas'} = $recomendaciones;
-                          $t_params->{'cantidad'} = scalar(@$recomendaciones);
+                          $t_params->{'cantidad'} = $cantidad;
+
+                          
 
 
                           C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

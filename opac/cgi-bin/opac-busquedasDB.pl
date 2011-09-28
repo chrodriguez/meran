@@ -37,6 +37,7 @@ $obj->{'tipo_nivel3_name'}  = ($input->param('tipo_nivel3_name'));
 $obj->{'tipoBusqueda'}      = 'all';
 $obj->{'token'}             = CGI::escapeHTML($input->param('token'));
 
+
 C4::AR::Validator::validateParams('U389',$obj,['tipoAccion']);
 
 #se corta el parametro page en 6 numeros nada mas, sino rompe error 500

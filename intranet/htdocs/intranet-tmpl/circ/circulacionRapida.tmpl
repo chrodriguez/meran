@@ -15,6 +15,9 @@ function clear_usuario(){
     $('#datosAutorizado').html('');
     $('#detalleUsuario').slideUp('slow');
     $('#tablaPrestamos').slideUp('slow');
+    $('#sanciones').slideUp('slow');
+    $('#aceptar').hide();
+    $('#cambo_tipo_prestamo').hide();
 }
 
 
@@ -83,18 +86,20 @@ function updateObtenerTiposDePrestamos(responseText){
 	var tipoPrestamo_array_hash_ref = infoHash.tipoPrestamo;
 	var tieneSancion                = infoHash.tieneSancion;
 
-//     if (tipoPrestamo_array_hash_ref.length != 0){
     var comboTipoPrestamo_html      = crearComboDeItems(tipoPrestamo_array_hash_ref, 'comboTipoPrestamo');
+    
     //dependiendo si tiene sanciones o no, mostramos el combo de prestamos o un mensaje
-    if(tieneSancion == "1"){
-        $('#spanComboTipoPrestamo').html("<span style='color:red;margin-left:40%;'>El usuario tiene una sanci&oacute;n del sistema</span>");
+    $('#cambo_tipo_prestamo').show();
+    
+    if(( tieneSancion != 0 ) &&( tipoPrestamo_array_hash_ref.length == 0 )){
+        $('#spanComboTipoPrestamo').html("<span style='color:red;margin-left:20%;'>El usuario tiene una sanci&oacute;n del sistema. No puede realizar ning&uacute;n tipo de pr&eacute;stamo para este ejemplar.</span>");
         $('#cambo_tipo_prestamo label').fadeOut(0);
+        $('#aceptar').hide();
     }else{
         $('#spanComboTipoPrestamo').html(comboTipoPrestamo_html);
         $('#cambo_tipo_prestamo label').fadeIn(0);
         mostrarBotonAceptar();
     }
-//     }
 }
 
 function realizarAccionCircRapida(){
@@ -300,12 +305,6 @@ function updateInfoDevolver(responseText){
 
 $(document).ready(function() {
 
-	$('#operacion').focus();
-	$('#aceptar').hide();
-    $('#cambo_tipo_prestamo').hide();
-	$('#divAutorizado').hide();
-	$('#divAgregarAutorizado').hide();
-
 	CrearAutocompleteUsuarios({	
                                                 IdInput: 'usuario', 
 								                IdInputHidden: 'nro_socio_hidden', 
@@ -325,6 +324,13 @@ $(document).ready(function() {
 									});
 
 	onChangeOperacion();
+	
+	$('#operacion').focus();
+	$('#aceptar').hide();
+    $('#cambo_tipo_prestamo').hide();
+	$('#divAutorizado').hide();
+	$('#divAgregarAutorizado').hide();
+
 });
 
 </script>

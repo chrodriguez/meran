@@ -904,7 +904,7 @@ sub batchBookLabelGenerator {
     my $pdf; 
 # 	my $pdf = new PDF::Report();
 	
- 
+ C4::AR::Debug::debug($count);
        if (!(C4::AR::Preferencias::getValorPreferencia('BookLabelPage'))){
           $pdf= new PDF::Report();
           $pdf->{PageWidth}  = '270';
@@ -921,7 +921,9 @@ sub batchBookLabelGenerator {
         } else {
               $pdf= new PDF::Report( PageSize => "A4");
               my $i=0;
-                    while ( $i < $count - 1 ) {
+
+                    while ( $i <= $count - 1 ) {
+
                             $pdf->newpage($pag);
                             $pdf->openpage($pag);
 
@@ -968,10 +970,11 @@ sub batchBookLabelGenerator {
 sub generateBookLabelA4 {
     my ( $nivel3, $x, $y, $pdf ) = @_;
 
-
     my $signatura   = $nivel3->getSignatura_topografica; 
     my $codigo      = $nivel3->getBarcode;
     my $branchcode  = $nivel3->getId_ui_origen;
+    
+
     
     #Datos de la biblioteca
     my $branch = &datosBiblio($branchcode);
@@ -981,15 +984,12 @@ sub generateBookLabelA4 {
       
 
     #Insert a rectangle to delimite the card
-#     $pdf->drawRect( $x - 12, $y, $x + 278, ( $y + 142 ) );
- 
-
-     $pdf->drawRect( $x - 12, $y + 30, $x + 278, ( $y + 172 ) );
+    $pdf->drawRect( $x - 12, $y + 30, $x + 278, ( $y + 172 ) );
 
 
-    C4::AR::Debug::debug($pageheight);
+    C4::AR::Debug::debug($branchcode);
 
-    $pdf->drawLine( $x + 70, $y + 30, $x + 70, $y +  172 );
+    $pdf->drawLine( $x + 80, $y + 30, $x + 80, $y +  172 );
 
 
     #Insert a barcode to the card
@@ -1002,15 +1002,18 @@ sub generateBookLabelA4 {
       . '/imagenes/escudo-'
       . $branchcode . '.jpg';
 
+      C4::AR::Debug::debug($escudo);
 
     if ( !( ( -e $escudo ) && ( -r $escudo ) ) ) {
+
+      C4::AR::Debug::debug("ENTRA???????");
         $escudo =
             C4::Context->config('intrahtdocs') . '/temas/'
           . C4::AR::Preferencias::getValorPreferencia('defaultUI')
           . '/imagenes/escudo-DEFAULT.jpg';
-        $pdf->addImgScaled($escudo, $x + 120 , 40 + ($y) , 5/100);
+        $pdf->addImgScaled($escudo, $x + 120 , 110 + ($y) , 5/100);
     }else{
-        $pdf->addImgScaled($escudo, $x + 80 , $pageheight + 27 + ($y-$posy) , 2/100);
+        $pdf->addImgScaled($escudo,  $x + 100 , 125 + ($y) , 2/100);
     }
    
     #Write the borrower data into the pdf file
@@ -1052,15 +1055,20 @@ sub generateBookLabelA4 {
 
     my $phone_fax = "";
     my $phone_tel = " Tel " . $branch->getTelefono || C4::AR::Filtros::i18n('No dispone');
-    $phone_fax = " Fax " . $branch->getFax      || C4::AR::Filtros::i18n('No dispone');
-
+    
+    $pdf->addRawText( $phone_tel, $x + 164, 264 + ( $y - $posy ) );
+    
+    if (C4::AR::Preferencias::getValorPreferencia('incluir_fax_etiquetas')){
+        $phone_fax = " Fax " . $branch->getFax      || C4::AR::Filtros::i18n('No dispone');
+        $pdf->addRawText( $phone_fax, $x + 164, 257 + ( $y - $posy ) );
+    }
 #     $pdf->addRawText( $phone_fax, $x + 144, $pageheight + 65 + ( $y - $posy ) );
-    $pdf->addRawText( $phone_fax, $x + 164, 265 + ( $y - $posy ) );
+   
 
 
     $posy = $posy + 7;
 #     $pdf->addRawText( $phone_tel, $x + 144, $pageheight + 65 + ( $y - $posy ) );
-    $pdf->addRawText( $phone_tel, $x + 164, 265 + ( $y - $posy ) );
+  
 
     #AHORA DIBUJAMOS LA SIGNATURA SEPARADA POR ' '
     $pdf->setSize(8);
@@ -1075,10 +1083,10 @@ sub generateBookLabelA4 {
 
     $pdf->addRawText( $codigo, $x + 15, $pageheight + ( $y - 120 ) - $posicion );
     $posicion += 15;
-    $pdf->addRawText( $nivel3->getDisponibilidadObject()->getNombre(), $x + 15, $pageheight + ( $y - 120 ) - $posicion );
+    $pdf->addRawText( $nivel3->getDisponibilidadObject()->getNombre(), $x + 10, ( $y + 148 ) - $posicion );
 
 # Inserto el barcode debajo de signatura
-    $pdf->addRawText( "$codigo", $x - 1, $y + 40);
+    $pdf->addRawText( "$codigo", $x + 5, $y + 40);
     
     $pdf->setFont("Arial");
 }
@@ -1122,7 +1130,7 @@ sub generateBookLabel{
           . '/imagenes/escudo-DEFAULT.jpg';
         $pdf->addImgScaled($escudo, $x + 120 , 40 + ($y) , 5/100);
     }else{
-        $pdf->addImgScaled($escudo, $x + 80 , $pageheight + 27 + ($y-$posy) , 2/100);
+        $pdf->addImgScaled($escudo, $x + 110 , 50 + ($y) , 2/100);
     }
 
 	#Write the borrower data into the pdf file
@@ -1151,12 +1159,16 @@ sub generateBookLabel{
 	$posy = $posy + 7;
 
 	my $phone_fax = "";
-	my $phone_tel = " Tel " . $branch->getTelefono || C4::AR::Filtros::i18n('No dispone');
-	$phone_fax = " Fax " . $branch->getFax      || C4::AR::Filtros::i18n('No dispone');
-
-	$pdf->addRawText( $phone_fax, $x + 164, $pageheight + ( $y - $posy ) );
+    my $phone_tel = " Tel " . $branch->getTelefono || C4::AR::Filtros::i18n('No dispone');
 	
-	$posy = $posy + 7;
+    if (C4::AR::Preferencias::getValorPreferencia('incluir_fax_etiquetas')){
+            $posy = $posy + 7 ;
+            $phone_fax = " Fax " . $branch->getFax      || C4::AR::Filtros::i18n('No dispone');
+            $pdf->addRawText( $phone_fax, $x + 164, $pageheight + ( $y - $posy ) );
+            $posy = $posy - 7 ;
+	}
+
+	$posy = $posy ;
 	$pdf->addRawText( $phone_tel, $x + 164, $pageheight + ( $y - $posy ) );
 
 	#AHORA DIBUJAMOS LA SIGNATURA SEPARADA POR ' '
@@ -1169,9 +1181,9 @@ sub generateBookLabel{
 		$posicion += 15;
 	}
 	
-    $pdf->addRawText( $codigo, $x + 15, $pageheight + ( $y - 120 ) - $posicion );
+    $pdf->addRawText( $codigo, $x + 15, $pageheight + ( $y - 131 ) - $posicion  );
     $posicion += 15;
-    $pdf->addRawText( $nivel3->getDisponibilidadObject()->getNombre(), $x + 15, $pageheight + ( $y - 120 ) - $posicion );
+    $pdf->addRawText( $nivel3->getDisponibilidadObject()->getNombre(), $x + 15, $pageheight + ( $y - 103 ) - $posicion);
 	
 	$pdf->setFont("Arial");
 }

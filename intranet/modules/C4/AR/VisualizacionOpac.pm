@@ -572,7 +572,7 @@ sub getConfiguracionByOrderGroupCampo{
         push (@filtros, (nivel => { eq => $nivel }) );
     }
 
-    my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros, sort_by => ('orden'), group_by => ('campo'));
+    my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros, sort_by => ('orden_subcampo'), group_by => ('campo'));
     
     foreach my $conf (@$configuracion){
         if($conf->getVistaCampo() eq ""){

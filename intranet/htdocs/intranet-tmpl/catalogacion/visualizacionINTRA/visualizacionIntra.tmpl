@@ -34,7 +34,7 @@ $(document).ready(function() {
 <div class="titulos" >[% 'Visualizaci&oacute;n de campos MARC en INTRANET' | i18n %]</div>
 
 <fieldset>
-    <legend><strong>[% "Seleccione un tipo de ejemplar:" | i18n %]</strong></legend>
+    <legend><strong>[% "Seleccione el esquema a configurar:" | i18n %]</strong></legend>
     [% combo_ejemplares %]
 
     [% PERL %]
@@ -44,7 +44,7 @@ $(document).ready(function() {
                                                 title   => "[% 'Buscar' | i18n %]",
                     ) ;
     [% END %]
-    <select name="eleccion_nivel" id="eleccion_nivel">
+    <select name="eleccion_nivel" id="eleccion_nivel" onchange="eleccionDeEjemplar();">
         <option value="1">Nivel 1</option>
         <option value="2">Nivel 2</option>
         <option value="3">Nivel 3</option>
