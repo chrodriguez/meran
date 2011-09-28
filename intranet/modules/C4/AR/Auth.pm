@@ -94,6 +94,7 @@ $VERSION = 1.0;
         checkRecoverLink
         _init_i18n
         getSessionSocioObject
+        getSessionType
         
 );
 
@@ -964,6 +965,20 @@ sub getSessionSocioObject {
     }else{
     	return C4::Modelo::UsrSocio->new();
     }
+}
+
+sub getSessionType{
+    my ($session) = @_;
+
+    unless($session){
+        $session = CGI::Session->load() || CGI::Session->new();
+    }
+
+	if ($session->param('type')){
+		return ($session->param('type'));
+	}
+	
+	return ('opac');
 }
 
 sub getSessionNroRandom {
