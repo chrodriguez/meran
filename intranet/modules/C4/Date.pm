@@ -291,7 +291,7 @@ sub proximosHabiles {
 		}
 	}else{
         #esto es si no importa quetodos los dias del periodo sean habiles, los que deben ser habiles son el 1ero y el ultimo		
-		$hasta = DateCalc($desde,"+ ".$cantidad. " days",\$err);
+		$hasta = DateCalc($desde,"+ ".$cantidad. " days",\$err,2);
 	}
 
         C4::AR::Debug::debug("********** HASTA DESPUES DEL CALCULO `primero ".$hasta);
