@@ -262,13 +262,15 @@ sub updateForHoliday{
 
 sub proximosHabiles {
 	my ($cantidad,$todosHabiles,$desde)=@_;
-	my $apertura=C4::AR::Preferencias::getValorPreferencia("open");
-	my $cierre=C4::AR::Preferencias::getValorPreferencia("close");
-	my ($actual,$min,$hora)= localtime;
+	my $apertura               =C4::AR::Preferencias::getValorPreferencia("open");
+	my $cierre                 =C4::AR::Preferencias::getValorPreferencia("close");
+	my $first_day_week         =C4::AR::Preferencias::getValorPreferencia("primer_dia_semana");
+	my $last_day_week          =C4::AR::Preferencias::getValorPreferencia("ultimo_dia_semana");
+	my ($actual,$min,$hora)    = localtime;
 	
 	$actual=($hora).':'.$min;
 	Date_Init("WorkDayBeg=".$apertura,"WorkDayEnd=".$cierre);
-    Date_Init("WorkWeekBeg=1","WorkWeekEnd=5");
+    Date_Init("WorkWeekBeg=$first_day_week","WorkWeekEnd=$last_day_week");
 
 	my $err= "Error con la fecha";
 	my $hoy= (ParseDate($desde) || ParseDate("today"));
