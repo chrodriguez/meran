@@ -1,9 +1,9 @@
-            <ul class="listado_sin_margen">
-                [% FOREACH nivel1 %]
-                        [% IF liblibrarian %]
-                            [% IF dato %]
-                            <li>    [% liblibrarian %]: <strong>[% dato %]</strong></li>
-                            [% END %]
-                        [% END %]
+<ul class="listado_sin_margen">
+    [% FOREACH nivel1 %]
+            [% IF liblibrarian %]
+                [% IF dato %]
+                <li>    [% liblibrarian %]: <strong>[% dato %]</strong></li>
                 [% END %]
-            </ul>
+            [% END %]
+    [% END %]
+</ul>

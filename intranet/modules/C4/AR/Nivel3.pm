@@ -394,8 +394,8 @@ sub detalleNivel3{
 	$hash_nivel2{'cant_nivel3'}             = scalar(@result);
 	$hash_nivel2{'cantPrestados'}           = $totales_nivel3->{'cantPrestados'};
 	$hash_nivel2{'cantReservas'}            = $totales_nivel3->{'cantReservas'};
-    $hash_nivel2{'cantReservasEnEspera'}    = $totales_nivel3->{'cantReservasEnEspera'};
-    $hash_nivel2{'cantReservasAsignadas'}   = $totales_nivel3->{'cantReservasAsignadas'};
+	$hash_nivel2{'cantReservasEnEspera'}    = $totales_nivel3->{'cantReservasEnEspera'};
+	$hash_nivel2{'cantReservasAsignadas'}   = $totales_nivel3->{'cantReservasAsignadas'};
 	$hash_nivel2{'disponibles'}             = $totales_nivel3->{'disponibles'};
 	$hash_nivel2{'cantParaSala'}            = $totales_nivel3->{'cantParaSala'};
 	$hash_nivel2{'cantParaPrestamo'}        = $totales_nivel3->{'cantParaPrestamo'};
@@ -737,10 +737,10 @@ sub detalleCompletoOPAC{
 			$hash_nivel2->{'rating'}                    = C4::AR::Nivel2::getRating($hash_nivel2->{'id2'},$nivel1->db);
 			$hash_nivel2->{'cant_reviews'}              = C4::AR::Nivel2::getCantReviews($hash_nivel2->{'id2'}, $nivel1->db);
 
-	        my ($cant_docs,$e_docs)                 = getListaDeDocs($hash_nivel2->{'id2'});  
+	        my ($cant_docs,$e_docs)                     = getListaDeDocs($hash_nivel2->{'id2'});  
 	        
-	        $hash_nivel2->{'lista_docs'}              = $e_docs;
-	        $hash_nivel2->{'cant_docs'}               = $cant_docs;
+	        $hash_nivel2->{'lista_docs'}                = $e_docs;
+	        $hash_nivel2->{'cant_docs'}                 = $cant_docs;
 
 			push(@nivel2, $hash_nivel2);
 		};

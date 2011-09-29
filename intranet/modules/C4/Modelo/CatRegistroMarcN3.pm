@@ -683,7 +683,7 @@ sub toMARC{
 
 
 =head2 sub toMARC_Opac
-
+    se utiliza para la visualizacion del detalle en el OPAC
 =cut
 sub toMARC_Opac{
     my ($self) = shift;
@@ -694,7 +694,7 @@ sub toMARC_Opac{
 
     my $params;
     $params->{'nivel'}          = '3';
-    $params->{'id_tipo_doc'}    = $self->nivel2->getTipoDocumento;
+    $params->{'id_tipo_doc'}    = $self->getTemplate()||'ALL';
     my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_opac_view($marc_record, $params);
 
     return ($MARC_result_array);
@@ -702,7 +702,7 @@ sub toMARC_Opac{
 
 
 =head2 sub toMARC_Intra
-
+    se utiliza para la visualizacion del detalle en la INTRA
 =cut
 sub toMARC_Intra{
     my ($self) = shift;
@@ -713,7 +713,7 @@ sub toMARC_Intra{
 
     my $params;
     $params->{'nivel'}          = '3';
-    $params->{'id_tipo_doc'}    = $self->getTipoDocumento;
+    $params->{'id_tipo_doc'}    = $self->getTemplate()||'ALL';
     my $MARC_result_array       = C4::AR::Catalogacion::marc_record_to_intra_view($marc_record, $params,$self->db);
 
     return ($MARC_result_array);

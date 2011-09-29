@@ -262,19 +262,21 @@ sub updateForHoliday{
 
 sub proximosHabiles {
 	my ($cantidad,$todosHabiles,$desde)=@_;
-	my $apertura=C4::AR::Preferencias::getValorPreferencia("open");
-	my $cierre=C4::AR::Preferencias::getValorPreferencia("close");
-	my ($actual,$min,$hora)= localtime;
+	my $apertura               =C4::AR::Preferencias::getValorPreferencia("open");
+	my $cierre                 =C4::AR::Preferencias::getValorPreferencia("close");
+	my $first_day_week         =C4::AR::Preferencias::getValorPreferencia("primer_dia_semana");
+	my $last_day_week          =C4::AR::Preferencias::getValorPreferencia("ultimo_dia_semana");
+	my ($actual,$min,$hora)    = localtime;
 	
 	$actual=($hora).':'.$min;
 	Date_Init("WorkDayBeg=".$apertura,"WorkDayEnd=".$cierre);
-    Date_Init("WorkWeekBeg=1","WorkWeekEnd=5");
+    Date_Init("WorkWeekBeg=".$first_day_week,"WorkWeekEnd=".$last_day_week);
 
 	my $err= "Error con la fecha";
-	my $hoy= (ParseDate($desde) || ParseDate("today"));
-    $desde= ($desde || DateCalc("today","+ 0 days",\$err,2));
+	my $hoy= ParseDate("today");
 
-    
+    $desde= ($desde || $hoy);
+
 	my $hasta;
 
 	if ($todosHabiles) {
@@ -283,23 +285,17 @@ sub proximosHabiles {
         #OLD WAY anda mejor con 		Date_NextWorkDay
 		#$hasta=DateCalc($desde,"+ ".$cantidad. " days",\$err,2);
 		$hasta = $desde;
+		C4::AR::Debug::debug("********** HASTA ANTES DEL CALCULO ".$hasta);
 		for (my $iter_habil = 1; $iter_habil <= $cantidad; $iter_habil++ ){
-			$hasta = DateCalc($hasta,"+ ".$iter_habil. " days",\$err,2);
+			$hasta = DateCalc($hasta,"+ 1 days",\$err);
 		}
 	}else{
         #esto es si no importa quetodos los dias del periodo sean habiles, los que deben ser habiles son el 1ero y el ultimo		
-		$hasta = DateCalc($desde,"+ ".$cantidad. " days",\$err);  
-        if (!esHabil($hasta)){
-            $hasta = Date_NextWorkDay($hasta,$cantidad);
-        } 
+		$hasta = DateCalc($desde,"+ ".$cantidad. " days",\$err,2);
+	    if (!esHabil($hasta)){
+	        $hasta = Date_NextWorkDay($hasta);
+	    } 
 	}
-
-    C4::AR::Debug::debug("_______________________________________DESDE __________________________________ ".$desde);
-    C4::AR::Debug::debug("_______________________________________HASTA CANT______________________________ ".$cantidad);
-    C4::AR::Debug::debug("_______________________________________HASTA___________________________________ ".$hasta);
-
-	
-	
 	#Se sume un dia si es feriado el ultimo dia.
 	my $dateformat= C4::Date::get_date_format();
 	$hasta = C4::Date::format_date_in_iso($hasta, $dateformat);
@@ -311,9 +307,16 @@ sub proximosHabiles {
 			$hasta=DateCalc($hasta,"+ 1 days",\$err,2);
 		}
 	}
+    
+    $desde = C4::Date::format_date_in_iso($desde, $dateformat);
+    $hasta = C4::Date::format_date_in_iso($hasta, $dateformat);
+    
+    C4::AR::Debug::debug("_______________________________________DESDE __________________________________ ".$desde);
+    C4::AR::Debug::debug("_______________________________________HASTA CANT______________________________ ".$cantidad);
+    C4::AR::Debug::debug("_______________________________________HASTA___________________________________ ".$hasta);
 
-    return (	C4::Date::format_date_in_iso($desde, $dateformat),
-                C4::Date::format_date_in_iso($hasta, $dateformat),
+    return (	$desde,
+                $hasta,
                 $apertura,
                 $cierre
 	);

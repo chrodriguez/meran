@@ -228,9 +228,12 @@ sub reservar {
 		$self->debug("RESERVA: es para OPAC se buscan algún nivel 3 para reservar");
 	}
 
+
+    C4::AR::Debug::debug("***_______________________________CALCULO DÍAS DE RESERVA_______________________***");	
 	#Numero de dias que tiene el usuario para retirar el libro si la reserva se efectua sobre un item
 	my $numeroDias                          = C4::AR::Preferencias::getValorPreferencia("reserveItem");
 	my ($desde,$hasta,$apertura,$cierre)    = C4::Date::proximosHabiles($numeroDias,1);
+	
     C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde => ".$desde);
     C4::AR::Debug::debug("C4::AR::CircReserva => reservar => hasta => ".$hasta);
 
@@ -245,9 +248,9 @@ sub reservar {
 	$paramsReserva{'id_ui'}                 = C4::AR::Preferencias::getValorPreferencia("defaultUI");
 	$paramsReserva{'estado'}                = ($id3 ne '')?'E':'G';
 	$paramsReserva{'hasta'}                 = C4::Date::format_date($hasta,$dateformat);
-C4::AR::Debug::debug("C4::AR::CircReserva => reservar => hasta hash => ".$paramsReserva{'hasta'});
+	C4::AR::Debug::debug("C4::AR::CircReserva => reservar => hasta hash => ".$paramsReserva{'hasta'});
 	$paramsReserva{'desde'}                 = C4::Date::format_date($desde,$dateformat);
-C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde hash => ".$paramsReserva{'desde'});
+	C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde hash => ".$paramsReserva{'desde'});
 	$paramsReserva{'desdeh'}                = $apertura;
 	$paramsReserva{'hastah'}                = $cierre;
 	$paramsReserva{'tipo_prestamo'}         = $params->{'tipo_prestamo'};
@@ -257,23 +260,27 @@ C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde hash => ".$params
 
 	$self->agregar(\%paramsReserva);
 
-C4::AR::Debug::debug("C4::AR::CircReserva => reservar => hasta hash2 => ".$paramsReserva{'hasta'});
-C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde hash2 => ".$paramsReserva{'desde'});
-	
+	C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde hash2 => ".$paramsReserva{'desde'});
+	C4::AR::Debug::debug("C4::AR::CircReserva => reservar => hasta hash2 => ".$paramsReserva{'hasta'});
+		
 	$paramsReserva{'id_reserva'}= $self->getId_reserva;
 
 	if( ($id3 ne '')&&($params->{'tipo'} eq 'OPAC') ){
-	#es una reserva de ITEM, se le agrega una SANCION al usuario al comienzo del dia siguiente
-	#al ultimo dia que tiene el usuario para ir a retirar el libro
-	
-	    my ($startdate,$enddate,$apertura,$cierre) = C4::Date::proximosHabiles($numeroDias,0,$hasta);
+		#es una reserva de ITEM, se le agrega una SANCION al usuario al comienzo del dia siguiente
+		#al ultimo dia que tiene el usuario para ir a retirar el libro
 		
-		my $err= "Error con la fecha";
+		C4::AR::Debug::debug("***__________________________CALCULO COMIENZO SANCION RESERVA__________________***");		
+	    my ($fin_reserva,$comienzo_sancion,$apertura,$cierre)    = C4::Date::proximosHabiles(1,1,$hasta);
 
-		$startdate              = C4::Date::format_date_in_iso($startdate,$dateformat);
-		my $daysOfSanctions     = C4::AR::Preferencias::getValorPreferencia("daysOfSanctionReserves");
-
-		$enddate                = C4::Date::format_date_in_iso($enddate,$dateformat);
+		# FIXME : esto debería generarse a partir de reglas de sanción.
+		my $diasDeSancionReserva     = C4::AR::Preferencias::getValorPreferencia("daysOfSanctionReserves");
+		# 
+		
+		C4::AR::Debug::debug("***_____________________________CALCULO FIN SANCION RESERVA____________________***");
+		my ($fecha_comienzo_sancion,$fecha_fin_sancion,$apertura,$cierre) = C4::Date::proximosHabiles($diasDeSancionReserva,0,$comienzo_sancion);
+		
+		$fecha_comienzo_sancion              = C4::Date::format_date_in_iso($fecha_comienzo_sancion,$dateformat);
+		$fecha_fin_sancion                = C4::Date::format_date_in_iso($fecha_fin_sancion,$dateformat);
 		my  $sancion            = C4::Modelo::CircSancion->new(db => $self->db);
 		my %paramsSancion;
 		#Responsable ahora es: 'Sistema', ticket #2645. Por reserva no retirada en el rep_historial_sancion
@@ -282,9 +289,9 @@ C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde hash2 => ".$param
 		$paramsSancion{'tipo_sancion'}      = undef;
 		$paramsSancion{'id_reserva'}        = $self->getId_reserva;
 		$paramsSancion{'nro_socio'}         = $params->{'nro_socio'};
-		$paramsSancion{'fecha_comienzo'}    = $startdate;
-		$paramsSancion{'fecha_final'}       = $enddate;
-		$paramsSancion{'dias_sancion'}      = $daysOfSanctions;
+		$paramsSancion{'fecha_comienzo'}    = $fecha_comienzo_sancion;
+		$paramsSancion{'fecha_final'}       = $fecha_fin_sancion;
+		$paramsSancion{'dias_sancion'}      = $diasDeSancionReserva;
 		$paramsSancion{'id3'}		        = $self->getId3;
 
 		$sancion->insertar_sancion(\%paramsSancion);
