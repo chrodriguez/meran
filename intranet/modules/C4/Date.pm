@@ -285,6 +285,7 @@ sub proximosHabiles {
         #OLD WAY anda mejor con 		Date_NextWorkDay
 		#$hasta=DateCalc($desde,"+ ".$cantidad. " days",\$err,2);
 		$hasta = $desde;
+		C4::AR::Debug::debug("********** HASTA ANTES DEL CALCULO ".$hasta);
 		for (my $iter_habil = 1; $iter_habil <= $cantidad; $iter_habil++ ){
 			$hasta = DateCalc($hasta,"+ 1 days",\$err);
 		}
@@ -293,9 +294,11 @@ sub proximosHabiles {
 		$hasta = DateCalc($desde,"+ ".$cantidad. " days",\$err);
 	}
 
+        C4::AR::Debug::debug("********** HASTA DESPUES DEL CALCULO `primero ".$hasta);
     if (!esHabil($hasta)){
-        $hasta = Date_NextWorkDay($hasta,$cantidad);
+        $hasta = Date_NextWorkDay($hasta);
     } 
+        C4::AR::Debug::debug("********** HASTA DESPUES DEL CALCULO segundo ".$hasta);
 
 	#Se sume un dia si es feriado el ultimo dia.
 	my $dateformat= C4::Date::get_date_format();
