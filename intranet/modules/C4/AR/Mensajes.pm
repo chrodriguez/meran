@@ -116,6 +116,7 @@ my %mensajesOPAC = (
     'RC01' => 'Disculpe, no se pudo eliminar el detalle, intente nuevamente.',
     'RC02' => 'La recomendacion fue eliminada con &eacute;xito',
     'RC03' => 'Disculpe, no se pudo eliminar la recomendacion, intente nuevamente.',
+    'RC04' => 'La recomendacion ha sido enviada',
     'VA001' => 'Error de parametros, inconsistentes o faltantes, don\'t HACK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
     'VA002' => 'Por favor, complete todos los datos requeridos e intente nuevamente. Gracias.',
     

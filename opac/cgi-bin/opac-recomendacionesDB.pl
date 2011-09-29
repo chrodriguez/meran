@@ -182,6 +182,44 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_EDICIONES') {
   C4::AR::Auth::print_header($session);
   print $infoOperacionJSON;     
 
+} elsif  ($obj->{'tipoAccion'} eq 'ACTIVAR_RECOMENDACION') {
+   
+    my $authnotrequired= 0;
+    my ($userid, $session, $flags)= checkauth(  $input, 
+                                                $authnotrequired, 
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'undefined'}, 
+                                                'opac'
+                                );
+
+    my $recom_id= $obj->{'id_rec'}; 
+    my $user_id= $obj->{'user_id'}; 
+    
+    my $recom= C4::AR::Recomendaciones::getRecomendacionPorId($recom_id);
+
+    $recom->activar();
+  
+    my $rec_de_usuario= C4::AR::Recomendaciones::getRecomendacionesDeUsuario($user_id);
+   
+    foreach my $rec (@$rec_de_usuario){
+
+        if (!$rec->getActiva){
+              my $message= C4::AR::Recomendaciones::eliminarRecomendacion($rec->getId);
+        }
+    } 
+
+    my $msg_object= C4::AR::Mensajes::create();
+    $msg_object->{'error'} = 0;
+    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'RC04', 'params' => []});
+
+    my $infoOperacionJSON = to_json $msg_object;  
+    C4::AR::Auth::print_header($session);
+    print $infoOperacionJSON;     
+
+
+
 }
 
 

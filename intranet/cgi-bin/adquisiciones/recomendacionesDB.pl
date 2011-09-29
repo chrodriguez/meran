@@ -153,7 +153,7 @@ if($obj){
 
                           my $inicial   = $obj->{'inicial'};
                           my $ini       = $obj->{'ini'} || 1;
-                          my $funcion   = $obj->{'funcion'};
+                          my $funcion   = $obj->{'funcion'} || 'changePage';
                           my ($recomendaciones, $cantidad);
                           my ($ini,$pageNumber,$cantR) = C4::AR::Utilidades::InitPaginador($ini);
                         
@@ -163,8 +163,14 @@ if($obj){
                             ($cantidad, $recomendaciones) = &C4::AR::Recomendaciones::getRecomendaciones($ini,$cantR);
                           }
 
+
+                          C4::AR::Debug::debug("Cantidad: ".$cantidad." CantR: ".$cantR." PageNumber: ".$pageNumber." Function: ".$funcion."Tparams: ".$t_params);
+                          
                           $t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Listado de Recomendaciones");
                           $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
+
+
+                          C4::AR::Debug::debug($t_params->{'paginador'});
 
                           $t_params->{'recom_activas'} = $recomendaciones;
                           $t_params->{'cantidad'} = $cantidad;

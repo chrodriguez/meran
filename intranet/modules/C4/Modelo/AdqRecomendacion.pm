@@ -66,6 +66,12 @@ sub desactivar{
     $self->save();
 }
 
+sub activar{
+    my ($self) = shift;
+    $self->setActiva(1);
+    $self->save();
+}
+
 sub eliminar{
     my ($self)      = shift;
     my ($params)    = @_;
@@ -87,7 +93,7 @@ sub agregarRecomendacion{
    
     $self->setAdqRefTipoRecomendacionId(1);
     
-    $self->setActiva(1);
+    $self->desactivar();
 
     $self->save();
 
@@ -115,7 +121,7 @@ sub setFecha{
 
 sub setActiva{
     my ($self)  = shift;
-    my ($valor) = @_;
+    my ($valor) =  @_;
     $self->activa($valor);
 }
 
