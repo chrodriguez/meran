@@ -394,7 +394,7 @@ sub toMARC{
     my ($self) = shift;
 
     #obtengo el marc_record del NIVEL 1
-    my $marc_record         = MARC::Record->new_from_usmarc($self->getMarcRecord());
+    my $marc_record             = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
     my $params;
     $params->{'nivel'}          = '1';
@@ -405,31 +405,8 @@ sub toMARC{
 }
 
 
-=head2 sub toMARC_Opac
-
-=cut
-sub toMARC_Opac{
-    my ($self) = shift;
-
-    #obtengo el marc_record del NIVEL 1
-    my $marc_record             = MARC::Record->new_from_usmarc($self->getMarcRecord());
-
-
-    my $params;
-    $params->{'nivel'}          = '1';
-#     $params->{'id_tipo_doc'}    = 'ALL';
-    my $MARC_result_array       = C4::AR::Catalogacion::marc_record_to_opac_view($marc_record, $params);
-
-#     my $orden = 'orden';
-#     my @return_array_sorted = sort{$b->{$orden} cmp $a->{$orden}} @$MARC_result_array;
-# 
-#     return (\@return_array_sorted);
-
-    return ($MARC_result_array);
-}
-
 =head2 sub toMARC_Intra
-
+    se utiliza para la visualizacion del detalle en la INTRA
 =cut
 sub toMARC_Intra{
     my ($self) = shift;
@@ -442,6 +419,24 @@ sub toMARC_Intra{
     $params->{'nivel'}          = '1';
     $params->{'id_tipo_doc'}    = $self->getTemplate()||'ALL';
     my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_intra_view($marc_record, $params);
+
+    return ($MARC_result_array);
+}
+
+
+=head2 sub toMARC_Opac
+    se utiliza para la visualizacion del detalle en el OPAC
+=cut
+sub toMARC_Opac{
+    my ($self) = shift;
+
+    #obtengo el marc_record del NIVEL 1
+    my $marc_record             = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+    my $params;
+    $params->{'nivel'}          = '1';
+    $params->{'id_tipo_doc'}    = $self->getTemplate()||'ALL';
+    my $MARC_result_array       = C4::AR::Catalogacion::marc_record_to_opac_view($marc_record, $params);
 
     return ($MARC_result_array);
 }

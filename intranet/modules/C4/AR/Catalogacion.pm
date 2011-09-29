@@ -385,7 +385,7 @@ sub marc_record_to_meran_por_nivel {
 sub marc_record_to_opac_view {
     my ($marc_record, $params,$db) = @_;
 
-    $params->{'tipo'} = 'OPAC';
+    $params->{'tipo'} 		= 'OPAC';
     my $MARC_result_array;
     #obtengo los campo, subcampo que se pueden mostrar
     my ($marc_record_salida) = filtrarVisualizacion($marc_record, $params,$db);
@@ -418,6 +418,9 @@ sub marc_record_to_intra_view {
     if(!C4::AR::Preferencias::getValorPreferencia("detalle_INTRA_extendido")){
 	#se procesa el marc_record filtrado
 	($MARC_result_array)     = marc_record_to_meran_to_detail_view_as_not_extended($marc_record_salida, $params, 'INTRA',$db);
+    } else {
+	#se procesa el marc_record filtrado
+	($MARC_result_array) = marc_record_to_meran_to_detail_view($marc_record_salida, $params->{'id_tipo_doc'}, 'INTRA',$db);
     }
 
     return $MARC_result_array;
@@ -436,7 +439,6 @@ sub filtrarVisualizacion{
     my $visulizacion_array_ref;
 
     if($params->{'tipo'} eq 'OPAC'){
-#         ($visulizacion_array_ref) = C4::AR::VisualizacionOpac::getConfiguracion($db);
         ($visulizacion_array_ref) = C4::AR::VisualizacionOpac::getConfiguracion($params->{'nivel'}, $params->{'id_tipo_doc'},$db);
     } else {
         ($visulizacion_array_ref) = C4::AR::VisualizacionIntra::getConfiguracion($params->{'nivel'}, $params->{'id_tipo_doc'},$db);
@@ -657,10 +659,10 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
             $hash_temp_aux{'campo'}             = $campo;
 	    $hash_temp_aux{'orden'} 		= getOrdenFromCampo($campo, $params->{'nivel'}, $itemtype, $type, $db);
 	    if($type eq "INTRA"){
-		#muestro el label configurado, si no existe muestro el label de la BIBLIA
-		$hash_temp_aux{'liblibrarian'}      = C4::AR::VisualizacionIntra::getVistaCampo($campo, $itemtype, $params->{'nivel'})||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
+            #muestro el label configurado, si no existe muestro el label de la BIBLIA
+            $hash_temp_aux{'liblibrarian'}      = C4::AR::VisualizacionIntra::getVistaCampo($campo, $itemtype, $params->{'nivel'})||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
 	    } else {
-		$hash_temp_aux{'liblibrarian'}      = C4::AR::VisualizacionOpac::getVistaCampo($campo, $itemtype, $params->{'nivel'})||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
+            $hash_temp_aux{'liblibrarian'}      = C4::AR::VisualizacionOpac::getVistaCampo($campo, $itemtype, $params->{'nivel'})||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
 	    }
 
             # veo que separador lleva cada subcampo para el $field dependiendo del campo y subcampo que se este procesando

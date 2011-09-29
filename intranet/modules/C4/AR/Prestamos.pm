@@ -233,7 +233,9 @@ sub chequeoDeFechas{
     my ($cantDiasRenovacion,$fechaRenovacion,$intervalo_vale_renovacion)=@_;
     # La $fechaRenovacion es la ultima fecha de renovacion o la fecha del prestamo si nunca se renovo
     my $plazo_actual=$cantDiasRenovacion; # Cuantos dias más se puede renovar el prestamo
-    my $vencimiento=proximoHabil($plazo_actual,0,$fechaRenovacion);
+    
+    my ($desde_proximos,$vencimiento,$apertura,$cierre) = C4::Date::proximosHabiles($plazo_actual, 0, $fechaRenovacion);
+
     my $err= "Error con la fecha";
     my $dateformat = C4::Date::get_date_format();
     my $hoy=C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days",\$err),$dateformat);#se saco el 2 para que ande bien.
@@ -593,7 +595,7 @@ sub t_renovar {
     
             if(!$msg_object->{'error'}){
                     eval{
-                        $prestamo->renovar($params->{'nro_socio'});
+                        $prestamo->renovar($params->{'responsable'});
                         $db->commit;
 
                         # Si la renovacion se pudo realizar

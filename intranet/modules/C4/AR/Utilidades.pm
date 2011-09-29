@@ -3968,20 +3968,17 @@ sub getFeriados{
 }
 
 sub getProximosFeriados{
+	
+	my ($todos) = @_;
     require C4::Modelo::PrefFeriado;
     require C4::Modelo::PrefFeriado::Manager;
     
 
     my $hoy = C4::AR::Utilidades::getToday();
+	
+	my $feriados = C4::Modelo::PrefFeriado::Manager->get_pref_feriado(query => [ fecha => { ge => $hoy } ], sort_by => ['fecha ASC']);
 
-    my $feriados = C4::Modelo::PrefFeriado::Manager->get_pref_feriado(query => [ fecha => { ge => $hoy } ], sort_by => ['fecha ASC'],  limit   => 5);
-    my @dates;
-
-    foreach my $date (@$feriados){
-        push (@dates, $date);
-    }
-
-    return (\@dates);
+    return ($feriados);
 }
 
 sub setFeriado{
@@ -3996,9 +3993,9 @@ sub setFeriado{
     my $feriado = C4::Modelo::PrefFeriado::Manager->get_pref_feriado(query => [ fecha => { eq => $fecha } ] );
     
     if (scalar(@$feriado)){
-        #El feriado ya existe!! no se puede volver a setear.
-        #$feriado->[0]->setFecha($fecha,$status,$texto_feriado);
-        return (0);
+        #El feriado ya existe!! se modifica el texto o se elimina dependiendo del status
+        $feriado->[0]->setFecha($fecha,$status,$texto_feriado);
+        
     }else{
         $feriado = C4::Modelo::PrefFeriado->new();
         eval{

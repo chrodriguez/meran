@@ -79,7 +79,12 @@ sub _write_debug{
 
     my $debug_file = $context->config('debug_file') || "/usr/local/koha/logs/debug.txt";
     open(Z, ">>".$debug_file);
-	print Z "DEBUG ("._str_debug_date_time().") => ".$data."\n";
+    my $type = C4::AR::Auth::getSessionType();
+    my $nro_socio = C4::AR::Auth::getSessionNroSocio();
+    if (C4::AR::Utilidades::validateString($nro_socio)){
+    	$nro_socio.=" -- ";
+    }
+	print Z $nro_socio."DEBUG -- $type --("._str_debug_date_time().") => ".$data."\n";
 	close(Z);        
 }
 

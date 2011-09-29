@@ -43,6 +43,7 @@ $VERSION = 3.0;
     getReservasDeSocioEnEspera
     getHistorialReservasParaTemplate
     cancelarReservaDesdeGrupoYSocio
+    cantReservasPorGrupoAsignadas
 );
 
 
@@ -325,6 +326,17 @@ sub cantReservasPorGrupoEnEspera{
     return ($reservas_count);
 }
 
+sub cantReservasPorGrupoAsignadas{
+    my ($id2)=@_;
+
+    my @filtros;
+    push(@filtros, ( id2    => { eq => $id2}));
+    push(@filtros, ( estado => { eq => 'E'} ));
+
+    my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( query => \@filtros); 
+
+    return ($reservas_count);
+}
 #para enviar un mail cuando al usuario se le asigna una reserva
 sub Enviar_Email_Asignacion_Reserva{
     my ($reserva,$params)=@_;

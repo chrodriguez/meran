@@ -2,50 +2,55 @@
 [% INCLUDE 'datePicker.inc' %]
 
 <script>
+    //2 objetos AJAX para que funcionen los paginadores a la vez en el mismo tmpl
+    var objAH,objAHCirculacion;
     function changePage(ini){
-            objAH.changePage(ini);
-        }
+        objAH.changePage(ini);
+    }
 
     function ordenar(orden){
-                objAH.sort(orden);
-            }
+        objAH.sort(orden);
+    }
+    
+    function ordenarHistorialCirculacion(orden){
+        objAHCirculacion.sort(orden);
+    }
 
     function verHistoricoDisponibilidad(id3){
-            objAH=new AjaxHelper(updateHistoricoDisponibilidad);
-            objAH.debug= true;
-            objAH.showOverlay = true;
-            objAH.url='detalleEjemplar.pl';
-            objAH.funcion = "changePage";
-            objAH.id3= id3;
-            objAH.tipo= 'VER_HISTORICO_DISPONIBILIDAD';
-            objAH.sendToServer();
+        objAH               = new AjaxHelper(updateHistoricoDisponibilidad);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;
+        objAH.url           = 'detalleEjemplar.pl';
+        objAH.funcion       = "changePage";
+        objAH.id3           = id3;
+        objAH.tipo          = 'VER_HISTORICO_DISPONIBILIDAD';
+        objAH.sendToServer();
     }
 
     function updateHistoricoDisponibilidad(responseText){
-            $('#historicoDisponibilidad').html(responseText);
-            zebra('datos_tabla');
+        $('#historicoDisponibilidad').html(responseText);
+        zebra('datos_tabla');
     }
 
     function verHistoricoCirculacion(id3){
-            objAH=new AjaxHelper(updateHistoricoCirculacion);
-            objAH.debug= true;
-            objAH.showOverlay = true;
-            objAH.url='detalleEjemplar.pl';
-            objAH.funcion = "changePage";
-            objAH.fecha_inicial=  $('#fecha_inicial').val();
-            objAH.fecha_final=  $('#fecha_final').val();
-            objAH.id3= id3;
-            objAH.tipo= 'VER_HISTORICO_CIRCULACION';
-            objAH.sendToServer();
+        objAHCirculacion                = new AjaxHelper(updateHistoricoCirculacion);
+        objAHCirculacion.debug          = true;
+        objAHCirculacion.showOverlay    = true;
+        objAHCirculacion.url            = 'detalleEjemplar.pl';
+        objAHCirculacion.funcion        = "changePage";
+        objAHCirculacion.fecha_inicial  = $('#fecha_inicial').val();
+        objAHCirculacion.fecha_final    = $('#fecha_final').val();
+        objAHCirculacion.id3            = id3;
+        objAHCirculacion.tipo           = 'VER_HISTORICO_CIRCULACION';
+        objAHCirculacion.sendToServer();
     }
 
     function updateHistoricoCirculacion(responseText){
-            $('#historicoCirculacion').html(responseText);
-            zebra('datos_tabla');
-
-            crearDatePicker('fecha_inicial');
-            crearDatePicker('fecha_final');
-
+        $('#historicoCirculacion').html(responseText);
+        zebra('datos_tabla');
+        crearDatePicker('fecha_inicial');
+        crearDatePicker('fecha_final');
+        $('#tr_sin_clase').removeClass('impar');
     }
 
     $(document).ready(function(){
@@ -56,7 +61,10 @@
 
 <div id="detalleEjemplar">
 <fieldset>
-<strong><legend>[% "Detalles del ejemplar" | i18n %] [% nivel3.id %]</legend></strong>
+<strong><legend>[% "Detalles del ejemplar" | i18n %] [% nivel3.id %] 
+                ([% "del grupo" | i18n %] <a href="[% url_prefix %]/catalogacion/estructura/detalle.pl?id1=[% nivel3.nivel2.getId1 %]&token=[% token %]">[% nivel3.getId2 %]</a>)
+        </legend>
+</strong>
 
     <ul class="listado_sin_margen">
                     <li> [% "Sig. Top."|i18n %]:        <strong>[% nivel3.getSignatura_topografica %]</strong></li>

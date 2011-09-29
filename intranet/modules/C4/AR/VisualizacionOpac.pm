@@ -284,16 +284,11 @@ sub getConfiguracion{
     my @filtros;
     $db = $db || C4::Modelo::CatVisualizacionOpac->new()->db;
     
-#     my $perfil = C4::AR::Preferencias::getValorPreferencia('perfil_opac');
-
-#     push ( @filtros, ( or   => [    id_perfil   => { eq => $perfil }, 
-#                                     id_perfil   => { eq => '0'     } ]) #PERFIL TODOS
-#                 );
-    push ( @filtros, ( nivel   => { eq => $nivel } ));
-
     push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $ejemplar }, 
                                     tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS
                 );
+
+    push ( @filtros, ( nivel   => { eq => $nivel } ));
 
     my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros, sort_by => ('campo, subcampo'), db => $db,);
 

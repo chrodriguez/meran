@@ -395,6 +395,7 @@ sub detalleNivel3{
 	$hash_nivel2{'cantPrestados'}           = $totales_nivel3->{'cantPrestados'};
 	$hash_nivel2{'cantReservas'}            = $totales_nivel3->{'cantReservas'};
 	$hash_nivel2{'cantReservasEnEspera'}    = $totales_nivel3->{'cantReservasEnEspera'};
+	$hash_nivel2{'cantReservasAsignadas'}   = $totales_nivel3->{'cantReservasAsignadas'};
 	$hash_nivel2{'disponibles'}             = $totales_nivel3->{'disponibles'};
 	$hash_nivel2{'cantParaSala'}            = $totales_nivel3->{'cantParaSala'};
 	$hash_nivel2{'cantParaPrestamo'}        = $totales_nivel3->{'cantParaPrestamo'};
@@ -562,6 +563,7 @@ sub detalleDisponibilidadNivel3{
     $infoNivel3{'cantPrestados'}        = C4::AR::Nivel2::getCantPrestados($id2,$db);
     $infoNivel3{'cantReservas'}         = C4::AR::Reservas::cantReservasPorGrupo($id2,$db);
     $infoNivel3{'cantReservasEnEspera'} = C4::AR::Reservas::cantReservasPorGrupoEnEspera($id2,$db);
+    $infoNivel3{'cantReservasAsignadas'}= C4::AR::Reservas::cantReservasPorGrupoAsignadas($id2,$db);
 
     for(my $i=0;$i<scalar(@$nivel3_array_ref);$i++){
         my %hash_nivel3;
@@ -735,10 +737,10 @@ sub detalleCompletoOPAC{
 			$hash_nivel2->{'rating'}                    = C4::AR::Nivel2::getRating($hash_nivel2->{'id2'},$nivel1->db);
 			$hash_nivel2->{'cant_reviews'}              = C4::AR::Nivel2::getCantReviews($hash_nivel2->{'id2'}, $nivel1->db);
 
-	        my ($cant_docs,$e_docs)                 = getListaDeDocs($hash_nivel2->{'id2'});  
+	        my ($cant_docs,$e_docs)                     = getListaDeDocs($hash_nivel2->{'id2'});  
 	        
-	        $hash_nivel2->{'lista_docs'}              = $e_docs;
-	        $hash_nivel2->{'cant_docs'}               = $cant_docs;
+	        $hash_nivel2->{'lista_docs'}                = $e_docs;
+	        $hash_nivel2->{'cant_docs'}                 = $cant_docs;
 
 			push(@nivel2, $hash_nivel2);
 		};
@@ -1074,7 +1076,7 @@ sub getHistoricoDisponibilidad {
 
 sub getHistoricoCirculacion {
 
-    my ($id3,$ini,$cantR,$fecha_inicial,$fecha_final) = @_;
+    my ($id3,$ini,$cantR,$fecha_inicial,$fecha_final,$orden) = @_;
 
     my @filtros;
     my $dateformat = C4::Date::get_date_format();
@@ -1093,7 +1095,7 @@ sub getHistoricoCirculacion {
                                                                             query => \@filtros, 
                                                                             limit   => $cantR,
                                                                             offset  => $ini,
-                                                                            sort_by => ['fecha DESC']
+                                                                            sort_by => $orden
      );
 
     #Obtengo la cant total en el histórico para el paginador
