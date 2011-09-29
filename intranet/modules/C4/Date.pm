@@ -270,7 +270,7 @@ sub proximosHabiles {
 	
 	$actual=($hora).':'.$min;
 	Date_Init("WorkDayBeg=".$apertura,"WorkDayEnd=".$cierre);
-    Date_Init("WorkWeekBeg=$first_day_week","WorkWeekEnd=$last_day_week");
+    Date_Init("WorkWeekBeg=".$first_day_week,"WorkWeekEnd=".$last_day_week);
 
 	my $err= "Error con la fecha";
 	my $hoy= (ParseDate($desde) || ParseDate("today"));
