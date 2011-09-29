@@ -79,8 +79,8 @@ function updateEliminarDetalle(responseText){
 
 function eliminarFila(filaId, idRecom){
  
-    $('#'+filaId).remove()
-    eliminarDetalle(idRecom)
+    $('#'+filaId).remove();
+    eliminarDetalle(idRecom);
      
 }
 
@@ -156,6 +156,7 @@ function updateCrearRecomendacion(responseText){
       
         
 function cancelarRecomendacion(){
+        $('.tr').remove();  
         objAH                   = new AjaxHelper(updateCancelarRecomendacion);
         objAH.debug             = true;
         objAH.showOverlay       = true;
@@ -166,7 +167,7 @@ function cancelarRecomendacion(){
 }
 
 function updateCancelarRecomendacion(responseText){
-  $('tabla_recomendacion').remove();
+//   $('tabla_recomendacion').remove();
   $('#ediciones').hide();
   $('#recomendacion').hide();
   $('#datos_material').hide();
