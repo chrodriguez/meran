@@ -287,11 +287,11 @@ sub proximosHabiles {
 		$hasta = $desde;
 		C4::AR::Debug::debug("********** HASTA ANTES DEL CALCULO ".$hasta);
 		for (my $iter_habil = 1; $iter_habil <= $cantidad; $iter_habil++ ){
-			$hasta = DateCalc($hasta,"+ 1 days",\$err);
+			$hasta = DateCalc($hasta,"+ 1 days",\$err,2);
 		}
 	}else{
         #esto es si no importa quetodos los dias del periodo sean habiles, los que deben ser habiles son el 1ero y el ultimo		
-		$hasta = DateCalc($desde,"+ ".$cantidad. " days",\$err,2);
+		$hasta = DateCalc($desde,"+ ".$cantidad. " days",\$err);
 	    if (!esHabil($hasta)){
 	        $hasta = Date_NextWorkDay($hasta);
 	    } 

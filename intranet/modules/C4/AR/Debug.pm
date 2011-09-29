@@ -41,12 +41,20 @@ sub debugObject{
 
     my $context = new C4::Context;
 
+    my $type = C4::AR::Auth::getSessionType();
+    my $nro_socio = C4::AR::Auth::getSessionNroSocio() || '';
+
     if($context->config('debug')){
         my $debug_file = $context->config('debug_file') || "/usr/local/koha/logs/debug.txt";
         open(Z, ">>".$debug_file);
 		print Z "\n";
 		if($object){
-			print Z "Object: ".$object->toString."=> ".$data."\n";
+			
+		    if (C4::AR::Utilidades::validateString($nro_socio)){
+		        $nro_socio.=" -- ";
+		    }
+			
+			print Z $nro_socio."-- $type -- Object: ".$object->toString."=> ".$data."\n";
 			print Z "\n";
 		}
 		close(Z);        
@@ -84,7 +92,7 @@ sub _write_debug{
     if (C4::AR::Utilidades::validateString($nro_socio)){
     	$nro_socio.=" -- ";
     }
-	print Z $nro_socio."DEBUG -- $type --("._str_debug_date_time().") => ".$data."\n";
+	print Z $nro_socio."$type --("._str_debug_date_time().") => ".$data."\n";
 	close(Z);        
 }
 
