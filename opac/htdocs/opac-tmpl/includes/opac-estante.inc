@@ -74,14 +74,14 @@
 		    <th colspan="4">[% "Contenido" | i18n %]</th>
 		</tr>
                 <tr class="tablaResultadoTitulo">
-                    <th Title="[% 'Ordenar por t&iacute;tulo' | i18n %]" width="33%">[% "T&iacute;tulo" | i18n %]
+                    <th class="click" Title="[% 'Ordenar por t&iacute;tulo' | i18n %]" width="33%">[% "T&iacute;tulo" | i18n %]
                     </th>
 
-                    <th Title="[% 'Ordenar por autor' | i18n %]" align="left" width="23%">[% "Autor" | i18n %]
+                    <th class="click" Title="[% 'Ordenar por autor' | i18n %]" align="left" width="23%">[% "Autor" | i18n %]
                     </th>
-                    <th Title="[% 'Ordenar por lugar' | i18n %]" width="20%">[% "Lugar" | i18n %]
+                    <th class="click" Title="[% 'Ordenar por lugar' | i18n %]" width="20%">[% "Lugar" | i18n %]
                     </th>
-                    <th Title="[% 'Ordenar por edici&oacute;n' | i18n %]" width="20%">[% "Edic&iacute;on" | i18n %]
+                    <th class="click" Title="[% 'Ordenar por edici&oacute;n' | i18n %]" width="20%">[% "Edic&iacute;on" | i18n %]
                     </th>
                 </tr>
                 </thead>
