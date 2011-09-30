@@ -65,8 +65,7 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
     if (!$msg_object->{'error'}){
     	eval {
 	        $socio->persona->modificarVisibilidadOPAC(\%data_hash);
-	        C4::AR::Debug::debug("remindFlag : ".$data_hash{'remindFlag'});
-	        $socio->setRemindFlag($data_hash{'remindFlag'});
+	        $socio->remindFlag($data_hash{'remindFlag'});
 	        $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio->getNro_socio);
 	        C4::AR::Auth::buildSocioData($session,$socio);
             $cod_msg = 'U338';
