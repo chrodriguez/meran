@@ -1101,9 +1101,9 @@ sub enviarRecordacionDePrestamo {
 
      my ($today) = @_;
 
-    # remindUser es la preferencia global que habilita el recordatorio al socio
-    
+    # remindUser es la preferencia global que habilita el recordatorio al socio   
     if (C4::AR::Preferencias::getValorPreferencia('remindUser')){
+    
         my @array_prestamos     = getAllPrestamosActivos($today); 
 
         use C4::AR::Usuarios;
@@ -1119,50 +1119,33 @@ sub enviarRecordacionDePrestamo {
                 # checkeamos si estan habilitadas las preferencias para mail                 
                 if ((C4::AR::Preferencias::getValorPreferencia('EnabledMailSystem'))&&(C4::AR::Preferencias::getValorPreferencia("reminderMail"))){       
                 
-                    my %mail;
+                    my %mail;                    
+                    my $nivel3              = C4::AR::Nivel3::getNivel3FromId3($pres->{'id3'});                    
+                    my $nivel1              = C4::AR::Nivel3::getNivel1FromId1($nivel3->{'id1'});     
+                    my $autor               = $nivel1->getAutor();
+                    my $titulo              = $nivel1->getTitulo();
+                    my $fecha_prestamo      = $pres->getFecha_vencimiento_formateada();
+                    my $cuerpo_mensaje      = C4::AR::Preferencias::getValorPreferencia('reminderMessage');
                     
-#                    C4::AR::Debug::debug("prestamoo : ".$pres);
-#                    C4::AR::Utilidades::printHASH($pres);           
-#                    C4::AR::Debug::debug("nivel 3 del prestamo : ".$pres->{'id3'});
-                    
-                    my $nivel3 = C4::AR::Nivel3::getNivel3FromId3($pres->{'id3'});
-                    # pedirle los datos al nivel 1
-                    
-                    my $nivel1 = C4::AR::Nivel3::getNivel1FromId1($nivel3->{'id1'});
-
-#                    C4::AR::Utilidades::printHASH($nivel1);
-#                    C4::AR::Debug::debug("autor nivel 1 : ".$nivel1->getAutor());
-                    
-                    my $autor   = $nivel1->getAutor();
-                    my $titulo  = $nivel1->getTitulo();
-                    
-
-                    my $fecha_prestamo = $pres->getFecha_vencimiento_formateada();
-                          
-                    my $cuerpo_mensaje  = C4::AR::Preferencias::getValorPreferencia('reminderMessage');
-                    $cuerpo_mensaje     =~ s/FIRSTNAME\ SURNAME/$socio->{'persona'}->{'nombre'}\ $socio->{'persona'}->{'apellido'}/;
-                    $cuerpo_mensaje     =~ s/VENCIMIENTO/$fecha_prestamo/;
-                    $cuerpo_mensaje     =~ s/AUTHOR/$autor/;
-                    $cuerpo_mensaje     =~ s/TITLE\:UNITITLE/$titulo/;
-                    $cuerpo_mensaje     =~ s/\(EDICION\)//;
-                    $cuerpo_mensaje     =~ s/BRANCH/Biblioteca/;
+                    $cuerpo_mensaje         =~ s/FIRSTNAME\ SURNAME/$socio->{'persona'}->{'nombre'}\ $socio->{'persona'}->{'apellido'}/;
+                    $cuerpo_mensaje         =~ s/VENCIMIENTO/$fecha_prestamo/;
+                    $cuerpo_mensaje         =~ s/AUTHOR/$autor/;
+                    $cuerpo_mensaje         =~ s/TITLE\:UNITITLE/$titulo/;
+                    $cuerpo_mensaje         =~ s/\(EDICION\)//;
+                    $cuerpo_mensaje         =~ s/BRANCH/Biblioteca/;
                                         
-                    C4::AR::Debug::debug("mensaje : ".$cuerpo_mensaje);
+                    # C4::AR::Debug::debug("mensaje : ".$cuerpo_mensaje);
                     
                     $mail{'mail_from'}      = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('mailFrom'));
                     $mail{'mail_to'}        = $socio->{'persona'}->email;
                     $mail{'mail_subject'}   = C4::AR::Preferencias::getValorPreferencia('reminderSubject'); 
                     $mail{'mail_message'}   = $cuerpo_mensaje;
                     
-                    #send mail
-#                    C4::AR::Mail::send_mail(\%mail);
-#                    C4::AR::Debug::debug("mail enviado");
+                    C4::AR::Mail::send_mail(\%mail);
+                   # C4::AR::Debug::debug("mail enviado");
                 }
-                
             }
-        }
-
-        
+        } 
     }
 }
 
@@ -1193,23 +1176,15 @@ sub getAllPrestamosActivos{
             @first  = split(/-/, $today);
             @second = split(/-/, $fecha_prestamo);
             $days   = Delta_Days(@first, @second);
-                    
-            C4::AR::Debug::debug("dayssss : ".$days);
 
-#            if ($days <= C4::AR::Preferencias::getValorPreferencia('reminderDays')){
-            if ($days <= 20){
-                # C4::AR::Debug::debug("entroooooooooooooooooooooo");               
+            if ($days <= C4::AR::Preferencias::getValorPreferencia('reminderDays')){          
                 push(@arrayPrestamos,($prestamo));
             }
-        
-        }
-        
-        return (@arrayPrestamos);
-        
+        }  
+        return (@arrayPrestamos);     
     }else{
         return 0;
     }
-
 }
 
 END { }       # module clean-up code here (global destructor)
