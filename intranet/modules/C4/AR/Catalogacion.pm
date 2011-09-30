@@ -1891,12 +1891,13 @@ sub getOrdenFromCampoSubcampo{
 
         my $conf_visualizacion = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($campo, $subcampo, $itemtype, $db);
 
+        C4::AR::Debug::debug("campo ".$campo." subcampo ".$subcampo." itemtype!!!!!!!!!!!!!!!!!!! ".$itemtype);
         if($conf_visualizacion){
             return $conf_visualizacion->getOrden();
         }
 
     } else {
-C4::AR::Debug::debug("campo ".$campo." subcampo ".$subcampo." itemtype ".$itemtype)
+        C4::AR::Debug::debug("campo ".$campo." subcampo ".$subcampo." itemtype ".$itemtype);
         my $conf_visualizacion = C4::AR::VisualizacionOpac::getVisualizacionFromCampoSubCampo($campo, $subcampo, $itemtype, $db);
       
 #         my $conf_visualizacion = C4::AR::VisualizacionOpac::getVisualizacionFromCampoSubCampo($campo, $subcampo, C4::AR::Preferencias::getValorPreferencia("perfil_opac"),$db);
