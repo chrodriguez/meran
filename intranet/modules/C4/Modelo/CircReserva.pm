@@ -233,6 +233,7 @@ sub reservar {
 	#Numero de dias que tiene el usuario para retirar el libro si la reserva se efectua sobre un item
 	my $numeroDias                          = C4::AR::Preferencias::getValorPreferencia("reserveItem");
 	my ($desde,$hasta,$apertura,$cierre)    = C4::Date::proximosHabiles($numeroDias,1);
+	
     C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde => ".$desde);
     C4::AR::Debug::debug("C4::AR::CircReserva => reservar => hasta => ".$hasta);
 
@@ -259,9 +260,9 @@ sub reservar {
 
 	$self->agregar(\%paramsReserva);
 
-	C4::AR::Debug::debug("C4::AR::CircReserva => reservar => hasta hash2 => ".$paramsReserva{'hasta'});
 	C4::AR::Debug::debug("C4::AR::CircReserva => reservar => desde hash2 => ".$paramsReserva{'desde'});
-	
+	C4::AR::Debug::debug("C4::AR::CircReserva => reservar => hasta hash2 => ".$paramsReserva{'hasta'});
+		
 	$paramsReserva{'id_reserva'}= $self->getId_reserva;
 
 	if( ($id3 ne '')&&($params->{'tipo'} eq 'OPAC') ){

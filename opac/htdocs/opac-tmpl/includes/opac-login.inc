@@ -28,7 +28,7 @@
                </p>
                <p>
                   <label for="userid">[% 'Usuario' | i18n %]</label>
-                  <input name="userid" id="userid" value="" title="username" tabindex="4" type="text">
+                  <input name="userid" id="userid" value="[% username_input %]"" title="username" tabindex="4" type="text">
                </p>
                <p>
                   <label for="password_plain">[% 'Contrase&ntilde;a' | i18n %]</label>

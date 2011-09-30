@@ -808,6 +808,7 @@ sub checkauth {
 					$userid           = $query->param('userid');
 					my $password      = $query->param('password');
 					my $nroRandom     = $session->param('nroRandom');
+					$session->param('username_input',$userid);
 					my $error_login	= 0;
 					my $mensaje;
 					my $cant_fallidos;
