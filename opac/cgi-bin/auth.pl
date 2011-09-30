@@ -14,6 +14,7 @@ my ($template, $t_params)= C4::Output::gettemplate("opac-main.tmpl", 'opac',1);
 $t_params->{'type'}='opac';
 
 my $session = CGI::Session->load() || CGI::Session->new();
+$t_params->{'username_input'}       = $session->param('username_input');
 
 my $codMensaje = $session->param('codMsg') || $session->param('codMSG') || 0;
 
@@ -29,7 +30,6 @@ $t_params->{'mostrar_captcha'}      = $query->param('mostrarCaptcha') || 0;
 $t_params->{'loginFailed'}          =  $query->param('loginFailed')|| 0;
 $t_params->{'loginAttempt'}         = $query->param('loginAttempt') || 0;
 $t_params->{'mostrar_fondo_home'}   = 1;
-
 
 if ($t_params->{'loginAttempt'} & !($t_params->{'mostrar_captcha'}) ){
   $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje('U310','opac');

@@ -2459,7 +2459,6 @@ sub generarComboTipoPrestamo{
 #FIXME falta un default no?
 #     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
 
-
     push (@select_tipo_nivel3_array, 'SIN SELECCIONAR');
     $options_hash{'values'}= \@select_tipo_nivel3_array;
     $options_hash{'labels'}= \%select_tipo_prestamo_hash;

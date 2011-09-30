@@ -1105,7 +1105,7 @@ Agrega una reserva a la tabla de historial de reservas.
 
 sub agregarReservaAHistorial{
 	my ($reserva) = @_;
-    
+
     use C4::Modelo::RepHistorialCirculacion;
     
     my %params = {};
