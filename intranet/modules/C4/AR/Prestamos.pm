@@ -1103,22 +1103,34 @@ sub enviarRecordacionDePrestamo {
 
     # remindUser es la preferencia global que habilita el recordatorio al socio   
     if (C4::AR::Preferencias::getValorPreferencia('remindUser')){
-    
+
         my @array_prestamos     = getAllPrestamosActivos($today); 
+        
+        _enviarRecordatorio(@array_prestamos);
+    }
+}
 
-        use C4::AR::Usuarios;
+=item
+    Funcion interna que envia los recordatorios
+=cut
+sub _enviarRecordatorio{
 
-        if(scalar(@array_prestamos) > 0){
-            foreach my $pres (@array_prestamos){
-           
-                my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($pres->{'nro_socio'});
-                
-                # TODO: obtener los medios (twitter, facebook, etc) que tenga el usuario seleccionados para avisarle por ese medio
-                # por ahora lo hacemos solo con mail  
-                 
-                # checkeamos si estan habilitadas las preferencias para mail                 
-                if ((C4::AR::Preferencias::getValorPreferencia('EnabledMailSystem'))&&(C4::AR::Preferencias::getValorPreferencia("reminderMail"))){       
-                
+    my (@array_prestamos) = @_;
+
+    use C4::AR::Usuarios;
+    if(scalar(@array_prestamos) > 0){
+        foreach my $pres (@array_prestamos){
+       
+            my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($pres->{'nro_socio'});
+            
+            # TODO: obtener los medios (twitter, facebook, etc) que tenga el usuario seleccionados para avisarle por ese medio
+            # por ahora lo hacemos solo con mail  
+             
+            # checkeamos si estan habilitadas las preferencias para mail                 
+            if ((C4::AR::Preferencias::getValorPreferencia('EnabledMailSystem'))&&(C4::AR::Preferencias::getValorPreferencia("reminderMail"))){     
+                # si el socio tiene habilitado el recordatorio de vencimiento
+                if($socio->getRemindFlag()){  
+            
                     my %mail;                    
                     my $nivel3              = C4::AR::Nivel3::getNivel3FromId3($pres->{'id3'});                    
                     my $nivel1              = C4::AR::Nivel3::getNivel1FromId1($nivel3->{'id1'});     
@@ -1126,13 +1138,15 @@ sub enviarRecordacionDePrestamo {
                     my $titulo              = $nivel1->getTitulo();
                     my $fecha_prestamo      = $pres->getFecha_vencimiento_formateada();
                     my $cuerpo_mensaje      = C4::AR::Preferencias::getValorPreferencia('reminderMessage');
-                    
+                  
                     $cuerpo_mensaje         =~ s/FIRSTNAME\ SURNAME/$socio->{'persona'}->{'nombre'}\ $socio->{'persona'}->{'apellido'}/;
                     $cuerpo_mensaje         =~ s/VENCIMIENTO/$fecha_prestamo/;
                     $cuerpo_mensaje         =~ s/AUTHOR/$autor/;
                     $cuerpo_mensaje         =~ s/TITLE\:UNITITLE/$titulo/;
                     $cuerpo_mensaje         =~ s/\(EDICION\)//;
                     $cuerpo_mensaje         =~ s/BRANCH/Biblioteca/;
+                    $cuerpo_mensaje         .= ". Para desactivar estas notificaciones, "
+                                                ."por favor ingrese a "."http://".$ENV{'SERVER_NAME'}.C4::AR::Utilidades::getUrlPrefix()."/modificarDatos.pl";
                                         
                     # C4::AR::Debug::debug("mensaje : ".$cuerpo_mensaje);
                     
@@ -1143,10 +1157,11 @@ sub enviarRecordacionDePrestamo {
                     
                     C4::AR::Mail::send_mail(\%mail);
                    # C4::AR::Debug::debug("mail enviado");
-                }
+               }
             }
-        } 
-    }
+        }
+    } 
+
 }
 
 
@@ -1177,7 +1192,7 @@ sub getAllPrestamosActivos{
             @second = split(/-/, $fecha_prestamo);
             $days   = Delta_Days(@first, @second);
 
-            if ($days <= C4::AR::Preferencias::getValorPreferencia('reminderDays')){          
+            if ($days <= C4::AR::Preferencias::getValorPreferencia('reminderDays')){        
                 push(@arrayPrestamos,($prestamo));
             }
         }  

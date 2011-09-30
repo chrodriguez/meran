@@ -40,6 +40,13 @@ $data_hash{'new_password1'}     = $input->param('new_password1');
 $data_hash{'new_password2'}     = $input->param('new_password2');
 $data_hash{'tema'}              = $input->param('temas_opac') || 0;
 
+if($input->param('remindFlag') eq "on"){
+    $data_hash{'remindFlag'}    = 1;
+}else{
+    $data_hash{'remindFlag'}    = 0;
+}
+
+
 my $fields_to_check = ['nombre','apellido','direccion','numero_telefono','id_ciudad','email'];
 my $update_password = C4::AR::Utilidades::validateString($data_hash{'actual_password'});
 
@@ -58,6 +65,8 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
     if (!$msg_object->{'error'}){
     	eval {
 	        $socio->persona->modificarVisibilidadOPAC(\%data_hash);
+	        C4::AR::Debug::debug("remindFlag : ".$data_hash{'remindFlag'});
+	        $socio->setRemindFlag($data_hash{'remindFlag'});
 	        $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio->getNro_socio);
 	        C4::AR::Auth::buildSocioData($session,$socio);
             $cod_msg = 'U338';

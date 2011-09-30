@@ -35,6 +35,7 @@ __PACKAGE__->meta->setup(
         locale                           => { type => 'varchar', overflow => 'truncate', length => 32 },
         lastValidation                   => { type => 'timestamp'  },
         recover_password_hash            => { type => 'varchar', overflow => 'truncate', length => 255 },
+        remindFlag                       => { type => 'integer', overflow => 'truncate', default => '1', length => 1 },
         #PARA ESTOS CAMPOS, NO HAY GETTER/SETTER
         client_ip_recover_pwd            => { type => 'varchar', overflow => 'truncate', length => 255 },
         recover_date_of                  => { type => 'timestamp'  },
@@ -113,6 +114,21 @@ sub setLastAuthMethod{
 	my ($method) = shift;
 	
 	$self->last_auth_method($method);
+	
+	$self->save();
+}
+
+sub getRemindFlag{
+	my ($self) = shift;
+	
+	return ($self->remindFlag);
+}
+
+sub setRemindFlag{
+	my ($self) = shift;
+	my ($remindFlag) = shift;
+	
+	$self->remindFlag($remindFlag);
 	
 	$self->save();
 }
