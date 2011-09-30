@@ -187,6 +187,9 @@ sub agregar {
     my ($self)      = shift;
     my ($data_hash) = @_;
     #Asignando data...
+    
+    my $session_type = lc C4::AR::Auth::getSessionType();
+    
     $self->setId3($data_hash->{'id3'}||undef);
     $self->setId2($data_hash->{'id2'});
     $self->setNro_socio($data_hash->{'nro_socio'});
@@ -202,9 +205,11 @@ sub agregar {
     $data_hash->{'tipo'}            = 'reserva';
     $data_hash->{'hasta'}           = C4::Date::format_date($data_hash->{'fecha_recordatorio'}, $dateformat);
 
-    $historial_circulacion->agregar($data_hash);
-#*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
-
+#Este IF se agrega para que no se registre en historico de circulacion la reserva automatica
+    if (rindex($session_type,'intra') == -1 ){
+	    $historial_circulacion->agregar($data_hash);
+	#*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
+    }
 }
 
 =item
@@ -273,28 +278,34 @@ sub reservar {
 	    my ($fin_reserva,$comienzo_sancion,$apertura,$cierre)    = C4::Date::proximosHabiles(1,1,$hasta);
 
 		# FIXME : esto debería generarse a partir de reglas de sanción.
-		my $diasDeSancionReserva     = C4::AR::Preferencias::getValorPreferencia("daysOfSanctionReserves");
+		# my $diasDeSancionReserva     = C4::AR::Preferencias::getValorPreferencia("daysOfSanctionReserves");
 		# 
 		
-		C4::AR::Debug::debug("***_____________________________CALCULO FIN SANCION RESERVA____________________***");
-		my ($fecha_comienzo_sancion,$fecha_fin_sancion,$apertura,$cierre) = C4::Date::proximosHabiles($diasDeSancionReserva,0,$comienzo_sancion);
+		my $fechaHoy =  C4::Date::format_date_in_iso( Date::Manip::ParseDate("today"), $dateformat );		
+		my $diasDeSancionReserva =  C4::AR::Sanciones::diasDeSancion( $comienzo_sancion,$fin_reserva,$self->socio->getCod_categoria ,'RE' );
+		C4::AR::Debug::debug("***___________________________________DIAS SANCION RESERVA___________________________".$diasDeSancionReserva);	
 		
-		$fecha_comienzo_sancion              = C4::Date::format_date_in_iso($fecha_comienzo_sancion,$dateformat);
-		$fecha_fin_sancion                = C4::Date::format_date_in_iso($fecha_fin_sancion,$dateformat);
-		my  $sancion            = C4::Modelo::CircSancion->new(db => $self->db);
-		my %paramsSancion;
-		#Responsable ahora es: 'Sistema', ticket #2645. Por reserva no retirada en el rep_historial_sancion
-		#$paramsSancion{'responsable'} = $params->{'responsable'};
-		$paramsSancion{'responsable'}       = "Sistema";
-		$paramsSancion{'tipo_sancion'}      = undef;
-		$paramsSancion{'id_reserva'}        = $self->getId_reserva;
-		$paramsSancion{'nro_socio'}         = $params->{'nro_socio'};
-		$paramsSancion{'fecha_comienzo'}    = $fecha_comienzo_sancion;
-		$paramsSancion{'fecha_final'}       = $fecha_fin_sancion;
-		$paramsSancion{'dias_sancion'}      = $diasDeSancionReserva;
-		$paramsSancion{'id3'}		        = $self->getId3;
+		if ($diasDeSancionReserva > 0) {
+			C4::AR::Debug::debug("***_____________________________CALCULO FIN SANCION RESERVA____________________***");
+			my ($fecha_comienzo_sancion,$fecha_fin_sancion,$apertura,$cierre) = C4::Date::proximosHabiles($diasDeSancionReserva,0,$comienzo_sancion);
+			
+			$fecha_comienzo_sancion              = C4::Date::format_date_in_iso($fecha_comienzo_sancion,$dateformat);
+			$fecha_fin_sancion                = C4::Date::format_date_in_iso($fecha_fin_sancion,$dateformat);
+			my  $sancion            = C4::Modelo::CircSancion->new(db => $self->db);
+			my %paramsSancion;
+			#Responsable ahora es: 'Sistema', ticket #2645. Por reserva no retirada en el rep_historial_sancion
+			#$paramsSancion{'responsable'} = $params->{'responsable'};
+			$paramsSancion{'responsable'}       = "Sistema";
+			$paramsSancion{'tipo_sancion'}      = undef;
+			$paramsSancion{'id_reserva'}        = $self->getId_reserva;
+			$paramsSancion{'nro_socio'}         = $params->{'nro_socio'};
+			$paramsSancion{'fecha_comienzo'}    = $fecha_comienzo_sancion;
+			$paramsSancion{'fecha_final'}       = $fecha_fin_sancion;
+			$paramsSancion{'dias_sancion'}      = $diasDeSancionReserva;
+			$paramsSancion{'id3'}		        = $self->getId3;
 
-		$sancion->insertar_sancion(\%paramsSancion);
+			$sancion->insertar_sancion(\%paramsSancion);
+		}
 	}
 
 	return (\%paramsReserva);
