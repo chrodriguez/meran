@@ -56,16 +56,26 @@ sub sendPost{
     C4::AR::Debug::debug("POST TWITTER ---------------> ".$post);
     
     my $mensaje=C4::AR::Mensajes::create();
-
+    my $result;
+    
     if (twitterEnabled()){
                   my $nt= connectTwitter();
-                  my $result = $nt->update($post);
-                  if ( my $err = $@ ) {
-                    C4::AR::Mensajes::add($mensaje, {'codMsg'=> 'SC001'.$err->isa('Net::Twitter::Error') , 'params' => []} ) ;
-                    C4::AR::Debug::debug("\n\n\n Twitter Error: ".$err->error." \n\n\n");
-                  } else {
-                    C4::AR::Mensajes::add($mensaje, {'codMsg'=> 'SC000' , 'params' => []} ) ;
+                  eval{
+	                  $result = $nt->update($post);
+	                  if ( my $err = $@ ) {
+	                    C4::AR::Mensajes::add($mensaje, {'codMsg'=> 'SC001'.$err->isa('Net::Twitter::Error') , 'params' => []} ) ;
+	                    C4::AR::Debug::debug("\n\n\n Twitter Error: ".$err->error." \n\n\n");
+	                  } else {
+	                    C4::AR::Mensajes::add($mensaje, {'codMsg'=> 'SC000' , 'params' => []} ) ;
+	                  }
+                  };
+                  if ($@){
+                  	my $err          = $@;
+                  	my @err_array    = split(/. at /, $err);
+                  	
+                  	C4::AR::Mensajes::add($mensaje, {'codMsg'=> 'SC004' , 'params' => [@err_array[0]]} ) ;
                   }
+                  
     } else {
         C4::AR::Mensajes::add($mensaje, {'codMsg'=> 'SC003' , 'params' => []} ) ;
     }
