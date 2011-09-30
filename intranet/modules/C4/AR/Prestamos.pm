@@ -322,6 +322,7 @@ sub getTiposDePrestamos {
 #retorna los datos de TODOS los tipos de prestamos
 use C4::Modelo::CircRefTipoPrestamo::Manager;
    my @filtros;
+   push(@filtros, ( id => { ne => 0 } )); # No debe mostrar NUNCA el tipo RESERVA
    my  $circ_ref_tipo_prestamo = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo( query => \@filtros);
    return($circ_ref_tipo_prestamo);
 }
