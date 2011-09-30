@@ -309,11 +309,7 @@ sub prestar {
    # NO HAY EJEMPLARES LIBRES PARA EL PRESTAMO, SE PONE EL ID3 EN "" PARA QUE SE
    # REALIZE UNA RESERVA DE GRUPO, SI SE PERMITE.
 				$params->{'id3'} = "";
-				if (
-					!C4::AR::Preferencias::getValorPreferencia(
-						'intranetGroupReserve')
-				  )
-				{
+				if (!C4::AR::Preferencias::getValorPreferencia('intranetGroupReserve')){
 
 					#NO SE PERMITE LA RESERVA DE GRUPO
 					$seReserva = 0;
@@ -373,11 +369,6 @@ sub insertarPrestamo {
 	my ($self)   = shift;
 	my ($params) = @_;
 
-# 	use C4::Modelo::CircReserva;
-#     my ($reserva) = C4::Modelo::CircReserva->new(db=> $self->db, id_reserva => $params->{'id_reserva'});
-#     $reserva->load();
-
-	$self->debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 	my ($reserva) =  C4::AR::Reservas::getReserva( $params->{'id_reserva'}, $self->db );
 	$self->debug("Se actualiza el estado de la reserva a P = Prestado a la reserva " . $reserva->getId2 );
 

@@ -23,6 +23,10 @@ body input[type="text"] {
 	border-radius: 5px;
 }
 
+.click {
+    cursor: pointer;
+}
+
 .fancylink img {
 	border: none;
 }

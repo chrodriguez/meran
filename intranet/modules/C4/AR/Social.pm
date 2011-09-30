@@ -52,30 +52,20 @@ sub sendPost{
     my ($post) = @_;
     
     my $cant_caracteres= length($post);
+    
+    C4::AR::Debug::debug("POST TWITTER ---------------> ".$post);
+    
     my $mensaje=C4::AR::Mensajes::create();
 
     if (twitterEnabled()){
-#         if ($cant_caracteres <= 140){
-
                   my $nt= connectTwitter();
                   my $result = $nt->update($post);
                   if ( my $err = $@ ) {
-              #        $mensaje = C4::AR::Mensajes::getMensaje('SC001','intranet').$err->isa('Net::Twitter::Error') ;
                     C4::AR::Mensajes::add($mensaje, {'codMsg'=> 'SC001'.$err->isa('Net::Twitter::Error') , 'params' => []} ) ;
-                  #     $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje('SC000'.':' $@ unless blessed $err && $err->isa('Net::Twitter::Error') ,'intranet');
-                  #         warn "HTTP Response Code: ", $err->code, "\n",
-                  #              "HTTP Message......: ", $err->message, "\n",
-                  #              "Twitter error.....: ", $err->error, "\n";
+                    C4::AR::Debug::debug("\n\n\n Twitter Error: ".$err->error." \n\n\n");
                   } else {
-              #        $mensaje = C4::AR::Mensajes::getMensaje('SC000','intranet');
                     C4::AR::Mensajes::add($mensaje, {'codMsg'=> 'SC000' , 'params' => []} ) ;
-                  #     $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje('SC000','intranet');
                   }
-
-#         } else {
-#               C4::AR::Mensajes::add($mensaje, {'codMsg'=> 'SC002' , 'params' => []} ) ;
-      
-#         }
     } else {
         C4::AR::Mensajes::add($mensaje, {'codMsg'=> 'SC003' , 'params' => []} ) ;
     }
