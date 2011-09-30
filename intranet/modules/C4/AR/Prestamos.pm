@@ -387,10 +387,10 @@ sub t_realizarPrestamo{
         my $db = $prestamo->db;
            $db->{connect_options}->{AutoCommit} = 0;
            $db->begin_work;
-        eval{
+        #eval{
             $prestamo->prestar($params,$msg_object);
             $db->commit;
-        };
+        #};
         if ($@){
             C4::AR::Debug::debug("ERROR");
             #Se loguea error de Base de Datos

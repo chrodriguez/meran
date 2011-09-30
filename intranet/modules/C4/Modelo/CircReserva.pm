@@ -187,6 +187,9 @@ sub agregar {
     my ($self)      = shift;
     my ($data_hash) = @_;
     #Asignando data...
+    
+    my $session_type = lc C4::AR::Auth::getSessionType();
+    
     $self->setId3($data_hash->{'id3'}||undef);
     $self->setId2($data_hash->{'id2'});
     $self->setNro_socio($data_hash->{'nro_socio'});
@@ -202,9 +205,11 @@ sub agregar {
     $data_hash->{'tipo'}            = 'reserva';
     $data_hash->{'hasta'}           = C4::Date::format_date($data_hash->{'fecha_recordatorio'}, $dateformat);
 
-    $historial_circulacion->agregar($data_hash);
-#*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
-
+#Este IF se agrega para que no se registre en historico de circulacion la reserva automatica
+    if (rindex($session_type,'intra') == -1 ){
+	    $historial_circulacion->agregar($data_hash);
+	#*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
+    }
 }
 
 =item

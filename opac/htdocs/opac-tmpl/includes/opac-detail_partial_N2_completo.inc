@@ -88,8 +88,10 @@
 										                <tr class="bordetabla" align="center">
 										                    <td>[% "C&oacute;digo" | i18n %]</td>
 										                    <td>[% "Signatura Topogr&aacute;fica" | i18n %]</td>
-										                    <td>[% "Biblioteca que lo posee" | i18n %]</td>
-										                    <td>[% "Biblioteca de origen" | i18n %]</td>
+                                                            [% IF mostrar_ui_opac %]
+											                    <td>[% "Biblioteca que lo posee" | i18n %]</td>
+											                    <td>[% "Biblioteca de origen" | i18n %]</td>
+                                                            [% END %]
 										                    <td>[% "Estado" | i18n %]</td>
 										                    <td>[% "Disponibilidad" | i18n %]</td>
 										                    <td>[% "MARC" | i18n %]</td>
@@ -100,8 +102,10 @@
 									                        <tr align="center">
 									                            <td>[% nivel3_obj.getBarcode %]</td>
 									                            <td>[% nivel3_obj.getSignatura_topografica %]</td>
-									                            <td>[% nivel3_obj.getUiPoseedoraName %]</td>   
-									                            <td>[% nivel3_obj.getUiOrigenName %]</td>  
+	                                                            [% IF mostrar_ui_opac %]
+										                            <td>[% nivel3_obj.getUiPoseedoraName %]</td>   
+										                            <td>[% nivel3_obj.getUiOrigenName %]</td>  
+	                                                            [% END %]
 									                            <td>[% nivel3_obj.getEstado %]</td>
 									                            <td>[% nivel3_obj.getDisponibilidadObject.getNombre %]</td>
 									                            <td>
