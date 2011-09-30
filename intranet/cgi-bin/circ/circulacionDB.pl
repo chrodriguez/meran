@@ -447,3 +447,34 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_ES_REGULAR"){
     C4::AR::Auth::print_header($session);
 	print $regular;
 }
+
+elsif ( $tipoAccion eq "IMPRIMIR_COMPROBANTE" ) {
+
+            my ($template, $session, $t_params) =  get_template_and_user ({
+                    template_name   => 'circ/ticket.tmpl',
+                    query       => $input,
+                    type        => "intranet",
+                    authnotrequired => 0,
+                    flagsrequired   => {    ui => 'ANY', 
+                                            tipo_documento => 'ANY', 
+                                            accion => 'CONSULTA', 
+                                            entorno => 'undefined'},
+            });
+
+            
+           C4::AR::Debug::debug( $obj->{'obj'});
+
+            my %env;
+            my $obj                             = C4::AR::Utilidades::from_json_ISO( $obj->{'obj'} );
+
+            $t_params->{'socio'}                = C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'socio'});
+            $t_params->{'responsable'}          = C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'responsable'});
+            $t_params->{'prestamo'}             = C4::AR::Prestamos::getPrestamoDeId3($obj->{'id3'});
+            $t_params->{'adicional_selected'}   = $obj->{'adicional_selected'};
+
+
+            C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+
+
+} 
+
