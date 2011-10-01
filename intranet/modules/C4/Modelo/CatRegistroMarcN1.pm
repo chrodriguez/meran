@@ -394,7 +394,7 @@ sub toMARC{
     my ($self) = shift;
 
     #obtengo el marc_record del NIVEL 1
-    my $marc_record         = MARC::Record->new_from_usmarc($self->getMarcRecord());
+    my $marc_record             = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
     my $params;
     $params->{'nivel'}          = '1';
@@ -404,10 +404,9 @@ sub toMARC{
     return ($MARC_result_array);
 }
 
-# FIXME dos metodos toMARC?????????????
 
 =head2 sub toMARC_Intra
-
+    se utiliza para la visualizacion del detalle en la INTRA
 =cut
 sub toMARC_Intra{
     my ($self) = shift;
@@ -426,7 +425,7 @@ sub toMARC_Intra{
 
 
 =head2 sub toMARC_Opac
-
+    se utiliza para la visualizacion del detalle en el OPAC
 =cut
 sub toMARC_Opac{
     my ($self) = shift;
