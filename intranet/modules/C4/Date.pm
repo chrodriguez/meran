@@ -296,10 +296,6 @@ sub proximosHabiles {
 	        $hasta = Date_NextWorkDay($hasta);
 	    } 
 	}
-
-        C4::AR::Debug::debug("********** HASTA DESPUES DEL CALCULO `primero ".$hasta);
-        C4::AR::Debug::debug("********** HASTA DESPUES DEL CALCULO segundo ".$hasta);
-
 	#Se sume un dia si es feriado el ultimo dia.
 	my $dateformat= C4::Date::get_date_format();
 	$hasta = C4::Date::format_date_in_iso($hasta, $dateformat);
