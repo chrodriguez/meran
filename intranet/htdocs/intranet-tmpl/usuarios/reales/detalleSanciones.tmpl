@@ -58,14 +58,16 @@ function updateBorrarSancion(responseText){
             [% ELSE %]
                 [% "class='impar'" %]
             [% END %]
-    >            
-        <td>[% sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]</td>
-        <td>[% IF sancion.tipo_sancion %]
-		    [% FOREACH ts IN sancion.ref_tipo_prestamo_sancion %] 
-			    [% ts.ref_tipo_prestamo.descripcion %]<br>
-		    [% END %]
-		    [% ELSE %]
+    >
+        <td>[% IF sancion.ref_tipo_sancion.ref_tipo_prestamo.getId %]
+				[% sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]
+			[% ELSE %]
 		        [% "Reserva no retirada" | i18n %]
+		    [% END %]
+		</td>
+        <td>
+		    [% FOREACH ts IN sancion.ref_tipo_sancion.ref_tipo_prestamo_sancion %] 
+			    [% ts.ref_tipo_prestamo.descripcion %]<br>
 		    [% END %]
 		</td>
         <td>[% sancion.getFecha_comienzo_formateada %]</td>

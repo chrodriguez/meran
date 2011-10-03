@@ -118,7 +118,8 @@ sub prestamosHabilitadosPorTipo {
     my $tipos_habilitados_array_ref = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo(   
                                                                         query => [ 
                                                                                 codigo_disponibilidad   => { eq => $codigo_disponibilidad },
-                                                                                habilitado          => { eq => 1}
+                                                                                habilitado          => { eq => 1},
+                                                                                id 					=> { ne => 0 } # No debe mostrar NUNCA el tipo RESERVA
                                                                             ], 
                                         );
 
