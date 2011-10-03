@@ -820,7 +820,7 @@ sub getNullValue {
     my ($dato) = @_;
 
 #     return ($dato eq "NULL")?"[SIN VALOR]":$dato;
-    return ($dato eq "NULL")?" ":$dato;
+    return ($dato eq "NULL")?"":$dato;
 }
 
 =head2
