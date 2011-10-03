@@ -104,8 +104,10 @@ sub actualizarTiposPrestamoQueAplica {
 		$tps->delete();
 	}
 
+		$self->debug("tipo sancion".$self->getTipo_sancion);
+		
     foreach my $tpa (@$tiposQueAplica) {
-		$self->debug("tipo tipo ".$tpa);
+		$self->debug("tipo ".$tpa);
 		my $ta = C4::Modelo::CircTipoPrestamoSancion->new(db=>$db);
 		$ta->setTipo_prestamo($tpa);
 		$ta->setTipo_sancion($self->getTipo_sancion);

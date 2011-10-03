@@ -47,7 +47,7 @@
 		<td>[% sancion.socio.persona.getLegajo %]</td>
 		<td>[% sancion.socio.categoria.getDescription %]</td>
 		<td>
-			[% IF sancion.getTipo_sancion %]
+			[% IF sancion.ref_tipo_sancion.ref_tipo_prestamo.getId %]
 				[% sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]
 			[% ELSE %]
 				Reserva no retirada
