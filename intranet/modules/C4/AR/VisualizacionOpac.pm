@@ -443,7 +443,7 @@ sub getVisualizacionFromCampoSubCampo{
                                                                                 db              => $db, 
 
                                         );  
-die;
+
     if(scalar(@$cat_estruct_info_array) > 0){
       return $cat_estruct_info_array->[0];
     }else{
