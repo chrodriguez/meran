@@ -285,7 +285,11 @@ sub reservar {
 		my $diasDeSancionReserva =  C4::AR::Sanciones::diasDeSancion( $comienzo_sancion,$fin_reserva,$self->socio->getCod_categoria ,'RE' );
 		C4::AR::Debug::debug("***___________________________________DIAS SANCION RESERVA___________________________".$diasDeSancionReserva);	
 		
-		if ($diasDeSancionReserva > 0) {
+		my $tipo_sancion = C4::AR::Sanciones::getTipoSancion('RE', $self->socio->getCod_categoria ,$self->db);
+		C4::AR::Debug::debug("***___________________________________TIPO SANCION RESERVA___________________________".$tipo_sancion->getTipo_sancion);	
+		
+		
+		if (($diasDeSancionReserva > 0)&&($tipo_sancion)) {
 			C4::AR::Debug::debug("***_____________________________CALCULO FIN SANCION RESERVA____________________***");
 			my ($fecha_comienzo_sancion,$fecha_fin_sancion,$apertura,$cierre) = C4::Date::proximosHabiles($diasDeSancionReserva,0,$comienzo_sancion);
 			
@@ -296,7 +300,7 @@ sub reservar {
 			#Responsable ahora es: 'Sistema', ticket #2645. Por reserva no retirada en el rep_historial_sancion
 			#$paramsSancion{'responsable'} = $params->{'responsable'};
 			$paramsSancion{'responsable'}       = "Sistema";
-			$paramsSancion{'tipo_sancion'}      = undef;
+			$paramsSancion{'tipo_sancion'}      = $tipo_sancion->getTipo_sancion;
 			$paramsSancion{'id_reserva'}        = $self->getId_reserva;
 			$paramsSancion{'nro_socio'}         = $params->{'nro_socio'};
 			$paramsSancion{'fecha_comienzo'}    = $fecha_comienzo_sancion;

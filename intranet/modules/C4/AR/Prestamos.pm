@@ -118,7 +118,8 @@ sub prestamosHabilitadosPorTipo {
     my $tipos_habilitados_array_ref = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo(   
                                                                         query => [ 
                                                                                 codigo_disponibilidad   => { eq => $codigo_disponibilidad },
-                                                                                habilitado          => { eq => 1}
+                                                                                habilitado          => { eq => 1},
+                                                                                id 					=> { ne => 0 } # No debe mostrar NUNCA el tipo RESERVA
                                                                             ], 
                                         );
 
@@ -1139,6 +1140,7 @@ sub _enviarRecordatorio{
                     my $titulo              = $nivel1->getTitulo();
                     my $fecha_prestamo      = $pres->getFecha_vencimiento_formateada();
                     my $cuerpo_mensaje      = C4::AR::Preferencias::getValorPreferencia('reminderMessage');
+                    my $link                = "http://".$ENV{'SERVER_NAME'}.C4::AR::Utilidades::getUrlPrefix()."/modificarDatos.pl";
                   
                     $cuerpo_mensaje         =~ s/FIRSTNAME\ SURNAME/$socio->{'persona'}->{'nombre'}\ $socio->{'persona'}->{'apellido'}/;
                     $cuerpo_mensaje         =~ s/VENCIMIENTO/$fecha_prestamo/;
@@ -1146,8 +1148,7 @@ sub _enviarRecordatorio{
                     $cuerpo_mensaje         =~ s/TITLE\:UNITITLE/$titulo/;
                     $cuerpo_mensaje         =~ s/\(EDICION\)//;
                     $cuerpo_mensaje         =~ s/BRANCH/Biblioteca/;
-                    $cuerpo_mensaje         .= ". Para desactivar estas notificaciones, "
-                                                ."por favor ingrese a "."http://".$ENV{'SERVER_NAME'}.C4::AR::Utilidades::getUrlPrefix()."/modificarDatos.pl";
+                    $cuerpo_mensaje         =~ s/LINK/$link/;
                                         
                     # C4::AR::Debug::debug("mensaje : ".$cuerpo_mensaje);
                     

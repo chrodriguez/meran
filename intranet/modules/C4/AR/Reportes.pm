@@ -107,7 +107,7 @@ sub altasRegistro {
 
 	$cat_registro_n3_count = $cat_registro_n3_count->[0]->{'agregacion_temp'};
 
-#Este for es sólo para hacer el array de id1, para que se puedar usar armarInfoNivel1
+#Este for es sÃ³lo para hacer el array de id1, para que se puedar usar armarInfoNivel1
 	my @id1_array;
 
 	foreach my $record (@$cat_registro_n3) {
@@ -607,7 +607,7 @@ sub armarInforme{
 
     my @informe;
 
-#     my @headers= ("Código de barra", "Signatura Topográfica", "Autor", "Título", "Editor", "Edición", "UI Origen", "UI Poseedora");
+#     my @headers= ("CÃ³digo de barra", "Signatura TopogrÃ¡fica", "Autor", "TÃ­tulo", "Editor", "EdiciÃ³n", "UI Origen", "UI Poseedora");
 
 #     push(@informe,\@headers);
 
