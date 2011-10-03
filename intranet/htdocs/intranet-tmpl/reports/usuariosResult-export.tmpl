@@ -1,3 +1,5 @@
+[% USE HTML %]
+
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme %]/includes/completo.css">
 
 <fieldset class="resultados_busqueda">
@@ -7,8 +9,6 @@
             <div class="filtros_reporte">
                 [% "A&ntilde;o" | i18n %]: [% param_anio %]<br />
                 [% "Categor&iacute;a" | i18n %]: [% param_categoria %]<br />
-                [% "Total de registros" | i18n %]: [% cantidad %]<br />
-                [% "Total de registros" | i18n %]: [% cantidad %]<br />
             </div>
                 <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%">
                 <thead>
