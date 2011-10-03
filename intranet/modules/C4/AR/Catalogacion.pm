@@ -82,16 +82,16 @@ sub _meran_to_marc{
         my $cant_subcampos          = $infoArrayNivel->[$i]->{'cant_subcampos'};
 
 
-        C4::AR::Debug::debug("_meran_to_marc => campo => ".$infoArrayNivel->[$i]->{'campo'});
-        C4::AR::Debug::debug("_meran_to_marc => cant_subcampos => ".$infoArrayNivel->[$i]->{'cant_subcampos'});
+#         C4::AR::Debug::debug("_meran_to_marc => campo => ".$infoArrayNivel->[$i]->{'campo'});
+#         C4::AR::Debug::debug("_meran_to_marc => cant_subcampos => ".$infoArrayNivel->[$i]->{'cant_subcampos'});
         my @subcampos_array;
         #se verifica si el campo esta autorizado para el nivel que se estra procesando
         for(my $j=0;$j<$cant_subcampos;$j++) {
             my $subcampo_hash_ref = $subcampos_hash->{$j};
 #             C4::AR::Debug::debug("_meran_to_marc => campo => ".$campo);
             while ( my ($key, $value) = each(%$subcampo_hash_ref) ) {
-                C4::AR::Debug::debug("_meran_to_marc => subcampo, dato => ".$key.", ".$subcampos_array->[$j]->{'dato'});
-                C4::AR::Debug::debug("_meran_to_marc => subcampo, datoReferencia => ".$key.", ".$subcampos_array->[$j]->{'datoReferencia'});
+#                 C4::AR::Debug::debug("_meran_to_marc => subcampo, dato => ".$key.", ".$subcampos_array->[$j]->{'dato'});
+#                 C4::AR::Debug::debug("_meran_to_marc => subcampo, datoReferencia => ".$key.", ".$subcampos_array->[$j]->{'datoReferencia'});
 
                 if($with_references){
                     $value = _procesar_referencia($campo, $key, $value, $itemtype);
@@ -100,9 +100,9 @@ sub _meran_to_marc{
                 if ( ($value ne '')&&(C4::AR::Utilidades::existeInArray($key, @{$autorizados{$campo}} ) )) {
                 #el subcampo $key, esta autorizado para el campo $campo
                     push(@subcampos_array, ($key => $value));
-                    C4::AR::Debug::debug("_meran_to_marc => campo ".$campo." ACEPTADO clave = ".$key." valor: ".$value);
+#                     C4::AR::Debug::debug("_meran_to_marc => campo ".$campo." ACEPTADO clave = ".$key." valor: ".$value);
                 } else {
-                    C4::AR::Debug::debug("_meran_to_marc => campo ".$campo." NO ACEPTADO clave = ".$key." valor: ".$value);
+#                     C4::AR::Debug::debug("_meran_to_marc => campo ".$campo." NO ACEPTADO clave = ".$key." valor: ".$value);
                 }
 
 #                 C4::AR::Debug::debug("_meran_to_marc => value de campo, subcampo => ".$key.", ".$campo." => ".$value);
@@ -461,11 +461,11 @@ sub filtrarVisualizacion{
                     if ( ($sub_campo ne '')&&(C4::AR::Utilidades::existeInArray($sub_campo, @{$autorizados{$field->tag}} ) )) {
                         #el subcampo $sub_campo, esta autorizado para el campo $field
                         push(@subcampos_array, ($sub_campo => $dato));
-                        C4::AR::Debug::debug("C4::AR::Catalogacion::filtrarVisualizacion => ACEPTADO campo,subcampo => dato ".$field->tag.",".$sub_campo." => ".$dato);
+#                         C4::AR::Debug::debug("C4::AR::Catalogacion::filtrarVisualizacion => ACEPTADO campo,subcampo => dato ".$field->tag.",".$sub_campo." => ".$dato);
                     }else{
     #                     $msg_object->{'error'} = 1;
     #                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U412', 'params' => [$campo.", ".$key." valor: ".$value]} ) ;
-			C4::AR::Debug::debug("C4::AR::Catalogacion::filtrarVisualizacion => NO ACEPTADO campo,subcampo => dato ".$field->tag.",".$sub_campo." => ".$dato);
+# 			C4::AR::Debug::debug("C4::AR::Catalogacion::filtrarVisualizacion => NO ACEPTADO campo,subcampo => dato ".$field->tag.",".$sub_campo." => ".$dato);
                     }
                 }
                 if (scalar(@subcampos_array)){
@@ -558,7 +558,7 @@ sub as_stringReloaded {
         my %hash_temp_aux;
         my $subcampo                        = $subfield->[0];
         my $dato                            = $subfield->[1];
-#         C4::AR::Debug::debug("Catalogacion => as_stringReloaded => subcampo => ".$subcampo." dato => ".$dato);
+        C4::AR::Debug::debug("Catalogacion => as_stringReloaded => subcampo => ".$subcampo." dato => ".$dato);
         my $cat_estruct_info_array          = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($field->tag, $subcampo, $itemtype, $db);
         my $text                            = "";
         if($cat_estruct_info_array){
@@ -567,7 +567,7 @@ sub as_stringReloaded {
             $text                           = $cat_estruct_info_array->getPre().$dato.$cat_estruct_info_array->getPost();
         }
 
-#         C4::AR::Debug::debug("Catalogacion => as_stringReloaded => text => ".$text);
+        C4::AR::Debug::debug("Catalogacion => as_stringReloaded => text => ".$text);
         push( @subs, $text );
     } # foreach
 
@@ -636,14 +636,14 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
             my $campo_ant                   = $field->tag;
             my $indicador_primario_dato     = $field->indicator(1);
             my $indicador_secundario_dato   = $field->indicator(2);
-            C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => campo => ".$campo);
+#             C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => campo => ".$campo);
             #proceso todos los subcampos del campo
             foreach my $subfield ($field->subfields()) {
                 my %hash_temp;
                 my %hash_temp_aux;
                 my $subcampo                        = $subfield->[0];
                 my $dato                            = $subfield->[1];
-                C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => subcampo => ".$subcampo);
+#                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => subcampo => ".$subcampo);
                 $hash_temp{'campo'}                 = $campo;
                 $hash_temp{'subcampo'}              = $subcampo;
                 $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype, $db);
@@ -651,7 +651,7 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
                 my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $db);
                 $hash_temp{'dato'}                  = $valor_referencia;
 
-		C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => dato => ".$valor_referencia);
+# 		C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => dato => ".$valor_referencia);
 
                 $field->update( $subcampo => $valor_referencia );
             }
@@ -1889,15 +1889,18 @@ sub getOrdenFromCampoSubcampo{
     
     if($type eq "INTRA"){
 
-        my $conf_visualizacion = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($campo, $subcampo, $itemtype,$db);
+        my $conf_visualizacion = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($campo, $subcampo, $itemtype, $db);
 
+        C4::AR::Debug::debug("campo ".$campo." subcampo ".$subcampo." itemtype!!!!!!!!!!!!!!!!!!! ".$itemtype);
         if($conf_visualizacion){
             return $conf_visualizacion->getOrden();
         }
 
     } else {
-        
-        my $conf_visualizacion = C4::AR::VisualizacionOpac::getVisualizacionFromCampoSubCampo($campo, $subcampo, C4::AR::Preferencias::getValorPreferencia("perfil_opac"),$db);
+        C4::AR::Debug::debug("campo ".$campo." subcampo ".$subcampo." itemtype ".$itemtype);
+        my $conf_visualizacion = C4::AR::VisualizacionOpac::getVisualizacionFromCampoSubCampo($campo, $subcampo, $itemtype, $db);
+      
+#         my $conf_visualizacion = C4::AR::VisualizacionOpac::getVisualizacionFromCampoSubCampo($campo, $subcampo, C4::AR::Preferencias::getValorPreferencia("perfil_opac"),$db);
 
         if($conf_visualizacion){
             return $conf_visualizacion->getOrden();

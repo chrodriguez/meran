@@ -19,19 +19,6 @@
         setMessages(Messages);
   }
 
-  function verificarCantCar(){
-        var limit = 140; 
-        var post=$('#post_twitter').val();
-      
-        if ($('#post_twitter').val().length > limit){
-             $('#publicar_twitter').attr('disabled', 'disabled');
-        } else {
-             $('#publicar_twitter').removeAttr("disabled");
- 
-        }
-    
-}
-
 
   $(document).ready(function() {
         $('#publicar_twitter').click(function() {
@@ -40,8 +27,8 @@
         });      
         
         $("#post_twitter").charCount({
-            limit: 140,        
-            warning: 20,
+            limit: 0,        
+            warning: 10,
             counterElement: 'p',
             css: 'textareaCounter',
             cssWarning: 'textareaCounterwarning',
@@ -55,7 +42,7 @@
     <div class="fancybox_twitter" id="fancybox_twitter">
         <fieldset>
                 <legend>[% 'Cuerpo del mensaje' | i18n %]:</legend>
-                <textarea id="post_twitter" onkeyup='verificarCantCar()' name="textarea_twitter" style="padding:5px" rows="5" cols="50"></textarea>
+                <textarea id="post_twitter" onkeyup='' name="textarea_twitter" style="padding:5px" rows="5" cols="50"></textarea>
                 <input class= "fancybox_button" id="publicar_twitter" type="button" value="Enviar">
             <!--</form>-->
         </fieldset>

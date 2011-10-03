@@ -7,6 +7,10 @@
     function changePage(ini){
         objAH.changePage(ini);
     }
+    
+    function changePageCirculacion(ini){
+        objAHCirculacion.changePage(ini);    
+    }
 
     function ordenar(orden){
         objAH.sort(orden);
@@ -37,7 +41,7 @@
         objAHCirculacion.debug          = true;
         objAHCirculacion.showOverlay    = true;
         objAHCirculacion.url            = 'detalleEjemplar.pl';
-        objAHCirculacion.funcion        = "changePage";
+        objAHCirculacion.funcion        = "changePageCirculacion";
         objAHCirculacion.fecha_inicial  = $('#fecha_inicial').val();
         objAHCirculacion.fecha_final    = $('#fecha_final').val();
         objAHCirculacion.id3            = id3;

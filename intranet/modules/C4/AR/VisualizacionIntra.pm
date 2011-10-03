@@ -405,14 +405,15 @@ sub getCamposXLike{
     Este funcion devuelve la configuracion de la estructura de catalogacion de un campo, subcampo, realizada por el usuario
 =cut
 sub getVisualizacionFromCampoSubCampo{
-    my ($campo, $subcampo, $itemtype, $db) = @_;
+    my ($campo, $subcampo, $tipo_ejemplar, $db) = @_;
+
     $db = $db || C4::Modelo::CatVisualizacionIntra->new()->db;
     my @filtros;
 
     push(@filtros, ( campo          => { eq => $campo } ) );
     push(@filtros, ( subcampo       => { eq => $subcampo } ) );
 #     push (@filtros,( tipo_ejemplar  => { eq => 'ALL' })); 
-    push (  @filtros, ( or   => [   tipo_ejemplar   => { eq => $itemtype }, 
+    push (  @filtros, ( or   => [   tipo_ejemplar   => { eq => $tipo_ejemplar }, 
                                     tipo_ejemplar   => { eq => 'ALL'     } ])
                      );
 
@@ -424,7 +425,6 @@ sub getVisualizacionFromCampoSubCampo{
                                         );  
 
     if(scalar(@$cat_estruct_info_array) > 0){
-      C4::AR::Debug::debug("VisualizacionIntra => getVisualizacionFromCampoSubCampo => lo encontre!!!");
       return $cat_estruct_info_array->[0];
     }else{
       return 0;

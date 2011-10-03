@@ -153,7 +153,7 @@ C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON E
 			$params{'tipo'}                     = "INTRA";
 			$params{'tipo_prestamo'}            = $tipoPrestamo;
 		
-			my ($msg_object)                    = &C4::AR::Prestamos::t_realizarPrestamo(\%params);
+			my ($msg_object)                    = C4::AR::Prestamos::t_realizarPrestamo(\%params);
 			my $ticketObj                       = 0;
 
 			if(!$msg_object->{'error'}){

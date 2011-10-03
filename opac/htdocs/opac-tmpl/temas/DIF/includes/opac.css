@@ -31,6 +31,10 @@ body input[type="text"] {
     clear: none;
 }
 
+.click {
+    cursor: pointer;
+}
+
 .page-container {
     border: solid 1px rgb(150, 150, 150);
 }
