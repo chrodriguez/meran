@@ -229,20 +229,26 @@ sub seRepiteSignatura {
     my ($self)      = shift;
     my ($signatura) = @_;
     
-    my @filtros;
-    my $existe = 0;
-
-    push(@filtros, ( id1        => { ne => $self->getId1() }) ); #Saco los del mismo registro
-    push(@filtros, ( id1        => { ne => C4::Modelo::RefEstado::estadoDisponibleValue()})); #Saco los compartidos
-    push(@filtros, ( signatura  => { eq => $signatura }));
+    my $sePermiteRepeticion = C4::AR::Preferencias::getValorPreferencia("se_permite_repetir_signatura");
     
-    my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => \@filtros ); 
-
-    $existe = scalar (@$nivel3_array_ref);
-    
-    C4::AR::Debug::debug("CatRegistroMarcN3 => seRepiteSignatura => EXISTE la signatura? => ".$existe);
-    
-    return $existe;
+    if (!$sePermiteRepeticion){
+	    my @filtros;
+	    my $existe = 0;
+	
+	    push(@filtros, ( id1        => { ne => $self->getId1() }) ); #Saco los del mismo registro
+	    push(@filtros, ( id1        => { ne => C4::Modelo::RefEstado::estadoDisponibleValue()})); #Saco los compartidos
+	    push(@filtros, ( signatura  => { eq => $signatura }));
+	    
+	    my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => \@filtros ); 
+	
+	    $existe = scalar (@$nivel3_array_ref);
+	    
+	    C4::AR::Debug::debug("CatRegistroMarcN3 => seRepiteSignatura => EXISTE la signatura? => ".$existe);
+	    
+	    return $existe;
+    }else{
+    	return 0;
+    }
 }
 
 sub modificar {
