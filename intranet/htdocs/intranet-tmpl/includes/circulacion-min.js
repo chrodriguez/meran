@@ -38,4 +38,4 @@ detallePrestamos(USUARIO.ID,updateInfoPrestamos);ejemplaresDelGrupo(ID_N2);}
 function devolver(){objAH=new AjaxHelper(updateInfoDevolver);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/circ/circulacionDB.pl';objAH.tipoAccion='REALIZAR_DEVOLUCION';objAH.datosArray=INFO_PRESTAMOS_ARRAY;objAH.nro_socio=USUARIO.ID;objAH.sendToServer();}
 function updateInfoDevolver(responseText){}
 function imprimirTicket(ticket,num){if(ticket!=0){var obj=JSONstring.make(ticket);objAH=new AjaxHelper(updateImprimirTicket);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/circ/circulacionDB.pl';objAH.tipoAccion='IMPRIMIR_COMPROBANTE';objAH.obj=obj;objAH.nroBoleta=num;objAH.sendToServer();}}
-function updateImprimirTicket(responseText){$('#fancybox_ticket').html(responseText);}
+function updateImprimirTicket(responseText){$('#ticket').html(responseText);$('#ticket').ajaxStop(function(){$('#ticket').modal({containerCss:{backgroundColor:"#fff",height:420,padding:0,width:650,},});});}

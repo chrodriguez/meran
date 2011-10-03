@@ -520,7 +520,18 @@ function imprimirTicket(ticket,num){
 
 
 function updateImprimirTicket(responseText){
-    $('#fancybox_ticket').html(responseText);
+    $('#ticket').html(responseText);
+    $('#ticket').ajaxStop(function() {
+       $('#ticket').modal({   containerCss:{
+            backgroundColor:"#fff",
+    //         borderColor:"#0063dc",
+            height:420,
+            padding:0,
+            width:650,
+            
+        },
+    });
+    });
     
    
 }
