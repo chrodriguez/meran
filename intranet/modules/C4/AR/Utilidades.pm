@@ -3987,6 +3987,7 @@ sub setFeriado{
     require C4::Modelo::PrefFeriado;
     require C4::Modelo::PrefFeriado::Manager;
     my $dateformat      = C4::Date::get_date_format();
+    $texto_feriado      = Encode::encode_utf8($texto_feriado);
     $fecha              = C4::Date::format_date_in_iso($fecha, $dateformat);
 
     my $feriado = C4::Modelo::PrefFeriado::Manager->get_pref_feriado(query => [ fecha => { eq => $fecha } ] );
