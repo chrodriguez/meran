@@ -462,7 +462,9 @@ elsif ( $tipoAccion eq "IMPRIMIR_COMPROBANTE" ) {
             });
 
             
-           C4::AR::Debug::debug( $obj->{'obj'});
+           C4::AR::Debug::debug("tickets a imprmirrrrrrrrrrrrrrrrr");
+          C4::AR::Debug::debug($obj->{'obj'});
+           
 
             my %env;
             my $obj                             = C4::AR::Utilidades::from_json_ISO( $obj->{'obj'} );

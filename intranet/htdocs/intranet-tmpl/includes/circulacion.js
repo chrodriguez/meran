@@ -284,12 +284,13 @@ function updateInfoPrestarReserva(responseText){
 	var infoHash        = JSONstring.toObject(responseText);
 	var messageArray    = infoHash.messages;
 	var ticketsArray    = infoHash.tickets;
-	var mensajes        = '';
-
-	for(var i=0; i<messageArray.length;i++){
-		imprimirTicket(ticketsArray[i].ticket,i);
+	var mensajes        = '';  
+    for(var i=0; i<messageArray.length;i++){
+ 		imprimirTicket(ticketsArray[i].ticket,i)
+  
+//         imprimirTicket(ticketsArray, i);
   		setMessages(messageArray[i]);
-	}
+  	}
 
 	detalleReservas(USUARIO.ID,updateInfoReservas);
     ejemplaresDelGrupo(ID_N2);
@@ -503,37 +504,43 @@ function updateInfoDevolver(responseText){
  */
 
 function imprimirTicket(ticket,num){
-
- if(ticket != 0){
-    var obj=JSONstring.make(ticket);
-    objAH               = new AjaxHelper(updateImprimirTicket);
-    objAH.debug         = true;
-    objAH.showOverlay   = true;
-    objAH.url           = URL_PREFIX+'/circ/circulacionDB.pl';
-    objAH.tipoAccion    = 'IMPRIMIR_COMPROBANTE';
-    objAH.obj           = obj;
-    objAH.nroBoleta     = num;
-    //se envia la consulta
-    objAH.sendToServer();
- }
+//     var obj;
+// alert(tickets[0].ticket);
+//  if(ticket != 0){
+//    for(i=0; i< ticket.length;i++){
+//       obj=JSONstring.make(ticket[i]);
+//       alert(obj);
+//   }
+    if(ticket != 0){   
+        obj=JSONstring.make(ticket);
+        objAH               = new AjaxHelper(updateImprimirTicket);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;
+        objAH.url           = URL_PREFIX+'/circ/circulacionDB.pl';
+        objAH.tipoAccion    = 'IMPRIMIR_COMPROBANTE';
+        objAH.obj           = obj;
+        objAH.nroBoleta     = num;
+        //se envia la consulta
+        objAH.sendToServer();
+  }
 }
 
 
 function updateImprimirTicket(responseText){
-    $('#ticket').html(responseText);
-    $('#ticket').ajaxStop(function() {
-       $('#ticket').modal({   containerCss:{
-            backgroundColor:"#fff",
-    //         borderColor:"#0063dc",
-            height:420,
-            padding:0,
-            width:650,
-            
-        },
-    });
-    });
+//     $('#ticket').html(responseText);
+//     $('#ticket').window.print();window.close();
+//     $('#ticket').ajaxStop(function() {
+//        $('#ticket').modal({   containerCss:{
+//             backgroundColor:"#fff",
+//     //         borderColor:"#0063dc",
+//             height:420,
+//             padding:0,
+//             width:650,
+//             
+//         },
+//     });
+//     });
     
-   
 }
 
 // FIXME esta muy feo esto!!!!!!!!!!!!!!!!!!!!!!!!!!!
