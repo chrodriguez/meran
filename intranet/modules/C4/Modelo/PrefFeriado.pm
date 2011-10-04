@@ -35,7 +35,7 @@ sub getFeriado{
 
     my $feriado = $self->feriado || C4::AR::Filtros::i18n('Sin Descripcion');
     
-    return (Encode::decode_utf8($feriado));
+    return ($feriado);
 }
 
 sub setFecha{
