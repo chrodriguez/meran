@@ -2425,7 +2425,7 @@ sub generarComboTipoPrestamo{
     my @select_tipo_nivel3_array;
     my %select_tipo_prestamo_hash;
 
-    require C4::Modelo::CircRefTipoPrestamo::Manager;
+    require C4::Modelo::CircRefTipoPrestamo::Manager;  
     my ($tipoPrestamo_array)= C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo();
 
     foreach my $tipoPrestamo (@$tipoPrestamo_array) {

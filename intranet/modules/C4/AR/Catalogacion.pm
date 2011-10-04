@@ -564,7 +564,9 @@ sub as_stringReloaded {
         if($cat_estruct_info_array){
 #             C4::AR::Debug::debug("getPre =>|".$cat_estruct_info_array->getPre()."|");
 #             C4::AR::Debug::debug("getPost =>|".$cat_estruct_info_array->getPost()."|");
-            $text                           = $cat_estruct_info_array->getPre().$dato.$cat_estruct_info_array->getPost();
+            if(C4::AR::Utilidades::trim($dato) ne ""){
+                $text                           = $cat_estruct_info_array->getPre().$dato.$cat_estruct_info_array->getPost();
+            }
         }
 
         C4::AR::Debug::debug("Catalogacion => as_stringReloaded => text => ".$text);
@@ -819,7 +821,8 @@ sub getDatoFromReferencia{
 sub getNullValue {
     my ($dato) = @_;
 
-    return ($dato eq "NULL")?"[SIN VALOR]":$dato;
+#     return ($dato eq "NULL")?"[SIN VALOR]":$dato;
+    return ($dato eq "NULL")?"":$dato;
 }
 
 =head2
