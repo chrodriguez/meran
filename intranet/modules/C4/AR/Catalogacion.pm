@@ -854,7 +854,7 @@ sub getRefFromStringConArrobas{
     Si no es una referencia, se devuelve el dato pasado por parametro
 =cut
 sub getRefFromStringConArrobasByCampoSubcampo{
-    my ($campo, $subcampo, $dato, $itemtype,$db) = @_;
+    my ($campo, $subcampo, $dato, $itemtype, $db) = @_;
 
     my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo, $itemtype,$db);
 
@@ -863,6 +863,9 @@ sub getRefFromStringConArrobasByCampoSubcampo{
         #tiene referencia
             return getRefFromStringConArrobas($dato);
         }
+    } else {
+# TODO estoy probado si va, esto debería ser una preferencia
+        $dato = "este campo no se puede mostrar debido a que no se encuentra configurado el campo ".$campo.", ".$subcampo;
     }
 
     return $dato;

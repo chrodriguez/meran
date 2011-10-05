@@ -5,10 +5,10 @@
 <fieldset class="resultados_busqueda">
 <!--     <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda" | i18n %]:</legend> -->
         <div class="datos_tabla_div" id="datos_tabla_div">
-            <div class="resultados_consulta">[% "Total de registros" | i18n %]: [% cantidad %] </div>
+            <div class="resultados_consulta">[% "Total de registros" | i18n %]: [% HTML.escape(cantidad) %] </div>
             <div class="filtros_reporte">
-                [% "A&ntilde;o" | i18n %]: [% param_anio %]<br />
-                [% "Categor&iacute;a" | i18n %]: [% param_categoria %]<br />
+                [% "A&ntilde;o" | i18n %]: [% HTML.escape(param_anio) %]<br />
+                [% "Categor&iacute;a" | i18n %]: [% HTML.escape(param_categoria) %]<br />
             </div>
                 <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%">
                 <thead>
@@ -49,7 +49,7 @@
                             [% IF !hide_nro_socio %]
                                     <td align='left' class="tarjetaId">
                                         [% PERL %]
-                                            print C4::AR::Filtros::link_to(     text =>     "[% socio.getNro_socio %]",
+                                            print C4::AR::Filtros::link_to(     text =>     "[% HTML.escape(socio.getNro_socio) %]",
                                                                                 url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
                                                                                 params =>   ["nro_socio=[% socio.getNro_socio %]"],
                                                                                 title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
@@ -60,7 +60,7 @@
                             [% IF !hide_nom_ape %]
                                     <td width=250 align="left" class="nomCompleto">
                                         [% PERL %]
-                                            print C4::AR::Filtros::link_to(     text =>     "[% socio.persona.getApeYNom %]",
+                                            print C4::AR::Filtros::link_to(     text =>     "[% HTML.escape(socio.persona.getApeYNom) %]",
                                                                                 url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
                                                                                 params =>   ["nro_socio=[% socio.getNro_socio %]"],
                                                                                 title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
@@ -71,17 +71,17 @@
                             
                         [% IF !hide_nro_documento %]
                             <td align="left" class="documento">
-                                [% socio.persona.getVersion_documento %]&nbsp;[% socio.persona.getNro_documento %]
+                                [% HTML.escape(socio.persona.getVersion_documento) %]&nbsp;[% socio.persona.getNro_documento %]
                             </td>
                         [% END %]
                         [% IF !hide_legajo %]
                             <td align="left" class="legajo">
-                                [% socio.persona.getLegajo %]
+                                [% HTML.escape(socio.persona.getLegajo) %]
                             </td>
                         [% END %]
                         [% IF !hide_categoria_socio_id %]
                             <td align=center>
-                                [% socio.categoria.getDescription %]
+                                [% HTML.escape(socio.categoria.getDescription) %]
                             </td>
                         [% END %]
                             <td align=center>
