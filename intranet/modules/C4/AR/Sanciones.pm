@@ -684,15 +684,11 @@ sub getHistorialSanciones{
 
     my $err         = "Error con la fecha";
     my $dateformat  = C4::Date::get_date_format();
-    my $hoy         = C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days",\$err),$dateformat);
+    my $hoy         = C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
     
     my @filtros;
-    push(@filtros, or   => [ 
-                   and  => [ nro_socio      => { eq => $nro_socio }, 
-                             fecha_final    => { lt => $hoy } ], 
-                   and  => [ nro_socio      => { eq => $nro_socio }, 
-                             tipo_operacion => { eq => 'Borrado' } ]                             
-                             ] );
+    push(@filtros, and  => [ nro_socio      => { eq => $nro_socio }, 
+                            or   => [ fecha_final    => { lt => $hoy },fecha_final    => undef ,tipo_operacion => { eq => 'Borrado' } ]]);
 
     use C4::Modelo::RepHistorialSancion::Manager;
     my $historial_sanciones_array_ref = C4::Modelo::RepHistorialSancion::Manager->get_rep_historial_sancion (   
