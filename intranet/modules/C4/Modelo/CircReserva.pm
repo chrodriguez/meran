@@ -286,7 +286,8 @@ sub reservar {
 		C4::AR::Debug::debug("***___________________________________DIAS SANCION RESERVA___________________________".$diasDeSancionReserva);	
 		
 		my $tipo_sancion = C4::AR::Sanciones::getTipoSancion('RE', $self->socio->getCod_categoria ,$self->db);
-		C4::AR::Debug::debug("***___________________________________TIPO SANCION RESERVA___________________________".$tipo_sancion->getTipo_sancion);	
+#	ESTE COMENTARIO ESTA ROMPIENDO PORQUE $tipo_sancion a veces viene empty
+#	C4::AR::Debug::debug("***___________________________________TIPO SANCION RESERVA___________________________".$tipo_sancion->getTipo_sancion);	
 		
 		
 		if (($diasDeSancionReserva > 0)&&($tipo_sancion)) {
