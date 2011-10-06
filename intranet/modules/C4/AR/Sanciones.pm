@@ -328,7 +328,7 @@ sub sanciones {
                                                                             fecha_comienzo  => { le => $hoy },
                                                                             fecha_final     => { ge => $hoy},
                                                                               ],
-                                                                    select  => ['circ_sancion.*'],
+                                                                    select  => ['*'],
                                                                     with_objects => ['socio','socio.persona','ref_tipo_sancion','nivel3', 'reserva'],
                                                                     sort_by => $orden,
                                                                     limit   => $cantR,
