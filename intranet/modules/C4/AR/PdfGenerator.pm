@@ -934,24 +934,39 @@ sub batchBookLabelGenerator {
                                 $i++;
                             }
                             if ( $i < $count ) {
-                                generateBookLabelA4(@$results[$i],14, 494, $pdf );
-                                generateBookLabelA4(@$results[$i], 312, 494, $pdf );
+                                generateBookLabelA4(@$results[$i],14, 554, $pdf );
+                                generateBookLabelA4(@$results[$i], 312, 554, $pdf );
                                 $i++;
                             }
                             if ( $i < $count ) { 
-                                generateBookLabelA4(@$results[$i], 14, 334, $pdf );
-                                generateBookLabelA4(@$results[$i], 312, 334, $pdf );
+                                generateBookLabelA4(@$results[$i], 14, 454, $pdf );
+                                generateBookLabelA4(@$results[$i], 312, 454, $pdf );
                                 $i++;
                             }
                             if ( $i < $count ) {
 #                                     
-                                  generateBookLabelA4(@$results[$i], 14, 174, $pdf );
-                                  generateBookLabelA4(@$results[$i], 312, 174, $pdf );    
+                                  generateBookLabelA4(@$results[$i], 14, 354, $pdf );
+                                  generateBookLabelA4(@$results[$i], 312, 354, $pdf );    
                                 $i++;
                             }
                             if ( $i < $count ) {
-                                 generateBookLabelA4(@$results[$i], 14, 14, $pdf);
-                                 generateBookLabelA4(@$results[$i], 312, 14, $pdf );
+                                 generateBookLabelA4(@$results[$i], 14, 254, $pdf);
+                                 generateBookLabelA4(@$results[$i], 312,254, $pdf );
+#                               
+                                 
+                                $i++;
+                            }
+
+                            if ( $i < $count ) {
+                                 generateBookLabelA4(@$results[$i], 14, 154, $pdf);
+                                 generateBookLabelA4(@$results[$i], 312,154, $pdf );
+#                               
+                                 
+                                $i++;
+                            }
+                            if ( $i < $count ) {
+                                 generateBookLabelA4(@$results[$i], 14, 54, $pdf);
+                                 generateBookLabelA4(@$results[$i], 312,54, $pdf );
 #                               
                                  
                                 $i++;
@@ -984,16 +999,16 @@ sub generateBookLabelA4 {
       
 
     #Insert a rectangle to delimite the card
-    $pdf->drawRect( $x - 12, $y + 30, $x + 278, ( $y + 172 ) );
+    $pdf->drawRect( $x - 7, $y + 80, $x + 265, ( $y + 172 ) );
 
 
     C4::AR::Debug::debug($branchcode);
 
-    $pdf->drawLine( $x + 80, $y + 30, $x + 80, $y +  172 );
+    $pdf->drawLine( $x + 80, $y + 80, $x + 80, $y +  172 );
 
 
     #Insert a barcode to the card
-    $pdf->drawBarcode( $x + 100, $y + 40, 78 / 100, 1, "3of9", $codigo, undef, 10,10, 25, 10 );
+    $pdf->drawBarcode( $x + 100, $y + 75, 70 / 100, 1, "3of9", $codigo, undef, 10,10, 25, 10 );
 
     my $posy = 100;
     my $escudo =
@@ -1076,17 +1091,20 @@ sub generateBookLabelA4 {
     my @sigs = split( / /, $signatura );
     my $posicion = 0;
     foreach my $sig (@sigs) {
+        if (C4::AR::Utilidades::validateString($sig)){
 #         $pdf->addRawText( "$sig", $x + 15, $pageheight + 50 + ( $y - 120 ) - $posicion );
-        $pdf->addRawText( "$sig", $x + 10, 250 + ( $y - 120 ) - $posicion );
-        $posicion += 15;
+          $pdf->addRawText( "$sig", $x + 10, 250 + ( $y - 100 ) - $posicion );
+          $posicion += 10;
+        }
     }
 
-    $pdf->addRawText( $codigo, $x + 15, $pageheight + ( $y - 120 ) - $posicion );
+#     $pdf->addRawText( $codigo, $x + 15, $pageheight + ( $y - 120 ) - $posicion );
+    $pdf->addRawText( $codigo, $x + 10, 250 + ( $y - 110 ) - $posicion);
     $posicion += 15;
-    $pdf->addRawText( $nivel3->getDisponibilidadObject()->getNombre(), $x + 10, ( $y + 148 ) - $posicion );
+    $pdf->addRawText( $nivel3->getDisponibilidadObject()->getNombre(), $x + 10, ( $y + 165 ) - $posicion );
 
 # Inserto el barcode debajo de signatura
-    $pdf->addRawText( "$codigo", $x + 5, $y + 40);
+#     $pdf->addRawText( "$codigo", $x + 10, $y + 80);
     
     $pdf->setFont("Arial");
 }
@@ -1177,13 +1195,15 @@ sub generateBookLabel{
 	my @sigs = split( / /, $signatura );
 	my $posicion = 0;
 	foreach my $sig (@sigs) {
-		$pdf->addRawText( "$sig", $x + 15, $pageheight + ( $y - 120 ) - $posicion );
-		$posicion += 15;
+        if (C4::AR::Utilidades::validateString($sig)){
+          $pdf->addRawText( "$sig", $x + 15, $pageheight + ( $y - 110 ) - $posicion );
+          $posicion += 10;
+        }
 	}
 	
-    $pdf->addRawText( $codigo, $x + 15, $pageheight + ( $y - 131 ) - $posicion  );
+    $pdf->addRawText( $codigo, $x + 15, $pageheight + ( $y - 122 ) - $posicion  );
     $posicion += 15;
-    $pdf->addRawText( $nivel3->getDisponibilidadObject()->getNombre(), $x + 15, $pageheight + ( $y - 103 ) - $posicion);
+    $pdf->addRawText( $nivel3->getDisponibilidadObject()->getNombre(), $x + 15, $pageheight + ( $y - 95 ) - $posicion);
 	
 	$pdf->setFont("Arial");
 }
