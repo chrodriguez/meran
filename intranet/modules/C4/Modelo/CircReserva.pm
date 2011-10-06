@@ -287,8 +287,10 @@ sub reservar {
 		
 		my $tipo_sancion = C4::AR::Sanciones::getTipoSancion('RE', $self->socio->getCod_categoria ,$self->db);
 
+
 # COMMENTADO porque si no hay una sancion se rompe
 # 		C4::AR::Debug::debug("***___________________________________TIPO SANCION RESERVA___________________________".$tipo_sancion->getTipo_sancion);	
+
 		
 		
 		if (($diasDeSancionReserva > 0)&&($tipo_sancion)) {
