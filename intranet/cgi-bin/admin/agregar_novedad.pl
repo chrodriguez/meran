@@ -36,20 +36,7 @@ if ($action){
 
           my $link = C4::AR::Social::shortenUrl($status->{'id'});
 
-          my $link_lenght= length($link);
-
-          C4::AR::Debug::debug($contenido);
-      #   Se reduce el contenido del post a 140 caracteres para que pueda publicarse en Twitter
-          if (length($contenido) > 140){
-                $cont= substr($contenido,0,(114 - $link_lenght));
-          } else {
-                if ((length($contenido) + $link_lenght) > 140){
-                      $cont= substr($contenido,0,length($contenido) - ($link_lenght + 26));         
-                } else {
-                      $cont=$contenido;
-                }
-          }
-        
+          $cont = $status->getResumen();
           my $post= C4::AR::Preferencias::getValorPreferencia('prefijo_twitter')." ".$cont."... Ver mas en: ".$link;
 
 

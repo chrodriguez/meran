@@ -42,6 +42,8 @@
         objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
         objAH.tipoAccion    = 'MOSTRAR_TABLA_VISUALIZACION';
         objAH.campo         = campo;
+        objAH.nivel         = $("#eleccion_nivel").val();
+        objAH.template      = $("#tipo_nivel3_id").val();;
         objAH.sendToServer();
     }
     

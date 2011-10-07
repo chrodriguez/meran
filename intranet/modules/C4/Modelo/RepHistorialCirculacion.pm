@@ -241,10 +241,10 @@ sub agregar {
     	#Asignando data...
     	if($data_hash->{'estado'} eq 'E'){
 		#es una reserva sobre el ITEM
-		  $self->setTipo_operacion('reserve');
+		  $self->setTipo_operacion('reserva');
 		}else{
 		#es una reserva sobre el GRUPO
-		  $self->setTipo_operacion('queue');
+		  $self->setTipo_operacion('espera');
 		$data_hash->{'id3'}= 0;
 		}
    	}

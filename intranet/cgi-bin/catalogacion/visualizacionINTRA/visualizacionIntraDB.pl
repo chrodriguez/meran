@@ -156,12 +156,10 @@ else{
                                                       entorno => 'datos_nivel1'}, 
                                                   'intranet'
                                       );
+
       my $campoX            = $obj->{'campoX'};
-
       my ($campos_array)    = C4::AR::VisualizacionIntra::getCamposXLike($campoX);
-
       my $info              = C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
-
       my $infoOperacionJSON = $info;
 
       C4::AR::Auth::print_header($session);
@@ -249,9 +247,8 @@ else{
                             debug => 1,
         });
         
-        my $campo                       = $obj->{'campo'} || "";
 
-        $t_params->{'visualizacion'}    = C4::AR::VisualizacionIntra::getSubCamposByCampo($campo);
+        $t_params->{'visualizacion'}    = C4::AR::VisualizacionIntra::getSubCampos($obj->{'campo'}, $obj->{'nivel'}, $obj->{'template'});
 
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);     
     }

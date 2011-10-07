@@ -8,6 +8,8 @@
 <script type="text/javascript" src="/intranet-tmpl/includes/usuarios/usuariosReales-min.js"></script>
 <script type="text/javascript" src="/includes/jquery/jquery.fileUploader-min.js"></script>
 <script type="text/javascript" src="/includes/jquery/jquery.livequery-min.js"></script>
+<script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox.js"></script>
+
 
 [% INCLUDE "WindowHelper.inc" %] 
 [% INCLUDE "ChangePasswordHelper.inc"  %]
@@ -296,6 +298,15 @@ $(document).ready(function(){
     USUARIO.ID      = '[% socio_modificar.getNro_socio %]';
 	detalleUsuario();
 
+//     $('#fancybox_ticket').modal({   containerCss:{
+//             backgroundColor:"#fff",
+//     //         borderColor:"#0063dc",
+//             height:420,
+//             padding:0,
+//             width:650
+//         },
+//     );
+
     makeToggle('toggle_container_block','trigger1',mostrarHistorialDePrestamos, 'historialPrestamos',true);
     makeToggle('toggle_container_block','trigger2',mostrarHistorialDeSanciones, 'historialSanciones',true);
     makeToggle('toggle_container_block','trigger3',mostrarHistorialDeReservas, 'historialReservas',true);
@@ -347,6 +358,7 @@ $(document).ready(function(){
             <div id="historialSanciones" class="toggle_container_block" style="display:none"></div>
         </fieldset>
     </div>
+    <div class="modal" id="ticket"></div> 
 </div>
 
 [% INCLUDE "intranet-bottom.inc" %]

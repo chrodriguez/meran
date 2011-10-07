@@ -32,7 +32,8 @@ sub getCamposXLike{
     my @filtros;
 
     push(@filtros, ( campo => { like => $campoX.'%'} ) );
-    push(@filtros, ( nivel => { eq => $nivel } ) );
+#     push(@filtros, ( nivel => { eq => $nivel } ) );
+    push(@filtros, ( or   => [ nivel => { eq => $nivel }, nivel => { eq => 0 } ] ));
 
      my $db_campos_MARC = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
                                                                                          query => \@filtros,
@@ -42,12 +43,6 @@ sub getCamposXLike{
                                                                         );
 
 
-#    my $db_campos_MARC = C4::Modelo::PrefEstructuraCampoMarc::Manager->get_pref_estructura_campo_marc(
-#                                                                                        query => \@filtros,
-#                                                                                        sort_by => ('campo'),
-#                                                                                        select   => [ 'campo', 'liblibrarian'],
-#                                                                                        group_by => [ 'campo'],
-#                                                                       );
 
     return($db_campos_MARC);
 }
@@ -77,7 +72,8 @@ sub getSubCamposLike{
     my @filtros;
 
     push(@filtros, ( campo => { eq => $campo} ) );
-    push(@filtros, ( nivel => { eq => $nivel } ) );
+#     push(@filtros, ( nivel => { eq => $nivel } ) );
+    push(@filtros, ( or   => [ nivel => { eq => $nivel }, nivel => { eq => 0 } ] ));
 
     my $db_campos_MARC = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
                                                                 query => \@filtros,
