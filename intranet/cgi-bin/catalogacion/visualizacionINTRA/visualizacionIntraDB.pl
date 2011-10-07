@@ -249,9 +249,8 @@ else{
                             debug => 1,
         });
         
-        my $campo                       = $obj->{'campo'} || "";
 
-        $t_params->{'visualizacion'}    = C4::AR::VisualizacionIntra::getSubCamposByCampo($campo);
+        $t_params->{'visualizacion'}    = C4::AR::VisualizacionIntra::getSubCampos($obj->{'campo'}, $obj->{'nivel'}, $obj->{'template'});
 
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);     
     }
