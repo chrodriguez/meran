@@ -178,23 +178,23 @@
                                                                 ) ;
                                 [% END %]                                
                             [% ELSE %]
-                                &nbsp;
+                                ----------
                             [% END %]
                         </td>
 
                         <td>
                         <span id="grupos_[% NIVEL.id1 %]" class="detalle_registro_edicion">
+                        
 	                        [% FOREACH NIVEL.grupos %]
 	                            [% IF edicion %]
 	                                [% edicion %] &nbsp;
-	                            [% END %]
+                                [% END %]
 	                            [% IF loop.prev.anio_publicacion != anio_publicacion %]
 	                                [% IF anio_publicacion %]
 	                                    ([% anio_publicacion %])
                                         <br />
 	                                [% END %]
-	                            [% END %]
-	                                
+	                            [% END %]       
 	                        [% END %]
 	                    </span>
                         </td>
