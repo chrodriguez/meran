@@ -130,6 +130,8 @@ sub reloadAllPreferences {
 
 sub getPreferenciasByArray {
     my ($variables_array)= @_;
+    
+    C4::AR::Debug::debug("ENTRO A getPreferenciasByArray() ===> FIXEAR PARA QUE USE LA CACHE!!!");
 
     my @filtros;
     my %preferencias_hash;
@@ -142,7 +144,6 @@ sub getPreferenciasByArray {
 
     my $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( query => [ or  => \@filtros ]);
 
-#     if ($preferencias_array_ref->[0]){
    if ($preferencias_array_ref){
 
         foreach my $p (@$preferencias_array_ref){
@@ -150,7 +151,6 @@ sub getPreferenciasByArray {
         }
 
         return \%preferencias_hash;
-#         return ($preferencia_array_ref);
     } else{
         return undef;
     }
@@ -161,17 +161,16 @@ sub getAllPreferencias {
     my @filtros;
     my %preferencias_hash;
 
-
     my $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( query => \@filtros );
 
-#     if ($preferencias_array_ref->[0]){
-   if ($preferencias_array_ref){
+    if ($preferencias_array_ref){
 
         foreach my $p (@$preferencias_array_ref){
             $preferencias_hash{$p->getVariable} = $p->getValue;
         }
 
         return \%preferencias_hash;
+        
     } else{
         return undef;
     }
@@ -184,6 +183,7 @@ BEGIN
 }
 
 sub getMenuPreferences{
+
     my $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( 
                                     query => [ variable=> { like => '%showMenuItem_%' }],
                             );
@@ -200,6 +200,7 @@ sub getMenuPreferences{
 =cut
 sub getPreferenciasByCategoria{
     my ($str)=@_;
+        
     my $preferencias_array_ref;
     my $prefTemp = C4::Modelo::PrefPreferenciaSistema->new();
   
@@ -215,6 +216,7 @@ sub getPreferenciasByCategoria{
 =cut
 sub getPreferenciasLikeCategoria{
     my ($str)=@_;
+    
     my $preferencias_array_ref;
     my $prefTemp = C4::Modelo::PrefPreferenciaSistema->new();
   
@@ -230,6 +232,7 @@ sub getPreferenciasLikeCategoria{
 =cut
 sub getPreferenciasByCategoriaHash{
     my ($str)=@_;
+        
     my $preferencias_array_ref;
     my $prefTemp = C4::Modelo::PrefPreferenciaSistema->new();
   
@@ -247,7 +250,7 @@ sub getPreferenciasByCategoriaHash{
 sub getPreferenciaLike {
     my ($str,$orden)=@_;
 
- C4::AR::Debug::debug("getValorPreferencia => getPreferenciaLike == $str");
+    C4::AR::Debug::debug("getValorPreferencia => getPreferenciaLike == $str");
 
     my $preferencias_array_ref;
     my @filtros;
@@ -281,6 +284,8 @@ sub getPreferenciaLikeConCategoria {
 
 sub getPreferencia{
     my ($variable)  = @_;
+    
+    C4::AR::Debug::debug("ENTRO A getPreferencia() ===> FIXEAR PARA QUE USE LA CACHE!!!");
 
     my $preferencia_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( query => [ variable => { eq => "".$variable} ]);
 
@@ -295,13 +300,13 @@ sub getPreferencia{
 sub getValorPreferencia {
     my ($variable)  = @_;
 
-    #verifico si se encuentra en la cache, sino se busca de la base
-#     if (defined $PREFERENCES->{$variable}){
-#          C4::AR::Debug::debug("getValorPreferencia => VARIABLE ==".$variable."== valor => ".$PREFERENCES->{$variable}." CACHED!!!!!!!");
-#         return $PREFERENCES->{$variable};
-#     }
+#    verifico si se encuentra en la cache, sino se busca de la base
+     if (defined $PREFERENCES->{$variable}){
+          C4::AR::Debug::debug("getValorPreferencia => VARIABLE ==".$variable."== valor => ".$PREFERENCES->{$variable}." CACHED!!!!!!!");
+         return $PREFERENCES->{$variable};
+     }
 
-#      C4::AR::Debug::debug("getValorPreferencia => VARIABLE ==".$variable."== NO CACHED!!!!!!!");
+      C4::AR::Debug::debug("getValorPreferencia => VARIABLE ==".$variable."== NO CACHED!!!!!!!");
     my $preferencia_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( query => [ variable => { eq => $variable} ]);
 
     if ($preferencia_array_ref->[0]){
@@ -370,7 +375,8 @@ sub setVariable {
         C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor CACHE antes => ".$PREFERENCES->{$variable});
         $preferencia->[0]->setValue($valor);
         $preferencia->[0]->save();
-        reloadAllPreferences();
+        $PREFERENCES->{$variable} = $valor;
+        # porque hacia esto ? ==> reloadAllPreferences();
         
         C4::AR::Debug::debug("Preferencias => setVariable => ".$variable." valor CACHE despues => ".$PREFERENCES->{$variable});
         C4::AR::Debug::debug("Preferencias => getVariable => ".$variable." valor desde la base => ".C4::AR::Preferencias::getValorPreferencia($variable));
@@ -445,6 +451,7 @@ sub getConfigVisualizacionOPAC{
 sub getMetodosAuth{
 	my @filtros;
 	my @arreglo_temp;
+		
     use C4::Modelo::SysMetodoAuth::Manager;
     
     push (@filtros, ('enabled' => {eq => 1}) );
@@ -461,12 +468,12 @@ sub getMetodosAuth{
 }
 
 sub getMetodosAuthAll{
+	
     use C4::Modelo::SysMetodoAuth::Manager;
     my $metodos_auth = C4::Modelo::SysMetodoAuth::Manager::get_sys_metodo_auth( query => [], 
                                                                                 sort_by => 'orden ASC',
                                                                               );
 
-    
 	return ($metodos_auth);
 }
 

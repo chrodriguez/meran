@@ -2789,12 +2789,13 @@ fieldset {
 	width: 554px;
 	position: relative;
 	height: 49px;
+	margin: 0 auto;
+	left: 10%;
 }
 
 #divsearchform {
 	height: 154px;
-	padding-top: 58px;
-	padding-left: 348px;
+    margin: 0 auto;
 }
 
 #search {
