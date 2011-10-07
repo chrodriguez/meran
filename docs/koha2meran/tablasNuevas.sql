@@ -268,6 +268,7 @@ INSERT  INTO `cat_pref_mapeo_koha_marc` (`tabla`, `campoTabla`, `nombre`, `campo
 ( 'publisher', 'publisher', 'Nombre de la editorial, distribuidor, etc.', '260', 'b'),
 ( 'biblioitems', 'classification', '', '900', 'b'),
 ( 'biblioitems', 'idLanguage', '', '041', 'h'),
+( 'biblioitems', 'fasc', 'Fasciculo', '863', 'b'),
 ( 'biblioitems', 'idSupport', '', '245', 'h');
 
 DROP TABLE IF EXISTS `cat_registro_marc_n1`;
