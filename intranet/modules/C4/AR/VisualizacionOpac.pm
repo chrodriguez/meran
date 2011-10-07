@@ -148,6 +148,23 @@ sub getSubCamposByCampo{
 }
 
 =item
+    
+=cut
+sub getSubCampos{
+    my ($campo, $nivel, $template) = @_;
+
+    my @filtros;
+    
+    push ( @filtros, ( nivel            => { eq => $nivel } ));
+    push ( @filtros, ( campo            => { eq => $campo } ));
+    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => 'ALL' }, tipo_ejemplar    => { eq => $template }]  ));
+
+    my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros, sort_by => ('orden_subcampo'),);
+
+    return ($configuracion);
+}
+
+=item
     Esta funcion edita la vista_campo de un grupo recibido como parametro
 =cut
 sub editVistaGrupo{
