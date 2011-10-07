@@ -280,8 +280,25 @@ print "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!
 
         if($_->{'campoTabla'} eq 'itemtype'){ $dn2->{'valor'}='cat_ref_tipo_nivel3@'.$biblioitem->{$_->{'campoTabla'}}; }
         elsif($_->{'campoTabla'} eq 'idLanguage'){ $dn2->{'valor'}='ref_idioma@'.$biblioitem->{$_->{'campoTabla'}}; }
-        elsif($_->{'campoTabla'} eq 'idCountry'){ $dn2->{'valor'}='ref_pais@'.$biblioitem->{$_->{'campoTabla'}}; }
-	  # LA Localidad pasa como texto
+        elsif($_->{'campoTabla'} eq 'volume'){ 
+			#Hay que ver si se trata de una revista (863 a) o de otra cosa (440 v) y queda como está
+			$dn2->{'valor'}='ref_idioma@'.$biblioitem->{$_->{'campoTabla'}}; 
+			if($biblioitem->{'itemtype'} eq 'REV'){
+				$dn2->{'campo'}='863';
+				$dn2->{'subcampo'}='a';
+			}
+			$dn2->{'valor'}=$biblioitem->{$_->{'campoTabla'}}; 
+		}
+		elsif($_->{'campoTabla'} eq 'publicationyear'){ 
+			#Hay que ver si se trata de una revista (863 i) o de otra cosa (260 c) y queda como está
+			$dn2->{'valor'}='ref_idioma@'.$biblioitem->{$_->{'campoTabla'}}; 
+			if($biblioitem->{'itemtype'} eq 'REV'){
+				$dn2->{'campo'}='863';
+				$dn2->{'subcampo'}='i';
+			}
+			$dn2->{'valor'}=$biblioitem->{$_->{'campoTabla'}}; 
+		}
+        elsif($_->{'campoTabla'} eq 'idCountry'){ $dn2->{'valor'}='ref_pais@'.$biblioitem->{$_->{'campoTabla'}}; } # LA Localidad pasa como texto
         elsif($_->{'campoTabla'} eq 'place'){ #Esto no se puede pasar sin buscar la referencia
                       my $idLocalidad= buscarLocalidad($biblioitem->{$_->{'campoTabla'}});
                        if($idLocalidad){
