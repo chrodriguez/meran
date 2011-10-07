@@ -156,12 +156,10 @@ else{
                                                       entorno => 'datos_nivel1'}, 
                                                   'intranet'
                                       );
+
       my $campoX            = $obj->{'campoX'};
-
       my ($campos_array)    = C4::AR::VisualizacionIntra::getCamposXLike($campoX);
-
       my $info              = C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
-
       my $infoOperacionJSON = $info;
 
       C4::AR::Auth::print_header($session);
