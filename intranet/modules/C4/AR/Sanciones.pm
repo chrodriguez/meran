@@ -41,15 +41,26 @@ sub getSancionesLike {
     my $dateformat  = C4::Date::get_date_format();
     my $hoy         = C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
     
-    push (@filtros, 
-         ( or => [  nombre          => { like => '%'.$str.'%'}, 
-                    apellido        => { like => $str.'%'}, 
-                    nro_socio       => { like => '%'.$str.'%'}
-                 ],
+    my @searchstring_array= split(' ',$str);
+    
+    C4::AR::Utilidades::printARRAY(\@searchstring_array);
+
+    foreach my $s (@searchstring_array){ 
+                push (  @filtros, ( or   => [   
+#                                               
+                                                apellido            => { like => $s.'%'},
+                                                apellido            => { like => '% '.$s.'%'},
+                                                nro_documento       => { like => '%'.$s.'%' }, 
+                                                legajo              => { like => '%'.$s.'%' },
+                                                nro_socio           => { like => '%'.$s.'%' }          
+                                            ],
+                    
                     fecha_comienzo  => { le => $hoy },
-                    fecha_final     => { ge => $hoy},           
+                    fecha_final     => { ge => $hoy},  
+          
          ));
-  
+    }
+
     $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion( 
                                         query           => \@filtros,
                                         select          => ['circ_sancion.*'],
