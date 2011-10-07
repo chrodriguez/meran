@@ -36,4 +36,4 @@ function updateInfoRenovar(responseText){cancelarDiv();var infoHash=JSONstring.t
 detallePrestamos(USUARIO.ID,updateInfoPrestamos);ejemplaresDelGrupo(ID_N2);}
 function devolver(){objAH=new AjaxHelper(updateInfoDevolver);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/circ/circulacionDB.pl';objAH.tipoAccion='REALIZAR_DEVOLUCION';objAH.datosArray=INFO_PRESTAMOS_ARRAY;objAH.nro_socio=USUARIO.ID;objAH.sendToServer();}
 function updateInfoDevolver(responseText){}
-function imprimirTicket(ticket,num){if(ticket!=0){var obj=JSONstring.make(ticket);window.open(URL_PREFIX+"/circ/ticket.pl?token="+token+"&obj="+obj,"Boleta "+num,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");}}
+function imprimirTicket(ticket,num){if(ticket!=0){var obj=JSONstring.make(ticket);$('#link_ticket').attr("href",URL_PREFIX+"/circ/ticket.pl?token="+token+"&obj="+obj);$('#link_ticket').attr(" target","_blank");$('.link_ticket').popupWindow({height:500,width:800,top:50,left:50});}}
