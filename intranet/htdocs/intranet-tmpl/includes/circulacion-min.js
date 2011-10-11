@@ -17,7 +17,8 @@ opciones=opciones+">"+items_array[i].label+"</option>";}
 html=html+opciones+"</select>";return html;}
 function prestar(){for(var i=0;i<INFO_PRESTAMOS_ARRAY.length;i++){INFO_PRESTAMOS_ARRAY[i].id3=$('#comboItems'+i).val();INFO_PRESTAMOS_ARRAY[i].barcode=$("#comboItems"+i+" option:selected").text();INFO_PRESTAMOS_ARRAY[i].tipoPrestamo=$('#tiposPrestamos'+i).val();INFO_PRESTAMOS_ARRAY[i].descripcionTipoPrestamo=$("#tiposPrestamos"+i+" option:selected").text();}
 objAH=new AjaxHelper(updateInfoPrestarReserva);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/circ/circulacionDB.pl';objAH.tipoAccion='PRESTAMO';objAH.datosArray=INFO_PRESTAMOS_ARRAY;objAH.nro_socio=USUARIO.ID;objAH.sendToServer();}
-function updateInfoPrestarReserva(responseText){cancelarDiv();var infoHash=JSONstring.toObject(responseText);var messageArray=infoHash.messages;var ticketsArray=infoHash.tickets;var mensajes='';alert(messageArray);detalleReservas(USUARIO.ID,updateInfoReservas);ejemplaresDelGrupo(ID_N2);}
+function updateInfoPrestarReserva(responseText){cancelarDiv();var infoHash=JSONstring.toObject(responseText);var messageArray=infoHash.messages;var ticketsArray=infoHash.tickets;var mensajes='';for(i=0;i<messageArray.length;i++){imprimirTicket(ticketsArray[i].ticket,i);setMessages(messageArray[i]);}
+detalleReservas(USUARIO.ID,updateInfoReservas);ejemplaresDelGrupo(ID_N2);}
 function cancelarDiv(){$('#confirmar_div').html('');}
 function cancelarReserva(reserveNumber){jConfirm(ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_RESERVA,'Info',function(is_confirmed){if(is_confirmed){objAH=new AjaxHelper(updateInfoCancelacion);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/circ/circulacionDB.pl';objAH.tipoAccion='CANCELAR_RESERVA';objAH.nro_socio=USUARIO.ID;objAH.id_reserva=reserveNumber;objAH.sendToServer();}});}
 function updateInfoCancelacion(responseText){var Messages=JSONstring.toObject(responseText);setMessages(Messages);detalleReservas(USUARIO.ID,updateInfoReservas);}
@@ -36,4 +37,5 @@ function updateInfoRenovar(responseText){cancelarDiv();var infoHash=JSONstring.t
 detallePrestamos(USUARIO.ID,updateInfoPrestamos);ejemplaresDelGrupo(ID_N2);}
 function devolver(){objAH=new AjaxHelper(updateInfoDevolver);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/circ/circulacionDB.pl';objAH.tipoAccion='REALIZAR_DEVOLUCION';objAH.datosArray=INFO_PRESTAMOS_ARRAY;objAH.nro_socio=USUARIO.ID;objAH.sendToServer();}
 function updateInfoDevolver(responseText){}
-function imprimirTicket(ticket,num){if(ticket!=0){var obj=JSONstring.make(ticket);$('#link_ticket').attr("href",URL_PREFIX+"/circ/ticket.pl?token="+token+"&obj="+obj);$('#link_ticket').attr(" target","_blank");$('.link_ticket').popupWindow({height:500,width:800,top:50,left:50});}}
+function imprimirTicket(ticket,num){if(ticket!=0){obj=JSONstring.make(ticket);objAH=new AjaxHelper(updateImprimirTicket);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/circ/circulacionDB.pl';objAH.tipoAccion='IMPRIMIR_COMPROBANTE';objAH.obj=obj;objAH.nroBoleta=num;objAH.sendToServer();}}
+function updateImprimirTicket(responseText){$('#ticket').html(responseText);$('#ticket').printElement({printBodyOptions:{styleToAdd:'color:#FFFFFF;',classNameToAdd:'comprobante'}});}

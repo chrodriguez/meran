@@ -285,15 +285,11 @@ function updateInfoPrestarReserva(responseText){
 	var messageArray    = infoHash.messages;
 	var ticketsArray    = infoHash.tickets;
 	var mensajes        = '';  
-   
-    alert(messageArray);
-    
-//     for(var i=0; i<messageArray.length;i++){
-//  		imprimirTicket(ticketsArray[i].ticket,i)
-//   
-// //         imprimirTicket(ticketsArray, i);
-//   		setMessages(messageArray[i]);
-//   	}
+  	
+  	for(i=0; i<messageArray.length;i++){
+        imprimirTicket(ticketsArray[i].ticket,i);
+        setMessages(messageArray[i]);
+    }
 
 	detalleReservas(USUARIO.ID,updateInfoReservas);
     ejemplaresDelGrupo(ID_N2);
@@ -506,66 +502,59 @@ function updateInfoDevolver(responseText){
  *          num, es el indice que se usa para darle nombre a la ventana.
  */
 
-// function imprimirTicket(ticket,num){
-// //     var obj;
-// // alert(tickets[0].ticket);
-// //  if(ticket != 0){
-// //    for(i=0; i< ticket.length;i++){
-// //       obj=JSONstring.make(ticket[i]);
-// //       alert(obj);
-// //   }
-//     if(ticket != 0){   
-//         obj=JSONstring.make(ticket);
-//         objAH               = new AjaxHelper(updateImprimirTicket);
-//         objAH.debug         = true;
-//         objAH.showOverlay   = true;
-//         objAH.url           = URL_PREFIX+'/circ/circulacionDB.pl';
-//         objAH.tipoAccion    = 'IMPRIMIR_COMPROBANTE';
-//         objAH.obj           = obj;
-//         objAH.nroBoleta     = num;
-//         //se envia la consulta
-//         objAH.sendToServer();
+function imprimirTicket(ticket,num){
+//     var obj;
+// alert(tickets[0].ticket);
+//  if(ticket != 0){
+//    for(i=0; i< ticket.length;i++){
+//       obj=JSONstring.make(ticket[i]);
+//       alert(obj);
 //   }
-// }
-// 
-// 
-// function updateImprimirTicket(responseText){
-//        
-// // //     $('#ticket').window.print();window.close();
-// //       $(document).ajaxStop(function() {
-//         $('#ticket').html(responseText).modal();
-// //       $('#ticket').modal({   containerCss:{
-// //             backgroundColor:"#fff",
-// //     //         borderColor:"#0063dc",
-// //             height:420,
-// //             padding:0,
-// //             width:650,
-// //             
-// //         },
-// //       });
-// //         return false;
-// //      });
-//          
-// }
+    if(ticket != 0){   
+        obj=JSONstring.make(ticket);
+        objAH               = new AjaxHelper(updateImprimirTicket);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;
+        objAH.url           = URL_PREFIX+'/circ/circulacionDB.pl';
+        objAH.tipoAccion    = 'IMPRIMIR_COMPROBANTE';
+        objAH.obj           = obj;
+        objAH.nroBoleta     = num;
+        //se envia la consulta
+        objAH.sendToServer();
+  }
+}
+
+
+function updateImprimirTicket(responseText){
+       
+// //     $('#ticket').window.print();window.close();
+//       $(document).ajaxStop(function() {
+        $('#ticket').html(responseText);
+        $('#ticket').printElement({ printBodyOptions:
+                                        { styleToAdd:'color:#FFFFFF;',
+                                        classNameToAdd : 'comprobante'} 
+                                  }
+        );
+//       $('#ticket').modal({   containerCss:{
+//             backgroundColor:"#fff",
+//     //         borderColor:"#0063dc",
+//             height:420,
+//             padding:0,
+//             width:650,
+//             
+//         },
+//       });
+//         return false;
+//      });
+         
+}
 
 // FIXME esta muy feo esto!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
+/*
 function imprimirTicket(ticket,num){
 
 	if(ticket != 0){
-		var obj=JSONstring.make(ticket);
-//         $('#link_ticket').attr("href",URL_PREFIX+"/circ/ticket.pl?token="+token+"&obj="+obj );
-//         $('#link_ticket').attr(" target", "_blank" );
-//        
-//         $('.link_ticket').popupWindow({ 
-//               height:500, 
-//               width:800, 
-//               top:50, 
-//               left:50 
-//         });
-//          
-        
-        
+		var obj=JSONstring.make(ticket);        
   		window.open (URL_PREFIX+"/circ/ticket.pl?token="+token+"&obj="+obj, "Boleta "+num,this.href);
 	}
-}
+}*/
