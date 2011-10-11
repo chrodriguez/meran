@@ -1171,8 +1171,14 @@ sub setLocale{
 
 
 sub tieneFoto{
-    my ($self)      = shift;
+    my ($self)          = shift;
+    my ($session_type)  = shift;
+    
     my $picturesDir = C4::Context->config("picturesdir");
+    
+    if ($session_type eq "opac"){
+    	$picturesDir = C4::Context->config("picturesdir_opac");
+    }
     my $foto;
   
     if (opendir(DIR, $picturesDir)) {

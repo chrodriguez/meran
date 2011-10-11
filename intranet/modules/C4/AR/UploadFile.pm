@@ -43,12 +43,18 @@ sub uploadPhoto{
     use C4::Modelo::UsrSocio;
     
     my $uploaddir       = C4::Context->config("picturesdir");
+    my $uploaddir_oapc  = C4::Context->config("picturesdir_opac");
     my $maxFileSize     = 2048 * 2048; # 1/2mb max file size...
     my $file            = $query->param('POSTDATA');
     my $nro_socio       = C4::AR::Auth::getSessionNroSocio();
     my $name            = $nro_socio;
     my $socio           = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
     my $type            = '';
+    
+    
+    if (C4::AR::Auth::getSessionType() eq "opac"){
+    	$uploaddir = $uploaddir_oapc;
+    }
      
     if ($file =~ /^GIF/i) {
         $type = "jpg";

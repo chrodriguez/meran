@@ -2,15 +2,6 @@
     var URL_PREFIX  = '[% url_prefix %]';
 </script>
 
-
-<style>
-.main-content{
-    top: 50%;
-    display: table-cell; 
-    vertical-align: middle;
-    position: absolute;
-}
-</style>
 [% USE HTML %]
 
 <!-- Login -->
@@ -18,6 +9,14 @@
      
 
 [% IF !loginFailed  %]
+		<style>
+			.main-content{
+			    top: 50%;
+			    display: table-cell; 
+			    vertical-align: middle;
+			    position: absolute;
+			}
+		</style>
         <div id="divsearchform" >
             <form id="searchform_main" action="[% url_prefix %]/opac-busquedasDB.pl" method="get" >
                 <fieldset>
