@@ -217,6 +217,24 @@ sub getSubCamposByCampo{
     return ($configuracion);
 }
 
+=item
+    
+=cut
+sub getSubCampos{
+    my ($campo, $nivel, $template) = @_;
+
+    my @filtros;
+    
+    push ( @filtros, ( nivel            => { eq => $nivel } ));
+    push ( @filtros, ( campo            => { eq => $campo } ));
+    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => 'ALL' }, tipo_ejemplar   => { eq => $template }]  ));
+
+
+    my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros, sort_by => ('orden_subcampo'),);
+
+    return ($configuracion);
+}
+
 
 =item
     Funcion que devuelve TODOS los campos ordenados por orden y por nivel si recibe el parametro nivel y agrupados por campo.

@@ -20,6 +20,7 @@
     }
     
     var campo;
+
     function editSubcampos(campo_parametro){
         campo               = campo_parametro;
         objAH               = new AjaxHelper(updateEditSubcampos);
@@ -27,7 +28,9 @@
         objAH.showOverlay   = true;  
         objAH.url           = URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
         objAH.tipoAccion    = 'MOSTRAR_TABLA_VISUALIZACION';
-        objAH.campo         = campo;
+        objAH.campo         = campo
+        objAH.nivel         = $("#eleccion_nivel").val();
+        objAH.template      = $("#tipo_nivel3_id").val();;
         objAH.sendToServer();
     }
     

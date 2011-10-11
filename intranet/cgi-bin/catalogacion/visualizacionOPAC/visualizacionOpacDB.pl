@@ -112,7 +112,7 @@ else{
 
         my $campo                       = $obj->{'campo'} || "";
 
-        $t_params->{'visualizacion'}    = C4::AR::VisualizacionOpac::getSubCamposByCampo($campo);
+        $t_params->{'visualizacion'}    = C4::AR::VisualizacionOpac::getSubCampos($obj->{'campo'}, $obj->{'nivel'}, $obj->{'template'});
 
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);     
     }

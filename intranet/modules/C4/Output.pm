@@ -1,32 +1,5 @@
 package C4::Output;
 
-# $Id: Output.pm,v 1.45.2.2 2004/02/29 07:59:08 acli Exp $
-
-#package to deal with marking up output
-#You will need to edit parts of this pm
-#set the value of path to be where your html lives
-
-
-# Copyright 2000-2002 Katipo Communications
-#
-# This file is part of Koha.
-#
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
-#
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
-
-# NOTE: I'm pretty sure this module is deprecated in favor of
-# templates.
-
 use strict;
 require Exporter;
 
@@ -77,9 +50,9 @@ sub gettemplate {
     my ($tmplbase, $opac, $loging_out, $socio) = @_;
 
 
-#     my $preferencias_hash_ref = C4::AR::Preferencias::getPreferenciasByArray(['tema_opac', 'tema_intra', 'defaultUI', 'titulo_nombre_ui']);
+#     my $preferencias_hash_ref = C4::AR::Preferencias::getPreferenciasByArray(['CirculationEnabled', 'LibraryName', 'defaultUI', 'titulo_nombre_ui','timeInterval','enable_localization_flags']);
 
-# C4::AR::Debug::debug("tema_opac ".$preferencias_hash_ref->{'tema_opac'});
+# C4::AR::Debug::debug("tema_opac ".$preferencias_hash_ref->{'defaultUI'});
 
     my $htdocs;
     my $tema_opac   = C4::AR::Preferencias::getValorPreferencia('defaultUI');
@@ -183,11 +156,3 @@ END { }       # module clean-up code here (global destructor)
 
 1;
 __END__
-
-=back
-
-=head1 AUTHOR
-
-Koha Developement team <info@koha.org>
-
-=cut

@@ -41,15 +41,26 @@ sub getSancionesLike {
     my $dateformat  = C4::Date::get_date_format();
     my $hoy         = C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
     
-    push (@filtros, 
-         ( or => [  nombre          => { like => '%'.$str.'%'}, 
-                    apellido        => { like => $str.'%'}, 
-                    nro_socio       => { like => '%'.$str.'%'}
-                 ],
+    my @searchstring_array= split(' ',$str);
+    
+    C4::AR::Utilidades::printARRAY(\@searchstring_array);
+
+    foreach my $s (@searchstring_array){ 
+                push (  @filtros, ( or   => [   
+#                                               
+                                                apellido            => { like => $s.'%'},
+                                                apellido            => { like => '% '.$s.'%'},
+                                                nro_documento       => { like => '%'.$s.'%' }, 
+                                                legajo              => { like => '%'.$s.'%' },
+                                                nro_socio           => { like => '%'.$s.'%' }          
+                                            ],
+                    
                     fecha_comienzo  => { le => $hoy },
-                    fecha_final     => { ge => $hoy},           
+                    fecha_final     => { ge => $hoy},  
+          
          ));
-  
+    }
+
     $sanciones_array_ref = C4::Modelo::CircSancion::Manager->get_circ_sancion( 
                                         query           => \@filtros,
                                         select          => ['circ_sancion.*'],
@@ -328,7 +339,7 @@ sub sanciones {
                                                                             fecha_comienzo  => { le => $hoy },
                                                                             fecha_final     => { ge => $hoy},
                                                                               ],
-                                                                    select  => ['circ_sancion.*'],
+                                                                    select  => ['*'],
                                                                     with_objects => ['socio','socio.persona','ref_tipo_sancion','nivel3', 'reserva'],
                                                                     sort_by => $orden,
                                                                     limit   => $cantR,
@@ -684,15 +695,11 @@ sub getHistorialSanciones{
 
     my $err         = "Error con la fecha";
     my $dateformat  = C4::Date::get_date_format();
-    my $hoy         = C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days",\$err),$dateformat);
+    my $hoy         = C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
     
     my @filtros;
-    push(@filtros, or   => [ 
-                   and  => [ nro_socio      => { eq => $nro_socio }, 
-                             fecha_final    => { lt => $hoy } ], 
-                   and  => [ nro_socio      => { eq => $nro_socio }, 
-                             tipo_operacion => { eq => 'Borrado' } ]                             
-                             ] );
+    push(@filtros, and  => [ nro_socio      => { eq => $nro_socio }, 
+                            or   => [ fecha_final    => { lt => $hoy },fecha_final    => undef ,tipo_operacion => { eq => 'Borrado' } ]]);
 
     use C4::Modelo::RepHistorialSancion::Manager;
     my $historial_sanciones_array_ref = C4::Modelo::RepHistorialSancion::Manager->get_rep_historial_sancion (   

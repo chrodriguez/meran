@@ -284,12 +284,16 @@ function updateInfoPrestarReserva(responseText){
 	var infoHash        = JSONstring.toObject(responseText);
 	var messageArray    = infoHash.messages;
 	var ticketsArray    = infoHash.tickets;
-	var mensajes        = '';
-
-	for(var i=0; i<messageArray.length;i++){
-		imprimirTicket(ticketsArray[i].ticket,i);
-  		setMessages(messageArray[i]);
-	}
+	var mensajes        = '';  
+   
+    alert(messageArray);
+    
+//     for(var i=0; i<messageArray.length;i++){
+//  		imprimirTicket(ticketsArray[i].ticket,i)
+//   
+// //         imprimirTicket(ticketsArray, i);
+//   		setMessages(messageArray[i]);
+//   	}
 
 	detalleReservas(USUARIO.ID,updateInfoReservas);
     ejemplaresDelGrupo(ID_N2);
@@ -501,7 +505,51 @@ function updateInfoDevolver(responseText){
  * @params: ticket, es el objeto que representa al ticket, o 0 si hubo algun error antes de generar el ticket.
  *          num, es el indice que se usa para darle nombre a la ventana.
  */
+
+// function imprimirTicket(ticket,num){
+// //     var obj;
+// // alert(tickets[0].ticket);
+// //  if(ticket != 0){
+// //    for(i=0; i< ticket.length;i++){
+// //       obj=JSONstring.make(ticket[i]);
+// //       alert(obj);
+// //   }
+//     if(ticket != 0){   
+//         obj=JSONstring.make(ticket);
+//         objAH               = new AjaxHelper(updateImprimirTicket);
+//         objAH.debug         = true;
+//         objAH.showOverlay   = true;
+//         objAH.url           = URL_PREFIX+'/circ/circulacionDB.pl';
+//         objAH.tipoAccion    = 'IMPRIMIR_COMPROBANTE';
+//         objAH.obj           = obj;
+//         objAH.nroBoleta     = num;
+//         //se envia la consulta
+//         objAH.sendToServer();
+//   }
+// }
+// 
+// 
+// function updateImprimirTicket(responseText){
+//        
+// // //     $('#ticket').window.print();window.close();
+// //       $(document).ajaxStop(function() {
+//         $('#ticket').html(responseText).modal();
+// //       $('#ticket').modal({   containerCss:{
+// //             backgroundColor:"#fff",
+// //     //         borderColor:"#0063dc",
+// //             height:420,
+// //             padding:0,
+// //             width:650,
+// //             
+// //         },
+// //       });
+// //         return false;
+// //      });
+//          
+// }
+
 // FIXME esta muy feo esto!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 function imprimirTicket(ticket,num){
 
 	if(ticket != 0){

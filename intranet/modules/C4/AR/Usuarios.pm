@@ -78,9 +78,6 @@ use vars qw(@EXPORT_OK @ISA);
     needsDataValidation
     crearPersonaLDAP
     _verificarLibreDeuda
-    recoverPassword
-    checkRecoverLink
-    changePasswordFromRecover
     updateUserProfile
 );
 

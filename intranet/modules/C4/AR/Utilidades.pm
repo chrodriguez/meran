@@ -3968,14 +3968,15 @@ sub getFeriados{
 
 sub getProximosFeriados{
 	
-	my ($todos) = @_;
+	my ($desde) = @_;
     require C4::Modelo::PrefFeriado;
     require C4::Modelo::PrefFeriado::Manager;
     
-
     my $hoy = C4::AR::Utilidades::getToday();
 	
-	my $feriados = C4::Modelo::PrefFeriado::Manager->get_pref_feriado(query => [ fecha => { ge => $hoy } ], sort_by => ['fecha ASC']);
+	$desde = $desde || $hoy;
+	
+	my $feriados = C4::Modelo::PrefFeriado::Manager->get_pref_feriado(query => [ fecha => { ge => $desde } ], sort_by => ['fecha ASC']);
 
     return ($feriados);
 }
