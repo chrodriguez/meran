@@ -12,7 +12,7 @@
 
               <div>
                 [% IF socio_data.usr_tiene_foto %]
-                    <img width="50" height="50" src="/uploads/pictures/[% socio_data.usr_tiene_foto %]"
+                    <img width="50" height="50" src="/uploads/pictures-opac/[% socio_data.usr_tiene_foto %]"
                         alt="[% socio_data.usr_apellido %], [% socio_data.usr_apellido %]"/>
                 [% ELSE %]
                       <img  width="50" height="50" src="[% temas %]/[% user_theme %]/imagenes/no_foto.jpg" 
