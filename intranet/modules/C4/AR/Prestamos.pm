@@ -49,6 +49,7 @@ $VERSION = 3;
     &getInfoPrestamo
     &getHistorialPrestamosVigentesParaTemplate
     &tienePrestamos
+    &enviarRecordacionDePrestamo
 );
 
 
@@ -117,7 +118,8 @@ sub prestamosHabilitadosPorTipo {
     my $tipos_habilitados_array_ref = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo(   
                                                                         query => [ 
                                                                                 codigo_disponibilidad   => { eq => $codigo_disponibilidad },
-                                                                                habilitado          => { eq => 1}
+                                                                                habilitado          => { eq => 1},
+                                                                                id 					=> { ne => 0 } # No debe mostrar NUNCA el tipo RESERVA
                                                                             ], 
                                         );
 
@@ -321,6 +323,7 @@ sub getTiposDePrestamos {
 #retorna los datos de TODOS los tipos de prestamos
 use C4::Modelo::CircRefTipoPrestamo::Manager;
    my @filtros;
+   push(@filtros, ( id => { ne => 0 } )); # No debe mostrar NUNCA el tipo RESERVA
    my  $circ_ref_tipo_prestamo = C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo( query => \@filtros);
    return($circ_ref_tipo_prestamo);
 }
@@ -387,10 +390,10 @@ sub t_realizarPrestamo{
         my $db = $prestamo->db;
            $db->{connect_options}->{AutoCommit} = 0;
            $db->begin_work;
-        eval{
+        #eval{
             $prestamo->prestar($params,$msg_object);
             $db->commit;
-        };
+        #};
         if ($@){
             C4::AR::Debug::debug("ERROR");
             #Se loguea error de Base de Datos
@@ -1094,15 +1097,110 @@ sub getCountPrestamosDeGrupo {
 
 
 =item
-Se envian los correos recordatorios si se encuentra seteada la preferencia "remainderMail"
+    Se envian los mails con los recordatorios de vencimiento
 =cut
-sub enviarCorreosDeRecordacion {
-# C4::AR::Debug::debug("EnabledMailSystem ".C4::Context->preference("EnabledMailSystem"));
-# C4::AR::Debug::debug("reminderMail ".C4::Context->preference("reminderMail"));
+sub enviarRecordacionDePrestamo {
 
-    if ((C4::Context->preference("EnabledMailSystem"))&&(C4::Context->preference("reminderMail") eq 1)){
-# TODO falta pasar
-        &C4::AR::Prestamos::enviar_recordatorios_prestamos();
+     my ($today) = @_;
+
+    # remindUser es la preferencia global que habilita el recordatorio al socio   
+    if (C4::AR::Preferencias::getValorPreferencia('remindUser')){
+
+        my @array_prestamos     = getAllPrestamosActivos($today); 
+        
+        _enviarRecordatorio(@array_prestamos);
+    }
+}
+
+=item
+    Funcion interna que envia los recordatorios
+=cut
+sub _enviarRecordatorio{
+
+    my (@array_prestamos) = @_;
+
+    use C4::AR::Usuarios;
+    if(scalar(@array_prestamos) > 0){
+        foreach my $pres (@array_prestamos){
+       
+            my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($pres->{'nro_socio'});
+            
+            # TODO: obtener los medios (twitter, facebook, etc) que tenga el usuario seleccionados para avisarle por ese medio
+            # por ahora lo hacemos solo con mail  
+             
+            # checkeamos si estan habilitadas las preferencias para mail                 
+            if ((C4::AR::Preferencias::getValorPreferencia('EnabledMailSystem'))&&(C4::AR::Preferencias::getValorPreferencia("reminderMail"))){     
+                # si el socio tiene habilitado el recordatorio de vencimiento
+                if($socio->getRemindFlag()){  
+            
+                    my %mail;                    
+                    my $nivel3              = C4::AR::Nivel3::getNivel3FromId3($pres->{'id3'});                    
+                    my $nivel1              = C4::AR::Nivel3::getNivel1FromId1($nivel3->{'id1'});     
+                    my $autor               = $nivel1->getAutor();
+                    my $titulo              = $nivel1->getTitulo();
+                    my $fecha_prestamo      = $pres->getFecha_vencimiento_formateada();
+                    my $cuerpo_mensaje      = C4::AR::Preferencias::getValorPreferencia('reminderMessage');
+                    my $link                = "http://".$ENV{'SERVER_NAME'}.C4::AR::Utilidades::getUrlPrefix()."/modificarDatos.pl";
+                  
+                    $cuerpo_mensaje         =~ s/FIRSTNAME\ SURNAME/$socio->{'persona'}->{'nombre'}\ $socio->{'persona'}->{'apellido'}/;
+                    $cuerpo_mensaje         =~ s/VENCIMIENTO/$fecha_prestamo/;
+                    $cuerpo_mensaje         =~ s/AUTHOR/$autor/;
+                    $cuerpo_mensaje         =~ s/TITLE\:UNITITLE/$titulo/;
+                    $cuerpo_mensaje         =~ s/\(EDICION\)//;
+                    $cuerpo_mensaje         =~ s/BRANCH/Biblioteca/;
+                    $cuerpo_mensaje         =~ s/LINK/$link/;
+                                        
+                    # C4::AR::Debug::debug("mensaje : ".$cuerpo_mensaje);
+                    
+                    $mail{'mail_from'}      = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('mailFrom'));
+                    $mail{'mail_to'}        = $socio->{'persona'}->email;
+                    $mail{'mail_subject'}   = C4::AR::Preferencias::getValorPreferencia('reminderSubject'); 
+                    $mail{'mail_message'}   = $cuerpo_mensaje;
+                    
+                    C4::AR::Mail::send_mail(\%mail);
+                   # C4::AR::Debug::debug("mail enviado");
+               }
+            }
+        }
+    } 
+
+}
+
+
+=item
+    Funcion que devuelve todos los prestamos que esten activos.
+    Hace una consulta vacia sobre la tabla porque ahi estan solo los prestamos activos
+=cut
+sub getAllPrestamosActivos{
+
+    my ($today) = @_;
+
+    my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo();
+    use Date::Calc qw(Delta_Days);
+    
+    my @first;
+    my @second;
+    my $days;
+    my @arrayPrestamos;
+      
+    if(scalar(@$prestamos_array_ref) > 0){
+    # recorremos todos los prestamos, le pedimos la fecha de vencimiento y la checkeamos con la actual
+        foreach my $prestamo (@$prestamos_array_ref){
+        
+            my $fecha_prestamo = $prestamo->getFecha_vencimiento();
+            
+            #obtenemos la diferencia de dias entre las dos fechas
+            @first  = split(/-/, $today);
+            @second = split(/-/, $fecha_prestamo);
+            $days   = Delta_Days(@first, @second);
+
+            if ($days <= C4::AR::Preferencias::getValorPreferencia('reminderDays')){        
+                push(@arrayPrestamos,($prestamo));
+            }
+        }  
+        return (@arrayPrestamos);     
+    }else{
+        return 0;
     }
 }
 

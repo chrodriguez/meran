@@ -2425,7 +2425,7 @@ sub generarComboTipoPrestamo{
     my @select_tipo_nivel3_array;
     my %select_tipo_prestamo_hash;
 
-    require C4::Modelo::CircRefTipoPrestamo::Manager;
+    require C4::Modelo::CircRefTipoPrestamo::Manager;  
     my ($tipoPrestamo_array)= C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo();
 
     foreach my $tipoPrestamo (@$tipoPrestamo_array) {
@@ -2458,7 +2458,6 @@ sub generarComboTipoPrestamo{
 
 #FIXME falta un default no?
 #     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
-
 
     push (@select_tipo_nivel3_array, 'SIN SELECCIONAR');
     $options_hash{'values'}= \@select_tipo_nivel3_array;
@@ -3988,6 +3987,7 @@ sub setFeriado{
     require C4::Modelo::PrefFeriado;
     require C4::Modelo::PrefFeriado::Manager;
     my $dateformat      = C4::Date::get_date_format();
+    $texto_feriado      = Encode::encode_utf8($texto_feriado);
     $fecha              = C4::Date::format_date_in_iso($fecha, $dateformat);
 
     my $feriado = C4::Modelo::PrefFeriado::Manager->get_pref_feriado(query => [ fecha => { eq => $fecha } ] );

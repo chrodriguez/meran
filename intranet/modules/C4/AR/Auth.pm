@@ -1147,6 +1147,7 @@ sub buildSocioData{
     $session->param('usr_legajo', $socio->persona->getLegajo());
     $session->param('usr_credential_type', $socio->getCredentialType());
     $session->param('usr_permisos_opac', $socio->tienePermisosOPAC);
+    $session->param('remindFlag', $socio->getRemindFlag());
 }
 
 sub buildSocioDataHashFromSession{
@@ -1172,6 +1173,7 @@ sub buildSocioDataHashFromSession{
     $socio_data{'usr_email'}                = $session->param('usr_email');
     $socio_data{'usr_legajo'}               = $session->param('usr_legajo');
     $socio_data{'ciudad_ref'}{'id'}         = $session->param('usr_ciudad_id'); 
+    $socio_data{'remindFlag'}               = $session->param('remindFlag'); 
     
     return (\%socio_data);
 }

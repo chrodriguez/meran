@@ -433,7 +433,9 @@ sub getVisualizacionFromCampoSubCampo{
     push(@filtros, ( campo          => { eq => $campo } ) );
     push(@filtros, ( subcampo       => { eq => $subcampo } ) );
 #     push (@filtros,( tipo_ejemplar  => { eq => 'ALL' })); 
-    push (  @filtros, ( or   => [   tipo_ejemplar   => { eq => $tipo_ejemplar } ]) );
+    push (  @filtros, ( or   => [   tipo_ejemplar   => { eq => $tipo_ejemplar }, 
+                                    tipo_ejemplar   => { eq => 'ALL'     } ])
+                     );
 
 
     my $cat_estruct_info_array = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(  

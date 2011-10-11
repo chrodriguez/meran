@@ -165,6 +165,13 @@
                       [% combo_temas %]
                   </p>
               </fieldset>
+              <fieldset>
+                  <legend>&nbsp;[% 'Recordatorio de vencimiento de pr&eacute;stamos' | i18n %]&nbsp;</legend>
+                  <p>
+                      <label for="remindFlag" class="left">[% 'Recibir notificaci&oacute;nes' | i18n %]:</label>
+                      <input type="checkbox" name="remindFlag" id="remindFlag" [% IF socio_data.remindFlag %] checked="checked" [% END %]/> 
+                  </p>
+              </fieldset>
               <p><input type="submit" name="submit" id="submit" class="button" value="[% 'Modificar datos' |  i18n %]" tabindex="12" /></p>
             </form>
           </div>
