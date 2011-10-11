@@ -1129,7 +1129,7 @@ sub buildSocioData{
     $session->param('usr_locale', $socio->getLocale());
     $session->param('usr_apellido', $socio->persona->getApellido());
     $session->param('usr_nombre', $socio->persona->getNombre());
-    $session->param('usr_tiene_foto', $socio->tieneFoto());
+    $session->param('usr_tiene_foto', $socio->tieneFoto(getSessionType()));
     $session->param('usr_documento_nombre', $socio->persona->documento->nombre());
     $session->param('usr_documento_version', $socio->persona->getVersion_documento());
     $session->param('usr_nro_documento', $socio->persona->getNro_documento());
