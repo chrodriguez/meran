@@ -1,6 +1,16 @@
 <script type="text/javascript">
     var URL_PREFIX  = '[% url_prefix %]';
 </script>
+
+
+<style>
+.main-content{
+    top: 50%;
+    display: table-cell; 
+    vertical-align: middle;
+    position: absolute;
+}
+</style>
 [% USE HTML %]
 
 <!-- Login -->

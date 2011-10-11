@@ -19,6 +19,7 @@ function updateInfoBusquedasBar(responseText){
 
 	$('#marco_contenido_datos').html("<div id='resultBusqueda'/><div id='result'/>");
 	updateInfoBusquedas(responseText);
+	$(window).unbind('scroll');	
 }
 
 function busquedaCombinable(){
@@ -37,9 +38,9 @@ function busquedaCombinable(){
     objAH.only_available	= ( $('#only_available').attr('checked') )?1:0;
     objAH.signatura         = $('#signatura').val();
     objAH.tipo_nivel3_name  = $('#tipo_nivel3_id').val();
-    objAH.tema		= $('#tema').val();
-    objAH.codBarra      = $('#codBarra').val();
-    objAH.isbn		= $('#isbn').val();
+    objAH.tema				= $('#tema').val();
+    objAH.codBarra      	= $('#codBarra').val();
+    objAH.isbn				= $('#isbn').val();
     
     objAH.tipoAccion        = 'BUSQUEDA_AVANZADA';
     //se setea la funcion para cambiar de pagina

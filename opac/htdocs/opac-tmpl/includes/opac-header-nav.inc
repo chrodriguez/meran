@@ -24,7 +24,7 @@
 	                &nbsp;|&nbsp;
 	                <a class="single_link" href="[% url_prefix %]/opac-contact.pl?token=[% token %]" title="[% 'P&oacute;ngase en contacto con nosotros' | i18n %]">[% 'Contacto' | i18n %]</a>
 	                &nbsp;|&nbsp;
-	                <a href="[% url_prefix %]/logout.pl" class="signout"><span>[% 'Cerrar sei&oacute;n' | i18n %]</span></a>
+	                <a href="[% url_prefix %]/logout.pl" class="signout"><span>[% 'Cerrar sesi&oacute;n' | i18n %]</span></a>
                 </div>
          
               [% ELSE %]

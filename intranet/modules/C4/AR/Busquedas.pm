@@ -948,8 +948,8 @@ sub busquedaAvanzada_newTemp{
     use Sphinx::Search;
     use Text::Unaccent;
     
-    my $only_sphinx= $params->{'only_sphinx'};
-
+    my $only_sphinx     = $params->{'only_sphinx'};
+    my $only_available  = $params->{'only_available'};
     C4::AR::Debug::debug("ONLY SPHINX ".$only_sphinx);
 
     my $sphinx  = Sphinx::Search->new();
@@ -1006,8 +1006,8 @@ sub busquedaAvanzada_newTemp{
     }
 
 
-    if ($params->{'only_available'}){
-        $query .= ' @string "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValue.'"';
+    if ($only_available){
+        $query .= ' @string "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValueSearch.'"';
     }
     
     if ($params->{'signatura'}){
@@ -1261,7 +1261,7 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
     }
 
     if ($only_available){
-        $query .= ' @string "ref_estado%'.C4::Modelo::RefEstado::disponibleValueSearch.'"';
+        $query .= ' @string "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValueSearch.'"';
     }
 
     C4::AR::Debug::debug("Busquedas => query string ".$query);
