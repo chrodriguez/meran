@@ -699,7 +699,7 @@ sub getHistorialSanciones{
     
     my @filtros;
     push(@filtros, and  => [ nro_socio      => { eq => $nro_socio }, 
-                            or   => [ fecha_final    => { lt => $hoy },fecha_final    => undef ,tipo_operacion => { eq => 'Borrado' } ]]);
+                             fecha_comienzo    => { lt => $hoy }]);
 
     use C4::Modelo::RepHistorialSancion::Manager;
     my $historial_sanciones_array_ref = C4::Modelo::RepHistorialSancion::Manager->get_rep_historial_sancion (   

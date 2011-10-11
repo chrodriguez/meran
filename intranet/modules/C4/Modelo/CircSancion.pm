@@ -312,6 +312,7 @@ sub eliminar_sancion {
     $data_hash->{'fecha_final'}     = $self->getFecha_final;
     $data_hash->{'fecha_comienzo'}  = $self->getFecha_comienzo;
     $data_hash->{'tipo_sancion'}    = $self->getTipo_sancion;
+    $data_hash->{'dias_sancion'}    = $self->getDias_sancion;
     $data_hash->{'id3'}             = $self->getId3;
     my ($historial_sancion)         = C4::Modelo::RepHistorialSancion->new(db=>$self->db);
     $data_hash->{'tipo_operacion'}  = 'Borrado';
