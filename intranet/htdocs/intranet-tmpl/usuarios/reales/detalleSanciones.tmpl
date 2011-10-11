@@ -59,7 +59,7 @@ function updateBorrarSancion(responseText){
                 [% "class='impar'" %]
             [% END %]
     >
-        <td>[% IF sancion.ref_tipo_sancion.ref_tipo_prestamo.getId %]
+        <td>[% IF sancion.ref_tipo_sancion.ref_tipo_prestamo.getId_tipo_prestamo %]
 				[% sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]
 			[% ELSE %]
 		        [% "Reserva no retirada" | i18n %]
