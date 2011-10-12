@@ -1094,6 +1094,8 @@ sub getHistoricoCirculacion {
     my $historico_array_ref = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion (
                                                                             query => \@filtros, 
                                                                             limit   => $cantR,
+                                                                            # estos objetos para poder ordenar por AJAX
+                                                                            with_objects => ['socio.persona','responsable_ref','responsable_ref.persona'],
                                                                             offset  => $ini,
                                                                             sort_by => $orden
      );

@@ -25,11 +25,12 @@
             <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
                 <thead>
                 <tr id="tr_sin_clase" class="titulo_tabla_resultado">
-                    <th class="click" onclick="ordenarHistorialCirculacion('nro_socio')" 
+                    <th class="click" onclick="ordenarHistorialCirculacion('persona.apellido')" 
 		                Title='[% "Ordenar por Usuario" | i18n %]'>
 		                [% "Usuario" | i18n %]
 			        </th>
-			        <th class="click" onclick="ordenarHistorialCirculacion('responsable')" 
+                    <!-- hay que ordenar por t5 por ROSE -->
+			        <th class="click" onclick="ordenarHistorialCirculacion('t5.apellido')" 
 		                Title='[% "Ordenar por Responsable" | i18n %]'>
 		                [% "Responsable" | i18n %]
 			        </th>
