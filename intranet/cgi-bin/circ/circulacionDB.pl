@@ -216,12 +216,15 @@ elsif($tipoAccion eq "REALIZAR_RENOVACION"){
                                                                     'intranet'
                                 );
 
-    $obj->{'responsable'}   = $user;
-    my $infoOperaciones     = C4::AR::Prestamos::t_renovar($obj);
+    $obj->{'responsable'}           = $user;
+    my ($infoTickets,$msg_object)   = C4::AR::Prestamos::t_renovar($obj);
+    
+    my %info;
+    $info{'tickets'}                = $infoTickets;
+    $info{'messages'}               = $msg_object;
 
-    my $infoOperacionJSON   = to_json $infoOperaciones;
     C4::AR::Auth::print_header($session);
-	print $infoOperacionJSON;
+	print to_json \%info;
 }
 #******************************************FIN***DEVOLVER_RENOVAR*********************************************
 
