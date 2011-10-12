@@ -308,30 +308,6 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 #                 C4::AR::Debug::debug("generar_indice => dato ".$dato);
             $dato                           = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato_ref, "ALL");
 
-
-# my @reglas;
-# my $separador   = "%";
-# my $hash_indice{ "020, a" } = { pre_separador => "isbn", pos_separador_ref => 0 };
-# 
-# push(@reglas, $hash_indice);
-# 
-# my $hash_indice{ "995, o" } = { pre_separador => "ref_disponilidad", pos_separador_ref => 0 }
-# 
-# push(@reglas, $hash_indice);
-# 
-# # $dato = 'isbn%'.$dato; 
-# 
-# if ($hash_indice{"campo, subcampo"} eq $campo.", ".$subcampo) {
-#     C4::AR::Debug::debug("C4::AR::Sphinx => generar_indice => ".$campo.", ".$subcampo." => dato ".$dato);
-#     
-#     if($hash_indice{"campo, subcampo"}->{"pos_separador_ref"}){
-#         $dato = $dato_ref;
-#     }
-# 
-#     $dato = $hash_indice{"campo, subcampo"}->{"pre_separador"}.$separador.$dato;  
-# }
-
-
 # TODO modularizame!!!!!!!!!!!!!
             #aca van todas las excepciones que no son referencias pero son necesarios para las busquedas 
             if (($campo eq "020") && ($subcampo eq "a")){

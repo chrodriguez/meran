@@ -669,6 +669,7 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
 
             # veo que separador lleva cada subcampo para el $field dependiendo del campo y subcampo que se este procesando
             my $field_as_string                 = as_stringReloaded($field, $itemtype);
+
             $hash_temp_aux{'dato'}              = ($hash_temp_aux{'dato'} ne "")?$hash_temp_aux{'dato'}.";".$field_as_string:$field_as_string;
 
             $index = C4::AR::Utilidades::getIndexFromArrayByString($campo,\@MARC_result_array);
@@ -863,13 +864,12 @@ sub getRefFromStringConArrobasByCampoSubcampo{
         #tiene referencia
             return getRefFromStringConArrobas($dato);
         }
-    } else {
-# TODO estoy probado si va, esto debería ser una preferencia
-        $dato = "este campo no se puede mostrar debido a que no se encuentra configurado el campo ".$campo.", ".$subcampo;
-    }
+    } 
 
     return $dato;
 }
+
+
 =head2
 sub _procesar_referencia
 
