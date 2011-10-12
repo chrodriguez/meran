@@ -573,29 +573,27 @@ sub t_devolver {
 }
 
 sub t_renovar {
-  my ($params)=@_;
+    my ($params)              = @_;
+    my $msg_object            = C4::AR::Mensajes::create();
 
-  my $ticketObj;
-  my @infoTickets;
-  my @infoMessages;
-  my $print_renew= C4::AR::Preferencias::getValorPreferencia("print_renew");
-  my $array_id_prestamos= $params->{'datosArray'};
-
-  my $prestamoTEMP = C4::Modelo::CircPrestamo->new();
-  my $db = $prestamoTEMP->db;
-     $db->{connect_options}->{AutoCommit} = 0;
-     $db->begin_work;
+    my $ticketObj;
+    my @infoTickets;
+    my $print_renew           = C4::AR::Preferencias::getValorPreferencia("print_renew");
+    my $array_id_prestamos    = $params->{'datosArray'};
+    my $prestamoTEMP          = C4::Modelo::CircPrestamo->new();
+    my $db                    = $prestamoTEMP->db;
+    $db->{connect_options}->{AutoCommit} = 0;
+    $db->begin_work;
 
     foreach my $data (@$array_id_prestamos){
-        my ($msg_object)= C4::AR::Mensajes::create();
 
-        $msg_object->{'tipo'}= "INTRA";
-        $msg_object->{'error'}= 0;
+        $msg_object->{'tipo'}   = "INTRA";
+        $msg_object->{'error'}  = 0;
         C4::AR::Debug::debug("T_Renovar ".$data->{'barcode'});
-        my $prestamo = C4::AR::Prestamos::getInfoPrestamo($data->{'id_prestamo'},$db);
+        my $prestamo            = C4::AR::Prestamos::getInfoPrestamo($data->{'id_prestamo'},$db);
         if ($prestamo){
             $prestamo->_verificarParaRenovar($msg_object);
-    
+
             if(!$msg_object->{'error'}){
                     eval{
                         $prestamo->renovar($params->{'responsable'});
@@ -611,7 +609,7 @@ sub t_renovar {
 
                         $msg_object->{'error'}= 0;
                         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P111', 'params' => [$data->{'barcode'}]} ) ;
-    
+
                     };
                     if ($@){
                     #Se loguea error de Base de Datos
@@ -626,16 +624,10 @@ sub t_renovar {
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P112', 'params' => [$data->{'barcode'}]} ) ;
         }
-        #guardo los mensajes
-        push (@infoMessages, $msg_object);
-  }
-  $db->{connect_options}->{AutoCommit} = 1;
+    }
+    $db->{connect_options}->{AutoCommit} = 1;
 
-    my %infoOperaciones;
-    $infoOperaciones{'tickets'}= \@infoTickets;
-    $infoOperaciones{'messages'}= \@infoMessages;
-
-    return (\%infoOperaciones);
+    return (\@infoTickets, $msg_object);
 }
 
 sub t_renovarOPAC {
