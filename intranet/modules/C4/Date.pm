@@ -300,11 +300,14 @@ sub proximosHabiles {
 	my $dateformat= C4::Date::get_date_format();
 	$hasta = C4::Date::format_date_in_iso($hasta, $dateformat);
 	
-	my $proximos_feriados = C4::AR::Utilidades::getProximosFeriados();
+	my $proximos_feriados = C4::AR::Utilidades::getProximosFeriados($hasta);
 	
 	foreach my $feriado (@$proximos_feriados) {
+		C4::AR::Debug::debug("_______________________________________ HASTA __________________________________ ".C4::Date::format_date($hasta,$dateformat));
+		C4::AR::Debug::debug("_______________________________________FERIADO______________________________ ".$feriado->getFecha);
 		if( C4::Date::format_date($hasta,$dateformat) eq $feriado->getFecha ) {
 			$hasta=DateCalc($hasta,"+ 1 days",\$err,2);
+			C4::AR::Debug::debug("_______________________________________ SUMA 1!!! __________________________________ ");
 		}
 	}
     
