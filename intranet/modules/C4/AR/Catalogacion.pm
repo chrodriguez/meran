@@ -1843,9 +1843,9 @@ sub _getEstructuraFromCampoSubCampo{
     $db = $db || C4::Modelo::CatEstructuraCatalogacion->new()->db;   
     my @filtros;
 
-    push(@filtros, ( campo      => { eq => $campo } ) );
-    push(@filtros, ( subcampo   => { eq => $subcampo } ) );
-    push (  @filtros, ( or   => [   itemtype   => { eq => $itemtype }, 
+    push( @filtros, ( campo      => { eq => $campo } ) );
+    push( @filtros, ( subcampo   => { eq => $subcampo } ) );
+    push( @filtros, ( or   => [     itemtype   => { eq => $itemtype }, 
                                     itemtype   => { eq => 'ALL'     } ])
                      );
 
@@ -1858,6 +1858,7 @@ sub _getEstructuraFromCampoSubCampo{
 
 										);	
 
+# FIXME si hay dos configuraciones toma la primera
   if(scalar(@$cat_estruct_info_array) > 0){
     return $cat_estruct_info_array->[0];
   }else{

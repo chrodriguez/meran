@@ -234,56 +234,51 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
     my $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("100","a"));
     if ($autor){
-#       $autor = C4::AR::Catalogacion::getDatoFromReferencia("100","a",$autor,"ALL");
       $autor = C4::AR::Catalogacion::getDatoFromReferencia("100", "a", $autor, $registro_marc_n1->{'template'});
       push (@autores,$autor);
     }
 
        $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("110","a"));
     if ($autor){
-#       $autor = C4::AR::Catalogacion::getDatoFromReferencia("110","a",$autor,"ALL");
       $autor = C4::AR::Catalogacion::getDatoFromReferencia("110", "a", $autor, $registro_marc_n1->{'template'});
       push (@autores,$autor);
     }
 
        $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("111","a"));
     if ($autor){
-#       $autor = C4::AR::Catalogacion::getDatoFromReferencia("111","a",$autor,"ALL");
-      $autor = C4::AR::Catalogacion::getDatoFromReferencia("111", "a", $autor, $registro_marc_n1->{'template'});
-      push (@autores,$autor);
+        $autor = C4::AR::Catalogacion::getDatoFromReferencia("111", "a", $autor, $registro_marc_n1->{'template'});
+        push (@autores,$autor);
     }
 
     #Ahora los adicionales
-      my @field700 =$marc_record->field("700");
-       foreach my $f700 (@field700){     
-	my @autores_adicionales =$f700->subfield("a");
-	foreach my $au_ad (@autores_adicionales){
-	$autor = C4::AR::Catalogacion::getRefFromStringConArrobas($au_ad);
-      
-	C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => autor adicional ".$au_ad);
+    my @field700 =$marc_record->field("700");
+    foreach my $f700 (@field700){     
+        my @autores_adicionales = $f700->subfield("a");
 
-	    if ($autor){
-# 	      $autor = C4::AR::Catalogacion::getDatoFromReferencia("700","a",$autor,"ALL");
-          $autor = C4::AR::Catalogacion::getDatoFromReferencia("700", "a", $autor, $registro_marc_n1->{'template'});
-	      push (@autores,$autor);
-	    }
-	}
-      }
+        foreach my $au_ad (@autores_adicionales){
+            $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($au_ad);          
+            C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => autor adicional ".$au_ad);
+
+            if ($autor){
+                $autor = C4::AR::Catalogacion::getDatoFromReferencia("700", "a", $autor, $registro_marc_n1->{'template'});
+                push (@autores,$autor);
+            }
+        }
+    }
 
       my @field700 =$marc_record->field("710");
        foreach my $f710 (@field700){     
-	my @autores_adicionales =$f710->subfield("a");
-	foreach my $au_ad (@autores_adicionales){
-	$autor = C4::AR::Catalogacion::getRefFromStringConArrobas($au_ad);
-      
-	C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => autor adicional ".$au_ad);
+          my @autores_adicionales =$f710->subfield("a");
+          foreach my $au_ad (@autores_adicionales){
+          $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($au_ad);
+            
+          C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => autor adicional ".$au_ad);
 
-	    if ($autor){
-# 	      $autor = C4::AR::Catalogacion::getDatoFromReferencia("710","a",$autor,"ALL");
-          $autor = C4::AR::Catalogacion::getDatoFromReferencia("710", "a", $autor, $registro_marc_n1->{'template'});
-	      push (@autores,$autor);
-	    }
-	}
+              if ($autor){
+                $autor = C4::AR::Catalogacion::getDatoFromReferencia("710", "a", $autor, $registro_marc_n1->{'template'});
+                push (@autores,$autor);
+              }
+          }
       }
 
     $autor = join(' | ',@autores);
@@ -305,8 +300,6 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 #             C4::AR::Debug::debug("generar_indice => campo => ".$field->tag);
 #             C4::AR::Debug::debug("generar_indice => subcampo => ".$subfield->[0]);
             $dato_ref                       = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato);
-#                 C4::AR::Debug::debug("generar_indice => dato ".$dato);
-#             $dato                           = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato_ref, "ALL");
             $dato                           = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato_ref, $registro_marc_n1->{'template'});
             
 # TODO modularizame!!!!!!!!!!!!!
