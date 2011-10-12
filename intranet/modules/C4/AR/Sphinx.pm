@@ -150,8 +150,6 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
     my %params;
     $params{'nivel'}        = "1";
-#     $params{'id_tipo_doc'}  = "ALL";
-    $params{'id_tipo_doc'}  = $registro_marc_n1->{'template'};
     $params{'id'}           = $registro_marc_n1->{'id'};
 
     my @resultEstYDatos = C4::AR::Catalogacion::getEstructuraYDatosDeNivel(\%params);
@@ -182,9 +180,6 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
 
         $params{'nivel'}        = "2";
-    # FIXME falta el itemtype y MODULARIZAR
-#         $params{'id_tipo_doc'}  = "ALL";
-        $params{'id_tipo_doc'}  = $registro_marc_n2->{'template'};
         $params{'id'}           = $registro_marc_n2->{'id'};
 
         my @resultEstYDatos = C4::AR::Catalogacion::getEstructuraYDatosDeNivel(\%params);
@@ -214,9 +209,6 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
 
             $params{'nivel'}        = "3";
-# FIXME falta el itemtype y MODULARIZAR
-#             $params{'id_tipo_doc'}  = "ALL";
-            $params{'id_tipo_doc'}  = $registro_marc_n3->{'template'};
             $params{'id3'}          = $registro_marc_n3->{'id'};
 
 # C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => NIVEL 3 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa ".$registro_marc_n3->{'id3'});
@@ -242,19 +234,22 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
     my $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("100","a"));
     if ($autor){
-      $autor = C4::AR::Catalogacion::getDatoFromReferencia("100","a",$autor,"ALL");
+#       $autor = C4::AR::Catalogacion::getDatoFromReferencia("100","a",$autor,"ALL");
+      $autor = C4::AR::Catalogacion::getDatoFromReferencia("100", "a", $autor, $registro_marc_n1->{'template'});
       push (@autores,$autor);
     }
 
        $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("110","a"));
     if ($autor){
-      $autor = C4::AR::Catalogacion::getDatoFromReferencia("110","a",$autor,"ALL");
+#       $autor = C4::AR::Catalogacion::getDatoFromReferencia("110","a",$autor,"ALL");
+      $autor = C4::AR::Catalogacion::getDatoFromReferencia("110", "a", $autor, $registro_marc_n1->{'template'});
       push (@autores,$autor);
     }
 
        $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("111","a"));
     if ($autor){
-      $autor = C4::AR::Catalogacion::getDatoFromReferencia("111","a",$autor,"ALL");
+#       $autor = C4::AR::Catalogacion::getDatoFromReferencia("111","a",$autor,"ALL");
+      $autor = C4::AR::Catalogacion::getDatoFromReferencia("111", "a", $autor, $registro_marc_n1->{'template'});
       push (@autores,$autor);
     }
 
@@ -268,7 +263,8 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 	C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => autor adicional ".$au_ad);
 
 	    if ($autor){
-	      $autor = C4::AR::Catalogacion::getDatoFromReferencia("700","a",$autor,"ALL");
+# 	      $autor = C4::AR::Catalogacion::getDatoFromReferencia("700","a",$autor,"ALL");
+          $autor = C4::AR::Catalogacion::getDatoFromReferencia("700", "a", $autor, $registro_marc_n1->{'template'});
 	      push (@autores,$autor);
 	    }
 	}
@@ -283,7 +279,8 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 	C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => autor adicional ".$au_ad);
 
 	    if ($autor){
-	      $autor = C4::AR::Catalogacion::getDatoFromReferencia("710","a",$autor,"ALL");
+# 	      $autor = C4::AR::Catalogacion::getDatoFromReferencia("710","a",$autor,"ALL");
+          $autor = C4::AR::Catalogacion::getDatoFromReferencia("710", "a", $autor, $registro_marc_n1->{'template'});
 	      push (@autores,$autor);
 	    }
 	}
@@ -309,8 +306,9 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 #             C4::AR::Debug::debug("generar_indice => subcampo => ".$subfield->[0]);
             $dato_ref                       = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato);
 #                 C4::AR::Debug::debug("generar_indice => dato ".$dato);
-            $dato                           = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato_ref, "ALL");
-
+#             $dato                           = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato_ref, "ALL");
+            $dato                           = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato_ref, $registro_marc_n1->{'template'});
+            
 # TODO modularizame!!!!!!!!!!!!!
             #aca van todas las excepciones que no son referencias pero son necesarios para las busquedas 
             if (($campo eq "020") && ($subcampo eq "a")){
@@ -390,7 +388,7 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
 #         C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => UPDATE => id1 => ".$registro_marc_n1->{'id'});
     }
-}
+} #END while (my $registro_marc_n1 = $sth1->fetchrow_hashref )
 
 }
 =pod
