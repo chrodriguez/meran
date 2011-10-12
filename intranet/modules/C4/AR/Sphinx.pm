@@ -234,20 +234,20 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
     my $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("100","a"));
     if ($autor){
-      $autor = C4::AR::Catalogacion::getDatoFromReferencia("100", "a", $autor, $registro_marc_n1->{'template'});
-      push (@autores,$autor);
+        $autor = C4::AR::Catalogacion::getDatoFromReferencia("100", "a", $autor, $registro_marc_n1->{'template'});
+        ($autor ne "NO_TIENE")?push (@autores,$autor):"";
     }
 
        $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("110","a"));
     if ($autor){
-      $autor = C4::AR::Catalogacion::getDatoFromReferencia("110", "a", $autor, $registro_marc_n1->{'template'});
-      push (@autores,$autor);
+        $autor = C4::AR::Catalogacion::getDatoFromReferencia("110", "a", $autor, $registro_marc_n1->{'template'});
+        ($autor ne "NO_TIENE")?push (@autores,$autor):"";
     }
 
        $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("111","a"));
     if ($autor){
         $autor = C4::AR::Catalogacion::getDatoFromReferencia("111", "a", $autor, $registro_marc_n1->{'template'});
-        push (@autores,$autor);
+        ($autor ne "NO_TIENE")?push (@autores,$autor):"";
     }
 
     #Ahora los adicionales
@@ -261,7 +261,7 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
             if ($autor){
                 $autor = C4::AR::Catalogacion::getDatoFromReferencia("700", "a", $autor, $registro_marc_n1->{'template'});
-                push (@autores,$autor);
+                ($autor ne "NO_TIENE")?push (@autores,$autor):"";
             }
         }
     }
@@ -276,7 +276,7 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
               if ($autor){
                 $autor = C4::AR::Catalogacion::getDatoFromReferencia("710", "a", $autor, $registro_marc_n1->{'template'});
-                push (@autores,$autor);
+                ($autor ne "NO_TIENE")?push (@autores,$autor):"";
               }
           }
       }
@@ -301,6 +301,9 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 #             C4::AR::Debug::debug("generar_indice => subcampo => ".$subfield->[0]);
             $dato_ref                       = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato);
             $dato                           = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato_ref, $registro_marc_n1->{'template'});
+
+            next if ($dato eq 'NO_TIENE');
+            next if ($dato eq '');
             
 # TODO modularizame!!!!!!!!!!!!!
             #aca van todas las excepciones que no son referencias pero son necesarios para las busquedas 
@@ -350,8 +353,8 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
             } else {
                 $superstring .= " ".$dato;
             }
-        }
-    }
+        } #END foreach my $subfield ($field->subfields())
+    } #END foreach my $field ($marc_record->fields)
 
 #     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => superstring!!!!!!!!!!!!!!!!!!! => ".$superstring);
 

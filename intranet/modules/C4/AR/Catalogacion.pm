@@ -765,9 +765,9 @@ sub getDatoFromReferencia{
     
     my $valor_referencia = 'NULL';
 #     C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia ============================ ");
-#     C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => campo:                    ".$campo);
-#     C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => subcampo:                 ".$subcampo);
-#     C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => dato:                     ".$dato);
+    C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => campo:                    ".$campo);
+    C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => subcampo:                 ".$subcampo);
+    C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => dato:                     ".$dato);
     
 #     if(($dato ne '')&&($campo ne '')&&($subcampo ne '')&&($dato ne '')&&($dato ne '0')){
     if(($dato ne '')&&($campo ne '')&&($subcampo ne '')&&($dato ne '')&&($dato ne "NULL")){
