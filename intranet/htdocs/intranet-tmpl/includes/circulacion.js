@@ -280,16 +280,18 @@ function prestar(){
  */
 function updateInfoPrestarReserva(responseText){
 	cancelarDiv();
-
+alert("sdfsdfsdfsdf");
 	var infoHash        = JSONstring.toObject(responseText);
 	var messageArray    = infoHash.messages;
 	var ticketsArray    = infoHash.tickets;
 	var mensajes        = '';  
-  	
   	for(i=0; i<messageArray.length;i++){
         imprimirTicket(ticketsArray[i].ticket,i);
         setMessages(messageArray[i]);
     }
+      
+//     imprimirTicket(ticketsArray);
+
 
 	detalleReservas(USUARIO.ID,updateInfoReservas);
     ejemplaresDelGrupo(ID_N2);
@@ -502,7 +504,7 @@ function updateInfoDevolver(responseText){
  *          num, es el indice que se usa para darle nombre a la ventana.
  */
 
-function imprimirTicket(ticket,num){
+function imprimirTicket(ticket, num){
 //     var obj;
 // alert(tickets[0].ticket);
 //  if(ticket != 0){
@@ -510,6 +512,13 @@ function imprimirTicket(ticket,num){
 //       obj=JSONstring.make(ticket[i]);
 //       alert(obj);
 //   }
+
+//     var comprobantes=new Array();
+//     for (i=0; i < tickets.length;i++){
+//  
+//           comprobantes[i]= JSONstring.make(tickets[i]);
+//     }
+//     
     if(ticket != 0){   
         obj=JSONstring.make(ticket);
         objAH               = new AjaxHelper(updateImprimirTicket);
@@ -527,14 +536,20 @@ function imprimirTicket(ticket,num){
 
 function updateImprimirTicket(responseText){
        
-// //     $('#ticket').window.print();window.close();
-//       $(document).ajaxStop(function() {
         $('#ticket').html(responseText);
         $('#ticket').printElement({ printBodyOptions:
                                         { styleToAdd:'color:#FFFFFF;',
                                         classNameToAdd : 'comprobante'} 
                                   }
         );
+        $('#ticket').hide();
+        
+        var html="<a id='link_comp' onclick='mostrarComprobante();'> Ver impresion</a>";
+        $('.message_text').append(html);
+//         $('#ticket').modal();
+        
+        
+        
 //       $('#ticket').modal({   containerCss:{
 //             backgroundColor:"#fff",
 //     //         borderColor:"#0063dc",
@@ -547,6 +562,20 @@ function updateImprimirTicket(responseText){
 //         return false;
 //      });
          
+}
+
+function mostrarComprobante(){
+
+    $('#ticket').modal({   containerCss:{
+            backgroundColor:"#fff",
+    //         borderColor:"#0063dc",
+            height:420,
+            padding:0,
+            width:650,
+            
+        },
+      });
+
 }
 
 // FIXME esta muy feo esto!!!!!!!!!!!!!!!!!!!!!!!!!!!

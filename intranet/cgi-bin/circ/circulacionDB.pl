@@ -461,6 +461,7 @@ elsif ( $tipoAccion eq "IMPRIMIR_COMPROBANTE" ) {
                                             entorno => 'undefined'},
             });
 
+#             C4::AR::Debug::debug(obj);
 
             my %env;
             my $obj                             = C4::AR::Utilidades::from_json_ISO( $obj->{'obj'} );
