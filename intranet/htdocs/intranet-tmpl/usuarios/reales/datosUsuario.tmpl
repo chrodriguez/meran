@@ -142,10 +142,13 @@ function updateInfoPrestarReserva(responseText){
 	var messageArray= infoHash.messages;
 	var ticketsArray= infoHash.tickets;
 	var mensajes= '';
+
 	for(var i=0; i<messageArray.length;i++){
-		imprimirTicket(ticketsArray[i].ticket,i);
+// 		imprimirTicket(ticketsArray[i].ticket,i);
   		setMessages(messageArray[i]);
 	}
+
+    imprimirTicket(ticketsArray)
 
 	detalleReservas(USUARIO.ID);
 	detallePrestamos(USUARIO.ID);

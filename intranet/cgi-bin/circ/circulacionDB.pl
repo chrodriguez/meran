@@ -464,16 +464,35 @@ elsif ( $tipoAccion eq "IMPRIMIR_COMPROBANTE" ) {
                                             entorno => 'undefined'},
             });
 
-#             C4::AR::Debug::debug(obj);
-
             my %env;
-            my $obj                             = C4::AR::Utilidades::from_json_ISO( $obj->{'obj'} );
+            my @comprobantes;
 
-            $t_params->{'socio'}                = C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'socio'});
-            $t_params->{'responsable'}          = C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'responsable'});
-            $t_params->{'prestamo'}             = C4::AR::Prestamos::getPrestamoDeId3($obj->{'id3'});
-            $t_params->{'adicional_selected'}   = $obj->{'adicional_selected'};
+            foreach my $ticket ($obj->{'comprobantes'}) {
 
+#                   my $obj = C4::AR::Utilidades::from_json_ISO( $obj->{'obj'} );
+                    my %hash;
+                  
+                      C4::AR::Debug::debug("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
+                      C4::AR::Utilidades::printARRAY($ticket);
+
+
+# 
+#                     $hash{'socio'} =C4::AR::Usuarios::getSocioInfoPorNroSocio($obj_t->{'socio'});
+#                     $hash{'responsable'}          = C4::AR::Usuarios::getSocioInfoPorNroSocio($obj_t->{'responsable'});
+#                     $hash{'prestamo'}             = C4::AR::Prestamos::getPrestamoDeId3($obj_t->{'id3'});
+#                     $hash{'adicional_selected'}   = $obj_t->{'adicional_selected'};
+#                     push(@comprobantes,%hash);
+            }
+
+            
+
+#             C4::AR::Utilidades::printARRAY(\@comprobantes);
+
+#             $t_params->{'socio'}                = C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'socio'});
+#             $t_params->{'responsable'}          = C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'responsable'});
+#             $t_params->{'prestamo'}             = C4::AR::Prestamos::getPrestamoDeId3($obj->{'id3'});
+#             $t_params->{'adicional_selected'}   = $obj->{'adicional_selected'};
+            $t_params->{'comprobantes'}   = \@comprobantes;
 
             C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 

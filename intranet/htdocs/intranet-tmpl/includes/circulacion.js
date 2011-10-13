@@ -160,7 +160,7 @@ function realizarAccion(accion,id_table,funcion) {
 		for(var i=0; i< long; i++){
                 array[i]=chck[i].value;
 		}
-
+        
 		objAH                   = new AjaxHelper(funcion);
 		objAH.debug             = true;
         objAH.showOverlay       = true;
@@ -280,16 +280,16 @@ function prestar(){
  */
 function updateInfoPrestarReserva(responseText){
 	cancelarDiv();
-alert("sdfsdfsdfsdf");
-	var infoHash        = JSONstring.toObject(responseText);
+	var infoHash        = JSONstring.toObject(responseText);  
 	var messageArray    = infoHash.messages;
 	var ticketsArray    = infoHash.tickets;
 	var mensajes        = '';  
-  	for(i=0; i<messageArray.length;i++){
-        imprimirTicket(ticketsArray[i].ticket,i);
-        setMessages(messageArray[i]);
-    }
-      
+    alert("sdafsdfsdfd");
+//   	for(i=0; i<messageArray.length;i++){
+//         imprimirTicket(ticketsArray[i].ticket,i);
+//         setMessages(messageArray[i]);
+//     }
+      die();
 //     imprimirTicket(ticketsArray);
 
 
@@ -464,7 +464,7 @@ function updateInfoRenovar(responseText){
 	var ticketsArray= infoHash.tickets;
 	
 	for(i=0; i<messageArray.length;i++){
-		imprimirTicket(ticketsArray[i].ticket,i);
+// 		imprimirTicket(ticketsArray[i].ticket,i);
   		setMessages(messageArray[i]);
 	}
 
@@ -504,33 +504,27 @@ function updateInfoDevolver(responseText){
  *          num, es el indice que se usa para darle nombre a la ventana.
  */
 
-function imprimirTicket(ticket, num){
-//     var obj;
-// alert(tickets[0].ticket);
-//  if(ticket != 0){
-//    for(i=0; i< ticket.length;i++){
-//       obj=JSONstring.make(ticket[i]);
-//       alert(obj);
-//   }
-
-//     var comprobantes=new Array();
-//     for (i=0; i < tickets.length;i++){
-//  
-//           comprobantes[i]= JSONstring.make(tickets[i]);
-//     }
-//     
-    if(ticket != 0){   
-        obj=JSONstring.make(ticket);
+function imprimirTicket(tickets){
+    var comprobantes=new Array();
+    
+    if(tickets.length > 0){
+        for(i=0; i< tickets.length;i++){
+                  comprobantes[i]= JSONstring.make(tickets[i]);
+        }
+    }
+    alert(comprobantes);
+//     if(ticket != 0){   
+//         obj=JSONstring.make(ticket);
         objAH               = new AjaxHelper(updateImprimirTicket);
         objAH.debug         = true;
         objAH.showOverlay   = true;
         objAH.url           = URL_PREFIX+'/circ/circulacionDB.pl';
         objAH.tipoAccion    = 'IMPRIMIR_COMPROBANTE';
-        objAH.obj           = obj;
-        objAH.nroBoleta     = num;
+        objAH.comprobantes  = comprobantes;
+//         objAH.nroBoleta     = num;
         //se envia la consulta
         objAH.sendToServer();
-  }
+//   }
 }
 
 
@@ -546,13 +540,12 @@ function updateImprimirTicket(responseText){
         
         var html="<a id='link_comp' onclick='mostrarComprobante();'> Ver impresion</a>";
         $('.message_text').append(html);
-//         $('#ticket').modal();
+
         
-        
-        
+           
 //       $('#ticket').modal({   containerCss:{
 //             backgroundColor:"#fff",
-//     //         borderColor:"#0063dc",
+//             borderColor:"#0063dc",
 //             height:420,
 //             padding:0,
 //             width:650,
