@@ -585,6 +585,6 @@ function imprimirTicket(ticket,num){
 	if(ticket != 0){
 		var obj=JSONstring.make(ticket);        
   		window.open (URL_PREFIX+"/circ/ticket.pl?token="+token+"&obj="+obj, "Boleta "+num,this.href);
-	}
+	}  
 }*/
 
