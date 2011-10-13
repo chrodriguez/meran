@@ -116,14 +116,14 @@ function updateInfoRenovar(responseText){
 	cancelarDiv();
 
 	var infoHash= JSONstring.toObject(responseText);
-	var messageArray= infoHash.messages;
+	var messageArray= infoHash.messages; 
 	var ticketsArray= infoHash.tickets;
-	
-	var mensajes= '';
-	for(i=0; i<messageArray.length;i++){
-		imprimirTicket(ticketsArray[i].ticket,i);
-  		setMessages(messageArray[i]);
-	}
+
+    setMessages(messageArray);
+    
+    for(var i=0;i<ticketsArray.length;i++){
+        imprimirTicket(ticketsArray[i].ticket,i);
+    }
 
 	detallePrestamos(USUARIO.ID);
 	//puede que llegue al  max de prestamos y se cancelen las reservas

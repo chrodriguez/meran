@@ -587,3 +587,4 @@ function imprimirTicket(ticket,num){
   		window.open (URL_PREFIX+"/circ/ticket.pl?token="+token+"&obj="+obj, "Boleta "+num,this.href);
 	}
 }*/
+
