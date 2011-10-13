@@ -638,7 +638,7 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
             my $campo_ant                   = $field->tag;
             my $indicador_primario_dato     = $field->indicator(1);
             my $indicador_secundario_dato   = $field->indicator(2);
-#             C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => campo => ".$campo);
+            C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => campo => ".$campo);
             #proceso todos los subcampos del campo
             foreach my $subfield ($field->subfields()) {
                 my %hash_temp;
@@ -653,7 +653,8 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
                 my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $db);
                 $hash_temp{'dato'}                  = $valor_referencia;
 
-# 		C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => dato => ".$valor_referencia);
+#               FIXME parche!!!! si el dato del subcampo no tiene nada no se agrega al marcrecord, por lo tanto le agrego un blanco
+                (length($valor_referencia) == 0)? $valor_referencia = $valor_referencia." ":$valor_referencia;
 
                 $field->update( $subcampo => $valor_referencia );
             }
@@ -765,9 +766,9 @@ sub getDatoFromReferencia{
     
     my $valor_referencia = 'NULL';
 #     C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia ============================ ");
-    C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => campo:                    ".$campo);
-    C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => subcampo:                 ".$subcampo);
-    C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => dato:                     ".$dato);
+#     C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => campo:                    ".$campo);
+#     C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => subcampo:                 ".$subcampo);
+#     C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => dato:                     ".$dato);
     
 #     if(($dato ne '')&&($campo ne '')&&($subcampo ne '')&&($dato ne '')&&($dato ne '0')){
     if(($dato ne '')&&($campo ne '')&&($subcampo ne '')&&($dato ne '')&&($dato ne "NULL")){

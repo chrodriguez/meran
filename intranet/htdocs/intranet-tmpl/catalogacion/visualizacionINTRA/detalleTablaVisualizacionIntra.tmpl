@@ -1,10 +1,12 @@
 <script type="text/javascript" language="javascript">
-    $(function() {
-	    $("#sortable_subcampo").sortable({
+    $("#enable_sort_subcampo").change(function(){
+        if($(this).is(':checked')){
+            $("#sortable_subcampo").sortable({
             stop: function(event, ui) {
-                actualizarOrdenSubCampos($('#sortable_subcampo').sortable('toArray'));
+                actualizarOrdenSubCampos($('#sortable').sortable('toArray'));
             }
         });
+        }
     });
 </script>
 <script type="text/javascript" language="javascript">
@@ -73,6 +75,7 @@
                 </tr>
             </thead>
             <tbody id="sortable_subcampo">
+                <input type="checkbox" name="enable_sort_subcampo" id="enable_sort_subcampo" /> Seleccione para Ordenar
                 [% FOREACH campo IN visualizacion %]
                     <tr id="[% campo.getId %]" align="center">
                         <td>[% campo.getCampo %]</td>
