@@ -122,7 +122,7 @@
 						                <td valign="middle">
 						
 						                          [% IF disponible %]
-						                              [% IF paraPrestamo %]
+						                              [% IF prestamo.getNro_socio %]
 						                                  [% PERL %]
 						                                      print C4::AR::Filtros::to_Icon( 
 						                                          boton   =>  "icon_devolver",
