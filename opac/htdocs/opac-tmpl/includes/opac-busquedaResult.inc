@@ -2,45 +2,54 @@
 
 	function ordenarPor(ord){
 	    //seteo el orden de los resultados
-	    
 	}
 
+    function submitForm(form_id) {
+        $('#' + form_id).submit();
+    }
+    
+    function exportarXLS(url){
+        alert(url)
+    }
+     
+    function externalSearch(keyword){
+
+  	    objAH                   = new AjaxHelper(updateExternalSearch);
+  	    objAH.debug             = true;
+  	    objAH.showOverlay       = true;
+  	    //para busquedas combinables
+  	    objAH.url               = URL_PREFIX+'/opac-oai-search.pl';
+  	    objAH.keyword           = keyword;
+  	    
+  	    //se setea la funcion para cambiar de pagina
+  	    objAH.funcion           = 'changePage';
+  	    //se envia la consulta
+  	    objAH.sendToServer();
+
+    }
+
+//     function externalSearch(keyword){
+//     	$.ajax({
+//             type: "GET",
+// 	        url: URL_PREFIX+'/opac-oai-search.pl',
+// 	        dataType: "xml",
+// 	        success: function(xml) {
+// 	        }
+//         });    	
+//     }
+    
+    function updateExternalSearch(responseText){
+    }       
+    
     $(document).ready(function() {
         $('.fancylink').fancybox();
     });
 
 
-    function submitForm(form_id) {
-        $('#' + form_id).submit();
-    }
-
-    
-     function exportarXLS(url){
-        alert(url)
-}
-//         window.open (url);
-/*
-        objAH                   = new AjaxHelper(updateExportarXLS);
-        objAH.debug             = true;
-        objAH.showOverlay       = true;
-        objAH.url               = URL_PREFIX+"/opac-busquedasDB.pl";
-        objAH.termino_buscado   = $("#termino_buscado").val();
-       
-        objAH.accion            = "EXPORTAR_XLS";
-        objAH.funcion           = "changePage";
-     
-        //se envia la consulta
-        objAH.sendToServer();
-        $('#reporteCreado').show();*/
-//     }
-    
-   
-
-
-
-
 </script>
+
 [% USE HTML %]
+
 [% IF show_search_details %]
 
      <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda:" | i18n %] <strong>[% buscoPor | html %]</strong></div>
@@ -50,10 +59,18 @@
      <div class="contenedor_paginador">[% paginador %]</div>
      
           [% IF only_available %]
-                    
-                      <h2 class="advice"> [% ' Solo se muestran ejemplares disponibles.' | i18n %] <a href="[% url_todos %]">([% ' Mostrar todos' | i18n %])</a></h2>
+                <h2 class="advice"> [% 'Solo se muestran ejemplares disponibles.' | i18n %] <a href="[% url_todos %]">([% ' Mostrar todos' | i18n %])</a></h2>
           [% END %]
 
+
+          <h2 class="advice"> [% 'Buscar en servidores externos.' | i18n %] <a href="#" onclick="externalSearch('[% buscoPor | html %]')">([% ' Buscar en servidores externos' | i18n %])</a></h2>
+
+
+          [% IF external_search %]
+	          [% IF cant_external_servers %]
+	                <h2 class="advice"> [% 'Buscar en servidores externos.' | i18n %] <a href="#" onclick="externSearch('[% buscoPor | html %]')">([% ' Buscar en servidores externos' | i18n %])</a></h2>
+	          [% END %]
+          [% END %]
 [% END %]
 
 [% IF (cantidad > 0) || ( (!from_suggested) && (suggested) )%]
