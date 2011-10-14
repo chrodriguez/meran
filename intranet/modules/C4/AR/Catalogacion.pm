@@ -22,14 +22,17 @@ use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
 
 @EXPORT_OK=qw(
-  &crearCatalogo
-  &buscarCamposObligatorios
-  &buscarCampo
-  &guardarCamposModificados
-  &guardarCampoTemporal
-  &getRefFromStringConArrobas
-  &getDocumentById
-  &saveEDocument
+  crearCatalogo
+  buscarCamposObligatorios
+  buscarCampo
+  guardarCamposModificados
+  guardarCampoTemporal
+  getRefFromStringConArrobas
+  getDocumentById
+  saveEDocument
+  headerDCXML
+  footerDCXML
+  existeNivel1
 );
 
 =head1 NAME
@@ -537,11 +540,43 @@ sub marc_record_to_meran_to_detail_view {
     return (\@MARC_result_array);
 }
 
-# sub getLabelByCampo{
-#     my ($campo) = @_;
-# 
-#     return "LABEL GENERICO";
-# }
+sub marc_record_to_oai {
+    my ($marc_record, $itemtype, $type, $db) = @_;
+
+    my @MARC_result_array;
+    
+    $type = $type || "__NO_TYPE";
+    
+    my $new_marc_record =   MARC::Record->new();
+    
+    foreach my $field ($marc_record->fields) {
+        if(! $field->is_control_field){
+            my %hash;
+            my $campo                       = $field->tag;
+            my $indicador_primario_dato     = $field->indicator(1);
+            my $indicador_secundario_dato   = $field->indicator(2);
+            #proceso todos los subcampos del campo
+            foreach my $subfield ($field->subfields()) {
+                my %hash_temp;
+
+                my $subcampo                        = $subfield->[0];
+                my $dato                            = $subfield->[1];
+                $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype, $db);
+                my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $db);
+                
+                
+                C4::AR::Debug::debug("PASANDO A MARC OAI EL CAMPO $campo , $subcampo CON VALOR $valor_referencia");
+                
+                my $field = MARC::Field->new($campo,'','',$subcampo => $valor_referencia);
+                
+                $new_marc_record->append_fields($field);
+            }
+            
+        }
+    }
+
+    return ($new_marc_record);
+}
 
 
 # TODO ver tema de performance, habria q llamar a getVisualizacionFromCampo y levantar toda la conf una vez
@@ -1844,9 +1879,10 @@ sub _getEstructuraFromCampoSubCampo{
     $db = $db || C4::Modelo::CatEstructuraCatalogacion->new()->db;   
     my @filtros;
 
-    push( @filtros, ( campo      => { eq => $campo } ) );
-    push( @filtros, ( subcampo   => { eq => $subcampo } ) );
-    push( @filtros, ( or   => [     itemtype   => { eq => $itemtype }, 
+    push(@filtros, ( campo      => { eq => $campo } ) );
+    push(@filtros, ( subcampo   => { eq => $subcampo } ) );
+
+    push (  @filtros, ( or   => [   itemtype   => { eq => $itemtype }, 
                                     itemtype   => { eq => 'ALL'     } ])
                      );
 
@@ -2023,6 +2059,90 @@ sub getHeader{
     }else{
         return 0;
     }
+}
+
+sub toOAIXML{
+    my ($dc,$id1) = @_;
+    
+    my $server      = $ENV{'SERVER_NAME'};
+    my $proto       = ($ENV{'SERVER_PORT'} eq 443)?"https://":"http://";
+    my $prefix   = $proto.$server.C4::AR::Utilidades::getUrlPrefix();
+    my $url = $prefix."/opac-detail.pl?id1=".$id1;
+    
+    my $xml = "\n <rdf:Description rdf:about=$url> \n";
+
+    while ( my ($key, $value) = each(%$dc) ) {
+
+    ## list context will retrieve all of a particular element 
+#    foreach my $element ( $record->element( 'Creator' ) ) {
+#        print "creator: ", $element->content(), "\n";
+#    }
+	        foreach my $campo (@$value){
+	        	my $campo_name = $key;
+	            if (C4::AR::Utilidades::validateString($campo->content)){
+	                $campo_name = C4::AR::Utilidades::str_replace("_",":",$campo_name);
+	                my $xml_field_name= lc($campo_name);
+	                $xml .= "<$xml_field_name>".$campo->content."</$xml_field_name>\n";
+	            }
+	        }
+    }
+    
+    $xml .= "</rdf:Description> \n";
+    
+    return ($xml);  
+}
+
+sub headerDCXML{
+	
+	my $headerDCXML =' 
+	<?xml version="1.0"?>
+    <!DOCTYPE rdf:RDF PUBLIC "-//DUBLIN CORE//DCMES DTD 2002/07/31//EN"
+        "http://dublincore.org/documents/2002/07/31/dcmes-xml/dcmes-xml-dtd.dtd">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:dc="http://purl.org/dc/elements/1.1/">';
+	
+	return $headerDCXML;
+}
+
+sub footerDCXML{
+    
+    my $footerDCXML = '</rdf:RDF>';
+    
+    return $footerDCXML;
+}
+
+sub existeNivel1{
+	my ($titulo,$autor_object) = @_;
+
+    use Sphinx::Search;
+
+    my $sphinx      = Sphinx::Search->new();
+    my $query       = '@titulo '.$titulo;
+       $query      .= '@autor '.$autor_object->getCompleto();
+    my $tipo        = 'SPH_MATCH_EXTENDED';
+    my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
+
+    $sphinx->SetMatchMode($tipo_match);
+    $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
+    $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
+    # NOTA: sphinx necesita el string decode_utf8
+    my $results = $sphinx->Query($query);
+
+    my @id1_array;
+    my $matches                 = $results->{'matches'};
+    my $total_found             = $results->{'total_found'};
+#     C4::AR::Utilidades::printHASH($results);
+    C4::AR::Debug::debug("C4::AR::Busqueda::busquedaPorTitulo => total_found: ".$total_found);
+#     C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
+    foreach my $hash (@$matches){
+      my %hash_temp         = {};
+      $hash_temp{'id1'}     = $hash->{'doc'};
+      $hash_temp{'hits'}    = $hash->{'weight'};
+
+      push (@id1_array, \%hash_temp);
+    }
+
+    return (scalar(@id1_array));
 }
 
 END { }       # module clean-up code here (global destructor)
