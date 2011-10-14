@@ -63,7 +63,7 @@
           [% END %]
 
 
-          <h2 class="advice"> [% 'Buscar en servidores externos.' | i18n %] <a href="#" onclick="externalSearch('[% buscoPor | html %]')">([% ' Buscar en servidores externos' | i18n %])</a></h2>
+<!--           <h2 class="advice"> [% 'Buscar en servidores externos.' | i18n %] <a href="#" onclick="externalSearch('[% buscoPor | html %]')">([% ' Buscar en servidores externos' | i18n %])</a></h2> -->
 
 
           [% IF external_search %]

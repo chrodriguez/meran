@@ -854,21 +854,19 @@ sub getHistorialPrestamos {
     my ($nro_socio,$ini,$cantR,$orden)=@_;
 
     my @filtros;
-#     push(@filtros, ( nro_socio => { eq => $nro_socio } ));
 
     my $historialPrestamos = C4::Modelo::RepHistorialPrestamo::Manager->get_rep_historial_prestamo( 
                                                     query => [ nro_socio => { eq => $nro_socio } ],
                                                     limit   => $cantR,
                                                     offset  => $ini,
-                                                    require_objects => ['nivel3','nivel3.nivel1'], 
-#                                                     select       => [],
+                                                    require_objects => ['nivel3','nivel3.nivel1'],
+                                                    sort_by => ['fecha_devolucion DESC']
            
 );
 
     my $cantidad = C4::Modelo::RepHistorialPrestamo::Manager->get_rep_historial_prestamo_count( 
                                                     query => [ nro_socio => { eq => $nro_socio } ],
                                                     require_objects => ['nivel3','nivel3.nivel1'], 
-#                                                     select       => [],
            
 );
 
