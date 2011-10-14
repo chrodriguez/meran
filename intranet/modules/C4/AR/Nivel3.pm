@@ -500,7 +500,7 @@ sub detalleCompletoINTRA {
     my ($id1, $t_params) = @_;
     
     #recupero el nivel1 segun el id1 pasado por parametro
-    my $nivel1              	= C4::AR::Nivel1::getNivel1FromId1($id1);
+    my $nivel1              = C4::AR::Nivel1::getNivel1FromId1($id1);
     my $page_number 		= $t_params->{'page'} || 0;
     my $cant_grupos 		= C4::Context->config("cant_grupos_per_query") || 5;
     #recupero todos los nivel2 segun el id1 pasado por parametro
@@ -1094,6 +1094,8 @@ sub getHistoricoCirculacion {
     my $historico_array_ref = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion (
                                                                             query => \@filtros, 
                                                                             limit   => $cantR,
+                                                                            # estos objetos para poder ordenar por AJAX
+                                                                            with_objects => ['socio.persona','responsable_ref','responsable_ref.persona'],
                                                                             offset  => $ini,
                                                                             sort_by => $orden
      );

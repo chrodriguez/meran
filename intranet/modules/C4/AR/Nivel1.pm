@@ -66,7 +66,7 @@ sub verificar_Alta_Nivel1 {
 #     C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => autor 100, a => ".$nombre_completo);
 #     C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => cantidad autores 100, a => ".$cant_autor);
 
-    if (($cant_titulo > 0)&&($cant_autor > 0)){
+    if (C4::AR::Catalogacion::existeNivel1($titulo,$autor)){
         $msg_object->{'error'} = 1;
   
         my %params_hash;

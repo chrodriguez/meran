@@ -116,9 +116,6 @@
                             [% IF contenido_estante.nivel2.getAnio_publicacion %]
                                 ([% contenido_estante.nivel2.getAnio_publicacion %])
                             [% END %]
-                            [% IF contenido_estante.nivel2.getVolumen %]
-                                t [% contenido_estante.nivel2.getVolumen %]  [% contenido_estante.nivel2.getVolumenDesc %]
-                       [% END %]
                     </td>
                 </tr>
                 [% END %]

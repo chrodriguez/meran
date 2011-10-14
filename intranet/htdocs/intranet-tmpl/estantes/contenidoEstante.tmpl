@@ -46,9 +46,6 @@
                             [% IF anio_publicacion %]
                                 ([% anio_publicacion %])
                             [% END %]
-                            [% IF volume %]
-                                t [% volume %]
-                            [% END %]
                             </div>
                             [% PERL %]
                                     print C4::AR::Filtros::to_Icon(
