@@ -285,7 +285,7 @@ sub getPreferenciaLikeConCategoria {
 sub getPreferencia{
     my ($variable)  = @_;
     
-    C4::AR::Debug::debug("ENTRO A getPreferencia() ===> FIXEAR PARA QUE USE LA CACHE!!!");
+#     C4::AR::Debug::debug("ENTRO A getPreferencia() ===> FIXEAR PARA QUE USE LA CACHE!!!");
 
     my $preferencia_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( query => [ variable => { eq => "".$variable} ]);
 
@@ -302,11 +302,11 @@ sub getValorPreferencia {
 
 #    verifico si se encuentra en la cache, sino se busca de la base
      if (defined $PREFERENCES->{$variable}){
-          C4::AR::Debug::debug("getValorPreferencia => VARIABLE ==".$variable."== valor => ".$PREFERENCES->{$variable}." CACHED!!!!!!!");
+#           C4::AR::Debug::debug("getValorPreferencia => VARIABLE ==".$variable."== valor => ".$PREFERENCES->{$variable}." CACHED!!!!!!!");
          return $PREFERENCES->{$variable};
      }
 
-      C4::AR::Debug::debug("getValorPreferencia => VARIABLE ==".$variable."== NO CACHED!!!!!!!");
+#       C4::AR::Debug::debug("getValorPreferencia => VARIABLE ==".$variable."== NO CACHED!!!!!!!");
     my $preferencia_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( query => [ variable => { eq => $variable} ]);
 
     if ($preferencia_array_ref->[0]){

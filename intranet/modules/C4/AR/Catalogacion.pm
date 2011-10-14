@@ -673,7 +673,7 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
             my $campo_ant                   = $field->tag;
             my $indicador_primario_dato     = $field->indicator(1);
             my $indicador_secundario_dato   = $field->indicator(2);
-#             C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => campo => ".$campo);
+            C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => campo => ".$campo);
             #proceso todos los subcampos del campo
             foreach my $subfield ($field->subfields()) {
                 my %hash_temp;
@@ -688,19 +688,21 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
                 my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $db);
                 $hash_temp{'dato'}                  = $valor_referencia;
 
-# 		C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => dato => ".$valor_referencia);
+#               FIXME parche!!!! si el dato del subcampo no tiene nada no se agrega al marcrecord, por lo tanto le agrego un blanco
+                (length($valor_referencia) == 0)? $valor_referencia = $valor_referencia." ":$valor_referencia;
 
                 $field->update( $subcampo => $valor_referencia );
             }
 
             $hash_temp_aux{'campo'}             = $campo;
-	    $hash_temp_aux{'orden'} 		= getOrdenFromCampo($campo, $params->{'nivel'}, $itemtype, $type, $db);
-	    if($type eq "INTRA"){
-            #muestro el label configurado, si no existe muestro el label de la BIBLIA
-            $hash_temp_aux{'liblibrarian'}      = C4::AR::VisualizacionIntra::getVistaCampo($campo, $itemtype, $params->{'nivel'})||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
-	    } else {
-            $hash_temp_aux{'liblibrarian'}      = C4::AR::VisualizacionOpac::getVistaCampo($campo, $itemtype, $params->{'nivel'})||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
-	    }
+            $hash_temp_aux{'orden'} 		    = getOrdenFromCampo($campo, $params->{'nivel'}, $itemtype, $type, $db);
+
+            if($type eq "INTRA"){
+                #muestro el label configurado, si no existe muestro el label de la BIBLIA
+                $hash_temp_aux{'liblibrarian'}      = C4::AR::VisualizacionIntra::getVistaCampo($campo, $itemtype, $params->{'nivel'})||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
+            } else {
+                $hash_temp_aux{'liblibrarian'}      = C4::AR::VisualizacionOpac::getVistaCampo($campo, $itemtype, $params->{'nivel'})||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
+            }
 
             # veo que separador lleva cada subcampo para el $field dependiendo del campo y subcampo que se este procesando
             my $field_as_string                 = as_stringReloaded($field, $itemtype);
@@ -1893,6 +1895,7 @@ sub _getEstructuraFromCampoSubCampo{
 
 										);	
 
+# FIXME si hay dos configuraciones toma la primera
   if(scalar(@$cat_estruct_info_array) > 0){
     return $cat_estruct_info_array->[0];
   }else{

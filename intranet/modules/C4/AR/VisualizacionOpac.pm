@@ -159,7 +159,7 @@ sub getSubCampos{
     push ( @filtros, ( campo            => { eq => $campo } ));
     push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => 'ALL' }, tipo_ejemplar    => { eq => $template }]  ));
 
-    my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros, sort_by => ('orden_subcampo'),);
+    my $configuracion = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros, sort_by => ('orden_subcampo'),);
 
     return ($configuracion);
 }
