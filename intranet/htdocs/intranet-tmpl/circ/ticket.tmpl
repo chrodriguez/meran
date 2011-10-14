@@ -6,163 +6,167 @@
 
 <!--LO QUE ESTA COMENTADO ES COMO ESTA ANTES!!!!!!! -->
 
-<table>
-  <tbody>
-    <tr>
-          <td>
-              <p style="align:center;">PR&Eacute;STAMO - RENOVACI&Oacute;N</p>
-          </td>
-    </tr>
-    <tr>
-          <td>
-              C&oacute;digo de barras:
-          </td>
-          <td>
-              <h2>[% prestamo.nivel3.getBarcode %]</h2>
-          </td>
-    </tr>
-    <tr>
-    	<td>
-        	Usuario:
-      	</td>
-      	<td>
-            [% IF adicional_selected == "true" %]
-                <b>[% socio.getNombre_apellido_autorizado %]</b>
-            [% ELSE %]  
-                <b>[% socio.persona.getApeYNom %]</b>
-            [% END %]
-      	</td>
-    </tr>
-    <tr>
-    	<td>
-        	Documento:
-      	</td>
-      	<td>
-       		Tipo:<b>[% socio.persona.documento.getTipo_documento  %]</b> 
-            N&uacute;mero:
-            [% IF adicional_selected == "true" %]
-                <b>[% socio.getDni_autorizado %]</b>
-            [% ELSE %]  
-                <b>[% socio.persona.getNro_documento %]</b>
-            [% END %]
-      	</td>
-    </tr>
-    <tr>
-      	<td>
-        	Fecha de pr&eacute;stamo: 
-      	</td>
-      	<td>
-            <b> [% prestamo.getFecha_prestamo_formateada_ticket %]</b>
-      	</td>
-    </tr>
-    <tr>
-     	<td>
-        	Fecha de devoluci&oacute;n:
-      	</td>
-        <td>
-        	<b>[% prestamo.getFecha_vencimiento_formateada %]</b>
-        </td>
-    </tr>
-    <tr>
-    	<td>
-        	Tipo de pr&eacute;stamo:
-      	</td>
-      	<td>
-        	<b>[% prestamo.tipo.getDescripcion %]</b>
-      	</td>
-    </tr>
-    <tr>
-      	<td>
-        	Autor:
-      	</td>
-      	<td>
-        	<b>[% prestamo.nivel3.nivel1.getAutor %]</b>
-      	</td>
-    </tr>
-    <tr>
-	<td>
-         	T&iacute;tulo:
-  	</td>
-      	<td>
-        	<b>[% prestamo.nivel3.nivel1.getTitulo %]</b>
-        </td>
-    </tr>
-   <!-- <tr>
-      	<TD align="right">
-        	Signatura topogr&aacute;fica:
-      </TD>
-      <td>
-        <b>[% topoSign %]</b>
-      </td>
-    </tr>-->
-     <tr>
-      	<td>
-        	Tomo:
-        </td>
-        <td>
-            <b>[% IF prestamo.nivel3.nivel2.getVolumen %] [% prestamo.nivel3.nivel2.getVolumen %] [% ELSE %] - [% END %]</b>
-        </td>
-    </tr>
 
-    <!--<tr>
-      	<TD align="right">
-        	Tipo de pr&eacute;stamo:
-      	</TD>
-      	<td>
-        	<b>[% issuedescription %]</b>
-      	</td>
-    </tr>-->
-    <tr>
-      	<td>
-        	Responsable:<!-- del pr&eacute;stamo: -->
-      	</td>
-      	<td>
-        	<b>[% responsable.persona.getApeYNom %]</b>
-      	</td>
-    </tr>
-    <tr>
-    	<td>
-      		Firma del usuario:
-    	</td>
-    	<td>
-    		&nbsp;
-    	</td>
-    </tr>
-<!-- NO ESTABA EN LA VERSION ANTERIOR -->
-       <tr>
-          <td>
-              <br>&nbsp;</br>
-          </td>
-      </tr>
-  </tbody>
-</table>
 
-<table>
-  <tbody> 
-    <tr>
-	<td>
-		<p>DEVOLUCI&Oacute;N</p>
-	</td>
-    </tr>
-    <tr>
-      	<td>
-        	Fecha: 
-      	</td>
-      	<td>
-		&nbsp;
-      	</td>
-    </tr>
-    <tr>
-    	<td>
-      		Firma del responsable:
-    	</td>
-    	<td>
-    		&nbsp;
-    	</td>
-    </tr>
-  </tbody>
-</table>
+[% FOREACH comp IN comprobantes %]
+        <table>
+            <tbody> 
+                  [% comp.prestamo %]
+                  <tr>
+                        <td>
+                            <p style="align:center;">PR&Eacute;STAMO - RENOVACI&Oacute;N</p>
+                        </td>
+                  </tr>
+                  <tr>
+                        <td>
+                            C&oacute;digo de barras:
+                        </td>
+                        <td>
+                            <h2>[% comp.prestamo.nivel3.getBarcode %]</h2>
+                        </td>
+                  </tr>
+                  <tr>
+                      <td>
+                          Usuario:
+                      </td>
+                      <td>
+                          [% IF comp.adicional_selected == "true" %]
+                              <b>[% comp.socio.getNombre_apellido_autorizado %]</b>
+                          [% ELSE %]  
+                              <b>[% comp.socio.persona.getApeYNom %]</b>
+                          [% END %]
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
+                          Documento:
+                      </td>
+                      <td>
+                          Tipo:<b>[% comp.socio.persona.documento.getTipo_documento  %]</b> 
+                          N&uacute;mero:
+                          [% IF comp.adicional_selected == "true" %]
+                              <b>[% comp.socio.getDni_autorizado %]</b>
+                          [% ELSE %]  
+                              <b>[% comp.socio.persona.getNro_documento %]</b>
+                          [% END %]
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
+                          Fecha de pr&eacute;stamo: 
+                      </td>
+                      <td>
+                          <b> [% comp.prestamo.getFecha_prestamo_formateada_ticket %]</b>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
+                          Fecha de devoluci&oacute;n:
+                      </td>
+                      <td>
+                          <b>[% comp.prestamo.getFecha_vencimiento_formateada %]</b>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
+                          Tipo de pr&eacute;stamo:
+                      </td>
+                      <td>
+                          <b>[% comp.prestamo.tipo.getDescripcion %]</b>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
+                          Autor:
+                      </td>
+                      <td>
+                          <b>[% comp.prestamo.nivel3.nivel1.getAutor %]</b>
+                      </td>
+                  </tr>
+                  <tr>
+                  <td>
+                          T&iacute;tulo:
+                  </td>
+                      <td>
+                          <b>[% comp.prestamo.nivel3.nivel1.getTitulo %]</b>
+                      </td>
+                  </tr>
+                <!-- <tr>
+                      <TD align="right">
+                          Signatura topogr&aacute;fica:
+                    </TD>
+                    <td>
+                      <b>[% topoSign %]</b>
+                    </td>
+                  </tr>-->
+                  <tr>
+                      <td>
+                          Tomo:
+                      </td>
+                      <td>
+                          <b>[% IF comp.prestamo.nivel3.nivel2.getVolumen %] [% comp.prestamo.nivel3.nivel2.getVolumen %] [% ELSE %] - [% END %]</b>
+                      </td>
+                  </tr>
 
+                  <!--<tr>
+                      <TD align="right">
+                          Tipo de pr&eacute;stamo:
+                      </TD>
+                      <td>
+                          <b>[% issuedescription %]</b>
+                      </td>
+                  </tr>-->
+                  <tr>
+                      <td>
+                          Responsable:<!-- del pr&eacute;stamo: -->
+                      </td>
+                      <td>
+                          <b>[% comp.responsable.persona.getApeYNom %]</b>
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
+                          Firma del usuario:
+                      </td>
+                      <td>
+                          &nbsp;
+                      </td>
+                  </tr>
+              <!-- NO ESTABA EN LA VERSION ANTERIOR -->
+                    <tr>
+                        <td>
+                            <br>&nbsp;</br>
+                        </td>
+                    </tr>
+                </tbody>
+              </table>
+
+              <table>
+                <tbody> 
+                  <tr>
+                  <td>
+                      <p>DEVOLUCI&Oacute;N</p>
+                  </td>
+                  </tr>
+                  <tr>
+                      <td>
+                          Fecha: 
+                      </td>
+                      <td>
+                      &nbsp;
+                      </td>
+                  </tr>
+                  <tr>
+                      <td>
+                          Firma del responsable:
+                      </td>
+                      <td>
+                          &nbsp;
+                      </td>
+                  </tr>
+                </tbody>
+              </table>
+[% END %]
 <!-- AGREGADO HASTA ACA -->
 
 <!--<br><br><br>

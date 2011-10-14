@@ -509,10 +509,11 @@ function imprimirTicket(tickets){
     
     if(tickets.length > 0){
         for(i=0; i< tickets.length;i++){
-                  comprobantes[i]= JSONstring.make(tickets[i]);
+//                   comprobantes[i]= JSONstring.make(tickets[i]);
+                     comprobantes[i]= tickets[i]; 
+//                    alert(tickets[i]);
         }
     }
-    alert(comprobantes);
 //     if(ticket != 0){   
 //         obj=JSONstring.make(ticket);
         objAH               = new AjaxHelper(updateImprimirTicket);

@@ -466,27 +466,27 @@ elsif ( $tipoAccion eq "IMPRIMIR_COMPROBANTE" ) {
 
             my %env;
             my @comprobantes;
+     
+            my $ref_array= $obj->{'comprobantes'};
 
-            foreach my $ticket ($obj->{'comprobantes'}) {
+            foreach my $elem (@$ref_array) {
+                    my %hash;    
+                    my $ticket= $elem->{'ticket'};
+    
+                    $hash{'socio'} =    C4::AR::Usuarios::getSocioInfoPorNroSocio($ticket->{'socio'});
+                    
+                    C4::AR::Debug::debug("--------------------------------------------------------------------------------");
+                    C4::AR::Utilidades::printHASH(%hash->{'socio'});
+                    C4::AR::Debug::debug("--------------------------------------------------------------------------------");                 
 
-#                   my $obj = C4::AR::Utilidades::from_json_ISO( $obj->{'obj'} );
-                    my %hash;
-                  
-                      C4::AR::Debug::debug("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
-                      C4::AR::Utilidades::printARRAY($ticket);
-
-
-# 
-#                     $hash{'socio'} =C4::AR::Usuarios::getSocioInfoPorNroSocio($obj_t->{'socio'});
-#                     $hash{'responsable'}          = C4::AR::Usuarios::getSocioInfoPorNroSocio($obj_t->{'responsable'});
-#                     $hash{'prestamo'}             = C4::AR::Prestamos::getPrestamoDeId3($obj_t->{'id3'});
-#                     $hash{'adicional_selected'}   = $obj_t->{'adicional_selected'};
-#                     push(@comprobantes,%hash);
+                    $hash{'responsable'}          = C4::AR::Usuarios::getSocioInfoPorNroSocio($ticket->{'responsable'});
+                    $hash{'prestamo'}             = C4::AR::Prestamos::getPrestamoDeId3($ticket->{'id3'});
+                    $hash{'adicional_selected'}   = $ticket->{'adicional_selected'};
+                    push(@comprobantes,$ticket);
+#                    
             }
+   
 
-            
-
-#             C4::AR::Utilidades::printARRAY(\@comprobantes);
 
 #             $t_params->{'socio'}                = C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'socio'});
 #             $t_params->{'responsable'}          = C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'responsable'});
