@@ -860,7 +860,7 @@ sub getHistorialPrestamos {
                                                     limit   => $cantR,
                                                     offset  => $ini,
                                                     require_objects => ['nivel3','nivel3.nivel1'],
-                                                    sort_by => ['fecha_prestamo DESC']
+                                                    sort_by => ['fecha_devolucion DESC']
            
 );
 
