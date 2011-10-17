@@ -22,14 +22,17 @@ use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
 
 @EXPORT_OK=qw(
-  &crearCatalogo
-  &buscarCamposObligatorios
-  &buscarCampo
-  &guardarCamposModificados
-  &guardarCampoTemporal
-  &getRefFromStringConArrobas
-  &getDocumentById
-  &saveEDocument
+  crearCatalogo
+  buscarCamposObligatorios
+  buscarCampo
+  guardarCamposModificados
+  guardarCampoTemporal
+  getRefFromStringConArrobas
+  getDocumentById
+  saveEDocument
+  headerDCXML
+  footerDCXML
+  existeNivel1
 );
 
 =head1 NAME
@@ -191,16 +194,16 @@ sub Z3950_to_meran{
     
     my ($marc_record_limpio1,$marc_record_limpio2,$marc_record_limpio3,$marc_record_campos_sin_definir)=_procesar_referencias($marc_record);
     if (scalar($marc_record_limpio1->fields())>0){
-    	C4::AR::Debug::debug("Z3950 marc_nivel1 => SALIDA => as_formatted ".$marc_record_limpio1->as_formatted());
+        C4::AR::Debug::debug("Z3950 marc_nivel1 => SALIDA => as_formatted ".$marc_record_limpio1->as_formatted());
         ($msg_object,$id1)=C4::AR::Nivel1::guardarRealmente($msg_object,$marc_record_limpio1); }
     if (scalar($marc_record_limpio2->fields())>0){
-    	C4::AR::Debug::debug("Z3950 marc_nivel2 => SALIDA => as_formatted ".$marc_record_limpio2->as_formatted());
-    	($msg_object,$id1,$id2)=C4::AR::Nivel2::guardarRealmente($msg_object,$id1,$marc_record_limpio2); }
+        C4::AR::Debug::debug("Z3950 marc_nivel2 => SALIDA => as_formatted ".$marc_record_limpio2->as_formatted());
+        ($msg_object,$id1,$id2)=C4::AR::Nivel2::guardarRealmente($msg_object,$id1,$marc_record_limpio2); }
     if (scalar($marc_record_limpio3->fields())>0){
-    	C4::AR::Debug::debug("Z3950 marc_nivel3 => ERROR en la estrcutura => as_formatted ".$marc_record_limpio3->as_formatted());
+        C4::AR::Debug::debug("Z3950 marc_nivel3 => ERROR en la estrcutura => as_formatted ".$marc_record_limpio3->as_formatted());
     }
     if (scalar($marc_record_campos_sin_definir->fields())>0){
-    	C4::AR::Debug::debug("Z3950 WARNING campos no definidos en la biblia!!  => SALIDA => as_formatted ".$marc_record_campos_sin_definir->as_formatted());
+        C4::AR::Debug::debug("Z3950 WARNING campos no definidos en la biblia!!  => SALIDA => as_formatted ".$marc_record_campos_sin_definir->as_formatted());
     }
     return($msg_object);
     
@@ -385,18 +388,18 @@ sub marc_record_to_meran_por_nivel {
 sub marc_record_to_opac_view {
     my ($marc_record, $params,$db) = @_;
 
-    $params->{'tipo'} 		= 'OPAC';
+    $params->{'tipo'}       = 'OPAC';
     my $MARC_result_array;
     #obtengo los campo, subcampo que se pueden mostrar
     my ($marc_record_salida) = filtrarVisualizacion($marc_record, $params,$db);
 
 
     if(!C4::AR::Preferencias::getValorPreferencia("detalle_OPAC_extendido")){
-	#se procesa el marc_record filtrado
-	($MARC_result_array)     = marc_record_to_meran_to_detail_view_as_not_extended($marc_record_salida, $params, 'OPAC',$db);
+    #se procesa el marc_record filtrado
+    ($MARC_result_array)     = marc_record_to_meran_to_detail_view_as_not_extended($marc_record_salida, $params, 'OPAC',$db);
     } else {
-	#se procesa el marc_record filtrado
-	($MARC_result_array) = marc_record_to_meran_to_detail_view($marc_record_salida, $params->{'id_tipo_doc'}, 'OPAC',$db);
+    #se procesa el marc_record filtrado
+    ($MARC_result_array) = marc_record_to_meran_to_detail_view($marc_record_salida, $params->{'id_tipo_doc'}, 'OPAC',$db);
     }
 
     return $MARC_result_array;
@@ -416,11 +419,11 @@ sub marc_record_to_intra_view {
     my ($marc_record_salida)    = filtrarVisualizacion($marc_record, $params,$db);
 
     if(!C4::AR::Preferencias::getValorPreferencia("detalle_INTRA_extendido")){
-	#se procesa el marc_record filtrado
-	($MARC_result_array)     = marc_record_to_meran_to_detail_view_as_not_extended($marc_record_salida, $params, 'INTRA',$db);
+    #se procesa el marc_record filtrado
+    ($MARC_result_array)     = marc_record_to_meran_to_detail_view_as_not_extended($marc_record_salida, $params, 'INTRA',$db);
     } else {
-	#se procesa el marc_record filtrado
-	($MARC_result_array) = marc_record_to_meran_to_detail_view($marc_record_salida, $params->{'id_tipo_doc'}, 'INTRA',$db);
+    #se procesa el marc_record filtrado
+    ($MARC_result_array) = marc_record_to_meran_to_detail_view($marc_record_salida, $params->{'id_tipo_doc'}, 'INTRA',$db);
     }
 
     return $MARC_result_array;
@@ -465,7 +468,7 @@ sub filtrarVisualizacion{
                     }else{
     #                     $msg_object->{'error'} = 1;
     #                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U412', 'params' => [$campo.", ".$key." valor: ".$value]} ) ;
-# 			C4::AR::Debug::debug("C4::AR::Catalogacion::filtrarVisualizacion => NO ACEPTADO campo,subcampo => dato ".$field->tag.",".$sub_campo." => ".$dato);
+#           C4::AR::Debug::debug("C4::AR::Catalogacion::filtrarVisualizacion => NO ACEPTADO campo,subcampo => dato ".$field->tag.",".$sub_campo." => ".$dato);
                     }
                 }
                 if (scalar(@subcampos_array)){
@@ -537,11 +540,43 @@ sub marc_record_to_meran_to_detail_view {
     return (\@MARC_result_array);
 }
 
-# sub getLabelByCampo{
-#     my ($campo) = @_;
-# 
-#     return "LABEL GENERICO";
-# }
+sub marc_record_to_oai {
+    my ($marc_record, $itemtype, $type, $db) = @_;
+
+    my @MARC_result_array;
+    
+    $type = $type || "__NO_TYPE";
+    
+    my $new_marc_record =   MARC::Record->new();
+    
+    foreach my $field ($marc_record->fields) {
+        if(! $field->is_control_field){
+            my %hash;
+            my $campo                       = $field->tag;
+            my $indicador_primario_dato     = $field->indicator(1);
+            my $indicador_secundario_dato   = $field->indicator(2);
+            #proceso todos los subcampos del campo
+            foreach my $subfield ($field->subfields()) {
+                my %hash_temp;
+
+                my $subcampo                        = $subfield->[0];
+                my $dato                            = $subfield->[1];
+                $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype, $db);
+                my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $db);
+                
+                
+                C4::AR::Debug::debug("PASANDO A MARC OAI EL CAMPO $campo , $subcampo CON VALOR $valor_referencia");
+                
+                my $field = MARC::Field->new($campo,'','',$subcampo => $valor_referencia);
+                
+                $new_marc_record->append_fields($field);
+            }
+            
+        }
+    }
+
+    return ($new_marc_record);
+}
 
 
 # TODO ver tema de performance, habria q llamar a getVisualizacionFromCampo y levantar toda la conf una vez
@@ -624,8 +659,8 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
     my @MARC_result_array;
     my %hash_temp_aux;
     my $index;
-    $type 		    = $type || "__NO_TYPE";
-    my $itemtype 	= $params->{'id_tipo_doc'};
+    $type           = $type || "__NO_TYPE";
+    my $itemtype    = $params->{'id_tipo_doc'};
 
 #     C4::AR::Debug::debug("marc_record->as_usmarc => ".$marc_record->as_formatted);
 
@@ -660,7 +695,7 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
             }
 
             $hash_temp_aux{'campo'}             = $campo;
-            $hash_temp_aux{'orden'} 		    = getOrdenFromCampo($campo, $params->{'nivel'}, $itemtype, $type, $db);
+            $hash_temp_aux{'orden'}             = getOrdenFromCampo($campo, $params->{'nivel'}, $itemtype, $type, $db);
 
             if($type eq "INTRA"){
                 #muestro el label configurado, si no existe muestro el label de la BIBLIA
@@ -1089,7 +1124,6 @@ sub getEstructuraYDatosDeNivel{
             
                     if($cat_estruct_array){
 
-# FIXME se recupera el primer campo q encuentra, le falta el nivel y el template
                         my ($campos_base_array_ref) = C4::AR::EstructuraCatalogacionBase::getEstructuraBaseFromCampo($campo);
 
                         #se verifica que exista el campo en la BIBLIA
@@ -1432,15 +1466,15 @@ sub _obtenerOpciones{
 
 #     C4::AR::Debug::debug("_obtenerOpciones => es un combo, se setean las opciones para => ".$cat_estruct_object->infoReferencia->getReferencia);
 #     C4::AR::Debug::debug("_obtenerOpciones => getCampos => ".$cat_estruct_object->infoReferencia->getCampos);
-	if ($cat_estruct_object->infoReferencia) {
-		my $orden = $cat_estruct_object->infoReferencia->getCampos;
-		my ($cantidad, $valores) = &C4::AR::Referencias::obtenerValoresTablaRef(   
+    if ($cat_estruct_object->infoReferencia) {
+        my $orden = $cat_estruct_object->infoReferencia->getCampos;
+        my ($cantidad, $valores) = &C4::AR::Referencias::obtenerValoresTablaRef(   
                                                                 $cat_estruct_object->infoReferencia->getReferencia,  #tabla  
                                                                 $cat_estruct_object->infoReferencia->getCampos,  #campo
                                                                 $orden
                                                 );
-		$hash_ref->{'opciones'} = $valores;
-	}
+        $hash_ref->{'opciones'} = $valores;
+    }
 #     C4::AR::Debug::debug("_obtenerOpciones => opciones => ".$valores);
 }
 
@@ -1471,7 +1505,7 @@ sub t_guardarEnEstructuraCatalogacion {
         };
     
         if ($@){
-        	$msg_object          = C4::AR::Mensajes::create();
+            $msg_object          = C4::AR::Mensajes::create();
             #Se loguea error de Base de Datos
             &C4::AR::Mensajes::printErrorDB($@, 'B426',"INTRA");
             $db->rollback;
@@ -1852,20 +1886,21 @@ sub _getEstructuraFromCampoSubCampo{
     $db = $db || C4::Modelo::CatEstructuraCatalogacion->new()->db;   
     my @filtros;
 
-    push( @filtros, ( campo      => { eq => $campo } ) );
-    push( @filtros, ( subcampo   => { eq => $subcampo } ) );
-    push( @filtros, ( or   => [     itemtype   => { eq => $itemtype }, 
+    push(@filtros, ( campo      => { eq => $campo } ) );
+    push(@filtros, ( subcampo   => { eq => $subcampo } ) );
+
+    push (  @filtros, ( or   => [   itemtype   => { eq => $itemtype }, 
                                     itemtype   => { eq => 'ALL'     } ])
                      );
 
-	my $cat_estruct_info_array = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(  
+    my $cat_estruct_info_array = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(  
                                                                                 db              => $db,
-																				query           =>  \@filtros, 
+                                                                                query           =>  \@filtros, 
 #                                                                 FIXME es necesario????????????
                                                                                 with_objects    => ['infoReferencia'],#LEFT JOIN
                                                                                 require_objects => [ 'subCamposBase' ] #INNER JOIN
 
-										);	
+                                        );  
 
 # FIXME si hay dos configuraciones toma la primera
   if(scalar(@$cat_estruct_info_array) > 0){
@@ -2002,7 +2037,7 @@ sub getDocumentById{
     my ($file) = C4::Modelo::EDocument::Manager->get_e_document( query => [ id => { eq => $file_id } ] );
     
     if (scalar(@$file)){
-    	return ($file->[0]);
+        return ($file->[0]);
     }
     
     return (undef);
@@ -2011,10 +2046,10 @@ sub getDocumentById{
 
 sub saveEDocument{
     my ($id2,$filepath,$file_type,$name) = @_;
-	
-	my $e_doc = C4::Modelo::EDocument->new();
-	$e_doc->agregar($id2,$filepath,$file_type,$name);
-	
+    
+    my $e_doc = C4::Modelo::EDocument->new();
+    $e_doc->agregar($id2,$filepath,$file_type,$name);
+    
 }
 
 sub getHeader{
@@ -2031,6 +2066,90 @@ sub getHeader{
     }else{
         return 0;
     }
+}
+
+sub toOAIXML{
+    my ($dc,$id1) = @_;
+    
+    my $server      = $ENV{'SERVER_NAME'};
+    my $proto       = ($ENV{'SERVER_PORT'} eq 443)?"https://":"http://";
+    my $prefix   = $proto.$server.C4::AR::Utilidades::getUrlPrefix();
+    my $url = $prefix."/opac-detail.pl?id1=".$id1;
+    
+    my $xml = "\n <rdf:Description rdf:about=$url> \n";
+
+    while ( my ($key, $value) = each(%$dc) ) {
+
+    ## list context will retrieve all of a particular element 
+#    foreach my $element ( $record->element( 'Creator' ) ) {
+#        print "creator: ", $element->content(), "\n";
+#    }
+            foreach my $campo (@$value){
+                my $campo_name = $key;
+                if (C4::AR::Utilidades::validateString($campo->content)){
+                    $campo_name = C4::AR::Utilidades::str_replace("_",":",$campo_name);
+                    my $xml_field_name= lc($campo_name);
+                    $xml .= "<$xml_field_name>".$campo->content."</$xml_field_name>\n";
+                }
+            }
+    }
+    
+    $xml .= "</rdf:Description> \n";
+    
+    return ($xml);  
+}
+
+sub headerDCXML{
+    
+    my $headerDCXML =' 
+    <?xml version="1.0"?>
+    <!DOCTYPE rdf:RDF PUBLIC "-//DUBLIN CORE//DCMES DTD 2002/07/31//EN"
+        "http://dublincore.org/documents/2002/07/31/dcmes-xml/dcmes-xml-dtd.dtd">
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:dc="http://purl.org/dc/elements/1.1/">';
+    
+    return $headerDCXML;
+}
+
+sub footerDCXML{
+    
+    my $footerDCXML = '</rdf:RDF>';
+    
+    return $footerDCXML;
+}
+
+sub existeNivel1{
+    my ($titulo,$autor_object) = @_;
+
+    use Sphinx::Search;
+
+    my $sphinx      = Sphinx::Search->new();
+    my $query       = '@titulo '.$titulo;
+       $query      .= '@autor '.$autor_object->getCompleto();
+    my $tipo        = 'SPH_MATCH_EXTENDED';
+    my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
+
+    $sphinx->SetMatchMode($tipo_match);
+    $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
+    $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
+    # NOTA: sphinx necesita el string decode_utf8
+    my $results = $sphinx->Query($query);
+
+    my @id1_array;
+    my $matches                 = $results->{'matches'};
+    my $total_found             = $results->{'total_found'};
+#     C4::AR::Utilidades::printHASH($results);
+    C4::AR::Debug::debug("C4::AR::Busqueda::busquedaPorTitulo => total_found: ".$total_found);
+#     C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
+    foreach my $hash (@$matches){
+      my %hash_temp         = {};
+      $hash_temp{'id1'}     = $hash->{'doc'};
+      $hash_temp{'hits'}    = $hash->{'weight'};
+
+      push (@id1_array, \%hash_temp);
+    }
+
+    return (scalar(@id1_array));
 }
 
 END { }       # module clean-up code here (global destructor)
