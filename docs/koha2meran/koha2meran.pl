@@ -1023,6 +1023,10 @@ sub traduccionEstructuraMarc {
 									FROM `rep_historial_circulacion` WHERE (`tipo_operacion` = 'devolucion' or `tipo_operacion` = 'return') ;");
      $refprestamos->execute();
       
+      #Responsables que no existen mas      
+       my $refresponsables=$dbh->prepare("UPDATE `rep_historial_circulacion` SET responsable='kohaadmin' WHERE responsable not in (select nro_socio from usr_socio);");
+       $refresponsables->execute();
+            
     }
 
 
