@@ -30,8 +30,8 @@ sub getObjeto{
 	my ($self) = shift;
 	my ($id) = @_;
 
-# 	my $objecto= C4::Modelo::RefIdioma->new(idLanguage => $id);
-    my $objecto= C4::Modelo::RefIdioma->new(id => $id);
+ 	my $objecto= C4::Modelo::RefIdioma->new(idLanguage => $id);
+#    my $objecto= C4::Modelo::RefIdioma->new(id => $id);
 	$objecto->load();
 	return $objecto;
 }
@@ -74,15 +74,15 @@ sub obtenerValoresCampo {
     my ($self)=shift;
     my ($campo,$orden)=@_;
 	my $ref_valores = C4::Modelo::RefIdioma::Manager->get_ref_idioma
-# 						( select   => ['idLanguage', $campo],
-                        ( select   => ['id', $campo],
+ 						( select   => ['idLanguage', $campo],
+#                        ( select   => ['id', $campo],
 						  sort_by => ($orden) );
     my @array_valores;
 
     for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
 		my $valor;
-# 		$valor->{"clave"} = $ref_valores->[$i]->getIdLanguage;
-        $valor->{"clave"} = $ref_valores->[$i]->getId();
+ 		$valor->{"clave"} = $ref_valores->[$i]->getIdLanguage;
+#        $valor->{"clave"} = $ref_valores->[$i]->getId();
 		$valor->{"valor"} = $ref_valores->[$i]->getCampo($campo);
 
         push (@array_valores, $valor);
@@ -96,8 +96,8 @@ sub obtenerValorCampo {
    	my ($campo,$id)=@_;
  	my $ref_valores = C4::Modelo::RefIdioma::Manager->get_ref_idioma
 						( select   => [$campo],
-# 						  query =>[ idLanguage => { eq => $id} ]);
-                        query =>[ id => { eq => $id} ]);
+ 						  query =>[ idLanguage => { eq => $id} ]);
+#                        query =>[ id => { eq => $id} ]);
     	
 # 	return ($ref_valores->[0]->getCampo($campo));
   if(scalar(@$ref_valores) > 0){
@@ -112,8 +112,8 @@ sub getCampo{
     my ($self) = shift;
 	my ($campo)=@_;
     
-# 	if ($campo eq "idLanguage") {return $self->getIdLanguage;}
-    if ($campo eq "id") {return $self->getId;}
+ 	if ($campo eq "idLanguage") {return $self->getIdLanguage;}
+#    if ($campo eq "id") {return $self->getId;}
 	if ($campo eq "description") {return $self->getDescription;}
 
 	return (0);
