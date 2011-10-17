@@ -285,12 +285,11 @@ function updateInfoPrestarReserva(responseText){
 	var ticketsArray    = infoHash.tickets;
 	var mensajes        = '';  
     alert("sdafsdfsdfd");
-//   	for(i=0; i<messageArray.length;i++){
+   	for(i=0; i<messageArray.length;i++){
 //         imprimirTicket(ticketsArray[i].ticket,i);
-//         setMessages(messageArray[i]);
-//     }
-      die();
-//     imprimirTicket(ticketsArray);
+        setMessages(messageArray[i]);
+     }
+    imprimirTicket(ticketsArray);
 
 
 	detalleReservas(USUARIO.ID,updateInfoReservas);
@@ -467,7 +466,8 @@ function updateInfoRenovar(responseText){
 // 		imprimirTicket(ticketsArray[i].ticket,i);
   		setMessages(messageArray[i]);
 	}
-
+    imprimirTicket(ticketsArray);
+  
 	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
     ejemplaresDelGrupo(ID_N2);
 }
