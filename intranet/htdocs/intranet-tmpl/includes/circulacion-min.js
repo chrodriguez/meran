@@ -39,4 +39,4 @@ function updateInfoDevolver(responseText){}
 function imprimirTicket(tickets){var comprobantes=new Array();if(tickets.length>0){for(i=0;i<tickets.length;i++){comprobantes[i]=tickets[i];}}
 objAH=new AjaxHelper(updateImprimirTicket);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/circ/circulacionDB.pl';objAH.tipoAccion='IMPRIMIR_COMPROBANTE';objAH.comprobantes=comprobantes;objAH.sendToServer();}
 function updateImprimirTicket(responseText){$('#ticket').html(responseText);$('#ticket').printElement({printBodyOptions:{styleToAdd:'color:#FFFFFF;',classNameToAdd:'comprobante'}});$('#ticket').hide();var html="<a id='link_comp' onclick='mostrarComprobante();'> Ver impresion</a>";$('.message_text').append(html);}
-function mostrarComprobante(){$('#ticket').modal({containerCss:{backgroundColor:"#fff",height:420,padding:0,width:650,},});}
+function mostrarComprobante(){$('#ticket').modal({containerCss:{backgroundColor:"#fff",color:"#000",},});}

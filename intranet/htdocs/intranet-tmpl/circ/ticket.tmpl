@@ -8,21 +8,18 @@
 
 
 
-[% FOREACH comp IN comprobantes %]
+[% FOREACH comprobantes %]
+    <div id="comprob">
+        <p >PR&Eacute;STAMO - RENOVACI&Oacute;N</p>
         <table>
             <tbody> 
-                  [% comp.prestamo %]
-                  <tr>
-                        <td>
-                            <p style="align:center;">PR&Eacute;STAMO - RENOVACI&Oacute;N</p>
-                        </td>
-                  </tr>
+         
                   <tr>
                         <td>
                             C&oacute;digo de barras:
                         </td>
                         <td>
-                            <h2>[% comp.prestamo.nivel3.getBarcode %]</h2>
+                            <h2>[% prestamo.nivel3.getBarcode %]</h2>
                         </td>
                   </tr>
                   <tr>
@@ -30,10 +27,10 @@
                           Usuario:
                       </td>
                       <td>
-                          [% IF comp.adicional_selected == "true" %]
-                              <b>[% comp.socio.getNombre_apellido_autorizado %]</b>
+                          [% IF adicional_selected == "true" %]
+                              <b>[% socio.getNombre_apellido_autorizado %]</b>
                           [% ELSE %]  
-                              <b>[% comp.socio.persona.getApeYNom %]</b>
+                              <b>[% socio.persona.getApeYNom %]</b>
                           [% END %]
                       </td>
                   </tr>
@@ -42,12 +39,12 @@
                           Documento:
                       </td>
                       <td>
-                          Tipo:<b>[% comp.socio.persona.documento.getTipo_documento  %]</b> 
+                          Tipo:<b>[% socio.persona.documento.getTipo_documento  %]</b> 
                           N&uacute;mero:
-                          [% IF comp.adicional_selected == "true" %]
-                              <b>[% comp.socio.getDni_autorizado %]</b>
+                          [% IF adicional_selected == "true" %]
+                              <b>[% socio.getDni_autorizado %]</b>
                           [% ELSE %]  
-                              <b>[% comp.socio.persona.getNro_documento %]</b>
+                              <b>[% socio.persona.getNro_documento %]</b>
                           [% END %]
                       </td>
                   </tr>
@@ -56,7 +53,7 @@
                           Fecha de pr&eacute;stamo: 
                       </td>
                       <td>
-                          <b> [% comp.prestamo.getFecha_prestamo_formateada_ticket %]</b>
+                          <b> [% prestamo.getFecha_prestamo_formateada_ticket %]</b>
                       </td>
                   </tr>
                   <tr>
@@ -64,7 +61,7 @@
                           Fecha de devoluci&oacute;n:
                       </td>
                       <td>
-                          <b>[% comp.prestamo.getFecha_vencimiento_formateada %]</b>
+                          <b>[% prestamo.getFecha_vencimiento_formateada %]</b>
                       </td>
                   </tr>
                   <tr>
@@ -72,7 +69,7 @@
                           Tipo de pr&eacute;stamo:
                       </td>
                       <td>
-                          <b>[% comp.prestamo.tipo.getDescripcion %]</b>
+                          <b>[% prestamo.tipo.getDescripcion %]</b>
                       </td>
                   </tr>
                   <tr>
@@ -80,7 +77,7 @@
                           Autor:
                       </td>
                       <td>
-                          <b>[% comp.prestamo.nivel3.nivel1.getAutor %]</b>
+                          <b>[% prestamo.nivel3.nivel1.getAutor %]</b>
                       </td>
                   </tr>
                   <tr>
@@ -88,7 +85,7 @@
                           T&iacute;tulo:
                   </td>
                       <td>
-                          <b>[% comp.prestamo.nivel3.nivel1.getTitulo %]</b>
+                          <b>[% prestamo.nivel3.nivel1.getTitulo %]</b>
                       </td>
                   </tr>
                 <!-- <tr>
@@ -140,14 +137,10 @@
                     </tr>
                 </tbody>
               </table>
-
+   
+              <p>DEVOLUCI&Oacute;N</p>
               <table>
                 <tbody> 
-                  <tr>
-                  <td>
-                      <p>DEVOLUCI&Oacute;N</p>
-                  </td>
-                  </tr>
                   <tr>
                       <td>
                           Fecha: 
@@ -166,7 +159,10 @@
                   </tr>
                 </tbody>
               </table>
+    </div>
+            
 [% END %]
+
 <!-- AGREGADO HASTA ACA -->
 
 <!--<br><br><br>

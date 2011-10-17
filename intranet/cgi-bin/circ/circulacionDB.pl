@@ -474,24 +474,15 @@ elsif ( $tipoAccion eq "IMPRIMIR_COMPROBANTE" ) {
                     my $ticket= $elem->{'ticket'};
     
                     $hash{'socio'} =    C4::AR::Usuarios::getSocioInfoPorNroSocio($ticket->{'socio'});
-                    
-                    C4::AR::Debug::debug("--------------------------------------------------------------------------------");
-                    C4::AR::Utilidades::printHASH(%hash->{'socio'});
-                    C4::AR::Debug::debug("--------------------------------------------------------------------------------");                 
+                    $hash{'responsable'} = C4::AR::Usuarios::getSocioInfoPorNroSocio($ticket->{'responsable'});
+                    $hash{'prestamo'} = C4::AR::Prestamos::getPrestamoDeId3($ticket->{'id3'});
 
-                    $hash{'responsable'}          = C4::AR::Usuarios::getSocioInfoPorNroSocio($ticket->{'responsable'});
-                    $hash{'prestamo'}             = C4::AR::Prestamos::getPrestamoDeId3($ticket->{'id3'});
+          
                     $hash{'adicional_selected'}   = $ticket->{'adicional_selected'};
-                    push(@comprobantes,$ticket);
-#                    
+                    push(@comprobantes,\%hash);
+                   
             }
    
-
-
-#             $t_params->{'socio'}                = C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'socio'});
-#             $t_params->{'responsable'}          = C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'responsable'});
-#             $t_params->{'prestamo'}             = C4::AR::Prestamos::getPrestamoDeId3($obj->{'id3'});
-#             $t_params->{'adicional_selected'}   = $obj->{'adicional_selected'};
             $t_params->{'comprobantes'}   = \@comprobantes;
 
             C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -543,15 +543,15 @@ function updateImprimirTicket(responseText){
         $('.message_text').append(html);
 
         
-           
-//       $('#ticket').modal({   containerCss:{
+//         $('#ticket').modal({   containerCss:{
 //             backgroundColor:"#fff",
 //             borderColor:"#0063dc",
 //             height:420,
 //             padding:0,
 //             width:650,
+   
 //             
-//         },
+//          },
 //       });
 //         return false;
 //      });
@@ -561,11 +561,11 @@ function updateImprimirTicket(responseText){
 function mostrarComprobante(){
 
     $('#ticket').modal({   containerCss:{
-            backgroundColor:"#fff",
-    //         borderColor:"#0063dc",
-            height:420,
-            padding:0,
-            width:650,
+             backgroundColor:"#fff",
+//             height:420,
+//             padding:0,
+//             width:650,
+               color: "#000",
             
         },
       });

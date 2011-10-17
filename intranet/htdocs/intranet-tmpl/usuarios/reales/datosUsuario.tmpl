@@ -121,9 +121,12 @@ function updateInfoRenovar(responseText){
 
     setMessages(messageArray);
     
-    for(var i=0;i<ticketsArray.length;i++){
-        imprimirTicket(ticketsArray[i].ticket,i);
+   for(var i=0; i<messageArray.length;i++){
+//      imprimirTicket(ticketsArray[i].ticket,i);
+        setMessages(messageArray[i]);
     }
+
+    imprimirTicket(ticketsArray);
 
 	detallePrestamos(USUARIO.ID);
 	//puede que llegue al  max de prestamos y se cancelen las reservas
@@ -361,7 +364,7 @@ $(document).ready(function(){
             <div id="historialSanciones" class="toggle_container_block" style="display:none"></div>
         </fieldset>
     </div>
-    <div class="ticket" id="ticket" style="padding-left:22%"></div>
+    <div class="ticket" id="ticket" ></div>
 </div>
 
 [% INCLUDE "intranet-bottom.inc" %]
