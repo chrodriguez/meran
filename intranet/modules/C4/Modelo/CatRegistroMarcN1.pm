@@ -441,6 +441,27 @@ sub toMARC_Opac{
     return ($MARC_result_array);
 }
 
+
+=head2 sub toMARC_OAI
+    Construye un registro MARC con datos referenciados
+=cut
+sub toMARC_OAI{
+    my ($self) = shift;
+
+    #obtengo el marc_record del NIVEL 1
+    my $marc_record             = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+    my $params;
+    $params->{'nivel'}          = '1';
+    $params->{'tipo'}           = 'OPAC';
+    $params->{'id_tipo_doc'}    = $self->getTemplate()||'ALL';
+    
+    $marc_record =  C4::AR::Catalogacion::filtrarVisualizacion($marc_record, $params);
+    
+    my $MARC_record       = C4::AR::Catalogacion::marc_record_to_oai($marc_record, $params->{'id_tipo_doc'}, $params->{'tipo'});
+
+    return ($MARC_record);
+}
 =head2 sub getGrupos
     Recupero todos los grupos del nivel 1.
     Retorna la referencia a un arreglo de objetos
