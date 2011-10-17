@@ -41,7 +41,7 @@
 
         </fieldset>
         <p>[% 'De' | i18n %]: [% HTML.escape(mensaje.getApellido) %], [% HTML.escape(mensaje.getNombre) %] ([% HTML.escape(mensaje.getEmail) %])</p>
-        <input type="hidden" name="email" id="email" value="[% mensaje.getEmail %]">
+        <input type="hidden" name="email" id="email" value="[% HTML.escape(mensaje.getEmail) %]">
         <h1 id="responder" class="pagetitle" onclick="responder()"> [% 'Responder mensaje' | i18n %]</h1>
                   <div class="responder" style="display:none; padding-top:10px;">
                             <textarea id="respuesta" name="respuesta" class="self_review" style="width: 377px"></textarea>
