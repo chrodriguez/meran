@@ -1129,19 +1129,12 @@ sub getEstructuraYDatosDeNivel{
                         #se verifica que exista el campo en la BIBLIA
                         if($campos_base_array_ref){
 
-                            $liblibrarian           = $cat_estruct_array->getLiblibrarian;
-                            $repetible              = $cat_estruct_array->getRepeatable;
-                            $indicador_primario     = $cat_estruct_array->getIndicadorPrimario;
-                            $indicador_secundario   = $cat_estruct_array->getIndicadorSecundario;
-                            $descripcion_campo      = $cat_estruct_array->getDescripcion.' - '.$cat_estruct_array->getCampo;  
+                            $liblibrarian           = $cat_estruct_array->camposBase->getLiblibrarian;
+                            $repetible              = $cat_estruct_array->camposBase->getRepeatable;
+                            $indicador_primario     = $cat_estruct_array->camposBase->getIndicadorPrimario;
+                            $indicador_secundario   = $cat_estruct_array->camposBase->getIndicadorSecundario;
+                            $descripcion_campo      = $cat_estruct_array->camposBase->getDescripcion.' - '.$cat_estruct_array->getCampo;  
     
-
-#                             $liblibrarian           = $cat_estruct_array->camposBase->getLiblibrarian;
-#                             $repetible              = $cat_estruct_array->camposBase->getRepeatable;
-#                             $indicador_primario     = $cat_estruct_array->camposBase->getIndicadorPrimario;
-#                             $indicador_secundario   = $cat_estruct_array->camposBase->getIndicadorSecundario;
-#                             $descripcion_campo      = $cat_estruct_array->camposBase->getDescripcion.' - '.$cat_estruct_array->getCampo;  
-#     
                         } else {
 
 #                             $liblibrarian           = "Catalogacion => getEstructuraYDatosDeNivel => NO EXISTE EL CAMPO (".$campo.")";
