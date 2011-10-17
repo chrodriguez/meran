@@ -42,12 +42,12 @@ my $tt1 = time();
     modificarCiudades();
 
  print "Agregando ciudades \n";
-     agregarCiudades();
+    agregarCiudades();
  
 # #################
  print "Procesando los 3 niveles (va a tardar!!! ...MUCHO!!! mas de lo que te imaginas) \n";
  my $st1 = time();
-     procesarV2_V3();
+    procesarV2_V3();
  my $end1 = time();
  my $tardo1=($end1 - $st1);
  print "AL FIN TERMINO!!! Tardo $tardo1 segundos !!!\n";
@@ -58,9 +58,9 @@ my $tt1 = time();
  print "Quitando tablas de mas \n";
   quitarTablasDeMas();
  print "Hasheando passwords \n";
-    hashearPasswords();
+ #   hashearPasswords();
  print "Limpiamos las tablas de circulacion \n";
- limpiarCirculacion();
+# limpiarCirculacion();
  print "Referencias de usuarios en circulacion \n";
  my $st2 = time();
    repararReferenciasDeUsuarios();
@@ -1006,16 +1006,23 @@ sub traduccionEstructuraMarc {
       my $refusr=$dbh->prepare("ALTER TABLE $tabla DROP borrowernumber;");
       $refusr->execute();
 
-      my $refclean=$dbh->prepare("DELETE FROM $tabla WHERE nro_socio=0 OR nro_socio='';");
+      my $refclean=$dbh->prepare("DELETE FROM $tabla WHERE nro_socio='0' OR nro_socio='';");
       $refclean->execute();
 
 	    if(($tabla eq 'rep_historial_sancion')||($tabla eq 'rep_historial_circulacion')){
-	      #Estas tablas tienen responsable
-	      my $refclean2=$dbh->prepare("DELETE FROM $tabla WHERE responsable=0 OR responsable='';");
+	      #Estas tablas tienen responsable (ponemos al usuario)
+	      my $refclean2=$dbh->prepare("UPDATE $tabla SET responsable=nro_socio WHERE responsable=0 OR responsable='';");
 	      $refclean2->execute();
 	    }
     }
 
+	#Se agregan las referencias a los prestamos viejos!!
+	
+	  my $refprestamos=$dbh->prepare("INSERT INTO rep_historial_prestamo (id3,nro_socio,tipo_prestamo,fecha_prestamo,id_ui_origen,id_ui_prestamo,fecha_devolucion,fecha_ultima_renovacion,renovaciones,timestamp,agregacion_temp)
+									SELECT id3,nro_socio,tipo_prestamo,NULL,id_ui as id_ui_origen,id_ui as id_ui_prestamo,fecha as fecha_devolucion,NULL,0,NOW(),NULL
+									FROM `rep_historial_circulacion` WHERE (`tipo_operacion` = 'devolucion' or `tipo_operacion` = 'return') ;");
+     $refprestamos->execute();
+      
     }
 
 

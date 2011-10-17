@@ -126,6 +126,7 @@ use vars qw(@EXPORT_OK @ISA);
     escapeHashData
     armarIniciales
     generarComboCamposPersona
+    str_replace
 );
 
 
@@ -4253,6 +4254,24 @@ sub armarIniciales{
     
     return ($iniciales);
 
+}
+
+#Replace a string without using RegExp.
+sub str_replace {
+    my $replace_this = shift;
+    my $with_this  = shift; 
+    my $string   = shift;
+    
+    my $length = length($string);
+    my $target = length($replace_this);
+    
+    for(my $i=0; $i<$length - $target + 1; $i++) {
+        if(substr($string,$i,$target) eq $replace_this) {
+            $string = substr($string,0,$i) . $with_this . substr($string,$i+$target);
+            return $string; #Comment this if you what a global replace
+        }
+    }
+    return $string;
 }
 
 END { }       # module clean-up code here (global destructor)

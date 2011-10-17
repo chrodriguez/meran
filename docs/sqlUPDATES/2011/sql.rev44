@@ -1,2 +1,1 @@
-DELETE FROM `rep_historial_circulacion` 
-WHERE (nro_socio = 0) OR (nro_socio IS NULL);
+DELETE FROM `rep_historial_circulacion`  WHERE (nro_socio = '0') OR (nro_socio IS NULL);

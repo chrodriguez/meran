@@ -39,49 +39,47 @@ use URI::Escape;
 use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
 @EXPORT_OK=qw(
-    &busquedaAvanzada
-    &busquedaCombinada
-    &armarBuscoPor
-    &obtenerEdiciones
-    &obtenerGrupos
-    &busquedaCombinada_newTemp
-    &obtenerDisponibilidadTotal
-    &busquedaPorBarcode
-    &buscarMapeo
-    &buscarMapeoTotal
-    &buscarMapeoCampoSubcampo
-    &buscarCamposMARC
-    &buscarSubCamposMARC
-    &buscarDatoDeCampoRepetible
-    &buscarTema
-    &busquedaSignaturaBetween
-    &busquedaPorEstante
-    &busquedaEstanteDeGrupo
-
-    &filtrarPorAutor
-    &MARCDetail
-
-    &getLibrarian
-    &getautor
-    &getLevel
-    &getLevels
-    &getCountry
-    &getCountryTypes
-    &getSupport
-    &getSupportTypes
-    &getLanguage
-    &getLanguages
-    &getItemType
-    &getItemTypes
-    &getborrowercategory
-    &getAvail
-    &getAvails
-    &getTema
-    &getNombreLocalidad
-    &getBranches
-    &getBranch
-
-    &t_loguearBusqueda
+    busquedaAvanzada
+    busquedaCombinada
+    armarBuscoPor
+    obtenerEdiciones
+    obtenerGrupos
+    busquedaCombinada_newTemp
+    obtenerDisponibilidadTotal
+    busquedaPorBarcode
+    buscarMapeo
+    buscarMapeoTotal
+    buscarMapeoCampoSubcampo
+    buscarCamposMARC
+    buscarSubCamposMARC
+    buscarDatoDeCampoRepetible
+    buscarTema
+    busquedaSignaturaBetween
+    busquedaPorEstante
+    busquedaEstanteDeGrupo
+    filtrarPorAutor
+    MARCDetail
+    getLibrarian
+    getautor
+    getLevel
+    getLevels
+    getCountry
+    getCountryTypes
+    getSupport
+    getSupportTypes
+    getLanguage
+    getLanguages
+    getItemType
+    getItemTypes
+    getborrowercategory
+    getAvail
+    getAvails
+    getTema
+    getNombreLocalidad
+    getBranches
+    getBranch
+    t_loguearBusqueda
+    toOAI
 );
 
 
@@ -1201,6 +1199,8 @@ sub busquedaCombinada_newTemp{
     # $string_utf8_encoded    = Encode::decode_utf8($string_utf8_encoded);
 
 
+    $session    =   $session || CGI::Session->load();
+    
     my $from_suggested = $obj_for_log->{'from_suggested'} || 0;
     my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
     my $string_suggested;
@@ -1261,7 +1261,7 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
     }
 
     if ($only_available){
-        $query .= ' @string "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValueSearch.'"';
+        $query .= ' "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValueSearch.'"';
     }
 
     C4::AR::Debug::debug("Busquedas => query string ".$query);
@@ -1380,6 +1380,36 @@ sub busquedaSinPaginar {
     return ($total_found, $resultsarray);
 }
 
+sub toOAI{
+	
+    my ($resultId1)    = @_;
+    use MARC::Crosswalk::DublinCore;
+    use MARC::File::XML;
+
+    my $dc_xml = C4::AR::Catalogacion::headerDCXML();
+    
+    foreach my $record (@$resultId1){
+        my $crosswalk = MARC::Crosswalk::DublinCore->new;
+        
+        # Convert a MARC record to Dublin Core (simple)
+        my $marc =  $record->{'marc_record'} ;
+        my $dc   = $crosswalk->as_dublincore( $marc );
+
+        $dc = $crosswalk->as_dublincore( $marc );
+        
+        $dc_xml .= C4::AR::Catalogacion::toOAIXML($dc,$record->{'id1'});
+        
+    }
+    
+    $dc_xml .= C4::AR::Catalogacion::footerDCXML();
+    
+    C4::AR::Debug::debug("XML DUBLINCORE DE LA BUSQUEDA: ");
+    
+    C4::AR::Debug::debug($dc_xml);
+    
+    return ($dc_xml);
+}
+
 sub armarInfoNivel1{
     my ($params, @resultId1)    = @_;
 
@@ -1400,6 +1430,7 @@ sub armarInfoNivel1{
 #                 C4::AR::Debug::debug("NIVEL 1 PARA FAVORITOS: ".($nivel1->toMARC)->as_formatted);
         # TODO ver si esto se puede sacar del resultado del indice asi no tenemos q ir a buscarlo
             @result_array_paginado[$i]->{'titulo'}              = $nivel1->getTitulo();
+            @result_array_paginado[$i]->{'marc_record'}         = $nivel1->toMARC_OAI();
             @result_array_paginado[$i]->{'titulo'}              .= ($nivel1->getRestoDelTitulo() ne "")?": ".$nivel1->getRestoDelTitulo():"";
             my $autor_object                                    = $nivel1->getAutorObject();
 #             @result_array_paginado[$i]->{'nomCompleto'}         = $nivel1->getAutorObject->getCompleto();
