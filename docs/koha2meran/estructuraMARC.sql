@@ -247,6 +247,7 @@ INSERT INTO `pref_estructura_campo_marc` (`campo`, `liblibrarian`, `libopac`, `r
 ('995', 'Datos del Ejemplar', 'Datos del Ejemplar', 1, 0, '', '', '', 0),
 ('000', 'LEADER', 'LEADER', 0, 0, '', '', '', 0),
 ('910', 'Tipo de documento', 'Tipo de documento', 0, 1, '', '', '', 0),
+('900', 'Nivel Bibliografico', 'Nivel Bibliografico', 0, 1, '', '', '', 0),
 ('882', 'REPLACEMENT RECORD INFORMATION', 'REPLACEMENT RECORD INFORMATION', 0, 0, '', 'Undefined', 'Undefined', 0),
 ('366', 'TRADE AVAILABILITY INFORMATION', 'TRADE AVAILABILITY INFORMATION', 1, 0, '', 'Undefined', 'Undefined', 0),
 ('751', 'ADDED ENTRY--GEOGRAPHIC NAME', 'ADDED ENTRY--GEOGRAPHIC NAME', 1, 0, '', 'Undefined', 'Undefined', 0),
