@@ -1,3 +1,4 @@
+[% USE HTML %]
 <script type="text/javascript" src="/includes/jquery/jquery.wysiwyg.js"></script>
 <link rel="stylesheet" href="/includes/css/wysiwyg.css" type="text/css" media="screen"/>
 
@@ -30,18 +31,18 @@
 
 </script>
  <div class="msj_contacto">
-    <h2>[% 'Asunto' | i18n %]: [% mensaje.getAsunto %]</h2>
-    <input type="hidden" id="asunto" name="asunto" value="[% mensaje.getAsunto %]">
+    <h2>[% 'Asunto' | i18n %]: [% HTML.escape(mensaje.getAsunto) %]</h2>
+    <input type="hidden" id="asunto" name="asunto" value="[% HTML.escape(mensaje.getAsunto) %]">
 
         <fieldset>
         
             <legend>[% 'Cuerpo del mensaje' | i18n %]:</legend>
-            <h3>[% mensaje.getMensaje %]</h3>
-            <input type="hidden" name="mensaje_contacto" id="mensaje_contacto" value="[% mensaje.getMensaje %]">
+            <h3>[% HTML.escape(mensaje.getMensaje) %]</h3>
+            <input type="hidden" name="mensaje_contacto" id="mensaje_contacto" value="[% HTML.escape(mensaje.getMensaje) %]">
 
         </fieldset>
-        <p>[% 'De' | i18n %]: [% mensaje.getApellido %], [% mensaje.getNombre %] ([% mensaje.getEmail %])</p>
-        <input type="hidden" name="email" id="email" value="[% mensaje.getEmail %]">
+        <p>[% 'De' | i18n %]: [% HTML.escape(mensaje.getApellido) %], [% HTML.escape(mensaje.getNombre) %] ([% HTML.escape(mensaje.getEmail) %])</p>
+        <input type="hidden" name="email" id="email" value="[% HTML.escape(mensaje.getEmail) %]">
         <h1 id="responder" class="pagetitle" onclick="responder()"> [% 'Responder mensaje' | i18n %]</h1>
                   <div class="responder" style="display:none; padding-top:10px;">
                             <textarea id="respuesta" name="respuesta" class="self_review" style="width: 377px"></textarea>

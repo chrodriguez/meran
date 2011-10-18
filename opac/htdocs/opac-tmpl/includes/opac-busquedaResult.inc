@@ -25,21 +25,48 @@
   	    objAH.funcion           = 'changePage';
   	    //se envia la consulta
   	    objAH.sendToServer();
-
     }
-
-//     function externalSearch(keyword){
-//     	$.ajax({
-//             type: "GET",
-// 	        url: URL_PREFIX+'/opac-oai-search.pl',
-// 	        dataType: "xml",
-// 	        success: function(xml) {
-// 	        }
-//         });    	
-//     }
     
     function updateExternalSearch(responseText){
-    }       
+        $(responseText).find('rdf\\:Description').each(function() {
+            var marker = $(this);
+            var title       = marker.find("dc\\:title").text();
+            var creator     = marker.find("dc\\:creator").text();
+            var subject     = marker.find("dc\\:subject").text();
+            var description = marker.find("dc\\:description").text();
+            var publisher   = marker.find("dc\\:publisher").text();
+            var contributor = marker.find("dc\\:contributor").text();
+            var date        = marker.find("dc\\:date").text();
+            var type        = marker.find("dc\\:type").text();
+            var format      = marker.find("dc\\:format").text();
+            var identifier  = marker.find("dc\\:identifier").text();
+            var source      = marker.find("dc\\:source").text();
+            var language    = marker.find("dc\\:language").text();
+            var relation    = marker.find("dc\\:relation").text();
+            var coverage    = marker.find("dc\\:coverage").text();
+            var rights      = marker.find("dc\\:rights").text();
+            
+            var DC_hash     = {
+            		title: title,
+            		creator: creator,
+            		subject: subject,
+            		description: description,
+            		publisher: publisher,
+            		contributor: contributor,
+            		date: date,
+            		type: type,
+            		format: format,
+            		identifier: identifier,
+            		source: source,
+            		language: language,
+            		relation: relation,
+            		coverage: coverage,
+            		rights: rights
+            }
+            
+            alert (DC_hash.creator);
+        });
+    }
     
     $(document).ready(function() {
         $('.fancylink').fancybox();
@@ -63,7 +90,7 @@
           [% END %]
 
 
-<!--           <h2 class="advice"> [% 'Buscar en servidores externos.' | i18n %] <a href="#" onclick="externalSearch('[% buscoPor | html %]')">([% ' Buscar en servidores externos' | i18n %])</a></h2> -->
+          <h2 class="advice"> [% 'Buscar en servidores externos.' | i18n %] <a href="#" onclick="externalSearch('[% buscoPor | html %]')">([% ' Buscar en servidores externos' | i18n %])</a></h2>
 
 
           [% IF external_search %]
@@ -123,6 +150,7 @@
                     <th align="center" style="width: 120px;">
                         [% "Valoraci&oacute;n" | i18n %]
                     </th>
+                    
                     [% IF socio_data.usr_permisos_opac %]
 	                    <th align="center" style="width: 80px;">
 	                        [% "Favoritos" | i18n %]

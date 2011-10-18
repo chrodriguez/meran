@@ -312,6 +312,27 @@ sub getConfiguracion{
     return ($configuracion);
 }
 
+sub getConfiguracionOAI{
+    my ($db) = @_;
+    
+    $db = $db || C4::Modelo::CatVisualizacionOpac->new()->db;
+    
+    my $arreglo_marc = getCamposParaOAI();    
+    
+    my @configuracion = ();
+    
+    foreach my $marc (@$arreglo_marc){
+    	
+        my  $conf_object = C4::Modelo::CatVisualizacionOpac->new();
+            $conf_object->campo($marc->{'campo'});
+            $conf_object->subcampo($marc->{'subcampo'});
+
+            push (@configuracion,$conf_object);
+    }
+
+    return (\@configuracion);
+}
+
 sub getVistaCampo{
     my ($campo, $template, $nivel, $db) = @_;
 
@@ -597,6 +618,77 @@ sub getConfiguracionByOrderGroupCampo{
     return ($configuracion);
 }
 
+
+sub getCamposParaOAI{
+
+    my @fields;
+    my %hash_fields = {};
+
+#Contributor
+
+    $hash_fields{'campo'} = '';
+    $hash_fields{'subcampo'} = '';
+    push (@fields, \%hash_fields);
+    
+    $hash_fields{'campo'} = '';
+    $hash_fields{'subcampo'} = '';
+    push (@fields, \%hash_fields);
+    
+    $hash_fields{'campo'} = '';
+    $hash_fields{'subcampo'} = '';
+    push (@fields, \%hash_fields);
+    
+    $hash_fields{'campo'} = '';
+    $hash_fields{'subcampo'} = '';
+    push (@fields, \%hash_fields);
+    
+    $hash_fields{'campo'} = '';
+    $hash_fields{'subcampo'} = '';
+    push (@fields, \%hash_fields);
+    
+    $hash_fields{'campo'} = '';
+    $hash_fields{'subcampo'} = '';
+    push (@fields, \%hash_fields);
+    
+    $hash_fields{'campo'} = '';
+    $hash_fields{'subcampo'} = '';
+    push (@fields, \%hash_fields);
+    
+    $hash_fields{'campo'} = '';
+    $hash_fields{'subcampo'} = '';
+    push (@fields, \%hash_fields);
+    
+    $hash_fields{'campo'} = '';
+    $hash_fields{'subcampo'} = '';
+    push (@fields, \%hash_fields);
+    
+    $hash_fields{'campo'} = '';
+    $hash_fields{'subcampo'} = '';
+    push (@fields, \%hash_fields);
+    
+    $hash_fields{'campo'} = '';
+    $hash_fields{'subcampo'} = '';
+    push (@fields, \%hash_fields);
+    
+    $hash_fields{'campo'} = '';
+    $hash_fields{'subcampo'} = '';
+    push (@fields, \%hash_fields);
+    
+    $hash_fields{'campo'} = '';
+    $hash_fields{'subcampo'} = '';
+    push (@fields, \%hash_fields);
+    
+    $hash_fields{'campo'} = '';
+    $hash_fields{'subcampo'} = '';
+    push (@fields, \%hash_fields);
+    
+    $hash_fields{'campo'} = '';
+    $hash_fields{'subcampo'} = '';
+    push (@fields, \%hash_fields);
+    
+    return (\@fields);
+    
+}
 
 END { }       # module clean-up code here (global destructor)
 
