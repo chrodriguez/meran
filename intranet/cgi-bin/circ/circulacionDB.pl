@@ -161,6 +161,8 @@ C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON E
 				C4::AR::Debug::debug("SE PRESTO SIN ERROR --> SE CREA EL TICKET");
 				$ticketObj = C4::AR::Prestamos::crearTicket($id3,$nro_socio,$user);
 			}
+
+        
 			#guardo los errores
 			push (@infoMessages, $msg_object);
 			
@@ -177,6 +179,7 @@ C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON E
 	my %infoOperaciones;
 	$infoOperaciones{'tickets'}     = \@infoTickets;
 	$infoOperaciones{'messages'}    = \@infoMessages;
+
 	my $infoOperacionJSON           = to_json \%infoOperaciones;
 
     C4::AR::Auth::print_header($session);

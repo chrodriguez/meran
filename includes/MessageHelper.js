@@ -59,13 +59,13 @@ function setMessages(Messages_hashref){
     try{
 
 //         if (!($('#mensajes').html()))
-            _createContentMessages();
+         _createContentMessages();
         var i;
         //se agregan todos los mensajes
         for(i=0;i<Messages_hashref.messages.length;i++){
             $('#mensajes').append('<div class="message_text" >'+Messages_hashref.messages[i].message + '</div>');
+            
         }
-    
         $('#mensajes').css("display","block");
 
         _show();

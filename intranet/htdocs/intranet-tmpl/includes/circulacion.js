@@ -278,23 +278,23 @@ function prestar(){
  * Funcion que se realiza cuando se realiza el prestamo.
  * prestamos.tmpl---> se actualiza la tabla de reservas despues que se presto algun item.
  */
-function updateInfoPrestarReserva(responseText){
-	cancelarDiv();
-	var infoHash        = JSONstring.toObject(responseText);  
-	var messageArray    = infoHash.messages;
-	var ticketsArray    = infoHash.tickets;
-	var mensajes        = '';  
-    alert("sdafsdfsdfd");
-   	for(i=0; i<messageArray.length;i++){
-//         imprimirTicket(ticketsArray[i].ticket,i);
-        setMessages(messageArray[i]);
-     }
-    imprimirTicket(ticketsArray);
-
-
-	detalleReservas(USUARIO.ID,updateInfoReservas);
-    ejemplaresDelGrupo(ID_N2);
-}
+// function updateInfoPrestarReserva(responseText){
+// 	cancelarDiv();
+// 	var infoHash        = JSONstring.toObject(responseText);  
+// 	var messageArray    = infoHash.messages;
+// 	var ticketsArray    = infoHash.tickets;
+// 	var mensajes        = '';  
+//     alert("sdafsdfsdfd");
+//    	for(i=0; i<messageArray.length;i++){
+// //         imprimirTicket(ticketsArray[i].ticket,i);
+//         setMessages(messageArray[i]);
+//      }
+//     imprimirTicket(ticketsArray);
+// 
+// 
+// 	detalleReservas(USUARIO.ID,updateInfoReservas);
+//     ejemplaresDelGrupo(ID_N2);
+// }
 
 /*
  * cancelarDiv
@@ -455,22 +455,22 @@ function renovar(){
  * Funcion que se ejecuta cuando se realiza devoluviones o renovaciones y actualiza la tabla de prestamos.
  * IGUAL A updateInfoPrestarReserva SALVO POR EL LLAMADO A LOS DETALLES.
  */
-function updateInfoRenovar(responseText){
-	cancelarDiv();
-
-	var infoHash= JSONstring.toObject(responseText);
-	var messageArray= infoHash.messages;
-	var ticketsArray= infoHash.tickets;
-	
-	for(i=0; i<messageArray.length;i++){
-// 		imprimirTicket(ticketsArray[i].ticket,i);
-  		setMessages(messageArray[i]);
-	}
-    imprimirTicket(ticketsArray);
-  
-	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
-    ejemplaresDelGrupo(ID_N2);
-}
+// function updateInfoRenovar(responseText){
+// 	cancelarDiv();
+// 
+// 	var infoHash= JSONstring.toObject(responseText);
+// 	var messageArray= infoHash.messages;
+// 	var ticketsArray= infoHash.tickets;
+// 	
+// 	for(i=0; i<messageArray.length;i++){
+// // 		imprimirTicket(ticketsArray[i].ticket,i);
+//   		setMessages(messageArray[i]);
+// 	}
+//     imprimirTicket(ticketsArray);
+//   
+// 	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
+//     ejemplaresDelGrupo(ID_N2);
+// }
 
 
 /* devolver
@@ -540,7 +540,7 @@ function updateImprimirTicket(responseText){
         $('#ticket').hide();
         
         var html="<a id='link_comp' onclick='mostrarComprobante();'> Ver impresion</a>";
-        $('.message_text').append(html);
+        $('#mensajes').append(html);
 
         
 //         $('#ticket').modal({   containerCss:{
