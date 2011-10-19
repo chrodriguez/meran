@@ -16,6 +16,7 @@ __PACKAGE__->meta->setup(
         direccion           => { type => 'varchar', overflow => 'truncate', not_null => 1 , length => 255},
         alt_direccion       => { type => 'varchar', overflow => 'truncate', not_null => 1 , length => 255},
         telefono            => { type => 'varchar', overflow => 'truncate', not_null => 1 , length => 255},
+        url_servidor        => { type => 'varchar', overflow => 'truncate', not_null => 1 , length => 255},
         fax                 => { type => 'varchar', overflow => 'truncate', not_null => 1 , length => 255},
         email               => { type => 'varchar', overflow => 'truncate', not_null => 1 , length => 255},
     ],
@@ -138,12 +139,26 @@ sub getFax{
 
     return (C4::AR::Utilidades::trim($self->fax));
 }
-    
+      
+
 sub setFax{
     my ($self) = shift;
     my ($fax) = @_;
 
     $self->fax($fax);
+}
+
+   
+sub getUrlServidor{
+    my ($self) = shift;
+    return (C4::AR::Utilidades::trim($self->url_servidor));
+}
+
+sub setUrlServidor{
+    my ($self) = shift;
+    my ($url_servidor) = @_;
+
+    $self->url_servidor($url_servidor);
 }
     
 sub getEmail{

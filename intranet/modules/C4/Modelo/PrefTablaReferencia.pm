@@ -102,15 +102,15 @@ sub obtenerValoresTablaRef{
 	my ($alias_tabla, $campo, $orden) = @_;
 	
 	my $ref = $self->createFromAlias($alias_tabla);
-     C4::AR::Debug::debug("PrefTablaReferencia => obtenerValoresTablaRef => ref: ".$ref);
-     C4::AR::Debug::debug("PrefTablaReferencia => obtenerValoresTablaRef => campo: ".$campo);
-     C4::AR::Debug::debug("PrefTablaReferencia => obtenerValoresTablaRef => orden: ".$orden);
-     C4::AR::Debug::debug("PrefTablaReferencia => obtenerValoresTablaRef => alias_tabla: ".$alias_tabla);
+#     C4::AR::Debug::debug("PrefTablaReferencia => obtenerValoresTablaRef => ref: ".$ref);
+#     C4::AR::Debug::debug("PrefTablaReferencia => obtenerValoresTablaRef => campo: ".$campo);
+#     C4::AR::Debug::debug("PrefTablaReferencia => obtenerValoresTablaRef => orden: ".$orden);
+#     C4::AR::Debug::debug("PrefTablaReferencia => obtenerValoresTablaRef => alias_tabla: ".$alias_tabla);
 
 	if ($ref){
         my ($cantidad,$valores) = $ref->obtenerValoresCampo($campo, $orden);
-         C4::AR::Debug::debug("PrefTablaReferencia => obtenerValoresTablaRef => dentro del if cantidad: ".$cantidad);
-         C4::AR::Debug::debug("PrefTablaReferencia => obtenerValoresTablaRef => dentro del if valores: ".$valores);
+#         C4::AR::Debug::debug("PrefTablaReferencia => obtenerValoresTablaRef => dentro del if cantidad: ".$cantidad);
+#         C4::AR::Debug::debug("PrefTablaReferencia => obtenerValoresTablaRef => dentro del if valores: ".$valores);
 
 		return ($cantidad,$valores);
     }else{
