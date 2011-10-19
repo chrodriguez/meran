@@ -5,7 +5,6 @@ require Exporter;
 use C4::Context;
 use PDF::Report;
 
-# use PDF::API2;
 use C4::AR::Usuarios;
 use HTML::HTMLDoc;
 
@@ -672,7 +671,7 @@ sub prestInterBiblio {
 	$titulo{'titulo'} = Encode::decode_utf8("SOLICITUD DE PRESTAMO INTERBIBLIOTECARIO");
 	$titulo{'posx'}   = 100;
 	my @parrafo;
-	$parrafo[0] = Encode::decode_utf8((("Sr. Director de la Biblioteca")));
+	$parrafo[0] = Encode::decode_utf8((("Sr/Sra Director/a de la Biblioteca")));
 	$parrafo[1] = Encode::decode_utf8((("de la ")) . ($biblioDestino->getNombre) );
 	$parrafo[2] = Encode::decode_utf8($director);
 	$parrafo[3] = ("S/D");
@@ -689,7 +688,7 @@ sub prestInterBiblio {
 	my $cant = scalar(@$datos);
 	( $pdf, $y ) = &imprimirTabla( $pdf, $y, $pageheight, $cant, $datos );
 
-	$parrafo[0] = Encode::decode_utf8((("La(s) misma(s) sería(n) retirada(s) por:")));
+	$parrafo[0] = Encode::decode_utf8((("Lo(s) mismo(s) sería(n) retirado(s) por:")));
 	$parrafo[1] = Encode::decode_utf8(("Nombre y apellido: ").$nombre);
 	$parrafo[2] = Encode::decode_utf8(("DNI:")) . $dni;
 	$parrafo[3] =
@@ -829,17 +828,49 @@ Imprime una tabla de tres columnas y n filas, dependiendo del parametro que lleg
 
 sub imprimirTabla {
 	my ( $pdf, $y, $pageheight, $cantFila, $datos ) = @_;
-	$pdf->setFont("Verdana-Bold");
-	$pdf->setSize(12);
+   
+#     $pdf->setFont("Verdana-Bold");
+#     $pdf->setSize(10);
+# #     $pdf->drawRect( 35, $pageheight - $y, 200, $pageheight - ( $y + 20 ) );
+#     $pdf->addRawText( "Autor/es:", 50, $pageheight - ( $y + 15 ) );
+# #   $pdf->drawRect( 200, $pageheight - $y, 350, $pageheight - ( $y + 20 ) );
+#     $pdf->addRawText( _format("Titulo"), 50, $pageheight - ( $y + 30) );
+# #   $pdf->drawRect( 350, $pageheight - $y, 500, $pageheight - ( $y + 20 ) );
+#     $pdf->addRawText( "Otros datos", 50, $pageheight - ( $y + 45 ) );
+# #   $y = $y + 40;
+#     $pdf->setFont("Verdana");
+#     $pdf->setSize(10);
+# #Se pone solamente Encode::decode_utf8 porque ya viene en UTF-8
+#     for ( my $i = 0 ; $i < $cantFila ; $i++ ) {
+# #       $pdf->drawRect( 35, $pageheight - $y, 200, $pageheight - ( $y + 20 ) );
+#         $pdf->addRawText( Encode::decode_utf8($datos->[$i]->{'autor'}),
+#              110, $pageheight - ( $y + 15 ));
+#         $pdf->drawRect( 200, $pageheight - $y, 350, $pageheight - ( $y + 20 ) );
+#         $pdf->addRawText( Encode::decode_utf8($datos->[$i]->{'titulo'}),
+#             210, $pageheight - ( $y + 15 ) );
+#         $pdf->drawRect( 350, $pageheight - $y, 500, $pageheight - ( $y + 20 ) );
+#         $pdf->addRawText( Encode::decode_utf8($datos->[$i]->{'otros'}),
+#             360, $pageheight - ( $y + 15 ) );
+#         $y = $y + 20;
+#     }
+#     $y = $y + 20;
+#     $pdf->setSize(10);
+#     return ( $pdf, $y );
+
+
+
+
+    $pdf->setFont("Verdana-Bold");
+	$pdf->setSize(10);
 	$pdf->drawRect( 50, $pageheight - $y, 200, $pageheight - ( $y + 20 ) );
 	$pdf->addRawText( "Autor/es", 100, $pageheight - ( $y + 15 ) );
 	$pdf->drawRect( 200, $pageheight - $y, 350, $pageheight - ( $y + 20 ) );
-	$pdf->addRawText( _format("Ttulo"), 255, $pageheight - ( $y + 15 ) );
+	$pdf->addRawText( _format("Titulo"), 255, $pageheight - ( $y + 15 ) );
 	$pdf->drawRect( 350, $pageheight - $y, 500, $pageheight - ( $y + 20 ) );
 	$pdf->addRawText( "Otros datos", 395, $pageheight - ( $y + 15 ) );
 	$y = $y + 20;
 	$pdf->setFont("Verdana");
-	$pdf->setSize(11);
+	$pdf->setSize(10);
 #Se pone solamente Encode::decode_utf8 porque ya viene en UTF-8
 	for ( my $i = 0 ; $i < $cantFila ; $i++ ) {
 		$pdf->drawRect( 50, $pageheight - $y, 200, $pageheight - ( $y + 20 ) );
@@ -881,11 +912,13 @@ sub imprimirPiePag {
 	$texto[2] =
 	  C4::AR::Filtros::i18n("Tel/Fax: ") . $biblio->getTelefono . "/" . $biblio->getFax;
 	$texto[3] =
-	    Encode::decode_utf8("Atención: lunes a viernes, ")
+	    Encode::decode_utf8("Atención: lunes a viernes: ")
 	  . C4::AR::Preferencias::getValorPreferencia('open') . " a "
-	  . C4::AR::Preferencias::getValorPreferencia('close');
+	  . C4::AR::Preferencias::getValorPreferencia('close'). Encode::decode_utf8(" Síabados: ")
+      . C4::AR::Preferencias::getValorPreferencia('open_sabado'). " a " .C4::AR::Preferencias::getValorPreferencia('close_sabado');
 	$texto[4] = "E-mail: " . $biblio->getEmail;
-	$texto[5] = Encode::decode_utf8("Sitio web: ") . $ENV{'SERVER_NAME'};
+# 	$texto[5] = Encode::decode_utf8("Sitio web: "). $ENV{'SERVER_NAME'};
+    $texto[5] = Encode::decode_utf8("Sitio web: ").$biblio->getUrlServidor;
 	$texto[6] = "";
 	$y        = $y + 15;
 	( $pdf, $y ) =
@@ -1017,11 +1050,10 @@ sub generateBookLabelA4 {
       . '/imagenes/escudo-'
       . $branchcode . '.jpg';
 
-      C4::AR::Debug::debug($escudo);
 
     if ( !( ( -e $escudo ) && ( -r $escudo ) ) ) {
 
-      C4::AR::Debug::debug("ENTRA???????");
+
         $escudo =
             C4::Context->config('intrahtdocs') . '/temas/'
           . C4::AR::Preferencias::getValorPreferencia('defaultUI')
@@ -1053,8 +1085,6 @@ sub generateBookLabelA4 {
     my $cantdir = 1;                       #Cuantas direcciones tiene?
     my $address = _unformat($branch->getDireccion);
     $address .= ", " . _unformat($branch->getAlt_direccion); 
-
-    C4::AR::Debug::debug($address);
 
      $pdf->addRawText($address, $x + 165, 265  + ( $y - $posy ));
 
