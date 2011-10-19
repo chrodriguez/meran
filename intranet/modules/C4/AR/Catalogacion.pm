@@ -481,6 +481,48 @@ sub filtrarVisualizacion{
     return $marc_record_salida;
 }
 
+sub filtrarVisualizacionOAI{
+    my ($marc_record, $params,$db) = @_;
+
+    $db = $db || C4::Modelo::CatEstructuraCatalogacion->new()->db;
+    
+    my $visulizacion_array_ref;
+
+    ($visulizacion_array_ref) = C4::AR::VisualizacionOpac::getConfiguracionOAI($db);
+
+    my %autorizados;
+    my $marc_record_salida = MARC::Record->new();
+    #se genera el arreglo de campo, subcampos autorizados para mostrar
+    foreach my $autorizado (@$visulizacion_array_ref){
+       push(@{$autorizados{$autorizado->getCampo()}},$autorizado->getSubCampo());
+    }
+
+    foreach my $field ($marc_record->fields) {
+        if(! $field->is_control_field){
+            #se verifica si el campo esta autorizado para el nivel que se estra procesando
+                my @subcampos_array = ();
+                foreach my $subfield ($field->subfields()){
+                    my $dato = $subfield->[1];
+                    my $sub_campo = $subfield->[0];
+                    if ( ($sub_campo ne '')&&(C4::AR::Utilidades::existeInArray($sub_campo, @{$autorizados{$field->tag}} ) )) {
+                        #el subcampo $sub_campo, esta autorizado para el campo $field
+                        push(@subcampos_array, ($sub_campo => $dato));
+#                         C4::AR::Debug::debug("C4::AR::Catalogacion::filtrarVisualizacion => ACEPTADO campo,subcampo => dato ".$field->tag.",".$sub_campo." => ".$dato);
+                    }else{
+    #                     $msg_object->{'error'} = 1;
+    #                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U412', 'params' => [$campo.", ".$key." valor: ".$value]} ) ;
+#           C4::AR::Debug::debug("C4::AR::Catalogacion::filtrarVisualizacion => NO ACEPTADO campo,subcampo => dato ".$field->tag.",".$sub_campo." => ".$dato);
+                    }
+                }
+                if (scalar(@subcampos_array)){
+                    my $marc_record_salida_temp = MARC::Field->new($field->tag, $field->indicator(1), $field->indicator(2), @subcampos_array);
+                    $marc_record_salida->append_fields($marc_record_salida_temp);
+                }
+        }
+    }
+
+    return $marc_record_salida;
+}
 
 =head2
     sub marc_record_to_meran_to_detail_view
@@ -2077,14 +2119,14 @@ sub toOAIXML{
 #    foreach my $element ( $record->element( 'Creator' ) ) {
 #        print "creator: ", $element->content(), "\n";
 #    }
-            foreach my $campo (@$value){
-                my $campo_name = $key;
-                if (C4::AR::Utilidades::validateString($campo->content)){
-                    $campo_name = C4::AR::Utilidades::str_replace("_",":",$campo_name);
-                    my $xml_field_name= lc($campo_name);
-                    $xml .= "<$xml_field_name>".$campo->content."</$xml_field_name>\n";
-                }
-            }
+	        foreach my $campo (@$value){
+	        	my $campo_name = $key;
+#	            if (C4::AR::Utilidades::validateString($campo->content)){
+	                $campo_name = C4::AR::Utilidades::str_replace("_",":",$campo_name);
+	                my $xml_field_name= lc($campo_name);
+	                $xml .= "<$xml_field_name>".$campo->content."</$xml_field_name>\n";
+#	            }
+	        }
     }
     
     $xml .= "</rdf:Description> \n";

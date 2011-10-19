@@ -161,6 +161,8 @@ C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON E
 				C4::AR::Debug::debug("SE PRESTO SIN ERROR --> SE CREA EL TICKET");
 				$ticketObj = C4::AR::Prestamos::crearTicket($id3,$nro_socio,$user);
 			}
+
+        
 			#guardo los errores
 			push (@infoMessages, $msg_object);
 			
@@ -177,6 +179,7 @@ C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON E
 	my %infoOperaciones;
 	$infoOperaciones{'tickets'}     = \@infoTickets;
 	$infoOperaciones{'messages'}    = \@infoMessages;
+
 	my $infoOperacionJSON           = to_json \%infoOperaciones;
 
     C4::AR::Auth::print_header($session);
@@ -464,15 +467,26 @@ elsif ( $tipoAccion eq "IMPRIMIR_COMPROBANTE" ) {
                                             entorno => 'undefined'},
             });
 
-
             my %env;
-            my $obj                             = C4::AR::Utilidades::from_json_ISO( $obj->{'obj'} );
+            my @comprobantes;
+     
+            my $ref_array= $obj->{'comprobantes'};
 
-            $t_params->{'socio'}                = C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'socio'});
-            $t_params->{'responsable'}          = C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'responsable'});
-            $t_params->{'prestamo'}             = C4::AR::Prestamos::getPrestamoDeId3($obj->{'id3'});
-            $t_params->{'adicional_selected'}   = $obj->{'adicional_selected'};
+            foreach my $elem (@$ref_array) {
+                    my %hash;    
+                    my $ticket= $elem->{'ticket'};
+    
+                    $hash{'socio'} =    C4::AR::Usuarios::getSocioInfoPorNroSocio($ticket->{'socio'});
+                    $hash{'responsable'} = C4::AR::Usuarios::getSocioInfoPorNroSocio($ticket->{'responsable'});
+                    $hash{'prestamo'} = C4::AR::Prestamos::getPrestamoDeId3($ticket->{'id3'});
 
+          
+                    $hash{'adicional_selected'}   = $ticket->{'adicional_selected'};
+                    push(@comprobantes,\%hash);
+                   
+            }
+   
+            $t_params->{'comprobantes'}   = \@comprobantes;
 
             C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 

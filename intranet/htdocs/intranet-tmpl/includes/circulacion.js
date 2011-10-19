@@ -160,7 +160,7 @@ function realizarAccion(accion,id_table,funcion) {
 		for(var i=0; i< long; i++){
                 array[i]=chck[i].value;
 		}
-
+        
 		objAH                   = new AjaxHelper(funcion);
 		objAH.debug             = true;
         objAH.showOverlay       = true;
@@ -278,26 +278,23 @@ function prestar(){
  * Funcion que se realiza cuando se realiza el prestamo.
  * prestamos.tmpl---> se actualiza la tabla de reservas despues que se presto algun item.
  */
-function updateInfoPrestarReserva(responseText){
-	cancelarDiv();
-
-	var infoHash        = JSONstring.toObject(responseText);
-	var messageArray    = infoHash.messages;
-	var ticketsArray    = infoHash.tickets;
-	var mensajes        = '';  
-   
-    alert(messageArray);
-    
-//     for(var i=0; i<messageArray.length;i++){
-//  		imprimirTicket(ticketsArray[i].ticket,i)
-//   
-// //         imprimirTicket(ticketsArray, i);
-//   		setMessages(messageArray[i]);
-//   	}
-
-	detalleReservas(USUARIO.ID,updateInfoReservas);
-    ejemplaresDelGrupo(ID_N2);
-}
+// function updateInfoPrestarReserva(responseText){
+// 	cancelarDiv();
+// 	var infoHash        = JSONstring.toObject(responseText);  
+// 	var messageArray    = infoHash.messages;
+// 	var ticketsArray    = infoHash.tickets;
+// 	var mensajes        = '';  
+//     alert("sdafsdfsdfd");
+//    	for(i=0; i<messageArray.length;i++){
+// //         imprimirTicket(ticketsArray[i].ticket,i);
+//         setMessages(messageArray[i]);
+//      }
+//     imprimirTicket(ticketsArray);
+// 
+// 
+// 	detalleReservas(USUARIO.ID,updateInfoReservas);
+//     ejemplaresDelGrupo(ID_N2);
+// }
 
 /*
  * cancelarDiv
@@ -458,21 +455,22 @@ function renovar(){
  * Funcion que se ejecuta cuando se realiza devoluviones o renovaciones y actualiza la tabla de prestamos.
  * IGUAL A updateInfoPrestarReserva SALVO POR EL LLAMADO A LOS DETALLES.
  */
-function updateInfoRenovar(responseText){
-	cancelarDiv();
-
-	var infoHash= JSONstring.toObject(responseText);
-	var messageArray= infoHash.messages;
-	var ticketsArray= infoHash.tickets;
-	
-	for(i=0; i<messageArray.length;i++){
-		imprimirTicket(ticketsArray[i].ticket,i);
-  		setMessages(messageArray[i]);
-	}
-
-	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
-    ejemplaresDelGrupo(ID_N2);
-}
+// function updateInfoRenovar(responseText){
+// 	cancelarDiv();
+// 
+// 	var infoHash= JSONstring.toObject(responseText);
+// 	var messageArray= infoHash.messages;
+// 	var ticketsArray= infoHash.tickets;
+// 	
+// 	for(i=0; i<messageArray.length;i++){
+// // 		imprimirTicket(ticketsArray[i].ticket,i);
+//   		setMessages(messageArray[i]);
+// 	}
+//     imprimirTicket(ticketsArray);
+//   
+// 	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
+//     ejemplaresDelGrupo(ID_N2);
+// }
 
 
 /* devolver
@@ -506,54 +504,81 @@ function updateInfoDevolver(responseText){
  *          num, es el indice que se usa para darle nombre a la ventana.
  */
 
-// function imprimirTicket(ticket,num){
-// //     var obj;
-// // alert(tickets[0].ticket);
-// //  if(ticket != 0){
-// //    for(i=0; i< ticket.length;i++){
-// //       obj=JSONstring.make(ticket[i]);
-// //       alert(obj);
-// //   }
+function imprimirTicket(tickets){
+    var comprobantes=new Array();
+    
+    if(tickets.length > 0){
+        for(i=0; i< tickets.length;i++){
+//                   comprobantes[i]= JSONstring.make(tickets[i]);
+                     comprobantes[i]= tickets[i]; 
+//                    alert(tickets[i]);
+        }
+    }
 //     if(ticket != 0){   
 //         obj=JSONstring.make(ticket);
-//         objAH               = new AjaxHelper(updateImprimirTicket);
-//         objAH.debug         = true;
-//         objAH.showOverlay   = true;
-//         objAH.url           = URL_PREFIX+'/circ/circulacionDB.pl';
-//         objAH.tipoAccion    = 'IMPRIMIR_COMPROBANTE';
-//         objAH.obj           = obj;
+        objAH               = new AjaxHelper(updateImprimirTicket);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;
+        objAH.url           = URL_PREFIX+'/circ/circulacionDB.pl';
+        objAH.tipoAccion    = 'IMPRIMIR_COMPROBANTE';
+        objAH.comprobantes  = comprobantes;
 //         objAH.nroBoleta     = num;
-//         //se envia la consulta
-//         objAH.sendToServer();
+        //se envia la consulta
+        objAH.sendToServer();
 //   }
-// }
-// 
-// 
-// function updateImprimirTicket(responseText){
-//        
-// // //     $('#ticket').window.print();window.close();
-// //       $(document).ajaxStop(function() {
-//         $('#ticket').html(responseText).modal();
-// //       $('#ticket').modal({   containerCss:{
-// //             backgroundColor:"#fff",
-// //     //         borderColor:"#0063dc",
-// //             height:420,
-// //             padding:0,
-// //             width:650,
-// //             
-// //         },
-// //       });
-// //         return false;
-// //      });
-//          
-// }
+}
+
+
+function updateImprimirTicket(responseText){
+       
+        $('#ticket').html(responseText);
+        $('#ticket').printElement({ printBodyOptions:
+                                        { styleToAdd:'color:#FFFFFF;',
+                                        classNameToAdd : 'comprobante'} 
+                                  }
+        );
+        $('#ticket').hide();
+        
+        var html="<a id='link_comp' onclick='mostrarComprobante();'> Ver impresion</a>";
+        $('#mensajes').append(html);
+
+        
+//         $('#ticket').modal({   containerCss:{
+//             backgroundColor:"#fff",
+//             borderColor:"#0063dc",
+//             height:420,
+//             padding:0,
+//             width:650,
+   
+//             
+//          },
+//       });
+//         return false;
+//      });
+         
+}
+
+function mostrarComprobante(){
+
+    $('#ticket').modal({   containerCss:{
+             backgroundColor:"#fff",
+//             height:420,
+//             padding:0,
+//             width:650,
+               color: "#000",
+            
+        },
+      });
+
+}
 
 // FIXME esta muy feo esto!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
+/*
 function imprimirTicket(ticket,num){
 
 	if(ticket != 0){
-		var obj=JSONstring.make(ticket);
-		window.open (URL_PREFIX+"/circ/ticket.pl?token="+token+"&obj="+obj, "Boleta "+num,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
-	}
-}
+		var obj=JSONstring.make(ticket);        
+  		window.open (URL_PREFIX+"/circ/ticket.pl?token="+token+"&obj="+obj, "Boleta "+num,this.href);
+	}  
+}*/
+

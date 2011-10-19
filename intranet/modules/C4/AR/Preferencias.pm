@@ -408,6 +408,7 @@ sub t_modificarVariable {
     $params->{'value'}          = $valor;
     $params->{'explanation'}    = $expl;
     $params->{'categoria'}      = $categoria;
+    $params->{'variable'}       = $var;
     my $msg_object              = C4::AR::Mensajes::create();
     my ($preferencia)           = C4::Modelo::PrefPreferenciaSistema->new( variable => $var );
     $preferencia->load();
