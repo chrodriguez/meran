@@ -29,11 +29,9 @@ $search->{'keyword'}            = $keyword;
 
 my %sphinx_options              = {};
 $sphinx_options{'only_sphinx'}       = 0;
+$sphinx_options{'report'}            = 1;
         
 my ($cantidad, $resultId1, $suggested)      = C4::AR::Busquedas::busquedaCombinada_newTemp($search->{'keyword'}, undef, $obj,\%sphinx_options);
-#$t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad, $cantR, $pageNumber, $obj->{'funcion'}, $t_params);
-
-
 my $xml = C4::AR::Busquedas::toOAI($resultId1);
 my $session    =   CGI::Session->load();
 

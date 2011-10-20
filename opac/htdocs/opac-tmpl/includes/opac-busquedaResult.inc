@@ -26,8 +26,18 @@
   	    //se envia la consulta
   	    objAH.sendToServer();
     }
+
+    var table = "";
     
     function updateExternalSearch(responseText){
+
+    	var templates = {
+    	    tr : '<tr>#{row}</tr>',
+    	    th : '<th>#{header}</th>',
+    	    td : '<td>#{cell}</td>'
+    	};
+    	table = '<table><thead><tr>';
+        
         $(responseText).find('rdf\\:Description').each(function() {
             var marker = $(this);
             var title       = marker.find("dc\\:title").text();
@@ -45,6 +55,7 @@
             var relation    = marker.find("dc\\:relation").text();
             var coverage    = marker.find("dc\\:coverage").text();
             var rights      = marker.find("dc\\:rights").text();
+            var url			= marker.attr('rdf\\:about');
             
             var DC_hash     = {
             		title: title,
@@ -63,9 +74,13 @@
             		coverage: coverage,
             		rights: rights
             }
+            var link = "<a href="+url+">"+DC_hash.title+"</a>";
+    	    table += $.tmpl(templates.th, {header: DC_hash.creator});
+    	    table += $.tmpl(templates.td, {cell: link,});
+    	    alert (link);
             
-//             alert (DC_hash.creator);
         });
+
     }
     
     $(document).ready(function() {
