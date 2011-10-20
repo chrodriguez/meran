@@ -318,7 +318,8 @@ sub getVistaCampo{
     my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros, db => $db,);
 
     if(scalar(@$configuracion) > 0){
-        return $configuracion->[0]->getVistaCampo;
+# FIXME estoy probando si lo dejon asi permite tener distintas configuraciones por nivel
+        return $configuracion->[0]->getVistaIntra;
     } else {
         return 0;
     }
