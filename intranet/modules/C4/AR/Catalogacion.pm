@@ -2113,7 +2113,7 @@ sub toOAIXML{
     my $prefix   = $proto.$server.C4::AR::Utilidades::getUrlPrefix();
     my $url = $prefix."/opac-detail.pl?id1=".$id1;
     
-    my $xml = "\n <rdf:Description rdf:about=$url> \n";
+    my $xml = "\n <rdf:Description rdf:about='$url'> \n";
 
     while ( my ($key, $value) = each(%$dc) ) {
 

@@ -322,6 +322,8 @@ sub _actualizarSession {
   
     my ($sessionID, $userid, $socioNro, $time, $nroRandom, $type, $flagsrequired, $token, $session)= @_;
 #     C4::AR::Debug::debug("userid en actualizarSession".$sessionID);
+    $type   =   $type || 'opac';
+    
     $session->param('sessionID', $sessionID);
     $session->param('userid', $userid);
    #C4::AR::Debug::debug("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! userid en actualizarSession actualizado".$session->param('userid'));
