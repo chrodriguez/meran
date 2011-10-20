@@ -11,14 +11,33 @@
     function exportarXLS(url){
         alert(url)
     }
-     
-    function externalSearch(keyword){
+
+    var servidores 	= new Array([% cant_servidores_externos %]);
+    var server_name	= {};
+    
+	[% FOREACH server IN external_servers %] 
+		servidores.push("[% server.url %]");
+		server_name["[% server.url %]"] = "[% server.ui.getNombre %]";
+	[% END %]
+
+
+	function doExternalSearches(keyword){
+
+		$('#main_content').html(table);
+		for (x=0; x<servidores.length ;x++){
+			externalSearch(keyword,servidores[x],server_name[servidores[x]]);
+		} 
+
+		//$('#main_content').html(table);
+	}
+    
+    function externalSearch(keyword,URL,server_name){
 
   	    objAH                   = new AjaxHelper(updateExternalSearch);
   	    objAH.debug             = true;
   	    objAH.showOverlay       = true;
   	    //para busquedas combinables
-  	    objAH.url               = URL_PREFIX+'/opac-oai-search.pl';
+  	    objAH.url               = URL;
   	    objAH.keyword           = keyword;
   	    
   	    //se setea la funcion para cambiar de pagina
@@ -26,8 +45,24 @@
   	    //se envia la consulta
   	    objAH.sendToServer();
     }
+
+    var table = "";
     
     function updateExternalSearch(responseText){
+
+    	var templates = {
+    	    tr : '<tr>#{row}</tr>',
+    	    th : '<th>#{header}</th>',
+    	    td : '<td>#{cell}</td>'
+    	};
+    	table  = '<table><thead>';
+		table += '<tr>';
+		
+        table += '<th>[% "T&iacute;tulo" | i18n %]</th>'; 
+        table += '<th>[% "Autor" | i18n %]';
+
+		table += '</tr></thead><tbody>';
+         
         $(responseText).find('rdf\\:Description').each(function() {
             var marker = $(this);
             var title       = marker.find("dc\\:title").text();
@@ -45,6 +80,7 @@
             var relation    = marker.find("dc\\:relation").text();
             var coverage    = marker.find("dc\\:coverage").text();
             var rights      = marker.find("dc\\:rights").text();
+            var url			= "<a href="+marker.attr('rdf:about')+" target='_blank'>"+title+"</a>";
             
             var DC_hash     = {
             		title: title,
@@ -61,11 +97,19 @@
             		language: language,
             		relation: relation,
             		coverage: coverage,
-            		rights: rights
+            		rights: rights,
+            		link: url
             }
-            
-            alert (DC_hash.creator);
+            table += '<tr>';
+    	    table += $.tmpl(templates.td, {cell: DC_hash.creator});
+    	    table += $.tmpl(templates.td, {cell: DC_hash.link,});
+            table += '</tr>';
         });
+
+		table += '</tbody></table>';
+        
+        return (table);
+
     }
     
     $(document).ready(function() {
@@ -90,12 +134,9 @@
           [% END %]
 
 
-          <h2 class="advice"> [% 'Buscar en servidores externos.' | i18n %] <a href="#" onclick="externalSearch('[% buscoPor | html %]')">([% ' Buscar en servidores externos' | i18n %])</a></h2>
-
-
           [% IF external_search %]
 	          [% IF cant_external_servers %]
-	                <h2 class="advice"> [% 'Buscar en servidores externos.' | i18n %] <a href="#" onclick="externSearch('[% buscoPor | html %]')">([% ' Buscar en servidores externos' | i18n %])</a></h2>
+	                <h2 class="advice"> [% 'Buscar en servidores externos.' | i18n %] <a href="#" onclick="doExternalSearches('[% buscoPor | html %]')">([% ' Buscar en servidores externos' | i18n %])</a></h2>
 	          [% END %]
           [% END %]
 [% END %]
@@ -218,7 +259,7 @@
                                 [% PERL %]
                                     print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(NIVEL.nomCompleto) %]",
                                                                     url =>      "[% url_prefix %]/opac-busquedasDB.pl", 
-                                                                    params =>   ["tipoAccion=BUSQUEDA_AVANZADA","autor=[% NIVEL.nomCompleto %]"],
+                                                                    params =>   ["tipoAccion=BUSQUEDA_AVANZADA","autor=[% HTML.escape(NIVEL.nomCompleto) %]"],
                                                                     title =>    "[% 'Buscar de este autor' | i18n %]"
                                                                 ) ;
                                 [% END %]                                
