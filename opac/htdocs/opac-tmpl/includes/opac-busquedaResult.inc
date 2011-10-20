@@ -259,7 +259,7 @@
                                 [% PERL %]
                                     print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(NIVEL.nomCompleto) %]",
                                                                     url =>      "[% url_prefix %]/opac-busquedasDB.pl", 
-                                                                    params =>   ["tipoAccion=BUSQUEDA_AVANZADA","autor=[% NIVEL.nomCompleto %]"],
+                                                                    params =>   ["tipoAccion=BUSQUEDA_AVANZADA","autor=[% HTML.escape(NIVEL.nomCompleto) %]"],
                                                                     title =>    "[% 'Buscar de este autor' | i18n %]"
                                                                 ) ;
                                 [% END %]                                
