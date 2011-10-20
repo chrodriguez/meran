@@ -20,10 +20,12 @@
 
 <div class="titulos">[% 'Completar Datos' | i18n %]</div>
 
-	<form name="info" id="info" action="[% url_prefix %]/usuarios/prestamoInterBiblio.pl" method="POST">
+<!-- 	<form name="info" id="info" action="[% url_prefix %]/usuarios/prestamoInterBiblio.pl" method="POST"> -->
+    <form name="info" id="info" action="[% url_prefix %]/usuarios/prestamoInterBiblio.pl" method="POST">
 		<input type="hidden" name="nro_socio" id="nro_socio" value="[% nro_socio %]">
 		<input type="hidden" name="accion" id="accion" value="imprimirPDF">
-		<input type="hidden" name="autores" id="autores">
+	<!--	<input type="hidden" name="export" id="export" value="1">-->
+        <input type="hidden" name="autores" id="autores">
 		<input type="hidden" name="titulos" id="titulos" />
 		<input type="hidden" name="otros" id="otros" />
 		<input type="hidden" name="token" value="[% token %]"/>

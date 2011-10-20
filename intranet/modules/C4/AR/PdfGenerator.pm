@@ -829,37 +829,6 @@ Imprime una tabla de tres columnas y n filas, dependiendo del parametro que lleg
 sub imprimirTabla {
 	my ( $pdf, $y, $pageheight, $cantFila, $datos ) = @_;
    
-#     $pdf->setFont("Verdana-Bold");
-#     $pdf->setSize(10);
-# #     $pdf->drawRect( 35, $pageheight - $y, 200, $pageheight - ( $y + 20 ) );
-#     $pdf->addRawText( "Autor/es:", 50, $pageheight - ( $y + 15 ) );
-# #   $pdf->drawRect( 200, $pageheight - $y, 350, $pageheight - ( $y + 20 ) );
-#     $pdf->addRawText( _format("Titulo"), 50, $pageheight - ( $y + 30) );
-# #   $pdf->drawRect( 350, $pageheight - $y, 500, $pageheight - ( $y + 20 ) );
-#     $pdf->addRawText( "Otros datos", 50, $pageheight - ( $y + 45 ) );
-# #   $y = $y + 40;
-#     $pdf->setFont("Verdana");
-#     $pdf->setSize(10);
-# #Se pone solamente Encode::decode_utf8 porque ya viene en UTF-8
-#     for ( my $i = 0 ; $i < $cantFila ; $i++ ) {
-# #       $pdf->drawRect( 35, $pageheight - $y, 200, $pageheight - ( $y + 20 ) );
-#         $pdf->addRawText( Encode::decode_utf8($datos->[$i]->{'autor'}),
-#              110, $pageheight - ( $y + 15 ));
-#         $pdf->drawRect( 200, $pageheight - $y, 350, $pageheight - ( $y + 20 ) );
-#         $pdf->addRawText( Encode::decode_utf8($datos->[$i]->{'titulo'}),
-#             210, $pageheight - ( $y + 15 ) );
-#         $pdf->drawRect( 350, $pageheight - $y, 500, $pageheight - ( $y + 20 ) );
-#         $pdf->addRawText( Encode::decode_utf8($datos->[$i]->{'otros'}),
-#             360, $pageheight - ( $y + 15 ) );
-#         $y = $y + 20;
-#     }
-#     $y = $y + 20;
-#     $pdf->setSize(10);
-#     return ( $pdf, $y );
-
-
-
-
     $pdf->setFont("Verdana-Bold");
 	$pdf->setSize(10);
 	$pdf->drawRect( 50, $pageheight - $y, 200, $pageheight - ( $y + 20 ) );
