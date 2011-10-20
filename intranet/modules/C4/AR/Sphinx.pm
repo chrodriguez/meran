@@ -385,12 +385,15 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
 #         C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => UPDATE => id1 => ".$registro_marc_n1->{'id'});
     }
-} #END while (my $registro_marc_n1 = $sth1->fetchrow_hashref )
- };
+    
+     } #END eval
     if ($@){
     	$msg_object->{'error'}= 1;
         C4::AR::Debug::debug("ERROR AL GENERAR EL INDICE EN EL REGISTRO: ". $registro_marc_n1->{'id'}." !!! ( ".$@." )");
     }
+    
+} #END while (my $registro_marc_n1 = $sth1->fetchrow_hashref )
+
 }
 =pod
 
