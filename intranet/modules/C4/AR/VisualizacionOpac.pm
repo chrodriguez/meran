@@ -324,8 +324,8 @@ sub getConfiguracionOAI{
     foreach my $marc (@$arreglo_marc){
     	
         my  $conf_object = C4::Modelo::CatVisualizacionOpac->new();
-            $conf_object->campo($marc->{'campo'});
-            $conf_object->subcampo($marc->{'subcampo'});
+            $conf_object->campo($marc->getCampo);
+            $conf_object->subcampo($marc->getSubcampo);
 
             push (@configuracion,$conf_object);
     }
@@ -625,67 +625,339 @@ sub getCamposParaOAI{
     my %hash_fields = {};
 
 #Contributor
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '100' },],
+    );
+    push (@fields, @$estructura);
+    
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '110' },],
+    );
+    push (@fields, @$estructura);
+    
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '111' },],
+    );
+    push (@fields, @$estructura);
+    
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '700' },],
+    );
+    push (@fields, @$estructura);
+    
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '710' },],
+    );
+    push (@fields, @$estructura);
+    
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '711' },],
+    );
+    push (@fields, @$estructura);
+    
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '720' },],
+    );
+    push (@fields, @$estructura);
+    
+#Coverage
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '651' },],
+    );
+    push (@fields, @$estructura);
+    
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '662' },],
+    );
+    push (@fields, @$estructura);
+    
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '751' },],
+    );
+    push (@fields, @$estructura);
+    
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '752' },],
+    );
+    push (@fields, @$estructura);
+    
+#Date
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '260' },
+                                                                                                  subcampo => { eq => 'c' },],
+    );
+    push (@fields, @$estructura);
+    
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '260' },
+                                                                                                  subcampo => { eq => 'g' },],
+    );
+    push (@fields, @$estructura);
+    
+#Description
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { ge => '500' },
+                                                                                                  campo => { le => '599' },
+                                                                                                  campo => { ne => '506' },
+                                                                                                  campo => { ne => '530' },
+                                                                                                  campo => { ne => '540' },
+                                                                                                  campo => { ne => '546' },
+                                                                                                  ],
+    );
+    push (@fields, @$estructura);
 
-    $hash_fields{'campo'} = '';
-    $hash_fields{'subcampo'} = '';
-    push (@fields, \%hash_fields);
+#Format
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '340' },
+                                                                                                  ],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '856' },
+                                                                                                  subcampo => { eq => 'q' },],
+    );
+    push (@fields, @$estructura);
+
+#Identifier
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '020' },
+                                                                                                  subcampo => { eq => 'a' },],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '022' },
+                                                                                                  subcampo => { eq => 'a' },],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '024' },
+                                                                                                  subcampo => { eq => 'a' },],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '856' },
+                                                                                                  subcampo => { eq => 'u' },],
+    );
+    push (@fields, @$estructura);
+
+#Language
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '041' },
+                                                                                                  subcampo => { eq => 'a' },],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '041' },
+                                                                                                  subcampo => { eq => 'b' },],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '041' },
+                                                                                                  subcampo => { eq => 'd' },],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '041' },
+                                                                                                  subcampo => { eq => 'e' },],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '041' },
+                                                                                                  subcampo => { eq => 'f' },],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '041' },
+                                                                                                  subcampo => { eq => 'g' },],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '041' },
+                                                                                                  subcampo => { eq => 'h' },],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '041' },
+                                                                                                  subcampo => { eq => 'j' },],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '546' },
+                                                                                                  ],
+    );
+    push (@fields, @$estructura);
+
+#Publisher
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '260' },
+                                                                                                  subcampo => { eq => 'a' },],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '260' },
+                                                                                                  subcampo => { eq => 'b' },],
+    );
+    push (@fields, @$estructura);
+
+#Relation
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '530' },
+                                                                                                  ],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { ge => '760' },
+                                                                                                  campo => { le => '786' },
+                                                                                                  ],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '787' },
+                                                                                                  subcampo => { eq => '0' },
+                                                                                                  ],
+    );
+    push (@fields, @$estructura);
     
-    $hash_fields{'campo'} = '';
-    $hash_fields{'subcampo'} = '';
-    push (@fields, \%hash_fields);
-    
-    $hash_fields{'campo'} = '';
-    $hash_fields{'subcampo'} = '';
-    push (@fields, \%hash_fields);
-    
-    $hash_fields{'campo'} = '';
-    $hash_fields{'subcampo'} = '';
-    push (@fields, \%hash_fields);
-    
-    $hash_fields{'campo'} = '';
-    $hash_fields{'subcampo'} = '';
-    push (@fields, \%hash_fields);
-    
-    $hash_fields{'campo'} = '';
-    $hash_fields{'subcampo'} = '';
-    push (@fields, \%hash_fields);
-    
-    $hash_fields{'campo'} = '';
-    $hash_fields{'subcampo'} = '';
-    push (@fields, \%hash_fields);
-    
-    $hash_fields{'campo'} = '';
-    $hash_fields{'subcampo'} = '';
-    push (@fields, \%hash_fields);
-    
-    $hash_fields{'campo'} = '';
-    $hash_fields{'subcampo'} = '';
-    push (@fields, \%hash_fields);
-    
-    $hash_fields{'campo'} = '';
-    $hash_fields{'subcampo'} = '';
-    push (@fields, \%hash_fields);
-    
-    $hash_fields{'campo'} = '';
-    $hash_fields{'subcampo'} = '';
-    push (@fields, \%hash_fields);
-    
-    $hash_fields{'campo'} = '';
-    $hash_fields{'subcampo'} = '';
-    push (@fields, \%hash_fields);
-    
-    $hash_fields{'campo'} = '';
-    $hash_fields{'subcampo'} = '';
-    push (@fields, \%hash_fields);
-    
-    $hash_fields{'campo'} = '';
-    $hash_fields{'subcampo'} = '';
-    push (@fields, \%hash_fields);
-    
-    $hash_fields{'campo'} = '';
-    $hash_fields{'subcampo'} = '';
-    push (@fields, \%hash_fields);
-    
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '787' },
+                                                                                                  subcampo => { eq => 't' },
+                                                                                                ],
+    );
+    push (@fields, @$estructura);
+
+#Rights
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '506' },
+                                                                                                  ],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '540' },
+                                                                                                  ],
+    );
+    push (@fields, @$estructura);
+
+#Source
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '543' },
+                                                                                                  subcampo => { eq => 't' },
+                                                                                                ],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '786' },
+                                                                                                  subcampo => { eq => 'o' },
+                                                                                                ],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '786' },
+                                                                                                  subcampo => { eq => 't' },
+                                                                                                ],
+    );
+    push (@fields, @$estructura);
+
+#Subject
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '050' },
+                                                                                                ],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '060' },
+                                                                                                ],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '080' },
+                                                                                                ],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '082' },
+                                                                                                ],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '600' },
+                                                                                                ],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '610' },
+                                                                                                ],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '611' },
+                                                                                                ],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '630' },
+                                                                                                ],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '650' },
+                                                                                                ],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '653' },
+                                                                                                ],
+    );
+    push (@fields, @$estructura);
+
+#Title
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '245' },
+                                                                                                ],
+    );
+    push (@fields, @$estructura);
+
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '246' },
+                                                                                                ],
+    );
+    push (@fields, @$estructura);
+
+#Type
+    my $estructura = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
+                                                                                    query   => [  campo => { eq => '655' },
+                                                                                                ],
+    );
+    push (@fields, @$estructura);
+
+
+
     return (\@fields);
     
 }

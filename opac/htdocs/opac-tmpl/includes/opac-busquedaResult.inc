@@ -64,7 +64,7 @@
             		rights: rights
             }
             
-            alert (DC_hash.creator);
+//             alert (DC_hash.creator);
         });
     }
     

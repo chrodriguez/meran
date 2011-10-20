@@ -2122,31 +2122,33 @@ sub checkRecoverLink{
 
     my $status = 0;
     
-    my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
-                                                 query              => [ 'recover_password_hash' => { eq => $key } ],
-                                     );
-
-    if(scalar(@$socio_array_ref)){
-        $status = 1;
-        my $socio          = $socio_array_ref->[0];
-        my $dateformat     = C4::Date::get_date_format();
-        my $hoy            = Date::Manip::ParseDate("now");
-        my $fecha_link     = $socio->recover_date_of;        
-        my $err;
-
-        $fecha_link        = Date::Manip::DateCalc( $fecha_link, "+ 1 day", \$err );
-
-        my $cmp_result = Date::Manip::Date_Cmp($fecha_link,$hoy);
-        
-        $status = $cmp_result >= 0; 
-        
-        if (!$status){
-            $socio->unsetRecoverPasswordHash();
-        }
-                
-         
-    }
-    
+    if (C4::AR::Utilidades::validateString($key)){
+	    my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
+	                                                 query              => [ 'recover_password_hash' => { eq => $key } ],
+	                                     );
+	
+	    if(scalar(@$socio_array_ref)){
+	        $status = 1;
+	        my $socio          = $socio_array_ref->[0];
+	        my $dateformat     = C4::Date::get_date_format();
+	        my $hoy            = Date::Manip::ParseDate("now");
+	        my $fecha_link     = $socio->recover_date_of;        
+	        my $err;
+	
+	        $fecha_link        = Date::Manip::DateCalc( $fecha_link, "+ 1 day", \$err );
+	
+	        my $cmp_result = Date::Manip::Date_Cmp($fecha_link,$hoy);
+	        
+	        $status = $cmp_result >= 0; 
+	        
+	        if (!$status){
+	            $socio->unsetRecoverPasswordHash();
+	            $status = 0;
+	        }
+	                
+	         
+	    }
+    }    
     return ($status)
 }
 

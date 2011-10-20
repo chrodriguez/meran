@@ -672,7 +672,7 @@ sub prestInterBiblio {
 	$titulo{'titulo'} = Encode::decode_utf8("SOLICITUD DE PRESTAMO INTERBIBLIOTECARIO");
 	$titulo{'posx'}   = 100;
 	my @parrafo;
-	$parrafo[0] = Encode::decode_utf8((("Sr. Director de la Biblioteca")));
+	$parrafo[0] = Encode::decode_utf8((("Sr/a. Director/a de la Biblioteca")));
 	$parrafo[1] = Encode::decode_utf8((("de la ")) . ($biblioDestino->getNombre) );
 	$parrafo[2] = Encode::decode_utf8($director);
 	$parrafo[3] = ("S/D");
@@ -834,7 +834,7 @@ sub imprimirTabla {
 	$pdf->drawRect( 50, $pageheight - $y, 200, $pageheight - ( $y + 20 ) );
 	$pdf->addRawText( "Autor/es", 100, $pageheight - ( $y + 15 ) );
 	$pdf->drawRect( 200, $pageheight - $y, 350, $pageheight - ( $y + 20 ) );
-	$pdf->addRawText( _format("Ttulo"), 255, $pageheight - ( $y + 15 ) );
+	$pdf->addRawText( _format("Título"), 255, $pageheight - ( $y + 15 ) );
 	$pdf->drawRect( 350, $pageheight - $y, 500, $pageheight - ( $y + 20 ) );
 	$pdf->addRawText( "Otros datos", 395, $pageheight - ( $y + 15 ) );
 	$y = $y + 20;
