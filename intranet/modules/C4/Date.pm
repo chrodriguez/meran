@@ -285,7 +285,7 @@ sub proximosHabiles {
         #OLD WAY anda mejor con 		Date_NextWorkDay
 		#$hasta=DateCalc($desde,"+ ".$cantidad. " days",\$err,2);
 		$hasta = $desde;
-		C4::AR::Debug::debug("********** HASTA ANTES DEL CALCULO ".$hasta);
+# 		C4::AR::Debug::debug("********** HASTA ANTES DEL CALCULO ".$hasta);
 		for (my $iter_habil = 1; $iter_habil <= $cantidad; $iter_habil++ ){
 			$hasta = DateCalc($hasta,"+ 1 days",\$err,2);
 		}
@@ -303,20 +303,20 @@ sub proximosHabiles {
 	my $proximos_feriados = C4::AR::Utilidades::getProximosFeriados($hasta);
 	
 	foreach my $feriado (@$proximos_feriados) {
-		C4::AR::Debug::debug("_______________________________________ HASTA __________________________________ ".C4::Date::format_date($hasta,$dateformat));
-		C4::AR::Debug::debug("_______________________________________FERIADO______________________________ ".$feriado->getFecha);
+# 		C4::AR::Debug::debug("_______________________________________ HASTA __________________________________ ".C4::Date::format_date($hasta,$dateformat));
+# 		C4::AR::Debug::debug("_______________________________________FERIADO______________________________ ".$feriado->getFecha);
 		if( C4::Date::format_date($hasta,$dateformat) eq $feriado->getFecha ) {
 			$hasta=DateCalc($hasta,"+ 1 days",\$err,2);
-			C4::AR::Debug::debug("_______________________________________ SUMA 1!!! __________________________________ ");
+# 			C4::AR::Debug::debug("_______________________________________ SUMA 1!!! __________________________________ ");
 		}
 	}
     
     $desde = C4::Date::format_date_in_iso($desde, $dateformat);
     $hasta = C4::Date::format_date_in_iso($hasta, $dateformat);
     
-    C4::AR::Debug::debug("_______________________________________DESDE __________________________________ ".$desde);
-    C4::AR::Debug::debug("_______________________________________HASTA CANT______________________________ ".$cantidad);
-    C4::AR::Debug::debug("_______________________________________HASTA___________________________________ ".$hasta);
+#     C4::AR::Debug::debug("_______________________________________DESDE __________________________________ ".$desde);
+#     C4::AR::Debug::debug("_______________________________________HASTA CANT______________________________ ".$cantidad);
+#     C4::AR::Debug::debug("_______________________________________HASTA___________________________________ ".$hasta);
 
     return (	$desde,
                 $hasta,

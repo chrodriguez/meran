@@ -433,9 +433,9 @@ function _seleccionarTipoDocumentoYDeshabilitarCombo(){
 function mostrarEstructuraDelNivel3(tipo_documento){
     _NIVEL_ACTUAL       = 3;
     
-    if(MODIFICAR == 0){
-        _mostrarAccion("Agregando ejemplares => Template: " + $('#tipo_nivel3_id').val() + crearBotonEsquema());
-    }
+//     if(MODIFICAR == 0){
+//         _mostrarAccion("Agregando ejemplares => Template: " + $('#tipo_nivel3_id').val() + crearBotonEsquema());
+//     }
 
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel3);
     objAH.debug         = true;
@@ -525,6 +525,11 @@ function seleccionar_esquema(){
     inicializar(); 
     ID_TIPO_EJEMPLAR    = $('#tipo_nivel3_id').val();
     TEMPLATE_ACTUAL     = $('#tipo_nivel3_id').val();
+    
+    if(MODIFICAR == 0){
+        _mostrarAccion("Agregando ejemplares => Template: " + $('#tipo_nivel3_id').val() + crearBotonEsquema());
+    }
+    
     
     if( (TIENE_NIVEL_2 == 0)&&($('#tipo_nivel3_id').val() == 'SIN SELECCIONAR') ){
         jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);
