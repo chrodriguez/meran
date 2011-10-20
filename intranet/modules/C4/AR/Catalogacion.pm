@@ -2113,21 +2113,15 @@ sub toOAIXML{
     my $prefix   = $proto.$server.C4::AR::Utilidades::getUrlPrefix();
     my $url = $prefix."/opac-detail.pl?id1=".$id1;
     
-    my $xml = "\n <rdf:Description rdf:about=$url> \n";
+    my $xml = "\n <rdf:Description rdf:about='$url'> \n";
 
     while ( my ($key, $value) = each(%$dc) ) {
 
-    ## list context will retrieve all of a particular element 
-#    foreach my $element ( $record->element( 'Creator' ) ) {
-#        print "creator: ", $element->content(), "\n";
-#    }
 	        foreach my $campo (@$value){
 	        	my $campo_name = $key;
-#	            if (C4::AR::Utilidades::validateString($campo->content)){
 	                $campo_name = C4::AR::Utilidades::str_replace("_",":",$campo_name);
 	                my $xml_field_name= lc($campo_name);
 	                $xml .= "<$xml_field_name>".$campo->content."</$xml_field_name>\n";
-#	            }
 	        }
     }
     
