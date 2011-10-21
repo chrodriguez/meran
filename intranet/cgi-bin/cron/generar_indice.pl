@@ -6,7 +6,7 @@ use C4::AR::Sphinx;
 
 	 my $tt1 = time();
 
-#	C4::AR::Sphinx::generar_indice($id1,$flag);
+	C4::AR::Sphinx::generar_indice($id1,$flag);
 	 
 	 my $end1 = time();
 	 my $tardo1=($end1 - $tt1);
