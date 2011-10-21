@@ -300,8 +300,15 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
             $dato                           = $subfield->[1];
 #             C4::AR::Debug::debug("generar_indice => campo => ".$field->tag);
 #             C4::AR::Debug::debug("generar_indice => subcampo => ".$subfield->[0]);
+ eval{
             $dato_ref                       = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato);
             $dato                           = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato_ref, $registro_marc_n1->{'template'});
+     }; #END eval
+     
+		if ($@){
+			C4::AR::Debug::debug("ERROR AL OBTENER UNA REFERENCIA DE ". $registro_marc_n1->{'id'}." !!! ( campo: ".$campo." subcampo:".$subcampo." template:".$registro_marc_n1->{'template'}." ".$@." )");
+			next;
+		}
 
             next if ($dato eq 'NO_TIENE');
             next if ($dato eq '');
@@ -389,6 +396,7 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
      }; #END eval
     if ($@){
         C4::AR::Debug::debug("ERROR AL GENERAR EL INDICE EN EL REGISTRO: ". $registro_marc_n1->{'id'}." !!! ( ".$@." )");
+        next;
     }
     
 } #END while (my $registro_marc_n1 = $sth1->fetchrow_hashref )
