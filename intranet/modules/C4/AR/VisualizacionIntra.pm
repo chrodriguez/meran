@@ -324,6 +324,28 @@ sub getVistaCampo{
     }
 }
 
+sub getVistaIntra{
+    my ($campo, $template, $nivel, $db) = @_;
+
+    $db = $db || C4::Modelo::CatVisualizacionIntra->new()->db;
+
+    my @filtros;
+
+    push ( @filtros, ( nivel   => { eq => $nivel } ));
+    push ( @filtros, ( campo   => { eq => $campo } ));
+    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $template }, 
+                                    tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS
+                );
+
+    my $configuracion = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros, db => $db,);
+
+    if(scalar(@$configuracion) > 0){
+        return $configuracion->[0]->getVistaIntra;
+    } else {
+        return 0;
+    }
+}
+
 sub addConfiguracion{
     my ($params, $db) = @_;
     my @filtros;

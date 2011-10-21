@@ -16,8 +16,11 @@ my $ini= $obj->{'ini'};
 my $tipoAccion= $obj->{'tipoAccion'}||"";
 my $start = [ Time::HiRes::gettimeofday( ) ]; #se toma el tiempo de inicio de la busqueda
 
+
 my $dateformat = C4::Date::get_date_format();
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
+
+$obj->{'page'} = $input->param('page') || 0;
 
 $obj->{'ini'} = $ini;
 $obj->{'cantR'} = $cantR;
@@ -31,9 +34,6 @@ my %sphinx_options              = {};
 $sphinx_options{'only_sphinx'}       = 0;
         
 my ($cantidad, $resultId1, $suggested)      = C4::AR::Busquedas::busquedaCombinada_newTemp($search->{'keyword'}, undef, $obj,\%sphinx_options);
-#$t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad, $cantR, $pageNumber, $obj->{'funcion'}, $t_params);
-
-
 my $xml = C4::AR::Busquedas::toOAI($resultId1);
 my $session    =   CGI::Session->load();
 
