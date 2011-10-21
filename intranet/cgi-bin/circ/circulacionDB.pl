@@ -23,7 +23,7 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
                                                                     $authnotrequired, 
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
-                                                                        accion => 'CONSULTA', 
+                                                                        accion => 'ALTA', 
                                                                         entorno => 'undefined'}, 
                                                                         'intranet'
                                         );
@@ -67,7 +67,7 @@ elsif($tipoAccion eq "CONFIRMAR_PRESTAMO"){
                                                                     $authnotrequired, 
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
-                                                                        accion => 'CONSULTA', 
+                                                                        accion => 'ALTA', 
                                                                         entorno => 'undefined'}, 
                                                                     'intranet'
                                     );
@@ -107,7 +107,7 @@ elsif($tipoAccion eq "PRESTAMO"){
                                                                     $authnotrequired, 
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
-                                                                        accion => 'CONSULTA', 
+                                                                        accion => 'ALTA', 
                                                                         entorno => 'undefined'}, 
                                                                     'intranet'
                                 );	
@@ -192,7 +192,7 @@ elsif($tipoAccion eq "REALIZAR_DEVOLUCION"){
                                                                     $authnotrequired, 
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
-                                                                        accion => 'CONSULTA', 
+                                                                        accion => 'ALTA', 
                                                                         entorno => 'undefined'}, 
                                                                       'intranet'
                                 );
@@ -214,7 +214,7 @@ elsif($tipoAccion eq "REALIZAR_RENOVACION"){
                                                                     $authnotrequired, 
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
-                                                                        accion => 'CONSULTA', 
+                                                                        accion => 'ALTA', 
                                                                         entorno => 'undefined'}, 
                                                                     'intranet'
                                 );
@@ -239,7 +239,7 @@ elsif($tipoAccion eq "CANCELAR_RESERVA"){
                                                                     $authnotrequired, 
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
-                                                                        accion => 'CONSULTA', 
+                                                                        accion => 'ALTA', 
                                                                         entorno => 'undefined'}, 
                                                                     'intranet'
                                 );
@@ -265,7 +265,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
                                                                     $authnotrequired, 
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
-                                                                        accion => 'CONSULTA', 
+                                                                        accion => 'ALTA', 
                                                                         entorno => 'undefined'}, 
                                                                     'intranet'
                                 );
@@ -304,7 +304,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_TIPOS_DE_PRESTAMO"){
                                                                     $authnotrequired, 
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
-                                                                        accion => 'CONSULTA', 
+                                                                        accion => 'ALTA', 
                                                                         entorno => 'undefined'}, 
                                                                     'intranet'
                                 );
@@ -342,7 +342,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_DATOS_EJEMPLAR"){
                                             authnotrequired     => 0,
                                             flagsrequired       => {  ui => 'ANY', 
                                                                       tipo_documento => 'ANY', 
-                                                                      accion => 'CONSULTA', 
+                                                                      accion => 'ALTA', 
                                                                       entorno => 'usuarios'},
                                             debug               => 1,
                 });
@@ -370,7 +370,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_SOCIO"){
                                                                     $authnotrequired, 
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
-                                                                        accion => 'CONSULTA', 
+                                                                        accion => 'ALTA', 
                                                                         entorno => 'undefined'}, 
                                                                     'intranet'
                                 );
@@ -407,7 +407,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_TIENE_AUTORIZADO"){
                                     authnotrequired => 0,
                                     flagsrequired => {  ui => 'ANY', 
                                                         tipo_documento => 'ANY', 
-                                                        accion => 'CONSULTA', 
+                                                        accion => 'ALTA', 
                                                         entorno => 'usuarios'},
                                     debug => 1,
                 });
@@ -438,7 +438,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_ES_REGULAR"){
                                                                     $authnotrequired, 
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
-                                                                        accion => 'CONSULTA', 
+                                                                        accion => 'ALTA', 
                                                                         entorno => 'undefined'},
                                                                     'intranet'
                                 );
@@ -463,7 +463,7 @@ elsif ( $tipoAccion eq "IMPRIMIR_COMPROBANTE" ) {
                     authnotrequired => 0,
                     flagsrequired   => {    ui => 'ANY', 
                                             tipo_documento => 'ANY', 
-                                            accion => 'CONSULTA', 
+                                            accion => 'ALTA', 
                                             entorno => 'undefined'},
             });
 
