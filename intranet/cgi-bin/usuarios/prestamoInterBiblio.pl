@@ -5,7 +5,7 @@ require Exporter;
 use strict;
 use CGI;
 use C4::AR::PdfGenerator;
-
+use C4::AR::Preferencias;
 use C4::AR::Auth;
 use C4::AR::Busquedas;
 
@@ -47,9 +47,9 @@ my ($template, $session, $t_params);
 
 
       my $nro_socio = $input->param('nro_socio');
-      my %t_params;
-      $t_params{'nro_socio'} = $nro_socio;
-      C4::AR::Validator::validateParams('U389',\%t_params,['nro_socio'] );
+#       my %t_params;
+      $t_params->{'nro_socio'} = $nro_socio;
+      C4::AR::Validator::validateParams('U389',$t_params,['nro_socio'] );
 
       my $accion = $input->param('tipoAccion');
       my $biblioDestino = C4::AR::Busquedas::getBranch($input->param('name_ui'));
@@ -74,19 +74,37 @@ my ($template, $session, $t_params);
       }
 
       my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+      my $branchcode  = C4::AR::Preferencias::getValorPreferencia("defaultUI");
+      my $biblio      = C4::AR::Busquedas::getBranch($branchcode);
+     
+     
+      $t_params->{'biblio'}= $biblio;
+      $t_params->{'socio'}= $socio;
+      $t_params->{'biblio_destino'}= $biblioDestino;
+      $t_params->{'director'}= $director;
+      $t_params->{'atencion'}=  C4::AR::Preferencias::getValorPreferencia('open') . " a "
+      . C4::AR::Preferencias::getValorPreferencia('close'). Encode::decode_utf8(" Sábados: ")
+      . C4::AR::Preferencias::getValorPreferencia('open_sabado'). " a " .C4::AR::Preferencias::getValorPreferencia('close_sabado');
+      $t_params->{'datos'}= \@datos;
+
+    
 
 
-      $t_params{'socio'}= $socio;
-      $t_params{'biblio_destino'}= $biblioDestino;
-      $t_params{'director'}= $director;
-      $t_params{'datos'}= \@datos;
 
-      C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+      my $out= C4::AR::Auth::get_html_content($template, $t_params, $session);
+
+      my $filename= C4::AR::PdfGenerator::pdfFromHTML($out);
+
+      print C4::AR::PdfGenerator::pdfHeader();
+
+      C4::AR::PdfGenerator::printPDF($filename);
+
+#       C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 
 # $socio->persona->getApellido;
 # C4::AR::PdfGenerator::prestInterBiblio($nro_socio,$socio,$biblioDestino,$director,\@datos);
-}
+# }
 
 # if ($to_pdf){
 #     $t_params->{'exported'} = 1;

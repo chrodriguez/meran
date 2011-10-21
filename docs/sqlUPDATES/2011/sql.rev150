@@ -19,6 +19,8 @@ INSERT INTO  `pref_preferencia_sistema` (
 `categoria`
 )
 VALUES (
-NULL ,  'external_search',  '1',  'Habilita/Deshabilita la búsqueda en servidores externos Meran', NULL ,  'bool',  'catalogo';
+NULL ,  'external_search',  '1',  'Habilita/Deshabilita la búsqueda en servidores externos Meran', NULL ,  'bool',  'catalogo'
+);
+
 
 

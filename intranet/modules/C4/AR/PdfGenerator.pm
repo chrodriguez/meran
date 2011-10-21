@@ -568,6 +568,7 @@ sub datosBiblio {
 		$biblio = C4::Modelo::PrefUnidadInformacion->new( id_ui => $branchcode );
 		$biblio->load();
 	};
+ 
 	return ($biblio);
 }
 
@@ -654,65 +655,65 @@ prestInterBiblio
 Genera y muestra la ventana para imprimir el documento de prestamos interbibliotecarios.
 =cut
 
-sub prestInterBiblio {
-	my ( $nro_socio, $socio, $biblioDestino, $director, $datos ) = @_;
-
-	my $tmpFileName = "prestInterBiblio" . $nro_socio . ".pdf";
-	my $nombre      = $socio->persona->getApeYNom;
-	my $dni         = $socio->persona->getNro_documento;
-	my $branchcode  = C4::AR::Preferencias::getValorPreferencia("defaultUI");
-	my $biblio      = datosBiblio($branchcode);
-	my $branchname  = $biblio->getNombre;
-
-	my ( $pdf, $pagewidth, $pageheight ) = &inicializarPDF();
-	my $x = 50;
-	my $y = 300;
-	my %titulo;
-	$titulo{'titulo'} = Encode::decode_utf8("SOLICITUD DE PRESTAMO INTERBIBLIOTECARIO");
-	$titulo{'posx'}   = 100;
-	my @parrafo;
-
-	$parrafo[0] = Encode::decode_utf8((("Sr/a. Director/a de la Biblioteca")));
-
-	$parrafo[1] = Encode::decode_utf8((("de la ")) . ($biblioDestino->getNombre) );
-	$parrafo[2] = Encode::decode_utf8($director);
-	$parrafo[3] = ("S/D");
-	$parrafo[4] = Encode::decode_utf8((
-"          Tengo el agrado de dirigirme a Ud. a fin de solicitarle en carácter de préstamo"
-	));
-	$parrafo[5] = Encode::decode_utf8((("interbibliotecario los siguientes items:")));
-
-	($pdf) =
-	  &imprimirEncabezado( $pdf,$branchname, $x, $pagewidth,
-		$pageheight, \%titulo, $biblio );
-	( $pdf, $y ) =
-	  &imprimirContenido( $pdf, $x, $y, $pageheight, 15, \@parrafo );
-	my $cant = scalar(@$datos);
-	( $pdf, $y ) = &imprimirTabla( $pdf, $y, $pageheight, $cant, $datos );
-
-	$parrafo[0] = Encode::decode_utf8((("Lo(s) mismo(s) sería(n) retirado(s) por:")));
-	$parrafo[1] = Encode::decode_utf8(("Nombre y apellido: ").$nombre);
-	$parrafo[2] = Encode::decode_utf8(("DNI:")) . $dni;
-	$parrafo[3] =
-	    Encode::decode_utf8(("Dirección:")). Encode::decode_utf8($socio->persona->getCalle . ", ". $socio->persona->ciudad_ref->getNombre);
-	$parrafo[4] = Encode::decode_utf8((("Teléfono:"))) . $socio->persona->getTelefono;
-	$parrafo[5] = Encode::decode_utf8(((("Correo electrónico:"))) . $socio->persona->getEmail);
-	$parrafo[6] = "";
-	$parrafo[7] = Encode::decode_utf8(((
-"          Sin otro particular y agradeciendo desde ya su amabilidad, saludo a Ud. muy"
-	)));
-	$parrafo[8] = Encode::decode_utf8((("atentamente.")));
-	
-	
-	#_formatArrayOfStrings( \@parrafo );
-
-	( $pdf, $y ) = &imprimirContenido( $pdf, $x, $y, $pageheight, 15, \@parrafo );
-	( $pdf, $y ) = &imprimirFirma( $pdf, $y, $pageheight );
-	$y = $y + 15;
-	$pdf->drawLine( 50, $pageheight - $y, $pagewidth - 50, $pageheight - $y );
-	$pdf = &imprimirPiePag( $pdf, $y, $pageheight, $biblio );
-	&imprimirFinal( $pdf, $tmpFileName );
-}
+# sub prestInterBiblio {
+# 	my ( $nro_socio, $socio, $biblioDestino, $director, $datos ) = @_;
+# 
+# 	my $tmpFileName = "prestInterBiblio" . $nro_socio . ".pdf";
+# 	my $nombre      = $socio->persona->getApeYNom;
+# 	my $dni         = $socio->persona->getNro_documento;
+# 	my $branchcode  = C4::AR::Preferencias::getValorPreferencia("defaultUI");
+# 	my $biblio      = datosBiblio($branchcode);
+# 	my $branchname  = $biblio->getNombre;
+# 
+# 	my ( $pdf, $pagewidth, $pageheight ) = &inicializarPDF();
+# 	my $x = 50;
+# 	my $y = 300;
+# 	my %titulo;
+# 	$titulo{'titulo'} = Encode::decode_utf8("SOLICITUD DE PRESTAMO INTERBIBLIOTECARIO");
+# 	$titulo{'posx'}   = 100;
+# 	my @parrafo;
+# 
+# 	$parrafo[0] = Encode::decode_utf8((("Sr/a. Director/a de la Biblioteca")));
+# 
+# 	$parrafo[1] = Encode::decode_utf8((("de la ")) . ($biblioDestino->getNombre) );
+# 	$parrafo[2] = Encode::decode_utf8($director);
+# 	$parrafo[3] = ("S/D");
+# 	$parrafo[4] = Encode::decode_utf8((
+# "          Tengo el agrado de dirigirme a Ud. a fin de solicitarle en carácter de préstamo"
+# 	));
+# 	$parrafo[5] = Encode::decode_utf8((("interbibliotecario los siguientes items:")));
+# 
+# 	($pdf) =
+# 	  &imprimirEncabezado( $pdf,$branchname, $x, $pagewidth,
+# 		$pageheight, \%titulo, $biblio );
+# 	( $pdf, $y ) =
+# 	  &imprimirContenido( $pdf, $x, $y, $pageheight, 15, \@parrafo );
+# 	my $cant = scalar(@$datos);
+# 	( $pdf, $y ) = &imprimirTabla( $pdf, $y, $pageheight, $cant, $datos );
+# 
+# 	$parrafo[0] = Encode::decode_utf8((("Lo(s) mismo(s) sería(n) retirado(s) por:")));
+# 	$parrafo[1] = Encode::decode_utf8(("Nombre y apellido: ").$nombre);
+# 	$parrafo[2] = Encode::decode_utf8(("DNI:")) . $dni;
+# 	$parrafo[3] =
+# 	    Encode::decode_utf8(("Dirección:")). Encode::decode_utf8($socio->persona->getCalle . ", ". $socio->persona->ciudad_ref->getNombre);
+# 	$parrafo[4] = Encode::decode_utf8((("Teléfono:"))) . $socio->persona->getTelefono;
+# 	$parrafo[5] = Encode::decode_utf8(((("Correo electrónico:"))) . $socio->persona->getEmail);
+# 	$parrafo[6] = "";
+# 	$parrafo[7] = Encode::decode_utf8(((
+# "          Sin otro particular y agradeciendo desde ya su amabilidad, saludo a Ud. muy"
+# 	)));
+# 	$parrafo[8] = Encode::decode_utf8((("atentamente.")));
+# 	
+# 	
+# 	#_formatArrayOfStrings( \@parrafo );
+# 
+# 	( $pdf, $y ) = &imprimirContenido( $pdf, $x, $y, $pageheight, 15, \@parrafo );
+# 	( $pdf, $y ) = &imprimirFirma( $pdf, $y, $pageheight );
+# 	$y = $y + 15;
+# 	$pdf->drawLine( 50, $pageheight - $y, $pagewidth - 50, $pageheight - $y );
+# 	$pdf = &imprimirPiePag( $pdf, $y, $pageheight, $biblio );
+# 	&imprimirFinal( $pdf, $tmpFileName );
+# }
 
 =item
 inicializarPDF
