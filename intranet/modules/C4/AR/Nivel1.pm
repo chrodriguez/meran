@@ -121,10 +121,16 @@ sub guardarRealmente{
             $catRegistroMarcN1->agregar($marc_record->as_usmarc,$params);
             $db->commit;            
             #recupero el id1 recien agregado
-            $id1 = $catRegistroMarcN1->getId1;
-            C4::AR::Sphinx::generar_indice($id1, 'R_PARTIAL', 'INSERT');
-            #ahora el indice se encuentra DESACTUALIZADO
-            C4::AR::Preferencias::setVariable('indexado', 0, $db);
+            $id1 = $catRegistroMarcN1->getId1; 
+            eval {
+                C4::AR::Sphinx::generar_indice($id1, 'R_PARTIAL', 'INSERT');
+                #ahora el indice se encuentra DESACTUALIZADO
+                C4::AR::Preferencias::setVariable('indexado', 0, $db);
+            };    
+            if ($@){
+                C4::AR::Debug::debug("ERROR AL REINDEXAR EN EL REGISTRO: ".$id1." !!! ( ".$@." )");
+            }
+
             #se cambio el permiso con exito
             $msg_object->{'error'} = 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U368', 'params' => [$id1]} ) ;
@@ -275,9 +281,15 @@ sub t_modificarNivel1 {
 
             $cat_registro_marc_n1->modificar($marc_record->as_usmarc, $params);
             $db->commit;
-            C4::AR::Sphinx::generar_indice($cat_registro_marc_n1->getId1(), 'R_PARTIAL', 'UPDATE');
-            #ahora el indice se encuentra DESACTUALIZADO
-            C4::AR::Preferencias::setVariable('indexado', 0, $db);
+
+            eval {
+                C4::AR::Sphinx::generar_indice($cat_registro_marc_n1->getId1(), 'R_PARTIAL', 'UPDATE');
+                #ahora el indice se encuentra DESACTUALIZADO
+                C4::AR::Preferencias::setVariable('indexado', 0, $db);
+            };    
+            if ($@){
+                C4::AR::Debug::debug("ERROR AL REINDEXAR EN EL REGISTRO: ".$cat_registro_marc_n1->getId1()." !!! ( ".$@." )");
+            }
 
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
@@ -359,9 +371,14 @@ sub t_eliminarNivel1{
         eval {
             $cat_registro_marc_n1->eliminar;  
             $db->commit;
-            C4::AR::Sphinx::generar_indice($cat_registro_marc_n1->getId1(), 'R_PARTIAL', 'UPDATE');
-            #ahora el indice se encuentra DESACTUALIZADO
-            C4::AR::Preferencias::setVariable('indexado', 0, $db);
+            eval {
+                C4::AR::Sphinx::generar_indice($cat_registro_marc_n1->getId1(), 'R_PARTIAL', 'UPDATE');
+                #ahora el indice se encuentra DESACTUALIZADO
+                C4::AR::Preferencias::setVariable('indexado', 0, $db);
+            };    
+            if ($@){
+                C4::AR::Debug::debug("ERROR AL REINDEXAR EN EL REGISTRO: ".$cat_registro_marc_n1->getId1()." !!! ( ".$@." )");
+            }
             #se cambio el permiso con exito
             $msg_object->{'error'}= 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U374', 'params' => [$id1]} ) ;
