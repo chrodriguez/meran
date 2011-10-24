@@ -63,6 +63,11 @@ sub getTituloFormal{
     return ($self->titulo_formal);
 }  
 
+sub getTituloFormalPDF{
+    my ($self) = shift;
+
+    return (C4::AR::Utilidades::trim(Encode::decode_utf8($self->getTituloFormal)));
+}
 
 sub setTituloFormal{
     my ($self) = shift;

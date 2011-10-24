@@ -22,15 +22,13 @@
 
 
 	function doExternalSearches(keyword){
-
-		$('#main_content').html(table);
+		$('#main_content').html("");
 		for (x=0; x<servidores.length ;x++){
 			externalSearch(keyword,servidores[x],server_name[servidores[x]]);
 		} 
 
-		//$('#main_content').html(table);
 	}
-    
+ var SERVER = "";   
     function externalSearch(keyword,URL,server_name){
 
   	    objAH                   = new AjaxHelper(updateExternalSearch);
@@ -38,8 +36,9 @@
   	    objAH.showOverlay       = true;
   	    //para busquedas combinables
   	    objAH.url               = URL;
+  	    objAH.async				= false;
   	    objAH.keyword           = keyword;
-  	    
+  	    SERVER = server_name;
   	    //se setea la funcion para cambiar de pagina
   	    objAH.funcion           = 'changePage';
   	    //se envia la consulta
@@ -55,9 +54,9 @@
     	    th : '<th>#{header}</th>',
     	    td : '<td>#{cell}</td>'
     	};
-    	table  = '<table><thead>';
+    	
+    	table  = '<fieldset><legend class="server_name">'+SERVER+'</legend></fieldset><table><thead>';
 		table += '<tr>';
-		
         table += '<th>[% "T&iacute;tulo" | i18n %]</th>'; 
         table += '<th>[% "Autor" | i18n %]';
 
@@ -107,9 +106,9 @@
         });
 
 		table += '</tbody></table>';
-        
-        return (table);
+		$('#main_content').append(table);
 
+		return (table);
     }
     
     $(document).ready(function() {
