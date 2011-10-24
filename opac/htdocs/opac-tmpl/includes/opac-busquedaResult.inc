@@ -1,121 +1,148 @@
 <script type="text/javascript">
 
-	function ordenarPor(ord){
-	    //seteo el orden de los resultados
-	}
-
     function submitForm(form_id) {
         $('#' + form_id).submit();
     }
-    
-    function exportarXLS(url){
-        alert(url)
-    }
 
-    var servidores 	= new Array([% cant_servidores_externos %]);
-    var server_name	= {};
-    
-	[% FOREACH server IN external_servers %] 
-		servidores.push("[% server.url %]");
-		server_name["[% server.url %]"] = "[% server.ui.getNombre %]";
-	[% END %]
+    [% IF external_search %]
+    	[% IF cant_external_servers %]
+		    var servidores 	= new Array([% cant_servidores_externos %]);
+		    var server_name	= {};
+			var SERVER = "";   
+			var numPag = 1;
+			var SEARCH = "";
+			var results = false;
+			
+			[% FOREACH server IN external_servers %] 
+				servidores.push("[% server.url %]");
+				server_name["[% server.url %]"] = "[% server.ui.getNombre %]";
+			[% END %]
+		
+		
+			function nextPage(){
+				numPag++;
+				doExternalSearches(SEARCH);
+			}		
+		
+			function prevPage(){
+				if (numPag > 1)
+					numPag--;
+				doExternalSearches(SEARCH);
+			}		
+		
+			function doExternalSearches(keyword){
+				$('#main_content').html("");
+				results = false;
+				SEARCH = keyword;
+				
+				for (x=0; x<servidores.length ;x++){
+					externalSearch(keyword,servidores[x],server_name[servidores[x]]);
+				} 
 
+				if (results){
+					if (numPag > 1)
+						$('#main_content').append("<input class='js_paging' type='button' onclick='prevPage();' value= [% 'Anterior' | i18n %] /> ");
+					$('#main_content').append("<input class='js_paging' type='button' onclick='nextPage();' value= [% 'Siguiente' | i18n %] /> ");
+	
+					$('#main_content').append("<br />");
+				}else{
+					$('#main_content').append("[% ' LOS SERVIDORES EXTERNOS NO DISPONEN DE MAS RESULTADOS SEGUN SU CRITERIO ' %]");
+				}
+			}
+		
+		 
+		    function externalSearch(keyword,URL,server_name){
+		
+		  	    objAH                   = new AjaxHelper(updateExternalSearch);
+		  	    objAH.debug             = true;
+		  	    objAH.showOverlay       = true;
+		  	    //para busquedas combinables
+		  	    objAH.url               = URL;
+		  	    objAH.async				= false;
+		  	    objAH.keyword           = keyword;
+		  	    SERVER = server_name;
+		  	    //se setea la funcion para cambiar de pagina
+		  	    objAH.ini          	 	= numPag;
+		  	    //se envia la consulta
+		  	    objAH.sendToServer();
+		    }
+		
+		    function updateExternalSearch(responseText){
+		
+		        var table 	= "";
+		        var cant_dc	= 0;
+		    	var templates = {
+		    	    tr : '<tr>#{row}</tr>',
+		    	    th : '<th>#{header}</th>',
+		    	    td : '<td>#{cell}</td>'
+		    	};
+		    	
+		    	table  = '<fieldset><legend class="server_name">'+SERVER+'</legend></fieldset><table><thead>';
+				table += '<tr>';
+		        table += '<th>[% "T&iacute;tulo" | i18n %]</th>'; 
+		        table += '<th>[% "Autor" | i18n %]';
+		
+				table += '</tr></thead><tbody>';
+		         
+		        $(responseText).find('rdf\\:Description').each(function() {
+		            cant_dc++;
+		            
+		            var marker = $(this);
+		            var title       = marker.find("dc\\:title").text();
+		            var creator     = marker.find("dc\\:creator").text();
+		            var subject     = marker.find("dc\\:subject").text();
+		            var description = marker.find("dc\\:description").text();
+		            var publisher   = marker.find("dc\\:publisher").text();
+		            var contributor = marker.find("dc\\:contributor").text();
+		            var date        = marker.find("dc\\:date").text();
+		            var type        = marker.find("dc\\:type").text();
+		            var format      = marker.find("dc\\:format").text();
+		            var identifier  = marker.find("dc\\:identifier").text();
+		            var source      = marker.find("dc\\:source").text();
+		            var language    = marker.find("dc\\:language").text();
+		            var relation    = marker.find("dc\\:relation").text();
+		            var coverage    = marker.find("dc\\:coverage").text();
+		            var rights      = marker.find("dc\\:rights").text();
+		            var url			= "<a href="+marker.attr('rdf:about')+" target='_blank'>"+title+"</a>";
+		            
+		            var DC_hash     = {
+		            		title: title,
+		            		creator: creator,
+		            		subject: subject,
+		            		description: description,
+		            		publisher: publisher,
+		            		contributor: contributor,
+		            		date: date,
+		            		type: type,
+		            		format: format,
+		            		identifier: identifier,
+		            		source: source,
+		            		language: language,
+		            		relation: relation,
+		            		coverage: coverage,
+		            		rights: rights,
+		            		link: url
+		            }
+		            table += '<tr>';
+		    	    table += $.tmpl(templates.td, {cell: DC_hash.creator});
+		    	    table += $.tmpl(templates.td, {cell: DC_hash.link,});
+		            table += '</tr>';
+		        });
+		
+				table += '</tbody></table>';
+				if (cant_dc > 0){
+					$('#main_content').append(table);
+					results = true;
+				}
+				
+				return (table);
+		    }
+          [% END %]
+       [% END %]		    
 
-	function doExternalSearches(keyword){
-		$('#main_content').html("");
-		for (x=0; x<servidores.length ;x++){
-			externalSearch(keyword,servidores[x],server_name[servidores[x]]);
-		} 
-
-	}
- var SERVER = "";   
-    function externalSearch(keyword,URL,server_name){
-
-  	    objAH                   = new AjaxHelper(updateExternalSearch);
-  	    objAH.debug             = true;
-  	    objAH.showOverlay       = true;
-  	    //para busquedas combinables
-  	    objAH.url               = URL;
-  	    objAH.async				= false;
-  	    objAH.keyword           = keyword;
-  	    SERVER = server_name;
-  	    //se setea la funcion para cambiar de pagina
-  	    objAH.funcion           = 'changePage';
-  	    //se envia la consulta
-  	    objAH.sendToServer();
-    }
-
-    var table = "";
-    
-    function updateExternalSearch(responseText){
-
-    	var templates = {
-    	    tr : '<tr>#{row}</tr>',
-    	    th : '<th>#{header}</th>',
-    	    td : '<td>#{cell}</td>'
-    	};
-    	
-    	table  = '<fieldset><legend class="server_name">'+SERVER+'</legend></fieldset><table><thead>';
-		table += '<tr>';
-        table += '<th>[% "T&iacute;tulo" | i18n %]</th>'; 
-        table += '<th>[% "Autor" | i18n %]';
-
-		table += '</tr></thead><tbody>';
-         
-        $(responseText).find('rdf\\:Description').each(function() {
-            var marker = $(this);
-            var title       = marker.find("dc\\:title").text();
-            var creator     = marker.find("dc\\:creator").text();
-            var subject     = marker.find("dc\\:subject").text();
-            var description = marker.find("dc\\:description").text();
-            var publisher   = marker.find("dc\\:publisher").text();
-            var contributor = marker.find("dc\\:contributor").text();
-            var date        = marker.find("dc\\:date").text();
-            var type        = marker.find("dc\\:type").text();
-            var format      = marker.find("dc\\:format").text();
-            var identifier  = marker.find("dc\\:identifier").text();
-            var source      = marker.find("dc\\:source").text();
-            var language    = marker.find("dc\\:language").text();
-            var relation    = marker.find("dc\\:relation").text();
-            var coverage    = marker.find("dc\\:coverage").text();
-            var rights      = marker.find("dc\\:rights").text();
-            var url			= "<a href="+marker.attr('rdf:about')+" target='_blank'>"+title+"</a>";
-            
-            var DC_hash     = {
-            		title: title,
-            		creator: creator,
-            		subject: subject,
-            		description: description,
-            		publisher: publisher,
-            		contributor: contributor,
-            		date: date,
-            		type: type,
-            		format: format,
-            		identifier: identifier,
-            		source: source,
-            		language: language,
-            		relation: relation,
-            		coverage: coverage,
-            		rights: rights,
-            		link: url
-            }
-            table += '<tr>';
-    	    table += $.tmpl(templates.td, {cell: DC_hash.creator});
-    	    table += $.tmpl(templates.td, {cell: DC_hash.link,});
-            table += '</tr>';
-        });
-
-		table += '</tbody></table>';
-		$('#main_content').append(table);
-
-		return (table);
-    }
-    
     $(document).ready(function() {
         $('.fancylink').fancybox();
     });
-
-
 </script>
 
 [% USE HTML %]

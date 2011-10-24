@@ -1262,3 +1262,19 @@ a.signin.menu-open span {
     border:1px solid red;
 
 }
+.js_paging{
+    background-image: url("../imagenes/botones/boton_medio.png");
+    border: 1px solid #969696;
+    border-radius: 3px 3px 3px 3px;
+    color: #FFFFFF;
+    font-family: verdana,arial,sans-serif;
+    margin: 0 auto;
+}
+
+.js_paging:hover {
+	background-image: url("../imagenes/botones/boton_medio_hover.png");
+    background: none repeat scroll 0 0 #DCDCDC;
+    border: 1px solid grey;
+    color: #505050;
+    cursor: pointer;
+}
