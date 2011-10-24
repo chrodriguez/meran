@@ -89,11 +89,12 @@ sub setNombre{
     $self->nombre($nombre);
 }
     
-sub getDireccion{
+sub getDireccionPDF{
     my ($self) = shift;
 
-    return (C4::AR::Utilidades::trim($self->direccion));
-} 
+    return (C4::AR::Utilidades::trim(Encode::decode_utf8($self->getDireccion)));
+}
+
 
 sub getDireccion{
     my ($self) = shift;

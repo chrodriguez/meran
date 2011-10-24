@@ -19,33 +19,27 @@ my $session = CGI::Session->load();
 C4::AR::Debug::debug("informacion.pl =>  codMsg: ".$session->param("codMsg"));
 $t_params->{'mensaje'}= C4::AR::Mensajes::getMensaje($session->param("codMsg"),'INTRA',[]);
 
+# si el mensaje es el U354 (no tiene permisos para ver esta pagina) se rompe si hace lo de abajo
+if(!($session->param("codMsg") eq 'U354')){
 
+    my $nivel2_array_ref = C4::AR::Nivel2::getAllNivel2();
 
+    foreach my $nivel2 (@$nivel2_array_ref){
 
+        my $tipo_doc = $nivel2->getTipoDocumento();
 
-#my $yo = C4::AR::Usuarios::getSocioInfoPorNroSocio("gaspo53");
+        C4::AR::Debug::debug("============== seteando tipo_doc: ".$tipo_doc." al registro: ".$nivel2->nivel1->getId1()." ==============");
+        $nivel2->nivel1->setTemplate($tipo_doc);
+        C4::AR::Debug::debug("seteando tipo_doc: ".$tipo_doc." al grupo: ".$nivel2->getId2());
+        $nivel2->setTemplate($tipo_doc);
 
-#$yo->convertirEnSuperLibrarian();
+        my $nivel3_array_ref = C4::AR::Nivel3::getNivel3FromId2($nivel2->getId2());
+        
+        foreach my $nivel3 (@$nivel3_array_ref){
 
-#C4::AR::Debug::debug("SEESION TYPE: ===================>>>>>>>>>>> ".$session->param('type'));
-
-my $nivel2_array_ref = C4::AR::Nivel2::getAllNivel2();
-
-foreach my $nivel2 (@$nivel2_array_ref){
-
-    my $tipo_doc = $nivel2->getTipoDocumento();
-
-    C4::AR::Debug::debug("============== seteando tipo_doc: ".$tipo_doc." al registro: ".$nivel2->nivel1->getId1()." ==============");
-    $nivel2->nivel1->setTemplate($tipo_doc);
-    C4::AR::Debug::debug("seteando tipo_doc: ".$tipo_doc." al grupo: ".$nivel2->getId2());
-    $nivel2->setTemplate($tipo_doc);
-
-    my $nivel3_array_ref = C4::AR::Nivel3::getNivel3FromId2($nivel2->getId2());
-    
-    foreach my $nivel3 (@$nivel3_array_ref){
-
-        C4::AR::Debug::debug("seteando tipo_doc: ".$tipo_doc." al ejemplar: ".$nivel3->getId());
-        $nivel3->setTemplate($tipo_doc);
+            C4::AR::Debug::debug("seteando tipo_doc: ".$tipo_doc." al ejemplar: ".$nivel3->getId());
+            $nivel3->setTemplate($tipo_doc);
+        }
     }
 }
 
