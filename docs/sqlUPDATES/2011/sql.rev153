@@ -1,0 +1,12 @@
+INSERT INTO  `Econo`.`pref_preferencia_sistema` (
+`id` ,
+`variable` ,
+`value` ,
+`explanation` ,
+`options` ,
+`type` ,
+`categoria`
+)
+VALUES (
+NULL ,  'external_search',  '0',  'Habilita/Deshabilita la búsqueda en servidores externos Meran', NULL ,  'bool',  'catalogo'
+);
