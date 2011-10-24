@@ -62,6 +62,7 @@
                  [% IF !(socio.getNro_socio == socio.getNro_documento) %]
                      <li> [% "Tarjeta de identificaci&oacute;n :" | i18n %] <strong> [% socio.getNro_socio %]</strong></li>
                   [% END %]
+                <li>[% "Categor&iacute;a del usuario:" | i18n %] <strong> [%  socio.categoria.getDescription %]</strong></li>
                 <li> [% "Credenciales" | i18n %]:<strong> [% socio.getCredentialType %]</strong> </li>
                 </ul>
           </fieldset>
@@ -105,7 +106,6 @@
                     <li>[% "Ciudad :" | i18n %] <strong> [%  socio.persona.ciudad_ref.getNombre %]</strong></li>
                     <li>[% "Calle :" | i18n %]  <strong> [%  socio.persona.getCalle %]</strong></li>
                     <li>[% "ID de usuario:" | i18n %] <strong> [%  socio.nro_socio %]</strong></li>
-                    <li>[% "Categor&iacute;a del usuario:" | i18n %] <strong> [%  socio.categoria.getDescription %]</strong></li>
                     <li>[% "Incorporaci&oacute;n a Biblioteca:" | i18n %] <strong> [%  socio.ui.nombre %]</strong></li>
                     [% IF usercourse %]
                     <li>
