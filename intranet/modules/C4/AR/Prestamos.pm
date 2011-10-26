@@ -592,7 +592,10 @@ sub t_renovar {
         C4::AR::Debug::debug("T_Renovar ".$data->{'barcode'});
         my $prestamo            = C4::AR::Prestamos::getInfoPrestamo($data->{'id_prestamo'},$db);
         if ($prestamo){
-            $prestamo->_verificarParaRenovar($msg_object);
+
+            C4::AR::Debug::debug("OPAC O INTRA???");
+    C4::AR::Debug::debug($params->{'type'});
+            $prestamo->_verificarParaRenovar($msg_object, $params->{'type'});
 
             if(!$msg_object->{'error'}){
                     eval{
