@@ -1278,3 +1278,7 @@ a.signin.menu-open span {
     color: #505050;
     cursor: pointer;
 }
+
+.server_name {
+    background: #DAE0EC;
+}

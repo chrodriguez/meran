@@ -37,6 +37,8 @@
 				
 				for (x=0; x<servidores.length ;x++){
 					externalSearch(keyword,servidores[x],server_name[servidores[x]]);
+					$('#main_content').append("<br />");
+					$('#main_content').append("<br />");
 				} 
 
 				if (results){
@@ -60,6 +62,7 @@
 		  	    objAH.url               = URL;
 		  	    objAH.async				= false;
 		  	    objAH.keyword           = keyword;
+		  	    objAH.showOverlay		= true;
 		  	    SERVER = server_name;
 		  	    //se setea la funcion para cambiar de pagina
 		  	    objAH.ini          	 	= numPag;
@@ -76,7 +79,7 @@
 		    	    th : '<th>#{header}</th>',
 		    	    td : '<td>#{cell}</td>'
 		    	};
-		    	
+
 		    	table  = '<fieldset><legend class="server_name">'+SERVER+'</legend></fieldset><table><thead>';
 				table += '<tr>';
 		        table += '<th>[% "T&iacute;tulo" | i18n %]</th>'; 
