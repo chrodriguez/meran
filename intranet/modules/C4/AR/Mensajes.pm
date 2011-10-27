@@ -74,7 +74,7 @@ my %mensajesOPAC = (
 	'U303' => 'En este momento no hay ejemplares disponibles para el pr&eacute;stamo inmediato. Cuando haya alg&uacute;n ejemplar a su disposici&oacute;n se le informar&aacute; a su cuenta de usuario y a su mail:
 	<br><i> *?* </i><br>Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.',
 	'U304' => 'Disculpe, no puede reservar porque no hizo el curso para usuarios.',
-	'U308' => 'Se cancel&oacute; la reserva con &eacute;xito.',
+    'U308' => 'Se cancel&oacute; la reserva con &eacute;xito.',
     'U315' => 'Las passwords no coinciden, ingrese la password nuevamente.',
     'U338' => 'Se modificaron los datos del usuario correctamente.',
     'U339' => 'Disculpe, no se pudo modificar los datos del usuario, intente nuevamente.',
@@ -184,6 +184,7 @@ my %mensajesINTRA = (
     'U306' => 'Disculpe, no se pudo eliminar el grupo *?*, intente nuevamente.',
     'U307' => 'Disculpe, no se pudo eliminar el registro *?*, intente nuevamente.',
     'U308' => 'Se cancel&oacute; la reserva con &eacute;xito.',
+    'U308b' => 'La reserva no se puede cancelar debido a preferencias del sistema.',
     'U309' => 'Se elimin&oacute; el seud&oacute;nimo con &eacute;xito.',
     'U310' => 'Se elimin&oacute; el sin&oacute;nimo (*?*) con &eacute;xito.',
     'U311' => 'Usted ha ingresado un ID de usuario que ya existe. Por favor elija otro. userid: *?* Apellido: *?* Nombre: *?*',
