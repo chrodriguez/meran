@@ -199,6 +199,7 @@ elsif($tipoAccion eq "REALIZAR_DEVOLUCION"){
 
     $obj->{'nro_socio'}        = $nro_socio;
 	$obj->{'responsable'}      = $user;
+    
 	my ($Message_arrayref)     = C4::AR::Prestamos::t_devolver($obj);
     
    	my %info;
@@ -220,6 +221,7 @@ elsif($tipoAccion eq "REALIZAR_RENOVACION"){
                                 );
 
     $obj->{'responsable'}           = $user;
+    $obj->{'type'}           = $session->param('type');
     my ($infoTickets,$msg_object)   = C4::AR::Prestamos::t_renovar($obj);
     
     my %info;
