@@ -613,7 +613,8 @@ sub setChange_password{
 
 sub cumpleRequisito{
     my ($self) = shift;
-    return ( ($self->cumple_requisito ne "0000000000:00:00") && ($self->cumple_requisito) );
+   return ( ($self->cumple_requisito ne "0000000000:00:00") && ($self->cumple_requisito) );
+ 
 	
 }
 sub getCumple_requisito{

@@ -576,6 +576,8 @@ sub t_renovar {
     my ($params)              = @_;
     my $msg_object            = C4::AR::Mensajes::create();
 
+    my $type= "intranet";
+
     my $ticketObj;
     my @infoTickets;
     my $print_renew           = C4::AR::Preferencias::getValorPreferencia("print_renew");
@@ -592,7 +594,7 @@ sub t_renovar {
         C4::AR::Debug::debug("T_Renovar ".$data->{'barcode'});
         my $prestamo            = C4::AR::Prestamos::getInfoPrestamo($data->{'id_prestamo'},$db);
         if ($prestamo){
-            $prestamo->_verificarParaRenovar($msg_object);
+            $prestamo->_verificarParaRenovar($msg_object, $params->{'type'});
 
             if(!$msg_object->{'error'}){
                     eval{
@@ -633,6 +635,9 @@ sub t_renovar {
 sub t_renovarOPAC {
   my ($params)=@_;
 
+  my $type= "opac";
+
+
   my $prestamoTEMP = C4::Modelo::CircPrestamo->new();
   my $db = $prestamoTEMP->db;
      $db->{connect_options}->{AutoCommit} = 0;
@@ -645,7 +650,7 @@ sub t_renovarOPAC {
         C4::AR::Debug::debug("T_Renovar OPAC ".$params->{'id_prestamo'});
         my $prestamo = C4::AR::Prestamos::getInfoPrestamo($params->{'id_prestamo'},$db);
         if ($prestamo){
-            $prestamo->_verificarParaRenovar($msg_object);
+            $prestamo->_verificarParaRenovar($msg_object, $type);
     
             if(!$msg_object->{'error'}){
                     eval{

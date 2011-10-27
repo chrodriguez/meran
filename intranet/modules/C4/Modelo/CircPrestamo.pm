@@ -697,8 +697,9 @@ Se verifica que se cumplan las condiciones para poder renovar
 
 sub _verificarParaRenovar {
 	my ($self)       = shift;
-	my ($msg_object) = @_;
+	my ($msg_object, $type) = @_;
 
+    C4::AR::Debug::debug($type);
 	#Se que estemos dentro de la fecha en que se puede realizar la renovacion
 	if ( !$self->estaEnFechaDeRenovacion ) {
 		$self->debug(
@@ -716,16 +717,18 @@ sub _verificarParaRenovar {
 		C4::AR::Mensajes::add( $msg_object,
 			{ 'codMsg' => 'U300', 'params' => [] } );
 	}
+      
+    if ($type eq "opac"){
+  
+        if ( !( $msg_object->{'error'} )  && !($self->socio->cumpleRequisito )) 
+        {
+                # El usuario cumple condicion?
+                $self->debug("_verificarParaRenovar - socio no cumple condicion");
+                $msg_object->{'error'} = 1;
+                C4::AR::Mensajes::add( $msg_object, { 'codMsg' => 'P114', 'params' => [] } );
+            }
 
-	if ( !( $msg_object->{'error'} ) && ( !$self->socio->getCumple_requisito ) )
-	{
-
-		# El usuario cumple condicion?
-		$self->debug("_verificarParaRenovar - socio no cumple condicion");
-		$msg_object->{'error'} = 1;
-		C4::AR::Mensajes::add( $msg_object, { 'codMsg' => 'P114', 'params' => [] } );
-	}
-
+    }
 	#Busco si tiene una sancion pendiente
 	my $sancion_pendiente =
 	  C4::AR::Sanciones::tieneSancionPendiente( $self->getNro_socio,
