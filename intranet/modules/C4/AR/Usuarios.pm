@@ -715,12 +715,12 @@ sub editarNote{
 
     my $nro_socio   = $params->{'nro_socio'};
     my $value       = $params->{'value'};
+
     my $socio       = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
-    if ($socio){
-       
+ 
+    if ($socio){       
            $socio->setNote($value); 
            $socio->save();
-               
     }
     return ($value);
 }

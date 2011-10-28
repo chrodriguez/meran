@@ -4,21 +4,25 @@ use strict;
 use C4::AR::Auth;
 
 use C4::AR::UploadFile;
+use C4::AR::Usuarios;
 use JSON;
 use CGI;
 
 my $input = new CGI;
 my $authnotrequired= 0;
 my $editing = $input->param('edit');
-my $elemEdit=  $input->param('elemEdit') || "";
-
-
+my $elemEdit=  $input->param('id') || "";
 
 if ($editing){
+
+
+        
         if ($elemEdit eq 'nota'){
-          
+           
+          my %params = {};
 
           my $value = $input->param('value');
+
           my ($template, $session, $t_params)  = get_template_and_user({  
                               template_name => "includes/partials/modificar_value.tmpl",
                               query => $input,
@@ -33,11 +37,15 @@ if ($editing){
                           });
           $params{'nro_socio'} = $input->param('nro_socio');
           $params{'value'} = $value;
-          C4::AR::Validator::validateParams('U389',\%params,['nro_socio'] );
+#           C4::AR::Validator::validateParams('U389',\%params,['nro_socio'] );
 
-          
+          C4::AR::Debug::debug($value);
+
           my ($value)= C4::AR::Usuarios::editarNote(\%params);
+
+
           $t_params->{'value'} = $value;
+        
           C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 
@@ -78,11 +86,11 @@ if ($editing){
 
         my $tipoAccion= $obj->{'tipoAccion'}||"";
 
-        my $nro_socio                   = $obj->{'nro_socio'};
-
-    =item
-        Aca se maneja el resteo de password del usuario
-    =cut
+        my $nro_socio = $obj->{'nro_socio'};
+# 
+#     =item
+#         Aca se maneja el resteo de password del usuario
+#     =cut
         ## TODO tambien se podria hacer que el sistema genere la pass y se la envie por correo al socio, esto deberia ser una preferencia 
         ## resetPassword = [0 | 1]
         ## autoGeneratePassword = [0 | 1]
@@ -219,10 +227,10 @@ Se elimina el usuario
 
         } #end if($tipoAccion eq "ELIMINAR_USUARIO")
 
-
-    =item
-    Se agrega el usuario
-    =cut
+# 
+#     =item
+#     Se agrega el usuario
+#     =cut
         elsif($tipoAccion eq "AGREGAR_USUARIO"){
             my ($user, $session, $flags) = checkauth( $input, 
                                                 $authnotrequired,
@@ -242,10 +250,10 @@ Se elimina el usuario
 
         } #end if($tipoAccion eq "AGREGAR_USUARIO")
 
-
-    =item
-    Se guarda la modificacion los datos del usuario
-    =cut
+# 
+#     =item
+#     Se guarda la modificacion los datos del usuario
+#     =cut
         elsif($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO"){
             my ($user, $session, $flags) = checkauth( 
                                                                     $input, 
@@ -268,9 +276,9 @@ Se elimina el usuario
         } #end if($tipoAccion eq "GUARDAR_MODIFICACION_USUARIO")
 
 
-    =item
-    Se genra la ventana para modificar los datos del usuario
-    =cut
+#     =item
+#     Se genra la ventana para modificar los datos del usuario
+#     =cut
         elsif($tipoAccion eq "MODIFICAR_USUARIO"){
 
             my ($template, $session, $t_params, $socio) = get_template_and_user({
