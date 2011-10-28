@@ -59,6 +59,7 @@ use vars qw(@EXPORT_OK @ISA);
     deshabilitarPersona
     resetPassword
     eliminarUsuario
+    editarNote
     _verficarEliminarUsuario
     t_cambiarPermisos
     cambiarPassword
@@ -707,6 +708,25 @@ sub editarAutorizado{
     }
     return ($value);
 }
+
+
+sub editarNote{
+    my ($params)    = @_;
+
+    my $nro_socio   = $params->{'nro_socio'};
+    my $value       = $params->{'value'};
+
+    my $socio       = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+ 
+    if ($socio){       
+           $socio->setNote($value); 
+           $socio->save();
+    }
+    return ($value);
+}
+
+
+
 =item
     Busca todos los usuarios, con sus datos, entre un par de nombres o legajo para poder crear los carnet.
 =cut

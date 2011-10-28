@@ -10,6 +10,8 @@ use Date::Manip;
 use Cwd;
 my $input=new CGI;
 
+
+
 my ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
                             template_name	=> 'usuarios/reales/detalleUsuario.tmpl',
                             query		=> $input,
@@ -25,6 +27,7 @@ my $obj         = $input->param('obj');
 $obj            = C4::AR::Utilidades::from_json_ISO($obj);
 my $msg_object  = C4::AR::Mensajes::create();
 my $nro_socio   = $obj->{'nro_socio'};
+
 
 C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
 
@@ -55,6 +58,7 @@ $t_params->{'mensaje_error_foto'}   = $msgFoto;
 $t_params->{'mensaje_error_borrar'} = $msgError;
 $t_params->{'error'}                = 0;
 $t_params->{'nro_socio'}            = $socio->getNro_socio;	
+$t_params->{'notas'}                 = $socio->getNote; 
 $t_params->{'socio'}                = $socio;
 $t_params->{'relativePicturesDir'}  = C4::Context->config("relativePicturesDir");
 $t_params->{'needsDataValidation'} = C4::AR::Usuarios::needsDataValidation($nro_socio);
