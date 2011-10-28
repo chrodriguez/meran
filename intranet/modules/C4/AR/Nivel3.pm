@@ -793,7 +793,7 @@ sub generaCodigoBarra{
 			$like.= $estructurabarcode[$i];
 		}
 	}
-
+C4::AR::Debug::debug("AGREGANDO BARCODEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE LIKE ".$like);
     # Puede venir el db tambien!!
     my $max_codigo = C4::Modelo::CatRegistroMarcN3::Manager->get_maximum_codigo_barra(like => $like.'%') || 0;
        C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => barcode máximo => ".$max_codigo);
@@ -801,7 +801,7 @@ sub generaCodigoBarra{
     my @barcodes_array_ref;
     for(my $i=1;$i<=$cant;$i++){
 	C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => completarConCeros => ".completarConCeros($max_codigo + $i));
-        $barcode  = $parametros->{'UI'}."-".$parametros->{'tipo_ejemplar'}."-".completarConCeros($max_codigo + $i);
+        $barcode  = $like.completarConCeros($max_codigo + $i);
         C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => barcode => ".$barcode);
         push(@barcodes_array_ref, $barcode);
     }
