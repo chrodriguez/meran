@@ -4,17 +4,18 @@
 <script src="/includes/jquery/jquery.jeditable.js"></script>
 
 <script type="text/javascript">
+var loaderPath= "";
     $(document).ready(function(){
         makeToggle('toggle_container','trigger',null,true);
-
-        $('.nota').editable('[% url_prefix %]/usuarios/reales/usariosRealesDB.pl', { 
+        loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
+        $('.nota').editable('[% url_prefix %]/usuarios/reales/usuariosRealesDB.pl', { 
               type      : 'textarea',
               cancel    : CANCELAR,
               submit    : OK,
               tooltip   : EDITABLE_MSG,
               placeholder: EDITABLE_MSG,
               style   : 'display: inline',
-              submitdata : {token: "[% token %]", edit: '1'},
+              submitdata : {token: "[% token %]", edit: '1', elemEdit: 'nota'},
               indicator : loaderPath,
         });
 

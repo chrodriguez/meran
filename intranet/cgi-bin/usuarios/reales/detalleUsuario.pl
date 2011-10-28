@@ -10,10 +10,7 @@ use Date::Manip;
 use Cwd;
 my $input=new CGI;
 
-# 
-# my $editing = $input->param('value');
-# 
-# C4::AR::Debug::debug($editing);
+
 
 my ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
                             template_name	=> 'usuarios/reales/detalleUsuario.tmpl',
@@ -30,9 +27,6 @@ my $obj         = $input->param('obj');
 $obj            = C4::AR::Utilidades::from_json_ISO($obj);
 my $msg_object  = C4::AR::Mensajes::create();
 my $nro_socio   = $obj->{'nro_socio'};
-
-
-
 
 
 C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
