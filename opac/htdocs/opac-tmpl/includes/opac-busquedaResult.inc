@@ -32,24 +32,31 @@
 		
 			function doExternalSearches(keyword){
 				$('#main_content').html("");
-				results = false;
-				SEARCH = keyword;
+				startOverlay();
 				
-				for (x=0; x<servidores.length ;x++){
-					externalSearch(keyword,servidores[x],server_name[servidores[x]]);
-					$('#main_content').append("<br />");
-					$('#main_content').append("<br />");
-				} 
-
-				if (results){
-					if (numPag > 1)
-						$('#main_content').append("<input class='js_paging' type='button' onclick='prevPage();' value= [% 'Anterior' | i18n %] /> ");
-					$('#main_content').append("<input class='js_paging' type='button' onclick='nextPage();' value= [% 'Siguiente' | i18n %] /> ");
-	
-					$('#main_content').append("<br />");
-				}else{
-					$('#main_content').append("[% ' LOS SERVIDORES EXTERNOS NO DISPONEN DE MAS RESULTADOS SEGUN SU CRITERIO ' %]");
+				try{
+					Concurrent.Thread.create(function(){
+						results = false;
+						keyword = 'econo';
+						SEARCH = keyword;
+						for (x=0; x<servidores.length ;x++){
+							externalSearch(keyword,servidores[x],server_name[servidores[x]]);
+							$('#main_content').append("<br />");
+							$('#main_content').append("<br />");
+						} 
+						closeModal();
+						if (results){
+							if (numPag > 1)
+								$('#main_content').append("<input class='js_paging' type='button' onclick='prevPage();' value= [% 'Anterior' | i18n %] /> ");
+							$('#main_content').append("<input class='js_paging' type='button' onclick='nextPage();' value= [% 'Siguiente' | i18n %] /> ");
+			
+							$('#main_content').append("<br />");
+						}else{
+							$('#main_content').append("[% ' LOS SERVIDORES EXTERNOS NO DISPONEN DE MAS RESULTADOS SEGUN SU CRITERIO ' %]");
+						}
+					});
 				}
+				catch(e){}
 			}
 		
 		 
@@ -57,12 +64,10 @@
 		
 		  	    objAH                   = new AjaxHelper(updateExternalSearch);
 		  	    objAH.debug             = true;
-		  	    objAH.showOverlay       = true;
 		  	    //para busquedas combinables
 		  	    objAH.url               = URL;
 		  	    objAH.async				= false;
 		  	    objAH.keyword           = keyword;
-		  	    objAH.showOverlay		= true;
 		  	    SERVER = server_name;
 		  	    //se setea la funcion para cambiar de pagina
 		  	    objAH.ini          	 	= numPag;
