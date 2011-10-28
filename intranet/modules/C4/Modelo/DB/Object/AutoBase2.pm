@@ -260,6 +260,8 @@ sub getCamposAsHash{
     my $arregloJSON;
     my $camposArray = $self->meta->columns;
 
+    C4::AR::Debug::debug("AutoBase2 => getCamposAsHash => ".$self->meta->table);
+
     foreach my $campo (@$camposArray){
 ## FIXME ."" se esta concatenando $campo con "" pq sino se rompe, cosa de locos
         push (@arregloJSON, {'campo' => $campo."" });

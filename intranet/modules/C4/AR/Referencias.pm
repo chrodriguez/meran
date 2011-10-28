@@ -378,6 +378,7 @@ sub obtenerTablasDeReferenciaAsString {
 sub getCamposDeTablaRef{
     # (Chain Of Responsibility Object Pattern)
     my ($tableAlias) = @_;
+    C4::AR::Debug::debug("Referencias => getCamposDeTablaRef => ".$tableAlias);
 
     my $db = C4::Modelo::PrefTablaReferencia->new();
        $db = $db->createFromAlias($tableAlias);
