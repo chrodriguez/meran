@@ -261,15 +261,15 @@ sub getCamposAsHash{
     my $camposArray = $self->meta->columns;
     use C4::Modelo::PrefTablaReferenciaConf;
 
-    C4::AR::Debug::debug("AutoBase2 => getCamposAsHash => ".$self->meta->table);
+#     C4::AR::Debug::debug("AutoBase2 => getCamposAsHash => ".$self->meta->table);
 
     foreach my $campo (@$camposArray){
         my $ptrc    = C4::Modelo::PrefTablaReferenciaConf->new();
         my $c       = $ptrc->getConf($self->meta->table, $campo);
 
-        C4::AR::Debug::debug("AutoBase2 => getCamposAsHash => campo => ".$campo);
+#         C4::AR::Debug::debug("AutoBase2 => getCamposAsHash => campo => ".$campo);
         if($c){
-            C4::AR::Debug::debug("AutoBase2 => getCamposAsHash => TIENE CONF => ".$campo);
+#             C4::AR::Debug::debug("AutoBase2 => getCamposAsHash => TIENE CONF => ".$campo);
 ## FIXME ."" se esta concatenando $campo con "" pq sino se rompe, cosa de locos
             ($c->getVisible())?push (@arregloJSON, {'campo' => $c->getCampoAlias()."" }):0;
         } 
