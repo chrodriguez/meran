@@ -251,10 +251,21 @@ elsif($tipoAccion eq "CANCELAR_RESERVA"){
 	$params{'nro_socio'}    = $obj->{'nro_socio'};
 	$params{'responsable'}  = $user;
 	$params{'tipo'}         = "INTRA";
-	
-	my ($Message_arrayref)=C4::AR::Reservas::t_cancelar_reserva(\%params);
-	
-	my $infoOperacionJSON=to_json $Message_arrayref;
+
+    my $enabled                = C4::AR::Preferencias::getValorPreferencia('cancelar_reservas_intranet');	
+    
+    my ($msg_object);
+    
+    if ($enabled){
+	   ($msg_object)     = C4::AR::Reservas::t_cancelar_reserva(\%params);
+    }else{
+    	$msg_object = C4::AR::Mensajes::create();
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U308b', 'params' => []} ) ;
+    }
+    
+    
+	my $infoOperacionJSON=to_json $msg_object;
 	
     C4::AR::Auth::print_header($session);
 	print $infoOperacionJSON;
