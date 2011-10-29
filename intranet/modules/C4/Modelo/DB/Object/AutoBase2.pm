@@ -256,8 +256,8 @@ sub modifyFieldValue{
 Esta funcion devuelve los campos de la tabla del objeto llamador
 =cut
 sub getCamposAsHash{
-    my ($self)=shift;
-    my $arregloJSON;
+    my ($self) = shift;
+    my @arregloJSON;
     my $camposArray = $self->meta->columns;
     use C4::Modelo::PrefTablaReferenciaConf;
 
@@ -270,12 +270,16 @@ sub getCamposAsHash{
 #         C4::AR::Debug::debug("AutoBase2 => getCamposAsHash => campo => ".$campo);
         if($c){
 #             C4::AR::Debug::debug("AutoBase2 => getCamposAsHash => TIENE CONF => ".$campo);
-## FIXME ."" se esta concatenando $campo con "" pq sino se rompe, cosa de locos
-            ($c->getVisible())?push (@arregloJSON, {'campo' => $c->getCampoAlias()."" }):0;
+            if($c->getVisible()){
+    ## FIXME ."" se esta concatenando $campo con "" pq sino se rompe, cosa de locos
+#                 C4::AR::Debug::debug("AutoBase2 => getCamposAsHash => AGREGO CAMPOOO => ".$campo);
+                push (@arregloJSON, {'campo' => $c->getCampoAlias()."" });
+            }
         } 
     }
 
-    return(\@arregloJSON);
+#     C4::AR::Debug::debug("AutoBase2 => getCamposAsHash => cant campos => ".scalar(@arregloJSON));
+    return(@arregloJSON);
 }
 
 sub getCamposAsArray{

@@ -383,7 +383,8 @@ sub getCamposDeTablaRef{
     my $db = C4::Modelo::PrefTablaReferencia->new();
        $db = $db->createFromAlias($tableAlias);
     if ($db){
-        return( $db->getCamposAsHash );
+        my @JSON_array_ref = $db->getCamposAsHash();
+        return \@JSON_array_ref;
     }else{
         return (0);
     }
