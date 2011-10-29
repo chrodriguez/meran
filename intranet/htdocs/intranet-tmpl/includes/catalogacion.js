@@ -586,10 +586,13 @@ function updateGuardarEsquema(responseText){
     
     if(_NIVEL_ACTUAL == 1){  
         modificarN1(ID_N1, TEMPLATE_ACTUAL);
+        mostrarInfoAltaNivel1(ID_N1);   
     } else if(_NIVEL_ACTUAL == 2){
         modificarN2(ID_N2, TEMPLATE_ACTUAL);
+        mostrarInfoAltaNivel2(ID_N2);  
     } else {
         modificarN3(ID_N3, TEMPLATE_ACTUAL);
+//         $("#template"+ID_N2).html(TEMPLATE_ACTUAL);      
     }
     
 }
@@ -742,7 +745,7 @@ function guardarDocumentoN1(){
     objAH.showOverlay               = true;
     objAH.url                       = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion                = "GUARDAR_NIVEL_1";
-    objAH.id_tipo_doc               = $("#tipo_nivel3_id").val();
+    objAH.id_tipo_doc               = TEMPLATE_ACTUAL;
     objAH.id_nivel_bibliografico    = $("#id_nivel_bibliografico").val();
 	_sacarOpciones();
     objAH.infoArrayNivel1           = MARC_OBJECT_ARRAY;
@@ -788,7 +791,7 @@ function guardarDocumentoN2(){
         objAH.showOverlay       = true;
         objAH.url               = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
         objAH.tipoAccion        = "GUARDAR_NIVEL_2";
-        objAH.id_tipo_doc       = $("#tipo_nivel3_id").val();  
+        objAH.id_tipo_doc       = TEMPLATE_ACTUAL;
 	    _sacarOpciones();
         objAH.infoArrayNivel2   = MARC_OBJECT_ARRAY;
         objAH.id1               = ID_N1;
@@ -823,7 +826,7 @@ function guardarDocumentoN3(){
         objAH.modificado        = 0;
 		objAH.url               = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
 		objAH.tipoAccion        = "GUARDAR_NIVEL_3";
-		objAH.id_tipo_doc       = $("#tipo_nivel3_id").val();
+		objAH.id_tipo_doc       = TEMPLATE_ACTUAL;
         objAH.esPorBarcode      = porBarcode;  
         objAH.ui_origen         = $('#' + _getIdComponente('995','d')).val();
         objAH.ui_duenio         = $('#' + _getIdComponente('995','c')).val();

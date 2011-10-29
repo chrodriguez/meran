@@ -1,4 +1,4 @@
-CREATE TABLE  `meran`.`pref_tabla_referencia_conf` (
+CREATE TABLE  `pref_tabla_referencia_conf` (
 `id` INT( 11 ) NOT NULL ,
 `tabla` VARCHAR( 255 ) NOT NULL ,
 `campo` VARCHAR( 255 ) NOT NULL ,

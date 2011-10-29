@@ -10,8 +10,9 @@
     [% ELSE %]
 
         [% FOREACH nivel2 IN nivel2_array %]    
+        <span id="grupo_[% nivel2.getId2 %]">
         <fieldset><legend class="nivel2Selected trigger trigger_n2_[% nivel2.getId2 %] click">
-                <strong>[% 'Grupo:' | i18n %] [% nivel2.getId2 %] - [% nivel2.getTipoDocumentoObject.getNombre %] ([% nivel2.getTemplate %]) </strong>
+                <strong>[% 'Grupo:' | i18n %] [% nivel2.getId2 %] - [% nivel2.getTipoDocumentoObject.getNombre %] ([% nivel2.getTemplate %])</strong>
                 </legend>
           <div id="nive2_id_[% nivel2.getId2 %]" class="nive2_id_[% nivel2.getId2 %]">
             
@@ -96,6 +97,7 @@
 
             </fieldset>
         </div>
+        </span>
         [% END %]
 
     [% END %]

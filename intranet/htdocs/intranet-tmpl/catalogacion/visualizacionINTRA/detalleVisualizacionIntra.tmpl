@@ -77,19 +77,20 @@
         objAH.ejemplar      = $("#tipo_nivel3_id").val();
         
         if (campo){
-        jConfirm(SEGURO_QUE_DESEA_ELIMINAR_TODO_EL_CAMPO,CATALOGO_ALERT_TITLE, function(confirmStatus){
-            if (confirmStatus){
-                objAH.campo         = campo;
-                objAH.sendToServer();
-            }
-        });
-    }
+            jConfirm(SEGURO_QUE_DESEA_ELIMINAR_TODO_EL_CAMPO,CATALOGO_ALERT_TITLE, function(confirmStatus){
+                if (confirmStatus){
+                    objAH.campo         = campo;
+                    objAH.sendToServer();
+                }
+            });
+        }
     }
     
     function updateEliminarTodoCampo(responseText){
         var Messages        = JSONstring.toObject(responseText);
         setMessages(Messages);
         mostrarTabla();
+        eleccionDeEjemplar();
     }
     
 </script>
