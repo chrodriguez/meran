@@ -10,7 +10,7 @@
 
     [% ELSE %]
     <fieldset>
-    <legend class="titulo_legend">[% "Regitro:" | i18n %]
+    <legend class="titulo_legend">[% "Registro:" | i18n %]
             [% PERL %]
                 print C4::AR::Filtros::link_to( text =>     [% nivel1.getId1 %],
                                                 url=>"detalle.pl", 
@@ -19,7 +19,7 @@
                                             ) ;
             [% END %]
 
-            ([% nivel1.getTemplate %]) 
+            <span id="template_[% nivel1.getId1 %]">([% nivel1.getTemplate %])</span>
     </legend>
             <ul class="listado_sin_margen">
             <li class="titulos"> [% nivel1.getTitulo %] </li>
