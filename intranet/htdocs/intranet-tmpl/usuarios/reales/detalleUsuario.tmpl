@@ -1,10 +1,26 @@
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme_intra %]/includes/fileuploader.css">
 
 <script type="text/javascript" src="/includes/jquery/fileuploader.js"></script>
+<script src="/includes/jquery/jquery.jeditable.js"></script>
 
 <script type="text/javascript">
+var loaderPath= "";
     $(document).ready(function(){
         makeToggle('toggle_container','trigger',null,true);
+        loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
+        $('.nota').editable('[% url_prefix %]/usuarios/reales/usuariosRealesDB.pl', { 
+              type      : 'textarea',
+              cancel    : CANCELAR,
+              submit    : OK,
+              tooltip   : EDITABLE_MSG,
+              placeholder: EDITABLE_MSG,
+              style   : 'display: inline',
+              submitdata : {token: "[% token %]", edit: '1', id: 'nota', nro_socio:'[% nro_socio %]' },
+              indicator : loaderPath,
+        });
+
+
+
     
         [% IF !foto_name %] 
             $('#div_uploader').show();
@@ -124,6 +140,18 @@
                 </ul>
             </div>
         </fieldset>
+
+        <fieldset>
+            <legend class="titulo_legend_resaltado trigger click titulo_legend" title='[% "click para acceder a las notas registradas sobre el usuario" | i18n %]'>
+                    [% "Notas" | i18n %]
+            </legend>
+            <div class="toggle_container" >
+                   <div class="nota">[% notas %]</div>
+            </div>
+        </fieldset>
+
+      
+
         </div>
 </div><!--columna izq -->
 

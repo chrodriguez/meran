@@ -25,6 +25,7 @@ __PACKAGE__->meta->setup(
         id_estado                        => { type => 'integer', overflow => 'truncate', not_null => 1,  default => 20 },
         activo                           => { type => 'integer', overflow => 'truncate', default => 0, not_null => 1 },
         agregacion_temp                  => { type => 'varchar', overflow => 'truncate', length => 255 },
+        note                             => { type => 'text', not_null => 1 },
         nombre_apellido_autorizado       => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 0 },
         dni_autorizado                   => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 0 },
         telefono_autorizado              => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 0 },
@@ -419,6 +420,21 @@ sub setActivo{
     my ($activo) = @_;
     $self->activo($activo);
 }
+
+
+sub setNote{
+    my ($self) = shift;
+    my ($note) = @_;
+    $self->note($note);
+}
+
+
+sub getNote{
+    my ($self) = shift;
+    return ($self->note);
+}
+
+
 
 sub getId_persona{
     my ($self) = shift;

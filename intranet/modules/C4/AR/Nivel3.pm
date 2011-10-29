@@ -801,7 +801,7 @@ sub generaCodigoBarra{
     my @barcodes_array_ref;
     for(my $i=1;$i<=$cant;$i++){
 	C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => completarConCeros => ".completarConCeros($max_codigo + $i));
-        $barcode  = $parametros->{'UI'}."-".$parametros->{'tipo_ejemplar'}."-".completarConCeros($max_codigo + $i);
+        $barcode  = $like.completarConCeros($max_codigo + $i);
         C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => barcode => ".$barcode);
         push(@barcodes_array_ref, $barcode);
     }
