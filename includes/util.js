@@ -75,6 +75,12 @@ function zebra(classObj){
 	$("."+ classObj + " tr:gt(0):even").addClass("par");		
 }
 
+function zebraList(classObj){
+
+    $("."+ classObj + " li:gt(0):odd").addClass("impar");
+    $("."+ classObj + " li:gt(0):even").addClass("par");        
+}
+
 function zebraId(idObj){
 
     $("#"+ idObj + " tr:gt(0):odd").addClass("impar");
