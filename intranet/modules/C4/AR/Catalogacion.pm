@@ -51,8 +51,6 @@ C4::AR::Catalogacion - Funciones que manipulan datos del catálogo
 
 =over 2
 =cut
-
-
 =head2
 sub meran_to_marc 
 
