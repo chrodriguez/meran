@@ -4727,6 +4727,10 @@ tr.impar {
 background-color:#E7F3FA;
 }
 
+li.impar {
+background-color:#E7F3FA;
+}
+
 /*hover de las tablas con checkbox*/
 .impar:hover {
     background:         #5C82B5;

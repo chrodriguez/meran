@@ -400,7 +400,7 @@ sub detalleNivel3{
 	$hash_nivel2{'id2'}                     = $id2;
 	$hash_nivel2{'tipo_documento'}          = $nivel2_object->getTipoDocumentoObject->getNombre();
 	$hash_nivel2{'nivel2_array'}            = $nivel2_object->toMARC_Intra; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
-        $hash_nivel2{'nivel2_template'}         = $nivel2_object->getTemplate();
+    $hash_nivel2{'nivel2_template'}         = $nivel2_object->getTemplate();
 	$hash_nivel2{'tiene_indice'}            = $nivel2_object->tiene_indice;
 	$hash_nivel2{'indice'}                  = $hash_nivel2{'tiene_indice'}?$nivel2_object->getIndice:0;
 	$hash_nivel2{'esta_en_estante_virtual'} = C4::AR::Estantes::estaEnEstanteVirtual($id2);
