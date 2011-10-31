@@ -127,6 +127,7 @@ use vars qw(@EXPORT_OK @ISA);
     armarIniciales
     generarComboCamposPersona
     str_replace
+    generarComboTablasDeReferenciaByNombreTabla
 );
 
 
@@ -2483,6 +2484,63 @@ sub generarComboTablasDeReferencia{
 
     foreach my $tabla (@$tabla_ref_array) {
         push(@select_tabla_ref_array, $tabla->getAlias_tabla);
+        $select_tabla_ref_array{$tabla->getAlias_tabla}= C4::AR::Filtros::i18n($tabla->getClient_title);
+    }
+
+    my %options_hash; 
+
+    if ( $params->{'onChange'} ){
+         $options_hash{'onChange'}  = $params->{'onChange'};
+    }
+
+    if ( $params->{'onFocus'} ){
+      $options_hash{'onFocus'}      = $params->{'onFocus'};
+    }
+
+    if ( $params->{'class'} ){
+         $options_hash{'class'}     = $params->{'class'};
+    }
+
+    if ( $params->{'onBlur'} ){
+      $options_hash{'onBlur'}       = $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}           = $params->{'name'}||'tablas_ref';
+    $options_hash{'id'}             = $params->{'id'}||'tablas_ref';
+    $options_hash{'size'}           = $params->{'size'}||1;
+    $options_hash{'multiple'}       = $params->{'multiple'}||0;
+    $options_hash{'defaults'}       = $params->{'default'} || 'SIN SELECCIONAR';
+
+#FIXME falta un default no?
+#     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
+
+
+    push (@select_tabla_ref_array, '-1');
+    $select_tabla_ref_array{'-1'}   = 'SIN SELECCIONAR';
+    $options_hash{'values'}         = \@select_tabla_ref_array;
+    $options_hash{'labels'}         = \%select_tabla_ref_array;
+
+    my $comboTipoNivel3             = CGI::scrolling_list(\%options_hash);
+
+    return $comboTipoNivel3;
+}
+
+=item
+    Igual que la de arriba, pero arma el select con los nombres de las tablas, en vez de su alias
+=cut
+sub generarComboTablasDeReferenciaByNombreTabla{
+
+    my ($params) = @_;
+
+    my @select_tabla_ref_array;
+    my %select_tabla_ref_array;
+
+    require C4::Modelo::PrefTablaReferencia::Manager;
+    my ($tabla_ref_array)= C4::Modelo::PrefTablaReferencia::Manager->get_pref_tabla_referencia();
+    
+
+    foreach my $tabla (@$tabla_ref_array) {
+        push(@select_tabla_ref_array, $tabla->getNombre_tabla);
         $select_tabla_ref_array{$tabla->getAlias_tabla}= C4::AR::Filtros::i18n($tabla->getClient_title);
     }
 
