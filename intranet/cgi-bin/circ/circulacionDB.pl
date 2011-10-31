@@ -498,7 +498,7 @@ elsif ( $tipoAccion eq "IMPRIMIR_COMPROBANTE" ) {
                     push(@comprobantes,\%hash);
                    
             }
-   
+    
             $t_params->{'comprobantes'}   = \@comprobantes;
 
             C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

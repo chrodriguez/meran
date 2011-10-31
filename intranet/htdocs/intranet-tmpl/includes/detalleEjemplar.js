@@ -227,13 +227,23 @@ function updateInfoRenovar(responseText){
 	var messageArray= infoHash.messages;
 	var ticketsArray= infoHash.tickets;
 	//Mensajes 
-	for(i=0; i<messageArray.length;i++){
-  		setMessages(messageArray[i]);
-	}
-	//Tickets si hay
-	for(i=0; i<ticketsArray.length;i++){
-		imprimirTicket(ticketsArray[i].ticket,i);
-	}
+// 	for(i=0; i<messageArray.length;i++){
+//   		setMessages(messageArray[i]);
+// 	}
+// 	//Tickets si hay
+// 	for(i=0; i<ticketsArray.length;i++){
+// 		imprimirTicket(ticketsArray[i].ticket,i);
+// 	}
+
+    setMessages(messageArray);
+    
+   for(var i=0; i<messageArray.length;i++){
+//      imprimirTicket(ticketsArray[i].ticket,i);
+        setMessages(messageArray[i]);
+    }
+
+    imprimirTicket(ticketsArray);
+
 
 	ejemplaresDelGrupo(ID_N2);
 	inicializar();
@@ -276,18 +286,27 @@ function confirmarPrestamo(){
 //esta funcion esta REDEFINIDA de la libreria de circulacion.js, es invocada desde la funcion prestar()
 function updateInfoPrestarReserva(responseText){
 	cancelarDiv();
-
 	var infoHash= JSONstring.toObject(responseText);
 	var messageArray= infoHash.messages;
 	var ticketsArray= infoHash.tickets;
 	var mensajes= '';
-	for(var i=0; i<messageArray.length;i++){
-		imprimirTicket(ticketsArray[i].ticket,i);
-  		setMessages(messageArray[i]);
-	}
+
+// 	for(var i=0; i<messageArray.length;i++){
+// 		imprimirTicket(ticketsArray[i].ticket,i);
+//   		setMessages(messageArray[i]);
+// 	}
+
+    for(var i=0; i<messageArray.length;i++){
+//      imprimirTicket(ticketsArray[i].ticket,i);
+        setMessages(messageArray[i]);
+
+    }
+
+    imprimirTicket(ticketsArray);
+
+
 	ejemplaresDelGrupo(ID_N2);
 }
-
 
  function generarVariasEtiquetas(){
 //             var selectedItems = new Array();
