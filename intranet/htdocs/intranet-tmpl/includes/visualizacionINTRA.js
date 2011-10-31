@@ -61,8 +61,8 @@ function updateAgregarVisualizacion(responseText){
     
     setMessages(Messages);
     if (! (hayError(Messages) ) ){
-	eleccionDeEjemplar(); 
-	$("#tablaResultSubCampos").html("");
+        eleccionDeEjemplar(); 
+        $("#tablaResultSubCampos").html("");
     }  
 }
 

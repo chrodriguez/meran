@@ -605,7 +605,7 @@ sub marc_record_to_oai {
                 my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $db);
                 
                 
-                C4::AR::Debug::debug("PASANDO A MARC OAI EL CAMPO $campo , $subcampo CON VALOR $valor_referencia");
+#                C4::AR::Debug::debug("PASANDO A MARC OAI EL CAMPO $campo , $subcampo CON VALOR $valor_referencia");
                 
                 my $field = MARC::Field->new($campo,'','',$subcampo => $valor_referencia);
                 
@@ -1270,32 +1270,6 @@ sub countFieldInMarcRecord{
     return $cant;
 }
 
-sub getSubcamposFaltantes {
-    my ($marc_record_field, $estructura_array_ref) = @_;
-
-    my @subcampos_array;
-
-#     my ($cant, $subcampos_array_ref) = getSubCamposFromEstructuraByCampo($c->getCampo, $nivel, $itemType);
-# 
-#         foreach my $sc  (@$subcampos_array_ref){
-#             my %hash;
-#         
-#             $hash{'tiene_estructura'}  = '1';
-#             $hash{'dato'}              = '';
-# #             $hash{'datoReferencia'}    = 0;
-#             $hash{'datoReferencia'}    = "NULL";
-#             
-#             my ($hash_temp) = _setDatos_de_estructura($sc, \%hash);
-# #             C4::AR::Debug::debug("getEstructuraSinDatos => campo, subcampo: ".$c->getCampo.", ".$sc->getSubcampo);
-#             
-#             push (@result, $hash_temp);
-#         }
-
-
-    #recorro el arreglo con la estructura de catalogcion base pasada por parámetro
-    #verifico que subcampos del campo pasado por parámetro no existen en $estructura_array_ref
-}
-
 sub agregarCamposVacios2 {
     my ($marc_record, $estructura_array_ref) = @_;
     
@@ -1376,6 +1350,7 @@ sub getEstructuraSinDatos {
     my $campo       = '';
     my $campo_ant   = '';
     foreach my $c  (@$campos_array_ref){
+#         C4::AR::Debug::debug("campo => ".$c->getCampo);
 
         my %hash_campos;
         my @result;
@@ -1384,6 +1359,7 @@ sub getEstructuraSinDatos {
 
         foreach my $sc  (@$subcampos_array_ref){
             my %hash;
+#             C4::AR::Debug::debug("subcampo => ".$sc);
         
             $hash{'tiene_estructura'}  = '1';
             $hash{'dato'}              = '';
@@ -1587,9 +1563,10 @@ sub _verificar_campo_subcampo_to_estructura{
         C4::AR::Debug::debug("_verificar_campo_subcampo_to_estructura => NO ESTA AUTORIZADO el campo, subcampo".$campo.", ".$subcampo);
     }elsif (_getEstructuraFromCampoSubCampo($campo, $subcampo, $itemtype)) {
         #el subcampo NO ES REPETIBLE y ya EXISTE en la ESTRUCTURA
-        $msg_object->{'error'} = 0;#NO ES ERROR SE INFORMA AL USUARIO Y SE CAMBIA LA VISIBILIDAD CONFIGURADA (campo, subcampo, itemtype)
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U412', 'params' => [" el campo ".$campo.", ".$subcampo.",".$itemtype." no es repetible"]} ) ;
-        C4::AR::Debug::debug("_verificar_campo_subcampo_to_estructura => NO SE PUEDE REPETIR el campo, subcampo".$campo.", ".$subcampo.",".$itemtype);
+# FIXME WF
+        $msg_object->{'error'} = 1;#NO ES ERROR SE INFORMA AL USUARIO Y SE CAMBIA LA VISIBILIDAD CONFIGURADA (campo, subcampo, itemtype)
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U412', 'params' => ["ya se encuentra configurado el campo ".$campo.", ".$subcampo.", ".$itemtype]} ) ;
+        C4::AR::Debug::debug("_verificar_campo_subcampo_to_estructura => NO SE PUEDE REPETIR el campo, subcampo".$campo.", ".$subcampo.", ".$itemtype);
     }
 
 }
