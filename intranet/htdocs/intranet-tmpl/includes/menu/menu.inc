@@ -359,12 +359,12 @@
                 <h4 class="menu_intermedio"><a href="javascript:;">[% 'Cat&aacute;logo' | i18n %]</a></h4>
                  <ul>
                      <li>
-		                                [% PERL %]
-		                                    print C4::AR::Filtros::link_to( text =>     "[% 'Preferencias' | i18n %]",
-		                                                                    url =>      "[% url_prefix %]/admin/global/catalogo_config.pl", 
-		                                                                    title =>    "[% 'Preferencias' | i18n %]"
-		                                                                ) ;
-		                                [% END %]
+		             [% PERL %]
+                        print C4::AR::Filtros::link_to( text =>     "[% 'Preferencias' | i18n %]",
+                                                        url =>      "[% url_prefix %]/admin/global/catalogo_config.pl", 
+                                                        title =>    "[% 'Preferencias' | i18n %]"
+                                                    ) ;
+                     [% END %]
 		             </li>
                      <li>
                          [% PERL %]
@@ -394,9 +394,17 @@
                           [% PERL %]
                               print C4::AR::Filtros::link_to( text =>     "[% 'Visualizaci&oacute;n de INTRANET' | i18n %]",
                                                               url =>      "[% url_prefix %]/catalogacion/visualizacionINTRA/visualizacionIntra.pl", 
-                                                              title =>    "[% 'Visualizaci&oacute;n del OPAC' | i18n %]"
+                                                              title =>    "[% 'Visualizaci&oacute;n del INTRANET' | i18n %]"
                                                           ) ;
                           [% END %]
+                      </li>
+                      <li>
+                                  [% PERL %]
+                                      print C4::AR::Filtros::link_to( text =>     "[% 'Tablas de Referencia' | i18n %]",
+                                                                      url =>      "[% url_prefix %]/catalogacion/tablasReferencia/tablasReferencia.pl", 
+                                                                      title =>    "[% 'Tablas de Referencia' | i18n %]"
+                                                                  ) ;
+                                  [% END %]
                       </li>
                       <li>
                                   [% PERL %]

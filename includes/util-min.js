@@ -5,6 +5,7 @@ function fancybox(id){$('#'+id).fancybox();}
 function crearForm(url,params){var arrayParam=params.split("&");var formu=$("#formulario");var inputs="";for(var i=0;i<arrayParam.length;i++){var nombre=arrayParam[i].split("=")[0];var valor=arrayParam[i].split("=")[1];inputs=inputs+"<input type='hidden' name="+nombre+" value="+valor+"><br>";}
 inputs=inputs+"<input type='hidden' name='token' value="+token+"><br>";formu.html("<form id='miForm' action="+url+" method='post'>"+inputs+"</form>");$("#miForm")[0].submit();}
 function zebra(classObj){$("."+classObj+" tr:gt(0):odd").addClass("impar");$("."+classObj+" tr:gt(0):even").addClass("par");}
+function zebraList(classObj){$("."+classObj+" li:gt(0):odd").addClass("impar");$("."+classObj+" li:gt(0):even").addClass("par");}
 function zebraId(idObj){$("#"+idObj+" tr:gt(0):odd").addClass("impar");$("#"+idObj+" tr:gt(0):even").addClass("par");}
 function tomarTiempo(){var currentTime=new Date()
 var hours=currentTime.getHours()
