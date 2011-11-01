@@ -273,9 +273,16 @@ sub getCamposAsHash{
             if($c->getVisible()){
     ## FIXME ."" se esta concatenando $campo con "" pq sino se rompe, cosa de locos
 #                 C4::AR::Debug::debug("AutoBase2 => getCamposAsHash => AGREGO CAMPOOO => ".$campo);
-                push (@arregloJSON, {'campo' => $c->getCampoAlias()."" });
+#                 push (@arregloJSON, {'campo' => $c->getCampoAlias()."" });
+                my %hash_temp; 
+                $hash_temp{'key'}       = $campo."";
+                $hash_temp{'value'}     = $c->getCampoAlias();
+                push (@arregloJSON, \%hash_temp);
             }
-        } 
+        }
+
+# TODO falta arreglar lo que se envía, pq agrega Nombre como value
+#         push (@arregloJSON, {'campo' => $campo."" });
     }
 
 #     C4::AR::Debug::debug("AutoBase2 => getCamposAsHash => cant campos => ".scalar(@arregloJSON));
