@@ -633,7 +633,7 @@ sub as_stringReloaded {
         my %hash_temp_aux;
         my $subcampo                        = $subfield->[0];
         my $dato                            = $subfield->[1];
-        C4::AR::Debug::debug("Catalogacion => as_stringReloaded => subcampo => ".$subcampo." dato => ".$dato);
+#         C4::AR::Debug::debug("Catalogacion => as_stringReloaded => subcampo => ".$subcampo." dato => ".$dato);
         my $cat_estruct_info_array          = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($field->tag, $subcampo, $itemtype, $db);
         my $text                            = "";
         if($cat_estruct_info_array){
@@ -644,7 +644,7 @@ sub as_stringReloaded {
             }
         }
 
-        C4::AR::Debug::debug("Catalogacion => as_stringReloaded => text => ".$text);
+#         C4::AR::Debug::debug("Catalogacion => as_stringReloaded => text => ".$text);
         push( @subs, $text );
     } # foreach
 
@@ -723,10 +723,13 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
 #                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => subcampo => ".$subcampo);
                 $hash_temp{'campo'}                 = $campo;
                 $hash_temp{'subcampo'}              = $subcampo;
+C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => subcampo => ".$subcampo);
                 $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype, $db);
                 $hash_temp{'datoReferencia'}        = $dato;
                 my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $db);
                 $hash_temp{'dato'}                  = $valor_referencia;
+                $hash_temp{'id1'}                   = $params->{'id1'};
+                $hash_temp{'id2'}                   = $params->{'id2'};
 
 #               FIXME parche!!!! si el dato del subcampo no tiene nada no se agrega al marcrecord, por lo tanto le agrego un blanco
                 (length($valor_referencia) == 0)? $valor_referencia = $valor_referencia." ":$valor_referencia;
