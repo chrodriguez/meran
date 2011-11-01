@@ -284,13 +284,21 @@ function updateInfoPrestarReserva(responseText){
 	var messageArray    = infoHash.messages;
 	var ticketsArray    = infoHash.tickets;
 	var mensajes        = '';  
-    alert("sdafsdfsdfd");
+    var hayError=0;
+    
    	for(i=0; i<messageArray.length;i++){
 //         imprimirTicket(ticketsArray[i].ticket,i);
         setMessages(messageArray[i]);
-     }
-    imprimirTicket(ticketsArray);
-
+    }
+     
+    for(i=0; i<messageArray.length;i++){
+       if  (messageArray[i].error){
+           hayError= 1;
+       }
+    }
+    if (!hayError){
+         imprimirTicket(ticketsArray);
+    }
 
 	detalleReservas(USUARIO.ID,updateInfoReservas);
     ejemplaresDelGrupo(ID_N2);
@@ -461,12 +469,24 @@ function updateInfoRenovar(responseText){
 	var infoHash= JSONstring.toObject(responseText);
 	var messageArray= infoHash.messages;
 	var ticketsArray= infoHash.tickets;
-	
-	for(i=0; i<messageArray.length;i++){
-// 		imprimirTicket(ticketsArray[i].ticket,i);
-  		setMessages(messageArray[i]);
-	}
-    imprimirTicket(ticketsArray);
+	var hayError=0;
+    
+    setMessages(messageArray);
+    
+    for(i=0; i<messageArray.length;i++){
+//         imprimirTicket(ticketsArray[i].ticket,i);
+        setMessages(messageArray[i]);
+    }
+     
+    for(i=0; i<messageArray.length;i++){
+       if  (messageArray[i].error){
+           hayError= 1;
+       }
+    }
+    
+    if (!hayError){
+         imprimirTicket(ticketsArray);
+    }
   
 	detallePrestamos(USUARIO.ID,updateInfoPrestamos);
     ejemplaresDelGrupo(ID_N2);
@@ -513,8 +533,7 @@ function imprimirTicket(tickets){
 //                    alert(tickets[i]);
         }
     }
-//     if(ticket != 0){   
-//         obj=JSONstring.make(ticket);
+
         objAH               = new AjaxHelper(updateImprimirTicket);
         objAH.debug         = true;
         objAH.showOverlay   = true;

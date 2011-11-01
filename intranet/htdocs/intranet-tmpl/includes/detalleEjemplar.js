@@ -226,6 +226,7 @@ function updateInfoRenovar(responseText){
 	var infoHash= JSONstring.toObject(responseText);
 	var messageArray= infoHash.messages;
 	var ticketsArray= infoHash.tickets;
+    var hayError= 0;
 	//Mensajes 
 // 	for(i=0; i<messageArray.length;i++){
 //   		setMessages(messageArray[i]);
@@ -237,12 +238,19 @@ function updateInfoRenovar(responseText){
 
     setMessages(messageArray);
     
-   for(var i=0; i<messageArray.length;i++){
-//      imprimirTicket(ticketsArray[i].ticket,i);
+        for(i=0; i<messageArray.length;i++){
+//         imprimirTicket(ticketsArray[i].ticket,i);
         setMessages(messageArray[i]);
-    }
+     }
 
-    imprimirTicket(ticketsArray);
+      for(i=0; i<messageArray.length;i++){
+       if  (messageArray[i].error){
+           hayError= 1;
+       }
+    }
+     if (!hayError){
+         imprimirTicket(ticketsArray);
+     }
 
 
 	ejemplaresDelGrupo(ID_N2);
@@ -290,19 +298,25 @@ function updateInfoPrestarReserva(responseText){
 	var messageArray= infoHash.messages;
 	var ticketsArray= infoHash.tickets;
 	var mensajes= '';
-
+    var hayError=0;
 // 	for(var i=0; i<messageArray.length;i++){
 // 		imprimirTicket(ticketsArray[i].ticket,i);
 //   		setMessages(messageArray[i]);
 // 	}
 
-    for(var i=0; i<messageArray.length;i++){
-//      imprimirTicket(ticketsArray[i].ticket,i);
+    for(i=0; i<messageArray.length;i++){
+//         imprimirTicket(ticketsArray[i].ticket,i);
         setMessages(messageArray[i]);
-
     }
-
-    imprimirTicket(ticketsArray);
+    
+    for(i=0; i<messageArray.length;i++){
+       if  (messageArray[i].error){
+           hayError= 1;
+       }
+    }
+     if (!hayError){
+         imprimirTicket(ticketsArray);
+     }
 
 
 	ejemplaresDelGrupo(ID_N2);

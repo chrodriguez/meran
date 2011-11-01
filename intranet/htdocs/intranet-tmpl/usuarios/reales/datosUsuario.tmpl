@@ -118,15 +118,24 @@ function updateInfoRenovar(responseText){
 	var infoHash= JSONstring.toObject(responseText);
 	var messageArray= infoHash.messages; 
 	var ticketsArray= infoHash.tickets;
+    var hayError=0;
 
     setMessages(messageArray);
     
-   for(var i=0; i<messageArray.length;i++){
-//      imprimirTicket(ticketsArray[i].ticket,i);
+   for(i=0; i<messageArray.length;i++){
+//         imprimirTicket(ticketsArray[i].ticket,i);
         setMessages(messageArray[i]);
     }
-
-    imprimirTicket(ticketsArray);
+     
+    for(i=0; i<messageArray.length;i++){
+       if  (messageArray[i].error){
+           hayError= 1;
+       }
+    }
+    
+    if (!hayError){
+         imprimirTicket(ticketsArray);
+    }
 
 	detallePrestamos(USUARIO.ID);
 	//puede que llegue al  max de prestamos y se cancelen las reservas
@@ -145,14 +154,24 @@ function updateInfoPrestarReserva(responseText){
 	var messageArray= infoHash.messages;
 	var ticketsArray= infoHash.tickets;
 	var mensajes= '';
+	var hayError=0;
 
-	for(var i=0; i<messageArray.length;i++){
-// 		imprimirTicket(ticketsArray[i].ticket,i);
-  		setMessages(messageArray[i]);
-
-	}
-
-    imprimirTicket(ticketsArray);
+    setMessages(messageArray);
+    
+    for(i=0; i<messageArray.length;i++){
+//         imprimirTicket(ticketsArray[i].ticket,i);
+        setMessages(messageArray[i]);
+    }
+     
+    for(i=0; i<messageArray.length;i++){
+       if  (messageArray[i].error){
+           hayError= 1;
+       }
+    }
+    
+    if (!hayError){
+         imprimirTicket(ticketsArray);
+    }
 
 	detalleReservas(USUARIO.ID);
 	detallePrestamos(USUARIO.ID);
