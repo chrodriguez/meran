@@ -52,14 +52,25 @@ if ($review){
 $t_params->{'portada_registro_medium'}  =  C4::AR::PortadasRegistros::getImageForId2($id2,'M');
 $t_params->{'portada_registro_big'}     =  C4::AR::PortadasRegistros::getImageForId2($id2,'L');
 
-my $nivel2                          = C4::AR::Nivel2::getNivel2FromId2($id2);
+# lo hacemos con un eval porque en algunos casos rompe
+# id2=0
+# id2=99999999999999999999999999999999999999999999999
 
-$t_params->{'nivel2'}               = $nivel2->toMARC_Opac;
-$t_params->{'titulo'}               = $nivel2->nivel1->getTitulo;
-$t_params->{'id1'}                  = $nivel2->nivel1->getId1;
-$t_params->{'reviews'}              = C4::AR::Nivel2::getReviews($id2);
-$t_params->{'partial_template'}     = "reviews.inc";
-$t_params->{'id2'}                  = $id2;
+eval{
+
+    my $nivel2                          = C4::AR::Nivel2::getNivel2FromId2($id2);
+
+    $t_params->{'nivel2'}               = $nivel2->toMARC_Opac;
+    $t_params->{'titulo'}               = $nivel2->nivel1->getTitulo;
+    $t_params->{'id1'}                  = $nivel2->nivel1->getId1;
+    $t_params->{'reviews'}              = C4::AR::Nivel2::getReviews($id2);
+    $t_params->{'partial_template'}     = "reviews.inc";
+    $t_params->{'id2'}                  = $id2;
+};
+ 
+if ($@){
+    $t_params->{'mensaje'}              = "Ha ocurrido un error";
+}
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
