@@ -37,6 +37,7 @@ if ($action){
           my $link = C4::AR::Social::shortenUrl($status->{'id'});
 
           $cont = $status->getResumen();
+          $cont = Encode::decode_utf8($cont);
           my $post= C4::AR::Preferencias::getValorPreferencia('prefijo_twitter')." ".$cont."... Ver mas en: ".$link;
 
 

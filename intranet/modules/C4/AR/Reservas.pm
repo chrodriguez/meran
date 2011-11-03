@@ -603,7 +603,7 @@ sub estaReservado{
 
 sub _verificarHorario{
     my $end = ParseDate(C4::AR::Preferencias::getValorPreferencia("close"));
-    my $offset = C4::AR::Preferencias::getValorPreferencia("offset_operacion_fuera_horario");
+    my $offset = C4::AR::Preferencias::getValorPreferencia("offset_operacion_fuera_horario") || 0;
     
     $end =  DateCalc($end,"+ $offset minutes");
     

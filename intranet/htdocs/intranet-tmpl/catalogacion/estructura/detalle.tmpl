@@ -21,7 +21,7 @@
             });
     </script>
 
-
+<script type="text/javascript" src="/includes/jquery/jquery.jPrintElement.js"></script>
 	<script src="/intranet-tmpl/includes/circulacion-min.js"></script>
 	<script src="/intranet-tmpl/includes/catalogacion-min.js"></script>
 	<script src="/intranet-tmpl/includes/detalleEjemplar.js"></script>
@@ -135,6 +135,7 @@
 	                        [% END %]
 
 			                <br>
+
                 <div class="main-subcontent" style="width:15%; float:left; margin: 1%">
                     [% IF portada_registro %]
                         <a class="fancylink" href="/uploads/covers/[% portada_registro_big %]">
@@ -163,7 +164,7 @@
 
                 [% INCLUDE  "partials/e-docs_grupo.inc" %]
                 [% INCLUDE  "partials/estantes_grupo.inc" %]
-
+                <div class="ticket" id="ticket" ></div>
 	            </div> <!--Fin <div id="grupo[  id2 ]-->
 	        </fieldset>
 	        <script type="text/javascript">makeToggle('grupo[% id2 %]','trigger_3_[% id2 %]',null,false);</script>
