@@ -40,7 +40,6 @@ function busquedaCombinable(){
     objAH.tipo_nivel3_name  = $('#tipo_nivel3_id').val();
     objAH.tema				= $('#tema').val();
     objAH.codBarra      	= $('#codBarra').val();
-    objAH.exacto            = $('#exacto').is(':checked');
 
     objAH.isbn				= $('#isbn').val();
     
