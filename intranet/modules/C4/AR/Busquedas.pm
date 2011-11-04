@@ -1200,7 +1200,6 @@ sub busquedaCombinada_newTemp{
     # no se encodea nunca a utf8 antes de llegar aca	
     # $string_utf8_encoded    = Encode::decode_utf8($string_utf8_encoded);
 
-
     $session    =   $session || CGI::Session->load();
     
     my $from_suggested = $obj_for_log->{'from_suggested'} || 0;
