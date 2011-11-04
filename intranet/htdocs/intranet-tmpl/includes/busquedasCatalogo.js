@@ -41,7 +41,7 @@ function busquedaCombinable(){
     objAH.tema				= $('#tema').val();
     objAH.codBarra      	= $('#codBarra').val();
     objAH.exacto            = $('#exacto').is(':checked');
-    alert($('#exacto').is(':checked'));
+
     objAH.isbn				= $('#isbn').val();
     
     objAH.tipoAccion        = 'BUSQUEDA_AVANZADA';
