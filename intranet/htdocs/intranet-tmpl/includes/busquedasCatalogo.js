@@ -40,6 +40,8 @@ function busquedaCombinable(){
     objAH.tipo_nivel3_name  = $('#tipo_nivel3_id').val();
     objAH.tema				= $('#tema').val();
     objAH.codBarra      	= $('#codBarra').val();
+    objAH.exacto            = $('#exacto').is(':checked');
+    alert($('#exacto').is(':checked'));
     objAH.isbn				= $('#isbn').val();
     
     objAH.tipoAccion        = 'BUSQUEDA_AVANZADA';
@@ -106,12 +108,12 @@ function buscar(doScroll){
     else if ($.trim($('#keyword').val()) != '') {
         if ( (jQuery.trim($('#keyword').val())).length < limite_caracteres ){
     		cumple_limite = false;
-        } else {busquedaPorKeyword();}
+        } else {busquedaPorKeyword(); }
     } 
     else if ( (jQuery.trim($('#keyword-bar').val()) != '') ) {
         if ( (jQuery.trim($('#keyword-bar').val())).length < limite_caracteres ){
             cumple_limite = false;
-        } else{buscarBar();}
+        } else{ buscarBar();}
     }    
     else {
 	       cumple_vacio = false;

@@ -148,6 +148,10 @@ function limpiarCampos(side){
 		                    </label>
 		                    <!--<input type="text" size="25" id="codBarra" readonly onkeypress="limpiarCampos('derecha')">-->
 		                    <input type="text" size="25" id="codBarra" onkeypress="limpiarCampos('centro')">
+                                <input name="exacto" type="checkbox" id="exacto" value="exacto" unchecked>
+                                                [% "Exacto" | i18n %]
+                                 
+                               
 		                </li>
 	        
 	        
@@ -156,6 +160,7 @@ function limpiarCampos(side){
 	                            <strong>[% "Signatura Topogr&aacute;fica" | i18n %]</strong>
 	                        </label>
 	                        <input type="text" size="25" id="signatura"  onkeypress="limpiarCampos('abajo')">
+
 	                    </li>
                         
                 </ul>
