@@ -2925,3 +2925,9 @@ fieldset {
 .cover_detalle_container{
 	width: 25%;
 }
+
+.server_name {
+    font-size: 14px;
+    font-weight: bold;
+    width: 100%;
+}

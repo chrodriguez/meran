@@ -209,7 +209,15 @@ if ($to_pdf){
         $t_params->{'pdf_tipo_nivel3_name'}   = $obj->{'tipo_nivel3_name'};
         $t_params->{'pdf_token'}              = $obj->{'token'};
 
-        $t_params->{'show_search_details'}      = 1;;
+        $t_params->{'external_search'}          = C4::AR::Preferencias::getValorPreferencia('external_search') || 0;
+        
+        my $cant_servidores =   $t_params->{'cant_external_servers'} = $t_params->{'external_search'}?C4::AR::Busquedas::cantServidoresExternos():0;
+
+        if ($cant_servidores){
+        	$t_params->{'external_servers'} = C4::AR::Busquedas::getServidoresExternos();
+        }
+        
+        $t_params->{'show_search_details'}      = 1;
 
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

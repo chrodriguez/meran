@@ -1,10 +1,26 @@
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme_intra %]/includes/fileuploader.css">
 
 <script type="text/javascript" src="/includes/jquery/fileuploader.js"></script>
+<script src="/includes/jquery/jquery.jeditable.js"></script>
 
 <script type="text/javascript">
+var loaderPath= "";
     $(document).ready(function(){
         makeToggle('toggle_container','trigger',null,true);
+        loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
+        $('.nota').editable('[% url_prefix %]/usuarios/reales/usuariosRealesDB.pl', { 
+              type      : 'textarea',
+              cancel    : CANCELAR,
+              submit    : OK,
+              tooltip   : EDITABLE_MSG,
+              placeholder: EDITABLE_MSG,
+              style   : 'display: inline',
+              submitdata : {token: "[% token %]", edit: '1', id: 'nota', nro_socio:'[% nro_socio %]' },
+              indicator : loaderPath,
+        });
+
+
+
     
         [% IF !foto_name %] 
             $('#div_uploader').show();
@@ -62,6 +78,7 @@
                  [% IF !(socio.getNro_socio == socio.getNro_documento) %]
                      <li> [% "Tarjeta de identificaci&oacute;n :" | i18n %] <strong> [% socio.getNro_socio %]</strong></li>
                   [% END %]
+                <li>[% "Categor&iacute;a del usuario:" | i18n %] <strong> [%  socio.categoria.getDescription %]</strong></li>
                 <li> [% "Credenciales" | i18n %]:<strong> [% socio.getCredentialType %]</strong> </li>
                 </ul>
           </fieldset>
@@ -105,7 +122,6 @@
                     <li>[% "Ciudad :" | i18n %] <strong> [%  socio.persona.ciudad_ref.getNombre %]</strong></li>
                     <li>[% "Calle :" | i18n %]  <strong> [%  socio.persona.getCalle %]</strong></li>
                     <li>[% "ID de usuario:" | i18n %] <strong> [%  socio.nro_socio %]</strong></li>
-                    <li>[% "Categor&iacute;a del usuario:" | i18n %] <strong> [%  socio.categoria.getDescription %]</strong></li>
                     <li>[% "Incorporaci&oacute;n a Biblioteca:" | i18n %] <strong> [%  socio.ui.nombre %]</strong></li>
                     [% IF usercourse %]
                     <li>
@@ -124,6 +140,18 @@
                 </ul>
             </div>
         </fieldset>
+
+        <fieldset>
+            <legend class="titulo_legend_resaltado trigger click titulo_legend" title='[% "click para acceder a las notas registradas sobre el usuario" | i18n %]'>
+                    [% "Notas" | i18n %]
+            </legend>
+            <div class="toggle_container" >
+                   <div class="nota">[% notas %]</div>
+            </div>
+        </fieldset>
+
+      
+
         </div>
 </div><!--columna izq -->
 

@@ -23,7 +23,9 @@
 				<!--<th>[% "Vol." | i18n %]</th> -->
 				<th>[% "Vencimiento" | i18n %]</th>
 				<th width="10%">[% "Retira en" | i18n %]</th>
-				<th width="10%">[% "Cancelar" | i18n %]</th>
+				[% IF cancelar_reservas_intranet %]
+				    <th width="10%">[% "Cancelar" | i18n %]</th>
+			    [% END %]
 			</tr>
 		[% FOREACH reserva IN RESERVAS_ASIGNADAS %]
 			<tr align="center">
@@ -90,18 +92,20 @@
 	                - 
 	            [% END %]
 				</td>
-				<td width="10%">
-	
-	                [% PERL %]
-	                    print C4::AR::Filtros::to_Icon(  
-	                                                        boton   => "icon_cancelar",
-	                                                        onClick => "cancelarReserva('[% reserva.getId_reserva %]');",
-	                                                        title   => "[% 'Cancelar' | i18n %]",
-	                                                        alternClass => "botonCentradoTabla"
-	                            ) ;
-	                [% END %]
-	
-				</td>
+                [% IF cancelar_reservas_intranet %]
+					<td width="10%">
+		
+		                [% PERL %]
+		                    print C4::AR::Filtros::to_Icon(  
+		                                                        boton   => "icon_cancelar",
+		                                                        onClick => "cancelarReserva('[% reserva.getId_reserva %]');",
+		                                                        title   => "[% 'Cancelar' | i18n %]",
+		                                                        alternClass => "botonCentradoTabla"
+		                            ) ;
+		                [% END %]
+		
+					</td>
+				[% END %]
 			</tr>
 		[% END %]
 		</table>

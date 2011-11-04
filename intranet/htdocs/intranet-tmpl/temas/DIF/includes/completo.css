@@ -4729,6 +4729,10 @@ tr.impar {
 background-color:#E7F3FA;
 }
 
+li.impar {
+background-color:#E7F3FA;
+}
+
 /*hover de las tablas con checkbox*/
 .impar:hover {
     background:         #5C82B5;
@@ -4936,6 +4940,34 @@ a {
 .wysiwyg{
     margin: 0 auto;
 }
+
+
+
+/* ESTILO MODAL IMPRESION DE TICKETS DE PRESTAMO */
+
+
+.ticket{
+    padding-left: 8%;
+/*    border:1px solid #4B5869;*/
+}
+
+.ticket td{
+    padding-right: 20px;
+}
+
+.ticket p{
+    background-color:#4B5869;
+    text-align:center;
+    font-size:16px; 
+    font-weight:bold;
+}
+
+#comprob{
+    padding-bottom:5%;
+
+}
+
+
 
 /*.mensaje_contacto h2{
     font-family: Arial;

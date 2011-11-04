@@ -53,7 +53,8 @@ if($reservas){
 	$t_params->{'RESERVAS_ESPERA'}              = \@reservas_espera;
 	$t_params->{'reservas_espera_count'}        = $recount;
 	#se verifica si la preferencia "circularDesdeDetalleUsuario" esta seteada
-	$t_params->{'circularDesdeDetalleUsuario'}  = C4::AR::Preferencias::getValorPreferencia('circularDesdeDetalleUsuario');
+    $t_params->{'circularDesdeDetalleUsuario'}  = C4::AR::Preferencias::getValorPreferencia('circularDesdeDetalleUsuario');
+    $t_params->{'cancelar_reservas_intranet'}   = C4::AR::Preferencias::getValorPreferencia('cancelar_reservas_intranet');
 }
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

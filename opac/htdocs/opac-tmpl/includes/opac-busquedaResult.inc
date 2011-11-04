@@ -1,51 +1,156 @@
 <script type="text/javascript">
 
-	function ordenarPor(ord){
-	    //seteo el orden de los resultados
-	}
-
     function submitForm(form_id) {
         $('#' + form_id).submit();
     }
-    
-    function exportarXLS(url){
-        alert(url)
-    }
-     
-    function externalSearch(keyword){
 
-  	    objAH                   = new AjaxHelper(updateExternalSearch);
-  	    objAH.debug             = true;
-  	    objAH.showOverlay       = true;
-  	    //para busquedas combinables
-  	    objAH.url               = URL_PREFIX+'/opac-oai-search.pl';
-  	    objAH.keyword           = keyword;
-  	    
-  	    //se setea la funcion para cambiar de pagina
-  	    objAH.funcion           = 'changePage';
-  	    //se envia la consulta
-  	    objAH.sendToServer();
+    [% IF external_search %]
+    	[% IF cant_external_servers %]
+		    var servidores 	= new Array([% cant_servidores_externos %]);
+		    var server_name	= {};
+			var SERVER = "";   
+			var numPag = 1;
+			var SEARCH = "";
+			var results = false;
+			
+			[% FOREACH server IN external_servers %] 
+				servidores.push("[% server.url %]");
+				server_name["[% server.url %]"] = "[% server.ui.getNombre %]";
+			[% END %]
+		
+		
+			function nextPage(){
+				numPag++;
+				doExternalSearches(SEARCH);
+			}		
+		
+			function prevPage(){
+				if (numPag > 1)
+					numPag--;
+				doExternalSearches(SEARCH);
+			}		
+		
+			function doExternalSearches(keyword){
+				$('#main_content').html("");
+				startOverlay();
+				
+				try{
+					Concurrent.Thread.create(function(){
+						results = false;
+						keyword = 'econo';
+						SEARCH = keyword;
+						for (x=0; x<servidores.length ;x++){
+							externalSearch(keyword,servidores[x],server_name[servidores[x]]);
+							$('#main_content').append("<br />");
+							$('#main_content').append("<br />");
+						} 
+						closeModal();
+						if (results){
+							if (numPag > 1)
+								$('#main_content').append("<input class='js_paging' type='button' onclick='prevPage();' value= [% 'Anterior' | i18n %] /> ");
+							$('#main_content').append("<input class='js_paging' type='button' onclick='nextPage();' value= [% 'Siguiente' | i18n %] /> ");
+			
+							$('#main_content').append("<br />");
+						}else{
+							$('#main_content').append("[% ' LOS SERVIDORES EXTERNOS NO DISPONEN DE MAS RESULTADOS SEGUN SU CRITERIO ' %]");
+						}
+					});
+				}
+				catch(e){}
+			}
+		
+		 
+		    function externalSearch(keyword,URL,server_name){
+		
+		  	    objAH                   = new AjaxHelper(updateExternalSearch);
+		  	    objAH.debug             = true;
+		  	    //para busquedas combinables
+		  	    objAH.url               = URL;
+		  	    objAH.async				= false;
+		  	    objAH.keyword           = keyword;
+		  	    SERVER = server_name;
+		  	    //se setea la funcion para cambiar de pagina
+		  	    objAH.ini          	 	= numPag;
+		  	    //se envia la consulta
+		  	    objAH.sendToServer();
+		    }
+		
+		    function updateExternalSearch(responseText){
+		
+		        var table 	= "";
+		        var cant_dc	= 0;
+		    	var templates = {
+		    	    tr : '<tr>#{row}</tr>',
+		    	    th : '<th>#{header}</th>',
+		    	    td : '<td>#{cell}</td>'
+		    	};
 
-    }
+		    	table  = '<fieldset><legend class="server_name">'+SERVER+'</legend></fieldset><table><thead>';
+				table += '<tr>';
+		        table += '<th>[% "T&iacute;tulo" | i18n %]</th>'; 
+		        table += '<th>[% "Autor" | i18n %]';
+		
+				table += '</tr></thead><tbody>';
+		         
+		        $(responseText).find('rdf\\:Description').each(function() {
+		            cant_dc++;
+		            
+		            var marker = $(this);
+		            var title       = marker.find("dc\\:title").text();
+		            var creator     = marker.find("dc\\:creator").text();
+		            var subject     = marker.find("dc\\:subject").text();
+		            var description = marker.find("dc\\:description").text();
+		            var publisher   = marker.find("dc\\:publisher").text();
+		            var contributor = marker.find("dc\\:contributor").text();
+		            var date        = marker.find("dc\\:date").text();
+		            var type        = marker.find("dc\\:type").text();
+		            var format      = marker.find("dc\\:format").text();
+		            var identifier  = marker.find("dc\\:identifier").text();
+		            var source      = marker.find("dc\\:source").text();
+		            var language    = marker.find("dc\\:language").text();
+		            var relation    = marker.find("dc\\:relation").text();
+		            var coverage    = marker.find("dc\\:coverage").text();
+		            var rights      = marker.find("dc\\:rights").text();
+		            var url			= "<a href="+marker.attr('rdf:about')+" target='_blank'>"+title+"</a>";
+		            
+		            var DC_hash     = {
+		            		title: title,
+		            		creator: creator,
+		            		subject: subject,
+		            		description: description,
+		            		publisher: publisher,
+		            		contributor: contributor,
+		            		date: date,
+		            		type: type,
+		            		format: format,
+		            		identifier: identifier,
+		            		source: source,
+		            		language: language,
+		            		relation: relation,
+		            		coverage: coverage,
+		            		rights: rights,
+		            		link: url
+		            }
+		            table += '<tr>';
+		    	    table += $.tmpl(templates.td, {cell: DC_hash.creator});
+		    	    table += $.tmpl(templates.td, {cell: DC_hash.link,});
+		            table += '</tr>';
+		        });
+		
+				table += '</tbody></table>';
+				if (cant_dc > 0){
+					$('#main_content').append(table);
+					results = true;
+				}
+				
+				return (table);
+		    }
+          [% END %]
+       [% END %]		    
 
-//     function externalSearch(keyword){
-//     	$.ajax({
-//             type: "GET",
-// 	        url: URL_PREFIX+'/opac-oai-search.pl',
-// 	        dataType: "xml",
-// 	        success: function(xml) {
-// 	        }
-//         });    	
-//     }
-    
-    function updateExternalSearch(responseText){
-    }       
-    
     $(document).ready(function() {
         $('.fancylink').fancybox();
     });
-
-
 </script>
 
 [% USE HTML %]
@@ -63,12 +168,9 @@
           [% END %]
 
 
-<!--           <h2 class="advice"> [% 'Buscar en servidores externos.' | i18n %] <a href="#" onclick="externalSearch('[% buscoPor | html %]')">([% ' Buscar en servidores externos' | i18n %])</a></h2> -->
-
-
           [% IF external_search %]
 	          [% IF cant_external_servers %]
-	                <h2 class="advice"> [% 'Buscar en servidores externos.' | i18n %] <a href="#" onclick="externSearch('[% buscoPor | html %]')">([% ' Buscar en servidores externos' | i18n %])</a></h2>
+	                <h2 class="advice"> [% 'Buscar en servidores externos.' | i18n %] <a href="#" onclick="doExternalSearches('[% buscoPor | html %]')">([% ' Buscar en servidores externos' | i18n %])</a></h2>
 	          [% END %]
           [% END %]
 [% END %]
@@ -123,6 +225,7 @@
                     <th align="center" style="width: 120px;">
                         [% "Valoraci&oacute;n" | i18n %]
                     </th>
+                    
                     [% IF socio_data.usr_permisos_opac %]
 	                    <th align="center" style="width: 80px;">
 	                        [% "Favoritos" | i18n %]
@@ -190,7 +293,7 @@
                                 [% PERL %]
                                     print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(NIVEL.nomCompleto) %]",
                                                                     url =>      "[% url_prefix %]/opac-busquedasDB.pl", 
-                                                                    params =>   ["tipoAccion=BUSQUEDA_AVANZADA","autor=[% NIVEL.nomCompleto %]"],
+                                                                    params =>   ["tipoAccion=BUSQUEDA_AVANZADA","autor=[% HTML.escape(NIVEL.nomCompleto) %]"],
                                                                     title =>    "[% 'Buscar de este autor' | i18n %]"
                                                                 ) ;
                                 [% END %]                                

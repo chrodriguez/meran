@@ -1,0 +1,65 @@
+<script type="text/javascript" language="javascript">
+    loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
+    $('.edit_nombre').editable(URL_PREFIX+'/catalogacion/tablasReferencia/tablasReferenciaDB.pl', { 
+          type      : 'text',
+          cancel    : CANCELAR,
+          submit    : OK,
+          tooltip   : EDITABLE_MSG,
+          placeholder: EDITABLE_MSG,
+          style   : 'display: inline',
+          submitdata : {token: '[% token %]', edit: 1, type: 'nombre'},
+          indicator : loaderPath,
+
+    });
+</script>
+<script type="text/javascript" language="javascript">
+function cambiarVisibilidad(campo, tabla){
+    objAH               = new AjaxHelper(updateCambiarVisualizacion);
+    objAH.url           = URL_PREFIX+'/catalogacion/tablasReferencia/tablasReferenciaDB.pl';
+    objAH.cache         = false;
+    objAH.showOverlay   = true;
+    objAH.accion        = "CHANGE_VISIVILIDAD";
+    objAH.tabla         = tabla;
+    objAH.campo         = campo;
+    objAH.sendToServer();
+
+}
+
+function updateCambiarVisualizacion(){
+    obtenerTabla();
+}
+</script>
+<div class="datos_tabla_div" id="datos_tabla_div">
+    <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0>
+        <thead>
+            <tr class="titulo_tabla_resultado">
+                <th>[% "Campo" | i18n %]</th>
+                <th>[% "Visible" | i18n %]</th>
+                <th>[% "Nombre" | i18n %]</th>
+                <th>[% "Cambiar Visivilidad" | i18n %]</th>
+            </tr>
+        </thead>
+        <tbody>
+            [% FOREACH dato IN data %]
+            <tr>
+                <td>[% dato.getCampo %]</td>
+
+                <td>[% IF dato.getVisible == 1 %] Si [% ELSE %] No [% END %]</td>
+
+                <td class="edit_nombre" id="[% dato.getCampo %],[% dato.getTabla %]">[% dato.getCampoAlias %]</td>
+                
+                <td>
+                [% PERL %]
+                            print C4::AR::Filtros::to_Icon(    
+                                            boton   => "icon_edicion",
+                                            onClick => "cambiarVisibilidad('[% dato.getCampo %]','[% dato.getTabla %]');",
+                                            title   => "[% 'Modificar Visivilidad' | i18n %]",
+                                            alternClass => "botonCentradoTabla"
+                                    ) ;
+                [% END %]
+                </td>
+            </tr>
+            [% END %]
+        </tbody>
+    </table>
+</div>

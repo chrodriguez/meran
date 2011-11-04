@@ -23,7 +23,7 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
                                                                     $authnotrequired, 
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
-                                                                        accion => 'CONSULTA', 
+                                                                        accion => 'ALTA', 
                                                                         entorno => 'undefined'}, 
                                                                         'intranet'
                                         );
@@ -67,7 +67,7 @@ elsif($tipoAccion eq "CONFIRMAR_PRESTAMO"){
                                                                     $authnotrequired, 
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
-                                                                        accion => 'CONSULTA', 
+                                                                        accion => 'ALTA', 
                                                                         entorno => 'undefined'}, 
                                                                     'intranet'
                                     );
@@ -107,7 +107,7 @@ elsif($tipoAccion eq "PRESTAMO"){
                                                                     $authnotrequired, 
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
-                                                                        accion => 'CONSULTA', 
+                                                                        accion => 'ALTA', 
                                                                         entorno => 'undefined'}, 
                                                                     'intranet'
                                 );	
@@ -161,6 +161,8 @@ C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON E
 				C4::AR::Debug::debug("SE PRESTO SIN ERROR --> SE CREA EL TICKET");
 				$ticketObj = C4::AR::Prestamos::crearTicket($id3,$nro_socio,$user);
 			}
+
+        
 			#guardo los errores
 			push (@infoMessages, $msg_object);
 			
@@ -177,6 +179,7 @@ C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON E
 	my %infoOperaciones;
 	$infoOperaciones{'tickets'}     = \@infoTickets;
 	$infoOperaciones{'messages'}    = \@infoMessages;
+
 	my $infoOperacionJSON           = to_json \%infoOperaciones;
 
     C4::AR::Auth::print_header($session);
@@ -189,13 +192,14 @@ elsif($tipoAccion eq "REALIZAR_DEVOLUCION"){
                                                                     $authnotrequired, 
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
-                                                                        accion => 'CONSULTA', 
+                                                                        accion => 'ALTA', 
                                                                         entorno => 'undefined'}, 
                                                                       'intranet'
                                 );
 
     $obj->{'nro_socio'}        = $nro_socio;
 	$obj->{'responsable'}      = $user;
+    
 	my ($Message_arrayref)     = C4::AR::Prestamos::t_devolver($obj);
     
    	my %info;
@@ -211,12 +215,13 @@ elsif($tipoAccion eq "REALIZAR_RENOVACION"){
                                                                     $authnotrequired, 
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
-                                                                        accion => 'CONSULTA', 
+                                                                        accion => 'ALTA', 
                                                                         entorno => 'undefined'}, 
                                                                     'intranet'
                                 );
 
     $obj->{'responsable'}           = $user;
+    $obj->{'type'}           = $session->param('type');
     my ($infoTickets,$msg_object)   = C4::AR::Prestamos::t_renovar($obj);
     
     my %info;
@@ -236,7 +241,7 @@ elsif($tipoAccion eq "CANCELAR_RESERVA"){
                                                                     $authnotrequired, 
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
-                                                                        accion => 'CONSULTA', 
+                                                                        accion => 'ALTA', 
                                                                         entorno => 'undefined'}, 
                                                                     'intranet'
                                 );
@@ -246,10 +251,21 @@ elsif($tipoAccion eq "CANCELAR_RESERVA"){
 	$params{'nro_socio'}    = $obj->{'nro_socio'};
 	$params{'responsable'}  = $user;
 	$params{'tipo'}         = "INTRA";
-	
-	my ($Message_arrayref)=C4::AR::Reservas::t_cancelar_reserva(\%params);
-	
-	my $infoOperacionJSON=to_json $Message_arrayref;
+
+    my $enabled                = C4::AR::Preferencias::getValorPreferencia('cancelar_reservas_intranet');	
+    
+    my ($msg_object);
+    
+    if ($enabled){
+	   ($msg_object)     = C4::AR::Reservas::t_cancelar_reserva(\%params);
+    }else{
+    	$msg_object = C4::AR::Mensajes::create();
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U308b', 'params' => []} ) ;
+    }
+    
+    
+	my $infoOperacionJSON=to_json $msg_object;
 	
     C4::AR::Auth::print_header($session);
 	print $infoOperacionJSON;
@@ -262,7 +278,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
                                                                     $authnotrequired, 
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
-                                                                        accion => 'CONSULTA', 
+                                                                        accion => 'ALTA', 
                                                                         entorno => 'undefined'}, 
                                                                     'intranet'
                                 );
@@ -301,7 +317,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_TIPOS_DE_PRESTAMO"){
                                                                     $authnotrequired, 
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
-                                                                        accion => 'CONSULTA', 
+                                                                        accion => 'ALTA', 
                                                                         entorno => 'undefined'}, 
                                                                     'intranet'
                                 );
@@ -339,7 +355,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_DATOS_EJEMPLAR"){
                                             authnotrequired     => 0,
                                             flagsrequired       => {  ui => 'ANY', 
                                                                       tipo_documento => 'ANY', 
-                                                                      accion => 'CONSULTA', 
+                                                                      accion => 'ALTA', 
                                                                       entorno => 'usuarios'},
                                             debug               => 1,
                 });
@@ -367,7 +383,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_SOCIO"){
                                                                     $authnotrequired, 
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
-                                                                        accion => 'CONSULTA', 
+                                                                        accion => 'ALTA', 
                                                                         entorno => 'undefined'}, 
                                                                     'intranet'
                                 );
@@ -404,7 +420,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_TIENE_AUTORIZADO"){
                                     authnotrequired => 0,
                                     flagsrequired => {  ui => 'ANY', 
                                                         tipo_documento => 'ANY', 
-                                                        accion => 'CONSULTA', 
+                                                        accion => 'ALTA', 
                                                         entorno => 'usuarios'},
                                     debug => 1,
                 });
@@ -435,7 +451,7 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_ES_REGULAR"){
                                                                     $authnotrequired, 
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
-                                                                        accion => 'CONSULTA', 
+                                                                        accion => 'ALTA', 
                                                                         entorno => 'undefined'},
                                                                     'intranet'
                                 );
@@ -460,19 +476,30 @@ elsif ( $tipoAccion eq "IMPRIMIR_COMPROBANTE" ) {
                     authnotrequired => 0,
                     flagsrequired   => {    ui => 'ANY', 
                                             tipo_documento => 'ANY', 
-                                            accion => 'CONSULTA', 
+                                            accion => 'ALTA', 
                                             entorno => 'undefined'},
             });
 
-
             my %env;
-            my $obj                             = C4::AR::Utilidades::from_json_ISO( $obj->{'obj'} );
+            my @comprobantes;
+     
+            my $ref_array= $obj->{'comprobantes'};
 
-            $t_params->{'socio'}                = C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'socio'});
-            $t_params->{'responsable'}          = C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'responsable'});
-            $t_params->{'prestamo'}             = C4::AR::Prestamos::getPrestamoDeId3($obj->{'id3'});
-            $t_params->{'adicional_selected'}   = $obj->{'adicional_selected'};
+            foreach my $elem (@$ref_array) {
+                    my %hash;    
+                    my $ticket= $elem->{'ticket'};
+    
+                    $hash{'socio'} =    C4::AR::Usuarios::getSocioInfoPorNroSocio($ticket->{'socio'});
+                    $hash{'responsable'} = C4::AR::Usuarios::getSocioInfoPorNroSocio($ticket->{'responsable'});
+                    $hash{'prestamo'} = C4::AR::Prestamos::getPrestamoDeId3($ticket->{'id3'});
 
+          
+                    $hash{'adicional_selected'}   = $ticket->{'adicional_selected'};
+                    push(@comprobantes,\%hash);
+                   
+            }
+    
+            $t_params->{'comprobantes'}   = \@comprobantes;
 
             C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 

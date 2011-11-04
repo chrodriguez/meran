@@ -294,6 +294,7 @@ function enable_disableSelects(){
 
 //esta funcion genera el combo de los campos segun la tabla de referencia seleccionada
 function armarComboCampos(){
+
     objAH               = new AjaxHelper(updateArmarComboCampos);
     objAH.debug         = true;
     objAH.showOverlay   = true;
@@ -311,12 +312,19 @@ function updateArmarComboCampos(responseText){
     $("#camposRef").html("");   //campos tabla
     var options = "<option value='-1'>Seleccionar SubCampo</option>";
     var joinedFields = "";
+//     for (x=0;x < camposSelect_array.length;x++){
+//         if (x == (camposSelect_array.length-1) ) //SI ES EL FINAL
+//          joinedFields+= camposSelect_array[x].campo;
+//         else
+//          joinedFields+= camposSelect_array[x].campo+", ";
+//          options+= "<option value=" + camposSelect_array[x].campo +" selected>" + camposSelect_array[x].campo + "</option>";
+//     }
     for (x=0;x < camposSelect_array.length;x++){
         if (x == (camposSelect_array.length-1) ) //SI ES EL FINAL
-         joinedFields+= camposSelect_array[x].campo;
+         joinedFields+= camposSelect_array[x].key;
         else
-         joinedFields+= camposSelect_array[x].campo+", ";
-         options+= "<option value=" + camposSelect_array[x].campo +" selected>" + camposSelect_array[x].campo + "</option>";
+         joinedFields+= camposSelect_array[x].key+", ";
+         options+= "<option value=" + camposSelect_array[x].key +" selected>" + camposSelect_array[x].value + "</option>";
     }
 
     //se agrega la info al combo

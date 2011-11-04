@@ -32,6 +32,7 @@ use C4::AR::PortadasRegistros;
 use C4::AR::Estantes;
 use Text::Aspell;
 use C4::Modelo::RepHistorialBusqueda;
+use C4::Modelo::SysExternosMeran::Manager;
 use Sphinx::Search  qw(SPH_MATCH_ANY SPH_MATCH_PHRASE SPH_MATCH_BOOLEAN SPH_MATCH_EXTENDED SPH_MATCH_ALL SPH_SORT_RELEVANCE);
 use Sphinx::Manager qw(new);
 use URI::Escape;
@@ -80,6 +81,8 @@ use vars qw(@EXPORT_OK @ISA);
     getBranch
     t_loguearBusqueda
     toOAI
+    cantServidoresExternos
+    getServidoresExternos
 );
 
 
@@ -998,14 +1001,13 @@ sub busquedaAvanzada_newTemp{
     }
 
     if( $params->{'codBarra'} ne "") {
-        $query .= ' @string "'."barcode%".$sphinx->EscapeString($params->{'codBarra'})."'";
-
+        $query .= ' @string "'."barcode%".$sphinx->EscapeString($params->{'codBarra'})."*'";
         $query .='*"';
     }
 
 
     if ($only_available){
-        $query .= ' @string "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValueSearch.'"';
+        $query .= ' @string "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValue.'"';
     }
     
     if ($params->{'signatura'}){
@@ -1198,7 +1200,6 @@ sub busquedaCombinada_newTemp{
     # no se encodea nunca a utf8 antes de llegar aca	
     # $string_utf8_encoded    = Encode::decode_utf8($string_utf8_encoded);
 
-
     $session    =   $session || CGI::Session->load();
     
     my $from_suggested = $obj_for_log->{'from_suggested'} || 0;
@@ -1261,7 +1262,7 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
     }
 
     if ($only_available){
-        $query .= ' "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValueSearch.'"';
+        $query .= ' "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValue.'"';
     }
 
     C4::AR::Debug::debug("Busquedas => query string ".$query);
@@ -1393,10 +1394,12 @@ sub toOAI{
         
         # Convert a MARC record to Dublin Core (simple)
         my $marc =  $record->{'marc_record'} ;
-        my $dc   = $crosswalk->as_dublincore( $marc );
-
-        $dc = $crosswalk->as_dublincore( $marc );
+        my $dc;
         
+        eval{
+            $dc   = $crosswalk->as_dublincore( $marc );
+        };
+                
         $dc_xml .= C4::AR::Catalogacion::toOAIXML($dc,$record->{'id1'});
         
     }
@@ -1966,6 +1969,13 @@ sub getRegistrosFromRange {
     return (scalar(@id1_array), \@id1_array);
 }
 
+sub cantServidoresExternos{
+	return (C4::Modelo::SysExternosMeran::Manager->get_sys_externos_meran_count());
+}
+
+sub getServidoresExternos{
+    return (C4::Modelo::SysExternosMeran::Manager->get_sys_externos_meran(require_objects => ['ui'],));
+}
 #***************************************Fin**Soporte MARC*********************************************************************
 
 

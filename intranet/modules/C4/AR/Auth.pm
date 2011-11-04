@@ -213,9 +213,24 @@ sub updateAuthOrder{
 sub checkBrowser{
 
     my @blacklist = qw(
+        Firefox_5
+        Firefox_4
         Firefox_3
-        Chrome_5
+        Chrome_14
+        Chrome_13
+        Chrome_12
+        Chrome_11
+        Chrome_10
+        Chrome_9
+        Chrome_8
+        Chrome_7
+        Chrome_6
+        MSIE_8
         MSIE_7
+        MSIE_6
+        MSIE_5
+        IceWeasel_5
+        IceWeasel_4
         IceWeasel_3
     );
     my $session         = CGI::Session->load();
@@ -307,6 +322,8 @@ sub _actualizarSession {
   
     my ($sessionID, $userid, $socioNro, $time, $nroRandom, $type, $flagsrequired, $token, $session)= @_;
 #     C4::AR::Debug::debug("userid en actualizarSession".$sessionID);
+    $type   =   $type || 'opac';
+    
     $session->param('sessionID', $sessionID);
     $session->param('userid', $userid);
    #C4::AR::Debug::debug("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! userid en actualizarSession actualizado".$session->param('userid'));
@@ -1390,7 +1407,8 @@ sub redirectTo {
         $session->param('redirectTo', $url);
 #         C4::AR::Debug::debug("redirectTo=> url: ".$url);
         print_header($session);
-        print 'CLIENT_REDIRECT';
+#        print 'CLIENT_REDIRECT';
+        print 'window.location="'.$url.'";';
         exit;
 	}else{
               my $session = CGI::Session->load();  
@@ -2107,31 +2125,33 @@ sub checkRecoverLink{
 
     my $status = 0;
     
-    my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
-                                                 query              => [ 'recover_password_hash' => { eq => $key } ],
-                                     );
-
-    if(scalar(@$socio_array_ref)){
-        $status = 1;
-        my $socio          = $socio_array_ref->[0];
-        my $dateformat     = C4::Date::get_date_format();
-        my $hoy            = Date::Manip::ParseDate("now");
-        my $fecha_link     = $socio->recover_date_of;        
-        my $err;
-
-        $fecha_link        = Date::Manip::DateCalc( $fecha_link, "+ 1 day", \$err );
-
-        my $cmp_result = Date::Manip::Date_Cmp($fecha_link,$hoy);
-        
-        $status = $cmp_result >= 0; 
-        
-        if (!$status){
-            $socio->unsetRecoverPasswordHash();
-        }
-                
-         
-    }
-    
+    if (C4::AR::Utilidades::validateString($key)){
+	    my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
+	                                                 query              => [ 'recover_password_hash' => { eq => $key } ],
+	                                     );
+	
+	    if(scalar(@$socio_array_ref)){
+	        $status = 1;
+	        my $socio          = $socio_array_ref->[0];
+	        my $dateformat     = C4::Date::get_date_format();
+	        my $hoy            = Date::Manip::ParseDate("now");
+	        my $fecha_link     = $socio->recover_date_of;        
+	        my $err;
+	
+	        $fecha_link        = Date::Manip::DateCalc( $fecha_link, "+ 1 day", \$err );
+	
+	        my $cmp_result = Date::Manip::Date_Cmp($fecha_link,$hoy);
+	        
+	        $status = $cmp_result >= 0; 
+	        
+	        if (!$status){
+	            $socio->unsetRecoverPasswordHash();
+	            $status = 0;
+	        }
+	                
+	         
+	    }
+    }    
     return ($status)
 }
 

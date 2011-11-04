@@ -350,7 +350,7 @@ function mostrarEstructuraDelNivel1(){
     _NIVEL_ACTUAL       = 1;
    
     if(MODIFICAR == 0){
-        _mostrarAccion("Agregando metadatos => Template: " + TEMPLATE_ACTUAL + crearBotonEsquema());
+        _mostrarAccion("Agregando metadatos => Esquema: " + TEMPLATE_ACTUAL + crearBotonEsquema());
     } 
 
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel1);
@@ -383,7 +383,7 @@ function mostrarEstructuraDelNivel2(){
     _NIVEL_ACTUAL       = 2;
     
     if(MODIFICAR == 0){
-        _mostrarAccion("Agregando grupo => Template: " + TEMPLATE_ACTUAL + crearBotonEsquema());
+        _mostrarAccion("Agregando grupo => Esquema: " + TEMPLATE_ACTUAL + crearBotonEsquema());
     }
     
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel2);
@@ -433,9 +433,9 @@ function _seleccionarTipoDocumentoYDeshabilitarCombo(){
 function mostrarEstructuraDelNivel3(tipo_documento){
     _NIVEL_ACTUAL       = 3;
     
-    if(MODIFICAR == 0){
-        _mostrarAccion("Agregando ejemplares => Template: " + $('#tipo_nivel3_id').val() + crearBotonEsquema());
-    }
+//     if(MODIFICAR == 0){
+//         _mostrarAccion("Agregando ejemplares => Template: " + $('#tipo_nivel3_id').val() + crearBotonEsquema());
+//     }
 
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel3);
     objAH.debug         = true;
@@ -526,6 +526,11 @@ function seleccionar_esquema(){
     ID_TIPO_EJEMPLAR    = $('#tipo_nivel3_id').val();
     TEMPLATE_ACTUAL     = $('#tipo_nivel3_id').val();
     
+    if(MODIFICAR == 0){
+        _mostrarAccion("Agregando ejemplares => Esquema: " + $('#tipo_nivel3_id').val() + crearBotonEsquema());
+    }
+    
+    
     if( (TIENE_NIVEL_2 == 0)&&($('#tipo_nivel3_id').val() == 'SIN SELECCIONAR') ){
         jAlert(SELECCIONE_EL_ESQUEMA,CATALOGO_ALERT_TITLE);
         $('#tipo_nivel3_id').focus();
@@ -581,10 +586,13 @@ function updateGuardarEsquema(responseText){
     
     if(_NIVEL_ACTUAL == 1){  
         modificarN1(ID_N1, TEMPLATE_ACTUAL);
+        mostrarInfoAltaNivel1(ID_N1);   
     } else if(_NIVEL_ACTUAL == 2){
         modificarN2(ID_N2, TEMPLATE_ACTUAL);
+        mostrarInfoAltaNivel2(ID_N2);  
     } else {
         modificarN3(ID_N3, TEMPLATE_ACTUAL);
+//         $("#template"+ID_N2).html(TEMPLATE_ACTUAL);      
     }
     
 }
@@ -737,7 +745,7 @@ function guardarDocumentoN1(){
     objAH.showOverlay               = true;
     objAH.url                       = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion                = "GUARDAR_NIVEL_1";
-    objAH.id_tipo_doc               = $("#tipo_nivel3_id").val();
+    objAH.id_tipo_doc               = TEMPLATE_ACTUAL;
     objAH.id_nivel_bibliografico    = $("#id_nivel_bibliografico").val();
 	_sacarOpciones();
     objAH.infoArrayNivel1           = MARC_OBJECT_ARRAY;
@@ -783,7 +791,7 @@ function guardarDocumentoN2(){
         objAH.showOverlay       = true;
         objAH.url               = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
         objAH.tipoAccion        = "GUARDAR_NIVEL_2";
-        objAH.id_tipo_doc       = $("#tipo_nivel3_id").val();  
+        objAH.id_tipo_doc       = TEMPLATE_ACTUAL;
 	    _sacarOpciones();
         objAH.infoArrayNivel2   = MARC_OBJECT_ARRAY;
         objAH.id1               = ID_N1;
@@ -818,7 +826,7 @@ function guardarDocumentoN3(){
         objAH.modificado        = 0;
 		objAH.url               = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
 		objAH.tipoAccion        = "GUARDAR_NIVEL_3";
-		objAH.id_tipo_doc       = $("#tipo_nivel3_id").val();
+		objAH.id_tipo_doc       = TEMPLATE_ACTUAL;
         objAH.esPorBarcode      = porBarcode;  
         objAH.ui_origen         = $('#' + _getIdComponente('995','d')).val();
         objAH.ui_duenio         = $('#' + _getIdComponente('995','c')).val();
@@ -2091,7 +2099,7 @@ function modificarN1(id1, template){
     ID_N1               = id1;
     
 // TODO falta agregar boton para modificar el template
-    _mostrarAccion("Modificando el metadato (" + ID_N1 + ") => Template: " + TEMPLATE_ACTUAL + crearBotonEsquema());
+    _mostrarAccion("Modificando el metadato (" + ID_N1 + ") => Esquema: " + TEMPLATE_ACTUAL + crearBotonEsquema());
     objAH               = new AjaxHelper(updateModificarN1);
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;
@@ -2120,7 +2128,7 @@ function modificarN2(id2, template){
     ID_N2               = id2;
     ID_TIPO_EJEMPLAR    = template;
 // TODO falta agregar boton para modificar el template
-    _mostrarAccion("Modificando el grupo (" + ID_N2 + ") => Template: " + ID_TIPO_EJEMPLAR + crearBotonEsquema());  
+    _mostrarAccion("Modificando el grupo (" + ID_N2 + ") => Esquema: " + ID_TIPO_EJEMPLAR + crearBotonEsquema());  
     objAH               = new AjaxHelper(updateModificarN2);
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;
@@ -2144,7 +2152,7 @@ function modificarN3(id3, template){
 	ID_N3               = id3;	
     ID_TIPO_EJEMPLAR    = template;
 // TODO falta agregar boton para modificar el template
-    _mostrarAccion("Modificando el ejemplar (" + ID_N3 + ") => Template: " + ID_TIPO_EJEMPLAR + crearBotonEsquema());  
+    _mostrarAccion("Modificando el ejemplar (" + ID_N3 + ") => Esquema: " + ID_TIPO_EJEMPLAR + crearBotonEsquema());  
 	objAH               = new AjaxHelper(updateModificarN3);
 	objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
 	objAH.debug         = true;

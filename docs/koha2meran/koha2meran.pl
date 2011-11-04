@@ -1006,8 +1006,8 @@ sub traduccionEstructuraMarc {
       my $refusr=$dbh->prepare("ALTER TABLE $tabla DROP borrowernumber;");
       $refusr->execute();
 
-#      my $refclean=$dbh->prepare("DELETE FROM $tabla WHERE nro_socio=0 OR nro_socio='';");
-#     $refclean->execute();
+      my $refclean=$dbh->prepare("DELETE FROM $tabla WHERE nro_socio='0' OR nro_socio='';");
+      $refclean->execute();
 
 	    if(($tabla eq 'rep_historial_sancion')||($tabla eq 'rep_historial_circulacion')){
 	      #Estas tablas tienen responsable (ponemos al usuario)
@@ -1018,11 +1018,15 @@ sub traduccionEstructuraMarc {
 
 	#Se agregan las referencias a los prestamos viejos!!
 	
-	#  my $refprestamos=$dbh->prepare("INSERT INTO rep_historial_prestamo (id3,nro_socio,tipo_prestamo,fecha_prestamo,id_ui_origen,id_ui_prestamo,fecha_devolucion,fecha_ultima_renovacion,fecha_vencimiento,renovaciones,timestamp,agregacion_temp)
-	#								SELECT id3,nro_socio,tipo_prestamo,NULL,id_ui as id_ui_origen,id_ui as id_ui_prestamo,fecha as fecha_devolucion,NULL,NULL,0,NOW(),NULL
-	#								FROM `rep_historial_circulacion` WHERE (`tipo_operacion` = 'devolucion' or `tipo_operacion` = 'return') ;");
-     # $refprestamos->execute();
+	  my $refprestamos=$dbh->prepare("INSERT INTO rep_historial_prestamo (id3,nro_socio,tipo_prestamo,fecha_prestamo,id_ui_origen,id_ui_prestamo,fecha_devolucion,fecha_ultima_renovacion,renovaciones,timestamp,agregacion_temp)
+									SELECT id3,nro_socio,tipo_prestamo,NULL,id_ui as id_ui_origen,id_ui as id_ui_prestamo,fecha as fecha_devolucion,NULL,0,NOW(),NULL
+									FROM `rep_historial_circulacion` WHERE (`tipo_operacion` = 'devolucion' or `tipo_operacion` = 'return') ;");
+     $refprestamos->execute();
       
+      #Responsables que no existen mas      
+       my $refresponsables=$dbh->prepare("UPDATE `rep_historial_circulacion` SET responsable='kohaadmin' WHERE responsable not in (select nro_socio from usr_socio);");
+       $refresponsables->execute();
+            
     }
 
 

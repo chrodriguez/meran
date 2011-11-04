@@ -74,9 +74,14 @@ sub t_guardarNivel3 {
         }
 
         if(defined $id3){
-            C4::AR::Sphinx::generar_indice($catRegistroMarcN3->getId1, 'R_PARTIAL', 'INSERT');
-            #ahora el indice se encuentra DESACTUALIZADO
-            C4::AR::Preferencias::setVariable('indexado', 0, $db);
+            eval {
+                C4::AR::Sphinx::generar_indice($catRegistroMarcN3->getId1, 'R_PARTIAL', 'INSERT');
+                #ahora el indice se encuentra DESACTUALIZADO
+                C4::AR::Preferencias::setVariable('indexado', 0, $db);
+            };    
+            if ($@){
+                C4::AR::Debug::debug("ERROR AL REINDEXAR EN EL REGISTRO: ".$catRegistroMarcN3->getId1()." !!! ( ".$@." )");
+            }
         }
 
         $db->commit;
@@ -135,9 +140,14 @@ sub t_modificarNivel3 {
         }#END for(my $i=0;$i<$cant;$i++)
 
         $db->commit;
-        C4::AR::Sphinx::generar_indice($cat_registro_marc_n3->getId1, 'R_PARTIAL', 'UPDATE');
-        #ahora el indice se encuentra DESACTUALIZADO
-        C4::AR::Preferencias::setVariable('indexado', 0, $db);
+        eval {
+            C4::AR::Sphinx::generar_indice($cat_registro_marc_n3->getId1, 'R_PARTIAL', 'UPDATE');
+            #ahora el indice se encuentra DESACTUALIZADO
+            C4::AR::Preferencias::setVariable('indexado', 0, $db);
+        };    
+        if ($@){
+            C4::AR::Debug::debug("ERROR AL REINDEXAR EN EL REGISTRO: ".$cat_registro_marc_n3->getId1()." !!! ( ".$@." )");
+        }
     };
 
     if ($@){
@@ -242,9 +252,14 @@ sub t_eliminarNivel3{
         $db->commit;
 
         if ($id1) {
-            C4::AR::Sphinx::generar_indice($id1, 'R_PARTIAL', 'UPDATE');
-            #ahora el indice se encuentra DESACTUALIZADO
-            C4::AR::Preferencias::setVariable('indexado', 0, $db);
+            eval {
+                C4::AR::Sphinx::generar_indice($id1, 'R_PARTIAL', 'UPDATE');
+                #ahora el indice se encuentra DESACTUALIZADO
+                C4::AR::Preferencias::setVariable('indexado', 0, $db);
+            };    
+            if ($@){
+                C4::AR::Debug::debug("ERROR AL REINDEXAR EN EL REGISTRO: ".$cat_registro_marc_n3->getId1()." !!! ( ".$@." )");
+            }
         }
     };
 
@@ -385,7 +400,7 @@ sub detalleNivel3{
 	$hash_nivel2{'id2'}                     = $id2;
 	$hash_nivel2{'tipo_documento'}          = $nivel2_object->getTipoDocumentoObject->getNombre();
 	$hash_nivel2{'nivel2_array'}            = $nivel2_object->toMARC_Intra; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
-        $hash_nivel2{'nivel2_template'}         = $nivel2_object->getTemplate();
+    $hash_nivel2{'nivel2_template'}         = $nivel2_object->getTemplate();
 	$hash_nivel2{'tiene_indice'}            = $nivel2_object->tiene_indice;
 	$hash_nivel2{'indice'}                  = $hash_nivel2{'tiene_indice'}?$nivel2_object->getIndice:0;
 	$hash_nivel2{'esta_en_estante_virtual'} = C4::AR::Estantes::estaEnEstanteVirtual($id2);
@@ -786,7 +801,7 @@ sub generaCodigoBarra{
     my @barcodes_array_ref;
     for(my $i=1;$i<=$cant;$i++){
 	C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => completarConCeros => ".completarConCeros($max_codigo + $i));
-        $barcode  = $parametros->{'UI'}."-".$parametros->{'tipo_ejemplar'}."-".completarConCeros($max_codigo + $i);
+        $barcode  = $like.completarConCeros($max_codigo + $i);
         C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => barcode => ".$barcode);
         push(@barcodes_array_ref, $barcode);
     }

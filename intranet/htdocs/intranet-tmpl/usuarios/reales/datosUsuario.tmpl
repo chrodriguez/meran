@@ -9,7 +9,7 @@
 <script type="text/javascript" src="/includes/jquery/jquery.fileUploader-min.js"></script>
 <script type="text/javascript" src="/includes/jquery/jquery.livequery-min.js"></script>
 <script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox.js"></script>
-
+<script type="text/javascript" src="/includes/jquery/jquery.jPrintElement.js"></script>
 
 [% INCLUDE "WindowHelper.inc" %] 
 [% INCLUDE "ChangePasswordHelper.inc"  %]
@@ -118,11 +118,23 @@ function updateInfoRenovar(responseText){
 	var infoHash= JSONstring.toObject(responseText);
 	var messageArray= infoHash.messages; 
 	var ticketsArray= infoHash.tickets;
+    var hayError=0;
 
     setMessages(messageArray);
     
-    for(var i=0;i<ticketsArray.length;i++){
-        imprimirTicket(ticketsArray[i].ticket,i);
+   for(i=0; i<messageArray.length;i++){
+//         imprimirTicket(ticketsArray[i].ticket,i);
+        setMessages(messageArray[i]);
+    }
+     
+    for(i=0; i<messageArray.length;i++){
+       if  (messageArray[i].error){
+           hayError= 1;
+       }
+    }
+    
+    if (!hayError){
+         imprimirTicket(ticketsArray);
     }
 
 	detallePrestamos(USUARIO.ID);
@@ -142,10 +154,24 @@ function updateInfoPrestarReserva(responseText){
 	var messageArray= infoHash.messages;
 	var ticketsArray= infoHash.tickets;
 	var mensajes= '';
-	for(var i=0; i<messageArray.length;i++){
-		imprimirTicket(ticketsArray[i].ticket,i);
-  		setMessages(messageArray[i]);
-	}
+	var hayError=0;
+
+    setMessages(messageArray);
+    
+    for(i=0; i<messageArray.length;i++){
+//         imprimirTicket(ticketsArray[i].ticket,i);
+        setMessages(messageArray[i]);
+    }
+     
+    for(i=0; i<messageArray.length;i++){
+       if  (messageArray[i].error){
+           hayError= 1;
+       }
+    }
+    
+    if (!hayError){
+         imprimirTicket(ticketsArray);
+    }
 
 	detalleReservas(USUARIO.ID);
 	detallePrestamos(USUARIO.ID);
@@ -358,7 +384,7 @@ $(document).ready(function(){
             <div id="historialSanciones" class="toggle_container_block" style="display:none"></div>
         </fieldset>
     </div>
-    <div class="modal" id="ticket"></div> 
+    <div class="ticket" id="ticket" ></div>
 </div>
 
 [% INCLUDE "intranet-bottom.inc" %]
