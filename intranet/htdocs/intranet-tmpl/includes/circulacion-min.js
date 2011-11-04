@@ -17,6 +17,10 @@ opciones=opciones+">"+items_array[i].label+"</option>";}
 html=html+opciones+"</select>";return html;}
 function prestar(){for(var i=0;i<INFO_PRESTAMOS_ARRAY.length;i++){INFO_PRESTAMOS_ARRAY[i].id3=$('#comboItems'+i).val();INFO_PRESTAMOS_ARRAY[i].barcode=$("#comboItems"+i+" option:selected").text();INFO_PRESTAMOS_ARRAY[i].tipoPrestamo=$('#tiposPrestamos'+i).val();INFO_PRESTAMOS_ARRAY[i].descripcionTipoPrestamo=$("#tiposPrestamos"+i+" option:selected").text();}
 objAH=new AjaxHelper(updateInfoPrestarReserva);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/circ/circulacionDB.pl';objAH.tipoAccion='PRESTAMO';objAH.datosArray=INFO_PRESTAMOS_ARRAY;objAH.nro_socio=USUARIO.ID;objAH.sendToServer();}
+function updateInfoPrestarReserva(responseText){cancelarDiv();var infoHash=JSONstring.toObject(responseText);var messageArray=infoHash.messages;var ticketsArray=infoHash.tickets;var mensajes='';var hayError=0;for(i=0;i<messageArray.length;i++){setMessages(messageArray[i]);}
+for(i=0;i<messageArray.length;i++){if(messageArray[i].error){hayError=1;}}
+if(!hayError){imprimirTicket(ticketsArray);}
+detalleReservas(USUARIO.ID,updateInfoReservas);ejemplaresDelGrupo(ID_N2);}
 function cancelarDiv(){$('#confirmar_div').html('');}
 function cancelarReserva(reserveNumber){jConfirm(ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_RESERVA,'Info',function(is_confirmed){if(is_confirmed){objAH=new AjaxHelper(updateInfoCancelacion);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/circ/circulacionDB.pl';objAH.tipoAccion='CANCELAR_RESERVA';objAH.nro_socio=USUARIO.ID;objAH.id_reserva=reserveNumber;objAH.sendToServer();}});}
 function updateInfoCancelacion(responseText){var Messages=JSONstring.toObject(responseText);setMessages(Messages);detalleReservas(USUARIO.ID,updateInfoReservas);}
@@ -31,6 +35,10 @@ if((infoArray[i].edicion!="")&&(infoArray[i].edicion!=null)){html=html+" - "+inf
 html=html+"<br>"}
 html=html+"</p>";html=html+"<center><input type='button' value='Aceptar' onClick=renovar()>";html=html+"<input type='button' value='Cancelar' onClick='cancelarDiv();'></center><br>";html=html+"</div>";$('#confirmar_div').html(html);scrollTo('confirmar_div');}
 function renovar(){objAH=new AjaxHelper(updateInfoRenovar);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/circ/circulacionDB.pl';objAH.tipoAccion='REALIZAR_RENOVACION';objAH.datosArray=INFO_PRESTAMOS_ARRAY;objAH.nro_socio=USUARIO.ID;objAH.sendToServer();}
+function updateInfoRenovar(responseText){cancelarDiv();var infoHash=JSONstring.toObject(responseText);var messageArray=infoHash.messages;var ticketsArray=infoHash.tickets;var hayError=0;setMessages(messageArray);for(i=0;i<messageArray.length;i++){setMessages(messageArray[i]);}
+for(i=0;i<messageArray.length;i++){if(messageArray[i].error){hayError=1;}}
+if(!hayError){imprimirTicket(ticketsArray);}
+detallePrestamos(USUARIO.ID,updateInfoPrestamos);ejemplaresDelGrupo(ID_N2);}
 function devolver(){objAH=new AjaxHelper(updateInfoDevolver);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/circ/circulacionDB.pl';objAH.tipoAccion='REALIZAR_DEVOLUCION';objAH.datosArray=INFO_PRESTAMOS_ARRAY;objAH.nro_socio=USUARIO.ID;objAH.sendToServer();}
 function updateInfoDevolver(responseText){}
 function imprimirTicket(tickets){var comprobantes=new Array();if(tickets.length>0){for(i=0;i<tickets.length;i++){comprobantes[i]=tickets[i];}}

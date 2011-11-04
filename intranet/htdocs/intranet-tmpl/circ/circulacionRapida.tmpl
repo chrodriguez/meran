@@ -4,6 +4,7 @@
 
 <script type="text/javascript" src="/intranet-tmpl/includes/circulacion-min.js"></script>
 <script type="text/javascript" src="/intranet-tmpl/includes/usuarios/usuariosReales-min.js"></script>
+<script type="text/javascript" src="/includes/jquery/jquery.jPrintElement.js"></script>
 
 <script type="text/javascript">
 // para la ventana de Agregar Autorizado
@@ -132,10 +133,31 @@ function updateRealizarAccion(responseText){
 		var ticketsArray    = infoHash.tickets;
 		var mensajes        = '';
 
-		for(var i=0; i<messageArray.length;i++){
-			imprimirTicket(ticketsArray[i].ticket,i);
-			setMessages(messageArray[i]);
-		}
+// 		for(var i=0; i<messageArray.length;i++){
+// 			imprimirTicket(ticketsArray[i].ticket,i);
+// 			setMessages(messageArray[i]);
+// 		}
+
+        var hayError=0;
+
+        setMessages(messageArray);
+    
+        for(i=0; i<messageArray.length;i++){
+//         imprimirTicket(ticketsArray[i].ticket,i);
+            setMessages(messageArray[i]);
+        }
+     
+        for(i=0; i<messageArray.length;i++){
+            if  (messageArray[i].error){
+                hayError= 1;
+            }
+        }
+          
+        if (!hayError){
+              imprimirTicket(ticketsArray);
+        }
+
+
 		//borro la cache del autocomplete
 		$('#barcode').flushCache();
 		$('#aceptar').hide();
@@ -410,7 +432,7 @@ $(document).ready(function() {
 <br>
 <!-- DETALLE DE PRESTAMOS -->
 <div id="tablaPrestamos" style="clear: both;"></div>
-
+<div class="ticket" id="ticket" ></div>
 <!-- DETALLE DE SANCIONES -->
 <div id="sanciones"></div>
 

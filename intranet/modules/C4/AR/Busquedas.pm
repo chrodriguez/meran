@@ -1001,8 +1001,7 @@ sub busquedaAvanzada_newTemp{
     }
 
     if( $params->{'codBarra'} ne "") {
-        $query .= ' @string "'."barcode%".$sphinx->EscapeString($params->{'codBarra'})."'";
-
+        $query .= ' @string "'."barcode%".$sphinx->EscapeString($params->{'codBarra'})."*'";
         $query .='*"';
     }
 
