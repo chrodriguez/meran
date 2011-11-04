@@ -1007,7 +1007,7 @@ sub busquedaAvanzada_newTemp{
 
 
     if ($only_available){
-        $query .= ' @string "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValueSearch.'"';
+        $query .= ' @string "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValue.'"';
     }
     
     if ($params->{'signatura'}){
@@ -1263,7 +1263,7 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
     }
 
     if ($only_available){
-        $query .= ' "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValueSearch.'"';
+        $query .= ' "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValue.'"';
     }
 
     C4::AR::Debug::debug("Busquedas => query string ".$query);
