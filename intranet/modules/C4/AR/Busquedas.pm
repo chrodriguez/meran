@@ -1001,14 +1001,13 @@ sub busquedaAvanzada_newTemp{
     }
 
     if( $params->{'codBarra'} ne "") {
-        $query .= ' @string "'."barcode%".$sphinx->EscapeString($params->{'codBarra'})."'";
-
+        $query .= ' @string "'."barcode%".$sphinx->EscapeString($params->{'codBarra'})."*'";
         $query .='*"';
     }
 
 
     if ($only_available){
-        $query .= ' @string "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValueSearch.'"';
+        $query .= ' @string "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValue.'"';
     }
     
     if ($params->{'signatura'}){
@@ -1201,7 +1200,6 @@ sub busquedaCombinada_newTemp{
     # no se encodea nunca a utf8 antes de llegar aca	
     # $string_utf8_encoded    = Encode::decode_utf8($string_utf8_encoded);
 
-
     $session    =   $session || CGI::Session->load();
     
     my $from_suggested = $obj_for_log->{'from_suggested'} || 0;
@@ -1264,7 +1262,7 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
     }
 
     if ($only_available){
-        $query .= ' "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValueSearch.'"';
+        $query .= ' "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValue.'"';
     }
 
     C4::AR::Debug::debug("Busquedas => query string ".$query);
