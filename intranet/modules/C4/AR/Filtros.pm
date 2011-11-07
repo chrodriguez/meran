@@ -66,8 +66,9 @@ sub link_to {
 	my $session = CGI::Session->load();
  	if($session->param('token')){
 	#si hay sesion se usa el token, sino no tiene sentido
+        my $status = index($url,'?');
          #SI NO HUBO PARAMETROS, EL TOKEN ES EL UNICO EN LA URL, O SEA QUE SE PONE ? EN VEZ DE &
-        if ($cant > 0){
+        if (($cant > 0)||($status != -1)){
 		    $url .= '&amp;token='.$session->param('token'); #se agrega el token
         }else{
             $url .= '?token='.$session->param('token'); 
@@ -261,11 +262,13 @@ sub show_componente2 {
 
             if ($session_type eq 'intranet'){
                 $url         = C4::AR::Utilidades::url_for("/catalogacion/estructura/detalle.pl", \%params_hash);
+
+C4::AR::Debug::debug("url ?????????? ".$url);
             }else{
                 $url         = C4::AR::Utilidades::url_for("/opac-detail.pl", \%params_hash);
             }
 
-            return C4::AR::Filtros::link_to( text => $text, url => $url );
+            return C4::AR::Filtros::link_to( text => $text, url => $url , blank => 1);
         }
         
         return "NO_LINK";
