@@ -233,7 +233,7 @@ sub diasDeSancion {
                 
                 my $begin = ParseDate(C4::AR::Preferencias::getValorPreferencia("open"));
                 my $end =  C4::Date::calc_endES();
-                my $actual=ParseDate("today");
+                my $actual=ParseDate("now");
                 if (Date_Cmp($actual, $end) <= 0){#No hay sancion se devuelve entre la apertura de la biblioteca y el limite
                     return(0);
                 }
