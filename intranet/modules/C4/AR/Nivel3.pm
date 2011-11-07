@@ -395,27 +395,29 @@ sub detalleNivel3{
 
     my $nivel2_object = C4::AR::Nivel2::getNivel2FromId2($id2,$db);
 
+    $hash_nivel2{'nivel1_analiticas_array'}     = undef;
+
     if($nivel2_object){
 
-	$hash_nivel2{'id2'}                     = $id2;
-	$hash_nivel2{'tipo_documento'}          = $nivel2_object->getTipoDocumentoObject->getNombre();
-	$hash_nivel2{'nivel2_array'}            = $nivel2_object->toMARC_Intra; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
-    $hash_nivel2{'nivel2_template'}         = $nivel2_object->getTemplate();
-	$hash_nivel2{'tiene_indice'}            = $nivel2_object->tiene_indice;
-	$hash_nivel2{'indice'}                  = $hash_nivel2{'tiene_indice'}?$nivel2_object->getIndice:0;
-	$hash_nivel2{'esta_en_estante_virtual'} = C4::AR::Estantes::estaEnEstanteVirtual($id2);
-	my ($totales_nivel3, @result)           = detalleDisponibilidadNivel3($id2,$nivel2_object->db);
-	$hash_nivel2{'nivel3'}                  = \@result;
-	$hash_nivel2{'cant_nivel3'}             = scalar(@result);
-	$hash_nivel2{'cantPrestados'}           = $totales_nivel3->{'cantPrestados'};
-	$hash_nivel2{'cantReservas'}            = $totales_nivel3->{'cantReservas'};
-	$hash_nivel2{'cantReservasEnEspera'}    = $totales_nivel3->{'cantReservasEnEspera'};
-	$hash_nivel2{'cantReservasAsignadas'}   = $totales_nivel3->{'cantReservasAsignadas'};
-	$hash_nivel2{'disponibles'}             = $totales_nivel3->{'disponibles'};
-	$hash_nivel2{'cantParaSala'}            = $totales_nivel3->{'cantParaSala'};
-	$hash_nivel2{'cantParaPrestamo'}        = $totales_nivel3->{'cantParaPrestamo'};
-	$hash_nivel2{'cantParaSalaActual'}      = $totales_nivel3->{'cantParaSalaActual'};
-	$hash_nivel2{'cantParaPrestamoActual'}  = $totales_nivel3->{'cantParaPrestamoActual'};
+        $hash_nivel2{'id2'}                     = $id2;
+        $hash_nivel2{'tipo_documento'}          = $nivel2_object->getTipoDocumentoObject->getNombre();
+        $hash_nivel2{'nivel2_array'}            = $nivel2_object->toMARC_Intra; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
+        $hash_nivel2{'nivel2_template'}         = $nivel2_object->getTemplate();
+        $hash_nivel2{'tiene_indice'}            = $nivel2_object->tiene_indice;
+        $hash_nivel2{'indice'}                  = $hash_nivel2{'tiene_indice'}?$nivel2_object->getIndice:0;
+        $hash_nivel2{'esta_en_estante_virtual'} = C4::AR::Estantes::estaEnEstanteVirtual($id2);
+        my ($totales_nivel3, @result)           = detalleDisponibilidadNivel3($id2,$nivel2_object->db);
+        $hash_nivel2{'nivel3'}                  = \@result;
+        $hash_nivel2{'cant_nivel3'}             = scalar(@result);
+        $hash_nivel2{'cantPrestados'}           = $totales_nivel3->{'cantPrestados'};
+        $hash_nivel2{'cantReservas'}            = $totales_nivel3->{'cantReservas'};
+        $hash_nivel2{'cantReservasEnEspera'}    = $totales_nivel3->{'cantReservasEnEspera'};
+        $hash_nivel2{'cantReservasAsignadas'}   = $totales_nivel3->{'cantReservasAsignadas'};
+        $hash_nivel2{'disponibles'}             = $totales_nivel3->{'disponibles'};
+        $hash_nivel2{'cantParaSala'}            = $totales_nivel3->{'cantParaSala'};
+        $hash_nivel2{'cantParaPrestamo'}        = $totales_nivel3->{'cantParaPrestamo'};
+        $hash_nivel2{'cantParaSalaActual'}      = $totales_nivel3->{'cantParaSalaActual'};
+        $hash_nivel2{'cantParaPrestamoActual'}  = $totales_nivel3->{'cantParaPrestamoActual'};
 	    
         my ($cant_docs,$e_docs)                 = getListaDeDocs($id2);  
 	    
@@ -429,6 +431,7 @@ sub detalleNivel3{
 
         my @nive1_analitica_array;
         my @nive2_analitica_array;
+      
   
         if($cat_reg_marc_n2_analiticas){
   
@@ -436,27 +439,25 @@ sub detalleNivel3{
                 my %hash_nivel1_aux;
                 my %hash_nivel2_aux;    
         
-                C4::AR::Debug::debug("id 2 ============= ".$n2->getId2Hijo());
+#                 C4::AR::Debug::debug("id 2 ============= ".$n2->getId2Hijo());
                 my $n2_object = C4::AR::Nivel2::getNivel2FromId2($n2->getId2Hijo(),$db);
                 my $n1_object = C4::AR::Nivel1::getNivel1FromId1($n2_object->getId1(),$db);
 
-    #             $hash_nivel2{'nivel1_analiticas_array'} = $n1_object->toMARC_Intra; 
-                $hash_nivel1_aux{'nivel1_analitica'} = $n1_object->toMARC_Intra;
-                push(@nive1_analitica_array, \%hash_nivel1_aux);
-    #             $hash_nivel2{'nivel2_analiticas_array'} = $n2_object->toMARC_Intra;
-                my %hash_nivel1_aux;
-    #             $hash_nivel2_aux{'nivel2_analitica'} = $n2_object->toMARC_Intra;
-    #             push(@nive2_analitica_array, \%hash_nivel2_aux);
-                $hash_nivel1_aux{'nivel1_analitica'} = $n2_object->toMARC_Intra;
+                $hash_nivel1_aux{'nivel1_analitica'}        = $n1_object->toMARC_Intra;
+
                 push(@nive1_analitica_array, \%hash_nivel1_aux);
 
-    #             push(@nive1_analitica_array, \%hash_nivel2_aux);
+                my %hash_nivel1_aux;
+
+                $hash_nivel1_aux{'nivel1_analitica'}        = $n2_object->toMARC_Intra;
+
+                push(@nive1_analitica_array, \%hash_nivel1_aux);
             }
 
             $hash_nivel2{'nivel1_analiticas_array'} = \@nive1_analitica_array;
             $hash_nivel2{'nivel1_analiticas_cant'}  = scalar(@nive1_analitica_array);
         }
-#         $hash_nivel2{'nivel1_analiticas_array'} = \@nive2_analitica_array;
+
     }
 
     return (\%hash_nivel2);

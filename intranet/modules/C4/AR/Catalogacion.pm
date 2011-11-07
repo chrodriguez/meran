@@ -397,7 +397,7 @@ sub marc_record_to_opac_view {
     ($MARC_result_array)     = marc_record_to_meran_to_detail_view_as_not_extended($marc_record_salida, $params, 'OPAC',$db);
     } else {
     #se procesa el marc_record filtrado
-    ($MARC_result_array) = marc_record_to_meran_to_detail_view($marc_record_salida, $params->{'id_tipo_doc'}, 'OPAC',$db);
+    ($MARC_result_array) = marc_record_to_meran_to_detail_view($marc_record_salida, $params, 'OPAC', $db);
     }
 
     return $MARC_result_array;
@@ -419,9 +419,10 @@ sub marc_record_to_intra_view {
     if(!C4::AR::Preferencias::getValorPreferencia("detalle_INTRA_extendido")){
     #se procesa el marc_record filtrado
     ($MARC_result_array)     = marc_record_to_meran_to_detail_view_as_not_extended($marc_record_salida, $params, 'INTRA',$db);
+#       ($MARC_result_array)     = marc_record_to_meran_to_detail_view($marc_record_salida, $params, 'INTRA', $db);
     } else {
     #se procesa el marc_record filtrado
-    ($MARC_result_array) = marc_record_to_meran_to_detail_view($marc_record_salida, $params->{'id_tipo_doc'}, 'INTRA',$db);
+    ($MARC_result_array) = marc_record_to_meran_to_detail_view($marc_record_salida, $params->{'id_tipo_doc'}, 'INTRA', $db);
     }
 
     return $MARC_result_array;
@@ -534,11 +535,11 @@ sub filtrarVisualizacionOAI{
     subcampos_array => [ {subcampo => 'a', dato => 'dato'}, {subcampo => 'b', dato => 'dato'}, ...]
 =cut
 sub marc_record_to_meran_to_detail_view {
-    my ($marc_record, $itemtype, $type, $db) = @_;
+    my ($marc_record, $params, $type, $db) = @_;
 
     my @MARC_result_array;
-    
-    $type = $type || "__NO_TYPE";
+    my $itemtype    = $params->{'id_tipo_doc'}; 
+    $type           = $type || "__NO_TYPE";
     
     foreach my $field ($marc_record->fields) {
         if(! $field->is_control_field){
@@ -569,6 +570,22 @@ sub marc_record_to_meran_to_detail_view {
                                                                         type        => $type
                                                                   );
 
+                $hash_temp{'id1'}                   = $params->{'id1'};
+                $hash_temp{'id2'}                   = $params->{'id2'};
+                $hash_temp{'dato_link'}             = C4::AR::Filtros::show_componente2( ('campo' => $campo, 'subcampo' => $subcampo, 'dato' => $dato , 'id1' => $params->{'id1'}) );
+
+                if($hash_temp{'dato_link'} ne "NO_LINK"){
+                    $hash_temp{'dato'} = $hash_temp{'dato_link'};
+                }
+
+#                 if($type eq "INTRA"){
+#                     #muestro el label configurado, si no existe muestro el label de la BIBLIA
+#                     $hash_temp{'liblibrarian'}      = C4::AR::VisualizacionIntra::getVistaIntra($campo, $params->{'id_tipo_doc'}, $params->{'nivel'})||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
+#                 } else {
+#                     $hash_temp{'liblibrarian'}      = C4::AR::VisualizacionOpac::getVistaOpac($campo, $params->{'id_tipo_doc'}, $params->{'nivel'})||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
+#                 }
+
+
                 push(@MARC_result_array, \%hash_temp);
             }
 
@@ -576,6 +593,10 @@ sub marc_record_to_meran_to_detail_view {
     }
 
     @MARC_result_array = sort{$a->{'orden'} <=> $b->{'orden'}} @MARC_result_array;
+
+    foreach my $hash (@MARC_result_array){
+        C4::AR::Debug::debug("hash?????????? ".$hash->{'campo'});
+    }
 
     return (\@MARC_result_array);
 }
@@ -633,7 +654,7 @@ sub as_stringReloaded {
         my %hash_temp_aux;
         my $subcampo                        = $subfield->[0];
         my $dato                            = $subfield->[1];
-        C4::AR::Debug::debug("Catalogacion => as_stringReloaded => subcampo => ".$subcampo." dato => ".$dato);
+#         C4::AR::Debug::debug("Catalogacion => as_stringReloaded => subcampo => ".$subcampo." dato => ".$dato);
         my $cat_estruct_info_array          = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($field->tag, $subcampo, $itemtype, $db);
         my $text                            = "";
         if($cat_estruct_info_array){
@@ -644,7 +665,7 @@ sub as_stringReloaded {
             }
         }
 
-        C4::AR::Debug::debug("Catalogacion => as_stringReloaded => text => ".$text);
+#         C4::AR::Debug::debug("Catalogacion => as_stringReloaded => text => ".$text);
         push( @subs, $text );
     } # foreach
 
@@ -713,7 +734,7 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
             my $campo_ant                   = $field->tag;
             my $indicador_primario_dato     = $field->indicator(1);
             my $indicador_secundario_dato   = $field->indicator(2);
-            C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => campo => ".$campo);
+#             C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => campo => ".$campo);
             #proceso todos los subcampos del campo
             foreach my $subfield ($field->subfields()) {
                 my %hash_temp;
@@ -723,10 +744,21 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
 #                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => subcampo => ".$subcampo);
                 $hash_temp{'campo'}                 = $campo;
                 $hash_temp{'subcampo'}              = $subcampo;
+# C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => subcampo ???????????? => ".$subcampo);
                 $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype, $db);
                 $hash_temp{'datoReferencia'}        = $dato;
                 my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $db);
                 $hash_temp{'dato'}                  = $valor_referencia;
+                $hash_temp{'id1'}                   = $params->{'id1'};
+                $hash_temp{'id2'}                   = $params->{'id2'};
+                $hash_temp{'dato_link'}             = C4::AR::Filtros::show_componente2( ('campo' => $campo, 'subcampo' => $subcampo, 'dato' => $dato , 'id1' => $params->{'id1'}) );
+
+                if($hash_temp{'dato_link'} ne "NO_LINK"){
+                    $hash_temp{'dato'}  = $hash_temp{'dato_link'};
+                    $valor_referencia   = $hash_temp{'dato_link'};
+                }
+
+# C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => dato ???????????? => ".$dato);
 
 #               FIXME parche!!!! si el dato del subcampo no tiene nada no se agrega al marcrecord, por lo tanto le agrego un blanco
                 (length($valor_referencia) == 0)? $valor_referencia = $valor_referencia." ":$valor_referencia;
@@ -753,14 +785,14 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
 
             if($index == -1){
             #NO EXISTE EL CAMPO
-                C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => NO EXISTE el campo => ".$campo);
+#                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => NO EXISTE el campo => ".$campo);
                 push(@MARC_result_array, \%hash_temp_aux);
             } else {
             #EXISTE EL CAMPO => campo, subcampo REPETIBLE
-                C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => EXISTE el campo => ".$campo);
+#                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => EXISTE el campo => ".$campo);
                 @MARC_result_array[$index]->{'dato'} = (@MARC_result_array[$index]->{'dato'} ne "")?@MARC_result_array[$index]->{'dato'}.$field->as_string:$field->as_string;
-                C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => dato => ".@MARC_result_array[$index]->{'dato'});
-                C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => field->as_string => ".$field->as_string);
+#                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => dato => ".@MARC_result_array[$index]->{'dato'});
+#                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => field->as_string => ".$field->as_string);
             }
 
         } #END if(! $field->is_control_field)
