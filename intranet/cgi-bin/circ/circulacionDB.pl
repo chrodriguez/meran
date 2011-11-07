@@ -24,7 +24,8 @@ if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
                                                                         accion => 'ALTA', 
-                                                                        entorno => 'undefined'}, 
+                                                                        entorno => 'circ_renovar',
+                                                                        tipo_permiso => 'circulacion'}, 
                                                                         'intranet'
                                         );
 #items a devolver o renovar
@@ -68,7 +69,8 @@ elsif($tipoAccion eq "CONFIRMAR_PRESTAMO"){
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
                                                                         accion => 'ALTA', 
-                                                                        entorno => 'undefined'}, 
+                                                                        entorno => 'circ_prestar',
+                                                                        tipo_permiso => 'circulacion'}, 
                                                                     'intranet'
                                     );
 #SE CREAN LOS COMBO PARA SELECCIONAR EL ITEM Y EL TIPO DE PRESTAMO
@@ -108,7 +110,8 @@ elsif($tipoAccion eq "PRESTAMO"){
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
                                                                         accion => 'ALTA', 
-                                                                        entorno => 'undefined'}, 
+                                                                        entorno => 'circ_prestar',
+                                                                        tipo_permiso => 'circulacion'}, 
                                                                     'intranet'
                                 );	
 #se realizan los prestamos
@@ -193,7 +196,8 @@ elsif($tipoAccion eq "REALIZAR_DEVOLUCION"){
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
                                                                         accion => 'ALTA', 
-                                                                        entorno => 'undefined'}, 
+                                                                        entorno => 'circ_devolver',
+                                                                        tipo_permiso => 'circulacion'}, 
                                                                       'intranet'
                                 );
 
@@ -216,7 +220,8 @@ elsif($tipoAccion eq "REALIZAR_RENOVACION"){
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
                                                                         accion => 'ALTA', 
-                                                                        entorno => 'undefined'}, 
+                                                                        entorno => 'circ_renovar',
+                                                                        tipo_permiso => 'circulacion'}, 
                                                                     'intranet'
                                 );
 
@@ -241,8 +246,9 @@ elsif($tipoAccion eq "CANCELAR_RESERVA"){
                                                                     $authnotrequired, 
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
-                                                                        accion => 'ALTA', 
-                                                                        entorno => 'undefined'}, 
+                                                                        accion => 'BAJA', 
+                                                                        entorno => 'circ_prestar',
+                                                                        tipo_permiso => 'circulacion'}, 
                                                                     'intranet'
                                 );
 		
@@ -279,7 +285,8 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
                                                                         accion => 'ALTA', 
-                                                                        entorno => 'undefined'}, 
+                                                                        entorno => 'circ_prestar',
+                                                                        tipo_permiso => 'circulacion'}, 
                                                                     'intranet'
                                 );
 		
@@ -317,8 +324,9 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_TIPOS_DE_PRESTAMO"){
                                                                     $authnotrequired, 
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
-                                                                        accion => 'ALTA', 
-                                                                        entorno => 'undefined'}, 
+                                                                        accion => 'CONSULTA', 
+                                                                        entorno => 'circ_prestar',
+                                                                        tipo_permiso => 'circulacion'}, 
                                                                     'intranet'
                                 );
 
@@ -355,8 +363,9 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_DATOS_EJEMPLAR"){
                                             authnotrequired     => 0,
                                             flagsrequired       => {  ui => 'ANY', 
                                                                       tipo_documento => 'ANY', 
-                                                                      accion => 'ALTA', 
-                                                                      entorno => 'usuarios'},
+                                                                      accion => 'CONSULTA', 
+                                                                      entorno => 'circ_prestar',
+                                                                      tipo_permiso => 'circulacion'},
                                             debug               => 1,
                 });
 
@@ -383,8 +392,9 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_SOCIO"){
                                                                     $authnotrequired, 
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
-                                                                        accion => 'ALTA', 
-                                                                        entorno => 'undefined'}, 
+                                                                        accion => 'CONSULTA', 
+                                                                        entorno => 'circ_prestar',
+                                                                        tipo_permiso => 'circulacion'}, 
                                                                     'intranet'
                                 );
 
@@ -420,8 +430,9 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_TIENE_AUTORIZADO"){
                                     authnotrequired => 0,
                                     flagsrequired => {  ui => 'ANY', 
                                                         tipo_documento => 'ANY', 
-                                                        accion => 'ALTA', 
-                                                        entorno => 'usuarios'},
+                                                        accion => 'CONSULTA', 
+                                                        entorno => 'circ_prestar',
+                                                        tipo_permiso => 'circulacion'},
                                     debug => 1,
                 });
 		
@@ -451,8 +462,9 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_ES_REGULAR"){
                                                                     $authnotrequired, 
                                                                     {   ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
-                                                                        accion => 'ALTA', 
-                                                                        entorno => 'undefined'},
+                                                                        accion => 'CONSULTA', 
+                                                                        entorno => 'circ_prestar',
+                                                                        tipo_permiso => 'circulacion'},
                                                                     'intranet'
                                 );
 
@@ -477,7 +489,8 @@ elsif ( $tipoAccion eq "IMPRIMIR_COMPROBANTE" ) {
                     flagsrequired   => {    ui => 'ANY', 
                                             tipo_documento => 'ANY', 
                                             accion => 'ALTA', 
-                                            entorno => 'undefined'},
+                                            entorno => 'circ_prestar',
+                                            tipo_permiso => 'circulacion'},
             });
 
             my %env;

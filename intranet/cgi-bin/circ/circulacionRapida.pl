@@ -15,8 +15,9 @@ my ($template, $session, $t_params, $usuario_logueado) =  get_template_and_user 
 							authnotrequired	=> 0,
 							flagsrequired	=> {    ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
-                                                    accion => 'CONSULTA', 
-                                                    entorno => 'undefined'},
+                                                    accion => 'ALTA', 
+                                                    entorno => 'circ_prestar',
+							                        tipo_permiso => 'circulacion'},
                 });
 
 

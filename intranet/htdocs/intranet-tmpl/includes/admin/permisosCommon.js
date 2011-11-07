@@ -4,20 +4,22 @@ var tipoPermiso = "CATALOGO";
 
 function changeTipoPermiso(){
     valueSelected = $("#tipo_permisos").val();
+    usuarioHidden = $("#nro_socio_hidden").val();
     
-    switch (valueSelected){
-    case "PCAT":
-    	tipoPermiso = "CATALOGO";
-    	break;
-    case "PCIR":
-    	tipoPermiso = "CIRCULACION";
-    	break;
-    case "PGEN":
-    	tipoPermiso = "GENERAL";
-    	break;
+    if ($.trim(usuarioHidden) != ''){
+	    switch (valueSelected){
+		    case "PCAT":
+		    	tipoPermiso = "CATALOGO";
+		    	break;
+		    case "PCIR":
+		    	tipoPermiso = "CIRCULACION";
+		    	break;
+		    case "PGEN":
+		    	tipoPermiso = "GENERAL";
+		    	break;
+	    }
+	    obtenerPermisos();
     }
-    
-    obtenerPermisos();
 	
 }
 
@@ -315,6 +317,10 @@ function armarArregloDePermisosSave_CIRCULACION(){
     var arreglo = new Array();
     arreglo[0] = new permiso('prestamos');
     arreglo[1] = new permiso('circ_opac');
+    arreglo[2] = new permiso('circ_prestar');
+    arreglo[3] = new permiso('circ_renovar');
+    arreglo[4] = new permiso('circ_devolver');
+    arreglo[5] = new permiso('circ_sanciones');
 
 
     return(arreglo);
@@ -325,6 +331,10 @@ function armarArregloDePermisos_CIRCULACION(){
     var arreglo = new Array();
     arreglo[0] = 'prestamos';
     arreglo[1] = 'circ_opac';
+    arreglo[2] = 'circ_prestar';
+    arreglo[3] = 'circ_renovar';
+    arreglo[4] = 'circ_devolver';
+    arreglo[5] = 'circ_sanciones';
 
     return(arreglo);
 }

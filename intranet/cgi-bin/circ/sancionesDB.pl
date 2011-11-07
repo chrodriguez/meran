@@ -20,7 +20,8 @@ my ($template, $session, $t_params) =  get_template_and_user ({
             flagsrequired   => {    ui => 'ANY', 
                                     tipo_documento => 'ANY', 
                                     accion => 'CONSULTA', 
-                                    entorno => 'usuarios'},
+                                    entorno => 'circ_sanciones',
+                                    tipo_permiso => 'circulacion'},
     });
 
 
@@ -49,7 +50,8 @@ elsif($tipoAccion eq "ELIMINAR_SANCIONES"){
                                                     {   ui              => 'ANY', 
                                                         tipo_documento  => 'ANY', 
                                                         accion          => 'BAJA', 
-                                                        entorno         => 'undefined'}, 
+                                                        entorno         => 'circ_sanciones',
+                                                        tipo_permiso => 'circulacion'}, 
                                                         'intranet'
                                     );
 
