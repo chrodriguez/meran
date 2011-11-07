@@ -915,8 +915,7 @@ function guardarModificacionDocumentoN2(){
     objAH.url               = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion        = "MODIFICAR_NIVEL_2";
 	_sacarOpciones();
-    objAH.infoArrayNivel2   = MARC_OBJECT_ARRAY;
-// TODO unificar todo a objAH.id_tipo_doc               = TEMPLATE_ACTUAL;    
+    objAH.infoArrayNivel2   = MARC_OBJECT_ARRAY;   
     objAH.tipo_ejemplar     = ID_TIPO_EJEMPLAR;
     objAH.id1               = ID_N1;
     objAH.id2               = ID_N2; //por si se modificó
