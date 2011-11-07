@@ -238,7 +238,7 @@ function updateEleccionCampo(responseText){
     var subcampos_array = JSONstring.toObject(responseText);
     //se inicializa el combo
     $("#subcampo").html('');
-    var options = "<option value='-1'>Seleccionar SubCampo</option>";
+    var options = "<option value='-1'>SIN SELECCIONAR</option>";
     
     for (x=0;x < subcampos_array.length;x++){
         var subcampo_string                             = $.trim(subcampos_array[x].subcampo)
@@ -310,7 +310,7 @@ function updateArmarComboCampos(responseText){
     //se inicializa el combo
     $("#camposSelect").html(""); //orden
     $("#camposRef").html("");   //campos tabla
-    var options = "<option value='-1'>Seleccionar SubCampo</option>";
+    var options = "<option value='-1'>SIN SELECCIONAR</option>";
     var joinedFields = "";
 //     for (x=0;x < camposSelect_array.length;x++){
 //         if (x == (camposSelect_array.length-1) ) //SI ES EL FINAL
