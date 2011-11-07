@@ -441,13 +441,20 @@ sub estaVencido {
 	  C4::Date::format_date_in_iso( $self->getFecha_vencimiento, $dateformat );
 	if ( Date::Manip::Date_Cmp( $df, $hoy ) < 0 ) { return 1; }
 	else {
+
 		if ( $self->getTipo_prestamo eq 'ES' ) {    #Prestamo especial
+			$self->debug("Prestamo Especial !!");			
 			if ( Date::Manip::Date_Cmp( $df, $hoy ) == 0 )
 			{                                       #Se tiene que devolver hoy
+			
+				$self->debug("Se tiene que devolver hoy!!!");
+				
 				my $end    = C4::Date::calc_endES();
-				my $actual = Date::Manip::ParseDate("today");
+				my $actual = Date::Manip::ParseDate("now");
+					$self->debug("HORA PE VENCIMIENTO ".$end." ACTUAL ".$actual);
 				if ( Date::Manip::Date_Cmp( $actual, $end ) > 0 )
 				{    #Se devuelve despues del limite
+				$self->debug("PE VENCIDO");
 					return (1);
 				}
 			}
