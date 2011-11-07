@@ -964,26 +964,15 @@ sub verificar_permisos_por_nivel{
     my ($flagsrequired) = @_;
     my @filtros;
     my $permisos_array_hash_ref;
-#     my @entornos_datos_nivel = ('datos_nivel1','datos_nivel2','datos_nivel3'); 
-#     my @entornos_estructura_catalogacion= ('estructura_catalogacion_n1','estructura_catalogacion_n2','estructura_catalogacion_n3');
+
     my @entornos_perm_catalogo      = ( 'datos_nivel1','datos_nivel2','datos_nivel3', 'estructura_catalogacion_n1',
                                         'estructura_catalogacion_n2','estructura_catalogacion_n3', 'sistema', 'undefined', 'usuarios');
     
     my @entornos_perm_general       = ( 'reportes','preferencias','permisos','adq_opac','adq_intra' );
     
-    my @entornos_perm_circulacion   = ( 'prestamos', 'circ_opac' );
+    my @entornos_perm_circulacion   = ( 'prestamos', 'circ_opac', 'circ_prestar','circ_renovar', 'circ_devolver', 'circ_sanciones' );
 
     my @entornos_manejo_usuario     = ( 'usuarios' );
-#     my @entornos_circulacion = ('');
-
-# FIXME falta verificar los parametros de entrada, que sean numeros y ademas q sean validos
-#     C4::AR::Debug::debug("");
-#     C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel => permisos requeridos");
-#     C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel => ui=================: ".$flagsrequired->{'ui'});
-#     C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel => tipo_documento=================: ".$flagsrequired->{'tipo_documento'});
-#     C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel => nro_socio=================: ".$flagsrequired->{'nro_socio'});
-#     C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel => entorno=================: ".$flagsrequired->{'entorno'});
-#     C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel => accion=================: ".$flagsrequired->{'accion'});
 
 
     $permisos_array_hash_ref = C4::Modelo::UsrSocio::checkEntorno($flagsrequired,\@entornos_perm_catalogo,\@entornos_perm_general,\@entornos_perm_circulacion);
