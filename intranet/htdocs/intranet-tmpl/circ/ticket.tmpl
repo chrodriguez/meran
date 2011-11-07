@@ -99,7 +99,7 @@
                           Tomo:
                       </td>
                       <td>
-                          <b>[% IF comp.prestamo.nivel3.nivel2.getVolumen %] [% comp.prestamo.nivel3.nivel2.getVolumen %] [% ELSE %] - [% END %]</b>
+                          <b>[% IF prestamo.nivel3.nivel2.getVolumen %] [% prestamo.nivel3.nivel2.getVolumen %] [% ELSE %] - [% END %]</b>
                       </td>
                   </tr>
 
@@ -115,8 +115,9 @@
                       <td>
                           Responsable:<!-- del pr&eacute;stamo: -->
                       </td>
+                                
                       <td>
-                          <b>[% comp.responsable.persona.getApeYNom %]</b>
+                          <b>[% responsable.persona.getApeYNom %]</b>
                       </td>
                   </tr>
                   <tr>

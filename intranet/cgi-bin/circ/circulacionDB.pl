@@ -503,10 +503,8 @@ elsif ( $tipoAccion eq "IMPRIMIR_COMPROBANTE" ) {
                     my $ticket= $elem->{'ticket'};
     
                     $hash{'socio'} =    C4::AR::Usuarios::getSocioInfoPorNroSocio($ticket->{'socio'});
-                    $hash{'responsable'} = C4::AR::Usuarios::getSocioInfoPorNroSocio($ticket->{'responsable'});
+                    $hash{'responsable'} = C4::AR::Usuarios::getSocioInfoPorNroSocio($ticket->{'responsable'});                
                     $hash{'prestamo'} = C4::AR::Prestamos::getPrestamoDeId3($ticket->{'id3'});
-
-          
                     $hash{'adicional_selected'}   = $ticket->{'adicional_selected'};
                     push(@comprobantes,\%hash);
                    

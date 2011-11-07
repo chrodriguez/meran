@@ -280,9 +280,6 @@ sub getCamposAsHash{
                 push (@arregloJSON, \%hash_temp);
             }
         }
-
-# TODO falta arreglar lo que se envía, pq agrega Nombre como value
-#         push (@arregloJSON, {'campo' => $campo."" });
     }
 
 #     C4::AR::Debug::debug("AutoBase2 => getCamposAsHash => cant campos => ".scalar(@arregloJSON));
