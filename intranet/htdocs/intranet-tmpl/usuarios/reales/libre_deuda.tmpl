@@ -8,34 +8,26 @@
         <img src="[% escudo %]" alt="escudo" width="80px" height="100px" /><br>
         [% biblio.titulo_formal %]<br>
         [% "BIBLIOTECA" | i18n  %]<br>
-        [% biblio.getNombrePDF %]<br><br><br>
+        [% biblio.getNombrePDF %]<br><br>
     </div>
-    <br><br><br>
-    <h1 align="center">[% titulo %]</h1><br><br>
-    <p id="fecha" align="right">[% fecha %]</p><br><br>
-    <div class="contenido">
-        <p>[% cuerpo_mensaje %]</p><br><br><br><br><br><br>
+    <h3 align="center">[% titulo %]</h3>
+    <p id="fecha" align="right">[% fecha %]
+    <div class="contenido" align="justify">
+        <p>[% cuerpo_mensaje %]</p><br>
     </div>
     <center>
         <div >
-            ..........................  <br> 
-            [% "Firma    " | i18n  %]
-        </div>
-        <br><br>
-        <div >
-            ..........................  <br>     
-            [% "Aclaraci&oacute;n " | i18n  %]
-        </div>
-        
-    </center>
-
-
-    </center><br><br>
-   <br><br><br>
-
-    </div>
+          
+          [% "Firma" | i18n  %]  ..........................   [% "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Aclaraci&oacute;n" | i18n  %]     .......................... <br> 
+         
     
-    <div id="pie" style="clear:both;">
+              
+        </div>
+       
+    </center>
+   
+    </div>   
+    <div id="pie" style="clear:both; font-size:9px">
     <hr>
               [% "Biblioteca: " | i18n  %] [% biblio.getNombrePDF %]<br>
               [% "Direcci&oacute;n:" | i18n  %]  [% biblio.getDireccionPDF %]<br>
