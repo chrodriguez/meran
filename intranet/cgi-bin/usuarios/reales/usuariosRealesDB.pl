@@ -442,6 +442,7 @@ Se elimina el usuario
             C4::AR::Validator::validateObjectInstance($socio);
 
             #se genera el combo de credenciales de usuario
+            $t_params->{'default'}              = $socio->getCredentialType();
             my $comboDeCredenciales             = C4::AR::Utilidades::generarComboDeCredentials($t_params);
             $t_params->{'comboDeCredenciales'}  = $comboDeCredenciales;
 
@@ -463,8 +464,8 @@ Se elimina el usuario
             });
 
 #            $obj->{'nro_socio'}
-            my $Message_arrayref=C4::AR::Usuarios::modificarCredencialesSocio($obj);
-            my $infoOperacionJSON=to_json $Message_arrayref;
+            my $Message_arrayref  = C4::AR::Usuarios::modificarCredencialesSocio($obj);
+            my $infoOperacionJSON = to_json $Message_arrayref;
 
             C4::AR::Auth::print_header($session);
             print $infoOperacionJSON;

@@ -99,7 +99,6 @@ sub modificarCredencialesSocio {
 
 
         eval {
-            my $socio = getSocioInfoPorNroSocio($params->{'nro_socio'});
             $socio->setCredentials($params->{'credenciales'});
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U338', 'params' => []} ) ;
         };
