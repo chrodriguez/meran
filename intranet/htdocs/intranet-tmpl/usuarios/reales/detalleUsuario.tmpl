@@ -6,7 +6,11 @@
 <script type="text/javascript">
 var loaderPath= "";
     $(document).ready(function(){
-        makeToggle('toggle_container','trigger',null,true);
+    	[% IF notas %]
+            makeToggle('toggle_container','trigger_notas',null,false);
+    	[% ELSE %]
+            makeToggle('toggle_container','trigger_notas',null,true);
+        [% END %]
         loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
         $('.nota').editable('[% url_prefix %]/usuarios/reales/usuariosRealesDB.pl', { 
               type      : 'textarea',
@@ -142,7 +146,7 @@ var loaderPath= "";
         </fieldset>
 
         <fieldset>
-            <legend class="titulo_legend_resaltado trigger click titulo_legend" title='[% "click para acceder a las notas registradas sobre el usuario" | i18n %]'>
+            <legend class="titulo_legend_resaltado trigger_notas click titulo_legend" title='[% "click para acceder a las notas registradas sobre el usuario" | i18n %]'>
                     [% "Notas" | i18n %]
             </legend>
             <div class="toggle_container" >
@@ -255,6 +259,14 @@ var loaderPath= "";
                                         print C4::AR::Filtros::to_Button(   text    => "[% 'Prest. Interbibliotecario' | i18n %]",
                                                                             boton   => "boton_buscar",
                                                                             onClick => "prestamosInterBibliotecarios();",
+                                                ) ;
+                            [% END %]
+                      </li>
+                      <li>
+                            [% PERL %]
+                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Cambiar Credenciales' | i18n %]",
+                                                                            boton   => "boton_buscar",
+                                                                            onClick => "cambiarCredencial();",
                                                 ) ;
                             [% END %]
                       </li>

@@ -420,4 +420,56 @@ Se elimina el usuario
                 print $infoOperacionJSON;
 
         }
+        elsif($tipoAccion eq "CAMBIAR_CREDENCIAL"){
+
+            my ($template, $session, $t_params, $socio) = get_template_and_user({
+                                            template_name   => "usuarios/reales/modificarCredenciales.tmpl",
+                                            query           => $input,
+                                            type            => "intranet",
+                                            authnotrequired => 0,
+                                            flagsrequired   => {    ui              => 'ANY', 
+                                                                    tipo_documento  => 'ANY', 
+                                                                    accion          => 'MODIFICACION', 
+                                                                    entorno         => 'usuarios',
+                                                                    tipo_permiso    => 'catalogo'},
+                                            debug           => 1,
+            });
+
+            $t_params->{'nro_socio'}            = $nro_socio;
+            C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
+            #Obtenemos los datos del borrower
+            my $socio                           = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+            #SI NO EXISTE EL SOCIO IMPRIME 0, PARA INFORMAR AL CLIENTE QUE ACCION REALIZAR
+            C4::AR::Validator::validateObjectInstance($socio);
+
+            #se genera el combo de credenciales de usuario
+            $t_params->{'default'}              = $socio->getCredentialType();
+            my $comboDeCredenciales             = C4::AR::Utilidades::generarComboDeCredentials($t_params);
+            $t_params->{'comboDeCredenciales'}  = $comboDeCredenciales;
+
+
+            C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+        }
+        elsif($tipoAccion eq "GUARDAR_MODIFICACION_CREDENCIALES"){
+
+            my ($template, $session, $t_params, $socio) = get_template_and_user({
+                                            template_name   => "usuarios/reales/modificarCredenciales.tmpl",
+                                            query           => $input,
+                                            type            => "intranet",
+                                            authnotrequired => 0,
+                                            flagsrequired   => {    ui              => 'ANY', 
+                                                                    tipo_documento  => 'ANY', 
+                                                                    accion          => 'MODIFICACION', 
+                                                                    entorno         => 'usuarios',
+                                                                    tipo_permiso    => 'catalogo'},
+                                            debug           => 1,
+            });
+
+#            $obj->{'nro_socio'}
+            my $Message_arrayref  = C4::AR::Usuarios::modificarCredencialesSocio($obj);
+            my $infoOperacionJSON = to_json $Message_arrayref;
+
+            C4::AR::Auth::print_header($session);
+            print $infoOperacionJSON;
+        }
     }

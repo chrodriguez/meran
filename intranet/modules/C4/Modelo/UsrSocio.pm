@@ -763,6 +763,7 @@ sub checkEntorno{
                                                                 ui => $flagsrequired->{'ui'}, 
                                                                 tipo_documento => $flagsrequired->{'tipo_documento'}, 
                                                                 nro_socio => $flagsrequired->{'nro_socio'},
+                                                                tipo_documento => 'ALL',
                                                     });
         }
         elsif($flagsrequired->{'tipo_permiso'} eq "general"){
@@ -771,6 +772,7 @@ sub checkEntorno{
                                                                 ui => $flagsrequired->{'ui'}, 
                                                                 tipo_documento => $flagsrequired->{'tipo_documento'}, 
                                                                 nro_socio => $flagsrequired->{'nro_socio'},
+                                                                tipo_documento => 'ALL',
                                                     });
         }
         elsif($flagsrequired->{'tipo_permiso'} eq "circulacion"){
@@ -778,6 +780,7 @@ sub checkEntorno{
                                                                 ui => $flagsrequired->{'ui'}, 
                                                                 tipo_documento => $flagsrequired->{'tipo_documento'}, 
                                                                 nro_socio => $flagsrequired->{'nro_socio'},
+                                                                tipo_documento => 'ALL',
                                                     });
         }
         return ($permisos_array_hash_ref);
@@ -802,6 +805,7 @@ sub setCredentials{
     $self->setCredentialType($credential_type);
     $self->save();
 }
+
 sub convertirEnEstudiante{
 
     my ($self) = shift;
