@@ -403,11 +403,11 @@ sub obtenerValoresTablaRef{
 #     C4::AR::Debug::debug("Referencias => obtenerValoresTablaRef => orden: ".$orden);
     
     my $ref = C4::Modelo::PrefTablaReferencia->new();
-	  my ($cantidad,$valores) = $ref->obtenerValoresTablaRef($tableAlias,$campo, $orden);
+	  my ($cantidad, $valores, $default_value) = $ref->obtenerValoresTablaRef($tableAlias,$campo, $orden);
 
 #     C4::AR::Debug::debug("Referencias => obtenerValoresTablaRef => cantidad: ".$cantidad);
 #     C4::AR::Debug::debug("Referencias => obtenerValoresTablaRef => valores: ".$valores);
-    return($cantidad,$valores);
+    return($cantidad, $valores, $default_value);
 
 }
 

@@ -951,12 +951,9 @@ function guardarModificacionDocumentoN3(){
     objAH.showOverlay       = true;
     objAH.url               = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion        = "MODIFICAR_NIVEL_3";
-// FIXME para q esta?
-    objAH.tipo_documento    = $("#tipo_nivel3_id").val();
     objAH.cantEjemplares    = $("#cantEjemplares").val();
     _sacarOpciones();
-    objAH.infoArrayNivel3   = MARC_OBJECT_ARRAY;
-// TODO unificar todo objAH.id_tipo_doc               = TEMPLATE_ACTUAL;    
+    objAH.infoArrayNivel3   = MARC_OBJECT_ARRAY; 
     objAH.tipo_ejemplar     = ID_TIPO_EJEMPLAR;
     objAH.id1               = ID_N1;
     objAH.id2               = ID_N2;
@@ -1718,6 +1715,7 @@ function subcampo_marc_conf(obj){
     this.referenciaTabla        = obj.referenciaTabla;
     this.opciones               = obj.opciones;
     this.defaultValue           = obj.defaultValue;
+    this.default_value          = obj.default_value;  
     this.tiene_estructura       = obj.tiene_estructura;
     this.ayuda_campo            = obj.ayuda_campo;
     this.descripcion_subcampo   = obj.descripcion_subcampo;
@@ -1736,7 +1734,9 @@ function subcampo_marc_conf(obj){
     function fGetRepetible(){ return this.repetible };
     function fGetReferenciaTabla(){ return this.referenciaTabla };    
     function fGetOpciones(){ return this.opciones };
-    function fGetDefaultValue(){ return this.defaultValue };
+//     function fGetDefaultValue(){ return this.defaultValue };
+    function fGetDefaultValue(){ return this.default_value };
+//     function fGetDefaultValue2(){ return this.default_value };  
     function fGetTieneEstructura(){ return this.tiene_estructura };
     function fGetObligatorio(){ return this.obligatorio };
     function fGetVistaIntra(){ return $.trim(this.liblibrarian) };
@@ -1758,6 +1758,7 @@ function subcampo_marc_conf(obj){
     this.getReferencia              = fGetReferencia;
     this.getOpciones                = fGetOpciones;
     this.getDefaultValue            = fGetDefaultValue;
+//     this.getDefaultValue2           = fGetDefaultValue2;  
     this.getTieneEstructura         = fGetTieneEstructura;
     this.getObligatorio             = fGetObligatorio;
     this.getVistaIntra              = fGetVistaIntra;
@@ -1798,9 +1799,10 @@ function newCombo(obj){
     var op              = "";
     var defaultValue    = "";
     var opciones        = obj.getOpciones();
+    var default_value   = obj.getDefaultValue();  
 
     for(var i=0; i< opciones.length; i++){
-        if(obj.getDatoReferencia() == opciones[i].clave){
+        if((obj.getDatoReferencia() == opciones[i].clave)||((default_value == opciones[i].clave)&&(MODIFICAR == 0))){
             defaultValue =" selected='selected' ";
         }
 

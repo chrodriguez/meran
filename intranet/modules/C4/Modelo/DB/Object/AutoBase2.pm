@@ -275,8 +275,10 @@ sub getCamposAsHash{
 #                 C4::AR::Debug::debug("AutoBase2 => getCamposAsHash => AGREGO CAMPOOO => ".$campo);
 #                 push (@arregloJSON, {'campo' => $c->getCampoAlias()."" });
                 my %hash_temp; 
-                $hash_temp{'key'}       = $campo."";
-                $hash_temp{'value'}     = $c->getCampoAlias();
+                $hash_temp{'key'}               = $campo."";
+                $hash_temp{'value'}             = $c->getCampoAlias();
+#                 $hash_temp{'default_value'}     = $self->getDefaultValue($self->meta->table);
+# C4::AR::Debug::debug("AutoBase2 => getCamposHash => ".$hash_temp{'default_value'});
                 push (@arregloJSON, \%hash_temp);
             }
         }
@@ -284,6 +286,35 @@ sub getCamposAsHash{
 
 #     C4::AR::Debug::debug("AutoBase2 => getCamposAsHash => cant campos => ".scalar(@arregloJSON));
     return(@arregloJSON);
+}
+
+sub getDefaultValue{
+    my ($self) = shift;
+ 
+    my $classAlias  = shift;
+    my $class;
+
+
+    use Switch;
+
+    switch ($classAlias) {
+        case 'cat_autor' { return C4::AR::Preferencias::getValorPreferencia("defaultUI");}
+        case 'tipo_ejemplar' {return C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");}
+        case 'ui' {return C4::AR::Preferencias::getValorPreferencia("defaultUI");}
+        case 'idioma' {return C4::AR::Preferencias::getValorPreferencia("defaultIdioma");}  
+        case 'pais' {return C4::AR::Preferencias::getValorPreferencia("defaultPais");} 
+        case 'disponibilidad' {return C4::AR::Preferencias::getValorPreferencia("defaultDisponibilidad");}
+        case 'tipo_prestamo' {return C4::AR::Preferencias::getValorPreferencia("defaultissuetype");}
+        case 'soporte' {return C4::AR::Preferencias::getValorPreferencia("defaultSoporte");}
+        case 'nivel_bibliografico' {return C4::AR::Preferencias::getValorPreferencia("defaultlevel");}
+#         case 'tema' {return C4::AR::Preferencias::getValorPreferencia("defaultUI");}
+#         case 'tipo_socio' {return C4::AR::Preferencias::getValorPreferencia("defaultUI");}
+#         case 'tipo_documento_usr' {return C4::AR::Preferencias::getValorPreferencia("defaultTipoDoc");}
+        case 'estado' {return C4::AR::Preferencias::getValorPreferencia("defaultEstado");}
+        case 'ciudad' {return C4::AR::Preferencias::getValorPreferencia("defaultCiudad");}
+#         case 'editorial' {return C4::AR::Preferencias::getValorPreferencia("defaultUI");}
+        else {C4::AR::Debug::debug("NO EXISTE LA TABLA DE REFERENCIA ".$classAlias) }
+    }
 }
 
 sub getCamposAsArray{

@@ -1075,6 +1075,7 @@ sub _setDatos_de_estructura {
         #tiene una referencia, y es un COMBO
 #         C4::AR::Debug::debug("_setDatos_de_estructura => ======== COMBO ======== ");
         _obtenerOpciones ($cat, \%hash_ref_result);
+#         $hash_ref_result{'default_value'}       =   
 
     }elsif( ($cat->getReferencia) && ($cat->getTipo eq 'auto') && defined($cat->infoReferencia) ){
         
@@ -1511,12 +1512,13 @@ sub _obtenerOpciones{
 #     C4::AR::Debug::debug("_obtenerOpciones => getCampos => ".$cat_estruct_object->infoReferencia->getCampos);
     if ($cat_estruct_object->infoReferencia) {
         my $orden = $cat_estruct_object->infoReferencia->getCampos;
-        my ($cantidad, $valores) = &C4::AR::Referencias::obtenerValoresTablaRef(   
+        my ($cantidad, $valores, $default_value) = &C4::AR::Referencias::obtenerValoresTablaRef(   
                                                                 $cat_estruct_object->infoReferencia->getReferencia,  #tabla  
                                                                 $cat_estruct_object->infoReferencia->getCampos,  #campo
                                                                 $orden
                                                 );
-        $hash_ref->{'opciones'} = $valores;
+        $hash_ref->{'opciones'}         = $valores;
+        $hash_ref->{'default_value'}    = $default_value;
     }
 #     C4::AR::Debug::debug("_obtenerOpciones => opciones => ".$valores);
 }
