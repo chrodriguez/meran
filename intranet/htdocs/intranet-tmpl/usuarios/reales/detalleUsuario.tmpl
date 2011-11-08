@@ -258,6 +258,14 @@ var loaderPath= "";
                                                 ) ;
                             [% END %]
                       </li>
+                      <li>
+                            [% PERL %]
+                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Cambiar Credenciales' | i18n %]",
+                                                                            boton   => "boton_buscar",
+                                                                            onClick => "cambiarCredencial();",
+                                                ) ;
+                            [% END %]
+                      </li>
 
                       [% IF mensaje_error_foto %] 
                         <li>

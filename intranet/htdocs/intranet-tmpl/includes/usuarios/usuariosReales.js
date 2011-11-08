@@ -382,7 +382,53 @@ function updateValidarDatosCensales(responseText){
     	
 }
 
+/************************************* Cambiar credenciales **********************************/
 
+function cambiarCredencial(){
+    objAH               = new AjaxHelper(updateCambiarCredencial);
+    objAH.url           = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.nro_socio     = USUARIO.ID;
+    objAH.tipoAccion    = 'CAMBIAR_CREDENCIAL';
+    objAH.sendToServer();
+}
 
+function updateCambiarCredencial(responseText){
+    if (!verificarRespuesta(responseText))
+        return(0);
 
+    $('#basic-modal-content').html(responseText);
+    $('#basic-modal-content').modal({   containerCss:{
+            backgroundColor:"#fff",
+    //         borderColor:"#0063dc",
+            height:117,
+            padding:0,
+            width:404
+        },
+    });
+}
 
+function guardarModificacionCredenciales(){
+
+    objAH               = new AjaxHelper(updateModificacionCredenciales);
+    objAH.url           = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
+    objAH.showOverlay   = true;
+    objAH.debug         = false;
+    objAH.nro_socio     = USUARIO.ID;
+    objAH.tipoAccion    = 'GUARDAR_MODIFICACION_CREDENCIALES';
+    objAH.credenciales  = $('#credential').val();
+
+    objAH.sendToServer();
+
+}
+
+function updateModificacionCredenciales(responseText){
+    if (!verificarRespuesta(responseText))
+            return(0);
+	var Messages=JSONstring.toObject(responseText);
+	setMessages(Messages);
+	detalleUsuario(USUARIO.ID);
+}
+
+/************************************* FIN - Cambiar credenciales **********************************/
