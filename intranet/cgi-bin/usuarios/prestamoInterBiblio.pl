@@ -40,7 +40,7 @@ C4::AR::Validator::validateParams('U389',$t_params,['nro_socio'] );
 my $accion = $input->param('tipoAccion');
 my $biblioDestino = C4::AR::Busquedas::getBranch($input->param('name_ui'));
 
-my $director = $input->param('director')||"___________________";
+my $director = Encode::decode_utf8($input->param('director'))||"___________________";
 
 
 my @autores=split("#",$input->param('autores'));
@@ -49,14 +49,14 @@ my @otros=split("#",$input->param('otros'));
 my @datos;
 for(my $i=0;$i<scalar(@titulos);$i++){
     if($i<scalar(@autores)){
-        $datos[$i]->{'autor'}=$autores[$i];
+        $datos[$i]->{'autor'}=Encode::decode_utf8($autores[$i]);
     }
     else{$datos[$i]->{'autor'}="";}
     if($i<scalar(@otros)){
-        $datos[$i]->{'otros'}=$otros[$i];
+        $datos[$i]->{'otros'}=Encode::decode_utf8($otros[$i]);
     }
     else{$datos[$i]->{'otros'}="";}
-    $datos[$i]->{'titulo'}=$titulos[$i];
+    $datos[$i]->{'titulo'}=Encode::decode_utf8($titulos[$i]);
 }
 
 my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
