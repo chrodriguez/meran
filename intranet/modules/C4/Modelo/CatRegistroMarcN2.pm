@@ -582,12 +582,11 @@ sub toMARC_Intra{
 
     #obtengo el marc_record del NIVEL 2
     my $marc_record             = MARC::Record->new_from_usmarc($self->getMarcRecord());
-#     $params->{'nivel'}          = '2';
-#     $params->{'id_tipo_doc'}    = $self->getTipoDocumento;
 
     my $params;
     $params->{'nivel'}          = '2';
     $params->{'id_tipo_doc'}    = $self->getTemplate()||'ALL';
+    $params->{'id2'}            = $self->getId2();
     my $MARC_result_array       = C4::AR::Catalogacion::marc_record_to_intra_view($marc_record, $params, $self->db);
 
     return ($MARC_result_array);

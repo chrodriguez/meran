@@ -66,8 +66,9 @@ sub link_to {
 	my $session = CGI::Session->load();
  	if($session->param('token')){
 	#si hay sesion se usa el token, sino no tiene sentido
+        my $status = index($url,'?');
          #SI NO HUBO PARAMETROS, EL TOKEN ES EL UNICO EN LA URL, O SEA QUE SE PONE ? EN VEZ DE &
-        if ($cant > 0){
+        if (($cant > 0)||($status != -1)){
 		    $url .= '&amp;token='.$session->param('token'); #se agrega el token
         }else{
             $url .= '?token='.$session->param('token'); 
@@ -230,6 +231,50 @@ sub to_Icon{
     }
 
     return $button;
+}
+
+sub show_componente2 {
+    my (%params_hash_ref) = @_;
+
+    my $campo               = $params_hash_ref{'campo'};
+    my $subcampo            = $params_hash_ref{'subcampo'};
+    my $dato                = $params_hash_ref{'dato'};
+    my $id1                 = $params_hash_ref{'id1'};
+#     my $itemtype            = $params_hash_ref{'itemtype'};
+#     my $type                = $params_hash_ref{'type'};
+    C4::AR::Debug::debug("show_componente2 => campo => ".$params_hash_ref{'campo'});
+
+    my $session             = CGI::Session->load();
+    my $session_type        = $session->param('type') || 'opac';
+     
+    if(($campo eq "245")&&($subcampo eq "a")) {
+
+      my $catRegistroMarcN1   = C4::AR::Nivel1::getNivel1FromId1($id1);
+
+#       C4::AR::Debug::debug("C4::AR::Filtros::show_componente => campo, subcampo: ".$campo.", ".$subcampo); 
+#       C4::AR::Debug::debug("C4::AR::Filtros::show_componente => DENTRO => dato: ".$dato);
+
+        if($catRegistroMarcN1){
+            my %params_hash;
+            my $text        = $catRegistroMarcN1->getTitulo()." (".$catRegistroMarcN1->getAutor().")"; 
+            %params_hash    = ('id1' => $catRegistroMarcN1->getId1());
+            my $url;
+
+            if ($session_type eq 'intranet'){
+                $url         = C4::AR::Utilidades::url_for("/catalogacion/estructura/detalle.pl", \%params_hash);
+
+C4::AR::Debug::debug("url ?????????? ".$url);
+            }else{
+                $url         = C4::AR::Utilidades::url_for("/opac-detail.pl", \%params_hash);
+            }
+
+            return C4::AR::Filtros::link_to( text => $text, url => $url , blank => 1);
+        }
+        
+        return "NO_LINK";
+    }
+
+    return "NO_LINK";
 }
 
 sub show_componente {

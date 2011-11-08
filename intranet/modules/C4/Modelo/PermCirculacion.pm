@@ -13,6 +13,10 @@ __PACKAGE__->meta->setup(
         tipo_documento => { type => 'varchar', overflow => 'truncate', length => 4, not_null => 1 }, 
         prestamos => { type => 'varchar', overflow => 'truncate', length => 8, not_null => 1 },
         circ_opac => { type => 'varchar', overflow => 'truncate', length => 8, not_null => 1 },
+        circ_prestar => { type => 'varchar', overflow => 'truncate', length => 8, not_null => 1 },
+        circ_renovar => { type => 'varchar', overflow => 'truncate', length => 8, not_null => 1 },
+        circ_devolver => { type => 'varchar', overflow => 'truncate', length => 8, not_null => 1 },
+        circ_sanciones => { type => 'varchar', overflow => 'truncate', length => 8, not_null => 1 },
 
     ],
 
@@ -30,6 +34,10 @@ sub agregar{
     $self->setTipo_documento($permisos_hash->{'tipo_documento'});
     $self->setPrestamos($permisos_hash->{'prestamos'});
     $self->setCirc_opac($permisos_hash->{'circ_opac'});
+    $self->setCirc_prestar($permisos_hash->{'circ_prestar'});
+    $self->setCirc_renovar($permisos_hash->{'circ_renovar'});
+    $self->setCirc_devolver($permisos_hash->{'circ_devolver'});
+    $self->setCirc_sanciones($permisos_hash->{'circ_sanciones'});
     $self->save();
 }
 
@@ -40,6 +48,10 @@ sub setAll{
     
     $self->setPrestamos($permisosByte);
     $self->setCirc_opac($permisosByte);
+    $self->setCirc_prestar($permisosByte);
+    $self->setCirc_renovar($permisosByte);
+    $self->setCirc_devolver($permisosByte);
+    $self->setCirc_sanciones($permisosByte);
 }
 
 sub modificar{
@@ -74,6 +86,50 @@ sub setCirc_opac{
     my ($self) = shift;
     my ($permisos) = @_;
     $self->circ_opac($permisos);
+}
+
+sub getCirc_prestar{
+    my ($self) = shift;
+    return ($self->circ_prestar);
+}
+
+sub setCirc_prestar{
+    my ($self) = shift;
+    my ($permisos) = @_;
+    $self->circ_prestar($permisos);
+}
+
+sub getCirc_renovar{
+    my ($self) = shift;
+    return ($self->circ_renovar);
+}
+
+sub setCirc_renovar{
+    my ($self) = shift;
+    my ($permisos) = @_;
+    $self->circ_renovar($permisos);
+}
+
+sub getCirc_devolver{
+    my ($self) = shift;
+    return ($self->circ_devolver);
+}
+
+sub setCirc_devolver{
+    my ($self) = shift;
+    my ($permisos) = @_;
+    $self->circ_devolver($permisos);
+}
+
+sub getCirc_sanciones{
+    my ($self) = shift;
+    return ($self->circ_sanciones);
+}
+
+sub setCirc_sanciones{
+    my ($self) = shift;
+    my ($permisos) = @_;
+    $self->circ_sanciones($permisos);
 }
 
 sub getUI{

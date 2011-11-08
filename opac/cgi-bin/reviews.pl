@@ -69,7 +69,7 @@ eval{
 };
  
 if ($@){
-    $t_params->{'mensaje'}              = "Ha ocurrido un error";
+    $t_params->{'mensaje'}              = "Ha ocurrido un error viendo las revisiónes";
 }
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
