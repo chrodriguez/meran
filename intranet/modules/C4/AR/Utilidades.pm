@@ -366,19 +366,14 @@ sub generarComboDeCredentials{
     push @select_credentials, 'estudiante';
     push @select_credentials, 'librarian';
     push @select_credentials, 'superLibrarian';
-    $select_credentials{'estudiante'} = 'estudiante';
-    $select_credentials{'librarian'} = 'librarian';
-    $select_credentials{'superLibrarian'} = 'superLibrarian';
-# FIXME se llama al socio,ahora la info esta en la sesion
-#     my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
+    $select_credentials{'estudiante'}       = 'estudiante';
+    $select_credentials{'librarian'}        = 'librarian';
+    $select_credentials{'superLibrarian'}   = 'superLibrarian';
 
-    my ($session) = CGI::Session->load();
-#     my $default_credential = 'estudiante';
+    my ($session)           = CGI::Session->load();
 
-#     if ($socio){
-#         $default_credential = $socio->getCredentialType;
-        my $default_credential = $params-{'default'} || 'estudiante';
-#     }
+    my $default_credential  = $params->{'default'} || 'estudiante';
+
 
     my $CGIregular = CGI::scrolling_list(       -name      => 'credential',
                                                 -id        => 'credential',

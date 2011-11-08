@@ -80,7 +80,39 @@ use vars qw(@EXPORT_OK @ISA);
     crearPersonaLDAP
     _verificarLibreDeuda
     updateUserProfile
+    modificarCredencialesSocio
 );
+
+=item
+    Cambia las credenciales del socio
+=cut
+sub modificarCredencialesSocio {
+
+    my ($params)    = @_;
+    my $msg_object  = C4::AR::Mensajes::create();
+    my ($socio)     = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
+
+    if ($socio){
+        my $db = $socio->db;
+        $db->{connect_options}->{AutoCommit} = 0;
+        $db->begin_work;
+
+
+        eval {
+            $socio->setCredentials($params->{'credenciales'});
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U338', 'params' => []} ) ;
+        };
+
+        if ($@){
+            &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U339', 'params' => []} ) ;
+            $db->rollback;
+        }
+        $db->{connect_options}->{AutoCommit} = 1;
+    }
+    return ($msg_object);
+}
 
 =item
     Este modulo agrega un autorizado (persona apta para retirar ejemplares a su nombre)
