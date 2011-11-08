@@ -430,7 +430,8 @@ Se elimina el usuario
                                             flagsrequired   => {    ui              => 'ANY', 
                                                                     tipo_documento  => 'ANY', 
                                                                     accion          => 'MODIFICACION', 
-                                                                    entorno         => 'usuarios'},
+                                                                    entorno         => 'usuarios',
+                                                                    tipo_permiso    => 'catalogo'},
                                             debug           => 1,
             });
 
@@ -459,7 +460,8 @@ Se elimina el usuario
                                             flagsrequired   => {    ui              => 'ANY', 
                                                                     tipo_documento  => 'ANY', 
                                                                     accion          => 'MODIFICACION', 
-                                                                    entorno         => 'usuarios'},
+                                                                    entorno         => 'usuarios',
+                                                                    tipo_permiso    => 'catalogo'},
                                             debug           => 1,
             });
 
