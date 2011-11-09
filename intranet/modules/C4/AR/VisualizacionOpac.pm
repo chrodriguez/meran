@@ -549,6 +549,7 @@ sub existeConfiguracion{
 
     push(@filtros, ( campo          => { eq => $params->{'campo'} } ));
     push(@filtros, ( subcampo       => { eq => $params->{'subcampo'} } ));
+    push(@filtros, ( nivel          => { eq => $params->{'nivel'} } ));
     push(@filtros, ( tipo_ejemplar  => { eq => $params->{'ejemplar'} } ));
 #    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $params->{'ejemplar'} }, 
 #                                    tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS
