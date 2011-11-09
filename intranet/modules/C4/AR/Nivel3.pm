@@ -748,7 +748,7 @@ sub detalleCompletoOPAC{
 			$hash_nivel2->{'cantParaPrestamoActual'}    = $totales_nivel3->{'cantParaPrestamoActual'};
 			$hash_nivel2->{'DivMARC'}                   = "MARCDetail".$i;
 			$hash_nivel2->{'DivDetalle'}                = "Detalle".$i;
-            $hash_nivel2->{'cat_ref_tipo_nivel3'}       = C4::AR::Nivel2::getFirstItemTypeFromN1($id1);
+            $hash_nivel2->{'cat_ref_tipo_nivel3'}       = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getId_tipo_doc();
             $hash_nivel2->{'cat_ref_tipo_nivel3_name'}  = C4::AR::Referencias::translateTipoNivel3($hash_nivel2->{'cat_ref_tipo_nivel3'});
 			$hash_nivel2->{'rating'}                    = C4::AR::Nivel2::getRating($hash_nivel2->{'id2'},$nivel1->db);
 			$hash_nivel2->{'cant_reviews'}              = C4::AR::Nivel2::getCantReviews($hash_nivel2->{'id2'}, $nivel1->db);
