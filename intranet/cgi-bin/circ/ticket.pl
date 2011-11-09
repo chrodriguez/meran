@@ -29,4 +29,4 @@ $t_params->{'prestamo'}             = C4::AR::Prestamos::getPrestamoDeId3($obj->
 $t_params->{'adicional_selected'}   = $obj->{'adicional_selected'};
 
 
-C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+   C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

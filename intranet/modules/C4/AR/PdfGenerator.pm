@@ -1213,6 +1213,7 @@ sub generateBookLabel{
 }
 #############FIN Etiquetas########################
 
+
 sub pdfFromHTML {
 
 	my ($out,$params) = @_;
@@ -1229,6 +1230,11 @@ sub pdfFromHTML {
 	$htmldoc->color_on();
 	$htmldoc->no_links();
 	$htmldoc->path(C4::Context->config('intra_for_pdf'));
+
+
+    if ($params->{'pageSize'}){
+          $htmldoc->set_page_size('21x14.8cm');
+    }
 
 	my $pdf = $htmldoc->generate_pdf();
 

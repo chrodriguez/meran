@@ -528,9 +528,8 @@ function imprimirTicket(tickets){
     var comprobantes=new Array();
     if(tickets.length > 0){
         for(i=0; i< tickets.length;i++){
-//                   comprobantes[i]= JSONstring.make(tickets[i]);
                      comprobantes[i]= tickets[i]; 
-//                    alert(tickets[i]);
+
         }
     }
 
@@ -548,32 +547,22 @@ function imprimirTicket(tickets){
 
 
 function updateImprimirTicket(responseText){
+    
+ 
+   //     $('#ticket').html(responseText);
        
-        $('#ticket').html(responseText);
-        $('#ticket').printElement({ printBodyOptions:
-                                        { styleToAdd:'color:#FFFFFF;',
-                                        classNameToAdd : 'comprobante'} 
-                                  }
-        );
-        $('#ticket').hide();
         
-        var html="<a id='link_comp' onclick='mostrarComprobante();'> Ver impresion</a>";
-        $('#mensajes').append(html);
+ //       $('#ticket').printElement({ printBodyOptions:
+ //                                       { styleToAdd:'color:#FFFFFF;' ,
+  //                                      classNameToAdd : 'comprobante'} 
+  //                                }
+  //      );*/
+//         $('#ticket').hide();
+//         var infoHash= JSONstring.toObject(responseText);
+//         var filename= infoHash.filename;
+//         var html="<a id='link_comp' onclick='filename;'> Imprimir</a>";
+//         $('#mensajes').append(html);
 
-        
-//         $('#ticket').modal({   containerCss:{
-//             backgroundColor:"#fff",
-//             borderColor:"#0063dc",
-//             height:420,
-//             padding:0,
-//             width:650,
-   
-//             
-//          },
-//       });
-//         return false;
-//      });
-         
 }
 
 function mostrarComprobante(){
