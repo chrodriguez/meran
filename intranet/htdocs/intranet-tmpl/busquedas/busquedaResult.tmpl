@@ -128,7 +128,7 @@
 										 [% PERL %]
 											print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(fasciculo) %]",
 																			url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
-																			params =>   ["id2=[% estadoDeColeccion.$anio.$volumen.$fasciculo %]&id1=[% id1 %]"],
+																			params =>   ["id2=[% estadoDeColeccion.$anio.$volumen.$fasciculo %]","id1=[% id1 %]"],
 																			title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
 																			class => "link_to_detail"
 																		) ;

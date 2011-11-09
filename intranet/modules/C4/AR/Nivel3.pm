@@ -520,7 +520,15 @@ sub detalleCompletoINTRA {
     my $page_number 		= $t_params->{'page'} || 0;
     my $cant_grupos 		= C4::Context->config("cant_grupos_per_query") || 5;
     #recupero todos los nivel2 segun el id1 pasado por parametro
-    my $nivel2_array_ref 	= C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1,$nivel1->db);
+
+    my $id2 =  $t_params->{'id2'} || 0;
+    my $nivel2_array_ref;
+
+    if ($id2){
+       ($nivel2_array_ref) = C4::AR::Nivel2::getNivel2FromId2_asArray($id2);
+    }else{
+       ($nivel2_array_ref) = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1,$nivel1->db);
+    }
 
     my @nivel2;
 
@@ -712,7 +720,14 @@ sub detalleCompletoOPAC{
     my $page_number = $t_params->{'page'} || 0;
     my $cant_grupos = C4::Context->config("cant_grupos_per_query") || 5;
 
-	my ($nivel2_array_ref) = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1,$nivel1->db);
+    my $id2 =  $t_params->{'id2'} || 0;
+    my $nivel2_array_ref;
+    
+    if ($id2){
+	   ($nivel2_array_ref) = C4::AR::Nivel2::getNivel2FromId2_asArray($id2);
+    }else{
+       ($nivel2_array_ref) = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1,$nivel1->db);
+    }
 
 	my @nivel2;
 
