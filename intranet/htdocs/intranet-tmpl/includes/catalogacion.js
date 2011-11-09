@@ -1734,9 +1734,7 @@ function subcampo_marc_conf(obj){
     function fGetRepetible(){ return this.repetible };
     function fGetReferenciaTabla(){ return this.referenciaTabla };    
     function fGetOpciones(){ return this.opciones };
-//     function fGetDefaultValue(){ return this.defaultValue };
     function fGetDefaultValue(){ return this.default_value };
-//     function fGetDefaultValue2(){ return this.default_value };  
     function fGetTieneEstructura(){ return this.tiene_estructura };
     function fGetObligatorio(){ return this.obligatorio };
     function fGetVistaIntra(){ return $.trim(this.liblibrarian) };
@@ -1758,7 +1756,6 @@ function subcampo_marc_conf(obj){
     this.getReferencia              = fGetReferencia;
     this.getOpciones                = fGetOpciones;
     this.getDefaultValue            = fGetDefaultValue;
-//     this.getDefaultValue2           = fGetDefaultValue2;  
     this.getTieneEstructura         = fGetTieneEstructura;
     this.getObligatorio             = fGetObligatorio;
     this.getVistaIntra              = fGetVistaIntra;
@@ -1803,11 +1800,14 @@ function newCombo(obj){
 
     for(var i=0; i< opciones.length; i++){
         if((obj.getDatoReferencia() == opciones[i].clave)||((default_value == opciones[i].clave)&&(MODIFICAR == 0))){
-            defaultValue =" selected='selected' ";
+//             defaultValue =" selected=selected ";
+            op = op + "<option value='" + opciones[i].clave + "' selected=selected>" + opciones[i].valor + "</option>\n";
+        } else {
+            op = op + "<option value='" + opciones[i].clave + "' >" + opciones[i].valor + "</option>\n";  
         }
 
-        op = op + "<option value='" + opciones[i].clave + "'" + defaultValue + "'>" + opciones[i].valor + "</option>\n";
-        defaultValue = "";
+//         op = op + "<option value='" + opciones[i].clave + "'" + defaultValue + ">" + opciones[i].valor + "</option>\n";
+//         defaultValue = "";
     }
 
     comp = comp + op + "</select>";

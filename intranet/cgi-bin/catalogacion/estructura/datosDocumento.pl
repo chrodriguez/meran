@@ -79,11 +79,11 @@ if($tipoAccion eq "MODIFICAR_NIVEL_1"){
 
 $t_params->{'template_catalogo'}                = $template_catalogo;
 $params_combo{'onChange'}                       = 'seleccionar_esquema()';
-$params_combo{'default'}                        = 'SIN SELECCIONAR';
+$params_combo{'default'}                        = C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");#'SIN SELECCIONAR';
 $t_params->{'comboTipoDocumento'}               = &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
 $t_params->{'nivel'}                            = $nivel;
 $params_combo{'onChange'}                       = '';
-$params_combo{'default'}                        = 'SIN SELECCIONAR';
+$params_combo{'default'}                        = C4::AR::Preferencias::getValorPreferencia("defaultlevel");#'SIN SELECCIONAR';
 $t_params->{'comboTipoNivelBibliografico'}      = &C4::AR::Utilidades::generarComboNivelBibliografico(\%params_combo);
 $t_params->{'page_sub_title'}                   = C4::AR::Filtros::i18n("Catalogaci&oacute;n - Datos del documento");
 
