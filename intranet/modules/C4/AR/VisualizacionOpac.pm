@@ -549,10 +549,10 @@ sub existeConfiguracion{
 
     push(@filtros, ( campo          => { eq => $params->{'campo'} } ));
     push(@filtros, ( subcampo       => { eq => $params->{'subcampo'} } ));
-#    push(@filtros, ( tipo_ejemplar  => { eq => $params->{'ejemplar'} } ));
-    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $params->{'ejemplar'} }, 
-                                    tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS
-    );
+    push(@filtros, ( tipo_ejemplar  => { eq => $params->{'ejemplar'} } ));
+#    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => $params->{'ejemplar'} }, 
+#                                    tipo_ejemplar   => { eq => 'ALL'     } ]) #TODOS
+#    );
 
 
     my $cat_estruct_info_array = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(  
