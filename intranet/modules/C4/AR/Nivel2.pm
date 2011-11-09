@@ -22,6 +22,7 @@ use vars qw(@EXPORT_OK @ISA);
         getNivel2FromId1
         getNivel2FromId2
         getFirstItemTypeFromN1
+        getNivel2FromId2_asArray
         
 );
 
@@ -303,6 +304,18 @@ sub getNivel2FromId2{
         return (0);
     }
 }
+
+sub getNivel2FromId2_asArray{
+    my ($id2, $db) = @_;
+    my $nivel2 = getNivel2FromId2($id2,$db);
+    
+    my @array = ();
+    
+    push(@array,$nivel2);
+    
+    return \@array; 
+}
+
 
 sub getTipoEjemplarFromId2{
     my ($id2) = @_;

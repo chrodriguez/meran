@@ -365,7 +365,7 @@ Se elimina el usuario
                                             flagsrequired => {  ui => 'ANY', 
                                                                 tipo_documento => 'ANY', 
                                                                 accion => 'CONSULTA', 
-                                                                entorno => 'undefined'},
+                                                                entorno => 'usuarios'},
                                             debug => 1,
             });
             C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );

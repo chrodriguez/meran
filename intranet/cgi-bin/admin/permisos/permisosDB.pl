@@ -36,7 +36,9 @@ if ($accion eq "OBTENER_PERMISOS_CATALOGO"){
                         flagsrequired => {  ui => 'ANY', 
                                             tipo_documento => 'ANY', 
                                             accion => 'CONSULTA', 
-                                            entorno => 'permisos', tipo_permiso => 'general'},
+                                            entorno => 'permisos', 
+                                            tipo_permiso => 'general'
+                        },
                         debug => 1,
                     });
     my $perfil = $obj->{'perfil'} || 0;
@@ -62,9 +64,10 @@ elsif ($accion eq "ACTUALIZAR_PERMISOS_CATALOGO"){
                             authnotrequired => 0,
                             flagsrequired => {  ui => 'ANY', 
                                                 tipo_documento => 'ANY', 
-                                                accion => 'CONSULTA', 
+                                                accion => 'MODIFICACION', 
                                                 entorno => 'permisos', 
-                                                tipo_permiso => 'general'},
+                                                tipo_permiso => 'general'
+                            },
                             debug => 1,
                     });
 
@@ -90,9 +93,10 @@ elsif ($accion eq "NUEVO_PERMISO_CATALOGO"){
                             authnotrequired => 0,
                             flagsrequired => {  ui => 'ANY', 
                                                 tipo_documento => 'ANY', 
-                                                accion => 'CONSULTA', 
+                                                accion => 'ALTA', 
                                                 entorno => 'permisos', 
-                                                tipo_permiso => 'general'},
+                                                tipo_permiso => 'general'
+                            },
                             debug => 1,
                     });
 
@@ -114,7 +118,8 @@ elsif ($accion eq "SHOW_NUEVO_PERMISO_CATALOGO"){
                                                 tipo_documento => 'ANY', 
                                                 accion => 'CONSULTA', 
                                                 entorno => 'permisos', 
-                                                tipo_permiso => 'general'},
+                                                tipo_permiso => 'general'
+                            },
                             debug => 1,
                     });
 
@@ -136,7 +141,8 @@ elsif ($accion eq "SHOW_NUEVO_PERMISO_CATALOGO"){
                                             tipo_documento => 'ANY', 
                                             accion => 'CONSULTA', 
                                             entorno => 'permisos', 
-                                            tipo_permiso => 'general'},
+                                            tipo_permiso => 'general'
+                        },
                         debug => 1,
                     });
     my $perfil = $obj->{'perfil'} || 0;
@@ -169,7 +175,8 @@ elsif ($accion eq "ACTUALIZAR_PERMISOS_GENERAL"){
                                                 tipo_documento => 'ANY', 
                                                 accion => 'MODIFICACION', 
                                                 entorno => 'permisos', 
-                                                tipo_permiso => 'general'},
+                                                tipo_permiso => 'general'
+                            },
                             debug => 1,
                     });
 
@@ -196,7 +203,8 @@ elsif ($accion eq "NUEVO_PERMISO_GENERAL"){
                                                 tipo_documento => 'ANY', 
                                                 accion => 'ALTA',   
                                                 entorno => 'permisos', 
-                                                tipo_permiso => 'general'},
+                                                tipo_permiso => 'general'
+                            },
                             debug => 1,
                     });
 
@@ -218,7 +226,8 @@ elsif ($accion eq "NUEVO_PERMISO_GENERAL"){
                                                 tipo_documento => 'ANY', 
                                                 accion => 'CONSULTA', 
                                                 entorno => 'permisos', 
-                                                tipo_permiso => 'general'},
+                                                tipo_permiso => 'general'
+                            },
                             debug => 1,
                     });
 
@@ -240,7 +249,8 @@ elsif ($accion eq "NUEVO_PERMISO_GENERAL"){
                                             tipo_documento => 'ANY', 
                                             accion => 'CONSULTA', 
                                             entorno => 'permisos', 
-                                            tipo_permiso => 'general'},
+                                            tipo_permiso => 'general'
+                        },
                         debug => 1,
                     });
     my $perfil = $obj->{'perfil'} || 0;
@@ -268,7 +278,8 @@ elsif ($accion eq "ACTUALIZAR_PERMISOS_CIRCULACION"){
                                                 tipo_documento => 'ANY', 
                                                 accion => 'MODIFICACION', 
                                                 entorno => 'permisos', 
-                                                tipo_permiso => 'general'},
+                                                tipo_permiso => 'general'
+                            },
                             debug => 1,
                     });
 
@@ -295,7 +306,8 @@ elsif ($accion eq "NUEVO_PERMISO_CIRCULACION"){
                                                 tipo_documento => 'ANY', 
                                                 accion => 'ALTA', 
                                                 entorno => 'permisos', 
-                                                tipo_permiso => 'general'},
+                                                tipo_permiso => 'general'
+                            },
                             debug => 1,
                     });
 
@@ -318,7 +330,8 @@ elsif ($accion eq "SHOW_NUEVO_PERMISO_CIRCULACION"){
                                                 tipo_documento => 'ANY', 
                                                 accion => 'CONSULTA', 
                                                 entorno => 'permisos', 
-                                                tipo_permiso => 'general'},
+                                                tipo_permiso => 'general'
+                            },
                             debug => 1,
                     });
 
