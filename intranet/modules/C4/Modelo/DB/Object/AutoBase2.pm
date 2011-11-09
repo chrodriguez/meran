@@ -306,7 +306,7 @@ sub getDefaultValue{
         case 'disponibilidad' {return C4::AR::Preferencias::getValorPreferencia("defaultDisponibilidad");}
         case 'tipo_prestamo' {return C4::AR::Preferencias::getValorPreferencia("defaultissuetype");}
         case 'soporte' {return C4::AR::Preferencias::getValorPreferencia("defaultSoporte");}
-        case 'nivel_bibliografico' {return C4::AR::Preferencias::getValorPreferencia("defaultlevel");}
+        case 'nivel_bibliografico' {return C4::AR::Preferencias::getValorPreferencia("defaultNivelBibliografico");}
 #         case 'tema' {return C4::AR::Preferencias::getValorPreferencia("defaultUI");}
 #         case 'tipo_socio' {return C4::AR::Preferencias::getValorPreferencia("defaultUI");}
 #         case 'tipo_documento_usr' {return C4::AR::Preferencias::getValorPreferencia("defaultTipoDoc");}
