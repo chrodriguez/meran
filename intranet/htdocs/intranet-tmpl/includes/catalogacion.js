@@ -409,11 +409,11 @@ function updateMostrarEstructuraDelNivel2(responseText){
     
     if(!MODIFICAR){
         //dejo seleccionado el tipo de documento segun el esquema  
-        $('#'+_getIdComponente('910','a')).val($('#tipo_nivel3_id').val());
+//         $('#'+_getIdComponente('910','a')).val($('#tipo_nivel3_id').val());
+        $('#'+_getIdComponente('910','a')).val(ID_TIPO_EJEMPLAR);
     }      
     
-    scrollTo('nivel2Tabla');  
-    
+    scrollTo('nivel2Tabla');   
 }
 
 
@@ -1800,14 +1800,11 @@ function newCombo(obj){
 
     for(var i=0; i< opciones.length; i++){
         if((obj.getDatoReferencia() == opciones[i].clave)||((default_value == opciones[i].clave)&&(MODIFICAR == 0))){
-//             defaultValue =" selected=selected ";
+//         if((obj.getDatoReferencia() == opciones[i].clave)||((ID_TIPO_EJEMPLAR == opciones[i].clave)&&(MODIFICAR == 0))){
             op = op + "<option value='" + opciones[i].clave + "' selected=selected>" + opciones[i].valor + "</option>\n";
         } else {
             op = op + "<option value='" + opciones[i].clave + "' >" + opciones[i].valor + "</option>\n";  
         }
-
-//         op = op + "<option value='" + opciones[i].clave + "'" + defaultValue + ">" + opciones[i].valor + "</option>\n";
-//         defaultValue = "";
     }
 
     comp = comp + op + "</select>";
