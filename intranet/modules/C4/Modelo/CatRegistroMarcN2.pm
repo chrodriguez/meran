@@ -497,6 +497,43 @@ sub getAnio_publicacion{
     return $marc_record->subfield("260","c");
 }
 
+
+=head2 REVISTAS
+ Para las Revistas:
+ De la lista del Formato Marc21 Fondos/Existencias/Datos de fondos, Campos de enumeración y cronología:
+	863 a: Volumen
+	863 b: Número
+	863 i: Año
+	
+	http://www.loc.gov/marc/holdings/echdspa.html
+=cut
+
+sub getVolumenRevista{
+     my ($self)      = shift;
+     
+     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());    
+ 
+     return $marc_record->subfield("863","a");
+}
+
+sub getNumeroRevista{
+     my ($self)      = shift;
+     
+     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());    
+ 
+     return $marc_record->subfield("863","b");
+}
+
+sub getAnioRevista{
+     my ($self)      = shift;
+     
+     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());    
+ 
+     return $marc_record->subfield("863","i");
+}
+
+
+
 =head2 sub tienePrestamos
     Verifica si el nivel 2 pasado por parametro tiene ejemplares con prestamos o no
 =cut

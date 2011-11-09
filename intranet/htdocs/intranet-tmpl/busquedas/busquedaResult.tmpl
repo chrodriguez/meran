@@ -102,7 +102,7 @@
                             print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(titulo) %]",
                                                             url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
                                                             params =>   ["id1=[% id1 %]"],
-                                                            title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]",
+                                                            title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
                                                             class => "link_to_detail"
                                                         ) ;
                         [% END %]
@@ -114,21 +114,69 @@
                         </a>
                     </td>
             
-                    <td>
-                        <span id="grupos_[% id1 %]">
-	                        [% FOREACH grupos %]
-	                            [% IF edicion %]
-	                                [% edicion %] &nbsp;
-	                            [% END %]
-	                            [% IF loop.prev.anio_publicacion != anio_publicacion %]
-	                                <br />
-		                            [% IF anio_publicacion %]
-		                                ([% anio_publicacion %])
-		                            [% END %]
-		                        [% END %]
-		                            
-	                        [% END %]
-	                    </span>
+                    <td> 
+						[% IF estadoDeColeccion %]
+							<span id="coleccion_[% id1 %]">
+							
+							[% FOREACH anio IN estadoDeColeccion.keys.sort %]
+								[% IF anio != '#' %][% anio %][% END %]
+								[% FOREACH volumen IN estadoDeColeccion.$anio.keys.sort %]
+									[% IF volumen != '#' %][% volumen  %][% END %]
+									(
+									[% FOREACH fasciculo IN estadoDeColeccion.$anio.$volumen.keys.sort %]
+
+										 [% PERL %]
+											print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(fasciculo) %]",
+																			url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+																			params =>   ["id2=[% estadoDeColeccion.$anio.$volumen.$fasciculo %]&id1=[% id1 %]"],
+																			title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
+																			class => "link_to_detail"
+																		) ;
+										 [% END %]
+                        
+									[% END %]
+									)
+								[% END %]
+							   <br/>
+							[% END %]
+
+							</span>
+							
+						  <script type="text/javascript">$("#coleccion_[% id1 %]").expander({
+							  slicePoint: 2000, 
+							  widow: 10,
+							  expandEffect: 'fadeIn', 
+							  expandText: "<br />[% 'M&aacute;s Revistas' | i18n %]",
+							  userCollapseText: '[^]'
+							});
+						 </script>
+						 
+						[% ELSE %]
+							[% IF grupos %]
+								<span id="grupos_[% id1 %]">
+									[% FOREACH grupos %]
+										[% IF edicion %]
+											[% edicion %] &nbsp;
+										[% END %]
+										[% IF loop.prev.anio_publicacion != anio_publicacion %]
+											<br />
+											[% IF anio_publicacion %]
+												([% anio_publicacion %])
+											[% END %]
+										[% END %]
+											
+									[% END %]
+								</span>
+						  <script type="text/javascript">$("#grupos_[% id1 %]").expander({
+							  slicePoint: 2000, 
+							  widow: 10,
+							  expandEffect: 'fadeIn', 
+							  expandText: "<br />[% 'M&aacute;s ediciones' | i18n %]",
+							  userCollapseText: '[^]'
+							});
+						 </script>
+							[% END %]
+						[% END %]
                     </td>
             
                     <td>
@@ -147,14 +195,6 @@
                         </td>
                     [% END %]
                 </tr>
-             <script type="text/javascript">$("#grupos_[% id1 %]").expander({
-            	  slicePoint: 2000, 
-            	  widow: 10,
-            	  expandEffect: 'fadeIn', 
-            	  expandText: "<br />[% 'M&aacute;s ediciones' | i18n %]",
-            	  userCollapseText: '[^]'
-            	});
-             </script>
             [% END %]
             </table>
         </div>
