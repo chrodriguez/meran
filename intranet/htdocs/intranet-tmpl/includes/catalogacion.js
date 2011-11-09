@@ -408,9 +408,12 @@ function updateMostrarEstructuraDelNivel2(responseText){
     addRules();
     
     if(!MODIFICAR){
-        //dejo seleccionado el tipo de documento segun el esquema  
-//         $('#'+_getIdComponente('910','a')).val($('#tipo_nivel3_id').val());
-        $('#'+_getIdComponente('910','a')).val(ID_TIPO_EJEMPLAR);
+        if(ID_TIPO_EJEMPLAR == 0){
+            $('#'+_getIdComponente('910','a')).val($('#tipo_nivel3_id').val());
+        } else {
+            //dejo seleccionado el tipo de documento segun el esquema  
+            $('#'+_getIdComponente('910','a')).val(ID_TIPO_EJEMPLAR);
+        } 
     }      
     
     scrollTo('nivel2Tabla');   
