@@ -240,6 +240,12 @@
 		    </div> <!--end <div id="ejemplaresDelGrupo -->
 		</fieldset>
 		<script type="text/javascript">makeToggle('ejemplaresDelGrupo[% id2 %]','trigger_2_[% id2 %]',null,false);</script>
-[% ELSE %]	
-    <h4 class="ejemplares_grupo">[% 'Este grupo no dispone de ejemplares' | i18n %]</h4>		
+[% ELSE %]
+
+    [% IF nivel2_template == 'ANA' %]
+        <h4 class="ejemplares_grupo">[% 'aca va el link al registro padre de la analitica' | i18n %]</h4>        
+    [% ELSE %]
+        <h4 class="ejemplares_grupo">[% 'Este grupo no dispone de ejemplares' | i18n %]</h4>        
+    [% END %]
+
 [% END %]

@@ -117,8 +117,8 @@ sub tiene_indice {
 }
 
 sub agregar{
-    my ($self) = shift;
-    my ($params, $marc_record, $db)    = @_;
+    my ($self)                          = shift;
+    my ($params, $marc_record, $db)     = @_;
 
     $self->setId1($params->{'id1'});    
     $self->setMarcRecord($marc_record);
@@ -127,17 +127,20 @@ sub agregar{
     my $mr = MARC::Record->new_from_usmarc($marc_record);    
 
 # TODO ver si tiene analica
-#     my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $db );
-#     $cat_registro_n2_analitica->setId2Padre(C4::AR::Catalogacion::getRefFromStringConArrobas($mr->subfield("773","a")));
-#     $cat_registro_n2_analitica->setId2Hijo($self->getId2());
-#     $cat_registro_n2_analitica->save();
 
     $self->save();
+
+    if($params->{'id_tipo_doc'} eq "ANA"){
+        my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $db );
+        $cat_registro_n2_analitica->setId2Padre(C4::AR::Catalogacion::getRefFromStringConArrobas($mr->subfield("773","a")));
+        $cat_registro_n2_analitica->setId2Hijo($self->getId2());
+        $cat_registro_n2_analitica->save();
+    }
 }
 
 sub modificar{
-    my ($self)           = shift;
-    my ($marc_record)    = @_;
+    my ($self)              = shift;
+    my ($marc_record, $db)  = @_;
 
     $self->setMarcRecord($marc_record);
     
@@ -148,6 +151,13 @@ sub modificar{
 #     $cat_registro_n2_analitica->setId2Padre(C4::AR::Catalogacion::getRefFromStringConArrobas($mr->subfield("773","a")));
 #     $cat_registro_n2_analitica->setId2Hijo($self->getId2());
 #     $cat_registro_n2_analitica->save();
+
+    if($self->getTemplate() eq "ANA"){
+        my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $db );
+        $cat_registro_n2_analitica->setId2Padre(C4::AR::Catalogacion::getRefFromStringConArrobas($mr->subfield("773","a")));
+        $cat_registro_n2_analitica->setId2Hijo($self->getId2());
+        $cat_registro_n2_analitica->save();
+    }
 
     $self->save();
 }

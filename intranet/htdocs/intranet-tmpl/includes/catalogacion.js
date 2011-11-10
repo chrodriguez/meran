@@ -1185,6 +1185,8 @@ function procesarInfoJson(marc_object_array, id_padre){
             strComp = strComp + "<div style='width:3%;float:right'>";
             campo_marc_conf_obj.setIdCompCliente("marc_group" + id_temp);
             strComp = strComp + crearBotonAgregarCampoRepetible(campo_marc_conf_obj, id_temp);
+//             NO ANDA VER ESTO
+//             strComp = strComp + crearBotonEliminarCampoRepetible(campo_marc_conf_obj, id_temp);  
             strComp = strComp + "</div>";
         } else {
             //cierro div CENTER si no es repetible

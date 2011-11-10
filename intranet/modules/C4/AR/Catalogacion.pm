@@ -792,7 +792,7 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
             } else {
             #EXISTE EL CAMPO => campo, subcampo REPETIBLE
 #                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => EXISTE el campo => ".$campo);
-                @MARC_result_array[$index]->{'dato'} = (@MARC_result_array[$index]->{'dato'} ne "")?@MARC_result_array[$index]->{'dato'}."***".$field->as_string:$field->as_string;
+                @MARC_result_array[$index]->{'dato'} = (@MARC_result_array[$index]->{'dato'} ne "")?@MARC_result_array[$index]->{'dato'}.$field->as_string:$field->as_string;
 #                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => dato => ".@MARC_result_array[$index]->{'dato'});
 #                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => field->as_string => ".$field->as_string);
             }
