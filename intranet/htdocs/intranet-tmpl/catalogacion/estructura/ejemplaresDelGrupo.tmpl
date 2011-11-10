@@ -241,9 +241,18 @@
 		</fieldset>
 		<script type="text/javascript">makeToggle('ejemplaresDelGrupo[% id2 %]','trigger_2_[% id2 %]',null,false);</script>
 [% ELSE %]
-
     [% IF nivel2_template == 'ANA' %]
         <h4 class="ejemplares_grupo">[% 'aca va el link al registro padre de la analitica' | i18n %]</h4>        
+
+            [% PERL %]
+                print C4::AR::Filtros::link_to(   text      => "Detalle del registro padre",
+                                                  url       => "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                                  params    => ["id1=[% nivel1_padre %]"],
+                                                  title     => "[% 'Detalle del registro padre' | i18n %]",
+                                                  blank     => 1,
+                                            );
+            [% END %]
+
     [% ELSE %]
         <h4 class="ejemplares_grupo">[% 'Este grupo no dispone de ejemplares' | i18n %]</h4>        
     [% END %]

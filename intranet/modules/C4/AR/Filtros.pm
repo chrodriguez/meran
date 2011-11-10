@@ -240,6 +240,7 @@ sub show_componente {
     my $subcampo            = $params_hash_ref{'subcampo'};
     my $dato                = $params_hash_ref{'dato'};
     my $id1                 = $params_hash_ref{'id1'};
+    my $id2                 = $params_hash_ref{'id2'};
 
     my $session             = CGI::Session->load();
     my $session_type        = $session->param('type') || 'opac';
@@ -262,6 +263,36 @@ sub show_componente {
             }else{
                 $url         = C4::AR::Utilidades::url_for("/opac-detail.pl", \%params_hash);
             }
+
+            return C4::AR::Filtros::link_to( text => $text, url => $url , blank => 1);
+        }
+        
+        return "NO_LINK";
+    }
+
+    if(($campo eq "773")&&($subcampo eq "a")) {
+
+            
+        my $nivel2_object       = C4::AR::Nivel2::getNivel2FromId2($dato);
+        $id1                    = $nivel2_object->getId1();
+        my $catRegistroMarcN1   = C4::AR::Nivel1::getNivel1FromId1($id1);
+
+      C4::AR::Debug::debug("C4::AR::Filtros::show_componente => campo, subcampo: ".$campo.", ".$subcampo); 
+      C4::AR::Debug::debug("C4::AR::Filtros::show_componente => DENTRO => dato: ".$dato);
+
+        if($catRegistroMarcN1){
+            my %params_hash;
+            my $text        = $catRegistroMarcN1->getTitulo(); 
+            %params_hash    = ('id1' => $catRegistroMarcN1->getId1());
+            my $url;
+
+            if ($session_type eq 'intranet'){
+                $url         = C4::AR::Utilidades::url_for("/catalogacion/estructura/detalle.pl", \%params_hash);
+            }else{
+                $url         = C4::AR::Utilidades::url_for("/opac-detail.pl", \%params_hash);
+            }
+
+C4::AR::Debug::debug("C4::AR::Filtros::show_componente => DENTRO => url: ".$url);
 
             return C4::AR::Filtros::link_to( text => $text, url => $url , blank => 1);
         }

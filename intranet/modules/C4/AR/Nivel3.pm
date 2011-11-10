@@ -396,6 +396,7 @@ sub detalleNivel3{
     my $nivel2_object = C4::AR::Nivel2::getNivel2FromId2($id2,$db);
 
     $hash_nivel2{'nivel1_analiticas_array'}     = undef;
+    $hash_nivel2{'nivel1_padre'}                = undef; #para el link al registro padre de una analitica
 
     if($nivel2_object){
 
@@ -424,6 +425,14 @@ sub detalleNivel3{
         $hash_nivel2{'lista_docs'}              = $e_docs;
         $hash_nivel2{'cant_docs'}               = $cant_docs;
 
+
+        if($nivel2_object->getTemplate() eq "ANA"){
+        #soy una ANALITICA tengo q obtener el ID2 del campo 773, a para obtener el ID1, link al registro padre
+#             $id2                                = $nivel2_object->getAnalitica();
+C4::AR::Debug::debug("Nivel3 => detalleNivel3 => getAnalitica => ".$nivel2_object->getAnalitica());
+            my $nivel2_object_padre             = C4::AR::Nivel2::getNivel2FromId2($nivel2_object->getAnalitica(),$db);
+            $hash_nivel2{'nivel1_padre'}        = $nivel2_object_padre->getId1();
+        }
 
 
         #otengo las analiticas
