@@ -408,12 +408,15 @@ function updateMostrarEstructuraDelNivel2(responseText){
     addRules();
     
     if(!MODIFICAR){
-        //dejo seleccionado el tipo de documento segun el esquema  
-        $('#'+_getIdComponente('910','a')).val($('#tipo_nivel3_id').val());
+        if(ID_TIPO_EJEMPLAR == 0){
+            $('#'+_getIdComponente('910','a')).val($('#tipo_nivel3_id').val());
+        } else {
+            //dejo seleccionado el tipo de documento segun el esquema  
+            $('#'+_getIdComponente('910','a')).val(ID_TIPO_EJEMPLAR);
+        } 
     }      
     
-    scrollTo('nivel2Tabla');  
-    
+    scrollTo('nivel2Tabla');   
 }
 
 
@@ -1182,6 +1185,8 @@ function procesarInfoJson(marc_object_array, id_padre){
             strComp = strComp + "<div style='width:3%;float:right'>";
             campo_marc_conf_obj.setIdCompCliente("marc_group" + id_temp);
             strComp = strComp + crearBotonAgregarCampoRepetible(campo_marc_conf_obj, id_temp);
+//             NO ANDA VER ESTO
+//             strComp = strComp + crearBotonEliminarCampoRepetible(campo_marc_conf_obj, id_temp);  
             strComp = strComp + "</div>";
         } else {
             //cierro div CENTER si no es repetible
@@ -1734,9 +1739,7 @@ function subcampo_marc_conf(obj){
     function fGetRepetible(){ return this.repetible };
     function fGetReferenciaTabla(){ return this.referenciaTabla };    
     function fGetOpciones(){ return this.opciones };
-//     function fGetDefaultValue(){ return this.defaultValue };
     function fGetDefaultValue(){ return this.default_value };
-//     function fGetDefaultValue2(){ return this.default_value };  
     function fGetTieneEstructura(){ return this.tiene_estructura };
     function fGetObligatorio(){ return this.obligatorio };
     function fGetVistaIntra(){ return $.trim(this.liblibrarian) };
@@ -1758,7 +1761,6 @@ function subcampo_marc_conf(obj){
     this.getReferencia              = fGetReferencia;
     this.getOpciones                = fGetOpciones;
     this.getDefaultValue            = fGetDefaultValue;
-//     this.getDefaultValue2           = fGetDefaultValue2;  
     this.getTieneEstructura         = fGetTieneEstructura;
     this.getObligatorio             = fGetObligatorio;
     this.getVistaIntra              = fGetVistaIntra;
@@ -1803,11 +1805,11 @@ function newCombo(obj){
 
     for(var i=0; i< opciones.length; i++){
         if((obj.getDatoReferencia() == opciones[i].clave)||((default_value == opciones[i].clave)&&(MODIFICAR == 0))){
-            defaultValue =" selected='selected' ";
+//         if((obj.getDatoReferencia() == opciones[i].clave)||((ID_TIPO_EJEMPLAR == opciones[i].clave)&&(MODIFICAR == 0))){
+            op = op + "<option value='" + opciones[i].clave + "' selected=selected>" + opciones[i].valor + "</option>\n";
+        } else {
+            op = op + "<option value='" + opciones[i].clave + "' >" + opciones[i].valor + "</option>\n";  
         }
-
-        op = op + "<option value='" + opciones[i].clave + "'" + defaultValue + "'>" + opciones[i].valor + "</option>\n";
-        defaultValue = "";
     }
 
     comp = comp + op + "</select>";

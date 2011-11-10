@@ -449,13 +449,52 @@ sub obtenerGrupos {
 	foreach my $nivel2 (@$niveles2){
 	    $result[$res]->{'id2'}=$nivel2->getId2;
         $result[$res]->{'edicion'}= $nivel2->getEdicion;
-        $result[$res]->{'nro_revista'}= $nivel2->getNroSerie;
-        
 	    $result[$res]->{'anio_publicacion'}=$nivel2->getAnio_publicacion;
 	    $res++;
 	}
 
 	return (\@result);
+}
+
+=item
+obtenerEstadoDeColeccion
+Esta funcion devuelve los datos de los fasciculos agrupados para años .
+=cut
+sub obtenerEstadoDeColeccion {
+	my ($id1,$itemtype,$type)=@_;
+	
+	my $cant_revistas=0;
+	#Obtenemos los niveles 2
+	my $niveles2 = C4::AR::Nivel2::getNivel2FromId1($id1);
+	
+	my %HoH = {}; 
+	foreach my $nivel2 (@$niveles2){
+		
+		if($nivel2->getTipoDocumento eq 'REV'){
+			$cant_revistas++;
+			my $anio=$nivel2->getAnioRevista ? $nivel2->getAnioRevista : '#';
+			my $volumen=$nivel2->getVolumenRevista ? $nivel2->getVolumenRevista : '#';
+			my $numero=$nivel2->getNumeroRevista ? $nivel2->getNumeroRevista : '#';
+			
+			$HoH{$anio}->{$volumen}->{$numero}=$nivel2->getId2;
+			
+		}
+	}
+	
+	#Recorrido
+	
+	#for my $anio (sort keys %HoH ) {
+    #C4::AR::Debug::debug("\n AÑO: $anio");
+        #for my $volumen (sort keys %{ $HoH{$anio} } ) {
+         #C4::AR::Debug::debug("VOLUMEN: $volumen ");
+              #for my $fasc (sort keys %{ $HoH{$anio}{$volumen} } ) {
+				#C4::AR::Debug::debug("NUM: $fasc ID2: ".$HoH{$anio}{$volumen}{$fasc});
+				#}
+		#}
+	#}
+
+
+return ($cant_revistas,\%HoH);
 }
 
 
@@ -1445,12 +1484,21 @@ sub armarInfoNivel1{
             #aca se procesan solo los ids de nivel 1 que se van a mostrar
             #se generan los grupos para mostrar en el resultado de la consulta
             my $ediciones           = C4::AR::Busquedas::obtenerGrupos(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name, "INTRA");
-            my $nivel2_array_ref    = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
-
             @result_array_paginado[$i]->{'grupos'} = 0;
             if(scalar(@$ediciones) > 0){
                 @result_array_paginado[$i]->{'grupos'}  = $ediciones;
             }
+
+            #se genera el estado de coleccion si se trata de revistas
+				  C4::AR::Debug::debug("REVISTA: se genera el estado de coleccion");
+				my ($cant_revistas ,$estadoDeColeccion)           = C4::AR::Busquedas::obtenerEstadoDeColeccion(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name, "INTRA");
+				@result_array_paginado[$i]->{'estadoDeColeccion'} = 0;
+				if($cant_revistas > 0){
+					@result_array_paginado[$i]->{'estadoDeColeccion'}  = $estadoDeColeccion;
+				}
+			
+            my $nivel2_array_ref    = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
+                        
             my $images_n1_hash_ref = C4::AR::PortadasRegistros::getAllImageForId1(@result_array_paginado[$i]->{'id1'});
             @result_array_paginado[$i]->{'cat_ref_tipo_nivel3'}     = C4::AR::Nivel2::getFirstItemTypeFromN1($nivel1->getId1);
             @result_array_paginado[$i]->{'cat_ref_tipo_nivel3_name'}= C4::AR::Referencias::translateTipoNivel3(@result_array_paginado[$i]->{'cat_ref_tipo_nivel3'});

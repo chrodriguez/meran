@@ -396,6 +396,7 @@ sub detalleNivel3{
     my $nivel2_object = C4::AR::Nivel2::getNivel2FromId2($id2,$db);
 
     $hash_nivel2{'nivel1_analiticas_array'}     = undef;
+    $hash_nivel2{'nivel1_padre'}                = undef; #para el link al registro padre de una analitica
 
     if($nivel2_object){
 
@@ -424,6 +425,14 @@ sub detalleNivel3{
         $hash_nivel2{'lista_docs'}              = $e_docs;
         $hash_nivel2{'cant_docs'}               = $cant_docs;
 
+
+        if($nivel2_object->getTemplate() eq "ANA"){
+        #soy una ANALITICA tengo q obtener el ID2 del campo 773, a para obtener el ID1, link al registro padre
+#             $id2                                = $nivel2_object->getAnalitica();
+C4::AR::Debug::debug("Nivel3 => detalleNivel3 => getAnalitica => ".$nivel2_object->getAnalitica());
+            my $nivel2_object_padre             = C4::AR::Nivel2::getNivel2FromId2($nivel2_object->getAnalitica(),$db);
+            $hash_nivel2{'nivel1_padre'}        = $nivel2_object_padre->getId1();
+        }
 
 
         #otengo las analiticas
@@ -520,7 +529,15 @@ sub detalleCompletoINTRA {
     my $page_number 		= $t_params->{'page'} || 0;
     my $cant_grupos 		= C4::Context->config("cant_grupos_per_query") || 5;
     #recupero todos los nivel2 segun el id1 pasado por parametro
-    my $nivel2_array_ref 	= C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1,$nivel1->db);
+
+    my $id2 =  $t_params->{'id2'} || 0;
+    my $nivel2_array_ref;
+
+    if ($id2){
+       ($nivel2_array_ref) = C4::AR::Nivel2::getNivel2FromId2_asArray($id2);
+    }else{
+       ($nivel2_array_ref) = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1,$nivel1->db);
+    }
 
     my @nivel2;
 
@@ -712,7 +729,14 @@ sub detalleCompletoOPAC{
     my $page_number = $t_params->{'page'} || 0;
     my $cant_grupos = C4::Context->config("cant_grupos_per_query") || 5;
 
-	my ($nivel2_array_ref) = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1,$nivel1->db);
+    my $id2 =  $t_params->{'id2'} || 0;
+    my $nivel2_array_ref;
+    
+    if ($id2){
+	   ($nivel2_array_ref) = C4::AR::Nivel2::getNivel2FromId2_asArray($id2);
+    }else{
+       ($nivel2_array_ref) = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1,$nivel1->db);
+    }
 
 	my @nivel2;
 
@@ -748,7 +772,7 @@ sub detalleCompletoOPAC{
 			$hash_nivel2->{'cantParaPrestamoActual'}    = $totales_nivel3->{'cantParaPrestamoActual'};
 			$hash_nivel2->{'DivMARC'}                   = "MARCDetail".$i;
 			$hash_nivel2->{'DivDetalle'}                = "Detalle".$i;
-            $hash_nivel2->{'cat_ref_tipo_nivel3'}       = C4::AR::Nivel2::getFirstItemTypeFromN1($id1);
+            $hash_nivel2->{'cat_ref_tipo_nivel3'}       = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getId_tipo_doc();
             $hash_nivel2->{'cat_ref_tipo_nivel3_name'}  = C4::AR::Referencias::translateTipoNivel3($hash_nivel2->{'cat_ref_tipo_nivel3'});
 			$hash_nivel2->{'rating'}                    = C4::AR::Nivel2::getRating($hash_nivel2->{'id2'},$nivel1->db);
 			$hash_nivel2->{'cant_reviews'}              = C4::AR::Nivel2::getCantReviews($hash_nivel2->{'id2'}, $nivel1->db);

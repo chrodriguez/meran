@@ -562,17 +562,19 @@ sub marc_record_to_meran_to_detail_view {
                 $hash_temp{'datoReferencia'}        = $dato;
                 my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $db);
 
-                $hash_temp{'dato'}                  = C4::AR::Filtros::show_componente(   
-                                                                        campo       => $hash_temp{'campo'},
-                                                                        subcampo    => $hash_temp{'subcampo'},
-                                                                        dato        => $valor_referencia,
-                                                                        itemtype    => $itemtype,
-                                                                        type        => $type
-                                                                  );
+                $hash_temp{'dato'}                  = $dato;
+
+#                 $hash_temp{'dato'}                  = C4::AR::Filtros::show_componente(   
+#                                                                         campo       => $hash_temp{'campo'},
+#                                                                         subcampo    => $hash_temp{'subcampo'},
+#                                                                         dato        => $valor_referencia,
+#                                                                         itemtype    => $itemtype,
+#                                                                         type        => $type
+#                                                                   );
 
                 $hash_temp{'id1'}                   = $params->{'id1'};
                 $hash_temp{'id2'}                   = $params->{'id2'};
-                $hash_temp{'dato_link'}             = C4::AR::Filtros::show_componente2( ('campo' => $campo, 'subcampo' => $subcampo, 'dato' => $dato , 'id1' => $params->{'id1'}) );
+                $hash_temp{'dato_link'}             = C4::AR::Filtros::show_componente( ('campo' => $campo, 'subcampo' => $subcampo, 'dato' => $dato , 'id1' => $params->{'id1'}) );
 
                 if($hash_temp{'dato_link'} ne "NO_LINK"){
                     $hash_temp{'dato'} = $hash_temp{'dato_link'};
@@ -665,7 +667,7 @@ sub as_stringReloaded {
             }
         }
 
-#         C4::AR::Debug::debug("Catalogacion => as_stringReloaded => text => ".$text);
+        C4::AR::Debug::debug("Catalogacion => as_stringReloaded => text => ".$text);
         push( @subs, $text );
     } # foreach
 
@@ -751,7 +753,7 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
                 $hash_temp{'dato'}                  = $valor_referencia;
                 $hash_temp{'id1'}                   = $params->{'id1'};
                 $hash_temp{'id2'}                   = $params->{'id2'};
-                $hash_temp{'dato_link'}             = C4::AR::Filtros::show_componente2( ('campo' => $campo, 'subcampo' => $subcampo, 'dato' => $dato , 'id1' => $params->{'id1'}) );
+                $hash_temp{'dato_link'}             = C4::AR::Filtros::show_componente( ('campo' => $campo, 'subcampo' => $subcampo, 'dato' => $dato , 'id1' => $params->{'id1'}, 'id2' => $params->{'id2'}) );
 
                 if($hash_temp{'dato_link'} ne "NO_LINK"){
                     $hash_temp{'dato'}  = $hash_temp{'dato_link'};
@@ -771,9 +773,9 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
 
             if($type eq "INTRA"){
                 #muestro el label configurado, si no existe muestro el label de la BIBLIA
-                $hash_temp_aux{'liblibrarian'}      = C4::AR::VisualizacionIntra::getVistaIntra($campo, $itemtype, $params->{'nivel'})||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
+                $hash_temp_aux{'liblibrarian'}      = C4::AR::VisualizacionIntra::getVistaCampo($campo, $itemtype, $params->{'nivel'})||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
             } else {
-                $hash_temp_aux{'liblibrarian'}      = C4::AR::VisualizacionOpac::getVistaOpac($campo, $itemtype, $params->{'nivel'})||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
+                $hash_temp_aux{'liblibrarian'}      = C4::AR::VisualizacionOpac::getVistaCampo($campo, $itemtype, $params->{'nivel'})||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
             }
 
             # veo que separador lleva cada subcampo para el $field dependiendo del campo y subcampo que se este procesando
@@ -1196,6 +1198,10 @@ sub getEstructuraYDatosDeNivel{
                                                                                 $tipo_ejemplar,
                                                         );
 
+C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel => campo => ".$nivel_info_marc_array->[$i]->{'campo'});
+C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel => subcampo => ".$subcampo->{'subcampo'});
+C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel => dato => ".$subcampo->{'dato'});
+
             
                     if($cat_estruct_array){
 
@@ -1380,8 +1386,8 @@ sub getEstructuraSinDatos {
 #     C4::AR::Debug::debug("getEstructuraSinDatos => cant campos distintos: ".$cant);    
 
     my @result_total;
-    my $campo       = '';
-    my $campo_ant   = '';
+#     my $campo       = '';
+#     my $campo_ant   = '';
     foreach my $c  (@$campos_array_ref){
 #         C4::AR::Debug::debug("campo => ".$c->getCampo);
 
@@ -1427,6 +1433,7 @@ sub getEstructuraSinDatos {
     # devuelve scalar(@result_total) que es la cantidad de campos distintos con sus respectivos subcampos
     return (scalar(@result_total), \@result_total);
 }
+
 
 =head2
     sub getIndicadorPrimarioByCampo
@@ -1890,12 +1897,90 @@ sub getDatosFromNivel{
 
     #obtengo los datos de nivel 1, 2 y 3 mapeados a MARC, con su informacion de estructura de catalogacion
     my @resultEstYDatos = getEstructuraYDatosDeNivel($params);
+#     my @resultEstYDatos2 = setear_campos_en_blanco($params, \@resultEstYDatos);
 
-    my @sorted = sort { $a->{campo} cmp $b->{campo} } @resultEstYDatos; # alphabetical sort 
 
+#     my @sorted = sort { $a->{campo} cmp $b->{campo} } @resultEstYDatos2; # alphabtical sort
+    my @sorted = sort { $a->{campo} cmp $b->{campo} } @resultEstYDatos; # alphabtical sort  
+
+#     return (scalar(@resultEstYDatos2), \@sorted);
     return (scalar(@resultEstYDatos), \@sorted);
 }
 
+
+
+# ESTO NO ANDA AUN!!!!!!!!
+sub setear_campos_en_blanco {
+    my ($params, $campos_array_ref) = @_;
+#     C4::AR::Debug::debug("getEstructuraSinDatos ============================================================================INI");
+
+    my $nivel       =  $params->{'nivel'};
+    my $itemType    =  $params->{'id_tipo_doc'};
+    my $orden       =  $params->{'orden'};
+    
+    #obtengo todos los campos <> de la estructura de catalogacion del Nivel 1, 2 o 3
+    my ($cant, $campos_array_ref) = getCamposFromEstructura($nivel, $itemType);
+
+#     C4::AR::Debug::debug("getEstructuraSinDatos => cant campos distintos: ".$cant);    
+        my @result_total;
+
+    foreach my $campo (@$campos_array_ref){
+
+
+
+#         my $campo       = '';
+#         my $campo_ant   = '';
+        foreach my $c  (@$campos_array_ref){
+    #         C4::AR::Debug::debug("campo => ".$c->getCampo);
+            foreach my $subcampo (@{$c->{'subcampos_array'}}){
+
+                my %hash_campos;
+                my @result;
+                #obtengo todos los subcampos de la estructura de catalogacion segun el campo
+                my ($cant, $subcampos_array_ref) = getSubCamposFromEstructuraByCampo($c->getCampo, $nivel, $itemType);
+
+                foreach my $sc  (@$subcampos_array_ref){
+                    my %hash;
+        #             C4::AR::Debug::debug("subcampo => ".$sc);
+                
+                    $hash{'tiene_estructura'}  = '1';
+                    $hash{'dato'}              = '';
+        #             $hash{'datoReferencia'}    = 0;
+                    $hash{'datoReferencia'}    = "NULL";
+                    
+                    my ($hash_temp) = _setDatos_de_estructura($sc, \%hash);
+        #             C4::AR::Debug::debug("getEstructuraSinDatos => campo, subcampo: ".$c->getCampo.", ".$sc->getSubcampo);
+                    
+                    push (@result, $hash_temp);
+                }
+
+                my %hash_campos;
+
+                $hash_campos{'campo'}                   = $c->getCampo;
+                $hash_campos{'repetible'}               = $c->camposBase->getRepeatable;
+                $hash_campos{'nombre'}                  = $c->camposBase->getLiblibrarian;
+                $hash_campos{'indicador_primario'}      = $c->camposBase->getIndicadorPrimario;
+                $hash_campos{'indicadores_primarios'}   = C4::AR::EstructuraCatalogacionBase::getIndicadorPrimarioFromEstructuraBaseByCampo( $c->getCampo );
+                $hash_campos{'indicador_secundario'}    = $c->camposBase->getIndicadorSecundario;
+                $hash_campos{'indicadores_secundarios'} = C4::AR::EstructuraCatalogacionBase::getIndicadorSecundarioFromEstructuraBaseByCampo( $c->getCampo );
+                $hash_campos{'descripcion_campo'}       = $c->camposBase->getDescripcion.' - '.$c->getCampo;
+                $hash_campos{'ayuda_campo'}             = 'esta es la ayuda del campo '.$c->getCampo;
+                $hash_campos{'subcampos_array'}         = \@result;
+
+                push (@result_total, \%hash_campos);
+
+            }
+
+        }
+
+
+    }
+
+#     C4::AR::Debug::debug("getEstructuraSinDatos ============================================================================FIN");
+
+    # devuelve scalar(@result_total) que es la cantidad de campos distintos con sus respectivos subcampos
+    return (\@result_total);
+}
 
 =item sub getEstructuraCatalogacionFromDBCompleta
     Retorna la estructura de catalogacion del Nivel 1, 2 o 3 que se encuentra configurada en la BD
