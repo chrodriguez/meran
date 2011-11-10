@@ -753,7 +753,7 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
                 $hash_temp{'dato'}                  = $valor_referencia;
                 $hash_temp{'id1'}                   = $params->{'id1'};
                 $hash_temp{'id2'}                   = $params->{'id2'};
-                $hash_temp{'dato_link'}             = C4::AR::Filtros::show_componente( ('campo' => $campo, 'subcampo' => $subcampo, 'dato' => $dato , 'id1' => $params->{'id1'}) );
+                $hash_temp{'dato_link'}             = C4::AR::Filtros::show_componente( ('campo' => $campo, 'subcampo' => $subcampo, 'dato' => $dato , 'id1' => $params->{'id1'}, 'id2' => $params->{'id2'}) );
 
                 if($hash_temp{'dato_link'} ne "NO_LINK"){
                     $hash_temp{'dato'}  = $hash_temp{'dato_link'};
