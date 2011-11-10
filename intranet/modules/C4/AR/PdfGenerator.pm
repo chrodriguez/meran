@@ -1224,19 +1224,12 @@ sub pdfFromHTML {
 
 	$htmldoc->set_html_content($out);
 	if (!$is_report){
-# 		$htmldoc->landscape();
+ 		$htmldoc->landscape();
 		$htmldoc->set_header( 't', '.', 'D' );
 	}
 	$htmldoc->color_on();
 	$htmldoc->no_links();
 	$htmldoc->path(C4::Context->config('intra_for_pdf'));
-
-
-    if ($params->{'pageSize'}){
-          $htmldoc->set_page_size('210x148mm');
-          $htmldoc->portrait();
-
-    }
 
 	my $pdf = $htmldoc->generate_pdf();
 
