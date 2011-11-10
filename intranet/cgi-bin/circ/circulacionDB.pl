@@ -518,10 +518,12 @@ elsif ( $tipoAccion eq "IMPRIMIR_COMPROBANTE" ) {
 
             my $out= C4::AR::Auth::get_html_content($template, $t_params, $session);
             my $filename= C4::AR::PdfGenerator::pdfFromHTML($out, $t_params);
-            print C4::AR::PdfGenerator::pdfHeader();
-            C4::AR::PdfGenerator::printPDF($filename);
-
-          
+#             print C4::AR::PdfGenerator::pdfHeader();
+#             C4::AR::PdfGenerator::printPDF($filename);
+            
+            C4::AR::Auth::print_header($session);
+            print $filename;
+#           
            
 } 
 

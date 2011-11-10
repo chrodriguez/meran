@@ -1224,7 +1224,7 @@ sub pdfFromHTML {
 
 	$htmldoc->set_html_content($out);
 	if (!$is_report){
-		$htmldoc->landscape();
+# 		$htmldoc->landscape();
 		$htmldoc->set_header( 't', '.', 'D' );
 	}
 	$htmldoc->color_on();
@@ -1233,7 +1233,9 @@ sub pdfFromHTML {
 
 
     if ($params->{'pageSize'}){
-          $htmldoc->set_page_size('21x14.8cm');
+          $htmldoc->set_page_size('210x148mm');
+          $htmldoc->portrait();
+
     }
 
 	my $pdf = $htmldoc->generate_pdf();
