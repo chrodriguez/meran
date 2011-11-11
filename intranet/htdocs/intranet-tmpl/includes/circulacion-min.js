@@ -41,7 +41,8 @@ if(!hayError){imprimirTicket(ticketsArray);}
 detallePrestamos(USUARIO.ID,updateInfoPrestamos);ejemplaresDelGrupo(ID_N2);}
 function devolver(){objAH=new AjaxHelper(updateInfoDevolver);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/circ/circulacionDB.pl';objAH.tipoAccion='REALIZAR_DEVOLUCION';objAH.datosArray=INFO_PRESTAMOS_ARRAY;objAH.nro_socio=USUARIO.ID;objAH.sendToServer();}
 function updateInfoDevolver(responseText){}
-function imprimirTicket(tickets){var comprobantes=new Array();if(tickets.length>0){for(i=0;i<tickets.length;i++){comprobantes[i]=tickets[i];}}
-var obj=JSONstring.make(comprobantes);window.open(URL_PREFIX+"/circ/ticket.pl?token="+token+"&obj="+obj,this.href);}
-function updateImprimirTicket(responseText){}
-function mostrarComprobante(){$('#ticket').modal({containerCss:{backgroundColor:"#fff",color:"#000",},});}
+var comprob;function imprimirTicket(tickets){var comprobantes=new Array();if(tickets.length>0){for(i=0;i<tickets.length;i++){comprobantes[i]=tickets[i];}}
+comprob=comprobantes;comp=JSONstring.make(comprobantes);linkComp="<a onclick=mostrarComprobante();>Ver Impresion</a>"
+$('#mensajes').append(linkComp);}
+function mostrarComprobante(){objAH=new AjaxHelper(updatemostrarComprobante);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/circ/ticket.pl';objAH.tipoAccion="MOSTRAR_COMPROBANTE";objAH.comp=comprob;objAH.sendToServer();}
+function updatemostrarComprobante(responseText){$('#ticket').modal({containerCss:{backgroundColor:"#fff",color:"#000",},});}

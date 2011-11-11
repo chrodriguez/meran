@@ -533,43 +533,29 @@ function imprimirTicket(tickets){
         }
     }
     
-    var obj=JSONstring.make(comprobantes);   
-    window.open (URL_PREFIX+"/circ/ticket.pl?token="+token+"&obj="+obj,this.href);
-//         objAH               = new AjaxHelper(updateImprimirTicket);
-//         objAH.debug         = true;
-//         objAH.showOverlay   = true;
-//         objAH.url           = URL_PREFIX+'/circ/circulacionDB.pl';
-//         objAH.tipoAccion    = 'IMPRIMIR_COMPROBANTE';
-//         objAH.comprobantes  = comprobantes;
-// //         objAH.nroBoleta     = num;
-//         //se envia la consulta
-//         objAH.sendToServer();
-//   }
+    comp=JSONstring.make(comprobantes);   
+//     window.open (URL_PREFIX+"/circ/ticket.pl?token="+token+"&comp="+comp,this.href);
+    linkComp= "<a href=>Ver Impresion</a>"
+    $('#mensajes').append(linkComp);
 }
 
 
-function updateImprimirTicket(responseText){
-    
- 
-   //     $('#ticket').html(responseText);
-       
-        
- //       $('#ticket').printElement({ printBodyOptions:
- //                                       { styleToAdd:'color:#FFFFFF;' ,
-  //                                      classNameToAdd : 'comprobante'} 
-  //                                }
-  //      );*/
-//         $('#ticket').hide();
-//         var infoHash= JSONstring.toObject(responseText);
-//         var filename= infoHash.filename;
-//         var html="<a id='link_comp' onclick='filename;'> Imprimir</a>";
-//         $('#mensajes').append(html);
 
-}
 
 function mostrarComprobante(){
+//     objAH               = new AjaxHelper(updatemostrarComprobante);
+//     objAH.debug         = true;
+//     objAH.showOverlay   = true;
+//     objAH.url           = URL_PREFIX+'/circ/ticket.pl';
+//     objAH.tipoAccion    = "MOSTRAR_COMPROBANTE";
+//     objAH.comp = comprob;
+//     //se envia la consulta
+//     objAH.sendToServer();
+//   
+}
 
-    $('#ticket').modal({   containerCss:{
+function updatemostrarComprobante(responseText){
+     $('#ticket').modal({   containerCss:{
              backgroundColor:"#fff",
 //             height:420,
 //             padding:0,

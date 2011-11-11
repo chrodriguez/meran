@@ -23,6 +23,7 @@ use C4::AR::Preferencias;
 use C4::AR::PedidoCotizacion;
 use C4::AR::Filtros;
 use URI::Escape;
+use File::Copy;
 use C4::Modelo::RefLocalidad;
 
 # FIXME Matiasp: Comentado por error de carga de modulos (Attempt to reload %s aborted.)
@@ -4326,6 +4327,30 @@ sub str_replace {
     }
     return $string;
 }
+
+
+sub moveFileToReports{
+    my ($filename) = @_;
+    use C4::Context;
+    
+    my @array= split(/\//,$filename);
+    my $name_file= pop(@array);
+
+    my $dir_origen;
+    foreach my $elem(@array){ 
+       $dir_origen.= "/".$elem; 
+    }
+    $dir_origen.= "/";
+    
+    my $context     = new C4::Context;
+    my $reports_dir = $context->config('reports_dir');
+
+    move($dir_origen."/".$filename, $reports_dir.$filename);
+    
+    return($reports_dir.$filename);
+    
+}
+
 
 END { }       # module clean-up code here (global destructor)
 
