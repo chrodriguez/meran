@@ -587,14 +587,14 @@ sub t_agregar_configuracion {
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
     
-        eval {
+#        eval {
 
             C4::AR::VisualizacionOpac::addConfiguracion($params, $db);
             $msg_object->{'error'} = 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U607', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}]} ) ;
 
             $db->commit;
-        };
+ #       };
 
         if ($@){
             #Se loguea error de Base de Datos
