@@ -1213,6 +1213,7 @@ sub generateBookLabel{
 }
 #############FIN Etiquetas########################
 
+
 sub pdfFromHTML {
 
 	my ($out,$params) = @_;
@@ -1223,7 +1224,7 @@ sub pdfFromHTML {
 
 	$htmldoc->set_html_content($out);
 	if (!$is_report){
-		$htmldoc->landscape();
+ 		$htmldoc->landscape();
 		$htmldoc->set_header( 't', '.', 'D' );
 	}
 	$htmldoc->color_on();

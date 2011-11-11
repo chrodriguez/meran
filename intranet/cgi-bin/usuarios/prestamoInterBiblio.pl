@@ -69,8 +69,10 @@ $t_params->{'socio'}= $socio;
 $t_params->{'biblio_destino'}= $biblioDestino;
 $t_params->{'director'}= $director;
 $t_params->{'atencion'}=  C4::AR::Preferencias::getValorPreferencia('open') . " a "
-. C4::AR::Preferencias::getValorPreferencia('close'). Encode::decode_utf8(" Sábados: ")
-. C4::AR::Preferencias::getValorPreferencia('open_sabado'). " a " .C4::AR::Preferencias::getValorPreferencia('close_sabado');
+. C4::AR::Preferencias::getValorPreferencia('close');
+
+# Encode::decode_utf8(" Sábados: ")
+# . C4::AR::Preferencias::getValorPreferencia('open_sabado'). " a " .C4::AR::Preferencias::getValorPreferencia('close_sabado');
 $t_params->{'datos'}= \@datos;
 
 
