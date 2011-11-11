@@ -128,6 +128,7 @@ use vars qw(@EXPORT_OK @ISA);
     generarComboCamposPersona
     str_replace
     generarComboTablasDeReferenciaByNombreTabla
+    serverName
 );
 
 
@@ -143,6 +144,19 @@ my %LABELS_COMPONENTS = (   "-1"            => C4::AR::Filtros::i18n("SIN SELECC
                             "rango_anio"    => C4::AR::Filtros::i18n("Anual rango") 
                         );
 
+ 
+
+=item
+    Devuelve el nombre del servidor.
+=cut
+sub serverName{ 
+
+    my $env_name    = $ENV{'SERVER_NAME'};
+    my $pref_name   = C4::AR::Preferencias::getValorPreferencia('serverName');
+    
+    return ($env_name || $pref_name);    
+    
+}
   
 =item
     Genera un combo con los campos que tiene una persona, de usr_persona
