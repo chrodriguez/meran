@@ -3127,7 +3127,7 @@ sub arrayClaveValorToJSONString{
 =head2
 sub existeInArray
  
-   Esta funcion busca en el arreglo el string, ambos pasados por parametro y devuelve 1 o 0
+   Esta funcion recibe un string seguido de un arreglo y busca en el arreglo el string, y devuelve 1 o 0
 =cut
 sub existeInArray{
     my ($string,@array) = @_;

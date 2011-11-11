@@ -1367,6 +1367,10 @@ sub _verificarPassword {
 
 	return $socio;
 }
+=item sub _autenticar
+	Esta funcion es la que hay que modificar si se cambia el conjunto de metodos de autenticacion, por ejemplo agregando otra cosa como podria ser openid
+
+=cut
 
 sub _autenticar{
 	use Switch;
@@ -1380,6 +1384,7 @@ sub _autenticar{
 		}
 		case "mysql"{
 			($socio) = C4::AR::AuthMysql::checkPassword($userid,$password,$nroRandom);       
+			    C4::AR::Debug::debug("Vamos bien???".$socio);      
 		}
 		else{
 			}
@@ -1913,21 +1918,27 @@ sub _passwordsIguales{
     return $result;
 }
 
+=item sub getPassword
+
+Esta funcion devuelve el password del socio desde el ultimo mecanismo utilizado para recuperar la password
+
+=cut
 
  sub getPassword{
     my ($socio)=@_;
     my $auth_method = $socio->getLastAuthMethod;
     my $msg_object= C4::AR::Mensajes::create();
     my $password;
+    my $metodosDeAutenticacion= C4::AR::Preferencias::getMetodosAuth();
     use Switch;
     switch ($auth_method){
-        case "ldap" {
+        case {"ldap" && C4::AR::Utilidades::existeInArray("ldap",@$metodosDeAutenticacion)} {
                 ($password) = C4::AR::Authldap::obtenerPassword($socio);   
-        };
-        case "mysql" {
-                ($password) = $socio->password;   
         }
-        else{}
+        else{
+			#en este caso devuelve lo que tiene el obejto en la base de datos.
+			($password) = $socio->password;   
+			}
     }
     
     return $password;

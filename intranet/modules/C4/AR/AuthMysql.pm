@@ -54,6 +54,7 @@ sub _checkPwEncriptada{
 
 sub _verificar_password_con_metodo {
     my ($password, $socio, $nroRandom) = @_;
+    C4::AR::Debug::debug("Password del socio socio_password --- password ingresado $password --- Nro_random $nroRandom");
     my $socio_password  = C4::AR::Auth::hashear_password($socio->getPassword().$nroRandom, C4::AR::Auth::getMetodoEncriptacion());
      C4::AR::Debug::debug("Password del socio $socio_password --- password ingresado $password --- Nro_random $nroRandom");
     if ($password eq $socio_password) {
@@ -71,6 +72,7 @@ sub checkPassword{
     my $socio=undef;
 	if (!C4::Context->config('plainPassword')){
 	    ($socio) = _checkPwEncriptada($userid,$password,$nroRandom);
+	    
 	}else{
 	    ($socio) = _checkPwPlana($userid,$password);       
 	}
