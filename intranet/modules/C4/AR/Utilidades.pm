@@ -151,11 +151,8 @@ my %LABELS_COMPONENTS = (   "-1"            => C4::AR::Filtros::i18n("SIN SELECC
 =cut
 sub serverName{ 
 
-    my $env_name    = $ENV{'SERVER_NAME'};
-    my $pref_name   = C4::AR::Preferencias::getValorPreferencia('serverName');
-    
-    return ($env_name || $pref_name);    
-    
+   return (C4::AR::Preferencias::getValorPreferencia('serverName'));
+
 }
   
 =item
