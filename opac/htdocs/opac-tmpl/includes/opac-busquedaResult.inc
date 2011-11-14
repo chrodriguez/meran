@@ -303,20 +303,71 @@
                         </td>
 
                         <td>
-                        <span id="grupos_[% NIVEL.id1 %]" class="detalle_registro_edicion">
+                        [% IF NIVEL.estadoDeColeccion %]
+							<span id="coleccion_[% NIVEL.id1 %]">
+							<ul class="listado_sin_margen estado_coleccion">
+							[% FOREACH anio IN NIVEL.estadoDeColeccion.keys.sort %]
+							[% IF NIVEL.estadoDeColeccion.$anio.keys %]
+							<li>
+								[% IF anio != '#' %]<b>[% anio %]</b>[% END %]
+								[% FOREACH volumen IN NIVEL.estadoDeColeccion.$anio.keys.sort %]
+									[% IF volumen != '#' %][% volumen  %][% END %]
+									(
+									[% FOREACH fasciculo IN NIVEL.estadoDeColeccion.$anio.$volumen.keys.sort %]
+
+										 [% PERL %]
+											print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(fasciculo) %]",
+																			url=>"[% url_prefix %]/opac-detail.pl", 
+																			params =>   ["id1=[% NIVEL.id1 %]","id2=[% NIVEL.estadoDeColeccion.$anio.$volumen.$fasciculo %]"],
+																			title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
+																			class => 	"link_to_detail"
+																		) ;
+										 [% END %]
                         
-	                        [% FOREACH NIVEL.grupos %]
-	                            [% IF edicion %]
-	                                [% edicion %] &nbsp;
-                                [% END %]
-	                            [% IF loop.prev.anio_publicacion != anio_publicacion %]
-	                                [% IF anio_publicacion %]
-	                                    ([% anio_publicacion %])
-                                        <br />
-	                                [% END %]
-	                            [% END %]       
-	                        [% END %]
-	                    </span>
+									[% END %]
+									)
+								[% END %]
+							   </li>
+							[% END %]
+							[% END %]
+							</ul>
+							</span>
+							
+						  <script type="text/javascript">$("#coleccion_[% NIVEL.id1 %]").expander({
+							  slicePoint: 2000, 
+							  widow: 10,
+							  expandEffect: 'fadeIn', 
+							  expandText: "<br />[% 'M&aacute;s Revistas' | i18n %]",
+							  userCollapseText: '[^]'
+							});
+						 </script>
+						 
+						[% ELSE %]
+							[% IF NIVEL.grupos %]
+								<span id="grupos_[% NIVEL.id1 %]" class="detalle_registro_edicion">
+									[% FOREACH NIVEL.grupos %]
+										[% IF edicion %]
+											[% edicion %] &nbsp;
+										[% END %]
+										[% IF loop.prev.anio_publicacion != anio_publicacion %]
+											[% IF anio_publicacion %]
+												([% anio_publicacion %])<br/>
+											[% END %]
+										[% END %]
+											
+									[% END %]
+								</span>
+						  <script type="text/javascript">$("#grupos_[% NIVEL.id1 %]").expander({
+							  slicePoint: 2000, 
+							  widow: 10,
+							  expandEffect: 'fadeIn', 
+							  expandText: "<br />[% 'M&aacute;s ediciones' | i18n %]",
+							  userCollapseText: '[^]'
+							});
+						 </script>
+							[% END %]
+						[% END %]
+   
                         </td>
 
                         <td>
@@ -386,14 +437,6 @@
 	                        </td>
 	                     [% END %]
                     </tr>
-	             <script type="text/javascript">$("#grupos_[% NIVEL.id1 %]").expander({
-	                  slicePoint: 2000, 
-	                  widow: 10,
-	                  expandEffect: 'fadeIn', 
-	                  expandText: "<br />[% 'M&aacute;s ediciones' | i18n %]",
-	                  userCollapseText: '[^]'
-	                });
-	             </script>
                     
                 [% END %]
         </table>

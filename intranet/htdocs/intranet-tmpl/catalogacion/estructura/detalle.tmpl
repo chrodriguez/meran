@@ -79,10 +79,47 @@
 	
 			    [% END %]
 		    </ul>
+			
+		[% IF estadoDeColeccion %]
+        <div id="fieldset_estado_coleccion_[% id1 %]">
+	        <fieldset>
+	            <legend class="trigger trigger_estado_coleccion_[% id1 %] click">[% "Estado de Colecci&oacute;n" | i18n %]</legend>
+	                <div id="estado_coleccion[% id1 %]" class="estado_coleccion[% id1 %]">
+	                
+						  <ul class="listado_sin_margen estado_coleccion">
+							[% FOREACH anio IN estadoDeColeccion.keys.sort %]
+							[% IF estadoDeColeccion.$anio.keys %]
+							<li>
+								[% IF anio != '#' %]<b>[% anio %]</b>[% END %]
+								[% FOREACH volumen IN estadoDeColeccion.$anio.keys.sort %]
+									[% IF volumen != '#' %][% volumen  %][% END %]
+									(
+									[% FOREACH fasciculo IN estadoDeColeccion.$anio.$volumen.keys.sort %]
+										 [% PERL %]
+											print C4::AR::Filtros::link_to( text =>     "[% fasciculo %]",
+																			url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+																			params =>   ["id1=[% id1 %]","id2=[% estadoDeColeccion.$anio.$volumen.$fasciculo %]"],
+																			title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
+																			class => "link_to_detail"
+																		) ;
+										 [% END %]
+                        
+									[% END %]
+									)
+								[% END %]
+								</li>
+							[% END %]
+							[% END %]
+							</ul>
+					</div>
+			</fieldset>
+		</div>
+	[% END %] <!-- End de If estadoColeccion  -->
 	
-			[% "N&uacute;mero Total de Ejemplares" | i18n %]:<b> [% cantItemN1 %]</b> 
+		[% "N&uacute;mero Total de Ejemplares" | i18n %]:<b> [% cantItemN1 %]</b>
 		</div>
 	</fieldset>
+	<script type="text/javascript">makeToggle('estado_coleccion[% id1 %]','trigger_estado_coleccion_[% id1 %]',null,false);</script>
 [% END %] <!-- End de If ajax  -->
 [% FOREACH nivel2 %]
 

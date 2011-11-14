@@ -480,19 +480,6 @@ sub obtenerEstadoDeColeccion {
 			
 		}
 	}
-	
-	#Recorrido
-	
-	#for my $anio (sort keys %HoH ) {
-    #C4::AR::Debug::debug("\n AÑO: $anio");
-        #for my $volumen (sort keys %{ $HoH{$anio} } ) {
-         #C4::AR::Debug::debug("VOLUMEN: $volumen ");
-              #for my $fasc (sort keys %{ $HoH{$anio}{$volumen} } ) {
-				#C4::AR::Debug::debug("NUM: $fasc ID2: ".$HoH{$anio}{$volumen}{$fasc});
-				#}
-		#}
-	#}
-
 
 return ($cant_revistas,\%HoH);
 }
