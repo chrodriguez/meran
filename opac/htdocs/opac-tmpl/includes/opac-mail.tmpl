@@ -4,102 +4,52 @@
 	  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	  <meta http-equiv="cache-control" content="no-cache" />
 	  <meta http-equiv="expires" content="1" />
-	  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="http://[% SERVER_ADDRESS %]/opac-tmpl/temas/[% user_theme %]/includes/opac.css" />
-	
-	  <title>
-	    [% IF ui.getNombre %]
-	        [% ui.getNombre %]
-	    [% ELSE %]
-	        Meran - OPAC
-	    [% END %]
-	  </title>
-	  
-	</head>
-	
-	<body>
-	
-	  <div class="page-container page-container-mail" style="">
-	    
-			<div class="header"> 
-			      <!-- A.1 HEADER TOP --> 
-			      <div class="header-top"> 
-			        <!-- Sitelogo and sitename --> 
-			        <a class="sitelogo" href="http://[% SERVER_ADDRESS %]/[% url_prefix %]/opac-main.pl" title="Ir al inicio"></a> 
-			        <div class="sitename"> 
-			          <h1><a href="http://[% SERVER_ADDRESS %]/[% url_prefix %]/opac-main.pl" title="Ir al inicio">MERAN &bull; 
-			          <span style="font-weight:normal;font-size:50%;">&nbsp;[% ui.getNombrePDF %]</span></a></h1> 
-			          <h2>Cat&aacute;logo P&uacute;blico</h2> 
-			        </div> 
-			  
-			      <!-- Navigation Level 0 --> 
-			        <div class="nav0"> 
-			        </div> 
-			        <!-- Navigation Level 1 --> 
-			        <div class="nav1"> 
-			       </div> 
-			      <!-- Navigation Level 1.1 --> 
-			        <div class="nav_logged"> 
-			        </div> 
-			      </div> 
-			      <!-- A.2 HEADER MIDDLE --> 
-			      <div class="header-middle">    
-			        <!-- Site message --> 
-			        <div class="sitemessage"> 
-			          <h1>&bull; [% ui.getNombrePDF %]</h1> 
-			          <h2>[% ui.getDireccionPDF %]</h2> 
-			          <h3><a href="http://[% SERVER_ADDRESS %]/[% url_prefix %]/opac-ui_info.pl">&rsaquo;&rsaquo;&nbsp;[% 'M&aacute;s Informaci&oacute;n De La Unidad' | i18n %]</a></h3> 
-			        </div> 
-			      </div> 
-			      <!-- A.3 HEADER BOTTOM --> 
-			      <div class="header-bottom"> 
-			        <!-- Navigation Level 2 (Drop-down menus) --> 
-			        <div class="nav2"> 
-			          <!-- Navigation item --> 
-			        </div> 
-			 
-			      <!-- A.4 HEADER BREADCRUMBS --> 
-			 
-			      <!-- Breadcrumbs --> 
-			 
-			        <div class="header-breadcrumbs"> 
-			            <div class="searchform"> 
-			        </div> 
-			 
-			        </div> 
-			 
-			      </div> 
-			 
-			 </div> 	   
-	        <div class="main"> 
-		        <div class="main-content"> 
-				    <div class="round-border-topright"></div> 
-			            <h1 class="pagetitle">
-			                 [% IF page_title %] 
-			                     [% page_title %]
-		                     [% ELSE %]
-		                         [% 'Informaci&oacute;n Importante' | i18n %]
-		                     [% END %]
-                        </h1> 
-			            <hr class="clear-contentunit" /> 
-			            <br /> 
-				        <h1>[% mail_content %]</h1> 
-				    </div>
-		        </div> 
-	    	</div>
-
-		    <div class="footer">
-		      <p>@2011 - [% ui.getNombrePDF %] | Biblioteca P&uacute;blica</p>
-		      <p class="credits">
+    </head>
+	<body style="font-family: 'Trebuchet MS', Verdana, Arial, Helvetica, sans-serif; background-color: #f2f1ed; color: #666">
+	<table width="650" border="0" align="center" cellpadding="0" cellspacing="0" style="font-family: 'Trebuchet MS', Verdana, Arial, Helvetica, sans-serif; padding: 6px; margin: 0 auto; width: 650px;">
+                    <tr>
+                        <td valign="top">
+                            <table width="100%" cellpadding="0" cellspacing="0" style="border: 5px solid #bcbbb9; background-color: #fff;" >
+                                <tr>
+                                    <td style="padding: 1px;">
+                                        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td>
+                                                    <table width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color: #6E6E6E;">
+                                                        <tr>
+                                                            <td width="340" style="padding: 12px 20px; font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;"><a href="[% server_name %]" style="color:#fff; text-decoration:none; font-size:26px;"><strong>MERAN</strong></a></td>
+                                                            <td align="right" valign="middle" style="padding: 12px 20px; font-family: 'Trebuchet MS', Verdana, Arial, Helvetica, sans-serif;"><span style="font-size:14px;color:#e2ebd8;">[% nombre_ui %]</span></td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 20px; font-family: 'Trebuchet MS', Verdana, Arial, Helvetica, sans-serif; color: #333;">       
+                                                    <p>[% mail_content %]</p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top" class="efooter" style="font-size: 9px; text-align: center; padding: 6px; font-family: 'Trebuchet MS', Verdana, Arial, Helvetica, sans-serif; color: #999;">
+                        <p>
+                <div class="footer">
+		          <p>@2011 - [% ui.getNombrePDF %] | Biblioteca P&uacute;blica</p>
+		          <p class="credits">
 		
-		          Powered by <a href="http://meran.linti.unlp.edu.ar" target="_blank" title="MERAN">MERAN</a> 
+		              Powered by <a href="http://meran.linti.unlp.edu.ar" target="_blank" title="MERAN">MERAN</a> 
 		
-		          | <a href="http://validator.w3.org/check?uri=referer" target="_blank" title="Validate XHTML code">W3C XHTML 1.0</a> 
+		              | <a href="http://validator.w3.org/check?uri=referer" target="_blank" title="Validate XHTML code">W3C XHTML 1.0</a> 
 		
-		          | <a href="http://jigsaw.w3.org/css-validator/" target="_blank" title="Validate CSS code">W3C CSS 2.0</a>
+		              | <a href="http://jigsaw.w3.org/css-validator/" target="_blank" title="Validate CSS code">W3C CSS 2.0</a>
 		
-		      </p>
+		          </p>
 		
-		    </div>
-	  </div>
+		        </div>
+        </table>
 	</body>
 </html>
