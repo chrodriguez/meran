@@ -129,6 +129,7 @@ use vars qw(@EXPORT_OK @ISA);
     generarComboCamposPersona
     str_replace
     generarComboTablasDeReferenciaByNombreTabla
+    serverName
 );
 
 
@@ -144,6 +145,16 @@ my %LABELS_COMPONENTS = (   "-1"            => C4::AR::Filtros::i18n("SIN SELECC
                             "rango_anio"    => C4::AR::Filtros::i18n("Anual rango") 
                         );
 
+ 
+
+=item
+    Devuelve el nombre del servidor.
+=cut
+sub serverName{ 
+
+   return (C4::AR::Preferencias::getValorPreferencia('serverName'));
+
+}
   
 =item
     Genera un combo con los campos que tiene una persona, de usr_persona
@@ -3117,7 +3128,7 @@ sub arrayClaveValorToJSONString{
 =head2
 sub existeInArray
  
-   Esta funcion busca en el arreglo el string, ambos pasados por parametro y devuelve 1 o 0
+   Esta funcion recibe un string seguido de un arreglo y busca en el arreglo el string, y devuelve 1 o 0
 =cut
 sub existeInArray{
     my ($string,@array) = @_;
