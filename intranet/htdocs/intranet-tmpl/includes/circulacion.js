@@ -533,14 +533,30 @@ function imprimirTicket(tickets){
         }
     }
     
+//     objAH               = new AjaxHelper(updateImprimirTicket);
+//     objAH.debug         = true;
+//     objAH.showOverlay   = true;
+//     objAH.url           = URL_PREFIX+'/circ/circulacionDB.pl';
+//     objAH.tipoAccion    = "IMPRIMIR_COMPROBANTE";
+//     objAH.comprobantes  = comprobantes;
+// //     //se envia la consulta
+//     objAH.sendToServer();
+    
+    
     comp=JSONstring.make(comprobantes);   
-//     window.open (URL_PREFIX+"/circ/ticket.pl?token="+token+"&comp="+comp,this.href);
+    window.open (URL_PREFIX+"/circ/ticket.pl?token="+token+"&comp="+comp,this.href);
     linkComp= "<a href=>Ver Impresion</a>"
     $('#mensajes').append(linkComp);
 }
 
 
-
+function updateImprimirTicket(responseText){
+//     if (!verificarRespuesta(responseText))
+//             return(0);
+//     linkComp= "<a href=../../"+responseText+">Ver Impresion</a>";
+//     $('#mensajes').append(linkComp);
+    
+}
 
 function mostrarComprobante(){
 //     objAH               = new AjaxHelper(updatemostrarComprobante);

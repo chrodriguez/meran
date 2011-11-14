@@ -4341,22 +4341,21 @@ sub str_replace {
 
 
 sub moveFileToReports{
-    my ($filename) = @_;
+    my ($path) = @_;
     use C4::Context;
     
-    my @array= split(/\//,$filename);
-    my $name_file= pop(@array);
+    my $url_base=$path;
 
-    my $dir_origen;
-    foreach my $elem(@array){ 
-       $dir_origen.= "/".$elem; 
-    }
-    $dir_origen.= "/";
-    
-    my $context     = new C4::Context;
-    my $reports_dir = $context->config('reports_dir');
+    my @array= split(/\//,$path);
+    my $filename= pop(@array);
+ 
+    my $context = new C4::Context;
+#     my $reports_dir = $context->config('reports_dir');
 
-    move($dir_origen."/".$filename, $reports_dir.$filename);
+    my $reports_dir = C4::AR::Utilidades::getUrlPrefix()."/intranet/reports/";
+    C4::AR::Debug::debug($reports_dir);
+
+    move($url_base, $reports_dir.$filename);
     
     return($reports_dir.$filename);
     

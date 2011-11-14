@@ -53,15 +53,15 @@ my $input=new CGI;
     $t_params->{'comprobantes'}   = \@comprobantes;
     $t_params->{'pageSize'}   = "A5";
     
-
+# 
     my $out= C4::AR::Auth::get_html_content($template, $t_params, $session);
     my $filename= C4::AR::PdfGenerator::pdfFromHTML($out, $t_params);
 
-    my $public_report = C4::AR::Utilidades::moveFileToReports($filename);
+#     my $public_report = C4::AR::Utilidades::moveFileToReports($filename);
 
-#    print C4::AR::PdfGenerator::pdfHeader();
-#     C4::AR::PdfGenerator::printPDF($filename);
+    print C4::AR::PdfGenerator::pdfHeader();
+    C4::AR::PdfGenerator::printPDF($filename);
 
     
 
-C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+# C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
