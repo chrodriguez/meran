@@ -1996,29 +1996,25 @@ sub _sendRecoveryPasswordMail_Unactive{
 
     my %mail;
 
-    $mail{'mail_from'}    = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveFrom"));
-    $mail{'mail_to'}      = $socio->persona->getEmail;
-    $mail{'mail_subject'} = C4::AR::Filtros::i18n("Instrucciones para reestablecer su clave");
+    $mail{'mail_from'}              = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveFrom"));
+    $mail{'mail_to'}                = $socio->persona->getEmail;
+    $mail{'mail_subject'}           = C4::AR::Filtros::i18n("Instrucciones para reestablecer su clave");
       
     # Datos para el mail
     use C4::Modelo::PrefUnidadInformacion;
                         
-    my $completo        = $socio->persona->getNombre . " " . $socio->persona->getApellido;
-    my $nro_socio       = $socio->getNro_socio;
+    my $completo                    = $socio->persona->getNombre . " " . $socio->persona->getApellido;
+    my $nro_socio                   = $socio->getNro_socio;
 
-    my $ui              = C4::AR::Referencias::obtenerDefaultUI();
-    my $nombre_ui       = Encode::decode_utf8($ui->getNombre());
+    my $ui                          = C4::AR::Referencias::obtenerDefaultUI();
+    my $nombre_ui                   = Encode::decode_utf8($ui->getNombre());
 
-    my $mailMessage     = C4::AR::Preferencias::getValorPreferencia('mailMessageForgotPassUnactive');
+    my $mailMessage                 = C4::AR::Preferencias::getValorPreferencia('mailMessageForgotPassUnactive');
     
-    $mailMessage        =~ s/SOCIO/$completo/;
+    $mailMessage                    =~ s/SOCIO/$completo/;
     #hay 2 NOMBRE_UI por eso repetido
-    $mailMessage        =~ s/NOMBRE_UI/$nombre_ui/;
-    $mailMessage        =~ s/NOMBRE_UI/$nombre_ui/;
-    #hay 3 LINK
-    $mailMessage        =~ s/LINK/$link/;
-    $mailMessage        =~ s/LINK/$link/;
-    $mailMessage        =~ s/LINK/$link/;
+    $mailMessage                    =~ s/NOMBRE_UI/$nombre_ui/;
+    $mailMessage                    =~ s/NOMBRE_UI/$nombre_ui/;
 
     $mail{'mail_message'}           = $mailMessage;
     $mail{'page_title'}             = C4::AR::Filtros::i18n("Olvido de su contrase&ntilde;a");
