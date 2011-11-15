@@ -480,19 +480,6 @@ sub obtenerEstadoDeColeccion {
 			
 		}
 	}
-	
-	#Recorrido
-	
-	#for my $anio (sort keys %HoH ) {
-    #C4::AR::Debug::debug("\n AÑO: $anio");
-        #for my $volumen (sort keys %{ $HoH{$anio} } ) {
-         #C4::AR::Debug::debug("VOLUMEN: $volumen ");
-              #for my $fasc (sort keys %{ $HoH{$anio}{$volumen} } ) {
-				#C4::AR::Debug::debug("NUM: $fasc ID2: ".$HoH{$anio}{$volumen}{$fasc});
-				#}
-		#}
-	#}
-
 
 return ($cant_revistas,\%HoH);
 }
@@ -1499,15 +1486,11 @@ sub armarInfoNivel1{
 			
             my $nivel2_array_ref    = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
                         
-            my $images_n1_hash_ref = C4::AR::PortadasRegistros::getAllImageForId1(@result_array_paginado[$i]->{'id1'});
             @result_array_paginado[$i]->{'cat_ref_tipo_nivel3'}     = C4::AR::Nivel2::getFirstItemTypeFromN1($nivel1->getId1);
             @result_array_paginado[$i]->{'cat_ref_tipo_nivel3_name'}= C4::AR::Referencias::translateTipoNivel3(@result_array_paginado[$i]->{'cat_ref_tipo_nivel3'});
-            @result_array_paginado[$i]->{'portada_registro'}        =  $images_n1_hash_ref->{'S'};
-            @result_array_paginado[$i]->{'portada_registro_medium'} =  $images_n1_hash_ref->{'M'};
-            @result_array_paginado[$i]->{'portada_registro_big'}    =  $images_n1_hash_ref->{'L'};
             my @nivel2_portadas = ();
 
-            if (scalar(@$nivel2_array_ref) > 1){
+            if (scalar(@$nivel2_array_ref)){
                 for(my $x=0;$x<scalar(@$nivel2_array_ref);$x++){
                     my %hash_nivel2 = {};
                     my $images_n2_hash_ref                      = $nivel2_array_ref->[$x]->getAllImage();
@@ -1515,7 +1498,7 @@ sub armarInfoNivel1{
 	                    $hash_nivel2{'portada_registro'}          =  $images_n2_hash_ref->{'S'};
 	                    $hash_nivel2{'portada_registro_medium'}   =  $images_n2_hash_ref->{'M'};
                         $hash_nivel2{'portada_registro_big'}      =  $images_n2_hash_ref->{'L'};
-                        $hash_nivel2{'grupo'}                     =  $nivel1->getId1;
+                        $hash_nivel2{'grupo'}                     =  $nivel2_array_ref->[$x]->getId2;
                         push(@nivel2_portadas, \%hash_nivel2);
                     }
                 }

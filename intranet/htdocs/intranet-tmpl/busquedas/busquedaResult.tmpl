@@ -58,39 +58,27 @@
                 <tr>
                         <td class="titulo_result">
                             [% IF portadas_grupo_cant > 0 %]
-                                    [% FOREACH portadas_grupo %]
+                                    [% FOREACH portada IN portadas_grupo %]
                                         [% IF loop.count < 4 %]
-                                            [% IF portada_registro %]
-                                                <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada_registro_big %]">
-                                                    <img name="cover"  src="/uploads/covers/[% portada_registro %]" title="Portada">
-                                                </a>
-                                            [% ELSE %]
-                                                  <img src="/uploads/covers/[% cat_ref_tipo_nivel3 %].png" 
-                                                        alt="[% 'Sin Portada' | i18n %]"
-                                                        title="[% 'Sin Portada' | i18n %]" />
-                                            [% END %]
+		                                    [% IF portada.portada_registro_big %]
+		                                        <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada.portada_registro_big %]">
+		                                            <img alt="cover" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
+		                                        </a>
+		                                    [% ELSE %]
+		                                        [% IF portada.portada_registro_medium %]
+		                                            <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada.portada_registro_medium %]">
+		                                                <img alt="cover" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
+		                                            </a>
+		                                        [% ELSE %]
+		                                                <img alt="cover" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
+		                                        [% END %]
+		                                    [% END %]
                                         [% END %]
                                     [% END %]
                             [% ELSE %]
-                                [% IF portada_registro %]
-                                    [% IF portada_registro_big %]
-                                        <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada_registro_big %]">
-                                            <img alt="cover" src="/uploads/covers/[% portada_registro %]" title="Portada" />
-                                        </a>
-                                    [% ELSE %]
-                                        [% IF portada_registro_medium %]
-                                            <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada_registro_medium %]">
-                                                <img alt="cover" src="/uploads/covers/[% portada_registro %]" title="Portada" />
-                                            </a>
-                                        [% ELSE %]
-                                                <img alt="cover" src="/uploads/covers/[% portada_registro %]" title="Portada" />
-                                        [% END %]
-                                    [% END %]
-                                [% ELSE %]
-                                         <img src="/uploads/covers/[% cat_ref_tipo_nivel3 %].png" 
-                                              alt="[% 'Sin Portada' | i18n %]"
-                                              title="[% 'Sin Portada' | i18n %]" />
-                                [% END %]
+                                  <img src="/uploads/covers/[% cat_ref_tipo_nivel3 %].png" 
+                                        alt="[% 'Sin Portada' | i18n %]"
+                                        title="[% 'Sin Portada' | i18n %]" />
                             [% END %]
                             <br />
                             <center><div style="font-weight: bold; font-size: 10px; clear:both;" >[% cat_ref_tipo_nivel3_name %] </div></center>
@@ -117,9 +105,11 @@
                     <td> 
 						[% IF estadoDeColeccion %]
 							<span id="coleccion_[% id1 %]">
-							
+							<ul class="listado_sin_margen estado_coleccion">
 							[% FOREACH anio IN estadoDeColeccion.keys.sort %]
-								[% IF anio != '#' %][% anio %][% END %]
+							[% IF estadoDeColeccion.$anio.keys %]
+							<li>
+								[% IF anio != '#' %]<b>[% anio %]</b>[% END %]
 								[% FOREACH volumen IN estadoDeColeccion.$anio.keys.sort %]
 									[% IF volumen != '#' %][% volumen  %][% END %]
 									(
@@ -128,18 +118,19 @@
 										 [% PERL %]
 											print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(fasciculo) %]",
 																			url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
-																			params =>   ["id2=[% estadoDeColeccion.$anio.$volumen.$fasciculo %]","id1=[% id1 %]"],
+																			params =>   ["id1=[% id1 %]","id2=[% estadoDeColeccion.$anio.$volumen.$fasciculo %]"],
 																			title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
-																			class => "link_to_detail"
+																			class => 	"link_to_detail"
 																		) ;
 										 [% END %]
                         
 									[% END %]
 									)
 								[% END %]
-							   <br/>
+							   </li>
 							[% END %]
-
+							[% END %]
+							</ul>
 							</span>
 							
 						  <script type="text/javascript">$("#coleccion_[% id1 %]").expander({

@@ -23,6 +23,7 @@ use C4::AR::Preferencias;
 use C4::AR::PedidoCotizacion;
 use C4::AR::Filtros;
 use URI::Escape;
+use File::Copy;
 use C4::Modelo::RefLocalidad;
 
 # FIXME Matiasp: Comentado por error de carga de modulos (Attempt to reload %s aborted.)
@@ -128,6 +129,7 @@ use vars qw(@EXPORT_OK @ISA);
     generarComboCamposPersona
     str_replace
     generarComboTablasDeReferenciaByNombreTabla
+    serverName
 );
 
 
@@ -143,6 +145,16 @@ my %LABELS_COMPONENTS = (   "-1"            => C4::AR::Filtros::i18n("SIN SELECC
                             "rango_anio"    => C4::AR::Filtros::i18n("Anual rango") 
                         );
 
+ 
+
+=item
+    Devuelve el nombre del servidor.
+=cut
+sub serverName{ 
+
+   return (C4::AR::Preferencias::getValorPreferencia('serverName'));
+
+}
   
 =item
     Genera un combo con los campos que tiene una persona, de usr_persona
@@ -3116,7 +3128,7 @@ sub arrayClaveValorToJSONString{
 =head2
 sub existeInArray
  
-   Esta funcion busca en el arreglo el string, ambos pasados por parametro y devuelve 1 o 0
+   Esta funcion recibe un string seguido de un arreglo y busca en el arreglo el string, y devuelve 1 o 0
 =cut
 sub existeInArray{
     my ($string,@array) = @_;
@@ -4326,6 +4338,29 @@ sub str_replace {
     }
     return $string;
 }
+
+
+# sub moveFileToReports{
+#     my ($path) = @_;
+#     use C4::Context;
+#     
+#     my $url_base=$path;
+# 
+#     my @array= split(/\//,$path);
+#     my $filename= pop(@array);
+#  
+#     my $context = new C4::Context;
+# #     my $reports_dir = $context->config('reports_dir');
+# 
+#     my $reports_dir = C4::AR::Utilidades::getUrlPrefix()."/intranet/reports/";
+#     C4::AR::Debug::debug($reports_dir);
+# 
+#     move($url_base, $reports_dir.$filename);
+#     
+#     return($reports_dir.$filename);
+#     
+# }
+
 
 END { }       # module clean-up code here (global destructor)
 

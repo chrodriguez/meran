@@ -225,6 +225,14 @@
 					                                                          li => 1,
 					                              ) ;
 					              [% END %]
+					              [% PERL %]
+					                      print C4::AR::Filtros::to_Icon(   
+					                                                          boton   => "icon_borrar",
+					                                                          onClick => "borrarEjemplaresN3('[% id2 %]');",
+					                                                          title   => "[% 'Eliminar Ejemplares' | i18n %]",
+					                                                          li => 1,
+					                              ) ;
+					              [% END %]
 					
 					        <form id="edicion_grupal[% id2 %]" name="edicion_grupal" action="datosDocumento.pl" method="post">
 					          

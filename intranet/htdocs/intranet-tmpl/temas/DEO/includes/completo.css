@@ -1765,6 +1765,11 @@ input.file {
 	width: 100%;
 }
 
+.estado_coleccion {
+	font-size: 10pt;
+	text-align: left;
+}
+
 .warning {
 	background-color: #990000;
 	height: 45px;

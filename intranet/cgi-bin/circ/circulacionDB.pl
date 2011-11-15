@@ -3,6 +3,8 @@
 use strict;
 use CGI;
 use C4::AR::Auth;
+use C4::AR::Utilidades;
+use C4::AR::PdfGenerator;
 # use C4::AR::Mensajes;
 use JSON;
 
@@ -509,11 +511,25 @@ elsif ( $tipoAccion eq "IMPRIMIR_COMPROBANTE" ) {
                     push(@comprobantes,\%hash);
                    
             }
-    
+      
+        
             $t_params->{'comprobantes'}   = \@comprobantes;
+            $t_params->{'pageSize'}   = "A5";
+           
+   
+            my $out= C4::AR::Auth::get_html_content($template, $t_params, $session);
+            my $filename= C4::AR::PdfGenerator::pdfFromHTML($out, $t_params);
 
-            C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
-
-
+            my $public_report = C4::AR::Utilidades::moveFileToReports($filename);
+# 
+#             my $out= C4::AR::Auth::get_html_content($template, $t_params, $session);
+#             my $filename= C4::AR::PdfGenerator::pdfFromHTML($out, $t_params);
+#             print C4::AR::PdfGenerator::pdfHeader();
+#             C4::AR::PdfGenerator::printPDF($filename);
+            
+            C4::AR::Auth::print_header($session);
+            print $public_report;
+#           
+           
 } 
 

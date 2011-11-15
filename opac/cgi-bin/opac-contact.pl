@@ -23,7 +23,7 @@ $t_params->{'content_title'}    = C4::AR::Filtros::i18n("Formulario de contacto"
 
 my $post = $query->param('post_message') || 0;
 
-if ($post){
+if (C4::AR::Utilidades::validateString($post)){
 
     use C4::Modelo::Contacto;
     my ($contacto)  = C4::Modelo::Contacto->new();

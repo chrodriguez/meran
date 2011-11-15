@@ -2060,22 +2060,34 @@ function updateBorrarN3(responseText){
     }
 }
 
-function borrarEjemplaresN3(){
+function borrarEjemplaresN3(id2){
+
+    var selectedItems = new Array();
+    
+    $('.icon_seleccionar:checked').each(function(){
+        selectedItems.push($(this).val());
+    });
+    
+    if (selectedItems.length == 0) {
+            jAlert('Debe seleccionar al menos un ejemplar','Advertencia de catalogo');
+    }else{      
 	
-    jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_ALERT_TITLE, function(confirmStatus){
-        if(confirmStatus){
-		    objAH               = new AjaxHelper(updateBorrarEjemplaresN3);
-            objAH.showOverlay   = true;
-		    objAH.debug         = true;
-		    objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
-            var id3_array       = recuperarSeleccionados("checkEjemplares");
-		    objAH.id3_array     = id3_array;
-		    objAH.nivel         = 3;
-		    objAH.itemtype      = $("#id_tipo_doc").val();
-		    objAH.tipoAccion    = "ELIMINAR_NIVEL";
-		    if(id3_array.length > 0){objAH.sendToServer();}
-        }
-	});
+        jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_ALERT_TITLE, function(confirmStatus){
+            if(confirmStatus){
+		        objAH               = new AjaxHelper(updateBorrarEjemplaresN3);
+                objAH.showOverlay   = true;
+                ID_N2               = id2;
+		        objAH.debug         = true;
+		        objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+                var id3_array       = selectedItems;
+		        objAH.id3_array     = id3_array;
+		        objAH.nivel         = 3;
+		        objAH.itemtype      = $("#id_tipo_doc").val();
+		        objAH.tipoAccion    = "ELIMINAR_NIVEL";
+		        objAH.sendToServer();
+            }
+	    });
+	}
 }
 
 function updateBorrarEjemplaresN3(responseText){
@@ -2084,10 +2096,11 @@ function updateBorrarEjemplaresN3(responseText){
     setMessages(Messages);
     
     if (! (hayError(Messages) ) ){
-	    inicializar();
-	    mostrarEstructuraDelNivel3(TEMPLATE_ACTUAL);
-        mostrarInfoAltaNivel2(ID_N2);
-        mostrarInfoAltaNivel3(ID_N2);
+//	    inicializar();
+//	    mostrarEstructuraDelNivel3(TEMPLATE_ACTUAL);
+//        mostrarInfoAltaNivel2(ID_N2);
+//        mostrarInfoAltaNivel3(ID_N2);
+        ejemplaresDelGrupo(ID_N2);
     }
 }
 /*
