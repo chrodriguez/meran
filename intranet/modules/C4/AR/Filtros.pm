@@ -277,8 +277,8 @@ sub show_componente {
         $id1                    = $nivel2_object->getId1();
         my $catRegistroMarcN1   = C4::AR::Nivel1::getNivel1FromId1($id1);
 
-      C4::AR::Debug::debug("C4::AR::Filtros::show_componente => campo, subcampo: ".$campo.", ".$subcampo); 
-      C4::AR::Debug::debug("C4::AR::Filtros::show_componente => DENTRO => dato: ".$dato);
+#       C4::AR::Debug::debug("C4::AR::Filtros::show_componente => campo, subcampo: ".$campo.", ".$subcampo); 
+#       C4::AR::Debug::debug("C4::AR::Filtros::show_componente => DENTRO => dato: ".$dato);
 
         if($catRegistroMarcN1){
             my %params_hash;
@@ -292,7 +292,7 @@ sub show_componente {
                 $url         = C4::AR::Utilidades::url_for("/opac-detail.pl", \%params_hash);
             }
 
-C4::AR::Debug::debug("C4::AR::Filtros::show_componente => DENTRO => url: ".$url);
+#             C4::AR::Debug::debug("C4::AR::Filtros::show_componente => DENTRO => url: ".$url);
 
             return C4::AR::Filtros::link_to( text => $text, url => $url , blank => 1);
         }
