@@ -237,39 +237,27 @@
                     <tr>
                         <td class="titulo_result">
                             [% IF NIVEL.portadas_grupo_cant > 0 %]
-                                    [% FOREACH NIVEL.portadas_grupo %]
+                                    [% FOREACH portada IN NIVEL.portadas_grupo %]
                                         [% IF loop.count < 4 %]
-						                    [% IF portada_registro %]
-						                        <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada_registro_big %]">
-						                            <img name="cover"  VALUE="" BORDER=0 src="/uploads/covers/[% portada_registro %]" title="Portada">
-						                        </a>
-						                    [% ELSE %]
-						                          <img src="/uploads/covers/[% NIVEL.cat_ref_tipo_nivel3 %].png" 
-						                                alt="[% 'Sin Portada' | i18n %]"
-						                                title="[% 'Sin Portada' | i18n %]" />
-						                    [% END %]
+		                                    [% IF portada.portada_registro_big %]
+		                                        <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada.portada_registro_big %]">
+		                                            <img alt="cover" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
+		                                        </a>
+		                                    [% ELSE %]
+		                                        [% IF portada.portada_registro_medium %]
+		                                            <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada.portada_registro_medium %]">
+		                                                <img alt="cover" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
+		                                            </a>
+		                                        [% ELSE %]
+		                                                <img alt="cover" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
+		                                        [% END %]
+		                                    [% END %]
                                         [% END %]
                                     [% END %]
                             [% ELSE %]
-                                [% IF NIVEL.portada_registro %]
-                                    [% IF NIVEL.portada_registro_big %]
-                                        <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% NIVEL.portada_registro_big %]">
-                                            <img alt="cover" src="/uploads/covers/[% NIVEL.portada_registro %]" title="Portada" />
-                                        </a>
-                                    [% ELSE %]
-                                        [% IF NIVEL.portada_registro_medium %]
-                                            <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% NIVEL.portada_registro_medium %]">
-                                                <img alt="cover" src="/uploads/covers/[% NIVEL.portada_registro %]" title="Portada" />
-                                            </a>
-                                        [% ELSE %]
-                                                <img alt="cover" src="/uploads/covers/[% NIVEL.portada_registro %]" title="Portada" />
-                                        [% END %]
-                                    [% END %]
-                                [% ELSE %]
-                                         <img src="/uploads/covers/[% NIVEL.cat_ref_tipo_nivel3 %].png" 
-                                              alt="[% 'Sin Portada' | i18n %]"
-                                              title="[% 'Sin Portada' | i18n %]" />
-                                [% END %]
+                                  <img src="/uploads/covers/[% NIVEL.cat_ref_tipo_nivel3 %].png" 
+                                        alt="[% 'Sin Portada' | i18n %]"
+                                        title="[% 'Sin Portada' | i18n %]" />
                             [% END %]
                             <br />
                             <center><div style="font-weight: bold; font-size: 10px; clear:both;" >[% NIVEL.cat_ref_tipo_nivel3_name %] </div></center>
