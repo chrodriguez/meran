@@ -559,6 +559,14 @@ sub detalleCompletoINTRA {
         }
 	
     }
+    
+	#Es una Revista? Armo el estado de colección
+	if($nivel1->getTemplate() eq "REV"){
+		my ($cant_revistas ,$estadoDeColeccion) = C4::AR::Busquedas::obtenerEstadoDeColeccion($id1, $nivel1->getTemplate(), "INTRA");
+		if($cant_revistas > 0){
+			$t_params->{'estadoDeColeccion'}  = $estadoDeColeccion;
+		}
+	}
 
     $t_params->{'nivel1'}           = $nivel1->toMARC_Intra;
     $t_params->{'nivel1_template'}  = $nivel1->getTemplate();
@@ -789,6 +797,14 @@ sub detalleCompletoOPAC{
 		}
 	}
 
+	#Es una Revista? Armo el estado de colección
+	if($nivel1->getTemplate() eq "REV"){
+		my ($cant_revistas ,$estadoDeColeccion) = C4::AR::Busquedas::obtenerEstadoDeColeccion($id1, $nivel1->getTemplate(), "INTRA");
+		if($cant_revistas > 0){
+			$t_params->{'estadoDeColeccion'}  = $estadoDeColeccion;
+		}
+	}
+	
 	$t_params->{'nivel1'}   = $nivel1->toMARC_Opac,
 	$t_params->{'id1'}	    = $id1;
 	$t_params->{'nivel2'}   = \@nivel2;

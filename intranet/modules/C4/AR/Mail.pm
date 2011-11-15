@@ -330,10 +330,21 @@ sub send_mail {
     $info_smtp_hash_ref->{'smtp_pass'}             = C4::AR::Preferencias::getValorPreferencia("password_mail");
     $info_smtp_hash_ref->{'smtp_server_sendmail'}  = C4::AR::Preferencias::getValorPreferencia("smtp_server_sendmail");
 
-    my ($template, $t_params)     = C4::Output::gettemplate("includes/opac-mail.tmpl", "OPAC", 1);
-    
+    my ($template, $t_params) = C4::Output::gettemplate("includes/opac-mail.tmpl", "OPAC", 1);
+
     $t_params->{'mail_content'} = Encode::decode_utf8($info_smtp_hash_ref->{'mail_message'});
     $t_params->{'page_title'}   = $info_smtp_hash_ref->{'page_title'};
+    $t_params->{'link'}         = $info_smtp_hash_ref->{'link'};
+    
+    #nombre de la UI
+    my $ui                      = C4::AR::Referencias::obtenerDefaultUI();
+    my $nombre_ui               = Encode::decode_utf8($ui->getNombre());
+    $t_params->{'nombre_ui'}    = $nombre_ui;
+    
+    #link de la pagina web
+    my $server_name             = C4::AR::Preferencias::getValorPreferencia('serverName');
+    $server_name                = 'http://' . $server_name;
+    $t_params->{'server_name'}  = $server_name;
     
     my $out= C4::AR::Auth::get_html_content($template, $t_params);
     

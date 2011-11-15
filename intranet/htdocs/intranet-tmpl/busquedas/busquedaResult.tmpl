@@ -117,9 +117,11 @@
                     <td> 
 						[% IF estadoDeColeccion %]
 							<span id="coleccion_[% id1 %]">
-							
+							<ul class="listado_sin_margen estado_coleccion">
 							[% FOREACH anio IN estadoDeColeccion.keys.sort %]
-								[% IF anio != '#' %][% anio %][% END %]
+							[% IF estadoDeColeccion.$anio.keys %]
+							<li>
+								[% IF anio != '#' %]<b>[% anio %]</b>[% END %]
 								[% FOREACH volumen IN estadoDeColeccion.$anio.keys.sort %]
 									[% IF volumen != '#' %][% volumen  %][% END %]
 									(
@@ -128,18 +130,19 @@
 										 [% PERL %]
 											print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(fasciculo) %]",
 																			url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
-																			params =>   ["id2=[% estadoDeColeccion.$anio.$volumen.$fasciculo %]","id1=[% id1 %]"],
+																			params =>   ["id1=[% id1 %]","id2=[% estadoDeColeccion.$anio.$volumen.$fasciculo %]"],
 																			title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
-																			class => "link_to_detail"
+																			class => 	"link_to_detail"
 																		) ;
 										 [% END %]
                         
 									[% END %]
 									)
 								[% END %]
-							   <br/>
+							   </li>
 							[% END %]
-
+							[% END %]
+							</ul>
 							</span>
 							
 						  <script type="text/javascript">$("#coleccion_[% id1 %]").expander({
