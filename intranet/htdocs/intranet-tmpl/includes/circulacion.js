@@ -14,7 +14,7 @@
  *
  */
 
-
+var comp;
 var INFO_PRESTAMOS_ARRAY= new Array();//Arreglo que contendra los objetos, con info que pertenece a los prestamos.
 var objAH;//Objeto AjaxHelper.
 
@@ -533,63 +533,33 @@ function imprimirTicket(tickets){
         }
     }
     
-//     objAH               = new AjaxHelper(updateImprimirTicket);
-//     objAH.debug         = true;
-//     objAH.showOverlay   = true;
-//     objAH.url           = URL_PREFIX+'/circ/circulacionDB.pl';
-//     objAH.tipoAccion    = "IMPRIMIR_COMPROBANTE";
-//     objAH.comprobantes  = comprobantes;
-// //     //se envia la consulta
-//     objAH.sendToServer();
-    
-    
     comp=JSONstring.make(comprobantes);   
     window.open (URL_PREFIX+"/circ/ticket.pl?token="+token+"&comp="+comp,this.href);
-    linkComp= "<a href=>Ver Impresion</a>"
+    window.close();
+    $('#ticket').load(URL_PREFIX+"/circ/ticket.pl?token="+token+"&comp="+comp,this.href);
+    $('#ticket').hide();
+    
+    linkComp= "<a onclick=mostrarComprobante();>Imprimir</a>";
     $('#mensajes').append(linkComp);
-}
-
-
-function updateImprimirTicket(responseText){
-//     if (!verificarRespuesta(responseText))
-//             return(0);
-//     linkComp= "<a href=../../"+responseText+">Ver Impresion</a>";
-//     $('#mensajes').append(linkComp);
     
 }
 
-function mostrarComprobante(){
-//     objAH               = new AjaxHelper(updatemostrarComprobante);
-//     objAH.debug         = true;
-//     objAH.showOverlay   = true;
-//     objAH.url           = URL_PREFIX+'/circ/ticket.pl';
-//     objAH.tipoAccion    = "MOSTRAR_COMPROBANTE";
-//     objAH.comp = comprob;
-//     //se envia la consulta
-//     objAH.sendToServer();
-//   
-}
 
-function updatemostrarComprobante(responseText){
-     $('#ticket').modal({   containerCss:{
-             backgroundColor:"#fff",
-//             height:420,
-//             padding:0,
-//             width:650,
-               color: "#000",
-            
-        },
-      });
+
+ function mostrarComprobante(responseText){
+   
+        window.open (URL_PREFIX+"/circ/ticket.pl?token="+token+"&comp="+comp,this.href);
+      
+//      $('#ticket').modal({   containerCss:{
+//              backgroundColor:"#fff",
+//              color: "#000",     
+//         },
+//       });
+//       $('#ticket').show();
+//       $('#ticket').printElement();
+//       $('#ticket').hide();
+      
 
 }
 
-// FIXME esta muy feo esto!!!!!!!!!!!!!!!!!!!!!!!!!!!
-/*
-function imprimirTicket(ticket,num){
-
-	if(ticket != 0){
-		var obj=JSONstring.make(ticket);        
-  		window.open (URL_PREFIX+"/circ/ticket.pl?token="+token+"&obj="+obj, "Boleta "+num,this.href);
-	}  
-}*/
 

@@ -11,6 +11,8 @@ var loaderPath= "";
     	[% ELSE %]
             makeToggle('toggle_container','trigger_notas',null,true);
         [% END %]
+        makeToggle('toggle_container','trigger',null,true);
+ 
         loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
         $('.nota').editable('[% url_prefix %]/usuarios/reales/usuariosRealesDB.pl', { 
               type      : 'textarea',
@@ -25,7 +27,6 @@ var loaderPath= "";
 
 
 
-    
         [% IF !foto_name %] 
             $('#div_uploader').show();
         [% ELSE %]

@@ -4340,26 +4340,26 @@ sub str_replace {
 }
 
 
-sub moveFileToReports{
-    my ($path) = @_;
-    use C4::Context;
-    
-    my $url_base=$path;
-
-    my @array= split(/\//,$path);
-    my $filename= pop(@array);
- 
-    my $context = new C4::Context;
-#     my $reports_dir = $context->config('reports_dir');
-
-    my $reports_dir = C4::AR::Utilidades::getUrlPrefix()."/intranet/reports/";
-    C4::AR::Debug::debug($reports_dir);
-
-    move($url_base, $reports_dir.$filename);
-    
-    return($reports_dir.$filename);
-    
-}
+# sub moveFileToReports{
+#     my ($path) = @_;
+#     use C4::Context;
+#     
+#     my $url_base=$path;
+# 
+#     my @array= split(/\//,$path);
+#     my $filename= pop(@array);
+#  
+#     my $context = new C4::Context;
+# #     my $reports_dir = $context->config('reports_dir');
+# 
+#     my $reports_dir = C4::AR::Utilidades::getUrlPrefix()."/intranet/reports/";
+#     C4::AR::Debug::debug($reports_dir);
+# 
+#     move($url_base, $reports_dir.$filename);
+#     
+#     return($reports_dir.$filename);
+#     
+# }
 
 
 END { }       # module clean-up code here (global destructor)

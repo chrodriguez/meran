@@ -1,4 +1,4 @@
-var INFO_PRESTAMOS_ARRAY=new Array();var objAH;function infoPrestamo(){this.id3='';this.id3Old='';this.tipoPrestamo;}
+var comp;var INFO_PRESTAMOS_ARRAY=new Array();var objAH;function infoPrestamo(){this.id3='';this.id3Old='';this.tipoPrestamo;}
 function objeto_usuario(){this.text;this.ID;}
 function detalleUsuario(nro_socio){objAH=new AjaxHelper(updateInfoUsuario);objAH.debug=true;objAH.cache=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/circ/detalleUsuario.pl';objAH.nro_socio=nro_socio;objAH.sendToServer();}
 function updateInfoUsuario(responseText){$('#detalleUsuario').slideDown('slow');$('#detalleUsuario').html(responseText);}
@@ -42,8 +42,5 @@ detallePrestamos(USUARIO.ID,updateInfoPrestamos);ejemplaresDelGrupo(ID_N2);}
 function devolver(){objAH=new AjaxHelper(updateInfoDevolver);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/circ/circulacionDB.pl';objAH.tipoAccion='REALIZAR_DEVOLUCION';objAH.datosArray=INFO_PRESTAMOS_ARRAY;objAH.nro_socio=USUARIO.ID;objAH.sendToServer();}
 function updateInfoDevolver(responseText){}
 function imprimirTicket(tickets){var comprobantes=new Array();if(tickets.length>0){for(i=0;i<tickets.length;i++){comprobantes[i]=tickets[i];}}
-comp=JSONstring.make(comprobantes);window.open(URL_PREFIX+"/circ/ticket.pl?token="+token+"&comp="+comp,this.href);linkComp="<a href=>Ver Impresion</a>"
-$('#mensajes').append(linkComp);}
-function updateImprimirTicket(responseText){}
-function mostrarComprobante(){}
-function updatemostrarComprobante(responseText){$('#ticket').modal({containerCss:{backgroundColor:"#fff",color:"#000",},});}
+comp=JSONstring.make(comprobantes);window.open(URL_PREFIX+"/circ/ticket.pl?token="+token+"&comp="+comp,this.href);window.close();$('#ticket').load(URL_PREFIX+"/circ/ticket.pl?token="+token+"&comp="+comp,this.href);$('#ticket').hide();linkComp="<a onclick=mostrarComprobante();>Imprimir</a>";$('#mensajes').append(linkComp);}
+function mostrarComprobante(responseText){window.open(URL_PREFIX+"/circ/ticket.pl?token="+token+"&comp="+comp,this.href);}
