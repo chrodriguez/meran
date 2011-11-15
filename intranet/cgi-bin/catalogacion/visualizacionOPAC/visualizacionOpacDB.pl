@@ -11,7 +11,7 @@ use JSON;
 my $input   = new CGI;
 
 my $editing = $input->param('id');
-
+my $nivel   = $input->param('nivel');
 my $type    = $input->param('type');
 
 if($editing){
@@ -50,7 +50,7 @@ if($editing){
     elsif($type eq "vista_campo"){
         $value          = $input->param('value');
         $vista_id       = $input->param('id');
-        $configuracion  = C4::AR::VisualizacionOpac::editVistaGrupo($vista_id,$value);
+        $configuracion  = C4::AR::VisualizacionOpac::editVistaGrupo($vista_id, $value, $nivel);
     }
     elsif($type eq "nivel"){
         $value          = $input->param('value');

@@ -168,10 +168,11 @@ sub getSubCampos{
     Esta funcion edita la vista_campo de un grupo recibido como parametro
 =cut
 sub editVistaGrupo{
-    my ($campo,$value)  = @_;
+    my ($campo, $value, $nivel)  = @_;
 
     my @filtros;
     push (@filtros, (campo => { eq => $campo }) );
+    push (@filtros, (nivel => { eq => $nivel }) );
     
     my $configuracion   = C4::Modelo::CatVisualizacionOpac::Manager->get_cat_visualizacion_opac(query => \@filtros,);
     
