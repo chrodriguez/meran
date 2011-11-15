@@ -10,9 +10,10 @@ use JSON;
 
 my $input   = new CGI;
 
-my $editing = $input->param('id');
-my $type    = $input->param('type');
-my $nivel   = $input->param('nivel');
+my $editing         = $input->param('id');
+my $type            = $input->param('type');
+my $nivel           = $input->param('nivel');
+my $tipo_ejemplar   = $input->param('tipo_ejemplar');
 
 if($editing){
 
@@ -56,7 +57,7 @@ if($editing){
         $value          = $input->param('value');
         $vista_id       = $input->param('id');
 
-        $configuracion  = C4::AR::VisualizacionIntra::editVistaGrupo($vista_id, $value, $nivel);
+        $configuracion  = C4::AR::VisualizacionIntra::editVistaGrupo($vista_id, $value, $nivel, $tipo_ejemplar);
     }
 
     $t_params->{'value'} = $configuracion;
