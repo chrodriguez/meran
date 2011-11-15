@@ -23,14 +23,26 @@ foreach my $nivel2 (@$nivel2_array_ref){
     
     if (($nota)&&(!$nivel2->tiene_indice)){
 		
-		  my $index = index($nota, 'Contiene:');
 		  my $new_indice ='';
+		  my $index = index($nota, 'Contiene:');
 		  if($index != -1){
 			$new_indice = substr($nota,$index+9);		  
 			  }else{
 				$index = index($nota, 'Contiene :');
 				if($index != -1){
 					$new_indice = substr($nota,$index+10);	
+					}
+					else{
+					$index = index($nota, 'Contenido :');
+					if($index != -1){
+						$new_indice = substr($nota,$index+11);	
+						}
+						else{
+							$index = index($nota, 'Contenido:');
+							if($index != -1){
+								$new_indice = substr($nota,$index+10);	
+								}
+						}
 					}
 			}
 			
