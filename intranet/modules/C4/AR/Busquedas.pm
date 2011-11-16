@@ -59,6 +59,7 @@ use vars qw(@EXPORT_OK @ISA);
     busquedaPorEstante
     busquedaEstanteDeGrupo
     filtrarPorAutor
+    MARCRecordById3
     MARCDetail
     getLibrarian
     getautor
@@ -1846,6 +1847,42 @@ sub armarBuscoPor{
 
 #*****************************************Soporte MARC************************************************************************
 #devuelve toda la info en MARC de un item (id3 de nivel 3)
+sub MARCRecordById3 {
+	my ($id3)= @_;
+
+		my $nivel3= C4::AR::Nivel3::getNivel3FromId3($id3);
+		my $marc_record = MARC::Record->new_from_usmarc($nivel3->nivel1->getMarcRecord());
+		$marc_record->append_fields(MARC::Record->new_from_usmarc($nivel3->nivel2->getMarcRecord())->fields());
+		$marc_record->append_fields(MARC::Record->new_from_usmarc($nivel3->getMarcRecord())->fields());
+	return $marc_record;
+}
+
+sub MARCRecordById3WithReferences {
+	my ($id3)= @_;
+
+	my $marc_record = C4::AR::Busquedas::MARCRecordById3($id3);
+
+    my $tipo_doc    = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("910","a"));
+    C4::AR::Debug::debug("MARCRecordById3WithReferences => tipo_doc = ".$tipo_doc);
+	foreach my $field ($marc_record->fields) {
+        if(! $field->is_control_field){
+            my $campo                       = $field->tag;
+            my $indicador_primario_dato     = $field->indicator(1);
+            my $indicador_secundario_dato   = $field->indicator(2);
+            foreach my $subfield ($field->subfields()) {
+                my $subcampo                        = $subfield->[0];
+                my $dato                            = $subfield->[1];
+                $dato                               = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $tipo_doc);
+                $marc_record->field($campo)->update( $subcampo => C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato,$tipo_doc));
+                
+			C4::AR::Debug::debug("MARCRecordById3WithReferences => dato = ".$dato." =============== refffff: ".C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato, $tipo_doc));
+            }
+		}
+	}
+	return $marc_record;
+}
+
+
 sub MARCDetail{
 	my ($id3,$tipo)= @_;
 
@@ -1854,23 +1891,17 @@ sub MARCDetail{
 	my $marc_array_nivel2;
 	my $marc_array_nivel3;
 
-	my ($nivel3_object)= C4::AR::Nivel3::getNivel3FromId3($id3);
+	my $nivel3_object= C4::AR::Nivel3::getNivel3FromId3($id3);
+
+
 	if($nivel3_object ne 0){
-		C4::AR::Debug::debug('recupero el nivel3');
 		($marc_array_nivel3)= $nivel3_object->toMARC;
 	}
-
-	my ($nivel2_object)= C4::AR::Nivel2::getNivel2FromId2($nivel3_object->getId2);
-	
-	if($nivel2_object ne 0){
-		C4::AR::Debug::debug('recupero el nivel2');
-		($marc_array_nivel2)= $nivel2_object->toMARC;
-		C4::AR::Debug::debug('MARCDetail => cant '.scalar(@$marc_array_nivel2));
+	if($nivel3_object->nivel2){
+		($marc_array_nivel2)= $nivel3_object->nivel2->toMARC;
 	}
-	my ($nivel1_object)= C4::AR::Nivel1::getNivel1FromId1($nivel2_object->getId1);
-	if($nivel1_object ne 0){
-		C4::AR::Debug::debug('recupero el nivel1');
-		($marc_array_nivel1)= $nivel1_object->toMARC;
+	if($nivel3_object->nivel1){
+		($marc_array_nivel1)= $nivel3_object->nivel1->toMARC;
 	}
 
 	my @result;
@@ -1886,30 +1917,33 @@ sub MARCDetail{
 		my $campo= @result[$i]->{'campo'};
 		my @info_campo_array;
 		C4::AR::Debug::debug("Proceso todos los subcampos del campo: ".$campo);
-		if(!_existeEnArregloDeCampoMARC(\@MARC_result_array, $campo) ){
+	#	if(!_existeEnArregloDeCampoMARC(\@MARC_result_array, $campo) ){
 			#proceso todos los subcampos del campo
 		my $subcampos=$result[$i]->{'subcampos_array'};
 			for(my $j=0;$j < @$subcampos;$j++){
- 				my %hash_temp;
- 				$hash_temp{'subcampo'}= $subcampos->[$j]{'subcampo'};
- 				$hash_temp{'liblibrarian'}= $subcampos->[$j]{'liblibrarian'};
- 				$hash_temp{'dato'}= $subcampos->[$j]{'dato'};
-				push(@info_campo_array, \%hash_temp);
-			      C4::AR::Debug::debug("campo, subcampo, dato: ".$result[$i]->{'campo'}.", ".$subcampos->[$j]{'subcampo'}.", ".$subcampos->[$j]{'liblibrarian'});
+				if(C4::AR::Utilidades::trim($subcampos->[$j]{'dato'})){
+					my %hash_temp;
+					$hash_temp{'subcampo'}= $subcampos->[$j]{'subcampo'};
+					$hash_temp{'liblibrarian'}= $subcampos->[$j]{'liblibrarian'};
+					$hash_temp{'dato'}= $subcampos->[$j]{'dato'};
+					push(@info_campo_array, \%hash_temp);
+					C4::AR::Debug::debug("campo, subcampo, dato: ".$result[$i]->{'campo'}.", ".$subcampos->[$j]{'subcampo'}.", ".$subcampos->[$j]{'liblibrarian'});
+				}
 			}
-			$hash{'campo'}= $campo;
-			$hash{'header'}= @result[$i]->{'header'};
-			$hash{'info_campo_array'}= \@info_campo_array;
-		
-			push(@MARC_result_array, \%hash);
-# 			C4::AR::Debug::debug("campo: ".$campo);
-			C4::AR::Debug::debug("cant subcampos: ".scalar(@info_campo_array));
-		}
+			if(scalar(@info_campo_array)){
+				$hash{'campo'}= $campo;
+				$hash{'header'}= @result[$i]->{'header'};
+				$hash{'info_campo_array'}= \@info_campo_array;
+				push(@MARC_result_array, \%hash);
+	# 			C4::AR::Debug::debug("campo: ".$campo);
+				C4::AR::Debug::debug("cant subcampos: ".scalar(@info_campo_array));
+			}
+		#}
 	}
 
 	return (\@MARC_result_array);
+	
 }
-
 
 =item
 Verifica si existe en el arreglo de campos el campo pasado por parametro

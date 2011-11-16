@@ -147,10 +147,22 @@ function detalleMARC(id3){
 }
 
 function updateInfoMARC(responseText){
+/*
 	$('#detalleComun').slideUp("slow");
 	$('#detalleMARC').html(responseText);
 	$('#detalleMARC').show();
 	scrollTo('detalleMARC');
+*/	
+	        $('#detalleMARC').html(responseText);
+			$('#detalleMARC').modal({   containerCss:{
+                backgroundColor:"#fff",
+        //         borderColor:"#0063dc",
+                height:"500px",
+                padding:"1",
+                width:"800px",
+            },
+        });
+        
 }
 
 function verDivs(){

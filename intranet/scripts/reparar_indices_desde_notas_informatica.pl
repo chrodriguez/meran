@@ -47,29 +47,37 @@ foreach my $nivel2 (@$nivel2_array_ref){
 			}
 			
 			if($new_indice){
-				$new_indice =~ s/\s--\s/\n/g;
-				$new_indice =~ s/\s-\s/\n/g;
 				
-				C4::AR::Debug::debug("NUEVO INDICE:\nContiene :\n".$new_indice);
-				$nivel2->setIndice("Contiene:\n".$new_indice);
+				$new_indice =~ s/\s--\s/\n/g;
+				$new_indice =~ s/\s--/\n/g;
+				$new_indice =~ s/--\s/\n/g;
+				$new_indice =~ s/--/\n/g;
+				$new_indice =~ s/\s-\s/\n/g;
+				$new_indice =~ s/\s–\s/\n/g;
+				$new_indice =~ s/\s–/\n/g;
+				$new_indice =~ s/–\s/\n/g;
+				$new_indice =~ s/–/\n/g;
+				
+				C4::AR::Debug::debug("NUEVO INDICE:\n".trim($new_indice));
+				$nivel2->setIndice(trim($new_indice));
 				
 				my $new_nota=trim(substr($nota,0,$index));
-				C4::AR::Debug::debug("NUEVA NOTA:\n".$new_nota);
 				my $marc_record = MARC::Record->new_from_usmarc($nivel2->getMarcRecord());
-				if($new_nota){
-					$marc_record->field("500")->update( 'a' => $new_nota );
+				if(trim($new_nota)){
+					C4::AR::Debug::debug("NUEVA NOTA:\n".trim($new_nota));
+					$marc_record->field("500")->update( 'a' => trim($new_nota));
 				}else{
 					$marc_record->field("500")->delete_subfield(code => 'a');
 					}
 				$nivel2->setMarcRecord($marc_record->as_usmarc);
-				
-				C4::AR::Debug::debug($marc_record->as_usmarc);
-				
+				C4::AR::Debug::debug("########################################");
+				C4::AR::Debug::debug($marc_record->as_formatted);
+				C4::AR::Debug::debug("########################################");
 			}	
 		}
 	
 
-   # $nivel2->save();
+    $nivel2->save();
 
 }
 
