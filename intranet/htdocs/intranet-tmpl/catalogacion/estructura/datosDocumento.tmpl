@@ -136,7 +136,11 @@ $(document).ready( function() {
     <ul style="clear:both">
         <li class="sub_item" >
 
-            <textarea id="indice_id" class="tinymce" rows="10" cols="120" style="width:600px; height:202px; max-width:650px"></textarea>
+            <textarea id="indice_id" class="tinymce" rows="10" cols="120" style="width:600px; height:202px; max-width:650px">
+            
+                [% indice_data %]
+                
+            </textarea>
         
             [% PERL %]
                     print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Indice' | i18n %]",
