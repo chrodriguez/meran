@@ -69,7 +69,7 @@ sub setDescripcion{
 sub obtenerValoresCampo {
     my ($self)=shift;
     my ($campo,$orden)=@_;
-	my $ref_valores = C4::Modelo::RefIdioma::Manager->get_ref_colaborador
+	my $ref_valores = C4::Modelo::RefColaborador::Manager->get_ref_colaborador
 						( select   => ['codigo', $campo],
 						  sort_by => ($orden) );
     my @array_valores;
