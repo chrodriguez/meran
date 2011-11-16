@@ -1693,6 +1693,9 @@ label.error_adv {
 
 .resultados_consulta {
 	font-size: 12px;
+    line-height: 50px;
+    overflow: hidden;
+    max-width: 80em;	
 }
 
 .bold {
