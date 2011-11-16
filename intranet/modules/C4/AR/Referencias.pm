@@ -33,6 +33,7 @@ use C4::Modelo::PrefInformacionReferencia::Manager;
 use C4::Modelo::AdqTipoMaterial::Manager;
 use C4::Modelo::AdqFormaEnvio::Manager;
 use C4::Modelo::AdqPresupuesto::Manager;
+use C4::Modelo::RefColaborador;
 
 
 use JSON;

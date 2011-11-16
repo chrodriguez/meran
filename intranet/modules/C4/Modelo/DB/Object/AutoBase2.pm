@@ -203,6 +203,7 @@ sub createFromAlias{
         case 'ciudad' {return C4::Modelo::RefLocalidad->new()}
         case 'editorial' {return C4::Modelo::CatEditorial->new()}
         case 'perfiles_opac' {return C4::Modelo::CatPerfilOpac->new()}
+        case 'colaborador' {return C4::Modelo::RefColaborador->new()}
 # TODO para el link de analiticas
         case 'nivel2' {return C4::Modelo::CatRegistroMarcN2->new()}
 	    else {C4::AR::Debug::debug("NO EXISTE LA TABLA DE REFERENCIA ".$classAlias) }
