@@ -47,7 +47,8 @@ sub getSancionesLike {
 
     foreach my $s (@searchstring_array){ 
                 push (  @filtros, ( or   => [   
-#                                               
+                                                'socio.persona.nombre'    => { like => $s.'%'},   
+                                                'socio.persona.nombre'    => { like => '% '.$s.'%'},
                                                 apellido            => { like => $s.'%'},
                                                 apellido            => { like => '% '.$s.'%'},
                                                 nro_documento       => { like => '%'.$s.'%' }, 
