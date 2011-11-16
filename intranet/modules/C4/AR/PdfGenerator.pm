@@ -936,28 +936,28 @@ sub batchBookLabelGenerator {
 
                             #Hoja A4 :  X diferencia 254 - Y diferencia 160
                             if ( $i < $count ) {
-                                generateBookLabelA4(@$results[$i], 14, 654, $pdf );
+                                generateBookLabelA4(@$results[$i], 25, 654, $pdf );
                                 generateBookLabelA4(@$results[$i], 312, 654, $pdf );
                                 $i++;
                             }
                             if ( $i < $count ) {
-                                generateBookLabelA4(@$results[$i],14, 554, $pdf );
+                                generateBookLabelA4(@$results[$i], 25, 554, $pdf );
                                 generateBookLabelA4(@$results[$i], 312, 554, $pdf );
                                 $i++;
                             }
                             if ( $i < $count ) { 
-                                generateBookLabelA4(@$results[$i], 14, 454, $pdf );
+                                generateBookLabelA4(@$results[$i], 25, 454, $pdf );
                                 generateBookLabelA4(@$results[$i], 312, 454, $pdf );
                                 $i++;
                             }
                             if ( $i < $count ) {
 #                                     
-                                  generateBookLabelA4(@$results[$i], 14, 354, $pdf );
+                                  generateBookLabelA4(@$results[$i], 25, 354, $pdf );
                                   generateBookLabelA4(@$results[$i], 312, 354, $pdf );    
                                 $i++;
                             }
                             if ( $i < $count ) {
-                                 generateBookLabelA4(@$results[$i], 14, 254, $pdf);
+                                 generateBookLabelA4(@$results[$i], 25, 254, $pdf);
                                  generateBookLabelA4(@$results[$i], 312,254, $pdf );
 #                               
                                  
@@ -965,14 +965,14 @@ sub batchBookLabelGenerator {
                             }
 
                             if ( $i < $count ) {
-                                 generateBookLabelA4(@$results[$i], 14, 154, $pdf);
+                                 generateBookLabelA4(@$results[$i], 25, 154, $pdf);
                                  generateBookLabelA4(@$results[$i], 312,154, $pdf );
 #                               
                                  
                                 $i++;
                             }
                             if ( $i < $count ) {
-                                 generateBookLabelA4(@$results[$i], 14, 54, $pdf);
+                                 generateBookLabelA4(@$results[$i], 25, 54, $pdf);
                                  generateBookLabelA4(@$results[$i], 312,54, $pdf );
 #                               
                                  
@@ -1032,9 +1032,9 @@ sub generateBookLabelA4 {
             C4::Context->config('intrahtdocs') . '/temas/'
           . C4::AR::Preferencias::getValorPreferencia('defaultUI')
           . '/imagenes/escudo-DEFAULT.jpg';
-        $pdf->addImgScaled($escudo, $x + 120 , 110 + ($y) , 5/100);
+        $pdf->addImgScaled($escudo, $x + 100 , 120 + ($y) , 5/100);
     }else{
-        $pdf->addImgScaled($escudo,  $x + 100 , 125 + ($y) , 2/100);
+        $pdf->addImgScaled($escudo,  $x + 90 , 130 + ($y) , 2/100);
     }
    
     #Write the borrower data into the pdf file
@@ -1044,15 +1044,15 @@ sub generateBookLabelA4 {
     #      $pdf->addRawText($branch->{'categ'},$x+135,$pageheight + ($y-$posy));
     $posy = $posy + 7;
 #     $pdf->addRawText( _unformat($branch->getTituloFormal), $x + 145, $pageheight + 65   + ( $y - $posy ) );
-    $pdf->addRawText( _unformat($branch->getTituloFormal), $x + 165,  265   + ( $y - $posy ) );
+    $pdf->addRawText( _unformat($branch->getTituloFormal), $x + 155,  270   + ( $y - $posy ) );
 
     $posy = $posy + 7;
 #     $pdf->addRawText( _unformat($branch->getNombre), $x + 145, $pageheight + 65 + ( $y - $posy ) );
-    $pdf->addRawText( _unformat($branch->getNombre), $x + 165, 265 + ( $y - $posy ) );
+    $pdf->addRawText( _unformat($branch->getNombre), $x + 155, 270 + ( $y - $posy ) );
     $posy = $posy + 7;
-    $pdf->setSize(5);
+    $pdf->setSize(6);
 #     $pdf->addRawText( C4::AR::Filtros::i18n("Biblioteca"), $x + 145, $pageheight + 65  + ( $y - $posy ) );
-    $pdf->addRawText( C4::AR::Filtros::i18n("Biblioteca"), $x + 165, 265  + ( $y - $posy ) );
+    $pdf->addRawText( C4::AR::Filtros::i18n("Biblioteca"), $x + 155, 270  + ( $y - $posy ) );
     $posy = $posy + 7;
     $pdf->setFont("Arial");
 
@@ -1060,7 +1060,7 @@ sub generateBookLabelA4 {
     my $address = _unformat($branch->getDireccion);
     $address .= ", " . _unformat($branch->getAlt_direccion); 
 
-     $pdf->addRawText($address, $x + 165, 265  + ( $y - $posy ));
+     $pdf->addRawText($address, $x + 155, 270  + ( $y - $posy ));
 
 
 
@@ -1069,17 +1069,17 @@ sub generateBookLabelA4 {
 
     my $mail = $branch->getEmail;
 #     $pdf->addRawText( $mail, $x + 145, $pageheight + 65 + ( $y - $posy ) );
-    $pdf->addRawText( $mail, $x + 165, 265 + ( $y - $posy ) );
+    $pdf->addRawText( $mail, $x + 155, 270 + ( $y - $posy ) );
     $posy = $posy + 7;
 
     my $phone_fax = "";
     my $phone_tel = " Tel " . $branch->getTelefono || C4::AR::Filtros::i18n('No dispone');
     
-    $pdf->addRawText( $phone_tel, $x + 164, 264 + ( $y - $posy ) );
+    $pdf->addRawText( $phone_tel, $x + 154, 269 + ( $y - $posy ) );
     
     if (C4::AR::Preferencias::getValorPreferencia('incluir_fax_etiquetas')){
         $phone_fax = " Fax " . $branch->getFax      || C4::AR::Filtros::i18n('No dispone');
-        $pdf->addRawText( $phone_fax, $x + 164, 257 + ( $y - $posy ) );
+        $pdf->addRawText( $phone_fax, $x + 154, 262 + ( $y - $posy ) );
     }
 #     $pdf->addRawText( $phone_fax, $x + 144, $pageheight + 65 + ( $y - $posy ) );
    
@@ -1097,15 +1097,15 @@ sub generateBookLabelA4 {
     foreach my $sig (@sigs) {
         if (C4::AR::Utilidades::validateString($sig)){
 #         $pdf->addRawText( "$sig", $x + 15, $pageheight + 50 + ( $y - 120 ) - $posicion );
-          $pdf->addRawText( "$sig", $x + 10, 250 + ( $y - 100 ) - $posicion );
+          $pdf->addRawText( "$sig", $x + 5, 250 + ( $y - 90 ) - $posicion );
           $posicion += 10;
         }
     }
 
 #     $pdf->addRawText( $codigo, $x + 15, $pageheight + ( $y - 120 ) - $posicion );
-    $pdf->addRawText( $codigo, $x + 10, 250 + ( $y - 110 ) - $posicion);
+    $pdf->addRawText( $codigo, $x + 5, 250 + ( $y - 128 ) - 37);
     $posicion += 15;
-    $pdf->addRawText( $nivel3->getDisponibilidadObject()->getNombre(), $x + 10, ( $y + 165 ) - $posicion );
+    $pdf->addRawText( $nivel3->getDisponibilidadObject()->getNombre(), $x + 5, ( $y + 145 ) - 50);
 
 # Inserto el barcode debajo de signatura
 #     $pdf->addRawText( "$codigo", $x + 10, $y + 80);
@@ -1135,7 +1135,7 @@ sub generateBookLabel{
     $pdf->drawLine( 95, $pageheight + ( $y - 97 ), 95, $y );
 
 	#Insert a barcode to the card
-	$pdf->drawBarcode( $x + 110, $y, 70 / 100, 1, "3of9", $codigo, undef, 10, 10, 25, 10 );
+	$pdf->drawBarcode( $x + 110, $y - 3, 70 / 100, 1, "3of9", $codigo, undef, 10, 10, 25, 10 );
 
 	my $posy = 100;
 	my $scale = 2/100;
@@ -1150,9 +1150,9 @@ sub generateBookLabel{
             C4::Context->config('intrahtdocs') . '/temas/'
           . C4::AR::Preferencias::getValorPreferencia('defaultUI')
           . '/imagenes/escudo-DEFAULT.jpg';
-        $pdf->addImgScaled($escudo, $x + 120 , 40 + ($y) , 5/100);
+        $pdf->addImgScaled($escudo, $x + 110 , 40 + ($y) , 5/100);
     }else{
-        $pdf->addImgScaled($escudo, $x + 110 , 50 + ($y) , 2/100);
+        $pdf->addImgScaled($escudo, $x + 100 , 50 + ($y) , 2/100);
     }
 
 	#Write the borrower data into the pdf file
@@ -1161,23 +1161,23 @@ sub generateBookLabel{
 
 	#      $pdf->addRawText($branch->{'categ'},$x+135,$pageheight + ($y-$posy));
 	$posy = $posy + 7;
-    $pdf->addRawText( _unformat($branch->getTituloFormal), $x + 165, $pageheight + ( $y - $posy ) );
+    $pdf->addRawText( _unformat($branch->getTituloFormal), $x + 160, $pageheight + ( $y - $posy ) );
 	$posy = $posy + 7;
-    $pdf->addRawText( _unformat($branch->getNombre), $x + 165, $pageheight + ( $y - $posy ) );
+    $pdf->addRawText( _unformat($branch->getNombre), $x + 160, $pageheight + ( $y - $posy ) );
     $posy = $posy + 7;
-	$pdf->setSize(5);
-	$pdf->addRawText( C4::AR::Filtros::i18n("Biblioteca"), $x + 165, $pageheight + ( $y - $posy ) );
+	$pdf->setSize(6);
+	$pdf->addRawText( C4::AR::Filtros::i18n("Biblioteca"), $x + 160, $pageheight + ( $y - $posy ) );
 	$posy = $posy + 7;
 	$pdf->setFont("Arial");
 
 	my $cantdir = 1;                       #Cuantas direcciones tiene?
 	my $address = _unformat($branch->getDireccion);
 	$address .= ", " . _unformat($branch->getAlt_direccion); 
-	$pdf->addRawText( $address, $x + 165, $pageheight + ( $y - $posy ) );
+	$pdf->addRawText( $address, $x + 160, $pageheight + ( $y - $posy ) );
 	$posy = $posy + ( 7 * $cantdir );
 
 	my $mail = $branch->getEmail;
-	$pdf->addRawText( $mail, $x + 165, $pageheight + ( $y - $posy ) );
+	$pdf->addRawText( $mail, $x + 160, $pageheight + ( $y - $posy ) );
 	$posy = $posy + 7;
 
 	my $phone_fax = "";
@@ -1186,12 +1186,12 @@ sub generateBookLabel{
     if (C4::AR::Preferencias::getValorPreferencia('incluir_fax_etiquetas')){
             $posy = $posy + 7 ;
             $phone_fax = " Fax " . $branch->getFax      || C4::AR::Filtros::i18n('No dispone');
-            $pdf->addRawText( $phone_fax, $x + 164, $pageheight + ( $y - $posy ) );
+            $pdf->addRawText( $phone_fax, $x + 159, $pageheight + ( $y - $posy ) );
             $posy = $posy - 7 ;
 	}
 
 	$posy = $posy ;
-	$pdf->addRawText( $phone_tel, $x + 164, $pageheight + ( $y - $posy ) );
+	$pdf->addRawText( $phone_tel, $x + 159, $pageheight + ( $y - $posy ) );
 
 	#AHORA DIBUJAMOS LA SIGNATURA SEPARADA POR ' '
 	$pdf->setSize(8);
@@ -1205,9 +1205,9 @@ sub generateBookLabel{
         }
 	}
 	
-    $pdf->addRawText( $codigo, $x + 15, $pageheight + ( $y - 122 ) - $posicion  );
+    $pdf->addRawText( $codigo, $x + 15, $pageheight + ( $y - 144 ) - 40  );
     $posicion += 15;
-    $pdf->addRawText( $nivel3->getDisponibilidadObject()->getNombre(), $x + 15, $pageheight + ( $y - 95 ) - $posicion);
+    $pdf->addRawText( $nivel3->getDisponibilidadObject()->getNombre(), $x + 15, $pageheight + ( $y - 120 ) - 55);
 	
 	$pdf->setFont("Arial");
 }
