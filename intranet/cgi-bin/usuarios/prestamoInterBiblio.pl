@@ -66,6 +66,8 @@ my $biblio      = C4::AR::Busquedas::getBranch($branchcode);
 
 $t_params->{'biblio'}= $biblio;
 $t_params->{'socio'}= $socio;
+$t_params->{'socio_nombre'}= Encode::decode_utf8($socio->persona->nombre);
+$t_params->{'socio_apellido'}=  Encode::decode_utf8($socio->persona->apellido);
 $t_params->{'biblio_destino'}= $biblioDestino;
 $t_params->{'director'}= $director;
 $t_params->{'atencion'}=  C4::AR::Preferencias::getValorPreferencia('open') . " a "
