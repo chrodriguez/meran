@@ -685,7 +685,7 @@ function mostrarInfoAltaNivel2(id2){
     objAH.debug         = true;
 //     objAH.showStatusIn  = 'nivel2';
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
-    objAH.tipoAccion    = "MOSTRAR_INFO_NIVEL2_LATERARL";
+    objAH.tipoAccion    = "MOSTRAR_INFO_NIVEL2_LATERAL";
     objAH.id2           = id2; //mostrar todos los nivel 2 del nivel1 con el q se esta trabajando, asi este vuela
     objAH.id1           = ID_N1;
     objAH.sendToServer();

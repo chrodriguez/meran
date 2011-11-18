@@ -437,8 +437,8 @@ sub detalleNivel3{
         #otengo las analiticas
         my  $cat_reg_marc_n2_analiticas = $nivel2_object->getAnaliticas();
 
-        my @nive1_analitica_array;
-        my @nive2_analitica_array;
+        my @nivel1_analitica_array;
+        my @nivel2_analitica_array;
       
   
         if($cat_reg_marc_n2_analiticas){
@@ -452,18 +452,15 @@ sub detalleNivel3{
                 my $n1_object = C4::AR::Nivel1::getNivel1FromId1($n2_object->getId1(),$db);
 
                 $hash_nivel1_aux{'nivel1_analitica'}        = $n1_object->toMARC_Intra;
-
-                push(@nive1_analitica_array, \%hash_nivel1_aux);
-
-                my %hash_nivel1_aux;
-
-                $hash_nivel1_aux{'nivel1_analitica'}        = $n2_object->toMARC_Intra;
-
-                push(@nive1_analitica_array, \%hash_nivel1_aux);
+                push(@nivel1_analitica_array, \%hash_nivel1_aux);
+                
+#Esto mostraba cosas de más, perdón Mike.
+                $hash_nivel2_aux{'nivel2_analitica'}        = $n2_object->toMARC_Intra;
+                push(@nivel2_analitica_array, \%hash_nivel2_aux);
             }
 
-            $hash_nivel2{'nivel1_analiticas_array'} = \@nive1_analitica_array;
-            $hash_nivel2{'nivel1_analiticas_cant'}  = scalar(@nive1_analitica_array);
+            $hash_nivel2{'nivel1_analiticas_array'} = \@nivel1_analitica_array;
+            $hash_nivel2{'nivel1_analiticas_cant'}  = scalar(@nivel1_analitica_array);
         }
 
     }

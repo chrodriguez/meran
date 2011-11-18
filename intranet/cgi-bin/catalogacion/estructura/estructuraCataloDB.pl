@@ -477,7 +477,7 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL1_LATERAL"){
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 
-elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL2_LATERARL"){
+elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL2_LATERAL"){
 #Se muestran las catalogaciones
 
     my ($template, $session, $t_params) = get_template_and_user({
@@ -500,16 +500,16 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL2_LATERARL"){
     $t_params->{'nivel2_array'} = $nivel2_array_ref;
     $t_params->{'OK'} = 1;
 
-    # obtenemos el indice, si es que tiene
-    my $indice = C4::AR::Nivel2::getNivel2FromId2($obj->{'id2'})->getIndice();
-    
     $t_params->{'indice_edit'} = 0;
-       
-    if($indice ne ""){
     
-        $t_params->{'indice_edit'} = 1;
-    }
-
+	if($obj->{'id2'}){
+    # obtenemos el indice, si es que tiene
+		my $indice = C4::AR::Nivel2::getNivel2FromId2($obj->{'id2'})->getIndice();   
+		if($indice ne ""){
+			$t_params->{'indice_edit'} = 1;
+		}
+	}
+	
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 

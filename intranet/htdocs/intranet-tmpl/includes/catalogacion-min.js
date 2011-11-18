@@ -62,7 +62,7 @@ function agregarN3(id2,tipo_documento){_NIVEL_ACTUAL=3;ID_N2=id2;ID_TIPO_EJEMPLA
 function mostrarInfoAltaNivel1(id1){ID_N1=id1;objAH=new AjaxHelper(updateMostrarInfoAltaNivel1);objAH.showOverlay=true;objAH.debug=true;objAH.showStatusIn='nivel1';objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";objAH.tipoAccion="MOSTRAR_INFO_NIVEL1_LATERAL";objAH.id1=ID_N1;objAH.sendToServer();}
 function updateMostrarInfoAltaNivel1(responseText){if((MODIFICAR==0)&&(_NIVEL_ACTUAL==1)){$('#nivel1Tabla').slideUp('slow');$('#estructuraDelNivel1').html('');}
 $('#nivel1').html(responseText);}
-function mostrarInfoAltaNivel2(id2){objAH=new AjaxHelper(updateMostrarInfoAltaNivel2);objAH.showOverlay=true;objAH.debug=true;objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";objAH.tipoAccion="MOSTRAR_INFO_NIVEL2_LATERARL";objAH.id2=id2;objAH.id1=ID_N1;objAH.sendToServer();}
+function mostrarInfoAltaNivel2(id2){objAH=new AjaxHelper(updateMostrarInfoAltaNivel2);objAH.showOverlay=true;objAH.debug=true;objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";objAH.tipoAccion="MOSTRAR_INFO_NIVEL2_LATERAL";objAH.id2=id2;objAH.id1=ID_N1;objAH.sendToServer();}
 function updateMostrarInfoAltaNivel2(responseText){if((MODIFICAR==0)&&(_NIVEL_ACTUAL==2)){$('#nivel2Tabla').slideUp('slow');$('#estructuraDelNivel2').html('');}
 $('#nivel2').html(responseText);}
 function guardarModificarDocumentoN1(){if(MODIFICAR==1){guardarModificacionDocumentoN1();}else{guardarDocumentoN1();}}
