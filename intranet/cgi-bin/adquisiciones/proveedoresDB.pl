@@ -23,7 +23,8 @@ if($tipoAccion eq "ELIMINAR"){
                                             {   ui              => 'ANY', 
                                                 tipo_documento  => 'ANY', 
                                                 accion          => 'BAJA', 
-                                                entorno         => 'usuarios'},
+                                                tipo_permiso => 'general',
+                                                entorno => 'adq_intra'},
                                                 "intranet"
                                     );
                                     
@@ -48,7 +49,8 @@ elsif($tipoAccion eq "GUARDAR_MODIFICACION_PROVEEDOR"){
                                                {   ui               => 'ANY', 
                                                    tipo_documento   => 'ANY', 
                                                    accion           => 'MODIFICACION', 
-                                                   entorno          => 'usuarios'},   
+                                                   tipo_permiso => 'general',
+                                                   entorno => 'adq_intra'},   
                                                    "intranet"
                                 );    
 
@@ -73,7 +75,8 @@ elsif($tipoAccion eq "GUARDAR_MONEDA_PROVEEDOR"){
                         flagsrequired   => {    ui => 'ANY', 
                                                 tipo_documento => 'ANY', 
                                                 accion => 'MODIFICAR', 
-                                                entorno => 'usuarios'},
+                                                tipo_permiso => 'general',
+                                                entorno => 'adq_intra'},
                         debug           => 1,
                     });
 
@@ -103,8 +106,9 @@ elsif($tipoAccion eq "ELIMINAR_MONEDA_PROVEEDOR"){
                         authnotrequired => 0,
                         flagsrequired   => {    ui => 'ANY', 
                                                 tipo_documento => 'ANY', 
-                                                accion => 'BAJA', 
-                                                entorno => 'usuarios'},
+                                                accion => 'MODIFICACION', 
+                                                tipo_permiso => 'general',
+                                                entorno => 'adq_intra'},
                         debug           => 1,
     });
 

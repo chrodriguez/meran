@@ -25,8 +25,9 @@ $obj                = C4::AR::Utilidades::from_json_ISO($obj);
                       authnotrequired   => 0,
                       flagsrequired     => {    ui => 'ANY', 
                                                 tipo_documento => 'ANY', 
-                                                accion => 'ALTA', 
-                                                entorno => 'usuarios'}, # FIXME
+                                                accion => 'CONSULTA', 
+                                                tipo_permiso => 'general',
+                                                entorno => 'adq_intra'}, # FIXME
                 });
 
 my $filepath    = $input->param('planilla');
