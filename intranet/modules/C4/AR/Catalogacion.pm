@@ -647,19 +647,27 @@ sub marc_record_to_oai {
 
 # TODO ver tema de performance, habria q llamar a getVisualizacionFromCampo y levantar toda la conf una vez
 sub as_stringReloaded {
-    my ($field, $itemtype, $nivel) = @_;
+    my ($field, $itemtype, $params) = @_;
 
-    
     my @subs;
     my $db      = undef;
-    my $subs    = $field->subfields();
+    my $campo   = $field->tag;
+    my $nivel   = $params->{'nivel'};
+    C4::AR::Debug::debug("Catalogacion => as_stringReloaded => campo => ".$campo." itemype => ".$itemtype." nivel => ".$nivel);  
 
     foreach my $subfield ($field->subfields()) {
         my %hash_temp;
-        my %hash_temp_aux;
         my $subcampo                        = $subfield->[0];
         my $dato                            = $subfield->[1];
-#         C4::AR::Debug::debug("Catalogacion => as_stringReloaded => subcampo => ".$subcampo." dato => ".$dato);
+        $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype, $nivel);
+        $dato                               = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $nivel);
+        C4::AR::Debug::debug("Catalogacion => as_stringReloaded => campo => ".$campo." subcampo => ".$subcampo." dato => ".$dato);
+        $hash_temp{'dato_link'}             = C4::AR::Filtros::show_componente( ('campo' => $campo, 'subcampo' => $subcampo, 'dato' => $dato , 'id1' => $params->{'id1'}, 'id2' => $params->{'id2'}) );
+
+        if($hash_temp{'dato_link'} ne "NO_LINK"){
+            $dato                           = $hash_temp{'dato_link'};
+        }
+
         my $cat_estruct_info_array          = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($field->tag, $subcampo, $itemtype, $nivel, $db);
         my $text                            = "";
         if($cat_estruct_info_array){
@@ -741,35 +749,36 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
             my $indicador_secundario_dato   = $field->indicator(2);
 #             C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => campo => ".$campo);
             #proceso todos los subcampos del campo
-            foreach my $subfield ($field->subfields()) {
-                my %hash_temp;
-                my %hash_temp_aux;
-                my $subcampo                        = $subfield->[0];
-                my $dato                            = $subfield->[1];
-#                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => subcampo => ".$subcampo);
-                $hash_temp{'campo'}                 = $campo;
-                $hash_temp{'subcampo'}              = $subcampo;
-# C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => subcampo ???????????? => ".$subcampo);
-                $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype, $params->{'nivel'}, $db);
-                $hash_temp{'datoReferencia'}        = $dato;
-                my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $params->{'nivel'}, $db);
-                $hash_temp{'dato'}                  = $valor_referencia;
-                $hash_temp{'id1'}                   = $params->{'id1'};
-                $hash_temp{'id2'}                   = $params->{'id2'};
-                $hash_temp{'dato_link'}             = C4::AR::Filtros::show_componente( ('campo' => $campo, 'subcampo' => $subcampo, 'dato' => $dato , 'id1' => $params->{'id1'}, 'id2' => $params->{'id2'}) );
-
-                if($hash_temp{'dato_link'} ne "NO_LINK"){
-                    $hash_temp{'dato'}  = $hash_temp{'dato_link'};
-                    $valor_referencia   = $hash_temp{'dato_link'};
-                }
-
-# C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => dato ???????????? => ".$dato);
-
-#               FIXME parche!!!! si el dato del subcampo no tiene nada no se agrega al marcrecord, por lo tanto le agrego un blanco
-                (length($valor_referencia) == 0)? $valor_referencia = $valor_referencia." ":$valor_referencia;
-
-                $field->update( $subcampo => $valor_referencia );
-            }
+#             foreach my $subfield ($field->subfields()) {
+#                 my %hash_temp;
+#                 my %hash_temp_aux;
+#                 my $subcampo                        = $subfield->[0];
+#                 my $dato                            = $subfield->[1];
+# #                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => subcampo => ".$subcampo);
+#                 $hash_temp{'campo'}                 = $campo;
+#                 $hash_temp{'subcampo'}              = $subcampo;
+# # C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => subcampo ???????????? => ".$subcampo);
+#                 $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype, $params->{'nivel'}, $db);
+#                 $hash_temp{'datoReferencia'}        = $dato;
+#                 my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $params->{'nivel'}, $db);
+# C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view_as_not_extended => campo => ".$field->tag." itemype => ".$itemtype." nivel => ".$params->{'nivel'}." dato => ".$dato);
+# C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view_as_not_extended => valor_referencia => ".$valor_referencia);
+#                 $hash_temp{'dato'}                  = $valor_referencia;
+#                 $hash_temp{'id1'}                   = $params->{'id1'};
+#                 $hash_temp{'id2'}                   = $params->{'id2'};
+#                 $hash_temp{'dato_link'}             = C4::AR::Filtros::show_componente( ('campo' => $campo, 'subcampo' => $subcampo, 'dato' => $dato , 'id1' => $params->{'id1'}, 'id2' => $params->{'id2'}) );
+# 
+#                 if($hash_temp{'dato_link'} ne "NO_LINK"){
+#                     $hash_temp{'dato'}  = $hash_temp{'dato_link'};
+#                     $valor_referencia   = $hash_temp{'dato_link'};
+#                 }
+# 
+# #               FIXME parche!!!! si el dato del subcampo no tiene nada no se agrega al marcrecord, por lo tanto le agrego un blanco
+#                 (length($valor_referencia) == 0)? $valor_referencia = $valor_referencia." ":$valor_referencia;
+# 
+#                 $field->update( $subcampo => $valor_referencia );
+# C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => field->as_string ???????????? => ".$field->as_string);
+#             }
 
             $hash_temp_aux{'campo'}             = $campo;
             $hash_temp_aux{'orden'}             = getOrdenFromCampo($campo, $params->{'nivel'}, $itemtype, $type, $db);
@@ -782,7 +791,7 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
             }
 
             # veo que separador lleva cada subcampo para el $field dependiendo del campo y subcampo que se este procesando
-            my $field_as_string                 = as_stringReloaded($field, $itemtype, $params->{'nivel'});
+            my $field_as_string                 = as_stringReloaded($field, $itemtype, $params);
 
             $hash_temp_aux{'dato'}              = ($hash_temp_aux{'dato'} ne "")?$hash_temp_aux{'dato'}.";".$field_as_string:$field_as_string;
 
@@ -790,14 +799,10 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
 
             if($index == -1){
             #NO EXISTE EL CAMPO
-#                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => NO EXISTE el campo => ".$campo);
                 push(@MARC_result_array, \%hash_temp_aux);
             } else {
             #EXISTE EL CAMPO => campo, subcampo REPETIBLE
-#                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => EXISTE el campo => ".$campo);
-                @MARC_result_array[$index]->{'dato'} = (@MARC_result_array[$index]->{'dato'} ne "")?@MARC_result_array[$index]->{'dato'}.$field->as_string:$field->as_string;
-#                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => dato => ".@MARC_result_array[$index]->{'dato'});
-#                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => field->as_string => ".$field->as_string);
+                @MARC_result_array[$index]->{'dato'} = (@MARC_result_array[$index]->{'dato'} ne "")?@MARC_result_array[$index]->{'dato'}.$field_as_string:$field_as_string;
             }
 
         } #END if(! $field->is_control_field)
@@ -1168,9 +1173,9 @@ sub getEstructuraYDatosDeNivel{
     #paso todo a MARC
     my $nivel_info_marc_array = undef;
 # FIXME lo saque para poder encontrar el error
-#     eval{
+    eval{
       $nivel_info_marc_array = $nivel->toMARC; #mapea los campos de la tabla nivel 1, 2, o 3 a MARC
-#     };
+    };
 
     my $campo;
     my $repetible;
