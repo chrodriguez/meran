@@ -504,7 +504,13 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL2_LATERAL"){
     
 	if($obj->{'id2'}){
     # obtenemos el indice, si es que tiene
-		my $indice = C4::AR::Nivel2::getNivel2FromId2($obj->{'id2'})->getIndice();   
+        my $indice;
+        my $nivel2 = C4::AR::Nivel2::getNivel2FromId2($obj->{'id2'})->getIndice();   
+        
+        if($nivel2){
+            $indice = $nivel2->getIndice();   
+        }
+
 		if($indice ne ""){
 			$t_params->{'indice_edit'} = 1;
 		}

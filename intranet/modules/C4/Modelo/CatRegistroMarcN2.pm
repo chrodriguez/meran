@@ -351,18 +351,18 @@ sub getTipoDocumentoObject{
         
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
     my $tipo_doc    = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("910","a"));
-
-#     C4::AR::Debug::debug("CatRegistroMarcN2 => getTipoDocumentoObject => ".$tipo_doc);
         
     my $tipo_doc_object = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3 ( query => [  'id_tipo_doc' => { eq => $tipo_doc } ] );
         
     if(scalar($tipo_doc_object) > 0){
         return $tipo_doc_object->[0];
     } else {
-        C4::AR::Debug::debug("CatRegistroMarcN2 => getTipoDocumentoObject()=> EL OBJECTO (ID) CatRefTipoNivel3 NO EXISTE");
+#         C4::AR::Debug::debug("CatRegistroMarcN2 => getTipoDocumentoObject()=> EL OBJECTO (ID) CatRefTipoNivel3 NO EXISTE");
         $tipo_doc = C4::Modelo::CatRefTipoNivel3->new();
     }
     
+
+# C4::AR::Debug::debug("CatRegistroMarcN2 => getTipoDocumentoObject()=> EL OBJECTO (ID) CatRefTipoNivel3 eXISTE???".$tipo_doc->getNombre());
     return $tipo_doc;
 }
 
