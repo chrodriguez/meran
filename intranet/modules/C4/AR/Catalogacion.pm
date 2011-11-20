@@ -675,6 +675,8 @@ sub as_stringReloaded {
 #             C4::AR::Debug::debug("getPost =>|".$cat_estruct_info_array->getPost()."|");
             if(C4::AR::Utilidades::trim($dato) ne ""){
                 $text                           = $cat_estruct_info_array->getPre().$dato.$cat_estruct_info_array->getPost();
+            } else {
+                $text                           = $dato;
             }
         }
 
