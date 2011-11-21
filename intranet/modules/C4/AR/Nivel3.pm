@@ -384,7 +384,7 @@ sub getBarcodesPrestadoLike {
 sub detalleNivel3{
     my ($id2,$db) = @_;
 
-    C4::AR::Debug::debug("detalleNivel3 ");
+    C4::AR::Debug::debug("detalleNivel3 => id2 => ".$id2);
 
     my %hash_nivel2;	
     #recupero el nivel1 segun el id1 pasado por parametro
@@ -403,6 +403,7 @@ sub detalleNivel3{
         $hash_nivel2{'id2'}                     = $id2;
         $hash_nivel2{'tipo_documento'}          = $nivel2_object->getTipoDocumentoObject->getNombre();
         $hash_nivel2{'nivel2_array'}            = $nivel2_object->toMARC_Intra; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
+
         $hash_nivel2{'nivel2_template'}         = $nivel2_object->getTemplate();
         $hash_nivel2{'tiene_indice'}            = $nivel2_object->tiene_indice;
         $hash_nivel2{'indice'}                  = $hash_nivel2{'tiene_indice'}?$nivel2_object->getIndice:0;
@@ -425,7 +426,6 @@ sub detalleNivel3{
         $hash_nivel2{'lista_docs'}              = $e_docs;
         $hash_nivel2{'cant_docs'}               = $cant_docs;
 
-
         if($nivel2_object->getTemplate() eq "ANA"){
         #soy una ANALITICA tengo q obtener el ID2 del campo 773, a para obtener el ID1, link al registro padre
 #             C4::AR::Debug::debug("Nivel3 => detalleNivel3 => getAnalitica => ".$nivel2_object->getAnalitica());
@@ -433,12 +433,11 @@ sub detalleNivel3{
             $hash_nivel2{'nivel1_padre'}        = $nivel2_object_padre->getId1();
         }
 
-
         #otengo las analiticas
-        my  $cat_reg_marc_n2_analiticas = $nivel2_object->getAnaliticas();
+        my $cat_reg_marc_n2_analiticas = $nivel2_object->getAnaliticas();
 
-        my @nive1_analitica_array;
-        my @nive2_analitica_array;
+        my @nivel1_analitica_array;
+        my @nivel2_analitica_array;
       
   
         if($cat_reg_marc_n2_analiticas){
@@ -452,18 +451,15 @@ sub detalleNivel3{
                 my $n1_object = C4::AR::Nivel1::getNivel1FromId1($n2_object->getId1(),$db);
 
                 $hash_nivel1_aux{'nivel1_analitica'}        = $n1_object->toMARC_Intra;
-
-                push(@nive1_analitica_array, \%hash_nivel1_aux);
-
-                my %hash_nivel1_aux;
-
-                $hash_nivel1_aux{'nivel1_analitica'}        = $n2_object->toMARC_Intra;
-
-                push(@nive1_analitica_array, \%hash_nivel1_aux);
+                push(@nivel1_analitica_array, \%hash_nivel1_aux);
+                
+#Esto mostraba cosas de más, perdón Mike.
+                $hash_nivel2_aux{'nivel2_analitica'}        = $n2_object->toMARC_Intra;
+                push(@nivel2_analitica_array, \%hash_nivel2_aux);
             }
 
-            $hash_nivel2{'nivel1_analiticas_array'} = \@nive1_analitica_array;
-            $hash_nivel2{'nivel1_analiticas_cant'}  = scalar(@nive1_analitica_array);
+            $hash_nivel2{'nivel1_analiticas_array'} = \@nivel1_analitica_array;
+            $hash_nivel2{'nivel1_analiticas_cant'}  = scalar(@nivel1_analitica_array);
         }
 
     }

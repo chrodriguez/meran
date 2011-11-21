@@ -232,12 +232,12 @@ function ordenar(orden){
                 objAH.debug= true;
                 objAH.url= 'estanteDB.pl';
                 objAH.estante= $('#input_id_estante').val();
-		objAH.abuelo= $('#input_abuelo_estante').val();
+				objAH.abuelo= $('#input_abuelo_estante').val();
                 objAH.padre= $('#input_padre_estante').val();
                 objAH.valor=$('#input_valor_estante').val();
                 objAH.tipo= 'MODIFICAR_ESTANTE';
                 objAH.sendToServer();
-		$.modal.close();
+				$.modal.close();
 	    }
         }
 
@@ -245,7 +245,6 @@ function ordenar(orden){
             var Messages= JSONstring.toObject(responseText);
             setMessages(Messages);
             if (!(hayError(Messages))){
-		$('#resultBusqueda').html(responseText);
                 if (objAH.padre == 0){
                     verEstantes();
                     $('.datos_tabla_div_estantes').hide();
