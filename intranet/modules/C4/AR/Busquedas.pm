@@ -1863,7 +1863,6 @@ sub MARCRecordById3WithReferences {
 	my $marc_record = C4::AR::Busquedas::MARCRecordById3($id3);
 
     my $tipo_doc    = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("910","a"));
-    C4::AR::Debug::debug("MARCRecordById3WithReferences => tipo_doc = ".$tipo_doc);
 	foreach my $field ($marc_record->fields) {
         if(! $field->is_control_field){
             my $campo                       = $field->tag;
@@ -1872,10 +1871,10 @@ sub MARCRecordById3WithReferences {
             foreach my $subfield ($field->subfields()) {
                 my $subcampo                        = $subfield->[0];
                 my $dato                            = $subfield->[1];
-                $dato                               = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $tipo_doc);
-                $marc_record->field($campo)->update( $subcampo => C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato,$tipo_doc));
+                my $nivel                       = C4::AR::EstructuraCatalogacionBase::getNivelFromEstructuraBaseByCampoSubcampo($campo, $subcampo);
+                $dato                               = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $tipo_doc,$nivel);
+                $field->update( $subcampo => C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato,$tipo_doc,$nivel));
                 
-			C4::AR::Debug::debug("MARCRecordById3WithReferences => dato = ".$dato." =============== refffff: ".C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato, $tipo_doc));
             }
 		}
 	}
