@@ -518,7 +518,7 @@ sub getTablaInstanceByAlias{
     my $clave;
 
     if ($tabla){
-      $clave = $tabla->get_key_value();
+      $clave = $tabla->meta->primary_key;
       
     }
 
@@ -669,16 +669,52 @@ sub asignarReferenciaParaCatalogo{
 
   my $id_viejo = $referer_involved;
   my $id_nuevo = $related_id;
-  my $nivel1 = C4::Modelo::CatRegistroMarcN1->new();
-  my $registros = $nivel1->getReferenced($tabla,$referer_involved);
+  my @id1_to_generate = ();
+ #Nivel 1 
+  my $nivel = C4::Modelo::CatRegistroMarcN1->new();
+  my $registros = $nivel->getReferenced($tabla,$referer_involved);
 
   foreach my $registro (@$registros){
       my $marc = $registro->getMarcRecord;
       $marc =~ s/$nombre_tabla\@$id_viejo/$nombre_tabla\@$id_nuevo/g;
       $registro->setMarcRecord($marc);
       $registro->save();
-      C4::AR::Sphinx::generar_indice($registro->getId1(), 'R_PARTIAL', 'UPDATE');
+      push (@id1_to_generate,$registro->getId1());
   }
+  
+ #Nivel 2 
+  my $nivel = C4::Modelo::CatRegistroMarcN2->new();
+  my $registros = $nivel->getReferenced($tabla,$referer_involved);
+
+  foreach my $registro (@$registros){
+      my $marc = $registro->getMarcRecord;
+      $marc =~ s/$nombre_tabla\@$id_viejo/$nombre_tabla\@$id_nuevo/g;
+      $registro->setMarcRecord($marc);
+      $registro->save();
+      if (!C4::AR::Utilidades::existeInArray($registro->getId1(),@id1_to_generate)){
+            push (@id1_to_generate,$registro->getId1());
+      }
+  }
+  
+ #Nivel 3 
+  my $nivel = C4::Modelo::CatRegistroMarcN3->new();
+  my $registros = $nivel->getReferenced($tabla,$referer_involved);
+
+  foreach my $registro (@$registros){
+      my $marc = $registro->getMarcRecord;
+      $marc =~ s/$nombre_tabla\@$id_viejo/$nombre_tabla\@$id_nuevo/g;
+      $registro->setMarcRecord($marc);
+      $registro->save();
+      if (!C4::AR::Utilidades::existeInArray($registro->getId1(),@id1_to_generate)){
+            push (@id1_to_generate,$registro->getId1());
+      }
+  } 
+  #Se regenera el indice para todos los Id1
+  
+  foreach my $id1 (@id1_to_generate){
+        C4::AR::Sphinx::generar_indice($id1, 'R_PARTIAL', 'UPDATE');
+  }
+  
 }
 
 

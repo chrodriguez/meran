@@ -88,8 +88,8 @@ if(!(hayError(Messages))){_freeMemory(ID3_ARRAY);ID3_ARRAY=[];_clearDataFromComp
 function guardar(nivel){if(nivel==1){$('#formNivel1').submit();}
 if(nivel==2){$('#formNivel2').submit();}
 if(nivel==3){$('#formNivel3').submit();}}
-function mostrarInfoAltaNivel3(idNivel2){if(idNivel2!=0){objAH=new AjaxHelper(updateMostrarInfoAltaNivel3);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";objAH.tipoAccion="MOSTRAR_INFO_NIVEL3_TABLA";objAH.id2=idNivel2;ID_N2=idNivel2;objAH.sendToServer();}}
-function updateMostrarInfoAltaNivel3(responseText){$('#divCantEjemplares').show();$('#detalleDelNivel3').html(responseText);$('#ejemplares_nive2_id_'+ID_N2).html(responseText);zebra('tablaResult');checkedAll('select_all','checkEjemplares');scrollTo('detalleDelNivel3');}
+function mostrarInfoAltaNivel3(idNivel2){startOverlay();if(idNivel2!=0){objAH=new AjaxHelper(updateMostrarInfoAltaNivel3);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";objAH.tipoAccion="MOSTRAR_INFO_NIVEL3_TABLA";objAH.id2=idNivel2;ID_N2=idNivel2;objAH.sendToServer();}}
+function updateMostrarInfoAltaNivel3(responseText){$('#divCantEjemplares').show();$('#detalleDelNivel3').html(responseText);$('#ejemplares_nive2_id_'+ID_N2).html(responseText);zebra('tablaResult');checkedAll('select_all','checkEjemplares');scrollTo('detalleDelNivel3');closeModal();}
 function mostrarInfoAltaNivel3ParaEdicionGrupalFromRegistro(idNivel2){if(idNivel2!=0){objAH=new AjaxHelper(updateMostrarInfoAltaNivel3ParaEdicionGrupalFromRegistro);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";objAH.tipoAccion="MOSTRAR_INFO_NIVEL3_TABLA";objAH.id2=idNivel2;ID_N2=idNivel2;objAH.sendToServer();}}
 function updateMostrarInfoAltaNivel3ParaEdicionGrupalFromRegistro(responseText){modificarEjemplaresN3();}
 function open_alta_indicador(id_div_alta_indicador){$('#'+id_div_alta_indicador).modal({containerCss:{backgroundColor:"#fff",height:150,padding:0,width:530,},});}
