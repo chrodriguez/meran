@@ -1992,9 +1992,10 @@ function updateBorrarN1(responseText){
 
     if (! (hayError(Messages) ) ){
         inicializar();
-	    mostrarEstructuraDelNivel1();
-	    mostrarInfoAltaNivel2(ID_N2);
-        mostrarInfoAltaNivel3(ID_N2);
+// 	    mostrarEstructuraDelNivel1();
+// 	    mostrarInfoAltaNivel2(ID_N2);
+//         mostrarInfoAltaNivel3(ID_N2);
+        $("#detalleComun").html("");    
     }
 }
 
