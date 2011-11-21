@@ -137,13 +137,21 @@ sub generar_indice {
         $sth1       = $dbh->prepare($query1);
         $sth1->execute($id1);
 
-    } else {
-
-        #se va a modificar un registro en particular
-        my $query1  = " SELECT * FROM cat_registro_marc_n1 WHERE id = ?";
-        $sth1       = $dbh->prepare($query1);
-        $sth1->execute($id1);
-    }
+    } elsif ($flag eq "R_PARTIAL") {
+		C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => action ".$action);
+		if ($action eq 'DELETE') {
+			#se va a eliminar un registro en particular		
+			my $query1  = " DELETE FROM indice_busqueda WHERE id = ? ";
+			$sth1       = $dbh->prepare($query1);
+			$sth1->execute($id1);	
+			}
+		else{
+			#se va a modificar un registro en particular
+			my $query1  = " SELECT * FROM cat_registro_marc_n1 WHERE id = ?";
+			$sth1       = $dbh->prepare($query1);
+			$sth1->execute($id1);
+        }
+    } 
 
 while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
