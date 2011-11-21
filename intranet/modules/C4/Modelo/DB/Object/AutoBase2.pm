@@ -89,13 +89,25 @@ sub getInvolvedFilterString{
     my @filtros;
     
     my $table_name = $tabla->meta->table;
+    
+    my $instance = $tabla->getByPk($value);
+    
+    $value = $instance->get_key_value();
 
     my $filter_string = $table_name."@".$value;
 
     push (@filtros, ( marc_record => {like => '%'.$filter_string.'%'} ) );
 
+   C4::AR::Debug::debug("********************* REFERENCIAS ************************** \n getInvolvedFilterString en $table_name =========> TABLA $tabla VALUE $value ************************************** \n");
+
     return($filter_string,\@filtros);
 	
+}
+
+sub get_key_value{
+    my ($self) = shift;
+    
+    return ($self->getPkValue);
 }
 
 sub replaceByThis{
@@ -111,7 +123,7 @@ sub replaceByThis{
     foreach my $tabla (@$data_array){
         if (!$tabla->{'tabla_catalogo'}){
             my ($clave_tabla_referente,$tabla_referente) = C4::AR::Referencias::getTablaInstanceByTableName($tabla->{'tabla_object'}->getTabla_referente);
-            $tabla_referente->replaceBy($tabla->{'tabla_object'}->getCampo_referente,$self->getPkValue,$new_id);
+            $tabla_referente->replaceBy($tabla->{'tabla_object'}->getCampo_referente,$self->get_key_value,$new_id);
         }
     }
 

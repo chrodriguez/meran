@@ -506,6 +506,7 @@ sub getTabla{
     return ($cantidad,$clave,$tabla,$datos,$campos);
 }
 
+
 sub getTablaInstanceByAlias{
     
     my ($alias) = @_;
@@ -517,7 +518,7 @@ sub getTablaInstanceByAlias{
     my $clave;
 
     if ($tabla){
-      $clave = $tabla->meta->primary_key."";
+      $clave = $tabla->get_key_value();
       
     }
 
@@ -644,6 +645,11 @@ sub asignarReferencia{
 
     if ($tabla){
         my $old_pk = $tabla->getByPk($referer_involved);
+        
+        my $new_instance = $tabla->getByPk($related_id);
+        
+        $related_id =   $new_instance->get_key_value();
+        
         $status = $old_pk->replaceByThis($related_id);
     }
     

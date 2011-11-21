@@ -20,11 +20,18 @@ __PACKAGE__->meta->setup(
 use C4::Modelo::RefIdioma::Manager;
 use C4::Modelo::RefPais;
 use Text::LevenshteinXS;
+
 sub toString{
 	my ($self) = shift;
 
     return ($self->getDescription);
 }    
+
+sub get_key_value{
+    my ($self) = shift;
+    
+    return ($self->getIdLanguage);
+}
 
 sub getObjeto{
 	my ($self) = shift;
