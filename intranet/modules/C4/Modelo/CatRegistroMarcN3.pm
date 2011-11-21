@@ -67,6 +67,7 @@ sub agregar {
     $self->setId2($params->{'id2'});
     $self->setId1($params->{'id1'});
     my $marc_record = MARC::Record->new_from_usmarc($params->{'marc_record'});
+        
     $self->setCodigoBarra($marc_record->subfield("995","f"));
     $self->setSignatura($marc_record->subfield("995","t"));
     $self->setCreatedAt(C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"), $dateformat));
