@@ -400,9 +400,9 @@
                       </li>
                       <li>
                                   [% PERL %]
-                                      print C4::AR::Filtros::link_to( text =>     "[% 'Tablas de Referencia' | i18n %]",
+                                      print C4::AR::Filtros::link_to( text =>     "[% 'Visibilidad Campos TR' | i18n %]",
                                                                       url =>      "[% url_prefix %]/catalogacion/tablasReferencia/tablasReferencia.pl", 
-                                                                      title =>    "[% 'Tablas de Referencia' | i18n %]"
+                                                                      title =>    "[% 'Visibilidad Campos TR' | i18n %]"
                                                                   ) ;
                                   [% END %]
                       </li>
