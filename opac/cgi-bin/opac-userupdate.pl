@@ -35,6 +35,12 @@ $data_hash{'direccion'}         = $input->param('direccion');
 $data_hash{'numero_telefono'}   = $input->param('telefono');
 $data_hash{'id_ciudad'}         = $input->param('id_ciudad');
 $data_hash{'email'}             = $input->param('email');
+
+$data_hash{'auth_nombre'}       = $input->param('nombre_autorizado');
+$data_hash{'auth_dni'}          = $input->param('dni_autorizado');
+$data_hash{'auth_telefono'}     = $input->param('telefono_autorizado');
+$data_hash{'eliminar_autorizado'}   = $input->param('eliminar_autorizado');
+
 $data_hash{'actual_password'}   = $input->param('actual_password');
 $data_hash{'new_password1'}     = $input->param('new_password1');
 $data_hash{'new_password2'}     = $input->param('new_password2');
@@ -47,11 +53,18 @@ if($input->param('remindFlag') eq "on"){
 }
 
 
-my $fields_to_check = ['nombre','apellido','direccion','numero_telefono','id_ciudad','email'];
+my $fields_to_check;
+
+$fields_to_check = ['nombre','apellido','direccion','numero_telefono','id_ciudad','email'];
+
 my $update_password = C4::AR::Utilidades::validateString($data_hash{'actual_password'});
 
 if ($update_password){
     $fields_to_check = ['nombre','apellido','direccion','numero_telefono','id_ciudad','email', 'actual_password','new_password1','new_password2'];
+}
+
+if ($data_hash{'eliminar_autorizado'}){
+     $socio->agregarAutorizado(\%data_hash);
 }
 
 if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
@@ -74,7 +87,12 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
     	if (@$){
     		$cod_msg = 'U339';
     	}
-    }else{
+    }
+
+    if (!$msg_object->{'error'}) {
+            $socio->agregarAutorizado(\%data_hash);
+
+    } else{
        $cod_msg = C4::AR::Mensajes::getFirstCodeError($msg_object);
     }
 

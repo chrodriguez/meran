@@ -34,6 +34,13 @@
       
     }
 
+    function eliminarAutorizado(){
+           $('#nombre_autorizado').val("");
+           $('#dni_autorizado').val("");
+           $('#telefono_autorizado').val("");
+           $('#eliminar_autorizado').val("true");
+    }
+
     $(document).ready(function() {
         CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'});
         $("#temas_opac").change(function() {
@@ -142,6 +149,26 @@
                    <input type="hidden" name="new_password2" id="new_password2" />
                    <input type="hidden" name="changePassword" id="changePassword" />
                    <input type="hidden" name="actual_password" id="actual_password" />
+              </fieldset>
+              
+              <fieldset>
+                            <legend class="titulo_legend_resaltado">[% 'Usuario adicional' | i18n %]</legend>
+                              <div class="authorizedBack">
+                                 <p>
+                                    <label class="left" for="nombre_autorizado"> [% "Nombre y Apellido" | i18n %]:</label>
+                                    <input type="text" name="nombre_autorizado" id="nombre_autorizado" class="field [% IF !socio.getNombre_apellido_autorizado %] error_field [% END %]" value="[% socio.getNombre_apellido_autorizado %]" tabindex="10" />
+                                 </p>
+                                 <p>    
+                                    <label class="left" for="dni_autorizado"> [% "DNI" | i18n %]: </label> 
+                                    <input type="text" name="dni_autorizado" id="dni_autorizado" class="field [% IF !socio.getDni_autorizado %] error_field [% END %]" value="[% socio.getDni_autorizado %]" tabindex="10" />
+                                 </p>
+                                 <p>
+                                    <label class="left" for="telefono_autorizado">[% "Tel&eacute;fono" | i18n %]:</label>
+                                    <input type="text" name="telefono_autorizado" id="telefono_autorizado" class="field [% IF !socio.getTelefono_autorizado %] error_field [% END %]" value="[% socio.getTelefono_autorizado %]" tabindex="10" /> 
+                                 </p>
+                                 <input type="hidden" name="eliminar_autorizado" id="eliminar_autorizado" value=""/> 
+                                 <p  class="left"><a onclick="eliminarAutorizado();">Eliminar Autorizado</a></p>
+                            </div>
               </fieldset>
               <fieldset>
                   <legend>&nbsp;[% 'Cambio de contrase&ntilde;a' | i18n %] ([% 'Dejar en blanco para descartar' | i18n %])&nbsp;</legend>

@@ -238,6 +238,7 @@ sub modificarVisibilidadOPAC{
     $self->setCiudad($data_hash->{'id_ciudad'});
     $self->setTelefono($data_hash->{'numero_telefono'});
     $self->setEmail($data_hash->{'email'});
+
     $self->save();
 }
 
