@@ -23,6 +23,11 @@ use C4::Modelo::PrefUnidadInformacion;
 use C4::Modelo::CatRefTipoNivel3::Manager;
 use Text::LevenshteinXS;
 
+sub get_key_value{
+    my ($self) = shift;
+    
+    return ($self->getId_tipo_doc);
+}
 
 sub getId{
     my ($self) = shift;

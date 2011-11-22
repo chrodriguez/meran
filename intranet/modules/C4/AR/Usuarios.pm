@@ -172,11 +172,11 @@ sub agregarPersona {
         #genero un estado de ALTA para la persona para una fuente de informacion
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
-        eval{
+        #eval{
             $person->agregar($params);
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
             $db->commit;
-        };
+        #};
 
         if ($@){
             &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
@@ -540,7 +540,7 @@ sub getSocioInfo {
     push (@filtros, (id_socio => {eq =>$id_socio}) );
 
     my  $socio = C4::Modelo::UsrSocio::Manager->get_usr_socio(query => \@filtros,
-                                                              require_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
+                                                              require_objects => ['persona','ui','categoria','persona.ciudad_ref',
                                                                                   'persona.documento'],
                                                               with_objects => ['persona.alt_ciudad_ref'],
                                                              );
@@ -561,10 +561,10 @@ sub getSocioInfoPorNroSocio {
     if ($nro_socio){
         my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
                                                     query => [ nro_socio => { eq => $nro_socio } ],
-                                                    require_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
+                                                    require_objects => ['persona','ui','categoria','persona.ciudad_ref',
                                                                         'persona.documento'],
                                                     with_objects => ['persona.alt_ciudad_ref'],
-                                                    select       => ['persona.*','usr_socio.*','estado.*','ref_localidad.*'],
+                                                    select       => ['persona.*','usr_socio.*','ref_localidad.*'],
                                         );
 
         if($socio_array_ref){
@@ -675,13 +675,13 @@ sub getSocioLike {
                                                                             limit   => $cantR,
                                                                             offset  => $ini,
                                                                             select => ['*','length(apellido) AS agregacion_temp'],
-                                                              with_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
+                                                              with_objects => ['persona','ui','categoria','persona.ciudad_ref',
                                                                                   'persona.documento'],
      ); 
 
     #Obtengo la cant total de socios para el paginador
     my $socios_array_ref_count = C4::Modelo::UsrSocio::Manager->get_usr_socio_count( query => \@filtros,
-                                                              with_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
+                                                              with_objects => ['persona','ui','categoria','persona.ciudad_ref',
                                                                                   'persona.documento'],
                                                                      );
 
@@ -814,14 +814,14 @@ sub BornameSearchForCard {
     eval{
         $socios_array_ref_count = C4::Modelo::UsrSocio::Manager->get_usr_socio_count(   query => \@filtros,
                                                                             sort_by => ( $socioTemp->sortByString($params->{'orden'}) ),
-                                                              require_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
+                                                              require_objects => ['persona','ui','categoria','persona.ciudad_ref',
                                                                                   'persona.documento'],
         );
         $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
                                                                             sort_by => ( $socioTemp->sortByString($params->{'orden'}) ),
 #                                                                             limit => $params->{'cantR'},
 #                                                                             offset => $params->{'ini'},
-                                                              require_objects => ['persona','ui','categoria','estado','persona.ciudad_ref',
+                                                              require_objects => ['persona','ui','categoria','persona.ciudad_ref',
                                                                                   'persona.documento'],
         );
     };

@@ -123,7 +123,11 @@ sub countAlphaNumericChars{
                 or 
             ($fragment =~ tr/A-Z//) 
                 or 
-            ($fragment =~ tr/0-9//)){
+            ($fragment =~ tr/0-9//)
+                or 
+            ($fragment =~ tr/\-//)
+            
+            ){
 
                 $count++;
             }
@@ -324,21 +328,13 @@ sub isValidDocument {
 
     my($docType,$docNumber) = @_;
     my($checkResult) = 0;
-    $docType = C4::AR::Utilidades::trim($docType);
-
-    if ($docType eq "DNI"){
-        if ( countNumericChars($docNumber) ){
-            if (length(C4::AR::Utilidades::trim($docNumber)) > 0){
-                $checkResult = 1;
-            }
-        }
+    $docType    = C4::AR::Utilidades::trim($docType);
+    $docNumber  = C4::AR::Utilidades::trim($docNumber);
+    
+    if (countAlphaNumericChars($docNumber) == (length($docNumber)) ){
+        $checkResult = 1;
     }
-    else
-     {
-        if ((&countAlphaNumericChars($docNumber) == (length($docNumber)) )){
-            $checkResult = 1;
-        }
-     }
+
     return ($checkResult);
 }
 

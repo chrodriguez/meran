@@ -372,7 +372,8 @@ sub t_eliminarNivel1{
             $cat_registro_marc_n1->eliminar;  
             $db->commit;
             eval {
-                C4::AR::Sphinx::generar_indice($cat_registro_marc_n1->getId1(), 'R_PARTIAL', 'UPDATE');
+				#Se eliminar del indice el registro eliminado
+                C4::AR::Sphinx::generar_indice($cat_registro_marc_n1->getId1(), 'R_PARTIAL', 'DELETE');
                 #ahora el indice se encuentra DESACTUALIZADO
                 C4::AR::Preferencias::setVariable('indexado', 0, $db);
             };    
