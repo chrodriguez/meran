@@ -25,6 +25,10 @@ my $mensaje                     = $input->param('mensaje');#Mensaje que viene de
 my $mensaje_desde_pdf           = $input->param('mensaje');
 
 $t_params->{'nro_socio'}        = $nro_socio;
+$t_params->{'auto_generar_comprobante_prestamo'} = C4::AR::Preferencias::getValorPreferencia('auto_generar_comprobante_prestamo');
+
+C4::AR::Debug::debug( C4::AR::Preferencias::getValorPreferencia('auto_generar_comprobante_prestamo'));
+
 my $socio = $t_params->{'socio_modificar'}  = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio) || C4::AR::Utilidades::redirectAndAdvice('U353');
 
 if ($socio->getActivo()){
