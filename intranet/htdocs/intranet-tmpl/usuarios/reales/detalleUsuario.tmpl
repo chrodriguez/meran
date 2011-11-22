@@ -6,13 +6,23 @@
 <script type="text/javascript">
 var loaderPath= "";
     $(document).ready(function(){
-    	[% IF notas %]
-            makeToggle('toggle_container','trigger_notas',null,false);
-    	[% ELSE %]
-            makeToggle('toggle_container','trigger_notas',null,true);
+
+        makeToggle('toggle_container_datos_sec','trigger',null,true);
+        
+        [% IF notas %]
+            makeToggle('toggle_container_nota','trigger',null,false);
+        [% ELSE %]
+            makeToggle('toggle_container_nota','trigger',null,true);
         [% END %]
-        makeToggle('toggle_container','trigger',null,true);
- 
+
+        [% IF socio.tieneAutorizado %]
+            makeToggle('toggle_container_autorizado','trigger',null,false);
+        [% ELSE %]
+            makeToggle('toggle_container_autorizado','trigger',null,true);
+        [% END %]
+
+
+
         loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
         $('.nota').editable('[% url_prefix %]/usuarios/reales/usuariosRealesDB.pl', { 
               type      : 'textarea',
@@ -87,30 +97,12 @@ var loaderPath= "";
                 <li> [% "Credenciales" | i18n %]:<strong> [% socio.getCredentialType %]</strong> </li>
                 </ul>
           </fieldset>
-    [% IF socio.tieneAutorizado %]
-        <fieldset>
-            <legend class="titulo_legend_resaltado">[% 'Usuario adicional' | i18n %]</legend>
-              <div class="authorizedBack">
-                  <ul class="listado_sin_margen">
-                      <li>
-                          [% "Nombre y Apellido" | i18n %]:<span id="nombre_autorizado" class="strong" > [% socio.getNombre_apellido_autorizado%]</span>
-                      </li>
-                      <li>
-                            [% "DNI" | i18n %]:<span id="dni_autorizado" class="strong" >  [% socio.getDni_autorizado %]</span>
-                      </li>
-                      <li>
-                          [% "Tel&eacute;fono" | i18n %]:<span id="telefono_autorizado" class="strong" >[% socio.getTelefono_autorizado %]</span>
-                      </li>
-                  </ul>
-              </div>
-        </fieldset>
-     [% END %]
         <div id="datos_Secundarios">
         <fieldset>
             <legend class="titulo_legend_resaltado trigger click titulo_legend" title='[% "click para acceder a informaci&oacute;n adicional" | i18n %]'>
                     [% "Datos secundarios" | i18n %]
             </legend>
-            <div class="toggle_container">
+            <div class="toggle_container_datos_sec">
                 <ul class="listado_sin_margen">
                     <li>[% "Fecha de nacimiento:" | i18n %] <strong> [% socio.persona.getNacimiento %]</strong></li>
                     <li>[% "Sexo:" | i18n %] <strong> [% socio.persona.getSexoPrint %]</strong> </li>
@@ -147,10 +139,27 @@ var loaderPath= "";
         </fieldset>
 
         <fieldset>
-            <legend class="titulo_legend_resaltado trigger_notas click titulo_legend" title='[% "click para acceder a las notas registradas sobre el usuario" | i18n %]'>
+            <legend class="titulo_legend_resaltado trigger click">[% 'Usuario adicional' | i18n %]</legend>
+              <div class="authorizedBack toggle_container_autorizado" style="display:block;">
+                  <ul class="listado_sin_margen">
+                      <li>
+                          [% "Nombre y Apellido: " | i18n %]<span id="nombre_autorizado" class="strong" > [% socio.getNombre_apellido_autorizado%]</span>
+                      </li>
+                      <li>
+                            [% "DNI: " | i18n %]<span id="dni_autorizado" class="strong" >  [% socio.getDni_autorizado %]</span>
+                      </li>
+                      <li>
+                          [% "Tel&eacute;fono: " | i18n %]<span id="telefono_autorizado" class="strong" >[% socio.getTelefono_autorizado %]</span>
+                      </li>
+                  </ul>
+              </div>
+        </fieldset>
+
+        <fieldset>
+            <legend class="titulo_legend_resaltado trigger click" title='[% "click para acceder a las notas registradas sobre el usuario" | i18n %]'>
                     [% "Notas" | i18n %]
             </legend>
-            <div class="toggle_container" >
+            <div class="toggle_container_nota" >
                    <div class="nota">[% notas %]</div>
             </div>
         </fieldset>

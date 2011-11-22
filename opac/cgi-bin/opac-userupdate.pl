@@ -54,9 +54,11 @@ if($input->param('remindFlag') eq "on"){
 
 
 my $fields_to_check;
-
-$fields_to_check = ['nombre','apellido','direccion','numero_telefono','id_ciudad','email'];
-
+if ($data_hash{'eliminar_autorizado'}){
+      $fields_to_check = ['nombre','apellido','direccion','numero_telefono','id_ciudad','email'];
+} else {
+      $fields_to_check = ['nombre','apellido','direccion','numero_telefono','id_ciudad','email','auth_nombre','auth_dni','auth_telefono'];
+}
 my $update_password = C4::AR::Utilidades::validateString($data_hash{'actual_password'});
 
 if ($update_password){
@@ -64,7 +66,7 @@ if ($update_password){
 }
 
 if ($data_hash{'eliminar_autorizado'}){
-     $socio->agregarAutorizado(\%data_hash);
+     $socio->desautorizarTercero();
 }
 
 if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){

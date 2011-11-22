@@ -166,8 +166,9 @@
                                     <label class="left" for="telefono_autorizado">[% "Tel&eacute;fono" | i18n %]:</label>
                                     <input type="text" name="telefono_autorizado" id="telefono_autorizado" class="field [% IF !socio.getTelefono_autorizado %] error_field [% END %]" value="[% socio.getTelefono_autorizado %]" tabindex="10" /> 
                                  </p>
+                                 <p><a onclick="eliminarAutorizado();" style="margin:11px;">Eliminar Autorizado</a></p>
                                  <input type="hidden" name="eliminar_autorizado" id="eliminar_autorizado" value=""/> 
-                                 <p  class="left"><a onclick="eliminarAutorizado();">Eliminar Autorizado</a></p>
+                                 
                             </div>
               </fieldset>
               <fieldset>
