@@ -184,13 +184,20 @@ sub to_Button{
     my (%params_hash_ref) = @_;
 
     my $button= '';
-
+    my @array_clases_buttons = ('clean-gray','thoughtbot');
+    
     if ($params_hash_ref{'url'}){
       $button .="<a href="."$params_hash_ref{'url'}"."> ";
     }
 
     my $text    = $params_hash_ref{'text'}; #obtengo el texto a mostrar
+    
     my $boton   = $params_hash_ref{'boton'} || "clean-gray"; #obtengo el boton
+    
+    if (!C4::AR::Utilidades::existeInArray($boton,@array_clases_buttons)){
+    	$boton = "clean-gray";
+    }
+    
     my $onclick = $params_hash_ref{'onclick'} || $params_hash_ref{'onClick'}; #obtengo el llamado a la funcion en el evento onclick
     my $title   = $params_hash_ref{'title'}; #obtengo el title de la componete
     my $width   = length($text);

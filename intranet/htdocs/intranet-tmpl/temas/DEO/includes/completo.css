@@ -410,12 +410,10 @@ body {
 #marco_principal {
 	background: #EAEBED;
 	float: left;
-	width: 76%;
-	min-height: 420px;
-	margin-top: 39px;
+	width: 99%;
+	min-height: 600px;
+	margin-top: 70px;
 	height: auto;
-	/* 	margin-left: 8px; */
-	/*	margin: 0 auto; */
 }
 
 .container_test {
@@ -1553,7 +1551,7 @@ h2.trigger {
 fieldset.accionesUsuarios {
 	float: right;
 	margin-left: 5%;
-	width: 30%;
+	width: 26%;
 }
 
 #file-uploader {
@@ -2922,7 +2920,7 @@ ul {
 }
 
 li {
-	margin-left: 30px;
+/* 	margin-left: 30px; */
 }
 
 b,strong {
