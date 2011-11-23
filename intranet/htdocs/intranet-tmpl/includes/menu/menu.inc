@@ -507,9 +507,9 @@
 			                    </li>
 			                    <li>
 			                                [% PERL %]
-			                                    print C4::AR::Filtros::link_to( text =>     "[% 'Tablas de Referencia' | i18n %]",
+			                                    print C4::AR::Filtros::link_to( text =>     "[% 'Control de autoridades' | i18n %]",
 			                                                                    url =>      "[% url_prefix %]/admin/referencias/referencias.pl",
-			                                                                    title =>    "[% 'Tablas de Referencia' | i18n %]"
+			                                                                    title =>    "[% 'Control de autoridades' | i18n %]"
 			                                                                ) ;
 			                                [% END %]
 			                    </li>
