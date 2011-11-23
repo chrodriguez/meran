@@ -24,6 +24,7 @@ $(document).ready(function() {
                                                                         boton   => "boton_buscar",
                                                                         onClick => "consultar();",
                                                                         title   => "[% 'Buscar' | i18n %]",
+                                                                        inline  => 1,
                                             ) ;
                 [% END %]
                 [% PERL %]
@@ -31,6 +32,7 @@ $(document).ready(function() {
                                                                         boton   => "boton_buscar",
                                                                         onClick => "Borrar();",
                                                                         title   => "[% 'Limpiar' | i18n %]",
+                                                                        inline  => 1,
                                             ) ;
                 [% END %]
         </li>
