@@ -101,6 +101,7 @@ fieldset {
 	clear: both;
 }
 
+
 fieldset .e_docs_upload_form{
 	float: right;
 	width: 60%;
@@ -187,6 +188,7 @@ fieldset legend {
     color: #35414F;
 }
 
+
 #search-bar-catalogue{
 	background-color: #35414F;
     width: 48.5%;
@@ -222,6 +224,9 @@ fieldset legend {
 	margin: 0;
     padding: 0;
 }
+
+
+
 
 
 .item-bar {
@@ -261,6 +266,7 @@ fieldset legend {
     margin: 2px;
     text-decoration: none;
 }
+
 
 #login {
 	background-image: url(../imagenes/meranLogin.png);
@@ -305,6 +311,9 @@ fieldset legend {
 	width: 20em;
 }
 
+/* ULTIMO - CREANDO INTRANET-STRUCTURE */
+
+
 #contenido_login {
 	display: block;
 	height: 70px;
@@ -343,6 +352,8 @@ fieldset legend {
 	height: 145px;
 	background-repeat: no-repeat;
 }
+
+/* ULTIMO */
 
 .idioma_y_login {
 	width: auto;
