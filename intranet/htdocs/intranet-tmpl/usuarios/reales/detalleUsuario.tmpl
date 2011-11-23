@@ -137,7 +137,7 @@ var loaderPath= "";
                 </ul>
             </div>
         </fieldset>
-
+[% IF socio.tieneAutorizado %]
         <fieldset>
             <legend class="titulo_legend_resaltado trigger click">[% 'Usuario adicional' | i18n %]</legend>
               <div class="authorizedBack toggle_container_autorizado" style="display:block;">
@@ -154,7 +154,7 @@ var loaderPath= "";
                   </ul>
               </div>
         </fieldset>
-
+[% END %]
         <fieldset>
             <legend class="titulo_legend_resaltado trigger click" title='[% "click para acceder a las notas registradas sobre el usuario" | i18n %]'>
                     [% "Notas" | i18n %]
@@ -177,7 +177,6 @@ var loaderPath= "";
 	                        <li>
 	                            [% PERL %]
                                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Validar datos Censales' | i18n %]",
-                                                                                    boton   => "boton_buscar",
                                                                                     onClick => "validarDatosCensales();",
                                                         ) ;
 	                            [% END %]
@@ -186,7 +185,6 @@ var loaderPath= "";
                         <li>
                             [% PERL %]
                                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Modificar Datos' | i18n %]",
-                                                                                    boton   => "boton_buscar",
                                                                                     onClick => "modificarDatosDeUsuario();",
                                                         ) ;
                             [% END %]
@@ -194,7 +192,6 @@ var loaderPath= "";
                         <li>
                             [% PERL %]
                                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Eliminar Usuario' | i18n %]",
-                                                                                    boton   => "boton_buscar",
                                                                                     onClick => "eliminarUsuario();",
                                                         ) ;
                             [% END %]
@@ -204,7 +201,6 @@ var loaderPath= "";
     
                             [% PERL %]
                                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Usuario Adicional' | i18n %]",
-                                                                                    boton   => "boton_buscar",
                                                                                     onClick => "agregarAutorizado();",
                                                         ) ;
                             [% END %]
@@ -213,7 +209,6 @@ var loaderPath= "";
                             <li>
                             [% PERL %]
                                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Eliminar Usuario Adicional' | i18n %]",
-                                                                                    boton   => "boton_buscar",
                                                                                     onClick => "desautorizarTercero();",
                                                         ) ;
                             [% END %]
@@ -223,7 +218,6 @@ var loaderPath= "";
                             <li>
                             [% PERL %]
                                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Reestablecer contrase&ntilde;a' | i18n %]",
-                                                                                    boton   => "boton_buscar",
                                                                                     onClick => "resetPassword();",
                                                         ) ;
                             [% END %]
@@ -236,7 +230,6 @@ var loaderPath= "";
       
                             [% PERL %]
                                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Cambio de Contrase&ntilde;a' | i18n %]",
-                                                                                    boton   => "boton_buscar",
                                                                                     onClick => "cambiarPassword();",
                                                         ) ;
                             [% END %]
@@ -250,7 +243,6 @@ var loaderPath= "";
         
                             [% PERL %]
                                     print C4::AR::Filtros::to_Button(   text    => "[% 'Generar Carnet' | i18n %]",
-                                                                        boton   => "boton_buscar",
                                                                         onClick => "formCarnet.submit();",
                                             ) ;
 
@@ -259,7 +251,6 @@ var loaderPath= "";
                         <li>
                             [% PERL %]
                                         print C4::AR::Filtros::to_Button(   text    => "[% 'Libre Deuda' | i18n %]",
-                                                                            boton   => "boton_buscar",
                                                                             onClick => "generarLibreDeuda();",
                                                 ) ;
                             [% END %]
@@ -267,7 +258,6 @@ var loaderPath= "";
                        <li>
                             [% PERL %]
                                         print C4::AR::Filtros::to_Button(   text    => "[% 'Prest. Interbibliotecario' | i18n %]",
-                                                                            boton   => "boton_buscar",
                                                                             onClick => "prestamosInterBibliotecarios();",
                                                 ) ;
                             [% END %]
@@ -275,7 +265,6 @@ var loaderPath= "";
                       <li>
                             [% PERL %]
                                         print C4::AR::Filtros::to_Button(   text    => "[% 'Cambiar Credenciales' | i18n %]",
-                                                                            boton   => "boton_buscar",
                                                                             onClick => "cambiarCredencial();",
                                                 ) ;
                             [% END %]
@@ -291,7 +280,6 @@ var loaderPath= "";
                           <li>
                                 [% PERL %]
                                             print C4::AR::Filtros::to_Button(   text    => "[% 'Eliminar Foto' | i18n %]",
-                                                                                boton   => "boton_borrar",
                                                                                 onClick => "eliminarFoto('[% foto_name %] ');",
                                                                              );
                                 [% END %]

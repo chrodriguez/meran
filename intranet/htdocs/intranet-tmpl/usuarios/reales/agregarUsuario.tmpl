@@ -229,9 +229,19 @@
 <div class="buttonContainerHorizontal">
     <ul class="listaMenuBotones" >
         [% IF addBorrower %]
-                <input type="button" name="save_button" class="submit-button" onclick="save()" id="save_button" value="[% 'Agregar usuario' | i18n %]">
+		        [% PERL %]
+		                            print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar usuario' | i18n %]",
+                                                                        boton   => "thoughtbot",
+		                                                                onClick => "save();",
+		                                    ) ;
+		        [% END %]
         [% ELSE  %]
-                <input type="button" name="save_button" class="submit-button" onclick="save()" id="save_button" value="[% 'Guardar modificaci&oacute;n' | i18n %]">
+                [% PERL %]
+                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar modificaci&oacute;n' | i18n %]",
+                                                                        boton   => "thoughtbot",
+                                                                        onClick => "save();",
+                                            ) ;
+                [% END %]
         [% END %]
 
     </ul>
