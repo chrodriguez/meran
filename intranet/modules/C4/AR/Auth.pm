@@ -1412,8 +1412,7 @@ sub redirectTo {
         $session->param('redirectTo', $url);
 #         C4::AR::Debug::debug("redirectTo=> url: ".$url);
         print_header($session);
-#        print 'CLIENT_REDIRECT';
-        print 'window.location="'.$url.'";';
+        print 'CLIENT_REDIRECT';
         exit;
 	}else{
               my $session = CGI::Session->load();  
