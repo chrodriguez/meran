@@ -128,7 +128,7 @@ sub i18n {
 
 
 
-sub to_Button{
+sub to_Button__{
     my (%params_hash_ref) = @_;
 
     my $button= '';
@@ -179,6 +179,55 @@ sub to_Button{
     return $button;
 }
 
+
+sub to_Button{
+    my (%params_hash_ref) = @_;
+
+    my $button= '';
+    my @array_clases_buttons = ('clean-gray','thoughtbot');
+    
+    if ($params_hash_ref{'url'}){
+      $button .="<a href="."$params_hash_ref{'url'}"."> ";
+    }
+
+    my $text    = $params_hash_ref{'text'}; #obtengo el texto a mostrar
+    
+    my $boton   = $params_hash_ref{'boton'} || "clean-gray"; #obtengo el boton
+    
+    if (!C4::AR::Utilidades::existeInArray($boton,@array_clases_buttons)){
+    	$boton = "clean-gray";
+    }
+    
+    my $onclick = $params_hash_ref{'onclick'} || $params_hash_ref{'onClick'}; #obtengo el llamado a la funcion en el evento onclick
+    my $title   = $params_hash_ref{'title'}; #obtengo el title de la componete
+    my $width   = length($text);
+    my $id      = $params_hash_ref{'id'}; #obtengo el id del boton
+    if($params_hash_ref{'width'}){
+        if ($params_hash_ref{'width'}=="auto"){
+            $width =$width+4;
+            $width= $width."ex";
+        }
+        else{ $width= $params_hash_ref{'width'};
+        }
+    }
+    
+    my $alternClass  = $params_hash_ref{'alternClass'} || 'horizontal';
+
+    if($title){
+    }
+
+    if($id){
+    }
+    
+    $button .=  '<button class="'.$boton.'" onclick="'.$onclick.'">'.$text.'</button>';
+
+    if ($params_hash_ref{'url'}){
+      $button .="</a>";
+    }
+
+    #C4::AR::Debug::debug("Filtros => to_Button => ".$button);
+    return $button;
+}
 
 sub setHelp{
     my (%params_hash_ref) = @_;

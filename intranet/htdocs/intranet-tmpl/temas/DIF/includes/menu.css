@@ -1141,6 +1141,7 @@
 
 .ui-accordion li{
     list-style-type: none;
+    margin-left: 0;
 }
 
 .ui-accordion li a{

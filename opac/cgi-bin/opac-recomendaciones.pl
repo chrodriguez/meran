@@ -17,7 +17,8 @@ my ($template, $session, $t_params)= get_template_and_user({
                                 flagsrequired => {  ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
-                                                    entorno => 'undefined'},
+                                                    tipo_permiso => 'general',
+                                                    entorno => 'adq_opac'},
                  });
 
 $t_params->{'combo_tipo_documento'} = &C4::AR::Utilidades::generarComboTipoNivel3();

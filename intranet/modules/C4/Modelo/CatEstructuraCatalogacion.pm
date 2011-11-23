@@ -82,6 +82,7 @@ sub agregar{
                                                                                     $data_hash->{'campo'},
                                                                                     $data_hash->{'subcampo'},
                                                                                     $data_hash->{'itemtype'}||'ALL',
+                                                                                    $data_hash->{'nivel'},
                                                                                     $self->db,
                                                                             );
 

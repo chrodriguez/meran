@@ -1009,6 +1009,7 @@ function guardar(nivel){
     Muestra el Nivel 3 Nivel 2 (idNivel2)
 */
 function mostrarInfoAltaNivel3(idNivel2){
+	startOverlay();
     if(idNivel2 != 0){
         objAH               = new AjaxHelper(updateMostrarInfoAltaNivel3);
         objAH.debug         = true;
@@ -1029,6 +1030,7 @@ function updateMostrarInfoAltaNivel3(responseText){
     checkedAll('select_all', 'checkEjemplares');
     
     scrollTo('detalleDelNivel3');
+    closeModal();
 }
 
 function mostrarInfoAltaNivel3ParaEdicionGrupalFromRegistro(idNivel2){
@@ -1992,9 +1994,10 @@ function updateBorrarN1(responseText){
 
     if (! (hayError(Messages) ) ){
         inicializar();
-	    mostrarEstructuraDelNivel1();
-	    mostrarInfoAltaNivel2(ID_N2);
-        mostrarInfoAltaNivel3(ID_N2);
+// 	    mostrarEstructuraDelNivel1();
+// 	    mostrarInfoAltaNivel2(ID_N2);
+//         mostrarInfoAltaNivel3(ID_N2);
+        $("#detalleComun").html("");    
     }
 }
 

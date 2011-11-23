@@ -32,7 +32,8 @@ if($tipoAccion eq "MOSTRAR_PRESUPUESTOS_PEDIDO"){
                               flagsrequired   => {  ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
-                                                    entorno => 'adquisiciones'},
+                                                    tipo_permiso => 'general',
+                                                    entorno => 'adq_intra'},
         });
       
 
@@ -146,7 +147,8 @@ if ($tipoAccion eq "EXPORTAR_MEJOR_PRESUPUESTO"){
                               flagsrequired   => {  ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
-                                                    entorno => 'usuarios'}, # FIXME
+                                                    tipo_permiso => 'general',
+                                                    entorno => 'adq_intra'}, # FIXME
         });
 
         my $mejor_pres_detalle;

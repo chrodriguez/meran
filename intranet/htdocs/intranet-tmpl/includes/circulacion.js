@@ -534,8 +534,10 @@ function imprimirTicket(tickets){
     }
     
     comp=JSONstring.make(comprobantes);   
-    window.open (URL_PREFIX+"/circ/ticket.pl?token="+token+"&comp="+comp,this.href);
-    window.close();
+    if (AUTO_GENERAR_COMPROBANTE == 1){
+      window.open (URL_PREFIX+"/circ/ticket.pl?token="+token+"&comp="+comp,this.href);
+      window.close();
+    }
     $('#ticket').load(URL_PREFIX+"/circ/ticket.pl?token="+token+"&comp="+comp,this.href);
     $('#ticket').hide();
     

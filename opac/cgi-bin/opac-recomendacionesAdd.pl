@@ -20,7 +20,8 @@ my ($template, $session, $t_params) = get_template_and_user({
     flagsrequired => {  ui => 'ANY', 
                         tipo_documento => 'ANY', 
                         accion => 'ALTA', 
-                        entorno => 'undefined'},
+                        tipo_permiso => 'general',
+                        entorno => 'adq_opac'},
     debug => 1,
 });
 

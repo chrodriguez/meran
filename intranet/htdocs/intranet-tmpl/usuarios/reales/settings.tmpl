@@ -46,7 +46,12 @@
     </div> 
 	<div class="buttonContainerHorizontal">
 	    <ul class="listaMenuBotones">
-            <input type="submit" value="[% 'Guardar' | i18n %]" id="save_button" class="submit-button" name="save_button">
+                [% PERL %]
+                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
+                                                                        boton   => "thoughtbot",
+                                                                        onClick => "function(){$('#user-settings').submit();}",
+                                            ) ;
+                [% END %]
 	    </ul>
 	</div>    
 </fieldset>

@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!doctype html>
 <html>
 	<head>
 	[% INCLUDE "message_INTRA.inc" %]
@@ -30,6 +30,7 @@
 	<script type="text/javascript" src="/includes/jquery/jquery-ui-1.8.9.custom.min.js"></script>
 	<script type="text/javascript" src="/includes/shiftSelectTr.js"></script>
 	<script type="text/javascript" src="/includes/jquery/jquery.expander.js"></script>
+	<script type="text/javascript" src="/includes/jquery/jquery.bar.js"></script>
 	<script type="text/javascript">
 	
 		function swap(id,src){
@@ -41,25 +42,7 @@
 			$('#url').val(location.pathname);
 			$('#formLang').submit();
 		}
-	
-		function mainmenu(){
-		
-		    var options = {minWidth: 140};  
-		    //$('#menu').menu();
-		    
-			var icons = {
-	            header: "ui-icon-circle-arrow-e",
-	            headerSelected: "ui-icon-circle-arrow-s"
-	        };
-	
-	        $('.accordion').accordion({
-	            autoHeight: false,
-	            navigation: true,
-	            clearStyle: true,
-	            //icons: icons, 
-	        });  
-		}
-		
+			
 		function searchesText(objectId){
 			
 			var text              = [% "'Que quiere buscar?'" | i18n %];
@@ -97,7 +80,6 @@
 	    }
 		
 		$(document).ready(function(){
-			mainmenu();
 			checkTr();
 			$('input[type="text"]').focus(function() {  
 			    $(this).removeClass("textInput").addClass("focusInput");  
@@ -118,11 +100,10 @@
 	  <div style="display: none;" id="ajax-indicator">
 	    <div><p>[% 'Cargando...' | i18n %]</p></div>
 	  </div>
-	  <div class="container_test">
-	<!--  <div id="menu-container" class="main-header"> -->
-	  
-	  [% INCLUDE   'menu.inc'  %]
-	  
+
+	  <header>
+	  	[% INCLUDE   'menu.inc'  %]
+	  </header>
 	<!--  </div> -->
 	  
 	  <div id="marco_principal">

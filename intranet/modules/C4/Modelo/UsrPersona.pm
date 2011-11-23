@@ -24,6 +24,7 @@ __PACKAGE__->meta->setup(
         telefono         => { type => 'varchar', overflow => 'truncate', length => 255 },
         email            => { type => 'varchar', overflow => 'truncate', length => 255 },
         fax              => { type => 'varchar', overflow => 'truncate', length => 255 },
+        id_estado        => { type => 'integer', overflow => 'truncate', not_null => 1,  default => 20 },
         msg_texto        => { type => 'varchar', overflow => 'truncate', length => 255 },
         alt_calle        => { type => 'varchar', overflow => 'truncate', length => 255 },
         alt_barrio       => { type => 'varchar', overflow => 'truncate', length => 255 },
@@ -61,6 +62,14 @@ __PACKAGE__->meta->setup(
         key_columns => { tipo_documento => 'id' },
         type        => 'one to one',
       },
+     estado => 
+      {
+        class       => 'C4::Modelo::UsrEstado',
+        key_columns => { id_estado => 'id_estado' },
+        type        => 'one to one',
+      },
+
+      
     ],
     
     primary_key_columns => [ 'id_persona' ],
@@ -101,6 +110,17 @@ sub load{
     }
 
     return $error;
+}
+
+sub getId_estado{
+    my ($self) = shift;
+    return ($self->id_estado);
+}
+
+sub setId_estado{
+    my ($self) = shift;
+    my ($id_estado) = @_;
+    $self->id_estado($id_estado);
 }
 
 sub getCategoria{
@@ -166,9 +186,30 @@ sub convertirEnSocio{
         $data_hash->{'categoria'}='NN';
         $data_hash->{'fuente'}="ES UNA FUENTE DEFAULT, PREGUNTARLE A EINAR....";
         $estado->agregar($data_hash);
-        $data_hash->{'id_estado'}= $estado->getId_estado;
+        $self->setId_estado($estado->getId_estado);
         $socio->agregar($data_hash);
         $socio->setThemeINTRA($data_hash->{'tema'} || 'default');
+}
+
+sub esRegularToString{
+    my ($self) = shift;
+
+    my ($estado) = C4::Modelo::UsrEstado->new(id_estado => $self->getId_estado);
+    $estado->load();
+
+    my $estado_alumno = C4::AR::Filtros::i18n("IRREGULAR");
+    if($estado->getRegular){$estado_alumno = C4::AR::Filtros::i18n("REGULAR")}
+    
+    return $estado_alumno;
+}
+
+sub esRegular{
+    my ($self) = shift;
+
+    my ($estado) = C4::Modelo::UsrEstado->new(id_estado => $self->getId_estado);
+    $estado->load();
+
+    return $estado->getRegular;
 }
 
 
@@ -238,6 +279,7 @@ sub modificarVisibilidadOPAC{
     $self->setCiudad($data_hash->{'id_ciudad'});
     $self->setTelefono($data_hash->{'numero_telefono'});
     $self->setEmail($data_hash->{'email'});
+
     $self->save();
 }
 

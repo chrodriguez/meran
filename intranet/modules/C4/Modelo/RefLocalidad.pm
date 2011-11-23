@@ -138,7 +138,7 @@ sub getAll{
     if ($matchig_or_not){
         my @matched_array;
         foreach my $each (@$ref_valores){
-          $match = ((distance($self_nombre,$each->getNombre)<=1) || (distance($self_nombre_abreviado,$each->getNombre_abreviado)<=1));
+          $match = ((distance($self_nombre,$each->getNombre)<=2) || (distance($self_nombre_abreviado,$each->getNombre_abreviado)<=2));
           if ($match){
             push (@matched_array,$each);
           }
