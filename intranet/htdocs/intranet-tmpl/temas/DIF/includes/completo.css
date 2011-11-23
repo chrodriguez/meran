@@ -4742,33 +4742,21 @@ background-color:#E7F3FA;
 .impar:hover {
     background:         #5C82B5;
     color:              #000000;
-    user-select:        none; /* CSS3 */
-    -moz-user-select:   none; /* Gecko (Firefox) */
-    -khtml-user-select: none; /* Webkit (Safari, Chrome) */
 }
 
 .par:hover {
     background:         #5C82B5;
     color:              #000000;
-    user-select:        none; /* CSS3 */
-    -moz-user-select:   none; /* Gecko (Firefox) */
-    -khtml-user-select: none; /* Webkit (Safari, Chrome) */
 }
 
 .impar.marked:hover {
     background:         #5C82B5;
     color:              #000000;
-    user-select:        none; /* CSS3 */
-    -moz-user-select:   none; /* Gecko (Firefox) */
-    -khtml-user-select: none; /* Webkit (Safari, Chrome) */
 }
 
 .par.marked:hover {
     background:         #5C82B5;
     color:              #000000;
-    user-select:        none; /* CSS3 */
-    -moz-user-select:   none; /* Gecko (Firefox) */
-    -khtml-user-select: none; /* Webkit (Safari, Chrome) */
 }
 
 .par.marked {
