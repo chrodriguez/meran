@@ -198,10 +198,12 @@ sub to_Button{
     	$boton = "clean-gray";
     }
     
-    my $onclick = $params_hash_ref{'onclick'} || $params_hash_ref{'onClick'}; #obtengo el llamado a la funcion en el evento onclick
-    my $title   = $params_hash_ref{'title'}; #obtengo el title de la componete
-    my $width   = length($text);
-    my $id      = $params_hash_ref{'id'}; #obtengo el id del boton
+    my $onclick     = $params_hash_ref{'onclick'} || $params_hash_ref{'onClick'}; #obtengo el llamado a la funcion en el evento onclick
+    my $title       = $params_hash_ref{'title'}; #obtengo el title de la componete
+    my $type        = $params_hash_ref{'type'} || 0; #obtengo el title de la componete
+    my $show_inline = $params_hash_ref{'inline'} || 0; #obtengo el title de la componete
+    my $width       = length($text);
+    my $id          = $params_hash_ref{'id'}; #obtengo el id del boton
     if($params_hash_ref{'width'}){
         if ($params_hash_ref{'width'}=="auto"){
             $width =$width+4;
@@ -218,8 +220,19 @@ sub to_Button{
 
     if($id){
     }
+    if ($type){
+    	$type = "type= ".$type;
+    }
     
-    $button .=  '<button class="'.$boton.'" onclick="'.$onclick.'">'.$text.'</button>';
+    if (!$show_inline){
+        $button .=  '<p style="text-align: center; margin: 0">';
+    }
+
+    $button .=  '<button class="'.$boton.'" onclick="'.$onclick.'" '.$type.'>'.$text.'</button>';
+    
+    if (!$show_inline){
+        $button .=  '</p>';
+    }
 
     if ($params_hash_ref{'url'}){
       $button .="</a>";

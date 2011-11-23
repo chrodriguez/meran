@@ -412,19 +412,15 @@ $(document).ready(function() {
             </li>
           </ul>
         </form>
+        [% PERL %]
+                            print C4::AR::Filtros::to_Button(     text    => "[% 'Aceptar' | i18n %]",
+                                                                  id      => "aceptar",
+                                                                  onClick => "realizarAccionCircRapida();",
+                                                                  title   => "[% 'realizar operaci&oacute;n' | i18n %]",
+                                    ) ;
+        [% END %]
+
 </fieldset>
-
-        <div style="float: left; width: 100%;">
-
-                              [% PERL %]
-                                                  print C4::AR::Filtros::to_Button(     text    => "[% 'Aceptar' | i18n %]",
-                                                                                        id      => "aceptar",
-                                                                                        onClick => "realizarAccionCircRapida();",
-                                                                                        title   => "[% 'realizar operaci&oacute;n' | i18n %]",
-                                                                                        alternClass => "botonCentrado"
-                                                          ) ;
-                              [% END %]
-        </div>
 
 <!-- DELTALLE DEL USUARIO -->
 <div id="detalleUsuario"></div>
