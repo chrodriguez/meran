@@ -753,8 +753,11 @@
         </select> 
     </li>
     <hr>
-    <p style="text-align: center;"><input value="Guardar cambios" type="submit"></p> 
-
+    [% PERL %]
+                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
+                                                    type    => "submit",
+                        ) ;
+    [% END %]
 </form> 
 </fieldset>
 

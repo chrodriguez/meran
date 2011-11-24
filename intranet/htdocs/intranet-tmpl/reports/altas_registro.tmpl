@@ -16,7 +16,6 @@
   <!--  <div class="titulos" >[% "Consultar las nuevas altas de registros" | i18n %]</div>-->
     <fieldset id="reportes">
     <legend class="titulo_legend"> <span class="titulos">[% "Consultar las nuevas altas de registros" | i18n %] </span> </legend>
-    <center>
         <div class="filtros_reportes">
             <fieldset>
                 <legend class="titulo_legend">[% "Opciones para el c&aacute;lculo del reporte" | i18n %]</legend>
@@ -37,7 +36,6 @@
                 </ul>
             </fieldset>
         </div>
-        <div class="buttonContainerHorizontal">
             [% PERL %]
                     print C4::AR::Filtros::to_Button( 
                                                         text    =>  "[% "Consultar" | i18n %]",
@@ -46,8 +44,6 @@
                                                         onClick =>  "consultarAltas();",
                                                     );
             [% END %]
-        </div>
-    </center>
 </div>
 
 <div id="result"></div>

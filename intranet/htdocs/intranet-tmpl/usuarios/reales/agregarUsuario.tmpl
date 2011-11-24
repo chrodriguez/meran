@@ -3,10 +3,9 @@
     <script type="text/javascript" src="/intranet-tmpl/includes/usuarios/usuariosReales-min.js"></script>
 [% END %]
 
-[% INCLUDE 'datePicker.inc' %]
 [% INCLUDE 'AutocompleteHelper.inc'  %]
 [% INCLUDE "FormValidateHelper.inc" %]
-
+[% INCLUDE "datePicker.inc" %]
 <script type="text/javascript">
 
     function validateNro_socio(){
@@ -29,7 +28,6 @@
 
     $(document).ready(function() {
         [% IF addBorrower %]
-            validateForm(agregarUsuario);
             validateNro_socio();
             $('#nro_socio').click(function(){toggleNro_socio()});
             $('#nro_socio').blur(function(){validateNro_socio()});
@@ -37,14 +35,10 @@
                 $("link").attr("href","[% temas %]/"+$("#temas_intra").val()+"/includes/completo_min.css");
                 return false;
             });
-        [% ELSE %]
-            validateForm(guardarModificacionUsuario);
         [% END %]
 
         CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'});
         CrearAutocompleteCiudades({IdInput: 'alt_ciudad', IdInputHidden: 'id_alt_ciudad'});
-        crearDatePicker('nacimiento');
-        $('#categoria_socio_id').addClass('required');
     });
 
 </script>
@@ -57,192 +51,239 @@
             [% END %]
 </legend>
 
-<form method="post"  name="userDataForm" id="userDataForm" class="classform">
+<form method="post" name="userDataForm" id="userDataForm" onsubmit="return save();">
     <fieldset>
-    <legend class="titulo_legend">[% "Datos personales del usuario" | i18n %]</legend>
-    <ul>
-        <li class="sub_item">
-            <label for="apellido"> [% "Apellido" | i18n %] *</label>
-            <input id="apellido" name="apellido" class="required" type="text" size="25" value="[% socio_modificar.persona.getApellido %]">
-        </li>
-
-        <li class="sub_item"> 
-            <label for="nombre"> [% "Nombres" | i18n %] *</label>
-            <input  id="nombre" name="nombre" class="required" type="text" size="25" value="[% socio_modificar.persona.getNombre %]">
-        </li>
-
-        <li class="sub_item">
-            <label for="nro_documento">[% "Documento" | i18n %] *</label>
-            [% combo_tipo_documento %] 
-            <input 	id="nro_documento" name="nro_documento" class="required" type="text" size="15" 
-                    value="[% socio_modificar.persona.getNro_documento %]">
-        </li>
-
-        <li class="sub_item">
-            <label for="legajo">[% "Legajo" | i18n %]</label>
-            <input type=text name="legajo" id="legajo" size="25" value="[% socio_modificar.persona.getLegajo %]">
-        </li>
-
-        <li class="sub_item">
-            <label for="sexo">[% "Sexo" | i18n %] *</label>
-            <input type="radio" name="sexo" value="F" class="required" [% IF socio_modificar.persona.getSexo == 'F' %] checked="checked" [% END %] /> F
-            <input type="radio" name="sexo" value="M" class="required" [% IF socio_modificar.persona.getSexo == 'M' %] checked="checked" [% END %] /> M 
-        </li>
-
-        <li class="sub_item">
-            <label for="nacimiento"> [% "Fecha de nacimiento " | i18n %] ([% socio_modificar.persona.getNacimiento %]) *</label>
-            <input type=text id="nacimiento" class="required" name="nacimiento" size=10 value="[% socio_modificar.persona.getNacimiento %]">
-        </li>
+	    <legend class="titulo_legend">[% "Datos personales del usuario" | i18n %]</legend>
+	    <ul>
+	        <li class="sub_item">
+	            <label for="apellido"> [% "Apellido" | i18n %] *</label>
+	            <input type="text" id="apellido" name="apellido" placeholder='[% "Apellido" | i18n %]' 
+	                     size="25" value="[% socio_modificar.persona.getApellido %]"
+	                     required autofocus
+	            >
+			  <script>
+			    if (!("autofocus" in document.createElement("input"))) {
+			      document.getElementById("apellido").focus();
+			    }
+			  </script>	            
+	        </li>
+	
+	        <li class="sub_item"> 
+	            <label for="nombre"> [% "Nombres" | i18n %] *</label>
+	            <input  id="nombre" name="nombre" required placeholder='[% "Nombres" | i18n %]' 
+	                    type="text" size="25" value="[% socio_modificar.persona.getNombre %]">
+	        </li>
+	
+	        <li class="sub_item">
+	            <label for="nro_documento">[% "Documento" | i18n %] *</label>
+	            [% combo_tipo_documento %] 
+	            <input 	id="nro_documento" name="nro_documento" placeholder='[% "Nro. de documento" | i18n %]' 
+	                    required type="text" size="15" 
+	                    value="[% socio_modificar.persona.getNro_documento %]">
+	        </li>
+	
+	        <li class="sub_item">
+	            <label for="legajo">[% "Legajo" | i18n %]</label>
+	            <input type="text" name="legajo" id="legajo" size="25" placeholder='[% "Legajo" | i18n %]' 
+	                    value="[% socio_modificar.persona.getLegajo %]">
+	        </li>
+	
+	        <li class="sub_item">
+	            <label for="sexo">[% "Sexo" | i18n %] *</label>
+	            <input type="radio" name="sexo" value="F" required [% IF socio_modificar.persona.getSexo == 'F' %] checked="checked" [% END %] /> F
+	            <input type="radio" name="sexo" value="M" required [% IF socio_modificar.persona.getSexo == 'M' %] checked="checked" [% END %] /> M 
+	        </li>
+	
+	        <li class="sub_item">
+	            <label for="nacimiento"> [% "Fecha de nacimiento " | i18n %] ([% socio_modificar.persona.getNacimiento %]) *</label>
+	            <input type="date" required id="nacimiento"  placeholder='[% "Fecha de nacimiento" | i18n %]'  
+	                    name="nacimiento" value="[% socio_modificar.persona.getNacimiento %]">
+				<script>
+				  var i = document.createElement("input");
+				  i.setAttribute("type", "date");
+				  if (i.type == "text") {
+					  crearDatePicker('nacimiento');				  }
+				</script>	                    
+	        </li>
+	    </ul>
+	</fieldset>
+	
+	<fieldset>
+	<legend class="titulo_legend">[% "Informaci&oacute;n de contacto" | i18n %] </legend>
+	<ul>
+		<li class="sub_item">
+		    <label for="calle"> [% "Direcci&oacute;n" | i18n %] * </label>
+		            <input required type="text" id="calle" 
+		                   name="calle" size="25" value="[% socio_modificar.persona.getCalle %]">
+		</li>
+		<li class="sub_item">
+		 <label for="codigo_postal">[% "C&oacute;digo Postal" | i18n %]</label>
+		  <input type="number" min="0" name="codigo_postal"  id="codigo_postal" placeholder='[% "C&oacute;digo postal" | i18n %]'  
+		         size="25" value="[% codigo_postal %]" required>
+		</li>
+		<li class="sub_item">
+		     <label for="ciudad"> [% "Ciudad" | i18n %] * </label>
+		            <input type="text" id="ciudad"
+	                       name="ciudad" value="[% socio_modificar.persona.ciudad_ref.getNombre %]" size="25" required>
+	                       
+		            <input type="hidden" id="id_ciudad" name="id_ciudad" value="[% socio_modificar.persona.ciudad_ref.id %]">
+		</li>
+		<li class="sub_item">
+		   <label for="telefono">[% "Tel&eacute;fono particular" | i18n %] </label>
+	        <input type="number" min="0" id="telefono" name="telefono"  
+	                size="25" value="[% socio_modificar.persona.getTelefono %]" required>
+		</li>
+		<li class="sub_item">
+		 <label for="telefono_laboral">[% "Tel&eacute;fono del trabajo" | i18n %]</label>
+		                <input type="text" id="telefono_laboral" name="telefono_laboral" 
+		                size="25" placeholder='[% "Tel&eacute;fono laboral" | i18n %]' value="[% socio_modificar.persona.getTelefono_laboral %]">
+		</li>
+		<li class="sub_item">
+		  <label for="alt_calle">[% "Direcci&oacute;n de origen" | i18n %]</label>
+		                <input type="text" id="alt_calle" name="alt_calle" size="25" value="[% socio_modificar.persona.getAlt_calle %]">
+		</li>
+		<li class="sub_item">
+		   <label for="id_alt_ciudad">[% "Ciudad de origen" | i18n %]</label>
+		            <input  type="text" id="alt_ciudad" name="alt_ciudad" placeholder='[% "Ciudad de or&iacute;gen" | i18n %]'   
+		                value="[% socio_modificar.persona.alt_ciudad_ref.getNombre%]" size="25" >
+		            <input type=hidden id="id_alt_ciudad" name="id_alt_ciudad" value="[% socio_modificar.persona.alt_ciudad_ref.LOCALIDAD %]"> 
+		</li>
+		<li class="sub_item">
+		   <label for="email">   [% "E-Mail" | i18n %] *</label>
+		                <input type="email" id="email" name="email" placeholder='[% "E-mail" | i18n %]'   
+		                       size="25" value="[% socio_modificar.persona.getEmail %]" required>
+	    </li>
     </ul>
-</fieldset>
-
-<fieldset>
-<legend class="titulo_legend">[% "Informaci&oacute;n de contacto" | i18n %] </legend>
-<ul>
-<li class="sub_item">
-    <label for="calle"> [% "Direcci&oacute;n" | i18n %] * </label>
-            <input class="required" type=text id="calle" name="calle" size="25" value="[% socio_modificar.persona.getCalle %]">
-</li>
-<li class="sub_item">
- <label for="codigo_postal">           [% "C&oacute;digo Postal" | i18n %]</label>
-            <input type="text" name="codigo_postal"  id="codigo_postal" size="25" value="[% codigo_postal %]">
-</li>
-<li class="sub_item">
-     <label for="id_ciudad"> [% "Ciudad" | i18n %] * </label>
-            <input class="required" type=text id="ciudad" name="ciudad" value="[% socio_modificar.persona.ciudad_ref.getNombre %]" size="25"  >
-            <input class="required" type="hidden" id="id_ciudad" name="id_ciudad" value="[% socio_modificar.persona.ciudad_ref.id %]">
-</li>
-<li class="sub_item">
- <label for="telefono">           [% "Tel&eacute;fono particular" | i18n %] </label>
-                <input type=text id="telefono" name="telefono" size="25" value="[% socio_modificar.persona.getTelefono %]">
-</li>
-<li class="sub_item">
- <label for="telefono_laboral">    [% "Tel&eacute;fono del trabajo" | i18n %]</label>
-                <input type=text id="telefono_laboral" name="telefono_laboral" size="25" 
-                    value="[% socio_modificar.persona.getTelefono_laboral %]">
-</li>
-<li class="sub_item">
-  <label for="alt_calle">          [% "Direcci&oacute;n de origen" | i18n %]</label>
-                <input type=text id="alt_calle" name="alt_calle" size="25" value="[% socio_modificar.persona.getAlt_calle %]">
-</li>
-<li class="sub_item">
-   <label for="id_alt_ciudad">    [% "Ciudad de origen" | i18n %]</label>
-            <input  type=text id="alt_ciudad" name="alt_ciudad" 
-                value="[% socio_modificar.persona.alt_ciudad_ref.getNombre%]" size="25" >
-            <input type=hidden id="id_alt_ciudad" name="id_alt_ciudad" value="[% socio_modificar.persona.alt_ciudad_ref.LOCALIDAD %]"> 
-</li>
-<li class="sub_item">
-   <label for="email">   [% "E-Mail" | i18n %] *</label>
-                <input class="required" type=text id="email" name="email" size="25" value="[% socio_modificar.persona.getEmail %]">
-        </li>
-        </ul>
-</fieldset>
-
-<fieldset>
-<legend class="titulo_legend">[% "Datos en el sistema" | i18n %]</legend>
-<ul>
-<li class="sub_item">
-        <label for="nro_socio">[% "Tarjeta de identificaci&oacute;n" | i18n %] *</label>
-        [% IF addBorrower %]
-            <input id="nro_socio" type="text" class="required" name="nro_socio" readonly="readonly" size=10 value="Auto-generar">
-        [% ELSE %]
-            <input id="nro_socio" type="text" name="nro_socio" size="10" readonly="readonly" class="partnerNumberHighlight" value=[% socio_modificar.getNro_socio %]>
-        [% END %]
-</li>
-<li class="sub_item">
- <label for="categoria_socio_id"> [% "Categor&iacute;a del usuario" | i18n %] * </label>
-                [% comboDeCategorias %]
-</li>
-
-[% IF addBorrower %]
+	</fieldset>
+	
+	<fieldset>
+	<legend class="titulo_legend">[% "Datos en el sistema" | i18n %]</legend>
+	<ul>
 	<li class="sub_item">
-		<label for="tipo_socio_id"> [% "Credenciales" | i18n %] *</label>
-		                [% comboDeCredentials %]
+	        <label for="nro_socio">[% "Tarjeta de identificaci&oacute;n" | i18n %] *</label>
+	        [% IF addBorrower %]
+	            <input id="nro_socio" type="text" required 
+	                   name="nro_socio" readonly="readonly" size=10 value="Auto-generar">
+	        [% ELSE %]
+	            <input id="nro_socio" type="text" name="nro_socio" size="10"  
+	                   readonly="readonly" class="partnerNumberHighlight" value="[% socio_modificar.getNro_socio %]">
+	        [% END %]
 	</li>
-[% END %]
-<li class="sub_item">
-<label for="changepassword">[% "Forzar cambio de contrase&ntilde;a " | i18n %] </label>
-<input type="checkbox" id="changepassword" name="changepassword" [% socio_modificar.getChange_password %] checked>
-</li>
-
-<li class="sub_item"><label for="cumple_requisito">&iquest;[% "Cumple requisito" | i18n %]?</label>
-   <input  type="checkbox" name="cumple_requisito" id="cumple_requisito" [% IF socio_modificar.cumpleRequisito %]  checked [% END %]>
-</li>
-
-<li class="sub_item"><label for="id_ui">[% "Unidad de Informaci&oacute;n" | i18n %]</label>
-                [% comboDeUI %]
-</li>
-</ul>
-</fieldset>
-
-[% IF socio_modificar.tieneAutorizado %]
-    <fieldset>
-        <legend class="titulo_legend">[% "Informaci&oacute;n del usuario Adicional" | i18n %] </legend>
-        <ul>
-        <li class="sub_item"> <label for="auth_nombre">[% "Nombre y Apellido" | i18n %]</label>
-                            <input  type=text id="auth_nombre" name="auth_nombre" 
-                                    value="[% socio_modificar.getNombre_apellido_autorizado %]" size="25" >
-        </li>
-        <li class="sub_item">
-        <label for="auth_dni">[% "Documento" | i18n %]</label>
-                            <input  type="text" id="auth_dni" name="auth_dni" 
-                                    value="[% socio_modificar.getDni_autorizado %]" size="25" >
-        </li>
-        <li class="sub_item">
-                            <label for="auth_telefono">[% "Tel&eacute;fono" | i18n %]</label>
-                            <input  type="text" id="auth_telefono" name="auth_telefono" 
-                                    value="[% socio_modificar.getTelefono_autorizado %]" size="25" >
-        </li>
-        </ul>
-    </fieldset>
-[% END %]
-
-<fieldset>
-    <legend class="titulo_legend">[% 'Datos de Estudio' | i18n %]</legend>
-    <ul>
-        <li class="sub_item"> 
-            <label>[% "Instituci&oacute;n" | i18n %]</label>
-                <input  type=text id="institucion" name="institucion" value="[% socio_modificar.persona.getInstitucion %]" size="25" >
-        </li>
-        <li class="sub_item">
-            <label>[% "Carrera" | i18n %]</label>
-                <input  type="text" id="carrera" name="carrera" value="[% socio_modificar.persona.getCarrera %]" size="25" >
-        </li>
-        <li class="sub_item">
-                <label>[% "A&ntilde;o" | i18n %]</label>
-                        <input  type="text" id="anio" name="anio" value="[% socio_modificar.persona.getAnio %]" size="25" >
-        </li>
-        <li class="sub_item">
-                <label>[% "Divisi&oacute;n" | i18n %]</label>
-                        <input  type="text" id="division" name="division" value="[% socio_modificar.persona.getDivision %]" size="25" >
-        </li>
-    </ul>
-</fieldset>
-
-<fieldset>
-    <legend class="titulo_legend">[% 'Personalizacion de visualizaci&oacute;n' | i18n %]</legend>
-    <p>
-        <label for="temas_intra" class="left">[% 'Tema' | i18n %]:</label>
-        [% combo_temas %]
-    </p>
-</fieldset>
-<div class="buttonContainerHorizontal">
-    <ul class="listaMenuBotones" >
-        [% IF addBorrower %]
-                <input type="button" name="save_button" class="submit-button" onclick="save()" id="save_button" value="[% 'Agregar usuario' | i18n %]">
-        [% ELSE  %]
-                <input type="button" name="save_button" class="submit-button" onclick="save()" id="save_button" value="[% 'Guardar modificaci&oacute;n' | i18n %]">
-        [% END %]
-
-    </ul>
-</div>
-        <div>
-            <strong>(*) [% "Obligatorio" | i18n %]</strong>
-        </div>
-
-
-
-</fieldset>
+	<li class="sub_item">
+	 <label for="categoria_socio_id"> [% "Categor&iacute;a del usuario" | i18n %] * </label>
+	                [% comboDeCategorias %]
+	</li>
+	
+	[% IF addBorrower %]
+		<li class="sub_item">
+			<label for="tipo_socio_id"> [% "Credenciales" | i18n %] *</label>
+			                [% comboDeCredentials %]
+		</li>
+	[% END %]
+	<li class="sub_item">
+	<label for="changepassword">[% "Forzar cambio de contrase&ntilde;a " | i18n %] </label>
+	<input type="checkbox" id="changepassword" name="changepassword" [% socio_modificar.getChange_password %] checked>
+	</li>
+	
+	<li class="sub_item"><label for="cumple_requisito">&iquest;[% "Cumple requisito" | i18n %]?</label>
+	   <input  type="checkbox" name="cumple_requisito" id="cumple_requisito" [% IF socio_modificar.cumpleRequisito %]  checked [% END %]>
+	</li>
+	
+	<li class="sub_item"><label for="id_ui">[% "Unidad de Informaci&oacute;n" | i18n %]</label>
+	                [% comboDeUI %]
+	</li>
+	</ul>
+	</fieldset>
+	
+	[% IF socio_modificar.tieneAutorizado %]
+	    <fieldset>
+	        <legend class="titulo_legend">[% "Informaci&oacute;n del usuario Adicional" | i18n %] </legend>
+	        <ul>
+	        <li class="sub_item"> <label for="auth_nombre">[% "Nombre y Apellido" | i18n %]</label>
+	                            <input  type=text id="auth_nombre" name="auth_nombre" 
+	                                    value="[% socio_modificar.getNombre_apellido_autorizado %]" size="25" >
+	        </li>
+	        <li class="sub_item">
+	        <label for="auth_dni">[% "Documento" | i18n %]</label>
+	                            <input  type="text" id="auth_dni" name="auth_dni" 
+	                                    value="[% socio_modificar.getDni_autorizado %]" size="25" >
+	        </li>
+	        <li class="sub_item">
+	                            <label for="auth_telefono">[% "Tel&eacute;fono" | i18n %]</label>
+	                            <input  type="text" id="auth_telefono" name="auth_telefono" 
+	                                    value="[% socio_modificar.getTelefono_autorizado %]" size="25" >
+	        </li>
+	        </ul>
+	    </fieldset>
+	[% END %]
+	
+	<fieldset>
+	    <legend class="titulo_legend">[% 'Datos de Estudio' | i18n %]</legend>
+	    <ul>
+	        <li class="sub_item"> 
+	            <label>[% "Instituci&oacute;n" | i18n %]</label>
+	                <input  type=text id="institucion" name="institucion" 
+	                        value="[% socio_modificar.persona.getInstitucion %]" size="25"
+	                        placeholder='[% "Instituci&oacute;n" | i18n %]' 
+	                        >
+	        </li>
+	        <li class="sub_item">
+	            <label>[% "Carrera" | i18n %]</label>
+	                <input  type="text" id="carrera" name="carrera" value="[% socio_modificar.persona.getCarrera %]" size="25" 
+	                        placeholder='[% "Carrera" | i18n %]' 
+	                        >
+	        </li>
+	        <li class="sub_item">
+	                <label>[% "A&ntilde;o" | i18n %]</label>
+	                        <input  type="number" id="anio" name="anio" 
+	                               value="[% socio_modificar.persona.getAnio %]" size="25" 
+	                               placeholder='[% "A&ntilde;o" | i18n %]' 
+	                               >
+	        </li>
+	        <li class="sub_item">
+	                <label>[% "Divisi&oacute;n" | i18n %]</label>
+	                        <input  type="text" id="division" name="division" 
+	                                value="[% socio_modificar.persona.getDivision %]" size="25" 
+	                                placeholder='[% "Divisi&oacute;n" | i18n %]' 
+	                                >
+	        </li>
+	    </ul>
+	</fieldset>
+	
+	<fieldset>
+	    <legend class="titulo_legend">[% 'Personalizacion de visualizaci&oacute;n' | i18n %]</legend>
+	    <p>
+	        <label for="temas_intra" class="left">[% 'Tema' | i18n %]:</label>
+	        [% combo_temas %]
+	    </p>
+	</fieldset>
+	<div class="buttonContainerHorizontal">
+	    <ul class="listaMenuBotones" >
+	        [% IF addBorrower %]
+			        [% PERL %]
+			                            print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar usuario' | i18n %]",
+	                                                                        boton   => "thoughtbot",
+	                                                                        type    => "submit",
+			                                    ) ;
+			        [% END %]
+	        [% ELSE  %]
+	                [% PERL %]
+	                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar modificaci&oacute;n' | i18n %]",
+	                                                                        boton   => "thoughtbot",
+	                                                                        type    => "submit",
+	                                            ) ;
+	                [% END %]
+	        [% END %]
+	
+	    </ul>
+	</div>
+	        <div>
+	            <strong>(*) [% "Obligatorio" | i18n %]</strong>
+	        </div>
+	
+	
+	
+	</fieldset>
 </form>
 
 [% IF addBorrower %]

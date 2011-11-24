@@ -241,7 +241,7 @@ Se elimina el usuario
                                                 "intranet"
                                     );
 
-            C4::AR::Validator::validateParams('U389',$obj,['nombre','nacimiento','ciudad','apellido','id_ui','sexo'] );
+            
             my $Message_arrayref=C4::AR::Usuarios::agregarPersona($obj);
             my $infoOperacionJSON=to_json $Message_arrayref;
 
