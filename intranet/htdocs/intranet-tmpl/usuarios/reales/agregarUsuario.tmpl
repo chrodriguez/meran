@@ -124,9 +124,9 @@
 		<li class="sub_item">
 		     <label for="ciudad"> [% "Ciudad" | i18n %] * </label>
 		            <input type="text" id="ciudad"
-	                       name="ciudad" value="[% socio_modificar.persona.ciudad_ref.getNombre %]" size="25" required>
+	                       name="ciudad" value="[% TRY %] [% socio_modificar.persona.ciudad_ref.getNombre %] [% CATCH %] [% END %]" size="25" required>
 	                       
-		            <input type="hidden" id="id_ciudad" name="id_ciudad" value="[% socio_modificar.persona.ciudad_ref.id %]">
+		            <input type="hidden" id="id_ciudad" name="id_ciudad" value="[% TRY %] [% socio_modificar.persona.ciudad_ref.id %] [% CATCH %] [% END %]">
 		</li>
 		<li class="sub_item">
 		   <label for="telefono">[% "Tel&eacute;fono particular" | i18n %] </label>

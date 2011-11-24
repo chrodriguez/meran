@@ -116,7 +116,7 @@ var loaderPath= "";
                     <li>E-mail: <strong><a href="mailto:[% socio.persona.getEmail %]">[% socio.persona.getEmail %]</a></strong></li>
                     [% END %]
                     <li>[% "Legajo :" | i18n %] <strong> [%  socio.persona.getLegajo %]</strong></li>
-                    <li>[% "Ciudad :" | i18n %] <strong> [%  socio.persona.ciudad_ref.getNombre %]</strong></li>
+                    <li>[% "Ciudad :" | i18n %] <strong> [% TRY %] [%  socio.persona.ciudad_ref.getNombre %]</strong></li>[% CATCH %] [% 'Ciudad inv&aacute;lida - Actualizar' | i18n %] [% END %]
                     <li>[% "Calle :" | i18n %]  <strong> [%  socio.persona.getCalle %]</strong></li>
                     <li>[% "ID de usuario:" | i18n %] <strong> [%  socio.nro_socio %]</strong></li>
                     <li>[% "Incorporaci&oacute;n a Biblioteca:" | i18n %] <strong> [%  socio.ui.nombre %]</strong></li>

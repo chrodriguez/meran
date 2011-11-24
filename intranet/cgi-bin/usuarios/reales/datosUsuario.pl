@@ -21,7 +21,7 @@ my ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
 
 
 my $nro_socio                   = $input->param('nro_socio');
-my $mensaje                     = $input->param('mensaje');#Mensaje que viene desde libreDeuda si es que no se puede imprimir
+my $mensaje                     = $input->param('mensaje'); #Mensaje que viene desde libreDeuda si es que no se puede imprimir
 my $mensaje_desde_pdf           = $input->param('mensaje');
 
 $t_params->{'nro_socio'}        = $nro_socio;
