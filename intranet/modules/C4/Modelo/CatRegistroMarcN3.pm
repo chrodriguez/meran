@@ -39,7 +39,6 @@ __PACKAGE__->meta->setup(
     ],
 
     primary_key_columns => [ 'id' ],
-    unique_key => [ 'codigo_barra' ],
 
     relationships => [
         nivel1  => {
