@@ -124,13 +124,13 @@ nav {
 
 #menu ul a:hover {
 	background: #0186ba;
-	background: -moz-linear-gradient(#04acec, #0186ba);
+	background: -moz-linear-gradient(#0FBAB6, #0186ba);
 	background: -webkit-gradient(linear, left top, left bottom, from(#04acec),
 		to(#0186ba) );
-	background: -webkit-linear-gradient(#04acec, #0186ba);
-	background: -o-linear-gradient(#04acec, #0186ba);
-	background: -ms-linear-gradient(#04acec, #0186ba);
-	background: linear-gradient(#04acec, #0186ba);
+	background: -webkit-linear-gradient(#0FBAB6, #0186ba);
+	background: -o-linear-gradient(#0FBAB6, #0186ba);
+	background: -ms-linear-gradient(#0FBAB6, #0186ba);
+	background: linear-gradient(#0FBAB6, #0186ba);
 }
 
 #menu ul li:first-child>a {
