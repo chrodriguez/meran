@@ -14,7 +14,10 @@ my ($template, $session, $t_params) = get_template_and_user({
                     flagsrequired   => {    ui => 'ANY', 
                                             tipo_documento => 'ANY', 
                                             accion => 'ALTA', 
-                                            entorno => 'usuarios'},
+                                            entorno => 'usuarios',
+                                            tipo_permiso => 'catalogo'
+                                            
+                    },
                     debug           => 1,
                 });
 

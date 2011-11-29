@@ -38,7 +38,8 @@ my ($template, $session, $t_params) = get_template_and_user({
     flagsrequired   => {    ui => 'ANY', 
                             tipo_documento => 'ANY', 
                             accion => 'CONSULTA', 
-                            entorno => 'usuarios'}, # FIXME
+                            tipo_permiso => 'general',
+                            entorno => 'adq_intra'}, # FIXME
     debug           => 1,
 });
 

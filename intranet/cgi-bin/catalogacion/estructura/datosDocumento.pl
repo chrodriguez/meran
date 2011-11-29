@@ -68,7 +68,9 @@ if($tipoAccion eq "MODIFICAR_NIVEL_1"){
     if($nivel2){
         $template_catalogo = $nivel2->getTemplate();
     }
-
+    
+    $t_params->{'indice_data'} = $nivel2->getIndice() || "";
+    
 }elsif($tipoAccion eq "MODIFICAR_NIVEL_3"){
     my $nivel3  = C4::AR::Nivel3::getNivel3FromId3($id3);
 
@@ -79,13 +81,15 @@ if($tipoAccion eq "MODIFICAR_NIVEL_1"){
 
 $t_params->{'template_catalogo'}                = $template_catalogo;
 $params_combo{'onChange'}                       = 'seleccionar_esquema()';
-$params_combo{'default'}                        = 'SIN SELECCIONAR';
+$params_combo{'default'}                        = C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");#'SIN SELECCIONAR';
 $t_params->{'comboTipoDocumento'}               = &C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
 $t_params->{'nivel'}                            = $nivel;
 $params_combo{'onChange'}                       = '';
-$params_combo{'default'}                        = 'SIN SELECCIONAR';
+$params_combo{'default'}                        = C4::AR::Preferencias::getValorPreferencia("defaultlevel");#'SIN SELECCIONAR';
 $t_params->{'comboTipoNivelBibliografico'}      = &C4::AR::Utilidades::generarComboNivelBibliografico(\%params_combo);
 $t_params->{'page_sub_title'}                   = C4::AR::Filtros::i18n("Catalogaci&oacute;n - Datos del documento");
 
+
+C4::AR::Debug::debug("indice edit: ------------------------------------------------------------> ".$t_params->{'indice_edit'});
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

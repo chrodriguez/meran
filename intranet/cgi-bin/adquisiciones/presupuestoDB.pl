@@ -29,7 +29,8 @@ if($tipoAccion eq "GUARDAR_MODIFICACION_PRESUPUESTO"){
                         flagsrequired   => {    ui => 'ANY', 
                                                 tipo_documento => 'ANY', 
                                                 accion => 'MODIFICAR', 
-                                                entorno => 'usuarios'},
+                                                tipo_permiso => 'general',
+                                                entorno => 'adq_intra'},
                         debug           => 1,
                     });
 
@@ -58,7 +59,8 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO"){
                               flagsrequired     => {    ui => 'ANY', 
                                                         tipo_documento => 'ANY', 
                                                         accion => 'CONSULTA', 
-                                                        entorno => 'usuarios'},
+                                                        tipo_permiso => 'general',
+                                                        entorno => 'adq_intra'},
         });
 
         my $presupuestos_dir    = "/usr/share/meran/intranet/htdocs/intranet-tmpl/proveedores/";
@@ -125,7 +127,8 @@ elsif($tipoAccion eq "MOSTRAR_PRESUPUESTO_MANUAL"){
                               flagsrequired     => {    ui => 'ANY', 
                                                         tipo_documento => 'ANY', 
                                                         accion => 'CONSULTA', 
-                                                        entorno => 'usuarios'},
+                                                        tipo_permiso => 'general',
+                                                        entorno => 'adq_intra'},
         });
         
     
@@ -151,7 +154,8 @@ elsif($tipoAccion eq "AGREGAR_PRESUPUESTO"){
         flagsrequired   => {    ui => 'ANY', 
                                 tipo_documento => 'ANY', 
                                 accion => 'ALTA', 
-                                entorno => 'usuarios'},
+                                tipo_permiso => 'general',
+                                entorno => 'adq_intra'},
         debug           => 1,
     });
    
@@ -185,7 +189,8 @@ elsif($tipoAccion eq "EXPORTAR_PRESUPUESTO"){
         flagsrequired   => {    ui => 'ANY', 
                                 tipo_documento => 'ANY', 
                                 accion => 'CONSULTA', 
-                                entorno => 'usuarios'}, # FIXME
+                                tipo_permiso => 'general',
+                                entorno => 'adq_intra'}, # FIXME
         debug           => 1,
     });
 

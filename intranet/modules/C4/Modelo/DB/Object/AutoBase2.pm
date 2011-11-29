@@ -89,13 +89,25 @@ sub getInvolvedFilterString{
     my @filtros;
     
     my $table_name = $tabla->meta->table;
+    
+    my $instance = $tabla->getByPk($value);
+    
+    $value = $instance->get_key_value();
 
     my $filter_string = $table_name."@".$value;
 
     push (@filtros, ( marc_record => {like => '%'.$filter_string.'%'} ) );
 
+   C4::AR::Debug::debug("********************* REFERENCIAS ************************** \n getInvolvedFilterString en $table_name =========> TABLA $tabla VALUE $value ************************************** \n");
+
     return($filter_string,\@filtros);
 	
+}
+
+sub get_key_value{
+    my ($self) = shift;
+    
+    return ($self->getPkValue);
 }
 
 sub replaceByThis{
@@ -111,7 +123,7 @@ sub replaceByThis{
     foreach my $tabla (@$data_array){
         if (!$tabla->{'tabla_catalogo'}){
             my ($clave_tabla_referente,$tabla_referente) = C4::AR::Referencias::getTablaInstanceByTableName($tabla->{'tabla_object'}->getTabla_referente);
-            $tabla_referente->replaceBy($tabla->{'tabla_object'}->getCampo_referente,$self->getPkValue,$new_id);
+            $tabla_referente->replaceBy($tabla->{'tabla_object'}->getCampo_referente,$self->get_key_value,$new_id);
         }
     }
 
@@ -203,6 +215,7 @@ sub createFromAlias{
         case 'ciudad' {return C4::Modelo::RefLocalidad->new()}
         case 'editorial' {return C4::Modelo::CatEditorial->new()}
         case 'perfiles_opac' {return C4::Modelo::CatPerfilOpac->new()}
+        case 'colaborador' {return C4::Modelo::RefColaborador->new()}
 # TODO para el link de analiticas
         case 'nivel2' {return C4::Modelo::CatRegistroMarcN2->new()}
 	    else {C4::AR::Debug::debug("NO EXISTE LA TABLA DE REFERENCIA ".$classAlias) }
@@ -306,7 +319,7 @@ sub getDefaultValue{
         case 'disponibilidad' {return C4::AR::Preferencias::getValorPreferencia("defaultDisponibilidad");}
         case 'tipo_prestamo' {return C4::AR::Preferencias::getValorPreferencia("defaultissuetype");}
         case 'soporte' {return C4::AR::Preferencias::getValorPreferencia("defaultSoporte");}
-        case 'nivel_bibliografico' {return C4::AR::Preferencias::getValorPreferencia("defaultlevel");}
+        case 'nivel_bibliografico' {return C4::AR::Preferencias::getValorPreferencia("defaultNivelBibliografico");}
 #         case 'tema' {return C4::AR::Preferencias::getValorPreferencia("defaultUI");}
 #         case 'tipo_socio' {return C4::AR::Preferencias::getValorPreferencia("defaultUI");}
 #         case 'tipo_documento_usr' {return C4::AR::Preferencias::getValorPreferencia("defaultTipoDoc");}

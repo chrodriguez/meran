@@ -21,10 +21,13 @@ my ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
 
 
 my $nro_socio                   = $input->param('nro_socio');
-my $mensaje                     = $input->param('mensaje');#Mensaje que viene desde libreDeuda si es que no se puede imprimir
+my $mensaje                     = $input->param('mensaje'); #Mensaje que viene desde libreDeuda si es que no se puede imprimir
 my $mensaje_desde_pdf           = $input->param('mensaje');
 
 $t_params->{'nro_socio'}        = $nro_socio;
+
+$t_params->{'auto_generar_comprobante_prestamo'} = C4::AR::Preferencias::getValorPreferencia('auto_generar_comprobante_prestamo');
+
 my $socio = $t_params->{'socio_modificar'}  = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio) || C4::AR::Utilidades::redirectAndAdvice('U353');
 
 if ($socio->getActivo()){

@@ -59,6 +59,7 @@ use vars qw(@EXPORT_OK @ISA);
     busquedaPorEstante
     busquedaEstanteDeGrupo
     filtrarPorAutor
+    MARCRecordById3
     MARCDetail
     getLibrarian
     getautor
@@ -449,13 +450,39 @@ sub obtenerGrupos {
 	foreach my $nivel2 (@$niveles2){
 	    $result[$res]->{'id2'}=$nivel2->getId2;
         $result[$res]->{'edicion'}= $nivel2->getEdicion;
-        $result[$res]->{'nro_revista'}= $nivel2->getNroSerie;
-        
 	    $result[$res]->{'anio_publicacion'}=$nivel2->getAnio_publicacion;
 	    $res++;
 	}
 
 	return (\@result);
+}
+
+=item
+obtenerEstadoDeColeccion
+Esta funcion devuelve los datos de los fasciculos agrupados para años .
+=cut
+sub obtenerEstadoDeColeccion {
+	my ($id1,$itemtype,$type)=@_;
+	
+	my $cant_revistas=0;
+	#Obtenemos los niveles 2
+	my $niveles2 = C4::AR::Nivel2::getNivel2FromId1($id1);
+	
+	my %HoH = {}; 
+	foreach my $nivel2 (@$niveles2){
+		
+		if($nivel2->getTipoDocumento eq 'REV'){
+			$cant_revistas++;
+			my $anio=$nivel2->getAnioRevista ? $nivel2->getAnioRevista : '#';
+			my $volumen=$nivel2->getVolumenRevista ? $nivel2->getVolumenRevista : '#';
+			my $numero=$nivel2->getNumeroRevista ? $nivel2->getNumeroRevista : '#';
+			
+			$HoH{$anio}->{$volumen}->{$numero}=$nivel2->getId2;
+			
+		}
+	}
+
+return ($cant_revistas,\%HoH);
 }
 
 
@@ -1445,21 +1472,26 @@ sub armarInfoNivel1{
             #aca se procesan solo los ids de nivel 1 que se van a mostrar
             #se generan los grupos para mostrar en el resultado de la consulta
             my $ediciones           = C4::AR::Busquedas::obtenerGrupos(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name, "INTRA");
-            my $nivel2_array_ref    = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
-
             @result_array_paginado[$i]->{'grupos'} = 0;
             if(scalar(@$ediciones) > 0){
                 @result_array_paginado[$i]->{'grupos'}  = $ediciones;
             }
-            my $images_n1_hash_ref = C4::AR::PortadasRegistros::getAllImageForId1(@result_array_paginado[$i]->{'id1'});
+
+            #se genera el estado de coleccion si se trata de revistas
+				  C4::AR::Debug::debug("REVISTA: se genera el estado de coleccion");
+				my ($cant_revistas ,$estadoDeColeccion)           = C4::AR::Busquedas::obtenerEstadoDeColeccion(@result_array_paginado[$i]->{'id1'}, $tipo_nivel3_name, "INTRA");
+				@result_array_paginado[$i]->{'estadoDeColeccion'} = 0;
+				if($cant_revistas > 0){
+					@result_array_paginado[$i]->{'estadoDeColeccion'}  = $estadoDeColeccion;
+				}
+			
+            my $nivel2_array_ref    = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1);
+                        
             @result_array_paginado[$i]->{'cat_ref_tipo_nivel3'}     = C4::AR::Nivel2::getFirstItemTypeFromN1($nivel1->getId1);
             @result_array_paginado[$i]->{'cat_ref_tipo_nivel3_name'}= C4::AR::Referencias::translateTipoNivel3(@result_array_paginado[$i]->{'cat_ref_tipo_nivel3'});
-            @result_array_paginado[$i]->{'portada_registro'}        =  $images_n1_hash_ref->{'S'};
-            @result_array_paginado[$i]->{'portada_registro_medium'} =  $images_n1_hash_ref->{'M'};
-            @result_array_paginado[$i]->{'portada_registro_big'}    =  $images_n1_hash_ref->{'L'};
             my @nivel2_portadas = ();
 
-            if (scalar(@$nivel2_array_ref) > 1){
+            if (scalar(@$nivel2_array_ref)){
                 for(my $x=0;$x<scalar(@$nivel2_array_ref);$x++){
                     my %hash_nivel2 = {};
                     my $images_n2_hash_ref                      = $nivel2_array_ref->[$x]->getAllImage();
@@ -1467,7 +1499,7 @@ sub armarInfoNivel1{
 	                    $hash_nivel2{'portada_registro'}          =  $images_n2_hash_ref->{'S'};
 	                    $hash_nivel2{'portada_registro_medium'}   =  $images_n2_hash_ref->{'M'};
                         $hash_nivel2{'portada_registro_big'}      =  $images_n2_hash_ref->{'L'};
-                        $hash_nivel2{'grupo'}                     =  $nivel1->getId1;
+                        $hash_nivel2{'grupo'}                     =  $nivel2_array_ref->[$x]->getId2;
                         push(@nivel2_portadas, \%hash_nivel2);
                     }
                 }
@@ -1815,6 +1847,41 @@ sub armarBuscoPor{
 
 #*****************************************Soporte MARC************************************************************************
 #devuelve toda la info en MARC de un item (id3 de nivel 3)
+sub MARCRecordById3 {
+	my ($id3)= @_;
+
+		my $nivel3= C4::AR::Nivel3::getNivel3FromId3($id3);
+		my $marc_record = MARC::Record->new_from_usmarc($nivel3->nivel1->getMarcRecord());
+		$marc_record->append_fields(MARC::Record->new_from_usmarc($nivel3->nivel2->getMarcRecord())->fields());
+		$marc_record->append_fields(MARC::Record->new_from_usmarc($nivel3->getMarcRecord())->fields());
+	return $marc_record;
+}
+
+sub MARCRecordById3WithReferences {
+	my ($id3)= @_;
+
+	my $marc_record = C4::AR::Busquedas::MARCRecordById3($id3);
+
+    my $tipo_doc    = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("910","a"));
+	foreach my $field ($marc_record->fields) {
+        if(! $field->is_control_field){
+            my $campo                       = $field->tag;
+            my $indicador_primario_dato     = $field->indicator(1);
+            my $indicador_secundario_dato   = $field->indicator(2);
+            foreach my $subfield ($field->subfields()) {
+                my $subcampo                        = $subfield->[0];
+                my $dato                            = $subfield->[1];
+                my $nivel                       = C4::AR::EstructuraCatalogacionBase::getNivelFromEstructuraBaseByCampoSubcampo($campo, $subcampo);
+                $dato                               = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $tipo_doc,$nivel);
+                $field->update( $subcampo => C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato,$tipo_doc,$nivel));
+                
+            }
+		}
+	}
+	return $marc_record;
+}
+
+
 sub MARCDetail{
 	my ($id3,$tipo)= @_;
 
@@ -1823,23 +1890,17 @@ sub MARCDetail{
 	my $marc_array_nivel2;
 	my $marc_array_nivel3;
 
-	my ($nivel3_object)= C4::AR::Nivel3::getNivel3FromId3($id3);
+	my $nivel3_object= C4::AR::Nivel3::getNivel3FromId3($id3);
+
+
 	if($nivel3_object ne 0){
-		C4::AR::Debug::debug('recupero el nivel3');
 		($marc_array_nivel3)= $nivel3_object->toMARC;
 	}
-
-	my ($nivel2_object)= C4::AR::Nivel2::getNivel2FromId2($nivel3_object->getId2);
-	
-	if($nivel2_object ne 0){
-		C4::AR::Debug::debug('recupero el nivel2');
-		($marc_array_nivel2)= $nivel2_object->toMARC;
-		C4::AR::Debug::debug('MARCDetail => cant '.scalar(@$marc_array_nivel2));
+	if($nivel3_object->nivel2){
+		($marc_array_nivel2)= $nivel3_object->nivel2->toMARC;
 	}
-	my ($nivel1_object)= C4::AR::Nivel1::getNivel1FromId1($nivel2_object->getId1);
-	if($nivel1_object ne 0){
-		C4::AR::Debug::debug('recupero el nivel1');
-		($marc_array_nivel1)= $nivel1_object->toMARC;
+	if($nivel3_object->nivel1){
+		($marc_array_nivel1)= $nivel3_object->nivel1->toMARC;
 	}
 
 	my @result;
@@ -1855,30 +1916,33 @@ sub MARCDetail{
 		my $campo= @result[$i]->{'campo'};
 		my @info_campo_array;
 		C4::AR::Debug::debug("Proceso todos los subcampos del campo: ".$campo);
-		if(!_existeEnArregloDeCampoMARC(\@MARC_result_array, $campo) ){
+	#	if(!_existeEnArregloDeCampoMARC(\@MARC_result_array, $campo) ){
 			#proceso todos los subcampos del campo
 		my $subcampos=$result[$i]->{'subcampos_array'};
 			for(my $j=0;$j < @$subcampos;$j++){
- 				my %hash_temp;
- 				$hash_temp{'subcampo'}= $subcampos->[$j]{'subcampo'};
- 				$hash_temp{'liblibrarian'}= $subcampos->[$j]{'liblibrarian'};
- 				$hash_temp{'dato'}= $subcampos->[$j]{'dato'};
-				push(@info_campo_array, \%hash_temp);
-			      C4::AR::Debug::debug("campo, subcampo, dato: ".$result[$i]->{'campo'}.", ".$subcampos->[$j]{'subcampo'}.", ".$subcampos->[$j]{'liblibrarian'});
+				if(C4::AR::Utilidades::trim($subcampos->[$j]{'dato'})){
+					my %hash_temp;
+					$hash_temp{'subcampo'}= $subcampos->[$j]{'subcampo'};
+					$hash_temp{'liblibrarian'}= $subcampos->[$j]{'liblibrarian'};
+					$hash_temp{'dato'}= $subcampos->[$j]{'dato'};
+					push(@info_campo_array, \%hash_temp);
+					C4::AR::Debug::debug("campo, subcampo, dato: ".$result[$i]->{'campo'}.", ".$subcampos->[$j]{'subcampo'}.", ".$subcampos->[$j]{'liblibrarian'});
+				}
 			}
-			$hash{'campo'}= $campo;
-			$hash{'header'}= @result[$i]->{'header'};
-			$hash{'info_campo_array'}= \@info_campo_array;
-		
-			push(@MARC_result_array, \%hash);
-# 			C4::AR::Debug::debug("campo: ".$campo);
-			C4::AR::Debug::debug("cant subcampos: ".scalar(@info_campo_array));
-		}
+			if(scalar(@info_campo_array)){
+				$hash{'campo'}= $campo;
+				$hash{'header'}= @result[$i]->{'header'};
+				$hash{'info_campo_array'}= \@info_campo_array;
+				push(@MARC_result_array, \%hash);
+	# 			C4::AR::Debug::debug("campo: ".$campo);
+				C4::AR::Debug::debug("cant subcampos: ".scalar(@info_campo_array));
+			}
+		#}
 	}
 
 	return (\@MARC_result_array);
+	
 }
-
 
 =item
 Verifica si existe en el arreglo de campos el campo pasado por parametro

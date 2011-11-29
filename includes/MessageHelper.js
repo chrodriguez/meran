@@ -69,7 +69,7 @@ function setMessages(Messages_hashref){
         $('#mensajes').css("display","block");
 
         _show();
-        scrollTo('mensajes');  
+        $('html, body').animate({scrollTop:0}, 'slow');
         _delay(clearMessages, 180);
     }
     catch (e){

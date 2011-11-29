@@ -47,7 +47,8 @@ sub getSancionesLike {
 
     foreach my $s (@searchstring_array){ 
                 push (  @filtros, ( or   => [   
-#                                               
+                                                'socio.persona.nombre'    => { like => $s.'%'},   
+                                                'socio.persona.nombre'    => { like => '% '.$s.'%'},
                                                 apellido            => { like => $s.'%'},
                                                 apellido            => { like => '% '.$s.'%'},
                                                 nro_documento       => { like => '%'.$s.'%' }, 
@@ -179,8 +180,11 @@ sub tieneLibroVencido {
   my $dateformat = C4::Date::get_date_format();
   my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
   foreach my $prestamo (@$prestamos_array_ref) {
-           C4::AR::Debug::debug("El prestamo de ".$prestamo->getId3." esta vencido? : ".$prestamo->estaVencido);
-    		return(1) if ($prestamo->estaVencido);
+           C4::AR::Debug::debug("El prestamo del Nivel3 -- ".$prestamo->getId3." -- esta vencido? : ".$prestamo->estaVencido);
+    		if ($prestamo->estaVencido){
+                C4::AR::Debug::debug("EL EJEMPLAR CON ID ".$prestamo->nivel3->getId." DEL USUARIO ".$prestamo->socio->getNro_socio." ESTA VENCIDO!!!!!!!!!!!!!");
+    			return(1);
+    		}
   }
   return(0);
 }

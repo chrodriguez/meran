@@ -1135,7 +1135,8 @@ sub _enviarRecordatorio{
                     my $titulo              = $nivel1->getTitulo();
                     my $fecha_prestamo      = $pres->getFecha_vencimiento_formateada();
                     my $cuerpo_mensaje      = C4::AR::Preferencias::getValorPreferencia('reminderMessage');
-                    my $link                = "http://".$ENV{'SERVER_NAME'}.C4::AR::Utilidades::getUrlPrefix()."/modificarDatos.pl";
+                    my $link                = "http://" . C4::AR::Utilidades::serverName() 
+                                                . C4::AR::Utilidades::getUrlPrefix() . "/modificarDatos.pl";
                   
                     $cuerpo_mensaje         =~ s/FIRSTNAME\ SURNAME/$socio->{'persona'}->{'nombre'}\ $socio->{'persona'}->{'apellido'}/;
                     $cuerpo_mensaje         =~ s/VENCIMIENTO/$fecha_prestamo/;
@@ -1189,7 +1190,8 @@ sub getAllPrestamosActivos{
             @second = split(/-/, $fecha_prestamo);
             $days   = Delta_Days(@first, @second);
 
-            if ($days <= C4::AR::Preferencias::getValorPreferencia('reminderDays')){        
+            # si esta dentro de los dias de reminderDays y NO esta vencido el prestamo
+            if ($days <= C4::AR::Preferencias::getValorPreferencia('reminderDays') && !($prestamo->estaVencido())){        
                 push(@arrayPrestamos,($prestamo));
             }
         }  

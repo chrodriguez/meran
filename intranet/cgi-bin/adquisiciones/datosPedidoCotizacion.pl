@@ -24,7 +24,8 @@ if ($tipoAccion eq "DETALLE") {
         flagsrequired   => {    ui => 'ANY', 
                                 tipo_documento => 'ANY', 
                                 accion => 'CONSULTA', 
-                                entorno => 'usuarios'},
+                                tipo_permiso => 'general',
+                                entorno => 'adq_intra'},
     });
     
     $t_params->{'pedido_cotizacion'} = $pedidos_cotizacion;

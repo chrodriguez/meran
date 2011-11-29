@@ -40,7 +40,7 @@ C4::AR::Validator::validateParams('U389',$t_params,['nro_socio'] );
 my $accion = $input->param('tipoAccion');
 my $biblioDestino = C4::AR::Busquedas::getBranch($input->param('name_ui'));
 
-my $director = $input->param('director')||"___________________";
+my $director = Encode::decode_utf8($input->param('director'))||"___________________";
 
 
 my @autores=split("#",$input->param('autores'));
@@ -49,14 +49,14 @@ my @otros=split("#",$input->param('otros'));
 my @datos;
 for(my $i=0;$i<scalar(@titulos);$i++){
     if($i<scalar(@autores)){
-        $datos[$i]->{'autor'}=$autores[$i];
+        $datos[$i]->{'autor'}=Encode::decode_utf8($autores[$i]);
     }
     else{$datos[$i]->{'autor'}="";}
     if($i<scalar(@otros)){
-        $datos[$i]->{'otros'}=$otros[$i];
+        $datos[$i]->{'otros'}=Encode::decode_utf8($otros[$i]);
     }
     else{$datos[$i]->{'otros'}="";}
-    $datos[$i]->{'titulo'}=$titulos[$i];
+    $datos[$i]->{'titulo'}=Encode::decode_utf8($titulos[$i]);
 }
 
 my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
@@ -66,11 +66,15 @@ my $biblio      = C4::AR::Busquedas::getBranch($branchcode);
 
 $t_params->{'biblio'}= $biblio;
 $t_params->{'socio'}= $socio;
+$t_params->{'socio_nombre'}= Encode::decode_utf8($socio->persona->nombre);
+$t_params->{'socio_apellido'}=  Encode::decode_utf8($socio->persona->apellido);
 $t_params->{'biblio_destino'}= $biblioDestino;
 $t_params->{'director'}= $director;
 $t_params->{'atencion'}=  C4::AR::Preferencias::getValorPreferencia('open') . " a "
-. C4::AR::Preferencias::getValorPreferencia('close'). Encode::decode_utf8(" Sábados: ")
-. C4::AR::Preferencias::getValorPreferencia('open_sabado'). " a " .C4::AR::Preferencias::getValorPreferencia('close_sabado');
+. C4::AR::Preferencias::getValorPreferencia('close');
+
+# Encode::decode_utf8(" Sábados: ")
+# . C4::AR::Preferencias::getValorPreferencia('open_sabado'). " a " .C4::AR::Preferencias::getValorPreferencia('close_sabado');
 $t_params->{'datos'}= \@datos;
 
 

@@ -27,8 +27,9 @@ if($obj){
                             authnotrequired     => 0,
                             flagsrequired       => {    ui => 'ANY',   
                                                         tipo_documento => 'ANY', 
-                                                        accion => 'ALTA',  
-                                                        entorno => 'usuarios'},
+                                                        accion => 'MODIFICACION',  
+                                                        tipo_permiso => 'general',
+                                                        entorno => 'adq_intra'},
                         });   
                           
                         my ($ok) = C4::AR::Recomendaciones::updateRecomendacionDetalle($obj);
@@ -49,8 +50,9 @@ if($obj){
                                           authnotrequired => 0,
                                           flagsrequired   => {    ui => 'ANY', 
                                                                   tipo_documento => 'ANY', 
-                                                                  accion => 'MODIFICAR', 
-                                                                  entorno => 'undefined'},
+                                                                  accion => 'BAJA', 
+                                                                  tipo_permiso => 'general',
+                                                                  entorno => 'adq_intra'},
                                           debug           => 1,
                                       });
 
@@ -77,7 +79,8 @@ if($obj){
                                               flagsrequired   => {    ui => 'ANY', 
                                                                       tipo_documento => 'ANY', 
                                                                       accion => 'CONSULTA', 
-                                                                      entorno => 'undefined'},
+                                                                      tipo_permiso => 'general',
+                                                                      entorno => 'adq_intra'},
                           });
 
                           my $recom_detalle= C4::AR::Recomendaciones::getRecomendacionDetallePorId($id_recomendacion);
@@ -100,7 +103,8 @@ if($obj){
                                               flagsrequired   => {    ui => 'ANY', 
                                                                       tipo_documento => 'ANY', 
                                                                       accion => 'CONSULTA', 
-                                                                      entorno => 'undefined'},
+                                                                      tipo_permiso => 'general',
+                                                                      entorno => 'adq_intra'},
                                           });
 
                           $t_params->{'combo_ediciones'} = $combo_ediciones;
@@ -125,7 +129,8 @@ if($obj){
                                               flagsrequired   => {    ui => 'ANY', 
                                                                       tipo_documento => 'ANY',   
                                                                       accion => 'CONSULTA', 
-                                                                      entorno => 'undefined'},
+                                                                      tipo_permiso => 'general',
+                                                                      entorno => 'adq_intra'},
                                           });
 
                           $t_params->{'datos_edicion'} = $datos_edicion;
@@ -145,7 +150,8 @@ if($obj){
                                               flagsrequired   => {    ui => 'ANY', 
                                                                       tipo_documento => 'ANY',   
                                                                       accion => 'CONSULTA', 
-                                                                      entorno => 'undefined'},
+                                                                      tipo_permiso => 'general',
+                                                                      entorno => 'adq_intra'},
                                           });
 
 
@@ -199,8 +205,9 @@ if($obj){
                                       authnotrequired     => 0,
                                       flagsrequired       => {    ui => 'ANY', 
                                                                   tipo_documento => 'ANY',   
-                                                                  accion => 'ALTA', 
-                                                                  entorno => 'usuarios'},
+                                                                  accion => 'MODIFICACION', 
+                                                                  tipo_permiso => 'general',
+                                                                  entorno => 'adq_intra'},
                           }); 
 
                           my $recomendaciones             = C4::AR::Recomendaciones::getRecomendacionDetallePorId($id_recomendacion);
@@ -216,8 +223,9 @@ if($obj){
                                         authnotrequired     => 0,
                                         flagsrequired       => {    ui => 'ANY', 
                                                                     tipo_documento => 'ANY',   
-                                                                    accion => 'ALTA', 
-                                                                    entorno => 'usuarios'},
+                                                                    accion => 'CONSULTA', 
+                                                                    tipo_permiso => 'general',
+                                                                    entorno => 'adq_intra'},
                             }); 
                           
 

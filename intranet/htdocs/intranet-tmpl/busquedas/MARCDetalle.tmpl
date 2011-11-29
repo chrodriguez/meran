@@ -1,22 +1,47 @@
 
-<p class="titulos">Detalle MARC</p>
+ <script src="/includes/jquery/ui/tabs.min.js" type="text/javascript"></script>
+  <link media="screen" rel="stylesheet" href="/includes/jquery/ui/base/jquery.ui.tabs.css" type="text/css">
 
-<!--*****************************************MARC DETAIL*****************************************************  -->
-<ul class="MARCResult">
-[% FOREACH MARCDetail_array %]
+<script>
+	$(function() {
+		$( "#tabs" ).tabs();
+	});
+</script>
 
-	[% IF header %]
-	<li class="MARCHeader">
-		[% campo %]&nbsp;[% header %]
-	</li>
-		[% FOREACH info_campo_array %]
-			<li class="MARCDetalle">
-				[% subcampo %]&nbsp;[% liblibrarian %]: &nbsp;<b>[% dato %]</b>
-			</li>
+<div class="detalle_marc">
+
+<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+	<ul>
+			<li><a href="#tabs-2">Detalle</a></li>
+		<li><a href="#tabs-1">Marc</a></li>
+	</ul>	
+	<div id="tabs-2">
+		<ul class="MARCResult">
+		[% FOREACH MARCDetail_array %]
+
+			[% IF info_campo_array.size > 0 %]
+				[% IF header %]
+				<li class="MARCHeader">
+					[% campo %]&nbsp;[% header %]
+				</li>
+					[% FOREACH info_campo_array %]
+						[% IF dato.remove('\s+') %]
+							<li class="MARCDetalle">
+								[% subcampo %]&nbsp;[% liblibrarian %]: &nbsp;<b>[% dato %]</b>
+							</li>
+						[% END %]
+					[% END %]
+				[% END %]  
+			[% END %]
 		[% END %]
-	[% END %]  
+		</ul>
+	</div>
+		<div id="tabs-1">
+		<pre>
+			[% detalle_marc %]
+		</pre>
+	</div>
 
-[% END %]
-</ul>
+</div>
 
-<p align="center"><a class="click" onClick="verDivs()">Volver</a></p>
+</div>

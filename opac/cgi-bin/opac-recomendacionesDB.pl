@@ -34,7 +34,8 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_EDICIONES') {
                         flagsrequired => {  ui => 'ANY', 
                                             tipo_documento => 'ANY', 
                                             accion => 'CONSULTA', 
-                                            entorno => 'undefined'},
+                                            tipo_permiso => 'general',
+                                            entorno => 'adq_opac'},
                     });
  
     $t_params->{'combo_ediciones'} = $combo_ediciones;
@@ -48,8 +49,9 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_EDICIONES') {
                                                 $authnotrequired, 
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
-                                                    accion => 'CONSULTA', 
-                                                    entorno => 'undefined'}, 
+                                                    accion => 'ALTA', 
+                                                    tipo_permiso => 'general',
+                                                    entorno => 'adq_opac'}, 
                                                 'opac'
                                 );
 
@@ -71,8 +73,9 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_EDICIONES') {
                                                 $authnotrequired, 
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
-                                                    accion => 'CONSULTA', 
-                                                    entorno => 'undefined'}, 
+                                                    accion => 'MODIFICACION', 
+                                                    tipo_permiso => 'general',
+                                                    entorno => 'adq_opac'}, 
                                                 'opac'
                                 );
 
@@ -111,7 +114,8 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_EDICIONES') {
                         flagsrequired => {  ui => 'ANY', 
                                             tipo_documento => 'ANY', 
                                             accion => 'CONSULTA',   
-                                            entorno => 'undefined'},
+                                            tipo_permiso => 'general',
+                                            entorno => 'adq_opac'},
                     });
 
    $t_params->{'cant_ejemplares_disp'} = $detalle_nivel_3->{'disponibles'};
@@ -134,7 +138,8 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_EDICIONES') {
                         flagsrequired => {  ui => 'ANY', 
                                             tipo_documento => 'ANY', 
                                             accion => 'CONSULTA', 
-                                            entorno => 'undefined'},
+                                            tipo_permiso => 'general',
+                                            entorno => 'adq_opac'},
                     });
 
     $t_params->{'datos_edicion'} = "";
@@ -151,7 +156,8 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_EDICIONES') {
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
-                                                    entorno => 'undefined'}, 
+                                                    tipo_permiso => 'general',
+                                                    entorno => 'adq_opac'}, 
                                                 'opac'
                                 );
 
@@ -172,7 +178,8 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_EDICIONES') {
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
-                                                    entorno => 'undefined'}, 
+                                                    tipo_permiso => 'general',
+                                                    entorno => 'adq_opac'}, 
                                                 'opac'
                                 );
 
@@ -190,7 +197,8 @@ if ($obj->{'tipoAccion'} eq 'BUSQUEDA_EDICIONES') {
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
-                                                    entorno => 'undefined'}, 
+                                                    tipo_permiso => 'general',
+                                                    entorno => 'adq_opac'}, 
                                                 'opac'
                                 );
 

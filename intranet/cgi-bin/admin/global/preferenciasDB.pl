@@ -26,7 +26,9 @@ my ($template, $session, $t_params)  = get_template_and_user({
 							flagsrequired   => {    ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
-                                                    entorno => 'undefined'},
+		                                            entorno => 'preferencias',
+		                                            tipo_permiso => 'general'
+							},
 							debug           => 1,
 			     });
 
@@ -48,7 +50,13 @@ if($accion eq "MODIFICAR_VARIABLE"){
 				query           => $input,
 				type            => "intranet",
 				authnotrequired => 0,
-				flagsrequired   => { ui => 'ANY', tipo_documento => 'ANY', accion => 'CONSULTA', entorno => 'undefined'},
+				flagsrequired   => { 
+					                                   ui => 'ANY', 
+				                                       tipo_documento => 'ANY', 
+				                                       accion => 'MODIFICACION', 
+					                                   entorno => 'preferencias',
+                                                       tipo_permiso => 'general'
+},
 				debug           => 1,
 				});
 
@@ -140,8 +148,10 @@ if($accion eq "GUARDAR_MODIFICACION_VARIABLE"){
                                             $authnotrequired, 
                                             {   ui              => 'ANY', 
                                                 tipo_documento  => 'ANY', 
-                                                accion          => 'ALTA', 
-                                                entorno         => 'undefined'}, 
+                                                accion          => 'MODIFICACION', 
+                                                entorno => 'preferencias',
+                                                tipo_permiso => 'general'
+                                            }, 
                                             'intranet'
                                     );
 
@@ -166,7 +176,9 @@ if($accion eq "SELECCION_CAMPO"){
                                             {   ui              => 'ANY', 
                                                 tipo_documento  => 'ANY', 
                                                 accion          => 'CONSULTA', 
-                                                entorno         => 'undefined'}, 
+                                                entorno => 'preferencias',
+                                                tipo_permiso => 'general'
+                                            }, 
                                             'intranet'
                                     );
 
@@ -207,8 +219,10 @@ my ($template, $session, $t_params) =
 				authnotrequired => 0,
 				flagsrequired   => {    ui => 'ANY', 
                                         tipo_documento => 'ANY', 
-                                        accion => 'CONSULTA', 
-                                        entorno => 'undefined'},
+                                        accion => 'ALTA', 
+                                        entorno => 'preferencias',
+                                        tipo_permiso => 'general'
+				},
 				debug           => 1,
 				});
 
@@ -266,7 +280,9 @@ if($accion eq "GUARDAR_NUEVA_VARIABLE"){
                                             {   ui              => 'ANY', 
                                                 tipo_documento  => 'ANY', 
                                                 accion          => 'ALTA', 
-                                                entorno         => 'undefined'}, 
+                                                entorno => 'preferencias',
+                                                tipo_permiso => 'general'
+                                            }, 
                                             'intranet'
                                     );
 
@@ -302,7 +318,9 @@ if($accion eq "ACTUALIZAR_TABLA_CATALOGO"){
 				                                flagsrequired   => {    ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
                                                                         accion => 'CONSULTA', 
-                                                                        entorno => 'undefined'},
+                                                                        entorno => 'preferencias',
+                                                                        tipo_permiso => 'general'
+				                                },
 				                                debug           => 1,
 				                                });
 
@@ -323,7 +341,9 @@ if($accion eq "ACTUALIZAR_TABLA_CIRCULACION"){
 				                                flagsrequired   => {    ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
                                                                         accion => 'CONSULTA', 
-                                                                        entorno => 'undefined'},
+					                                                    entorno => 'preferencias',
+					                                                    tipo_permiso => 'general'
+				                                },
 				                                debug           => 1,
 				                                });
 
@@ -343,7 +363,9 @@ if($accion eq "ACTUALIZAR_TABLA_ESTILOS"){
 				                                flagsrequired   => {    ui => 'ANY', 
                                                                         tipo_documento => 'ANY', 
                                                                         accion => 'CONSULTA', 
-                                                                        entorno => 'undefined'},
+					                                                    entorno => 'preferencias',
+					                                                    tipo_permiso => 'general'
+				                                },
 				                                debug           => 1,
 				                                });
 

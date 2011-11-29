@@ -15,11 +15,13 @@ my ($template, $session, $t_params) = get_template_and_user({
 								flagsrequired   => {  ui            => 'ANY', 
                                                     tipo_documento  => 'ANY', 
                                                     accion          => 'CONSULTA', 
-                                                    entorno         => 'undefined'},
+                                                    entorno         => 'undefined',
+							                        tipo_permiso    => 'catalogo'},
 			     });
 
 my $idNivel1 = $input->param('id1');
 
+$t_params->{'id2'} = $input->param('id2') || 0;
 $t_params->{'page'} = $input->param('page') || 0;
 my $cant_total      = 0;
 

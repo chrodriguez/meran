@@ -61,7 +61,6 @@ function consultar(){
             [% unidades %]
         </li>
     </ul>
-    <div class="buttonContainerHorizontal">
         [% PERL %]
                         print C4::AR::Filtros::to_Button( 
                                                             text    =>  "[% 'Buscar' | i18n %]",
@@ -69,7 +68,6 @@ function consultar(){
                                                             onClick =>  "consultar();",
                                 ) ;
         [% END %]
-    </div>
 </fieldset>
 
 <div id="result"></div>

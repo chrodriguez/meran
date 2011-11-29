@@ -107,7 +107,7 @@
                                     [% PERL %]
                                         print C4::AR::Filtros::to_Icon(  
                                                                             boton   => "icon_cancelar",
-                                                                            onClick => "asignarReferencia('[% tabla_related %]','[% related.getPkValue %]','[% referer_involved.getPkValue %]');",
+                                                                            onClick => "asignarReferencia('[% tabla_related %]','[% related.getPkValue %]','[% referer_involved.getPkValue %]','[% referer_involved.get_key_value %]');",
                                                                             title   => "[% 'Asignar' | i18n %]",
                                                                             alternClass => "botonCentradoTabla",
                                                                             elem => 'span',
@@ -119,7 +119,7 @@
                                     [% PERL %]
                                         print C4::AR::Filtros::to_Icon(  
                                                                             boton   => "icon_cancelar",
-                                                                            onClick => "asignarEliminarReferencia('[% tabla_related %]','[% related.getPkValue %]','[% referer_involved.getPkValue %]');",
+                                                                            onClick => "asignarEliminarReferencia('[% tabla_related %]','[% related.getPkValue %]','[% referer_involved.getPkValue %]','[% referer_involved.get_key_value %]');",
                                                                             title   => "[% 'Asignar y Eliminar' | i18n %]",
                                                                             alternClass => "botonCentradoTabla",
                                                                             elem => 'span',

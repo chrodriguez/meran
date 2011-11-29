@@ -2,7 +2,33 @@
     $(document).ready(function() {
         $('.fancylink').fancybox();
     });
+    
+function detalleMARC(id3){
+	objAH               = new AjaxHelper(updateInfoMARC);
+	objAH.debug         = true;
+    objAH.showOverlay   = true;
+	objAH.url			= URL_PREFIX+"/opac-MARCDetail.pl";
+	objAH.id3           = id3;
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+function updateInfoMARC(responseText){
+	        $('#detalleMARC').html(responseText);
+			$('#detalleMARC').modal({   containerCss:{
+                backgroundColor:"#fff",
+        //         borderColor:"#0063dc",
+                height:"500px",
+                padding:"1",
+                width:"800px",
+            },
+        });
+        
+}
 </script>
+
+
+	<div id="detalleMARC" style="display:none"></div>
 
 [% FOREACH nivel2 %]
 
@@ -112,7 +138,7 @@
 									                          [% PERL %]
 									                                  print C4::AR::Filtros::to_Icon( 
 									                                                                  boton         => "icon_marc",
-									                                                                  onClick       => "MARCDetail('[% id3 %]', '[% DivDetalle %]', '[% DivMARC %]');", 
+									                                                                  onClick       => "detalleMARC('[% id3 %]');", 
 									                                                                  title         => "[% 'Detalle MARC' | i18n %]",
 									                                                                  alternClass   => "botonCentradoTabla",
 									                                                              ) ;
