@@ -1367,6 +1367,10 @@ sub _verificarPassword {
 
 	return $socio;
 }
+=item sub _autenticar
+	Esta funcion es la que hay que modificar si se cambia el conjunto de metodos de autenticacion, por ejemplo agregando otra cosa como podria ser openid
+
+=cut
 
 sub _autenticar{
 	use Switch;
@@ -1380,6 +1384,7 @@ sub _autenticar{
 		}
 		case "mysql"{
 			($socio) = C4::AR::AuthMysql::checkPassword($userid,$password,$nroRandom);       
+			    C4::AR::Debug::debug("Vamos bien???".$socio);      
 		}
 		else{
 			}
@@ -1407,8 +1412,7 @@ sub redirectTo {
         $session->param('redirectTo', $url);
 #         C4::AR::Debug::debug("redirectTo=> url: ".$url);
         print_header($session);
-#        print 'CLIENT_REDIRECT';
-        print 'window.location="'.$url.'";';
+        print 'CLIENT_REDIRECT';
         exit;
 	}else{
               my $session = CGI::Session->load();  
@@ -1913,21 +1917,27 @@ sub _passwordsIguales{
     return $result;
 }
 
+=item sub getPassword
+
+Esta funcion devuelve el password del socio desde el ultimo mecanismo utilizado para recuperar la password
+
+=cut
 
  sub getPassword{
     my ($socio)=@_;
     my $auth_method = $socio->getLastAuthMethod;
     my $msg_object= C4::AR::Mensajes::create();
     my $password;
+    my $metodosDeAutenticacion= C4::AR::Preferencias::getMetodosAuth();
     use Switch;
     switch ($auth_method){
-        case "ldap" {
+        case {"ldap" && C4::AR::Utilidades::existeInArray("ldap",@$metodosDeAutenticacion)} {
                 ($password) = C4::AR::Authldap::obtenerPassword($socio);   
-        };
-        case "mysql" {
-                ($password) = $socio->password;   
         }
-        else{}
+        else{
+			#en este caso devuelve lo que tiene el obejto en la base de datos.
+			($password) = $socio->password;   
+			}
     }
     
     return $password;
@@ -1938,43 +1948,38 @@ sub _passwordsIguales{
 ############################### PASSWORD RECOVERY SUBs #######################################
 
 sub _sendRecoveryPasswordMail{
+
     my ($socio,$link) = @_;
 
     use C4::AR::Mail;
 
     my %mail;
 
-    my $mail_from       = $mail{'mail_from'}  = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveFrom"));
-    my $mail_to         = $mail{'mail_to'}    = $socio->persona->getEmail;
-    my $mail_subject    = $mail{'mail_subject'}          = C4::AR::Filtros::i18n("Instrucciones para reestablecer su clave");
-    
-    
-## Datos para el mail
+    $mail{'mail_from'}              = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveFrom"));
+    $mail{'mail_to'}                = $socio->persona->getEmail;
+    $mail{'mail_subject'}           = C4::AR::Filtros::i18n("Instrucciones para reestablecer su clave");
+       
+    # Datos para el mail
     use C4::Modelo::PrefUnidadInformacion;
-    use MIME::Lite::TT::HTML;
     
-    my $completo            = $socio->persona->getNombre." ".$socio->persona->getApellido;
-    my $nro_socio           = $socio->getNro_socio;
-
-    my $ui              = C4::AR::Referencias::obtenerDefaultUI();
-    my $nombre_ui       = Encode::decode_utf8($ui->getNombre());
-
-    my $mailMessage =
-                C4::AR::Filtros::i18n("
-                        Estimado/a ")."<b>$completo ($nro_socio)</b>, ".C4::AR::Filtros::i18n("socio de")." $nombre_ui, ".C4::AR::Filtros::i18n("recientemente UD ha solicitado reestablecer su clave.<br />
-                        Para hacerlo, haga click en el siguiente enlace y siga los pasos que el sistema le va a indicar").":<br />
-                                    <a href='$link'> $link </a> <br /><br /><br /><br /><br /><br />".
+    my $completo                    = $socio->persona->getNombre . " " . $socio->persona->getApellido;
+    my $nro_socio                   = $socio->getNro_socio;
+    my $ui                          = C4::AR::Referencias::obtenerDefaultUI();
+    my $nombre_ui                   = Encode::decode_utf8($ui->getNombre());
+    my $mailMessage                 = C4::AR::Preferencias::getValorPreferencia('mailMessageForgotPass');
                         
-                        C4::AR::Filtros::i18n("Si no puede abrir el enlace, copie y pegue la siguente URL en su navegador").": <br /> $link <br />".
-                        
-                        C4::AR::Filtros::i18n("<br /><br />Si UD no ha solicitado un reseteo de su clave, simplemente ignore este mail. <br />
-                        
-                        Atte.,")." $nombre_ui.
-                ";
-    
+    $mailMessage                    =~ s/SOCIO/$completo/;
+    #hay 2 NOMBRE_UI por eso repetido
+    $mailMessage                    =~ s/NOMBRE_UI/$nombre_ui/;
+    $mailMessage                    =~ s/NOMBRE_UI/$nombre_ui/;
+    #hay 3 LINK
+    $mailMessage                    =~ s/LINK/$link/;
+    $mailMessage                    =~ s/LINK/$link/;
+    $mailMessage                    =~ s/LINK/$link/;
     
     $mail{'mail_message'}           = $mailMessage;
     $mail{'page_title'}             = C4::AR::Filtros::i18n("Olvido de su contrase&ntilde;a");
+    $mail{'link'}                   = $link;
     
     my ($ok, $msg_error)            = C4::AR::Mail::send_mail(\%mail);
     
@@ -1983,41 +1988,33 @@ sub _sendRecoveryPasswordMail{
 }
 
 sub _sendRecoveryPasswordMail_Unactive{
+
     my ($socio) = @_;
 
     use C4::AR::Mail;
 
     my %mail;
 
-    my $mail_from       = $mail{'mail_from'}  = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveFrom"));
-    my $mail_to         = $mail{'mail_to'}    = $socio->persona->getEmail;
-    my $mail_subject    = $mail{'mail_subject'}          = C4::AR::Filtros::i18n("Instrucciones para reestablecer su clave");
-    
-    
-## Datos para el mail
+    $mail{'mail_from'}              = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveFrom"));
+    $mail{'mail_to'}                = $socio->persona->getEmail;
+    $mail{'mail_subject'}           = C4::AR::Filtros::i18n("Instrucciones para reestablecer su clave");
+      
+    # Datos para el mail
     use C4::Modelo::PrefUnidadInformacion;
-    use MIME::Lite::TT::HTML;
-    
-    my $completo            = $socio->persona->getNombre." ".$socio->persona->getApellido;
-    my $nro_socio           = $socio->getNro_socio;
-
-    my $ui              = C4::AR::Referencias::obtenerDefaultUI();
-    my $nombre_ui       = Encode::decode_utf8($ui->getNombre());
-
-    my $mailMessage =
-                C4::AR::Filtros::i18n("
-                        Estimado/a ")."<b>$completo ($nro_socio)</b>, ".C4::AR::Filtros::i18n("socio de")." $nombre_ui, ".C4::AR::Filtros::i18n("recientemente UD ha solicitado reestablecer su clave.<br /><br />
-                        Para hacerlo, debe dirigirse a la biblioteca, ya que UD. no cumple las condiciones necesarias de regularidad").":<br />
-                                    <br />".
-                        C4::AR::Filtros::i18n(  "<br /><br />Puede dirigirse a $nombre_ui, ".Encode::decode_utf8($ui->getDireccion).", ".
-                                                Encode::decode_utf8($ui->getCiudad)."<br />").
                         
-                        C4::AR::Filtros::i18n("<br /><br />Si UD no ha solicitado un reseteo de su clave, simplemente ignore este mail. <br />
-                        
-                        Atte.,")." $nombre_ui.
-                ";
+    my $completo                    = $socio->persona->getNombre . " " . $socio->persona->getApellido;
+    my $nro_socio                   = $socio->getNro_socio;
+
+    my $ui                          = C4::AR::Referencias::obtenerDefaultUI();
+    my $nombre_ui                   = Encode::decode_utf8($ui->getNombre());
+
+    my $mailMessage                 = C4::AR::Preferencias::getValorPreferencia('mailMessageForgotPassUnactive');
     
-    
+    $mailMessage                    =~ s/SOCIO/$completo/;
+    #hay 2 NOMBRE_UI por eso repetido
+    $mailMessage                    =~ s/NOMBRE_UI/$nombre_ui/;
+    $mailMessage                    =~ s/NOMBRE_UI/$nombre_ui/;
+
     $mail{'mail_message'}           = $mailMessage;
     $mail{'page_title'}             = C4::AR::Filtros::i18n("Olvido de su contrase&ntilde;a");
     

@@ -117,8 +117,8 @@ sub tiene_indice {
 }
 
 sub agregar{
-    my ($self) = shift;
-    my ($params, $marc_record, $db)    = @_;
+    my ($self)                          = shift;
+    my ($params, $marc_record, $db)     = @_;
 
     $self->setId1($params->{'id1'});    
     $self->setMarcRecord($marc_record);
@@ -127,27 +127,33 @@ sub agregar{
     my $mr = MARC::Record->new_from_usmarc($marc_record);    
 
 # TODO ver si tiene analica
-#     my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $db );
-#     $cat_registro_n2_analitica->setId2Padre(C4::AR::Catalogacion::getRefFromStringConArrobas($mr->subfield("773","a")));
-#     $cat_registro_n2_analitica->setId2Hijo($self->getId2());
-#     $cat_registro_n2_analitica->save();
 
     $self->save();
+
+    if($params->{'id_tipo_doc'} eq "ANA"){
+        my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $db );
+        $cat_registro_n2_analitica->setId2Padre(C4::AR::Catalogacion::getRefFromStringConArrobas($mr->subfield("773","a")));
+        $cat_registro_n2_analitica->setId2Hijo($self->getId2());
+        $cat_registro_n2_analitica->save();
+    }
 }
 
 sub modificar{
-    my ($self)           = shift;
-    my ($marc_record)    = @_;
+    my ($self)              = shift;
+    my ($marc_record, $db)  = @_;
 
     $self->setMarcRecord($marc_record);
     
     my $mr = MARC::Record->new_from_usmarc($marc_record);  
 
 # TODO ver si tiene analica
-#     my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $self->db );
-#     $cat_registro_n2_analitica->setId2Padre(C4::AR::Catalogacion::getRefFromStringConArrobas($mr->subfield("773","a")));
-#     $cat_registro_n2_analitica->setId2Hijo($self->getId2());
-#     $cat_registro_n2_analitica->save();
+# FIXME falta buscar y modificar, sino hay q borrarla y agregarla nuevamente
+    if($self->getTemplate() eq "ANA"){
+        my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $db );
+        $cat_registro_n2_analitica->setId2Padre(C4::AR::Catalogacion::getRefFromStringConArrobas($mr->subfield("773","a")));
+        $cat_registro_n2_analitica->setId2Hijo($self->getId2());
+#         $cat_registro_n2_analitica->save();
+    }
 
     $self->save();
 }
@@ -345,18 +351,18 @@ sub getTipoDocumentoObject{
         
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
     my $tipo_doc    = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("910","a"));
-
-#     C4::AR::Debug::debug("CatRegistroMarcN2 => getTipoDocumentoObject => ".$tipo_doc);
         
     my $tipo_doc_object = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3 ( query => [  'id_tipo_doc' => { eq => $tipo_doc } ] );
         
     if(scalar($tipo_doc_object) > 0){
         return $tipo_doc_object->[0];
     } else {
-        C4::AR::Debug::debug("CatRegistroMarcN2 => getTipoDocumentoObject()=> EL OBJECTO (ID) CatRefTipoNivel3 NO EXISTE");
+#         C4::AR::Debug::debug("CatRegistroMarcN2 => getTipoDocumentoObject()=> EL OBJECTO (ID) CatRefTipoNivel3 NO EXISTE");
         $tipo_doc = C4::Modelo::CatRefTipoNivel3->new();
     }
     
+
+# C4::AR::Debug::debug("CatRegistroMarcN2 => getTipoDocumentoObject()=> EL OBJECTO (ID) CatRefTipoNivel3 eXISTE???".$tipo_doc->getNombre());
     return $tipo_doc;
 }
 
@@ -497,6 +503,43 @@ sub getAnio_publicacion{
     return $marc_record->subfield("260","c");
 }
 
+
+=head2 REVISTAS
+ Para las Revistas:
+ De la lista del Formato Marc21 Fondos/Existencias/Datos de fondos, Campos de enumeración y cronología:
+	863 a: Volumen
+	863 b: Número
+	863 i: Año
+	
+	http://www.loc.gov/marc/holdings/echdspa.html
+=cut
+
+sub getVolumenRevista{
+     my ($self)      = shift;
+     
+     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());    
+ 
+     return $marc_record->subfield("863","a");
+}
+
+sub getNumeroRevista{
+     my ($self)      = shift;
+     
+     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());    
+ 
+     return $marc_record->subfield("863","b");
+}
+
+sub getAnioRevista{
+     my ($self)      = shift;
+     
+     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());    
+ 
+     return $marc_record->subfield("863","i");
+}
+
+
+
 =head2 sub tienePrestamos
     Verifica si el nivel 2 pasado por parametro tiene ejemplares con prestamos o no
 =cut
@@ -582,12 +625,11 @@ sub toMARC_Intra{
 
     #obtengo el marc_record del NIVEL 2
     my $marc_record             = MARC::Record->new_from_usmarc($self->getMarcRecord());
-#     $params->{'nivel'}          = '2';
-#     $params->{'id_tipo_doc'}    = $self->getTipoDocumento;
 
     my $params;
     $params->{'nivel'}          = '2';
     $params->{'id_tipo_doc'}    = $self->getTemplate()||'ALL';
+    $params->{'id2'}            = $self->getId2();
     my $MARC_result_array       = C4::AR::Catalogacion::marc_record_to_intra_view($marc_record, $params, $self->db);
 
     return ($MARC_result_array);

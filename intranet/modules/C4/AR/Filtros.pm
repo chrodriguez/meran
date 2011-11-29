@@ -66,8 +66,9 @@ sub link_to {
 	my $session = CGI::Session->load();
  	if($session->param('token')){
 	#si hay sesion se usa el token, sino no tiene sentido
+        my $status = index($url,'?');
          #SI NO HUBO PARAMETROS, EL TOKEN ES EL UNICO EN LA URL, O SEA QUE SE PONE ? EN VEZ DE &
-        if ($cant > 0){
+        if (($cant > 0)||($status != -1)){
 		    $url .= '&amp;token='.$session->param('token'); #se agrega el token
         }else{
             $url .= '?token='.$session->param('token'); 
@@ -127,7 +128,7 @@ sub i18n {
 
 
 
-sub to_Button{
+sub to_Button__{
     my (%params_hash_ref) = @_;
 
     my $button= '';
@@ -178,6 +179,68 @@ sub to_Button{
     return $button;
 }
 
+
+sub to_Button{
+    my (%params_hash_ref) = @_;
+
+    my $button= '';
+    my @array_clases_buttons = ('clean-gray','thoughtbot');
+    
+    if ($params_hash_ref{'url'}){
+      $button .="<a href="."$params_hash_ref{'url'}"."> ";
+    }
+
+    my $text    = $params_hash_ref{'text'}; #obtengo el texto a mostrar
+    
+    my $boton   = $params_hash_ref{'boton'} || "clean-gray"; #obtengo el boton
+    
+    if (!C4::AR::Utilidades::existeInArray($boton,@array_clases_buttons)){
+    	$boton = "clean-gray";
+    }
+    
+    my $onclick     = $params_hash_ref{'onclick'} || $params_hash_ref{'onClick'}; #obtengo el llamado a la funcion en el evento onclick
+    my $title       = $params_hash_ref{'title'}; #obtengo el title de la componete
+    my $type        = $params_hash_ref{'type'} || 0; #obtengo el title de la componete
+    my $show_inline = $params_hash_ref{'inline'} || 0; #obtengo el title de la componete
+    my $width       = length($text);
+    my $id          = $params_hash_ref{'id'}; #obtengo el id del boton
+    if($params_hash_ref{'width'}){
+        if ($params_hash_ref{'width'}=="auto"){
+            $width =$width+4;
+            $width= $width."ex";
+        }
+        else{ $width= $params_hash_ref{'width'};
+        }
+    }
+    
+    my $alternClass  = $params_hash_ref{'alternClass'} || 'horizontal';
+
+    if($title){
+    }
+
+    if($id){
+    }
+    if ($type){
+    	$type = "type= ".$type;
+    }
+    
+    if (!$show_inline){
+        $button .=  '<p style="text-align: center; margin: 0">';
+    }
+
+    $button .=  '<button class="'.$boton.'" onclick="'.$onclick.'" '.$type.'>'.$text.'</button>';
+    
+    if (!$show_inline){
+        $button .=  '</p>';
+    }
+
+    if ($params_hash_ref{'url'}){
+      $button .="</a>";
+    }
+
+    #C4::AR::Debug::debug("Filtros => to_Button => ".$button);
+    return $button;
+}
 
 sub setHelp{
     my (%params_hash_ref) = @_;
@@ -238,74 +301,144 @@ sub show_componente {
     my $campo               = $params_hash_ref{'campo'};
     my $subcampo            = $params_hash_ref{'subcampo'};
     my $dato                = $params_hash_ref{'dato'};
-    my $itemtype            = $params_hash_ref{'itemtype'};
-    my $type                = $params_hash_ref{'type'};
+    my $id1                 = $params_hash_ref{'id1'};
+    my $id2                 = $params_hash_ref{'id2'};
 
     my $session             = CGI::Session->load();
     my $session_type        = $session->param('type') || 'opac';
      
     if(($campo eq "245")&&($subcampo eq "a")) {
 
-      my $catRegistroMarcN2   = C4::AR::Nivel2::getNivel2FromId2($dato);
+      my $catRegistroMarcN1   = C4::AR::Nivel1::getNivel1FromId1($id1);
 
-      C4::AR::Debug::debug("C4::AR::Filtros::show_componente => campo, subcampo: ".$campo.", ".$subcampo); 
+#       C4::AR::Debug::debug("C4::AR::Filtros::show_componente => campo, subcampo: ".$campo.", ".$subcampo); 
+#       C4::AR::Debug::debug("C4::AR::Filtros::show_componente => DENTRO => dato: ".$dato);
 
-      C4::AR::Debug::debug("C4::AR::Filtros::show_componente => DENTRO => dato: ".$dato);
-
-        if($catRegistroMarcN2){
+        if($catRegistroMarcN1){
             my %params_hash;
-            my $text        = $catRegistroMarcN2->nivel1->getTitulo()." (".$catRegistroMarcN2->nivel1->getAutor().") - ".$catRegistroMarcN2->toString; 
-            %params_hash    = ('id1' => $catRegistroMarcN2->getId1());
+            my $text        = $catRegistroMarcN1->getTitulo(); 
+            %params_hash    = ('id1' => $catRegistroMarcN1->getId1());
             my $url;
 
             if ($session_type eq 'intranet'){
-            	$url         = C4::AR::Utilidades::url_for("/catalogacion/estructura/detalle.pl", \%params_hash);
+                $url         = C4::AR::Utilidades::url_for("/catalogacion/estructura/detalle.pl", \%params_hash);
             }else{
                 $url         = C4::AR::Utilidades::url_for("/opac-detail.pl", \%params_hash);
             }
 
-            return C4::AR::Filtros::link_to( text => $text, url => $url );
+            return C4::AR::Filtros::link_to( text => $text, url => $url , blank => 1);
         }
         
-    } elsif($type eq "INTRA") {
-        if(($campo eq "773")&&($subcampo eq "a")){
-            my $catRegistroMarcN2   = C4::AR::Nivel2::getNivel2FromId2($dato);
-    
-# TODO FIXEDDDDDDDDDD en el futuro esto se debe levantar de la configuracion
-            if($catRegistroMarcN2){
-
-                #obtengo las analiticas
-                my $cat_reg_marc_n2_analiticas = $catRegistroMarcN2->getAnaliticas();
-  
-                if(scalar(@$cat_reg_marc_n2_analiticas) > 0){
-                     #no tiene analiticas
-                    C4::AR::Debug::debug("C4::AR::Filtros::show_componente => TIENE ANALITICAS"); 
-                    my %params_hash;
-                    my $text        = $catRegistroMarcN2->nivel1->getTitulo()." (".$catRegistroMarcN2->nivel1->getAutor().") - ".$catRegistroMarcN2->toString; 
-                    %params_hash    = ('id1' => $catRegistroMarcN2->getId1());
-                    my $url         = C4::AR::Utilidades::url_for("/catalogacion/estructura/detalle.pl", \%params_hash);
-
-                    return C4::AR::Filtros::link_to( text => $text, url => $url );
-                }
-
-#                 aca tengo que identificar si este nivel 2 es padre o hijo de una analitica para cambiar el link               
-            } else {
-                C4::AR::Debug::debug("C4::AR::Filtros::show_componente => NO TIENE ANALITICAS"); 
-            }
-        }
-    } else {
-# TODO FIXEDDDDDDDDDD en el futuro esto se debe levantar de la configuracion
-        if(($campo eq "773")&&($subcampo eq "a")){
-            my $catRegistroMarcN2 = C4::AR::Nivel2::getNivel2FromId2($dato);
-    
-            if($catRegistroMarcN2){
-                return $catRegistroMarcN2->nivel1->getTitulo()." (".$catRegistroMarcN2->nivel1->getAutor().") - ".$catRegistroMarcN2->toString; 
-            }
-        }
+        return "NO_LINK";
     }
 
-    return $dato;
+    if(($campo eq "773")&&($subcampo eq "a")) {
+
+            
+        my $nivel2_object       = C4::AR::Nivel2::getNivel2FromId2($dato);
+        $id1                    = $nivel2_object->getId1();
+        my $catRegistroMarcN1   = C4::AR::Nivel1::getNivel1FromId1($id1);
+
+#       C4::AR::Debug::debug("C4::AR::Filtros::show_componente => campo, subcampo: ".$campo.", ".$subcampo); 
+#       C4::AR::Debug::debug("C4::AR::Filtros::show_componente => DENTRO => dato: ".$dato);
+
+        if($catRegistroMarcN1){
+            my %params_hash;
+            my $text        = $catRegistroMarcN1->getTitulo(); 
+            %params_hash    = ('id1' => $catRegistroMarcN1->getId1());
+            my $url;
+
+            if ($session_type eq 'intranet'){
+                $url         = C4::AR::Utilidades::url_for("/catalogacion/estructura/detalle.pl", \%params_hash);
+            }else{
+                $url         = C4::AR::Utilidades::url_for("/opac-detail.pl", \%params_hash);
+            }
+
+#             C4::AR::Debug::debug("C4::AR::Filtros::show_componente => DENTRO => url: ".$url);
+
+            return C4::AR::Filtros::link_to( text => $text, url => $url , blank => 1);
+        }
+        
+        return "NO_LINK";
+    }
+
+    return "NO_LINK";
 }
+
+# sub show_componente {
+#     my (%params_hash_ref) = @_;
+# 
+#     my $campo               = $params_hash_ref{'campo'};
+#     my $subcampo            = $params_hash_ref{'subcampo'};
+#     my $dato                = $params_hash_ref{'dato'};
+#     my $itemtype            = $params_hash_ref{'itemtype'};
+#     my $type                = $params_hash_ref{'type'};
+# 
+#     my $session             = CGI::Session->load();
+#     my $session_type        = $session->param('type') || 'opac';
+#      
+#     if(($campo eq "245")&&($subcampo eq "a")) {
+# 
+#       my $catRegistroMarcN2   = C4::AR::Nivel2::getNivel2FromId2($dato);
+# 
+#       C4::AR::Debug::debug("C4::AR::Filtros::show_componente => campo, subcampo: ".$campo.", ".$subcampo); 
+# 
+#       C4::AR::Debug::debug("C4::AR::Filtros::show_componente => DENTRO => dato: ".$dato);
+# 
+#         if($catRegistroMarcN2){
+#             my %params_hash;
+#             my $text        = $catRegistroMarcN2->nivel1->getTitulo()." (".$catRegistroMarcN2->nivel1->getAutor().") - ".$catRegistroMarcN2->toString; 
+#             %params_hash    = ('id1' => $catRegistroMarcN2->getId1());
+#             my $url;
+# 
+#             if ($session_type eq 'intranet'){
+#             	$url         = C4::AR::Utilidades::url_for("/catalogacion/estructura/detalle.pl", \%params_hash);
+#             }else{
+#                 $url         = C4::AR::Utilidades::url_for("/opac-detail.pl", \%params_hash);
+#             }
+# 
+#             return C4::AR::Filtros::link_to( text => $text, url => $url );
+#         }
+#         
+#     } elsif($type eq "INTRA") {
+#         if(($campo eq "773")&&($subcampo eq "a")){
+#             my $catRegistroMarcN2   = C4::AR::Nivel2::getNivel2FromId2($dato);
+#     
+# # TODO FIXEDDDDDDDDDD en el futuro esto se debe levantar de la configuracion
+#             if($catRegistroMarcN2){
+# 
+#                 #obtengo las analiticas
+#                 my $cat_reg_marc_n2_analiticas = $catRegistroMarcN2->getAnaliticas();
+#   
+#                 if(scalar(@$cat_reg_marc_n2_analiticas) > 0){
+#                      #no tiene analiticas
+#                     C4::AR::Debug::debug("C4::AR::Filtros::show_componente => TIENE ANALITICAS"); 
+#                     my %params_hash;
+#                     my $text        = $catRegistroMarcN2->nivel1->getTitulo()." (".$catRegistroMarcN2->nivel1->getAutor().") - ".$catRegistroMarcN2->toString; 
+#                     %params_hash    = ('id1' => $catRegistroMarcN2->getId1());
+#                     my $url         = C4::AR::Utilidades::url_for("/catalogacion/estructura/detalle.pl", \%params_hash);
+# 
+#                     return C4::AR::Filtros::link_to( text => $text, url => $url );
+#                 }
+# 
+# #                 aca tengo que identificar si este nivel 2 es padre o hijo de una analitica para cambiar el link               
+#             } else {
+#                 C4::AR::Debug::debug("C4::AR::Filtros::show_componente => NO TIENE ANALITICAS"); 
+#             }
+#         }
+#     } else {
+# # TODO FIXEDDDDDDDDDD en el futuro esto se debe levantar de la configuracion
+#         if(($campo eq "773")&&($subcampo eq "a")){
+#             my $catRegistroMarcN2 = C4::AR::Nivel2::getNivel2FromId2($dato);
+#     
+#             if($catRegistroMarcN2){
+#                 return $catRegistroMarcN2->nivel1->getTitulo()." (".$catRegistroMarcN2->nivel1->getAutor().") - ".$catRegistroMarcN2->toString; 
+#             }
+#         }
+#     }
+# 
+#     return $dato;
+# }
 
 sub ayuda_marc{
 

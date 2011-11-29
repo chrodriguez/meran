@@ -1693,6 +1693,9 @@ label.error_adv {
 
 .resultados_consulta {
 	font-size: 12px;
+    line-height: 50px;
+    overflow: hidden;
+    max-width: 80em;	
 }
 
 .bold {
@@ -2804,7 +2807,7 @@ fieldset {
 	width: 489px;
 	padding: 2px 4px;
 	position: absolute;
-	font-size: 16px;
+	font-size: 17px;
 	top: 8px;
 	left: 1;
 	right: 50px;

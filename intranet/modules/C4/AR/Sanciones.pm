@@ -47,7 +47,8 @@ sub getSancionesLike {
 
     foreach my $s (@searchstring_array){ 
                 push (  @filtros, ( or   => [   
-#                                               
+                                                'socio.persona.nombre'    => { like => $s.'%'},   
+                                                'socio.persona.nombre'    => { like => '% '.$s.'%'},
                                                 apellido            => { like => $s.'%'},
                                                 apellido            => { like => '% '.$s.'%'},
                                                 nro_documento       => { like => '%'.$s.'%' }, 
@@ -179,8 +180,11 @@ sub tieneLibroVencido {
   my $dateformat = C4::Date::get_date_format();
   my $hoy=C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
   foreach my $prestamo (@$prestamos_array_ref) {
-           C4::AR::Debug::debug("El prestamo de ".$prestamo->getId3." esta vencido? : ".$prestamo->estaVencido);
-    		return(1) if ($prestamo->estaVencido);
+           C4::AR::Debug::debug("El prestamo del Nivel3 -- ".$prestamo->getId3." -- esta vencido? : ".$prestamo->estaVencido);
+    		if ($prestamo->estaVencido){
+                C4::AR::Debug::debug("EL EJEMPLAR CON ID ".$prestamo->nivel3->getId." DEL USUARIO ".$prestamo->socio->getNro_socio." ESTA VENCIDO!!!!!!!!!!!!!");
+    			return(1);
+    		}
   }
   return(0);
 }
@@ -233,7 +237,7 @@ sub diasDeSancion {
                 
                 my $begin = ParseDate(C4::AR::Preferencias::getValorPreferencia("open"));
                 my $end =  C4::Date::calc_endES();
-                my $actual=ParseDate("today");
+                my $actual=ParseDate("now");
                 if (Date_Cmp($actual, $end) <= 0){#No hay sancion se devuelve entre la apertura de la biblioteca y el limite
                     return(0);
                 }

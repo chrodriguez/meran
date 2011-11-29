@@ -2,12 +2,12 @@
 <head>
   <meta http-equiv="Content-Tipo" content="text/html; charset=UTF-8">
 </head>
-<body onload="javascript:window.print();window.close();">-->
+
 
 <!--LO QUE ESTA COMENTADO ES COMO ESTA ANTES!!!!!!! -->
-
+<body onload="javascript:window.print();window.close();">
 [% FOREACH comprobantes %]
-    <div id="comprob">
+    <div class="comprob">
         <p >PR&Eacute;STAMO - RENOVACI&Oacute;N</p>
         <table>
             <tbody> 
@@ -99,7 +99,7 @@
                           Tomo:
                       </td>
                       <td>
-                          <b>[% IF comp.prestamo.nivel3.nivel2.getVolumen %] [% comp.prestamo.nivel3.nivel2.getVolumen %] [% ELSE %] - [% END %]</b>
+                          <b>[% IF prestamo.nivel3.nivel2.getVolumen %] [% prestamo.nivel3.nivel2.getVolumen %] [% ELSE %] - [% END %]</b>
                       </td>
                   </tr>
 
@@ -115,8 +115,9 @@
                       <td>
                           Responsable:<!-- del pr&eacute;stamo: -->
                       </td>
+                                
                       <td>
-                          <b>[% comp.responsable.persona.getApeYNom %]</b>
+                          <b>[% responsable.persona.getApeYNom %]</b>
                       </td>
                   </tr>
                   <tr>
@@ -154,10 +155,13 @@
                           &nbsp;
                       </td>
                   </tr>
+                  
                 </tbody>
               </table>
+       
     </div>
-            
+    <div  style= "page-break-after: always"></div>  
+    <!-- PAGE BREAK -->    
 [% END %]
 
 <!-- AGREGADO HASTA ACA -->

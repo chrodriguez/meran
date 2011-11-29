@@ -22,7 +22,6 @@ __PACKAGE__->meta->setup(
         last_change_password             => { type => 'date' },
         change_password                  => { type => 'integer', overflow => 'truncate', default => '0', not_null => 1 },
         cumple_requisito                 => { type => 'varchar', overflow => 'truncate', length=>32, not_null => 1, default => '0'},
-        id_estado                        => { type => 'integer', overflow => 'truncate', not_null => 1,  default => 20 },
         activo                           => { type => 'integer', overflow => 'truncate', default => 0, not_null => 1 },
         agregacion_temp                  => { type => 'varchar', overflow => 'truncate', length => 255 },
         note                             => { type => 'text', not_null => 1 },
@@ -64,13 +63,6 @@ __PACKAGE__->meta->setup(
       {
         class       => 'C4::Modelo::UsrRefCategoriaSocio',
         key_columns => { id_categoria => 'id' },
-        type        => 'one to one',
-      },
-
-     estado => 
-      {
-        class       => 'C4::Modelo::UsrEstado',
-        key_columns => { id_estado => 'id_estado' },
         type        => 'one to one',
       },
 
@@ -175,8 +167,6 @@ sub agregar{
     }else{
     	$self->setCumple_requisito("0000000000:00:00");
     }
-
-    $self->setId_estado($data_hash->{'id_estado'});
 
     if (C4::AR::Preferencias::getValorPreferencia("autoActivarPersona")){
         C4::AR::Debug::debug("Desde UsrSocio->agregar(), se tiene autoActivarPersona en 1, ojimetro");
@@ -644,17 +634,6 @@ sub setCumple_requisito{
     $self->cumple_requisito($cumple_requisito);
 }
 
-sub getId_estado{
-    my ($self) = shift;
-    return ($self->id_estado);
-}
-
-sub setId_estado{
-    my ($self) = shift;
-    my ($id_estado) = @_;
-    $self->id_estado($id_estado);
-}
-
 sub getTheme{
     my ($self) = shift;
     return ($self->theme);
@@ -689,22 +668,13 @@ sub setThemeSave{
 sub esRegular{
     my ($self) = shift;
 
-    my ($estado) = C4::Modelo::UsrEstado->new(id_estado => $self->getId_estado);
-    $estado->load();
-
-    return $estado->getRegular;
+    return $self->persona->esRegular;
 }
 
 sub esRegularToString{
     my ($self) = shift;
 
-    my ($estado) = C4::Modelo::UsrEstado->new(id_estado => $self->getId_estado);
-    $estado->load();
-
-    my $estado_alumno = C4::AR::Filtros::i18n("IRREGULAR");
-    if($estado->getRegular){$estado_alumno = C4::AR::Filtros::i18n("REGULAR")}
-    
-    return $estado_alumno;
+    return $self->persona->esRegularToString;
 }
 
 sub getIs_super_user{
@@ -763,6 +733,7 @@ sub checkEntorno{
                                                                 ui => $flagsrequired->{'ui'}, 
                                                                 tipo_documento => $flagsrequired->{'tipo_documento'}, 
                                                                 nro_socio => $flagsrequired->{'nro_socio'},
+                                                                tipo_documento => 'ALL',
                                                     });
         }
         elsif($flagsrequired->{'tipo_permiso'} eq "general"){
@@ -771,6 +742,7 @@ sub checkEntorno{
                                                                 ui => $flagsrequired->{'ui'}, 
                                                                 tipo_documento => $flagsrequired->{'tipo_documento'}, 
                                                                 nro_socio => $flagsrequired->{'nro_socio'},
+                                                                tipo_documento => 'ALL',
                                                     });
         }
         elsif($flagsrequired->{'tipo_permiso'} eq "circulacion"){
@@ -778,6 +750,7 @@ sub checkEntorno{
                                                                 ui => $flagsrequired->{'ui'}, 
                                                                 tipo_documento => $flagsrequired->{'tipo_documento'}, 
                                                                 nro_socio => $flagsrequired->{'nro_socio'},
+                                                                tipo_documento => 'ALL',
                                                     });
         }
         return ($permisos_array_hash_ref);
@@ -802,6 +775,7 @@ sub setCredentials{
     $self->setCredentialType($credential_type);
     $self->save();
 }
+
 sub convertirEnEstudiante{
 
     my ($self) = shift;
@@ -964,26 +938,15 @@ sub verificar_permisos_por_nivel{
     my ($flagsrequired) = @_;
     my @filtros;
     my $permisos_array_hash_ref;
-#     my @entornos_datos_nivel = ('datos_nivel1','datos_nivel2','datos_nivel3'); 
-#     my @entornos_estructura_catalogacion= ('estructura_catalogacion_n1','estructura_catalogacion_n2','estructura_catalogacion_n3');
+
     my @entornos_perm_catalogo      = ( 'datos_nivel1','datos_nivel2','datos_nivel3', 'estructura_catalogacion_n1',
                                         'estructura_catalogacion_n2','estructura_catalogacion_n3', 'sistema', 'undefined', 'usuarios');
     
     my @entornos_perm_general       = ( 'reportes','preferencias','permisos','adq_opac','adq_intra' );
     
-    my @entornos_perm_circulacion   = ( 'prestamos', 'circ_opac' );
+    my @entornos_perm_circulacion   = ( 'prestamos', 'circ_opac', 'circ_prestar','circ_renovar', 'circ_devolver', 'circ_sanciones' );
 
     my @entornos_manejo_usuario     = ( 'usuarios' );
-#     my @entornos_circulacion = ('');
-
-# FIXME falta verificar los parametros de entrada, que sean numeros y ademas q sean validos
-#     C4::AR::Debug::debug("");
-#     C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel => permisos requeridos");
-#     C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel => ui=================: ".$flagsrequired->{'ui'});
-#     C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel => tipo_documento=================: ".$flagsrequired->{'tipo_documento'});
-#     C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel => nro_socio=================: ".$flagsrequired->{'nro_socio'});
-#     C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel => entorno=================: ".$flagsrequired->{'entorno'});
-#     C4::AR::Debug::debug("UsrSocio => verificar_permisos_por_nivel => accion=================: ".$flagsrequired->{'accion'});
 
 
     $permisos_array_hash_ref = C4::Modelo::UsrSocio::checkEntorno($flagsrequired,\@entornos_perm_catalogo,\@entornos_perm_general,\@entornos_perm_circulacion);

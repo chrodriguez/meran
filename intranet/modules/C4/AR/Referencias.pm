@@ -33,6 +33,7 @@ use C4::Modelo::PrefInformacionReferencia::Manager;
 use C4::Modelo::AdqTipoMaterial::Manager;
 use C4::Modelo::AdqFormaEnvio::Manager;
 use C4::Modelo::AdqPresupuesto::Manager;
+use C4::Modelo::RefColaborador;
 
 
 use JSON;
@@ -403,11 +404,11 @@ sub obtenerValoresTablaRef{
 #     C4::AR::Debug::debug("Referencias => obtenerValoresTablaRef => orden: ".$orden);
     
     my $ref = C4::Modelo::PrefTablaReferencia->new();
-	  my ($cantidad,$valores) = $ref->obtenerValoresTablaRef($tableAlias,$campo, $orden);
+	  my ($cantidad, $valores, $default_value) = $ref->obtenerValoresTablaRef($tableAlias,$campo, $orden);
 
 #     C4::AR::Debug::debug("Referencias => obtenerValoresTablaRef => cantidad: ".$cantidad);
 #     C4::AR::Debug::debug("Referencias => obtenerValoresTablaRef => valores: ".$valores);
-    return($cantidad,$valores);
+    return($cantidad, $valores, $default_value);
 
 }
 
@@ -505,6 +506,7 @@ sub getTabla{
     return ($cantidad,$clave,$tabla,$datos,$campos);
 }
 
+
 sub getTablaInstanceByAlias{
     
     my ($alias) = @_;
@@ -516,7 +518,7 @@ sub getTablaInstanceByAlias{
     my $clave;
 
     if ($tabla){
-      $clave = $tabla->meta->primary_key."";
+      $clave = $tabla->meta->primary_key;
       
     }
 
@@ -643,6 +645,11 @@ sub asignarReferencia{
 
     if ($tabla){
         my $old_pk = $tabla->getByPk($referer_involved);
+        
+        my $new_instance = $tabla->getByPk($related_id);
+        
+        $related_id =   $new_instance->get_key_value();
+        
         $status = $old_pk->replaceByThis($related_id);
     }
     
@@ -662,16 +669,52 @@ sub asignarReferenciaParaCatalogo{
 
   my $id_viejo = $referer_involved;
   my $id_nuevo = $related_id;
-  my $nivel1 = C4::Modelo::CatRegistroMarcN1->new();
-  my $registros = $nivel1->getReferenced($tabla,$referer_involved);
+  my @id1_to_generate = ();
+ #Nivel 1 
+  my $nivel = C4::Modelo::CatRegistroMarcN1->new();
+  my $registros = $nivel->getReferenced($tabla,$referer_involved);
 
   foreach my $registro (@$registros){
       my $marc = $registro->getMarcRecord;
       $marc =~ s/$nombre_tabla\@$id_viejo/$nombre_tabla\@$id_nuevo/g;
       $registro->setMarcRecord($marc);
       $registro->save();
-      C4::AR::Sphinx::generar_indice($registro->getId1(), 'R_PARTIAL', 'UPDATE');
+      push (@id1_to_generate,$registro->getId1());
   }
+  
+ #Nivel 2 
+  my $nivel = C4::Modelo::CatRegistroMarcN2->new();
+  my $registros = $nivel->getReferenced($tabla,$referer_involved);
+
+  foreach my $registro (@$registros){
+      my $marc = $registro->getMarcRecord;
+      $marc =~ s/$nombre_tabla\@$id_viejo/$nombre_tabla\@$id_nuevo/g;
+      $registro->setMarcRecord($marc);
+      $registro->save();
+      if (!C4::AR::Utilidades::existeInArray($registro->getId1(),@id1_to_generate)){
+            push (@id1_to_generate,$registro->getId1());
+      }
+  }
+  
+ #Nivel 3 
+  my $nivel = C4::Modelo::CatRegistroMarcN3->new();
+  my $registros = $nivel->getReferenced($tabla,$referer_involved);
+
+  foreach my $registro (@$registros){
+      my $marc = $registro->getMarcRecord;
+      $marc =~ s/$nombre_tabla\@$id_viejo/$nombre_tabla\@$id_nuevo/g;
+      $registro->setMarcRecord($marc);
+      $registro->save();
+      if (!C4::AR::Utilidades::existeInArray($registro->getId1(),@id1_to_generate)){
+            push (@id1_to_generate,$registro->getId1());
+      }
+  } 
+  #Se regenera el indice para todos los Id1
+  
+  foreach my $id1 (@id1_to_generate){
+        C4::AR::Sphinx::generar_indice($id1, 'R_PARTIAL', 'UPDATE');
+  }
+  
 }
 
 

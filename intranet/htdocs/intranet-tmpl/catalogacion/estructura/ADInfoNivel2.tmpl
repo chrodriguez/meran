@@ -52,13 +52,24 @@
                                                                 li => 1,
                                     ) ;
                     [% END %]
-                    [% PERL %]
-                            print C4::AR::Filtros::to_Icon(   
-                                                                boton   => "icon_indice",
-                                                                onClick => "agregarIndice('[% nivel2.getId2 %]');",
-                                                                title   => "[% 'Agregar Indice' | i18n %]",
-                                                                li => 1,
-                                    ) ;
+                    [% IF indice_edit == 1 %]
+                        [% PERL %]
+                                print C4::AR::Filtros::to_Icon(   
+                                                                    boton   => "icon_indice",
+                                                                    onClick => "agregarIndice('[% nivel2.getId2 %]');",
+                                                                    title   => "[% 'Editar Indice' | i18n %]",
+                                                                    li => 1,
+                                        ) ;
+                        [% END %]
+                    [% ELSE %]
+                        [% PERL %]
+                                print C4::AR::Filtros::to_Icon(   
+                                                                    boton   => "icon_indice",
+                                                                    onClick => "agregarIndice('[% nivel2.getId2 %]');",
+                                                                    title   => "[% 'Agregar Indice' | i18n %]",
+                                                                    li => 1,
+                                        ) ;
+                        [% END %]
                     [% END %]
                 </ul>
                 </li>

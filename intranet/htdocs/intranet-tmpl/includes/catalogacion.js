@@ -408,12 +408,15 @@ function updateMostrarEstructuraDelNivel2(responseText){
     addRules();
     
     if(!MODIFICAR){
-        //dejo seleccionado el tipo de documento segun el esquema  
-        $('#'+_getIdComponente('910','a')).val($('#tipo_nivel3_id').val());
+        if(ID_TIPO_EJEMPLAR == 0){
+            $('#'+_getIdComponente('910','a')).val($('#tipo_nivel3_id').val());
+        } else {
+            //dejo seleccionado el tipo de documento segun el esquema  
+            $('#'+_getIdComponente('910','a')).val(ID_TIPO_EJEMPLAR);
+        } 
     }      
     
-    scrollTo('nivel2Tabla');  
-    
+    scrollTo('nivel2Tabla');   
 }
 
 
@@ -682,7 +685,7 @@ function mostrarInfoAltaNivel2(id2){
     objAH.debug         = true;
 //     objAH.showStatusIn  = 'nivel2';
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
-    objAH.tipoAccion    = "MOSTRAR_INFO_NIVEL2_LATERARL";
+    objAH.tipoAccion    = "MOSTRAR_INFO_NIVEL2_LATERAL";
     objAH.id2           = id2; //mostrar todos los nivel 2 del nivel1 con el q se esta trabajando, asi este vuela
     objAH.id1           = ID_N1;
     objAH.sendToServer();
@@ -792,6 +795,7 @@ function guardarDocumentoN2(){
         objAH.url               = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
         objAH.tipoAccion        = "GUARDAR_NIVEL_2";
         objAH.id_tipo_doc       = TEMPLATE_ACTUAL;
+        objAH.tipo_ejemplar     = $('#' + _getIdComponente('910','a')).val();  
 	    _sacarOpciones();
         objAH.infoArrayNivel2   = MARC_OBJECT_ARRAY;
         objAH.id1               = ID_N1;
@@ -914,8 +918,7 @@ function guardarModificacionDocumentoN2(){
     objAH.url               = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion        = "MODIFICAR_NIVEL_2";
 	_sacarOpciones();
-    objAH.infoArrayNivel2   = MARC_OBJECT_ARRAY;
-// TODO unificar todo a objAH.id_tipo_doc               = TEMPLATE_ACTUAL;    
+    objAH.infoArrayNivel2   = MARC_OBJECT_ARRAY;   
     objAH.tipo_ejemplar     = ID_TIPO_EJEMPLAR;
     objAH.id1               = ID_N1;
     objAH.id2               = ID_N2; //por si se modificó
@@ -951,12 +954,9 @@ function guardarModificacionDocumentoN3(){
     objAH.showOverlay       = true;
     objAH.url               = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion        = "MODIFICAR_NIVEL_3";
-// FIXME para q esta?
-    objAH.tipo_documento    = $("#tipo_nivel3_id").val();
     objAH.cantEjemplares    = $("#cantEjemplares").val();
     _sacarOpciones();
-    objAH.infoArrayNivel3   = MARC_OBJECT_ARRAY;
-// TODO unificar todo objAH.id_tipo_doc               = TEMPLATE_ACTUAL;    
+    objAH.infoArrayNivel3   = MARC_OBJECT_ARRAY; 
     objAH.tipo_ejemplar     = ID_TIPO_EJEMPLAR;
     objAH.id1               = ID_N1;
     objAH.id2               = ID_N2;
@@ -1009,6 +1009,7 @@ function guardar(nivel){
     Muestra el Nivel 3 Nivel 2 (idNivel2)
 */
 function mostrarInfoAltaNivel3(idNivel2){
+	startOverlay();
     if(idNivel2 != 0){
         objAH               = new AjaxHelper(updateMostrarInfoAltaNivel3);
         objAH.debug         = true;
@@ -1029,6 +1030,7 @@ function updateMostrarInfoAltaNivel3(responseText){
     checkedAll('select_all', 'checkEjemplares');
     
     scrollTo('detalleDelNivel3');
+    closeModal();
 }
 
 function mostrarInfoAltaNivel3ParaEdicionGrupalFromRegistro(idNivel2){
@@ -1185,6 +1187,8 @@ function procesarInfoJson(marc_object_array, id_padre){
             strComp = strComp + "<div style='width:3%;float:right'>";
             campo_marc_conf_obj.setIdCompCliente("marc_group" + id_temp);
             strComp = strComp + crearBotonAgregarCampoRepetible(campo_marc_conf_obj, id_temp);
+//             NO ANDA VER ESTO
+//             strComp = strComp + crearBotonEliminarCampoRepetible(campo_marc_conf_obj, id_temp);  
             strComp = strComp + "</div>";
         } else {
             //cierro div CENTER si no es repetible
@@ -1718,6 +1722,7 @@ function subcampo_marc_conf(obj){
     this.referenciaTabla        = obj.referenciaTabla;
     this.opciones               = obj.opciones;
     this.defaultValue           = obj.defaultValue;
+    this.default_value          = obj.default_value;  
     this.tiene_estructura       = obj.tiene_estructura;
     this.ayuda_campo            = obj.ayuda_campo;
     this.descripcion_subcampo   = obj.descripcion_subcampo;
@@ -1736,7 +1741,7 @@ function subcampo_marc_conf(obj){
     function fGetRepetible(){ return this.repetible };
     function fGetReferenciaTabla(){ return this.referenciaTabla };    
     function fGetOpciones(){ return this.opciones };
-    function fGetDefaultValue(){ return this.defaultValue };
+    function fGetDefaultValue(){ return this.default_value };
     function fGetTieneEstructura(){ return this.tiene_estructura };
     function fGetObligatorio(){ return this.obligatorio };
     function fGetVistaIntra(){ return $.trim(this.liblibrarian) };
@@ -1798,14 +1803,15 @@ function newCombo(obj){
     var op              = "";
     var defaultValue    = "";
     var opciones        = obj.getOpciones();
+    var default_value   = obj.getDefaultValue();  
 
     for(var i=0; i< opciones.length; i++){
-        if(obj.getDatoReferencia() == opciones[i].clave){
-            defaultValue =" selected='selected' ";
+        if((obj.getDatoReferencia() == opciones[i].clave)||((default_value == opciones[i].clave)&&(MODIFICAR == 0))){
+//         if((obj.getDatoReferencia() == opciones[i].clave)||((ID_TIPO_EJEMPLAR == opciones[i].clave)&&(MODIFICAR == 0))){
+            op = op + "<option value='" + opciones[i].clave + "' selected=selected>" + opciones[i].valor + "</option>\n";
+        } else {
+            op = op + "<option value='" + opciones[i].clave + "' >" + opciones[i].valor + "</option>\n";  
         }
-
-        op = op + "<option value='" + opciones[i].clave + "'" + defaultValue + "'>" + opciones[i].valor + "</option>\n";
-        defaultValue = "";
     }
 
     comp = comp + op + "</select>";
@@ -1988,9 +1994,10 @@ function updateBorrarN1(responseText){
 
     if (! (hayError(Messages) ) ){
         inicializar();
-	    mostrarEstructuraDelNivel1();
-	    mostrarInfoAltaNivel2(ID_N2);
-        mostrarInfoAltaNivel3(ID_N2);
+// 	    mostrarEstructuraDelNivel1();
+// 	    mostrarInfoAltaNivel2(ID_N2);
+//         mostrarInfoAltaNivel3(ID_N2);
+        $("#detalleComun").html("");    
     }
 }
 
@@ -2056,22 +2063,34 @@ function updateBorrarN3(responseText){
     }
 }
 
-function borrarEjemplaresN3(){
+function borrarEjemplaresN3(id2){
+
+    var selectedItems = new Array();
+    
+    $('.icon_seleccionar:checked').each(function(){
+        selectedItems.push($(this).val());
+    });
+    
+    if (selectedItems.length == 0) {
+            jAlert('Debe seleccionar al menos un ejemplar','Advertencia de catalogo');
+    }else{      
 	
-    jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_ALERT_TITLE, function(confirmStatus){
-        if(confirmStatus){
-		    objAH               = new AjaxHelper(updateBorrarEjemplaresN3);
-            objAH.showOverlay   = true;
-		    objAH.debug         = true;
-		    objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
-            var id3_array       = recuperarSeleccionados("checkEjemplares");
-		    objAH.id3_array     = id3_array;
-		    objAH.nivel         = 3;
-		    objAH.itemtype      = $("#id_tipo_doc").val();
-		    objAH.tipoAccion    = "ELIMINAR_NIVEL";
-		    if(id3_array.length > 0){objAH.sendToServer();}
-        }
-	});
+        jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_ALERT_TITLE, function(confirmStatus){
+            if(confirmStatus){
+		        objAH               = new AjaxHelper(updateBorrarEjemplaresN3);
+                objAH.showOverlay   = true;
+                ID_N2               = id2;
+		        objAH.debug         = true;
+		        objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+                var id3_array       = selectedItems;
+		        objAH.id3_array     = id3_array;
+		        objAH.nivel         = 3;
+		        objAH.itemtype      = $("#id_tipo_doc").val();
+		        objAH.tipoAccion    = "ELIMINAR_NIVEL";
+		        objAH.sendToServer();
+            }
+	    });
+	}
 }
 
 function updateBorrarEjemplaresN3(responseText){
@@ -2080,10 +2099,11 @@ function updateBorrarEjemplaresN3(responseText){
     setMessages(Messages);
     
     if (! (hayError(Messages) ) ){
-	    inicializar();
-	    mostrarEstructuraDelNivel3(TEMPLATE_ACTUAL);
-        mostrarInfoAltaNivel2(ID_N2);
-        mostrarInfoAltaNivel3(ID_N2);
+//	    inicializar();
+//	    mostrarEstructuraDelNivel3(TEMPLATE_ACTUAL);
+//        mostrarInfoAltaNivel2(ID_N2);
+//        mostrarInfoAltaNivel3(ID_N2);
+        ejemplaresDelGrupo(ID_N2);
     }
 }
 /*

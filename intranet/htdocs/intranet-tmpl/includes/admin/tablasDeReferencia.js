@@ -92,9 +92,9 @@ function mostrarReferencias(tabla,value_id){
 }
 
 
-function asignarReferencia(tabla,related_id,referer_involved){
+function asignarReferencia(tabla,related_id,referer_involved,referer_involved_show){
     $('#fieldset_tablaResult_involved').addClass("warning");
-    jConfirm(TITLE_FIRST_ASSIGN_REFERENCIES+referer_involved+TITLE_TO_ASSIGN_REFERENCIES+related_id,"Titulo",function(confirmed){
+    jConfirm(TITLE_FIRST_ASSIGN_REFERENCIES+referer_involved_show+TITLE_TO_ASSIGN_REFERENCIES+related_id,"Titulo",function(confirmed){
         if (confirmed){
             objAH=new AjaxHelper(updateObtenerTabla);
             objAH.url= URL_PREFIX+'/admin/referencias/referenciasDB.pl';
@@ -110,9 +110,9 @@ function asignarReferencia(tabla,related_id,referer_involved){
     });
 }
 
-function asignarEliminarReferencia(tabla,related_id,referer_involved){
+function asignarEliminarReferencia(tabla,related_id,referer_involved,referer_involved_show){
     $('#fieldset_tablaResult_involved').addClass("warning");
-    jConfirm(TITLE_FIRST_ASSIGN_DELETE_REFERENCIES+referer_involved+TITLE_TO_ASSIGN_REFERENCIES+related_id,"Titulo",function(confirmed){
+    jConfirm(TITLE_FIRST_ASSIGN_DELETE_REFERENCIES+referer_involved_show+TITLE_TO_ASSIGN_REFERENCIES+related_id,"Titulo",function(confirmed){
         if (confirmed){
             objAH=new AjaxHelper(updateObtenerTabla);
             objAH.url= URL_PREFIX+'/admin/referencias/referenciasDB.pl';

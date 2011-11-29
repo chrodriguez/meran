@@ -73,11 +73,9 @@ if (!($msg_object->{'error'})){
             
         $t_params->{'titulo'}           = "CERTIFICADO DE LIBRE DEUDA";
         $t_params->{'atencion'}         =  C4::AR::Preferencias::getValorPreferencia('open') . " a "
-            . C4::AR::Preferencias::getValorPreferencia('close'). Encode::decode_utf8(" Sabados: ")
-            . C4::AR::Preferencias::getValorPreferencia('open_sabado'). " a " 
-            . C4::AR::Preferencias::getValorPreferencia('close_sabado');
-        
-    
+            . C4::AR::Preferencias::getValorPreferencia('close') ;
+
+
         my $out         = C4::AR::Auth::get_html_content($template, $t_params, $session);
         my $filename    = C4::AR::PdfGenerator::pdfFromHTML($out);
         print C4::AR::PdfGenerator::pdfHeader();

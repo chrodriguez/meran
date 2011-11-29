@@ -25,6 +25,48 @@
     
 [% END %]
 
+[% IF estadoDeColeccion %]
+    <div class="detalle_completo_niveles">
+        <div class="main-subcontent" style="width:100%; float:left">
+            <div class="subcontent-unit-border" style="width:100%;">
+                <div class="round-border-topleft""></div>
+                    <div class="main-subcontent" style="width:100%; float:left;">
+						 <legend class="trigger trigger_estado_coleccion_[% id1 %] click" ><h1>[% "Estado de Colecci&oacute;n" | i18n %]</h1></legend>
+						         <div id="estado_coleccion[% id1 %]" class="detalle_total estado_coleccion[% id1 %]">
+									<ul class="listado_sin_margen estado_coleccion">
+										[% FOREACH anio IN estadoDeColeccion.keys.sort %]
+										[% IF estadoDeColeccion.$anio.keys %]
+										<li>
+											[% IF anio != '#' %]<b>[% anio %]</b>[% END %]
+											[% FOREACH volumen IN estadoDeColeccion.$anio.keys.sort %]
+												[% IF volumen != '#' %][% volumen  %][% END %]
+												(
+												[% FOREACH fasciculo IN estadoDeColeccion.$anio.$volumen.keys.sort %]
+
+													 [% PERL %]
+														print C4::AR::Filtros::link_to( text =>     "[% fasciculo %]",
+																						url=>"[% url_prefix %]/opac-detail.pl", 
+																						params =>   ["id1=[% id1 %]","id2=[% estadoDeColeccion.$anio.$volumen.$fasciculo %]"],
+																						title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
+																						class => 	"link_to_detail"
+																					) ;
+													 [% END %]
+									
+												[% END %]
+												)
+											[% END %]
+										   </li>
+										[% END %]
+										[% END %]
+									</ul>
+							   </div>
+					</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">makeToggle('estado_coleccion[% id1 %]','trigger_estado_coleccion_[% id1 %]',null,false);</script>
+[% END %]
+
 [% IF preferencias.resumido %]
     [% INCLUDE 'opac-detail_partial_N2_reducido.inc' %]
 [% ELSE %]

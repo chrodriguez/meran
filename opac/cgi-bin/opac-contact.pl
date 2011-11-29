@@ -28,14 +28,14 @@ if ($post){
     use C4::Modelo::Contacto;
     my ($contacto)  = C4::Modelo::Contacto->new();
     my $params_hash = $query->Vars;
-    $contacto->agregar($params_hash);
     $t_params->{'mensaje_error'} = 0;
-    
-    #verificamos que los campos requeridos tengan valor
+        #verificamos que los campos requeridos tengan valor
     if( ($params_hash->{'nombre'} eq "") || ($params_hash->{'apellido'} eq "") || ($params_hash->{'email'} eq "") || ($params_hash->{'mensaje'} eq "") ){
         $t_params->{'mensaje_error'} = 1;
+    }else{
+  	    $contacto->agregar($params_hash);
     }
-    
+        
     $t_params->{'partial_template'} = "opac-contact_posted.inc";
     
 }else{

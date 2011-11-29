@@ -254,7 +254,8 @@ sub getSubCamposByNivel{
 
     my @filtros;
 
-    push(@filtros, ( nivel => { eq => $nivel } ) );
+#     push(@filtros, ( nivel => { eq => $nivel } ) );
+    push ( @filtros, ( or   => [    nivel   => { eq => $nivel }, nivel    => { eq => 0 }]  ));
 
     my $db_subcampos_MARC = C4::Modelo::PrefEstructuraSubcampoMarc::Manager->get_pref_estructura_subcampo_marc(
                                                                 query => \@filtros,

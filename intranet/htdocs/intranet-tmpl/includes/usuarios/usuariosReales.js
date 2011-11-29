@@ -88,67 +88,10 @@ function updateGuardarModificacionUsuario(responseText){
 
 
 function save(){
-   $('#userDataForm').submit();
+  agregarUsuario();
+  return false;
 }
 
-
-function validateForm(func){
-
-   
-         $().ready(function() {
-            // validate signup form on keyup and submit
-            $.validator.setDefaults({
-              submitHandler:  func ,
-            });
-            $("#userDataForm").validate({
-    
-                debug: true,
-                errorElement: "em",
-                errorClass: "error_adv",
-               rules: {
-                  nro_documento: "required",
-                  tipo_documento_id: "required",
-				  categoria_socio_id: "required",	
-                  apellido: "required",
-                  nombre: "required",
-                  nro_socio: "required",
-                  sexo: "required",
-                  calle: "required",
-                  ciudad: "required",
-                  id_ciudad: "required",
-                  id_ui: "required",
-
-                  nacimiento: {
-                        required: true,
-                        dateITA: true
-                  },
-                 
-                  email: {
-                        required: true,
-                        email: true
-                  },
-               },
-               messages: {
-				  categoria_socio_id: POR_FAVOR_SELECCIONE_LA_CATEGORIA,
-                  apellido: POR_FAVOR_INGRESE_SU_APELLIDO,
-                  nombre: POR_FAVOR_INGRESE_SU_NOMBRE,
-                  nro_socio: POR_FAVOR_INGRESE_LA_TARJETA_DE_IDENTIFICACION,
-                  sexo: POR_FAVOR_INGRESE_EL_SEXO,
-                  calle: POR_FAVOR_INGRESE_LA_CALLE_DONDE_VIVE,
-                  ciudad: POR_FAVOR_INGRESE_LA_CIUDAD_EN_DONDE_VIVE,
-                  id_ciudad: POR_FAVOR_INGRESE_LA_CIUDAD_EN_DONDE_VIVE,
-                  nacimiento: POR_FAVOR_INGRESE_LA_FECHA_DE_NACIMIENTO,
-                  telefono: POR_FAVOR_INGRESE_EL_TELEFONO,
-                  nro_documento: {
-                     required: POR_FAVOR_INGRESE_SU_NRO_DE_DNI,
-                  },
-                  tipo_documento_id: POR_FAVOR_INGRESE_SU_NRO_DE_DNI,
-                  email: POR_FAVOR_INGRESE_UNA_DIR_DE_EMAIL_VALIDA,
-                  id_ui: POR_FAVOR_INGRESE_UNA_UI
-               }
-            });
-         });
-   }
 //************************************************Eliminar Usuario**********************************************
 function eliminarUsuario(){
 
@@ -227,11 +170,6 @@ function agregarUsuario(){
 
 }
 
-function checkUserData(){
-
-   $('#userDataForm').validate();
-
-}
 
 function updateAgregarUsuario(responseText){
     if (!verificarRespuesta(responseText))
@@ -382,7 +320,53 @@ function updateValidarDatosCensales(responseText){
     	
 }
 
+/************************************* Cambiar credenciales **********************************/
 
+function cambiarCredencial(){
+    objAH               = new AjaxHelper(updateCambiarCredencial);
+    objAH.url           = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.nro_socio     = USUARIO.ID;
+    objAH.tipoAccion    = 'CAMBIAR_CREDENCIAL';
+    objAH.sendToServer();
+}
 
+function updateCambiarCredencial(responseText){
+    if (!verificarRespuesta(responseText))
+        return(0);
 
+    $('#basic-modal-content').html(responseText);
+    $('#basic-modal-content').modal({   containerCss:{
+            backgroundColor:"#fff",
+    //         borderColor:"#0063dc",
+            height:117,
+            padding:0,
+            width:404
+        },
+    });
+}
 
+function guardarModificacionCredenciales(){
+
+    objAH               = new AjaxHelper(updateModificacionCredenciales);
+    objAH.url           = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
+    objAH.showOverlay   = true;
+    objAH.debug         = false;
+    objAH.nro_socio     = USUARIO.ID;
+    objAH.tipoAccion    = 'GUARDAR_MODIFICACION_CREDENCIALES';
+    objAH.credenciales  = $('#credential').val();
+
+    objAH.sendToServer();
+
+}
+
+function updateModificacionCredenciales(responseText){
+    if (!verificarRespuesta(responseText))
+            return(0);
+	var Messages=JSONstring.toObject(responseText);
+	setMessages(Messages);
+	detalleUsuario(USUARIO.ID);
+}
+
+/************************************* FIN - Cambiar credenciales **********************************/

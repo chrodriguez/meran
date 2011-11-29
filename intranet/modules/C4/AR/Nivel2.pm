@@ -22,6 +22,7 @@ use vars qw(@EXPORT_OK @ISA);
         getNivel2FromId1
         getNivel2FromId2
         getFirstItemTypeFromN1
+        getNivel2FromId2_asArray
         
 );
 
@@ -304,6 +305,18 @@ sub getNivel2FromId2{
     }
 }
 
+sub getNivel2FromId2_asArray{
+    my ($id2, $db) = @_;
+    my $nivel2 = getNivel2FromId2($id2,$db);
+    
+    my @array = ();
+    
+    push(@array,$nivel2);
+    
+    return \@array; 
+}
+
+
 sub getTipoEjemplarFromId2{
     my ($id2) = @_;
 
@@ -468,7 +481,7 @@ sub t_modificarNivel2 {
     
         eval {
             my $marc_record = C4::AR::Catalogacion::meran_nivel2_to_meran($params);
-            $cat_registro_marc_n2->modificar($marc_record->as_usmarc);  
+            $cat_registro_marc_n2->modificar($marc_record->as_usmarc, $db);  
             $db->commit;
             eval {
                 C4::AR::Sphinx::generar_indice($cat_registro_marc_n2->getId1, 'R_PARTIAL', 'UPDATE');

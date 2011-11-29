@@ -45,10 +45,17 @@ sub t_guardarNivel3 {
 
     my $catRegistroMarcN3_tmp   = C4::Modelo::CatRegistroMarcN3->new();  
     my $db = $catRegistroMarcN3_tmp->db;
+    
+    use Apache::Session::Lock::Semaphore;
+    my $locker = new Apache::Session::Lock::Semaphore;
+    
     # enable transactions, if possible
     $db->{connect_options}->{AutoCommit} = 0;
     $db->begin_work;
-    
+
+    #Semaphore para acceso exclusivo al bloque entre procesos
+    $locker->acquire_write_lock();
+
     eval {
         #obtengo el tipo de ejemplar a partir del id2 del nivel 2
         $params->{'tipo_ejemplar'} = C4::AR::Nivel2::getTipoEjemplarFromId2($params->{'id2'});
@@ -56,12 +63,13 @@ sub t_guardarNivel3 {
         my ($barcodes_para_agregar) = _generarArreglo($params, $msg_object);
 
         foreach my $barcode (@$barcodes_para_agregar){
+
             #se procesa un barcode por vez junto con la info del nivel 3 y nivel3 repetible
             my $marc_record         = C4::AR::Catalogacion::meran_nivel3_to_meran($params);
             $catRegistroMarcN3      = C4::Modelo::CatRegistroMarcN3->new(db => $db);  
             #genero el subcampo para el barcode
-            my $field = $marc_record->field('995');  
-            $field->add_subfields( 'f' => $barcode );
+            my $field = $marc_record->field('995'); 
+            $field->update('f' => uc($barcode));
             $params->{'marc_record'} = $marc_record->as_usmarc;
             $catRegistroMarcN3->agregar($db, $params, $msg_object);
             #recupero el id3 recien agregado
@@ -98,6 +106,7 @@ sub t_guardarNivel3 {
 
     $db->{connect_options}->{AutoCommit} = 1;
 
+    $locker->release_write_lock();
     return ($msg_object);
 }
 
@@ -384,7 +393,7 @@ sub getBarcodesPrestadoLike {
 sub detalleNivel3{
     my ($id2,$db) = @_;
 
-    C4::AR::Debug::debug("detalleNivel3 ");
+    C4::AR::Debug::debug("detalleNivel3 => id2 => ".$id2);
 
     my %hash_nivel2;	
     #recupero el nivel1 segun el id1 pasado por parametro
@@ -395,40 +404,50 @@ sub detalleNivel3{
 
     my $nivel2_object = C4::AR::Nivel2::getNivel2FromId2($id2,$db);
 
+    $hash_nivel2{'nivel1_analiticas_array'}     = undef;
+    $hash_nivel2{'nivel1_padre'}                = undef; #para el link al registro padre de una analitica
+
     if($nivel2_object){
 
-	$hash_nivel2{'id2'}                     = $id2;
-	$hash_nivel2{'tipo_documento'}          = $nivel2_object->getTipoDocumentoObject->getNombre();
-	$hash_nivel2{'nivel2_array'}            = $nivel2_object->toMARC_Intra; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
-    $hash_nivel2{'nivel2_template'}         = $nivel2_object->getTemplate();
-	$hash_nivel2{'tiene_indice'}            = $nivel2_object->tiene_indice;
-	$hash_nivel2{'indice'}                  = $hash_nivel2{'tiene_indice'}?$nivel2_object->getIndice:0;
-	$hash_nivel2{'esta_en_estante_virtual'} = C4::AR::Estantes::estaEnEstanteVirtual($id2);
-	my ($totales_nivel3, @result)           = detalleDisponibilidadNivel3($id2,$nivel2_object->db);
-	$hash_nivel2{'nivel3'}                  = \@result;
-	$hash_nivel2{'cant_nivel3'}             = scalar(@result);
-	$hash_nivel2{'cantPrestados'}           = $totales_nivel3->{'cantPrestados'};
-	$hash_nivel2{'cantReservas'}            = $totales_nivel3->{'cantReservas'};
-	$hash_nivel2{'cantReservasEnEspera'}    = $totales_nivel3->{'cantReservasEnEspera'};
-	$hash_nivel2{'cantReservasAsignadas'}   = $totales_nivel3->{'cantReservasAsignadas'};
-	$hash_nivel2{'disponibles'}             = $totales_nivel3->{'disponibles'};
-	$hash_nivel2{'cantParaSala'}            = $totales_nivel3->{'cantParaSala'};
-	$hash_nivel2{'cantParaPrestamo'}        = $totales_nivel3->{'cantParaPrestamo'};
-	$hash_nivel2{'cantParaSalaActual'}      = $totales_nivel3->{'cantParaSalaActual'};
-	$hash_nivel2{'cantParaPrestamoActual'}  = $totales_nivel3->{'cantParaPrestamoActual'};
+        $hash_nivel2{'id2'}                     = $id2;
+        $hash_nivel2{'tipo_documento'}          = $nivel2_object->getTipoDocumentoObject->getNombre();
+        $hash_nivel2{'nivel2_array'}            = $nivel2_object->toMARC_Intra; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
+
+        $hash_nivel2{'nivel2_template'}         = $nivel2_object->getTemplate();
+        $hash_nivel2{'tiene_indice'}            = $nivel2_object->tiene_indice;
+        $hash_nivel2{'indice'}                  = $hash_nivel2{'tiene_indice'}?$nivel2_object->getIndice:0;
+        $hash_nivel2{'esta_en_estante_virtual'} = C4::AR::Estantes::estaEnEstanteVirtual($id2);
+        my ($totales_nivel3, @result)           = detalleDisponibilidadNivel3($id2,$nivel2_object->db);
+        $hash_nivel2{'nivel3'}                  = \@result;
+        $hash_nivel2{'cant_nivel3'}             = scalar(@result);
+        $hash_nivel2{'cantPrestados'}           = $totales_nivel3->{'cantPrestados'};
+        $hash_nivel2{'cantReservas'}            = $totales_nivel3->{'cantReservas'};
+        $hash_nivel2{'cantReservasEnEspera'}    = $totales_nivel3->{'cantReservasEnEspera'};
+        $hash_nivel2{'cantReservasAsignadas'}   = $totales_nivel3->{'cantReservasAsignadas'};
+        $hash_nivel2{'disponibles'}             = $totales_nivel3->{'disponibles'};
+        $hash_nivel2{'cantParaSala'}            = $totales_nivel3->{'cantParaSala'};
+        $hash_nivel2{'cantParaPrestamo'}        = $totales_nivel3->{'cantParaPrestamo'};
+        $hash_nivel2{'cantParaSalaActual'}      = $totales_nivel3->{'cantParaSalaActual'};
+        $hash_nivel2{'cantParaPrestamoActual'}  = $totales_nivel3->{'cantParaPrestamoActual'};
 	    
         my ($cant_docs,$e_docs)                 = getListaDeDocs($id2);  
 	    
         $hash_nivel2{'lista_docs'}              = $e_docs;
         $hash_nivel2{'cant_docs'}               = $cant_docs;
 
-
+        if($nivel2_object->getTemplate() eq "ANA"){
+        #soy una ANALITICA tengo q obtener el ID2 del campo 773, a para obtener el ID1, link al registro padre
+#             C4::AR::Debug::debug("Nivel3 => detalleNivel3 => getAnalitica => ".$nivel2_object->getAnalitica());
+            my $nivel2_object_padre             = C4::AR::Nivel2::getNivel2FromId2($nivel2_object->getAnalitica(),$db);
+            $hash_nivel2{'nivel1_padre'}        = $nivel2_object_padre->getId1();
+        }
 
         #otengo las analiticas
-        my  $cat_reg_marc_n2_analiticas = $nivel2_object->getAnaliticas();
+        my $cat_reg_marc_n2_analiticas = $nivel2_object->getAnaliticas();
 
-        my @nive1_analitica_array;
-        my @nive2_analitica_array;
+        my @nivel1_analitica_array;
+        my @nivel2_analitica_array;
+      
   
         if($cat_reg_marc_n2_analiticas){
   
@@ -436,27 +455,22 @@ sub detalleNivel3{
                 my %hash_nivel1_aux;
                 my %hash_nivel2_aux;    
         
-                C4::AR::Debug::debug("id 2 ============= ".$n2->getId2Hijo());
+#                 C4::AR::Debug::debug("id 2 ============= ".$n2->getId2Hijo());
                 my $n2_object = C4::AR::Nivel2::getNivel2FromId2($n2->getId2Hijo(),$db);
                 my $n1_object = C4::AR::Nivel1::getNivel1FromId1($n2_object->getId1(),$db);
 
-    #             $hash_nivel2{'nivel1_analiticas_array'} = $n1_object->toMARC_Intra; 
-                $hash_nivel1_aux{'nivel1_analitica'} = $n1_object->toMARC_Intra;
-                push(@nive1_analitica_array, \%hash_nivel1_aux);
-    #             $hash_nivel2{'nivel2_analiticas_array'} = $n2_object->toMARC_Intra;
-                my %hash_nivel1_aux;
-    #             $hash_nivel2_aux{'nivel2_analitica'} = $n2_object->toMARC_Intra;
-    #             push(@nive2_analitica_array, \%hash_nivel2_aux);
-                $hash_nivel1_aux{'nivel1_analitica'} = $n2_object->toMARC_Intra;
-                push(@nive1_analitica_array, \%hash_nivel1_aux);
-
-    #             push(@nive1_analitica_array, \%hash_nivel2_aux);
+                $hash_nivel1_aux{'nivel1_analitica'}        = $n1_object->toMARC_Intra;
+                push(@nivel1_analitica_array, \%hash_nivel1_aux);
+                
+#Esto mostraba cosas de más, perdón Mike.
+                $hash_nivel2_aux{'nivel2_analitica'}        = $n2_object->toMARC_Intra;
+                push(@nivel2_analitica_array, \%hash_nivel2_aux);
             }
 
-            $hash_nivel2{'nivel1_analiticas_array'} = \@nive1_analitica_array;
-            $hash_nivel2{'nivel1_analiticas_cant'}  = scalar(@nive1_analitica_array);
+            $hash_nivel2{'nivel1_analiticas_array'} = \@nivel1_analitica_array;
+            $hash_nivel2{'nivel1_analiticas_cant'}  = scalar(@nivel1_analitica_array);
         }
-#         $hash_nivel2{'nivel1_analiticas_array'} = \@nive2_analitica_array;
+
     }
 
     return (\%hash_nivel2);
@@ -519,7 +533,15 @@ sub detalleCompletoINTRA {
     my $page_number 		= $t_params->{'page'} || 0;
     my $cant_grupos 		= C4::Context->config("cant_grupos_per_query") || 5;
     #recupero todos los nivel2 segun el id1 pasado por parametro
-    my $nivel2_array_ref 	= C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1,$nivel1->db);
+
+    my $id2 =  $t_params->{'id2'} || 0;
+    my $nivel2_array_ref;
+
+    if ($id2){
+       ($nivel2_array_ref) = C4::AR::Nivel2::getNivel2FromId2_asArray($id2);
+    }else{
+       ($nivel2_array_ref) = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1,$nivel1->db);
+    }
 
     my @nivel2;
 
@@ -541,6 +563,14 @@ sub detalleCompletoINTRA {
         }
 	
     }
+    
+	#Es una Revista? Armo el estado de colección
+	if($nivel1->getTemplate() eq "REV"){
+		my ($cant_revistas ,$estadoDeColeccion) = C4::AR::Busquedas::obtenerEstadoDeColeccion($id1, $nivel1->getTemplate(), "INTRA");
+		if($cant_revistas > 0){
+			$t_params->{'estadoDeColeccion'}  = $estadoDeColeccion;
+		}
+	}
 
     $t_params->{'nivel1'}           = $nivel1->toMARC_Intra;
     $t_params->{'nivel1_template'}  = $nivel1->getTemplate();
@@ -711,7 +741,14 @@ sub detalleCompletoOPAC{
     my $page_number = $t_params->{'page'} || 0;
     my $cant_grupos = C4::Context->config("cant_grupos_per_query") || 5;
 
-	my ($nivel2_array_ref) = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1,$nivel1->db);
+    my $id2 =  $t_params->{'id2'} || 0;
+    my $nivel2_array_ref;
+    
+    if ($id2){
+	   ($nivel2_array_ref) = C4::AR::Nivel2::getNivel2FromId2_asArray($id2);
+    }else{
+       ($nivel2_array_ref) = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1,$nivel1->db);
+    }
 
 	my @nivel2;
 
@@ -727,18 +764,18 @@ sub detalleCompletoOPAC{
 			$hash_nivel2->{'id2'}                       = $nivel2_array_ref->[$i]->getId2;
 			$hash_nivel2->{'tipo_documento'}            = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getNombre();
 			$hash_nivel2->{'tiene_indice'}              = $nivel2_array_ref->[$i]->tiene_indice;
-			$hash_nivel2->{'esta_en_estante_virtual'}   = C4::AR::Estantes::estaEnEstanteVirtual($nivel2_array_ref->[$i]->getId2);
+			$hash_nivel2->{'esta_en_estante_virtual'}   = C4::AR::Estantes::estaEnEstanteVirtual($hash_nivel2->{'id2'});
 			$hash_nivel2->{'indice'}                    = $hash_nivel2->{'tiene_indice'}?$nivel2_array_ref->[$i]->getIndice:0;
 			$hash_nivel2->{'nivel2_array'}              = ($nivel2_array_ref->[$i])->toMARC_Opac; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
-			my ($totales_nivel3,@result)                = detalleDisponibilidadNivel3($nivel2_array_ref->[$i]->getId2,$nivel1->db);
+			my ($totales_nivel3,@result)                = detalleDisponibilidadNivel3($hash_nivel2->{'id2'},$nivel1->db);
             $hash_nivel2->{'nivel3'}                    = \@result;
-            $hash_nivel2->{'cant_nivel3'}                = scalar(@result);
+            $hash_nivel2->{'cant_nivel3'}               = scalar(@result);
 			$hash_nivel2->{'cantPrestados'}             = $totales_nivel3->{'cantPrestados'};
 			$hash_nivel2->{'cantReservas'}              = $totales_nivel3->{'cantReservas'};
-			$hash_nivel2->{'portada_registro'}          = C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'S');
-			$hash_nivel2->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'M');
-            $hash_nivel2->{'primer_signatura'}= $nivel2_array_ref->[0]->getSignaturas->[0];
-			$hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($nivel2_array_ref->[$i]->getId2,'L');
+			$hash_nivel2->{'portada_registro'}          = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'S');
+			$hash_nivel2->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'M');
+            $hash_nivel2->{'primer_signatura'}          = $nivel2_array_ref->[0]->getSignaturas->[0];
+			$hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'L');
 			$hash_nivel2->{'cantReservasEnEspera'}      = $totales_nivel3->{'cantReservasEnEspera'};
 			$hash_nivel2->{'disponibles'}               = $totales_nivel3->{'disponibles'};
 			$hash_nivel2->{'cantParaSala'}              = $totales_nivel3->{'cantParaSala'};
@@ -747,7 +784,7 @@ sub detalleCompletoOPAC{
 			$hash_nivel2->{'cantParaPrestamoActual'}    = $totales_nivel3->{'cantParaPrestamoActual'};
 			$hash_nivel2->{'DivMARC'}                   = "MARCDetail".$i;
 			$hash_nivel2->{'DivDetalle'}                = "Detalle".$i;
-            $hash_nivel2->{'cat_ref_tipo_nivel3'}       = C4::AR::Nivel2::getFirstItemTypeFromN1($id1);
+            $hash_nivel2->{'cat_ref_tipo_nivel3'}       = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getId_tipo_doc();
             $hash_nivel2->{'cat_ref_tipo_nivel3_name'}  = C4::AR::Referencias::translateTipoNivel3($hash_nivel2->{'cat_ref_tipo_nivel3'});
 			$hash_nivel2->{'rating'}                    = C4::AR::Nivel2::getRating($hash_nivel2->{'id2'},$nivel1->db);
 			$hash_nivel2->{'cant_reviews'}              = C4::AR::Nivel2::getCantReviews($hash_nivel2->{'id2'}, $nivel1->db);
@@ -764,6 +801,14 @@ sub detalleCompletoOPAC{
 		}
 	}
 
+	#Es una Revista? Armo el estado de colección
+	if($nivel1->getTemplate() eq "REV"){
+		my ($cant_revistas ,$estadoDeColeccion) = C4::AR::Busquedas::obtenerEstadoDeColeccion($id1, $nivel1->getTemplate(), "INTRA");
+		if($cant_revistas > 0){
+			$t_params->{'estadoDeColeccion'}  = $estadoDeColeccion;
+		}
+	}
+	
 	$t_params->{'nivel1'}   = $nivel1->toMARC_Opac,
 	$t_params->{'id1'}	    = $id1;
 	$t_params->{'nivel2'}   = \@nivel2;

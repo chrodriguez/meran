@@ -108,11 +108,12 @@ sub obtenerValoresTablaRef{
 #     C4::AR::Debug::debug("PrefTablaReferencia => obtenerValoresTablaRef => alias_tabla: ".$alias_tabla);
 
 	if ($ref){
-        my ($cantidad,$valores) = $ref->obtenerValoresCampo($campo, $orden);
+        my ($cantidad, $valores) = $ref->obtenerValoresCampo($campo, $orden);
 #         C4::AR::Debug::debug("PrefTablaReferencia => obtenerValoresTablaRef => dentro del if cantidad: ".$cantidad);
 #         C4::AR::Debug::debug("PrefTablaReferencia => obtenerValoresTablaRef => dentro del if valores: ".$valores);
-
-		return ($cantidad,$valores);
+        my $default_value = $ref->getDefaultValue($alias_tabla);
+        C4::AR::Debug::debug("PrefTablaReferencia => obtenerValoresTablaRef => ".$default_value." para tabla => ".$alias_tabla);
+		return ($cantidad, $valores, $default_value);
     }else{
 #         C4::AR::Debug::debug("PrefTablaReferencia => obtenerValoresTablaRef => ERROR en la conf de la tabla 'pref_informacion_referencia'!!!!!");
         return 0;

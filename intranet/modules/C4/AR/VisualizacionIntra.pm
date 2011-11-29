@@ -39,10 +39,12 @@ $VERSION = 0.01;
     Esta funcion edita la vista_campo de un grupo recibido como parametro
 =cut
 sub editVistaGrupo{
-    my ($campo,$value)  = @_;
+    my ($campo, $value, $nivel, $tipo_ejemplar)  = @_;
 
     my @filtros;
     push (@filtros, (campo => { eq => $campo }) );
+    push (@filtros, (nivel => { eq => $nivel }) );
+    push ( @filtros, ( or   => [    tipo_ejemplar   => { eq => 'ALL' }, tipo_ejemplar    => { eq => $tipo_ejemplar }]  ));
     
     my $configuracion   = C4::Modelo::CatVisualizacionIntra::Manager->get_cat_visualizacion_intra(query => \@filtros,);
     
@@ -445,13 +447,14 @@ sub getCamposXLike{
     Este funcion devuelve la configuracion de la estructura de catalogacion de un campo, subcampo, realizada por el usuario
 =cut
 sub getVisualizacionFromCampoSubCampo{
-    my ($campo, $subcampo, $tipo_ejemplar, $db) = @_;
+    my ($campo, $subcampo, $tipo_ejemplar, $nivel, $db) = @_;
 
     $db = $db || C4::Modelo::CatVisualizacionIntra->new()->db;
     my @filtros;
 
     push(@filtros, ( campo          => { eq => $campo } ) );
     push(@filtros, ( subcampo       => { eq => $subcampo } ) );
+    push(@filtros, ( nivel          => { eq => $nivel } ) );
 #     push (@filtros,( tipo_ejemplar  => { eq => 'ALL' })); 
     push (  @filtros, ( or   => [   tipo_ejemplar   => { eq => $tipo_ejemplar }, 
                                     tipo_ejemplar   => { eq => 'ALL'     } ])

@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 
 <head>
@@ -128,8 +128,6 @@
 
                     onEnter("password",enviar);
 
-                    // Add the value of "Search..." to the input field and a class of .empty
-                    $("#search").val("Buscar...").addClass("empty");
 
                     // When you click on #search
                     $("#search").focus(function(){
@@ -138,17 +136,6 @@
                         if($(this).val() == "Buscar...") {
                             // remove all the text and the class of .empty
                             $(this).val("").removeClass("empty");;
-                        }
-
-                    });
-
-                    // When the focus on #search is lost
-                    $("#search").blur(function(){
-
-                        // If the input field is empty
-                        if($(this).val() == "") {
-                            // Add the text "Search..." and a class of .empty
-                            $(this).val("Buscar...").addClass("empty");
                         }
 
                     });
@@ -184,7 +171,7 @@
 <!-- Global IE fix to avoid layout crash when single word size wider than column width -->
 <!--[if IE]><style type="text/css"> body {word-wrap: break-word;}</style><![endif]-->
     
-<body>
+<body lang="es-Es">
   <!-- Main Page Container -->
   <noscript> 
       <p>[% 'DEBE HABILITAR SOPORTE PARA JAVASCRIPT EN SU NAVEGADOR, DE LO CONTRARIO NO PODRA NAVEGAR EL SITIO.' | i18n %]</p> 

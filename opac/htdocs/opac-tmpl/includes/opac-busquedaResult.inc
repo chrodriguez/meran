@@ -237,39 +237,27 @@
                     <tr>
                         <td class="titulo_result">
                             [% IF NIVEL.portadas_grupo_cant > 0 %]
-                                    [% FOREACH NIVEL.portadas_grupo %]
+                                    [% FOREACH portada IN NIVEL.portadas_grupo %]
                                         [% IF loop.count < 4 %]
-						                    [% IF portada_registro %]
-						                        <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada_registro_big %]">
-						                            <img name="cover"  VALUE="" BORDER=0 src="/uploads/covers/[% portada_registro %]" title="Portada">
-						                        </a>
-						                    [% ELSE %]
-						                          <img src="/uploads/covers/[% NIVEL.cat_ref_tipo_nivel3 %].png" 
-						                                alt="[% 'Sin Portada' | i18n %]"
-						                                title="[% 'Sin Portada' | i18n %]" />
-						                    [% END %]
+		                                    [% IF portada.portada_registro_big %]
+		                                        <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada.portada_registro_big %]">
+		                                            <img alt="cover" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
+		                                        </a>
+		                                    [% ELSE %]
+		                                        [% IF portada.portada_registro_medium %]
+		                                            <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada.portada_registro_medium %]">
+		                                                <img alt="cover" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
+		                                            </a>
+		                                        [% ELSE %]
+		                                                <img alt="cover" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
+		                                        [% END %]
+		                                    [% END %]
                                         [% END %]
                                     [% END %]
                             [% ELSE %]
-                                [% IF NIVEL.portada_registro %]
-                                    [% IF NIVEL.portada_registro_big %]
-                                        <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% NIVEL.portada_registro_big %]">
-                                            <img alt="cover" src="/uploads/covers/[% NIVEL.portada_registro %]" title="Portada" />
-                                        </a>
-                                    [% ELSE %]
-                                        [% IF NIVEL.portada_registro_medium %]
-                                            <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% NIVEL.portada_registro_medium %]">
-                                                <img alt="cover" src="/uploads/covers/[% NIVEL.portada_registro %]" title="Portada" />
-                                            </a>
-                                        [% ELSE %]
-                                                <img alt="cover" src="/uploads/covers/[% NIVEL.portada_registro %]" title="Portada" />
-                                        [% END %]
-                                    [% END %]
-                                [% ELSE %]
-                                         <img src="/uploads/covers/[% NIVEL.cat_ref_tipo_nivel3 %].png" 
-                                              alt="[% 'Sin Portada' | i18n %]"
-                                              title="[% 'Sin Portada' | i18n %]" />
-                                [% END %]
+                                  <img src="/uploads/covers/[% NIVEL.cat_ref_tipo_nivel3 %].png" 
+                                        alt="[% 'Sin Portada' | i18n %]"
+                                        title="[% 'Sin Portada' | i18n %]" />
                             [% END %]
                             <br />
                             <center><div style="font-weight: bold; font-size: 10px; clear:both;" >[% NIVEL.cat_ref_tipo_nivel3_name %] </div></center>
@@ -303,20 +291,71 @@
                         </td>
 
                         <td>
-                        <span id="grupos_[% NIVEL.id1 %]" class="detalle_registro_edicion">
+                        [% IF NIVEL.estadoDeColeccion %]
+							<span id="coleccion_[% NIVEL.id1 %]">
+							<ul class="listado_sin_margen estado_coleccion">
+							[% FOREACH anio IN NIVEL.estadoDeColeccion.keys.sort %]
+							[% IF NIVEL.estadoDeColeccion.$anio.keys %]
+							<li>
+								[% IF anio != '#' %]<b>[% anio %]</b>[% END %]
+								[% FOREACH volumen IN NIVEL.estadoDeColeccion.$anio.keys.sort %]
+									[% IF volumen != '#' %][% volumen  %][% END %]
+									(
+									[% FOREACH fasciculo IN NIVEL.estadoDeColeccion.$anio.$volumen.keys.sort %]
+
+										 [% PERL %]
+											print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(fasciculo) %]",
+																			url=>"[% url_prefix %]/opac-detail.pl", 
+																			params =>   ["id1=[% NIVEL.id1 %]","id2=[% NIVEL.estadoDeColeccion.$anio.$volumen.$fasciculo %]"],
+																			title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
+																			class => 	"link_to_detail"
+																		) ;
+										 [% END %]
                         
-	                        [% FOREACH NIVEL.grupos %]
-	                            [% IF edicion %]
-	                                [% edicion %] &nbsp;
-                                [% END %]
-	                            [% IF loop.prev.anio_publicacion != anio_publicacion %]
-	                                [% IF anio_publicacion %]
-	                                    ([% anio_publicacion %])
-                                        <br />
-	                                [% END %]
-	                            [% END %]       
-	                        [% END %]
-	                    </span>
+									[% END %]
+									)
+								[% END %]
+							   </li>
+							[% END %]
+							[% END %]
+							</ul>
+							</span>
+							
+						  <script type="text/javascript">$("#coleccion_[% NIVEL.id1 %]").expander({
+							  slicePoint: 2000, 
+							  widow: 10,
+							  expandEffect: 'fadeIn', 
+							  expandText: "<br />[% 'M&aacute;s Revistas' | i18n %]",
+							  userCollapseText: '[^]'
+							});
+						 </script>
+						 
+						[% ELSE %]
+							[% IF NIVEL.grupos %]
+								<span id="grupos_[% NIVEL.id1 %]" class="detalle_registro_edicion">
+									[% FOREACH NIVEL.grupos %]
+										[% IF edicion %]
+											[% edicion %] &nbsp;
+										[% END %]
+										[% IF loop.prev.anio_publicacion != anio_publicacion %]
+											[% IF anio_publicacion %]
+												([% anio_publicacion %])<br/>
+											[% END %]
+										[% END %]
+											
+									[% END %]
+								</span>
+						  <script type="text/javascript">$("#grupos_[% NIVEL.id1 %]").expander({
+							  slicePoint: 2000, 
+							  widow: 10,
+							  expandEffect: 'fadeIn', 
+							  expandText: "<br />[% 'M&aacute;s ediciones' | i18n %]",
+							  userCollapseText: '[^]'
+							});
+						 </script>
+							[% END %]
+						[% END %]
+   
                         </td>
 
                         <td>
@@ -386,14 +425,6 @@
 	                        </td>
 	                     [% END %]
                     </tr>
-	             <script type="text/javascript">$("#grupos_[% NIVEL.id1 %]").expander({
-	                  slicePoint: 2000, 
-	                  widow: 10,
-	                  expandEffect: 'fadeIn', 
-	                  expandText: "<br />[% 'M&aacute;s ediciones' | i18n %]",
-	                  userCollapseText: '[^]'
-	                });
-	             </script>
                     
                 [% END %]
         </table>

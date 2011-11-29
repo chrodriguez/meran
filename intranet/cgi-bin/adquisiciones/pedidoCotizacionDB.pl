@@ -27,7 +27,8 @@ if($tipoAccion eq "AGREGAR_PEDIDO_COTIZACION"){
                                             {   ui              => 'ANY', 
                                                 tipo_documento  => 'ANY', 
                                                 accion          => 'ALTA', 
-                                                entorno         => 'usuarios'},
+                                                tipo_permiso => 'general',
+                                                entorno => 'adq_intra'},
                                                 "intranet"
                                             );                              
     my $infoOperacionJSON = to_json $message;
@@ -59,7 +60,8 @@ elsif($tipoAccion eq "APPEND_PEDIDO_COTIZACION"){
                                             {   ui              => 'ANY', 
                                                 tipo_documento  => 'ANY', 
                                                 accion          => 'ALTA', 
-                                                entorno         => 'usuarios'},
+                                                tipo_permiso => 'general',
+                                                entorno => 'adq_intra'},
                                                 "intranet"
                                             );                              
     my $infoOperacionJSON = to_json $message;
@@ -79,8 +81,9 @@ elsif($tipoAccion eq "PRESUPUESTAR"){
                                     authnotrequired => 0,
                                     flagsrequired   => {    ui => 'ANY', 
                                                             tipo_documento => 'ANY', 
-                                                            accion => 'ALTA', 
-                                                            entorno => 'usuarios'},
+                                                            accion => 'CONSULTA', 
+                                                            tipo_permiso => 'general',
+                                                            entorno => 'adq_intra'},
                                     debug           => 1,
                             });
     
@@ -103,7 +106,8 @@ elsif($tipoAccion eq "AGREGAR_PEDIDO_COTIZACION_DETALLE"){
                                     flagsrequired   => {    ui => 'ANY', 
                                                             tipo_documento => 'ANY', 
                                                             accion => 'ALTA', 
-                                                            entorno => 'usuarios'},
+                                                            tipo_permiso => 'general',
+                                                            entorno => 'adq_intra'},
                                     debug           => 1,
                             });
 

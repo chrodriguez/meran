@@ -418,7 +418,8 @@ sub toMARC_Intra{
     my $params;
     $params->{'nivel'}          = '1';
     $params->{'id_tipo_doc'}    = $self->getTemplate()||'ALL';
-    my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_intra_view($marc_record, $params);
+    $params->{'id1'}            = $self->getId1();
+    my $MARC_result_array       = &C4::AR::Catalogacion::marc_record_to_intra_view($marc_record, $params, $self->db);
 
     return ($MARC_result_array);
 }
@@ -515,7 +516,6 @@ sub getReferenced{
 
     my ($self) = shift;
     my ($tabla, $value)= @_;
-   C4::AR::Debug::debug("getReferenced en Nivel1 =========> TABLA $tabla VALUE $value");
 
     my ($filter_string,$filtros) = $self->getInvolvedFilterString($tabla, $value);
 

@@ -24,7 +24,13 @@ __PACKAGE__->meta->setup(
 use C4::Modelo::RefDisponibilidad;
 use C4::Modelo::RefPais::Manager;
 use Text::LevenshteinXS;
+
+sub get_key_value{
+    my ($self) = shift;
     
+    return ($self->getIso);
+}
+
 sub toString{
 	my ($self) = shift;
 

@@ -84,7 +84,7 @@ sub getPermCatalogo{
     my ($filtros,$db)= @_;
 
     $db = $db || C4::Modelo::PermCatalogo->new()->db;
-    my $permiso = C4::Modelo::PermCatalogo::Manager->get_perm_catalogo(query => $filtros,);
+    my $permiso = C4::Modelo::PermCatalogo::Manager->get_perm_catalogo(db => $db, query => $filtros,);
 
     if (scalar(@$permiso)){
         return($permiso);
@@ -99,7 +99,7 @@ sub getPermGeneral{
 
     $db = $db || C4::Modelo::PermGeneral->new()->db;
 
-    my $permiso = C4::Modelo::PermGeneral::Manager->get_perm_general(query => $filtros,);
+    my $permiso = C4::Modelo::PermGeneral::Manager->get_perm_general(db => $db, query => $filtros,);
 
     if (scalar(@$permiso)){
         return($permiso);
@@ -114,7 +114,7 @@ sub getPermCirculacion{
 
     $db = $db || C4::Modelo::PermCirculacion->new()->db;
 
-    my $permiso = C4::Modelo::PermCirculacion::Manager->get_perm_circulacion(query => $filtros,);
+    my $permiso = C4::Modelo::PermCirculacion::Manager->get_perm_circulacion(db => $db, query => $filtros,);
 
     if (scalar(@$permiso)){
         return($permiso);
@@ -522,6 +522,9 @@ sub armarPerfilGeneral{
         $permisoTemp->setAll(ALTA | MODIFICACION | CONSULTA);
 
     }
+    elsif ($perfil eq 'E'){
+        $permisoTemp->setAll(CONSULTA);
+    }    
     return $permisoTemp;
 
 }
@@ -664,6 +667,10 @@ sub armarPerfilCirculacion{
         $permisoTemp->setAll(ALTA | MODIFICACION | CONSULTA);
 
     }
+    elsif ($perfil eq 'E'){
+        $permisoTemp->setAll(CONSULTA);
+    }
+        
     return $permisoTemp;
 
 }

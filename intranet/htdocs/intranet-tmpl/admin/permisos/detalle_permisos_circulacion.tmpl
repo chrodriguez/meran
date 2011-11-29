@@ -80,4 +80,138 @@
         </ul>
     </fieldset>
 </div>
+
+
+<div>
+    <fieldset id="circ_prestar">
+        <legend class="titulo_legend_resaltado"> [% "Realizar pr&eacute;stamos" | i18n %] </legend>
+        <ul class="permission_grant" >
+            <li class="inline_input">
+                <label for="permission_5"> TODOS </label>
+                <input type="checkbox" id="circ_prestar_todos" name="circ_prestar_todos" onChange="adviceGrant(this,'circ_prestar','high');"
+                    [% IF permisos.circ_prestar.TODOS %] checked="checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_2"> Baja </label>
+                <input type="checkbox" id="circ_prestar_baja" name="circ_prestar_baja" onChange="adviceGrant(this,'circ_prestar','high');"
+                    [% IF permisos.circ_prestar.BAJA %] checked="checked" [% END %]/>
+            </li>
+            <li class="inline_input">
+                <label for="permission_3"> Modificaci&oacute;n </label>
+                <input type="checkbox" id="circ_prestar_modif" name="circ_prestar_modif" onChange="adviceGrant(this,'circ_prestar','high');"
+                    [% IF permisos.circ_prestar.MODIFICACION %] checked="checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_1"> Alta </label>
+                <input type="checkbox" id="circ_prestar_alta" name="circ_prestar_alta" onChange="adviceGrant(this,'circ_prestar','medium');"
+                    [% IF permisos.circ_prestar.ALTA %] checked="checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_4"> Consulta </label>
+                <input type="checkbox" id="circ_prestar_consulta" name="circ_prestar_consulta" onChange="adviceGrant(this,'circ_prestar','low');"
+                    [% IF permisos.circ_prestar.CONSULTA %] checked="checked" [% END %]/>
+            </li>
+        </ul>
+    </fieldset>
+</div>
+
+<div>
+    <fieldset id="circ_renovar">
+        <legend class="titulo_legend_resaltado"> [% "Renovar pr&eacute;stamos" | i18n %] </legend>
+        <ul class="permission_grant" >
+            <li class="inline_input">
+                <label for="permission_5"> TODOS </label>
+                <input type="checkbox" id="circ_renovar_todos" name="circ_renovar_todos" onChange="adviceGrant(this,'circ_renovar','high');"
+                    [% IF permisos.circ_renovar.TODOS %] checked="checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_2"> Baja </label>
+                <input type="checkbox" id="circ_renovar_baja" name="circ_renovar_baja" onChange="adviceGrant(this,'circ_renovar','high')"            
+                    [% IF permisos.circ_renovar.BAJA %] checked="checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_3"> Modificaci&oacute;n </label>
+                <input type="checkbox" id="circ_renovar_modif" name="circ_renovar_modif" onChange="adviceGrant(this,'circ_renovar','high');"
+                    [% IF permisos.circ_renovar.MODIFICACION %] checked="checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_1"> Alta </label>
+                <input type="checkbox" id="circ_renovar_alta" name="circ_renovar_alta" onChange="adviceGrant(this,'circ_renovar','medium');"
+                    [% IF permisos.circ_renovar.ALTA %] checked="checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_4"> Consulta </label>
+                <input type="checkbox" id="circ_renovar_consulta" name="circ_renovar_consulta" onChange="adviceGrant(this,'circ_renovar','low');"
+                    [% IF permisos.circ_renovar.CONSULTA %] checked="checked" [% END %]/>
+            </li>
+        </ul>
+    </fieldset>
+</div>
+
+
+<div>
+    <fieldset id="circ_devolver">
+        <legend class="titulo_legend_resaltado"> [% "Devolver pr&eacute;stamos" | i18n %] </legend>
+        <ul class="permission_grant" >
+            <li class="inline_input">
+                <label for="permission_5"> TODOS </label>
+                <input type="checkbox" id="circ_devolver_todos" name="circ_devolver_todos" onChange="adviceGrant(this,'circ_devolver','high');"
+                    [% IF permisos.circ_devolver.TODOS %] checked="checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_2"> Baja </label>
+                <input type="checkbox" id="circ_devolver_baja" name="circ_devolver_baja" onChange="adviceGrant(this,'circ_devolver','high');"
+                    [% IF permisos.circ_devolver.BAJA %] checked="checked" [% END %]/>
+            </li>
+            <li class="inline_input">
+                <label for="permission_3"> Modificaci&oacute;n </label>
+                <input type="checkbox" id="circ_devolver_modif" name="circ_devolver_modif" onChange="adviceGrant(this,'circ_devolver','high');"
+                    [% IF permisos.circ_devolver.MODIFICACION %] checked="checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_1"> Alta </label>
+                <input type="checkbox" id="circ_devolver_alta" name="circ_devolver_alta" onChange="adviceGrant(this,'circ_devolver','medium');"
+                    [% IF permisos.circ_devolver.ALTA %] checked="checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_4"> Consulta </label>
+                <input type="checkbox" id="circ_devolver_consulta" name="circ_devolver_consulta" onChange="adviceGrant(this,'circ_devolver','low');"
+                    [% IF permisos.circ_devolver.CONSULTA %] checked="checked" [% END %]/>
+            </li>
+        </ul>
+    </fieldset>
+</div>
+
+<div>
+    <fieldset id="circ_sanciones">
+        <legend class="titulo_legend_resaltado"> [% "Sanciones" | i18n %] </legend>
+        <ul class="permission_grant" >
+            <li class="inline_input">
+                <label for="permission_5"> TODOS </label>
+                <input type="checkbox" id="circ_sanciones_todos" name="circ_sanciones_todos" onChange="adviceGrant(this,'circ_sanciones','high');"
+                    [% IF permisos.circ_sanciones.TODOS %] checked="checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_2"> Baja </label>
+                <input type="checkbox" id="circ_sanciones_baja" name="circ_sanciones_baja" onChange="adviceGrant(this,'circ_sanciones','high');"
+                    [% IF permisos.circ_sanciones.BAJA %] checked="checked" [% END %]/>
+            </li>
+            <li class="inline_input">
+                <label for="permission_3"> Modificaci&oacute;n </label>
+                <input type="checkbox" id="circ_sanciones_modif" name="circ_sanciones_modif" onChange="adviceGrant(this,'circ_sanciones','high');"
+                    [% IF permisos.circ_sanciones.MODIFICACION %] checked="checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_1"> Alta </label>
+                <input type="checkbox" id="circ_sanciones_alta" name="circ_sanciones_alta" onChange="adviceGrant(this,'circ_sanciones','medium');"
+                    [% IF permisos.circ_sanciones.ALTA %] checked="checked" [% END %] />
+            </li>
+            <li class="inline_input">
+                <label for="permission_4"> Consulta </label>
+                <input type="checkbox" id="circ_sanciones_consulta" name="circ_sanciones_consulta" onChange="adviceGrant(this,'circ_sanciones','low');"
+                    [% IF permisos.circ_sanciones.CONSULTA %] checked="checked" [% END %]/>
+            </li>
+        </ul>
+    </fieldset>
+</div>
 [% INCLUDE 'partials/admin/_guardarPermisos.inc' %]

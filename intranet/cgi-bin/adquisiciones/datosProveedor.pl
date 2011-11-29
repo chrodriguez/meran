@@ -22,8 +22,9 @@ if ($tipoAccion eq "EDITAR") {
             authnotrequired => 0,
             flagsrequired   => {    ui => 'ANY',   
                                     tipo_documento => 'ANY', 
-                                    accion => 'CONSULTA', 
-                                    entorno => 'usuarios'},
+                                    accion => 'MODIFICACION', 
+                                    tipo_permiso => 'general',
+                                    entorno => 'adq_intra'},
     });
     
     my $comboDeTipoDeDoc = &C4::AR::Utilidades::generarComboTipoDeDoc();
@@ -40,7 +41,8 @@ if ($tipoAccion eq "EDITAR") {
                       flagsrequired     => {    ui => 'ANY', 
                                                 tipo_documento => 'ANY', 
                                                 accion => 'CONSULTA', 
-                                                entorno => 'usuarios'},
+                                                tipo_permiso => 'general',
+                                                entorno => 'adq_intra'},
           });    
 }
 

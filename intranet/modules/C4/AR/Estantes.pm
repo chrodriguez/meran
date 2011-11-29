@@ -104,7 +104,7 @@ sub borrarEstantes {
                 $estante->delete();
                  $db->commit;
                 $msg_object->{'error'}= 0;
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E004', 'params' => [$estante->getEstante]} ) ;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E004', 'params' => [Encode::decode_utf8($estante->getEstante)]} ) ;
                 C4::AR::Debug::debug("EL ESTANTE SE ELIMINO CON EXITO");
             }
             };
@@ -114,7 +114,7 @@ sub borrarEstantes {
             $db->rollback;
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E003', 'params' => [$estante->getEstante]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E003', 'params' => [Encode::decode_utf8($estante->getEstante)]} ) ;
         }
 
         $db->{connect_options}->{AutoCommit} = 1;
@@ -152,7 +152,7 @@ sub borrarContenido {
 
             my $text = $contenido_estante->nivel2->nivel1->getTitulo."(".$contenido_estante->nivel2->nivel1->getAutor.")";
             $contenido_estante->delete();
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E006', 'params' => [$text]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E006', 'params' => [Encode::decode_utf8($text)]} ) ;
             }
         C4::AR::Debug::debug("EL CONTENIDO SE ELIMINO CON EXITO");
         $db->commit;
@@ -164,7 +164,7 @@ sub borrarContenido {
         $db->rollback;
         #Se setea error para el usuario
         $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E005', 'params' => [$estante->getEstante]} ) ;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E005', 'params' => [Encode::decode_utf8($estante->getEstante)]} ) ;
     }
     $db->{connect_options}->{AutoCommit} = 1;
 
@@ -182,14 +182,14 @@ sub _verificacionesParaBorrar {
     if (@$contenido){
     #El estante posee contenido
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E001', 'params' => [$estante->getEstante]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E001', 'params' => [Encode::decode_utf8($estante->getEstante)]} ) ;
             C4::AR::Debug::debug("Entro al if de contenido ");
       }
 
     my $subestantes = C4::AR::Estantes::getSubEstantes($estante->getId);
     if(@$subestantes) {
           $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E002', 'params' => [$estante->getEstante]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E002', 'params' => [Encode::decode_utf8($estante->getEstante)]} ) ;
             C4::AR::Debug::debug("Entro al if de subestantes");
         }
 }
@@ -265,7 +265,7 @@ sub _verificacionesParaAgregarContenido {
 	   if($contenido_estante->getId2 eq $id2){
 		#El estante ya posee contenido
 		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E015', 'params' => [$estante->getEstante]} ) ;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E015', 'params' => [Encode::decode_utf8($estante->getEstante)]} ) ;
 		C4::AR::Debug::debug("Entro al if de estante duplicado ");
 	    }
          }
@@ -460,7 +460,7 @@ sub agregarContenidoAEstante {
             $nuevo_contenido_estante->save();
             $db->commit;
             $msg_object->{'error'}= 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E014', 'params' => [$estante->getEstante]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E014', 'params' => [Encode::decode_utf8($estante->getEstante)]} ) ;
             C4::AR::Debug::debug("CONTENIDO AGREGADO CON EXITO AL ESTANTE");
         }
         };
@@ -470,7 +470,7 @@ sub agregarContenidoAEstante {
         $db->rollback;
         #Se setea error para el usuario
         $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E013', 'params' => [$estante->getEstante]} ) ;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'E013', 'params' => [Encode::decode_utf8($estante->getEstante)]} ) ;
     }
     $db->{connect_options}->{AutoCommit} = 1;
 

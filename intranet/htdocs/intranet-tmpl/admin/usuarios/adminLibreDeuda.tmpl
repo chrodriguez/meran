@@ -43,16 +43,12 @@ function desmarcar(chk){
                   <li><input type="checkbox" name="chk0" id="chk0" value="1" onclick="checkedAll(this)"> [% "todas" | i18n %]<br></li>
               </ul>
           <br>
-              <ul>
-                  <li>
                       [% PERL %]
                                           print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
                                                                               boton   => "boton_buscar",
                                                                               onClick => "adminLiDe.submit();",
                                                   ) ;
                       [% END %]
-                  </li>
-              </ul>
           </form>
     </fieldset>
 </fieldset>

@@ -5,28 +5,36 @@ use CGI;
 use C4::AR::Auth;
 
 
-my $input=new CGI;
-my $ajax = $input->param('ajax') || 0;
-my ($template, $session, $t_params)= get_template_and_user({
-								template_name => ($ajax?"includes/opac-detail.inc":"opac-main.tmpl"),
-								query => $input,
-								type => "opac",
+my $input = new CGI;
+my $ajax  = $input->param('ajax') || 0;
+my ($template, $session, $t_params) = get_template_and_user({
+								template_name   => ($ajax?"includes/opac-detail.inc":"opac-main.tmpl"),
+								query           => $input,
+								type            => "opac",
 								authnotrequired => 1,
-								flagsrequired => {  ui => 'ANY', 
-                                                    tipo_documento => 'ANY', 
-                                                    accion => 'CONSULTA', 
-                                                    entorno => 'undefined'},
+								flagsrequired   => {  ui            => 'ANY', 
+                                                    tipo_documento  => 'ANY', 
+                                                    accion          => 'CONSULTA', 
+                                                    entorno         => 'undefined',
+							                        tipo_permiso    => 'catalogo'},
 			     });
 
-my $idNivel1= $input->param('id1');
+my $idNivel1 = $input->param('id1');
 
+$t_params->{'id2'} = $input->param('id2') || 0;
 $t_params->{'page'} = $input->param('page') || 0;
 my $cant_total      = 0;
 
 eval{ 
-    ($cant_total)    =   C4::AR::Nivel3::detalleCompletoOPAC($idNivel1, $t_params);
-    $t_params->{'cant_total'}           = $cant_total;
+    ($cant_total)                   =   C4::AR::Nivel3::detalleCompletoOPAC($idNivel1, $t_params);
+    $t_params->{'cant_total'}       = $cant_total;
 };
+
+if ($@){
+
+    $t_params->{'mensaje'}          = "Ha ocurrido un error";
+
+}
 
 $t_params->{'partial_template'}     = "opac-detail.inc";
 $t_params->{'preferencias'}         = C4::AR::Preferencias::getConfigVisualizacionOPAC();

@@ -67,6 +67,7 @@ sub agregar {
     $self->setId2($params->{'id2'});
     $self->setId1($params->{'id1'});
     my $marc_record = MARC::Record->new_from_usmarc($params->{'marc_record'});
+        
     $self->setCodigoBarra($marc_record->subfield("995","f"));
     $self->setSignatura($marc_record->subfield("995","t"));
     $self->setCreatedAt(C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"), $dateformat));
@@ -79,15 +80,19 @@ sub agregar {
     $self->validar($msg_object, $MARC_result_array, $params, 'INSERT', $db);
   
     if(!$msg_object->{'error'}){
-        $self->save();
-
-        $params->{'id_ui'}                     = $self->getId_ui_poseedora();
-        $params->{'id3'}                       = $self->getId3();
-        $params->{'estado_nuevo'}              = $self->getIdEstado();          #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)      
-        $params->{'disponibilidad_nueva'}      = $self->getIdDisponibilidad(); #(DISPONIBLE, PRESTAMO, SALA LECTURA)
-    
-        # verificar_alta
-        $self->verificar_alta($db, $params, $msg_object);
+    	if ((!$self->estadoCompartido) && (!C4::AR::Nivel3::existeBarcode($self->getCodigoBarra()))){
+	        $self->save();
+	        $params->{'id_ui'}                     = $self->getId_ui_poseedora();
+	        $params->{'id3'}                       = $self->getId3();
+	        $params->{'estado_nuevo'}              = $self->getIdEstado();          #(DISPONIBLE, "NO DISPONIBLES" => BAJA, COMPARTIDO, etc)      
+	        $params->{'disponibilidad_nueva'}      = $self->getIdDisponibilidad(); #(DISPONIBLE, PRESTAMO, SALA LECTURA)
+	    
+	        # verificar_alta
+	        $self->verificar_alta($db, $params, $msg_object);
+    	}else{
+            $msg_object->{'error'} = 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U386', 'params' => [$self->getCodigoBarra()]} );
+    	}
     }
 }
 

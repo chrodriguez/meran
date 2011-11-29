@@ -1002,7 +1002,7 @@ sub getBusquedasOPAC {
 #			FIXME: ver si anda! cambiado 16/05 porque ahora no esta mas el cod_categoria, esta el id. 
 #				( 'usr_socio.cod_categoria' => { eq => $tipo_socio } ) );
 
-                ( 'usr_socio.categoria.getCategory_code' => { eq => $tipo_socio } ) );
+                ( 'usr_socio.id_categoria' => { eq => $tipo_socio } ) );
 		}
 		if ( C4::AR::Utilidades::validateString($f_inicio) ) {
 			push(

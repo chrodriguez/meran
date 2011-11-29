@@ -238,7 +238,7 @@ function updateEleccionCampo(responseText){
     var subcampos_array = JSONstring.toObject(responseText);
     //se inicializa el combo
     $("#subcampo").html('');
-    var options = "<option value='-1'>Seleccionar SubCampo</option>";
+    var options = "<option value='-1'>SIN SELECCIONAR</option>";
     
     for (x=0;x < subcampos_array.length;x++){
         var subcampo_string                             = $.trim(subcampos_array[x].subcampo)
@@ -310,7 +310,7 @@ function updateArmarComboCampos(responseText){
     //se inicializa el combo
     $("#camposSelect").html(""); //orden
     $("#camposRef").html("");   //campos tabla
-    var options = "<option value='-1'>Seleccionar SubCampo</option>";
+    var options = "<option value='-1'>SIN SELECCIONAR</option>";
     var joinedFields = "";
 //     for (x=0;x < camposSelect_array.length;x++){
 //         if (x == (camposSelect_array.length-1) ) //SI ES EL FINAL
@@ -392,9 +392,9 @@ function checkEstructuraCatalogacion(){
     objAH.obligatorio = ($('#obligatorio_si')[0].checked)?1:0;
 
     if (!isNaN(objAH.nivel)) {
-      if (objAH.nivel == 1)
-        objAH.itemtype= 'ALL';
-      else
+//       if (objAH.nivel == 1)
+//         objAH.itemtype= 'ALL';
+//       else
         objAH.itemtype= $('#tipo_nivel3_id').val();
 
       if (comboSeleccionado($('#campo')) && ok)
@@ -457,7 +457,7 @@ function agregarEstructuraCatalogacion(){
     objAH               = new AjaxHelper(updateAgregarEstructuraCatalogacion);
     objAH.debug         = true;
     objAH.showOverlay   = true;
-    objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.nivel         = $('#niveles_id').val();
 
     ok                  = checkEstructuraCatalogacion();

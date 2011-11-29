@@ -17,21 +17,35 @@
 			    position: absolute;
 			}
 		</style>
+		<script>
+			  function startSearch(event) {
+				  if (event.target.results.length > 1) {
+			          var second = event.target.results[1].utterance;
+			          document.getElementById("second_best").value = second;
+			        }  
+			  }
+			  
+		</script>
         <div id="divsearchform" >
-            <form id="searchform_main" action="[% url_prefix %]/opac-busquedasDB.pl" method="get" >
+            <form id="searchform_main" action="[% url_prefix %]/opac-busquedasDB.pl" method="get" onsubmit="startOverlay();" >
                 <fieldset>
-                   <input type="text" id="search" name="string" value="[% search_string %]" tabindex="-1"/>
+                   <input type="text" id="search" name="string" value="[% search_string %]" tabindex="-1" 
+                   		  x-webkit-speech onwebkitspeechchange="javascript:startSearch();" 
+                   		  speech onspeechchange="javascript:startSearch();"
+                   />
+                   <input type="hidden" name="second_best" id="second_best">
                    <input type="submit" id="search-submit" value=""/>
                    <input type="hidden" name="tipoAccion"  value="BUSQUEDA_COMBINABLE" />
                    <input type="hidden" name="token" value="[% token %]" />
                 </fieldset>
             </form>
         </div>
+        
 [% ELSE %]
        <p id="titulo_login_main">Ingresar a MERAN</p>
        <div class="login_main" >
    
-          <form method="post" id="signin_main" action="[% url_prefix %]/opac-main.pl"  onsubmit="return enviar()">
+          <form method="post" id="signin_main" action="[% url_prefix %]/opac-main.pl" onsubmit="return enviar()">
                <p>
                   <input type="hidden" name="remember_me" value="0"/>
                </p>
