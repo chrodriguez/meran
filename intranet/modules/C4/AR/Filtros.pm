@@ -337,15 +337,9 @@ sub show_componente {
             
         my $nivel2_object       = C4::AR::Nivel2::getNivel2FromId2($dato);
 
-<<<<<<< HEAD
 	if(!$nivel2_object){
 		return "NO_LINK";
 	}	
-=======
-    if(!$nivel2_object){
-        return "NO_LINK";
-    }   
->>>>>>> f1db4aeb4c3c67d906e7693335da4be9d035a069
 
         $id1                    = $nivel2_object->getId1();
         my $catRegistroMarcN1   = C4::AR::Nivel1::getNivel1FromId1($id1);

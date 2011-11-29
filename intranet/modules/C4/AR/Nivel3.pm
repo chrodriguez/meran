@@ -552,21 +552,14 @@ sub detalleCompletoINTRA {
     
     for(my $i=$inicio;$i<$cantidad;$i++){
 
-<<<<<<< HEAD
 	#eval{
 		my ($hash_nivel2) = detalleNivel3($nivel2_array_ref->[$i]->getId2,$nivel1->db);
 
 		push(@nivel2, $hash_nivel2);
 	#};
 		
-=======
-    #eval{
-        my ($hash_nivel2) = detalleNivel3($nivel2_array_ref->[$i]->getId2,$nivel1->db);
 
-        push(@nivel2, $hash_nivel2);
-    #};
         
->>>>>>> f1db4aeb4c3c67d906e7693335da4be9d035a069
         if ($i >= ($cantidad_total-1)){
             last;
         }
