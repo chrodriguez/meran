@@ -4,6 +4,8 @@
     <script src="/includes/jquery/jquery.jqpageflow.js" type="text/javascript"></script>
     
     <script type="text/javascript"> 
+     var AUTO_GENERAR_COMPROBANTE = '[% auto_generar_comprobante_prestamo %]';
+
         $(document).ready(function(){
             $("#main_content").flexiPagination({
                 url: "[% url_prefix %]/catalogacion/estructura/detalle.pl?id1=[% id1 %]&ajax=1&token=[% token %]",

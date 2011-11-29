@@ -160,7 +160,7 @@
 		                      [% END %]
 		            [% ELSE %]
 		                    [% PERL %]
-		                          print C4::AR::Filtros::link_to( text =>     "[% 'Pr&eacute;stamos, Devoluciones y Renovaciones' | i18n %]",
+		                          print C4::AR::Filtros::link_to( text =>     "[% 'Pr&eacute;st., Devol., y Renov.' | i18n %]",
 		                                                          url =>      "[% url_prefix %]/circ/circulacionRapida.pl", 
 		                                                          title =>    "[% 'Pr&eacute;stamos, Devoluciones y Renovaciones' | i18n %]"
 		                                                      ) ;
