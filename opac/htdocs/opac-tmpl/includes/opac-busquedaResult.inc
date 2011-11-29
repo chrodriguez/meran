@@ -6,7 +6,7 @@
 
     [% IF external_search %]
     	[% IF cant_external_servers %]
-		    var servidores 	= new Array([% cant_servidores_externos %]);
+		    var servidores 	= new Array();
 		    var server_name	= {};
 			var SERVER = "";   
 			var numPag = 1;

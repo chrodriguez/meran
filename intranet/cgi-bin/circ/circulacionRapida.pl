@@ -22,5 +22,6 @@ my ($template, $session, $t_params, $usuario_logueado) =  get_template_and_user 
 
 
 $t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Circulaci&oacute;n R&aacute;pida");
+$t_params->{'auto_generar_comprobante_prestamo'} = C4::AR::Preferencias::getValorPreferencia('auto_generar_comprobante_prestamo');
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
