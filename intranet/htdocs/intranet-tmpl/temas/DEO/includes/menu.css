@@ -5,21 +5,26 @@ nav {
 	z-index: 12;
 }
 
+
+#menu {
+    background: -moz-linear-gradient(#444444, #0FBAB6) repeat scroll 0 0 transparent;
+    box-shadow: 0 2px 1px #444444;
+}
 #menu {
 	width: 100%;
 	margin: 0;
-	padding: 4px 0 0 0;
+	padding: 3px 0 0 0;
 	list-style: none;
 	background: #111;
-	background: -moz-linear-gradient(#6C7880, #111);
-	background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #111), color-stop(1, #6C7880) );
-	background: -webkit-linear-gradient(#6C7880, #111);
-	background: -o-linear-gradient(#6C7880, #111);
-	background: -ms-linear-gradient(#6C7880, #111);
-	background: linear-gradient(#6C7880, #111);
-	-moz-box-shadow: 0 2px 1px #9c9c9c;
-	-webkit-box-shadow: 0 2px 1px #9c9c9c;
-	box-shadow: 0 2px 1px #9c9c9c;
+	background: -moz-linear-gradient(#35414F, #0FBAB6) repeat scroll 0 0 transparent;
+	background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #0FBAB6), color-stop(1, #35414F) );
+	background: -webkit-linear-gradient(#35414F, #0FBAB6);
+	background: -o-linear-gradient(#35414F, #0FBAB6);
+	background: -ms-linear-gradient(#35414F, #0FBAB6);
+	background: linear-gradient(#35414F, #0FBAB6);
+	-moz-box-shadow: 0 2px 1px #35414F;
+	-webkit-box-shadow: 0 2px 1px #35414F;
+	box-shadow: 0 2px 1px #35414F;
 }
 
 #menu li {
@@ -119,13 +124,13 @@ nav {
 
 #menu ul a:hover {
 	background: #0186ba;
-	background: -moz-linear-gradient(#04acec, #0186ba);
+	background: -moz-linear-gradient(#0FBAB6, #0186ba);
 	background: -webkit-gradient(linear, left top, left bottom, from(#04acec),
 		to(#0186ba) );
-	background: -webkit-linear-gradient(#04acec, #0186ba);
-	background: -o-linear-gradient(#04acec, #0186ba);
-	background: -ms-linear-gradient(#04acec, #0186ba);
-	background: linear-gradient(#04acec, #0186ba);
+	background: -webkit-linear-gradient(#0FBAB6, #0186ba);
+	background: -o-linear-gradient(#0FBAB6, #0186ba);
+	background: -ms-linear-gradient(#0FBAB6, #0186ba);
+	background: linear-gradient(#0FBAB6, #0186ba);
 }
 
 #menu ul li:first-child>a {

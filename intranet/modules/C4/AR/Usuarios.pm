@@ -561,10 +561,10 @@ sub getSocioInfoPorNroSocio {
     if ($nro_socio){
         my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
                                                     query => [ nro_socio => { eq => $nro_socio } ],
-                                                    require_objects => ['persona','ui','categoria','persona.ciudad_ref',
+                                                    require_objects => ['persona','ui','categoria',
                                                                         'persona.documento'],
-                                                    with_objects => ['persona.alt_ciudad_ref'],
-                                                    select       => ['persona.*','usr_socio.*','ref_localidad.*'],
+                                                    with_objects => ['persona.alt_ciudad_ref','persona.ciudad_ref'],
+                                                    select       => ['persona.*','usr_socio.*'],
                                         );
 
         if($socio_array_ref){

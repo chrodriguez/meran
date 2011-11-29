@@ -24,3 +24,7 @@ cpan -i HTML::HTMLDoc
 cpan -i MARC::File::XML
 cpan -i DateTime::Format::DateManip
 cpan -i WWW::Google::URLShortener
+cpan -i Apache::Session::Lock::Semaphore
+
+
+

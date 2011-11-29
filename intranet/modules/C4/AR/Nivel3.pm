@@ -45,10 +45,17 @@ sub t_guardarNivel3 {
 
     my $catRegistroMarcN3_tmp   = C4::Modelo::CatRegistroMarcN3->new();  
     my $db = $catRegistroMarcN3_tmp->db;
+    
+    use Apache::Session::Lock::Semaphore;
+    my $locker = new Apache::Session::Lock::Semaphore;
+    
     # enable transactions, if possible
     $db->{connect_options}->{AutoCommit} = 0;
     $db->begin_work;
-    
+
+    #Semaphore para acceso exclusivo al bloque entre procesos
+    $locker->acquire_write_lock();
+
     eval {
         #obtengo el tipo de ejemplar a partir del id2 del nivel 2
         $params->{'tipo_ejemplar'} = C4::AR::Nivel2::getTipoEjemplarFromId2($params->{'id2'});
@@ -63,7 +70,6 @@ sub t_guardarNivel3 {
             #genero el subcampo para el barcode
             my $field = $marc_record->field('995'); 
             $field->update('f' => uc($barcode));
-            
             $params->{'marc_record'} = $marc_record->as_usmarc;
             $catRegistroMarcN3->agregar($db, $params, $msg_object);
             #recupero el id3 recien agregado
@@ -100,6 +106,7 @@ sub t_guardarNivel3 {
 
     $db->{connect_options}->{AutoCommit} = 1;
 
+    $locker->release_write_lock();
     return ($msg_object);
 }
 
