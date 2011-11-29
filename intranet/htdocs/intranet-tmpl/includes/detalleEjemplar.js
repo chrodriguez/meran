@@ -1,3 +1,4 @@
+
 function generarForm(id1, id2){
 
     if(seleccionoAlgo("checkEjemplares"+id2)){
@@ -250,20 +251,19 @@ function updateInfoRenovar(responseText){
 
     setMessages(messageArray);
     
-        for(i=0; i<messageArray.length;i++){
+    for(i=0; i<messageArray.length;i++){
 //         imprimirTicket(ticketsArray[i].ticket,i);
         setMessages(messageArray[i]);
-     }
+    }
 
-      for(i=0; i<messageArray.length;i++){
+    for(i=0; i<messageArray.length;i++){
        if  (messageArray[i].error){
            hayError= 1;
        }
     }
-     if (!hayError){
+    if (!hayError){
          imprimirTicket(ticketsArray);
-     }
-
+    }
 
 	ejemplaresDelGrupo(ID_N2);
 	inicializar();
@@ -326,6 +326,7 @@ function updateInfoPrestarReserva(responseText){
            hayError= 1;
        }
     }
+    
      if (!hayError){
          imprimirTicket(ticketsArray);
      }

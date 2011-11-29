@@ -1556,9 +1556,6 @@ h2.trigger {
 	margin-bottom: 15px;
 }
 
-
-/* ULTIMO */
-
 .centro {
 	margin-bottom: 10px;
 	margin-left: 1%;
@@ -1982,11 +1979,6 @@ em {
 	background: url(../imagenes/shadow.png);
 }
 
-
-/* ULTIMO - CREANDO INTRANET-STRUCTURE */
-
-
-
 #tooltip.pretty h3 {
 	margin-bottom: 0.75em;
 	font-size: 12pt;
@@ -2079,7 +2071,8 @@ ul li {
 }
 
 .menu-item {
-	font: bold 11px/200% Verdana, Arial, Helvetica, sans-serif;
+	font-weight: bold; 
+    font-family: Verdana, Arial, Helvetica, sans-serif;
 	background: #5fa3a4;
 	color: #FFFFFF;
 	cursor: pointer;
@@ -2088,7 +2081,8 @@ ul li {
 }
 
 .menu-item a:hover {
-	font: bold 11px/200% Verdana, Arial, Helvetica, sans-serif;
+	font-weight: bold;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
 	background: #333333;
 	color: #fff;
 	cursor: pointer;
@@ -2096,7 +2090,8 @@ ul li {
 }
 
 .menu-item a {
-	font: bold 11px/200% Verdana, Arial, Helvetica, sans-serif;
+	font-weight: bold;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
 	color: #FFF;
 	width: auto;
 	cursor: pointer;
@@ -2262,6 +2257,7 @@ div.indicators {
 .datos_tabla_char thead {
 	background: #fc9;
 }
+
 
 /* ============================================================REPORTES =============================================================== */
 .hasDatepicker {
@@ -2880,7 +2876,7 @@ ul.stream-tabs li.open,ul.stream-tabs li.open:hover,ul.stream-tabs li.open .tab-
 }
 
 body {
-	font: 13px/1.5 Helvetica Neue, Arial, Helvetica, 'Liberation Sans',
+	font-family: Helvetica Neue, Arial, Helvetica, 'Liberation Sans',
 		FreeSans, sans-serif;
 }
 
@@ -3296,7 +3292,7 @@ a.places-nearby {
 
 #geo_browser_help_banner {
 	color: #FFFFFF;
-	font: 12px Verdana;
+	font-family: Verdana;
 	position: fixed;
 	right: 0;
 	text-align: left;
@@ -4228,7 +4224,7 @@ body.front-page {
 }
 
 .front-page .search input,.front-page .search .holding .holder {
-	font: 15px Helvetica Neue, Arial, sans-serif;
+	font-family: Helvetica Neue, Arial, sans-serif;
 }
 
 .front-page .search .holding .holder {
@@ -4378,7 +4374,7 @@ body.front-page {
 }
 
 .front-signup .holding input,.front-signup .holding .holder {
-	font: 15px Helvetica Neue, Arial, sans-serif;
+	font-family: Helvetica Neue, Arial, sans-serif;
 }
 
 .front-signup .holding input {
@@ -4621,7 +4617,7 @@ form.signin p,form.signin span {
 form.signin .textbox input {
 	border: 1px solid #CCCCCC;
 	border-radius: 3px 3px 3px 3px;
-	font: 13px Arial, sans-serif;
+	font-family: Arial, sans-serif;
 	padding: 6px 6px 4px;
 	width: 200px;
 }
@@ -4649,6 +4645,12 @@ form.signin .subchck .remember {
 	position: absolute;
 	right: 2px;
 }
+
+
+
+/* ULTIMO - CREANDO INTRANET-STRUCTURE */
+
+
 
 .dark form.signin .textbox input {
 	background: none repeat scroll 0 0 #666666;
@@ -5670,3 +5672,6 @@ button.thoughtbot:active {
 	-o-box-shadow: inset 0px 0px 0px 1px rgba(255, 115, 100, 0.4);
 	box-shadow: inset 0px 0px 0px 1px rgba(255, 115, 100, 0.4);
 }
+
+
+/* ULTIMO */
