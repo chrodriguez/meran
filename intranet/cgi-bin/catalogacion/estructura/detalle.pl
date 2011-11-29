@@ -8,25 +8,25 @@ use C4::AR::Nivel3 qw(detalleCompletoINTRA);
 my $input=new CGI;
 my $ajax = $input->param('ajax') || 0;
 my ($template, $session, $t_params) = get_template_and_user({
-							template_name   => ('catalogacion/estructura/detalle.tmpl'),
-							query           => $input,
-							type            => "intranet",
-							authnotrequired => 0,
-							flagsrequired   => {    ui => 'ANY', 
+                            template_name   => ('catalogacion/estructura/detalle.tmpl'),
+                            query           => $input,
+                            type            => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired   => {    ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
                                                     accion => 'CONSULTA', 
                                                     entorno => 'datos_nivel1'},
-						});
+                        });
 
 my $id1             = $input->param('id1');
 
 $t_params->{'id2'} = $input->param('id2') || 0;
 $t_params->{'page'} = $input->param('page') || 0;
 
-eval{ 
+#eval{ 
     my ($cant_total)            =  C4::AR::Nivel3::detalleCompletoINTRA($id1, $t_params);
     $t_params->{'cant_total'}   = $cant_total;
-};
+#};
 
 
 $t_params->{'per_page'}         = C4::Context->config("cant_grupos_per_query") || 5;

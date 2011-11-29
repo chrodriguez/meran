@@ -12,8 +12,8 @@ use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
 @EXPORT_OK=qw( 
     &setHelpIco
-	&i18n
-	&link_to
+    &i18n
+    &link_to
     &to_Button
 );
 
@@ -43,18 +43,18 @@ El objetivo principal de la funcion es la de evitar CSRF (Cross Site Request For
 en cada link.
 =cut
 sub link_to {
-	my (%params_hash_ref) = @_;
+    my (%params_hash_ref) = @_;
 
-	my $link    = '';
-	my $params  = $params_hash_ref{'params'} || []; #obtengo los paraametros
-	my $text    = $params_hash_ref{'text'}; #obtengo el texto a mostrar
-	my $url     = $params_hash_ref{'url'}; #obtengo la url
-	my $title   = $params_hash_ref{'title'}; #obtengo el title a mostrar
-	my $class   = $params_hash_ref{'class'}; #obtengo la clase
+    my $link    = '';
+    my $params  = $params_hash_ref{'params'} || []; #obtengo los paraametros
+    my $text    = $params_hash_ref{'text'}; #obtengo el texto a mostrar
+    my $url     = $params_hash_ref{'url'}; #obtengo la url
+    my $title   = $params_hash_ref{'title'}; #obtengo el title a mostrar
+    my $class   = $params_hash_ref{'class'}; #obtengo la clase
     my $boton   = $params_hash_ref{'boton'}; #obtengo el title a mostrar
     my $width   = $params_hash_ref{'width'};
     my $blank   = $params_hash_ref{'blank'} || 0;
-	my $cant    = scalar(@$params);
+    my $cant    = scalar(@$params);
     my @result;
     
     foreach my $p (@$params){
@@ -63,24 +63,24 @@ sub link_to {
         $url = C4::AR::Utilidades::addParamToUrl($url,@result[0],@result[1]);
     }
 
-	my $session = CGI::Session->load();
- 	if($session->param('token')){
-	#si hay sesion se usa el token, sino no tiene sentido
+    my $session = CGI::Session->load();
+    if($session->param('token')){
+    #si hay sesion se usa el token, sino no tiene sentido
         my $status = index($url,'?');
          #SI NO HUBO PARAMETROS, EL TOKEN ES EL UNICO EN LA URL, O SEA QUE SE PONE ? EN VEZ DE &
         if (($cant > 0)||($status != -1)){
-		    $url .= '&amp;token='.$session->param('token'); #se agrega el token
+            $url .= '&amp;token='.$session->param('token'); #se agrega el token
         }else{
             $url .= '?token='.$session->param('token'); 
         }
-	}
+    }
 
-	$link= "<a href='".$url."'";
-	if ($class ne ''){
+    $link= "<a href='".$url."'";
+    if ($class ne ''){
         if (!$boton){ #Porque si es con boton, la clase la lleva el li
-		    $link .= " class=".$class;
+            $link .= " class=".$class;
         }
-	}
+    }
 
     if($title ne ''){
         $link .= " title='".$title."'";
@@ -90,7 +90,7 @@ sub link_to {
         $link .= " target='blank'";
     }
 
-	$link .= " >";
+    $link .= " >";
 
     my $button;
 
@@ -110,10 +110,10 @@ sub link_to {
         $link .= $text."</a>"; 
     }
 
-#  	C4::AR::Debug::debug("url: ".$url);
-#  	C4::AR::Debug::debug("link: ".$link);
+#   C4::AR::Debug::debug("url: ".$url);
+#   C4::AR::Debug::debug("link: ".$link);
 
-	return $link;
+    return $link;
 }
 
 =item
@@ -121,9 +121,9 @@ Esta funcion es utilizada para la Internacionalizacion, lo que hace es tomar el 
 y hacer la traduccion del mismo, obteniedola del binario correspondiente, por ej. en_EN/LC_MESSAGES/intranet.mo
 =cut
 sub i18n {
-	my ($text)      = @_;
+    my ($text)      = @_;
 # La inicializacion se paso toda a auth => checkauth
- 	return __($text);
+    return __($text);
 }
 
 
@@ -195,7 +195,7 @@ sub to_Button{
     my $boton   = $params_hash_ref{'boton'} || "clean-gray"; #obtengo el boton
     
     if (!C4::AR::Utilidades::existeInArray($boton,@array_clases_buttons)){
-    	$boton = "clean-gray";
+        $boton = "clean-gray";
     }
     
     my $onclick     = $params_hash_ref{'onclick'} || $params_hash_ref{'onClick'}; #obtengo el llamado a la funcion en el evento onclick
@@ -221,7 +221,7 @@ sub to_Button{
     if($id){
     }
     if ($type){
-    	$type = "type= ".$type;
+        $type = "type= ".$type;
     }
     
     if (!$show_inline){
@@ -332,10 +332,15 @@ sub show_componente {
         return "NO_LINK";
     }
 
-    if(($campo eq "773")&&($subcampo eq "a")) {
+    if(($campo eq "773")&&($subcampo eq "a")&&($dato ne "")) {
 
             
         my $nivel2_object       = C4::AR::Nivel2::getNivel2FromId2($dato);
+
+    if(!$nivel2_object){
+        return "NO_LINK";
+    }   
+
         $id1                    = $nivel2_object->getId1();
         my $catRegistroMarcN1   = C4::AR::Nivel1::getNivel1FromId1($id1);
 
@@ -392,7 +397,7 @@ sub show_componente {
 #             my $url;
 # 
 #             if ($session_type eq 'intranet'){
-#             	$url         = C4::AR::Utilidades::url_for("/catalogacion/estructura/detalle.pl", \%params_hash);
+#               $url         = C4::AR::Utilidades::url_for("/catalogacion/estructura/detalle.pl", \%params_hash);
 #             }else{
 #                 $url         = C4::AR::Utilidades::url_for("/opac-detail.pl", \%params_hash);
 #             }
@@ -562,13 +567,13 @@ sub getComboLang {
     $html .="<select id='language' name='language' tabindex='-1' style='width:170px;'>";
 
     foreach my $lang (@languages){
-    	if ($user_lang eq $lang){
-    	   $default = "selected='selected'";
+        if ($user_lang eq $lang){
+           $default = "selected='selected'";
            $html .="<option value='$lang' $default>".$languages_name{$lang}."</option>";
-    	}else{
+        }else{
            $html .="<option value='$lang '>".$languages_name{$lang}."</option>";
-    		
-    	}
+            
+        }
     }
     
     $html .="</select>";
