@@ -370,6 +370,7 @@ sub show_componente {
     return "NO_LINK";
 }
 
+
 # sub show_componente {
 #     my (%params_hash_ref) = @_;
 # 

@@ -174,7 +174,6 @@ sub t_modificarNivel3 {
 }
 
 
-
 =head2 sub getNivel3FromId2
 Recupero todos los nivel 3 a partir de un id2
 =cut
