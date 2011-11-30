@@ -16,12 +16,12 @@ nav {
 	padding: 3px 0 0 0;
 	list-style: none;
 	background: #111;
-	background: -moz-linear-gradient(#35414F, #0FBAB6) repeat scroll 0 0 transparent;
-	background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #0FBAB6), color-stop(1, #35414F) );
-	background: -webkit-linear-gradient(#35414F, #0FBAB6);
-	background: -o-linear-gradient(#35414F, #0FBAB6);
-	background: -ms-linear-gradient(#35414F, #0FBAB6);
-	background: linear-gradient(#35414F, #0FBAB6);
+	background: -moz-linear-gradient(#35414F, #4C707A) repeat scroll 0 0 transparent;
+	background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #4C707A), color-stop(1, #35414F) );
+	background: -webkit-linear-gradient(#35414F, #4C707A);
+	background: -o-linear-gradient(#35414F, #4C707A);
+	background: -ms-linear-gradient(#35414F, #4C707A);
+	background: linear-gradient(#35414F, #4C707A);
 	-moz-box-shadow: 0 2px 1px #35414F;
 	-webkit-box-shadow: 0 2px 1px #35414F;
 	box-shadow: 0 2px 1px #35414F;
@@ -38,7 +38,7 @@ nav {
 	float: left;
 	height: 25px;
 	padding: 0 25px;
-	color: #999;
+	color: #FFFDEE;
 	text-transform: uppercase;
 	font: bold 12px/25px Arial, Helvetica;
 	text-decoration: none;
@@ -123,14 +123,14 @@ nav {
 }
 
 #menu ul a:hover {
-	background: #0186ba;
-	background: -moz-linear-gradient(#0FBAB6, #0186ba);
-	background: -webkit-gradient(linear, left top, left bottom, from(#04acec),
+	background: #60909E;
+	background: -moz-linear-gradient(#60909E, #60909E);
+	background: -webkit-gradient(linear, left top, left bottom, from(#60909E),
 		to(#0186ba) );
-	background: -webkit-linear-gradient(#0FBAB6, #0186ba);
-	background: -o-linear-gradient(#0FBAB6, #0186ba);
-	background: -ms-linear-gradient(#0FBAB6, #0186ba);
-	background: linear-gradient(#0FBAB6, #0186ba);
+	background: -webkit-linear-gradient(#60909E, #60909E);
+	background: -o-linear-gradient(#60909E, #60909E);
+	background: -ms-linear-gradient(#60909E, #60909E);
+	background: linear-gradient(#60909E, #60909E);
 }
 
 #menu ul li:first-child>a {
