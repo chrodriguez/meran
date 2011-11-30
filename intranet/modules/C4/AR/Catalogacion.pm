@@ -607,7 +607,7 @@ sub marc_record_to_meran_to_detail_view {
 }
 
 sub marc_record_to_oai {
-    my ($marc_record, $itemtype, $type, $nivel, $db) = @_;
+    my ($marc_record, $itemtype, $type, $nivel, $db,$params) = @_;
 
     my @MARC_result_array;
     
@@ -635,7 +635,7 @@ sub marc_record_to_oai {
                 
                 my $field = MARC::Field->new($campo,'','',$subcampo => $valor_referencia);
                 
-                C4::AR::Debug::debug("\n\n\n AHHHHHHHHHHHHHHHHHHHHHHHH ".as_stringReloaded($field, $itemtype, $params));
+                C4::AR::Debug::debug("\n\n\n AHHHHHHHHHHHHHHHHHHHHHHHH ".as_stringReloaded($field, $itemtype, $field));
                 $new_marc_record->append_fields($field);
             }
             
