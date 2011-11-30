@@ -1,4 +1,4 @@
-INSERT INTO  `econo2meran`.`pref_preferencia_sistema` (
+INSERT INTO  `pref_preferencia_sistema` (
 `id` ,
 `variable` ,
 `value` ,
