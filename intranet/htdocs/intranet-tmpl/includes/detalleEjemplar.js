@@ -1,4 +1,3 @@
-
 function generarForm(id1, id2){
 
     if(seleccionoAlgo("checkEjemplares"+id2)){

@@ -87,9 +87,14 @@ function updateGuardarModificacionUsuario(responseText){
 // ***************************************** Validaciones ******************************************************
 
 
-function save(){
+function add(){
   agregarUsuario();
   return false;
+}
+
+function save_modif(){
+	guardarModificacionUsuario();
+	return false;
 }
 
 //************************************************Eliminar Usuario**********************************************

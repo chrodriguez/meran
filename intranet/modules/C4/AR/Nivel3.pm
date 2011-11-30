@@ -26,9 +26,9 @@ use vars qw(@EXPORT_OK @ISA);
 
 @EXPORT_OK=qw(
     &detalleCompletoINTRA
-	&detalleNivel3
-	&getBarcode
-	&modificarEstadoItem
+    &detalleNivel3
+    &getBarcode
+    &modificarEstadoItem
     &getNivel3FromId3
     &cantNiveles3FromId1
 );
@@ -172,7 +172,6 @@ sub t_modificarNivel3 {
 
     return ($msg_object);
 }
-
 
 
 =head2 sub getNivel3FromId2
@@ -327,9 +326,9 @@ sub getNivel3FromBarcode {
     my $nivel3 = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => \@filtros ); 
 
     foreach my $n3 (@$nivel3){
-	if (! $n3->estadoCompartido) { #Sin compartidos
-	  return $n3;
-	}
+    if (! $n3->estadoCompartido) { #Sin compartidos
+      return $n3;
+    }
     }
     return (0);
 }
@@ -341,7 +340,7 @@ sub getBarcodesLike {
     
     my $limit = C4::AR::Preferencias::getValorPreferencia('limite_resultados_autocompletables') || 20;
      
-	push(@filtros, ( marc_record => { like => '%'.$barcode.'%' }) );
+    push(@filtros, ( marc_record => { like => '%'.$barcode.'%' }) );
     
     $barcodes_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
                                                         query => \@filtros, 
@@ -349,13 +348,13 @@ sub getBarcodesLike {
                                                         non_lazy => 1, 
                                                         limit => $limit, 
                                                         offset => 0, ); 
-	my $cant= scalar(@$barcodes_array_ref);
+    my $cant= scalar(@$barcodes_array_ref);
 
-	if($cant > 0){
-		return ($cant, $barcodes_array_ref);
-	}else{
-		return ($cant, 0);
-	}
+    if($cant > 0){
+        return ($cant, $barcodes_array_ref);
+    }else{
+        return ($cant, 0);
+    }
 }
 
 =head2
@@ -368,20 +367,20 @@ sub getBarcodesPrestadoLike {
     my @filtros;
  
     push(@filtros, ( marc_record => { like => '%'.$barcode.'%' } ) ); #Con este barcode, FIXME: si agregan el barcode en otro lugar?? 
-# 	push(@filtros, ( barcode=> { like => $barcode.'%' }) );
-	push(@filtros, ( fecha_devolucion => { eq => undef }) );
+#   push(@filtros, ( barcode=> { like => $barcode.'%' }) );
+    push(@filtros, ( fecha_devolucion => { eq => undef }) );
     
     $barcodes_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(   query => \@filtros, 
                                                                                   require_objects => [ 'nivel3' ], #INNER JOIN
                                                                                   select => ['*'],
-										); 
-	my $cant= scalar(@$barcodes_array_ref);
+                                        ); 
+    my $cant= scalar(@$barcodes_array_ref);
 
-	if($cant > 0){
-		return ($cant, $barcodes_array_ref);
-	}else{
-		return ($cant, 0);
-	}
+    if($cant > 0){
+        return ($cant, $barcodes_array_ref);
+    }else{
+        return ($cant, 0);
+    }
 }
 
 =head2
@@ -395,11 +394,11 @@ sub detalleNivel3{
 
     C4::AR::Debug::debug("detalleNivel3 => id2 => ".$id2);
 
-    my %hash_nivel2;	
+    my %hash_nivel2;    
     #recupero el nivel1 segun el id1 pasado por parametro
     if (!$db){
-	    my $n3_temp = C4::Modelo::CatRegistroMarcN3->new();
-	    $db      = $n3_temp->db;
+        my $n3_temp = C4::Modelo::CatRegistroMarcN3->new();
+        $db      = $n3_temp->db;
     }
 
     my $nivel2_object = C4::AR::Nivel2::getNivel2FromId2($id2,$db);
@@ -429,9 +428,9 @@ sub detalleNivel3{
         $hash_nivel2{'cantParaPrestamo'}        = $totales_nivel3->{'cantParaPrestamo'};
         $hash_nivel2{'cantParaSalaActual'}      = $totales_nivel3->{'cantParaSalaActual'};
         $hash_nivel2{'cantParaPrestamoActual'}  = $totales_nivel3->{'cantParaPrestamoActual'};
-	    
+        
         my ($cant_docs,$e_docs)                 = getListaDeDocs($id2);  
-	    
+        
         $hash_nivel2{'lista_docs'}              = $e_docs;
         $hash_nivel2{'cant_docs'}               = $cant_docs;
 
@@ -456,15 +455,18 @@ sub detalleNivel3{
                 my %hash_nivel2_aux;    
         
 #                 C4::AR::Debug::debug("id 2 ============= ".$n2->getId2Hijo());
+#PATCH_ADAMS VERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
                 my $n2_object = C4::AR::Nivel2::getNivel2FromId2($n2->getId2Hijo(),$db);
-                my $n1_object = C4::AR::Nivel1::getNivel1FromId1($n2_object->getId1(),$db);
-
-                $hash_nivel1_aux{'nivel1_analitica'}        = $n1_object->toMARC_Intra;
-                push(@nivel1_analitica_array, \%hash_nivel1_aux);
-                
+                if ($n2_object){
+	                my $n1_object = C4::AR::Nivel1::getNivel1FromId1($n2_object->getId1(),$db);
+	
+	                $hash_nivel1_aux{'nivel1_analitica'}        = $n1_object->toMARC_Intra;
+	                push(@nivel1_analitica_array, \%hash_nivel1_aux);
 #Esto mostraba cosas de más, perdón Mike.
                 $hash_nivel2_aux{'nivel2_analitica'}        = $n2_object->toMARC_Intra;
                 push(@nivel2_analitica_array, \%hash_nivel2_aux);
+                }
+                
             }
 
             $hash_nivel2{'nivel1_analiticas_array'} = \@nivel1_analitica_array;
@@ -508,18 +510,18 @@ $id2, id de CatRegistroMarcN2
 =cut
 
 sub getListaDeDocs{
-	my ($id2) = @_;
+    my ($id2) = @_;
     my @filtros;
-	
-	use C4::Modelo::EDocument::Manager;
-	
-	push(@filtros, ( id2 => { eq => $id2 }) );
-	
-	my $e_docs = C4::Modelo::EDocument::Manager->get_e_document(query => \@filtros,);
-	
-	return (scalar(@$e_docs), $e_docs);
-	
-	
+    
+    use C4::Modelo::EDocument::Manager;
+    
+    push(@filtros, ( id2 => { eq => $id2 }) );
+    
+    my $e_docs = C4::Modelo::EDocument::Manager->get_e_document(query => \@filtros,);
+    
+    return (scalar(@$e_docs), $e_docs);
+    
+    
 }
 
 =head2 sub detalleCompletoINTRA
@@ -530,8 +532,8 @@ sub detalleCompletoINTRA {
     
     #recupero el nivel1 segun el id1 pasado por parametro
     my $nivel1              = C4::AR::Nivel1::getNivel1FromId1($id1);
-    my $page_number 		= $t_params->{'page'} || 0;
-    my $cant_grupos 		= C4::Context->config("cant_grupos_per_query") || 5;
+    my $page_number         = $t_params->{'page'} || 0;
+    my $cant_grupos         = C4::Context->config("cant_grupos_per_query") || 5;
     #recupero todos los nivel2 segun el id1 pasado por parametro
 
     my $id2 =  $t_params->{'id2'} || 0;
@@ -552,29 +554,29 @@ sub detalleCompletoINTRA {
     
     for(my $i=$inicio;$i<$cantidad;$i++){
 
-	eval{
-		my ($hash_nivel2) = detalleNivel3($nivel2_array_ref->[$i]->getId2,$nivel1->db);
+    #eval{
+        my ($hash_nivel2) = detalleNivel3($nivel2_array_ref->[$i]->getId2,$nivel1->db);
 
-		push(@nivel2, $hash_nivel2);
-	};
-		
+        push(@nivel2, $hash_nivel2);
+    #};
+        
         if ($i >= ($cantidad_total-1)){
             last;
         }
-	
+    
     }
     
-	#Es una Revista? Armo el estado de colección
-	if($nivel1->getTemplate() eq "REV"){
-		my ($cant_revistas ,$estadoDeColeccion) = C4::AR::Busquedas::obtenerEstadoDeColeccion($id1, $nivel1->getTemplate(), "INTRA");
-		if($cant_revistas > 0){
-			$t_params->{'estadoDeColeccion'}  = $estadoDeColeccion;
-		}
-	}
+    #Es una Revista? Armo el estado de colección
+    if($nivel1->getTemplate() eq "REV"){
+        my ($cant_revistas ,$estadoDeColeccion) = C4::AR::Busquedas::obtenerEstadoDeColeccion($id1, $nivel1->getTemplate(), "INTRA");
+        if($cant_revistas > 0){
+            $t_params->{'estadoDeColeccion'}  = $estadoDeColeccion;
+        }
+    }
 
     $t_params->{'nivel1'}           = $nivel1->toMARC_Intra;
     $t_params->{'nivel1_template'}  = $nivel1->getTemplate();
-    $t_params->{'id1'}	            = $id1;
+    $t_params->{'id1'}              = $id1;
     $t_params->{'cantItemN1'}       = C4::AR::Nivel3::cantNiveles3FromId1($id1,$nivel1->db);
     $t_params->{'nivel2'}           = \@nivel2;
     #se ferifica si la preferencia "circularDesdeDetalleDelRegistro" esta seteada
@@ -651,16 +653,16 @@ sub detalleDisponibilidadNivel3{
                     #esta DISPONIBLE y es PARA PRESTAMO
                     $infoNivel3{'cantParaPrestamo'}++;
 
-		    unless($hash_nivel3{'estaPrestado'}||$hash_nivel3{'estaReservado'}){
-			$infoNivel3{'cantParaPrestamoActual'}++;
-		    }
+            unless($hash_nivel3{'estaPrestado'}||$hash_nivel3{'estaReservado'}){
+            $infoNivel3{'cantParaPrestamoActual'}++;
+            }
                 }elsif($esParaSala){
                     #es PARA SALA
                     $infoNivel3{'cantParaSala'}++;
 
-		    unless($hash_nivel3{'estaPrestado'}||$hash_nivel3{'estaReservado'}){
-			$infoNivel3{'cantParaSalaActual'}++;
-		    }
+            unless($hash_nivel3{'estaPrestado'}||$hash_nivel3{'estaReservado'}){
+            $infoNivel3{'cantParaSalaActual'}++;
+            }
                 }
 
         } else {
@@ -733,11 +735,11 @@ sub detalleDisponibilidadNivel3{
 Genera el detalle 
 =cut
 sub detalleCompletoOPAC{
-	my ($id1, $t_params) = @_;
-	#recupero el nivel1 segun el id1 pasado por parametro
-	my $nivel1= C4::AR::Nivel1::getNivel1FromId1OPAC($id1);
+    my ($id1, $t_params) = @_;
+    #recupero el nivel1 segun el id1 pasado por parametro
+    my $nivel1= C4::AR::Nivel1::getNivel1FromId1OPAC($id1);
     my $config_visualizacion= C4::AR::Preferencias::getConfigVisualizacionOPAC();
-	#recupero todos los nivel2 segun el id1 pasado por parametro
+    #recupero todos los nivel2 segun el id1 pasado por parametro
     my $page_number = $t_params->{'page'} || 0;
     my $cant_grupos = C4::Context->config("cant_grupos_per_query") || 5;
 
@@ -745,74 +747,74 @@ sub detalleCompletoOPAC{
     my $nivel2_array_ref;
     
     if ($id2){
-	   ($nivel2_array_ref) = C4::AR::Nivel2::getNivel2FromId2_asArray($id2);
+       ($nivel2_array_ref) = C4::AR::Nivel2::getNivel2FromId2_asArray($id2);
     }else{
        ($nivel2_array_ref) = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1,$nivel1->db);
     }
 
-	my @nivel2;
+    my @nivel2;
 
-	my $cantidad_total = scalar(@$nivel2_array_ref);
+    my $cantidad_total = scalar(@$nivel2_array_ref);
     my $inicio = (($page_number) * $cant_grupos);
-    my $cantidad = $inicio + $cant_grupos;	
-	
-	
-	for(my $i=$inicio;$i<$cantidad;$i++){
-		eval{
-	 		my $hash_nivel2;
-			$nivel2_array_ref->[$i]->load();
-			$hash_nivel2->{'id2'}                       = $nivel2_array_ref->[$i]->getId2;
-			$hash_nivel2->{'tipo_documento'}            = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getNombre();
-			$hash_nivel2->{'tiene_indice'}              = $nivel2_array_ref->[$i]->tiene_indice;
-			$hash_nivel2->{'esta_en_estante_virtual'}   = C4::AR::Estantes::estaEnEstanteVirtual($hash_nivel2->{'id2'});
-			$hash_nivel2->{'indice'}                    = $hash_nivel2->{'tiene_indice'}?$nivel2_array_ref->[$i]->getIndice:0;
-			$hash_nivel2->{'nivel2_array'}              = ($nivel2_array_ref->[$i])->toMARC_Opac; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
-			my ($totales_nivel3,@result)                = detalleDisponibilidadNivel3($hash_nivel2->{'id2'},$nivel1->db);
+    my $cantidad = $inicio + $cant_grupos;  
+    
+    
+    for(my $i=$inicio;$i<$cantidad;$i++){
+        eval{
+            my $hash_nivel2;
+            $nivel2_array_ref->[$i]->load();
+            $hash_nivel2->{'id2'}                       = $nivel2_array_ref->[$i]->getId2;
+            $hash_nivel2->{'tipo_documento'}            = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getNombre();
+            $hash_nivel2->{'tiene_indice'}              = $nivel2_array_ref->[$i]->tiene_indice;
+            $hash_nivel2->{'esta_en_estante_virtual'}   = C4::AR::Estantes::estaEnEstanteVirtual($hash_nivel2->{'id2'});
+            $hash_nivel2->{'indice'}                    = $hash_nivel2->{'tiene_indice'}?$nivel2_array_ref->[$i]->getIndice:0;
+            $hash_nivel2->{'nivel2_array'}              = ($nivel2_array_ref->[$i])->toMARC_Opac; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
+            my ($totales_nivel3,@result)                = detalleDisponibilidadNivel3($hash_nivel2->{'id2'},$nivel1->db);
             $hash_nivel2->{'nivel3'}                    = \@result;
             $hash_nivel2->{'cant_nivel3'}               = scalar(@result);
-			$hash_nivel2->{'cantPrestados'}             = $totales_nivel3->{'cantPrestados'};
-			$hash_nivel2->{'cantReservas'}              = $totales_nivel3->{'cantReservas'};
-			$hash_nivel2->{'portada_registro'}          = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'S');
-			$hash_nivel2->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'M');
+            $hash_nivel2->{'cantPrestados'}             = $totales_nivel3->{'cantPrestados'};
+            $hash_nivel2->{'cantReservas'}              = $totales_nivel3->{'cantReservas'};
+            $hash_nivel2->{'portada_registro'}          = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'S');
+            $hash_nivel2->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'M');
             $hash_nivel2->{'primer_signatura'}          = $nivel2_array_ref->[0]->getSignaturas->[0];
-			$hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'L');
-			$hash_nivel2->{'cantReservasEnEspera'}      = $totales_nivel3->{'cantReservasEnEspera'};
-			$hash_nivel2->{'disponibles'}               = $totales_nivel3->{'disponibles'};
-			$hash_nivel2->{'cantParaSala'}              = $totales_nivel3->{'cantParaSala'};
-			$hash_nivel2->{'cantParaPrestamo'}          = $totales_nivel3->{'cantParaPrestamo'};
-			$hash_nivel2->{'cantParaSalaActual'}        = $totales_nivel3->{'cantParaSalaActual'};
-			$hash_nivel2->{'cantParaPrestamoActual'}    = $totales_nivel3->{'cantParaPrestamoActual'};
-			$hash_nivel2->{'DivMARC'}                   = "MARCDetail".$i;
-			$hash_nivel2->{'DivDetalle'}                = "Detalle".$i;
+            $hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'L');
+            $hash_nivel2->{'cantReservasEnEspera'}      = $totales_nivel3->{'cantReservasEnEspera'};
+            $hash_nivel2->{'disponibles'}               = $totales_nivel3->{'disponibles'};
+            $hash_nivel2->{'cantParaSala'}              = $totales_nivel3->{'cantParaSala'};
+            $hash_nivel2->{'cantParaPrestamo'}          = $totales_nivel3->{'cantParaPrestamo'};
+            $hash_nivel2->{'cantParaSalaActual'}        = $totales_nivel3->{'cantParaSalaActual'};
+            $hash_nivel2->{'cantParaPrestamoActual'}    = $totales_nivel3->{'cantParaPrestamoActual'};
+            $hash_nivel2->{'DivMARC'}                   = "MARCDetail".$i;
+            $hash_nivel2->{'DivDetalle'}                = "Detalle".$i;
             $hash_nivel2->{'cat_ref_tipo_nivel3'}       = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getId_tipo_doc();
             $hash_nivel2->{'cat_ref_tipo_nivel3_name'}  = C4::AR::Referencias::translateTipoNivel3($hash_nivel2->{'cat_ref_tipo_nivel3'});
-			$hash_nivel2->{'rating'}                    = C4::AR::Nivel2::getRating($hash_nivel2->{'id2'},$nivel1->db);
-			$hash_nivel2->{'cant_reviews'}              = C4::AR::Nivel2::getCantReviews($hash_nivel2->{'id2'}, $nivel1->db);
+            $hash_nivel2->{'rating'}                    = C4::AR::Nivel2::getRating($hash_nivel2->{'id2'},$nivel1->db);
+            $hash_nivel2->{'cant_reviews'}              = C4::AR::Nivel2::getCantReviews($hash_nivel2->{'id2'}, $nivel1->db);
 
-	        my ($cant_docs,$e_docs)                     = getListaDeDocs($hash_nivel2->{'id2'});  
-	        
-	        $hash_nivel2->{'lista_docs'}                = $e_docs;
-	        $hash_nivel2->{'cant_docs'}                 = $cant_docs;
+            my ($cant_docs,$e_docs)                     = getListaDeDocs($hash_nivel2->{'id2'});  
+            
+            $hash_nivel2->{'lista_docs'}                = $e_docs;
+            $hash_nivel2->{'cant_docs'}                 = $cant_docs;
 
-			push(@nivel2, $hash_nivel2);
-		};
+            push(@nivel2, $hash_nivel2);
+        };
         if ($i >= ($cantidad_total-1)){
-			last;
-		}
-	}
+            last;
+        }
+    }
 
-	#Es una Revista? Armo el estado de colección
-	if($nivel1->getTemplate() eq "REV"){
-		my ($cant_revistas ,$estadoDeColeccion) = C4::AR::Busquedas::obtenerEstadoDeColeccion($id1, $nivel1->getTemplate(), "INTRA");
-		if($cant_revistas > 0){
-			$t_params->{'estadoDeColeccion'}  = $estadoDeColeccion;
-		}
-	}
-	
-	$t_params->{'nivel1'}   = $nivel1->toMARC_Opac,
-	$t_params->{'id1'}	    = $id1;
-	$t_params->{'nivel2'}   = \@nivel2;
-	return ($cantidad_total);
+    #Es una Revista? Armo el estado de colección
+    if($nivel1->getTemplate() eq "REV"){
+        my ($cant_revistas ,$estadoDeColeccion) = C4::AR::Busquedas::obtenerEstadoDeColeccion($id1, $nivel1->getTemplate(), "INTRA");
+        if($cant_revistas > 0){
+            $t_params->{'estadoDeColeccion'}  = $estadoDeColeccion;
+        }
+    }
+    
+    $t_params->{'nivel1'}   = $nivel1->toMARC_Opac,
+    $t_params->{'id1'}      = $id1;
+    $t_params->{'nivel2'}   = \@nivel2;
+    return ($cantidad_total);
 }
 
 
@@ -831,13 +833,13 @@ sub generaCodigoBarra{
     
     my $like = '';
 
-	for (my $i=0; $i<@estructurabarcode; $i++) {
-		if (($i % 2) == 0) {
-			$like.= %$parametros->{$estructurabarcode[$i]};
-		} else {
-			$like.= $estructurabarcode[$i];
-		}
-	}
+    for (my $i=0; $i<@estructurabarcode; $i++) {
+        if (($i % 2) == 0) {
+            $like.= %$parametros->{$estructurabarcode[$i]};
+        } else {
+            $like.= $estructurabarcode[$i];
+        }
+    }
 
     # Puede venir el db tambien!!
     my $max_codigo = C4::Modelo::CatRegistroMarcN3::Manager->get_maximum_codigo_barra(like => $like.'%') || 0;
@@ -845,7 +847,7 @@ sub generaCodigoBarra{
 
     my @barcodes_array_ref;
     for(my $i=1;$i<=$cant;$i++){
-	C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => completarConCeros => ".completarConCeros($max_codigo + $i));
+    C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => completarConCeros => ".completarConCeros($max_codigo + $i));
         $barcode  = $like.completarConCeros($max_codigo + $i);
         C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => barcode => ".$barcode);
         push(@barcodes_array_ref, $barcode);
@@ -902,27 +904,27 @@ sub cantNiveles3FromId1{
 Busca los datos del nivel 3 a partir de un id3, respetando su disponibilidad
 =cut
 sub buscarNivel3PorDisponibilidad{
-	my ($nivel3aPrestar) = @_;
-	
-	my ($nivel3_array_ref) = getNivel3FromId2($nivel3aPrestar->getId2);
-	my @items;
-	my $j=0;
-	foreach my $n3 (@$nivel3_array_ref){
-		my $item;
+    my ($nivel3aPrestar) = @_;
+    
+    my ($nivel3_array_ref) = getNivel3FromId2($nivel3aPrestar->getId2);
+    my @items;
+    my $j=0;
+    foreach my $n3 (@$nivel3_array_ref){
+        my $item;
 
-		if((!$n3->estaPrestado)&&($n3->estadoDisponible)&&($nivel3aPrestar->getIdDisponibilidad eq $n3->getIdDisponibilidad)){
-		#Si no esta prestado, esta en estado disponmible y tiene la misma disponibilidad que el novel 3 que intento prestar se agrega al combo
-				$item->{'label'} = $n3->getBarcode;
-				$item->{'value'} = $n3->getId3;
-				push (@items,$item);
-			}
-	}
+        if((!$n3->estaPrestado)&&($n3->estadoDisponible)&&($nivel3aPrestar->getIdDisponibilidad eq $n3->getIdDisponibilidad)){
+        #Si no esta prestado, esta en estado disponmible y tiene la misma disponibilidad que el novel 3 que intento prestar se agrega al combo
+                $item->{'label'} = $n3->getBarcode;
+                $item->{'value'} = $n3->getId3;
+                push (@items,$item);
+            }
+    }
 
-	return(\@items);
+    return(\@items);
 }
 
 sub _verificarDeleteItem {
-	my($msg_object, $params)=@_;
+    my($msg_object, $params)=@_;
 
     $msg_object->{'error'} = 0;#no hay error
 
@@ -969,10 +971,10 @@ sub getAllNivel3FromId2 {
 Verifica si existe el barcode en la base
 =cut
 sub existeBarcode {
-	my($barcode) = @_;
+    my($barcode) = @_;
 
-	my $nivel_array_ref = C4::AR::Nivel3::getNivel3FromBarcode($barcode);
-	
+    my $nivel_array_ref = C4::AR::Nivel3::getNivel3FromBarcode($barcode);
+    
 #     C4::AR::Debug::debug("Nivel3 => existeBarcode => ".$nivel_array_ref);
 
     if ($nivel_array_ref == 0){
@@ -980,7 +982,7 @@ sub existeBarcode {
     } else {
         return 1;
     }
-# 	return ( $nivel_array_ref != 0);
+#   return ( $nivel_array_ref != 0);
 }
 
 #=======================================================================ABM Nivel 3======================================================
@@ -994,13 +996,13 @@ Tiene PRIORIDAD la carga multiple de varios barcodes sobre la carga multiple de 
 
 Si el barcode ES obligatorio:
 
-	- No puede ser blanco
-	- No puede Existir
+    - No puede ser blanco
+    - No puede Existir
 
 Si el barcode NO es obligatorio:
-	
-	- Se permite barcode en blanco
-	- Si se ingresa un barcode, NO PUEDE EXISTIR
+    
+    - Se permite barcode en blanco
+    - Si se ingresa un barcode, NO PUEDE EXISTIR
 
 =cut
 
@@ -1015,28 +1017,28 @@ sub _generateBarcode{
     un conjunto de barcodes agregados por el usuario (llama a _generarArregloDeBarcodesPorBarcodes()).
     Devuelve un arreglo de barcodes validos (autogenerados o ingresados por el usuario)
 =cut
-sub _generarArreglo{	
-	my ($params, $msg_object) = @_;
+sub _generarArreglo{    
+    my ($params, $msg_object) = @_;
  
-	my $cant                        = $params->{'cantEjemplares'}; #recupero la cantidad de ejemplares a agregar, 1 o mas
-	my $barcodes_array              = $params->{'BARCODES_ARRAY'}; #se esta agregando por barcodes 
-	my @barcodes_para_agregar;
-	$params->{'agregarPorBarcodes'} = 0;
+    my $cant                        = $params->{'cantEjemplares'}; #recupero la cantidad de ejemplares a agregar, 1 o mas
+    my $barcodes_array              = $params->{'BARCODES_ARRAY'}; #se esta agregando por barcodes 
+    my @barcodes_para_agregar;
+    $params->{'agregarPorBarcodes'} = 0;
     my $esPorBarcode                = 0;
     $esPorBarcode                   = $params->{'esPorBarcode'};#defined $barcodes_array;
 
     C4::AR::Debug::debug("Nivel 3 => _generarArreglo => esPorBarcode => ".$esPorBarcode);
     #se setea la cantidad de ejemplares a agregar
-	if($esPorBarcode eq 'true'){
-		$params->{'agregarPorBarcodes'} = 1;
+    if($esPorBarcode eq 'true'){
+        $params->{'agregarPorBarcodes'} = 1;
 #         _generarArregloDeBarcodesPorBarcodes($msg_object, $barcodes_array, \@barcodes_para_agregar);
 #         @barcodes_para_agregar = _generarArregloDeBarcodesPorBarcodes($msg_object, $barcodes_array);
         @barcodes_para_agregar = @$barcodes_array;
-	}else{
-		@barcodes_para_agregar = _generarArregloDeBarcodesPorCantidad($cant, $params, $msg_object);
-	}
+    }else{
+        @barcodes_para_agregar = _generarArregloDeBarcodesPorCantidad($cant, $params, $msg_object);
+    }
 
-	return (\@barcodes_para_agregar);
+    return (\@barcodes_para_agregar);
 }
 
 =head2 sub _generarArregloDeBarcodesPorBarcodes
@@ -1058,15 +1060,15 @@ sub _generarArregloDeBarcodesPorBarcodes{
 }
 
 sub _selectBarcodeFormat{
-	my ($params) = @_;
-	
+    my ($params) = @_;
+    
     my $default_ui = C4::AR::Preferencias::getValorPreferencia("defaultUI");
     my $UI_origen_object = $params->{'ui_origen'};
     my $UI_duenio_object = $params->{'ui_duenio'};
     
     return ($UI_duenio_object || $default_ui || $UI_origen_object);
     
-    	
+        
 }
 
 =head2 sub _generarArregloDeBarcodesPorCantidad
