@@ -454,12 +454,11 @@ sub toMARC_OAI{
 
     my $params;
     $params->{'nivel'}          = '1';
-    $params->{'tipo'}           = 'OPAC';
     $params->{'id_tipo_doc'}    = $self->getTemplate()||'ALL';
     
     $marc_record =  C4::AR::Catalogacion::filtrarVisualizacionOAI($marc_record, $params);
     
-    my $MARC_record       = C4::AR::Catalogacion::marc_record_to_oai($marc_record, $params->{'id_tipo_doc'}, $params->{'tipo'});
+    my $MARC_record       = C4::AR::Catalogacion::marc_record_to_opac_view($marc_record, $params);
 
     return ($MARC_record);
 }

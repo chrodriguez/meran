@@ -631,7 +631,7 @@ sub marc_record_to_oai {
                 my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $nivel, $db);
                     
                 
-                C4::AR::Debug::debug("PASANDO A MARC OAI EL CAMPO $campo , $subcampo CON VALOR $dato");
+                C4::AR::Debug::debug("PASANDO A MARC OAI EL CAMPO $campo , $subcampo CON VALOR $valor_referencia");
                 
                 my $field = MARC::Field->new($campo,'','',$subcampo => $valor_referencia);
                 
