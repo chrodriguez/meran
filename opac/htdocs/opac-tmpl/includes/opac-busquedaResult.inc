@@ -33,14 +33,13 @@
 			function doExternalSearches(keyword){
 				$('#main_content').html("");
 				startOverlay();
+				SEARCH = keyword;
 				
 				try{
 					Concurrent.Thread.create(function(){
 						results = false;
-						keyword = 'econo';
-						SEARCH = keyword;
 						for (x=0; x<servidores.length ;x++){
-							externalSearch(keyword,servidores[x],server_name[servidores[x]]);
+							externalSearch(SEARCH,servidores[x],server_name[servidores[x]]);
 							$('#main_content').append("<br />");
 							$('#main_content').append("<br />");
 						} 
@@ -85,7 +84,7 @@
 		    	    td : '<td>#{cell}</td>'
 		    	};
 
-		    	table  = '<fieldset><legend class="server_name">'+SERVER+'</legend></fieldset><table><thead>';
+		    	table  = '<fieldset><legend class="server_name">'+SERVER+'</legend></fieldset><table class="external_results"><thead>';
 				table += '<tr>';
 		        table += '<th>[% "T&iacute;tulo" | i18n %]</th>'; 
 		        table += '<th>[% "Autor" | i18n %]';
@@ -132,8 +131,8 @@
 		            		link: url
 		            }
 		            table += '<tr>';
+		    	    table += $.tmpl(templates.td, {cell: DC_hash.link});
 		    	    table += $.tmpl(templates.td, {cell: DC_hash.creator});
-		    	    table += $.tmpl(templates.td, {cell: DC_hash.link,});
 		            table += '</tr>';
 		        });
 		
