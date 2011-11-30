@@ -458,7 +458,7 @@ sub toMARC_OAI{
     
     $marc_record =  C4::AR::Catalogacion::filtrarVisualizacionOAI($marc_record, $params);
     
-    my $MARC_record       = C4::AR::Catalogacion::marc_record_to_oai($marc_record, $params->{'id_tipo_doc'}, $params->{'tipo'}, $params->{'nivel'}, $self->db,$params);
+    my $MARC_record       = C4::AR::Catalogacion::marc_record_to_oai($marc_record, $params->{'id_tipo_doc'}, $params->{'tipo'}, $params->{'nivel'});
 
     return ($MARC_record);
 }
