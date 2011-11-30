@@ -635,6 +635,7 @@ sub marc_record_to_oai {
                 
                 my $field = MARC::Field->new($campo,'','',$subcampo => $valor_referencia);
                 
+                C4::AR::Debug::debug("\n\n\n AHHHHHHHHHHHHHHHHHHHHHHHH ".as_stringReloaded($field, $itemtype, $params));
                 $new_marc_record->append_fields($field);
             }
             
