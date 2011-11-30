@@ -1,3 +1,4 @@
+@IMPORT url("../../../includes/opac-structure.css");
 @IMPORT url("forms.css");
 
 @IMPORT url("/includes/css/fancybox.css");
@@ -5,12 +6,7 @@
 @IMPORT url("menu.css");
 
 body,html {
-	height: 100%;
 	background-color: #EAEBED;
-}
-
-#fancybox-content {
-	min-width: 401px;
 }
 
 #fancybox-content fieldset {
@@ -21,20 +17,11 @@ body,html {
 }
 
 #fancybox-content h2 {
-	padding-left: 5px;
 	color: #111;
-	font-size: 14px;
 	border-radius: 5px 5px 5px 5px;
 	background-color: #fff;
 }
 
-#fancybox-content h3 {
-	font-size: 13px;
-}
-
-#fancybox-content h4 {
-	font-size: 12px;
-}
 
 #fancybox-content legend {
 	border-radius: 4px 4px 4px 4px;
@@ -42,73 +29,12 @@ body,html {
 	color: #111;
 }
 
-.novedad_contacto {
-	min-width: 500px;
-}
-
-.loading_items {
-	margin: 0 auto;
-	width: 300px;
-}
-
-#jqpageflow-block {
-	width: 600px;
-	clear: both;
-	margin: 0 auto;
-	display: none;
-}
-
-#jqpageflow-block img {
-	clear: both;
-}
-
-.jqpageflow-loader {
-	position: relative;
-	display: none;
-	right: 1%;
-	z-index: 10001;
-	bottom: 0;
-}
-
-.jqpageflow-loadertext {
-	font-size: 18px;
-	width: 100%;
-	text-align: center;
-	position: relative;
-}
-
-.info_paginador {
-	margin: 0 auto;
-	width: 40%;
-}
-
 .focusInput {
 	background: white;
 }
 
-.close_modal_link {
-	margin: 0 auto;
-}
-
 .textInput {
 	background: #EAEBED;
-}
-
-fieldset {
-	clear: both;
-}
-
-
-
-fieldset .e_docs_upload_form{
-
-	float: right;
-	width: 60%;
-	text-align: justify;
-}
-
-.fileUploader_catalogo ul li {
-	width: 98%;
 }
 
 fieldset {
@@ -125,18 +51,8 @@ fieldset {
 	border-top-color: #35414F;
 	border-top-style: solid;
 	border-top-width: 2px;
-	display: block;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	margin-bottom: 20px;
-	margin-left: 0;
-	margin-right: 0;
-	margin-top: 20px;
-	padding-bottom: 10px;
-	padding-left: 10px;
-	padding-right: 10px;
-	padding-top: 0;
-	position: relative;
+
 }
 
 fieldset legend {
@@ -154,389 +70,155 @@ fieldset legend {
 	border-top-style: solid;
 	border-top-width: 1px;
 	color: #FFF9E7;
-	font-size: 110%;
-	font-variant: small-caps;
 	font-weight: bold;
-	margin-bottom: 10px;
-	margin-left: 0;
-	margin-right: 0;
-	margin-top: 0;
-	padding-bottom: 2px;
-	padding-left: 5px;
-	padding-right: 5px;
-	padding-top: 2px;
-	position: relative;
-	top: 0px;
-}
-
-.header-bottom {
-	width: 100%;
-	height: 21%;
-}
-
-#search-bar {
-	width: 48.5%;
-	margin: 0 auto;
-	height: 95%;
-	max-height: 130px;
 }
 
 #filterBar a {
 	color: #35414F;
 }
 
-
-
 #search-bar-catalogue{
 
 	background-color: #35414F;
-	width: 48.5%;
-	height: 85%;
 	color: #FCFFFF;
-	float: left;
 	border-right-width: 1px;
 	border-right-color: #8B97A3;
 	border-right-style: solid;
 }
 
 #search-bar-users {
-	background-color: #35414F;
-	width: 49%;
-	height: 85%;
-	color: #FCFFFF;
-	float: left;
+	background-color: #35414F;	
+	color: #FCFFFF;	
 }
 
 #search-bar-catalogue h5 {
 	background-color: #4B5869;
-	color: #FCFFFF;
-	margin: 0;
-	font-size: 98%;
-	padding: 0;
+	color: #FCFFFF;	
 }
 
 #search-bar-users h5 {
 	background-color: #4B5869;
 	color: #FCFFFF;
-	font-size: 98%;
-	margin: 0;
-	padding: 0;
 }
 
 
 .item-bar {
 	font-family: "Verdana", "Trebuchet MS", "Arial";
-	font-size: 8pt;
 	color: #FCFFFF;
-	list-style: none;
 	font-weight: bold;
-	padding: 0px;
-	margin: 2px;
-	text-decoration: none;
-	margin: 0 10px 0 9px;
-}
-
-.item-bar label {
-	margin-right: 0;
 }
 
 .item-bar a {
 	font-family: "Verdana", "Trebuchet MS", "Arial";
-	font-size: 8pt;
 	color: #FCFFFF;
-	list-style: none;
 	font-weight: bold;
-	padding: 0px;
-	margin: 0px;
-	text-decoration: none;
 }
 
 .item-bar a:hover {
 	font-family: "Verdana", "Trebuchet MS", "Arial";
-	font-size: 8pt;
 	color: #FCFFFF;
-	list-style: none;
-	font-weight: bold;
-	padding: 0px;
-	margin: 2px;
-	text-decoration: none;
+	font-weight: bold;	
 }
 
 
 #login {
 	background-image: url(../imagenes/meranLogin.png);
 	background-repeat: no-repeat;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	height: 200px;
-	margin-top: -100px;
-	width: 330px;
-	margin-left: -150px;
-}
-
-#login span {
-	display: inline;
-	padding: 10px;
-}
-
-#login input {
-	float: right;
-	width: 57%;
-	margin-top: 4px;
-}
-
-#login label {
-	float: left;
-	margin-right: 0px;
-}
-
-#test {
-	padding-left: 12px;
-	padding-top: 65px;
-	width: 90%;
-	height: 70%;
-}
-
-.entry {
-	padding-bottom: 2%;
-	margin: 0 auto;
-	float: left;
-	padding-left: 5%;
-	width: 20em;
-}
-
-
-
-
-#contenido_login {
-	display: block;
-	height: 70px;
-	width: 80%;
-	padding-top: 70px;
-	padding-left: 10px;
-	position: relative;
-	margin: 0 auto;
-	float: left;
-}
-
-#boton_login {
-	display: block;
-	list-style-type: none;
-	margin: 0 auto;
-	width: 75px;
-}
-
-#boton_login ul {
-	list-style-type: none;
-}
-
-.header {
-	margin: 25px;
-	width: 70%;
 }
 
 .logo_Superior {
 	background-image: url(../imagenes/logo.png);
-	width: 220px;
-	float: left;
-	margin-left: 2%;
-	margin-top: 1%;
-	margin-bottom: 0;
-	margin-right: 2%;
-	height: 145px;
 	background-repeat: no-repeat;
 }
 
 .idioma_y_login {
-	width: auto;
-	min-width: 25em;
-	float: right;
-	margin-bottom: 12px;
-	margin-left: 2px;
-	margin-top: -145px;
-	padding-right: 20px;
 	font-family: tahoma, arial, helvetica, sans-serif;
     font-weight: bold;
-	text-align: right;
-	height: 5em;
 }
 
 body {
 	color: #000000;
 	font-family: "Verdana", "Trebuchet MS", "Arial";
-	font-size: 13px;
 	font-style: normal;
 }
 
 #marco_superior {
 	background: transparent url(../imagenes/arriba_izq.png) no-repeat top
 		left;
-	width: 100%;
-	height: 7px;
-	font-size: 1px;
 }
 
 #marco_superior div {
 	background: transparent url(../imagenes/arriba_der.png) no-repeat top
 		right;
-	width: 100%;
-	height: 7px;
-	font-size: 1px;
 }
 
 #marco_inferior {
 	background: transparent url(../imagenes/abajo_izq.png) no-repeat bottom
 		left;
-	width: 100%;
-	height: 7px;
-	font-size: 1px;
-	clear: both;
 }
 
 #marco_inferior div {
 	background: transparent url(../imagenes/abajo_der.png) no-repeat bottom
 		right;
-	width: 100%;
-	height: 7px;
-	font-size: 1px;
-}
-
-#marco_contenido {
-	clear: both;
-	margin-bottom: 3%;
-	height: 80%;
-}
-
-#marco_contenido_datos {
-	margin-left: 10px;
-	margin-right: 10px;
-	margin-top: 30px;
-}
-
-#marco_contenido_datos li.item {
-	clear: left;
-	float: left;
 }
 
 #marco_principal {
 	background: #EAEBED;
-	float: left;
-	width: 99%;
-	min-height: 86%;
-	margin-top: 70px;
-	height: auto;
-}
-
-.container_test {
-	height: 90%;
-	min-width: 1023px;
 }
 
 .titulos {
 	font-weight: bold;
 	font-Family: arial, helvetica, sans-serif;
-	font-size: 15px;
-	text-align: left;
-	text-transform: uppercase;
 }
 
 .item {
 	font-family: "Verdana", "Trebuchet MS", "Arial";
-	font-size: 8pt;
 	color: #46848f;
-	list-style: none;
 	font-weight: bold;
-	padding: 0px;
-	margin: 2px;
-	text-decoration: none;
-	margin: 0 10px 0 9px;
 }
 
 .item a {
 	font-family: "Verdana", "Trebuchet MS", "Arial";
-	font-size: 8pt;
 	color: #35414F;
-	list-style: none;
 	font-weight: bold;
 	padding: 0px;
 	margin: 0px;
-	text-decoration: none;
+
 }
 
 .item a:hover {
 	font-family: "Verdana", "Trebuchet MS", "Arial";
 	color: #4B5869;
-	list-style: none;
 	font-weight: bold;
-	text-decoration: none;
 }
 
 .sub_item {
 	font-family: "Verdana", "Trebuchet MS", "Arial";
-	font-size: 9pt;
 	color: #4B5869;
-	list-style: none;
 	font-weight: bold;
-	text-decoration: none;
-	clear: both;
 }
 
-.sub_item label {
-	display: block;
-	margin-top: 10px;
-	float: left;
-	margin-right: 13px;
-	padding-right: 10px;
-	position: relative;
-	text-align: right;
-	width: 36%;
-	font-size: 12px
-}
-
-.sub_item input[type="radio"] {
-	margin-top: 10px;
-}
-
-.sub_item input[type="checkbox"] {
-	margin-top: 11px;
-}
 
 .titulo_tabla {
 	color: #a8b71c;
-	text-transform: uppercase;
-	text-align: center;
-	font-size: 10pt;
 	font-weight: bold;
-	clear: both;
-	padding: 10px;
 }
 
 .titulo_tabla_resultado {
 	font-Family: Arial, Helvetica, sans-serif;
 	color: #FFFFFF;
-	font-size: 9pt;
 	background: #35414F;
-	text-align: center;
 	font-weight: bold;
-	height: 20px;
 	border-left: 1px solid #ccc;
-	vertical-align: top;
 }
 
 .titulo_tabla_resultado th {
 	border: none;
 	background: #35414F;
-	width: 21px;
-}
-
-.tabla_der {
-	float: right;
 }
 
 .msj_main {
 	color: #35414F;
-	margin: 6px;
 }
 
 .msj_main .msj_main_asunto {
@@ -548,12 +230,7 @@ body {
 	color: #7E94AF;
 }
 
-.click {
-	cursor: pointer;
-}
-
 .tabla_datos {
-	font-size: 9pt;
 	color: #000000;
 	font-family: " Arial ", "Verdana", " sans-serif ";;
 	font-style: normal;
@@ -567,61 +244,38 @@ tr.impar td,tr.impar td a {
 	color: #35414F;
 }
 
-.CEC_componente_largo {
-	width: 100%;
-}
-
-.CEC_componente_medio {
-	width: 50%;
-}
-
-.CEC_componente_corto {
-	width: 25%;
-}
 
 em.error_adv {
-	background: transparent url(../imagenes/error.gif) no-repeat scroll 0 0;
-	padding-left: 16px;
-	margin-left: 12px;
+	background: transparent url(../imagenes/error.gif) no-repeat scroll 0 0;	
 }
 
 div.error_adv {
-	background: transparent url(../imagenes/error.gif) no-repeat scroll 0 0;
-	padding-left: 16px;
-	color: #A1C162;
-	clear: both
+	background: transparent url(../imagenes/error.gif) no-repeat scroll 0 0;	
+	color: #A1C162;	
 }
 
 div.info_adv {
-	padding-left: 16px;
-	font-style: italic;
-	clear: both
+	font-style: italic;	
 }
 
 label.error_adv {
 	background: transparent url(../imagenes/error.gif) no-repeat scroll 0 0;
-	padding-left: 16px;
-	width: auto;
 }
 
 .divCirculacion {
 	border-style: solid;
 	border-color: gray;
-	left: 75%;
-	text-align: center;
 	background-color: white;
 }
 
 .fontMsgConfirmation {
 	text-decoration: none;
-	font-size: 10pt;
 	font-family: "Trebuchet MS", "Verdana";
 	color: red;
 	font-weight: bold;
 }
 
 .fecha_vencida {
-	font-size: 10pt;
 	color: red;
 }
 
@@ -643,19 +297,16 @@ label.error_adv {
 }
 
 .impar .prestamo {
-	font-size: 10pt;
 	color: #006400;
 	font-weight: bold;
 }
 
 .par .salaLectura {
-	font-size: 10pt;
 	color: #35414F;
 	font-weight: bold;
 }
 
 .impar .salaLectura {
-	font-size: 10pt;
 	color: #35414F;
 	font-weight: bold;
 }
@@ -664,7 +315,6 @@ label.error_adv {
 
 
 .impar .disponible {
-	font-size: 10pt;
 	color: #006400;
 	font-weight: bold;
 }
@@ -685,7 +335,6 @@ label.error_adv {
 }
 
 .impar .nodisponible {
-	font-size: 10pt;
 	color: red;
 	font-weight: bold;
 }
@@ -697,7 +346,6 @@ label.error_adv {
 	border-bottom-width: 1px;
 	border-left-width: 1px;
 	font-family: "Trebuchet MS", "Verdana", "Arial";
-	font-size: 10pt;
 	color: #000000;
 	font-weight: normal;
 }
@@ -714,573 +362,326 @@ label.error_adv {
 	font-style: italic;
 }
 
-.botonCentrado {
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 0;
-	margin-bottom: 0;
-	padding-bottom: 5px;
-	padding-top: 5px;
-	clear: both;
-}
-
-.botonCentradoTabla {
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 0;
-	margin-bottom: 0;
-	clear: both;
-}
-
-.textoCentrado {
-	clear: both;
-	text-align: center;
-}
-
-.divContentComponente {
-	clear: both;
-	padding-top: 1%;
-}
-
-.divComponente {
-	float: left;
-	padding-right: 1%;
-	padding-bottom: 1%;
-}
 
 .divLabelComponente {
-	float: left;
-	width: 25%;
 	font-family: "Trebuchet MS", "Verdana", "Arial";
-	font-size: 10pt;
 	color: #000000;
 	font-weight: normal;
 }
 
 #paginador {
 	color: #000000;
-	cursor: pointer;
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 10pt;
-	font-weight: normal;
-	text-align: center;
-	margin: 0 auto;
-	width: 50%;
+	font-weight: normal;	
 }
 
 .paginador_seleccionado {
 	color: #4B6D22;
-	cursor: pointer;
 	font-family: Arial, Verdana, Helvetica, sans-serif;
-	font-size: 10pt;
 	font-weight: bold;
-	text-align: center;
-	margin: 2px;
 }
 
 .letras {
 	color: #CCCCCC;
-	cursor: pointer;
 	font-family: " Arial ", "Verdana", " sans-serif ";
-	font-size: 10pt;
 	font-weight: normal;
-	text-align: center;
-}
-
-li {
-	list-style-type: none;
 }
 
 .boton_texto {
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 11px;
 	font-weight: bold;
 	color: #000000;
 	background-position: center;
-	margin-top: 5px;
-	text-align: center;
 }
 
 .boton_medio {
 	background: url(../imagenes/botones/boton_medio.png) repeat-x scroll
 		center;
-	height: 21px;
-	position: relative;
-	margin: 5px auto;
-	padding-left: 0;
-	padding-right: 0;
-	cursor: pointer;
-	height: 21px;
 	white-space: nowrap;
-	width: 150px;
 }
 
 .boton_der {
-	float: right;
 	background: transparent url(../imagenes/botones/boton_der.png) no-repeat;
-	height: 21px;
-	width: 3px;
 }
 
 .boton_buscar {
 	background: transparent url(../imagenes/botones/boton_buscar.png)
 		no-repeat;
-	height: 21px;
-	width: 20px;
-	float: left;
 }
 
 .boton_agregar {
 	background: transparent url(../imagenes/botones/boton_agregar.png)
 		no-repeat;
-	height: 21px;
-	width: 20px;
-	float: left;
 }
 
 .boton_ayuda {
 	background: transparent url(../imagenes/botones/boton_ayuda.png)
 		no-repeat;
-	height: 21px;
-	width: 20px;
-	float: left;
 }
 
 .boton_borrar {
 	background: transparent url(../imagenes/botones/boton_borrar.png)
 		no-repeat;
-	height: 21px;
-	width: 20px;
-	float: left;
 }
 
 .boton_campo_temporal {
 	background: transparent
 		url(../imagenes/botones/boton_campo_temporal.png) no-repeat;
-	height: 21px;
-	width: 20px;
-	float: left;
 }
 
 .boton_eliminar_X {
 	background: transparent url(../imagenes/iconos/12-em-cross.png)
 		no-repeat;
-	height: 21px;
-	width: 20px;
-	float: left;
 }
 
 .boton_edicion {
 	background: transparent url(../imagenes/botones/boton_edicion.png)
 		no-repeat;
-	height: 21px;
-	width: 20px;
-	float: left;
 }
 
 .boton_entrar {
 	background: transparent url(../imagenes/botones/boton_entrar.png)
 		no-repeat;
-	height: 21px;
-	width: 20px;
-	float: left;
 }
 
 .boton_enviar {
 	background: transparent url(../imagenes/botones/boton_enviar.png)
 		no-repeat;
-	height: 21px;
-	width: 20px;
-	float: left;
 }
 
 .boton_estantes {
 	background: transparent url(../imagenes/botones/boton_estantes.png)
 		no-repeat;
-	height: 21px;
-	width: 20px;
-	float: left;
 }
 
 .boton_favoritos {
 	background: transparent url(../imagenes/botones/boton_favoritos.png)
 		no-repeat;
-	height: 21px;
-	width: 20px;
-	float: left;
 }
 
 .boton_guardar {
 	background: transparent url(../imagenes/botones/boton_guardar.png)
 		no-repeat;
-	height: 21px;
-	width: 20px;
-	float: left;
 }
 
 .boton_imprimir {
 	background: transparent url(../imagenes/botones/boton_imprimir.png)
 		no-repeat;
-	height: 21px;
-	width: 20px;
-	float: left;
 }
 
 .boton_indice {
 	background: transparent url(../imagenes/botones/boton_indice.png)
 		no-repeat;
-	height: 21px;
-	width: 20px;
-	float: left;
 }
 
 .boton_inicio {
 	background: transparent url(../imagenes/botones/boton_inicio.png)
 		no-repeat;
-	height: 21px;
-	width: 20px;
-	float: left;
 }
 
 .boton_ir {
 	background: transparent url(../imagenes/botones/boton_ir.png) no-repeat;
-	height: 21px;
-	width: 20px;
-	float: left;
 }
 
 .boton_micuenta {
 	background: transparent url(../imagenes/botones/boton_micuenta.png)
 		no-repeat;
-	height: 21px;
-	width: 20px;
-	float: left;
 }
 
 .boton_miembros {
 	background: transparent url(../imagenes/botones/boton_miembros.png)
 		no-repeat;
-	height: 21px;
-	width: 20px;
-	float: left;
 }
 
 .boton_PDF {
 	background: transparent url(../imagenes/botones/boton_PDF.png) no-repeat;
-	height: 21px;
-	width: 20px;
-	float: left;
 }
 
 .boton_salir {
 	background: transparent url(../imagenes/botones/boton_salir.png)
 		no-repeat;
-	height: 21px;
-	width: 20px;
-	float: left;
 }
 
 .boton_seleccionar {
 	background: transparent url(../imagenes/botones/boton_seleccionar.png)
 		no-repeat;
-	height: 21px;
-	width: 20px;
-	float: left;
+
 }
 
 .boton_subir {
 	background: transparent url(../imagenes/botones/boton_subir.png)
 		no-repeat;
-	height: 21px;
-	width: 20px;
-	float: left;
+
 }
 
 .boton_exportar_marc {
 	background: transparent url(../imagenes/botones/boton_exportar_marc.png)
 		no-repeat;
-	height: 21px;
-	width: 20px;
-	float: left;
+	
 }
 
 .icon_bajar {
 	background: transparent url(../imagenes/iconos/bajar.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
-	clear: none;
-	float: left;
 }
 
 .icon_warning {
-	background: transparent url(../imagenes/iconos/warning.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
-	clear: none;
-	float: left;
+	background: transparent url(../imagenes/iconos/warning.png) no-repeat;	
 }
 
 .icon_subir {
 	background: transparent url(../imagenes/iconos/subir.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	clear: none;
-	cursor: pointer;
-	float: none;
+		
 }
 
 .icon_borrar {
 	background: transparent url(../imagenes/iconos/borrar.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
+
 }
 
 .icon_ayuda {
 	background: transparent url(../imagenes/iconos/ayuda.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
-	float: left;
 }
 
 .icon_ayuda_marc {
 	background: transparent url(../imagenes/iconos/ayuda_marc.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
-	float: right;
 }
 
 .icon_agregar {
 	background: transparent url(../imagenes/iconos/agregar.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
 }
 
 .icon_mas {
 	background: transparent url(../imagenes/iconos/mas.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
 }
 
 
 .icon_renovar {
-	background: transparent url(../imagenes/iconos/renovar.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
+	background: transparent url(../imagenes/iconos/renovar.png) no-repeat;	
 }
 
 .icon_der {
 	background: transparent url(../imagenes/iconos/der.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
 }
 
 .icon_devolver {
 	background: transparent url(../imagenes/iconos/devolver.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
 }
 
 .icon_exportar {
 	background: transparent url(../imagenes/iconos/exportar.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
+
 }
 
 .icon_buscar {
 	background: transparent url(../imagenes/iconos/buscar.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
 }
 
 .icon_edicion {
 	background: transparent url(../imagenes/iconos/edicion.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
 }
 
 .icon_entrar {
 	background: transparent url(../imagenes/iconos/entrar.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
 }
 
 .icon_enviar {
 	background: transparent url(../imagenes/iconos/enviar.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
 }
 
 .icon_estvirtuales {
 	background: transparent url(../imagenes/iconos/estvirtuales.png)
 		no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
+
 }
 
 .icon_favoritos {
 	background: transparent url(../imagenes/iconos/favoritos.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
 }
 
 .icon_guardar {
 	background: transparent url(../imagenes/iconos/guardar.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
 }
 
 .icon_imprimir {
 	background: transparent url(../imagenes/iconos/imprimir.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
 }
 
 .icon_indice {
 	background: transparent url(../imagenes/iconos/indice.png) no-repeat;
-	height: 25px;
-	width: 25px;
 }
 
 .icon_ejemplares {
 	background: transparent url(../imagenes/iconos/ejemplares.png) no-repeat;
-	height: 25px;
-	width: 25px;
 }
 
 .icon_inicio {
 	background: transparent url(../imagenes/iconos/inicio.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
 }
 
 .icon_ir {
 	background: transparent url(../imagenes/iconos/ir.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
 }
 
 .icon_izq {
 	background: transparent url(../imagenes/iconos/izq.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
 }
 
 .icon_micuenta {
 	background: transparent url(../imagenes/iconos/micuenta.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
+
 }
 
 .icon_miembros {
 	background: transparent url(../imagenes/iconos/miembros.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
 }
 
 .icon_pdf {
 	background: transparent url(../imagenes/iconos/pdf.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
 }
 
 .icon_prestar {
 	background: transparent url(../imagenes/iconos/prestar.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
 }
 
 .icon_marc {
 	background: transparent url(../imagenes/iconos/marc.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
 }
 
 .icon_cancelar {
 	background: transparent url(../imagenes/iconos/cancelar.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
 }
 
 .icon_sacar {
 	background: transparent url(../imagenes/iconos/sacar.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
+
 }
 
 .icon_salir {
 	background: transparent url(../imagenes/iconos/salir.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
 }
 
 .icon_seleccionar {
 	background: transparent url(../imagenes/iconos/seleccionar.png)
 		no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
 }
 
 .icon_anadir {
 	background: transparent url(../imagenes/iconos/anadir.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
 }
 
 .icon_globo {
-	background: transparent url(../imagenes/iconos/globo.png) no-repeat;
-	height: 25px;
-	width: 25px;
-	cursor: pointer;
-	clear: none;
-	float: left;
+	background: transparent url(../imagenes/iconos/globo.png) no-repeat;	
 }
 
 .cargando {
 	background-image: url(../imagenes/loaders/ajax-loader.gif);
 	background-repeat: no-repeat;
 	background-position: center center;
-	height: auto;
-	min-height: 30px;
 }
 
 .loading {
 	background-image: url(../imagenes/loaders/ajax-loader.gif);
 	background-repeat: no-repeat;
-	height: 50px;
-	width: 50px;
-	min-height: 50px;
 }
 
 .MARCResult li {
@@ -1288,30 +689,9 @@ li {
 	color: #000000;
 	font-family: Arial, Helvetica, sans-serif;
 	line-height: 1.5em;
-	margin-left: 32px;
-	table-layout: fixed;
 }
 
-.detalleMARC {
-	list-style-type: none;
-	display: block;
-	padding: 5px;
-	text-align: left;
-	width: 90%;
-}
-
-.botones_detalle_nivel1 {
-	margin-bottom: 5px;
-}
-
-.guardarMARC {
-	display: block;
-	float: right;
-	padding: 5px;
-	text-align: center;
-	margin-left: auto;
-	margin-right: auto;
-}
+/* //////// HASTA ACA REVISADO*/
 
 .horizontal {
 	margin: 0 auto;
@@ -4990,7 +4370,7 @@ form.signin .subchck .remember {
 	border-radius: 4px 4px 4px 4px;
 	box-shadow: 0 1px 0 #444444;
 	color: #CCCCCC;
-	font: 13px Arial, sans-serif;
+	font-family: Arial, sans-serif;
 	padding: 6px 25px 4px 6px;
 	width: 215px;
 }
@@ -5220,7 +4600,7 @@ a#signin-link i {
 body .latest-status-text {
 	color: #999999;
 	float: right;
-	font: 13px/2 'helvetica neue', helvetica, arial, sans-serif;
+	font-family: 'helvetica neue', helvetica, arial, sans-serif;
 }
 
 body .latest-status-text a {
@@ -5340,7 +4720,7 @@ tr.par {
 	color: #333333 !important;
 	cursor: pointer;
 	display: inline-block;
-	font: 12px/15px Helvetica Neue, Arial, "Lucida Grande", Sans-serif;
+	font-family:  Helvetica Neue, Arial, "Lucida Grande", Sans-serif;
 	margin: 0;
 	overflow: hidden;
 	padding: 5px 9px;
@@ -5498,8 +4878,9 @@ button.blue-pill {
 	-o-box-shadow: inset 0 1px 0 0 #aec3e5;
 	box-shadow: inset 0 1px 0 0 #aec3e5;
 	color: #fff;
-	font: bold 11px "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans",
-		Geneva, Verdana, sans-serif;
+	font-weight: bold;
+    font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans",
+        Geneva, Verdana, sans-serif;
 	line-height: 1;
 	padding: 8px 0;
 	text-align: center;
@@ -5559,7 +4940,8 @@ button.clean-gray {
 	-o-border-radius: 3px;
 	border-radius: 3px;
 	color: #333;
-	font: bold 11px "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans",
+    font-weight: bold;
+	font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans",
 		Geneva, Verdana, sans-serif;
 	line-height: 1;
 	padding: 8px 0;
@@ -5627,7 +5009,8 @@ button.thoughtbot {
 	box-shadow: inset 0px 0px 0px 1px rgba(255, 115, 100, 0.4), 0 1px 3px
 		#333333;
 	color: #fff;
-	font: bold 17px "helvetica neue", helvetica, arial, sans-serif;
+	font-weight: bold; 
+    font-family: "helvetica neue", helvetica, arial, sans-serif;
 	line-height: 1;
 	padding: 8px 0 10px 0;
 	text-align: center;
