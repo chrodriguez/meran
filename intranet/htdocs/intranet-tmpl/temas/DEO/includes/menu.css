@@ -45,6 +45,11 @@ nav {
 	text-shadow: 0 1px 0 #000;
 }
 
+/* PENSAR QUE PUEDE QUEDAR LINDO?????? COLOR??? EFECTO??? */
+#menu li:hover{
+    background: transparent;	
+}
+
 #menu li:hover>a {
 	color: #fafafa;
 }

@@ -29,7 +29,7 @@
         $("#button_twitter").click(twitter_click);
         
         [% IF twitter_enabled %]
-	        $('#tweets').liveTwitter('[% twitter_username %]', {limit: 5, imageSize: 32}, function(){
+	        $('#tweets').liveTwitter('[% twitter_username_to_search %]', {limit: 5, imageSize: 32}, function(){
 	            $('#tweets .loading').remove();
 	        });
         [% END %]
@@ -136,10 +136,13 @@
 [% END %]
 
 [% IF twitter_enabled %]
-	<a class="fancy_link" href="[% url_prefix %]/admin/publicar_twitter.pl?token=[% token %]" > 
-	  <img id="button_twitter" src="[% temas %]/[% tema %]/imagenes/botones/button_twitter_normal.png" alt="Twitter"/>
-	</a>
-	<div id="tweets" class="tweets"><div class="loading">[% 'Loading tweets...' | i18n %]</div></div>
+<div id="twitter_container">
+	<div id="tweets" class="tweets"><div class="loading">[% 'Cargando tweets...' | i18n %]</div></div>
+	<br />
+    <a class="fancy_link" href="[% url_prefix %]/admin/publicar_twitter.pl?token=[% token %]" > 
+      <img id="button_twitter" src="[% temas %]/[% tema %]/imagenes/botones/button_twitter_normal.png" alt="Twitter"/>
+    </a>
+</div>
 [% END %]
   
 [% INCLUDE 'intranet-bottom.inc' %]
