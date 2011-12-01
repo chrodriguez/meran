@@ -401,7 +401,11 @@ sub detalleNivel3{
         $db      = $n3_temp->db;
     }
 
-    my $nivel2_object = C4::AR::Nivel2::getNivel2FromId2($id2,$db);
+    my $nivel2_object = undef;
+    
+    eval{
+        my $nivel2_object = C4::AR::Nivel2::getNivel2FromId2($id2,$db);
+    }
 
     $hash_nivel2{'nivel1_analiticas_array'}     = undef;
     $hash_nivel2{'nivel1_padre'}                = undef; #para el link al registro padre de una analitica
@@ -554,10 +558,10 @@ sub detalleCompletoINTRA {
     
     for(my $i=$inicio;$i<$cantidad;$i++){
 
-    my $new_id2;
+    my $new_id2 = 0;
     eval {
     	$new_id2 = $nivel2_array_ref->[$i]->getId2;
-    }
+    };
     #eval{
         my ($hash_nivel2) = detalleNivel3($new_id2,$nivel1->db);
 
