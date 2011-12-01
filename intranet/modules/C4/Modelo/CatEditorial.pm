@@ -13,7 +13,9 @@ __PACKAGE__->meta->setup(
 
     primary_key_columns => [ 'id' ],
 );
+
 use C4::Modelo::CatEditorial::Manager;
+use Text::LevenshteinXS;
 
 sub toString{
 	my ($self) = shift;
