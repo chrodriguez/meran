@@ -68,8 +68,9 @@ if($tipoAccion eq "MODIFICAR_NIVEL_1"){
     if($nivel2){
         $template_catalogo = $nivel2->getTemplate();
     }
-    
-    $t_params->{'indice_data'} = $nivel2->getIndice() || "";
+    if($nivel2){
+        $t_params->{'indice_data'} = $nivel2->getIndice() || "";
+    }
     
 }elsif($tipoAccion eq "MODIFICAR_NIVEL_3"){
     my $nivel3  = C4::AR::Nivel3::getNivel3FromId3($id3);

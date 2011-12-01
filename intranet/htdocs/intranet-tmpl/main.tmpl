@@ -28,7 +28,11 @@
  
         $("#button_twitter").click(twitter_click);
         
-
+        [% IF twitter_enabled %]
+// 	        $('#tweets').liveTwitter('[% twitter_username_to_search %]', {limit: 5, imageSize: 32}, function(){
+// 	            $('#tweets .loading').remove();
+// 	        });
+        [% END %]
         
       });
   
