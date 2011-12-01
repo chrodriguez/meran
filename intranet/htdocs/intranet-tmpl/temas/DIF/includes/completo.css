@@ -5646,3 +5646,51 @@ button.thoughtbot:active {
     -o-box-shadow: inset 0px 0px 0px 1px rgba(255, 115, 100, 0.4);
     box-shadow: inset 0px 0px 0px 1px rgba(255, 115, 100, 0.4);
 }
+
+.tweets {
+    background: #444;
+    padding: 1px 5px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    max-width: 300px;
+    margin: 0 auto;
+}
+.tweets .loading {
+    padding: 10px 20px;
+    color: #ccc;
+}
+
+.tweet {
+    font-size: 13px;
+    background: #fff;
+    margin: 4px 0;
+    padding: 8px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+}
+.tweet img {
+    float: left;
+}
+.tweet .text {
+    margin: 0;
+    margin-left: 44px;
+}
+.tweet .username {
+    display: block;
+}
+.tweet .username a {
+    font-weight: bold;
+    text-decoration: none;
+    color: #111;
+}
+.tweet .time a {
+    font-size: 80%;
+    color: #888;
+    white-space: nowrap;
+    text-decoration: none;
+    padding-left: 8px;
+}
+
+#twitter_container{
+    width: 360px
+}

@@ -7,6 +7,7 @@
 <link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/css/fancybox/jquery.fancybox.css">
 <script src="/includes/jquery/jquery.charCount.js"></script>
 <script type="text/javascript" src="/includes/jquery/jquery.wysiwyg.js"></script>
+<script type="text/javascript" src="/includes/jquery/jquery.livetwitter.js"></script>
 <link rel="stylesheet" href="/includes/css/wysiwyg.css" type="text/css" media="screen"/>
 
 <script type="text/javascript">
@@ -26,6 +27,8 @@
         $("#button_twitter").hover(twitter_hover, twitter_normal);
  
         $("#button_twitter").click(twitter_click);
+        
+
         
       });
   
@@ -129,9 +132,13 @@
 [% END %]
 
 [% IF twitter_enabled %]
-	<a class="fancy_link" href="[% url_prefix %]/admin/publicar_twitter.pl?token=[% token %]" > 
-	  <img id="button_twitter" src="[% temas %]/[% tema %]/imagenes/botones/button_twitter_normal.png" alt="Twitter"/>
-	</a>
+<!-- <div id="twitter_container"> -->
+<!-- 	<div id="tweets" class="tweets"><div class="loading">[% 'Cargando tweets...' | i18n %]</div></div> -->
+<!-- 	<br /> -->
+<!--     <a class="fancy_link" href="[% url_prefix %]/admin/publicar_twitter.pl?token=[% token %]" >  -->
+<!--       <img id="button_twitter" src="[% temas %]/[% tema %]/imagenes/botones/button_twitter_normal.png" alt="Twitter"/> -->
+<!--     </a> -->
+<!-- </div> -->
 [% END %]
   
 [% INCLUDE 'intranet-bottom.inc' %]

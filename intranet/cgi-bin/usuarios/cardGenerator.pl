@@ -16,7 +16,7 @@ my ($userid, $session, $flags) = C4::AR::Auth::checkauth(   $input,
                                                         $authnotrequired,
                                                         {   ui => 'ANY', 
                                                             tipo_documento => 'ANY', 
-                                                            accion => 'CONSULTA', 
+                                                            accion => 'MODIFICACION', 
                                                             entorno => 'usuarios'
                                                         },
                                                         "intranet"
