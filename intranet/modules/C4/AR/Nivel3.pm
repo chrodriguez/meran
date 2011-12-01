@@ -405,7 +405,7 @@ sub detalleNivel3{
     
     eval{
         my $nivel2_object = C4::AR::Nivel2::getNivel2FromId2($id2,$db);
-    }
+    };
 
     $hash_nivel2{'nivel1_analiticas_array'}     = undef;
     $hash_nivel2{'nivel1_padre'}                = undef; #para el link al registro padre de una analitica
