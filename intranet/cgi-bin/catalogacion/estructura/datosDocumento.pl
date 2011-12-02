@@ -66,17 +66,16 @@ if($tipoAccion eq "MODIFICAR_NIVEL_1"){
     my $nivel2  = C4::AR::Nivel2::getNivel2FromId2($id2);
 
     if($nivel2){
-        $template_catalogo = $nivel2->getTemplate();
-    }
-    if($nivel2){
-        $t_params->{'indice_data'} = $nivel2->getIndice() || "";
+        $template_catalogo          = $nivel2->getTemplate();
+        $t_params->{'indice_data'}  = $nivel2->getIndice() || "";
     }
     
 }elsif($tipoAccion eq "MODIFICAR_NIVEL_3"){
     my $nivel3  = C4::AR::Nivel3::getNivel3FromId3($id3);
 
     if($nivel3){
-        $template_catalogo = $nivel3->getTemplate();
+        $template_catalogo          = $nivel3->getTemplate();
+        $t_params->{'indice_data'}  = C4::AR::Nivel2::getNivel2FromId1($id1)->[0]->getIndice() || "";
     }
 }
 

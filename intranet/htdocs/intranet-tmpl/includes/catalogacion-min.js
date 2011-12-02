@@ -52,8 +52,8 @@ if(MODIFICAR==1){}else{close_esquema();MODIFICAR=0;AGREGAR_COMPLETO=0;if(_NIVEL_
 inicializarSideLayers();}}
 function guardarEsquema(){objAH=new AjaxHelper(updateGuardarEsquema);objAH.showOverlay=true;objAH.debug=true;objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";objAH.tipoAccion="GUARDAR_ESQUEMA";objAH.id1=ID_N1;objAH.id2=ID_N2;objAH.id3=ID_N3;objAH.nivel=_NIVEL_ACTUAL;objAH.template=$("#tipo_nivel3_id").val();objAH.sendToServer();}
 function updateGuardarEsquema(responseText){var info=JSONstring.toObject(responseText);var Messages=info.Message_arrayref;setMessages(Messages);if(_NIVEL_ACTUAL==1){modificarN1(ID_N1,TEMPLATE_ACTUAL);mostrarInfoAltaNivel1(ID_N1);}else if(_NIVEL_ACTUAL==2){modificarN2(ID_N2,TEMPLATE_ACTUAL);mostrarInfoAltaNivel2(ID_N2);}else{modificarN3(ID_N3,TEMPLATE_ACTUAL);}}
-function agregarIndice(id2){ID_N2=id2;$('#datos_indice').dialog({width:800,position:'center',modal:true});}
-function mostrarIndice(id2){$("#indice_data"+id2).dialog({width:800,position:'center',modal:true});}
+function agregarIndice(id2){ID_N2=id2;$('#datos_indice').modal({containerCss:{backgroundColor:"#fff",height:343,padding:0,width:900},});}
+function mostrarIndice(id2){$("#indice_data"+id2).modal({containerCss:{backgroundColor:"#fff",height:200,padding:0,width:863},});}
 function guardarIndice(){objAH=new AjaxHelper(updateGuadarIndice);objAH.showOverlay=true;objAH.debug=true;objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";objAH.tipoAccion="GUARDAR_INDICE";objAH.id2=ID_N2;objAH.indice=$("#indice_id").val();objAH.sendToServer();close_window_indice();}
 function updateGuadarIndice(responseText){var info=JSONstring.toObject(responseText);var Messages=info.Message_arrayref;setMessages(Messages);}
 function close_window_indice(){$('#datos_indice').dialog('close');}
