@@ -24,7 +24,7 @@ my ($template, $session, $t_params) = get_template_and_user({
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 
 
-my $ini = $obj->{'inicial'} || 0;
+my $ini = $obj->{'ini'} || 0;
 
 $obj->{'orden'}=$obj->{'orden'}||'apellido';
 $obj->{'apellido1'}=$obj->{'surname1'};

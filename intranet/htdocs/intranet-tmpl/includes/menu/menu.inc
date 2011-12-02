@@ -338,6 +338,14 @@
 		                     [% END %]
 				             </li>
 		                     <li>
+				             [% PERL %]
+		                        print C4::AR::Filtros::link_to( text =>     "[% 'Generaci&oacute;n de Barcodes' | i18n %]",
+		                                                        url =>      "[% url_prefix %]/admin/catalogo/barcode_gen_setup.pl", 
+		                                                        title =>    "[% 'Preferencias' | i18n %]"
+		                                                    ) ;
+		                     [% END %]
+				             </li>
+		                     <li>
 		                         [% PERL %]
 		                             print C4::AR::Filtros::link_to( text =>     "[% 'Servidores Z39.50' | i18n %]",
 		                                                             url =>      "[% url_prefix %]/admin/catalogo/MARC/z3950servers.pl",
