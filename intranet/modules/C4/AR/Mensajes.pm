@@ -521,6 +521,9 @@ my %mensajesINTRA = (
     'RC00' => 'El detalle de la recomendacion fue eliminado con &eacute;xito',
     'RC01' => 'Disculpe, no se pudo eliminar el detalle, intente nuevamente.',
     'RC02' => 'La recomendacion fue eliminada con &eacute;xito',
+    
+    #prestamos vencidos
+    'PV00' => 'Se enviaron los mails de pr&eacute;stamos vencidos con &eacute;xito',
 
 );
 

@@ -1,0 +1,34 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script type="text/javascript" language="javascript">
+
+  function enviarMails(){
+    
+    objAH                   = new AjaxHelper(updateEnviarMails);
+    objAH.url               = URL_PREFIX+"/admin/circulacion/prestamos_vencidosDB.pl";
+    objAH.showOverlay       = true;
+    objAH.tipo_prestamo     = $("#tipo_prestamo_id").val();
+    objAH.categoria_socio   = $("#categoria_socio_id").val();
+    objAH.tipoAccion        = "ENVIAR_MAILS_PRESTAMOS_VENCIDOS";
+    objAH.sendToServer();
+  
+  }
+  
+  function updateEnviarMails(responseText){
+  
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
+  
+  }
+
+</script>
+
+<fieldset>
+    <legend class="titulo_legend">[% "Pr&eacute;stamos vencidos" | i18n %] </legend>
+    <div>
+        <div>
+            <button class="clean-gray" onclick="enviarMails();">Enviar Mails</button>
+        </div>
+</fieldset>
+
+[% INCLUDE "intranet-bottom.inc" %]

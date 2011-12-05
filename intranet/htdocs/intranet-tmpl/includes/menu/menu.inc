@@ -452,6 +452,14 @@
 			                                                                ) ;
 			                                [% END %]
 			                    </li>
+			                    <li>
+			                                [% PERL %]
+			                                    print C4::AR::Filtros::link_to( text =>     "[% 'Pr&eacute;stamos Vencidos' | i18n %]",
+			                                                                    url =>      "[% url_prefix %]/admin/circulacion/prestamos_vencidos.pl",
+			                                                                    title =>    "[% 'Pr&eacute;stamos Vencidos' | i18n %]"
+			                                                                ) ;
+			                                [% END %]
+			                    </li>
 	                        </ul>
 	                  </li>           
 	                    
