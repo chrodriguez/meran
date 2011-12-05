@@ -879,7 +879,7 @@ sub checkauth {
 							}
 							# #                               $session->secure(0);
 						}else{
-							#si es estudiante no puede loguearse en la INTRA
+							# si es estudiante no puede loguearse en la INTRA
 							if($socio->getCredentialType() eq "estudiante"){
 							    $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/auth.pl?token='.$session->param('token'));
 							    redirectTo(C4::AR::Utilidades::getUrlPrefix().'/auth.pl?token='.$session->param('token'));
