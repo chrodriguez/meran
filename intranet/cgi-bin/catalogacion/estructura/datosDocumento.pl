@@ -89,7 +89,4 @@ $params_combo{'default'}                        = C4::AR::Preferencias::getValor
 $t_params->{'comboTipoNivelBibliografico'}      = &C4::AR::Utilidades::generarComboNivelBibliografico(\%params_combo);
 $t_params->{'page_sub_title'}                   = C4::AR::Filtros::i18n("Catalogaci&oacute;n - Datos del documento");
 
-
-C4::AR::Debug::debug("indice edit: ------------------------------------------------------------> ".$t_params->{'indice_edit'});
-
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
