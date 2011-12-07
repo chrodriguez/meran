@@ -28,7 +28,6 @@ function updateModificarDatosDeUsuario(responseText){
         $('#basic-modal-content').html(responseText);
         $('#basic-modal-content').modal({   containerCss:{
                 backgroundColor:"#fff",
-        //         borderColor:"#0063dc",
                 height:420,
                 padding:0,
                 width:900

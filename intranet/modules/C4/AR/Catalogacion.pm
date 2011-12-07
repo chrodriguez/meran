@@ -33,6 +33,7 @@ use vars qw(@EXPORT_OK @ISA);
   headerDCXML
   footerDCXML
   existeNivel1
+  getBarcodeFormat
 );
 
 =head1 NAME
@@ -2290,6 +2291,27 @@ sub existeNivel1{
     }
 
     return (scalar(@id1_array));
+}
+
+
+sub getBarcodeFormat{
+	my ($tipo_documento) = @_;
+	use C4::Modelo::BarcodeFormat;
+	
+    my $format;
+	my $default_format = C4::AR::Preferencias::getValorPreferencia("barcodeFormat");
+	
+	my $format_n3      = C4::Modelo::BarcodeFormat->new(id_tipo_doc => $tipo_documento);
+	$format_n3->load();
+	
+	if (C4::AR::Utilidades::validateString($format_n3->getFormat())){
+	   $format = $format_n3->getFormat();
+	}else{
+       $format = $default_format;
+	}
+	
+	return ($format);
+	
 }
 
 END { }       # module clean-up code here (global destructor)
