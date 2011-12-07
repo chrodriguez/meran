@@ -523,7 +523,7 @@ my %mensajesINTRA = (
     'RC02' => 'La recomendacion fue eliminada con &eacute;xito',
     
     #prestamos vencidos
-    'PV00' => 'Se enviaron los mails de pr&eacute;stamos vencidos con &eacute;xito',
+    'PV00' => 'Se enviar&aacute;n los mails de pr&eacute;stamos vencidos a la brevedad',
 
 );
 
