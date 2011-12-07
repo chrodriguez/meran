@@ -16,4 +16,10 @@ my ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
                                                         entorno         => 'undefined'},
 });
 
+if(C4::AR::Preferencias::getValorPreferencia('enableMailPrestVencidos')){
+
+  $t_params->{'mensaje'} = 'Se enviar&aacute;n los mails de pr&eacute;stamos vencidos a la brevedad';
+
+}
+
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
