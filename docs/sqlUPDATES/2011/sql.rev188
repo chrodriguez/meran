@@ -1,4 +1,4 @@
-NSERT INTO `pref_preferencia_sistema` (
+INSERT INTO `pref_preferencia_sistema` (
 `id` ,
 `variable` ,
 `value` ,
