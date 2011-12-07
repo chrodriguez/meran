@@ -144,6 +144,7 @@ sub gettemplate {
             CirculationEnabled          => C4::AR::Preferencias::getValorPreferencia("CirculationEnabled"),
             LibraryName                 => C4::AR::Preferencias::getValorPreferencia("LibraryName"),
             enable_localization_flags   => C4::AR::Preferencias::getValorPreferencia("enable_localization_flags") || 0,
+            twitter_username_to_search  => C4::AR::Preferencias::getValorPreferencia("twitter_username_to_search") || undef,
             plainPassword               => C4::Context->config('plainPassword') || 0,
             nroRandom                   => C4::AR::Auth::getSessionNroRandom(),
                         

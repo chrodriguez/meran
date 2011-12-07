@@ -20,7 +20,7 @@ if ($op eq 'pdf') {
     $obj->{'legajo1'}=$input->param('legajo1');
     $obj->{'legajo2'}=$input->param('legajo2');
     $obj->{'categoria_socio'}=$input->param('categoria_socio');
-
+    $obj->{'export'} = 1;
     my ($cantidad,$results)=C4::AR::Usuarios::BornameSearchForCard($obj);
 
     #HAY QUE GENERAR EL PDF CON LOS CARNETS
