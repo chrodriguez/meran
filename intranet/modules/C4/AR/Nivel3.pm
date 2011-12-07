@@ -835,13 +835,18 @@ sub generaCodigoBarra{
     my($parametros, $cant) = @_;
 
    my $barcode;
-    my @estructurabarcode = split(',',C4::AR::Preferencias::getValorPreferencia("barcodeFormat"));
+    my @estructurabarcode = split(',',C4::AR::Catalogacion::getBarcodeFormat($parametros->{'tipo_ejemplar'}));
     
     my $like = '';
 
     for (my $i=0; $i<@estructurabarcode; $i++) {
         if (($i % 2) == 0) {
-            $like.= %$parametros->{$estructurabarcode[$i]};
+            my $pattern_string = %$parametros->{$estructurabarcode[$i]};
+            if ($pattern_string){
+                $like.= $pattern_string;
+            }else{
+                $like.= $estructurabarcode[$i];
+            }
         } else {
             $like.= $estructurabarcode[$i];
         }
