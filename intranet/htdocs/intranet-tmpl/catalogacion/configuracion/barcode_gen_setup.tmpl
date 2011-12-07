@@ -1,0 +1,60 @@
+[% INCLUDE "intranet-top.inc" %]
+
+[% INCLUDE  'WindowHelper.inc'  %]
+
+[% INCLUDE  'AutocompleteHelper.inc'  %] 
+
+<script>
+	//Init Form
+	var objAH; //Objeto AjaxHelper.
+	
+	function eleccionDeBarcodeFormat(){
+	    objAH               = new AjaxHelper(updateEleccionDeBarcodeFormat);
+	    objAH.debug         = true;
+	    objAH.cache         = true;
+	    objAH.showOverlay   = true;
+	    objAH.url           = URL_PREFIX+'/admin/catalogo/barcode_gen_setup.pl';
+	    objAH.id_tipo_doc   = $('#tipo_nivel3_id').val();
+	    objAH.tipoAccion    = "ELECCION_BARCODE";
+	    //se envia la consulta
+	    objAH.sendToServer();
+	}
+
+	/*
+	 * updateInfoUsuario
+	 * Funcion que se realiza cuando se completa la consulta ajax de detalleUsuario, muestra los datos del usuario.
+	 */
+	function updateEleccionDeBarcodeFormat(responseText){
+	    $('#result').slideDown('slow');
+	    //se borran los mensajes de error/informacion del usuario
+	    $('#result').html(responseText);
+	}
+	
+	
+	
+	
+	
+	$(document).ready(function() {
+	});
+</script>
+
+<input type="hidden" id="idEncabezado">
+
+<div class="titulos" >[% 'Configurac&oacute;n de formatos de Barcode' | i18n %]</div>
+
+<fieldset>
+    <legend><strong>[% "Seleccione el tipo de documento a configurar:" | i18n %]</strong></legend>
+
+    [% PERL %]
+            print C4::AR::Filtros::to_Icon(   
+                                                boton   => "icon_buscar",
+                                                onClick => "eleccionDeBarcodeFormat();",
+                                                title   => "[% 'Buscar' | i18n %]",
+                    ) ;
+    [% END %]
+    [% selectItemType %]
+</fieldset>
+
+<div id="result"></div>
+
+[% INCLUDE "intranet-bottom.inc" %]
