@@ -123,9 +123,11 @@ sub getImageByIsbn {
 			if ($response->is_success) {
 				my $buffer = $response->content;
 		
-	 		    my ($width, $height) = imgsize($buffer);
+	 		    my ($width, $height) = imgsize(\$buffer);
 	 		     
-				if ((length($buffer) != 0) && !($width == 1 && $height == 1)) { 
+	 		    C4::AR::Debug::debug($width." X ".$height);
+	 		    
+				if ((length($buffer) != 0) && !($width <= 32 && $height <= 32)) { 
 					#Devuelve algo vacío?
 					if (!open(WFD,">$path/$file")) {
 						C4::AR::Debug::debug( "Hay un error y el archivo no puede escribirse en el servidor.");
