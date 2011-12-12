@@ -2308,7 +2308,7 @@ sub updateBarcodeFormat{
         $format_n3 = $format_n3->[0];
     }   
 
-    #eval{
+    eval{
        $format = C4::AR::Utilidades::trim($format);
        if ($format eq ""){
         $format_n3->delete();
@@ -2319,7 +2319,7 @@ sub updateBarcodeFormat{
 	       $format_n3->save();
 	       C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'CB001', 'params' => [$tipo_documento]} ) ;
        }
-    #};
+    };
     
     if ($@){
         $msg_object->{'error'}= 1;
