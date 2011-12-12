@@ -20,10 +20,17 @@ if($tipoAccion eq "ENVIAR_MAILS_PRESTAMOS_VENCIDOS"){
                                                 entorno         => 'undefined' },
                                             'intranet'
                            );
+                           
+    # seteamos en 1 el flag para el CRON                           
+    C4::AR::Preferencias::setVariable('enableMailPrestVencidos', 1);
+    
+    my $msg_object            = C4::AR::Mensajes::create();
+    
+    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'PV00'});
 
-    my ($Messages_arrayref)  = C4::AR::Prestamos::enviarRecordacionDePrestamoVencidos();
+    my ($Messages_arrayref)   = $msg_object;
 
-    my $infoOperacionJSON = to_json $Messages_arrayref;
+    my $infoOperacionJSON     = to_json $Messages_arrayref;
 
     C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;

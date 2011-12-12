@@ -124,6 +124,8 @@ my %mensajesOPAC = (
 
 my %mensajesINTRA = (
     '000' => '',
+    'CB001' => 'El formato de inventario para el tipo de documento (*?*) se ha acualizado.',
+    'CB002' => '[ERROR] El formato de inventario para el tipo de documento (*?*) no se ha podido acualizar.',
     'R001' => 'El usuario lleg&oacute; al m&acute;ximo de reservas permitidas (*?*).',
     'R002' => 'El usuario ya tiene una reserva para el mismo tipo de prestamo ',
     'R003' => 'El usuario lleg&oacute; al m&acute;ximo de reservas en espera (*?*).',
@@ -523,7 +525,7 @@ my %mensajesINTRA = (
     'RC02' => 'La recomendacion fue eliminada con &eacute;xito',
     
     #prestamos vencidos
-    'PV00' => 'Se enviaron los mails de pr&eacute;stamos vencidos con &eacute;xito',
+    'PV00' => 'Se enviar&aacute;n los mails de pr&eacute;stamos vencidos a la brevedad',
 
 );
 
