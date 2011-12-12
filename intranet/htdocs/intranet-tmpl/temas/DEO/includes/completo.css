@@ -1538,52 +1538,29 @@ b,strong {
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-	display: inline-block;
 	font-weight: normal;
-	margin: -1px auto 0;
-	max-width: 490px;
-	min-width: 100px;
-	padding: 0 6px 5px;
-	width: auto;
-}
-
-#message-drawer .message {
-	padding: 0 6px 4px;
 }
 
 #message-drawer .message .message-inside {
 	background: none repeat scroll 0 0 #FFFFFF;
 	border-bottom-left-radius: 3px;
 	border-bottom-right-radius: 3px;
-	display: inline-block;
-	font-size: 13px;
-	min-width: 100px;
-	padding: 8px 12px 8px 16px;
 }
 
 #message-drawer .message .message-inside span {
 	color: #333333;
-	display: inline-block;
-	max-width: 440px;
-	vertical-align: middle;
 }
 
 #message-drawer a.dismiss {
 	background: none repeat scroll 0 0 #F8F8F8;
 	color: #999999;
-	display: inline-block;
 	font-family: Tahoma;
-	font-size: 12px;
 	font-weight: bold;
-	height: 22px;
-	margin: -5px -10px -10px 10px;
-	padding: 6px 6px 2px;
 }
 
 #message-drawer a.dismiss:hover {
 	background: none repeat scroll 0 0 #EEEEEE;
 	color: #333333;
-	text-decoration: none;
 }
 
 #message-drawer em.blink {
@@ -1593,40 +1570,8 @@ b,strong {
 #first-container .header {
 	background-color: #EDEDED;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-	height: 24px;
-	padding: 13px;
 }
 
-.base-list,.base-list li,.inline-list,.inline-list li {
-	list-style: none outside none;
-	margin: 0;
-	padding: 0;
-}
-
-.inline-list li {
-	display: inline;
-}
-
-.clearfix:after {
-	clear: both;
-	content: ". ";
-	display: block;
-	height: 0;
-	line-height: 0;
-	visibility: hidden;
-}
-
-.clearfix {
-	display: inline-block;
-}
-
-html[xmlns] .clearfix {
-	display: block;
-}
-
-* html .clearfix {
-	height: 1%;
-}
 
 body.user-style-twttr {
 	background: url("../imagenes/bg-clouds.png") repeat-x scroll left 40px
@@ -1673,9 +1618,7 @@ body.loading-body {
 	background: none repeat scroll 0 0 #F5F6F7;
 }
 
-body.loading-body #page-container {
-	display: none;
-}
+/*  =================  HASTA ACA 12/10 */
 
 .geo-control {
 	float: left;
