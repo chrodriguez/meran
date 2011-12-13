@@ -1,4 +1,4 @@
-@IMPORT url("../../../includes/opac-structure.css");
+@IMPORT url("../../../intranet-structure.css");
 @IMPORT url("forms.css");
 
 @IMPORT url("/includes/css/fancybox.css");
@@ -1620,9 +1620,6 @@ body.loading-body {
 
 /*  =================  HASTA ACA 12/10 */
 
-.geo-control {
-	float: left;
-}
 
 .geo_progress {
 	color: #999999;
@@ -1631,21 +1628,11 @@ body.loading-body {
 .crosshairs {
 	background: url("../imagenes/sprite-icons.png") no-repeat scroll -64px
 		-80px transparent;
-	display: inline-block;
-	height: 11px;
-	margin: 0 1px 3px 0;
-	vertical-align: middle;
-	width: 11px;
 }
 
 a.geo_disable_webclient span {
 	background: url("../imagenes/sprite-icons.png") no-repeat scroll -112px
 		-80px transparent;
-	display: inline-block;
-	height: 7px;
-	margin: 0 3px;
-	vertical-align: middle;
-	width: 7px;
 }
 
 a.geo_disable_webclient:hover span {
@@ -1654,116 +1641,56 @@ a.geo_disable_webclient:hover span {
 
 .near {
 	color: #8C8C8C;
-	font-size: 14px;
-}
-
-a.places-nearby {
-	left: 385px;
-	position: absolute;
-	top: 148px;
-}
-
-.geo_notifications {
-	display: none;
-}
-
-.place_link:focus {
-	outline: medium none;
 }
 
 .place_link span.place_icon {
 	background: url("../imagenes/sprite-icons.png") no-repeat scroll -305px
 		-97px #2276BB;
-	display: inline-block;
-	height: 11px;
-	margin: 0 4px 4px 0;
-	vertical-align: middle;
-	width: 7px;
 }
 
 #geo_browser_help_banner {
 	color: #FFFFFF;
 	font-family: Verdana;
-	position: fixed;
-	right: 0;
-	text-align: left;
-	top: 0;
-	z-index: 10000;
 }
 
 #geo_browser_help_banner.geo_firefox {
 	background: url("../imagenes/geo_firefox_help_banner_back.png")
 		no-repeat scroll right center #333333;
 	border-bottom-left-radius: 4px;
-	height: 108px;
 }
 
 #geo_browser_help_banner.geo_chrome {
 	background: url("../imagenes/geo_chrome_help_banner_back.png") no-repeat
 		scroll right center #333333;
-	height: 65px;
 }
 
 #geo_browser_help_banner.geo_ie_gtb {
 	background: url("../imagenes/geo_ie_gtb_help_banner_back.png") no-repeat
 		scroll right center #333333;
-	height: 108px;
-}
-
-#geo_browser_help_banner.geo_firefox>div {
-	margin: 8px 183px -3px 10px;
-}
-
-#geo_browser_help_banner.geo_chrome>div {
-	margin: 25px 120px 20px 20px;
-}
-
-#geo_browser_help_banner.geo_ie_gtb>div {
-	margin: 8px 200px -3px 10px;
-}
-
-#geo_browser_help_banner img {
-	margin-right: 6px;
-	position: relative;
-	top: 8px;
 }
 
 ul.places_list {
 	background-color: #FFFFFF;
 	border: 1px solid #AAAAAA;
 	border-radius: 5px 5px 5px 5px;
-	list-style: none outside none;
-	padding: 4px 0;
-	text-align: left;
 }
 
 .place_content ul.places_list li,ul.places_list li {
 	color: #333333;
-	cursor: pointer;
-	margin-left: 0;
-	padding: 3px 8px 3px 4px;
 }
 
 .geo_more_places {
 	border-top: 1px solid #CCCCCC;
-	margin-top: 4px;
-	padding-top: 5px;
 }
 
 .place_content ul.places_list li:hover,.place_content ul.places_list a:hover
 	{
 	background-color: #666666;
 	color: white;
-	outline: medium none;
 }
 
 li .place_item_icon {
 	background: none repeat scroll 0 0 transparent;
-	display: inline-block;
-	height: 9px;
-	margin: 0 4px 2px 0;
-	vertical-align: middle;
-	width: 10px;
 }
 
 li.selected .place_item_icon {
@@ -1774,8 +1701,6 @@ li.selected .place_item_icon {
 li .refresh {
 	background: url("../imagenes/sprite-icons.png") no-repeat scroll -96px
 		-80px transparent;
-	margin: 0 5px 2px 2px;
-	width: 7px;
 }
 
 ul.places_list li:hover .refresh {
@@ -1786,11 +1711,6 @@ ul.places_list li:hover .refresh {
 li .clear {
 	background: url("../imagenes/sprite-icons.png") no-repeat scroll -128px
 		-80px transparent;
-	display: inline-block;
-	height: 7px;
-	margin: 0 5px 0 2px;
-	vertical-align: middle;
-	width: 7px;
 }
 
 ul.places_list li:hover .clear {
@@ -1801,11 +1721,6 @@ ul.places_list li:hover .clear {
 li .place_icon {
 	background: url("../imagenes/sprite-icons.png") no-repeat scroll -224px
 		-64px transparent;
-	display: inline-block;
-	height: 11px;
-	margin: 0 4px 4px 0;
-	vertical-align: middle;
-	width: 7px;
 }
 
 li .more_places {
@@ -1816,27 +1731,6 @@ li .place_details {
 	color: #999999;
 }
 
-#geo_promo_dialog_content {
-	font-size: 11px;
-	padding: 15px;
-	text-align: left;
-}
-
-#geo_promo_dialog_content .tiny-map {
-	float: right;
-	padding-left: 20px;
-}
-
-#geo_dialog_descr {
-	font-size: 13px;
-	margin-bottom: 20px;
-}
-
-#geo_not_now {
-	line-height: 1.9em;
-	margin-left: 8px;
-}
-
 #geo_turn_location_on {
 	font-weight: bold;
 }
@@ -1844,131 +1738,49 @@ li .place_details {
 a.geo_disable_webclient {
 	color: #999999;
 	font-family: tahoma, sans-serif;
-	font-size: 12px;
 	font-weight: bold;
-	line-height: 12px;
-	text-shadow: 1px 1px 1px #FFFFFF;
-}
-
-a.geo_disable_webclient:hover {
-	text-decoration: none;
 }
 
 .geo-unable-to-turn-location-on {
 	color: #FF3333;
-	display: none;
-	margin-top: 10px;
-}
-
-.geo_map_with_place {
-	width: 490px;
-}
-
-.tweet_geo_big {
-	line-height: 1.35em;
-	padding: 0 20px 15px;
-}
-
-.tweet_geo_big .map_canvas {
-	height: 125px;
-	margin-top: 15px;
 }
 
 .tweet_geo_big .geo_map_place_details {
 	color: #444444;
-	font-size: 13px;
 }
 
 .tweet_geo_big .geo_map_place_name {
 	color: #333333;
-	font-size: 20px;
-	line-height: 20px;
-	margin-top: 15px;
-	padding-bottom: 4px;
 }
 
 .geo_map_place_icon {
 	background: url("../imagenes/sprite-icons.png") no-repeat scroll -160px
 		-96px transparent;
-	display: inline-block;
-	font-size: 11px;
-	height: 11px;
-	line-height: 1.1em;
-	margin-right: 6px;
-	width: 7px;
-}
-
-.tweet_geo_small {
-	overflow: hidden;
-	padding: 0 20px 20px;
-}
-
-.mentioned-in-tweet .tweet_geo_small {
-	padding: 10px 0;
 }
 
 .tweet_geo_small .map_canvas {
 	border-radius: 6px 6px 6px 6px;
-	cursor: pointer;
-	float: left;
-	height: 100px;
-	width: 175px;
 }
 
 .tweet_geo_small .geo_map_place_details {
 	color: #777777;
-	float: left;
-	font-size: 12px;
-	line-height: 1.35em;
-	padding-left: 10px;
 }
 
 .tweet_geo_small .geo_map_place_name {
 	color: #333333;
-	font-size: 13px;
-	line-height: 1.35em;
-}
-
-.geo_map_tweets_at_this_place_link {
-	font-size: 11px;
 }
 
 .geo_place_search_table {
 	font-family: 'Lucida Grande', sans-serif;
-	font-size: 13px;
 }
 
 .geo_place_search_col1 {
 	font-weight: bold;
-	padding-left: 0;
-	padding-right: 7px;
-	text-align: right;
-}
-
-.geo_place_search_city {
-	padding-bottom: 14px;
-	padding-left: 7px;
-}
-
-#geo_city {
-	margin: 0 0 16px 8px;
 }
 
 #geo_poi_hint {
 	color: #999999;
 	font-family: 'Lucida Grande', sans-serif;
-	font-size: 11px;
-	padding: 4px 0 8px 7px;
-}
-
-#place_search_results {
-	padding: 0 0 0 7px;
-	width: 310px;
-}
-
-#place_search_done,#place_search_cancel {
-	margin-bottom: 5px;
-	margin-top: 20px;
 }
 
 #place_search_form .help-text {
@@ -1979,29 +1791,12 @@ a.geo_disable_webclient:hover {
 	border: 1px solid #AAAAAA !important;
 	border-bottom-left-radius: 4px;
 	border-top-left-radius: 4px;
-	font-size: 1em;
-	outline: medium none;
-	padding: 5px;
-	vertical-align: middle;
-	width: 282px;
 }
 
-body.it #place_search_form input {
-	width: 262px;
-}
-
-body.es #place_search_form input {
-	width: 242px;
-}
-
-#place_search_form #city_search_query {
-	width: 336px;
-}
 
 #place_search_form input:focus {
 	border-color: rgba(82, 168, 236, 0.75) !important;
 	box-shadow: 0 0 8px rgba(82, 168, 236, 0.5);
-	outline: medium none;
 }
 
 .place_search_submit {
@@ -2012,13 +1807,6 @@ body.es #place_search_form input {
 	border-style: solid;
 	border-top-right-radius: 3px;
 	border-width: 1px;
-	cursor: pointer;
-	margin-left: -1px;
-	padding-bottom: 5px !important;
-	padding-left: 0.9em;
-	padding-right: 0.9em;
-	padding-top: 5px !important;
-	vertical-align: middle;
 }
 
 .place_search_submit:hover {
@@ -2038,21 +1826,12 @@ body.es #place_search_form input {
 }
 
 #place_search_results li {
-	line-height: 1.2em;
-	list-style-type: none;
-	margin: 8px 0 0;
-	overflow: visible;
 	white-space: nowrap;
 }
 
 .geo-place-search-result-icon {
 	background: url("../imagenes/sprite-icons.png") no-repeat scroll -224px
 		-64px transparent;
-	display: inline-block;
-	height: 11px;
-	margin: 0 3px 3px -10px;
-	vertical-align: middle;
-	width: 7px;
 }
 
 #place_search_results .geo-place-details {
@@ -2070,28 +1849,17 @@ ul.place_search_dropdown.places_list .place_noicon {
 }
 
 ul.place_search_dropdown.places_list li {
-	padding-left: 8px;
 	white-space: nowrap;
 }
 
 .places_list li.hover {
 	background-color: #666666;
 	color: white;
-	outline: medium none;
 }
 
 ul.places_list {
 	background-color: #FFFFFF;
 	border: 1px solid #AAAAAA;
-	display: none;
-	padding: 4px 0;
-	position: absolute;
-	text-align: left;
-	z-index: 9999;
-}
-
-#place_search_go_back {
-	margin-top: 12px;
 }
 
 #place_search_go_back,#change_city {
@@ -2101,65 +1869,18 @@ ul.places_list {
 
 .geo_place_search_hint {
 	color: #999999;
-	font-size: 11px;
-	padding: 4px 0 0 7px;
-}
-
-div.geo_add_place {
-	margin-top: 15px;
 }
 
 div.geo_add_place a {
 	font-weight: bold;
 }
 
-.geo_search_message {
-	margin-top: 12px;
-}
-
-.geo_next_prev {
-	margin-top: 10px;
-}
-
 .geo_next_prev .link-disabled {
 	color: #BBBBBB;
 }
 
-.geo_next_prev .link-disabled:hover {
-	cursor: default;
-	text-decoration: none;
-}
-
-#geo_prev_result {
-	margin-right: 20px;
-}
-
 .geo_place_search_table {
 	font-family: 'Lucida Grande', sans-serif;
-	font-size: 13px;
-	width: 100%;
-}
-
-#geo_place_creation_dialog .twttr-dialog-body,#geo_place_creation_dialog .twttr-dialog-inside
-	{
-	padding: 0;
-}
-
-#geo_place_creation_dialog .twttr-dialog-content {
-	margin-bottom: 0;
-}
-
-.geo-where-is-place {
-	position: relative;
-}
-
-.geo-where-is-place .geo-map-canvas {
-	height: 300px;
-}
-
-.geo-query-map {
-	margin: 0 10px 10px;
-	padding-top: 10px;
 }
 
 .geo-place-creation-dialog-content .help-text {
@@ -2170,11 +1891,6 @@ div.geo_add_place a {
 	border: 1px solid #CCCCCC !important;
 	border-bottom-left-radius: 4px;
 	border-top-left-radius: 4px;
-	font-size: 1em;
-	outline: medium none;
-	padding: 5px;
-	vertical-align: middle;
-	width: 288px;
 }
 
 .geo-query-map input:hover {
@@ -2184,7 +1900,6 @@ div.geo_add_place a {
 .geo-query-map input:focus {
 	border-color: rgba(82, 168, 236, 0.75) !important;
 	box-shadow: 0 0 8px rgba(82, 168, 236, 0.5);
-	outline: medium none;
 }
 
 .geo-query-map span {
@@ -2195,72 +1910,29 @@ div.geo_add_place a {
 	border-style: solid;
 	border-top-right-radius: 3px;
 	border-width: 1px;
-	cursor: pointer;
-	margin-left: -1px;
-	padding-bottom: 5px !important;
-	padding-left: 0.9em;
-	padding-right: 0.9em;
-	padding-top: 5px !important;
-	vertical-align: middle;
 }
 
 .geo-query-map-error {
 	color: #FF3333;
-	margin: 10px;
-}
-
-.geo-drop-pin-hint {
-	display: none;
-	position: absolute;
-	right: 10px;
-	width: 300px;
-}
-
-.geo-move-pin-hint {
-	display: none;
-	left: 175px;
-	margin: 2px 0 0 -127px;
-	position: absolute;
-	top: 150px;
-	width: 250px;
 }
 
 .geo-creation-hint-arrow {
 	background-image: url("../imagenes/geo_creation_hint_arrow.gif");
-	height: 11px;
-	margin: 0 auto;
-	width: 21px;
 }
 
 .geo-drop-pin-hint .geo-creation-hint-arrow {
 	-moz-transform: scaleY(-1);
-	margin-right: 20px;
 }
 
 .geo-creation-hint-bubble {
 	background-color: #424242;
 	border-radius: 5px 5px 5px 5px;
 	color: white;
-	font-size: 12px;
 	font-weight: bold;
-	padding: 10px;
-	text-align: center;
-}
-
-.geo-creation-actions {
-	margin: 12px 10px;
 }
 
 .geo-droppable-pin {
 	background-image: url("../imagenes/poi-pin.png");
-	display: none;
-	height: 32px;
-	position: absolute;
-	width: 43px;
-}
-
-.button.geo-submit {
-	margin-bottom: 0;
 }
 
 .button.geo-submit.disabled {
@@ -2269,102 +1941,43 @@ div.geo_add_place a {
 	border-color: #CCCCCC;
 	box-shadow: 0 1px 0 #F8F8F8;
 	color: #BBBBBB !important;
-	cursor: default;
-	text-shadow: 0 1px #F0F0F0;
 }
 
 .geo-spinner {
 	background: url("../imagenes/spinner-small.gif") repeat scroll 0 0
 		transparent;
-	display: inline-block;
-	height: 14px;
-	line-height: 1.9em;
-	margin-left: 15px;
-	vertical-align: middle;
-	width: 14px;
 }
 
 .geo-place-creation-error {
 	color: #FF3333;
-	display: none;
-	margin-top: 10px;
-}
-
-.geo-similar-places .geo-map-canvas {
-	height: 200px;
-}
-
-.geo-similar-places ul {
-	margin: 8px 0 15px;
-}
-
-.geo-similar-places li {
-	font-size: 13px;
-	line-height: 13px;
-	list-style-type: none;
-	margin: 5px 0;
 }
 
 .geo-similar-places .geo-place-details {
 	color: #999999;
-	font-size: 11px;
 }
 
 .geo-map-place-bubble {
-	display: none;
-	margin-top: 10px;
-	opacity: 0;
-	position: absolute;
-	text-align: center;
 	white-space: nowrap;
-	z-index: 20;
 }
 
 .geo-map-place-bubble span {
 	background-image: url("../imagenes/geo_creation_hint_arrow.gif");
 	background-repeat: no-repeat;
-	display: inline-block;
-	height: 11px;
-	vertical-align: bottom;
-	width: 21px;
 }
 
 .geo-map-place-bubble>div {
 	background-color: #424242;
 	color: white;
-	font-size: 11px;
 	font-weight: bold;
-	padding: 10px;
-	text-align: left;
-}
-
-.geo-confirm-place-creation .geo-map-canvas {
-	height: 200px;
-}
-
-.geo-go-back {
-	line-height: 1.9em;
-	margin-left: 10px;
 }
 
 .geo-place-creation-col1 {
 	font-weight: bold;
-	padding-right: 7px;
-	text-align: right;
-}
-
-.geo-place-creation-row2 {
-	padding-top: 10px;
 }
 
 .geo-confirm-place-creation input {
 	border: 1px solid #CCCCCC !important;
 	border-radius: 4px 4px 4px 4px;
-	font-size: 1em;
-	outline: medium none;
-	padding: 5px;
-	vertical-align: middle;
-	width: 240px;
 }
 
 .geo-confirm-place-creation input:hover {
@@ -2374,105 +1987,28 @@ div.geo_add_place a {
 .geo-confirm-place-creation input:focus {
 	border-color: rgba(82, 168, 236, 0.75) !important;
 	box-shadow: 0 0 8px rgba(82, 168, 236, 0.5);
-	outline: medium none;
 }
 
 .geo-place-creation-hint {
 	color: #999999;
-	font-size: 11px;
-}
-
-.geo-place-creation-city {
-	margin: 8px 0 16px;
 }
 
 .geo_map_link_separator {
 	color: #AAAAAA;
-	margin: 0 5px 0 10px;
-}
-
-.geo_map_place_address_and_container {
-	line-height: 17px;
-	margin-top: 5px;
-}
-
-.geo_map_place_page_link,.geo_map_tweet_geo_pane_link {
-	font-size: 11px;
-}
-
-.geo-place-page-title h2 {
-	font-size: 26px;
-	font-weight: 200;
-	margin: 15px 15px 0;
-}
-
-.geo-place-page-title h2 strong {
-	font-weight: 500;
-}
-
-.geo-place-page-title {
-	margin-bottom: 10px;
-	word-wrap: break-word;
-}
-
-.geo-place-page-details {
-	margin-left: 15px;
-}
-
-.geo-place-page-map-container {
-	margin: 15px;
-}
-
-#geo_place_page_map_canvas {
-	height: 175px;
-}
-
-.geo-place-page-owner li {
-	margin-left: 0;
-}
-
-div.latest-tweet.geo-place-page-latest-tweet .tweet-content {
-	margin-left: 0;
-}
-
-.dashboard.place-dashboard .tweet+hr {
-	display: block;
 }
 
 .geo-separator {
 	background-color: #CCCCCC;
-	display: inline-block;
-	height: 23px;
-	margin: 0 3px;
-	vertical-align: top;
-	width: 1px;
-}
-
-a.geo-insert-place-button {
-	padding: 3px 5px;
 }
 
 a.geo-insert-place-button span {
 	background: url("../imagenes/sprite-icons.png") no-repeat scroll -144px
 		-96px transparent;
-	height: 11px;
-	margin: 2px;
-	width: 7px;
 }
 
 a.geo-insert-place-button:hover span,a.geo-insert-place-button:focus span
 	{
 	background-position: -160px -80px;
-}
-
-span.geo-status {
-	display: inline-block;
-	margin-top: 2px;
-	vertical-align: top;
-}
-
-h2.place-component a.view-all {
-	font-size: 12px;
 }
 
 body.front-page {
@@ -2484,44 +2020,13 @@ body.front-page {
 .front-page #doc {
 	background: url("../imagenes/front/map.png") no-repeat scroll center 0
 		transparent;
-	min-width: 1000px;
-	overflow: hidden;
-}
-
-.front-page #page-outer {
-	padding-top: 0;
-	position: relative;
-	width: 1000px;
-}
-
-.front-page #top-bar-outer,#front-container {
-	display: none;
-}
-
-.front-page #front-container {
-	display: block;
-	overflow: visible;
-}
-
-.front-page form .holding {
-	overflow: visible;
-	position: relative;
 }
 
 .front-page form .holding .holder {
 	-moz-transition: opacity 0.4s ease 0s, left 0.3s ease 0s;
 	color: #999999;
-	cursor: text;
-	left: 8px;
-	position: absolute;
 	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-	white-space: nowrap;
-	z-index: 1;
-}
-
-.front-page form .hasome .holder {
-	left: 20px;
-	opacity: 0;
+	white-space: nowrap;	
 }
 
 .front-page .button {
@@ -2536,11 +2041,6 @@ body.front-page {
 	box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2)
 		inset;
 	color: #567792;
-	opacity: 0.7;
-}
-
-.front-page .front-signup .holding input {
-	padding: 9px 7px 10px;
 }
 
 .front-page form .hasome input {
@@ -2554,64 +2054,37 @@ body.front-page {
 .front-page form .holding:hover input {
 	box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3)
 		inset;
-	opacity: 0.9;
 }
 
 .front-page form .holding input:focus,.front-page form .holding input.focused,.front-page form .holding input.actasfocused
 	{
 	box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.1)
 		inset, 0 0 10px rgba(255, 255, 255, 0.9);
-	opacity: 1;
-	outline: medium none;
-}
-
-.front-page #front-container .leftside {
-	height: 435px;
-	padding-top: 30px;
-	width: 520px;
 }
 
 .front-page .leftside h1 {
 	background: url("../imagenes/front/logo.png") no-repeat scroll 0 0
 		transparent;
-	height: 39px;
-	width: 184px;
-}
-
-.front-page .leftside h1 span {
-	visibility: hidden;
 }
 
 .front-page .leftside h2 {
-	font-size: 55px;
 	font-weight: 100;
-	line-height: 0.9em;
-	margin: 86px 0 8px;
 }
 
 .front-page .leftside h2 a {
 	color: white;
-	outline: medium none;
 	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
 }
 
 .front-page .leftside h2 a:hover {
-	text-decoration: none;
 	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6), 0 0 6px #8FB5C8, 0 0 30px
 		rgba(143, 181, 200, 0.7);
 }
 
 .front-page .leftside p {
 	color: #B9CBD6;
-	font-size: 20px;
 	font-weight: 300;
-	line-height: 26px;
 	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
-}
-
-.front-page .search {
-	position: absolute;
-	top: 318px;
 }
 
 .front-page .search input,.front-page .search .holding .holder {
@@ -2620,33 +2093,20 @@ body.front-page {
 
 .front-page .search .holding .holder {
 	color: #555555;
-	line-height: 36px;
-	padding-left: 6px;
 }
 
 .front-page .search input {
 	background: none repeat scroll 0 0 rgba(255, 255, 255, 0.6);
 	border-radius: 40px 40px 40px 40px;
-	padding: 9px 12px;
-	width: 314px;
 }
 
 .front-page .search .glass {
 	background: none repeat scroll 0 0 transparent;
-	cursor: pointer;
-	display: block;
-	left: 304px;
-	position: absolute;
-	top: 6px;
 }
 
 .front-page .search .glass i {
 	background-image: url("../imagenes/sprite-icons.png");
 	background-position: -256px -96px;
-	display: block;
-	font-size: 0;
-	height: 14px;
-	width: 14px;
 }
 
 .front-page .search .glass.left i {
@@ -2657,111 +2117,33 @@ body.front-page {
 	background-image: url("../imagenes/sprite-icons.png");
 	background-position: -240px -96px;
 	content: "";
-	display: block;
-	height: 14px;
-	margin-top: 1px;
-	opacity: 0.6;
-	position: absolute;
-	width: 14px;
-	z-index: -1;
-}
-
-.front-page .rightside {
-	position: absolute;
-	right: -20px;
-	top: 0;
-	width: 350px;
 }
 
 .front-page .rightside div.gradient {
 	background-image: -moz-radial-gradient(center 65%, circle farthest-side, #8FB5C8 10%,
 		rgba(143, 181, 200, 0) 100% );
-	height: 417px;
-	left: -200px;
-	position: absolute;
-	top: 0;
-	width: 750px;
-	z-index: -1;
 }
 
-.front-signin {
-	padding: 28px 0 0 20px;
-}
-
-.front-page .signin .textbox {
-	height: 27px;
-}
-
-.front-page .signin .textbox div.holding {
-	position: absolute;
-}
-
-.front-page .signin .textbox div.password {
-	left: 143px;
-}
-
-.front-page .signin .textbox input {
-	font-size: 13px;
-	padding: 6px;
-	width: 105px;
-}
-
-.front-page .signin .password input {
-	width: 104px;
-}
-
-.front-page .signin .holding .holder {
-	line-height: 28px;
-}
-
-.front-page .signin .subchck {
-	padding: 0;
-	position: static;
-}
-
-.front-page .signin .subchck label.remember {
-	right: auto;
-}
 
 .front-page .signin .submit {
 	box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
 	font-weight: bold;
-	left: 265px;
-	margin-top: -27px;
-	min-width: 64px;
-	padding: 6px;
-	position: absolute;
-	text-align: center;
 	white-space: nowrap;
-}
-
-.front-page .signin p {
-	padding-left: 131px;
 }
 
 .front-page .signin p a,.front-page .signin .remember span {
 	color: white;
-	line-height: 22px;
-}
-
-.front-signup {
-	padding: 20px;
-	position: absolute;
-	top: 135px;
-	width: 310px;
 }
 
 .front-signup h3 {
 	color: white;
-	font-size: 16px;
 	font-weight: bold;
-	margin-bottom: 6px;
 	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
 }
 
 .front-signup h3 em {
-	font-style: normal;
 	font-weight: 300;
+    font-style: normal;
 }
 
 .front-signup .holding input,.front-signup .holding .holder {
@@ -2770,274 +2152,100 @@ body.front-page {
 
 .front-signup .holding input {
 	border-radius: 4px 4px 4px 4px;
-	margin-bottom: 8px;
-	opacity: 1 !important;
-	padding: 8px 6px;
-	width: 296px;
-}
-
-.front-signup .holding .holder {
-	line-height: 38px;
 }
 
 .front-signup .submit {
 	box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
-	float: right;
-	height: 35px;
-	padding-left: 16px;
-	padding-right: 16px;
-}
-
-.front-page div.radial {
-	left: 0;
-	position: absolute;
-	top: 417px;
-	width: 100%;
-	z-index: 2;
 }
 
 .front-page div.radial .shadow,.front-page div.radial ul {
-	left: 460px;
-	list-style-type: none;
-	margin-left: -1300px;
-	position: relative;
-	text-align: center;
 	white-space: nowrap;
-	width: 2600px;
 }
 
 .front-page div.radial .shadow {
 	background: -moz-linear-gradient(center top, rgba(0, 0, 0, 0.4) 0pt,
 		transparent 100% ) repeat scroll 0 0 transparent;
-	height: 4px;
-	opacity: 0.8;
-	position: absolute;
-	z-index: 2;
-}
-
-.front-page div.radial li,.front-page div.radial li a {
-	display: inline-block;
-	height: 48px;
-	margin: 0;
-	outline: medium none;
-	vertical-align: top;
-	width: 48px;
 }
 
 .front-page div.radial img {
 	
 }
 
-.front-page #front-container .bottompart {
-	border-top: 0 none;
-	margin-top: 20px;
-}
-
-.front-page #front-container .bottompart .inline-list {
-	font-size: 12px;
-}
-
 .front-page #front-container .bottompart a {
 	color: #437EA1;
 }
 
-.front-page .bottompart div.language {
-	margin-bottom: 5px;
-	visibility: hidden;
-}
-
-.route-front .bottompart div.language {
-	visibility: visible;
-}
 
 .logged-out .bottompart {
-	border-top: 1px solid #EEEEEE;
-	margin-top: 20px;
-	padding: 30px 0;
-	position: relative;
-}
-
-.logged-out .bottompart .component {
-	margin: 0;
-}
-
-.logged-out .bottompart hr.component-spacer {
-	display: none;
+	border-top: 1px solid #EEEEEE;	
 }
 
 .logged-out .bottompart a {
 	color: #999999;
 }
 
-.logged-out .bottompart form.language {
-	position: absolute;
-	right: 0;
-	text-align: right;
-	top: 28px;
-	width: 380px;
-}
 
 .logged-out .bottompart .language select {
 	border: 1px solid #CCCCCC;
 	border-radius: 3px 3px 3px 3px;
-	padding: 2px;
-	width: 150px;
-}
-
-.logged-out .bottompart .language option {
-	margin: 1px;
-	padding: 0 4px;
 }
 
 .logged-out .bottompart .language label span,.logged-out .bottompart div.language,.logged-out .bottompart .footer
 	{
 	color: #666666;
-	font-size: 11px;
-	text-transform: capitalize;
 }
 
 .logged-out .bottompart div.language em.current {
 	font-style: normal;
 }
 
-.logged-out .bottompart .footer p {
-	display: inline;
-}
-
 .signup-call-out {
 	background: none repeat scroll 0 0 #F8F8F8;
 	border-radius: 4px 4px 4px 4px;
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-	margin: 6px 0 1em;
-	padding: 8px 14px 12px;
 	text-shadow: 0 1px 0 #FFFFFF;
-}
-
-.signup-call-out+hr.component-spacer {
-	display: none;
 }
 
 .signup-call-out h1 {
 	color: #333333;
-	font-size: 18px;
-	padding-bottom: 2px;
 }
 
 .signup-call-out h2 {
 	color: #777777;
-	font-size: 16px;
-	font-weight: normal;
-	line-height: 22px;
-}
-
-.signup-call-out form.signup-btn {
-	padding: 8px 0 2px;
-}
-
-.profile-actions-container .logged-out-mobile {
-	float: right;
-	font-size: 11px;
-	line-height: 28px;
-	text-align: right;
-	width: 333px;
 }
 
 .profile-actions-container .logged-out-mobile .icon {
 	background-position: -160px -48px;
-	height: 16px;
-	margin-right: 2px;
-	vertical-align: middle;
-	width: 16px;
-}
-
-#sms_codes table {
-	text-align: left;
-	width: 100%;
-}
-
-#sms_codes table ul {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-}
-
-#sms_codes table ul li {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-}
-
-#sms_codes li span.sms-code {
-	display: inline-block;
-	width: 120px;
-}
-
-#sms_codes th.sms-code {
-	width: 120px;
-}
-
-#sms_codes th {
-	padding: 3px 0;
 }
 
 #sms_codes table tr td {
 	border-top: 1px solid #EEEEEE;
-	padding: 3px 0;
 }
 
 #signin-or-signup .signup h2 {
 	color: #777777;
-	font-size: 16px;
 	font-weight: normal;
-	padding: 10px 0 2em;
+	
 }
 
 #signin-or-signup form.signin {
 	border-right: 1px solid #CCCCCC;
-	float: left;
-	margin-right: 15px;
-	padding: 0 15px 10px 0;
-	width: 215px;
 }
 
 form.signin p,form.signin span {
 	color: #999999;
-	font-size: 11px;
 }
 
 form.signin .textbox input {
 	border: 1px solid #CCCCCC;
 	border-radius: 3px 3px 3px 3px;
 	font-family: Arial, sans-serif;
-	padding: 6px 6px 4px;
-	width: 200px;
 }
 
 form.signin .textbox input:hover,form.signin .textbox input:focus,form.signin .textbox input.focused,form.signin .textbox input.actasfocused
 	{
 	border-color: #999999;
 }
-
-form.signin .textbox label {
-	display: block;
-	padding-bottom: 7px;
-}
-
-form.signin .textbox span {
-	display: block;
-}
-
-form.signin .subchck {
-	padding: 9px 0;
-	position: relative;
-}
-
-form.signin .subchck .remember {
-	position: absolute;
-	right: 2px;
-}
-
-
 
 /* ULTIMO - CREANDO INTRANET-STRUCTURE */
 
@@ -3069,41 +2277,10 @@ form.signin .subchck .remember {
 	box-shadow: none;
 }
 
-#signup-link,.route-login #signin-link {
-	display: none;
-}
-
-.route-login #signup-link {
-	display: block;
-}
-
-.route-login div.main {
-	left: 50%;
-	margin: 50px 0 0 -200px;
-	position: relative;
-	width: 400px;
-}
-
-.route-login .main div.aside {
-	left: 420px;
-	position: absolute;
-	top: 50px;
-	width: 280px;
-}
-
 .route-login .main div.aside p {
 	color: #999999;
-	font-size: 11px;
-	margin-bottom: 9px;
-	padding-left: 20px;
 }
 
-.route-login .aside p span.icon {
-	height: 16px;
-	margin-left: -20px;
-	position: absolute;
-	width: 16px;
-}
 
 .route-login .forgot span.icon {
 	background-position: -160px 0;
@@ -3113,144 +2290,30 @@ form.signin .subchck .remember {
 	background-position: -160px -48px;
 }
 
-.route-login form.signin {
-	padding: 0 45px;
-}
-
-.route-login form.signin h4 {
-	font-size: 16px;
-	margin-bottom: 9px;
-}
-
-.route-login form.signin .textbox input {
-	font-size: 18px;
-	width: 296px;
-}
-
-.route-login form.signin .captcha {
-	left: -4px;
-	position: relative;
-}
-
-.route-login form.signin .subchck .remember {
-	position: static;
-}
-
-.route-login form.signin .subchck .submit {
-	float: right;
-	font-size: 16px;
-	height: 36px;
-	padding: 0 25px;
-}
-
 .route-login .main .signup a em {
 	font-style: normal;
 	font-weight: bold;
 }
 
-.route-login .main .signup {
-	padding: 2em;
-	text-align: center;
-}
-
-#top-bar-outer {
-	display: block;
-	height: 40px;
-	position: relative;
-	text-align: center;
-	width: 100%;
-}
 
 #top-bar-bg {
 	background: #35414F;
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-	height: 100%;
-	left: 0;
-	position: absolute;
-	top: 0;
-	width: 100%;
-}
-
-#top-bar {
-	margin: 0 auto;
-	max-width: 1120px;
-	min-width: 1000px;
-	text-align: left;
-}
-
-#top-bar .top-bar-inside {
-	margin: 0 40px;
-	max-width: 1040px;
-	min-width: 920px;
-	position: relative;
-}
-
-#top-bar ul {
-	float: left;
-	list-style-type: none;
-	margin: 0;
-}
-
-#top-bar ul li {
-	float: left;
-	margin: 0;
-	padding: 0;
 }
 
 #top-bar ul li a {
 	color: #BABABA;
-	display: block;
 	font-weight: normal;
-	padding: 10px;
+
 }
 
-#top-bar ul li a {
-	padding: 10px 10px 11px;
-}
-
-#top-bar ul li a:hover {
-	text-decoration: none;
-}
-
-#logo {
-	float: left;
-}
 
 #logo a {
 	background: url("images/logo_horizontal.png") no-repeat scroll -10px 5px
 		transparent;
 	color: #FFFFFF;
-	display: block;
-	height: 40px;
-	margin-right: 5px;
-	outline: medium none;
-	text-indent: -9999px;
-	width: 140px;
 }
 
-#top-bar .active-links {
-	min-width: 250px;
-	/*     TODO antes era absolute, guarda */
-	position: fixed;
-	right: 0;
-	top: 0;
-	float: right;
-}
-
-#top-bar .static-links {
-	float: left;
-	margin-left: -52px;
-}
-
-#global-nav {
-	float: right;
-	margin-left: 8px;
-}
-
-#global-nav li a {
-	margin-right: 1px;
-	outline: medium none;
-}
 
 #global-nav li a:hover {
 	color: #FFFFFF;
@@ -3276,34 +2339,10 @@ form.signin .subchck .remember {
 	background-repeat: no-repeat;
 }
 
-#session {
-	float: right;
-	padding: 10px 18px 10px 15px;
-	vertical-align: top;
-}
-
-#session {
-	padding: 10px 18px 11px 15px;
-}
-
-#new-tweet {
-	cursor: pointer;
-	display: block;
-	float: right;
-	height: 21px;
-	padding: 9px 10px;
-	width: 16px;
-}
 
 #new-tweet span {
 	background-image: url("../imagenes/sprite-icons.png");
 	background-position: -176px -96px;
-	display: block;
-	font-size: 0;
-	height: 14px;
-	margin-top: 4px;
-	text-indent: -9999px;
-	width: 14px;
 }
 
 #new-tweet:hover span {
@@ -3313,33 +2352,16 @@ form.signin .subchck .remember {
 #top-bar .vr {
 	border-left: 1px solid #35414F;
 	border-right: 1px solid #2F2F2F;
-	display: block;
-	float: right;
-	height: 26px;
-	margin: 6px 3px 1px;
 }
 
 #session a.profile-links span#screen-name {
 	background: url("../imagenes/down-arrow.png") no-repeat scroll right
 		center transparent;
 	color: white;
-	cursor: default;
-	padding-right: 13px;
-}
-
-#session a.profile-links:hover,#session a:hover {
-	text-decoration: none !important;
 }
 
 #session img {
 	border: medium none;
-	cursor: pointer;
-	display: inline-block;
-	height: 30px;
-	margin-right: 6px;
-	margin-top: -4px;
-	vertical-align: middle;
-	width: 30px;
 }
 
 #session .promotional {
@@ -3347,32 +2369,11 @@ form.signin .subchck .remember {
 	border-radius: 3px 3px 3px 3px;
 	box-shadow: 0 1px 0 #000000;
 	color: black;
-	font-size: 12px;
-	margin-top: -2px;
-	outline: medium none;
-	padding: 3px 6px 3px 5px;
 }
 
-.static-links .search-form {
-	float: left;
-	margin: 6px 0.8em 0 0;
-	opacity: 1;
-	position: relative;
-}
 
 .static-links .search-form input,textarea,select {
 	font-family: verdana;
-	font-size: 12px;
-	margin: 0 0 10px;
-	max-width: 300px;
-}
-
-.search-form {
-	float: left;
-	margin: 6px 0 0;
-	margin-right: 0.8em;
-	opacity: 1;
-	position: relative;
 }
 
 .search-form .search-query {
@@ -3382,8 +2383,6 @@ form.signin .subchck .remember {
 	box-shadow: 0 1px 0 #444444;
 	color: #CCCCCC;
 	font-family: Arial, sans-serif;
-	padding: 6px 25px 4px 6px;
-	width: 215px;
 }
 
 .search-form .search-query:hover {
@@ -3391,21 +2390,9 @@ form.signin .subchck .remember {
 	color: #FFFFFF;
 }
 
-.search-form span.glass {
-	cursor: pointer;
-	display: block;
-	padding: 7px 8px 5px;
-	position: absolute;
-	right: 0;
-}
-
 .search-form span.glass i {
 	background-image: url("../imagenes/sprite-icons.png");
 	background-position: -224px -96px;
-	display: block;
-	font-size: 0;
-	height: 14px;
-	width: 14px;
 }
 
 .search-form span.glass.left i {
@@ -3417,7 +2404,6 @@ form.signin .subchck .remember {
 	border: 1px solid #EEEEEE;
 	box-shadow: 0 0 3px #000000;
 	color: #333333;
-	outline: medium none;
 	text-shadow: 0 1px 0 #FFFFFF;
 }
 
@@ -3426,33 +2412,10 @@ form.signin .subchck .remember {
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
 	box-shadow: 0 2px 2px rgba(0, 0, 0, 0.6);
-	clear: both;
-	position: absolute;
-	right: 0;
-	top: -999px;
-	z-index: 0;
-}
-
-#top-bar .active .dropdown {
-	top: 40px;
-}
-
-#top-bar ul.user-dropdown {
-	max-height: 350px;
-	overflow-x: hidden;
-	width: 152px;
-}
-
-body.fr #top-bar ul.user-dropdown,body.es #top-bar ul.user-dropdown,body.de #top-bar ul.user-dropdown
-	{
-	width: 190px;
 }
 
 #top-bar ul.user-dropdown li {
 	background: none repeat scroll 0 0 rgba(255, 255, 255, 0.1);
-	clear: both;
-	display: block;
-	width: 100%;
 }
 
 #top-bar ul.user-dropdown li:last-child,#top-bar ul.user-dropdown li:last-child a
@@ -3463,32 +2426,15 @@ body.fr #top-bar ul.user-dropdown,body.es #top-bar ul.user-dropdown,body.de #top
 
 #top-bar ul.user-dropdown li a,#top-bar ul.user-dropdown li h2 {
 	background-image: none;
-	clear: both;
-	display: block;
-	padding: 6px 15px;
-	width: 122px;
 }
 
 #top-bar ul.user-dropdown li span {
 	background: none repeat scroll 0 0 #222222;
 	border-top: 1px solid #000000;
-	box-shadow: 0 -1px #333333;
-	clear: both;
+	box-shadow: 0 -1px #333333;	
 	color: #666666 !important;
-	cursor: default;
-	display: block;
-	padding: 6px 15px;
-	width: 122px;
 }
 
-#top-bar ul.user-dropdown li:last-child h2 {
-	display: none;
-}
-
-body.fr #top-bar ul.user-dropdown li a,body.es #top-bar ul.user-dropdown li a,body.de #top-bar ul.user-dropdown li a,body.fr #top-bar ul.user-dropdown li h2,body.es #top-bar ul.user-dropdown li h2,body.de #top-bar ul.user-dropdown li h2
-	{
-	width: 160px;
-}
 
 #top-bar ul.user-dropdown li a:hover {
 	background: none repeat scroll 0 0 rgba(255, 255, 255, 0.1);
@@ -3504,26 +2450,16 @@ body.fr #top-bar ul.user-dropdown li a,body.es #top-bar ul.user-dropdown li a,bo
 	color: #FFFFFF;
 }
 
-#session * {
-	outline: medium none;
-}
+
 
 #session #screen-name {
 	color: #BABABA;
-	cursor: default;
 	font-weight: normal;
 }
 
 #session #screen-name:after {
 	/*     background: url("../imagenes/sprite-icons.png") no-repeat scroll -79px -68px transparent; */
 	content: "&darr";
-	display: inline-block;
-	height: 7px;
-	margin-left: 1px;
-	margin-top: 8px;
-	text-indent: -99999px;
-	vertical-align: top;
-	width: 7px;
 }
 
 #session:hover #screen-name,#session:hover #signup-link,#session:hover #signin-link,.active #signin-link
@@ -3536,9 +2472,7 @@ a#signup-link,a#signin-link {
 }
 
 a#signup-link em,a#signin-link em {
-	font-size: 10px;
 	font-style: normal;
-	margin-right: 4px;
 }
 
 a#signup-link strong {
@@ -3552,12 +2486,6 @@ a#signin-link strong {
 a#signin-link i {
 	background: url("../imagenes/toggle_down_light.png") no-repeat scroll 0
 		0 transparent;
-	display: inline-block;
-	height: 13px;
-	margin-left: 4px;
-	margin-top: -1px;
-	vertical-align: middle;
-	width: 13px;
 }
 
 .active a#signin-link i {
@@ -3567,16 +2495,10 @@ a#signin-link i {
 
 #signin-dropdown form {
 	background: none repeat scroll 0 0 rgba(255, 255, 255, 0.1);
-	cursor: auto;
-	padding: 10px;
 }
 
 #signin-dropdown .textbox span {
 	color: #BABABA !important;
-}
-
-#signin-dropdown .textbox input {
-	width: 200px;
 }
 
 #signin-dropdown p a {
@@ -3588,14 +2510,6 @@ a#signin-link i {
 	color: #BABABA;
 	font-family: 'Helvetica Neue', Arial, Helvetica, 'Liberation Sans',
 		FreeSans, sans-serif;
-	font-size: 13px;
-	padding: 6px 15px;
-	text-align: left;
-}
-
-#top-bar form.turn-phx-off-form button::-moz-focus-inner {
-	border: 0 none;
-	padding: 0;
 }
 
 #top-bar form.turn-phx-off-form:hover {
@@ -3605,12 +2519,10 @@ a#signin-link i {
 #top-bar form.turn-phx-off-form:hover,#top-bar form.turn-phx-off-form button:hover
 	{
 	color: #FFFFFF;
-	cursor: pointer;
 }
 
 body .latest-status-text {
 	color: #999999;
-	float: right;
 	font-family: 'helvetica neue', helvetica, arial, sans-serif;
 }
 
@@ -3622,31 +2534,21 @@ body .latest-status-text a {
 	color: #aaa;
 }
 
-.fileUploader_catalogo {
-	width: 550px;
-	clear: both;
-}
-
 .novedad_intra .titulo_novedad a {
 	color: #46848F;
 	font-family: "Verdana", "Trebuchet MS", "Arial";
-	font-size: 12pt;
 	font-weight: bold;
-	list-style: none outside none;
-	text-decoration: none;
 }
 
 .novedad_intra .fecha_novedad {
 	color: #4B5869;
 	font-family: "Verdana", "Trebuchet MS", "Arial";
-	font-size: 8pt;
 	font-weight: normal;
 }
 
 .novedad_intra .resumen_novedad {
 	color: #4B5869;
 	font-family: "Verdana", "Trebuchet MS", "Arial";
-	font-size: 8pt;
 	font-weight: normal;
 }
 
@@ -3695,30 +2597,14 @@ tr.par {
 
 .par .disponible {
 	color: #35414F;
-	font-size: 10pt;
 }
 
 .par .prestamo {
 	color: #35414F;
-	font-size: 10pt;
-}
-
-.resultBusqueda {
-	min-width: 900px;
-}
-
-#label-file-uploader h6 {
-	display: none;
 }
 
 .ejemplares_grupo {
-	text-align: center;
 	background: #99CC66;
-}
-
-.fancybox_twitter {
-	width: 350px;
-	margin: 0 auto 0 auto;
 }
 
 .fancybox_button {
@@ -3730,11 +2616,7 @@ tr.par {
 	box-shadow: 0 1px 0 #F8F8F8;
 	color: #333333 !important;
 	cursor: pointer;
-	display: inline-block;
 	font-family:  Helvetica Neue, Arial, "Lucida Grande", Sans-serif;
-	margin: 0;
-	overflow: hidden;
-	padding: 5px 9px;
 	text-shadow: 0 1px #F0F0F0;
 }
 /* Estilo mensaje de contacto (mainpage) */
@@ -3767,9 +2649,6 @@ a {
     padding: 0;
     text-decoration: none;
 }*/
-.charleft {
-	width: 300px;
-}
 
 .textareaCounterwarning {
 	color: red;
@@ -3793,7 +2672,6 @@ a {
 
 .div_detalle_recom p {
 	font-weight: bold;
-	margin-left: 10px;
 	border-radius: 5px 5px 5px 5px;
 }
 
@@ -3801,17 +2679,7 @@ a {
 	font-weight: lighter;
 }
 
-#fancybox-outer {
-	min-width: 413px;
-}
 
-.msj_contacto #fancybox-wrap {
-	width: 424px;
-}
-
-.msj_contacto #fancybox-content {
-	width: 401px;
-}
 
 .msj_contacto p {
 	color: #fff;
@@ -3820,46 +2688,21 @@ a {
 
 .msj_contacto h1 {
 	color: #fff;
-	text-decoration: underline;
-	font-size: 12px;
-	cursor: pointer;
 }
 
 .mensaje_contacto {
 	background-color: rgba(0, 0, 0, 0.8);
 	border-radius: 5px 5px 5px 5px;
 	box-shadow: 0 3px 0 rgba(0, 0, 0, 0.1);
-	left: 0;
-	padding: 6px;
 	/*  position: fixed;*/
-	top: 0;
-	width: 600px;
-	z-index: 11;
-}
-
-.wysiwyg {
-	margin: 0 auto;
 }
 
 /* ESTILO MODAL IMPRESION DE TICKETS DE PRESTAMO */
-.ticket {
-	padding-left: 8%;
-	/*    border:1px solid #4B5869;*/
-}
 
-.ticket td {
-	padding-right: 20px;
-}
 
 .ticket p {
 	background-color: #4B5869;
-	text-align: center;
-	font-size: 16px;
 	font-weight: bold;
-}
-
-#comprob {
-	padding-bottom: 7%;
 }
 
 /* blue pill (inspired by iTunes)
@@ -3892,12 +2735,7 @@ button.blue-pill {
 	font-weight: bold;
     font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans",
         Geneva, Verdana, sans-serif;
-	line-height: 1;
-	padding: 8px 0;
-	text-align: center;
 	text-shadow: 0 -1px 1px #64799e;
-	text-transform: uppercase;
-	width: 300px;
 }
 
 button.blue-pill:hover {
@@ -3919,7 +2757,6 @@ button.blue-pill:hover {
 	-ms-box-shadow: inset 0 1px 0 0 #a5b9d9;
 	-o-box-shadow: inset 0 1px 0 0 #a5b9d9;
 	box-shadow: inset 0 1px 0 0 #a5b9d9;
-	cursor: pointer;
 }
 
 button.blue-pill:active {
@@ -3954,11 +2791,6 @@ button.clean-gray {
     font-weight: bold;
 	font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans",
 		Geneva, Verdana, sans-serif;
-	line-height: 1;
-	padding: 8px 0;
-	text-align: center;
-	text-shadow: 0 1px 0 #eee;
-	width: 150px;
 }
 
 button.clean-gray:hover {
@@ -3973,7 +2805,6 @@ button.clean-gray:hover {
 	background-image: linear-gradient(top, #dddddd, #bbbbbb);
 	border: 1px solid #bbb;
 	border-bottom: 1px solid #999;
-	cursor: pointer;
 	text-shadow: 0 1px 0 #ddd;
 }
 
@@ -4022,11 +2853,7 @@ button.thoughtbot {
 	color: #fff;
 	font-weight: bold; 
     font-family: "helvetica neue", helvetica, arial, sans-serif;
-	line-height: 1;
-	padding: 8px 0 10px 0;
-	text-align: center;
 	text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.8);
-	width: 300px;
 }
 
 button.thoughtbot:hover {
@@ -4043,7 +2870,6 @@ button.thoughtbot:hover {
 	background-image: -o-linear-gradient(top, #f37873 0%, #db504d 50%, #cb0500 50%, #a20601
 		100%);
 	background-image: linear-gradient(top, #f37873 0%, #db504d 50%, #cb0500 50%, #a20601 100%);
-	cursor: pointer;
 }
 
 button.thoughtbot:active {
@@ -4069,63 +2895,31 @@ button.thoughtbot:active {
 
 .tweets {
 	background: #444;
-	padding: 1px 5px;
 	-moz-border-radius: 8px;
 	-webkit-border-radius: 8px;
-	max-width: 300px;
-	margin: 0 auto;
 }
 
 .tweets .loading {
-	padding: 10px 20px;
 	color: #ccc;
 }
 
 .tweet {
-	font-size: 13px;
 	background: #fff;
-	margin: 4px 0;
-	padding: 8px;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 }
 
-.tweet img {
-	float: left;
-}
-
-.tweet .text {
-	margin: 0;
-	margin-left: 44px;
-}
-
-.tweet .username {
-	display: block;
-}
-
 .tweet .username a {
 	font-weight: bold;
-	text-decoration: none;
 	color: #111;
 }
 
 .tweet .time a {
-	font-size: 80%;
 	color: #888;
 	white-space: nowrap;
-	text-decoration: none;
-	padding-left: 8px;
-}
-
-#twitter_container {
-	width: 360px
 }
 
 #unique_modify_value {
-	width: 50%;
-	height: 35px;
-	padding: 5px 20px 0px 20px;
-	margin: 0 auto;
 	background: #5E768D;
 	background: -moz-linear-gradient(top, #546A7F 0%, #5E768D 20%);
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #546A7F),
@@ -4143,11 +2937,6 @@ button.thoughtbot:active {
 }
 
 #div_container_modify_value label {
-	float: left;
-	clear: left;
-	margin: 11px 20px 0 0;
-	text-align: right;
-	font-size: 16px;
 	color: #445668;
 	text-shadow: 0px 1px 0px #f2f2f2;
 }
