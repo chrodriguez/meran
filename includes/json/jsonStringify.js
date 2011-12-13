@@ -33,6 +33,7 @@ JSONstring={
 // 		x =  temp.replace(/[\@|#;'?¿]+/g,'');
         x =  temp.replace(/[|#;'\t]+/g,'');
         x =  x.replace(/"/,'\"');
+        x = encodeURIComponent(x);
 
 		this.log("jsconStringify => clearData: "+x);
 		return x;
