@@ -8,6 +8,7 @@ apt-get install libjson-perl libjson-xs-perl librose-db-perl librose-db-object-p
 apt-get install libcgi-session-perl libdate-manip-perl liblocale-maketext-gettext-perl libspreadsheet-writeexcel-perl libfile-libmagic-perl -y
 apt-get install libhttp-browserdetect-perl libtext-unaccent-perl -y
 apt-get install libmarc-crosswalk-dublincore-perl libmarc-xml-perl -y
+apt-get install libimage-size-perl -y
 
 # OTROS AUN NO!!!
 apt-get install make gcc -y
