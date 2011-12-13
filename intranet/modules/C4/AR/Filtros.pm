@@ -331,6 +331,16 @@ sub show_componente {
         
         return "NO_LINK";
     }
+    
+    if(($campo eq "856")&&($subcampo eq "u")) {
+
+
+        C4::AR::Debug::debug("C4::AR::Filtros::show_componente => campo, subcampo: ".$campo.", ".$subcampo); 
+        C4::AR::Debug::debug("C4::AR::Filtros::show_componente => DENTRO => dato: ".$dato);
+        
+        return C4::AR::Filtros::link_to( text => $dato, url => $dato , blank => 1);
+
+    }
 
     if(($campo eq "773")&&($subcampo eq "a")&&($dato ne "")) {
 
