@@ -130,6 +130,7 @@ use vars qw(@EXPORT_OK @ISA);
     str_replace
     generarComboTablasDeReferenciaByNombreTabla
     serverName
+    translateTipoCredencial
 );
 
 
@@ -378,9 +379,9 @@ sub generarComboDeCredentials{
     push @select_credentials, 'estudiante';
     push @select_credentials, 'librarian';
     push @select_credentials, 'superLibrarian';
-    $select_credentials{'estudiante'}       = 'estudiante';
-    $select_credentials{'librarian'}        = 'librarian';
-    $select_credentials{'superLibrarian'}   = 'superLibrarian';
+    $select_credentials{'estudiante'}       = 'Usuario';
+    $select_credentials{'librarian'}        = 'Bibliotecario';
+    $select_credentials{'superLibrarian'}   = 'Directivo';
 
     my ($session)           = CGI::Session->load();
 
@@ -1780,13 +1781,29 @@ sub generarComboPermisos{
 
 }
 
+
+sub translateTipoCredencial{
+	my ($credencial) = @_;
+
+    my %labels = {};
+    
+    $labels{"superLibrarian"}= C4::AR::Filtros::i18n('Directivo');
+    $labels{"librarian"}= C4::AR::Filtros::i18n('Bibliotecario');
+    $labels{"estudiante"}= C4::AR::Filtros::i18n('Usuario');
+    
+    
+    return ($labels{$credencial});
+	
+	
+}
+
 sub generarComboPerfiles{
     my ($params) = @_;
 
     my (@label,@values);
 # FIXME podria ir a tabla PERFILES, pero se vera en un futuro...
-    push (@label,"SuperLibrarian");
-    push (@label,"Librarian");
+    push (@label,C4::AR::Filtros::i18n('Directivo'));
+    push (@label,C4::AR::Filtros::i18n('Bibliotecario'));
 
     my %labels;
     my %options_hash; 
@@ -1794,9 +1811,9 @@ sub generarComboPerfiles{
     @values[1]='L';
     @values[2]='E';
     @values[3]='custom';
-    $labels{"SL"}= 'SuperLibrarian';
-    $labels{"L"}= 'Librarian';
-    $labels{"E"}= C4::AR::Filtros::i18n('Estudiante');
+    $labels{"SL"}= C4::AR::Filtros::i18n('Directivo');
+    $labels{"L"}= C4::AR::Filtros::i18n('Bibliotecario');
+    $labels{"E"}= C4::AR::Filtros::i18n('Usuario');
     $labels{"custom"}= 'Custom';
 
     $options_hash{'onChange'}= $params->{'onChange'};

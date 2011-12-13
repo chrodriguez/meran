@@ -80,7 +80,7 @@ sub agregar {
     $self->validar($msg_object, $MARC_result_array, $params, 'INSERT', $db);
   
     if(!$msg_object->{'error'}){
-    	if ((!$self->estadoCompartido) && (!C4::AR::Nivel3::existeBarcode($self->getCodigoBarra()))){
+    	if ( (($self->estadoCompartido) || (!C4::AR::Nivel3::existeBarcode($self->getCodigoBarra()))) && (C4::AR::Utilidades::validateString($self->getIdEstado)) ){
 	        $self->save();
 	        $params->{'id_ui'}                     = $self->getId_ui_poseedora();
 	        $params->{'id3'}                       = $self->getId3();

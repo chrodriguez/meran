@@ -326,7 +326,7 @@ sub getNivel3FromBarcode {
     my $nivel3 = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => \@filtros ); 
 
     foreach my $n3 (@$nivel3){
-    if (! $n3->estadoCompartido) { #Sin compartidos
+    if (!$n3->estadoCompartido) { #Sin compartidos
       return $n3;
     }
     }
