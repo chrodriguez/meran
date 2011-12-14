@@ -783,6 +783,11 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
 # C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => field->as_string ???????????? => ".$field->as_string);
 #             }
 
+            # veo que separador lleva cada subcampo para el $field dependiendo del campo y subcampo que se este procesando
+            my $field_as_string                 = as_stringReloaded($field, $itemtype, $params);
+
+            $hash_temp_aux{'dato'}              = ($hash_temp_aux{'dato'} ne "")?$hash_temp_aux{'dato'}.";".$field_as_string:$field_as_string;
+
             $hash_temp_aux{'campo'}             = $campo;
             $hash_temp_aux{'orden'}             = getOrdenFromCampo($campo, $params->{'nivel'}, $itemtype, $type, $db);
 
@@ -790,13 +795,18 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
                 #muestro el label configurado, si no existe muestro el label de la BIBLIA
                 $hash_temp_aux{'liblibrarian'}      = C4::AR::VisualizacionIntra::getVistaCampo($campo, $itemtype, $params->{'nivel'})||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
             } else {
+                #en el OPAC no se permiten datos blancos ni nulos 
+                if((C4::AR::Utilidades::trim($hash_temp_aux{'dato'}) eq "")||($hash_temp_aux{'dato'} eq 'NO_TIENE')){
+                    next;
+                }
+
                 $hash_temp_aux{'liblibrarian'}      = C4::AR::VisualizacionOpac::getVistaCampo($campo, $itemtype, $params->{'nivel'})||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
             }
 
-            # veo que separador lleva cada subcampo para el $field dependiendo del campo y subcampo que se este procesando
-            my $field_as_string                 = as_stringReloaded($field, $itemtype, $params);
-
-            $hash_temp_aux{'dato'}              = ($hash_temp_aux{'dato'} ne "")?$hash_temp_aux{'dato'}.";".$field_as_string:$field_as_string;
+#             # veo que separador lleva cada subcampo para el $field dependiendo del campo y subcampo que se este procesando
+#             my $field_as_string                 = as_stringReloaded($field, $itemtype, $params);
+# 
+#             $hash_temp_aux{'dato'}              = ($hash_temp_aux{'dato'} ne "")?$hash_temp_aux{'dato'}.";".$field_as_string:$field_as_string;
 
             $index = C4::AR::Utilidades::getIndexFromArrayByString($campo,\@MARC_result_array);
 
@@ -2308,18 +2318,14 @@ sub updateBarcodeFormat{
         $format_n3 = $format_n3->[0];
     }   
 
-    eval{
-       $format = C4::AR::Utilidades::trim($format);
-       if ($format eq ""){
-        $format_n3->delete();
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'CB001', 'params' => [$tipo_documento]} ) ;
-       }else{
+    #eval{
+	    if (C4::AR::Utilidades::validateString($format)){
 	       $format = $format_n3->setFormat($format);
 	       $format_n3->setId_tipo_doc($tipo_documento);
 	       $format_n3->save();
 	       C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'CB001', 'params' => [$tipo_documento]} ) ;
-       }
-    };
+	    }
+    #};
     
     if ($@){
         $msg_object->{'error'}= 1;
