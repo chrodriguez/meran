@@ -82,6 +82,9 @@ function obtenerDatosDelEjemplar(){
 
 function updateObtenerDatosDelEjemplar(responseText){
     $('#datos_ejemplar').html(responseText);
+    if (responseText == ""){
+    	alert ([% "Hubo un problema con el ejemplar" | i18n %]);
+    }
 }
 
 function updateObtenerTiposDePrestamos(responseText){

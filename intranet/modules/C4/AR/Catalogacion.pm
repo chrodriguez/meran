@@ -2308,14 +2308,18 @@ sub updateBarcodeFormat{
         $format_n3 = $format_n3->[0];
     }   
 
-    #eval{
-	    if (C4::AR::Utilidades::validateString($format)){
+    eval{
+       $format = C4::AR::Utilidades::trim($format);
+       if ($format eq ""){
+        $format_n3->delete();
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'CB001', 'params' => [$tipo_documento]} ) ;
+       }else{
 	       $format = $format_n3->setFormat($format);
 	       $format_n3->setId_tipo_doc($tipo_documento);
 	       $format_n3->save();
 	       C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'CB001', 'params' => [$tipo_documento]} ) ;
-	    }
-    #};
+       }
+    };
     
     if ($@){
         $msg_object->{'error'}= 1;

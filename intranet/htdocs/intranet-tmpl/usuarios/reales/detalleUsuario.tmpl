@@ -94,7 +94,7 @@ var loaderPath= "";
                      <li> [% "Tarjeta de identificaci&oacute;n :" | i18n %] <strong> [% socio.getNro_socio %]</strong></li>
                   [% END %]
                 <li>[% "Categor&iacute;a del usuario:" | i18n %] <strong> [%  socio.categoria.getDescription %]</strong></li>
-                <li> [% "Credenciales" | i18n %]:<strong> [% socio.getCredentialType %]</strong> </li>
+                <li> [% "Credenciales" | i18n %]:<strong> [% PERL %] print C4::AR::Utilidades::translateTipoCredencial('[% socio.getCredentialType %]') [% END %]</strong> </li>
                 </ul>
           </fieldset>
         <div id="datos_Secundarios">

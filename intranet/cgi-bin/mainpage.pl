@@ -22,14 +22,15 @@ C4::AR::Auth::checkBrowser();
 my ($msjNoLeidos, $cant)            = C4::AR::MensajesContacto::noLeidos();
 my ($ultimos_no_leidos)             = C4::AR::MensajesContacto::ultimosNoLeidos($msjNoLeidos);
 
-my $twitter_enabled= C4::AR::Preferencias::getValorPreferencia("twitter_enabled");
-
+my $twitter_enabled             = C4::AR::Preferencias::getValorPreferencia("twitter_enabled");
+my $twitter_username_to_search  = C4::AR::Preferencias::getValorPreferencia("twitter_username_to_search");
 
 
 $t_params->{'ultimos_no_leidos'}    = $ultimos_no_leidos;
 $t_params->{'cant_noleidos'}        = $cant;
 
-$t_params->{'twitter_enabled'}      = $twitter_enabled;
+$t_params->{'twitter_enabled'}              = $twitter_enabled;
+$t_params->{'twitter_username_to_search'}   = $twitter_username_to_search;
 
 
 
