@@ -557,7 +557,7 @@ sub cancelar_reservas_no_regulares {
 										    query => [ estado => {ne => 'P'}]);
 
     foreach my $reserva (@$reservas_array_ref){
-	if(! $reserva->socio->estado->regular){
+	if(! $reserva->socio->esRegular){
 	    $self->debug("cancelar_reservas_no_regulares => Usuario Irregular = ".$reserva->socio->getNro_socio." se cancela la reserva ".$reserva->getId_reserva );
 	    $reserva->cancelar_reserva($params);
 	  }
