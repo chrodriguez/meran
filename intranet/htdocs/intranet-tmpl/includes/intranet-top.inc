@@ -8,6 +8,7 @@
 	    imagesForJS = '[% temas %]/[% tema %]/imagenes';
 	    M_LIMITE_RESULTADOS = [% limite_resultados_autocompletables %] + 0;
 	    var URL_PREFIX  = '[% url_prefix %]';
+	    var UNLOAD		= '[% unload_alert %]';
 	    
 	</script>
 	
@@ -84,6 +85,11 @@
 			    $(this).removeClass("textInput").addClass("focusInput");  
 			});
 	        $('input[type="text"]').addClass("textInput");    
+
+			if (UNLOAD)
+		        $(window).bind('beforeunload', function(){ 
+		        	return("[% 'ATENCION: Se perderan los elementos que no haya guardado' | i18n %]");
+		        });
 	    });
 	</script>
 	</head>

@@ -375,7 +375,6 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA_OBTENER_DATOS_EJEMPLAR"){
     my ($nivel3) = C4::AR::Nivel3::getNivel3FromBarcode($obj->{'barcode'});
 
     if($nivel3){
-    C4::AR::Debug::debug("LA PUTA MADREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
         my $socio                       = C4::AR::Prestamos::getSocioFromPrestamo($nivel3->getId3());
         my $socio_reserva               = C4::AR::Reservas::getSocioFromReserva($nivel3->getId3());
