@@ -1112,8 +1112,6 @@ sub enviarRecordacionDePrestamo {
 =cut
 sub enviarRecordacionDePrestamoVencidos {
 
-    my $msg_object          = C4::AR::Mensajes::create();
-
     # remindUser es la preferencia global que habilita el recordatorio al socio   
     if (C4::AR::Preferencias::getValorPreferencia('remindUser')){
 
@@ -1121,10 +1119,10 @@ sub enviarRecordacionDePrestamoVencidos {
         
         _enviarRecordatorioVencidos(@array_prestamos);
         
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'PV00'}) ;
+        # unseteamos el flag para el CRON                           
+        C4::AR::Preferencias::setVariable('enableMailPrestVencidos', 0);
     }
     
-    return ($msg_object);
 }
 
 =item

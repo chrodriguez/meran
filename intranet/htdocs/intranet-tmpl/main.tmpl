@@ -28,10 +28,10 @@
  
         $("#button_twitter").click(twitter_click);
         
-        [% IF twitter_enabled %]
-// 	        $('#tweets').liveTwitter('[% twitter_username_to_search %]', {limit: 5, imageSize: 32}, function(){
-// 	            $('#tweets .loading').remove();
-// 	        });
+        [% IF twitter_username_to_search %]
+	        $('#tweets').liveTwitter('[% twitter_username_to_search %]', {limit: 5, imageSize: 32}, function(){
+	            $('#tweets .loading').remove();
+	        });
         [% END %]
         
       });
@@ -137,8 +137,10 @@
 
 [% IF twitter_enabled %]
 <div id="twitter_container">
-<!-- 	<div id="tweets" class="tweets"><div class="loading">[% 'Cargando tweets...' | i18n %]</div></div> -->
-	<br />
+    [% IF twitter_username_to_search %]
+	   <div id="tweets" class="tweets"><div class="loading">[% 'Cargando tweets...' | i18n %]</div></div>
+	   <br />
+    [% END %]
     <a class="fancy_link" href="[% url_prefix %]/admin/publicar_twitter.pl?token=[% token %]" > 
       <img id="button_twitter" src="[% temas %]/[% tema %]/imagenes/botones/button_twitter_normal.png" alt="Twitter"/>
     </a>
