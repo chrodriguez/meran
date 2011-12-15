@@ -602,12 +602,26 @@ function updateGuardarEsquema(responseText){
 
 function agregarIndice(id2){
     ID_N2 = id2;
-  
-    $('#datos_indice').dialog({ width: 800, position: 'center', modal: true });
+
+    $('#datos_indice').modal({   containerCss:{
+                backgroundColor:"#fff",
+                height:343,
+                padding:0,
+                width:900
+            },
+        });
+
 }
 
 function mostrarIndice(id2){
-    $("#indice_data" + id2).dialog({ width: 800, position: 'center', modal: true }); 
+
+    $("#indice_data" + id2).modal({   containerCss:{
+                backgroundColor:"#fff",
+                height:200,
+                padding:0,
+                width:863
+            },
+        });
 }
 
 function guardarIndice(){

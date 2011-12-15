@@ -103,6 +103,22 @@ sub getFecha_reserva{
     return ($self->fecha_reserva);
 }
 
+sub estaVencida{
+    my ($self) = shift; 
+
+    my $dateformat = C4::Date::get_date_format();
+    my $hoy = C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"), $dateformat);
+    my $fecha_vencimiento = $self->getFecha_notificacion_formateada();
+    $fecha_vencimiento = C4::Date::format_date_in_iso(Date::Manip::ParseDate($fecha_vencimiento), $dateformat);
+    if ( Date::Manip::Date_Cmp( $fecha_vencimiento, $hoy ) < 0 ){
+    	C4::AR::Debug::debug("ESTA VENCIDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    	return (1);
+    }
+    
+    return (0);
+	
+}
+
 sub getFecha_reserva_formateada{
     my ($self) = shift; 
 	my $dateformat = C4::Date::get_date_format();
@@ -178,6 +194,12 @@ sub getTimestamp{
     return ($self->timestamp);
 }
 
+
+sub esEspera{
+    my ($self)      = shift;
+
+    return (!C4::AR::Utilidades::validateString($self->getId3()));	
+}
 =item
 agregar
 Funcion que agrega una reserva
@@ -535,7 +557,7 @@ sub cancelar_reservas_no_regulares {
 										    query => [ estado => {ne => 'P'}]);
 
     foreach my $reserva (@$reservas_array_ref){
-	if(! $reserva->socio->estado->regular){
+	if(! $reserva->socio->esRegular){
 	    $self->debug("cancelar_reservas_no_regulares => Usuario Irregular = ".$reserva->socio->getNro_socio." se cancela la reserva ".$reserva->getId_reserva );
 	    $reserva->cancelar_reserva($params);
 	  }

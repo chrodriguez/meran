@@ -587,11 +587,11 @@ div.pagination span.disabled {
 }
 
 .main-content table td {
-	border-left: solid 2px rgb(255, 255, 255);
-	border-right: solid 2px rgb(255, 255, 255);
-	border-top: solid 2px rgb(255, 255, 255);
-	border-bottom: solid 2px rgb(255, 255, 255);
-	background-color: rgb(220, 220, 220);
+	border-left: solid 1px rgb(255, 255, 255);
+	border-right: solid 1px rgb(255, 255, 255);
+	border-top: solid 1px rgb(255, 255, 255);
+	border-bottom: solid 1px rgb(255, 255, 255);
+	background-color: #F2F2F2;
 	color: rgb(80, 80, 80);
 }
 
@@ -1281,5 +1281,10 @@ a.signin.menu-open span {
 }
 
 .server_name {
-    background: #DAE0EC;
+    background: #F2F2F2;
+    color: #015A96;
+}
+
+.external_results{
+	
 }

@@ -8,7 +8,7 @@ use C4::Context;
 use HTTP::Request;
 use LWP::UserAgent;
 use C4::AR::Busquedas;
-
+use Image::Size;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -70,7 +70,7 @@ sub getImageByIsbn {
     my $path = C4::Context->config("covers"); #Donde se guardan las imagenes
     my $file = "";
     my $msg = '';
-# FIXME MONOOOOOOOOO esto esta matando la maquina!!!!!!!!!!
+# FIXME MONOOOOOOOOO esto esta matando la maquina!!!!!!!!!! Se hace 1 vez por dia o semana chee!!
 
     my $portada = C4::AR::PortadasRegistros::getPortadaByIsbn($isbn);
 
@@ -78,37 +78,79 @@ sub getImageByIsbn {
     elsif (($portada)&&($size eq 'M')) {$url=$portada->getMedium;}
         elsif (($portada)&&($size eq 'L')) {$url=$portada->getLarge;}
 
-# TODO falta verificar $path, sino existe covers en el koha.conf
-    if ($url eq ''){
 
+	if (-d $path) {
+	#Existe el path de las portadas?
+	
+    if ($url eq ''){
+	#Si no existe en la base la busco.
+	
         my $isbnaux=$isbn;
         #Realiza la Busqueda
         $isbnaux =~ s/-//g; # Quito los - para buscar
-
-        #Armo la URL --> http://covers.openlibrary.org/b/$key/$value-$size.jpg
+        
+		#Archivo a guardar
         $file= $isbnaux."-".$size.".jpg";
-        $url= "http://covers.openlibrary.org/b/isbn/".$file."?default=false";
 
-        C4::AR::Debug::debug( "Obteniendo : ".$url);
-		my $request = HTTP::Request->new(GET => $url);
-		my $ua = LWP::UserAgent->new;
- 		my $response = $ua->request($request);
-        if ($response->is_success) {
-		    my $buffer = $response->content;
-		    if (!open(WFD,">$path/$file")) {
-                C4::AR::Debug::debug( "Hay un error y el archivo no puede escribirse en el servidor.");
-            }
-		    else {
-                binmode WFD;
-			    print WFD $buffer;
-			    close(WFD);
-			    C4::AR::PortadasRegistros::insertCover ($isbn,$file,$size);
-			    return $file;
-            }
+		my @urls=();
+		
+		#PRIMERO SE BUSCA EN: http://openlibrary.org/
+        #Armo la URL --> http://covers.openlibrary.org/b/$key/$value-$size.jpg
+        $url= "http://covers.openlibrary.org/b/isbn/".$file."?default=false";
+		push (@urls, $url);
+		
+		#SEGUNDO SE BUSCA EN: http://www.librarything.com/
+        #Armo la URL --> http://covers.librarything.com/devkey/KEY/$size/isbn/$isbnaux
+        
+        if (C4::AR::Preferencias::getValorPreferencia('library_thing_key')){
+			#Esta la KEY configurada?
+			my $cover_size='medium';
+			if 	($size eq 'S') {$cover_size='small';}
+			elsif ($size eq 'M') {$cover_size='medium';}
+			elsif ($size eq 'L') {$cover_size='large';}
+			
+			my $key = C4::AR::Preferencias::getValorPreferencia('library_thing_key');
+			$url= "http://covers.librarything.com/devkey/".$key."/".$cover_size."/isbn/".$isbnaux;
+			push (@urls, $url);
+		}
+		
+		foreach my $url (@urls){
+			
+			C4::AR::Debug::debug( "Obteniendo : ".$url);
+			my $request = HTTP::Request->new(GET => $url);
+			my $ua = LWP::UserAgent->new;
+			my $response = $ua->request($request);
+			if ($response->is_success) {
+				my $buffer = $response->content;
+		
+	 		    my ($width, $height) = imgsize(\$buffer);
+	 		     
+	 		    C4::AR::Debug::debug($width." X ".$height);
+	 		    
+				if ((length($buffer) != 0) && !($width <= 32 && $height <= 32)) { 
+					#Devuelve algo vacío?
+					if (!open(WFD,">$path/$file")) {
+						C4::AR::Debug::debug( "Hay un error y el archivo no puede escribirse en el servidor.");
+					}
+					else {
+						binmode WFD;
+						print WFD $buffer;
+						close(WFD);
+						C4::AR::PortadasRegistros::insertCover ($isbn,$file,$size);
+						return $file;
+					}
+				}
+				else{
+					C4::AR::Debug::debug("Devolvió una imagen vacía");
+					}
+			}
+			else{
+			C4::AR::Debug::debug( $response->status_line);
         }
-        else{
-        C4::AR::Debug::debug( $response->status_line);
-        }
+		}
+	}
+}else{
+	C4::AR::Debug::debug( "No existe el directorio de portadas:".$path );
 	}
 return $url;
 }

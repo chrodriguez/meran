@@ -326,7 +326,7 @@ sub getNivel3FromBarcode {
     my $nivel3 = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( query => \@filtros ); 
 
     foreach my $n3 (@$nivel3){
-    if (! $n3->estadoCompartido) { #Sin compartidos
+    if (!$n3->estadoCompartido) { #Sin compartidos
       return $n3;
     }
     }
@@ -401,6 +401,8 @@ sub detalleNivel3{
         $db      = $n3_temp->db;
     }
 
+    my $nivel2_object = undef;
+    
     my $nivel2_object = C4::AR::Nivel2::getNivel2FromId2($id2,$db);
 
     $hash_nivel2{'nivel1_analiticas_array'}     = undef;
@@ -554,8 +556,12 @@ sub detalleCompletoINTRA {
     
     for(my $i=$inicio;$i<$cantidad;$i++){
 
+    my $new_id2 = 0;
+    eval {
+    	$new_id2 = $nivel2_array_ref->[$i]->getId2;
+    };
     #eval{
-        my ($hash_nivel2) = detalleNivel3($nivel2_array_ref->[$i]->getId2,$nivel1->db);
+        my ($hash_nivel2) = detalleNivel3($new_id2,$nivel1->db);
 
         push(@nivel2, $hash_nivel2);
     #};
@@ -829,13 +835,18 @@ sub generaCodigoBarra{
     my($parametros, $cant) = @_;
 
    my $barcode;
-    my @estructurabarcode = split(',',C4::AR::Preferencias::getValorPreferencia("barcodeFormat"));
+    my @estructurabarcode = split(',',C4::AR::Catalogacion::getBarcodeFormat($parametros->{'tipo_ejemplar'}));
     
     my $like = '';
 
     for (my $i=0; $i<@estructurabarcode; $i++) {
         if (($i % 2) == 0) {
-            $like.= %$parametros->{$estructurabarcode[$i]};
+            my $pattern_string = %$parametros->{$estructurabarcode[$i]};
+            if ($pattern_string){
+                $like.= $pattern_string;
+            }else{
+                $like.= $estructurabarcode[$i];
+            }
         } else {
             $like.= $estructurabarcode[$i];
         }

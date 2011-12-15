@@ -150,8 +150,9 @@
 	                            [% END %]
 	                        [% END %]
 		                
-<!--                            <a class="inline" href="#indice_data[% id2 %]">Indice</a>-->
-                            <div style="display:none"><div id="indice_data[% id2 %]" style="white-space: pre;" title="[% 'Indice del grupo' | i18n %]">[% indice %]</div></div>
+                           <div id="indice_data[% id2 %]" style="display:none">
+                            <pre>[% indice %]</pre>
+                          </div>
 
 		                <div>
 		                    [% PERL %]

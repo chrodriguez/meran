@@ -33,6 +33,7 @@ use vars qw(@EXPORT_OK @ISA);
   headerDCXML
   footerDCXML
   existeNivel1
+  getBarcodeFormat
 );
 
 =head1 NAME
@@ -629,9 +630,9 @@ sub marc_record_to_oai {
                 my $dato                            = $subfield->[1];
                 $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype, $db);
                 my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $nivel, $db);
+                    
                 
-                
-#                C4::AR::Debug::debug("PASANDO A MARC OAI EL CAMPO $campo , $subcampo CON VALOR $valor_referencia");
+                C4::AR::Debug::debug("PASANDO A MARC OAI EL CAMPO $campo , $subcampo CON VALOR $valor_referencia");
                 
                 my $field = MARC::Field->new($campo,'','',$subcampo => $valor_referencia);
                 
@@ -654,6 +655,8 @@ sub as_stringReloaded {
     my $campo   = $field->tag;
     my $nivel   = $params->{'nivel'};
     C4::AR::Debug::debug("Catalogacion => as_stringReloaded => campo => ".$campo." itemype => ".$itemtype." nivel => ".$nivel);  
+
+    my @array_subcampos;
 
     foreach my $subfield ($field->subfields()) {
         my %hash_temp;
@@ -678,11 +681,22 @@ sub as_stringReloaded {
             } else {
                 $text                           = $dato;
             }
+
+            $hash_temp{'dato'}              = $text;
+            $hash_temp{'orden_subcampo'}    = $cat_estruct_info_array->getOrdenSubCampo();
         }
 
         C4::AR::Debug::debug("Catalogacion => as_stringReloaded => text => ".$text);
-        push( @subs, $text );
+#         push( @subs, $text );
+        push (@array_subcampos, \%hash_temp);
     } # foreach
+
+# TODO es una grasada pero anda!!!!!!!
+    @array_subcampos = sort{$a->{'orden_subcampo'} <=> $b->{'orden_subcampo'}} @array_subcampos;
+
+    foreach my $s (@array_subcampos){
+        push( @subs, $s->{'dato'} );
+    }
 
     return join( " ", @subs );
 }
@@ -749,38 +763,11 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
             my $campo_ant                   = $field->tag;
             my $indicador_primario_dato     = $field->indicator(1);
             my $indicador_secundario_dato   = $field->indicator(2);
-#             C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => campo => ".$campo);
-            #proceso todos los subcampos del campo
-#             foreach my $subfield ($field->subfields()) {
-#                 my %hash_temp;
-#                 my %hash_temp_aux;
-#                 my $subcampo                        = $subfield->[0];
-#                 my $dato                            = $subfield->[1];
-# #                 C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => subcampo => ".$subcampo);
-#                 $hash_temp{'campo'}                 = $campo;
-#                 $hash_temp{'subcampo'}              = $subcampo;
-# # C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => subcampo ???????????? => ".$subcampo);
-#                 $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype, $params->{'nivel'}, $db);
-#                 $hash_temp{'datoReferencia'}        = $dato;
-#                 my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $params->{'nivel'}, $db);
-# C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view_as_not_extended => campo => ".$field->tag." itemype => ".$itemtype." nivel => ".$params->{'nivel'}." dato => ".$dato);
-# C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view_as_not_extended => valor_referencia => ".$valor_referencia);
-#                 $hash_temp{'dato'}                  = $valor_referencia;
-#                 $hash_temp{'id1'}                   = $params->{'id1'};
-#                 $hash_temp{'id2'}                   = $params->{'id2'};
-#                 $hash_temp{'dato_link'}             = C4::AR::Filtros::show_componente( ('campo' => $campo, 'subcampo' => $subcampo, 'dato' => $dato , 'id1' => $params->{'id1'}, 'id2' => $params->{'id2'}) );
-# 
-#                 if($hash_temp{'dato_link'} ne "NO_LINK"){
-#                     $hash_temp{'dato'}  = $hash_temp{'dato_link'};
-#                     $valor_referencia   = $hash_temp{'dato_link'};
-#                 }
-# 
-# #               FIXME parche!!!! si el dato del subcampo no tiene nada no se agrega al marcrecord, por lo tanto le agrego un blanco
-#                 (length($valor_referencia) == 0)? $valor_referencia = $valor_referencia." ":$valor_referencia;
-# 
-#                 $field->update( $subcampo => $valor_referencia );
-# C4::AR::Debug::debug("C4::AR::Catalocagion::marc_record_to_detail_viw2 => field->as_string ???????????? => ".$field->as_string);
-#             }
+
+            # veo que separador lleva cada subcampo para el $field dependiendo del campo y subcampo que se este procesando
+            my $field_as_string                 = as_stringReloaded($field, $itemtype, $params);
+
+            $hash_temp_aux{'dato'}              = ($hash_temp_aux{'dato'} ne "")?$hash_temp_aux{'dato'}.";".$field_as_string:$field_as_string;
 
             $hash_temp_aux{'campo'}             = $campo;
             $hash_temp_aux{'orden'}             = getOrdenFromCampo($campo, $params->{'nivel'}, $itemtype, $type, $db);
@@ -789,13 +776,13 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
                 #muestro el label configurado, si no existe muestro el label de la BIBLIA
                 $hash_temp_aux{'liblibrarian'}      = C4::AR::VisualizacionIntra::getVistaCampo($campo, $itemtype, $params->{'nivel'})||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
             } else {
+                #en el OPAC no se permiten datos blancos ni nulos 
+                if((C4::AR::Utilidades::trim($hash_temp_aux{'dato'}) eq "")||($hash_temp_aux{'dato'} eq 'NO_TIENE')){
+                    next;
+                }
+
                 $hash_temp_aux{'liblibrarian'}      = C4::AR::VisualizacionOpac::getVistaCampo($campo, $itemtype, $params->{'nivel'})||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
             }
-
-            # veo que separador lleva cada subcampo para el $field dependiendo del campo y subcampo que se este procesando
-            my $field_as_string                 = as_stringReloaded($field, $itemtype, $params);
-
-            $hash_temp_aux{'dato'}              = ($hash_temp_aux{'dato'} ne "")?$hash_temp_aux{'dato'}.";".$field_as_string:$field_as_string;
 
             $index = C4::AR::Utilidades::getIndexFromArrayByString($campo,\@MARC_result_array);
 
@@ -2290,6 +2277,66 @@ sub existeNivel1{
     }
 
     return (scalar(@id1_array));
+}
+
+
+sub updateBarcodeFormat{
+    my ($tipo_documento,$format) = @_;
+    use C4::Modelo::BarcodeFormat::Manager;
+
+    my $msg_object  = C4::AR::Mensajes::create();
+    
+    my $format_n3      = C4::Modelo::BarcodeFormat::Manager->get_barcode_format(query=> [id_tipo_doc => $tipo_documento],);
+
+    if (!scalar(@$format_n3)){
+        $format_n3 = C4::Modelo::BarcodeFormat->new();
+    }else{
+        $format_n3 = $format_n3->[0];
+    }   
+
+    #eval{
+	    if (C4::AR::Utilidades::validateString($format)){
+	       $format = $format_n3->setFormat($format);
+	       $format_n3->setId_tipo_doc($tipo_documento);
+	       $format_n3->save();
+	       C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'CB001', 'params' => [$tipo_documento]} ) ;
+	    }
+    #};
+    
+    if ($@){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'CB002', 'params' => [$tipo_documento]} ) ;
+    }
+    
+    return ($msg_object);
+    
+}
+
+sub getBarcodeFormat{
+	my ($tipo_documento,$for_catalogue) = @_;
+	use C4::Modelo::BarcodeFormat::Manager;
+	
+	$for_catalogue = $for_catalogue || 1;
+    my $format = undef;
+	my $default_format = C4::AR::Preferencias::getValorPreferencia("barcodeFormat");
+	
+	my $format_n3      = C4::Modelo::BarcodeFormat::Manager->get_barcode_format(query=> [id_tipo_doc => $tipo_documento],);
+
+    if (!scalar(@$format_n3)){
+    	$format_n3 = C4::Modelo::BarcodeFormat->new();
+    }else{
+    	$format_n3 = $format_n3->[0];
+    }	
+	if (C4::AR::Utilidades::validateString($format_n3->getFormat())){
+	   $format = $format_n3->getFormat();
+	}else{
+		if ($for_catalogue ne "NO"){
+            $format = $default_format;
+		}
+	}
+	
+	return ($format);
+	
 }
 
 END { }       # module clean-up code here (global destructor)

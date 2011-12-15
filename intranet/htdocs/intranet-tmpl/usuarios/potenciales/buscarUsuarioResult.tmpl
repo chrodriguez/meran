@@ -1,3 +1,29 @@
+<script type="text/javascript" >
+    function checkTr(){
+	        // click sobre los <tr>, para darle estilo
+	        $('tr').click(function() {
+	            var clase = $(this).attr('class').split(' ');
+	            //solo los <tr> que tengan en el primer <td> un input checkbox
+	            if($(this).children(':first-child').children(':first-child').attr('type') == 'checkbox'){
+	                if(clase[1] == 'marked'){
+	                    $(this).removeClass("marked"); 
+	                    $(this).children(':first-child').children(':first-child').removeAttr('checked');
+	                }else{
+	                    $(this).addClass("marked");
+	                    $(this).children(':first-child').children(':first-child').attr('checked','true');
+	                }
+	            }
+	        });     
+	        //seleccion con shift
+	        $(function() {
+	            $('tr').shiftClick();
+	        }); 
+	    }
+	    
+	    $(document).ready(function(){
+			checkTr();
+	    });
+</script>
 [% USE HTML %]
 
 <div class="resultados_consulta">[% "La cantidad de usuarios es" | i18n %]: [% cantidad %]</div> 
