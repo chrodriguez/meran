@@ -1,20 +1,20 @@
 
     <fieldset>
         <legend class="titulo_legend">[% "Informaci&oacute;n del ejemplar" | i18n %] </legend>
-        <ul>
-        <li>
+        <ul class="lista_datos_ejemplar">
+        <li style="clear: both;">
             <div class="sub_item_data">[% 'T&iacute;tulo:' | i18n %]</div>
             <div class="sub_item_data_right">[% titulo %]</div>
         </li>
-        <li>
+        <li style="clear: both;">
             <div class="sub_item_data">[% 'Autor:' | i18n %]</div>
             <div class="sub_item_data_right">[% autor %]</div>
         </li>
-       <li>
+       <li style="clear: both;">
             <div class="sub_item_data">[% 'Disponibilidad:' | i18n %]</div>
             <div class="sub_item_data_right"><strong class="[% IF nivel3.esParaSala %]salaLectura[% ELSE %]prestamo[% END %]">[% nivel3.getDisponibilidadObject.getNombre  %]</strong></div>
         </li>
-       <li>
+       <li style="clear: both;">
             <div class="sub_item_data">[% 'Estado:' | i18n %]</div>
             <div class="sub_item_data_right">
                     [% IF socio_prestamo %]

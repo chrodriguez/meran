@@ -771,6 +771,11 @@ sub detalleCompletoOPAC{
             $nivel2_array_ref->[$i]->load();
             $hash_nivel2->{'id2'}                       = $nivel2_array_ref->[$i]->getId2;
             $hash_nivel2->{'tipo_documento'}            = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getNombre();
+            $hash_nivel2->{'isbn'}        		        = $nivel2_array_ref->[$i]->getISBN;
+            if(($nivel2_array_ref->[$i]->getISSN)&&(!$t_params->{'issn'})){
+			#Se supone que no cambian dentro de la misma publicación seriada, se toma solo el primero
+				$t_params->{'issn'}        				= $nivel2_array_ref->[$i]->getISSN;
+			}
             $hash_nivel2->{'tiene_indice'}              = $nivel2_array_ref->[$i]->tiene_indice;
             $hash_nivel2->{'esta_en_estante_virtual'}   = C4::AR::Estantes::estaEnEstanteVirtual($hash_nivel2->{'id2'});
             $hash_nivel2->{'indice'}                    = $hash_nivel2->{'tiene_indice'}?$nivel2_array_ref->[$i]->getIndice:0;

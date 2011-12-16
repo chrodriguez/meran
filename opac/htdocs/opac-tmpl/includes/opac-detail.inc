@@ -5,6 +5,17 @@
 	function mostrarIndice(id2){
 	    $("#indice_data" + id2).dialog({ width: 800, position: 'center', modal: true }); 
 	}
+	
+	function ProcessGBSBookInfo(booksInfo) {
+		for (id in booksInfo) {
+		 var element = document.getElementById(id);
+		 var bookInfo = booksInfo[id];
+		 if (bookInfo) {
+		  element.href = bookInfo.preview_url;
+		  element.style.display = '';
+		 }
+	   }
+	 }
 </script>
 
 [% IF !ajax %]
@@ -59,7 +70,18 @@
 										[% END %]
 										[% END %]
 									</ul>
+									[% IF issn %]
+										<div class="rating">
+											<div class="google-books">
+												<a id="ISSN:[% issn %]"  style="display:none" target="_blank">
+													<img src="/includes/css/gbs_preview_button1.gif" border="0" style="margin: 0"/>
+												</a>
+											</div>
+											<script src="http://books.google.com/books?jscmd=viewapi&bibkeys=ISSN:[% issn %]&callback=ProcessGBSBookInfo"></script>
+										</div>
+									[% END %]
 							   </div>
+							   
 					</div>
 			</div>
 		</div>

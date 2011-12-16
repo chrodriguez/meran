@@ -37,32 +37,41 @@
                                           <br />
                                           <li> [% 'Puede solicitar m&aacute;s f&aacute;cilmente el ejemplar con' | i18n %]&nbsp;<b>[% primer_signatura %]</b></li>
                                       </ul>
-        
-                                    [% IF tiene_indice %]
-                                        [% PERL %]
-                                                            print C4::AR::Filtros::to_Icon(  
-                                                                                                boton   => "icon_indice",
-                                                                                                onClick => "mostrarIndice([% id2 %]);",
-                                                                                                title   => "[% 'Ver &iacute;ndice' | i18n %]",
-                                                                    ) ;
-                                        [% END %]
-                                    [% END %]
-    
-                                    [% IF indice %]
-                                        <div style="display:none"><div id="indice_data[% id2 %]" style="white-space: pre;" title="[% 'Indice del grupo' | i18n %]">[% indice %]</div></div>
-                                    [% END %]
-        
-                                    [% IF esta_en_estante_virtual %]
-                                          <a href="[% url_prefix %]/opac-busquedasDB.pl?tipoAccion=BUSQUEDA_AVANZADA&estantes_grupo=[% id2 %]" class="contenedor_boton">
-                                              [% PERL %]
-	                                             print  C4::AR::Filtros::to_Icon(  
-	                                                                                   boton   => "icon_estvirtuales",
-	                                                                                   title   => "[% 'Ver estantes virtuales en los que se encuentra' | i18n %]",
-	                                                             );
-                                              [% END %]
-                                          </a>
-                                   [% END %]
-        
+									<div class="rating">  
+										[% IF tiene_indice %]
+											[% PERL %]
+																print C4::AR::Filtros::to_Icon(  
+																									boton   => "icon_indice",
+																									onClick => "mostrarIndice([% id2 %]);",
+																									title   => "[% 'Ver &iacute;ndice' | i18n %]",
+																		) ;
+											[% END %]
+										[% END %]
+		
+										[% IF indice %]
+											<div style="display:none"><div id="indice_data[% id2 %]" style="white-space: pre;" title="[% 'Indice del grupo' | i18n %]">[% indice %]</div></div>
+										[% END %]
+										 
+										[% IF esta_en_estante_virtual %]
+											  <a href="[% url_prefix %]/opac-busquedasDB.pl?tipoAccion=BUSQUEDA_AVANZADA&estantes_grupo=[% id2 %]" class="contenedor_boton">
+												  [% PERL %]
+													 print  C4::AR::Filtros::to_Icon(  
+																						   boton   => "icon_estvirtuales",
+																						   title   => "[% 'Ver estantes virtuales en los que se encuentra' | i18n %]",
+																	 );
+												  [% END %]
+											  </a>
+									   [% END %]
+									   
+									  	 [% IF isbn %]
+											<div class="google-books">
+												<a id="ISBN:[% isbn %]"  style="display:none" target="_blank">
+													<img src="/includes/css/gbs_preview_button1.gif" border="0" style="margin: 0"/>
+												</a>
+											</div>
+											<script src="http://books.google.com/books?jscmd=viewapi&bibkeys=ISBN:[% isbn %]&callback=ProcessGBSBookInfo"></script>
+										 [% END %]
+									</div>
                                   </div> <!-- END <div class="detalle_total">-->
                 
                                  [% END %]  <!--END  IF nivel2_array -->
