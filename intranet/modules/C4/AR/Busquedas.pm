@@ -953,10 +953,12 @@ sub getSuggestion{
     my $cont = 0;
     while ( ($total_found <= 0) && ($cont < 50) ){
         $suggestion="";
+
         foreach my $word (@words){
             my @suggestions = $speller->suggest($word);
             $suggestion.= @suggestions[$cont]." ";
         }
+        
         $suggestion = Encode::encode_utf8($suggestion);
         ($total_found) = C4::AR::Busquedas::busquedaCombinada_newTemp($suggestion,$session,$obj_for_log,$sphinx_options);
         $cont++;

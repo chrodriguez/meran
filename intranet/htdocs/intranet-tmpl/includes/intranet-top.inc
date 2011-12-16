@@ -32,6 +32,17 @@
 	<script type="text/javascript" src="/includes/shiftSelectTr.js"></script>
 	<script type="text/javascript" src="/includes/jquery/jquery.expander.js"></script>
 	<script type="text/javascript">
+
+		function enableAlert(){
+	        $(window).bind('beforeunload', function(){ 
+	        	return("[% 'ATENCION: Se perderan los elementos que no haya guardado' | i18n %]");
+	        });
+		}
+
+		function disableAlert(){
+	        $(window).unbind('beforeunload');
+		}
+
 	
 		function swap(id,src){
 			   document.getElementById(id).src=src;
@@ -86,10 +97,10 @@
 			});
 	        $('input[type="text"]').addClass("textInput");    
 
-			if (UNLOAD)
-		        $(window).bind('beforeunload', function(){ 
-		        	return("[% 'ATENCION: Se perderan los elementos que no haya guardado' | i18n %]");
-		        });
+			if (UNLOAD == 1)
+				enableAlert();
+			else
+		        disableAlert();
 	    });
 	</script>
 	</head>

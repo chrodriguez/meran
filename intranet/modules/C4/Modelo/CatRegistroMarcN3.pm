@@ -33,7 +33,7 @@ __PACKAGE__->meta->setup(
         codigo_barra            => { type => 'varchar', overflow => 'truncate', not_null => 1 },
         signatura               => { type => 'varchar', overflow => 'truncate' },
         updated_at              => { type => 'timestamp', not_null => 1 },
-        created_at              => { type => 'varchar', overflow => 'truncate' },
+        created_at              => { type => 'timestamp' },
         agregacion_temp         => { type => 'varchar', overflow => 'truncate' },
         template                => { type => 'varchar', overflow => 'truncate', not_null => 1 },
     ],
@@ -70,7 +70,7 @@ sub agregar {
         
     $self->setCodigoBarra($marc_record->subfield("995","f"));
     $self->setSignatura($marc_record->subfield("995","t"));
-    $self->setCreatedAt(C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"), $dateformat));
+    $self->setCreatedAt(C4::Date::format_date_in_iso(Date::Manip::ParseDate("now"), $dateformat));
     $self->setMarcRecord($params->{'marc_record'});
     $self->setTemplate($params->{'id_tipo_doc'});
 
@@ -412,6 +412,51 @@ sub getUpdatedAt{
 
     return $self->updated_at;
 }
+
+sub getCreatedAt_format{
+    my ($self)  = shift;
+    
+    use DateTime::Format::MySQL;
+    my $dateformat = C4::Date::get_date_format();
+    my $date = $self->getCreatedAt;
+    
+    eval{
+        $date = DateTime::Format::MySQL->format_datetime($date);
+        my @time_array = split(/ /,$date);
+        my $time = @time_array[1];
+        $date = C4::Date::format_date($date,$dateformat);
+        $date = $date." ".$time;
+    };
+    
+    if (@$){
+        $date = undef;
+    }
+    
+    return ($date);
+}
+
+sub getUpdatedAt_format{
+    my ($self)  = shift;
+
+    use DateTime::Format::MySQL;
+    my $dateformat = C4::Date::get_date_format();
+    my $date = $self->getUpdatedAt;
+    
+    eval{
+    	$date = DateTime::Format::MySQL->format_datetime($date);
+    	my @time_array = split(/ /,$date);
+    	my $time = @time_array[1];
+    	$date = C4::Date::format_date($date,$dateformat);
+        $date = $date." ".$time;
+    };
+    
+    if (@$){
+    	$date = undef;
+    }
+    
+    return ($date);
+}
+
 
 sub setUpdatedAt{
     my ($self)  = shift;
