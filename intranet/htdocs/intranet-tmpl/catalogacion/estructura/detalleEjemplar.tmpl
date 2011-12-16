@@ -66,9 +66,10 @@ var AUTO_GENERAR_COMPROBANTE = '[% auto_generar_comprobante_prestamo %]';
 
 <div id="detalleEjemplar">
 <fieldset>
-<strong><legend>[% "Detalles del ejemplar" | i18n %] [% nivel3.id %] 
-                ([% "del grupo" | i18n %] <a href="[% url_prefix %]/catalogacion/estructura/detalle.pl?id1=[% nivel3.nivel2.getId1 %]&token=[% token %]">[% nivel3.getId2 %]</a>)
-        </legend>
+<strong>
+    <legend>[% "Detalles del ejemplar" | i18n %] [% nivel3.id %] 
+            ([% "del grupo" | i18n %] <a href="[% url_prefix %]/catalogacion/estructura/detalle.pl?id1=[% nivel3.nivel2.getId1 %]&token=[% token %]">[% nivel3.getId2 %]</a>)
+    </legend>
 </strong>
 
     <ul class="listado_sin_margen">
@@ -77,19 +78,27 @@ var AUTO_GENERAR_COMPROBANTE = '[% auto_generar_comprobante_prestamo %]';
                     <li> [% "Disponibilidad"|i18n %]:   <strong class="[% IF nivel3.esParaSala %]salaLectura[% ELSE %]prestamo[% END %]">[% nivel3.getDisponibilidadObject.getNombre  %]</strong></li>
                     <li> [% "Estado"|i18n %]:           <strong class="[% IF nivel3.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">[% nivel3.getEstadoObject.getNombre  %]</strong></li>
 
-    [% IF socio_reserva %]
-        [% 'Reservado a:' | i18n  %] 
-        <strong>[% PERL %]
-            print C4::AR::Filtros::link_to(   text =>     "[% socio_reserva.persona.getApeYNom %]",
-                                              url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
-                                              params =>   ["nro_socio=[% socio_reserva.getNro_socio %]"],
-                                              title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
-                                              blank =>  1,
-                                        );
-        [% END %]
-        </strong>
-    [% END %]
+                    [% IF nivel3.getCreatedAt_format %]
+                        <li>[% "Fecha de carga"|i18n %]: <strong class="normal_date">[% nivel3.getCreatedAt_format  %]</strong></li>
+                    [% END %]
 
+                    [% IF nivel3.getUpdatedAt_format %]
+                        <li>[% "Ultima actualizaci&oacute;n"|i18n %]: <strong class="normal_date">[% nivel3.getUpdatedAt_format  %]</strong></li>
+                    [% END %]
+
+				    [% IF socio_reserva %]
+				        [% 'Reservado a:' | i18n  %] 
+				        <strong>
+					        [% PERL %]
+					            print C4::AR::Filtros::link_to(   text =>     "[% socio_reserva.persona.getApeYNom %]",
+					                                              url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+					                                              params =>   ["nro_socio=[% socio_reserva.getNro_socio %]"],
+					                                              title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
+					                                              blank =>  1,
+					                                        );
+					        [% END %]
+				        </strong>
+				    [% END %]
 </ul>
 
 <div id="historicoDisponibilidad"></div>
