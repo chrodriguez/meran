@@ -787,7 +787,7 @@ sub detalleCompletoOPAC{
             $hash_nivel2->{'cantReservas'}              = $totales_nivel3->{'cantReservas'};
             $hash_nivel2->{'portada_registro'}          = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'S');
             $hash_nivel2->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'M');
-            $hash_nivel2->{'primer_signatura'}          = $nivel2_array_ref->[0]->getSignaturas->[0];
+            $hash_nivel2->{'primer_signatura'}          = $nivel2_array_ref->[$i]->getSignaturas->[0];
             $hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'L');
             $hash_nivel2->{'cantReservasEnEspera'}      = $totales_nivel3->{'cantReservasEnEspera'};
             $hash_nivel2->{'disponibles'}               = $totales_nivel3->{'disponibles'};
