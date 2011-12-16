@@ -78,11 +78,11 @@ var AUTO_GENERAR_COMPROBANTE = '[% auto_generar_comprobante_prestamo %]';
                     <li> [% "Disponibilidad"|i18n %]:   <strong class="[% IF nivel3.esParaSala %]salaLectura[% ELSE %]prestamo[% END %]">[% nivel3.getDisponibilidadObject.getNombre  %]</strong></li>
                     <li> [% "Estado"|i18n %]:           <strong class="[% IF nivel3.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">[% nivel3.getEstadoObject.getNombre  %]</strong></li>
 
-                    [% IF nivel3.getCreatedAt_format %]
+                    [% IF nivel3.getCreatedAt_format != "0000-00-00 00:00:00" %]
                         <li>[% "Fecha de carga"|i18n %]: <strong class="normal_date">[% nivel3.getCreatedAt_format  %]</strong></li>
                     [% END %]
 
-                    [% IF nivel3.getUpdatedAt_format %]
+                    [% IF nivel3.getUpdatedAt_format != "0000-00-00 00:00:00" %]
                         <li>[% "Ultima actualizaci&oacute;n"|i18n %]: <strong class="normal_date">[% nivel3.getUpdatedAt_format  %]</strong></li>
                     [% END %]
 
