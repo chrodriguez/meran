@@ -1,7 +1,7 @@
 [% USE HTML %]
 
-<!--<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme %]/includes/completo.css">-->
-<!--<meta http-equiv="Content-Type" content="text/html; charset=utf-8">-->
+<link rel="stylesheet" type="text/css" href="/intranet-tmpl/intranet-structure.css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
 <fieldset class="">
     <div class="encabezado">
@@ -10,18 +10,44 @@
         [% "BIBLIOTECA" | i18n  %]<br>
         [% biblio.getNombrePDF %]<br><br>
     </div>
+        [% IF print_format == "1" %] 
+                <br />
+        [% END %]
     <h3 align="center">[% titulo %]</h3>
     <p id="fecha" align="right">[% fecha %]
     <div class="contenido" align="justify">
         <p>[% cuerpo_mensaje %]</p><br>
     </div>
-    <center>
+    <center> 
         <div >
-          
+          [% IF print_format == "1" %] 
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+          [% END %]
           [% "Firma" | i18n  %]  ..........................   [% "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Aclaraci&oacute;n" | i18n  %]     .......................... <br> 
-         
-    
-              
+               
         </div>
        
     </center>

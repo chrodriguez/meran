@@ -75,11 +75,14 @@ if (!($msg_object->{'error'})){
         $t_params->{'atencion'}         =  C4::AR::Preferencias::getValorPreferencia('open') . " a "
             . C4::AR::Preferencias::getValorPreferencia('close') ;
 
-
+                   
+        $t_params->{'print_format'}     = C4::AR::Preferencias::getValorPreferencia('libre_deuda_fill_a4');
+        
+        C4::AR::Debug::debug("libreeeeeee".C4::AR::Preferencias::getValorPreferencia('libre_deuda_fill_a4'));
         my $out         = C4::AR::Auth::get_html_content($template, $t_params, $session);
         my $filename    = C4::AR::PdfGenerator::pdfFromHTML($out);
         print C4::AR::PdfGenerator::pdfHeader();
-
+# 
         C4::AR::PdfGenerator::printPDF($filename);
 
 	}else{
