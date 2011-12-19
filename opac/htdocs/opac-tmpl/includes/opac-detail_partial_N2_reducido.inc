@@ -78,7 +78,11 @@
                                      <div id="[% DivDetalle %]">
 
                                         [% INCLUDE 'e-docs_grupo.inc' %]
-                                        [% INCLUDE 'opac-detail_partial_disponibilidad.inc' %]
+                                        
+                                        [% IF disponible %]
+                                            [% INCLUDE 'opac-detail_partial_disponibilidad.inc' %]
+                                        [% END %]
+                                        
                                     </div>
                   </div>
            </div>

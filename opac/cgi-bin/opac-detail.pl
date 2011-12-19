@@ -35,7 +35,6 @@ if ($@){
     $t_params->{'mensaje'}          = "Ha ocurrido un error";
 
 }
-
 $t_params->{'partial_template'}     = "opac-detail.inc";
 $t_params->{'preferencias'}         = C4::AR::Preferencias::getConfigVisualizacionOPAC();
 $t_params->{'per_page'}             = C4::Context->config("cant_grupos_per_query") || 5;
