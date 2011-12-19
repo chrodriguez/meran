@@ -58,7 +58,7 @@ sub t_guardarNivel3 {
 
     eval {
         #obtengo el tipo de ejemplar a partir del id2 del nivel 2
-        $params->{'tipo_ejemplar'} = C4::AR::Nivel2::getTipoEjemplarFromId2($params->{'id2'});
+        $params->{'tipo_ejemplar'} = $params->{'id_tipo_doc'} || C4::AR::Nivel2::getTipoEjemplarFromId2($params->{'id2'});
         #se genera el arreglo de barcodes validos para agregar a la base y se setean los mensajes para el usuario (mensajes de ERROR)
         my ($barcodes_para_agregar) = _generarArreglo($params, $msg_object);
 
@@ -852,7 +852,12 @@ sub generaCodigoBarra{
     my($parametros, $cant) = @_;
 
    my $barcode;
-    my @estructurabarcode = split(',',C4::AR::Catalogacion::getBarcodeFormat($parametros->{'tipo_ejemplar'}));
+   my $tipo_ejemplar = $parametros->{'id_tipo_doc'} || $parametros->{'tipo_ejemplar'}; 
+   
+   C4::AR::Debug::debug("\n\n\n GENERANDO BARCODE PARA TIPO DE EJEMPLAR: ".$tipo_ejemplar."  ".$parametros->{'id_tipo_doc'}."\n\n\n");
+   
+   
+   my @estructurabarcode = split(',',C4::AR::Catalogacion::getBarcodeFormat($tipo_ejemplar));
     
     my $like = '';
 

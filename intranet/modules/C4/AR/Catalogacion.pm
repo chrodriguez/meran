@@ -1247,13 +1247,17 @@ C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel => dato => ".$s
                                                                                                     $nivel_info_marc_array->[$i]->{'campo'}, 
                                                                                                     $subcampo->{'subcampo'}
                                                                                 );
-
-                        $liblibrarian           = $cat_estruct_base_array->camposBase->getLiblibrarian;
-                        $repetible              = $cat_estruct_base_array->camposBase->getRepeatable;
-                        $indicador_primario     = $cat_estruct_base_array->camposBase->getIndicadorPrimario;
-                        $indicador_secundario   = $cat_estruct_base_array->camposBase->getIndicadorSecundario;
-                        $descripcion_campo      = $cat_estruct_base_array->camposBase->getDescripcion.' - '.$cat_estruct_base_array->getCampo;  
-
+                        eval{
+	                        $liblibrarian           = $cat_estruct_base_array->camposBase->getLiblibrarian;
+	                        $repetible              = $cat_estruct_base_array->camposBase->getRepeatable;
+	                        $indicador_primario     = $cat_estruct_base_array->camposBase->getIndicadorPrimario;
+	                        $indicador_secundario   = $cat_estruct_base_array->camposBase->getIndicadorSecundario;
+	                        $descripcion_campo      = $cat_estruct_base_array->camposBase->getDescripcion.' - '.$cat_estruct_base_array->getCampo;  
+                        };
+                        
+                        if ( (@$) || (!$cat_estruct_base_array) ){
+                            C4::AR::Debug::debug("Catalogacion::getEstructuraYDatosDeNivel() --> INTENTANDO RECUPERAR ESTRUCTURA DE CATALOGO -- ROMPIO CON ".$nivel_info_marc_array->[$i]->{'campo'}." -> ".$subcampo->{'subcampo'});	
+                        }
 
 
 
