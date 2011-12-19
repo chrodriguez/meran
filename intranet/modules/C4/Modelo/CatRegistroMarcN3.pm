@@ -30,10 +30,10 @@ __PACKAGE__->meta->setup(
         marc_record             => { type => 'text', overflow => 'truncate' },
         id1                     => { type => 'integer', overflow => 'truncate', not_null => 1 },
         id2                     => { type => 'integer', overflow => 'truncate', not_null => 1 },
-        codigo_barra            => { type => 'varchar', overflow => 'truncate' },
+        codigo_barra            => { type => 'varchar', overflow => 'truncate', not_null => 1 },
         signatura               => { type => 'varchar', overflow => 'truncate' },
         updated_at              => { type => 'timestamp', not_null => 1 },
-        created_at              => { type => 'varchar', overflow => 'truncate' },
+        created_at              => { type => 'timestamp' },
         agregacion_temp         => { type => 'varchar', overflow => 'truncate' },
         template                => { type => 'varchar', overflow => 'truncate', not_null => 1 },
     ],
@@ -70,7 +70,7 @@ sub agregar {
         
     $self->setCodigoBarra($marc_record->subfield("995","f"));
     $self->setSignatura($marc_record->subfield("995","t"));
-    $self->setCreatedAt(C4::Date::format_date_in_iso(Date::Manip::ParseDate("today"), $dateformat));
+    $self->setCreatedAt(C4::Date::format_date_in_iso(Date::Manip::ParseDate("now"), $dateformat));
     $self->setMarcRecord($params->{'marc_record'});
     $self->setTemplate($params->{'id_tipo_doc'});
 
@@ -157,8 +157,11 @@ sub validarBarcode {
         } 
 
     } elsif ($action eq "UPDATE") {
-
-        if( !($msg_object->{'error'}) && $self->seRepiteBarcode($subcampo_hash_ref->{'dato'}) ){
+        if ( !($msg_object->{'error'}) && (!C4::AR::Utilidades::validateString($subcampo_hash_ref->{'dato'})) ) {
+            $msg_object->{'error'} = 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U387', 'params' => []} );
+        } 
+        elsif( !($msg_object->{'error'}) && $self->seRepiteBarcode($subcampo_hash_ref->{'dato'}) ){
             #verifico en el UPDATE si el barcode existe en la base de datos
             C4::AR::Debug::debug("CatRegistroMarcN3 => validarBarcode => el barcode ".$subcampo_hash_ref->{'dato'}." existe en la base");
             $msg_object->{'error'} = 1;
@@ -413,6 +416,51 @@ sub getUpdatedAt{
     return $self->updated_at;
 }
 
+sub getCreatedAt_format{
+    my ($self)  = shift;
+    
+    use DateTime::Format::MySQL;
+    my $dateformat = C4::Date::get_date_format();
+    my $date = $self->getCreatedAt;
+    
+    eval{
+        $date = DateTime::Format::MySQL->format_datetime($date);
+        my @time_array = split(/ /,$date);
+        my $time = @time_array[1];
+        $date = C4::Date::format_date($date,$dateformat);
+        $date = $date." ".$time;
+    };
+    
+    if (@$){
+        $date = undef;
+    }
+    
+    return ($date);
+}
+
+sub getUpdatedAt_format{
+    my ($self)  = shift;
+
+    use DateTime::Format::MySQL;
+    my $dateformat = C4::Date::get_date_format();
+    my $date = $self->getUpdatedAt;
+    
+    eval{
+    	$date = DateTime::Format::MySQL->format_datetime($date);
+    	my @time_array = split(/ /,$date);
+    	my $time = @time_array[1];
+    	$date = C4::Date::format_date($date,$dateformat);
+        $date = $date." ".$time;
+    };
+    
+    if (@$){
+    	$date = undef;
+    }
+    
+    return ($date);
+}
+
+
 sub setUpdatedAt{
     my ($self)  = shift;
     my ($now)   = @_;
@@ -463,8 +511,12 @@ sub setId2{
 sub setCodigoBarra{
     my ($self)  = shift;
     my ($codigo_barra)   = @_;
+    
+    $codigo_barra = C4::AR::Utilidades::trim($codigo_barra);
 
-    $self->codigo_barra($codigo_barra);
+    if (C4::AR::Utilidades::validateString($codigo_barra)){
+        $self->codigo_barra($codigo_barra);
+    }
 }
 
 sub setSignatura{

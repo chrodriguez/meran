@@ -147,6 +147,7 @@ sub gettemplate {
             twitter_username_to_search  => C4::AR::Preferencias::getValorPreferencia("twitter_username_to_search") || undef,
             plainPassword               => C4::Context->config('plainPassword') || 0,
             nroRandom                   => C4::AR::Auth::getSessionNroRandom(),
+            unload_alert                => 0,
                         
         );
 

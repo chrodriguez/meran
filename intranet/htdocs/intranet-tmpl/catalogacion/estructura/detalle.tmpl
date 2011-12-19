@@ -21,6 +21,17 @@
              inicializar();
              zebra("tablaResult");
             });
+            
+      	function ProcessGBSBookInfo(booksInfo) {
+			for (id in booksInfo) {
+			 var element = document.getElementById(id);
+			 var bookInfo = booksInfo[id];
+			 if (bookInfo) {
+			  element.href = bookInfo.preview_url;
+			  element.style.display = '';
+			 }
+		   }
+		}
     </script>
 
 <script type="text/javascript" src="/includes/jquery/jquery.jPrintElement.js"></script>
@@ -113,6 +124,18 @@
 							[% END %]
 							[% END %]
 							</ul>
+							
+									[% IF issn %]
+										<div style="position: relative; float:right;">
+											<div class="google-books">
+												<a id="ISSN:[% issn %]"  style="display:none" target="_blank">
+													<img src="/includes/css/gbs_preview_button1.gif" border="0" style="margin: 0"/>
+												</a>
+											</div>
+											<script src="http://books.google.com/books?jscmd=viewapi&bibkeys=ISSN:[% issn %]&callback=ProcessGBSBookInfo"></script>
+										</div>
+									[% END %]
+									
 					</div>
 			</fieldset>
 		</div>
@@ -175,16 +198,26 @@
 	                        [% END %]
 
 			                <br>
-
-                <div class="main-subcontent" style="width:15%; float:left; margin: 1%">
-                    [% IF portada_registro %]
-                        <a class="fancylink" href="/uploads/covers/[% portada_registro_big %]">
-                            <img src="/uploads/covers/[% portada_registro_medium %]" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" />
-                        </a>
-                    [% END %]
-                </div>
-
-			                <ul class="listado_sin_margen">
+			                
+			                [% IF portada_registro or isbn %]
+			                   <div style="position: relative; float:right; margin-right: 12px;">
+			                    [% IF portada_registro %]
+			                        <a class="fancylink" href="/uploads/covers/[% portada_registro_big %]">
+			                            <img style="max-height: 180px; max-width:110px;" src="/uploads/covers/[% portada_registro_medium %]" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" />
+			                        </a>
+			                    [% END %]
+								[% IF isbn %]
+									<div class="google-books">
+										<a style="margin-left: 10px;" id="ISBN:[% isbn %]"  style="display:none" target="_blank">
+											<img src="/includes/css/gbs_preview_button1.gif" border="0" style="margin: 0"/>
+										</a>
+									</div>
+									<script src="http://books.google.com/books?jscmd=viewapi&bibkeys=ISBN:[% isbn %]&callback=ProcessGBSBookInfo"></script>
+								[% END %]
+							   </div>
+							[% END %]
+							
+			                <ul class="listado_sin_margen" style="clear: none; margin-top:12px;">
 				                [% FOREACH nivel2_array %]
                                     [% IF liblibrarian %]
                                         [% IF dato %]

@@ -917,6 +917,7 @@ function updateGuardarModificacionDocumentoN1(responseText){
         mostrarEstructuraDelNivel2();
         //se esta modificando desde el detalle del registro
         if (FROM_DETALLE_REGISTRO == 1) {
+        	disableAlert();
             window.location = "detalle.pl?id1=" + ID_N1;
         }
         
@@ -956,7 +957,10 @@ function updateGuardarModificacionDocumentoN2(responseText){
         mostrarInfoAltaNivel2(ID_N2);
         mostrarEstructuraDelNivel3(TEMPLATE_ACTUAL);
         //se esta modificando desde el detalle del registro
-        if (FROM_DETALLE_REGISTRO == 1) window.location = "detalle.pl?id1=" + ID_N1;
+        if (FROM_DETALLE_REGISTRO == 1){
+        	disableAlert();
+        	window.location = "detalle.pl?id1=" + ID_N1;
+        }
         MODIFICAR = 0;
     }
 }
@@ -1000,7 +1004,10 @@ function updateGuardarModificacionDocumentoN3(responseText){
         //muestra la tabla con los ejemplares agregados
         mostrarInfoAltaNivel3(ID_N2);
         //se esta modificando desde el detalle del registro
-        if (FROM_DETALLE_REGISTRO == 1) window.location = "detalle.pl?id1=" + ID_N1;
+        if (FROM_DETALLE_REGISTRO == 1){
+        	disableAlert();
+        	window.location = "detalle.pl?id1=" + ID_N1;
+        }
         MODIFICAR = 0;
     }
 }
