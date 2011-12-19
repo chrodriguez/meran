@@ -70,6 +70,7 @@
 
                                         [% INCLUDE 'e-docs_grupo.inc' %]
                                         [% INCLUDE 'opac-detail_partial_disponibilidad.inc' %]
+                                        
                                     </div>
                   </div>
            </div>
