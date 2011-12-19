@@ -157,25 +157,6 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
  eval{
 
-    my %params;
-    $params{'nivel'}        = "1";
-    $params{'id'}           = $registro_marc_n1->{'id'};
-
-    my @resultEstYDatos = C4::AR::Catalogacion::getEstructuraYDatosDeNivel(\%params);
-
-#      C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => generando indice del id ".$registro_marc_n1->{'id'});
-
-    foreach my $c (@resultEstYDatos){
-#         C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => campo ".$c->{'campo'});
-
-        foreach my $s (@{$c->{'subcampos_array'}}){ 
-#             C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
-#             C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
-            $string_con_dato = $string_con_dato." ".$s->{'dato'};   
-        }
-    }
-
-
     my $marc_record = MARC::Record->new_from_usmarc($registro_marc_n1->{'marc_record'});
 
     my $query2=" SELECT * FROM cat_registro_marc_n2 where id1 =?;";
@@ -187,25 +168,13 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
     #se agregan todos los ejemplares (nivel3) al nivel2
     while (my $registro_marc_n2 = $sth2->fetchrow_hashref ){
 
-
-        $params{'nivel'}        = "2";
-        $params{'id'}           = $registro_marc_n2->{'id'};
-
-        my @resultEstYDatos = C4::AR::Catalogacion::getEstructuraYDatosDeNivel(\%params);
-
-        foreach my $c (@resultEstYDatos){
-             C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => campo ".$c->{'campo'});
-
-            foreach my $s (@{$c->{'subcampos_array'}}){ 
-                 C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
-                 C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
-                $string_con_dato = $string_con_dato." ".$s->{'dato'};   
-            }
-        }
-
-
         my $marc_record2 = MARC::Record->new_from_usmarc($registro_marc_n2->{'marc_record'});
-        $marc_record->add_fields($marc_record2->fields);
+        $marc_record->append_fields($marc_record2->fields);
+        
+		#Agregamos el indice
+		if ($registro_marc_n2->{'indice'}){
+			$marc_record->append_fields(MARC::Field->new(865, '', '', 'a' => $registro_marc_n2->{'indice'}));
+		}
 
         my $query3=" SELECT * FROM cat_registro_marc_n3 where id1=? and id2=?;";
         my $sth3=$dbh->prepare($query3);
@@ -214,27 +183,7 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
         while (my $registro_marc_n3 = $sth3->fetchrow_hashref ){
 #             C4::AR::Debug::debug('C4::AR::Sphinx::generar_indice => ID3 '.$registro_marc_n3->{'id'});
             my $marc_record3 = MARC::Record->new_from_usmarc($registro_marc_n3->{'marc_record'});
-            $marc_record->add_fields($marc_record3->fields);
-
-
-            $params{'nivel'}        = "3";
-            $params{'id3'}          = $registro_marc_n3->{'id'};
-
-# C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => NIVEL 3 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa ".$registro_marc_n3->{'id3'});
-            my @resultEstYDatos = C4::AR::Catalogacion::getEstructuraYDatosDeNivel(\%params);
-
-#             C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => NIVEL 3 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa ");
-
-            foreach my $c (@resultEstYDatos){
-#                 C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => campo ".$c->{'campo'});
-
-                foreach my $s (@{$c->{'subcampos_array'}}){ 
-#                     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
-#                     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
-                    $string_con_dato = $string_con_dato." ".$s->{'dato'};   
-                }
-            }
-
+            $marc_record->append_fields($marc_record3->fields);
         }
     }
 #Ahora en $marc_record tenemos todo el registro completo
@@ -244,19 +193,25 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
     my $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("100","a"));
     if ($autor){
         $autor = C4::AR::Catalogacion::getDatoFromReferencia("100", "a", $autor, $registro_marc_n1->{'template'},1);
-        ($autor ne "NO_TIENE")?push (@autores,$autor):"";
+        if (($autor)&&($autor ne "NO_TIENE")){
+			push (@autores,$autor);
+		}
     }
 
        $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("110","a"));
     if ($autor){
         $autor = C4::AR::Catalogacion::getDatoFromReferencia("110", "a", $autor, $registro_marc_n1->{'template'},1);
-        ($autor ne "NO_TIENE")?push (@autores,$autor):"";
+        if (($autor)&&($autor ne "NO_TIENE")){
+			push (@autores,$autor);
+		}
     }
 
        $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("111","a"));
     if ($autor){
         $autor = C4::AR::Catalogacion::getDatoFromReferencia("111", "a", $autor, $registro_marc_n1->{'template'},1);
-        ($autor ne "NO_TIENE")?push (@autores,$autor):"";
+        if (($autor)&&($autor ne "NO_TIENE")){
+			push (@autores,$autor);
+		}
     }
 
     #Ahora los adicionales
@@ -270,7 +225,9 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
             if ($autor){
                 $autor = C4::AR::Catalogacion::getDatoFromReferencia("700", "a", $autor, $registro_marc_n1->{'template'},1);
-                ($autor ne "NO_TIENE")?push (@autores,$autor):"";
+                if (($autor)&&($autor ne "NO_TIENE")){
+					push (@autores,$autor);
+				}
             }
         }
     }
@@ -285,7 +242,9 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
               if ($autor){
                 $autor = C4::AR::Catalogacion::getDatoFromReferencia("710", "a", $autor, $registro_marc_n1->{'template'},1);
-                ($autor ne "NO_TIENE")?push (@autores,$autor):"";
+                if (($autor)&&($autor ne "NO_TIENE")){
+					push (@autores,$autor);
+				}
               }
           }
       }
@@ -306,8 +265,8 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
 
             $subcampo                       = $subfield->[0];
             $dato                           = $subfield->[1];
-#             C4::AR::Debug::debug("generar_indice => campo => ".$field->tag);
-#             C4::AR::Debug::debug("generar_indice => subcampo => ".$subfield->[0]);
+             C4::AR::Debug::debug("generar_indice => campo => ".$field->tag);
+             C4::AR::Debug::debug("generar_indice => subcampo => ".$subfield->[0]);
  eval{
 	        my $nivel                       = C4::AR::EstructuraCatalogacionBase::getNivelFromEstructuraBaseByCampoSubcampo($campo, $subcampo);
             $dato_ref                       = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato,$registro_marc_n1->{'template'},$nivel);
@@ -373,7 +332,7 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
         } #END foreach my $subfield ($field->subfields())
     } #END foreach my $field ($marc_record->fields)
 
-#     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => superstring!!!!!!!!!!!!!!!!!!! => ".$superstring);
+     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => superstring!!!!!!!!!!!!!!!!!!! => ".$superstring);
 
     if($action eq "INSERT"){
         my $query4  =   " INSERT INTO indice_busqueda (id, titulo, autor, string) ";
@@ -403,6 +362,7 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
     }
     
      }; #END eval
+     
     if ($@){
         C4::AR::Debug::debug("ERROR AL GENERAR EL INDICE EN EL REGISTRO: ". $registro_marc_n1->{'id'}." !!! ( ".$@." )");
         next;
