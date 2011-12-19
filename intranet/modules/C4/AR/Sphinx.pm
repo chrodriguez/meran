@@ -194,11 +194,11 @@ while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
         my @resultEstYDatos = C4::AR::Catalogacion::getEstructuraYDatosDeNivel(\%params);
 
         foreach my $c (@resultEstYDatos){
-#             C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => campo ".$c->{'campo'});
+             C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => campo ".$c->{'campo'});
 
             foreach my $s (@{$c->{'subcampos_array'}}){ 
-#                 C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
-#                 C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
+                 C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => subcampo ".$s->{'subcampo'});
+                 C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => dato ".$s->{'dato'});
                 $string_con_dato = $string_con_dato." ".$s->{'dato'};   
             }
         }
