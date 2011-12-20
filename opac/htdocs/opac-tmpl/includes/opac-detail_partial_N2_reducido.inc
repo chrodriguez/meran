@@ -49,7 +49,17 @@
 										[% END %]
 		
 										[% IF indice %]
-											<div style="display:none"><div id="indice_data[% id2 %]" style="white-space: pre;" title="[% 'Indice del grupo' | i18n %]">[% indice %]</div></div>
+											<div style="display:none">
+                                                  <div id="indice_data[% id2 %]"  title="[% 'Indice del grupo' | i18n %]">
+                                                      <ul>
+                                                      [% FOREACH elem IN indice %]
+                                                          [% FOREACH word IN elem.split(' ') %]
+                                                              <li class="li_items_indice">[% word %]</li>
+                                                          [% END %]
+                                                      [% END %]
+                                                      </ul>
+                                                  </div>
+                                          </div>
 										[% END %]
 										 
 										[% IF esta_en_estante_virtual %]

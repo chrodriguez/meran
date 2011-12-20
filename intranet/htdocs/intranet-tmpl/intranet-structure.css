@@ -4178,17 +4178,11 @@ button.thoughtbot:hover {
 
 #div_container_modify_value label {
 	float: left;
-	clear: left;
+	clear: none;
 	margin: 11px 20px 0 0;
 	text-align: right;
 	font-size: 16px;
 
 }
-
-.print_libre_deuda_A4{
-
-  padding-top:200px;
-}
-
 
 
