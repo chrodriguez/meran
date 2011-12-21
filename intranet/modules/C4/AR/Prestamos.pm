@@ -50,6 +50,8 @@ $VERSION = 3;
     &getHistorialPrestamosVigentesParaTemplate
     &tienePrestamos
     &enviarRecordacionDePrestamo
+    &getAllPrestamosVencidos
+    &getAllPrestamosActivos
 );
 
 
