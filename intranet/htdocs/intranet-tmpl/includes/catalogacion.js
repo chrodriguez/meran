@@ -565,6 +565,7 @@ function seleccionar_esquema(){
 
         inicializarSideLayers();
     }
+   
 }
 
 function guardarEsquema(){

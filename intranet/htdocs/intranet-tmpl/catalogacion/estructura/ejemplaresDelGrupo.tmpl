@@ -158,24 +158,29 @@
 					                <td> 
 					                          [% PERL %]
 					                                  print C4::AR::Filtros::to_Icon( 
-					                                                                  boton   =>  "icon_marc",
-					                                                                  onClick =>   "detalleMARC('[% id3 %]','[%  %]');", 
-					                                                                  title   =>   "[% 'Detalle MARC' | i18n %]",
-					                                                                      alternClass=> "botonCentradoTabla",
+					                                                                  boton         => "icon_marc",
+					                                                                  onClick       => "detalleMARC('[% id3 %]');", 
+					                                                                  title         => "[% 'Detalle MARC' | i18n %]",
+                                                                                      alternClass   => "botonCentradoTabla",
 					                                                              ) ;
+
 					                          [% END %]
 					                </td>
 					                <td>
 					
 					                    [% IF nivel3_obj.getNota != "" %]
-					
+
+                                              <div id="nota_ejemplar_[% id3 %]" style="display:none">[% nivel3_obj.getNota %]</div>	
+
 					                          [% PERL %]
 					                                  print C4::AR::Filtros::to_Icon( 
 					                                                                  boton         => "icon_globo",
 					                                                                  title         => "[% nivel3_obj.getNota %]",
 					                                                                  alternClass   => "botonCentradoTabla",
+                                                                                      onClick       => "verNota('[% id3 %]');",
 					                                                              ) ;
 					                          [% END %]
+
 					                    [% ELSE %]
 					                       ---
 					                    [% END %]
