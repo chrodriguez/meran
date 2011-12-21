@@ -8,6 +8,7 @@
 	    imagesForJS = '[% temas %]/[% tema %]/imagenes';
 	    M_LIMITE_RESULTADOS = [% limite_resultados_autocompletables %] + 0;
 	    var URL_PREFIX  = '[% url_prefix %]';
+	    var UNLOAD		= '[% unload_alert %]';
 	    
 	</script>
 	
@@ -31,6 +32,17 @@
 	<script type="text/javascript" src="/includes/shiftSelectTr.js"></script>
 	<script type="text/javascript" src="/includes/jquery/jquery.expander.js"></script>
 	<script type="text/javascript">
+
+		function enableAlert(){
+	        $(window).bind('beforeunload', function(){ 
+	        	return("[% 'ATENCION: Se perderan los elementos que no haya guardado' | i18n %]");
+	        });
+		}
+
+		function disableAlert(){
+	        $(window).unbind('beforeunload');
+		}
+
 	
 		function swap(id,src){
 			   document.getElementById(id).src=src;
@@ -84,6 +96,11 @@
 			    $(this).removeClass("textInput").addClass("focusInput");  
 			});
 	        $('input[type="text"]').addClass("textInput");    
+
+			if (UNLOAD == 1)
+				enableAlert();
+			else
+		        disableAlert();
 	    });
 	</script>
 	</head>

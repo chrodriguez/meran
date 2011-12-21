@@ -11,7 +11,7 @@ __PACKAGE__->meta->setup(
         id_tipo_doc             => { type => 'varchar', overflow => 'truncate', length => 4, not_null => 1 },
         nombre                  => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         agregacion_temp         => { type => 'varchar', overflow => 'truncate', length => 250 },
-
+        disponible              => { type => 'integer', overflow => 'truncate', length => 1, not_null => 1, default => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -43,6 +43,17 @@ sub setId_tipo_doc{
     my ($self) = shift;
     my ($id_tipo_doc) = @_;
     $self->id_tipo_doc($id_tipo_doc);
+}
+
+sub getDisponible{
+    my ($self) = shift;
+    return $self->disponible;
+}
+
+sub setDisponible{
+    my ($self) = shift;
+    my ($disponible) = @_;
+    $self->disponible($disponible);
 }
 
 sub getNombre{

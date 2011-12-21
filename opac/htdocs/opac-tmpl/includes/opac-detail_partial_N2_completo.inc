@@ -64,7 +64,9 @@ function updateInfoMARC(responseText){
 			                              <br />
 			                              <li> [% 'Puede solicitar m&aacute;s f&aacute;cilmente el ejemplar con' | i18n %]&nbsp;<b>[% primer_signatura %]</b></li>
 			                          </ul>
-		
+									
+									<div class="rating">
+									
 	                                [% IF tiene_indice %]
 	                                    [% PERL %]
 	                                                        print C4::AR::Filtros::to_Icon(  
@@ -90,6 +92,16 @@ function updateInfoMARC(responseText){
 										  </a>
 		                           [% END %]
 		
+		
+								   [% IF isbn %]
+											<div class="google-books">
+												<a id="ISBN:[% isbn %]"  style="display:none" target="_blank">
+													<img src="/includes/css/gbs_preview_button1.gif" border="0" style="margin: 0"/>
+												</a>
+											</div>
+											<script src="http://books.google.com/books?jscmd=viewapi&bibkeys=ISBN:[% isbn %]&callback=ProcessGBSBookInfo"></script>
+								   [% END %]
+									</div>	 
 			                      </div> <!-- END <div class="detalle_total">-->
 				
 					             [% END %]  <!--END  IF nivel2_array -->
@@ -151,9 +163,13 @@ function updateInfoMARC(responseText){
 									            <br />
 									            <br />
 										[% END %]
-
-                                        [% INCLUDE 'e-docs_grupo.inc' %]
-				                        [% INCLUDE 'opac-detail_partial_disponibilidad.inc' %]
+										
+										[% INCLUDE 'e-docs_grupo.inc' %]
+										
+                                        [% disponible %]
+                                            [% INCLUDE 'opac-detail_partial_disponibilidad.inc' %]
+                                        [% END %]
+                                        
 					                </div>
 			      </div>
 		   </div>

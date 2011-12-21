@@ -1282,3 +1282,7 @@ a.signin.menu-open span {
 .server_name {
     background: #DAE0EC;
 }
+
+.li_items_indice{
+  line-height:1.4em;
+}
