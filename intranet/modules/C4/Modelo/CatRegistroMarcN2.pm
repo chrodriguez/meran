@@ -608,11 +608,6 @@ sub toMARC{
 
     #obtengo el marc_record del NIVEL 2
     my $marc_record             = MARC::Record->new_from_usmarc($self->getMarcRecord());
-	
-	#Agregamos el indice
-	if ($self->tiene_indice){
-		$marc_record->append_fields(MARC::Field->new(865, '', '', 'a' => $self->getIndice));
-		}
 
     my $params;
     $params->{'nivel'}          = '2';
