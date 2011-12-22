@@ -45,7 +45,7 @@ C4::AR::Nivel1 - Funciones que manipulan datos del catálogo de nivel 1
 =cut
 
 =head2
- sub t_guardarNivel2
+ getNivel2FromId2t_guardarNivel2
 
     Esta funcion se invoca desde el template para guardar los datos de nivel2, se apoya en una funcion de Catalogacion.pm que lo que hace es transformar los datos que llegan en un objeto MARC::Record que luego va a insertarse en la base de datos a traves de un objeto CatRegistroMarcN2
 =cut

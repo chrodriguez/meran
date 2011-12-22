@@ -440,7 +440,10 @@ sub detalleNivel3{
         #soy una ANALITICA tengo q obtener el ID2 del campo 773, a para obtener el ID1, link al registro padre
 #             C4::AR::Debug::debug("Nivel3 => detalleNivel3 => getAnalitica => ".$nivel2_object->getAnalitica());
             my $nivel2_object_padre             = C4::AR::Nivel2::getNivel2FromId2($nivel2_object->getAnalitica(),$db);
-            $hash_nivel2{'nivel1_padre'}        = $nivel2_object_padre->getId1();
+
+            if($nivel2_object_padre){
+                $hash_nivel2{'nivel1_padre'}        = $nivel2_object_padre->getId1();
+            }
         }
 
         #otengo las analiticas
@@ -464,9 +467,9 @@ sub detalleNivel3{
 	
 	                $hash_nivel1_aux{'nivel1_analitica'}        = $n1_object->toMARC_Intra;
 	                push(@nivel1_analitica_array, \%hash_nivel1_aux);
-#Esto mostraba cosas de más, perdón Mike.
-                $hash_nivel2_aux{'nivel2_analitica'}        = $n2_object->toMARC_Intra;
-                push(@nivel2_analitica_array, \%hash_nivel2_aux);
+                    #Esto mostraba cosas de más, perdón Mike.
+                    $hash_nivel2_aux{'nivel2_analitica'}        = $n2_object->toMARC_Intra;
+                    push(@nivel2_analitica_array, \%hash_nivel2_aux);
                 }
                 
             }
