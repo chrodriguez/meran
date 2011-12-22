@@ -1149,7 +1149,7 @@ sub getEstructuraYDatosDeNivel{
 #         C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel1FromId1 => ID1 ".$params->{'id'});
     }
     elsif( $params->{'nivel'} eq '2'){
-        $nivel          = C4::AR::Nivel2::getNivel2FromId2($params->{'id'});
+        $nivel          = C4::AR::Nivel2::getNivel2FromId2($params->{'id'}); #BUGGGGGGGGGGGGGGGGGGG
         $tipo_ejemplar  = $nivel->getTemplate()||'ALL';
 #         C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel2FromId2 => ID2 ".$params->{'id'});
     }
