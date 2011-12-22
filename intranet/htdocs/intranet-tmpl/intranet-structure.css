@@ -949,11 +949,6 @@ li {
     cursor: pointer;
 }
 
-.cargando {
-    height: auto;
-    min-height: 30px;
-}
-
 .loading {
     height: 50px;
     width: 50px;
