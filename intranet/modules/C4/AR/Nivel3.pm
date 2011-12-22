@@ -559,24 +559,24 @@ sub detalleCompletoINTRA {
     
     for(my $i=$inicio;$i<$cantidad;$i++){
 
-    my $new_id2 = 0;
-    eval {
-    	$new_id2 = $nivel2_array_ref->[$i]->getId2;
-    };
+        my $new_id2 = 0;
+        eval {
+            $new_id2 = $nivel2_array_ref->[$i]->getId2;
+        };
     #eval{
         my ($hash_nivel2) = detalleNivel3($new_id2,$nivel1->db);
             
-            #Para ver la portada en el detalle
-            $hash_nivel2->{'portada_registro'}          = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'S');
-            $hash_nivel2->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'M');
-            $hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'L');
-            
-            #Para el google book preview
-            $hash_nivel2->{'isbn'}        		        = $nivel2_array_ref->[$i]->getISBN;
-            if(($nivel2_array_ref->[$i]->getISSN)&&(!$t_params->{'issn'})){
-			#Se supone que no cambian dentro de la misma publicación seriada, se toma solo el primero
-				$t_params->{'issn'}        				= $nivel2_array_ref->[$i]->getISSN;
-			}
+        #Para ver la portada en el detalle
+        $hash_nivel2->{'portada_registro'}          = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'S');
+        $hash_nivel2->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'M');
+        $hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'L');
+        
+        #Para el google book preview
+        $hash_nivel2->{'isbn'}        		        = $nivel2_array_ref->[$i]->getISBN;
+        if(($nivel2_array_ref->[$i]->getISSN)&&(!$t_params->{'issn'})){
+        #Se supone que no cambian dentro de la misma publicación seriada, se toma solo el primero
+            $t_params->{'issn'}        				= $nivel2_array_ref->[$i]->getISSN;
+        }
 			
         push(@nivel2, $hash_nivel2);
     #};

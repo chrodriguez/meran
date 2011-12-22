@@ -1126,8 +1126,8 @@ sub _setDatos_de_estructura_base {
     $hash_ref_result{'intranet_habilitado'}     = '';#$cat->getIntranet_habilitado;
     $hash_ref_result{'rules'}                   = '';#$cat->getRules;    
 
-    C4::AR::Debug::debug("_setDatos_de_estructura_base => campo, subcampo: ".$cat->getCampo.", ".$cat->getSubcampo);
-    C4::AR::Debug::debug("_setDatos_de_estructura_base => dato: ".$datos_hash_ref->{'dato'});
+#     C4::AR::Debug::debug("_setDatos_de_estructura_base => campo, subcampo: ".$cat->getCampo.", ".$cat->getSubcampo);
+#     C4::AR::Debug::debug("_setDatos_de_estructura_base => dato: ".$datos_hash_ref->{'dato'});
 
     return (\%hash_ref_result);
 }
@@ -1145,23 +1145,20 @@ sub getEstructuraYDatosDeNivel{
 
     if( $params->{'nivel'} eq '1'){
         $nivel          = C4::AR::Nivel1::getNivel1FromId1($params->{'id'});
-        $tipo_ejemplar  = $nivel->getTemplate()||'ALL';
-#         C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel1FromId1 => ID1 ".$params->{'id'});
+        $tipo_ejemplar  = ($nivel)?$nivel->getTemplate()||'ALL':'ALL';
     }
     elsif( $params->{'nivel'} eq '2'){
-        $nivel          = C4::AR::Nivel2::getNivel2FromId2($params->{'id'}); #BUGGGGGGGGGGGGGGGGGGG
-        $tipo_ejemplar  = $nivel->getTemplate()||'ALL';
-#         C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel2FromId2 => ID2 ".$params->{'id'});
+        $nivel          = C4::AR::Nivel2::getNivel2FromId2($params->{'id'}); 
+        $tipo_ejemplar  = ($nivel)?$nivel->getTemplate()||'ALL':'ALL';
     }
     elsif( $params->{'nivel'} eq '3'){
         $nivel          = C4::AR::Nivel3::getNivel3FromId3($params->{'id3'});
-        $tipo_ejemplar  = $nivel->getTemplate()||'ALL';
-#         C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel =>  getNivel3FromId3 => ID3 ".$params->{'id3'});
+        $tipo_ejemplar  = ($nivel)?$nivel->getTemplate()||'ALL':'ALL';
     }
 
     #paso todo a MARC
     my $nivel_info_marc_array = undef;
-# FIXME lo saque para poder encontrar el error
+
     eval{
       $nivel_info_marc_array = $nivel->toMARC; #mapea los campos de la tabla nivel 1, 2, o 3 a MARC
     };
@@ -1197,9 +1194,9 @@ sub getEstructuraYDatosDeNivel{
                                                                                 $params->{'nivel'}
                                                         );
 
-C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel => campo => ".$nivel_info_marc_array->[$i]->{'campo'});
-C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel => subcampo => ".$subcampo->{'subcampo'});
-C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel => dato => ".$subcampo->{'dato'});
+                    C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel => campo => ".$nivel_info_marc_array->[$i]->{'campo'});
+                    C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel => subcampo => ".$subcampo->{'subcampo'});
+                    C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel => dato => ".$subcampo->{'dato'});
 
             
                     if($cat_estruct_array){
@@ -1209,37 +1206,33 @@ C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel => dato => ".$s
                         #se verifica que exista el campo en la BIBLIA
                         if($campos_base_array_ref){
 
-                            $liblibrarian           = $cat_estruct_array->camposBase->getLiblibrarian;
-                            $repetible              = $cat_estruct_array->camposBase->getRepeatable;
-                            $indicador_primario     = $cat_estruct_array->camposBase->getIndicadorPrimario;
-                            $indicador_secundario   = $cat_estruct_array->camposBase->getIndicadorSecundario;
-                            $descripcion_campo      = $cat_estruct_array->camposBase->getDescripcion.' - '.$cat_estruct_array->getCampo;  
+#                             $liblibrarian           = $cat_estruct_array->camposBase->getLiblibrarian;
+#                             $repetible              = $cat_estruct_array->camposBase->getRepeatable;
+#                             $indicador_primario     = $cat_estruct_array->camposBase->getIndicadorPrimario;
+#                             $indicador_secundario   = $cat_estruct_array->camposBase->getIndicadorSecundario;
+#                             $descripcion_campo      = $cat_estruct_array->camposBase->getDescripcion.' - '.$cat_estruct_array->getCampo;  
+                            $liblibrarian           = $campos_base_array_ref->getLiblibrarian;
+                            $repetible              = $campos_base_array_ref->getRepeatable;
+                            $indicador_primario     = $campos_base_array_ref->getIndicadorPrimario;
+                            $indicador_secundario   = $campos_base_array_ref->getIndicadorSecundario;
+                            $descripcion_campo      = $campos_base_array_ref->getDescripcion.' - '.$cat_estruct_array->getCampo;  
     
                         } else {
-
-#                             $liblibrarian           = "Catalogacion => getEstructuraYDatosDeNivel => NO EXISTE EL CAMPO (".$campo.")";
-#                             $indicador_primario     = "Catalogacion => getEstructuraYDatosDeNivel => NO EXISTE EL CAMPO (".$campo.")";
-#                             $indicador_secundario   = "Catalogacion => getEstructuraYDatosDeNivel => NO EXISTE EL CAMPO (".$campo.")";
-#                             $descripcion_campo      = "Catalogacion => getEstructuraYDatosDeNivel => NO EXISTE EL CAMPO (".$campo.")";  
-
+                            #simplemente se avisa, esto no debería pasar
+                            C4::AR::Debug::debug("Catalogacion::getEstructuraYDatosDeNivel() --> EL CAMPO ".$campo." NO EXISTE EN LA BIBLIA"); 
                         }
             
                         $hash_temp{'tiene_estructura'}  = '1';
                         $hash_temp{'dato'}              = $subcampo->{'dato'};
                         $hash_temp{'datoReferencia'}    = $subcampo->{'datoReferencia'};
-        
-#                         C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => campo => ".$nivel_info_marc_array->[$i]->{'campo'});
-#                         C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => subcampo => ".$subcampo->{'subcampo'});
-#                         C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => liblibrarian => ".$subcampo->{'liblibrarian'});
-#                         C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => dato => ".$subcampo->{'dato'});
-#                         C4::AR::Debug::debug("Catalogacion => getEstructuraYDatosDeNivel => datoReferencia => ".$subcampo->{'datoReferencia'});
             
                         my $hash_result = _setDatos_de_estructura($cat_estruct_array, \%hash_temp);
                       
                             
                         push(@result, $hash_result);
                     }else{
-                        #EL CAMPO, SUBCAMPO NO TIENE UNA ESTRUCTURA CONFIGURADA
+                        #EL CAMPO, SUBCAMPO, TIPO_EJEMPLAR y NIVEL NO TIENE UNA ESTRUCTURA CONFIGURADA
+                        C4::AR::Debug::debug("Catalogacion::getEstructuraYDatosDeNivel() --> EL CAMPO ".$campo." SUBCAMPO ".$subcampo->{'subcampo'}." NIVEL ".$params->{'nivel'}." TIPO_EJEMPLAR ".$tipo_ejemplar." NO TIENE ESTRUCTURA CONFIGURADA");   
                         my $hash_result;
 
                         #RECUPERO LA INFO DE LA ESTRUCTURA BASE
@@ -1247,16 +1240,13 @@ C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel => dato => ".$s
                                                                                                     $nivel_info_marc_array->[$i]->{'campo'}, 
                                                                                                     $subcampo->{'subcampo'}
                                                                                 );
-                        eval{
+
+                        if($cat_estruct_base_array){
 	                        $liblibrarian           = $cat_estruct_base_array->camposBase->getLiblibrarian;
 	                        $repetible              = $cat_estruct_base_array->camposBase->getRepeatable;
 	                        $indicador_primario     = $cat_estruct_base_array->camposBase->getIndicadorPrimario;
 	                        $indicador_secundario   = $cat_estruct_base_array->camposBase->getIndicadorSecundario;
 	                        $descripcion_campo      = $cat_estruct_base_array->camposBase->getDescripcion.' - '.$cat_estruct_base_array->getCampo;  
-                        };
-                        
-                        if ( (@$) || (!$cat_estruct_base_array) ){
-                            C4::AR::Debug::debug("Catalogacion::getEstructuraYDatosDeNivel() --> INTENTANDO RECUPERAR ESTRUCTURA DE CATALOGO -- ROMPIO CON ".$nivel_info_marc_array->[$i]->{'campo'}." -> ".$subcampo->{'subcampo'});	
                         }
 
 
