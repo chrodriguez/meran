@@ -1,0 +1,37 @@
+[% USE HTML %]
+[% IF cant_noleidos > 0 %]
+    <fieldset class="mensajes">
+        <legend class="titulo_legend"><strong>[% "Mensajes de Contacto :" | i18n %]</strong></legend>    
+           
+               
+                  <ul>
+                      [% FOREACH mens IN ultimos_no_leidos %]
+                          <li  class="msj_main"> 
+                                <span class="msj_main_nombre">[% HTML.escape(mens.getNombre) %] [% HTML.escape(mens.getApellido) %]</span>
+                                <span class="msj_main_mail">([% HTML.escape(mens.getEmail) %])</span>
+                       
+                                 <span class="msj_main_asunto">
+                                        <a class="fancy_link" href="[% url_prefix %]/admin/ver_mensaje.pl?token=[% token %]&id=[% mens.id %]">
+                                        [% HTML.escape(mens.getAsunto) %]
+                                        </a>
+                                        <script>$('.fancy_link').fancybox();</script>
+                                </span>
+                            </td>
+                          </li>
+                      [% END %]
+                  </ul>
+                 <br>
+                  <ul>
+                      <li class="item"> 
+                                  [% PERL %]
+                                  print C4::AR::Filtros::link_to( 
+                                        text =>     "[% 'Ver Mensajes' | i18n %]",
+                                        url=>"[% url_prefix %]/admin/mensajes_contacto.pl", 
+                                        title =>    "[% 'Mensajes' | i18n %]"
+                                        );
+                                  [% END %]           
+                        
+                      </li>
+                  </ul>
+    </fieldset> 
+[% END %]
