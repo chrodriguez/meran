@@ -670,11 +670,6 @@ label.error_adv {
 	background: transparent url(../imagenes/iconos/globo.png) no-repeat;	
 }
 
-.cargando {
-	background-image: url(../imagenes/loaders/ajax-loader.gif);
-	background-repeat: no-repeat;
-	background-position: center center;
-}
 
 .loading {
 	background-image: url(../imagenes/loaders/ajax-loader.gif);

@@ -51,6 +51,7 @@
     function mensajesContacto(){
         objAH               = new AjaxHelper(updateMensajesContacto);
         objAH.debug         = true;
+        objAH.offIndicator  = 1; 
         objAH.url           = URL_PREFIX+'/mensajes_contacto.pl';
         objAH.sendToServer();
     }
