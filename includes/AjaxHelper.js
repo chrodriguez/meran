@@ -38,7 +38,7 @@ function _Init(options){
         if(options.showOverlay){
     		startOverlay();
         } else {
-           if(!options.offIndicator){
+           if (!options.offIndicator)
             _ShowState(options);
         }
     }
