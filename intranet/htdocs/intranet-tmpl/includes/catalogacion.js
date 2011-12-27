@@ -569,6 +569,7 @@ function seleccionar_esquema(){
 }
 
 function guardarEsquema(){
+    TEMPLATE_ACTUAL     = $('#tipo_nivel3_id').val();
     objAH               = new AjaxHelper(updateGuardarEsquema);
     objAH.showOverlay   = true;
     objAH.debug         = true;

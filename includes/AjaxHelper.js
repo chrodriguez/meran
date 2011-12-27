@@ -31,14 +31,19 @@ function closeModal(){
 function _Init(options){
 
     if(options.showStatusIn != ''){
-        $('#' + options.showStatusIn).addClass('cargando');
+    	if (options.offIndicator != true)
+    		$('#' + options.showStatusIn).addClass('cargando');
 // //         window.console.log("agrego cargando en " + options.showStatusIn);
     }else{
 
         if(options.showOverlay){
     		startOverlay();
         } else {
+<<<<<<< HEAD
            if (options.showState)
+=======
+           if (options.offIndicator != true)
+>>>>>>> c213503eb77ad9368e30d81554c00137e3a0dfd1
             _ShowState(options);
         }
     }
@@ -136,7 +141,11 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 	this.cache          = false; 			//para cachear los resultados
 	this.showStatusIn   = '';               //muestra el estado del AJAX en el DIV pasado por parametro
 	this.showOverlay    = false;            //muestra el overlay y bloquea la pantalla luego de hacer una peticion AJAX
+<<<<<<< HEAD
 	this.showState      = false;
+=======
+	this.offIndicator   = false;            //muestra el overlay y bloquea la pantalla luego de hacer una peticion AJAX
+>>>>>>> c213503eb77ad9368e30d81554c00137e3a0dfd1
 	this.autoClose      = true;             //cierra automaticamente el overlay
 	this.async          = true;             //asincronico por defecto
 
@@ -199,7 +208,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
                       
 						if(helper.showState){
 						//muestra el estado del AJAX
-                            _Init({debug: helper.debug, showStatusIn: helper.showStatusIn, showOverlay: helper.showOverlay});
+                            _Init({debug: helper.debug, showStatusIn: helper.showStatusIn, showOverlay: helper.showOverlay, offIndicator: helper.offIndicator});
 						}
 
 						if(helper.onBeforeSend){
