@@ -1,3 +1,4 @@
+<script type="text/javascript" src="/includes/jquery/jquery.gritter.js"></script>
 <script>
 
 
@@ -15,8 +16,25 @@
    function updatePublicarTwitter(responseText){
       if (!verificarRespuesta(responseText))
                 return(0);
-        var Messages=JSONstring.toObject(responseText);
-        setMessages(Messages);
+        var text=JSONstring.toObject(responseText).messages[0].message;
+        $.extend($.gritter.options, {
+            class_name: 'gritter', // for light notifications (can be added directly to $.gritter.add too)
+            position: 'bottom-right', // possibilities: bottom-left, bottom-right, top-left, top-right
+            fade_in_speed: 100, // how fast notifications fade in (string or int)
+            fade_out_speed: 100, // how fast the notices fade out
+            time: 3000 // hang on the screen for...
+        });
+        $.gritter.add({
+                // (string | mandatory) the heading of the notification
+                title: 'Twitter',
+                // (string | mandatory) the text inside the notification
+                text: text,
+                // (bool | optional) if you want it to fade out on its own or just sit there
+                sticky: false,
+                // (int | optional) the time you want it to be alive for before fading out
+                time: ''
+        });
+
   }
 
 
@@ -38,7 +56,6 @@
  });
 
 </script>
-
     <div class="fancybox_twitter" id="fancybox_twitter">
         <fieldset>
                 <legend>[% 'Cuerpo del mensaje' | i18n %]:</legend>

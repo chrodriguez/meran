@@ -55,7 +55,7 @@ if($obj){
 
 C4::AR::Debug::debug($post);
 
-$mensaje= C4::AR::Social::sendPost($post);
+# $mensaje= C4::AR::Social::sendPost($post);
 
 if($obj){
       my $infoOperacionJSON   = to_json $mensaje;

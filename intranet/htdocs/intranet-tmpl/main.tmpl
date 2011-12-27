@@ -51,7 +51,6 @@
     function mensajesContacto(){
         objAH               = new AjaxHelper(updateMensajesContacto);
         objAH.debug         = true;
-        objAH.offIndicator  = 1; 
         objAH.url           = URL_PREFIX+'/mensajes_contacto.pl';
         objAH.sendToServer();
     }
@@ -116,6 +115,7 @@
 <div id="mensajes_contacto"></div>
 
 [% IF twitter_enabled %]
+
 <div id="twitter_container">
     [% IF twitter_username_to_search %]
 	   <div id="tweets" class="tweets"><div class="loading">[% 'Cargando tweets...' | i18n %]</div></div>

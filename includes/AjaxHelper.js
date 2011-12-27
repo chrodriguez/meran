@@ -38,7 +38,7 @@ function _Init(options){
         if(options.showOverlay){
     		startOverlay();
         } else {
-           if (!options.offIndicator)
+           if (options.showState)
             _ShowState(options);
         }
     }
@@ -136,6 +136,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 	this.cache          = false; 			//para cachear los resultados
 	this.showStatusIn   = '';               //muestra el estado del AJAX en el DIV pasado por parametro
 	this.showOverlay    = false;            //muestra el overlay y bloquea la pantalla luego de hacer una peticion AJAX
+	this.showState      = false;
 	this.autoClose      = true;             //cierra automaticamente el overlay
 	this.async          = true;             //asincronico por defecto
 
