@@ -4180,4 +4180,6 @@ button.thoughtbot:hover {
 
 }
 
-
+.hidden_element {
+    display: none;
+}
