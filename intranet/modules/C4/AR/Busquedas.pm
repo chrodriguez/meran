@@ -1855,6 +1855,12 @@ sub MARCRecordById3 {
 		my $nivel3= C4::AR::Nivel3::getNivel3FromId3($id3);
 		my $marc_record = MARC::Record->new_from_usmarc($nivel3->nivel1->getMarcRecord());
 		$marc_record->append_fields(MARC::Record->new_from_usmarc($nivel3->nivel2->getMarcRecord())->fields());
+		
+		##Agregamos el indice
+		if ($nivel3->nivel2->tiene_indice){
+			$marc_record->append_fields(MARC::Field->new(865, '', '', 'a' => $nivel3->nivel2->getIndice));
+		}
+		
 		$marc_record->append_fields(MARC::Record->new_from_usmarc($nivel3->getMarcRecord())->fields());
 	return $marc_record;
 }
@@ -1863,7 +1869,7 @@ sub MARCRecordById3WithReferences {
 	my ($id3)= @_;
 
 	my $marc_record = C4::AR::Busquedas::MARCRecordById3($id3);
-
+	
     my $tipo_doc    = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("910","a"));
 	foreach my $field ($marc_record->fields) {
         if(! $field->is_control_field){
@@ -1873,10 +1879,14 @@ sub MARCRecordById3WithReferences {
             foreach my $subfield ($field->subfields()) {
                 my $subcampo                        = $subfield->[0];
                 my $dato                            = $subfield->[1];
-                my $nivel                       = C4::AR::EstructuraCatalogacionBase::getNivelFromEstructuraBaseByCampoSubcampo($campo, $subcampo);
-                $dato                               = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $tipo_doc,$nivel);
-                $field->update( $subcampo => C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato,$tipo_doc,$nivel));
-                
+                my $nivel   	                    = C4::AR::EstructuraCatalogacionBase::getNivelFromEstructuraBaseByCampoSubcampo($campo, $subcampo);
+                if (C4::AR::Utilidades::trim($dato) ne ''){
+					$dato                           = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $tipo_doc,$nivel);
+					my $datoFinal= C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato,$tipo_doc,$nivel);
+					if($datoFinal){
+						$field->update( $subcampo => $datoFinal);
+					}
+				}
             }
 		}
 	}
@@ -1942,6 +1952,21 @@ sub MARCDetail{
 		#}
 	}
 
+	#EL INDICE. Hay que ver si se puede subir, asi no queda desordenado. 
+	if($nivel3_object->nivel2->tiene_indice){
+		my %hash;
+		my @info_campo_array;
+		my %hash_temp;
+		$hash_temp{'subcampo'}= 'a';
+		$hash_temp{'liblibrarian'}= 'Índice';
+		$hash_temp{'dato'}= $nivel3_object->nivel2->getIndice;
+		push(@info_campo_array, \%hash_temp);
+		$hash{'campo'}= '865';
+		$hash{'header'}= 'Índice';
+		$hash{'info_campo_array'}= \@info_campo_array;
+		push(@MARC_result_array, \%hash);
+	}
+	
 	return (\@MARC_result_array);
 	
 }

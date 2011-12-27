@@ -2258,7 +2258,17 @@ sub cambiarPasswordForzadoEnMetodo{
         }
 
         else{}
-    }    
+    }
+    
+        #Se limpian los login_attempts
+        eval{
+            
+            C4::AR::Debug::debug("\n\n\n\n AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH ".$socio->getNro_socio."\n\n\n\n");
+            my $attempts_object = _getAttemptsObject($socio->getNro_socio);    
+            
+            $attempts_object->reset();
+        }
+        
 }
 
 END { }       # module clean-up code here (global destructor)
