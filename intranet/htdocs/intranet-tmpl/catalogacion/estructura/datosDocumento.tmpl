@@ -119,7 +119,7 @@ $(document).ready( function() {
             [% PERL %]
                     print C4::AR::Filtros::to_Button(   text    => "[% 'Usar esquema' | i18n %]",
                                                         boton   => "boton_guardar",
-                                                        onClick => "seleccionar_esquema();",
+                                                        onClick => "guardarEsquema();",
                                                         title   => "[% 'Usar esquema' | i18n | i18n %]",
                                                         alternClass => "botonCentrado",
                                                         id      =>  "boton_guardar_esquema"
