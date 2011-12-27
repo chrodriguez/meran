@@ -1367,12 +1367,8 @@ function replaceAccents(s){var r=s.toLowerCase();r=r.replace(new RegExp(/\s/g),"
 function replaceNonAccents(s){var r=s.toLowerCase();r=r.replace(new RegExp(/\s/g),"");r=r.replace(new RegExp(/[àaâãäå]/g),"á");r=r.replace(new RegExp(/[èeêë]/g),"é");r=r.replace(new RegExp(/[ìiîï]/g),"í");r=r.replace(new RegExp(/n/g),"ñ");r=r.replace(new RegExp(/[òoôõö]/g),"ó");r=r.replace(new RegExp(/[ùuûü]/g),"ú");r=r.replace(new RegExp(/[y]/g),"ÿ");r=r.replace(new RegExp(/\W/g),"");return r;}
 function disableComponent(id){$('#'+id).attr('disabled',true);}function startOverlay(){$('#ajax-indicator').modal({close:false,containerCss:{backgroundColor:"#fff",height:50,padding:0,width:190,opacity:50,},});return(true);}
 function closeModal(){$.modal.close();}
-<<<<<<< HEAD
-function _Init(options){if(options.showStatusIn!=''){$('#'+options.showStatusIn).addClass('cargando');}else{if(options.showOverlay){startOverlay();}else{if(options.showState)
-=======
 function _Init(options){if(options.showStatusIn!=''){if(options.offIndicator!=true)
-$('#'+options.showStatusIn).addClass('cargando');}else{if(options.showOverlay){startOverlay();}else{if(options.offIndicator!=true)
->>>>>>> c213503eb77ad9368e30d81554c00137e3a0dfd1
+$('#'+options.showStatusIn).addClass('cargando');}else{if(options.showOverlay){startOverlay();}else{if(options.showState)
 _ShowState(options);}}}
 function _AddDiv(){var contenedor=$('#state')[0];if(contenedor==null){$('body').append("<div id='state' class='loading' style='position:absolute'>&nbsp;</div>");$('#state').css('top','0px');$('#state').css('left','0px');}}
 function _ShowState(options){_AddDiv();$('#state').centerObject(options);$('#state').show();};function _HiddeState(options){if(options.showStatusIn!=''){$('#'+options.showStatusIn).show();$('#'+options.showStatusIn).removeClass('cargando');}else{$('#state').ajaxStop($('#state').hide());}
@@ -1384,11 +1380,9 @@ obj.css('left',$(window).width()/2-this.width()/2);if(options){if((options.debug
 "\n"+
 "Total Horizontal: "+$(window).width()+"\n"+
 "Medio: "+$(window).width()/2);}}}
-<<<<<<< HEAD
-function AjaxHelper(fncUpdateInfo,fncInit){this.ini='';this.funcion='';this.url='';this.orden='';this.debug=false;this.debugJSON=false;this.onComplete=fncUpdateInfo;this.onBeforeSend=fncInit;this.showState=true;this.cache=false;this.showStatusIn='';this.showOverlay=false;this.showState=false;this.autoClose=true;this.async=true;this.sendToServer=function(){this.ajaxCallback(this);}
-=======
-function AjaxHelper(fncUpdateInfo,fncInit){this.ini='';this.funcion='';this.url='';this.orden='';this.debug=false;this.debugJSON=false;this.onComplete=fncUpdateInfo;this.onBeforeSend=fncInit;this.showState=true;this.cache=false;this.showStatusIn='';this.showOverlay=false;this.offIndicator=false;this.autoClose=true;this.async=true;this.sendToServer=function(){this.ajaxCallback(this);}
->>>>>>> c213503eb77ad9368e30d81554c00137e3a0dfd1
+function AjaxHelper(fncUpdateInfo,fncInit){this.ini='';this.funcion='';this.url='';this.orden='';this.debug=false;this.debugJSON=false;this.onComplete=fncUpdateInfo;this.onBeforeSend=fncInit;this.showState=true;this.cache=false;this.showStatusIn='';this.showOverlay=false;
+this.showState=false;
+this.autoClose=true;this.async=true;this.sendToServer=function(){this.ajaxCallback(this);}
 this.sort=function(ord){this.log("AjaxHelper => sort: "+ord);this.orden=ord;this.sendToServer();}
 this.changePage=function(ini){this.log("AjaxHelper => changePage: "+ini);this.ini=ini;this.sendToServer();}
 this.log=function(str){if((this.debug)&&(window.console)){window.console.log(str);}}
