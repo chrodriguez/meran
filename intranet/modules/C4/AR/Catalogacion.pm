@@ -628,7 +628,7 @@ sub marc_record_to_oai {
 
                 my $subcampo                        = $subfield->[0];
                 my $dato                            = $subfield->[1];
-                $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype, $db);
+                $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype, $nivel, $db);
                 my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $nivel, $db);
                     
                 
