@@ -58,7 +58,7 @@ sub t_guardarNivel3 {
 
     eval {
         #obtengo el tipo de ejemplar a partir del id2 del nivel 2
-        $params->{'tipo_ejemplar'} = C4::AR::Nivel2::getTipoEjemplarFromId2($params->{'id2'});
+        $params->{'tipo_ejemplar'} = $params->{'id_tipo_doc'} || C4::AR::Nivel2::getTipoEjemplarFromId2($params->{'id2'});
         #se genera el arreglo de barcodes validos para agregar a la base y se setean los mensajes para el usuario (mensajes de ERROR)
         my ($barcodes_para_agregar) = _generarArreglo($params, $msg_object);
 
@@ -440,7 +440,10 @@ sub detalleNivel3{
         #soy una ANALITICA tengo q obtener el ID2 del campo 773, a para obtener el ID1, link al registro padre
 #             C4::AR::Debug::debug("Nivel3 => detalleNivel3 => getAnalitica => ".$nivel2_object->getAnalitica());
             my $nivel2_object_padre             = C4::AR::Nivel2::getNivel2FromId2($nivel2_object->getAnalitica(),$db);
-            $hash_nivel2{'nivel1_padre'}        = $nivel2_object_padre->getId1();
+
+            if($nivel2_object_padre){
+                $hash_nivel2{'nivel1_padre'}        = $nivel2_object_padre->getId1();
+            }
         }
 
         #otengo las analiticas
@@ -464,9 +467,9 @@ sub detalleNivel3{
 	
 	                $hash_nivel1_aux{'nivel1_analitica'}        = $n1_object->toMARC_Intra;
 	                push(@nivel1_analitica_array, \%hash_nivel1_aux);
-#Esto mostraba cosas de más, perdón Mike.
-                $hash_nivel2_aux{'nivel2_analitica'}        = $n2_object->toMARC_Intra;
-                push(@nivel2_analitica_array, \%hash_nivel2_aux);
+                    #Esto mostraba cosas de más, perdón Mike.
+                    $hash_nivel2_aux{'nivel2_analitica'}        = $n2_object->toMARC_Intra;
+                    push(@nivel2_analitica_array, \%hash_nivel2_aux);
                 }
                 
             }
@@ -556,13 +559,25 @@ sub detalleCompletoINTRA {
     
     for(my $i=$inicio;$i<$cantidad;$i++){
 
-    my $new_id2 = 0;
-    eval {
-    	$new_id2 = $nivel2_array_ref->[$i]->getId2;
-    };
+        my $new_id2 = 0;
+        eval {
+            $new_id2 = $nivel2_array_ref->[$i]->getId2;
+        };
     #eval{
         my ($hash_nivel2) = detalleNivel3($new_id2,$nivel1->db);
-
+            
+        #Para ver la portada en el detalle
+        $hash_nivel2->{'portada_registro'}          = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'S');
+        $hash_nivel2->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'M');
+        $hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'L');
+        
+        #Para el google book preview
+        $hash_nivel2->{'isbn'}        		        = $nivel2_array_ref->[$i]->getISBN;
+        if(($nivel2_array_ref->[$i]->getISSN)&&(!$t_params->{'issn'})){
+        #Se supone que no cambian dentro de la misma publicación seriada, se toma solo el primero
+            $t_params->{'issn'}        				= $nivel2_array_ref->[$i]->getISSN;
+        }
+			
         push(@nivel2, $hash_nivel2);
     #};
         
@@ -771,6 +786,7 @@ sub detalleCompletoOPAC{
             $nivel2_array_ref->[$i]->load();
             $hash_nivel2->{'id2'}                       = $nivel2_array_ref->[$i]->getId2;
             $hash_nivel2->{'tipo_documento'}            = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getNombre();
+            $hash_nivel2->{'disponible'}                = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getDisponible();
             $hash_nivel2->{'isbn'}        		        = $nivel2_array_ref->[$i]->getISBN;
             if(($nivel2_array_ref->[$i]->getISSN)&&(!$t_params->{'issn'})){
 			#Se supone que no cambian dentro de la misma publicación seriada, se toma solo el primero
@@ -787,7 +803,7 @@ sub detalleCompletoOPAC{
             $hash_nivel2->{'cantReservas'}              = $totales_nivel3->{'cantReservas'};
             $hash_nivel2->{'portada_registro'}          = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'S');
             $hash_nivel2->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'M');
-            $hash_nivel2->{'primer_signatura'}          = $nivel2_array_ref->[0]->getSignaturas->[0];
+            $hash_nivel2->{'primer_signatura'}          = $nivel2_array_ref->[$i]->getSignaturas->[0];
             $hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'L');
             $hash_nivel2->{'cantReservasEnEspera'}      = $totales_nivel3->{'cantReservasEnEspera'};
             $hash_nivel2->{'disponibles'}               = $totales_nivel3->{'disponibles'};
@@ -840,7 +856,12 @@ sub generaCodigoBarra{
     my($parametros, $cant) = @_;
 
    my $barcode;
-    my @estructurabarcode = split(',',C4::AR::Catalogacion::getBarcodeFormat($parametros->{'tipo_ejemplar'}));
+   my $tipo_ejemplar = $parametros->{'id_tipo_doc'} || $parametros->{'tipo_ejemplar'}; 
+   
+   C4::AR::Debug::debug("\n\n\n GENERANDO BARCODE PARA TIPO DE EJEMPLAR: ".$tipo_ejemplar."  ".$parametros->{'id_tipo_doc'}."\n\n\n");
+   
+   
+   my @estructurabarcode = split(',',C4::AR::Catalogacion::getBarcodeFormat($tipo_ejemplar));
     
     my $like = '';
 

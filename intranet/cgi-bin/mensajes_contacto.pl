@@ -8,7 +8,7 @@ use C4::AR::MensajesContacto;
 my $query = new CGI;
 
 my ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
-									template_name   => "main.tmpl",
+									template_name   => "mensajes_contacto.tmpl",
 									query           => $query,
 									type            => "intranet",
 									authnotrequired => 0,
@@ -18,13 +18,10 @@ my ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
                                                         entorno         => 'undefined'},
 });
 
-C4::AR::Auth::checkBrowser();
-my $twitter_enabled             = C4::AR::Preferencias::getValorPreferencia("twitter_enabled");
-my $twitter_username_to_search  = C4::AR::Preferencias::getValorPreferencia("twitter_username_to_search");
+my ($msjNoLeidos, $cant)            = C4::AR::MensajesContacto::noLeidos();
+my ($ultimos_no_leidos)             = C4::AR::MensajesContacto::ultimosNoLeidos($msjNoLeidos);
 
-$t_params->{'twitter_enabled'}              = $twitter_enabled;
-$t_params->{'twitter_username_to_search'}   = $twitter_username_to_search;
-
-
+$t_params->{'ultimos_no_leidos'}    = $ultimos_no_leidos;
+$t_params->{'cant_noleidos'}        = $cant;
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

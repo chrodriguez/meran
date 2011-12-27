@@ -157,8 +157,11 @@ sub validarBarcode {
         } 
 
     } elsif ($action eq "UPDATE") {
-
-        if( !($msg_object->{'error'}) && $self->seRepiteBarcode($subcampo_hash_ref->{'dato'}) ){
+        if ( !($msg_object->{'error'}) && (!C4::AR::Utilidades::validateString($subcampo_hash_ref->{'dato'})) ) {
+            $msg_object->{'error'} = 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U387', 'params' => []} );
+        } 
+        elsif( !($msg_object->{'error'}) && $self->seRepiteBarcode($subcampo_hash_ref->{'dato'}) ){
             #verifico en el UPDATE si el barcode existe en la base de datos
             C4::AR::Debug::debug("CatRegistroMarcN3 => validarBarcode => el barcode ".$subcampo_hash_ref->{'dato'}." existe en la base");
             $msg_object->{'error'} = 1;
@@ -508,8 +511,12 @@ sub setId2{
 sub setCodigoBarra{
     my ($self)  = shift;
     my ($codigo_barra)   = @_;
+    
+    $codigo_barra = C4::AR::Utilidades::trim($codigo_barra);
 
-    $self->codigo_barra($codigo_barra);
+    if (C4::AR::Utilidades::validateString($codigo_barra)){
+        $self->codigo_barra($codigo_barra);
+    }
 }
 
 sub setSignatura{

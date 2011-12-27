@@ -1120,7 +1120,7 @@ sub reservasEdicion{
     
     if($tipo eq "GR"){
         push (@filtros, ( estado => { eq => 'G'}) );
-        $ordenAux    = 'timestamp DESC';
+        $ordenAux    = 'id_reserva DESC';
     
     }
     else{

@@ -1,5 +1,3 @@
-var USUARIO;
-
 function generarForm(id1, id2){
 
     if(seleccionoAlgo("checkEjemplares"+id2)){
@@ -167,6 +165,17 @@ function updateInfoMARC(responseText){
         
 }
 
+function verNota(id3){
+    $('#nota_ejemplar_'+id3).modal({   containerCss:{
+            backgroundColor:"#fff",
+    //         borderColor:"#0063dc",
+            height:"500px",
+            padding:"1",
+            width:"800px",
+        },
+    });
+}
+
 function verDivs(){
 	$('#detalleComun').slideDown("slow");
 	$('#detalleComun').show();
@@ -252,20 +261,19 @@ function updateInfoRenovar(responseText){
 
     setMessages(messageArray);
     
-        for(i=0; i<messageArray.length;i++){
+    for(i=0; i<messageArray.length;i++){
 //         imprimirTicket(ticketsArray[i].ticket,i);
         setMessages(messageArray[i]);
-     }
+    }
 
-      for(i=0; i<messageArray.length;i++){
+    for(i=0; i<messageArray.length;i++){
        if  (messageArray[i].error){
            hayError= 1;
        }
     }
-     if (!hayError){
+    if (!hayError){
          imprimirTicket(ticketsArray);
-     }
-
+    }
 
 	ejemplaresDelGrupo(ID_N2);
 	inicializar();
@@ -328,6 +336,7 @@ function updateInfoPrestarReserva(responseText){
            hayError= 1;
        }
     }
+    
      if (!hayError){
          imprimirTicket(ticketsArray);
      }
