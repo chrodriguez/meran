@@ -2933,3 +2933,41 @@ button.thoughtbot:active {
 }
 
 
+/* gritter*/
+
+.gritter-item-wrapper {
+    background:url('css/gritter/ie-spacer.gif'); /* ie7/8 fix */ 
+}
+.gritter-top {
+    background:url(css/gritter/gritter.png) no-repeat left -30px;
+}
+.hover .gritter-top {
+    background-position:right -30px;
+}
+.gritter-bottom {
+    background:url(css/gritter/gritter.png) no-repeat left bottom;
+}
+.hover .gritter-bottom {
+    background-position: bottom right;
+}
+.gritter-item {
+    background:url(css/gritter/gritter.png) no-repeat left -40px;
+    color:#eee;
+    font-family:verdana;
+}
+.hover .gritter-item {
+    background-position:right -40px;
+}
+
+.gritter-close { 
+    background:url(css/gritter/gritter.png) no-repeat left top;
+}
+/* for the light (white) version of the gritter notice */
+.gritter-light .gritter-item,
+.gritter-light .gritter-bottom,
+.gritter-light .gritter-top,
+.gritter-close {
+    background-image: url(css/gritter/gritter-light.png);
+    color: #222;
+}
+

@@ -387,8 +387,7 @@ $(document).ready( function() {
     <legend class="titulo_legend"> [% "Administraci&oacute;n de Preferencias del Sistema" | i18n %] </legend>
     <ul>
         <li class="sub_item" style="margin-top: 5px;">
-            <input type="text" id="buscar" name="buscar" style="float:left; margin:5px;">
-            <br />
+            <input type="text" id="buscar" name="buscar" >
 	            [% PERL %]
 	                                print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
 	                                                                    boton   => "boton_buscar",
