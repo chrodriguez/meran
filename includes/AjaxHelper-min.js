@@ -13,9 +13,7 @@ obj.css('left',$(window).width()/2-this.width()/2);if(options){if((options.debug
 "\n"+
 "Total Horizontal: "+$(window).width()+"\n"+
 "Medio: "+$(window).width()/2);}}}
-function AjaxHelper(fncUpdateInfo,fncInit){this.ini='';this.funcion='';this.url='';this.orden='';this.debug=false;this.debugJSON=false;this.onComplete=fncUpdateInfo;this.onBeforeSend=fncInit;this.showState=true;this.cache=false;this.showStatusIn='';this.showOverlay=false;<<<<<<<HEAD
-this.showState=false;=======this.offIndicator=false;>>>>>>>c213503eb77ad9368e30d81554c00137e3a0dfd1
-this.autoClose=true;this.async=true;this.sendToServer=function(){this.ajaxCallback(this);}
+function AjaxHelper(fncUpdateInfo,fncInit){this.ini='';this.funcion='';this.url='';this.orden='';this.debug=false;this.debugJSON=false;this.onComplete=fncUpdateInfo;this.onBeforeSend=fncInit;this.showState=true;this.cache=false;this.showStatusIn='';this.showOverlay=false;this.showState=false;this.autoClose=true;this.async=true;this.sendToServer=function(){this.ajaxCallback(this);}
 this.sort=function(ord){this.log("AjaxHelper => sort: "+ord);this.orden=ord;this.sendToServer();}
 this.changePage=function(ini){this.log("AjaxHelper => changePage: "+ini);this.ini=ini;this.sendToServer();}
 this.log=function(str){if((this.debug)&&(window.console)){window.console.log(str);}}

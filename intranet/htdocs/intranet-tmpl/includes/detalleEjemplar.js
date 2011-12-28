@@ -359,12 +359,15 @@ function updateInfoPrestarReserva(responseText){
 //                 window.open (URL_PREFIX+"/catalogacion/barcode_gen.pl?token="+token+"&id1="+id1+"&id2="+id2,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
 //             }
              var selectedItems = new Array();
-                $('.icon_seleccionar:checked').each(function(){
+               
+             $('.icon_seleccionar:checked').each(function(){
                                                       selectedItems.push($(this).val());
                                                 });
+          
              if (selectedItems.length == 0) {
                         jAlert('Debe seleccionar al menos un ejemplar','Advertencia de catalogo');
              }else{  
+          
                     $('#tablaEjemplares').submit();
              }
 
