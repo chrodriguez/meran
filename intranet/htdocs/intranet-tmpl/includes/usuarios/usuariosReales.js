@@ -50,6 +50,7 @@ function guardarModificacionUsuario(){
     objAH.telefono          = $('#telefono').val();
     objAH.cod_categoria     = $('#categoria_socio_id').val();
     objAH.ciudad            = $('#id_ciudad').val();
+    objAH.alt_calle         = $('#alt_calle').val();
     objAH.alt_ciudad        = $('#id_alt_ciudad').val();
     objAH.alt_telefono      = $('#alt_telefono').val();
     objAH.apellido          = $('#apellido').val();
@@ -154,6 +155,7 @@ function agregarUsuario(){
       objAH.cod_categoria   = $('#categoria_socio_id').val();
       objAH.ciudad          = $('#id_ciudad').val();
       objAH.alt_ciudad      = $('#id_alt_ciudad').val();
+      objAH.alt_calle       = $('#alt_calle').val();
       objAH.alt_telefono    = $('#alt_telefono').val();
       objAH.apellido        = $('#apellido').val();
       objAH.id_ui           = $('#id_ui').val();
