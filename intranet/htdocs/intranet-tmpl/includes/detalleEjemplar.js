@@ -367,7 +367,7 @@ function updateInfoPrestarReserva(responseText){
              if (selectedItems.length == 0) {
                         jAlert('Debe seleccionar al menos un ejemplar','Advertencia de catalogo');
              }else{  
-             alert(selectedItems);
+          
                     $('#tablaEjemplares').submit();
              }
 
