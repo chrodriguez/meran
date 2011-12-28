@@ -997,6 +997,9 @@ li {
     margin: 0 auto;
 }
 
+ul li button{
+	float: right;
+}
 ul.horizontal-list {
     min-width: 696px;
     list-style: none;
