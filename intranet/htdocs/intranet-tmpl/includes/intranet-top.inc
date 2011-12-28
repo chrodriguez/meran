@@ -75,7 +75,8 @@
 	            var clase = $(this).attr('class').split(' ');
 	            //solo los <tr> que tengan en el primer <td> un input checkbox
 	            if($(this).children(':first-child').children(':first-child').attr('type') == 'checkbox'){
-	                if(clase[1] == 'marked'){
+	                // algunos casos los tr tienen clase: 'par odd'
+	                if(clase[1] == 'marked' || clase[2] == 'marked'){
 	                    $(this).removeClass("marked"); 
 	                    $(this).children(':first-child').children(':first-child').removeAttr('checked');
 	                }else{
