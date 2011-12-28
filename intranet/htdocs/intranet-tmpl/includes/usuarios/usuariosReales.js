@@ -160,6 +160,7 @@ function agregarUsuario(){
       objAH.tipo_documento  = $('#tipo_documento_id').val();
       objAH.credential_type = $('#credential').val();
       objAH.nro_documento   = $('#nro_documento').val();
+      objAH.codigo_postal   = $('#codigo_postal').val();
       objAH.legajo          = $('#legajo').val();
       objAH.institucion     = $('#institucion').val();
       objAH.carrera         = $('#carrera').val();
