@@ -33,17 +33,18 @@ if ($id){
     my $nivel3          = C4::AR::Nivel3::getNivel3FromId3($id);
     push (@arreglo, $nivel3);
 } else {
-    my $hash=$input->{'param'};
-    my @keys=keys %$hash;
-    my $key_string= @keys[0];
-  
-    my $array_ref= $hash->{$key_string};
 
-    foreach my $id3 (@$array_ref) {
+      my $hash=$input->{'param'};
+      my @keys=keys %$hash;
+      my $key_string= @keys[0];
+
+      my $array_ref= $hash->{$key_string};
+
+      foreach my $id3 (@$array_ref) {
                 my $nivel3 = C4::AR::Nivel3::getNivel3FromId3($id3);
                 push (@arreglo, $nivel3);
-    }
-}
+      }
+ }
 
 C4::AR::PdfGenerator::batchBookLabelGenerator(scalar(@arreglo),\@arreglo);
 
