@@ -200,14 +200,14 @@
     
     /*=================================================Fin===Proveedor=======================================================*/
 
-     /*=================================================File Uploader=========================================================*/
+    /*=================================================File Uploader=========================================================*/
     TYPE_ERROR  = " Error en {file}: Solamente se permiten extensiones {extensions}";
     SIZE_ERROR  = "{file} es muy grande, el maximo tama&ntilde;o es {sizeLimit}.";
     EMPTY_ERROR = "{file} esta vacio. Elija un archivo con contenido, por favor.";
     ON_LEAVE    = "[% 'The files are being uploaded, if you leave now the upload will be cancelled.' | i18n %]";  
-     /*=================================================Fin File Uploader=========================================================*/
+    /*=================================================Fin File Uploader======================================================*/
      
-   /*=================================================Servidores z3950=========================================================*/
+    /*=================================================Servidores z3950=========================================================*/
     POR_FAVOR_INGRESE_SERVER_SERVIDOR   = "[% 'Por favor ingrese el servidor z3950' | i18n %]";
     POR_FAVOR_INGRESE_PUERTO_SERVIDOR   = "[% 'Por favor ingrese el puerto del servidor z3950' | i18n %]";
     POR_FAVOR_INGRESE_BASE_SERVIDOR     = "[% 'Por favor ingrese la base del servidor z3950' | i18n %]";
@@ -215,5 +215,11 @@
     POR_FAVOR_INGRESE_PASSWORD_SERVIDOR = "[% 'Por favor ingrese la password del servidor z3950' | i18n %]";
     POR_FAVOR_INGRESE_NOMBRE_SERVIDOR   = "[% 'Por favor ingrese el nombre del servidor z3950' | i18n %]";
     POR_FAVOR_INGRESE_SINTAXIS_SERVIDOR = "[% 'Por favor ingrese la sintaxis del servidor z3950' | i18n %]";
-     /*=================================================Fin Servidores z3950=========================================================*/
+    /*================================================Fin Servidores z3950====================================================*/
+    
+    /*=================================================Mails prestamos vencidos===============================================*/
+    PRESTAMO_TITLE =  "[% 'Advertencia' | i18n %]";
+    POR_FAVOR_SELECCIONE_ALGUN_PRESTAMO  = "[% 'Por favor seleccione al menos un pr&eacute;stamo' | i18n %]";
+    /*==========================================Fin Mails prestamos vencidos==================================================*/
+     
 </script>

@@ -526,6 +526,7 @@ my %mensajesINTRA = (
     
     #prestamos vencidos
     'PV00' => 'Se enviar&aacute;n los mails de pr&eacute;stamos vencidos a la brevedad',
+    'PV01' => 'Ocurrio un error mientras se mandaban los mails de pr&eacute;stamos vencidos',
 
 );
 
