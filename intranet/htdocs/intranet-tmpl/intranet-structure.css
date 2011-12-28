@@ -997,9 +997,10 @@ li {
     margin: 0 auto;
 }
 
-ul li button{
-	float: right;
+.filtros button{
+	float: none !important;
 }
+
 ul.horizontal-list {
     min-width: 696px;
     list-style: none;
