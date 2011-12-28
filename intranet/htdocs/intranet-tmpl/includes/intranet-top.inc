@@ -20,7 +20,7 @@
 	
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<META HTTP-EQUIV="cache-control" content="public">
-	<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme_intra %]/includes/completo.css">
+	<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme_intra %]/includes/intranet.css">
 	<script type="text/javascript" src="/includes/json/jsonStringify.js"></script>
 	<script type="text/javascript" src="/includes/completo-intranet-top.js"></script>
 	<script type="text/javascript" src="/includes/jquery/modal/jquery.simplemodal.js"></script>

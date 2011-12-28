@@ -33,9 +33,7 @@ if ($id){
     my $nivel3          = C4::AR::Nivel3::getNivel3FromId3($id);
     push (@arreglo, $nivel3);
 } else {
-
     my $hash=$input->{'param'};
-
     my @keys=keys %$hash;
     my $key_string= @keys[0];
   

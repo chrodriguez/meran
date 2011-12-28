@@ -31,6 +31,7 @@ __PACKAGE__->meta->setup(
         alt_ciudad       => { type => 'integer', overflow => 'truncate', length => 11, not_null => 0 },
         alt_telefono     => { type => 'varchar', overflow => 'truncate', length => 255 },
         nacimiento       => { type => 'varchar', overflow => 'truncate', length => 255},
+        codigo_postal    => { type => 'varchar', overflow => 'truncate', length => 32},
         fecha_alta       => { type => 'varchar', overflow => 'truncate', length => 255},
         sexo             => { type => 'character', overflow => 'truncate', length => 1 },
         telefono_laboral => { type => 'varchar', overflow => 'truncate', length => 50 },
@@ -153,6 +154,7 @@ sub agregar{
     $self->setAlt_calle($data_hash->{'alt_calle'});
     $self->setAlt_barrio($data_hash->{'alt_barrio'});
     $self->setAlt_ciudad($data_hash->{'alt_ciudad'});
+    $self->setCodigoPostal($data_hash->{'codigo_postal'});
     $self->setAlt_telefono($data_hash->{'alt_telefono'});
     $self->setNacimiento($data_hash->{'nacimiento'});
     $self->setFecha_alta($data_hash->{'fecha_alta'});
@@ -238,6 +240,7 @@ sub modificar{
     $self->setAlt_ciudad($data_hash->{'alt_ciudad'});
     $self->setAlt_telefono($data_hash->{'alt_telefono'});
     $self->setNacimiento($data_hash->{'nacimiento'});
+    $self->setCodigoPostal($data_hash->{'codigo_postal'});
     $self->setFecha_alta($data_hash->{'fecha_alta'});
     $self->setSexo($data_hash->{'sexo'});
     $self->setTelefono_laboral($data_hash->{'telefono_laboral'});
@@ -523,6 +526,17 @@ sub setIniciales{
     my ($self) = shift;
     my ($iniciales) = @_;
     $self->iniciales($iniciales);
+}
+
+sub getCodigoPostal{
+    my ($self) = shift;
+    return ($self->codigo_postal);
+}
+
+sub setCodigoPostal{
+    my ($self) = shift;
+    my ($cp) = @_;
+    $self->codigo_postal($cp);
 }
 
 sub getCalle{
