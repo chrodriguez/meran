@@ -54,6 +54,7 @@ function guardarModificacionUsuario(){
     objAH.alt_telefono      = $('#alt_telefono').val();
     objAH.apellido          = $('#apellido').val();
     objAH.id_ui             = $('#id_ui').val();
+    objAH.codigo_postal		= $('#codigo_postal').val();
     objAH.tipo_documento    = $('#tipo_documento_id').val();
     objAH.nro_documento     = $('#nro_documento').val();
     objAH.legajo            = $('#legajo').val();
