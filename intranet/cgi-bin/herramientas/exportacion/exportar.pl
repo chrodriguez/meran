@@ -23,7 +23,7 @@ if ($op eq 'export') {
     C4::AR::Debug::debug("Exportar => OP: ".$op);
     C4::AR::Debug::debug("Exportar => : ".$filename);
     print $query->header(
-                                -type           => 'application/octet-stream', 
+                                -type           => 'application/octet-stream',
                                 -attachment     => $filename,
                                 -expires        => '0',
                       );
@@ -42,13 +42,13 @@ else {
 
 
 my ($template, $session, $t_params)= get_template_and_user({
-                                    template_name => "herramientas/exportar.tmpl",
+                                    template_name => "herramientas/exportacion/exportar.tmpl",
                                     query => $query,
                                     type => "intranet",
                                     authnotrequired => 0,
-                                    flagsrequired => {  ui => 'ANY', 
-                                                        tipo_documento => 'ANY', 
-                                                        accion => 'CONSULTA', 
+                                    flagsrequired => {  ui => 'ANY',
+                                                        tipo_documento => 'ANY',
+                                                        accion => 'CONSULTA',
                                                         entorno => 'undefined'},
                                     debug => 1,
             });
