@@ -66,7 +66,7 @@ sub getId_prestamo {
 sub setId_prestamo {
 	my ($self)        = shift;
 	my ($id_prestamo) = @_;
-	$self->id_reserva($id_prestamo);
+	$self->id_prestamo($id_prestamo);
 }
 
 sub getId3 {

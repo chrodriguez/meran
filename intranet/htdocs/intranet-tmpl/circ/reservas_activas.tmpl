@@ -23,8 +23,8 @@ function changePage(ini){
 function consultar(){
 	tipoReserva=$("#tipoReserva").val();
 	objAH=new AjaxHelper(updateInfo);
-    objAH.showOverlay       = true;
-	
+    objAH.showOverlay  = true;
+	objAH.debug    = true;
     objAH.url=URL_PREFIX+"/circ/reservas_activas_result.pl";
 	
 	objAH.tipoReserva=tipoReserva;

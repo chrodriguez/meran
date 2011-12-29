@@ -22,6 +22,22 @@ function updateInfoBusquedasBar(responseText){
 	$(window).unbind('scroll');	
 }
 
+function busquedaPorTipoDoc(){
+
+	    objAH                   = new AjaxHelper(updateBusquedaCombinable);
+	    objAH.debug             = true;
+	    objAH.showOverlay       = true;
+	    //para busquedas combinables
+	    objAH.url               = URL_PREFIX+'/busquedas/busquedasDB.pl';
+	    objAH.only_available	= ( $('#only_available').attr('checked') )?1:0;
+	    objAH.tipo_nivel3_name  = $('#tipo_nivel3_id').val();
+	    objAH.tipoAccion        = 'BUSQUEDA_AVANZADA';
+	    //se setea la funcion para cambiar de pagina
+	    objAH.funcion           = 'changePage';
+	    //se envia la consulta
+	    objAH.sendToServer();
+}
+
 function busquedaCombinable(){
 
     var radio               = $("#tipo:checked");
@@ -96,9 +112,13 @@ function buscar(doScroll){
     	(jQuery.trim($('#isbn').val()) != '') ||
     	(jQuery.trim($('#codBarra').val()) != '') ||
     	(jQuery.trim($('#tema').val()) != '')
-     ){ 
-        busquedaCombinable();
-    }     
+     )
+    { 
+    	busquedaCombinable();
+    }
+    else if ($('#tipo_nivel3_id').val() != ""){
+		busquedaPorTipoDoc();
+    }
     else if ($.trim($('#estante').val()) != '') {
         if ( (jQuery.trim($('#estante').val())).length < limite_caracteres ){
     		cumple_limite = false;

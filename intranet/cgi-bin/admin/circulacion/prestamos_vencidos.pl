@@ -2,10 +2,11 @@
 use strict;
 use C4::AR::Auth;
 use CGI;
+use C4::AR::Prestamos;
 
-my $input           = new CGI;
+my $input = new CGI;
 
-my ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
+my ($template, $session, $t_params) = C4::AR::Auth::get_template_and_user({
 									template_name   => "admin/circulacion/prestamos_vencidos.tmpl",
 									query           => $input,
 									type            => "intranet",
@@ -16,9 +17,12 @@ my ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
                                                         entorno         => 'undefined'},
 });
 
+my @prestamos_array_ref   = C4::AR::Prestamos::getAllPrestamosVencidos();
+$t_params->{'prestamos'}  = \@prestamos_array_ref;
+
 if(C4::AR::Preferencias::getValorPreferencia('enableMailPrestVencidos')){
 
-  $t_params->{'mensaje'} = 'Se enviar&aacute;n los mails de pr&eacute;stamos vencidos a la brevedad';
+    $t_params->{'mensaje'}  = 'Se enviar&aacute;n los mails de pr&eacute;stamos vencidos a la brevedad';
 
 }
 

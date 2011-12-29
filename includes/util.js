@@ -240,8 +240,18 @@ function toggle_ayuda_in_line(){
     });    
 }
 
-
-
+function toggle_component(id_componente, container_class){
+    
+    $("#" + id_componente).toggle(function(){
+        $(this).addClass("active"); 
+    }, function(){
+        $(this).removeClass("active");
+    });
+    
+    $("#" + id_componente).click(function(){
+        $(this).next("." + container_class).slideToggle("fast");
+    });
+}
 
 function esBrowser(browser){
 

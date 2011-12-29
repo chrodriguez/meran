@@ -23,7 +23,7 @@
 					<li class="columna_der">[% "Ejemplares Prestados:"|i18n %]<strong> [% cantPrestados %]</strong></li>
 					</ul>                
 					<hr>
-					<form id="tablaEjemplares" name="tablaEjemplares" action="[% url_prefix %]/catalogacion/barcode_gen.pl" method="post">
+					<form id="tablaEjemplares[% id2 %]" name="tablaEjemplares[% id2 %]" action="[% url_prefix %]/catalogacion/barcode_gen.pl" method="post">
 					<table id="tabla_ejemplares[% id2 %]" cellspacing="0" cellpadding="0"  width="100%" class="tablaResult">
 							<tr class="titulo_tabla_resultado">
 					            <th>
@@ -52,13 +52,12 @@
 					                <strong>[% "Acciones" |i18n %]</strong>
 					            </th>
 							</tr>
-					
+                           
 					[% FOREACH nivel3 %]
-					
+				
 							<tr align="center">
 					                <td>
 					                    <input type="checkbox" id="checkEjemplares[% id2 %]" name="checkEjemplares[% id2 %]" class="icon_seleccionar" value="[% nivel3_obj.getId3 %]">
-					
 					                </td>
 					                <td>[% nivel3_obj.getSignatura_topografica %]</td>
 					                <td>
@@ -225,7 +224,7 @@
 					              [% PERL %]
 					                      print C4::AR::Filtros::to_Icon(   
 					                                                          boton   => "icon_exportar",
-					                                                          onClick => "generarVariasEtiquetas();",
+					                                                          onClick => "generarVariasEtiquetas([% id2 %]);",
 					                                                          title   => "[% 'Generar etiquetas de ejemplares' | i18n %]",
 					                                                          li => 1,
 					                              ) ;

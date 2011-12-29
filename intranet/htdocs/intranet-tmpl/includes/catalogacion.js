@@ -1184,7 +1184,7 @@ function procesarInfoJson(marc_object_array, id_padre){
         strComp = strComp + "</div>"; //end div buttonContainerHorizontal
 
         //genero el header para el campo q contiene todos los subcampos
-        strComp = strComp + "<div id='marc_group" + id_temp + "' ><li class='MARCHeader'>";
+        strComp = strComp + "<div id='marc_group" + id_temp + "'><li id='trigger_" + id_temp + "' class='MARCHeader click trigger trigger_" + id_temp + "'>";
         strComp = strComp + "<div class='MARCHeader_info'>";
 
         //header LEFT
@@ -1221,12 +1221,11 @@ function procesarInfoJson(marc_object_array, id_padre){
         //cierro MARCHeader_info
         strComp = strComp + "</div>";
 // TODO creo q el div MARCHeader_content esta deprecated
-        strComp = strComp + "</li><div class='MARCHeader_content'>";
+        strComp = strComp + "</li><div id='MARC_content_" + id_temp + "' class='MARC_content_" + id_temp + "'>";
 
-        //cierrdo DIV MARCHeader_content
-        strComp = strComp + "</div>";
         //cierro DIV marc_group
-        strComp = strComp + "</div>";
+//         strComp = strComp + "</div>";
+       
 
         if(id_padre == null) {
             $("#" + getDivDelNivel()).append(strComp);
@@ -1242,7 +1241,8 @@ function procesarInfoJson(marc_object_array, id_padre){
         //proceso los subcampos
         var subcampo_marc_conf_obj  = new subcampo_marc_conf(objetos[i]);
         var subcampos_array         = campo_marc_conf_obj.getSubCamposArray();
-        marc_group                  = "marc_group" + id_temp;
+//         marc_group                  = "marc_group" + id_temp;
+        marc_group                  = "MARC_content_" + id_temp;  
         
         for(var j=0; j < subcampos_array.length; j++){
         //recorro los subcampos
@@ -1254,6 +1254,13 @@ function procesarInfoJson(marc_object_array, id_padre){
         }
 
         MARC_OBJECT_ARRAY.push(campo_marc_conf_obj);
+        //cierrdo DIV MARCHeader_content
+        strComp = strComp + "</div>";
+        //cierro DIV marc_group
+        strComp = strComp + "</div>"
+        
+        strComp = "<script type='text/javascript'>toggle_component('trigger_"+ id_temp +"','MARC_content_"+ id_temp +"');</script>";
+        $("#marc_group" + id_temp).append(strComp);
     }
 
     if(objetos.length != 1) {

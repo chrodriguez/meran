@@ -668,7 +668,7 @@ sub getSocioLike {
     $orden = "apellido,nombre";
     my $ordenAux= $socioTemp->sortByString($orden);
     
-    $ordenAux = 'agregacion_temp,'.$ordenAux;
+   # $ordenAux = 'agregacion_temp,'.$ordenAux;
     
     my $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
                                                                             sort_by => $ordenAux,
