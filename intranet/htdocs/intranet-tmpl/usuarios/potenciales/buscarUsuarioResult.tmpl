@@ -21,7 +21,8 @@
 	    }
 	    
 	    $(document).ready(function(){
-			checkTr();
+			    checkTr();
+			    checkedAll('checkAllUsuariosPotenciales','chkboxUsuariosPotenciales');
 	    });
 </script>
 [% USE HTML %]
@@ -34,7 +35,11 @@
 <table id="tablaResult" class="datos_tabla" width="100%" cellspacing=0 cellpadding=0>
 	<thead>
   	<tr class="titulo_tabla_resultado">
-    		<th>&nbsp;</th>
+    		<th>
+    		      <a id="checkAllUsuariosPotenciales" class="click">
+                    <img border="0" title="Seleccionar todos" src="/intranet-tmpl/temas/DEO/imagenes/iconos/check.png">
+              </a>
+        </th>
 
     		<th align="left" width="28%" class="click" onClick="ordenar('apellido')">
                     [% "Apellido y Nombres" | i18n %]
@@ -60,7 +65,7 @@
 			[% IF nomodificable %]
 				[% "Imposible" | i18n %] 
 			[% ELSE %]
-				<input type=checkbox name="[% socio.getNro_socio %]" 
+				<input type="checkbox" name="chkboxUsuariosPotenciales" 
 				id="[% socio.getNro_socio %]" 
 				value="[% socio.getNro_socio %]">
 			[% END %]

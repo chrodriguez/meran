@@ -345,7 +345,7 @@ function updateInfoPrestarReserva(responseText){
 	ejemplaresDelGrupo(ID_N2);
 }
 
- function generarVariasEtiquetas(){
+ function generarVariasEtiquetas(id2){
 //             var selectedItems = new Array();
 //             $('#checkEjemplares:checked').each(function(){
 //                                                   selectedItems.push($(this).val());
@@ -365,7 +365,7 @@ function updateInfoPrestarReserva(responseText){
              if (selectedItems.length == 0) {
                         jAlert('Debe seleccionar al menos un ejemplar','Advertencia de catalogo');
              }else{  
-                    $('#tablaEjemplares').submit();
+                    $('#tablaEjemplares'+id2).submit();
              }
 
  }

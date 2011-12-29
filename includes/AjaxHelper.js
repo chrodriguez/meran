@@ -38,9 +38,10 @@ function _Init(options){
 
         if(options.showOverlay){
     		startOverlay();
-        } else {
-           if (options.offIndicator != true)
+        } else {         
+           if (options.showState){
             _ShowState(options);
+           }
         }
     }
     
@@ -133,11 +134,11 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 	this.debugJSON      = false;			//para debuguear jsonStringify (JSON)
 	this.onComplete     = fncUpdateInfo;  	//se ejecuta cuando se completa el ajax
 	this.onBeforeSend   = fncInit;		    //se ejecuta antes de consultar al servidor con ajax
-	this.showState      = true;
+ 	this.showState      = true;
 	this.cache          = false; 			//para cachear los resultados
 	this.showStatusIn   = '';               //muestra el estado del AJAX en el DIV pasado por parametro
 	this.showOverlay    = false;            //muestra el overlay y bloquea la pantalla luego de hacer una peticion AJAX
-	this.offIndicator   = false;            //muestra el overlay y bloquea la pantalla luego de hacer una peticion AJAX
+// 	this.showState      = false;
 	this.autoClose      = true;             //cierra automaticamente el overlay
 	this.async          = true;             //asincronico por defecto
 

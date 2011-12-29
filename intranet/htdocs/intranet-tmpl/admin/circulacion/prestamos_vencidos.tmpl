@@ -2,30 +2,133 @@
 
 <script type="text/javascript" language="javascript">
 
-  function enviarMails(){
+    $(document).ready( function() {
+	    zebra('datos_tabla');
+	    makeDataTable('#prestamosVencidos');
+    });
     
-    objAH                   = new AjaxHelper(updateEnviarMails);
-    objAH.url               = URL_PREFIX+"/admin/circulacion/prestamos_vencidosDB.pl";
-    objAH.showOverlay       = true;
-    objAH.tipo_prestamo     = $("#tipo_prestamo_id").val();
-    objAH.categoria_socio   = $("#categoria_socio_id").val();
-    objAH.tipoAccion        = "ENVIAR_MAILS_PRESTAMOS_VENCIDOS";
-    objAH.sendToServer();
-  
-  }
-  
-  function updateEnviarMails(responseText){
-  
-    var Messages=JSONstring.toObject(responseText);
-    setMessages(Messages);
-  
-  }
+    var selected = new Array();
+
+    function enviarMailsATodos(){
+
+        objAH                   = new AjaxHelper(updateEnviarMailsATodos);
+        objAH.url               = URL_PREFIX+"/admin/circulacion/prestamos_vencidosDB.pl";
+        objAH.showOverlay       = true;
+        objAH.tipoAccion        = "ENVIAR_TODOS_MAILS_PRESTAMOS_VENCIDOS";
+        objAH.sendToServer();
+
+    }
+
+    function updateEnviarMailsATodos(responseText){
+
+        var Messages=JSONstring.toObject(responseText);
+        setMessages(Messages);
+
+    }
+    
+    function enviarMailsASeleccionados(){
+
+        objAH                   = new AjaxHelper(updateEnviarMailsASeleccionados);
+        objAH.url               = URL_PREFIX+"/admin/circulacion/prestamos_vencidosDB.pl";
+        objAH.showOverlay       = true;
+        objAH.tipoAccion        = "ENVIAR_A_SELECCION_MAILS_PRESTAMOS_VENCIDOS";
+        getSeleccionados();
+        objAH.ids_prestamos     = selected;
+        objAH.sendToServer();
+
+    }
+
+    function updateEnviarMailsASeleccionados(responseText){
+
+        // limpia esta variable sino quedan prestamos viejos
+        selected = new Array();
+        var Messages=JSONstring.toObject(responseText);
+        setMessages(Messages);
+
+    }
+    
+    // devuelve los id de los prestamos seleccionados
+    function getSeleccionados(){
+    
+        var checkeds   = $("tr input[type='checkbox']:checked");
+
+        if (checkeds.length > 0){
+        
+            //alert(selected[0].id)
+            
+            for(i = 0; i < checkeds.length; i++) {
+                selected.push(checkeds[i].id);
+            }
+            
+        }else{
+        
+            jAlert(POR_FAVOR_SELECCIONE_ALGUN_PRESTAMO,PRESTAMO_TITLE);
+            
+        }
+
+        
+    }
 
 </script>
 
 <fieldset>
+    <legend class="titulo_legend">[% "Acciones" | i18n %] </legend>
+        <button class="clean-gray" onclick="enviarMailsATodos();">Enviar a Todos</button>
+</fieldset>
+
+<fieldset>
     <legend class="titulo_legend">[% "Pr&eacute;stamos vencidos" | i18n %] </legend>
-        <button class="clean-gray" onclick="enviarMails();">Enviar Mails</button>
+        
+<table id="prestamosVencidos" class="datos_tabla" width="100%" cellspacing=0 cellpadding=0>
+	<thead>
+  	<tr class="titulo_tabla_resultado">
+    	<th>
+    		[% "Mandar Mail" | i18n %]
+        </th>
+    		<th>
+            [% "Tipo de Pr&eacute;stamo" | i18n %]
+        </th>
+    		<th>
+            [% "Fecha de Pr&eacute;stamo" | i18n %]
+        </th>
+        </th>
+    	<th>
+            [% "Ejemplar" | i18n %]
+        </th>
+    	<th>  
+            [% "Numero de Socio" | i18n %]
+        </th>
+  	</tr>
+	</thead>
+	<tbody>
+	
+	[% FOREACH prestamo IN prestamos %]
+      	<tr align="center" >
+          	
+     		<td valign="middle" align="center">
+     		    <input type="checkbox" name="[% prestamo.socio.getNro_socio %]" 
+				id="[% prestamo.getId_prestamo %]" >
+		    </td>
+		
+          	<td align="left" class="nomCompleto">
+                [% prestamo.getTipo_prestamo %]
+		    </td>
+          	<td align="left" class="documento">
+          	    [% prestamo.getFecha_prestamo %]
+		    </td>
+<!--		    TODO: link-->
+		    <td align="left" class="documento">
+          	    [% prestamo.nivel3.codigo_barra %]
+		    </td>
+     		<td>
+                [% prestamo.socio.getNro_socio %]
+		    </td>
+
+        </tr>
+    [% END %]
+	</tbody>
+</table>
+<button class="clean-gray" onclick="enviarMailsASeleccionados();">Enviar a Seleccionados</button>
 </fieldset>
 
 [% INCLUDE "intranet-bottom.inc" %]

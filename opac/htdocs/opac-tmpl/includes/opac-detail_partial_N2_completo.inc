@@ -166,7 +166,7 @@ function updateInfoMARC(responseText){
 										
 										[% INCLUDE 'e-docs_grupo.inc' %]
 										
-                                        [% disponible %]
+                                        [% IF disponible %]
                                             [% INCLUDE 'opac-detail_partial_disponibilidad.inc' %]
                                         [% END %]
                                         

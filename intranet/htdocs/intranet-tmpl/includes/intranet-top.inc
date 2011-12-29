@@ -20,7 +20,7 @@
 	
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<META HTTP-EQUIV="cache-control" content="public">
-	<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme_intra %]/includes/completo.css">
+	<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme_intra %]/includes/intranet.css">
 	<script type="text/javascript" src="/includes/json/jsonStringify.js"></script>
 	<script type="text/javascript" src="/includes/completo-intranet-top.js"></script>
 	<script type="text/javascript" src="/includes/jquery/modal/jquery.simplemodal.js"></script>
@@ -75,7 +75,8 @@
 	            var clase = $(this).attr('class').split(' ');
 	            //solo los <tr> que tengan en el primer <td> un input checkbox
 	            if($(this).children(':first-child').children(':first-child').attr('type') == 'checkbox'){
-	                if(clase[1] == 'marked'){
+	                // algunos casos los tr tienen clase: 'par odd'
+	                if(clase[1] == 'marked' || clase[2] == 'marked'){
 	                    $(this).removeClass("marked"); 
 	                    $(this).children(':first-child').children(':first-child').removeAttr('checked');
 	                }else{

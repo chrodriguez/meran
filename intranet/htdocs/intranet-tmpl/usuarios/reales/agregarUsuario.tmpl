@@ -119,7 +119,7 @@
 		<li class="sub_item">
 		 <label for="codigo_postal">[% "C&oacute;digo Postal" | i18n %]</label>
 		  <input type="number" min="0" name="codigo_postal"  id="codigo_postal" placeholder='[% "C&oacute;digo postal" | i18n %]'  
-		         size="25" value="[% codigo_postal %]">
+		         size="25" value="[% socio_modificar.persona.codigo_postal %]">
 		</li>
 		<li class="sub_item">
 		     <label for="ciudad"> [% "Ciudad" | i18n %] * </label>
@@ -146,7 +146,7 @@
 		   <label for="id_alt_ciudad">[% "Ciudad de origen" | i18n %]</label>
 		            <input  type="text" id="alt_ciudad" name="alt_ciudad" placeholder='[% "Ciudad de or&iacute;gen" | i18n %]'   
 		                value="[% socio_modificar.persona.alt_ciudad_ref.getNombre%]" size="25" >
-		            <input type=hidden id="id_alt_ciudad" name="id_alt_ciudad" value="[% socio_modificar.persona.alt_ciudad_ref.LOCALIDAD %]"> 
+		            <input type=hidden id="id_alt_ciudad" name="id_alt_ciudad" value="[% socio_modificar.persona.alt_ciudad_ref.id %]"> 
 		</li>
 		<li class="sub_item">
 		   <label for="email">   [% "E-Mail" | i18n %] *</label>

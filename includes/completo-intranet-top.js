@@ -1350,6 +1350,7 @@ function getRadioButtonSelectedValue(ctrl){for(i=0;i<ctrl.length;i++)
 if(ctrl[i].checked)return ctrl[i].value;}
 function highlight(classesArray,idKeywordsArray){for(x=0;x<idKeywordsArray.length;x++){stringArray=($('#'+idKeywordsArray[x]).val()).split(' ');for(y=0;y<stringArray.length;y++){if($.trim(stringArray[y]).length!=0){for(z=0;z<classesArray.length;z++){$('.'+classesArray[z]).highlight(stringArray[y]);}}}}}
 function toggle_ayuda_in_line(){$("#ayuda").click(function(){$("#ayuda_in_line").toggle("slow");});}
+function toggle_component(id_componente,container_class){$("#"+id_componente).toggle(function(){$(this).addClass("active");},function(){$(this).removeClass("active");});$("#"+id_componente).click(function(){$(this).next("."+container_class).slideToggle("fast");});}
 function esBrowser(browser){browser=browser.toLowerCase();ok=false;jQuery.each(jQuery.browser,function(i,val){if((val)&&(i==browser))
 ok=true;});return(ok);}
 function makeToggle(container_class,trigger,afterToggleFunction,hide){if(hide)
@@ -1368,8 +1369,7 @@ function replaceNonAccents(s){var r=s.toLowerCase();r=r.replace(new RegExp(/\s/g
 function disableComponent(id){$('#'+id).attr('disabled',true);}function startOverlay(){$('#ajax-indicator').modal({close:false,containerCss:{backgroundColor:"#fff",height:50,padding:0,width:190,opacity:50,},});return(true);}
 function closeModal(){$.modal.close();}
 function _Init(options){if(options.showStatusIn!=''){if(options.offIndicator!=true)
-$('#'+options.showStatusIn).addClass('cargando');}else{if(options.showOverlay){startOverlay();}else{if(options.offIndicator!=true)
-_ShowState(options);}}}
+$('#'+options.showStatusIn).addClass('cargando');}else{if(options.showOverlay){startOverlay();}else{if(options.showState){_ShowState(options);}}}}
 function _AddDiv(){var contenedor=$('#state')[0];if(contenedor==null){$('body').append("<div id='state' class='loading' style='position:absolute'>&nbsp;</div>");$('#state').css('top','0px');$('#state').css('left','0px');}}
 function _ShowState(options){_AddDiv();$('#state').centerObject(options);$('#state').show();};function _HiddeState(options){if(options.showStatusIn!=''){$('#'+options.showStatusIn).show();$('#'+options.showStatusIn).removeClass('cargando');}else{$('#state').ajaxStop($('#state').hide());}
 if(options.showOverlay){$(document).ajaxStop(closeModal());}};jQuery.fn.centerObject=function(options){var obj=this;var total=0;var dif=0;if($(window).scrollTop()==0){obj.css('top',$(window).height()/2-this.height()/2);}else{total=$(window).height()+$(window).scrollTop();dif=total-$(window).height();obj.css('top',dif+($(window).height())/2);}
@@ -1380,7 +1380,7 @@ obj.css('left',$(window).width()/2-this.width()/2);if(options){if((options.debug
 "\n"+
 "Total Horizontal: "+$(window).width()+"\n"+
 "Medio: "+$(window).width()/2);}}}
-function AjaxHelper(fncUpdateInfo,fncInit){this.ini='';this.funcion='';this.url='';this.orden='';this.debug=false;this.debugJSON=false;this.onComplete=fncUpdateInfo;this.onBeforeSend=fncInit;this.showState=true;this.cache=false;this.showStatusIn='';this.showOverlay=false;this.offIndicator=false;this.autoClose=true;this.async=true;this.sendToServer=function(){this.ajaxCallback(this);}
+function AjaxHelper(fncUpdateInfo,fncInit){this.ini='';this.funcion='';this.url='';this.orden='';this.debug=false;this.debugJSON=false;this.onComplete=fncUpdateInfo;this.onBeforeSend=fncInit;this.showState=true;this.cache=false;this.showStatusIn='';this.showOverlay=false;this.autoClose=true;this.async=true;this.sendToServer=function(){this.ajaxCallback(this);}
 this.sort=function(ord){this.log("AjaxHelper => sort: "+ord);this.orden=ord;this.sendToServer();}
 this.changePage=function(ini){this.log("AjaxHelper => changePage: "+ini);this.ini=ini;this.sendToServer();}
 this.log=function(str){if((this.debug)&&(window.console)){window.console.log(str);}}
