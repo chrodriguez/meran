@@ -1490,7 +1490,7 @@ li.MARCHeader {
     width: 100%;
     list-style-type: none;
     clear: both;
-    height: 40px;
+    height: 30px;
 }
 
 li.MARCHeader label {
@@ -1510,7 +1510,7 @@ li.MARCHeader input {
 
 .MARCHeader_info {
     width: 100%;
-    padding-top: 9px;
+    padding-top: 5px;
 }
 
 .MARCHeader_controls {
