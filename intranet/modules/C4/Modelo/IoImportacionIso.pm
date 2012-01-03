@@ -87,7 +87,6 @@ sub setIdImportacionEsquema{
 sub setNombre{
     my ($self)  = shift;
     my ($nombre) = @_;
-    utf8::encode($nombre);
     $self->nombre($nombre);
 }
 
@@ -108,7 +107,6 @@ sub setFormato{
 sub setComentario{
     my ($self)   = shift;
     my ($comentario) = @_;
-    utf8::encode($comentario);
     $self->comentario($comentario);
 }
 

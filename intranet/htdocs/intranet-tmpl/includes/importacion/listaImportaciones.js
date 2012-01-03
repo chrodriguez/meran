@@ -57,7 +57,7 @@ function consultar(filtro,doScroll){
     }
     else{
 // ver estas dos variables donde estan, asi tira bien el aler
-        jAlert(INGRESE_UN_DATO,USUARIOS_ALERT_TITLE);
+        jAlert(INGRESE_UN_DATO,IMPORTACION_ALERT_TITLE);
         $('#nombre_importacion').focus();
     }
 

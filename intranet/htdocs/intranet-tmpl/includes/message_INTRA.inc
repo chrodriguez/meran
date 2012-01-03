@@ -133,7 +133,7 @@
     /*=============================================Fin===Visualizacion Opac===========================================*/
     /*================================================Busquedas==============================================*/
     INGRESE_DATOS_PARA_LA_BUSQUEDA = "[% 'Ingrese datos para la b\u00fasqueda' | i18n %]";
-    INGRESE_AL_MENOS_TRES_CARACTERES_PARA_REALIZAR_LA_BUSQUEDA = "[% 'Ingrese al menos 3 caracteres para realizar la b\u00fasqueda' | i18n %]";    
+    INGRESE_AL_MENOS_TRES_CARACTERES_PARA_REALIZAR_LA_BUSQUEDA = "[% 'Ingrese al menos 3 caracteres para realizar la b\u00fasqueda' | i18n %]";
     /*=============================================Fin===Busquedas===========================================*/
 
     /*================================================Reglas Sanciones==============================================*/
@@ -197,16 +197,16 @@
     POR_FAVOR_INGRESE_UNA_FORMA_DE_ENVIO            = "[% 'Por favor seleccione alg&uacute;na forma de envio' | i18n %]";
     POR_FAVOR_SELECCIONE_LAS_RECOMENDACIONES        = "[% 'Por favor seleccione las recomendaciones que desea incluir' | i18n %]";
     POR_FAVOR_SELECCIONE_PROVEEDORES_A_PRESUPUESTAR = "[% 'Por favor seleccione los proveedores que desea presupuestar' | i18n %]";
-    
+
     /*=================================================Fin===Proveedor=======================================================*/
 
     /*=================================================File Uploader=========================================================*/
     TYPE_ERROR  = " Error en {file}: Solamente se permiten extensiones {extensions}";
     SIZE_ERROR  = "{file} es muy grande, el maximo tama&ntilde;o es {sizeLimit}.";
     EMPTY_ERROR = "{file} esta vacio. Elija un archivo con contenido, por favor.";
-    ON_LEAVE    = "[% 'The files are being uploaded, if you leave now the upload will be cancelled.' | i18n %]";  
+    ON_LEAVE    = "[% 'The files are being uploaded, if you leave now the upload will be cancelled.' | i18n %]";
     /*=================================================Fin File Uploader======================================================*/
-     
+
     /*=================================================Servidores z3950=========================================================*/
     POR_FAVOR_INGRESE_SERVER_SERVIDOR   = "[% 'Por favor ingrese el servidor z3950' | i18n %]";
     POR_FAVOR_INGRESE_PUERTO_SERVIDOR   = "[% 'Por favor ingrese el puerto del servidor z3950' | i18n %]";
@@ -216,10 +216,14 @@
     POR_FAVOR_INGRESE_NOMBRE_SERVIDOR   = "[% 'Por favor ingrese el nombre del servidor z3950' | i18n %]";
     POR_FAVOR_INGRESE_SINTAXIS_SERVIDOR = "[% 'Por favor ingrese la sintaxis del servidor z3950' | i18n %]";
     /*================================================Fin Servidores z3950====================================================*/
-    
+
     /*=================================================Mails prestamos vencidos===============================================*/
     PRESTAMO_TITLE =  "[% 'Advertencia' | i18n %]";
     POR_FAVOR_SELECCIONE_ALGUN_PRESTAMO  = "[% 'Por favor seleccione al menos un pr&eacute;stamo' | i18n %]";
     /*==========================================Fin Mails prestamos vencidos==================================================*/
-     
+
+    /*====================================================Importacion/Exportacion==========================================================*/
+    IMPORTACION_ALERT_TITLE =  "[% 'Advertencia' | i18n %]";
+
+    /*=================================================Fin===Estante=======================================================*/
 </script>

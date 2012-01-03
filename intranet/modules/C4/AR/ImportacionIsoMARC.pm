@@ -109,6 +109,10 @@ sub getImportacionById {
 =cut
 sub getImportacionLike {
     my ($busqueda,$orden,$ini,$cantR,$habilitados,$inicial) = @_;
+
+    require C4::Modelo::IoImportacionIso;
+    require C4::Modelo::IoImportacionIso::Manager;
+
     my @filtros;
     my $importacionTemp = C4::Modelo::IoImportacionIso->new();
 

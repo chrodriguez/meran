@@ -85,13 +85,11 @@ elsif($tipoAccion eq "BUSQUEDA"){
   my ($ini,$pageNumber,$cantR) = C4::AR::Utilidades::InitPaginador($ini);
   my ($cantidad,$importaciones) = C4::AR::ImportacionIsoMARC::getImportacionLike($busqueda,$orden,$ini,$cantR,1,$inicial);
 
-  if($importaciones){
       $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
       $t_params->{'resultsloop'}        = $importaciones;
       $t_params->{'cantidad'}           = $cantidad;
       $t_params->{'importacion_busqueda'} = $busqueda;
 
-  }#END if($importaciones)
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 

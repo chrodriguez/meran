@@ -21,13 +21,10 @@
                             [% "Nombre" | i18n %]
                         </th>
                         <th>
-                            [% "Archivo" | i18n %]
+                            [% "Comentario" | i18n %]
                         </th>
                         <th>
                             [% "Formato" | i18n %]
-                        </th>
-                        <th>
-                            [% "Comentario" | i18n %]
                         </th>
                         <th>
                             [% "Esquema" | i18n %]
@@ -39,20 +36,17 @@
                 </thead>
             <tbody>
 
-            [% FOREACH importacion ON IMPORTACIONES %]
+            [% FOREACH importacion IN resultsloop %]
                 <tr  align="center">
 
                       <td align="left">
                           [% importacion.getNombre %]
                       </td>
                       <td align="left">
-                           [% importacion.getArchivo %]
+                           [% importacion.getComentario %]
                       </td>
                       <td align="left">
                            [% importacion.getFormato %]
-                      </td>
-                      <td align="left">
-                           [% importacion.getComentario %]
                       </td>
                       <td align="left">
                            [% importacion.getEsquema.getNombre %]
