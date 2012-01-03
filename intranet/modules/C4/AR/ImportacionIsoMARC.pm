@@ -34,30 +34,18 @@ use vars qw(@EXPORT @ISA);
 =item sub save_marc_import
 
 =cut
-sub save_marc_import {
-    my ($archivo, $comentario, $estado) = @_;
+sub guardarNuevaImportacion {
+    my ($file_name,$formato,$id_esquema,$file_type,$nombre,$comentario) = @_;
 
-
-    my $fechaHoy = C4::Date::format_date_in_iso(ParseDate("today"));
-    my $dbh = C4::Context->dbh;
-
-    my $query   =  " INSERT INTO marc_import (archivo, comentario, estado, fecha_upload) ";
-    $query      .= " VALUES (?, ?, ?, ?) ";
-
-    my $sth     = $dbh->prepare($query);
-    $sth->execute($archivo, $comentario, $estado, $fechaHoy);
-    $sth->finish;
-
-# TODO falata lockear la tabla para q no se meta otro
-
-    my $query   = " SELECT max(id) as max_id
-                    FROM marc_import ";
-
-    my $sth     = $dbh->prepare($query);
-    $sth->execute();
-    my $data    = $sth->fetchrow_hashref;
-
-    return $data->{'max_id'};
+    my %parametros;
+    $parametros{'id_esquema'}   = $id_esquema;
+    $parametros{'formato'}      = $formato;
+    $parametros{'archivo'}      = $file_name;
+    $parametros{'tipo_archivo'} = $file_type;
+    $parametros{'nombre'}       = $nombre;
+    $parametros{'comentario'}   = $comentario;
+    my $Io_importacion          = C4::Modelo::IoImportacionIso->new(db => $db);
+    $Io_importacion->agregar(\%parametros);
 }
 
 =item sub update_marc_import

@@ -2916,8 +2916,8 @@ sub generarComboEsquemasImportacion {
       $options_hash{'onBlur'}       = $params->{'onBlur'};
     }
 
-    $options_hash{'name'}           = $params->{'name'}||'esquemasImportacion';
-    $options_hash{'id'}             = $params->{'id'}||'esquemasImportacion';
+    $options_hash{'name'}           = $params->{'name'}||'esquemaImportacion';
+    $options_hash{'id'}             = $params->{'id'}||'esquemaImportacion';
     $options_hash{'size'}           =  $params->{'size'}||1;
     $options_hash{'multiple'}       = $params->{'multiple'}||0;
     $options_hash{'defaults'}       = 'NUEVO ESQUEMA';
@@ -2957,8 +2957,8 @@ sub generarComboFormatosImportacion {
       $options_hash{'onBlur'}       = $params->{'onBlur'};
     }
 
-    $options_hash{'name'}           = $params->{'name'}||'formatosImportacion';
-    $options_hash{'id'}             = $params->{'id'}||'formatosImportacion';
+    $options_hash{'name'}           = $params->{'name'}||'formatoImportacion';
+    $options_hash{'id'}             = $params->{'id'}||'formatoImportacion';
     $options_hash{'size'}           =  $params->{'size'}||1;
     $options_hash{'multiple'}       = $params->{'multiple'}||0;
     $options_hash{'defaults'}       = 'ISO 2709';

@@ -268,7 +268,7 @@ sub deleteDocument {
 
 sub uploadImport {
 
-    my ($file_name,$name,$format,$schema,$file_data)=@_;
+    my ($file_name,$name,$comments,$format,$schema,$file_data)=@_;
 
     my $importsDir= C4::Context->config("importsdir");
     my $msg='';
@@ -326,7 +326,7 @@ sub uploadImport {
                 }else
                 {
                     $msg= "El archivo ".$name.".$ext ($showName) se ha cargado correctamente";
-                    C4::AR::ImportacionIsoMARC::guardarNuevaImportacion($file_name,$format,$schema,$isValidFileType,$showName);
+                    C4::AR::ImportacionIsoMARC::guardarNuevaImportacion($file_name,$format,$schema,$isValidFileType,$showName,$comments);
                 }
             }
         }else{

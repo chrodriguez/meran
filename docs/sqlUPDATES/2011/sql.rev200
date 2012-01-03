@@ -1,1 +1,3 @@
 ALTER TABLE `io_importacion_iso` ADD `nombre` VARCHAR( 255 ) NOT NULL AFTER `id_importacion_esquema` ;
+ALTER TABLE `io_importacion_iso` ADD `formato` VARCHAR( 255 ) NOT NULL AFTER `archivo`;
+INSERT INTO `io_importacion_iso_esquema` (`id`, `nombre`, `descripcion`) VALUES (1, 'Marc', 'Esquema sin detalle, los campos pasan como entran.');

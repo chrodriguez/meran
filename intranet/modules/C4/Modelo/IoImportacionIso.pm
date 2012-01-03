@@ -14,6 +14,7 @@ __PACKAGE__->meta->setup(
         nombre                  => { type => 'varchar',     overflow => 'truncate', length => 255,  not_null => 1},
         archivo                 => { type => 'varchar',     overflow => 'truncate', length => 255,  not_null => 1},
         comentario              => { type => 'varchar',     overflow => 'truncate', length => 255,  not_null => 1},
+        formato                 => { type => 'varchar',     overflow => 'truncate', length => 255,  not_null => 1},
         estado                  => { type => 'character',   overflow => 'truncate', length => 1,    not_null => 1},
         fecha_upload            => { type => 'date',        overflow => 'truncate', not_null => 1},
         fecha_import            => { type => 'date',        overflow => 'truncate', not_null => 1},
@@ -54,13 +55,20 @@ __PACKAGE__->meta->setup(
 
 #----------------------------------- FUNCIONES DEL MODELO ------------------------------------------------
 
-sub addImportacionIso{
+sub agregar{
     my ($self)   = shift;
     my ($params) = @_;
 
-    #$self->setProveedorId($params->{'id_proveedor'});
-    #$self->setRefEstadoPresupuestoId(1);
-    #$self->setRefPedidoCotizacionId($params->{'pedido_cotizacion_id'});
+    $self->setIdImportacionEsquema($params->{'id_esquema'});
+    $self->setNombre($params->{'nombre'});
+    $self->setArchivo($params->{'archivo'});
+    $self->setFormato($params->{'formato'});
+    $self->setComentario($params->{'comentario'});
+    $self->setEstado('I');
+
+    my $dateformat = C4::Date::get_date_format();
+    my $hoy        = C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
+    $self->setFechaUpload($hoy);
 
     $self->save();
 }
@@ -88,6 +96,13 @@ sub setArchivo{
     my ($archivo) = @_;
     utf8::encode($archivo);
     $self->archivo($archivo);
+}
+
+sub setFormato{
+    my ($self)  = shift;
+    my ($formato) = @_;
+    utf8::encode($formato);
+    $self->formato($formato);
 }
 
 sub setComentario{
@@ -182,6 +197,11 @@ sub getNombre{
 sub getArchivo{
     my ($self)  = shift;
     return $self->archivo;
+}
+
+sub getFormato{
+    my ($self)  = shift;
+    return $self->formato;
 }
 
 sub getComentario{
