@@ -1,0 +1,1 @@
+ALTER TABLE `io_importacion_iso` ADD `nombre` VARCHAR( 255 ) NOT NULL AFTER `id_importacion_esquema` ;
