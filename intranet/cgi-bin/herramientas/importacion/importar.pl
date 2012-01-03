@@ -20,6 +20,7 @@ my ($template, $session, $t_params)= get_template_and_user({
                                                         entorno => 'undefined'},
                                     debug => 1,
             });
-
+$t_params->{'combo_formatos'}          = C4::AR::Utilidades::generarComboFormatosImportacion();
+$t_params->{'combo_esquemas'}          = C4::AR::Utilidades::generarComboEsquemasImportacion();
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params,$session);

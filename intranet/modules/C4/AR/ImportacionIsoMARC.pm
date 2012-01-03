@@ -15,10 +15,10 @@ use MARC::Record;
 use MARC::File::USMARC;
 use C4::AR::Utilidades;
 
-use vars qw(@EXPORT_OK @ISA);
+use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
-@EXPORT_OK=qw(&ui
-       &campoIso
+@EXPORT=qw(&ui
+           &campoIso
        &subCampoIso
        &datosCompletos
        &insertDescripcion
@@ -31,15 +31,14 @@ use vars qw(@EXPORT_OK @ISA);
        &getImportacionFromDB
 );
 
-
 =item sub save_marc_import
-
 
 =cut
 sub save_marc_import {
     my ($archivo, $comentario, $estado) = @_;
-    my $dateformat = C4::Date::get_date_format();
-    my $fechaHoy = C4::Date::format_date_in_iso(ParseDate("today"),$dateformat);
+
+
+    my $fechaHoy = C4::Date::format_date_in_iso(ParseDate("today"));
     my $dbh = C4::Context->dbh;
 
     my $query   =  " INSERT INTO marc_import (archivo, comentario, estado, fecha_upload) ";
@@ -59,75 +58,6 @@ sub save_marc_import {
     my $data    = $sth->fetchrow_hashref;
 
     return $data->{'max_id'};
-}
-
-
-=item
-    Esta funcion agrega una nueva importacion
-    Parametros:
-                HASH: {archivo},{comentario},{estado}
-=cut
-sub agregarProveedor{
-
-    my ($param) = @_;
-    my $proveedor = C4::Modelo::AdqProveedor->new();
-    my $msg_object= C4::AR::Mensajes::create();
-    my $db = $proveedor->db;
-
-     _verificarDatosProveedor($param,$msg_object);
-
-    if (!($msg_object->{'error'})){
-          # entro si no hay algun error, todos los campos ingresados son validos
-          $db->{connect_options}->{AutoCommit} = 0;
-          $db->begin_work;
-          my $id_moneda;
-          # FIXME ver el tipo de documento, poner 1 para DNI
-           eval{
-              $proveedor->agregarProveedor($param);
-              my $id_proveedor = $proveedor->getId();
-
-#             monedas
-              for(my $i=0;$i<scalar(@{$param->{'monedas_array'}});$i++){
-                my %parametros;
-                $parametros{'id_proveedor'}     = $id_proveedor;
-                $parametros{'id_moneda'}        = $param->{'monedas_array'}->[$i];
-                my $proveedor_moneda            = C4::Modelo::AdqProveedorMoneda->new(db => $db);
-                $proveedor_moneda->agregarMonedaProveedor(\%parametros);
-              }
-
-#             materiales
-              for(my $i=0;$i<scalar(@{$param->{'materiales_array'}});$i++){
-                my %parametros2;
-                $parametros2{'id_proveedor'}    = $id_proveedor;
-                $parametros2{'id_material'}     = $param->{'materiales_array'}->[$i];
-                my $proveedor_material          = C4::Modelo::AdqProveedorTipoMaterial->new(db => $db);
-                $proveedor_material->agregarMaterialProveedor(\%parametros2);
-              }
-
-#             envios
-              for(my $i=0;$i<scalar(@{$param->{'formas_envios_array'}});$i++){
-                my %parametros2;
-                $parametros2{'id_proveedor'}    = $id_proveedor;
-                $parametros2{'id_forma_envio'}  = $param->{'formas_envios_array'}->[$i];
-                my $proveedor_forma_envio = C4::Modelo::AdqProveedorFormaEnvio->new(db => $db);
-                $proveedor_forma_envio->agregarFormaDeEnvioProveedor(\%parametros2);
-              }
-
-              $msg_object->{'error'} = 0;
-              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'A001', 'params' => []});
-              $db->commit;
-           };
-           if ($@){
-           # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
-               &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
-               $msg_object->{'error'}= 1;
-               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
-               $db->rollback;
-           }
-
-          $db->{connect_options}->{AutoCommit} = 1;
-    }
-    return ($msg_object);
 }
 
 =item sub update_marc_import
@@ -1569,8 +1499,3 @@ sub procesar_reglas_matcheo{
 
         return ($reglas_matcheo);
 }
-
-END { }       # module clean-up code here (global destructor)
-
-1;
-__END__

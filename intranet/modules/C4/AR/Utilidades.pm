@@ -2882,6 +2882,101 @@ sub generarComboTipoDeOperacion{
     return $CGISelectTipoOperacion;
 }
 
+
+sub generarComboEsquemasImportacion {
+
+    my ($params) = @_;
+
+    require C4::Modelo::IoImportacionIsoEsquema::Manager;
+    my @select_esquemasImportacion_Values;
+    my %select_esquemasImportacion_Labels;
+    my $result = C4::Modelo::IoImportacionIsoEsquema::Manager->get_io_importacion_iso_esquema();
+
+    foreach my $esquemaImportacion (@$result) {
+            push (@select_esquemasImportacion_Values, $esquemaImportacion->id);
+            $select_esquemasImportacion_Labels{$esquemaImportacion->id} = $esquemaImportacion->nombre;
+    }
+
+
+    my %options_hash;
+
+    if ( $params->{'onChange'} ){
+         $options_hash{'onChange'}  = $params->{'onChange'};
+    }
+
+    if ( $params->{'onFocus'} ){
+      $options_hash{'onFocus'}      = $params->{'onFocus'};
+    }
+
+    if ( $params->{'class'} ){
+         $options_hash{'class'}     = $params->{'class'};
+    }
+
+    if ( $params->{'onBlur'} ){
+      $options_hash{'onBlur'}       = $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}           = $params->{'name'}||'esquemasImportacion';
+    $options_hash{'id'}             = $params->{'id'}||'esquemasImportacion';
+    $options_hash{'size'}           =  $params->{'size'}||1;
+    $options_hash{'multiple'}       = $params->{'multiple'}||0;
+    $options_hash{'defaults'}       = 'NUEVO ESQUEMA';
+
+    push (@select_esquemasImportacion_Values, '-1');
+    $select_esquemasImportacion_Labels{'-1'}            ='NUEVO ESQUEMA';
+
+    $options_hash{'values'}         = \@select_esquemasImportacion_Values;
+    $options_hash{'labels'}         = \%select_esquemasImportacion_Labels;
+
+    my $CGISelectEsquemaImportacion                   = CGI::scrolling_list(\%options_hash);
+    return $CGISelectEsquemaImportacion;
+}
+
+sub generarComboFormatosImportacion {
+
+    my ($params) = @_;
+
+    my @select_formatosImportacion_Values;
+    my %select_formatosImportacion_Labels;
+
+    my %options_hash;
+
+    if ( $params->{'onChange'} ){
+         $options_hash{'onChange'}  = $params->{'onChange'};
+    }
+
+    if ( $params->{'onFocus'} ){
+      $options_hash{'onFocus'}      = $params->{'onFocus'};
+    }
+
+    if ( $params->{'class'} ){
+         $options_hash{'class'}     = $params->{'class'};
+    }
+
+    if ( $params->{'onBlur'} ){
+      $options_hash{'onBlur'}       = $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}           = $params->{'name'}||'formatosImportacion';
+    $options_hash{'id'}             = $params->{'id'}||'formatosImportacion';
+    $options_hash{'size'}           =  $params->{'size'}||1;
+    $options_hash{'multiple'}       = $params->{'multiple'}||0;
+    $options_hash{'defaults'}       = 'ISO 2709';
+
+    push (@select_formatosImportacion_Values, 'iso');
+    $select_formatosImportacion_Labels{'iso'}            ='ISO 2709';
+    push (@select_formatosImportacion_Values, 'isis');
+    $select_formatosImportacion_Labels{'isis'}            ='ISIS';
+    push (@select_formatosImportacion_Values, 'xml');
+    $select_formatosImportacion_Labels{'xml'}            ='XML';
+
+    $options_hash{'values'}         = \@select_formatosImportacion_Values;
+    $options_hash{'labels'}         = \%select_formatosImportacion_Labels;
+
+    my $CGISelectFormatosImportacion                   = CGI::scrolling_list(\%options_hash);
+    return $CGISelectFormatosImportacion;
+}
+
 sub generarComboNiveles{
 
     my ($params) = @_;

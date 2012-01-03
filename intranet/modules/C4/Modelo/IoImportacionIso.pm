@@ -11,6 +11,7 @@ __PACKAGE__->meta->setup(
     columns => [
         id                      => { type => 'integer',     overflow => 'truncate', length => 11,   not_null => 1 },
         id_importacion_esquema  => { type => 'integer',     overflow => 'truncate', length => 11,   not_null => 1},
+        nombre                  => { type => 'varchar',     overflow => 'truncate', length => 255,  not_null => 1},
         archivo                 => { type => 'varchar',     overflow => 'truncate', length => 255,  not_null => 1},
         comentario              => { type => 'varchar',     overflow => 'truncate', length => 255,  not_null => 1},
         estado                  => { type => 'character',   overflow => 'truncate', length => 1,    not_null => 1},
@@ -73,6 +74,13 @@ sub setIdImportacionEsquema{
     my ($self) = shift;
     my ($esquema) = @_;
     $self->id_importacion_esquema($esquema);
+}
+
+sub setNombre{
+    my ($self)  = shift;
+    my ($nombre) = @_;
+    utf8::encode($nombre);
+    $self->nombre($nombre);
 }
 
 sub setArchivo{
@@ -164,6 +172,11 @@ sub getId{
 sub getIdImportacionEsquema{
     my ($self) = shift;
     return $self->id_importacion_esquema;
+}
+
+sub getNombre{
+    my ($self)  = shift;
+    return $self->nombre;
 }
 
 sub getArchivo{

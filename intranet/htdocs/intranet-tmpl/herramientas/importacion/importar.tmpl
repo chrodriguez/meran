@@ -1,18 +1,54 @@
 [% INCLUDE 'intranet-top.inc' %]
 
-<script type="text/javascript"> 
+<script type="text/javascript">
 
-$(document).ready(function() {
-
-});
+    function doUpload() {
+        $('#uploadfile').submit();
+    }
 
 </script>
 <fieldset>
-<legend><strong>[% "Herramientas de Importaci&oacute;n:" | i18n %]</strong></legend>
+<legend><strong>[% "Importaci&oacute;n:" | i18n %]</strong></legend>
+
+<div style="width: 100%; clear: both; margin: 0 auto;">
+<form id="uploadfile" action="subirNuevaImportacion.pl" enctype="multipart/form-data" method="POST">
+<fieldset class="rows" id="import">
+<legend>Subir archivo al cat&aacute;logo</legend>
+
+ <ol>
+      <li class="sub_item">
+      <label>Título del arhivo: </label>
+      <input type="text" name="titulo" required>
+      </li>
+      <li class="sub_item">
+        <label>Archivo: </label>
+        <input type="file" name="upfile" required accept="iso,xml">
+      </li>
+      <li class="sub_item">
+        <label>Formato: </label>
+        [% combo_formatos %]
+      </li>
+      <li class="sub_item">
+        <label>Comentario: </label>
+        <input type="text" name="comentario">
+      </li>
+      <li class="sub_item">
+        <label>Esquema: </label>
+        [% combo_esquemas %]
+      </li>
+ </ol>
+
+                            [% PERL %]
+                                                print C4::AR::Filtros::to_Button(   text    => "[% 'Subir Archivo' | i18n %]",
+                                                                                    onClick => "doUpload();",
+                                                        ) ;
+                            [% END %]
+</fieldset>
+</form>
+</div>
+
 
 </fieldset>
-
-<div id="result"></div>
 
 [% INCLUDE 'intranet-bottom.inc' %]
 
