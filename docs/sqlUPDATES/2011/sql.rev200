@@ -8,3 +8,6 @@ CHANGE `cant_registros_n2` `cant_registros_n2` INT( 11 ) NULL DEFAULT NULL ,
 CHANGE `cant_registros_n3` `cant_registros_n3` INT( 11 ) NULL DEFAULT NULL ,
 CHANGE `reglas_matcheo` `reglas_matcheo` MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ;
 
+
+ALTER TABLE `io_importacion_iso` CHANGE `fecha_upload` `fecha_upload` VARCHAR( 20 ) NOT NULL ,
+CHANGE `fecha_import` `fecha_import` VARCHAR( 20 ) NULL DEFAULT NULL ;
