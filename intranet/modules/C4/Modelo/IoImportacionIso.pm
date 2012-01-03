@@ -72,6 +72,22 @@ sub agregar{
 
     $self->save();
 }
+
+
+sub eliminar{
+    my ($self)      = shift;
+    my ($params)    = @_;
+
+    #HACER ALGO SI ES NECESARIO
+
+    my ($registros) = C4::AR::ImportacionIsoMARC::getRegistrosFromImportacion($self->getId(), $self->db);
+
+    foreach my $rec (@$registros){
+      $rec->eliminar();
+    }
+
+    $self->delete();
+}
 #----------------------------------- FIN - FUNCIONES DEL MODELO -------------------------------------------
 
 

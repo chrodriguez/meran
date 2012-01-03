@@ -23,7 +23,7 @@ if($tipoAccion eq "ELIMINAR"){
                                             {   ui              => 'ANY',
                                                 tipo_documento  => 'ANY',
                                                 accion          => 'BAJA',
-                                                tipo_permiso => 'general',
+                                                tipo_permiso => 'catalogo',
                                                 entorno => 'undefined'},
                                                 "intranet"
                                     );
@@ -49,7 +49,7 @@ elsif($tipoAccion eq "DETALLE"){
                                                {   ui               => 'ANY',
                                                    tipo_documento   => 'ANY',
                                                    accion           => 'CONSULTA',
-                                                   tipo_permiso => 'general',
+                                                   tipo_permiso => 'catalogo',
                                                    entorno => 'undefined'},
                                                    "intranet"
                                 );
@@ -72,6 +72,7 @@ elsif($tipoAccion eq "BUSQUEDA"){
                                     flagsrequired => {  ui => 'ANY',
                                                         tipo_documento => 'ANY',
                                                         accion => 'CONSULTA',
+                                                        tipo_permiso => 'catalogo',
                                                         entorno => 'undefined'},
                                     debug => 1,
             });

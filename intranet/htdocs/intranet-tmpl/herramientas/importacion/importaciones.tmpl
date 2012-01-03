@@ -14,11 +14,14 @@
     <li class="horizontal">
             <input id="nombre_importacion" type=text name="nombre_importacion" onFocus="checkFilter('focus')"
                 onBlur="checkFilter('blur')">
+     </li>
+     <li class="horizontal">
             [% PERL %]
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
                                                                     boton   => "boton_buscar",
                                                                     onClick => "consultar();",
                                                                     title   => "[% 'Buscar' | i18n %]",
+                                                                    inline => "1"
                                         ) ;
             [% END %]
             [% PERL %]
@@ -26,6 +29,7 @@
                                                                     boton   => "boton_buscar",
                                                                     onClick => "borrar();",
                                                                     title   => "[% 'Limpiar' | i18n %]",
+                                                                    inline => "1"
                                         ) ;
             [% END %]
     </li>
