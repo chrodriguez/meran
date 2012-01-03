@@ -1,10 +1,18 @@
 [% INCLUDE "intranet-top.inc" %]
+<script type="text/javascript" src="/intranet-tmpl/includes/importacion/listaImportaciones.js"></script>
+
+[% INCLUDE "FormValidateHelper.inc" %]
+<script type="text/javascript">
+ $(document).ready(function() {
+       onEnter("nombre_proveedor",consultar);
+ });
+</script>
 <fieldset>
-<legend class="titulo_legend_resaltado">Listado de Proveedores</legend>
+<legend class="titulo_legend_resaltado">Listado de Importaciones</legend>
 <div class="buttonContainerHorizontal">
 <ul>
     <li class="horizontal">
-            <input id="nombre_proveedor" type=text name="nombre_proveedor" onFocus="checkFilter('focus')"
+            <input id="nombre_importacion" type=text name="nombre_importacion" onFocus="checkFilter('focus')"
                 onBlur="checkFilter('blur')">
             [% PERL %]
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
@@ -25,13 +33,12 @@
 </div>
 <ul>
     [% PERL %]
-         print C4::AR::Filtros::setHelp(text => "[% 'Tipee el nombre o la razon social del proveedor que desea buscar.' | i18n %]",
-                                        );
+         print C4::AR::Filtros::setHelp(text => "[% 'Tipee el nombre, el archivo o parte del comentario de la importaci&oacute;n que desea buscar.' | i18n %]",);
     [% END %]
 </ul>
 </fieldset>
 <fieldset>
-    <legend class="titulo_legend">[% "Inicial del nombre o razon social del proveedor:" | i18n %]</legend>
+    <legend class="titulo_legend">[% "Inicial de la importaci&oacute;n:" | i18n %]</legend>
     <div id="filterBar" style="text-align:center">
             <a href="#tablaResult" onClick="consultar('A')"> A |</a>
             <a href="#tablaResult" onClick="consultar('B')"> B |</a>

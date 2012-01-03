@@ -11,19 +11,21 @@ __PACKAGE__->meta->setup(
     columns => [
         id                      => { type => 'integer',     overflow => 'truncate', length => 11,   not_null => 1 },
         id_importacion_esquema  => { type => 'integer',     overflow => 'truncate', length => 11,   not_null => 1},
+        nombre                  => { type => 'varchar',     overflow => 'truncate', length => 255,  not_null => 1},
         archivo                 => { type => 'varchar',     overflow => 'truncate', length => 255,  not_null => 1},
         comentario              => { type => 'varchar',     overflow => 'truncate', length => 255,  not_null => 1},
+        formato                 => { type => 'varchar',     overflow => 'truncate', length => 255,  not_null => 1},
         estado                  => { type => 'character',   overflow => 'truncate', length => 1,    not_null => 1},
-        fecha_upload            => { type => 'date',        overflow => 'truncate', not_null => 1},
-        fecha_import            => { type => 'date',        overflow => 'truncate', not_null => 1},
-        cant_registros_n1       => { type => 'integer',     overflow => 'truncate', length => 11,   not_null => 1},
-        cant_registros_n2       => { type => 'integer',     overflow => 'truncate', length => 11,   not_null => 1},
-        cant_registros_n3       => { type => 'integer',     overflow => 'truncate', length => 11,   not_null => 1},
-        accion_general          => { type => 'varchar',     overflow => 'truncate', length => 255,  not_null => 1},
-        accion_sinmatcheo       => { type => 'varchar',     overflow => 'truncate', length => 255,  not_null => 1},
-        accion_item             => { type => 'varchar',     overflow => 'truncate', length => 255,  not_null => 1},
-        accion_barcode          => { type => 'varchar',     overflow => 'truncate', length => 255,  not_null => 1},
-        reglas_matcheo          => { type => 'text',        overflow => 'truncate', not_null => 1},
+        fecha_upload            => { type => 'varchar',     overflow => 'truncate', not_null => 1},
+        fecha_import            => { type => 'varchar',     overflow => 'truncate'},
+        cant_registros_n1       => { type => 'integer',     overflow => 'truncate', length => 11},
+        cant_registros_n2       => { type => 'integer',     overflow => 'truncate', length => 11},
+        cant_registros_n3       => { type => 'integer',     overflow => 'truncate', length => 11},
+        accion_general          => { type => 'varchar',     overflow => 'truncate', length => 255},
+        accion_sinmatcheo       => { type => 'varchar',     overflow => 'truncate', length => 255},
+        accion_item             => { type => 'varchar',     overflow => 'truncate', length => 255},
+        accion_barcode          => { type => 'varchar',     overflow => 'truncate', length => 255},
+        reglas_matcheo          => { type => 'text',        overflow => 'truncate'},
 
     ],
 
@@ -53,13 +55,20 @@ __PACKAGE__->meta->setup(
 
 #----------------------------------- FUNCIONES DEL MODELO ------------------------------------------------
 
-sub addImportacionIso{
+sub agregar{
     my ($self)   = shift;
     my ($params) = @_;
 
-    #$self->setProveedorId($params->{'id_proveedor'});
-    #$self->setRefEstadoPresupuestoId(1);
-    #$self->setRefPedidoCotizacionId($params->{'pedido_cotizacion_id'});
+    $self->setIdImportacionEsquema($params->{'id_esquema'});
+    $self->setNombre($params->{'nombre'});
+    $self->setArchivo($params->{'archivo'});
+    $self->setFormato($params->{'formato'});
+    $self->setComentario($params->{'comentario'});
+    $self->setEstado('I');
+
+    my $dateformat = C4::Date::get_date_format();
+    my $hoy        = C4::Date::format_date_in_iso(C4::Date::ParseDate("today"), $dateformat);
+    $self->setFechaUpload($hoy);
 
     $self->save();
 }
@@ -75,11 +84,25 @@ sub setIdImportacionEsquema{
     $self->id_importacion_esquema($esquema);
 }
 
+sub setNombre{
+    my ($self)  = shift;
+    my ($nombre) = @_;
+    utf8::encode($nombre);
+    $self->nombre($nombre);
+}
+
 sub setArchivo{
     my ($self)  = shift;
     my ($archivo) = @_;
     utf8::encode($archivo);
     $self->archivo($archivo);
+}
+
+sub setFormato{
+    my ($self)  = shift;
+    my ($formato) = @_;
+    utf8::encode($formato);
+    $self->formato($formato);
 }
 
 sub setComentario{
@@ -166,9 +189,19 @@ sub getIdImportacionEsquema{
     return $self->id_importacion_esquema;
 }
 
+sub getNombre{
+    my ($self)  = shift;
+    return $self->nombre;
+}
+
 sub getArchivo{
     my ($self)  = shift;
     return $self->archivo;
+}
+
+sub getFormato{
+    my ($self)  = shift;
+    return $self->formato;
 }
 
 sub getComentario{
@@ -181,14 +214,32 @@ sub getEstado{
     return $self->estado;
 }
 
+sub getEsquema{
+    my ($self)   = shift;
+    return $self->esquema;
+}
+
 sub getFechaUpload{
     my ($self)   = shift;
     return $self->fecha_upload;
 }
 
+sub getFechaUpload_formateada{
+    my ($self)   = shift;
+    my $dateformat = C4::Date::get_date_format();
+    return C4::Date::format_date(C4::AR::Utilidades::trim($self->fecha_upload),$dateformat);
+}
+
 sub getFechaImport{
     my ($self)   = shift;
     return $self->fecha_import;
+}
+
+
+sub getFechaImport{
+    my ($self)   = shift;
+    my $dateformat = C4::Date::get_date_format();
+    return C4::Date::format_date(C4::AR::Utilidades::trim($self->fecha_import),$dateformat);
 }
 
 sub getCantRegistrosN1{
