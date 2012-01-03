@@ -10,10 +10,8 @@ require Exporter;
 
 use C4::Context;
 use Date::Manip;
-use C4::AR::ExportacionIsoMARC;
-use MARC::Record;
-use MARC::File::USMARC;
 use C4::AR::Utilidades;
+use C4::Modelo::IoImportacionIso;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -44,7 +42,7 @@ sub guardarNuevaImportacion {
     $parametros{'tipo_archivo'} = $file_type;
     $parametros{'nombre'}       = $nombre;
     $parametros{'comentario'}   = $comentario;
-    my $Io_importacion          = C4::Modelo::IoImportacionIso->new(db => $db);
+    my $Io_importacion          = C4::Modelo::IoImportacionIso->new();
     $Io_importacion->agregar(\%parametros);
 }
 

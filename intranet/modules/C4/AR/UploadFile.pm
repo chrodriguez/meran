@@ -33,6 +33,8 @@ use vars qw(@EXPORT @ISA);
         deletePhoto
         uploadFile
         deleteDocument
+        uploadImport
+        deleteImport
     );
 
 my $picturesDir = C4::Context->config("picturesdir");
