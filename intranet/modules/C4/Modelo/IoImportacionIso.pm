@@ -2,6 +2,8 @@ package C4::Modelo::IoImportacionIso;
 
 use strict;
 use utf8;
+use C4::AR::ImportacionIsoMARC;
+use C4::AR::UploadFile;
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
@@ -79,6 +81,10 @@ sub eliminar{
     my ($params)    = @_;
 
     #HACER ALGO SI ES NECESARIO
+    my %parametros;
+    $parametros{'id'}   = $self->getId();
+    my $msg =     C4::AR::UploadFile::deleteImport(\%parametros);
+
 
     my ($registros) = C4::AR::ImportacionIsoMARC::getRegistrosFromImportacion($self->getId(), $self->db);
 

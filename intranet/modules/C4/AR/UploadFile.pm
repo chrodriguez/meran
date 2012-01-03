@@ -340,21 +340,21 @@ sub uploadImport {
 
 sub deleteImport {
 
-    my ($query,$params)=@_;
+    my ($params)=@_;
 
     my $importsDir= C4::Context->config("importsdir");
     my $msg='';
+
     my $file_id = $params->{'id'};
 
         my $file = C4::AR::ImportacionIsoMARC::getImportacionById($file_id);
-        my $write_file= $importsDir."/".$file->getFilename;
+        my $write_file= $importsDir."/".$file->Archivo;
 
         if (!open(WFD,"$write_file")) {
                 $msg=C4::AR::Filtros::i18n("Hay un error y el archivo no puede eliminarse del servidor.");
         }else{
             unlink($write_file);
             $msg= C4::AR::Filtros::i18n("El archivo ").$file->getTitle.C4::AR::Filtros::i18n(" se ha eliminado correctamente");
-            $file->delete();
         }
     return($msg);
 }

@@ -57,6 +57,31 @@ sub getImportaciones {
     return (\@importaciones);
 }
 
+=item sub getRegistrosFromImportacion
+Se obtienen los registros de la importacion
+=cut
+sub getRegistrosFromImportacion {
+
+    my ($id_importacion,$db) = @_;
+
+    require C4::Modelo::IoImportacionIsoRegistro;
+    require C4::Modelo::IoImportacionIsoRegistro::Manager;
+    $db = $db || C4::Modelo::IoImportacionIsoRegistro->new()->db;
+
+    my $registros = C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro(  db              => $db,
+                                                                                                    query => [
+                                                                                                        id_importacion_iso => { eq => $id_importacion },
+                                                                                                        ],);
+    my @registros;
+
+    foreach my $registros (@$registros){
+        push (@registros, $registros);
+    }
+
+    return (\@registros);
+}
+
+
 =item
     Esta funcion elimina una importacion (con todos sus registros)
     Parametros:
@@ -90,6 +115,9 @@ sub eliminarImportacion {
 =cut
 sub getImportacionById {
     my ($id) = @_;
+
+    require C4::Modelo::IoImportacionIso;
+    require C4::Modelo::IoImportacionIso::Manager;
 
     my $importacionTemp;
     my @filtros;

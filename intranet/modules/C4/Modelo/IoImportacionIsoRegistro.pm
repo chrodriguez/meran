@@ -1,53 +1,38 @@
-package C4::Modelo::AdqPresupuesto;
+package C4::Modelo::IoImportacionIsoRegistro;
 
 use strict;
-use utf8;
-use C4::AR::Permisos;
-use C4::AR::Utilidades;
-use C4::Modelo::AdqProveedor;
-use C4::Modelo::RefEstadoPresupuesto;
+
+use C4::Modelo::IoImportacionIsoRegistro;
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
-    table   => 'adq_presupuesto',
+    table   => 'io_importacion_iso_registro',
 
     columns => [
-        id                              => { type => 'integer', overflow => 'truncate', not_null => 1 },
-        proveedor_id                    => { type => 'integer', overflow => 'truncate', not_null => 1},
-        fecha                           => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1},
-        ref_estado_presupuesto_id       => { type => 'integer', overflow => 'truncate', not_null => 1},
-        ref_pedido_cotizacion_id        => { type => 'integer', overflow => 'truncate', not_null => 1},
-
+        id                             => { type => 'integer', overflow => 'truncate', not_null => 1 },
+        id_importacion_iso             => { type => 'integer', overflow => 'truncate', not_null => 1},
+        type                           => { type => 'varchar', overflow => 'truncate', length => 25},
+        estado                         => { type => 'integer', overflow => 'truncate', length => 2},
+        matching                       => { type => 'integer', overflow => 'truncate'},
+        id_matching                    => { type => 'integer', overflow => 'truncate'},
+        id1                            => { type => 'integer', overflow => 'truncate'},
+        id2                            => { type => 'integer', overflow => 'truncate'},
+        id3                            => { type => 'integer', overflow => 'truncate'},
+        marc_record                    => { type => 'text', overflow => 'truncate' },
     ],
 
 
     relationships =>
     [
-      ref_proveedor => 
+      ref_importacion =>
       {
-         class       => 'C4::Modelo::AdqProveedor',
-         key_columns => {proveedor_id => 'id' },
+         class       => 'C4::Modelo::IoImportacionIso',
+         key_columns => {id_importacion_iso => 'id' },
          type        => 'one to one',
        },
-      
-      ref_estado_presupuesto => 
-      {
-        class       => 'C4::Modelo::RefEstadoPresupuesto',
-        key_columns => {ref_estado_presupuesto_id => 'id' },
-        type        => 'one to one',
-      },
-      
-      ref_pedido_cotizacion => 
-
-      {
-        class       => 'C4::Modelo::AdqPedidoCotizacion',
-        key_columns => {ref_pedido_cotizacion_id => 'id' },
-        type        => 'one to one',
-      },
-
     ],
-    
+
     primary_key_columns => [ 'id' ],
     unique_key          => ['id'],
 
@@ -55,15 +40,24 @@ __PACKAGE__->meta->setup(
 
 #----------------------------------- FUNCIONES DEL MODELO ------------------------------------------------
 
-sub addPresupuesto{
+
+sub agregar{
     my ($self)   = shift;
     my ($params) = @_;
 
-    $self->setProveedorId($params->{'id_proveedor'});
-    $self->setRefEstadoPresupuestoId(1);
-    $self->setRefPedidoCotizacionId($params->{'pedido_cotizacion_id'});
-    
+    $self->setIdImportacionIso($params->{'id_importacion_iso'});
+    $self->setMarcRecord($params->{'marc_record'});
     $self->save();
+}
+
+
+sub eliminar{
+    my ($self)      = shift;
+    my ($params)    = @_;
+
+    #HACER ALGO SI ES NECESARIO
+
+    $self->delete();
 }
 #----------------------------------- FIN - FUNCIONES DEL MODELO -------------------------------------------
 
@@ -71,31 +65,17 @@ sub addPresupuesto{
 
 #----------------------------------- GETTERS y SETTERS------------------------------------------------
 
-sub setProveedorId{
+sub setIdImportacionIso{
     my ($self) = shift;
-    my ($prov) = @_;
-    utf8::encode($prov);
-    $self->proveedor_id ($prov);
+    my ($id_imporatcion) = @_;
+    utf8::encode($id_imporatcion);
+    $self->id_importacion_iso($id_imporatcion);
 }
 
-sub setFecha{
+sub setMarcRecord{
     my ($self)  = shift;
-    my ($fecha) = @_;
-    $self->fecha($fecha);
-}
-
-sub setRefEstadoPresupuestoId{
-    my ($self)   = shift;
-    my ($estado) = @_;
-    utf8::encode($estado);
-    $self->ref_estado_presupuesto_id($estado);
-}
-
-sub setRefPedidoCotizacionId{
-    my ($self)   = shift;
-    my ($pedido) = @_;
-    utf8::encode($pedido);
-    $self->ref_pedido_cotizacion_id($pedido);
+    my ($marc_record) = @_;
+    $self->marc_record($marc_record);
 }
 
 sub getId{
@@ -103,22 +83,12 @@ sub getId{
     return ($self->id);
 }
 
-sub getFecha{
+sub getIdImportacionIso{
     my ($self) = shift;
-    return ($self->fecha);
+    return ($self->id_importacion_iso);
 }
 
-sub getProveedorId{
+sub setMarcRecord{
     my ($self) = shift;
-    return ($self->proveedor_id);
-}
-
-sub getRefEstadoPresupuestoId{
-    my ($self) = shift;
-    return ($self->ref_estado_presupuesto_id);
-}
-
-sub getRefPedidoCotizacionId{
-    my ($self) = shift;
-    return ($self-> ref_pedido_cotizacion_id);
+    return ($self->marc_record);
 }
