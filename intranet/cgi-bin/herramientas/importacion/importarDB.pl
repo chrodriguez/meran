@@ -1,149 +1,99 @@
 #!/usr/bin/perl
 
-
 use strict;
-use CGI;
 use C4::AR::Auth;
-
-use C4::AR::Utilidades;
 use C4::AR::ImportacionIsoMARC;
+use CGI;
 use JSON;
 
-my $input = new CGI;
+my $input           = new CGI;
+my $authnotrequired = 0;
+my $obj             = $input->param('obj');
+$obj                = C4::AR::Utilidades::from_json_ISO($obj);
+my $tipoAccion      = $obj->{'tipoAccion'}||"";
 
-my $upfile      = $input->param('upfile');
-C4::AR::ImportacionIsoMARC::subirArchivoISO($upfile);
+=item
+    Se elimina el Proveedor
+=cut
 
-my $comentario  = $input->param('comentario');
-my $esquema     = $input->param('esquemaImportacion');
+if($tipoAccion eq "ELIMINAR"){
 
+        my ($userid, $session, $flags) = checkauth( $input,
+                                            $authnotrequired,
+                                            {   ui              => 'ANY',
+                                                tipo_documento  => 'ANY',
+                                                accion          => 'BAJA',
+                                                tipo_permiso => 'general',
+                                                entorno => 'undefined'},
+                                                "intranet"
+                                    );
 
+        my $id_importacion        = $obj->{'id_importacion'};
 
+        my ($Message_arrayref)  = C4::AR::ImportacionIsoMARC::eliminarImportacion($id_importacion);
+        my $infoOperacionJSON   = to_json $Message_arrayref;
 
+        C4::AR::Auth::print_header($session);
+        print $infoOperacionJSON;
 
+    } #end if($tipoAccion eq "ELIMINAR_Importacion")
 
+=item
+Se guarda la modificacion los datos del Proveedor
+=cut
+elsif($tipoAccion eq "DETALLE"){
 
+      my ($nro_socio, $session, $flags) = checkauth(
+                                               $input,
+                                               $authnotrequired,
+                                               {   ui               => 'ANY',
+                                                   tipo_documento   => 'ANY',
+                                                   accion           => 'CONSULTA',
+                                                   tipo_permiso => 'general',
+                                                   entorno => 'undefined'},
+                                                   "intranet"
+                                );
 
+        my ($Message_arrayref)  = C4::AR::ImportacionIsoMARC::editarImportacion($obj);
+        my $infoOperacionJSON   = to_json $Message_arrayref;
 
-#$obj = C4::AR::Utilidades::from_json_ISO($obj);
-#my $accion = $obj->{'tipoAccion'} || "";
+        C4::AR::Auth::print_header($session);
+        print $infoOperacionJSON;
 
+ }
 
-#my $query                   = new CGI;
-#my $archivo                 = $query->param('upfile');
-#my $comentario              = $query->param('comentario');
-#my $accion                  = $query->param('accion');
-#my $importacion             = $query->param('importacion');
-#my $registro_importacion    = $query->param('registro_importacion');
+elsif($tipoAccion eq "BUSQUEDA"){
+#Lista de Proveedores por defecto
+    my ($template, $session, $t_params)= get_template_and_user({
+                                    template_name => "/herramientas/importacion/lista_importaciones.tmpl",
+                                    query => $input,
+                                    type => "intranet",
+                                    authnotrequired => 0,
+                                    flagsrequired => {  ui => 'ANY',
+                                                        tipo_documento => 'ANY',
+                                                        accion => 'CONSULTA',
+                                                        entorno => 'undefined'},
+                                    debug => 1,
+            });
 
-#my $flagsrequired;
-#$flagsrequired->{'borrow'} = 1;
-#my ($loggedinuser, $cookie, $sessionID) = checkauth($query, 0, $flagsrequired,"intranet");
+  my $orden     = $obj->{'orden'}||'nombre';
+  my $funcion   = $obj->{'funcion'};
+  my $inicial   = $obj->{'inicial'};
+  my $busqueda  = $obj->{'nombre_importacion'};
+  my $ini       = $obj->{'ini'} || 1;
 
+  my ($ini,$pageNumber,$cantR) = C4::AR::Utilidades::InitPaginador($ini);
+  my ($cantidad,$importaciones) = C4::AR::ImportacionIsoMARC::getImportacionLike($busqueda,$orden,$ini,$cantR,1,$inicial);
 
+  if($importaciones){
+      $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
+      $t_params->{'resultsloop'}        = $importaciones;
+      $t_params->{'cantidad'}           = $cantidad;
+      $t_params->{'importacion_busqueda'} = $busqueda;
 
-#if ($accion eq "UPLOAD"){
-    #my ($id)        = &C4::AR::ImportacionIsoMARC::save_marc_import($archivo, $comentario, "S");
+  }#END if($importaciones)
 
-  ##  my $filename    = C4::AR::UploadFile::uploadISO( $archivo );
-
-    #my $file;
-    #if($query->param('file_format') eq 'iso'){
-        #$file = MARC::File::USMARC->in( $archivo );
-     #} else {
-        #$file = MARC::File::XML->in( $archivo );
-     #}
-##     C4::AR::Debug::debug("import_upload => file: ".$file);
-
-    #my $cant_biblios        = 0;
-    #my $cant_biblioitems    = 0;
-    #my $cant_items          = 0;
-    #my $cant_reg_desconocido = 0;
-
-    #while ( my $marc = $file->next() ) {
-
-        #C4::AR::Debug::debug("importDB.pl => import_upload => file: ".$marc->as_usmarc);
-        #C4::AR::ImportacionIsoMARC::save_marc_import_record($id, $marc);
-
-        #if($marc->subfield('090', 'a') eq "Biblio") {
-            #$cant_biblios++;
-        #}elsif($marc->subfield('090', 'a') eq "Biblioitem") {
-            #$cant_biblioitems++;
-        #}elsif($marc->subfield('090', 'a') eq "Item") {
-            #$cant_items++;
-        #}else{
-               #$cant_reg_desconocido++;
-            #}
-    #}
-
-    #$file->close();
-    #undef $file;
-
-    #my %params;
-    #$params{'cant_biblios'}     = $cant_biblios;
-    #$params{'cant_biblioitems'} = $cant_biblioitems;
-    #$params{'cant_items'}       = $cant_items;
-    #$params{'cant_reg_desconocido'} = $cant_reg_desconocido;
-    #$params{'id'}               = $id;
-
-    #C4::AR::ImportacionIsoMARC::update_marc_import(\%params);
-
-#} elsif ($accion eq "ELIMINAR_IMPORTACION"){
-
-    #C4::AR::ImportacionIsoMARC::delete_marc_import_record($importacion);
-
-    #my %params;
-    #$params{'estado'}   = "E";
-    #$params{'id'}       = $importacion;
-
-    #C4::AR::ImportacionIsoMARC::update_marc_import(\%params);
-
-#} elsif ($accion eq "ELIMINAR_REGISTRO_IMPORTACION"){
-
-##     C4::AR::ImportacionIsoMARC::delete_registro_marc_import_record($registro_importacion);
-
-##     my %params;
-##     $params{'estado'}   = "E";
-##     $params{'id'}       = $importacion;
-##
-##     C4::AR::ImportacionIsoMARC::update_marc_import(\%params);
-##     print $query->redirect("/cgi-bin/koha/import/manage_import_batch_detail.pl");
-
-#} elsif ($accion eq "IMPORTAR"){
-
-##     C4::AR::ImportacionIsoMARC::delete_marc_import_record();
-    #C4::AR::ImportacionIsoMARC::realizar_importacion_fromDB($importacion,$loggedinuser);
-    #C4::AR::ImportacionIsoMARC::realizar_importacion_registros_desconocidos_fromDB($importacion,$loggedinuser);
-    #my %params;
-    #$params{'estado'}           = "I";
-    #$params{'id'}               = $importacion;
-    #$params{'fecha_import'}     = C4::Date::format_date_in_iso(ParseDate("today"));
-
-    #C4::AR::ImportacionIsoMARC::update_marc_import(\%params);
-
-#} elsif ($accion eq "VERIFICAR_MATCHEO"){
-
-    ##Reglas de matcheo
-    #my $reglas    = $query->param('reglas_matcheo');
-
-    ##Acciones
-    #my $acciones;
-    #$acciones->{'accion_general'}       = $query->param('accion_general');
-    #$acciones->{'accion_sinmatcheo'}    = $query->param('accion_sinmatcheo');
-    #$acciones->{'accion_item'}          = $query->param('accion_item');
-    #$acciones->{'accion_barcode'}       = $query->param('accion_barcode');
-    #$acciones->{'id'}                   = $importacion;
-    #$acciones->{'reglas_matcheo'}       = $reglas;
-
-    #my $reglas_matcheo = C4::AR::ImportacionIsoMARC::procesar_reglas_matcheo($reglas);
-    #C4::AR::ImportacionIsoMARC::realizar_matcheo_importacion_fromDB($importacion,$reglas_matcheo,$acciones);
-
-    ##actualizo el header del registro de la importacion
-    #C4::AR::ImportacionIsoMARC::update_marc_import($acciones);
-
-    #print $query->redirect("/cgi-bin/koha/import/manage_import_batch_detail.pl?import=".$importacion);
-
-#}
+C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 
-#print $query->redirect("/cgi-bin/koha/import/manage_import_batch.pl");
+}

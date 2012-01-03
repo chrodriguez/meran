@@ -11,9 +11,9 @@ $VERSION = 0.01;
 @ISA = qw(Exporter);
 
 @EXPORT = qw(
-	&getMensaje
-	&getAccion
-	&encodeUtf8Msj
+    &getMensaje
+    &getAccion
+    &encodeUtf8Msj
 );
 
 #000 - Todo normal
@@ -29,51 +29,52 @@ $VERSION = 0.01;
 #VO800 - VO899 para Visualizacion Opac
 #E900 - E999 para Estantes
 #RC00 - #RC99 para Recomendaciones
+#IO00 - #IO99 para Importaciones/Exportaciones
 
 # %mensajes mapea codigo de mensaje con la descripcion del mismo
 my %mensajesOPAC = (
-    	'000' => '',
-    	'R001' => 'Disculpe, usted no puede realizar m&aacute;s de *?* reservas',
-    	'R002' => 'Disculpe, no puede efectuar reservas porque ya tiene una reserva para el mismo grupo y tipo de prestamo ',
-	'R003' => 'Disculpe, usted no puede tener m&aacute;s de *?* reservas en espera.',
-	'R004' => '',
-	'R005' => '',
-	'R006' => '',
-	'R007' => 'Disculpe, pero no hay ejemplares disponibles para reservar.',
-	'R008' => 'Disculpe, llego al m&aacute;ximo de reservas en espera.',
-	'R009' => 'Disculpe, no se pudo realizar la reserva, intente nuevamente.',
-	'R010' => 'Disculpe, no se pudo cancelar la reserva, intente nuevamente.',
-	'R011' => 'Disculpe, no se pudo cancelar y reservar, intente nuevamente.',
+        '000' => '',
+        'R001' => 'Disculpe, usted no puede realizar m&aacute;s de *?* reservas',
+        'R002' => 'Disculpe, no puede efectuar reservas porque ya tiene una reserva para el mismo grupo y tipo de prestamo ',
+    'R003' => 'Disculpe, usted no puede tener m&aacute;s de *?* reservas en espera.',
+    'R004' => '',
+    'R005' => '',
+    'R006' => '',
+    'R007' => 'Disculpe, pero no hay ejemplares disponibles para reservar.',
+    'R008' => 'Disculpe, llego al m&aacute;ximo de reservas en espera.',
+    'R009' => 'Disculpe, no se pudo realizar la reserva, intente nuevamente.',
+    'R010' => 'Disculpe, no se pudo cancelar la reserva, intente nuevamente.',
+    'R011' => 'Disculpe, no se pudo cancelar y reservar, intente nuevamente.',
     'R012' => 'Disculpe, no se pudo renovar, ha alcanzado el m&aacute;ximo posible.',
     'R900' => 'Disculpe, no se circular desde OPAC, la biblioteca ha deshabilitado esto.',
-	'P100' => 'Disculpe, no puede efectuar reservas porque ya tiene un ejemplar prestado del mismo grupo y del mismo tipo de prestamo',
-	'P101' => 'Disculpe, usted ha alcanzado la cantidad m&aacute;xima de pr&eacute;stamos *?*. No puede efectuar reservas sobre ejemplares.',
-	'P102' => '',
-	'P103' => '',
-	'P104' => '',
-	'P105' => '',
-	'P106' => '',
-	'P107' => '',
-	'P108' => '',
-	'P109' => 'El prestamo del ejemplar con c&oacute;digo de barras *?* ha sido devuelto.',
-	'P110' => 'El prestamo n&uacute;mero *?* ha sido devuelto',
-	'P111' => 'El ejemplar con c&oacute;digo de barras *?* fue renovado',
-	'P112' => 'El ejemplar con c&oacute;digo de barras *?* no pudo ser renovado',
-	'P113' => 'Disculpe, no se pudo renovar el pr&eacute;stamo, intente nuevamente.',
-	'P114' => 'Disculpe, no puede efectuar renovaciones porque usted no cumple condici&oacute;n.',
-	'P118' => 'El ejemplar que intenta renovar esta vencido',
-	'P119' => 'Renovaci&oacute;n fuera de fecha',
+    'P100' => 'Disculpe, no puede efectuar reservas porque ya tiene un ejemplar prestado del mismo grupo y del mismo tipo de prestamo',
+    'P101' => 'Disculpe, usted ha alcanzado la cantidad m&aacute;xima de pr&eacute;stamos *?*. No puede efectuar reservas sobre ejemplares.',
+    'P102' => '',
+    'P103' => '',
+    'P104' => '',
+    'P105' => '',
+    'P106' => '',
+    'P107' => '',
+    'P108' => '',
+    'P109' => 'El prestamo del ejemplar con c&oacute;digo de barras *?* ha sido devuelto.',
+    'P110' => 'El prestamo n&uacute;mero *?* ha sido devuelto',
+    'P111' => 'El ejemplar con c&oacute;digo de barras *?* fue renovado',
+    'P112' => 'El ejemplar con c&oacute;digo de barras *?* no pudo ser renovado',
+    'P113' => 'Disculpe, no se pudo renovar el pr&eacute;stamo, intente nuevamente.',
+    'P114' => 'Disculpe, no puede efectuar renovaciones porque usted no cumple condici&oacute;n.',
+    'P118' => 'El ejemplar que intenta renovar esta vencido',
+    'P119' => 'Renovaci&oacute;n fuera de fecha',
         'P120' => 'Disculpe, no se pudo renovar el pr&eacute;stamo, el grupo posee reservas.',
-	'P131' => 'Disculpe, no puede efectuar la renovación porque el usuario tiene ejemplar/es vencido/s.',
-	'S200' => 'Disculpe, no puede efectuar reservas porque usted esta sancionado hasta el *?*',
+    'P131' => 'Disculpe, no puede efectuar la renovación porque el usuario tiene ejemplar/es vencido/s.',
+    'S200' => 'Disculpe, no puede efectuar reservas porque usted esta sancionado hasta el *?*',
     'S204' => 'Disculpe, no puede efectuar el pr&eacute;stamo porque el usuario tiene un ejemplar vencido.',
-	'S201' => 'Disculpe, no puede efectuar reservas porque usted tiene una posible sanci&oacute;n pendiente.',
-	'U300' => 'Disculpe, no puede efectuar reservas porque usted no es un alumno regular.',
-	'U301' => 'Disculpe, no puede efectuar reservas porque usted no ha realizado a&uacute;n el curso para usuarios.',
-	'U302' => 'El libro que acaba de reservar deber&aacute; ser retirado antes del d&iacute;a: *?* hasta las *?*',
-	'U303' => 'En este momento no hay ejemplares disponibles para el pr&eacute;stamo inmediato. Cuando haya alg&uacute;n ejemplar a su disposici&oacute;n se le informar&aacute; a su cuenta de usuario y a su mail:
-	<br><i> *?* </i><br>Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.',
-	'U304' => 'Disculpe, no puede reservar porque no hizo el curso para usuarios.',
+    'S201' => 'Disculpe, no puede efectuar reservas porque usted tiene una posible sanci&oacute;n pendiente.',
+    'U300' => 'Disculpe, no puede efectuar reservas porque usted no es un alumno regular.',
+    'U301' => 'Disculpe, no puede efectuar reservas porque usted no ha realizado a&uacute;n el curso para usuarios.',
+    'U302' => 'El libro que acaba de reservar deber&aacute; ser retirado antes del d&iacute;a: *?* hasta las *?*',
+    'U303' => 'En este momento no hay ejemplares disponibles para el pr&eacute;stamo inmediato. Cuando haya alg&uacute;n ejemplar a su disposici&oacute;n se le informar&aacute; a su cuenta de usuario y a su mail:
+    <br><i> *?* </i><br>Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.',
+    'U304' => 'Disculpe, no puede reservar porque no hizo el curso para usuarios.',
     'U308' => 'Se cancel&oacute; la reserva con &eacute;xito.',
     'U315' => 'Las passwords no coinciden, ingrese la password nuevamente.',
     'U338' => 'Se modificaron los datos del usuario correctamente.',
@@ -94,24 +95,10 @@ my %mensajesOPAC = (
     'U605' => 'Compruebe el texto de verificaci&oacute;n.',
     'U606' => 'Hubo un problema en el proceso de restablecer su clave. Int&eacute;ntelo de nuevo. Si el problema persiste, dir&iacute;jase a la biblioteca.',
     'U607' => 'Para operar en el cat&aacute;logo p&uacute;blico, debe iniciar sesi&oacute; nuevamente. Disculpe las molestias.',
-	'B400' => 'Error al intentar reservar desde OPAC, funcion C4::AR::Reservas::reservarOPAC.',
-	'B401' => '',
-	'B402' => '',
-	'B403' => '',
-	'B404' => 'Error al cancelar una reserva desde OPAC, funcion C4::AR::Reservas::t_cancelar_reserva',
-	'B405' => 'Error al intentar renovar desde OPAC, funcion C4::AR::Prestamos::t_renovarOPAC',
-	'B406' => '',
-	'B407' => 'Error al intentar carncelar y reservar desde OPAC, funcion C4::AR::Reservas::t_cancelar_y_reserva',
-	'B408' => 'Error al intentar agregar un favorito desde OPAC, funcion C4::AR::BookShelves::t_addPrivateShelfs',	
-	'B409' => 'Error al intentar eliminar un favorito desde OPAC, funcion C4::AR::BookShelves::t_delPrivateShelfs',
-	'B410' => 'Error al intentar agregar una recomendaci&oacute;n desde OPAC en funcion C4::AR::Recomendaciones::agregarRecomendacion',
-    'B411' => 'Error en funcion C4::AR::Auth::t_operacionesDeOPAC',
-    'B412' => 'Error en la funcion C4::AR::RecomendacionDetalle::eliminarDetalleRecomendacion',
-    'B413' => 'Error en la funcion C4::AR::Recomendaciones::eliminarRecomendacion',
-	'F700' => 'Disculpe, no se pudo agregar el favorito, intente nuevamente.',
-	'F701' => 'Se agrego el favorito con &eacute;xito',
-	'F702' => 'Se elimin&oacute; el favorito con &eacute;xito',
-	'F703' => 'Disculpe, no se pudo eliminar el favorito, intente nuevamente.',
+    'F700' => 'Disculpe, no se pudo agregar el favorito, intente nuevamente.',
+    'F701' => 'Se agrego el favorito con &eacute;xito',
+    'F702' => 'Se elimin&oacute; el favorito con &eacute;xito',
+    'F703' => 'Disculpe, no se pudo eliminar el favorito, intente nuevamente.',
     'RC00' => 'El detalle de la recomendacion fue eliminado con &eacute;xito',
     'RC01' => 'Disculpe, no se pudo eliminar el detalle, intente nuevamente.',
     'RC02' => 'La recomendacion fue eliminada con &eacute;xito',
@@ -119,7 +106,23 @@ my %mensajesOPAC = (
     'RC04' => 'La recomendacion ha sido enviada',
     'VA001' => 'Error de parametros, inconsistentes o faltantes, don\'t HACK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
     'VA002' => 'Por favor, complete todos los datos requeridos e intente nuevamente. Gracias.',
-    
+
+   #ERRORES DE BASE DE DATOS
+    'B400' => 'Error al intentar reservar desde OPAC, funcion C4::AR::Reservas::reservarOPAC.',
+    'B401' => '',
+    'B402' => '',
+    'B403' => '',
+    'B404' => 'Error al cancelar una reserva desde OPAC, funcion C4::AR::Reservas::t_cancelar_reserva',
+    'B405' => 'Error al intentar renovar desde OPAC, funcion C4::AR::Prestamos::t_renovarOPAC',
+    'B406' => '',
+    'B407' => 'Error al intentar carncelar y reservar desde OPAC, funcion C4::AR::Reservas::t_cancelar_y_reserva',
+    'B408' => 'Error al intentar agregar un favorito desde OPAC, funcion C4::AR::BookShelves::t_addPrivateShelfs',
+    'B409' => 'Error al intentar eliminar un favorito desde OPAC, funcion C4::AR::BookShelves::t_delPrivateShelfs',
+    'B410' => 'Error al intentar agregar una recomendaci&oacute;n desde OPAC en funcion C4::AR::Recomendaciones::agregarRecomendacion',
+    'B411' => 'Error en funcion C4::AR::Auth::t_operacionesDeOPAC',
+    'B412' => 'Error en la funcion C4::AR::RecomendacionDetalle::eliminarDetalleRecomendacion',
+    'B413' => 'Error en la funcion C4::AR::Recomendaciones::eliminarRecomendacion',
+
 );
 
 my %mensajesINTRA = (
@@ -176,7 +179,7 @@ my %mensajesINTRA = (
     'S203' => 'No se pudo eliminar la sanci&oacute;n a *?*, *?*, *?*.',
     'S204' => 'Disculpe, no puede efectuar el pr&eacute;stamo porque el usuario tiene un ejemplar vencido.',
     'S205' => 'No es posible realizar el pr&eacute;stamo porque el usuario tiene una sanci&oacute;n para ese tipo de pr&eacute;stamo hasta el *?*.',
-    
+
     'U300' => 'El usuario no puede reservar porque no es un alumno regular.',
     'U301' => 'El usuario no puede reservar porque no ha realizado a&uacute;n el curso para usuarios.',
     'U302' => '',
@@ -226,7 +229,7 @@ my %mensajesINTRA = (
     'U344' => 'La foto ha sido eliminada.',
     'U345' => 'No se pudo eliminar la foto.',
     'U346' => 'El usuario con tarjeta id: *?* ya se encuentra habilitado!!!',
-    'U347' => 'El usuario con tarjeta id: *?* se ha habilit&oacute; con &eacute;xito', 
+    'U347' => 'El usuario con tarjeta id: *?* se ha habilit&oacute; con &eacute;xito',
     'U348' => 'Disculple, no se pudo hablitar el usurio, intente nuevamente',
     'U349' => 'El usuario con tarjeta id: *?* es IRREGULAR y no puede ser habilitado!!!',
     'U350' => 'El usuario con tarjeta id: *?* NO se encuentra habilitado!!!',
@@ -243,10 +246,10 @@ my %mensajesINTRA = (
     'U361' => 'El password actual NO coincide con el suyo.',
     'U362' => 'UD. no puede personalizar el password de otro usuario.',
     'U363' => 'El usuario con tarjeta id: *?* se ha deshabilit&oacute; con &eacute;xito',
-    'U364' => 'Se agreg&oacute; la estructura de catalogaci&oacute;n con &eacute;xito', 
+    'U364' => 'Se agreg&oacute; la estructura de catalogaci&oacute;n con &eacute;xito',
     'U365' => 'Disculpe, no se pudo agregar la estructura de catalogaci&oacute;n, intente nuevamente',
-    'U366' => 'Se modific&oacute; la estructura de catalogaci&oacute;n con &eacute;xito', 
-    'U367' => 'Disculpe, no se pudo modificar la estructura de catalogaci&oacute;n, intente nuevamente',    
+    'U366' => 'Se modific&oacute; la estructura de catalogaci&oacute;n con &eacute;xito',
+    'U367' => 'Disculpe, no se pudo modificar la estructura de catalogaci&oacute;n, intente nuevamente',
     'U368' => 'Se agreg&oacute; con &Eacute;xito el Nivel 1 ( *?* )',
     'U369' => 'Se agreg&oacute; con &Eacute;xito el Nivel 2 ( *?* )',
     'U370' => 'Se agreg&oacute; con &Eacute;xito el Nivel 3 ( *?* )',
@@ -292,9 +295,9 @@ my %mensajesINTRA = (
     'U410' => 'Se agruparon los campos con &eacute;xito.',
     'U411' => 'Disculpe, No se pudieron agrupar los campos.',
     'U412' => 'Error en la estructura *?*.',
-    'U413' => 'Se envi&oacute; el mail de prueba exitosamente a la cuenta (*?*).',        
-    'U414' => 'Error al intentar enviar el mail de prueba a la cuenta (*?*) <br/> (*?*).',                
-    'U415' => 'Se han verificado los datos censales del socio.',                
+    'U413' => 'Se envi&oacute; el mail de prueba exitosamente a la cuenta (*?*).',
+    'U414' => 'Error al intentar enviar el mail de prueba a la cuenta (*?*) <br/> (*?*).',
+    'U415' => 'Se han verificado los datos censales del socio.',
     'U416' => 'No se han verificado los datos censales del socio, intentelo nuevamente.',
     'U417' => 'No se puede repetir la signatura topogr&aacute;fica, existe en otro registro.',
     'U418' => 'No se puede extender el libre deuda porque el usuario tiene reservas asignadas.',
@@ -305,13 +308,13 @@ my %mensajesINTRA = (
     'U423' => 'Se puede imprimir el certificado de libre deuda para *?*. <br/> *?*',
     'U424' => 'No se puede eliminar el usuario porque tiene pr&eacute;stamos vigentes y/o vencidos.',
     'U425' => 'El valor ingresado en el Captcha es invalido, por favor intente nuevamente',
-   
+
     'U426' => 'El mail ha sido enviado',
     'U427' => 'Ha ocurrido un error, el mail no ha sido enviado',
 
 
     'U499' => 'El password actual no puede ser igual al nuevo.',
-    
+
     'U500' => 'La tarjeda de identificaci&oacute;n ingresada (Nro. de socio) ya pertenece a otro usuario.',
     'U501' => 'El libro cuyo t&iacute;tulo y autor es:  *?* ya existe.  Desea agregar nuevos ejemplares al registro *?* ? ',
 #     'U405' => 'No existe la estructura de catalogaci&oacute;n que se intentando recuperar.',
@@ -331,64 +334,11 @@ my %mensajesINTRA = (
     'U611' => 'Disculpe, no se pudo agregar el &iacute;ndice',
     'U612' => 'Se modifico el esquema correctamente',
 
-    'B400' => '',
-    'B401' => 'Error al intentar prestar desde INTRA, funcion C4::AR::Reservas::t_realizarPrestamo.',
-    'B402' => 'Error al intentar guardar un item desde INTRA, funcion C4::AR::Catalogacion::transaccion.',
-    'B403' => 'Error al intentar guardar un item desde INTRA, funcion C4::AR::Catalogacion::transaccionNivel3.',
-    'B404' => 'Error al cancelar una reserva desde INTRA, funcion C4::AR::Reservas::t_cancelar_reserva',
-    'B405' => 'Error al intentar renovar desde la INTRA, funcion C4::AR::Prestamos::t_renovar',
-    'B406' => 'Error al intentar devolver desde la INTRA, funcion C4::AR::Prestamos::t_devolver',
-    'B407' => '',
-    'B408' => 'Error en funcion C4::AR::Auth::t_operacionesDeOPAC',
-    'B409' => 'Error en funcion C4::AR::Auth::t_operacionesDeINTRA',
-    'B410' => 'Error en funcion C4::AR::VisualizacionOpac::t_insertarEncabezado',
-    'B411' => 'Error en funcion C4::AR::VisualizacionOpac::t_deleteEncabezado',
-    'B412' => 'Error en funcion C4::AR::Nivel3::t_deleteItem',
-    'B413' => 'Error en funcion C4::AR::Nivel2::t_deleteGrupo',
-    'B414' => 'Error en funcion C4::AR::Nivel1::t_deleteNivel1',
-    'B415' => 'Error en funcion C4::AR::VisualizacionOpac::t_deleteEncabezado',
-    'B416' => 'Error en funcion C4::AR::VisualizacionOpac::t_insertConfVisualizacion',
-    'B417' => 'Error en funcion C4::AR::ControlAutoridades::t_eliminarSeudonimosAutor',
-    'B418' => 'Error en funcion C4::AR::ControlAutoridades::t_eliminarSeudonimosTema',
-    'B419' => 'Error en funcion C4::AR::ControlAutoridades::t_eliminarSeudonimosEditorial',
-    'B420' => 'Error en funcion C4::AR::Usuarios::t_cambiarPassword',
-    'B421' => 'Error en funcion C4::AR::Usuarios::t_cambiarPermisos',
-    'B422' => 'Error en funcion C4::AR::Usuarios::t_eliminarUsuario',
-    'B423' => 'Error en funcion C4::AR::Usuarios::habilitarPersona',
-    'B424' => 'Error en funcion C4::AR::Usuarios::t_updateBorrower',
-    'B425' => 'Error en funcion C4::AR::Usuarios::t_addPersons',
-    'B426' => 'Error en funcion C4::AR::Catalogacion::t_guardarEnEstructuraCatalogacion',
-    'B427' => 'Error en funcion C4::AR::Nivel1::t_guardarNivel1',
-    'B428' => 'Error en funcion C4::AR::Nivel2::t_guardarNivel2',
-    'B429' => 'Error en funcion C4::AR::Nivel3::t_guardarNivel3',
-    'B430' => 'Error en funcion C4::AR::Nivel1::t_modificarNivel1',
-    'B431' => 'Error en funcion C4::AR::Nivel2::t_modificarNivel2',
-    'B432' => 'Error en funcion C4::AR::Nivel3::t_modificarNivel3',
-    'B433' => 'Error en funcion C4::AR::Nivel1::t_eliminarNivel1',
-    'B434' => 'Error en funcion C4::AR::Nivel2::t_eliminarNivel2',
-    'B435' => 'Error en funcion C4::AR::Nivel3::t_eliminarNivel3',
-    'B436' => 'Error en funcion C4::AR::VisualizacionOpac::t_insertConfVisualizacion',
-    'B437' => 'Error en funcion C4::AR::ControlAutoridades::t_insertarSeudonimosAutor',
-    'B438' => 'Error en funcion C4::AR::ControlAutoridades::t_insertarSeudonimosTema',
-    'B439' => 'Error en funcion C4::AR::ControlAutoridades::t_insertarSeudonimosEditorial',
-    'B440' => 'Error en funcion C4::AR::ControlAutoridades::t_eliminarSinonimosAutor',
-    'B441' => 'Error en funcion C4::AR::ControlAutoridades::t_eliminarSinonimosTemas',
-    'B442' => 'Error en funcion C4::AR::ControlAutoridades::t_eliminarSinonimosEditoriales',
-    'B443' => 'Error en funcion C4::AR::ControlAutoridades::t_updateSinonimosAutores',
-    'B444' => 'Error en funcion C4::AR::ControlAutoridades::t_updateSinonimosTemas',
-    'B445' => 'Error en funcion C4::AR::ContR099rolAutoridades::t_updateSinonimosEditoriales',
-    'B446' => 'Error en funcion C4::AR::VisualizacionOpac::t_updateConfVisualizacion',
-    'B447' => 'Error en funcion C4::AR::Nivel1::t_eliminarNivel1Repetible',
-    'B448' => 'Error en funcion C4::AR::Catalogacion::t_agruparCampos',   
-    'B449' => 'Error en la funcion C4::AR::Provedoores::agregarProveedor',
-    'B450' => 'Error en funcion C4::AR::Catalogacion::_procesar_referencia',
-    'B451' => 'Error en funcion C4::AR::Catalogacion::getDatoFromReferencia',
-    'B452' => 'Error en funcion C4::AR::Permisos::actualizarPermisosGeneral',
     'C500' => 'Los items fueron guardados correctamente.',
     'C501' => 'Se produjo un error al intentar guardar los datos del item, repita la operacion.',
     'C502' => 'Se produjo un error, el codigo de barra ingresado esta repetido. Vuelva a intentarlo',
     'CA601' => 'Se produjo un error al intentar agregar un sin&oacute;nimo, repita la operaci&oacute;n',
-    'CA602' => 'Se produjo un error al intentar agregar un seud&oacute;nimo, repita la operaci&oacute;n',	
+    'CA602' => 'Se produjo un error al intentar agregar un seud&oacute;nimo, repita la operaci&oacute;n',
     'CA603' => 'Se produjo un error al intentar eliminar un seud&oacute;nimo, repita la operaci&oacute;n',
     'CA604' => 'Se produjo un error al intentar eliminar un sin&oacute;nimo, repita la operaci&oacute;n',
     'CA605' => 'Se produjo un error al intentar actualizar un sin&oacute;nimo, repita la operaci&oacute;n',
@@ -482,40 +432,40 @@ my %mensajesINTRA = (
     'A030' => 'La cantidad de ejemplares no puede estar en blanco.',
     'A031' => 'El precio unitario ingresado es inv&aacute;lido.',
     'A032' => 'El precio unitario no puede estar en blanco.',
-    'A033' => 'Pedido cotizaci&oacute;n generado con &eacute;xito.',  
-    'A034' => 'Recomendaci&oacute;n actualizada con &eacute;xito.',       
-    'A035' => 'Presupuesto generado con &eacute;xito.', 
-    'A036' => 'La exportaci&oacute;n se realiz&oacute correctamente.', 
-    'A037' => 'La exportaci&oacute;n no ha podido realizarse.', 
-    'A038' => 'Las monedas seleccionadas son inv&aacute;lidas.', 
-    'A039' => 'Las formas de envio seleccionadas son inv&aacute;lidas.', 
-    'A040' => 'Los materiales seleccionados son inv&aacute;lidos.',  
-    'A041' => 'El pedido de cotizaci&oacute;n fue agregado exitosamente.',       
-    'A042' => 'Alguno de los ejemplares seleccionados ya se encuentran dentro del Pedido de Cotizaci&oacute;n.',   
+    'A033' => 'Pedido cotizaci&oacute;n generado con &eacute;xito.',
+    'A034' => 'Recomendaci&oacute;n actualizada con &eacute;xito.',
+    'A035' => 'Presupuesto generado con &eacute;xito.',
+    'A036' => 'La exportaci&oacute;n se realiz&oacute correctamente.',
+    'A037' => 'La exportaci&oacute;n no ha podido realizarse.',
+    'A038' => 'Las monedas seleccionadas son inv&aacute;lidas.',
+    'A039' => 'Las formas de envio seleccionadas son inv&aacute;lidas.',
+    'A040' => 'Los materiales seleccionados son inv&aacute;lidos.',
+    'A041' => 'El pedido de cotizaci&oacute;n fue agregado exitosamente.',
+    'A042' => 'Alguno de los ejemplares seleccionados ya se encuentran dentro del Pedido de Cotizaci&oacute;n.',
     #mensajes de servidores z3950
-    'S000' => 'Se agrego el servidor z3950 con &eacute;xito.',   
-    'S001' => 'Hubo un error cuando se intentaba agregar el servidor z3950.',   
-    'S002' => 'Se elimino el servidor z3950 con &eacute;xito.',   
-    'S003' => 'Hubo un error cuando se intentaba eliminar el servidor z3950.',   
-    'S004' => 'Se modifico el servidor z3950 con &eacute;xito.',   
-    'S005' => 'Hubo un error cuando se intentaba modificar el servidor z3950.',   
-    'S006' => 'Se deshabilit&oacute; el servidor z3950 con &eacute;xito.',   
-    'S007' => 'Hubo un error cuando se intentaba deshabilitar el servidor z3950.', 
-    'S008' => 'Por favor verifique que los datos ingresados sean correctos.',  
+    'S000' => 'Se agrego el servidor z3950 con &eacute;xito.',
+    'S001' => 'Hubo un error cuando se intentaba agregar el servidor z3950.',
+    'S002' => 'Se elimino el servidor z3950 con &eacute;xito.',
+    'S003' => 'Hubo un error cuando se intentaba eliminar el servidor z3950.',
+    'S004' => 'Se modifico el servidor z3950 con &eacute;xito.',
+    'S005' => 'Hubo un error cuando se intentaba modificar el servidor z3950.',
+    'S006' => 'Se deshabilit&oacute; el servidor z3950 con &eacute;xito.',
+    'S007' => 'Hubo un error cuando se intentaba deshabilitar el servidor z3950.',
+    'S008' => 'Por favor verifique que los datos ingresados sean correctos.',
     #mensajes visualizacion INTRA y OPAC
-    'M000' => 'Se modifico el orden con &eacute;xito.',  
-    'M001' => 'Se eliminaron todas las visualizaciones del campo "*?*", nivel "*?*" y ejemplar "*?*" con &eacute;xito.', 
-    'M002' => 'Error al intentar eliminar las visualizaciones con campo "*?*" y nivel "*?*".', 
-    'M003' => 'Error en la funcion eliminarTodoElCampo.', 
+    'M000' => 'Se modifico el orden con &eacute;xito.',
+    'M001' => 'Se eliminaron todas las visualizaciones del campo "*?*", nivel "*?*" y ejemplar "*?*" con &eacute;xito.',
+    'M002' => 'Error al intentar eliminar las visualizaciones con campo "*?*" y nivel "*?*".',
+    'M003' => 'Error en la funcion eliminarTodoElCampo.',
 
-    #Mensajes Social     
+    #Mensajes Social
     'SC000' => 'El mensaje ha sido publicado en Twitter',
     'SC001' => 'El mensaje no pudo ser publicado a causa del siguiente error: ',
     'SC002' => 'Se ha excedido en la cantidad de caracteres ingresados. El mensaje no ha sido publicado en Twitter ',
     'SC003' => 'No esta habilitada la preferencia para publicar en Twitter',
     'SC004' => 'Error de Twitter: *?*',
-    
-     #Metodos Auth     
+
+     #Metodos Auth
     'MA000' => 'El Metodo fue agregado exitosamente',
     'MA001' => 'El Metodo no pudo ser agregado',
 
@@ -523,32 +473,92 @@ my %mensajesINTRA = (
     'RC00' => 'El detalle de la recomendacion fue eliminado con &eacute;xito',
     'RC01' => 'Disculpe, no se pudo eliminar el detalle, intente nuevamente.',
     'RC02' => 'La recomendacion fue eliminada con &eacute;xito',
-    
+
     #prestamos vencidos
     'PV00' => 'Se enviar&aacute;n los mails de pr&eacute;stamos vencidos a la brevedad',
     'PV01' => 'Ocurrio un error mientras se mandaban los mails de pr&eacute;stamos vencidos',
 
+    #Mensajes Importaciones/Exportaciones
+    'IO00' => 'La importaci&oacute;n fue eliminada con &eacute;xito',
+    'IO01' => 'Ocurrio un error mientras se intentaba eliminar la importaci&oacute;n',
+
+
+#ERRORES DE BASE DE DATOS
+    'B400' => '',
+    'B401' => 'Error al intentar prestar desde INTRA, funcion C4::AR::Reservas::t_realizarPrestamo.',
+    'B402' => 'Error al intentar guardar un item desde INTRA, funcion C4::AR::Catalogacion::transaccion.',
+    'B403' => 'Error al intentar guardar un item desde INTRA, funcion C4::AR::Catalogacion::transaccionNivel3.',
+    'B404' => 'Error al cancelar una reserva desde INTRA, funcion C4::AR::Reservas::t_cancelar_reserva',
+    'B405' => 'Error al intentar renovar desde la INTRA, funcion C4::AR::Prestamos::t_renovar',
+    'B406' => 'Error al intentar devolver desde la INTRA, funcion C4::AR::Prestamos::t_devolver',
+    'B407' => '',
+    'B408' => 'Error en funcion C4::AR::Auth::t_operacionesDeOPAC',
+    'B409' => 'Error en funcion C4::AR::Auth::t_operacionesDeINTRA',
+    'B410' => 'Error en funcion C4::AR::VisualizacionOpac::t_insertarEncabezado',
+    'B411' => 'Error en funcion C4::AR::VisualizacionOpac::t_deleteEncabezado',
+    'B412' => 'Error en funcion C4::AR::Nivel3::t_deleteItem',
+    'B413' => 'Error en funcion C4::AR::Nivel2::t_deleteGrupo',
+    'B414' => 'Error en funcion C4::AR::Nivel1::t_deleteNivel1',
+    'B415' => 'Error en funcion C4::AR::VisualizacionOpac::t_deleteEncabezado',
+    'B416' => 'Error en funcion C4::AR::VisualizacionOpac::t_insertConfVisualizacion',
+    'B417' => 'Error en funcion C4::AR::ControlAutoridades::t_eliminarSeudonimosAutor',
+    'B418' => 'Error en funcion C4::AR::ControlAutoridades::t_eliminarSeudonimosTema',
+    'B419' => 'Error en funcion C4::AR::ControlAutoridades::t_eliminarSeudonimosEditorial',
+    'B420' => 'Error en funcion C4::AR::Usuarios::t_cambiarPassword',
+    'B421' => 'Error en funcion C4::AR::Usuarios::t_cambiarPermisos',
+    'B422' => 'Error en funcion C4::AR::Usuarios::t_eliminarUsuario',
+    'B423' => 'Error en funcion C4::AR::Usuarios::habilitarPersona',
+    'B424' => 'Error en funcion C4::AR::Usuarios::t_updateBorrower',
+    'B425' => 'Error en funcion C4::AR::Usuarios::t_addPersons',
+    'B426' => 'Error en funcion C4::AR::Catalogacion::t_guardarEnEstructuraCatalogacion',
+    'B427' => 'Error en funcion C4::AR::Nivel1::t_guardarNivel1',
+    'B428' => 'Error en funcion C4::AR::Nivel2::t_guardarNivel2',
+    'B429' => 'Error en funcion C4::AR::Nivel3::t_guardarNivel3',
+    'B430' => 'Error en funcion C4::AR::Nivel1::t_modificarNivel1',
+    'B431' => 'Error en funcion C4::AR::Nivel2::t_modificarNivel2',
+    'B432' => 'Error en funcion C4::AR::Nivel3::t_modificarNivel3',
+    'B433' => 'Error en funcion C4::AR::Nivel1::t_eliminarNivel1',
+    'B434' => 'Error en funcion C4::AR::Nivel2::t_eliminarNivel2',
+    'B435' => 'Error en funcion C4::AR::Nivel3::t_eliminarNivel3',
+    'B436' => 'Error en funcion C4::AR::VisualizacionOpac::t_insertConfVisualizacion',
+    'B437' => 'Error en funcion C4::AR::ControlAutoridades::t_insertarSeudonimosAutor',
+    'B438' => 'Error en funcion C4::AR::ControlAutoridades::t_insertarSeudonimosTema',
+    'B439' => 'Error en funcion C4::AR::ControlAutoridades::t_insertarSeudonimosEditorial',
+    'B440' => 'Error en funcion C4::AR::ControlAutoridades::t_eliminarSinonimosAutor',
+    'B441' => 'Error en funcion C4::AR::ControlAutoridades::t_eliminarSinonimosTemas',
+    'B442' => 'Error en funcion C4::AR::ControlAutoridades::t_eliminarSinonimosEditoriales',
+    'B443' => 'Error en funcion C4::AR::ControlAutoridades::t_updateSinonimosAutores',
+    'B444' => 'Error en funcion C4::AR::ControlAutoridades::t_updateSinonimosTemas',
+    'B445' => 'Error en funcion C4::AR::ContR099rolAutoridades::t_updateSinonimosEditoriales',
+    'B446' => 'Error en funcion C4::AR::VisualizacionOpac::t_updateConfVisualizacion',
+    'B447' => 'Error en funcion C4::AR::Nivel1::t_eliminarNivel1Repetible',
+    'B448' => 'Error en funcion C4::AR::Catalogacion::t_agruparCampos',
+    'B449' => 'Error en la funcion C4::AR::Provedoores::agregarProveedor',
+    'B450' => 'Error en funcion C4::AR::Catalogacion::_procesar_referencia',
+    'B451' => 'Error en funcion C4::AR::Catalogacion::getDatoFromReferencia',
+    'B452' => 'Error en funcion C4::AR::Permisos::actualizarPermisosGeneral',
+    'B453' => 'Error en funcion C4::AR::ImportacionIsoMARC::eliminarImportacion',
 );
 
 sub getMensaje {
-	my($codigo,$tipo,$param)=@_;
-	my $msj="";
-    
+    my($codigo,$tipo,$param)=@_;
+    my $msj="";
+
     $tipo = C4::AR::Utilidades::capitalizarString($tipo);
-    
-	(($tipo eq "Opac")) ? ($msj=$mensajesOPAC{$codigo}):($msj=$mensajesINTRA{$codigo});
-		
+
+    (($tipo eq "Opac")) ? ($msj=$mensajesOPAC{$codigo}):($msj=$mensajesINTRA{$codigo});
+
     my $p;
-    
-	foreach $p (@$param){
-		$msj=~ s/\*\?\*/$p/o;
-	}
+
+    foreach $p (@$param){
+        $msj=~ s/\*\?\*/$p/o;
+    }
 
     C4::AR::Debug::debug("C4::AR::Mensajes => getMensaje => tipo => ".$tipo);
     C4::AR::Debug::debug("C4::AR::Mensajes => getMensaje => codigo => ".$codigo);
     C4::AR::Debug::debug("C4::AR::Mensajes => getMensaje => mensaje => ".$msj);
 
-	return $msj;
+    return $msj;
 }
 
 =item
@@ -556,23 +566,23 @@ Esta funcion se encarga de setear variables para los distintos pl que la invocan
 estas variables se setean para mostrar u ocultar cosas en los tmpls
 =cut
 sub getAccion {
-	my($codigo,$tipo)=@_;
-	my %acciones;
-	
-	if($codigo eq 'R001'){
-		$acciones{'maximoReservas'}= 1;
-# 		$acciones{'materialEnEspera'}= 0;
-	}
+    my($codigo,$tipo)=@_;
+    my %acciones;
 
- 	if($codigo eq 'U302'){
- 		$acciones{'materialParaRetirar'}= 1;
- 	}
+    if($codigo eq 'R001'){
+        $acciones{'maximoReservas'}= 1;
+#       $acciones{'materialEnEspera'}= 0;
+    }
 
-	if($codigo eq 'U303'){
-		$acciones{'reservaGrupo'}= 1;
-	}
+    if($codigo eq 'U302'){
+        $acciones{'materialParaRetirar'}= 1;
+    }
 
-	return \%acciones;
+    if($codigo eq 'U303'){
+        $acciones{'reservaGrupo'}= 1;
+    }
+
+    return \%acciones;
 }
 
 =item
@@ -583,19 +593,19 @@ Guarda los errores en el siguiente archivo: /var/log/koha/debugErrorDBA.txt
 # TODO usar Debug::debug
 # TODO esto no deberia estar aca, va en Debug
 sub printErrorDB {
-	my($errorsDB_array,$codigo,$tipo)=@_;
+    my($errorsDB_array,$codigo,$tipo)=@_;
 
-	my $paraMens;
-	my $path=">>".C4::Context->config("kohalogdir")."debugErrorDBA.txt";
-	open(A,$path);
-	print A "\n";
-	print A "**************Error en la transaccion - Fecha:". Date::Manip::ParseDate("now")."**************\n";
-	print A "Codigo: $codigo\n";
-	my $message= &C4::AR::Mensajes::getMensaje($codigo,$tipo,$paraMens);
-	print A "Message: $message\n";
-	print A "$@ \n";
-	print A "\n";
-	close(A);
+    my $paraMens;
+    my $path=">>".C4::Context->config("kohalogdir")."debugErrorDBA.txt";
+    open(A,$path);
+    print A "\n";
+    print A "**************Error en la transaccion - Fecha:". Date::Manip::ParseDate("now")."**************\n";
+    print A "Codigo: $codigo\n";
+    my $message= &C4::AR::Mensajes::getMensaje($codigo,$tipo,$paraMens);
+    print A "Message: $message\n";
+    print A "$@ \n";
+    print A "\n";
+    close(A);
 }
 
 
@@ -634,15 +644,15 @@ sub messagesPush {
 
 sub create {
 
-	#se crea el objetos contenedor de mensajes
-	my %msg_object;
-	$msg_object{'error'}    = 0;
-	$msg_object{'messages'} = [];
+    #se crea el objetos contenedor de mensajes
+    my %msg_object;
+    $msg_object{'error'}    = 0;
+    $msg_object{'messages'} = [];
     my $session = CGI::Session->load();
-  
-	$msg_object{'tipo'}     = $session->param('type')||'INTRA';
 
-	return \%msg_object;
+    $msg_object{'tipo'}     = $session->param('type')||'INTRA';
+
+    return \%msg_object;
 }
 
 sub hayError {
@@ -668,9 +678,9 @@ sub getFirstCodeError {
 sub encodeUtf8Msj{
 
     my($hash) = @_;
-    
+
     use Encode;
-    
+
     foreach my $value (@$hash) {
         $value = encode("utf8",$value);
     }
@@ -678,23 +688,23 @@ sub encodeUtf8Msj{
 
 #Esta funcion agrega un mensaje al arreglo de objetos mensajes
 sub add {
-	my($Message_hashref, $msg_hashref)=@_;
+    my($Message_hashref, $msg_hashref)=@_;
     #@param $Message_hashref es el objeto mensaje contenedor de los mensajes
     #@param $msg_hashref es un mensaje
-	#se obtiene el texto del mensaje
-#   	my $messageString= &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'},$Message_hashref->{'tipo'},$msg_hashref->{'params'});
+    #se obtiene el texto del mensaje
+#       my $messageString= &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'},$Message_hashref->{'tipo'},$msg_hashref->{'params'});
     my $session         = CGI::Session->load();
     my $tipo            = $session->param('type')||'INTRA';
 
     #encodeamos en utf8 para mostrar bien los acentros
     encodeUtf8Msj($msg_hashref->{'params'});
 
-    my $messageString   = &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'}, $tipo, $msg_hashref->{'params'});     
-	$msg_hashref->{'message'}= $messageString;
+    my $messageString   = &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'}, $tipo, $msg_hashref->{'params'});
+    $msg_hashref->{'message'}= $messageString;
 # C4::AR::Debug::debug("Mensajes::add => message: ".$messageString."\n");
 # C4::AR::Debug::debug("Mensajes::add => params: ".$msg_hashref->{'params'}->[0]."\n");
 
- 	push (@{$Message_hashref->{'messages'}}, $msg_hashref);
+    push (@{$Message_hashref->{'messages'}}, $msg_hashref);
 }
 
 END { }       # module clean-up code here (global destructor)

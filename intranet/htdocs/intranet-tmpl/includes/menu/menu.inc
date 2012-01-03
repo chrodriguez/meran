@@ -393,17 +393,17 @@
                                     <ul>
                                         <li>
                                                   [% PERL %]
-                                                      print C4::AR::Filtros::link_to( text =>     "[% 'Subir Nueva Importaci&oacute;n' | i18n %]",
-                                                                                      url =>      "[% url_prefix %]/herramientas/importacion/importar.pl",
-                                                                                      title =>    "[% 'Importaci&oacute;n' | i18n %]"
+                                                      print C4::AR::Filtros::link_to( text =>     "[% 'Nueva Importaci&oacute;n' | i18n %]",
+                                                                                      url =>      "[% url_prefix %]/herramientas/importacion/subirNuevaImportacion.pl",
+                                                                                      title =>    "[% 'Nueva Importaci&oacute;n' | i18n %]"
                                                                                   ) ;
                                                   [% END %]
                                         </li>
                                         <li>
                                                   [% PERL %]
-                                                      print C4::AR::Filtros::link_to( text =>     "[% 'Chequeo Importaci&oacute;n' | i18n %]",
-                                                                                      url =>      "[% url_prefix %]/herramientas/importacion/chequeo_importacion.pl",
-                                                                                      title =>    "[% 'Chequeo Importaci&oacute;n' | i18n %]"
+                                                      print C4::AR::Filtros::link_to( text =>     "[% 'Importaci&oacute;nes' | i18n %]",
+                                                                                      url =>      "[% url_prefix %]/herramientas/importacion/importar.pl",
+                                                                                      title =>    "[% 'Importaci&oacute;nes' | i18n %]"
                                                                                   ) ;
                                                   [% END %]
                                         </li>

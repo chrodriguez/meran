@@ -67,7 +67,7 @@ sub agregar{
     $self->setEstado('I');
 
     my $dateformat = C4::Date::get_date_format();
-    my $hoy        = C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
+    my $hoy        = C4::Date::format_date_in_iso(C4::Date::ParseDate("today"), $dateformat);
     $self->setFechaUpload($hoy);
 
     $self->save();
@@ -214,14 +214,32 @@ sub getEstado{
     return $self->estado;
 }
 
+sub getEsquema{
+    my ($self)   = shift;
+    return $self->esquema;
+}
+
 sub getFechaUpload{
     my ($self)   = shift;
     return $self->fecha_upload;
 }
 
+sub getFechaUpload_formateada{
+    my ($self)   = shift;
+    my $dateformat = C4::Date::get_date_format();
+    return C4::Date::format_date(C4::AR::Utilidades::trim($self->fecha_upload),$dateformat);
+}
+
 sub getFechaImport{
     my ($self)   = shift;
     return $self->fecha_import;
+}
+
+
+sub getFechaImport{
+    my ($self)   = shift;
+    my $dateformat = C4::Date::get_date_format();
+    return C4::Date::format_date(C4::AR::Utilidades::trim($self->fecha_import),$dateformat);
 }
 
 sub getCantRegistrosN1{
