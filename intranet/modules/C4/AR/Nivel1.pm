@@ -94,6 +94,8 @@ sub t_guardarNivel1 {
     
     verificar_Alta_Nivel1($marc_record, $msg_object);
 
+C4::AR::Debug::debug("C4::AR::Nivel1::t_guardarNivel1 => msg_object->{'error'} ".$msg_object->{'error'});
+
     if(!$msg_object->{'error'}){
         ($msg_object, $id1) = guardarRealmente($msg_object,$marc_record,$params);
     }
