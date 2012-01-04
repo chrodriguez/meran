@@ -2240,16 +2240,16 @@ sub footerDCXML{
 }
 
 sub existeNivel1{
-    my ($titulo,$autor_object) = @_;
+    my ($titulo,$autor) = @_;
 
     use Sphinx::Search;
 
     my $sphinx      = Sphinx::Search->new();
     my $query       = '@titulo '.$titulo;
-       $query      .= ' @autor '.$autor_object->getCompleto();
+       $query      .= ' @autor '.$autor;
     my $tipo        = 'SPH_MATCH_EXTENDED';
     my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
-    C4::AR::Debug::debug("C4::AR::Busqueda::busquedaPorTitulo => query: ".$query);
+    C4::AR::Debug::debug("C4::AR::Busqueda::existeNivel1 => query: ".$query);
 
     $sphinx->SetMatchMode($tipo_match);
     $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
@@ -2261,7 +2261,7 @@ sub existeNivel1{
     my $matches                 = $results->{'matches'};
     my $total_found             = $results->{'total_found'};
 #     C4::AR::Utilidades::printHASH($results);
-    C4::AR::Debug::debug("C4::AR::Busqueda::busquedaPorTitulo => total_found: ".$total_found);
+    C4::AR::Debug::debug("C4::AR::Busqueda::existeNivel1 => total_found: ".$total_found);
 
     return $total_found;
 }
