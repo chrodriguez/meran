@@ -202,7 +202,7 @@ function scrollTo(idObj) {
 		return; // alert('util.js=> scrollTo => No existe la componte con ID:
 				// '+idObj);
 
-	var divOffset = $('#' + idObj).offset().top - 40;
+	var divOffset = $('#' + idObj).offset().top - 110;
 	$('html,body').animate({
 		scrollTop : divOffset
 	}, 200);

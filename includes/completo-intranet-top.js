@@ -1351,7 +1351,7 @@ funcion();}}});}
 function registrarKeypress(typeObject){var componentes=["input","INPUT"];var bool1=componentes[0]==typeObject;var bool2=componentes[1]==typeObject;var result=bool1||bool2;if(result==-1)
 return;$(typeObject).keypress(function(e){if(e.which==13){if(this.value!=''){buscar();}}});}
 function scrollTo(idObj){var result_array=$("#"+idObj);if(result_array.length==0)
-return;var divOffset=$('#'+idObj).offset().top-40;$('html,body').animate({scrollTop:divOffset},200);}
+return;var divOffset=$('#'+idObj).offset().top-110;$('html,body').animate({scrollTop:divOffset},200);}
 function getRadioButtonSelectedValue(ctrl){for(i=0;i<ctrl.length;i++)
 if(ctrl[i].checked)
 return ctrl[i].value;}
@@ -1432,7 +1432,7 @@ helper.onComplete(ajax.responseText);}}}});}}function clearMessages(){$('#mensaj
 function verificarRespuesta(responseText){if(responseText==0){jAlert(DATOS_ENVIADOS_INCORRECTOS,'Info','errboxid');return(0);}else{return(1);}}
 function setMessages(Messages_hashref){//@params
 try{_createContentMessages();var i;for(i=0;i<Messages_hashref.messages.length;i++){$('#mensajes').append('<div class="message_text" >'+Messages_hashref.messages[i].message+'</div>');}
-$('#mensajes').css("display","block");_show();$('html, body').animate({scrollTop:0},'slow');_delay(clearMessages,180);}
+$('#mensajes').css("display","block");_show();$('html, body').animate({scrollTop:0},'slow');_delay(clearMessages,20);}
 catch(e){}}
 function assignCloseButton(){$('#close_message').click(function()
 {$('#mensajes').animate({opacity:0},"slow");clearMessages();});}

@@ -18,7 +18,7 @@
 	    <title>Meran::UNLP</title>
 	[% END %]
 	
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta charset="utf-8" />
 	<META HTTP-EQUIV="cache-control" content="public">
 	<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme_intra %]/includes/intranet.css">
 	<script type="text/javascript" src="/includes/json/jsonStringify.js"></script>
@@ -31,6 +31,8 @@
 	<script type="text/javascript" src="/includes/jquery/jquery-ui-1.8.9.custom.min.js"></script>
 	<script type="text/javascript" src="/includes/shiftSelectTr.js"></script>
 	<script type="text/javascript" src="/includes/jquery/jquery.expander.js"></script>
+	<script type="text/javascript" src="/includes/jquery/modernizr.js"></script>
+	
 	<script type="text/javascript">
 
 		function enableAlert(){

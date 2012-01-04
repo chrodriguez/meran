@@ -70,7 +70,7 @@ function setMessages(Messages_hashref){
 
         _show();
         $('html, body').animate({scrollTop:0}, 'slow');
-        _delay(clearMessages, 180);
+        _delay(clearMessages, 20);
     }
     catch (e){
       // We do nothing ;)

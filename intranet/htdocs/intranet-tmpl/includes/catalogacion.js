@@ -350,7 +350,7 @@ function mostrarEstructuraDelNivel1(){
     _NIVEL_ACTUAL       = 1;
    
     if(MODIFICAR == 0){
-        _mostrarAccion("Agregando metadatos => Esquema: " + TEMPLATE_ACTUAL + crearBotonEsquema());
+        _mostrarAccion(crearBotonEsquema() + "<h5>Agregando registro con el esquema: " + TEMPLATE_ACTUAL + "</h5>");
     } 
 
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel1);
@@ -383,7 +383,7 @@ function mostrarEstructuraDelNivel2(){
     _NIVEL_ACTUAL       = 2;
     
     if(MODIFICAR == 0){
-        _mostrarAccion("Agregando grupo => Esquema: " + TEMPLATE_ACTUAL + crearBotonEsquema());
+        _mostrarAccion(crearBotonEsquema() + "<h5>Agregando grupo con el esquema: " + TEMPLATE_ACTUAL + "</h5>");
     }
     
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel2);
@@ -437,7 +437,7 @@ function mostrarEstructuraDelNivel3(tipo_documento){
     _NIVEL_ACTUAL       = 3;
     
 //     if(MODIFICAR == 0){
-//         _mostrarAccion("Agregando ejemplares => Template: " + $('#tipo_nivel3_id').val() + crearBotonEsquema());
+//         _mostrarAccion(crearBotonEsquema() + "Agregando ejemplares => Template: " + $('#tipo_nivel3_id').val() + crearBotonEsquema());
 //     }
 
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel3);
@@ -530,7 +530,7 @@ function seleccionar_esquema(){
     TEMPLATE_ACTUAL     = $('#tipo_nivel3_id').val();
     
     if(MODIFICAR == 0){
-        _mostrarAccion("Agregando ejemplares => Esquema: " + $('#tipo_nivel3_id').val() + crearBotonEsquema());
+        _mostrarAccion(crearBotonEsquema() + "<h5>Agregando ejemplares con el esquema: " + $('#tipo_nivel3_id').val() + "</h5>");
     }
     
     
@@ -664,7 +664,7 @@ function agregarN3(id2, tipo_documento){
     ID_TIPO_EJEMPLAR    = tipo_documento;
 	MODIFICAR           = 0;
     inicializar();  
-    _mostrarAccion("Agregando ejemplares");
+    _mostrarAccion(crearBotonEsquema() + "Agregando ejemplares");
 	$('#divCantEjemplares').show();
 // 	mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
     open_esquema();
@@ -2149,7 +2149,7 @@ function modificarN1(id1, template){
     ID_N1               = id1;
     
 // TODO falta agregar boton para modificar el template
-    _mostrarAccion("Modificando el metadato (" + ID_N1 + ") => Esquema: " + TEMPLATE_ACTUAL + crearBotonEsquema());
+    _mostrarAccion(crearBotonEsquema() + "<h5>Modificando el registro (" + ID_N1 + ") con el esquema: " + TEMPLATE_ACTUAL + "</h5>");
     objAH               = new AjaxHelper(updateModificarN1);
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;
@@ -2163,7 +2163,7 @@ function modificarN1(id1, template){
 }
 
 function _mostrarAccion(mensaje){
-    $('#estado_accion').html( mensaje );
+    $('#estado_accion').html(mensaje);
     $('#estado_accion').show();
 }
 
@@ -2178,7 +2178,7 @@ function modificarN2(id2, template){
     ID_N2               = id2;
     ID_TIPO_EJEMPLAR    = template;
 // TODO falta agregar boton para modificar el template
-    _mostrarAccion("Modificando el grupo (" + ID_N2 + ") => Esquema: " + ID_TIPO_EJEMPLAR + crearBotonEsquema());  
+    _mostrarAccion(crearBotonEsquema() + "<h5>Modificando el grupo (" + ID_N2 + ") con el esquema: " + ID_TIPO_EJEMPLAR + "</h5>");  
     objAH               = new AjaxHelper(updateModificarN2);
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;
@@ -2202,7 +2202,7 @@ function modificarN3(id3, template){
 	ID_N3               = id3;	
     ID_TIPO_EJEMPLAR    = template;
 // TODO falta agregar boton para modificar el template
-    _mostrarAccion("Modificando el ejemplar (" + ID_N3 + ") => Esquema: " + ID_TIPO_EJEMPLAR + crearBotonEsquema());  
+    _mostrarAccion(crearBotonEsquema() + "<h5>Modificando el ejemplar (" + ID_N3 + ") con el esquema: " + ID_TIPO_EJEMPLAR + "</h5>");  
 	objAH               = new AjaxHelper(updateModificarN3);
 	objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
 	objAH.debug         = true;

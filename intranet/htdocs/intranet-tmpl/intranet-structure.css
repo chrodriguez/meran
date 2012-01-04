@@ -4231,6 +4231,17 @@ button.thoughtbot:hover {
 	display: none;
 }
 
+#estado_accion{
+    padding-bottom: 25px;
+}
+
+#estado_accion h5{
+    text-transform: none;
+    font-size: 16px;
+    margin-left: 5px;
+    float: left;
+}
+
 .fileUploader_catalogo form {
 	padding: 20px;
 	border: 1px solid #cccccc;
@@ -4239,7 +4250,7 @@ button.thoughtbot:hover {
 	-webkit-box-shadow: 0 0 10px #ccc;
 	-moz-box-shadow: 0 0 10px #ccc;
 	box-shadow: 0 0 10px #ccc;
-	width: 400px;
+	width: 420px;
 	margin: 20px auto;
 	background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff),

@@ -48,6 +48,7 @@
   <script src="/includes/sha1.js" type="text/javascript"></script>
   <script src="/includes/jsthread.js" type="text/javascript"></script>
   <script type="text/javascript" src="/includes/jquery/jquery.tmpl.js"></script>	
+  <script type="text/javascript" src="/includes/jquery/modernizr.js"></script>
   
   <link media="screen" rel="stylesheet" href="/includes/jquery/modal/basic-min.css" type="text/css" />
 

@@ -7,7 +7,6 @@ var shouldScroll    = true;
 function updateInfoBusquedas(responseText){
 
     $("#volver").hide();
-    $("#filtrosBusqueda").slideUp('fast');  
     $('#resultBusqueda').html(responseText);
     $("#resultBusqueda").slideDown("fast");
     zebra('datos_tabla');
