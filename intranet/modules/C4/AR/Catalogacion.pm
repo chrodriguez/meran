@@ -2246,10 +2246,9 @@ sub existeNivel1{
 
     my $sphinx      = Sphinx::Search->new();
     my $query       = '@titulo '.$titulo;
-       $query      .= ' @autor '.$autor;
+       $query      .= '@autor '.$autor;
     my $tipo        = 'SPH_MATCH_EXTENDED';
     my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
-    C4::AR::Debug::debug("C4::AR::Busqueda::existeNivel1 => query: ".$query);
 
     $sphinx->SetMatchMode($tipo_match);
     $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
@@ -2260,10 +2259,18 @@ sub existeNivel1{
     my @id1_array;
     my $matches                 = $results->{'matches'};
     my $total_found             = $results->{'total_found'};
-#     C4::AR::Utilidades::printHASH($results);
+
     C4::AR::Debug::debug("C4::AR::Busqueda::existeNivel1 => total_found: ".$total_found);
 
-    return $total_found;
+    foreach my $hash (@$matches){
+      my %hash_temp         = {};
+      $hash_temp{'id1'}     = $hash->{'doc'};
+      $hash_temp{'hits'}    = $hash->{'weight'};
+
+      push (@id1_array, \%hash_temp);
+    }
+
+    return (scalar(@id1_array), \@id1_array);
 }
 
 

@@ -65,14 +65,15 @@ sub verificar_Alta_Nivel1 {
 #     my ($cant_autor, $id1_array_ref)    = C4::AR::Busquedas::busquedaPorAutor($nombre_completo);
 #     C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => autor 100, a => ".$nombre_completo);
 #     C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => cantidad autores 100, a => ".$cant_autor);
+    my ($cant, $result_array_ref) = C4::AR::Catalogacion::existeNivel1($titulo,$nombre_completo);
 
-    if (C4::AR::Catalogacion::existeNivel1($titulo,$nombre_completo)){
+    if ($cant){
         $msg_object->{'error'} = 1;
   
         my %params_hash;
-        %params_hash    = ('id1' => $id1_array_ref->[0]->{'id1'});
+        %params_hash    = ('id1' => $result_array_ref->[0]->{'id1'});
         my $url         = C4::AR::Utilidades::url_for("/catalogacion/estructura/detalle.pl", \%params_hash);
-        my $link        = C4::AR::Filtros::link_to( text    => $id1_array_ref->[0]->{'id1'},
+        my $link        = C4::AR::Filtros::link_to( text    => $result_array_ref->[0]->{'id1'},
                                                     url     => $url 
                                               );
 
