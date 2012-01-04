@@ -2245,6 +2245,8 @@ sub existeNivel1{
     use Sphinx::Search;
 
     my $sphinx      = Sphinx::Search->new();
+    $titulo         = unac_string('utf8',$titulo);
+    $autor          = unac_string('utf8',$autor);
     my $query       = '@titulo "'.$titulo.'*"';
        $query      .= ' @autor "'.$autor.'*"';
     my $tipo        = 'SPH_MATCH_EXTENDED';
@@ -2256,7 +2258,7 @@ sub existeNivel1{
     # NOTA: sphinx necesita el string decode_utf8
     my $results = $sphinx->Query($query);
     C4::AR::Debug::debug("C4::AR::Busqueda::existeNivel1 => query: ".$query);
-    C4::AR::Debug::debug("C4::AR::Busqueda::existeNivel1 => matchmode: ".$tipo_match);
+    C4::AR::Debug::debug("C4::AR::Busqueda::existeNivel1 => matchmode: ".$tipo);
 
     my @id1_array;
     my $matches                 = $results->{'matches'};
