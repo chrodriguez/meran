@@ -2246,9 +2246,10 @@ sub existeNivel1{
 
     my $sphinx      = Sphinx::Search->new();
     my $query       = '@titulo '.$titulo;
-       $query      .= '@autor '.$autor_object->getCompleto();
+       $query      .= ' @autor '.$autor_object->getCompleto();
     my $tipo        = 'SPH_MATCH_EXTENDED';
     my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
+    C4::AR::Debug::debug("C4::AR::Busqueda::busquedaPorTitulo => query: ".$query);
 
     $sphinx->SetMatchMode($tipo_match);
     $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
