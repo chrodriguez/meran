@@ -2256,6 +2256,7 @@ sub existeNivel1{
     # NOTA: sphinx necesita el string decode_utf8
     my $results = $sphinx->Query($query);
     C4::AR::Debug::debug("C4::AR::Busqueda::existeNivel1 => query: ".$query);
+    C4::AR::Debug::debug("C4::AR::Busqueda::existeNivel1 => matchmode: ".$tipo_match);
 
     my @id1_array;
     my $matches                 = $results->{'matches'};
