@@ -2261,16 +2261,8 @@ sub existeNivel1{
     my $total_found             = $results->{'total_found'};
 #     C4::AR::Utilidades::printHASH($results);
     C4::AR::Debug::debug("C4::AR::Busqueda::busquedaPorTitulo => total_found: ".$total_found);
-#     C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
-    foreach my $hash (@$matches){
-      my %hash_temp         = {};
-      $hash_temp{'id1'}     = $hash->{'doc'};
-      $hash_temp{'hits'}    = $hash->{'weight'};
 
-      push (@id1_array, \%hash_temp);
-    }
-
-    return (scalar(@id1_array));
+    return $total_found;
 }
 
 
