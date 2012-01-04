@@ -73,7 +73,7 @@ sub verificar_Alta_Nivel1 {
                                                     url     => $url 
                                               );
 
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U501', 'params' => [unac_string('utf8',$titulo)." - ".$nombre_completo, $link]} ) ;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U501', 'params' => [unac_string('utf8',$titulo)." - ".unac_string('utf8',$nombre_completo), $link]} ) ;
     }
 }
 
