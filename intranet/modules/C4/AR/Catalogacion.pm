@@ -2245,8 +2245,8 @@ sub existeNivel1{
     use Sphinx::Search;
 
     my $sphinx      = Sphinx::Search->new();
-    my $query       = '@titulo "'.$titulo.'"';
-       $query      .= ' @autor "'.$autor.'"';
+    my $query       = '@titulo "'.$titulo.'*"';
+       $query      .= ' @autor "'.$autor.'*"';
     my $tipo        = 'SPH_MATCH_EXTENDED';
     my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
