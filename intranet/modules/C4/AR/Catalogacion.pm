@@ -2243,6 +2243,7 @@ sub existeNivel1{
     my ($titulo, $autor) = @_;
 
     use Sphinx::Search;
+    use Text::Unaccent;
 
     my $sphinx      = Sphinx::Search->new();
     $titulo         = unac_string('utf8',$titulo);
