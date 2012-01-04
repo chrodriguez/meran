@@ -50,21 +50,16 @@ campos clave =>
 
 sub verificar_Alta_Nivel1 {
     my ($marc_record, $msg_object) = @_;
+
+    use Text::Unaccent;
     # FIXME la edicion no la puedo validar con los datos de N1
 
-    my $ref_autor   = $marc_record->subfield("100","a");
-    my $titulo      = $marc_record->subfield("245","a");
-
-#     my ($cant_titulo, $id1_array_ref) = C4::AR::Busquedas::busquedaPorTitulo($titulo);
-#     C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => cantidad titulos => ".$cant_titulo);
-
+    my $ref_autor       = $marc_record->subfield("100","a");
+    my $titulo          = $marc_record->subfield("245","a");
     my $id_autor        = C4::AR::Catalogacion::getRefFromStringConArrobas($ref_autor);
     my $autor           = C4::Modelo::CatAutor->getByPk($id_autor);
     my $nombre_completo = $autor->getCompleto();
 
-#     my ($cant_autor, $id1_array_ref)    = C4::AR::Busquedas::busquedaPorAutor($nombre_completo);
-#     C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => autor 100, a => ".$nombre_completo);
-#     C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => cantidad autores 100, a => ".$cant_autor);
     my ($cant, $result_array_ref) = C4::AR::Catalogacion::existeNivel1($titulo,$nombre_completo);
 
     if ($cant){
@@ -78,7 +73,7 @@ sub verificar_Alta_Nivel1 {
                                                     url     => $url 
                                               );
 
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U501', 'params' => [$titulo." - ".$nombre_completo, $link]} ) ;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U501', 'params' => [unac_string('utf8',$titulo)." - ".$nombre_completo, $link]} ) ;
     }
 }
 

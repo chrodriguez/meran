@@ -2258,14 +2258,14 @@ sub existeNivel1{
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
     # NOTA: sphinx necesita el string decode_utf8
     my $results = $sphinx->Query($query);
-    C4::AR::Debug::debug("C4::AR::Busqueda::existeNivel1 => query: ".$query);
-    C4::AR::Debug::debug("C4::AR::Busqueda::existeNivel1 => matchmode: ".$tipo);
+#     C4::AR::Debug::debug("C4::AR::Busqueda::existeNivel1 => query: ".$query);
+#     C4::AR::Debug::debug("C4::AR::Busqueda::existeNivel1 => matchmode: ".$tipo);
 
     my @id1_array;
     my $matches                 = $results->{'matches'};
     my $total_found             = $results->{'total_found'};
 
-    C4::AR::Debug::debug("C4::AR::Busqueda::existeNivel1 => total_found: ".$total_found);
+#     C4::AR::Debug::debug("C4::AR::Busqueda::existeNivel1 => total_found: ".$total_found);
 
     foreach my $hash (@$matches){
       my %hash_temp         = {};
