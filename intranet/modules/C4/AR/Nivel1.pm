@@ -71,6 +71,7 @@ sub verificar_Alta_Nivel1 {
         $msg_object->{'error'} = 1;
   
         my %params_hash;
+        #muestro el id1 de al menos el primer registro que coincide
         %params_hash    = ('id1' => $result_array_ref->[0]->{'id1'});
         my $url         = C4::AR::Utilidades::url_for("/catalogacion/estructura/detalle.pl", \%params_hash);
         my $link        = C4::AR::Filtros::link_to( text    => $result_array_ref->[0]->{'id1'},

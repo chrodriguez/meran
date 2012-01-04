@@ -988,11 +988,11 @@ Esta funcion recibe un campo, un subcampo y un dato y busca en la tabla de refer
 sub _procesar_referencia {
     my ($campo, $subcampo, $dato, $itemtype, $nivel) = @_;
 
-    C4::AR::Debug::debug("Catalogacion => _procesar_referencia");
-    C4::AR::Debug::debug("Catalogacion => _procesar_referencia => campo => ".$campo);
-    C4::AR::Debug::debug("Catalogacion => _procesar_referencia => subcampo => ".$subcampo);
-    C4::AR::Debug::debug("Catalogacion => _procesar_referencia => itemype => ".$itemtype);
-    C4::AR::Debug::debug("Catalogacion => _procesar_referencia => nivel => ".$nivel);
+#     C4::AR::Debug::debug("Catalogacion => _procesar_referencia");
+#     C4::AR::Debug::debug("Catalogacion => _procesar_referencia => campo => ".$campo);
+#     C4::AR::Debug::debug("Catalogacion => _procesar_referencia => subcampo => ".$subcampo);
+#     C4::AR::Debug::debug("Catalogacion => _procesar_referencia => itemype => ".$itemtype);
+#     C4::AR::Debug::debug("Catalogacion => _procesar_referencia => nivel => ".$nivel);
 
     my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo, $itemtype, $nivel);
     if($estructura) {
@@ -1006,11 +1006,11 @@ sub _procesar_referencia {
                 #se genera el nuevo dato => tabla@dato para poder obtener el dato de la referencia luego
                 my $string_result           = $obj_generico->getTableName.'@'.$dato;
 
-                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => getReferencia:    ".$estructura->infoReferencia->getReferencia);
-                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => dato entrada:     ".$dato);
-                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => Tabla:            ".$obj_generico->getTableName);
-                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => Modulo:           ".$obj_generico->toString);
-                C4::AR::Debug::debug("Catalogacion => _procesar_referencia => string_result:    ".$string_result);
+#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => getReferencia:    ".$estructura->infoReferencia->getReferencia);
+#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => dato entrada:     ".$dato);
+#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => Tabla:            ".$obj_generico->getTableName);
+#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => Modulo:           ".$obj_generico->toString);
+#                 C4::AR::Debug::debug("Catalogacion => _procesar_referencia => string_result:    ".$string_result);
 
                 $dato = $string_result;
             };
@@ -2240,13 +2240,13 @@ sub footerDCXML{
 }
 
 sub existeNivel1{
-    my ($titulo,$autor) = @_;
+    my ($titulo, $autor) = @_;
 
     use Sphinx::Search;
 
     my $sphinx      = Sphinx::Search->new();
     my $query       = '@titulo '.$titulo;
-       $query      .= '@autor '.$autor;
+       $query      .= ' & @autor '.$autor;
     my $tipo        = 'SPH_MATCH_EXTENDED';
     my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
@@ -2255,6 +2255,7 @@ sub existeNivel1{
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
     # NOTA: sphinx necesita el string decode_utf8
     my $results = $sphinx->Query($query);
+    C4::AR::Debug::debug("C4::AR::Busqueda::existeNivel1 => query: ".$query);
 
     my @id1_array;
     my $matches                 = $results->{'matches'};
