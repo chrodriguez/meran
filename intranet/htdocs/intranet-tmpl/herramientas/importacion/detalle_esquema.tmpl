@@ -57,10 +57,10 @@ var loaderPath= "";
     
                                        }); 
                                     </script>
-                                    <td class="editable_hover editable_select" id="[% detalle.id %]___ign">[% detalle.getIgnorar %]</td>
+                                    <td class="editable_hover editable_select" id="[% detalle.id %]___ign">[% detalle.getIgnorarFront %]</td>
                                     <script>
 	                                    $('.editable_select').editable('[% url_prefix %]/herramientas/importacion/esquemas_importacionDB.pl', { 
-	                                        data   : " {'0':'[% 'No' | i18n %]','1':'[% 'S&iacute;' | i18n %]','selected':'[% 'detalle.getIgnorar' %]'}",
+	                                        data   : " {'[% 'No' | i18n %]':'[% 'No' | i18n %]','[% 'Si' | i18n %]':'[% 'Si' | i18n %]','selected':'[% 'detalle.getIgnorarFront' %]'}",
 	                                        type      : 'select',
 	                                        submit    : OK,
 	                                        style   : 'display: inline',

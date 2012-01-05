@@ -247,7 +247,7 @@ sub editarValorEsquema{
         case "cd"   {$object->setCampoDestino($value)}
         case "scd"  {$object->setSubcampoDestino($value)}
         case "n"    {$object->setNivel($value)}
-        case "ign"  {$object->setIgnorar($value)}
+        case "ign"  {$object->setIgnorarFront($value); $value = $object->getIgnorarFront();}
     }
     $object->save(); 
            
