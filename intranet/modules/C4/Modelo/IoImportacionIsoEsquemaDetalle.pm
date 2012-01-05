@@ -132,8 +132,21 @@ sub getIgnorar{
     return $self->ignorar;
 }
 
+sub getIgnorarFront{
+    my ($self)  = shift;
+    return (C4::AR::Utilidades::translateYesNo_fromNumber($self->ignorar));
+}
+
 sub setIgnorar{
     my ($self)  = shift;
     my ($value) = @_;
     $self->ignorar($value);
 }
+
+sub setIgnorarFront{
+    my ($self)  = shift;
+    my ($value) = @_;
+    
+   	$self->ignorar(C4::AR::Utilidades::translateYesNo_toNumber($value));
+}
+

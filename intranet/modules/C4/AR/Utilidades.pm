@@ -132,6 +132,8 @@ use vars qw(@EXPORT_OK @ISA);
     generarComboTablasDeReferenciaByNombreTabla
     serverName
     translateTipoCredencial
+    translateYesNo_fromNumber
+    translateYesNo_toNumber
 );
 
 
@@ -4529,6 +4531,25 @@ sub modificarCampoGlobalmente {
 
 }
 
+sub translateYesNo_fromNumber{
+	my ($value) = @_;
+	
+	if ($value == 1){
+		return C4::AR::Filtros::i18n('Si');
+	}else{
+        return C4::AR::Filtros::i18n('No');
+	}
+}
+
+sub translateYesNo_toNumber{
+    my ($value) = @_;
+    
+    if ($value eq C4::AR::Filtros::i18n('Si')){
+        return 1;
+    }else{
+        return 0
+    }
+}
 END { }       # module clean-up code here (global destructor)
 
 1;
