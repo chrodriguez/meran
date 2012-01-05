@@ -10,7 +10,7 @@ __PACKAGE__->meta->setup(
     table   => 'io_importacion_iso_registro',
 
     columns => [
-        id                             => { type => 'integer', overflow => 'truncate', not_null => 1 },
+        id                             => { type => 'serial', overflow => 'truncate', not_null => 1 },
         id_importacion_iso             => { type => 'integer', overflow => 'truncate', not_null => 1},
         type                           => { type => 'varchar', overflow => 'truncate', length => 25},
         estado                         => { type => 'integer', overflow => 'truncate', length => 2},
@@ -19,7 +19,7 @@ __PACKAGE__->meta->setup(
         id1                            => { type => 'integer', overflow => 'truncate'},
         id2                            => { type => 'integer', overflow => 'truncate'},
         id3                            => { type => 'integer', overflow => 'truncate'},
-        marc_record                    => { type => 'text', overflow => 'truncate' },
+        marc_record                    => { type => 'text', overflow => 'truncate', not_null => 1},
     ],
 
 
@@ -88,7 +88,7 @@ sub getIdImportacionIso{
     return ($self->id_importacion_iso);
 }
 
-sub setMarcRecord{
+sub getMarcRecord{
     my ($self) = shift;
     return ($self->marc_record);
 }

@@ -14,6 +14,7 @@ use C4::AR::Utilidades;
 use C4::Modelo::IoImportacionIso;
 use C4::Modelo::IoImportacionIsoRegistro;
 
+
 use MARC::Record;
 use MARC::Moose::Record;
 use MARC::Moose::Reader::File::Isis;
@@ -59,14 +60,15 @@ sub guardarRegistrosNuevaImportacion {
 
     my $reader;
     switch ($params->{'formatoImportacion'}) {
-        case "iso"   {MARC::Moose::Reader::File::Iso2709->new(file   => $params->{'write_file'})}
-        case "isis"  {MARC::Moose::Reader::File::Isis->new(file   => $params->{'write_file'})}
-        case "xml"   {MARC::Moose::Reader::File::Isis->Marcxml(file   => $params->{'write_file'})}
+        case "iso"   {$reader=MARC::Moose::Reader::File::Iso2709->new(file   => $params->{'write_file'})}
+        case "isis"  {$reader=MARC::Moose::Reader::File::Isis->new(file   => $params->{'write_file'})}
+        case "xml"   {$reader=MARC::Moose::Reader::File::Isis->Marcxml(file   => $params->{'write_file'})}
     }
 
 #Leemos los registros armamos el Marc::Record
     while ( my $record = $reader->read() ) {
 
+        C4::AR::Debug::debug("ImportacionIsoMARC => registro leido ");
          my $marc_record = MARC::Record->new();
          my $indentificador_1    = '#';
          my $indentificador_2    = '#';
@@ -77,19 +79,20 @@ sub guardarRegistrosNuevaImportacion {
                     #Que hacemos?
                  }
                  else {
-                     my $field = MARC::Field->new($field->tag, $indentificador_1, $indentificador_2);
+                    my $new_field = MARC::Field->new($field->tag, $indentificador_1, $indentificador_2,'a'=>'b');
                     for my $subfield ( @{$field->subf} ) {
-                        $field->add_subfields($subfield->[0] => $subfield->[1]);
+                        $marc_record->append_fields( MARC::Field->new($field->tag, $indentificador_1, $indentificador_2, $subfield->[0] => $subfield->[1]));
                     }
-                    $marc_record->append_fields($field);
+                    #$marc_record->append_fields($new_field);
                 }
-
-            my %params;
-            $params{'id_importacion_iso'}      = $importacion->getId;
-            $params{'marc_record'}   = $marc_record->as_usmarc();
-            my $Io_registro_importacion          = C4::Modelo::IoImportacionIsoRegistro->new();
-            $Io_registro_importacion->agregar($params);
          }
+
+            my %parametros;
+            $parametros{'id_importacion_iso'}      = $importacion->getId;
+            $parametros{'marc_record'}   = $marc_record->as_usmarc();
+
+            my $Io_registro_importacion          = C4::Modelo::IoImportacionIsoRegistro->new();
+            $Io_registro_importacion->agregar(\%parametros);
     }
 
 }
