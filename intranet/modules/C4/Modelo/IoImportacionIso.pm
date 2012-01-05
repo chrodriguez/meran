@@ -83,16 +83,16 @@ sub eliminar{
     #HACER ALGO SI ES NECESARIO
     my %parametros;
     $parametros{'id'}   = $self->getId();
-    my $msg =     C4::AR::UploadFile::deleteImport(\%parametros);
+    my $msg_object =     C4::AR::UploadFile::deleteImport(\%parametros);
 
-
-    my ($registros) = C4::AR::ImportacionIsoMARC::getRegistrosFromImportacion($self->getId(), $self->db);
-
-    foreach my $rec (@$registros){
-      $rec->eliminar();
+    if (!$msg_object->{'error'}){
+            my ($registros) = C4::AR::ImportacionIsoMARC::getRegistrosFromImportacion($self->getId(), $self->db);
+            foreach my $rec (@$registros){
+              $rec->eliminar();
+            }
+            $self->delete();
     }
-
-    $self->delete();
+    return($msg_object);
 }
 #----------------------------------- FIN - FUNCIONES DEL MODELO -------------------------------------------
 

@@ -272,8 +272,10 @@ sub uploadImport {
 
     my ($file_name,$name,$comments,$format,$schema,$file_data)=@_;
 
-    my $importsDir= C4::Context->config("importsdir");
-    my $msg='';
+    my $importsDir  = C4::Context->config("importsdir");
+    my $msg_object  = C4::AR::Mensajes::create();
+    $msg_object->{'error'}= 0;
+    #my $msg='';
     my $bytes_read;
     my $size= 0;
 
@@ -297,7 +299,9 @@ sub uploadImport {
         my $ext= @nombreYextension[$size];
 
         if (!grep(/$ext/i,@extensiones_permitidas)) {
-                $msg= "Solo se permiten archivos del tipo (".join(", ",@extensiones_permitidas).") [Fallo de extension]";
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP00', 'params' => [join(", ",@extensiones_permitidas)]});
+            #$msg= "Solo se permiten archivos del tipo (".join(", ",@extensiones_permitidas).") [Fallo de extension]";
         }elsif (scalar(@nombreYextension)>=2) { # verifica que el nombre del archivo tenga el punto (.)
             my $ext= @nombreYextension[$size];
             my $buff='';
@@ -309,7 +313,9 @@ sub uploadImport {
             my $write_file= $importsDir."/".$file_name;
 
             if (!open(WFD,">$write_file")) {
-                    $msg="Hay un error y el archivo no puede escribirse en el servidor.";
+                    #$msg="Hay un error y el archivo no puede escribirse en el servidor.";
+                    $msg_object->{'error'}= 1;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP01', 'params' => []});
             }else{
                 my $size = 0;
                 while ($bytes_read=read($file_data,$buff,2096,0)) {
@@ -323,19 +329,39 @@ sub uploadImport {
 
                 if ( !$isValidFileType )
                 {
-                    $msg= "Solo se permiten archivos (".join(", ",@extensiones_permitidas).") [Fallo de contenido]";
+                    $msg_object->{'error'}= 1;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP00', 'params' => [join(", ",@extensiones_permitidas)]});
                     unlink($write_file);
                 }else
                 {
-                    $msg= "El archivo ".$name.".$ext ($showName) se ha cargado correctamente";
-                    C4::AR::ImportacionIsoMARC::guardarNuevaImportacion($file_name,$format,$schema,$isValidFileType,$showName,$comments);
+                    eval {
+                        #$msg= "El archivo ".$name.".$ext ($showName) se ha cargado correctamente";
+                        C4::AR::ImportacionIsoMARC::guardarNuevaImportacion($file_name,$format,$schema,$isValidFileType,$showName,$comments,$msg_object);
+                        if ($msg_object->{'error'} eq 0){
+                            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP02', 'params' => [$name.$ext,$showName]});
+                        } else{
+                            #Si no se pudo guardar la importacion, se borra el archivo.
+                             unlink($write_file);
+                            }
+                    };
+                    if ($@){
+                        #Se loguea error de Base de Datos
+                        &C4::AR::Mensajes::printErrorDB($@, 'B454',"INTRA");
+                        #Si no se pudo guardar la importacion, se borra el archivo.
+                        unlink($write_file);
+                        #Se setea error para el usuario
+                        $msg_object->{'error'}= 1;
+                        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP03', 'params' => []} ) ;
+                    }
                 }
             }
         }else{
-            $msg= C4::AR::Filtros::i18n("El nombre del archivo no tiene un formato correcto.");
+            #$msg= C4::AR::Filtros::i18n("El nombre del archivo no tiene un formato correcto.");
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP04', 'params' => []} ) ;
         }
 
-    return($msg);
+    return($msg_object);
 }
 
 sub deleteImport {
@@ -343,7 +369,8 @@ sub deleteImport {
     my ($params)=@_;
 
     my $importsDir= C4::Context->config("importsdir");
-    my $msg='';
+    my $msg_object  = C4::AR::Mensajes::create();
+    $msg_object->{'error'}= 0;
 
     my $file_id = $params->{'id'};
 
@@ -351,10 +378,14 @@ sub deleteImport {
         my $write_file= $importsDir."/".$file->Archivo;
 
         if (!open(WFD,"$write_file")) {
-                $msg=C4::AR::Filtros::i18n("Hay un error y el archivo no puede eliminarse del servidor.");
+                #$msg=C4::AR::Filtros::i18n("Hay un error y el archivo no puede eliminarse del servidor.");
+                $msg_object->{'error'}= 1;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP05', 'params' => []} ) ;
         }else{
             unlink($write_file);
-            $msg= C4::AR::Filtros::i18n("El archivo ").$file->getTitle.C4::AR::Filtros::i18n(" se ha eliminado correctamente");
+            #$msg= C4::AR::Filtros::i18n("El archivo ").$file->getTitle.C4::AR::Filtros::i18n(" se ha eliminado correctamente");
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP06', 'params' => [$file->getTitulo]} ) ;
         }
-    return($msg);
+    return($msg_object);
 }

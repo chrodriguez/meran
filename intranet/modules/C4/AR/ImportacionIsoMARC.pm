@@ -94,9 +94,11 @@ sub eliminarImportacion {
      my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($id);
 
      eval {
-         $importacion->eliminar;
+        $msg_object = $importacion->eliminar;
+        if(!$msg_object->{'error'}){
          $msg_object->{'error'}= 0;
          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IO00', 'params' => []} ) ;
+        }
      };
 
      if ($@){

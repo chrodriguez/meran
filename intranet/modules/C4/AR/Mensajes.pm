@@ -30,6 +30,7 @@ $VERSION = 0.01;
 #E900 - E999 para Estantes
 #RC00 - #RC99 para Recomendaciones
 #IO00 - #IO99 para Importaciones/Exportaciones
+#UP00 - #UP99 para Upload Files
 
 # %mensajes mapea codigo de mensaje con la descripcion del mismo
 my %mensajesOPAC = (
@@ -482,6 +483,16 @@ my %mensajesINTRA = (
     'IO00' => 'La importaci&oacute;n fue eliminada con &eacute;xito',
     'IO01' => 'Ocurrio un error mientras se intentaba eliminar la importaci&oacute;n',
 
+    #Mensajes Upload Files
+    'UP00' => 'Solo se permiten archivos del tipo ("*?*") [Fallo de extension]',
+    'UP01' => 'Hay un error y el archivo no puede escribirse en el servidor',
+    'UP02' => 'El archivo "*?*" ("*?*") se ha cargado correctamente',
+    'UP03' => 'Ocurrio un error mientras se intentaba subir el archivo de la importaci&oacute;n',
+    'UP04' => 'El nombre del archivo no tiene un formato correcto',
+    'UP05' => 'Hay un error y el archivo no puede eliminarse del servidor',
+    'UP06' => 'El archivo "*?*" se ha eliminado correctamente',
+
+
 
 #ERRORES DE BASE DE DATOS
     'B400' => '',
@@ -538,6 +549,7 @@ my %mensajesINTRA = (
     'B451' => 'Error en funcion C4::AR::Catalogacion::getDatoFromReferencia',
     'B452' => 'Error en funcion C4::AR::Permisos::actualizarPermisosGeneral',
     'B453' => 'Error en funcion C4::AR::ImportacionIsoMARC::eliminarImportacion',
+    'B454' => 'Error en funcion C4::AR::UploadFile::uploadImport',
 );
 
 sub getMensaje {
