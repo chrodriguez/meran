@@ -270,7 +270,7 @@ sub deleteDocument {
 
 sub uploadImport {
 
-    my ($file_name,$name,$comments,$format,$schema,$file_data)=@_;
+    my ($params)=@_;
 
     my $importsDir  = C4::Context->config("importsdir");
     my $msg_object  = C4::AR::Mensajes::create();
@@ -279,13 +279,13 @@ sub uploadImport {
     my $bytes_read;
     my $size= 0;
 
-    my $showName = $name;
+    my $showName = $params->{'titulo'};
 
     if (!C4::AR::Utilidades::validateString($showName)){
-        $showName = $file_name;
+        $showName = $params->{'file_name'};
     }
 
-    my @nombreYextension=split('\.',$file_name);
+    my @nombreYextension=split('\.',$params->{'file_name'});
 
     use Digest::MD5;
 #Para chequeos de tamaño
@@ -318,7 +318,7 @@ sub uploadImport {
                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP01', 'params' => []});
             }else{
                 my $size = 0;
-                while ($bytes_read=read($file_data,$buff,2096,0)) {
+                while ($bytes_read=read($params->{'file_data'},$buff,2096,0)) {
                         $size += $bytes_read;
                         binmode WFD;
                         print WFD $buff;
@@ -336,7 +336,10 @@ sub uploadImport {
                 {
                     eval {
                         #$msg= "El archivo ".$name.".$ext ($showName) se ha cargado correctamente";
-                        C4::AR::ImportacionIsoMARC::guardarNuevaImportacion($file_name,$format,$schema,$isValidFileType,$showName,$comments,$msg_object);
+                        $params->{'showName'}=$showName;
+                        $params->{'isValidFileType'}=$isValidFileType;
+
+                        C4::AR::ImportacionIsoMARC::guardarNuevaImportacion($params,$msg_object);
                         if ($msg_object->{'error'} eq 0){
                             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP02', 'params' => [$name.$ext,$showName]});
                         } else{
@@ -367,16 +370,14 @@ sub uploadImport {
 sub deleteImport {
 
     my ($params)=@_;
-
     my $importsDir= C4::Context->config("importsdir");
     my $msg_object  = C4::AR::Mensajes::create();
     $msg_object->{'error'}= 0;
 
     my $file_id = $params->{'id'};
 
-        my $file = C4::AR::ImportacionIsoMARC::getImportacionById($file_id);
-        my $write_file= $importsDir."/".$file->Archivo;
-
+    my $file = C4::AR::ImportacionIsoMARC::getImportacionById($file_id);
+        my $write_file= $importsDir."/".$file->getArchivo;
         if (!open(WFD,"$write_file")) {
                 #$msg=C4::AR::Filtros::i18n("Hay un error y el archivo no puede eliminarse del servidor.");
                 $msg_object->{'error'}= 1;
@@ -385,7 +386,7 @@ sub deleteImport {
             unlink($write_file);
             #$msg= C4::AR::Filtros::i18n("El archivo ").$file->getTitle.C4::AR::Filtros::i18n(" se ha eliminado correctamente");
             $msg_object->{'error'}= 0;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP06', 'params' => [$file->getTitulo]} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP06', 'params' => [$file->getNombre]} ) ;
         }
     return($msg_object);
 }

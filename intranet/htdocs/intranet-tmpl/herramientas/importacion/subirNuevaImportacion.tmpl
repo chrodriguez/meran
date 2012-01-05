@@ -6,6 +6,15 @@
         $('#uploadfile').submit();
     }
 
+    function cambiarEsquema() {
+      if ($('#esquemaImportacion').val() == "-1"){
+            $('#esquema_nuevo').show();
+          }
+         else{
+             $('#esquema_nuevo').hide();
+             }
+    }
+
 </script>
 <fieldset>
 <legend><strong>[% "Nueva Importaci&oacute;n:" | i18n %]</strong></legend>
@@ -33,8 +42,12 @@
         <input type="text" name="comentario">
       </li>
       <li class="sub_item">
-        <label>Esquema: </label>
+        <label>Seleccionar Esquema: </label>
         [% combo_esquemas %]
+      </li>
+       <li class="sub_item" id='esquema_nuevo' style="display: none;">
+        <label>Nombre Nuevo Esquema: </label>
+        <input type="text" name="nombreEsquema" > (Si se deja en blanco se utiliza el nombre del archivo.)
       </li>
  </ol>
 

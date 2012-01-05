@@ -83,11 +83,15 @@ sub eliminar{
     #HACER ALGO SI ES NECESARIO
     my %parametros;
     $parametros{'id'}   = $self->getId();
+                $self->debug("IoImportacion=> antes eliminar archivo");
     my $msg_object =     C4::AR::UploadFile::deleteImport(\%parametros);
-
+                $self->debug("IoImportacion=> despues eliminar archivo");
     if (!$msg_object->{'error'}){
+            $self->debug("IoImportacion=> eliminar archivo");
+
             my ($registros) = C4::AR::ImportacionIsoMARC::getRegistrosFromImportacion($self->getId(), $self->db);
             foreach my $rec (@$registros){
+                $self->debug("IoImportacion=> registro");
               $rec->eliminar();
             }
             $self->delete();
