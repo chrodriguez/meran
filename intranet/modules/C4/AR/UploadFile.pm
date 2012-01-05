@@ -306,11 +306,11 @@ sub uploadImport {
             my $ext= @nombreYextension[$size];
             my $buff='';
 
-            $name = @nombreYextension[0];
+            my $name = @nombreYextension[0];
             my $file_type = $ext;
             my $hash_unique = Digest::MD5::md5_hex(localtime());
-            my $file_name = $name.".".$ext."_".$hash_unique;
-            my $write_file= $importsDir."/".$file_name;
+            $params->{'file_name'} = $name.".".$ext."_".$hash_unique;
+            my $write_file= $importsDir."/".$params->{'file_name'};
 
             if (!open(WFD,">$write_file")) {
                     #$msg="Hay un error y el archivo no puede escribirse en el servidor.";
@@ -338,6 +338,7 @@ sub uploadImport {
                         #$msg= "El archivo ".$name.".$ext ($showName) se ha cargado correctamente";
                         $params->{'showName'}=$showName;
                         $params->{'isValidFileType'}=$isValidFileType;
+                        $params->{'write_file'}=$write_file;
 
                         C4::AR::ImportacionIsoMARC::guardarNuevaImportacion($params,$msg_object);
                         if ($msg_object->{'error'} eq 0){

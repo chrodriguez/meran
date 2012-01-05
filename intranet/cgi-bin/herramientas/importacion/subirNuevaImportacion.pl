@@ -55,7 +55,7 @@ if ($input->param('upfile')){
 
     my ($msg_object) = C4::AR::UploadFile::uploadImport(\%parametros);
 
-    $t_params->{'mensaje'} = $msg_object;
+    $t_params->{'mensaje'} = $msg_object->{'messages'}[0]->{'message'};
 }
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
