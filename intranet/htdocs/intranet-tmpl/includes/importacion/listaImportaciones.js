@@ -103,7 +103,7 @@ function checkFilter(eventType){
        }
 }
 
-//************************************************* ELIMINAR PROVEEDOR ****************************************************
+//************************************************* ELIMINAR IMPORTACION ****************************************************
 
     function borrarImportacion(id){
         jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,IMPORTACION_ALERT_TITLE, function(confirmStatus){

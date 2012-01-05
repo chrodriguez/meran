@@ -12,6 +12,13 @@ use C4::Context;
 use Date::Manip;
 use C4::AR::Utilidades;
 use C4::Modelo::IoImportacionIso;
+use C4::Modelo::IoImportacionIsoRegistro;
+
+use MARC::Record;
+use MARC::Moose::Record;
+use MARC::Moose::Reader::File::Isis;
+use MARC::Moose::Reader::File::Iso2709;
+use MARC::Moose::Reader::File::Marcxml;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -31,17 +38,60 @@ use vars qw(@EXPORT @ISA);
 Guarda una nueva imporatción
 =cut
 sub guardarNuevaImportacion {
-    my ($file_name,$formato,$id_esquema,$file_type,$nombre,$comentario) = @_;
+    my ($params,$msg_object) = @_;
 
-    my %parametros;
-    $parametros{'id_esquema'}   = $id_esquema;
-    $parametros{'formato'}      = $formato;
-    $parametros{'archivo'}      = $file_name;
-    $parametros{'tipo_archivo'} = $file_type;
-    $parametros{'nombre'}       = $nombre;
-    $parametros{'comentario'}   = $comentario;
     my $Io_importacion          = C4::Modelo::IoImportacionIso->new();
-    $Io_importacion->agregar(\%parametros);
+    $Io_importacion->agregar($params);
+
+    #Ahora los registros del archivo $params->{'write_file'}
+    C4::AR::ImportacionIsoMARC::guardarRegistrosNuevaImportacion($Io_importacion,$params,$msg_object);
+
+}
+
+
+=item sub guardarRegistrosNuevaImportacion
+Guarda los registros de una nueva imporatción
+=cut
+sub guardarRegistrosNuevaImportacion {
+    my ($importacion,$params,$msg_object) = @_;
+
+    use Switch;
+
+    my $reader;
+    switch ($params->{'formatoImportacion'}) {
+        case "iso"   {MARC::Moose::Reader::File::Iso2709->new(file   => $params->{'write_file'})}
+        case "isis"  {MARC::Moose::Reader::File::Isis->new(file   => $params->{'write_file'})}
+        case "xml"   {MARC::Moose::Reader::File::Isis->Marcxml(file   => $params->{'write_file'})}
+    }
+
+#Leemos los registros armamos el Marc::Record
+    while ( my $record = $reader->read() ) {
+
+         my $marc_record = MARC::Record->new();
+         my $indentificador_1    = '#';
+         my $indentificador_2    = '#';
+
+         for my $field ( @{$record->fields} ) {
+             if($field->tag < '010'){
+                 #CONTROL FIELD
+                    #Que hacemos?
+                 }
+                 else {
+                     my $field = MARC::Field->new($field->tag, $indentificador_1, $indentificador_2);
+                    for my $subfield ( @{$field->subf} ) {
+                        $field->add_subfields($subfield->[0] => $subfield->[1]);
+                    }
+                    $marc_record->append_fields($field);
+                }
+
+            my %params;
+            $params{'id_importacion_iso'}      = $importacion->getId;
+            $params{'marc_record'}   = $marc_record->as_usmarc();
+            my $Io_registro_importacion          = C4::Modelo::IoImportacionIsoRegistro->new();
+            $Io_registro_importacion->agregar($params);
+         }
+    }
+
 }
 
 =item sub guardarNuevaImportacion
@@ -98,7 +148,7 @@ sub eliminarImportacion {
      my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($id);
 
      eval {
-        $msg_object = $importacion->eliminar;
+        $msg_object = $importacion->eliminar();
         if(!$msg_object->{'error'}){
          $msg_object->{'error'}= 0;
          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IO00', 'params' => []} ) ;
@@ -181,26 +231,26 @@ Obtiene un esquema de importacion
 
 sub getEsquema{
     my ($id_esquema) = @_;
-    
+
     use C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager;
     my @filtros;
-    
+
     push(@filtros,(id_importacion_esquema => {eq =>$id_esquema}));
-    
+
     my $esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(query => \@filtros,);
-    
+
     return $esquema;
 }
 
 sub addCampo{
     my ($id_esquema) = @_;
-    
+
     use C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager;
     my @filtros;
 
     my $esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle->new();
     my $value = "ZZZ";
-    
+
     $esquema->setIdImportacionEsquema($id_esquema);
     $esquema->setCampoOrigen($value);
     $esquema->setSubcampoOrigen($value);
@@ -208,38 +258,38 @@ sub addCampo{
     $esquema->setSubcampoDestino($value);
     $esquema->setNivel(1);
     $esquema->setIgnorar(0);
-    
+
     $esquema->save();
-        
+
     return $esquema;
 }
 
 sub getRow{
     my ($id) = @_;
-    
+
     use C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager;
     my @filtros;
-    
+
     push(@filtros,(id => {eq =>$id}));
-    
+
     my $esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(query => \@filtros,);
-    
+
     if ($esquema->[0]){
         return $esquema->[0];
     }else{
         return 0;
     }
-    
+
 }
 sub editarValorEsquema{
-	my ($row_id,$value) = @_;
-    
+    my ($row_id,$value) = @_;
+
     use Switch;
 
-	my @values = split('___',$row_id);
-	
-	
-	my $object = getRow(@values[0]);
+    my @values = split('___',$row_id);
+
+
+    my $object = getRow(@values[0]);
 
     switch (@values[1]) {
         case "co"  {$object->setCampoOrigen($value)}
@@ -249,10 +299,10 @@ sub editarValorEsquema{
         case "n"    {$object->setNivel($value)}
         case "ign"  {$object->setIgnorarFront($value); $value = $object->getIgnorarFront();}
     }
-    $object->save(); 
-           
+    $object->save();
+
     return ($value);
-	
+
 }
 END { }       # module clean-up code here (global destructor)
 

@@ -61,10 +61,10 @@ sub agregar{
     my ($self)   = shift;
     my ($params) = @_;
 
-    $self->setIdImportacionEsquema($params->{'id_esquema'});
-    $self->setNombre($params->{'nombre'});
-    $self->setArchivo($params->{'archivo'});
-    $self->setFormato($params->{'formato'});
+    $self->setIdImportacionEsquema($params->{'esquemaImportacion'});
+    $self->setNombre($params->{'titulo'});
+    $self->setArchivo($params->{'file_name'});
+    $self->setFormato($params->{'formatoImportacion'});
     $self->setComentario($params->{'comentario'});
     $self->setEstado('I');
 
@@ -83,11 +83,15 @@ sub eliminar{
     #HACER ALGO SI ES NECESARIO
     my %parametros;
     $parametros{'id'}   = $self->getId();
+                $self->debug("IoImportacion=> antes eliminar archivo");
     my $msg_object =     C4::AR::UploadFile::deleteImport(\%parametros);
-
+                $self->debug("IoImportacion=> despues eliminar archivo");
     if (!$msg_object->{'error'}){
+            $self->debug("IoImportacion=> eliminar archivo");
+
             my ($registros) = C4::AR::ImportacionIsoMARC::getRegistrosFromImportacion($self->getId(), $self->db);
             foreach my $rec (@$registros){
+                $self->debug("IoImportacion=> registro");
               $rec->eliminar();
             }
             $self->delete();

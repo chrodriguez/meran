@@ -22,21 +22,40 @@ my ($template, $session, $t_params)= get_template_and_user({
                                                         entorno => 'undefined'},
                                     debug => 1,
             });
-$t_params->{'combo_formatos'}          = C4::AR::Utilidades::generarComboFormatosImportacion();
-$t_params->{'combo_esquemas'}          = C4::AR::Utilidades::generarComboEsquemasImportacion();
+
+    $t_params->{'combo_formatos'}          = C4::AR::Utilidades::generarComboFormatosImportacion();
+
+    my %parametros;
+    $parametros{'onChange'}   = 'cambiarEsquema();';
+    $t_params->{'combo_esquemas'}          = C4::AR::Utilidades::generarComboEsquemasImportacion(\%parametros);
 
 if ($input->param('upfile')){
     #ES UNA NUEVA IMPORTACION
-    my $titulo      = $input->param('titulo');
-    my $file_name   = $input->param('upfile');
-    my $file_data   = $input->upload('upfile');
-    my $comentario  = $input->param('comentario');
-    my $esquema     = $input->param('esquemaImportacion');
-    my $formato     = $input->param('formatoImportacion');
+    my %parametros;
+    $parametros{'titulo'}      = $input->param('titulo');
+    $parametros{'file_name'}   = $input->param('upfile');
+    $parametros{'file_data'}   = $input->upload('upfile');
+    $parametros{'comentario'}  = $input->param('comentario');
+    $parametros{'esquemaImportacion'}     = $input->param('esquemaImportacion');
+    $parametros{'formatoImportacion'}    = $input->param('formatoImportacion');
 
     #Si el esquema es nuevo hay que crearlo vacio al menos!
-    my ($msg) = C4::AR::UploadFile::uploadImport($file_name,$titulo,$comentario,$formato,$esquema,$file_data);
-    $t_params->{'mensaje'} = $msg;
+    if($parametros{'esquemaImportacion'} eq "-1"){
+
+       $parametros{'nombreEsquema'}     = $input->param('nombreEsquema');
+
+       #Crear Nuevo Esquema
+       #TODO
+       #Llenar nuevo esquema
+       #TODO
+       #Necesitamos el id del nuevo esquema ACA!
+           $parametros{'esquemaImportacion'}     = $input->param('esquemaImportacion');
+
+        }
+
+    my ($msg_object) = C4::AR::UploadFile::uploadImport(\%parametros);
+
+    $t_params->{'mensaje'} = $msg_object->{'messages'}[0]->{'message'};
 }
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
