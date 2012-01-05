@@ -526,6 +526,12 @@ body {
 	padding: 0 0 5px;
 	width: 175px;
 }
+.subcontent-unit-border p{
+
+    text-indent: 0px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 .subcontent-unit-border-green {
 	width: 175px;

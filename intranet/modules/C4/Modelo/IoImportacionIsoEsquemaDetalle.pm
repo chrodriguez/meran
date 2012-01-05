@@ -6,7 +6,7 @@ use utf8;
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
-    table   => 'io_importacion_iso_esquema',
+    table   => 'io_importacion_iso_esquema_detalle',
 
     columns => [
         id                          => { type => 'integer',     overflow => 'truncate', length => 11,   not_null => 1 },
@@ -15,6 +15,9 @@ __PACKAGE__->meta->setup(
         subcampo_origen             => { type => 'character',   overflow => 'truncate', length => 1,    not_null => 1},
         campo_destino               => { type => 'character',   overflow => 'truncate', length => 3,    not_null => 1},
         subcampo_destino            => { type => 'character',   overflow => 'truncate', length => 1,    not_null => 1},
+        nivel                       => { type => 'integer',     overflow => 'truncate', length => 2,   not_null => 1},
+        ignorar                     => { type => 'integer',     overflow => 'truncate', length => 2,   not_null => 1, default => 0},
+        
 
     ],
 
@@ -111,4 +114,26 @@ sub getCampoDestino{
 sub getSubcampoDestino{
     my ($self)  = shift;
     return $self->subcampo_destino;
+}
+
+sub getNivel{
+    my ($self)  = shift;
+    return $self->nivel;
+}
+
+sub setNivel{
+    my ($self)  = shift;
+    my ($nivel) = @_;
+    $self->nivel($nivel);
+}
+
+sub getIgnorar{
+    my ($self)  = shift;
+    return $self->ignorar;
+}
+
+sub setIgnorar{
+    my ($self)  = shift;
+    my ($value) = @_;
+    $self->ignorar($value);
 }

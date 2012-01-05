@@ -2920,7 +2920,7 @@ sub generarComboEsquemasImportacion {
     $options_hash{'id'}             = $params->{'id'}||'esquemaImportacion';
     $options_hash{'size'}           =  $params->{'size'}||1;
     $options_hash{'multiple'}       = $params->{'multiple'}||0;
-    $options_hash{'defaults'}       = 'NUEVO ESQUEMA';
+    $options_hash{'defaults'}       = C4::AR::Filtros::i18n('NUEVO ESQUEMA');
 
     push (@select_esquemasImportacion_Values, '-1');
     $select_esquemasImportacion_Labels{'-1'}            ='NUEVO ESQUEMA';
