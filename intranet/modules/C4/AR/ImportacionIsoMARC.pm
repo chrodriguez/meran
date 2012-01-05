@@ -31,6 +31,7 @@ use vars qw(@EXPORT @ISA);
            getEsquema
            getRow
            editarValorEsquema
+           addCampo
 );
 
 =item sub guardarNuevaImportacion
@@ -238,12 +239,29 @@ sub getEsquema{
 
     my $esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(query => \@filtros,);
 
-    if ($esquema->[0]){
-        return $esquema->[0];
-    }else{
-        return 0;
-    }
+    return $esquema;
+}
 
+sub addCampo{
+    my ($id_esquema) = @_;
+
+    use C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager;
+    my @filtros;
+
+    my $esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle->new();
+    my $value = "ZZZ";
+
+    $esquema->setIdImportacionEsquema($id_esquema);
+    $esquema->setCampoOrigen($value);
+    $esquema->setSubcampoOrigen($value);
+    $esquema->setCampoDestino($value);
+    $esquema->setSubcampoDestino($value);
+    $esquema->setNivel(1);
+    $esquema->setIgnorar(0);
+
+    $esquema->save();
+
+    return $esquema;
 }
 
 sub getRow{

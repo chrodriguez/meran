@@ -1,0 +1,44 @@
+[% INCLUDE "intranet-top.inc" %]
+
+<script type="text/javascript" src="/intranet-tmpl/herramientas/esquemas_importacion.js"></script>
+<script>
+    $(document).ready(function() {
+    	showEsquemaImportacion();
+    });
+</script>
+
+<div class="titulos" >[% "Administraci&oacute;n de esquemas de importaci&oacute;n" | i18n %]</div>
+
+[% INCLUDE  'AutocompleteHelper.inc'  %]
+
+<div class="">
+    <br><br>
+    <fieldset>
+        <legend class="titulo_legend">[% "Selecci&oacute; de esquema de importaci&oacute;n" | i18n %]</legend>
+        <div class="permisos_selector">
+            <ul>
+                <li class="sub_item">
+                    <label for="id_ui">[% 'Esquema' | i18n %]: </label>
+                    [% combo_esquemas_importacion %]
+                </li>
+
+                [% PERL %]
+                    print C4::AR::Filtros::to_Button(   text    => "[% 'Nuevo esquema' | i18n %]",
+                                                        boton   => "boton_agregar",
+                                                        onClick => "nuevoEsquemaImportacion();",
+                                                        title   => "[% 'Nuevo esquema' | i18n %]",
+                                                        alternClass => "botonCentrado",
+                            ) ;
+                [% END %]
+            </ul>
+        </div>
+        <br>
+        <br>
+        <br>
+    </fieldset>
+    <div class="esquema_result" id="esquema_result"> </div>
+</div>
+
+
+
+[% INCLUDE "intranet-bottom.inc" %]

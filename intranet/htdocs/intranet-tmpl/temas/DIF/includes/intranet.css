@@ -951,11 +951,6 @@ input.file {
 #mensajes{position:relative;background:#ffc;padding:5px;border:1px solid #CCCCCC;text-align:center;font-weight:bold;width:99%;}
 */
 
-
-.editable:hover {
-	background: graytext;
-}
-
 div.pagination {	
 	font-family: Tahoma, Arial, Helvetica, Sans-serif;
 	/*	background-color: #c1c1c1;*/
