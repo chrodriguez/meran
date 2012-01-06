@@ -1194,9 +1194,9 @@ sub getEstructuraYDatosDeNivel{
                                                                                 $params->{'nivel'}
                                                         );
 
-                    C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel => campo => ".$nivel_info_marc_array->[$i]->{'campo'});
-                    C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel => subcampo => ".$subcampo->{'subcampo'});
-                    C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel => dato => ".$subcampo->{'dato'});
+#                     C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel => campo => ".$nivel_info_marc_array->[$i]->{'campo'});
+#                     C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel => subcampo => ".$subcampo->{'subcampo'});
+#                     C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel => dato => ".$subcampo->{'dato'});
 
             
                     if($cat_estruct_array){
@@ -1206,11 +1206,6 @@ sub getEstructuraYDatosDeNivel{
                         #se verifica que exista el campo en la BIBLIA
                         if($campos_base_array_ref){
 
-#                             $liblibrarian           = $cat_estruct_array->camposBase->getLiblibrarian;
-#                             $repetible              = $cat_estruct_array->camposBase->getRepeatable;
-#                             $indicador_primario     = $cat_estruct_array->camposBase->getIndicadorPrimario;
-#                             $indicador_secundario   = $cat_estruct_array->camposBase->getIndicadorSecundario;
-#                             $descripcion_campo      = $cat_estruct_array->camposBase->getDescripcion.' - '.$cat_estruct_array->getCampo;  
                             $liblibrarian           = $campos_base_array_ref->getLiblibrarian;
                             $repetible              = $campos_base_array_ref->getRepeatable;
                             $indicador_primario     = $campos_base_array_ref->getIndicadorPrimario;
@@ -1595,7 +1590,7 @@ sub _verificar_campo_subcampo_to_estructura{
         $msg_object->{'error'} = 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U412', 'params' => [" NO ESTA AUTORIZADO ".$campo.", ".$subcampo]} ) ;
         C4::AR::Debug::debug("_verificar_campo_subcampo_to_estructura => NO ESTA AUTORIZADO el campo, subcampo".$campo.", ".$subcampo);
-    }elsif (_getEstructuraFromCampoSubCampo($campo, $subcampo, $itemtype, $nivel)) {
+    }elsif (_existeConfiguracionEnCatalogo($campo, $subcampo, $itemtype, $nivel)) {
         #el subcampo NO ES REPETIBLE y ya EXISTE en la ESTRUCTURA
 # FIXME WF
         $msg_object->{'error'} = 1;#NO ES ERROR SE INFORMA AL USUARIO Y SE CAMBIA LA VISIBILIDAD CONFIGURADA (campo, subcampo, itemtype)
@@ -2004,18 +1999,51 @@ C4::AR::Debug::debug("getEstructuraCatalogacionFromDBCompleta => itemType => ".$
 =head2 sub _getEstructuraFromCampoSubCampo
     Este funcion devuelve la configuracion de la estructura de catalogacion de un campo, subcampo, realizada por el usuario
 =cut
+sub _existeConfiguracionEnCatalogo{
+    my ($campo, $subcampo, $itemtype, $nivel, $db) = @_;
+
+    $db = $db || C4::Modelo::CatEstructuraCatalogacion->new()->db;   
+    my @filtros;
+
+    push ( @filtros, ( campo      => { eq => $campo } ) );
+    push ( @filtros, ( subcampo   => { eq => $subcampo } ) );
+    push ( @filtros, ( nivel      => { eq => $nivel } ) );
+    push ( @filtros, ( or   => [   itemtype   => { eq => $itemtype } ]));
+
+    my $cat_estruct_info_array = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(  
+                                                                                db              => $db,
+                                                                                query           =>  \@filtros, 
+#                                                                 FIXME es necesario????????????
+                                                                                with_objects    => ['infoReferencia'],#LEFT JOIN
+                                                                                require_objects => [ 'subCamposBase' ] #INNER JOIN
+
+                                        );  
+
+
+    if(scalar(@$cat_estruct_info_array) > 0){
+        return 1;
+    } else {
+        return 0;
+    }    
+}
+
+=head2 sub _getEstructuraFromCampoSubCampo
+    Este funcion devuelve la configuracion de la estructura de catalogacion de un campo, subcampo, realizada por el usuario
+=cut
 sub _getEstructuraFromCampoSubCampo{
     my ($campo, $subcampo, $itemtype, $nivel, $db) = @_;
 
     $db = $db || C4::Modelo::CatEstructuraCatalogacion->new()->db;   
     my @filtros;
+    my $index_all = 0;
 
     push(@filtros, ( campo      => { eq => $campo } ) );
     push(@filtros, ( subcampo   => { eq => $subcampo } ) );
     push(@filtros, ( nivel      => { eq => $nivel } ) );
 
     push (  @filtros, ( or   => [   itemtype   => { eq => $itemtype }, 
-                                    itemtype   => { eq => 'ALL'     } ])
+                                    itemtype   => { eq => 'ALL'     } 
+                                ])
                      );
 
     my $cat_estruct_info_array = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(  
@@ -2028,13 +2056,39 @@ sub _getEstructuraFromCampoSubCampo{
                                         );  
 
 
+ 
+#elimino configuraciones duplicadas (configuracion para un mismo campo, subcampo, nivel pero para dos itemtypes distintos como puede ser ALL y LIB) si es que existen, dejando
+#la configuracion mas especifica
+    if(scalar(@$cat_estruct_info_array) > 1){
+    #hay dos configuraciones para campo, subcampo, nivel, tipo_ejemplar
 
-# FIXME si hay dos configuraciones toma la primera
-  if(scalar(@$cat_estruct_info_array) > 0){
-    return $cat_estruct_info_array->[0];
-  }else{
-    return 0;
-  }
+        for (my $i=0;$i <= scalar(@$cat_estruct_info_array);$i++){
+
+            if($cat_estruct_info_array->[$i]->getItemType() eq $itemtype){
+                return $cat_estruct_info_array->[$i];
+            } elsif ($cat_estruct_info_array->[$i]->getItemType() eq "ALL") {
+                $index_all = $i;
+            }
+            C4::AR::Debug::debug("C4::AR::Catalocagion::_getEstructuraFromCampoSubCampo => campo, subcampo, itemtype, nivel ".$cat_estruct_info_array->[$i]->getId().", ".$cat_estruct_info_array->[$i]->getCampo().", ".$cat_estruct_info_array->[$i]->getSubcampo().", ".$cat_estruct_info_array->[$i]->getItemType().", ".$cat_estruct_info_array->[$i]->getNivel());
+        }
+
+    } else {
+        if(scalar(@$cat_estruct_info_array) > 0){
+          return $cat_estruct_info_array->[0];
+        } else {
+          return 0;
+        }    
+    }
+
+    return $cat_estruct_info_array->[$index_all];
+
+  # FIXME si hay dos configuraciones toma la primera
+# Miguel: estoy probando lo de arriba, si anda DELETE!!!!!!
+#     if(scalar(@$cat_estruct_info_array) > 0){
+#       return $cat_estruct_info_array->[0];
+#     }else{
+#       return 0;
+#     }
 }
 
 =item sub getEstructuraCatalogacionById
