@@ -484,6 +484,9 @@ my %mensajesINTRA = (
     'IO01' => 'Ocurrio un error mientras se intentaba eliminar la importaci&oacute;n',
     'IO02' => 'El esquema "*?*" ya existe (o se agreg&oacute; un nuevo esquema y no se modific&oacute;)',
     'IO03' => 'El esquema se elimin&oacute; correctamente',
+    'IO04' => 'El esquema solicitado no existe',
+    'IO05' => 'El esquema ha sido eliminado correctamente',
+    'IO06' => 'El esquema no se ha podido eliminar.',
 
     #Mensajes Upload Files
     'UP00' => 'Solo se permiten archivos del tipo ("*?*") [Fallo de extension]',

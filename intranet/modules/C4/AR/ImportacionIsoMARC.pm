@@ -242,12 +242,7 @@ sub getEsquema{
 
     my $detalle_esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(query => \@filtros,);
 
-    my $esquema;
-    
-    eval{
-    	$esquema = C4::Modelo::IoImportacionIsoEsquema->new(id => $id_esquema);
-    	$esquema->load();
-    };
+    my $esquema = getEsquemaObject($id_esquema);
     
     return ($detalle_esquema,$esquema);
 }
@@ -263,6 +258,8 @@ sub addEsquema{
     $esquema->setDescripcion($descripcion);
     $esquema->save();
 
+    C4::AR::ImportacionIsoMARC::addCampo($esquema->getId);
+    
     return $esquema;
 }
 
@@ -313,16 +310,68 @@ sub getRow{
 
 }
 
+sub getEsquemaObject{
+    my ($id) = @_;
+
+    use C4::Modelo::IoImportacionIsoEsquema::Manager;
+    my @filtros;
+
+    push(@filtros,(id => {eq =>$id}));
+
+    my $esquema = C4::Modelo::IoImportacionIsoEsquema::Manager->get_io_importacion_iso_esquema(query => \@filtros,);
+
+    if ($esquema->[0]){
+        return $esquema->[0];
+    }else{
+        return 0;
+    }
+
+}
+
+sub delEsquema{
+    my ($id_esquema) = @_;
+
+    use C4::Modelo::IoImportacionIsoEsquema::Manager;
+    use C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager;
+
+    my $msg_code = 'IO05';
+    
+    my @filtros_detalle;
+    push(@filtros_detalle,(id_importacion_esquema => {eq =>$id_esquema}));
+
+    my @filtros_esquema;
+    push(@filtros_esquema,(id => {eq =>$id_esquema}));
+
+  #  eval{
+        C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->delete_io_importacion_iso_esquema_detalle(where => \@filtros_detalle);
+        C4::Modelo::IoImportacionIsoEsquema::Manager->delete_io_importacion_iso_esquema(where => \@filtros_esquema);
+   # };
+    
+    if ($@){
+    	return 'IO06';
+    }
+
+    return($msg_code);
+}
+
 sub delCampo{
     my ($id) = @_;
     
     my $row = getRow($id);
 
+    my $id_esquema;
+    
     if ($row){
-	    my $id_esquema = $row->esquema->getId;
-	  	$row->delete();
-	  	
-	  	return ($id_esquema,'IO03');
+    	eval{
+		    $id_esquema = $row->esquema->id;
+		  	$row->delete();
+    	};
+    	
+    	if ($@){
+    	   return (0,'IO04');
+    	}else{
+    		return ($id_esquema,'IO03');
+    	}
     }
 }
 
@@ -349,6 +398,27 @@ sub editarValorEsquema{
     return ($value);
 
 }
+
+sub editarEsquema{
+    my ($row_id,$value) = @_;
+
+    use Switch;
+
+    my @values = split('___',$row_id);
+
+
+    my $object = getEsquemaObject(@values[0]);
+
+    switch (@values[1]) {
+        case "nombre"  {$object->setNombre($value)}
+        case "desc"  {$object->setDescripcion($value)}
+    }
+    $object->save();
+
+    return ($value);
+
+}
+
 END { }       # module clean-up code here (global destructor)
 
 1;
