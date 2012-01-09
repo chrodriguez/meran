@@ -1257,7 +1257,7 @@ div.fakefile {
 
 input.file {
     position: relative;
-    filter: alpha(opacity :       0);
+    filter: alpha(opacity :         0);
     z-index: 2;
     opacity: 0;
     text-align: right;
@@ -2888,7 +2888,7 @@ div.geo_add_place {
     line-height: 1.9em;
     margin-left: 15px;
     vertical-align: middle;
-    width: 14px;
+    width: 14px;intranet/htdocs/intranet-tmpl/intranet-structure.css
 }
 
 .geo-place-creation-error {
@@ -2947,7 +2947,7 @@ div.geo_add_place {
 }
 
 .geo-place-creation-col1 {
-    padding-right: 7px;
+    padding-right: 7px;intranet/htdocs/intranet-tmpl/intranet-structure.css
     text-align: right;
 }
 
@@ -3080,7 +3080,7 @@ h2.place-component a.view-all {
     position: relative;
 }
 
-.front-page form .holding .holder {
+.front-page form .holding .holder {intranet/htdocs/intranet-tmpl/intranet-structure.css
     cursor: text;
     left: 8px;
     position: absolute;
@@ -3113,7 +3113,7 @@ h2.place-component a.view-all {
 .front-page #front-container .leftside {
     height: 435px;
     padding-top: 30px;
-    width: 520px;
+    width: 520px;intranet/htdocs/intranet-tmpl/intranet-structure.css
 }
 
 .front-page .leftside h1 {
@@ -4241,11 +4241,11 @@ button.thoughtbot:hover {
     display: none;
 }
 
-#estado_accion{
+#estado_accion {
     padding-bottom: 25px;
 }
 
-#estado_accion h5{
+#estado_accion h5 {
     text-transform: none;
     font-size: 16px;
     margin-left: 5px;
@@ -4333,7 +4333,23 @@ button.thoughtbot:hover {
         to(#c77801) );
 }
 
-*:focus{ outline:none; }
-.floatLeft { float: left; }
-.floatRight { float: right; }
-.clear { clear: both; }
+*:focus {
+    outline: none;intranet/htdocs/intranet-tmpl/intranet-structure.css
+}
+
+.floatLeft {
+    float: left;
+}
+
+.floatRight {
+    float: right;
+}
+
+.clear {
+    clear: both;
+}
+
+.table_messages{
+    width: 100%;
+
+}

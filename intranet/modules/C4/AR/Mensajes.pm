@@ -482,7 +482,9 @@ my %mensajesINTRA = (
     #Mensajes Importaciones/Exportaciones
     'IO00' => 'La importaci&oacute;n fue eliminada con &eacute;xito',
     'IO01' => 'Ocurrio un error mientras se intentaba eliminar la importaci&oacute;n',
-    'IO02' => 'Ocurrio un error mientras se intentaban leer los registros de la importaci&oacute;n',
+    'IO02' => 'El esquema "*?*" ya existe (o se agreg&oacute; un nuevo esquema y no se modific&oacute;)',
+    'IO03' => 'El esquema se elimin&oacute; correctamente',
+    'IO04' => 'Ocurrio un error mientras se intentaban leer los registros de la importaci&oacute;n',
 
     #Mensajes Upload Files
     'UP00' => 'Solo se permiten archivos del tipo ("*?*") [Fallo de extension]',
@@ -492,8 +494,6 @@ my %mensajesINTRA = (
     'UP04' => 'El nombre del archivo no tiene un formato correcto',
     'UP05' => 'Hay un error y el archivo no puede eliminarse del servidor',
     'UP06' => 'El archivo "*?*" se ha eliminado correctamente',
-
-
 
 #ERRORES DE BASE DE DATOS
     'B400' => '',
