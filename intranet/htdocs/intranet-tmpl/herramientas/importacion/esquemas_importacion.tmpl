@@ -2,6 +2,13 @@
 
 <script type="text/javascript" src="/intranet-tmpl/herramientas/esquemas_importacion.js"></script>
 <script>
+	function nuevoEsquemaImportacion_dialog(){
+	    jPrompt("[% 'Nombre del esquema' | i18n %]:", "[% 'Esquema' | i18n %] X", "[% 'Nuevo esquema de importacion' | i18n %]", function(title) {
+	        if( title )
+	            nuevoEsquemaImportacion(title);
+	    });
+	}
+
     $(document).ready(function() {
     	showEsquemaImportacion();
     });
@@ -25,7 +32,7 @@
                 [% PERL %]
                     print C4::AR::Filtros::to_Button(   text    => "[% 'Nuevo esquema' | i18n %]",
                                                         boton   => "boton_agregar",
-                                                        onClick => "nuevoEsquemaImportacion();",
+                                                        onClick => "nuevoEsquemaImportacion_dialog();",
                                                         title   => "[% 'Nuevo esquema' | i18n %]",
                                                         alternClass => "botonCentrado",
                             ) ;

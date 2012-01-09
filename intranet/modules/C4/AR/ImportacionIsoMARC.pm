@@ -240,7 +240,28 @@ sub getEsquema{
 
     push(@filtros,(id_importacion_esquema => {eq =>$id_esquema}));
 
-    my $esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(query => \@filtros,);
+    my $detalle_esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(query => \@filtros,);
+
+    my $esquema;
+    
+    eval{
+    	$esquema = C4::Modelo::IoImportacionIsoEsquema->new(id => $id_esquema);
+    	$esquema->load();
+    };
+    
+    return ($detalle_esquema,$esquema);
+}
+
+sub addEsquema{
+    my ($nombre,$descripcion) = @_;
+
+    use C4::Modelo::IoImportacionIsoEsquema;
+
+    my $esquema = C4::Modelo::IoImportacionIsoEsquema->new();
+    
+    $esquema->setNombre($nombre);
+    $esquema->setDescripcion($descripcion);
+    $esquema->save();
 
     return $esquema;
 }
@@ -253,18 +274,25 @@ sub addCampo{
 
     my $esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle->new();
     my $value = "ZZZ";
+    my $error_code = 0;
+    
+    eval{
+	    $esquema->setIdImportacionEsquema($id_esquema);
+	    $esquema->setCampoOrigen($value);
+	    $esquema->setSubcampoOrigen($value);
+	    $esquema->setCampoDestino($value);
+	    $esquema->setSubcampoDestino($value);
+	    $esquema->setNivel(1);
+	    $esquema->setIgnorar(0);
 
-    $esquema->setIdImportacionEsquema($id_esquema);
-    $esquema->setCampoOrigen($value);
-    $esquema->setSubcampoOrigen($value);
-    $esquema->setCampoDestino($value);
-    $esquema->setSubcampoDestino($value);
-    $esquema->setNivel(1);
-    $esquema->setIgnorar(0);
+        $esquema->save();
+    };
+    
+    if ($@){
+    	return ($esquema,'IO02');
+    }
 
-    $esquema->save();
-
-    return $esquema;
+    return ($esquema,$error_code);
 }
 
 sub getRow{
@@ -284,6 +312,20 @@ sub getRow{
     }
 
 }
+
+sub delCampo{
+    my ($id) = @_;
+    
+    my $row = getRow($id);
+
+    if ($row){
+	    my $id_esquema = $row->esquema->getId;
+	  	$row->delete();
+	  	
+	  	return ($id_esquema,'IO03');
+    }
+}
+
 sub editarValorEsquema{
     my ($row_id,$value) = @_;
 

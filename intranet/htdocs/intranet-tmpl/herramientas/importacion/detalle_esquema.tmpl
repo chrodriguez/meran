@@ -24,7 +24,7 @@ var loaderPath= "";
 </script>
 <div id="tabla_referencia">
     <fieldset class="resultados_busqueda">
-        <legend class="titulo_legend trigger click">[% "Detalle del esquema " | i18n %] [%esquema_title %]</legend>
+        <legend class="titulo_legend trigger click">[% "Detalle del esquema " | i18n %] [% esquema_title %]</legend>
 	            <div class="datos_tabla_div" id="datos_tabla_div">
 	                <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0>
 	                    <thead>
@@ -35,11 +35,12 @@ var loaderPath= "";
                                 <th class="click"> [% 'SubCampo destino' | i18n %]</th>
                                 <th class="click"> [% 'Nivel' | i18n %]</th>
                                 <th class="click"> [% 'Ignorar' | i18n %]</th>
+                                <th class="click"> [% 'Eliminar' | i18n %]</th>
 	                        </tr>
 	                    </thead>
 	                    <tbody>
 	                            [% FOREACH detalle IN esquema %]
-									<script>esquema = detalle.id</script>	                              
+									<script>var esquema = [% detalle.id %]</script>	                              
 									<tr>
                                     <td class="editable" id="[% detalle.id %]___co">[% detalle.getCampoOrigen %]</td>
                                     <td class="editable" id="[% detalle.id %]___sco">[% detalle.getSubcampoOrigen %]</td>
@@ -69,6 +70,19 @@ var loaderPath= "";
 	
 	                                   }); 
                                     </script>
+                                    <td>
+		                                [% PERL %]
+		                                    print C4::AR::Filtros::to_Icon(  
+		                                                                        boton   => "icon_cancelar",
+		                                                                        onClick => "eliminarEsquemaRow('[% detalle.id %]');",
+		                                                                        title   => "[% 'Eliminar' | i18n %]",
+		                                                                        alternClass => "botonCentradoTabla",
+		                                                                        elem => 'span',
+		                                                                        style => 'float: left;',
+		                                            ) ;
+		                                [% END %]
+		                            </td>
+                                    
 	                              </tr>
 	                            [% END %]
 	                    </tbody>
@@ -81,5 +95,8 @@ var loaderPath= "";
                                                            title   => "[% 'Agregar campo' | i18n %]",
                                ) ;
                 [% END %]
+        <div class="mensajes_informacion" style="clear:both;"> [% table_error_message %] </div>
     </fieldset>
 </div>
+
+

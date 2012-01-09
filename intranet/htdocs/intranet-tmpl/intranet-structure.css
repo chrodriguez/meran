@@ -5,11 +5,11 @@ body,html {
 }
 
 .editable:hover {
-    background: graytext;
+	background: graytext;
 }
 
 .editable_hover:hover {
-    background: graytext;
+	background: graytext;
 }
 
 #fancybox-content {
@@ -1255,7 +1255,7 @@ div.fakefile {
 
 input.file {
 	position: relative;
-	filter: alpha(opacity :       0);
+	filter: alpha(opacity :         0);
 	z-index: 2;
 	opacity: 0;
 	text-align: right;
@@ -4239,15 +4239,15 @@ button.thoughtbot:hover {
 	display: none;
 }
 
-#estado_accion{
-    padding-bottom: 25px;
+#estado_accion {
+	padding-bottom: 25px;
 }
 
-#estado_accion h5{
-    text-transform: none;
-    font-size: 16px;
-    margin-left: 5px;
-    float: left;
+#estado_accion h5 {
+	text-transform: none;
+	font-size: 16px;
+	margin-left: 5px;
+	float: left;
 }
 
 .fileUploader_catalogo form {
@@ -4331,7 +4331,23 @@ button.thoughtbot:hover {
 		to(#c77801) );
 }
 
-*:focus{ outline:none; }
-.floatLeft { float: left; }
-.floatRight { float: right; }
-.clear { clear: both; }
+*:focus {
+	outline: none;
+}
+
+.floatLeft {
+	float: left;
+}
+
+.floatRight {
+	float: right;
+}
+
+.clear {
+	clear: both;
+}
+
+.table_messages{
+	width: 100%;
+	
+}

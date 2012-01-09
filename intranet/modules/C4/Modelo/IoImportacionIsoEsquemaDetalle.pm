@@ -34,8 +34,7 @@ __PACKAGE__->meta->setup(
     ],
 
     primary_key_columns => [ 'id' ],
-    unique_key          => ['id'],
-
+    unique_key          => ['id_importacion_esquema','campo_origen','subcampo_origen','campo_destino','subcampo_destino']
 );
 
 #----------------------------------- FUNCIONES DEL MODELO ------------------------------------------------
