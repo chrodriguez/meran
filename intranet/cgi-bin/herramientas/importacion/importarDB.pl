@@ -10,7 +10,7 @@ my $input           = new CGI;
 my $authnotrequired = 0;
 my $obj             = $input->param('obj');
 $obj                = C4::AR::Utilidades::from_json_ISO($obj);
-my $tipoAccion      = $obj->{'tipoAccion'}||"";
+my $tipoAccion      = $obj->{'tipoAccion'}||"BUSQUEDA";
 
 =item
     Se elimina el Proveedor
@@ -38,32 +38,65 @@ if($tipoAccion eq "ELIMINAR"){
 
     } #end if($tipoAccion eq "ELIMINAR_Importacion")
 
-=item
-Se guarda la modificacion los datos del Proveedor
-=cut
 elsif($tipoAccion eq "DETALLE"){
 
-      my ($nro_socio, $session, $flags) = checkauth(
-                                               $input,
-                                               $authnotrequired,
-                                               {   ui               => 'ANY',
-                                                   tipo_documento   => 'ANY',
-                                                   accion           => 'CONSULTA',
-                                                   tipo_permiso => 'catalogo',
-                                                   entorno => 'undefined'},
-                                                   "intranet"
-                                );
+#Detalle de una importacion
+    my ($template, $session, $t_params)= get_template_and_user({
+                                    template_name => "/herramientas/importacion/lista_registros_importacion.tmpl",
+                                    query => $input,
+                                    type => "intranet",
+                                    authnotrequired => 0,
+                                    flagsrequired => {  ui => 'ANY',
+                                                        tipo_documento => 'ANY',
+                                                        accion => 'CONSULTA',
+                                                        tipo_permiso => 'catalogo',
+                                                        entorno => 'undefined'},
+                                    debug => 1,
+            });
 
-        my ($Message_arrayref)  = C4::AR::ImportacionIsoMARC::editarImportacion($obj);
-        my $infoOperacionJSON   = to_json $Message_arrayref;
 
-        C4::AR::Auth::print_header($session);
-        print $infoOperacionJSON;
+
+  my $funcion   = $obj->{'funcion'} || 'changePage';
+  my $ini       = $obj->{'ini'} || 1;
+  my $id_importacion   = $obj->{'id_importacion'};
+
+  my ($ini,$pageNumber,$cantR) = C4::AR::Utilidades::InitPaginador($ini);
+  my ($cantidad,$registros) = C4::AR::ImportacionIsoMARC::getRegistrosFromImportacion($id_importacion,$ini,$cantR);
+
+      $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
+      $t_params->{'resultsloop'}        = $registros;
+      $t_params->{'cantidad'}           = $cantidad;
+
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+
+ }
+
+elsif($tipoAccion eq "DETALLE_REGISTRO"){
+
+#Detalle de una importacion
+    my ($template, $session, $t_params)= get_template_and_user({
+                                    template_name => "/herramientas/importacion/detalleRegistroMARC.tmpl",
+                                    query => $input,
+                                    type => "intranet",
+                                    authnotrequired => 0,
+                                    flagsrequired => {  ui => 'ANY',
+                                                        tipo_documento => 'ANY',
+                                                        accion => 'CONSULTA',
+                                                        tipo_permiso => 'catalogo',
+                                                        entorno => 'undefined'},
+                                    debug => 1,
+            });
+
+  my $id   = $obj->{'id'};
+  my ($registro_importacion) = C4::AR::ImportacionIsoMARC::getRegistrosFromImportacionById($id);
+      $t_params->{'registro_importacion'} = $registro_importacion;
+
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
  }
 
 elsif($tipoAccion eq "BUSQUEDA"){
-#Lista de Proveedores por defecto
+#Lista de Importaciones por defecto
     my ($template, $session, $t_params)= get_template_and_user({
                                     template_name => "/herramientas/importacion/lista_importaciones.tmpl",
                                     query => $input,
@@ -84,7 +117,7 @@ elsif($tipoAccion eq "BUSQUEDA"){
   my $ini       = $obj->{'ini'} || 1;
 
   my ($ini,$pageNumber,$cantR) = C4::AR::Utilidades::InitPaginador($ini);
-  my ($cantidad,$importaciones) = C4::AR::ImportacionIsoMARC::getImportacionLike($busqueda,$orden,$ini,$cantR,1,$inicial);
+  my ($cantidad,$importaciones) = C4::AR::ImportacionIsoMARC::getImportacionLike($busqueda,$orden,$ini,$cantR,$inicial);
 
       $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
       $t_params->{'resultsloop'}        = $importaciones;

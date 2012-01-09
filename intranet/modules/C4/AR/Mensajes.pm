@@ -484,9 +484,10 @@ my %mensajesINTRA = (
     'IO01' => 'Ocurrio un error mientras se intentaba eliminar la importaci&oacute;n',
     'IO02' => 'El esquema "*?*" ya existe (o se agreg&oacute; un nuevo esquema y no se modific&oacute;)',
     'IO03' => 'El esquema se elimin&oacute; correctamente',
-    'IO04' => 'El esquema solicitado no existe',
+    'IO04' => 'Ocurrio un error mientras se intentaban leer los registros de la importaci&oacute;n',
     'IO05' => 'El esquema ha sido eliminado correctamente',
     'IO06' => 'El esquema no se ha podido eliminar.',
+    'IO07' => 'El esquema solicitado no existe',
 
     #Mensajes Upload Files
     'UP00' => 'Solo se permiten archivos del tipo ("*?*") [Fallo de extension]',
@@ -496,7 +497,7 @@ my %mensajesINTRA = (
     'UP04' => 'El nombre del archivo no tiene un formato correcto',
     'UP05' => 'Hay un error y el archivo no puede eliminarse del servidor',
     'UP06' => 'El archivo "*?*" se ha eliminado correctamente',
-    
+
 #ERRORES DE BASE DE DATOS
     'B400' => '',
     'B401' => 'Error al intentar prestar desde INTRA, funcion C4::AR::Reservas::t_realizarPrestamo.',
@@ -553,6 +554,7 @@ my %mensajesINTRA = (
     'B452' => 'Error en funcion C4::AR::Permisos::actualizarPermisosGeneral',
     'B453' => 'Error en funcion C4::AR::ImportacionIsoMARC::eliminarImportacion',
     'B454' => 'Error en funcion C4::AR::UploadFile::uploadImport',
+    'B455' => 'Error en funcion C4::AR::UploadFile::guardarRegistrosNuevaImportacion',
 );
 
 sub getMensaje {

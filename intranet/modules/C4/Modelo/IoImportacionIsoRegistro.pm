@@ -59,6 +59,15 @@ sub eliminar{
 
     $self->delete();
 }
+
+
+sub getRegistroMARCOriginal{
+    my ($self)      = shift;
+    my ($params) = @_;
+
+    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+    return $marc_record;
+    }
 #----------------------------------- FIN - FUNCIONES DEL MODELO -------------------------------------------
 
 
@@ -91,4 +100,19 @@ sub getIdImportacionIso{
 sub getMarcRecord{
     my ($self) = shift;
     return ($self->marc_record);
+}
+
+sub getTipo{
+    my ($self) = shift;
+    return ($self->type);
+}
+
+sub getEstado{
+    my ($self) = shift;
+    return ($self->estado);
+}
+
+sub getMatching{
+    my ($self) = shift;
+    return ($self->matching);
 }

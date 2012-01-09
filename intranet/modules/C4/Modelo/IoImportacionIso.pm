@@ -62,7 +62,7 @@ sub agregar{
     my ($params) = @_;
 
     $self->setIdImportacionEsquema($params->{'esquemaImportacion'});
-    $self->setNombre($params->{'titulo'});
+    $self->setNombre($params->{'showName'});
     $self->setArchivo($params->{'file_name'});
     $self->setFormato($params->{'formatoImportacion'});
     $self->setComentario($params->{'comentario'});
@@ -83,17 +83,17 @@ sub eliminar{
     #HACER ALGO SI ES NECESARIO
     my %parametros;
     $parametros{'id'}   = $self->getId();
-                $self->debug("IoImportacion=> antes eliminar archivo");
+    #Se eliminan el archivo
     my $msg_object =     C4::AR::UploadFile::deleteImport(\%parametros);
-                $self->debug("IoImportacion=> despues eliminar archivo");
     if (!$msg_object->{'error'}){
-            $self->debug("IoImportacion=> eliminar archivo");
-
-            my ($registros) = C4::AR::ImportacionIsoMARC::getRegistrosFromImportacion($self->getId(), $self->db);
-            foreach my $rec (@$registros){
-                $self->debug("IoImportacion=> registro");
-              $rec->eliminar();
+            #Se eliminan los registros
+            my ($registros_array_ref_count, $registros_array_ref) = C4::AR::ImportacionIsoMARC::getRegistrosFromImportacion($self->getId(),1,'ALL',$self->db);
+            if($registros_array_ref){
+                foreach my $rec (@$registros_array_ref){
+                  $rec->eliminar();
+                }
             }
+            #Se elimina la importacion
             $self->delete();
     }
     return($msg_object);
