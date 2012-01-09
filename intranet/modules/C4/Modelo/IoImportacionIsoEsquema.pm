@@ -33,13 +33,12 @@ __PACKAGE__->meta->setup(
 
 #----------------------------------- FUNCIONES DEL MODELO ------------------------------------------------
 
-sub addEsquema{
+sub agregar{
     my ($self)   = shift;
     my ($params) = @_;
 
-    #$self->setProveedorId($params->{'id_proveedor'});
-    #$self->setRefEstadoPresupuestoId(1);
-    #$self->setRefPedidoCotizacionId($params->{'pedido_cotizacion_id'});
+    $self->setNombre($params->{'nombre'});
+    $self->setDescripcion($params->{'descripcion'});
 
     $self->save();
 }

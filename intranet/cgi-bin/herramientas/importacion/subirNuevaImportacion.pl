@@ -26,7 +26,6 @@ my ($template, $session, $t_params)= get_template_and_user({
     $t_params->{'combo_formatos'}          = C4::AR::Utilidades::generarComboFormatosImportacion();
 
     my %parametros;
-    $parametros{'onChange'}   = 'cambiarEsquema();';
     $t_params->{'combo_esquemas'}          = C4::AR::Utilidades::generarComboEsquemasImportacion(\%parametros);
 
 if ($input->param('upfile')){
@@ -40,8 +39,10 @@ if ($input->param('upfile')){
     $parametros{'formatoImportacion'}    = $input->param('formatoImportacion');
 
     #Si el esquema es nuevo hay que crearlo vacio al menos!
-    if($parametros{'esquemaImportacion'} eq "-1"){
+    if($input->param('nuevo_esquema')){
        $parametros{'nombreEsquema'}     = $input->param('nombreEsquema');
+       $parametros{'nuevo_esquema'}     = $input->param('nuevo_esquema');
+       $parametros{'esquemaImportacion'} = -1;
         }
 
     my ($msg_object) = C4::AR::UploadFile::uploadImport(\%parametros);

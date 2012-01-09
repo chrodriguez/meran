@@ -41,18 +41,22 @@ Guarda una nueva imporatción
 sub guardarNuevaImportacion {
     my ($params,$msg_object) = @_;
 
-    my $Io_importacion          = C4::Modelo::IoImportacionIso->new();
-    my $db = $Io_importacion->db;
+    my $db =  C4::Modelo::IoImportacionIso->new()->db;
        $db->{connect_options}->{AutoCommit} = 0;
        $db->begin_work;
+
+    my $Io_importacion          = C4::Modelo::IoImportacionIso->new(db=> $db);
 
     my $nuevo_esquema =0;
    eval {
     #Si el esquema es nuevo hay que crearlo vacio al menos!
-    if($params->{'esquemaImportacion'} eq "-1"){
+    if($params->{'nuevo_esquema'}){
        #Crear Nuevo Esquema
-           $nuevo_esquema = C4::AR::ImportacionIsoMARC::addEsquema($params->{'nombreEsquema'},'Esquema generado autom&aacute;ticamente',$db);
-       #Llenar nuevo esquema
+           my %parametros;
+           $parametros{'nombre'}      = $params->{'nombreEsquema'};
+           $parametros{'descripcion'}   = 'Esquema generado autom&aacute;ticamente';
+           $nuevo_esquema = C4::Modelo::IoImportacionIsoEsquema->new(db=> $db);
+           $nuevo_esquema->agregar(\%parametros);
 
        #Necesitamos el id del nuevo esquema ACA!
            $params->{'esquemaImportacion'}     = $nuevo_esquema->getId;
@@ -66,13 +70,12 @@ sub guardarNuevaImportacion {
     #Si el esquema es nuevo hay que llenarlo con los datos de los registros cargados
     if($nuevo_esquema){
        #Llenar nuevo esquema
-        my $detalle_esquema = $Io_importacion->obtenerCamposSubcamposDeRegistros();
-
-        foreach my $detalle (@$detalle_esquema){
-          my $nuevo_esquema_detalle          = C4::Modelo::IoImportacionIsoEsquemaDetalle->new(db=>$db);
-          $detalle_esquema->{'id_importacion_esquema'}=$nuevo_esquema->getId;
-          $nuevo_esquema_detalle->agregar($detalle_esquema);
-            }
+        #my $detalle_esquema = $Io_importacion->obtenerCamposSubcamposDeRegistros();
+        #foreach my $detalle (@$detalle_esquema){
+          #my $nuevo_esquema_detalle          = C4::Modelo::IoImportacionIsoEsquemaDetalle->new(db=>$db);
+          #$detalle_esquema->{'id_importacion_esquema'}=$nuevo_esquema->getId;
+          #$nuevo_esquema_detalle->agregar($detalle_esquema);
+            #}
     }
 
     $db->commit;
@@ -345,14 +348,11 @@ sub getEsquema{
 }
 
 sub addEsquema{
-    my ($nombre,$descripcion,$db) = @_;
+    my ($nombre,$descripcion) = @_;
 
     use C4::Modelo::IoImportacionIsoEsquema;
 
     my $esquema = C4::Modelo::IoImportacionIsoEsquema->new();
-    if ($db){
-        $esquema->db=$db;
-    }
     $esquema->setNombre($nombre);
     $esquema->setDescripcion($descripcion);
     $esquema->save();
