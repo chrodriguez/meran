@@ -58,9 +58,8 @@
                               [% PERL %]
                                             print C4::AR::Filtros::link_to(
                                                                               text =>     C4::AR::Filtros::to_Icon( boton   => "icon_mas" ),
-                                                                              url=>"[% url_prefix %]/herramientas/importacion/importarDB.pl",
-                                                                              params =>   ["id_importacion=[% importacion.getId %]",
-                                                                                          "action=DETALLE"],
+                                                                              url=>"[% url_prefix %]/herramientas/importacion/detalle_importacion.pl",
+                                                                              params =>   ["id_importacion=[% importacion.getId %]"],
                                                                               title =>    "[% 'Ver detalle' | i18n %]"
                                                                         );
                               [% END %]
@@ -69,7 +68,7 @@
                               [% PERL %]
                               print C4::AR::Filtros::link_to(   text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
                                                                 url=>"[% url_prefix %]/herramientas/importacion/importarDB.pl",
-                                                                params =>   ["action=EDITAR", "id_proveedor=[% proveedor.getId %]"],
+                                                                params =>   ["tipoAccion=EDITAR", "id_importacion=[% importacion.getId %]"],
                                                                 title =>    "[% 'Editar Importaci&oacute;n' | i18n %]"
                                                           );
                              [% END %]

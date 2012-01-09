@@ -1,0 +1,18 @@
+[% INCLUDE "intranet-top.inc" %]
+<script type="text/javascript" src="/intranet-tmpl/includes/importacion/detalleImportacion.js"></script>
+
+[% INCLUDE "FormValidateHelper.inc" %]
+<script type="text/javascript">
+       detalleImportacion([% importacion.getId %]);
+</script>
+<fieldset>
+<legend class="titulo_legend_resaltado">Detalle de la Importaci&oacute;n [% importacion.getTitulo %]</legend>
+<div>
+
+</div>
+</fieldset>
+
+<br>
+<div id="detalleImportacion"></div>
+<br>
+[% INCLUDE "intranet-bottom.inc" %]

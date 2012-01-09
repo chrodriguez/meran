@@ -62,29 +62,35 @@ sub guardarRegistrosNuevaImportacion {
     switch ($params->{'formatoImportacion'}) {
         case "iso"   {$reader=MARC::Moose::Reader::File::Iso2709->new(file   => $params->{'write_file'})}
         case "isis"  {$reader=MARC::Moose::Reader::File::Isis->new(file   => $params->{'write_file'})}
-        case "xml"   {$reader=MARC::Moose::Reader::File::Isis->Marcxml(file   => $params->{'write_file'})}
+        case "xml"   {$reader=MARC::Moose::Reader::File::Marcxml->new(file   => $params->{'write_file'})}
     }
 
 #Leemos los registros armamos el Marc::Record
     while ( my $record = $reader->read() ) {
-
-        C4::AR::Debug::debug("ImportacionIsoMARC => registro leido ");
+    eval {
          my $marc_record = MARC::Record->new();
-         my $indentificador_1    = '#';
-         my $indentificador_2    = '#';
 
          for my $field ( @{$record->fields} ) {
+             my $new_field=0;
              if($field->tag < '010'){
                  #CONTROL FIELD
-                    #Que hacemos?
+                 $new_field = MARC::Field->new( $field->tag, $field->{'value'} );
                  }
                  else {
-                    my $new_field = MARC::Field->new($field->tag, $indentificador_1, $indentificador_2,'a'=>'b');
                     for my $subfield ( @{$field->subf} ) {
-                        $marc_record->append_fields( MARC::Field->new($field->tag, $indentificador_1, $indentificador_2, $subfield->[0] => $subfield->[1]));
+                        if(!$new_field){
+                            my $ind1=$field->ind1?$field->ind1:'#';
+                            my $ind2=$field->ind2?$field->ind2:'#';
+                            $new_field= MARC::Field->new($field->tag, $ind1, $ind2,$subfield->[0] => $subfield->[1]);
+                            }
+                        else{
+                            $new_field->add_subfields( $subfield->[0] => $subfield->[1] );
+                        }
                     }
-                    #$marc_record->append_fields($new_field);
                 }
+             if($new_field){
+                $marc_record->append_fields($new_field);
+             }
          }
 
             my %parametros;
@@ -93,12 +99,23 @@ sub guardarRegistrosNuevaImportacion {
 
             my $Io_registro_importacion          = C4::Modelo::IoImportacionIsoRegistro->new();
             $Io_registro_importacion->agregar(\%parametros);
-    }
+
+      };
+
+     if ($@){
+         #Se loguea error de Base de Datos
+         &C4::AR::Mensajes::printErrorDB($@, 'B455','INTRA');
+         #Se setea error para el usuario
+         $msg_object->{'error'}= 1;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IO02', 'params' => []} ) ;
+     }
+
+    } # WHILE  ( my $record = $reader->read()
 
 }
 
-=item sub guardarNuevaImportacion
-Guarda una nueva imporatción
+=item sub getImportaciones
+obtiene las importaciones
 =cut
 sub getImportaciones {
     require C4::Modelo::IoImportacionIso;
@@ -119,25 +136,66 @@ Se obtienen los registros de la importacion
 =cut
 sub getRegistrosFromImportacion {
 
-    my ($id_importacion,$db) = @_;
+    my ($id_importacion,$ini,$cantR,$db) = @_;
 
     require C4::Modelo::IoImportacionIsoRegistro;
     require C4::Modelo::IoImportacionIsoRegistro::Manager;
     $db = $db || C4::Modelo::IoImportacionIsoRegistro->new()->db;
 
-    my $registros = C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro(  db              => $db,
+
+    my $registros_array_ref;
+
+    if($cantR eq 'ALL'){
+
+     $registros_array_ref= C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro(  db              => $db,
                                                                                                     query => [
                                                                                                         id_importacion_iso => { eq => $id_importacion },
                                                                                                         ],);
-    my @registros;
+     }else{
+     $registros_array_ref= C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro(  db              => $db,
+                                                                                                    query => [
+                                                                                                        id_importacion_iso => { eq => $id_importacion },
+                                                                                                        ],
+                                                                                                    limit   => $cantR,
+                                                                                                    offset  => $ini,
+                                                                                                        );
+     }
 
-    foreach my $registros (@$registros){
-        push (@registros, $registros);
+    #Obtengo la cantidad total de registros de la importacion para el paginador
+    my $registros_array_ref_count = C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro_count(  db  => $db,
+                                                                                                                        query => [
+                                                                                                                            id_importacion_iso => { eq => $id_importacion },
+                                                                                                                        ]);
+
+    if(scalar(@$registros_array_ref) > 0){
+        return ($registros_array_ref_count, $registros_array_ref);
+    }else{
+        return (0,0);
     }
 
-    return (\@registros);
 }
 
+
+=item
+     Esta funcion devuelve un registro de importacion segun su id
+=cut
+sub getRegistrosFromImportacionById {
+    my ($id) = @_;
+
+    require C4::Modelo::IoImportacionIsoRegistro;
+    require C4::Modelo::IoImportacionIsoRegistro::Manager;
+
+    my $registroImportacionTemp;
+    my @filtros;
+
+    if ($id){
+        push (@filtros, ( id => { eq => $id}));
+        $registroImportacionTemp = C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro( query => \@filtros );
+        return $registroImportacionTemp->[0]
+    }
+
+    return 0;
+}
 
 =item
     Esta funcion elimina una importacion (con todos sus registros)
@@ -195,7 +253,7 @@ sub getImportacionById {
     Este funcion devuelve la informacion de importaciones segun su nombre, archivo o comentario
 =cut
 sub getImportacionLike {
-    my ($busqueda,$orden,$ini,$cantR,$habilitados,$inicial) = @_;
+    my ($busqueda,$orden,$ini,$cantR,$inicial) = @_;
 
     require C4::Modelo::IoImportacionIso;
     require C4::Modelo::IoImportacionIso::Manager;

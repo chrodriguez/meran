@@ -482,6 +482,7 @@ my %mensajesINTRA = (
     #Mensajes Importaciones/Exportaciones
     'IO00' => 'La importaci&oacute;n fue eliminada con &eacute;xito',
     'IO01' => 'Ocurrio un error mientras se intentaba eliminar la importaci&oacute;n',
+    'IO02' => 'Ocurrio un error mientras se intentaban leer los registros de la importaci&oacute;n',
 
     #Mensajes Upload Files
     'UP00' => 'Solo se permiten archivos del tipo ("*?*") [Fallo de extension]',
@@ -550,6 +551,7 @@ my %mensajesINTRA = (
     'B452' => 'Error en funcion C4::AR::Permisos::actualizarPermisosGeneral',
     'B453' => 'Error en funcion C4::AR::ImportacionIsoMARC::eliminarImportacion',
     'B454' => 'Error en funcion C4::AR::UploadFile::uploadImport',
+    'B455' => 'Error en funcion C4::AR::UploadFile::guardarRegistrosNuevaImportacion',
 );
 
 sub getMensaje {
