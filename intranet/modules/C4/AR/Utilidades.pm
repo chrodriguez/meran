@@ -2893,45 +2893,46 @@ sub generarComboEsquemasImportacion {
     my @select_esquemasImportacion_Values;
     my %select_esquemasImportacion_Labels;
     my $result = C4::Modelo::IoImportacionIsoEsquema::Manager->get_io_importacion_iso_esquema();
-
-    foreach my $esquemaImportacion (@$result) {
-            push (@select_esquemasImportacion_Values, $esquemaImportacion->id);
-            $select_esquemasImportacion_Labels{$esquemaImportacion->id} = $esquemaImportacion->nombre;
+    my $result_count = C4::Modelo::IoImportacionIsoEsquema::Manager->get_io_importacion_iso_esquema_count();
+    
+    if ($result_count){
+	    foreach my $esquemaImportacion (@$result) {
+	            push (@select_esquemasImportacion_Values, $esquemaImportacion->id);
+	            $select_esquemasImportacion_Labels{$esquemaImportacion->id} = $esquemaImportacion->nombre;
+	    }
+	
+	
+	    my %options_hash;
+	
+	    if ( $params->{'onChange'} ){
+	         $options_hash{'onChange'}  = $params->{'onChange'};
+	    }
+	
+	    if ( $params->{'onFocus'} ){
+	      $options_hash{'onFocus'}      = $params->{'onFocus'};
+	    }
+	
+	    if ( $params->{'class'} ){
+	         $options_hash{'class'}     = $params->{'class'};
+	    }
+	
+	    if ( $params->{'onBlur'} ){
+	      $options_hash{'onBlur'}       = $params->{'onBlur'};
+	    }
+	
+	    $options_hash{'name'}           = $params->{'name'}||'esquemaImportacion';
+	    $options_hash{'id'}             = $params->{'id'}||'esquemaImportacion';
+	    $options_hash{'size'}           =  $params->{'size'}||1;
+	    $options_hash{'multiple'}       = $params->{'multiple'}||0;
+	
+	    $options_hash{'values'}         = \@select_esquemasImportacion_Values;
+	    $options_hash{'labels'}         = \%select_esquemasImportacion_Labels;
+	
+	    my $CGISelectEsquemaImportacion                   = CGI::scrolling_list(\%options_hash);
+	    return $CGISelectEsquemaImportacion;
+    }else{
+    	return 0;
     }
-
-
-    my %options_hash;
-
-    if ( $params->{'onChange'} ){
-         $options_hash{'onChange'}  = $params->{'onChange'};
-    }
-
-    if ( $params->{'onFocus'} ){
-      $options_hash{'onFocus'}      = $params->{'onFocus'};
-    }
-
-    if ( $params->{'class'} ){
-         $options_hash{'class'}     = $params->{'class'};
-    }
-
-    if ( $params->{'onBlur'} ){
-      $options_hash{'onBlur'}       = $params->{'onBlur'};
-    }
-
-    $options_hash{'name'}           = $params->{'name'}||'esquemaImportacion';
-    $options_hash{'id'}             = $params->{'id'}||'esquemaImportacion';
-    $options_hash{'size'}           =  $params->{'size'}||1;
-    $options_hash{'multiple'}       = $params->{'multiple'}||0;
-    $options_hash{'defaults'}       = C4::AR::Filtros::i18n('NUEVO ESQUEMA');
-
-    push (@select_esquemasImportacion_Values, '-1');
-    $select_esquemasImportacion_Labels{'-1'}            ='NUEVO ESQUEMA';
-
-    $options_hash{'values'}         = \@select_esquemasImportacion_Values;
-    $options_hash{'labels'}         = \%select_esquemasImportacion_Labels;
-
-    my $CGISelectEsquemaImportacion                   = CGI::scrolling_list(\%options_hash);
-    return $CGISelectEsquemaImportacion;
 }
 
 sub generarComboFormatosImportacion {

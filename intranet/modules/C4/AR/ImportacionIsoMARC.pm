@@ -83,7 +83,7 @@ sub guardarNuevaImportacion {
         eval {$db->rollback};
         #Se setea error para el usuario
         $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IO05', 'params' => []} ) ;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IO08', 'params' => []} ) ;
     }
     $db->{connect_options}->{AutoCommit} = 1;
 }
@@ -339,12 +339,7 @@ sub getEsquema{
 
     my $detalle_esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(query => \@filtros,);
 
-    my $esquema;
-
-    eval{
-        $esquema = C4::Modelo::IoImportacionIsoEsquema->new(id => $id_esquema);
-        $esquema->load();
-    };
+    my $esquema = getEsquemaObject($id_esquema);
 
     return ($detalle_esquema,$esquema);
 }
@@ -361,6 +356,8 @@ sub addEsquema{
     $esquema->setNombre($nombre);
     $esquema->setDescripcion($descripcion);
     $esquema->save();
+
+    C4::AR::ImportacionIsoMARC::addCampo($esquema->getId);
 
     return $esquema;
 }
@@ -412,16 +409,68 @@ sub getRow{
 
 }
 
+sub getEsquemaObject{
+    my ($id) = @_;
+
+    use C4::Modelo::IoImportacionIsoEsquema::Manager;
+    my @filtros;
+
+    push(@filtros,(id => {eq =>$id}));
+
+    my $esquema = C4::Modelo::IoImportacionIsoEsquema::Manager->get_io_importacion_iso_esquema(query => \@filtros,);
+
+    if ($esquema->[0]){
+        return $esquema->[0];
+    }else{
+        return 0;
+    }
+
+}
+
+sub delEsquema{
+    my ($id_esquema) = @_;
+
+    use C4::Modelo::IoImportacionIsoEsquema::Manager;
+    use C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager;
+
+    my $msg_code = 'IO05';
+
+    my @filtros_detalle;
+    push(@filtros_detalle,(id_importacion_esquema => {eq =>$id_esquema}));
+
+    my @filtros_esquema;
+    push(@filtros_esquema,(id => {eq =>$id_esquema}));
+
+  #  eval{
+        C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->delete_io_importacion_iso_esquema_detalle(where => \@filtros_detalle);
+        C4::Modelo::IoImportacionIsoEsquema::Manager->delete_io_importacion_iso_esquema(where => \@filtros_esquema);
+   # };
+
+    if ($@){
+        return 'IO06';
+    }
+
+    return($msg_code);
+}
+
 sub delCampo{
     my ($id) = @_;
 
     my $row = getRow($id);
 
-    if ($row){
-        my $id_esquema = $row->esquema->getId;
-        $row->delete();
+    my $id_esquema;
 
-        return ($id_esquema,'IO03');
+    if ($row){
+        eval{
+            $id_esquema = $row->esquema->id;
+            $row->delete();
+        };
+
+        if ($@){
+           return (0,'IO07');
+        }else{
+            return ($id_esquema,'IO03');
+        }
     }
 }
 
@@ -436,11 +485,11 @@ sub editarValorEsquema{
     my $object = getRow(@values[0]);
 
     switch (@values[1]) {
-        case "co"  {$object->setCampoOrigen($value)}
-        case "sco"  {$object->setSubcampoOrigen($value)}
-        case "cd"   {$object->setCampoDestino($value)}
-        case "scd"  {$object->setSubcampoDestino($value)}
-        case "n"    {$object->setNivel($value)}
+        case "co"  {$object->setCampoOrigen($value); $value = $object->getCampoOrigen()}
+        case "sco"  {$object->setSubcampoOrigen($value); $value = $object->getSubcampoOrigen()}
+        case "cd"   {$object->setCampoDestino($value); $value = $object->getCampoDestino()}
+        case "scd"  {$object->setSubcampoDestino($value); $value = $object->getSubcampoDestino()}
+        case "n"    {$object->setNivel($value); $value = $object->getNivel()}
         case "ign"  {$object->setIgnorarFront($value); $value = $object->getIgnorarFront();}
     }
     $object->save();
@@ -448,6 +497,27 @@ sub editarValorEsquema{
     return ($value);
 
 }
+
+sub editarEsquema{
+    my ($row_id,$value) = @_;
+
+    use Switch;
+
+    my @values = split('___',$row_id);
+
+
+    my $object = getEsquemaObject(@values[0]);
+
+    switch (@values[1]) {
+        case "nombre"  {$object->setNombre($value)}
+        case "desc"  {$object->setDescripcion($value)}
+    }
+    $object->save();
+
+    return ($value);
+
+}
+
 END { }       # module clean-up code here (global destructor)
 
 1;

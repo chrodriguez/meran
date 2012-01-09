@@ -20,12 +20,9 @@ function showEsquemaImportacion(){
     objAH.url           = URL_PREFIX+'/herramientas/importacion/esquemas_importacionDB.pl';
     objAH.cache         = false;
     objAH.showOverlay   = true;  
-        if ($('#esquemaImportacion').val() != "-1")
-            objAH.esquema = $('#esquemaImportacion').val();
-        else
-            objAH.esquema = 0;
-        
+    objAH.esquema = $('#esquemaImportacion').val();
     objAH.accion            = "OBTENER_ESQUEMA";
+
     objAH.sendToServer();	
 }
 
@@ -59,6 +56,19 @@ function eliminarEsquemaRow(id_esquema){
     objAH.showOverlay       = true;
     objAH.accion="ELIMINAR_CAMPO";
     objAH.id_row = id_esquema;
+    
+    objAH.sendToServer();
+    
+}
+
+function eliminarEsquema(id_esquema){
+
+    objAH=new AjaxHelper(updateAgregarCampo);
+    objAH.url           = URL_PREFIX+'/herramientas/importacion/esquemas_importacionDB.pl';
+    objAH.cache = false;
+    objAH.showOverlay       = true;
+    objAH.accion="ELIMINAR_ESQUEMA";
+    objAH.id_esquema = id_esquema;
     
     objAH.sendToServer();
     
