@@ -444,11 +444,11 @@ sub editarValorEsquema{
     my $object = getRow(@values[0]);
 
     switch (@values[1]) {
-        case "co"  {$object->setCampoOrigen($value)}
-        case "sco"  {$object->setSubcampoOrigen($value)}
-        case "cd"   {$object->setCampoDestino($value)}
-        case "scd"  {$object->setSubcampoDestino($value)}
-        case "n"    {$object->setNivel($value)}
+        case "co"  {$object->setCampoOrigen($value); $value = $object->getCampoOrigen()}
+        case "sco"  {$object->setSubcampoOrigen($value); $value = $object->getSubcampoOrigen()}
+        case "cd"   {$object->setCampoDestino($value); $value = $object->getCampoDestino()}
+        case "scd"  {$object->setSubcampoDestino($value); $value = $object->getSubcampoDestino()}
+        case "n"    {$object->setNivel($value); $value = $object->getNivel()}
         case "ign"  {$object->setIgnorarFront($value); $value = $object->getIgnorarFront();}
     }
     $object->save();
