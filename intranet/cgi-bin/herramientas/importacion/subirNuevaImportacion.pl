@@ -41,16 +41,7 @@ if ($input->param('upfile')){
 
     #Si el esquema es nuevo hay que crearlo vacio al menos!
     if($parametros{'esquemaImportacion'} eq "-1"){
-
        $parametros{'nombreEsquema'}     = $input->param('nombreEsquema');
-
-       #Crear Nuevo Esquema
-       #TODO
-       #Llenar nuevo esquema
-       #TODO
-       #Necesitamos el id del nuevo esquema ACA!
-           $parametros{'esquemaImportacion'}     = $input->param('esquemaImportacion');
-
         }
 
     my ($msg_object) = C4::AR::UploadFile::uploadImport(\%parametros);

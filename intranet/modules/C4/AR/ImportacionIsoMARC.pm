@@ -42,11 +42,50 @@ sub guardarNuevaImportacion {
     my ($params,$msg_object) = @_;
 
     my $Io_importacion          = C4::Modelo::IoImportacionIso->new();
+    my $db = $Io_importacion->db;
+       $db->{connect_options}->{AutoCommit} = 0;
+       $db->begin_work;
+
+    my $nuevo_esquema =0;
+   eval {
+    #Si el esquema es nuevo hay que crearlo vacio al menos!
+    if($params->{'esquemaImportacion'} eq "-1"){
+       #Crear Nuevo Esquema
+           $nuevo_esquema = C4::AR::ImportacionIsoMARC::addEsquema($params->{'nombreEsquema'},'Esquema generado autom&aacute;ticamente',$db);
+       #Llenar nuevo esquema
+
+       #Necesitamos el id del nuevo esquema ACA!
+           $params->{'esquemaImportacion'}     = $nuevo_esquema->getId;
+        }
+
     $Io_importacion->agregar($params);
 
     #Ahora los registros del archivo $params->{'write_file'}
-    C4::AR::ImportacionIsoMARC::guardarRegistrosNuevaImportacion($Io_importacion,$params,$msg_object);
+    C4::AR::ImportacionIsoMARC::guardarRegistrosNuevaImportacion($Io_importacion,$params,$msg_object,$db);
 
+    #Si el esquema es nuevo hay que llenarlo con los datos de los registros cargados
+    if($nuevo_esquema){
+       #Llenar nuevo esquema
+        my $detalle_esquema = $Io_importacion->obtenerCamposSubcamposDeRegistros();
+
+        foreach my $detalle (@$detalle_esquema){
+          my $nuevo_esquema_detalle          = C4::Modelo::IoImportacionIsoEsquemaDetalle->new(db=>$db);
+          $detalle_esquema->{'id_importacion_esquema'}=$nuevo_esquema->getId;
+          $nuevo_esquema_detalle->agregar($detalle_esquema);
+            }
+    }
+
+    $db->commit;
+    };
+        if ($@){
+        #Se loguea error de Base de Datos
+        &C4::AR::Mensajes::printErrorDB($@, 'B456',"INTRA");
+        eval {$db->rollback};
+        #Se setea error para el usuario
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IO08', 'params' => []} ) ;
+    }
+    $db->{connect_options}->{AutoCommit} = 1;
 }
 
 
@@ -54,7 +93,7 @@ sub guardarNuevaImportacion {
 Guarda los registros de una nueva imporatción
 =cut
 sub guardarRegistrosNuevaImportacion {
-    my ($importacion,$params,$msg_object) = @_;
+    my ($importacion,$params,$msg_object,$db) = @_;
 
     use Switch;
 
@@ -97,7 +136,7 @@ sub guardarRegistrosNuevaImportacion {
             $parametros{'id_importacion_iso'}      = $importacion->getId;
             $parametros{'marc_record'}   = $marc_record->as_usmarc();
 
-            my $Io_registro_importacion          = C4::Modelo::IoImportacionIsoRegistro->new();
+            my $Io_registro_importacion          = C4::Modelo::IoImportacionIsoRegistro->new(db => $db);
             $Io_registro_importacion->agregar(\%parametros);
 
       };
@@ -301,23 +340,25 @@ sub getEsquema{
     my $detalle_esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(query => \@filtros,);
 
     my $esquema = getEsquemaObject($id_esquema);
-    
+
     return ($detalle_esquema,$esquema);
 }
 
 sub addEsquema{
-    my ($nombre,$descripcion) = @_;
+    my ($nombre,$descripcion,$db) = @_;
 
     use C4::Modelo::IoImportacionIsoEsquema;
 
     my $esquema = C4::Modelo::IoImportacionIsoEsquema->new();
-
+    if ($db){
+        $esquema->db=$db;
+    }
     $esquema->setNombre($nombre);
     $esquema->setDescripcion($descripcion);
     $esquema->save();
 
     C4::AR::ImportacionIsoMARC::addCampo($esquema->getId);
-    
+
     return $esquema;
 }
 
@@ -393,7 +434,7 @@ sub delEsquema{
     use C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager;
 
     my $msg_code = 'IO05';
-    
+
     my @filtros_detalle;
     push(@filtros_detalle,(id_importacion_esquema => {eq =>$id_esquema}));
 
@@ -404,9 +445,9 @@ sub delEsquema{
         C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->delete_io_importacion_iso_esquema_detalle(where => \@filtros_detalle);
         C4::Modelo::IoImportacionIsoEsquema::Manager->delete_io_importacion_iso_esquema(where => \@filtros_esquema);
    # };
-    
+
     if ($@){
-    	return 'IO06';
+        return 'IO06';
     }
 
     return($msg_code);
@@ -418,18 +459,18 @@ sub delCampo{
     my $row = getRow($id);
 
     my $id_esquema;
-    
+
     if ($row){
-    	eval{
-		    $id_esquema = $row->esquema->id;
-		  	$row->delete();
-    	};
-    	
-    	if ($@){
-    	   return (0,'IO07');
-    	}else{
-    		return ($id_esquema,'IO03');
-    	}
+        eval{
+            $id_esquema = $row->esquema->id;
+            $row->delete();
+        };
+
+        if ($@){
+           return (0,'IO07');
+        }else{
+            return ($id_esquema,'IO03');
+        }
     }
 }
 

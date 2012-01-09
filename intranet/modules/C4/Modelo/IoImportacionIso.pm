@@ -98,6 +98,43 @@ sub eliminar{
     }
     return($msg_object);
 }
+
+
+
+sub obtenerCamposSubcamposDeRegistros{
+    my ($self)      = shift;
+    my ($params)    = @_;
+
+    my @detalleCamposSubcampos=();
+
+    foreach my $registro ($self->registros){
+
+        my $marc_record = $registro->getMarcRecord();
+
+        foreach my $field ($marc_record->fields) {
+            my $campo                       = $field->tag;
+            if(! $field->is_control_field){
+                #proceso todos los subcampos del campo
+                foreach my $subfield ($field->subfields()) {
+                    my %detalle;
+                    $detalle{'campo'}      = $campo;
+                    my $subcampo = $subfield->[0];
+                    $detalle{'subcampo'}   = $subcampo;
+                    push (@detalleCamposSubcampos,%detalle);
+                }
+            }
+            else{
+                    my %detalle;
+                    $detalle{'campo'}      = $campo;
+                    $detalle{'subcampo'}   = '';
+                    push (@detalleCamposSubcampos,%detalle);
+                }
+        }
+    }
+
+    return(\@detalleCamposSubcampos);
+}
+
 #----------------------------------- FIN - FUNCIONES DEL MODELO -------------------------------------------
 
 

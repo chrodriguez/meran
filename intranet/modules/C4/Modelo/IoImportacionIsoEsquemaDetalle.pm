@@ -13,11 +13,11 @@ __PACKAGE__->meta->setup(
         id_importacion_esquema      => { type => 'integer',     overflow => 'truncate', length => 11,   not_null => 1},
         campo_origen                => { type => 'character',   overflow => 'truncate', length => 3,    not_null => 1},
         subcampo_origen             => { type => 'character',   overflow => 'truncate', length => 1,    not_null => 1},
-        campo_destino               => { type => 'character',   overflow => 'truncate', length => 3,    not_null => 1},
-        subcampo_destino            => { type => 'character',   overflow => 'truncate', length => 1,    not_null => 1},
-        nivel                       => { type => 'integer',     overflow => 'truncate', length => 2,   not_null => 1},
+        campo_destino               => { type => 'character',   overflow => 'truncate', length => 3,    },
+        subcampo_destino            => { type => 'character',   overflow => 'truncate', length => 1,    },
+        nivel                       => { type => 'integer',     overflow => 'truncate', length => 2,   },
         ignorar                     => { type => 'integer',     overflow => 'truncate', length => 2,   not_null => 1, default => 0},
-        
+
 
     ],
 
@@ -39,13 +39,13 @@ __PACKAGE__->meta->setup(
 
 #----------------------------------- FUNCIONES DEL MODELO ------------------------------------------------
 
-sub addEsquemaDetalle{
+sub agregar{
     my ($self)   = shift;
     my ($params) = @_;
 
-    #$self->setProveedorId($params->{'id_proveedor'});
-    #$self->setRefEstadoPresupuestoId(1);
-    #$self->setRefPedidoCotizacionId($params->{'pedido_cotizacion_id'});
+    $self->setIdImportacionEsquema($params->{'id_importacion_esquema'});
+    $self->setCampoOrigen($params->{'campo'});
+    $self->setSubcampoOrigen($params->{'subcampo'});
 
     $self->save();
 }
@@ -145,7 +145,7 @@ sub setIgnorar{
 sub setIgnorarFront{
     my ($self)  = shift;
     my ($value) = @_;
-    
-   	$self->ignorar(C4::AR::Utilidades::translateYesNo_toNumber($value));
+
+    $self->ignorar(C4::AR::Utilidades::translateYesNo_toNumber($value));
 }
 
