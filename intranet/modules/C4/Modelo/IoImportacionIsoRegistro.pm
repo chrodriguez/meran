@@ -116,3 +116,33 @@ sub getMatching{
     my ($self) = shift;
     return ($self->matching);
 }
+
+sub getCampoSubcampoJoined{
+    my ($self) = shift;
+    my ($campo,$subcampo) = @_;
+
+    my $marc = $self->getRegistroMARCOriginal;
+
+    my $detalle_completo = $self->ref_importacion->esquema->getDetalleByCampoSubcampo($campo,$subcampo);
+
+    my $join='';
+    foreach my $detalle (@$detalle_completo){
+        my $aux = $marc->subfield($detalle->getCampoOrigen,$detalle->getSubcampoOrigen);
+        if ($aux){
+            if ($join){$join.=" ";}
+                $join.=$aux;
+            }
+     }
+
+    return ($join);
+}
+
+sub getTitulo{
+    my ($self) = shift;
+    return ($self->getCampoSubcampoJoined('245','a'));
+}
+
+sub getAutor{
+    my ($self) = shift;
+    return ($self->getCampoSubcampoJoined('100','a'));
+}

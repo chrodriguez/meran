@@ -105,34 +105,30 @@ sub obtenerCamposSubcamposDeRegistros{
     my ($self)      = shift;
     my ($params)    = @_;
 
-    my @detalleCamposSubcampos=();
+    my %detalleCamposSubcampos=();
 
     foreach my $registro ($self->registros){
 
-        my $marc_record = $registro->getMarcRecord();
+        my $marc_record = $registro->getRegistroMARCOriginal();
 
         foreach my $field ($marc_record->fields) {
-            my $campo                       = $field->tag;
+            my $campo = $field->tag;
             if(! $field->is_control_field){
                 #proceso todos los subcampos del campo
                 foreach my $subfield ($field->subfields()) {
-                    my %detalle;
-                    $detalle{'campo'}      = $campo;
-                    my $subcampo = $subfield->[0];
-                    $detalle{'subcampo'}   = $subcampo;
-                    push (@detalleCamposSubcampos,%detalle);
+                     my $subcampo = $subfield->[0];
+                    $detalleCamposSubcampos{$campo}{$subcampo} = 1;
+                    #$self->debug("CAMPO ".$campo." SUBCAMPO".$subcampo);
                 }
             }
             else{
-                    my %detalle;
-                    $detalle{'campo'}      = $campo;
-                    $detalle{'subcampo'}   = '';
-                    push (@detalleCamposSubcampos,%detalle);
+                    $detalleCamposSubcampos{$campo}{''} = 1;
+                    #$self->debug("CAMPO CONTROL ".$campo);
                 }
         }
     }
 
-    return(\@detalleCamposSubcampos);
+    return(\%detalleCamposSubcampos);
 }
 
 #----------------------------------- FIN - FUNCIONES DEL MODELO -------------------------------------------

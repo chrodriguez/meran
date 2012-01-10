@@ -14,13 +14,13 @@
                 <thead>
                     <tr class="titulo_tabla_resultado">
                         <th>
-                            [% "Id" | i18n %]
+                            [% "T&iacute;itulo" | i18n %]
+                        </th>
+                        <th>
+                            [% "Autor" | i18n %]
                         </th>
                         <th>
                             [% "Tipo" | i18n %]
-                        </th>
-                        <th>
-                            [% "Estado" | i18n %]
                         </th>
                         <th>
                             [% "Encontrado" | i18n %]
@@ -39,10 +39,10 @@
                 <tr  align="center">
 
                       <td align="left">
-                          [% detalle_importacion.getId %]
+                          [% detalle_importacion.getTitulo %]
                       </td>
                       <td align="left">
-                           [% detalle_importacion.getTipo %]
+                           [% detalle_importacion.getAutor %]
                       </td>
                       <td align="left">
                            [% detalle_importacion.getEstado %]

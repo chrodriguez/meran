@@ -69,13 +69,19 @@ sub guardarNuevaImportacion {
 
     #Si el esquema es nuevo hay que llenarlo con los datos de los registros cargados
     if($nuevo_esquema){
-       #Llenar nuevo esquema
-        #my $detalle_esquema = $Io_importacion->obtenerCamposSubcamposDeRegistros();
-        #foreach my $detalle (@$detalle_esquema){
-          #my $nuevo_esquema_detalle          = C4::Modelo::IoImportacionIsoEsquemaDetalle->new(db=>$db);
-          #$detalle_esquema->{'id_importacion_esquema'}=$nuevo_esquema->getId;
-          #$nuevo_esquema_detalle->agregar($detalle_esquema);
-            #}
+       #Armar nuevo esquema (hash de hashes)
+        my $detalle_esquema = $Io_importacion->obtenerCamposSubcamposDeRegistros();
+
+        foreach my $campo ( keys %$detalle_esquema) {
+            foreach my $subcampo ( keys %{$detalle_esquema->{$campo}}) {
+                my $nuevo_esquema_detalle          = C4::Modelo::IoImportacionIsoEsquemaDetalle->new(db=>$db);
+                my %detalle=();
+                $detalle{'campo'}=$campo;
+                $detalle{'subcampo'}=$subcampo;
+                $detalle{'id_importacion_esquema'}=$nuevo_esquema->getId;
+                $nuevo_esquema_detalle->agregar(\%detalle);
+            }
+        }
     }
 
     $db->commit;

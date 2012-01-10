@@ -75,3 +75,17 @@ sub getDescripcion{
     my ($self)  = shift;
     return $self->descripcion;
 }
+
+
+sub getDetalleByCampoSubcampo{
+    my ($self)  = shift;
+    my ($campo,$subcampo) = @_;
+    my @detalle_completo;
+    foreach my $detalle ($self->detalle){
+
+        if (($detalle->getCampoDestino eq $campo)&&($detalle->getSubcampoDestino eq $subcampo)) {
+            push (@detalle_completo, $detalle);
+        }
+    }
+    return \@detalle_completo;
+}
