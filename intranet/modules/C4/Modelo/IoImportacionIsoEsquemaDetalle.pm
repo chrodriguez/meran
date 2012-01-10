@@ -17,6 +17,8 @@ __PACKAGE__->meta->setup(
         subcampo_destino            => { type => 'character',   overflow => 'truncate', length => 1,    },
         nivel                       => { type => 'integer',     overflow => 'truncate', length => 2,   },
         ignorar                     => { type => 'integer',     overflow => 'truncate', length => 2,   not_null => 1, default => 0},
+        orden                       => { type => 'integer',     overflow => 'truncate', length => 2,   },
+        separador                   => { type => 'varchar',   overflow => 'truncate', length => 32,    },
 
 
     ],
@@ -34,7 +36,7 @@ __PACKAGE__->meta->setup(
     ],
 
     primary_key_columns => [ 'id' ],
-    unique_key          => ['id_importacion_esquema','campo_origen','subcampo_origen','campo_destino','subcampo_destino']
+    unique_key          => ['id_importacion_esquema','campo_origen','subcampo_origen','campo_destino','subcampo_destino','orden']
 );
 
 #----------------------------------- FUNCIONES DEL MODELO ------------------------------------------------
@@ -149,3 +151,24 @@ sub setIgnorarFront{
     $self->ignorar(C4::AR::Utilidades::translateYesNo_toNumber($value));
 }
 
+sub getOrden{
+    my ($self)  = shift;
+    return $self->orden;
+}
+
+sub setOrden{
+    my ($self)  = shift;
+    my ($orden) = @_;
+    $self->orden($orden);
+}
+
+sub getSeparador{
+    my ($self)  = shift;
+    return $self->separador;
+}
+
+sub setSeparador{
+    my ($self)  = shift;
+    my ($separador) = @_;
+    $self->separador($separador);
+}
