@@ -363,8 +363,6 @@ sub addEsquema{
     $esquema->setDescripcion($descripcion);
     $esquema->save();
 
-    C4::AR::ImportacionIsoMARC::addCampo($esquema->getId);
-
     return $esquema;
 }
 
