@@ -2,10 +2,10 @@
 
 <fieldset>
 <legend><strong>[% 'Agregar campo Marc para el nivel' | i18n %] [% nivel %]:</strong></legend>
-    
+
 <ul>
     <li class="sub_item">
-        <label for="campoX">[% 'Seleccion' | i18n %]:</label> 
+        <label for="campoX">[% 'Seleccion' | i18n %]:</label>
         [% selectCampoX %]
     </li>
     <li class="sub_item">
@@ -26,11 +26,11 @@
         <label for="obligatorio">[% 'Obligatorio?' | i18n %]</label>
         <input type=radio id="obligatorio_si" name="obligatorio" value="1">[% 'S&iacute;' | i18n %]
         <input type=radio id="obligatorio_no" name="obligatorio" value="0" checked>[% 'No' | i18n %]<BR>
-    </li> 
+    </li>
     <li class="sub_item">
-        <label for="liblibrarian">[% 'Vista en Intranet' | i18n %]:</label> 
+        <label for="liblibrarian">[% 'Vista en Intranet' | i18n %]:</label>
         <input id="liblibrarian" type="text" value="" size="90">
-    </li> 
+    </li>
     <li class="sub_item">
         <label for="tipoInput">[% 'Tipo de entrada' | i18n %]:</label>
         [% comboComponentes %]
@@ -60,10 +60,10 @@
             <select name="camposSelect" id="camposSelect"></select>
         </li>
         <li class="sub_item">
-		    <label for="camposRef">[% 'Campos' | i18n %]:</label> 
+            <label for="camposRef">[% 'Campos' | i18n %]:</label>
             <select name="camposRef" id="camposRef"></select>
         </li>
-    
+
         <p>[% 'Ejemplo' | i18n %]: [% ejemplo %]</p>
         <p>[% 'NOTA: En Campos borras los campos que no desea ingresar y en el separador ingresar un caracter que no sea una letra ni un numero' | i18n %]</p>
 
@@ -85,7 +85,7 @@
                                                             boton   => "boton_buscar",
                                                             onClick => "cancelarEstructuraCatalogacion();",
                                                             title   => "[% 'Cancelar Campo' | i18n %]",
-                                                            width => "auto",    
+                                                            width => "auto",
                                                             alternClass => "botonCentrado",
                                 ) ;
     [% END %]

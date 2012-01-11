@@ -129,3 +129,44 @@ C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 
 }
+elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS_ESQUEMA_ORIGEN"){
+        my ($user, $session, $flags)= checkauth(    $input,
+                                                  $authnotrequired,
+                                                  {   ui => 'ANY',
+                                                      tipo_documento => 'ANY',
+                                                      accion => 'CONSULTA',
+                                                      entorno => 'datos_nivel1'},
+                                                  'intranet'
+                                      );
+
+      my $campoX            = $obj->{'campoX'};
+      my $id_esquema        = $obj->{'id_esquema'};
+      my ($campos_array)    = C4::AR::ImportacionIsoMARC::getCamposXFromEsquemaOrigenLike($id_esquema,$campoX);
+      my $info              = C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
+      my $infoOperacionJSON = $info;
+
+      C4::AR::Auth::print_header($session);
+      print $infoOperacionJSON;
+    }
+
+    elsif($tipoAccion eq "GENERAR_ARREGLO_SUBCAMPOS_ESQUEMA_ORIGEN"){
+        my ($user, $session, $flags)= checkauth(    $input,
+                                                  $authnotrequired,
+                                                  {   ui => 'ANY',
+                                                      tipo_documento => 'ANY',
+                                                      accion => 'CONSULTA',
+                                                      entorno => 'datos_nivel1'},
+                                                  'intranet'
+                                      );
+      my $campo             = $obj->{'campo'};
+      my $id_esquema        = $obj->{'id_esquema'};
+
+      my ($campos_array)    = C4::AR::ImportacionIsoMARC::getSubCamposFromEsquemaOrigenLike($id_esquema,$campo);
+
+      my $info              = C4::AR::Utilidades::arrayObjectsToJSONString($campos_array);
+
+      my $infoOperacionJSON = $info;
+
+      C4::AR::Auth::print_header($session);
+      print $infoOperacionJSON;
+    }

@@ -522,6 +522,42 @@ sub editarEsquema{
 
 }
 
+sub getCamposXFromEsquemaOrigenLike {
+      my ($id_esquema,$campoX) = @_;
+
+    use C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager;
+
+    my @filtros;
+    push(@filtros, (id_importacion_esquema => {eq =>$id_esquema}));
+    push(@filtros, (campo_origen => { like => $campoX.'%'}) );
+
+    my $db_campos_MARC = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
+                                                                                        query => \@filtros,
+                                                                                        sort_by => ('campo_origen'),
+                                                                                        select   => [ 'campo_origen'],
+                                                                                        group_by => [ 'campo_origen'],
+                                                                       );
+    return($db_campos_MARC);
+}
+
+
+sub getSubCamposFromEsquemaOrigenLike {
+      my ($id_esquema,$campo) = @_;
+    use C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager;
+
+    my @filtros;
+    push(@filtros, (id_importacion_esquema => {eq =>$id_esquema}));
+    push(@filtros, (campo_origen => { eq => $campo}) );
+
+    my $db_subcampos_MARC = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
+                                                                                        query => \@filtros,
+                                                                                        sort_by => ('subcampo_origen'),
+                                                                                        select   => [ 'subcampo_origen'],
+                                                                                        group_by => [ 'subcampo_origen'],
+                                                                       );
+    return($db_subcampos_MARC);
+}
+
 END { }       # module clean-up code here (global destructor)
 
 1;

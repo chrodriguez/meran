@@ -2826,6 +2826,7 @@ sub generarComboCampoX{
 
     my $onReadyFunction = shift;
     my $defaultCampoX = shift;
+    my $idCombo = shift;
     #Filtro de numero de campo
     my %camposX;
     my @values;
@@ -2840,9 +2841,9 @@ sub generarComboCampoX{
         $camposX{$i}=$option;
     }
     my $defaulCX= $defaultCampoX || 'Elegir';
-
-    my $selectCampoX=CGI::scrolling_list(  -name      => 'campoX',
-                    -id    => 'campoX',
+    my $idCX= $idCombo || 'campoX';
+    my $selectCampoX=CGI::scrolling_list(  -name      => $idCX,
+                    -id    => $idCX,
                     -values    => \@values,
                     -labels    => \%camposX,
                     -defaults  => $defaulCX,
@@ -2894,44 +2895,44 @@ sub generarComboEsquemasImportacion {
     my %select_esquemasImportacion_Labels;
     my $result = C4::Modelo::IoImportacionIsoEsquema::Manager->get_io_importacion_iso_esquema();
     my $result_count = C4::Modelo::IoImportacionIsoEsquema::Manager->get_io_importacion_iso_esquema_count();
-    
+
     if ($result_count){
-	    foreach my $esquemaImportacion (@$result) {
-	            push (@select_esquemasImportacion_Values, $esquemaImportacion->id);
-	            $select_esquemasImportacion_Labels{$esquemaImportacion->id} = $esquemaImportacion->nombre;
-	    }
-	
-	
-	    my %options_hash;
-	
-	    if ( $params->{'onChange'} ){
-	         $options_hash{'onChange'}  = $params->{'onChange'};
-	    }
-	
-	    if ( $params->{'onFocus'} ){
-	      $options_hash{'onFocus'}      = $params->{'onFocus'};
-	    }
-	
-	    if ( $params->{'class'} ){
-	         $options_hash{'class'}     = $params->{'class'};
-	    }
-	
-	    if ( $params->{'onBlur'} ){
-	      $options_hash{'onBlur'}       = $params->{'onBlur'};
-	    }
-	
-	    $options_hash{'name'}           = $params->{'name'}||'esquemaImportacion';
-	    $options_hash{'id'}             = $params->{'id'}||'esquemaImportacion';
-	    $options_hash{'size'}           =  $params->{'size'}||1;
-	    $options_hash{'multiple'}       = $params->{'multiple'}||0;
-	
-	    $options_hash{'values'}         = \@select_esquemasImportacion_Values;
-	    $options_hash{'labels'}         = \%select_esquemasImportacion_Labels;
-	
-	    my $CGISelectEsquemaImportacion                   = CGI::scrolling_list(\%options_hash);
-	    return $CGISelectEsquemaImportacion;
+        foreach my $esquemaImportacion (@$result) {
+                push (@select_esquemasImportacion_Values, $esquemaImportacion->id);
+                $select_esquemasImportacion_Labels{$esquemaImportacion->id} = $esquemaImportacion->nombre;
+        }
+
+
+        my %options_hash;
+
+        if ( $params->{'onChange'} ){
+             $options_hash{'onChange'}  = $params->{'onChange'};
+        }
+
+        if ( $params->{'onFocus'} ){
+          $options_hash{'onFocus'}      = $params->{'onFocus'};
+        }
+
+        if ( $params->{'class'} ){
+             $options_hash{'class'}     = $params->{'class'};
+        }
+
+        if ( $params->{'onBlur'} ){
+          $options_hash{'onBlur'}       = $params->{'onBlur'};
+        }
+
+        $options_hash{'name'}           = $params->{'name'}||'esquemaImportacion';
+        $options_hash{'id'}             = $params->{'id'}||'esquemaImportacion';
+        $options_hash{'size'}           =  $params->{'size'}||1;
+        $options_hash{'multiple'}       = $params->{'multiple'}||0;
+
+        $options_hash{'values'}         = \@select_esquemasImportacion_Values;
+        $options_hash{'labels'}         = \%select_esquemasImportacion_Labels;
+
+        my $CGISelectEsquemaImportacion                   = CGI::scrolling_list(\%options_hash);
+        return $CGISelectEsquemaImportacion;
     }else{
-    	return 0;
+        return 0;
     }
 }
 
@@ -4533,18 +4534,18 @@ sub modificarCampoGlobalmente {
 }
 
 sub translateYesNo_fromNumber{
-	my ($value) = @_;
-	
-	if ($value == 1){
-		return C4::AR::Filtros::i18n('Si');
-	}else{
+    my ($value) = @_;
+
+    if ($value == 1){
+        return C4::AR::Filtros::i18n('Si');
+    }else{
         return C4::AR::Filtros::i18n('No');
-	}
+    }
 }
 
 sub translateYesNo_toNumber{
     my ($value) = @_;
-    
+
     if ($value eq C4::AR::Filtros::i18n('Si')){
         return 1;
     }else{
