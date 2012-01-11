@@ -133,6 +133,17 @@ sub obtenerCamposSubcamposDeRegistros{
     return(\%detalleCamposSubcampos);
 }
 
+
+sub setearIdentificacionRelacionRegistros{
+    my ($self)      = shift;
+    foreach my $registro ($self->registros){
+        $registro->setIdentificacion($registro->getIdentificacionFromRecord);
+        $registro->setRelacion($registro->getRelacionFromRecord);
+        $registro->save();
+    }
+}
+
+
 #----------------------------------- FIN - FUNCIONES DEL MODELO -------------------------------------------
 
 
