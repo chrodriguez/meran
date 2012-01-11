@@ -115,16 +115,26 @@ var loaderPath= "";
 		                                   }); 
 	                                    </script>
 	                                    <td>
-			                                [% PERL %]
-			                                    print C4::AR::Filtros::to_Icon(  
-			                                                                        boton   => "icon_cancelar",
-			                                                                        onClick => "eliminarEsquemaRow('[% detalle.id %]');",
-			                                                                        title   => "[% 'Eliminar' | i18n %]",
-			                                                                        alternClass => "botonCentradoTabla",
-			                                                                        elem => 'span',
-			                                                                        style => 'float: left;',
-			                                            ) ;
-			                                [% END %]
+                                            [% PERL %]
+                                                print C4::AR::Filtros::to_Icon(  
+                                                                                    boton   => "icon_cancelar",
+                                                                                    onClick => "eliminarEsquemaRow('[% detalle.id %]');",
+                                                                                    title   => "[% 'Eliminar' | i18n %]",
+                                                                                    alternClass => "botonCentradoTabla",
+                                                                                    elem => 'span',
+                                                                                    style => 'float: left;',
+                                                        ) ;
+                                            [% END %]
+                                            [% PERL %]
+                                                print C4::AR::Filtros::to_Icon(  
+                                                                                    boton   => "icon_agregar",
+                                                                                    onClick => "agregarCampoAEsquema('[% detalle.id %]');",
+                                                                                    title   => "[% 'Agregar campo' | i18n %]",
+                                                                                    alternClass => "botonCentradoTabla",
+                                                                                    elem => 'span',
+                                                                                    style => 'float: left;',
+                                                        ) ;
+                                            [% END %]
 			                            </td>
 	                                    
 		                              </tr>
