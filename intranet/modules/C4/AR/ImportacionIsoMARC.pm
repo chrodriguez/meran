@@ -558,6 +558,56 @@ sub getSubCamposFromEsquemaOrigenLike {
     return($db_subcampos_MARC);
 }
 
+
+
+sub procesarRelacionRegistroEjemplares {
+      my ($params) = @_;
+
+     my $msg_object= C4::AR::Mensajes::create();
+     my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($params->{'id'});
+
+     eval {
+
+          my $id_importacion             = $params->{'id'};
+          my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($id_importacion);
+
+          my $campo_relacion = $params->{'campo_relacion'};
+          my $subcampo_relacion = $params->{'subcampo_relacion'};
+          my $preambulo_relacion = $params->{'preambulo_relacion'};
+          if (($campo_relacion )&&($campo_relacion ne '-1')) {
+              $importacion->setCampoRelacion($campo_relacion,$subcampo_relacion,$preambulo_relacion);
+              }
+
+          my $campo_identificacion = $params->{'campo_identificacion'};
+          my $subcampo_identificacion = $params->{'subcampo_identificacion'};
+          if (($campo_identificacion)&&($campo_identificacion ne '-1')) {
+              $importacion->setCampoIdentificacion($campo_identificacion,$subcampo_identificacion);
+          }
+
+          $importacion->save();
+
+        #ACA HAY QUE PROCESAR LA RELACION
+        # 1 - Buscar todas las identificaciones
+        # 2 - Buscar todas las relaciones registro/ejemplar
+
+        if(!$msg_object->{'error'}){
+         $msg_object->{'error'}= 0;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IO09', 'params' => []} ) ;
+        }
+     };
+
+     if ($@){
+         #Se loguea error de Base de Datos
+         &C4::AR::Mensajes::printErrorDB($@, 'B457','INTRA');
+         #Se setea error para el usuario
+         $msg_object->{'error'}= 1;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IO10', 'params' => []} ) ;
+     }
+
+     return ($msg_object);
+
+}
+
 END { }       # module clean-up code here (global destructor)
 
 1;

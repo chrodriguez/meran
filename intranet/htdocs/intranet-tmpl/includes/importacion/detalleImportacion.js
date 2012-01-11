@@ -158,3 +158,34 @@ function enable_disableSelectsOrigen(id){
          $("#subcampo"+id).hide();
       }
 }
+
+function procesarRelacionRegistroEjemplares(id){
+    if ($("#campo1").val() != -1){
+        objAHDetalle=new AjaxHelper(updateRelacionRegistroEjemplares);
+        objAHDetalle.url               = URL_PREFIX+'/herramientas/importacion/importarDB.pl';
+        objAHDetalle.debug             = true;
+        objAHDetalle.showOverlay       = true;
+        objAHDetalle.tipoAccion        = "RELACION_REGISTRO_EJEMPLARES";
+        objAHDetalle.id = id;
+
+
+        objAHDetalle.campo_identificacion = $("#campo1").val();
+        if ( $("#subcampo2").val()){
+            objAHDetalle.subcampo_identificacion = $("#subcampo1").val();
+        }
+
+        objAHDetalle.campo_relacion = $("#campo2").val();
+        if ( $("#subcampo2").val()){
+        objAHDetalle.subcampo_relacion = $("#subcampo2").val();
+        }
+        objAHDetalle.preambulo_relacion = $("#preambulo").val();
+
+        objAHDetalle.sendToServer();
+    }
+
+}
+
+function updateRelacionRegistroEjemplares(responseText){
+        var Messages=JSONstring.toObject(responseText);
+        setMessages(Messages);
+}
