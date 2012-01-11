@@ -1184,7 +1184,8 @@ function procesarInfoJson(marc_object_array, id_padre){
         strComp = strComp + "</div>"; //end div buttonContainerHorizontal
 
         //genero el header para el campo q contiene todos los subcampos
-        strComp = strComp + "<div id='marc_group" + id_temp + "'><li id='trigger_" + id_temp + "' class='MARCHeader click trigger trigger_" + id_temp + "'>";
+//         strComp = strComp + "<div id='marc_group" + id_temp + "'><li id='trigger_" + id_temp + "' class='MARCHeader click trigger trigger_" + id_temp + "'>";
+        strComp = strComp + "<div id='marc_group" + id_temp + "'><li class='MARCHeader'>";
         strComp = strComp + "<div class='MARCHeader_info'>";
 
         //header LEFT
@@ -1200,7 +1201,7 @@ function procesarInfoJson(marc_object_array, id_padre){
         strComp = strComp + "</div>";
 
         //header CENTER
-        strComp = strComp + "<div style='width:80%;float:left'>";
+        strComp = strComp + "<div id='trigger_" + id_temp + "' class='MARCHeader click trigger trigger_" + id_temp + "' style='width:80%;float:left'>";
         strComp = strComp + "<a class='fancy_extern_link' href='http://www.loc.gov/marc/bibliographic/bd" + campo_marc_conf_obj.getCampo() + ".html' TARGET='_blank'>" + campo_marc_conf_obj.getCampo() + "</a> - " + campo_marc_conf_obj.getNombre();
 
         if(campo_marc_conf_obj.getRepetible() == "1"){  

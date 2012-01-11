@@ -899,22 +899,23 @@ sub getDatoFromReferencia{
 
                         my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
                         my $obj_generico    = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
-#                         C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => campo tabla:                 ".$estructura->infoReferencia->getCampos);
-#                         C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => id tabla:                    ".$dato);  
-                                                                                        #campo_tabla,                   id_tabla
+                        C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => campo tabla:                 ".$estructura->infoReferencia->getCampos);
+                        C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => id tabla:                    ".$dato);  
+#                                                                                         campo_tabla,                id_tabla
                         $valor_referencia   = $obj_generico->obtenerValorCampo($estructura->infoReferencia->getCampos, $dato);
 
-#                         C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Tabla:               ".$obj_generico->getTableName);
-#                         C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Modulo:              ".$obj_generico->toString);
-#                         C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Valor referencia:    ".$valor_referencia);
+                        C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Tabla:               ".$obj_generico->getTableName);
+                        C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Modulo:              ".$obj_generico->toString);
+                        C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Valor referencia:    ".$valor_referencia);
 
                         $dato = $valor_referencia;
 
                     };
 
                     if ($@){
-                        &C4::AR::Mensajes::printErrorDB($@, 'B451',"INTRA");
-#                         C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia, ERROR en campo, subcampo => ".$campo.", ".$subcampo);
+                        C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia, ERROR en campo, subcampo, dato => ".$campo.", ".$subcampo." => ".$dato);
+                        C4::AR::Mensajes::printErrorDB($@, 'B451',"INTRA");
+#                         $dato = "error en configuracion del catalogo";  
                     }
                 } else {
 #                     C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => ERROR EN REFERENCIA campo, subcampo => ".$campo.", ".$subcampo);
@@ -1092,9 +1093,9 @@ sub _setDatos_de_estructura {
 #             C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia = -1 => el autor no existe se agrega ".$hash_ref_result{'dato'});
         }
 
-#         C4::AR::Debug::debug("_setDatos_de_estructura => ======== AUTOCOMPLETE ======== ");
-#         C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$hash_ref_result{'datoReferencia'});
-#         C4::AR::Debug::debug("_setDatos_de_estructura => referenciaTabla: ".$hash_ref_result{'referenciaTabla'});
+        C4::AR::Debug::debug("_setDatos_de_estructura => ======== AUTOCOMPLETE ======== ");
+        C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$hash_ref_result{'datoReferencia'});
+        C4::AR::Debug::debug("_setDatos_de_estructura => referenciaTabla: ".$hash_ref_result{'referenciaTabla'});
     }else{
         #cualquier otra componete
 #         C4::AR::Debug::debug("_setDatos_de_estructura => ======== ".$cat->getTipo." ======== ");
@@ -1194,12 +1195,14 @@ sub getEstructuraYDatosDeNivel{
                                                                                 $params->{'nivel'}
                                                         );
 
-#                     C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel => campo => ".$nivel_info_marc_array->[$i]->{'campo'});
-#                     C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel => subcampo => ".$subcampo->{'subcampo'});
-#                     C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel => dato => ".$subcampo->{'dato'});
+                    C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel => campo => ".$nivel_info_marc_array->[$i]->{'campo'});
+                    C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel => subcampo => ".$subcampo->{'subcampo'});
+                    C4::AR::Debug::debug("Catalocagion => getEstructuraYDatosDeNivel => dato => ".$subcampo->{'dato'});
 
             
                     if($cat_estruct_array){
+#                         C4::AR::Debug::debug("Catalogacion::getEstructuraYDatosDeNivel() --> EL CAMPO ".$campo." SUBCAMPO ".$subcampo->{'subcampo'}." NIVEL ".$params->{'nivel'}." TIPO_EJEMPLAR ".$tipo_ejemplar." TIENE ESTRUCTURA CONFIGURADA");   
+#                         C4::AR::Debug::debug("Catalogacion::getEstructuraYDatosDeNivel() --> datoReferencia ".$subcampo->{'datoReferencia'});   
 
                         my ($campos_base_array_ref) = C4::AR::EstructuraCatalogacionBase::getEstructuraBaseFromCampo($campo);
 
