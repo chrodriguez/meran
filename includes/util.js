@@ -251,7 +251,8 @@ function toggle_component(id_componente, container_class) {
 	});
 
 	$("#" + id_componente).click(function() {
-		$(this).next("." + container_class).slideToggle("fast");
+// 		$(this).next("." + container_class).slideToggle("fast");
+        $("#" + container_class).slideToggle("fast");
 	});
 }
 
