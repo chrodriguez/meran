@@ -2965,3 +2965,6 @@ button.thoughtbot:active {
     color: #222;
 }
 
+.highlightedRow{
+    background-color: red !important;
+}

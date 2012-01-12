@@ -21,8 +21,6 @@ function updateNuevoEsquemaImportacion(responseText){
 
 function showEsquemaImportacion(){
 
-	this.showEsquemaImportacion_func = showEsquemaImportacion_func;
-	
 	worker.onmessage = function(event) {showEsquemaImportacion_func(); };
 	worker.postMessage();
 }
@@ -158,8 +156,12 @@ function updateAgregarCampoEsquema(responseText){
     }  
 }
 
-
 function editarOrdenEsquema(id_esquema){
+	worker.onmessage = function(event) {editarOrdenEsquema_func(id_esquema); };
+	worker.postMessage();
+}
+
+function editarOrdenEsquema_func(id_esquema){
     objAH               = new AjaxHelper(updateEditarOrdenEsquema);
     objAH.debug         = true;
     objAH.showOverlay   = true;  
@@ -168,12 +170,18 @@ function editarOrdenEsquema(id_esquema){
     objAH.id_esquema	= id_esquema;
     
     esquema_orden_actual = id_esquema;
+    
     objAH.sendToServer();
 }
 
 function updateEditarOrdenEsquema(responseText){
     $("#tablaResultSubCampos").html(responseText);
-    zebra("tabla_datos_sub_campos");  
+    zebra("tabla_datos_sub_campos");
+    scrollTo('tablaResultSubCampos');
+    $('tr').removeClass('highlightedRow');
+    $('#esquema_'+esquema_orden_actual).addClass('highlightedRow');
+    
+    
 }
 
 function actualizarOrdenSubCampos(object_array){
