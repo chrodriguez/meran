@@ -1,3 +1,7 @@
+
+var esquema_orden_actual = 0;
+var esquema_padre		 = 0;
+
 function nuevoEsquemaImportacion(title){
 
 	objAH               = new AjaxHelper(updateNuevoEsquemaImportacion);
@@ -20,9 +24,11 @@ function showEsquemaImportacion(){
     objAH.url           = URL_PREFIX+'/herramientas/importacion/esquemas_importacionDB.pl';
     objAH.cache         = false;
     objAH.showOverlay   = true;  
-    objAH.esquema = $('#esquemaImportacion').val();
-    objAH.accion            = "OBTENER_ESQUEMA";
+    objAH.esquema	 	= $('#esquemaImportacion').val();
+    objAH.accion        = "OBTENER_ESQUEMA";
 
+    esquema_padre		= $('#esquemaImportacion').val();
+    
     objAH.sendToServer();	
 }
 
@@ -61,14 +67,27 @@ function eliminarEsquemaRow(id_esquema){
     
 }
 
+function eliminarEsquemaRowOne(id_esquema){
+
+    objAH=new AjaxHelper(updateSortableSC);
+    objAH.url           = URL_PREFIX+'/herramientas/importacion/esquemas_importacionDB.pl';
+    objAH.cache 		= false;
+    objAH.showOverlay   = true;
+    objAH.accion		="ELIMINAR_CAMPO_ONE";
+    objAH.id_row 		= id_esquema;
+    
+    objAH.sendToServer();
+    
+}
+
 function eliminarEsquema(id_esquema){
 
     objAH=new AjaxHelper(updateAgregarCampo);
     objAH.url           = URL_PREFIX+'/herramientas/importacion/esquemas_importacionDB.pl';
-    objAH.cache = false;
-    objAH.showOverlay       = true;
-    objAH.accion="ELIMINAR_ESQUEMA";
-    objAH.id_esquema = id_esquema;
+    objAH.cache 		= false;
+    objAH.showOverlay   = true;
+    objAH.accion		="ELIMINAR_ESQUEMA";
+    objAH.id_esquema 	= id_esquema;
     
     objAH.sendToServer();
     
@@ -125,6 +144,7 @@ function updateAgregarCampoEsquema(responseText){
     setMessages(Messages);
     if (! (hayError(Messages) ) ){
         $("#add_campo_esquema_result").html("");
+        updateSortableSC();
     }  
 }
 
@@ -136,6 +156,8 @@ function editarOrdenEsquema(id_esquema){
     objAH.url           = URL_PREFIX+'/herramientas/importacion/esquemas_importacionDB.pl';
     objAH.accion    	= 'MOSTRAR_TABLA_ORDEN_ESQUEMA';
     objAH.id_esquema	= id_esquema;
+    
+    esquema_orden_actual = id_esquema;
     objAH.sendToServer();
 }
 
@@ -144,5 +166,18 @@ function updateEditarOrdenEsquema(responseText){
     zebra("tabla_datos_sub_campos");  
 }
 
+function actualizarOrdenSubCampos(object_array){
+    objAH               = new AjaxHelper(updateSortableSC);
+    objAH.debug         = true;
+    objAH.url           = URL_PREFIX+'/herramientas/importacion/esquemas_importacionDB.pl';
+    objAH.showOverlay   = true;
+    objAH.accion    	= "ACTUALIZAR_ORDEN_ESQUEMA";
+    objAH.newOrderArray = object_array;
+    objAH.id_esquema	= esquema_padre;
+    objAH.sendToServer(); 
+}
 
+function updateSortableSC(){
+	editarOrdenEsquema(esquema_orden_actual);    
+}
 

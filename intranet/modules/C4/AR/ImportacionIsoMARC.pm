@@ -459,6 +459,7 @@ sub addCampo{
         $esquema->setSubcampoDestino($value);
         $esquema->setNivel(1);
         $esquema->setIgnorar(0);
+        $esquema->setNextOrden();
 
         $esquema->save();
     };
@@ -488,8 +489,46 @@ sub getOrdenEsquema{
                                                                                                     sort_by => ['orden ASC'],
     );
     
-    return ($detalle_esquema);
+    return ($detalle_esquema,$detalle);
 	
+}
+
+sub updateNewOrder{
+    my ($params) = @_;
+    my $msg_object      = C4::AR::Mensajes::create();
+    
+    # ordeno los ids que llegan desordenados primero, para obtener un clon de los ids, y ahora usarlo de indice para el orden
+    # esto es porque no todos los campos de cat_visualizacion_intra se muestran en el template a ordenar ( ej 8 y 9 )
+    # entonces no puedo usar un simple indice como id.
+    my $newOrderArray = $params->{'newOrderArray'};
+    
+    my @array = sort { $a <=> $b } @$newOrderArray;
+    
+    my $i = 0;
+    # hay que hacer update de todos los campos porque si viene un nuevo orden y es justo ordenado (igual que @array : 1,2,3...)
+    # tambien hay que actualizarlo
+    foreach my $campo (@$newOrderArray){
+    
+	    my @filtros;
+	    push(@filtros,(id => { eq => $campo }));
+	    
+	    push(@filtros,(id_importacion_esquema => { eq => $params->{'id_esquema'} }));
+	    
+        my $config_temp   = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
+                                                                    query   => \@filtros, 
+                               );
+                               
+        my $configuracion = $config_temp->[0];
+        
+        $configuracion->setOrden($i+1);
+        $configuracion->save();
+    
+        $i++;
+    }
+    
+    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'M000', 'params' => []} ) ;
+
+    return ($msg_object);
 }
 
 sub addCampoAEsquema{
@@ -579,10 +618,10 @@ sub delEsquema{
     my @filtros_esquema;
     push(@filtros_esquema,(id => {eq =>$id_esquema}));
 
-  #  eval{
+    eval{
         C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->delete_io_importacion_iso_esquema_detalle(where => \@filtros_detalle);
         C4::Modelo::IoImportacionIsoEsquema::Manager->delete_io_importacion_iso_esquema(where => \@filtros_esquema);
-   # };
+    };
 
     if ($@){
         return 'IO06';
@@ -596,19 +635,42 @@ sub delCampo{
 
     my $row = getRow($id);
 
-    my $id_esquema;
+    my @filtros;
+    my $id_esquema = $row->esquema->getId;
+    
+    push( @filtros, ( id_importacion_esquema => { eq => $id_esquema }, ) );
+    push( @filtros, ( campo_origen => { eq => $row->getCampoOrigen }, ) );
+    push( @filtros, ( subcampo_origen => { eq => $row->getSubcampoOrigen }, ) );
+        
+    eval{
+        C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->delete_io_importacion_iso_esquema_detalle(where => \@filtros);    	
+    };
 
-    if ($row){
-        eval{
-            $id_esquema = $row->esquema->id;
-            $row->delete();
-        };
+    if ($@){
+       return (0,'IO07');
+    }else{
+        return ($id_esquema,'IO03');
+    }
+}
 
-        if ($@){
-           return (0,'IO07');
-        }else{
-            return ($id_esquema,'IO03');
-        }
+sub delCampoOne{
+    my ($id) = @_;
+
+    my $row = getRow($id);
+
+    my @filtros;
+    my $id_esquema = $row->esquema->getId;
+    
+    push( @filtros, ( id => { eq => $id }, ) );
+        
+    eval{
+        C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->delete_io_importacion_iso_esquema_detalle(where => \@filtros);     
+    };
+
+    if ($@){
+       return (0,'IO07');
+    }else{
+        return ($id_esquema,'IO03');
     }
 }
 
@@ -653,6 +715,7 @@ sub editarValorEsquema{
         case "scd"  {$object->setSubcampoDestino($value); $value = $object->getSubcampoDestino()}
         case "n"    {$object->setNivel($value); $value = $object->getNivel()}
         case "ign"  {$object->setIgnorarFront($value); $value = $object->getIgnorarFront();}
+        case "sep"  {$object->setSeparador($value); $value = $object->getSeparador();}
     }
     $object->save();
 

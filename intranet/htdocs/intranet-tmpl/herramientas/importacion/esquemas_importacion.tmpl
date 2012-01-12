@@ -4,7 +4,9 @@
 
 [% INCLUDE  'AutocompleteHelper.inc'  %] 
 
+<script type="text/javascript" src="/includes/jquery/jquery-ui-1.8.13.sortable.min.js"></script>
 <script type="text/javascript" src="/intranet-tmpl/herramientas/esquemas_importacion.js"></script>
+
 <script>
 	function nuevoEsquemaImportacion_dialog(){
 	    jPrompt("[% 'Nombre del esquema' | i18n %]:", "[% 'Esquema' | i18n %] X", "[% 'Nuevo esquema de importacion' | i18n %]", function(title) {

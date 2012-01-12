@@ -78,7 +78,7 @@ if (!$editing){
         $t_params->{'esquema_title'} = $esquema->getNombre;
         $t_params->{'id_esquema'} = $id_esquema;
         
-    }   elsif($tipoAccion eq "ELIMINAR_CAMPO"){
+    }elsif($tipoAccion eq "ELIMINAR_CAMPO"){
               ($template, $session, $t_params)  = get_template_and_user({  
                             template_name => "herramientas/importacion/detalle_esquema.tmpl",
                             query => $input,
@@ -95,6 +95,34 @@ if (!$editing){
         my $id_row = $obj->{'id_row'} || 0;
         
         my ($id_esquema,$msg_code) = C4::AR::ImportacionIsoMARC::delCampo($id_row);
+        
+        if ($msg_code){
+            $t_params->{'table_error_message'} = C4::AR::Mensajes::getMensaje($msg_code,'INTRA');
+        }
+        my ($detalle_esquema,$esquema)  = C4::AR::ImportacionIsoMARC::getEsquema($id_esquema);
+        
+        $t_params->{'esquema'} = $detalle_esquema;
+        $t_params->{'info_esquema'} = $esquema;
+        $t_params->{'esquema_title'} = $esquema->getNombre;
+        $t_params->{'id_esquema'} = $id_esquema;
+        
+    }elsif($tipoAccion eq "ELIMINAR_CAMPO_ONE"){
+              ($template, $session, $t_params)  = get_template_and_user({  
+                            template_name => "herramientas/importacion/detalle_esquema.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => {  ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'MODIFICACION', 
+                                                entorno => 'permisos', 
+                                                tipo_permiso => 'general'},
+                            debug => 1,
+                        });
+    
+        my $id_row = $obj->{'id_row'} || 0;
+        
+        my ($id_esquema,$msg_code) = C4::AR::ImportacionIsoMARC::delCampoOne($id_row);
         
         if ($msg_code){
             $t_params->{'table_error_message'} = C4::AR::Mensajes::getMensaje($msg_code,'INTRA');
@@ -210,12 +238,31 @@ if (!$editing){
                             debug => 1,
                         });
 
-            my ($esquema) = C4::AR::ImportacionIsoMARC::getOrdenEsquema($obj);
-            
-            $t_params->{'esquema'} = $esquema;              
+            eval{
+	            my ($esquema,$row) = C4::AR::ImportacionIsoMARC::getOrdenEsquema($obj);
+	            
+	            $t_params->{'esquema'} = $esquema;
+	            $t_params->{'esquema_padre'} = $row;
+            };
+                           
 
-    }
-    
+    }elsif($tipoAccion eq "ACTUALIZAR_ORDEN_ESQUEMA"){
+              ($template, $session, $t_params)  = get_template_and_user({  
+                            template_name => "herramientas/importacion/orden_esquema_campos.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => {  ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'MODIFICACION', 
+                                                entorno => 'permisos', 
+                                                tipo_permiso => 'general'},
+                            debug => 1,
+                        });
+                        
+        my $info = C4::AR::ImportacionIsoMARC::updateNewOrder($obj);                        
+
+    }    
 }else{
 	
 	my $valor;

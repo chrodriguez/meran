@@ -17,7 +17,7 @@ __PACKAGE__->meta->setup(
         subcampo_destino            => { type => 'character',   overflow => 'truncate', length => 1,    },
         nivel                       => { type => 'integer',     overflow => 'truncate', length => 2,   },
         ignorar                     => { type => 'integer',     overflow => 'truncate', length => 2,   not_null => 1, default => 0},
-        orden                       => { type => 'integer',     overflow => 'truncate', length => 2,   },
+        orden                       => { type => 'integer',     overflow => 'truncate', length => 2, default => 0  },
         separador                   => { type => 'varchar',   overflow => 'truncate', length => 32,    },
 
 
@@ -153,7 +153,7 @@ sub setIgnorarFront{
 
 sub getOrden{
     my ($self)  = shift;
-    return $self->orden;
+    return ($self->orden);
 }
 
 sub setOrden{
@@ -171,4 +171,26 @@ sub setSeparador{
     my ($self)  = shift;
     my ($separador) = @_;
     $self->separador($separador);
+}
+
+sub setNextOrden{
+    my ($self)  = shift;
+    
+    use C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager;
+    
+    my @filtros;
+
+    push(@filtros,(id_importacion_esquema => {eq => $self->getIdImportacionEsquema}));
+    push(@filtros,(campo_origen => {eq => $self->getCampoOrigen}));
+    push(@filtros,(subcampo_origen => {eq => $self->getSubcampoOrigen}));
+
+    my $detalle_esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
+                                                                                                        query => \@filtros,
+                                                                                                        sort_by => ['orden DESC'],
+    );
+    
+    my $new_orden = $detalle_esquema->[0]->getOrden();
+
+    $self->setOrden(++$new_orden);    
+	
 }
