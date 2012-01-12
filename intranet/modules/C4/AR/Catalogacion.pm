@@ -1258,6 +1258,8 @@ sub getEstructuraYDatosDeNivel{
   
                         push(@result, $hash_result);
                     }
+
+                    @result = sort { $a->{subcampo} cmp $b->{subcampo} } @result;
                 }# END foreach my $s (@{$m->{'subcampos_array'}})
         
                 my %hash_campos;
@@ -1978,7 +1980,7 @@ sub setear_campos_en_blanco {
 =cut
 sub getEstructuraCatalogacionFromDBCompleta{
     my ($nivel, $itemType) = @_;
-C4::AR::Debug::debug("getEstructuraCatalogacionFromDBCompleta => itemType => ".$itemType);
+# C4::AR::Debug::debug("getEstructuraCatalogacionFromDBCompleta => itemType => ".$itemType);
 
     my $catalogaciones_array_ref = C4::Modelo::CatEstructuraCatalogacion::Manager->get_cat_estructura_catalogacion(   
                                                                 query => [ 
@@ -1991,7 +1993,7 @@ C4::AR::Debug::debug("getEstructuraCatalogacionFromDBCompleta => itemType => ".$
 
                                                                         ],
 
-                                                                sort_by => ( 'campo' ),
+                                                                sort_by => ( 'campo, subcampo' ),
                                                              );
 
 
