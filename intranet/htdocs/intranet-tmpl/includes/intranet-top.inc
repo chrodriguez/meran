@@ -32,8 +32,10 @@
 	<script type="text/javascript" src="/includes/shiftSelectTr.js"></script>
 	<script type="text/javascript" src="/includes/jquery/jquery.expander.js"></script>
 	<script type="text/javascript" src="/includes/modernizr.js"></script>
+	<script type="text/javascript" src="/includes/workers.js"></script>
 	
 	<script type="text/javascript">
+		var worker = new Worker('/includes/workers.js');
 
 		function enableAlert(){
 	        $(window).bind('beforeunload', function(){ 

@@ -103,6 +103,7 @@ var loaderPath= "";
 		                                    $('.editable_select').editable('[% url_prefix %]/herramientas/importacion/esquemas_importacionDB.pl', { 
 		                                        data   : " {'[% 'No' | i18n %]':'[% 'No' | i18n %]','[% 'Si' | i18n %]':'[% 'Si' | i18n %]','selected':'[% 'detalle.getIgnorarFront' %]'}",
 		                                        type      : 'select',
+		                                        submit    : 'OK',
 		                                        style   : 'display: inline',
 		                                        submitdata : {token: "[% token %]", edit: '1'},
 		                                        indicator : loaderPath,

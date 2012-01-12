@@ -2,6 +2,7 @@
 var esquema_orden_actual = 0;
 var esquema_padre		 = 0;
 
+
 function nuevoEsquemaImportacion(title){
 
 	objAH               = new AjaxHelper(updateNuevoEsquemaImportacion);
@@ -19,6 +20,15 @@ function updateNuevoEsquemaImportacion(responseText){
 }
 
 function showEsquemaImportacion(){
+
+	this.showEsquemaImportacion_func = showEsquemaImportacion_func;
+	
+	worker.onmessage = function(event) {showEsquemaImportacion_func(); };
+	worker.postMessage();
+}
+
+
+function showEsquemaImportacion_func(){
 	
     objAH               = new AjaxHelper(updateShowEsquemaImportacion);
     objAH.url           = URL_PREFIX+'/herramientas/importacion/esquemas_importacionDB.pl';

@@ -141,14 +141,26 @@ sub getIgnorarFront{
 sub setIgnorar{
     my ($self)  = shift;
     my ($value) = @_;
+
     $self->ignorar($value);
 }
 
 sub setIgnorarFront{
     my ($self)  = shift;
     my ($value) = @_;
+    use C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager;
 
-    $self->ignorar(C4::AR::Utilidades::translateYesNo_toNumber($value));
+    $value = C4::AR::Utilidades::translateYesNo_toNumber($value);
+    my @filtros;
+
+    push(@filtros,(id_importacion_esquema => {eq => $self->getIdImportacionEsquema}));
+    push(@filtros,(campo_origen => {eq => $self->getCampoOrigen}));
+    push(@filtros,(subcampo_origen => {eq => $self->getSubcampoOrigen}));
+
+    my $detalle_esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->update_io_importacion_iso_esquema_detalle(
+                                                                                                        where => \@filtros,
+                                                                                                        set => { ignorar => $value },
+    );    
 }
 
 sub getOrden{

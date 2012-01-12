@@ -459,7 +459,6 @@ sub addCampo{
         $esquema->setSubcampoDestino($value);
         $esquema->setNivel(1);
         $esquema->setIgnorar(0);
-        $esquema->setNextOrden();
 
         $esquema->save();
     };
@@ -512,8 +511,6 @@ sub updateNewOrder{
 	    my @filtros;
 	    push(@filtros,(id => { eq => $campo }));
 	    
-	    push(@filtros,(id_importacion_esquema => { eq => $params->{'id_esquema'} }));
-	    
         my $config_temp   = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
                                                                     query   => \@filtros, 
                                );
@@ -550,7 +547,8 @@ sub addCampoAEsquema{
         $new_esquema->setSeparador($params->{'separador'});
         $new_esquema->setNivel(1);
         $new_esquema->setIgnorar(0);
-
+        $new_esquema->setNextOrden();
+        
         $new_esquema->save();
         
         $msg_object->{'error'}= 0;
@@ -714,7 +712,7 @@ sub editarValorEsquema{
         case "cd"   {$object->setCampoDestino($value); $value = $object->getCampoDestino()}
         case "scd"  {$object->setSubcampoDestino($value); $value = $object->getSubcampoDestino()}
         case "n"    {$object->setNivel($value); $value = $object->getNivel()}
-        case "ign"  {$object->setIgnorarFront($value); $value = $object->getIgnorarFront();}
+        case "ign"  {$object->setIgnorarFront($value); $object->load(); $value = $object->getIgnorarFront();}
         case "sep"  {$object->setSeparador($value); $value = $object->getSeparador();}
     }
     $object->save();

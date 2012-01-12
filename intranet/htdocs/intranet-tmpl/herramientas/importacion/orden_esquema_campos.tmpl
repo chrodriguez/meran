@@ -1,0 +1,63 @@
+<script type="text/javascript" language="javascript">
+    $("#enable_sort_subcampo").change(function(){
+        if($(this).is(':checked')){
+            $("#sortable_subcampo").sortable({
+            stop: function(event, ui) {
+                actualizarOrdenSubCampos($('#sortable_subcampo').sortable('toArray'));
+            }
+        });
+        }
+    });
+</script>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function() {
+        makeToggle('divTablaAgregarVisualizacion','trigger',null,false);
+        onEnter('lib_librarian',agregarVisualizacion);
+        loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
+        $('.editable').editable('[% url_prefix %]/herramientas/importacion/esquemas_importacionDB.pl', { 
+            type      : 'text',
+            tooltip   : EDITABLE_MSG,
+            placeholder: EDITABLE_MSG,
+            style   : 'display: inline',
+            submitdata : {token: "[% token %]", edit: '1'},
+            indicator : loaderPath,
+
+      });
+
+    });
+</script>
+<fieldset>
+    <legend class="titulo_legend trigger click"><strong>[% "Campos destino para " | i18n %][% esquema_padre.getCampoOrigen %]$<span style="text-transform: lowercase;">[% esquema_padre.getSubcampoOrigen %]</span></strong></legend>
+      <table id="tabla_datos_visualizacion_intra" class="tabla_datos_sub_campos" cellspacing=0 border="0" cellpadding=0 style="width:100%;">
+            <thead>
+                <tr class="titulo_tabla_resultado">
+                    <td>[% "Campo Destino" | i18n %]</td>
+                    <td>[% "Subcampo Destino" | i18n %]</td>
+                    <td>[% "Separador" | i18n %]</td>
+                    <td>[% "Elminar" | i18n %]</td>
+                </tr>
+            </thead>
+            <tbody id="sortable_subcampo">
+                <input type="checkbox" name="enable_sort_subcampo" id="enable_sort_subcampo" /> Seleccione para Ordenar
+                [% FOREACH detalle IN esquema %]
+                    <tr id="[% detalle.id %]" align="center">
+                        <td>[% detalle.getCampoDestino %]</td>
+                        <td>[% detalle.getSubcampoDestino %]</td>
+                        <td class="editable" id="[% detalle.id %]___sep">[% detalle.getSeparador %]</td>
+                        <td align="center">
+		                        [% PERL %]
+		                            print C4::AR::Filtros::to_Icon(  
+		                                                                boton   => "icon_cancelar",
+		                                                                onClick => "eliminarEsquemaRowOne('[% detalle.id %]');",
+		                                                                title   => "[% 'Eliminar' | i18n %]",
+		                                                                alternClass => "botonCentradoTabla",
+		                                                                elem => 'span',
+		                                                                style => 'float: left;',
+		                                    ) ;
+		                        [% END %]                        
+                        </td>
+                    </tr>
+                [% END %]
+            </tbody>
+        </table>
+</fieldset>
