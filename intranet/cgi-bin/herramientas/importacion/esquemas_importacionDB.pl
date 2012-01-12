@@ -12,6 +12,8 @@ my $editing         = $input->param('value') || $input->param('id');
 my $editing_esquema = $input->param('edit_esquema') || 0;
 my ($template, $session, $t_params);
 
+my $show_template = 1;
+
 if (!$editing){
 	$obj=C4::AR::Utilidades::from_json_ISO($obj);
 	my $tipoAccion  = $obj->{'accion'}||""; 
@@ -43,7 +45,7 @@ if (!$editing){
         }
         $t_params->{'id_esquema'} = $id_esquema;
 	}
-    elsif($tipoAccion eq "AGREGAR_CAMPO"){
+    elsif($tipoAccion eq "AGREGAR_CAMPO"){ #DELETE WHEN AGREGAR_CAMPO_A_ESQUEMA completed
               ($template, $session, $t_params)  = get_template_and_user({  
                             template_name => "herramientas/importacion/detalle_esquema.tmpl",
                             query => $input,
@@ -156,7 +158,64 @@ if (!$editing){
             $t_params->{'table_error_message_esquema'} = C4::AR::Mensajes::getMensaje($msg_code,'INTRA');
         }
 
+    }elsif($tipoAccion eq "MOSTRAR_AGREGAR_CAMPO_A_ESQUEMA"){
+              ($template, $session, $t_params)  = get_template_and_user({  
+                            template_name => "herramientas/importacion/add_campo_esquema.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => {  ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'MODIFICACION', 
+                                                entorno => 'permisos', 
+                                                tipo_permiso => 'general'},
+                            debug => 1,
+                        });
+            $t_params->{'selectCampoX'} = C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');                       
+            $t_params->{'id_esquema'}   = $obj->{'esquema'};                       
+
+    }elsif($tipoAccion eq "AGREGAR_CAMPO_A_ESQUEMA"){
+              ($template, $session, $t_params)  = get_template_and_user({  
+                            template_name => "herramientas/importacion/add_campo_esquema.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => {  ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'MODIFICACION', 
+                                                entorno => 'permisos', 
+                                                tipo_permiso => 'general'},
+                            debug => 1,
+                        });
+
+            my ($Message_arrayref) = C4::AR::ImportacionIsoMARC::addCampoAEsquema($obj);     
+
+            $show_template  = 0;
+            my $infoOperacionJSON=to_json $Message_arrayref;
+
+            C4::AR::Auth::print_header($session);
+            print $infoOperacionJSON;
+                             
+    }elsif($tipoAccion eq "MOSTRAR_TABLA_ORDEN_ESQUEMA"){
+              ($template, $session, $t_params)  = get_template_and_user({  
+                            template_name => "herramientas/importacion/orden_esquema_campos.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => {  ui => 'ANY', 
+                                                tipo_documento => 'ANY', 
+                                                accion => 'MODIFICACION', 
+                                                entorno => 'permisos', 
+                                                tipo_permiso => 'general'},
+                            debug => 1,
+                        });
+
+            my ($esquema) = C4::AR::ImportacionIsoMARC::getOrdenEsquema($obj);
+            
+            $t_params->{'esquema'} = $esquema;              
+
     }
+    
 }else{
 	
 	my $valor;
@@ -205,4 +264,6 @@ if (!$editing){
     $t_params->{'value'} = $valor;
 }
 
-C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+if ($show_template){
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+}

@@ -1,6 +1,6 @@
 [% USE HTML %]
 <script src="/includes/jquery/jquery.jeditable.js"></script>
-
+<script src="/intranet-tmpl/includes/visualizacionINTRA-min.js"></script>
 <script type="text/javascript">
 var loaderPath= "";
       $(document).ready(function() {
@@ -10,8 +10,6 @@ var loaderPath= "";
         loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
         $('.editable').editable('[% url_prefix %]/herramientas/importacion/esquemas_importacionDB.pl', { 
               type      : 'text',
-              cancel    : CANCELAR,
-              submit    : OK,
               tooltip   : EDITABLE_MSG,
               placeholder: EDITABLE_MSG,
               style   : 'display: inline',
@@ -43,7 +41,6 @@ var loaderPath= "";
 	                                <script>
 	                                    $('.editable_esquema').editable('[% url_prefix %]/herramientas/importacion/esquemas_importacionDB.pl', { 
 	                                        type      : 'text',
-	                                        submit    : OK,
 	                                        style   : 'display: inline',
 	                                        submitdata : {token: "[% token %]", edit: '1', edit_esquema: '1'},
 	                                        indicator : loaderPath,
@@ -53,7 +50,6 @@ var loaderPath= "";
 	                                <script>
 	                                    $('.editable_esquema').editable('[% url_prefix %]/herramientas/importacion/esquemas_importacionDB.pl', { 
 	                                        type      : 'text',
-	                                        submit    : OK,
 	                                        style   : 'display: inline',
 	                                        submitdata : {token: "[% token %]", edit: '1', edit_esquema: '1'},
 	                                        indicator : loaderPath,
@@ -100,14 +96,13 @@ var loaderPath= "";
 										<tr>
 	                                    <td class="editable" id="[% detalle.id %]___co">[% detalle.getCampoOrigen %]</td>
                                         <td class="editable" id="[% detalle.id %]___sco">[% detalle.getSubcampoOrigen %]</td>
-                                        <td class="click click_destino" id="[% detalle.id %]___destino">[% detalle.getDestino %]</td>
+                                        <td class="" id="[% detalle.id %]___destino">[% detalle.getDestino %]</td>
 
 	                                    <td class="editable_hover editable_select" id="[% detalle.id %]___ign">[% detalle.getIgnorarFront %]</td>
 	                                    <script>
 		                                    $('.editable_select').editable('[% url_prefix %]/herramientas/importacion/esquemas_importacionDB.pl', { 
 		                                        data   : " {'[% 'No' | i18n %]':'[% 'No' | i18n %]','[% 'Si' | i18n %]':'[% 'Si' | i18n %]','selected':'[% 'detalle.getIgnorarFront' %]'}",
 		                                        type      : 'select',
-		                                        submit    : OK,
 		                                        style   : 'display: inline',
 		                                        submitdata : {token: "[% token %]", edit: '1'},
 		                                        indicator : loaderPath,
@@ -125,6 +120,14 @@ var loaderPath= "";
                                                                                     style => 'float: left;',
                                                         ) ;
                                             [% END %]
+				                            [% PERL %]
+				                                print C4::AR::Filtros::to_Icon( text    => "[% 'Editar Orden' | i18n %]",
+				                                                                onClick => "editarOrdenEsquema('[% detalle.id %]')",
+				                                                                boton   => "icon_edicion",
+				                                                                title   => "[% 'Editar Orden' | i18n %]",
+				                                                                
+				                                                            );
+				                            [% END %]
                                             [% PERL %]
                                                 print C4::AR::Filtros::to_Icon(  
                                                                                     boton   => "icon_agregar",
@@ -152,5 +155,7 @@ var loaderPath= "";
 	        <div class="mensajes_informacion" style="clear:both;"> [% table_error_message %] </div>
 	    </fieldset>
 	</div>
+    <div id="add_campo_esquema_result"></div>
+    <div id="tablaResultSubCampos"></div>
 [% END %]
 

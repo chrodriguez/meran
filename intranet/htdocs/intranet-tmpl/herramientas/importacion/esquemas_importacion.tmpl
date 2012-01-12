@@ -1,5 +1,9 @@
 [% INCLUDE "intranet-top.inc" %]
 
+[% INCLUDE  'WindowHelper.inc'  %]
+
+[% INCLUDE  'AutocompleteHelper.inc'  %] 
+
 <script type="text/javascript" src="/intranet-tmpl/herramientas/esquemas_importacion.js"></script>
 <script>
 	function nuevoEsquemaImportacion_dialog(){
@@ -16,12 +20,10 @@
 
 <div class="titulos" >[% "Administraci&oacute;n de esquemas de importaci&oacute;n" | i18n %]</div>
 
-[% INCLUDE  'AutocompleteHelper.inc'  %]
-
 <div class="">
     <br><br>
     <fieldset>
-        <legend class="titulo_legend">[% "Selecci&oacute; de esquema de importaci&oacute;n" | i18n %]</legend>
+        <legend class="titulo_legend">[% "Selecci&oacute;n de esquema de importaci&oacute;n" | i18n %]</legend>
         <div class="permisos_selector">
             <ul>
                 [% IF combo_esquemas_importacion %]

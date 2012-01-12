@@ -489,6 +489,8 @@ my %mensajesINTRA = (
     'IO06' => 'El esquema no se ha podido eliminar.',
     'IO07' => 'El esquema solicitado no existe',
     'IO08' => 'Ocurrio un error mientras se intentaban guardar la  nueva importaci&oacute;n',
+    'IO015' => 'El campo/subcampo ya existe en el esquema',
+    'IO016' => 'El Campo "*?*" y Subcampo "*?*" se han agregado correctamente al esquema "*?*"',
 
     #Mensajes Upload Files
     'UP00' => 'Solo se permiten archivos del tipo ("*?*") [Fallo de extension]',

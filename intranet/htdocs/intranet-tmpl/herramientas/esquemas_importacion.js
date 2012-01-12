@@ -73,3 +73,76 @@ function eliminarEsquema(id_esquema){
     objAH.sendToServer();
     
 }
+
+/* FUNCIONES PARA AGREGAR UN NUEVO MAPPEO DE CAMPOS */
+
+
+function agregarCampoAEsquema(id_esquema){
+    objAH=new AjaxHelper(updateAgregarCampoAEsquema);
+    objAH.url           = URL_PREFIX+'/herramientas/importacion/esquemas_importacionDB.pl';
+    objAH.cache = false;
+    objAH.showOverlay       = true;
+    objAH.accion="MOSTRAR_AGREGAR_CAMPO_A_ESQUEMA";
+    objAH.esquema = id_esquema;
+    
+    objAH.sendToServer();
+}
+
+
+function updateAgregarCampoAEsquema(responseText){
+
+    $('#add_campo_esquema_result').html(responseText);
+    scrollTo('add_campo_esquema_result');
+}
+
+function agregarCampoEsquema(id_esquema){
+
+    objAH               = new AjaxHelper(updateAgregarCampoEsquema);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.url           = URL_PREFIX+'/herramientas/importacion/esquemas_importacionDB.pl';
+    objAH.accion    	= 'AGREGAR_CAMPO_A_ESQUEMA';
+    var campo           = $.trim($("#campo").val());
+    var subcampo        = $.trim($("#subcampo").val());
+    var separador    	= $.trim($("#separador").val());
+    if ( (campo) && (subcampo) ){
+        objAH.campo         = campo;
+        objAH.subcampo      = subcampo;
+        objAH.separador  	= separador;
+        objAH.id_esquema 	= id_esquema;
+        
+        objAH.sendToServer();
+    }else{
+        jAlert(SELECCIONE_VISTA_INTRA,CATALOGO_ALERT_TITLE);
+    }
+    
+}
+
+function updateAgregarCampoEsquema(responseText){
+
+    var Messages        = JSONstring.toObject(responseText);
+    
+    setMessages(Messages);
+    if (! (hayError(Messages) ) ){
+        $("#add_campo_esquema_result").html("");
+    }  
+}
+
+
+function editarOrdenEsquema(id_esquema){
+    objAH               = new AjaxHelper(updateEditarOrdenEsquema);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;  
+    objAH.url           = URL_PREFIX+'/herramientas/importacion/esquemas_importacionDB.pl';
+    objAH.accion    	= 'MOSTRAR_TABLA_ORDEN_ESQUEMA';
+    objAH.id_esquema	= id_esquema;
+    objAH.sendToServer();
+}
+
+function updateEditarOrdenEsquema(responseText){
+    $("#tablaResultSubCampos").html(responseText);
+    zebra("tabla_datos_sub_campos");  
+}
+
+
+

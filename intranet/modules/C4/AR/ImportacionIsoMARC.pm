@@ -346,7 +346,10 @@ sub getEsquema{
 
     push(@filtros,(id_importacion_esquema => {eq =>$id_esquema}));
 
-    my $detalle_esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(query => \@filtros,);
+    my $detalle_esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
+                                                                                                        query => \@filtros,
+                                                                                                        group_by => ['campo_origen,subcampo_origen'],
+    );
 
     my $esquema = getEsquemaObject($id_esquema);
 
@@ -394,6 +397,65 @@ sub addCampo{
 
     return ($esquema,$error_code);
 }
+
+sub getOrdenEsquema{
+
+    my ($params) = @_;
+
+    use C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager;
+    my @filtros;
+
+    my $detalle = getRow($params->{'id_esquema'});
+    
+    push(@filtros,(id_importacion_esquema => { eq => $detalle->esquema->getId }));
+    push(@filtros,(campo_origen           => { eq => $detalle->getCampoOrigen}));
+    push(@filtros,(subcampo_origen => { eq => $detalle->getSubcampoOrigen }));
+
+    my $detalle_esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
+                                                                                                    query => \@filtros,
+                                                                                                    sort_by => ['orden ASC'],
+    );
+    
+    return ($detalle_esquema);
+	
+}
+
+sub addCampoAEsquema{
+    my ($params) = @_;
+
+    use C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager;
+    my @filtros;
+
+    my $esquema = getRow($params->{'id_esquema'});
+    my $msg_object = C4::AR::Mensajes::create();
+
+    eval{
+    	my $new_esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle->new();
+        $new_esquema->setIdImportacionEsquema($esquema->getIdImportacionEsquema);
+        $new_esquema->setCampoOrigen($esquema->getCampoOrigen);
+        $new_esquema->setSubcampoOrigen($esquema->getSubcampoOrigen);
+        $new_esquema->setCampoDestino($params->{'campo'});
+        $new_esquema->setSubcampoDestino($params->{'subcampo'});
+        $new_esquema->setSeparador($params->{'separador'});
+        $new_esquema->setNivel(1);
+        $new_esquema->setIgnorar(0);
+
+        $new_esquema->save();
+        
+        $msg_object->{'error'}= 0;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IO016', 'params' => [$params->{'campo'},$params->{'subcampo'},$esquema->esquema->getNombre]} ) ;
+        
+    };
+
+    if ($@){
+		$msg_object->{'error'}= 1;
+		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IO015', 'params' => []} ) ;
+    }
+
+    return ($msg_object);
+	
+}
+
 
 sub getRow{
     my ($id) = @_;
@@ -478,6 +540,30 @@ sub delCampo{
     }
 }
 
+sub actualizarMappeo{
+    my ($row,$new_value,$action) = @_;
+    
+    my @filtros;
+    push( @filtros, ( id_importacion_esquema => { eq => $row->esquema->getId }, ) );
+    push( @filtros, ( campo_origen => { eq => $row->getCampoOrigen }, ) );
+    push( @filtros, ( subcampo_origen => { eq => $row->getSubcampoOrigen }, ) );
+        
+    if ($action eq "co"){
+	    C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->update_io_importacion_iso_esquema_detalle(
+	                                                                                         where => \@filtros,
+	                                                                                         set   => { campo_origen => $new_value },
+	                                                                                         
+	    );
+    }else{
+        C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->update_io_importacion_iso_esquema_detalle(
+                                                                                             where => \@filtros,
+                                                                                             set   => { subcampo_origen => $new_value },
+                                                                                             
+        );
+    	
+    }	
+}
+
 sub editarValorEsquema{
     my ($row_id,$value) = @_;
 
@@ -489,8 +575,8 @@ sub editarValorEsquema{
     my $object = getRow(@values[0]);
 
     switch (@values[1]) {
-        case "co"  {$object->setCampoOrigen($value); $value = $object->getCampoOrigen()}
-        case "sco"  {$object->setSubcampoOrigen($value); $value = $object->getSubcampoOrigen()}
+        case "co"  {actualizarMappeo($object,$value,@values[1]); $object->load(); $value = $object->getCampoOrigen()}
+        case "sco"  {actualizarMappeo($object,$value,@values[1]); $object->load(); $value = $object->getSubcampoOrigen()}
         case "cd"   {$object->setCampoDestino($value); $value = $object->getCampoDestino()}
         case "scd"  {$object->setSubcampoDestino($value); $value = $object->getSubcampoDestino()}
         case "n"    {$object->setNivel($value); $value = $object->getNivel()}
