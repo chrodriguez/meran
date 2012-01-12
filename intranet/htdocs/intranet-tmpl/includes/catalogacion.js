@@ -196,6 +196,17 @@ function _getCampoMARC_conf_ById(id){
     return 0;
 }
 
+function _getIndexCampoMARC_conf_ById(id){
+    for(var i=0;i<MARC_OBJECT_ARRAY.length;i++){
+        if(MARC_OBJECT_ARRAY[i].getIdCompCliente() == id){
+
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 // Array Remove - By John Resig (MIT Licensed)
 function removeFromArray (array, from, to) {
   var rest = array.slice((to || from) + 1 || array.length);
@@ -1208,11 +1219,12 @@ function procesarInfoJson(marc_object_array, id_padre){
             //cierro div CENTER
             strComp = strComp + "</div>";
             //header RIGHT
-            strComp = strComp + "<div style='width:3%;float:right'>";
+            strComp = strComp + "<div style='width:4%;float:right'>";
             campo_marc_conf_obj.setIdCompCliente("marc_group" + id_temp);
             strComp = strComp + crearBotonAgregarCampoRepetible(campo_marc_conf_obj, id_temp);
 //             NO ANDA VER ESTO
-//             strComp = strComp + crearBotonEliminarCampoRepetible(campo_marc_conf_obj, id_temp);  
+            
+            strComp = strComp + crearBotonEliminarCampoRepetible(campo_marc_conf_obj);  
             strComp = strComp + "</div>";
         } else {
             //cierro div CENTER si no es repetible
@@ -1607,13 +1619,13 @@ function cloneCampo(marc_group){
 }
 
 function remove(id){
-    var subcampo_temp   = _getSubCampoMARC_conf_ById(id);       //recupero el subcampo segun el id pasado por parametro
-    var _from           = subcampo_temp.posSubCampo;            //posicion del subcampo en el arreglo de subcampos
-    var _to             = subcampo_temp.posSubCampo;
+    var campo_temp      = _getIndexCampoMARC_conf_ById(id);       //recupero el campo segun el id pasado por parametro
+    var _from           = campo_temp;            //posicion del campo en el arreglo de subcampos
+    var _to             = campo_temp;
 
-    $('#LI'+id).remove();                                       //elimino la componete del cliente
+    $('#'+id).remove();                                       //elimino la componete del cliente
 
-    removeFromArray(MARC_OBJECT_ARRAY[subcampo_temp.posCampo].getSubCamposArray(), _from, _to); //elimino la informacion del subcampo
+    removeFromArray(MARC_OBJECT_ARRAY, _from, _to); //elimino la informacion del campo
 }
 
 function removeSubcampo(id){
@@ -1658,11 +1670,10 @@ function crearBotonAgregarCampoRepetible(obj, id_padre){
     }
 }
 
-// TODO parece q no se va a usar mas
-function crearBotonEliminarRepetible(obj){
+function crearBotonEliminarCampoRepetible(obj){
 
     if(obj.getRepetible() == '1'){
-        return "<div onclick=remove('"+ obj.getIdCompCliente() +"') class='horizontal icon_sacar' title='Eliminar'/>";
+        return "<div onclick=remove('"+ obj.getIdCompCliente() +"') class='horizontal icon_borrar' title='Eliminar campo repetible'/>";
     }else{  
         return "";
     }

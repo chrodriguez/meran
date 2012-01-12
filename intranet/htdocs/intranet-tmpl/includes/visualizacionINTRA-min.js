@@ -6,8 +6,7 @@ function updateEleccionDeNivel(responseText){$("#result").html(responseText);zeb
 function eleccionCampoX(){if($("#campoX").val()!=-1){objAH=new AjaxHelper(updateEleccionCampoX);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";objAH.campoX=$('#campoX').val();objAH.tipoAccion="GENERAR_ARREGLO_CAMPOS";objAH.sendToServer();}
 else
 enable_disableSelects();}
-function updateEleccionCampoX(responseText){var campos_array=JSONstring.toObject(responseText);$("#campo").html('')
-var options="<option value='-1'>Seleccionar CampoX</option>";for(x=0;x<campos_array.length;x++){CAMPOS_ARRAY[campos_array[x].campo]=$.trim(campos_array[x].liblibrarian);options+="<option value="+campos_array[x].campo+" >"+campos_array[x].campo+"</option>";}
+function updateEleccionCampoX(responseText){var campos_array=JSONstring.toObject(responseText);$("#campo").html('');var options="<option value='-1'>Seleccionar CampoX</option>";for(var x=0;x<campos_array.length;x++){CAMPOS_ARRAY[campos_array[x].campo]=$.trim(campos_array[x].liblibrarian);options+="<option value="+campos_array[x].campo+" >"+campos_array[x].campo+"</option>";}
 $("#campo").append(options);enable_disableSelects();}
 function eleccionCampo(){if($("#campo").val()!=-1){objAH=new AjaxHelper(updateEleccionCampo);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";objAH.campo=$('#campo').val();objAH.tipoAccion="GENERAR_ARREGLO_SUBCAMPOS";objAH.sendToServer();}
 else
