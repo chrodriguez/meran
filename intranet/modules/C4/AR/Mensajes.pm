@@ -489,6 +489,8 @@ my %mensajesINTRA = (
     'IO06' => 'El esquema no se ha podido eliminar.',
     'IO07' => 'El esquema solicitado no existe',
     'IO08' => 'Ocurrio un error mientras se intentaban guardar la  nueva importaci&oacute;n',
+    'IO09' => 'Relaci&oacute;n Registro/Ejemplares aplicada con &eacute;xito',
+    'IO10' => 'Ocurrio un error mientras se intentaban aplicar la relaci&oacute;n Registro/Ejemplares',
     'IO015' => 'El campo/subcampo ya existe en el esquema',
     'IO016' => 'El Campo "*?*" y Subcampo "*?*" se han agregado correctamente al esquema "*?*"',
 
@@ -559,6 +561,7 @@ my %mensajesINTRA = (
     'B454' => 'Error en funcion C4::AR::UploadFile::uploadImport',
     'B455' => 'Error en funcion C4::AR::UploadFile::guardarRegistrosNuevaImportacion',
     'B456' => 'Error en funcion C4::AR::UploadFile::guardarRegistrosNuevaImportacion',
+    'B457' => 'Error en funcion C4::AR::ImportacionIsoMARC::procesarRelacionRegistroEjemplares',
 );
 
 sub getMensaje {

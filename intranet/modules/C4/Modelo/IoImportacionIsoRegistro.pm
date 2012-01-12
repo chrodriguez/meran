@@ -16,6 +16,8 @@ __PACKAGE__->meta->setup(
         estado                         => { type => 'integer', overflow => 'truncate', length => 2},
         matching                       => { type => 'integer', overflow => 'truncate'},
         id_matching                    => { type => 'integer', overflow => 'truncate'},
+        identificacion                 => { type => 'varchar', overflow => 'truncate', length => 255},
+        relacion                       => { type => 'varchar', overflow => 'truncate', length => 255},
         id1                            => { type => 'integer', overflow => 'truncate'},
         id2                            => { type => 'integer', overflow => 'truncate'},
         id3                            => { type => 'integer', overflow => 'truncate'},
@@ -137,6 +139,11 @@ sub getCampoSubcampoJoined{
     return ($join);
 }
 
+sub getIdentificacion{
+    my ($self)   = shift;
+    return ($self->identificacion);
+}
+
 sub getTitulo{
     my ($self) = shift;
     return ($self->getCampoSubcampoJoined('245','a'));
@@ -145,4 +152,110 @@ sub getTitulo{
 sub getAutor{
     my ($self) = shift;
     return ($self->getCampoSubcampoJoined('100','a'));
+}
+
+
+sub setIdentificacion{
+    my ($self)   = shift;
+    my ($ident) = @_;
+    $self->identificacion($ident);
+}
+
+sub getIdentificacionFromRecord{
+    my ($self)   = shift;
+
+    my $identificacion='';
+    my $marc = $self->getRegistroMARCOriginal();
+
+    my $campo =$self->ref_importacion->getCampoFromCampoIdentificacion;
+    if ($campo){
+        my $field = $marc->field($campo);
+        if ($field){
+            if ($field->is_control_field()){
+                #Si es de control devuelvo el dato;
+                $identificacion = $field->data();
+                }
+            else{
+                #Si no es de control tiene subcampo
+                my $subcampo =$self->ref_importacion->getSubcampoFromCampoIdentificacion;
+                if ($subcampo){
+                    $identificacion = $field->subfield($subcampo);
+                    }
+            }
+        }
+    }
+
+    return $identificacion;
+}
+
+
+sub setRelacion{
+    my ($self)   = shift;
+    my ($rel) = @_;
+    $self->relacion($rel);
+}
+
+sub getRelacionFromRecord{
+    my ($self)   = shift;
+
+    my $relacion='';
+    my $marc = $self->getRegistroMARCOriginal();
+
+    my $campo =$self->ref_importacion->getCampoFromCampoRelacion;
+    if ($campo){
+        my $field = $marc->field($campo);
+        if ($field->is_control_field()){
+            #Si es de control devuelvo el dato;
+            $relacion = $field->data();
+            }
+        else{
+            #Si no es de control tiene subcampo
+            my $subcampo =$self->ref_importacion->getSubcampoFromCampoRelacion;
+            if ($subcampo){
+                $relacion = $field->subfield($subcampo);
+                }
+        }
+
+
+        if ($relacion){
+            #Para identificar si es un campo de realcion debe comenzar con este string
+            my $pre =$self->ref_importacion->getPreambuloFromCampoRelacion;
+            if($pre){
+                #todo a  minuscula
+                $relacion=lc($relacion);
+                $pre=lc($pre);
+                if($relacion =~ m/^$pre/){
+                    $relacion =~ s/^$pre//;
+                }
+                else{
+                    $relacion ='';
+                    }
+            }
+        }
+    }
+
+    return $relacion;
+}
+
+
+sub getRelacion{
+    my ($self)   = shift;
+    return ($self->relacion);
+}
+
+
+sub getCantidadDeEjemplares{
+     my ($self)   = shift;
+
+     my ($cantidad,$ejemplares) = C4::AR::ImportacionIsoMARC::getEjemplaresFromRegistroDeImportacionById($self->getId);
+
+    return $cantidad;
+}
+
+sub getEjemplares{
+     my ($self)   = shift;
+
+     my ($cantidad,$ejemplares) = C4::AR::ImportacionIsoMARC::getEjemplaresFromRegistroDeImportacionById($self->getId);
+
+    return $ejemplares;
 }

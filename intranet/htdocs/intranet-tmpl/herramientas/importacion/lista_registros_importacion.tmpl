@@ -20,13 +20,10 @@
                             [% "Autor" | i18n %]
                         </th>
                         <th>
-                            [% "Tipo" | i18n %]
+                            [% "Identificaci&oacute;n" | i18n %]
                         </th>
                         <th>
-                            [% "Encontrado" | i18n %]
-                        </th>
-                        <th>
-                            [% "Configuraci&oacute;n" | i18n %]
+                            [% "Cantidad de Ejemplares" | i18n %]
                         </th>
                         <th>
                             [% "Acciones" | i18n %]
@@ -45,13 +42,10 @@
                            [% detalle_importacion.getAutor %]
                       </td>
                       <td align="left">
-                           [% detalle_importacion.getEstado %]
+                           [% detalle_importacion.getIdentificacion %]
                       </td>
                       <td align="left">
-                           [% detalle_importacion.getMatching %]
-                      </td>
-                      <td align="left">
-
+                           [% detalle_importacion.getCantidadDeEjemplares %]
                       </td>
                       <!--  BOTONES ACCIONES (Editar, Borrar, Ver detalle) -->
                       <td align='left' width="9%" >

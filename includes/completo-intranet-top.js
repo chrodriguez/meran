@@ -1357,7 +1357,7 @@ if(ctrl[i].checked)
 return ctrl[i].value;}
 function highlight(classesArray,idKeywordsArray){for(x=0;x<idKeywordsArray.length;x++){stringArray=($('#'+idKeywordsArray[x]).val()).split(' ');for(y=0;y<stringArray.length;y++){if($.trim(stringArray[y]).length!=0){for(z=0;z<classesArray.length;z++){$('.'+classesArray[z]).highlight(stringArray[y]);}}}}}
 function toggle_ayuda_in_line(){$("#ayuda").click(function(){$("#ayuda_in_line").toggle("slow");});}
-function toggle_component(id_componente,container_class){$("#"+id_componente).toggle(function(){$(this).addClass("active");},function(){$(this).removeClass("active");});$("#"+id_componente).click(function(){$(this).next("."+container_class).slideToggle("fast");});}
+function toggle_component(id_componente,container_class){$("#"+id_componente).toggle(function(){$(this).addClass("active");},function(){$(this).removeClass("active");});$("#"+id_componente).click(function(){$("#"+container_class).slideToggle("fast");});}
 function esBrowser(browser){browser=browser.toLowerCase();ok=false;jQuery.each(jQuery.browser,function(i,val){if((val)&&(i==browser))
 ok=true;});return(ok);}
 function makeToggle(container_class,trigger,afterToggleFunction,hide){if(hide)

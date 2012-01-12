@@ -20,6 +20,8 @@ __PACKAGE__->meta->setup(
         estado                  => { type => 'character',   overflow => 'truncate', length => 1,    not_null => 1},
         fecha_upload            => { type => 'varchar',     overflow => 'truncate', not_null => 1},
         fecha_import            => { type => 'varchar',     overflow => 'truncate'},
+        campo_identificacion    => { type => 'varchar',     overflow => 'truncate', length => 255},
+        campo_relacion          => { type => 'varchar',     overflow => 'truncate', length => 255},
         cant_registros_n1       => { type => 'integer',     overflow => 'truncate', length => 11},
         cant_registros_n2       => { type => 'integer',     overflow => 'truncate', length => 11},
         cant_registros_n3       => { type => 'integer',     overflow => 'truncate', length => 11},
@@ -131,6 +133,17 @@ sub obtenerCamposSubcamposDeRegistros{
     return(\%detalleCamposSubcampos);
 }
 
+
+sub setearIdentificacionRelacionRegistros{
+    my ($self)      = shift;
+    foreach my $registro ($self->registros){
+        $registro->setIdentificacion($registro->getIdentificacionFromRecord);
+        $registro->setRelacion($registro->getRelacionFromRecord);
+        $registro->save();
+    }
+}
+
+
 #----------------------------------- FIN - FUNCIONES DEL MODELO -------------------------------------------
 
 
@@ -186,6 +199,42 @@ sub setFechaImport{
     my ($self)   = shift;
     my ($fecha) = @_;
     $self->fecha_import($fecha);
+}
+sub setCampoIdentificacion{
+    my ($self)   = shift;
+    my ($campo,$subcampo) = @_;
+    $self->campo_identificacion($campo."@".$subcampo);
+}
+
+sub getCampoFromCampoIdentificacion{
+    my ($self)   = shift;
+    return (split(/@/, $self->campo_identificacion()))[0];
+}
+
+sub getSubcampoFromCampoIdentificacion{
+    my ($self)   = shift;
+    return (split(/@/, $self->campo_identificacion()))[1];
+}
+
+sub setCampoRelacion{
+    my ($self)   = shift;
+    my ($campo,$subcampo,$pre) = @_;
+    $self->campo_relacion($campo."@".$subcampo."@".$pre);
+}
+
+sub getCampoFromCampoRelacion{
+    my ($self)   = shift;
+    return (split(/@/, $self->campo_relacion()))[0];
+}
+
+sub getSubcampoFromCampoRelacion{
+    my ($self)   = shift;
+    return (split(/@/, $self->campo_relacion()))[1];
+}
+
+sub getPreambuloFromCampoRelacion{
+    my ($self)   = shift;
+    return (split(/@/, $self->campo_relacion()))[2];
 }
 
 sub setCantRegistrosN1{

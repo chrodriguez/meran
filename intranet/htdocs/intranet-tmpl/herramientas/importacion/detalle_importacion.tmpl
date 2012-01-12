@@ -46,11 +46,15 @@
                 <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
             </select>
           </li>
+          <li class="sub_item">
+            <label>Pre&aacute;mbulo Campo de Relaci&oacute;n: </label>
+            <input type='text'name="preambulo" id="preambulo">
+          </li>
      </ol>
 
             [% PERL %]
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Procesar' | i18n %]",
-                                                                    onClick => "doUpload();",
+                                                                    onClick => "procesarRelacionRegistroEjemplares('[% importacion.getId %]');",
                                         ) ;
             [% END %]
     </div>

@@ -223,11 +223,57 @@ sub getRegistrosFromImportacion {
 
 }
 
+=item sub getRegistrosPadreFromImportacion
+Se obtienen los registros de la importacion
+=cut
+sub getRegistrosPadreFromImportacion {
+
+    my ($id_importacion,$ini,$cantR,$db) = @_;
+
+    require C4::Modelo::IoImportacionIsoRegistro;
+    require C4::Modelo::IoImportacionIsoRegistro::Manager;
+    $db = $db || C4::Modelo::IoImportacionIsoRegistro->new()->db;
+
+
+    my $registros_array_ref;
+
+    if($cantR eq 'ALL'){
+
+     $registros_array_ref= C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro(  db              => $db,
+                                                                                                    query => [
+                                                                                                        id_importacion_iso => { eq => $id_importacion },
+                                                                                                        relacion => { eq => '' },
+                                                                                                        ],);
+     }else{
+     $registros_array_ref= C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro(  db              => $db,
+                                                                                                    query => [
+                                                                                                        id_importacion_iso => { eq => $id_importacion },
+                                                                                                        relacion => { eq => '' },
+                                                                                                        ],
+                                                                                                    limit   => $cantR,
+                                                                                                    offset  => $ini,
+                                                                                                        );
+     }
+
+    #Obtengo la cantidad total de registros de la importacion para el paginador
+    my $registros_array_ref_count = C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro_count(  db  => $db,
+                                                                                                                        query => [
+                                                                                                                            id_importacion_iso => { eq => $id_importacion },
+                                                                                                                            relacion => { eq => '' },
+                                                                                                                        ]);
+
+    if(scalar(@$registros_array_ref) > 0){
+        return ($registros_array_ref_count, $registros_array_ref);
+    }else{
+        return (0,0);
+    }
+
+}
 
 =item
      Esta funcion devuelve un registro de importacion segun su id
 =cut
-sub getRegistrosFromImportacionById {
+sub getRegistroFromImportacionById {
     my ($id) = @_;
 
     require C4::Modelo::IoImportacionIsoRegistro;
@@ -239,10 +285,36 @@ sub getRegistrosFromImportacionById {
     if ($id){
         push (@filtros, ( id => { eq => $id}));
         $registroImportacionTemp = C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro( query => \@filtros );
-        return $registroImportacionTemp->[0]
+        return $registroImportacionTemp->[0];
     }
 
     return 0;
+}
+
+
+=item
+     Esta funcion devuelve un los ejemplares de un  registro de importacion segun su id
+=cut
+sub getEjemplaresFromRegistroDeImportacionById {
+    my ($id) = @_;
+
+    my ($registro_importacion) = C4::AR::ImportacionIsoMARC::getRegistroFromImportacionById($id);
+
+    if ($registro_importacion->getIdentificacion){
+        my @filtros;
+        push (@filtros, ( relacion => { eq => $registro_importacion->getIdentificacion }));
+
+        require C4::Modelo::IoImportacionIsoRegistro;
+        require C4::Modelo::IoImportacionIsoRegistro::Manager;
+
+        #Obtengo la cantidad total de registros de la importacion para el paginador
+        my $registros_array_ref = C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro( query => \@filtros );
+
+        if(scalar(@$registros_array_ref) > 0){
+            return (scalar(@$registros_array_ref), $registros_array_ref);
+        }
+    }
+    return (0,0);
 }
 
 =item
@@ -642,6 +714,57 @@ sub getSubCamposFromEsquemaOrigenLike {
                                                                                         group_by => [ 'subcampo_origen'],
                                                                        );
     return($db_subcampos_MARC);
+}
+
+
+
+sub procesarRelacionRegistroEjemplares {
+      my ($params) = @_;
+
+     my $msg_object= C4::AR::Mensajes::create();
+     my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($params->{'id'});
+
+     eval {
+
+          my $id_importacion             = $params->{'id'};
+          my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($id_importacion);
+
+          my $campo_relacion = $params->{'campo_relacion'};
+          my $subcampo_relacion = $params->{'subcampo_relacion'};
+          my $preambulo_relacion = $params->{'preambulo_relacion'};
+          if (($campo_relacion )&&($campo_relacion ne '-1')) {
+              $importacion->setCampoRelacion($campo_relacion,$subcampo_relacion,$preambulo_relacion);
+              }
+
+          my $campo_identificacion = $params->{'campo_identificacion'};
+          my $subcampo_identificacion = $params->{'subcampo_identificacion'};
+          if (($campo_identificacion)&&($campo_identificacion ne '-1')) {
+              $importacion->setCampoIdentificacion($campo_identificacion,$subcampo_identificacion);
+          }
+
+          $importacion->save();
+
+        #ACA HAY QUE PROCESAR LA RELACION
+        # 1 - Buscar todas las identificaciones
+        # 2 - Buscar todas las relaciones registro/ejemplar
+        $importacion->setearIdentificacionRelacionRegistros();
+
+        if(!$msg_object->{'error'}){
+         $msg_object->{'error'}= 0;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IO09', 'params' => []} ) ;
+        }
+     };
+
+     if ($@){
+         #Se loguea error de Base de Datos
+         &C4::AR::Mensajes::printErrorDB($@, 'B457','INTRA');
+         #Se setea error para el usuario
+         $msg_object->{'error'}= 1;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IO10', 'params' => []} ) ;
+     }
+
+     return ($msg_object);
+
 }
 
 END { }       # module clean-up code here (global destructor)
