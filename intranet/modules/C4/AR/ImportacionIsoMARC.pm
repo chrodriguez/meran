@@ -242,13 +242,13 @@ sub getRegistrosPadreFromImportacion {
      $registros_array_ref= C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro(  db              => $db,
                                                                                                     query => [
                                                                                                         id_importacion_iso => { eq => $id_importacion },
-                                                                                                        relacion => { eq => undef },
+                                                                                                        relacion => { eq => '' },
                                                                                                         ],);
      }else{
      $registros_array_ref= C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro(  db              => $db,
                                                                                                     query => [
                                                                                                         id_importacion_iso => { eq => $id_importacion },
-                                                                                                        relacion => { eq => undef },
+                                                                                                        relacion => { eq => '' },
                                                                                                         ],
                                                                                                     limit   => $cantR,
                                                                                                     offset  => $ini,
@@ -259,7 +259,7 @@ sub getRegistrosPadreFromImportacion {
     my $registros_array_ref_count = C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro_count(  db  => $db,
                                                                                                                         query => [
                                                                                                                             id_importacion_iso => { eq => $id_importacion },
-                                                                                                                            relacion => { eq => undef },
+                                                                                                                            relacion => { eq => '' },
                                                                                                                         ]);
 
     if(scalar(@$registros_array_ref) > 0){
@@ -302,7 +302,6 @@ sub getEjemplaresFromRegistroDeImportacionById {
 
     if ($registro_importacion->getIdentificacion){
         my @filtros;
-        push (@filtros, ( id => { eq => $id}));
         push (@filtros, ( relacion => { eq => $registro_importacion->getIdentificacion }));
 
         require C4::Modelo::IoImportacionIsoRegistro;

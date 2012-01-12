@@ -139,6 +139,11 @@ sub getCampoSubcampoJoined{
     return ($join);
 }
 
+sub getIdentificacion{
+    my ($self)   = shift;
+    return ($self->identificacion);
+}
+
 sub getTitulo{
     my ($self) = shift;
     return ($self->getCampoSubcampoJoined('245','a'));
@@ -156,12 +161,6 @@ sub setIdentificacion{
     $self->identificacion($ident);
 }
 
-sub getIdentificacion{
-    my ($self)   = shift;
-    return ($self->identificacion);
-}
-
-
 sub getIdentificacionFromRecord{
     my ($self)   = shift;
 
@@ -171,16 +170,18 @@ sub getIdentificacionFromRecord{
     my $campo =$self->ref_importacion->getCampoFromCampoIdentificacion;
     if ($campo){
         my $field = $marc->field($campo);
-        if ($field->is_control_field()){
-            #Si es de control devuelvo el dato;
-            $identificacion = $field->data();
-            }
-        else{
-            #Si no es de control tiene subcampo
-            my $subcampo =$self->ref_importacion->getSubcampoFromCampoIdentificacion;
-            if ($subcampo){
-                $identificacion = $field->subfield($subcampo);
+        if ($field){
+            if ($field->is_control_field()){
+                #Si es de control devuelvo el dato;
+                $identificacion = $field->data();
                 }
+            else{
+                #Si no es de control tiene subcampo
+                my $subcampo =$self->ref_importacion->getSubcampoFromCampoIdentificacion;
+                if ($subcampo){
+                    $identificacion = $field->subfield($subcampo);
+                    }
+            }
         }
     }
 

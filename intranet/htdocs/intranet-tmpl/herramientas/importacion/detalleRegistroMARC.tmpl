@@ -18,9 +18,24 @@
         </ul>
         <div id="tabs-1" >
             <br><br>
-            <pre>
-                [% registro_importacion.getRegistroMARCOriginal.as_formatted %]
-            </pre>
+
+            <fieldset class="resultados_busqueda">
+            <legend class="titulo_legend trigger click">[% "Registro" | i18n %]</legend>
+                <pre>
+                    [% registro_importacion.getRegistroMARCOriginal.as_formatted %]
+                </pre>
+
+                [% FOREACH registro_ejemplar IN registro_importacion.getEjemplares %]
+
+                    <fieldset class="resultados_busqueda">
+                    <legend class="titulo_legend trigger click">[% "Ejemplar" | i18n %]</legend>
+                        <pre>
+                            [% registro_ejemplar.getRegistroMARCOriginal.as_formatted %]
+                        </pre>
+                    </fieldset>
+                [% END %]
+
+            </fieldset>
         </div>
 
         <div id="tabs-2">
