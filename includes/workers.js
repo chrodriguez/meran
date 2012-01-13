@@ -1,4 +1,4 @@
 self.onmessage = function(event) {
   // Do some work.
-	self.postMessage();
+	self.postMessage('data');
 };

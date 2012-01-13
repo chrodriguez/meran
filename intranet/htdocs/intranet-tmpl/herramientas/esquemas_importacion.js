@@ -22,7 +22,7 @@ function updateNuevoEsquemaImportacion(responseText){
 function showEsquemaImportacion(){
 
 	worker.onmessage = function(event) {showEsquemaImportacion_func(); };
-	worker.postMessage();
+	worker.postMessage('data');
 }
 
 
@@ -158,7 +158,7 @@ function updateAgregarCampoEsquema(responseText){
 
 function editarOrdenEsquema(id_esquema){
 	worker.onmessage = function(event) {editarOrdenEsquema_func(id_esquema); };
-	worker.postMessage();
+	worker.postMessage('data');
 }
 
 function editarOrdenEsquema_func(id_esquema){
