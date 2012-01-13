@@ -184,11 +184,25 @@ Se obtienen los registros de la importacion
 =cut
 sub getRegistrosFromImportacion {
 
-    my ($id_importacion,$ini,$cantR,$db) = @_;
+    my ($id_importacion,$filter,$ini,$cantR,$db) = @_;
 
     require C4::Modelo::IoImportacionIsoRegistro;
     require C4::Modelo::IoImportacionIsoRegistro::Manager;
     $db = $db || C4::Modelo::IoImportacionIsoRegistro->new()->db;
+
+    my @filtros;
+    push (@filtros, ( id_importacion_iso => { eq => $id_importacion}));
+
+    if((!$filter)||($filter eq 'MAIN')){
+        #Solo registros padre por defecto
+        push (@filtros, ( relacion => { eq => '' }));
+        }
+    elsif($filter eq 'UNIDENTIFIED'){
+        push (@filtros, ( identificacion => { eq => undef }));
+        }
+    elsif($filter eq 'ALL'){
+        #si se muestran todos no se agregan mas filtros
+        }
 
 
     my $registros_array_ref;
@@ -196,24 +210,19 @@ sub getRegistrosFromImportacion {
     if($cantR eq 'ALL'){
 
      $registros_array_ref= C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro(  db              => $db,
-                                                                                                    query => [
-                                                                                                        id_importacion_iso => { eq => $id_importacion },
-                                                                                                        ],);
+                                                                                                    query => \@filtros,);
      }else{
      $registros_array_ref= C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro(  db              => $db,
-                                                                                                    query => [
-                                                                                                        id_importacion_iso => { eq => $id_importacion },
-                                                                                                        ],
+                                                                                                    query => \@filtros,
                                                                                                     limit   => $cantR,
                                                                                                     offset  => $ini,
                                                                                                         );
+
      }
 
     #Obtengo la cantidad total de registros de la importacion para el paginador
     my $registros_array_ref_count = C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro_count(  db  => $db,
-                                                                                                                        query => [
-                                                                                                                            id_importacion_iso => { eq => $id_importacion },
-                                                                                                                        ]);
+                                                                                                                        query => \@filtros);
 
     if(scalar(@$registros_array_ref) > 0){
         return ($registros_array_ref_count, $registros_array_ref);
@@ -316,6 +325,32 @@ sub getEjemplaresFromRegistroDeImportacionById {
     }
     return (0,0);
 }
+
+=item
+     Esta funcion devuelve un los ejemplares de un  registro de importacion segun su id
+=cut
+sub getRegistroPadreFromRegistroDeImportacionById {
+    my ($id) = @_;
+
+    my ($registro_importacion) = C4::AR::ImportacionIsoMARC::getRegistroFromImportacionById($id);
+
+    if ($registro_importacion->getRelacion){
+        my @filtros;
+        push (@filtros, ( identificacion => { eq => $registro_importacion->getRelacion }));
+
+        require C4::Modelo::IoImportacionIsoRegistro;
+        require C4::Modelo::IoImportacionIsoRegistro::Manager;
+
+        #Obtengo la cantidad total de registros de la importacion para el paginador
+        my $registros_array_ref = C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro( query => \@filtros );
+
+        if($registros_array_ref->[0]){
+            return $registros_array_ref->[0];
+        }
+    }
+    return 0;
+}
+
 
 =item
     Esta funcion elimina una importacion (con todos sus registros)
@@ -478,7 +513,7 @@ sub getOrdenEsquema{
     my @filtros;
 
     my $detalle = getRow($params->{'id_esquema'});
-    
+
     push(@filtros,(id_importacion_esquema => { eq => $detalle->esquema->getId }));
     push(@filtros,(campo_origen           => { eq => $detalle->getCampoOrigen}));
     push(@filtros,(subcampo_origen => { eq => $detalle->getSubcampoOrigen }));
@@ -487,42 +522,42 @@ sub getOrdenEsquema{
                                                                                                     query => \@filtros,
                                                                                                     sort_by => ['orden ASC'],
     );
-    
+
     return ($detalle_esquema,$detalle);
-	
+
 }
 
 sub updateNewOrder{
     my ($params) = @_;
     my $msg_object      = C4::AR::Mensajes::create();
-    
+
     # ordeno los ids que llegan desordenados primero, para obtener un clon de los ids, y ahora usarlo de indice para el orden
     # esto es porque no todos los campos de cat_visualizacion_intra se muestran en el template a ordenar ( ej 8 y 9 )
     # entonces no puedo usar un simple indice como id.
     my $newOrderArray = $params->{'newOrderArray'};
-    
+
     my @array = sort { $a <=> $b } @$newOrderArray;
-    
+
     my $i = 0;
     # hay que hacer update de todos los campos porque si viene un nuevo orden y es justo ordenado (igual que @array : 1,2,3...)
     # tambien hay que actualizarlo
     foreach my $campo (@$newOrderArray){
-    
-	    my @filtros;
-	    push(@filtros,(id => { eq => $campo }));
-	    
+
+        my @filtros;
+        push(@filtros,(id => { eq => $campo }));
+
         my $config_temp   = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
-                                                                    query   => \@filtros, 
+                                                                    query   => \@filtros,
                                );
-                               
+
         my $configuracion = $config_temp->[0];
-        
+
         $configuracion->setOrden($i+1);
         $configuracion->save();
-    
+
         $i++;
     }
-    
+
     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'M000', 'params' => []} ) ;
 
     return ($msg_object);
@@ -538,7 +573,7 @@ sub addCampoAEsquema{
     my $msg_object = C4::AR::Mensajes::create();
 
     eval{
-    	my $new_esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle->new();
+        my $new_esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle->new();
         $new_esquema->setIdImportacionEsquema($esquema->getIdImportacionEsquema);
         $new_esquema->setCampoOrigen($esquema->getCampoOrigen);
         $new_esquema->setSubcampoOrigen($esquema->getSubcampoOrigen);
@@ -548,21 +583,21 @@ sub addCampoAEsquema{
         $new_esquema->setNivel(1);
         $new_esquema->setIgnorar(0);
         $new_esquema->setNextOrden();
-        
+
         $new_esquema->save();
-        
+
         $msg_object->{'error'}= 0;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IO016', 'params' => [$params->{'campo'},$params->{'subcampo'},$esquema->esquema->getNombre]} ) ;
-        
+
     };
 
     if ($@){
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IO015', 'params' => []} ) ;
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IO015', 'params' => []} ) ;
     }
 
     return ($msg_object);
-	
+
 }
 
 
@@ -635,13 +670,13 @@ sub delCampo{
 
     my @filtros;
     my $id_esquema = $row->esquema->getId;
-    
+
     push( @filtros, ( id_importacion_esquema => { eq => $id_esquema }, ) );
     push( @filtros, ( campo_origen => { eq => $row->getCampoOrigen }, ) );
     push( @filtros, ( subcampo_origen => { eq => $row->getSubcampoOrigen }, ) );
-        
+
     eval{
-        C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->delete_io_importacion_iso_esquema_detalle(where => \@filtros);    	
+        C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->delete_io_importacion_iso_esquema_detalle(where => \@filtros);
     };
 
     if ($@){
@@ -658,11 +693,11 @@ sub delCampoOne{
 
     my @filtros;
     my $id_esquema = $row->esquema->getId;
-    
+
     push( @filtros, ( id => { eq => $id }, ) );
-        
+
     eval{
-        C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->delete_io_importacion_iso_esquema_detalle(where => \@filtros);     
+        C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->delete_io_importacion_iso_esquema_detalle(where => \@filtros);
     };
 
     if ($@){
@@ -674,26 +709,26 @@ sub delCampoOne{
 
 sub actualizarMappeo{
     my ($row,$new_value,$action) = @_;
-    
+
     my @filtros;
     push( @filtros, ( id_importacion_esquema => { eq => $row->esquema->getId }, ) );
     push( @filtros, ( campo_origen => { eq => $row->getCampoOrigen }, ) );
     push( @filtros, ( subcampo_origen => { eq => $row->getSubcampoOrigen }, ) );
-        
+
     if ($action eq "co"){
-	    C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->update_io_importacion_iso_esquema_detalle(
-	                                                                                         where => \@filtros,
-	                                                                                         set   => { campo_origen => $new_value },
-	                                                                                         
-	    );
+        C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->update_io_importacion_iso_esquema_detalle(
+                                                                                             where => \@filtros,
+                                                                                             set   => { campo_origen => $new_value },
+
+        );
     }else{
         C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->update_io_importacion_iso_esquema_detalle(
                                                                                              where => \@filtros,
                                                                                              set   => { subcampo_origen => $new_value },
-                                                                                             
+
         );
-    	
-    }	
+
+    }
 }
 
 sub editarValorEsquema{

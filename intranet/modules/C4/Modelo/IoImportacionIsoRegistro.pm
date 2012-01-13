@@ -104,10 +104,7 @@ sub getMarcRecord{
     return ($self->marc_record);
 }
 
-sub getTipo{
-    my ($self) = shift;
-    return ($self->type);
-}
+
 
 sub getEstado{
     my ($self) = shift;
@@ -146,12 +143,28 @@ sub getIdentificacion{
 
 sub getTitulo{
     my ($self) = shift;
-    return ($self->getCampoSubcampoJoined('245','a'));
+    my $titulo = ($self->getCampoSubcampoJoined('245','a'));
+
+    if(!$titulo){
+        my $padre=$self->getRegistroPadre;
+        if ($padre){
+            $titulo=$padre->getTitulo;
+            }
+        }
+    return $titulo;
 }
 
 sub getAutor{
     my ($self) = shift;
-    return ($self->getCampoSubcampoJoined('100','a'));
+    my $autor = ($self->getCampoSubcampoJoined('100','a'));
+
+    if(!$autor){
+        my $padre=$self->getRegistroPadre;
+        if ($padre){
+            $autor=$padre->getAutor;
+            }
+        }
+    return $autor;
 }
 
 
@@ -258,4 +271,26 @@ sub getEjemplares{
      my ($cantidad,$ejemplares) = C4::AR::ImportacionIsoMARC::getEjemplaresFromRegistroDeImportacionById($self->getId);
 
     return $ejemplares;
+}
+
+sub getRegistroPadre{
+     my ($self)   = shift;
+
+     my $registro_padre = C4::AR::ImportacionIsoMARC::getRegistroPadreFromRegistroDeImportacionById($self->getId);
+
+    return $registro_padre;
+}
+
+sub getTipo{
+     my ($self)   = shift;
+
+    if($self->getIdentificacion){
+        if(($self->getRelacion)&&($self->getRegistroPadre)) {
+             return "Ejemplar";
+            }
+        else{
+        return "Registro";
+        }
+    }
+    return "Desconocido";
 }

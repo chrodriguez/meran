@@ -10,19 +10,21 @@
          $("#subcampo1").hide();
          $("#campo2").hide();
          $("#subcampo2").hide();
-       detalleImportacion([% importacion.getId %]);
+         makeToggle('configuracion_relacion','trigger',null,true);
+
+         detalleImportacion([% importacion.getId %]);
+
     });
 
 </script>
 
-
 <fieldset>
-<legend class="titulo_legend_resaltado">Detalle de la Importaci&oacute;n ([% importacion.getNombre %])</legend>
+<legend class="titulo_legend_resaltado">Configuraci&oacute;n de la Importaci&oacute;n ([% importacion.getNombre %])</legend>
 <div>
 
     <fieldset>
-    <legend class="titulo_legend_resaltado">Relaci&oacute;n Registro/Ejemplares</legend>
-    <div>
+    <legend class="titulo_legend_resaltado trigger click">Relaci&oacute;n Registro/Ejemplares</legend>
+    <div class="configuracion_relacion">
      <ol>
           <li class="sub_item">
           <label>Campo de Identificaci&oacute;n </label>
