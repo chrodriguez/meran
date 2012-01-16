@@ -137,9 +137,11 @@ sub obtenerCamposSubcamposDeRegistros{
 sub setearIdentificacionRelacionRegistros{
     my ($self)      = shift;
     foreach my $registro ($self->registros){
+         eval {
         $registro->setIdentificacion($registro->getIdentificacionFromRecord);
         $registro->setRelacion($registro->getRelacionFromRecord);
         $registro->save();
+        };
     }
 }
 

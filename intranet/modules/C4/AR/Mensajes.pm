@@ -627,7 +627,7 @@ sub printErrorDB {
     print A "Codigo: $codigo\n";
     my $message= &C4::AR::Mensajes::getMensaje($codigo,$tipo,$paraMens);
     print A "Message: $message\n";
-    print A "$@ \n";
+    print A "Error: $errorsDB_array \n";
     print A "\n";
     close(A);
 }

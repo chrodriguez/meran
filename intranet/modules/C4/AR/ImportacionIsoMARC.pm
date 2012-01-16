@@ -312,6 +312,7 @@ sub getEjemplaresFromRegistroDeImportacionById {
     if ($registro_importacion->getIdentificacion){
         my @filtros;
         push (@filtros, ( relacion => { eq => $registro_importacion->getIdentificacion }));
+        push (@filtros, ( id_importacion_iso => { eq => $id }));
 
         require C4::Modelo::IoImportacionIsoRegistro;
         require C4::Modelo::IoImportacionIsoRegistro::Manager;
@@ -337,6 +338,7 @@ sub getRegistroPadreFromRegistroDeImportacionById {
     if ($registro_importacion->getRelacion){
         my @filtros;
         push (@filtros, ( identificacion => { eq => $registro_importacion->getRelacion }));
+        push (@filtros, ( id_importacion_iso => { eq => $id }));
 
         require C4::Modelo::IoImportacionIsoRegistro;
         require C4::Modelo::IoImportacionIsoRegistro::Manager;
