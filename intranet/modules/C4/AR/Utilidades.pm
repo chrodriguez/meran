@@ -1287,7 +1287,7 @@ sub armarPaginas{
 
     my $themelang= $t_params->{'themelang'};
 
-    my $paginador= "<div class='pagination'><div id='content_paginator'  align='center' >";
+    my $paginador= "<div class='pagination_bar'><div id='content_paginator'  align='center' >";
     my $class="paginador";
 
     if($actual > 1){

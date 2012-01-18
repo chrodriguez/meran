@@ -764,20 +764,6 @@ label.error_adv {
 	padding: 3px;
 }
 
-label {
-	display: block;
-	clear: both;
-	float: left;
-	margin-right: 13px;
-	padding-right: 10px;
-	position: relative;
-	text-align: right;
-	margin-top: 5px;
-	width: auto;
-}
-
-
-/*  dfgdfgdfgdfgdf */
 .toggle_container {
 	background: #F0F0F0;
 	border-top: 1px solid #D6D6D6;	
@@ -929,15 +915,6 @@ input.file {
 
 .datos_tabla td a {
 	color: #35414F;
-}
-
-.warning {
-	background-color: #990000;
-}
-
-.warning p {	
-	color: InfoBackground;
-	font-weight: bold;
 }
 
 .error_en_parametros {
@@ -2967,4 +2944,8 @@ button.thoughtbot:active {
 
 .highlightedRow{
     background-color: red !important;
+}
+
+.report_form_container{
+    background: #FAFAFA;
 }

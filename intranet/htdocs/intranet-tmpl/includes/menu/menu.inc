@@ -481,20 +481,6 @@
                       </li>
 
                        <li>
-                            <a href="#">[% 'Consultas' | i18n %]</a>
-                            <ul>
-                                <li>
-                                            [% PERL %]
-                                                print C4::AR::Filtros::link_to( text =>     "[% 'Reportes Gen&eacute;ricos' | i18n %]",
-                                                                                url =>      "#",
-                                                                                title =>    "[% 'Reportes Gen&eacute;ricos' | i18n %]"
-                                                                            ) ;
-                                            [% END %]
-                                </li>
-                            </ul>
-                      </li>
-
-                       <li>
                             <a href="#">[% 'Global' | i18n %]</a>
                             <ul>
                                 <li>

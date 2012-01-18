@@ -161,7 +161,7 @@ body {
 }
 
 #marco_principal {
-	background: #EAEBED;
+	background: #FFFFFF;
 }
 
 .titulos {
@@ -764,20 +764,6 @@ label.error_adv {
 	padding: 3px;
 }
 
-label {
-	display: block;
-	clear: both;
-	float: left;
-	margin-right: 13px;
-	padding-right: 10px;
-	position: relative;
-	text-align: right;
-	margin-top: 5px;
-	width: auto;
-}
-
-
-/*  dfgdfgdfgdfgdf */
 .toggle_container {
 	background: #F0F0F0;
 	border-top: 1px solid #D6D6D6;	
@@ -931,15 +917,6 @@ input.file {
 	color: #35414F;
 }
 
-.warning {
-	background-color: #990000;
-}
-
-.warning p {	
-	color: InfoBackground;
-	font-weight: bold;
-}
-
 .error_en_parametros {
 	color: red;
 }
@@ -950,29 +927,29 @@ input.file {
 #mensajes{position:relative;background:#ffc;padding:5px;border:1px solid #CCCCCC;text-align:center;font-weight:bold;width:99%;}
 */
 
-div.pagination {	
+div.pagination_bar {	
 	font-family: Tahoma, Arial, Helvetica, Sans-serif;
 	/*	background-color: #c1c1c1;*/
 	border: 1px solid #35414F;
 }
 
-div.pagination a {
+div.pagination_bar a {
 	/*	background-color: #c1c1c1;*/
 	color: #000;
 }
 
-div.pagination a:hover,div.pagination a:active {
+div.pagination_bar a:hover,div.pagination_bar a:active {
 	background-color: #7E94AF;
 	color: #000;
 }
 
-div.pagination a.current {
+div.pagination_bar a.current {
 	font-weight: bold;
 	background-color: #35414F;
 	color: #FFFFFF;
 }
 
-div.pagination span.disabled {
+div.pagination_bar span.disabled {
 	/*	background-color: #c1c1c1;*/
 	color: #35414F;
 }
@@ -2967,4 +2944,8 @@ button.thoughtbot:active {
 
 .highlightedRow{
     background-color: red !important;
+}
+
+.report_form_container{
+	background: #FAFAFA;
 }
