@@ -35,6 +35,7 @@
 	<script type="text/javascript" src="/includes/workers.js"></script>
 	
 	<script type="text/javascript">
+
 		var worker = new Worker('/includes/workers.js');
 
 		function enableAlert(){

@@ -198,3 +198,14 @@ function updateSortableSC(){
 	editarOrdenEsquema(esquema_orden_actual);    
 }
 
+function eleccionSubCampoEsquema(){
+
+    if ($('#subcampo').val() != -1){
+        $('#liblibrarian').html(SUBCAMPOS_ARRAY[$('#subcampo').val()].liblibrarian);
+//         mostrarTablaRef();
+    }
+    else 
+        enable_disableSelects();
+}
+
+
