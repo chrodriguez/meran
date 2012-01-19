@@ -26,4 +26,6 @@ $t_params->{'importacion'}          = $importacion;
 $t_params->{'selectCampoX1'}         = C4::AR::Utilidades::generarComboCampoX('eleccionCampoOrigenX("1","'.$importacion->getIdImportacionEsquema.'")','','campoX1');
 $t_params->{'selectCampoX2'}         = C4::AR::Utilidades::generarComboCampoX('eleccionCampoOrigenX("2","'.$importacion->getIdImportacionEsquema.'")','','campoX2');
 
+$t_params->{'selectCampoX'} = C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
+
 C4::AR::Auth::output_html_with_http_headers($template, $t_params,$session);

@@ -1,5 +1,7 @@
 [% INCLUDE "intranet-top.inc" %]
 <script type="text/javascript" src="/intranet-tmpl/includes/importacion/detalleImportacion.js"></script>
+<script src="/intranet-tmpl/includes/visualizacionINTRA-min.js"></script>
+
 
 [% INCLUDE "FormValidateHelper.inc" %]
 
@@ -10,24 +12,117 @@
          $("#subcampo1").hide();
          $("#campo2").hide();
          $("#subcampo2").hide();
+         makeToggle('configuracion_acciones','trigger',null,true);
+         makeToggle('configuracion_matcheo','trigger',null,true);
          makeToggle('configuracion_relacion','trigger',null,true);
 
          detalleImportacion([% importacion.getId %]);
 
     });
 
+
+function eleccionSubCampo(){
+
+    if ($('#subcampo').val() != -1){
+        $('#nombre_subcampo').html(SUBCAMPOS_ARRAY[$('#subcampo').val()].liblibrarian);
+    }
+    else
+        enable_disableSelects();
+}
+
+
 </script>
 
 <fieldset>
-<legend class="titulo_legend_resaltado">Configuraci&oacute;n de la Importaci&oacute;n ([% importacion.getNombre %])</legend>
+<legend class="titulo_legend_resaltado">[% 'Configuraci&oacute;n de la Importaci&oacute;n' | i18n %] ([% importacion.getNombre %])</legend>
 <div>
 
     <fieldset>
-    <legend class="titulo_legend_resaltado trigger click">Relaci&oacute;n Registro/Ejemplares</legend>
+    <legend class="titulo_legend_resaltado trigger click">[% 'Configurar Acciones' | i18n %]</legend>
+    <div class="configuracion_acciones">
+     <ol>
+          <li class="sub_item">
+          <label>[% 'Accion si se encuentra el registro en el Cat&aacute;logo' | i18n %]</label>
+            <select name="matching_rule" id="matching_rule">
+                <option value="I">[% 'Ignorar' | i18n %]</option>
+                <option value="U">[% 'Actualizar' | i18n %]</option>
+                <option value="D">[% 'Duplicar' | i18n %]</option>
+                <option value="P">[% 'Pisar' | i18n %]</option>
+            </select>
+          </li>
+
+          <li class="sub_item">
+          <label>[% 'Accion si NO se encuentra el registro en el Cat&aacute;logo' | i18n %]</label>
+            <select name="no_matching_rule" id="no_matching_rule">
+                <option value="A">[% 'Agregar' | i18n %]</option>
+                <option value="I">[% 'Ignorar' | i18n %]</option>
+            </select>
+          </li>
+
+          <li class="sub_item">
+          <label>[% 'Manejo de ejemplares' | i18n %]</label>
+            <select name="matching_rule" id="matching_rule">
+                <option value="A">[% 'Agregar' | i18n %]</option>
+                <option value="I">[% 'Ignorar' | i18n %]</option>
+            </select>
+          </li>
+     </ol>
+
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Procesar' | i18n %]",
+                                                                    onClick => "guardarAcciones('[% importacion.getId %]');",
+                                        ) ;
+            [% END %]
+    </div>
+    </fieldset>
+
+
+    <fieldset>
+    <legend class="titulo_legend_resaltado trigger click">[% 'Configurar la b&uacute;squeda de registros en el Cat&aacute;logo' | i18n %]</legend>
+    <div class="configuracion_matcheo">
+       <ol>
+            <li class="sub_item">
+                <label for="campo">[% 'Campo a Matchear' | i18n %]:</label>
+                 [% selectCampoX %]
+              <select name="campo" id="campo" onChange="eleccionCampo()">
+                  <option value="-1">[% 'Seleccionar CampoX' | i18n %]</option>
+              </select>
+              <select name="subcampo" id="subcampo" onChange="eleccionSubCampo()">
+                        <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
+                    </select>
+           </li>
+
+           <li class="sub_item">
+                <label for="campo"> [% 'Nombre' | i18n %]:</label> <strong><span id="nombre_subcampo"></span></strong>
+            </li>
+          <li class="sub_item">
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% '+' | i18n %]",
+                                                                    onClick => "agregarCampoReglasMatcheo('[% importacion.getId %]');",
+                                        ) ;
+            [% END %]
+          </li>
+          <li class="sub_item">
+            <label>[% 'Campos a buscar' | i18n %]: </label>
+            <input type='text' name="campos_matcheo" id="campos_matcheo">
+          </li>
+     </ol>
+
+            [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Procesar' | i18n %]",
+                                                                    onClick => "procesarReglasMatcheo('[% importacion.getId %]');",
+                                        ) ;
+            [% END %]
+    </div>
+    </fieldset>
+
+
+    <fieldset>
+    <legend class="titulo_legend_resaltado trigger click">[% 'Relaci&oacute;n Registro/Ejemplares' | i18n %]</legend>
     <div class="configuracion_relacion">
      <ol>
           <li class="sub_item">
-          <label>Campo de Identificaci&oacute;n </label>
+          <label>[% 'Campo de Identificaci&oacute;n' | i18n %] </label>
             [% selectCampoX1 %]
             <select name="campo1" id="campo1" onChange="eleccionCampoOrigen('1','[% importacion.getIdImportacionEsquema %]')">
                 <option value="-1">[% 'Seleccionar CampoX' | i18n %]</option>
@@ -35,11 +130,10 @@
             <select name="subcampo1" id="subcampo1">
                 <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
             </select>
-    </li>
-
           </li>
+
           <li class="sub_item">
-            <label>Campo de Relaci&oacute;n: </label>
+            <label>[% 'Campo de Relaci&oacute;n' | i18n %]: </label>
             [% selectCampoX2 %]
             <select name="campo2" id="campo2" onChange="eleccionCampoOrigen('2','[% importacion.getIdImportacionEsquema %]')">
                 <option value="-1">[% 'Seleccionar CampoX' | i18n %]</option>
@@ -48,8 +142,9 @@
                 <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
             </select>
           </li>
+
           <li class="sub_item">
-            <label>Pre&aacute;mbulo Campo de Relaci&oacute;n: </label>
+            <label>[% 'Pre&aacute;mbulo Campo de Relaci&oacute;n' | i18n %]: </label>
             <input type='text'name="preambulo" id="preambulo">
           </li>
      </ol>
@@ -61,7 +156,6 @@
             [% END %]
     </div>
     </fieldset>
-
 
 </div>
 </fieldset>
