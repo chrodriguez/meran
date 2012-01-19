@@ -176,7 +176,6 @@ function editarOrdenEsquema_func(id_esquema){
 
 function updateEditarOrdenEsquema(responseText){
     $("#tablaResultSubCampos").html(responseText);
-    zebra("tabla_datos_sub_campos");
     scrollTo('tablaResultSubCampos');
     $('tr').removeClass('highlightedRow');
     $('#esquema_'+esquema_orden_actual).addClass('highlightedRow');
