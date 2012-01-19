@@ -30,6 +30,9 @@
                             [% "Esquema" | i18n %]
                         </th>
                         <th>
+                            [% "Fecha Subida" | i18n %]
+                        </th>
+                        <th>
                             [% "Acciones" | i18n %]
                         </th>
                     </tr>
@@ -50,6 +53,9 @@
                       </td>
                       <td align="left">
                            [% importacion.getEsquema.getNombre %]
+                      </td>
+                      <td align="left">
+                           [% importacion.getFechaUpload_formateada %]
                       </td>
                       <!--  BOTONES ACCIONES (Editar, Borrar, Ver detalle) -->
                       <td align='left' width="9%" >

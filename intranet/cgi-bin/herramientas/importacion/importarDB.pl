@@ -115,7 +115,7 @@ elsif($tipoAccion eq "BUSQUEDA"){
                                     debug => 1,
             });
 
-  my $orden     = $obj->{'orden'}||'nombre';
+  my $orden     = $obj->{'orden'}||'fecha_upload';
   my $funcion   = $obj->{'funcion'};
   my $inicial   = $obj->{'inicial'};
   my $busqueda  = $obj->{'nombre_importacion'};

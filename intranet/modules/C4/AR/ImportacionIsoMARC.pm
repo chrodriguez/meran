@@ -45,16 +45,16 @@ sub guardarNuevaImportacion {
        $db->{connect_options}->{AutoCommit} = 0;
        $db->begin_work;
 
-    my $Io_importacion          = C4::Modelo::IoImportacionIso->new(db=> $db);
-
-    my $nuevo_esquema =0;
    eval {
+
+    my $Io_importacion          = C4::Modelo::IoImportacionIso->new(db=> $db);
+    my $nuevo_esquema =0;
     #Si el esquema es nuevo hay que crearlo vacio al menos!
     if($params->{'nuevo_esquema'}){
        #Crear Nuevo Esquema
            my %parametros;
            $parametros{'nombre'}      = $params->{'nombreEsquema'};
-           $parametros{'descripcion'}   = 'Esquema generado autom&aacute;ticamente';
+           $parametros{'descripcion'}   = 'Esquema generado';
            $nuevo_esquema = C4::Modelo::IoImportacionIsoEsquema->new(db=> $db);
            $nuevo_esquema->agregar(\%parametros);
 
@@ -63,6 +63,12 @@ sub guardarNuevaImportacion {
         }
 
     $Io_importacion->agregar($params);
+
+    #Obtengo los campos/subcampos para ver si por si es necesario realizar un corrimiento de campos
+     my $campos_archivo = C4::AR::ImportacionIsoMARC::obtenerCamposDeArchivo($params);
+     $params->{'camposArchivo'}     = $campos_archivo;
+     my %camposMovidos;
+     $params->{'camposMovidos'}     = \%camposMovidos;
 
     #Ahora los registros del archivo $params->{'write_file'}
     C4::AR::ImportacionIsoMARC::guardarRegistrosNuevaImportacion($Io_importacion,$params,$msg_object,$db);
@@ -120,7 +126,8 @@ sub guardarRegistrosNuevaImportacion {
 
          for my $field ( @{$record->fields} ) {
              my $new_field=0;
-             if($field->tag < '010'){
+
+             if(($field->tag < '010')&&(!$field->{'subf'})){
                  #CONTROL FIELD
                  $new_field = MARC::Field->new( $field->tag, $field->{'value'} );
                  }
@@ -129,7 +136,33 @@ sub guardarRegistrosNuevaImportacion {
                         if(!$new_field){
                             my $ind1=$field->ind1?$field->ind1:'#';
                             my $ind2=$field->ind2?$field->ind2:'#';
-                            $new_field= MARC::Field->new($field->tag, $ind1, $ind2,$subfield->[0] => $subfield->[1]);
+
+                            my $campo = $field->tag;
+                            #Si es un campo de CONTROL pero tiene SUBCAMPOS hay que moverlo a un 900 para que no se pierdan los datos.
+                             if(($field->tag < '010')&&($field->{'subf'})){
+                                 #Empiezo viendo a partir de los campos 900 (son solo 10 los de control!!!)
+                                my $movidos =$params->{'camposMovidos'};
+                                my $campos =$params->{'camposArchivo'};
+
+                                if($movidos->{$campo}){
+                                    #ya fue movido?
+                                    $campo=$movidos->{$campo};
+                                 }
+                                 else{
+                                     #hay que moverlo
+                                     $campo+=900;
+                                     while (($campos->{$campo}) && ($campo <= 999)){
+                                         #C4::AR::Debug::debug("Campo ".$campo." ==> ".$campos->{$campo});
+                                         $campo++;
+                                        }
+                                        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IO017', 'params' => [$field->tag,$campo]});
+                                      #lo marco como movido y utilizado
+                                     $movidos->{$field->tag}=$campo;
+                                     $campos->{$campo}=1;
+                                }
+                             }
+
+                            $new_field= MARC::Field->new($campo, $ind1, $ind2,$subfield->[0] => $subfield->[1]);
                             }
                         else{
                             $new_field->add_subfields( $subfield->[0] => $subfield->[1] );
@@ -304,7 +337,7 @@ sub getRegistroFromImportacionById {
 =item
      Esta funcion devuelve un los ejemplares de un  registro de importacion segun su id
 =cut
-sub getEjemplaresFromRegistroDeImportacionById {
+sub getRegistrosHijoFromRegistroDeImportacionById {
     my ($id) = @_;
 
     my ($registro_importacion) = C4::AR::ImportacionIsoMARC::getRegistroFromImportacionById($id);
@@ -312,7 +345,7 @@ sub getEjemplaresFromRegistroDeImportacionById {
     if ($registro_importacion->getIdentificacion){
         my @filtros;
         push (@filtros, ( relacion => { eq => $registro_importacion->getIdentificacion }));
-        push (@filtros, ( id_importacion_iso => { eq => $id }));
+        push (@filtros, ( id_importacion_iso => { eq => $registro_importacion->id_importacion_iso }));
 
         require C4::Modelo::IoImportacionIsoRegistro;
         require C4::Modelo::IoImportacionIsoRegistro::Manager;
@@ -338,7 +371,7 @@ sub getRegistroPadreFromRegistroDeImportacionById {
     if ($registro_importacion->getRelacion){
         my @filtros;
         push (@filtros, ( identificacion => { eq => $registro_importacion->getRelacion }));
-        push (@filtros, ( id_importacion_iso => { eq => $id }));
+        push (@filtros, ( id_importacion_iso => { eq => $registro_importacion->id_importacion_iso }));
 
         require C4::Modelo::IoImportacionIsoRegistro;
         require C4::Modelo::IoImportacionIsoRegistro::Manager;
@@ -863,6 +896,32 @@ sub procesarRelacionRegistroEjemplares {
 
      return ($msg_object);
 
+}
+
+
+sub obtenerCamposDeArchivo {
+    my ($params)    = @_;
+
+    my %detalleCampos=();
+    use Switch;
+    my $reader;
+    switch ($params->{'formatoImportacion'}) {
+        case "iso"   {$reader=MARC::Moose::Reader::File::Iso2709->new(file   => $params->{'write_file'})}
+        case "isis"  {$reader=MARC::Moose::Reader::File::Isis->new(file   => $params->{'write_file'})}
+        case "xml"   {$reader=MARC::Moose::Reader::File::Marcxml->new(file   => $params->{'write_file'})}
+    }
+
+    while ( my $record = $reader->read() ) {
+    eval {
+         for my $field ( @{$record->fields} ) {
+             my $campo = $field->tag;
+             if(!$detalleCampos{$campo}){
+                $detalleCampos{$campo}= 1;
+            }
+         }
+        };
+    }
+    return(\%detalleCampos);
 }
 
 END { }       # module clean-up code here (global destructor)

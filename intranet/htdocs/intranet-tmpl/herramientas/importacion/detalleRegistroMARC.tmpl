@@ -25,10 +25,10 @@
                     [% registro_importacion.getRegistroMARCOriginal.as_formatted %]
                 </pre>
 
-                [% FOREACH registro_ejemplar IN registro_importacion.getEjemplares %]
+                [% FOREACH registro_ejemplar IN registro_importacion.getRegistrosHijo %]
 
                     <fieldset class="resultados_busqueda">
-                    <legend class="titulo_legend trigger click">[% "Ejemplar" | i18n %]</legend>
+                    <legend class="titulo_legend trigger click">[% "Registro Hijo" | i18n %]</legend>
                         <pre>
                             [% registro_ejemplar.getRegistroMARCOriginal.as_formatted %]
                         </pre>

@@ -77,15 +77,24 @@ sub getDescripcion{
 }
 
 
-sub getDetalleByCampoSubcampo{
+sub getDetalleByCampoSubcampoDestino{
     my ($self)  = shift;
     my ($campo,$subcampo) = @_;
-    my @detalle_completo;
-    foreach my $detalle ($self->detalle){
 
-        if (($detalle->getCampoDestino eq $campo)&&($detalle->getSubcampoDestino eq $subcampo)) {
-            push (@detalle_completo, $detalle);
-        }
-    }
-    return \@detalle_completo;
+    require C4::Modelo::IoImportacionIsoEsquemaDetalle;
+    require C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager;
+
+    my @filtros;
+    push(@filtros,(id_importacion_esquema   => { eq => $self->getId }));
+    push(@filtros,(campo_destino            => { eq => $campo}));
+    push(@filtros,(subcampo_destino         => { eq => $subcampo }));
+
+    my $detalleTemp = C4::Modelo::IoImportacionIsoEsquemaDetalle->new();
+    my $ordenAux= $detalleTemp->sortByString('orden');
+    my $detalle_completo = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
+                                                                                        query => \@filtros,
+                                                                                        sort_by => $ordenAux,
+     );
+
+    return $detalle_completo;
 }

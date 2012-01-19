@@ -493,6 +493,7 @@ my %mensajesINTRA = (
     'IO10' => 'Ocurrio un error mientras se intentaban aplicar la relaci&oacute;n Registro/Ejemplares',
     'IO015' => 'El campo/subcampo ya existe en el esquema',
     'IO016' => 'El Campo "*?*" y Subcampo "*?*" se han agregado correctamente al esquema "*?*"',
+    'IO017' => 'El Campo "*?*" fue movido a "*?*" por tener subcampos y no ser de control.',
 
     #Mensajes Upload Files
     'UP00' => 'Solo se permiten archivos del tipo ("*?*") [Fallo de extension]',

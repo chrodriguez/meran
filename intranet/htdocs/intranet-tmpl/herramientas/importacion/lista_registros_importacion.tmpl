@@ -50,14 +50,14 @@
                             [% detalle_importacion.getTitulo %]
                       </td>
                       <td align="left">
-                            [% detalle_importacion.getTitulo %]
+                            [% detalle_importacion.getAutor %]
                       </td>
                       <td align="left">
                            [% detalle_importacion.getIdentificacion %]
                       </td>
                       <td align="left">
                            [% detalle_importacion.getTipo %]
-                          [% IF detalle_importacion.getTipo == "Registro" %] ([% detalle_importacion.getCantidadDeEjemplares %] ej.)[% END %]
+                          [% IF detalle_importacion.getTipo == "Registro" %] ([% detalle_importacion.getCantidadDeRegistrosHijo %] registros)[% END %]
                       </td>
                       <!--  BOTONES ACCIONES (Editar, Borrar, Ver detalle) -->
                       <td align='left' width="9%" >

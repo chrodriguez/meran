@@ -122,15 +122,24 @@ sub getCampoSubcampoJoined{
 
     my $marc = $self->getRegistroMARCOriginal;
 
-    my $detalle_completo = $self->ref_importacion->esquema->getDetalleByCampoSubcampo($campo,$subcampo);
+    my $detalle_completo = $self->ref_importacion->esquema->getDetalleByCampoSubcampoDestino($campo,$subcampo);
 
     my $join='';
     foreach my $detalle (@$detalle_completo){
-        my $aux = $marc->subfield($detalle->getCampoOrigen,$detalle->getSubcampoOrigen);
-        if ($aux){
-            if ($join){$join.=" ";}
-                $join.=$aux;
-            }
+        my $dato ='';
+        my $field = $marc->field($detalle->getCampoOrigen);
+        if ($field){
+            if($field->is_control_field()){
+                    #Campo de Control
+                   $dato = $field->data();
+                }
+                else {
+                    $dato = $field->subfield($detalle->getSubcampoOrigen);
+                }
+            if ($dato){
+                    $join.=$detalle->getSeparador . $dato;
+             }
+        }
      }
 
     return ($join);
@@ -257,20 +266,20 @@ sub getRelacion{
 }
 
 
-sub getCantidadDeEjemplares{
+sub getCantidadDeRegistrosHijo{
      my ($self)   = shift;
 
-     my ($cantidad,$ejemplares) = C4::AR::ImportacionIsoMARC::getEjemplaresFromRegistroDeImportacionById($self->getId);
+     my ($cantidad,$registros) = C4::AR::ImportacionIsoMARC::getRegistrosHijoFromRegistroDeImportacionById($self->getId);
 
     return $cantidad;
 }
 
-sub getEjemplares{
+sub getRegistrosHijo{
      my ($self)   = shift;
 
-     my ($cantidad,$ejemplares) = C4::AR::ImportacionIsoMARC::getEjemplaresFromRegistroDeImportacionById($self->getId);
+     my ($cantidad,$registros) = C4::AR::ImportacionIsoMARC::getRegistrosHijoFromRegistroDeImportacionById($self->getId);
 
-    return $ejemplares;
+    return $registros;
 }
 
 sub getRegistroPadre{
@@ -286,7 +295,7 @@ sub getTipo{
 
     if($self->getIdentificacion){
         if(($self->getRelacion)&&($self->getRegistroPadre)) {
-             return "Ejemplar";
+             return "Registro Hijo";
             }
         else{
         return "Registro";
