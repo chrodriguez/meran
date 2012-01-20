@@ -70,6 +70,39 @@ sub getRegistroMARCOriginal{
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
     return $marc_record;
     }
+
+sub getRegistroMARCResultado{
+    my ($self)      = shift;
+    my ($params) = @_;
+
+    my $marc_record_original = $self->getRegistroMARCOriginal();
+    my $marc_record = MARC::Record->new();
+    my $detalle_destino = $self->ref_importacion->esquema->getDetalleDestino();
+
+    foreach my $detalle (@$detalle_destino){
+        my $new_field=0;
+        my $dato = $self->getCampoSubcampoJoined($detalle->getCampoDestino,$detalle->getSubcampoDestino);
+
+        if ($detalle->getCampoDestino ne 'ZZZ'){
+            #Sino no esta configurado
+            if($detalle->getCampoDestino < '010'){
+                #CONTROL FIELD
+                $new_field = MARC::Field->new( $detalle->getCampoDestino, $dato );
+               }
+            else {
+                my $ind1='#';
+                my $ind2='#';
+                $new_field= MARC::Field->new($detalle->getCampoDestino, $ind1, $ind2,$detalle->getSubcampoDestino => $dato);
+                }
+            if($new_field){
+                $marc_record->append_fields($new_field);
+            }
+        }
+       }
+
+    return $marc_record;
+    }
+
 #----------------------------------- FIN - FUNCIONES DEL MODELO -------------------------------------------
 
 

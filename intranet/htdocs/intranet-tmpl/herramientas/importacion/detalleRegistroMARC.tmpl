@@ -20,7 +20,7 @@
             <br><br>
 
             <fieldset class="resultados_busqueda">
-            <legend class="titulo_legend trigger click">[% "Registro" | i18n %]</legend>
+            <legend class="titulo_legend trigger click">[% "Registro Original" | i18n %]</legend>
                 <pre>
                     [% registro_importacion.getRegistroMARCOriginal.as_formatted %]
                 </pre>
@@ -39,7 +39,14 @@
         </div>
 
         <div id="tabs-2">
+            <br><br>
 
+            <fieldset class="resultados_busqueda">
+            <legend class="titulo_legend trigger click">[% "Registro Resultado" | i18n %]</legend>
+                <pre>
+                    [% registro_importacion.getRegistroMARCResultado.as_formatted %]
+                </pre>
+            </fieldset>
         </div>
 
     </div>

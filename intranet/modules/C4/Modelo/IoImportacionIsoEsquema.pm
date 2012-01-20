@@ -98,3 +98,26 @@ sub getDetalleByCampoSubcampoDestino{
 
     return $detalle_completo;
 }
+
+
+sub getDetalleDestino{
+    my ($self)  = shift;
+
+    require C4::Modelo::IoImportacionIsoEsquemaDetalle;
+    require C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager;
+
+    my @filtros;
+    push(@filtros,(id_importacion_esquema   => { eq => $self->getId }));
+    push(@filtros,(campo_destino            => { ne => undef}));
+    push(@filtros,(subcampo_destino         => { ne => undef}));
+
+    my $detalleTemp = C4::Modelo::IoImportacionIsoEsquemaDetalle->new();
+    my $ordenAux= $detalleTemp->sortByString('orden');
+    my $detalle_completo = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
+                                                                                        query => \@filtros,
+                                                                                        sort_by => $ordenAux,
+                                                                                        distinct =>1,
+     );
+
+    return $detalle_completo;
+}
