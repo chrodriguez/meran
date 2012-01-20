@@ -172,7 +172,7 @@ function procesarRelacionRegistroEjemplares(id){
 
 
         objAHDetalle.campo_identificacion = $("#campo1").val();
-        if ( $("#subcampo2").val()){
+        if ( $("#subcampo1").val()){
             objAHDetalle.subcampo_identificacion = $("#subcampo1").val();
         }
 
@@ -180,6 +180,12 @@ function procesarRelacionRegistroEjemplares(id){
         if ( $("#subcampo2").val()){
         objAHDetalle.subcampo_relacion = $("#subcampo2").val();
         }
+
+        objAHDetalle.campo_edicion = $("#campo3").val();
+        if ( $("#subcampo3").val()){
+        objAHDetalle.subcampo_edicion = $("#subcampo3").val();
+        }
+
         objAHDetalle.preambulo_relacion = $("#preambulo").val();
 
         objAHDetalle.sendToServer();

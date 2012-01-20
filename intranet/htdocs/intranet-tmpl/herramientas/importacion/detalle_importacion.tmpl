@@ -12,6 +12,8 @@
          $("#subcampo1").hide();
          $("#campo2").hide();
          $("#subcampo2").hide();
+         $("#campo3").hide();
+         $("#subcampo3").hide();
          makeToggle('configuracion_acciones','trigger',null,true);
          makeToggle('configuracion_matcheo','trigger',null,true);
          makeToggle('configuracion_relacion','trigger',null,true);
@@ -133,12 +135,23 @@ function eleccionSubCampo(){
           </li>
 
           <li class="sub_item">
-            <label>[% 'Campo de Relaci&oacute;n' | i18n %]: </label>
+            <label>[% 'Campo de Relaci&oacute;n Ejemplares' | i18n %]: </label>
             [% selectCampoX2 %]
             <select name="campo2" id="campo2" onChange="eleccionCampoOrigen('2','[% importacion.getIdImportacionEsquema %]')">
                 <option value="-1">[% 'Seleccionar CampoX' | i18n %]</option>
             </select>
             <select name="subcampo2" id="subcampo2">
+                <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
+            </select>
+          </li>
+
+            <li class="sub_item">
+            <label>[% 'Campo de Relaci&oacute;n Ediciones' | i18n %]: </label>
+            [% selectCampoX3 %]
+            <select name="campo3" id="campo3" onChange="eleccionCampoOrigen('3','[% importacion.getIdImportacionEsquema %]')">
+                <option value="-1">[% 'Seleccionar CampoX' | i18n %]</option>
+            </select>
+            <select name="subcampo3" id="subcampo3">
                 <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
             </select>
           </li>

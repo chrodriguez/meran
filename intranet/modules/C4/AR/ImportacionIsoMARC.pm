@@ -160,7 +160,7 @@ sub guardarRegistrosNuevaImportacion {
                                      $movidos->{$field->tag}=$campo;
                                      $campos->{$campo}=1;
                                 }
-                             }
+                             }marc record
 
                             $new_field= MARC::Field->new($campo, $ind1, $ind2,$subfield->[0] => $subfield->[1]);
                             }
