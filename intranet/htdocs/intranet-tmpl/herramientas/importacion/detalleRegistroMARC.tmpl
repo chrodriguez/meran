@@ -15,6 +15,7 @@
         <ul>
             <li><a href="#tabs-1">Registro Original</a></li>
             <li><a href="#tabs-2">Registro Resultado</a></li>
+            <li><a href="#tabs-3">Vista Previa</a></li>
         </ul>
         <div id="tabs-1" >
             <br><br>
@@ -49,6 +50,131 @@
             </fieldset>
         </div>
 
+        <div id="tabs-3">
+
+
+
+
+    <fieldset>
+           <legend>[% "Detalles de Nivel 1 registro" | i18n %] [% id1 %] ([% nivel1_template %])</legend>
+
+        <div id="detalle1" class="detalle1">
+            <ul class="listado_sin_margen">
+                [% FOREACH nivel1 %]
+                        [% IF liblibrarian %]
+                            [% IF dato %]
+                            <li>    [% liblibrarian %]: <strong>[% dato %]</strong> </li>
+                            [% END %]
+                        [% END %]
+                [% END %]
+            </ul>
+
+        [% IF estadoDeColeccion %]
+        <div id="fieldset_estado_coleccion_[% id1 %]">
+            <fieldset>
+                <legend class="trigger trigger_estado_coleccion_[% id1 %] click">[% "Estado de Colecci&oacute;n" | i18n %]</legend>
+                    <div id="estado_coleccion[% id1 %]" class="estado_coleccion[% id1 %]">
+
+                          <ul class="listado_sin_margen estado_coleccion">
+                            [% FOREACH anio IN estadoDeColeccion.keys.sort %]
+                                [% IF estadoDeColeccion.$anio.keys %]
+                                <li>
+                                    [% IF anio != '#' %]<b>[% anio %]</b>[% END %]
+                                    [% FOREACH volumen IN estadoDeColeccion.$anio.keys.sort %]
+                                        [% IF volumen != '#' %][% volumen  %][% END %]
+                                        (
+                                        [% FOREACH fasciculo IN estadoDeColeccion.$anio.$volumen.keys.sort %]
+                                             [% fasciculo %]
+                                        [% END %]
+                                        )
+                                    [% END %]
+                                </li>
+                                [% END %]
+                            [% END %]
+                            </ul>
+
+                                    [% IF issn %]
+                                        <div style="position: relative; float:right;">
+                                            <div class="google-books">
+                                                <a id="ISSN:[% issn %]"  style="display:none" target="_blank">
+                                                    <img src="/includes/css/gbs_preview_button1.gif" border="0" style="margin: 0"/>
+                                                </a>
+                                            </div>
+                                            <script src="http://books.google.com/books?jscmd=viewapi&bibkeys=ISSN:[% issn %]&callback=ProcessGBSBookInfo"></script>
+                                        </div>
+                                    [% END %]
+
+                    </div>
+            </fieldset>
+        </div>
+    [% END %] <!-- End de If estadoColeccion  -->
+
+        [% "N&uacute;mero Total de Ejemplares" | i18n %]:<b> [% cantItemN1 %]</b>
+        </div>
+    </fieldset>
+    <script type="text/javascript">makeToggle('estado_coleccion[% id1 %]','trigger_estado_coleccion_[% id1 %]',null,false);</script>
+
+[% FOREACH nivel2 %]
+
+        <div id="fieldset_grupo[% id2 %]">
+            <fieldset>
+                <legend class="trigger trigger_3_[% id2 %] click">[% "Detalles de Nivel 2 para registro" | i18n %] [% id2 %] [% "GRUPO" | i18n %] - [% tipo_documento %] ([% nivel2_template %])</legend>
+                    <div id="grupo[% id2 %]" class="grupo[% id2 %]">
+
+                        <!-- NIVEL 2 -->
+                            <div id="[% id2 %]" style="position: relative; float:right;"></div>
+                           <div id="indice_data[% id2 %]" style="display:none">
+                            <pre>[% indice %]</pre>
+                          </div>
+
+                            <br>
+
+                            [% IF portada_registro or isbn %]
+                               <div style="position: relative; float:right; margin-right: 12px;">
+                                [% IF portada_registro %]
+                                    <a class="fancylink" href="/uploads/covers/[% portada_registro_big %]">
+                                        <img style="max-height: 180px; max-width:110px;" src="/uploads/covers/[% portada_registro_medium %]" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" />
+                                    </a>
+                                [% END %]
+                                [% IF isbn %]
+                                    <div class="google-books">
+                                        <a style="margin-left: 10px;" id="ISBN:[% isbn %]"  style="display:none" target="_blank">
+                                            <img src="/includes/css/gbs_preview_button1.gif" border="0" style="margin: 0"/>
+                                        </a>
+                                    </div>
+                                    <script src="http://books.google.com/books?jscmd=viewapi&bibkeys=ISBN:[% isbn %]&callback=ProcessGBSBookInfo"></script>
+                                [% END %]
+                               </div>
+                            [% END %]
+
+                            <ul class="listado_sin_margen" style="clear: none; margin-top:12px;">
+                                [% FOREACH nivel2_array %]
+                                    [% IF liblibrarian %]
+                                        [% IF dato %]
+                                        <li> [% liblibrarian %]: <strong>[% dato %]</strong></li>
+                                        [% END %]
+                                    [% END %]
+                                [% END %] <!-- END FOREACH nivel2_array -->
+                                <li>
+                                        [% INCLUDE "estructura/ejemplaresDelGrupo.tmpl" %]
+                                </li>
+                                [% IF nivel1_analiticas_cant %]
+                                    <li>
+                                        [% INCLUDE "estructura/analiticasDelGrupo.tmpl" %]
+                                    </li>
+                                [% END %]
+                            </ul>
+
+                </div> <!--Fin <div id="grupo[  id2 ]-->
+            </fieldset>
+            <script type="text/javascript">makeToggle('grupo[% id2 %]','trigger_3_[% id2 %]',null,false);</script>
+        </div>
+
+[% END %]<!-- END FOREACH Nivel 2-->
+</div> <!-- Fin DIV detalleComun -->
+
+
+        </div>
     </div>
     </div>
 </fieldset>
