@@ -145,17 +145,6 @@ function eleccionSubCampo(){
             </select>
           </li>
 
-            <li class="sub_item">
-            <label>[% 'Campo de Relaci&oacute;n Ediciones' | i18n %]: </label>
-            [% selectCampoX3 %]
-            <select name="campo3" id="campo3" onChange="eleccionCampoOrigen('3','[% importacion.getIdImportacionEsquema %]')">
-                <option value="-1">[% 'Seleccionar CampoX' | i18n %]</option>
-            </select>
-            <select name="subcampo3" id="subcampo3">
-                <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
-            </select>
-          </li>
-
           <li class="sub_item">
             <label>[% 'Pre&aacute;mbulo Campo de Relaci&oacute;n' | i18n %]: </label>
             <input type='text'name="preambulo" id="preambulo">
