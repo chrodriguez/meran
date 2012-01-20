@@ -290,6 +290,7 @@ function makeDataTable(id) {
 		$(id).dataTable({
 			"bFilter" : true,
 			"bPaginate" : false,
+			"bDestroy"	: true,
 			"oLanguage" : {
 				"sLengthMenu" : S_LENGTH_MENU,
 				"sZeroRecords" : S_ZERO_RECORDS,

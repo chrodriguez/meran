@@ -19,8 +19,7 @@
 		});
 
         
-        $('.fancy_link').fancybox({
-        });
+        $('.fancy_link').fancybox({});
 
         mostrarNovedades();
         mensajesContacto();
@@ -40,20 +39,20 @@
   
 
     function mostrarNovedades(){
-        objAH               = new AjaxHelper(updateActualizarTabla);
-        objAH.debug         = true;
-        objAH.showStatusIn  = '';
-        objAH.url           = URL_PREFIX+'/novedadesIntra.pl';
-        objAH.tipoAccion    = "MOSTRAR_NOVEDADES";
-        objAH.sendToServer();
+        var objAH_temp               = new AjaxHelper(updateActualizarTabla);
+        objAH_temp.debug         = true;
+        objAH_temp.showStatusIn  = '';
+        objAH_temp.url           = URL_PREFIX+'/novedadesIntra.pl';
+        objAH_temp.tipoAccion    = "MOSTRAR_NOVEDADES";
+        objAH_temp.sendToServer();
     }
 
     function mensajesContacto(){
-        objAH               = new AjaxHelper(updateMensajesContacto);
-        objAH.debug         = true;
-    this.showState      = false;
-        objAH.url           = URL_PREFIX+'/mensajes_contacto.pl';
-        objAH.sendToServer();
+        var objAH_temp               = new AjaxHelper(updateMensajesContacto);
+        objAH_temp.debug         = true;
+        this.showState      = false;
+        objAH_temp.url           = URL_PREFIX+'/mensajes_contacto.pl';
+        objAH_temp.sendToServer();
     }
 
     function updateMensajesContacto(responseText){
