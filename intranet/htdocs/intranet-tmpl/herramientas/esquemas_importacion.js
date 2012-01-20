@@ -201,7 +201,7 @@ function updateSortableSC(){
 function eleccionSubCampoEsquema(){
 
     if ($('#subcampo').val() != -1){
-        $('#liblibrarian').html(SUBCAMPOS_ARRAY[$('#subcampo').val()].liblibrarian);
+        $('#liblibrarian_esquema').html(SUBCAMPOS_ARRAY[$('#subcampo').val()].liblibrarian);
 //         mostrarTablaRef();
     }
     else 

@@ -151,6 +151,8 @@ function updateEleccionCampo(responseText){
     var subcampos_array=JSONstring.toObject(responseText);
     //se inicializa el combo
     $("#subcampo").html('');
+    $("#liblibrarian").val('');
+    $("#liblibrarian_esquema").html('');
     var options = "<option value='-1'>Seleccionar SubCampo</option>";
 //     var subcampo = new Object;    
 //     subcampo.liblibrarian = '';
