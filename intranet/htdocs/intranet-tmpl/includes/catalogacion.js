@@ -1368,11 +1368,10 @@ function procesarSubCampo(objeto, marc_group){
     if(marc_conf_obj.getTieneEstructura() == '0'){ 
         //no existe estructura de catalogacion configurada para este campo, subcampo
 // TODO armar una funcion q genere esto
-//         vista_intra         = vista_intra + "<div class='divComponente'><input type='text' id='" + marc_conf_obj.getIdCompCliente() + "' value='" + marc_conf_obj.getDato() + "' size='55' disabled></div>";
         vista_intra         = "<div class='divComponente'><input type='text' id='" + marc_conf_obj.getIdCompCliente() + "' value='" + marc_conf_obj.getDato() + "' size='55' disabled></div>";
         vista_intra         = vista_intra + crearIconWarning(marc_conf_obj);
+        vista_intra         = vista_intra + crearBotonEliminarSubcampo(marc_conf_obj);
         tiene_estructura    = 0;
-//         vista_intra         =  marc_conf_obj.getCampo() + '^' + marc_conf_obj.getSubCampo() + " - " + vista_intra
         divLabel            = crearDivLabel(marc_conf_obj.getCampo() + '^' + marc_conf_obj.getSubCampo() + " - " + marc_conf_obj.getVistaIntra(), marc_conf_obj.getIdCompCliente());  
         strComp             = "<li id='LI" + marc_conf_obj.getIdCompCliente() + "' class='sub_item'> " + divLabel + vista_intra + "</li>";  
     } else {
@@ -1655,6 +1654,13 @@ function crearBotonEliminarSubcampoRepetible(obj){
         return "";
     }
 }
+
+function crearBotonEliminarSubcampo(obj){
+
+    return "<div onclick=removeSubcampo('"+ obj.getIdCompCliente() +"') class='icon_borrar horizontal' title='Eliminar subcampo'/>";
+  
+}
+
 
 function crearIconWarning(obj){
 
