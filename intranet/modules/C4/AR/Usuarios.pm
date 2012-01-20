@@ -513,7 +513,7 @@ sub actualizarSocio {
         eval {
             my $socio = getSocioInfoPorNroSocio($params->{'nro_socio'});
             $socio->modificar($params);
-            $socio->setThemeINTRA($params->{'tema'} || 'default');
+#            $socio->setThemeINTRA($params->{'tema'} || 'default');
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U338', 'params' => []} ) ;
         };
 
@@ -1066,7 +1066,7 @@ sub updateUserProfile{
 	eval{
 		$socio->persona->setEmail($params->{'email'});
         $socio->setLocale($params->{'language'});
-        $socio->setThemeINTRA($params->{'temas_intra'});
+        #$socio->setThemeINTRA($params->{'temas_intra'});
         #SAVE DATA
 		$socio->persona->save();
 		$socio->save();

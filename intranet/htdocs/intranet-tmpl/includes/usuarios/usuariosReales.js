@@ -66,7 +66,6 @@ function guardarModificacionUsuario(){
     objAH.changepassword    = ( $('#changepassword').attr('checked') )?1:0;
     objAH.cumple_requisito	= ($('#cumple_requisito').attr('checked') )?1:0;    
 	objAH.tipoAccion        = 'GUARDAR_MODIFICACION_USUARIO';
-    objAH.tema              = $('#temas_intra').val();
     objAH.auth_nombre       = $('#auth_nombre').val();
     objAH.auth_dni          = $('#auth_dni').val();
     objAH.auth_telefono     = $('#auth_telefono').val();
@@ -171,7 +170,6 @@ function agregarUsuario(){
       objAH.cumple_requisito= ($('#cumple_requisito').attr('checked') )?1:0;
       objAH.changepassword  = ($('#changepassword').attr('checked') )?1:0;
       objAH.tipoAccion      = 'AGREGAR_USUARIO';
-      objAH.tema            = $('#temas_intra').val();
 
       objAH.sendToServer();
       startOverlay();
