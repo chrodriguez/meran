@@ -134,6 +134,7 @@ use vars qw(@EXPORT_OK @ISA);
     translateTipoCredencial
     translateYesNo_fromNumber
     translateYesNo_toNumber
+    printAjaxPercent
 );
 
 
@@ -4552,6 +4553,23 @@ sub translateYesNo_toNumber{
         return 0
     }
 }
+
+sub printAjaxPercent{
+	my ($total,$actual,$msg_object) = @_;
+	
+	my $percent = ($actual * 100) / $total;
+	
+	C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'PERCENTAGE_VALUE', 'params' => [$percent]} );
+	
+    my $infoOperacionJSON=to_json $msg_object;
+
+    my $session = CGI::Session->load();
+    
+    C4::AR::Auth::print_header($session);
+    print $infoOperacionJSON;
+}
+
+
 END { }       # module clean-up code here (global destructor)
 
 1;

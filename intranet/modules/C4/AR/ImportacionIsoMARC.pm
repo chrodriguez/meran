@@ -78,14 +78,19 @@ sub guardarNuevaImportacion {
        #Armar nuevo esquema (hash de hashes)
         my $detalle_esquema = $Io_importacion->obtenerCamposSubcamposDeRegistros();
 
+        my $total = 0;
+        my $actual = 0;
         foreach my $campo ( keys %$detalle_esquema) {
             foreach my $subcampo ( keys %{$detalle_esquema->{$campo}}) {
+            	$actual++;
                 my $nuevo_esquema_detalle          = C4::Modelo::IoImportacionIsoEsquemaDetalle->new(db=>$db);
                 my %detalle=();
                 $detalle{'campo'}=$campo;
                 $detalle{'subcampo'}=$subcampo;
                 $detalle{'id_importacion_esquema'}=$nuevo_esquema->getId;
                 $nuevo_esquema_detalle->agregar(\%detalle);
+
+                C4::AR::Utilidades::printAjaxPercent($total,$actual);
             }
         }
     }

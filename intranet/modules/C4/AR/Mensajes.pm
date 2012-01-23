@@ -563,6 +563,7 @@ my %mensajesINTRA = (
     'B455' => 'Error en funcion C4::AR::UploadFile::guardarRegistrosNuevaImportacion',
     'B456' => 'Error en funcion C4::AR::UploadFile::guardarRegistrosNuevaImportacion',
     'B457' => 'Error en funcion C4::AR::ImportacionIsoMARC::procesarRelacionRegistroEjemplares',
+    'PERCENTAGE_VALUE' => "*?*",
 );
 
 sub getMensaje {
@@ -726,6 +727,7 @@ sub add {
 
     my $messageString   = &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'}, $tipo, $msg_hashref->{'params'});
     $msg_hashref->{'message'}= $messageString;
+    $msg_hashref->{'codMsg'}= $msg_hashref->{'codMsg'};
 # C4::AR::Debug::debug("Mensajes::add => message: ".$messageString."\n");
 # C4::AR::Debug::debug("Mensajes::add => params: ".$msg_hashref->{'params'}->[0]."\n");
 
