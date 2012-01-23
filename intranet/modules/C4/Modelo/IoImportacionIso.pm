@@ -406,3 +406,18 @@ sub getReglasMatcheoArray{
     }
     return \@reglas_finales;
 }
+
+sub getRegistrosPadre{
+    my ($self)   = shift;
+
+    my ($cantidad, $registros) = C4::AR::ImportacionIsoMARC::getRegistrosFromImportacion($self->getId,'MAIN',0,'ALL');
+    return $registros;
+}
+
+sub getRegistros{
+    my ($self)   = shift;
+
+    my ($cantidad, $registros) = C4::AR::ImportacionIsoMARC::getRegistrosFromImportacion($self->getId,'ALL',0,'ALL');
+    return $registros;
+}
+

@@ -167,6 +167,25 @@ sub getMatching{
     return ($self->matching);
 }
 
+sub setMatching{
+    my ($self) = shift;
+    my ($matching) = @_;
+    $self->matching($matching);
+}
+
+
+sub getIdMatching{
+    my ($self) = shift;
+    return ($self->id_matching);
+}
+
+sub setIdMatching{
+    my ($self) = shift;
+    my ($matching) = @_;
+    $self->id_matching($matching);
+}
+
+
 sub getCampoSubcampoJoined{
     my ($self) = shift;
     my ($campo,$subcampo) = @_;
@@ -353,4 +372,23 @@ sub getTipo{
         }
     }
     return "Desconocido";
+}
+
+
+sub getDatosFromReglasMatcheo{
+     my ($self)   = shift;
+     my ($reglas) = @_;
+
+    my @reglas_datos=();
+
+    foreach my $regla (@$reglas){
+
+        my $dato = $self->getCampoSubcampoJoined($regla->{'campo'},$regla->{'subcampo'});
+
+        if ($dato){
+            $regla->{'datos'}=$dato;
+            push (@reglas_datos,$regla);
+            }
+        }
+    return  \@reglas_datos;
 }

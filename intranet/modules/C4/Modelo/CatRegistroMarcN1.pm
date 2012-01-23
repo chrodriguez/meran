@@ -36,18 +36,18 @@ sub setMarcRecord{
 
 sub getSignaturas{
     my ($self)          = shift;
-    
+
     use C4::Modelo::CatRegistroMarcN2;
-    
+
     my $array_nivel2 = C4::AR::Nivel2::getNivel2FromId1($self->getId1,$self->db);
-    
+
     my @signaturas;
-    
+
     foreach my $nivel2 (@$array_nivel2){
-    	my $signaturas_nivel2 = $nivel2->getSignaturas;
-    	push (@signaturas, @$signaturas_nivel2);
-    }	
-    
+        my $signaturas_nivel2 = $nivel2->getSignaturas;
+        push (@signaturas, @$signaturas_nivel2);
+    }
+
     return (\@signaturas);
 }
 
@@ -86,7 +86,7 @@ sub setearLeader {
     my ($params)    = @_;
 
     my $nivel_bibliografico = C4::Modelo::RefNivelBibliografico->getByPk($params->{'id_nivel_bibliografico'});
-    my $marc_record         = MARC::Record->new_from_usmarc($self->getMarcRecord()); 
+    my $marc_record         = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
 # FIXME no me funciona el substr con reemplazo
     my $leader = substr($marc_record->leader(), 0, 7).$nivel_bibliografico->getCode().substr($marc_record->leader(), 8, 24);
@@ -122,7 +122,7 @@ sub modificar{
 
     #seteo datos del LEADER
     $self->setearLeader($params);
-    
+
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
 #     C4::AR::Debug::debug("CatRegistroMarcN1 => agregar => LEADER modificado !!!!!!!!!!!!! ".$marc_record->leader());
 # die;
@@ -141,62 +141,62 @@ sub eliminar{
       $n2->eliminar();
     }
 
-    $self->delete();    
+    $self->delete();
 }
 
 sub getCDU{
     my ($self)      = shift;
-    
+
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
-    
-#     C4::AR::Debug::debug("CatRegistroMarcN1 => CDU ".$marc_record->subfield("080","a")); 
+
+#     C4::AR::Debug::debug("CatRegistroMarcN1 => CDU ".$marc_record->subfield("080","a"));
 
     return $marc_record->subfield("080","a");
 }
 
 # sub getAutoresSecundarios{
 #     my ($self)      = shift;
-#     
+#
 #     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
-#     
-# #     C4::AR::Debug::debug("CatRegistroMarcN1 => autores secundarios ".$marc_record->subfield("700","a")); 
-# 
+#
+# #     C4::AR::Debug::debug("CatRegistroMarcN1 => autores secundarios ".$marc_record->subfield("700","a"));
+#
 #     return $marc_record->subfield("700","a");
 # }
 
 # sub getAutoresSecundariosObject{
 #     my ($self)      = shift;
-#     
+#
 #     #obtengo la referencia del autor secundario
 #     my $ref_autor   = $self->getAutoresSecundarios();
 #     my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas($ref_autor);
 # #     C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> ref_autor => ".$ref_autor);
 # #     C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> ref => ".$ref);
-# 
+#
 #     my $autor       = C4::Modelo::CatAutor->getByPk($ref);
-# 
+#
 #     if(!$autor){
 #         C4::AR::Debug::debug("CatRegistroMarcN1 => getAutoresSecundariosObject()=> EL OBJECTO (ID) AUTOR NO EXISTE");
 #         $autor = C4::Modelo::CatAutor->new();
 #     }
-# 
+#
 #     return ($autor);
 # }
 
 sub getAutoresSecundarios{
     my ($self)      = shift;
-    
+
     my @colaboradores_array;
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
     my $autor;
-    
+
 
     my @campos_array = $marc_record->field("700");
-    
+
     foreach my $campo (@campos_array){
         my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas($campo->subfield("a"));
         my $colaborador = C4::Modelo::CatAutor->getByPk($ref);
-        
+
         if ($campo->subfield("e")) {
             $autor = $colaborador->getCompleto()." (".$campo->subfield("e").")";
         }
@@ -209,15 +209,15 @@ sub getAutoresSecundarios{
 
 sub getTemas{
     my ($self)      = shift;
-    
+
     my @temas;
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
-    
+
 
     my @campos_array = $marc_record->field("650");
-    
+
     foreach my $campo (@campos_array){
-#         C4::AR::Debug::debug("CatRegistroMarcN1 => getTemas ".$campo->subfield("a")); 
+#         C4::AR::Debug::debug("CatRegistroMarcN1 => getTemas ".$campo->subfield("a"));
         my $ref     = C4::AR::Catalogacion::getRefFromStringConArrobas($campo->subfield("a"));
         my $tema    = C4::Modelo::CatTema->getByPk($ref);
 
@@ -230,17 +230,17 @@ sub getTemas{
 
 sub getTema{
     my ($self)      = shift;
-    
+
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
-    
-#     C4::AR::Debug::debug("CatRegistroMarcN1 => temas ".$marc_record->subfield("700","a")); 
+
+#     C4::AR::Debug::debug("CatRegistroMarcN1 => temas ".$marc_record->subfield("700","a"));
 
     return $marc_record->subfield("650","a");
 }
 
 sub getTemaObject{
     my ($self)      = shift;
-    
+
     #obtengo la referencia del autor secundario
     my $ref_tema   = $self->getTema();
     my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas($ref_tema);
@@ -259,24 +259,24 @@ sub getTemaObject{
 
 sub getNombreGeografico{
     my ($self)      = shift;
-    
+
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
-    
-#     C4::AR::Debug::debug("CatRegistroMarcN1 => nombre geografico ".$marc_record->subfield("651","a")); 
+
+#     C4::AR::Debug::debug("CatRegistroMarcN1 => nombre geografico ".$marc_record->subfield("651","a"));
 
     return $marc_record->subfield("651","a");
 }
 
 sub getNombreGeograficoObject{
     my ($self)      = shift;
-    
+
     #obtengo la referencia del autor secundario
     my $ref_pais    = $self->getNombreGeografico();
     my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas($ref_pais);
 #     C4::AR::Debug::debug("CatRegistroMarcN1 => getNombreGeograficoObject()=> ref_tema => ".$ref_pais);
 #     C4::AR::Debug::debug("CatRegistroMarcN1 => getNombreGeograficoObject()=> ref => ".$ref);
 
-    my $pais        = C4::Modelo::RefPais::Manager->get_ref_pais ( 
+    my $pais        = C4::Modelo::RefPais::Manager->get_ref_pais (
                                                                       query     => [  'iso' => { eq => $ref } ]
                                                         );
 
@@ -289,43 +289,43 @@ sub getNombreGeograficoObject{
         return ($pais->[0]);
     }
 
-    
+
 }
 
 
 sub getTerminoNoControlado{
     my ($self)      = shift;
-    
+
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
-    
-#     C4::AR::Debug::debug("CatRegistroMarcN1 => termino no contralado ".$marc_record->subfield("653","a")); 
+
+#     C4::AR::Debug::debug("CatRegistroMarcN1 => termino no contralado ".$marc_record->subfield("653","a"));
 
     return $marc_record->subfield("653","a");
 }
 
 sub getEntradaNoControlado{
     my ($self)      = shift;
-    
+
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
-    
-#     C4::AR::Debug::debug("CatRegistroMarcN1 => entrada no contralado ".$marc_record->subfield("720","a")); 
+
+#     C4::AR::Debug::debug("CatRegistroMarcN1 => entrada no contralado ".$marc_record->subfield("720","a"));
 
     return $marc_record->subfield("720","a");
 }
 
 sub getTitulo{
     my ($self)      = shift;
-    
+
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
-    
-#     C4::AR::Debug::debug("CatRegistroMarcN1 => titulo ".$marc_record->subfield("245","a")); 
+
+#     C4::AR::Debug::debug("CatRegistroMarcN1 => titulo ".$marc_record->subfield("245","a"));
 
     return $marc_record->subfield("245","a");
 }
 
 sub getRestoDelTitulo{
     my ($self)      = shift;
-    
+
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
     return $marc_record->subfield("245","b");
@@ -333,9 +333,9 @@ sub getRestoDelTitulo{
 
 sub getAutorObject{
     my ($self)      = shift;
-    
+
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
-    
+
     #obtengo la referencia al autor
     my $ref_autor   = $marc_record->subfield("100","a");
     my $ref         = C4::AR::Catalogacion::getRefFromStringConArrobas($ref_autor);
@@ -356,7 +356,7 @@ sub getAutorObject{
 =cut
 sub getAutor{
     my ($self)      = shift;
-    
+
     my $autor = $self->getAutorObject();
 
     return ($autor->getCompleto());
@@ -368,7 +368,7 @@ Recupera el Nivel Bibliografico (el code), bit 7 del LEADER
 sub getNivelBibliografico{
     my ($self)      = shift;
 
-# bit 7 del Leader    
+# bit 7 del Leader
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
 #     C4::AR::Debug::debug("CatRegistroMarcN1 => getNivelBibliografico => LEADER !!!!!!!!!!!!!!!! ".substr ($marc_record->leader(),7,1));
@@ -377,12 +377,12 @@ sub getNivelBibliografico{
 
 sub getNivelBibliograficoObject{
     my ($self)      = shift;
-    
+
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
     my $code        = $self->getNivelBibliografico();
 
     my $nivel_bibliografico = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico( query => [ code => { eq => $code }]);
-   
+
 
     return ($nivel_bibliografico->[0]);
 }
@@ -443,6 +443,24 @@ sub toMARC_Opac{
 }
 
 
+=head2 sub getMarcRecordData
+    Construye un registro MARC con datos referenciados
+=cut
+sub getMarcRecordData{
+    my ($self) = shift;
+
+    #obtengo el marc_record del NIVEL 1
+    my $marc_record             = MARC::Record->new_from_usmarc($self->getMarcRecord());
+
+    my $params;
+    $params->{'nivel'}          = '1';
+    $params->{'id_tipo_doc'}    = $self->getTemplate()||'ALL';
+
+    my $MARC_record       = C4::AR::Catalogacion::marc_record_with_data($marc_record, $params->{'id_tipo_doc'}, $params->{'tipo'}, $params->{'nivel'});
+    return ($MARC_record);
+}
+
+
 =head2 sub toMARC_OAI
     Construye un registro MARC con datos referenciados
 =cut
@@ -455,9 +473,9 @@ sub toMARC_OAI{
     my $params;
     $params->{'nivel'}          = '1';
     $params->{'id_tipo_doc'}    = $self->getTemplate()||'ALL';
-    
+
     $marc_record =  C4::AR::Catalogacion::filtrarVisualizacionOAI($marc_record, $params);
-    
+
     my $MARC_record       = C4::AR::Catalogacion::marc_record_to_oai($marc_record, $params->{'id_tipo_doc'}, $params->{'tipo'}, $params->{'nivel'});
 
     return ($MARC_record);
@@ -469,8 +487,8 @@ sub toMARC_OAI{
 sub getGrupos {
     my ($self) = shift;
 
-    #recupero todos los grupos de nivel 1 
-    my ($nivel2_object_array) = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2( 
+    #recupero todos los grupos de nivel 1
+    my ($nivel2_object_array) = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(
                                                                         query => [ id => { eq => $self->getId1 } ]
                                                                    );
     return $nivel2_object_array;
@@ -486,7 +504,7 @@ sub tienePrestamos{
     #recupero todos los grupos del nivel 1
     my ($nivel2_object_array) = $self->getGrupos();
 
-    #recorro los id2 del nivel 1 para verificar si tienen prestamos o no 
+    #recorro los id2 del nivel 1 para verificar si tienen prestamos o no
     foreach my $nivel2 (@$nivel2_object_array){
         $cant = C4::AR::Prestamos::getCountPrestamosDeGrupo($nivel2->getId2);
         if($cant > 0){

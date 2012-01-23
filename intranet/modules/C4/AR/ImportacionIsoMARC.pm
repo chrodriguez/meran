@@ -82,7 +82,7 @@ sub guardarNuevaImportacion {
         my $actual = 0;
         foreach my $campo ( keys %$detalle_esquema) {
             foreach my $subcampo ( keys %{$detalle_esquema->{$campo}}) {
-            	$actual++;
+                $actual++;
                 my $nuevo_esquema_detalle          = C4::Modelo::IoImportacionIsoEsquemaDetalle->new(db=>$db);
                 my %detalle=();
                 $detalle{'campo'}=$campo;
@@ -943,10 +943,30 @@ sub procesarReglasMatcheo {
           my $reglas_matcheo = $params->{'reglas_matcheo'};
           $importacion->setReglasMatcheo($reglas_matcheo);
           $importacion->save();
-          my @reglas= $importacion->getReglasMatcheo();
+          my $reglas= $importacion->getReglasMatcheoArray();
 
         #ACA HAY QUE PROCESAR LAS REGLAS
         # Recorrer cada registro y ver si matchea contra alguno de la base
+
+        my $registros_importacion = $importacion->getRegistrosPadre();
+
+        foreach my $registro (@$registros_importacion){
+            #Armo las reglas con dato y busco en el catalogo si existe
+            my $reglas_registro = $registro->getDatosFromReglasMatcheo($reglas);
+            my $id_matching =0;
+                if(scalar(@$reglas_registro)){
+                    $id_matching = C4::AR::ImportacionIsoMARC::getIdMatchingFromCatalog($reglas_registro);
+                }
+
+            if($id_matching){
+                $registro->setMatching(1);
+                $registro->setIdMatching($id_matching);
+                }
+              else{
+                $registro->setMatching(0);
+                  }
+              $registro->save();
+            }
 
         if(!$msg_object->{'error'}){
          $msg_object->{'error'}= 0;
@@ -967,6 +987,32 @@ sub procesarReglasMatcheo {
 }
 
 
+sub getIdMatchingFromCatalog {
+    my ($reglas)    = @_;
+
+    my  $nivel1_array_ref = C4::AR::Nivel1::getNivel1Completo();
+
+    foreach my $nivel1 ( @$nivel1_array_ref)
+    {
+        my $marc_record = $nivel1->getMarcRecordData();
+        my $match=0;
+            foreach my $regla (@$reglas){
+                my $data = $marc_record->subfield($regla->{'campo'},$regla->{'subcampo'});
+                if ($regla->{'dato'} eq $data) {
+                    $match =1;
+                    }
+                else{
+                    $match =0;
+                    }
+            }
+
+        if($match){
+            return $nivel1->getId;
+            }
+     }
+
+    return(0);
+}
 
 
 END { }       # module clean-up code here (global destructor)
