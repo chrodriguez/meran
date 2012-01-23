@@ -191,3 +191,89 @@ function updateRelacionRegistroEjemplares(responseText){
         var Messages=JSONstring.toObject(responseText);
         setMessages(Messages);
 }
+
+
+
+
+function eliminarCampoReglasMatcheo(pos){
+
+   var nuevas_reglas="";
+   var reglas= $('#lista_reglas_matcheo').val();
+   var reglas_arr = (reglas).split("#");
+   for (regla in reglas_arr){
+      if (pos != regla){
+         nuevas_reglas=nuevas_reglas+reglas_arr[regla];
+      }
+   }
+   $('#lista_reglas_matcheo').val(nuevas_reglas);
+   cargarCampoReglasMatcheo();
+}
+
+
+function agregarCampoReglasMatcheo(){
+
+
+    if ($('#subcampo').val() != -1){
+        var nueva_regla=$('#campo').val()+"$"+$('#subcampo').val()+"$"+$('#nombre_subcampo').html();
+        if (existeCampoReglaMatcheo(nueva_regla) == 0){
+            var reglas= $('#lista_reglas_matcheo').val();
+            if(reglas){
+                $('#lista_reglas_matcheo').val(reglas+"#"+nueva_regla);
+            }else{
+                $('#lista_reglas_matcheo').val(nueva_regla);
+            }
+            cargarCampoReglasMatcheo();
+        }
+    }
+}
+
+function existeCampoReglaMatcheo(nueva_regla){
+   var reglas= $('#lista_reglas_matcheo').val();
+   if(reglas){
+        var reglas_arr = (reglas).split("#");
+        for (regla in reglas_arr){
+           if (nueva_regla == reglas_arr[regla]){
+                return 1;
+               }
+        }
+    }
+   return 0;
+}
+
+function cargarCampoReglasMatcheo(){
+        var reglas= $('#lista_reglas_matcheo').val();
+        var resultado="";
+        if(reglas){
+            var reglas_arr = (reglas).split("#");
+            for (regla in reglas_arr){
+                 var regla_actual = reglas_arr[regla];
+                 var regla_actual_arr = (regla_actual).split("$");
+                resultado=resultado+"<tr align='center'>";
+                resultado=resultado+"<td>"+regla_actual_arr[0]+"</td>";
+                resultado=resultado+"<td>"+regla_actual_arr[1]+"</td>";
+                resultado=resultado+"<td>"+regla_actual_arr[2]+"</td>";
+                resultado=resultado+"<td><input type='button' name='-' id='-' value='-' onclick=eliminarCampoReglasMatcheo('"+regla+"')></td>";
+                resultado=resultado+"</tr>";
+            }
+        }
+        $('#reglas_matcheo').html(resultado);
+
+}
+
+function procesarReglasMatcheo(id){
+
+        objAHDetalle=new AjaxHelper(updateReglasMatcheo);
+        objAHDetalle.url               = URL_PREFIX+'/herramientas/importacion/importarDB.pl';
+        objAHDetalle.debug             = true;
+        objAHDetalle.showOverlay       = true;
+        objAHDetalle.tipoAccion        = "REGLAS_MATCHEO";
+        objAHDetalle.id = id;
+        objAHDetalle.reglas_matcheo = $("#lista_reglas_matcheo").val();
+        objAHDetalle.sendToServer();
+
+}
+
+function updateReglasMatcheo(responseText){
+        var Messages=JSONstring.toObject(responseText);
+        setMessages(Messages);
+}
