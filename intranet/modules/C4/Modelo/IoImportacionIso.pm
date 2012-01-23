@@ -389,3 +389,20 @@ sub getReglasMatcheo{
     my ($self)   = shift;
     return $self->reglas_matcheo;
 }
+
+sub getReglasMatcheoArray{
+    my ($self)   = shift;
+
+    my @reglas_matcheo= split(/#/, $self->reglas_matcheo);
+    my @reglas_finales=();
+
+    foreach my $regla (@reglas_matcheo){
+        my @regla_splitted = split(/$/, $regla);
+        my %regla_final;
+        $regla_final{'campo'}       = $regla_splitted[0];
+        $regla_final{'subcampo'}    = $regla_splitted[1];
+        $regla_final{'nombre'}      = $regla_splitted[2];
+        push (@reglas_finales,\%regla_final);
+    }
+    return \@reglas_finales;
+}

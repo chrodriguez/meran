@@ -858,7 +858,6 @@ sub procesarRelacionRegistroEjemplares {
       my ($params) = @_;
 
      my $msg_object= C4::AR::Mensajes::create();
-     my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($params->{'id'});
 
      eval {
 
@@ -928,6 +927,47 @@ sub obtenerCamposDeArchivo {
     }
     return(\%detalleCampos);
 }
+
+
+
+sub procesarReglasMatcheo {
+      my ($params) = @_;
+
+     my $msg_object= C4::AR::Mensajes::create();
+
+     eval {
+
+          my $id_importacion             = $params->{'id'};
+          my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($id_importacion);
+
+          my $reglas_matcheo = $params->{'reglas_matcheo'};
+          $importacion->setReglasMatcheo($reglas_matcheo);
+          $importacion->save();
+          my @reglas= $importacion->getReglasMatcheo();
+
+        #ACA HAY QUE PROCESAR LAS REGLAS
+        # Recorrer cada registro y ver si matchea contra alguno de la base
+
+        if(!$msg_object->{'error'}){
+         $msg_object->{'error'}= 0;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IO11', 'params' => []} ) ;
+        }
+     };
+
+     if ($@){
+         #Se loguea error de Base de Datos
+         &C4::AR::Mensajes::printErrorDB($@, 'B458','INTRA');
+         #Se setea error para el usuario
+         $msg_object->{'error'}= 1;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IO12', 'params' => []} ) ;
+     }
+
+     return ($msg_object);
+
+}
+
+
+
 
 END { }       # module clean-up code here (global destructor)
 

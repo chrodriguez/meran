@@ -12,11 +12,13 @@
          $("#subcampo1").hide();
          $("#campo2").hide();
          $("#subcampo2").hide();
-         $("#campo3").hide();
-         $("#subcampo3").hide();
+
+
          makeToggle('configuracion_acciones','trigger',null,true);
          makeToggle('configuracion_matcheo','trigger',null,true);
          makeToggle('configuracion_relacion','trigger',null,true);
+
+         cargarCampoReglasMatcheo();
 
          detalleImportacion([% importacion.getId %]);
 
@@ -31,7 +33,6 @@ function eleccionSubCampo(){
     else
         enable_disableSelects();
 }
-
 
 </script>
 
@@ -86,29 +87,39 @@ function eleccionSubCampo(){
             <li class="sub_item">
                 <label for="campo">[% 'Campo a Matchear' | i18n %]:</label>
                  [% selectCampoX %]
-              <select name="campo" id="campo" onChange="eleccionCampo()">
+              <select name="campo" id="campo" onChange="eleccionCampo()" disabled>
                   <option value="-1">[% 'Seleccionar CampoX' | i18n %]</option>
               </select>
-              <select name="subcampo" id="subcampo" onChange="eleccionSubCampo()">
+              <select name="subcampo" id="subcampo" onChange="eleccionSubCampo()" disabled>
                         <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
-                    </select>
-           </li>
+              </select>
+              <strong><span id="nombre_subcampo"></span></strong>
+           <input type='button' name="+" id="+" value="+" onclick="agregarCampoReglasMatcheo()">
 
-           <li class="sub_item">
-                <label for="campo"> [% 'Nombre' | i18n %]:</label> <strong><span id="nombre_subcampo"></span></strong>
-            </li>
-          <li class="sub_item">
-            [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% '+' | i18n %]",
-                                                                    onClick => "agregarCampoReglasMatcheo('[% importacion.getId %]');",
-                                        ) ;
-            [% END %]
-          </li>
-          <li class="sub_item">
-            <label>[% 'Campos a buscar' | i18n %]: </label>
-            <input type='text' name="campos_matcheo" id="campos_matcheo">
-          </li>
-     </ol>
+           </li>
+           </ol>
+           <input type='hidden'name="lista_reglas_matcheo" id="lista_reglas_matcheo" value="[% importacion.getReglasMatcheo %]">
+          <div class="datos_tabla_div_importacion">
+            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+                <thead>
+                    <tr class="titulo_tabla_resultado">
+                        <th>
+                            [% "Campo" | i18n %]
+                        </th>
+                        <th>
+                            [% "Subcampo" | i18n %]
+                        </th>
+                        <th>
+                            [% "Detalle" | i18n %]
+                        </th>
+                        <th>
+                            [% "Acciones" | i18n %]
+                        </th>
+                    </tr>
+                </thead>
+            <tbody id='reglas_matcheo'>
+            </tbody>
+            </table>
 
             [% PERL %]
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Procesar' | i18n %]",
