@@ -16,5 +16,3 @@
 	}
 	
 </script>
-
-<progress id="progress_bar" max="100" style="display:none"></progress>
