@@ -11,6 +11,23 @@
 <link rel="stylesheet" href="/includes/css/wysiwyg.css" type="text/css" media="screen"/>
 
 <script type="text/javascript">
+    var xhr = new XMLHttpRequest();;
+	function test(){
+	
+	    xhr.onreadystatechange = updateTest;
+	    xhr.open("POST", URL_PREFIX+'/testProgress.pl');
+	
+	    xhr.send();
+	
+	}
+	
+	function updateTest(){
+		$('#twitter_container').html(xhr.responseText);
+	}
+</script>
+
+
+<script type="text/javascript">
 	$(document).ready(function() {
 		CrearAutocompleteCatalogo({ 
 		    IdInput: 'catalogo_search', 
@@ -126,5 +143,8 @@
     </a>
 </div>
 [% END %]
+
+[% INCLUDE 'partials/_percent_bar.inc' %]
+
 
 [% INCLUDE 'intranet-bottom.inc' %]

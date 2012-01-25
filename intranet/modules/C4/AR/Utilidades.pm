@@ -4575,18 +4575,14 @@ sub translateYesNo_toNumber{
 }
 
 sub printAjaxPercent{
-    my ($total,$actual,$msg_object) = @_;
-
-    my $percent = ($actual * 100) / $total;
-
-    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'PERCENTAGE_VALUE', 'params' => [$percent]} );
-
-    my $infoOperacionJSON=to_json $msg_object;
+	my ($total,$actual) = @_;
+	
+	my $percent = ($actual * 100) / $total;
 
     my $session = CGI::Session->load();
 
     C4::AR::Auth::print_header($session);
-    print $infoOperacionJSON;
+    print '<progress id="progress_bar" max="100" style="display:none; value="'.$percent.'"></progress>';
 }
 
 
