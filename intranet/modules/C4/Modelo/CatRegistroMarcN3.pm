@@ -541,6 +541,12 @@ sub getMarcRecord{
     return (C4::AR::Utilidades::trim($self->marc_record));
 }
 
+sub getMarcRecordObject{
+    my ($self) = shift;
+    return (MARC::Record->new_from_usmarc($self->getMarcRecord()));
+}
+
+
 sub setMarcRecord{
     my ($self)          = shift;
     my ($marc_record)   = @_;
@@ -989,10 +995,10 @@ sub getReferenced{
 
 
 
-=head2 sub getMarcRecordData
+=head2 sub getMarcRecordConDatos
     Construye un registro MARC con datos referenciados
 =cut
-sub getMarcRecordData{
+sub getMarcRecordConDatos{
     my ($self) = shift;
 
     #obtengo el marc_record del NIVEL 3

@@ -276,4 +276,25 @@ function procesarReglasMatcheo(id){
 function updateReglasMatcheo(responseText){
         var Messages=JSONstring.toObject(responseText);
         setMessages(Messages);
+        detalleImportacion(objAHDetalle.id_importacion);
+}
+
+function cambiarEsdatoRegistro(id_importacion,id_registro,estado){
+
+        objAHDetalle=new AjaxHelper(updateEstadoRegistro);
+        objAHDetalle.url               = URL_PREFIX+'/herramientas/importacion/importarDB.pl';
+        objAHDetalle.debug             = true;
+        objAHDetalle.showOverlay       = true;
+        objAHDetalle.tipoAccion        = "CAMBIAR_ESTADO_REGISTRO";
+        objAHDetalle.estado = estado;
+        objAHDetalle.id = id_registro;
+        objAHDetalle.id_importacion = id_importacion;
+        objAHDetalle.sendToServer();
+
+}
+
+function updateEstadoRegistro(responseText){
+        var Messages=JSONstring.toObject(responseText);
+        setMessages(Messages);
+        detalleImportacion(objAHDetalle.id_importacion);
 }

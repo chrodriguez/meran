@@ -1714,6 +1714,26 @@ sub getNivelBibliograficoByCode{
     }
 }
 
+=item
+getNombreFromEstadoByCodigo
+=cut
+sub getNombreFromEstadoByCodigo{
+    my ($codigo)   = @_;
+
+    my @filtros;
+
+    push(@filtros, ( codigo => { eq => $codigo }) );
+
+    my $estado = C4::Modelo::RefEstado::Manager->get_ref_estado( query => \@filtros );
+
+    if(scalar(@$estado) > 0){
+        return ($estado->[0]->nombre);
+    } else {
+        return "NULL";
+    }
+}
+
+
 =head2
 # Esta funcioin remueve los blancos del principio y el final del string
 =cut
@@ -4555,16 +4575,16 @@ sub translateYesNo_toNumber{
 }
 
 sub printAjaxPercent{
-	my ($total,$actual,$msg_object) = @_;
-	
-	my $percent = ($actual * 100) / $total;
-	
-	C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'PERCENTAGE_VALUE', 'params' => [$percent]} );
-	
+    my ($total,$actual,$msg_object) = @_;
+
+    my $percent = ($actual * 100) / $total;
+
+    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'PERCENTAGE_VALUE', 'params' => [$percent]} );
+
     my $infoOperacionJSON=to_json $msg_object;
 
     my $session = CGI::Session->load();
-    
+
     C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }

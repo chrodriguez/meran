@@ -6,8 +6,16 @@ require Exporter;
 
 use C4::AR::Catalogacion;
 use MARC::Record;
+
 use C4::Modelo::RefEstado;
 use C4::Modelo::RefEstado::Manager;
+
+use C4::Modelo::IndiceBusqueda;
+use C4::Modelo::IndiceBusqueda::Manager;
+
+use C4::Modelo::CatRegistroMarcN1;
+use C4::Modelo::CatRegistroMarcN1::Manager;
+
 
 use vars qw(@EXPORT @ISA);
 @ISA = qw(Exporter);
@@ -31,7 +39,7 @@ sub reindexar{
         my $mgr = Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
         #verifica si sphinx esta levantado, sino lo está lo levanta, sino no hace nada
         #Esto no deberia llamarse mas porque el sphinx es un servicio del squezze ahora!
-        #asi que lo comento    
+        #asi que lo comento
         #C4::AR::Sphinx::sphinx_start($mgr);
 
         my @args;
@@ -62,7 +70,7 @@ sub sphinx_start{
           # some code comes here
           $mgr = $mgr || Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
           $mgr->debug(0);
-	  $mgr->searchd_sudo("sudo");
+      $mgr->searchd_sudo("sudo");
           my $pids = $mgr->get_searchd_pid;
           if(scalar(@$pids) == 0){
 #               C4::AR::Debug::debug("Utilidades => generar_indice => el sphinx esta caido!!!!!!! => ");
@@ -84,20 +92,30 @@ sub sphinx_start{
   }
 }
 
+sub limpiarIndice {
 
-sub getNombreFromEstadoByCodigo{
-    my ($codigo)   = @_;
-    
+    my $indice_busqueda_array_ref = C4::Modelo::IndiceBusqueda::Manager->get_indice_busqueda();
+
+    foreach my $indice (@$indice_busqueda_array_ref){
+        #si no existe más el nivel 1 se elimina la entrada del índice
+        if (!$indice->nivel1){
+            $indice->delete();
+        }
+    }
+}
+
+
+sub getIndiceBusquedaById {
+    my ($id)   = @_;
+
     my @filtros;
-    
-    push(@filtros, ( codigo => { eq => $codigo }) );
+    push(@filtros, ( id => { eq => $id }) );
+    my $indice_busqueda_array_ref = C4::Modelo::IndiceBusqueda::Manager->get_indice_busqueda( query => \@filtros );
 
-    my $nivel3 = C4::Modelo::RefEstado::Manager->get_ref_estado( query => \@filtros ); 
-
-    if(scalar(@$nivel3) > 0){
-        return ($nivel3->[0]->nombre);
+    if(scalar(@$indice_busqueda_array_ref) > 0){
+        return ($indice_busqueda_array_ref->[0]);
     } else {
-        return "NULL";
+        return 0;
     }
 }
 
@@ -107,268 +125,59 @@ sub getNombreFromEstadoByCodigo{
 sub generar_indice {
     my ($id1, $flag, $action)   = @_;
 
-
-    my $dbh = C4::Context->dbh;
-    my $sth1;
-    my $dato;
-    my $dato_ref;
-    my $dato_con_tabla;
-    my $campo;
-    my $subcampo;
-    my $string_con_dato         = "";
-    my $MARC_result_array;
-    
     $id1 = $id1 || 0;
-    
-#     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => flag => ".$flag);
-    if($flag eq "R_FULL"){
+
+    if ($flag eq "R_PARTIAL") {
+        #Se va a modificar un único nivel 1
+        C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => action ".$action);
+        if ($action eq 'DELETE') {
+            #se va a eliminar un registro en particular
+             my $indice_busueda = C4::AR::Sphinx::getIndiceBusquedaById($id1);
+
+             if($indice_busueda){
+                 $indice_busueda->delete();
+                 }
+
+            }
+        else{
+            #se va a modificar un registro en particular
+             my $nivel1 =  C4::AR::Nivel1::getNivel1FromId1($id1);
+             if($nivel1){
+                 eval{
+                    $nivel1->generarIndice();
+                }; #END eval
+
+                if ($@){
+                    C4::AR::Debug::debug("ERROR AL GENERAR EL INDICE EN EL REGISTRO: ". $id1." !!! ( ".$@." )");
+                }
+            }
+        }
+    }
+    else{
+        #Se van a reindexar varios niveles
+
         #Vaciamos el indice
-        my $truncate  = " TRUNCATE TABLE `indice_busqueda`;";
-        my $sth0      = $dbh->prepare($truncate);
-        $sth0->execute();
-
-        my $query1  = " SELECT * FROM cat_registro_marc_n1 WHERE id >= ?";
-        $sth1       = $dbh->prepare($query1);
-        $sth1->execute($id1);
-    } elsif($flag eq "R_ACUMULATIVE") {
-
-        #se va a modificar un registro en adelante, SIN TRUNCAR
-        my $query1  = " SELECT * FROM cat_registro_marc_n1 WHERE id >= ?";
-        $sth1       = $dbh->prepare($query1);
-        $sth1->execute($id1);
-
-    } elsif ($flag eq "R_PARTIAL") {
-		C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => action ".$action);
-		if ($action eq 'DELETE') {
-			#se va a eliminar un registro en particular		
-			my $query1  = " DELETE FROM indice_busqueda WHERE id = ? ";
-			$sth1       = $dbh->prepare($query1);
-			$sth1->execute($id1);	
-			}
-		else{
-			#se va a modificar un registro en particular
-			my $query1  = " SELECT * FROM cat_registro_marc_n1 WHERE id = ?";
-			$sth1       = $dbh->prepare($query1);
-			$sth1->execute($id1);
+        C4::AR::Sphinx::limpiarIndice();
+        #Obtenemos todos los niveles 1
+        my @filtros;
+        if ($flag eq "R_ACUMULATIVE"){
+            #Si no es R_FULL se hace a partir de un nivel hacia adelante
+            push(@filtros, ( id => { ge => $id1 }) );
         }
-    } 
+        my $niveles1 = C4::Modelo::CatRegistroMarcN1::Manager->get_cat_registro_marc_n1( query => \@filtros );
 
-while (my $registro_marc_n1 = $sth1->fetchrow_hashref ){
+        foreach my $nivel1 (@$niveles1 ){
+            eval{
+                $nivel1->generarIndice();
+            }; #END eval
 
- eval{
-
-    my $marc_record = MARC::Record->new_from_usmarc($registro_marc_n1->{'marc_record'});
-
-    my $query2=" SELECT * FROM cat_registro_marc_n2 where id1 =?;";
-    my $sth2=$dbh->prepare($query2);
-    $sth2->execute($registro_marc_n1->{'id'});
-
-
-
-    #se agregan todos los ejemplares (nivel3) al nivel2
-    while (my $registro_marc_n2 = $sth2->fetchrow_hashref ){
-
-        my $marc_record2 = MARC::Record->new_from_usmarc($registro_marc_n2->{'marc_record'});
-        $marc_record->append_fields($marc_record2->fields);
-        
-		#Agregamos el indice
-		if ($registro_marc_n2->{'indice'}){
-			$marc_record->append_fields(MARC::Field->new(865, '', '', 'a' => $registro_marc_n2->{'indice'}));
-		}
-
-        my $query3=" SELECT * FROM cat_registro_marc_n3 where id1=? and id2=?;";
-        my $sth3=$dbh->prepare($query3);
-        $sth3->execute($registro_marc_n1->{'id'},$registro_marc_n2->{'id'});
-
-        while (my $registro_marc_n3 = $sth3->fetchrow_hashref ){
-#             C4::AR::Debug::debug('C4::AR::Sphinx::generar_indice => ID3 '.$registro_marc_n3->{'id'});
-            my $marc_record3 = MARC::Record->new_from_usmarc($registro_marc_n3->{'marc_record'});
-            $marc_record->append_fields($marc_record3->fields);
-        }
-    }
-#Ahora en $marc_record tenemos todo el registro completo
-    #Autores
-    my @autores;
-
-    my $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("100","a"));
-    if ($autor){
-        $autor = C4::AR::Catalogacion::getDatoFromReferencia("100", "a", $autor, $registro_marc_n1->{'template'},1);
-        if (($autor)&&($autor ne "NO_TIENE")){
-			push (@autores,$autor);
-		}
-    }
-
-       $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("110","a"));
-    if ($autor){
-        $autor = C4::AR::Catalogacion::getDatoFromReferencia("110", "a", $autor, $registro_marc_n1->{'template'},1);
-        if (($autor)&&($autor ne "NO_TIENE")){
-			push (@autores,$autor);
-		}
-    }
-
-       $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($marc_record->subfield("111","a"));
-    if ($autor){
-        $autor = C4::AR::Catalogacion::getDatoFromReferencia("111", "a", $autor, $registro_marc_n1->{'template'},1);
-        if (($autor)&&($autor ne "NO_TIENE")){
-			push (@autores,$autor);
-		}
-    }
-
-    #Ahora los adicionales
-    my @field700 =$marc_record->field("700");
-    foreach my $f700 (@field700){     
-        my @autores_adicionales = $f700->subfield("a");
-
-        foreach my $au_ad (@autores_adicionales){
-            $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($au_ad);          
-            C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => autor adicional ".$au_ad);
-
-            if ($autor){
-                $autor = C4::AR::Catalogacion::getDatoFromReferencia("700", "a", $autor, $registro_marc_n1->{'template'},1);
-                if (($autor)&&($autor ne "NO_TIENE")){
-					push (@autores,$autor);
-				}
+            if ($@){
+                C4::AR::Debug::debug("ERROR AL GENERAR EL INDICE EN EL REGISTRO: ". $nivel1->getId1." !!! ( ".$@." )");
+                next;
             }
-        }
-    }
+        } #END foreach
 
-      my @field700 =$marc_record->field("710");
-       foreach my $f710 (@field700){     
-          my @autores_adicionales =$f710->subfield("a");
-          foreach my $au_ad (@autores_adicionales){
-          $autor = C4::AR::Catalogacion::getRefFromStringConArrobas($au_ad);
-            
-          C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => autor adicional ".$au_ad);
-
-              if ($autor){
-                $autor = C4::AR::Catalogacion::getDatoFromReferencia("710", "a", $autor, $registro_marc_n1->{'template'},1);
-                if (($autor)&&($autor ne "NO_TIENE")){
-					push (@autores,$autor);
-				}
-              }
-          }
-      }
-
-    $autor = join(' | ',@autores);
-
-    #Titulo
-    my $titulo                  = $marc_record->subfield("245","a");
-    #Armo el superstring
-    my $superstring             = "";    
-
-    #recorro los campos
-    foreach my $field ($marc_record->fields){
-        $campo = $field->tag;
-
-        #recorro los subcampos
-        foreach my $subfield ($field->subfields()) {
-
-            $subcampo                       = $subfield->[0];
-            $dato                           = $subfield->[1];
-             C4::AR::Debug::debug("generar_indice => campo => ".$field->tag);
-             C4::AR::Debug::debug("generar_indice => subcampo => ".$subfield->[0]);
- eval{
-	        my $nivel                       = C4::AR::EstructuraCatalogacionBase::getNivelFromEstructuraBaseByCampoSubcampo($campo, $subcampo);
-            $dato_ref                       = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato,$registro_marc_n1->{'template'},$nivel);
-            $dato                           = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato_ref, $registro_marc_n1->{'template'},$nivel);
-     }; #END eval
-     
-		if ($@){
-			C4::AR::Debug::debug("ERROR AL OBTENER UNA REFERENCIA DE ". $registro_marc_n1->{'id'}." !!! ( campo: ".$campo." subcampo:".$subcampo." template:".$registro_marc_n1->{'template'}." ".$@." )");
-			next;
-		}
-
-            next if ($dato eq 'NO_TIENE');
-            next if ($dato eq '');
-            
-# TODO modularizame!!!!!!!!!!!!!
-            #aca van todas las excepciones que no son referencias pero son necesarios para las busquedas 
-            if (($campo eq "020") && ($subcampo eq "a")){
-                $dato = 'isbn%'.$dato;  
-#                 C4::AR::Debug::debug("generar_indice => 020, a => dato ".$dato);
-            }
-
-            if (($campo eq "995") && ($subcampo eq "o")){
-                $dato = 'ref_disponibilidad%'.$dato;
-                $dato .= ' ref_disponibilidad_code%'.$dato_ref;  
-#                 C4::AR::Debug::debug("generar_indice => 020, a => dato ".$dato);
-            }
-
-            if (($campo eq "995") && ($subcampo eq "e")){
-                 C4::AR::Debug::debug(" ================================== generar_indice => 995, e => dato ".$dato);
-                $dato = 'ref_estado%'.getNombreFromEstadoByCodigo($dato_ref);  
-            }
-
-            if (($campo eq "995") && ($subcampo eq "f")){
-                $dato = 'barcode%'.$dato;  
-#                 C4::AR::Debug::debug("generar_indice => 995, f => dato ".$dato);
-            }
-
-            if (($campo eq "995") && ($subcampo eq "t")){
-                $dato = 'signatura%'.$dato;  
-#                 C4::AR::Debug::debug("generar_indice => 995, f => dato ".$dato);
-            }
-
-            if (($campo eq "650") && ($subcampo eq "a")){
-                $dato = 'cat_tema%'.$dato;  
-#                 C4::AR::Debug::debug("generar_indice => 650, a => dato ".$dato);
-            }
-   
-            if (($campo eq "910") && ($subcampo eq "a")){
-# FIXME es para la busqueda MATCH EXTENDED
-                $dato .= ' cat_ref_tipo_nivel3%'.$dato_ref;
-                
-#                 C4::AR::Debug::debug("generar_indice => 995, f => dato ".$dato);
-            }
-
-
-# C4::AR::Debug::debug("dato despues de buscar ref => ".$dato);
-    
-            if ($superstring eq "") {
-                $superstring            = $dato;
-            } else {
-                $superstring .= " ".$dato;
-            }
-        } #END foreach my $subfield ($field->subfields())
-    } #END foreach my $field ($marc_record->fields)
-
-     C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => superstring!!!!!!!!!!!!!!!!!!! => ".$superstring);
-
-    if($action eq "INSERT"){
-        my $query4  =   " INSERT INTO indice_busqueda (id, titulo, autor, string) ";
-        $query4 .=      " VALUES (?,?,?,?) ";
-        my $sth4    = $dbh->prepare($query4);
-        $sth4->execute($registro_marc_n1->{'id'}, $titulo, $autor, $superstring);
-    } else {    
-
-        my $query4  = "SELECT COUNT(*) as cant FROM indice_busqueda WHERE id = ?";
-        my $sth4    = $dbh->prepare($query4);
-        $sth4->execute($registro_marc_n1->{'id'});
-        my $data = $sth4->fetchrow_hashref;
-
-        if($data->{'cant'}) {
-            my $query4  =   " UPDATE indice_busqueda SET titulo = ?, autor = ?, string = ? ";
-            $query4 .=      " WHERE id = ? ";
-            my $sth4    = $dbh->prepare($query4);
-            $sth4->execute($titulo, $autor, $superstring, $registro_marc_n1->{'id'});
-        } else {
-            my $query4  =   " INSERT INTO indice_busqueda (id, titulo, autor, string) ";
-            $query4 .=      " VALUES (?,?,?,?) ";
-            my $sth4    = $dbh->prepare($query4);
-            $sth4->execute($registro_marc_n1->{'id'}, $titulo, $autor, $superstring);
-        }
-
-#         C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => UPDATE => id1 => ".$registro_marc_n1->{'id'});
-    }
-    
-     }; #END eval
-     
-    if ($@){
-        C4::AR::Debug::debug("ERROR AL GENERAR EL INDICE EN EL REGISTRO: ". $registro_marc_n1->{'id'}." !!! ( ".$@." )");
-        next;
-    }
-    
-} #END while (my $registro_marc_n1 = $sth1->fetchrow_hashref )
+     } #END else
 
 }
 =pod
