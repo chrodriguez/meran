@@ -238,6 +238,12 @@ sub getRegistrosFromImportacion {
     elsif($filter eq 'UNIDENTIFIED'){
         push (@filtros, ( identificacion => { eq => undef }));
         }
+    elsif($filter eq 'MATCH'){
+        push (@filtros, ( matching => { eq => 1 }));
+        }
+    elsif($filter eq 'IGNORED'){
+        push (@filtros, ( estado => { eq => 'I' }));
+        }
     elsif($filter eq 'ALL'){
         #si se muestran todos no se agregan mas filtros
         }
@@ -261,53 +267,6 @@ sub getRegistrosFromImportacion {
     #Obtengo la cantidad total de registros de la importacion para el paginador
     my $registros_array_ref_count = C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro_count(  db  => $db,
                                                                                                                         query => \@filtros);
-
-    if(scalar(@$registros_array_ref) > 0){
-        return ($registros_array_ref_count, $registros_array_ref);
-    }else{
-        return (0,0);
-    }
-
-}
-
-=item sub getRegistrosPadreFromImportacion
-Se obtienen los registros de la importacion
-=cut
-sub getRegistrosPadreFromImportacion {
-
-    my ($id_importacion,$ini,$cantR,$db) = @_;
-
-    require C4::Modelo::IoImportacionIsoRegistro;
-    require C4::Modelo::IoImportacionIsoRegistro::Manager;
-    $db = $db || C4::Modelo::IoImportacionIsoRegistro->new()->db;
-
-
-    my $registros_array_ref;
-
-    if($cantR eq 'ALL'){
-
-     $registros_array_ref= C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro(  db              => $db,
-                                                                                                    query => [
-                                                                                                        id_importacion_iso => { eq => $id_importacion },
-                                                                                                        relacion => { eq => '' },
-                                                                                                        ],);
-     }else{
-     $registros_array_ref= C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro(  db              => $db,
-                                                                                                    query => [
-                                                                                                        id_importacion_iso => { eq => $id_importacion },
-                                                                                                        relacion => { eq => '' },
-                                                                                                        ],
-                                                                                                    limit   => $cantR,
-                                                                                                    offset  => $ini,
-                                                                                                        );
-     }
-
-    #Obtengo la cantidad total de registros de la importacion para el paginador
-    my $registros_array_ref_count = C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro_count(  db  => $db,
-                                                                                                                        query => [
-                                                                                                                            id_importacion_iso => { eq => $id_importacion },
-                                                                                                                            relacion => { eq => '' },
-                                                                                                                        ]);
 
     if(scalar(@$registros_array_ref) > 0){
         return ($registros_array_ref_count, $registros_array_ref);
@@ -936,7 +895,7 @@ sub procesarReglasMatcheo {
      my $msg_object= C4::AR::Mensajes::create();
 
      eval {
-
+        C4::AR::Debug::debug("procesarReglasMatcheo");
           my $id_importacion             = $params->{'id'};
           my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($id_importacion);
 
@@ -947,13 +906,14 @@ sub procesarReglasMatcheo {
 
         #ACA HAY QUE PROCESAR LAS REGLAS
         # Recorrer cada registro y ver si matchea contra alguno de la base
-
+        C4::AR::Debug::debug("procesarReglasMatcheo");
         my $registros_importacion = $importacion->getRegistrosPadre();
 
         foreach my $registro (@$registros_importacion){
             #Armo las reglas con dato y busco en el catalogo si existe
             my $reglas_registro = $registro->getDatosFromReglasMatcheo($reglas);
             my $id_matching =0;
+            C4::AR::Debug::debug("procesarReglasMatcheo==> reglas con datos ".scalar(@$reglas_registro));
                 if(scalar(@$reglas_registro)){
                     $id_matching = C4::AR::ImportacionIsoMARC::getIdMatchingFromCatalog($reglas_registro);
                 }
@@ -990,28 +950,73 @@ sub procesarReglasMatcheo {
 sub getIdMatchingFromCatalog {
     my ($reglas)    = @_;
 
-    my  $nivel1_array_ref = C4::AR::Nivel1::getNivel1Completo();
+    #obtengo los datod de todos los niveles1
+    C4::AR::Debug::debug("obtengo los datod de todos los niveles1");
+    my $st1 = time();
 
+    my  $nivel1_array_ref = C4::AR::Nivel1::getNivel1Completo();
+    my %niveles1_hash=();
     foreach my $nivel1 ( @$nivel1_array_ref)
     {
-        my $marc_record = $nivel1->getMarcRecordData();
-        my $match=0;
-            foreach my $regla (@$reglas){
-                my $data = $marc_record->subfield($regla->{'campo'},$regla->{'subcampo'});
-                if ($regla->{'dato'} eq $data) {
-                    $match =1;
-                    }
-                else{
-                    $match =0;
-                    }
-            }
+        $niveles1_hash{$nivel1->getId1}=$nivel1->getMarcRecordConDatosFull();
+    }
+    my $end1 = time();
+    my $tardo1=($end1 - $st1);
+    my $min= $tardo1/60;
 
-        if($match){
-            return $nivel1->getId;
-            }
-     }
+    C4::AR::Debug::debug("TARDO ".$min." minutos");
+        foreach my $id (keys %niveles1_hash){
+            my $marc_record= $niveles1_hash{$id};
+            my $match=0;
+                foreach my $regla (@$reglas){
+                    my $data = $marc_record->subfield($regla->{'campo'},$regla->{'subcampo'});
+                    if ($regla->{'dato'} eq $data) {
+                        $match =1;
+                        C4::AR::Debug::debug("MATCH");
+                        }
+                    else{
+                        $match =0;
+                        }
+                }
+
+            if($match){
+                return $id;
+                }
+        }
 
     return(0);
+}
+
+
+sub cambiarEsdatoRegistro {
+      my ($params) = @_;
+
+     my $msg_object= C4::AR::Mensajes::create();
+
+     eval {
+
+
+          my $id_registro             = $params->{'id'};
+          my ($registro_importacion) = C4::AR::ImportacionIsoMARC::getRegistroFromImportacionById($id_registro);
+          $registro_importacion->setEstado($params->{'estado'});
+          $registro_importacion->save();
+
+        if(!$msg_object->{'error'}){
+         $msg_object->{'error'}= 0;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IO11', 'params' => []} ) ;
+        }
+     };
+
+     if ($@){
+         #Se loguea error de Base de Datos
+         &C4::AR::Mensajes::printErrorDB($@, 'B458','INTRA');
+         #Se setea error para el usuario
+         $msg_object->{'error'}= 1;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IO12', 'params' => []} ) ;
+     }
+
+     return ($msg_object);
+
 }
 
 

@@ -397,7 +397,7 @@ sub getReglasMatcheoArray{
     my @reglas_finales=();
 
     foreach my $regla (@reglas_matcheo){
-        my @regla_splitted = split(/$/, $regla);
+        my @regla_splitted = split(/\$/, $regla);
         my %regla_final;
         $regla_final{'campo'}       = $regla_splitted[0];
         $regla_final{'subcampo'}    = $regla_splitted[1];
@@ -421,3 +421,9 @@ sub getRegistros{
     return $registros;
 }
 
+sub getCantRegistros{
+    my ($self)   = shift;
+
+    my ($cantidad, $registros) = C4::AR::ImportacionIsoMARC::getRegistrosFromImportacion($self->getId,'ALL',0,'ALL');
+    return $cantidad;
+}

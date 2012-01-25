@@ -1714,6 +1714,26 @@ sub getNivelBibliograficoByCode{
     }
 }
 
+=item
+getNombreFromEstadoByCodigo
+=cut
+sub getNombreFromEstadoByCodigo{
+    my ($codigo)   = @_;
+
+    my @filtros;
+
+    push(@filtros, ( codigo => { eq => $codigo }) );
+
+    my $estado = C4::Modelo::RefEstado::Manager->get_ref_estado( query => \@filtros );
+
+    if(scalar(@$estado) > 0){
+        return ($estado->[0]->nombre);
+    } else {
+        return "NULL";
+    }
+}
+
+
 =head2
 # Esta funcioin remueve los blancos del principio y el final del string
 =cut
@@ -4558,8 +4578,9 @@ sub printAjaxPercent{
 	my ($total,$actual) = @_;
 	
 	my $percent = ($actual * 100) / $total;
+
     my $session = CGI::Session->load();
-    
+
     C4::AR::Auth::print_header($session);
     print '<progress id="progress_bar" max="100" style="display:none; value="'.$percent.'"></progress>';
 }

@@ -91,6 +91,11 @@ sub getMarcRecord{
     return (C4::AR::Utilidades::trim($self->marc_record));
 }
 
+sub getMarcRecordObject{
+    my ($self) = shift;
+    return (MARC::Record->new_from_usmarc($self->getMarcRecord()));
+}
+
 sub setMarcRecord{
     my ($self)          = shift;
     my ($marc_record)   = @_;
@@ -668,6 +673,24 @@ sub tieneReservas {
     }
 }
 
+=head2 sub getEjemplares
+retorna los de ejemplares del grupo
+=cut
+sub getEjemplares{
+    my ($self) = shift;
+
+    my $ejemplares = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(
+
+                                                                query => [  'id1' => { eq => $self->getId1 },
+                                                                            'id2' => { eq => $self->getId2 }
+                                                                         ],
+
+                                        );
+
+
+    return $ejemplares;
+}
+
 =head2 sub getCantEjemplares
 retorna la canitdad de ejemplares del grupo
 =cut
@@ -771,11 +794,29 @@ sub toString {
     return ($string);
 }
 
+=head2 sub getMarcRecordFull
+    Construye un registro MARC y le agrega los ejemplares
+=cut
+sub getMarcRecordFull{
+    my ($self) = shift;
 
-=head2 sub getMarcRecordData
+    #obtengo el marc_record del NIVEL 2
+    my $marc_record = $self->getMarcRecordObject();
+
+    my $ejemplares = $self->getEjemplares();
+
+    foreach my $nivel3 (@$ejemplares){
+        my $marc_record_n3  =$nivel3->getMarcRecordObject();
+        $marc_record->append_fields($marc_record_n3->fields());
+        }
+
+    return $marc_record;
+}
+
+=head2 sub getMarcRecordConDatos
     Construye un registro MARC con datos referenciados
 =cut
-sub getMarcRecordData{
+sub getMarcRecordConDatos{
     my ($self) = shift;
 
     #obtengo el marc_record del NIVEL 2
@@ -786,7 +827,31 @@ sub getMarcRecordData{
     $params->{'id_tipo_doc'}    = $self->getTemplate()||'ALL';
 
     my $MARC_record       = C4::AR::Catalogacion::marc_record_with_data($marc_record, $params->{'id_tipo_doc'}, $params->{'tipo'}, $params->{'nivel'});
+
+        #Agregamos el indice
+        if ($self->getIndice){
+            $MARC_record->append_fields(MARC::Field->new(865, '', '', 'a' => $self->getIndice));
+        }
     return ($MARC_record);
+}
+
+=head2 sub getMarcRecordConDatosFull
+    Construye un registro MARC con datos referenciados y le agrega los ejemplares
+=cut
+sub getMarcRecordConDatosFull{
+    my ($self) = shift;
+
+    #obtengo el marc_record del NIVEL 2
+    my $marc_record             = $self->getMarcRecordConDatos();
+
+    my $ejemplares = $self->getEjemplares();
+
+    foreach my $nivel3 (@$ejemplares){
+        my $marc_record_n3  =$nivel3->getMarcRecordConDatos();
+        $marc_record->append_fields($marc_record_n3->fields());
+        }
+
+    return $marc_record;
 }
 
 1;

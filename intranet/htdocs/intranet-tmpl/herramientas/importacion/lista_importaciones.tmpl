@@ -30,6 +30,10 @@
                             [% "Esquema" | i18n %]
                         </th>
                         <th>
+                            [% "Cantidad de Registros" | i18n %]
+                        </th>
+
+                        <th>
                             [% "Fecha Subida" | i18n %]
                         </th>
                         <th>
@@ -53,6 +57,9 @@
                       </td>
                       <td align="left">
                            [% importacion.getEsquema.getNombre %]
+                      </td>
+                      <td align="left">
+                           [% importacion.getCantRegistros %]
                       </td>
                       <td align="left">
                            [% importacion.getFechaUpload_formateada %]

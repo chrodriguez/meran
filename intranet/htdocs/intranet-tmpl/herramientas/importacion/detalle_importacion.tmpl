@@ -17,6 +17,7 @@
          makeToggle('configuracion_acciones','trigger',null,true);
          makeToggle('configuracion_matcheo','trigger',null,true);
          makeToggle('configuracion_relacion','trigger',null,true);
+         makeToggle('configuracion','trigger',null,true);
 
          cargarCampoReglasMatcheo();
 
@@ -37,8 +38,8 @@ function eleccionSubCampo(){
 </script>
 
 <fieldset>
-<legend class="titulo_legend_resaltado">[% 'Configuraci&oacute;n de la Importaci&oacute;n' | i18n %] ([% importacion.getNombre %])</legend>
-<div>
+<legend class="titulo_legend_resaltado trigger click">[% 'Configuraci&oacute;n de la Importaci&oacute;n' | i18n %] ([% importacion.getNombre %])</legend>
+<div class="configuracion">
 
     <fieldset>
     <legend class="titulo_legend_resaltado trigger click">[% 'Configurar Acciones' | i18n %]</legend>

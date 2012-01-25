@@ -162,6 +162,13 @@ sub getEstado{
     return ($self->estado);
 }
 
+
+sub setEstado{
+    my ($self) = shift;
+    my ($estado) = @_;
+    $self->estado($estado);
+}
+
 sub getMatching{
     my ($self) = shift;
     return ($self->matching);
@@ -384,6 +391,8 @@ sub getDatosFromReglasMatcheo{
     foreach my $regla (@$reglas){
 
         my $dato = $self->getCampoSubcampoJoined($regla->{'campo'},$regla->{'subcampo'});
+
+        $self->debug($regla->{'campo'}."&".$regla->{'subcampo'}." => ".$dato);
 
         if ($dato){
             $regla->{'datos'}=$dato;
