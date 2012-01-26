@@ -72,7 +72,20 @@
                       </td>
 
                       <td align="left">
-                        [% IF detalle_importacion.getMatching %]<span class='rojo'>Si</span>[% ELSE %]<span class='verde'>No</span>[% END %]
+                        [% IF detalle_importacion.getMatching %]
+
+							[% PERL %]
+                            print C4::AR::Filtros::link_to( text =>     "Si",
+                                                            url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                                            params =>   ["id1=[% detalle_importacion.getIdMatching %]"],
+                                                            title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
+                                                            class => "rojo"
+                                                        ) ;
+							[% END %]
+
+                        [% ELSE %]
+							<span class='verde'>No</span>
+                        [% END %]
                       </td>
                       <td align="left">
                         [% IF detalle_importacion.getEstado == "I" %]<span class='rojo'>Si</span>[% ELSE %]<span class='verde'>No</span>[% END %]

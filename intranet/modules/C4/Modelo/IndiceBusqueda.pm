@@ -71,10 +71,14 @@ sub setTitulo{
     $self->titulo($titulo);
 }
 
-
 sub getMarcRecord{
     my ($self) = shift;
     return (C4::AR::Utilidades::trim($self->marc_record));
+}
+
+sub getMarcRecordObject{
+    my ($self) = shift;
+    return (MARC::Record->new_from_usmarc($self->getMarcRecord()));
 }
 
 sub setMarcRecord{

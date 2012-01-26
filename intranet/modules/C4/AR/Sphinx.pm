@@ -119,6 +119,17 @@ sub getIndiceBusquedaById {
     }
 }
 
+sub getAllIndiceBusqueda {
+
+    my $indice_busqueda_array_ref = C4::Modelo::IndiceBusqueda::Manager->get_indice_busqueda();
+
+    if(scalar(@$indice_busqueda_array_ref) > 0){
+        return ($indice_busqueda_array_ref);
+    } else {
+        return 0;
+    }
+}
+
 =head2
     sub generar_indice
 =cut

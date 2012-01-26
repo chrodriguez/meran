@@ -392,10 +392,8 @@ sub getDatosFromReglasMatcheo{
 
         my $dato = $self->getCampoSubcampoJoined($regla->{'campo'},$regla->{'subcampo'});
 
-        $self->debug($regla->{'campo'}."&".$regla->{'subcampo'}." => ".$dato);
-
         if ($dato){
-            $regla->{'datos'}=$dato;
+            $regla->{'dato'}=$dato;
             push (@reglas_datos,$regla);
             }
         }

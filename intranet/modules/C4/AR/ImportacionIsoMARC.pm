@@ -895,7 +895,6 @@ sub procesarReglasMatcheo {
      my $msg_object= C4::AR::Mensajes::create();
 
      eval {
-        C4::AR::Debug::debug("procesarReglasMatcheo");
           my $id_importacion             = $params->{'id'};
           my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($id_importacion);
 
@@ -905,15 +904,14 @@ sub procesarReglasMatcheo {
           my $reglas= $importacion->getReglasMatcheoArray();
 
         #ACA HAY QUE PROCESAR LAS REGLAS
+        my $tt1 = time();
         # Recorrer cada registro y ver si matchea contra alguno de la base
-        C4::AR::Debug::debug("procesarReglasMatcheo");
         my $registros_importacion = $importacion->getRegistrosPadre();
-
+		my $cant_registros=0;
         foreach my $registro (@$registros_importacion){
             #Armo las reglas con dato y busco en el catalogo si existe
             my $reglas_registro = $registro->getDatosFromReglasMatcheo($reglas);
             my $id_matching =0;
-            C4::AR::Debug::debug("procesarReglasMatcheo==> reglas con datos ".scalar(@$reglas_registro));
                 if(scalar(@$reglas_registro)){
                     $id_matching = C4::AR::ImportacionIsoMARC::getIdMatchingFromCatalog($reglas_registro);
                 }
@@ -921,16 +919,23 @@ sub procesarReglasMatcheo {
             if($id_matching){
                 $registro->setMatching(1);
                 $registro->setIdMatching($id_matching);
+                $cant_registros++;
                 }
               else{
                 $registro->setMatching(0);
                   }
               $registro->save();
             }
+		my $tt2 = time();
+		my $tardo2=($tt2 - $tt1);
+		my $min= $tardo2/60;
+		my $hour= $min/60;
+		C4::Debug::debug( "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!! o mejor $hour horas !!!");
+
 
         if(!$msg_object->{'error'}){
          $msg_object->{'error'}= 0;
-         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IO11', 'params' => []} ) ;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IO11', 'params' => [$cant_registros]} ) ;
         }
      };
 
@@ -951,39 +956,29 @@ sub getIdMatchingFromCatalog {
     my ($reglas)    = @_;
 
     #obtengo los datod de todos los niveles1
-    C4::AR::Debug::debug("obtengo los datod de todos los niveles1");
-    my $st1 = time();
 
-    my  $nivel1_array_ref = C4::AR::Nivel1::getNivel1Completo();
-    my %niveles1_hash=();
-    foreach my $nivel1 ( @$nivel1_array_ref)
-    {
-        $niveles1_hash{$nivel1->getId1}=$nivel1->getMarcRecordConDatosFull();
-    }
-    my $end1 = time();
-    my $tardo1=($end1 - $st1);
-    my $min= $tardo1/60;
+    my  $indice_array_ref = C4::AR::Sphinx::getAllIndiceBusqueda();
 
-    C4::AR::Debug::debug("TARDO ".$min." minutos");
-        foreach my $id (keys %niveles1_hash){
-            my $marc_record= $niveles1_hash{$id};
+	if ($indice_array_ref) {
+    foreach my $indice ( @$indice_array_ref) {
+            my $marc_record=  $indice->getMarcRecordObject;
             my $match=0;
                 foreach my $regla (@$reglas){
-                    my $data = $marc_record->subfield($regla->{'campo'},$regla->{'subcampo'});
-                    if ($regla->{'dato'} eq $data) {
-                        $match =1;
-                        C4::AR::Debug::debug("MATCH");
-                        }
-                    else{
-                        $match =0;
-                        }
+                    my @datos = $marc_record->subfield($regla->{'campo'},$regla->{'subcampo'});
+                    foreach my $datos (@datos){
+#						C4::AR::Debug::debug("CAMPARANDO ".C4::AR::Utilidades::trim($regla->{'dato'})." <==>".C4::AR::Utilidades::trim($datos));
+						if ( C4::AR::Utilidades::trim($regla->{'dato'}) eq C4::AR::Utilidades::trim($datos)) {
+							C4::AR::Debug::debug("MATCH REGLA=".$regla->{'campo'}."&".$regla->{'subcampo'}." => ".$regla->{'dato'});
+							return $indice->getId;
+							}
+					}
                 }
 
             if($match){
-                return $id;
+                return $indice->getId;
                 }
         }
-
+	}
     return(0);
 }
 
