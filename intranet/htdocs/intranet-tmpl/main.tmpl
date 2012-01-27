@@ -11,19 +11,23 @@
 <link rel="stylesheet" href="/includes/css/wysiwyg.css" type="text/css" media="screen"/>
 
 <script type="text/javascript">
-    var xhr = new XMLHttpRequest();;
+var jobID = 0;
+
 	function test(){
-	
-	    xhr.onreadystatechange = updateTest;
-	    xhr.open("POST", URL_PREFIX+'/testProgress.pl');
-	
-	    xhr.send();
-	
+		    objAH                   = new AjaxHelper(updateTest);
+		    objAH.url               = URL_PREFIX+'/start_job.pl';
+		    objAH.debug             = true;
+		    objAH.showOverlay       = false;
+		    objAH.accion            = "START_DEMO"; 
+		    objAH.sendToServer();
+
+	}
+
+	function updateTest(responseText){
+		jobID = responseText;
 	}
 	
-	function updateTest(){
-		$('#twitter_container').html(xhr.responseText);
-	}
+		
 </script>
 
 

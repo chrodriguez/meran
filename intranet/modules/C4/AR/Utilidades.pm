@@ -4582,9 +4582,29 @@ sub printAjaxPercent{
     my $session = CGI::Session->load();
 
     C4::AR::Auth::print_header($session);
-    print '<progress id="progress_bar" max="100" style="display:none; value="'.$percent.'"></progress>';
+    print $percent;
+    
+    return ($percent);
 }
 
+sub demo_test{
+    
+    my ($job) = @_;
+    
+    use C4::AR::BackgroundJob;
+    
+    if (!$job){
+        $job = C4::AR::BackgrounJob->new("DEMO","NULL",10);        
+    }
+     
+    for (my $x=1; $x<=10; $x++){
+        sleep(1);
+        my $percent = printAjaxPercent(10,$x);
+        $job->progress($percent);
+        C4::AR::Debug::debug("-------------------------- JOB -------------- \n\n\n\n\n");
+    }
+    
+}
 
 END { }       # module clean-up code here (global destructor)
 

@@ -95,6 +95,7 @@ $VERSION = 1.0;
         _init_i18n
         getSessionSocioObject
         getSessionType
+        printValue
         
 );
 
@@ -2269,6 +2270,15 @@ sub cambiarPasswordForzadoEnMetodo{
             $attempts_object->reset();
         }
         
+}
+
+sub printValue{
+    my ($value) = @_;
+    
+    my $session = CGI::Session->load();
+    C4::AR::Auth::print_header($session);
+    print $value;
+    	
 }
 
 END { }       # module clean-up code here (global destructor)
