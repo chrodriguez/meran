@@ -1021,8 +1021,133 @@ sub getNivelesFromRegistro {
       
     my ($registro_importacion) = C4::AR::ImportacionIsoMARC::getRegistroFromImportacionById($id_registro);
 	my $marc_record_to_meran = $registro_importacion->getRegistroMARCResultado();
+	
+	#Armamos un grupo de niveles vacio 
 	my $marc_record_n1 = MARC::Record->new();
-              
+ 	my $marc_record_n2 = MARC::Record->new();
+	my $marc_record_n3 = MARC::Record->new();
+	my @grupos=();
+	my @ejemplares=();
+    foreach my $field ($marc_record_to_meran->fields) {
+        if(! $field->is_control_field){
+            my $campo                       = $field->tag;
+            my $indicador_primario_dato     = $field->indicator(1);
+            my $indicador_secundario_dato   = $field->indicator(2);
+            #proceso todos los subcampos del campo
+            foreach my $subfield ($field->subfields()) {
+                my $subcampo          = $subfield->[0];
+                my $dato              = $subfield->[1];
+                my $estructura        = C4::AR::EstructuraCatalogacionBase::getEstructuraBaseFromCampoSubCampo($campo, $subcampo);
+				
+				use Switch;
+				switch ($estructura->getNivel) {
+				case 1 { 
+						#El campo es de Nivel 1 
+						if ($marc_record_n1->field($campo)){
+							#Existe el campo, agrego el subcampo
+							$marc_record_n1->field($campo)->add_subfields($subcampo => $dato);
+						}
+						else{
+							#No existe el campo, se crea
+							my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
+							$marc_record_n1->append_fields($field);
+							}
+					}
+				case 2 {
+						#Nivel 2
+						
+						#HAY QUE CREAR UNO NUEVO??
+						if(($marc_record_n2->subfield($campo,$subcampo))&&(!$estructura->getRepetible)){
+							#Existe el subcampo y no es repetible ==> es un nivel 2 nuevo
+								
+							#Agrego el último ejemplar y lo guardo
+							if (scalar($marc_record_n3->fields())){
+								push(@ejemplares,$marc_record_n3);
+								$marc_record_n3 = MARC::Record->new();
+							}
+								
+							#Guardo el nivel 2 con sus ejemplares
+							my %hash_temp;
+							$hash_temp{'grupo'}  = $marc_record_n2;
+							$hash_temp{'ejemplares'}   = \@ejemplares;
+							push (@grupos, \%hash_temp);
+							$marc_record_n2 = MARC::Record->new();
+							@ejemplares = ();
+						}				
+						
+						#El campo es de Nivel 2
+						if ($marc_record_n2->field($campo)){
+							#Existe el campo, agrego el subcampo
+							$marc_record_n2->field($campo)->add_subfields($subcampo => $dato);
+						}
+						else{
+							#No existe el campo, se crea
+							my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
+							$marc_record_n2->append_fields($field);
+							}
+						}
+				case 3 {
+						#Nivel 3 
+						#Aca no hay ningun campo que sea repetible, si ya existe el subcampo es un nuevo ejemplar.
+						 if($marc_record_n3->subfield($campo,$subcampo)){
+							#Existe el subcampo y no es repetible ==> es un nivel 3 nuevo							
+							#Agrego el último ejemplar y lo guardo
+								push(@ejemplares,$marc_record_n3);
+								$marc_record_n3 = MARC::Record->new();
+							}
+						
+						#El campo es de Nivel 3
+						if ($marc_record_n3->field($campo)){
+							#Existe el campo, agrego el subcampo
+							$marc_record_n3->field($campo)->add_subfields($subcampo => $dato);
+						}
+						else{
+							#No existe el campo, se crea
+							my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
+							$marc_record_n3->append_fields($field);
+							}
+						}
+				else {
+					C4::AR::Debug::debug("CAMPO MULTINIVEL ".$campo."&".$subcampo."=".$dato);
+					#FIXME va en el 1 por ahora
+						#El campo es de Nivel 1 
+						if ($marc_record_n1->field($campo)){
+							#Existe el campo, agrego el subcampo
+							$marc_record_n1->field($campo)->add_subfields($subcampo => $dato);
+						}
+						else{
+							#No existe el campo, se crea
+							my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
+							$marc_record_n1->append_fields($field);
+							}
+				
+					}
+				} # END SWITCH
+                
+			}
+			
+		}
+	}
+	
+		#Agrego el último ejemplar y lo guardo
+		if (scalar($marc_record_n3->fields())){
+			push(@ejemplares,$marc_record_n3);
+			$marc_record_n3 = MARC::Record->new();
+		}
+							
+		#Guardo el nivel 2 con sus ejemplares
+		my %hash_temp;
+		$hash_temp{'grupo'}  = $marc_record_n2;
+		$hash_temp{'ejemplares'}   = \@ejemplares;
+		push (@grupos, \%hash_temp);
+	
+	
+		my %hash_temp;
+		$hash_temp{'registro'}  = $marc_record_n1;
+		$hash_temp{'grupos'}   = \@grupos;
+
+	return  \%hash_temp;
+		
 }
 
 
