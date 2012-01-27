@@ -298,3 +298,39 @@ function updateEstadoRegistro(responseText){
         setMessages(Messages);
         detalleImportacion(objAHDetalle.id_importacion);
 }
+
+function quitarMatcheoRegistro(id_importacion,id_registro,estado){
+
+        objAHDetalle=new AjaxHelper(updateQuitarMatcheoRegistro);
+        objAHDetalle.url               = URL_PREFIX+'/herramientas/importacion/importarDB.pl';
+        objAHDetalle.debug             = true;
+        objAHDetalle.showOverlay       = true;
+        objAHDetalle.tipoAccion        = "QUITAR_MATCHEO_REGISTRO";
+        objAHDetalle.id = id_registro;
+        objAHDetalle.id_importacion = id_importacion;
+        objAHDetalle.sendToServer();
+
+}
+
+function updateQuitarMatcheoRegistro(responseText){
+        var Messages=JSONstring.toObject(responseText);
+        setMessages(Messages);
+        detalleImportacion(objAHDetalle.id_importacion);
+}
+function comenzarImportacion(id_importacion){
+
+        objAHDetalle=new AjaxHelper(updateComenzarImportacion);
+        objAHDetalle.url               = URL_PREFIX+'/herramientas/importacion/importarDB.pl';
+        objAHDetalle.debug             = true;
+        objAHDetalle.showOverlay       = true;
+        objAHDetalle.tipoAccion        = "COMENZAR_IMPORTACION";
+        objAHDetalle.id = id_importacion;
+        objAHDetalle.sendToServer();
+
+}
+
+function updateComenzarImportacion(responseText){
+        var Messages=JSONstring.toObject(responseText);
+        setMessages(Messages);
+        detalleImportacion(objAHDetalle.id);
+}

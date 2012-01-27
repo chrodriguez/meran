@@ -73,7 +73,6 @@
 
                       <td align="left">
                         [% IF detalle_importacion.getMatching %]
-
 							[% PERL %]
                             print C4::AR::Filtros::link_to( text =>     "Si",
                                                             url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
@@ -82,7 +81,17 @@
                                                             class => "rojo"
                                                         ) ;
 							[% END %]
+                      <div class="click">
+                            [% PERL %]
+                            print C4::AR::Filtros::to_Icon(
+                                                             boton         => "icon_borrar",
+                                                             onClick       => "quitarMatcheoRegistro('[% detalle_importacion.getIdImportacionIso %]','[% detalle_importacion.getId %]');",
+                                                             title         => "[% 'No es el mismo registro' | i18n %]",
+                                                             alternClass   => "botonCentradoTabla",
+                                                           ) ;
 
+                            [% END %]
+                        </div>
                         [% ELSE %]
 							<span class='verde'>No</span>
                         [% END %]
@@ -140,3 +149,15 @@
 </fieldset>
 
 <div id="detalleRegistroMARC"></div>
+
+<div class="buttonContainerHorizontal">
+    <ul class="horizontal-list" >
+                [% PERL %]
+                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Comenzar Importaci&oacute;n' | i18n %]",
+                                                                        boton   => "thoughtbot",
+                                                                        onClick => "comenzarImportacion('[% id_importacion %]');",
+                                                                        title   => "[% 'Comenzar Importaci&oacute;n' | i18n %]",
+                                            ) ;
+                [% END %]
+  </ul>
+</div>

@@ -930,7 +930,7 @@ sub procesarReglasMatcheo {
 		my $tardo2=($tt2 - $tt1);
 		my $min= $tardo2/60;
 		my $hour= $min/60;
-		C4::Debug::debug( "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!! o mejor $hour horas !!!");
+		C4::AR::Debug::debug( "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!! o mejor $hour horas !!!");
 
 
         if(!$msg_object->{'error'}){
@@ -1014,6 +1014,156 @@ sub cambiarEsdatoRegistro {
 
 }
 
+#Dividir el registro en niveles de meran
+
+sub getNivelesFromRegistro {
+      my ($id_registro) = @_;
+      
+    my ($registro_importacion) = C4::AR::ImportacionIsoMARC::getRegistroFromImportacionById($id_registro);
+	my $marc_record_to_meran = $registro_importacion->getRegistroMARCResultado();
+	my $marc_record_n1 = MARC::Record->new();
+              
+}
+
+
+
+
+#=head2
+    #sub marc_record_to_meran_view
+
+    #pasa la informacion de un marc_record a una estructura para utilizar en el cliente
+    #ESTO ES PARA LA VISTA DEL DETALLE
+
+    #campo => "campo"
+    #indicador_primario =>
+    #indicador_secundario =>
+    #subcampos_array => [ {subcampo => 'a', dato => 'dato'}, {subcampo => 'b', dato => 'dato'}, ...]
+#=cut
+#sub marc_record_to_meran_view {
+    #my ($marc_record, $params, $type, $nivel, $db) = @_;
+
+    #my @MARC_result_array;
+    #my $itemtype    = $params->{'id_tipo_doc'};
+    #$type           = $type || "__NO_TYPE";
+
+    #foreach my $field ($marc_record->fields) {
+        #if(! $field->is_control_field){
+            #my %hash;
+            #my $campo                       = $field->tag;
+            #my $indicador_primario_dato     = $field->indicator(1);
+            #my $indicador_secundario_dato   = $field->indicator(2);
+            ##proceso todos los subcampos del campo
+            #foreach my $subfield ($field->subfields()) {
+                #my %hash_temp;
+
+                #my $subcampo                        = $subfield->[0];
+                #my $dato                            = $subfield->[1];
+                #$hash_temp{'campo'}                 = $campo;
+                #$hash_temp{'subcampo'}              = $subcampo;
+                #$hash_temp{'liblibrarian'}          = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo, $itemtype, $type, $nivel, $db);
+                #$hash_temp{'orden'}                 = getOrdenFromCampoSubcampo($campo, $subcampo, $itemtype, $type, $nivel ,$db);
+                ##C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view => orden: ".$hash_temp{'orden'});
+                ##$dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype, $db);
+                #$hash_temp{'datoReferencia'}        = $dato;
+              ##  my $valor_referencia                = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $params->{'nivel'}, $db);
+
+                #$hash_temp{'dato'}                  = $dato;
+                #$hash_temp{'id1'}                   = $params->{'id1'};
+                #$hash_temp{'id2'}                   = $params->{'id2'};
+                #$hash_temp{'dato_link'}             = C4::AR::Filtros::show_componente( ('campo' => $campo, 'subcampo' => $subcampo, 'dato' => $dato , 'id1' => $params->{'id1'}) );
+
+                #if($hash_temp{'dato_link'} ne "NO_LINK"){
+                    #$hash_temp{'dato'} = $hash_temp{'dato_link'};
+                #}
+
+                #push(@MARC_result_array, \%hash_temp);
+            #}
+
+        #}
+    #}
+
+    #@MARC_result_array = sort{$a->{'orden'} <=> $b->{'orden'}} @MARC_result_array;
+
+    #foreach my $hash (@MARC_result_array){
+        #C4::AR::Debug::debug("hash?????????? ".$hash->{'campo'});
+    #}
+
+    #return (\@MARC_result_array);
+#}
+
+#=head2 sub detalleVistaPrevia
+    #Genera el detalle de un registro para su vista previa
+#=cut
+#sub detalleVistaPrevia {
+    #my ($id, $t_params) = @_;
+    
+    ##recupero el nivel1 segun el id1 pasado por parametro
+    #my $nivel1              = C4::AR::ImportacionIsoMARC::getRegistroFromImportacionById($id);
+
+    #my $id2 =  $t_params->{'id2'} || 0;
+    #my $nivel2_array_ref;
+
+    #if ($id2){
+       #($nivel2_array_ref) = C4::AR::Nivel2::getNivel2FromId2_asArray($id2);
+    #}else{
+       #($nivel2_array_ref) = C4::AR::Nivel2::getNivel2FromId1($nivel1->getId1,$nivel1->db);
+    #}
+
+    #my @nivel2;
+
+    #my $cantidad_total = scalar(@$nivel2_array_ref);
+    #my $inicio = (($page_number) * $cant_grupos);
+    #my $cantidad = $inicio + $cant_grupos;  
+    
+    
+    #for(my $i=$inicio;$i<$cantidad;$i++){
+
+        #my $new_id2 = 0;
+        #eval {
+            #$new_id2 = $nivel2_array_ref->[$i]->getId2;
+        #};
+    ##eval{
+        #my ($hash_nivel2) = detalleNivel3($new_id2,$nivel1->db);
+            
+        ##Para ver la portada en el detalle
+        #$hash_nivel2->{'portada_registro'}          = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'S');
+        #$hash_nivel2->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'M');
+        #$hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'L');
+        
+        ##Para el google book preview
+        #$hash_nivel2->{'isbn'}        		        = $nivel2_array_ref->[$i]->getISBN;
+        #if(($nivel2_array_ref->[$i]->getISSN)&&(!$t_params->{'issn'})){
+        ##Se supone que no cambian dentro de la misma publicación seriada, se toma solo el primero
+            #$t_params->{'issn'}        				= $nivel2_array_ref->[$i]->getISSN;
+        #}
+			
+        #push(@nivel2, $hash_nivel2);
+    ##};
+        
+        #if ($i >= ($cantidad_total-1)){
+            #last;
+        #}
+    
+    #}
+    
+    ##Es una Revista? Armo el estado de colección
+    #if($nivel1->getTemplate() eq "REV"){
+        #my ($cant_revistas ,$estadoDeColeccion) = C4::AR::Busquedas::obtenerEstadoDeColeccion($id1, $nivel1->getTemplate(), "INTRA");
+        #if($cant_revistas > 0){
+            #$t_params->{'estadoDeColeccion'}  = $estadoDeColeccion;
+        #}
+    #}
+
+    #$t_params->{'nivel1'}           = $nivel1->toMARC_Intra;
+    #$t_params->{'nivel1_template'}  = $nivel1->getTemplate();
+    #$t_params->{'id1'}              = $id1;
+    #$t_params->{'cantItemN1'}       = C4::AR::Nivel3::cantNiveles3FromId1($id1,$nivel1->db);
+    #$t_params->{'nivel2'}           = \@nivel2;
+    ##se ferifica si la preferencia "circularDesdeDetalleDelRegistro" esta seteada
+    #$t_params->{'circularDesdeDetalleDelRegistro'}  = C4::AR::Preferencias::getValorPreferencia('circularDesdeDetalleDelRegistro');
+
+    #return ($cantidad_total);
+#}
 
 END { }       # module clean-up code here (global destructor)
 
