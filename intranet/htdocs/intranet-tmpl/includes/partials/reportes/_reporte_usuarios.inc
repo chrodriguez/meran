@@ -3,6 +3,23 @@
 		$('#report_result').show();
 		scrollTo("report_result");
 	}
+
+
+	$(document).ready( function(){ 
+	    $(".cb-enable").click(function(){
+	        var parent = $(this).parents('.switch');
+	        $('.cb-disable',parent).removeClass('selected');
+	        $(this).addClass('selected');
+	        $('.checkbox',parent).attr('checked', true);
+	    });
+	    $(".cb-disable").click(function(){
+	        var parent = $(this).parents('.switch');
+	        $('.cb-enable',parent).removeClass('selected');
+	        $(this).addClass('selected');
+	        $('.checkbox',parent).attr('checked', false);
+	    });
+	});
+		
 </script>
 
 <div class="span12 center_fieldset report_form_container">
@@ -63,6 +80,15 @@
             </div>
           </div><!-- /clearfix -->
 
+		  <div class="clearfix">
+        <div class="iphone-toggle-buttons">
+			<label for="checkbox-0">
+				<input type="checkbox" name="checkbox-0" id="checkbox-0" />
+				<span class="help-block"></span><span>&nbsp;Generar estadisticas</span>
+			</label>
+        </div>
+
+		  </div>
 
           <div class="actions">
             <input type="submit" class="btn primary" value="Consultar">

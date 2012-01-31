@@ -20,9 +20,11 @@
 	    fd.append("upfile", document.getElementById('fileToUpload_1').files[0]);
         fd.append("formatoImportacion",document.getElementById('formatoImportacion').value);
         fd.append("comentario",document.getElementById('comentario').value);
-        fd.append("esquemaImportacion",document.getElementById('esquemaImportacion').value);
+        if (document.getElementById('esquemaImportacion'))
+            fd.append("esquemaImportacion",document.getElementById('esquemaImportacion').value);
         fd.append("nuevo_esquema",document.getElementById('nuevo_esquema').value);
-        fd.append("nombreEsquema",document.getElementById('nombreEsquema').value);
+        if (document.getElementById('nombreEsquema'))
+            fd.append("nombreEsquema",document.getElementById('nombreEsquema').value);
         
 	    
 	
@@ -80,7 +82,7 @@
 			      </li>
 			      <li class="sub_item" id='seleccionar_esquema'>
 			        <label>Seleccionar Esquema: </label>
-			        [% combo_esquemas %]
+			        [% IF combo_esquemas %][% combo_esquemas %][% ELSE %] [% 'No hay ning&uacute;n esquema definido.' %][% END %]
 			      </li>
 			      <li class="sub_item" id='esquema_nuevo' style="display: none;">
 			        <label>Nombre Nuevo Esquema: </label>

@@ -492,13 +492,12 @@ function uploadProgress(evt) {
 				+ 'px';
 		document.getElementById('transferBytesInfo' + '_' + ID2_file).innerHTML = bytesTransfered;
 		if (percentComplete == 100) {
-			document.getElementById('progressInfo' + '_' + ID2_file).style.display = 'none';
 			var uploadResponse = document.getElementById('uploadResponse' + '_'	+ ID2_file);
-			uploadResponse.innerHTML = '<span style="font-size: 18pt; font-weight: bold;">Please wait...</span>';
+			uploadResponse.innerHTML = '<span style="font-size: 18pt; font-weight: bold;">Procesando...</span>';
 			uploadResponse.style.display = 'block';
 		}
 	} else {
-		document.getElementById('progressBar').innerHTML = 'unable to compute';
+		document.getElementById('progressBar').innerHTML = 'No se pudo completar';
 	}
 }
 

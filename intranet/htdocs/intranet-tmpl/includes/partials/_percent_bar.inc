@@ -17,9 +17,9 @@ var interval_ID = 0;
 	        objAH.jobID             = jobID; 
 	        objAH.sendToServer();
     	}else{
-    		percent_progress_bar = null;
-                clearInterval(interval_ID);
-                jAlert("EHHHH LOCO, TERMINO!!!!!!!!!!!");
+			percent_progress_bar = null;
+            clearInterval(interval_ID);
+            jAlert("EHHHH LOCO, TERMINO!!!!!!!!!!!");
 
     	}
 
@@ -31,7 +31,7 @@ var interval_ID = 0;
     }
 	
     function checkProgress(){
- 	interval_ID = window.setInterval('pollTest()', 300);
+ 		interval_ID = window.setInterval('pollTest()', 300);
     }
 	
 </script>

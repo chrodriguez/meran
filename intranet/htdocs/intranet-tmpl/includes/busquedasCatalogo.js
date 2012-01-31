@@ -115,24 +115,19 @@ function buscar(doScroll){
     { 
     	busquedaCombinable();
     }
-    else if ($('#tipo_nivel3_id').val() != ""){
-		busquedaPorTipoDoc();
-    }
-    else if ($.trim($('#estante').val()) != '') {
-        if ( (jQuery.trim($('#estante').val())).length < limite_caracteres ){
-    		cumple_limite = false;
-        } else {busquedaPorEstante();}
-    } 
     else if ($.trim($('#keyword').val()) != '') {
         if ( (jQuery.trim($('#keyword').val())).length < limite_caracteres ){
     		cumple_limite = false;
         } else {busquedaPorKeyword(); }
     } 
-    else if ( (jQuery.trim($('#keyword-bar').val()) != '') ) {
-        if ( (jQuery.trim($('#keyword-bar').val())).length < limite_caracteres ){
-            cumple_limite = false;
-        } else{ buscarBar();}
-    }    
+    else if ($.trim($('#estante').val()) != '') {
+        if ( (jQuery.trim($('#estante').val())).length < limite_caracteres ){
+    		cumple_limite = false;
+        } else {busquedaPorEstante();}
+    } 
+    else if ($('#tipo_nivel3_id').val() != ""){
+    	busquedaCombinable();
+    }
     else {
 	       cumple_vacio = false;
 	}

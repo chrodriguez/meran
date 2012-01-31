@@ -1403,7 +1403,7 @@ bytesTransfered=(Math.round(bytesUploaded*100)/100)
 .toString()
 +'%';document.getElementById('progressBar'+'_'+ID2_file).style.width=(percentComplete*3.55)
 .toString()
-+'px';document.getElementById('transferBytesInfo'+'_'+ID2_file).innerHTML=bytesTransfered;if(percentComplete==100){document.getElementById('progressInfo'+'_'+ID2_file).style.display='none';var uploadResponse=document.getElementById('uploadResponse'+'_'+ID2_file);uploadResponse.innerHTML='<span style="font-size: 18pt; font-weight: bold;">Please wait...</span>';uploadResponse.style.display='block';}}else{document.getElementById('progressBar').innerHTML='unable to compute';}}
++'px';document.getElementById('transferBytesInfo'+'_'+ID2_file).innerHTML=bytesTransfered;if(percentComplete==100){var uploadResponse=document.getElementById('uploadResponse'+'_'+ID2_file);uploadResponse.innerHTML='<span style="font-size: 18pt; font-weight: bold;">Procesando...</span>';uploadResponse.style.display='block';}}else{document.getElementById('progressBar').innerHTML='No se pudo completar';}}
 function uploadComplete(evt){clearInterval(intervalTimer);var uploadResponse=document.getElementById('uploadResponse'+'_'+ID2_file);uploadResponse.innerHTML=evt.target.responseText;uploadResponse.style.display='block';}
 function uploadFailed(evt){clearInterval(intervalTimer);alert("An error occurred while uploading the file.");}
 function uploadCanceled(evt){clearInterval(intervalTimer);alert("The upload has been canceled by the user or the browser dropped the connection.");}function startOverlay(){$('#ajax-indicator').modal({close:false,containerCss:{backgroundColor:"#fff",height:50,padding:0,width:190,opacity:50,},});return(true);}
