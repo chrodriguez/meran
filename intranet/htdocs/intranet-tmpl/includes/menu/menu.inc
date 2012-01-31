@@ -210,72 +210,23 @@
                  <a href="#">[% 'Consultas' | i18n %]</a>
                  <ul>
                     <li>
-                         <a href="#">[% 'Usuarios' | i18n %]</a>
-                         <ul>
-                                 <li>
-                                             [% PERL %]
-                                                 print C4::AR::Filtros::link_to( text =>     "[% 'Generar Carnets' | i18n %]",
-                                                                                 url =>      "[% url_prefix %]/reports/users-cards.pl",
-                                                                                 title =>    "[% 'Generar Carnets' | i18n %]"
-                                                                             ) ;
-                                             [% END %]
-                                 </li>
-                                 <li>
-                                             [% PERL %]
-                                                 print C4::AR::Filtros::link_to( text =>     "[% 'Usuarios' | i18n %]",
-                                                                                 url =>      "[% url_prefix %]/reports/usuarios.pl",
-                                                                                 title =>    "[% 'Usuarios (PREGUNTALE A FER)' | i18n %]"
-                                                                             ) ;
-                                             [% END %]
-                                 </li>
+							[% PERL %]
+								print C4::AR::Filtros::link_to( text =>     "[% 'Usuarios' | i18n %]",
+															    url =>      "[% url_prefix %]/reports/usuarios.pl",
+															    title =>    "[% 'Usuarios' | i18n %]"
+							  							      );
+							[% END %]
+					</li>
 
-                         </ul>
-                    </li>
                     <li>
-                        <a href="#">[% 'Cat&aacute;logo' | i18n %]</a>
-                        <ul>
-                          <li>
-                              [% PERL %]
-                                  print C4::AR::Filtros::link_to( text =>     "[% 'Estantes virtuales' | i18n %]",
-                                                                  url =>      "[% url_prefix %]/reports/estantes_virtuales.pl",
-                                                                  title =>    "[% 'Busquedas desde OPAC' | i18n %]"
-                                                              ) ;
-                              [% END %]
-                          </li>
-                          <li>
-                              [% PERL %]
-                                  print C4::AR::Filtros::link_to( text =>     "[% 'Busquedas desde OPAC' | i18n %]",
-                                                                  url =>      "[% url_prefix %]/reports/busquedas_opac.pl",
-                                                                  title =>    "[% 'Busquedas desde OPAC' | i18n %]"
-                                                              ) ;
-                              [% END %]
-                          </li>
-                          <li>
-                              [% PERL %]
-                                  print C4::AR::Filtros::link_to( text =>     "[% 'Altas de Registro' | i18n %]",
-                                                                  url =>      "[% url_prefix %]/reports/altas_registro.pl",
-                                                                  title =>    "[% 'Altas de registro' | i18n %]"
-                                                              ) ;
-                              [% END %]
-                          </li>
-                          <li>
-                                  [% PERL %]
-                                      print C4::AR::Filtros::link_to( text =>     "[% 'Inventario y Signatura' | i18n %]",
-                                                                      url =>      "[% url_prefix %]/reports/inventory-sig-top.pl",
-                                                                      title =>    "[% 'Inventario y Signatura' | i18n %]"
-                                                                  ) ;
-                                  [% END %]
-                          </li>
-                          <li>
-                                  [% PERL %]
-                                      print C4::AR::Filtros::link_to( text =>     "[% 'Registro de Actividades' | i18n %]",
-                                                                      url =>      "[% url_prefix %]/reports/registro.pl",
-                                                                      title =>    "[% 'Registro de Actividades' | i18n %]"
-                                                                  ) ;
-                                  [% END %]
-                          </li>
-                       </ul>
-                   </li>
+							[% PERL %]
+								print C4::AR::Filtros::link_to( text =>     "[% 'Circulaci&oacute;n' | i18n %]",
+															    url =>      "[% url_prefix %]/reports/circulacion.pl",
+															    title =>    "[% 'Circulaci&oacute;n' | i18n %]"
+							  							      );
+							[% END %]
+					</li>
+
                 </ul>
            </li>
 
