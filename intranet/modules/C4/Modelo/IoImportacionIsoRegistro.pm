@@ -399,3 +399,11 @@ sub getDatosFromReglasMatcheo{
         }
     return  \@reglas_datos;
 }
+
+
+sub getNiveles {
+     my ($self)   = shift;
+
+    my $niveles= C4::AR::ImportacionIsoMARC::getNivelesFromRegistro($self->getId);
+    return  $niveles;
+}
