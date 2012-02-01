@@ -39,7 +39,7 @@ if($tipoAccion eq "MOSTRAR_CAMPOS"){
 			        });
 
 
-C4::AR::Debug::debug("getEstructuraCatalogacionFromDBCompleta => itemType FROM PL => ".$itemType);
+# C4::AR::Debug::debug("getEstructuraCatalogacionFromDBCompleta => itemType FROM PL => ".$itemType);
 # TODO en el template esta haciendo una consulta por cada fila
     my ($cant, $catalogaciones_array_ref) = C4::AR::Catalogacion::getEstructuraCatalogacionFromDBCompleta($nivel, $itemType, $orden);
     

@@ -9,12 +9,12 @@
 
 [% USE HTML %]
 
-<div class="contenedor_paginador">[% paginador %]</div>
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda (usuarios):" | i18n %]</legend>
         <div class="datos_tabla_div_user">
             <div class="resultados_consulta">[% "La cantidad de usuarios es" | i18n %]: [% cantidad %]</div> 
             <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: [% HTML.escape(socio_busqueda) %]</div> 
+            <div class="contenedor_paginador">[% paginador %]</div>
             <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
                 <thead>
                 <tr class="titulo_tabla_resultado">

@@ -115,10 +115,10 @@ function updateEleccionCampoX(responseText){
     //Arreglo de Objetos Global
     var campos_array = JSONstring.toObject(responseText);
     //se inicializa el combo
-    $("#campo").html('')
+    $("#campo").html('');
     var options = "<option value='-1'>Seleccionar CampoX</option>";
     
-    for (x=0;x < campos_array.length;x++){
+    for (var x=0;x < campos_array.length;x++){
          CAMPOS_ARRAY[campos_array[x].campo]= $.trim(campos_array[x].liblibrarian);   
          options+= "<option value=" + campos_array[x].campo +" >" + campos_array[x].campo + "</option>";
     }
@@ -151,6 +151,8 @@ function updateEleccionCampo(responseText){
     var subcampos_array=JSONstring.toObject(responseText);
     //se inicializa el combo
     $("#subcampo").html('');
+    $("#liblibrarian").val('');
+    $("#liblibrarian_esquema").html('');
     var options = "<option value='-1'>Seleccionar SubCampo</option>";
 //     var subcampo = new Object;    
 //     subcampo.liblibrarian = '';

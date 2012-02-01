@@ -1,4 +1,4 @@
-var objAH;
+var objAH_search;
 
 var combinables     = ['titulo', 'autor', 'tipo', 'signatura', 'tipo_nivel3_id'];
 var noCombinables   = ['keyword', 'isbn', 'dictionary', 'codBarra', 'estante', 'tema'];
@@ -7,7 +7,6 @@ var shouldScroll    = true;
 function updateInfoBusquedas(responseText){
 
     $("#volver").hide();
-    $("#filtrosBusqueda").slideUp('fast');  
     $('#resultBusqueda').html(responseText);
     $("#resultBusqueda").slideDown("fast");
     zebra('datos_tabla');
@@ -24,18 +23,18 @@ function updateInfoBusquedasBar(responseText){
 
 function busquedaPorTipoDoc(){
 
-	    objAH                   = new AjaxHelper(updateBusquedaCombinable);
-	    objAH.debug             = true;
-	    objAH.showOverlay       = true;
+	    objAH_search                   = new AjaxHelper(updateBusquedaCombinable);
+	    objAH_search.debug             = true;
+	    objAH_search.showOverlay       = true;
 	    //para busquedas combinables
-	    objAH.url               = URL_PREFIX+'/busquedas/busquedasDB.pl';
-	    objAH.only_available	= ( $('#only_available').attr('checked') )?1:0;
-	    objAH.tipo_nivel3_name  = $('#tipo_nivel3_id').val();
-	    objAH.tipoAccion        = 'BUSQUEDA_AVANZADA';
+	    objAH_search.url               = URL_PREFIX+'/busquedas/busquedasDB.pl';
+	    objAH_search.only_available	= ( $('#only_available').attr('checked') )?1:0;
+	    objAH_search.tipo_nivel3_name  = $('#tipo_nivel3_id').val();
+	    objAH_search.tipoAccion        = 'BUSQUEDA_AVANZADA';
 	    //se setea la funcion para cambiar de pagina
-	    objAH.funcion           = 'changePage';
+	    objAH_search.funcion           = 'changePage_search';
 	    //se envia la consulta
-	    objAH.sendToServer();
+	    objAH_search.sendToServer();
 }
 
 function busquedaCombinable(){
@@ -43,57 +42,57 @@ function busquedaCombinable(){
     var radio               = $("#tipo:checked");
     var tipo                = radio[0].value;
 
-    objAH                   = new AjaxHelper(updateBusquedaCombinable);
-    objAH.debug             = true;
-    objAH.showOverlay       = true;
+    objAH_search                   = new AjaxHelper(updateBusquedaCombinable);
+    objAH_search.debug             = true;
+    objAH_search.showOverlay       = true;
     //para busquedas combinables
-    objAH.url               = URL_PREFIX+'/busquedas/busquedasDB.pl';
-    objAH.titulo            = $('#titulo').val();
-    objAH.tipo              = tipo;
-    objAH.autor             = $('#autor').val();
-    objAH.only_available	= ( $('#only_available').attr('checked') )?1:0;
-    objAH.signatura         = $('#signatura').val();
-    objAH.tipo_nivel3_name  = $('#tipo_nivel3_id').val();
-    objAH.tema				= $('#tema').val();
-    objAH.codBarra      	= $('#codBarra').val();
+    objAH_search.url               = URL_PREFIX+'/busquedas/busquedasDB.pl';
+    objAH_search.titulo            = $('#titulo').val();
+    objAH_search.tipo              = tipo;
+    objAH_search.autor             = $('#autor').val();
+    objAH_search.only_available	= ( $('#only_available').attr('checked') )?1:0;
+    objAH_search.signatura         = $('#signatura').val();
+    objAH_search.tipo_nivel3_name  = $('#tipo_nivel3_id').val();
+    objAH_search.tema				= $('#tema').val();
+    objAH_search.codBarra      	= $('#codBarra').val();
 
-    objAH.isbn				= $('#isbn').val();
+    objAH_search.isbn				= $('#isbn').val();
     
-    objAH.tipoAccion        = 'BUSQUEDA_AVANZADA';
+    objAH_search.tipoAccion        = 'BUSQUEDA_AVANZADA';
     //se setea la funcion para cambiar de pagina
-    objAH.funcion           = 'changePage';
+    objAH_search.funcion           = 'changePage_search';
     //se envia la consulta
-    objAH.sendToServer();
+    objAH_search.sendToServer();
 }
 
 function updateBusquedaCombinable(responseText){
     updateInfoBusquedas(responseText);
 }
 
-function changePage(ini){
-    objAH.changePage(ini);
+function changePage_search(ini){
+    objAH_search.changePage(ini);
 }
 
 function ordenarPor(ord){
     //seteo el orden de los resultados
-    objAH.sort(ord);
+    objAH_search.sort(ord);
 }
 
 
 function buscarBar(){
-    objAH=new AjaxHelper(updateInfoBusquedasBar);
-    objAH.showOverlay       = true;
-    objAH.debug= true;
-    objAH.url= URL_PREFIX+'/busquedas/busquedasDB.pl';
-    objAH.keyword= $('#keyword-bar').val();
-    objAH.shouldScroll = true;
-    objAH.tipoAccion= 'BUSQUEDA_COMBINADA';
+    objAH_search=new AjaxHelper(updateInfoBusquedasBar);
+    objAH_search.showOverlay       = true;
+    objAH_search.debug= true;
+    objAH_search.url= URL_PREFIX+'/busquedas/busquedasDB.pl';
+    objAH_search.keyword= $('#keyword-bar').val();
+    objAH_search.shouldScroll = true;
+    objAH_search.tipoAccion= 'BUSQUEDA_COMBINADA';
     //se setea la funcion para cambiar de pagina
-    objAH.match_mode = "SPH_MATCH_ALL";
-    objAH.funcion= 'changePage';
+    objAH_search.match_mode = "SPH_MATCH_ALL";
+    objAH_search.funcion= 'changePage_search';
   
-    if (jQuery.trim(objAH.keyword).length > 0)
-    	objAH.sendToServer();	
+    if (jQuery.trim(objAH_search.keyword).length > 0)
+    	objAH_search.sendToServer();	
 }
 
 function buscar(doScroll){
@@ -116,24 +115,19 @@ function buscar(doScroll){
     { 
     	busquedaCombinable();
     }
-    else if ($('#tipo_nivel3_id').val() != ""){
-		busquedaPorTipoDoc();
-    }
-    else if ($.trim($('#estante').val()) != '') {
-        if ( (jQuery.trim($('#estante').val())).length < limite_caracteres ){
-    		cumple_limite = false;
-        } else {busquedaPorEstante();}
-    } 
     else if ($.trim($('#keyword').val()) != '') {
         if ( (jQuery.trim($('#keyword').val())).length < limite_caracteres ){
     		cumple_limite = false;
         } else {busquedaPorKeyword(); }
     } 
-    else if ( (jQuery.trim($('#keyword-bar').val()) != '') ) {
-        if ( (jQuery.trim($('#keyword-bar').val())).length < limite_caracteres ){
-            cumple_limite = false;
-        } else{ buscarBar();}
-    }    
+    else if ($.trim($('#estante').val()) != '') {
+        if ( (jQuery.trim($('#estante').val())).length < limite_caracteres ){
+    		cumple_limite = false;
+        } else {busquedaPorEstante();}
+    } 
+    else if ($('#tipo_nivel3_id').val() != ""){
+    	busquedaCombinable();
+    }
     else {
 	       cumple_vacio = false;
 	}
@@ -168,24 +162,24 @@ function busquedaPorKeyword(suggested){
     keyword = keyword.replace(/\|/g,"OR");
     keyword = keyword.replace(/\-/g,"NOT");
 	
-    objAH=new AjaxHelper(updateBusquedaPorKeyword);
-    objAH.showOverlay = true;
-    objAH.debug = true;
-    objAH.url= URL_PREFIX+'/busquedas/busquedasDB.pl';
+    objAH_search=new AjaxHelper(updateBusquedaPorKeyword);
+    objAH_search.showOverlay = true;
+    objAH_search.debug = true;
+    objAH_search.url= URL_PREFIX+'/busquedas/busquedasDB.pl';
 
     if (suggested){
-        objAH.keyword= suggested;
-        objAH.from_suggested= 1;
+        objAH_search.keyword= suggested;
+        objAH_search.from_suggested= 1;
     }else{
-        objAH.keyword= keyword;
+        objAH_search.keyword= keyword;
     }
 
-    objAH.match_mode = $('#match_mode').val();
-    objAH.only_available 	= ( $('#only_available').attr('checked') )?1:0;
-    objAH.tipoAccion= 'BUSQUEDA_COMBINADA';
+    objAH_search.match_mode = $('#match_mode').val();
+    objAH_search.only_available 	= ( $('#only_available').attr('checked') )?1:0;
+    objAH_search.tipoAccion= 'BUSQUEDA_COMBINADA';
     //se setea la funcion para cambiar de pagina
-    objAH.funcion= 'changePage';
-    objAH.sendToServer();
+    objAH_search.funcion= 'changePage_search';
+    objAH_search.sendToServer();
 }
 
 function updateBusquedaPorKeyword(responseText){
@@ -200,29 +194,29 @@ function updateBusquedaPorKeyword(responseText){
 }
 
 function busquedaPorEstante(){
-    objAH               = new AjaxHelper(updateInfoBusquedas);
-    objAH.showOverlay       = true;
-    objAH.url           = URL_PREFIX+'/busquedas/busquedasDB.pl';
+    objAH_search               = new AjaxHelper(updateInfoBusquedas);
+    objAH_search.showOverlay       = true;
+    objAH_search.url           = URL_PREFIX+'/busquedas/busquedasDB.pl';
     //se setea la funcion para cambiar de pagina
-    objAH.debug         = true;
-    objAH.funcion       = 'changePage';
-    objAH.estante	= $('#estante').val();
-    objAH.tipoAccion    = "BUSQUEDA_POR_ESTANTE";
-    objAH.sendToServer();
+    objAH_search.debug         = true;
+    objAH_search.funcion       = 'changePage_search';
+    objAH_search.estante	= $('#estante').val();
+    objAH_search.tipoAccion    = "BUSQUEDA_POR_ESTANTE";
+    objAH_search.sendToServer();
 }
 
 function verTema(idtema,tema){
 
-    objAH=new AjaxHelper(updateInfoBusquedas);
-    objAH.debug= true;
-    objAH.showOverlay       = true;
-    objAH.url= URL_PREFIX+'/busquedas/busqueda.pl';
-    objAH.idTema= idtema;
-    objAH.tema= tema;
+    objAH_search=new AjaxHelper(updateInfoBusquedas);
+    objAH_search.debug= true;
+    objAH_search.showOverlay       = true;
+    objAH_search.url= URL_PREFIX+'/busquedas/busqueda.pl';
+    objAH_search.idTema= idtema;
+    objAH_search.tema= tema;
 
     //se setea la funcion para cambiar de pagina
-    objAH.funcion= 'changePage';
-    objAH.sendToServer();
+    objAH_search.funcion= 'changePage_search';
+    objAH_search.sendToServer();
 }
 
 
@@ -238,21 +232,21 @@ function cambiarEstadoCampos(campos, clase){
 
 
 function buscarPorAutor(completo){
-    objAH               = new AjaxHelper(updateInfoBusquedas);
-    objAH.showOverlay       = true;
-    objAH.url           = URL_PREFIX+'/busquedas/busquedasDB.pl';
+    objAH_search               = new AjaxHelper(updateInfoBusquedas);
+    objAH_search.showOverlay       = true;
+    objAH_search.url           = URL_PREFIX+'/busquedas/busquedasDB.pl';
     //se setea la funcion para cambiar de pagina
-    objAH.debug         = true;
-    objAH.funcion       = 'changePage';
-    objAH.only_available = ( $('#only_available').attr('checked') )?1:0;
-    objAH.completo      = completo;
-    objAH.tipoAccion    = "BUSQUEDA_POR_AUTOR";
-    objAH.sendToServer();
+    objAH_search.debug         = true;
+    objAH_search.funcion       = 'changePage_search';
+    objAH_search.only_available = ( $('#only_available').attr('checked') )?1:0;
+    objAH_search.completo      = completo;
+    objAH_search.tipoAccion    = "BUSQUEDA_POR_AUTOR";
+    objAH_search.sendToServer();
 }
 
 function ordenar(ord){
     //seteo el orden de los resultados
-    objAH.sort(ord);
+    objAH_search.sort(ord);
 }
 
 // FIXME DEPRECATEDDDDDDDDd

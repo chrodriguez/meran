@@ -196,6 +196,17 @@ function _getCampoMARC_conf_ById(id){
     return 0;
 }
 
+function _getIndexCampoMARC_conf_ById(id){
+    for(var i=0;i<MARC_OBJECT_ARRAY.length;i++){
+        if(MARC_OBJECT_ARRAY[i].getIdCompCliente() == id){
+
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 // Array Remove - By John Resig (MIT Licensed)
 function removeFromArray (array, from, to) {
   var rest = array.slice((to || from) + 1 || array.length);
@@ -350,7 +361,7 @@ function mostrarEstructuraDelNivel1(){
     _NIVEL_ACTUAL       = 1;
    
     if(MODIFICAR == 0){
-        _mostrarAccion("Agregando metadatos => Esquema: " + TEMPLATE_ACTUAL + crearBotonEsquema());
+        _mostrarAccion(crearBotonEsquema() + "<h5>Agregando registro con el esquema: " + TEMPLATE_ACTUAL + "</h5>");
     } 
 
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel1);
@@ -383,7 +394,7 @@ function mostrarEstructuraDelNivel2(){
     _NIVEL_ACTUAL       = 2;
     
     if(MODIFICAR == 0){
-        _mostrarAccion("Agregando grupo => Esquema: " + TEMPLATE_ACTUAL + crearBotonEsquema());
+        _mostrarAccion(crearBotonEsquema() + "<h5>Agregando grupo con el esquema: " + TEMPLATE_ACTUAL + "</h5>");
     }
     
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel2);
@@ -437,7 +448,7 @@ function mostrarEstructuraDelNivel3(tipo_documento){
     _NIVEL_ACTUAL       = 3;
     
 //     if(MODIFICAR == 0){
-//         _mostrarAccion("Agregando ejemplares => Template: " + $('#tipo_nivel3_id').val() + crearBotonEsquema());
+//         _mostrarAccion(crearBotonEsquema() + "Agregando ejemplares => Template: " + $('#tipo_nivel3_id').val() + crearBotonEsquema());
 //     }
 
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel3);
@@ -530,7 +541,7 @@ function seleccionar_esquema(){
     TEMPLATE_ACTUAL     = $('#tipo_nivel3_id').val();
     
     if(MODIFICAR == 0){
-        _mostrarAccion("Agregando ejemplares => Esquema: " + $('#tipo_nivel3_id').val() + crearBotonEsquema());
+        _mostrarAccion(crearBotonEsquema() + "<h5>Agregando ejemplares con el esquema: " + $('#tipo_nivel3_id').val() + "</h5>");
     }
     
     
@@ -664,7 +675,7 @@ function agregarN3(id2, tipo_documento){
     ID_TIPO_EJEMPLAR    = tipo_documento;
 	MODIFICAR           = 0;
     inicializar();  
-    _mostrarAccion("Agregando ejemplares");
+    _mostrarAccion(crearBotonEsquema() + "Agregando ejemplares");
 	$('#divCantEjemplares').show();
 // 	mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
     open_esquema();
@@ -1186,7 +1197,8 @@ function procesarInfoJson(marc_object_array, id_padre){
         strComp = strComp + "</div>"; //end div buttonContainerHorizontal
 
         //genero el header para el campo q contiene todos los subcampos
-        strComp = strComp + "<div id='marc_group" + id_temp + "' ><li class='MARCHeader'>";
+//         strComp = strComp + "<div id='marc_group" + id_temp + "'><li id='trigger_" + id_temp + "' class='MARCHeader click trigger trigger_" + id_temp + "'>";
+        strComp = strComp + "<div id='marc_group" + id_temp + "'><li class='MARCHeader'>";
         strComp = strComp + "<div class='MARCHeader_info'>";
 
         //header LEFT
@@ -1202,18 +1214,19 @@ function procesarInfoJson(marc_object_array, id_padre){
         strComp = strComp + "</div>";
 
         //header CENTER
-        strComp = strComp + "<div style='width:80%;float:left'>";
+        strComp = strComp + "<div id='trigger_" + id_temp + "' class='MARCHeader click trigger trigger_" + id_temp + "' style='width:80%;float:left'>";
         strComp = strComp + "<a class='fancy_extern_link' href='http://www.loc.gov/marc/bibliographic/bd" + campo_marc_conf_obj.getCampo() + ".html' TARGET='_blank'>" + campo_marc_conf_obj.getCampo() + "</a> - " + campo_marc_conf_obj.getNombre();
 
         if(campo_marc_conf_obj.getRepetible() == "1"){  
             //cierro div CENTER
             strComp = strComp + "</div>";
             //header RIGHT
-            strComp = strComp + "<div style='width:3%;float:right'>";
+            strComp = strComp + "<div style='width:4%;float:right'>";
             campo_marc_conf_obj.setIdCompCliente("marc_group" + id_temp);
             strComp = strComp + crearBotonAgregarCampoRepetible(campo_marc_conf_obj, id_temp);
 //             NO ANDA VER ESTO
-//             strComp = strComp + crearBotonEliminarCampoRepetible(campo_marc_conf_obj, id_temp);  
+            
+            strComp = strComp + crearBotonEliminarCampoRepetible(campo_marc_conf_obj);  
             strComp = strComp + "</div>";
         } else {
             //cierro div CENTER si no es repetible
@@ -1223,12 +1236,11 @@ function procesarInfoJson(marc_object_array, id_padre){
         //cierro MARCHeader_info
         strComp = strComp + "</div>";
 // TODO creo q el div MARCHeader_content esta deprecated
-        strComp = strComp + "</li><div class='MARCHeader_content'>";
+        strComp = strComp + "</li><div id='MARC_content_" + id_temp + "' class='MARC_content_" + id_temp + "'>";
 
-        //cierrdo DIV MARCHeader_content
-        strComp = strComp + "</div>";
         //cierro DIV marc_group
-        strComp = strComp + "</div>";
+//         strComp = strComp + "</div>";
+       
 
         if(id_padre == null) {
             $("#" + getDivDelNivel()).append(strComp);
@@ -1244,7 +1256,8 @@ function procesarInfoJson(marc_object_array, id_padre){
         //proceso los subcampos
         var subcampo_marc_conf_obj  = new subcampo_marc_conf(objetos[i]);
         var subcampos_array         = campo_marc_conf_obj.getSubCamposArray();
-        marc_group                  = "marc_group" + id_temp;
+//         marc_group                  = "marc_group" + id_temp;
+        marc_group                  = "MARC_content_" + id_temp;  
         
         for(var j=0; j < subcampos_array.length; j++){
         //recorro los subcampos
@@ -1256,6 +1269,13 @@ function procesarInfoJson(marc_object_array, id_padre){
         }
 
         MARC_OBJECT_ARRAY.push(campo_marc_conf_obj);
+        //cierrdo DIV MARCHeader_content
+        strComp = strComp + "</div>";
+        //cierro DIV marc_group
+        strComp = strComp + "</div>"
+        
+        strComp = "<script type='text/javascript'>toggle_component('trigger_"+ id_temp +"','MARC_content_"+ id_temp +"');</script>";
+        $("#marc_group" + id_temp).append(strComp);
     }
 
     if(objetos.length != 1) {
@@ -1350,11 +1370,10 @@ function procesarSubCampo(objeto, marc_group){
     if(marc_conf_obj.getTieneEstructura() == '0'){ 
         //no existe estructura de catalogacion configurada para este campo, subcampo
 // TODO armar una funcion q genere esto
-//         vista_intra         = vista_intra + "<div class='divComponente'><input type='text' id='" + marc_conf_obj.getIdCompCliente() + "' value='" + marc_conf_obj.getDato() + "' size='55' disabled></div>";
         vista_intra         = "<div class='divComponente'><input type='text' id='" + marc_conf_obj.getIdCompCliente() + "' value='" + marc_conf_obj.getDato() + "' size='55' disabled></div>";
         vista_intra         = vista_intra + crearIconWarning(marc_conf_obj);
+        vista_intra         = vista_intra + crearBotonEliminarSubcampo(marc_conf_obj);
         tiene_estructura    = 0;
-//         vista_intra         =  marc_conf_obj.getCampo() + '^' + marc_conf_obj.getSubCampo() + " - " + vista_intra
         divLabel            = crearDivLabel(marc_conf_obj.getCampo() + '^' + marc_conf_obj.getSubCampo() + " - " + marc_conf_obj.getVistaIntra(), marc_conf_obj.getIdCompCliente());  
         strComp             = "<li id='LI" + marc_conf_obj.getIdCompCliente() + "' class='sub_item'> " + divLabel + vista_intra + "</li>";  
     } else {
@@ -1601,13 +1620,13 @@ function cloneCampo(marc_group){
 }
 
 function remove(id){
-    var subcampo_temp   = _getSubCampoMARC_conf_ById(id);       //recupero el subcampo segun el id pasado por parametro
-    var _from           = subcampo_temp.posSubCampo;            //posicion del subcampo en el arreglo de subcampos
-    var _to             = subcampo_temp.posSubCampo;
+    var campo_temp      = _getIndexCampoMARC_conf_ById(id);       //recupero el campo segun el id pasado por parametro
+    var _from           = campo_temp;            //posicion del campo en el arreglo de subcampos
+    var _to             = campo_temp;
 
-    $('#LI'+id).remove();                                       //elimino la componete del cliente
+    $('#'+id).remove();                                       //elimino la componete del cliente
 
-    removeFromArray(MARC_OBJECT_ARRAY[subcampo_temp.posCampo].getSubCamposArray(), _from, _to); //elimino la informacion del subcampo
+    removeFromArray(MARC_OBJECT_ARRAY, _from, _to); //elimino la informacion del campo
 }
 
 function removeSubcampo(id){
@@ -1638,6 +1657,13 @@ function crearBotonEliminarSubcampoRepetible(obj){
     }
 }
 
+function crearBotonEliminarSubcampo(obj){
+
+    return "<div onclick=removeSubcampo('"+ obj.getIdCompCliente() +"') class='icon_borrar horizontal' title='Eliminar subcampo'/>";
+  
+}
+
+
 function crearIconWarning(obj){
 
     return "<div class='icon_warning horizontal' title='NO TIENE ESTRUCTURA'/>";
@@ -1652,11 +1678,10 @@ function crearBotonAgregarCampoRepetible(obj, id_padre){
     }
 }
 
-// TODO parece q no se va a usar mas
-function crearBotonEliminarRepetible(obj){
+function crearBotonEliminarCampoRepetible(obj){
 
     if(obj.getRepetible() == '1'){
-        return "<div onclick=remove('"+ obj.getIdCompCliente() +"') class='horizontal icon_sacar' title='Eliminar'/>";
+        return "<div onclick=remove('"+ obj.getIdCompCliente() +"') class='horizontal icon_borrar' title='Eliminar campo repetible'/>";
     }else{  
         return "";
     }
@@ -2144,7 +2169,7 @@ function modificarN1(id1, template){
     ID_N1               = id1;
     
 // TODO falta agregar boton para modificar el template
-    _mostrarAccion("Modificando el metadato (" + ID_N1 + ") => Esquema: " + TEMPLATE_ACTUAL + crearBotonEsquema());
+    _mostrarAccion(crearBotonEsquema() + "<h5>Modificando el registro (" + ID_N1 + ") con el esquema: " + TEMPLATE_ACTUAL + "</h5>");
     objAH               = new AjaxHelper(updateModificarN1);
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;
@@ -2158,7 +2183,7 @@ function modificarN1(id1, template){
 }
 
 function _mostrarAccion(mensaje){
-    $('#estado_accion').html( mensaje );
+    $('#estado_accion').html(mensaje);
     $('#estado_accion').show();
 }
 
@@ -2173,7 +2198,7 @@ function modificarN2(id2, template){
     ID_N2               = id2;
     ID_TIPO_EJEMPLAR    = template;
 // TODO falta agregar boton para modificar el template
-    _mostrarAccion("Modificando el grupo (" + ID_N2 + ") => Esquema: " + ID_TIPO_EJEMPLAR + crearBotonEsquema());  
+    _mostrarAccion(crearBotonEsquema() + "<h5>Modificando el grupo (" + ID_N2 + ") con el esquema: " + ID_TIPO_EJEMPLAR + "</h5>");  
     objAH               = new AjaxHelper(updateModificarN2);
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;
@@ -2197,7 +2222,7 @@ function modificarN3(id3, template){
 	ID_N3               = id3;	
     ID_TIPO_EJEMPLAR    = template;
 // TODO falta agregar boton para modificar el template
-    _mostrarAccion("Modificando el ejemplar (" + ID_N3 + ") => Esquema: " + ID_TIPO_EJEMPLAR + crearBotonEsquema());  
+    _mostrarAccion(crearBotonEsquema() + "<h5>Modificando el ejemplar (" + ID_N3 + ") con el esquema: " + ID_TIPO_EJEMPLAR + "</h5>");  
 	objAH               = new AjaxHelper(updateModificarN3);
 	objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
 	objAH.debug         = true;

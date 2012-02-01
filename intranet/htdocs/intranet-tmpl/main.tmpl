@@ -11,6 +11,28 @@
 <link rel="stylesheet" href="/includes/css/wysiwyg.css" type="text/css" media="screen"/>
 
 <script type="text/javascript">
+var jobID = 0;
+
+	function test(){
+		    objAH                   = new AjaxHelper(updateTest);
+		    objAH.url               = URL_PREFIX+'/start_job.pl';
+		    objAH.debug             = true;
+		    objAH.showOverlay       = false;
+		    objAH.accion            = "START_DEMO"; 
+		    objAH.sendToServer();
+
+	}
+
+	function updateTest(responseText){
+		jobID = responseText;
+		checkProgress();
+	}
+	
+		
+</script>
+
+
+<script type="text/javascript">
 	$(document).ready(function() {
 		CrearAutocompleteCatalogo({ 
 		    IdInput: 'catalogo_search', 
@@ -19,8 +41,7 @@
 		});
 
         
-        $('.fancy_link').fancybox({
-        });
+        $('.fancy_link').fancybox({});
 
         mostrarNovedades();
         mensajesContacto();
@@ -40,20 +61,20 @@
   
 
     function mostrarNovedades(){
-        objAH               = new AjaxHelper(updateActualizarTabla);
-        objAH.debug         = true;
-        objAH.showStatusIn  = '';
-        objAH.url           = URL_PREFIX+'/novedadesIntra.pl';
-        objAH.tipoAccion    = "MOSTRAR_NOVEDADES";
-        objAH.sendToServer();
+        var objAH_temp               = new AjaxHelper(updateActualizarTabla);
+        objAH_temp.debug         = true;
+        objAH_temp.showStatusIn  = '';
+        objAH_temp.url           = URL_PREFIX+'/novedadesIntra.pl';
+        objAH_temp.tipoAccion    = "MOSTRAR_NOVEDADES";
+        objAH_temp.sendToServer();
     }
 
     function mensajesContacto(){
-        objAH               = new AjaxHelper(updateMensajesContacto);
-        objAH.debug         = true;
-    this.showState      = false;
-        objAH.url           = URL_PREFIX+'/mensajes_contacto.pl';
-        objAH.sendToServer();
+        var objAH_temp               = new AjaxHelper(updateMensajesContacto);
+        objAH_temp.debug         = true;
+        this.showState      = false;
+        objAH_temp.url           = URL_PREFIX+'/mensajes_contacto.pl';
+        objAH_temp.sendToServer();
     }
 
     function updateMensajesContacto(responseText){
@@ -127,5 +148,8 @@
     </a>
 </div>
 [% END %]
-  
+
+[% INCLUDE 'partials/_percent_bar.inc' %]
+
+
 [% INCLUDE 'intranet-bottom.inc' %]

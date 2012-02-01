@@ -85,8 +85,6 @@ function limpiarCampos(side){
                         <strong>[% "B&uacute;squeda combinada" | i18n %]</strong>
                     </label>
                     <input type="text" id="keyword" size="25" onkeypress="limpiarCampos('arriba')">
-                    <label for="match_mode">
-                    </label>  
                     [% PERL %]
                         print C4::AR::Filtros::getComboMatchMode();
                     [% END %]
@@ -106,8 +104,6 @@ function limpiarCampos(side){
 							
 							    <input name="tipo" type=radio id=tipo value="normal" checked>
 							                    [% "Normal" | i18n %]
-							    <label for="tipo">
-							    </label>    
 							    <input name="tipo" type=radio id=tipo value="exacto">
 							                    [% "Exacto" | i18n %]
 							</li>
@@ -161,16 +157,16 @@ function limpiarCampos(side){
                 </ul>
           </fieldset>
           </div>
-          <div align ="center">
-                <!--<ul class="listaMenuBotones">-->
-                <ul>
-                    <li>
-    <!-- FIXME esto no se usa??? -->
-                    <input type="hidden" name="type" value="intra">
+          <div>
+                <ul >
+                    <li class="sub_item">
+                            <input type="hidden" name="type" value="intra">
                             <label for="only_available">
                                 <strong>[% "Solo disponibles para pr&eacute;stamo" | i18n %]</strong>
                             </label>
-                            <input type="checkbox" id="only_available" name="only_available" style="float:left;">
+                            <input type="checkbox" id="only_available" name="only_available">
+                    </li>
+                    <li class="sub_item">
 			                [% PERL %]
 			                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
 			                                                                        onClick => "buscar();",

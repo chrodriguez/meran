@@ -132,6 +132,9 @@ use vars qw(@EXPORT_OK @ISA);
     generarComboTablasDeReferenciaByNombreTabla
     serverName
     translateTipoCredencial
+    translateYesNo_fromNumber
+    translateYesNo_toNumber
+    printAjaxPercent
 );
 
 
@@ -1285,7 +1288,7 @@ sub armarPaginas{
 
     my $themelang= $t_params->{'themelang'};
 
-    my $paginador= "<div class='pagination'><div id='content_paginator'  align='center' >";
+    my $paginador= "<div class='pagination_bar'><div id='content_paginator'  align='center' >";
     my $class="paginador";
 
     if($actual > 1){
@@ -1710,6 +1713,26 @@ sub getNivelBibliograficoByCode{
         return 0;
     }
 }
+
+=item
+getNombreFromEstadoByCodigo
+=cut
+sub getNombreFromEstadoByCodigo{
+    my ($codigo)   = @_;
+
+    my @filtros;
+
+    push(@filtros, ( codigo => { eq => $codigo }) );
+
+    my $estado = C4::Modelo::RefEstado::Manager->get_ref_estado( query => \@filtros );
+
+    if(scalar(@$estado) > 0){
+        return ($estado->[0]->nombre);
+    } else {
+        return "NULL";
+    }
+}
+
 
 =head2
 # Esta funcioin remueve los blancos del principio y el final del string
@@ -2824,6 +2847,7 @@ sub generarComboCampoX{
 
     my $onReadyFunction = shift;
     my $defaultCampoX = shift;
+    my $idCombo = shift;
     #Filtro de numero de campo
     my %camposX;
     my @values;
@@ -2838,9 +2862,9 @@ sub generarComboCampoX{
         $camposX{$i}=$option;
     }
     my $defaulCX= $defaultCampoX || 'Elegir';
-
-    my $selectCampoX=CGI::scrolling_list(  -name      => 'campoX',
-                    -id    => 'campoX',
+    my $idCX= $idCombo || 'campoX';
+    my $selectCampoX=CGI::scrolling_list(  -name      => $idCX,
+                    -id    => $idCX,
                     -values    => \@values,
                     -labels    => \%camposX,
                     -defaults  => $defaulCX,
@@ -2880,6 +2904,102 @@ sub generarComboTipoDeOperacion{
                                                     );
 
     return $CGISelectTipoOperacion;
+}
+
+
+sub generarComboEsquemasImportacion {
+
+    my ($params) = @_;
+
+    require C4::Modelo::IoImportacionIsoEsquema::Manager;
+    my @select_esquemasImportacion_Values;
+    my %select_esquemasImportacion_Labels;
+    my $result = C4::Modelo::IoImportacionIsoEsquema::Manager->get_io_importacion_iso_esquema();
+    my $result_count = C4::Modelo::IoImportacionIsoEsquema::Manager->get_io_importacion_iso_esquema_count();
+
+    if ($result_count){
+        foreach my $esquemaImportacion (@$result) {
+                push (@select_esquemasImportacion_Values, $esquemaImportacion->id);
+                $select_esquemasImportacion_Labels{$esquemaImportacion->id} = $esquemaImportacion->nombre;
+        }
+
+
+        my %options_hash;
+
+        if ( $params->{'onChange'} ){
+             $options_hash{'onChange'}  = $params->{'onChange'};
+        }
+
+        if ( $params->{'onFocus'} ){
+          $options_hash{'onFocus'}      = $params->{'onFocus'};
+        }
+
+        if ( $params->{'class'} ){
+             $options_hash{'class'}     = $params->{'class'};
+        }
+
+        if ( $params->{'onBlur'} ){
+          $options_hash{'onBlur'}       = $params->{'onBlur'};
+        }
+
+        $options_hash{'name'}           = $params->{'name'}||'esquemaImportacion';
+        $options_hash{'id'}             = $params->{'id'}||'esquemaImportacion';
+        $options_hash{'size'}           =  $params->{'size'}||1;
+        $options_hash{'multiple'}       = $params->{'multiple'}||0;
+
+        $options_hash{'values'}         = \@select_esquemasImportacion_Values;
+        $options_hash{'labels'}         = \%select_esquemasImportacion_Labels;
+
+        my $CGISelectEsquemaImportacion                   = CGI::scrolling_list(\%options_hash);
+        return $CGISelectEsquemaImportacion;
+    }else{
+        return 0;
+    }
+}
+
+sub generarComboFormatosImportacion {
+
+    my ($params) = @_;
+
+    my @select_formatosImportacion_Values;
+    my %select_formatosImportacion_Labels;
+
+    my %options_hash;
+
+    if ( $params->{'onChange'} ){
+         $options_hash{'onChange'}  = $params->{'onChange'};
+    }
+
+    if ( $params->{'onFocus'} ){
+      $options_hash{'onFocus'}      = $params->{'onFocus'};
+    }
+
+    if ( $params->{'class'} ){
+         $options_hash{'class'}     = $params->{'class'};
+    }
+
+    if ( $params->{'onBlur'} ){
+      $options_hash{'onBlur'}       = $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}           = $params->{'name'}||'formatoImportacion';
+    $options_hash{'id'}             = $params->{'id'}||'formatoImportacion';
+    $options_hash{'size'}           =  $params->{'size'}||1;
+    $options_hash{'multiple'}       = $params->{'multiple'}||0;
+    $options_hash{'defaults'}       = 'ISO 2709';
+
+    push (@select_formatosImportacion_Values, 'iso');
+    $select_formatosImportacion_Labels{'iso'}            ='ISO 2709';
+    push (@select_formatosImportacion_Values, 'isis');
+    $select_formatosImportacion_Labels{'isis'}            ='ISIS';
+    push (@select_formatosImportacion_Values, 'xml');
+    $select_formatosImportacion_Labels{'xml'}            ='XML';
+
+    $options_hash{'values'}         = \@select_formatosImportacion_Values;
+    $options_hash{'labels'}         = \%select_formatosImportacion_Labels;
+
+    my $CGISelectFormatosImportacion                   = CGI::scrolling_list(\%options_hash);
+    return $CGISelectFormatosImportacion;
 }
 
 sub generarComboNiveles{
@@ -4432,6 +4552,58 @@ sub modificarCampoGlobalmente {
  my $min= $tardo1/60;
  print "Tardo $min minutos !!!\n";
 
+}
+
+sub translateYesNo_fromNumber{
+    my ($value) = @_;
+
+    if ($value == 1){
+        return C4::AR::Filtros::i18n('Si');
+    }else{
+        return C4::AR::Filtros::i18n('No');
+    }
+}
+
+sub translateYesNo_toNumber{
+    my ($value) = @_;
+
+    if ($value eq C4::AR::Filtros::i18n('Si')){
+        return 1;
+    }else{
+        return 0
+    }
+}
+
+sub printAjaxPercent{
+	my ($total,$actual) = @_;
+	
+	my $percent = ($actual * 100) / $total;
+
+    my $session = CGI::Session->load();
+
+    C4::AR::Auth::print_header($session);
+    print $percent;
+    
+    return ($percent);
+}
+
+sub demo_test{
+    
+    my ($job) = @_;
+    
+    use C4::AR::BackgroundJob;
+    
+    if (!$job){
+        $job = C4::AR::BackgrounJob->new("DEMO","NULL",10);        
+    }
+     
+    for (my $x=1; $x<=10; $x++){
+        sleep(1);
+        my $percent = printAjaxPercent(10,$x);
+        $job->progress($percent);
+        C4::AR::Debug::debug("-------------------------- JOB -------------- \n\n\n\n\n");
+    }
+    
 }
 
 END { }       # module clean-up code here (global destructor)
