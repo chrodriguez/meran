@@ -11,6 +11,28 @@
 <link rel="stylesheet" href="/includes/css/wysiwyg.css" type="text/css" media="screen"/>
 
 <script type="text/javascript">
+var jobID = 0;
+
+	function test(){
+		    objAH                   = new AjaxHelper(updateTest);
+		    objAH.url               = URL_PREFIX+'/start_job.pl';
+		    objAH.debug             = true;
+		    objAH.showOverlay       = false;
+		    objAH.accion            = "START_DEMO"; 
+		    objAH.sendToServer();
+
+	}
+
+	function updateTest(responseText){
+		jobID = responseText;
+		checkProgress();
+	}
+	
+		
+</script>
+
+
+<script type="text/javascript">
 	$(document).ready(function() {
 		CrearAutocompleteCatalogo({ 
 		    IdInput: 'catalogo_search', 
@@ -19,11 +41,12 @@
 		});
 
         
-        $('.fancy_link').fancybox({
-        });
+        $('.fancy_link').fancybox({});
 
         mostrarNovedades();
+        mensajesContacto();
 
+        setInterval(mensajesContacto,10000);
         $("#button_twitter").hover(twitter_hover, twitter_normal);
  
         $("#button_twitter").click(twitter_click);
@@ -38,13 +61,26 @@
   
 
     function mostrarNovedades(){
-            objAH               = new AjaxHelper(updateActualizarTabla);
-            objAH.debug         = true;
-            objAH.url           = URL_PREFIX+'/novedadesIntra.pl';
-            objAH.tipoAccion    = "MOSTRAR_NOVEDADES";
-            objAH.sendToServer();
+        var objAH_temp               = new AjaxHelper(updateActualizarTabla);
+        objAH_temp.debug         = true;
+        objAH_temp.showStatusIn  = '';
+        objAH_temp.url           = URL_PREFIX+'/novedadesIntra.pl';
+        objAH_temp.tipoAccion    = "MOSTRAR_NOVEDADES";
+        objAH_temp.sendToServer();
     }
 
+    function mensajesContacto(){
+        var objAH_temp               = new AjaxHelper(updateMensajesContacto);
+        objAH_temp.debug         = true;
+        this.showState      = false;
+        objAH_temp.url           = URL_PREFIX+'/mensajes_contacto.pl';
+        objAH_temp.sendToServer();
+    }
+
+    function updateMensajesContacto(responseText){
+    	$('#mensajes_contacto').html(responseText);
+    }
+    
     function updateActualizarTabla(responseText){
         $("#resultNovedades").html(responseText);
         $('.fancy_link').fancybox({
@@ -98,44 +134,10 @@
 
 <div id="resultNovedades"></div>
 
-
-[% IF cant_noleidos > 0 %]
-    <fieldset class="mensajes">
-        <legend class="titulo_legend"><strong>[% "Mensajes de Contacto :" | i18n %]</strong></legend>    
-           
-               
-                  <ul>
-                      [% FOREACH mens IN ultimos_no_leidos %]
-                          <li  class="msj_main"> 
-                                <span class="msj_main_nombre">[% HTML.escape(mens.nombre) %] [% HTML.escape(mens.apellido) %]</span>
-                                <span class="msj_main_mail">([% HTML.escape(mens.email) %])</span>
-                       
-                                 <span class="msj_main_asunto">
-                                        <a class="fancy_link" href="[% url_prefix %]/admin/ver_mensaje.pl?token=[% token %]&id=[% mens.id %]">
-                                        [% HTML.escape(mens.asunto) %]
-                                        </a>
-                                </span>
-                            </td>
-                          </li>
-                      [% END %]
-                  </ul>
-                 <br>
-                  <ul>
-                      <li class="item"> 
-                                  [% PERL %]
-                                  print C4::AR::Filtros::link_to( 
-                                        text =>     "[% 'Ver Mensajes' | i18n %]",
-                                        url=>"[% url_prefix %]/admin/mensajes_contacto.pl", 
-                                        title =>    "[% 'Mensajes' | i18n %]"
-                                        );
-                                  [% END %]           
-                        
-                      </li>
-                  </ul>
-    </fieldset> 
-[% END %]
+<div id="mensajes_contacto"></div>
 
 [% IF twitter_enabled %]
+
 <div id="twitter_container">
     [% IF twitter_username_to_search %]
 	   <div id="tweets" class="tweets"><div class="loading">[% 'Cargando tweets...' | i18n %]</div></div>
@@ -146,5 +148,8 @@
     </a>
 </div>
 [% END %]
-  
+
+[% INCLUDE 'partials/_percent_bar.inc' %]
+
+
 [% INCLUDE 'intranet-bottom.inc' %]

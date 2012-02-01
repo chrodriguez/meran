@@ -50,6 +50,10 @@ $VERSION = 3;
     &getHistorialPrestamosVigentesParaTemplate
     &tienePrestamos
     &enviarRecordacionDePrestamo
+    &getAllPrestamosVencidos
+    &getAllPrestamosActivos
+    &setPrestamosVencidosTemp
+    &getAllPrestamosVencidosParaMail
 );
 
 
@@ -1108,19 +1112,51 @@ sub enviarRecordacionDePrestamo {
 }
 
 =item
+    Funcion que limpia la data de la tabla circ_prestamo_vencido_temp
+=cut
+sub _limpiarTablaCircPrestamoVencidoTemp {
+
+    use C4::Modelo::CircPrestamoVencidoTemp::Manager;
+    use C4::Modelo::CircPrestamoVencidoTemp;
+
+    my $prestamos_vencidos_temp_array_ref = C4::Modelo::CircPrestamoVencidoTemp::Manager->get_circ_prestamo_vencido_temp();
+
+    if(scalar(@$prestamos_vencidos_temp_array_ref) > 0){
+        
+        eval{
+        
+            foreach my $id_prestamo (@$prestamos_vencidos_temp_array_ref){
+            
+                my $prestamo_vencido_temp = C4::Modelo::CircPrestamoVencidoTemp->new(id => $id_prestamo->{'id'});
+
+                $prestamo_vencido_temp->load();
+                
+                $prestamo_vencido_temp->delete();
+                
+            }
+        };       
+    }
+}
+
+=item
     Se envian los mails a los socios con prestamos vencidos
+    Se ejecuta esta funcion solo si el flag enableMailPrestVencidos esta activo.
+    El mismo se activa desde otra interfaz y el CRON lo checkea antes de llamar aca.
 =cut
 sub enviarRecordacionDePrestamoVencidos {
 
     # remindUser es la preferencia global que habilita el recordatorio al socio   
     if (C4::AR::Preferencias::getValorPreferencia('remindUser')){
 
-        my @array_prestamos = getAllPrestamosVencidos(); 
+        my @array_prestamos = getAllPrestamosVencidosParaMail(); 
         
         _enviarRecordatorioVencidos(@array_prestamos);
         
         # unseteamos el flag para el CRON                           
         C4::AR::Preferencias::setVariable('enableMailPrestVencidos', 0);
+        
+        # limpiamos la tabla prestamo_vencido_temp si es que tiene algo
+        _limpiarTablaCircPrestamoVencidoTemp();
     }
     
 }
@@ -1133,7 +1169,9 @@ sub _enviarRecordatorioVencidos{
     my (@array_prestamos) = @_;
 
     use C4::AR::Usuarios;
+    
     if(scalar(@array_prestamos) > 0){
+    
         foreach my $pres (@array_prestamos){
        
             my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($pres->{'nro_socio'});
@@ -1143,8 +1181,6 @@ sub _enviarRecordatorioVencidos{
              
             # checkeamos si estan habilitadas las preferencias para mail                 
             if (C4::AR::Preferencias::getValorPreferencia('EnabledMailSystem')){     
-                # si el socio tiene habilitado el recordatorio de vencimiento
- 
         
                 my %mail;                    
                 my $nivel3              = C4::AR::Nivel3::getNivel3FromId3($pres->{'id3'});                    
@@ -1159,8 +1195,6 @@ sub _enviarRecordatorioVencidos{
                 $cuerpo_mensaje         =~ s/AUTHOR/$autor/;
                 $cuerpo_mensaje         =~ s/TITLE\:UNITITLE/$titulo/;
                 $cuerpo_mensaje         =~ s/\(EDICION\)//;
-                                    
-                # C4::AR::Debug::debug("mensaje : ".$cuerpo_mensaje);
                 
                 $mail{'mail_from'}      = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('mailFrom'));
                 $mail{'mail_to'}        = $socio->{'persona'}->email;
@@ -1168,8 +1202,6 @@ sub _enviarRecordatorioVencidos{
                 $mail{'mail_message'}   = $cuerpo_mensaje;
                 
                 C4::AR::Mail::send_mail(\%mail);
-               # C4::AR::Debug::debug("mail enviado");
-
             }
         }
     } 
@@ -1214,8 +1246,6 @@ sub _enviarRecordatorio{
                     $cuerpo_mensaje         =~ s/\(EDICION\)//;
                     $cuerpo_mensaje         =~ s/BRANCH/Biblioteca/;
                     $cuerpo_mensaje         =~ s/LINK/$link/;
-                                        
-                    # C4::AR::Debug::debug("mensaje : ".$cuerpo_mensaje);
                     
                     $mail{'mail_from'}      = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('mailFrom'));
                     $mail{'mail_to'}        = $socio->{'persona'}->email;
@@ -1223,7 +1253,6 @@ sub _enviarRecordatorio{
                     $mail{'mail_message'}   = $cuerpo_mensaje;
                     
                     C4::AR::Mail::send_mail(\%mail);
-                   # C4::AR::Debug::debug("mail enviado");
                }
             }
         }
@@ -1232,14 +1261,63 @@ sub _enviarRecordatorio{
 }
 
 =item
+    Funcion que devuelve todos los prestamos vencidos para mandar los mails
+    Hace un checkeo para ver que prestamos traer
+=cut
+sub getAllPrestamosVencidosParaMail{
+
+    my $prestamos_array_ref               = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo();
+    
+    use C4::Modelo::CircPrestamoVencidoTemp::Manager;
+    my $prestamos_vencidos_temp_array_ref = C4::Modelo::CircPrestamoVencidoTemp::Manager->get_circ_prestamo_vencido_temp();
+    
+    my @arrayPrestamos;
+    
+    # seleccionaron solo algunos prestamos
+    # vamos a enviar solo estos
+    if(scalar(@$prestamos_vencidos_temp_array_ref) > 0){
+        
+        use  C4::Modelo::CircPrestamoVencidoTemp;
+        
+        eval{
+        
+            foreach my $id_prestamo (@$prestamos_vencidos_temp_array_ref){
+            
+                # hace el new del objeto prestamo con el id del for
+                my $prestamo_vencido_temp = C4::Modelo::CircPrestamo->new(id_prestamo => $id_prestamo->{'id_prestamo'});
+
+                $prestamo_vencido_temp->load();
+                push(@arrayPrestamos,($prestamo_vencido_temp));
+                
+            }
+        };
+        return (@arrayPrestamos);  
+            
+    }
+    elsif(scalar(@$prestamos_array_ref) > 0){
+    # recorremos todos los prestamos, y guardamos los vencidos
+        foreach my $prestamo (@$prestamos_array_ref){
+        
+            if ($prestamo->estaVencido()){        
+                push(@arrayPrestamos,($prestamo));
+            }
+        }  
+        
+        return (@arrayPrestamos);     
+    }else{
+        return 0;
+    }
+}
+
+=item
     Funcion que devuelve todos los prestamos vencidos.
 =cut
 sub getAllPrestamosVencidos{
 
     my $prestamos_array_ref = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo();
-
+     
     my @arrayPrestamos;
-      
+
     if(scalar(@$prestamos_array_ref) > 0){
     # recorremos todos los prestamos, y guardamos los vencidos
         foreach my $prestamo (@$prestamos_array_ref){
@@ -1293,6 +1371,45 @@ sub getAllPrestamosActivos{
     }else{
         return 0;
     }
+}
+
+=item
+    Funcion que setea los prestamos vencidos a enviar mail
+    Lo hace sobre la tabla 'circ_prestamo_vencido_temp'
+=cut
+sub setPrestamosVencidosTemp{
+
+    my ($ids_prestamos) = @_;
+    
+    my $msg_object      = C4::AR::Mensajes::create();
+
+    use C4::Modelo::CircPrestamoVencidoTemp;
+
+    if(!$msg_object->{'error'}){
+    
+        eval {
+        
+            foreach my $id_prestamo (@$ids_prestamos){
+            
+                my $prestamo_vencido_temp = C4::Modelo::CircPrestamoVencidoTemp->new();
+                $prestamo_vencido_temp->agregarPrestamo($id_prestamo); 
+                         
+            }  
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'PV00'});
+            
+        };
+        
+        if ($@){
+
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'PV01'} ) ;
+            
+        }
+    }
+
+    return ($msg_object);
+      
 }
 
 END { }       # module clean-up code here (global destructor)

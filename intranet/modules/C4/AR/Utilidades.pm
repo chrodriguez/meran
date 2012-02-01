@@ -1,6 +1,6 @@
 package C4::AR::Utilidades;
 
-#Este modulo provee funcionalidades varias sobre las tablas de referencias en general, ademas de funciones que sirven como 
+#Este modulo provee funcionalidades varias sobre las tablas de referencias en general, ademas de funciones que sirven como
 #apoyo a la funcionalidad de Meran. No existe una division clara de lo que incluye y lo que no, por lo tanto resta leer los comentarios de
 #cada funcion.
 #Escrito el 8/9/2006 por einar@info.unlp.edu.ar
@@ -17,7 +17,7 @@ use C4::AR::ControlAutoridades;
 use C4::Date;
 use Encode;
 use HTML::Entities;
-use POSIX qw(ceil floor); 
+use POSIX qw(ceil floor);
 use JSON;
 use C4::AR::Preferencias;
 use C4::AR::PedidoCotizacion;
@@ -25,6 +25,7 @@ use C4::AR::Filtros;
 use URI::Escape;
 use File::Copy;
 use C4::Modelo::RefLocalidad;
+use MARC::Record;
 
 # FIXME Matiasp: Comentado por error de carga de modulos (Attempt to reload %s aborted.)
 # use C4::AR::Presupuestos;
@@ -131,38 +132,41 @@ use vars qw(@EXPORT_OK @ISA);
     generarComboTablasDeReferenciaByNombreTabla
     serverName
     translateTipoCredencial
+    translateYesNo_fromNumber
+    translateYesNo_toNumber
+    printAjaxPercent
 );
 
 
 # para los combos que no usan tablas de referencia
 my @VALUES_COMPONENTS = (   "-1", "text", "texta", "combo", "auto", "calendar", "anio", "rango_anio" );
 my %LABELS_COMPONENTS = (   "-1"            => C4::AR::Filtros::i18n("SIN SELECCIONAR"),
-                            "text"          => C4::AR::Filtros::i18n("Texto simple"), 
-                            "texta"         => C4::AR::Filtros::i18n("Texto ampliado"), 
-                            "combo"         => C4::AR::Filtros::i18n("Lista desplegable"), 
-                            "auto"          => C4::AR::Filtros::i18n("Autocompletable"), 
-                            "calendar"      => C4::AR::Filtros::i18n("Calendario"), 
-                            "anio"          => C4::AR::Filtros::i18n("Anual"), 
-                            "rango_anio"    => C4::AR::Filtros::i18n("Anual rango") 
+                            "text"          => C4::AR::Filtros::i18n("Texto simple"),
+                            "texta"         => C4::AR::Filtros::i18n("Texto ampliado"),
+                            "combo"         => C4::AR::Filtros::i18n("Lista desplegable"),
+                            "auto"          => C4::AR::Filtros::i18n("Autocompletable"),
+                            "calendar"      => C4::AR::Filtros::i18n("Calendario"),
+                            "anio"          => C4::AR::Filtros::i18n("Anual"),
+                            "rango_anio"    => C4::AR::Filtros::i18n("Anual rango")
                         );
 
- 
+
 
 =item
     Devuelve el nombre del servidor.
 =cut
-sub serverName{ 
+sub serverName{
 
    return (C4::AR::Preferencias::getValorPreferencia('serverName'));
 
 }
-  
+
 =item
     Genera un combo con los campos que tiene una persona, de usr_persona
 =cut
 sub generarComboCamposPersona{
     my ($params) = @_;
-    
+
     use CGI::Session;
 
     my @select_campos_array;
@@ -174,19 +178,19 @@ sub generarComboCamposPersona{
     my $campos_persona          = C4::Modelo::UsrPersona::Manager->get_usr_persona(
                                                 query => [ id_persona  => { eq => $persona->getId_persona() } ],
     );
-    
-    my %hash = @$campos_persona[0]; 
 
-    foreach my $campo (@$campos_persona) {  
-        while (my ($key,$value) = each(%$campo)) {  
+    my %hash = @$campos_persona[0];
+
+    foreach my $campo (@$campos_persona) {
+        while (my ($key,$value) = each(%$campo)) {
                 push(@select_campos_array, $key);
                 $select_campos_hash{$key} = $key;
         }
     }
-    
+
     shift(@select_campos_array);
 
-    my %options_hash; 
+    my %options_hash;
 
     if ( $params->{'onChange'} ){
         $options_hash{'onChange'}   = $params->{'onChange'};
@@ -212,15 +216,15 @@ sub generarComboCamposPersona{
     my $comboDeCamposPersona    = CGI::scrolling_list(\%options_hash);
 
     return $comboDeCamposPersona;
-}  
-  
-=item 
+}
+
+=item
     Devuelve los headers con aplicacion y nombre de archivo recibidos por parametros
     parametros: HASH (para que se pueda extender)
 =cut
 sub setHeaders{
     my ($params)        = @_;
-    
+
     my ($filename)      = $params->{'file_name'};
     my ($aplication)    = $params->{'aplicacion'};
 
@@ -231,8 +235,8 @@ sub setHeaders{
     my $header          = $session->header( -type => $aplication, -attachment => $filename );
 
     return ($header);
-}    
-                  
+}
+
 
 =item sub getStringFor
     Devuelve el texto de la clave pasada por parametro
@@ -242,7 +246,7 @@ sub getStringFor{
 
     if(defined %LABELS_COMPONENTS->{$key}){
         return C4::AR::Filtros::i18n(%LABELS_COMPONENTS->{$key});
-    }else{ 
+    }else{
         return "INDEFINIDO";
     }
 }
@@ -251,7 +255,7 @@ sub generarComboComponentes{
     my ($params) = @_;
 
 
-    my %options_hash; 
+    my %options_hash;
 
     if ( $params->{'onChange'} ){
         $options_hash{'onChange'}   = $params->{'onChange'};
@@ -320,16 +324,16 @@ sub generarComboTemasOPAC{
     my (@label,@values);
     my $temas = C4::AR::Preferencias::getPreferenciasByCategoria("temas_opac");
     my %labels;
-    my %options_hash; 
+    my %options_hash;
 
     foreach my $pref (@$temas){
         push (@values,$pref->getValue());
         $labels{$pref->getValue()} = $pref->getValue();
     }
 
-    my ($session) = CGI::Session->load();    
+    my ($session) = CGI::Session->load();
     my $socio     = C4::AR::Auth::getSessionSocioObject();
-    
+
     $options_hash{'values'}     = \@values;
     $options_hash{'labels'}     = \%labels;
     $options_hash{'defaults'}   = $socio->getTheme() || C4::AR::Preferencias::getPreferenciasByCategoria('defaultUI') || 'default';
@@ -348,15 +352,15 @@ sub generarComboTemasINTRA{
     my (@label,@values);
     my $temas = C4::AR::Preferencias::getPreferenciasByCategoria("temas_intra");
     my %labels;
-    my %options_hash; 
+    my %options_hash;
 
     foreach my $pref (@$temas){
         push (@values,$pref->getValue());
         $labels{$pref->getValue()} = $pref->getValue();
     }
 
-    my ($session) = CGI::Session->load();    
-     
+    my ($session) = CGI::Session->load();
+
     $options_hash{'values'}     = \@values;
     $options_hash{'labels'}     = \%labels;
     $options_hash{'defaults'}   = $session->param('usr_theme_intra') || C4::AR::Preferencias::getPreferenciasByCategoria('defaultUI') || 'default';
@@ -426,7 +430,7 @@ sub crearComponentes{
     my ($tipoInput,$id,$values,$labels,$valor)=@_;
     my $inputCampos;
     if ($tipoInput eq 'combo'){
-        $inputCampos=CGI::scrolling_list(  
+        $inputCampos=CGI::scrolling_list(
             -name      => $id,
             -id    => $id,
             -values    => $values,
@@ -443,7 +447,7 @@ sub crearComponentes{
             -labels    => $labels,
             -default   => $valor,
         );
-        
+
         #el CGI::radio_group devuelve el radio entre tags <label>, se rompe el estilo, asi q se le saca los tags <label>
         $inputCampos = reemplazarEnString($inputCampos, '<label>', '');
         $inputCampos = reemplazarEnString($inputCampos, '<\/label>', '');
@@ -486,15 +490,15 @@ sub crearComponentes{
 =item
 sub mailDeUsuarios {
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare(" SELECT emailaddress 
-                FROM  borrowers 
+    my $sth=$dbh->prepare(" SELECT emailaddress
+                FROM  borrowers
                 WHERE (emailaddress IS NOT NULL) AND (emailaddress <> '')");
     $sth->execute();
     my @results;
     while (my $data = $sth->fetchrow_hashref) {
-        push(@results, $data); 
+        push(@results, $data);
     }
-      
+
     $sth->finish;
 
     return(@results);
@@ -517,9 +521,9 @@ tener en cuenta escapar algunos caracteres como <\label> => <\/label>
 sub reemplazarEnString{
     my ($string, $cadena_a_reemplazar, $cadena_reemplazo) = @_;
 
-    $string =~ s/$cadena_a_reemplazar/$cadena_reemplazo/g;  
+    $string =~ s/$cadena_a_reemplazar/$cadena_reemplazo/g;
 
-    return $string;  
+    return $string;
 }
 
 sub array_diff{
@@ -547,14 +551,14 @@ sub saveholidays{
         my $dbh = C4::Context->dbh;
 #Se borran todos los feriados de la tabla
         if (scalar(@feriados_borrados)) {
-            my $sth=$dbh->prepare(" DELETE FROM pref_feriado 
+            my $sth=$dbh->prepare(" DELETE FROM pref_feriado
                                     WHERE fecha IN (".join(',',map {"('".$_."')"} @feriados_borrados).")");
             $sth->execute();
             $sth->finish;
         }
 #Se dan de alta todos los feriados
         if (scalar(@feriados_nuevos)) {
-            my $sth=$dbh->prepare(" INSERT INTO pref_feriado (fecha) 
+            my $sth=$dbh->prepare(" INSERT INTO pref_feriado (fecha)
                                     VALUES ".join(',',map {"('".$_."')"} @feriados_nuevos));
             $sth->execute();
             $sth->finish;
@@ -566,12 +570,12 @@ sub saveholidays{
 sub obtenerTiposDeColaboradores{
 
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare(" SELECT codigo,descripcion 
-                            FROM cat_ref_colaborador 
+    my $sth=$dbh->prepare(" SELECT codigo,descripcion
+                            FROM cat_ref_colaborador
                             ORDER BY (descripcion)");
     $sth->execute();
     my %results;
-    while (my $data = $sth->fetchrow_hashref) {#push(@results, $data); 
+    while (my $data = $sth->fetchrow_hashref) {#push(@results, $data);
     $results{$data->{'codigo'}}=$data->{'descripcion'};
     }
     # while
@@ -586,13 +590,13 @@ sub obtenerParches{
 
     my ($version)=@_;
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare(" SELECT * 
-                            FROM parches 
-                            WHERE (corresponde > ?) 
+    my $sth=$dbh->prepare(" SELECT *
+                            FROM parches
+                            WHERE (corresponde > ?)
                             ORDER BY (id)");
     $sth->execute($version);
     my @results;
-    while (my $data = $sth->fetchrow_hashref) {#push(@results, $data); 
+    while (my $data = $sth->fetchrow_hashref) {#push(@results, $data);
         push(@results,$data);
     }
     # while
@@ -602,30 +606,30 @@ sub obtenerParches{
 
 =item aplicarParches
 la funcion aplicarParches aplica el parche que le llega por parametro.
-Para hacer esto lo que hace es leer la base de datos y aplicar las instrucciones mysql que corresponden con ese parche 
+Para hacer esto lo que hace es leer la base de datos y aplicar las instrucciones mysql que corresponden con ese parche
 =cut
 sub aplicarParches{
 
     my ($parche)=@_;
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare(" SELECT * 
-                            FROM parches_scripts 
-                            WHERE (parche= ?) 
+    my $sth=$dbh->prepare(" SELECT *
+                            FROM parches_scripts
+                            WHERE (parche= ?)
                             ORDER BY (id)");
     $sth->execute($parche);
     my $sth2;
     my $error='';
-    while (my $data = $sth->fetchrow_hashref) {#push(@results, $data); 
+    while (my $data = $sth->fetchrow_hashref) {#push(@results, $data);
         $sth2=$dbh->prepare($data->{'sql'});
-        $sth2->execute();  
+        $sth2->execute();
         if ($sth2 -> errstr){
             $error=$sth2 -> errstr;
         }
         # while
         $sth->finish;
         if (not $error){
-            my $sth3=$dbh->prepare("UPDATE parches 
-                                    SET aplicado='1' 
+            my $sth3=$dbh->prepare("UPDATE parches
+                                    SET aplicado='1'
                                     WHERE id=?");
             $sth3->execute($parche);
         }
@@ -638,14 +642,14 @@ sub aplicarParches{
 sub getholidays{
 
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare(" SELECT * 
+    my $sth=$dbh->prepare(" SELECT *
                             FROM pref_feriado");
     $sth->execute();
 
     my @results;
 
     while (my $data = $sth->fetchrow) {
-        push(@results, $data); 
+        push(@results, $data);
     } # while
     $sth->finish;
     return(scalar(@results),@results);
@@ -657,17 +661,17 @@ sub obtenerReferencia{
 
     my ($dato)=@_;
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare(" SELECT UPPER(concat_ws(', ',apellido,nombre)) 
-                            FROM cat_autor 
-                            WHERE apellido LIKE ? 
-                            ORDER BY apellido 
+    my $sth=$dbh->prepare(" SELECT UPPER(concat_ws(', ',apellido,nombre))
+                            FROM cat_autor
+                            WHERE apellido LIKE ?
+                            ORDER BY apellido
                             LIMIT 0,15");
     $sth->execute($dato.'%');
 
     my @results;
 
     while (my $data = $sth->fetchrow) {
-        push(@results, $data); 
+        push(@results, $data);
     } # while
     $sth->finish;
     return(@results);
@@ -678,16 +682,16 @@ sub obtenerAutores{
 
     my ($dato)=@_;
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare(" SELECT completo, id 
-                            FROM cat_autor 
-                            WHERE apellido LIKE ? 
+    my $sth=$dbh->prepare(" SELECT completo, id
+                            FROM cat_autor
+                            WHERE apellido LIKE ?
                             ORDER BY (apellido)");
     $sth->execute($dato.'%');
 
     my @results;
 
     while (my $data = $sth->fetchrow_hashref) {
-        push(@results, $data); 
+        push(@results, $data);
     } # while
     $sth->finish;
     return(@results);
@@ -703,7 +707,7 @@ sub obtenerPaises{
 
     push(@filtros, ( nombre_largo => { like => $pais.'%'}) );
     my $limit = C4::AR::Preferencias::getValorPreferencia('limite_resultados_autocompletables') || 20;
-     
+
     my $paises_array_ref = C4::Modelo::RefPais::Manager->get_ref_pais(
 
         query   => \@filtros,
@@ -715,7 +719,7 @@ sub obtenerPaises{
 
     return (scalar(@$paises_array_ref), $paises_array_ref);
 
-    
+
 }
 
 =head2
@@ -728,10 +732,10 @@ sub obtenerCiudades{
         my @filtros_or;
         push(@filtros_or, (NOMBRE => {like => '%'.$ciudad.'%'}) );
         push(@filtros_or, (NOMBRE_ABREVIADO => {like => '%'.$ciudad.'%'}) );
-	push(@filtros, (or => \@filtros_or) );
+    push(@filtros, (or => \@filtros_or) );
 
     my $limit = C4::AR::Preferencias::getValorPreferencia('limite_resultados_autocompletables') || 20;
-     
+
     my $ciudades_array_ref = C4::Modelo::RefLocalidad::Manager->get_ref_localidad(
 
         query   => \@filtros,
@@ -743,7 +747,7 @@ sub obtenerCiudades{
 
     return (scalar(@$ciudades_array_ref), $ciudades_array_ref);
 
-    
+
 }
 
 #obtenerTemas devuelve los temas que sean like el parametro
@@ -752,10 +756,10 @@ sub obtenerTemas{
     my ($dato)=@_;
     my $dbh = C4::Context->dbh;
 #   my $sth=$dbh->prepare("select catalogueentry from catalogueentry where catalogueentry LIKE ? order by catalogueentry limit 0,15");
-    my $sth=$dbh->prepare(" SELECT nombre 
-                            FROM cat_tema 
-                            WHERE nombre LIKE ? 
-                            ORDER BY nombre 
+    my $sth=$dbh->prepare(" SELECT nombre
+                            FROM cat_tema
+                            WHERE nombre LIKE ?
+                            ORDER BY nombre
                             LIMIT 0,15");
 
     $sth->execute($dato.'%');
@@ -763,7 +767,7 @@ sub obtenerTemas{
     my @results;
 
     while (my $data = $sth->fetchrow) {
-        push(@results, $data); 
+        push(@results, $data);
     } # while
     $sth->finish;
     return(@results);
@@ -773,9 +777,9 @@ sub obtenerTemas2{
 
     my ($dato)=@_;
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare(" SELECT nombre, id 
-                            FROM cat_tema 
-                            WHERE nombre LIKE ? 
+    my $sth=$dbh->prepare(" SELECT nombre, id
+                            FROM cat_tema
+                            WHERE nombre LIKE ?
                             ORDER BY nombre");
 
     $sth->execute($dato.'%');
@@ -794,10 +798,10 @@ sub obtenerEditores{
 
     my ($dato)=@_;
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare(" SELECT UPPER(concat_ws(', ',apellido,nombre)) 
-                            FROM cat_autor 
-                            WHERE apellido LIKE ? 
-                            ORDER BY (apellido) 
+    my $sth=$dbh->prepare(" SELECT UPPER(concat_ws(', ',apellido,nombre))
+                            FROM cat_autor
+                            WHERE apellido LIKE ?
+                            ORDER BY (apellido)
                             LIMIT 0,15");
 
     $sth->execute($dato.'%');
@@ -805,7 +809,7 @@ sub obtenerEditores{
     my @results;
 
     while (my $data = $sth->fetchrow) {
-        push(@results, $data); 
+        push(@results, $data);
     } # while
     $sth->finish;
     return(@results);
@@ -815,9 +819,9 @@ sub obtenerBiblios{
 
     my ($dato)=@_;
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare(" SELECT branchname, branchcode AS id 
-                            FROM pref_unidad_informacion 
-                            WHERE branchname LIKE ? 
+    my $sth=$dbh->prepare(" SELECT branchname, branchcode AS id
+                            FROM pref_unidad_informacion
+                            WHERE branchname LIKE ?
                             ORDER BY branchname");
 
     $sth->execute($dato.'%');
@@ -835,15 +839,15 @@ sub noaccents{
 
     my $word = @_[0];
     my @chars = split(//,$word);
-    my $newstr = ""; 
+    my $newstr = "";
     foreach my $ch (@chars) {
-        if (ord($ch) == 225 || ord($ch) == 193) {$newstr.= 'a'} 
+        if (ord($ch) == 225 || ord($ch) == 193) {$newstr.= 'a'}
         elsif (ord($ch) == 233 || ord($ch) == 201) {$newstr.= 'e'}
         elsif (ord($ch) == 237 || ord($ch) == 205) {$newstr.= 'i'}
         elsif (ord($ch) == 243 || ord($ch) == 211) {$newstr.= 'o'}
         elsif (ord($ch) == 250 || ord($ch) == 218) {$newstr.= 'u'}
         else {$newstr.= $ch}
-    } 
+    }
     return(uc($newstr));
 }
 
@@ -887,19 +891,19 @@ sub listadoTabla{
 
         $sth=$dbh->prepare("    SELECT *
                                 FROM $tabla
-                                WHERE $orden BETWEEN  '$bloqueIni%' AND '$bloqueFin%' 
+                                WHERE $orden BETWEEN  '$bloqueIni%' AND '$bloqueFin%'
                                 ORDER BY $orden limit $ind,$cant ");
         $sth->execute();
     }else{
-        $sth=$dbh->prepare("  SELECT COUNT(*) 
-                                FROM $tabla  
+        $sth=$dbh->prepare("  SELECT COUNT(*)
+                                FROM $tabla
                                 WHERE $orden LIKE '$search'");
         $sth->execute();
 
         @cantidad=$sth->fetchrow_array;
-        $sth=$dbh->prepare("    SELECT * 
-                                FROM $tabla 
-                                WHERE $orden LIKE '$search' 
+        $sth=$dbh->prepare("    SELECT *
+                                FROM $tabla
+                                WHERE $orden LIKE '$search'
                                 ORDER BY $orden LIMIT $ind,$cant");
         $sth->execute();
     }
@@ -928,7 +932,7 @@ sub listadoTabla{
 }
 
 #devuelve los valores de un elemento en particular de la tabla de referencia que se esta editando
-#recibe la tabla, el nombre del campo que es identificador y el valor que debe buscar 
+#recibe la tabla, el nombre del campo que es identificador y el valor que debe buscar
 #estos tres parametros se obtienen anteriorimente de la tabla tablasDeReferencias
 sub valoresTabla{
 
@@ -946,8 +950,8 @@ sub valoresTabla{
             push(@results,$aux);
     }
 
-    $sth=$dbh->prepare("    SELECT * 
-                            FROM $tabla 
+    $sth=$dbh->prepare("    SELECT *
+                            FROM $tabla
                             WHERE $indice=?");
     $sth->execute($valor);
 
@@ -980,8 +984,8 @@ sub tablasRelacionadas{
     #autores    id      0       colaboradores       idColaborador
     #autores    id      0       additionalauthors   author
     #autores    id      0       analyticalauthors   author
-    my $sth=$dbh->prepare(" SELECT * 
-                            FROM pref_tabla_referencia 
+    my $sth=$dbh->prepare(" SELECT *
+                            FROM pref_tabla_referencia
                             WHERE referencia= ?");
     $sth->execute($tabla);
 
@@ -989,15 +993,15 @@ sub tablasRelacionadas{
 
     while (my $data=$sth->fetchrow_hashref){
         my $aux;
-        my $sth2=$dbh->prepare("SELECT $data->{'nomcamporeferencia'} 
-                                FROM $data->{'referencia'} 
+        my $sth2=$dbh->prepare("SELECT $data->{'nomcamporeferencia'}
+                                FROM $data->{'referencia'}
                                 WHERE $indice = ?");
         $sth2->execute($valor);
 
         my $identificador=$sth2->fetchrow_array;
 
-        $sth2=$dbh->prepare("   SELECT COUNT(*) 
-                                FROM $data->{'referente'} 
+        $sth2=$dbh->prepare("   SELECT COUNT(*)
+                                FROM $data->{'referente'}
                                 WHERE $data->{'camporeferente'}= ?");
         $sth2->execute($identificador);
         $aux->{'relacionadoTabla'} = $data->{'referente'};
@@ -1011,8 +1015,8 @@ sub tablasRelacionadas{
 
 
 
-#devuelve los valores similares de un elemento en particular de la tabla de referencia que se esta editando basandose en la tablaDeReferenciaInfo 
-#recibe la tabla, el nombre del campo que es identificador y el valor que debe buscar 
+#devuelve los valores similares de un elemento en particular de la tabla de referencia que se esta editando basandose en la tablaDeReferenciaInfo
+#recibe la tabla, el nombre del campo que es identificador y el valor que debe buscar
 #estos tres parametros se obtienen anteriorimente de la tabla tablasDeReferencias
 sub valoresSimilares{
 
@@ -1020,18 +1024,18 @@ sub valoresSimilares{
     ($id||($id=0));
     my $dbh = C4::Context->dbh;
     #Obtengo que campo voy a utilizar para buscar similares, es en tablasDeReferenciasInfo
-    my $sth=$dbh->prepare(" SELECT similares 
-                FROM pref_tabla_referencia_info 
+    my $sth=$dbh->prepare(" SELECT similares
+                FROM pref_tabla_referencia_info
                 WHERE referencia=? ");
 
     $sth->execute($tabla);
 
     my $similar=$sth->fetchrow_array;
-    #Busco el valor del campo similar que corresponde al registro para el cual estoy buscando similares 
+    #Busco el valor del campo similar que corresponde al registro para el cual estoy buscando similares
 
-    $sth=$dbh->prepare("    SELECT $similar 
-                FROM $tabla 
-                WHERE $camporeferencia = ? 
+    $sth=$dbh->prepare("    SELECT $similar
+                FROM $tabla
+                WHERE $camporeferencia = ?
                 LIMIT 0,1");
     $sth->execute($id);
 
@@ -1039,16 +1043,16 @@ sub valoresSimilares{
     my $tamano=(length($valorAbuscarSimil))-1;
     #Busco los valores similares, con una expresion regular que busca aquellas tuplas que coincidan en campo similar en todos los caracteres-1 del original
 
-    $sth=$dbh->prepare("    SELECT * 
-                            FROM $tabla 
-                            WHERE $similar REGEXP '[$valorAbuscarSimil]{$tamano,}' AND $camporeferencia  != ? 
-                            ORDER BY $similar 
+    $sth=$dbh->prepare("    SELECT *
+                            FROM $tabla
+                            WHERE $similar REGEXP '[$valorAbuscarSimil]{$tamano,}' AND $camporeferencia  != ?
+                            ORDER BY $similar
                             LIMIT 0,15");
     $sth->execute($id);
 
-    my $sth3=$dbh->prepare("SELECT camporeferencia 
-                            FROM pref_tabla_referencia 
-                            WHERE referencia=? 
+    my $sth3=$dbh->prepare("SELECT camporeferencia
+                            FROM pref_tabla_referencia
+                            WHERE referencia=?
                             LIMIT 0,1");
     $sth3->execute($tabla);
 
@@ -1073,7 +1077,7 @@ sub valoresSimilares{
     return (@results);
 }
 
-#Busca todas las tablas relacionadas con $tabla y actualiza la referencia a el nuevo valor que esta en valorNuevo. Ej: actualiza todos los libros para que hayan sido escritos por autor id=58 y le pone que fueron esvcritos por autor id=60 
+#Busca todas las tablas relacionadas con $tabla y actualiza la referencia a el nuevo valor que esta en valorNuevo. Ej: actualiza todos los libros para que hayan sido escritos por autor id=58 y le pone que fueron esvcritos por autor id=60
 sub asignar{
 
     my ($tabla,$indice,$identificador,$valorNuevo,$borrar)=@_;
@@ -1084,8 +1088,8 @@ sub asignar{
 
     $sthT->execute();
 
-    my $sth=$dbh->prepare(" SELECT * 
-                            FROM pref_tabla_referencia 
+    my $sth=$dbh->prepare(" SELECT *
+                            FROM pref_tabla_referencia
                             WHERE referencia= ?");
     $sth->execute($tabla);
 
@@ -1095,19 +1099,19 @@ sub asignar{
     while (my $data=$sth->fetchrow_hashref){
         $asignar=1;
         my $aux;
-        my $sth2=$dbh->prepare("SELECT $data->{'nomcamporeferencia'} 
-                                FROM $data->{'referencia'} 
+        my $sth2=$dbh->prepare("SELECT $data->{'nomcamporeferencia'}
+                                FROM $data->{'referencia'}
                                 WHERE $indice = ?");
         $sth2->execute($identificador);
         my $identificador2=$sth2->fetchrow_array;
 
-        $sth2=$dbh->prepare("   UPDATE $data->{'referente'} 
-                                SET $data->{'camporeferente'}= ? 
+        $sth2=$dbh->prepare("   UPDATE $data->{'referente'}
+                                SET $data->{'camporeferente'}= ?
                                 WHERE $data->{'camporeferente'}= ?");
         $sth2->execute($valorNuevo,$identificador2);
     }
     if ($borrar){
-        my $sth3=$dbh->prepare("DELETE FROM $tabla 
+        my $sth3=$dbh->prepare("DELETE FROM $tabla
                                 WHERE $indice= ?");
         $sth3->execute($identificador);
         $borrar=1;
@@ -1126,8 +1130,8 @@ sub obtenerValores{
     $sth->execute($tabla);
     my @data=$sth->fetchrow_array;
 
-    $sth=$dbh->prepare("    SELECT * 
-                            FROM ? 
+    $sth=$dbh->prepare("    SELECT *
+                            FROM ?
                             WHERE ?=?");
     $sth->execute($tabla,$indice,$valor);
     my $data2=$sth->fetchrow_hashref;
@@ -1141,7 +1145,7 @@ sub obtenerValores{
     return \%row;
 }
 
-#Esta funcion recibe tres parametros, el nombre de la tabla que se esta editando, el campo identificador de la tabla y un hash de los campos y valores que se van a actualizar en esa tabla   
+#Esta funcion recibe tres parametros, el nombre de la tabla que se esta editando, el campo identificador de la tabla y un hash de los campos y valores que se van a actualizar en esa tabla
 sub actualizarCampos{
 
     my ($tabla,$id,%valores)=@_;
@@ -1152,8 +1156,8 @@ sub actualizarCampos{
         $sql.=', '.$key.'="'.$valores{$key}.'"';
     }
     $sql=substr($sql,2);
-    my $sth=$dbh->prepare(" UPDATE $tabla 
-                            SET $sql 
+    my $sth=$dbh->prepare(" UPDATE $tabla
+                            SET $sql
                             WHERE $id=?");
 
     $sth->execute($valores{$id});
@@ -1164,14 +1168,14 @@ sub actualizarCampos{
 sub obtenerDefaults{
 
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare(" SELECT * 
+    my $sth=$dbh->prepare(" SELECT *
                 FROM defaultbiblioitem");
 
     $sth->execute();
     my @results;
 
     while (my $data = $sth->fetchrow_hashref) {
-        push(@results, $data); 
+        push(@results, $data);
     } # while
     $sth->finish;
     return(@results);
@@ -1180,8 +1184,8 @@ sub guardarDefaults{
 
     my ($biblioitem)=@_;
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare(" UDPATE defaultbiblioitem 
-                            SET valor = ? 
+    my $sth=$dbh->prepare(" UDPATE defaultbiblioitem
+                            SET valor = ?
                             WHERE campo=?");
 
     $sth->execute($biblioitem->{'volume'},'volume');
@@ -1217,10 +1221,10 @@ sub verificarValor {
   # C4::AR::Debug::debug("antes de limpiar => ".$valor);
 
     $valor=~ s/\b(SELECT|SHOW|ALL|WHERE|INSERT|SHUTDOWN|DROP|UNION|DELETE|UPDATE|FROM|BETWEEN|information_schema|table_name)\b/ /gi;
-    
+
 #     C4::AR::Debug::debug("despues de limpiar => ".$valor);
 
-#    $valor=~ s/%|"|=|\*|-(<,>)//g;  
+#    $valor=~ s/%|"|=|\*|-(<,>)//g;
 #    $valor=~ s/%3b|%3d|%27|%25//g;#Por aca no entra llegan los caracteres ya traducidos
 #    $valor=~ s/\<SCRIPT>|\<\/SCRIPT>//gi;
 
@@ -1254,7 +1258,7 @@ sub crearPaginador{
     my ($cantResult, $cantRenglones, $pagActual, $funcion,$t_params)=@_;
 
     my ($paginador, $cantPaginas)=C4::AR::Utilidades::armarPaginas($pagActual, $cantResult, $cantRenglones,$funcion,$t_params);
-  
+
     return $paginador;
 
 }
@@ -1284,7 +1288,7 @@ sub armarPaginas{
 
     my $themelang= $t_params->{'themelang'};
 
-    my $paginador= "<div class='pagination'><div id='content_paginator'  align='center' >";
+    my $paginador= "<div class='pagination_bar'><div id='content_paginator'  align='center' >";
     my $class="paginador";
 
     if($actual > 1){
@@ -1296,7 +1300,7 @@ sub armarPaginas{
     }else{
         $paginador .= "<span class='disabled' title='".$previous_text."'>".$previous_text."</span>";
     }
-    
+
     for (my $i=$limInf; ($totalPaginas >1 and $i <= $totalPaginas and $i <= $limSup) ; $i++ ) {
         my $onClick = "";
         if($actual == $i){
@@ -1315,13 +1319,13 @@ sub armarPaginas{
 
     }
 
-    $paginador .= "</div></div>"; 
+    $paginador .= "</div></div>";
 
     if ($totalPaginas <= 1){
       $paginador="";
     }
 
-    
+
     return($paginador, $totalPaginas);
 }
 
@@ -1342,14 +1346,14 @@ sub cambiarLibreDeuda{
 
     my ($valor)=@_;
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare("	UPDATE pref_preferencia_sistema 
-                            SET value=? 
+    my $sth=$dbh->prepare(" UPDATE pref_preferencia_sistema
+                            SET value=?
                             WHERE variable='libreDeuda'");
 
     $sth->execute($valor);
 }
 
-=item 
+=item
 checkdigit
   $valid = &checkdigit($env, $cardnumber $nounique);
 Takes a card number, computes its check digit, and compares it to the
@@ -1368,8 +1372,8 @@ sub checkdigit{
     #not correct
     unless ( $nounique ){
         my $dbh=C4::Context->dbh;
-        my $query=qq{   SELECT * 
-                        FROM borrowers 
+        my $query=qq{   SELECT *
+                        FROM borrowers
                         WHERE cardnumber=?};
         my $sth=$dbh->prepare($query);
 
@@ -1492,7 +1496,7 @@ sub from_json_ISO {
         $data =~ s/\t//g;
         $data = UTF8toISO($data);
         #C4::AR::Debug::debug("Data JSON ===> ".$data);
-	    return from_json($data, {latin1 => 1});
+        return from_json($data, {latin1 => 1});
     }
     or do{
         #FIXME falta generar un codigo de error para error de sistema
@@ -1509,7 +1513,7 @@ sub ASCIItoHEX {
     my ($char) = @_;
 
     use Switch;
-   
+
     switch ($char) {
         case "#"    { $char =  "\x".C4::AR::Utilidades::dec2hex(32)   }
         else        { $char =  $char }
@@ -1525,7 +1529,7 @@ sub HEXtoASCII {
     my ($char) = @_;
 
     require Switch;
-   
+
     switch ($char) {
         case "\x20"     { $char =  "#"   }
         else            { $char =  $char }
@@ -1566,7 +1570,7 @@ sub dec2hex {
             if ($decnum > 9) {
                 $decnum = chr($decnum + 55);
             }
-    
+
             # add this onto the final answer..
             # reset decnum variable to zero so loop
             # will exit
@@ -1591,10 +1595,10 @@ sub obtenerValoresAutorizados{
     my @filtros;
     my $valTemp = C4::Modelo::PrefValorAutorizado->new();
 
-    $valAuto_array_ref = C4::Modelo::PrefValorAutorizado::Manager->get_pref_valor_autorizado( 
+    $valAuto_array_ref = C4::Modelo::PrefValorAutorizado::Manager->get_pref_valor_autorizado(
                                         select => ['category'],
                                         group_by => ['category'],
-                                    ); 
+                                    );
 
     return ($valAuto_array_ref);
 
@@ -1629,8 +1633,8 @@ sub buscarMonedas{
     my $dbh = C4::Context->dbh;
     my $query = "   SELECT  ref_adq_moneda.id, ref_adq_moneda.nombre
 
-                    FROM ref_adq_moneda 
-    
+                    FROM ref_adq_moneda
+
                     WHERE (ref_adq_moneda.nombre LIKE ?)
 
                     ORDER BY (ref_adq_moneda.nombre)";
@@ -1640,8 +1644,8 @@ sub buscarMonedas{
     my @results;
     my $cant;
 
-    while (my $data=$sth->fetchrow_hashref){ 
-        push(@results,$data); 
+    while (my $data=$sth->fetchrow_hashref){
+        push(@results,$data);
         $cant++;
     }
     $sth->finish;
@@ -1656,7 +1660,7 @@ sub buscarLenguajes{
       my ($lenguaje) = @_;
 
       my $lenguajes = C4::Modelo::RefIdioma::Manager->get_ref_idioma(   query => [ description => { like => '%'.$lenguaje.'%' } ],
-                                                                        sort_by => 'description ASC'     
+                                                                        sort_by => 'description ASC'
 
                                                                      );
 
@@ -1671,7 +1675,7 @@ sub buscarSoportes{
       my ($soporte) = @_;
 
       my $soportes = C4::Modelo::RefSoporte::Manager->get_ref_soporte(query => [ description => { like => '%'.$soporte.'%' } ],
-                                                                      sort_by => 'description ASC' 
+                                                                      sort_by => 'description ASC'
                                                                         );
 
       return (scalar(@$soportes), $soportes);
@@ -1686,7 +1690,7 @@ sub buscarNivelesBibliograficos{
 
       my $nivelesBibliograficos = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico(
                                                                           query => [ description => { like => '%'.$nivelBibliografico.'%' } ],
-#                                                                           sort_by => 'description ASC'    
+#                                                                           sort_by => 'description ASC'
                                                                           );
 
       return (scalar(@$nivelesBibliograficos), $nivelesBibliograficos);
@@ -1709,6 +1713,26 @@ sub getNivelBibliograficoByCode{
         return 0;
     }
 }
+
+=item
+getNombreFromEstadoByCodigo
+=cut
+sub getNombreFromEstadoByCodigo{
+    my ($codigo)   = @_;
+
+    my @filtros;
+
+    push(@filtros, ( codigo => { eq => $codigo }) );
+
+    my $estado = C4::Modelo::RefEstado::Manager->get_ref_estado( query => \@filtros );
+
+    if(scalar(@$estado) > 0){
+        return ($estado->[0]->nombre);
+    } else {
+        return "NULL";
+    }
+}
+
 
 =head2
 # Esta funcioin remueve los blancos del principio y el final del string
@@ -1760,10 +1784,10 @@ sub generarComboPermisos{
     push (@label,"Control de Autoridades");
 
     $values = C4::Modelo::PermCatalogo->new()->meta->columns;
-    
+
     my %labels;
-    
-    my %options_hash; 
+
+    my %options_hash;
     foreach my $permiso (@$values) {
         $labels{$permiso}= $permiso;
     }
@@ -1783,18 +1807,18 @@ sub generarComboPermisos{
 
 
 sub translateTipoCredencial{
-	my ($credencial) = @_;
+    my ($credencial) = @_;
 
     my %labels = {};
-    
+
     $labels{"superLibrarian"}= C4::AR::Filtros::i18n('Directivo');
     $labels{"librarian"}= C4::AR::Filtros::i18n('Bibliotecario');
     $labels{"estudiante"}= C4::AR::Filtros::i18n('Usuario');
-    
-    
+
+
     return ($labels{$credencial});
-	
-	
+
+
 }
 
 sub generarComboPerfiles{
@@ -1806,7 +1830,7 @@ sub generarComboPerfiles{
     push (@label,C4::AR::Filtros::i18n('Bibliotecario'));
 
     my %labels;
-    my %options_hash; 
+    my %options_hash;
     @values[0]='SL';
     @values[1]='L';
     @values[2]='E';
@@ -1836,12 +1860,12 @@ sub generarComboTipoPermisos{
     my (@values);
 
     my %labels;
-    my %options_hash; 
+    my %options_hash;
 
     @values[0]='PCAT';
     @values[1]='PCIR';
     @values[2]='PGEN';
-    
+
     $labels{"PCAT"}= C4::AR::Filtros::i18n('Permisos Catalogo');
     $labels{"PCIR"}= C4::AR::Filtros::i18n('Permisos Circulacion');
     $labels{"PGEN"}= C4::AR::Filtros::i18n('Permisos Generales');
@@ -1873,7 +1897,7 @@ sub generarComboDeDisponibilidad{
         $select_disponibilidades_hash{$disponibilidad->getCodigo}= $disponibilidad->nombre;
     }
 
-    my %options_hash; 
+    my %options_hash;
 
     if ( $params->{'onChange'} ){
         $options_hash{'onChange'}= $params->{'onChange'};
@@ -1913,7 +1937,7 @@ sub generarComboCategoriasDeSocioConCodigoCat{
         $select_categorias_hash{$categoria->getCategory_code}= $categoria->description;
     }
 
-    my %options_hash; 
+    my %options_hash;
 
     if ( $params->{'onChange'} ){
         $options_hash{'onChange'}   = $params->{'onChange'};
@@ -1955,7 +1979,7 @@ sub generarComboCategoriasDeSocio{
         $select_categorias_hash{$categoria->getId}= $categoria->description;
     }
 
-    my %options_hash; 
+    my %options_hash;
 
     if ( $params->{'onChange'} ){
         $options_hash{'onChange'}   = $params->{'onChange'};
@@ -1998,7 +2022,7 @@ sub generarComboTipoDeDoc{
 
     $select_docs{''}                = 'SIN SELECCIONAR';
 
-    my %options_hash; 
+    my %options_hash;
 
     if ( $params->{'onChange'} ){
         $options_hash{'onChange'}   = $params->{'onChange'};
@@ -2006,7 +2030,7 @@ sub generarComboTipoDeDoc{
     if ( $params->{'onFocus'} ){
         $options_hash{'onFocus'}    = $params->{'onFocus'};
     }
-    if ( $params->{'onBlur'} ){ 
+    if ( $params->{'onBlur'} ){
         $options_hash{'onBlur'}     = $params->{'onBlur'};
     }
 
@@ -2023,7 +2047,7 @@ sub generarComboTipoDeDoc{
 
     my $combo_tipo_documento    = CGI::scrolling_list(\%options_hash);
 
-    return $combo_tipo_documento; 
+    return $combo_tipo_documento;
 }
 
 # genera el combo de documentos con los values del select los id del tipo de documento.
@@ -2040,7 +2064,7 @@ sub generarComboTipoDeDocConValuesIds{
     }
     $select_docs{''}                = 'SIN SELECCIONAR';
 
-    my %options_hash; 
+    my %options_hash;
 
     if ( $params->{'onChange'} ){
         $options_hash{'onChange'}   = $params->{'onChange'};
@@ -2048,7 +2072,7 @@ sub generarComboTipoDeDocConValuesIds{
     if ( $params->{'onFocus'} ){
         $options_hash{'onFocus'}    = $params->{'onFocus'};
     }
-    if ( $params->{'onBlur'} ){ 
+    if ( $params->{'onBlur'} ){
         $options_hash{'onBlur'}     = $params->{'onBlur'};
     }
 
@@ -2065,7 +2089,7 @@ sub generarComboTipoDeDocConValuesIds{
 
     my $combo_tipo_documento    = CGI::scrolling_list(\%options_hash);
 
-    return $combo_tipo_documento; 
+    return $combo_tipo_documento;
 }
 
 #genera el combo multiselect de formas de envio
@@ -2084,7 +2108,7 @@ sub generarComboFormasDeEnvio{
 
     $select_formas_envio{''}                = 'SIN SELECCIONAR';
 
-    my %options_hash; 
+    my %options_hash;
 
     if ( $params->{'onChange'} ){
         $options_hash{'onChange'}   = $params->{'onChange'};
@@ -2092,7 +2116,7 @@ sub generarComboFormasDeEnvio{
     if ( $params->{'onFocus'} ){
         $options_hash{'onFocus'}    = $params->{'onFocus'};
     }
-    if ( $params->{'onBlur'} ){ 
+    if ( $params->{'onBlur'} ){
         $options_hash{'onBlur'}     = $params->{'onBlur'};
     }
 
@@ -2108,7 +2132,7 @@ sub generarComboFormasDeEnvio{
 
     my $combo_formas_envio   = CGI::scrolling_list(\%options_hash);
 
-    return $combo_formas_envio; 
+    return $combo_formas_envio;
 }
 
 #genera el combo multiselect de tipo de materiales
@@ -2126,7 +2150,7 @@ sub generarComboTipoDeMaterial{
 
     $select_tipo_material{''}                = 'SIN SELECCIONAR';
 
-    my %options_hash; 
+    my %options_hash;
 
     if ( $params->{'onChange'} ){
         $options_hash{'onChange'}   = $params->{'onChange'};
@@ -2134,7 +2158,7 @@ sub generarComboTipoDeMaterial{
     if ( $params->{'onFocus'} ){
         $options_hash{'onFocus'}    = $params->{'onFocus'};
     }
-    if ( $params->{'onBlur'} ){ 
+    if ( $params->{'onBlur'} ){
         $options_hash{'onBlur'}     = $params->{'onBlur'};
     }
 
@@ -2150,7 +2174,7 @@ sub generarComboTipoDeMaterial{
 
     my $combo_tipo_materiales   = CGI::scrolling_list(\%options_hash);
 
-    return $combo_tipo_materiales; 
+    return $combo_tipo_materiales;
 }
 
 sub generarComboProveedoresMultiple{
@@ -2164,14 +2188,14 @@ sub generarComboProveedoresMultiple{
         push(@select_proveedores_array, $prov->getId);
         if ($prov-> getNombre eq "") {
              $select_proveedores{$prov->getId}  = $prov->getRazonSocial;
-        } else { 
+        } else {
             $select_proveedores{$prov->getId}  = $prov->getNombre;
         }
     }
 
     $select_proveedores{''}                = 'SIN SELECCIONAR';
 
-    my %options_hash; 
+    my %options_hash;
 
     if ( $params->{'onChange'} ){
         $options_hash{'onChange'}   = $params->{'onChange'};
@@ -2179,7 +2203,7 @@ sub generarComboProveedoresMultiple{
     if ( $params->{'onFocus'} ){
         $options_hash{'onFocus'}    = $params->{'onFocus'};
     }
-    if ( $params->{'onBlur'} ){ 
+    if ( $params->{'onBlur'} ){
         $options_hash{'onBlur'}     = $params->{'onBlur'};
     }
 
@@ -2196,7 +2220,7 @@ sub generarComboProveedoresMultiple{
 
     my $combo_proveedores    = CGI::scrolling_list(\%options_hash);
 
-    return $combo_proveedores; 
+    return $combo_proveedores;
 }
 
 
@@ -2211,14 +2235,14 @@ sub generarComboProveedores{
         push(@select_proveedores_array, $prov->getId);
         if ($prov-> getNombre eq "") {
              $select_proveedores{$prov->getId}  = $prov->getRazonSocial;
-        } else { 
+        } else {
             $select_proveedores{$prov->getId}  = $prov->getNombre;
         }
     }
 
     $select_proveedores{''}                = 'SIN SELECCIONAR';
 
-    my %options_hash; 
+    my %options_hash;
 
     if ( $params->{'onChange'} ){
         $options_hash{'onChange'}   = $params->{'onChange'};
@@ -2226,7 +2250,7 @@ sub generarComboProveedores{
     if ( $params->{'onFocus'} ){
         $options_hash{'onFocus'}    = $params->{'onFocus'};
     }
-    if ( $params->{'onBlur'} ){ 
+    if ( $params->{'onBlur'} ){
         $options_hash{'onBlur'}     = $params->{'onBlur'};
     }
 
@@ -2243,7 +2267,7 @@ sub generarComboProveedores{
 
     my $combo_proveedores    = CGI::scrolling_list(\%options_hash);
 
-    return $combo_proveedores; 
+    return $combo_proveedores;
 }
 
 
@@ -2256,14 +2280,14 @@ sub generarComboPresupuestos{
     my $presupuestos  = C4::AR::Presupuestos::getAdqPresupuestos();
 
     push (@select_presupuestos_array, '');
-    
+
 
     foreach my $presupuesto (@$presupuestos) {
         push(@select_presupuestos_array, $presupuesto->getId);
-        
+
 # FIXME (ver si es persona fisica o razxon social)
         $select_presupuestos{$presupuesto->getId}  = $presupuesto->getId." - ".$presupuesto->ref_proveedor->getNombre." - ".$presupuesto->getFecha;
-      
+
     }
 
     my %options_hash;
@@ -2274,7 +2298,7 @@ sub generarComboPresupuestos{
     if ( $params->{'onFocus'} ){
         $options_hash{'onFocus'}    = $params->{'onFocus'};
     }
-    if ( $params->{'onBlur'} ){ 
+    if ( $params->{'onBlur'} ){
         $options_hash{'onBlur'}     = $params->{'onBlur'};
     }
 
@@ -2285,13 +2309,13 @@ sub generarComboPresupuestos{
      $options_hash{'multiple'}   = $params->{'multiple'}||0;
      $options_hash{'defaults'}   = $params->{'default'} || 0;
 
-   
+
     $options_hash{'values'}     = \@select_presupuestos_array;
     $options_hash{'labels'}     = \%select_presupuestos;
 
     my $combo_presupuestos  = CGI::scrolling_list(\%options_hash);
 
-    return $combo_presupuestos; 
+    return $combo_presupuestos;
 }
 
 sub generarComboPedidosCotizacion {
@@ -2300,9 +2324,9 @@ sub generarComboPedidosCotizacion {
     my @select_pedidos_array;
     my %select_pedidos;
     my $cotizaciones  = &C4::AR::PedidoCotizacion::getAdqPedidosCotizacion();
-      
+
 #     C4::AR::Debug::debug("RECOMENDACIONES:".$recomendaciones);
-    
+
     push(@select_pedidos_array, 0);
     $select_pedidos{'0'}                = 'SIN SELECCIONAR';
 
@@ -2312,8 +2336,8 @@ sub generarComboPedidosCotizacion {
     }
 
     my %options_hash;
-    
- 
+
+
 
     if ( $params->{'onChange'} ){
         $options_hash{'onChange'}   = $params->{'onChange'};
@@ -2321,12 +2345,12 @@ sub generarComboPedidosCotizacion {
     if ( $params->{'onFocus'} ){
         $options_hash{'onFocus'}    = $params->{'onFocus'};
     }
-    if ( $params->{'onBlur'} ){ 
+    if ( $params->{'onBlur'} ){
         $options_hash{'onBlur'}     = $params->{'onBlur'};
     }
-      
 
-     
+
+
 
     $options_hash{'name'}       = $params->{'name'}||'combo_pedidos';
     $options_hash{'id'}         = $params->{'id'}||'combo_pedidos';
@@ -2335,13 +2359,13 @@ sub generarComboPedidosCotizacion {
     $options_hash{'multiple'}   = $params->{'multiple'}||0;
     $options_hash{'defaults'}   = $params->{'default'} || 0;
 
-   
+
     $options_hash{'values'}     = \@select_pedidos_array;
     $options_hash{'labels'}     = \%select_pedidos;
 
     my $combo_pedidos  = CGI::scrolling_list(\%options_hash);
 
-    return $combo_pedidos; 
+    return $combo_pedidos;
 
 
 }
@@ -2356,14 +2380,14 @@ sub generarComboRecomendaciones{
     my $recomendaciones  = &C4::AR::Recomendaciones::getRecomendaciones();
 
     push (@select_recomendaciones_array, '');
-      
+
 #     C4::AR::Debug::debug("RECOMENDACIONES:".$recomendaciones);
 
     foreach my $recomendacion (@$recomendaciones) {
         push(@select_recomendaciones_array, $recomendacion->getId);
         $select_recomendaciones{$recomendacion->getId}  = $recomendacion->getId." - ".$recomendacion->ref_usr_socio->[0]->persona->nombre." - ".$recomendacion->getFecha;
     }
-    
+
     my %options_hash;
 
     if ( $params->{'onChange'} ){
@@ -2372,7 +2396,7 @@ sub generarComboRecomendaciones{
     if ( $params->{'onFocus'} ){
         $options_hash{'onFocus'}    = $params->{'onFocus'};
     }
-    if ( $params->{'onBlur'} ){ 
+    if ( $params->{'onBlur'} ){
         $options_hash{'onBlur'}     = $params->{'onBlur'};
     }
 
@@ -2383,13 +2407,13 @@ sub generarComboRecomendaciones{
      $options_hash{'multiple'}   = $params->{'multiple'}||0;
      $options_hash{'defaults'}   = $params->{'default'} || 0;
 
-   
+
     $options_hash{'values'}     = \@select_recomendaciones_array;
     $options_hash{'labels'}     = \%select_recomendaciones;
 
     my $combo_recomendaciones  = CGI::scrolling_list(\%options_hash);
 
-    return $combo_recomendaciones; 
+    return $combo_recomendaciones;
 }
 
 
@@ -2409,7 +2433,7 @@ sub generarComboTipoNivel3{
     push (@select_tipo_nivel3_array, '');
     $select_tipo_nivel3_hash{''}    = 'SIN SELECCIONAR';
 
-    my %options_hash; 
+    my %options_hash;
 
     if ( $params->{'onChange'} ){
          $options_hash{'onChange'}  = $params->{'onChange'};
@@ -2451,7 +2475,7 @@ sub generarComboTipoPrestamo{
     my @select_tipo_nivel3_array;
     my %select_tipo_prestamo_hash;
 
-    require C4::Modelo::CircRefTipoPrestamo::Manager;  
+    require C4::Modelo::CircRefTipoPrestamo::Manager;
     my ($tipoPrestamo_array)= C4::Modelo::CircRefTipoPrestamo::Manager->get_circ_ref_tipo_prestamo();
 
     foreach my $tipoPrestamo (@$tipoPrestamo_array) {
@@ -2459,7 +2483,7 @@ sub generarComboTipoPrestamo{
         $select_tipo_prestamo_hash{$tipoPrestamo->id_tipo_prestamo}= $tipoPrestamo->descripcion;
     }
 
-    my %options_hash; 
+    my %options_hash;
 
     if ( $params->{'onChange'} ){
          $options_hash{'onChange'}= $params->{'onChange'};
@@ -2504,14 +2528,14 @@ sub generarComboTablasDeReferencia{
 
     require C4::Modelo::PrefTablaReferencia::Manager;
     my ($tabla_ref_array)= C4::Modelo::PrefTablaReferencia::Manager->get_pref_tabla_referencia();
-    
+
 
     foreach my $tabla (@$tabla_ref_array) {
         push(@select_tabla_ref_array, $tabla->getAlias_tabla);
         $select_tabla_ref_array{$tabla->getAlias_tabla}= C4::AR::Filtros::i18n(Encode::decode_utf8(Encode::encode_utf8($tabla->getClient_title)));
     }
 
-    my %options_hash; 
+    my %options_hash;
 
     if ( $params->{'onChange'} ){
          $options_hash{'onChange'}  = $params->{'onChange'};
@@ -2561,14 +2585,14 @@ sub generarComboTablasDeReferenciaByNombreTabla{
 
     require C4::Modelo::PrefTablaReferencia::Manager;
     my ($tabla_ref_array)= C4::Modelo::PrefTablaReferencia::Manager->get_pref_tabla_referencia();
-    
+
 
     foreach my $tabla (@$tabla_ref_array) {
         push(@select_tabla_ref_array, $tabla->getNombre_tabla);
         $select_tabla_ref_array{$tabla->getAlias_tabla}= C4::AR::Filtros::i18n($tabla->getClient_title);
     }
 
-    my %options_hash; 
+    my %options_hash;
 
     if ( $params->{'onChange'} ){
          $options_hash{'onChange'}  = $params->{'onChange'};
@@ -2616,14 +2640,14 @@ sub generarComboDePerfilesOPAC{
 
     require C4::Modelo::CatPerfilOpac::Manager;
     my ($perfiles)= C4::Modelo::CatPerfilOpac::Manager->get_cat_perfil_opac();
-    
+
 
     foreach my $perfil (@$perfiles) {
         push(@select_perfil_ref_array, $perfil->id);
         $select_perfil_ref_array{$perfil->id}= $perfil->getNombre;
     }
 
-    my %options_hash; 
+    my %options_hash;
 
     $params->{'onChange'} = $params->{'onChange'} || 'eleccionDePerfil()';
     if ( $params->{'onChange'} ){
@@ -2675,7 +2699,7 @@ sub generarComboUI{
         $select_ui{$ui->id_ui}= $ui->nombre;
     }
 
-    my %options_hash; 
+    my %options_hash;
 
     if ( $params->{'onChange'} ){
         $options_hash{'onChange'}= $params->{'onChange'};
@@ -2710,7 +2734,7 @@ sub generarComboUI{
 
     my $CGIunidadDeInformacion= CGI::scrolling_list(\%options_hash);
 
-    return $CGIunidadDeInformacion; 
+    return $CGIunidadDeInformacion;
 }
 
 sub generarComboNivelBibliografico{
@@ -2727,7 +2751,7 @@ sub generarComboNivelBibliografico{
         $select_niveles{$nivel->id}= $nivel->description;
     }
 
-    my %options_hash; 
+    my %options_hash;
 
     if ( $params->{'onChange'} ){
         $options_hash{'onChange'}   = $params->{'onChange'};
@@ -2768,7 +2792,7 @@ sub generarComboNivelBibliografico{
 
     my $CGI_Nivel_Bibliografico = CGI::scrolling_list(\%options_hash);
 
-    return $CGI_Nivel_Bibliografico; 
+    return $CGI_Nivel_Bibliografico;
 }
 
 sub generarComboDeSocios{
@@ -2776,7 +2800,7 @@ sub generarComboDeSocios{
     my ($params) = @_;
     my @select_socios;
     my %select_socios;
-    my $socios  = C4::Modelo::UsrSocio::Manager->get_usr_socio( query => [ 
+    my $socios  = C4::Modelo::UsrSocio::Manager->get_usr_socio( query => [
                                                                           activo => {eq => 1},
                                                                        ],);
 
@@ -2785,7 +2809,7 @@ sub generarComboDeSocios{
         $select_socios{$socio->getNro_socio}= $socio->persona->getApeYNom." (".$socio->getNro_socio.")" ;
     }
 
-    my %options_hash; 
+    my %options_hash;
 
     if ( $params->{'onChange'} ){
         $options_hash{'onChange'}   = $params->{'onChange'};
@@ -2815,7 +2839,7 @@ sub generarComboDeSocios{
 
     my $CGIsocios                   = CGI::scrolling_list(\%options_hash);
 
-    return $CGIsocios; 
+    return $CGIsocios;
 }
 
 
@@ -2823,6 +2847,7 @@ sub generarComboCampoX{
 
     my $onReadyFunction = shift;
     my $defaultCampoX = shift;
+    my $idCombo = shift;
     #Filtro de numero de campo
     my %camposX;
     my @values;
@@ -2837,9 +2862,9 @@ sub generarComboCampoX{
         $camposX{$i}=$option;
     }
     my $defaulCX= $defaultCampoX || 'Elegir';
-
-    my $selectCampoX=CGI::scrolling_list(  -name      => 'campoX',
-                    -id    => 'campoX',
+    my $idCX= $idCombo || 'campoX';
+    my $selectCampoX=CGI::scrolling_list(  -name      => $idCX,
+                    -id    => $idCX,
                     -values    => \@values,
                     -labels    => \%camposX,
                     -defaults  => $defaulCX,
@@ -2881,6 +2906,102 @@ sub generarComboTipoDeOperacion{
     return $CGISelectTipoOperacion;
 }
 
+
+sub generarComboEsquemasImportacion {
+
+    my ($params) = @_;
+
+    require C4::Modelo::IoImportacionIsoEsquema::Manager;
+    my @select_esquemasImportacion_Values;
+    my %select_esquemasImportacion_Labels;
+    my $result = C4::Modelo::IoImportacionIsoEsquema::Manager->get_io_importacion_iso_esquema();
+    my $result_count = C4::Modelo::IoImportacionIsoEsquema::Manager->get_io_importacion_iso_esquema_count();
+
+    if ($result_count){
+        foreach my $esquemaImportacion (@$result) {
+                push (@select_esquemasImportacion_Values, $esquemaImportacion->id);
+                $select_esquemasImportacion_Labels{$esquemaImportacion->id} = $esquemaImportacion->nombre;
+        }
+
+
+        my %options_hash;
+
+        if ( $params->{'onChange'} ){
+             $options_hash{'onChange'}  = $params->{'onChange'};
+        }
+
+        if ( $params->{'onFocus'} ){
+          $options_hash{'onFocus'}      = $params->{'onFocus'};
+        }
+
+        if ( $params->{'class'} ){
+             $options_hash{'class'}     = $params->{'class'};
+        }
+
+        if ( $params->{'onBlur'} ){
+          $options_hash{'onBlur'}       = $params->{'onBlur'};
+        }
+
+        $options_hash{'name'}           = $params->{'name'}||'esquemaImportacion';
+        $options_hash{'id'}             = $params->{'id'}||'esquemaImportacion';
+        $options_hash{'size'}           =  $params->{'size'}||1;
+        $options_hash{'multiple'}       = $params->{'multiple'}||0;
+
+        $options_hash{'values'}         = \@select_esquemasImportacion_Values;
+        $options_hash{'labels'}         = \%select_esquemasImportacion_Labels;
+
+        my $CGISelectEsquemaImportacion                   = CGI::scrolling_list(\%options_hash);
+        return $CGISelectEsquemaImportacion;
+    }else{
+        return 0;
+    }
+}
+
+sub generarComboFormatosImportacion {
+
+    my ($params) = @_;
+
+    my @select_formatosImportacion_Values;
+    my %select_formatosImportacion_Labels;
+
+    my %options_hash;
+
+    if ( $params->{'onChange'} ){
+         $options_hash{'onChange'}  = $params->{'onChange'};
+    }
+
+    if ( $params->{'onFocus'} ){
+      $options_hash{'onFocus'}      = $params->{'onFocus'};
+    }
+
+    if ( $params->{'class'} ){
+         $options_hash{'class'}     = $params->{'class'};
+    }
+
+    if ( $params->{'onBlur'} ){
+      $options_hash{'onBlur'}       = $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}           = $params->{'name'}||'formatoImportacion';
+    $options_hash{'id'}             = $params->{'id'}||'formatoImportacion';
+    $options_hash{'size'}           =  $params->{'size'}||1;
+    $options_hash{'multiple'}       = $params->{'multiple'}||0;
+    $options_hash{'defaults'}       = 'ISO 2709';
+
+    push (@select_formatosImportacion_Values, 'iso');
+    $select_formatosImportacion_Labels{'iso'}            ='ISO 2709';
+    push (@select_formatosImportacion_Values, 'isis');
+    $select_formatosImportacion_Labels{'isis'}            ='ISIS';
+    push (@select_formatosImportacion_Values, 'xml');
+    $select_formatosImportacion_Labels{'xml'}            ='XML';
+
+    $options_hash{'values'}         = \@select_formatosImportacion_Values;
+    $options_hash{'labels'}         = \%select_formatosImportacion_Labels;
+
+    my $CGISelectFormatosImportacion                   = CGI::scrolling_list(\%options_hash);
+    return $CGISelectFormatosImportacion;
+}
+
 sub generarComboNiveles{
 
     my ($params) = @_;
@@ -2898,7 +3019,7 @@ sub generarComboNiveles{
         push(@select_niveles, $nivel);
         $select_niveles{$nivel}= $nivel;
     }
-    my %options_hash; 
+    my %options_hash;
 
     if ( $params->{'onChange'} ){
         $options_hash{'onChange'}= $params->{'onChange'};
@@ -2925,7 +3046,7 @@ sub generarComboNiveles{
 
     my $CGINiveles= CGI::scrolling_list(\%options_hash);
 
-    return $CGINiveles; 
+    return $CGINiveles;
 }
 
 # GENERA COMBO CON LAS EDICIONES PARA UN ID DADO
@@ -2944,7 +3065,7 @@ sub generarComboNivel2{
         $select_ediciones_hash{$edicion->getId2}= $edicion->toString;
     }
 
-    my %options_hash; 
+    my %options_hash;
 
 # FIXME esto tiene q estar
 #     if ( $params->{'onChange'} ){
@@ -2956,7 +3077,7 @@ sub generarComboNivel2{
 #     if ( $params->{'onBlur'} ){
 #         $options_hash{'onBlur'}     = $params->{'onBlur'};
 #     }
-   
+
     $options_hash{'name'}       = 'edicion_id';
     $options_hash{'id'}         = 'edicion_id';
     $options_hash{'size'}       = 1;
@@ -2989,7 +3110,7 @@ sub generarComboNivel2Detalle{
         $select_ediciones_hash{$edicion->getId2}= $edicion->toString;
     }
 
-    my %options_hash; 
+    my %options_hash;
     $options_hash{'name'}       = 'edicion_id';
     $options_hash{'id'}         = 'edicion_id';
     $options_hash{'size'}       = 1;
@@ -3047,16 +3168,16 @@ sub escapeHashData{
     C4::AR::Debug::debug("ENTRO A escapeHashData ================================>");
     if($hash_ref){
         while ( my ($key, $value) = each(%$hash_ref) ) {
-        	    C4::AR::Debug::debug("key: $key => value: $value\n");
-        	    if($value =~ /[<>]/){
-            	    $value = encode_entities($value);
-        	    }
+                C4::AR::Debug::debug("key: $key => value: $value\n");
+                if($value =~ /[<>]/){
+                    $value = encode_entities($value);
+                }
                 $hash_ref->{$key} = $value;
-                
+
                 C4::AR::Debug::debug("ENCODED key: $key => value: $value\n");
             }
     }
-    
+
     return ($hash_ref);
 }
 
@@ -3144,7 +3265,7 @@ sub arrayClaveValorToJSONString{
 
 =head2
 sub existeInArray
- 
+
    Esta funcion recibe un string seguido de un arreglo y busca en el arreglo el string, y devuelve 1 o 0
 =cut
 sub existeInArray{
@@ -3154,7 +3275,7 @@ sub existeInArray{
 #         C4::AR::Debug::debug("Utilidades => existeInArray => EXISTE => ".$string." en el arreglo");
         return 1;
     }
-    
+
 #         C4::AR::Debug::debug("Utilidades => existeInArray => NO EXISTE => ".$string." en el arreglo");
     return 0;
 }
@@ -3181,7 +3302,7 @@ sub isBrowser{
 
     if ( $browser =~ s/Mozilla// ) {
         if ($browser =~ s/(MSIE)//){
-            # print Z "IE \n";	
+            # print Z "IE \n";
         }
         if($browser =~ s/(Chrome)//){
             # print Z "Chrome \n";
@@ -3191,7 +3312,7 @@ sub isBrowser{
             # print Z "Iceweasel \n";
         }
     }elsif( $browser =~ s/(Opera)//) {
-        # print Z "Opera \n";	
+        # print Z "Opera \n";
     }else{
         # print Z "otro \n";
         $ok= 0;
@@ -3264,7 +3385,7 @@ sub obtenerCoincidenciasDeBusqueda{
     foreach my $search (@$search_array){
         $cant= 0;
         $search= lc $search;
-        while ($string =~ /$search/g) { 
+        while ($string =~ /$search/g) {
             $cant++;
         }
         $cont += $cant;
@@ -3383,7 +3504,7 @@ sub autorAutocomplete{
     foreach my $autor (@$autores_array_ref){
         $textout.= $autor->getId."|".$autor->getCompleto."\n";
     }
-    
+
     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 #     return ($textout eq '')?"-1|".$autorStr:$textout;
 }
@@ -3404,13 +3525,13 @@ sub obtenerDescripcionDeSubCampos{
 sub ayudaCampoMARCAutocomplete{
     my ($campo) = @_;
 
-    my $campos_marc_array_ref= &C4::AR::Referencias::obtenerCamposLike($campo); 
+    my $campos_marc_array_ref= &C4::AR::Referencias::obtenerCamposLike($campo);
     my $textout;
 
     foreach my $campo_marc (@$campos_marc_array_ref){
         $textout.= $campo_marc->getCampo."| (".$campo_marc->getCampo.") ".$campo_marc->getLiblibrarian."\n";
     }
-    
+
     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
@@ -3477,7 +3598,7 @@ sub autoresAutocomplete{
 
     my ($cant, $autores_array_ref) = &C4::AR::ControlAutoridades::search_autores($autor);
     my $resultado = "";
-   
+
     foreach my $autor (@$autores_array_ref){
         $resultado .=  $autor->getId."|". $autor->getCompleto. "\n";
     }
@@ -3593,17 +3714,17 @@ sub ciudadesAutocomplete{
 }
 
 # sub catalogoBibliotecaAutocomplete{
-# 
+#
 #     my ($busquedaStr)= @_;;
 #     my $textout="";
 #     my ($cant, $busqueda_array_ref)=C4::AR::Utilidades::obtenerCatalogo($busquedaStr);
-# 
+#
 #     foreach my $item (@$busqueda_array_ref){
 #         $textout.=$pais->getIso."|".$pais->getNombre_largo."\n";
 #     }
-# 
+#
 #     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
-# 
+#
 # }
 
 sub getSphinxMatchMode{
@@ -3634,17 +3755,17 @@ sub getSphinxMatchMode{
 }
 
 sub createSphinxInstance{
-	my ($string_array,$tipo) = @_;
-	
+    my ($string_array,$tipo) = @_;
+
     use Sphinx::Search;
     my $sphinx = Sphinx::Search->new();
-    
+
     my $server_address = C4::Context->config("sphinx_server") || 'localhost';
-    
-    my $server_port = C4::Context->config("server_port") || '3312'; 
-    
+
+    my $server_port = C4::Context->config("server_port") || '3312';
+
     $sphinx->SetServer($server_address, $server_port);
-    
+
     my $query = '';
 
     my $tipo_match  = getSphinxMatchMode($tipo);
@@ -3663,7 +3784,7 @@ sub createSphinxInstance{
     $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
 
-    return ($sphinx,$query);	
+    return ($sphinx,$query);
 
 }
 
@@ -3689,17 +3810,17 @@ sub catalogoAutocomplete{
       foreach my $documento (@$resultado_busquedas){
             my %has_temp;
             $has_temp{'id'}= $documento->{'id1'};
-            
+
             C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
             $has_temp{'dato'} = $documento->{'titulo'};
- 	    if($documento->{'nomCompleto'}){ $has_temp{'dato'} .= " (".$documento->{'nomCompleto'}.")";}
-	    $has_temp{'dato'} .= "\n";
-            push (@data_array, \%has_temp); 
+        if($documento->{'nomCompleto'}){ $has_temp{'dato'} .= " (".$documento->{'nomCompleto'}.")";}
+        $has_temp{'dato'} .= "\n";
+            push (@data_array, \%has_temp);
 
 #              C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
-#              $textout.= $documento->{'id1'}."|".$documento->{'titulo'}."\n";          
+#              $textout.= $documento->{'id1'}."|".$documento->{'titulo'}."\n";
       }
- 
+
      $textout= getTextOutSorted(\@data_array, {'DESC' => 1, 'ORDER_BY' => 'dato'});
 
      return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
@@ -3727,7 +3848,7 @@ sub temasAutocomplete{
         $textout.=$texto."|".$tema->{'id'}."\n";
         $texto="";
     }
-    
+
     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
@@ -3744,7 +3865,7 @@ sub soportesAutocomplete{
             $textout.= $result->[$i]->{'idSupport'}."|".$result->[$i]->{'description'}."\n";
         }
     }
-    
+
     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
@@ -3768,7 +3889,7 @@ sub temasAutocomplete{
         $textout.=$texto."|".$tema->{'id'}."\n";
         $texto="";
     }
-    
+
     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
@@ -3784,11 +3905,11 @@ sub usuarioAutocomplete{
             $has_temp{'id'}= $usuario->getNro_socio;
             if ($mostrar_regularidad) {
                  $has_temp{'dato'}   = $usuario->persona->getApeYNom." (".$usuario->getNro_socio.")"." - ".$usuario->esRegularToString."\n";
-             
+
              } else {
                  $has_temp{'dato'}   = $usuario->persona->getApeYNom." (".$usuario->getNro_socio.")"."\n";
             }
-            push (@data_array, \%has_temp);    
+            push (@data_array, \%has_temp);
         }
         $textout = getTextOutSorted(\@data_array, {'DESC' => 1, 'ORDER_BY' => 'dato'});
     }
@@ -3841,7 +3962,7 @@ sub barcodeAutocompleteBySphinx{
 
 
      foreach my $s (@$resultado_busquedas){
-            
+
 #              C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
              $textout.= $s->{'id1'}."|".$s->{'id1'}."\n";
      }
@@ -3876,10 +3997,10 @@ sub barcodePrestadoAutocomplete{
 }
 
 
-=item 
+=item
 sub getTextOutSorted
 
-@params 
+@params
 
 $params->{'orden'} el orden id or dato
 $params->{'DESC'} DESC => descendente, ASC => ascendete
@@ -3896,7 +4017,7 @@ sub getTextOutSorted{
         @return_array_sorted = sort{$a->{$orden} cmp $b->{$orden}} @$data_array_ref;
     }else{
     #ordena la HASH de strings de manera ASC
-        @return_array_sorted = sort{$b->{$orden} cmp $a->{$orden}} @$data_array_ref;        
+        @return_array_sorted = sort{$b->{$orden} cmp $a->{$orden}} @$data_array_ref;
     }
 
     foreach my $e (@return_array_sorted){
@@ -3937,7 +4058,7 @@ sub isAjaxRequest {
     Esta funcion se utiliza para actualizar las passwords de los socios de MD5 a SHA256_base64
 =cut
 sub md5ToSHA_B64_256 {
-       
+
     my $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( );
 
     foreach my $socio (@$socios_array_ref){
@@ -4012,7 +4133,7 @@ sub armarPaginasOPAC{
         $paginador .= "<a href='".$url."&page=".$totalPaginas."' class='next' title='".$last_text."'>".$last_text."</a>";
 
     }
-    $paginador .= "</div></div>"; 
+    $paginador .= "</div></div>";
 
     if ($totalPaginas <= 1){
       $paginador="";
@@ -4050,16 +4171,16 @@ sub getFeriados{
 }
 
 sub getProximosFeriados{
-	
-	my ($desde) = @_;
+
+    my ($desde) = @_;
     require C4::Modelo::PrefFeriado;
     require C4::Modelo::PrefFeriado::Manager;
-    
+
     my $hoy = C4::AR::Utilidades::getToday();
-	
-	$desde = $desde || $hoy;
-	
-	my $feriados = C4::Modelo::PrefFeriado::Manager->get_pref_feriado(query => [ fecha => { ge => $desde } ], sort_by => ['fecha ASC']);
+
+    $desde = $desde || $hoy;
+
+    my $feriados = C4::Modelo::PrefFeriado::Manager->get_pref_feriado(query => [ fecha => { ge => $desde } ], sort_by => ['fecha ASC']);
 
     return ($feriados);
 }
@@ -4075,11 +4196,11 @@ sub setFeriado{
     $fecha              = C4::Date::format_date_in_iso($fecha, $dateformat);
 
     my $feriado = C4::Modelo::PrefFeriado::Manager->get_pref_feriado(query => [ fecha => { eq => $fecha } ] );
-    
+
     if (scalar(@$feriado)){
         #El feriado ya existe!! se modifica el texto o se elimina dependiendo del status
         $feriado->[0]->setFecha($fecha,$status,$texto_feriado);
-        
+
     }else{
         $feriado = C4::Modelo::PrefFeriado->new();
         eval{
@@ -4116,11 +4237,11 @@ sub bbl_sort {
                 my $temp = @$array[$index + 1];
                 @$array[$index + 1] = @$array[$index];
                 @$array[$index] = $temp;
-                
+
                 $temp = @$array2[$index + 1];
                 @$array2[$index + 1] = @$array2[$index];
                 @$array2[$index] = $temp;
-                
+
                 $temp = @$array3[$index + 1];
                 @$array3[$index + 1] = @$array3[$index];
                 @$array3[$index] = $temp;
@@ -4134,16 +4255,16 @@ sub bbl_sort {
 sub getToday{
 
     use Date::Manip;
-    
+
     my $dateformat = C4::Date::get_date_format();
-	
-	return  C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days"),$dateformat);
+
+    return  C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days"),$dateformat);
 }
 
 
 sub daysToNow{
     my ($date) = @_;
-    
+
     use Date::Calc qw(Delta_Days);
 
     my @today = (localtime)[5,4,3];
@@ -4153,11 +4274,11 @@ sub daysToNow{
     my @date_to_cmp = (split '-',$date);
 
     my $days = 0;
-    
+
     eval{
         $days = Delta_Days(@date_to_cmp,@today);
     };
-    
+
     return ($days);
 }
 
@@ -4180,7 +4301,7 @@ sub paginarArrayResult {
 }
 
 sub generarComboEstantes{
-	
+
     my ($params) = @_;
 
     my @select_estante_array;
@@ -4195,7 +4316,7 @@ sub generarComboEstantes{
     push (@select_estante_array, '');
     $select_estante_array{''}= 'SIN SELECCIONAR';
 
-    my %options_hash; 
+    my %options_hash;
 
     if ( $params->{'onChange'} ){
          $options_hash{'onChange'}= $params->{'onChange'};
@@ -4241,8 +4362,8 @@ sub isValidFile{
     open(FILE, "<$file_path") or die "Can't open $file_path : $!\n";
     close(FILE);
 
-    $file_type = $flm->checktype_filename($file_path);    
- 
+    $file_type = $flm->checktype_filename($file_path);
+
     my @extensiones_permitidas=("bmp","jpg","gif","png","jpeg","msword","docx","odt","pdf","xls","zip","rar");
     my @nombreYextension=split('\.',$file_path);
 
@@ -4262,35 +4383,35 @@ sub isValidFile{
 }
 
 sub escapeURL{
-	my ($url) = @_;
-	
-	$url = URI::Escape::uri_escape_utf8($url);
-	
-	return ($url);
+    my ($url) = @_;
+
+    $url = URI::Escape::uri_escape_utf8($url);
+
+    return ($url);
 }
 
 sub getUrlPrefix{
-	return ("".C4::Context->config('url_prefix'));
-	
+    return ("".C4::Context->config('url_prefix'));
+
 }
 
 sub addParamToUrl{
-	my ($url,$param,$value) = @_;
+    my ($url,$param,$value) = @_;
 
-	$param = $param."=".$value;
-	
-	my $status = index($url,'?');
-	
-	if (C4::AR::Utilidades::validateString($value)){
-		if ($status == -1){
-			$url .= '?'.$param;
-		}else{
-	        $url .= '&'.$param;
-		}
+    $param = $param."=".$value;
+
+    my $status = index($url,'?');
+
+    if (C4::AR::Utilidades::validateString($value)){
+        if ($status == -1){
+            $url .= '?'.$param;
+        }else{
+            $url .= '&'.$param;
+        }
     }
-	
-	return ($url);
-	
+
+    return ($url);
+
 }
 
 sub hash_params_to_url_params{
@@ -4312,28 +4433,28 @@ sub url_for{
     my $server      = $ENV{'SERVER_NAME'};
     my $proto       = ($ENV{'SERVER_PORT'} eq 443)?"https://":"http://";
     my $url_final   = $proto.$server.getUrlPrefix().$url;
-    
+
 # C4::AR::Debug::debug("url_final => ".$url_final);
     return $url_final;
 }
 
 sub armarIniciales{
-	my ($params) = @_;
-	
-	my @split_nombre   = split(/ /,$params->{'nombre'});
-    my @split_apellido = split(/ /,$params->{'apellido'}); 
+    my ($params) = @_;
+
+    my @split_nombre   = split(/ /,$params->{'nombre'});
+    my @split_apellido = split(/ /,$params->{'apellido'});
     my $iniciales = '';
-    
+
     foreach my $name (@split_nombre){
-    	$name  = uc trim($name);
-    	$iniciales.= substr($name,0,1); 
+        $name  = uc trim($name);
+        $iniciales.= substr($name,0,1);
     }
-    
+
     foreach my $surname (@split_apellido){
         $surname  = uc trim($surname);
-        $iniciales.= substr($surname,0,1); 
+        $iniciales.= substr($surname,0,1);
     }
-    
+
     return ($iniciales);
 
 }
@@ -4341,12 +4462,12 @@ sub armarIniciales{
 #Replace a string without using RegExp.
 sub str_replace {
     my $replace_this = shift;
-    my $with_this  = shift; 
+    my $with_this  = shift;
     my $string   = shift;
-    
+
     my $length = length($string);
     my $target = length($replace_this);
-    
+
     for(my $i=0; $i<$length - $target + 1; $i++) {
         if(substr($string,$i,$target) eq $replace_this) {
             $string = substr($string,0,$i) . $with_this . substr($string,$i+$target);
@@ -4360,24 +4481,130 @@ sub str_replace {
 # sub moveFileToReports{
 #     my ($path) = @_;
 #     use C4::Context;
-#     
+#
 #     my $url_base=$path;
-# 
+#
 #     my @array= split(/\//,$path);
 #     my $filename= pop(@array);
-#  
+#
 #     my $context = new C4::Context;
 # #     my $reports_dir = $context->config('reports_dir');
-# 
+#
 #     my $reports_dir = C4::AR::Utilidades::getUrlPrefix()."/intranet/reports/";
 #     C4::AR::Debug::debug($reports_dir);
-# 
+#
 #     move($url_base, $reports_dir.$filename);
-#     
+#
 #     return($reports_dir.$filename);
-#     
+#
 # }
 
+=item
+sub modificarCampoGlobalmente
+
+$campo_origen Campo que se va a modifcar en TODOS los registros del nivel $nivel
+$campo_destino Campo por el cual se va a cambiar $campo_origen
+$nivel nivel donde se encuentran los campos $campo_origen y $campo_destino
+=cut
+sub modificarCampoGlobalmente {
+    my ($campo_origen, $campo_destino, $nivel) = @_;
+
+ my $registros_array_ref;
+
+    if ($nivel eq 1) {
+        $registros_array_ref = C4::AR::Nivel1::getNivel1Completo();
+    } elsif ($nivel eq 2) {
+        $registros_array_ref = C4::AR::Nivel2::getAllNivel2();
+    } elsif ($nivel eq 3) {
+        $registros_array_ref = C4::AR::Nivel3::getNivel3Completo();
+    }
+ print "Modificando el campo $campo_origen al $campo_destino del nivel $nivel \n";
+ my $st1 = time();
+ #Procesamos los registros
+ my $cantidad = scalar(@$registros_array_ref);
+ my $registro=1;
+   foreach my $nivel (@$registros_array_ref){
+         my $marc_record = MARC::Record->new_from_usmarc($nivel->getMarcRecord());
+         my $porcentaje= int (($registro * 100) / $cantidad );
+         print "Procesando registro: $registro de $cantidad ($porcentaje%) \r";
+
+        my $field = $marc_record->field($campo_origen);
+        if(($field)&&(!$marc_record->field($campo_destino))){
+            #Existe el campo y no existe el campo destino
+            my $indentificador_1        = C4::AR::Utilidades::ASCIItoHEX($field->indicator(1));
+            my $indentificador_2        = C4::AR::Utilidades::ASCIItoHEX($field->indicator(2));
+            my @subcampos_array;
+            foreach  my $subfield ($field->subfields()){
+                push(@subcampos_array, ($subfield->[0] => $subfield->[1]));
+            }
+            my $new_field = new MARC::Field($campo_destino,$indentificador_1,$indentificador_2, @subcampos_array);
+            $field->replace_with($new_field);
+             C4::AR::Debug::debug($marc_record->as_formatted);
+            $nivel->setMarcRecord($marc_record->as_usmarc);
+            $nivel->save();
+        }
+     $registro++;
+    }
+
+ #Fin Proceso
+ my $end1 = time();
+ my $tardo1=($end1 - $st1);
+ my $min= $tardo1/60;
+ print "Tardo $min minutos !!!\n";
+
+}
+
+sub translateYesNo_fromNumber{
+    my ($value) = @_;
+
+    if ($value == 1){
+        return C4::AR::Filtros::i18n('Si');
+    }else{
+        return C4::AR::Filtros::i18n('No');
+    }
+}
+
+sub translateYesNo_toNumber{
+    my ($value) = @_;
+
+    if ($value eq C4::AR::Filtros::i18n('Si')){
+        return 1;
+    }else{
+        return 0
+    }
+}
+
+sub printAjaxPercent{
+	my ($total,$actual) = @_;
+	
+	my $percent = ($actual * 100) / $total;
+
+    my $session = CGI::Session->load();
+
+    C4::AR::Auth::print_header($session);
+    print $percent;
+    
+    return ($percent);
+}
+
+sub demo_test{
+    
+    my ($job) = @_;
+    
+    use C4::AR::BackgroundJob;
+    
+    if (!$job){
+        $job = C4::AR::BackgrounJob->new("DEMO","NULL",10);        
+    }
+     
+    for (my $x=1; $x<=10; $x++){
+        sleep(1);
+        my $percent = printAjaxPercent(10,$x);
+        $job->progress($percent);
+        C4::AR::Debug::debug("-------------------------- JOB -------------- \n\n\n\n\n");
+    }
+    
+}
 
 END { }       # module clean-up code here (global destructor)
 

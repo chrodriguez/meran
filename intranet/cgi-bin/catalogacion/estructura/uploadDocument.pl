@@ -13,8 +13,8 @@ my $query       = new CGI;
 my $id2         = $query->param('id2');
 my $id1         = $query->param('id1');
 my $name        = $query->param('filename');
-my $file_name   = $query->param('file');
-my $file_data   = $query->upload('file');
+my $file_name   = $query->param('fileToUpload');
+my $file_data   = $query->upload('fileToUpload');
 my $authnotrequired = 0;
 
 C4::AR::Debug::debug("E-DOCUMENT PARA GRUPO:                 ".$id2);
@@ -35,13 +35,10 @@ my ($template, $session, $t_params) = get_template_and_user({
 
 my ($msg) = C4::AR::UploadFile::uploadDocument($file_name,$name,$id2,$file_data);
 
-C4::AR::Nivel3::detalleCompletoINTRA($id1, $t_params);
+print $session->header();
+print $msg;
 
-$t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Catalogaci&oacute;n - Detalle del &iacute;tem");
-$t_params->{'pref_e_documents'}  = C4::AR::Preferencias::getPreferencia("e_documents");
-$t_params->{'mensaje'} = $msg;
-
-C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+#C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 #C4::AR::Debug::debug($msg);
 

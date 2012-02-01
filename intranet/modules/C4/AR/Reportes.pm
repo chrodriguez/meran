@@ -1094,11 +1094,11 @@ sub registroDeUsuarios {
 	}
 	if ( ( C4::AR::Utilidades::validateString($name_to) ) ) {
 		push( @filtros,
-			( 'persona.apellido' => { eq => $name_to, lt => $name_to } ) );
+			( 'persona.apellido' => { like => $name_to.'%', lt => $name_to } ) );
 	}
 	if ( ( C4::AR::Utilidades::validateString($name_from) ) ) {
 		push( @filtros,
-			( 'persona.apellido' => { eq => $name_from, gt => $name_from } ) );
+			( 'persona.apellido' => { like => $name_from.'%', gt => $name_from } ) );
 	}
 	if ( ($anio) && ( $anio =~ /^-?[\.|\d]*\Z/ ) ) {
 		push(
@@ -1140,6 +1140,8 @@ sub registroDeUsuarios {
 		query           => \@filtros,
 		require_objects => ['persona', 'categoria'],
 	  );
+	  
+	  
 	return ( $rep_busqueda_count, $rep_busqueda );
 
 }

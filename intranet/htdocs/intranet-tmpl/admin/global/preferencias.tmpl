@@ -386,26 +386,25 @@ $(document).ready( function() {
 <fieldset id="reportes">
     <legend class="titulo_legend"> [% "Administraci&oacute;n de Preferencias del Sistema" | i18n %] </legend>
     <ul>
-        <li class="sub_item">
-            <input type="text" id="buscar" name="buscar" value="">
-            [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
-                                                                    boton   => "boton_buscar",
-                                                                    onClick => "buscarPreferencia();",
-                                                                    title   => "[% 'Buscar' | i18n %]",
-                                                                    inline  => 1,
-                                        ) ;
-            [% END %]
-        
-            [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
-                                                                    boton   => "boton_borrar",
-                                                                    onClick => "limpiar();",
-                                                                    title   => "[% 'Limpiar' | i18n %]",
-                                                                    inline  => 1,
-                                        ) ;
-            [% END %]
-        </li>
+        <li class="sub_item filtros">
+            <input type="text" id="buscar" name="buscar" >
+	            [% PERL %]
+	                                print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+	                                                                    boton   => "boton_buscar",
+	                                                                    onClick => "buscarPreferencia();",
+	                                                                    title   => "[% 'Buscar' | i18n %]",
+	                                                                    inline  => 1,
+	                                        ) ;
+	            [% END %]
+	            [% PERL %]
+	                                print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
+	                                                                    boton   => "boton_borrar",
+	                                                                    onClick => "limpiar();",
+	                                                                    title   => "[% 'Limpiar' | i18n %]",
+	                                                                    inline  => 1,
+	                                        ) ;
+	            [% END %]
+       </li>
     </ul>
 </fieldset>
 

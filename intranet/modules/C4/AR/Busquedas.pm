@@ -1856,7 +1856,7 @@ sub MARCRecordById3 {
 		my $marc_record = MARC::Record->new_from_usmarc($nivel3->nivel1->getMarcRecord());
 		$marc_record->append_fields(MARC::Record->new_from_usmarc($nivel3->nivel2->getMarcRecord())->fields());
 		
-		#Agregamos el indice
+		##Agregamos el indice
 		if ($nivel3->nivel2->tiene_indice){
 			$marc_record->append_fields(MARC::Field->new(865, '', '', 'a' => $nivel3->nivel2->getIndice));
 		}
@@ -1952,6 +1952,21 @@ sub MARCDetail{
 		#}
 	}
 
+	#EL INDICE. Hay que ver si se puede subir, asi no queda desordenado. 
+	if($nivel3_object->nivel2->tiene_indice){
+		my %hash;
+		my @info_campo_array;
+		my %hash_temp;
+		$hash_temp{'subcampo'}= 'a';
+		$hash_temp{'liblibrarian'}= 'Índice';
+		$hash_temp{'dato'}= $nivel3_object->nivel2->getIndice;
+		push(@info_campo_array, \%hash_temp);
+		$hash{'campo'}= '865';
+		$hash{'header'}= 'Índice';
+		$hash{'info_campo_array'}= \@info_campo_array;
+		push(@MARC_result_array, \%hash);
+	}
+	
 	return (\@MARC_result_array);
 	
 }

@@ -50,10 +50,12 @@ function guardarModificacionUsuario(){
     objAH.telefono          = $('#telefono').val();
     objAH.cod_categoria     = $('#categoria_socio_id').val();
     objAH.ciudad            = $('#id_ciudad').val();
+    objAH.alt_calle         = $('#alt_calle').val();
     objAH.alt_ciudad        = $('#id_alt_ciudad').val();
     objAH.alt_telefono      = $('#alt_telefono').val();
     objAH.apellido          = $('#apellido').val();
     objAH.id_ui             = $('#id_ui').val();
+    objAH.codigo_postal		= $('#codigo_postal').val();
     objAH.tipo_documento    = $('#tipo_documento_id').val();
     objAH.nro_documento     = $('#nro_documento').val();
     objAH.legajo            = $('#legajo').val();
@@ -64,7 +66,6 @@ function guardarModificacionUsuario(){
     objAH.changepassword    = ( $('#changepassword').attr('checked') )?1:0;
     objAH.cumple_requisito	= ($('#cumple_requisito').attr('checked') )?1:0;    
 	objAH.tipoAccion        = 'GUARDAR_MODIFICACION_USUARIO';
-    objAH.tema              = $('#temas_intra').val();
     objAH.auth_nombre       = $('#auth_nombre').val();
     objAH.auth_dni          = $('#auth_dni').val();
     objAH.auth_telefono     = $('#auth_telefono').val();
@@ -153,12 +154,14 @@ function agregarUsuario(){
       objAH.cod_categoria   = $('#categoria_socio_id').val();
       objAH.ciudad          = $('#id_ciudad').val();
       objAH.alt_ciudad      = $('#id_alt_ciudad').val();
+      objAH.alt_calle       = $('#alt_calle').val();
       objAH.alt_telefono    = $('#alt_telefono').val();
       objAH.apellido        = $('#apellido').val();
       objAH.id_ui           = $('#id_ui').val();
       objAH.tipo_documento  = $('#tipo_documento_id').val();
       objAH.credential_type = $('#credential').val();
       objAH.nro_documento   = $('#nro_documento').val();
+      objAH.codigo_postal   = $('#codigo_postal').val();
       objAH.legajo          = $('#legajo').val();
       objAH.institucion     = $('#institucion').val();
       objAH.carrera         = $('#carrera').val();
@@ -167,7 +170,6 @@ function agregarUsuario(){
       objAH.cumple_requisito= ($('#cumple_requisito').attr('checked') )?1:0;
       objAH.changepassword  = ($('#changepassword').attr('checked') )?1:0;
       objAH.tipoAccion      = 'AGREGAR_USUARIO';
-      objAH.tema            = $('#temas_intra').val();
 
       objAH.sendToServer();
       startOverlay();

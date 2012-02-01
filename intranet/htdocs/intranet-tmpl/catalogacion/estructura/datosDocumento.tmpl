@@ -22,7 +22,6 @@
 
 var TIENE_NIVEL_2 = 0;
 
-
 //Funcion que se ejecuta cuando se carga la pagina, dependiendo de donde viene ejecuta las funciones correspondientes.
 $(document).ready( function() {
 	//oculto todas las tabls
@@ -117,12 +116,12 @@ $(document).ready( function() {
         </li>
         <li>
             [% PERL %]
-                    print C4::AR::Filtros::to_Button(   text    => "[% 'Usar esquema' | i18n %]",
-                                                        boton   => "boton_guardar",
-                                                        onClick => "seleccionar_esquema();",
-                                                        title   => "[% 'Usar esquema' | i18n | i18n %]",
-                                                        alternClass => "botonCentrado",
-                                                        id      =>  "boton_guardar_esquema"
+                    print C4::AR::Filtros::to_Button(   text        => "[% 'Usar esquema' | i18n %]",
+                                                        boton       => "boton_guardar",
+                                                        onClick     => "guardarEsquema();",
+                                                        title       => "[% 'Usar esquema' | i18n | i18n %]",
+                                                        alternClass => "botonCentrado hidden_element",
+                                                        id          => "boton_guardar_esquema",
                             ) ;
             [% END %]
         </li>

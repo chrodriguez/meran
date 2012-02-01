@@ -513,7 +513,7 @@ sub actualizarSocio {
         eval {
             my $socio = getSocioInfoPorNroSocio($params->{'nro_socio'});
             $socio->modificar($params);
-            $socio->setThemeINTRA($params->{'tema'} || 'default');
+#            $socio->setThemeINTRA($params->{'tema'} || 'default');
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U338', 'params' => []} ) ;
         };
 
@@ -668,7 +668,7 @@ sub getSocioLike {
     $orden = "apellido,nombre";
     my $ordenAux= $socioTemp->sortByString($orden);
     
-    $ordenAux = 'agregacion_temp,'.$ordenAux;
+   # $ordenAux = 'agregacion_temp,'.$ordenAux;
     
     my $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
                                                                             sort_by => $ordenAux,
@@ -1066,7 +1066,7 @@ sub updateUserProfile{
 	eval{
 		$socio->persona->setEmail($params->{'email'});
         $socio->setLocale($params->{'language'});
-        $socio->setThemeINTRA($params->{'temas_intra'});
+        #$socio->setThemeINTRA($params->{'temas_intra'});
         #SAVE DATA
 		$socio->persona->save();
 		$socio->save();

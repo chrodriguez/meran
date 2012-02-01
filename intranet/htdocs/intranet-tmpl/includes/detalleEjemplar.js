@@ -165,6 +165,17 @@ function updateInfoMARC(responseText){
         
 }
 
+function verNota(id3){
+    $('#nota_ejemplar_'+id3).modal({   containerCss:{
+            backgroundColor:"#fff",
+    //         borderColor:"#0063dc",
+            height:"500px",
+            padding:"1",
+            width:"800px",
+        },
+    });
+}
+
 function verDivs(){
 	$('#detalleComun').slideDown("slow");
 	$('#detalleComun').show();
@@ -334,7 +345,7 @@ function updateInfoPrestarReserva(responseText){
 	ejemplaresDelGrupo(ID_N2);
 }
 
- function generarVariasEtiquetas(){
+ function generarVariasEtiquetas(id2){
 //             var selectedItems = new Array();
 //             $('#checkEjemplares:checked').each(function(){
 //                                                   selectedItems.push($(this).val());
@@ -354,7 +365,7 @@ function updateInfoPrestarReserva(responseText){
              if (selectedItems.length == 0) {
                         jAlert('Debe seleccionar al menos un ejemplar','Advertencia de catalogo');
              }else{  
-                    $('#tablaEjemplares').submit();
+                    $('#tablaEjemplares'+id2).submit();
              }
 
  }

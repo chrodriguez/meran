@@ -1,0 +1,94 @@
+[% USE HTML %]
+<script src="/includes/jquery/jquery.jeditable.js"></script>
+<script src="/intranet-tmpl/includes/visualizacionINTRA-min.js"></script>
+<script type="text/javascript">
+      var loaderPath= "";
+      $(document).ready(function() {
+        loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>'
+        makeDataTable('#tablaResult');
+        loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
+        $('.editable').editable('[% url_prefix %]/herramientas/importacion/esquemas_importacionDB.pl', { 
+              type      : 'text',
+              tooltip   : EDITABLE_MSG,
+              placeholder: EDITABLE_MSG,
+              style   : 'display: inline',
+              submitdata : {token: "[% token %]", edit: '1'},
+              indicator : loaderPath,
+              callback: function(){makeDataTable('#tablaResult');},
+
+        });
+
+        $('.tabs').tabs();
+
+      });
+</script>
+
+[% IF info_esquema %]
+	<div id="tabla_referencia">
+	    <fieldset class="resultados_busqueda">
+	        <legend class="titulo_legend trigger">[% "Esquema " | i18n %] [% HTML.escape(esquema_title) %]</legend>
+	                <div class="datos_tabla_div" id="datos_tabla_div_esquema">
+	                    <table id="tabla_esquema" class="datos_tabla" border=0 cellspacing=0 cellpadding=0>
+	                        <thead>
+	                            <tr class="titulo_tabla_resultado">
+	                                <th class=""> [% 'Nombre' | i18n %]</th>
+	                                <th class=""> [% 'Descripci&oacute;n' | i18n %]</th>
+	                                <th class=""> [% 'Eliminar' | i18n %]</th>
+	                            </tr>
+	                        </thead>
+	                        <tbody>
+	                             <tr>
+	                                <td class="editable_esquema" id="[% info_esquema.id %]___nombre">[% HTML.escape(info_esquema.getNombre) %]</td>
+	                                <td class="editable_esquema" id="[% info_esquema.id %]___desc">[% HTML.escape(info_esquema.getDescripcion) %]</td>
+	                                <script>
+	                                    $('.editable_esquema').editable('[% url_prefix %]/herramientas/importacion/esquemas_importacionDB.pl', { 
+	                                        type      : 'text',
+	                                        style   : 'display: inline',
+	                                        submitdata : {token: "[% token %]", edit: '1', edit_esquema: '1'},
+	                                        indicator : loaderPath,
+	
+	                                   }); 
+	                                </script>
+	                                <script>
+	                                    $('.editable_esquema').editable('[% url_prefix %]/herramientas/importacion/esquemas_importacionDB.pl', { 
+	                                        type      : 'text',
+	                                        style   : 'display: inline',
+	                                        submitdata : {token: "[% token %]", edit: '1', edit_esquema: '1'},
+	                                        indicator : loaderPath,
+	
+	                                   }); 
+	                                </script>
+	                                <td>
+	                                    [% PERL %]
+	                                        print C4::AR::Filtros::to_Icon(  
+	                                                                            boton   => "icon_cancelar",
+	                                                                            onClick => "eliminarEsquema('[% info_esquema.id %]');",
+	                                                                            title   => "[% 'Eliminar Esquema' | i18n %]",
+	                                                                            alternClass => "botonCentradoTabla",
+	                                                                            elem => 'span',
+	                                                                            style => 'float: left;',
+	                                                ) ;
+	                                    [% END %]
+	                                </td>
+	                             </tr>
+	                        </tbody>
+	                    </table>
+	                </div>
+	        <div class="mensajes_informacion" style="clear:both;"> [% table_error_message_esquema %] </div>
+	    </fieldset>
+	</div>
+
+
+	<ul class="tabs">
+	  <li class="active"><a href="#split_campos">[% 'Separaci&oacute;n de Campos' | i18n %]</a></li>
+	  <li><a href="#join_campos">[% 'Uni&oacute;n de Campos' | i18n %]</a></li>
+	</ul>
+	 
+	<div class="pill-content">
+	  <div class="active" id="split_campos">[% INCLUDE 'herramientas/importacion/_detalle_esquema.inc' %]</div>
+	  <div id="join_campos"></div>
+	</div>
+	
+
+[% END %]
+

@@ -440,7 +440,10 @@ sub detalleNivel3{
         #soy una ANALITICA tengo q obtener el ID2 del campo 773, a para obtener el ID1, link al registro padre
 #             C4::AR::Debug::debug("Nivel3 => detalleNivel3 => getAnalitica => ".$nivel2_object->getAnalitica());
             my $nivel2_object_padre             = C4::AR::Nivel2::getNivel2FromId2($nivel2_object->getAnalitica(),$db);
-            $hash_nivel2{'nivel1_padre'}        = $nivel2_object_padre->getId1();
+
+            if($nivel2_object_padre){
+                $hash_nivel2{'nivel1_padre'}        = $nivel2_object_padre->getId1();
+            }
         }
 
         #otengo las analiticas
@@ -464,9 +467,9 @@ sub detalleNivel3{
 	
 	                $hash_nivel1_aux{'nivel1_analitica'}        = $n1_object->toMARC_Intra;
 	                push(@nivel1_analitica_array, \%hash_nivel1_aux);
-#Esto mostraba cosas de más, perdón Mike.
-                $hash_nivel2_aux{'nivel2_analitica'}        = $n2_object->toMARC_Intra;
-                push(@nivel2_analitica_array, \%hash_nivel2_aux);
+                    #Esto mostraba cosas de más, perdón Mike.
+                    $hash_nivel2_aux{'nivel2_analitica'}        = $n2_object->toMARC_Intra;
+                    push(@nivel2_analitica_array, \%hash_nivel2_aux);
                 }
                 
             }
@@ -556,24 +559,24 @@ sub detalleCompletoINTRA {
     
     for(my $i=$inicio;$i<$cantidad;$i++){
 
-    my $new_id2 = 0;
-    eval {
-    	$new_id2 = $nivel2_array_ref->[$i]->getId2;
-    };
+        my $new_id2 = 0;
+        eval {
+            $new_id2 = $nivel2_array_ref->[$i]->getId2;
+        };
     #eval{
         my ($hash_nivel2) = detalleNivel3($new_id2,$nivel1->db);
             
-            #Para ver la portada en el detalle
-            $hash_nivel2->{'portada_registro'}          = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'S');
-            $hash_nivel2->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'M');
-            $hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'L');
-            
-            #Para el google book preview
-            $hash_nivel2->{'isbn'}        		        = $nivel2_array_ref->[$i]->getISBN;
-            if(($nivel2_array_ref->[$i]->getISSN)&&(!$t_params->{'issn'})){
-			#Se supone que no cambian dentro de la misma publicación seriada, se toma solo el primero
-				$t_params->{'issn'}        				= $nivel2_array_ref->[$i]->getISSN;
-			}
+        #Para ver la portada en el detalle
+        $hash_nivel2->{'portada_registro'}          = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'S');
+        $hash_nivel2->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'M');
+        $hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'L');
+        
+        #Para el google book preview
+        $hash_nivel2->{'isbn'}        		        = $nivel2_array_ref->[$i]->getISBN;
+        if(($nivel2_array_ref->[$i]->getISSN)&&(!$t_params->{'issn'})){
+        #Se supone que no cambian dentro de la misma publicación seriada, se toma solo el primero
+            $t_params->{'issn'}        				= $nivel2_array_ref->[$i]->getISSN;
+        }
 			
         push(@nivel2, $hash_nivel2);
     #};

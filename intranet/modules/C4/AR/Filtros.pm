@@ -159,7 +159,7 @@ sub to_Button__{
         $button .= ' title="'.$title.'"';
     }
 
-    if($id){
+    if(C4::AR::Utilidads::validateString($id)){
         $button .= ' id="'.$id.'"';
     }
     
@@ -218,17 +218,15 @@ sub to_Button{
     if($title){
     }
 
-    if($id){
-    }
     if ($type){
         $type = "type= ".$type;
     }
     
     if (!$show_inline){
-        $button .=  '<p style="text-align: center; margin: 0">';
+        $button .=  '<p style="text-align: center; margin: 0;">';
     }
 
-    $button .=  '<button class="'.$boton.'" onclick="'.$onclick.'" '.$type.'>'.$text.'</button>';
+    $button .=  '<button id="'.$id.'" class="'.$boton.' '.$alternClass.'" onclick="'.$onclick.'" '.$type.'>'.$text.'</button>';
     
     if (!$show_inline){
         $button .=  '</p>';

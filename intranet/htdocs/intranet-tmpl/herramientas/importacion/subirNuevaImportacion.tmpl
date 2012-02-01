@@ -1,0 +1,128 @@
+[% INCLUDE 'intranet-top.inc' %]
+
+<script type="text/javascript">
+
+	function uploadFile(url) {
+	    previousBytesLoaded = 0;
+	    ID2_file = 1;
+	    document.getElementById('uploadResponse_1').style.display = 'none';
+	    document.getElementById('progressNumber_1').innerHTML = '';
+	    var progressBar = document.getElementById('progressBar_1');
+	    progressBar.style.display = 'block';
+	    progressBar.style.width = '0px';
+	
+	    /*
+	     * If you want to upload only a file along with arbitary data that is not in
+	     * the form, use this
+	     */
+	    var fd = new FormData();
+	    fd.append("titulo", document.getElementById('titulo').value);
+	    fd.append("upfile", document.getElementById('fileToUpload_1').files[0]);
+        fd.append("formatoImportacion",document.getElementById('formatoImportacion').value);
+        fd.append("comentario",document.getElementById('comentario').value);
+        if (document.getElementById('esquemaImportacion'))
+            fd.append("esquemaImportacion",document.getElementById('esquemaImportacion').value);
+        fd.append("nuevo_esquema",document.getElementById('nuevo_esquema').value);
+        if (document.getElementById('nombreEsquema'))
+            fd.append("nombreEsquema",document.getElementById('nombreEsquema').value);
+        
+	    
+	
+	    /* If you want to simply post the entire form, use this */
+	    // var fd = document.getElementById('form1').getFormData();
+	    xhr = new XMLHttpRequest();
+	    xhr.upload.addEventListener("progress", uploadProgress, false);
+	    xhr.addEventListener("load", uploadComplete, false);
+	    xhr.addEventListener("error", uploadFailed, false);
+	    xhr.addEventListener("abort", uploadCanceled, false);
+	    xhr.open("POST", url);
+	    xhr.send(fd);
+	
+	    intervalTimer = setInterval(updateTransferSpeed, 500);
+	}
+
+      $(document).ready(function() {
+        $('#nuevo_esquema').click (
+            function() {
+              if ($('#nuevo_esquema').attr('checked')){
+                    $('#esquema_nuevo').show();
+                    $('#seleccionar_esquema').hide();
+                  }
+                 else{
+                     $('#esquema_nuevo').hide();
+                     $('#seleccionar_esquema').show();
+                     }
+            }
+        );
+      });
+</script>
+<fieldset>
+<legend><strong>[% "Nueva Importaci&oacute;n:" | i18n %]</strong></legend>
+
+<div class="fileUploader_catalogo" style="width: 100%;">
+	<form id="uploadfile" action="subirNuevaImportacion.pl" enctype="multipart/form-data" method="POST" style="width:80%;">
+		<fieldset class="rows" id="import">
+			 <ol>
+			      <li class="sub_item">
+			      <label>Título del archivo: </label>
+			      <input type="text" name="titulo" id="titulo" >
+			      </li>
+			      <li class="sub_item">
+			        <label>Archivo: </label>
+			        <input type="file" name="upfile" id="fileToUpload_1" required accept="iso,xml" onchange="fileSelected(1);">
+
+			      </li>
+			      <li class="sub_item">
+			        <label>Formato: </label>
+			        [% combo_formatos %]
+			      </li>
+			      <li class="sub_item">
+			        <label>Comentario: </label>
+			        <input type="text" name="comentario" id="comentario">
+			      </li>
+			      <li class="sub_item" id='seleccionar_esquema'>
+			        <label>Seleccionar Esquema: </label>
+			        [% IF combo_esquemas %][% combo_esquemas %][% ELSE %] [% 'No hay ning&uacute;n esquema definido.' %][% END %]
+			      </li>
+			      <li class="sub_item" id='esquema_nuevo' style="display: none;">
+			        <label>Nombre Nuevo Esquema: </label>
+			        <input type="text" name="nombreEsquema" id="nombreEsquema" > ([% 'Si se deja en blanco se utiliza el nombre del archivo' | i18n %].)
+			      </li>
+			       <li class="sub_item">
+			        <label>Generar Nuevo Esquema: </label>
+			        <input type="checkbox" name="nuevo_esquema" id="nuevo_esquema">
+			      </li>
+		      
+			 </ol>
+             <div class="row">
+               <input type="button" onclick="uploadFile('[% url_prefix %]/herramientas/importacion/subirNuevaImportacion.pl')" value="[% 'Subir' | i18n %]" />
+             </div>
+             <div style="margin: 0 auto; width: 50%;">
+              <div id="fileInfo_1" class="fileInfo">
+                <div id="fileName_1" class="fileName"></div>
+                <div id="fileSize_1" class="fileSize"></div>
+                <div id="fileType_1" class="fileType"></div>
+              </div>
+              <div class="row"></div>
+              <div id="progressIndicator_1" clas="progressIndicator" > 
+                <div id="progressBar_1" class="floatLeft progressBar">
+                </div>
+                <div id="progressNumber_1" class="floatRight">&nbsp;</div>
+                <div>
+                  <div id="transferSpeedInfo_1" class="floatLeft" style="width: 80px;">&nbsp;</div>
+                  <div id="timeRemainingInfo_1" class="floatLeft" style="margin-left: 10px;">&nbsp;</div>
+                  <div id="transferBytesInfo_1" class="floatRight" style="text-align: right;">&nbsp;</div>
+                </div>    
+                <div id="uploadResponse_1" class="uploadResponse"></div>
+               </div> 
+             </div>
+		</fieldset>
+		
+	</form>
+</div>
+
+
+</fieldset>
+
+[% INCLUDE 'intranet-bottom.inc' %]
+

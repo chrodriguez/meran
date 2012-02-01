@@ -3,7 +3,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 	    $("#temas_intra").change(function() {
-            $("link").attr("href","[% temas %]/"+$("#temas_intra").val()+"/includes/completo.css");
+            $("link").attr("href","[% temas %]/"+$("#temas_intra").val()+"/includes/intranet.css");
 	        return false;
 	    });
 	});
@@ -25,12 +25,6 @@
                                     <strong>[% "Idioma" | i18n %]</strong>
                                 </label>
                                 [% languages %]
-                            </li>
-                            <li class="sub_item">
-                                <label for="temas_intra">
-                                    <strong>[% "Tema" | i18n %]</strong>
-                                </label>
-                                [% combo_temas_intra %]
                             </li>
 	                        <li class="sub_item">
 	                            <label for="email">

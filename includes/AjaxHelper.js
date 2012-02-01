@@ -31,14 +31,17 @@ function closeModal(){
 function _Init(options){
 
     if(options.showStatusIn != ''){
-        $('#' + options.showStatusIn).addClass('cargando');
+    	if (options.offIndicator != true)
+    		$('#' + options.showStatusIn).addClass('cargando');
 // //         window.console.log("agrego cargando en " + options.showStatusIn);
     }else{
 
         if(options.showOverlay){
     		startOverlay();
-        } else {
+        } else {         
+           if (options.showState){
             _ShowState(options);
+           }
         }
     }
     
@@ -131,10 +134,11 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 	this.debugJSON      = false;			//para debuguear jsonStringify (JSON)
 	this.onComplete     = fncUpdateInfo;  	//se ejecuta cuando se completa el ajax
 	this.onBeforeSend   = fncInit;		    //se ejecuta antes de consultar al servidor con ajax
-	this.showState      = true;
+ 	this.showState      = true;
 	this.cache          = false; 			//para cachear los resultados
 	this.showStatusIn   = '';               //muestra el estado del AJAX en el DIV pasado por parametro
 	this.showOverlay    = false;            //muestra el overlay y bloquea la pantalla luego de hacer una peticion AJAX
+// 	this.showState      = false;
 	this.autoClose      = true;             //cierra automaticamente el overlay
 	this.async          = true;             //asincronico por defecto
 
@@ -197,7 +201,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
                       
 						if(helper.showState){
 						//muestra el estado del AJAX
-                            _Init({debug: helper.debug, showStatusIn: helper.showStatusIn, showOverlay: helper.showOverlay});
+                            _Init({debug: helper.debug, showStatusIn: helper.showStatusIn, showOverlay: helper.showOverlay, offIndicator: helper.offIndicator});
 						}
 
 						if(helper.onBeforeSend){

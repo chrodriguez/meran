@@ -29,19 +29,21 @@ use Image::Resize;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(
-		uploadPhoto
-	 	deletePhoto
-		uploadFile
-		deleteDocument
-	);
+        uploadPhoto
+        deletePhoto
+        uploadFile
+        deleteDocument
+        uploadImport
+        deleteImport
+    );
 
 my $picturesDir = C4::Context->config("picturesdir");
 
 sub uploadPhoto{
-	my ($query) = @_;
+    my ($query) = @_;
 
     use C4::Modelo::UsrSocio;
-    
+
     my $uploaddir       = C4::Context->config("picturesdir");
     my $uploaddir_oapc  = C4::Context->config("picturesdir_opac");
     my $maxFileSize     = 2048 * 2048; # 1/2mb max file size...
@@ -50,12 +52,12 @@ sub uploadPhoto{
     my $name            = $nro_socio;
     my $socio           = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
     my $type            = '';
-    
-    
+
+
     if (C4::AR::Auth::getSessionType() eq "opac"){
-    	$uploaddir = $uploaddir_oapc;
+        $uploaddir = $uploaddir_oapc;
     }
-     
+
     if ($file =~ /^GIF/i) {
         $type = "jpg";
     } elsif ($file =~ /PNG/i) {
@@ -67,15 +69,15 @@ sub uploadPhoto{
     }
 
     if ($socio->tieneFoto){
-    	unlink($socio->tieneFoto);
+        unlink($socio->tieneFoto);
     }
     if (!$type) {
         print qq|{ "success": false, "error": "Invalid file type..." }|;
         print STDERR "file has been NOT been uploaded... \n";
     }
-    
+
     $type = "jpg";
-    
+
     open(WRITEIT, ">$uploaddir/$name.$type") or die "Cant write to $uploaddir/$name.$type. Reason: $!";
         print WRITEIT $file;
     close(WRITEIT);
@@ -85,7 +87,7 @@ sub uploadPhoto{
     print STDERR qq|Main filesize: $check_size  Max Filesize: $maxFileSize \n\n|;
 
     print $query->header();
-    
+
     if ($check_size < 1) {
         print STDERR "ooops, its empty - gonna get rid of it!\n";
         print qq|{ "success": false, "error": "File is empty..." }|;
@@ -97,60 +99,60 @@ sub uploadPhoto{
     } else  {
         print qq|{ "success": true }|;
         print STDERR "file has been successfully uploaded... thank you.\n";
- 
+
     }
-    
+
 
 }
 
 sub deletePhoto{
-	my ($foto_name) = @_;
+    my ($foto_name) = @_;
 # TODO falta verificar permisos
-	my $msg_object  = C4::AR::Mensajes::create();
-	
-# 	if (open(PHOTO,">>".$picturesDir.'/'.$foto_name)){
+    my $msg_object  = C4::AR::Mensajes::create();
+
+#   if (open(PHOTO,">>".$picturesDir.'/'.$foto_name)){
 C4::AR::Debug::debug("UploadFile => deletePhoto => ".C4::AR::Utilidades::trim($picturesDir."/".$foto_name));
-	if (unlink(C4::AR::Utilidades::trim($picturesDir."/".$foto_name))) { 
-		$msg_object->{'error'}= 0;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U344', 'params' => []} ) ;	
-	}else{
-		$msg_object->{'error'}= 1;
-		C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U345', 'params' => []} ) ;	
-	}
-		
-	return ($msg_object);
+    if (unlink(C4::AR::Utilidades::trim($picturesDir."/".$foto_name))) {
+        $msg_object->{'error'}= 0;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U344', 'params' => []} ) ;
+    }else{
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U345', 'params' => []} ) ;
+    }
+
+    return ($msg_object);
 }
 
 sub uploadFile{
 
     my ($prov,$write_file,$filepath, $presupuestos_dir) = @_;
-    my $bytes_read; 
+    my $bytes_read;
     my $msg                     = '';
     my $size                    = 0;
     my $msg_object              = C4::AR::Mensajes::create();
     my @extensiones_permitidas  = ("odt","xls");
-  
+
     my @nombreYextension        = split('\.',$filepath);
-   
-    if (scalar(@nombreYextension)==2) { 
-    
+
+    if (scalar(@nombreYextension)==2) {
+
     # verifica que el nombre del archivo tenga el punto (.)
             my $ext         = @nombreYextension[1];
             my $buff        = '';
-           
+
     #         if (!grep(/$ext/i,@extensiones_permitidas)) {
     #             $msg_object->{'error'}= 1;
     #             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U341', 'params' => []} ) ;
-    #             C4::AR::Debug::debug("UploadFile => uploadPhoto => error U341");    
-    #         } else 
+    #             C4::AR::Debug::debug("UploadFile => uploadPhoto => error U341");
+    #         } else
     #         {
-    #     
+    #
             if ((open(WFD,">$write_file"))) {
     #                 $msg_object->{'error'}= 1;
-    #                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U342', 'params' => []} ) ;  
-    #                 C4::AR::Debug::debug("UploadFile => uploadPhoto => error U342");    
+    #                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U342', 'params' => []} ) ;
+    #                 C4::AR::Debug::debug("UploadFile => uploadPhoto => error U342");
     #             }
-    #             else    
+    #             else
     #             {
                     while ($bytes_read=read($filepath,$buff,2096)) {
 #                         C4::AR::Debug::debug("ESCRIBIENDO: ".$bytes_read);
@@ -171,13 +173,13 @@ sub uploadDocument {
     my $msg='';
     my $bytes_read;
     my $size= 0;
-    
+
     my $showName = $name;
-    
+
     if (!C4::AR::Utilidades::validateString($showName)){
-    	$showName = $file_name;
+        $showName = $file_name;
     }
-    
+
     my @nombreYextension=split('\.',$file_name);
 
     use Digest::MD5;
@@ -198,17 +200,17 @@ sub uploadDocument {
         }elsif (scalar(@nombreYextension)>=2) { # verifica que el nombre del archivo tenga el punto (.)
             my $ext= @nombreYextension[$size];
             my $buff='';
-            
+
             $name = @nombreYextension[0];
             my $file_type = $ext;
             my $hash_unique = Digest::MD5::md5_hex(localtime());
             my $file_name = $name.".".$ext."_".$hash_unique;
             my $write_file= $eDocsDir."/".$file_name;
-                                                                                                                                
+
             if (!open(WFD,">$write_file")) {
                     $msg="Hay un error y el archivo no puede escribirse en el servidor.";
             }else{
-            	my $size = 0;
+                my $size = 0;
                 while ($bytes_read=read($file_data,$buff,2096,0)) {
                         $size += $bytes_read;
                         binmode WFD;
@@ -250,7 +252,7 @@ sub deleteDocument {
         my $file = C4::AR::Catalogacion::getDocumentById($file_id);
 
         my $write_file= $eDocsDir."/".$file->getFilename;
-                                                                                                                                
+
         if (!open(WFD,"$write_file")) {
                 $msg=C4::AR::Filtros::i18n("Hay un error y el archivo no puede eliminarse del servidor.");
         }else{
@@ -263,4 +265,129 @@ sub deleteDocument {
     }
 
     return($msg);
+}
+
+
+sub uploadImport {
+
+    my ($params)=@_;
+
+    my $importsDir  = C4::Context->config("importsdir");
+    my $msg_object  = C4::AR::Mensajes::create();
+    $msg_object->{'error'}= 0;
+    #my $msg='';
+    my $bytes_read;
+    my $size= 0;
+
+    my $showName = $params->{'titulo'};
+
+    if (!C4::AR::Utilidades::validateString($showName)){
+        $showName = $params->{'file_name'};
+    }
+
+    my @nombreYextension=split('\.',$params->{'file_name'});
+
+    use Digest::MD5;
+#Para chequeos de tamaño
+# my $maxFileSize = 2048 * 2048; # 1/2mb max file size...
+# my $check_size = -s "$uploaddir/$name.$type";
+#if ($check_size > $maxFileSize) { blabla }
+
+
+        my @extensiones_permitidas=("iso","xml");
+        my $size = scalar(@nombreYextension) - 1;
+        my $ext= @nombreYextension[$size];
+
+        if (!grep(/$ext/i,@extensiones_permitidas)) {
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP00', 'params' => [join(", ",@extensiones_permitidas)]});
+            #$msg= "Solo se permiten archivos del tipo (".join(", ",@extensiones_permitidas).") [Fallo de extension]";
+        }elsif (scalar(@nombreYextension)>=2) { # verifica que el nombre del archivo tenga el punto (.)
+            my $ext= @nombreYextension[$size];
+            my $buff='';
+
+            my $name = @nombreYextension[0];
+            my $file_type = $ext;
+            my $hash_unique = Digest::MD5::md5_hex(localtime());
+            $params->{'file_name'} = $name.".".$ext."_".$hash_unique;
+            my $write_file= $importsDir."/".$params->{'file_name'};
+
+            if (!open(WFD,">$write_file")) {
+                    #$msg="Hay un error y el archivo no puede escribirse en el servidor.";
+                    $msg_object->{'error'}= 1;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP01', 'params' => []});
+            }else{
+                my $size = 0;
+                while ($bytes_read=read($params->{'file_data'},$buff,2096,0)) {
+                        $size += $bytes_read;
+                        binmode WFD;
+                        print WFD $buff;
+                }
+                close(WFD);
+
+                my $isValidFileType = C4::AR::Utilidades::isValidFile($write_file);
+
+                if ( !$isValidFileType )
+                {
+                    $msg_object->{'error'}= 1;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP00', 'params' => [join(", ",@extensiones_permitidas)]});
+                    unlink($write_file);
+                }else
+                {
+                    eval {
+                        #$msg= "El archivo ".$name.".$ext ($showName) se ha cargado correctamente";
+                        $params->{'showName'}=$showName;
+                        $params->{'isValidFileType'}=$isValidFileType;
+                        $params->{'write_file'}=$write_file;
+
+                        C4::AR::ImportacionIsoMARC::guardarNuevaImportacion($params,$msg_object);
+                        if ($msg_object->{'error'} eq 0){
+                            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP02', 'params' => [$name.$ext,$showName]});
+                        } else{
+                            #Si no se pudo guardar la importacion, se borra el archivo.
+                             unlink($write_file);
+                            }
+                    };
+                    if ($@){
+                        #Se loguea error de Base de Datos
+                        &C4::AR::Mensajes::printErrorDB($@, 'B454',"INTRA");
+                        #Si no se pudo guardar la importacion, se borra el archivo.
+                        unlink($write_file);
+                        #Se setea error para el usuario
+                        $msg_object->{'error'}= 1;
+                        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP03', 'params' => []} ) ;
+                    }
+                }
+            }
+        }else{
+            #$msg= C4::AR::Filtros::i18n("El nombre del archivo no tiene un formato correcto.");
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP04', 'params' => []} ) ;
+        }
+
+    return($msg_object);
+}
+
+sub deleteImport {
+
+    my ($params)=@_;
+    my $importsDir= C4::Context->config("importsdir");
+    my $msg_object  = C4::AR::Mensajes::create();
+    $msg_object->{'error'}= 0;
+
+    my $file_id = $params->{'id'};
+
+    my $file = C4::AR::ImportacionIsoMARC::getImportacionById($file_id);
+        my $write_file= $importsDir."/".$file->getArchivo;
+        if (!open(WFD,"$write_file")) {
+                #$msg=C4::AR::Filtros::i18n("Hay un error y el archivo no puede eliminarse del servidor.");
+                $msg_object->{'error'}= 1;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP05', 'params' => []} ) ;
+        }else{
+            unlink($write_file);
+            #$msg= C4::AR::Filtros::i18n("El archivo ").$file->getTitle.C4::AR::Filtros::i18n(" se ha eliminado correctamente");
+            $msg_object->{'error'}= 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP06', 'params' => [$file->getNombre]} ) ;
+        }
+    return($msg_object);
 }
