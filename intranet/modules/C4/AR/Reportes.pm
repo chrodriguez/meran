@@ -1120,7 +1120,7 @@ sub registroDeUsuarios {
 	if ( ( ( $limit == 0 ) && ( $offset == 0 ) ) || ($total) ) {
 		($rep_busqueda) = C4::Modelo::UsrSocio::Manager->get_usr_socio(
 			query           => \@filtros,
-			require_objects => ['persona'],
+			require_objects => ['persona', 'categoria'],
 			select          => [ '*', 'persona.*' ],
 		);
 	}
@@ -1128,7 +1128,7 @@ sub registroDeUsuarios {
 
 		($rep_busqueda) = C4::Modelo::UsrSocio::Manager->get_usr_socio(
 			query           => \@filtros,
-			require_objects => ['persona'],
+			require_objects => ['persona', 'categoria'],
 			select          => [ '*', 'persona.*' ],
 			limit           => $limit,
 			offset          => $offset,
@@ -1138,7 +1138,7 @@ sub registroDeUsuarios {
 	my ($rep_busqueda_count) =
 	  C4::Modelo::UsrSocio::Manager->get_usr_socio_count(
 		query           => \@filtros,
-		require_objects => ['persona'],
+		require_objects => ['persona', 'categoria'],
 	  );
 	return ( $rep_busqueda_count, $rep_busqueda );
 
