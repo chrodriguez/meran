@@ -1184,11 +1184,13 @@ function procesarInfoJson(marc_object_array, id_padre){
             strIndicadores = strIndicadores + "<li>" + crearSelectIndicadoresSecundarios(campo_marc_conf_obj, id_aux) + "</li>";
         }
 
-        strIndicadores = strIndicadores + "<div class='buttonContainerHorizontal'>";
+        strIndicadores = strIndicadores + "<p style='text-align: center; margin: 0;'><button id='' class='clean-gray botonCentrado' 0='' onclick='guardar_indicadores(" + id_div_indicadores + ", " + id_aux +");'>Aceptar</button>";
+        strIndicadores = strIndicadores + "<button id='' class='clean-gray botonCentrado' 0='' onclick='close_alta_indicador();'>Cancelar</button></p>";
+//         strIndicadores = strIndicadores + "<div class='buttonContainerHorizontal'>";
 
-        strIndicadores = strIndicadores + "<li onclick='guardar_indicadores(" + id_div_indicadores + ", " + id_aux +");' class='click boton_medio horizontal'><div class='boton_guardar'></div><div class='boton_der'></div><div class='boton_texto'>Aceptar</div></li>";
+//         strIndicadores = strIndicadores + "<li onclick='guardar_indicadores(" + id_div_indicadores + ", " + id_aux +");' class='click boton_medio horizontal'><div class='boton_guardar'></div><div class='boton_der'></div><div class='boton_texto'>Aceptar</div></li>";
 
-        strIndicadores = strIndicadores + "<li onclick='close_alta_indicador();' class='click boton_medio horizontal'><div class='boton_salir'></div><div class='boton_der'></div><div class='boton_texto'>Cancelar</div></li>";
+//         strIndicadores = strIndicadores + "<li onclick='close_alta_indicador();' class='click boton_medio horizontal'><div class='boton_salir'></div><div class='boton_der'></div><div class='boton_texto'>Cancelar</div></li>";
 
         //cierro UL de indicadores
         strComp = strComp + strIndicadores + "</ul>";

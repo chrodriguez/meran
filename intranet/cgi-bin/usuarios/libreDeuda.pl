@@ -62,7 +62,7 @@ if (!($msg_object->{'error'})){
 
         $t_params->{'fecha'}            = "La Plata ".$dia." de ".$mes." de ".$anio;
         $t_params->{'biblio'}           = $biblio;
-        
+        C4::AR::Utilidades::printHASH($biblio);
         use Encode;
         $t_params->{'cuerpo_mensaje'}   = Encode::decode_utf8($cuerpo_mensaje);
         
