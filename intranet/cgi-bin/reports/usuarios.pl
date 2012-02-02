@@ -3,7 +3,6 @@ use strict;
 require Exporter;
 use C4::AR::Auth;
 use CGI;
-use C4::AR::MensajesContacto;
 
 my $query = new CGI;
 
