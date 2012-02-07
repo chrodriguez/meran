@@ -1198,7 +1198,7 @@ function procesarInfoJson(marc_object_array, id_padre){
 
         //genero el header para el campo q contiene todos los subcampos
 //         strComp = strComp + "<div id='marc_group" + id_temp + "'><li id='trigger_" + id_temp + "' class='MARCHeader click trigger trigger_" + id_temp + "'>";
-        strComp = strComp + "<div id='marc_group" + id_temp + "'><li class='MARCHeader'>";
+        strComp = strComp + "<div id='marc_group" + id_temp + "' class='row' style='width: 80%;'><li class='MARCHeader'>";
         strComp = strComp + "<div class='MARCHeader_info'>";
 
         //header LEFT
@@ -1221,13 +1221,16 @@ function procesarInfoJson(marc_object_array, id_padre){
             //cierro div CENTER
             strComp = strComp + "</div>";
             //header RIGHT
-            strComp = strComp + "<div style='width:4%;float:right'>";
+            strComp = strComp + "<div style='float:right'>";
             campo_marc_conf_obj.setIdCompCliente("marc_group" + id_temp);
-            strComp = strComp + crearBotonAgregarCampoRepetible(campo_marc_conf_obj, id_temp);
-//             NO ANDA VER ESTO
+           
+            //strComp = strComp + crearBotonAgregarCampoRepetible(campo_marc_conf_obj, id_temp);
+            //strComp = strComp + crearBotonEliminarCampoRepetible(campo_marc_conf_obj);  
+            var id = "marc_group" + id_temp + "_buttons";
+            strComp = strComp + openDivButtonContainer(id,'campo');
             
-            strComp = strComp + crearBotonEliminarCampoRepetible(campo_marc_conf_obj);  
             strComp = strComp + "</div>";
+            
         } else {
             //cierro div CENTER si no es repetible
             strComp = strComp + "</div>";
@@ -1248,7 +1251,10 @@ function procesarInfoJson(marc_object_array, id_padre){
             //estoy clonando un campo
             $(strComp).insertAfter($("#" + id_padre));
         }
-        
+
+        $("#marc_group" + id_temp + "_buttons_lista").append(crearBotonAgregarCampoRepetible(campo_marc_conf_obj,id));
+        $("#marc_group" + id_temp + "_buttons_lista").append(crearBotonEliminarCampoRepetible(campo_marc_conf_obj,id));
+
         //seteo los datos de los indicadores
         $("#select_indicador_primario" + MARC_OBJECT_ARRAY.length).val(campo_marc_conf_obj.getIndicadorPrimarioDato());
         $("#select_indicador_secundario" + MARC_OBJECT_ARRAY.length).val(campo_marc_conf_obj.getIndicadorSecundarioDato());
@@ -1362,6 +1368,10 @@ function procesarSubCampo(objeto, marc_group){
     var divComp             = crearDivComponente("div"+marc_conf_obj.getIdCompCliente());
     var tiene_estructura    = marc_conf_obj.getTieneEstructura(); //falta q los niveles 1, 2, 3 mantengan esta estructura
       
+    var content_div_open= "<div class=control-group>";
+    var content_div_close= "</div>";
+    var controls_div= "<div class=controls>";
+    
 
     if(marc_conf_obj.getObligatorio() == "1"){  
         vista_intra = vista_intra + "<b> * </b>";
@@ -1375,11 +1385,11 @@ function procesarSubCampo(objeto, marc_group){
         vista_intra         = vista_intra + crearBotonEliminarSubcampo(marc_conf_obj);
         tiene_estructura    = 0;
         divLabel            = crearDivLabel(marc_conf_obj.getCampo() + '^' + marc_conf_obj.getSubCampo() + " - " + marc_conf_obj.getVistaIntra(), marc_conf_obj.getIdCompCliente());  
-        strComp             = "<li id='LI" + marc_conf_obj.getIdCompCliente() + "' class='sub_item'> " + divLabel + vista_intra + "</li>";  
+        strComp             = "<span id='LI" + marc_conf_obj.getIdCompCliente() + "'> " + content_div_open + divLabel + controls_div +  vista_intra + content_div_close  + content_div_close + "</span>";  
     } else {
         vista_intra         =  marc_conf_obj.getCampo() + '^' + marc_conf_obj.getSubCampo() + " - " + vista_intra
         divLabel            = crearDivLabel(vista_intra, marc_conf_obj.getIdCompCliente());
-        strComp             = "<li id='LI" + marc_conf_obj.getIdCompCliente() + "' class='sub_item'> " + divLabel + divComp + "</li>";    
+        strComp             = "<span id='LI" + marc_conf_obj.getIdCompCliente() + "'> " + content_div_open + divLabel + controls_div + divComp + content_div_close + content_div_close + "</span>";    
     }
     
     $("#" + marc_group).append(strComp);
@@ -1639,40 +1649,64 @@ function removeSubcampo(id){
     removeFromArray(MARC_OBJECT_ARRAY[subcampo_temp.posCampo].getSubCamposArray(), _from, _to); //elimino la informacion del subcampo
 }
 
+
+function openDivButtonContainer(id,tipo){
+	
+	var clase = 'btn btn-primary';
+	if (tipo != 'campo')
+		clase = 'btn';
+	var elem = 	'<div class="btn-group" style="float: left; margin-left: 5px;" id="'+id+'">'+
+				'<a class='+clase+'><i class="icon white user"></i> Acciones</a>'+
+				'<a class='+clase+'" dropdown-toggle" data-toggle="dropdown" ><span class="caret"></span></a>'+
+				'<ul class="dropdown-menu" id="'+id+"_lista"+'">'+'</ul></div>';
+	
+	return elem;
+}
+
+function closeDivButtonContainer(id){
+	var elem = 	'</ul></div>';
+	
+	return elem;
+}
+
 function crearBotonAgregarSubcampoRepetible(obj){
 
     if(obj.getRepetible() == '1'){
-        return "<div onclick=cloneSubCampo('"+ obj.getIdCompCliente() +"') class='icon_mas horizontal' title='Agregar subcampo repetible'/>";
+    	return '<li><a onclick=cloneSubCampo("'+ obj.getIdCompCliente() +'")><i class="icon-plus"></i> Agregar Subcampo repetible</a></li>';
+        //return "<div onclick=cloneSubCampo('"+ obj.getIdCompCliente() +"') class='icon_mas horizontal' title='Agregar subcampo repetible'/>";
     }else{  
         return "";
     }
 }
 
 function crearBotonEliminarSubcampoRepetible(obj){
-
+//HACER CON ESTOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
     if(obj.getRepetible() == '1'){
-        return "<div onclick=removeSubcampo('"+ obj.getIdCompCliente() +"') class='icon_borrar horizontal' title='Eliminar subcampo repetible'/>";
+    	return '<li><a onclick=removeSubcampo("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar Subcampo repetible</a></li>';
+    	//return "<div onclick=removeSubcampo('"+ obj.getIdCompCliente() +"') class='icon_borrar horizontal' title='Eliminar subcampo repetible'/>";
     }else{  
         return "";
     }
 }
 
 function crearBotonEliminarSubcampo(obj){
-
-    return "<div onclick=removeSubcampo('"+ obj.getIdCompCliente() +"') class='icon_borrar horizontal' title='Eliminar subcampo'/>";
-  
+	return '<a onclick=removeSubcampo("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar Subcampo</a></li>';
+    //return "<div onclick=removeSubcampo('"+ obj.getIdCompCliente() +"') class='icon_borrar horizontal' title='Eliminar subcampo'/>";
+	return "<a class='btn btn-danger' onclick=removeSubcampo('"+ obj.getIdCompCliente() +"')><i class='icon-trash icon-white'></i> Borrar </a>";
 }
 
 
 function crearIconWarning(obj){
 
-    return "<div class='icon_warning horizontal' title='NO TIENE ESTRUCTURA'/>";
+    //return "<div class='icon_warning horizontal' title='NO TIENE ESTRUCTURA'/>";
+	return "<a class='btn btn-warning' >Sin estructura</a>";
 }
 
 function crearBotonAgregarCampoRepetible(obj, id_padre){
 
     if(obj.getRepetible() == '1'){
-        return "<div onclick=cloneCampo('marc_group"+ id_padre +"') class='icon_mas horizontal' title='Agregar campo repetible'/>";
+    	return '<li><a onclick=cloneCampo("marc_group"'+ id_padre +'")><i class="icon-plus"></i> Agregar campo repetible</a></li>';
+        //return "<div onclick=cloneCampo('marc_group"+ id_padre +"') class='icon_mas horizontal' title='Agregar campo repetible'/>";
     }else{  
         return "";
     }
@@ -1681,7 +1715,9 @@ function crearBotonAgregarCampoRepetible(obj, id_padre){
 function crearBotonEliminarCampoRepetible(obj){
 
     if(obj.getRepetible() == '1'){
-        return "<div onclick=remove('"+ obj.getIdCompCliente() +"') class='horizontal icon_borrar' title='Eliminar campo repetible'/>";
+    	return '<li><a onclick=remove("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar campo repetible</a></li>';
+        //return "<div onclick=remove('"+ obj.getIdCompCliente() +"') class='horizontal icon_borrar' title='Eliminar campo repetible'/>";
+    	return "<a class='btn btn-danger' onclick=remove('"+ obj.getIdCompCliente() +"')><i class='icon-trash icon-white'></i> Elimimar </a>";
     }else{  
         return "";
     }
@@ -1823,19 +1859,22 @@ function subcampo_marc_conf(obj){
 
 
 function crearText(obj){
-    var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+" name='" + obj.getIdCompCliente() + "' class='horizontal' >";     
+    var comp = "<input class='input-xlarge' type='text' id='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+" name='" + obj.getIdCompCliente() + "' class='horizontal' >";     
     $("#div" + obj.getIdCompCliente()).append(comp);
     
     crearBotones(obj);
 }
 
 function crearBotones(obj){
-    if((obj.getEdicionGrupal() == "0")&&(MODIFICAR == 1)&&(EDICION_N3_GRUPAL == 1)){  
+	if(obj.getRepetible() == '1')
+		$(openDivButtonContainer("div_botones" + obj.getIdCompCliente())).insertAfter("#div" + obj.getIdCompCliente());
+
+	if((obj.getEdicionGrupal() == "0")&&(MODIFICAR == 1)&&(EDICION_N3_GRUPAL == 1)){  
         disableComponent(obj.getIdCompCliente());  
         $('#'+ obj.getIdCompCliente()).val("No se permite edicion grupal");  
     } else {
-        $(crearBotonEliminarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
-        $(crearBotonAgregarSubcampoRepetible(obj)).insertAfter("#div" + obj.getIdCompCliente());
+        $("#div_botones" + obj.getIdCompCliente() + "_lista").append(crearBotonEliminarSubcampoRepetible(obj));
+        $("#div_botones" + obj.getIdCompCliente() + "_lista").append(crearBotonAgregarSubcampoRepetible(obj));
     }
 }
 
@@ -1877,8 +1916,9 @@ function crearCombo(obj){
 }
 
 function crearTextArea(obj){
-    var comp = "<textarea id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' rows='4' tabindex=" + TAB_INDEX + ">" + obj.getDato() + "</textarea>";
-    comp = comp + crearBotonAgregarSubcampoRepetible(obj);
+    var comp = "<textarea class='input-xlarge' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' rows='4' tabindex=" + TAB_INDEX + ">" + obj.getDato() + "</textarea>";
+
+    //comp = comp + crearBotonAgregarSubcampoRepetible(obj);
 
     $("#div" + obj.getIdCompCliente()).append(comp);
 // FIXME     y esto???
@@ -1968,7 +2008,7 @@ function crearAuto(obj){
 }
 
 function crearCalendar(obj){
-    var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+" class='horizontal'>";
+    var comp = "<input class='input-xlarge' type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+" class='horizontal'>";
 
     $("#div" + obj.getIdCompCliente()).append(comp);
 
@@ -1977,14 +2017,14 @@ function crearCalendar(obj){
 }
 
 function crearTextAnio(obj){
-    var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+" class='horizontal'>";
+    var comp = "<input class='input-xlarge' type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+" class='horizontal'>";
 
     $("#div" + obj.getIdCompCliente()).append(comp);
     crearBotones(obj);
 }
 
 function crearTextRangoAnio(obj){
-    var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+" class='horizontal'>";
+    var comp = "<input class='input-xlarge' type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+" class='horizontal'>";
 
     $("#div" + obj.getIdCompCliente()).append(comp);
     crearBotones(obj);
@@ -2004,12 +2044,12 @@ function hacerComponenteObligatoria(idObj){
 
 // Esta funcion crea un divComponente con un id segun parametro idObj
 function crearDivComponente(idObj){
-    return "<div id='"+idObj+"' class='divComponente'></div>";
+   return "<div id='"+idObj+"' class='divComponente' style='float: left;'></div>";
 }
 
 // Esta funcion crea un divLabel con un Label segun parametro
 function crearDivLabel(label, idComp){
-    return "<label for='"+ idComp +"'> " + label + " </label>";
+    return "<label class='control-label' for='"+ idComp +"'> " + label + " </label>";
 }
 
 

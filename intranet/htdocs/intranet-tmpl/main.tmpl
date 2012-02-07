@@ -33,6 +33,8 @@ var jobID = 0;
 
 
 <script type="text/javascript">
+var mensajes_interval_id;
+
 	$(document).ready(function() {
 		CrearAutocompleteCatalogo({ 
 		    IdInput: 'catalogo_search', 
@@ -46,7 +48,7 @@ var jobID = 0;
         mostrarNovedades();
         mensajesContacto();
 
-        setInterval(mensajesContacto,10000);
+        mensajes_interval_id = setInterval(mensajesContacto,10000);
         $("#button_twitter").hover(twitter_hover, twitter_normal);
  
         $("#button_twitter").click(twitter_click);
