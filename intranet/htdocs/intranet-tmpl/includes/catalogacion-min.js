@@ -140,10 +140,10 @@ campo_obj.subcampos_hash=copy(campo_obj.getSubCamposHash());campo_obj.setSubCamp
 procesarInfoJson(temp,marc_group);}
 function remove(id){var campo_temp=_getIndexCampoMARC_conf_ById(id);var _from=campo_temp;var _to=campo_temp;$('#'+id).remove();removeFromArray(MARC_OBJECT_ARRAY,_from,_to);}
 function removeSubcampo(id){var subcampo_temp=_getSubCampoMARC_conf_ById(id);var _from=_getPosBySubCampoMARC_conf_ById(id);var _to=_from;$('#LI'+id).remove();removeFromArray(MARC_OBJECT_ARRAY[subcampo_temp.posCampo].getSubCamposArray(),_from,_to);}
-function openDivButtonContainer(id,tipo){var clase='btn btn-primary';if(tipo!='campo')
-clase='btn';var elem='<div class="btn-group" style="float: left; margin-left: 5px;" id="'+id+'">'+
+function openDivButtonContainer(id,tipo){var clase='btn btn-primary ';if(tipo!='campo')
+clase='btn ';var elem='<div class="btn-group" style="float: left; margin-left: 5px;" id="'+id+'">'+
 '<a class='+clase+'><i class="icon white user"></i> Acciones</a>'+
-'<a class='+clase+'" dropdown-toggle" data-toggle="dropdown" ><span class="caret"></span></a>'+
+'<a class='+clase+" dropdown-toggle"+' data-toggle="dropdown" ><span class="caret"></span></a>'+
 '<ul class="dropdown-menu" id="'+id+"_lista"+'">'+'</ul></div>';return elem;}
 function closeDivButtonContainer(id){var elem='</ul></div>';return elem;}
 function crearBotonAgregarSubcampoRepetible(obj){if(obj.getRepetible()=='1'){return'<li><a onclick=cloneSubCampo("'+obj.getIdCompCliente()+'")><i class="icon-plus"></i> Agregar Subcampo repetible</a></li>';}else{return"";}}

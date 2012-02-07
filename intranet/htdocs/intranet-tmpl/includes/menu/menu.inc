@@ -404,19 +404,9 @@
                                                                         ) ;
                                         [% END %]
                                 </li>
-	              
           </ul>
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
         </div><!-- /.nav-collapse -->
       </div>
     </div><!-- /navbar-inner -->
   </div>
+
