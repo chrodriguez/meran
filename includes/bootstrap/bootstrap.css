@@ -609,6 +609,16 @@ a.thumbnail:hover{border-color:#0088cc;-webkit-box-shadow:0 1px 4px rgba(0, 105,
 .show{display:block;}
 .invisible{visibility:hidden;}
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+.center-section-form{
+    width: 75%;
+    margin: 0 auto;
+}   
+=======
+
+=======
+>>>>>>> 68d14db47b142e02d487570b06902d4b312931d5
 /* MERAN */
 
 #top-stuff {
@@ -960,3 +970,9 @@ search-form .search-query {
     width: 140px;
 }
 
+<<<<<<< HEAD
+
+
+>>>>>>> bf3f739719e6fb5202c4c7e6a1f6cf2eadb7eaed
+=======
+>>>>>>> 68d14db47b142e02d487570b06902d4b312931d5

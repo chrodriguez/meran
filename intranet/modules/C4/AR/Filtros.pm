@@ -187,8 +187,9 @@ sub to_Button{
 
     my $button= '';
 
-    my @array_clases_buttons = ('clean-gray','thoughtbot', 'btn btn-large btn-primary', 'btn btn-large', 'btn btn-primary', 'btn');
-   
+
+    my @array_clases_buttons = ('clean-gray','thoughtbot', 'btn btn-large btn-primary', 'btn btn-large', 'btn btn-primary','btn');  
+
     if ($params_hash_ref{'url'}){
       $button .="<a href="."$params_hash_ref{'url'}"."> ";
     }
@@ -198,7 +199,7 @@ sub to_Button{
     my $boton   = $params_hash_ref{'boton'} || "clean-gray"; #obtengo el boton
     
     if (!C4::AR::Utilidades::existeInArray($boton,@array_clases_buttons)){
-        $boton = "clean-gray";
+        $boton = "btn btn-primary";
     }
     
     my $onclick     = $params_hash_ref{'onclick'} || $params_hash_ref{'onClick'}; #obtengo el llamado a la funcion en el evento onclick
@@ -247,8 +248,8 @@ sub setHelp{
     my (%params_hash_ref) = @_;
 
     my $help    = '';
-    $help       =  "<div class='reference'>".i18n($params_hash_ref{'text'})."</div>";
-
+#     $help       =  "<div class='reference'>".i18n($params_hash_ref{'text'})."</div>";
+    $help       =  "<span class='help-inline'>".i18n($params_hash_ref{'text'})."</span>";
     return $help;
 }
 
