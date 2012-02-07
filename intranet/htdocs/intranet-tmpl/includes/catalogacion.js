@@ -1654,7 +1654,7 @@ function openDivButtonContainer(id,tipo){
 	
 	var clase = 'btn btn-primary';
 	if (tipo != 'campo')
-		clase = 'btn';
+		clase = 'btn ';
 	var elem = 	'<div class="btn-group" style="float: left; margin-left: 5px;" id="'+id+'">'+
 				'<a class='+clase+'><i class="icon white user"></i> Acciones</a>'+
 				'<a class='+clase+'" dropdown-toggle" data-toggle="dropdown" ><span class="caret"></span></a>'+
