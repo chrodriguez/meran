@@ -56,46 +56,65 @@
         );
       });
 </script>
-<fieldset>
-<legend><strong>[% "Nueva Importaci&oacute;n:" | i18n %]</strong></legend>
+
 
 <div class="fileUploader_catalogo" style="width: 100%;">
-	<form id="uploadfile" action="subirNuevaImportacion.pl" enctype="multipart/form-data" method="POST" style="width:80%;">
-		<fieldset class="rows" id="import">
-			 <ol>
-			      <li class="sub_item">
-			      <label>Título del archivo: </label>
-			      <input type="text" name="titulo" id="titulo" >
-			      </li>
-			      <li class="sub_item">
-			        <label>Archivo: </label>
-			        <input type="file" name="upfile" id="fileToUpload_1" required accept="iso,xml" onchange="fileSelected(1);">
+	<form id="uploadfile" action="subirNuevaImportacion.pl" enctype="multipart/form-data" method="POST" class="form-horizontal">
+        <fieldset>
+        <legend>[% "Nueva Importaci&oacute;n:" | i18n %]</legend>
+		
+		    <div class="control-group">
+                <label class="control-label" for="titulo">[% 'T&iacute;tulo del archivo' | i18n %]: </label>
+                <div class="controls">
+                    <input type="text" name="titulo" id="titulo" >
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label class="control-label" for="upfile">[% 'Archivo' | i18n %]: </label>
+                <div class="controls">
+                    <input type="file" name="upfile" id="fileToUpload_1" required accept="iso,xml" onchange="fileSelected(1);">
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label class="control-label">[% 'Formato' | i18n %]: </label>
+                <div class="controls">
+                    [% combo_formatos %]
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label class="control-label" for="comentario">[% 'Comentario' | i18n %]: </label>
+                <div class="controls">
+                    <input type="text" name="comentario" id="comentario">
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label class="control-label">[% 'Seleccionar Esquema' | i18n %]: </label>
+                <div class="controls">
+                    [% IF combo_esquemas %][% combo_esquemas %][% ELSE %] [% 'No hay ning&uacute;n esquema definido.' %][% END %]
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label class="control-label" for="nombreEsquema">[% 'Nombre Nuevo Esquema' | i18n %]: </label>
+                <div class="controls">
+                    <input type="text" name="nombreEsquema" id="nombreEsquema" > ([% 'Si se deja en blanco se utiliza el nombre del archivo' | i18n %].)
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label class="control-label" for="nuevo_esquema">[% 'Generar Nuevo Esquema' | i18n %]: </label>
+                <div class="controls">
+                    <input type="checkbox" name="nuevo_esquema" id="nuevo_esquema">
+                </div>
+            </div>
+	      
 
-			      </li>
-			      <li class="sub_item">
-			        <label>Formato: </label>
-			        [% combo_formatos %]
-			      </li>
-			      <li class="sub_item">
-			        <label>Comentario: </label>
-			        <input type="text" name="comentario" id="comentario">
-			      </li>
-			      <li class="sub_item" id='seleccionar_esquema'>
-			        <label>Seleccionar Esquema: </label>
-			        [% IF combo_esquemas %][% combo_esquemas %][% ELSE %] [% 'No hay ning&uacute;n esquema definido.' %][% END %]
-			      </li>
-			      <li class="sub_item" id='esquema_nuevo' style="display: none;">
-			        <label>Nombre Nuevo Esquema: </label>
-			        <input type="text" name="nombreEsquema" id="nombreEsquema" > ([% 'Si se deja en blanco se utiliza el nombre del archivo' | i18n %].)
-			      </li>
-			       <li class="sub_item">
-			        <label>Generar Nuevo Esquema: </label>
-			        <input type="checkbox" name="nuevo_esquema" id="nuevo_esquema">
-			      </li>
-		      
-			 </ol>
-             <div class="row">
-               <input type="button" onclick="uploadFile('[% url_prefix %]/herramientas/importacion/subirNuevaImportacion.pl')" value="[% 'Subir' | i18n %]" />
+             <div class="form-actions">
+               <input type="button" class="btn btn-primary" onclick="uploadFile('[% url_prefix %]/herramientas/importacion/subirNuevaImportacion.pl')" value="[% 'Subir' | i18n %]" />
              </div>
              <div style="margin: 0 auto; width: 50%;">
               <div id="fileInfo_1" class="fileInfo">
@@ -120,9 +139,6 @@
 		
 	</form>
 </div>
-
-
-</fieldset>
 
 [% INCLUDE 'intranet-bottom.inc' %]
 

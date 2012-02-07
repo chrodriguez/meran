@@ -2,75 +2,77 @@
 <!-- FIXME no se si se usa -->
 <p id="error" class="fontmsg"></p>
 
+<div>
+    <form class="form-horizontal">
+        <fieldset>
+        <legend>[% "Modificar Preferencia:" | i18n %]</legend>
+        
+             <div class="control-group">
+                    <label class="control-label" for="variable"> [% "Variable" | i18n %]: </label>
+                    <div class="controls">
+                        [% IF variable %]
+		                [% variable %]
+		                <input type="hidden" id="variable" value="[% variable %]">
+	                    [% ELSE %]
+		                    <input type="text" id="variable" size="50">
+	                    [% END %]
+                
+		                <input type="hidden" id="tipoVar" value="[% tipo %]">
+		                [% IF tabla %]<input type="hidden" id="tabla" value="[% tabla %]">[% END %]
+		                [% IF campo %]<input type="hidden" id="campo" value="[% campo %]">[% END %]
+		                [% IF categoria %]<input type="hidden" id="categoria" value="[% categoria %]">[% END %]
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="valor"> [% "Valor" | i18n %]: </label>
+                    <div class="controls">
+                        [% valor %]
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="explicacion"> [% "Explicaci&oacute;n" | i18n %]: </label>
+                    <div class="controls">
+                        <textarea id="explicacion" cols="57" rows="2">[% HTML.escape(explicacion) %]</textarea>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                        [% IF !nueva %]
 
-<fieldset>
-<legend><strong>[% "Modificar Preferencia:" | i18n %]</strong></legend>
-<ul>
-    <li class="sub_item" >
-	    <label for="variable">
-		    [% "Variable" | i18n %]:
-	    </label>
-	    [% IF variable %]
-		    [% variable %]
-		    <input type="hidden" id="variable" value="[% variable %]">
-	    [% ELSE %]
-		    <input type="text" id="variable" size="50">
-	    [% END %]
-    
-		    <input type="hidden" id="tipoVar" value="[% tipo %]">
-		    [% IF tabla %]<input type="hidden" id="tabla" value="[% tabla %]">[% END %]
-		    [% IF campo %]<input type="hidden" id="campo" value="[% campo %]">[% END %]
-		    [% IF categoria %]<input type="hidden" id="categoria" value="[% categoria %]">[% END %]
-    </li>
-    <li class="sub_item" >
-	    <label for="valor">
-		    [% "Valor" | i18n %]:
-	    </label>
-	        [% valor %]
-    </li>
-    <li class="sub_item" >
-	    <label for="explicacion">
-		    [% "Explicaci&oacute;n" | i18n %]:
-	    </label>
-	    <textarea id="explicacion" cols="57" rows="2">[% HTML.escape(explicacion) %]</textarea>
-    </li>
+	                    [% PERL %]
+	                                print C4::AR::Filtros::to_Button(   
+	                                                    text    => "[% 'Guardar Modificaci&oacute;n' | i18n %]",
+	                                                    boton   => "btn btn-large btn-primary",
+	                                                    onClick => "guardarModificacion();",
+	                                                    width   => "auto",
+	                                                    title   => "[% 'Guardar Modificaci&oacute;n' | i18n %]", 
+	                                                    alternClass   => "botonCentrado"
+	                                        ) ;
+	                    [% END %]
 
-</ul>
+                        [% ELSE %]
 
-<ul>
-    [% IF !nueva %]
-	    <li>
-	    [% PERL %]
-	                print C4::AR::Filtros::to_Button(   
-	                                    text    => "[% 'Guardar Modificaci&oacute;n' | i18n %]",
-	                                    boton   => "boton_agregar",
-	                                    onClick => "guardarModificacion();",
-	                                    width   => "auto",
-	                                    title   => "[% 'Guardar Modificaci&oacute;n' | i18n %]", 
-	                                    alternClass   => "botonCentrado"
-	                        ) ;
-	    [% END %]
-	    </li>
-    [% ELSE %]
-	    <li>
-	    [% PERL %]
-	                print C4::AR::Filtros::to_Button(   
-	                                    text    => "[% 'Guardar Nueva Variable' | i18n %]",
-	                                    boton   => "boton_agregar",
-	                                    onClick => "guardarNuevaVariable();",
-	                                    width => "auto",
-	                                    title   => "[% 'Guardar Nueva Variable' | i18n %]",
-	                                    alternClass   => "botonCentrado"    
-	                        ) ;
-	    [% END %]
-	    </li>
-      [% END %]
-</ul>
+	                    [% PERL %]
+	                                print C4::AR::Filtros::to_Button(   
+	                                                    text    => "[% 'Guardar Nueva Variable' | i18n %]",
+	                                                    boton   => "btn btn-large btn-primary",
+	                                                    onClick => "guardarNuevaVariable();",
+	                                                    width => "auto",
+	                                                    title   => "[% 'Guardar Nueva Variable' | i18n %]",
+	                                                    alternClass   => "botonCentrado"    
+	                                        ) ;
+	                    [% END %]
+                      [% END %]
+                </div>
 
-    <div style="clear:both">
-        <p>[% "NOTA: Para las variables que representan una hora o minutos, solo ingresar la hora en numeros (hh:mm) o los minutos (mm).</p>
-        <p>Ej: la variable close = 18:30, beginESissue = 60." | i18n %]</p>
-    </div>
+            <div style="clear:both">
+                <p>[% "NOTA: Para las variables que representan una hora o minutos, solo ingresar la hora en numeros (hh:mm) o los minutos (mm).</p>
+                <p>Ej: la variable close = 18:30, beginESissue = 60." | i18n %]</p>
+            </div>
 
-</fieldset>
+        </fieldset>
+    </form>
+</div>
 

@@ -7,84 +7,104 @@
 <!-- FIXME no se si se usa el hidden -->
 <input id="obligatorio" type="hidden" value="">
 
-<fieldset>
-<legend><strong>[% 'Modificar campo Marc para el nivel' | i18n %] [% nivel %]:</strong></legend>
+<form class="form-horizontal">
+    <fieldset>
+    <legend>[% 'Modificar campo Marc para el nivel' | i18n %] [% nivel %]:</legend>
+    
+    <div class="control-group">
+        <label class="control-label" for="tipo_nivel3_id"> [% "Esquema" | i18n %]: </label>
+        <div class="controls">
+            [% selectItemType %]
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label" for="campoX"> [% "Campo" | i18n %]: </label>
+        <div class="controls">
+            <input type="text" value="[% catalogacion.campo %]" disabled/>
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label" for="campoX"> [% "Subcampo" | i18n %]: </label>
+        <div class="controls">
+            <input type="text" value="[% catalogacion.subcampo %]" disabled/>
+        </div>
+    </div>
 
-<ul>
-
-    <li class="sub_item" id="content_combo_tipo_nivel3_id">
-        <label for="tipo_nivel3_id">
-            [% 'Esquema:' | i18n %] 
-        </label>
-        [% selectItemType %]
-    </li>
-
-    <li class="sub_item">
-        <label for="campoX">Campo:</label> 
-        <input type="text" value="[% catalogacion.campo %]" disabled/>
-    </li>
-
-    <li class="sub_item">
-        <label for="campoX">Subcampo:</label> 
-        <input type="text" value="[% catalogacion.subcampo %]" disabled/>
-    </li>
 
 <!--     Si catalogacion.subCamposBase.getObligatorio (LA BIBLIA) dice que es obligatorio, no se puede modificar -->
-    <li class="sub_item">
-        <label for="obligatorio">[% 'Obligatorio?' | i18n %]</label>
-        <input  type=radio id="obligatorio_si" name="obligatorio" value="1" 
+    <div class="control-group">
+        <label class="control-label" for="obligatorio"> [% "Obligatorio?" | i18n %]: </label>
+        <div class="controls">
+            <input  type=radio id="obligatorio_si" name="obligatorio" value="1" 
                 [% IF catalogacion.obligatorio == '1' %] checked [% END %]
                 [% IF catalogacion.subCamposBase.getObligatorio %] disabled [% END %]>
             [% 'S&iacute;' | i18n %]
-        <input  type=radio id="obligatorio_no" name="obligatorio" value="0" 
+            <input  type=radio id="obligatorio_no" name="obligatorio" value="0" 
                 [% IF catalogacion.obligatorio == '0' %] checked [% END %]
                 [% IF catalogacion.subCamposBase.getObligatorio %] disabled [% END %]>  
-            [% 'No' | i18n %]<BR>
-    </li> 
-    <li class="sub_item">
-        <label for="liblibrarian">
-            [% 'Vista en Intranet:' | i18n %] 
-        </label>
-        <input id="liblibrarian" type="text" value="[% catalogacion.getLiblibrarian %]" size="85"> 
-   </li>
-    <li class="sub_item">
-        <label for="tipoInput">[% 'Tipo de entrada' | i18n %]:</label>
-        [% comboComponentes %]
-    </li>
-    <li class="sub_item">
-        <label for="combo_validate">[% 'Validador' | i18n %]:</label>
-        [% PERL %]
+            [% 'No' | i18n %]
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label" for="liblibrarian"> [% "Vista en Intranet" | i18n %]: </label>
+        <div class="controls">
+            <input id="liblibrarian" type="text" value="[% catalogacion.getLiblibrarian %]" size="85"> 
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label" for="tipoInput"> [% "Tipo de entrada" | i18n %]: </label>
+        <div class="controls">
+            [% comboComponentes %]
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label" for="combo_validate"> [% "Validador" | i18n %]: </label>
+        <div class="controls">
+            [% PERL %]
                         print C4::AR::Filtros::getComboValidadores();
-        [% END %]
-    </li>
-
-    <li class="sub_item">
-        <label for="tablas_ref">[% 'Tabla de referencia' | i18n %]: </label>
-        [% tabla_referencias %]
-    </li>
+            [% END %]
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label" for="tablas_ref"> [% "Tabla de referencia" | i18n %]: </label>
+        <div class="controls">
+            [% tabla_referencias %]
+        </div>
+    </div>
+    
 
     <div id="divCamposRef" valign="top" style="display:none">
-        <li class="sub_item">
-            <label for="orden">[% 'Orden' | i18n %]:</label>
-            <select name="camposSelect" id="camposSelect"></select>
-        </li>
-        <li class="sub_item">
-            <label for="camposRef">[% 'Campos' | i18n %]:</label> 
-            <select name="camposRef" id="camposRef"></select>
-        </li>
+    
+        <div class="control-group">
+            <label class="control-label" for="orden"> [% "Orden" | i18n %]: </label>
+            <div class="controls">
+                <select name="camposSelect" id="camposSelect"></select>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="camposRef"> [% "Campos" | i18n %]: </label>
+            <div class="controls">
+                <select name="camposRef" id="camposRef"></select>
+            </div>
+        </div>
     
         <p>[% 'Ejemplo' | i18n %]: [% ejemplo %]</p>
         <p>[% 'NOTA: En Campos borras los campos que no desea ingresar y en el separador ingresar un caracter que no sea una letra ni un numero' | i18n %]</p>
 
     </div>
 
-</ul>
-
-
+     <div class="form-actions">
 
     [% PERL %]
                         print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Campo' | i18n %]",
-                                                            boton   => "boton_buscar",
+                                                            boton   => "btn btn-large btn-primary",
                                                             onClick => "modificarEstructuraCatalogacion([% catalogacion.getId %]);",
                                                             title   => "[% 'Guardar Campo' | i18n %]",
                                                             alternClass => "botonCentrado",
@@ -94,15 +114,18 @@
 
     [% PERL %]
                         print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar Campo' | i18n %]",
-                                                            boton   => "boton_buscar",
+                                                            boton   => "btn btn-large",
                                                             onClick => "cancelarEstructuraCatalogacion();",
                                                             title   => "[% 'Cancelar Campo' | i18n %]",
                                                             alternClass => "botonCentrado",       
                                                             width   => "auto"
                                 ) ;
     [% END %]
+    
+    </div>
 
 </fieldset>
+</form>
 [% ELSE %]
     [% PERL %]
             print C4::AR::Filtros::get_error_message( 

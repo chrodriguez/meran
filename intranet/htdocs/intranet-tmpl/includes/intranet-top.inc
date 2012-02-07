@@ -21,7 +21,6 @@
 	
 	<meta charset="utf-8" />
 	<META HTTP-EQUIV="cache-control" content="public">
-<!-- 	<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme_intra %]/includes/intranet.css"> -->
 	<link media="screen" rel="stylesheet" href="/includes/jquery/modal/basic-min.css" type="text/css">
 	<link media="screen" rel="stylesheet" href="/includes/css/fancybox.css" type="text/css">
 	<script type="text/javascript" src="/includes/json/jsonStringify.js"></script>

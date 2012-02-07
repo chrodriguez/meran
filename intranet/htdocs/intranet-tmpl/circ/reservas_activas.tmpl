@@ -35,29 +35,33 @@ function consultar(){
 
 </script>
 
-<div class="titulos" >[% "Reservas activas" | i18n %]</div>
-
 <fieldset>
-    <legend class="titulo_legend">[% "Tipo de reserva" | i18n %]</legend>
-    <ul>
-        <li class="sub_item">
-            <label for="tipoReserva">[% "Seleccione el tipo de reserva" | i18n %]</label>
-            <select name="tipoReserva" id="tipoReserva" onchange="consultar();">
-                <option selected="selected" value="EJ" id="EJ">[% "Por ejemplar" | i18n %]</option>
-                <option value="GR" id="GR">[% "Por grupo" | i18n %]</option>
-                <option value="TO" id="TO">[% "Todas" | i18n %]</option>
-            </select>
-        </li>
-    </ul>
-    <div class="buttonContainerHorizontal">
-        [% PERL %]
-                        print C4::AR::Filtros::to_Button( 
-                                                            text    =>  "[% 'Buscar' | i18n %]",
-                                                            boton   =>  "boton_buscar",
-                                                            onClick =>  "consultar();",
-                                ) ;
-        [% END %]
-    </div>
+    <legend class="titulo_legend">[% "Reservas activas" | i18n %]</legend>
+    <section class="center-section-form">
+      <form class="form-horizontal">
+          <div class="control-group">
+              <label for="tipoReserva">[% "Seleccione el tipo de reserva" | i18n %]</label>
+              <div class="controls">
+                  <select name="tipoReserva" id="tipoReserva" onchange="consultar();">
+                      <option selected="selected" value="EJ" id="EJ">[% "Por ejemplar" | i18n %]</option>
+                      <option value="GR" id="GR">[% "Por grupo" | i18n %]</option>
+                      <option value="TO" id="TO">[% "Todas" | i18n %]</option>
+                  </select>
+              </div>
+          </div>
+    
+          <!--<div class="form-actions">
+                [% PERL %]
+                                print C4::AR::Filtros::to_Button( 
+                                                                    text    =>  "[% 'Buscar' | i18n %]",
+                                                                    boton   =>  "btn btn-primary",
+                                                                    onClick =>  "consultar();",
+                                                                    inline => "1",
+                                        ) ;
+                [% END %]
+        </div>-->
+      </form>
+    </section>
 </fieldset>
 
 <div id="result"></div>
