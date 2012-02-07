@@ -535,49 +535,6 @@
              </ul>
          </li>
 
-                                      <li>
-                                <a href="#">[% 'Importar/Exportar' | i18n %]</a>
-                                <ul>
-                                  <li>
-                                    <a href="#">[% 'Importaci&oacute;n' | i18n %]</a>
-                                    <ul>
-                                        <li>
-                                                  [% PERL %]
-                                                      print C4::AR::Filtros::link_to( text =>     "[% 'Nueva Importaci&oacute;n' | i18n %]",
-                                                                                      url =>      "[% url_prefix %]/herramientas/importacion/subirNuevaImportacion.pl",
-                                                                                      title =>    "[% 'Nueva Importaci&oacute;n' | i18n %]"
-                                                                                  ) ;
-                                                  [% END %]
-                                        </li>
-                                        <li>
-                                                  [% PERL %]
-                                                      print C4::AR::Filtros::link_to( text =>     "[% 'Importaci&oacute;nes' | i18n %]",
-                                                                                      url =>      "[% url_prefix %]/herramientas/importacion/importar.pl",
-                                                                                      title =>    "[% 'Importaci&oacute;nes' | i18n %]"
-                                                                                  ) ;
-                                                  [% END %]
-                                        </li>
-                                        <li>
-                                                  [% PERL %]
-                                                      print C4::AR::Filtros::link_to( text =>     "[% 'Esquemas de Importaci&oacute;n' | i18n %]",
-                                                                                      url =>      "[% url_prefix %]/herramientas/importacion/esquemas_importacion.pl",
-                                                                                      title =>    "[% 'Esquemas de Importaci&oacute;n' | i18n %]"
-                                                                                  ) ;
-                                                  [% END %]
-                                        </li>
-                                    </ul>
-                                  </li>
-                                  <li>
-                                              [% PERL %]
-                                                  print C4::AR::Filtros::link_to( text =>     "[% 'Exportar' | i18n %]",
-                                                                                  url =>      "[% url_prefix %]/herramientas/exportacion/exportar.pl",
-                                                                                  title =>    "[% 'Exportaci&oacute;n' | i18n %]"
-                                                                              ) ;
-                                              [% END %]
-                                  </li>
-                                </ul>
-                            </li>
-
 
     </ul>
 </nav>
