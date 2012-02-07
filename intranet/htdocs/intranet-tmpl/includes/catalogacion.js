@@ -1224,8 +1224,6 @@ function procesarInfoJson(marc_object_array, id_padre){
             strComp = strComp + "<div style='float:right'>";
             campo_marc_conf_obj.setIdCompCliente("marc_group" + id_temp);
            
-            //strComp = strComp + crearBotonAgregarCampoRepetible(campo_marc_conf_obj, id_temp);
-            //strComp = strComp + crearBotonEliminarCampoRepetible(campo_marc_conf_obj);  
             var id = "marc_group" + id_temp + "_buttons";
             strComp = strComp + openDivButtonContainer(id,'campo');
             
@@ -1652,12 +1650,16 @@ function removeSubcampo(id){
 
 function openDivButtonContainer(id,tipo){
 	
-	var clase = 'btn btn-primary ';
-	if (tipo != 'campo')
-		clase = 'btn ';
+	var clase 			= "btn btn-primary ";
+	var clase_dropdown  = "btn btn-primary dropdown-toggle ";
+	if (tipo != 'campo'){
+		clase = "btn ";
+		clase_dropdown = "btn dropdown-toggle ";
+	}
+	
 	var elem = 	'<div class="btn-group" style="float: left; margin-left: 5px;" id="'+id+'">'+
-				'<a class='+clase+'><i class="icon white user"></i> Acciones</a>'+
-				'<a class='+clase+" dropdown-toggle"+' data-toggle="dropdown" ><span class="caret"></span></a>'+
+				'<a class="'+clase+'"><i class="icon white user"></i> Acciones</a>'+
+				'<a class="'+clase_dropdown+'" data-toggle="dropdown" ><span class="caret"></span></a>'+
 				'<ul class="dropdown-menu" id="'+id+"_lista"+'">'+'</ul></div>';
 	
 	return elem;
@@ -1705,7 +1707,7 @@ function crearIconWarning(obj){
 function crearBotonAgregarCampoRepetible(obj, id_padre){
 
     if(obj.getRepetible() == '1'){
-    	return '<li><a onclick=cloneCampo("marc_group"'+ id_padre +'")><i class="icon-plus"></i> Agregar campo repetible</a></li>';
+    	return "<li><a onclick=cloneCampo('marc_group"+ id_padre +"')><i class='icon-plus'></i> Agregar campo repetible</a></li>";
         //return "<div onclick=cloneCampo('marc_group"+ id_padre +"') class='icon_mas horizontal' title='Agregar campo repetible'/>";
     }else{  
         return "";
