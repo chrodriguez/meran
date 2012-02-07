@@ -35,11 +35,8 @@ function consultar(){
 
 </script>
 
-<div class="titulos" >[% "Reservas activas" | i18n %]</div>
-
 <fieldset>
-    <legend class="titulo_legend">[% "Tipo de reserva" | i18n %]</legend>
-
+    <legend class="titulo_legend">[% "Reservas activas" | i18n %]</legend>
     <section class="center-section-form">
       <form class="form-horizontal">
           <div class="control-group">
@@ -53,15 +50,16 @@ function consultar(){
               </div>
           </div>
     
-          <div class="form-actions">
+          <!--<div class="form-actions">
                 [% PERL %]
                                 print C4::AR::Filtros::to_Button( 
                                                                     text    =>  "[% 'Buscar' | i18n %]",
                                                                     boton   =>  "btn btn-primary",
                                                                     onClick =>  "consultar();",
+                                                                    inline => "1",
                                         ) ;
                 [% END %]
-        </div>
+        </div>-->
       </form>
     </section>
 </fieldset>
