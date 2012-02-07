@@ -1250,8 +1250,8 @@ function procesarInfoJson(marc_object_array, id_padre){
             $(strComp).insertAfter($("#" + id_padre));
         }
 
-        $("#marc_group" + id_temp + "_buttons_lista").append(crearBotonAgregarCampoRepetible(campo_marc_conf_obj,id));
-        $("#marc_group" + id_temp + "_buttons_lista").append(crearBotonEliminarCampoRepetible(campo_marc_conf_obj,id));
+        $("#marc_group" + id_temp + "_buttons_lista").append(crearBotonAgregarCampoRepetible(campo_marc_conf_obj,"marc_group" + id_temp));
+        $("#marc_group" + id_temp + "_buttons_lista").append(crearBotonEliminarCampoRepetible(campo_marc_conf_obj,"marc_group" + id_temp));
 
         //seteo los datos de los indicadores
         $("#select_indicador_primario" + MARC_OBJECT_ARRAY.length).val(campo_marc_conf_obj.getIndicadorPrimarioDato());
@@ -1707,7 +1707,7 @@ function crearIconWarning(obj){
 function crearBotonAgregarCampoRepetible(obj, id_padre){
 
     if(obj.getRepetible() == '1'){
-    	return "<li><a onclick=cloneCampo('marc_group"+ id_padre +"')><i class='icon-plus'></i> Agregar campo repetible</a></li>";
+    	return "<li><a onclick=cloneCampo('"+ id_padre +"')><i class='icon-plus'></i> Agregar campo repetible</a></li>";
         //return "<div onclick=cloneCampo('marc_group"+ id_padre +"') class='icon_mas horizontal' title='Agregar campo repetible'/>";
     }else{  
         return "";
