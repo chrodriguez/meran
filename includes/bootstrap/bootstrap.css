@@ -609,41 +609,6 @@ a.thumbnail:hover{border-color:#0088cc;-webkit-box-shadow:0 1px 4px rgba(0, 105,
 .show{display:block;}
 .invisible{visibility:hidden;}
 
-<<<<<<< HEAD
-.titulos {
-    font-weight: bold;
-    font-Family: arial, helvetica, sans-serif;
-}
-
-.icon_edicion {
-    background: transparent url(../imagenes/iconos/edicion.png) no-repeat;
-    height: 25px;
-    width: 25px;
-    cursor: pointer;
-}
-
-.botonCentradoTabla {
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 0;
-    margin-bottom: 0;
-    clear: both;
-}
-
-.icon_buscar {
-    background: transparent url(../imagenes/iconos/buscar.png) no-repeat;
-    height: 25px;
-    width: 25px;
-    cursor: pointer;
-}
-
-.horizontal {
-    margin: 0 auto;
-    float: left;
-}
-
-=======
-
 /* MERAN */
 
 #top-stuff {
@@ -994,7 +959,4 @@ search-form .search-query {
     text-indent: -9999px;
     width: 140px;
 }
-
-
->>>>>>> 4509992d6c0749ad260c1b7c1240a935eecc2979
 
