@@ -1,9 +1,23 @@
-<br />
-<br />
 
-<div style="width:80%; margin: 0 auto;" id="div_container_modify_value">
-    <label for="unique_modify_value">[% 'Formato de Inventario para ' | i18n %] [% tipo_doc %]</label>
-	<input id="unique_modify_value" type="text" placeholder="[% 'SIN FORMATO' | i18n %]" value="[% value %]" onkeypress="searchKeyPress();" />
-	<input type="hidden" id="edit" name="edit" value="1" />
-	<button class="clean-gray" onclick="[% function %]" id="unique_modify_button">[% 'Actualizar formato' | i18n %]</button>
+<div id="div_container_modify_value">
+    <form class="form-horizontal" onsubmit="return false">
+        <fieldset>
+        <legend>[% "Modificar Preferencia:" | i18n %]</legend>
+        
+        
+         <div class="control-group">
+                    <label for="unique_modify_value">[% 'Formato de Inventario para ' | i18n %] [% tipo_doc %]</label>
+                    <div class="controls">
+                        <input id="unique_modify_value" type="text" placeholder="[% 'SIN FORMATO' | i18n %]" value="[% value %]" onkeypress="searchKeyPress();" />
+	                    <input type="hidden" id="edit" name="edit" value="1" />
+                    </div>
+        </div>
+        
+         <div class="form-actions">
+            <button class="btn btn-large btn-primary" onclick="[% function %]" id="unique_modify_button">[% 'Actualizar formato' | i18n %]</button>
+         </div>
+         
+        </fieldset>
+    </form>
 </div>
+
