@@ -111,42 +111,62 @@
         eleccionDeEjemplar();
     }
 </script>
+<form class="form-horizontal">
 <fieldset>
-    <legend class="titulo_legend trigger click"><strong>[% "Agregar Visualizaci&oacute;n:" | i18n %]</strong></legend>
+    <legend class="titulo_legend trigger click">[% "Agregar Visualizaci&oacute;n:" | i18n %]</legend>
     <div class="divTablaAgregarVisualizacion" id="divTablaAgregarVisualizacion">
-        <ul>
-            <li class="sub_item">
-                <label for="campoX">[% 'Selecci&oacute;n' | i18n %]:</label> 
+    
+        <div class="control-group">
+            <label class="control-label" for="campoX"> [% "Selecci&oacute;n" | i18n %]: </label>
+            <div class="controls">
                 [% selectCampoX %]
-            </li>
-            <li class="sub_item">
-                <label for="campo">[% 'Campo' | i18n %]:</label>
-                    <select name="campo" id="campo" onChange="eleccionCampo()">
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="campo"> [% "Campo" | i18n %]: </label>
+            <div class="controls">
+                <select name="campo" id="campo" onChange="eleccionCampo()">
                         <option value="-1">[% 'Seleccionar CampoX' | i18n %]</option>
                     </select>
                 [% 'Nombre' | i18n %]: <strong><span id="nombre_campo"></span></strong>
-            </li>
-            <li class="sub_item">
-                <label for="subcampo">[% 'Subcampo' | i18n %]:</label>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="subcampo"> [% "Subcampo" | i18n %]: </label>
+            <div class="controls">
                 <select name="subcampo" id="subcampo" onChange="eleccionSubCampo()">
                         <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
-                    </select>
-            </li>
-            <li class="sub_item" id="lib_librarian">
-                <label for="pre">[% 'Pre' | i18n %]:</label> 
+                </select>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="pre"> [% "Pre" | i18n %]: </label>
+            <div class="controls">
                 <input id="pre" type="text" value="" size="50">
-            </li>
-            <li class="sub_item" id="lib_librarian">
-                <label for="liblibrarian">[% 'Vista en Intranet' | i18n %]:</label> 
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="liblibrarian"> [% "Vista en Intranet" | i18n %]: </label>
+            <div class="controls">
                 <input id="liblibrarian" type="text" value="" size="90">
-            </li> 
-            <li class="sub_item" id="lib_librarian">
-                <label for="post">[% 'Post' | i18n %]:</label> 
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="post"> [% "Post" | i18n %]: </label>
+            <div class="controls">
                 <input id="post" type="text" value="" size="50">
-            </li>
+            </div>
+        </div>
+
+        <div class="form-actions">
             [% PERL %]
                     print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Vista' | i18n %]",
-                                                        boton   => "boton_buscar",
+                                                        boton   => "btn btn-large btn-primary",
                                                         onClick => "agregarVisualizacion()",
                                                         title   => "[% 'Agregar Vista' | i18n %]",
                                                         width => "auto",
@@ -154,9 +174,10 @@
                             ) ;
             [% END %]
 
-      </ul>
+      </div>
     </div>
 </fieldset>
+</form>
 
 <div id="divAgregarModificarVisualizacion"></div>
 <div id="tablaResultCampos"></div>

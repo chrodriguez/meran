@@ -8,40 +8,46 @@
        consultar('TODOS');
  });
 </script>
-<fieldset>
-<legend class="titulo_legend_resaltado">Listado de Importaciones</legend>
-<div class="buttonContainerHorizontal">
-<ul>
-    <li class="horizontal">
-            <input id="nombre_importacion" type=text name="nombre_importacion" onFocus="checkFilter('focus')"
-                onBlur="checkFilter('blur')">
-     </li>
-     <li class="horizontal">
-            [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
-                                                                    boton   => "boton_buscar",
-                                                                    onClick => "consultar();",
-                                                                    title   => "[% 'Buscar' | i18n %]",
-                                                                    inline => "1"
-                                        ) ;
+
+
+    <fieldset>
+        <legend class="titulo_legend_resaltado">Listado de Importaciones</legend>  
+        <section class="center-section-form">
+        <form class="form-horizontal">
+            <div class="control-group">
+                <div class="controls">
+                    <input id="nombre_importacion" type=text name="nombre_importacion" onFocus="checkFilter('focus')"
+                        onBlur="checkFilter('blur')">
+                    [% PERL %]
+                 print C4::AR::Filtros::setHelp(text => "[% 'Tipee el nombre, el archivo o parte del comentario de la importaci&oacute;n que desea buscar.' | i18n %]",);
             [% END %]
-            [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
-                                                                    boton   => "boton_buscar",
-                                                                    onClick => "borrar();",
-                                                                    title   => "[% 'Limpiar' | i18n %]",
-                                                                    inline => "1"
-                                        ) ;
-            [% END %]
-    </li>
-</ul>
-</div>
-<ul>
-    [% PERL %]
-         print C4::AR::Filtros::setHelp(text => "[% 'Tipee el nombre, el archivo o parte del comentario de la importaci&oacute;n que desea buscar.' | i18n %]",);
-    [% END %]
-</ul>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                [% PERL %]
+                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+                                                                        boton   => "btn btn-primary",
+                                                                        onClick => "consultar();",
+                                                                        title   => "[% 'Buscar' | i18n %]",
+                                                                        inline => "1"
+                                            ) ;
+                [% END %]
+                [% PERL %]
+                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
+                                                                        boton   => "btn",
+                                                                        onClick => "borrar();",
+                                                                        title   => "[% 'Limpiar' | i18n %]",
+                                                                        inline => "1"
+                                            ) ;
+                [% END %]
+            
+            </div>
+    
+</form>
+</section>
 </fieldset>
+
 <fieldset>
     <legend class="titulo_legend">[% "Inicial de la importaci&oacute;n:" | i18n %]</legend>
     <div id="filterBar" style="text-align:center">

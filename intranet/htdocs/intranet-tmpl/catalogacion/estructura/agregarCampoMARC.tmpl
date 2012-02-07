@@ -1,46 +1,66 @@
 <!-- TEMPLATE DE CAMPOS TEMPORALES -->
 
-<fieldset>
-<legend><strong>[% 'Agregar campo Marc para el nivel' | i18n %] [% nivel %]:</strong></legend>
-
-<ul>
-    <li class="sub_item">
-        <label for="campoX">[% 'Seleccion' | i18n %]:</label>
-        [% selectCampoX %]
-    </li>
-    <li class="sub_item">
-        <label for="campo">[% 'Campo' | i18n %]:</label>
+<form class="form-horizontal">
+    <fieldset>
+    <legend>[% 'Agregar campo Marc para el nivel' | i18n %] [% nivel %]:</legend>
+    
+    <div class="control-group">
+        <label class="control-label" for="campoX"> [% "Seleccion" | i18n %]: </label>
+        <div class="controls">
+            [% selectCampoX %]
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label" for="campo"> [% "Campo" | i18n %]: </label>
+        <div class="controls">
             <select name="campo" id="campo" onChange="eleccionCampo()">
                 <option value="-1">[% 'Seleccionar CampoX' | i18n %]</option>
             </select>
-        [% 'Nombre' | i18n %]: <strong><span id="nombre_campo"></span></strong>
-    </li>
-    <li class="sub_item">
-        <label for="subcampo">[% 'Subcampo' | i18n %]:</label>
-        <select name="subcampo" id="subcampo" onChange="eleccionSubCampo()">
+            [% 'Nombre' | i18n %]: <strong><span id="nombre_campo"></span></strong>
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label" for="subcampo"> [% "Subcampo" | i18n %]: </label>
+        <div class="controls">
+            <select name="subcampo" id="subcampo" onChange="eleccionSubCampo()">
                 <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
             </select>
-<!--        <input id="obligatorio" type="hidden" value="">-->
-    </li>
-    <li class="sub_item">
-        <label for="obligatorio">[% 'Obligatorio?' | i18n %]</label>
-        <input type=radio id="obligatorio_si" name="obligatorio" value="1">[% 'S&iacute;' | i18n %]
-        <input type=radio id="obligatorio_no" name="obligatorio" value="0" checked>[% 'No' | i18n %]<BR>
-    </li>
-    <li class="sub_item">
-        <label for="liblibrarian">[% 'Vista en Intranet' | i18n %]:</label>
-        <input id="liblibrarian" type="text" value="" size="90">
-    </li>
-    <li class="sub_item">
-        <label for="tipoInput">[% 'Tipo de entrada' | i18n %]:</label>
-        [% comboComponentes %]
-    </li>
-    <li class="sub_item">
-        <label for="combo_validate">[% 'Validador' | i18n %]:</label>
-        [% PERL %]
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label" for="obligatorio"> [% "Obligatorio?" | i18n %]: </label>
+        <div class="controls">
+            <input type=radio id="obligatorio_si" name="obligatorio" value="1">[% 'S&iacute;' | i18n %]
+            <input type=radio id="obligatorio_no" name="obligatorio" value="0" checked>[% 'No' | i18n %]
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label" for="liblibrarian"> [% "Vista en Intranet" | i18n %]: </label>
+        <div class="controls">
+            <input id="liblibrarian" type="text" value="" size="90">
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label" for="tipoInput"> [% "Tipo de entrada" | i18n %]: </label>
+        <div class="controls">
+            [% comboComponentes %]
+        </div>
+    </div>
+    
+    <div class="control-group">
+        <label class="control-label" for="combo_validate"> [% "Validador" | i18n %]: </label>
+        <div class="controls">
+            [% PERL %]
                 print C4::AR::Filtros::getComboValidadores();
-        [% END %]
-    </li>
+            [% END %]
+        </div>
+    </div>
+
 
 <!--     <li class="sub_item"> -->
 <!--         <label for="tablaRef">[% 'Tabla de refencia' | i18n %]: </label> -->
@@ -49,45 +69,58 @@
 <!--         </select> -->
 <!--     </li> -->
 
-    <li class="sub_item">
-        <label for="tablas_ref">[% 'Tabla de referencia' | i18n %]: </label>
-        [% tabla_referencias %]
-    </li>
+    <div class="control-group">
+        <label class="control-label" for="tablas_ref"> [% "Tabla de referencia" | i18n %]: </label>
+        <div class="controls">
+            [% tabla_referencias %]
+        </div>
+    </div>
+    
 
     <div id="divCamposRef" valign="top" style="display:none">
-        <li class="sub_item">
-            <label for="orden">[% 'Orden' | i18n %]:</label>
-            <select name="camposSelect" id="camposSelect"></select>
-        </li>
-        <li class="sub_item">
-            <label for="camposRef">[% 'Campos' | i18n %]:</label>
-            <select name="camposRef" id="camposRef"></select>
-        </li>
-
+    
+        <div class="control-group">
+            <label class="control-label" for="orden"> [% "Orden" | i18n %]: </label>
+            <div class="controls">
+                <select name="camposSelect" id="camposSelect"></select>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="camposRef"> [% "Campos" | i18n %]: </label>
+            <div class="controls">
+                <select name="camposRef" id="camposRef"></select>
+            </div>
+        </div>
+    
         <p>[% 'Ejemplo' | i18n %]: [% ejemplo %]</p>
         <p>[% 'NOTA: En Campos borras los campos que no desea ingresar y en el separador ingresar un caracter que no sea una letra ni un numero' | i18n %]</p>
 
     </div>
-</ul>
 
-    [% PERL %]
-                        print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Campo' | i18n %]",
-                                                            boton   => "boton_buscar",
-                                                            onClick => "agregarEstructuraCatalogacion([% nivel %]);",
-                                                            title   => "[% 'Guardar Campo' | i18n %]",
-                                                            width => "auto",
-                                                            alternClass => "botonCentrado",
-                                ) ;
-    [% END %]
+    <div class="form-actions">
 
-    [% PERL %]
-                        print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar Campo' | i18n %]",
-                                                            boton   => "boton_buscar",
-                                                            onClick => "cancelarEstructuraCatalogacion();",
-                                                            title   => "[% 'Cancelar Campo' | i18n %]",
-                                                            width => "auto",
-                                                            alternClass => "botonCentrado",
-                                ) ;
-    [% END %]
+        [% PERL %]
+                            print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Campo' | i18n %]",
+                                                                boton   => "btn btn-large btn-primary",
+                                                                onClick => "agregarEstructuraCatalogacion([% nivel %]);",
+                                                                title   => "[% 'Guardar Campo' | i18n %]",
+                                                                width => "auto",
+                                                                alternClass => "botonCentrado",
+                                    ) ;
+        [% END %]
+
+        [% PERL %]
+                            print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar Campo' | i18n %]",
+                                                                boton   => "btn btn-large",
+                                                                onClick => "cancelarEstructuraCatalogacion();",
+                                                                title   => "[% 'Cancelar Campo' | i18n %]",
+                                                                width => "auto",
+                                                                alternClass => "botonCentrado",
+                                    ) ;
+        [% END %]
+    
+    </div>
 
 </fieldset>
+</form>

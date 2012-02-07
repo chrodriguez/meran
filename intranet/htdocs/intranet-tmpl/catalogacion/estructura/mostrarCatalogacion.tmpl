@@ -12,7 +12,7 @@
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend trigger click">[% "Campos Modificados del nivel" | i18n %]:</legend>
         <div class="datos_tabla_div" id="datos_tabla_div">
-        <table id="tablaCamposMod" class="tabla_datos" width="100%" cellspacing="0" cellpadding="0" border="0">
+        <table id="tablaCamposMod" class="table table-striped">
 
 	        <tr class="titulo_tabla_resultado">
 
@@ -126,17 +126,17 @@
 
     [% END %]
     
-    
+<div class="form-actions">    
     [% PERL %]
                 print C4::AR::Filtros::to_Button(       text    => "[% 'Agregar Campo' | i18n %]",
-                                                        boton   => "boton_agregar",
+                                                        boton   => "btn btn-large btn-primary",
                                                         onClick => "mostrarAgregarCampo();",
                                                         title   => "[% 'Agregar Campo' | i18n %]",
                                                         width   => "auto",
                                                         alternClass => "botonCentrado"
                         ) ;
     [% END %]    
-       
+</div>     
 [% END %] <!-- END IF niveles -->
 
 <div id="groups_content"></div>

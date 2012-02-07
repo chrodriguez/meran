@@ -103,7 +103,7 @@ code{padding:3px 4px;color:#d14;background-color:#f7f7f9;border:1px solid #e1e1e
 pre{display:block;padding:8.5px;margin:0 0 9px;font-size:12px;line-height:18px;background-color:#f5f5f5;border:1px solid #ccc;border:1px solid rgba(0, 0, 0, 0.15);-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;white-space:pre;white-space:pre-wrap;word-break:break-all;}pre.prettyprint{margin-bottom:18px;}
 pre code{padding:0;background-color:transparent;}
 form{margin:0 0 18px;}
-fieldset{padding:0;margin:0;border:0;}
+fieldset{padding:0;margin:0;border:0;padding: 0 10px 10px;margin: 20px 0;}
 legend{display:block;width:100%;padding:0;margin-bottom:27px;font-size:19.5px;line-height:36px;color:#333333;border:0;border-bottom:1px solid #eee;}
 label,input,button,select,textarea{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:13px;font-weight:normal;line-height:18px;}
 label{display:block;margin-bottom:5px;color:#333333;}
@@ -610,12 +610,15 @@ a.thumbnail:hover{border-color:#0088cc;-webkit-box-shadow:0 1px 4px rgba(0, 105,
 .invisible{visibility:hidden;}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 .center-section-form{
     width: 75%;
     margin: 0 auto;
 }   
 =======
 
+=======
+>>>>>>> 68d14db47b142e02d487570b06902d4b312931d5
 /* MERAN */
 
 #top-stuff {
@@ -967,6 +970,9 @@ search-form .search-query {
     width: 140px;
 }
 
+<<<<<<< HEAD
 
 
 >>>>>>> bf3f739719e6fb5202c4c7e6a1f6cf2eadb7eaed
+=======
+>>>>>>> 68d14db47b142e02d487570b06902d4b312931d5

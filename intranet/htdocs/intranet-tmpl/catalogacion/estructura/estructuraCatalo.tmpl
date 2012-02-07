@@ -526,16 +526,15 @@ function updateModificarEstructuraCatalogacion(responseText){
 
 <div class="titulos" >Configuraci&oacute;n del formulario de carga</div>
 
-
-<fieldset>
-    <legend><strong>[% "Seleccione el nivel:" | i18n %]</strong></legend>
-    <ul>
-        <li class="sub_item">
-            <label for="niveles_id" >
-                [% 'Nivel:' | i18n %] 
-            </label>
+<form class="form-horizontal">
+    <fieldset>
+    <legend>[% "Seleccione el nivel:" | i18n %]</legend>
+    
+    <div class="control-group">
+        <label class="control-label" for="niveles_id"> [% "Nivel" | i18n %]: </label>
+        <div class="controls">
             [% selectNivel %]
-
+            
             [% PERL %]
                     print C4::AR::Filtros::to_Icon(   
                                                         boton   => "icon_buscar",
@@ -543,17 +542,19 @@ function updateModificarEstructuraCatalogacion(responseText){
                                                         title   => "[% 'Buscar' | i18n %]",
                             ) ;
             [% END %]
-        </li>
+            
+        </div>
+    </div>
     
-        <li id="content_combo_tipo_nivel3_id" class="sub_item">
-            <label for="tipo_nivel3_id">
-                [% 'Esquema:' | i18n %] 
-            </label>
+    <div class="control-group">
+        <label class="control-label" for="tipo_nivel3_id"> [% "Esquema" | i18n %]: </label>
+        <div class="controls">
             [% selectItemType %]
-        </li>
-    
-    </ul>
+        </div>
+    </div>
+
 </fieldset>
+</form>
 
 <!-- PARA MOSTRAR TEMPLATE PARA MODIFICAR CAMPOS -->
 <div id= "resultModificarCampo"></div>

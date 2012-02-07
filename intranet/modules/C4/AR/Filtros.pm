@@ -187,8 +187,9 @@ sub to_Button{
 
     my $button= '';
 
-    my @array_clases_buttons = ('clean-gray','thoughtbot', 'btn btn-large btn-primary', 'btn btn-large', 'btn btn-primary','btn' );
-  
+
+    my @array_clases_buttons = ('clean-gray','thoughtbot', 'btn btn-large btn-primary', 'btn btn-large', 'btn btn-primary','btn');  
+
     if ($params_hash_ref{'url'}){
       $button .="<a href="."$params_hash_ref{'url'}"."> ";
     }
