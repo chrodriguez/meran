@@ -169,88 +169,88 @@ $(document).ready( function() {
 <div id="estado_accion" class="titulos" style="display:none"></div>
 <!--            Manejo del Nivel 1 -->
 <div id="nivel1Tabla" style="display:none">
-<fieldset>
-<legend class="titulo_legend">[% "Datos del registro" | i18n %]</legend>
 
-<form id="formNivel1" name="formNivel1">
-<!--     CAMPOS DINAMICOS DEL NIVEL1 -->
-    <div id= "estructuraDelNivel1"></div>
-    <input type="hidden" name="token" value="[% token %]" />
-
-</form>
-    
-    <div class="textoCentrado">* [% "Campos obligatorios" | i18n %]</div>
-
-            [% PERL %]
-                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 1' | i18n %]",
-                                                        boton   => "boton_guardar",
-                                                        onClick => "guardar(1);",
-                                                        title   => "[% 'Guardar el nivel 1' | i18n %]",
-                                                        alternClass => "botonCentrado"
-                            ) ;
-            [% END %]
-
-</fieldset>
+	<form id="formNivel1" name="formNivel1" class="form-horizontal">
+		<fieldset>
+		<legend class="titulo_legend">[% "Datos del registro" | i18n %]</legend>
+		<!--     CAMPOS DINAMICOS DEL NIVEL1 -->
+		    <div id= "estructuraDelNivel1"></div>
+		    <input type="hidden" name="token" value="[% token %]" />
+		
+		    
+		    <div class="textoCentrado">* [% "Campos obligatorios" | i18n %]</div>
+		
+           <div class="form-actions">
+                    [% PERL %]
+                            print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 1' | i18n %]",
+                                                                boton   => "btn btn btn-primary",
+                                                                onClick => "guardar(1);",
+                                                                title   => "[% 'Guardar el nivel 1' | i18n %]",
+                                    ) ;
+                    [% END %]
+           </div>
+		
+		</fieldset>
+	</form>
 </div>
 
 <!--            Manejo del Nivel 2 -->
 <div id="nivel2Tabla" style="display:none">
-  <fieldset>
-    <legend class="titulo_legend">[% "Datos del grupo" | i18n %]</legend>
         
-    <form id="formNivel2" name="formNivel2">
-    <!--     CAMPOS DINAMICOS DEL NIVEL 2 -->
-        <div id= "estructuraDelNivel2"></div>
-        <input type="hidden" name="token" value="[% token %]" />
+    <form id="formNivel2" name="formNivel2" class="form-horizontal">
+		  <fieldset>
+		    <legend class="titulo_legend">[% "Datos del grupo" | i18n %]</legend>
+		    <!--     CAMPOS DINAMICOS DEL NIVEL 2 -->
+		        <div id= "estructuraDelNivel2"></div>
+		        <input type="hidden" name="token" value="[% token %]" />
+		
+		    <div class="textoCentrado">* [% "Campos obligatorios" | i18n %]</div>
+           <div class="form-actions">
+		
+			    [% PERL %]
+			            print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 2' | i18n %]",
+			                                                boton   => "btn btn btn-primary",
+			                                                onClick => "guardar(2);",
+			                                                title   => "[% 'Guardar el nivel 2' | i18n %]",
+			                    ) ;
+			    [% END %]
+          </div>		
+		  </fieldset>
     </form>
-
-    <div class="textoCentrado">* [% "Campos obligatorios" | i18n %]</div>
-
-    [% PERL %]
-            print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 2' | i18n %]",
-                                                boton   => "boton_guardar",
-                                                onClick => "guardar(2);",
-                                                title   => "[% 'Guardar el nivel 2' | i18n %]",
-                                                alternClass => "botonCentrado"
-                    ) ;
-    [% END %]
-
-  </fieldset>
 </div>
 
 
 <!--            Manejo del Nivel 3 -->
 <div id="nivel3Tabla" style="display:none">   
-<fieldset>
-<legend class="titulo_legend">[% "Datos del ejemplar" | i18n %]</legend>
 
-<form id="formNivel3" name="formNivel3">
-	<div id="divCantEjemplares" class="divContentComponente">
-		<li class="sub_item"> 
-            <label for="cantEjemplares">Cant. Ejemplares: </label>
-		    <input  id="cantEjemplares" type="text" tabindex="1" size="10" value="1" 
-                    class="required" onClick="registrarToggleOnChangeForBarcode()"/>
-        </li>
-	</div>
-<!--     CAMPOS DINAMICOS DEL NIVEL 3 -->
-    <div id= "estructuraDelNivel3"></div>
-    <input type="hidden" name="token" value="[% token %]" />
-
-</form>
-
-        <div class="textoCentrado">* [% "Campos obligatorios" | i18n %]</div>
-     
-                        [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 3' | i18n %]",
-                                                                    boton   => "boton_guardar",
-                                                                    onClick => "guardar(3);",
-                                                                    title   => "[% 'Guardar el nivel 3' | i18n %]",
-                                                                    alternClass => "botonCentrado"
-                                        ) ;
-                        [% END %]
-
-
-</fieldset>
+	<form id="formNivel3" name="formNivel3" class="form-horizontal">
+		<fieldset>
+		<legend class="titulo_legend">[% "Datos del ejemplar" | i18n %]</legend>
+			<div id="divCantEjemplares" class="divContentComponente">
+				<li class="sub_item"> 
+		            <label for="cantEjemplares">Cant. Ejemplares: </label>
+				    <input  id="cantEjemplares" type="text" tabindex="1" size="10" value="1" 
+		                    class="required" onClick="registrarToggleOnChangeForBarcode()"/>
+		        </li>
+			</div>
+		<!--     CAMPOS DINAMICOS DEL NIVEL 3 -->
+		    <div id= "estructuraDelNivel3"></div>
+		    <input type="hidden" name="token" value="[% token %]" />
+		
+	        <div class="textoCentrado">* [% "Campos obligatorios" | i18n %]</div>
+            <div class="form-actions">
+	     
+	                        [% PERL %]
+	                                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 3' | i18n %]",
+	                                                                    boton   => "btn btn btn-primary",
+	                                                                    onClick => "guardar(3);",
+	                                                                    title   => "[% 'Guardar el nivel 3' | i18n %]",
+	                                        ) ;
+	                        [% END %]
+            </div>
+	    </fieldset>
+	</form>
+    
 </div>
 
 </div> <!--END <div class="centro">-->

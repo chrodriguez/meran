@@ -2,6 +2,7 @@
 <html>
 	<head>
 	[% INCLUDE "message_INTRA.inc" %]
+	[% INCLUDE "BootstrapToolkit.inc" %]
 	<script type="text/javascript">
 	//     <!-- variables de entorno sacadas de las preferencias del sistema -->
 	    token       = '[% token %]';
@@ -20,8 +21,12 @@
 	
 	<meta charset="utf-8" />
 	<META HTTP-EQUIV="cache-control" content="public">
+<<<<<<< HEAD
 <!--	<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme_intra %]/includes/intranet.css">-->
  	<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme_intra %]/includes/bootstrap.css"> 
+=======
+<!-- 	<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme_intra %]/includes/intranet.css"> -->
+>>>>>>> 4509992d6c0749ad260c1b7c1240a935eecc2979
 	<link media="screen" rel="stylesheet" href="/includes/jquery/modal/basic-min.css" type="text/css">
 	<link media="screen" rel="stylesheet" href="/includes/css/fancybox.css" type="text/css">
 	<script type="text/javascript" src="/includes/json/jsonStringify.js"></script>
@@ -104,7 +109,7 @@
 			    $(this).removeClass("textInput").addClass("focusInput");  
 			});
 	        $('input[type="text"]').addClass("textInput");    
-
+	       // $('.dropdown-toggle').dropdown();
 			if (UNLOAD == 1)
 				enableAlert();
 			else
@@ -112,7 +117,7 @@
 	    });
 	</script>
 	</head>
-	<body>
+	<body data-spy="scroll" data-target=".subnav" data-offset="50">
 	  <noscript>
 	      <div class='tableMsgUser'>
 	          <font class='fontMsgUser'>
@@ -131,7 +136,7 @@
 	<!--  </div> -->
 	  
 	  <div id="marco_principal">
-	     <div id="marco_contenido" class="contenido">
+	     <div id="container" class="container">
 	  
 	  
 		  <div id="marco_contenido_datos" class="contenido">
