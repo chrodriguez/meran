@@ -70,8 +70,8 @@ function crearForm(url, params) {
  */
 function zebra(classObj) {
 
-	$("." + classObj + " tr:gt(0):odd").addClass("impar");
-	$("." + classObj + " tr:gt(0):even").addClass("par");
+	//$("." + classObj + " tr:gt(0):odd").addClass("impar");
+	//$("." + classObj + " tr:gt(0):even").addClass("par");
 }
 
 function zebraList(classObj) {

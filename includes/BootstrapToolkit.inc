@@ -1,6 +1,3 @@
-<link rel="stylesheet" href="/includes/bootstrap/bootstrap.min.css">
-<script src="/includes/bootstrap/js/bootstrap-tabs.js"></script>
-<script src="/includes/bootstrap/js/bootstrap-alerts.js"></script>
-<script src="/includes/bootstrap/js/bootstrap-twipsy.js"></script>
-<script src="/includes/bootstrap/js/bootstrap-buttons.js"></script>
-<script src="/includes/bootstrap/js/bootstrap-scrollspy.js"></script>
+<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme_intra %]/includes/bootstrap.css">
+<script src="http://twitter.github.com/bootstrap/assets/js/jquery.js"></script>
+<script src="/includes/bootstrap/js/bootstrap.min.js"></script>

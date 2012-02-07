@@ -11,10 +11,12 @@ use base qw( Template::Plugin::Filter );
 use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
 @EXPORT_OK=qw( 
-    &setHelpIco
-    &i18n
-    &link_to
-    &to_Button
+    setHelpIco
+    i18n
+    link_to
+    to_Button
+    action_link_button
+    action_button
 );
 
 =item
@@ -184,8 +186,9 @@ sub to_Button{
     my (%params_hash_ref) = @_;
 
     my $button= '';
+
     my @array_clases_buttons = ('clean-gray','thoughtbot', 'btn btn-large btn-primary', 'btn btn-large', 'btn btn-primary','btn' );
-    
+  
     if ($params_hash_ref{'url'}){
       $button .="<a href="."$params_hash_ref{'url'}"."> ";
     }
@@ -604,6 +607,41 @@ sub getComboValidadores {
     return $html;
 }
 
+sub action_link_button{
+
+    my (%params_hash_ref) = @_;
+
+    my $url      = $params_hash_ref{'url'} || $params_hash_ref{'url'}; #obtengo el llamado a la funcion en el evento onclick
+    my $button   = $params_hash_ref{'button'}; #obtengo el boton
+    my $icon     = $params_hash_ref{'icon'} || undef;  #obtengo el boton
+    my $params   = $params_hash_ref{'params'} || $params_hash_ref{'url'}; #obtengo el llamado a la funcion en el evento onclick
+    my $title    = $params_hash_ref{'title'}; #obtengo el title de la componete
+    my @result;
+    
+    foreach my $p (@$params){
+        @result = split(/=/,$p);
+
+        $url = C4::AR::Utilidades::addParamToUrl($url,@result[0],@result[1]);
+    }
+    
+    my $html = "<a class='".$button."' href='".$url."'><i class='".$icon."'></i>".$title."</a>";
+    
+    return $html;
+}
+
+sub action_button{
+
+    my (%params_hash_ref) = @_;
+
+    my $action    = $params_hash_ref{'action'};
+    my $button   = $params_hash_ref{'button'}; #obtengo el boton
+    my $icon     = $params_hash_ref{'icon'} || undef;  #obtengo el boton
+    my $title    = $params_hash_ref{'title'}; #obtengo el title de la componete
+
+    my $html = "<a class='".$button."' href='' onclick='".$action."'><i class='".$icon."'></i>".$title."</a>";
+    
+    return $html;
+}
 
 END { }       # module clean-up code here (global destructor)
 

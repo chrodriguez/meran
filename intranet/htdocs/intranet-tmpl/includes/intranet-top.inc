@@ -2,6 +2,7 @@
 <html>
 	<head>
 	[% INCLUDE "message_INTRA.inc" %]
+	[% INCLUDE "BootstrapToolkit.inc" %]
 	<script type="text/javascript">
 	//     <!-- variables de entorno sacadas de las preferencias del sistema -->
 	    token       = '[% token %]';
@@ -104,7 +105,7 @@
 			    $(this).removeClass("textInput").addClass("focusInput");  
 			});
 	        $('input[type="text"]').addClass("textInput");    
-
+	       // $('.dropdown-toggle').dropdown();
 			if (UNLOAD == 1)
 				enableAlert();
 			else
@@ -112,7 +113,7 @@
 	    });
 	</script>
 	</head>
-	<body>
+	<body data-spy="scroll" data-target=".subnav" data-offset="50">
 	  <noscript>
 	      <div class='tableMsgUser'>
 	          <font class='fontMsgUser'>
@@ -131,7 +132,7 @@
 	<!--  </div> -->
 	  
 	  <div id="marco_principal">
-	     <div id="marco_contenido" class="contenido">
+	     <div id="container" class="container">
 	  
 	  
 		  <div id="marco_contenido_datos" class="contenido">
