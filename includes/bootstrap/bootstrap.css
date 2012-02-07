@@ -961,5 +961,7 @@ search-form .search-query {
     width: 140px;
 }
 
-
+.inline{
+	display: inline;
+}
 
