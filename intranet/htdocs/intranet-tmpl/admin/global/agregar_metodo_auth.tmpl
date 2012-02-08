@@ -1,32 +1,34 @@
 <fieldset>
-<legend>[% "Modificar Preferencia:" | i18n %]</legend>
-<ul>
-    <li class="sub_item" >
-	    <label for="variable">
-		    [% "Metodo" | i18n %]:
-	    </label>
-    </li>
-</ul>
-
-<ul>
-	    <li>
-            <input id="name_metodo" type="text">
-	    </li>
-</ul>
-
-    <div style="clear:both">
-        <p>[% "NOTA: El M&eacute;todo se agrega deshabilitado por defecto." | i18n %]</p>
-    </div>
+<legend>[% "Agregar M&eacute;todo de Autenticaci&oacute;n:" | i18n %]</legend>
+    <form class="form-horizontal" action="return false">
     
-    [% PERL %]
-                print C4::AR::Filtros::to_Button(   
-                                    text    => "[% 'Guardar M&eacute;todo' | i18n %]",
-                                    boton   => "boton_agregar",
-                                    onClick => "guardarMetodo();",
-                                    width   => "auto",
-                                    title   => "[% 'Guardar M&eoacute;todo' | i18n %]", 
-                                    alternClass   => "botonCentrado"
-                        ) ;
-    [% END %]
-
+        <div class="control-group">
+            <label class="control-label" for="variable">[% 'Metodo' | i18n %]: </label>
+            <div class="controls">
+                <input id="name_metodo" type="text">
+                [% PERL %]
+                    print C4::AR::Filtros::setHelpInput(   
+                                                    text        => "[% 'El M&eacute;todo se agrega deshabilitado por defecto.' | i18n %]",
+                                                    class       => "info",
+                                                    textLabel   => "NOTA:"
+                                            ) ;
+                    
+                [% END %]
+            </div>
+        </div>
+        
+        <div class="form-actions">
+            [% PERL %]
+                        print C4::AR::Filtros::to_Button(   
+                                            text    => "[% 'Guardar M&eacute;todo' | i18n %]",
+                                            boton   => "boton_agregar",
+                                            onClick => "guardarMetodo();",
+                                            width   => "auto",
+                                            title   => "[% 'Guardar M&eoacute;todo' | i18n %]", 
+                                            alternClass   => "botonCentrado"
+                                ) ;
+            [% END %]
+        </div>
+        
+    </form>
 </fieldset>

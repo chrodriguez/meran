@@ -17,6 +17,7 @@ use vars qw(@EXPORT_OK @ISA);
     to_Button
     action_link_button
     action_button
+    setHelpInput
 );
 
 =item
@@ -251,6 +252,44 @@ sub setHelp{
 #     $help       =  "<div class='reference'>".i18n($params_hash_ref{'text'})."</div>";
     $help       =  "<span class='help-inline'>".i18n($params_hash_ref{'text'})."</span>";
     return $help;
+}
+
+
+=item 
+Ffuncion que crea los mensajes de ayuda en los inputs
+Recibe como parametro una hash con:
+    textLabel: texto del label
+    class: clase del label (para darle colores, sino pone una por default)
+    text: texto de ayuda
+    
+Ejemplo:
+        text        => "[% 'El M&eacute;todo se agrega deshabilitado por defecto.' | i18n %]",
+        class       => "info",
+        textLabel   => "NOTA:"    
+=cut
+sub setHelpInput{
+
+    my (%params_hash_ref)       = @_;
+    
+    my @array_clases_labels     = ('success','warning', 'important', 'info');
+    
+    my $classLabel              = $params_hash_ref{'class'} || "label";
+    
+    if (!C4::AR::Utilidades::existeInArray($classLabel,@array_clases_labels)){
+        $classLabel = "label";
+    }
+    
+    if($classLabel ne "label"){
+        $classLabel = "label label-" . $classLabel;
+    }
+       
+    my $help                    = "<p class='help-block'><span class='"
+                                    . $classLabel . "'>"
+                                    . $params_hash_ref{'textLabel'} . "</span>"
+                                    . $params_hash_ref{'text'} . "</p>";
+
+    return $help;                                    
+   
 }
 
 
