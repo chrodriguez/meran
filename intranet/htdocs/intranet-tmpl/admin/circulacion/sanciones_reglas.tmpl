@@ -1,15 +1,18 @@
-<table border=0 cellspacing=0 cellpadding=0 width="100%">
-	<tr class="titulo_tabla_resultado">
+<table class="table table-striped">
+  <thead>    
+    <tr class="titulo_tabla_resultado">
 
-		<td>[% "Orden" | i18n %]</td>
-		<td>[% "D&iacute;as de demora" | i18n %]</td>
-        <td>[% "D&iacute;as de sanci&oacute;n" | i18n %]</td>
-        <td>[% "Cantidad" | i18n %]</td>
-        <td> [% "Eliminar" | i18n %]</td>
+		<th>[% "Orden" | i18n %]</th>
+		<th>[% "D&iacute;as de demora" | i18n %]</th>
+        <th>[% "D&iacute;as de sanci&oacute;n" | i18n %]</th>
+        <th>[% "Cantidad" | i18n %]</th>
+        <th> [% "Eliminar" | i18n %]</th>
 
         </tr>
+  </thead>  
+  <tbody>
         [% FOREACH regla_tipo IN REGLAS_TIPOS_SANCIONES %]
-		<tr valign=middle align=center>
+		<tr>
 
 			<td>[% regla_tipo.getOrden %]</td>
 			<td>[% regla_tipo.ref_regla.getDias_demora %]</td>
@@ -29,11 +32,11 @@
 	[% END %]
 	<tr class="titulo_tabla_resultado">
         <td>[% "Orden" | i18n %]</td>
-        <td colspan="2">[% "Regla" | i18n %]</td>
+        <td>[% "Regla" | i18n %]</td>
         <td>[% "Cantidad" | i18n %]</td>
         <td> [% "Agregar" | i18n %]</td>
         </tr>
-        <tr valign=middle align=center>
+        <tr>
         	<td >[% ordenes %]</td>
             <td colspan="2">
             <div width='20%'>
@@ -62,4 +65,5 @@
             [% END %]
 		    </td>
         </tr>
+    </tbody>
 </table>

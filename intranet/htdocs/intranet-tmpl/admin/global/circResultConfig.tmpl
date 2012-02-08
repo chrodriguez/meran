@@ -1,18 +1,18 @@
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend">[% "Preferencias de circulaci&oacute;n" | i18n %]</legend>
     <div class="tablaResultado_preferencias" id="tablaResultado_preferencias" >
-        <table name="tablaResult" class="datos_tabla" cellspacing="0" cellpadding="0" border="0" width="100%">
+        <table name="tablaResult" class="datos_tabla table table-striped">
             <thead>
                 <tr class="titulo_tabla_resultado">
-                    <th width="13%">[% "Variable" | i18n %]</th>
-                    <th width="25%">[% "Valor" | i18n %]</th>
-                    <th width="39%">[% "Explicaci&oacute;n" | i18n %]</th>
-                    <th width="3%">[% "Editar" | i18n %]</th>
+                    <th>[% "Variable" | i18n %]</th>
+                    <th>[% "Valor" | i18n %]</th>
+                    <th>[% "Explicaci&oacute;n" | i18n %]</th>
+                    <th>[% "Editar" | i18n %]</th>
                 </tr>
             </thead>
-        <tbody>
-        [% FOREACH preferencia IN preferencias %]
-            <tr>
+            <tbody>
+            [% FOREACH preferencia IN preferencias %]
+              <tr>
                 <td >[% preferencia.getVariable %]</td>
                 <td >[% preferencia.getShowValue %]</td>
                 <td >[% preferencia.getExplanation %]</td>
@@ -26,10 +26,9 @@
                                     ) ;
                     [% END %]
                 </td>
-            
-            </tr>
+              </tr>
         
-        [% END %]
+            [% END %]
         
             </tbody>
         </table>
