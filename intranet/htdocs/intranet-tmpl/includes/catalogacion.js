@@ -1215,7 +1215,7 @@ function procesarInfoJson(marc_object_array, id_padre){
 
         //header CENTER
         strComp = strComp + "<div id='trigger_" + id_temp + "' class='MARCHeader click trigger trigger_" + id_temp + "' style='width:80%;float:left'>";
-        strComp = strComp + "<a class='fancy_extern_link' href='http://www.loc.gov/marc/bibliographic/bd" + campo_marc_conf_obj.getCampo() + ".html' TARGET='_blank'>" + campo_marc_conf_obj.getCampo() + "</a> - " + campo_marc_conf_obj.getNombre();
+        strComp = strComp + "<a class='fancy_extern_link' href='http://www.loc.gov/marc/bibliographic/bd" + campo_marc_conf_obj.getCampo() + ".html' TARGET='_blank'>" + campo_marc_conf_obj.getCampo() + "</a> - " +  "<h5 class='inline'>" + campo_marc_conf_obj.getNombre() + "</h5>";
 
         if(campo_marc_conf_obj.getRepetible() == "1"){  
             //cierro div CENTER
@@ -1652,13 +1652,15 @@ function openDivButtonContainer(id,tipo){
 	
 	var clase 			= "btn btn-primary ";
 	var clase_dropdown  = "btn btn-primary dropdown-toggle ";
+	var title			= "Campo"
 	if (tipo != 'campo'){
 		clase = "btn ";
 		clase_dropdown = "btn dropdown-toggle ";
+		title			= "Subcampo";
 	}
 	
 	var elem = 	'<div class="btn-group" style="float: left; margin-left: 5px;" id="'+id+'">'+
-				'<a class="'+clase+'"><i class="icon white user"></i> Acciones</a>'+
+				'<a class="'+clase+'"><i class="icon white user"></i> '+title+'</a>'+
 				'<a class="'+clase_dropdown+'" data-toggle="dropdown" ><span class="caret"></span></a>'+
 				'<ul class="dropdown-menu" id="'+id+"_lista"+'">'+'</ul></div>';
 	
@@ -1674,8 +1676,7 @@ function closeDivButtonContainer(id){
 function crearBotonAgregarSubcampoRepetible(obj){
 
     if(obj.getRepetible() == '1'){
-    	return '<li><a onclick=cloneSubCampo("'+ obj.getIdCompCliente() +'")><i class="icon-plus"></i> Agregar Subcampo repetible</a></li>';
-        //return "<div onclick=cloneSubCampo('"+ obj.getIdCompCliente() +"') class='icon_mas horizontal' title='Agregar subcampo repetible'/>";
+    	return '<li><a onclick=cloneSubCampo("'+ obj.getIdCompCliente() +'")><i class="icon-plus"></i> Agregar</a></li>';
     }else{  
         return "";
     }
@@ -1684,17 +1685,14 @@ function crearBotonAgregarSubcampoRepetible(obj){
 function crearBotonEliminarSubcampoRepetible(obj){
 //HACER CON ESTOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
     if(obj.getRepetible() == '1'){
-    	return '<li><a onclick=removeSubcampo("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar Subcampo repetible</a></li>';
-    	//return "<div onclick=removeSubcampo('"+ obj.getIdCompCliente() +"') class='icon_borrar horizontal' title='Eliminar subcampo repetible'/>";
+    	return '<li><a onclick=removeSubcampo("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar</a></li>';
     }else{  
         return "";
     }
 }
 
 function crearBotonEliminarSubcampo(obj){
-	return '<a onclick=removeSubcampo("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar Subcampo</a></li>';
-    //return "<div onclick=removeSubcampo('"+ obj.getIdCompCliente() +"') class='icon_borrar horizontal' title='Eliminar subcampo'/>";
-	return "<a class='btn btn-danger' onclick=removeSubcampo('"+ obj.getIdCompCliente() +"')><i class='icon-trash icon-white'></i> Borrar </a>";
+	return '<a onclick=removeSubcampo("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar</a></li>';
 }
 
 
@@ -1707,8 +1705,7 @@ function crearIconWarning(obj){
 function crearBotonAgregarCampoRepetible(obj, id_padre){
 
     if(obj.getRepetible() == '1'){
-    	return "<li><a onclick=cloneCampo('"+ id_padre +"')><i class='icon-plus'></i> Agregar campo repetible</a></li>";
-        //return "<div onclick=cloneCampo('marc_group"+ id_padre +"') class='icon_mas horizontal' title='Agregar campo repetible'/>";
+    	return "<li><a onclick=cloneCampo('"+ id_padre +"')><i class='icon-plus'></i> Agregar</a></li>";
     }else{  
         return "";
     }
@@ -1717,9 +1714,7 @@ function crearBotonAgregarCampoRepetible(obj, id_padre){
 function crearBotonEliminarCampoRepetible(obj){
 
     if(obj.getRepetible() == '1'){
-    	return '<li><a onclick=remove("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar campo repetible</a></li>';
-        //return "<div onclick=remove('"+ obj.getIdCompCliente() +"') class='horizontal icon_borrar' title='Eliminar campo repetible'/>";
-    	return "<a class='btn btn-danger' onclick=remove('"+ obj.getIdCompCliente() +"')><i class='icon-trash icon-white'></i> Elimimar </a>";
+    	return '<li><a onclick=remove("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar</a></li>';
     }else{  
         return "";
     }
