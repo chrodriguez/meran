@@ -1,55 +1,59 @@
-<table class="datos_tabla" border='0' cellpadding='0' cellspacing='0' width='99%'>
-    <tr class="titulo_tabla_resultado">
-        <td>[% "C&oacute;digo" | i18n %]</td>
-        <td>[% "Descripci&oacute;n" | i18n %]</td>
-        <td>[% "M&aacute;xima cantidad de pr&eacute;stamos" | i18n %]</td>
-        <td>[% "D&iacute;as de duraci&oacute;n del pr&eacute;stamo" | i18n %]</td>
-        <td>[% "Renovaciones" | i18n %]</td>
-        <td>[% "D&iacute;as de Renovaci&oacute;n" | i18n %]</td>
-        <td>[% "Cantidad de d&iacute;as para renovar" | i18n %]</td>
-        <td>[% "Para Sala" | i18n %]</td>
-        <td>[% "Habilitado" | i18n %]</td>
-        <td width="8%">[% "Editar" | i18n %]</td>
-<!--         <td>[% "Eliminar" | i18n %]</td> -->
+<table class="table table-striped">
+  <thead>
+    <tr>
+        <th>[% "C&oacute;digo" | i18n %]</th>
+        <th>[% "Descripci&oacute;n" | i18n %]</th>
+        <th>[% "M&aacute;xima cantidad de pr&eacute;stamos" | i18n %]</th>
+        <th>[% "D&iacute;as de duraci&oacute;n del pr&eacute;stamo" | i18n %]</th>
+        <th>[% "Renovaciones" | i18n %]</th>
+        <th>[% "D&iacute;as de Renovaci&oacute;n" | i18n %]</th>
+        <th>[% "Cantidad de d&iacute;as para renovar" | i18n %]</th>
+        <th>[% "Para Sala" | i18n %]</th>
+        <th>[% "Habilitado" | i18n %]</th>
+        <th>[% "Editar" | i18n %]</th>
+<!--         <th>[% "Eliminar" | i18n %]</th> -->
     </tr>
-[% FOREACH tipo_prestamo IN TIPOS_PRESTAMOS_LOOP %]
-    <tr align="middle">    
+  </thead>
+
+  <tbody>
+    [% FOREACH tipo_prestamo IN TIPOS_PRESTAMOS_LOOP %]
+    <tr>    
         <td>
                 [% tipo_prestamo.getId_tipo_prestamo %]
         </td>
         <td>
                 [% tipo_prestamo.getDescripcion %]
         </td>
-        <td align="center">
+        <td>
                 [% tipo_prestamo.getPrestamos %]
         </td>
-        <td align="center">
+        <td>
                 [% tipo_prestamo.getDias_prestamo %]
         </td>
-        <td align="center">
+        <td>
                 [% tipo_prestamo.getRenovaciones %]
         </td>
-        <td align="center">
+        <td>
                 [% tipo_prestamo.getDias_renovacion %]
         </td>
-        <td align="center">
+        <td>
                 [% tipo_prestamo.getDias_antes_renovacion %]
         </td>
-        <td align="center">
+        <td>
                 [% IF tipo_prestamo.codigo_disponibilidad == 'CIRC0001' %]
                         [% "Si" | i18n %]
                 [% ELSE %]
                         [% "No" | i18n %]
                 [% END %]
         </td>
-        <td align="center">
+        <td>
                 [% IF tipo_prestamo.getHabilitado %]
                         [% "Si" | i18n %]
                 [% ELSE %]
                         [% "No" | i18n %]
                 [% END %]
         </td>
-        <td   align="center">
+        <td>
                             [% PERL %]
                                 print C4::AR::Filtros::to_Icon( text =>     "[% 'Editar' | i18n %]",
                                                                 onClick => "modificarTipoPrestamo('[% tipo_prestamo.getId_tipo_prestamo %]')",
@@ -71,9 +75,8 @@
         </td>-->
     </tr>
 [% END %]
-        <tr valign=bottom>
-                <td class="lineafinaltabla"  align="left" colspan="9"></td>
-        </tr>
+       
+ </tbody>
 </table>
 
             <div style="float: left; width: 100%;">

@@ -61,88 +61,110 @@ function Check(f) {
 </script>
 
 <fieldset>
+  <section class="center-section-form"> 
     <legend class="titulo_legend">
 [% IF tipo_prestamo %]
     [% "Modificar Tipo de Pr&eacute;stamo" | i18n %]
 [% ELSE %]
     [% "Agregar Tipo de Pr&eacute;stamo" | i18n %]
 [% END %]</legend>
-    <br>
-    <ul>
-                [% IF tipo_prestamo %]
-                <li class="sub_item">
-                    <label for="tipo_prestamo">[% 'Tipo de pr&eacute;stamo' | i18n %]</label>
-                    <input type=hidden id='id_tipo_prestamo'  value='[% tipo_prestamo.getId_tipo_prestamo %]'>
-                    [% tipo_prestamo.getId_tipo_prestamo %]
-                </li>
-                [% ELSE %]
-                 <li class="sub_item">
-                     <label for="tipo_prestamo">[% "Tipo de pr&eacute;stamo" | i18n %]</label>
-                     <input type=text id='id_tipo_prestamo' size=6 maxlength=4 onBlur="toUC(this)">
-                 </li>
-                [% END %]
-                <li class="sub_item">
-                     <label for="descripcion">[% "Descripci&oacute;n" | i18n %]</label>
-                     <input type=text id='descripcion' size=40 maxlength=80 value='[% tipo_prestamo.getDescripcion %]'>
-                </li>
-                <li class="sub_item">
-                     <label for="sala">[% "Para Sala" | i18n %]</label>
-                    [% IF tipo_prestamo.codigo_disponibilidad == 'CIRC0001' %]
-                        <input type=checkbox id='disponibilidad' checked value=1>
-                    [% ELSE %]
-                        <input type=checkbox id='disponibilidad' value=1>
-                    [% END %]
-                </li>
-                <li class="sub_item">
-                    <label for="habilitado">[% "Habilitado" | i18n %]</label>
-                    [% IF tipo_prestamo.getHabilitado %]
-                    <input  type=checkbox id='habilitado' checked value=1>
-                    [% ELSE %]
-                    <input  type=checkbox id='habilitado' value=1>
-                    [% END %]
-                </li>
-                <li class="sub_item">
-                    <label for="max_prestamos">[% "M&aacute;xima cantidad de pr&eacute;stamos" | i18n %]</label>
-                    <input type=text  id='prestamos' size=10 value='[% tipo_prestamo.getPrestamos %]'>
-                </li>
-                <li class="sub_item">
-                     <label for="max_prestamos">[% "D&iacute;as de duraci&oacute;n del pr&eacute;stamo" | i18n %]</label>
-                     <input type=text id='dias_prestamo' size=40 maxlength=80 value='[% tipo_prestamo.getDias_prestamo %]'>
-                </li>
-
-                <li class="sub_item">
-                    <label for="renovaciones">[% "Renovaciones" | i18n %]</label>
-                    <input type=text id='renovaciones' size=40 maxlength=80 value='[% tipo_prestamo.getRenovaciones %]'>
-                </li>
-                <li class="sub_item">
-                     <label for="dias_renovaciones">[% "D&iacute;as de Renovaci&oacute;n" | i18n %]</label>
-                     <input type=text id='dias_renovacion' size=40 maxlength=80 value='[% tipo_prestamo.getDias_renovacion %]'>
-                </li>
-                <li class="sub_item">
-                     <label for="dias_antes_renovaciones">[% "Cuantos d&iacute;as antes se puede renovar" | i18n %]</label>
-                     <input type=text id='dias_antes_renovacion' size=40 maxlength=80 value='[% tipo_prestamo.getDias_antes_renovacion %]'>
-               </li>
-
-            <div style="float: left; width: 100%;">
-                            [% IF tipo_prestamo %]
-                                [% PERL %]
-                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
-                                                                        boton   => "boton_guardar",
-                                                                        onClick => "guardarModificacionTipoPrestamo();",
-                                                                        title   => "[% 'Guardar Cambios' | i18n %]",
-                                                                        alternClass => "botonCentrado"
-                                            ) ;
+    
+          <form class="form-horizontal">
+                <div class="control-group">
+                      [% IF tipo_prestamo %]
+                          <label for="tipo_prestamo" class="control-label">[% 'Tipo de pr&eacute;stamo' | i18n %]</label>
+                          <div class="controls">
+                              <input type=hidden id='id_tipo_prestamo'  value='[% tipo_prestamo.getId_tipo_prestamo %]'>
+                              [% tipo_prestamo.getId_tipo_prestamo %]
+                          </div>
+                      [% ELSE %]
+                          <label for="tipo_prestamo" class="control-label">[% "Tipo de pr&eacute;stamo" | i18n %]</label>
+                          <div class="controls">
+                              <input type=text id='id_tipo_prestamo' size=6 maxlength=4 onBlur="toUC(this)">
+                          </div>
+                      [% END %]
+                </div>
+                <div class="control-group">
+                          <label for="descripcion" class="control-label">[% "Descripci&oacute;n" | i18n %]</label>
+                          <div class="controls">
+                                <input type=text id='descripcion' size=40 maxlength=80 value='[% tipo_prestamo.getDescripcion %]'>
+                          </div>
+                </div>
+                <div class="control-group">
+                          <label for="sala" class="control-label">[% "Para Sala" | i18n %]</label>
+                          <div class="controls">
+                                [% IF tipo_prestamo.codigo_disponibilidad == 'CIRC0001' %]
+                                    <input type=checkbox id='disponibilidad' checked value=1>
+                                [% ELSE %]
+                                    <input type=checkbox id='disponibilidad' value=1>
                                 [% END %]
-                            [% ELSE %]
-                                [% PERL %]
-                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
-                                                                        boton   => "boton_guardar",
-                                                                        onClick => "guardarNuevoTipoPrestamo();",
-                                                                        title   => "[% 'Guardar Cambios' | i18n %]",
-                                                                        alternClass => "botonCentrado"
-                                            ) ;
-                                [% END %]
-                            [% END %]
-            </div>
-        </ul>
+                          </div>
+                </div>
+                <div class="control-group">
+                          <label for="habilitado" class="control-label">[% "Habilitado" | i18n %]</label>
+                          <div class="controls">
+                              [% IF tipo_prestamo.getHabilitado %]
+                              <input  type=checkbox id='habilitado' checked value=1>
+                              [% ELSE %]
+                              <input  type=checkbox id='habilitado' value=1>
+                              [% END %]
+                          </div>
+                </div>
+                <div class="control-group">
+                          <label for="max_prestamos" class="control-label">[% "M&aacute;xima cantidad de pr&eacute;stamos" | i18n %]</label>
+                          <div class="controls">
+                              <input type=text  id='prestamos' size=10 value='[% tipo_prestamo.getPrestamos %]'>
+                          </div>
+                </div>
+                <div class="control-group">
+                          <label for="max_prestamos" class="control-label">[% "D&iacute;as de duraci&oacute;n del pr&eacute;stamo" | i18n %]</label>
+                          <div class="controls">
+                                <input type=text id='dias_prestamo' size=40 maxlength=80 value='[% tipo_prestamo.getDias_prestamo %]'>
+                          </div> 
+                </div>
+
+                <div class="control-group">
+                    <label for="renovaciones" class="control-label">[% "Renovaciones" | i18n %]</label>
+                    <div class="controls">
+                        <input type=text id='renovaciones' size=40 maxlength=80 value='[% tipo_prestamo.getRenovaciones %]'>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="dias_renovaciones" class="control-label">[% "D&iacute;as de Renovaci&oacute;n" | i18n %]</label>
+                    <div class="controls">
+                        <input type=text id='dias_renovacion' size=40 maxlength=80 value='[% tipo_prestamo.getDias_renovacion %]'>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label for="dias_antes_renovaciones" class="control-label">[% "Cuantos d&iacute;as antes se puede renovar" | i18n %]</label>
+                    <div class="controls">
+                        <input type=text id='dias_antes_renovacion' size=40 maxlength=80 value='[% tipo_prestamo.getDias_antes_renovacion %]'>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                                  [% IF tipo_prestamo %]
+                                      [% PERL %]
+                                          print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
+                                                                              boton   => "boton_guardar",
+                                                                              onClick => "guardarModificacionTipoPrestamo();",
+                                                                              title   => "[% 'Guardar Cambios' | i18n %]",
+                                                                              alternClass => "botonCentrado",
+                                                                              inline => "1",
+                                                  ) ;
+                                      [% END %]
+                                  [% ELSE %]
+                                      [% PERL %]
+                                          print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
+                                                                              boton   => "boton_guardar",
+                                                                              onClick => "guardarNuevoTipoPrestamo();",
+                                                                              title   => "[% 'Guardar Cambios' | i18n %]",
+                                                                              alternClass => "botonCentrado",
+                                                                              inline => "1",
+                                                  ) ;
+                                      [% END %]
+                                  [% END %]
+                  </div>
+          </section>
+      </form>
 </fieldset>
