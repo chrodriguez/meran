@@ -22,7 +22,6 @@
 	
 	<meta charset="utf-8" />
 	<META HTTP-EQUIV="cache-control" content="public">
-	<script type="text/javascript" src="/includes/jquery/bootbox.min.js"></script>
 	<script type="text/javascript" src="/includes/json/jsonStringify.js"></script>
 	<script type="text/javascript" src="/includes/completo-intranet-top.js"></script>
 	[% INCLUDE "BootstrapToolkit.inc" %]
@@ -121,7 +120,7 @@
 	      </div>
 	  </noscript>
 	  
-	  <div id="ajax-indicator" class="modal hide fade loading" style="display: none;">
+	  <div id="ajax-indicator" class="modal hide fade loading">
 			<div id="block_1" class="barlittle"></div>
 			<div id="block_2" class="barlittle"></div>
 			<div id="block_3" class="barlittle"></div>

@@ -1114,7 +1114,7 @@ function guardar_indicadores(id_div_indicadores, i){
         str                         = str + "<span class='indSeparator'>|</span><span>" + key_indicador_secundario + "</span>";
 
     $('#'+id_div_indicadores).html(str);
-    $.modal.close(); //cirro la ventana
+    closeModal(id_div_indicadores);
 
     //seteo los valores en los combos ocultos para luego guardarlos en la base
     $("#select_indicador_primario" + i).val(key_indicador_primario); 
@@ -1150,7 +1150,7 @@ function procesarInfoJson(marc_object_array, id_padre){
         var id_aux                  = MARC_OBJECT_ARRAY.length;
 
         //los indicadores quedan ocultos y se muestran en una ventana
-        strComp                     = strComp + "<form id='" + id_div_alta_indicador + "' class= 'modal fade hide' class='form-horizontal well'>";
+        strComp                     = strComp + "<form id='" + id_div_alta_indicador + "' class= 'modal fade hide form-horizontal well' onsubmit='return false;'>";
    
         
         //genero el indicador primario

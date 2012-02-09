@@ -9,16 +9,14 @@
 
 function startOverlay(){
     $('#ajax-indicator').modal();   
-    
-    return (true);
 }
 
 
 function closeModal(id){
-	if (id)
-		$('#ajax-indicator').modal('toggle');
+	if (id == '')
+		$('#ajax-indicator').modal('hide');
 	else
-		$('#'+id).modal('toggle');
+		$('#'+id).modal('hide');
 }
 //Funciones Privadas para manejar el estado del la consulta de AJAX
 
@@ -73,8 +71,6 @@ function _HiddeState(options){
     }
 
     if(options.showOverlay){
-//         $.modal.close();
-//         $('#ajax-indicator').ajaxStop($.modal.close());
         $(document).ajaxStop(closeModal());
     }
 
