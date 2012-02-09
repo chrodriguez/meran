@@ -1,74 +1,75 @@
 <fieldset class="datos_usuario">
+<div class="form-actions"> 
 <legend class="titulo_legend_resaltado">[% 'Datos de Usuario' | i18n %]</legend>
-<div id="datosUsuario" style="clear:both;">
-	<div class="vcard">
-    <ul>
-        <li>
-            [% "Apellido y Nombre:" | i18n %]
-            <b>
-              [% PERL %]
-                  print C4::AR::Filtros::link_to(   text =>     "[% socio.persona.getApeYNom %]",
-                                                    url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
-                                                    params =>   ["nro_socio=[% socio.getNro_socio %]"],
-                                                    title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
-                                                    blank =>  1,
-                                              );
-              [% END %]
-            </b>
-        </li>
-        <li>
-            [% "Documento:" | i18n %]<b> [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</b>
-        </li>
-        <li>
-            [% "Fecha de nacimiento:" | i18n %]<b> [% socio.persona.getNacimiento %]</b>
-        </li>
-        <li>
-            [% "Sexo:" | i18n %] <b> [% socio.persona.getSexo %]</b>
-        </li>
-        [% IF socio.persona.getTelefono %]
-        <li>
+      <div id="datosUsuario" style="clear:both;">
+        <div class="vcard">
+        <ul class="unstyled">
+            <li>
+                <strong>[% "Apellido y Nombre: " | i18n %]</strong>
+                
+                  [% PERL %]
+                      print C4::AR::Filtros::link_to(   text =>     "[% socio.persona.getApeYNom %]",
+                                                        url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+                                                        params =>   ["nro_socio=[% socio.getNro_socio %]"],
+                                                        title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
+                                                        blank =>  1,
+                                                  );
+                  [% END %]
+            </li>
+            <li>
+                <strong>[% "Documento:" | i18n %]</strong> [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]
+            </li>
+            <li>
+                <strong>[% "Fecha de nacimiento:" | i18n %]</strong> [% socio.persona.getNacimiento %]
+            </li>
+            <li>
+                <strong>[% "Sexo:" | i18n %]</strong> [% socio.persona.getSexo %]
+            </li>
+            [% IF socio.persona.getTelefono %]
+            <li>
+                    <div class="tel">
+                            <strong><span class="type">[% "Tel&eacute;fono:" | i18n %]</span>
+                                    </strong>[% socio.persona.getTelefono %]<br>
+                    </div>  
+            </li>
+            [% END %]
+            [% IF socio.persona.getAlt_telefono %]
+            <li>
                 <div class="tel">
-                        <span class="type">[% "Tel&eacute;fono:" | i18n %]</span>
-                                <b>[% socio.persona.getTelefono %]</b><br>
+                       <strong> <span class="type">[% "Tel&eacute;fono Alt:" | i18n %]</span></strong>
+                                    [% socio.persona.getAlt_telefono %]<br>
                 </div>  
-        </li>
-        [% END %]
-        [% IF socio.persona.getAlt_telefono %]
-        <li>
-            <div class="tel">
-                    <span class="type">[% "Tel&eacute;fono Alt:" | i18n %]</span>
-                                <b>[% socio.persona.getAlt_telefono %]</b><br>
-            </div>  
-        </li>
-        [% END %]
-        [% IF socio.persona.getEmail %]
-        <li>
-                E-mail: <b><a href="mailto:[% socio.persona.getEmail %]">
-                        <span class="email"> [% socio.persona.getEmail %]</span></a></b>
-        </li>
-        [% END %]
-        <li>    
-            [% "Tarjeta de identificaci&oacute;n" | i18n %]:<b> [% socio.getNro_socio %]</b>
-        </li>
-        <li>
-            [% "Legajo" | i18n %]:<b> [%  socio.persona.getNro_documento %]</b>
-        </li>
-        <li>
-            [% "Ciudad" | i18n %]:<b> [%  socio.persona.ciudad_ref.getNombre %]</b>
-        </li>
-        <li>
-            [% "Calle" | i18n %]:<b> [%  socio.persona.getCalle %]</b>
-        </li>
-        <li>
-            [% "ID de usuario:" | i18n %]<b> [%  socio.nro_socio %]</b>
-        </li>
-        <li>
-            [% "Categor&iacute;a del usuario:" | i18n %]<b> [%  socio.categoria.getDescription %]</b>
-        </li>
-	</ul>
-	</div> <!--end vcard-->
-</div>  
-</frameset>
+            </li>
+            [% END %]
+            [% IF socio.persona.getEmail %]
+            <li>
+                   <strong><span class="type">[% " E-mail:" | i18n %]</span></strong><a href="mailto:[% socio.persona.getEmail %]">
+                            <span class="email"> [% socio.persona.getEmail %]</span></a>
+            </li>
+            [% END %]
+            <li>    
+                <strong>[% "Tarjeta de identificaci&oacute;n" | i18n %]:</strong> [% socio.getNro_socio %]
+            </li>
+            <li>
+                <strong>[% "Legajo" | i18n %]:</strong> [%  socio.persona.getNro_documento %]
+            </li>
+            <li>
+                <strong>[% "Ciudad" | i18n %]:</strong> [%  socio.persona.ciudad_ref.getNombre %]
+            </li>
+            <li>
+                <strong>[% "Calle" | i18n %]:</strong> [%  socio.persona.getCalle %]
+            </li>
+            <li>
+                <strong>[% "ID de usuario:" | i18n %]</strong> [%  socio.nro_socio %]
+            </li>
+            <li>
+                <strong>[% "Categor&iacute;a del usuario:" | i18n %]</strong> [%  socio.categoria.getDescription %]
+            </li>
+        </ul>
+        </div> <!--end vcard-->
+      </div>  
+</div>
+</fieldset>
 
 
 

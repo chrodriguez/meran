@@ -1,22 +1,17 @@
 
     <fieldset>
+      <div class="form-actions">    
         <legend class="titulo_legend">[% "Informaci&oacute;n del ejemplar" | i18n %] </legend>
-        <ul class="lista_datos_ejemplar">
-        <li style="clear: both;">
-            <div class="sub_item_data">[% 'T&iacute;tulo:' | i18n %]</div>
-            <div class="sub_item_data_right">[% titulo %]</div>
-        </li>
-        <li style="clear: both;">
-            <div class="sub_item_data">[% 'Autor:' | i18n %]</div>
-            <div class="sub_item_data_right">[% autor %]</div>
-        </li>
-       <li style="clear: both;">
-            <div class="sub_item_data">[% 'Disponibilidad:' | i18n %]</div>
-            <div class="sub_item_data_right"><strong class="[% IF nivel3.esParaSala %]salaLectura[% ELSE %]prestamo[% END %]">[% nivel3.getDisponibilidadObject.getNombre  %]</strong></div>
-        </li>
-       <li style="clear: both;">
-            <div class="sub_item_data">[% 'Estado:' | i18n %]</div>
-            <div class="sub_item_data_right">
+        <ul class="lista_datos_ejemplar unstyled">
+    
+            <li><strong>[% 'T&iacute;tulo: ' | i18n %]</strong>[% titulo %]</li>
+
+            <li><strong>[% 'Autor: ' | i18n %]</strong>[% autor %]</li>
+
+            <li><strong>[% 'Disponibilidad: ' | i18n %]</strong>
+            <span class="[% IF nivel3.esParaSala %]salaLectura[% ELSE %]prestamo[% END %]">[% nivel3.getDisponibilidadObject.getNombre  %]</span></li>
+
+            <li><strong>[% 'Estado:' | i18n %]</strong>
                     [% IF socio_prestamo %]
                         <strong class="[% IF nivel3.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">[% 'Prestado a:' | i18n  %]</strong>
                         [% PERL %]
@@ -48,8 +43,8 @@
                                                         );
                         [% END %]
                         </strong>
-                    [% END %]
-            </div>
-        </li>
+                    [% END %]</li>
+
         </ul>
+      </div>
     </fieldset>

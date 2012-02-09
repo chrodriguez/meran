@@ -9,13 +9,12 @@ function updateInfoBusquedas(responseText){
     $("#volver").hide();
     $('#resultBusqueda').html(responseText);
     $("#resultBusqueda").slideDown("fast");
-    zebra('datos_tabla');
     if (shouldScroll)
       scrollTo('resultBusqueda');
 }
 
 function updateInfoBusquedasBar(responseText){
-
+	clearInterval(mensajes_interval_id);
 	$('#marco_contenido_datos').html("<div id='resultBusqueda'/><div id='result'/>");
 	updateInfoBusquedas(responseText);
 	$(window).unbind('scroll');	
