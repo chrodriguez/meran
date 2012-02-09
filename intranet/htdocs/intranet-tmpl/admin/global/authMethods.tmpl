@@ -74,18 +74,18 @@
 
 </script>
 
-<fieldset id="reportes">
-    <legend class="titulo_legend"> [% "M&eacute;todos de Autenticaci&oacute;n" | i18n %]</legend>
-        <table class="tabla_datos" cellspacing=0 border="0" cellpadding=0 style="width:100%;">
+<fieldset>
+    <legend> [% "M&eacute;todos de Autenticaci&oacute;n" | i18n %]</legend>
+        <table class="table table-striped">
             <thead>
-                <tr class="titulo_tabla_resultado">
-                    <td>[% "Nombre" | i18n %]</td>
-                    <td>[% "Habilitado" | i18n %]</td>
+                <tr>
+                    <th>[% "Nombre" | i18n %]</th>
+                    <th>[% "Habilitado" | i18n %]</th>
                 </tr>
             </thead>
             <tbody id="sortable">
                 [% FOREACH metodo IN metodos %]
-                    <tr id="[% metodo.id %]" align="center">
+                    <tr id="[% metodo.id %]">
                         <td>[% metodo.metodo %]</td>
                         <td><input onclick="changeMethod([% metodo.id %])" type="checkbox" id="enable[% metodo.id %]" name="metodo_enabled" [% IF metodo.enabled == '1' %] checked="true" [% ELSE %] [% END %] value="[% metodo.enabled %]"/></td>
                     </tr>
@@ -94,6 +94,7 @@
         </table>
 
 </fieldset>
+<div class="form-actions">
 [% PERL %]
     print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar M&eacute;todo' | i18n %]",
                                         boton   => "boton_buscar",
@@ -103,6 +104,7 @@
                                         alternClass => "botonCentrado",
     ) ;
 [% END %]
+</div>
 <div id="agregar_metodo"></div>
 
 [% INCLUDE "intranet-bottom.inc" %]
