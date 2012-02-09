@@ -196,7 +196,7 @@ sub to_Button{
 
     my $text    = $params_hash_ref{'text'}; #obtengo el texto a mostrar
     
-    my $boton   = $params_hash_ref{'boton'} || "clean-gray"; #obtengo el boton
+    my $boton   = $params_hash_ref{'boton'} || "btn btn-primary"; #obtengo el boton
     
     if (!C4::AR::Utilidades::existeInArray($boton,@array_clases_buttons)){
         $boton = "btn btn-primary";

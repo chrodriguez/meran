@@ -2,7 +2,6 @@
 <html>
 	<head>
 	[% INCLUDE "message_INTRA.inc" %]
-	[% INCLUDE "BootstrapToolkit.inc" %]
 	<script type="text/javascript">
 	//     <!-- variables de entorno sacadas de las preferencias del sistema -->
 	    token       = '[% token %]';
@@ -10,6 +9,8 @@
 	    M_LIMITE_RESULTADOS = [% limite_resultados_autocompletables %] + 0;
 	    var URL_PREFIX  = '[% url_prefix %]';
 	    var UNLOAD		= '[% unload_alert %]';
+	    var mensajes_interval_id;
+	    
 	    
 	</script>
 	
@@ -21,11 +22,11 @@
 	
 	<meta charset="utf-8" />
 	<META HTTP-EQUIV="cache-control" content="public">
-	<link media="screen" rel="stylesheet" href="/includes/jquery/modal/basic-min.css" type="text/css">
-	<link media="screen" rel="stylesheet" href="/includes/css/fancybox.css" type="text/css">
+	<script type="text/javascript" src="/includes/jquery/bootbox.min.js"></script>
 	<script type="text/javascript" src="/includes/json/jsonStringify.js"></script>
 	<script type="text/javascript" src="/includes/completo-intranet-top.js"></script>
-	<script type="text/javascript" src="/includes/jquery/modal/jquery.simplemodal.js"></script>
+	[% INCLUDE "BootstrapToolkit.inc" %]
+	<link media="screen" rel="stylesheet" href="/includes/css/fancybox.css" type="text/css">
 	<script type="text/javascript" src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
 	<script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox.js"></script>
 	<script type="text/javascript" src="/includes/jquery/fancybox/jquery.mousewheel.js"></script>
@@ -120,9 +121,13 @@
 	      </div>
 	  </noscript>
 	  
-	  <div style="display: none;" id="ajax-indicator">
-	    <div><p>[% 'Cargando...' | i18n %]</p></div>
-	  </div>
+	  <div id="ajax-indicator" class="modal hide fade loading" style="display: none;">
+			<div id="block_1" class="barlittle"></div>
+			<div id="block_2" class="barlittle"></div>
+			<div id="block_3" class="barlittle"></div>
+			<div id="block_4" class="barlittle"></div>
+			<div id="block_5" class="barlittle"></div>
+  	  </div>
 
 	  <header>
 	  	[% INCLUDE   'menu.inc'  %]

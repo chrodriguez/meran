@@ -1199,6 +1199,7 @@ sub buildSocioDataHashFromSession{
     $socio_data{'usr_legajo'}               = $session->param('usr_legajo');
     $socio_data{'ciudad_ref'}{'id'}         = $session->param('usr_ciudad_id'); 
     $socio_data{'remindFlag'}               = $session->param('remindFlag'); 
+    $socio_data{'usr_credential_type'}      = $session->param('usr_credential_type'); 
     
     return (\%socio_data);
 }

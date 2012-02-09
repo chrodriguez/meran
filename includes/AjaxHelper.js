@@ -8,23 +8,17 @@
  */
 
 function startOverlay(){
-    $('#ajax-indicator').modal({   
-       	close: false,
-        containerCss:{
-            backgroundColor:"#fff",
-            height: 50,
-            padding: 0,
-            width: 190,
-            opacity: 50,
-        },
-    });   
+    $('#ajax-indicator').modal();   
     
     return (true);
 }
 
 
-function closeModal(){
-	$.modal.close();
+function closeModal(id){
+	if (id)
+		$('#ajax-indicator').modal('toggle');
+	else
+		$('#'+id).modal('toggle');
 }
 //Funciones Privadas para manejar el estado del la consulta de AJAX
 
