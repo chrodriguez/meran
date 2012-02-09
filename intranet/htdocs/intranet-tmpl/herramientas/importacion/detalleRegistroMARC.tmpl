@@ -53,16 +53,20 @@
         <div id="tabs-3">
     <fieldset>
            <legend>[% "get Niveles test" | i18n %]</legend>
-				[% GUPOS = registro_importacion.getNiveles %]
+				[% GRUPOS = registro_importacion.getNiveles %]
 				Registro:
-				[% GUPOS.registro.as_formatted %]
+				[% GRUPOS.registro.as_formatted %]
                 [% FOREACH grupo IN GRUPOS.grupos %]
-					Grupo:
-					[% grupo.grupo %]
+					<fieldset>
+					<legend>[% "Grupo" | i18n %]</legend>
+					[% grupo.grupo.as_formatted %]
 					[% FOREACH ejemplar IN grupo.ejemplares %]
-						Ejemplar:
-						[% ejemplar %]
+					<fieldset>
+					<legend>[% "Ejemplar" | i18n %]</legend>
+						[% ejemplar.as_formatted %]
+					 </fieldset>
 					[% END %]
+					</fieldset>
                 [% END %]               
     </fieldset>               
     <fieldset>
