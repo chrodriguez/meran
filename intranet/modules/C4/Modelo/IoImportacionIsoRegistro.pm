@@ -82,24 +82,42 @@ sub getRegistroMARCResultado{
     foreach my $detalle (@$detalle_destino){
         my $new_field=0;
         my $dato = $self->getCampoSubcampoJoined($detalle->getCampoDestino,$detalle->getSubcampoDestino);
-
-        if ($detalle->getCampoDestino ne 'ZZZ'){
-            #Sino no esta configurado
-            if($detalle->getCampoDestino < '010'){
-                #CONTROL FIELD
-                $new_field = MARC::Field->new( $detalle->getCampoDestino, $dato );
-               }
-            else {
-                my $ind1='#';
-                my $ind2='#';
-                $new_field= MARC::Field->new($detalle->getCampoDestino, $ind1, $ind2,$detalle->getSubcampoDestino => $dato);
+        if($dato){
+            #Hay dato en el campo
+            if ($detalle->getCampoDestino ne 'ZZZ'){
+                #Sino no esta configurado
+                if($detalle->getCampoDestino < '010'){
+                    #CONTROL FIELD
+                    $new_field = MARC::Field->new( $detalle->getCampoDestino, $dato );
+                   }
+                else {
+                    my $field = $marc_record->field($detalle->getCampoDestino);
+                    if($field){
+                        #Existe el campo, se agrega el subcampo
+                        $field->add_subfields( $detalle->getSubcampoDestino => $dato );
+                        }
+                    else{
+                        #No existe el campo, se crea uno nuevo
+                        my $ind1='#';
+                        my $ind2='#';
+                        $new_field= MARC::Field->new($detalle->getCampoDestino, $ind1, $ind2,$detalle->getSubcampoDestino => $dato);
+                    }
+                    }
+                if($new_field){
+                    $marc_record->append_fields($new_field);
                 }
-            if($new_field){
-                $marc_record->append_fields($new_field);
-            }
+             }
         }
        }
 
+    #Ahora agregamos los registros hijo
+    my $registros_hijo = $self->getRegistrosHijo();
+    if($registros_hijo){
+        foreach my $registro (@$registros_hijo){
+            my $mc=$registro->getRegistroMARCResultado();
+             $marc_record->append_fields($mc->fields());
+        }
+    }
     return $marc_record;
     }
 
@@ -144,10 +162,36 @@ sub getEstado{
     return ($self->estado);
 }
 
+
+sub setEstado{
+    my ($self) = shift;
+    my ($estado) = @_;
+    $self->estado($estado);
+}
+
 sub getMatching{
     my ($self) = shift;
     return ($self->matching);
 }
+
+sub setMatching{
+    my ($self) = shift;
+    my ($matching) = @_;
+    $self->matching($matching);
+}
+
+
+sub getIdMatching{
+    my ($self) = shift;
+    return ($self->id_matching);
+}
+
+sub setIdMatching{
+    my ($self) = shift;
+    my ($matching) = @_;
+    $self->id_matching($matching);
+}
+
 
 sub getCampoSubcampoJoined{
     my ($self) = shift;
@@ -336,3 +380,31 @@ sub getTipo{
     }
     return "Desconocido";
 }
+
+
+sub getDatosFromReglasMatcheo{
+     my ($self)   = shift;
+     my ($reglas) = @_;
+
+    my @reglas_datos=();
+
+    foreach my $regla (@$reglas){
+
+        my $dato = $self->getCampoSubcampoJoined($regla->{'campo'},$regla->{'subcampo'});
+
+        if ($dato){
+            $regla->{'dato'}=$dato;
+            push (@reglas_datos,$regla);
+            }
+        }
+    return  \@reglas_datos;
+}
+
+
+sub getNiveles {
+     my ($self)   = shift;
+
+    my $niveles= C4::AR::ImportacionIsoMARC::getNivelesFromRegistro($self->getId);
+    return  $niveles;
+}
+

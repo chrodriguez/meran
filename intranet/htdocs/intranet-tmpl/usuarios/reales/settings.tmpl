@@ -9,51 +9,36 @@
 	});
 </script>	
 
-<fieldset>
-    <legend class="titulo_legend trigger">
-        [% "Perfil de " | i18n %][% socio_data.usr_nro_socio %] ([% socio_data.usr_apellido %], [% socio_data.usr_nombre %])</legend>
-    <div id="filtrosBusqueda" class="filtrosBusqueda">
-        <span class="titulos"></span>
-        <div class="formElemets classform">
-            <div id="busqueda_combinada">
-	            <fieldset>
-	                <legend class="titulo_legend"><strong>[% "Opciones personales" | i18n %]</strong></legend>
-	                <form id="user-settings" method="POST" action="[% url_prefix %]/usuarios/reales/settings.pl" onsubmit="javascript:startOverlay();"
-		                <ul id="simple">
-                            <li class="sub_item">
-                                <label for="languages">
-                                    <strong>[% "Idioma" | i18n %]</strong>
-                                </label>
-                                [% languages %]
-                            </li>
-                            <li class="sub_item">
-                                <label for="temas_intra">
-                                    <strong>[% "Tema" | i18n %]</strong>
-                                </label>
-                                [% combo_temas_intra %]
-                            </li>
-	                        <li class="sub_item">
-	                            <label for="email">
-	                                <strong>[% "E-mail" | i18n %]</strong>
-	                            </label>
-	                            <input type="text" name="email" id="email" value="[% socio_data.usr_email %]" style="width:300px;"/>
-	                        </li>
-		                </ul>
-		                <input type="hidden" name="token" value="[% token %]" />
-	            </fieldset>
-            </div>
-         </div>
-    </div> 
-	<div class="buttonContainerHorizontal">
-	    <ul class="listaMenuBotones">
-                [% PERL %]
-                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
-                                                                        boton   => "thoughtbot",
-                                                                        onClick => "function(){$('#user-settings').submit();}",
-                                            ) ;
-                [% END %]
-	    </ul>
-	</div>    
-</fieldset>
-
+<form class="form-horizontal" id="user-settings" method="POST" action="[% url_prefix %]/usuarios/reales/settings.pl" onsubmit="javascript:startOverlay();">
+        <fieldset>
+	          <legend>
+	            [% "Perfil de " | i18n %][% socio_data.usr_nro_socio %] ([% socio_data.usr_apellido %], [% socio_data.usr_nombre %])
+	          </legend>
+	          <div class="control-group">
+	              <label for="languages">[% "Idioma" | i18n %]</label>
+	              <div class="controls">
+	                  [% languages %]
+                      <p class="help-block">[% "Idioma en que se ver&aacute; Meran " | i18n %]</p>	                  
+	              </div>
+	           </div>
+	           <div class="control-group">
+		           <label for="email">[% "E-mail" | i18n %]</label>
+		           <div class="controls">
+			            <div class="input-prepend">
+			              <span class="add-on"><i class="icon-envelope"></i></span>
+			              <input class="span3" type="text" name="email" id="email" value="[% socio_data.usr_email %]">
+			            </div>		               
+		           </div>
+	               <input type="hidden" name="token" value="[% token %]" />
+		       </div>
+			     <div class="form-actions">
+			           [% PERL %]
+			                               print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
+			                                                                   boton   => "btn btn-primary",
+			                                                                   onClick => "function(){$('#user-settings').submit();}",
+			                                       ) ;
+			           [% END %]
+			    </div>
+        </fieldset>
+</form>
 [% INCLUDE "intranet-bottom.inc" %]

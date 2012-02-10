@@ -2,6 +2,7 @@
 
     $(document).ready(function() {
           makeToggle('datos_tabla_div_importacion','trigger',null,false);
+          makeToggle('filtro_importacion','trigger',null,true);
     });
 
 </script>
@@ -11,10 +12,14 @@
 
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend trigger click">[% "Filtrar" | i18n %]</legend>
-        <div >
-            <input type="radio" name="record_filter" value="MAIN" [% IF record_filter == 'MAIN' or !record_filter %] checked [% END %]onChange="detalleImportacion([% id_importacion %]);">Registros Principales
-            <input type="radio" name="record_filter" value="ALL" [% IF record_filter == 'ALL' %] checked [% END %] onChange="detalleImportacion([% id_importacion %]);">Todos
-            <input type="radio" name="record_filter" value="UNIDENTIFIED" [% IF record_filter == 'UNIDENTIFIED' %] checked [% END %] onChange="detalleImportacion([% id_importacion %]);">Registros Sin Identificar
+        <div class="filtro_importacion">
+            <ul>
+                <li><input type="radio" name="record_filter" value="MAIN" [% IF record_filter == 'MAIN' or !record_filter %] checked [% END %]onChange="detalleImportacion([% id_importacion %]);">Registros Principales</li>
+                <li><input type="radio" name="record_filter" value="ALL" [% IF record_filter == 'ALL' %] checked [% END %] onChange="detalleImportacion([% id_importacion %]);">Todos</li>
+                <li><input type="radio" name="record_filter" value="UNIDENTIFIED" [% IF record_filter == 'UNIDENTIFIED' %] checked [% END %] onChange="detalleImportacion([% id_importacion %]);">Registros Sin Identificar</li>
+                <li><input type="radio" name="record_filter" value="MATCH" [% IF record_filter == 'MATCH' %] checked [% END %] onChange="detalleImportacion([% id_importacion %]);">Registros Encontrados</li>
+                <li><input type="radio" name="record_filter" value="IGNORED" [% IF record_filter == 'IGNORED' %] checked [% END %] onChange="detalleImportacion([% id_importacion %]);">Registros Ignorados</li>
+            </ul>
         </div>
 </fieldset>
 
@@ -35,6 +40,12 @@
                         </th>
                         <th>
                             [% "Tipo" | i18n %]
+                        </th>
+                         <th>
+                            [% "Encontrado" | i18n %]
+                        </th>
+                        <th>
+                            [% "Ignorado" | i18n %]
                         </th>
                         <th>
                             [% "Acciones" | i18n %]
@@ -59,6 +70,36 @@
                            [% detalle_importacion.getTipo %]
                           [% IF detalle_importacion.getTipo == "Registro" %] ([% detalle_importacion.getCantidadDeRegistrosHijo %] registros)[% END %]
                       </td>
+
+                      <td align="left">
+                        [% IF detalle_importacion.getMatching %]
+							[% PERL %]
+                            print C4::AR::Filtros::link_to( text =>     "Si",
+                                                            url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                                            params =>   ["id1=[% detalle_importacion.getIdMatching %]"],
+                                                            title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
+                                                            class => "rojo"
+                                                        ) ;
+							[% END %]
+                      <div class="click">
+                            [% PERL %]
+                            print C4::AR::Filtros::to_Icon(
+                                                             boton         => "icon_borrar",
+                                                             onClick       => "quitarMatcheoRegistro('[% detalle_importacion.getIdImportacionIso %]','[% detalle_importacion.getId %]');",
+                                                             title         => "[% 'No es el mismo registro' | i18n %]",
+                                                             alternClass   => "botonCentradoTabla",
+                                                           ) ;
+
+                            [% END %]
+                        </div>
+                        [% ELSE %]
+							<span class='verde'>No</span>
+                        [% END %]
+                      </td>
+                      <td align="left">
+                        [% IF detalle_importacion.getEstado == "I" %]<span class='rojo'>Si</span>[% ELSE %]<span class='verde'>No</span>[% END %]
+                      </td>
+
                       <!--  BOTONES ACCIONES (Editar, Borrar, Ver detalle) -->
                       <td align='left' width="9%" >
 
@@ -71,6 +112,29 @@
                                                                           alternClass   => "botonCentradoTabla",
                                                                       ) ;
 
+                              [% END %]
+                       </div>
+                      <div class="click horizontal icon_mas">
+                              [% IF detalle_importacion.getEstado != "I" %]
+                                  [% PERL %]
+                                              print C4::AR::Filtros::to_Icon(
+                                                                              boton         => "icon_sacar",
+                                                                              onClick       => "cambiarEsdatoRegistro('[% detalle_importacion.getIdImportacionIso %]','[% detalle_importacion.getId %]','I');",
+                                                                              title         => "[% 'Ignorar Registro' | i18n %]",
+                                                                              alternClass   => "botonCentradoTabla",
+                                                                          ) ;
+
+                                  [% END %]
+                              [% ELSE %]
+                                  [% PERL %]
+                                              print C4::AR::Filtros::to_Icon(
+                                                                              boton         => "icon_agregar",
+                                                                              onClick       => "cambiarEsdatoRegistro('[% detalle_importacion.getIdImportacionIso %]','[% detalle_importacion.getId %]','');",
+                                                                              title         => "[% 'No Ignorar Registro' | i18n %]",
+                                                                              alternClass   => "botonCentradoTabla",
+                                                                          ) ;
+
+                                  [% END %]
                               [% END %]
                          </div>
                       </td>
@@ -85,3 +149,15 @@
 </fieldset>
 
 <div id="detalleRegistroMARC"></div>
+
+<div class="buttonContainerHorizontal">
+    <ul class="horizontal-list" >
+                [% PERL %]
+                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Comenzar Importaci&oacute;n' | i18n %]",
+                                                                        boton   => "thoughtbot",
+                                                                        onClick => "comenzarImportacion('[% id_importacion %]');",
+                                                                        title   => "[% 'Comenzar Importaci&oacute;n' | i18n %]",
+                                            ) ;
+                [% END %]
+  </ul>
+</div>

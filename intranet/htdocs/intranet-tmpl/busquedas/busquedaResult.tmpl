@@ -17,8 +17,9 @@
     <legend class="titulo_legend trigger click" title='[% "click para acceder a los resultados de la b&uacute;squeda" | i18n %]'>
         [% "Resultados de la b&uacute;squeda (cat&aacute;logo)" | i18n %]:</legend>
         <div class="datos_tabla_div" id="datos_tabla_div">
+
+        <section class="center-section-form hero-unit">
             <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda" | i18n %]: 
-            
                 <h2><i>[% buscoPor %]</i></h2>
             
                 [% IF !from_suggested %]
@@ -34,30 +35,31 @@
             
             </div>
             <div class="resultados_consulta">[% "Total de registros" | i18n %]: <b>[% cantidad %]</b>  en ([% timeSeg %] segundos)</div>
+        </section>    
             <div class="contenedor_paginador">[% paginador %]</div>
 
 
-            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
-                <tr class="titulo_tabla_resultado">
-                    <td style="width: 11%;">[% "Tipo" | i18n %]</td>
-                    <td width="35%" class="click" onclick="ordenarPor('titulo')">
-                        [% "T&iacute;tulo" | i18n %]
-                    </td>
-                    <td width=28%" class="click" onclick="ordenarPor('autor')">
-                        [% "Autor" | i18n %]
-                    </td>
-                    <td width="11%">[% "Edici&oacute;n/A&ntilde;o" | i18n %]</td>
-                    <td width="10%"> [% "Disponibilidad" | i18n %] </td>
-                    [% IF signatura_filter %]
-                        <td>[% "Signatura" | i18n %]</td>
-                    [% END %]
-                    
-                    
-                </tr>
+            <table id="tablaResult" class="table table-striped" border=0 cellspacing=0 cellpadding=0 width=100%>
+                <thead>
+                    <tr>
+	                    <th >[% "Tipo" | i18n %]</th>
+	                    <th class="click" onclick="ordenarPor('titulo')">
+	                        [% "T&iacute;tulo" | i18n %]
+	                    </th>
+	                    <th class="click" onclick="ordenarPor('autor')">
+	                        [% "Autor" | i18n %]
+	                    </th>
+	                    <th>[% "Edici&oacute;n/A&ntilde;o" | i18n %]</th>
+	                    <th> [% "Disponibilidad" | i18n %] </th>
+	                    [% IF signatura_filter %]
+	                        <th>[% "Signatura" | i18n %]</th>
+	                    [% END %]
+                    </tr>
+                 </thead>
             <!-- Actual Resultados de la b&uacute;squeda -->
             [% FOREACH SEARCH_RESULTS %]
                 <tr>
-                        <td class="titulo_result">
+                        <td>
                             [% IF portadas_grupo_cant > 0 %]
                                     [% FOREACH portada IN portadas_grupo %]
                                         [% IF loop.count < 4 %]

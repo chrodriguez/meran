@@ -491,6 +491,8 @@ my %mensajesINTRA = (
     'IO08' => 'Ocurrio un error mientras se intentaban guardar la  nueva importaci&oacute;n',
     'IO09' => 'Relaci&oacute;n Registro/Ejemplares aplicada con &eacute;xito',
     'IO10' => 'Ocurrio un error mientras se intentaban aplicar la relaci&oacute;n Registro/Ejemplares',
+    'IO11' => 'Reglas de matcheo aplicadas con &eacute;xito, se encontraron "*?*" registros',
+    'IO12' => 'Ocurrio un error mientras se intentaban aplicar las reglas de matcheo',
     'IO015' => 'El campo/subcampo ya existe en el esquema',
     'IO016' => 'El Campo "*?*" y Subcampo "*?*" se han agregado correctamente al esquema "*?*"',
     'IO017' => 'El Campo "*?*" fue movido a "*?*" por tener subcampos y no ser de control.',
@@ -563,6 +565,8 @@ my %mensajesINTRA = (
     'B455' => 'Error en funcion C4::AR::UploadFile::guardarRegistrosNuevaImportacion',
     'B456' => 'Error en funcion C4::AR::UploadFile::guardarRegistrosNuevaImportacion',
     'B457' => 'Error en funcion C4::AR::ImportacionIsoMARC::procesarRelacionRegistroEjemplares',
+    'PERCENTAGE_VALUE' => "*?*",
+    'B458' => 'Error en funcion C4::AR::ImportacionIsoMARC::procesarReglasMatcheo',
 );
 
 sub getMensaje {
@@ -726,6 +730,7 @@ sub add {
 
     my $messageString   = &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'}, $tipo, $msg_hashref->{'params'});
     $msg_hashref->{'message'}= $messageString;
+    $msg_hashref->{'codMsg'}= $msg_hashref->{'codMsg'};
 # C4::AR::Debug::debug("Mensajes::add => message: ".$messageString."\n");
 # C4::AR::Debug::debug("Mensajes::add => params: ".$msg_hashref->{'params'}->[0]."\n");
 

@@ -1,47 +1,47 @@
-
-var objAH;
+var objAH_usuarios;
 var shouldScrollUser=true;
 var globalSearchTemp;
+
 function ordenar(orden){
-    objAH.sort(orden);
+    objAH_usuarios.sort(orden);
 }
 
-function changePage(ini){
-    objAH.changePage(ini);
+function changePage_usuarios(ini){
+    objAH_usuarios.changePage(ini);
 }
 
 function consultarBar(filtro,doScroll){
     if (doScroll)
       shouldScrollUser = doScroll;
-    objAH=new AjaxHelper(updateInfoUsuariosBar);
-    objAH.showOverlay       = true;
-    objAH.cache = true;
+    objAH_usuarios=new AjaxHelper(updateInfoUsuariosBar);
+    objAH_usuarios.showOverlay       = true;
+    objAH_usuarios.cache = true;
     busqueda = jQuery.trim($('#socio-bar').val());
     inicial = '0';
 
     if(jQuery.trim(busqueda).length > 0){
-        objAH.url= URL_PREFIX+'/usuarios/reales/buscarUsuarioResult.pl';
-        objAH.showOverlay       = true;
-        objAH.debug= true;
-//      objAH.cache= true;
-        objAH.funcion= 'changePage';
-        objAH.socio= busqueda;
-        objAH.sendToServer();
+        objAH_usuarios.url= URL_PREFIX+'/usuarios/reales/buscarUsuarioResult.pl';
+        objAH_usuarios.showOverlay       = true;
+        objAH_usuarios.debug= true;
+//      objAH_usuarios.cache= true;
+        objAH_usuarios.funcion= 'changePage_usuarios';
+        objAH_usuarios.socio= busqueda;
+        objAH_usuarios.sendToServer();
     }
 }
 
 function consultar(filtro,doScroll){
     if (doScroll)
       shouldScrollUser = doScroll;
-    objAH=new AjaxHelper(updateInfoUsuarios);
-    objAH.showOverlay       = true;
-    objAH.cache = true;
+    objAH_usuarios=new AjaxHelper(updateInfoUsuarios);
+    objAH_usuarios.showOverlay       = true;
+    objAH_usuarios.cache = true;
     busqueda = jQuery.trim($('#socio').val());
     inicial = '0';
     if (filtro){
         inicial = filtro;
         busqueda = jQuery.trim(filtro);
-        objAH.inicial= inicial;
+        objAH_usuarios.inicial= inicial;
         $('#socio').val(FILTRO_POR + filtro);
     }
     else
@@ -61,13 +61,13 @@ function consultar(filtro,doScroll){
            }
     }
     if(jQuery.trim(busqueda).length > 0){
-        objAH.url= URL_PREFIX+'/usuarios/reales/buscarUsuarioResult.pl';
-        objAH.showOverlay       = true;
-        objAH.debug= true;
-//      objAH.cache= true;
-        objAH.funcion= 'changePage';
-        objAH.socio= busqueda;
-        objAH.sendToServer();
+        objAH_usuarios.url= URL_PREFIX+'/usuarios/reales/buscarUsuarioResult.pl';
+        objAH_usuarios.showOverlay       = true;
+        objAH_usuarios.debug= true;
+//      objAH_usuarios.cache= true;
+        objAH_usuarios.funcion= 'changePage_usuarios';
+        objAH_usuarios.socio= busqueda;
+        objAH_usuarios.sendToServer();
     }
     else{
         jAlert(INGRESE_UN_DATO,USUARIOS_ALERT_TITLE);

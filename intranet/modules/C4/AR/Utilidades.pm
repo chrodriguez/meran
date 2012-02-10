@@ -134,6 +134,7 @@ use vars qw(@EXPORT_OK @ISA);
     translateTipoCredencial
     translateYesNo_fromNumber
     translateYesNo_toNumber
+    printAjaxPercent
 );
 
 
@@ -1287,38 +1288,38 @@ sub armarPaginas{
 
     my $themelang= $t_params->{'themelang'};
 
-    my $paginador= "<div class='pagination_bar'><div id='content_paginator'  align='center' >";
+    my $paginador= "<div class='pagination'><ul>";
     my $class="paginador";
 
     if($actual > 1){
         #a la primer pagina
         my $ant= $actual-1;
-        $paginador .= "<a class='click previous' onClick='".$funcion."(1)' title='".$first_text."'> ".$first_text."</a>";
-        $paginador .= "<a class='click previous' onClick='".$funcion."(".$ant.")' title='".$previous_text."'> ".$previous_text."</a>";
+        $paginador .= "<li class='prev'><a  onClick='".$funcion."(1)' title='".$first_text."'> ".$first_text."</a></li>";
+        $paginador .= "<li class='prev'><a  onClick='".$funcion."(".$ant.")' title='".$previous_text."'> ".$previous_text."</a></li>";
 
     }else{
-        $paginador .= "<span class='disabled' title='".$previous_text."'>".$previous_text."</span>";
+        $paginador .= "<li class='prev'> <a href='#' title='".$previous_text."'>".$previous_text."</a></li>";
     }
 
     for (my $i=$limInf; ($totalPaginas >1 and $i <= $totalPaginas and $i <= $limSup) ; $i++ ) {
         my $onClick = "";
         if($actual == $i){
-            $class="'current'";
+            $class="'active click'";
         }else{
-            $class="'pagination click'";
+            $class="'click'";
             $onClick = "onClick='".$funcion."(".$i.")'";
         }
-        $paginador .= "<a class=".$class." ".$onClick."> ".$i." </a>";
+        $paginador .= "<li class=".$class."><a class=".$class."$onClick> ".$i." </a></li>";
     }
 
     if($actual >= 1 && $actual < $totalPaginas){
         my $sig= $actual+1;
-        $paginador .= "<a class='click next' onClick='".$funcion."(".$sig.")' title='".$next_text."'>".$next_text."</a>";
-        $paginador .= "<a class='click next' onClick='".$funcion."(".$totalPaginas.")' title='".$last_text."'>".$last_text."</a>";
+        $paginador .= "<li class='next'><a class='click next' onClick='".$funcion."(".$sig.")' title='".$next_text."'>".$next_text."</a></li>";
+        $paginador .= "<li class='next'><a class='click next' onClick='".$funcion."(".$totalPaginas.")' title='".$last_text."'>".$last_text."</a></li>";
 
     }
 
-    $paginador .= "</div></div>";
+    $paginador .= "</ul></div>";
 
     if ($totalPaginas <= 1){
       $paginador="";
@@ -1712,6 +1713,26 @@ sub getNivelBibliograficoByCode{
         return 0;
     }
 }
+
+=item
+getNombreFromEstadoByCodigo
+=cut
+sub getNombreFromEstadoByCodigo{
+    my ($codigo)   = @_;
+
+    my @filtros;
+
+    push(@filtros, ( codigo => { eq => $codigo }) );
+
+    my $estado = C4::Modelo::RefEstado::Manager->get_ref_estado( query => \@filtros );
+
+    if(scalar(@$estado) > 0){
+        return ($estado->[0]->nombre);
+    } else {
+        return "NULL";
+    }
+}
+
 
 =head2
 # Esta funcioin remueve los blancos del principio y el final del string
@@ -4552,6 +4573,39 @@ sub translateYesNo_toNumber{
         return 0
     }
 }
+
+sub printAjaxPercent{
+	my ($total,$actual) = @_;
+	
+	my $percent = ($actual * 100) / $total;
+
+    my $session = CGI::Session->load();
+
+    C4::AR::Auth::print_header($session);
+    print $percent;
+    
+    return ($percent);
+}
+
+sub demo_test{
+    
+    my ($job) = @_;
+    
+    use C4::AR::BackgroundJob;
+    
+    if (!$job){
+        $job = C4::AR::BackgrounJob->new("DEMO","NULL",10);        
+    }
+     
+    for (my $x=1; $x<=10; $x++){
+        sleep(1);
+        my $percent = printAjaxPercent(10,$x);
+        $job->progress($percent);
+        C4::AR::Debug::debug("-------------------------- JOB -------------- \n\n\n\n\n");
+    }
+    
+}
+
 END { }       # module clean-up code here (global destructor)
 
 1;

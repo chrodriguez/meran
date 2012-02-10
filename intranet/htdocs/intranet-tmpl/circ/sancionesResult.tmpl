@@ -1,92 +1,92 @@
-<div class="resultados_consulta">[% "Cantidad de sanciones" | i18n %]: &nbsp;[% cant %]</div> 
-<div class="contenedor_paginador">[% paginador %]</div>
-<table class="datos_tabla" id="tablaResult" border="0" cellpadding="0" cellspacing="0" width="99%">
-	<tr class="titulo_tabla_resultado">
-  
-  		<th align="center"><a href="#" onclick="todos();">
-			<img src="[% temas %]/[% tema %]/imagenes/iconos/check.png" title="[% 'Invertir la selecci&oacute;n' | i18n %]"  border=0></a>
-		</th>
-  
-		<th class="click" onclick="ordenar('socio.nro_socio')" Title="[% 'Ordenar por tarjeta de Id.' | i18n %]">[% "Tarjeta de Id." | i18n %]</th>
-  		<th class="click" onclick="ordenar('persona.apellido')" Title="[% 'Ordenar por apellido' | i18n %]">[% "Socio" | i18n %]</th>
-  		<th class="click" onclick="ordenar('persona.legajo')" Title="[% 'Ordenar por legajo' | i18n %]">[% "Legajo" | i18n %]</th>
-  		<th class="click" onclick="ordenar('ref_tipo_sancion.categoria_socio')" Title="[% 'Ordenar por categoria' | i18n %]">[% "Cat." | i18n %]</th>
-  		<th class="click" onclick="ordenar('ref_tipo_sancion.tipo_prestamo')" Title="[% 'Ordenar por tipo de pr&eacute;stamo' | i18n %]">[% "Tipo de pr&eacute;stamo" | i18n %]</th>
-  		<th class="click" onclick="ordenar('fecha_comienzo')" Title="[% 'Ordenar por fecha de inicio' | i18n %]">[% "Fecha inicio" | i18n %]</th>
-  		<th class="click" onclick="ordenar('fecha_final')" Title="[% 'Ordenar por fecha de fin' | i18n %]">[% "Fecha fin" | i18n %]</th>
-        <th class="click" onclick="ordenar('autor')" Title="[% 'Ordenar por autor' | i18n %]">[% "Autor" | i18n %]</th>
-        <th class="click" onclick="ordenar('titulo')" Title="[% 'Ordenar por titulo' | i18n %]">[% "Titulo" | i18n %]</th>
-        <th class="click" onclick="ordenar('edicion')" Title="[% 'Ordenar por edicion' | i18n %]">[% "Edicion/A	&ntilde;o" | i18n %]</th>
-	</tr>
-[% IF CANT_SANCIONES %]
-  [% FOREACH sancion IN SANCIONES %]
-	<tr align="center">
-		
-			<td >
-             <input type="checkbox" name="chkboxSanciones" value="[% sancion.getId_sancion %]" 
-					id="[% sancion.getId_sancion %]">
-    		</td>
-        <td align='left' class="tarjetaId">
-            [% PERL %]
-                print C4::AR::Filtros::link_to(   text =>     "[% sancion.getNro_socio %]",
-                                                url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
-                                                params =>   ["nro_socio=[% sancion.socio.getNro_socio %]"],
-                                                title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
-                                            );
-            [% END %]
-        </td>
-        <td align='left' class="tarjetaId">
-            [% PERL %]
-                print C4::AR::Filtros::link_to(   text =>     "[% sancion.socio.persona.getApeYNom %]",
-                                                url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
-                                                params =>   ["nro_socio=[% sancion.socio.getNro_socio %]"],
-                                                title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
-                                            );
-            [% END %]
-        </td>
-		<td>[% sancion.socio.persona.getLegajo %]</td>
-		<td>[% sancion.socio.categoria.getDescription %]</td>
-		<td>
-			[% IF sancion.ref_tipo_sancion.ref_tipo_prestamo.id_tipo_prestamo %]
-				[% sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]
-			[% ELSE %]
-				Reserva no retirada
-			[% END %]
-		</td>
-		<td>[% sancion.getFecha_comienzo_formateada %]</td>
-		<td>[% sancion.getFecha_final_formateada %]</td>
 
-        [% IF sancion.nivel3.getId %]
-			<td>[% sancion.nivel3.nivel1.getAutor %]</td>
-			<td>[% sancion.nivel3.nivel1.getTitulo %]</td>
-			<td>[% sancion.nivel3.nivel2.getEdicion %]</td>
-        [% ELSE %]
-	        [% IF sancion.reserva.nivel3.getId %]
-		        <td>[% sancion.reserva.nivel3.nivel1.getAutor %]</td>
-		        <td>[% sancion.reserva.nivel3.nivel1.getTitulo %]</td>
-		        <td>[% sancion.reserva.nivel3.nivel2.getEdicion %]</td>
-	        [% ELSE %]
-	            <td>[% '---' | i18n %]</td>
-	            <td>[% '---' | i18n %]</td>
-	            <td>[% '---' | i18n %]</td>
-	        [% END %]
-	    [% END %]    
-	</tr>
-  [% END %]
-    <tr>
-	<td colspan="12" >&nbsp;</td>
-    </tr>
-	<tr><td colspan="12" align="center" >
-            [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Borrar Sanciones' | i18n %]",
-                                                                    boton   => "boton_borrar",
-                                                                    onClick => "borrarSanciones('chkboxSanciones');",
-                                                                    title   => "[% 'Borrar Sanciones' | i18n %]",
-                                                                    alternClass=> "botonCentradoTabla",
-                                        ) ;
-            [% END %]
-	</td></tr>
-  [% ELSE %]
-	<td colspan="12" align='center'>[% 'No Hay Sanciones' | i18n %] </td>
-  [% END %]
-</table>
+<div class="contenedor_paginador">[% paginador %]</div>
+[% IF CANT_SANCIONES %]
+    <div class="resultados_consulta">[% "Cantidad de sanciones" | i18n %]: &nbsp;[% cant %]</div> 
+    <table class="table table-striped" id="tablaResult">
+        <thead> 
+          <tr>
+              <th><a href="#" onclick="todos();">
+                  <img src="[% temas %]/[% tema %]/imagenes/iconos/check.png" title="[% 'Invertir la selecci&oacute;n' | i18n %]"  border=0></a>
+              </th>
+              <th class="click" onclick="ordenar('socio.nro_socio')" Title="[% 'Ordenar por tarjeta de Id.' | i18n %]">[% "Tarjeta de Id." | i18n %]</th>
+              <th class="click" onclick="ordenar('persona.apellido')" Title="[% 'Ordenar por apellido' | i18n %]">[% "Socio" | i18n %]</th>
+              <th class="click" onclick="ordenar('persona.legajo')" Title="[% 'Ordenar por legajo' | i18n %]">[% "Legajo" | i18n %]</th>
+              <th class="click" onclick="ordenar('ref_tipo_sancion.categoria_socio')" Title="[% 'Ordenar por categoria' | i18n %]">[% "Cat." | i18n %]</th>
+              <th class="click" onclick="ordenar('ref_tipo_sancion.tipo_prestamo')" Title="[% 'Ordenar por tipo de pr&eacute;stamo' | i18n %]">[% "Tipo de pr&eacute;stamo" | i18n %]</th>
+              <th class="click" onclick="ordenar('fecha_comienzo')" Title="[% 'Ordenar por fecha de inicio' | i18n %]">[% "Fecha inicio" | i18n %]</th>
+              <th class="click" onclick="ordenar('fecha_final')" Title="[% 'Ordenar por fecha de fin' | i18n %]">[% "Fecha fin" | i18n %]</th>
+              <th class="click" onclick="ordenar('autor')" Title="[% 'Ordenar por autor' | i18n %]">[% "Autor" | i18n %]</th>
+              <th class="click" onclick="ordenar('titulo')" Title="[% 'Ordenar por titulo' | i18n %]">[% "Titulo" | i18n %]</th>
+              <th class="click" onclick="ordenar('edicion')" Title="[% 'Ordenar por edicion' | i18n %]">[% "Edicion/A	&ntilde;o" | i18n %]</th>
+          </tr>
+        </thead>
+        <tbody>
+              [% FOREACH sancion IN SANCIONES %]
+                  <tr>  
+                    <td>
+                        <input type="checkbox" name="chkboxSanciones" value="[% sancion.getId_sancion %]" 
+                                id="[% sancion.getId_sancion %]">
+                    </td>
+                    <td class="tarjetaId">
+                        [% PERL %]
+                            print C4::AR::Filtros::link_to(   text =>     "[% sancion.getNro_socio %]",
+                                                            url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+                                                            params =>   ["nro_socio=[% sancion.socio.getNro_socio %]"],
+                                                            title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                                        );
+                        [% END %]
+                    </td>
+                    <td class="tarjetaId">
+                        [% PERL %]
+                            print C4::AR::Filtros::link_to(   text =>     "[% sancion.socio.persona.getApeYNom %]",
+                                                            url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+                                                            params =>   ["nro_socio=[% sancion.socio.getNro_socio %]"],
+                                                            title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                                        );
+                        [% END %]
+                    </td>
+                    <td>[% sancion.socio.persona.getLegajo %]</td>
+                    <td>[% sancion.socio.categoria.getDescription %]</td>
+                    <td>
+                        [% IF sancion.ref_tipo_sancion.ref_tipo_prestamo.id_tipo_prestamo %]
+                            [% sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]
+                        [% ELSE %]
+                            Reserva no retirada
+                        [% END %]
+                    </td>
+                    <td>[% sancion.getFecha_comienzo_formateada %]</td>
+                    <td>[% sancion.getFecha_final_formateada %]</td>
+
+                    [% IF sancion.nivel3.getId %]
+                        <td>[% sancion.nivel3.nivel1.getAutor %]</td>
+                        <td>[% sancion.nivel3.nivel1.getTitulo %]</td>
+                        <td>[% sancion.nivel3.nivel2.getEdicion %]</td>
+                    [% ELSE %]
+                        [% IF sancion.reserva.nivel3.getId %]
+                            <td>[% sancion.reserva.nivel3.nivel1.getAutor %]</td>
+                            <td>[% sancion.reserva.nivel3.nivel1.getTitulo %]</td>
+                            <td>[% sancion.reserva.nivel3.nivel2.getEdicion %]</td>
+                        [% ELSE %]
+                            <td>[% '---' | i18n %]</td>
+                            <td>[% '---' | i18n %]</td>
+                            <td>[% '---' | i18n %]</td>
+                        [% END %]
+                    [% END %]    
+                </tr>
+              [% END %]
+          </tbody>
+       </table>
+       <div class="form-actions">
+                    [% PERL %]
+                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Borrar Sanciones' | i18n %]",
+                                                                            boton   => "btn btn-primary",
+                                                                            onClick => "borrarSanciones('chkboxSanciones');",
+                                                                            title   => "[% 'Borrar Sanciones' | i18n %]",
+                                                                         
+                                                ) ;
+                    [% END %]
+       </div>
+[% ELSE %]
+       <div class="alert alert-info">[% 'No se han registrado sanciones' | i18n %] </div>
+[% END %]
+

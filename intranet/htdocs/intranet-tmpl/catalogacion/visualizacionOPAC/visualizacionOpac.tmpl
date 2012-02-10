@@ -32,25 +32,25 @@ $(document).ready(function() {
 <input type="hidden" id="idEncabezado">
 
 <div class="titulos" >[% 'Visualizaci&oacute;n de campos MARC en OPAC' | i18n %]</div>
+<form class="form-horizontal">
+    <fieldset>
+        <legend>[% "Seleccione el esquema a configurar:" | i18n %]</legend>
+        [% combo_perfiles %]
 
-<fieldset>
-    <legend><strong>[% "Seleccione el esquema a configurar:" | i18n %]</strong></legend>
-    [% combo_perfiles %]
-
-    [% PERL %]
-            print C4::AR::Filtros::to_Icon(   
-                                                boton   => "icon_buscar",
-                                                onClick => "eleccionDeEjemplar();",
-                                                title   => "[% 'Buscar' | i18n %]",
-                    ) ;
-    [% END %]
-    <select name="eleccion_nivel" id="eleccion_nivel" onchange="eleccionDeEjemplar();">
-        <option value="1">Nivel 1</option>
-        <option value="2">Nivel 2</option>
-        <option value="3">Nivel 3</option>
-    </select>
-</fieldset>
-
+        [% PERL %]
+                print C4::AR::Filtros::to_Icon(   
+                                                    boton   => "icon_buscar",
+                                                    onClick => "eleccionDeEjemplar();",
+                                                    title   => "[% 'Buscar' | i18n %]",
+                        ) ;
+        [% END %]
+        <select name="eleccion_nivel" id="eleccion_nivel" onchange="eleccionDeEjemplar();">
+            <option value="1">Nivel 1</option>
+            <option value="2">Nivel 2</option>
+            <option value="3">Nivel 3</option>
+        </select>
+    </fieldset>
+</form>
 <div id="result"></div>
 
 [% INCLUDE "intranet-bottom.inc" %]

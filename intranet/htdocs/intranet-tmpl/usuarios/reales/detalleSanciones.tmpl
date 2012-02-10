@@ -38,8 +38,9 @@ function updateBorrarSancion(responseText){
 
 [% IF SANCIONES %]
 
-<table id="detalleSancionesResult" width="100%">
-    <tr class="titulo_tabla_resultado">		    
+<table id="detalleSancionesResult"  class="table table-striped"  width="100%">
+  <thead>
+    <tr>		    
         <th>[% "Sancion Original" | i18n %]</th>
 	    <th>[% "Se aplica a" | i18n %]</th>
         <th>[% "Desde" | i18n %]</th>
@@ -49,10 +50,12 @@ function updateBorrarSancion(responseText){
         <th>[% "Edicion" | i18n %]</th>
         <th>[% "Acciones" | i18n %]</th>
     </tr>
+  </thead>
+  <tbody>
 	[% i = 2 %]
 	[% FOREACH sancion IN SANCIONES %]
 	
-	<tr align="center" 
+	<tr
             [% IF i % 2 == 0 %] 
                 [% "class='par'" %]
             [% ELSE %]
@@ -89,10 +92,11 @@ function updateBorrarSancion(responseText){
 	</tr>	
 	[% i = i + 1 %]       
     [% END %]	
+  </tbody>
 </table>
 [% ELSE %]
 
-    <div class="resultados_consulta">[% 'El usuario no tiene sanciones actualmente' | i18n %]</div>
+    <div class="alert alert-info">[% 'El usuario no tiene sanciones actualmente' | i18n %]</div>
 
 [% END %]
 </fieldset>

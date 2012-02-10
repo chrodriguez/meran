@@ -95,6 +95,7 @@ $VERSION = 1.0;
         _init_i18n
         getSessionSocioObject
         getSessionType
+        printValue
         
 );
 
@@ -1198,6 +1199,7 @@ sub buildSocioDataHashFromSession{
     $socio_data{'usr_legajo'}               = $session->param('usr_legajo');
     $socio_data{'ciudad_ref'}{'id'}         = $session->param('usr_ciudad_id'); 
     $socio_data{'remindFlag'}               = $session->param('remindFlag'); 
+    $socio_data{'usr_credential_type'}      = $session->param('usr_credential_type'); 
     
     return (\%socio_data);
 }
@@ -2269,6 +2271,15 @@ sub cambiarPasswordForzadoEnMetodo{
             $attempts_object->reset();
         }
         
+}
+
+sub printValue{
+    my ($value) = @_;
+    
+    my $session = CGI::Session->load();
+    C4::AR::Auth::print_header($session);
+    print $value;
+    	
 }
 
 END { }       # module clean-up code here (global destructor)

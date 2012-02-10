@@ -56,7 +56,7 @@ sub gettemplate {
 
     my $htdocs;
     my $tema_opac   = C4::AR::Preferencias::getValorPreferencia('defaultUI');
-    my $tema_intra  = C4::AR::Preferencias::getValorPreferencia('defaultUI');
+    my $tema_intra  = "default"; #para volver a tener temas, poner la linea de arriba 
     my $temas       = C4::Context->config('temas');
     my $tema;
     my $type;
@@ -116,7 +116,9 @@ sub gettemplate {
     my ($session)       = CGI::Session->load();
 
     $user_theme         = $session->param('urs_theme') || $tema_opac;
-    $user_theme_intra   = $session->param('usr_theme_intra') || $tema_intra;
+    
+    #para volver a tener temas, poner $session->param('usr_theme_intra') || $tema_intra;
+    $user_theme_intra   = $tema_intra;
 
     if ($loging_out){
         $user_theme         = $tema_opac;

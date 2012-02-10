@@ -1,110 +1,28 @@
-[% INCLUDE "intranet-top.inc" %]
+[% INCLUDE 'intranet-top.inc' %] 
+[% INCLUDE 'BootstrapToolkit.inc' %]
+<script src="/includes/bootstrap/js/bootstrap-modal.js"></script>
 
-[% INCLUDE  'WindowHelper.inc'  %]
-[% INCLUDE 'datePicker.inc' %]
-
-<script src="/includes/jquery/validate/jquery.validate.js"></script>
-<script type="text/javascript" src="/intranet-tmpl/reports/reports.js"></script>
+[% USE HTML %]
 
 
-<script type="text/javascript">
+<script>
 
-var objAH;
-
-function ordenar(orden){
-	objAH.sort(orden);
-}
-
-function changePage(ini){
-	objAH.changePage(ini);
-}
-
-function updateInfo(responseText){
-	$("#result").html(responseText);
-    scrollTo('result');
-	zebra("datos_tabla");
-	objAH.id    = "";
-	objAH.notas = "";
-}
-
-
-function consultar(){
-	objAH                   = new AjaxHelper(updateInfo);
-	objAH.url=URL_PREFIX+"/reports/usuariosResult.pl";
-    objAH.debug             = true;
-    objAH.showOverlay       = true;
-	objAH.year              = $("#year").val();
-    objAH.category          = $("#categoria_socio_id").val();
-    objAH.ui                = $("#id_ui").val();
-    objAH.name_from         = $("#name_from").val();
-    objAH.name_to           = $("#name_to").val();
-	objAH.funcion           = "changePage";
-	objAH.sendToServer();
-}
-
-
-
-$(document).ready(function() {
-    crearDatePicker('dateselected');
-    crearDatePicker('dateselectedEnd');
-
-});
+	$(document).ready(function(){
+		$('.tabs').tabs();
+	    $('.alert-message').alert();
+	    $('#modal-from-dom').modal({keyboard: true,backdrop: true,});
+	});
 
 </script>
 
-<!--<div class="titulos">[% "Registro de Usuarios" | i18n %]</div>-->
-
-<fieldset class="formulario_busqueda">
-    <legend class="titulo_legend"><span class="titulos">[% 'Registro de Usuarios' | i18n %]</span></legend>   
-<!-- FIXME para los tipos, el script anda mal, los toma como el check de fecha o el radio operacion -->
-<fieldset>
-    <legend class="titulo_legend">[% "Filtrar por:" | i18n %]</legend>
-    <ul>
-    <li class="sub_item">
-        <label for="year">[% "A&ntilde;o de alta" | i18n %]:</label>
-        [% select_year %]
-    </li>
-    <br />
-    <li class="sub_item">
-        <label for="categoria_socio_id">[% "Categor&iacute;a del socio/a" | i18n %]:</label>
-        [% select_category %]
-    </li>
-    <br />
-    <li class="sub_item">
-        <label for="id_ui">[% "Unidad de Informaci&oacute;n" | i18n %]:</label>
-        [% select_ui %]
-    </li>
-    <br />
-    <fieldset>
-        <legend class="titulo_legend">[% "Filtrar por Apellido:" | i18n %]</legend>
-        <ul>
-            <li class="sub_item">
-                <label for="name_from">[% "Desde" | i18n %]:</label>
-                <input type='text' id='name_from' name='name_from' value='[% name_from %]'>
-            </li>
-            <br />
-            <li class="sub_item">
-                <label for="name_to">[% "Hasta" | i18n %]:</label>
-                <input type='text' id='name_to' name='name_to' value='[% name_to %]'>
-            </li>
-            <br />
-        </ul>
-    </fieldset>
-
+<ul class="tabs">
+  <li class="active"><a href="#labels">[% 'Generar etiquetas' | i18n %]</a></li>
+  <li><a href="#registro">[% 'Registro de usuarios' | i18n %]</a></li>
 </ul>
-</fieldset>
-<!-- </div> -->
-<div class="buttonContainerHorizontal">
-        [% PERL %]
-            print C4::AR::Filtros::to_Button( 
-                                                text    =>  "[% 'Buscar' | i18n %]",
-                                                boton   =>  "boton_buscar",
-                                                onClick =>  "consultar();",
-                    ) ;
-        [% END %]
+ 
+<div class="pill-content">
+  <div class="active" id="labels">[% INCLUDE 'partials/reportes/_reporte_usuarios.inc' %]</div>
+  <div id="registro"> </div>
 </div>
 
-<div id="result" ></div>
-</fieldset>
-[% INCLUDE "intranet-bottom.inc" %]
-
+[% INCLUDE 'intranet-bottom.inc' %]

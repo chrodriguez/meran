@@ -114,9 +114,10 @@ sub getDetalleDestino{
     my $detalleTemp = C4::Modelo::IoImportacionIsoEsquemaDetalle->new();
     my $ordenAux= $detalleTemp->sortByString('orden');
     my $detalle_completo = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
+                                                                                        distinct => 1,
+                                                                                        select => [ 'campo_destino','subcampo_destino' ],
                                                                                         query => \@filtros,
                                                                                         sort_by => $ordenAux,
-                                                                                        distinct =>1,
      );
 
     return $detalle_completo;

@@ -136,17 +136,23 @@ function limpiar(){
 
 <fieldset id="reportes">
     <legend class="titulo_legend"> <span class="titulos">[% "Administraci&oacute;n de Sanciones del Sistema" | i18n %] </span> </legend>
-    
-    <ul>
-        <li class="sub_item">
+    <section class="center-section-form">
+    <form class="form-horizontal">
+        <div class="control-group">
+          <div class="controls">
             <input type="text" id="buscar" name="buscar" value="">
-            [% PERL %]
+            <p class="help-block"><span class="label label-info">[% 'Nota' | i18n %]</span>[% ' Ingrese el Apellido, Nombre o Numero de Socio.' | i18n %]</p>
+          </div>    
+        </div>  
+ <!--[% PERL %]
                  print C4::AR::Filtros::setHelp(text => "[% 'Ingrese el Apellido, Nombre o Numero de Socio.' | i18n %]",
                                                 );
-            [% END %]
+            [% END %]-->
+        
+        <div class="form-actions">
             [% PERL %]
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
-                                                                    boton   => "boton_buscar",
+                                                                    boton   => "btn btn-primary",
                                                                     onClick => "buscarSancion();",
                                                                     title   => "[% 'Buscar' | i18n %]",
                                                                     inline  => 1,
@@ -155,15 +161,19 @@ function limpiar(){
         
             [% PERL %]
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
-                                                                    boton   => "boton_borrar",
+                                                                    boton   => "btn",
                                                                     onClick => "limpiar();",
                                                                     title   => "[% 'Limpiar' | i18n %]",
                                                                     inline  => 1,
                                         ) ;
             [% END %]
-        </li>
-    </ul>
-</fieldset>
+        </div>
+   </section>
+     <!--   </li>
+    </ul>-->
+   </form>
+ </fieldset>
+ 
 
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend">[% "Sanciones" | i18n %]</legend>
