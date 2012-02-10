@@ -26,6 +26,11 @@
         	window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&tipoAccion=MODIFICAR_NIVEL_1";
         }
         
+        function editarEjemplar(id2,id3){
+            window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&id2=".id2."&id2=".id3."&tipoAccion=MODIFICAR_NIVEL_3";
+        	
+        }
+        
       	function ProcessGBSBookInfo(booksInfo) {
 			for (id in booksInfo) {
 			 var element = document.getElementById(id);

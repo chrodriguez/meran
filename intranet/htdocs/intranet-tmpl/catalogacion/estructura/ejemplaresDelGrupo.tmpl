@@ -24,37 +24,21 @@
 					</ul>                
 					<hr>
 					<form id="tablaEjemplares[% id2 %]" name="tablaEjemplares[% id2 %]" action="[% url_prefix %]/catalogacion/barcode_gen.pl" method="post">
-						<table id="tabla_ejemplares[% id2 %]" cellspacing="0" cellpadding="0"  width="100%" class="tablaResult">
-								<tr class="titulo_tabla_resultado">
-						            <th>
-						                [% PERL %]
-						                    print C4::AR::Filtros::to_Icon(   
-						                                                            boton   => "icon_seleccionar",
-						                                                            id      => "select_all[% id2 %]",
-						                                                            title   => "[% 'Seleccionar todos' | i18n %]",
-						                                                            alternClass => "botonCentrado"
-						                                ) ;
-						                [% END %]
-						            </th>
-									<th><strong>[% "Sig. Top."|i18n %]</strong> </th>
-									<th><strong>[% "C&oacute;digo"|i18n %]</strong></th>
-									<th><strong>[% "Tipo de Pr&eacute;stamo"|i18n %]</strong></th>
-						 			<th><strong>[% "Estado"|i18n %]</strong></th>
-									<th><strong>[% "Vencimiento"|i18n %]</strong></th>
-	                                [% IF circularDesdeDetalleDelRegistro %]
-										<th width="7%">
-										    <strong>[% "Circulaci&oacute;n"|i18n %]</strong>
-									    </th>
-									[% END %]
-									<th><strong>[% "MARC" |i18n %]</strong></th>
-						            <th><strong>[% "Notas" |i18n %]</strong></th>
-						            <th width="8%">    
-						                <strong>[% "Acciones" |i18n %]</strong>
-						            </th>
-								</tr>
-	                           
+                        [% PERL %]
+                            print C4::AR::Filtros::tableHeader(   
+                                                                    id              => "tabla_ejemplares[% id2 %]",
+                                                                    class           => "",
+                                                                    selectAll_id    => "select_all[% id2 %]",
+                                                                    columns         => ['[% "Sig. Top."|i18n %]','[% "C&oacute;digo"|i18n %]','[% "Tipo de Pr&eacute;stamo"|i18n %]',
+                                                                                        '[% "Estado"|i18n %]','[% "Vencimiento"|i18n %]', [% IF circularDesdeDetalleDelRegistro %] '[% "Circulaci&oacute;n"|i18n %]' [% END %],
+                                                                                        '[% "MARC" |i18n %]','[% "Notas" |i18n %]','[% "Acciones" |i18n %]',
+                                                                                       ]
+                                                                    
+                                        ) ;
+                        [% END %]
+						
 						[% FOREACH nivel3 %]
-					
+					     <tbody>
 								<tr>
 						                <td>
 						                    <input type="checkbox" id="checkEjemplares[% id2 %]" name="checkEjemplares[% id2 %]" class="icon_seleccionar" value="[% nivel3_obj.getId3 %]">
@@ -99,68 +83,62 @@
 						                            [% END %]
 						                        [% END %]
 						                    [% END %]
-						                    <div class="[% claseDisponibilidad %]">
-						                        [% nivel3_obj.getDisponibilidadObject.getNombre %]
-						                    </div>
+
+					                        [% nivel3_obj.getDisponibilidadObject.getNombre %]
 						                </td>
 						                <td>
-						                    <span class="[% claseEstado %]">
-						                        [% nivel3_obj.getEstadoObject.getNombre %]
-						                    </span>
+					                        [% nivel3_obj.getEstadoObject.getNombre %]
 						                </td>
 						                <td>
-						                    <span class="[% claseFecha %]">
-						                        [% IF prestamo %]
-						                            [% prestamo.getFecha_vencimiento_formateada %]
-						                        [% ELSE %]
-						                            -------
-						                        [% END %]
-						                    </span>
+					                        [% IF prestamo %]
+					                            [% prestamo.getFecha_vencimiento_formateada %]
+					                        [% ELSE %]
+					                            -------
+					                        [% END %]
 						                </td>
 	                                    [% IF circularDesdeDetalleDelRegistro %]
-							                <td valign="middle">
+							                <td >
 							
 							                          [% IF disponible %]
 							                              [% IF prestamo.getNro_socio %]
-							                                  [% PERL %]
-							                                      print C4::AR::Filtros::to_Icon( 
-							                                          boton   =>  "icon_devolver",
-							                                          onClick =>   "devolverPrestamo('[% socio_prestamo.getNro_socio %]','[% socio_prestamo.persona.getApeYNom %]','[% id2 %]','[% prestamo.getId_prestamo %]');", 
-							                                          title   =>   "[% 'Devolver' | i18n %]",
-							                                          alternClass=> "botonCentradoTabla",
-							                                          ) ;
-							                                  [% END %]
-							                                  [% IF prestamo.sePuedeRenovar %]
-							                                      [% PERL %]
-							                                          print C4::AR::Filtros::to_Icon( 
-							                                                                              boton   =>  "icon_renovar",
-							                                                                              onClick =>   "renovarPrestamo('[% socio_prestamo.getNro_socio %]','[% socio_prestamo.persona.getApeYNom %]','[% id2 %]','[% prestamo.getId_prestamo %]');", 
-							                                                                              title   =>   "[% 'Renovar' | i18n %]",
-							                                                                              alternClass=> "botonCentradoTabla",
-							                                                                      ) ;
-							                                      [% END %]
-							                                  [% END %]
-							                              [% ELSE %]
-							                                  [% PERL %]
-							                                          print C4::AR::Filtros::to_Icon( 
-							                                                                          boton   =>  "icon_prestar",
-							                                                                          onClick =>   "buscarUsuario('[% id2 %]','[% id3 %]');", 
-							                                                                          title   =>   "[% 'Realizar pr&eacute;stamo' | i18n %]",
-							                                                                              alternClass=> "botonCentradoTabla",
-							                                                                      ) ;
-							                                  [% END %]
-							                              [% END %]
-							                          [% END %]
-							                      [% ELSE %]
+							                              
+												                [% PERL %]
+												                    print C4::AR::Filtros::action_set_button(    
+												                                                        title           => "[% 'Circulaci&oacute;n' | i18n %]",
+												                                                        button          => 'btn btn-primary',
+												
+												                                                        actions         => [
+												                                                                            {title => "Devolver", 
+												                                                                             action=>"devolverPrestamo('[% socio_prestamo.getNro_socio %]','[% socio_prestamo.persona.getApeYNom %]','[% id2 %]','[% prestamo.getId_prestamo %]')",
+												                                                                             icon=>"icon-share-alt"
+												                                                                            },
+												                                                                            [% IF prestamo.sePuedeRenovar %]
+												                                                                                {title => "Renovar", 
+												                                                                                 action=>"renovarPrestamo('[% socio_prestamo.getNro_socio %]','[% socio_prestamo.persona.getApeYNom %]','[% id2 %]','[% prestamo.getId_prestamo %]')", 
+												                                                                                 icon=>"icon-refresh"
+												                                                                                },
+												                                                                            [% ELSE %]
+                                                                                                                                {title => "Prestar", 
+                                                                                                                                 action=>"buscarUsuario('[% id2 %]','[% id3 %]')", 
+                                                                                                                                 icon=>"icon-repeat"
+                                                                                                                                },
+												                                                                            [% END %]
+												                                                                            ],
+												
+												                            ) ;
+												                [% END %]
+									                 [% END %]
+							                 [% END %]
+
 							                </td>
 	                                    [% END %] <!--END IF permiso_para_circular -->
 						                <td> 
 						                          [% PERL %]
-						                                  print C4::AR::Filtros::to_Icon( 
-						                                                                  boton         => "icon_marc",
-						                                                                  onClick       => "detalleMARC('[% id3 %]');", 
-						                                                                  title         => "[% 'Detalle MARC' | i18n %]",
-	                                                                                      alternClass   => "botonCentradoTabla",
+						                                  print C4::AR::Filtros::action_button( 
+						                                                                  button         => "btn click",
+						                                                                  action       => "detalleMARC([% id3 %])", 
+						                                                                  icon         => "icon-info-sign",
+	                                                                                      title        => "",
 						                                                              ) ;
 	
 						                          [% END %]
@@ -185,30 +163,35 @@
 						                    [% END %]
 						                </td>
 						                <td>
-						                    [% PERL %]
-						                        print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
-						                                                        url=>"[% url_prefix %]/catalogacion/estructura/datosDocumento.pl", 
-						                                                        params =>   ["id1=[% id1 %]","id2=[% id2 %]","id3=[% id3 %]","tipoAccion=MODIFICAR_NIVEL_3"],
-						                                                        title =>    "[% 'Editar Ejemplar' | i18n %]"
-						                                                    ) ;
-						                    [% END %]
-						                    [% PERL %]
-						                              print C4::AR::Filtros::to_Icon(        boton   => "icon_borrar",
-						                                                                    onClick => "borrarN3('[% id2 %]','[% id3 %]');",
-						                                                                    title   => "[% 'Borrar Ejemplar' | i18n %]"
-						                              ) ;
-						                    [% END %]
-						                    [% PERL %]
-						                              print C4::AR::Filtros::to_Icon(        boton   => "icon_exportar",
-						                                                                    onClick => "generarEtiqueta('[% id3 %]','[% nivel3_obj.getBarcode %]');",
-						                                                                    title   => "[% 'Generar etiqueta de ejemplar' | i18n %]"
-						                              ) ;
-						                    [% END %]
+			                              [% PERL %]
+			                                  print C4::AR::Filtros::action_set_button(    
+                                                    title           => "[% 'Ejemplar' | i18n %]",
+                                                    button          => 'btn btn-primary',
+
+                                                    actions         => [
+                                                                        {title => "Editar", 
+                                                                         action=>"editarEjemplar([% id2 %],[% id3 %])",
+                                                                         icon=>"icon-pencil"
+                                                                        },
+                                                                        {title => "Borrar", 
+                                                                         action=>"borrarN3([% id2 %],[% id3 %])", 
+                                                                         icon=>"icon-trash"
+                                                                        },
+                                                                        {title => "Etiquetas", 
+                                                                         action=>"generarEtiqueta([% id3 %],'[% nivel3_obj.getBarcode %]')", 
+                                                                         icon=>"icon-barcode"
+                                                                        },
+                                                                        ],
+			              
+			                                          ) ;
+			                              [% END %]
+
 						                </td>
 						    </tr>
+						</tbody>
 					</form>
+                </table>
 					[%   IF loop.last %]
-					</table>
 					
 					    [%   IF loop.count > 1 %]
 					<!--     si hay mas de una fila se muestra esto -->

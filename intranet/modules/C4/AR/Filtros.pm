@@ -690,7 +690,9 @@ sub action_button{
     my $icon     = $params_hash_ref{'icon'} || undef;  #obtengo el boton
     my $title    = $params_hash_ref{'title'}; #obtengo el title de la componete
 
-    my $html = "<a class='".$button."' href='' onclick='".$action."'><i class='".$icon."'></i>".$title."</a>";
+    $button.= " click";
+    
+    my $html = "<a class='".$button."' onclick='".$action."'><i class='".$icon."'></i>".$title."</a>";
     
     return $html;
 }
@@ -722,6 +724,32 @@ sub action_set_button{
     $html.= "</ul></div>";
     
     return $html;	
+}
+
+sub tableHeader{
+    my (%params_hash_ref) = @_;
+    
+    my $id          = $params_hash_ref{'id'}; 
+    my $class       = $params_hash_ref{'class'} || undef;
+    my $select_all  = $params_hash_ref{'selectAll_id'} || undef;
+    
+    my $columns     = $params_hash_ref{'columns'};
+    
+    my $html = "<table id=$id class='table table-striped $class'><thead>";
+    
+    if ($select_all){
+        $html .= "<th>S_ALL</th>";
+    }
+    
+    foreach my $column (@$columns){
+        $html .= "<th>$column</th>";
+
+    }
+
+    $html .= "</thead>";
+    
+    return $html;	
+	
 }
 
 END { }       # module clean-up code here (global destructor)

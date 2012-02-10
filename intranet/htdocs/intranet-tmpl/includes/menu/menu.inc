@@ -8,7 +8,7 @@
           <span class="icon-bar"></span>
         </a>
         
-        <div id="logo"><a href="/meran/mainpage.pl?token=[% token %]">[% 'MERAN' | i18n %]</a></div>
+        <div id="logo"><a href="[% url_prefix %]/mainpage.pl?token=[% token %]">[% 'MERAN' | i18n %]</a></div>
         <div class="nav-collapse">
           <ul class="nav">
             <li class="dropdown">
