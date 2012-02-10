@@ -699,16 +699,33 @@ sub action_button{
 
 
 sub action_set_button{
-	my (%params_hash_ref) = @_;
-	
+    my (%params_hash_ref) = @_;
+    
     my $title       = $params_hash_ref{'title'}; #obtengo el title de la componete
+    my $action      = $params_hash_ref{'action'} || undef;
+    my $url         = $params_hash_ref{'url'} || undef;
+    
     my $icon  = $params_hash_ref{'icon'} || 'icon white user'; #obtengo el title de la componete
 
     my $actions     = $params_hash_ref{'actions'} || [];
     
     my $button   = $params_hash_ref{'button'} || "btn btn-primary";
     
-     my $html = "<div class='btn-group'><a class='$button' class='click'><i class='$icon'></i>$title</a>";
+    my $html = "<div class='btn-group'>";
+    
+    if ($url){
+            my $params   =  $params_hash_ref{'params'} ||  $url;
+            my @result;
+            foreach my $p (@$params){
+                @result = split(/=/,$p);
+                $url = C4::AR::Utilidades::addParamToUrl($url,@result[0],@result[1]);
+            }
+        $html.= "<a class='$button' href='$url'><i class='$icon'></i>$title</a>";
+        
+    }else{
+        $html.= "<a class='$button' class='click'><i class='$icon'></i>$title</a>";
+    }
+
     $html.= "<a class='$button dropdown-toggle' data-toggle='dropdown' href='#'><span class='caret'></span></a>";
     $html.= "<ul class='dropdown-menu'>";
     
@@ -726,14 +743,14 @@ sub action_set_button{
                 @result = split(/=/,$p);
                 $url = C4::AR::Utilidades::addParamToUrl($url,@result[0],@result[1]);
             }
-            $html .= "<li><a class='click' href='$url'><i class='$icon'></i>$name</a></li>";
+            $html .= "<a class='click' href='$url'><i class='$icon'></i>$title</a>";
         }
 
     }
 
     $html.= "</ul></div>";
     
-    return $html;	
+    return $html;   
 }
 
 sub tableHeader{
