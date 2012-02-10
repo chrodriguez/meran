@@ -279,7 +279,7 @@ function updateReglasMatcheo(responseText){
         detalleImportacion(objAHDetalle.id_importacion);
 }
 
-function cambiarEsdatoRegistro(id_importacion,id_registro,estado){
+function cambiarEstadoRegistro(id_importacion,id_registro,estado){
 
         objAHDetalle=new AjaxHelper(updateEstadoRegistro);
         objAHDetalle.url               = URL_PREFIX+'/herramientas/importacion/importarDB.pl';

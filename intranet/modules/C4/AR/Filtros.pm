@@ -726,7 +726,7 @@ sub action_set_button{
                 @result = split(/=/,$p);
                 $url = C4::AR::Utilidades::addParamToUrl($url,@result[0],@result[1]);
             }
-            $html .= "<a class='click' href='$url'><i class='$icon'></i>$title</a>";
+            $html .= "<li><a class='click' href='$url'><i class='$icon'></i>$name</a></li>";
         }
 
     }
