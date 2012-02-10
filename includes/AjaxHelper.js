@@ -13,7 +13,7 @@ function startOverlay(){
 
 
 function closeModal(id){
-	if (id == '')
+	if ((id == '') || (id == null))
 		$('#ajax-indicator').modal('hide');
 	else
 		$('#'+id).modal('hide');

@@ -2023,7 +2023,7 @@ bytesTransfered=(Math.round(bytesUploaded*100)/100)
 function uploadComplete(evt){clearInterval(intervalTimer);var uploadResponse=document.getElementById('uploadResponse'+'_'+ID2_file);uploadResponse.innerHTML=evt.target.responseText;uploadResponse.style.display='block';}
 function uploadFailed(evt){clearInterval(intervalTimer);alert("An error occurred while uploading the file.");}
 function uploadCanceled(evt){clearInterval(intervalTimer);alert("The upload has been canceled by the user or the browser dropped the connection.");}function startOverlay(){$('#ajax-indicator').modal();}
-function closeModal(id){if(id=='')
+function closeModal(id){if((id=='')||(id==null))
 $('#ajax-indicator').modal('hide');else
 $('#'+id).modal('hide');}
 function _Init(options){if(options.showStatusIn!=''){if(options.offIndicator!=true)

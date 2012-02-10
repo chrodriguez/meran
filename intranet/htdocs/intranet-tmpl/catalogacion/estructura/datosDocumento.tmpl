@@ -104,36 +104,37 @@ $(document).ready( function() {
 
 <div id="datos_esquema" class="modal fade hide">
 	<!-- <div id="datos_esquema"> -->
-	<fieldset>
+    <form class="well form-horizontal">
 	    <legend class="titulo_legend">[% "Datos del esquema" | i18n %]</legend>
-	    <ul style="clear:both">
-	        <li class="sub_item" >
+	        <div class="control-group">
 	            <label for="tipo_nivel3_id">
 	                [% "Esquema de ingreso de datos:" | i18n %]
 	            </label>
-	                [% comboTipoDocumento %]
-	        
-	            [% PERL %]
-	                    print C4::AR::Filtros::to_Button(     text   => "[% 'Usar esquema' | i18n %]",
-	                                                        boton   => "btn btn-primary",
-	                                                        onClick => "seleccionar_esquema();",
-	                                                        title   => "[% 'Usar esquema' | i18n %]",
-	                            ) ;
-	            [% END %]
-	        </li>
-	        <li>
-	            [% PERL %]
-	                    print C4::AR::Filtros::to_Button(   text        => "[% 'Usar esquema' | i18n %]",
-	                                                        boton       => "btn btn-primary",
-	                                                        onClick     => "guardarEsquema();",
-	                                                        title       => "[% 'Usar esquema' | i18n | i18n %]",
-	                                                        alternClass => "botonCentrado hidden_element",
-	                                                        id          => "boton_guardar_esquema",
-	                            ) ;
-	            [% END %]
-	        </li>
-	    </ul>
-	</fieldset>
+	            <div class="controls">
+		                [% comboTipoDocumento %]
+		        </div>
+	        </div>
+            <div class='form-actions'>
+                <p style='text-align: center; margin: 0;'>	            
+	                [% PERL %]
+	                        print C4::AR::Filtros::to_Button(     text   => "[% 'Usar esquema' | i18n %]",
+	                                                            boton   => "btn btn-primary",
+	                                                            onClick => "seleccionar_esquema();",
+	                                                            title   => "[% 'Usar esquema' | i18n %]",
+	                                ) ;
+	                [% END %]
+	                
+	                [% PERL %]
+		                    print C4::AR::Filtros::to_Button(   text        => "[% 'Usar esquema' | i18n %]",
+		                                                        boton       => "btn btn-primary",
+		                                                        onClick     => "guardarEsquema();",
+		                                                        title       => "[% 'Usar esquema' | i18n | i18n %]",
+		                                                        id          => "boton_guardar_esquema",
+		                            ) ;
+		            [% END %]
+	           </p>
+	       </div>
+	</form>
 </div>
 
 <div id="datos_indice" class="modal fade hide">

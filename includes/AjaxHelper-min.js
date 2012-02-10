@@ -1,5 +1,5 @@
 function startOverlay(){$('#ajax-indicator').modal();}
-function closeModal(id){if(id=='')
+function closeModal(id){if((id=='')||(id==null))
 $('#ajax-indicator').modal('hide');else
 $('#'+id).modal('hide');}
 function _Init(options){if(options.showStatusIn!=''){if(options.offIndicator!=true)
