@@ -69,8 +69,7 @@ $(document).ready( function() {
         mostrarEstructuraDelNivel1();
         $('#datos_del_leader').show();
     }
-
-
+    
 } );
 
 </script>
@@ -82,54 +81,62 @@ $(document).ready( function() {
 <div id="abm_tablas_referencia"><div id="abm_tablas_referencia_content"></div></div>
 
 <div id="datos_del_leader" style="display: none;">
-<fieldset>
-    <legend class="titulo_legend">[% "Datos de la cabecera" | i18n %]</legend>
-    <ul style="clear:both">        
-        <li class="sub_item" >
-            <label for="id_nivel_bibliografico">
-                [% "Nivel Bibliogr&aacute;fico:" | i18n %]
-            </label>
-            [% comboTipoNivelBibliografico %]
-        </li>
-    </ul>
-</fieldset>
+	<form class="well form-search form-horizontal">
+	        <legend class="titulo_legend">[% "Datos de la cabecera" | i18n %]</legend>
+	        <div class="control-group">
+	            <label for="id_nivel_bibliografico">
+	                [% "Nivel Bibliogr&aacute;fico:" | i18n %]
+	            </label>
+	            <div class="controls">
+	                [% comboTipoNivelBibliografico %]
+	            </div>
+	         <legend><div id="estado_accion" class="titulos" style="display:none"></div></legend>
+	                      
+	</form>
+	
+	<fieldset>
+	    <ul style="clear:both">        
+	        <li class="sub_item" >
+	        </li>
+	    </ul>
+	</fieldset>
 </div>
 
-<div id="datos_esquema" style="display: none; margin: 0 auto; width: 90%;">
-<!-- <div id="datos_esquema"> -->
-<fieldset>
-    <legend class="titulo_legend">[% "Datos del esquema" | i18n %]</legend>
-    <ul style="clear:both">
-        <li class="sub_item" >
-            <label for="tipo_nivel3_id">
-                [% "Esquema de ingreso de datos:" | i18n %]
-            </label>
-                [% comboTipoDocumento %]
-        
-            [% PERL %]
-                    print C4::AR::Filtros::to_Icon(   
-                                                        boton   => "icon_buscar",
-                                                        onClick => "seleccionar_esquema();",
-                                                        title   => "[% 'Buscar' | i18n %]",
-                            ) ;
-            [% END %]
-        </li>
-        <li>
-            [% PERL %]
-                    print C4::AR::Filtros::to_Button(   text        => "[% 'Usar esquema' | i18n %]",
-                                                        boton       => "boton_guardar",
-                                                        onClick     => "guardarEsquema();",
-                                                        title       => "[% 'Usar esquema' | i18n | i18n %]",
-                                                        alternClass => "botonCentrado hidden_element",
-                                                        id          => "boton_guardar_esquema",
-                            ) ;
-            [% END %]
-        </li>
-    </ul>
-</fieldset>
+<div id="datos_esquema" class="modal fade hide">
+	<!-- <div id="datos_esquema"> -->
+	<fieldset>
+	    <legend class="titulo_legend">[% "Datos del esquema" | i18n %]</legend>
+	    <ul style="clear:both">
+	        <li class="sub_item" >
+	            <label for="tipo_nivel3_id">
+	                [% "Esquema de ingreso de datos:" | i18n %]
+	            </label>
+	                [% comboTipoDocumento %]
+	        
+	            [% PERL %]
+	                    print C4::AR::Filtros::to_Button(     text   => "[% 'Usar esquema' | i18n %]",
+	                                                        boton   => "btn btn-primary",
+	                                                        onClick => "seleccionar_esquema();",
+	                                                        title   => "[% 'Usar esquema' | i18n %]",
+	                            ) ;
+	            [% END %]
+	        </li>
+	        <li>
+	            [% PERL %]
+	                    print C4::AR::Filtros::to_Button(   text        => "[% 'Usar esquema' | i18n %]",
+	                                                        boton       => "btn btn-primary",
+	                                                        onClick     => "guardarEsquema();",
+	                                                        title       => "[% 'Usar esquema' | i18n | i18n %]",
+	                                                        alternClass => "botonCentrado hidden_element",
+	                                                        id          => "boton_guardar_esquema",
+	                            ) ;
+	            [% END %]
+	        </li>
+	    </ul>
+	</fieldset>
 </div>
 
-<div id="datos_indice" style="display: none;">
+<div id="datos_indice" class="modal fade hide">
 <fieldset>
     <legend class="titulo_legend">[% "Datos del Indice" | i18n %]</legend>
     <ul style="clear:both">
@@ -166,7 +173,6 @@ $(document).ready( function() {
 
 <div id="centro" [% IF !ocultarDivLateral %] class="centro" [% END %]>
 <!-- aca se va mostrando la accion que se va realizando -->
-<div id="estado_accion" class="titulos" style="display:none"></div>
 <!--            Manejo del Nivel 1 -->
 <div id="nivel1Tabla" style="display:none">
 
@@ -183,7 +189,7 @@ $(document).ready( function() {
            <div class="form-actions">
                     [% PERL %]
                             print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 1' | i18n %]",
-                                                                boton   => "btn btn btn-primary",
+                                                                boton   => "btn btn-primary",
                                                                 onClick => "guardar(1);",
                                                                 title   => "[% 'Guardar el nivel 1' | i18n %]",
                                     ) ;
@@ -199,22 +205,22 @@ $(document).ready( function() {
         
     <form id="formNivel2" name="formNivel2" class="form-horizontal">
 		  <fieldset>
-		    <legend class="titulo_legend">[% "Datos del grupo" | i18n %]</legend>
-		    <!--     CAMPOS DINAMICOS DEL NIVEL 2 -->
-		        <div id= "estructuraDelNivel2"></div>
-		        <input type="hidden" name="token" value="[% token %]" />
-		
-		    <div class="textoCentrado">* [% "Campos obligatorios" | i18n %]</div>
-           <div class="form-actions">
-		
-			    [% PERL %]
-			            print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 2' | i18n %]",
-			                                                boton   => "btn btn btn-primary",
-			                                                onClick => "guardar(2);",
-			                                                title   => "[% 'Guardar el nivel 2' | i18n %]",
-			                    ) ;
-			    [% END %]
-          </div>		
+			    <legend class="titulo_legend">[% "Datos del grupo" | i18n %]</legend>
+			    <!--     CAMPOS DINAMICOS DEL NIVEL 2 -->
+			        <div id= "estructuraDelNivel2"></div>
+			        <input type="hidden" name="token" value="[% token %]" />
+			
+			    <div class="textoCentrado">* [% "Campos obligatorios" | i18n %]</div>
+	           <div class="form-actions">
+			
+				    [% PERL %]
+				            print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 2' | i18n %]",
+				                                                boton   => "btn btn-primary",
+				                                                onClick => "guardar(2);",
+				                                                title   => "[% 'Guardar el nivel 2' | i18n %]",
+				                    ) ;
+				    [% END %]
+	          </div>		
 		  </fieldset>
     </form>
 </div>

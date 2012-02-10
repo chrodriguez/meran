@@ -361,7 +361,7 @@ function mostrarEstructuraDelNivel1(){
     _NIVEL_ACTUAL       = 1;
    
     if(MODIFICAR == 0){
-        _mostrarAccion(crearBotonEsquema() + "<h5>Agregando registro con el esquema: " + TEMPLATE_ACTUAL + "</h5>");
+        _mostrarAccion("<h4>Agregando registro con el esquema: " + TEMPLATE_ACTUAL + "</h4>" + crearBotonEsquema());
     } 
 
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel1);
@@ -387,14 +387,14 @@ function updateMostrarEstructuraDelNivel1(responseText){
 	validateForm('formNivel1',guardarModificarDocumentoN1);
     addRules();
     
-    scrollTo('nivel1Tabla');  
+    scrollTo('datos_del_leader');  
 }
 
 function mostrarEstructuraDelNivel2(){
     _NIVEL_ACTUAL       = 2;
     
     if(MODIFICAR == 0){
-        _mostrarAccion(crearBotonEsquema() + "<h5>Agregando grupo con el esquema: " + TEMPLATE_ACTUAL + "</h5>");
+        _mostrarAccion("<h4>Agregando grupo con el esquema: " + TEMPLATE_ACTUAL + "</h4>" + crearBotonEsquema());
     }
     
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel2);
@@ -541,7 +541,7 @@ function seleccionar_esquema(){
     TEMPLATE_ACTUAL     = $('#tipo_nivel3_id').val();
     
     if(MODIFICAR == 0){
-        _mostrarAccion(crearBotonEsquema() + "<h5>Agregando ejemplares con el esquema: " + $('#tipo_nivel3_id').val() + "</h5>");
+        _mostrarAccion("<h4>Agregando ejemplares con el esquema: " + $('#tipo_nivel3_id').val() + "</h4>" + crearBotonEsquema());
     }
     
     
@@ -675,7 +675,7 @@ function agregarN3(id2, tipo_documento){
     ID_TIPO_EJEMPLAR    = tipo_documento;
 	MODIFICAR           = 0;
     inicializar();  
-    _mostrarAccion(crearBotonEsquema() + "Agregando ejemplares");
+    _mostrarAccion("Agregando ejemplares" + crearBotonEsquema());
 	$('#divCantEjemplares').show();
 // 	mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
     open_esquema();
@@ -1085,34 +1085,15 @@ function updateMostrarInfoAltaNivel3ParaEdicionGrupalFromRegistro(responseText){
 }
 
 function open_alta_indicador(id_div_alta_indicador){
-    $('#'+id_div_alta_indicador).modal({   
-            containerCss:{
-                backgroundColor:"#fff",
-        //         borderColor:"#0063dc",
-                height: 150,
-                padding: 0,
-                width: 530,
-    //             opacity: 50,
-            },
-    });
+    $('#'+id_div_alta_indicador).modal();
 }
 
-function close_alta_indicador(){
-    $.modal.close(); //cirro la ventana
+function close_alta_indicador(id){
+    closeModal(id); //cirro la ventana
 }
 
 function open_esquema(){
-    $("#datos_esquema").modal({   
-            containerCss:{
-                backgroundColor:"#fff",
-        //         borderColor:"#0063dc",
-                height: 150,
-                padding: 0,
-                width: 530,
-                /*margin: '0 auto',     */         
-    //             opacity: 50,
-            },
-    });
+    $("#datos_esquema").modal();
     
     if(MODIFICAR == 1){
         $("#boton_guardar_esquema").show();
@@ -1122,7 +1103,7 @@ function open_esquema(){
 }
 
 function close_esquema(){
-    $.modal.close(); //cirro la ventana 
+    closeModal('datos_esquema'); //cirro la ventana 
 }
 
 function guardar_indicadores(id_div_indicadores, i){
@@ -1133,7 +1114,7 @@ function guardar_indicadores(id_div_indicadores, i){
         str                         = str + "<span class='indSeparator'>|</span><span>" + key_indicador_secundario + "</span>";
 
     $('#'+id_div_indicadores).html(str);
-    $.modal.close(); //cirro la ventana
+    closeModal(id_div_indicadores);
 
     //seteo los valores en los combos ocultos para luego guardarlos en la base
     $("#select_indicador_primario" + i).val(key_indicador_primario); 
@@ -1169,47 +1150,43 @@ function procesarInfoJson(marc_object_array, id_padre){
         var id_aux                  = MARC_OBJECT_ARRAY.length;
 
         //los indicadores quedan ocultos y se muestran en una ventana
-        strComp                     = strComp + "<ul id='" + id_div_alta_indicador + "' style='display:none'>";
+        strComp                     = strComp + "<form id='" + id_div_alta_indicador + "' class= 'modal fade hide form-horizontal well' onsubmit='return false;'>";
    
+        
         //genero el indicador primario
         if(campo_marc_conf_obj.getIndicadorPrimario() != ''){
-            strIndicadores = "<li class='sub_item'>Indicador Primero: " + campo_marc_conf_obj.getIndicadorPrimario() + "</li>";
-            strIndicadores = strIndicadores + "<li>" + crearSelectIndicadoresPrimarios(campo_marc_conf_obj, id_aux) + "</li>";
+        	strIndicadores = "<div class='control-group'>" + "<label for='"+id_div_alta_indicador+"'>Indicador Primero: " + campo_marc_conf_obj.getIndicadorPrimario() + "</label>"+"<div class='controls'>";
+            strIndicadores = strIndicadores + crearSelectIndicadoresPrimarios(campo_marc_conf_obj, id_aux);
+            strIndicadores = strIndicadores + "<p class='help-block'>Seleccione un indicador primario para el campo</p>";
+            strIndicadores = strIndicadores + "</div></div>";
         }
 
 
         //genero el indicador secundario
         if(campo_marc_conf_obj.getIndicadorSecundario() != ''){
-            strIndicadores = strIndicadores + "<li class='sub_item'>Indicador Segundo: " + campo_marc_conf_obj.getIndicadorSecundario() + "</li>";
-            strIndicadores = strIndicadores + "<li>" + crearSelectIndicadoresSecundarios(campo_marc_conf_obj, id_aux) + "</li>";
+        	strIndicadores += "<div class='control-group'>" + "<label for='"+id_div_alta_indicador+"'>Indicador Segundo: " + campo_marc_conf_obj.getIndicadorSecundario() + "</label>"+"<div class='controls'>";
+            strIndicadores = strIndicadores + crearSelectIndicadoresSecundarios(campo_marc_conf_obj, id_aux);
+            strIndicadores = strIndicadores + "<p class='help-block'>Seleccione un indicador secundario para el campo</p>";
+            strIndicadores = strIndicadores + "</div></div>";
         }
-
-        strIndicadores = strIndicadores + "<p style='text-align: center; margin: 0;'><button id='' class='clean-gray botonCentrado' 0='' onclick='guardar_indicadores(" + id_div_indicadores + ", " + id_aux +");'>Aceptar</button>";
-        strIndicadores = strIndicadores + "<button id='' class='clean-gray botonCentrado' 0='' onclick='close_alta_indicador();'>Cancelar</button></p>";
-//         strIndicadores = strIndicadores + "<div class='buttonContainerHorizontal'>";
-
-//         strIndicadores = strIndicadores + "<li onclick='guardar_indicadores(" + id_div_indicadores + ", " + id_aux +");' class='click boton_medio horizontal'><div class='boton_guardar'></div><div class='boton_der'></div><div class='boton_texto'>Aceptar</div></li>";
-
-//         strIndicadores = strIndicadores + "<li onclick='close_alta_indicador();' class='click boton_medio horizontal'><div class='boton_salir'></div><div class='boton_der'></div><div class='boton_texto'>Cancelar</div></li>";
-
+        
+ 		strIndicadores = strIndicadores + "<div class='form-actions'><p style='text-align: center; margin: 0;'>";
+ 		
+        strIndicadores = strIndicadores + "<button class='btn btn-primary horizontal' onclick='guardar_indicadores(" + id_div_indicadores + ", " + id_aux +");'>Aceptar</button>";
+        strIndicadores = strIndicadores + "<button class='btn horizontal' onclick=close_alta_indicador('"+id_div_alta_indicador+"');>Cancelar</button></p>";
+        strIndicadores = strIndicadores + "</div>";
         //cierro UL de indicadores
-        strComp = strComp + strIndicadores + "</ul>";
         strComp = strComp + "</div>"; //end div buttonContainerHorizontal
+        strComp = strComp + strIndicadores + "</form>";
 
         //genero el header para el campo q contiene todos los subcampos
 //         strComp = strComp + "<div id='marc_group" + id_temp + "'><li id='trigger_" + id_temp + "' class='MARCHeader click trigger trigger_" + id_temp + "'>";
-        strComp = strComp + "<div id='marc_group" + id_temp + "' class='row' style='width: 80%;'><li class='MARCHeader'>";
+        strComp = strComp + "<div id='marc_group" + id_temp + "' class='row underline' style='width: 80%;'><li class='MARCHeader'>";
         strComp = strComp + "<div class='MARCHeader_info'>";
 
         //header LEFT
         strComp = strComp + "<div style='width:10%;float:left'>";
-        strComp = strComp + crearBotonAyudaCampo(campo_marc_conf_obj.getCampo());
-
-        //el campo tiene indicadores
-        if ( campo_marc_conf_obj.getIndicadoresPrimarios() != '0') {
-            
-            strComp = strComp + "<div id='" + id_div_indicadores + "' class='indicators' title='Ver/modificar los indicadores' onclick=open_alta_indicador('" + id_div_alta_indicador + "');><span>" + campo_marc_conf_obj.getIndicadorPrimarioDato() + "</span><span class='indSeparator'>|</span><span>" + campo_marc_conf_obj.getIndicadorSecundarioDato() + "</span></div>";
-        }
+        strComp = strComp + crearBotonAyudaCampo(campo_marc_conf_obj.getCampo(),id_div_alta_indicador,campo_marc_conf_obj.getIndicadoresPrimarios());
 
         strComp = strComp + "</div>";
 
@@ -1223,10 +1200,18 @@ function procesarInfoJson(marc_object_array, id_padre){
             //header RIGHT
             strComp = strComp + "<div style='float:right'>";
             campo_marc_conf_obj.setIdCompCliente("marc_group" + id_temp);
+<<<<<<< HEAD
+            strComp = strComp + crearBotonAgregarCampoRepetible(campo_marc_conf_obj, id_temp);
+            
+            alert("procesando info JSON First? " + campo_marc_conf_obj.getFirst());
+            strComp = strComp + crearBotonEliminarCampoRepetible(campo_marc_conf_obj, campo_marc_conf_obj.getFirst());   
+            
+=======
            
             var id = "marc_group" + id_temp + "_buttons";
             strComp = strComp + openDivButtonContainer(id,'campo');
             
+>>>>>>> 8368df2aea2e11525198d0f6cf819e0992dcb38f
             strComp = strComp + "</div>";
             
         } else {
@@ -1237,7 +1222,7 @@ function procesarInfoJson(marc_object_array, id_padre){
         //cierro MARCHeader_info
         strComp = strComp + "</div>";
 // TODO creo q el div MARCHeader_content esta deprecated
-        strComp = strComp + "</li><div id='MARC_content_" + id_temp + "' class='MARC_content_" + id_temp + "'>";
+        strComp = strComp + "</li><div id='MARC_content_" + id_temp + "' class='MARC_content_" + id_temp + " left'>";
 
         //cierro DIV marc_group
 //         strComp = strComp + "</div>";
@@ -1300,14 +1285,25 @@ function procesarInfoJson(marc_object_array, id_padre){
     }
 }
 
-function crearBotonAyudaCampo(campo){
+function crearBotonAyudaCampo(campo,id_div_alta_indicador,indicadores){
     var funcion = "ayudaParaCampo('" + campo + "')";
+    
+    
+    var html = "<div class='btn-group inline'>"+"<a class='btn click' onclick=" + funcion + " title='Info'><i class='icon-info-sign'></i></a>";
+    
+    if (indicadores != '0')
+    	html += "<a class='btn click' onclick=open_alta_indicador('" + id_div_alta_indicador + "') title='Indicadores'><i class='icon-align-justify'></i></a></div>";
 
-    return "<div class='icon_ayuda' onclick=" + funcion + "> </div>"; 
+    return html;
+    
 }
 
 function crearBotonEsquema(){
-    return "<div title='Cambiar el esquema' style='' onclick='open_esquema();' class='click horizontal icon_buscar'> </div>"
+	
+	var html = "<a class='btn btn-primary click' title='Cambiar el esquema' onclick='open_esquema();' > Esquema</a>";
+	
+	
+    return html;
 }
 
 function ayudaParaCampo(campo){
@@ -1366,7 +1362,8 @@ function procesarSubCampo(objeto, marc_group){
     var divComp             = crearDivComponente("div"+marc_conf_obj.getIdCompCliente());
     var tiene_estructura    = marc_conf_obj.getTieneEstructura(); //falta q los niveles 1, 2, 3 mantengan esta estructura
       
-    var content_div_open= "<div class=control-group>";
+    var id_temp_content_div = "div_control"+marc_conf_obj.getIdCompCliente()
+    var content_div_open= "<div id='"+id_temp_content_div+"' class=control-group>";
     var content_div_close= "</div>";
     var controls_div= "<div class=controls>";
     
@@ -1380,7 +1377,9 @@ function procesarSubCampo(objeto, marc_group){
 // TODO armar una funcion q genere esto
         vista_intra         = "<div class='divComponente'><input type='text' id='" + marc_conf_obj.getIdCompCliente() + "' value='" + marc_conf_obj.getDato() + "' size='55' disabled></div>";
         vista_intra         = vista_intra + crearIconWarning(marc_conf_obj);
-        vista_intra         = vista_intra + crearBotonEliminarSubcampo(marc_conf_obj);
+        
+        vista_intra         = vista_intra + crearBotonEliminarSubcampo(marc_conf_obj, marc_conf_obj.getFirst());
+        
         tiene_estructura    = 0;
         divLabel            = crearDivLabel(marc_conf_obj.getCampo() + '^' + marc_conf_obj.getSubCampo() + " - " + marc_conf_obj.getVistaIntra(), marc_conf_obj.getIdCompCliente());  
         strComp             = "<span id='LI" + marc_conf_obj.getIdCompCliente() + "'> " + content_div_open + divLabel + controls_div +  vista_intra + content_div_close  + content_div_close + "</span>";  
@@ -1424,12 +1423,14 @@ function procesarSubCampo(objeto, marc_group){
         //Se agregan clases para cuando tenga que recuperar los datos.
         if(objeto.obligatorio == "1"){
             hacerComponenteObligatoria(marc_conf_obj.getIdCompCliente());
+            $("#"+id_temp_content_div).addClass('error');
         }
 
     }
 }
 
 var RULES_OPTIONS = [];
+var alert_showed = false;
 
 function addRules(){
 //     log("add rules ????????????????: ");
@@ -1441,9 +1442,24 @@ function addRules(){
             if(subcampos_array[s].rules != ""){
                 create_rules_object(subcampos_array[s].rules);
 //                 log("remove rules val??: " + $('#'+subcampos_array[s].getIdCompCliente()).val() + " para el id " + subcampos_array[s].getIdCompCliente());
-                $('#'+subcampos_array[s].getIdCompCliente()).rules("remove");
-//                 log("rules: " + subcampos_array[s].rules + " para el id " + subcampos_array[s].getIdCompCliente());
-                $('#'+subcampos_array[s].getIdCompCliente()).rules("add", RULES_OPTIONS);
+                try{
+	                $('#'+subcampos_array[s].getIdCompCliente()).rules("remove");
+	//                 log("rules: " + subcampos_array[s].rules + " para el id " + subcampos_array[s].getIdCompCliente());
+	                $('#'+subcampos_array[s].getIdCompCliente()).rules("add", RULES_OPTIONS);
+                }
+                catch(e){
+                	if (!alert_showed){
+                		closeModal();
+	                	bootbox.dialog("Hubo un problema en la estructura del catalogo", {
+	                	    "label" : "Aceptar",
+	                	    "class" : "btn-warning",   // or primary, or danger, or nothing at all
+	                	    "callback": function() {
+	                	    	alert_showed = true;
+	                	    }
+	                	});
+	                	alert_showed = true;
+                	}
+                }
             }
         }
     }
@@ -1592,6 +1608,7 @@ function cloneSubCampo(id){
     var subcampo_temp   = _getSubCampoMARC_conf_ById(id);
     var obj             = copy(subcampo_temp);        //se genera una copia del subcampo
     obj.setIdCompCliente( id_componente );            //seteo el nuevo id de la componente
+    subcampo_temp.setFirst(false);  
     procesarSubCampo(obj, subcampo_temp.marc_group);  //se genera la componente en el cliente
     
     //agrego el subcampo en la poscion "posCampo" del arreglo MARC_OBJECT_ARRAY, donde se encuentra el campo contenedor
@@ -1605,6 +1622,8 @@ function cloneCampo(marc_group){
     var campo_temp      = _getCampoMARC_conf_ById(marc_group);
     var campo_obj       = copy(campo_temp);      //se genera una copia del campo
 
+    campo_obj.setFirst(false);  
+    alert("estoy clonando First? " + campo_obj.getFirst());
     //ahora cambio el id del campo
     campo_obj.setIdCompCliente(generarIdComponente());
     //ahora cambio los id's de los subcampos
@@ -1647,11 +1666,22 @@ function removeSubcampo(id){
     removeFromArray(MARC_OBJECT_ARRAY[subcampo_temp.posCampo].getSubCamposArray(), _from, _to); //elimino la informacion del subcampo
 }
 
+<<<<<<< HEAD
+function crearBotonAgregarSubcampoRepetible(obj, show){
+    display = "none";
+  
+    if(!show){
+        display = "block";
+    }
+
+    if(obj.getRepetible() == '1'){
+        return "<div onclick=cloneSubCampo('"+ obj.getIdCompCliente() +"') class='icon_mas horizontal' title='Agregar subcampo repetible' style='display: " + display + "'/>";
+=======
 
 function openDivButtonContainer(id,tipo){
 	
-	var clase 			= "btn btn-primary ";
-	var clase_dropdown  = "btn btn-primary dropdown-toggle ";
+	var clase 			= "btn btn-info ";
+	var clase_dropdown  = "btn btn-info dropdown-toggle ";
 	var title			= "Campo"
 	if (tipo != 'campo'){
 		clase = "btn ";
@@ -1676,25 +1706,61 @@ function closeDivButtonContainer(id){
 function crearBotonAgregarSubcampoRepetible(obj){
 
     if(obj.getRepetible() == '1'){
-    	return '<li><a onclick=cloneSubCampo("'+ obj.getIdCompCliente() +'")><i class="icon-plus"></i> Agregar</a></li>';
+    	return '<li><a class="click" onclick=cloneSubCampo("'+ obj.getIdCompCliente() +'")><i class="icon-plus"></i> Agregar</a></li>';
+>>>>>>> 8368df2aea2e11525198d0f6cf819e0992dcb38f
     }else{  
         return "";
     }
 }
 
-function crearBotonEliminarSubcampoRepetible(obj){
-//HACER CON ESTOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+function crearBotonEliminarSubcampoRepetible(obj, show){
+  
+    display = "none";
+  
+    if(!show){
+        display = "block";
+    }
+
     if(obj.getRepetible() == '1'){
-    	return '<li><a onclick=removeSubcampo("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar</a></li>';
+<<<<<<< HEAD
+        return "<div onclick=removeSubcampo('"+ obj.getIdCompCliente() +"') class='icon_borrar horizontal' title='Eliminar subcampo repetible' style='display: " + display + "'/>";
+=======
+    	return '<li><a class="click" onclick=removeSubcampo("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar</a></li>';
+>>>>>>> 8368df2aea2e11525198d0f6cf819e0992dcb38f
     }else{  
         return "";
     }
 }
 
+<<<<<<< HEAD
+function crearBotonEliminarSubcampo(obj, show){
+    display = "none";
+  
+    if(!show){
+        display = "block";
+    }
+
+    return "<div onclick=removeSubcampo('"+ obj.getIdCompCliente() +"') class='icon_borrar horizontal' title='Eliminar subcampo' style='display: " + display + "'/>";
+  
+=======
 function crearBotonEliminarSubcampo(obj){
-	return '<a onclick=removeSubcampo("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar</a></li>';
+	return '<a class="click" onclick=removeSubcampo("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar</a></li>';
+>>>>>>> 8368df2aea2e11525198d0f6cf819e0992dcb38f
 }
 
+function crearBotonEliminarCampoRepetible(obj, show){
+    display = "none";
+  
+    if(!show){
+        display = "block";
+    }
+
+    if(obj.getRepetible() == '1'){
+        return "<div onclick=remove('"+ obj.getIdCompCliente() +"') class='horizontal icon_borrar' title='Eliminar campo repetible' style='display: " + display + "'/>";
+    }else{  
+        return "";
+    }
+}
 
 function crearIconWarning(obj){
 
@@ -1705,21 +1771,24 @@ function crearIconWarning(obj){
 function crearBotonAgregarCampoRepetible(obj, id_padre){
 
     if(obj.getRepetible() == '1'){
-    	return "<li><a onclick=cloneCampo('"+ id_padre +"')><i class='icon-plus'></i> Agregar</a></li>";
+    	return "<li><a class='click' onclick=cloneCampo('"+ id_padre +"')><i class='icon-plus'></i> Agregar</a></li>";
     }else{  
         return "";
     }
 }
 
+<<<<<<< HEAD
+=======
 function crearBotonEliminarCampoRepetible(obj){
 
     if(obj.getRepetible() == '1'){
-    	return '<li><a onclick=remove("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar</a></li>';
+    	return '<li><a class="click" onclick=remove("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar</a></li>';
     }else{  
         return "";
     }
 }
 
+>>>>>>> 8368df2aea2e11525198d0f6cf819e0992dcb38f
 function campo_marc_conf(obj){
 
     this.nombre                     = obj.nombre;
@@ -1737,6 +1806,7 @@ function campo_marc_conf(obj){
     this.indicadores_secundarios    = obj.indicadores_secundarios;
     this.indicador_primario_dato    = obj.indicador_primario_dato;
     this.indicador_secundario_dato  = obj.indicador_secundario_dato;
+    this.first                      = true;  
 
 
     for(var i = 0; i < obj.subcampos_array.length; i++){
@@ -1761,6 +1831,8 @@ function campo_marc_conf(obj){
     function fGetIndicadoresSecundarios(){  return (this.indicadores_secundarios)};
     function fGetIndicadorPrimarioDato(){   return ((this.indicador_primario_dato == undefined)?'#':this.indicador_primario_dato)};
     function fGetIndicadorSecundarioDato(){ return ((this.indicador_secundario_dato == undefined)?'#':this.indicador_secundario_dato)};
+    function fGetFirst(){ return this.first}; 
+    function fSetFirst(bool){ this.first = bool}; 
     
 
     //metodos
@@ -1781,6 +1853,8 @@ function campo_marc_conf(obj){
     this.getIndicadoresSecundarios  = fGetIndicadoresSecundarios;    
     this.getIndicadorPrimarioDato   = fGetIndicadorPrimarioDato;
     this.getIndicadorSecundarioDato = fGetIndicadorSecundarioDato;
+    this.getFirst                   = fGetFirst;  
+    this.setFirst                   = fSetFirst;
 
 }
 
@@ -1809,6 +1883,7 @@ function subcampo_marc_conf(obj){
     this.tiene_estructura       = obj.tiene_estructura;
     this.ayuda_campo            = obj.ayuda_campo;
     this.descripcion_subcampo   = obj.descripcion_subcampo;
+    this.first                  = true;  
 
     function fGetIdCompCliente(){ return this.idCompCliente };
     function fSetIdCompCliente( id ){ this.idCompCliente = id };
@@ -1830,6 +1905,8 @@ function subcampo_marc_conf(obj){
     function fGetVistaIntra(){ return $.trim(this.liblibrarian) };
     function fGetAyudaCampo(){ return $.trim(this.ayuda_campo) };
     function fGetDescripcionSubCampo(){ return $.trim(this.descripcion_subcampo) };
+    function fGetFirst(){return this.first};
+    function fSetFirst(bool){ this.first = bool };
 
     //metodos
     this.getIdCompCliente           = fGetIdCompCliente;
@@ -1852,6 +1929,8 @@ function subcampo_marc_conf(obj){
     this.getEdicionGrupal           = fGetEdicionGrupal;  
     this.getAyudaCampo              = fGetAyudaCampo;
     this.getDescripcionSubCampo     = fGetDescripcionSubCampo;
+    this.getFirst                   = fGetFirst;  
+    this.setFirst                   = fSetFirst;
 }
 
 
@@ -1870,8 +1949,8 @@ function crearBotones(obj){
         disableComponent(obj.getIdCompCliente());  
         $('#'+ obj.getIdCompCliente()).val("No se permite edicion grupal");  
     } else {
-        $("#div_botones" + obj.getIdCompCliente() + "_lista").append(crearBotonEliminarSubcampoRepetible(obj));
         $("#div_botones" + obj.getIdCompCliente() + "_lista").append(crearBotonAgregarSubcampoRepetible(obj));
+        $("#div_botones" + obj.getIdCompCliente() + "_lista").append(crearBotonEliminarSubcampoRepetible(obj));
     }
 }
 
@@ -2036,7 +2115,8 @@ function hacerComponenteObligatoria(idObj){
         $("#"+idObj).addClass("required");
     }
 
-    agregarAHash(HASH_MESSAGES, idObj, ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO);    
+    agregarAHash(HASH_MESSAGES, idObj, ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO);
+    
 }
 
 // Esta funcion crea un divComponente con un id segun parametro idObj
@@ -2206,7 +2286,7 @@ function modificarN1(id1, template){
     ID_N1               = id1;
     
 // TODO falta agregar boton para modificar el template
-    _mostrarAccion(crearBotonEsquema() + "<h5>Modificando el registro (" + ID_N1 + ") con el esquema: " + TEMPLATE_ACTUAL + "</h5>");
+    _mostrarAccion("<h4>Modificando el registro (" + ID_N1 + ") con el esquema: " + TEMPLATE_ACTUAL + "</h4>" + crearBotonEsquema());
     objAH               = new AjaxHelper(updateModificarN1);
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;
@@ -2235,7 +2315,7 @@ function modificarN2(id2, template){
     ID_N2               = id2;
     ID_TIPO_EJEMPLAR    = template;
 // TODO falta agregar boton para modificar el template
-    _mostrarAccion(crearBotonEsquema() + "<h5>Modificando el grupo (" + ID_N2 + ") con el esquema: " + ID_TIPO_EJEMPLAR + "</h5>");  
+    _mostrarAccion("<h4>Modificando el grupo (" + ID_N2 + ") con el esquema: " + ID_TIPO_EJEMPLAR + "</h4>" + crearBotonEsquema());  
     objAH               = new AjaxHelper(updateModificarN2);
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;
@@ -2259,7 +2339,7 @@ function modificarN3(id3, template){
 	ID_N3               = id3;	
     ID_TIPO_EJEMPLAR    = template;
 // TODO falta agregar boton para modificar el template
-    _mostrarAccion(crearBotonEsquema() + "<h5>Modificando el ejemplar (" + ID_N3 + ") con el esquema: " + ID_TIPO_EJEMPLAR + "</h5>");  
+    _mostrarAccion("<h4>Modificando el ejemplar (" + ID_N3 + ") con el esquema: " + ID_TIPO_EJEMPLAR + "</h4>" + crearBotonEsquema());  
 	objAH               = new AjaxHelper(updateModificarN3);
 	objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
 	objAH.debug         = true;
@@ -2391,8 +2471,8 @@ function validateForm(formID, func){
 
     $().ready(function() {
     $("#"+formID).validate({
-            errorElement: "div",
-            errorClass: "error_adv",
+            errorElement: "span",
+            errorClass: "help-inline",
 //             rules: HASH_RULES,
             messages: HASH_MESSAGES,
     })});

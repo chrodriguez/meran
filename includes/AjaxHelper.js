@@ -8,23 +8,15 @@
  */
 
 function startOverlay(){
-    $('#ajax-indicator').modal({   
-       	close: false,
-        containerCss:{
-            backgroundColor:"#fff",
-            height: 50,
-            padding: 0,
-            width: 190,
-            opacity: 50,
-        },
-    });   
-    
-    return (true);
+    $('#ajax-indicator').modal();   
 }
 
 
-function closeModal(){
-	$.modal.close();
+function closeModal(id){
+	if (id == '')
+		$('#ajax-indicator').modal('hide');
+	else
+		$('#'+id).modal('hide');
 }
 //Funciones Privadas para manejar el estado del la consulta de AJAX
 
@@ -79,8 +71,6 @@ function _HiddeState(options){
     }
 
     if(options.showOverlay){
-//         $.modal.close();
-//         $('#ajax-indicator').ajaxStop($.modal.close());
         $(document).ajaxStop(closeModal());
     }
 

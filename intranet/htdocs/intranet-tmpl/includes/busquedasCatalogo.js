@@ -8,6 +8,7 @@ function updateInfoBusquedas(responseText){
 
     $("#volver").hide();
     $('#resultBusqueda').html(responseText);
+    closeModal();
     $("#resultBusqueda").slideDown("fast");
     if (shouldScroll)
       scrollTo('resultBusqueda');

@@ -33,7 +33,6 @@ var jobID = 0;
 
 
 <script type="text/javascript">
-var mensajes_interval_id;
 
 	$(document).ready(function() {
 		CrearAutocompleteCatalogo({ 
@@ -64,7 +63,7 @@ var mensajes_interval_id;
 
     function mostrarNovedades(){
         var objAH_temp               = new AjaxHelper(updateActualizarTabla);
-        objAH_temp.debug         = true;
+        objAH_temp.debug         = false;
         objAH_temp.showStatusIn  = '';
         objAH_temp.url           = URL_PREFIX+'/novedadesIntra.pl';
         objAH_temp.tipoAccion    = "MOSTRAR_NOVEDADES";
@@ -73,7 +72,7 @@ var mensajes_interval_id;
 
     function mensajesContacto(){
         var objAH_temp               = new AjaxHelper(updateMensajesContacto);
-        objAH_temp.debug         = true;
+        objAH_temp.debug         = false;
         this.showState      = false;
         objAH_temp.url           = URL_PREFIX+'/mensajes_contacto.pl';
         objAH_temp.sendToServer();
