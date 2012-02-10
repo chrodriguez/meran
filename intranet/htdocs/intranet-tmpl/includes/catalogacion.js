@@ -1228,7 +1228,7 @@ function procesarInfoJson(marc_object_array, id_padre){
         }
 
         $("#marc_group" + id_temp + "_buttons_lista").append(crearBotonAgregarCampoRepetible(campo_marc_conf_obj,"marc_group" + id_temp));
-        $("#marc_group" + id_temp + "_buttons_lista").append(crearBotonEliminarCampoRepetible(campo_marc_conf_obj,"marc_group" + id_temp));
+        $("#marc_group" + id_temp + "_buttons_lista").append(crearBotonEliminarCampoRepetible(campo_marc_conf_obj,"marc_group" + id_temp, campo_marc_conf_obj.getFirst()));
 
         //seteo los datos de los indicadores
         $("#select_indicador_primario" + MARC_OBJECT_ARRAY.length).val(campo_marc_conf_obj.getIndicadorPrimarioDato());
@@ -1716,10 +1716,19 @@ function crearBotonAgregarCampoRepetible(obj, id_padre){
     }
 }
 
-function crearBotonEliminarCampoRepetible(obj){
+function crearBotonEliminarCampoRepetible(obj, show){
+    display = "none";
+  
+    if(!show){
+        display = "block";
+    }
+    
+// FIXME no esta funcionando bien, luego de clonar debería mostrarse igual
+
+display = "block";
 
     if(obj.getRepetible() == '1'){
-    	return '<li><a class="click" onclick=remove("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar</a></li>';
+    	return '<li style= "display:' + display + '"><a class="click" onclick=remove("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar</a></li>';
     }else{  
         return "";
     }
@@ -1742,6 +1751,7 @@ function campo_marc_conf(obj){
     this.indicadores_secundarios    = obj.indicadores_secundarios;
     this.indicador_primario_dato    = obj.indicador_primario_dato;
     this.indicador_secundario_dato  = obj.indicador_secundario_dato;
+    this.first                      = true;
 
 
     for(var i = 0; i < obj.subcampos_array.length; i++){
@@ -1766,6 +1776,8 @@ function campo_marc_conf(obj){
     function fGetIndicadoresSecundarios(){  return (this.indicadores_secundarios)};
     function fGetIndicadorPrimarioDato(){   return ((this.indicador_primario_dato == undefined)?'#':this.indicador_primario_dato)};
     function fGetIndicadorSecundarioDato(){ return ((this.indicador_secundario_dato == undefined)?'#':this.indicador_secundario_dato)};
+    function fGetFirst(){ return this.first}; 
+    function fSetFirst(bool){ this.first = bool}; 
     
 
     //metodos
@@ -1786,6 +1798,8 @@ function campo_marc_conf(obj){
     this.getIndicadoresSecundarios  = fGetIndicadoresSecundarios;    
     this.getIndicadorPrimarioDato   = fGetIndicadorPrimarioDato;
     this.getIndicadorSecundarioDato = fGetIndicadorSecundarioDato;
+    this.getFirst                   = fGetFirst;  
+    this.setFirst                   = fSetFirst;
 
 }
 
@@ -1814,6 +1828,7 @@ function subcampo_marc_conf(obj){
     this.tiene_estructura       = obj.tiene_estructura;
     this.ayuda_campo            = obj.ayuda_campo;
     this.descripcion_subcampo   = obj.descripcion_subcampo;
+    this.first                  = true; 
 
     function fGetIdCompCliente(){ return this.idCompCliente };
     function fSetIdCompCliente( id ){ this.idCompCliente = id };
@@ -1835,6 +1850,8 @@ function subcampo_marc_conf(obj){
     function fGetVistaIntra(){ return $.trim(this.liblibrarian) };
     function fGetAyudaCampo(){ return $.trim(this.ayuda_campo) };
     function fGetDescripcionSubCampo(){ return $.trim(this.descripcion_subcampo) };
+    function fGetFirst(){return this.first};
+    function fSetFirst(bool){ this.first = bool };
 
     //metodos
     this.getIdCompCliente           = fGetIdCompCliente;
@@ -1857,6 +1874,8 @@ function subcampo_marc_conf(obj){
     this.getEdicionGrupal           = fGetEdicionGrupal;  
     this.getAyudaCampo              = fGetAyudaCampo;
     this.getDescripcionSubCampo     = fGetDescripcionSubCampo;
+    this.getFirst                   = fGetFirst;  
+    this.setFirst                   = fSetFirst;
 }
 
 
