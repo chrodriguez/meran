@@ -748,7 +748,7 @@ sub tableHeader{
     my $html = "<table id=$id class='table table-striped $class'><thead>";
     
     if ($select_all){
-        $html .= "<th>S_ALL</th>";
+        $html .= "<th><i class='icon-ok-sign'></th>";
     }
     
     foreach my $column (@$columns){

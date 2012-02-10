@@ -185,42 +185,38 @@
 			              
 			                                          ) ;
 			                              [% END %]
-
 						                </td>
-						    </tr>
-						</tbody>
-					</form>
-                </table>
+						      </tr>
 					[%   IF loop.last %]
 					
 					    [%   IF loop.count > 1 %]
 					<!--     si hay mas de una fila se muestra esto -->
 					        <div class="horizontal">[% "Para los elementos que est&aacute;n marcados:" | i18n %]</div>
-					              [% PERL %]
-					                      print C4::AR::Filtros::to_Icon(   
-					                                                          boton   => "icon_edicion",
-					                                                          onClick => "generarForm('[% id1 %]','[% id2 %]');",
-					                                                          title   => "[% 'Modificar Ejemplares' | i18n %]",
-					                                                          li => 1,
-					                              ) ;
-					              [% END %]
-					              [% PERL %]
-					                      print C4::AR::Filtros::to_Icon(   
-					                                                          boton   => "icon_exportar",
-					                                                          onClick => "generarVariasEtiquetas([% id2 %]);",
-					                                                          title   => "[% 'Generar etiquetas de ejemplares' | i18n %]",
-					                                                          li => 1,
-					                              ) ;
-					              [% END %]
-					              [% PERL %]
-					                      print C4::AR::Filtros::to_Icon(   
-					                                                          boton   => "icon_borrar",
-					                                                          onClick => "borrarEjemplaresN3('[% id2 %]');",
-					                                                          title   => "[% 'Eliminar Ejemplares' | i18n %]",
-					                                                          li => 1,
-					                              ) ;
-					              [% END %]
-					
+                                   <td>
+                                     [% PERL %]
+                                         print C4::AR::Filtros::action_set_button(    
+                                               title           => "[% 'Ejemplares' | i18n %]",
+                                               button          => 'btn btn-primary',
+
+                                               actions         => [
+                                                                   {title => "Modificar", 
+                                                                    action=>"generarForm([% id1 %],[% id2 %])",
+                                                                    icon=>"icon-pencil"
+                                                                   },
+                                                                   {title => "Etiquetas", 
+                                                                    action=>"generarVariasEtiquetas([% id2 %])", 
+                                                                    icon=>"icon-barcode"
+                                                                   },
+                                                                   {title => "Borrar", 
+                                                                    action=>"borrarEjemplaresN3([% id2 %])", 
+                                                                    icon=>"icon-trash"
+                                                                   },
+                                                                   ],
+                     
+                                                 ) ;
+                                     [% END %]
+                                   </td>
+					        
 					        <form id="edicion_grupal[% id2 %]" name="edicion_grupal" action="datosDocumento.pl" method="post">
 					          
 					        </form>
@@ -232,9 +228,12 @@
 					
 					
 					[% END %]<!-- END FOREACH NIVEL 3 -->
-		    </div> <!--end <div id="ejemplaresDelGrupo -->
-		</fieldset>
-		<script type="text/javascript">makeToggle('ejemplaresDelGrupo[% id2 %]','trigger_2_[% id2 %]',null,false);</script>
+                      </tbody>
+                  </form>
+              </table>
+    </div> <!--end <div id="ejemplaresDelGrupo -->
+</fieldset>
+<script type="text/javascript">makeToggle('ejemplaresDelGrupo[% id2 %]','trigger_2_[% id2 %]',null,false);</script>
 [% ELSE %]
     [% IF nivel2_template == 'ANA' %]
         <h4 class="ejemplares_grupo">[% 'aca va el link al registro padre de la analitica' | i18n %]</h4>        
