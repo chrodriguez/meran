@@ -8,7 +8,7 @@
  */
 
 function startOverlay(){
-    $('#ajax-indicator').modal();   
+    $('#ajax-indicator').modal({keyboard: false,});   
 }
 
 

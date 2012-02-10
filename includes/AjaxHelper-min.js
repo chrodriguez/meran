@@ -1,4 +1,4 @@
-function startOverlay(){$('#ajax-indicator').modal();}
+function startOverlay(){$('#ajax-indicator').modal({keyboard:false,});}
 function closeModal(id){if((id=='')||(id==null))
 $('#ajax-indicator').modal('hide');else
 $('#'+id).modal('hide');}

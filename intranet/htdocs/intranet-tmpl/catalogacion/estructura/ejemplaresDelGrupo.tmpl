@@ -178,7 +178,7 @@
                                                                          icon=>"icon-trash"
                                                                         },
                                                                         {title => "Etiquetas", 
-                                                                         action=>"generarEtiqueta([% id3 %],'[% nivel3_obj.getBarcode %]')", 
+                                                                         action=>'generarEtiqueta([% id3 %],"[% nivel3_obj.getBarcode %]")', 
                                                                          icon=>"icon-barcode"
                                                                         },
                                                                         ],
@@ -191,31 +191,35 @@
 					
 					    [%   IF loop.count > 1 %]
 					<!--     si hay mas de una fila se muestra esto -->
-					        <div class="horizontal">[% "Para los elementos que est&aacute;n marcados:" | i18n %]</div>
-                                   <td>
-                                     [% PERL %]
-                                         print C4::AR::Filtros::action_set_button(    
-                                               title           => "[% 'Ejemplares' | i18n %]",
-                                               button          => 'btn btn-primary',
-
-                                               actions         => [
-                                                                   {title => "Modificar", 
-                                                                    action=>"generarForm([% id1 %],[% id2 %])",
-                                                                    icon=>"icon-pencil"
-                                                                   },
-                                                                   {title => "Etiquetas", 
-                                                                    action=>"generarVariasEtiquetas([% id2 %])", 
-                                                                    icon=>"icon-barcode"
-                                                                   },
-                                                                   {title => "Borrar", 
-                                                                    action=>"borrarEjemplaresN3([% id2 %])", 
-                                                                    icon=>"icon-trash"
-                                                                   },
-                                                                   ],
-                     
-                                                 ) ;
-                                     [% END %]
-                                   </td>
+					        <tfoot>
+					               <tr>
+	                                   <td>
+							               [% "Para los elementos que est&aacute;n marcados:" | i18n %]
+		                                     [% PERL %]
+		                                         print C4::AR::Filtros::action_set_button(    
+		                                               title           => "[% 'Ejemplares' | i18n %]",
+		                                               button          => 'btn btn-primary',
+		
+		                                               actions         => [
+		                                                                   {title => "Modificar", 
+		                                                                    action=>"generarForm([% id1 %],[% id2 %])",
+		                                                                    icon=>"icon-pencil"
+		                                                                   },
+		                                                                   {title => "Etiquetas", 
+		                                                                    action=>"generarVariasEtiquetas([% id2 %])", 
+		                                                                    icon=>"icon-barcode"
+		                                                                   },
+		                                                                   {title => "Borrar", 
+		                                                                    action=>"borrarEjemplaresN3([% id2 %])", 
+		                                                                    icon=>"icon-trash"
+		                                                                   },
+		                                                                   ],
+		                     
+		                                                 ) ;
+		                                     [% END %]
+	                                   </td>
+                                   </tr>
+                             </tfoot>
 					        
 					        <form id="edicion_grupal[% id2 %]" name="edicion_grupal" action="datosDocumento.pl" method="post">
 					          

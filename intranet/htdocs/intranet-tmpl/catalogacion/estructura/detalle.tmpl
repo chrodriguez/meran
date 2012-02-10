@@ -89,17 +89,16 @@
 	            
 	        </div>
 		    
-		    <ul class="listado_sin_margen">
+		    <dl>
 			    [% FOREACH nivel1 %]
-	
 			            [% IF liblibrarian %]
 			                [% IF dato %]
-			                <li>    [% liblibrarian %]: <strong>[% dato %]</strong> </li>
+				                <dt class="inline left rightMargin">[% liblibrarian %]:&nbsp;</dt> 
+				                <dd>[% dato %]&nbsp;</dd>
 			                [% END %]
 			            [% END %]
-	
 			    [% END %]
-		    </ul>
+		    </dl>
 			
 		[% IF estadoDeColeccion %]
         <div id="fieldset_estado_coleccion_[% id1 %]">

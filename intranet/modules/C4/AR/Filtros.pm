@@ -668,6 +668,8 @@ sub action_link_button{
     my $icon     = $params_hash_ref{'icon'} || undef;  #obtengo el boton
     my $params   = $params_hash_ref{'params'} || $params_hash_ref{'url'}; #obtengo el llamado a la funcion en el evento onclick
     my $title    = $params_hash_ref{'title'}; #obtengo el title de la componete
+    my $popover  = $params_hash_ref{'popover'} || undef;
+
     my @result;
     
     foreach my $p (@$params){
@@ -685,10 +687,11 @@ sub action_button{
 
     my (%params_hash_ref) = @_;
 
-    my $action    = $params_hash_ref{'action'};
+    my $action   = $params_hash_ref{'action'};
     my $button   = $params_hash_ref{'button'}; #obtengo el boton
     my $icon     = $params_hash_ref{'icon'} || undef;  #obtengo el boton
     my $title    = $params_hash_ref{'title'}; #obtengo el title de la componete
+    my $popover  = $params_hash_ref{'popover'} || undef;
 
     $button.= " click";
     
@@ -743,7 +746,7 @@ sub action_set_button{
                 @result = split(/=/,$p);
                 $url = C4::AR::Utilidades::addParamToUrl($url,@result[0],@result[1]);
             }
-            $html .= "<a class='click' href='$url'><i class='$icon'></i>$title</a>";
+            $html .= "<a class='click' href='$url'><i class='$icon'></i>$name</a>";
         }
 
     }
