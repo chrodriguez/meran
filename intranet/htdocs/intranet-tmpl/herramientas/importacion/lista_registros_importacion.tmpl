@@ -110,8 +110,8 @@
 									title           => "[% 'Registro' | i18n %]",
                                     button          => 'btn btn-primary',
                                     actions         => [
-										{title => "Detalle", action=>"detalleRegistroMARC('[% detalle_importacion.getId %]');",icon=>"icon-search"},
-                                        {title => "Ignorar", action=>"cambiarEsdatoRegistro('[% detalle_importacion.getIdImportacionIso %]','[% detalle_importacion.getId %]','I');", icon=>"icon-ban-circle"},
+										{title => "Detalle", action=>"detalleRegistroMARC([% detalle_importacion.getId %])",icon=>"icon-search"},
+                                        {title => "Ignorar", action=>"cambiarEstadoRegistro([% detalle_importacion.getIdImportacionIso %],[% detalle_importacion.getId %],'I')", icon=>"icon-ban-circle"},
                                                        ],
 								);
                               [% END %]
@@ -122,7 +122,7 @@
                                     button          => 'btn btn-primary',
                                     actions         => [
 										{title => "Detalle", action=>"detalleRegistroMARC('[% detalle_importacion.getId %]');",icon=>"icon-search"},
-                                        {title => "Procesar", action=>"cambiarEsdatoRegistro('[% detalle_importacion.getIdImportacionIso %]','[% detalle_importacion.getId %]','I');", icon=>"icon-ok-circle"},
+                                        {title => "Procesar", action=>"cambiarEstadoRegistro('[% detalle_importacion.getIdImportacionIso %]','[% detalle_importacion.getId %]','I');", icon=>"icon-ok-circle"},
                                                        ],
 								);
                               [% END %]
