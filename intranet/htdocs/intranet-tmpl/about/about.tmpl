@@ -20,54 +20,44 @@ function updateEdit(responseText){
 
 
 
-<fieldset><legend class="titulo_legend">Datos de la Biblioteca</legend>
-    
-    <table width="100%">
-        <tr>
-            <td width="50%">[% info_about.descripcion %]</td>
-        </tr>
-    </table>
-    
-</fieldset>
-
-<div style="float: right;">
-	[% PERL %]
+<fieldset>
+    <legend class="titulo_legend">Datos de la Biblioteca</legend>
+    <form onsubmit="return false" class="well form-search">
+        [% info_about.descripcion %]+
+        
+        [% PERL %]
 	    print C4::AR::Filtros::to_Button(   text    => "[% 'Editar Informacion' | i18n %]",
 	                                                          boton   => "boton_buscar",
 	                                                          onClick => "edit()",
 	                                                          title   => "[% 'Editar Informacion' | i18n %]",
 	                                                          id      => "[% 'edit_about' %]",
 	                                                                ) ;
-	[% END %]
-</div>
+	    [% END %]
+    
+    </form>
+</fieldset>
+
 <div id="edicion_about"></div>
 
-
-<fieldset><legend class="titulo_legend">Equipo Central</legend>
-<div >
-     <h4><a href="http://www.cespi.unlp.edu.ar" target="_blank">CESPI</a> - <a href="http://www.linti.unlp.edu.ar" target="_blank">LINTI</a> - <a href="http://www.info.unlp.edu.ar" target="_blank">Facultad de Informática</a></h4> 
-     <ul> 
-         <li>Javier D&iacute;az</li>
-         <li>Einar Lanfranco</li>
-         <li>Mat&iacute;as Pagano</li>
-         <li>Augusto Perez</li>
-         <li>Miguel Carbone</li>
-         <li>Gaspar Rajoy</li>
-         <li>Magal&iacute; Defalco</li>
-         <li>Francisco Raposeiras</li>
-     </ul>
-</div>
-<div >
-     <h4><a href="http://www.econo.unlp.edu.ar" target="_blank">Facultad de Ciencias Econ&oacute;micas</a></h4>
-     <ul>
-         <li>Mar&iacute;a Fernanda Pietroboni</li>
-         <li>Mar&iacute;a Laura Asenjo</li>
-         <li>Paula Gabriela Gonzalez</li>
-         <li>Ana Mar&iacute;a Ca&ntilde;edo</li>
-         
-     </ul>
-</div>
-
+<fieldset>
+    <legend class="titulo_legend">Equipo Central</legend>
+    <div>
+         <dt><a href="http://www.cespi.unlp.edu.ar" target="_blank">CESPI</a> - <a href="http://www.linti.unlp.edu.ar" target="_blank">LINTI</a> - <a href="http://www.info.unlp.edu.ar" target="_blank">Facultad de Informática</a></dt> 
+         <dd>Javier D&iacute;az</dd>
+         <dd>Einar Lanfranco</dd>
+         <dd>Mat&iacute;as Pagano</dd>
+         <dd>Augusto Perez</dd>
+         <dd>Miguel Carbone</dd>
+         <dd>Gaspar Rajoy</dd>
+         <dd>Magal&iacute; Defalco</dd>
+         <dd>Francisco Raposeiras</dd>
+    </div>
+    <div>
+         <dt><a href="http://www.econo.unlp.edu.ar" target="_blank">Facultad de Ciencias Econ&oacute;micas</a></dt>
+         <dd>Mar&iacute;a Fernanda Pietroboni</dd>
+         <dd>Mar&iacute;a Laura Asenjo</dd>
+         <dd>Paula Gabriela Gonzalez</dd>
+    </div>
 </fieldset>
     
 [% INCLUDE "intranet-bottom.inc" %]

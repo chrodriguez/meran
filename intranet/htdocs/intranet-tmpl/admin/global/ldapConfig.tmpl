@@ -1108,13 +1108,14 @@
         </div>
     </div>
 
-    <hr>
+    <div class="form-actions">
     [% PERL %]
                 print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
                                                     type    => "submit",
                                                     boton   => "boton_agregar",
                         ) ;
     [% END %]
+    </div>
 </form> 
 </fieldset>
 
