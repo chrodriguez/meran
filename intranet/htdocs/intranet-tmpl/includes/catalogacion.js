@@ -1172,8 +1172,8 @@ function procesarInfoJson(marc_object_array, id_padre){
         
  		strIndicadores = strIndicadores + "<div class='form-actions'><p style='text-align: center; margin: 0;'>";
  		
-        strIndicadores = strIndicadores + "<button class='btn horizontal' onclick=close_alta_indicador('"+id_div_alta_indicador+"');>Cancelar</button></p>";
-        strIndicadores = strIndicadores + "<button class='btn btn-primary horizontal' onclick='guardar_indicadores(" + id_div_indicadores + ", " + id_aux +");'>Aceptar</button>";
+        strIndicadores = strIndicadores + "<button class='btn horizontal' onclick=close_alta_indicador('"+id_div_alta_indicador+"');>Cancelar</button>";
+        strIndicadores = strIndicadores + "<button class='btn btn-primary horizontal' onclick='guardar_indicadores(" + id_div_indicadores + ", " + id_aux +");'>Aceptar</button></p>";
         strIndicadores = strIndicadores + "</div>";
         //cierro UL de indicadores
         strComp = strComp + "</div>"; //end div buttonContainerHorizontal

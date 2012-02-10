@@ -176,7 +176,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 				_hash_key= b64_md5(params);
 		        this.log("AjaxHelper => cache element");
                 this.log("AjaxHelper => cache hash_key " + _hash_key);
-				if ( $.jCache.hasItem(_hash_key) ){
+				if (($.jCache != null) && ( $.jCache.hasItem(_hash_key) )){
 				//antes de hacer la peticion al servidor, se verifica si la info esta en la cache
 					return helper.onComplete($.jCache.getItem(_hash_key));
 				}
@@ -210,7 +210,8 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 
 								if(helper.cache){
 									//guardo la respuesta del servidor en la cache
-									$.jCache.setItem(_hash_key, ajax.responseText);
+									if ($.jCache)
+										$.jCache.setItem(_hash_key, ajax.responseText);
  								}
 
 								//respuesta normal

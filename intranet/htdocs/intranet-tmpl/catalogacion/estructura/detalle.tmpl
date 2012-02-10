@@ -22,6 +22,10 @@
              zebra("tablaResult");
             });
             
+        function modificarNivel1(){
+        	window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&tipoAccion=MODIFICAR_NIVEL_1";
+        }
+        
       	function ProcessGBSBookInfo(booksInfo) {
 			for (id in booksInfo) {
 			 var element = document.getElementById(id);
@@ -64,22 +68,17 @@
 	
 		<div id="detalle1" class="detalle1">
 	        <div class="botones_detalle_nivel1">
+	               
                 [% PERL %]
-                    print C4::AR::Filtros::action_link_button(    
-                                                        url             => "datosDocumento.pl",
+                    print C4::AR::Filtros::action_set_button(    
+                                                        title           => "[% 'Nivel 1' | i18n %]",
                                                         button          => 'btn btn-primary',
-                                                        icon            => 'icon-pencil icon-white',
-                                                        params          => ["id1=[% id1 %]","tipoAccion=MODIFICAR_NIVEL_1"],
-                                                        title           => "[% 'Modificar Nivel 1' | i18n %]",
-                            ) ;
-                [% END %]
 
-                [% PERL %]
-                    print C4::AR::Filtros::action_button(    
-                                                        action          => ["borrarN1([% id1 %])",],
-                                                        button          => "btn btn btn-danger",
-                                                        icon            => 'icon-trash icon-white',
-                                                        title           => "[% 'Borrar Nivel 1' | i18n %]",
+                                                        actions         => [
+                                                                            {title => "Modificar", action=>"modificarNivel1()",icon=>"icon-pencil"},
+                                                                            {title => "Eliminar", action=>"borrarN1([% id1 %])", icon=>"icon-trash"},
+                                                                            ],
+
                             ) ;
                 [% END %]
 	            

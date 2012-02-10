@@ -18,6 +18,7 @@ use vars qw(@EXPORT_OK @ISA);
     action_link_button
     action_button
     setHelpInput
+    action_set_button
 );
 
 =item
@@ -692,6 +693,35 @@ sub action_button{
     my $html = "<a class='".$button."' href='' onclick='".$action."'><i class='".$icon."'></i>".$title."</a>";
     
     return $html;
+}
+
+
+sub action_set_button{
+	my (%params_hash_ref) = @_;
+	
+    my $title       = $params_hash_ref{'title'}; #obtengo el title de la componete
+    my $icon  = $params_hash_ref{'icon'} || 'icon white user'; #obtengo el title de la componete
+
+    my $actions     = $params_hash_ref{'actions'} || [];
+    
+    my $button   = $params_hash_ref{'button'} || "btn btn-primary";
+    
+     my $html = "<div class='btn-group'><a class='$button' class='click'><i class='$icon'></i>$title</a>";
+    $html.= "<a class='$button dropdown-toggle' data-toggle='dropdown' href='#'><span class='caret'></span></a>";
+    $html.= "<ul class='dropdown-menu'>";
+    
+    foreach my $action (@$actions){
+        my $name = $action->{'title'};
+        my $func = $action->{'action'};
+        my $icon = $action->{'icon'};
+
+        $html .= "<li><a class='click' onclick='$func' ><i class='$icon' ></i> $name</a></li>";
+
+    }
+
+    $html.= "</ul></div>";
+    
+    return $html;	
 }
 
 END { }       # module clean-up code here (global destructor)

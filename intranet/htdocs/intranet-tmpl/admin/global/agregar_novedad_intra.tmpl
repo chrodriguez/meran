@@ -24,29 +24,39 @@
     <legend class="titulo_legend trigger click">[% "Agregar novedad de INTRA" | i18n %]:</legend>
         <div class="form">
             [% IF editing %]
-                <form id="form_novedad" action="[% url_prefix %]/admin/global/editar_novedad_intra.pl" method="POST">
+                <form id="form_novedad" action="[% url_prefix %]/admin/global/editar_novedad_intra.pl" class="form-horizontal" method="POST">
                     <input type="hidden" id="action" name="action" value="editar">
                     <input type="hidden" id="token" name="token" value="[% token %]">
                     <input type="hidden" id="novedad_id" name="novedad_id" value="[% novedad.id %]">
             [% ELSE %]
-                <form id="form_novedad" action="[% url_prefix %]/admin/global/agregar_novedad_intra.pl" method="POST">
+                <form id="form_novedad" action="[% url_prefix %]/admin/global/agregar_novedad_intra.pl" class="form-horizontal" method="POST">
                     <input type="hidden" id="action" name="action" value="agregar">
             [% END %]
-                <ul>
-                    <li class="sub_item">
-                        <label for="titulo">[% "Titulo" | i18n %]</label>
-                          <input type="text" id="titulo" name="titulo" value="[% novedad.getTitulo %]">
-                    </li>
-                    <li class="sub_item">
-                        <label for="categoria">[% "Categor&iacute;a" | i18n %]</label>
-                          <input type="text" id="categoria" name="categoria" value="[% novedad.getCategoria %]">
-                    </li>
-                     <li class="sub_item">
-                       <label for="contenido">[% "Contenido" | i18n %]</label>
-                          <textarea id="contenido" name="contenido" style="width: 88.3%" >[%novedad.getContenido %]</textarea>
-                    </li>
+            
+                <div class="control-group">
+                    <label class="control-label" for="titulo">[% 'Titulo' | i18n %]: </label>
+                    <div class="controls">
+                        <input type="text" id="titulo" name="titulo" value="[% novedad.getTitulo %]">
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="categoria">[% 'Categor&iacute;a' | i18n %]: </label>
+                    <div class="controls">
+                        <input type="text" id="categoria" name="categoria" value="[% novedad.getCategoria %]">
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="contenido">[% 'Contenido' | i18n %]: </label>
+                    <div class="controls">
+                        <textarea id="contenido" name="contenido" style="width: 88.3%" >[%novedad.getContenido %]</textarea>
+                    </div>
+                </div>
 
-                        <input type="hidden" id="token" name="token" value="[% token %]">
+                <input type="hidden" id="token" name="token" value="[% token %]">
+                
+                <div class="form-actions">
                         [% IF editing %]
                             [% PERL %]
                                         print C4::AR::Filtros::to_Button(   text    => "[% 'Modificar' | i18n %]",
@@ -66,7 +76,7 @@
                                                 ) ;
                             [% END %]
                         [% END %]
-                </ul>
+                </div>
             </form>
         </div>
 </fieldset>
