@@ -1222,9 +1222,10 @@ function procesarInfoJson(marc_object_array, id_padre){
             strComp = strComp + "<div style='width:4%;float:right'>";
             campo_marc_conf_obj.setIdCompCliente("marc_group" + id_temp);
             strComp = strComp + crearBotonAgregarCampoRepetible(campo_marc_conf_obj, id_temp);
-//             NO ANDA VER ESTO
             
-            strComp = strComp + crearBotonEliminarCampoRepetible(campo_marc_conf_obj);  
+            alert("procesando info JSON First? " + campo_marc_conf_obj.getFirst());
+            strComp = strComp + crearBotonEliminarCampoRepetible(campo_marc_conf_obj, campo_marc_conf_obj.getFirst());   
+            
             strComp = strComp + "</div>";
         } else {
             //cierro div CENTER si no es repetible
@@ -1370,7 +1371,9 @@ function procesarSubCampo(objeto, marc_group){
 // TODO armar una funcion q genere esto
         vista_intra         = "<div class='divComponente'><input type='text' id='" + marc_conf_obj.getIdCompCliente() + "' value='" + marc_conf_obj.getDato() + "' size='55' disabled></div>";
         vista_intra         = vista_intra + crearIconWarning(marc_conf_obj);
-        vista_intra         = vista_intra + crearBotonEliminarSubcampo(marc_conf_obj);
+        
+        vista_intra         = vista_intra + crearBotonEliminarSubcampo(marc_conf_obj, marc_conf_obj.getFirst());
+        
         tiene_estructura    = 0;
         divLabel            = crearDivLabel(marc_conf_obj.getCampo() + '^' + marc_conf_obj.getSubCampo() + " - " + marc_conf_obj.getVistaIntra(), marc_conf_obj.getIdCompCliente());  
         strComp             = "<li id='LI" + marc_conf_obj.getIdCompCliente() + "' class='sub_item'> " + divLabel + vista_intra + "</li>";  
@@ -1582,6 +1585,7 @@ function cloneSubCampo(id){
     var subcampo_temp   = _getSubCampoMARC_conf_ById(id);
     var obj             = copy(subcampo_temp);        //se genera una copia del subcampo
     obj.setIdCompCliente( id_componente );            //seteo el nuevo id de la componente
+    subcampo_temp.setFirst(false);  
     procesarSubCampo(obj, subcampo_temp.marc_group);  //se genera la componente en el cliente
     
     //agrego el subcampo en la poscion "posCampo" del arreglo MARC_OBJECT_ARRAY, donde se encuentra el campo contenedor
@@ -1595,6 +1599,8 @@ function cloneCampo(marc_group){
     var campo_temp      = _getCampoMARC_conf_ById(marc_group);
     var campo_obj       = copy(campo_temp);      //se genera una copia del campo
 
+    campo_obj.setFirst(false);  
+    alert("estoy clonando First? " + campo_obj.getFirst());
     //ahora cambio el id del campo
     campo_obj.setIdCompCliente(generarIdComponente());
     //ahora cambio los id's de los subcampos
@@ -1637,30 +1643,59 @@ function removeSubcampo(id){
     removeFromArray(MARC_OBJECT_ARRAY[subcampo_temp.posCampo].getSubCamposArray(), _from, _to); //elimino la informacion del subcampo
 }
 
-function crearBotonAgregarSubcampoRepetible(obj){
+function crearBotonAgregarSubcampoRepetible(obj, show){
+    display = "none";
+  
+    if(!show){
+        display = "block";
+    }
 
     if(obj.getRepetible() == '1'){
-        return "<div onclick=cloneSubCampo('"+ obj.getIdCompCliente() +"') class='icon_mas horizontal' title='Agregar subcampo repetible'/>";
+        return "<div onclick=cloneSubCampo('"+ obj.getIdCompCliente() +"') class='icon_mas horizontal' title='Agregar subcampo repetible' style='display: " + display + "'/>";
     }else{  
         return "";
     }
 }
 
-function crearBotonEliminarSubcampoRepetible(obj){
+function crearBotonEliminarSubcampoRepetible(obj, show){
+  
+    display = "none";
+  
+    if(!show){
+        display = "block";
+    }
 
     if(obj.getRepetible() == '1'){
-        return "<div onclick=removeSubcampo('"+ obj.getIdCompCliente() +"') class='icon_borrar horizontal' title='Eliminar subcampo repetible'/>";
+        return "<div onclick=removeSubcampo('"+ obj.getIdCompCliente() +"') class='icon_borrar horizontal' title='Eliminar subcampo repetible' style='display: " + display + "'/>";
     }else{  
         return "";
     }
 }
 
-function crearBotonEliminarSubcampo(obj){
+function crearBotonEliminarSubcampo(obj, show){
+    display = "none";
+  
+    if(!show){
+        display = "block";
+    }
 
-    return "<div onclick=removeSubcampo('"+ obj.getIdCompCliente() +"') class='icon_borrar horizontal' title='Eliminar subcampo'/>";
+    return "<div onclick=removeSubcampo('"+ obj.getIdCompCliente() +"') class='icon_borrar horizontal' title='Eliminar subcampo' style='display: " + display + "'/>";
   
 }
 
+function crearBotonEliminarCampoRepetible(obj, show){
+    display = "none";
+  
+    if(!show){
+        display = "block";
+    }
+
+    if(obj.getRepetible() == '1'){
+        return "<div onclick=remove('"+ obj.getIdCompCliente() +"') class='horizontal icon_borrar' title='Eliminar campo repetible' style='display: " + display + "'/>";
+    }else{  
+        return "";
+    }
+}
 
 function crearIconWarning(obj){
 
@@ -1671,15 +1706,6 @@ function crearBotonAgregarCampoRepetible(obj, id_padre){
 
     if(obj.getRepetible() == '1'){
         return "<div onclick=cloneCampo('marc_group"+ id_padre +"') class='icon_mas horizontal' title='Agregar campo repetible'/>";
-    }else{  
-        return "";
-    }
-}
-
-function crearBotonEliminarCampoRepetible(obj){
-
-    if(obj.getRepetible() == '1'){
-        return "<div onclick=remove('"+ obj.getIdCompCliente() +"') class='horizontal icon_borrar' title='Eliminar campo repetible'/>";
     }else{  
         return "";
     }
@@ -1702,6 +1728,7 @@ function campo_marc_conf(obj){
     this.indicadores_secundarios    = obj.indicadores_secundarios;
     this.indicador_primario_dato    = obj.indicador_primario_dato;
     this.indicador_secundario_dato  = obj.indicador_secundario_dato;
+    this.first                      = true;  
 
 
     for(var i = 0; i < obj.subcampos_array.length; i++){
@@ -1726,6 +1753,8 @@ function campo_marc_conf(obj){
     function fGetIndicadoresSecundarios(){  return (this.indicadores_secundarios)};
     function fGetIndicadorPrimarioDato(){   return ((this.indicador_primario_dato == undefined)?'#':this.indicador_primario_dato)};
     function fGetIndicadorSecundarioDato(){ return ((this.indicador_secundario_dato == undefined)?'#':this.indicador_secundario_dato)};
+    function fGetFirst(){ return this.first}; 
+    function fSetFirst(bool){ this.first = bool}; 
     
 
     //metodos
@@ -1746,6 +1775,8 @@ function campo_marc_conf(obj){
     this.getIndicadoresSecundarios  = fGetIndicadoresSecundarios;    
     this.getIndicadorPrimarioDato   = fGetIndicadorPrimarioDato;
     this.getIndicadorSecundarioDato = fGetIndicadorSecundarioDato;
+    this.getFirst                   = fGetFirst;  
+    this.setFirst                   = fSetFirst;
 
 }
 
@@ -1774,6 +1805,7 @@ function subcampo_marc_conf(obj){
     this.tiene_estructura       = obj.tiene_estructura;
     this.ayuda_campo            = obj.ayuda_campo;
     this.descripcion_subcampo   = obj.descripcion_subcampo;
+    this.first                  = true;  
 
     function fGetIdCompCliente(){ return this.idCompCliente };
     function fSetIdCompCliente( id ){ this.idCompCliente = id };
@@ -1795,6 +1827,8 @@ function subcampo_marc_conf(obj){
     function fGetVistaIntra(){ return $.trim(this.liblibrarian) };
     function fGetAyudaCampo(){ return $.trim(this.ayuda_campo) };
     function fGetDescripcionSubCampo(){ return $.trim(this.descripcion_subcampo) };
+    function fGetFirst(){return this.first};
+    function fSetFirst(bool){ this.first = bool };
 
     //metodos
     this.getIdCompCliente           = fGetIdCompCliente;
@@ -1817,6 +1851,8 @@ function subcampo_marc_conf(obj){
     this.getEdicionGrupal           = fGetEdicionGrupal;  
     this.getAyudaCampo              = fGetAyudaCampo;
     this.getDescripcionSubCampo     = fGetDescripcionSubCampo;
+    this.getFirst                   = fGetFirst;  
+    this.setFirst                   = fSetFirst;
 }
 
 
