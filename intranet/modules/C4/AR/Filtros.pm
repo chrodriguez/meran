@@ -671,7 +671,7 @@ sub action_link_button{
     my $icon     = $params_hash_ref{'icon'} || undef;
     my $params   = $params_hash_ref{'params'} || $params_hash_ref{'url'}; #obtengo el llamado a la funcion en el evento onclick
     my $title    = $params_hash_ref{'title'}; #obtengo el title de la componete
-    my $popover  = $params_hash_ref{'popover'} || undef;
+    my $popover  = $params_hash_ref{'popover'} || undef;
     my @result;
     
     foreach my $p (@$params){
@@ -693,7 +693,7 @@ sub action_button{
     my $button   = $params_hash_ref{'button'}; #obtengo el boton
     my $icon     = $params_hash_ref{'icon'} || undef;  #obtengo el boton
     my $title    = $params_hash_ref{'title'}; #obtengo el title de la componete
-    my $popover  = $params_hash_ref{'popover'} || undef;
+    my $popover  = $params_hash_ref{'popover'} || undef;
 
     $button.= " click";
     
