@@ -715,9 +715,19 @@ sub action_set_button{
     foreach my $action (@$actions){
         my $name = $action->{'title'};
         my $func = $action->{'action'};
+        my $url  = $action->{'url'};
         my $icon = $action->{'icon'};
-
-        $html .= "<li><a class='click' onclick='$func' ><i class='$icon' ></i> $name</a></li>";
+        if ($func){
+            $html .= "<li><a class='click' onclick='$func' ><i class='$icon' ></i> $name</a></li>";
+        }else{
+            my $params   =  $action->{'params'} ||  $action->{'url'};
+            my @result;
+            foreach my $p (@$params){
+                @result = split(/=/,$p);
+                $url = C4::AR::Utilidades::addParamToUrl($url,@result[0],@result[1]);
+            }
+            $html .= "<a class='click' href='$url'><i class='$icon'></i>$title</a>";
+        }
 
     }
 
@@ -749,7 +759,43 @@ sub tableHeader{
     $html .= "</thead>";
     
     return $html;	
+}
+
+sub action_group_link_button{
+	my (%params_hash_ref) = @_;
 	
+    my $actions     = $params_hash_ref{'actions'} || [];
+    
+    
+    my $html = "<div class='btn-group'>";
+   
+    foreach my $action (@$actions){
+        my $url   =  $action->{'url'}; #obtengo la url si es un link 
+        my $title = $action->{'title'};
+		my $icon  = $action->{'icon'};
+		my $class = $action->{'class'};
+		
+        if($url){
+			#ES UN LINK
+			my $params   =  $action->{'params'} ||  $action->{'url'}; #obtengo el llamado a la funcion en el evento onclick
+			my @result;
+			foreach my $p (@$params){
+				@result = split(/=/,$p);
+				$url = C4::AR::Utilidades::addParamToUrl($url,@result[0],@result[1]);
+			}
+			$html .= "<a class='click btn $class' href='$url'><i class='$icon'></i>$title</a>";
+		}
+		else{
+			#ES UNA ACCION
+			my $func = $action->{'action'}; #obtengo la funcion si es una accion
+			$html .= "<a class='click btn $class' onclick='$func' ><i class='$icon'></i>$title</a>";
+		}
+
+    }
+
+    $html.= "</div>";
+    
+    return $html;	
 }
 
 END { }       # module clean-up code here (global destructor)

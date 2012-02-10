@@ -103,40 +103,32 @@
                       <!--  BOTONES ACCIONES (Editar, Borrar, Ver detalle) -->
                       <td align='left' width="9%" >
 
-                      <div class="click horizontal icon_mas">
+                      <div class="botones_detalle_importacion">
+						   [% IF detalle_importacion.getEstado != "I" %]
                               [% PERL %]
-                                          print C4::AR::Filtros::to_Icon(
-                                                                          boton         => "icon_marc",
-                                                                          onClick       => "detalleRegistroMARC('[% detalle_importacion.getId %]');",
-                                                                          title         => "[% 'Detalle MARC' | i18n %]",
-                                                                          alternClass   => "botonCentradoTabla",
-                                                                      ) ;
-
+                               print C4::AR::Filtros::action_set_button(    
+									title           => "[% 'Registro' | i18n %]",
+                                    button          => 'btn btn-primary',
+                                    actions         => [
+										{title => "Detalle", action=>"detalleRegistroMARC('[% detalle_importacion.getId %]');",icon=>"icon-search"},
+                                        {title => "Ignorar", action=>"cambiarEsdatoRegistro('[% detalle_importacion.getIdImportacionIso %]','[% detalle_importacion.getId %]','I');", icon=>"icon-ban-circle"},
+                                                       ],
+								);
                               [% END %]
+                           [% ELSE %]
+                              [% PERL %]
+                               print C4::AR::Filtros::action_set_button(    
+									title           => "[% 'Registro' | i18n %]",
+                                    button          => 'btn btn-primary',
+                                    actions         => [
+										{title => "Detalle", action=>"detalleRegistroMARC('[% detalle_importacion.getId %]');",icon=>"icon-search"},
+                                        {title => "Procesar", action=>"cambiarEsdatoRegistro('[% detalle_importacion.getIdImportacionIso %]','[% detalle_importacion.getId %]','I');", icon=>"icon-ok-circle"},
+                                                       ],
+								);
+                              [% END %]
+						   [% END %]
                        </div>
-                      <div class="click horizontal icon_mas">
-                              [% IF detalle_importacion.getEstado != "I" %]
-                                  [% PERL %]
-                                              print C4::AR::Filtros::to_Icon(
-                                                                              boton         => "icon_sacar",
-                                                                              onClick       => "cambiarEsdatoRegistro('[% detalle_importacion.getIdImportacionIso %]','[% detalle_importacion.getId %]','I');",
-                                                                              title         => "[% 'Ignorar Registro' | i18n %]",
-                                                                              alternClass   => "botonCentradoTabla",
-                                                                          ) ;
-
-                                  [% END %]
-                              [% ELSE %]
-                                  [% PERL %]
-                                              print C4::AR::Filtros::to_Icon(
-                                                                              boton         => "icon_agregar",
-                                                                              onClick       => "cambiarEsdatoRegistro('[% detalle_importacion.getIdImportacionIso %]','[% detalle_importacion.getId %]','');",
-                                                                              title         => "[% 'No Ignorar Registro' | i18n %]",
-                                                                              alternClass   => "botonCentradoTabla",
-                                                                          ) ;
-
-                                  [% END %]
-                              [% END %]
-                         </div>
+                      
                       </td>
                 </tr>
             [% END %]
