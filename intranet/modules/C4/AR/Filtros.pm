@@ -58,6 +58,7 @@ sub link_to {
     my $boton   = $params_hash_ref{'boton'}; #obtengo el title a mostrar
     my $width   = $params_hash_ref{'width'};
     my $blank   = $params_hash_ref{'blank'} || 0;
+    my $tooltip = $params_hash_ref{'tooltip'} || 0;
     my $cant    = scalar(@$params);
     my @result;
     
@@ -93,6 +94,8 @@ sub link_to {
     if($blank){
         $link .= " target='blank'";
     }
+    
+    
 
     $link .= " >";
 
@@ -664,12 +667,11 @@ sub action_link_button{
     my (%params_hash_ref) = @_;
 
     my $url      = $params_hash_ref{'url'} || $params_hash_ref{'url'}; #obtengo el llamado a la funcion en el evento onclick
-    my $button   = $params_hash_ref{'button'}; #obtengo el boton
-    my $icon     = $params_hash_ref{'icon'} || undef;  #obtengo el boton
+    my $button   = $params_hash_ref{'button'};
+    my $icon     = $params_hash_ref{'icon'} || undef;
     my $params   = $params_hash_ref{'params'} || $params_hash_ref{'url'}; #obtengo el llamado a la funcion en el evento onclick
     my $title    = $params_hash_ref{'title'}; #obtengo el title de la componete
     my $popover  = $params_hash_ref{'popover'} || undef;
-
     my @result;
     
     foreach my $p (@$params){
@@ -746,7 +748,7 @@ sub action_set_button{
                 @result = split(/=/,$p);
                 $url = C4::AR::Utilidades::addParamToUrl($url,@result[0],@result[1]);
             }
-            $html .= "<a class='click' href='$url'><i class='$icon'></i>$name</a>";
+            $html .= "<a class='click' href='$url'><i class='$icon'></i> $name</a>";
         }
 
     }
