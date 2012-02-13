@@ -154,14 +154,7 @@ function updateInfoMARC(responseText){
 	scrollTo('detalleMARC');
 */	
 	        $('#detalleMARC').html(responseText);
-			$('#detalleMARC').modal({   containerCss:{
-                backgroundColor:"#fff",
-        //         borderColor:"#0063dc",
-                height:"500px",
-                padding:"1",
-                width:"800px",
-            },
-        });
+			$('#detalleMARC').modal();
         
 }
 

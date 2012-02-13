@@ -12,8 +12,6 @@ __PACKAGE__->meta->setup(
         id_socio                         => { type => 'serial', overflow => 'truncate', not_null => 1 , length => 11},
         nro_socio                        => { type => 'varchar', overflow => 'truncate', length => 16, not_null => 1 },
         id_ui                            => { type => 'varchar', overflow => 'truncate', length => 4, not_null => 1 },
-        #id_categoria = 1 es Estudiante en la 17.10
-        id_categoria                     => { type => 'integer', overflow => 'truncate', length =>2, not_null => 1, default => 8 },
         fecha_alta                       => { type => 'date' },
         expira                           => { type => 'date' },
         flags                            => { type => 'integer', overflow => 'truncate' },
@@ -56,13 +54,6 @@ __PACKAGE__->meta->setup(
       {
         class       => 'C4::Modelo::PrefUnidadInformacion',
         key_columns => { id_ui => 'id_ui' },
-        type        => 'one to one',
-      },
-
-     categoria => 
-      {
-        class       => 'C4::Modelo::UsrRefCategoriaSocio',
-        key_columns => { id_categoria => 'id' },
         type        => 'one to one',
       },
 
@@ -143,8 +134,6 @@ sub agregar{
     }
 
     $self->setId_ui($data_hash->{'id_ui'});
-    $self->setId_categoria($data_hash->{'cod_categoria'});
-
 
     my $dateformat = C4::Date::get_date_format();
     my $fecha_alta = $data_hash->{'fecha_alta'} || C4::Date::format_date_in_iso(C4::AR::Utilidades::getToday(),$dateformat);
@@ -173,6 +162,8 @@ sub agregar{
         $self->activar();
     }
 
+    $self->save();
+    $self->setId_categoria($data_hash->{'cod_categoria'});
     $self->save();
     $self->setCredentials($data_hash->{'credential_type'});
 
@@ -235,7 +226,7 @@ sub modificar{
     my ($data_hash)=@_;
 
     $self->setId_ui($data_hash->{'id_ui'});
-    $self->setId_categoria($data_hash->{'cod_categoria'});
+    $self->persona->setId_categoria($data_hash->{'cod_categoria'});
 
     my $today = Date::Manip::ParseDate("today");
     C4::AR::Debug::debug("TODAY ==================================== >".$today);
@@ -470,20 +461,20 @@ sub setId_ui{
     $self->id_ui($id_ui);
 }
 
+sub categoria{
+    my ($self) = shift;
+    return ($self->persona->categoria);
+}
+
+
 sub getCod_categoria{
     my ($self) = shift;
-    return ($self->categoria->getCategory_code);
+    return ($self->persona->getCod_categoria);
 }
 
 sub getId_categoria{
     my ($self) = shift;
-    return ($self->id_categoria);
-}
-
-sub setId_categoria{
-    my ($self) = shift;
-    my ($id_categoria) = @_;
-    $self->id_categoria($id_categoria);
+    return ($self->persona->id_categoria);
 }
 
 sub getFecha_alta{

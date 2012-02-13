@@ -23,7 +23,11 @@
             });
             
         function modificarNivel1(){
-        	window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&tipoAccion=MODIFICAR_NIVEL_1";
+            window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&tipoAccion=MODIFICAR_NIVEL_1";
+        }
+
+        function modificarNivel2(id2){
+            window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&id2="+id2+"tipoAccion=MODIFICAR_NIVEL_1";
         }
         
         function editarEjemplar(id2,id3){
@@ -60,7 +64,7 @@
 	<!-- PARA PODER CREAR EL FORMULARIO -->
 	<div id="formulario"></div>
 	
-	<div id="detalleMARC" style="display:none"></div>
+	<div id="detalleMARC" class="modal hide fade"></div>
 	
 	<div id="detalleComun">
 	
@@ -160,48 +164,61 @@
 	            <legend class="trigger trigger_3_[% id2 %] click">[% "Detalles de Nivel 2 para registro" | i18n %] [% id2 %] [% "GRUPO" | i18n %] - [% tipo_documento %] ([% nivel2_template %])</legend>
 	                <div id="grupo[% id2 %]" class="grupo[% id2 %]">
 
+		                [% PERL %]
+		                    print C4::AR::Filtros::action_set_button(    
+		                                                        title           => "[% 'Nivel 2' | i18n %]",
+		                                                        button          => 'btn btn-primary',
+		
+		                                                        actions         => [
+		                                                                            {title => "Modificar", action=>'modificarNivel2("[% id2 %]")',icon=>"icon-pencil"},
+		                                                                            {title => "Eliminar", action=>"borrarN2([% id2 %])", icon=>"icon-trash"},
+		                                                                            ],
+		
+		                            ) ;
+		                [% END %]
+
+
+
+
+
 		                <!-- NIVEL 2 -->
 			                <div id="[% id2 %]" style="position: relative; float:right;"></div>
-			                [% PERL %]
-				                print C4::AR::Filtros::link_to(	text => 	C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
-												                url => 		"datosDocumento.pl", 
-												                params =>	["id1=[% id1 %]","id2=[% id2 %]","tipoAccion=MODIFICAR_NIVEL_2"],
-												                title =>	"[% 'Editar Grupo' | i18n %]"
-											                ) ;
-			                [% END %]
-
 	                        [% IF tiene_indice %]
-	                            [% PERL %]
-	                                                print C4::AR::Filtros::to_Icon(  
-	                                                                                    boton   => "icon_indice",
-	                                                                                    onClick => "mostrarIndice([% id2 %]);",
-	                                                                                    title   => "[% 'Ver &iacute;ndice' | i18n %]",
-	                                                        ) ;
-	                            [% END %]
-	                        [% END %]
+                                  [% PERL %]
+                                          print C4::AR::Filtros::action_button( 
+                                                                          button         => "btn click",
+                                                                          action       => "mostrarIndice([% id2 %])", 
+                                                                          icon         => "icon-info-sign",
+                                                                          title        => "[% 'Indice' | i18n %]",
+                                                                      ) ;
+
+                                  [% END %]
+                            [% END %]
 		                
-                           <div id="indice_data[% id2 %]" style="display:none">
-                            <pre>[% indice %]</pre>
+                           <div id="indice_data[% id2 %]" class="modal hide fade">
+								            <div class="modal-header">
+								              <a class="close" data-dismiss="modal">×</a>
+								              <h3>[% 'Indice del grupo' | i18n %]</h3>
+								            </div>
+								            <div class="modal-body">
+								              <p>[% indice %]</p>
+								
+								
+								            </div>
+
+								          </div>                            
                           </div>
 
-		                <div>
-		                    [% PERL %]
-		                                        print C4::AR::Filtros::to_Icon(  
-		                                                                            boton   => "icon_borrar",
-		                                                                            onClick => "borrarN2([% id2 %]);",
-		                                                                            title   => "[% 'Borrar Grupo' | i18n %]",
-		                                                ) ;
-		                    [% END %]
-		                </div>
-
 	                        [% IF esta_en_estante_virtual %]
-	                            [% PERL %]
-	                                                print C4::AR::Filtros::to_Icon(  
-	                                                                                    boton   => "icon_estvirtuales",
-	                                                                                    onClick => "mostrarEstantesVirtualesDeGrupo([% id2 %]);",
-	                                                                                    title   => "[% 'Ver estantes virtuales en los que se encuentra' | i18n %]",
-	                                                        ) ;
-	                            [% END %]
+                                [% PERL %]
+                                        print C4::AR::Filtros::action_button( 
+                                                                        button         => "btn click",
+                                                                        action       => "mostrarEstantesVirtualesDeGrupo([% id2 %])", 
+                                                                        icon         => "icon-info-sign",
+                                                                        title        => "[% 'Ver estantes virtuales en los que se encuentra' | i18n %]",
+                                                                    ) ;
+
+                                [% END %]
 	                        [% END %]
 
 			                <br>
@@ -224,11 +241,12 @@
 							   </div>
 							[% END %]
 							
-			                <ul class="listado_sin_margen" style="clear: none; margin-top:12px;">
+			                <dl>
 				                [% FOREACH nivel2_array %]
                                     [% IF liblibrarian %]
                                         [% IF dato %]
-                                        <li> [% liblibrarian %]: <strong>[% dato %]</strong></li>
+			                                <dt class="inline left rightMargin">[% liblibrarian %]:&nbsp;</dt> 
+			                                <dd>[% dato %]&nbsp;</dd>
                                         [% END %]
                                     [% END %]
                                 [% END %] <!-- END FOREACH nivel2_array -->
@@ -240,7 +258,7 @@
                                         [% INCLUDE "estructura/analiticasDelGrupo.tmpl" %]
 	                                </li>
                                 [% END %]
-                            </ul>
+                            </dl>
 
                 [% INCLUDE  "partials/e-docs_grupo.inc" %]
                 [% INCLUDE  "partials/estantes_grupo.inc" %]

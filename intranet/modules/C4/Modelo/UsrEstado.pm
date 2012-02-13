@@ -13,8 +13,7 @@ __PACKAGE__->meta->setup
     table   => 'usr_estado',
     columns => [
         id_estado        => { type => 'serial', overflow => 'truncate', not_null => 1, length => 11 },
-        regular          => { type => 'integer', overflow => 'truncate', not_null => 1, length => 1 },
-        categoria        => { type => 'character', overflow => 'truncate', length => 2, not_null => 1 },
+        nombre           => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         fuente           => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
     ],
 
@@ -26,7 +25,6 @@ sub agregar{
     my ($data_hash)=@_;
     #Asignando data...
     $self->setFuente($data_hash->{'fuente'});
-    $self->setRegular($data_hash->{'regular'});
     $self->setCategoria($data_hash->{'categoria'});
     $self->save();
 }
@@ -36,26 +34,15 @@ sub getId_estado{
     return ($self->id_estado);
 }
 
-sub getRegular{
+sub getNombre{
     my ($self) = shift;
-    return ($self->regular);
+    return (C4::AR::Utilidades::trim($self->nombre));
 }
 
-sub setRegular{
+sub setNombre{
     my ($self) = shift;
-    my ($regular) = @_;
-    $self->regular($regular);
-}
-
-sub getCategoria{
-    my ($self) = shift;
-    return (C4::AR::Utilidades::trim($self->categoria));
-}
-
-sub setCategoria{
-    my ($self) = shift;
-    my ($categoria) = @_;
-    $self->categoria($categoria);
+    my ($nombre) = @_;
+    $self->nombre($nombre);
 }
 
 sub getFuente{

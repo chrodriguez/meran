@@ -1,4 +1,4 @@
-package C4::Modelo::UsrEstado::Manager;
+package C4::Modelo::UsrRegularidad::Manager;
 
 # this class IS a "Rose::DB::Object::Manager"
 # and contains all the methodes that 
@@ -8,7 +8,7 @@ use base qw(Rose::DB::Object::Manager);
 # replace the inherited Products->object_class
 # with our own new Product->object_class
 # (yes, it just always returns the value 'Product')
-sub object_class { 'C4::Modelo::UsrEstado' }
+sub object_class { 'C4::Modelo::UsrRegularidad' }
 
 # use the make_manager_methods to generate methodes 
 # to manage the objects, the methods are called:
@@ -19,6 +19,6 @@ sub object_class { 'C4::Modelo::UsrEstado' }
 #    delete_usr_estado
 #    update_usr_estado
 #
-__PACKAGE__->make_manager_methods('usr_estado');
+__PACKAGE__->make_manager_methods('usr_regularidad');
 
 1;

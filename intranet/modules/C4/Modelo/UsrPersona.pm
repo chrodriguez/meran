@@ -16,6 +16,7 @@ __PACKAGE__->meta->setup(
         apellido         => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         nombre           => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         titulo           => { type => 'varchar', overflow => 'truncate', length => 255 },
+        id_categoria     => { type => 'integer', overflow => 'truncate', length =>2, not_null => 1, default => 8 },       
         otros_nombres    => { type => 'varchar', overflow => 'truncate', length => 255 },
         iniciales        => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         calle            => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
@@ -69,6 +70,12 @@ __PACKAGE__->meta->setup(
         key_columns => { id_estado => 'id_estado' },
         type        => 'one to one',
       },
+     categoria => 
+      {
+        class       => 'C4::Modelo::UsrRefCategoriaSocio',
+        key_columns => { id_categoria => 'id' },
+        type        => 'one to one',
+      },
 
       
     ],
@@ -80,7 +87,7 @@ __PACKAGE__->meta->setup(
 use utf8;
 use C4::Modelo::UsrPersona;
 use C4::Modelo::UsrEstado;
-
+use C4::Modelo::UsrRegularidad::Manager;
 
 
 =item
@@ -196,24 +203,29 @@ sub convertirEnSocio{
 sub esRegularToString{
     my ($self) = shift;
 
-    my ($estado) = C4::Modelo::UsrEstado->new(id_estado => $self->getId_estado);
-    $estado->load();
-
-    my $estado_alumno = C4::AR::Filtros::i18n("IRREGULAR");
-    if($estado->getRegular){$estado_alumno = C4::AR::Filtros::i18n("REGULAR")}
-    
-    return $estado_alumno;
+    return $self->getCondicion_object->estado->getNombre;
 }
 
 sub esRegular{
     my ($self) = shift;
 
-    my ($estado) = C4::Modelo::UsrEstado->new(id_estado => $self->getId_estado);
-    $estado->load();
-
-    return $estado->getRegular;
+    return $self->getCondicion_object->getCondicion;
 }
 
+
+sub getCondicion_object{
+    my ($self) = shift;
+    use C4::Modelo::UsrRegularidad::Manager;
+
+    my @filtros;
+    
+    push (@filtros, (usr_estado_id => {eq => $self->getId_estado }) );
+    push (@filtros, (usr_ref_categoria_id => {eq => $self->getId_categoria }) );
+    
+    my ($estados) = C4::Modelo::UsrRegularidad::Manager->get_usr_regularidad(query => \@filtros,);
+    
+    return $estados->[0];
+}
 
 sub modificar{
     my ($self)=shift;
@@ -733,6 +745,23 @@ sub setCumple_condicion{
     my ($self) = shift;
     my ($cumple_condicion) = @_;
     $self->cumple_condicion($cumple_condicion);
+}
+
+sub getId_categoria{
+    my ($self) = shift;
+    return ($self->id_categoria);
+}
+
+sub setId_categoria{
+    my ($self) = shift;
+    my ($id_categoria) = @_;
+    $self->id_categoria($id_categoria);
+}
+
+
+sub getCod_categoria{
+    my ($self) = shift;
+    return ($self->categoria->getCategory_code);
 }
 
 sub getInvolvedCount{

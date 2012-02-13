@@ -4503,7 +4503,11 @@ body {
 }
 
 .left{
-	float: left;
+    float: left;
+}
+
+.right{
+    float: right;
 }
 
 .underline{
@@ -4594,4 +4598,98 @@ body {
     background-color:#E6E6DD;
 }
 
+
+
+/* FORM DE FILE UPLOAD */
+.fileUploader_catalogo form {
+    padding: 20px;
+    border: 1px solid #cccccc;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-box-shadow: 0 0 10px #ccc;
+    -moz-box-shadow: 0 0 10px #ccc;
+    box-shadow: 0 0 10px #ccc;
+    width: 420px;
+    margin: 20px auto;
+    background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff),
+        to(#f2f2f2) );
+}
+
+.fileUploader_catalogo form input {
+    border: 1px solid #ccc;
+    font-size: 13pt;
+    padding: 5px 10px 5px 10px;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+
+.fileUploader_catalogo form  input[type=button] {
+    background-image: -moz-linear-gradient(top, #ffffff, #dfdfdf);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff),
+        to(#dfdfdf) );
+}
+
+.fileUploader_catalogo form input:focus {
+    -webkit-box-shadow: 0 0 10px #ccc;
+    -moz-box-shadow: 0 0 10px #ccc;
+    box-shadow: 0 0 5px #ccc;
+    -webkit-transform: scale(1.05);
+    -moz-transform: scale(1.05);
+    transform: scale(1.05);
+}
+
+.fileToUpload {
+    width: 378px;
+}
+
+.progressIndicator {
+    font-size: 10pt;
+}
+
+.fileInfo {
+    font-size: 10pt;
+    font-style: italic;
+    color: #aaa;
+    margin-top: 10px;
+}
+
+.progressBar {
+    height: 14px;
+    border: 1px solid #cccccc;
+    display: none;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    background-image: -moz-linear-gradient(top, #66cc00, #4b9500);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#66cc00),
+        to(#4b9500) );
+}
+
+.uploadResponse {
+    margin-top: 10px;
+    padding: 20px;
+    overflow: hidden;
+    display: none;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 5px #ccc;
+    background-image: -moz-linear-gradient(top, #ff9900, #c77801);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#ff9900),
+        to(#c77801) );
+}
+
+.fileUploader_catalogo ul li {
+    width: 98%;
+}
+
+.fileUploader_catalogo {
+    width: 550px;
+    clear: both;
+}
+
+/* FIN FORM DE FILE UPLOAD */
 
