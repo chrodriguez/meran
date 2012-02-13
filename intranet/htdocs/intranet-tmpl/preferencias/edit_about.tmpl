@@ -10,13 +10,25 @@
 
 <center>
 <fieldset>
-<legend class="titulos">Editar Informacion</legend>
+<legend>Editar Informacion</legend>
 
-<form action="about.pl?token=[% token %]" method="post">
-
-    <textarea id="about" name="about" class="self_review" style="width: 88.3%">[% info_about.descripcion %]</textarea>
+<form action="about.pl?token=[% token %]" method="post" class="form-horizontal">
     
-    <p><input type="submit" value="Aceptar" /></p>
+    <div class="control-group">
+        <div class="controls">
+            <textarea id="about" name="about" class="self_review" style="width: 88.3%">[% info_about.descripcion %]</textarea>
+        </div>
+    </div>
+    
+    
+    <div class="form-actions">
+    [% PERL %]
+                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
+                                                    type    => "submit",
+                                                    boton   => "boton_agregar",
+                        ) ;
+    [% END %]
+    </div>
 </form>
 
 </center>

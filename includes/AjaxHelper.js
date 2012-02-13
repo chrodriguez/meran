@@ -8,23 +8,15 @@
  */
 
 function startOverlay(){
-    $('#ajax-indicator').modal({   
-       	close: false,
-        containerCss:{
-            backgroundColor:"#fff",
-            height: 50,
-            padding: 0,
-            width: 190,
-            opacity: 50,
-        },
-    });   
-    
-    return (true);
+    $('#ajax-indicator').modal({keyboard: false,});   
 }
 
 
-function closeModal(){
-	$.modal.close();
+function closeModal(id){
+	if ((id == '') || (id == null))
+		$('#ajax-indicator').modal('hide');
+	else
+		$('#'+id).modal('hide');
 }
 //Funciones Privadas para manejar el estado del la consulta de AJAX
 
@@ -79,8 +71,6 @@ function _HiddeState(options){
     }
 
     if(options.showOverlay){
-//         $.modal.close();
-//         $('#ajax-indicator').ajaxStop($.modal.close());
         $(document).ajaxStop(closeModal());
     }
 
@@ -186,7 +176,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 				_hash_key= b64_md5(params);
 		        this.log("AjaxHelper => cache element");
                 this.log("AjaxHelper => cache hash_key " + _hash_key);
-				if ( $.jCache.hasItem(_hash_key) ){
+				if (($.jCache != null) && ( $.jCache.hasItem(_hash_key) )){
 				//antes de hacer la peticion al servidor, se verifica si la info esta en la cache
 					return helper.onComplete($.jCache.getItem(_hash_key));
 				}
@@ -220,7 +210,8 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 
 								if(helper.cache){
 									//guardo la respuesta del servidor en la cache
-									$.jCache.setItem(_hash_key, ajax.responseText);
+									if ($.jCache)
+										$.jCache.setItem(_hash_key, ajax.responseText);
  								}
 
 								//respuesta normal

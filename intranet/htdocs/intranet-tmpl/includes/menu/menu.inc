@@ -8,7 +8,7 @@
           <span class="icon-bar"></span>
         </a>
         
-        <div id="logo"><a href="/meran/mainpage.pl?token=[% token %]">[% 'MERAN' | i18n %]</a></div>
+        <div id="logo"><a href="[% url_prefix %]/mainpage.pl?token=[% token %]">[% 'MERAN' | i18n %]</a></div>
         <div class="nav-collapse">
           <ul class="nav">
             <li class="dropdown">
@@ -59,6 +59,8 @@
 		                                   [% END %]
 		                               </li>
 					<li class="divider"></li>
+	      [% IF socio_data.usr_credential_type == "superLibrarian" %]
+					
                              <li>
                              [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'Preferencias' | i18n %]",
@@ -115,8 +117,10 @@
                                                                             ) ;
                                             [% END %]
                                 </li>
-                              
-						<li class="divider"></li>				
+           [% END %]
+	      [% IF socio_data.usr_credential_type == "superLibrarian" %]
+						<li class="divider"></li>	
+									
 										<li>
                                            [% PERL %]
                                                       print C4::AR::Filtros::link_to( text =>     "<i class='icon-download-alt'></i> [% 'Nueva Importaci&oacute;n' | i18n %]",
@@ -151,13 +155,15 @@
 	                                  </li>
                               
 					
-
+			[% END %]
               </ul>
             </li>
 
             <li class="dropdown">
 	            <a href="#" class="dropdown-toggle" data-toggle="dropdown">[% 'Usuarios' | i18n %] <b class="caret"></b></a>
 	            <ul class="dropdown-menu">
+   	      [% IF socio_data.usr_credential_type == "librarian" OR  socio_data.usr_credential_type == "superLibrarian" %]
+	            
 	                    <li>
 	                              [% PERL %]
 	                                  print C4::AR::Filtros::link_to( text =>     "[% 'Usuarios Reales' | i18n %]",
@@ -182,6 +188,9 @@
 	                                                              ) ;
 	                              [% END %]
 	                    </li>
+	      [% END %]
+	      [% IF socio_data.usr_credential_type == "superLibrarian" %]
+	                    
 				<li class="divider"></li>
                                 <li>
                                             [% PERL %]
@@ -191,11 +200,13 @@
                                                                             ) ;
                                             [% END %]
                                 </li>
+          [% END %]
 				</ul>
 		  </li>
 
             <li class="dropdown">
 	            <a href="#" class="dropdown-toggle" data-toggle="dropdown">[% 'Circulaci&oacute;n' | i18n %] <b class="caret"></b></a>
+	      [% IF socio_data.usr_credential_type == "librarian" OR  socio_data.usr_credential_type == "superLibrarian" %]
 	            <ul class="dropdown-menu">
                     <li>
 	                    [% IF (!menu_preferences.showMenuItem_circ_prestamos) AND (!menu_preferences.showMenuItem_circ_devolucion_renovacion) %]
@@ -251,6 +262,8 @@
                                                               ) ;
                               [% END %]
                     </li>
+                [% IF socio_data.usr_credential_type == "superLibrarian" %]
+                    
                     <li class="divider"></li>
 
                                 <li>
@@ -285,13 +298,15 @@
                                                                             ) ;
                                             [% END %]
                                 </li>
+              [% END %]
 
                     <li class="divider"></li>
 <!--                     CONSULTAS -->
 				</ul>
+      [% END %]
+
 		  </li>
       </ul>
-          
           <form class="navbar-search pull-left" action="" onsubmit="return false;">
           
 		    <input type="text" id="keyword-bar" class="search-query span2" name="keyword-bar" placeholder='[% "Cat&aacute;logo" | i18n %]'>
@@ -317,7 +332,7 @@
               </ul>
             </li>
           </ul>
-          
+      [% IF socio_data.usr_credential_type == "superLibrarian" %]
           <ul class="nav">
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">[% 'Administraci&oacute;n' | i18n %] <b class="caret"></b></a>
@@ -405,6 +420,8 @@
                                         [% END %]
                                 </li>
           </ul>
+      [% END %]
+          
         </div><!-- /.nav-collapse -->
       </div>
     </div><!-- /navbar-inner -->

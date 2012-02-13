@@ -18,6 +18,7 @@ use vars qw(@EXPORT_OK @ISA);
     action_link_button
     action_button
     setHelpInput
+    action_set_button
 );
 
 =item
@@ -57,6 +58,7 @@ sub link_to {
     my $boton   = $params_hash_ref{'boton'}; #obtengo el title a mostrar
     my $width   = $params_hash_ref{'width'};
     my $blank   = $params_hash_ref{'blank'} || 0;
+    my $tooltip = $params_hash_ref{'tooltip'} || 0;
     my $cant    = scalar(@$params);
     my @result;
     
@@ -92,6 +94,8 @@ sub link_to {
     if($blank){
         $link .= " target='blank'";
     }
+    
+    
 
     $link .= " >";
 
@@ -197,7 +201,7 @@ sub to_Button{
 
     my $text    = $params_hash_ref{'text'}; #obtengo el texto a mostrar
     
-    my $boton   = $params_hash_ref{'boton'} || "clean-gray"; #obtengo el boton
+    my $boton   = $params_hash_ref{'boton'} || "btn btn-primary"; #obtengo el boton
     
     if (!C4::AR::Utilidades::existeInArray($boton,@array_clases_buttons)){
         $boton = "btn btn-primary";
@@ -274,6 +278,8 @@ sub setHelpInput{
     my @array_clases_labels     = ('success','warning', 'important', 'info');
     
     my $classLabel              = $params_hash_ref{'class'} || "label";
+    my $textLabel               = $params_hash_ref{'textLabel'} || "";
+    my $help                    = "";
     
     if (!C4::AR::Utilidades::existeInArray($classLabel,@array_clases_labels)){
         $classLabel = "label";
@@ -282,11 +288,20 @@ sub setHelpInput{
     if($classLabel ne "label"){
         $classLabel = "label label-" . $classLabel;
     }
-       
-    my $help                    = "<p class='help-block'><span class='"
-                                    . $classLabel . "'>"
-                                    . $params_hash_ref{'textLabel'} . "</span>"
+    
+    if($textLabel eq ""){
+    
+        $help                    = "<p class='help-block'>"
                                     . $params_hash_ref{'text'} . "</p>";
+    
+    }else{
+       
+        $help                    = "<p class='help-block'><span class='"
+                                        . $classLabel . "'>"
+                                        . $params_hash_ref{'textLabel'} . "</span>"
+                                        . $params_hash_ref{'text'} . "</p>";
+                                    
+    }
 
     return $help;                                    
    
@@ -652,10 +667,11 @@ sub action_link_button{
     my (%params_hash_ref) = @_;
 
     my $url      = $params_hash_ref{'url'} || $params_hash_ref{'url'}; #obtengo el llamado a la funcion en el evento onclick
-    my $button   = $params_hash_ref{'button'}; #obtengo el boton
-    my $icon     = $params_hash_ref{'icon'} || undef;  #obtengo el boton
+    my $button   = $params_hash_ref{'button'};
+    my $icon     = $params_hash_ref{'icon'} || undef;
     my $params   = $params_hash_ref{'params'} || $params_hash_ref{'url'}; #obtengo el llamado a la funcion en el evento onclick
     my $title    = $params_hash_ref{'title'}; #obtengo el title de la componete
+    my $popover  = $params_hash_ref{'popover'} || undef;
     my @result;
     
     foreach my $p (@$params){
@@ -673,14 +689,135 @@ sub action_button{
 
     my (%params_hash_ref) = @_;
 
-    my $action    = $params_hash_ref{'action'};
+    my $action   = $params_hash_ref{'action'};
     my $button   = $params_hash_ref{'button'}; #obtengo el boton
     my $icon     = $params_hash_ref{'icon'} || undef;  #obtengo el boton
     my $title    = $params_hash_ref{'title'}; #obtengo el title de la componete
+    my $popover  = $params_hash_ref{'popover'} || undef;
 
-    my $html = "<a class='".$button."' href='' onclick='".$action."'><i class='".$icon."'></i>".$title."</a>";
+    $button.= " click";
+    
+    my $html = "<a class='".$button."' onclick='".$action."'><i class='".$icon."'></i>".$title."</a>";
     
     return $html;
+}
+
+
+sub action_set_button{
+    my (%params_hash_ref) = @_;
+    
+    my $title       = $params_hash_ref{'title'}; #obtengo el title de la componete
+    my $action      = $params_hash_ref{'action'} || undef;
+    my $url         = $params_hash_ref{'url'} || undef;
+    
+    my $icon  = $params_hash_ref{'icon'} || 'icon white user'; #obtengo el title de la componete
+
+    my $actions     = $params_hash_ref{'actions'} || [];
+    
+    my $button   = $params_hash_ref{'button'} || "btn btn-primary";
+    
+    my $html = "<div class='btn-group'>";
+    
+    if ($url){
+            my $params   =  $params_hash_ref{'params'} ||  $url;
+            my @result;
+            foreach my $p (@$params){
+                @result = split(/=/,$p);
+                $url = C4::AR::Utilidades::addParamToUrl($url,@result[0],@result[1]);
+            }
+        $html.= "<a class='$button' href='$url'><i class='$icon'></i>$title</a>";
+        
+    }else{
+        $html.= "<a class='$button' class='click'><i class='$icon'></i>$title</a>";
+    }
+
+    $html.= "<a class='$button dropdown-toggle' data-toggle='dropdown' href='#'><span class='caret'></span></a>";
+    $html.= "<ul class='dropdown-menu'>";
+    
+    foreach my $action (@$actions){
+        my $name = $action->{'title'};
+        my $func = $action->{'action'};
+        my $url  = $action->{'url'};
+        my $icon = $action->{'icon'};
+        if ($func){
+            $html .= "<li><a class='click' onclick='$func' ><i class='$icon' ></i> $name</a></li>";
+        }else{
+            my $params   =  $action->{'params'} ||  $action->{'url'};
+            my @result;
+            foreach my $p (@$params){
+                @result = split(/=/,$p);
+                $url = C4::AR::Utilidades::addParamToUrl($url,@result[0],@result[1]);
+            }
+            $html .= "<a class='click' href='$url'><i class='$icon'></i> $name</a>";
+        }
+
+    }
+
+    $html.= "</ul></div>";
+    
+    return $html;   
+}
+
+sub tableHeader{
+    my (%params_hash_ref) = @_;
+    
+    my $id          = $params_hash_ref{'id'}; 
+    my $class       = $params_hash_ref{'class'} || undef;
+    my $select_all  = $params_hash_ref{'selectAll_id'} || undef;
+    
+    my $columns     = $params_hash_ref{'columns'};
+    
+    my $html = "<table id=$id class='table table-striped $class'><thead>";
+    
+    if ($select_all){
+        $html .= "<th><i class='icon-ok-sign'></th>";
+    }
+    
+    foreach my $column (@$columns){
+        $html .= "<th>$column</th>";
+
+    }
+
+    $html .= "</thead>";
+    
+    return $html;	
+}
+
+sub action_group_link_button{
+	my (%params_hash_ref) = @_;
+	
+    my $actions     = $params_hash_ref{'actions'} || [];
+    
+    
+    my $html = "<div class='btn-group'>";
+   
+    foreach my $action (@$actions){
+        my $url   =  $action->{'url'}; #obtengo la url si es un link 
+        my $title = $action->{'title'};
+		my $icon  = $action->{'icon'};
+		my $class = $action->{'class'};
+		
+        if($url){
+			#ES UN LINK
+			my $params   =  $action->{'params'} ||  $action->{'url'}; #obtengo el llamado a la funcion en el evento onclick
+			my @result;
+			foreach my $p (@$params){
+				@result = split(/=/,$p);
+				$url = C4::AR::Utilidades::addParamToUrl($url,@result[0],@result[1]);
+			}
+			$html .= "<a class='click btn $class' href='$url'><i class='$icon'></i>$title</a>";
+		}
+		else{
+			#ES UNA ACCION
+			my $func = $action->{'action'}; #obtengo la funcion si es una accion
+			$html .= "<a class='click btn $class' onclick='$func' ><i class='$icon'></i>$title</a>";
+		}
+
+    }
+
+    $html.= "</div>";
+    
+    return $html;	
 }
 
 END { }       # module clean-up code here (global destructor)
