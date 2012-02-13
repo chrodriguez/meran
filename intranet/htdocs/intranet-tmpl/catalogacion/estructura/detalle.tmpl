@@ -161,7 +161,11 @@
 
         <div id="fieldset_grupo[% id2 %]">
 	        <fieldset>
-	            <legend class="trigger trigger_3_[% id2 %] click">[% "Detalles de Nivel 2 para registro" | i18n %] [% id2 %] [% "GRUPO" | i18n %] - [% tipo_documento %] ([% nivel2_template %])</legend>
+	            <legend class="trigger trigger_3_[% id2 %] click">
+	               <div class="alert alert-success">
+	                   [% "Detalle de Nivel 2 para registro" | i18n %] [% id2 %] [% "GRUPO" | i18n %] - [% tipo_documento %] ([% nivel2_template %])
+                   </div>
+                 </legend>
 	                <div id="grupo[% id2 %]" class="grupo[% id2 %]">
 
 		                [% PERL %]
@@ -206,7 +210,6 @@
 								
 								            </div>
 
-								          </div>                            
                           </div>
 
 	                        [% IF esta_en_estante_virtual %]
