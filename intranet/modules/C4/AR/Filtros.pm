@@ -6,6 +6,7 @@ require Exporter;
 use Locale::Maketext::Gettext::Functions qw(__);
 use Template::Plugin::Filter;
 use CGI::Session;
+use HTML::Entities;
 use base qw( Template::Plugin::Filter );
 
 use vars qw(@EXPORT_OK @ISA);
@@ -687,6 +688,9 @@ sub action_link_button{
     	$popopver_attr.= " rel='popover' data-content='$text_pop' data-original-title='$title_pop' ";   
     }
     
+    my $params   = $params_hash_ref{'params'} || $params_hash_ref{'url'}; #obtengo el llamado a la funcion en el evento onclick
+    my $title    = $params_hash_ref{'title'}; #obtengo el title de la componete
+    my $popover  = $params_hash_ref{'popover'} || undef;
     my @result;
     
     foreach my $p (@$params){
@@ -708,9 +712,7 @@ sub action_button{
     my $button   = $params_hash_ref{'button'}; #obtengo el boton
     my $icon     = $params_hash_ref{'icon'} || undef;  #obtengo el boton
     my $title    = $params_hash_ref{'title'}; #obtengo el title de la componete
-
-
-    my $popover = $params_hash_ref{'popover'} ||undef;
+    my $popover  = $params_hash_ref{'popover'} || undef;
 
     $button.= " click";
 
@@ -766,7 +768,7 @@ sub action_set_button{
         $html.= "<a class='$button' $popopver_attr href='$url'><i class='$icon'></i>$title</a>";
         
     }else{
-        $html.= "<a class='$button' $popopver_attr class='click'><i class='$icon'></i>$title</a>";
+        $html.= "<a class='$button' $popopver_attr class='click' onclick='$action'><i class='$icon'></i>$title</a>";
     }
 
     $html.= "<a class='$button dropdown-toggle' data-toggle='dropdown' href='#'><span class='caret'></span></a>";
@@ -808,12 +810,11 @@ sub tableHeader{
     my $html = "<table id=$id class='table table-striped $class'><thead>";
     
     if ($select_all){
-        $html .= "<th><i class='icon-ok-sign'></th>";
+        $html .= "<th><i class='icon-ok-sign click' id='$select_all' title='".C4::AR::Filtros::i18n("Seleccionar todos")."'></th>";
     }
     
     foreach my $column (@$columns){
         $html .= "<th>$column</th>";
-
     }
 
     $html .= "</thead>";

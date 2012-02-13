@@ -109,9 +109,10 @@
                                print C4::AR::Filtros::action_set_button(    
 									title           => "[% 'Registro' | i18n %]",
                                     button          => 'btn btn-primary',
+                                    action			=> 'detalleRegistroMARC("[% detalle_importacion.getId %]")',
                                     actions         => [
-										{title => "Detalle", action=>"detalleRegistroMARC([% detalle_importacion.getId %])",icon=>"icon-search"},
-                                        {title => "Ignorar", action=>"cambiarEstadoRegistro([% detalle_importacion.getIdImportacionIso %],[% detalle_importacion.getId %],'I')", icon=>"icon-ban-circle"},
+										{title => "Detalle", action=>'detalleRegistroMARC("[% detalle_importacion.getId %]")',icon=>"icon-search"},
+                                        {title => "Ignorar", action=>'cambiarEstadoRegistro("[% detalle_importacion.getIdImportacionIso %]","[% detalle_importacion.getId %]","I")', icon=>"icon-ban-circle"},
                                                        ],
 								);
                               [% END %]
@@ -120,9 +121,10 @@
                                print C4::AR::Filtros::action_set_button(    
 									title           => "[% 'Registro' | i18n %]",
                                     button          => 'btn btn-primary',
+                                    action			=> 'detalleRegistroMARC("[% detalle_importacion.getId %]")',
                                     actions         => [
-										{title => "Detalle", action=>"detalleRegistroMARC('[% detalle_importacion.getId %]');",icon=>"icon-search"},
-                                        {title => "Procesar", action=>"cambiarEstadoRegistro('[% detalle_importacion.getIdImportacionIso %]','[% detalle_importacion.getId %]','I');", icon=>"icon-ok-circle"},
+										{title => "Detalle", action=>'detalleRegistroMARC("[% detalle_importacion.getId %]");',icon=>"icon-search"},
+                                        {title => "Procesar", action=>'cambiarEstadoRegistro("[% detalle_importacion.getIdImportacionIso %]","[% detalle_importacion.getId %]","I");', icon=>"icon-ok-circle"},
                                                        ],
 								);
                               [% END %]

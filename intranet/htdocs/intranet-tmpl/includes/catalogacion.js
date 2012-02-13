@@ -628,13 +628,7 @@ function agregarIndice(id2){
 
 function mostrarIndice(id2){
 
-    $("#indice_data" + id2).modal({   containerCss:{
-                backgroundColor:"#fff",
-                height:200,
-                padding:0,
-                width:863
-            },
-        });
+    $("#indice_data" + id2).modal();
 }
 
 function guardarIndice(){

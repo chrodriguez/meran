@@ -296,6 +296,7 @@ function cambiarEstadoRegistro(id_importacion,id_registro,estado){
 function updateEstadoRegistro(responseText){
         var Messages=JSONstring.toObject(responseText);
         setMessages(Messages);
+        closeModal();
         detalleImportacion(objAHDetalle.id_importacion);
 }
 
