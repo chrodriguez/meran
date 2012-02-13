@@ -3,7 +3,7 @@
 <script type="text/javascript" language="javascript">
 
     $(document).ready( function() {
-	    zebra('datos_tabla');
+// 	    zebra('datos_tabla');
 	    makeDataTable('#prestamosVencidos');
     });
     
@@ -71,53 +71,43 @@
 
 </script>
 
-<fieldset>
+<!--<fieldset>
     <legend class="titulo_legend">[% "Acciones" | i18n %] </legend>
         <button class="clean-gray" onclick="enviarMailsATodos();">Enviar a Todos</button>
-</fieldset>
+</fieldset>-->
 
 <fieldset>
     <legend class="titulo_legend">[% "Pr&eacute;stamos vencidos" | i18n %] </legend>
         
-<table id="prestamosVencidos" class="datos_tabla" width="100%" cellspacing=0 cellpadding=0>
-	<thead>
-  	<tr class="titulo_tabla_resultado">
-    	<th>
-    		[% "Mandar Mail" | i18n %]
-        </th>
-    		<th>
-            [% "Tipo de Pr&eacute;stamo" | i18n %]
-        </th>
-    		<th>
-            [% "Fecha de Pr&eacute;stamo" | i18n %]
-        </th>
-        </th>
-    	<th>
-            [% "Ejemplar" | i18n %]
-        </th>
-    	<th>  
-            [% "Numero de Socio" | i18n %]
-        </th>
-  	</tr>
-	</thead>
+      [% PERL %]
+                print C4::AR::Filtros::tableHeader(   
+                                  id              => "prestamosVencidos",
+                                  class           => "",
+                                  selectAll_id    => "un_id",
+                                  columns         => ['[% "Tipo de pr&eacute;stamo"|i18n %]','[% "Fecha de prpr&eacute;stamo"|i18n %]',
+                                                      '[% "Ejemplar"|i18n %]','[% "N&uacute;mero de Socio"|i18n %]',
+                                                     ]
+                                                                   
+                                        ) ;
+      [% END %]
+
 	<tbody>
-	
-	[% FOREACH prestamo IN prestamos %]
-      	<tr align="center" >
+      [% FOREACH prestamo IN prestamos %]
+      	<tr>
           	
-     		<td valign="middle" align="center">
+     		<td>
      		    <input type="checkbox" name="[% prestamo.socio.getNro_socio %]" 
 				id="[% prestamo.getId_prestamo %]" >
 		    </td>
 		
-          	<td align="left" class="nomCompleto">
+          	<td class="nomCompleto">
                 [% prestamo.getTipo_prestamo %]
 		    </td>
-          	<td align="left" class="documento">
+          	<td class="documento">
           	    [% prestamo.getFecha_prestamo %]
 		    </td>
 <!--		    TODO: link-->
-		    <td align="left" class="documento">
+		    <td class="documento">
           	    [% prestamo.nivel3.codigo_barra %]
 		    </td>
      		<td>
@@ -125,10 +115,31 @@
 		    </td>
 
         </tr>
-    [% END %]
-	</tbody>
-</table>
-<button class="clean-gray" onclick="enviarMailsASeleccionados();">Enviar a Seleccionados</button>
+      [% END %]
+     </tbody>
+     <tfoot>
+      [% PERL %]
+              print C4::AR::Filtros::action_button(
+                                              button       => "btn click btn-warning",
+                                              action       => "enviarMailsATodos();",
+                                              icon         => "",
+                                              title        => "Enviar a todos",
+                                          ) ;
+       
+      [% END %]
+      [% PERL %]
+              print C4::AR::Filtros::action_button(
+                                              button       => "btn click btn-primary",
+                                              action       => "enviarMailsASeleccionados();",
+                                              icon         => "",
+                                              title        => "Enviar a seleccionados",
+                                          ) ;
+       
+      [% END %]
+
+    </tfoot>
+  </table>
+<!--<button class="clean-gray" onclick="enviarMailsASeleccionados();">Enviar a Seleccionados</button>-->
 </fieldset>
 
 [% INCLUDE "intranet-bottom.inc" %]
