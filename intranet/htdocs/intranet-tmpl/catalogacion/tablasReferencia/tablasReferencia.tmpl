@@ -36,10 +36,10 @@ function updateObtenerTabla(responseText){
 
                     [% PERL %]
                         print C4::AR::Filtros::to_Button(   text    => "[% 'Obtener Tabla' | i18n %]",
-                                                            boton   => "btn btn-large btn-primary",
+                                                            boton   => "btn btn-primary",
                                                             onClick => "obtenerTabla();",
                                                             title   => "[% 'Obtener Tabla' | i18n %]",
-                                                            alternClass => "botonCentrado",
+                                                            inline  => "1"
                                 ) ;
                     [% END %]
                 </div>

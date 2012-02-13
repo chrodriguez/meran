@@ -36,24 +36,24 @@ var loaderPath= "";
 	
 	            <fieldset class="center_fieldset">
 	                <legend class="titulo_legend">[% "Filtrar por:" | i18n %]</legend>
-	                <ul>
-	                    <li class="item">
-	                        <label for="search_tabla"> &nbsp; </label>
-	                        <input type="text" id="search_tabla" name="search_tabla"/>
-	                    </li>
+	                <form onsubmit="return false" class="well form-search">
+	                    <input type="text" id="search_tabla" name="search_tabla" class="input-medium search-query"/>
+	                    
 	                    [% PERL %]
 	                        print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
 	                                                            boton   => "boton_agregar",
 	                                                            onClick => "obtenerTablaFiltrada();",
 	                                                            title   => "[% 'Buscar' | i18n %]",
+	                                                            inline  => "1"
 	                                ) ;
 	                    [% END %]
-	                </ul>
+	                </form>
 	            </fieldset>
 	        <div class="datos_tabla_div" id="datos_tabla_div">
                 <div class="contenedor_paginador">[% paginador %]</div>
-                <div class="info_paginador">[% "De un total de" | i18n %]&nbsp;<b>[% cantidad_total %]</b></div>
-	            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0>
+                <div class="alert alert-info">[% "De un total de" | i18n %]&nbsp;<b>[% cantidad_total %]</b></div>
+                
+	            <table id="tablaResult" class="table table-striped">
 	                <thead>
 	                    <tr class="titulo_tabla_resultado">
 	                        [% FOREACH campo IN campos %]
@@ -67,16 +67,18 @@ var loaderPath= "";
 	                          <tr>
 	                            [% dato.printAsTableElement %]
 	                            <td>
-	                            [% PERL %]
-	                                print C4::AR::Filtros::to_Icon(  
-	                                                                    boton   => "icon_cancelar",
-	                                                                    onClick => "mostrarReferencias('[% tabla %]', '[% dato.getPkValue %]');",
-	                                                                    title   => "[% 'Asignar' | i18n %]",
-	                                                                    alternClass => "botonCentradoTabla",
-	                                                                    elem => 'span',
-	                                                                    style => 'float: left;',
-	                                        ) ;
-	                            [% END %]
+
+	                             [% PERL %]
+                                  print C4::AR::Filtros::action_button( 
+                                                                  button    => "btn click",
+                                                                  action    => 'mostrarReferencias("[% tabla %]", "[% dato.getPkValue %]")', 
+                                                                  icon      => "icon-remove",
+                                                                  title     => "",
+                                                              ) ;
+
+
+                                [% END %]
+	                            
 	                            </td>
 	                          </tr>
 	                        [% END %]

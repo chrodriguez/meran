@@ -1,29 +1,33 @@
 <fieldset>
     <legend>[% "Preferencias del cat&aacute;logo" | i18n %]</legend>
-    <div class="tablaResultado_preferencias" id="tablaResultado_preferencias" >
-        <table name="tablaResult" class="table table-striped">
-            <thead>
-                <tr class="titulo_tabla_resultado">
-                    <th width="13%">[% "Variable" | i18n %]</th>
-                    <th width="25%">[% "Valor" | i18n %]</th>
-                    <th width="39%">[% "Explicaci&oacute;n" | i18n %]</th>
-                    <th width="3%">[% "Editar" | i18n %]</th>
-                </tr>
-            </thead>
+    <div>
+        
+        [% PERL %]
+            print C4::AR::Filtros::tableHeader(   
+                            id              => "preferenciasCatalogo_table",
+                            class           => "",
+                            selectAll_id    => "",
+                            columns         => ['[% "Variable"|i18n %]','[% "Valor"|i18n %]','[% "Explicaci&oacute;n"|i18n %]',
+                                                '[% "Editar"|i18n %]' ]
+                        ) ;
+        [% END %]
+    
+
         <tbody>
         [% FOREACH preferencia IN preferencias %]
             <tr>
                 <td>[% preferencia.getVariable %]</td>
                 <td>[% preferencia.getShowValue %]</td>
                 <td>[% preferencia.getExplanation %]</td>
-                <td>
+                <td>                  
                     [% PERL %]
-                            print C4::AR::Filtros::to_Icon(    
-                                            boton   => "icon_edicion",
-                                            onClick => "modificarVariable('[% preferencia.getVariable %]','[% preferencia.getType %]');",
-                                            title   => "[% 'Modificar Preferencia' | i18n %]",
-                                            alternClass => "botonCentradoTabla"
-                                    ) ;
+                          print C4::AR::Filtros::action_button( 
+                                                    button         => "btn click",
+                                                    action       => 'modificarVariable("[% preferencia.getVariable %]","[% preferencia.getType %]");', 
+                                                    icon         => "icon-pencil",
+                                                  ) ;
+
+
                     [% END %]
                 </td>
             

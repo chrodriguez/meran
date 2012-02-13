@@ -62,18 +62,21 @@
 </script>
 <fieldset>
     <legend class="titulo_legend trigger click"><strong>[% "Configuraci&oacute;n de la Visualizaci&oacute;n de SubCampos:" | i18n %]</strong></legend>
-      <table id="tabla_datos_visualizacion_intra" class="table table-striped">
-            <thead>
-                <tr class="titulo_tabla_resultado">
-                    <td>[% "Campo" | i18n %]</td>
-                    <td>[% "Subcampo" | i18n %]</td>
-                    <td>[% "Pre" | i18n %]</td>
-                    <td>[% "Vista en INTRANET " | i18n %]</td>
-                    <td>[% "Post" | i18n %]</td>
-                    <td>[% "Nivel" | i18n %]</td>
-                    <td>[% "Acciones" | i18n %]</td>
-                </tr>
-            </thead>
+    
+    [% PERL %]
+                print C4::AR::Filtros::tableHeader(   
+                                  id              => "visualizacionIntra_table",
+                                  class           => "",
+                                  selectAll_id    => "",
+                                  columns         => ['[% "Campo"|i18n %]','[% "Subcampo"|i18n %]','[% "Pre"|i18n %]',
+                                                    [% "Vista en OPAC"|i18n %]','[% "Post"|i18n %]','[% "Nivel"|i18n %]',
+                                                    '[% "Acciones"|i18n %]',
+                                                     ]
+
+                                                                    
+                                        ) ;
+        [% END %]
+
             <tbody id="sortable_subcampo">
                 <input type="checkbox" name="enable_sort_subcampo" id="enable_sort_subcampo" /> Seleccione para Ordenar
                 [% FOREACH campo IN visualizacion %]
@@ -86,11 +89,10 @@
                         <td class="nivel" id="[% campo.id %]">[% campo.getNivel %]</td>
                         <td align="center">
                             [% PERL %]
-                                print C4::AR::Filtros::to_Icon( text    => "[% 'Eliminar Vista' | i18n %]",
-                                                                onClick => "eliminarVista('[% campo.id %]')",
+                                print C4::AR::Filtros::to_Icon( text =>     "[% 'Eliminar Vista' | i18n %]",
+                                                                onClick => 'eliminarVista("[% campo.id %]")',
                                                                 boton   => "icon_cancelar",
-                                                                title   => "[% 'Eliminar Vista' | i18n %]",
-                                                                alternClass => "botonCentradoTabla"
+                                                                title =>    "[% 'Eliminar Vista' | i18n %]"
                                                             ) ;
                             [% END %]
                         </td>
