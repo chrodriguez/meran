@@ -14,59 +14,48 @@
         <div class="datos_tabla_div_importacion">
             <div class="resultados_consulta">[% "La cantidad de Importaciones es" | i18n %]: [% cantidad %]</div>
             <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: [% importacion_busqueda %]</div>
-            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
-                <thead>
-                    <tr class="titulo_tabla_resultado">
-                        <th>
-                            [% "Nombre" | i18n %]
-                        </th>
-                        <th>
-                            [% "Comentario" | i18n %]
-                        </th>
-                        <th>
-                            [% "Formato" | i18n %]
-                        </th>
-                        <th>
-                            [% "Esquema" | i18n %]
-                        </th>
-                        <th>
-                            [% "Cantidad de Registros" | i18n %]
-                        </th>
+            
+            [% PERL %]
+                print C4::AR::Filtros::tableHeader(   
+                                  id              => "tablaResult",
+                                  columns         => ['[% "Nombre"|i18n %]',
+													  '[% "Comentario"|i18n %]',
+													  '[% "Formato"|i18n %]',
+													  '[% "Esquema"|i18n %]',
+													  '[% "Cantidad de Registros"|i18n %]',
 
-                        <th>
-                            [% "Fecha Subida" | i18n %]
-                        </th>
-                        <th>
-                            [% "Acciones" | i18n %]
-                        </th>
-                    </tr>
-                </thead>
+													  '[% "Fecha Subida"|i18n %]',
+													  '[% "Acciones"|i18n %]',
+                                                     ]
+                                        );
+            [% END %]
+                
             <tbody>
 
             [% FOREACH importacion IN resultsloop %]
-                <tr  align="center">
+                <tr>
 
-                      <td align="left">
+                      <td>
                           [% importacion.getNombre %]
                       </td>
-                      <td align="left">
+                      <td>
                            [% importacion.getComentario %]
                       </td>
-                      <td align="left">
+                      <td>
                            [% importacion.getFormato %]
                       </td>
-                      <td align="left">
+                      <td>
                            [% importacion.getEsquema.getNombre %]
                       </td>
-                      <td align="left">
+                      <td>
                            [% importacion.getCantRegistros %]
                       </td>
-                      <td align="left">
+                      <td>
                            [% importacion.getFechaUpload_formateada %]
                       </td>
                       <!--  BOTONES ACCIONES (Editar, Borrar, Ver detalle) -->
-                      <td align='left' width="9%" >
-					  <div class="detalle_importacion">
+                      <td>
+					  <div>
 						      [% PERL %]
                                print C4::AR::Filtros::action_set_button(
 									title           => "[% 'Importaci&oacute;n' | i18n %]",
@@ -84,9 +73,6 @@
                       </td>
                 </tr>
             [% END %]
-              <tr>
-                    <td class="lineafinaltabla"  align="left" colspan="14"></td>
-              </tr>
             </tbody>
             </table>
         </div>
