@@ -4691,5 +4691,8 @@ body {
     clear: both;
 }
 
+.half_width{
+	width: 50%;
+}
 /* FIN FORM DE FILE UPLOAD */
 

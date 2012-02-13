@@ -588,7 +588,7 @@ sub libreDeuda {
 
 	my $branchname = $socio->ui->getNombrePDF;
 
-    my $branchcode= C4::AR::Preferencias::getValorPreferencia('defaultUI');
+    my $branchcode= 'default';
 
 	my ( $pdf, $pagewidth, $pageheight ) = &inicializarPDF();
 
@@ -617,14 +617,14 @@ sub libreDeuda {
     
      my $escudo =
         C4::Context->config('intrahtdocs') . '/temas/'
-      . C4::AR::Preferencias::getValorPreferencia('defaultUI')
+      . 'default'
       . '/imagenes/escudo-DEFAULT'
       . '.jpg';
 
 
     my $escudoUI =
         C4::Context->config('intrahtdocs') . '/temas/'
-      . C4::AR::Preferencias::getValorPreferencia('defaultUI')
+      . 'default'
       . '/imagenes/escudo-'
       . $branchcode
       . '.jpg';
@@ -1020,7 +1020,7 @@ sub generateBookLabelA4 {
     my $posy = 100;
     my $escudo =
         C4::Context->config('intrahtdocs') . '/temas/'
-      . C4::AR::Preferencias::getValorPreferencia('defaultUI')
+      . 'default'
       . '/imagenes/escudo-'
       . $branchcode . '.jpg';
 
@@ -1030,7 +1030,7 @@ sub generateBookLabelA4 {
 
         $escudo =
             C4::Context->config('intrahtdocs') . '/temas/'
-          . C4::AR::Preferencias::getValorPreferencia('defaultUI')
+          . 'default'
           . '/imagenes/escudo-DEFAULT.jpg';
         $pdf->addImgScaled($escudo, $x + 100 , 120 + ($y) , 5/100);
     }else{
@@ -1141,14 +1141,14 @@ sub generateBookLabel{
 	my $scale = 2/100;
 	my $escudo =
 	    C4::Context->config('intrahtdocs') . '/temas/'
-      . C4::AR::Preferencias::getValorPreferencia('defaultUI')
+      . 'default'
 	  . '/imagenes/escudo-'
 	  . $branchcode . '.jpg';
 
     if ( !( ( -e $escudo ) && ( -r $escudo ) ) ) {
         $escudo =
             C4::Context->config('intrahtdocs') . '/temas/'
-          . C4::AR::Preferencias::getValorPreferencia('defaultUI')
+          . 'default'
           . '/imagenes/escudo-DEFAULT.jpg';
         $pdf->addImgScaled($escudo, $x + 110 , 40 + ($y) , 5/100);
     }else{

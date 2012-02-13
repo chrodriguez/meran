@@ -149,11 +149,12 @@
         <div class="form-actions">
             [% PERL %]
                     print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Vista' | i18n %]",
-                                                        boton   => "btn btn-large btn-primary",
+                                                        boton   => "btn btn-primary",
                                                         onClick => "agregarVisualizacion()",
                                                         title   => "[% 'Agregar Vista' | i18n %]",
                                                         width => "auto",
                                                         alternClass => "botonCentrado",
+                                                        inline => "1"
                             ) ;
             [% END %]
 

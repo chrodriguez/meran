@@ -12,17 +12,19 @@
 		<fieldset>
 		    <legend class="trigger trigger_2_[% id2 %] click">[% "Ejemplares del grupo" | i18n %] [% id2 %]</legend>
 		    <div id="ejemplaresDelGrupo[% id2 %]" class="ejemplaresDelGrupo[% id2 %]" >
-					<ul class="resumen_items">
-					<li class="columna_izq">[% "Ejemplares Disponibles:"|i18n %]<strong> [% disponibles %]</strong></li>
-					<li class="columna_der">[% "Reservas Realizadas:"|i18n %] 
-					       <strong> <a class="fancylink" href="[% url_prefix %]/circ/reservas_activas_edicion.pl?token=[% token %]&id2=[% id2 %]&tipoReserva=EJ">[% cantReservasAsignadas %]</a></strong>
-			        </li>
-					<li class="columna_izq">[% "Reservas en Espera:"|i18n %] 
-					       <strong> <a class="fancylink" href="[% url_prefix %]/circ/reservas_activas_edicion.pl?token=[% token %]&id2=[% id2 %]&tipoReserva=GR">[% cantReservasEnEspera %]</a></strong>
-			        </li>
-					<li class="columna_der">[% "Ejemplares Prestados:"|i18n %]<strong> [% cantPrestados %]</strong></li>
-					</ul>                
-					<hr>
+					<div class="alert alert-info">
+					    <dl>
+							<dt class="inline left rightMargin">[% "Ejemplares Disponibles:"|i18n %]</dt>
+				               <dd> [% disponibles %]</dd>
+							<dt class="inline left rightMargin">[% "Reservas Realizadas:"|i18n %]</dt>
+							   <dd> <a class="fancylink" href="[% url_prefix %]/circ/reservas_activas_edicion.pl?token=[% token %]&id2=[% id2 %]&tipoReserva=EJ">[% cantReservasAsignadas %]</a></dd>
+							<dt class="inline left rightMargin">[% "Reservas en Espera:"|i18n %]</dt>
+					           <dd> <a class="fancylink" href="[% url_prefix %]/circ/reservas_activas_edicion.pl?token=[% token %]&id2=[% id2 %]&tipoReserva=GR">[% cantReservasEnEspera %]</a></dd>
+							<dt class="inline left rightMargin">[% "Ejemplares Prestados:"|i18n %]</dt>
+						      <dd> [% cantPrestados %]</dd>
+				        </dl>
+					</div>                
+
 					<form id="tablaEjemplares[% id2 %]" name="tablaEjemplares[% id2 %]" action="[% url_prefix %]/catalogacion/barcode_gen.pl" method="post">
                         [% PERL %]
                             print C4::AR::Filtros::tableHeader(   
@@ -37,8 +39,8 @@
                                         ) ;
                         [% END %]
 						
+                        <tbody>
 						[% FOREACH nivel3 %]
-					     <tbody>
 								<tr>
 						                <td>
 						                    <input type="checkbox" id="checkEjemplares[% id2 %]" name="checkEjemplares[% id2 %]" class="icon_seleccionar" value="[% nivel3_obj.getId3 %]">
@@ -189,7 +191,7 @@
 						                </td>
 						      </tr>
 					[%   IF loop.last %]
-					
+					</tbody>
 					    [%   IF loop.count > 1 %]
 					<!--     si hay mas de una fila se muestra esto -->
 					        <tfoot>
