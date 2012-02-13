@@ -241,7 +241,7 @@
 							   </div>
 							[% END %]
 							
-			                <ul class="listado_sin_margen" style="clear: none; margin-top:12px;">
+			                <dl>
 				                [% FOREACH nivel2_array %]
                                     [% IF liblibrarian %]
                                         [% IF dato %]
@@ -258,7 +258,7 @@
                                         [% INCLUDE "estructura/analiticasDelGrupo.tmpl" %]
 	                                </li>
                                 [% END %]
-                            </ul>
+                            </dl>
 
                 [% INCLUDE  "partials/e-docs_grupo.inc" %]
                 [% INCLUDE  "partials/estantes_grupo.inc" %]

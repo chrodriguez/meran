@@ -41,6 +41,7 @@
 			intervalTimer = setInterval(updateTransferSpeed, 500);
 		}
 		</script>
+
 		<fieldset>
 		
 		    <legend class="titulo_legend trigger trigger_4_[% id2 %] click">[% "Documentos electr&oacute;nicos del grupo"| i18n %]:</legend>
@@ -48,60 +49,80 @@
 		    <div id="lista_docs_[% id2 %]" class="lista_docs_[% id2 %]">
 		        <ul>
 		               [% FOREACH file IN lista_docs %] 
-		                    <li class="item">
-		                           [% PERL %]
-		                               print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(file.getTitle) %]",
-		                                                               url =>      "getDocument.pl", 
-		                                                               params =>   ["id=[% file.getId %]"],
-		                                                               title =>    "[% HTML.escape(file.getTitle) %]"
-		                                                           ) ;
-		                           [% END %]
-		                        <img style="height: 25px; width: 25px; border: none; float:left;" src='[% temas %]/[% user_theme_intra %]/imagenes/iconos/[% file.getIconType %].png' />
-		                           [% PERL %]
-		                               print C4::AR::Filtros::link_to( text =>     "(Eliminar)",
-		                                                               url =>      "deleteDocument.pl", 
-		                                                               params =>   ["id=[% file.getId %]","id1=[% id1 %]"],
-		                                                               title =>    "Eliminar"
-		                                                           ) ;
-		                           [% END %]
-		                    </li>
+		                    <dl>
+		                           <dt>
+			                           [% PERL %]
+			                               print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(file.getTitle) %]",
+			                                                               url =>      "getDocument.pl", 
+			                                                               params =>   ["id=[% file.getId %]"],
+			                                                               title =>    "[% HTML.escape(file.getTitle) %]"
+			                                                           ) ;
+			                           [% END %]
+			                           <img style="height: 25px; width: 25px; border: none; float:left;" src='[% temas %]/[% user_theme_intra %]/imagenes/iconos/[% file.getIconType %].png' />
+			                           [% PERL %]
+			                               print C4::AR::Filtros::action_link_button( 
+			                               								   title =>     "",
+			                                                               url =>      "deleteDocument.pl", 
+			                                                               params =>   ["id=[% file.getId %]","id1=[% id1 %]"],
+			                                                               button =>    "btn btn-danger click",
+			                                                               icon	  =>  "icon-trash",
+			                                                           ) ;
+			                           [% END %]
+	                           	  </dt>
+		                    </dl>
 		            [% END %]
 		        </ul>
-				    <div id="file-uploader_[% id2 %]" class="fileUploader_catalogo [% IF cant_docs %] floatRight [% ELSE %] floatLeft [% END %]">
+				    <div id="file-uploader_[% id2 %]" class="fileUploader_catalogo [% IF cant_docs %] right [% ELSE %] left [% END %]">
 						<form id="form_file-uploader_[% id2 %]" enctype="multipart/form-data" method="post" 
 								action="[% url_prefix %]/catalogacion/estructura/uploadDocument.pl">
 				               <input type="hidden" name="id2" id="id2" value="[% id2 %]" /><br />
 				               <input type="hidden" name="id1" id="id1" value="[% id1 %]" /><br />
-						  <div class="row">
-						    <label for="fileToUpload_[% id2 %]">[% "Seleccione un archivo" | i18n %]</label><br />
-						    <input type="file" name="fileToUpload" id="fileToUpload_[% id2 %]" onchange="fileSelected([% id2 %]);"/>  
-						  </div>
-						  <div class="row">
-							  <label for="filename">[% "T&iacute;tulo del arhivo"| i18n %]: </label>
-							  <input type="text" name="filename" id="filename_[% id2 %]" required /><br />
-						  </div>
-						  <div class="row" id="submit_button_div_[% id2 %]">
-						  	<input type="button" onclick="uploadFile('[% id2 %]','[% id1 %]','[% url_prefix %]/catalogacion/estructura/uploadDocument.pl')" value="[% 'Subir' | i18n %]" />
-						  </div>
-						  <div id="fileInfo_[% id2 %]" class="fileInfo">
-						    <div id="fileName_[% id2 %]" class="fileName"></div>
-						    <div id="fileSize_[% id2 %]" class="fileSize"></div>
-						    <div id="fileType_[% id2 %]" class="fileType"></div>
-						  </div>
-						  <div class="row"></div>
-						  <div id="progressIndicator_[% id2 %]" clas="progressIndicator" > 
-						    <div id="progressBar_[% id2 %]" class="floatLeft progressBar">
-						    </div>
-						    <div id="progressNumber_[% id2 %]" class="floatRight">&nbsp;</div>
-						    <div class="clear"></div>
-						    <div>
-						      <div id="transferSpeedInfo_[% id2 %]" class="floatLeft" style="width: 80px;">&nbsp;</div>
-						      <div id="timeRemainingInfo_[% id2 %]" class="floatLeft" style="margin-left: 10px;">&nbsp;</div>
-						      <div id="transferBytesInfo_[% id2 %]" class="floatRight" style="text-align: right;">&nbsp;</div>
-						      <div class="clear"></div>
-						    </div>    
-						    <div id="uploadResponse_[% id2 %]" class="uploadResponse"></div>
-						  </div>  
+							  <div class="control-group">
+							    <label class="control-label" for="fileToUpload_[% id2 %]">[% "Seleccione un archivo" | i18n %]</label>
+							    <div class="controls">
+							    	<input type="file" name="fileToUpload" id="fileToUpload_[% id2 %]" onchange="fileSelected([% id2 %]);"/>
+							    </div>  
+							  </div>
+							  <div class="control-group">
+								  <label class="control-label" for="filename">[% "T&iacute;tulo del arhivo"| i18n %]: </label>
+								  <div class="controls">
+								  	<input type="text" name="filename" id="filename_[% id2 %]" required /><br />
+							  	  </div>
+							  </div>
+<!-- 							  <div class="row" id="submit_button_div_[% id2 %]"> -->
+								<div class="form-actions">
+							  		<div class="controls">
+		                                  [% PERL %]
+		                                          print C4::AR::Filtros::action_button( 
+		                                                                          button         => "btn btn-primary click",
+		                                                                          action       => 'uploadFile("[% id2 %]","[% id1 %]","[% url_prefix %]/catalogacion/estructura/uploadDocument.pl")', 
+		                                                                          icon         => "",
+		                                                                          title        => "[% 'Subir archivo' | i18n %]",
+		                                                                      ) ;
+		
+		                                  [% END %]
+							  			
+						  			</div>
+<!-- 							  </div> -->
+							  <div id="fileInfo_[% id2 %]" class="fileInfo">
+							    <div id="fileName_[% id2 %]" class="fileName"></div>
+							    <div id="fileSize_[% id2 %]" class="fileSize"></div>
+							    <div id="fileType_[% id2 %]" class="fileType"></div>
+							  </div>
+							  <div class="row"></div>
+							  <div id="progressIndicator_[% id2 %]" clas="progressIndicator" > 
+							    <div id="progressBar_[% id2 %]" class="floatLeft progressBar">
+							    </div>
+							    <div id="progressNumber_[% id2 %]" class="floatRight">&nbsp;</div>
+							    <div class="clear"></div>
+							    <div>
+							      <div id="transferSpeedInfo_[% id2 %]" class="floatLeft" style="width: 80px;">&nbsp;</div>
+							      <div id="timeRemainingInfo_[% id2 %]" class="floatLeft" style="margin-left: 10px;">&nbsp;</div>
+							      <div id="transferBytesInfo_[% id2 %]" class="floatRight" style="text-align: right;">&nbsp;</div>
+							      <div class="clear"></div>
+							    </div>    
+							    <div id="uploadResponse_[% id2 %]" class="uploadResponse"></div>
+							  </div>  
 						</form>
 				    </div>
 		    </div>
