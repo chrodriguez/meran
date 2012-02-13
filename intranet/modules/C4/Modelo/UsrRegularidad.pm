@@ -1,4 +1,4 @@
-package C4::Modelo::UsrEstado;
+package C4::Modelo::UsrRegularidad;
 
 # this class IS a "Usr_persona::DB::Object" 
 # and contains all the methodes that 
@@ -10,12 +10,12 @@ use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup
   (
-    table   => 'usr_estado',
+    table   => 'usr_regularidad',
     columns => [
         id                      => { type => 'serial', overflow => 'truncate', not_null => 1, length => 11 },
         usr_estado_id           => { type => 'integer', overflow => 'truncate', not_null => 1, length => 1 },
         usr_ref_categoria_id    => { type => 'integer', overflow => 'truncate', length => 2, not_null => 1 },
-        regular                 => { type => 'integer', overflow => 'truncate', not_null => 1, length => 1 },
+        condicion                 => { type => 'integer', overflow => 'truncate', not_null => 1, length => 1 },
     ],
 
      relationships =>
@@ -23,13 +23,13 @@ __PACKAGE__->meta->setup
       estado => 
       {
         class       => 'C4::Modelo::UsrEstado',
-        key_columns => { usr_estado_id => 'id' },
+        key_columns => { usr_estado_id => 'id_estado' },
         type        => 'one to one',
       },
 
       categoria => 
       {
-        class       => 'C4::Modelo::UsrRefCategoriaSocioId',
+        class       => 'C4::Modelo::UsrRefCategoriaSocio',
         key_columns => { usr_ref_categoria_id => 'id' },
         type        => 'one to one',
       },
@@ -46,7 +46,7 @@ sub agregar{
     #Asignando data...
     $self->setUsrEstadoId($data_hash->{'usr_estado_id'});
     $self->setUsrRefCategoriaId($data_hash->{'usr_ref_categoria_id'});
-    $self->setRegular($data_hash->{'regular'});
+    $self->setCondicion($data_hash->{'Condicion'});
     $self->save();
 }
 
@@ -77,15 +77,15 @@ sub setUsrRefCategoriaId{
     $self->usr_ref_categoria_id($id);
 }
 
-sub getRegular{
+sub getCondicion{
     my ($self) = shift;
-    return ($self->regular);
+    return ($self->condicion);
 }
 
-sub setRegular{
+sub setCondicion{
     my ($self) = shift;
-    my ($regular) = @_;
-    $self->regular($regular);
+    my ($condicion) = @_;
+    $self->condicion($condicion);
 }
 
 
