@@ -81,6 +81,12 @@ sub link_to {
     }
 
     $link= "<a href='".$url."'";
+
+    if ($tooltip){
+        $link .= " data-original-title='$tooltip'";
+        $class.= " tooltip_link";
+    }
+
     if ($class ne ''){
         if (!$boton){ #Porque si es con boton, la clase la lleva el li
             $link .= " class=".$class;
@@ -95,8 +101,6 @@ sub link_to {
         $link .= " target='blank'";
     }
     
-    
-
     $link .= " >";
 
     my $button;
@@ -666,12 +670,23 @@ sub action_link_button{
 
     my (%params_hash_ref) = @_;
 
-    my $url      = $params_hash_ref{'url'} || $params_hash_ref{'url'}; #obtengo el llamado a la funcion en el evento onclick
+    my $url      = $params_hash_ref{'url'} || $params_hash_ref{'url'};
     my $button   = $params_hash_ref{'button'};
     my $icon     = $params_hash_ref{'icon'} || undef;
-    my $params   = $params_hash_ref{'params'} || $params_hash_ref{'url'}; #obtengo el llamado a la funcion en el evento onclick
-    my $title    = $params_hash_ref{'title'}; #obtengo el title de la componete
-    my $popover  = $params_hash_ref{'popover'} || undef;
+    my $params   = $params_hash_ref{'params'} || $params_hash_ref{'url'};
+    my $title    = $params_hash_ref{'title'};
+
+
+    my $popover = $params_hash_ref{'popover'} ||undef;
+    my $popopver_attr = "";
+    
+    if ($popover){
+        $button.= " popover_button ";
+    	my $text_pop = $popover->{'text'};
+    	my $title_pop= $popover->{'title'};
+    	$popopver_attr.= " rel='popover' data-content='$text_pop' data-original-title='$title_pop' ";   
+    }
+    
     my @result;
     
     foreach my $p (@$params){
@@ -680,7 +695,7 @@ sub action_link_button{
         $url = C4::AR::Utilidades::addParamToUrl($url,@result[0],@result[1]);
     }
     
-    my $html = "<a class='".$button."' href='".$url."'><i class='".$icon."'></i>".$title."</a>";
+    my $html = "<a class='".$button."' $popopver_attr href='".$url."'><i class='".$icon."'></i>".$title."</a>";
     
     return $html;
 }
@@ -693,11 +708,23 @@ sub action_button{
     my $button   = $params_hash_ref{'button'}; #obtengo el boton
     my $icon     = $params_hash_ref{'icon'} || undef;  #obtengo el boton
     my $title    = $params_hash_ref{'title'}; #obtengo el title de la componete
-    my $popover  = $params_hash_ref{'popover'} || undef;
+
+
+    my $popover = $params_hash_ref{'popover'} ||undef;
 
     $button.= " click";
+
+    my $popopver_attr = "";
     
-    my $html = "<a class='".$button."' onclick='".$action."'><i class='".$icon."'></i>".$title."</a>";
+    if ($popover){
+        $button.= " popover_button ";
+        my $text_pop = $popover->{'text'};
+        my $title_pop= $popover->{'title'};
+        $popopver_attr.= " rel='popover' data-content='$text_pop' data-original-title='$title_pop' ";   
+    }
+    
+    
+    my $html = "<a class='".$button."' $popopver_attr onclick='".$action."'><i class='".$icon."'></i>".$title."</a>";
     
     return $html;
 }
@@ -715,6 +742,17 @@ sub action_set_button{
     my $actions     = $params_hash_ref{'actions'} || [];
     
     my $button   = $params_hash_ref{'button'} || "btn btn-primary";
+
+    my $popover = $params_hash_ref{'popover'} ||undef;
+    my $popopver_attr = "";
+    
+    if ($popover){
+        $button.= " popover_button ";
+        my $text_pop = $popover->{'text'};
+        my $title_pop= $popover->{'title'};
+        $popopver_attr.= " rel='popover' data-content='$text_pop' data-original-title='$title_pop' ";   
+    }
+
     
     my $html = "<div class='btn-group'>";
     
@@ -725,10 +763,10 @@ sub action_set_button{
                 @result = split(/=/,$p);
                 $url = C4::AR::Utilidades::addParamToUrl($url,@result[0],@result[1]);
             }
-        $html.= "<a class='$button' href='$url'><i class='$icon'></i>$title</a>";
+        $html.= "<a class='$button' $popopver_attr href='$url'><i class='$icon'></i>$title</a>";
         
     }else{
-        $html.= "<a class='$button' class='click'><i class='$icon'></i>$title</a>";
+        $html.= "<a class='$button' $popopver_attr class='click'><i class='$icon'></i>$title</a>";
     }
 
     $html.= "<a class='$button dropdown-toggle' data-toggle='dropdown' href='#'><span class='caret'></span></a>";

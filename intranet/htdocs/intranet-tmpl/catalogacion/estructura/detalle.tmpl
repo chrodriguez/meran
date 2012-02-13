@@ -60,7 +60,7 @@
 	<!-- PARA PODER CREAR EL FORMULARIO -->
 	<div id="formulario"></div>
 	
-	<div id="detalleMARC" style="display:none"></div>
+	<div id="detalleMARC" class="modal hide fade"></div>
 	
 	<div id="detalleComun">
 	
@@ -228,7 +228,8 @@
 				                [% FOREACH nivel2_array %]
                                     [% IF liblibrarian %]
                                         [% IF dato %]
-                                        <li> [% liblibrarian %]: <strong>[% dato %]</strong></li>
+			                                <dt class="inline left rightMargin">[% liblibrarian %]:&nbsp;</dt> 
+			                                <dd>[% dato %]&nbsp;</dd>
                                         [% END %]
                                     [% END %]
                                 [% END %] <!-- END FOREACH nivel2_array -->
