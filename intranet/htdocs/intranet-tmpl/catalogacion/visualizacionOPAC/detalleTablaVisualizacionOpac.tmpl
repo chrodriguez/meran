@@ -62,18 +62,21 @@
 </script>
 <fieldset>
     <legend class="titulo_legend trigger click">[% "Configuraci&oacute;n de la Visualizaci&oacute;n de SubCampos:" | i18n %]</legend>
-      <table class="table table-striped" cellspacing=0 border="0" cellpadding=0 style="width:100%;">
-            <thead>
-                <tr class="titulo_tabla_resultado">
-                    <td>[% "Campo" | i18n %]</td>
-                    <td>[% "Subcampo" | i18n %]</td>
-                    <td>[% "Pre" | i18n %]</td>
-                    <td>[% "Vista en OPAC" | i18n %]</td>
-                    <td>[% "Post " | i18n %]</td>
-                    <td>[% "Nivel" | i18n %]</td>
-                    <td>[% "Acciones" | i18n %]</td>
-                </tr>
-            </thead>
+               
+        [% PERL %]
+                print C4::AR::Filtros::tableHeader(   
+                                  id              => "visualizacionOpac_table",
+                                  class           => "",
+                                  selectAll_id    => "",
+                                  columns         => ['[% "Campo"|i18n %]','[% "Subcampo"|i18n %]','[% "Pre"|i18n %]',
+                                                    [% "Vista en OPAC"|i18n %]','[% "Post"|i18n %]','[% "Nivel"|i18n %]',
+                                                    '[% "Acciones"|i18n %]',
+                                                     ]
+
+                                                                    
+                                        ) ;
+        [% END %]
+
             <tbody id="sortable_subcampo">
                 <input type="checkbox" name="enable_sort_subcampo" id="enable_sort_subcampo" /> Seleccione para Ordenar
                 [% FOREACH campo IN visualizacion %]
@@ -87,7 +90,7 @@
                         <td align="center">
                             [% PERL %]
                                 print C4::AR::Filtros::to_Icon( text =>     "[% 'Eliminar Vista' | i18n %]",
-                                                                onClick => "eliminarVista('[% campo.id %]')",
+                                                                onClick => 'eliminarVista("[% campo.id %]")',
                                                                 boton   => "icon_cancelar",
                                                                 title =>    "[% 'Eliminar Vista' | i18n %]"
                                                             ) ;

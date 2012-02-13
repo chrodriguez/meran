@@ -99,24 +99,26 @@
     </div>
 
     <div class="form-actions">
-
-        [% PERL %]
-                            print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Campo' | i18n %]",
-                                                                boton   => "btn btn-large btn-primary",
-                                                                onClick => "agregarEstructuraCatalogacion([% nivel %]);",
-                                                                title   => "[% 'Guardar Campo' | i18n %]",
-                                                                width => "auto",
-                                                                alternClass => "botonCentrado",
-                                    ) ;
-        [% END %]
-
+    
         [% PERL %]
                             print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar Campo' | i18n %]",
-                                                                boton   => "btn btn-large",
+                                                                boton   => "btn",
                                                                 onClick => "cancelarEstructuraCatalogacion();",
                                                                 title   => "[% 'Cancelar Campo' | i18n %]",
                                                                 width => "auto",
                                                                 alternClass => "botonCentrado",
+                                                                inline  => "1",
+                                    ) ;
+        [% END %]
+
+        [% PERL %]
+                            print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Campo' | i18n %]",
+                                                                boton   => "btn btn-primary",
+                                                                onClick => "agregarEstructuraCatalogacion([% nivel %]);",
+                                                                title   => "[% 'Guardar Campo' | i18n %]",
+                                                                width => "auto",
+                                                                alternClass => "botonCentrado",
+                                                                inline  => "1",
                                     ) ;
         [% END %]
     

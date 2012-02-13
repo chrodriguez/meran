@@ -101,24 +101,26 @@
     </div>
 
      <div class="form-actions">
-
-    [% PERL %]
-                        print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Campo' | i18n %]",
-                                                            boton   => "btn btn-large btn-primary",
-                                                            onClick => "modificarEstructuraCatalogacion([% catalogacion.getId %]);",
-                                                            title   => "[% 'Guardar Campo' | i18n %]",
-                                                            alternClass => "botonCentrado",
-                                                            width   => "auto"
+     
+     [% PERL %]
+                        print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar Campo' | i18n %]",
+                                                            boton   => "btn",
+                                                            onClick => "cancelarEstructuraCatalogacion();",
+                                                            title   => "[% 'Cancelar Campo' | i18n %]",
+                                                            alternClass => "botonCentrado",       
+                                                            width   => "auto",
+                                                            inline  => "1",
                                 ) ;
     [% END %]
 
     [% PERL %]
-                        print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar Campo' | i18n %]",
-                                                            boton   => "btn btn-large",
-                                                            onClick => "cancelarEstructuraCatalogacion();",
-                                                            title   => "[% 'Cancelar Campo' | i18n %]",
-                                                            alternClass => "botonCentrado",       
-                                                            width   => "auto"
+                        print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Campo' | i18n %]",
+                                                            boton   => "btn btn-primary",
+                                                            onClick => "modificarEstructuraCatalogacion([% catalogacion.getId %]);",
+                                                            title   => "[% 'Guardar Campo' | i18n %]",
+                                                            alternClass => "botonCentrado",
+                                                            width   => "auto",
+                                                            inline  => "1",
                                 ) ;
     [% END %]
     
