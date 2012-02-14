@@ -39,8 +39,6 @@ function mostrarSanciones(){
 }
 function updateMostrarSanciones(responseText){
 	$("#divResultado").html(responseText);
-    zebra('datos_tabla');
-
 }
 
 function ordenar(orden){
@@ -118,7 +116,6 @@ function buscarSancion(){
 
 function updateBuscaSancion(responseText){
 	$("#divResultado").html(responseText);
-	zebra('datos_tabla');
 }
 
 
@@ -137,7 +134,7 @@ function limpiar(){
 <fieldset id="reportes">
     <legend class="titulo_legend"> <span class="titulos">[% "Administraci&oacute;n de Sanciones del Sistema" | i18n %] </span> </legend>
     <section class="center-section-form">
-    <form class="form-horizontal">
+    <form class="form-horizontal" onsubmit="return false;">
         <div class="control-group">
           <div class="controls">
             <input type="text" id="buscar" name="buscar" value="">
