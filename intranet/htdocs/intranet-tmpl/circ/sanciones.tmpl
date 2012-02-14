@@ -159,6 +159,15 @@ function limpiar(){
             [% END %]-->
         
         <div class="form-actions">
+              [% PERL %]
+                                print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
+                                                                    boton   => "btn",
+                                                                    onClick => "limpiar();",
+                                                                    title   => "[% 'Limpiar' | i18n %]",
+                                                                    inline  => 1,
+                                        ) ;
+            [% END %]
+
             [% PERL %]
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
                                                                     boton   => "btn btn-primary",
@@ -168,14 +177,7 @@ function limpiar(){
                                         ) ;
             [% END %]
         
-            [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
-                                                                    boton   => "btn",
-                                                                    onClick => "limpiar();",
-                                                                    title   => "[% 'Limpiar' | i18n %]",
-                                                                    inline  => 1,
-                                        ) ;
-            [% END %]
+          
         </div>
    </section>
      <!--   </li>

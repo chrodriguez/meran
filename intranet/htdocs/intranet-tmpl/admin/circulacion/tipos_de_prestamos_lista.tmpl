@@ -54,14 +54,17 @@
                 [% END %]
         </td>
         <td>
+
                             [% PERL %]
-                                print C4::AR::Filtros::to_Icon( text =>     "[% 'Editar' | i18n %]",
-                                                                onClick => "modificarTipoPrestamo('[% tipo_prestamo.getId_tipo_prestamo %]')",
-                                                                boton   => "icon_edicion",
-                                                                title =>    "[% 'Editar' | i18n %]",
-                                                                alternClass => "botonCentrado"
-                                                            ) ;
+                                  print C4::AR::Filtros::action_button(
+                                                                  button       => "btn click",
+                                                                  action       => 'modificarTipoPrestamo("[% tipo_prestamo.getId_tipo_prestamo %]")',
+                                                                  icon         => "icon-edit",
+                                                                  title        => "",
+                                  ) ;
                             [% END %]
+
+
         </td>
 <!--        <td   align="center">
                             [% PERL %]
@@ -81,6 +84,7 @@
 
             <div style="float: left; width: 100%;">
             [% PERL %]
+                                
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar' | i18n %]",
                                                                     boton   => "boton_buscar",
                                                                     onClick => "agregarTipoPrestamo();",

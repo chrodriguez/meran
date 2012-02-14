@@ -84,7 +84,7 @@
                                   id              => "prestamosVencidos",
                                   class           => "",
                                   selectAll_id    => "un_id",
-                                  columns         => ['[% "Tipo de pr&eacute;stamo"|i18n %]','[% "Fecha de prpr&eacute;stamo"|i18n %]',
+                                  columns         => ['[% "Tipo de pr&eacute;stamo"|i18n %]','[% "Fecha de pr&eacute;stamo"|i18n %]',
                                                       '[% "Ejemplar"|i18n %]','[% "N&uacute;mero de Socio"|i18n %]',
                                                      ]
                                                                    
@@ -96,8 +96,7 @@
       	<tr>
           	
      		<td>
-     		    <input type="checkbox" name="[% prestamo.socio.getNro_socio %]" 
-				id="[% prestamo.getId_prestamo %]" >
+     		    <input type="checkbox" name="[% prestamo.socio.getNro_socio %]" id="[% prestamo.getId_prestamo %]" >
 		    </td>
 		
           	<td class="nomCompleto">
@@ -117,8 +116,9 @@
         </tr>
       [% END %]
      </tbody>
-     <tfoot>
-      [% PERL %]
+    <tfoot>
+    <tr>
+      <td>[% PERL %]
               print C4::AR::Filtros::action_button(
                                               button       => "btn click btn-warning",
                                               action       => "enviarMailsATodos();",
@@ -135,10 +135,13 @@
                                               title        => "Enviar a seleccionados",
                                           ) ;
        
-      [% END %]
-
+      [% END %]</td>
+    </tr>
     </tfoot>
   </table>
+
+   
+
 <!--<button class="clean-gray" onclick="enviarMailsASeleccionados();">Enviar a Seleccionados</button>-->
 </fieldset>
 

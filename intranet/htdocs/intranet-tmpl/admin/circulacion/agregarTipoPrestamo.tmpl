@@ -143,6 +143,19 @@ function Check(f) {
                 </div>
 
                 <div class="form-actions">
+                          <!--        [% PERL %]
+ 
+                                          print C4::AR::Filtros::action_button(
+                                                                                button       => "btn click",
+                                                                                action       => "detalleMARC([% id3 %])",
+                                                                                icon         => "icon-info-sign",
+                                                                                title        => "",
+                                                                          ) ;
+       
+                                                                    
+
+                                  [% END %]-->
+
                                   [% IF tipo_prestamo %]
                                       [% PERL %]
                                           print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",

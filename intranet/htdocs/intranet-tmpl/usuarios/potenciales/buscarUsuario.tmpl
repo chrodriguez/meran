@@ -127,14 +127,55 @@ $(document).ready(function() {
 
 </script>
 
-<center>
 
 <!--<div class="titulos">[% "B&uacute;squeda de Usuarios Potenciales" | i18n %]</div>-->
 <fieldset>
     <legend class="titulo_legend">[% "B&uacute;squeda de Usuarios Potenciales" | i18n %]</legend>
-<p id="msj" style="font-size:12pt; color:red"></p>
+      <p id="msj" style="font-size:12pt; color:red"></p>
 
-<div class="buttonContainerHorizontal">
+
+      <section class="center-section-form">
+        <form class="form-horizontal">
+          <div class="control-group">
+              <div class="controls">
+             <!--     <input id="buscar" class="textInput" type="text" value="" name="buscar">-->
+                  <input id="persona" class="textInput" type=text name="persona" value="[% persona %]" onFocus="checkFilter('focus')" onBlur="checkFilter('blur')"> 
+        
+                  <p class="help-block">
+                      <span class="label label-info">NOTA</span>
+                      [% "Tipear el apellido, DNI o legajo del usuario. Presionar buscar." | i18n %]
+                  </p>
+              </div>
+          </div>
+  
+          <div class="form-actions">
+                      [% PERL %]
+                              print C4::AR::Filtros::action_button(
+                                                              button       => "btn click",
+                                                              action       => "Borrar();",
+                                                              icon         => "",
+                                                              title        => "[% 'Limpiar' | i18n %]",
+                                                          ) ;
+
+                      [% END %]
+                      [% PERL %]
+                              print C4::AR::Filtros::action_button(
+                                                              button       => "btn btn-primary",
+                                                              action       => "buscarUsuariosPotenciales();",
+                                                              icon         => "",
+                                                              title        => "[% 'Buscar' | i18n %]",
+                                                          ) ;
+
+                      [% END %]
+                    
+                      
+          </div>
+        </form>
+      
+</section>
+
+
+<!--<div class="buttonContainerHorizontal">
 <ul>
     <li class="filtros">
 			<input id="persona" type=text name="persona" value="[% persona %]" onFocus="checkFilter('focus')" 
@@ -167,10 +208,10 @@ $(document).ready(function() {
 			 [% "Tipear el apellido, DNI o legajo del usuario. Presionar buscar." | i18n %]
 			</p>
     </li>
-</ul>
+</ul>-->
 
 <fieldset>
-    <legend class="titulo_legend">[% "Inicial del apellido:" | i18n %]</legend>
+    <legend class="titulo_legend">[% "B&uacute;squeda por inicial del apellido" | i18n %]</legend>
     <div id="filterBar" style="text-align:center">
         <a href="#tablaResult" onClick="consultar('A')"> A |</a>
         <a href="#tablaResult" onClick="consultar('B')"> B |</a>
@@ -201,13 +242,13 @@ $(document).ready(function() {
         <a href="#tablaResult" onClick="consultar('TODOS')"> [% "TODOS" | i18n %] </a>
     </div>
 </fieldset>
-<div>
-    <input type="checkbox" name="habilitados_filter" id="habilitados_filter">[% 'S&oacute;lo habilitados' | i18n %]
+<div><br><br>
+    <input type="checkbox" name="habilitados_filter" id="habilitados_filter">[% " Mostrar s&oacute;lo usuarios habilitados"| i18n %]
 </div>
 
 <br>
 <div id="result"></div>
-</center>
+
 </fieldset>
 
 [% INCLUDE "intranet-bottom.inc" %]

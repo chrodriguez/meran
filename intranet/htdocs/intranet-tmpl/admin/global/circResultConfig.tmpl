@@ -18,13 +18,15 @@
                 <td >[% preferencia.getExplanation %]</td>
                 <td>
                     [% PERL %]
-                            print C4::AR::Filtros::to_Icon(    
-                                            boton   => "icon_edicion",
-                                            onClick => "modificarVariable('[% preferencia.getVariable %]','[% preferencia.getType %]');",
-                                            title   => "[% 'Modificar Preferencia' | i18n %]",
-                                            alternClass => "botonCentradoTabla"
-                                    ) ;
+                            print C4::AR::Filtros::action_button(
+                                                            button       => "btn click",
+                                                            action       => 'modificarVariable("[% preferencia.getVariable %]","[% preferencia.getType %]");',
+                                                            icon         => "icon-edit",
+                                                            title        => "",
+                            ) ;
+
                     [% END %]
+
                 </td>
               </tr>
         

@@ -26,10 +26,12 @@
 	    });
 </script>
 [% USE HTML %]
+<div class="well">
+  
+    <div>[% "La cantidad de usuarios es" | i18n %]:<strong> [% cantidad %]</strong></div> 
+    <div>[% "Ha buscado por" | i18n %]:<strong> [% HTML.escape(socio_busqueda) %]</strong></div>
 
-<div class="resultados_consulta">[% "La cantidad de usuarios es" | i18n %]: [% cantidad %]</div> 
-<div class="resultados_consulta">[% "Ha buscado por" | i18n %]: [% HTML.escape(socio_busqueda) %]</div>
-
+</div>
 <div class="contenedor_paginador">[% paginador %]</div>
 
 <table id="tablaResult" class="datos_tabla" width="100%" cellspacing=0 cellpadding=0>
@@ -98,7 +100,7 @@
         	<td class="lineafinaltabla"  align="left" colspan="12"></td>
         </tr>
 	</tbody>
-</table>
+
 
 
 <table>
@@ -134,3 +136,5 @@
 		</td>
 	</tr>
 </table>
+
+

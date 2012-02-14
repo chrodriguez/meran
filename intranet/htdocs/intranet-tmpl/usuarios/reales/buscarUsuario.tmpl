@@ -14,7 +14,48 @@ $(document).ready(function() {
 <!--<div class="titulos" >[% "B&uacute;squeda de Usuarios Reales" | i18n %]</div>-->
 <fieldset>
     <legend class="titulo_legend">[% "B&uacute;squeda de Usuarios Reales" | i18n %]</legend>
-    <div class="buttonContainerHorizontal">
+      <section class="center-section-form">
+        <form class="form-horizontal">
+          <div class="control-group">
+              <div class="controls">
+             <!--     <input id="buscar" class="textInput" type="text" value="" name="buscar">-->
+                  <input id="socio" class="textInput" type=text name="socio" onFocus="checkFilter('focus')"> 
+                  <p class="help-block">
+                      <span class="label label-info">NOTA</span>
+                      Tipear el apellido, DNI, tarjeta de id. o legajo del usuario.
+                  </p>
+              </div>
+          </div>
+  
+        <div class="form-actions">
+                    [% PERL %]
+                            print C4::AR::Filtros::action_button(
+                                                            button       => "btn click",
+                                                            action       => "Borrar();",
+                                                            icon         => "",
+                                                            title        => "[% 'Limpiar' | i18n %]",
+                                                        ) ;
+
+                    [% END %]
+                    [% PERL %]
+                            print C4::AR::Filtros::action_button(
+                                                            button       => "btn btn-primary",
+                                                            action       => "consultar();",
+                                                            icon         => "",
+                                                            title        => "[% 'Buscar' | i18n %]",
+                                                        ) ;
+
+                    [% END %]
+                   
+                    
+        </div>
+           </form>
+      </section>
+
+
+
+
+<!--    <div class="buttonContainerHorizontal">
     <ul>
         <li class="filtros">
                 <input id="socio" type=text name="socio" onFocus="checkFilter('focus')" 
@@ -42,16 +83,16 @@ $(document).ready(function() {
         <li style="text-align:center">
 <!--                     <p class="recuadroAyuda"> -->
                     
-                    [% PERL %]
+                    <!--[% PERL %]
                         print C4::AR::Filtros::setHelp( text => "Tipear el apellido, DNI, tarjeta de id. o legajo del usuario.");
-                    [% END %]
+                    [% END %]-->
 <!--                     </p> -->
-        </li>
-    </ul>
+      <!--  </li>
+    </ul>-->
 
 
     <fieldset>
-        <legend class="titulo_legend">[% "Inicial del apellido:" | i18n %]</legend>
+        <legend class="titulo_legend">[% "Inicial del apellido" | i18n %]</legend>
         <div id="filterBar" style="text-align:center">
                 <a href="#tablaResult" onClick="consultar('A')"> A |</a>
                 <a href="#tablaResult" onClick="consultar('B')"> B |</a>
