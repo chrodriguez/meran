@@ -54,7 +54,7 @@ function changePageSanciones(ini){
 function mostrarHistorialDePrestamos(){
 	objAHPrestamos               = new AjaxHelper(updateMostrarHistorialDePrestamos);
 	objAHPrestamos.debug         = true;
-    objAHPrestamos.cache         = true;
+    objAHPrestamos.cache         = false;
     objAHPrestamos.showOverlay   = true;
 	objAHPrestamos.url           = URL_PREFIX+'/usuarios/reales/historialPrestamos.pl';
 	objAHPrestamos.nro_socio     = USUARIO.ID;
@@ -71,7 +71,7 @@ function updateMostrarHistorialDePrestamos(responseText){
 function mostrarHistorialDeReservas(){
     objAHReservas               = new AjaxHelper(updateMostrarHistorialDeReservas);
     objAHReservas.debug         = true;
-    objAHReservas.cache         = true;
+    objAHReservas.cache         = false;
     objAHReservas.showOverlay   = true;
     objAHReservas.url           = URL_PREFIX+'/usuarios/reales/historialReservas.pl';
     objAHReservas.nro_socio     = USUARIO.ID;
@@ -81,7 +81,6 @@ function mostrarHistorialDeReservas(){
 
 function updateMostrarHistorialDeReservas(responseText){
     $('#historialReservas').html(responseText);
-    zebra('tablaHistorialReservas');
     $.scrollTo('#historialReseravs');
 }
 
@@ -92,7 +91,7 @@ function updateMostrarHistorialDeReservas(responseText){
 function mostrarHistorialDeSanciones(){
     objAHSanciones               = new AjaxHelper(updateMostrarHistorialDeSanciones);
     objAHSanciones.debug         = true;
-    objAHSanciones.cache         = true;
+    objAHSanciones.cache         = false;
     objAHSanciones.showOverlay   = true;
     objAHSanciones.url           = URL_PREFIX+'/usuarios/reales/historialSanciones.pl';
     objAHSanciones.nro_socio     = USUARIO.ID;
@@ -102,7 +101,6 @@ function mostrarHistorialDeSanciones(){
 
 function updateMostrarHistorialDeSanciones(responseText){
     $('#historialSanciones').html(responseText);
-    zebra('tablaHistorialSanciones');
     $.scrollTo('#historialSanciones');
 }
 
@@ -220,14 +218,7 @@ function updatePrestamosInterBibliotecarios(responseText){
         return(0);
 
     $('#basic-modal-content').html(responseText);
-    $('#basic-modal-content').modal({   containerCss:{
-            backgroundColor:"#fff",
-    //         borderColor:"#0063dc",
-            height:420,
-            padding:0,
-            width:650
-        },
-    });
+    $('#basic-modal-content').modal();
 }
 
 
@@ -323,15 +314,6 @@ $(document).ready(function(){
 	USUARIO.text    = "[% socio_modificar.persona.getApeYNom %]";
     USUARIO.ID      = '[% socio_modificar.getNro_socio %]';
 	detalleUsuario();
-
-//     $('#fancybox_ticket').modal({   containerCss:{
-//             backgroundColor:"#fff",
-//     //         borderColor:"#0063dc",
-//             height:420,
-//             padding:0,
-//             width:650
-//         },
-//     );
 
     makeToggle('toggle_container_block','trigger1',mostrarHistorialDePrestamos, 'historialPrestamos',true);
     makeToggle('toggle_container_block','trigger2',mostrarHistorialDeSanciones, 'historialSanciones',true);

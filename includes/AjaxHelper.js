@@ -10,7 +10,7 @@ var overlay_on = false;
 
 function startOverlay(){
 	if (!overlay_on){
-		$('#ajax-indicator').modal({show:true, keyboard: false, backdrop: true,});
+		$('#ajax-indicator').modal({show:true, keyboard: false, backdrop: false,});
 		overlay_on = true;
 	}
 }

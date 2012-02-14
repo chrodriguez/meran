@@ -122,12 +122,9 @@
 	      </div>
 	  </noscript>
 	  
-	  <div id="ajax-indicator" class="modal hide fade loading" data-toggle="modal">
-			<div id="block_1" class="barlittle"></div>
-			<div id="block_2" class="barlittle"></div>
-			<div id="block_3" class="barlittle"></div>
-			<div id="block_4" class="barlittle"></div>
-			<div id="block_5" class="barlittle"></div>
+	  <div id="ajax-indicator" class="modal hide fade loading">
+			<div class="circle"></div>
+			<div class="circle1"></div>
   	  </div>
 
 	  <header>

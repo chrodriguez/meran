@@ -1,4 +1,4 @@
-var overlay_on=false;function startOverlay(){if(!overlay_on){$('#ajax-indicator').modal({show:true,keyboard:false,backdrop:true,});overlay_on=true;}}
+var overlay_on=false;function startOverlay(){if(!overlay_on){$('#ajax-indicator').modal({show:true,keyboard:false,backdrop:false,});overlay_on=true;}}
 function closeModal(id){if((id=='')||(id==null))
 $('#ajax-indicator').modal('hide');else
 $('#'+id).modal('hide');overlay_on=false;}
