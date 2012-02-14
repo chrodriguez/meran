@@ -19,7 +19,7 @@
                     <input id="nombre_importacion" type=text name="nombre_importacion" onFocus="checkFilter('focus')"
                         onBlur="checkFilter('blur')">
                     [% PERL %]
-                 print C4::AR::Filtros::setHelp(text => "[% 'Tipee el nombre, el archivo o parte del comentario de la importaci&oacute;n que desea buscar.' | i18n %]",);
+                 print C4::AR::Filtros::setHelpInput(text => "[% 'Tipee el nombre, el archivo o parte del comentario de la importaci&oacute;n que desea buscar.' | i18n %]",);
             [% END %]
                 </div>
             </div>
@@ -49,7 +49,7 @@
 </fieldset>
 
 <fieldset>
-    <legend class="titulo_legend">[% "Inicial de la importaci&oacute;n:" | i18n %]</legend>
+    <legend class="titulo_legend">[% "Inicial de la importaci&oacute;n" | i18n %]</legend>
     <div id="filterBar" style="text-align:center">
             <a href="#tablaResult" onClick="consultar('A')"> A |</a>
             <a href="#tablaResult" onClick="consultar('B')"> B |</a>
