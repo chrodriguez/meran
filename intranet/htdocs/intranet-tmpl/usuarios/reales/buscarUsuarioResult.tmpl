@@ -10,108 +10,137 @@
 [% USE HTML %]
 
 <fieldset class="resultados_busqueda">
-    <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda (usuarios):" | i18n %]</legend>
-        <div class="datos_tabla_div_user">
-                
-           
-            <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: [% HTML.escape(socio_busqueda) %]</div> 
-            <div class="resultados_consulta">[% "La cantidad de usuarios es" | i18n %]: [% cantidad %]</div> 
-                
-            <div class="contenedor_paginador">[% paginador %]</div>
-            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
-                <thead>
-                <tr class="titulo_tabla_resultado">
-            
-                    <th class="click" onclick="ordenar('nro_socio')" 
-                        Title="[% 'Ordenar por tarjeta de Id.' | i18n %]" width="12%">[% "Tarjeta Id." | i18n %]
-                    </th>
+    <legend>[% "Resultados de la b&uacute;squeda (usuarios)" | i18n %]</legend>
+        <!--<div class="datos_tabla_div_user">-->
+            <div class="contenedor_paginador">[% paginador %]</div>    
+            <div class="well">
+                <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: <strong>[% HTML.escape(socio_busqueda) %]</strong></div> 
+                 
 
-                    <th Title="[% 'Imagen para mostrar' | i18n %]" width="12%"></th>
+         [% IF cantidad %]
+                        <div class="resultados_consulta">[% "La cantidad de usuarios es" | i18n %]: <strong>[% cantidad %]</strong></div>
+                        
+                        
+            
+                  </div>
 
-                    <th class="click" onclick="ordenar('apellido')" 
-                        Title="[% 'Ordenar por apellido' | i18n %]" align="left" width="30%">[% "Apellido y Nombres" | i18n %]
-                    </th>
-                    <th class="click" onclick="ordenar('nro_documento')" 
-                        Title="[% 'Ordenar por DNI' | i18n %]" width="15%">[% "Documento" | i18n %]
-                    </th>
-                    <th class="click" onclick="ordenar('legajo')" 
-                        Title="[% 'Ordenar por legajo' | i18n %]" align="left">[% "Legajo" | i18n %]
-                    </th>
-                    <th class="click" onclick="ordenar('cod_categoria')" 
-                        Title="[% 'Ordenar por categoria' | i18n %]">[% "Cat." | i18n %]
-                    </th>
-                    <th>[% "Prest." | i18n %]</th>
-                    <th>[% "Ven." | i18n %]</th>
-                    <th>[% "Estado" | i18n %]</th>
-            
-                </tr>
-                </thead>
-                <tbody>
-            
-            [% FOREACH resultsloop %]	
-                <tr  align="center">
-            
-                      <td align='left' class="tarjetaId">
-                          [% PERL %]
-                              print C4::AR::Filtros::link_to(   text =>     "[% socio.getNro_socio %]",
-                                                                url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
-                                                                params =>   ["nro_socio=[% socio.getNro_socio %]"],
-                                                                title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
-                                                          );
-                          [% END %]
-                      </td>
-                      <td class="userImage"> 
-                          [% IF socio.tieneFoto %]
-                              <a class="user_pic_fancy" href="/uploads/pictures/[% socio.tieneFoto %]">
-                                  <img border="0" src="/uploads/pictures/[% socio.tieneFoto %]" 
-                                        alt="[% 'Imagen de' | i18n %] [% socio.persona.getApellido %], [% socio.persona.getNombre %]"
-                                        title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
-                                  >
-                              </a>
-                          [% ELSE %]
-                              <img border="0" src="[% temas %]/[% tema %]/imagenes/no_foto.jpg" 
-                                    alt="[% 'Usuario sin foto' | i18n %]"
-                                    title="[% 'Usuario sin foto' | i18n %]"
-                              >
-                          [% END %]
-                      </td>
-                      <td width=250 align="left" class="nomCompleto">
-                          [% PERL %]
-                              print C4::AR::Filtros::link_to(	text => 	"[% socio.persona.getApeYNom %]",
-                                                                url => 		"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
-                                                                params =>	["nro_socio=[% socio.getNro_socio %]"],
-                                                                title =>	"[% 'Mostrar Detalle del Usuario' | i18n %]"
-                                                          );
-                          [% END %]
-                      </td>
-                      <td align="left" class="documento">
-                          [% socio.persona.getVersion_documento %]&nbsp;[% socio.persona.getNro_documento %]
-                      </td>
-                      <td align="left" class="legajo">
-                          [% socio.persona.getLegajo %]
-                      </td>
-                      <td align=center>
-                          [% socio.categoria.getDescription %]
-                      </td>
-                      <td align=center>
-                          [% issue %]
-                      </td>
-                      <td align=center>
-                          [% od %]
-                      </td>
-                      <td align="center">
-                      <span class="[% clase %]"><b>[% socio.esRegularToString %]</b></span>
-                      </td>
-            
-                </tr>
-            
-            [% END %]
-            
-                <tr>
-                    <td class="lineafinaltabla"  align="left" colspan="14"></td>
-                </tr>
-                </tbody>
-            
-            </table>
+                  [% PERL %]
+                      print C4::AR::Filtros::tableHeader(   
+                                        id              => "tablaResult",
+                                        class           => "",
+                                        selectAll_id    => "",
+                                        columns         => ['[% "Tarjeta Id." | i18n %]','[% 'Imagen para mostrar' | i18n %]',
+                                                            '[% "Apellido y Nombres" | i18n %]','[% "Documento" | i18n %]',
+                                                            '[% "Legajo" | i18n %]','[% "Cat." | i18n %]','[% "Prest." | i18n %]',
+                                                            '[% "Ven." | i18n %]','[% "Estado" | i18n %]'
+
+
+                                                            ]
+                                                                        
+                                              ) ;
+                  [% END %]
+
+
+
+
+                  <!--<table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
+                      <thead>
+                      <tr class="titulo_tabla_resultado">
+                  
+                          <th class="click" Title="[% 'Ordenar por tarjeta de Id.' | i18n %]">[% "Tarjeta Id." | i18n %]
+                          </th>
+
+                          <th Title="[% 'Imagen para mostrar' | i18n %]"></th>
+
+                          <th class="click" onclick="ordenar('apellido')" 
+                              Title="[% 'Ordenar por apellido' | i18n %]" align="left" width="30%">[% "Apellido y Nombres" | i18n %]
+                          </th>
+                          <th class="click" onclick="ordenar('nro_documento')" 
+                              Title="[% 'Ordenar por DNI' | i18n %]" width="15%">[% "Documento" | i18n %]
+                          </th>
+                          <th class="click" onclick="ordenar('legajo')" 
+                              Title="[% 'Ordenar por legajo' | i18n %]" align="left">[% "Legajo" | i18n %]
+                          </th>
+                          <th class="click" onclick="ordenar('cod_categoria')" 
+                              Title="[% 'Ordenar por categoria' | i18n %]">[% "Cat." | i18n %]
+                          </th>
+                          <th>[% "Prest." | i18n %]</th>
+                          <th>[% "Ven." | i18n %]</th>
+                          <th>[% "Estado" | i18n %]</th>
+                  
+                      </tr>
+                      </thead>-->
+                      <tbody>
+                  
+                            [% FOREACH resultsloop %]	
+                                <tr>
+                            
+                                      <td class="tarjetaId">
+                                          [% PERL %]
+                                              print C4::AR::Filtros::link_to(   text =>     "[% socio.getNro_socio %]",
+                                                                                url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+                                                                                params =>   ["nro_socio=[% socio.getNro_socio %]"],
+                                                                                title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                                                          );
+                                          [% END %]
+                                      </td>
+                                      <td class="userImage"> 
+                                          [% IF socio.tieneFoto %]
+                                              <a class="user_pic_fancy" href="/uploads/pictures/[% socio.tieneFoto %]">
+                                                  <img border="0" src="/uploads/pictures/[% socio.tieneFoto %]" 
+                                                        alt="[% 'Imagen de' | i18n %] [% socio.persona.getApellido %], [% socio.persona.getNombre %]"
+                                                        title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                                                  >
+                                              </a>
+                                          [% ELSE %]
+                                              <img border="0" src="[% temas %]/[% tema %]/imagenes/no_foto.jpg" 
+                                                    alt="[% 'Usuario sin foto' | i18n %]"
+                                                    title="[% 'Usuario sin foto' | i18n %]"
+                                              >
+                                          [% END %]
+                                      </td>
+                                      <td class="nomCompleto">
+                                          [% PERL %]
+                                              print C4::AR::Filtros::link_to(	text => 	"[% socio.persona.getApeYNom %]",
+                                                                                url => 		"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+                                                                                params =>	["nro_socio=[% socio.getNro_socio %]"],
+                                                                                title =>	"[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                                                          );
+                                          [% END %]
+                                      </td>
+                                      <td class="documento">
+                                          [% socio.persona.getVersion_documento %]&nbsp;[% socio.persona.getNro_documento %]
+                                      </td>
+                                      <td class="legajo">
+                                          [% socio.persona.getLegajo %]
+                                      </td>
+                                      <td>
+                                          [% socio.categoria.getDescription %]
+                                      </td>
+                                      <td>
+                                          [% issue %]
+                                      </td>
+                                      <td>
+                                          [% od %]
+                                      </td>
+                                      <td>
+                                      [% socio.esRegularToString %]
+                                      </td>
+                            
+                                </tr>
+                            
+                            [% END %]
+                  
+                    <!-- <tr>
+                          <td class="lineafinaltabla"></td>
+                      </tr>-->
+                      </tbody>
+                  </table>
+             [% ELSE %]
+                  </div>
+                          <div class="alert alert-info">[% 'No hay usuarios para mostrar'| i18n %]</div>
+
+             [% END %]
+
         </div>
 </fieldset>
