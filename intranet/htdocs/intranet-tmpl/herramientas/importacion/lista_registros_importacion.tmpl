@@ -5,6 +5,11 @@
           makeToggle('filtro_importacion','trigger',null,true);
     });
 
+function cambiarFiltro (filtro){
+	$('#record_filter').val(filtro);
+	detalleImportacion([% id_importacion %]);
+	}
+	
 </script>
 
 <fieldset class="resultados_busqueda">
@@ -12,15 +17,35 @@
 
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend trigger click">[% "Filtrar" | i18n %]</legend>
-        <div class="filtro_importacion">
-            <ul>
-                <li><input type="radio" name="record_filter" value="MAIN" [% IF record_filter == 'MAIN' or !record_filter %] checked [% END %]onChange="detalleImportacion([% id_importacion %]);">Registros Principales</li>
-                <li><input type="radio" name="record_filter" value="ALL" [% IF record_filter == 'ALL' %] checked [% END %] onChange="detalleImportacion([% id_importacion %]);">Todos</li>
-                <li><input type="radio" name="record_filter" value="UNIDENTIFIED" [% IF record_filter == 'UNIDENTIFIED' %] checked [% END %] onChange="detalleImportacion([% id_importacion %]);">Registros Sin Identificar</li>
-                <li><input type="radio" name="record_filter" value="MATCH" [% IF record_filter == 'MATCH' %] checked [% END %] onChange="detalleImportacion([% id_importacion %]);">Registros Encontrados</li>
-                <li><input type="radio" name="record_filter" value="IGNORED" [% IF record_filter == 'IGNORED' %] checked [% END %] onChange="detalleImportacion([% id_importacion %]);">Registros Ignorados</li>
+    	 <input type="hidden" name="record_filter" id="record_filter" value="[% IF !record_filter %]MAIN[% ELSE %][% record_filter %][% END %]" >
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+            
+                <li [% IF record_filter == 'MAIN' or !record_filter %] class="active" [% END %]>
+				<a href="#A" onClick="cambiarFiltro('MAIN');">Registros Principales</a>
+				</li>
+				
+                <li [% IF record_filter == 'ALL' %] class="active" [% END %]>
+				<a href="#B" onClick="cambiarFiltro('ALL');">Todos</a>
+				</li>
+                
+                <li [% IF record_filter == 'UNIDENTIFIED' %] class="active" [% END %]>
+				<a href="#C" onClick="cambiarFiltro('UNIDENTIFIED');">Registros Sin Identificar</a>
+				</li>
+                
+                <li [% IF record_filter == 'MATCH' %] class="active" [% END %]>
+				<a href="#D" onClick="cambiarFiltro('MATCH');">Registros Encontrados</a>
+				</li>
+			    
+			    <li [% IF record_filter == 'IGNORED' %] class="active" [% END %]>
+				<a href="#E" onClick="cambiarFiltro('IGNORED');">Registros Ignorados</a>
+				</li>
             </ul>
+            
+            <div class="tab-content">
+			</div>
         </div>
+    
 </fieldset>
 
         <div class="contenedor_paginador">[% paginador %]</div>

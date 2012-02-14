@@ -21,7 +21,7 @@ function detalleImportacion(id_importacion){
     objAH.funcion           = 'changePage';
     objAH.tipoAccion        = "DETALLE";
     objAH.id_importacion  = id_importacion;
-    objAH.record_filter  =  $("input[@name=record_filter]:checked").val();
+    objAH.record_filter  =  $('#record_filter').val();
     objAH.sendToServer();
 
 }
