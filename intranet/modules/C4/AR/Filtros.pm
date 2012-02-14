@@ -85,13 +85,11 @@ sub link_to {
 
     if ($tooltip){
         $link .= " data-original-title='$tooltip'";
-        $class.= " tooltip_link";
+        $class.= ' tooltip_link';
     }
 
-    if ($class ne ''){
-        if (!$boton){ #Porque si es con boton, la clase la lleva el li
-            $link .= " class=".$class;
-        }
+    if (C4::AR::Utilidades::validateString($class)){
+         $link .= " class='$class'";
     }
 
     if($title ne ''){

@@ -42,9 +42,9 @@
 		}
 		</script>
 
-		<fieldset>
+		<fieldset class="trigger">
 		
-		    <legend class="titulo_legend trigger trigger_4_[% id2 %] click">[% "Documentos electr&oacute;nicos del grupo"| i18n %]:</legend>
+		    <legend class="titulo_legend trigger trigger_4_[% id2 %] click">[% "Documentos electr&oacute;nicos"| i18n %]</legend>
 		
 		    <div id="lista_docs_[% id2 %]" class="lista_docs_[% id2 %]">
 		        <ul>

@@ -122,7 +122,7 @@
 	      </div>
 	  </noscript>
 	  
-	  <div id="ajax-indicator" class="modal hide fade loading">
+	  <div id="ajax-indicator" class="modal hide fade loading" data-toggle="modal">
 			<div id="block_1" class="barlittle"></div>
 			<div id="block_2" class="barlittle"></div>
 			<div id="block_3" class="barlittle"></div>

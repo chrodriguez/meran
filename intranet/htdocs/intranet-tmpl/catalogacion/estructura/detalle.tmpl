@@ -27,11 +27,11 @@
         }
 
         function modificarNivel2(id2){
-            window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&id2="+id2+"tipoAccion=MODIFICAR_NIVEL_1";
+            window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&id2="+id2+"&tipoAccion=MODIFICAR_NIVEL_1";
         }
         
         function editarEjemplar(id2,id3){
-            window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&id2=".id2."&id2=".id3."&tipoAccion=MODIFICAR_NIVEL_3";
+            window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&id2="+id2+"&id2="+id3+"&tipoAccion=MODIFICAR_NIVEL_3";
         	
         }
         
@@ -73,7 +73,10 @@
 	
 	
 	<fieldset>
-		   <legend>[% "Detalles de Nivel 1 registro" | i18n %] [% id1 %] ([% nivel1_template %])</legend>
+		   <div class="page-header">
+            <h1>[% "Detalles de Nivel 1 registro" | i18n %] [% id1 %] <small>([% nivel1_template %])</small></h1>
+           </div>
+		      
 	
 		<div id="detalle1" class="detalle1">
 	        <div class="botones_detalle_nivel1">
@@ -84,7 +87,7 @@
                                                         button          => 'btn btn-primary',
 
                                                         actions         => [
-                                                                            {title => "Modificar", action=>"modificarNivel1()",icon=>"icon-pencil"},
+                                                                            {title => "Modificar", action=>"modificarNivel1()",icon=>"icon-edit"},
                                                                             {title => "Eliminar", action=>"borrarN1([% id1 %])", icon=>"icon-trash"},
                                                                             ],
 
@@ -152,7 +155,7 @@
 		</div>
 	[% END %] <!-- End de If estadoColeccion  -->
 	
-		[% "N&uacute;mero Total de Ejemplares" | i18n %]:<b> [% cantItemN1 %]</b>
+		<h4>[% "N&uacute;mero Total de Ejemplares" | i18n %]:<b> [% cantItemN1 %]</b></h4>
 		</div>
 	</fieldset>
 	<script type="text/javascript">makeToggle('estado_coleccion[% id1 %]','trigger_estado_coleccion_[% id1 %]',null,false);</script>
@@ -161,9 +164,11 @@
 
         <div id="fieldset_grupo[% id2 %]">
 	        <fieldset>
-	            <legend class="trigger trigger_3_[% id2 %] click">
+	            <legend class="trigger_3_[% id2 %] click">
 	               <div class="alert alert-success">
-	                   [% "Detalle de Nivel 2 para registro" | i18n %] [% id2 %] [% "GRUPO" | i18n %] - [% tipo_documento %] ([% nivel2_template %])
+						<div class="page-header">
+	                       <h2>[% "Detalle de Nivel 2 " | i18n %] <small>[% "GRUPO" | i18n %] [% id2 %] - [% tipo_documento %] ([% nivel2_template %])</small></h2>
+                        </div>                   
                    </div>
                  </legend>
 	                <div id="grupo[% id2 %]" class="grupo[% id2 %]">
@@ -174,7 +179,7 @@
 		                                                        button          => 'btn btn-primary',
 		
 		                                                        actions         => [
-		                                                                            {title => "Modificar", action=>'modificarNivel2("[% id2 %]")',icon=>"icon-pencil"},
+		                                                                            {title => "Modificar", action=>'modificarNivel2("[% id2 %]")',icon=>"icon-edit"},
 		                                                                            {title => "Eliminar", action=>"borrarN2([% id2 %])", icon=>"icon-trash"},
 		                                                                            ],
 		
@@ -271,7 +276,10 @@
 	        <script type="text/javascript">makeToggle('grupo[% id2 %]','trigger_3_[% id2 %]',null,false);</script>
         </div>
 
+
+
 [% END %]<!-- END FOREACH Nivel 2-->
+
 </div> <!-- Fin DIV detalleComun -->
 [% IF !ajax %]
 	<div id='basic-modal-content'></div>

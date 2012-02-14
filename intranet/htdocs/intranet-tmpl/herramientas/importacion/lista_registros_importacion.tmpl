@@ -26,52 +26,40 @@
         <div class="contenedor_paginador">[% paginador %]</div>
         <div class="datos_tabla_div_importacion">
             <div class="resultados_consulta">[% "La cantidad de registros es" | i18n %]: [% cantidad %]</div>
-            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
-                <thead>
-                    <tr class="titulo_tabla_resultado">
-                        <th>
-                            [% "T&iacute;itulo" | i18n %]
-                        </th>
-                        <th>
-                            [% "Autor" | i18n %]
-                        </th>
-                        <th>
-                            [% "Identificaci&oacute;n" | i18n %]
-                        </th>
-                        <th>
-                            [% "Tipo" | i18n %]
-                        </th>
-                         <th>
-                            [% "Encontrado" | i18n %]
-                        </th>
-                        <th>
-                            [% "Ignorado" | i18n %]
-                        </th>
-                        <th>
-                            [% "Acciones" | i18n %]
-                        </th>
-                    </tr>
-                </thead>
+            
+            [% PERL %]
+                print C4::AR::Filtros::tableHeader(   
+                                  id              => "tablaResult",
+                                  columns         => ['[% "T&iacute;itulo"|i18n %]',
+													  '[% "Autor"|i18n %]',
+													  '[% "Identificaci&oacute;n"|i18n %]',
+													  '[% "Tipo"|i18n %]',
+													  '[% "Encontrado"|i18n %]',
+													  '[% "Ignorado"|i18n %]',
+													  '[% "Acciones"|i18n %]',
+                                                     ]
+                                        );
+            [% END %]
+
             <tbody>
 
             [% FOREACH detalle_importacion IN resultsloop %]
-                <tr  align="center">
-
-                      <td align="left">
+                <tr>
+                      <td>
                             [% detalle_importacion.getTitulo %]
                       </td>
-                      <td align="left">
+                      <td>
                             [% detalle_importacion.getAutor %]
                       </td>
-                      <td align="left">
+                      <td>
                            [% detalle_importacion.getIdentificacion %]
                       </td>
-                      <td align="left">
+                      <td>
                            [% detalle_importacion.getTipo %]
                           [% IF detalle_importacion.getTipo == "Registro" %] ([% detalle_importacion.getCantidadDeRegistrosHijo %] registros)[% END %]
                       </td>
 
-                      <td align="left">
+                      <td>
                         [% IF detalle_importacion.getMatching %]
 							[% PERL %]
                             print C4::AR::Filtros::link_to( text =>     "Si",
@@ -96,14 +84,13 @@
 							<span class='verde'>No</span>
                         [% END %]
                       </td>
-                      <td align="left">
+                      <td>
                         [% IF detalle_importacion.getEstado == "I" %]<span class='rojo'>Si</span>[% ELSE %]<span class='verde'>No</span>[% END %]
                       </td>
 
                       <!--  BOTONES ACCIONES (Editar, Borrar, Ver detalle) -->
-                      <td align='left' width="9%" >
-
-                      <div class="botones_detalle_importacion">
+                      <td>
+                      <div>
 						   [% IF detalle_importacion.getEstado != "I" %]
                               [% PERL %]
                                print C4::AR::Filtros::action_set_button(    
@@ -134,9 +121,6 @@
                       </td>
                 </tr>
             [% END %]
-              <tr>
-                    <td class="lineafinaltabla"  align="left" colspan="14"></td>
-              </tr>
             </tbody>
             </table>
         </div>
