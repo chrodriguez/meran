@@ -105,7 +105,7 @@
 			    $(this).removeClass("textInput").addClass("focusInput");  
 			});
 	        $('input[type="text"]').addClass("textInput");    
-	       // $('.dropdown-toggle').dropdown();
+	        $('.dropdown-toggle').dropdown();
 			if (UNLOAD == 1)
 				enableAlert();
 			else
