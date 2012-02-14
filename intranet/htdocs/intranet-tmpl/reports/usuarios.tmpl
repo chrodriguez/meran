@@ -1,6 +1,5 @@
 [% INCLUDE 'intranet-top.inc' %] 
 [% INCLUDE 'BootstrapToolkit.inc' %]
-<script src="/includes/bootstrap/js/bootstrap-modal.js"></script>
 
 [% USE HTML %]
 
@@ -8,21 +7,24 @@
 <script>
 
 	$(document).ready(function(){
-		$('.tabs').tabs();
-	    $('.alert-message').alert();
-	    $('#modal-from-dom').modal({keyboard: true,backdrop: true,});
+		$('#report_tabs').tab('show');
 	});
 
 </script>
 
-<ul class="tabs">
-  <li class="active"><a href="#labels">[% 'Generar etiquetas' | i18n %]</a></li>
-  <li><a href="#registro">[% 'Registro de usuarios' | i18n %]</a></li>
+<ul id="report_tabs" class="nav nav-tabs">
+  <li class="active">
+    <a href="#labels">[% 'Generar etiquetas' | i18n %]</a>
+  </li>
+  <li>
+    <a href="#registro">[% 'Registro de usuarios' | i18n %]</a>
+  </li>
 </ul>
  
-<div class="pill-content">
-  <div class="active" id="labels">[% INCLUDE 'partials/reportes/_reporte_usuarios.inc' %]</div>
-  <div id="registro"> </div>
+<div id="report_tabsContent" class="tab-content">
+  <div class="tab-pane fade active" id="labels">[% INCLUDE 'partials/reportes/_reporte_usuarios.inc' %]</div>
+  <div class="tab-pane fade" id="registro">jsdnfjksdnfsdjfnksjdnfsdkjfnk </div>
 </div>
+
 
 [% INCLUDE 'intranet-bottom.inc' %]

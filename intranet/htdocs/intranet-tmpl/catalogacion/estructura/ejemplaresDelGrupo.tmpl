@@ -10,16 +10,34 @@
 		</script>
 		
 		<fieldset>
-		    <legend class="trigger trigger_2_[% id2 %] click">[% "Ejemplares del grupo" | i18n %] [% id2 %]</legend>
+		    <legend class="trigger trigger_2_[% id2 %] click">[% "Ejemplares" | i18n %]</legend>
 		    <div id="ejemplaresDelGrupo[% id2 %]" class="ejemplaresDelGrupo[% id2 %]" >
 					<div class="alert alert-info">
 					    <dl>
 							<dt class="inline left rightMargin">[% "Ejemplares Disponibles:"|i18n %]</dt>
 				               <dd> [% disponibles %]</dd>
 							<dt class="inline left rightMargin">[% "Reservas Realizadas:"|i18n %]</dt>
-							   <dd> <a class="fancylink" href="[% url_prefix %]/circ/reservas_activas_edicion.pl?token=[% token %]&id2=[% id2 %]&tipoReserva=EJ">[% cantReservasAsignadas %]</a></dd>
+							   <dd> 
+                                  [% PERL %]
+                                      print C4::AR::Filtros::link_to( text => "[% cantReservasAsignadas %]",
+                                                                      url=>"[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
+                                                                      params => ["id2=[% id2 %]","tipoReserva=EJ"],
+                                                                      tooltip => '[% "Reservas sobre el grupo con ejemplares asignados (en orden)" | i18n %]',
+                                                                      class   => "fancylink",
+                                                                  ) ;
+                                  [% END %]
+						     </dd>
 							<dt class="inline left rightMargin">[% "Reservas en Espera:"|i18n %]</dt>
-					           <dd> <a class="fancylink" href="[% url_prefix %]/circ/reservas_activas_edicion.pl?token=[% token %]&id2=[% id2 %]&tipoReserva=GR">[% cantReservasEnEspera %]</a></dd>
+					           <dd> 
+                                  [% PERL %]
+                                      print C4::AR::Filtros::link_to( text => "[% cantReservasAsignadas %]",
+                                                                      url=>"[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
+                                                                      params => ["id2=[% id2 %]","tipoReserva=GR"],
+                                                                      tooltip => '[% "Reservas sobre el grupo en espera (en orden)" | i18n %]',
+                                                                      class   => "fancylink",
+                                                                  ) ;
+                                  [% END %]
+				               </dd>
 							<dt class="inline left rightMargin">[% "Ejemplares Prestados:"|i18n %]</dt>
 						      <dd> [% cantPrestados %]</dd>
 				        </dl>
@@ -47,14 +65,14 @@
 						                </td>
 						                <td>[% nivel3_obj.getSignatura_topografica %]</td>
 						                <td>
-						                [% PERL %]
-						                    print C4::AR::Filtros::link_to( text => "[% nivel3_obj.getBarcode %]",
-						                                                    url=>"[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
-						                                                    params =>   ["id3=[% id3 %]"],
-						                                                    title =>    "[% 'Detalle del ejemplar' | i18n %]",
-						                                                    tooltip => {'Detalle del ejemplar'},
-						                                                ) ;
-						                [% END %]
+							                [% PERL %]
+							                    print C4::AR::Filtros::link_to( text => "[% nivel3_obj.getBarcode %]",
+							                                                    url=>"[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
+							                                                    params =>   ["id3=[% id3 %]"],
+							                                                    title =>    "[% 'Detalle del ejemplar' | i18n %]",
+							                                                    tooltip => "[% 'Detalle del ejemplar' | i18n %]",
+							                                                ) ;
+							                [% END %]
 						                </td>
 						                <td>
 						           
@@ -174,7 +192,7 @@
                                                     actions         => [
                                                                         {title => "Editar", 
                                                                          action=>"editarEjemplar([% id2 %],[% id3 %])",
-                                                                         icon=>"icon-pencil"
+                                                                         icon=>"icon-edit"
                                                                         },
                                                                         {title => "Borrar", 
                                                                          action=>"borrarN3([% id2 %],[% id3 %])", 
@@ -206,7 +224,7 @@
 		                                               actions         => [
 		                                                                   {title => "Modificar", 
 		                                                                    action=>"generarForm([% id1 %],[% id2 %])",
-		                                                                    icon=>"icon-pencil"
+		                                                                    icon=>"icon-edit"
 		                                                                   },
 		                                                                   {title => "Etiquetas", 
 		                                                                    action=>"generarVariasEtiquetas([% id2 %])", 

@@ -7,7 +7,8 @@
 </div></div>
 	
 </div>
-      <div id="loading_items" class="loading_items"><br /></div>
+      <div id="loading_items" class="loading_items">
+	 </div>
 
 </div>
 <!-- <footer> -->

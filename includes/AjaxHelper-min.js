@@ -1,7 +1,7 @@
-function startOverlay(){$('#ajax-indicator').modal({keyboard:false,});}
+var overlay_on=false;function startOverlay(){if(!overlay_on){$('#ajax-indicator').modal({show:true,keyboard:false,backdrop:true,});overlay_on=true;}}
 function closeModal(id){if((id=='')||(id==null))
 $('#ajax-indicator').modal('hide');else
-$('#'+id).modal('hide');}
+$('#'+id).modal('hide');overlay_on=false;}
 function _Init(options){if(options.showStatusIn!=''){if(options.offIndicator!=true)
 $('#'+options.showStatusIn).addClass('cargando');}else{if(options.showOverlay){startOverlay();}else{if(options.showState){_ShowState(options);}}}}
 function _AddDiv(){var contenedor=$('#state')[0];if(contenedor==null){$('body').append("<div id='state' class='loading' style='position:absolute'>&nbsp;</div>");$('#state').css('top','0px');$('#state').css('left','0px');}}
