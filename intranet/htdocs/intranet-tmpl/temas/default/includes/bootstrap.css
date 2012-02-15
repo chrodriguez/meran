@@ -4817,3 +4817,7 @@ body {
 .table tbody tr:hover{
 	background-color: #F89406;
 }
+
+.clear{
+	clear: both;
+}

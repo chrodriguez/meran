@@ -201,6 +201,32 @@
                                             [% END %]
                                 </li>
           [% END %]
+				<li class="divider"></li>
+	      [% IF socio_data.usr_credential_type == "superLibrarian" %]
+	                    
+                                <li>
+                                            [% PERL %]
+                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-flag'></i> [% 'Permisos' | i18n %]",
+                                                                                url =>      "[% url_prefix %]/admin/permisos/permisos.pl",
+                                                                                title =>    "[% 'Permisos' | i18n %]"
+                                                                            ) ;
+                                            [% END %]
+                                </li>
+          [% END %]
+
+				<li class="divider"></li>
+	      [% IF socio_data.usr_credential_type == "librarian" OR  socio_data.usr_credential_type == "superLibrarian" %]
+	                    
+                                <li>
+                                            [% PERL %]
+                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-print'></i> [% 'Reportes' | i18n %]",
+                                                                                url =>      "[% url_prefix %]/reports/usuarios.pl",
+                                                                                title =>    "[% 'Reportes' | i18n %]"
+                                                                            ) ;
+                                            [% END %]
+                                </li>
+          [% END %]
+
 				</ul>
 		  </li>
 
