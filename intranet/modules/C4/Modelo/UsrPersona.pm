@@ -203,13 +203,22 @@ sub convertirEnSocio{
 sub esRegularToString{
     my ($self) = shift;
 
-    return $self->getCondicion_object->estado->getNombre;
+    my $object = $self->getCondicion_object;
+    my $result =  $object?$object->estado->getNombre:C4::AR::Filtros::i18n("INDEFINIDO");
+    
+    return $result;
 }
 
 sub esRegular{
     my ($self) = shift;
 
-    return $self->getCondicion_object->getCondicion;
+    my $object = $self->getCondicion_object;
+    
+    if ($object){
+        return $object->getCondicion;
+    }else{
+    	return 0;
+    }
 }
 
 
