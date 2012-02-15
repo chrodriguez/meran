@@ -59,7 +59,9 @@ sub link_to {
     my $boton   = $params_hash_ref{'boton'}; #obtengo el title a mostrar
     my $width   = $params_hash_ref{'width'};
     my $blank   = $params_hash_ref{'blank'} || 0;
+    my $icon    = $params_hash_ref{'icon'} || 0;
     my $tooltip = $params_hash_ref{'tooltip'} || 0;
+    
     my $cant    = scalar(@$params);
     my @result;
     
@@ -80,6 +82,7 @@ sub link_to {
             $url .= '?token='.$session->param('token'); 
         }
     }
+
 
     $link= "<a href='".$url."'";
 
@@ -102,26 +105,11 @@ sub link_to {
     
     $link .= " >";
 
-    my $button;
 
-    if($boton){
-        $button .=  "<li id='boton_medio' style='width:".$width."px' class='".$class."' > ";
-        $button .=  $link;
-        $button .=  "   <div id=".$boton."> ";
-        $button .=  "   </div> ";
-        $button .=  "   <div id='boton_der'> ";
-        $button .=  "   </div> ";
-        $button .=  "   <div id='boton_texto'>".$text."</div> ";
-        $button .=  "   </a> ";
-        $button .=  "</li> ";
-
-        return $button;
-    }else{
-        $link .= $text."</a>"; 
+    if ($icon){
+        $link .= "<i class='$icon'></i>";    	
     }
-
-#   C4::AR::Debug::debug("url: ".$url);
-#   C4::AR::Debug::debug("link: ".$link);
+    $link .= $text."</a>"; 
 
     return $link;
 }

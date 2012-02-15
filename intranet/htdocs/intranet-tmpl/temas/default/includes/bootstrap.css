@@ -4818,7 +4818,13 @@ body {
 	background-color: #F89406;
 }
 
+
 .userImage img {
     height: 50px;
     width: 50px;
 }
+
+.clear{
+	clear: both;
+}
+

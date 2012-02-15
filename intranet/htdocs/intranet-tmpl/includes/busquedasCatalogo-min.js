@@ -15,7 +15,7 @@ else if($.trim($('#keyword').val())!=''){if((jQuery.trim($('#keyword').val())).l
 else if($.trim($('#estante').val())!=''){if((jQuery.trim($('#estante').val())).length<limite_caracteres){cumple_limite=false;}else{busquedaPorEstante();}}
 else if($('#tipo_nivel3_id').val()!=""){busquedaCombinable();}
 else{cumple_vacio=false;}
-if(!cumple_limite){jAlert(INGRESE_AL_MENOS_TRES_CARACTERES_PARA_REALIZAR_LA_BUSQUEDA,CATALOGO_ALERT_TITLE);}else if(!cumple_vacio){jAlert(INGRESE_DATOS_PARA_LA_BUSQUEDA,CATALOGO_ALERT_TITLE)}}
+if(!cumple_limite){jAlert(INGRESE_AL_MENOS_TRES_CARACTERES_PARA_REALIZAR_LA_BUSQUEDA);}else if(!cumple_vacio){jAlert(INGRESE_DATOS_PARA_LA_BUSQUEDA)}}
 function buscarSuggested(suggested){busquedaPorKeyword(suggested);if($('#keyword').val())
 $('#keyword').val(suggested);else
 $('#keyword-bar').val(suggested);}

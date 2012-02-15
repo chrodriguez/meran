@@ -133,11 +133,10 @@ function buscar(doScroll){
 	}
 
      if (!cumple_limite) {
-        jAlert(INGRESE_AL_MENOS_TRES_CARACTERES_PARA_REALIZAR_LA_BUSQUEDA,CATALOGO_ALERT_TITLE);
+        jAlert(INGRESE_AL_MENOS_TRES_CARACTERES_PARA_REALIZAR_LA_BUSQUEDA);
     } else if (!cumple_vacio) {
-        jAlert(INGRESE_DATOS_PARA_LA_BUSQUEDA,CATALOGO_ALERT_TITLE)
+        jAlert(INGRESE_DATOS_PARA_LA_BUSQUEDA)
     }
-
 }
 
 
