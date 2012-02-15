@@ -9,21 +9,18 @@
 
 [% USE HTML %]
 
-<fieldset class="resultados_busqueda">
-    <legend>[% "Resultados de la b&uacute;squeda (usuarios)" | i18n %]</legend>
+<fieldset>
+    <legend>[% "Resultados de la b&uacute;squeda" | i18n %]</legend>
         <!--<div class="datos_tabla_div_user">-->
-            <div class="contenedor_paginador">[% paginador %]</div>    
+             
             <div class="well">
                 <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: <strong>[% HTML.escape(socio_busqueda) %]</strong></div> 
                  
 
          [% IF cantidad %]
                         <div class="resultados_consulta">[% "La cantidad de usuarios es" | i18n %]: <strong>[% cantidad %]</strong></div>
-                        
-                        
-            
                   </div>
-
+                  <div class="contenedor_paginador">[% paginador %]</div>  
                   [% PERL %]
                       print C4::AR::Filtros::tableHeader(   
                                         id              => "tablaResult",
@@ -40,36 +37,6 @@
                                               ) ;
                   [% END %]
 
-
-
-
-                  <!--<table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
-                      <thead>
-                      <tr class="titulo_tabla_resultado">
-                  
-                          <th class="click" Title="[% 'Ordenar por tarjeta de Id.' | i18n %]">[% "Tarjeta Id." | i18n %]
-                          </th>
-
-                          <th Title="[% 'Imagen para mostrar' | i18n %]"></th>
-
-                          <th class="click" onclick="ordenar('apellido')" 
-                              Title="[% 'Ordenar por apellido' | i18n %]" align="left" width="30%">[% "Apellido y Nombres" | i18n %]
-                          </th>
-                          <th class="click" onclick="ordenar('nro_documento')" 
-                              Title="[% 'Ordenar por DNI' | i18n %]" width="15%">[% "Documento" | i18n %]
-                          </th>
-                          <th class="click" onclick="ordenar('legajo')" 
-                              Title="[% 'Ordenar por legajo' | i18n %]" align="left">[% "Legajo" | i18n %]
-                          </th>
-                          <th class="click" onclick="ordenar('cod_categoria')" 
-                              Title="[% 'Ordenar por categoria' | i18n %]">[% "Cat." | i18n %]
-                          </th>
-                          <th>[% "Prest." | i18n %]</th>
-                          <th>[% "Ven." | i18n %]</th>
-                          <th>[% "Estado" | i18n %]</th>
-                  
-                      </tr>
-                      </thead>-->
                       <tbody>
                   
                             [% FOREACH resultsloop %]	

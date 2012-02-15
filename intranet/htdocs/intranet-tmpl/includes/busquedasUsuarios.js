@@ -76,7 +76,7 @@ function consultar(filtro,doScroll){
 }
 
 function updateInfoUsuarios(responseText){
-    $('#result_usuarios').html(responseText);
+    $('#result').html(responseText);
     zebra('datos_tabla');
     var idArray = [];
     var classes = [];

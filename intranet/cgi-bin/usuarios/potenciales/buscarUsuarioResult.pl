@@ -69,9 +69,10 @@ if($socios){
 	}
 	
 	$t_params->{'resultsloop'}= \@resultsdata;
-	$t_params->{'cantidad'}= $cantidad;
-	$t_params->{'socio_busqueda'}= $socioBuscado;
+	
 
 }#END if($socios)
 
+$t_params->{'cantidad'}= $cantidad;
+$t_params->{'socio_busqueda'}= $socioBuscado;
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

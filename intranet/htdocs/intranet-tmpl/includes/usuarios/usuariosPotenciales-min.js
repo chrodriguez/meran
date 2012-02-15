@@ -17,5 +17,5 @@ tipoAccion=$("#accion").val();else
 fromDetail=true;}
 catch(e){}
 objAH.tipoAccion=tipoAccion;objAH.id_personas=arrayPersonNumbers;objAH.funcion="changePage";objAH.sendToServer();}
-function updateInfoActualizar(responseText){var Messages=JSONstring.toObject(responseText);setMessages(Messages);if(!fromDetail)
+function updateInfoActualizar(responseText){var Messages=JSONstring.toObject(responseText);alert("adasd");setMessages(Messages);if(!fromDetail)
 buscarUsuariosPotenciales();}
