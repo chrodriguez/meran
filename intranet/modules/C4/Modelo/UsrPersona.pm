@@ -16,7 +16,6 @@ __PACKAGE__->meta->setup(
         apellido         => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         nombre           => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         titulo           => { type => 'varchar', overflow => 'truncate', length => 255 },
-        id_categoria     => { type => 'integer', overflow => 'truncate', length =>2, not_null => 1, default => 8 },       
         otros_nombres    => { type => 'varchar', overflow => 'truncate', length => 255 },
         iniciales        => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         calle            => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
@@ -25,7 +24,6 @@ __PACKAGE__->meta->setup(
         telefono         => { type => 'varchar', overflow => 'truncate', length => 255 },
         email            => { type => 'varchar', overflow => 'truncate', length => 255 },
         fax              => { type => 'varchar', overflow => 'truncate', length => 255 },
-        id_estado        => { type => 'integer', overflow => 'truncate', not_null => 1,  default => 20 },
         msg_texto        => { type => 'varchar', overflow => 'truncate', length => 255 },
         alt_calle        => { type => 'varchar', overflow => 'truncate', length => 255 },
         alt_barrio       => { type => 'varchar', overflow => 'truncate', length => 255 },
@@ -64,19 +62,6 @@ __PACKAGE__->meta->setup(
         key_columns => { tipo_documento => 'id' },
         type        => 'one to one',
       },
-     estado => 
-      {
-        class       => 'C4::Modelo::UsrEstado',
-        key_columns => { id_estado => 'id_estado' },
-        type        => 'one to one',
-      },
-     categoria => 
-      {
-        class       => 'C4::Modelo::UsrRefCategoriaSocio',
-        key_columns => { id_categoria => 'id' },
-        type        => 'one to one',
-      },
-
       
     ],
     
@@ -118,24 +103,6 @@ sub load{
     }
 
     return $error;
-}
-
-sub getId_estado{
-    my ($self) = shift;
-    return ($self->id_estado);
-}
-
-sub setId_estado{
-    my ($self) = shift;
-    my ($id_estado) = @_;
-    $self->id_estado($id_estado);
-}
-
-sub getCategoria{
-    my ($self)=shift;
-    my $socio_array_ref = C4::Modelo::UsrPersona::Manager->get_usr_persona( query => [ id_persona => { eq => $self->getId_persona } ]);
-
-    return ($socio_array_ref->[0]->categoria->getDescription);
 }
 
 sub agregar{
@@ -195,45 +162,9 @@ sub convertirEnSocio{
         $data_hash->{'categoria'}='NN';
         $data_hash->{'fuente'}="ES UNA FUENTE DEFAULT, PREGUNTARLE A EINAR....";
         $estado->agregar($data_hash);
-        $self->setId_estado($estado->getId_estado);
         $socio->agregar($data_hash);
+        $socio->setId_estado($estado->getId_estado);
         $socio->setThemeINTRA($data_hash->{'tema'} || 'default');
-}
-
-sub esRegularToString{
-    my ($self) = shift;
-
-    my $object = $self->getCondicion_object;
-    my $result =  $object?$object->estado->getNombre:C4::AR::Filtros::i18n("INDEFINIDO");
-    
-    return $result;
-}
-
-sub esRegular{
-    my ($self) = shift;
-
-    my $object = $self->getCondicion_object;
-    
-    if ($object){
-        return $object->getCondicion;
-    }else{
-    	return 0;
-    }
-}
-
-
-sub getCondicion_object{
-    my ($self) = shift;
-    use C4::Modelo::UsrRegularidad::Manager;
-
-    my @filtros;
-    
-    push (@filtros, (usr_estado_id => {eq => $self->getId_estado }) );
-    push (@filtros, (usr_ref_categoria_id => {eq => $self->getId_categoria }) );
-    
-    my ($estados) = C4::Modelo::UsrRegularidad::Manager->get_usr_regularidad(query => \@filtros,);
-    
-    return $estados->[0];
 }
 
 sub modificar{
@@ -754,23 +685,6 @@ sub setCumple_condicion{
     my ($self) = shift;
     my ($cumple_condicion) = @_;
     $self->cumple_condicion($cumple_condicion);
-}
-
-sub getId_categoria{
-    my ($self) = shift;
-    return ($self->id_categoria);
-}
-
-sub setId_categoria{
-    my ($self) = shift;
-    my ($id_categoria) = @_;
-    $self->id_categoria($id_categoria);
-}
-
-
-sub getCod_categoria{
-    my ($self) = shift;
-    return ($self->categoria->getCategory_code);
 }
 
 sub getInvolvedCount{

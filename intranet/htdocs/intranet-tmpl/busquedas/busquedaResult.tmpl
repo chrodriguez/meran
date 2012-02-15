@@ -48,9 +48,6 @@
                              ) ;
              [% END %]
 
-
-
-            <!-- Actual Resultados de la b&uacute;squeda -->
             [% FOREACH SEARCH_RESULTS %]
                 <tr>
                         <td>
@@ -82,7 +79,7 @@
                         </td>
 
 
-                    <td class="titulo_result">
+                    <td >
                         [% PERL %]
                             print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(titulo) %]",
                                                             url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
@@ -93,7 +90,7 @@
                         [% END %]
                     </td>
             
-                    <td class="autor_result">
+                    <td>
                         <a class="click" onClick="buscarPorAutor('[% nomCompleto %]')" title="[% 'Filtrar por Autor' | i18n %]">
                             [% nomCompleto %]
                         </a>

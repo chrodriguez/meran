@@ -10,7 +10,7 @@
 	    var URL_PREFIX  = '[% url_prefix %]';
 	    var UNLOAD		= '[% unload_alert %]';
 	    var mensajes_interval_id;
-	    
+	    var loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
 	    
 	</script>
 	
@@ -142,11 +142,9 @@
 		  <!--  usado como referencia por el MessageHelper -->
 		  <div id="end_top">
 		    [% IF mensaje %]
-		        <div class="mensajes_informacion">
-		            <div id="mensajes" style="opacity: 90; display: block;">
-		                <div class="message_text">[% mensaje %]</div>
-		            </div>
-		        </div>
+					<div class="alert [% mensaje_class %]">
+					        <strong>Info</strong> [% mensaje %]
+					</div>
 		    [% END %]
 		  </div>
 	
