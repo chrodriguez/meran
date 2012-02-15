@@ -78,16 +78,17 @@
 	    function checkTr(){
 	        // click sobre los <tr>, para darle estilo
 	        $('tr').click(function() {
-	            var clase = $(this).attr('class').split(' ');
-	            //solo los <tr> que tengan en el primer <td> un input checkbox
+	            var clase = $(this).attr('class');
+	            // solo los <tr> que tengan en el primer <td> un input checkbox
 	            if($(this).children(':first-child').children(':first-child').attr('type') == 'checkbox'){
-	                // algunos casos los tr tienen clase: 'par odd'
-	                if(clase[1] == 'marked' || clase[2] == 'marked'){
-	                    $(this).removeClass("marked"); 
-	                    $(this).children(':first-child').children(':first-child').removeAttr('checked');
-	                }else{
+	                // ahora los tr no tienen clase por defecto
+	                // la primera vez 'clase' es null	                
+	                if(clase == null || clase == ""){
 	                    $(this).addClass("marked");
 	                    $(this).children(':first-child').children(':first-child').attr('checked','true');
+	                }else{
+	                    $(this).removeClass("marked"); 
+	                    $(this).children(':first-child').children(':first-child').removeAttr('checked');
 	                }
 	            }
 	        });     

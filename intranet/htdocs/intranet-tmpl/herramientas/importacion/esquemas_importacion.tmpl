@@ -17,35 +17,38 @@
     });
 </script>
 
-<div class="titulos" >[% "Administraci&oacute;n de esquemas de importaci&oacute;n" | i18n %]</div>
-
-<div class="">
-    <br><br>
-    <fieldset>
-        <legend class="titulo_legend">[% "Selecci&oacute;n de esquema de importaci&oacute;n" | i18n %]</legend>
-        <div class="permisos_selector">
-            <ul>
-                [% IF combo_esquemas_importacion %]
-	                <li class="sub_item">
-	                    <label for="id_ui">[% 'Esquema' | i18n %]: </label>
-	                        [% combo_esquemas_importacion %]
-	                </li>
-                [% END %]
+<h3>[% "Administraci&oacute;n de esquemas de importaci&oacute;n" | i18n %]</h3>
+</br>
+<div>
+    <form class="form-horizontal" onsubmit="return false">
+        <fieldset>
+            <legend>[% "Selecci&oacute;n de esquema de importaci&oacute;n" | i18n %]</legend>
+            
+            [% IF combo_esquemas_importacion %]
+            
+                <div class="control-group">
+                    <label class="control-label" for="id_ui">[% 'Esquema' | i18n %]:</label>
+                    <div class="controls">
+                        [% combo_esquemas_importacion %]
+                    </div>
+                </div>
                 
-                [% PERL %]
-                    print C4::AR::Filtros::to_Button(   text    => "[% 'Nuevo esquema' | i18n %]",
-                                                        boton   => "boton_agregar",
-                                                        onClick => "nuevoEsquemaImportacion_dialog();",
-                                                        title   => "[% 'Nuevo esquema' | i18n %]",
-                                                        alternClass => "botonCentrado",
-                            ) ;
-                [% END %]
-            </ul>
-        </div>
-        <br>
-        <br>
-        <br>
-    </fieldset>
+            [% END %]
+                    
+            <div class="form-actions">
+                    
+                    [% PERL %]
+                        print C4::AR::Filtros::to_Button(   text    => "[% 'Nuevo esquema' | i18n %]",
+                                                            boton   => "boton_agregar",
+                                                            onClick => "nuevoEsquemaImportacion_dialog();",
+                                                            title   => "[% 'Nuevo esquema' | i18n %]",
+                                                            inline  => 1
+                                ) ;
+                    [% END %]
+
+            </div>
+        </fieldset>
+    </form>
     <div class="esquema_result" id="esquema_result"> </div>
 </div>
 
