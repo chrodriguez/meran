@@ -14,118 +14,34 @@ $(document).ready(function() {
 <!--<div class="titulos" >[% "B&uacute;squeda de Usuarios Reales" | i18n %]</div>-->
 <fieldset>
     <legend class="titulo_legend">[% "B&uacute;squeda de Usuarios Reales" | i18n %]</legend>
-      <section class="center-section-form">
-        <form class="form-horizontal">
-          <div class="control-group">
-              <div class="controls">
-             <!--     <input id="buscar" class="textInput" type="text" value="" name="buscar">-->
-                  <input id="socio" class="textInput" type=text name="socio" onFocus="checkFilter('focus')"> 
-                  <p class="help-block">
-                      <span class="label label-info">NOTA</span>
-                      Tipear el apellido, DNI, tarjeta de id. o legajo del usuario.
-                  </p>
+      
+    <section class="center-section-form">
+
+      [% PERL %]
+          print C4::AR::Filtros::tabbedPane(    titulo    => "",
+                                                subtitulo => "[% 'Navegue por las pesta&ntilde;as para acceder a los distintos tipos de b&uacute;squeda' | i18n %]",
+                                                content   => [ {id => 'labels', text=> "[% 'B&uacute;squeda general' | i18n %]" },
+                                                               {id => 'registro', text => "[% 'B&uacute;squeda por inicial' | i18n %]"},
+                                                              ],
+                                                content_id=> ['reportes_usuarios'],
+                                                active_id => 'labels',
+                                            );
+
+      [% END %]
+
+              <div class="tab-pane fade in active" id="labels">
+                   [% INCLUDE 'partials/usuarios/_busqueda_gral_usuarios.inc' %]
               </div>
-          </div>
-  
-        <div class="form-actions">
-                    [% PERL %]
-                            print C4::AR::Filtros::action_button(
-                                                            button       => "btn click",
-                                                            action       => "Borrar();",
-                                                            icon         => "",
-                                                            title        => "[% 'Limpiar' | i18n %]",
-                                                        ) ;
+              <div class="tab-pane fade" id="registro">
+                   [% INCLUDE 'partials/usuarios/_busqueda_inicial_usuarios.inc' %]
+              </div>
+            </div>
+      </div>
+    </section>
+</fieldset>
 
-                    [% END %]
-                    [% PERL %]
-                            print C4::AR::Filtros::action_button(
-                                                            button       => "btn btn-primary",
-                                                            action       => "consultar();",
-                                                            icon         => "",
-                                                            title        => "[% 'Buscar' | i18n %]",
-                                                        ) ;
-
-                    [% END %]
-                   
-                    
-        </div>
-           </form>
-      </section>
-
-
-
-
-<!--    <div class="buttonContainerHorizontal">
-    <ul>
-        <li class="filtros">
-                <input id="socio" type=text name="socio" onFocus="checkFilter('focus')" 
-                    onBlur="checkFilter('blur')">
-                [% PERL %]
-                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
-                                                                        boton   => "boton_buscar",
-                                                                        onClick => "consultar();",
-                                                                        title   => "[% 'Buscar' | i18n %]",
-                                                                        inline  => 1,
-                                            ) ;
-                [% END %]
-                [% PERL %]
-                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
-                                                                        boton   => "boton_buscar",
-                                                                        onClick => "Borrar();",
-                                                                        title   => "[% 'Limpiar' | i18n %]",
-                                                                        inline  => 1,
-                                            ) ;
-                [% END %]
-        </li>
-    </ul>
-    </div>
-    <ul>
-        <li style="text-align:center">
-<!--                     <p class="recuadroAyuda"> -->
-                    
-                    <!--[% PERL %]
-                        print C4::AR::Filtros::setHelp( text => "Tipear el apellido, DNI, tarjeta de id. o legajo del usuario.");
-                    [% END %]-->
-<!--                     </p> -->
-      <!--  </li>
-    </ul>-->
-
-
-    <fieldset>
-        <legend class="titulo_legend">[% "Inicial del apellido" | i18n %]</legend>
-        <div id="filterBar" style="text-align:center">
-                <a href="#tablaResult" onClick="consultar('A')"> A |</a>
-                <a href="#tablaResult" onClick="consultar('B')"> B |</a>
-                <a href="#tablaResult" onClick="consultar('C')"> C |</a>
-                <a href="#tablaResult" onClick="consultar('D')"> D |</a>
-                <a href="#tablaResult" onClick="consultar('E')"> E |</a>
-                <a href="#tablaResult" onClick="consultar('F')"> F |</a>
-                <a href="#tablaResult" onClick="consultar('G')"> G |</a>
-                <a href="#tablaResult" onClick="consultar('H')"> H |</a>
-                <a href="#tablaResult" onClick="consultar('I')"> I |</a>
-                <a href="#tablaResult" onClick="consultar('j')"> J |</a>
-                <a href="#tablaResult" onClick="consultar('K')"> K |</a>
-                <a href="#tablaResult" onClick="consultar('L')"> L |</a>
-                <a href="#tablaResult" onClick="consultar('M')"> M |</a>
-                <a href="#tablaResult" onClick="consultar('N')"> N |</a>
-                <a href="#tablaResult" onClick="consultar('O')"> O |</a>
-                <a href="#tablaResult" onClick="consultar('P')"> P |</a>
-                <a href="#tablaResult" onClick="consultar('Q')"> Q |</a>
-                <a href="#tablaResult" onClick="consultar('R')"> R |</a>
-                <a href="#tablaResult" onClick="consultar('S')"> S |</a>
-                <a href="#tablaResult" onClick="consultar('T')"> T |</a>
-                <a href="#tablaResult" onClick="consultar('U')"> U |</a>
-                <a href="#tablaResult" onClick="consultar('V')"> V |</a>
-                <a href="#tablaResult" onClick="consultar('W')"> W |</a>
-                <a href="#tablaResult" onClick="consultar('X')"> X |</a>
-                <a href="#tablaResult" onClick="consultar('Y')"> Y |</a>
-                <a href="#tablaResult" onClick="consultar('Z')"> Z |</a>
-                <a href="#tablaResult" onClick="consultar('TODOS')"> [% "TODOS" | i18n %] </a>
-        </div>
-    </fieldset>
-    <br>
-    <div id="result"></div>
-    <br>
+<br><br><div id="result_usuarios"> </div>
+    
 
 [% INCLUDE 'intranet-bottom.inc' %]
 
