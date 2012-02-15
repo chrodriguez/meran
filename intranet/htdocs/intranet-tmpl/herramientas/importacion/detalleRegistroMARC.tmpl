@@ -10,16 +10,18 @@
 
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend trigger click">[% "Detalle de Registro" | i18n %]</legend>
-    <div class="detalleMARC">
-    <div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
-        <ul>
-            <li><a href="#tabs-1">Registro Original</a></li>
-            <li><a href="#tabs-2">Registro Resultado</a></li>
-            <li><a href="#tabs-3">Vista Previa</a></li>
-        </ul>
-        <div id="tabs-1" >
-            <br><br>
-
+    
+    
+    <div class="tabbable">
+    <ul class="nav nav-tabs">
+    <li  class="active" ><a  href="#1" data-toggle="tab">[% 'Registro Original' | i18n %]</a> </li>
+    <li><a  href="#2" data-toggle="tab">[% 'Registro Resultado' | i18n %]</a></li>
+    <li><a  href="#3" data-toggle="tab">[% 'Vista Previa' | i18n %]</a></li>
+    </ul>
+    
+   <div class="tab-content">
+    <div class="tab-pane active" id="1">
+		
             <fieldset class="resultados_busqueda">
             <legend class="titulo_legend trigger click">[% "Registro Original" | i18n %]</legend>
                 <pre>
@@ -39,8 +41,7 @@
             </fieldset>
         </div>
 
-        <div id="tabs-2">
-            <br><br>
+  <div class="tab-pane" id="2">
 
             <fieldset class="resultados_busqueda">
             <legend class="titulo_legend trigger click">[% "Registro Resultado" | i18n %]</legend>
@@ -50,7 +51,7 @@
             </fieldset>
         </div>
 
-        <div id="tabs-3">
+  <div class="tab-pane" id="3">
     <fieldset>
            <legend>[% "get Niveles test" | i18n %]</legend>
 				[% GRUPOS = registro_importacion.getNiveles %]

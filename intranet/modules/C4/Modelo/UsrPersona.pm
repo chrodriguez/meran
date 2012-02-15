@@ -203,17 +203,13 @@ sub convertirEnSocio{
 sub esRegularToString{
     my ($self) = shift;
 
-    eval{
-    	return $self->getCondicion_object->estado->getNombre;
-    };
+    return $self->getCondicion_object->estado->getNombre;
 }
 
 sub esRegular{
     my ($self) = shift;
 
-    eval{
-    	return $self->getCondicion_object->getCondicion;
-    };
+    return $self->getCondicion_object->getCondicion;
 }
 
 

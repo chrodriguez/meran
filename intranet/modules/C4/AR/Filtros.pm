@@ -857,7 +857,34 @@ sub action_group_link_button{
     return $html;	
 }
 
-END { }       # module clean-up code here (global destructor)
+sub tabbedPane{
+    my (%params) = @_;
+    
+    my $html = "<div class='span12 columns'>";
+
+    $html .= "<h2>".$params{'titulo'}."</h2>";
+    $html .= "<p>".$params{'subtitulo'}."</p>";
+    $html .= "<ul id='tab' class='nav nav-tabs'>";    
+    
+    my $content_elems = $params{'content'};
+    foreach my $elem (@$content_elems){
+    	my $active = "";
+    	
+    	if ($elem->{'id'} eq $params{'active_id'}){
+    		$active = "class='active'";
+    	}
+    	$html .= "<li $active><a href='#".$elem->{'id'}."' data-toggle='tab'>".$elem->{'text'}."</a></li>";
+    }
+    
+    $html .= "</ul>";
+    
+    $html .= "<div id='".$params{'content_id'}."' class='tab-content'>";
+    
+    return $html;
+    
+}
+
+END { }
 
 1;
 __END__

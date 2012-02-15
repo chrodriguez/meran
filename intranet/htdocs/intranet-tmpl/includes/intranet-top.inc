@@ -101,11 +101,12 @@
 			checkTr();
 			$('.tooltip_link').tooltip({delay: { show: 1000, hide: 100 },});
 			$('.popover_button').popover({delay: { show: 800, hide: 100 },});
+			$(".alert").alert();
 			$('input[type="text"]').focus(function() {  
 			    $(this).removeClass("textInput").addClass("focusInput");  
 			});
 	        $('input[type="text"]').addClass("textInput");    
-	       // $('.dropdown-toggle').dropdown();
+	        $('.dropdown-toggle').dropdown();
 			if (UNLOAD == 1)
 				enableAlert();
 			else
@@ -122,12 +123,9 @@
 	      </div>
 	  </noscript>
 	  
-	  <div id="ajax-indicator" class="modal hide fade loading" data-toggle="modal">
-			<div id="block_1" class="barlittle"></div>
-			<div id="block_2" class="barlittle"></div>
-			<div id="block_3" class="barlittle"></div>
-			<div id="block_4" class="barlittle"></div>
-			<div id="block_5" class="barlittle"></div>
+	  <div id="ajax-indicator" class="modal hide fade loading">
+			<div class="circle"></div>
+			<div class="circle1"></div>
   	  </div>
 
 	  <header>
