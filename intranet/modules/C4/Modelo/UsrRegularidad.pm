@@ -88,5 +88,12 @@ sub setCondicion{
     $self->condicion($condicion);
 }
 
+sub getRegularidad{
+    my ($self) = shift;
+
+    my $cond = $self->getCondicion;
+    
+    return $cond?C4::AR::Filtros::i18n("REGULAR"):C4::AR::Filtros::i18n("NO REGULAR");	
+}
 
 1;
