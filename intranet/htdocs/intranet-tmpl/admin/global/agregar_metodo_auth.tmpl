@@ -5,7 +5,7 @@
         <div class="control-group">
             <label class="control-label" for="variable">[% 'Metodo' | i18n %]: </label>
             <div class="controls">
-                <input id="name_metodo" type="text">
+                <input id="name_metodo" required type="text">
                 [% PERL %]
                     print C4::AR::Filtros::setHelpInput(   
                                                     text        => "[% 'El M&eacute;todo se agrega deshabilitado por defecto.' | i18n %]",

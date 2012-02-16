@@ -25,17 +25,21 @@
 
 [% IF info_esquema %]
 	<div id="tabla_referencia">
-	    <fieldset class="resultados_busqueda">
-	        <legend class="titulo_legend trigger">[% "Esquema " | i18n %] [% HTML.escape(esquema_title) %]</legend>
-	                <div class="datos_tabla_div" id="datos_tabla_div_esquema">
-	                    <table id="tabla_esquema" class="datos_tabla" border=0 cellspacing=0 cellpadding=0>
-	                        <thead>
-	                            <tr class="titulo_tabla_resultado">
-	                                <th class=""> [% 'Nombre' | i18n %]</th>
-	                                <th class=""> [% 'Descripci&oacute;n' | i18n %]</th>
-	                                <th class=""> [% 'Eliminar' | i18n %]</th>
-	                            </tr>
-	                        </thead>
+	    <fieldset>
+	        <legend>[% "Esquema " | i18n %] [% HTML.escape(esquema_title) %]</legend>
+	                <div class="datos_tabla_div" id="datos_tabla_div_esquema">	 
+	                                       
+	                        [% PERL %]
+                                print C4::AR::Filtros::tableHeader(   
+                                                  id              => "datos_tabla_div_esquema",
+                                                  class           => "clases_adicionales",
+                                                  selectAll_id    => "",
+                                                  columns         => ['[% "Nombre"|i18n %]','[% "Descripci&oacute;n"|i18n %]',
+                                                                    '[% "Eliminar"|i18n %]',
+                                                                     ]                                   
+                                            ) ;
+                            [% END %]
+                            
 	                        <tbody>
 	                             <tr>
 	                                <td class="editable_esquema" id="[% info_esquema.id %]___nombre">[% HTML.escape(info_esquema.getNombre) %]</td>
@@ -60,15 +64,15 @@
 	                                </script>
 	                                <td>
 	                                    [% PERL %]
-	                                        print C4::AR::Filtros::to_Icon(  
-	                                                                            boton   => "icon_cancelar",
-	                                                                            onClick => "eliminarEsquema('[% info_esquema.id %]');",
-	                                                                            title   => "[% 'Eliminar Esquema' | i18n %]",
-	                                                                            alternClass => "botonCentradoTabla",
-	                                                                            elem => 'span',
-	                                                                            style => 'float: left;',
-	                                                ) ;
-	                                    [% END %]
+                                            print C4::AR::Filtros::action_button( 
+                                                                          button    => "btn click",
+                                                                          action    => "eliminarEsquema([% id3 %])", 
+                                                                          icon      => "icon-remove",
+                                                                          title     => "",
+                                                                      ) ;
+
+
+                                        [% END %]
 	                                </td>
 	                             </tr>
 	                        </tbody>
@@ -78,17 +82,15 @@
 	    </fieldset>
 	</div>
 
-
-	<ul class="tabs">
-	  <li class="active"><a href="#split_campos">[% 'Separaci&oacute;n de Campos' | i18n %]</a></li>
-	  <li><a href="#join_campos">[% 'Uni&oacute;n de Campos' | i18n %]</a></li>
-	</ul>
-	 
+	<a class="btn" href="#split_campos">[% 'Separaci&oacute;n de Campos' | i18n %]</a>
+	<a class="btn" href="#join_campos">[% 'Uni&oacute;n de Campos' | i18n %]</a>
+	
+    </br>
+    </br>
+    </br>
 	<div class="pill-content">
 	  <div class="active" id="split_campos">[% INCLUDE 'herramientas/importacion/_detalle_esquema.inc' %]</div>
 	  <div id="join_campos"></div>
 	</div>
 	
-
 [% END %]
-

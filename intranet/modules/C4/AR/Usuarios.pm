@@ -80,6 +80,8 @@ use vars qw(@EXPORT_OK @ISA);
     _verificarLibreDeuda
     updateUserProfile
     modificarCredencialesSocio
+    getEsquemaRegularidades
+    editarRegularidadEsquema
 );
 
 =item
@@ -539,7 +541,7 @@ sub getSocioInfo {
     push (@filtros, (id_socio => {eq =>$id_socio}) );
 
     my  $socio = C4::Modelo::UsrSocio::Manager->get_usr_socio(query => \@filtros,
-                                                              require_objects => ['persona','ui','persona.categoria','persona.ciudad_ref',
+                                                              require_objects => ['persona','ui','categoria','persona.ciudad_ref',
                                                                                   'persona.documento'],
                                                               with_objects => ['persona.alt_ciudad_ref'],
                                                              );
@@ -560,7 +562,7 @@ sub getSocioInfoPorNroSocio {
     if ($nro_socio){
         my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
                                                     query => [ nro_socio => { eq => $nro_socio } ],
-                                                    require_objects => ['persona','ui','persona.categoria',
+                                                    require_objects => ['persona','ui','categoria',
                                                                         'persona.documento'],
                                                     with_objects => ['persona.alt_ciudad_ref','persona.ciudad_ref'],
                                                     select       => ['persona.*','usr_socio.*'],
@@ -674,13 +676,13 @@ sub getSocioLike {
                                                                             limit   => $cantR,
                                                                             offset  => $ini,
                                                                             select => ['*','length(apellido) AS agregacion_temp'],
-                                                              with_objects => ['persona','ui','persona.categoria','persona.ciudad_ref',
+                                                              with_objects => ['persona','ui','categoria','persona.ciudad_ref',
                                                                                   'persona.documento'],
      ); 
 
     #Obtengo la cant total de socios para el paginador
     my $socios_array_ref_count = C4::Modelo::UsrSocio::Manager->get_usr_socio_count( query => \@filtros,
-                                                              with_objects => ['persona','ui','persona.categoria','persona.ciudad_ref',
+                                                              with_objects => ['persona','ui','categoria','persona.ciudad_ref',
                                                                                   'persona.documento'],
                                                                      );
 
@@ -802,13 +804,13 @@ sub BornameSearchForCard {
     eval{
         $socios_array_ref_count = C4::Modelo::UsrSocio::Manager->get_usr_socio_count(   query => \@filtros,
                                                                             sort_by => ( $socioTemp->sortByString($params->{'orden'}) ),
-                                                              require_objects => ['persona','ui','persona.categoria','persona.ciudad_ref',
+                                                              require_objects => ['persona','ui','categoria','persona.ciudad_ref',
                                                                                   'persona.documento'],
         );
         if ($params->{'export'}){
 	        $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
 	                                                                            sort_by => ( $socioTemp->sortByString($params->{'orden'}) ),
-	                                                              require_objects => ['persona','ui','persona.categoria','persona.ciudad_ref',
+	                                                              require_objects => ['persona','ui','categoria','persona.ciudad_ref',
 	                                                                                  'persona.documento'],
 	        );
         }else{
@@ -816,7 +818,7 @@ sub BornameSearchForCard {
                                                                                 sort_by => ( $socioTemp->sortByString($params->{'orden'}) ),
                                                                                  limit => $params->{'cantR'},
                                                                                  offset => $params->{'ini'},
-                                                                  require_objects => ['persona','ui','persona.categoria','persona.ciudad_ref',
+                                                                  require_objects => ['persona','ui','categoria','persona.ciudad_ref',
                                                                                       'persona.documento'],
             );
         }
@@ -1073,6 +1075,36 @@ sub updateUserProfile{
 	
 	return ($socio);
 }
+
+sub getEsquemaRegularidades{
+	
+	my $regularidades = C4::Modelo::UsrRegularidad::Manager->get_usr_regularidad(require_objects => ['estado','categoria'], sort_by => ['estado.nombre ASC'],);
+	
+	return $regularidades;
+	
+}
+
+
+sub editarRegularidadEsquema{
+	
+	my ($ref,$value) = @_;
+
+    my @filtros;
+
+    push (@filtros, (id => {eq =>$ref}) );
+	
+	my $regularidades = C4::Modelo::UsrRegularidad::Manager->update_usr_regularidad(   where => \@filtros, 
+	                                                                                   set => {condicion => $value} );
+	
+	
+	return ($value);
+	
+}
+
+
+
+
+
 
 END { }       # module clean-up code here (global destructor)
 

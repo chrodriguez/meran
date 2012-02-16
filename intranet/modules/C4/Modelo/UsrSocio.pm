@@ -20,6 +20,7 @@ __PACKAGE__->meta->setup(
         last_change_password             => { type => 'date' },
         change_password                  => { type => 'integer', overflow => 'truncate', default => '0', not_null => 1 },
         cumple_requisito                 => { type => 'varchar', overflow => 'truncate', length=>32, not_null => 1, default => '0'},
+        id_estado                        => { type => 'integer', overflow => 'truncate', not_null => 1,  default => 20 },
         activo                           => { type => 'integer', overflow => 'truncate', default => 0, not_null => 1 },
         agregacion_temp                  => { type => 'varchar', overflow => 'truncate', length => 255 },
         note                             => { type => 'text', not_null => 1 },
@@ -38,6 +39,7 @@ __PACKAGE__->meta->setup(
         client_ip_recover_pwd            => { type => 'varchar', overflow => 'truncate', length => 255 },
         recover_date_of                  => { type => 'timestamp'  },
         last_auth_method                 => { type => 'varchar', overflow => 'truncate', default => 'mysql', length => 255 },
+        id_categoria                     => { type => 'integer', overflow => 'truncate', length =>2, not_null => 1, default => 8 },       
         
     ],
 
@@ -54,6 +56,20 @@ __PACKAGE__->meta->setup(
       {
         class       => 'C4::Modelo::PrefUnidadInformacion',
         key_columns => { id_ui => 'id_ui' },
+        type        => 'one to one',
+      },
+
+     categoria => 
+      {
+        class       => 'C4::Modelo::UsrRefCategoriaSocio',
+        key_columns => { id_categoria => 'id' },
+        type        => 'one to one',
+      },
+
+     estado => 
+      {
+        class       => 'C4::Modelo::UsrEstado',
+        key_columns => { id_estado => 'id_estado' },
         type        => 'one to one',
       },
 
@@ -193,6 +209,19 @@ sub desautorizarTercero{
     $self->save();
 }
 
+
+sub getId_estado{
+    my ($self) = shift;
+    return ($self->id_estado);
+}
+
+sub setId_estado{
+    my ($self) = shift;
+    my ($id_estado) = @_;
+    $self->id_estado($id_estado);
+}
+
+
 sub tieneAutorizado{
 
     my ($self)=shift;
@@ -226,7 +255,7 @@ sub modificar{
     my ($data_hash)=@_;
 
     $self->setId_ui($data_hash->{'id_ui'});
-    $self->persona->setId_categoria($data_hash->{'cod_categoria'});
+    $self->setId_categoria($data_hash->{'cod_categoria'});
 
     my $today = Date::Manip::ParseDate("today");
     C4::AR::Debug::debug("TODAY ==================================== >".$today);
@@ -461,20 +490,20 @@ sub setId_ui{
     $self->id_ui($id_ui);
 }
 
-sub categoria{
+sub getCategoria{
     my ($self) = shift;
-    return ($self->persona->categoria);
+    return ($self->categoria);
 }
 
 
 sub getCod_categoria{
     my ($self) = shift;
-    return ($self->persona->getCod_categoria);
+    return ($self->categoria->getCategory_code);
 }
 
 sub getId_categoria{
     my ($self) = shift;
-    return ($self->persona->id_categoria);
+    return ($self->id_categoria);
 }
 
 sub getFecha_alta{
@@ -656,18 +685,50 @@ sub setThemeSave{
     $self->save();
 }
 
-sub esRegular{
-    my ($self) = shift;
-
-    return $self->persona->esRegular;
-}
-
 sub esRegularToString{
     my ($self) = shift;
 
-    return $self->persona->esRegularToString;
+    my $object = $self->getCondicion_object;
+    my $result;
+    
+    eval{
+        $result =  $object?$object->estado->getNombre:C4::AR::Filtros::i18n("INDEFINIDO");
+    };
+    
+    if (@$){
+        return C4::AR::Filtros::i18n("INDEFINIDO");
+    }else{
+    	return $result;
+    }
 }
 
+sub esRegular{
+    my ($self) = shift;
+    
+    my $object = $self->getCondicion_object();
+    
+    if ($object){
+        return $object->getCondicion;
+    }else{
+        return 0;
+    }
+}
+
+
+sub getCondicion_object{
+    my ($self) = shift;
+
+    use C4::Modelo::UsrRegularidad::Manager;
+
+    my @filtros;
+    
+    push (@filtros, (usr_estado_id => {eq => $self->getId_estado }) );
+    push (@filtros, (usr_ref_categoria_id => {eq => $self->getId_categoria }) );
+    
+    my ($estados) = C4::Modelo::UsrRegularidad::Manager->get_usr_regularidad(query => \@filtros,);
+    
+    return $estados->[0];
+}
 sub getIs_super_user{
     my ($self) = shift;
 
