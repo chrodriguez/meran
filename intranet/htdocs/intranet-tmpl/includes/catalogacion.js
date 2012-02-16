@@ -429,7 +429,7 @@ function updateMostrarEstructuraDelNivel2(responseText){
         } 
     }      
     
-//     scrollTo('nivel2Tabla');   
+     scrollTo('nivel2Tabla');   
 }
 
 
@@ -1280,8 +1280,9 @@ function crearBotonAyudaCampo(campo,id_div_alta_indicador,indicadores){
     var html = "<div class='btn-group inline'>"+"<a class='btn click' onclick=" + funcion + " title='Info'><i class='icon-info-sign'></i></a>";
     
     if (indicadores != '0')
-    	html += "<a class='btn click' onclick=open_alta_indicador('" + id_div_alta_indicador + "') title='Indicadores'><i class='icon-align-justify'></i></a></div>";
+    	html += "<a class='btn click' onclick=open_alta_indicador('" + id_div_alta_indicador + "') title='Indicadores'><i class='icon-align-justify'></i></a>";
 
+    html += "</div>";
     return html;
     
 }

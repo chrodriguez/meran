@@ -1,3 +1,9 @@
+<script>
+	$(document).ready(function(){
+	    $('.tooltip_link').tooltip({delay: { show: 1000, hide: 100 },});
+	});
+</script>
+
 [% PERL %]
     print C4::AR::Filtros::tableHeader(   
                                             id              => "tabla_ejemplares",
