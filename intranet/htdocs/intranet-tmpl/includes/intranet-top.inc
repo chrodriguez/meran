@@ -85,9 +85,11 @@
 	                // la primera vez 'clase' es null	                
 	                if(clase == null || clase == ""){
 	                    $(this).addClass("marked");
+	                    $(this).children().addClass("marked")
 	                    $(this).children(':first-child').children(':first-child').attr('checked','true');
 	                }else{
 	                    $(this).removeClass("marked"); 
+	                    $(this).children().removeClass("marked")
 	                    $(this).children(':first-child').children(':first-child').removeAttr('checked');
 	                }
 	            }

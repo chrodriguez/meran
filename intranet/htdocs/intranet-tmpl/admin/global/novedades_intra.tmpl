@@ -3,12 +3,12 @@
 <script type="text/javascript">
 
     function obtenerNovedades(){
-        objAH=new AjaxHelper(updateObtenerNovedades);
-        objAH.debug= true;
-        objAH.showOverlay = true;
-        objAH.url=URL_PREFIX+'/admin/global/novedades_intraDB.pl';
-        objAH.tipoAccion='LISTAR';
-        objAH.funcion= 'changePage';
+        objAH               = new AjaxHelper(updateObtenerNovedades);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;
+        objAH.url           = URL_PREFIX+'/admin/global/novedades_intraDB.pl';
+        objAH.tipoAccion    = 'LISTAR';
+        objAH.funcion       = 'changePage';
         objAH.sendToServer();
     }
 
@@ -22,14 +22,14 @@
 
     
     function eliminarNovedad(id_novedad){
-        jConfirm(ELIMINAR_NOVEDAD, NOVEDAD_TITLE, function(confirmStatus){
+        bootbox.confirm(ELIMINAR_NOVEDAD, function(confirmStatus){
             if (confirmStatus){
-                objAH=new AjaxHelper(updateEliminarNovedad);
-                objAH.debug= true;
-                objAH.url=URL_PREFIX+'/admin/global/novedades_intraDB.pl';
-                objAH.showOverlay       = true;
-                objAH.tipoAccion='ELIMINAR';
-                objAH.id=id_novedad;
+                objAH               = new AjaxHelper(updateEliminarNovedad);
+                objAH.debug         = true;
+                objAH.url           = URL_PREFIX+'/admin/global/novedades_intraDB.pl';
+                objAH.showOverlay   = true;
+                objAH.tipoAccion    = 'ELIMINAR';
+                objAH.id            = id_novedad;
                 objAH.sendToServer();
             }
         });
