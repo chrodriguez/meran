@@ -156,7 +156,6 @@ function actualizarPersonas(cant,arrayPersonNumbers){
 function updateInfoActualizar(responseText){
 
  	var Messages=JSONstring.toObject(responseText);
-alert("adasd");
  	setMessages(Messages);
 	
 	if (!fromDetail)
