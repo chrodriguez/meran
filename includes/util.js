@@ -205,7 +205,7 @@ function registrarKeypress(typeObject) {
  */
 function scrollTo(idObj) {
 	
-	alert("haciendo scroll a "+idObj);
+//	alert("haciendo scroll a "+idObj);
 	var result_array = $("#" + idObj);
 	// se verifica la existencia de la componente
 	if (result_array.length == 0)

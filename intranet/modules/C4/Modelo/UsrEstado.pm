@@ -43,7 +43,7 @@ sub agregar{
     my ($data_hash)=@_;
     #Asignando data...
     $self->setFuente($data_hash->{'fuente'});
-    $self->setCategoria($data_hash->{'categoria'});
+    $self->setNombre($data_hash->{'categoria'});
     $self->conformarUsrRegularidad();
     $self->save();
 }
