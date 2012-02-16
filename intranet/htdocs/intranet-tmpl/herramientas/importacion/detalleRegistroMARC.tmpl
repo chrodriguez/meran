@@ -14,13 +14,13 @@
     
     <div class="tabbable">
     <ul class="nav nav-tabs">
-    <li  class="active" ><a  href="#1" data-toggle="tab">[% 'Registro Original' | i18n %]</a> </li>
-    <li><a  href="#2" data-toggle="tab">[% 'Registro Resultado' | i18n %]</a></li>
-    <li><a  href="#3" data-toggle="tab">[% 'Vista Previa' | i18n %]</a></li>
+    <li  class="active" ><a  href="#RO" data-toggle="tab">[% 'Registro Original' | i18n %]</a> </li>
+    <li><a  href="#RR" data-toggle="tab">[% 'Registro Resultado' | i18n %]</a></li>
+    <li><a  href="#VP" data-toggle="tab">[% 'Vista Previa' | i18n %]</a></li>
     </ul>
     
    <div class="tab-content">
-    <div class="tab-pane active" id="1">
+    <div class="tab-pane active" id="RO">
 		
             <fieldset class="resultados_busqueda">
             <legend class="titulo_legend trigger click">[% "Registro Original" | i18n %]</legend>
@@ -41,7 +41,7 @@
             </fieldset>
         </div>
 
-  <div class="tab-pane" id="2">
+  <div class="tab-pane" id="RR">
 
             <fieldset class="resultados_busqueda">
             <legend class="titulo_legend trigger click">[% "Registro Resultado" | i18n %]</legend>
@@ -51,7 +51,7 @@
             </fieldset>
         </div>
 
-  <div class="tab-pane" id="3">
+  <div class="tab-pane" id="VP">
     <fieldset>
            <legend>[% "get Niveles test" | i18n %]</legend>
 				[% GRUPOS = registro_importacion.getNiveles %]
