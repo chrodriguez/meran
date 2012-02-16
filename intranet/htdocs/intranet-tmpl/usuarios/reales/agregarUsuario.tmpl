@@ -68,7 +68,7 @@
             <div class="control-group error">
                   <label class="control-label" for="apellido">[% "Apellido" | i18n %]</label>
                   <div class="controls">
-                        <input id="apellido" name="apellido"  type="text" class="input-xlarge focused" value="[% socio_modificar.persona.getApellido %]" autofocus>
+                        <input id="apellido" name="apellido" required  type="text" class="input-xlarge focused" value="[% socio_modificar.persona.getApellido %]" autofocus>
                         <script>
                               if (!("autofocus" in document.createElement("input"))) {
                                 document.getElementById("apellido").focus();
