@@ -11,8 +11,8 @@
                     <label class="control-label" for="variable"> [% "Variable" | i18n %]: </label>
                     <div class="controls">
                         [% IF variable %]
-		                [% variable %]
-		                <input type="hidden" id="variable" value="[% variable %]">
+		                    [% variable %]
+		                    <input type="hidden" id="variable" value="[% variable %]">
 	                    [% ELSE %]
 		                    <input type="text" id="variable" size="50">
 	                    [% END %]
@@ -27,7 +27,11 @@
                 <div class="control-group">
                     <label class="control-label" for="valor"> [% "Valor" | i18n %]: </label>
                     <div class="controls">
-                        [% valor %]
+                        [% IF valor %]
+                            [%  valor %]
+                        [% ELSE %]
+                            <input id="valor" type="text" size="50" name="valor">
+                        [% END %]
                     </div>
                 </div>
                 
@@ -44,7 +48,7 @@
 	                    [% PERL %]
 	                                print C4::AR::Filtros::to_Button(   
 	                                                    text    => "[% 'Guardar Modificaci&oacute;n' | i18n %]",
-	                                                    boton   => "btn btn-large btn-primary",
+	                                                    boton   => "btn btn-primary",
 	                                                    onClick => "guardarModificacion();",
 	                                                    width   => "auto",
 	                                                    title   => "[% 'Guardar Modificaci&oacute;n' | i18n %]", 
@@ -57,7 +61,7 @@
 	                    [% PERL %]
 	                                print C4::AR::Filtros::to_Button(   
 	                                                    text    => "[% 'Guardar Nueva Variable' | i18n %]",
-	                                                    boton   => "btn btn-large btn-primary",
+	                                                    boton   => "btn btn-primary",
 	                                                    onClick => "guardarNuevaVariable();",
 	                                                    width => "auto",
 	                                                    title   => "[% 'Guardar Nueva Variable' | i18n %]",
@@ -67,10 +71,21 @@
                       [% END %]
                 </div>
 
-            <div style="clear:both">
-                <p>[% "NOTA: Para las variables que representan una hora o minutos, solo ingresar la hora en numeros (hh:mm) o los minutos (mm).</p>
-                <p>Ej: la variable close = 18:30, beginESissue = 60." | i18n %]</p>
-            </div>
+            [% PERL %]
+                print C4::AR::Filtros::setHelpInput(   
+                                    text        => "[% 'Para las variables que representan una hora o minutos, solo ingresar la hora en numeros (hh:mm) o los minutos (mm).' | i18n %]",
+                                    class       => "info",
+                                    textLabel   => "NOTA",   
+                        ) ;
+	       [% END %]
+	       
+	       
+	       [% PERL %]
+                print C4::AR::Filtros::setHelpInput(   
+                                    text        => "[% 'Ej: la variable close = 18:30, beginESissue = 60.' | i18n %]",
+                        ) ;
+	       [% END %]
+
 
         </fieldset>
     </form>

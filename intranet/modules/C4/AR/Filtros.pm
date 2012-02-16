@@ -251,7 +251,7 @@ sub setHelp{
 
 
 =item 
-Ffuncion que crea los mensajes de ayuda en los inputs
+Funcion que crea los mensajes de ayuda en los inputs
 Recibe como parametro una hash con:
     textLabel: texto del label
     class: clase del label (para darle colores, sino pone una por default)
@@ -674,7 +674,7 @@ sub action_link_button{
     	$popopver_attr.= " rel='popover' data-content='$text_pop' data-original-title='$title_pop' ";   
     }
     
-    my $params   = $params_hash_ref{'params'} || $params_hash_ref{'url'}; #obtengo el llamado a la funcion en el evento onclick
+    my $params   = $params_hash_ref{'params'}; #obtengo el llamado a la funcion en el evento onclick
     my $title    = $params_hash_ref{'title'}; #obtengo el title de la componete
     my $popover  = $params_hash_ref{'popover'} || undef;
     my @result;
