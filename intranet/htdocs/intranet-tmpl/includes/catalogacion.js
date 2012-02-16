@@ -404,7 +404,7 @@ function mostrarEstructuraDelNivel2(){
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion    = "MOSTRAR_ESTRUCTURA_DEL_NIVEL";
     objAH.nivel         = 2;
-    objAH.id_tipo_doc   = TEMPLATE_ACTUAL;//$("#tipo_nivel3_id").val();
+    objAH.id_tipo_doc   = TEMPLATE_ACTUAL;
     objAH.sendToServer();
 }
 
@@ -415,7 +415,6 @@ function updateMostrarEstructuraDelNivel2(responseText){
     //proceso la info del servidor y se crean las componentes en el cliente
     var objetos_array = JSONstring.toObject(responseText);
     procesarInfoJson(objetos_array, null); 
-// FIXME se llama dos veces esto!!!!!!!!!!!!
 	//asigno el handler para el validador
 	validateForm('formNivel2',guardarModificarDocumentoN2);
 //     addRules();
@@ -1028,7 +1027,8 @@ function updateGuardarModificacionDocumentoN3(responseText){
 
 function guardar(nivel){
     if(nivel == 1){
-        $('#formNivel1').submit();        
+        $('#formNivel1').submit();
+//         guardarModificarDocumentoN1();
     } 
     if(nivel == 2){
         $('#formNivel2').submit();
@@ -1357,9 +1357,9 @@ function procesarSubCampo(objeto, marc_group){
     var tiene_estructura    = marc_conf_obj.getTieneEstructura(); //falta q los niveles 1, 2, 3 mantengan esta estructura
       
     var id_temp_content_div = "div_control"+marc_conf_obj.getIdCompCliente()
-    var content_div_open= "<div id='"+id_temp_content_div+"' class=control-group>";
-    var content_div_close= "</div>";
-    var controls_div= "<div class=controls>";
+    var content_div_open    = "<div id='"+id_temp_content_div+"' class=control-group>";
+    var content_div_close   = "</div>";
+    var controls_div        = "<div class=controls>";
     
 
     if(marc_conf_obj.getObligatorio() == "1"){  
