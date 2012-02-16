@@ -85,10 +85,12 @@
 	                // la primera vez 'clase' es null	                
 	                if(clase == null || clase == ""){
 	                    $(this).addClass("marked");
+	                    //pintamos el <td> por el nuevo css bootstrap
 	                    $(this).children().addClass("marked")
 	                    $(this).children(':first-child').children(':first-child').attr('checked','true');
 	                }else{
 	                    $(this).removeClass("marked"); 
+	                    //pintamos el <td> por el nuevo css bootstrap
 	                    $(this).children().removeClass("marked")
 	                    $(this).children(':first-child').children(':first-child').removeAttr('checked');
 	                }
