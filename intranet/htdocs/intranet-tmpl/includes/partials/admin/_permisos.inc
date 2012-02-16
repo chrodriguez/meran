@@ -1,7 +1,7 @@
 [% INCLUDE  'AutocompleteHelper.inc'  %]
 
 <div class="permisos">
-    <form class="form-horizontal">
+    <form class="form-horizontal" onsubmit="return false;">
         <fieldset>
             <legend class="titulo_legend">[% "Selecci&oacute;n de Permisos" | i18n %]</legend>
             
@@ -38,10 +38,11 @@
                 
                     [% PERL %]
                         print C4::AR::Filtros::to_Button(   text    => "[% 'Obtener Permisos' | i18n %]",
-                                                            boton   => "btn btn-large btn-primary",
+                                                            boton   => "btn btn-primary",
                                                             onClick => "obtenerPermisos();",
                                                             title   => "[% 'Obtener Permisos' | i18n %]",
                                                             alternClass => "botonCentrado",
+                                                            inline  => "1"
                                 ) ;
                     [% END %]
                     
