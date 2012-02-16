@@ -1078,7 +1078,7 @@ sub updateUserProfile{
 
 sub getEsquemaRegularidades{
 	
-	my $regularidades = C4::Modelo::UsrRegularidad::Manager->get_usr_regularidad(require_objects => ['estado','categoria'], sort_by => ['estado.nombre ASC'],);
+	my $regularidades = C4::Modelo::UsrRegularidad::Manager->get_usr_regularidad(require_objects => ['estado','categoria'], sort_by => ['categoria.description, estado.nombre ASC'],);
 	
 	return $regularidades;
 	
@@ -1094,7 +1094,7 @@ sub editarRegularidadEsquema{
     push (@filtros, (id => {eq =>$ref}) );
 	
 	my $regularidades = C4::Modelo::UsrRegularidad::Manager->update_usr_regularidad(   where => \@filtros, 
-	                                                                                   set => {condicion => $value} );
+	                                                                                   set => {condicion => C4::AR::Utilidades::translateYesNo_toNumber($value)} );
 	
 	
 	return ($value);

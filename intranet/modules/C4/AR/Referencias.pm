@@ -55,6 +55,7 @@ use vars qw(@EXPORT_OK @ISA);
                     obtenerEstantes
                     obtenerUIByIdUi
                     obtenerDefaultUI
+                    obtenerEstados
                     
         );
 
@@ -784,9 +785,9 @@ sub agregarRegistro{
        
        C4::AR::Debug::debug("ALIAS DE LA TABLA ADDNEWRECORD ======================== ".$alias);
 
-    eval{
+    #eval{
         $object = $tabla->addNewRecord();
-    };
+    #};
 
     $tabla = $tabla->createFromAlias($alias);
 
@@ -844,6 +845,17 @@ sub obtenerEstantes{
 	
 }
 
+
+sub obtenerEstados{
+    
+    use C4::Modelo::UsrEstado::Manager;
+    
+    my $estados = C4::Modelo::UsrEstado::Manager->get_usr_estado();
+    
+    return ($estados);
+    
+    
+}
 
 END { }       # module clean-up code here (global destructor)
 
