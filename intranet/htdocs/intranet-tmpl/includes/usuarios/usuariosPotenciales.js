@@ -94,7 +94,7 @@ function detalleUsuario(){
     objAH=new AjaxHelper(updateDetalleUsuario);
     objAH.url=URL_PREFIX+'/usuarios/potenciales/detalleUsuario.pl';
     objAH.debug= true;
-    objAH.showOverlay       = true;
+    objAH.showOverlay = true;
     objAH.nro_socio= usuario.ID;
     objAH.sendToServer();
 }
@@ -111,19 +111,21 @@ function habilitar(){
 	var cant=checks.length;
 	var accion=$("#accion").val();
 	if (cant>0){
-		theStatus= UD_ESTA_A_PUNTO + accion + A_LOS_PROPIETARIOS; 
+		theStatus= HABILITAR_POTENCIALES_CONFIRM; 
 	
 		for(i=0;i<checks.length;i++){
-			theStatus=theStatus+ TARJETA_NRO + array[i].value+"\n";
-			personNumbers[i]=array[i].name;
+			personNumbers[i]=array[i].value;
 		}
 
-		theStatus=theStatus + ESTA_SEGURO;
 		if (cant>0){
-			if (confirm (theStatus)){actualizarPersonas(cant,personNumbers);}
+			bootbox.confirm(theStatus, function (ok){ 
+									if (ok)
+										actualizarPersonas(cant,personNumbers);
+			}
+			);
 		}
 	}
-	else{ alert (NO_SE_SELECCIONO_NINGUN_USUARIO);}
+	else{ jAlert (NO_SE_SELECCIONO_NINGUN_USUARIO);}
 }	
 
 function habilitarDesdeDetalle(nro_socio){
@@ -136,6 +138,7 @@ function actualizarPersonas(cant,arrayPersonNumbers){
 	objAH=new AjaxHelper(updateInfoActualizar);
 	objAH.url= URL_PREFIX+"/usuarios/potenciales/usuariosPotencialesDB.pl";
 	objAH.debug= true;
+	objAH.showOverlay = true;
 	objAH.cantidad= cant;
 	var tipoAccion = "HABILITAR_PERSON";
 

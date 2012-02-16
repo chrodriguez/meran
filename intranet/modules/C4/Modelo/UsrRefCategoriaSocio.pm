@@ -36,6 +36,24 @@ sub nextMember{
     return(C4::Modelo::UsrRefTipoDocumento->new());
 }
 
+
+sub conformarUsrRegularidad{
+    my ($self)=shift;
+
+    my ($estados_array_ref)  = C4::AR::Referencias::obtenerEstados();
+
+    foreach my $estado (@$estados_array_ref) {
+        my $regularidad = C4::Modelo::UsrRegularidad->new();
+        my %data_hash ={};
+
+        $data_hash{'usr_estado_id'} = $estado->getId_estado;
+        $data_hash{'usr_ref_categoria_id'} = $self->getId();
+        $data_hash{'Condicion'} = 0;
+        $regularidad->agregar(\%data_hash);
+    }    
+    
+}
+
 sub getId{
     my ($self) = shift;
     return ($self->id);    

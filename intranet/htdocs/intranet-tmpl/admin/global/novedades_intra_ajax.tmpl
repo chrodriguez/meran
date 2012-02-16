@@ -13,18 +13,21 @@
         [% IF novedades %]
             <div class="datos_tabla_div_user">
                 <div class="alert alert-info">[% "La cantidad de novedades es" | i18n %]: [% cant_novedades %]</div>
-                <table id="tablaResult" class="table table-striped">
-                    <thead>
-                        <tr class="titulo_tabla_resultado">
-                            <th>[% "Fecha" | i18n %]</th>
-                            <th>[% "Usuario" | i18n %]</th>
-                            <th>[% "Titulo" | i18n %]</th>
-                            <th>[% "Resumen" | i18n %]</th>
-                            <th>[% "Categor&iacute;a" | i18n %]</th>
-                            <th>[% "Eliminar" | i18n %]</th>
-                            <th>[% "Editar" | i18n %]</th>
-                        </tr>
-                    </thead>
+                
+                [% PERL %]
+                        print C4::AR::Filtros::tableHeader(   
+                                          id              => "novedades_intra_table",
+                                          class           => "",
+                                          selectAll_id    => "",
+                                          columns         => ['[% "Fecha"|i18n %]','[% "Usuario"|i18n %]',
+                                                            '[% "T&iacute;tulo"|i18n %]', '[% "Resumen"|i18n %]',
+                                                            '[% "Categor&iacute;a"|i18n %]', '[% "Eliminar"|i18n %]',
+                                                            '[% "Editar"|i18n %]',
+                                                             ]
+             
+                                                ) ;
+                    [% END %]
+
                     <tbody>
                         [% FOREACH novedad IN novedades %]
                             <tr class="leido[% novedad.getLeido %]">
@@ -52,22 +55,28 @@
                                     <a href="#">[% novedad.getCategoria %]</a>
                                 </td>
                                 <td>
+                                
                                     [% PERL %]
-                                                print C4::AR::Filtros::to_Icon(   text    => "[% 'Eliminar' | i18n %]",
-                                                        boton   => "icon_borrar",
-                                                        onClick => "eliminarNovedad('[% novedad.id %]')",
-                                                        width => "auto",
-                                                        title   => "[% 'Eliminar novedad' | i18n %]",
-                                                        ) ;
+                                      print C4::AR::Filtros::action_button( 
+                                                                      button    => "btn click",
+                                                                      action    => 'eliminarNovedad("[% novedad.id %]")', 
+                                                                      icon      => "icon-remove",
+                                                                      title     => "",
+                                                                  ) ;
+
+
                                     [% END %]
                                 </td>
                                 <td>
                                     [% PERL %]
-                                            print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
-                                                                            url =>      "[% url_prefix %]/admin/global/editar_novedad_intra.pl", 
-                                                                            params =>   ["id=[% novedad.id %]"],
-                                                                            title =>    "[% 'Editar novedad' | i18n %]"
-                                                                        ) ;
+                                          print C4::AR::Filtros::action_link_button( 
+                                                                          button    => "btn click",
+                                                                          url       => "[% url_prefix %]/admin/global/editar_novedad_intra.pl", 
+                                                                          params    =>  ["id=[% novedad.id %]"],
+                                                                          icon      => "icon-edit",
+                                                                          title     => "",
+                                                                      ) ;
+
                                     [% END %]
                                 </td>
                             </tr>
@@ -79,6 +88,7 @@
             <h2>[% 'No hay novedades' | i18n %]</h2>
         [% END %]
 </fieldset>
+<div class="form-actions">
 [% PERL %]
             print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar novedad' | i18n %]",
                     boton   => "boton_buscar",
@@ -87,3 +97,4 @@
                     title   => "[% 'Agregar novedad' | i18n %]",
                     ) ;
 [% END %]
+</div>

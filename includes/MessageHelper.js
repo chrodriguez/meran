@@ -57,36 +57,22 @@ function setMessages(Messages_hashref){
 //message1: 	codMsg: 'U324'
 //		message: 'Texto para informar'
     try{
-
-//         if (!($('#mensajes').html()))
          _createContentMessages();
         var i;
         //se agregan todos los mensajes
         for(i=0;i<Messages_hashref.messages.length;i++){
-            $('#mensajes').append('<div class="message_text" >'+Messages_hashref.messages[i].message + '</div>');
+            $('#mensajes').append('<p>' + Messages_hashref.messages[i].message + '</p>');
             
         }
-        $('#mensajes').css("display","block");
-
-        _show();
+        $('#mensajes').removeClass('hide');
         $('html, body').animate({scrollTop:0}, 'slow');
-        _delay(clearMessages, 20);
+        _delay(clearMessages, 60);
     }
     catch (e){
       // We do nothing ;)
     }
 }
 
-
-function assignCloseButton(){
-    $('#close_message').click(function()
-    {
-      //the messagebox gets scrool down with top property and gets hidden with zero opacity
-      $('#mensajes').animate({opacity:0}, "slow");
-      clearMessages();
-    });
-
-}
 //crea el contenedor para los mensajes, si ya esta creado, borra el contenido
 function _createContentMessages(){
 
@@ -95,20 +81,12 @@ function _createContentMessages(){
 	if(contenedor == null){
      //no existe el contenedor, se crea
 		//console.log("MessageHelper: Se crea el div cotenedor");
-		$('#end_top').append("<div class='mensajes_informacion'><div id='mensajes'><img id='close_message' style='float:right;cursor:pointer' src="+imagesForJS+'/iconos/12-em-cross.png'+" /></div></div>");
+		$('#end_top').append("<div id='mensajes' class='alert hide pagination-centered'><br /> </div>"); //faltaria agregar la clase warning, success o danger
 	}
 	else{
     //existe el contenedor, lo limpio
         clearMessages();
-        $('#mensajes').append("<img id='close_message' style='float:right;cursor:pointer' src='"+imagesForJS+'/iconos/12-em-cross.png'+ " />");
 	}
-
-    _show();
-    assignCloseButton();
-}
-
-function _show(){
-    $('#mensajes').animate({opacity:90,"filter":"alpha(opacity=90)"}, "fast");
 }
 
 //luego de x segundos se ejecuta la funcion pasada por parametro

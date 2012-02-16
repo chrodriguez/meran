@@ -139,7 +139,7 @@ var loaderPath= "";
         </fieldset>
 [% IF socio.tieneAutorizado %]
         <fieldset>
-            <legend class="titulo_legend_resaltado trigger click">[% 'Usuario adicional' | i18n %]</legend>
+            <legend class="trigger click">[% 'Usuario adicional' | i18n %]</legend>
               <div class="authorizedBack toggle_container_autorizado" style="display:block;">
                   <ul class="listado_sin_margen">
                       <li>
@@ -156,7 +156,7 @@ var loaderPath= "";
         </fieldset>
 [% END %]
         <fieldset>
-            <legend class="titulo_legend_resaltado trigger click" title='[% "click para acceder a las notas registradas sobre el usuario" | i18n %]'>
+            <legend class="trigger click" title='[% "click para acceder a las notas registradas sobre el usuario" | i18n %]'>
                     [% "Notas" | i18n %]
             </legend>
             <div class="toggle_container_nota" >
@@ -169,8 +169,8 @@ var loaderPath= "";
         </div>
 </div><!--columna izq -->
 
-<div class="columna_der" >
-          <fieldset  class="accionesUsuarios" style="clear:none" >
+<div>
+          <fieldset >
                 <legend class ="titulo_legend_resaltado">[% 'Acciones' | i18n %]</legend>
                     <ul class ="listaMenuBotones" >
                         [% IF needsDataValidation %]
@@ -301,4 +301,4 @@ var loaderPath= "";
               </div><!--columna_der -->
 </fieldset>
 </div><!--vcard -->
-<div id="basic-modal-content" class="modal hide fade"></div>
+<div id="basic-modal-content" class="modal hide fade">sdf</div>

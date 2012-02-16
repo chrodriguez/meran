@@ -1,15 +1,18 @@
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend">[% "Preferencias de Estilos" | i18n %]</legend>
     <div class="tablaResultado_preferencias" id="tablaResultado_preferencias" >
-        <table name="tablaResult" class="table table-striped" cellspacing="0" cellpadding="0" border="0" width="100%">
-            <thead>
-                <tr class="titulo_tabla_resultado">
-                    <th width="13%">[% "Variable" | i18n %]</th>
-                    <th width="25%">[% "Valor" | i18n %]</th>
-                    <th width="39%">[% "Explicaci&oacute;n" | i18n %]</th>
-                    <th width="3%">[% "Editar" | i18n %]</th>
-                </tr>
-            </thead>
+    
+        [% PERL %]
+            print C4::AR::Filtros::tableHeader(   
+                              id              => "estilosTable",
+                              class           => "",
+                              selectAll_id    => "",
+                              columns         => ['[% "Variable"|i18n %]','[% "Valor"|i18n %]',
+                                                '[% "Explicaci&oacute;n"|i18n %]', '[% "Editar"|i18n %]',
+                                                 ]                 
+                                    ) ;
+        [% END %]
+
         <tbody>
         [% FOREACH preferencia IN preferencias %]
             <tr>
@@ -24,6 +27,15 @@
                                             title   => "[% 'Modificar Preferencia' | i18n %]",
                                             alternClass => "botonCentradoTabla"
                                     ) ;
+                    [% END %]
+                    
+                     [% PERL %]
+                        print C4::AR::Filtros::action_button( 
+                                                      button    => "btn click",
+                                                      action    => 'modificarVariable("[% preferencia.getVariable %]","[% preferencia.getCategoria %]");', 
+                                                      icon      => "icon-edit",
+                                                      title     => "",
+                                                  ) ;
                     [% END %]
                 </td>
             

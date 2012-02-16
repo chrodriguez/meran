@@ -1,9 +1,8 @@
-<div class="buttonContainerHorizontal">
-    <ul class="horizontal-list" >
+<div class="form-actions">
         [% IF nuevoPermiso != 1%]
                         [% PERL %]
                                     print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Permisos' | i18n %]",
-                                                                        boton   => "thoughtbot",
+                                                                        boton   => "",
                                                                         onClick => "actualizarPermisos();",
                                                                         title   => "[% 'Guardar Permisos' | i18n %]",
                                             );
@@ -11,11 +10,10 @@
         [% ELSE %]
                 [% PERL %]
                                     print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Permisos' | i18n %]",
-                                                                        boton   => "thoughtbot",
+                                                                        boton   => "",
                                                                         onClick => "nuevoPermiso();",
                                                                         title   => "[% 'Guardar Permisos' | i18n %]",
                                             ) ;
                 [% END %]
         [% END %]
-  </ul>
 </div>

@@ -26,13 +26,7 @@ function updateModificarDatosDeUsuario(responseText){
             return(0);
 
         $('#basic-modal-content').html(responseText);
-        $('#basic-modal-content').modal({   containerCss:{
-                backgroundColor:"#fff",
-                height:420,
-                padding:0,
-                width:900
-            },
-        });
+        $('#basic-modal-content').modal();
 }
 
 function guardarModificacionUsuario(){
