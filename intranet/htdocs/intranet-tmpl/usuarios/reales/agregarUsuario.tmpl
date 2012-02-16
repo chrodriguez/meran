@@ -4,7 +4,6 @@
 [% END %]
 
 [% INCLUDE 'AutocompleteHelper.inc'  %]
-[% INCLUDE "FormValidateHelper.inc" %]
 [% INCLUDE "datePicker.inc" %]
 <script type="text/javascript">
 
@@ -55,8 +54,6 @@
     </legend>
 
 
-<!--<form method="post" name="userDataForm" id="userDataForm" onsubmit="return [% IF addBorrower == 1 %] add(); [% ELSE %] save_modif(); [% END %]">
-    --> 
   <section class="center-section-form"> 
 
     <fieldset>
@@ -521,6 +518,6 @@
     </form>
   </section>
 </fieldset>
-[% IF addBorrower %]
+[% IF addBorrower == 1%]
     [% INCLUDE "intranet-bottom.inc" %]
 [% END %]

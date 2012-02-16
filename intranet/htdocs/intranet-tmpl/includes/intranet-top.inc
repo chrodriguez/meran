@@ -152,4 +152,4 @@
 		    [% END %]
 		  </div>
 	
-	    <div id="basic-modal-content"></div>
+	    <div id="basic-modal-content" class="modal hide fade"></div>

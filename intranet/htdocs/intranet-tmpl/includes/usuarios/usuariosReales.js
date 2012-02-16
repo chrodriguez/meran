@@ -31,6 +31,7 @@ function updateModificarDatosDeUsuario(responseText){
 
 function guardarModificacionUsuario(){
 
+	$('#basic-modal-content').modal('hide');
 	objAH                   = new AjaxHelper(updateGuardarModificacionUsuario);
 	objAH.url               = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
 	objAH.debug             = true;

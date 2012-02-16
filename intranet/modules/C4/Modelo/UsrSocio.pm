@@ -179,7 +179,7 @@ sub agregar{
     }
 
     $self->save();
-    $self->setId_categoria($data_hash->{'cod_categoria'});
+    $self->setId_categoria(C4::AR::Referencias::idCategoriaDeSocio($data_hash->{'cod_categoria'}));
     $self->save();
     $self->setCredentials($data_hash->{'credential_type'});
 
@@ -255,7 +255,7 @@ sub modificar{
     my ($data_hash)=@_;
 
     $self->setId_ui($data_hash->{'id_ui'});
-    $self->setId_categoria($data_hash->{'cod_categoria'});
+    $self->setId_categoria(C4::AR::Referencias::idCategoriaDeSocio($data_hash->{'cod_categoria'}));
 
     my $today = Date::Manip::ParseDate("today");
     C4::AR::Debug::debug("TODAY ==================================== >".$today);
@@ -558,7 +558,7 @@ sub getPassword{
 sub setPassword{
     my ($self) = shift;
     my ($password) = @_;
-    C4::AR::Debug::debug("NUEVO PASSWORD EN SOCIOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO ".$password);
+
     $self->password($password);
     $self->save();
 }
@@ -1273,6 +1273,22 @@ sub replaceBy{
     my $replaced = C4::Modelo::UsrSocio::Manager->update_usr_socio(     where => \@filtros,
                                                                         set   => { $campo => $new_value });
 }
+
+
+sub getId_categoria{
+    my ($self) = shift;
+    
+    return ($self->id_categoria);
+}
+
+sub setId_categoria{
+    my ($self) = shift;
+    my ($id) = shift;
+    
+    $self->id_categoria($id);
+    $self->save();
+}
+
 
 
 1;
