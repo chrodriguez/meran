@@ -415,7 +415,6 @@ function updateMostrarEstructuraDelNivel2(responseText){
     //proceso la info del servidor y se crean las componentes en el cliente
     var objetos_array = JSONstring.toObject(responseText);
     procesarInfoJson(objetos_array, null); 
-    alert("despues de procesarInfoJson");
 // FIXME se llama dos veces esto!!!!!!!!!!!!
 	//asigno el handler para el validador
 	validateForm('formNivel2',guardarModificarDocumentoN2);
