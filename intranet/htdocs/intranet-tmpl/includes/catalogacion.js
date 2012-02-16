@@ -32,7 +32,7 @@ var HASH_RULES = new Array(); //para manejar las reglas de validacion del FORM d
 var HASH_MESSAGES = new Array();
 var AGREGAR_COMPLETO = 1; //flag para verificar si se esta por agregar un documento desde el nivel 1 o no
 var ID_COMPONENTE = 1;
-
+var scroll = 'N1';
 function agregarAHash (HASH, name, value){
     HASH[name] = value;
 }
@@ -415,7 +415,6 @@ function updateMostrarEstructuraDelNivel2(responseText){
     //proceso la info del servidor y se crean las componentes en el cliente
     var objetos_array = JSONstring.toObject(responseText);
     procesarInfoJson(objetos_array, null); 
-    alert("despues de procesarInfoJson");
 // FIXME se llama dos veces esto!!!!!!!!!!!!
 	//asigno el handler para el validador
 	validateForm('formNivel2',guardarModificarDocumentoN2);
@@ -430,7 +429,7 @@ function updateMostrarEstructuraDelNivel2(responseText){
         } 
     }      
     
-//     scrollTo('nivel2Tabla');   
+     scrollTo('nivel2Tabla');   
 }
 
 
@@ -700,6 +699,8 @@ function updateMostrarInfoAltaNivel1(responseText){
     }
 
     $('#nivel1').html(responseText);
+    if (scroll == 'N1')
+    	scrollTo('nivel1tabla');
 }
 
 //esta funcion muestra la info en la barra laterarl del NIVEL 2 luego de ser guardado
@@ -723,6 +724,8 @@ function updateMostrarInfoAltaNivel2(responseText){
     }
 
     $('#nivel2').html(responseText);
+    if (scroll == 'N2')
+    	scrollTo('nivel2tabla');
 }
 
 /*
@@ -998,7 +1001,7 @@ function updateGuardarModificacionDocumentoN3(responseText){
     var info        = JSONstring.toObject(responseText);
     var Messages    = info.Message_arrayref; //obtengo los mensajes para el usuario
     setMessages(Messages);
-
+	scroll			= 'N3';
    	//PARA LIMPIAR EL VALUE DE TODOS (ASI INGRESA UNO NUEVO)
   	var allInputs   = $('#estructuraDelNivel3 :input');
 	for (x=0; x< allInputs.length; x++){
@@ -1060,7 +1063,8 @@ function updateMostrarInfoAltaNivel3(responseText){
     zebra('tablaResult');
     checkedAll('select_all', 'checkEjemplares');
     
-    scrollTo('detalleDelNivel3');
+    if (scroll == 'N3')
+    	scrollTo('detalleDelNivel3');
     closeModal();
 }
 
@@ -1281,8 +1285,9 @@ function crearBotonAyudaCampo(campo,id_div_alta_indicador,indicadores){
     var html = "<div class='btn-group inline'>"+"<a class='btn click' onclick=" + funcion + " title='Info'><i class='icon-info-sign'></i></a>";
     
     if (indicadores != '0')
-    	html += "<a class='btn click' onclick=open_alta_indicador('" + id_div_alta_indicador + "') title='Indicadores'><i class='icon-align-justify'></i></a></div>";
+    	html += "<a class='btn click' onclick=open_alta_indicador('" + id_div_alta_indicador + "') title='Indicadores'><i class='icon-align-justify'></i></a>";
 
+    html += "</div>";
     return html;
     
 }
@@ -2221,6 +2226,7 @@ function updateBorrarEjemplaresN3(responseText){
  * guardados en la base de datos y poder modificarlos.
  */
 function modificarN1(id1, template){
+    scroll				= "N1";
      $('#datos_del_leader').show();
 	inicializar();
   
@@ -2254,6 +2260,7 @@ function updateModificarN1(responseText){
 
 function modificarN2(id2, template){
     inicializar();
+    scroll				= "N2";
     ID_N2               = id2;
     ID_TIPO_EJEMPLAR    = template;
 // TODO falta agregar boton para modificar el template
@@ -2278,6 +2285,7 @@ function updateModificarN2(responseText){
 
 function modificarN3(id3, template){
 	inicializar();
+    scroll				= "N3";
 	ID_N3               = id3;	
     ID_TIPO_EJEMPLAR    = template;
 // TODO falta agregar boton para modificar el template

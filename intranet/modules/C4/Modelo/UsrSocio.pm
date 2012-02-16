@@ -179,7 +179,7 @@ sub agregar{
     }
 
     $self->save();
-    $self->setId_categoria($data_hash->{'cod_categoria'});
+    $self->setId_categoria(C4::AR::Referencias::idCategoriaDeSocio($data_hash->{'cod_categoria'}));
     $self->save();
     $self->setCredentials($data_hash->{'credential_type'});
 
@@ -255,7 +255,7 @@ sub modificar{
     my ($data_hash)=@_;
 
     $self->setId_ui($data_hash->{'id_ui'});
-    $self->setId_categoria($data_hash->{'cod_categoria'});
+    $self->setId_categoria(C4::AR::Referencias::idCategoriaDeSocio($data_hash->{'cod_categoria'}));
 
     my $today = Date::Manip::ParseDate("today");
     C4::AR::Debug::debug("TODAY ==================================== >".$today);
@@ -558,7 +558,7 @@ sub getPassword{
 sub setPassword{
     my ($self) = shift;
     my ($password) = @_;
-    C4::AR::Debug::debug("NUEVO PASSWORD EN SOCIOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO ".$password);
+
     $self->password($password);
     $self->save();
 }
@@ -693,9 +693,12 @@ sub esRegularToString{
     
     eval{
         $result =  $object?$object->estado->getNombre:C4::AR::Filtros::i18n("INDEFINIDO");
+        if ($result == 1){
+        	
+        }
     };
     
-    if (@$){
+    if ($@){
         return C4::AR::Filtros::i18n("INDEFINIDO");
     }else{
     	return $result;
@@ -725,7 +728,7 @@ sub getCondicion_object{
     push (@filtros, (usr_estado_id => {eq => $self->getId_estado }) );
     push (@filtros, (usr_ref_categoria_id => {eq => $self->getId_categoria }) );
     
-    my ($estados) = C4::Modelo::UsrRegularidad::Manager->get_usr_regularidad(query => \@filtros,);
+    my ($estados) = C4::Modelo::UsrRegularidad::Manager->get_usr_regularidad(query => \@filtros, require_objects => ['categoria','estado']);
     
     return $estados->[0];
 }
@@ -1270,6 +1273,22 @@ sub replaceBy{
     my $replaced = C4::Modelo::UsrSocio::Manager->update_usr_socio(     where => \@filtros,
                                                                         set   => { $campo => $new_value });
 }
+
+
+sub getId_categoria{
+    my ($self) = shift;
+    
+    return ($self->id_categoria);
+}
+
+sub setId_categoria{
+    my ($self) = shift;
+    my ($id) = shift;
+    
+    $self->id_categoria($id);
+    $self->save();
+}
+
 
 
 1;

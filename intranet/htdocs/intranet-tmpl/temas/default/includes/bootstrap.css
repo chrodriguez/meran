@@ -4814,6 +4814,18 @@ body {
 	background-color: #5BB75B;
 }
 
+
+.userImage img {
+    height: 50px;
+    width: 50px;
+}
+
+.table-striped tbody tr:nth-child(odd) td.marked,.table-striped tbody tr:nth-child(odd) th.marked{
+	background-color: #5BB75B;
+
+}
+
 .clear{
 	clear: both;
 }
+

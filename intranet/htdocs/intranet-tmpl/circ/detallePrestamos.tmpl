@@ -9,8 +9,23 @@
 
 <!--<div class="titulo_tabla">[% "PR&Eacute;STAMOS" | i18n %]</div>-->
 
-<table id="table_tablaPrestamos" class="table table-striped">
-	<!--<tr class="titulo_tabla_resultado">-->
+      [% PERL %]
+                print C4::AR::Filtros::tableHeader(   
+                                  id              => "table_tablaPrestamos",
+                                  class           => "",
+                                  selectAll_id    => "checkAllPrestamos",
+                                  columns         => ['[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]',
+                                                      '[% "C&oacute;digo de Barras" %]','[% "Pr&eacute;stamo" %]',
+                                                      '[% "Vencimiento" %]','[% "Tipo" %]'
+                                                     ]
+                                                                   
+                                        ) ;
+      [% END %]
+
+
+
+<!--<table id="table_tablaPrestamos" class="table table-striped">
+	<tr class="titulo_tabla_resultado">
     <thead>
         <tr>
 		<th>
@@ -28,10 +43,10 @@
         <th>[% 'Tipo' | i18n %]</th>
 
       </tr>
-    </thead>
+    </thead>-->
     <tbody>
      [% FOREACH prestamo IN PRESTAMOS %]
-	<tr align="center">
+	<tr>
 	
 		<td>
 			 <input type="checkbox" name="chkboxPrestamos" value="[% prestamo.getId_prestamo %]" id="[% prestamo.getId_prestamo %]">
@@ -48,7 +63,7 @@
                     &nbsp;
                 [% END %]
 		</td>
-        <td align="center">
+        <td>
                 <a href='[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl?id3=[% prestamo.getId3 %]' title='Detalle del Ejemplar'> 
                 [% prestamo.nivel3.getBarcode %]</a>
         </td>
@@ -78,30 +93,52 @@
      [% END %]
   </tbody>
 </table>
-
-            [% PERL %]
+<!--
+           [% PERL %]
                                 print C4::AR::Filtros::to_Icon( text    => "[% 'Devolver' | i18n %]",
                                                                 boton   => "icon_devolver",
                                                                 onClick => "realizarAccion('DEVOLUCION','table_tablaPrestamos',generaDivDevolucion);",
                                                                 title   => "[% 'Devolver' | i18n %]",
                                                                 alternClass => "botonCentrado"
                                         ) ;
-            [% END %]
+            [% END %]-->
+
+             [% PERL %]
+                                  print C4::AR::Filtros::action_button(
+                                                                  button       => "btn click",
+                                                                  action       => 'realizarAccion("DEVOLUCION","table_tablaPrestamos",generaDivDevolucion);',
+                                                                  icon         => "icon-edit",
+                                                                  title        => "",
+                                  ) ;
+              [% END %]
+
 
         [% IF algunoSeRenueva %]
-            [% PERL %]
+            <!--[% PERL %]
                         print C4::AR::Filtros::to_Icon(     text    => "[% 'Renovar' | i18n %]",
                                                             boton   => "icon_renovar",                                                            
                                                             onClick => "realizarAccion('RENOVACION','table_tablaPrestamos',generaDivRenovacion);",
                                                             title   => "[% 'Renovar' | i18n %]",
                                                             alternClass => "botonCentrado"
                                 ) ;
-            [% END %]
+            [% END %]-->
+          
+              [% PERL %]
+                                  print C4::AR::Filtros::action_button(
+                                                                  button       => "btn click",
+                                                                  action       => 'realizarAccion("RENOVACION","table_tablaPrestamos",generaDivRenovacion);',
+                                                                  icon         => "icon-refresh",
+                                                                  title        => "",
+                                  ) ;
+              [% END %]
+
+
+
         [% END %]
 
     [% ELSE %]
 
-<div class="alert alert-info">[% "El usuario no tiene ejemplares asignados"| i18n %]</div>
+        <div class="alert alert-info">[% "El usuario no tiene ejemplares asignados"| i18n %]</div>
 
     [% END %]
     </fieldset>

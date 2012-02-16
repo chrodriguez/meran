@@ -114,11 +114,19 @@ function checkedAll(id, nombreCheckbox) {
 		$("input[name=" + nombreCheckbox + "]").each(function() {
 			this.checked = true;
 			$(this).parent().parent().addClass("marked");
+			//pintamos a cada <tr> por el nuevo css bootstrap
+			$(this).parent().parent().children().each(function(){
+			    $(this).addClass("marked");
+			});
 		})
 	}, function() {
 		$("input[name=" + nombreCheckbox + "]").each(function() {
 			this.checked = false;
 			$(this).parent().parent().removeClass("marked");
+			//pintamos a cada <tr> por el nuevo css bootstrap
+			$(this).parent().parent().children().each(function(){
+			    $(this).removeClass("marked");
+			});
 		})
 	});
 }
@@ -196,6 +204,8 @@ function registrarKeypress(typeObject) {
  * 
  */
 function scrollTo(idObj) {
+	
+//	alert("haciendo scroll a "+idObj);
 	var result_array = $("#" + idObj);
 	// se verifica la existencia de la componente
 	if (result_array.length == 0)

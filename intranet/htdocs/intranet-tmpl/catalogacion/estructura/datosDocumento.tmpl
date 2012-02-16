@@ -233,19 +233,25 @@ $(document).ready( function() {
 
 	<form id="formNivel3" name="formNivel3" class="form-horizontal">
 		<fieldset>
-		<legend class="titulo_legend">[% "Datos del ejemplar" | i18n %]</legend>
-			<div id="divCantEjemplares" class="divContentComponente">
-				<li class="sub_item"> 
-		            <label for="cantEjemplares">Cant. Ejemplares: </label>
+		    <legend class="titulo_legend">[% "Datos del ejemplar" | i18n %]</legend>
+			<div id="divCantEjemplares" class="control-group">
+	            <label for="cantEjemplares" class="control-label warning">Cant. Ejemplares: </label>
+			    <div class="controls">
 				    <input  id="cantEjemplares" type="text" tabindex="1" size="10" value="1" 
-		                    class="required" onClick="registrarToggleOnChangeForBarcode()"/>
-		        </li>
+			                    class="required" onClick="registrarToggleOnChangeForBarcode()"/>
+			        
+                    [% PERL %]
+                            print C4::AR::Filtros::setHelpInput( text        => "[% 'Al ingresar cantidad se cancela el ingreso manual de barcodes.' | i18n %]",
+                                                                 class       => "info",
+                                    ) ;
+                    [% END %]
+                </div>
 			</div>
 		<!--     CAMPOS DINAMICOS DEL NIVEL 3 -->
 		    <div id= "estructuraDelNivel3"></div>
 		    <input type="hidden" name="token" value="[% token %]" />
 		
-	        <div class="textoCentrado">* [% "Campos obligatorios" | i18n %]</div>
+	        <p class="help-block">* [% "Campos obligatorios" | i18n %]</p>
             <div class="form-actions">
 	     
 	                        [% PERL %]

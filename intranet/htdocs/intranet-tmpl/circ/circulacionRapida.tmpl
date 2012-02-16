@@ -368,7 +368,7 @@ $(document).ready(function() {
 <fieldset>
     <legend class="titulo_legend"><span class="titulos">[% 'Circulaci&oacute;n R&aacute;pida' | i18n %]</span></legend>
        <section class="center-section-form"> 
-        <form id="form_circulacion_rapida" class="classform form-horizontal">
+        <form id="form_circulacion_rapida" class="classform form-horizontal" onsubmit="return false;">
        <!-- <ul>-->
             <!--<li class="sub_item">-->
             <div class="control-group">
@@ -435,13 +435,6 @@ $(document).ready(function() {
         </form>
         <div class="form-actions" id="acciones">
         [% PERL %]
-                            print C4::AR::Filtros::to_Button(     text    => "[% 'Aceptar' | i18n %]",
-                                                                  id      => "aceptar",
-                                                                  boton   => "btn btn-primary",
-                                                                  onClick => "realizarAccionCircRapida();",
-                                                                  inline  => "1",
-                                                                  title   => "[% 'realizar operaci&oacute;n' | i18n %]",
-                                    ) ;
         
                             print C4::AR::Filtros::to_Button(     text    => "[% 'Cancelar' | i18n %]",
                                                                   id      => "cancelar",
@@ -449,6 +442,14 @@ $(document).ready(function() {
                                                                   onClick => "",
                                                                   inline  => "1",
                                                                   title   => "[% 'cancelar operaci&oacute;n' | i18n %]",
+                                    ) ;
+
+                            print C4::AR::Filtros::to_Button(     text    => "[% 'Aceptar' | i18n %]",
+                                                                  id      => "aceptar",
+                                                                  boton   => "btn btn-primary",
+                                                                  onClick => "realizarAccionCircRapida();",
+                                                                  inline  => "1",
+                                                                  title   => "[% 'realizar operaci&oacute;n' | i18n %]",
                                     ) ;
         [% END %]
         </div>

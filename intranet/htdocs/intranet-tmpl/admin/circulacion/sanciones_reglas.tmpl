@@ -1,65 +1,71 @@
-<table border=0 cellspacing=0 cellpadding=0 width="100%">
-	<tr class="titulo_tabla_resultado">
+<fieldset>
+    <legend class="titulo_legend">[% "Tipos Sanciones" | i18n %] </legend>
+    <table class="table table-striped">
+      <thead>    
+        <tr class="titulo_tabla_resultado">
 
-		<td>[% "Orden" | i18n %]</td>
-		<td>[% "D&iacute;as de demora" | i18n %]</td>
-        <td>[% "D&iacute;as de sanci&oacute;n" | i18n %]</td>
-        <td>[% "Cantidad" | i18n %]</td>
-        <td> [% "Eliminar" | i18n %]</td>
+            <th>[% "Orden" | i18n %]</th>
+            <th>[% "D&iacute;as de demora" | i18n %]</th>
+            <th>[% "D&iacute;as de sanci&oacute;n" | i18n %]</th>
+            <th>[% "Cantidad" | i18n %]</th>
+            <th> [% "Eliminar" | i18n %]</th>
 
-        </tr>
-        [% FOREACH regla_tipo IN REGLAS_TIPOS_SANCIONES %]
-		<tr valign=middle align=center>
+            </tr>
+      </thead>  
+      <tbody>
+            [% FOREACH regla_tipo IN REGLAS_TIPOS_SANCIONES %]
+            <tr>
 
-			<td>[% regla_tipo.getOrden %]</td>
-			<td>[% regla_tipo.ref_regla.getDias_demora %]</td>
-			<td>[% regla_tipo.ref_regla.getDias_sancion %]</td>
-			<td>[% IF regla_tipo.getCantidad %] [% regla_tipo.getCantidad %]  [% ELSE %] Infinito [% END %]</td>
-			<td>
-            [% PERL %]
-                    print C4::AR::Filtros::to_Icon(  
-                                                        boton   => "icon_borrar",
-                                                        onClick => "eliminarReglaTipoSancion([% regla_tipo.getTipo_sancion %],[% regla_tipo.getRegla_sancion %]);",
-                                                        title   => "[% 'Eliminar' | i18n %]",
-                            ) ;
-            [% END %]
-			</td>
-
-		</tr>
-	[% END %]
-	<tr class="titulo_tabla_resultado">
-        <td>[% "Orden" | i18n %]</td>
-        <td colspan="2">[% "Regla" | i18n %]</td>
-        <td>[% "Cantidad" | i18n %]</td>
-        <td> [% "Agregar" | i18n %]</td>
-        </tr>
-        <tr valign=middle align=center>
-        	<td >[% ordenes %]</td>
-            <td colspan="2">
-            <div width='20%'>
-            <div style="float: left">
-            [% reglas_de_sancion %]
-            </div>
-            <div style="float: left">
+                <td>[% regla_tipo.getOrden %]</td>
+                <td>[% regla_tipo.ref_regla.getDias_demora %]</td>
+                <td>[% regla_tipo.ref_regla.getDias_sancion %]</td>
+                <td>[% IF regla_tipo.getCantidad %] [% regla_tipo.getCantidad %]  [% ELSE %] Infinito [% END %]</td>
+                <td>
                 [% PERL %]
-                    print C4::AR::Filtros::to_Icon(  
-                                                        boton   => "icon_edicion",
-                                                        onClick => "editarReglas();",
-                                                        title   => "[% 'Editar Reglas' | i18n %]",
-                            ) ;
+                        print C4::AR::Filtros::to_Icon(  
+                                                            boton   => "icon_borrar",
+                                                            onClick => "eliminarReglaTipoSancion([% regla_tipo.getTipo_sancion %],[% regla_tipo.getRegla_sancion %]);",
+                                                            title   => "[% 'Eliminar' | i18n %]",
+                                ) ;
                 [% END %]
-            </div>
-            </div>
-            </td>
-            <td>[% cantidades %]</td>
-            <td >
-            [% PERL %]
-                    print C4::AR::Filtros::to_Icon(  
-                                                        boton   => "icon_anadir",
-                                                        onClick => "agregarReglaTipoSancion();",
-                                                        title   => "[% 'Agregar' | i18n %]",
-                            ) ;
-            [% END %]
-		    </td>
-        </tr>
-</table>
+                </td>
+
+            </tr>
+        [% END %]
+      </tbody>
+      </table>
+      <table class="table table-striped">
+        <thead>    
+          <tr>
+              <th>[% "Orden" | i18n %]</th>
+              <th>[% "Regla" | i18n %]</th>
+              <th>[% "Cantidad" | i18n %]</th>
+              <th>[% "Agregar" | i18n %]</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+                  <td>[% ordenes %]</td>
+                  <td>[% reglas_de_sancion %]
+                    [% PERL %]
+                          print C4::AR::Filtros::to_Icon(  
+                                                              boton   => "icon_edicion",
+                                                              onClick => "editarReglas();",
+                                                              title   => "[% 'Editar Reglas' | i18n %]",
+                                  ) ;
+                      [% END %]
+                  </td>
+                  <td>[% cantidades %]</td>
+                  <td>
+                  [% PERL %]
+                          print C4::AR::Filtros::to_Icon(  
+                                                              boton   => "icon_anadir",
+                                                              onClick => "agregarReglaTipoSancion();",
+                                                              title   => "[% 'Agregar' | i18n %]",
+                                  ) ;
+                  [% END %]
+                  </td>
+          </tr>
+        </tbody>
+    </table>
+</fieldset>

@@ -5,30 +5,35 @@
 </script>
 
 <fieldset class="resultados_busqueda">
-    <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda" | i18n %]:</legend>
+    <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda" | i18n %]</legend>
         <div class="datos_tabla_div" id="datos_tabla_div">
-            <div class="resultados_consulta">[% "Total de registros" | i18n %]: [% cantidad %]</div>
+        <div class="well">
+            <div class="resultados_consulta">[% "Total de registros" | i18n %]: <strong>[% cantidad %]</strong></div>
+        </div>
             <div class="contenedor_paginador">[% paginador %]</div>
-                <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
+                <table id="tablaResult" class="datos_tabla table table-striped">
+                  <thead>
                     <tr class="titulo_tabla_resultado">
                 
-                        <td title="[% 'Apellido del solicitante' | i18n %]"> [% "Apellido" | i18n %]</td>
-                        <td title="[% 'Nombre del solicitante' | i18n %]"> [% "Nombre" | i18n %]</td>
-                        <td class="click" onclick="ordenar('nro_socio')" title="[% 'Ordenar por numero de socio' | i18n %]">
+                        <th title="[% 'Apellido del solicitante' | i18n %]"> [% "Apellido" | i18n %]</th>
+                        <th title="[% 'Nombre del solicitante' | i18n %]"> [% "Nombre" | i18n %]</th>
+                        <th class="click" onclick="ordenar('nro_socio')" title="[% 'Ordenar por numero de socio' | i18n %]">
                             [% "N&uacute;mero de socio" | i18n %]
-                        </td>
-                        <td class=""  title="[% 'E-mail del solicitante' | i18n %]">[% "E-mail" | i18n %]</td>
-                        <td class="click" onclick="ordenar('fecha_reserva')" title="[% 'Ordenar por fecha de reserva' | i18n %]">[% "Fecha de reserva" | i18n %]</td>
-                        <td class="click" onclick="ordenar('fecha_recordatorio')" title="[% 'Ordenar por fecha de vencimiento' | i18n %]">
+                        </th>
+                        <th class=""  title="[% 'E-mail del solicitante' | i18n %]">[% "E-mail" | i18n %]</th>
+                        <th class="click" onclick="ordenar('fecha_reserva')" title="[% 'Ordenar por fecha de reserva' | i18n %]">[% "Fecha de reserva" | i18n %]</th>
+                        <th class="click" onclick="ordenar('fecha_recordatorio')" title="[% 'Ordenar por fecha de vencimiento' | i18n %]">
                             [% "Fecha de vencimiento" | i18n %]
-                        </td>
-                        <td class="" title="[% 'C&oacute;digo de barra del ejemplar' | i18n %]">
+                        </th>
+                        <th class="" title="[% 'C&oacute;digo de barra del ejemplar' | i18n %]">
                             [% "C&oacute;digo de barra" | i18n %]
-                        </td>
+                        </th>
                 
                     </tr>
+                  </thead>
+                  <tbody>
                 [% FOREACH reserva IN reservas %]
-                    <tr align='center'>
+                    <tr>
                         <td> 
                             <a href="[% url_prefix %]/usuarios/reales/datosUsuario.pl?nro_socio=[% reserva.socio.getNro_socio %]">
                                 [% reserva.socio.persona.getApellido %]
@@ -66,6 +71,7 @@
                         </td>
                     </tr>
                 [% END %]
+                </tbody>
                 </table>
       </div>
 </fieldset>

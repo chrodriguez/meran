@@ -127,88 +127,48 @@ $(document).ready(function() {
 
 </script>
 
-<center>
 
 <!--<div class="titulos">[% "B&uacute;squeda de Usuarios Potenciales" | i18n %]</div>-->
 <fieldset>
     <legend class="titulo_legend">[% "B&uacute;squeda de Usuarios Potenciales" | i18n %]</legend>
-<p id="msj" style="font-size:12pt; color:red"></p>
+      <p id="msj" style="font-size:12pt; color:red"></p>
 
-<div class="buttonContainerHorizontal">
-<ul>
-    <li class="filtros">
-			<input id="persona" type=text name="persona" value="[% persona %]" onFocus="checkFilter('focus')" 
-                onBlur="checkFilter('blur')">
+      <section class="center-section-form">
 
-            [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
-                                                                    boton   => "boton_buscar",
-                                                                    onClick => "buscarUsuariosPotenciales();",
-                                                                    title   => "[% 'Buscar' | i18n %]",
-                                                                    inline  => 1,
-                                        ) ;
-            [% END %]
-            [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
-                                                                    boton   => "boton_buscar",
-                                                                    onClick => "Borrar();",
-                                                                    title   => "[% 'Limpiar' | i18n %]",
-                                                                    inline  => 1,
-                                        ) ;
-            [% END %]
+              [% PERL %]
+                  print C4::AR::Filtros::tabbedPane(    titulo    => "",
+                                                        subtitulo => "",
+                                                        content   => [ {id => 'labels', text=> "[% 'B&uacute;squeda general' | i18n %]" },
+                                                                      {id => 'registro', text => "[% 'B&uacute;squeda por inicial' | i18n %]"},
+                                                                      ],
+                                                        content_id=> ['busqueda_usuarios_potenciales'],
+                                                        active_id => 'labels',
+                                                    );
 
+              [% END %]
 
-    </li>
-</ul>
-</div>
-<ul>
-    <li style="text-align:center">
-			<p class="recuadroAyuda">
-			 [% "Tipear el apellido, DNI o legajo del usuario. Presionar buscar." | i18n %]
-			</p>
-    </li>
-</ul>
+              <div class="tab-pane fade in active" id="labels">
+                   [% INCLUDE 'partials/usuarios/_busqueda_gral_usuarios_potenciales.inc' %]
+              </div>
+              <div class="tab-pane fade" id="registro">
+                   [% INCLUDE 'partials/usuarios/_busqueda_inicial_usuarios_potenciales.inc' %]
+              </div>
+              <input type="checkbox" name="habilitados_filter" id="habilitados_filter">[% " Mostrar s&oacute;lo usuarios habilitados"| i18n %]
+              <br>
+              [% PERL %]
+              print C4::AR::Filtros::setHelpInput(
+                                                   text =>"[% 'Navegue por las pesta&ntilde;as para acceder a los distintos tipos de b&uacute;squeda' | i18n %]",
+                                                   textLabel =>"[% 'INFO' | i18n %]",
+                                                   class => "info"
+                                                    
+              );
+              [% END %]
+    
+    </section>
 
-<fieldset>
-    <legend class="titulo_legend">[% "Inicial del apellido:" | i18n %]</legend>
-    <div id="filterBar" style="text-align:center">
-        <a href="#tablaResult" onClick="consultar('A')"> A |</a>
-        <a href="#tablaResult" onClick="consultar('B')"> B |</a>
-        <a href="#tablaResult" onClick="consultar('C')"> C |</a>
-        <a href="#tablaResult" onClick="consultar('D')"> D |</a>
-        <a href="#tablaResult" onClick="consultar('E')"> E |</a>
-        <a href="#tablaResult" onClick="consultar('F')"> F |</a>
-        <a href="#tablaResult" onClick="consultar('G')"> G |</a>
-        <a href="#tablaResult" onClick="consultar('H')"> H |</a>
-        <a href="#tablaResult" onClick="consultar('I')"> I |</a>
-        <a href="#tablaResult" onClick="consultar('j')"> J |</a>
-        <a href="#tablaResult" onClick="consultar('K')"> K |</a>
-        <a href="#tablaResult" onClick="consultar('L')"> L |</a>
-        <a href="#tablaResult" onClick="consultar('M')"> M |</a>
-        <a href="#tablaResult" onClick="consultar('N')"> N |</a>
-        <a href="#tablaResult" onClick="consultar('O')"> O |</a>
-        <a href="#tablaResult" onClick="consultar('P')"> P |</a>
-        <a href="#tablaResult" onClick="consultar('Q')"> Q |</a>
-        <a href="#tablaResult" onClick="consultar('R')"> R |</a>
-        <a href="#tablaResult" onClick="consultar('S')"> S |</a>
-        <a href="#tablaResult" onClick="consultar('T')"> T |</a>
-        <a href="#tablaResult" onClick="consultar('U')"> U |</a>
-        <a href="#tablaResult" onClick="consultar('V')"> V |</a>
-        <a href="#tablaResult" onClick="consultar('W')"> W |</a>
-        <a href="#tablaResult" onClick="consultar('X')"> X |</a>
-        <a href="#tablaResult" onClick="consultar('Y')"> Y |</a>
-        <a href="#tablaResult" onClick="consultar('Z')"> Z |</a>
-        <a href="#tablaResult" onClick="consultar('TODOS')"> [% "TODOS" | i18n %] </a>
-    </div>
 </fieldset>
-<div>
-    <input type="checkbox" name="habilitados_filter" id="habilitados_filter">[% 'S&oacute;lo habilitados' | i18n %]
-</div>
+<br><br><div id="result"></div>
 
-<br>
-<div id="result"></div>
-</center>
-</fieldset>
 
 [% INCLUDE "intranet-bottom.inc" %]
 

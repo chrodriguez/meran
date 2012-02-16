@@ -20,12 +20,31 @@ __PACKAGE__->meta->setup
     primary_key_columns => [ 'id_estado' ],
 );
 
+
+sub conformarUsrRegularidad{
+    my ($self)=shift;
+
+    my ($categorias_array_ref)  = C4::AR::Referencias::obtenerCategoriaDeSocio();
+
+    foreach my $categoria (@$categorias_array_ref) {
+        my $regularidad = C4::Modelo::UsrRegularidad->new();
+        my %data_hash ={};
+
+        $data_hash{'usr_estado_id'} = $self->getId_estado;
+        $data_hash{'usr_ref_categoria_id'} = $categoria->getId();
+        $data_hash{'Condicion'} = 0;
+        $regularidad->agregar(\%data_hash);
+    }    
+	
+}
+
 sub agregar{
     my ($self)=shift;
     my ($data_hash)=@_;
     #Asignando data...
     $self->setFuente($data_hash->{'fuente'});
-    $self->setCategoria($data_hash->{'categoria'});
+    $self->setNombre($data_hash->{'categoria'});
+    $self->conformarUsrRegularidad();
     $self->save();
 }
 

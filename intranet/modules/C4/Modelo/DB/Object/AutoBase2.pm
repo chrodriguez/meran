@@ -369,6 +369,12 @@ sub addNewRecord{
 
     $self->save();
     
+    #parche loco
+    
+    if ($self->meta->table eq "usr_ref_categoria_socio"){
+    	$self->conformarUsrRegularidad();
+    }
+    
     return $self;
 
 }
