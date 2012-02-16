@@ -693,9 +693,12 @@ sub esRegularToString{
     
     eval{
         $result =  $object?$object->estado->getNombre:C4::AR::Filtros::i18n("INDEFINIDO");
+        if ($result == 1){
+        	
+        }
     };
     
-    if (@$){
+    if ($@){
         return C4::AR::Filtros::i18n("INDEFINIDO");
     }else{
     	return $result;
@@ -725,7 +728,7 @@ sub getCondicion_object{
     push (@filtros, (usr_estado_id => {eq => $self->getId_estado }) );
     push (@filtros, (usr_ref_categoria_id => {eq => $self->getId_categoria }) );
     
-    my ($estados) = C4::Modelo::UsrRegularidad::Manager->get_usr_regularidad(query => \@filtros,);
+    my ($estados) = C4::Modelo::UsrRegularidad::Manager->get_usr_regularidad(query => \@filtros, require_objects => ['categoria','estado']);
     
     return $estados->[0];
 }

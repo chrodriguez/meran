@@ -49,8 +49,9 @@
 
     NEW_GRANT = "[% 'ATENCION: DANDO DE ALTA UN NUEVO PERMISO YA QUE EL USUARIO NO CUENTA CON PRIVILEGIOS PARA TAL COMBINACION ' | i18n %]";
     // mensaje compuesto
-    UD_ESTA_A_PUNTO= "[% 'Usted est\u00e1 a punto de' | i18n %]";
+    UD_ESTA_A_PUNTO= "[% 'Usted est\u00e1 a punto de habilitar' | i18n %]";
     A_LOS_PROPIETARIOS= "[% 'a los propietarios de' | i18n %]:";
+    HABILITAR_POTENCIALES_CONFIRM = "[% 'Habilitar a los usuarios seleccionados?' | i18n %]"; 
     // fin mensaje compuesto
 
     PERMISOS_DE_ACCESO= "[% 'Permisos de Acceso' | i18n %]";

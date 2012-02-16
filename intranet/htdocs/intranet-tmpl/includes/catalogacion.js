@@ -415,7 +415,6 @@ function updateMostrarEstructuraDelNivel2(responseText){
     //proceso la info del servidor y se crean las componentes en el cliente
     var objetos_array = JSONstring.toObject(responseText);
     procesarInfoJson(objetos_array, null); 
-    alert("despues de procesarInfoJson");
 // FIXME se llama dos veces esto!!!!!!!!!!!!
 	//asigno el handler para el validador
 	validateForm('formNivel2',guardarModificarDocumentoN2);
@@ -430,7 +429,7 @@ function updateMostrarEstructuraDelNivel2(responseText){
         } 
     }      
     
-//     scrollTo('nivel2Tabla');   
+     scrollTo('nivel2Tabla');   
 }
 
 
@@ -1281,8 +1280,9 @@ function crearBotonAyudaCampo(campo,id_div_alta_indicador,indicadores){
     var html = "<div class='btn-group inline'>"+"<a class='btn click' onclick=" + funcion + " title='Info'><i class='icon-info-sign'></i></a>";
     
     if (indicadores != '0')
-    	html += "<a class='btn click' onclick=open_alta_indicador('" + id_div_alta_indicador + "') title='Indicadores'><i class='icon-align-justify'></i></a></div>";
+    	html += "<a class='btn click' onclick=open_alta_indicador('" + id_div_alta_indicador + "') title='Indicadores'><i class='icon-align-justify'></i></a>";
 
+    html += "</div>";
     return html;
     
 }

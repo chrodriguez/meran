@@ -1,7 +1,4 @@
 [% USE HTML %]
-<!-- FIXME no se si se usa -->
-<p id="error" class="fontmsg"></p>
-
 <div>
     <form class="form-horizontal">
         <fieldset>
@@ -50,9 +47,7 @@
 	                                                    text    => "[% 'Guardar Modificaci&oacute;n' | i18n %]",
 	                                                    boton   => "btn btn-primary",
 	                                                    onClick => "guardarModificacion();",
-	                                                    width   => "auto",
 	                                                    title   => "[% 'Guardar Modificaci&oacute;n' | i18n %]", 
-	                                                    alternClass   => "botonCentrado"
 	                                        ) ;
 	                    [% END %]
 
@@ -63,9 +58,7 @@
 	                                                    text    => "[% 'Guardar Nueva Variable' | i18n %]",
 	                                                    boton   => "btn btn-primary",
 	                                                    onClick => "guardarNuevaVariable();",
-	                                                    width => "auto",
 	                                                    title   => "[% 'Guardar Nueva Variable' | i18n %]",
-	                                                    alternClass   => "botonCentrado"    
 	                                        ) ;
 	                    [% END %]
                       [% END %]
