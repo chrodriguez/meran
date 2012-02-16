@@ -385,7 +385,7 @@ function updateMostrarEstructuraDelNivel1(responseText){
     procesarInfoJson(objetos_array, null); 
 	//asigno el handler para el validador
 	validateForm('formNivel1',guardarModificarDocumentoN1);
-    addRules();
+//     addRules();
     
     scrollTo('datos_del_leader');  
 }
@@ -411,12 +411,15 @@ function mostrarEstructuraDelNivel2(){
 function updateMostrarEstructuraDelNivel2(responseText){
     _clearContentsEstructuraDelNivel();
     _showAndHiddeEstructuraDelNivel(2);
+    
     //proceso la info del servidor y se crean las componentes en el cliente
     var objetos_array = JSONstring.toObject(responseText);
     procesarInfoJson(objetos_array, null); 
+    alert("despues de procesarInfoJson");
+// FIXME se llama dos veces esto!!!!!!!!!!!!
 	//asigno el handler para el validador
 	validateForm('formNivel2',guardarModificarDocumentoN2);
-    addRules();
+//     addRules();
     
     if(!MODIFICAR){
         if(ID_TIPO_EJEMPLAR == 0){
@@ -427,7 +430,7 @@ function updateMostrarEstructuraDelNivel2(responseText){
         } 
     }      
     
-    scrollTo('nivel2Tabla');   
+//     scrollTo('nivel2Tabla');   
 }
 
 
