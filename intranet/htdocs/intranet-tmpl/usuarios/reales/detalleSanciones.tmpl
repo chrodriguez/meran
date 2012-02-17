@@ -36,67 +36,68 @@ function updateBorrarSancion(responseText){
 [% END %]
 <legend class="titulo_legend_resaltado">[% 'Detalle de sanciones' | i18n %]</legend>
 
-[% IF SANCIONES %]
-
-<table id="detalleSancionesResult"  class="table table-striped"  width="100%">
-  <thead>
-    <tr>		    
-        <th>[% "Sancion Original" | i18n %]</th>
-	    <th>[% "Se aplica a" | i18n %]</th>
-        <th>[% "Desde" | i18n %]</th>
-        <th>[% "Hasta" | i18n %]</th>
-        <th>[% "Autor" | i18n %]</th>
-        <th>[% "T&iacute;tulo" | i18n %]</th>
-        <th>[% "Edicion" | i18n %]</th>
-        <th>[% "Acciones" | i18n %]</th>
-    </tr>
-  </thead>
-  <tbody>
-	[% i = 2 %]
-	[% FOREACH sancion IN SANCIONES %]
-	
-	<tr
-            [% IF i % 2 == 0 %] 
-                [% "class='par'" %]
-            [% ELSE %]
-                [% "class='impar'" %]
+  [% IF SANCIONES %]
+   
+           [% PERL %]
+                                print C4::AR::Filtros::tableHeader(   
+                                            id              => "detalleSancionesResult",
+                                            class           => "",
+                                            selectAll_id    => "",
+                                            columns         => ['[% "Sancion Original" | i18n %]','[% "Se aplica a" | i18n %]',
+                                                                '[% "Desde" | i18n %]','[% "Hasta" | i18n %]',
+                                                                '[% "Autor" | i18n %]','[% "T&iacute;tulo" | i18n %]','[% "Edicion" | i18n %]',
+                                                                '[% "Eliminar" | i18n %]'
+                                                              ]
+                                                                            
+                                                  ) ;
             [% END %]
-    >
-        <td>[% IF sancion.ref_tipo_sancion.ref_tipo_prestamo.getId_tipo_prestamo %]
-				[% sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]
-			[% ELSE %]
-		        [% "Reserva no retirada" | i18n %]
-		    [% END %]
-		</td>
-        <td>
-		    [% FOREACH ts IN sancion.ref_tipo_sancion.ref_tipo_prestamo_sancion %] 
-			    [% ts.ref_tipo_prestamo.descripcion %]<br>
-		    [% END %]
-		</td>
-        <td>[% sancion.getFecha_comienzo_formateada %]</td>
-        <td>[% sancion.getFecha_final_formateada %]</td>
-        <td>[% sancion.nivel3.nivel1.getAutor %]</td>
-        <td>[% sancion.nivel3.nivel1.getTitulo %]</td>
-        <td>[% sancion.nivel3.nivel2.getEdicion %]</td>
-        <td>
-        [% PERL %]
-            print C4::AR::Filtros::to_Icon(  
-                                                boton   => "icon_cancelar",
-                                                onClick => "borrarSancion('[% sancion.getId_sancion %]');",
-                                                title   => "[% 'Borrar Sancion' | i18n %]",
-                                                alternClass => "botonCentradoTabla"
-                    ) ;
-	    [% END %]
-  
-        </td>
-	</tr>	
-	[% i = i + 1 %]       
-    [% END %]	
-  </tbody>
-</table>
-[% ELSE %]
+        
+            <tbody>
+           
+              [% FOREACH sancion IN SANCIONES %]
+              
+              <tr>
+                  <td>[% IF sancion.ref_tipo_sancion.ref_tipo_prestamo.getId_tipo_prestamo %]
+                          [% sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]
+                      [% ELSE %]
+                          [% "Reserva no retirada" | i18n %]
+                      [% END %]
+                  </td>
+                  <td>
+                      [% FOREACH ts IN sancion.ref_tipo_sancion.ref_tipo_prestamo_sancion %] 
+                          [% ts.ref_tipo_prestamo.descripcion %]<br>
+                      [% END %]
+                  </td>
+                  <td>[% sancion.getFecha_comienzo_formateada %]</td>
+                  <td>[% sancion.getFecha_final_formateada %]</td>
+                  <td>[% sancion.nivel3.nivel1.getAutor %]</td>
+                  <td>[% sancion.nivel3.nivel1.getTitulo %]</td>
+                  <td>[% sancion.nivel3.nivel2.getEdicion %]</td>
+                  <td>
+        
 
-    <div class="alert alert-success">[% 'El usuario no tiene sanciones actualmente' | i18n %]</div>
+                  [% PERL %]
+                          print C4::AR::Filtros::action_button( 
+                                                          button       => "btn click",
+                                                          action       => "borrarSancion('[% sancion.getId_sancion %]')", 
+                                                          icon         => "icon-trash",
+                                                          title        => "",
+                                                      ) ;
 
-[% END %]
+                  [% END %]
+
+
+
+            
+                  </td>
+              </tr>	
+         
+              [% END %]	
+            </tbody>
+          </table>
+          [% ELSE %]
+
+              <div class="alert alert-success">[% 'El usuario no tiene sanciones actualmente' | i18n %]</div>
+
+          [% END %]
 </fieldset>

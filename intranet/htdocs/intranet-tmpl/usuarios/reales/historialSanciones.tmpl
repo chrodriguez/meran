@@ -1,45 +1,29 @@
 [% USE HTML %]
 
+
+
+<div class="well">
 [% IF cant %]
-		<div class="resultados_consulta">[% "Cantidad de registros en el historial de sanciones" | i18n %]: &nbsp;[% cant %]</div> 
+		[% "Cantidad de registros en el historial de sanciones" | i18n %]: <strong>[% cant %]</strong></div> 
+        
 		<div class="contenedor_paginador">[% paginador %]</div>
-		<table class="tablaHistorialSanciones datos_tabla" cellspacing=0  cellpadding=0 border=0 width="100%">
-		    <tr class="titulo_tabla_resultado">
-		        <td>
-                    [% "Operaci&oacute;n" | i18n %]
-                </td>
-                <td class="click" onclick="ordenarHistorialSanciones('usr_responsable.nro_socio')" 
-                        Title='[% "Ordenar por Responsable" | i18n %]'>
-                    [% "Responsable" | i18n %]
-                </td>
-		            <td class="click" onclick="ordenarHistorialSanciones('fecha_comienzo')" 
-		                Title='[% "Ordenar por Fecha Inicial" | i18n %]'>
-				    [% "Fecha Inicial" | i18n %]
-		        </td>
-			    <td class="click" onclick="ordenarHistorialSanciones('fecha_final')" 
-		                Title='[% "Ordenar por Fecha Final" | i18n %]'>
-				    [% "Fecha Final" | i18n %]
-			    </td>
-		        <td class="click" onclick="ordenarHistorialSanciones('tipo_sancion')" 
-                    Title='[% "Ordenar por Tipo de Sanci&oacute;n" | i18n %]'>
-                    [% "Tipo de Sanci&oacute;n" | i18n %]
-                </td>
-                <td>
-                        [% "Dias Sancion" | i18n %]
-                </td>
-                <td>
-                        [% "Autor" | i18n %]
-                </td>
-                <td>
-                        [% "Titulo" | i18n %]
-                </td>
-                <td>
-                        [% "Edicion/A&ntildeo" | i18n %]
-                </td>
-		    </tr>
-		    
+
+           [% PERL %]
+                                print C4::AR::Filtros::tableHeader(   
+                                            id              => "tablaHistorialSanciones",
+                                            class           => "",
+                                            selectAll_id    => "",
+                                            columns         => ['[% "Operaci&oacute;n" | i18n %]','[% "Responsable"|i18n %]','[% "Fecha Inicial" | i18n %]',
+                                                                '[% "Fecha Final" | i18n %]','[% "Tipo de Sanci&oacute;n" | i18n %]',
+                                                                '[% "Dias Sancion" | i18n %]','[% "Autor" %]','[% "T&iacute;tulo"|i18n %]','[% "Edicion/A&ntildeo" | i18n %]'
+                                                              ]
+                                                                            
+                                                  ) ;
+           [% END %]
+
+            <tbody>
             [% FOREACH historial_sancion IN HISTORIAL_SANCIONES %]
-            <tr valign="middle" align="center">
+            <tr>
                     [% IF historial_sancion.getTipo_operacion == "Borrado"  %]
                         <td style="color:red;">
                         Borrado, el [% historial_sancion.getTimestamp %]
@@ -90,11 +74,12 @@
                 <td>
                    [% historial_sancion.nivel3.nivel2.getEdicion %] [%historial_sancion.nivel3.nivel2.getAnio_publicacion %]
                 </td>
-           
+              </tr>
             [% END %] 
-
+          
 		
 		</table>
 [% ELSE %]
-    <div class="resultados_consulta">[% "No existen registros en el hisotrial de sanciones" | i18n %]</div>
+    </div>
+    <div class="alert alert-success">[% "No existen registros en el hisotrial de sanciones" | i18n %]</div>
 [% END %] 

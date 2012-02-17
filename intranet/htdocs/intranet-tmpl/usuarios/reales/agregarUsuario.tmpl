@@ -4,6 +4,7 @@
 [% END %]
 
 [% INCLUDE 'AutocompleteHelper.inc'  %]
+[% INCLUDE "FormValidateHelper.inc" %]
 [% INCLUDE "datePicker.inc" %]
 <script type="text/javascript">
 
@@ -54,6 +55,8 @@
     </legend>
 
 
+<!--<form method="post" name="userDataForm" id="userDataForm" onsubmit="return [% IF addBorrower == 1 %] add(); [% ELSE %] save_modif(); [% END %]">
+    --> 
   <section class="center-section-form"> 
 
     <fieldset>
@@ -65,7 +68,8 @@
             <div class="control-group error">
                   <label class="control-label" for="apellido">[% "Apellido" | i18n %]</label>
                   <div class="controls">
-                        <input id="apellido" name="apellido" required  type="text" class="input-xlarge focused" value="[% socio_modificar.persona.getApellido %]" autofocus>
+                        <input id="apellido" name="apellido" required  type="text" class="input focused" value="[% socio_modificar.persona.getApellido %]" autofocus>
+                        
                         <script>
                               if (!("autofocus" in document.createElement("input"))) {
                                 document.getElementById("apellido").focus();
@@ -77,7 +81,7 @@
             <div class="control-group error">
                   <label class="control-label" for="nombre">[% "Nombres" | i18n %]</label>
                   <div class="controls">
-                        <input  id="nombre" name="nombre" class="input-xlarge focused" type="text" value="[% socio_modificar.persona.getNombre %]">
+                        <input  id="nombre" name="nombre" required class="input focused" type="text" value="[% socio_modificar.persona.getNombre %]">
                   </div>
             </div>
             
@@ -85,7 +89,7 @@
                 <label class="control-label" for="nro_documento">[% "Documento" | i18n %]</label>    
                       <div class="controls">
                           [% combo_tipo_documento %] 
-                          <input  id="nro_documento" name="nro_documento" class="input focused" type="text" value="[% socio_modificar.persona.getNro_documento %]">
+                          <input  id="nro_documento" name="nro_documento" required class="input focused" type="text" value="[% socio_modificar.persona.getNro_documento %]">
                       </div>
             </div>
 
@@ -93,7 +97,7 @@
                 
                   <label  class="control-label" for="legajo">[% "Legajo" | i18n %]</label>
                   <div class="controls">
-                      <input type="text" name="legajo" id="legajo"  class="input-xlarge focused" value="[% socio_modificar.persona.getLegajo %]">
+                      <input type="text" name="legajo" id="legajo"  class="input focused" value="[% socio_modificar.persona.getLegajo %]">
                   </div>
             </div>
 
@@ -113,7 +117,7 @@
             <div class="control-group error">
                       <label class="control-label" for="nacimiento"> [% "Fecha de nacimiento " | i18n %] ([% socio_modificar.persona.getNacimiento %])</label>
                       <div class="controls">
-                            <input type="date" id="nacimiento" name="nacimiento" class="input-xlarge focused" value="[% socio_modificar.persona.getNacimiento %]">
+                            <input type="date" id="nacimiento" name="nacimiento" required class="input focused" value="[% socio_modificar.persona.getNacimiento %]">
                             <script>
                               var i = document.createElement("input");
                               i.setAttribute("type", "date");
@@ -179,7 +183,7 @@
               <div class="control-group error">
                     <label class="control-label" for="calle"> [% "Direcci&oacute;n" | i18n %]</label>
                     <div class="controls">
-                          <input  id="calle" name="calle" class="input-xlarge focused" type="text" value="[% socio_modificar.persona.getCalle %]">
+                          <input  id="calle" name="calle" class="input focused" required type="text" value="[% socio_modificar.persona.getCalle %]">
                     </div>
               </div>
 
@@ -193,7 +197,7 @@
               <div class="control-group error">
                     <label class="control-label" for="ciudad"> [% "Ciudad" | i18n %]</label>
                     <div class="controls">
-                          <input  id="ciudad" name="ciudad" class="input-xlarge focused" type="text" value="[% TRY %] [% socio_modificar.persona.ciudad_ref.getNombre %] [% CATCH %] [% END %]">
+                          <input  id="ciudad" name="ciudad" class="input focused" type="text" value="[% TRY %] [% socio_modificar.persona.ciudad_ref.getNombre %] [% CATCH %] [% END %]">
                           <input type="hidden" id="id_ciudad" name="id_ciudad" value="[% TRY %] [% socio_modificar.persona.ciudad_ref.id %] [% CATCH %] [% END %]">
                     </div>
               </div>
@@ -201,14 +205,14 @@
               <div class="control-group error">
                     <label class="control-label" for="telefono"> [% "Tel&eacute;fono particular" | i18n %] </label>
                     <div class="controls">
-                          <input  id="telefono" name="telefono" class="input focused" type="number" value="[% socio_modificar.persona.getTelefono %]">
+                          <input  id="telefono" name="telefono" required class="input focused" type="number" value="[% socio_modificar.persona.getTelefono %]">
                     </div>
               </div>
 
               <div class="control-group error">
                     <label class="control-label" for="telefono_laboral"> [% "Tel&eacute;fono del trabajo" | i18n %] </label>
                     <div class="controls">
-                          <input  id="telefono_laboral" name="telefono_laboral" class="input focused" type="number" value="[% socio_modificar.persona.getTelefono_laboral %]">
+                          <input  id="telefono_laboral" name="telefono_laboral" required class="input focused" type="number" value="[% socio_modificar.persona.getTelefono_laboral %]">
                     </div>
               </div>
 
@@ -230,7 +234,7 @@
               <div class="control-group error">
                     <label class="control-label" for="email">[% "E-Mail" | i18n %]</label>
                     <div class="controls">
-                          <input  id="email" name="email" class="input focused" type="text" value="[% socio_modificar.persona.getEmail %]">
+                          <input  id="email" name="email" class="input focused" required type="text" value="[% socio_modificar.persona.getEmail %]">
                     </div>
               </div>
         </fieldset>
@@ -288,7 +292,7 @@
                         [% IF addBorrower %]
                               <input id="nro_socio" type="text" class="input disabled" required name="nro_socio" value="Auto-generar">
                         [% ELSE %]
-                              <input id="nro_socio" type="text" name="nro_socio" class="input disabled partnerNumberHighlight" value="[% socio_modificar.getNro_socio %]">
+                              <input id="nro_socio" type="text" name="nro_socio" required class="input disabled partnerNumberHighlight" value="[% socio_modificar.getNro_socio %]">
                         [% END %]            
                     </div>
             </div>
@@ -518,6 +522,6 @@
     </form>
   </section>
 </fieldset>
-[% IF addBorrower == 1%]
+[% IF addBorrower %]
     [% INCLUDE "intranet-bottom.inc" %]
 [% END %]
