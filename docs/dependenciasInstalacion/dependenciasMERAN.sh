@@ -3,7 +3,7 @@ apt-get update -y
 apt-get install apache2 mysql-server libpdf-report-perl libhtml-template-expr-perl  libhtml-template-perl libnet-ldap-perl libdbd-mysql-perl libmail-sendmail-perl libmarc-record-perl libgd-gd2-perl libarchive-zip-perl libapache2-mod-perl2 libapache-db-perl libooolib-perl libpdf-report-perl  libchart-perl libtemplate-perl libnet-amazon-perl libnet-z3950-zoom-perl  aspell-es libtext-aspell-perl libnet-smtp-ssl-perl libspreadsheet-writeexcel-perl htmldoc libyaml-dev libcaptcha-recaptcha-perl libemail-mime-encodings-perl libproc-simple-perl -y 
 
 # MUCHOS ESTAN EN SQUEEZE!!!
-apt-get install libjson-perl libjson-xs-perl librose-db-perl librose-db-object-perl sphinxsearch libsphinx-search-perl libdigest-sha-perl libcrypt-cbc-perl libtext-levenshtein-perl  libnet-smtp-tls-perl libnet-ssleay-perl libnet-twitter-perl libwww-facebook-api-perl libspreadsheet-read-perl -y
+apt-get install libjson-perl libjson-xs-perl librose-db-perl librose-db-object-perl sphinxsearch libsphinx-search-perl libdigest-sha-perl libcrypt-cbc-perl libtext-levenshtein-perl  libnet-smtp-tls-perl libnet-ssleay-perl libnet-twitter-perl libwww-facebook-api-perl libspreadsheet-read-perl libyaml-perl -y
 
 apt-get install libcgi-session-perl libdate-manip-perl liblocale-maketext-gettext-perl libspreadsheet-writeexcel-perl libfile-libmagic-perl -y
 apt-get install libhttp-browserdetect-perl libtext-unaccent-perl -y

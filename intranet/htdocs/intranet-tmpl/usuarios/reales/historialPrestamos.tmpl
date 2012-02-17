@@ -1,118 +1,104 @@
 [% USE HTML %]
+    <div class="well">
+    [% IF cant %]
 
-[% IF cant %]
-		<div class="resultados_consulta">[% "Cantidad de pr&eacute;stamos realizados" | i18n %]: &nbsp;[% cant %]</div> 
-		
-		<div class="contenedor_paginador">[% paginador %]</div>
-		
-		<table class="tablaHistorialPrestamos datos_tabla" cellspacing=0  cellpadding=0 border=0 width="100%">
-		    <tr class="titulo_tabla_resultado">
-		    
-			    <td class="click" onclick="ordenarHistorialPrestamos('titulo')" 
-		            Title='[% "Ordenar por t&iacute;tulo" | i18n %]'>
-				    [% "T&iacute;tulo" | i18n %]
-			    </td>
-			    <td class="click" onclick="ordenarHistorialPrestamos('autor')" 
-		            Title='[% "Ordenar por Autor" | i18n %]'>
-		            [% "Autor" | i18n %]
-			    </td>
-		        <td>
-                    [% "Edici&oacute;n" | i18n %]
-		        </td>
-		            <td class="click" onclick="ordenarHistorialPrestamos('barcode')" 
-		                Title='[% "Ordenar por C&oacute;digo" | i18n %]'>
-				    [% "C&oacute;digo" | i18n %]
-		        </td>
-			    <td>[% "Fecha" | i18n %]</td>
-			    <td>[% "Renovaci&oacute;n" | i18n %]</td>
-			    <td>[% "Pr&eacute;stamo" | i18n %]</td>
-                <td>[% "Catidad de Renovaciones" | i18n %]</td>
-			    <td>[% "Vencimiento" | i18n %]</td>
-			    <td class="click" onclick="ordenarHistorialPrestamos('fecha_devolucion')" 
-		                Title='[% "Ordenar por Fecha de devoluci&oacute;n" | i18n %]'>
-				    [% "Devoluci&oacute;n" | i18n %]
-			    </td>
-		    
-		    </tr>
-		    
-		    [% FOREACH prestamo IN historial %]
+                  [% "Cantidad de pr&eacute;stamos realizados" | i18n %]: &nbsp;[% cant %]
+                  </div>
+                  <div class="contenedor_paginador">[% paginador %]</div>
+                  
+                  [% PERL %]
+                        print C4::AR::Filtros::tableHeader(   
+                                    id              => "table_tablaHistorialPrestamos",
+                                    class           => "",
+                                    selectAll_id    => "",
+                                    columns         => ['[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]',
+                                                        '[% "Edici&oacute;n" | i18n %]','[% "C&oacute;digo" | i18n %]','[% "Fecha" | i18n %]',
+                                                        '[% "Renovaci&oacute;n" | i18n %]','[% "Pr&eacute;stamo" | i18n %]',
+                                                        '[% "Catidad de Renovaciones" | i18n %]','[% "Vencimiento" %]','[% "Devoluci&oacute;n" | i18n %]'
+                                                      ]
+                                                                    
+                                          ) ;
+                  [% END %]
 
-		    <tr valign=middle align="center">
+                  <tbody>
+                      [% FOREACH prestamo IN historial %]
+                      <tr>
 
-			    <td>
-				    [% PERL %]
-						    print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(prestamo.nivel3.nivel1.getTitulo) %]",
-		                                                    url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl",
-														    params =>	[	"id1=[% HTML.escape(prestamo.nivel3.nivel1.id) %]"], 
-													    ) ;
-				    [% END %]
-			    </td>
-			    <td>
-			
-                            <a class="click" onClick="buscarPorAutor('[% prestamo.nivel3.nivel1.getAutor %]')" title="[% 'Filtrar por Autor' | i18n %]">
-                                  [% prestamo.nivel3.nivel1.getAutor %]
-                            </a>
-                              
-						  
-				  
-			    </td>
-			    <td>
-			   
-		    
-				    [% IF prestamo.nivel3.nivel2.getEdicion %]
-					    [% prestamo.nivel3.nivel2.getEdicion %]
-				    [% END %]
-		    
-				    [% IF prestamo.nivel3.nivel2.getAnio_publicacion %]
-					   ([% prestamo.nivel3.nivel2.getAnio_publicacion %])
-		            [% END %]
+                          <td>
+                              [% PERL %]
+                                      print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(prestamo.nivel3.nivel1.getTitulo) %]",
+                                                                      url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl",
+                                                                      params =>	[	"id1=[% HTML.escape(prestamo.nivel3.nivel1.id) %]"], 
+                                                                  ) ;
+                              [% END %]
+                          </td>
+                          <td>
+                      
+                                      <a class="click" onClick="buscarPorAutor('[% prestamo.nivel3.nivel1.getAutor %]')" title="[% 'Filtrar por Autor' | i18n %]">
+                                            [% prestamo.nivel3.nivel1.getAutor %]
+                                      </a>
+                                        
+                                    
+                            
+                          </td>
+                          <td>
+                        
+                      
+                              [% IF prestamo.nivel3.nivel2.getEdicion %]
+                                  [% prestamo.nivel3.nivel2.getEdicion %]
+                              [% END %]
+                      
+                              [% IF prestamo.nivel3.nivel2.getAnio_publicacion %]
+                                ([% prestamo.nivel3.nivel2.getAnio_publicacion %])
+                              [% END %]
 
-		    
-			
-			    </td>
-			    <td align="center" >
-				    [% PERL %]
-						    print C4::AR::Filtros::link_to(	text => 	"[% prestamo.nivel3.getBarcode %]",
-														    url=>"[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
-														    params =>	["id3=[% prestamo.id3 %]"],
-														    title =>	"[% "Detalle del Ejemplar" | i18n %]"
-													    ) ;
-				    [% END %]	
-			    </td>
-			    <td>
-				    [% prestamo.getFecha_prestamo_formateada %]
-			    </td>
-			     <td>
-		            [% IF prestamo.fecha_ultima_renovacion %]
-				        [% prestamo.getFecha_devolucion_formateada %]
-		            [% ELSE %]
-		                --------
-		            [% END %]
-			    </td>
-			    <td>
-				    [% prestamo.getTipo_prestamo %]
-			    </td>
-                <td>
-                    [% prestamo.renovaciones%]
-                </td>
-			    <td>
-		            [% IF estaVencido %]
-				        <span class="fecha_critica">[% prestamo.getFecha_vencimiento_formateada %]</span>
-		            [% ELSE %]
-		                <span class="fecha_cumple">[% prestamo.getFecha_vencimiento_formateada %]</span>
-		            [% END %]
-			    </td>
-			    <td>
-		            [% IF prestamo.fecha_devolucion%]
-				       [% prestamo.getFecha_devolucion_formateada %]
-		            [% ELSE %]
-		                --------
-		            [% END %]
-			    </td>
-		    
-		    [% END %] <!-- FOREACH PRIMERO -->
-		
+                      
+                      
+                          </td>
+                          <td>
+                              [% PERL %]
+                                      print C4::AR::Filtros::link_to(	text => 	"[% prestamo.nivel3.getBarcode %]",
+                                                                      url=>"[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
+                                                                      params =>	["id3=[% prestamo.id3 %]"],
+                                                                      title =>	"[% "Detalle del Ejemplar" | i18n %]"
+                                                                  ) ;
+                              [% END %]	
+                          </td>
+                          <td>
+                              [% prestamo.getFecha_prestamo_formateada %]
+                          </td>
+                          <td>
+                              [% IF prestamo.fecha_ultima_renovacion %]
+                                  [% prestamo.getFecha_devolucion_formateada %]
+                              [% ELSE %]
+                                  --------
+                              [% END %]
+                          </td>
+                          <td>
+                              [% prestamo.getTipo_prestamo %]
+                          </td>
+                          <td>
+                              [% prestamo.renovaciones%]
+                          </td>
+                          <td>
+                              [% IF estaVencido %]
+                                  <span class="fecha_critica">[% prestamo.getFecha_vencimiento_formateada %]</span>
+                              [% ELSE %]
+                                  <span class="fecha_cumple">[% prestamo.getFecha_vencimiento_formateada %]</span>
+                              [% END %]
+                          </td>
+                          <td>
+                              [% IF prestamo.fecha_devolucion%]
+                                [% prestamo.getFecha_devolucion_formateada %]
+                              [% ELSE %]
+                                  --------
+                              [% END %]
+                          </td>
+                      </tr>
+                      [% END %] <!-- FOREACH PRIMERO -->
+            </tbody>
 		</table>
-[% ELSE %]
-    <div class="resultados_consulta">[% "No se han realizado pr&eacute;stamos." | i18n %]</div>
-[% END %] 
+  [% ELSE %]
+       </div>
+            <div class="alert alert-info">[% 'No hay importaciones para mostrar'| i18n %]</div>
+[% END %]
