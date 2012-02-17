@@ -57,9 +57,9 @@
                                 <td>
                                     [% PERL %]
                                       print C4::AR::Filtros::action_button( 
-                                                                      button    => "btn click",
+                                                                      button    => "btn btn-danger click",
                                                                       action    => 'eliminarNovedad("[% novedad.id %]")', 
-                                                                      icon      => "icon-remove",
+                                                                      icon      => "icon-white icon-remove",
                                                                       title     => "",
                                                                   ) ;
 
@@ -69,10 +69,10 @@
                                 <td>
                                      [% PERL %]
                                           print C4::AR::Filtros::action_link_button( 
-                                                                          button    => "btn click",
+                                                                          button    => "btn btn-primary click",
                                                                           url       => "[% url_prefix %]/admin/editar_novedad.pl", 
                                                                           params    =>  ["id=[% novedad.id %]"],
-                                                                          icon      => "icon-edit",
+                                                                          icon      => "icon-white icon-edit",
                                                                           title     => "",
                                                                       ) ;
 

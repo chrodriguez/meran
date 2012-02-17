@@ -37,7 +37,7 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 my ($cant_mensajes,$mensajes_contacto) = C4::AR::MensajesContacto::listar(0,$ini,$cantR);
 
-$t_params->{'paginador'} = C4::AR::Utilidades::crearPaginadorOPAC($cant_mensajes,$cantR, $pageNumber,$url,$t_params);
+$t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cant_mensajes,$cantR, $pageNumber,$url,$t_params);
 
 $t_params->{'mensajes_contacto'} = $mensajes_contacto;
 $t_params->{'cant_mensajes'} = $cant_mensajes;
