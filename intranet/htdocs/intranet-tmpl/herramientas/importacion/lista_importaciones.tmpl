@@ -70,7 +70,7 @@
                                         params 			=>   ["id_importacion=[% importacion.getId %]"],
                                         actions         => [
 										    {title => "Detalle",icon=>"icon-search",url=>"[% url_prefix %]/herramientas/importacion/detalle_importacion.pl", params =>   ["id_importacion=[% importacion.getId %]"]},
-                                            {title => "Editar",icon=>"icon-pencil",url=>"[% url_prefix %]/herramientas/importacion/importarDB.pl", params =>   ["tipoAccion=EDITAR", "id_importacion=[% importacion.getId %]"]},
+                                            {title => "Configurar",icon=>"icon-pencil",url=>"[% url_prefix %]/herramientas/importacion/configurar_importacion.pl", params =>   ["id_importacion=[% importacion.getId %]"]},
                                             {title => "Borrar",action=>"borrarImportacion([% importacion.getId %]);", icon=>"icon-remove"},
                                                            ],
 								    );

@@ -13,10 +13,9 @@ my ($template, $session, $t_params);
 
 my $show_template = 1;
 
-$obj=C4::AR::Utilidades::from_json_ISO($obj);
-my $tipoAccion  = $obj->{'accion'}||""; 
+my $edit = $input->param('edit');
 
-f($tipoAccion eq "UPDATE_ESQUEMA"){
+if($edit){
 
         ($template, $session, $t_params)  = get_template_and_user({  
                             template_name => "includes/partials/modificar_value.tmpl",
@@ -33,10 +32,10 @@ f($tipoAccion eq "UPDATE_ESQUEMA"){
     
         my $string_ref = $input->param('id');
         my $value = $input->param('value');
-        
-        $valor = C4::AR::Usuarios::editarRegularidadEsquema($string_ref,$value);
+        my $valor = C4::AR::Usuarios::editarRegularidadEsquema($string_ref,$value);
 
 
+        $t_params->{'value'} = $valor;
 
-C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
-
+        C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+}
