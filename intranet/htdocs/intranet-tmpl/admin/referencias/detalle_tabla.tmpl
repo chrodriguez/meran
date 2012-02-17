@@ -22,19 +22,10 @@
       });
 </script>
 <div id="tabla_referencia">
-	<fieldset class="resultados_busqueda">
-	    <legend class="titulo_legend trigger click">[% "Tabla " | i18n %]: [% tabla %]</legend>
+	<fieldset>
+	    <legend>[% "Tabla " | i18n %]: [% tabla %]</legend>
 	        <div class="search_tabla">
-	                    [% PERL %]
-	                        print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Registro' | i18n %]",
-	                                                            boton   => "boton_agregar",
-	                                                            onClick => "agregarRegistro('[% tabla %]');",
-	                                                            title   => "[% 'Agregar Registro' | i18n %]",
-	                                ) ;
-	                    [% END %]
-	
-	            <fieldset class="center_fieldset">
-	                <legend class="titulo_legend">[% "Filtrar por:" | i18n %]</legend>
+	            <fieldset>
 	                <form onsubmit="return false" class="well form-search">
 	                    <input type="text" id="search_tabla" name="search_tabla" class="input-medium search-query"/>
 	                    
@@ -44,6 +35,11 @@
 	                                                            onClick => "obtenerTablaFiltrada();",
 	                                                            title   => "[% 'Buscar' | i18n %]",
 	                                                            inline  => "1"
+	                                ) ;
+	                    [% END %]
+	                    
+	                    [% PERL %]
+	                        print C4::AR::Filtros::setHelpInput(   text    => "[% 'Ingrese la palabra por la cual desea filtrar' | i18n %]",
 	                                ) ;
 	                    [% END %]
 	                </form>
@@ -69,9 +65,9 @@
 
 	                             [% PERL %]
                                   print C4::AR::Filtros::action_button( 
-                                                                  button    => "btn click",
+                                                                  button    => "btn btn-danger click",
                                                                   action    => 'mostrarReferencias("[% tabla %]", "[% dato.getPkValue %]")', 
-                                                                  icon      => "icon-remove",
+                                                                  icon      => "icon-remove icon-white",
                                                                   title     => "",
                                                               ) ;
 
@@ -85,4 +81,13 @@
 	            </table>
 	        </div>
 	</fieldset>
+	<div class="form-actions">
+	[% PERL %]
+      print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Registro' | i18n %]",
+                                          boton   => "boton_agregar",
+                                          onClick => "agregarRegistro('[% tabla %]');",
+                                          title   => "[% 'Agregar Registro' | i18n %]",
+              ) ;
+  [% END %]
+  </div>
 </div>
