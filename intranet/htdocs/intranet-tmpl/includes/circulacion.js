@@ -373,6 +373,8 @@ function generaDivDevolucion(responseText){
 		if((infoArray[i].autor != "")&&(infoArray[i].autor != null)){ 
             html= html + infoArray[i].autor;
             if((infoArray[i].titulo != "")&&(infoArray[i].titulo != null)){html= html + ", ";}
+        }else{
+    		html += "SIN AUTOR"; 
         }
 		html += "</dt>";
 		html += "<dd>";

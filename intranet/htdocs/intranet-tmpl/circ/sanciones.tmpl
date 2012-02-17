@@ -3,18 +3,6 @@
 <script type="text/javascript" src="/intranet-tmpl/includes/circulacion-min.js"></script>
 
 <script language=javascript>
-function todos(){
-	var checks=document.getElementsByTagName("input");
-	if (checks.length>0){
-		for(i=0;i<checks.length;i++){
-			if(checks[i].type == "checkbox"){
-        			if(checks[i].checked){checks[i].checked=false}
-				else{checks[i].checked=true}
-			}
-		}
-	}
-}
-
 var objAH;//Objeto AjaxHelper.
 var ORDEN;//orden
 /*
@@ -90,7 +78,7 @@ function updateSanciones(responseText){
 
 
 $(document).ready( function() {
-	mostrarSanciones();
+	buscarSancion();
 	onEnter("buscar",buscarSancion);
 });
 
@@ -143,7 +131,6 @@ function limpiar(){
                     print C4::AR::Filtros::setHelpInput(   
                                                     text        => "[% ' Ingrese el Apellido, Nombre o Numero de Socio.' | i18n %]",
                                                     class       => "info",
-                                                    textLabel   => "NOTA",
                                             ) ;
                     
                 [% END %]

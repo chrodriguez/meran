@@ -83,7 +83,9 @@ function buscarUsuariosPotenciales(){
     if ($("#habilitados_filter").attr('checked'))  
         objAH.habilitados_filter = 1;
 
-    objAH.sendToServer();
+    if(busqueda != ""){
+    	objAH.sendToServer();
+    }
 }
 
 function updateInfo(responseText){

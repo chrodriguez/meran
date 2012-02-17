@@ -116,24 +116,23 @@ var jobID = 0;
     }
 
 </script>
+
 <h1>[% 'Principal' | i18n %] <small>[% 'Accesos frecuentes, novedades, mensajes' | i18n %]</small></h1>
 <div class="well span4 " style="padding: 8px 0;">
         <ul class="nav nav-list">
-          <li><a href="#"><i class="icon-home"></i>[% 'Accesos frecuentes' | i18n %]</a></li>
           <li>
                     [% PERL %]
                        print C4::AR::Filtros::link_to( text =>     "[% 'Mis datos' | i18n %]",
                                                    url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
                                                    title =>    "[% 'Mis datos' | i18n %]",
                                                    params =>   ["nro_socio=[% nro_socio %]"],
-                                                   icon => "icon-pencil",
+                                                   icon => "icon-user",
                                                    tooltip => "['Ver y/o modificar sus datos' | i18n ]"
                            );
                    [% END %]
           </li>
-          <li><a href="#"><i class="i"></i> Misc</a></li>
         </ul>
-    </div>        
+</div>        
 
 
 <div id="resultNovedades" class="clear"></div>
@@ -144,7 +143,9 @@ var jobID = 0;
 
 <div id="twitter_container" class="clear">
     [% IF twitter_username_to_search %]
-	   <div id="tweets" class="tweets"><div class="loading">[% 'Cargando tweets...' | i18n %]</div></div>
+	   <div id="tweets" class="tweets">
+	       <div class="loading">[% 'Cargando tweets...' | i18n %]</div>
+       </div>
 	   <br />
     [% END %]
     <a class="fancy_link" href="[% url_prefix %]/admin/publicar_twitter.pl?token=[% token %]" > 

@@ -2,27 +2,19 @@
 [% IF cantidad %]
   <fieldset class="main">
       <legend class="titulo_legend">[% "Novedades:" | i18n %]</legend>
-      <ul>
-          <li class="item">
+      <dl>
               [% FOREACH novedad IN novedades %]
-                      <div class="novedad_intra" id="novedad_intra_[% novedad.getId %]">
-                          <p class="titulo_novedad">
-                            <a class="fancy_link" href='[% url_prefix %]/admin/global/ver_novedad_intra.pl?id=[% novedad.getId %]&amp;token=[% token %]'>[% novedad.getTitulo %]</a>
-                            <span class="fecha_novedad">
-                                ([% novedad.getFechaLegible %])
-                            </span>
-                          </p>
-                          <p class="resumen_novedad">
-                              [% novedad.getResumen %]
-                            <a class="fancy_link" href='[% url_prefix %]/admin/global/ver_novedad_intra.pl?id=[% novedad.getId %]&amp;token=[% token %]'>[% 'Leer m&aacute;s' | i18n %]
-                                    
-                          </p>
-                      </div>
-                      [% IF loop.count != loop.size %]
-                        <hr class="divisor_novedades">
-                      [% END %]
+                  <dt>
+                    <a class="fancy_link" href='[% url_prefix %]/admin/global/ver_novedad_intra.pl?id=[% novedad.getId %]&amp;token=[% token %]'>
+                        [% novedad.getTitulo %]
+                     </a>
+                     ([% novedad.getFechaLegible %])
+                  </dt>
+                  <dd>
+                    [% novedad.getResumen %]
+                    <a class="fancy_link" href='[% url_prefix %]/admin/global/ver_novedad_intra.pl?id=[% novedad.getId %]&amp;token=[% token %]'>[% 'Leer m&aacute;s' | i18n %]</a>
+                  </dd>
               [% END %]
-          </li>
-      </ul>
+      </dl>
   </fieldset>
 [% END %]

@@ -1,181 +1,173 @@
 [% IF circularDesdeDetalleUsuario == 0 %]
     [% INCLUDE 'partials/usuarios/detalleReservas-noCirculation.inc' %]
 [% ELSE %]
-	[% USE HTML %] 
-	
-	[% IF reservas_asignadas_count %]
-	
-	<fieldset>
-	<legend class="titulo_legend_resaltado">[% "Ejemplares Asignados" | i18n %]</legend>
-		<table id="reseravsAsignadasResult" class="reseravsAsignadasResult datos_tabla" cellspacing=0  cellpadding=0  border=0   width="100%">
-			<tr class="titulo_tabla_resultado">
-				<th>
-					<a class="click" id="checkAllReservas">
-						<img src="[% temas %]/[% tema %]/imagenes/iconos/check.png" border="0" title="[% 'Invertir la selecci&oacute;n' | i18n %]">
-					</a>
-				</th>
-		
-				<th>[% "T&iacute;tulo" | i18n %]</th>
-				<th>[% "Autor" | i18n %]</th>
-				<th>[% "C. Barra" | i18n %]</th>
-				<th>[% "Sig. Top." | i18n %]</th>
-				<th>[% "Ed." | i18n %]</th>
-				<!--<th>[% "Vol." | i18n %]</th> -->
-				<th>[% "Vencimiento" | i18n %]</th>
-				<th width="10%">[% "Retira en" | i18n %]</th>
-				[% IF cancelar_reservas_intranet %]
-				    <th width="10%">[% "Cancelar" | i18n %]</th>
-			    [% END %]
-			</tr>
-		[% FOREACH reserva IN RESERVAS_ASIGNADAS %]
-			<tr align="center">
-			
-				<td>
-    				<input type="checkbox"  name="chkboxReservas" value="[%  reserva.getId3 %]" id="[% reserva.nivel3.getBarcode %]">
-				</td>
-		
-				<td width="16%">
-					[% PERL %]
-						print C4::AR::Filtros::link_to(	text => 	" [% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
-														url => 		"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
-														params =>	["id1=[% reserva.nivel2.nivel1.getId1 %]"],
-													) ;
-					[% END %]
-				</td>	
-				<td>
-	                [% IF reserva.nivel3.nivel1.getAutor %]
-	                    [% reserva.nivel3.nivel1.getAutor %]
-	                [% ELSE %]
-	                    &nbsp;
-	                [% END %]
-				</td>
-				<td>
-					[% PERL %]
-						print C4::AR::Filtros::link_to(	text => 	"[% reserva.nivel3.getBarcode %]",
-														url => 		"[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
-														params =>	["id3=[% reserva.getId3 %]"],
-														title =>	"[% 'Mostrar Detalle de Disponibilidad' | i18n %]"
-													) ;
-					[% END %]
-					
-				</td>
-				<td>
-				[% IF reserva.nivel3.getSignatura_topografica %] 
-					[% PERL %]
-						print C4::AR::Filtros::link_to(	text => 	"[% reserva.nivel3.getSignatura_topografica %]",
-														url => 		"[% url_prefix %]/detalle.pl", 
-														params =>	["id1=[% reserva.nivel3.nivel1.getId1 %]"],
-													) ;
-					[% END %]
-				[% END %]
-				</td>
-	            <td>  
-	            [% IF reserva.nivel3.nivel2.getEdicion %] [% reserva.nivel3.nivel2.getEdicion %] [% ELSE %] - [% END %]
-	            </td>
-	    
-	            <!-- <td> 
-	            [% IF reserva.nivel3.nivel2.getVolumen %] t [% reserva.nivel3.nivel2.getVolumen %] 
-	                [% IF reserva.nivel3.nivel2.getVolumenDesc %] ([% reserva.nivel3.nivel2.getVolumenDesc %])  [% END %] 
-	            [% END %]
-	            </td> -->
-				<td>
-	            [% IF reserva.getFecha_recordatorio_formateada %]
-	            <font  [% IF reserva.estaVencida %] color="red" [% END %] >[% reserva.getFecha_recordatorio_formateada %]</font>
-	            [% ELSE %]
-	               - 
-	            [% END %]
-				</td>
-				<td>
-	            [% IF reserva.getId_ui %] 
-	                [% reserva.ui.getNombre %]
-	            [% ELSE %]
-	                - 
-	            [% END %]
-				</td>
-                [% IF cancelar_reservas_intranet %]
-					<td width="10%">
-		
-		                [% PERL %]
-		                    print C4::AR::Filtros::to_Icon(  
-		                                                        boton   => "icon_cancelar",
-		                                                        onClick => "cancelarReserva('[% reserva.getId_reserva %]');",
-		                                                        title   => "[% 'Cancelar' | i18n %]",
-		                                                        alternClass => "botonCentradoTabla"
-		                            ) ;
-		                [% END %]
-		
-					</td>
-				[% END %]
-			</tr>
-		[% END %]
-		</table>
-	
-        [% PERL %]
-            print C4::AR::Filtros::to_Icon(  
-                                                boton   => "icon_prestar",
-                                                onClick => "realizarAccion('CONFIRMAR_PRESTAMO','reseravsAsignadasResult',generaDivPrestamo);",
-                                                title   => "[% 'Prestar' | i18n %]",
-                                                alternClass => "botonCentrado"
-                    ) ;
-        [% END %]
+   [% USE HTML %] 
 
-	</fieldset>
-	[% END %]
-	
-	[% IF RESERVAS_ESPERA %]
-	<fieldset>
-	<legend class="titulo_legend">[% "Reservas en espera" | i18n %]</legend>
-		    
-		    <table class="reservasEnEsperaResult datos_tabla" cellspacing=0  cellpadding=0  border=0   width="100%">
-			    <tr valign=middle class="titulo_tabla_resultado">
-				    <th>[% "T&iacute;tulo" | i18n %]</th>
-				    <th>[% "Autor" | i18n %]</th>
-				    <th>[% "Edici&oacute;n" | i18n %]</th>
-				    <!--<th>[% "Volumen" | i18n %]</th>-->
-				    <th>[% "Cancelar" | i18n %]</th>
-			    </tr>
-	        [% FOREACH reserva IN RESERVAS_ESPERA %]
-			    <tr align="center">
-			    
-				    <td width="10%"> 
-				    [% PERL %]
-					    print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
-													    url => 		"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
-													    params =>	["id1=[% reserva.nivel2.nivel1.getId1 %]"],
-												    ) ;
-				    [% END %]
-				    </td>
-				    <td>
-	                    [% IF reserva.nivel2.nivel1.getAutor %]
-	                        [% reserva.nivel2.nivel1.getAutor %]
-	                    [% ELSE %]
-	                        &nbsp;
-	                    [% END %]
-				    </td>
-	            <td>  
-	                [% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
-	                </td>
-	        
-	                <!--<td> 
-	                [% IF reserva.nivel3.nivel2.getVolumen %] t [% reserva.nivel3.nivel2.getVolumen %] 
-	                    [% IF reserva.nivel3.nivel2.getVolumenDesc %] ([% reserva.nivel3.nivel2.getVolumenDesc %])  [% END %] 
-	                [% END %]
-	                </td>-->
-				    <td width="10%"> 
-	
-	                    [% PERL %]
-	                        print C4::AR::Filtros::to_Icon(  
-	                                                            boton   => "icon_cancelar",
-	                                                            onClick => "cancelarReserva('[% reserva.getId_reserva %]');",
-	                                                            title   => "[% 'Cancelar' | i18n %]",
-	                                                            alternClass => "botonCentradoTabla"
-	                                ) ;
-	                    [% END %]
-	
-				    </td>
-			    </tr>
-		    [% END %]
-		    </table>
-	</fieldset>
-	[% END %]
+    <fieldset>
+    <legend class="titulo_legend_resaltado">[% "Ejemplares Asignados" | i18n %]</legend>
+
+            [% IF reservas_asignadas_count %]
+                <div class="well">
+                    [% "Cantidad de ejemplares prestados" | i18n %]: <strong>[% prestamos_cant %]</strong> 
+                </div>
+
+                [% PERL %]
+                      print C4::AR::Filtros::tableHeader(   
+                                  id              => "reseravsAsignadasResult",
+                                  class           => "",
+                                  selectAll_id    => "checkAllReservas",
+                                  columns         => ['[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]',
+                                                      '[% "C&oacute;digo de Barras" %]','[% "Sig. Top." | i18n %]',
+                                                      '[% "Ed." | i18n %]','[% "Vencimiento" %]','[% "Retira en" %]',
+                                                       [% IF cancelar_reservas_intranet %]'[% "Cancelar" %]'[% END %], 
+                                                    ]
+                                                                  
+                                        ) ;
+                [% END %]
+                <tbody>
+                [% FOREACH reserva IN RESERVAS_ASIGNADAS %]
+                    <tr>
+                        <td>
+                            [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     " [% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
+                                                                url =>      "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                                                params =>   ["id1=[% reserva.nivel2.nivel1.getId1 %]"],
+                                                            ) ;
+                            [% END %]
+                        </td>   
+                        <td>
+                            [% IF reserva.nivel3.nivel1.getAutor %]
+                                [% reserva.nivel3.nivel1.getAutor %]
+                            [% ELSE %]
+                                &nbsp;
+                            [% END %]
+                        </td>
+                        <td>
+                            [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     "[% reserva.nivel3.getBarcode %]",
+                                                                url =>      "[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
+                                                                params =>   ["id3=[% reserva.getId3 %]"],
+                                                                title =>    "[% 'Mostrar Detalle de Disponibilidad' | i18n %]"
+                                                            ) ;
+                            [% END %]
+                            
+                        </td>
+                        <td>
+                        [% IF reserva.nivel3.getSignatura_topografica %] 
+                            [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     "[% reserva.nivel3.getSignatura_topografica %]",
+                                                                url =>      "[% url_prefix %]/detalle.pl", 
+                                                                params =>   ["id1=[% reserva.nivel3.nivel1.getId1 %]"],
+                                                            ) ;
+                            [% END %]
+                        [% END %]
+                        </td>
+                        <td>  
+                        [% IF reserva.nivel3.nivel2.getEdicion %] [% reserva.nivel3.nivel2.getEdicion %] [% ELSE %] - [% END %]
+                        </td>
+        
+                        <td>
+                        [% IF reserva.getFecha_recordatorio_formateada %]
+                             [% reserva.getFecha_recordatorio_formateada %]>
+                        [% ELSE %]
+                           - 
+                        [% END %]
+                        </td>
+                        <td>
+                        [% IF reserva.getId_ui %] 
+                            [% reserva.ui.getNombre %]
+                        [% ELSE %]
+                            - 
+                        [% END %]
+                        </td>
+                        [% IF cancelar_reservas_intranet %]
+                            <td>
+                
+                                [% PERL %]
+                                    print C4::AR::Filtros::action_button(  
+                                                                        boton   => "btn btn-info",
+                                                                        icon    => "icon-white icon-remove"
+                                                                        onClick => "cancelarReserva('[% reserva.getId_reserva %]');",
+                                                                        title   => "[% 'Cancelar' | i18n %]",
+                                            ) ;
+                                [% END %]
+                
+                            </td>
+                        [% END %]
+                    </tr>
+                [% END %]
+            </tbody>
+        </table>
+            [% PERL %]
+                print C4::AR::Filtros::action_button(  
+                                                    boton   => "btn btn-danger",
+                                                    onClick => "realizarAccion('CONFIRMAR_PRESTAMO','reseravsAsignadasResult',generaDivPrestamo);",
+                                                    title   => "[% 'Prestar' | i18n %]",
+                                                    iconn   => "icon-white icon-share-alt"
+                        ) ;
+            [% END %]
+     [% ELSE %]
+            <div class="alert alert-info">[% 'El usuario no tiene ninguna reserva asignada.'| i18n %]</div>
+     [% END %]
+    
+    
+    <fieldset>
+       <legend class="titulo_legend">[% "Reservas en espera" | i18n %]</legend>
+
+       [% IF reservas_espera_count %]
+          <div class="well">
+              [% "Cantidad de reservas en espera" | i18n %]: <strong>[% reservas_espera_count %]</strong> 
+          </div>
+
+             [% PERL %]
+                   print C4::AR::Filtros::tableHeader(   
+                               id              => "reseravsEsperaResult",
+                               class           => "",
+                               selectAll_id    => "checkAllReservas",
+                               columns         => ['[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]',
+                                                   '[% "Ed." | i18n %]','[% "Cancelar" %]', 
+                                                 ]
+                                                               
+                                     ) ;
+             [% END %]
+            <tbody>    
+                [% FOREACH reserva IN RESERVAS_ESPERA %]
+                    <tr>
+                        <td> 
+                        [% PERL %]
+                            print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
+                                                            url =>      "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                                            params =>   ["id1=[% reserva.nivel2.nivel1.getId1 %]"],
+                                                        ) ;
+                        [% END %]
+                        </td>
+                        <td>
+                            [% IF reserva.nivel2.nivel1.getAutor %]
+                                [% reserva.nivel2.nivel1.getAutor %]
+                            [% ELSE %]
+                                &nbsp;
+                            [% END %]
+                        </td>
+                        <td>  
+                           [% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
+                        </td>
+                
+                        <td> 
+                            [% PERL %]
+                                print C4::AR::Filtros::action_button(  
+                                                                    boton   => "btn btn-danger",
+                                                                    onClick => "cancelarReserva('[% reserva.getId_reserva %]');",
+                                                                    title   => "[% 'Cancelar' | i18n %]",
+                                                                    icon   => "icon-white icon-remove"
+                                        ) ;
+                            [% END %]
+                        </td>
+                    </tr>
+                [% END %]
+            </tbody>
+         </table>
+      [% ELSE %]
+          <div class="alert alert-info">[% 'El usuario no tiene ninguna reserva en espera.'| i18n %]</div>
+      [% END %]
+    </fieldset>
 [% END %]

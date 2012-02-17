@@ -1,25 +1,28 @@
+<script type="text/javascript" >
+        $(document).ready(function(){
+        	checkTr();
+                checkedAll('checkAllSanciones','chkboxSanciones');
+        });
 
+</script>
 <div class="contenedor_paginador">[% paginador %]</div>
 [% IF CANT_SANCIONES %]
     <div class="well">[% "Cantidad de sanciones" | i18n %]: &nbsp;[% cant %]</div> 
-    <table class="table table-striped" id="tablaResult">
-        <thead> 
-          <tr>
-              <th><a href="#" onclick="todos();">
-                  <img src="[% temas %]/[% tema %]/imagenes/iconos/check.png" title="[% 'Invertir la selecci&oacute;n' | i18n %]"  border=0></a>
-              </th>
-              <th class="click" onclick="ordenar('socio.nro_socio')" Title="[% 'Ordenar por tarjeta de Id.' | i18n %]">[% "Tarjeta de Id." | i18n %]</th>
-              <th class="click" onclick="ordenar('persona.apellido')" Title="[% 'Ordenar por apellido' | i18n %]">[% "Socio" | i18n %]</th>
-              <th class="click" onclick="ordenar('persona.legajo')" Title="[% 'Ordenar por legajo' | i18n %]">[% "Legajo" | i18n %]</th>
-              <th class="click" onclick="ordenar('ref_tipo_sancion.categoria_socio')" Title="[% 'Ordenar por categoria' | i18n %]">[% "Cat." | i18n %]</th>
-              <th class="click" onclick="ordenar('ref_tipo_sancion.tipo_prestamo')" Title="[% 'Ordenar por tipo de pr&eacute;stamo' | i18n %]">[% "Tipo de pr&eacute;stamo" | i18n %]</th>
-              <th class="click" onclick="ordenar('fecha_comienzo')" Title="[% 'Ordenar por fecha de inicio' | i18n %]">[% "Fecha inicio" | i18n %]</th>
-              <th class="click" onclick="ordenar('fecha_final')" Title="[% 'Ordenar por fecha de fin' | i18n %]">[% "Fecha fin" | i18n %]</th>
-              <th class="click" onclick="ordenar('autor')" Title="[% 'Ordenar por autor' | i18n %]">[% "Autor" | i18n %]</th>
-              <th class="click" onclick="ordenar('titulo')" Title="[% 'Ordenar por titulo' | i18n %]">[% "Titulo" | i18n %]</th>
-              <th class="click" onclick="ordenar('edicion')" Title="[% 'Ordenar por edicion' | i18n %]">[% "Edicion/A	&ntilde;o" | i18n %]</th>
-          </tr>
-        </thead>
+      [% PERL %]
+          print C4::AR::Filtros::tableHeader(   
+                                                  id              => "tablaResult_sanciones",
+                                                  class           => "",
+                                                  selectAll_id    => "checkAllSanciones",
+                                                  columns         => ['[% "Tarjeta de Id."|i18n %]','[% "Socio"|i18n %]','[% "Legajo"|i18n %]',
+                                                                      '[% "Cat."|i18n %]','[% "Tipo de pr&eacute;stamo"|i18n %]', '[% "Fecha inicio"|i18n %]',
+                                                                      '[% "Fecha fin"|i18n %]','[% "Autor"|i18n %]', '[% "T&iacute;tulo"|i18n %]',
+                                                                      '[% "Edici&oacute;n"|i18n %]',
+                                                                     ]
+                                                  
+                      ) ;
+      [% END %]
+        
+        
         <tbody>
               [% FOREACH sancion IN SANCIONES %]
                   <tr>  
@@ -27,7 +30,7 @@
                         <input type="checkbox" name="chkboxSanciones" value="[% sancion.getId_sancion %]" 
                                 id="[% sancion.getId_sancion %]">
                     </td>
-                    <td class="tarjetaId">
+                    <td>
                         [% PERL %]
                             print C4::AR::Filtros::link_to(   text =>     "[% sancion.getNro_socio %]",
                                                             url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
@@ -36,7 +39,7 @@
                                                         );
                         [% END %]
                     </td>
-                    <td class="tarjetaId">
+                    <td>
                         [% PERL %]
                             print C4::AR::Filtros::link_to(   text =>     "[% sancion.socio.persona.getApeYNom %]",
                                                             url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 

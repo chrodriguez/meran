@@ -184,10 +184,8 @@ function updateAgregarUsuario(responseText){
 
 function desautorizarTercero(claveUsuario, confirmeClave){
 
-    jConfirm(CONFIRMAR_ELIMINAR_AFILIADO, USUARIOS_ALERT_TITLE, function(confirmStatus){
-
-    	if (confirmStatus){
-	    	objAH=new AjaxHelper(updateDesautorizarTercero);
+    	bootbox.confirm(CONFIRMAR_ELIMINAR_AFILIADO, function (ok){ 
+        	objAH=new AjaxHelper(updateDesautorizarTercero);
 	        objAH.debug= true;
 	        objAH.showOverlay       = true;
 	        objAH.url= URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
@@ -195,7 +193,6 @@ function desautorizarTercero(claveUsuario, confirmeClave){
 	        objAH.tipoAccion= 'ELIMINAR_AUTORIZADO';
 	        //se envia la consulta
 	        objAH.sendToServer();
-    	}
     });
 }
 
@@ -210,16 +207,14 @@ function updateDesautorizarTercero(responseText){
 
 
 function resetPassword(claveUsuario, confirmeClave){
-    jConfirm(RESET_PASSWORD, USUARIOS_ALERT_TITLE, function(confirmStatus){
-        if (confirmStatus){
-            objAH=new AjaxHelper(updateResetPassword);
+	bootbox.confirm(RESET_PASSWORD, function (ok){ 
+    		objAH=new AjaxHelper(updateResetPassword);
             objAH.showOverlay       = true;
             objAH.url= URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
             objAH.nro_socio= USUARIO.ID;
             objAH.tipoAccion= 'RESET_PASSWORD';
             //se envia la consulta
             objAH.sendToServer();
-        }
     });
 }
 
@@ -244,19 +239,18 @@ function cambiarPassword(){
 //***********************************************Fin**Cambiar Password*****************************************
 
 function eliminarFoto(foto){
+	foto = user_picture_name;
 
-    jConfirm(CONFIRMAR_ELIMINAR_FOTO, USUARIOS_ALERT_TITLE, function(confirmStatus){
-    	if (confirmStatus){
-			objAH               = new AjaxHelper(updateEliminarFoto);
-		 	objAH.debug         = true;
-		    objAH.showOverlay       = true;
-			objAH.url           = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
-			objAH.tipoAccion    = 'ELIMINAR_FOTO';
-			objAH.foto_name     = foto;
-			objAH.nro_socio     = USUARIO.ID;
-			objAH.sendToServer();
-    	}
-    });
+	bootbox.confirm(CONFIRMAR_ELIMINAR_FOTO, function (ok){ 
+		objAH               = new AjaxHelper(updateEliminarFoto);
+	 	objAH.debug         = true;
+	    objAH.showOverlay       = true;
+		objAH.url           = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
+		objAH.tipoAccion    = 'ELIMINAR_FOTO';
+		objAH.foto_name     = foto;
+		objAH.nro_socio     = USUARIO.ID;
+		objAH.sendToServer();
+	});	
 }
 
 function updateEliminarFoto(responseText){

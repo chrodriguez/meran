@@ -9,11 +9,10 @@ checkTr();
 		
 		<fieldset> 
               <legend class="titulo_legend_resaltado">[% "Ejemplares Prestados" | i18n %]</legend>
-                  <div class="well">
-                    <!-- [% "Ha buscado por" | i18n %]: <strong>[% importacion_busqueda%]</strong></br>-->
-           
                      [% IF prestamos_cant %]
-                          [% "Cantidad de ejemplares prestados" | i18n %]: <strong>[% prestamos_cant %]</strong> </div>
+                        <div class="well">
+                            [% "Cantidad de ejemplares prestados" | i18n %]: <strong>[% prestamos_cant %]</strong> 
+                        </div>
 
                           [% PERL %]
                                 print C4::AR::Filtros::tableHeader(   
@@ -126,10 +125,7 @@ checkTr();
                                       ) ;
                       [% END %]
             [% ELSE %]
-           
-            </div>
-            <div class="alert alert-info">[% 'No hay importaciones para mostrar'| i18n %]</div>
-        
+                <div class="alert alert-info">[% 'El usuario no tiene ning&uacute;n ejemplar en su poder.'| i18n %]</div>
+            [% END %]
 		</fieldset>
-	[% END %]
 [% END %]

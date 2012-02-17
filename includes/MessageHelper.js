@@ -85,7 +85,7 @@ function _createContentMessages(){
 	if(contenedor == null){
      //no existe el contenedor, se crea
 		//console.log("MessageHelper: Se crea el div cotenedor");
-		$('#end_top').append("<div id='mensajes' class='alert hide pagination-centered'><br /> </div>"); //faltaria agregar la clase warning, success o danger
+		$('#end_top').append("<div id='mensajes' class='alert hide pagination-centered'><a class='close' data-dismiss='alert'>×</a><br /> </div>"); //faltaria agregar la clase warning, success o danger
 	}
 	else{
     //existe el contenedor, lo limpio

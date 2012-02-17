@@ -4807,11 +4807,15 @@ body {
 	border-radius: 2px;
 }
 
+.note{
+    background-color: whitesmoke;
+    border-radius: 2px;
+}
 .active{
 }
 
 .marked{
-	background-color: #5BB75B;
+	background-color: #DFF0D8;
 }
 
 
@@ -4821,7 +4825,7 @@ body {
 }
 
 .table-striped tbody tr:nth-child(odd) td.marked,.table-striped tbody tr:nth-child(odd) th.marked{
-	background-color: #5BB75B;
+	background-color: #DFF0E8;
 
 }
 

@@ -2050,7 +2050,7 @@ $('#mensajes').addClass('alert-error');hayError=Messages_hashref.error;for(i=0;i
 $('#mensajes').removeClass('hide');$('html, body').animate({scrollTop:0},'slow');_delay(clearMessages,60);}
 catch(e){}
 return hayError;}
-function _createContentMessages(){var contenedor=$('#mensajes')[0];if(contenedor==null){$('#end_top').append("<div id='mensajes' class='alert hide pagination-centered'><br /> </div>");}
+function _createContentMessages(){var contenedor=$('#mensajes')[0];if(contenedor==null){$('#end_top').append("<div id='mensajes' class='alert hide pagination-centered'><a class='close' data-dismiss='alert'>×</a><br /> </div>");}
 else{clearMessages();}}
 function _delay(funcion,segundos){setTimeout(funcion,segundos*1000);}
 function hayError(msg){if(msg.error==1)
