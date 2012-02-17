@@ -132,7 +132,7 @@ function cambiarFiltro (filtro){
                                     action			=> 'detalleRegistroMARC("[% detalle_importacion.getId %]")',
                                     actions         => [
 										{title => "Detalle", action=>'detalleRegistroMARC("[% detalle_importacion.getId %]");',icon=>"icon-search"},
-                                        {title => "Procesar", action=>'cambiarEstadoRegistro("[% detalle_importacion.getIdImportacionIso %]","[% detalle_importacion.getId %]","I");', icon=>"icon-ok-circle"},
+                                        {title => "Procesar", action=>'cambiarEstadoRegistro("[% detalle_importacion.getIdImportacionIso %]","[% detalle_importacion.getId %]","P");', icon=>"icon-ok-circle"},
                                                        ],
 								);
                               [% END %]
