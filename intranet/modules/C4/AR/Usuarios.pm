@@ -1091,6 +1091,9 @@ sub editarRegularidadEsquema{
 
     my @filtros;
 
+    my @id_array = split('_',$ref);
+    
+    $ref = @id_array[1];
     push (@filtros, (id => {eq =>$ref}) );
 	
 	my $regularidades = C4::Modelo::UsrRegularidad::Manager->update_usr_regularidad(   where => \@filtros, 

@@ -60,7 +60,7 @@ sub link_to {
     my $width   = $params_hash_ref{'width'};
     my $blank   = $params_hash_ref{'blank'} || 0;
     my $icon    = $params_hash_ref{'icon'} || 0;
-    my $tooltip = $params_hash_ref{'tooltip'} || 0;
+    my $tooltip = $params_hash_ref{'tooltip'};
     
     my $cant    = scalar(@$params);
     my @result;
@@ -86,7 +86,7 @@ sub link_to {
 
     $link= "<a href='".$url."'";
 
-    if ($tooltip){
+    if ($tooltip ne ''){
         $link .= " data-original-title='$tooltip'";
         $class.= ' tooltip_link';
     }

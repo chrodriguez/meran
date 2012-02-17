@@ -32,8 +32,7 @@
 // }
 
 function clearMessages(){
-    $('#mensajes').css({opacity:0,"filter":"alpha(opacity=0)"});
-	$('#end_top').html('');
+	$('#end_top').html("<div id='mensajes' class='alert hide pagination-centered'><br /> </div>");
 }
 
 function verificarRespuesta(responseText){
