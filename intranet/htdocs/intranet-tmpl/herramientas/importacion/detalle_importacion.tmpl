@@ -13,8 +13,6 @@
          $("#campo2").hide();
          $("#subcampo2").hide();
 
-         makeToggle('tabbable','trigger',null,true);
-
          cargarCampoReglasMatcheo();
 
          detalleImportacion([% importacion.getId %]);
@@ -33,18 +31,23 @@ function eleccionSubCampo(){
 
 </script>
 
-<fieldset>
-<legend class="titulo_legend_resaltado trigger click">[% 'Configuraci&oacute;n de la Importaci&oacute;n' | i18n %] ([% importacion.getNombre %])</legend>
+<div class="container">
+    [% PERL %]
+    print C4::AR::Filtros::tabbedPane( titulo    => "[% 'Configuraci&oacute;n de la Importaci&oacute;n' | i18n %] ([% importacion.getNombre %])",
+                                 subtitulo => "[% 'Navegue por las pesta&ntilde;as para acceder a las distintas configuraciones' | i18n %]",
+                                 content   => [ {id => 'base_conf', text=> "[% 'Acciones B&aacute;sicas' | i18n %]" },
+                                                {id => 'matching_conf', text => "[% 'B&uacute;squeda de registros en el Cat&aacute;logo' | i18n %]"},
+                                                {id => 'relacion_conf', text => "[% 'Relacion Registro/Ejemplar' | i18n %]"},
+                                              ],
+                                 content_id=> ['configuracion_importacion'],
+                                 active_id => 'base_conf',
 
-<div class="tabbable">
-    <ul class="nav nav-tabs">
-    <li  class="active" ><a  href="#1" data-toggle="tab">[% 'Acciones B&aacute;sicas' | i18n %]</a> </li>
-    <li><a  href="#2" data-toggle="tab">[% 'B&uacute;squeda de registros en el Cat&aacute;logo' | i18n %]</a></li>
-    <li><a  href="#3" data-toggle="tab">[% 'Relacion Registro/Ejemplar' | i18n %]</a></li>
-    </ul>
     
-   <div class="tab-content">
-    <div class="tab-pane active" id="1">
+    );
+	[% END %]
+	
+  
+    <div class="tab-pane fade in active" id="base_conf">
 		    <label>[% 'Configurar Acciones' | i18n %]</label>
      <ol>
           <li class="sub_item">
@@ -81,7 +84,7 @@ function eleccionSubCampo(){
             [% END %]
 
     </div>
-    <div class="tab-pane" id="2">
+    <div class="tab-pane fade" id="matching_conf">
 	<label>[% 'Configurar la b&uacute;squeda de registros en el Cat&aacute;logo' | i18n %]</label>		
        <ol>
             <li class="sub_item">
@@ -128,7 +131,7 @@ function eleccionSubCampo(){
             [% END %]
     </div>
  </div>
-    <div class="tab-pane" id="3">
+    <div class="tab-pane fade" id="relacion_conf">
 	<label>[% 'Relaci&oacute;n Registro/Ejemplares' | i18n %]</label>
      <ol>
           <li class="sub_item">
@@ -167,9 +170,9 @@ function eleccionSubCampo(){
     </div>
   </div>
 </div>
-</fieldset>
+
 
 <br>
-<div id="detalleImportacion"></div>
-<br>
+<div class="span14 row" id="detalleImportacion"></div>
+</div>
 [% INCLUDE "intranet-bottom.inc" %]

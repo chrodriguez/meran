@@ -12,11 +12,8 @@ function cambiarFiltro (filtro){
 	
 </script>
 
-<fieldset class="resultados_busqueda">
-    <legend class="titulo_legend trigger click">[% "Registros de la Importaci&oacute;n:" | i18n %]</legend>
+    <h2>[% "Registros de la Importaci&oacute;n:" | i18n %]</h2>
 
-<fieldset class="resultados_busqueda">
-    <legend class="titulo_legend trigger click">[% "Filtrar" | i18n %]</legend>
     	 <input type="hidden" name="record_filter" id="record_filter" value="[% IF !record_filter %]MAIN[% ELSE %][% record_filter %][% END %]" >
         <div class="tabbable">
             <ul class="nav nav-tabs">
@@ -45,8 +42,7 @@ function cambiarFiltro (filtro){
             <div class="tab-content">
 			</div>
         </div>
-    
-</fieldset>
+
 
         <div class="contenedor_paginador">[% paginador %]</div>
         <div class="datos_tabla_div_importacion">
@@ -149,18 +145,16 @@ function cambiarFiltro (filtro){
             </tbody>
             </table>
         </div>
-</fieldset>
+
 
 <div id="detalleRegistroMARC"></div>
 
-<div class="buttonContainerHorizontal">
-    <ul class="horizontal-list" >
                 [% PERL %]
-                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Comenzar Importaci&oacute;n' | i18n %]",
-                                                                        boton   => "thoughtbot",
-                                                                        onClick => "comenzarImportacion('[% id_importacion %]');",
+                                    print C4::AR::Filtros::action_button( 
+                                                                        button   => "btn btn-danger",
+                                                                        action => 'comenzarImportacion("[% id_importacion %]");',
                                                                         title   => "[% 'Comenzar Importaci&oacute;n' | i18n %]",
                                             ) ;
                 [% END %]
-  </ul>
-</div>
+
+
