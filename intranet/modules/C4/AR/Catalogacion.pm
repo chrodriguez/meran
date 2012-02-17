@@ -2065,8 +2065,9 @@ sub _getEstructuraFromCampoSubCampo{
     if(scalar(@$cat_estruct_info_array) > 1){
     #hay dos configuraciones para campo, subcampo, nivel, tipo_ejemplar
 
-        for (my $i=0;$i <= scalar(@$cat_estruct_info_array);$i++){
-
+#         for (my $i=0;$i <= scalar(@$cat_estruct_info_array);$i++){
+        for (my $i=0;$i < scalar(@$cat_estruct_info_array);$i++){
+C4::AR::Debug::debug("Catalocagion => _getEstructuraFromCampoSubCampo => ".$cat_estruct_info_array->[$i]." i => ".$i);
             if($cat_estruct_info_array->[$i]->getItemType() eq $itemtype){
                 return $cat_estruct_info_array->[$i];
             } elsif ($cat_estruct_info_array->[$i]->getItemType() eq "ALL") {

@@ -361,7 +361,7 @@ function mostrarEstructuraDelNivel1(){
     _NIVEL_ACTUAL       = 1;
    
     if(MODIFICAR == 0){
-        _mostrarAccion("<h4>Agregando registro con el esquema: " + TEMPLATE_ACTUAL + "</h4>" + crearBotonEsquema());
+        _mostrarAccion("<h4>Agregando registro con el esquema: " + $('#tipo_nivel3_id option:selected').html() + " (" + TEMPLATE_ACTUAL + ")</h4>" + crearBotonEsquema());
     } 
 
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel1);
@@ -394,7 +394,7 @@ function mostrarEstructuraDelNivel2(){
     _NIVEL_ACTUAL       = 2;
     
     if(MODIFICAR == 0){
-        _mostrarAccion("<h4>Agregando grupo con el esquema: " + TEMPLATE_ACTUAL + "</h4>" + crearBotonEsquema());
+        _mostrarAccion("<h4>Agregando grupo con el esquema: " + $('#tipo_nivel3_id option:selected').html() + " (" + TEMPLATE_ACTUAL + ")</h4>" + crearBotonEsquema());
     }
     
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel2);
@@ -488,7 +488,7 @@ function updateMostrarEstructuraDelNivel3(responseText){
 // TODO fatlta ver esto!!!!!!!
     if(EDICION_N3_GRUPAL == 0){
     //no se trata de una edicion grupal se agregan las reglas para validar los campos, sino se permiten campos nulos
-        addRules();
+//         addRules();
     } else {
         $("#nivel3Tabla").before("<div class='reference'>Complete sólo los campos que desee modificar</div>");  
     }
@@ -542,7 +542,7 @@ function seleccionar_esquema(){
     TEMPLATE_ACTUAL     = $('#tipo_nivel3_id').val();
     
     if(MODIFICAR == 0){
-        _mostrarAccion("<h4>Agregando ejemplares con el esquema: " + $('#tipo_nivel3_id').val() + "</h4>" + crearBotonEsquema());
+        _mostrarAccion("<h4>Agregando ejemplares con el esquema: " + $('#tipo_nivel3_id option:selected').html() + " (" + $('#tipo_nivel3_id').val() + ")</h4>" + crearBotonEsquema());
     }
     
     
@@ -1424,6 +1424,8 @@ function procesarSubCampo(objeto, marc_group){
 var RULES_OPTIONS = [];
 var alert_showed = false;
 
+
+// TODO por ahora no lo uso, pero hay q ver si sirve para personalizar el texto a informar al usuario
 function addRules(){
 //     log("add rules ????????????????: ");
      for(var i=0; i< MARC_OBJECT_ARRAY.length; i++){
@@ -1626,6 +1628,8 @@ function cloneCampo(marc_group){
         subcampos_array_destino.push(subcampo_obj);
     }
 
+// FIXME no funciona!!!!!!
+    campo_obj.setFirst(0);
     campo_obj.subcampos_hash = copy(campo_obj.getSubCamposHash());
     campo_obj.setSubCamposArray(subcampos_array_destino);
 
@@ -1727,7 +1731,7 @@ function crearBotonEliminarCampoRepetible(obj, show){
     
 // FIXME no esta funcionando bien, luego de clonar debería mostrarse igual
 
-display = "block";
+// display = "block";
 
     if(obj.getRepetible() == '1'){
     	return '<li style= "display:' + display + '"><a class="click" onclick=remove("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar</a></li>';
@@ -2234,7 +2238,7 @@ function modificarN1(id1, template){
     ID_N1               = id1;
     
 // TODO falta agregar boton para modificar el template
-    _mostrarAccion("<h4>Modificando el registro (" + ID_N1 + ") con el esquema: " + TEMPLATE_ACTUAL + "</h4>" + crearBotonEsquema());
+    _mostrarAccion("<h4>Modificando el registro (" + ID_N1 + ") con el esquema: " + $('#tipo_nivel3_id option:selected').html() + " (" + TEMPLATE_ACTUAL + ")</h4>" + crearBotonEsquema());
     objAH               = new AjaxHelper(updateModificarN1);
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;
