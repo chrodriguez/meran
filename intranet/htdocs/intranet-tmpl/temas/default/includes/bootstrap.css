@@ -4833,3 +4833,7 @@ body {
 	clear: both;
 }
 
+.bigModal{
+	width: 83%;
+	left: 30%;
+}
