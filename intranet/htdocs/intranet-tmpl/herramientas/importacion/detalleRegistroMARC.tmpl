@@ -1,29 +1,20 @@
 
- <script src="/includes/jquery/ui/tabs.min.js" type="text/javascript"></script>
-  <link media="screen" rel="stylesheet" href="/includes/jquery/ui/base/jquery.ui.tabs.css" type="text/css">
-
-<script>
-    $(function() {
-        $( "#tabs" ).tabs();
-    });
-</script>
-
 <fieldset class="resultados_busqueda">
-    <legend class="titulo_legend trigger click">[% "Detalle de Registro" | i18n %]</legend>
+    [% PERL %]
+    print C4::AR::Filtros::tabbedPane( titulo    => "[% 'Detalle de Registro' | i18n %]",
+                                 subtitulo => "[% 'Navegue por las pesta&ntilde;as para acceder a las distintas vistas' | i18n %]",
+                                 content   => [ {id => 'RO', text=> "[% 'Registro Original' | i18n %]" },
+                                                {id => 'RR', text => "[% 'Registro Resultado' | i18n %]"},
+                                                {id => 'VP', text => "[% 'Vista Previa' | i18n %]"},
+                                              ],
+                                 content_id=> ['detalle_registro'],
+                                 active_id => 'RO',
+
     
-    
-    <div class="tabbable">
-    <ul class="nav nav-tabs">
-    <li  class="active" ><a  href="#RO" data-toggle="tab">[% 'Registro Original' | i18n %]</a> </li>
-    <li><a  href="#RR" data-toggle="tab">[% 'Registro Resultado' | i18n %]</a></li>
-    <li><a  href="#VP" data-toggle="tab">[% 'Vista Previa' | i18n %]</a></li>
-    </ul>
-    
-   <div class="tab-content">
-    <div class="tab-pane active" id="RO">
-		
-            <fieldset class="resultados_busqueda">
-            <legend class="titulo_legend trigger click">[% "Registro Original" | i18n %]</legend>
+    );
+	[% END %]
+
+    <div class="tab-pane fade in active" id="RO">
                 <pre>
                     [% registro_importacion.getRegistroMARCOriginal.as_formatted %]
                 </pre>
@@ -37,21 +28,15 @@
                         </pre>
                     </fieldset>
                 [% END %]
-
-            </fieldset>
         </div>
 
-  <div class="tab-pane" id="RR">
-
-            <fieldset class="resultados_busqueda">
-            <legend class="titulo_legend trigger click">[% "Registro Resultado" | i18n %]</legend>
+  <div class="tab-pane fade" id="RR">
                 <pre>
                     [% registro_importacion.getRegistroMARCResultado.as_formatted %]
                 </pre>
-            </fieldset>
         </div>
 
-  <div class="tab-pane" id="VP">
+  <div class="tab-pane fade" id="VP">
     <fieldset>
            <legend>[% "get Niveles test" | i18n %]</legend>
 				[% GRUPOS = registro_importacion.getNiveles %]
