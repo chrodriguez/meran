@@ -33,8 +33,7 @@
 
 function clearMessages(){
     $('#mensajes').css({opacity:0,"filter":"alpha(opacity=0)"});
-    $('#mensajes').hide();
-	$('#mensajes').html('');
+	$('#end_top').html('');
 }
 
 function verificarRespuesta(responseText){
@@ -56,10 +55,14 @@ function setMessages(Messages_hashref){
 //Message.messages: [message_1, message_2, ... , message_n]
 //message1: 	codMsg: 'U324'
 //		message: 'Texto para informar'
+	var hayError = 0;
     try{
          _createContentMessages();
         var i;
         //se agregan todos los mensajes
+        if (Messages_hashref.error == 1)
+        	$('#mensajes').addClass('alert-error');
+        hayError = Messages_hashref.error;
         for(i=0;i<Messages_hashref.messages.length;i++){
             $('#mensajes').append('<p>' + Messages_hashref.messages[i].message + '</p>');
             
@@ -71,6 +74,8 @@ function setMessages(Messages_hashref){
     catch (e){
       // We do nothing ;)
     }
+    
+    return hayError;
 }
 
 //crea el contenedor para los mensajes, si ya esta creado, borra el contenido

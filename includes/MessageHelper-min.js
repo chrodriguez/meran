@@ -1,9 +1,11 @@
-function clearMessages(){$('#mensajes').css({opacity:0,"filter":"alpha(opacity=0)"});$('#mensajes').hide();$('#mensajes').html('');}
+function clearMessages(){$('#mensajes').css({opacity:0,"filter":"alpha(opacity=0)"});$('#end_top').html('');}
 function verificarRespuesta(responseText){if(responseText==0){jAlert(DATOS_ENVIADOS_INCORRECTOS,'Info','errboxid');return(0);}else{return(1);}}
 function setMessages(Messages_hashref){//@params
-try{_createContentMessages();var i;for(i=0;i<Messages_hashref.messages.length;i++){$('#mensajes').append('<p>'+Messages_hashref.messages[i].message+'</p>');}
+var hayError=0;try{_createContentMessages();var i;if(Messages_hashref.error==1)
+$('#mensajes').addClass('alert-error');hayError=Messages_hashref.error;for(i=0;i<Messages_hashref.messages.length;i++){$('#mensajes').append('<p>'+Messages_hashref.messages[i].message+'</p>');}
 $('#mensajes').removeClass('hide');$('html, body').animate({scrollTop:0},'slow');_delay(clearMessages,60);}
-catch(e){}}
+catch(e){}
+return hayError;}
 function _createContentMessages(){var contenedor=$('#mensajes')[0];if(contenedor==null){$('#end_top').append("<div id='mensajes' class='alert hide pagination-centered'><br /> </div>");}
 else{clearMessages();}}
 function _delay(funcion,segundos){setTimeout(funcion,segundos*1000);}

@@ -73,7 +73,6 @@ function updateGuardarModificacionUsuario(responseText){
 	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
 	detalleUsuario();
-    $.modal.close();
 }
 
 //*********************************************Fin***Modificar Datos Usuario***************************************
@@ -288,14 +287,7 @@ function updateAgregarAutorizado(responseText){
             return(0);
 
     $('#basic-modal-content').html(responseText);
-    $('#basic-modal-content').modal({   containerCss:{
-            backgroundColor:"#fff",
-    //         borderColor:"#0063dc",
-            height:200,
-            padding:0,
-            width:650
-        },
-    });
+    $('#basic-modal-content').modal();
 }
 
 function validarDatosCensales(){
@@ -338,14 +330,7 @@ function updateCambiarCredencial(responseText){
         return(0);
 
     $('#basic-modal-content').html(responseText);
-    $('#basic-modal-content').modal({   containerCss:{
-            backgroundColor:"#fff",
-    //         borderColor:"#0063dc",
-            height:117,
-            padding:0,
-            width:404
-        },
-    });
+    $('#basic-modal-content').modal();
 }
 
 function guardarModificacionCredenciales(){

@@ -44,8 +44,8 @@ sub agregar{
     #Asignando data...
     $self->setFuente($data_hash->{'fuente'});
     $self->setNombre($data_hash->{'categoria'});
-    $self->conformarUsrRegularidad();
     $self->save();
+    $self->conformarUsrRegularidad();
 }
 
 sub getId_estado{

@@ -145,19 +145,12 @@ function updateRealizarAccion(responseText){
 
         var hayError=0;
 
-        setMessages(messageArray);
     
         for(i=0; i<messageArray.length;i++){
-//         imprimirTicket(ticketsArray[i].ticket,i);
-            setMessages(messageArray[i]);
+            if (setMessages(messageArray[i]))
+            	hayError = 1;
         }
      
-        for(i=0; i<messageArray.length;i++){
-            if  (messageArray[i].error){
-                hayError= 1;
-            }
-        }
-          
         if (!hayError){
               imprimirTicket(ticketsArray);
         }

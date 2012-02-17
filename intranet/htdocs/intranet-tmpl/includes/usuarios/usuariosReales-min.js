@@ -2,7 +2,7 @@ var nro_socio_temp;var vDatosUsuario=0;function modificarDatosDeUsuario(){objAH=
 function updateModificarDatosDeUsuario(responseText){if(!verificarRespuesta(responseText))
 return(0);$('#basic-modal-content').html(responseText);$('#basic-modal-content').modal();}
 function guardarModificacionUsuario(){$('#basic-modal-content').modal('hide');objAH=new AjaxHelper(updateGuardarModificacionUsuario);objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';objAH.debug=true;objAH.showOverlay=true;objAH.nro_socio=nro_socio_temp;objAH.sexo=$("input[@name=sexo]:checked").val();objAH.calle=$('#calle').val();objAH.nombre=$('#nombre').val();objAH.nacimiento=$('#nacimiento').val();objAH.email=$('#email').val();objAH.telefono=$('#telefono').val();objAH.cod_categoria=$('#categoria_socio_id').val();objAH.ciudad=$('#id_ciudad').val();objAH.alt_calle=$('#alt_calle').val();objAH.alt_ciudad=$('#id_alt_ciudad').val();objAH.alt_telefono=$('#alt_telefono').val();objAH.apellido=$('#apellido').val();objAH.id_ui=$('#id_ui').val();objAH.codigo_postal=$('#codigo_postal').val();objAH.tipo_documento=$('#tipo_documento_id').val();objAH.nro_documento=$('#nro_documento').val();objAH.legajo=$('#legajo').val();objAH.institucion=$('#institucion').val();objAH.carrera=$('#carrera').val();objAH.anio=$('#anio').val();objAH.division=$('#division').val();objAH.changepassword=($('#changepassword').attr('checked'))?1:0;objAH.cumple_requisito=($('#cumple_requisito').attr('checked'))?1:0;objAH.tipoAccion='GUARDAR_MODIFICACION_USUARIO';objAH.auth_nombre=$('#auth_nombre').val();objAH.auth_dni=$('#auth_dni').val();objAH.auth_telefono=$('#auth_telefono').val();objAH.sendToServer();startOverlay();}
-function updateGuardarModificacionUsuario(responseText){var Messages=JSONstring.toObject(responseText);setMessages(Messages);detalleUsuario();$.modal.close();}
+function updateGuardarModificacionUsuario(responseText){var Messages=JSONstring.toObject(responseText);setMessages(Messages);detalleUsuario();}
 function add(){agregarUsuario();return false;}
 function save_modif(){guardarModificacionUsuario();return false;}
 function eliminarUsuario(){var is_confirmed=confirm(CONFIRMA_LA_BAJA);if(is_confirmed){objAH=new AjaxHelper(updateEliminarUsuario);objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';objAH.debug=true;objAH.showOverlay=true;objAH.nro_socio=USUARIO.ID;objAH.tipoAccion='ELIMINAR_USUARIO';objAH.sendToServer();startOverlay();}}
@@ -25,13 +25,13 @@ function updateEliminarFoto(responseText){if(!verificarRespuesta(responseText))
 return(0);$('#foto').html('');var Messages=JSONstring.toObject(responseText);setMessages(Messages);$('#div_uploader').show();$('#div_boton_eliminar_foto').hide();detalleUsuario();}
 function agregarAutorizado(){objAH=new AjaxHelper(updateAgregarAutorizado);objAH.showOverlay=true;objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';objAH.tipoAccion="MOSTRAR_VENTANA_AGREGAR_AUTORIZADO";objAH.debug=true;objAH.sendToServer();}
 function updateAgregarAutorizado(responseText){if(!verificarRespuesta(responseText))
-return(0);$('#basic-modal-content').html(responseText);$('#basic-modal-content').modal({containerCss:{backgroundColor:"#fff",height:200,padding:0,width:650},});}
+return(0);$('#basic-modal-content').html(responseText);$('#basic-modal-content').modal();}
 function validarDatosCensales(){objAH=new AjaxHelper(updateValidarDatosCensales);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';objAH.debug=true;objAH.nro_socio=USUARIO.ID;nro_socio_temp=objAH.nro_socio;objAH.tipoAccion='VALIDAR_DATOS_CENSALES';objAH.sendToServer();}
 function updateValidarDatosCensales(responseText){if(!verificarRespuesta(responseText))
 return(0);var Messages=JSONstring.toObject(responseText);setMessages(Messages);detalleUsuario();}
 function cambiarCredencial(){objAH=new AjaxHelper(updateCambiarCredencial);objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';objAH.debug=true;objAH.showOverlay=true;objAH.nro_socio=USUARIO.ID;objAH.tipoAccion='CAMBIAR_CREDENCIAL';objAH.sendToServer();}
 function updateCambiarCredencial(responseText){if(!verificarRespuesta(responseText))
-return(0);$('#basic-modal-content').html(responseText);$('#basic-modal-content').modal({containerCss:{backgroundColor:"#fff",height:117,padding:0,width:404},});}
+return(0);$('#basic-modal-content').html(responseText);$('#basic-modal-content').modal();}
 function guardarModificacionCredenciales(){objAH=new AjaxHelper(updateModificacionCredenciales);objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';objAH.showOverlay=true;objAH.debug=false;objAH.nro_socio=USUARIO.ID;objAH.tipoAccion='GUARDAR_MODIFICACION_CREDENCIALES';objAH.credenciales=$('#credential').val();objAH.sendToServer();}
 function updateModificacionCredenciales(responseText){if(!verificarRespuesta(responseText))
 return(0);var Messages=JSONstring.toObject(responseText);setMessages(Messages);detalleUsuario(USUARIO.ID);}
