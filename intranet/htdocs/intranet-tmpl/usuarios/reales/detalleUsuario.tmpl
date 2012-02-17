@@ -202,46 +202,7 @@ var loaderPath= "";
                                                 );
                               [% END %]
 
-	                        <!--<li>
-	                            [% PERL %]
-                                                print C4::AR::Filtros::to_Button(   text    => "[% 'Validar datos Censales' | i18n %]",
-                                                                                    onClick => "validarDatosCensales();",
-                                                        ) ;
-	                            [% END %]
-	                        </li>-->
-            
-                     <!--   <li>
-                            [% PERL %]
-                                                print C4::AR::Filtros::to_Button(   text    => "[% 'Modificar Datos' | i18n %]",
-                                                                                    onClick => "modificarDatosDeUsuario();",
-                                                        ) ;
-                            [% END %]
-                        </li>-->
-                  <!--      <li>
-                            [% PERL %]
-                                                print C4::AR::Filtros::to_Button(   text    => "[% 'Eliminar Usuario' | i18n %]",
-                                                                                    onClick => "eliminarUsuario();",
-                                                        ) ;
-                            [% END %]
-                            </li>-->
-                    <!--    [% IF !socio.tieneAutorizado %]
-                            <li>
-    
-                            [% PERL %]
-                                                print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Usuario Adicional' | i18n %]",
-                                                                                    onClick => "agregarAutorizado();",
-                                                        ) ;
-                            [% END %]
-                            </li>
-                        [% ELSE %]
-                            <li>
-                            [% PERL %]
-                                                print C4::AR::Filtros::to_Button(   text    => "[% 'Eliminar Usuario Adicional' | i18n %]",
-                                                                                    onClick => "desautorizarTercero();",
-                                                        ) ;
-                            [% END %]
-                            </li>
-                        [% END %]-->
+	                      
                         <!--[% IF socio_data.usr_nro_socio != nro_socio %]
                             <li>
                             [% PERL %]
@@ -276,27 +237,7 @@ var loaderPath= "";
 
                             [% END %]
                         </li>-->
-                        <!--<li>
-                            [% PERL %]
-                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Libre Deuda' | i18n %]",
-                                                                            onClick => "generarLibreDeuda();",
-                                                ) ;
-                            [% END %]
-                       </li>-->
-                  <!--     <li>
-                            [% PERL %]
-                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Prest. Interbibliotecario' | i18n %]",
-                                                                            onClick => "prestamosInterBibliotecarios();",
-                                                ) ;
-                            [% END %]
-                      </li>-->
-                     <!-- <li>
-                            [% PERL %]
-                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Cambiar Credenciales' | i18n %]",
-                                                                            onClick => "cambiarCredencial();",
-                                                ) ;
-                            [% END %]
-                      </li>-->
+                        
 
                       [% IF mensaje_error_foto %] 
                         <li>
