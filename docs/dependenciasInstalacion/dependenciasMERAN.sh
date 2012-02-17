@@ -26,6 +26,7 @@ cpan -i MARC::File::XML
 cpan -i DateTime::Format::DateManip
 cpan -i WWW::Google::URLShortener
 cpan -i Apache::Session::Lock::Semaphore
-
+# ESTA DA ERROR AUN EN SQUEEZE (anda la 0.18) bajarla y compilar a mano ==>  http://search.cpan.org/CPAN/authors/id/F/FR/FREDERICD/marc-moose-0.018.tar.gz
+cpan -i MARC::Moose::Record
 
 
