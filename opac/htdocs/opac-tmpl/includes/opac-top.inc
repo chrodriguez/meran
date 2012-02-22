@@ -29,7 +29,7 @@
   [% INCLUDE 'message_OPAC.inc' %]
   <script src="/includes/jquery/jquery.js" type="text/javascript"></script>
   <script src="/includes/AjaxHelper.js" type="text/javascript"></script>
-  <script src="/includes/jquery/jquery.alerts.js" type="text/javascript"></script>
+  <script src="/includes/jquery/jquery.alerts.opac.js" type="text/javascript"></script>
   <script src="/includes/jquery/ui/ui-min.js" type="text/javascript"></script>
   <script src="/includes/jquery/ui/core.js" type="text/javascript"></script>
   <script src="/includes/jquery/ui.stars.js" type="text/javascript"></script>
@@ -156,7 +156,8 @@
             $("fieldset#signin_menu").mouseup(function() {
                 return false
             });
-            $(document).mouseup(function(e) {
+            $(document).mouseup(function(e) {
+
                 if($(e.target).parent("a.signin").length==0) {
                     $(".signin").removeClass("menu-open");
                     $("fieldset#signin_menu").hide();

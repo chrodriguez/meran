@@ -60,32 +60,58 @@
 </script>
 
 <div id="contentWindow" class="formElemets">
-    <fieldset>
-        <legend class="titulo_legend">[% 'Agregar Usuario Adicional' | i18n %]</legend>
-        <br>
-        <ul>
-            <li class="sub_item">
-                <label for="nombreAutorizado" style="float: left;" >[% "Ingrese Apellido y Nombres" | i18n %]</label>
-                <input 	type="text" id="nombreAutorizado" name="nombreAutorizado" style="width:40%;" tabindex="1">
-            </li>
-            <li class="sub_item">
-                <label for="dniAutorizado" style="float: left;" >[% "Ingrese el DNI" | i18n %]</label>
-                <input  type="text" id="dniAutorizado" name="dniAutorizado" style="width:40%;" tabindex="2">
-            </li>
-            <li class="sub_item">
-                <label for="telefonoAutorizado" style="float: left;" >[% "Ingrese un tel&eacute;fono (contacto seguro)" | i18n %]</label>
-                <input  type="text" id="telefonoAutorizado" name="telefonoAutorizado" style="width:40%;" tabindex="3">
-            </li>
-            <li class="sub_item">
-                [% PERL %]
-                        print C4::AR::Filtros::to_Button(      text    => "[% 'Aceptar' | i18n %]",
-                                                               boton   => "boton_buscar",
-                                                               onClick => "confirmarAgregarAutorizado();",
-                                                               title   => "[% 'Agregar Autorizado' | i18n %]",
-                                ) ;
-                [% END %]
-            </li>
-        </ul>
+    <fieldset> 
+        <legend class="titulo_legend">[% ' Agregar Usuario Adicional' | i18n %]</legend>
+            <form class="form-horizontal" onsumit="false;">
+                   <div class="control-group">
+                           <label class="control-label" for="nombreAutorizado">[% "Apellido y Nombres" | i18n %]</label>
+                           <div class="controls">
+                                    <input type="text" class="input focused" id="nombreAutorizado" name="nombreAutorizado" tabindex="1">
+                            </div>
+                   </div>
+
+                   <div class="control-group">
+                           <label class="control-label" for="dniAutorizado">[% "DNI" | i18n %]</label>
+                           <div class="controls">
+                                    <input type="text" class="input focused" id="dniAutorizado" name="dniAutorizado" tabindex="2">
+                            </div>
+                   </div>
+
+                   <div class="control-group">
+                           <label class="control-label" for="telefonoAutorizado">[% "Tel&eacute;fono (contacto seguro)" | i18n %]</label>
+                           <div class="controls">
+                                    <input type="text" class="input focused" id="telefonoAutorizado" name="telefonoAutorizado" tabindex="3">
+                            </div>
+                   </div>
+                   <div class="form-actions">
+                              [% PERL %]
+                                  print C4::AR::Filtros::to_Button(      text    => "[% 'Aceptar' | i18n %]",
+                                                                        boton   => "boton_buscar",
+                                                                        onClick => "confirmarAgregarAutorizado();",
+                                                                        title   => "[% 'Agregar Autorizado' | i18n %]",
+                                                                        inline=> "1",
+                                          ) ;
+                              [% END %]
+                    </div>
+               
+                     <!-- <li class="sub_item">
+                          <label for="nombreAutorizado" style="float: left;" >[% "Ingrese Apellido y Nombres" | i18n %]</label>
+                          <input 	type="text" id="nombreAutorizado" name="nombreAutorizado" style="width:40%;" tabindex="1">
+                      </li>-->
+                     <!-- <li class="sub_item">
+                          <label for="dniAutorizado" style="float: left;" >[% "Ingrese el DNI" | i18n %]</label>
+                          <input  type="text" id="dniAutorizado" name="dniAutorizado" style="width:40%;" tabindex="2">
+                      </li>-->
+                     <!-- <li class="sub_item">
+                          <label for="telefonoAutorizado" style="float: left;" >[% "Ingrese un tel&eacute;fono (contacto seguro)" | i18n %]</label>
+                          <input  type="text" id="telefonoAutorizado" name="telefonoAutorizado" style="width:40%;" tabindex="3">
+                      </li>-->
+                    
+                        
+                      
+                  
+        </form>
+      </section>
     </fieldset>
 </div> <!--end div id="contentWindow"-->
 

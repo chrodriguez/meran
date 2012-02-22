@@ -37,8 +37,9 @@ $(document).ready(function() {
               </div><br>
               [% PERL %]
               print C4::AR::Filtros::setHelpInput(
-                                                   text =>"[% 'Navegue por las pesta&ntilde;as para acceder a los distintos tipos de b&uacute;squeda' | i18n %]",
-                                                   class => "info"
+                                                   text =>"[% ' Navegue por las pesta&ntilde;as para acceder a los distintos tipos de b&uacute;squeda' | i18n %]",
+                                                   class => "info",
+                                                   icon=>"icon-info-sign",
                                                     
               );
               [% END %]

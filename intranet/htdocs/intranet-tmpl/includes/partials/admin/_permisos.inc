@@ -1,6 +1,7 @@
 [% INCLUDE  'AutocompleteHelper.inc'  %]
 
 <div class="permisos">
+  <section class="center-section-form">
     <form class="form-horizontal" onsubmit="return false;">
         <fieldset>
             <legend class="titulo_legend">[% "Selecci&oacute;n de Permisos" | i18n %]</legend>
@@ -49,5 +50,6 @@
                 </div>
         </fieldset>
     </form>
+    </section>
     <div class="permisos_assign_chk" id="permisos_assign_chk"> </div>
 </div>

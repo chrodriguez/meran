@@ -78,9 +78,9 @@ function updateBorrarSancion(responseText){
 
                   [% PERL %]
                           print C4::AR::Filtros::action_button( 
-                                                          button       => "btn click",
-                                                          action       => "borrarSancion('[% sancion.getId_sancion %]')", 
-                                                          icon         => "icon-trash",
+                                                          button       => "btn click btn-danger",
+                                                          action       => 'borrarSancion("[% sancion.getId_sancion %]")', 
+                                                          icon         => "icon-trash icon-white",
                                                           title        => "",
                                                       ) ;
 
