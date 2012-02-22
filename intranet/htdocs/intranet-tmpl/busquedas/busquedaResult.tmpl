@@ -14,28 +14,28 @@
       });
 </script>
 <fieldset class="resultados_busqueda">
-    <legend class="titulo_legend trigger click" title='[% "click para acceder a los resultados de la b&uacute;squeda" | i18n %]'>
+    <legend class="titulo_legend click" title='[% "click para acceder a los resultados de la b&uacute;squeda" | i18n %]'>
         [% "Resultados de la b&uacute;squeda (cat&aacute;logo)" | i18n %]:</legend>
         <div class="datos_tabla_div" id="datos_tabla_div">
 
-        <section class="center-section-form hero-unit">
-            <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda" | i18n %]: 
-                <h2><i>[% buscoPor %]</i></h2>
+        <section class="center-section-form">
+            <div class="well">
+                <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: <strong>[% HTML.escape(buscoPor) %]</strong></div> 
             
                 [% IF !from_suggested %]
 			        [% IF suggested %]
-			                <div class="suggested_search click">
-			                    <a onclick="buscarSuggested('[% suggested %]')">
-			                        [% "Usted quiso decir" | i18n %] <span style="font-style: italic">[% suggested %]</span>?
-			                    </a>
-			                </div>
+	                    <a href="#" onclick="buscarSuggested('[% suggested %]')">
+	                        [% "Usted quiso decir" | i18n %] <span style="font-style: italic">[% suggested %]</span>?
+	                    </a>
 			        [% END %]
 			    [% END %]
-            
-            
+
             </div>
-            <div class="resultados_consulta">[% "Total de registros" | i18n %]: <b>[% cantidad %]</b>  en ([% timeSeg %] segundos)</div>
+            [% IF cantidad %]
+                <div class="resultados_consulta">[% "Total de registros" | i18n %]: <b>[% cantidad %]</b>  en ([% timeSeg %] segundos)</div>
+            [% END %]
         </section>    
+        [% IF cantidad %]
             <div class="contenedor_paginador">[% paginador %]</div>
              [% PERL %]
                  print C4::AR::Filtros::tableHeader(   
@@ -184,7 +184,9 @@
             </table>
         </div>
         <div class="contenedor_paginador">[% paginador %]</div>
-        
+     [% ELSE %]
+        <div class="alert alert-info">[% 'No hay resultados para el criterio de b&uacute;squeda'| i18n %]</div>
+     [% END %]
 </fieldset>
 
 [% IF HEADERS %]
