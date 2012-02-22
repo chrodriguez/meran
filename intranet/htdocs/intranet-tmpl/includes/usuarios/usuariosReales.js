@@ -96,7 +96,7 @@ function eliminarUsuario(){
 
 	var is_confirmed = confirm(CONFIRMA_LA_BAJA);
 
-	if (is_confirmed) {
+	bootbox.confirm(CONFIRMA_LA_BAJA, function (ok){ 
 
 		objAH=new AjaxHelper(updateEliminarUsuario);
 		objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
@@ -106,7 +106,7 @@ function eliminarUsuario(){
 		objAH.tipoAccion= 'ELIMINAR_USUARIO';
 		objAH.sendToServer();
 		startOverlay();
-	}
+	});
 }
 
 
