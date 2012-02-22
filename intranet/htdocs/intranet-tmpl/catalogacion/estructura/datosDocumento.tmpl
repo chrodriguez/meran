@@ -34,6 +34,8 @@ $(document).ready( function() {
     TIENE_NIVEL_2           = [% tiene_nivel_2 %];
     TEMPLATE_ACTUAL         = $('#tipo_nivel3_id').val();
 
+    $('#datos_del_leader').show();
+
     [% IF tipoAccion == "MODIFICAR_NIVEL_1" %]
         MODIFICAR               = 1;
         FROM_DETALLE_REGISTRO   = 1;
@@ -59,6 +61,13 @@ $(document).ready( function() {
         [% END %]
 
         modificarEjemplaresN3FromRegistro(params.id1);
+    [% ELSIF tipoAccion == "AGREGAR_ANALITICA" %]  
+        TEMPLATE_ACTUAL         = "ANA";
+        $('#id_nivel_bibliografico').val(1); //ta medio FIXEDDDDD!!!!!!!!
+        $('#tipo_nivel3_id').val(TEMPLATE_ACTUAL);
+        $('#datos_del_leader').hide();
+        ACTION                  = "AGREGAR_ANALITICA";
+        ID_N2_PADRE             = [% id2 %];
     [% END %]
 
     $('#datos_indice').hide();
@@ -67,7 +76,7 @@ $(document).ready( function() {
         $('#datos_del_leader').hide();
     } else {
         mostrarEstructuraDelNivel1();
-        $('#datos_del_leader').show();
+//         $('#datos_del_leader').show();
     }
     
 } );

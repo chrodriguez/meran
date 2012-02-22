@@ -548,13 +548,15 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
                                     );
-    $obj->{'responsable'}=$user;
+
+
+    $obj->{'responsable'}           = $user;
 	#Se guarda informacion del NIVEL 1
-    my ($Message_arrayref, $id1) = C4::AR::Nivel1::t_guardarNivel1($obj);
+    my ($Message_arrayref, $id1)    = C4::AR::Nivel1::t_guardarNivel1($obj);
     
     my %info;
-    $info{'Message_arrayref'} = $Message_arrayref;
-    $info{'id1'} = $id1;
+    $info{'Message_arrayref'}       = $Message_arrayref;
+    $info{'id1'}                    = $id1;
 
     C4::AR::Auth::print_header($session);
     print to_json \%info;

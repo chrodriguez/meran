@@ -29,6 +29,10 @@
         function modificarNivel2(id2){
             window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&id2="+id2+"&tipoAccion=MODIFICAR_NIVEL_2";
         }
+
+        function agregarAnalitica(id2){
+            window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&id2="+id2+"&tipoAccion=AGREGAR_ANALITICA";
+        }
         
         function editarEjemplar(id2,id3){
             window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&id2="+id2+"&id2="+id3+"&tipoAccion=MODIFICAR_NIVEL_3";
@@ -57,6 +61,7 @@
 	[% INCLUDE "AutocompleteHelper.inc" %]
 	[% INCLUDE  'WindowHelper.inc'  %]
 	
+	<div id="confirmar_div" class="pane"></div>
 	<br>
 	
 	
@@ -179,7 +184,8 @@
 		
 		                                                        actions         => [
 		                                                                            {title => "Modificar", action=>'modificarNivel2("[% id2 %]")',icon=>"icon-edit"},
-		                                                                            {title => "Eliminar", action=>"borrarN2([% id2 %])", icon=>"icon-trash"},
+		                                                                            {title => "Eliminar", action=>"borrarN2([% id2 %])", icon=>"icon-trash"},                                                                            
+                                                                                    {title => "Agregar analítica", action=>"agregarAnalitica([% id2 %])", icon=>"icon-edit"},
 		                                                                            ],
 		
 		                            ) ;

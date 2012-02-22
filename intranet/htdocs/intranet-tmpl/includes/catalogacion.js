@@ -12,27 +12,30 @@
 
 //************************************************REVISADO******************************************************************
 
-var ID_N1=0; //para saber el id del nivel 1
-var ID_N2=0; //para saber el id del nivel 2
-var ID_N3=0; //para saber el id del nivel 3
-var ID_TIPO_EJEMPLAR=0; //para saber con tipo de ejemplar se esta trabajando
-var TAB_INDEX= 0;//tabindex para las componentes
+var ID_N1                   = 0; //para saber el id del nivel 1
+var ID_N2                   = 0; //para saber el id del nivel 2
+var ID_N2_PADRE             = 0; //para el id2 del padre en una analitica
+var ID_N3                   = 0; //para saber el id del nivel 3
+var ID_TIPO_EJEMPLAR        = 0; //para saber con tipo de ejemplar se esta trabajando
+var TAB_INDEX               = 0;//tabindex para las componentes
 //arreglo de objetos componentes, estos objetos son actualizados por el usuario y luego son enviados al servidor
-var MARC_OBJECT_ARRAY= new Array();
+var MARC_OBJECT_ARRAY       = new Array();
 //arreglo con datos del servidor para modificar las componentes
-var MODIFICAR = 0;
-var TEMPLATE_ACTUAL = 0;
-var EDICION_N3_GRUPAL = 0; //=1 indica si se estan editando datos del Nivel 3 de forma grupal
-var FROM_DETALLE_REGISTRO = 0;
-var ID3_ARRAY = new Array(); //para enviar 1 o mas ID_N3 para agregar/modificar/eliminar
-var BARCODES_ARRAY = new Array(); //para enviar 1 o mas barcodes
-var _NIVEL_ACTUAL= 1; //para mantener el nivel que se esta procesando
-var _message= CAMPO_NO_PUEDE_ESTAR_EN_BLANCO;
-var HASH_RULES = new Array(); //para manejar las reglas de validacion del FORM dinamicamente
-var HASH_MESSAGES = new Array();
-var AGREGAR_COMPLETO = 1; //flag para verificar si se esta por agregar un documento desde el nivel 1 o no
-var ID_COMPONENTE = 1;
-var scroll = 'N1';
+var MODIFICAR               = 0;
+var ACTION                  = "UNDEFINED";
+var TEMPLATE_ACTUAL         = 0;
+var EDICION_N3_GRUPAL       = 0; //=1 indica si se estan editando datos del Nivel 3 de forma grupal
+var FROM_DETALLE_REGISTRO   = 0;
+var ID3_ARRAY               = new Array(); //para enviar 1 o mas ID_N3 para agregar/modificar/eliminar
+var BARCODES_ARRAY          = new Array(); //para enviar 1 o mas barcodes
+var _NIVEL_ACTUAL           = 1; //para mantener el nivel que se esta procesando
+var _message                = CAMPO_NO_PUEDE_ESTAR_EN_BLANCO;
+var HASH_RULES              = new Array(); //para manejar las reglas de validacion del FORM dinamicamente
+var HASH_MESSAGES           = new Array();
+var AGREGAR_COMPLETO        = 1; //flag para verificar si se esta por agregar un documento desde el nivel 1 o no
+var ID_COMPONENTE           = 1;
+var scroll                  = 'N1';
+
 function agregarAHash (HASH, name, value){
     HASH[name] = value;
 }
@@ -826,6 +829,7 @@ function guardarDocumentoN2(){
         objAH.infoArrayNivel2   = MARC_OBJECT_ARRAY;
         objAH.id1               = ID_N1;
         objAH.id2               = ID_N2; //por si se modificó
+        objAH.id2_padre         = ID_N2_PADRE;
         objAH.sendToServer();
     }
 }
@@ -841,7 +845,12 @@ function updateGuardarDocumentoN2(responseText){
         inicializar();
         //carga la barra lateral con info de nivel 2
         mostrarInfoAltaNivel2(ID_N2);
-        mostrarEstructuraDelNivel3(TEMPLATE_ACTUAL);
+        if(ACTION != "AGREGAR_ANALITICA"){  
+            mostrarEstructuraDelNivel3(TEMPLATE_ACTUAL);    
+        } else {
+            window.location = "detalle.pl?id1=" + ID_N1;
+// falta sacar el alert q pregunta si salgo de la pagina
+        }
     }
 }
 
