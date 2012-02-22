@@ -45,6 +45,8 @@ sub getSancionesLike {
     
     C4::AR::Utilidades::printARRAY(\@searchstring_array);
 
+    
+
     foreach my $s (@searchstring_array){ 
                 push (  @filtros, ( or   => [   
                                                 'socio.persona.nombre'    => { like => $s.'%'},   

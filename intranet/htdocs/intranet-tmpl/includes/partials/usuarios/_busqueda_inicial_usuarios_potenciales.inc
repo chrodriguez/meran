@@ -29,4 +29,5 @@
         <a href="#tablaResult" onClick="consultar('Z')"> Z |</a>
         <a href="#tablaResult" onClick="consultar('TODOS')"> [% "TODOS" | i18n %] </a>
     </div>
+    <input type="checkbox" name="habilitados_filter" id="habilitados_filter">[% " Mostrar s&oacute;lo usuarios habilitados"| i18n %]
 </fieldset>

@@ -271,6 +271,7 @@ sub setHelpInput{
     my $classLabel              = $params_hash_ref{'class'} || "label";
     my $textLabel               = $params_hash_ref{'textLabel'} || "";
     my $help                    = "";
+    my $icon                    = $params_hash_ref{'icon'};
     
     if (!C4::AR::Utilidades::existeInArray($classLabel,@array_clases_labels)){
         $classLabel = "label";
@@ -281,11 +282,17 @@ sub setHelpInput{
     }
     
     if($textLabel eq ""){
-    
-        $help                    = "<p class='help-block'>"
-                                    . $params_hash_ref{'text'} . "</p>";
-    
-    }else{
+        
+            if ($icon){
+                  $help                = "<p class='help-block'><i class='$icon'></i>"
+                                          . $params_hash_ref{'text'} . "</p>";
+            } else {
+                $help                    = "<p class='help-block'>"
+                                          . $params_hash_ref{'text'} . "</p>";
+            }
+
+  
+    }   else {
        
         $help                    = "<p class='help-block'><span class='"
                                         . $classLabel . "'>"

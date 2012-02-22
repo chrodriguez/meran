@@ -155,16 +155,17 @@ $(document).ready(function() {
               <div class="tab-pane fade" id="registro">
                    [% INCLUDE 'partials/usuarios/_busqueda_inicial_usuarios_potenciales.inc' %]
               </div>
-              <input type="checkbox" name="habilitados_filter" id="habilitados_filter">[% " Mostrar s&oacute;lo usuarios habilitados"| i18n %]
               <br>
+             
               [% PERL %]
               print C4::AR::Filtros::setHelpInput(
-                                                   text =>"[% 'Navegue por las pesta&ntilde;as para acceder a los distintos tipos de b&uacute;squeda' | i18n %]",
-                                                   class => "info"
+                                                   text =>"[% ' Navegue por las pesta&ntilde;as para acceder a los distintos tipos de b&uacute;squeda' | i18n %]",
+                                                   class => "info",
+                                                   icon => "icon-info-sign",
                                                     
               );
               [% END %]
-    
+  
     </section>
 
 </fieldset>

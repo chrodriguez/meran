@@ -3,8 +3,8 @@
 <script type="text/javascript" language="javascript">
 
     $(document).ready( function() {
-// 	    zebra('datos_tabla');
 	    makeDataTable('#prestamosVencidos');
+	    checkedAll("prestamos_vencidos", "prestamo");
     });
     
     var selected = new Array();
@@ -62,7 +62,7 @@
             
         }else{
         
-            jAlert(POR_FAVOR_SELECCIONE_ALGUN_PRESTAMO,PRESTAMO_TITLE);
+            jAlert(POR_FAVOR_SELECCIONE_ALGUN_PRESTAMO);
             
         }
 
@@ -71,19 +71,15 @@
 
 </script>
 
-<!--<fieldset>
-    <legend class="titulo_legend">[% "Acciones" | i18n %] </legend>
-        <button class="clean-gray" onclick="enviarMailsATodos();">Enviar a Todos</button>
-</fieldset>-->
-
 <fieldset>
     <legend class="titulo_legend">[% "Pr&eacute;stamos vencidos" | i18n %] </legend>
-        
+        [% IF cantidad  %]
+ [% IF cantidad  %]
       [% PERL %]
                 print C4::AR::Filtros::tableHeader(   
                                   id              => "prestamosVencidos",
                                   class           => "",
-                                  selectAll_id    => "un_id",
+                                  selectAll_id    => "prestamos_vencidos",
                                   columns         => ['[% "Tipo de pr&eacute;stamo"|i18n %]','[% "Fecha de pr&eacute;stamo"|i18n %]',
                                                       '[% "Ejemplar"|i18n %]','[% "N&uacute;mero de Socio"|i18n %]',
                                                      ]
@@ -91,54 +87,57 @@
                                         ) ;
       [% END %]
 
-	<tbody>
-      [% FOREACH prestamo IN prestamos %]
-      	<tr>
-          	
-     		<td>
-     		    <input type="checkbox" name="[% prestamo.socio.getNro_socio %]" id="[% prestamo.getId_prestamo %]" >
-		    </td>
+			<tbody>
+		      [% FOREACH prestamo IN prestamos %]
+		      	<tr>
+		     		<td>
+		     		    <input type="checkbox" id="[% prestamo.getId_prestamo %]" name="prestamo" >
+				    </td>
+				
+		          	<td>
+		                [% prestamo.getTipo_prestamo %]
+				    </td>
+		          	<td>
+		          	    [% prestamo.getFecha_prestamo %]
+				    </td>
+				    <td>
+		          	    [% prestamo.nivel3.codigo_barra %]
+				    </td>
+		     		<td>
+		                [% prestamo.socio.getNro_socio %]
+				    </td>
 		
-          	<td class="nomCompleto">
-                [% prestamo.getTipo_prestamo %]
-		    </td>
-          	<td class="documento">
-          	    [% prestamo.getFecha_prestamo %]
-		    </td>
-<!--		    TODO: link-->
-		    <td class="documento">
-          	    [% prestamo.nivel3.codigo_barra %]
-		    </td>
-     		<td>
-                [% prestamo.socio.getNro_socio %]
-		    </td>
-
-        </tr>
-      [% END %]
-     </tbody>
-    <tfoot>
-    <tr>
-      <td>[% PERL %]
-              print C4::AR::Filtros::action_button(
-                                              button       => "btn click btn-warning",
-                                              action       => "enviarMailsATodos();",
-                                              icon         => "",
-                                              title        => "Enviar a todos",
-                                          ) ;
-       
-      [% END %]
-      [% PERL %]
-              print C4::AR::Filtros::action_button(
-                                              button       => "btn click btn-primary",
-                                              action       => "enviarMailsASeleccionados();",
-                                              icon         => "",
-                                              title        => "Enviar a seleccionados",
-                                          ) ;
-       
-      [% END %]</td>
-    </tr>
-    </tfoot>
+		        </tr>
+		      [% END %]
+		     </tbody>
+		    <tfoot>
+		    <tr>
+		      <td>[% PERL %]
+		              print C4::AR::Filtros::action_button(
+		                                              button       => "btn click btn-warning",
+		                                              action       => "enviarMailsATodos();",
+		                                              icon         => "",
+		                                              title        => "Enviar a todos",
+		                                          ) ;
+		       
+		      [% END %]
+		      [% PERL %]
+		              print C4::AR::Filtros::action_button(
+		                                              button       => "btn click btn-primary",
+		                                              action       => "enviarMailsASeleccionados();",
+		                                              icon         => "",
+		                                              title        => "Enviar a seleccionados",
+		                                          ) ;
+		       
+		      [% END %]</td>
+		    </tr>
+		    </tfoot>
   </table>
+[% ELSE %]
+    <div class="well">
+        <div class="resultados_consulta">[% "No hay pr&eacute;stamos vencidos" | i18n %]</div> 
+    </div>      
+[% END %]
 
    
 

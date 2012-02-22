@@ -36,12 +36,12 @@
             <div class="well">
                 <div class="resultados_consulta">[% "Ha buscado por" | i18n %]:<strong>[% HTML.escape(socio_busqueda) %]</strong></div> 
                  
-
-                [% IF cantidad %]
-                         
-                        <div class="resultados_consulta">[% "La cantidad de usuarios es" | i18n %]: <strong>[% cantidad %]</strong></div>
-                        
-                  </div>
+                 [% IF cantidad %]
+                          <div class="resultados_consulta">[% "La cantidad de usuarios es" | i18n %]: <strong>[% cantidad %]</strong></div>
+                 [% END %]
+            </div>
+            [% IF cantidad %]
+            <div class="form-horizontal">                
                   <div class="contenedor_paginador">[% paginador %]</div>   
                   [% PERL %]
                       print C4::AR::Filtros::tableHeader(   
@@ -56,90 +56,71 @@
                                               ) ;
                   [% END %]
 
-                  <tbody>
- 
-          [% FOREACH resultsloop %]
-                  <tr>
-                  
-                      <td>
-                          [% IF nomodificable %]
-                              [% "Imposible" | i18n %] 
-                          [% ELSE %]
-                              <input type="checkbox" name="chkboxUsuariosPotenciales" 
-                              id="[% socio.getNro_socio %]" 
-                              value="[% socio.getNro_socio %]">
-                          [% END %]
-                      </td>
-                  
-                      <td class="nomCompleto">
-                          [% PERL %]
-                              print C4::AR::Filtros::link_to( text =>     "[% socio.persona.getApeYNom %]",
-                                                              url=>"[% url_prefix %]/usuarios/potenciales/datosUsuario.pl", 
-                                                              params =>   ["nro_socio=[% socio.getNro_socio %]"],
-                                                              title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
-                                                          ) ;
-                          [% END %]
-                      </td>
-
-                      <td>
-                          [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]
-                      </td>
-
-                      <td>
-                              [% socio.categoria.getDescription %]
-                      </td> 
-                      <td>
-                          <span class="[% clase %]"> <b>[% activo %]</b> </span>
-                      </td>
-
-                  </tr>
-          [% END %]
-
- 
-	</tbody>
-
-          <table>
-              <tr>
-                  <td>
-                  <input name="cantidad" id="cantidad" type="hidden" value="[% modificable %]">
-                  </td>   
-              </tr>
-              <tr>
-                  <td>
-                      <label for="accion" accesskey="t"></label>
-                      <select id="accion" name="accion">
-                          <option value="HABILITAR_PERSON" selected="selected">
-                              [% "Habilitar Seleccionados" | i18n %]
-                          </option>
-                          <option value="DESHABILITAR_PERSON">
-                              [% "Deshabilitar Seleccionados" | i18n %]
-                          </option>
-                      </select>
-                  </td>
-                  <td>
-
-                    [% PERL %]
-                              print C4::AR::Filtros::to_Button(   
-                                                                    text          => "[% 'Aceptar' | i18n %]",
-                                                                    boton         => "boton_seleccionar",
-                                                                    width         => "auto",
-                                                                    onClick       => "habilitar();",
-                                                                    alternClass   => "botonCentrado",
-                                                                    title         => "[% 'Aceptar' | i18n %]",
-                                      ) ;
-                    [% END %]
-                  </td>
-              </tr>
-          </table>
-
-          [% ELSE %]
-                  </div>
-                          <div class="alert alert-info">[% 'No hay usuarios para mostrar'| i18n %]</div>
-
-          [% END %]
-
-
+	               <tbody>
+			          [% FOREACH resultsloop %]
+			                  <tr>
+			                      <td>
+			                          [% IF nomodificable %]
+			                              [% "Imposible" | i18n %] 
+			                          [% ELSE %]
+			                              <input type="checkbox" name="chkboxUsuariosPotenciales" 
+			                              id="[% socio.getNro_socio %]" 
+			                              value="[% socio.getNro_socio %]">
+			                          [% END %]
+			                      </td>
+			                  
+			                      <td class="nomCompleto">
+			                          [% PERL %]
+			                              print C4::AR::Filtros::link_to( text =>     "[% socio.persona.getApeYNom %]",
+			                                                              url=>"[% url_prefix %]/usuarios/potenciales/datosUsuario.pl", 
+			                                                              params =>   ["nro_socio=[% socio.getNro_socio %]"],
+			                                                              title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
+			                                                          ) ;
+			                          [% END %]
+			                      </td>
+			
+			                      <td>
+			                          [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]
+			                      </td>
+			
+			                      <td>
+			                              [% socio.categoria.getDescription %]
+			                      </td> 
+			                      <td>
+			                          <span class="[% clase %]"> <b>[% activo %]</b> </span>
+			                      </td>
+			
+			                  </tr>
+			          [% END %]
+				</tbody>
+              </table>
+	          <div class="form-actions">
+	                  <input name="cantidad" id="cantidad" type="hidden" value="[% modificable %]">
+	
+	                     <select id="accion" name="accion">
+	                         <option value="HABILITAR_PERSON" selected="selected">
+	                             [% "Habilitar Seleccionados" | i18n %]
+	                         </option>
+	                         <option value="DESHABILITAR_PERSON">
+	                             [% "Deshabilitar Seleccionados" | i18n %]
+	                         </option>
+	                     </select>
+	
+	                    [% PERL %]
+	                              print C4::AR::Filtros::to_Button(   
+	                                                                    text          => "[% 'Aceptar' | i18n %]",
+	                                                                    boton         => "boton_seleccionar",
+	                                                                    width         => "auto",
+	                                                                    onClick       => "habilitar();",
+	                                                                    title         => "[% 'Aceptar' | i18n %]",
+	                                      ) ;
+	                    [% END %]
+	          </div>
         </div>
+          [% ELSE %]
+              <div class="alert alert-info">[% 'No hay usuarios para mostrar'| i18n %]</div>
+
+          [% END %]
 </fieldset>
 
 

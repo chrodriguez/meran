@@ -1319,15 +1319,12 @@ sub getAllPrestamosVencidos{
     my @arrayPrestamos;
 
     if(scalar(@$prestamos_array_ref) > 0){
-    # recorremos todos los prestamos, y guardamos los vencidos
         foreach my $prestamo (@$prestamos_array_ref){
-        
             if ($prestamo->estaVencido()){        
                 push(@arrayPrestamos,($prestamo));
             }
         }  
-        
-        return (@arrayPrestamos);     
+        return (\@arrayPrestamos);     
     }else{
         return 0;
     }

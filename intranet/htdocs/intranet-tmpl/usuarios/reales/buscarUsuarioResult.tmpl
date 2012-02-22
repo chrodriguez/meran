@@ -15,9 +15,11 @@
              
             <div class="well">
                 <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: <strong>[% HTML.escape(socio_busqueda) %]</strong></div> 
+		         [% IF cantidad %]
+		                  <div class="resultados_consulta">[% "La cantidad de usuarios es" | i18n %]: <strong>[% cantidad %]</strong></div>
+		         [% END %]
             </div>
          [% IF cantidad %]
-                  <div class="resultados_consulta">[% "La cantidad de usuarios es" | i18n %]: <strong>[% cantidad %]</strong></div>
                   <div class="contenedor_paginador">[% paginador %]</div>  
                   [% PERL %]
                       print C4::AR::Filtros::tableHeader(   

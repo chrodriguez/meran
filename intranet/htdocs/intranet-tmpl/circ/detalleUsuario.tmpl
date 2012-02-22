@@ -1,8 +1,9 @@
 [% INCLUDE "AjaxTemplateJSReadyActivations.inc" %]
 
-<fieldset class="datos_usuario">
+<div class="well form-actions"> 
+    <fieldset class="datos_usuario">
         <legend class="titulo_legend_resaltado">[% 'Datos de Usuario' | i18n %]</legend>
-	<div class="well form-actions"> 
+	
 		   <div class="left span3">
 	             [% IF socio.tieneFoto %]  
 	                 <a class="fancylink" rel="group" href="/uploads/pictures/[% socio.tieneFoto %]">
@@ -31,8 +32,8 @@
 		           [% END %]
 		     </dl>
 	     </div>
-    </div>
-</fieldset>
-
+    
+    </fieldset>
+</div>
 
 

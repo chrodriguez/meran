@@ -1,7 +1,6 @@
 <form class="form-horizontal" onsubmit="return false;">
           <div class="control-group">
               <div class="controls">
-             <!--     <input id="buscar" class="textInput" type="text" value="" name="buscar">-->
                   <input id="persona" class="textInput" type=text name="persona" value="[% persona %]" onFocus="checkFilter('focus')" onBlur="checkFilter('blur')"> 
                   [% PERL %]
                       print C4::AR::Filtros::setHelpInput(
@@ -12,6 +11,13 @@
                 
               </div>
           </div>
+          <div class="control-group">
+              <div class="controls">
+              		<input type="checkbox" name="habilitados_filter" id="habilitados_filter">[% " Mostrar s&oacute;lo usuarios habilitados"| i18n %]
+              </div>
+          </div>
+
+
   
           <div class="form-actions">
                       [% PERL %]

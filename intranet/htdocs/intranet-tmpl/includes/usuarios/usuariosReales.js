@@ -166,7 +166,6 @@ function agregarUsuario(){
       objAH.tipoAccion      = 'AGREGAR_USUARIO';
 
       objAH.sendToServer();
-      startOverlay();
 
 }
 
@@ -182,17 +181,62 @@ function updateAgregarUsuario(responseText){
 
 //*************************************************Cambiar Password*******************************************
 
+
+function agregarAutorizado(){
+    objAH               = new AjaxHelper(updateAgregarAutorizado);
+    objAH.showOverlay   = true;
+    objAH.url           = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
+    objAH.tipoAccion    = "MOSTRAR_VENTANA_AGREGAR_AUTORIZADO";
+    objAH.debug         = true;
+    objAH.sendToServer();
+}
+
+function updateAgregarAutorizado(responseText){
+    if (!verificarRespuesta(responseText))
+            return(0);
+
+    $('#basic-modal-content').html(responseText);
+    $('#basic-modal-content').modal();
+}
+
+
+function confirmarAgregarAutorizado(){
+
+    if (verificarDatos()){
+        objAH                   = new AjaxHelper(updateConfirmarAgregarAutorizado);
+        objAH.url               = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
+        objAH.debug             = true;
+        objAH.showOverlay       = true;
+        objAH.nro_socio         = NRO_SOCIO_AUTH; 
+        objAH.auth_nombre       = $('#nombreAutorizado').val();
+        objAH.auth_dni          = $('#dniAutorizado').val();
+        objAH.auth_telefono     = $('#telefonoAutorizado').val();
+        objAH.tipoAccion        = 'AGREGAR_AUTORIZADO';
+        objAH.sendToServer();
+    }
+}
+
+function updateConfirmarAgregarAutorizado(responseText){
+    var Messages = JSONstring.toObject(responseText);
+    setMessages(Messages);
+    $('#basic-modal-content').modal('hide');
+    detalleUsuario();
+        
+}
+
 function desautorizarTercero(claveUsuario, confirmeClave){
 
     	bootbox.confirm(CONFIRMAR_ELIMINAR_AFILIADO, function (ok){ 
-        	objAH=new AjaxHelper(updateDesautorizarTercero);
-	        objAH.debug= true;
-	        objAH.showOverlay       = true;
-	        objAH.url= URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
-	        objAH.nro_socio= USUARIO.ID;
-	        objAH.tipoAccion= 'ELIMINAR_AUTORIZADO';
-	        //se envia la consulta
-	        objAH.sendToServer();
+    		if (ok){
+	        	objAH=new AjaxHelper(updateDesautorizarTercero);
+		        objAH.debug= true;
+		        objAH.showOverlay       = true;
+		        objAH.url= URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
+		        objAH.nro_socio= USUARIO.ID;
+		        objAH.tipoAccion= 'ELIMINAR_AUTORIZADO';
+		        //se envia la consulta
+		        objAH.sendToServer();
+    		}
     });
 }
 
@@ -265,23 +309,6 @@ function updateEliminarFoto(responseText){
     $('#div_uploader').show();
     $('#div_boton_eliminar_foto').hide();
     detalleUsuario();
-}
-
-function agregarAutorizado(){
-    objAH               = new AjaxHelper(updateAgregarAutorizado);
-    objAH.showOverlay   = true;
-    objAH.url           = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
-    objAH.tipoAccion    = "MOSTRAR_VENTANA_AGREGAR_AUTORIZADO";
-    objAH.debug         = true;
-    objAH.sendToServer();
-}
-
-function updateAgregarAutorizado(responseText){
-    if (!verificarRespuesta(responseText))
-            return(0);
-
-    $('#basic-modal-content').html(responseText);
-    $('#basic-modal-content').modal();
 }
 
 function validarDatosCensales(){
