@@ -764,30 +764,34 @@ sub action_set_button{
         $html.= "<a class='$button' $popopver_attr class='click' onclick='$action'><i class='$icon'></i>$title</a>";
     }
 
-    $html.= "<a class='$button dropdown-toggle' data-toggle='dropdown' href='#'><span class='caret'></span></a>";
-    $html.= "<ul class='dropdown-menu'>";
-    
-    foreach my $action (@$actions){
-        my $name = $action->{'title'};
-        my $func = $action->{'action'};
-        my $url  = $action->{'url'};
-        my $icon = $action->{'icon'};
-        if ($func){
-            $html .= "<li><a class='click' onclick='$func' ><i class='$icon' ></i> $name</a></li>";
-        }else{
-            my $params   =  $action->{'params'} ||  $action->{'url'};
-            my @result;
-            foreach my $p (@$params){
-                @result = split(/=/,$p);
-                $url = C4::AR::Utilidades::addParamToUrl($url,@result[0],@result[1]);
-            }
-            $html .= "<a class='click' href='$url'><i class='$icon'></i> $name</a>";
-        }
 
-    }
+    if (scalar(@$actions)){
+	    $html.= "<a class='$button dropdown-toggle' data-toggle='dropdown' href='#'><span class='caret'></span></a>";
+	    $html.= "<ul class='dropdown-menu'>";
+	    
+	    foreach my $action (@$actions){
+	        my $name = $action->{'title'};
+	        my $func = $action->{'action'};
+	        my $url  = $action->{'url'};
+	        my $icon = $action->{'icon'};
+	        if ($func){
+	            $html .= "<li><a class='click' onclick='$func' ><i class='$icon' ></i>$name</a></li>";
+	        }else{
+	            my $params   =  $action->{'params'} ||  $action->{'url'};
+	            my @result;
+	            foreach my $p (@$params){
+	                @result = split(/=/,$p);
+	                $url = C4::AR::Utilidades::addParamToUrl($url,@result[0],@result[1]);
+	            }
+	            $html .= "<a class='click' href='$url'><i class='$icon'></i> $name</a>";
+	        }
+	
+	    }
+	
+	    $html.= "</ul>";
+    }    
+    $html.= "</div>";
 
-    $html.= "</ul></div>";
-    
     return $html;   
 }
 

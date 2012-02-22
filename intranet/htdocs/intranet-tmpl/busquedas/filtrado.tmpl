@@ -74,10 +74,10 @@ function limpiarCampos(side){
 			<div id="filtrosBusqueda" class="filtrosBusqueda">
 	            <form id="busqueda_combinada" class="form-horizontal" onsubmit="return false;">
 		            <fieldset>
-		                <legend class="titulo_legend"><strong>[% "B&uacute;squeda combinada" | i18n %]</strong></legend>
+		                <legend class="titulo_legend">[% "B&uacute;squeda combinada" | i18n %]</legend>
 		                    <div class="control-group">
 			                    <label class="control-label" for="keyword">
-			                        <strong>[% "B&uacute;squeda combinada" | i18n %]</strong>
+			                        [% "B&uacute;squeda combinada" | i18n %]
 			                    </label>
 			                    <div class="controls"> 
 				                    <input type="text" id="keyword" size="25" onkeypress="limpiarCampos('arriba')">
@@ -92,10 +92,10 @@ function limpiarCampos(side){
 			<div>
 	            <form id="busqueda_simple" class="form-horizontal" onsubmit="return false;">
 		            <fieldset>
-		            <legend class="titulo_legend"><strong>[% "B&uacute;squeda espec&iacute;fica" | i18n %]</strong></legend>
+		            <legend class="titulo_legend">[% "B&uacute;squeda espec&iacute;fica" | i18n %]</legend>
 		                <div class="control-group">
 						      <label class="control-label" for="titulo"> 
-						          <strong>[% "T&iacute;tulo" %]</strong>
+						          [% "T&iacute;tulo" %]
 						      </label>
 						     <div class="controls"> 
 							     <input type="text"  size="25" id="titulo" onkeypress="limpiarCampos('abajo')">
@@ -109,7 +109,7 @@ function limpiarCampos(side){
 						
 	                  <div class="control-group">
 	                        <label class="control-label" for="autor">
-	                            <strong>[% "Autor" %]</strong>
+	                            [% "Autor" %]
 	                        </label>
 	                        <div class="controls">
 	                          <input type="text" size="25" id="autor" onkeypress="limpiarCampos('abajo')">
@@ -117,7 +117,7 @@ function limpiarCampos(side){
 	                  </div>
 		                <div class="control-group">
 		                    <label class="control-label" for="isbn">
-		                        <strong>ISBN</strong>   
+		                        ISBN   
 		                    </label>
 		                    <div class="controls">
 		                       <input type="text" id="isbn" size="25"  onkeypress="limpiarCampos('abajo')">
@@ -125,7 +125,7 @@ function limpiarCampos(side){
 		                </div>
 	                  <div class="control-group">
 	                    <label class="control-label" for="tipo_nivel3_id">
-	                        <strong>[% "Tipo de documento" | i18n %]</strong> 
+	                        [% "Tipo de documento" | i18n %] 
 	                    </label>
 	                    <div class="controls">
 	                        [% comboTipoDocumento %]
@@ -134,7 +134,7 @@ function limpiarCampos(side){
 	                  
 	                   <div class="control-group">
 	                       <label class="control-label" for="tema">
-	                           <strong>[% "Tema" | i18n %]</strong>
+	                           [% "Tema" | i18n %]
 	                       </label>
 	                       <div class="controls">
 	                            <input type="text" size="25" id="tema"  onkeypress="limpiarCampos('centro')">
@@ -142,7 +142,7 @@ function limpiarCampos(side){
 	                   </div>
 	                   <div class="control-group">
 	                       <label class="control-label" for="estante">
-	                           <strong>[% "Estantes Virtuales" | i18n %]</strong>
+	                           [% "Estantes Virtuales" | i18n %]
 	                       </label>
 	                       <div class="controls">
 	                            <input type="text" size="25" id="estante" onkeypress="limpiarCampos('centro')">
@@ -151,7 +151,7 @@ function limpiarCampos(side){
 	
 	                <div class="control-group">
 	                    <label class="control-label" for="codBarra">
-	                        <strong>[% "C&oacute;digo de barras" | i18n %]</strong>
+	                        [% "C&oacute;digo de barras" | i18n %]
 	                    </label>
 	                    <div class="controls">
 	                        <input type="text" size="25" id="codBarra" onkeypress="limpiarCampos('centro')">
@@ -160,7 +160,7 @@ function limpiarCampos(side){
 	
 	                 <div class="control-group">
 	                       <label class="control-label" for="signatura">
-	                           <strong>[% "Signatura Topogr&aacute;fica" | i18n %]</strong>
+	                           [% "Signatura Topogr&aacute;fica" | i18n %]
 	                       </label>
 	                       <div class="controls">
 	                            <input type="text" size="25" id="signatura"  onkeypress="limpiarCampos('abajo')">

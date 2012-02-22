@@ -49,7 +49,7 @@ function agregarVisualizacion(){
         objAH.post          = post;        
         objAH.sendToServer();
     }else{
-        jAlert(SELECCIONE_VISTA_OPAC,CATALOGO_ALERT_TITLE);
+        jAlert(SELECCIONE_VISTA_OPAC);
     }
     
 }

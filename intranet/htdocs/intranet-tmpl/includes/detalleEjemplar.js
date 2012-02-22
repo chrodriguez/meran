@@ -123,14 +123,7 @@ function buscarUsuario(id2, id3){
 function updateBuscarUsuario(responseText){
 
     $('#basic-modal-content').html(responseText);
-    $('#basic-modal-content').modal({   containerCss:{
-            backgroundColor:"#fff",
-    //         borderColor:"#0063dc",
-            height:200,
-            padding:0,
-            width:600
-        },
-    });
+    $('#basic-modal-content').modal();
 
 }
 
@@ -298,7 +291,7 @@ function confirmarPrestamo(){
 		objAH.nro_socio     = USUARIO.ID;
 		//se envia la consulta
 		objAH.sendToServer();
-		$.modal.close();
+		$('#basic-modal-content').modal('hide');
 	}else{
 		jAlert(INGRESE_EL_USUARIO);
 		$('#campoUsuario').focus();
@@ -314,10 +307,6 @@ function updateInfoPrestarReserva(responseText){
 	var ticketsArray= infoHash.tickets;
 	var mensajes= '';
     var hayError=0;
-// 	for(var i=0; i<messageArray.length;i++){
-// 		imprimirTicket(ticketsArray[i].ticket,i);
-//   		setMessages(messageArray[i]);
-// 	}
 
     for(i=0; i<messageArray.length;i++){
 //         imprimirTicket(ticketsArray[i].ticket,i);
@@ -339,18 +328,7 @@ function updateInfoPrestarReserva(responseText){
 }
 
  function generarVariasEtiquetas(id2){
-//             var selectedItems = new Array();
-//             $('#checkEjemplares:checked').each(function(){
-//                                                   selectedItems.push($(this).val());
-//                                             });
-//                                             
-//             if (selectedItems.length == 0) {
-//                   jAlert('Debe seleccionar al menos un ejemplar','Advertencia de catalogo');
-//             } else {  
-//                 var id1= selectedItems[0];
-//                 var id2= selectedItems[selectedItems.length - 1];
-//                 window.open (URL_PREFIX+"/catalogacion/barcode_gen.pl?token="+token+"&id1="+id1+"&id2="+id2,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
-//             }
+
              var selectedItems = new Array();
                 $('.icon_seleccionar:checked').each(function(){
                                                       selectedItems.push($(this).val());

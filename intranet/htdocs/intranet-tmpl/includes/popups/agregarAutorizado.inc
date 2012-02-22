@@ -70,7 +70,7 @@
                                           ) ;
                               [% END %]
                     </div>
-        	</div>
+           </div>
     </fieldset>
 </div>
 

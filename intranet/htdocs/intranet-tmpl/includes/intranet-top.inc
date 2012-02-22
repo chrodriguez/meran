@@ -146,5 +146,6 @@
 					</div>
 		    [% END %]
 		  </div>
-	
+
+		<div id="confirmar_div" class="modal hide fade"></div>
 	    <div id="basic-modal-content" class="modal hide fade"></div>

@@ -186,7 +186,7 @@ function generaDivPrestamo(responseText){
 	var infoArray       = new Array;
 	infoArray           = JSONstring.toObject(responseText);
 	
-	var html                = "<div id='div_circ_rapida_devolucion' class='modal hide fade'>";
+	var html                = "<div id='div_circ_rapida_devolucion' class=''>";
 	var accion              = infoArray[0].accion;
 	html                    += "<div class='modal-header'><a href='#' class='close' data-dismiss='modal'>×</a><h3>"+ infoArray[0].accion + "</h3></div>";
 	html					+= "<div class='modal-body'>";
@@ -196,6 +196,7 @@ function generaDivPrestamo(responseText){
 	
         var coma                = "";
         html					+= "<p>";
+        html					+= "<dl>";
 		var infoPrestamoObj     = new infoPrestamo();
 		infoPrestamoObj.id3Old  = infoArray[i].id3Old;
 		INFO_PRESTAMOS_ARRAY[i] = infoPrestamoObj;
@@ -204,23 +205,31 @@ function generaDivPrestamo(responseText){
 		var comboTipoPrestamo   = crearComboDeItems(infoArray[i].tipoPrestamo, 'tiposPrestamos' + i);
       
 		if((infoArray[i].autor != "")&&(infoArray[i].autor != null)){ 
+			html    += "<dt>";
             html    = html + infoArray[i].autor;
-            coma    = ", ";
+            html    += "</dt>";
         };
 
 		if((infoArray[i].titulo != "")&&(infoArray[i].titulo != null)){ 
-            html= html + coma + infoArray[i].titulo;
-            coma    = ", ";
-        };
+			html    += "<dd>";
+            html= html + infoArray[i].titulo;
 
-		if((infoArray[i].edicion != "")&&(infoArray[i].edicion != null)){ html= html + coma + infoArray[i].edicion};
+            if((infoArray[i].edicion != "")&&(infoArray[i].edicion != null)){ 
+            	html= html + ", " + infoArray[i].edicion
+        	};
+        	
+			html    += "</dd>";
+        };
+		html    += "</dl>";
+
+		
 		html= html + "<br>C&oacute;digo de barras: " + comboItems;
 		html= html + "<br>Tipo de pr&eacute;stamo: " + comboTipoPrestamo;
 		html					+= "</p>";
 	}
 
 	html= html + "</div>";
-	html= html + "<div class='modal-footer'><button class='btn' onClick='prestar(1)'>Prestar</button></div>";
+	html= html + "<div class='modal-footer'><button class='btn btn-primary' onClick='prestar(1)'>Prestar</button></div>";
 	html= html + "</div>";
 
 	$('#confirmar_div').html(html);
@@ -362,7 +371,7 @@ function generaDivDevolucion(responseText){
 	var infoArray           = new Array;
 	INFO_PRESTAMOS_ARRAY    = new Array();
 	infoArray               = JSONstring.toObject(responseText);
-	var html                = "<div id='div_circ_rapida_devolucion' class='modal hide fade'>";
+	var html                = "<div id='div_circ_rapida_devolucion' class=''>";
 	var accion              = infoArray[0].accion;
 	html                    += "<div class='modal-header'><a href='#' class='close' data-dismiss='modal'>×</a><h3>"+ infoArray[0].accion + "</h3></div>";
 
@@ -394,7 +403,7 @@ function generaDivDevolucion(responseText){
 	html= html + "</div>";
 
 	$('#confirmar_div').html(html);
-	$('#div_circ_rapida_devolucion').modal();
+	$('#confirmar_div').modal();
 }
 
 /*
@@ -512,7 +521,7 @@ function devolver(is_modal){
 	//se envia la consulta
 	objAH.sendToServer();
 	if (is_modal)
-		$('#div_circ_rapida_devolucion').modal('hide');
+		$('#confirmar_div').modal('hide');
 }
 
 /*
