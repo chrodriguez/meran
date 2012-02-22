@@ -401,6 +401,17 @@ sub activar{
     my ($self) = shift;
     $self->setActivo(1);
     $self->persona->activar();
+
+    my ($credential_type) = $self->getCredentialType;
+
+    switch ($credential_type){
+
+      case 'estudiante'      {$self->convertirEnEstudiante}
+      case 'librarian'       {$self->convertirEnLibrarian}
+      case 'superLibrarian'  {$self->convertirEnSuperLibrarian; $self->setIs_super_user(1);}
+      else                   {$self->convertirEnEstudiante}
+    }
+
     $self->save();
 }
 
