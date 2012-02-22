@@ -63,10 +63,12 @@
 
 <input type="hidden" id="idEncabezado">
 
-<div class="titulos" >[% 'Configuraci&oacute;n de formatos de Barcode' | i18n %]</div>
+<h3>[% 'Configuraci&oacute;n de formatos de Barcode' | i18n %]</h3>
 
 <fieldset>
     <legend>[% "Seleccione el tipo de documento a configurar:" | i18n %]</legend>
+    
+    <section class="center-section-form">
 
     [% PERL %]
             print C4::AR::Filtros::to_Icon(   
@@ -75,7 +77,10 @@
                                                 title   => "[% 'Buscar' | i18n %]",
                     ) ;
     [% END %]
+    
     [% selectItemType %]
+    
+    </section>
     
     <div id="result"></div>
 

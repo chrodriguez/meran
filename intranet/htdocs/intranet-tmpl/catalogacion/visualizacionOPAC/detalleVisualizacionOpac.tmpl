@@ -111,11 +111,11 @@
         eleccionDeEjemplar();
     }
 </script>
-<form class="form-horizontal">
+<div class="form-horizontal">
 <fieldset>
-    <legend class="titulo_legend trigger click">[% "Agregar Visualizaci&oacute;n:" | i18n %]</legend>
+    <legend>[% "Agregar Visualizaci&oacute;n:" | i18n %]</legend>
     <div class="divTablaAgregarVisualizacion" id="divTablaAgregarVisualizacion">
-    
+    <section class="center-section-form">
         <div class="control-group">
             <label class="control-label" for="campoX"> [% "Selecci&oacute;n" | i18n %]: </label>
             <div class="controls">
@@ -177,8 +177,9 @@
 
       </div>
     </div>
+    </section>
 </fieldset>
-</form>
+</div>
 
 <div id="divAgregarModificarVisualizacion"></div>
 <div id="tablaResultCampos"></div>
