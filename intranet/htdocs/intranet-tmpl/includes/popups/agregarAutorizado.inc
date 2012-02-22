@@ -93,23 +93,7 @@
                                           ) ;
                               [% END %]
                     </div>
-               
-                     <!-- <li class="sub_item">
-                          <label for="nombreAutorizado" style="float: left;" >[% "Ingrese Apellido y Nombres" | i18n %]</label>
-                          <input 	type="text" id="nombreAutorizado" name="nombreAutorizado" style="width:40%;" tabindex="1">
-                      </li>-->
-                     <!-- <li class="sub_item">
-                          <label for="dniAutorizado" style="float: left;" >[% "Ingrese el DNI" | i18n %]</label>
-                          <input  type="text" id="dniAutorizado" name="dniAutorizado" style="width:40%;" tabindex="2">
-                      </li>-->
-                     <!-- <li class="sub_item">
-                          <label for="telefonoAutorizado" style="float: left;" >[% "Ingrese un tel&eacute;fono (contacto seguro)" | i18n %]</label>
-                          <input  type="text" id="telefonoAutorizado" name="telefonoAutorizado" style="width:40%;" tabindex="3">
-                      </li>-->
-                    
-                        
-                      
-                  
+       
         </form>
       </section>
     </fieldset>
