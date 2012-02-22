@@ -96,6 +96,14 @@ elsif($tipoAccion eq "DETALLE_REGISTRO"){
   my ($registro_importacion) = C4::AR::ImportacionIsoMARC::getRegistroFromImportacionById($id);
       $t_params->{'registro_importacion'} = $registro_importacion;
 
+  my $vista_previa = C4::AR::ImportacionIsoMARC::detalleCompletoVistaPrevia($id);
+     
+      $t_params->{'nivel1'}           = $vista_previa->{'nivel1'};
+      $t_params->{'nivel1_template'}  = $vista_previa->{'nivel1_template'};
+      $t_params->{'cantItemN1'}       = $vista_previa->{'cantItemN1'};
+      $t_params->{'nivel2'}           = $vista_previa->{'nivel2'};
+    
+      
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
  }

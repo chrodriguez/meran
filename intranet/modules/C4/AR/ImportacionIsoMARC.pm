@@ -1058,6 +1058,8 @@ sub getNivelesFromRegistro {
 						#Nivel 2
 
 						#HAY QUE CREAR UNO NUEVO??
+ 						C4::AR::Debug::debug("HAY QUE CREAR UNO NUEVO??  ".$campo."&".$subcampo."=".$dato." ".$marc_record_n2->subfield($campo,$subcampo)." repetible? ".$estructura->getRepetible);
+
 						if(($marc_record_n2->subfield($campo,$subcampo))&&(!$estructura->getRepetible)&&(($campo ne '910')&&($subcampo ne 'a'))){
 							#Existe el subcampo y no es repetible ==> es un nivel 2 nuevo
 							C4::AR::Debug::debug("Existe el subcampo y no es repetible ==> es un nivel 2 nuevo  ".$campo."&".$subcampo."=".$dato);
@@ -1069,6 +1071,7 @@ sub getNivelesFromRegistro {
 							}
 								
 							#Guardo el nivel 2 con sus ejemplares
+							$tipo_ejemplar = C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord($marc_record_n2);
 							my %hash_temp;
 							$hash_temp{'grupo'}  = $marc_record_n2;
 							$hash_temp{'tipo_ejemplar'}  = $tipo_ejemplar;
@@ -1078,8 +1081,9 @@ sub getNivelesFromRegistro {
 							@ejemplares = ();
 						}				
 						
-						if (($campo eq '910')&&($subcampo eq 'a')){
-							$tipo_ejemplar = $dato;
+						if ((($campo eq '910')&&($subcampo eq 'a'))&&($marc_record_n2->subfield($campo,$subcampo))){
+								#ya existe el 910,a, no sirve que haya varios
+								next;
 							}
 						
 						#El campo es de Nivel 2
@@ -1099,6 +1103,7 @@ sub getNivelesFromRegistro {
 						 if($marc_record_n3->subfield($campo,$subcampo)){
 							#Existe el subcampo y no es repetible ==> es un nivel 3 nuevo							
 							#Agrego el último ejemplar y lo guardo
+							
 								push(@ejemplares,$marc_record_n3);
 								$marc_record_n3 = MARC::Record->new();
 							}
@@ -1143,6 +1148,7 @@ sub getNivelesFromRegistro {
 		}
 							
 		#Guardo el nivel 2 con sus ejemplares
+		$tipo_ejemplar = C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord($marc_record_n2);
 		my %hash_temp;
 		$hash_temp{'grupo'}  = $marc_record_n2;
 		$hash_temp{'tipo_ejemplar'}  = $tipo_ejemplar;
@@ -1161,7 +1167,7 @@ sub getNivelesFromRegistro {
 		my %hash_temp;
 		$hash_temp{'registro'}  = $marc_record_n1;
 		$hash_temp{'grupos'}   = \@grupos;
-
+		$hash_temp{'tipo_ejemplar'}  = $tipo_ejemplar;
 	return  \%hash_temp;
 		
 }
@@ -1169,29 +1175,25 @@ sub getNivelesFromRegistro {
 =head2 sub detalleCompletoVistaPrevia
     Genera el detalle 
 =cut
+
 sub detalleCompletoVistaPrevia {
     my ($id_registro) = @_;
-    
-
+   
     my $detalle = C4::AR::ImportacionIsoMARC::getNivelesFromRegistro($id_registro);
     
     #recupero el nivel1 segun el id1 pasado por parametro
     my $nivel1              = $detalle->{'registro'};
-
-    #recupero todos los nivel2 
-
-    my @nivel2;
-
-    my $cantidad_total = scalar($detalle->{'grupos'});
+    my $grupos = $detalle->{'grupos'};
     
-    foreach my $nivel2 ($detalle->{'grupos'}){
-        
-		my %hash_nivel2;  
+    my @niveles2;    
+    foreach my $nivel2 (@$grupos){
 		my $nivel2_marc = $nivel2->{'grupo'};
+		my %hash_nivel2=();
         $hash_nivel2{'tipo_documento'}          = $nivel2_marc->subfield('910','a');
-        $hash_nivel2{'nivel2_array'}            =  C4::AR::ImportacionIsoMARC::toMARC_Array($nivel2_marc,'LIB','',2);
-        $hash_nivel2{'nivel2_template'}         = $nivel2->{'template'};
+        $hash_nivel2{'nivel2_array'}            =  C4::AR::ImportacionIsoMARC::toMARC_Array($nivel2_marc,$hash_nivel2{'tipo_documento'},'',2);
+        $hash_nivel2{'nivel2_template'}         = $nivel2->{'tipo_ejemplar'};
         $hash_nivel2{'tiene_indice'}            = 0;
+
         
         if($nivel2->{'grupo'}->subfield('865','a')){
 			$hash_nivel2{'indice'}              = $nivel2_marc->subfield('865','a');
@@ -1199,26 +1201,28 @@ sub detalleCompletoVistaPrevia {
 		}
         $hash_nivel2{'esta_en_estante_virtual'} = 0;
         
-        my ($totales_nivel3, @result)           =  C4::AR::ImportacionIsoMARC::detalleDisponibilidadEjemplares($nivel2->{'ejemplares'});
-        $hash_nivel2{'nivel3'}                  = \@result;
-        $hash_nivel2{'cant_nivel3'}             = scalar($nivel2->{'ejemplares'});
-        $hash_nivel2{'cantPrestados'}           = 0;
-        $hash_nivel2{'cantReservas'}            = 0;
-        $hash_nivel2{'cantReservasEnEspera'}    = 0;
-        $hash_nivel2{'cantReservasAsignadas'}   = 0;
-        $hash_nivel2{'disponibles'}             = $totales_nivel3->{'disponibles'};
-        $hash_nivel2{'cantParaSala'}            = $totales_nivel3->{'cantParaSala'};
-        $hash_nivel2{'cantParaPrestamo'}        = $totales_nivel3->{'cantParaPrestamo'};
-        $hash_nivel2{'cantParaSalaActual'}      = $totales_nivel3->{'cantParaSalaActual'};
-        $hash_nivel2{'cantParaPrestamoActual'}  = $totales_nivel3->{'cantParaPrestamoActual'};
-        push(@nivel2, \%hash_nivel2);
+        my $ejemplares = $nivel2->{'ejemplares'};
+        my @niveles3=();
+        
+            foreach my $nivel3 (@$ejemplares){
+				my %hash_nivel3=();
+				$hash_nivel3{'tipo_documento'}          = $nivel2_marc->subfield('910','a');
+				$hash_nivel3{'barcode'}            =  generaCodigoBarraFromMarcRecord($nivel3,$hash_nivel3{'tipo_documento'});
+				push(@niveles3, \%hash_nivel3);
+			}
+
+        $hash_nivel2{'nivel3'}                  = \@niveles3;        
+        $hash_nivel2{'cant_nivel3'}             = @niveles3;
+
+        push(@niveles2, \%hash_nivel2);
     }
+    
     my %t_params;
     $t_params{'nivel1'}           = C4::AR::ImportacionIsoMARC::toMARC_Array($nivel1,'LIB','',1);
-    $t_params{'nivel1_template'}  = $nivel1->getTemplate();
+    $t_params{'nivel1_template'}  = $detalle->{'tipo_ejemplar'};
     $t_params{'cantItemN1'}       = 1;
-    $t_params{'nivel2'}           = \@nivel2;
-    #se ferifica si la preferencia "circularDesdeDetalleDelRegistro" esta seteada
+    $t_params{'nivel2'}           = \@niveles2;
+
     return \%t_params;
 }
 
@@ -1243,7 +1247,7 @@ sub toMARC_Array {
                 $hash_temp{'subcampo'}              = $subcampo;
                 $hash_temp{'liblibrarian'}          = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo, $itemtype, $type, $nivel);
                 $hash_temp{'orden'}                 = C4::AR::Catalogacion::getOrdenFromCampoSubcampo($campo, $subcampo, $itemtype, $type, $nivel);
-                $hash_temp{'datoReferencia'}        = $dato;
+                $hash_temp{'datoReferencia'}        = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype, $nivel);
                 $hash_temp{'dato'}                  = $dato;
                 push(@MARC_result_array, \%hash_temp);
             }
@@ -1259,7 +1263,84 @@ sub detalleDisponibilidadEjemplares{
 	my ($ejemplar) = @_;
 	    
 }
+
+
+sub getTipoDocumentoFromMarcRecord{
+		my ($marc_record) = @_;
+#FIXME	Debería ir a una tabla de referencia de alias o sinónimos
+		my $tipo_documento = $marc_record->subfield('910','a');
+		
+		my $resultado ='LIB';
+		if ($tipo_documento){
+			use Switch;
+			switch ($tipo_documento) {
+				case 'TEXTO' { 
+					$resultado = 'LIB';
+					}
+				else {
+					$resultado = 'LIB';
+					}
+			}
+		}
+	return $resultado;
+}
+
+sub generaCodigoBarraFromMarcRecord{
+    my($marc_record_n3,$tipo_ejemplar) = @_;
+
+   my $barcode; 
+   my @estructurabarcode = split(',', C4::AR::Preferencias::getValorPreferencia("barcodeFormat"));
+    
+    my $like = '';
+
+    for (my $i=0; $i<@estructurabarcode; $i++) {
+        if (($i % 2) == 0) {
+            my $pattern_string ='';
+           	use Switch;
+			switch ($estructurabarcode[$i]) {
+				case 'UI' { 
+						my $ui = $marc_record_n3->subfield('995','c');
+						if ($ui){
+							$pattern_string= $ui;
+							}
+						else{
+							$pattern_string= C4::AR::Preferencias::getValorPreferencia("defaultUI");
+							}
+					}
+				case 'tipo_ejemplar' {
+						if ($tipo_ejemplar){
+							$pattern_string= $tipo_ejemplar;
+							}
+						else{
+							$pattern_string= C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
+							}
+					}
+            }
+            if ($pattern_string){
+                $like.= $pattern_string;
+            }else{
+                $like.= $estructurabarcode[$i];
+            }
+        } else {
+            $like.= $estructurabarcode[$i];
+        }
+    }
+
+	my $nro_inventario = $marc_record_n3->subfield('995','f');
+	if ($nro_inventario){
+	 #viene con nro de inventario
+		$barcode  = $like.C4::AR::Nivel3::completarConCeros($nro_inventario);
+	 }
 	
+	if ((C4::AR::Nivel3::existeBarcode($barcode))||(!$barcode)){
+		# Si no viene el códifo en el campo 995, f  o ya existe se busca el máximo de su tipo
+		my $max_codigo = C4::Modelo::CatRegistroMarcN3::Manager->get_maximum_codigo_barra(like => $like.'%') || 0;
+  	    $barcode  = $like.C4::AR::Nivel3::completarConCeros($max_codigo + 1);
+     }
+     
+    return ($barcode);
+}
+
 END { }       # module clean-up code here (global destructor)
 
 1;
