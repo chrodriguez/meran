@@ -1,74 +1,37 @@
+[% INCLUDE "AjaxTemplateJSReadyActivations.inc" %]
+
 <fieldset class="datos_usuario">
-<div class="well form-actions"> 
-<legend class="titulo_legend_resaltado">[% 'Datos de Usuario' | i18n %]</legend>
-      <div id="datosUsuario" style="clear:both;">
-        <div class="vcard">
-        <ul class="unstyled">
-            <li>
-                <strong>[% "Apellido y Nombre: " | i18n %]</strong>
-                
-                  [% PERL %]
-                      print C4::AR::Filtros::link_to(   text =>     "[% socio.persona.getApeYNom %]",
-                                                        url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
-                                                        params =>   ["nro_socio=[% socio.getNro_socio %]"],
-                                                        title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
-                                                        blank =>  1,
-                                                  );
-                  [% END %]
-            </li>
-            <li>
-                <strong>[% "Documento:" | i18n %]</strong> [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]
-            </li>
-            <li>
-                <strong>[% "Fecha de nacimiento:" | i18n %]</strong> [% socio.persona.getNacimiento %]
-            </li>
-            <li>
-                <strong>[% "Sexo:" | i18n %]</strong> [% socio.persona.getSexo %]
-            </li>
-            [% IF socio.persona.getTelefono %]
-            <li>
-                    <div class="tel">
-                            <strong><span class="type">[% "Tel&eacute;fono:" | i18n %]</span>
-                                    </strong>[% socio.persona.getTelefono %]<br>
-                    </div>  
-            </li>
-            [% END %]
-            [% IF socio.persona.getAlt_telefono %]
-            <li>
-                <div class="tel">
-                       <strong> <span class="type">[% "Tel&eacute;fono Alt:" | i18n %]</span></strong>
-                                    [% socio.persona.getAlt_telefono %]<br>
-                </div>  
-            </li>
-            [% END %]
-            [% IF socio.persona.getEmail %]
-            <li>
-                   <strong><span class="type">[% " E-mail:" | i18n %]</span></strong><a href="mailto:[% socio.persona.getEmail %]">
-                            <span class="email"> [% socio.persona.getEmail %]</span></a>
-            </li>
-            [% END %]
-            <li>    
-                <strong>[% "Tarjeta de identificaci&oacute;n" | i18n %]:</strong> [% socio.getNro_socio %]
-            </li>
-            <li>
-                <strong>[% "Legajo" | i18n %]:</strong> [%  socio.persona.getNro_documento %]
-            </li>
-            <li>
-                <strong>[% "Ciudad" | i18n %]:</strong> [%  socio.persona.ciudad_ref.getNombre %]
-            </li>
-            <li>
-                <strong>[% "Calle" | i18n %]:</strong> [%  socio.persona.getCalle %]
-            </li>
-            <li>
-                <strong>[% "ID de usuario:" | i18n %]</strong> [%  socio.nro_socio %]
-            </li>
-            <li>
-                <strong>[% "Categor&iacute;a del usuario:" | i18n %]</strong> [%  socio.categoria.getDescription %]
-            </li>
-        </ul>
-        </div> <!--end vcard-->
-      </div>  
-</div>
+        <legend class="titulo_legend_resaltado">[% 'Datos de Usuario' | i18n %]</legend>
+	<div class="well form-actions"> 
+		   <div class="left span3">
+	             [% IF socio.tieneFoto %]  
+	                 <a class="fancylink" rel="group" href="/uploads/pictures/[% socio.tieneFoto %]">
+	                     <img border="0" src="/uploads/pictures/[% socio.tieneFoto %]"
+	                           style="height: 60%; width: 60%; max-width: 120px; max-height: 120px;" 
+	                           alt="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+	                           title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+	                     >
+	                 </a>
+	             [% END %]
+	       </div>
+	     <div class="left span6">
+		     <dl>
+		           <dt class="inline left rightMargin">[% "Apellido:" | i18n %]</dt>
+		           <dd>[% socio.persona.getApellido %] </dd>
+		
+		           <dt class="inline left rightMargin">[% "Nombre:" | i18n %]</dt>
+		           <dd>[% socio.persona.getNombre %] </dd>
+		
+		           <dt class="inline left rightMargin">[% "Documento:" | i18n %]</dt>
+		           <dd>[% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</dd>
+		
+		           [% IF !(socio.getNro_socio == socio.getNro_documento) %]
+		               <dt class="inline left rightMargin">[% "Tarjeta de identificaci&oacute;n :" | i18n %] </dt>
+		               <dd>[% socio.getNro_socio %]</dd>
+		           [% END %]
+		     </dl>
+	     </div>
+    </div>
 </fieldset>
 
 

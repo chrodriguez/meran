@@ -4,7 +4,6 @@
 		    $(document).ready(function(){
 		        checkedAll("select_all"+"[% id2 %]", "checkEjemplares"+"[% id2 %]");
 		        $('.fancylink').fancybox();
-		
 		    });
 		
 		</script>
@@ -275,7 +274,9 @@
             [% END %]
 
     [% ELSE %]
-        <h4 class="ejemplares_grupo">[% 'Este grupo no dispone de ejemplares' | i18n %]</h4>        
+		<div class="alert fade in">
+           <strong>[% 'Este grupo no dispone de ejemplares' | i18n %]</strong>
+		</div>    
     [% END %]
 
 [% END %]

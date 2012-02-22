@@ -30,7 +30,6 @@
 	<script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox.js"></script>
 	<script type="text/javascript" src="/includes/jquery/fancybox/jquery.mousewheel.js"></script>
 	<script type="text/javascript" src="/includes/jquery/jquery-ui-1.8.9.custom.min.js"></script>
-	<script type="text/javascript" src="/includes/shiftSelectTr.js"></script>
 	<script type="text/javascript" src="/includes/jquery/jquery.expander.js"></script>
 	<script type="text/javascript" src="/includes/modernizr.js"></script>
 	<script type="text/javascript" src="/includes/workers.js"></script>
@@ -96,10 +95,6 @@
 	                }
 	            }
 	        });     
-	        //seleccion con shift
-	        $(function() {
-	            $('tr').shiftClick();
-	        }); 
 	    }
 		
 		$(document).ready(function(){
