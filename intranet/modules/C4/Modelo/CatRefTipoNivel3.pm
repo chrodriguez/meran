@@ -12,6 +12,7 @@ __PACKAGE__->meta->setup(
         nombre                  => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         agregacion_temp         => { type => 'varchar', overflow => 'truncate', length => 250 },
         disponible              => { type => 'integer', overflow => 'truncate', length => 1, not_null => 1, default => 1 },
+        enable_nivel3           => { type => 'integer', overflow => 'truncate', length => 1, not_null => 1, default => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -67,6 +68,17 @@ sub setNombre{
     $self->nombre($nombre);
 }
 
+sub getEnableNivel3{
+    my ($self) = shift;
+    return $self->enable_nivel3;
+}
+
+sub setEnableNivel3{
+    my ($self) = shift;
+    my ($enable_nivel3) = @_;
+    $self->enable_nivel3($enable_nivel3);
+}
+
 sub nextMember{
     return(C4::Modelo::PrefUnidadInformacion->new());
 }
@@ -108,16 +120,11 @@ sub obtenerValorCampo {
   }
 }
 
-
+#getter de enableNivel3
 sub enableNivel3 {
     my ($self) = shift;
 
-    if($self->getNombre() eq "ANA"){
-        return 0;
-    }
-
-# FIXME esto se debe levantar de la configuracion de la tabla, leyendo el cambio "enable_nivel3"
-    return 1;
+    return $self->enable_nivel3;
 }
 
 sub getCampo{
