@@ -848,6 +848,7 @@ function updateGuardarDocumentoN2(responseText){
         if(ACTION != "AGREGAR_ANALITICA"){  
             mostrarEstructuraDelNivel3(TEMPLATE_ACTUAL);    
         } else {
+            disableAlert();
             window.location = "detalle.pl?id1=" + ID_N1;
 // falta sacar el alert q pregunta si salgo de la pagina
         }
@@ -1915,8 +1916,7 @@ function crearBotones(obj){
 }
 
 function crearAyudaComponete(obj, ayuda_string){
-//   <div htmlfor="id_componente_17" generated="true" class="error_adv">Ingrese un rango de años válido (1979 - 2000)</div>
-    var html = "<div htmlfor='" + obj.getIdCompCliente() + "' class='info_adv'>" + ayuda_string + "</div>";
+    var html = "<p htmlfor='" + obj.getIdCompCliente() + "' class='help-block'>" + ayuda_string + "</p>";
 
     $(html).insertAfter("#"+obj.getIdCompCliente());
 }

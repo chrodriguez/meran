@@ -184,8 +184,10 @@
 		
 		                                                        actions         => [
 		                                                                            {title => "Modificar", action=>'modificarNivel2("[% id2 %]")',icon=>"icon-edit"},
-		                                                                            {title => "Eliminar", action=>"borrarN2([% id2 %])", icon=>"icon-trash"},                                                                            
+		                                                                            {title => "Eliminar", action=>"borrarN2([% id2 %])", icon=>"icon-trash"},   
+                                                                                [% IF show_action == 1 %]
                                                                                     {title => "Agregar analítica", action=>"agregarAnalitica([% id2 %])", icon=>"icon-edit"},
+                                                                                [% END %]
 		                                                                            ],
 		
 		                            ) ;

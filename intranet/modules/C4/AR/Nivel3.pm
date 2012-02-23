@@ -436,15 +436,15 @@ sub detalleNivel3{
         $hash_nivel2{'lista_docs'}              = $e_docs;
         $hash_nivel2{'cant_docs'}               = $cant_docs;
 
-        if($nivel2_object->getTemplate() eq "ANA"){
-        #soy una ANALITICA tengo q obtener el ID2 del campo 773, a para obtener el ID1, link al registro padre
-#             C4::AR::Debug::debug("Nivel3 => detalleNivel3 => getAnalitica => ".$nivel2_object->getAnalitica());
-            my $nivel2_object_padre             = C4::AR::Nivel2::getNivel2FromId2($nivel2_object->getAnalitica(),$db);
+        $hash_nivel2{'show_action'}             = 1; #muestra la accion agregar analitica
+        $hash_nivel2{'enable_nivel3'}           = $nivel2_object->getTipoDocumentoObject->enableNivel3();
 
-            if($nivel2_object_padre){
-                $hash_nivel2{'nivel1_padre'}        = $nivel2_object_padre->getId1();
-            }
+# FIXED falta levantar del tipo de ejemplar
+        if($nivel2_object->getTemplate() eq "ANA"){
+            $hash_nivel2{'nivel1_padre'}        = $nivel2_object->getIdN1Padre();
+            $hash_nivel2{'show_action'}         = 0;
         }
+
 
         #otengo las analiticas
         my $cat_reg_marc_n2_analiticas = $nivel2_object->getAnaliticas();

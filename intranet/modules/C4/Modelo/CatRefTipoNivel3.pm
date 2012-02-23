@@ -109,6 +109,17 @@ sub obtenerValorCampo {
 }
 
 
+sub enableNivel3 {
+    my ($self) = shift;
+
+    if($self->getNombre() eq "ANA"){
+        return 0;
+    }
+
+# FIXME esto se debe levantar de la configuracion de la tabla, leyendo el cambio "enable_nivel3"
+    return 1;
+}
+
 sub getCampo{
     my ($self) = shift;
 	my ($campo)=@_;
