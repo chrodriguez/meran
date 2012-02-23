@@ -447,7 +447,9 @@ sub detalleNivel3{
 
 
         #otengo las analiticas
-        my $cat_reg_marc_n2_analiticas = $nivel2_object->getAnaliticas();
+        my $cat_reg_marc_n2_analiticas          = $nivel2_object->getAnaliticas();
+
+        $hash_nivel2{'tiene_analiticas'}        = ($cat_reg_marc_n2_analiticas)?scalar(@$cat_reg_marc_n2_analiticas):$cat_reg_marc_n2_analiticas;
 
         my @nivel1_analitica_array;
         my @nivel2_analitica_array;
