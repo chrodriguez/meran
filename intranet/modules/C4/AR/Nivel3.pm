@@ -497,14 +497,14 @@ sub migrarAnaliticas{
   
         if($cat_reg_marc_n2_analitica_id ne ""){
 
-            C4::AR::Debug::debug("ANALITICA? ============= ".$cat_reg_marc_n2_analitica_id);
+#             C4::AR::Debug::debug("ANALITICA? ============= ".$cat_reg_marc_n2_analitica_id);
 
 
             my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new();
             $cat_registro_n2_analitica->setId2Padre($cat_reg_marc_n2_analitica_id);
             $cat_registro_n2_analitica->setId2Hijo($nivel2_object->getId2());
 
-            $cat_registro_n2_analitica->save();
+#             $cat_registro_n2_analitica->save();
         }
     }
 }
