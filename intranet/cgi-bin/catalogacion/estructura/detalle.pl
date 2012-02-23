@@ -18,10 +18,9 @@ my ($template, $session, $t_params) = get_template_and_user({
                                                     entorno => 'datos_nivel1'},
                         });
 
-my $id1             = $input->param('id1');
-
-$t_params->{'id2'} = $input->param('id2') || 0;
-$t_params->{'page'} = $input->param('page') || 0;
+my $id1                         = $input->param('id1');
+$t_params->{'id2'}              = $input->param('id2') || 0;
+$t_params->{'page'}             = $input->param('page') || 0;
 
 #eval{ 
     my ($cant_total)            =  C4::AR::Nivel3::detalleCompletoINTRA($id1, $t_params);

@@ -8,11 +8,11 @@
       });
 </script>
 <fieldset>
-    <legend class="titulo_legend trigger click">[% "Novedades de OPAC" | i18n %]:</legend>
+    <legend>[% "Novedades de OPAC" | i18n %]:</legend>
         <div class="contenedor_paginador">[% paginador %]</div>
         [% IF novedades %]
             <div class="datos_tabla_div_user">
-                <div class="alert alert-info">[% "La cantidad de novedades es" | i18n %]: [% cant_novedades %]</div>
+                <div class="well">[% "La cantidad de novedades es" | i18n %]: [% cant_novedades %]</div>
                 
                     [% PERL %]
                         print C4::AR::Filtros::tableHeader(   

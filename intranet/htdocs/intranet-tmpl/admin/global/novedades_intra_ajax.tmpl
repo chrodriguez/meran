@@ -7,12 +7,12 @@
           });
       });
 </script>
-<fieldset class="resultados_busqueda">
-    <legend class="titulo_legend trigger click">[% "Novedades de INTRA" | i18n %]:</legend>
+<fieldset>
+    <legend>[% "Novedades de INTRA" | i18n %]:</legend>
         <div class="contenedor_paginador">[% paginador %]</div>
         [% IF novedades %]
             <div class="datos_tabla_div_user">
-                <div class="alert alert-info">[% "La cantidad de novedades es" | i18n %]: [% cant_novedades %]</div>
+                <div class="well">[% "La cantidad de novedades es" | i18n %]: [% cant_novedades %]</div>
                 
                 [% PERL %]
                         print C4::AR::Filtros::tableHeader(   
