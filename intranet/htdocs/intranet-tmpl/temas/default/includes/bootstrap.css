@@ -591,11 +591,11 @@ legend {
 	width: 100%;
 	padding: 0;
 	margin-bottom: 27px;
-	font-size: 19.5px;
+	font-size: 16.5px;
 	line-height: 36px;
 	color: #333333;
 	border: 0;
-	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid #D6E9C6;
 }
 
 label,input,button,select,textarea {
@@ -4809,7 +4809,7 @@ body {
 
 .note{
     background-color: whitesmoke;
-    border-radius: 2px;
+    borderlegend-radius: 2px;
 }
 .active{
 }
@@ -4836,4 +4836,13 @@ body {
 .bigModal{
 	width: 83%;
 	left: 30%;
+}
+
+.title{
+    background-color: #FAFAFA;
+    font-size: 20px;
+    margin-bottom: 20px;
+    margin-top: 15px;
+    min-height: 20px;
+    padding: 4px;
 }
