@@ -55,15 +55,14 @@
     </legend>
 
 
-<!--<form method="post" name="userDataForm" id="userDataForm" onsubmit="return [% IF addBorrower == 1 %] add(); [% ELSE %] save_modif(); [% END %]">
-    --> 
   <section class="center-section-form"> 
 
-    <fieldset>
-        <legend class="titulo_legend">[% "Datos personales del usuario" | i18n %]</legend>
-    
-        <form class="form-horizontal" method="post" name="userDataForm" id="userDataForm" onsubmit="return [% IF addBorrower == 1 %] add(); [% ELSE %] save_modif(); [% END %]">
+  <form   class="form-horizontal" method="post" name="userDataForm" id="userDataForm" 
+                onsubmit="return [% IF addBorrower == 1 %] add(); [% ELSE %] save_modif(); [% END %]">
           
+    <fieldset>
+        <legend>[% "Datos personales del usuario" | i18n %]</legend>
+            
          
             <div class="control-group error">
                   <label class="control-label" for="apellido">[% "Apellido" | i18n %]</label>
@@ -104,12 +103,8 @@
             <div class="control-group error">
                       <label class="control-label" for="sexo">[% "Sexo" | i18n %] </label>
                       <div class="controls">
-                          <label class="radio">
-                              <input type="radio" name="sexo" value="F" required [% IF socio_modificar.persona.getSexo == 'F' %] checked="checked" [% END %] /> F
-                          </label>
-                          <label class="radio">
-                              <input type="radio" name="sexo" value="M" required [% IF socio_modificar.persona.getSexo == 'M' %] checked="checked" [% END %] /> M 
-                          </label>
+                           <input type="radio" name="sexo" value="F" required [% IF socio_modificar.persona.getSexo == 'F' %] checked="checked" [% END %] /> F
+                           <input type="radio" name="sexo" value="M" required [% IF socio_modificar.persona.getSexo == 'M' %] checked="checked" [% END %] /> M 
                       </div>
             </div>
       
@@ -273,7 +268,7 @@
               </fieldset>
         [% END %]
 
-	
+    
             <fieldset>
                 <legend class="titulo_legend">[% "Instituci&oacute;n" | i18n %]</legend>
                 
@@ -329,11 +324,9 @@
                     [% END %]
         
             </div>
-      
-	    
-    </form>
+     </fieldset>
   </section>
-</fieldset>
+</form>
 [% IF addBorrower %]
     [% INCLUDE "intranet-bottom.inc" %]
 [% END %]

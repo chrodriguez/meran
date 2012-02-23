@@ -1,20 +1,21 @@
 
 [% IF cantidad %]
-  <fieldset class="main">
-      <legend class="titulo_legend">[% "Novedades:" | i18n %]</legend>
+  <fieldset>
+      <legend>[% "Novedades:" | i18n %]</legend>
       <dl>
               [% FOREACH novedad IN novedades %]
                   <dt>
-                    <a class="fancy_link" href='[% url_prefix %]/admin/global/ver_novedad_intra.pl?id=[% novedad.getId %]&amp;token=[% token %]'>
-                        [% novedad.getTitulo %]
-                     </a>
-                     ([% novedad.getFechaLegible %])
+                        [% novedad.getTitulo %] ( [% novedad.getFechaLegible %] )
                   </dt>
                   <dd>
                     [% novedad.getResumen %]
-                    <a class="fancy_link" href='[% url_prefix %]/admin/global/ver_novedad_intra.pl?id=[% novedad.getId %]&amp;token=[% token %]'>[% 'Leer m&aacute;s' | i18n %]</a>
+                    <a href='#' onclick="showNovedad([% novedad.getId %]);">
+                        [% 'Leer m&aacute;s' | i18n %]
+                     </a>
                   </dd>
               [% END %]
       </dl>
   </fieldset>
+  
+<div id="mostrar_novedad" class="modal hide fade"></div>
 [% END %]

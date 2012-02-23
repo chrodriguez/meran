@@ -22,6 +22,10 @@
             <div class="well">
                 <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: <strong>[% HTML.escape(buscoPor) %]</strong></div> 
             
+	            [% IF cantidad %]
+	                <div class="resultados_consulta">[% "Total de registros" | i18n %]: <b>[% cantidad %]</b>  en ([% timeSeg %] segundos)</div>
+	            [% END %]
+
                 [% IF !from_suggested %]
 			        [% IF suggested %]
 	                    <a href="#" onclick="buscarSuggested('[% suggested %]')">
@@ -31,9 +35,6 @@
 			    [% END %]
 
             </div>
-            [% IF cantidad %]
-                <div class="resultados_consulta">[% "Total de registros" | i18n %]: <b>[% cantidad %]</b>  en ([% timeSeg %] segundos)</div>
-            [% END %]
         </section>    
         [% IF cantidad %]
             <div class="contenedor_paginador">[% paginador %]</div>

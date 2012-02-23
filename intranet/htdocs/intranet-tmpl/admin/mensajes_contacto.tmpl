@@ -37,8 +37,7 @@
                                   class           => "",
                                   selectAll_id    => "",
                                   columns         => ['[% "Fecha"|i18n %]','[% "Asunto"|i18n %]',
-                                                    '[% "Remitente"|i18n %]', '[% "Marcar Como Leido/No Leido"|i18n %]',
-                                                    '[% "Eliminar"|i18n %]',
+                                                    '[% "Remitente"|i18n %]','[% "Eliminar"|i18n %]',
                                                      ]
      
                                         ) ;
@@ -46,30 +45,18 @@
             
                 <tbody>
                     [% FOREACH mensaje IN mensajes_contacto %]
-                        <tr class="leido[% mensaje.getLeido %]">
+                        <tr>
                             <td>
-                                <a class="fancy_link" href="[% url_prefix %]/admin/ver_mensaje.pl?token=[% token %]&id=[% mensaje.id %]">
-                                    [% mensaje.getFecha %] 
-                                </a>
+                                  [% mensaje.getFecha %] 
                             </td>
                             <td>
-                                <a class="fancy_link" href="[% url_prefix %]/admin/ver_mensaje.pl?token=[% token %]&id=[% mensaje.id %]">
-                                    [% HTML.escape(mensaje.getAsunto) %] 
-                                </a>
+                               <a href="#" onclick="showDirectMessage([% mensaje.id%])">
+                                    [% HTML.escape(mens.getAsunto) %]
+                               </a>
                             </td>
                             <td>
-                                <a class="fancy_link" href="[% url_prefix %]/admin/ver_mensaje.pl?token=[% token %]&id=[% mensaje.id %]">
+                                <a href="#" onclick="showDirectMessage([% mensaje.id%])">
                                     [% HTML.escape(mensaje.getApellido) %], [% HTML.escape(mensaje.getNombre) %] 
-                                </a>
-                            </td>
-                            <td>
-                                <a class="" 
-                                    href="[% url_prefix %]/admin/mensajes_contacto.pl?token=[% token %]&id=[% mensaje.id %]&tipoAccion=marcar">
-                                    [% IF mensaje.getLeido == 1%]
-                                        [% 'Leido' | i18n %]
-                                    [% ELSE %]
-                                        [% 'No Leido' | i18n %]
-                                    [% END %]
                                 </a>
                             </td>
                             <td>
@@ -90,5 +77,5 @@
             </table>
         </div>
 </fieldset>
-
+<div id="mostrar_mensaje" class="modal hide fade"></div>
 [% INCLUDE 'intranet-bottom.inc' %]

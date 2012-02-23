@@ -1,29 +1,28 @@
 [% USE HTML %]
 [% IF cant_noleidos > 0 %]
     <fieldset>
-        <legend><strong>[% "Mensajes de Contacto :" | i18n %]</strong></legend>    
+        <legend>[% "Mensajes de Contacto :" | i18n %]</legend>    
          <dl>
              [% FOREACH mens IN ultimos_no_leidos %]
                  <dt>
                        [% HTML.escape(mens.getNombre) %] [% HTML.escape(mens.getApellido) %]
                         <a href="mailto:[% HTML.escape(mens.getEmail) %]">([% HTML.escape(mens.getEmail) %])</a>
                         <dd>
-                               <a class="fancy_link" href="[% url_prefix %]/admin/ver_mensaje.pl?token=[% token %]&id=[% mens.id %]">
+                               <a href="#" onclick="showDirectMessage([% mens.id%])">
                                     [% HTML.escape(mens.getAsunto) %]
                                </a>
-                               <script>$('.fancy_link').fancybox();</script>
                         </dd>
                  </dt>
              [% END %]
          </dl>
-        <br>
            [% PERL %]
 	           print C4::AR::Filtros::action_link_button( 
 	                 text =>     "[% 'Ver Mensajes' | i18n %]",
+	                 button => "btn btn-info",
 	                 url=>"[% url_prefix %]/admin/mensajes_contacto.pl", 
 	                 title =>    "[% 'Mensajes' | i18n %]",
 	                 );
            [% END %]           
-               
     </fieldset> 
 [% END %]
+<div id="mostrar_mensaje" class="modal hide fade"></div>

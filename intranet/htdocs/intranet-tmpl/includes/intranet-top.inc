@@ -11,6 +11,8 @@
 	    var UNLOAD		= '[% unload_alert %]';
 	    var mensajes_interval_id;
 	    var loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
+	    var reading_dm = false;
+	    
 	    
 	</script>
 	
@@ -33,26 +35,27 @@
 	<script type="text/javascript" src="/includes/jquery/jquery.expander.js"></script>
 	<script type="text/javascript" src="/includes/modernizr.js"></script>
 	<script type="text/javascript" src="/includes/workers.js"></script>
+	<script type="text/javascript" scrc="/includes/intranet-top.js"></script>
 	
 	<script type="text/javascript">
 
 		var worker = new Worker('/includes/workers.js');
 
 		function enableAlert(){
-	        $(window).bind('beforeunload', function(){ 
-	        	return("[% 'ATENCION: Se perderan los elementos que no haya guardado' | i18n %]");
-	        });
+		    $(window).bind('beforeunload', function(){ 
+		    	return("[% 'ATENCION: Se perderan los elementos que no haya guardado' | i18n %]");
+		    });
 		}
 
 		function disableAlert(){
-	        $(window).unbind('beforeunload');
+		    $(window).unbind('beforeunload');
 		}
 
-	
+
 		function swap(id,src){
 			   document.getElementById(id).src=src;
 		}
-		
+
 		function cambiarIdioma() {
 			$('#lang_server').val($('#language').val());
 			$('#url').val(location.pathname);
@@ -64,39 +67,157 @@
 			var text              = [% "'Que quiere buscar?'" | i18n %];
 			var search            =  $('#'+objectId);
 			
-	        if ($.trim(search.val()) == ''){
-	        	search.val(text);
-	        	search.addClass("search-title");
-	        }
+		    if ($.trim(search.val()) == ''){
+		    	search.val(text);
+		    	search.addClass("search-title");
+		    }
 		}
-		
+
 		function searchBoxFocus(object){	
-	        object.value='';
+		    object.value='';
 		}
-		
-	    function checkTr(){
-	        // click sobre los <tr>, para darle estilo
-	        $('tr').click(function() {
-	            var clase = $(this).attr('class');
-	            // solo los <tr> que tengan en el primer <td> un input checkbox
-	            if($(this).children(':first-child').children(':first-child').attr('type') == 'checkbox'){
-	                // ahora los tr no tienen clase por defecto
-	                // la primera vez 'clase' es null	                
-	                if(clase == null || clase == ""){
-	                    $(this).addClass("marked");
-	                    //pintamos el <td> por el nuevo css bootstrap
-	                    $(this).children().addClass("marked")
-	                    $(this).children(':first-child').children(':first-child').attr('checked','true');
-	                }else{
-	                    $(this).removeClass("marked"); 
-	                    //pintamos el <td> por el nuevo css bootstrap
-	                    $(this).children().removeClass("marked")
-	                    $(this).children(':first-child').children(':first-child').removeAttr('checked');
-	                }
-	            }
-	        });     
-	    }
-		
+
+
+		function mostrarNovedades(){
+		    var objAH_temp               = new AjaxHelper(updateActualizarTabla);
+		    objAH_temp.debug         = false;
+		    objAH_temp.showStatusIn  = '';
+		    objAH_temp.url           = URL_PREFIX+'/novedadesIntra.pl';
+		    objAH_temp.tipoAccion    = "MOSTRAR_NOVEDADES";
+		    objAH_temp.sendToServer();
+		}
+
+		function mensajesContacto(){
+			if (!reading_dm){
+		        var objAH_temp               = new AjaxHelper(updateMensajesContacto);
+		        objAH_temp.debug         = false;
+		        this.showState      = false;
+		        objAH_temp.url           = URL_PREFIX+'/mensajes_contacto.pl';
+		        objAH_temp.sendToServer();
+			}
+		}
+
+		function updateMensajesContacto(responseText){
+			$('#mensajes_contacto').html(responseText);
+		}
+
+		function updateActualizarTabla(responseText){
+		    $("#resultNovedades").html(responseText);
+		    $('.fancy_link').fancybox({
+		                    onComplete:function(){
+		                          $('#state').css('display','none');     
+		                    }
+		    });
+		}
+
+		function twitter_hover(){
+		    $("#button_twitter").attr("src","[% temas %]/[% tema %]/imagenes/botones/button_twitter_hover.png");
+		    }
+		  
+		    function twitter_normal(){
+		        $("#button_twitter").attr("src","[% temas %]/[% tema %]/imagenes/botones/button_twitter_normal.png");
+		}
+
+		function twitter_click(){
+		    $("#button_twitter").attr("src","[% temas %]/[% tema %]/imagenes/botones/button_twitter_click.png");
+		}
+
+		function responder(){
+		    $("#respuesta").wysiwyg();
+		    $(".responder").show(); 
+		    $(".wysiwyg").css('width','388px');   
+		    $("#fancybox-wrap").css('top','25px');
+		    $("#respuestaIFrame").css('width','388px');
+		    $("#responder").attr('onclick', ' '); 
+		}
+				
+		function checkTr(){
+		    // click sobre los <tr>, para darle estilo
+		    $('tr').click(function() {
+		        var clase = $(this).attr('class');
+		        // solo los <tr> que tengan en el primer <td> un input checkbox
+		        if($(this).children(':first-child').children(':first-child').attr('type') == 'checkbox'){
+		            // ahora los tr no tienen clase por defecto
+		            // la primera vez 'clase' es null	                
+		            if(clase == null || clase == ""){
+		                $(this).addClass("marked");
+		                //pintamos el <td> por el nuevo css bootstrap
+		                $(this).children().addClass("marked")
+		                $(this).children(':first-child').children(':first-child').attr('checked','true');
+		            }else{
+		                $(this).removeClass("marked"); 
+		                //pintamos el <td> por el nuevo css bootstrap
+		                $(this).children().removeClass("marked")
+		                $(this).children(':first-child').children(':first-child').removeAttr('checked');
+		            }
+		        }
+		    });     
+		}
+
+		function showNovedad(id){
+
+			var objAH_novedad      	 		= new AjaxHelper(updateShowNovedad);
+			objAH_novedad.showOverlay       = true;
+			objAH_novedad.debug             = true;
+			objAH_novedad.url               = '[% url_prefix %]/admin/global/ver_novedad_intra.pl';
+			objAH_novedad.id				= id;
+			objAH_novedad.sendToServer();
+		}
+
+		function updateShowNovedad(responseText){
+		    if (!verificarRespuesta(responseText))
+		        return(0);
+
+		    $('#mostrar_novedad').html(responseText);
+		    $('#mostrar_novedad').modal();
+		}
+
+		function responderMail(){
+		    closeDM();
+		    objAH                     = new AjaxHelper(updateResponderMail);
+		    objAH.url                 = URL_PREFIX+'/admin/rta_mensaje_contacto.pl';
+		    objAH.showOverlay         = true;
+		    objAH.debug               = true;
+		    objAH.texto               = $('#respuesta').val();
+		    objAH.asunto              = $('#asunto').val();
+		    objAH.email               = $('#email').val();
+		    objAH.mensaje_contacto    = $('#mensaje_contacto').val();
+            objAH.sendToServer();
+        
+	  }
+		  
+		  function updateResponderMail(responseText){
+		      if (!verificarRespuesta(responseText))
+		              return(0);
+		      var Messages=JSONstring.toObject(responseText);
+		      setMessages(Messages);
+		      
+		  }
+		  
+		function showDirectMessage(id){
+
+					var objAH_novedad      	 		= new AjaxHelper(updateShowDirectMessage);
+					objAH_novedad.showOverlay       = true;
+					objAH_novedad.debug             = true;
+					objAH_novedad.url               = '[% url_prefix %]/admin/ver_mensaje.pl';
+					objAH_novedad.id				= id;
+					objAH_novedad.sendToServer();
+		}
+
+		function updateShowDirectMessage(responseText){
+		    if (!verificarRespuesta(responseText))
+		        return(0);
+
+			reading_dm = true;
+		    $('#mostrar_mensaje').html(responseText);
+		    $('#mostrar_mensaje').modal();
+		}		
+
+		function closeDM(){
+			reading_dm = false;
+			$('#mostrar_mensaje').modal('hide');
+		}
+				
 		$(document).ready(function(){
 			checkTr();
 			$('.tooltip_link').tooltip({delay: { show: 1000, hide: 100 },});
