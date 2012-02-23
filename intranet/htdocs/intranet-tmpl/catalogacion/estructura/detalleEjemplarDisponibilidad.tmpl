@@ -1,5 +1,6 @@
 <fieldset>
     <legend>[% "Hist&oacute;rico de Disponibilidad" | i18n %]:</legend>
+    [% IF cant_historico %]
             <div class="contenedor_paginador">[% paginador %]</div>
               [% PERL %]
                   print C4::AR::Filtros::tableHeader(   
@@ -30,4 +31,7 @@
 	            <p class="help-block">[% "Este ejemplar a tenido " | i18n %] [% cant_historico %][% " cambios en su disponibilidad " | i18n %]</p>
               </tfoot>
           </table>
+     [% ELSE %]
+        <div class="alert alert-info">[% 'No hay hist&oacute;rico de disponibilidad'| i18n %]</div>
+     [% END %]
 </fieldset>

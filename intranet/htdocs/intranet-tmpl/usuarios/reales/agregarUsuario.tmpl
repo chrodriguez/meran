@@ -44,17 +44,19 @@
 </script>
 
 
-            [% IF addBorrower %]
-               <div class="title"> [% "Agregar usuario real" | i18n %]</div>
-            [% ELSE  %]
-                <div class="title"> [% "Usuarios Reales - Modificar Datos" | i18n %]</div>             
-            [% END %]
+[% IF addBorrower %]
+   <div class="title"> [% "Agregar usuario real" | i18n %]</div>
+[% ELSE  %]
+    <div class="modal-header">
+     <h3>[% "Usuarios Reales - Modificar Datos" | i18n %]</h3>
+    </div>
+[% END %]
 
 <fieldset>
 
   <section class="center-section-form"> 
 
-  <form   class="form-horizontal" method="post" name="userDataForm" id="userDataForm" 
+  <form class="form-horizontal" method="post" name="userDataForm" id="userDataForm" 
                 onsubmit="return [% IF addBorrower == 1 %] add(); [% ELSE %] save_modif(); [% END %]">
           
     <fieldset>
@@ -305,7 +307,7 @@
                     [% IF addBorrower %]
                             [% PERL %]
                                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar usuario' | i18n %]",
-                                                                                    boton   => "",
+                                                                                    boton   => "btn btn-primary",
                                                                                     type    => "submit",
                                                                                     inline  => "1",
                                                         ) ;
@@ -313,7 +315,7 @@
                     [% ELSE  %]
                             [% PERL %]
                                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar modificaci&oacute;n' | i18n %]",
-                                                                                    boton   => "",
+                                                                                    boton   => "btn btn-primary",
                                                                                     type    => "submit",
                                                                                     inline  => "1",
                                                         ) ;

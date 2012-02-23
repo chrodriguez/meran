@@ -196,12 +196,12 @@
 		  
 		function showDirectMessage(id){
 
-					var objAH_novedad      	 		= new AjaxHelper(updateShowDirectMessage);
-					objAH_novedad.showOverlay       = true;
-					objAH_novedad.debug             = true;
-					objAH_novedad.url               = '[% url_prefix %]/admin/ver_mensaje.pl';
-					objAH_novedad.id				= id;
-					objAH_novedad.sendToServer();
+			var objAH_novedad      	 		= new AjaxHelper(updateShowDirectMessage);
+			objAH_novedad.showOverlay       = true;
+			objAH_novedad.debug             = true;
+			objAH_novedad.url               = '[% url_prefix %]/admin/ver_mensaje.pl';
+			objAH_novedad.id				= id;
+			objAH_novedad.sendToServer();
 		}
 
 		function updateShowDirectMessage(responseText){
@@ -211,6 +211,9 @@
 			reading_dm = true;
 		    $('#mostrar_mensaje').html(responseText);
 		    $('#mostrar_mensaje').modal();
+		    $('#mostrar_mensaje').on('hidden', function () {
+		    	  closeDM();
+	    	 });
 		}		
 
 		function closeDM(){
