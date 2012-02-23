@@ -166,25 +166,27 @@ function limpiarCampos(side){
 	                            <input type="text" size="25" id="signatura"  onkeypress="limpiarCampos('abajo')">
 	                       </div>
 	                 </div>
-	           </fieldset>
-	
-	          <div class="form-actions">
-	                    <div class="control-group">
-	                            <input type="hidden" name="type" value="intra">
-	                            <label class="control-label" for="only_available">
-	                                <strong>[% "Solo disponibles para pr&eacute;stamo" | i18n %]</strong>
-	                            </label>
-	                            <div class="controls">
-	                                <input type="checkbox" id="only_available" name="only_available">
+                    <div class="control-group">
+                        <div class="controls">
+                            <input type="hidden" name="type" value="intra">
+                            <input id="only_available" type="checkbox" name="only_available">[% " S&oacute;lo disponibles para pr&eacute;stamo" | i18n %]
+                        </div>
+
+              </fieldset>
+
+
+	              
+                                <div class="form-actions">
 					                [% PERL %]
 					                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
 					                                                                        onClick => "buscar();",
 					                                                                        boton    => "btn btn-primary",
+                                                                                            inline => "1",
 					                                            ) ;
 					                [% END %]
                                 </div>
-	                    </div>
-	                </ul>
+	                    
+	                
             </div>
        </form>
     </div>
