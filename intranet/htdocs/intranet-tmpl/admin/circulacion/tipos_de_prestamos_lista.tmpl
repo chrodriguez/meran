@@ -11,7 +11,6 @@
         <th>[% "Para Sala" | i18n %]</th>
         <th>[% "Habilitado" | i18n %]</th>
         <th>[% "Editar" | i18n %]</th>
-<!--         <th>[% "Eliminar" | i18n %]</th> -->
     </tr>
   </thead>
 
@@ -76,10 +75,9 @@
 	  [% PERL %]
 	                      
 	                      print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar' | i18n %]",
-	                                                          boton   => "boton_buscar",
+	                                                          boton   => "btn btn-primary",
 	                                                          onClick => "agregarTipoPrestamo();",
 	                                                          title   => "[% 'Agregar Tipo de Pr&eacute;stamo' | i18n %]",
-	                                                          alternClass => "botonCentrado"
 	                              ) ;
 	  [% END %]
   </div>

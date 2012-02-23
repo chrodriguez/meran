@@ -31,10 +31,11 @@ $(document).ready(function() {
 
 <input type="hidden" id="idEncabezado">
 
-<h3>[% 'Visualizaci&oacute;n de campos MARC en INTRANET' | i18n %]</h3>
+<div class="title">[% 'Visualizaci&oacute;n de campos MARC en INTRANET' | i18n %]</div>
 <form class="form-horizontal">
     <fieldset>
         <legend>[% "Seleccione el esquema a configurar:" | i18n %]</legend>
+        <section class="center-section-form">
         [% combo_ejemplares %]
 
         [% PERL %]
@@ -49,7 +50,7 @@ $(document).ready(function() {
             <option value="2">Nivel 2</option>
             <option value="3">Nivel 3</option>
         </select>
-        
+        </section>
     </fieldset>
 </form>
 <div id="result"></div>

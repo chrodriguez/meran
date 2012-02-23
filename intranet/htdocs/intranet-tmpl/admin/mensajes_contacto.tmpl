@@ -29,7 +29,7 @@
     <legend>[% "Mensajes de Contacto" | i18n %]:</legend>
         <div>[% paginador %]</div>
         <div class="datos_tabla_div_user">
-            <div class="alert alert-info">[% "La cantidad de mensajes es" | i18n %]: [% cant_mensajes %]</div>
+            <div class="well">[% "La cantidad de mensajes es" | i18n %]: [% cant_mensajes %]</div>
             
             [% PERL %]
                 print C4::AR::Filtros::tableHeader(   

@@ -13,6 +13,7 @@
 //************************************************REVISADO******************************************************************
 
 var ID_N1                   = 0; //para saber el id del nivel 1
+var ID_N1_PADRE             = 0; //para el id1 del padre en una analitica
 var ID_N2                   = 0; //para saber el id del nivel 2
 var ID_N2_PADRE             = 0; //para el id2 del padre en una analitica
 var ID_N3                   = 0; //para saber el id del nivel 3
@@ -849,8 +850,7 @@ function updateGuardarDocumentoN2(responseText){
             mostrarEstructuraDelNivel3(TEMPLATE_ACTUAL);    
         } else {
             disableAlert();
-            window.location = "detalle.pl?id1=" + ID_N1;
-// falta sacar el alert q pregunta si salgo de la pagina
+            window.location = "detalle.pl?id1=" + ID_N1_PADRE;
         }
     }
 }
