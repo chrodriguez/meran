@@ -1,5 +1,5 @@
 <fieldset>
-        <legend class="titulo_legend">[% "Inicial del apellido" | i18n %]</legend>
+
         <div id="filterBar" style="text-align:center">
                 <a href="#tablaResult" onClick="consultar('A')"> A |</a>
                 <a href="#tablaResult" onClick="consultar('B')"> B |</a>

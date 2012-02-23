@@ -44,16 +44,13 @@
 </script>
 
 
+            [% IF addBorrower %]
+               <div class="title"> [% "Agregar usuario real" | i18n %]</div>
+            [% ELSE  %]
+                <div class="title"> [% "Usuarios Reales - Modificar Datos" | i18n %]</div>             
+            [% END %]
 
 <fieldset>
-    <legend >
-            [% IF addBorrower %]
-                [% "Agregar usuario real" | i18n %]
-            [% ELSE  %]
-                [% "Usuarios Reales - Modificar Datos" | i18n %]
-            [% END %]
-    </legend>
-
 
 <!--<form method="post" name="userDataForm" id="userDataForm" onsubmit="return [% IF addBorrower == 1 %] add(); [% ELSE %] save_modif(); [% END %]">
     --> 

@@ -57,9 +57,9 @@
 
                             [% PERL %]
                                   print C4::AR::Filtros::action_button(
-                                                                  button       => "btn click",
+                                                                  button       => "btn click btn-primary",
                                                                   action       => 'modificarTipoPrestamo("[% tipo_prestamo.getId_tipo_prestamo %]")',
-                                                                  icon         => "icon-edit",
+                                                                  icon         => "icon-edit icon-white",
                                                                   title        => "",
                                   ) ;
                             [% END %]
@@ -82,7 +82,7 @@
  </tbody>
 </table>
 
-            <div style="float: left; width: 100%;">
+        <div class="form-actions">
             [% PERL %]
                                 
                                 print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar' | i18n %]",

@@ -24,13 +24,18 @@ function desmarcar(chk){
     </div>
 </div>
 [% END %]
+
+
+<div class="title"> [% "Administraci&oacute;n de Libre Deuda" | i18n %]</div>
 <form name="adminLiDe" method="post" action="[% url_prefix %]/admin/usuarios/adminLibreDeuda.pl" class="form-horizontal">
+
+<section class="center-section-form">
 <fieldset>
-    <legend class="titulo_legend">[% "Administraci&oacute;n de Libre Deuda" | i18n %]</legend>
+
     <p class="inputFontNormal">
-          [% "Elija porqu&eacute; causa no se puede realizar la impresi&oacute;n del certificado de libre deuda" | i18n %]
-    </p>
-    <legend class="titulo_legend">[% "Por tener:" | i18n %]</legend>
+          [% "Seleccione las causas por las cuales no se puede realizar la impresi&oacute;n del certificado de libre deuda" | i18n %]
+    </p><br>
+    <!--<legend class="titulo_legend">[% "Por tener" | i18n %]</legend>-->
           
     <input type="hidden" name="newflags" value="1">
     
@@ -76,6 +81,7 @@ function desmarcar(chk){
                           print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
                                                               boton   => "boton_buscar",
                                                               onClick => "adminLiDe.submit();",
+                                                              inline  => "1",  
                                   ) ;
         [% END %]
         
@@ -83,6 +89,7 @@ function desmarcar(chk){
     
 </fieldset>                      
 </form>
+</section>
 <script>
 // PARA MARCAR LOS CHECKBOX QUE CORRESPONDE
 var l="[% libreD %]";

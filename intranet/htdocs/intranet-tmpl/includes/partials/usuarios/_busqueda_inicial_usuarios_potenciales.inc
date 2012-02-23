@@ -1,5 +1,5 @@
 <fieldset>
-    <legend class="titulo_legend">[% "B&uacute;squeda por inicial del apellido" | i18n %]</legend>
+
     <div id="filterBar" style="text-align:center">
         <a href="#tablaResult" onClick="consultar('A')"> A |</a>
         <a href="#tablaResult" onClick="consultar('B')"> B |</a>
@@ -28,6 +28,6 @@
         <a href="#tablaResult" onClick="consultar('Y')"> Y |</a>
         <a href="#tablaResult" onClick="consultar('Z')"> Z |</a>
         <a href="#tablaResult" onClick="consultar('TODOS')"> [% "TODOS" | i18n %] </a>
-    </div>
+    </div><br>
     <input type="checkbox" name="habilitados_filter" id="habilitados_filter">[% " Mostrar s&oacute;lo usuarios habilitados"| i18n %]
 </fieldset>

@@ -7,8 +7,10 @@
 	</div>
 [% END %]
 
+<div class="title">[% "Administraci&oacute;n de regularidades de usuarios" | i18n %]</div>
+
 <fieldset>
-    <legend>[% "Administraci&oacute;n de regularidades de usuarios" | i18n %]</legend>
+  
     <p>
           [% "Aqu&iacute; podr&aacute; configurar los distintos casos de regularidad para tipos de usuario y estados" | i18n %]
     </p>
@@ -37,7 +39,6 @@
                         style   : 'display: inline',
                         submitdata : {token: "[% token %]", edit: '1'},
                         indicator : loaderPath,
-
                    }); 
                 </script>
 	            
