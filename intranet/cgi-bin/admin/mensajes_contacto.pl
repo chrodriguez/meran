@@ -26,10 +26,7 @@ my $ini = $obj->{'ini'} = $input->param('page') || 0;
 my $id_mensaje = $input->param('id') || 0;
 my $url = C4::AR::Utilidades::getUrlPrefix()."/admin/mensajes_contacto.pl?token=".$input->param('token')."&tipoAccion=".$obj->{'tipoAccion'};
 
-if ($accion eq 'marcar'){
-    C4::AR::MensajesContacto::marcar($id_mensaje);
-}
-elsif ($accion eq 'eliminar'){
+if ($accion eq 'eliminar'){
     C4::AR::MensajesContacto::eliminar($id_mensaje);
 }
 

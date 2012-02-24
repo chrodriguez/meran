@@ -18,7 +18,12 @@ my ($template, $session, $t_params) = get_template_and_user({
                                     debug => 1,
                 });
 
-my ($id_novedad) = $input->param('id');
+my $obj=$input->param('obj');
+
+$obj=C4::AR::Utilidades::from_json_ISO($obj);
+
+my ($id_novedad) = $obj->{'id'};
+
 my ($novedad) = C4::AR::NovedadesIntra::getNovedad($id_novedad);
 $t_params->{'novedad'} = $novedad;
 $t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Novedades - Ver novedad");

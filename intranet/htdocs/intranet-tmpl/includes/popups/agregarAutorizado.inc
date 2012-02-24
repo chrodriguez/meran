@@ -36,42 +36,51 @@
 
 </script>
 
-<div id="contentWindow" class="formElemets">
-    <fieldset> 
-        <legend class="titulo_legend">[% ' Agregar Usuario Adicional' | i18n %]</legend>
-            <div class="form-horizontal">
-                   <div class="control-group">
-                           <label class="control-label" for="nombreAutorizado">[% "Apellido y Nombres" | i18n %]</label>
-                           <div class="controls">
-                                    <input type="text" class="input focused" id="nombreAutorizado" name="nombreAutorizado" tabindex="1">
-                            </div>
-                   </div>
 
-                   <div class="control-group">
-                           <label class="control-label" for="dniAutorizado">[% "DNI" | i18n %]</label>
-                           <div class="controls">
-                                    <input type="text" class="input focused" id="dniAutorizado" name="dniAutorizado" tabindex="2">
-                            </div>
-                   </div>
 
-                   <div class="control-group">
-                           <label class="control-label" for="telefonoAutorizado">[% "Tel&eacute;fono (contacto seguro)" | i18n %]</label>
-                           <div class="controls">
-                                    <input type="text" class="input focused" id="telefonoAutorizado" name="telefonoAutorizado" tabindex="3">
-                            </div>
-                   </div>
-                   <div class="form-actions">
+<div class="modal">
+              <div class="modal-header">
+                <a href="#" class="close" data-dismiss="modal">×</a>
+                <h3>[% ' Agregar Usuario Adicional' | i18n %]</h3>
+              </div>
+              <div class="modal-body">
+		            <div class="form-horizontal">
+		                   <div class="control-group">
+		                           <label class="control-label" for="nombreAutorizado">[% "Apellido y Nombres" | i18n %]</label>
+		                           <div class="controls">
+		                                    <input type="text" class="input focused" id="nombreAutorizado" name="nombreAutorizado" tabindex="1">
+		                            </div>
+		                   </div>
+		
+		                   <div class="control-group">
+		                           <label class="control-label" for="dniAutorizado">[% "DNI" | i18n %]</label>
+		                           <div class="controls">
+		                                    <input type="text" class="input focused" id="dniAutorizado" name="dniAutorizado" tabindex="2">
+		                            </div>
+		                   </div>
+		
+		                   <div class="control-group">
+		                           <label class="control-label" for="telefonoAutorizado">[% "Tel&eacute;fono (contacto seguro)" | i18n %]</label>
+		                           <div class="controls">
+		                                    <input type="text" class="input focused" id="telefonoAutorizado" name="telefonoAutorizado" tabindex="3">
+		                            </div>
+		                   </div>
+		           </div>
+              </div>
+              <div class="modal-footer">
                               [% PERL %]
                                   print C4::AR::Filtros::to_Button(      text    => "[% 'Aceptar' | i18n %]",
-                                                                        boton   => "boton_buscar",
+                                                                        boton   => "btn btn-primary",
                                                                         onClick => "confirmarAgregarAutorizado();",
                                                                         title   => "[% 'Agregar Autorizado' | i18n %]",
                                                                         inline=> "1",
                                           ) ;
-                              [% END %]
-                    </div>
-           </div>
-    </fieldset>
+                              [% END %]                
+              </div>
 </div>
+
+
+
+
 
 

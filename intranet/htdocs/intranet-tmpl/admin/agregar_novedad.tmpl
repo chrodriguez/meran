@@ -13,19 +13,17 @@
 
 [% USE HTML %]
 
+[% IF editing %]
+    <form id="form_novedad" action="[% url_prefix %]/admin/editar_novedad.pl" method="POST" class="form-horizontal">
+        <input type="hidden" id="action" name="action" value="editar">
+        <input type="hidden" id="token" name="token" value="[% token %]">
+        <input type="hidden" id="novedad_id" name="novedad_id" value="[% novedad.id %]">
+[% ELSE %]
+    <form id="form_novedad" action="[% url_prefix %]/admin/agregar_novedad.pl" method="POST" class="form-horizontal">
+        <input type="hidden" id="action" name="action" value="agregar">
+[% END %]
 <fieldset>
     <legend>[% "Agregar novedad de OPAC" | i18n %]:</legend>
-        <div class="form">
-            [% IF editing %]
-                <form id="form_novedad" action="[% url_prefix %]/admin/editar_novedad.pl" method="POST" class="form-horizontal">
-                    <input type="hidden" id="action" name="action" value="editar">
-                    <input type="hidden" id="token" name="token" value="[% token %]">
-                    <input type="hidden" id="novedad_id" name="novedad_id" value="[% novedad.id %]">
-            [% ELSE %]
-                <form id="form_novedad" action="[% url_prefix %]/admin/agregar_novedad.pl" method="POST" class="form-horizontal">
-                    <input type="hidden" id="action" name="action" value="agregar">
-            [% END %]
-            
                 <div class="control-group">
                     <label class="control-label" for="titulo">[% "Titulo" | i18n %]</label>
                     <div class="controls">
@@ -105,7 +103,6 @@
                 [% END %]
                 </div>
             </form>
-        </div>
 </fieldset>
 
 [% INCLUDE 'intranet-bottom.inc' %]

@@ -42,7 +42,4 @@ if ($t_params->{'sessionClose'}){
 }
 
 
-C4::AR::Debug::debug("LOCALE ACTUAL EN AUTH: ".$session->param('usr_locale'));
-
-
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

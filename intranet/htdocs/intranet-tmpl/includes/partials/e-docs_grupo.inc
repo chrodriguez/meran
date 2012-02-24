@@ -65,7 +65,7 @@
 			                                                               url =>      "deleteDocument.pl", 
 			                                                               params =>   ["id=[% file.getId %]","id1=[% id1 %]"],
 			                                                               button =>    "btn btn-danger click",
-			                                                               icon	  =>  "icon-trash",
+			                                                               icon	  =>  "icon-white icon-trash",
 			                                                           ) ;
 			                           [% END %]
 	                           	  </dt>

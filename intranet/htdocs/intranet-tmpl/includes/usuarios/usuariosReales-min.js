@@ -5,7 +5,7 @@ function guardarModificacionUsuario(){$('#modificar-datos-usuario').modal('hide'
 function updateGuardarModificacionUsuario(responseText){var Messages=JSONstring.toObject(responseText);setMessages(Messages);detalleUsuario();}
 function add(){agregarUsuario();return false;}
 function save_modif(){guardarModificacionUsuario();return false;}
-function eliminarUsuario(){var is_confirmed=confirm(CONFIRMA_LA_BAJA);bootbox.confirm(CONFIRMA_LA_BAJA,function(ok){objAH=new AjaxHelper(updateEliminarUsuario);objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';objAH.debug=true;objAH.showOverlay=true;objAH.nro_socio=USUARIO.ID;objAH.tipoAccion='ELIMINAR_USUARIO';objAH.sendToServer();startOverlay();});}
+function eliminarUsuario(){bootbox.confirm(CONFIRMA_LA_BAJA,function(ok){if(ok){objAH=new AjaxHelper(updateEliminarUsuario);objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';objAH.debug=true;objAH.showOverlay=true;objAH.nro_socio=USUARIO.ID;objAH.tipoAccion='ELIMINAR_USUARIO';objAH.sendToServer();startOverlay();}});}
 function updateEliminarUsuario(responseText){if(!verificarRespuesta(responseText))
 return(0);var Messages=JSONstring.toObject(responseText);setMessages(Messages);if(!(hayError(Messages))){window.location.href=URL_PREFIX+"/usuarios/potenciales/buscarUsuario.pl?token="+token;}}
 function agregarUsuario(){objAH=new AjaxHelper(updateAgregarUsuario);objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';objAH.showOverlay=true;objAH.debug=true;if((($.trim(nro_socio)).length==0)||($('#nro_socio').val()=='Auto-generar')){objAH.auto_nro_socio=1;}else{objAH.nro_socio=$('#nro_socio').val();}
@@ -20,12 +20,12 @@ function updateConfirmarAgregarAutorizado(responseText){var Messages=JSONstring.
 function desautorizarTercero(claveUsuario,confirmeClave){bootbox.confirm(CONFIRMAR_ELIMINAR_AFILIADO,function(ok){if(ok){objAH=new AjaxHelper(updateDesautorizarTercero);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';objAH.nro_socio=USUARIO.ID;objAH.tipoAccion='ELIMINAR_AUTORIZADO';objAH.sendToServer();}});}
 function updateDesautorizarTercero(responseText){if(!verificarRespuesta(responseText))
 return(0);var Messages=JSONstring.toObject(responseText);setMessages(Messages);detalleUsuario();}
-function resetPassword(claveUsuario,confirmeClave){bootbox.confirm(RESET_PASSWORD,function(ok){objAH=new AjaxHelper(updateResetPassword);objAH.showOverlay=true;objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';objAH.nro_socio=USUARIO.ID;objAH.tipoAccion='RESET_PASSWORD';objAH.sendToServer();});}
+function resetPassword(claveUsuario,confirmeClave){bootbox.confirm(RESET_PASSWORD,function(ok){if(ok){objAH=new AjaxHelper(updateResetPassword);objAH.showOverlay=true;objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';objAH.nro_socio=USUARIO.ID;objAH.tipoAccion='RESET_PASSWORD';objAH.sendToServer();}});}
 function updateResetPassword(responseText){if(!verificarRespuesta(responseText))
 return(0);var Messages=JSONstring.toObject(responseText);setMessages(Messages);}
 function clearInput(){$('#newpassword').val('');$('#newpassword1').val('');}
 function cambiarPassword(){$('#formCambioPassword').submit();}
-function eliminarFoto(foto){foto=user_picture_name;bootbox.confirm(CONFIRMAR_ELIMINAR_FOTO,function(ok){objAH=new AjaxHelper(updateEliminarFoto);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';objAH.tipoAccion='ELIMINAR_FOTO';objAH.foto_name=foto;objAH.nro_socio=USUARIO.ID;objAH.sendToServer();});}
+function eliminarFoto(foto){foto=user_picture_name;bootbox.confirm(CONFIRMAR_ELIMINAR_FOTO,function(ok){if(ok){objAH=new AjaxHelper(updateEliminarFoto);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';objAH.tipoAccion='ELIMINAR_FOTO';objAH.foto_name=foto;objAH.nro_socio=USUARIO.ID;objAH.sendToServer();}});}
 function updateEliminarFoto(responseText){if(!verificarRespuesta(responseText))
 return(0);$('#foto').html('');var Messages=JSONstring.toObject(responseText);setMessages(Messages);$('#div_uploader').show();$('#div_boton_eliminar_foto').hide();detalleUsuario();}
 function validarDatosCensales(){objAH=new AjaxHelper(updateValidarDatosCensales);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';objAH.debug=true;objAH.nro_socio=USUARIO.ID;nro_socio_temp=objAH.nro_socio;objAH.tipoAccion='VALIDAR_DATOS_CENSALES';objAH.sendToServer();}

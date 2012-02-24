@@ -220,8 +220,8 @@ function deleteFavorite(id1){
 }
 
 function updateDeleteFavorite(responseText){
-    if (responseText == 1)
-        jAlert(FAVORITE_DELETED,CATALOGO_TITLE);
+    if (responseText != 0)
+        jAlert(FAVORITE_DELETED);
     else
-        jAlert(FAVORITE_DELETED_ERROR,CATALOGO_TITLE);
+        jAlert(FAVORITE_DELETED_ERROR);
 }

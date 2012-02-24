@@ -1,5 +1,5 @@
-<!doctype html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -13,23 +13,36 @@
   <meta name="distribution" content="global" />
   <meta name="description" content="OPAC" />
   <meta name="keywords" content="Your keywords, keywords, keywords, here ..." />
+  
+  <style>
+    body {
+      padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+    }
+  </style>  
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+   
   <link rel="stylesheet" type="text/css" media="screen,projection,print" href="[% temas %]/[% user_theme %]/includes/opac.css" />
-
+  <link media="screen" rel="stylesheet" href="/includes/css/fancybox.css" type="text/css">
+  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/ui.stars.css" />
   <link rel="icon" type="image/x-icon" href="[% temas %]/[% user_theme %]/imagenes/favicon.ico" />
-<!-- variables de entorno sacadas de las preferencias del sistema -->
+
   <script type="text/javascript">
     var token= '[% token %]';
     var imagesForJS = '[% temas %]/[% tema %]/imagenes';
-// TODO no esta recuperando este valor
+
     var M_LIMITE_RESULTADOS = [% limite_resultados_autocompletables %] + "";
     var URL_PREFIX  = '[% url_prefix %]';
 
   </script>
 
   [% INCLUDE 'message_OPAC.inc' %]
-  <script src="/includes/jquery/jquery.js" type="text/javascript"></script>
+  <script src="/includes/jquery/jquery.js"></script>
+  <script src="/includes/bootstrap/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/includes/jquery/bootbox.min.js"></script>
   <script src="/includes/AjaxHelper.js" type="text/javascript"></script>
-  <script src="/includes/jquery/jquery.alerts.opac.js" type="text/javascript"></script>
   <script src="/includes/jquery/ui/ui-min.js" type="text/javascript"></script>
   <script src="/includes/jquery/ui/core.js" type="text/javascript"></script>
   <script src="/includes/jquery/ui.stars.js" type="text/javascript"></script>
@@ -40,18 +53,15 @@
   <script src="/opac-tmpl/includes/circulacionOPAC.js" type="text/javascript"></script>
   <script src="/includes/jquery/fancybox/jquery.easing.1.3.js" type="text/javascript"></script>
   <script src="/includes/jquery/fancybox/jquery.fancybox.js" type="text/javascript"></script>
-  <script type="text/javascript" src="/includes/jquery/modal/jquery.simplemodal.js"></script>
   <script src="/opac-tmpl/includes/favoritos.js" type="text/javascript"></script>
   <script type="text/javascript" src="/includes/jquery/jquery.expander.js"></script>
   <script src="/includes/util.js" type="text/javascript"></script>
   <script src="/includes/md5.js" type="text/javascript"></script>
   <script src="/includes/sha1.js" type="text/javascript"></script>
   <script src="/includes/jsthread.js" type="text/javascript"></script>
-  <script type="text/javascript" src="/includes/jquery/jquery.tmpl.js"></script>	
-  <script type="text/javascript" src="/includes/jquery/modernizr.js"></script>
+  <script type="text/javascript" src="/includes/opac.js"></script>	
+  <script type="text/javascript" src="/includes/jquery/jquery.alerts.js"></script>	
   
-  <link media="screen" rel="stylesheet" href="/includes/jquery/modal/basic-min.css" type="text/css" />
-
   <title>
     [% IF titulo_nombre_ui %]
         [% titulo_nombre_ui %]
@@ -61,6 +71,8 @@
   </title>
   
   <script type="text/javascript">
+  	  var URL_PREFIX  = '[% url_prefix %]';
+  	  
       [% IF socio_data.usr_permisos_opac %]
 	      [% IF !noAjaxRequests %]
 	          $(document).ready(function() {
@@ -106,8 +118,9 @@
       }
       
       $(document).ready(function() {
-
-
+			$('.popover_button').popover({delay: { show: 800, hide: 100 }, placement: 'left',});
+			$(".alert").alert();
+          
                     $(function () {
                         var $alert = $('#alert_msg_main');
                         if($alert.length)
@@ -165,29 +178,23 @@
             });         
             
         });
-</script>
-
-
-</head>
-
-<!-- Global IE fix to avoid layout crash when single word size wider than column width -->
-<!--[if IE]><style type="text/css"> body {word-wrap: break-word;}</style><![endif]-->
-    
-<body lang="es-Es">
-  <!-- Main Page Container -->
-  <noscript> 
-      <p>[% 'DEBE HABILITAR SOPORTE PARA JAVASCRIPT EN SU NAVEGADOR, DE LO CONTRARIO NO PODRA NAVEGAR EL SITIO.' | i18n %]</p> 
-  </noscript>
-
-[% IF mostrar_fondo_home %]
-  <div class="page-container page-container-background">
-[% ELSE %]
-  <div class="page-container">
-[% END %]
-    <!-- For alternative headers START PASTE here -->
-        [% INCLUDE 'opac-top-header.inc' %]
-        [% INCLUDE 'opac-main_content.inc' %]
-        [% INCLUDE 'opac-main_sub_content.inc' %]
-        <div id="loading_items" class="loading_items"><br /></div>
-        
-  </div>
+	</script>
+	
+	
+	</head>
+	
+	<!-- Global IE fix to avoid layout crash when single word size wider than column width -->
+	<!--[if IE]><style type="text/css"> body {word-wrap: break-word;}</style><![endif]-->
+	    
+	<body lang="es-Es">
+	<!-- POAR AHORA ES LA NAV -->
+	   [% INCLUDE 'opac-top-header.inc' %]
+		<div class="container">		   
+		<!-- Pagetitle -->
+			        [% IF content_title %]
+			            <div class="title">[% content_title %]</div>  
+			        [% END %]
+			        [% IF partial_template %]
+			              [% INCLUDE $partial_template %]
+			        [% END %]
+		</div>        

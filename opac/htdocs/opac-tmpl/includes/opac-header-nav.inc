@@ -6,14 +6,6 @@
 </script>
 [% USE HTML %]
   
-      <!-- Navigation Level 0 -->
-        [% IF enable_localization_flags %]
-	        <div class="nav0">
-	          [% localization_FLAGS %]
-	        </div>
-	    [% END %]    
-        <!-- Navigation Level 1 -->
-      <!-- Navigation Level 1.1 -->
         <div class="nav_logged">
             
           <a class="meranlogo" href="[% url_prefix %]/opac-about.pl?token=[% token %]" title="[% 'Ir al inicio' | i18n %]"></a>

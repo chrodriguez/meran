@@ -1,52 +1,48 @@
 [% USE HTML %]
+
 <script type="text/javascript" src="/includes/jquery/jquery.wysiwyg.js"></script>
 <link rel="stylesheet" href="/includes/css/wysiwyg.css" type="text/css" media="screen"/>
 
-<script type="text/javascript"> 
-      
-        function responderMail(){
-                  startOverlay();
-                  $('#fancybox-overlay').css('z-index','1010');
-                  objAH                     = new AjaxHelper(updateResponderMail);
-                  objAH.url                 = URL_PREFIX+'/admin/rta_mensaje_contacto.pl';
-                  objAH.debug               = true;
-                  objAH.texto               = $('#respuesta').val();
-                  objAH.asunto              = $('#asunto').val();
-                  objAH.email               = $('#email').val();
-                  objAH.mensaje_contacto    = $('#mensaje_contacto').val();
-                  objAH.sendToServer();
-              
-        }
-        
-        
-        function updateResponderMail(responseText){
-            closeModal();
-           $('#fancybox-overlay').css('z-index','1001');
-            if (!verificarRespuesta(responseText))
-                    return(0);
-            var Messages=JSONstring.toObject(responseText);
-            setMessages(Messages);
-            $.fancybox.close();
-        }
 
-</script>
- <div class="msj_contacto">
-    <h2>[% 'Asunto' | i18n %]: [% HTML.escape(mensaje.getAsunto) %]</h2>
-    <input type="hidden" id="asunto" name="asunto" value="[% HTML.escape(mensaje.getAsunto) %]">
+<div class="modal-header">
+  <a href="#" class="close" data-dismiss="modal">×</a>
+  <h3>[% HTML.escape(mensaje.getAsunto) %]</h3>
+</div>
+<div class="modal-body">
+  <p>[% HTML.escape(mensaje.getMensaje) %]</p>
 
-        <fieldset>
-        
-            <legend>[% 'Cuerpo del mensaje' | i18n %]:</legend>
-            <h3>[% HTML.escape(mensaje.getMensaje) %]</h3>
-            <input type="hidden" name="mensaje_contacto" id="mensaje_contacto" value="[% HTML.escape(mensaje.getMensaje) %]">
+  <input type="hidden" name="email" id="email" value="[% HTML.escape(mensaje.getEmail) %]">
+	[% PERL %]
+	        print C4::AR::Filtros::action_button( 
+	                                        button         => "btn click",
+	                                        action       => "responder()", 
+	                                        icon         => "icon-share",
+	                                        title        => "[% 'Responder' | i18n %]",
+	                                    ) ;
+	
+	[% END %]
 
-        </fieldset>
-        <p>[% 'De' | i18n %]: [% HTML.escape(mensaje.getApellido) %], [% HTML.escape(mensaje.getNombre) %] ([% HTML.escape(mensaje.getEmail) %])</p>
-        <input type="hidden" name="email" id="email" value="[% HTML.escape(mensaje.getEmail) %]">
-        <h1 id="responder" class="pagetitle" onclick="responder()"> [% 'Responder mensaje' | i18n %]</h1>
-                  <div class="responder" style="display:none; padding-top:10px;">
-                            <textarea id="respuesta" name="respuesta" class="self_review" style="width: 377px"></textarea>
-                            <p style="width:20px; padding-top:15px;"><input class="fancybox_button" type="submit" onclick="responderMail()"  value="Aceptar"/></p>
-                  </div>
+  <div class="responder" style="display:none; padding-top:10px;">
+      <textarea id="respuesta" name="respuesta" class="self_review" style="width: 377px"></textarea>
+      <div class="">
+		   [% PERL %]
+		           print C4::AR::Filtros::action_button( 
+		                                           button         => "btn btn-primary click",
+		                                           action       => "responderMail()", 
+		                                           icon         => "icon-white icon-share",
+		                                           title        => "[% 'Enviar' | i18n %]",
+		                                       ) ;
+		   
+		   [% END %]
+      </div>
+  </div>
+
+
+
+</div>
+<div class="modal-footer">
+   <h5>[% 'De' | i18n %]: [% HTML.escape(mensaje.getApellido) %], [% HTML.escape(mensaje.getNombre) %] ([% HTML.escape(mensaje.getEmail) %])</h5>
 </div>
 
+
+                  

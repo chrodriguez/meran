@@ -39,7 +39,7 @@ function updateInfoMARC(responseText){
 			
 			    [% IF nivel2_array %]
                     <div class="main-subcontent" style="width:100%; float:left;">
-                                <h1>[% "Detalle" | i18n %]</h1>
+                                <div class="title">[% "Detalle" | i18n %]</div> 
                                 <div class="cover_detalle_container">
 					                    [% IF portada_registro %]
 					                        <a class="fancylink" href="/uploads/covers/[% portada_registro_big %]">
@@ -50,7 +50,7 @@ function updateInfoMARC(responseText){
 					                    [% END %]
 					                    <br />
 	   				                    <center><div style="font-weight: bold; font-size: 10px; clear:both;" >[% cat_ref_tipo_nivel3_name %] </div></center>
-	                           </div>		
+                                </div>		
                                 <div class="detalle_total">	                           
 	                                [% INCLUDE 'opac-detail_partial_N1.inc' %]
 			                          <ul class="listado_sin_margen">

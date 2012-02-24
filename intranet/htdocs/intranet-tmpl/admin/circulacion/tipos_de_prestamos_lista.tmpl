@@ -11,7 +11,6 @@
         <th>[% "Para Sala" | i18n %]</th>
         <th>[% "Habilitado" | i18n %]</th>
         <th>[% "Editar" | i18n %]</th>
-<!--         <th>[% "Eliminar" | i18n %]</th> -->
     </tr>
   </thead>
 
@@ -57,39 +56,28 @@
 
                             [% PERL %]
                                   print C4::AR::Filtros::action_button(
-                                                                  button       => "btn click btn-primary",
+                                                                  button       => "btn btn-primary click",
                                                                   action       => 'modificarTipoPrestamo("[% tipo_prestamo.getId_tipo_prestamo %]")',
-                                                                  icon         => "icon-edit icon-white",
+                                                                  icon         => "icon-white icon-edit",
                                                                   title        => "",
                                   ) ;
                             [% END %]
 
 
         </td>
-<!--        <td   align="center">
-                            [% PERL %]
-                                print C4::AR::Filtros::to_Icon( text =>     "[% 'Eliminar' | i18n %]",
-                                                                onClick => "eliminarTipoPrestamo('[% tipo_prestamo.getId_tipo_prestamo %]')",
-                                                                boton   => "icon_borrar",
-                                                                title =>    "[% 'Eliminar' | i18n %]",
-                                                                alternClass => "botonCentrado"
-                                                            ) ;
-                            [% END %]
-        </td>-->
     </tr>
 [% END %]
        
  </tbody>
 </table>
 
-        <div class="form-actions">
-            [% PERL %]
-                                
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar' | i18n %]",
-                                                                    boton   => "boton_buscar",
-                                                                    onClick => "agregarTipoPrestamo();",
-                                                                    title   => "[% 'Agregar Tipo de Pr&eacute;stamo' | i18n %]",
-                                                                    alternClass => "botonCentrado"
-                                        ) ;
-            [% END %]
-            </div>
+  <div class="form-actions">
+	  [% PERL %]
+	                      
+	                      print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar' | i18n %]",
+	                                                          boton   => "btn btn-primary",
+	                                                          onClick => "agregarTipoPrestamo();",
+	                                                          title   => "[% 'Agregar Tipo de Pr&eacute;stamo' | i18n %]",
+	                              ) ;
+	  [% END %]
+  </div>

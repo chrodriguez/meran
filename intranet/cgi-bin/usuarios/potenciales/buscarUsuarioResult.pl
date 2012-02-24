@@ -45,18 +45,15 @@ $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $
 
 if($socios){
 
-	my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategoriasDeSocio();
+	my $comboDeCategorias= C4::AR::Utilidades::generarComboCategoriasDeSocio();
 	
 	my @resultsdata; 
 	my $i=0;
 	
 	foreach my $socio (@$socios){
 		my $clase="";
-		if ($socio->getActivo == 0){
-			$activo = "NO";
-		}else{
-			$activo = "SI";
-		}
+
+    	$activo = C4::AR::Utilidades::translateYesNo_fromNumber($socio->esRegular);
 		
 		my %row = (
 				clase=> $clase,

@@ -257,7 +257,7 @@
                     <li>
 	                    [% IF (!menu_preferences.showMenuItem_circ_prestamos) AND (!menu_preferences.showMenuItem_circ_devolucion_renovacion) %]
 	                              [% PERL %]
-	                                  print C4::AR::Filtros::link_to( text =>     "[% 'Pr&eacute;st., Devol., y Renov.' | i18n %]",
+	                                  print C4::AR::Filtros::link_to( text =>     "[% 'Circulaci&oacute;n R&aacute;pida' | i18n %]",
 	                                                                  url =>      "[% url_prefix %]/circ/circulacionRapida.pl",
 	                                                                  title =>    "[% 'Circulaci&oacute;n R&aacute;pida' | i18n %]"
 	                                                              ) ;

@@ -32,56 +32,7 @@ var jobID = 0;
 
 
 <script type="text/javascript">
-    function mostrarNovedades(){
-        var objAH_temp               = new AjaxHelper(updateActualizarTabla);
-        objAH_temp.debug         = false;
-        objAH_temp.showStatusIn  = '';
-        objAH_temp.url           = URL_PREFIX+'/novedadesIntra.pl';
-        objAH_temp.tipoAccion    = "MOSTRAR_NOVEDADES";
-        objAH_temp.sendToServer();
-    }
 
-    function mensajesContacto(){
-        var objAH_temp               = new AjaxHelper(updateMensajesContacto);
-        objAH_temp.debug         = false;
-        this.showState      = false;
-        objAH_temp.url           = URL_PREFIX+'/mensajes_contacto.pl';
-        objAH_temp.sendToServer();
-    }
-
-    function updateMensajesContacto(responseText){
-    	$('#mensajes_contacto').html(responseText);
-    }
-    
-    function updateActualizarTabla(responseText){
-        $("#resultNovedades").html(responseText);
-        $('.fancy_link').fancybox({
-                        onComplete:function(){
-                              $('#state').css('display','none');     
-                        }
-        });
-    }
-
-    function twitter_hover(){
-        $("#button_twitter").attr("src","[% temas %]/[% tema %]/imagenes/botones/button_twitter_hover.png");
-    }
-  
-    function twitter_normal(){
-        $("#button_twitter").attr("src","[% temas %]/[% tema %]/imagenes/botones/button_twitter_normal.png");
-    }
-
-    function twitter_click(){
-        $("#button_twitter").attr("src","[% temas %]/[% tema %]/imagenes/botones/button_twitter_click.png");
-    }
-    
-    function responder(){
-        $("#respuesta").wysiwyg();
-        $(".responder").show(); 
-        $(".wysiwyg").css('width','388px');   
-        $("#fancybox-wrap").css('top','25px');
-        $("#respuestaIFrame").css('width','388px');
-        $("#responder").attr('onclick', ' '); 
-    }
     
     $(document).ready(function() {
         CrearAutocompleteCatalogo({ 
@@ -142,6 +93,7 @@ var jobID = 0;
        </div>
 	   <br />
     [% END %]
+    <br />
     <a class="fancy_link" href="[% url_prefix %]/admin/publicar_twitter.pl?token=[% token %]" > 
       <img id="button_twitter" src="[% temas %]/[% tema %]/imagenes/botones/button_twitter_normal.png" alt="Twitter" />
     </a>

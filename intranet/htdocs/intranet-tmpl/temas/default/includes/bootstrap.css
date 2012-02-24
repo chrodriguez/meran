@@ -595,7 +595,11 @@ legend {
 	line-height: 36px;
 	color: #333333;
 	border: 0;
+<<<<<<< HEAD
 	border-bottom: 1px solid #DDDDDD;
+=======
+	border-bottom: 1px solid #EEE;
+>>>>>>> f6414b64a56183f849b9d07d112a44425ad33698
 }
 
 label,input,button,select,textarea {
