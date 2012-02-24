@@ -4104,33 +4104,32 @@ sub armarPaginasOPAC{
 
     my $themelang= $t_params->{'themelang'};
 
-    my $paginador= "<div class='pagination'><div id='content_paginator' align='center' >";
+    my $paginador= "<div class='pagination'><ul>";
     my $class="paginador";
 
     if($actual > 1){
         #a la primer pagina
         my $ant= $actual-1;
-        $paginador .= "<a href='".$url."&page=1' class='previous' title='".$first_text."'> ".$first_text."</a>";
-        $paginador .= "<a href='".$url."&page=".$ant."' class='previous' title='".$previous_text."'> ".$previous_text."</a>";
+        $paginador .= "<li class='prev'><a href='".$url."&page=1' class='previous' title='".$first_text."'> ".$first_text."</a></li>";
+        $paginador .= "<li class='prev'><a href='".$url."&page=".$ant."' class='previous' title='".$previous_text."'> ".$previous_text."</a></li>";
 
     }else{
-        $paginador .= "<span class='disabled' title='".$previous_text."'>".$previous_text."</span>";
+        $paginador .= "<li class='prev'><a href='#' title='".$previous_text."'>".$previous_text."</a></li>";
     }
 
     for (my $i=$limInf; ($totalPaginas >1 and $i <= $totalPaginas and $i <= $limSup) ; $i++ ) {
         if($actual == $i){
-            $class="'current'";
-            $paginador .= "<span class=".$class."> ".$i." </span>";
+            $class="'active click'";
         }else{
-            $class="'pagination'";
-            $paginador .= "<a href='".$url."&page=".$i."' class=".$class."> ".$i." </a>";
+            $class="'click'";
         }
+        $paginador .= "<li class=".$class."><a href='".$url."&page=".$i."' class=".$class."> ".$i." </a></li>";
     }
 
     if($actual >= 1 && ($actual < $totalPaginas)){
         my $sig= $actual+1;
-        $paginador .= "<a href='".$url."&page=".$sig."' class='next' title='".$next_text."'>".$next_text."</a>";
-        $paginador .= "<a href='".$url."&page=".$totalPaginas."' class='next' title='".$last_text."'>".$last_text."</a>";
+        $paginador .= "<li class='next'><a href='".$url."&page=".$sig."' class='next' title='".$next_text."'>".$next_text."</a></li>";
+        $paginador .= "<li class='next'><a href='".$url."&page=".$totalPaginas."' class='next' title='".$last_text."'>".$last_text."</a></li>";
 
     }
     $paginador .= "</div></div>";
