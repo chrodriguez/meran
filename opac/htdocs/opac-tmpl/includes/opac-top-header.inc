@@ -84,7 +84,14 @@
           </form>
 
           <ul class="nav pull-right">
-            <li><a href="#">Link</a></li>
+            <li>
+                    [% PERL %]
+	                    print C4::AR::Filtros::link_to( text    =>  "[% 'Contacto' | i18n %]",
+	                                                    url     =>  '[% url_prefix %]/opac-contact.pl',
+	                                                    title   =>  "[% 'Contacto' | i18n %]",
+	                            ) ;
+	                [% END %]
+			 </li>
             <li class="divider-vertical"></li>
 			[% IF socio_data.usr_nro_socio %]
 	            <li class="dropdown">
