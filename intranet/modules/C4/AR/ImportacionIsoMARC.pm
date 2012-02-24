@@ -1189,7 +1189,7 @@ sub detalleCompletoVistaPrevia {
     foreach my $nivel2 (@$grupos){
 		my $nivel2_marc = $nivel2->{'grupo'};
 		my %hash_nivel2=();
-        $hash_nivel2{'tipo_documento'}          = $nivel2_marc->subfield('910','a');
+        $hash_nivel2{'tipo_documento'}          = C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord_Object($nivel2_marc);
         $hash_nivel2{'nivel2_array'}            =  C4::AR::ImportacionIsoMARC::toMARC_Array($nivel2_marc,$hash_nivel2{'tipo_documento'},'',2);
         $hash_nivel2{'nivel2_template'}         = $nivel2->{'tipo_ejemplar'};
         $hash_nivel2{'tiene_indice'}            = 0;
@@ -1205,10 +1205,8 @@ sub detalleCompletoVistaPrevia {
         my @niveles3=();
         
             foreach my $nivel3 (@$ejemplares){
-				my %hash_nivel3=();
-				$hash_nivel3{'tipo_documento'}          = $nivel2_marc->subfield('910','a');
-				$hash_nivel3{'barcode'}            =  generaCodigoBarraFromMarcRecord($nivel3,$hash_nivel3{'tipo_documento'});
-				push(@niveles3, \%hash_nivel3);
+				my $n3 =  C4::AR::ImportacionIsoMARC::getEjemplarFromMarcRecord($nivel3,$hash_nivel2{'tipo_documento'});
+				push(@niveles3, $n3);
 			}
 
         $hash_nivel2{'nivel3'}                  = \@niveles3;        
@@ -1259,29 +1257,126 @@ sub toMARC_Array {
     return (\@MARC_result_array);
 }
 
-sub detalleDisponibilidadEjemplares{
+sub getDisponibilidadEjemplar{
 	my ($ejemplar) = @_;
-	    
+	    my $dato = $ejemplar->subfield('995','o');
+	    my $resultado=C4::AR::Preferencias::getValorPreferencia("defaultDisponibilidad");
+	    #FIXME	Debería ir a una tabla de referencia de alias o sinónimos
+	    if ($dato){
+			use Switch;
+			switch ($dato) {
+				case 'PRES' { 
+					$resultado = "CIRC0000";
+					}
+				case 'SALA' { 
+					$resultado = "CIRC0001";
+					}
+			}
+		}
+	return $resultado;
 }
 
+sub getEstadoEjemplar{
+	my ($ejemplar) = @_;
+	    my $dato = $ejemplar->subfield('995','e');
+	    my $resultado=C4::AR::Preferencias::getValorPreferencia("defaultEstado");
+	    #FIXME	Debería ir a una tabla de referencia de alias o sinónimos
+	    if ($dato){
+			use Switch;
+			switch ($dato) {
+				case 'DISPONIBLE' { 
+					$resultado = "STATE002";
+					}
+				case 'NO DISPONIBLE' { 
+					$resultado = "STATE000";
+					}
+			}
+		}
+	return $resultado;
+}
+
+sub getEstadoEjemplar_Object{
+	my ($ejemplar) = @_;
+	my $estado = C4::AR::ImportacionIsoMARC::getEstadoEjemplar($ejemplar);
+	my $object_estado = C4::Modelo::RefEstado->getByPk($estado);
+	return  $object_estado;
+}
+
+
+sub getDisponibilidadEjemplar_Object{
+	my ($ejemplar) = @_;
+	my $disponibilidad = C4::AR::ImportacionIsoMARC::getDisponibilidadEjemplar($ejemplar);
+	my $object_disponibilidad = C4::Modelo::RefDisponibilidad->getByPk($disponibilidad);
+	return $object_disponibilidad;
+}
+
+
+sub getEjemplarFromMarcRecord{
+	my ($nivel3,$tipo_documento) = @_;
+	    
+	my %hash_nivel3=();
+	$hash_nivel3{'tipo_documento'}          = $tipo_documento;
+	$hash_nivel3{'barcode'}            		=  C4::AR::ImportacionIsoMARC::generaCodigoBarraFromMarcRecord($nivel3,$tipo_documento->getId_tipo_doc());
+	$hash_nivel3{'signatura_topografica'}   =  $nivel3->subfield('995','t');
+	$hash_nivel3{'disponibilidad'}   		=  C4::AR::ImportacionIsoMARC::getDisponibilidadEjemplar_Object($nivel3);
+	$hash_nivel3{'estado'}   		=  C4::AR::ImportacionIsoMARC::getEstadoEjemplar_Object($nivel3);
+	
+	return \%hash_nivel3;
+}
 
 sub getTipoDocumentoFromMarcRecord{
 		my ($marc_record) = @_;
 #FIXME	Debería ir a una tabla de referencia de alias o sinónimos
 		my $tipo_documento = $marc_record->subfield('910','a');
 		
-		my $resultado ='LIB';
+		my $resultado =C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
 		if ($tipo_documento){
 			use Switch;
 			switch ($tipo_documento) {
 				case 'TEXTO' { 
 					$resultado = 'LIB';
 					}
-				else {
-					$resultado = 'LIB';
-					}
 			}
 		}
+	return $resultado;
+}
+
+sub getTipoDocumentoFromMarcRecord_Object{
+		my ($marc_record) = @_;
+		my $tipo_documento = getTipoDocumentoFromMarcRecord($marc_record);
+	    my $object_tipo_documento = C4::Modelo::CatRefTipoNivel3->getByPk($tipo_documento);
+	    
+	    C4::AR::Debug::debug("TIPO DOCUMENTO ".$tipo_documento." => ".$object_tipo_documento->getNombre);
+		return $object_tipo_documento;
+}
+
+
+sub getUIFromMarcRecord {
+		my ($marc_record) = @_;
+#FIXME	Debería ir a una tabla de referencia de alias o sinónimos
+		my $ui = $marc_record->subfield('995','c');
+		
+		my $resultado = '';
+		#FIXME hay que ver si existe la UI
+		
+		if ($ui){
+			if(C4::AR::Referencias::obtenerUIByIdUi($ui)){
+			#es el id
+				$resultado=$ui;
+				}
+			else{
+				my $uiLike=C4::AR::Referencias::obtenerUILike($ui);
+				if (scalar(@$uiLike)){
+					#Existe algo parecido?
+					$resultado=$uiLike->[0]->getId_ui;
+					}
+				else{
+					#Valor por defecto
+					$resultado =C4::AR::Preferencias::getValorPreferencia("defaultUI");
+					}
+				}
+			}
+			
 	return $resultado;
 }
 
@@ -1299,21 +1394,10 @@ sub generaCodigoBarraFromMarcRecord{
            	use Switch;
 			switch ($estructurabarcode[$i]) {
 				case 'UI' { 
-						my $ui = $marc_record_n3->subfield('995','c');
-						if ($ui){
-							$pattern_string= $ui;
-							}
-						else{
-							$pattern_string= C4::AR::Preferencias::getValorPreferencia("defaultUI");
-							}
+					$pattern_string= C4::AR::ImportacionIsoMARC::getUIFromMarcRecord($marc_record_n3);
 					}
 				case 'tipo_ejemplar' {
-						if ($tipo_ejemplar){
-							$pattern_string= $tipo_ejemplar;
-							}
-						else{
-							$pattern_string= C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
-							}
+					$pattern_string= C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord($marc_record_n3);
 					}
             }
             if ($pattern_string){
@@ -1334,8 +1418,7 @@ sub generaCodigoBarraFromMarcRecord{
 	
 	if ((C4::AR::Nivel3::existeBarcode($barcode))||(!$barcode)){
 		# Si no viene el códifo en el campo 995, f  o ya existe se busca el máximo de su tipo
-		my $max_codigo = C4::Modelo::CatRegistroMarcN3::Manager->get_maximum_codigo_barra(like => $like.'%') || 0;
-  	    $barcode  = $like.C4::AR::Nivel3::completarConCeros($max_codigo + 1);
+  	    $barcode  = $like.'AUTOGENERADO';
      }
      
     return ($barcode);
