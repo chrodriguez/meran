@@ -1,27 +1,22 @@
 [% USE HTML %]
 
 [% IF cantidad %]
-        <div class="resultados_consulta">[% "Cantidad de reservas realizadas" | i18n %]: &nbsp;[% cantidad %]</div> 
+        <div class="alert alert-info">[% "Cantidad de reservas realizadas" | i18n %]: <strong>[% cantidad %] </strong></div> 
         
         <div class="contenedor_paginador">[% paginador %]</div>
         
-        <table id="tablaResult" class="tabla_datos" cellspacing=0  cellpadding=0 border=0 width="100%">
-            <tr class="tablaresultadoTitle" >
-            
-                <th>
-                    [% "T&iacute;tulo" | i18n %]
-                </th>
-                <th>
-                    [% "Autor" | i18n %]
-                </th>
-                <th>
-                    [% "Edici&oacute;n" | i18n %]
-                </th>
-                <th>
-                    [% "Fecha" | i18n %]
-                </th>
-            
-            </tr>
+        [% PERL %]
+            print C4::AR::Filtros::tableHeader(   
+                              id              => "tablaResult",
+                              columns         => ['[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]','[% "Edici&oacute;n"|i18n %]',
+                                                    '[% "Fecha"|i18n %]',
+                                                 ]
+
+                                                                
+                                    ) ;
+        [% END %]
+        
+        <tbody>
             
             [% FOREACH reserva IN reservas %]
             <tr>
@@ -48,8 +43,8 @@
                     &nbsp;[% reserva.getFecha_reserva_formateada %]&nbsp;
                 </td>
             [% END %] <!-- FOREACH PRIMERO -->
-        
+        </tbody>
         </table>
 [% ELSE %]
-    <div class="resultados_consulta">[% "No se han realizado reservas." | i18n %] &nbsp;[% cant %]</div>
+    <div class="alert alert-info">[% "No se han realizado reservas." | i18n %] &nbsp;[% cant %]</div>
 [% END %] 

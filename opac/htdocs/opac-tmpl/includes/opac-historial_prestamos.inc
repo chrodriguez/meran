@@ -2,7 +2,7 @@
 
 [% IF cantidad %]
 
-    <div class="alert alert-info">[% "Cantidad de pr&eacute;stamos realizadas:" | i18n %]<strong>[% cantidad %]</strong></div>
+    <div class="alert alert-info">[% "Cantidad de pr&eacute;stamos realizadas:" | i18n %] <strong>[% cantidad %]</strong></div>
     
     <div class="contenedor_paginador">[% paginador %]</div>
 
