@@ -719,7 +719,7 @@ sub action_button{
     }
     
     
-    my $html = "<a class='".$button."' $popopver_attr onclick='".$action."'><i class='".$icon."'></i>".$title."</a>";
+    my $html = "<a class='".$button."' $popopver_attr onclick='".$action."'><i class='".$icon."'></i> ".$title."</a>";
     
     return $html;
 }
@@ -758,10 +758,10 @@ sub action_set_button{
                 @result = split(/=/,$p);
                 $url = C4::AR::Utilidades::addParamToUrl($url,@result[0],@result[1]);
             }
-        $html.= "<a class='$button' $popopver_attr href='$url'><i class='$icon'></i>$title</a>";
+        $html.= "<a class='$button' $popopver_attr href='$url'><i class='$icon'></i> $title</a>";
         
     }else{
-        $html.= "<a class='$button' $popopver_attr class='click' onclick='$action'><i class='$icon'></i>$title</a>";
+        $html.= "<a class='$button' $popopver_attr class='click' onclick='$action'><i class='$icon'></i> $title</a>";
     }
 
 
@@ -775,7 +775,7 @@ sub action_set_button{
 	        my $url  = $action->{'url'};
 	        my $icon = $action->{'icon'};
 	        if ($func){
-	            $html .= "<li><a class='click' onclick='$func' ><i class='$icon' ></i>$name</a></li>";
+	            $html .= "<li><a class='click' onclick='$func' ><i class='$icon' ></i> $name</a></li>";
 	        }else{
 	            my $params   =  $action->{'params'} ||  $action->{'url'};
 	            my @result;
@@ -783,7 +783,7 @@ sub action_set_button{
 	                @result = split(/=/,$p);
 	                $url = C4::AR::Utilidades::addParamToUrl($url,@result[0],@result[1]);
 	            }
-	            $html .= "<a class='click' href='$url'><i class='$icon'></i> $name</a>";
+	            $html .= "<li><a href='$url'><i class='$icon'></i> $name</a></li>";
 	        }
 	
 	    }

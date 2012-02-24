@@ -4577,8 +4577,12 @@ sub translateYesNo_toNumber{
 sub printAjaxPercent{
 	my ($total,$actual) = @_;
 	
-	my $percent = ($actual * 100) / $total;
-
+	my $percent = 0;
+	
+	eval{
+	   $percent = ($actual * 100) / $total;
+	};
+    
     my $session = CGI::Session->load();
 
     C4::AR::Auth::print_header($session);

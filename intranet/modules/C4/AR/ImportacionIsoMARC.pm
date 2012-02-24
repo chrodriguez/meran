@@ -16,6 +16,7 @@ use C4::Modelo::IoImportacionIsoRegistro;
 
 
 use MARC::Record;
+use MARC::Field;
 use MARC::Moose::Record;
 use MARC::Moose::Reader::File::Isis;
 use MARC::Moose::Reader::File::Iso2709;
@@ -165,7 +166,7 @@ sub guardarRegistrosNuevaImportacion {
                                      $movidos->{$field->tag}=$campo;
                                      $campos->{$campo}=1;
                                 }
-                             }marc record
+                             }
 
                             $new_field= MARC::Field->new($campo, $ind1, $ind2,$subfield->[0] => $subfield->[1]);
                             }
