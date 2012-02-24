@@ -105,7 +105,8 @@ var loaderPath= "";
 	                                                                   [% ELSE %]
 	                                                                         {title => "Cambio de Contrase&ntilde;a", action=>'cambiarPassword()', icon=>"icon-warning-sign"},
 	                                                                   [% END %]
-	                                                                   {title => "Libre Deuda", action=>'generarLibreDeuda()', icon=>"icon-asterisk"},
+                                                                       {title => "Generar carnet", action=>'formCarnet.submit();', icon=>"icon-barcode"},
+                                                                       {title => "Libre Deuda", action=>'generarLibreDeuda()', icon=>"icon-asterisk"},
 	                                                                   {title => "Prest. Interbibliotecario", action=>'prestamosInterBibliotecarios()', icon=>"icon-shopping-cart"},
 	                                                                   {title => "Cambiar Credenciales", action=>'cambiarCredencial()', icon=>"icon-eye-open"},
 	                                                                   {title => 'Eliminar Foto', action=>'eliminarFoto()', icon=>'icon-picture'},
@@ -140,7 +141,11 @@ var loaderPath= "";
     <form id="formCambioPassword" method="get" action="/meran/usuarios/change_password.pl">
                <input type="hidden" value="[% token %]" name="token">
     </form>
-
+                         
+	<form action=[% url_prefix %]/usuarios/cardGenerator.pl method=get name="formCarnet">
+	    <input type=hidden name="nro_socio" value="[% socio.getNro_socio %]" >
+	    <input type=hidden name="token" value="[% token %]" >
+	</form>
 
      <div class="span12" >
                 <dl>
