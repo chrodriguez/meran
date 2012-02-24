@@ -1197,6 +1197,11 @@ sub detalleCompletoVistaPrevia {
 		my $nivel2_marc = $nivel2->{'grupo'};
 		my %hash_nivel2=();
         $hash_nivel2{'tipo_documento'}          = C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord_Object($nivel2_marc);
+        
+        #Seteo bien el código de tipo de documento
+        my $tipo_documento = C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord($nivel2_marc);
+        $nivel2_marc->field('910')->update( a => $tipo_documento);
+        
         $hash_nivel2{'nivel2_array'}            =  C4::AR::ImportacionIsoMARC::toMARC_Array($nivel2_marc,$hash_nivel2{'tipo_documento'},'',2);
         $hash_nivel2{'nivel2_template'}         = $nivel2->{'tipo_ejemplar'};
         $hash_nivel2{'tiene_indice'}            = 0;
@@ -1326,7 +1331,7 @@ sub getEjemplarFromMarcRecord{
 	$hash_nivel3{'barcode'}            		=  C4::AR::ImportacionIsoMARC::generaCodigoBarraFromMarcRecord($nivel3,$tipo_documento->getId_tipo_doc());
 	$hash_nivel3{'signatura_topografica'}   =  $nivel3->subfield('995','t');
 	$hash_nivel3{'disponibilidad'}   		=  C4::AR::ImportacionIsoMARC::getDisponibilidadEjemplar_Object($nivel3);
-	$hash_nivel3{'estado'}   		=  C4::AR::ImportacionIsoMARC::getEstadoEjemplar_Object($nivel3);
+	$hash_nivel3{'estado'}   				=  C4::AR::ImportacionIsoMARC::getEstadoEjemplar_Object($nivel3);
 	
 	return \%hash_nivel3;
 }
@@ -1350,11 +1355,9 @@ sub getTipoDocumentoFromMarcRecord{
 
 sub getTipoDocumentoFromMarcRecord_Object{
 		my ($marc_record) = @_;
-		my $tipo_documento = getTipoDocumentoFromMarcRecord($marc_record);
-	    my $object_tipo_documento = C4::Modelo::CatRefTipoNivel3->getByPk($tipo_documento);
-	    
-	    C4::AR::Debug::debug("TIPO DOCUMENTO ".$tipo_documento." => ".$object_tipo_documento->getNombre);
-		return $object_tipo_documento;
+		my $tipo_documento = C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord($marc_record);
+	    my $object_tipo_documento = C4::AR::Referencias::getTipoNivel3ByCodigo($tipo_documento);
+	  	return $object_tipo_documento;
 }
 
 

@@ -832,6 +832,22 @@ sub getValidadores{
     return \%validadores;
 }
 
+sub getTipoNivel3ByCodigo{
+    my ($tipo_nivel3) = @_;
+    
+    my @filtros;
+
+    push (  @filtros, ( id_tipo_doc => { eq => $tipo_nivel3 },) );
+
+    my $tiposNivel3 = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3(query => \@filtros);
+
+    if (scalar(@$tiposNivel3)){
+    	return ($tiposNivel3->[0]);
+    }else{
+    	return 0;
+    }
+}
+
 sub translateTipoNivel3{
     my ($tipo_nivel3) = @_;
     
