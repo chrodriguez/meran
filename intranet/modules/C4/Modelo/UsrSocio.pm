@@ -1110,7 +1110,7 @@ sub tieneSeteadosPermisos{
     push (@filtros, ( ui => $self->getId_ui ) );
     push (@filtros, ( tipo_documento => "ALL") );
      
-    my $permisos = C4::Modelo::PermCatalogo::Manager::get_perm_catalogo();
+    my $permisos = C4::Modelo::PermCatalogo::Manager::get_perm_catalogo(query => \@filtros,);
     
     my $result = $permisos->[0] || undef;
     
