@@ -74,8 +74,11 @@
 		          </li>     
 	          [% END %]     
           </ul> 
-          <form class="navbar-search pull-left" action="[% url_prefix %]/opac-busquedasDB.pl" method="get">
-              <input type="text" class="search-query span2" placeholder="[% 'Buscar' | i18n %]">
+          <form class="navbar-search pull-left" action="[% url_prefix %]/opac-busquedasDB.pl" method="get" onsubmit="startOverlay();">
+              <input type="text" class="search-query span3" placeholder="[% 'Buscar' | i18n %]"
+                   		  x-webkit-speech onwebkitspeechchange="javascript:startSearch();" 
+                   		  speech onspeechchange="javascript:startSearch();"
+              >
               <input type="hidden" name="tipoAccion" value="BUSQUEDA_COMBINABLE" />
               <input type="hidden" name="token" value="[% token %]" />
           </form>
@@ -87,15 +90,25 @@
 	            <li class="dropdown">
 		            <a href="#" class="dropdown-toggle" data-toggle="dropdown">[% socio_data.usr_nombre %]&nbsp;[% socio_data.usr_apellido %]<b class="caret"></b></a>
 		            <ul class="dropdown-menu">
-		              <li><a href="#">Action</a></li>
-		              <li><a href="#">Another action</a></li>
-		              <li><a href="#">Something else here</a></li>
-		              <li class="divider"></li>
-		              <li><a href="#">Separated link</a></li>
+		                <li>
+		                	<a href="[% url_prefix %]/usuarios/reales/settings.pl?token=[% token %]&amp;nro_socio=[% socio_data.usr_nro_socio %]">
+		                		<i class="icon-cog"></i> [% "Ajustes" | i18n %]
+		                	</a>
+		                </li>
+		                <li class="divider"></li>
+		                <li><a href="[% url_prefix %]/logout.pl?token=[% token %]"><i class="icon-off"></i> [% "Salir" | i18n %]</a></li>
 		            </ul>
 				</li>
             [% ELSE %]
-            	<li class="active" ><a href="#">[% 'Iniciar sesi&oacute;n' | i18n %]</a></li>
+            	<li class="active" >
+            	
+                      [% PERL %]
+                          print C4::AR::Filtros::link_to( text    =>  "[% 'Iniciar sesi&oacute;n' | i18n %]",
+                                                          url     =>  '[% url_prefix %]/opac-auth.pl',
+                                                          title   =>  "[% 'Iniciar sesi&oacute;n' | i18n %]",
+                                  ) ;
+                      [% END %]
+            	</li>
             [% END %]
           </ul>
         </div><!-- /.nav-collapse -->

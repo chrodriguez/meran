@@ -118,8 +118,8 @@ function updateObtenerFavoritos(responseText){
 }
 
 function eliminarFavorito(id_favorito){
-    jConfirm(FAVORITE_CONFIRM_DELETE, CATALOGO_TITLE, function(confirmStatus){
-        if (confirmStatus){
+	bootbox.confirm(FAVORITE_CONFIRM_DELETE, function (ok){ 
+		if (ok){
             objAH=new AjaxHelper(updateEliminarFavorito);
             objAH.showOverlay       = true;
             objAH.debug= true;
@@ -136,5 +136,4 @@ function updateEliminarFavorito(responseText){
         if (!verificarRespuesta(responseText))
             return(0);
         $('#mis_favoritos').html(responseText);
-        zebra('datos_tabla');
 }

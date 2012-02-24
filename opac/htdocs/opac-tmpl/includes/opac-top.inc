@@ -25,6 +25,8 @@
   <![endif]-->
    
   <link rel="stylesheet" type="text/css" media="screen,projection,print" href="[% temas %]/[% user_theme %]/includes/opac.css" />
+  <link media="screen" rel="stylesheet" href="/includes/css/fancybox.css" type="text/css">
+  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/ui.stars.css" />
   <link rel="icon" type="image/x-icon" href="[% temas %]/[% user_theme %]/imagenes/favicon.ico" />
 
   <script type="text/javascript">
@@ -57,8 +59,8 @@
   <script src="/includes/md5.js" type="text/javascript"></script>
   <script src="/includes/sha1.js" type="text/javascript"></script>
   <script src="/includes/jsthread.js" type="text/javascript"></script>
-  <script type="text/javascript" src="/includes/jquery/jquery.tmpl.js"></script>	
   <script type="text/javascript" src="/includes/opac.js"></script>	
+  <script type="text/javascript" src="/includes/jquery/jquery.alerts.js"></script>	
   
   <title>
     [% IF titulo_nombre_ui %]
@@ -69,6 +71,8 @@
   </title>
   
   <script type="text/javascript">
+  	  var URL_PREFIX  = '[% url_prefix %]';
+  	  
       [% IF socio_data.usr_permisos_opac %]
 	      [% IF !noAjaxRequests %]
 	          $(document).ready(function() {
@@ -114,6 +118,9 @@
       }
       
       $(document).ready(function() {
+			$('.popover_button').popover({delay: { show: 800, hide: 100 }, placement: 'left',});
+			$(".alert").alert();
+          
                     $(function () {
                         var $alert = $('#alert_msg_main');
                         if($alert.length)

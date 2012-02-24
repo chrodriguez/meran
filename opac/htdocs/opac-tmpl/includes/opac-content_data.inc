@@ -46,12 +46,13 @@
         <!-- Content unit - Two columns -->
         <br />
         [% IF (!cantidad_prestamos > 0) && (!reservas_asignadas_count  > 0) && (!reservas_espera_count > 0) && (!cant_sanciones > 0) %]
-            <h1 class="pagetitle"> [% 'Ultimos ejemplares adquiridos por la biblioteca' | i18n %]</h1>
-            <hr class="clear-contentunit" />
+	        <div class="page-header">
+			    <h1>[% ui.getNombre %] <small>[% 'Ultimos ejemplares adquiridos' | i18n %]</small></h1>
+			</div> 
               [% INCLUDE 'opac-busquedaResult.inc' %]
         [% ELSE %]
-              <h1 id="ultimos_ejemplares_adq" class="pagetitle" style="text-decoration:underline; font-size: 17px; cursor:pointer;"> [% 'Ultimos ejemplares adquiridos por la biblioteca' | i18n %]</h1>
-              <div class="ultimos_ejemplares_adq">
-                    [% INCLUDE 'opac-busquedaResult.inc' %]
-              </div>
+		        <div class="page-header">
+				    <h1>[% ui.getNombre %] <small>[% 'Ultimos ejemplares adquiridos' | i18n %]</small></h1>
+				</div> 
+                [% INCLUDE 'opac-busquedaResult.inc' %]
         [% END %]
