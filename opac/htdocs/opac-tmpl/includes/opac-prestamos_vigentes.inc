@@ -3,7 +3,9 @@
 [% USE HTML %]
 [% IF cantidad_prestamos %]
 
-    <div class="resultados_consulta">[% "Cantidad de pr&eacute;stamos vigentes:" | i18n %]&nbsp;[% cantidad_prestamos %]</div>
+    <div class="alert alert-info">
+        [% "Cantidad de pr&eacute;stamos vigentes:" | i18n %] <strong> [% cantidad_prestamos %] </strong>
+    </div>
 
     <div class="contenedor_paginador">[% paginador %]</div>
 
