@@ -8,11 +8,14 @@
     <div class="detalle_completo_niveles">
         <div class="main-subcontent" style="width:100%; float:left">
             <div class="subcontent-unit-border" style="width:100%;">
-                <div class="round-border-topleft""></div>
+    
             
                 [% IF nivel2_array %]
-                    <div class="main-subcontent" style="width:100%; float:left;">
-                                <h1>[% "Detalle" | i18n %]</h1>
+                    <!--<div class="main-subcontent" style="width:100%; float:left;">
+                                <div class="title">[% "Detalle" | i18n %]</div> -->
+                    <fieldset>
+                          <legend class="titulo_legend"><span class="titulos">[% "Detalle" | i18n %]</span></legend>
+                          <div class="well">
                                 <div class="cover_detalle_container">
                                         [% IF portada_registro %]
                                             <a class="fancylink" href="/uploads/covers/[% portada_registro_big %]">
@@ -24,7 +27,9 @@
                                         <br />
                                         <center><div style="font-weight: bold; font-size: 10px; clear:both;" >[% cat_ref_tipo_nivel3_name %] </div></center>
                                </div>       
-                                <div class="detalle_total">                            
+                       
+
+                               <div class="detalle_total">                            
                                     [% INCLUDE 'opac-detail_partial_N1.inc' %]
                                       <ul class="listado_sin_margen">
                                           [% FOREACH nivel2_array %]
@@ -37,6 +42,8 @@
                                           <br />
                                           <li> [% 'Puede solicitar m&aacute;s f&aacute;cilmente el ejemplar con' | i18n %]&nbsp;<b>[% primer_signatura %]</b></li>
                                       </ul>
+                  
+
 									<div class="rating">  
 										[% IF tiene_indice %]
 											[% PERL %]
@@ -83,7 +90,12 @@
 										 [% END %]
 									</div>
                                   </div> <!-- END <div class="detalle_total">-->
-                
+                            
+            </div>
+</fieldset> 
+
+
+
                                  [% END %]  <!--END  IF nivel2_array -->
                                      <div id="[% DivDetalle %]">
 

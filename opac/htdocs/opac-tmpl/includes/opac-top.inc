@@ -192,9 +192,7 @@
 		<div class="container">		   
 		<!-- Pagetitle -->
 			        [% IF content_title %]
-			            <div class="title">
-			                [% content_title %]
-			            </div>
+			            <div class="title">[% content_title %]</div>  
 			        [% END %]
 			        [% IF partial_template %]
 			              [% INCLUDE $partial_template %]
