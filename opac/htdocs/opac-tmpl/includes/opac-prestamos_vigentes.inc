@@ -3,21 +3,23 @@
 [% USE HTML %]
 [% IF cantidad_prestamos %]
 
-    <div class="resultados_consulta">[% "Cantidad de pr&eacute;stamos vigentes:" | i18n %]&nbsp;[% cantidad_prestamos %]</div>
+    <div class="alert alert-info">
+        [% "Cantidad de pr&eacute;stamos vigentes:" | i18n %] <strong> [% cantidad_prestamos %] </strong>
+    </div>
 
     <div class="contenedor_paginador">[% paginador %]</div>
 
+    [% PERL %]
+        print C4::AR::Filtros::tableHeader(   
+                          id              => "tablaPrestamos",
+                          columns         => ['[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]','[% "Edici&oacute;n"|i18n %]',
+                                                '[% "Fecha de Pr&eacute;stamo"|i18n %]', '[% "Fecha de Vencimiento"|i18n %]',
+                                             ]
 
-
-    <table id="tablaHistorial" class="tablaHistorial tabla_datos" cellspacing="0" cellpadding="4" style="width:98%; text-align:center; border: 1;">
-        <tr class="tablaResultadoTitulo" >
-            <th>[% "T&iacute;tulo" | i18n %]</th>
-            <th>[% "Autor" | i18n %]</th>
-            <th>[% "Edici&oacute;n" | i18n %]</th>
-            <th>[% "Fecha de Pr&eacute;stamo" | i18n %]</th>
-            <th>[% "Fecha de Vencimiento" | i18n %]</th>
-            <th>&nbsp;</th>
-        </tr>
+                                                            
+                                ) ;
+    [% END %]
+    <tbody>
         <!-- ESTE LOOP MUESTRA LOS PRESTAMOS -->
         [% FOREACH prestamo IN prestamos %]
             <tr>
@@ -63,11 +65,11 @@
                   </td>
             </tr>
         [% END %]
-
+    </tbody>
     </table>
 
 [% ELSE %]
-    <h1> [% 'Ud. no tiene pr&eacute;stamos vigentes.' | i18n %] </h1>
+    <div class="alert alert-info"> [% 'Ud. no tiene pr&eacute;stamos vigentes.' | i18n %] </div>
 
 [% END %]
 

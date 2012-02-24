@@ -37,42 +37,63 @@
 		            </ul>
 	            </li>  
 	            [% IF socio_data.usr_nro_socio %]
-		            <li class="dropdown">
-		              <a href="#" class="dropdown-toggle" data-toggle="dropdown">[% 'Mi cuenta' | i18n %] <b class="caret"></b></a>
-		              <ul class="dropdown-menu">
-		                  <li>
-		                      <a href='[% url_prefix %]/opac-prestamos_vigentes.pl?token=[% token %]'>
-		                          [% 'Pr&eacute;stamos vigentes' | i18n %]
-		                      </a>
-		                  </li>
-		                  <li>
-		                      <a href='[% url_prefix %]/opac-historial_prestamos.pl?token=[% token %]'>
-		                          [% 'Historial de pr&eacute;stamos' | i18n %]
-		                      </a>
-		                  </li>
-		                  <li>
-		                      <a href='[% url_prefix %]/opac-historial_reservas.pl?token=[% token %]'>
-		                          [% 'Historial de reservas' | i18n %]
-		                      </a>
-		                  </li>
-		                  <li>
-		                      [% PERL %]
-		                          print C4::AR::Filtros::link_to( text    =>  "[% 'Recomendaciones' | i18n %]",
-		                                                          url     =>  '[% url_prefix %]/opac-recomendaciones.pl',
-		                                                          title   =>  "[% 'Recomendaciones' | i18n %]",
-		                                  ) ;
-		                      [% END %]
-		                  </li>
-			            <li class="divider"></li>
-		                <li class="nav-header">[% 'Personal' | i18n %]</li>
-		                <li>
-		                    <a href='[% url_prefix %]/opac-favoritos.pl?token=[% token %]'>
-		                    		[% 'Favoritos' | i18n %]
-		                	</a>
-						</li>	          
-		         	</ul>
-		          </li>     
-	          [% END %]     
+	                <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">[% 'Mi cuenta' | i18n %] <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                [% PERL %]
+                                  print C4::AR::Filtros::link_to( text    =>  "[% 'Pr&eacute;stamos vigentes' | i18n %]",
+                                                                  url     =>  '[% url_prefix %]/opac-prestamos_vigentes.pl',
+                                                                  title   =>  "[% 'Pr&eacute;stamos vigentes' | i18n %]",
+                                          ) ;
+                                [% END %]
+                            </li>
+                            <li>
+                                [% PERL %]
+                                  print C4::AR::Filtros::link_to( text    =>  "[% 'Historial de pr&eacute;stamos' | i18n %]",
+                                                                  url     =>  '[% url_prefix %]/opac-historial_prestamos.pl',
+                                                                  title   =>  "[% 'Historial de pr&eacute;stamos' | i18n %]",
+                                          ) ;
+                                [% END %]
+                            </li>
+                            <li>
+                                [% PERL %]
+                                  print C4::AR::Filtros::link_to( text    =>  "[% 'Historial de reservas' | i18n %]",
+                                                                  url     =>  '[% url_prefix %]/opac-historial_reservas.pl',
+                                                                  title   =>  "[% 'Historial de reservas' | i18n %]",
+                                          ) ;
+                                [% END %]
+                            </li>
+                            <li>
+                                [% PERL %]
+                                  print C4::AR::Filtros::link_to( text    =>  "[% 'Recomendaciones' | i18n %]",
+                                                                  url     =>  '[% url_prefix %]/opac-recomendaciones.pl',
+                                                                  title   =>  "[% 'Recomendaciones' | i18n %]",
+                                          ) ;
+                                [% END %]
+                            </li>
+                            <li class="divider"></li>
+                            <li class="nav-header">[% 'Personal' | i18n %]</li>	
+                            <li>
+                                [% PERL %]
+                                  print C4::AR::Filtros::link_to( text    =>  "[% 'Mis Datos' | i18n %]",
+                                                                  url     =>  '[% url_prefix %]/modificarDatos.pl',
+                                                                  title   =>  "[% 'Mis Datos' | i18n %]",
+                                          ) ;
+                                [% END %]
+                            </li>
+                            <li>
+                                [% PERL %]
+                                  print C4::AR::Filtros::link_to( text    =>  "[% 'Favoritos' | i18n %]",
+                                                                  url     =>  '[% url_prefix %]/opac-favoritos.pl',
+                                                                  title   =>  "[% 'Favoritos' | i18n %]",
+                                          ) ;
+                                [% END %]
+                            </li>		                  
+                            <li class="divider"></li>          
+                        </ul>
+                    </li>     
+	            [% END %]     
           </ul> 
           <form class="navbar-search pull-left" action="[% url_prefix %]/opac-busquedasDB.pl" method="get" onsubmit="startOverlay();">
               <input type="text" class="search-query span3" placeholder="[% 'Buscar' | i18n %]"
