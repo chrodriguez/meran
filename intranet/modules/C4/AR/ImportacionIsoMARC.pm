@@ -16,6 +16,7 @@ use C4::Modelo::IoImportacionIsoRegistro;
 
 
 use MARC::Record;
+use MARC::Field;
 use MARC::Moose::Record;
 use MARC::Moose::Reader::File::Isis;
 use MARC::Moose::Reader::File::Iso2709;

@@ -1064,6 +1064,7 @@ sub tienePermisos {
 
     my ($self) = shift;
     my ($flagsrequired) = @_;
+    
     if (!($self->getActivo)){ 
         C4::AR::Debug::debug("UsrSocio => TIPO_PERMISO => el socio no es activo");
         return 0;
@@ -1097,6 +1098,24 @@ sub tienePermisos {
         C4::AR::Debug::debug("UsrSocio => NO TIENE EL PERMISO");
         return 0;
     }
+}
+
+
+sub tieneSeteadosPermisos{
+    my ($self) = shift;
+
+    my @filtros;
+    
+    push (@filtros, ( nro_socio => $self->getNro_socio ) );
+    push (@filtros, ( ui => $self->getId_ui ) );
+    push (@filtros, ( tipo_documento => "ALL") );
+     
+    my $permisos = C4::Modelo::PermCatalogo::Manager::get_perm_catalogo();
+    
+    my $result = $permisos->[0] || undef;
+    
+    return $result;
+	
 }
 
 sub tienePermisosOPAC{

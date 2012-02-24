@@ -172,7 +172,11 @@ a:hover {
 }
 
 .span12,.container {
-	width: 940px;
+    width: 940px;
+}
+
+.span90,.container {
+    width: 90%;
 }
 
 .offset1 {
@@ -3143,8 +3147,8 @@ button.btn.small,input[type="submit"].btn.small {
 
 .pagination {
 	height: 36px;
-	margin-left: 20%;
-	width: 70%;
+	margin-left: 12%;
+	width: 76%;
 }
 
 .pagination ul {

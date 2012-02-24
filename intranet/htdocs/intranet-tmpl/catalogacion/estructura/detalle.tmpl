@@ -200,11 +200,12 @@
 		                <!-- NIVEL 2 -->
 			                <div id="[% id2 %]" style="position: relative; float:right;"></div>
 	                        [% IF tiene_indice %]
+	                               <br />
                                   [% PERL %]
                                           print C4::AR::Filtros::action_button( 
-                                                                          button         => "btn click",
+                                                                          button         => "btn btn-info click",
                                                                           action       => "mostrarIndice([% id2 %])", 
-                                                                          icon         => "icon-info-sign",
+                                                                          icon         => "icon-white icon-info-sign",
                                                                           title        => "[% 'Indice' | i18n %]",
                                                                       ) ;
 
