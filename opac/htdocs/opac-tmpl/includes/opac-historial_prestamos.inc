@@ -6,8 +6,6 @@
     
     <div class="contenedor_paginador">[% paginador %]</div>
 
-    <div class="tablaResultadoTitulo">[% "Historial de Pr&eacute;stamos" | i18n %]</div>
-
 
     [% PERL %]
         print C4::AR::Filtros::tableHeader(   
