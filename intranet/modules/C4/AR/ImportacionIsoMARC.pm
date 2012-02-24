@@ -1059,14 +1059,15 @@ sub getNivelesFromRegistro {
 						#Nivel 2
 
 						#HAY QUE CREAR UNO NUEVO??
- 						C4::AR::Debug::debug("HAY QUE CREAR UNO NUEVO??  ".$campo."&".$subcampo."=".$dato." ".$marc_record_n2->subfield($campo,$subcampo)." repetible? ".$estructura->getRepetible);
+ 						#C4::AR::Debug::debug("HAY QUE CREAR UNO NUEVO??  ".$campo."&".$subcampo."=".$dato." ".$marc_record_n2->subfield($campo,$subcampo)." repetible? ".$estructura->getRepetible);
 
 						if(($marc_record_n2->subfield($campo,$subcampo))&&(!$estructura->getRepetible)&&(($campo ne '910')&&($subcampo ne 'a'))){
 							#Existe el subcampo y no es repetible ==> es un nivel 2 nuevo
-							C4::AR::Debug::debug("Existe el subcampo y no es repetible ==> es un nivel 2 nuevo  ".$campo."&".$subcampo."=".$dato);
+							#C4::AR::Debug::debug("Existe el subcampo y no es repetible ==> es un nivel 2 nuevo  ".$campo."&".$subcampo."=".$dato);
 											
 							#Agrego el último ejemplar y lo guardo
 							if (scalar($marc_record_n3->fields())){
+								C4::AR::Debug::debug("EJEMPLAR ".$marc_record_n3->as_formatted);	
 								push(@ejemplares,$marc_record_n3);
 								$marc_record_n3 = MARC::Record->new();
 							}
@@ -1101,14 +1102,15 @@ sub getNivelesFromRegistro {
 				case 3 {
 						#Nivel 3 
 						#Aca no hay ningun campo que sea repetible, si ya existe el subcampo es un nuevo ejemplar.
+						
 						 if($marc_record_n3->subfield($campo,$subcampo)){
 							#Existe el subcampo y no es repetible ==> es un nivel 3 nuevo							
 							#Agrego el último ejemplar y lo guardo
-							
+							C4::AR::Debug::debug("EJEMPLAR ".$marc_record_n3->as_formatted);	
 								push(@ejemplares,$marc_record_n3);
 								$marc_record_n3 = MARC::Record->new();
 							}
-						
+						C4::AR::Debug::debug("EJ ".$campo."&".$subcampo."=".$dato);
 						#El campo es de Nivel 3
 						if ($marc_record_n3->field($campo)){
 							#Existe el campo, agrego el subcampo
@@ -1120,7 +1122,7 @@ sub getNivelesFromRegistro {
 							$marc_record_n3->append_fields($field);
 							}
 						}
-				else {
+				case 0 {
 					C4::AR::Debug::debug("CAMPO MULTINIVEL ".$campo."&".$subcampo."=".$dato);
 					#FIXME va en el 1 por ahora
 						#El campo es de Nivel 1 
@@ -1141,9 +1143,11 @@ sub getNivelesFromRegistro {
 			
 		}
 	}
-	
+	C4::AR::Debug::debug("ULTIMO EJEMPLAR ".$marc_record_n3->fields());
+		C4::AR::Debug::debug("EJEMPLAR ".$marc_record_n3->as_formatted);
 		#Agrego el último ejemplar y lo guardo
 		if (scalar($marc_record_n3->fields())){
+			C4::AR::Debug::debug("EJEMPLAR ".$marc_record_n3->as_formatted);
 			push(@ejemplares,$marc_record_n3);
 			$marc_record_n3 = MARC::Record->new();
 		}
@@ -1156,15 +1160,17 @@ sub getNivelesFromRegistro {
 		$hash_temp{'ejemplares'}   = \@ejemplares;
 		push (@grupos, \%hash_temp);
 	
-	#foreach my $grupo (@grupos){
-		#my $ej = $grupo->{'ejemplares'};
-		#C4::AR::Debug::debug(" GRUPO con ".scalar(@$ej)." ej");
-		#C4::AR::Debug::debug(" Grupo  ".$grupo->{'grupo'}->as_formatted);
-			#foreach my $ejemplar (@$ej){
-					#C4::AR::Debug::debug(" Ejemplar  ".$ejemplar->as_formatted);
-			#}
-		#}
+		C4::AR::Debug::debug("###########################################################################################");
+		foreach my $grupo (@grupos){
+			my $ej = $grupo->{'ejemplares'};
+			C4::AR::Debug::debug(" GRUPO con ".scalar(@$ej)." ej");
+			C4::AR::Debug::debug(" Grupo  ".$grupo->{'grupo'}->as_formatted);
+				foreach my $ejemplar (@$ej){
+						C4::AR::Debug::debug(" Ejemplar  ".$ejemplar->as_formatted);
+				}
+		}
 		
+		C4::AR::Debug::debug("###########################################################################################");
 		my %hash_temp;
 		$hash_temp{'registro'}  = $marc_record_n1;
 		$hash_temp{'grupos'}   = \@grupos;
@@ -1191,6 +1197,11 @@ sub detalleCompletoVistaPrevia {
 		my $nivel2_marc = $nivel2->{'grupo'};
 		my %hash_nivel2=();
         $hash_nivel2{'tipo_documento'}          = C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord_Object($nivel2_marc);
+        
+        #Seteo bien el código de tipo de documento
+        my $tipo_documento = C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord($nivel2_marc);
+        $nivel2_marc->field('910')->update( a => $tipo_documento);
+        
         $hash_nivel2{'nivel2_array'}            =  C4::AR::ImportacionIsoMARC::toMARC_Array($nivel2_marc,$hash_nivel2{'tipo_documento'},'',2);
         $hash_nivel2{'nivel2_template'}         = $nivel2->{'tipo_ejemplar'};
         $hash_nivel2{'tiene_indice'}            = 0;
@@ -1320,7 +1331,7 @@ sub getEjemplarFromMarcRecord{
 	$hash_nivel3{'barcode'}            		=  C4::AR::ImportacionIsoMARC::generaCodigoBarraFromMarcRecord($nivel3,$tipo_documento->getId_tipo_doc());
 	$hash_nivel3{'signatura_topografica'}   =  $nivel3->subfield('995','t');
 	$hash_nivel3{'disponibilidad'}   		=  C4::AR::ImportacionIsoMARC::getDisponibilidadEjemplar_Object($nivel3);
-	$hash_nivel3{'estado'}   		=  C4::AR::ImportacionIsoMARC::getEstadoEjemplar_Object($nivel3);
+	$hash_nivel3{'estado'}   				=  C4::AR::ImportacionIsoMARC::getEstadoEjemplar_Object($nivel3);
 	
 	return \%hash_nivel3;
 }
@@ -1344,11 +1355,9 @@ sub getTipoDocumentoFromMarcRecord{
 
 sub getTipoDocumentoFromMarcRecord_Object{
 		my ($marc_record) = @_;
-		my $tipo_documento = getTipoDocumentoFromMarcRecord($marc_record);
-	    my $object_tipo_documento = C4::Modelo::CatRefTipoNivel3->getByPk($tipo_documento);
-	    
-	    C4::AR::Debug::debug("TIPO DOCUMENTO ".$tipo_documento." => ".$object_tipo_documento->getNombre);
-		return $object_tipo_documento;
+		my $tipo_documento = C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord($marc_record);
+	    my $object_tipo_documento = C4::AR::Referencias::getTipoNivel3ByCodigo($tipo_documento);
+	  	return $object_tipo_documento;
 }
 
 
