@@ -28,6 +28,8 @@
 	<script type="text/javascript" src="/includes/completo-intranet-top.js"></script>
 	[% INCLUDE "BootstrapToolkit.inc" %]
 	<link media="screen" rel="stylesheet" href="/includes/css/fancybox.css" type="text/css">
+	<link media="screen" rel="stylesheet" href="/includes/css/fancybox.css" type="text/css">
+	<link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranet.css">
 	<script type="text/javascript" src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
 	<script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox.js"></script>
 	<script type="text/javascript" src="/includes/jquery/fancybox/jquery.mousewheel.js"></script>

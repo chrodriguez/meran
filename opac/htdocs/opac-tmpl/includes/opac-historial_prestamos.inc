@@ -2,21 +2,24 @@
 
 [% IF cantidad %]
 
-    <div class="resultados_consulta">[% "Cantidad de pr&eacute;stamos realizadas:" | i18n %]&nbsp;[% cantidad %]</div>
+    <div class="alert alert-info">[% "Cantidad de pr&eacute;stamos realizadas:" | i18n %] <strong>[% cantidad %]</strong></div>
     
     <div class="contenedor_paginador">[% paginador %]</div>
 
     <div class="tablaResultadoTitulo">[% "Historial de Pr&eacute;stamos" | i18n %]</div>
 
-    <table id="tablaHistorial" class="tablaHistorial tabla_datos" cellspacing="0" cellpadding="4" style="width:98%; text-align:center; border: 1;">
-        <tr class="tablaResultadoTitulo" >
-            <th>[% "T&iacute;tulo" | i18n %]</th>
-            <th>[% "Autor" | i18n %]</th>
-            <th>[% "Edici&oacute;n" | i18n %]</th>
-            <th>[% "Pr&eacute;stamo" | i18n %]</th>
-            <th>[% "Dev" | i18n %]</th>
-        </tr>
-        <!-- ESTE LOOP MUESTRA LOS PRESTAMOS -->
+
+    [% PERL %]
+        print C4::AR::Filtros::tableHeader(   
+                          id              => "tablaHistorial",
+                          columns         => ['[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]','[% "Edici&oacute;n"|i18n %]',
+                                                '[% "Pr&eacute;stamo"|i18n %]', '[% "Dev"|i18n %]',
+                                             ]
+
+                                                            
+                                ) ;
+    [% END %]
+    <tdoby>
         [% FOREACH prestamo IN prestamos %]
             <tr>
             <td> 
@@ -55,8 +58,8 @@
                 </td>
             </tr>
         [% END %]
-
+    </tdoby>
     </table>
 [% ELSE %]
-    <h1> [% 'Ud. no tiene registrado ning&uacute;n pr&eacute;stamo.' | i18n %] </h1>
+    <div class="alert alert-info">[% 'Ud. no tiene registrado ning&uacute;n pr&eacute;stamo.' | i18n %] </div>
 [% END %]

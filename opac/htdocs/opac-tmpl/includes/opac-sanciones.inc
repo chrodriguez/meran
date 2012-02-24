@@ -21,14 +21,26 @@
                                 [% END %]
                             </b>
                             </br>
-                            <b>[% "Desde el: " | i18n %]</b>[% sancion.getFecha_comienzo_formateada %]<b>[% " hasta el: " | i18n %]</b>[% sancion.getFecha_final_formateada %]</br>
-                            <b>[% "Autor: " | i18n %]</b>[% sancion.nivel3.nivel1.getAutor %]</br>
-                            <b>[% "Titulo: " | i18n %]</b>[% sancion.nivel3.nivel1.getTitulo %]</br>
-                            <b>[% "Edicion: " | i18n %]</b>[% IF sancion.nivel3.nivel2.getEdicion %] 
-                                                             [% sancion.nivel3.nivel2.getEdicion %]
-                                                           [% ELSE %]
-                                                             --
-                                                           [% END %]</br>
+                            <dl>
+                            
+	                            <dt class="inline left rightMargin">[% "Desde el: " | i18n %]</dt>
+	                            <dd>[% sancion.getFecha_comienzo_formateada %]<b>[% " hasta el: " | i18n %]</b>[% sancion.getFecha_final_formateada %]</dd>
+	
+	                            <dt class="inline left rightMargin">[% "Autor: " | i18n %]</dt>
+	                            <dd>[% sancion.nivel3.nivel1.getAutor %]</dd>
+	
+	                            <dt class="inline left rightMargin">[% "Titulo: " | i18n %]</dt>
+	                            <dd>[% sancion.nivel3.nivel1.getTitulo %]</dd>
+	
+	                            <dt class="inline left rightMargin">[% "Edicion: " | i18n %]</dt>
+	                            <dd>		
+	                            		[% IF sancion.nivel3.nivel2.getEdicion %] 
+	                                                             [% sancion.nivel3.nivel2.getEdicion %]
+	                                                           [% ELSE %]
+	                                                             --
+	                                                           [% END %]
+	                            </dd>
+                            </dl>
                             <hr  class="clear-contentunit">
                         </li>      
                     
