@@ -8,7 +8,7 @@
 
             [% IF reservas_asignadas_count %]
                 <div class="well">
-                    [% "Cantidad de ejemplares prestados" | i18n %]: <strong>[% prestamos_cant %]</strong> 
+                    [% "Cantidad de ejemplares prestados" | i18n %]: <strong>[% reservas_asignadas_count %]</strong> 
                 </div>
 
                 [% PERL %]
@@ -27,6 +27,10 @@
                 <tbody>
                 [% FOREACH reserva IN RESERVAS_ASIGNADAS %]
                     <tr>
+
+                        <td>
+                            <input type="checkbox" name="chkboxReservas" value="[% reserva.nivel3.getId3  %]" id="[% reserva.nivel3.getId3 %]">
+                        </td>
                         <td>
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text =>     " [% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
@@ -68,7 +72,7 @@
         
                         <td>
                         [% IF reserva.getFecha_recordatorio_formateada %]
-                             [% reserva.getFecha_recordatorio_formateada %]>
+                             [% reserva.getFecha_recordatorio_formateada %]
                         [% ELSE %]
                            - 
                         [% END %]
@@ -85,10 +89,9 @@
                 
                                 [% PERL %]
                                     print C4::AR::Filtros::action_button(  
-                                                                        boton   => "btn btn-info",
-                                                                        icon    => "icon-white icon-remove"
-                                                                        onClick => "cancelarReserva('[% reserva.getId_reserva %]');",
-                                                                        title   => "[% 'Cancelar' | i18n %]",
+                                                                        button   => "btn btn-danger",
+                                                                        icon    => "icon-white icon-remove",
+                                                                        action => 'cancelarReserva([% "reserva.getId_reserva" %]);',
                                             ) ;
                                 [% END %]
                 
@@ -100,10 +103,10 @@
         </table>
             [% PERL %]
                 print C4::AR::Filtros::action_button(  
-                                                    boton   => "btn btn-danger",
-                                                    onClick => "realizarAccion('CONFIRMAR_PRESTAMO','reseravsAsignadasResult',generaDivPrestamo);",
+                                                    button   => "btn btn-primary",
+                                                    action => 'realizarAccion("CONFIRMAR_PRESTAMO","reseravsAsignadasResult",generaDivPrestamo);',
                                                     title   => "[% 'Prestar' | i18n %]",
-                                                    iconn   => "icon-white icon-share-alt"
+                                                    icon   => "icon-white icon-share-alt"
                         ) ;
             [% END %]
      [% ELSE %]
@@ -155,8 +158,8 @@
                         <td> 
                             [% PERL %]
                                 print C4::AR::Filtros::action_button(  
-                                                                    boton   => "btn btn-danger",
-                                                                    onClick => "cancelarReserva('[% reserva.getId_reserva %]');",
+                                                                    button   => "btn click btn-danger",
+                                                                    action => "cancelarReserva('[% reserva.getId_reserva %]');",
                                                                     title   => "[% 'Cancelar' | i18n %]",
                                                                     icon   => "icon-white icon-remove"
                                         ) ;

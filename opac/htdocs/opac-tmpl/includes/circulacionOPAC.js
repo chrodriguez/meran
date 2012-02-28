@@ -7,9 +7,8 @@
 * Funcion Ajax que hace una reserva
 */
 function reservar(id1, id2){
-
-    jConfirm(ESTA_SEGURO_QUE_DESEA_RESERVAR,OPAC_ALERT_TITLE, function(confirmStatus){
-        if (confirmStatus){
+    bootbox.confirm(ESTA_SEGURO_QUE_DESEA_RESERVAR,OPAC_ALERT_TITLE, function (ok){ 
+        if (ok){
             objAH               = new AjaxHelper(updateInfoReserva);
             objAH.debug         = true;
             objAH.showOverlay   = true;

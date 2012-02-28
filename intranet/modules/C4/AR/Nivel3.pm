@@ -301,6 +301,7 @@ sub getNivel3FromId3{
 #                                                                     select          => ['cat_registro_marc_n1.*']    
 #                                                                     require_objects => ['ref_disponibilidad', 'ref_estado']
                                                                 );
+    C4::AR::Debug::debug(scalar(@$nivel3_array_ref));
 
     if( scalar(@$nivel3_array_ref) > 0){
         return ($nivel3_array_ref->[0]);

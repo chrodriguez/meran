@@ -335,9 +335,8 @@ function cancelarDiv(){
  * prestamos.tmpl---> se cancela la reserva.
  */
 function cancelarReserva(reserveNumber){
-
-	jConfirm(ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_RESERVA,'Info',function(is_confirmed){
-        if (is_confirmed) {
+    bootbox.confirm(ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_RESERVA, function (ok){ 
+        if (ok){
             objAH               = new AjaxHelper(updateInfoCancelacion);
             objAH.debug         = true;
             objAH.showOverlay   = true;  

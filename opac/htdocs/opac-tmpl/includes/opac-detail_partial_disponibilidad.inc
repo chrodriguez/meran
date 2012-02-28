@@ -3,18 +3,16 @@
                     <h1 class="orange">[% "Informaci&oacute;n de disponibilidad" | i18n %]</h1>
                             <li class="detalle_barra_circulacion" style="float:left; margin-left: 40px;">
                                 [% IF CirculationEnabled %]
-                                    [% IF socio_data.usr_nro_socio %]
-                                        <br />
-                                        <br />                                  
+                                   [% IF socio_data.usr_nro_socio %]                             
                                         [% PERL %]
-                                            print C4::AR::Filtros::to_Icon(   text    => "[% 'Reservar' | i18n %]",
-                                                                                boton   => "icon_reservar",
-                                                                                width   => "100px",
-                                                                                onClick => "reservar([% id1 %],[% id2 %])",
+                                            print C4::AR::Filtros::action_button(   
+                                                                                button   => "btn click",
+                                                                                icon   => "icon-remove",
+                                                                                action => "reservar([% id1 %],[% id2 %])",
                                                                                 title   => "[% 'Reservar' | i18n %]",
                                                                         );
                                         [% END %]
-                                    [% END %]
+                                   [% END %]
                                 [% END %]
                             </li>
 
@@ -36,6 +34,7 @@
                     </div>
                 </div>
            </div>
+
           [% IF socio_data %]
               [% INCLUDE 'rating.inc' %]
           [% END %]
