@@ -1,17 +1,21 @@
 [% IF addBorrower == 1 %]
     [% INCLUDE "intranet-top.inc" %]
+	<script type="text/javascript">
+	    var AUTO_GENERAR_LABEL = "[% 'Auto-generar' | i18n %]";
+	</script>
     <script type="text/javascript" src="/intranet-tmpl/includes/usuarios/usuariosReales-min.js"></script>
 [% END %]
 
 [% INCLUDE 'AutocompleteHelper.inc'  %]
 [% INCLUDE "FormValidateHelper.inc" %]
-[% INCLUDE "datePicker.inc" %]
+
+
 <script type="text/javascript">
 
     function validateNro_socio(){
         nro_socio = $('#nro_socio').val();
         if ( (($.trim(nro_socio)).length == 0 ) ) {
-            $('#nro_socio').val('Auto-generar'); 
+            $('#nro_socio').val(AUTO_GENERAR_LABEL); 
             $('#nro_socio').attr("readonly","true"); 
             $('#nro_socio').attr("title",SOLO_SERA_NUMERICO);
         }
@@ -76,14 +80,14 @@
                   </div>
             </div>
 
-            <div class="control-group error">
+            <div class="control-group">
                   <label class="control-label" for="nombre">[% "Nombres" | i18n %]</label>
                   <div class="controls">
                         <input  id="nombre" name="nombre" required class="input focused" type="text" value="[% socio_modificar.persona.getNombre %]">
                   </div>
             </div>
             
-            <div class="control-group error">
+            <div class="control-group">
                 <label class="control-label" for="nro_documento">[% "Documento" | i18n %]</label>    
                       <div class="controls">
                           [% combo_tipo_documento %] 
@@ -95,29 +99,22 @@
                 
                   <label  class="control-label" for="legajo">[% "Legajo" | i18n %]</label>
                   <div class="controls">
-                      <input type="text" name="legajo" id="legajo"  class="input focused" value="[% socio_modificar.persona.getLegajo %]">
+                      <input type="text" name="legajo" id="legajo"  value="[% socio_modificar.persona.getLegajo %]">
                   </div>
             </div>
 
-            <div class="control-group error">
+            <div class="control-group">
                       <label class="control-label" for="sexo">[% "Sexo" | i18n %] </label>
                       <div class="controls">
                            <input type="radio" name="sexo" value="F" required [% IF socio_modificar.persona.getSexo == 'F' %] checked="checked" [% END %] /> F
                            <input type="radio" name="sexo" value="M" required [% IF socio_modificar.persona.getSexo == 'M' %] checked="checked" [% END %] /> M 
                       </div>
             </div>
-      
-      
-            <div class="control-group error">
-                      <label class="control-label" for="nacimiento"> [% "Fecha de nacimiento " | i18n %] ([% socio_modificar.persona.getNacimiento %])</label>
+            
+            <div class="control-group">
+                      <label class="control-label" for="nacimiento"> [% "Fecha de nacimiento " | i18n %] </label>
                       <div class="controls">
-                            <input type="date" id="nacimiento" name="nacimiento" required class="input focused" value="[% socio_modificar.persona.getNacimiento %]">
-                            <script>
-                              var i = document.createElement("input");
-                              i.setAttribute("type", "date");
-                              if (i.type == "text") {
-                                  crearDatePicker('nacimiento');                  }
-                            </script>    
+                            <input type="text" id="nacimiento" name="nacimiento" data-datepicker="datepicker"  value="[% socio_modificar.persona.getNacimiento %]" required>
                       </div>
             </div>
 
@@ -125,7 +122,7 @@
         <fieldset>
             <legend class="titulo_legend">[% "Informaci&oacute;n de contacto" | i18n %] </legend>
 
-              <div class="control-group error">
+              <div class="control-group">
                     <label class="control-label" for="calle"> [% "Direcci&oacute;n" | i18n %]</label>
                     <div class="controls">
                           <input  id="calle" name="calle" class="input focused" required type="text" value="[% socio_modificar.persona.getCalle %]">
@@ -139,7 +136,7 @@
                     </div>
               </div>
 
-              <div class="control-group error">
+              <div class="control-group">
                     <label class="control-label" for="ciudad"> [% "Ciudad" | i18n %]</label>
                     <div class="controls">
                           <input  id="ciudad" name="ciudad" class="input focused" type="text" value="[% TRY %] [% socio_modificar.persona.ciudad_ref.getNombre %] [% CATCH %] [% END %]">
@@ -147,14 +144,14 @@
                     </div>
               </div>
 
-              <div class="control-group error">
+              <div class="control-group ">
                     <label class="control-label" for="telefono"> [% "Tel&eacute;fono particular" | i18n %] </label>
                     <div class="controls">
                           <input  id="telefono" name="telefono" required class="input focused" type="number" value="[% socio_modificar.persona.getTelefono %]">
                     </div>
               </div>
 
-              <div class="control-group error">
+              <div class="control-group">
                     <label class="control-label" for="telefono_laboral"> [% "Tel&eacute;fono del trabajo" | i18n %] </label>
                     <div class="controls">
                           <input  id="telefono_laboral" name="telefono_laboral" required class="input focused" type="number" value="[% socio_modificar.persona.getTelefono_laboral %]">
@@ -176,7 +173,7 @@
                     </div>
               </div>
           
-              <div class="control-group error">
+              <div class="control-group">
                     <label class="control-label" for="email">[% "E-Mail" | i18n %]</label>
                     <div class="controls">
                           <input  id="email" name="email" class="input focused" required type="text" value="[% socio_modificar.persona.getEmail %]">
@@ -191,14 +188,15 @@
                     <label class="control-label" for="nro_socio">[% "Tarjeta de identificaci&oacute;n" | i18n %]</label>
                     <div class="controls">
                         [% IF addBorrower %]
-                              <input id="nro_socio" type="text" class="input disabled" required name="nro_socio" value="Auto-generar">
+                              <input id="nro_socio" type="text" class="" required name="nro_socio" value="" placeholder="[% 'Auto-generar' | i18n %]" >
+                              <p class="help-block">[% 'Dejando esta opci&oacute;n, la tarjeta ser&aacute; el Nro. de documento' | i18n %].</p>                              
                         [% ELSE %]
-                              <input id="nro_socio" type="text" name="nro_socio" required class="input disabled partnerNumberHighlight" value="[% socio_modificar.getNro_socio %]">
+                              <input id="nro_socio" type="text" name="nro_socio" required class="disabled" disabled value="[% socio_modificar.getNro_socio %]">
                         [% END %]            
                     </div>
             </div>
 
-            <div class="control-group error">
+            <div class="control-group">
                     <label class="control-label" for="categoria_socio_id">[% "Categor&iacute;a del usuario" | i18n %]</label>
                     <div class="controls">
                           [% comboDeCategorias %]
@@ -206,7 +204,7 @@
             </div>
 
             [% IF addBorrower %]
-                <div class="control-group error">
+                <div class="control-group">
                     <label class="control-label" for="tipo_socio_id"> [% "Credenciales" | i18n %]</label>
                           <div class="controls">
                                     [% comboDeCredentials %]
