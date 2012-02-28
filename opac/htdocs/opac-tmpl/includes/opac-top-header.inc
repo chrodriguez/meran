@@ -76,14 +76,6 @@
                             <li class="nav-header">[% 'Personal' | i18n %]</li>	
                             <li>
                                 [% PERL %]
-                                  print C4::AR::Filtros::link_to( text    =>  "[% 'Mis Datos' | i18n %]",
-                                                                  url     =>  '[% url_prefix %]/modificarDatos.pl',
-                                                                  title   =>  "[% 'Mis Datos' | i18n %]",
-                                          ) ;
-                                [% END %]
-                            </li>
-                            <li>
-                                [% PERL %]
                                   print C4::AR::Filtros::link_to( text    =>  "[% 'Favoritos' | i18n %]",
                                                                   url     =>  '[% url_prefix %]/opac-favoritos.pl',
                                                                   title   =>  "[% 'Favoritos' | i18n %]",
@@ -123,6 +115,14 @@
 		                		<i class="icon-cog"></i> [% "Ajustes" | i18n %]
 		                	</a>
 		                </li>
+		                <li>
+                            [% PERL %]
+                              print C4::AR::Filtros::link_to( text    =>  '<i class="icon-cog"></i> [% "Mis Datos" | i18n %]',
+                                                              url     =>  '[% url_prefix %]/modificarDatos.pl',
+                                                              title   =>  "[% 'Mis Datos' | i18n %]",
+                                      ) ;
+                            [% END %]
+                        </li>
 		                <li class="divider"></li>
 		                <li><a href="[% url_prefix %]/logout.pl?token=[% token %]"><i class="icon-off"></i> [% "Salir" | i18n %]</a></li>
 		            </ul>

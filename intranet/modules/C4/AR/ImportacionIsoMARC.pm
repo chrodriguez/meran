@@ -1030,6 +1030,7 @@ sub getNivelesFromRegistro {
 	my @grupos=();
 	my @ejemplares=();
 	my $tipo_ejemplar='';
+	my $total_ejemplares=0;
     foreach my $field ($marc_record_to_meran->fields) {
         if(! $field->is_control_field){
             my $campo                       = $field->tag;
@@ -1077,6 +1078,8 @@ sub getNivelesFromRegistro {
 							my %hash_temp;
 							$hash_temp{'grupo'}  = $marc_record_n2;
 							$hash_temp{'tipo_ejemplar'}  = $tipo_ejemplar;
+							$hash_temp{'cant_ejemplares'}   = scalar(@ejemplares);
+							$total_ejemplares+=$hash_temp{'cant_ejemplares'};
 							$hash_temp{'ejemplares'}   = \@ejemplares;
 							push (@grupos, \%hash_temp);
 							$marc_record_n2 = MARC::Record->new();
@@ -1157,6 +1160,8 @@ sub getNivelesFromRegistro {
 		my %hash_temp;
 		$hash_temp{'grupo'}  = $marc_record_n2;
 		$hash_temp{'tipo_ejemplar'}  = $tipo_ejemplar;
+		$hash_temp{'cant_ejemplares'}   = scalar(@ejemplares);
+		$total_ejemplares+=$hash_temp{'cant_ejemplares'};
 		$hash_temp{'ejemplares'}   = \@ejemplares;
 		push (@grupos, \%hash_temp);
 	
@@ -1169,12 +1174,13 @@ sub getNivelesFromRegistro {
 						C4::AR::Debug::debug(" Ejemplar  ".$ejemplar->as_formatted);
 				}
 		}
-		
 		C4::AR::Debug::debug("###########################################################################################");
+		
 		my %hash_temp;
 		$hash_temp{'registro'}  = $marc_record_n1;
 		$hash_temp{'grupos'}   = \@grupos;
 		$hash_temp{'tipo_ejemplar'}  = $tipo_ejemplar;
+		$hash_temp{'total_ejemplares'}  = $total_ejemplares;
 	return  \%hash_temp;
 		
 }
@@ -1230,7 +1236,7 @@ sub detalleCompletoVistaPrevia {
     my %t_params;
     $t_params{'nivel1'}           = C4::AR::ImportacionIsoMARC::toMARC_Array($nivel1,'LIB','',1);
     $t_params{'nivel1_template'}  = $detalle->{'tipo_ejemplar'};
-    $t_params{'cantItemN1'}       = 1;
+    $t_params{'cantItemN1'}       = $detalle->{'total_ejemplares'};
     $t_params{'nivel2'}           = \@niveles2;
 
     return \%t_params;

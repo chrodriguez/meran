@@ -132,7 +132,7 @@ function agregarUsuario(){
       objAH.url     = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
       objAH.showOverlay       = true;
       objAH.debug   = true;
-      if ( (($.trim(nro_socio)).length == 0 ) || ( $('#nro_socio').val() == 'Auto-generar' ) ) {
+      if ( (($.trim(nro_socio)).length == 0 ) || ( $('#nro_socio').val() == AUTO_GENERAR_LABEL ) ) {
         objAH.auto_nro_socio=1;
       }else{
         objAH.nro_socio= $('#nro_socio').val();

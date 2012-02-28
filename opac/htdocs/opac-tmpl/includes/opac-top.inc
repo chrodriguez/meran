@@ -39,9 +39,7 @@
   </script>
 
   [% INCLUDE 'message_OPAC.inc' %]
-  <script src="/includes/jquery/jquery.js"></script>
-  <script src="/includes/bootstrap/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="/includes/jquery/bootbox.min.js"></script>
+  [% INCLUDE 'BootstrapToolkit.inc' %]
   <script src="/includes/AjaxHelper.js" type="text/javascript"></script>
   <script src="/includes/jquery/ui/ui-min.js" type="text/javascript"></script>
   <script src="/includes/jquery/ui/core.js" type="text/javascript"></script>
@@ -60,7 +58,6 @@
   <script src="/includes/sha1.js" type="text/javascript"></script>
   <script src="/includes/jsthread.js" type="text/javascript"></script>
   <script type="text/javascript" src="/includes/opac.js"></script>	
-  <script type="text/javascript" src="/includes/jquery/jquery.alerts.js"></script>	
   
   <title>
     [% IF titulo_nombre_ui %]

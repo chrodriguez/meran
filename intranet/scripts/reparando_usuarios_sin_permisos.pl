@@ -9,7 +9,7 @@ use C4::Modelo::UsrSocio;
 	my  $socios_activos = C4::Modelo::UsrSocio::Manager->get_usr_socio( query => \@filtros );
 
     foreach my $socio (@$socios_activos){
-		if ($socio->tieneSeteadosPermisos){
+		if (!$socio->tieneSeteadosPermisos){
 			C4::AR::Debug::debug("USUARIO ACTIVO SIN PERMISOS!!!  ".$socio->persona->getApeYNom()." (".$socio->getNro_socio.")");
 			#$socio->activar();
 		}
