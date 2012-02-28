@@ -1,8 +1,36 @@
 [% USE HTML %]
 
+<script type="text/javascript">    
+        function enviar(){
+              [% IF plainPassword == 0 %]
+                  var nroRandom   = [% nroRandom %];
+                  var hash        = b64_sha256(b64_sha256(b64_md5($("#password_plain").val()))+nroRandom);
+                  $("#password").val(hash);
+              [% ELSE %]
+                  $("#password").val($("#password_plain").val());
+              [% END %]
+              return true;
+      }
+      var RecaptchaOptions = {
+   
+        theme : 'white',
+      }
+
+      //onEnter con foco en input, ejecuta la busqueda
+      var RecaptchaOptions = {
+          theme : 'blue', /* tema color blanco */
+          lang : 'es' /* idioma español */
+      };    
+
+      onEnter("password",enviar);
+      
+
+</script>
+
+
 <!-- Login -->
 [% IF !socio_data %]
-
+<section class="center-section-form medium">
 		<div class="page-header">
 		    <h1>Meran <small>[% 'Inicio de sei&oacute;n' | i18n %]</small></h1>
 		</div>     
@@ -42,5 +70,5 @@
 	                  </div>
 	                [% END %]
           </form>
-
+</section>
 [% END %]
