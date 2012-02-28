@@ -13,3 +13,11 @@ legend {
 	font-size: 16.5px;
 }
 
+.center-section-form {
+    width: 75%;
+    margin: 0 auto;
+}
+
+.medium {
+    width: 50%;
+}

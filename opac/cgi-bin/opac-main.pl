@@ -14,7 +14,7 @@ my ($template, $session, $t_params)= get_template_and_user({
                                             template_name   => "opac-main.tmpl",
                                             query           => $query,
                                             type            => "opac",
-                                            authnotrequired => 0,
+                                            authnotrequired => 1,
                                             flagsrequired   => {    ui              => 'ANY', 
                                                             tipo_documento  => 'ANY', 
                                                             accion          => 'CONSULTA', 

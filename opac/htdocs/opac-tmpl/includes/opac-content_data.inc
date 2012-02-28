@@ -10,10 +10,6 @@
 							                300000
 							             [% END %]
 							             );
-                $("#ultimos_ejemplares_adq").click(function() {  $(".ultimos_ejemplares_adq").toggle(); 
-                                                               });
-                $(".ultimos_ejemplares_adq").hide();
-	            
         });
 
     </script>

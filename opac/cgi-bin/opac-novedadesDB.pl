@@ -37,7 +37,7 @@ elsif($tipoAccion eq "ACTUALIZAR_TABLA_NOVEDADES"){
 									template_name   => "opac-novedades_result.tmpl",
 								    query           => $input,
                                     type            => "opac",
-									authnotrequired => 0,
+									authnotrequired => 1,
 									flagsrequired   => {    ui => 'ANY', 
                                                             tipo_documento => 'ANY', 
                                                             accion => 'CONSULTA', 
