@@ -21,3 +21,13 @@ legend {
 .medium {
     width: 50%;
 }
+
+.span90 {
+    width: 90%;
+}
+
+.bigInput{
+	height: 32px;
+	font-size: 23px;
+	color: #999;
+}
