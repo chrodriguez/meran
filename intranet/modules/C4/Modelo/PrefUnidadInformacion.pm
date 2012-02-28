@@ -285,6 +285,20 @@ sub getCampo{
 	return (0);
 }
 
+sub tieneLogoOpacMenu{
+	my ($self) = shift;
+    my $logo =
+        C4::Context->config('intrahtdocs') . '/temas/'
+      . $self->getId_ui
+      . '/logo_ui_opac_menu.png';
+
+    if ( -e $logo ){
+    	return 1;
+    }else{
+    	return 0;
+    }
+    
+}
 
 sub getAll{
 

@@ -35,3 +35,9 @@ body {
 	font-size: 23px;
 	color: #999;
 }
+
+.logo_opac_menu{
+	float: left;
+	line-height:0;
+	
+}
