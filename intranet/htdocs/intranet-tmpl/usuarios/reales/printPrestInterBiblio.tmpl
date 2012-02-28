@@ -13,80 +13,67 @@
 	    document.getElementById('titulos').value=titulos;
 	    document.getElementById('otros').value=otros;
 	    document.getElementById('info').submit();
+	    
+	    $('#basic-modal-content').modal('hide');
     }
 
 </script>
 
+    <div class="modal-header">
+        <a href="#" class="close" data-dismiss="modal">×</a>
+        <h3>[% 'Pr&eacute;stamo interbibliotecario' | i18n %]</h3>
+    </div>
+    <div class="modal-body">
+	    <form class="form-horizontal" name="info" id="info" action="[% url_prefix %]/usuarios/prestamoInterBiblio.pl" method="POST">
+	    <fieldset>
+	       <legend>[% 'Completar Datos' | i18n %] [% 'para' | i18n %] [% 'el' | i18n %] </legend>
+			<input type="hidden" name="nro_socio" id="nro_socio" value="[% nro_socio %]">
+			<input type="hidden" name="accion" id="accion" value="imprimirPDF">
+	        <input type="hidden" name="autores" id="autores">
+			<input type="hidden" name="titulos" id="titulos" />
+			<input type="hidden" name="otros" id="otros" />
+			<input type="hidden" name="token" value="[% token %]"/>
 
-<div class="titulos">[% 'Completar Datos' | i18n %]</div>
-    <form name="info" id="info" action="[% url_prefix %]/usuarios/prestamoInterBiblio.pl" method="POST">
-		<input type="hidden" name="nro_socio" id="nro_socio" value="[% nro_socio %]">
-		<input type="hidden" name="accion" id="accion" value="imprimirPDF">
-        <input type="hidden" name="autores" id="autores">
-		<input type="hidden" name="titulos" id="titulos" />
-		<input type="hidden" name="otros" id="otros" />
-		<input type="hidden" name="token" value="[% token %]"/>
-		<table align="center" height="100%" weight="100%">
-			<tr>
-				<td>
-					[% "Biblioteca" | i18n %]:
-				</td>
-				<td colspan="2">
-					[% comboDeUI %]
-				</td>
-			</tr>
-			<tr>
-				<td>
-					[% "Nombre Director" | i18n %]:
-				</td>
-				<td colspan="2">
-					<input type="text" id="director" name="director">
-				</td>
-			</tr>
-			<tr class="titulo_tabla_resultado">
-				<td  align="center" colspan="3">
-					[% "DATOS DE LOS DOCUMENTOS" | i18n %]
-				</td>
-			</tr>
-			<tr>
-				<th>
-					[% "Autor" | i18n %]
-				</th>
-				<th>
-					[% "T&iacute;tulo" | i18n %]
-				</th>
-				<th>
-					[% "Otros Datos" | i18n %]
-				</th>
-			</tr>
-			<tr>
-				<td>
-					<input type=text name="autor1" id="autor1" value="">
-				</td>
-				<td>
-					<input type=text name="titulo1" id="titulo1" value="">
-				</td>
-				<td>
-					<input type=text name="otro1" id="otro1" value="">
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<input type=text name="autor2" id="autor2" value="">
-				</td>
-				<td>
-					<input type=text name="titulo2" id="titulo2" value="">
-				</td>
-				<td>
-					<input type=text name="otro2" id="otro2" value="">
-				</td>
-			</tr>
-			<tr>
-				<td align=center colspan="3">
-					<br><br>
-					<input type="image" src="[% themelang %]/images/pdf.png"  onClick="imprimir()"  value="imprimir">
-				</td>
-			</tr>
-		</table>
-    </form>
+			<div class="control-group">
+	            <label class="control-label" for="id_ui">[% "Biblioteca" | i18n %]:</label>
+	            <div class="controls">
+	              [% comboDeUI %]
+	            </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="director">[% "Nombre Director" | i18n %]:</label>
+                <div class="controls">
+                  <input type="text" id="director" name="director">
+                </div>
+            </div>						
+            
+            <div clas="form-inline">
+		        <fieldset>
+		           <legend>[% 'Datos de los documentos' | i18n %] [% 'para' | i18n %] [% 'el' | i18n %] </legend>
+	
+					<input type=text name="autor1" id="autor1" value="" placeholder='[% "Autor" | i18n %]'>
+					<input type=text name="titulo1" id="titulo1" value="" placeholder='[% "T&iacute;tulo" | i18n %]'>
+					<input type=text name="otro1" id="otro1" value="" placeholder='[% "Otros Datos" | i18n %]'>
+	
+	                <input type=text name="autor2" id="autor2" value="" placeholder='[% "Autor" | i18n %]'>
+	                <input type=text name="titulo2" id="titulo2" value="" placeholder='[% "T&iacute;tulo" | i18n %]'>
+	                <input type=text name="otro2" id="otro2" value="" placeholder='[% "Otros Datos" | i18n %]'>
+	            </fieldset>
+			</div>
+
+          <div class="form-actions">
+             [% PERL %]
+                     print C4::AR::Filtros::action_button( 
+                                                     button         => "btn btn-primary click",
+                                                     action       => "imprimir()", 
+                                                     icon         => "icon-white icon-print ",
+                                                     title        => "[% 'Imprimir' | i18n %]",
+                                                 ) ;
+
+             [% END %]
+          </div>
+			
+		  </fieldset>
+	    </form>
+    </div>
 </div>
