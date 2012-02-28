@@ -1,16 +1,48 @@
 [% USE HTML %]
+
 [% IF novedad.getContenido %]
-	<h1><a href="#">[% novedad.getTitulo %]</a></h1>
-	<h3>[% novedad.getFechaLegible %]</a></h3>
-	<p>
-	    [% novedad.getContenido %]
-	</p>
-	<p class="details"> 
-	[% IF novedad.getCategoria %]
-		[% 'Categor&iacute;a' | i18n %]: 
-		<a href="#">[% novedad.getCategoria %]</a>
-	[% END %] 
-	</p>
+    
+    <fieldset>
+        <legend>Detalle de la novedad <strong>[% HTML.escape(novedad.getTitulo) %]</strong></legend>
+
+        <div>
+            <dl>
+                <dt>[% 'T&iacute;tulo' | i18n %]:</dt>
+                <dd>[% HTML.escape(novedad.getTitulo) %]</dd>
+                
+                <dt>[% 'Fecha' | i18n %]:</dt>
+                <dd>[% HTML.escape(novedad.getFechaLegible) %]</dd>
+                
+                <dt>[% 'Contenido' | i18n %]:</dt>
+                <dd>[% HTML.escape(novedad.getContenido) %]</dd>
+                
+	            [% IF novedad.getCategoria %]
+                    <dt>[% 'Categoria' | i18n %]:</dt>
+                    <dd>[% HTML.escape(novedad.getCategoria) %]</dd>
+                [% END %] 
+	    </div>
+	    <div class="form-actions">
+	        [% PERL %]
+                print C4::AR::Filtros::action_link_button( 
+                                                button          => "btn btn-primary click",
+                                                url             => "[% url_prefix %]/opac-novedades.pl", 
+                                                title           => "Volver al listado",
+                                          ) ;
+
+            [% END %]
+	    </div>
+	</fieldset>
+	
 [% ELSE %]
-        <h1>[% 'La novedad solictada no existe.' | i18n %]</h1>
+        <div class="alert alert-info">[% 'La novedad solictada no existe.' | i18n %]</div>
+        <div class="form-actions">
+	        [% PERL %]
+                print C4::AR::Filtros::action_link_button( 
+                                                button          => "btn btn-primary click",
+                                                url             => "[% url_prefix %]/opac-novedades.pl", 
+                                                title           => "Volver al listado",
+                                          ) ;
+
+            [% END %]
+	    </div>
 [% END %]

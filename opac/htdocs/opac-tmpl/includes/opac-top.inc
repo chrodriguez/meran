@@ -13,12 +13,7 @@
   <meta name="distribution" content="global" />
   <meta name="description" content="OPAC" />
   <meta name="keywords" content="Your keywords, keywords, keywords, here ..." />
-  
-  <style>
-    body {
-      padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-    }
-  </style>  
+
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -97,23 +92,6 @@
 
     <script type="text/javascript">    
 
-        function enviar(){
-              [% IF plainPassword == 0 %]
-                  var nroRandom   = [% nroRandom %];
-                  var hash        = b64_sha256(b64_sha256(b64_md5($("#password_plain").val()))+nroRandom);
-                  $("#password").val(hash);
-              [% ELSE %]
-                  $("#password").val($("#password_plain").val());
-              [% END %]
-              return true;
-      }
-      var RecaptchaOptions = {
-   
-        theme : 'white',
-//         lang : 'es,   
-        
-      }
-      
       $(document).ready(function() {
 			$('.popover_button').popover({delay: { show: 800, hide: 100 }, placement: 'left',});
 			$(".alert").alert();
@@ -129,51 +107,6 @@
                             });
                         }
                     });
-
-
-                  //onEnter con foco en input, ejecuta la busqueda
-                    var RecaptchaOptions = {
-                        theme : 'blue', /* tema color blanco */
-                        lang : 'es' /* idioma español */
-                    };    
-
-                    onEnter("password",enviar);
-
-
-                    // When you click on #search
-                    $("#search").focus(function(){
-
-                        // If the value is equal to "Search..."
-                        if($(this).val() == "Buscar...") {
-                            // remove all the text and the class of .empty
-                            $(this).val("").removeClass("empty");;
-                        }
-
-                    });
-
-                    [% IF !loginFailed  %]
-                        try {$("#search").focus();} catch (e){}
-                    [% ELSE %]
-                    try {$("#userid").focus();} catch (e){}
-                    [% END %]
-
-            $(".signin").click(function(e) {          
-                e.preventDefault();
-                $("fieldset#signin_menu").toggle();
-                $(".signin").toggleClass("menu-open");
-            });
-            
-            $("fieldset#signin_menu").mouseup(function() {
-                return false
-            });
-            $(document).mouseup(function(e) {
-
-                if($(e.target).parent("a.signin").length==0) {
-                    $(".signin").removeClass("menu-open");
-                    $("fieldset#signin_menu").hide();
-                }
-            });         
-            
         });
 	</script>
 	
@@ -194,4 +127,4 @@
 			        [% IF partial_template %]
 			              [% INCLUDE $partial_template %]
 			        [% END %]
-		</div>        
+		        

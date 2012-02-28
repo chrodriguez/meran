@@ -1221,7 +1221,7 @@ sub detalleCompletoVistaPrevia {
         
         my $ejemplares = $nivel2->{'ejemplares'};
         my @niveles3=();
-        
+        C4::AR::Debug::debug(" Ejemplares ".scalar(@$ejemplares));
             foreach my $nivel3 (@$ejemplares){
 				my $n3 =  C4::AR::ImportacionIsoMARC::getEjemplarFromMarcRecord($nivel3,$hash_nivel2{'tipo_documento'});
 				push(@niveles3, $n3);
