@@ -13,12 +13,7 @@
   <meta name="distribution" content="global" />
   <meta name="description" content="OPAC" />
   <meta name="keywords" content="Your keywords, keywords, keywords, here ..." />
-  
-  <style>
-    body {
-      padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-    }
-  </style>  
+
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -194,4 +189,4 @@
 			        [% IF partial_template %]
 			              [% INCLUDE $partial_template %]
 			        [% END %]
-		</div>        
+		        

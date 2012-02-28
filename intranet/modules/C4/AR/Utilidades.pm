@@ -4132,7 +4132,7 @@ sub armarPaginasOPAC{
         $paginador .= "<li class='next'><a href='".$url."&page=".$totalPaginas."' class='next' title='".$last_text."'>".$last_text."</a></li>";
 
     }
-    $paginador .= "</div></div>";
+    $paginador .= "</div>";
 
     if ($totalPaginas <= 1){
       $paginador="";
