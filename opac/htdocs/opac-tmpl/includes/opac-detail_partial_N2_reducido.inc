@@ -11,10 +11,10 @@
     
             
                 [% IF nivel2_array %]
-                    <!--<div class="main-subcontent" style="width:100%; float:left;">
-                                <div class="title">[% "Detalle" | i18n %]</div> -->
+                    <!--<div class="main-subcontent" style="width:100%; float:left;">-->
+                                <div class="title">[% "Informaci&oacute;n de ejemplar" | i18n %]</div> 
                     <fieldset>
-                          <legend class="titulo_legend"><span class="titulos">[% "Detalle" | i18n %]</span></legend>
+                          <legend class="titulo_legend"><span class="titulos">[% "Detalle" | i18n %]</span></legend> 
                           <div class="well">
                                 <div class="cover_detalle_container">
                                         [% IF portada_registro %]
@@ -25,23 +25,23 @@
                                               <img src="/uploads/covers/[% cat_ref_tipo_nivel3 %].png" alt="[% 'Sin Portada' | i18n %]" title="[% 'Sin Portada' | i18n %]" />
                                         [% END %]
                                         <br />
-                                        <center><div style="font-weight: bold; font-size: 10px; clear:both;" >[% cat_ref_tipo_nivel3_name %] </div></center>
+                                        <div style="font-weight: bold; font-size: 10px; clear:both;" >[% cat_ref_tipo_nivel3_name %] </div>
                                </div>       
                        
 
                                <div class="detalle_total">                            
                                     [% INCLUDE 'opac-detail_partial_N1.inc' %]
-                                      <ul class="listado_sin_margen">
+                                      <dl class="listado_sin_margen">
                                           [% FOREACH nivel2_array %]
                                                       [% IF liblibrarian %]
                                                           [% IF dato %]
-                                                          <li> [% liblibrarian %]: <strong>[% dato %]</strong></li>
+                                                          <dt>[% liblibrarian %]:</dt><dd>[% dato %]</dd>
                                                           [% END %]
                                                       [% END %]
                                           [% END %] <!-- END FOREACH subcampos_array-->
                                           <br />
                                           <li> [% 'Puede solicitar m&aacute;s f&aacute;cilmente el ejemplar con' | i18n %]&nbsp;<b>[% primer_signatura %]</b></li>
-                                      </ul>
+                                      </dl>
                   
 
 									<div class="rating">  
