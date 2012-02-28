@@ -16,6 +16,7 @@ use vars qw(@EXPORT @ISA);
     &getNovedad
     &listar
     &agregar
+    &getNovedadesByFecha
 );
 
 
@@ -160,6 +161,26 @@ sub eliminar{
         return ($novedades_array_ref->[0]->delete());
     }else{
         return (0);
+    }
+}
+
+=item
+    Trae las novedades ordenadas por fecha
+=cut
+sub getNovedadesByFecha{
+#    my ($ini,$cantR) = @_;
+    my $novedades_array_ref = C4::Modelo::SysNovedad::Manager->get_sys_novedad( 
+                                                                                sort_by => ['fecha DESC'],
+#                                                                                limit   => $cantR,
+#                                                                                offset  => $ini,
+                                                                              );
+
+    #Obtengo la cant total de sys_novedads para el paginador
+    my $novedades_array_ref_count = C4::Modelo::SysNovedad::Manager->get_sys_novedad_count();
+    if(scalar(@$novedades_array_ref) > 0){
+        return ($novedades_array_ref_count, $novedades_array_ref);
+    }else{
+        return (0,0);
     }
 }
 
