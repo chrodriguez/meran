@@ -35,7 +35,7 @@
 		    <h1>Meran <small>[% 'Inicio de sei&oacute;n' | i18n %]</small></h1>
 		</div>     
           <form class="well form-inline" method="post" id="signin_main" 
-          		action="[% url_prefix %]/opac-main.pl" onsubmit="return enviar()">
+          		action="[% url_prefix %]/opac-login.pl" onsubmit="return enviar()">
 	
 	                  <input name="userid" id="userid" value="[% username_input %]" placeholder="[% 'Nro. de socio' | i18n %]" 
 	                  		 title="username" tabindex="4" type="text" class="input-big">

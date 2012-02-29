@@ -744,8 +744,12 @@ sub checkauth {
     my $sin_captcha=0;
     my $time = localtime(time());
     
-    if($authnotrequired) {
-        return ($userid, $session, $flags, getSessionSocioObject());
+    if ($authnotrequired) {
+    	my $socio_object = getSessionSocioObject();
+    	if ($userid){
+    		buildSocioData($session,$socio_object);
+    	}
+        return ($userid, $session, $flags, $socio_object);
     }
 
     if ($demo) {

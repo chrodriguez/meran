@@ -21,6 +21,7 @@ use MARC::Moose::Record;
 use MARC::Moose::Reader::File::Isis;
 use MARC::Moose::Reader::File::Iso2709;
 use MARC::Moose::Reader::File::Marcxml;
+use Clone;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -1080,7 +1081,9 @@ sub getNivelesFromRegistro {
 							$hash_temp{'tipo_ejemplar'}  = $tipo_ejemplar;
 							$hash_temp{'cant_ejemplares'}   = scalar(@ejemplares);
 							$total_ejemplares+=$hash_temp{'cant_ejemplares'};
-							$hash_temp{'ejemplares'}   = \@ejemplares;
+							  
+							$hash_temp{'ejemplares'}   = Clone::clone(\@ejemplares);
+							C4::AR::Debug::debug("GRUPO CON ".$hash_temp{'cant_ejemplares'}." EJEMPLARES");
 							push (@grupos, \%hash_temp);
 							$marc_record_n2 = MARC::Record->new();
 							@ejemplares = ();
@@ -1162,7 +1165,7 @@ sub getNivelesFromRegistro {
 		$hash_temp{'tipo_ejemplar'}  = $tipo_ejemplar;
 		$hash_temp{'cant_ejemplares'}   = scalar(@ejemplares);
 		$total_ejemplares+=$hash_temp{'cant_ejemplares'};
-		$hash_temp{'ejemplares'}   = \@ejemplares;
+		$hash_temp{'ejemplares'}   = Clone::clone(\@ejemplares);
 		push (@grupos, \%hash_temp);
 	
 		C4::AR::Debug::debug("###########################################################################################");
@@ -1206,8 +1209,10 @@ sub detalleCompletoVistaPrevia {
         
         #Seteo bien el código de tipo de documento
         my $tipo_documento = C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord($nivel2_marc);
-        $nivel2_marc->field('910')->update( a => $tipo_documento);
-        
+        if($nivel2_marc->field('910')){
+			$nivel2_marc->field('910')->update( a => $tipo_documento);
+		}
+		
         $hash_nivel2{'nivel2_array'}            =  C4::AR::ImportacionIsoMARC::toMARC_Array($nivel2_marc,$hash_nivel2{'tipo_documento'},'',2);
         $hash_nivel2{'nivel2_template'}         = $nivel2->{'tipo_ejemplar'};
         $hash_nivel2{'tiene_indice'}            = 0;
@@ -1221,9 +1226,33 @@ sub detalleCompletoVistaPrevia {
         
         my $ejemplares = $nivel2->{'ejemplares'};
         my @niveles3=();
+        
+        #Disponibilidad
+        $hash_nivel2{'disponibles'}=0;
+        $hash_nivel2{'no_disponibles'}=0;
+        $hash_nivel2{'disponibles_sala'}=0;
+        $hash_nivel2{'disponibles_domiciliario'}=0;
+        
         C4::AR::Debug::debug(" Ejemplares ".scalar(@$ejemplares));
             foreach my $nivel3 (@$ejemplares){
 				my $n3 =  C4::AR::ImportacionIsoMARC::getEjemplarFromMarcRecord($nivel3,$hash_nivel2{'tipo_documento'});
+				#Calcular las disponibilidades
+				my $estado= $n3->{'estado'};
+				my $disponibilidad= $n3->{'disponibilidad'};
+				
+				if ($estado->getCodigo eq $estado->estadoDisponibleValue){
+					#disponible
+					$hash_nivel2{'disponibles'}++;
+					if ($disponibilidad->getCodigo eq $disponibilidad->paraPrestamoValue){
+						$hash_nivel2{'disponibles_domiciliario'}++;
+						}else{
+							$hash_nivel2{'disponibles_sala'}++;
+							}
+					}
+					else{
+						$hash_nivel2{'no_disponibles'}++;
+						}
+				#
 				push(@niveles3, $n3);
 			}
 

@@ -3,21 +3,14 @@
     <script type="text/javascript">
 
 	    $(document).ready(function() {
-	            actualizarTabla();
-	            setInterval(actualizarTabla,[% IF timeInterval %]
-							                [% timeInterval %]
-							             [% ELSE %]
-							                300000
-							             [% END %]
-							             );
         });
 
     </script>
 
-      <!-- Content unit - One column -->
-        <div class="column1-unit novedades_opac">
-            <div id="resultNovedades"></div>
-        </div>
+    <div class="hero-unit" id="search-bar">
+     	<h1>[% 'Bienvenido ' | i18n %]<small>[% ui.getNombre %]</small></h1>
+        <br />
+        
         [% IF cant_sanciones > 0 %]
               [% INCLUDE 'opac-sanciones.inc' %]
         [% END %]
@@ -37,18 +30,69 @@
              <div class="reservas_espera_opac_main">
                   [% INCLUDE 'opac-reservas_espera.inc' %]
             </div>
-        [% END %]
-        
-        <!-- Content unit - Two columns -->
-        <br />
-        [% IF (!cantidad_prestamos > 0) && (!reservas_asignadas_count  > 0) && (!reservas_espera_count > 0) && (!cant_sanciones > 0) %]
-	        <div class="page-header">
-			    <h1>[% ui.getNombre %] <small>[% 'Ultimos ejemplares adquiridos' | i18n %]</small></h1>
-			</div> 
-              [% INCLUDE 'opac-busquedaResult.inc' %]
-        [% ELSE %]
-		        <div class="page-header">
-				    <h1>[% ui.getNombre %] <small>[% 'Ultimos ejemplares adquiridos' | i18n %]</small></h1>
-				</div> 
-                [% INCLUDE 'opac-busquedaResult.inc' %]
-        [% END %]
+        [% END %]	
+		
+		
+		[% IF !((cant_sanciones > 0) || (cantidad_prestamos > 0) || (reservas_asignadas_count > 0) || (reservas_espera_count > 0)) %]
+	        <form class="" action="[% url_prefix %]/opac-busquedasDB.pl" method="get" onsubmit="startOverlay();">
+	            <input type="hidden" name="tipoAccion" value="BUSQUEDA_COMBINABLE" />
+	            <input type="hidden" name="token" value="[% token %]" />
+		        <p>
+		        	<input type="text" name="string" class="input-medium search-query span90 bigInput"
+	                 		  x-webkit-speech onwebkitspeechchange="javascript:startSearch();" 
+	                   		  speech onspeechchange="javascript:startSearch();"
+	                   		  placeholder="[% 'Qu&eacute; necesit&aacute;s' | i18n %]?"
+		        	>
+		        </p>
+		        
+		        <p><button class="btn btn-primary btn-large" type="submit">[% 'Buscar' | i18n %]</button></p>
+		    </form>
+	    [% END %]
+    </div>
+
+      <!-- Example row of columns -->
+      <div class="row">
+	      
+	        <div class="span4" id="last_new">
+		        [% IF novedad %]
+			          <h2>[% novedad.getTitulo %]</h2>
+			           <p>[% novedad.getResumen %]</p>
+			          <p>
+		                [% PERL %]
+		                   print C4::AR::Filtros::action_link_button( 
+		                                                     button         => "btn click",
+		                                                     url       	=> "[% url_prefix %]/opac-novedades.pl",
+		                                                     params		=> ["token=[% token %]"],
+		                                                     title        => "[% 'Novedades' | i18n %] &raquo;",
+		                                       ) ;
+		                [% END %]
+		          	  </p>
+				[% ELSE %]
+			          <h2>[% 'Novedades' | i18n %]</h2>
+			           <p>[% 'Todav&iacute;a no se ha publicado ninguna novedad. Siempre consult&aacute; esta secci&oacute;n para enterarte de las cosas que la biblioteca tiene para decirte' | i18n %].</p>
+			          <p>
+				[% END %]	        
+	        </div>
+	        <div class="span4">
+	          <h2>[% 'Ejemplares destacados' | i18n %]</h2>
+	           <p>[% 'Revis&aacute; los ejemplares promovidos por la biblioteca' | i18n %].</p>
+	          <p><a class="btn" href="#">[% 'Ver ejemplares' | i18n %] &raquo;</a></p>
+	       </div>
+	       
+	        <div class="span4">
+	          <h2>[% 'La biblioteca' | i18n %]</h2>
+	          <p>[% ui.getNombre %]</p>
+	          <p>[% ui.getTituloFormal %]</p>
+	          <p>
+                [% PERL %]
+                   print C4::AR::Filtros::action_link_button( 
+                                                     button         => "btn click",
+                                                     url       	=> "[% url_prefix %]/opac-about.pl",
+                                                     params		=> ["token=[% token %]"],
+                                                     title        => "[% 'Acerca de' | i18n %] &raquo;",
+                                       ) ;
+                [% END %]
+          	  </p>
+	        </div>
+      </div>
+

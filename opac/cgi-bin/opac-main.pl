@@ -71,22 +71,22 @@ if ($sanciones){
 
 my $apertura=C4::AR::Preferencias::getValorPreferencia("open");
 my $cierre=C4::AR::Preferencias::getValorPreferencia("close");
+
+
+my ($cantidad_novedades,$novedades)                         = C4::AR::Novedades::getUltimasNovedades(1);
+
+$t_params->{'novedad'} = $novedades;
+$t_params->{'apertura_ui'} = $apertura;
 $t_params->{'cierre_ui'} = $cierre;
 $t_params->{'apertura_ui'} = $apertura;
-
 $t_params->{'reservas_asignadas_count'} = $racount;
 $t_params->{'reservas_espera_count'}    = $recount;
-
 $t_params->{'prestamos'}            = $prestamos_array_ref;
 $t_params->{'nro_socio'}            = $nro_socio;
 $t_params->{'SEARCH_RESULTS'}       = $grupos;
 $t_params->{'cantidad_prestamos'}             = $cant;
-
 $t_params->{'cantidad'}       = $cantidad;
-
 $t_params->{'partial_template'}     = "opac-content_data.inc";
-
-
 $t_params->{'noAjaxRequests'}       = 0;
 
 

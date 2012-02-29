@@ -6,12 +6,18 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </a>
-		[% PERL %]
-                   print C4::AR::Filtros::link_to( text    =>  "[% 'MERAN' | i18n %]",
-                                                    url     =>  '[% url_prefix %]/opac-main.pl',
-                                                    title   =>  "[% 'Inicio' | i18n %]",
-                                                    class	=> "brand",
-                            ) ;
+        [% IF ui.tieneLogoOpacMenu %]
+        	<a href="[% url_prefix %]/opac-main.pl" class="logo_opac_menu">
+        		<img src="[% temas %]/[% user_theme %]/imagenes/logo_ui_opac_menu.png" />
+        	</a>
+        [% ELSE %]
+			[% PERL %]
+	                   print C4::AR::Filtros::link_to( text    =>  "[% 'MERAN' | i18n %]",
+	                                                    url     =>  '[% url_prefix %]/opac-main.pl',
+	                                                    title   =>  "[% 'Inicio' | i18n %]",
+	                                                    class	=> "brand",
+	                            ) ;
+			[% END %]
 		[% END %]
         <div class="nav-collapse">
           <ul class="nav">
@@ -132,7 +138,7 @@
             	
                       [% PERL %]
                           print C4::AR::Filtros::link_to( text    =>  "[% 'Iniciar sesi&oacute;n' | i18n %]",
-                                                          url     =>  '[% url_prefix %]/opac-auth.pl',
+                                                          url     =>  '[% url_prefix %]/auth.pl',
                                                           title   =>  "[% 'Iniciar sesi&oacute;n' | i18n %]",
                                   ) ;
                       [% END %]
