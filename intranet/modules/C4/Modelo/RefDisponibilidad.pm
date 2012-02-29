@@ -77,6 +77,12 @@ sub getObjeto{
 	return $objecto;
 }
 
+sub get_key_value{
+    my ($self) = shift;
+    return ($self->getCodigo);
+}
+
+
 sub getCodigo{
     my ($self) = shift;
 

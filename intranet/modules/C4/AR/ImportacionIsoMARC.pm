@@ -21,7 +21,7 @@ use MARC::Moose::Record;
 use MARC::Moose::Reader::File::Isis;
 use MARC::Moose::Reader::File::Iso2709;
 use MARC::Moose::Reader::File::Marcxml;
-use Clone;
+
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -1069,7 +1069,7 @@ sub getNivelesFromRegistro {
 											
 							#Agrego el último ejemplar y lo guardo
 							if (scalar($marc_record_n3->fields())){
-								C4::AR::Debug::debug("EJEMPLAR ".$marc_record_n3->as_formatted);	
+								#C4::AR::Debug::debug("EJEMPLAR ".$marc_record_n3->as_formatted);	
 								push(@ejemplares,$marc_record_n3);
 								$marc_record_n3 = MARC::Record->new();
 							}
@@ -1081,9 +1081,9 @@ sub getNivelesFromRegistro {
 							$hash_temp{'tipo_ejemplar'}  = $tipo_ejemplar;
 							$hash_temp{'cant_ejemplares'}   = scalar(@ejemplares);
 							$total_ejemplares+=$hash_temp{'cant_ejemplares'};
-							  
-							$hash_temp{'ejemplares'}   = Clone::clone(\@ejemplares);
-							C4::AR::Debug::debug("GRUPO CON ".$hash_temp{'cant_ejemplares'}." EJEMPLARES");
+							my @ejemplares_grupo =   @ejemplares; #esto hace la copia del arreglo
+							$hash_temp{'ejemplares'}   = \@ejemplares_grupo;
+							#C4::AR::Debug::debug("GRUPO CON ".$hash_temp{'cant_ejemplares'}." EJEMPLARES");
 							push (@grupos, \%hash_temp);
 							$marc_record_n2 = MARC::Record->new();
 							@ejemplares = ();
@@ -1112,11 +1112,11 @@ sub getNivelesFromRegistro {
 						 if($marc_record_n3->subfield($campo,$subcampo)){
 							#Existe el subcampo y no es repetible ==> es un nivel 3 nuevo							
 							#Agrego el último ejemplar y lo guardo
-							C4::AR::Debug::debug("EJEMPLAR ".$marc_record_n3->as_formatted);	
+							#C4::AR::Debug::debug("EJEMPLAR ".$marc_record_n3->as_formatted);	
 								push(@ejemplares,$marc_record_n3);
 								$marc_record_n3 = MARC::Record->new();
 							}
-						C4::AR::Debug::debug("EJ ".$campo."&".$subcampo."=".$dato);
+						#C4::AR::Debug::debug("EJ ".$campo."&".$subcampo."=".$dato);
 						#El campo es de Nivel 3
 						if ($marc_record_n3->field($campo)){
 							#Existe el campo, agrego el subcampo
@@ -1149,11 +1149,8 @@ sub getNivelesFromRegistro {
 			
 		}
 	}
-	C4::AR::Debug::debug("ULTIMO EJEMPLAR ".$marc_record_n3->fields());
-		C4::AR::Debug::debug("EJEMPLAR ".$marc_record_n3->as_formatted);
 		#Agrego el último ejemplar y lo guardo
 		if (scalar($marc_record_n3->fields())){
-			C4::AR::Debug::debug("EJEMPLAR ".$marc_record_n3->as_formatted);
 			push(@ejemplares,$marc_record_n3);
 			$marc_record_n3 = MARC::Record->new();
 		}
@@ -1165,19 +1162,21 @@ sub getNivelesFromRegistro {
 		$hash_temp{'tipo_ejemplar'}  = $tipo_ejemplar;
 		$hash_temp{'cant_ejemplares'}   = scalar(@ejemplares);
 		$total_ejemplares+=$hash_temp{'cant_ejemplares'};
-		$hash_temp{'ejemplares'}   = Clone::clone(\@ejemplares);
+		my @ejemplares_grupo =   @ejemplares; #esto hace la copia del arreglo
+		$hash_temp{'ejemplares'}   = \@ejemplares_grupo;
+		@ejemplares=();
 		push (@grupos, \%hash_temp);
 	
-		C4::AR::Debug::debug("###########################################################################################");
-		foreach my $grupo (@grupos){
-			my $ej = $grupo->{'ejemplares'};
-			C4::AR::Debug::debug(" GRUPO con ".scalar(@$ej)." ej");
-			C4::AR::Debug::debug(" Grupo  ".$grupo->{'grupo'}->as_formatted);
-				foreach my $ejemplar (@$ej){
-						C4::AR::Debug::debug(" Ejemplar  ".$ejemplar->as_formatted);
-				}
-		}
-		C4::AR::Debug::debug("###########################################################################################");
+		#C4::AR::Debug::debug("###########################################################################################");
+		#foreach my $grupo (@grupos){
+			#my $ej = $grupo->{'ejemplares'};
+			#C4::AR::Debug::debug(" GRUPO con ".scalar(@$ej)." ej");
+			#C4::AR::Debug::debug(" Grupo  ".$grupo->{'grupo'}->as_formatted);
+				#foreach my $ejemplar (@$ej){
+						#C4::AR::Debug::debug(" Ejemplar  ".$ejemplar->as_formatted);
+				#}
+		#}
+		#C4::AR::Debug::debug("###########################################################################################");
 		
 		my %hash_temp;
 		$hash_temp{'registro'}  = $marc_record_n1;
@@ -1188,11 +1187,11 @@ sub getNivelesFromRegistro {
 		
 }
 
-=head2 sub detalleCompletoVistaPrevia
+=head2 sub detalleCompleto
     Genera el detalle 
 =cut
 
-sub detalleCompletoVistaPrevia {
+sub detalleCompletoRegistro {
     my ($id_registro) = @_;
    
     my $detalle = C4::AR::ImportacionIsoMARC::getNivelesFromRegistro($id_registro);
@@ -1200,20 +1199,33 @@ sub detalleCompletoVistaPrevia {
     #recupero el nivel1 segun el id1 pasado por parametro
     my $nivel1              = $detalle->{'registro'};
     my $grupos = $detalle->{'grupos'};
-    
+    my $tipo_documento;
     my @niveles2;    
     foreach my $nivel2 (@$grupos){
 		my $nivel2_marc = $nivel2->{'grupo'};
 		my %hash_nivel2=();
-        $hash_nivel2{'tipo_documento'}          = C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord_Object($nivel2_marc);
-        
+        $hash_nivel2{'tipo_documento'}      = C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord_Object($nivel2_marc);
+        $tipo_documento 					= $hash_nivel2{'tipo_documento'};
         #Seteo bien el código de tipo de documento
-        my $tipo_documento = C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord($nivel2_marc);
         if($nivel2_marc->field('910')){
-			$nivel2_marc->field('910')->update( a => $tipo_documento);
-		}
+			$nivel2_marc->field('910')->update( 'a' => $tipo_documento->getNombre());
+		}else{
+				my $new_field= MARC::Field->new('910','#','#','a' => $tipo_documento->getNombre());
+				$nivel2_marc->append_fields($new_field);
+			}
+			
+		$hash_nivel2{'nivel_bibliografico'}      = C4::AR::ImportacionIsoMARC::getNivelBibliograficoFromMarcRecord_Object($nivel2_marc);
+        my $nivel_bibliografico					 = $hash_nivel2{'nivel_bibliografico'};
+        #Seteo bien el código de tipo de documento
+        if($nivel2_marc->field('900')){
+			$nivel2_marc->field('900')->update( 'b' => $nivel_bibliografico->getDescription());
+		}else{
+				my $new_field= MARC::Field->new('900','#','#','b' => $nivel_bibliografico->getDescription());
+				$nivel2_marc->append_fields($new_field);
+			}
 		
-        $hash_nivel2{'nivel2_array'}            =  C4::AR::ImportacionIsoMARC::toMARC_Array($nivel2_marc,$hash_nivel2{'tipo_documento'},'',2);
+		$hash_nivel2{'marc_record'}             = $nivel2_marc;
+        $hash_nivel2{'nivel2_array'}            = C4::AR::ImportacionIsoMARC::toMARC_Array($nivel2_marc,$tipo_documento->getId_tipo_doc(),'',2);
         $hash_nivel2{'nivel2_template'}         = $nivel2->{'tipo_ejemplar'};
         $hash_nivel2{'tiene_indice'}            = 0;
 
@@ -1233,9 +1245,9 @@ sub detalleCompletoVistaPrevia {
         $hash_nivel2{'disponibles_sala'}=0;
         $hash_nivel2{'disponibles_domiciliario'}=0;
         
-        C4::AR::Debug::debug(" Ejemplares ".scalar(@$ejemplares));
+        #C4::AR::Debug::debug(" Ejemplares ".scalar(@$ejemplares));
             foreach my $nivel3 (@$ejemplares){
-				my $n3 =  C4::AR::ImportacionIsoMARC::getEjemplarFromMarcRecord($nivel3,$hash_nivel2{'tipo_documento'});
+				my $n3 =  C4::AR::ImportacionIsoMARC::getEjemplarFromMarcRecord($nivel3,$tipo_documento->getId_tipo_doc());
 				#Calcular las disponibilidades
 				my $estado= $n3->{'estado'};
 				my $disponibilidad= $n3->{'disponibilidad'};
@@ -1261,9 +1273,10 @@ sub detalleCompletoVistaPrevia {
 
         push(@niveles2, \%hash_nivel2);
     }
-    
+    if(!$tipo_documento){$tipo_documento = C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");}
     my %t_params;
-    $t_params{'nivel1'}           = C4::AR::ImportacionIsoMARC::toMARC_Array($nivel1,'LIB','',1);
+    $t_params{'nivel1'}           = C4::AR::ImportacionIsoMARC::toMARC_Array($nivel1,$tipo_documento->getId_tipo_doc(),'',1);
+    $t_params{'marc_record'}      = $nivel1;
     $t_params{'nivel1_template'}  = $detalle->{'tipo_ejemplar'};
     $t_params{'cantItemN1'}       = $detalle->{'total_ejemplares'};
     $t_params{'nivel2'}           = \@niveles2;
@@ -1285,15 +1298,40 @@ sub toMARC_Array {
             #proceso todos los subcampos del campo
             foreach my $subfield ($field->subfields()) {
                 my %hash_temp;
-
                 my $subcampo                        = $subfield->[0];
                 my $dato                            = $subfield->[1];
                 $hash_temp{'campo'}                 = $campo;
                 $hash_temp{'subcampo'}              = $subcampo;
                 $hash_temp{'liblibrarian'}          = C4::AR::Catalogacion::getLiblibrarian($campo, $subcampo, $itemtype, $type, $nivel);
                 $hash_temp{'orden'}                 = C4::AR::Catalogacion::getOrdenFromCampoSubcampo($campo, $subcampo, $itemtype, $type, $nivel);
-                $hash_temp{'datoReferencia'}        = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype, $nivel);
                 $hash_temp{'dato'}                  = $dato;
+                
+                #es una referencia?
+                $hash_temp{'referencia'} = 0;
+                $hash_temp{'referencia_encontrada'} = 0;
+                my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo, $itemtype, $nivel);
+                if($estructura->getReferencia){
+					C4::AR::Debug::debug("REFERENCIA ==>  ".$campo."&".$subcampo."=".$dato);
+					#es una referencia, yo tengo el dato nomás (luego se verá si hay que crear una nueva o ya existe en la base)
+					#my $infoRef = $estructura->infoReferencia->getReferencia;
+					#my $referer_involved = $tabla_referer_involved->getByPk($value_id);
+					$hash_temp{'referencia'} = $estructura->infoReferencia->getReferencia;
+					my ($clave_tabla_referer_involved,$tabla_referer_involved) =  C4::AR::Referencias::getTablaInstanceByAlias($hash_temp{'referencia'});
+					$hash_temp{'referencia_tabla'} = $tabla_referer_involved->meta->table;
+					C4::AR::Debug::debug("Tabla REF  ==>  ".$tabla_referer_involved);
+					my ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getAll(0,0,1,$dato);
+					
+					if (($campo eq '910')&&($subcampo eq 'a')){
+							C4::AR::Debug::debug("REF CANT ==>  ".$ref_cantidad);
+					}
+					
+					if ($ref_cantidad){
+						C4::AR::Debug::debug("ENCONTRE!!!  REF  ==>  ".$ref_valores->[0]->get_key_value);
+						$hash_temp{'referencia_encontrada'} =  $ref_valores->[0]->get_key_value;
+						}
+				}
+
+                #
                 push(@MARC_result_array, \%hash_temp);
             }
         }
@@ -1362,8 +1400,9 @@ sub getEjemplarFromMarcRecord{
 	my ($nivel3,$tipo_documento) = @_;
 	    
 	my %hash_nivel3=();
+	$hash_nivel3{'marc_record'}          	= $nivel3;
 	$hash_nivel3{'tipo_documento'}          = $tipo_documento;
-	$hash_nivel3{'barcode'}            		=  C4::AR::ImportacionIsoMARC::generaCodigoBarraFromMarcRecord($nivel3,$tipo_documento->getId_tipo_doc());
+	$hash_nivel3{'barcode'}            		=  C4::AR::ImportacionIsoMARC::generaCodigoBarraFromMarcRecord($nivel3,$tipo_documento);
 	$hash_nivel3{'signatura_topografica'}   =  $nivel3->subfield('995','t');
 	$hash_nivel3{'disponibilidad'}   		=  C4::AR::ImportacionIsoMARC::getDisponibilidadEjemplar_Object($nivel3);
 	$hash_nivel3{'estado'}   				=  C4::AR::ImportacionIsoMARC::getEstadoEjemplar_Object($nivel3);
@@ -1395,6 +1434,31 @@ sub getTipoDocumentoFromMarcRecord_Object{
 	  	return $object_tipo_documento;
 }
 
+sub getNivelBibliograficoFromMarcRecord{
+		my ($marc_record) = @_;
+
+		my $nivel_bibliografico = $marc_record->subfield('900','b');
+		
+		my $resultado =C4::AR::Preferencias::getValorPreferencia("defaultNivelBibliografico");
+		if ($nivel_bibliografico){
+			#FIXME por ahora suponemos que viene bien el codigo, puede haber alias
+			 $resultado= $nivel_bibliografico;
+			#use Switch;
+			#switch ($tipo_documento) {
+				#case 'TEXTO' { 
+					#$resultado = 'LIB';
+					#}
+			#}
+		}
+	return $resultado;
+}
+
+sub getNivelBibliograficoFromMarcRecord_Object{
+		my ($marc_record) = @_;
+		my $nivel_bibliografico = C4::AR::ImportacionIsoMARC::getNivelBibliograficoFromMarcRecord($marc_record);
+	    my $object_nivel_bibliografico = C4::AR::Utilidades::getNivelBibliograficoByCode($nivel_bibliografico);
+	  	return $object_nivel_bibliografico;
+}
 
 sub getUIFromMarcRecord {
 		my ($marc_record) = @_;
@@ -1468,6 +1532,13 @@ sub generaCodigoBarraFromMarcRecord{
      
     return ($barcode);
 }
+
+
+sub referenciasFromMarcRecord{
+    my($marc_record) = @_;
+
+}
+
 
 END { }       # module clean-up code here (global destructor)
 

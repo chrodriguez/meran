@@ -96,7 +96,7 @@ elsif($tipoAccion eq "DETALLE_REGISTRO"){
   my ($registro_importacion) = C4::AR::ImportacionIsoMARC::getRegistroFromImportacionById($id);
       $t_params->{'registro_importacion'} = $registro_importacion;
 
-  my $vista_previa = C4::AR::ImportacionIsoMARC::detalleCompletoVistaPrevia($id);
+  my $vista_previa = C4::AR::ImportacionIsoMARC::detalleCompletoRegistro($id);
      
       $t_params->{'nivel1'}           = $vista_previa->{'nivel1'};
       $t_params->{'nivel1_template'}  = $vista_previa->{'nivel1_template'};

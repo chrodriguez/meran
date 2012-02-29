@@ -3,40 +3,18 @@
     [% PERL %]
     print C4::AR::Filtros::tabbedPane( titulo    => "[% 'Detalle de Registro' | i18n %]",
                                  subtitulo => "[% 'Navegue por las pesta&ntilde;as para acceder a las distintas vistas' | i18n %]",
-                                 content   => [ {id => 'RO', text=> "[% 'Registro Original' | i18n %]" },
+                                 content   => [ {id => 'VP', text => "[% 'Vista Previa' | i18n %]"},
+												{id => 'RO', text=> "[% 'Registro Original' | i18n %]" },
                                                 {id => 'RR', text => "[% 'Registro Resultado' | i18n %]"},
-                                                {id => 'VP', text => "[% 'Vista Previa' | i18n %]"},
                                               ],
                                  content_id=> ['detalle_registro'],
-                                 active_id => 'RO',
+                                 active_id => 'VP',
 
     
     );
 	[% END %]
 
-    <div class="tab-pane fade in active" id="RO">
-                <pre>
-                    [% registro_importacion.getRegistroMARCOriginal.as_formatted %]
-                </pre>
-
-                [% FOREACH registro_ejemplar IN registro_importacion.getRegistrosHijo %]
-
-                    <fieldset class="resultados_busqueda">
-                    <legend class="titulo_legend trigger click">[% "Registro Hijo" | i18n %]</legend>
-                        <pre>
-                            [% registro_ejemplar.getRegistroMARCOriginal.as_formatted %]
-                        </pre>
-                    </fieldset>
-                [% END %]
-        </div>
-
-  <div class="tab-pane fade" id="RR">
-                <pre>
-                    [% registro_importacion.getRegistroMARCResultado.as_formatted %]
-                </pre>
-        </div>
-
-  <div class="tab-pane fade" id="VP">
+  <div class="tab-pane fade in active" id="VP">
             
     <fieldset>
           <div class="page-header">
@@ -49,7 +27,11 @@
                         [% IF liblibrarian %]
                             [% IF dato %]
 										<dt class="inline left rightMargin">[% liblibrarian %]:&nbsp;</dt> 
-										<dd>[% dato %]&nbsp;</dd>
+										<dd>[% dato %]&nbsp;
+										[% IF referencia %]
+										([% "Referencia a " | i18n %] [% referencia %] => <b>[% referencia_tabla %]@[% IF referencia_encontrada %][% referencia_encontrada %][% ELSE %]__NUEVA__[% END %]</b>)
+                                        [% END %]
+                                        </dd>
                             [% END %]
                         [% END %]
                 [% END %]
@@ -93,7 +75,11 @@
                                     [% IF liblibrarian %]
                                         [% IF dato %]
 										<dt class="inline left rightMargin">[% liblibrarian %]:&nbsp;</dt> 
-										<dd>[% dato %]&nbsp;</dd>
+										<dd>[% dato %]&nbsp;
+										[% IF referencia %]
+										([% "Referencia a " | i18n %] [% referencia %] => <b>[% referencia_tabla %]@[% IF referencia_encontrada %][% referencia_encontrada %][% ELSE %]__NUEVA__[% END %]</b>)
+                                        [% END %]
+										</dd>
                                         [% END %]
                                     [% END %]
                                 [% END %] <!-- END FOREACH nivel2_array -->
@@ -117,7 +103,7 @@
 															 <dt class="inline left rightMargin">[% "Ejemplares No Disponibles:"|i18n %]</dt>
 															  <dd> [% no_disponibles %]</dd>
 														</dl>
-													</div>                
+												</div>                
 
 													<form id="tablaEjemplares[% id2 %]" name="tablaEjemplares[% id2 %]" action="[% url_prefix %]/catalogacion/barcode_gen.pl" method="post">
 														[% PERL %]
@@ -169,7 +155,29 @@
         </div>
 
 [% END %]<!-- END FOREACH Nivel 2-->
-</div> <!-- Fin DIV detalleComun -->
+</div> <!-- Fin DIV class="tab-pane fade in active" id="VP" -->
+
+    <div class="tab-pane fade" id="RO">
+                <pre>
+                    [% registro_importacion.getRegistroMARCOriginal.as_formatted %]
+                </pre>
+
+                [% FOREACH registro_ejemplar IN registro_importacion.getRegistrosHijo %]
+
+                    <fieldset class="resultados_busqueda">
+                    <legend class="titulo_legend trigger click">[% "Registro Hijo" | i18n %]</legend>
+                        <pre>
+                            [% registro_ejemplar.getRegistroMARCOriginal.as_formatted %]
+                        </pre>
+                    </fieldset>
+                [% END %]
+        </div>
+
+  <div class="tab-pane fade" id="RR">
+                <pre>
+                    [% registro_importacion.getRegistroMARCResultado.as_formatted %]
+                </pre>
+        </div>
 
 
         </div>

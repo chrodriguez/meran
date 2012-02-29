@@ -45,9 +45,13 @@ sub getId{
     return (C4::AR::Utilidades::trim($self->id));
 }
 
+sub get_key_value{
+    my ($self) = shift;
+    return ($self->getCode);
+}
+
 sub getCode{
     my ($self) = shift;
-
     return (C4::AR::Utilidades::trim($self->code));
 }
     
@@ -145,22 +149,7 @@ sub getAll{
                                                                    );
     }
     my $ref_cant = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico_count(query => \@filtros,);
-    my $self_descripcion = $self->getDescription;
-
-    my $match = 0;
-    if ($matchig_or_not){
-        my @matched_array;
-        foreach my $each (@$ref_valores){
-          $match = ((distance($self_descripcion,$each->getDescription)<=1));
-          if ($match){
-            push (@matched_array,$each);
-          }
-        }
-        return (scalar(@matched_array),\@matched_array);
-    }
-    else{
-      return($ref_cant,$ref_valores);
-    }
+    return($ref_cant,$ref_valores);
 }
 
 1;

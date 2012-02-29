@@ -162,22 +162,7 @@ sub getAll{
     }
     my $ref_cant = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3_count(query => \@filtros,);
 
-    my $self_nombre = $self->getNombre;
-
-    my $match = 0;
-    if ($matchig_or_not){
-        my @matched_array;
-        foreach my $autor (@$ref_valores){
-          $match = ((distance($self_nombre,$autor->getNombre)<=1));
-          if ($match){
-            push (@matched_array,$autor);
-          }
-        }
-        return (scalar(@matched_array),\@matched_array);
-    }
-    else{
-      return($ref_cant,$ref_valores);
-    }
+    return($ref_cant,$ref_valores);
 }
 
 1;

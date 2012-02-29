@@ -147,6 +147,11 @@ sub nextMember{
     return(C4::Modelo::RefLocalidad->new());
 }
 
+sub get_key_value{
+    my ($self) = shift;
+    return ($self->getCodigo);
+}
+
 sub getAll{
 
     my ($self) = shift;
