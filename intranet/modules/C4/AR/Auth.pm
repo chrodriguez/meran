@@ -207,16 +207,20 @@ sub updateAuthOrder{
 
 =item 
     Checkea si el browser es uno ideal
-    Browser NO soportados:
-        FF: 3, IE: 7, Google Chrome 7, 8 y 9, Chromium Browser 5
-        Chromium Browser y Google Chrome lo detecta con el mismo user agent
+    Chromium Browser y Google Chrome lo detecta con el mismo user agent
 =cut
 sub checkBrowser{
 
     my @blacklist = qw(
+        Firefox_9
+        Firefox_8
+        Firefox_7
+        Firefox_6
         Firefox_5
         Firefox_4
         Firefox_3
+        Chrome_16
+        Chrome_15
         Chrome_14
         Chrome_13
         Chrome_12
@@ -226,10 +230,12 @@ sub checkBrowser{
         Chrome_8
         Chrome_7
         Chrome_6
+        MSIE_9
         MSIE_8
         MSIE_7
         MSIE_6
         MSIE_5
+        IceWeasel_6
         IceWeasel_5
         IceWeasel_4
         IceWeasel_3
@@ -242,10 +248,13 @@ sub checkBrowser{
 	
 	C4::AR::Debug::debug("HTTP USER AGENT ===================================> ".$search);
 	
+	C4::AR::Debug::debug("session : " . $session);
+	C4::AR::Utilidades::printHASH($session);
+	
 	if ($search ~~ @blacklist){
 	    if (!$session->param('check_browser_allowed')){
             if($session->param('type') eq "opac"){
-                redirectTo(C4::AR::Utilidades::getUrlPrefix().'/checkBrowser.pl?token='.$session->param('token'));
+                redirectTo(C4::AR::Utilidades::getUrlPrefix().'/checkBrowser.pl');
             }else{
                 redirectTo(C4::AR::Utilidades::getUrlPrefix().'/checkBrowser.pl?token='.$session->param('token'));
             }    

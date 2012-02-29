@@ -68,8 +68,8 @@
   [% IF socio_data.usr_permisos_opac %]
         [% IF !noAjaxRequests %]
         <script type="text/javascript">
-          $(document).ready(function() {
-/*
+/*          $(document).ready(function() {
+
         	infoReservas();
             infoSanciones();
             setInterval(infoReservas,[% IF timeInterval %]
