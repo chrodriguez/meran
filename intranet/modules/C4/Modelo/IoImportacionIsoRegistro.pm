@@ -214,7 +214,7 @@ sub getCampoSubcampoJoined{
                     $dato = $field->subfield($detalle->getSubcampoOrigen);
                 }
             if ($dato){
-                    $join.=$detalle->getSeparador . $dato;
+                    $join.=$detalle->getSeparador. $dato;
              }
         }
      }

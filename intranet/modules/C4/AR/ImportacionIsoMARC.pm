@@ -1215,6 +1215,7 @@ sub detalleCompletoRegistro {
 			}
 			
 		$hash_nivel2{'nivel_bibliografico'}      = C4::AR::ImportacionIsoMARC::getNivelBibliograficoFromMarcRecord_Object($nivel2_marc);
+		
         my $nivel_bibliografico					 = $hash_nivel2{'nivel_bibliografico'};
         #Seteo bien el código de tipo de documento
         if($nivel2_marc->field('900')){
@@ -1442,7 +1443,7 @@ sub getNivelBibliograficoFromMarcRecord{
 		my $resultado =C4::AR::Preferencias::getValorPreferencia("defaultNivelBibliografico");
 		if ($nivel_bibliografico){
 			#FIXME por ahora suponemos que viene bien el codigo, puede haber alias
-			 $resultado= $nivel_bibliografico;
+			 $resultado=$nivel_bibliografico;
 			#use Switch;
 			#switch ($tipo_documento) {
 				#case 'TEXTO' { 
@@ -1456,7 +1457,11 @@ sub getNivelBibliograficoFromMarcRecord{
 sub getNivelBibliograficoFromMarcRecord_Object{
 		my ($marc_record) = @_;
 		my $nivel_bibliografico = C4::AR::ImportacionIsoMARC::getNivelBibliograficoFromMarcRecord($marc_record);
+		C4::AR::Debug::debug(" NIVEL BIBLIOGRAFICO  ".$nivel_bibliografico );
+		
+		$nivel_bibliografico = C4::AR::Utilidades::trim($nivel_bibliografico);
 	    my $object_nivel_bibliografico = C4::AR::Utilidades::getNivelBibliograficoByCode($nivel_bibliografico);
+		C4::AR::Debug::debug("OBJETO  NIVEL BIBLIOGRAFICO  ".$object_nivel_bibliografico );
 	  	return $object_nivel_bibliografico;
 }
 
