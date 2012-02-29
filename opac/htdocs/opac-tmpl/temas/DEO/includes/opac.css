@@ -1,4 +1,5 @@
 @import url("/includes/bootstrap/css/bootstrap.css");
+@import url("/includes/bootstrap/css/bootstrap-responsive.css");
 
 .title{
     background-color: #FAFAFA;
@@ -14,9 +15,13 @@ legend {
 }
 
 body {
-    padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+    padding-bottom: 60px;
 }
 
+.sidebar-nav {
+  padding: 9px 0;
+}
+      
 .center-section-form {
     width: 75%;
     margin: 0 auto;
@@ -39,5 +44,12 @@ body {
 .logo_opac_menu{
 	float: left;
 	line-height:0;
-	
+}
+
+.main_content {
+  padding-top: 60px;
+}
+
+.medium_font{
+	font-size: 40px !important;
 }

@@ -61,31 +61,32 @@
 	});
 </script>
 
-<input type="hidden" id="idEncabezado">
-
-<div class="title">[% 'Configuraci&oacute;n de formatos de Barcode' | i18n %]</div>
-
-<fieldset>
-    <legend>[% "Seleccione el tipo de documento a configurar:" | i18n %]</legend>
-    
-    <section class="center-section-form">
-
-    [% PERL %]
-            print C4::AR::Filtros::to_Icon(   
-                                                boton   => "icon_buscar",
-                                                onClick => "eleccionDeBarcodeFormat();",
-                                                title   => "[% 'Buscar' | i18n %]",
-                    ) ;
-    [% END %]
-    
-    [% selectItemType %]
-    
-    </section>
-    
-    <div id="result"></div>
-
-</fieldset>
-
+<div class="form-horizontal">
+	<fieldset>
+	    <legend>[% 'Configuraci&oacute;n de formatos de Barcode' | i18n %]</legend>
+	    
+	    <section class="center-section-form">
+	
+		    <div class="control-group">
+		      [% selectItemType %]
+		    </div>
+		    <div class="form-actions">
+				[% PERL %]
+				                    print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+				                                                        onClick => "eleccionDeBarcodeFormat();",
+				                                                        boton    => "btn btn-primary",
+				                                                        inline => "1",
+				                            ) ;
+				[% END %]
+		    </div>    
+	    
+	    
+	    </section>
+	    
+	    <div id="result"></div>
+	
+	</fieldset>
+</div>
 
 
 [% INCLUDE "intranet-bottom.inc" %]

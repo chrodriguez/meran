@@ -358,102 +358,102 @@ $(document).ready(function() {
 </script>
 
 <div id="confirmar_div" ></div>
-<fieldset>
-    <legend class="titulo_legend"><span class="titulos">[% 'Circulaci&oacute;n R&aacute;pida' | i18n %]</span></legend>
-       <section class="center-section-form"> 
-        <form id="form_circulacion_rapida" class="classform form-horizontal" onsubmit="return false;">
-       <!-- <ul>-->
-            <!--<li class="sub_item">-->
-            <div class="control-group">
-                  <label for="operacion" class="control-label">[% 'Operaci&oacute;n' | i18n %]</label>
-                  <div class="controls">
-                  <select id='operacion' tabindex='1' onChange='onChangeOperacion()'>	
-                      <option value="prestar">[% 'Pr&eacute;stamo' | i18n %]</option>
-                      <option value="devolver">[% 'Devoluci&oacute;n' | i18n %]</option>
-                      <option value="renovar">[% 'Renovaci&oacute;n' | i18n %]</option> 
-                  </select>
-                  </div>
-                  <!--<div id="cambo_tipo_prestamo" style="display: none">-->
-            </div>
-            <!--</li>-->
-        <!--    <li class="sub_item">-->
-	        <div id="divInfoEjemplar" class="control-group">
-	                <label for="barcode"  class="control-label">[% 'C&oacute;digo de Barras' | i18n %]
-	                 [% PERL %]
-	                     print C4::AR::Filtros::setHelpIcon( text => "[% 'Campo autocompletable, ingrese el nro. de inventario, por ej. DEO-LIB-0' | i18n %]",);
-	                 [% END %]
-	                </label>
-                    <div class="controls">
-                        <input type="text" id="barcode" name="barcode" value="" tabindex='2' style="display: none;">
-                        <input type='hidden' id='barcode_hidden' value='' tabindex='-1'>
-                        <input type="text" id="barcodePrestado" value='' tabindex='2' style="display: none;">
-                        <!-- para guardar el nro_socio del usuario al que se le realizo el prestamo -->
-                        <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
-                    </div>
-            </div>
-            <!--</li>-->
-            <!--<li>-->
-            <div id="datos_ejemplar"></div>
-           <!-- </li>-->
-           <!-- <li class="sub_item">-->
-            <div id="divInfoUsuario" class="control-group" >
-                <label for="usuario" class="control-label">[% 'Usuario' | i18n %]
-                    [% PERL %]
-                        print C4::AR::Filtros::setHelpIcon( text => "[% 'Campo autocompletable, b&uacute;squeda por nombre, apellido, nro. de documento, legajo, nro. socio' | i18n %]",);
-                    [% END %]
-                </label>
-                <div class="controls">
-                    <input type='text' id='usuario' name='usuario' value='' size=32 tabindex='3' style="float: left" onclick="clear_usuario();">
-                    <div id="estadoUsuario"></div>
-                    <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
-                </div>
-  <!--                  <input type="button" class="nonForm" onclick="agregarAutorizado()" id="save_button" value="[% 'Agregar Adicional' | i18n %]" > -->
-            </div>
-           <!-- </li>-->
-            <!--<li>-->
-                <div id="datosAutorizado"></div>
-                <div id="detalleUsuario"></div>
-            <!--</li>-->
-            <!--<li class="sub_item">-->
-            <div id="divInfoUsuario">
-                  <div id="cambo_tipo_prestamo" class="control-group">
-                      <label for="operacion">[% 'Tipo de Pr&eacute;stamo' | i18n %]</label>
-                      <div class="controls">
-                          <div id="spanComboTipoPrestamo"></div>
-                      </div>
-                  </div>
-             
-           <!-- </li>-->
-       <!--   </ul>-->
-        </form>
-        <div class="form-actions" id="acciones">
-        [% PERL %]
-        
-                            print C4::AR::Filtros::to_Button(     text    => "[% 'Cancelar' | i18n %]",
-                                                                  id      => "cancelar",
-                                                                  boton   => "btn",
-                                                                  onClick => "",
-                                                                  inline  => "1",
-                                                                  title   => "[% 'cancelar operaci&oacute;n' | i18n %]",
-                                    ) ;
-
-                            print C4::AR::Filtros::to_Button(     text    => "[% 'Aceptar' | i18n %]",
-                                                                  id      => "aceptar",
-                                                                  boton   => "btn btn-primary",
-                                                                  onClick => "realizarAccionCircRapida();",
-                                                                  inline  => "1",
-                                                                  title   => "[% 'realizar operaci&oacute;n' | i18n %]",
-                                    ) ;
-        [% END %]
-        </div>
-</fieldset>
-
-<!-- DELTALLE DEL USUARIO -->
-<br>
-<!-- DETALLE DE PRESTAMOS -->
-<div id="tablaPrestamos" style="clear: both;"></div>
-<div class="ticket" id="ticket" ></div>
-<!-- DETALLE DE SANCIONES -->
-<div id="sanciones"></div>
+<section class="center-section-form"> 
+	<form id="form_circulacion_rapida" class="classform form-horizontal" onsubmit="return false;">
+		<fieldset>
+		    <legend class="titulo_legend"><span class="titulos">[% 'Circulaci&oacute;n R&aacute;pida' | i18n %]</span></legend>
+		       <!-- <ul>-->
+		            <!--<li class="sub_item">-->
+		            <div class="control-group">
+		                  <label for="operacion" class="control-label">[% 'Operaci&oacute;n' | i18n %]</label>
+		                  <div class="controls">
+		                  <select id='operacion' tabindex='1' onChange='onChangeOperacion()'>	
+		                      <option value="prestar">[% 'Pr&eacute;stamo' | i18n %]</option>
+		                      <option value="devolver">[% 'Devoluci&oacute;n' | i18n %]</option>
+		                      <option value="renovar">[% 'Renovaci&oacute;n' | i18n %]</option> 
+		                  </select>
+		                  </div>
+		                  <!--<div id="cambo_tipo_prestamo" style="display: none">-->
+		            </div>
+		            <!--</li>-->
+		        <!--    <li class="sub_item">-->
+			        <div id="divInfoEjemplar" class="control-group">
+			                <label for="barcode"  class="control-label">[% 'C&oacute;digo de Barras' | i18n %]
+			                 [% PERL %]
+			                     print C4::AR::Filtros::setHelpIcon( text => "[% 'Campo autocompletable, ingrese el nro. de inventario, por ej. DEO-LIB-0' | i18n %]",);
+			                 [% END %]
+			                </label>
+		                    <div class="controls">
+		                        <input type="text" id="barcode" name="barcode" value="" tabindex='2' style="display: none;">
+		                        <input type='hidden' id='barcode_hidden' value='' tabindex='-1'>
+		                        <input type="text" id="barcodePrestado" value='' tabindex='2' style="display: none;">
+		                        <!-- para guardar el nro_socio del usuario al que se le realizo el prestamo -->
+		                        <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
+		                    </div>
+		            </div>
+		            <!--</li>-->
+		            <!--<li>-->
+		            <div id="datos_ejemplar"></div>
+		           <!-- </li>-->
+		           <!-- <li class="sub_item">-->
+		            <div id="divInfoUsuario" class="control-group" >
+		                <label for="usuario" class="control-label">[% 'Usuario' | i18n %]
+		                    [% PERL %]
+		                        print C4::AR::Filtros::setHelpIcon( text => "[% 'Campo autocompletable, b&uacute;squeda por nombre, apellido, nro. de documento, legajo, nro. socio' | i18n %]",);
+		                    [% END %]
+		                </label>
+		                <div class="controls">
+		                    <input type='text' id='usuario' name='usuario' value='' size=32 tabindex='3' style="float: left" onclick="clear_usuario();">
+		                    <div id="estadoUsuario"></div>
+		                    <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
+		                </div>
+		  <!--                  <input type="button" class="nonForm" onclick="agregarAutorizado()" id="save_button" value="[% 'Agregar Adicional' | i18n %]" > -->
+		            </div>
+		           <!-- </li>-->
+		            <!--<li>-->
+		                <div id="datosAutorizado"></div>
+		                <div id="detalleUsuario"></div>
+		            <!--</li>-->
+		            <!--<li class="sub_item">-->
+		            <div id="divInfoUsuario">
+		                  <div id="cambo_tipo_prestamo" class="control-group">
+		                      <label for="operacion">[% 'Tipo de Pr&eacute;stamo' | i18n %]</label>
+		                      <div class="controls">
+		                          <div id="spanComboTipoPrestamo"></div>
+		                      </div>
+		                  </div>
+		             
+		           <!-- </li>-->
+		       <!--   </ul>-->
+		        <div class="form-actions" id="acciones">
+		        [% PERL %]
+		        
+		                            print C4::AR::Filtros::to_Button(     text    => "[% 'Cancelar' | i18n %]",
+		                                                                  id      => "cancelar",
+		                                                                  boton   => "btn",
+		                                                                  onClick => "",
+		                                                                  inline  => "1",
+		                                                                  title   => "[% 'cancelar operaci&oacute;n' | i18n %]",
+		                                    ) ;
+		
+		                            print C4::AR::Filtros::to_Button(     text    => "[% 'Aceptar' | i18n %]",
+		                                                                  id      => "aceptar",
+		                                                                  boton   => "btn btn-primary",
+		                                                                  onClick => "realizarAccionCircRapida();",
+		                                                                  inline  => "1",
+		                                                                  title   => "[% 'realizar operaci&oacute;n' | i18n %]",
+		                                    ) ;
+		        [% END %]
+		        </div>
+		</fieldset>
+    </form>
+	
+	<!-- DELTALLE DEL USUARIO -->
+	<br>
+	<!-- DETALLE DE PRESTAMOS -->
+	<div id="tablaPrestamos" style="clear: both;"></div>
+	<div class="ticket" id="ticket" ></div>
+	<!-- DETALLE DE SANCIONES -->
+	<div id="sanciones"></div>
 </section>
 [% INCLUDE 'intranet-bottom.inc' %]

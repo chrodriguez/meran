@@ -13,16 +13,23 @@
   <meta name="distribution" content="global" />
   <meta name="description" content="OPAC" />
   <meta name="keywords" content="Your keywords, keywords, keywords, here ..." />
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
-   
-  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="[% temas %]/[% user_theme %]/includes/opac.css" />
-  <link media="screen" rel="stylesheet" href="/includes/css/fancybox.css" type="text/css">
-  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/ui.stars.css" />
-  <link rel="icon" type="image/x-icon" href="[% temas %]/[% user_theme %]/imagenes/favicon.ico" />
+
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+       
+  <link rel="stylesheet" href="[% temas %]/[% user_theme %]/includes/opac.css" />
+  <link rel="stylesheet" href="/includes/css/ui.stars.css" />
+<!--   <link rel="icon" type="image/x-icon" href="[% temas %]/[% user_theme %]/imagenes/favicon.ico" /> -->
 
   <script type="text/javascript">
     var token               = '[% token %]';
@@ -42,8 +49,6 @@
   [% INCLUDE 'AutocompleteHelper.inc'  %]
   <script src="/includes/MessageHelper.js" type="text/javascript"></script>
   <script src="/opac-tmpl/includes/circulacionOPAC.js" type="text/javascript"></script>
-  <script src="/includes/jquery/fancybox/jquery.easing.1.3.js" type="text/javascript"></script>
-  <script src="/includes/jquery/fancybox/jquery.fancybox.js" type="text/javascript"></script>
   <script src="/opac-tmpl/includes/favoritos.js" type="text/javascript"></script>
   <script type="text/javascript" src="/includes/jquery/jquery.expander.js"></script>
   <script src="/includes/util.js" type="text/javascript"></script>
@@ -64,7 +69,8 @@
         [% IF !noAjaxRequests %]
         <script type="text/javascript">
           $(document).ready(function() {
-            infoReservas();
+/*
+        	infoReservas();
             infoSanciones();
             setInterval(infoReservas,[% IF timeInterval %]
                                         [% timeInterval %]
@@ -79,6 +85,7 @@
                                      [% END %]
                                      );
           });
+*/
           </script>
         [% END %]
     [% END %]
@@ -112,7 +119,7 @@
 	<body lang="es-Es">
 	<!-- POAR AHORA ES LA NAV -->
 	   [% INCLUDE 'opac-top-header.inc' %]
-		<div class="container">		   
+		<div class="container main_content">		   
 			        [% IF content_title %]
 			            <div class="title">[% content_title %]</div>  
 			        [% END %]
