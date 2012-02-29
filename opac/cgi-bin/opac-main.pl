@@ -1,7 +1,6 @@
 #!/usr/bin/perl
 use strict;
 require Exporter;
-
 use C4::Output;  # contains gettemplate
 use C4::AR::Auth;
 use C4::AR::Novedades;
@@ -84,6 +83,5 @@ $t_params->{'SEARCH_RESULTS'}       = $grupos;
 $t_params->{'cantidad'}             = $cantidad;
 $t_params->{'partial_template'}     = "opac-content_data.inc";
 $t_params->{'noAjaxRequests'}       = 0;
-
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
