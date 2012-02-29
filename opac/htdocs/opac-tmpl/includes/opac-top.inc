@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es-ES">
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -25,12 +25,10 @@
   <link rel="icon" type="image/x-icon" href="[% temas %]/[% user_theme %]/imagenes/favicon.ico" />
 
   <script type="text/javascript">
-    var token= '[% token %]';
-    var imagesForJS = '[% temas %]/[% tema %]/imagenes';
-
+    var token               = '[% token %]';
+    var imagesForJS         = '[% temas %]/[% tema %]/imagenes';
     var M_LIMITE_RESULTADOS = [% limite_resultados_autocompletables %] + "";
-    var URL_PREFIX  = '[% url_prefix %]';
-
+    var URL_PREFIX          = '[% url_prefix %]';
   </script>
 
   [% INCLUDE 'message_OPAC.inc' %]
@@ -61,34 +59,29 @@
         Meran - OPAC
     [% END %]
   </title>
-  
-  <script type="text/javascript">
-  	  var URL_PREFIX  = '[% url_prefix %]';
-  	  
-      [% IF socio_data.usr_permisos_opac %]
-	      [% IF !noAjaxRequests %]
-	          $(document).ready(function() {
-	            infoReservas();
-	            infoSanciones();
-	            setInterval(infoReservas,[% IF timeInterval %]
-	                                        [% timeInterval %]
-	                                     [% ELSE %]
-	                                        300000
-	                                     [% END %]
-	                                     );
-	            setInterval(infoSanciones,[% IF timeInterval %]
-	                                        [% timeInterval %]
-	                                     [% ELSE %]
-	                                        300000
-	                                     [% END %]
-	                                     );
-	          });
-      [% END %]
-      [% END %]
-      
 
-	
-  </script>
+  [% IF socio_data.usr_permisos_opac %]
+        [% IF !noAjaxRequests %]
+        <script type="text/javascript">
+          $(document).ready(function() {
+            infoReservas();
+            infoSanciones();
+            setInterval(infoReservas,[% IF timeInterval %]
+                                        [% timeInterval %]
+                                     [% ELSE %]
+                                        300000
+                                     [% END %]
+                                     );
+            setInterval(infoSanciones,[% IF timeInterval %]
+                                        [% timeInterval %]
+                                     [% ELSE %]
+                                        300000
+                                     [% END %]
+                                     );
+          });
+          </script>
+        [% END %]
+    [% END %]
 
     <script type="text/javascript">    
 
@@ -120,7 +113,6 @@
 	<!-- POAR AHORA ES LA NAV -->
 	   [% INCLUDE 'opac-top-header.inc' %]
 		<div class="container">		   
-		<!-- Pagetitle -->
 			        [% IF content_title %]
 			            <div class="title">[% content_title %]</div>  
 			        [% END %]
