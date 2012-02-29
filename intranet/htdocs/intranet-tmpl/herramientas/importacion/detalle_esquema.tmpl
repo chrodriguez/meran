@@ -1,12 +1,11 @@
 [% USE HTML %]
 <script src="/includes/jquery/jquery.jeditable.js"></script>
 <script src="/intranet-tmpl/includes/visualizacionINTRA-min.js"></script>
+
 <script type="text/javascript">
       var loaderPath= "";
       $(document).ready(function() {
         loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>'
-        makeDataTable('#tablaResult');
-        loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
         $('.editable').editable('[% url_prefix %]/herramientas/importacion/esquemas_importacionDB.pl', { 
               type      : 'text',
               tooltip   : EDITABLE_MSG,
@@ -18,8 +17,6 @@
 
         });
 
-        $('.tabs').tabs();
-
       });
 </script>
 
@@ -27,8 +24,6 @@
 	<div id="tabla_referencia">
 	    <fieldset>
 	        <legend>[% "Esquema " | i18n %] [% HTML.escape(esquema_title) %]</legend>
-	                <div class="datos_tabla_div" id="datos_tabla_div_esquema">	 
-	                                       
 	                        [% PERL %]
                                 print C4::AR::Filtros::tableHeader(   
                                                   id              => "datos_tabla_div_esquema",
@@ -53,15 +48,6 @@
 	
 	                                   }); 
 	                                </script>
-	                                <script>
-	                                    $('.editable_esquema').editable('[% url_prefix %]/herramientas/importacion/esquemas_importacionDB.pl', { 
-	                                        type      : 'text',
-	                                        style   : 'display: inline',
-	                                        submitdata : {token: "[% token %]", edit: '1', edit_esquema: '1'},
-	                                        indicator : loaderPath,
-	
-	                                   }); 
-	                                </script>
 	                                <td>
 	                                    [% PERL %]
                                             print C4::AR::Filtros::action_button( 
@@ -77,7 +63,6 @@
 	                             </tr>
 	                        </tbody>
 	                    </table>
-	                </div>
 	        <div class="mensajes_informacion" style="clear:both;"> [% table_error_message_esquema %] </div>
 	    </fieldset>
 	</div>

@@ -54,11 +54,9 @@
     </div>
 </noscript>
 [% IF mensaje %]
-  <div class='tableMsgUser'>
-    <div id='mensajes' class="mensajes_informacion auth_info">
-      <font class='fontMsgUser'><b>[% mensaje %]</b></font>
-    </div>
-  </div>
+	<div class="alert [% class_mensaje %]">
+	    <strong>[[% 'Informaci&oacute;n' | i18n %]]</strong> [% mensaje %]
+	</div>
 [% END %]
 <div style="padding-top: 15%; height: 100%;" >
         
