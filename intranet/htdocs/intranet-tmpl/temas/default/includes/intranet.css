@@ -1,5 +1,4 @@
 @import url("/includes/bootstrap/css/bootstrap.css");
-@import url("/includes/bootstrap/css/bootstrap-responsive.css");
 
 /* MERAN */
 #logo a {
@@ -38,8 +37,6 @@
     width: 99%;
     min-height: 100%;
     height: auto;
-    padding-bottom: 3em;
-    padding-left: 10px;
     padding-top: 60px;
 }
 
@@ -186,6 +183,10 @@ body {
 
 .span90 {
     width: 90%;
+}
+
+.span100 {
+    width: 100%;
 }
 
 .novedad_contacto {
@@ -558,6 +559,20 @@ body {
 }
 
 /* FIN DATE PICKER */
+.no-margin{
+    margin-left: 0;
+}
+
+.login-form{
+  position: absolute;
+  width: 600px;
+  height: 240px;
+  top: 50%;
+  left: 50%;
+  margin-top: -120px;
+  margin-left: -290px
+  }
+
 
 /*.center-section-form form{
     margin: 0 auto;

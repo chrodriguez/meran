@@ -17,7 +17,7 @@
 		
 </script>
 
-<div class="span12 center_fieldset report_form_container">
+<div class="center_fieldset report_form_container">
       <form class="form-horizontal" onsubmit="generarEtiquetas('report_result_cards'); return false;">
           <div class="control-group">
             <label class="control-label"  for="name">Partel del nombre/apellido</label>
