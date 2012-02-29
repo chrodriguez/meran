@@ -562,3 +562,8 @@ body {
 }
 
 /* FIN DATE PICKER */
+
+fieldset {
+  padding-top: 20px;
+}
+

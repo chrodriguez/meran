@@ -36,11 +36,12 @@ function consultar(){
 </script>
 
 <fieldset>
+    <form class="form-horizontal">
     <legend class="titulo_legend">[% "Reservas activas" | i18n %]</legend>
     <section class="center-section-form">
-      <form class="form-horizontal">
+  
           <div class="control-group">
-              <label for="tipoReserva">[% "Seleccione el tipo de reserva" | i18n %]</label>
+              <label class="control-label" for="tipoReserva">[% "Seleccione el tipo de reserva" | i18n %]</label>
               <div class="controls">
                   <select name="tipoReserva" id="tipoReserva" onchange="consultar();">
                       <option selected="selected" value="EJ" id="EJ">[% "Por ejemplar" | i18n %]</option>

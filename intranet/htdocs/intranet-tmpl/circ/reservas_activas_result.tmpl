@@ -4,33 +4,35 @@
       });
 </script>
 
-<fieldset class="resultados_busqueda">
-    <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda" | i18n %]</legend>
+<fieldset>
+    <legend>[% "Resultados de la b&uacute;squeda" | i18n %]</legend>
         <div class="datos_tabla_div" id="datos_tabla_div">
         <div class="well">
-            <div class="resultados_consulta">[% "Total de registros" | i18n %]: <strong>[% cantidad %]</strong></div>
+              [% "La cantidad de Importaciones es" | i18n %]: <strong>[%cantidad %]</strong>
         </div>
-            <div class="contenedor_paginador">[% paginador %]</div>
-                <table id="tablaResult" class="datos_tabla table table-striped">
-                  <thead>
-                    <tr class="titulo_tabla_resultado">
+        
+              <div class="contenedor_paginador">[% paginador %]</div>
+
+              [% IF cantidad %]
+           
+             
+
+                      [% PERL %]
+                            print C4::AR::Filtros::tableHeader(   
+                                  id              => "tablaResult",
+                                  class           => "",
+                                  selectAll_id    => "",
+                                  columns         => ['[% "Apellido" | i18n %]','[% "Nombre" | i18n %]',
+                                                      '[% "N&uacute;mero de socio" | i18n %]','[% "E-mail" | i18n %]',
+                                                      '[% "Fecha de reserva" | i18n %]','[% "Fecha de vencimiento" | i18n %]',
+                                                      '[% "C&oacute;digo de barra" | i18n %]'
+                                                     ]
+
+                                                                    
+                                        ) ;
+                      [% END %]
                 
-                        <th title="[% 'Apellido del solicitante' | i18n %]"> [% "Apellido" | i18n %]</th>
-                        <th title="[% 'Nombre del solicitante' | i18n %]"> [% "Nombre" | i18n %]</th>
-                        <th class="click" onclick="ordenar('nro_socio')" title="[% 'Ordenar por numero de socio' | i18n %]">
-                            [% "N&uacute;mero de socio" | i18n %]
-                        </th>
-                        <th class=""  title="[% 'E-mail del solicitante' | i18n %]">[% "E-mail" | i18n %]</th>
-                        <th class="click" onclick="ordenar('fecha_reserva')" title="[% 'Ordenar por fecha de reserva' | i18n %]">[% "Fecha de reserva" | i18n %]</th>
-                        <th class="click" onclick="ordenar('fecha_recordatorio')" title="[% 'Ordenar por fecha de vencimiento' | i18n %]">
-                            [% "Fecha de vencimiento" | i18n %]
-                        </th>
-                        <th class="" title="[% 'C&oacute;digo de barra del ejemplar' | i18n %]">
-                            [% "C&oacute;digo de barra" | i18n %]
-                        </th>
-                
-                    </tr>
-                  </thead>
+                   
                   <tbody>
                 [% FOREACH reserva IN reservas %]
                     <tr>
@@ -73,6 +75,10 @@
                 [% END %]
                 </tbody>
                 </table>
+          
+              [% ELSE %]
+                  <div class="alert alert-info">[% 'No hay reservas para mostrar'| i18n %]</div>
+              [% END %]
       </div>
 </fieldset>
 <br>

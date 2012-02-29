@@ -690,7 +690,7 @@ form {
   margin: 0 0 18px;
 }
 fieldset {
-  padding: 0;
+  padding-top: 0;
   margin: 0;
   border: 0;
 }
