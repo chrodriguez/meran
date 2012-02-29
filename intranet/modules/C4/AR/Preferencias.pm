@@ -6,7 +6,7 @@ package C4::AR::Preferencias;
 
 use strict;
 require Exporter;
-use C4::Context;
+#use C4::Context;
 use C4::Date;
 use C4::Modelo::PrefPreferenciaSistema;
 use C4::Modelo::PrefPreferenciaSistema::Manager;

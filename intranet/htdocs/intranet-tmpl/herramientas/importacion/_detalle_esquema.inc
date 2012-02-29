@@ -1,18 +1,17 @@
     <div id="tabla_referencia">
         <fieldset>
             <legend>[% "Detalle del esquema " | i18n %] [% esquema_title %]</legend>
-                    <div class="datos_tabla_div" id="datos_tabla_div">   
-                          
+
                         [% IF esquema.size %]               
                                 
                             [% PERL %]
                                 print C4::AR::Filtros::tableHeader(   
                                                   id              => "datos_tabla_div_esquema",
-                                                  class           => "clases_adicionales",
+                                                  class           => "",
                                                   selectAll_id    => "",
                                                   columns         => ['[% "Campo origen"|i18n %]','[% "SubCampo origen"|i18n %]',
                                                                     '[% "Destino"|i18n %]','[% "Ignorar"|i18n %]','[% "Acciones"|i18n %]',
-                                                                     ]                                   
+                                                                     ],
                                             ) ;
                             [% END %]
                                 
@@ -23,8 +22,8 @@
                                         <td class="editable" id="[% detalle.id %]___co">[% detalle.getCampoOrigen %]</td>
                                         <td class="editable" id="[% detalle.id %]___sco">[% detalle.getSubcampoOrigen %]</td>
                                         <td class="" id="[% detalle.id %]___destino">[% detalle.getDestino %]</td>
-
                                         <td class="editable_hover editable_select" id="[% detalle.id %]___ign">[% detalle.getIgnorarFront %]</td>
+
                                         <script>
                                             $('.editable_select').editable('[% url_prefix %]/herramientas/importacion/esquemas_importacionDB.pl', { 
                                                 data   : " {'[% 'No' | i18n %]':'[% 'No' | i18n %]','[% 'Si' | i18n %]':'[% 'Si' | i18n %]','selected':'[% 'detalle.getIgnorarFront' %]'}",
@@ -37,11 +36,11 @@
                                            }); 
                                         </script>
                                         <td>
-                                        
                                             [% PERL %]
                                                 print C4::AR::Filtros::action_set_button(    
                                                       title           => "[% 'Esquema' | i18n %]",
                                                       button          => 'btn btn-primary',
+                                                      action=>"editarOrdenEsquema([% detalle.id %]);",
                                                       actions         => [
                                                                           { title => "[% 'Eliminar' | i18n %]", 
                                                                             action=> "eliminarEsquemaRow([% detalle.id %]);",
@@ -53,35 +52,31 @@
                                                                            },
                                                                            {title => "[% 'Agregar campo' | i18n %]", 
                                                                             action=>"agregarCampoAEsquema([% detalle.id %]);",
-                                                                            icon=>"icon-plus"
+                                                                            icon  =>"icon-plus"
                                                                            },
                                                                           ],
-                                                        popover       => {text=>'Esta acci&oacute;n se aplica para todos los ejemplares seleccionados', 
-                                                                          title=> 'Atenci&oacute;n'}
-
                              
                                                         ) ;
-                                        [% END %]
+                                        	[% END %]
                                         </td>
                                   </tr>
                                 [% END %]
                             </tbody>
                         </table>
-                    </div>
-                
                 [% ELSE %]
                 
-                    <div class="alert alert-info">[% 'No hay detalle que mostrar'| i18n %]</div>
+                    <div class="alert alert-info">[% 'No hay detalle para mostrar'| i18n %]</div>
                 
                 [% END %]
-                
-                [% PERL %]
-                       print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar campo' | i18n %]",
-                                                           boton   => "boton_agregar",
-                                                           onClick => "agregarCampo([% id_esquema %]);",
-                                                           title   => "[% 'Agregar campo' | i18n %]",
-                               ) ;
-                [% END %]
+                <div class="form-actions">
+	                [% PERL %]
+	                       print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar campo' | i18n %]",
+	                                                           boton   => "boton_agregar",
+	                                                           onClick => "agregarCampo([% id_esquema %]);",
+	                                                           title   => "[% 'Agregar campo' | i18n %]",
+	                               ) ;
+	                [% END %]
+                </div>
             <div class="mensajes_informacion" style="clear:both;"> [% table_error_message %] </div>
         </fieldset>
     </div>

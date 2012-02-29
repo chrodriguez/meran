@@ -182,6 +182,10 @@ sub getSeparador{
 sub setSeparador{
     my ($self)  = shift;
     my ($separador) = @_;
+    
+    if (!C4::AR::Utilidades::validateString($separador)){
+        $separador = " ";
+    }
     $self->separador($separador);
 }
 

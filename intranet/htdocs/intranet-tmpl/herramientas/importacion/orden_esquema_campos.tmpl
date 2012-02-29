@@ -27,16 +27,20 @@
     });
 </script>
 <fieldset>
-    <legend class="titulo_legend trigger click"><strong>[% "Campos destino para " | i18n %][% esquema_padre.getCampoOrigen %]$<span style="text-transform: lowercase;">[% esquema_padre.getSubcampoOrigen %]</span></strong></legend>
-      <table id="tabla_datos_visualizacion_intra" class="bordered-table zebra-striped" cellspacing=0 border="0" cellpadding=0 style="width:100%;">
-            <thead>
-                <tr class="titulo_tabla_resultado">
-                    <td>[% "Campo Destino" | i18n %]</td>
-                    <td>[% "Subcampo Destino" | i18n %]</td>
-                    <td>[% "Separador" | i18n %]</td>
-                    <td>[% "Elminar" | i18n %]</td>
-                </tr>
-            </thead>
+    <legend class="titulo_legend trigger click">
+        [% "Campos destino para " | i18n %][% esquema_padre.getCampoOrigen %]$<smallstyle="text-transform: lowercase;">[% esquema_padre.getSubcampoOrigen %]</small>
+    </legend>
+             [% PERL %]
+                 print C4::AR::Filtros::tableHeader(   
+                                   id              => "tabla_datos_visualizacion_intra",
+                                   class           => "clases_adicionales",
+                                   selectAll_id    => "",
+                                   columns         => ['[% "Campo Destino"|i18n %]','[% "Subcampo Destino"|i18n %]',
+                                                     '[% "Separador"|i18n %]','[% "Elminar"|i18n %]',
+                                                      ]                                   
+                             ) ;
+             [% END %]
+            
             <tbody id="sortable_subcampo">
                 <input type="checkbox" name="enable_sort_subcampo" id="enable_sort_subcampo" /> Seleccione para Ordenar
                 [% FOREACH detalle IN esquema %]
@@ -44,15 +48,12 @@
                         <td>[% detalle.getCampoDestino %]</td>
                         <td>[% detalle.getSubcampoDestino %]</td>
                         <td class="editable" id="[% detalle.id %]___sep">[% detalle.getSeparador %]</td>
-                        <td align="center">
+                        <td>
 		                        [% PERL %]
-		                            print C4::AR::Filtros::to_Icon(  
-		                                                                boton   => "icon_cancelar",
-		                                                                onClick => "eliminarEsquemaRowOne('[% detalle.id %]');",
-		                                                                title   => "[% 'Eliminar' | i18n %]",
-		                                                                alternClass => "botonCentradoTabla",
-		                                                                elem => 'span',
-		                                                                style => 'float: left;',
+		                            print C4::AR::Filtros::action_button(  
+		                                                                button    => "btn click btn-danger",
+		                                                                action    => "eliminarEsquemaRowOne([% detalle.id %]);",
+		                                                                icon      => "icon-remove icon-white",
 		                                    ) ;
 		                        [% END %]                        
                         </td>
