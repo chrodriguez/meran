@@ -14,6 +14,7 @@
                           id              => "tablaPrestamos",
                           columns         => ['[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]','[% "Edici&oacute;n"|i18n %]',
                                                 '[% "Fecha de Pr&eacute;stamo"|i18n %]', '[% "Fecha de Vencimiento"|i18n %]',
+                                                '[% "Estado"|i18n %]',  '[% "Renovar"|i18n %]',
                                              ]
 
                                                             
@@ -44,23 +45,29 @@
                   </td>
                   <td>
                     [% IF prestamo.nivel3.nivel2.getEdicion %] [% prestamo.nivel3.nivel2.getEdicion %] [% ELSE %] - [% END %]                  </td>
-                  <td align=center>
+                  <td>
                       [% prestamo.getFecha_prestamo_formateada %]
                   </td>
-                  <td align=center>
+                  <td>
                       [% prestamo.getFecha_vencimiento_formateada %]
                   </td>
+                  
+                  <td>
+                      [% IF prestamo.estaVencido %] <span class="label label-important">Vencido</span> [% ELSE %] 
+                      <span class="label label-success">Vigente</span>[% END %] 
+                  </td>
 
-                  <td align=center>
+                  <td>
                   [% IF prestamo.sePuedeRenovar %]
-		    [% PERL %]
-				print C4::AR::Filtros::to_Icon(     text    => "[% 'Renovar' | i18n %]",
-								    boton   => "icon_renovar",                                                            
-								    onClick => "renovar('[% prestamo.getId_prestamo %]');",
-								    title   => "[% 'Renovar' | i18n %]",
-								    alternClass => "botonCentradoTabla"
-					) ;
-		    [% END %]
+                    [% PERL %]
+                                  print C4::AR::Filtros::action_button( 
+                                                                  button    => "btn btn-primary click",
+                                                                  action    => 'renovar("[% prestamo.getId_prestamo %]")', 
+                                                                  icon      => "icon-refresh icon-white",
+                                                              ) ;
+
+
+                      [% END %]
                   [% END %]
                   </td>
             </tr>
