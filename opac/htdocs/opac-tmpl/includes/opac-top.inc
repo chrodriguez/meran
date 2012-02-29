@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es-ES">
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -13,24 +13,29 @@
   <meta name="distribution" content="global" />
   <meta name="description" content="OPAC" />
   <meta name="keywords" content="Your keywords, keywords, keywords, here ..." />
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
-   
-  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="[% temas %]/[% user_theme %]/includes/opac.css" />
-  <link media="screen" rel="stylesheet" href="/includes/css/fancybox.css" type="text/css">
-  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/ui.stars.css" />
-  <link rel="icon" type="image/x-icon" href="[% temas %]/[% user_theme %]/imagenes/favicon.ico" />
+
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+       
+  <link rel="stylesheet" href="[% temas %]/[% user_theme %]/includes/opac.css" />
+  <link rel="stylesheet" href="/includes/css/ui.stars.css" />
+<!--   <link rel="icon" type="image/x-icon" href="[% temas %]/[% user_theme %]/imagenes/favicon.ico" /> -->
 
   <script type="text/javascript">
-    var token= '[% token %]';
-    var imagesForJS = '[% temas %]/[% tema %]/imagenes';
-
+    var token               = '[% token %]';
+    var imagesForJS         = '[% temas %]/[% tema %]/imagenes';
     var M_LIMITE_RESULTADOS = [% limite_resultados_autocompletables %] + "";
-    var URL_PREFIX  = '[% url_prefix %]';
-
+    var URL_PREFIX          = '[% url_prefix %]';
   </script>
 
   [% INCLUDE 'message_OPAC.inc' %]
@@ -39,13 +44,11 @@
   <script src="/includes/jquery/ui/ui-min.js" type="text/javascript"></script>
   <script src="/includes/jquery/ui/core.js" type="text/javascript"></script>
   <script src="/includes/jquery/ui.stars.js" type="text/javascript"></script>
+  [% INCLUDE 'AutocompleteHelper.inc' %]
   <script src="/includes/jquery/jquery.wysiwyg.js" type="text/javascript"></script>
   <script src="/includes/json/jsonStringify.js" type="text/javascript"></script>
-  [% INCLUDE 'AutocompleteHelper.inc'  %]
   <script src="/includes/MessageHelper.js" type="text/javascript"></script>
   <script src="/opac-tmpl/includes/circulacionOPAC.js" type="text/javascript"></script>
-  <script src="/includes/jquery/fancybox/jquery.easing.1.3.js" type="text/javascript"></script>
-  <script src="/includes/jquery/fancybox/jquery.fancybox.js" type="text/javascript"></script>
   <script src="/opac-tmpl/includes/favoritos.js" type="text/javascript"></script>
   <script type="text/javascript" src="/includes/jquery/jquery.expander.js"></script>
   <script src="/includes/util.js" type="text/javascript"></script>
@@ -61,34 +64,31 @@
         Meran - OPAC
     [% END %]
   </title>
-  
-  <script type="text/javascript">
-  	  var URL_PREFIX  = '[% url_prefix %]';
-  	  
-      [% IF socio_data.usr_permisos_opac %]
-	      [% IF !noAjaxRequests %]
-	          $(document).ready(function() {
-	            infoReservas();
-	            infoSanciones();
-	            setInterval(infoReservas,[% IF timeInterval %]
-	                                        [% timeInterval %]
-	                                     [% ELSE %]
-	                                        300000
-	                                     [% END %]
-	                                     );
-	            setInterval(infoSanciones,[% IF timeInterval %]
-	                                        [% timeInterval %]
-	                                     [% ELSE %]
-	                                        300000
-	                                     [% END %]
-	                                     );
-	          });
-      [% END %]
-      [% END %]
-      
 
-	
-  </script>
+  [% IF socio_data.usr_permisos_opac %]
+        [% IF !noAjaxRequests %]
+        <script type="text/javascript">
+          $(document).ready(function() {
+/*
+        	infoReservas();
+            infoSanciones();
+            setInterval(infoReservas,[% IF timeInterval %]
+                                        [% timeInterval %]
+                                     [% ELSE %]
+                                        300000
+                                     [% END %]
+                                     );
+            setInterval(infoSanciones,[% IF timeInterval %]
+                                        [% timeInterval %]
+                                     [% ELSE %]
+                                        300000
+                                     [% END %]
+                                     );
+          });
+*/
+          </script>
+        [% END %]
+    [% END %]
 
     <script type="text/javascript">    
 
@@ -119,8 +119,7 @@
 	<body lang="es-Es">
 	<!-- POAR AHORA ES LA NAV -->
 	   [% INCLUDE 'opac-top-header.inc' %]
-		<div class="container">		   
-		<!-- Pagetitle -->
+		<div class="container main_content">		   
 			        [% IF content_title %]
 			            <div class="title">[% content_title %]</div>  
 			        [% END %]

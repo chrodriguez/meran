@@ -1,5 +1,5 @@
 @import url("/includes/bootstrap/css/bootstrap.css");
-
+@import url("/includes/bootstrap/css/bootstrap-responsive.css");
 
 /* MERAN */
 #logo a {
@@ -26,11 +26,6 @@
     margin-bottom: 22px;
 }
 
-.center-section-form {
-    width: 75%;
-    margin: 0 auto;
-}
-
 .info-result {
     background: gainsboro;
     border-radius: 10px;
@@ -45,10 +40,11 @@
     height: auto;
     padding-bottom: 3em;
     padding-left: 10px;
+    padding-top: 60px;
 }
 
 body {
-    padding-top: 40px;
+    padding-bottom: 60px;
 }
 
 #logo a {
@@ -566,4 +562,8 @@ body {
 fieldset {
   padding-top: 20px;
 }
+
+/*.center-section-form form{
+    margin: 0 auto;
+}*/
 

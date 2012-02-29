@@ -1,39 +1,31 @@
 [% USE HTML %]
-
-    <script type="text/javascript">
-
-	    $(document).ready(function() {
-        });
-
-    </script>
-
     <div class="hero-unit" id="search-bar">
-     	<h1>[% 'Bienvenido ' | i18n %]<small>[% ui.getNombre %]</small></h1>
-        <br />
-        
-        [% IF cant_sanciones > 0 %]
-              [% INCLUDE 'opac-sanciones.inc' %]
-        [% END %]
-        [% IF cantidad_prestamos > 0  %]
-            <div class="prestamos_opac_main">
-                  [% INCLUDE 'opac-prestamos.inc' %]
-            </div>
-        [% END %]
+     	<h1 class="medium_font">[% 'Bienvenido ' | i18n %]<small>[% ui.getNombre %]</small></h1>
+        <p>
+	        [% IF cant_sanciones > 0 %]
+	              [% INCLUDE 'opac-sanciones.inc' %]
+	        [% END %]
+	        [% IF cantidad_prestamos > 0  %]
+	            <div class="prestamos_opac_main">
+	                  [% INCLUDE 'opac-prestamos.inc' %]
+	            </div>
+	        [% END %]
+	
+	        [% IF reservas_asignadas_count > 0 %]
+	             <div class="reservas_asig_opac_main">
+	                  [% INCLUDE 'opac-reservas_asignadas.inc' %]
+	            </div>
+	        [% END %]
+	
+	        [% IF reservas_espera_count > 0 %]
+	             <div class="reservas_espera_opac_main">
+	                  [% INCLUDE 'opac-reservas_espera.inc' %]
+	            </div>
+	        [% END %]	
+		</p>
 
-        [% IF reservas_asignadas_count > 0 %]
-             <div class="reservas_asig_opac_main">
-                  [% INCLUDE 'opac-reservas_asignadas.inc' %]
-            </div>
-        [% END %]
-
-        [% IF reservas_espera_count > 0 %]
-             <div class="reservas_espera_opac_main">
-                  [% INCLUDE 'opac-reservas_espera.inc' %]
-            </div>
-        [% END %]	
-		
-		
 		[% IF !((cant_sanciones > 0) || (cantidad_prestamos > 0) || (reservas_asignadas_count > 0) || (reservas_espera_count > 0)) %]
+		<p>
 	        <form class="" action="[% url_prefix %]/opac-busquedasDB.pl" method="get" onsubmit="startOverlay();">
 	            <input type="hidden" name="tipoAccion" value="BUSQUEDA_COMBINABLE" />
 	            <input type="hidden" name="token" value="[% token %]" />
@@ -47,12 +39,12 @@
 		        
 		        <p><button class="btn btn-primary btn-large" type="submit">[% 'Buscar' | i18n %]</button></p>
 		    </form>
+		</p>
 	    [% END %]
     </div>
 
       <!-- Example row of columns -->
       <div class="row">
-	      
 	        <div class="span4" id="last_new">
 		        [% IF novedad %]
 			          <h2>[% novedad.getTitulo %]</h2>

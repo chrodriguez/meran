@@ -1288,7 +1288,7 @@ sub armarPaginas{
 
     my $themelang= $t_params->{'themelang'};
 
-    my $paginador= "<div class='pagination'><ul>";
+    my $paginador= "<div class='pagination pagination-centered'><ul>";
     my $class="paginador";
 
     if($actual > 1){
@@ -4104,7 +4104,7 @@ sub armarPaginasOPAC{
 
     my $themelang= $t_params->{'themelang'};
 
-    my $paginador= "<div class='pagination'><ul>";
+    my $paginador= "<div class='pagination pagination-centered'><ul>";
     my $class="paginador";
 
     if($actual > 1){

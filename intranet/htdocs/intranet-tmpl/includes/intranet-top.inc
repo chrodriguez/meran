@@ -23,13 +23,27 @@
 	[% END %]
 	
 	<meta charset="utf-8" />
-	<META HTTP-EQUIV="cache-control" content="public">
+	<meta http-equiv="cache-control" content="public">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<script type="text/javascript" src="/includes/json/jsonStringify.js"></script>
 	<script type="text/javascript" src="/includes/completo-intranet-top.js"></script>
 	[% INCLUDE "BootstrapToolkit.inc" %]
 	<link media="screen" rel="stylesheet" href="/includes/css/fancybox.css" type="text/css">
 	<link media="screen" rel="stylesheet" href="/includes/css/fancybox.css" type="text/css">
 	<link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranet.css">
+
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+
 	<script type="text/javascript" src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
 	<script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox.js"></script>
 	<script type="text/javascript" src="/includes/jquery/fancybox/jquery.mousewheel.js"></script>
@@ -240,7 +254,7 @@
 	    });
 	</script>
 	</head>
-	<body data-spy="scroll" data-target=".subnav" data-offset="50">
+	<body data-spy="scroll" data-target=".subnav">
 	  <noscript>
 	      <div class='tableMsgUser'>
 	          <font class='fontMsgUser'>
