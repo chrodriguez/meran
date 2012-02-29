@@ -44,9 +44,9 @@
   <script src="/includes/jquery/ui/ui-min.js" type="text/javascript"></script>
   <script src="/includes/jquery/ui/core.js" type="text/javascript"></script>
   <script src="/includes/jquery/ui.stars.js" type="text/javascript"></script>
+  [% INCLUDE 'AutocompleteHelper.inc' %]
   <script src="/includes/jquery/jquery.wysiwyg.js" type="text/javascript"></script>
   <script src="/includes/json/jsonStringify.js" type="text/javascript"></script>
-  [% INCLUDE 'AutocompleteHelper.inc'  %]
   <script src="/includes/MessageHelper.js" type="text/javascript"></script>
   <script src="/opac-tmpl/includes/circulacionOPAC.js" type="text/javascript"></script>
   <script src="/opac-tmpl/includes/favoritos.js" type="text/javascript"></script>
