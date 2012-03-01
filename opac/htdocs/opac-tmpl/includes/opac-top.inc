@@ -121,7 +121,9 @@
 	   [% INCLUDE 'opac-top-header.inc' %]
 		<div class="container main_content">		   
 			        [% IF content_title %]
-			            <div class="title">[% content_title %]</div>  
+			        	<fieldset>
+			        		<legend class="title">[% content_title %]</legend>
+			        	</fieldset>
 			        [% END %]
 			        [% IF partial_template %]
 			              [% INCLUDE $partial_template %]

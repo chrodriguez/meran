@@ -72,10 +72,10 @@
                             </li>
                             <li>
                                 [% PERL %]
-                                  print C4::AR::Filtros::link_to( text    =>  "[% 'Recomendaciones' | i18n %]",
-                                                                  url     =>  '[% url_prefix %]/opac-recomendaciones.pl',
-                                                                  title   =>  "[% 'Recomendaciones' | i18n %]",
-                                          ) ;
+                                    #print C4::AR::Filtros::link_to( text    =>  "[% 'Recomendaciones' | i18n %]",
+                                    #                              url     =>  '[% url_prefix %]/opac-recomendaciones.pl',
+                                    #                              title   =>  "[% 'Recomendaciones' | i18n %]",
+                                    #      ) ;
                                 [% END %]
                             </li>
                             <li class="divider"></li>
