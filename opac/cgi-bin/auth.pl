@@ -27,7 +27,7 @@ my $sessionClose = $t_params->{'sessionClose'} = $query->param('sessionClose') |
 
 
 $t_params->{'mostrar_captcha'}      = $query->param('mostrarCaptcha') || 0;
-$t_params->{'loginFailed'}          =  $query->param('loginFailed')|| 0;
+my $fail                            = $t_params->{'loginFailed'}          =  $query->param('loginFailed')|| 0;
 $t_params->{'loginAttempt'}         = $query->param('loginAttempt') || 0;
 $t_params->{'mostrar_fondo_home'}   = 1;
 
@@ -40,6 +40,10 @@ $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje($codMensaje,'OPAC');
 if ($t_params->{'sessionClose'}){ 
   $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje('U358','opac');
 }
+if ($fail){
+    $t_params->{'class_mensaje'} = "alert-error";	
+}
+
 
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

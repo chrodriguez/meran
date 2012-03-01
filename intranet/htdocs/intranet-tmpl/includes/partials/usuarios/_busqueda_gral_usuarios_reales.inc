@@ -2,7 +2,6 @@
      <form class="form-horizontal" onsubmit="return false;">
         <div class="control-group">
               <div class="controls">
-             <!--     <input id="buscar" class="textInput" type="text" value="" name="buscar">-->
                   <input id="socio" class="textInput" type=text name="socio" onFocus="checkFilter('focus')"> 
 
                   [% PERL %]

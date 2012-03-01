@@ -17,11 +17,10 @@ function updateObtenerTabla(responseText){
 }
 </script>
 
-<div class="permisos">
-    <form class="form-horizontal">
+<div class="center-section-form ">
+    <form class="form-horizontal" onsubmit="return false;">
         <fieldset>
             <legend class="titulo_legend">[% "Selecci&oacute;n de tablas de referencia" | i18n %]</legend>
-            <div class="permisos_selector">
                 <div class="control-group">
                     <label class="control-label" for="id_ui"> [% "Tabla" | i18n %]: </label>
                     <div class="controls">
@@ -42,7 +41,6 @@ function updateObtenerTabla(responseText){
                     [% END %]
                     
                 </div>
-            </div>
         </fieldset>
     </form>
     <div class="detalle_tabla" id="detalle_tabla"> </div>
