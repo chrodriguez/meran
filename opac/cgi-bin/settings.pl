@@ -1,14 +1,12 @@
 #!/usr/bin/perl
-
 use strict;
 use CGI;
 use C4::AR::Auth;
-
 use C4::AR::Utilidades;
 use HTML::Template;
 
 my $input       = new CGI;
-my $post_params =   $input->Vars;
+my $post_params = $input->Vars;
 my $token       = $input->param("token");
 my $socio       = undef;
 
