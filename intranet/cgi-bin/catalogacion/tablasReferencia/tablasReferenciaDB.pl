@@ -71,7 +71,7 @@ else{
 
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
     }
-    elsif ($accion eq "CHANGE_VISIVILIDAD"){
+    elsif ($accion eq "CHANGE_VISIBILIDAD"){
     
         my $tabla  = $obj->{'tabla'};
         my $campo  = $obj->{'campo'};

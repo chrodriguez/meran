@@ -12,23 +12,7 @@
 
     });
 </script>
-<script type="text/javascript" language="javascript">
-function cambiarVisibilidad(campo, tabla){
-    objAH               = new AjaxHelper(updateCambiarVisualizacion);
-    objAH.url           = URL_PREFIX+'/catalogacion/tablasReferencia/tablasReferenciaDB.pl';
-    objAH.cache         = false;
-    objAH.showOverlay   = true;
-    objAH.accion        = "CHANGE_VISIVILIDAD";
-    objAH.tabla         = tabla;
-    objAH.campo         = campo;
-    objAH.sendToServer();
 
-}
-
-function updateCambiarVisualizacion(){
-    obtenerTabla();
-}
-</script>
 <div class="datos_tabla_div" id="datos_tabla_div">
 
         [% PERL %]

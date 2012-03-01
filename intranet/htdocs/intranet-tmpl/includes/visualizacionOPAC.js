@@ -5,6 +5,126 @@ CAMPOS_ARRAY= new Array();
 SUBCAMPOS_ARRAY= new Array();
 
 
+
+
+function mostrarTabla(){
+    objAH               = new AjaxHelper(updateMostrarTabla);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;  
+    objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+    objAH.tipoAccion    = 'MOSTRAR_TABLA_CAMPO';
+    objAH.ejemplar      = $("#tipo_nivel3_id").val();
+    objAH.nivel         = $("#eleccion_nivel").val();
+    objAH.sendToServer();
+}
+
+function updateMostrarTabla(responseText){
+    $("#tablaResultCampos").html(responseText);
+    scrollTo("tablaResultCampos");  
+}
+
+function actualizarOrdenCampo(){
+    objAH               = new AjaxHelper(updateSortable);
+    objAH.debug         = true;
+    objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+    objAH.showOverlay   = true;
+    objAH.tipoAccion    = "ACTUALIZAR_ORDEN_AGRUPANDO";
+    objAH.newOrderArray = $('#sortable').sortable('toArray');
+    objAH.sendToServer(); 
+}
+
+function updateSortable(){
+    mostrarTabla();        
+}
+
+var campo;
+function editSubcampos(campo_parametro){
+    campo               = campo_parametro;
+    objAH               = new AjaxHelper(updateEditSubcampos);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;  
+    objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+    objAH.tipoAccion    = 'MOSTRAR_TABLA_VISUALIZACION';
+    objAH.campo         = campo;
+    objAH.nivel         = $("#eleccion_nivel").val();
+    objAH.template      = $("#tipo_nivel3_id").val();;
+    objAH.sendToServer();
+}
+
+function updateEditSubcampos(responseText){
+    $("#tablaResultSubCampos").html(responseText);
+    scrollTo("tablaResultSubCampos");  
+}
+
+function actualizarOrdenSubCampos(){
+    objAH               = new AjaxHelper(updateSortableSC);
+    objAH.debug         = true;
+    objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+    objAH.showOverlay   = true;
+    objAH.tipoAccion    = "ACTUALIZAR_ORDEN_SUBCAMPOS";
+    objAH.newOrderArray = $('#sortable_subcampo').sortable('toArray');
+    objAH.sendToServer(); 
+}
+
+function updateSortableSC(){
+    editSubcampos(campo);        
+}
+
+function actualizarOrden(){
+    objAH               = new AjaxHelper(updateSortable);
+    objAH.debug         = true;
+    objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+    objAH.showOverlay   = true;
+    // si estamos agrupando por campo o no
+    if($("#ordenar_campos").is(':checked')){
+        objAH.tipoAccion    = "ACTUALIZAR_ORDEN_AGRUPANDO";
+    }else{
+        objAH.tipoAccion    = "ACTUALIZAR_ORDEN";
+    }
+    objAH.newOrderArray = $('#sortable').sortable('toArray');
+    objAH.sendToServer(); 
+}
+
+function updateSortable(){
+    mostrarTabla();        
+}
+
+function eliminarTodoElCampo(campo){
+    objAH               = new AjaxHelper(updateEliminarTodoCampo);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;  
+    objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
+    objAH.tipoAccion    = 'ELIMINAR_TODO_EL_CAMPO';
+    objAH.nivel         = $("#eleccion_nivel").val();
+    objAH.ejemplar      = $("#tipo_nivel3_id").val();
+    
+    if (campo){
+    jConfirm(SEGURO_QUE_DESEA_ELIMINAR_TODO_EL_CAMPO,CATALOGO_ALERT_TITLE, function(confirmStatus){
+        if (confirmStatus){
+            objAH.campo         = campo;
+            objAH.sendToServer();
+        }
+    });
+}
+}
+
+function updateEliminarTodoCampo(responseText){
+    var Messages        = JSONstring.toObject(responseText);
+    setMessages(Messages);
+    mostrarTabla();
+    eleccionDeEjemplar();
+}
+
+
+function showAddVistaOPAC(){
+	$('#add_vista_opac').modal();
+}
+
+
+function hideAddVistaOPAC(){
+    $('#add_vista_opac').modal('hide');
+}
+
 function eliminarVista(vista_id){
     objAH               = new AjaxHelper(updateAgregarVisualizacion);
     objAH.debug         = true;
@@ -55,6 +175,7 @@ function agregarVisualizacion(){
 }
 
 function updateAgregarVisualizacion(responseText){
+	hideAddVistaOPAC();
     var Messages        = JSONstring.toObject(responseText);
     setMessages(Messages);
     if (! (hayError(Messages) ) ){

@@ -85,9 +85,9 @@
                         <td>[% campo.getSubCampo %]</td>
                         <td class="pre" id="[% campo.id %]">[% campo.getPre %]</td>
                         <td class="editable" id="[% campo.id %]">[% campo.getVistaOpac %]</td>
-                        <td class="post" id="[% campo.id %]">[% campo.getPost %]</td>
-                        <td class="nivel" id="[% campo.id %]">[% campo.getNivel %]</td>
-                        <td align="center">
+                        <td id="[% campo.id %]">[% campo.getPost %]</td>
+                        <td id="[% campo.id %]">[% campo.getNivel %]</td>
+                        <td >
                             [% PERL %]
                                   print C4::AR::Filtros::action_button( 
                                                                   button       => "btn click btn-danger",
@@ -103,16 +103,4 @@
                 [% END %]
             </tbody>
         </table>
-        <div class="form-actions">
-	             [% PERL %]
-	                   print C4::AR::Filtros::action_button( 
-	                                                   button       => "btn btn-primary",
-	                                                   action       => "showAddVistaOPAC()", 
-	                                                   icon         => "icon-add icon-white",
-	                                                   title        => "Agregar vista",
-	                                               ) ;
-	
-	
-	             [% END %]
-        </div>
 </fieldset>

@@ -69,7 +69,7 @@
                                   class           => "",
                                   selectAll_id    => "",
                                   columns         => ['[% "Campo"|i18n %]','[% "Subcampo"|i18n %]','[% "Pre"|i18n %]',
-                                                    [% "Vista en OPAC"|i18n %]','[% "Post"|i18n %]','[% "Nivel"|i18n %]',
+                                                    '[% "Vista en OPAC" | i18n %]','[% "Post"|i18n %]','[% "Nivel"|i18n %]',
                                                     '[% "Acciones"|i18n %]',
                                                      ]
 
@@ -85,15 +85,18 @@
                         <td>[% campo.getSubCampo %]</td>
                         <td class="pre" id="[% campo.id %]">[% campo.getPre %]</td>
                         <td class="editable" id="[% campo.id %]">[% campo.getVistaIntra %]</td>
-                        <td class="post" id="[% campo.id %]">[% campo.getPost %]</td>
-                        <td class="nivel" id="[% campo.id %]">[% campo.getNivel %]</td>
-                        <td align="center">
+                        <td id="[% campo.id %]">[% campo.getPost %]</td>
+                        <td id="[% campo.id %]">[% campo.getNivel %]</td>
+                        <td >
                             [% PERL %]
-                                print C4::AR::Filtros::to_Icon( text =>     "[% 'Eliminar Vista' | i18n %]",
-                                                                onClick => 'eliminarVista("[% campo.id %]")',
-                                                                boton   => "icon_cancelar",
-                                                                title =>    "[% 'Eliminar Vista' | i18n %]"
-                                                            ) ;
+                                  print C4::AR::Filtros::action_button( 
+                                                                  button       => "btn click btn-danger",
+                                                                  action       => "eliminarVista([% campo.id %])", 
+                                                                  icon         => "icon-remove icon-white",
+                                                                  title        => "",
+                                                              ) ;
+
+
                             [% END %]
                         </td>
                     </tr>

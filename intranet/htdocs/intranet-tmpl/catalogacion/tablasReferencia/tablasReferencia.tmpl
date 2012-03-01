@@ -15,6 +15,22 @@ function obtenerTabla(){
 function updateObtenerTabla(responseText){
     $('#detalle_tabla').html(responseText);
 }
+
+function cambiarVisibilidad(campo, tabla){
+    objAH               = new AjaxHelper(updateCambiarVisualizacion);
+    objAH.url           = URL_PREFIX+'/catalogacion/tablasReferencia/tablasReferenciaDB.pl';
+    objAH.cache         = false;
+    objAH.showOverlay   = true;
+    objAH.accion        = "CHANGE_VISIBILIDAD";
+    objAH.tabla         = tabla;
+    objAH.campo         = campo;
+    objAH.sendToServer();
+
+}
+
+function updateCambiarVisualizacion(){
+    obtenerTabla();
+}
 </script>
 
 <div class="center-section-form ">
@@ -43,7 +59,7 @@ function updateObtenerTabla(responseText){
                 </div>
         </fieldset>
     </form>
-    <div class="detalle_tabla" id="detalle_tabla"> </div>
 </div>
+<div id="detalle_tabla"> </div>
 
 [% INCLUDE "intranet-bottom.inc" %]
