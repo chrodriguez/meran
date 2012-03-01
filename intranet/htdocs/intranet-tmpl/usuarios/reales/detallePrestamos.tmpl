@@ -1,5 +1,9 @@
 <script type="text/javascript" charset="utf-8">
-checkTr();
+
+$(document).ready(function(){
+    checkTr();
+    $('.popover_button').popover({delay: { show: 800, hide: 100 },});
+});
 </script>
 [% IF circularDesdeDetalleUsuario == 0 %]
     [% INCLUDE 'partials/usuarios/detallePrestamos-noCirculation.inc' %]
@@ -114,13 +118,15 @@ checkTr();
 
                       [% PERL %]
                               print C4::AR::Filtros::action_set_button(    
-                                                                  title           => "[% 'Prestamos' | i18n %]",
+                                                                  title           => "[% 'Pr&eacute;stamos' | i18n %]",
                                                                   button          => 'btn btn-primary',
 
                                                                   actions         => [
                                                                                       [% IF prestamos_cant %]{title => "Devolver", action=>'realizarAccion("DEVOLUCION","table_tablaPrestamos",generaDivDevolucion)',icon=>"icon-share-alt"}[% END %],
                                                                                       [% IF algunoSeRenueva>0 && vencidos == 0 %]{title => "Renovar", action=>'realizarAccion("RENOVACION","table_tablaPrestamos",generaDivRenovacion)', icon=>"icon-repeat"}[% END %],
                                                                                       ],
+                                                                  popover           => {title => "[% 'Pr&eacute;stamos' | i18n %]",
+                                                                                        text => "[% 'Renovar (si aplica) o devolver ejemplares' | i18n %]" }
 
                                       ) ;
                       [% END %]

@@ -93,7 +93,7 @@
     <script type="text/javascript">    
 
       $(document).ready(function() {
-			$('.popover_button').popover({delay: { show: 800, hide: 100 }, placement: 'left',});
+			$('.popover_button').popover({delay: { show: 800, hide: 100 }, placement: 'right',});
 			$(".alert").alert();
           
                     $(function () {
@@ -119,7 +119,14 @@
 	<body lang="es-Es">
 	<!-- POAR AHORA ES LA NAV -->
 	   [% INCLUDE 'opac-top-header.inc' %]
-		<div class="container main_content">		   
+		<div class="container main_content">	
+				  <div id="end_top">
+					    [% IF mensaje %]
+								<div class="alert [% mensaje_class %]">
+								        <strong>Info</strong> [% mensaje %]
+								</div>
+					    [% END %]
+		  			</div>	   
 			        [% IF content_title %]
 			        	<fieldset>
 			        		<legend class="title">[% content_title %]</legend>

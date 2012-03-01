@@ -1,8 +1,8 @@
-<dl class="listado_sin_margen">
+<dl>
     [% FOREACH nivel1 %]
             [% IF liblibrarian %]
                 [% IF dato %]
-                <dt>[% liblibrarian %]:</dt><dd>[% dato %]</dd>
+                <dt class="inline left rightMargin">[% liblibrarian %]:</dt><dd>[% dato %]</dd>
                 [% END %]
             [% END %]
     [% END %]

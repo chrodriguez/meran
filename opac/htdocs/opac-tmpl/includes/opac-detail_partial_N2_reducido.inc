@@ -1,21 +1,16 @@
 <script type="text/javascript">
     $(document).ready(function() {
-        $('.fancylink').fancybox();
+       // $('.fancylink').fancybox();
     });
 </script>
 
 [% FOREACH nivel2 %]
-    <div class="detalle_completo_niveles">
-        <div class="main-subcontent" style="width:100%; float:left">
-            <div class="subcontent-unit-border" style="width:100%;">
-    
-            
                 [% IF nivel2_array %]
-                    <!--<div class="main-subcontent" style="width:100%; float:left;">-->
-                                <div class="title">[% "Informaci&oacute;n de ejemplar" | i18n %]</div> 
                     <fieldset>
-                          <legend class="titulo_legend"><span class="titulos">[% "Detalle" | i18n %]</span></legend> 
-                          <div class="well">
+						<div class="page-header">
+						    <h1>[% 'Detalle del registro' | i18n %] <small>[% nivel1_obj.getTitulo %]</small></h1>
+						</div>                          
+						<div class="well">
                                 <div class="cover_detalle_container">
                                         [% IF portada_registro %]
                                             <a class="fancylink" href="/uploads/covers/[% portada_registro_big %]">
@@ -35,23 +30,21 @@
                                           [% FOREACH nivel2_array %]
                                                       [% IF liblibrarian %]
                                                           [% IF dato %]
-                                                          <dt>[% liblibrarian %]:</dt><dd>[% dato %]</dd>
+                                                          <dt class="inline left rightMargin">[% liblibrarian %]:</dt><dd>[% dato %]</dd>
                                                           [% END %]
                                                       [% END %]
-                                          [% END %] <!-- END FOREACH subcampos_array-->
-                                          <br />
-                                          <li> [% 'Puede solicitar m&aacute;s f&aacute;cilmente el ejemplar con' | i18n %]&nbsp;<b>[% primer_signatura %]</b></li>
+                                          [% END %]
                                       </dl>
                   
 
 									<div class="rating">  
 										[% IF tiene_indice %]
 											[% PERL %]
-																print C4::AR::Filtros::to_Icon(  
-																									boton   => "icon_indice",
-																									onClick => "mostrarIndice([% id2 %]);",
-																									title   => "[% 'Ver &iacute;ndice' | i18n %]",
-																		) ;
+													print C4::AR::Filtros::to_Icon(  
+																						boton   => "icon_indice",
+																						onClick => "mostrarIndice([% id2 %]);",
+																						title   => "[% 'Ver &iacute;ndice' | i18n %]",
+															) ;
 											[% END %]
 										[% END %]
 		
@@ -83,36 +76,35 @@
 									  	 [% IF isbn %]
 											<div class="google-books">
 												<a id="ISBN:[% isbn %]"  style="display:none" target="_blank">
-													<img src="/includes/css/gbs_preview_button1.gif" border="0" style="margin: 0"/>
+											<img src="/includes/css/gbs_preview_button1.gif" border="0" style="margin: 0"/>
 												</a>
 											</div>
 											<script src="http://books.google.com/books?jscmd=viewapi&bibkeys=ISBN:[% isbn %]&callback=ProcessGBSBookInfo"></script>
 										 [% END %]
 									</div>
-                                  </div> <!-- END <div class="detalle_total">-->
-                            
-            </div>
-</fieldset> 
+                                  </div>
+                            </div>
+
+                		[% END %]  <!--END  IF nivel2_array -->
+
+	              	[% INCLUDE 'e-docs_grupo.inc' %]
+	                                        
+	     			[% IF disponible %]
+	                   [% INCLUDE 'opac-detail_partial_disponibilidad.inc' %]
+	            	[% END %]
+	  			</fieldset> 
 
 
-
-                                 [% END %]  <!--END  IF nivel2_array -->
-                                     <div id="[% DivDetalle %]">
-
-                                        [% INCLUDE 'e-docs_grupo.inc' %]
-                                        
-                                        [% IF disponible %]
-                                            [% INCLUDE 'opac-detail_partial_disponibilidad.inc' %]
-                                        [% END %]
-                                        
-                                    </div>
-                  </div>
-           </div>
-    </div>
-  </div>
-    <br />
-    <hr class="separador-detalle-item" />
-    <br />
-    <br />
-
+<div id="modal_reservar" class="modal hide fade">
+              <div class="modal-header">
+                <a href="#" class="close" data-dismiss="modal">×</a>
+                <h3>[% 'Reserva de ejemplar' | i18n %]</h3>
+              </div>
+              <div class="modal-body">
+                <p>One fine body…</p>
+              </div>
+              <div class="modal-footer">
+                <a href="#" class="btn btn-primary" onclick="reservar([% id1 %],[% id2 %]);">[% 'Reservar' | i18n %]</a>
+              </div>
+</div>
 [% END %]  <!--END FOREACH nivel2 -->

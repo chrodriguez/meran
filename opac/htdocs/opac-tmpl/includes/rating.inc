@@ -7,6 +7,7 @@
                 $.post("[% url_prefix %]/rating.pl", {rate: value, id2: [% id2 %]}, function(data)
                 {
                     $("#ajax_response[% id2 %]").html(data);
+                    $("#ajax_response[% id2 %]").show();
                 });
             },
             cancelShow: false,
@@ -19,8 +20,8 @@
     });
 </script>
 
-<div class="rating">
-    <label>[% "Valoraci&oacute;n" | i18n %]</label>
+<div class="rating well">
+    <h4>[% "Valoraci&oacute;n" | i18n %]</h4>
     <form id="rating[% id2 %]" class="ratings" action="[% url_prefix %]/rating.pl" method="post">
         <input type="radio" name="rate" value="1" id="rate1" />
         <input type="radio" name="rate" value="2" id="rate2" />
@@ -35,5 +36,5 @@
         <input type="submit" value="Enviar" />
     </form>
     <br style="clear:both" />
-    <p id="ajax_response[% id2 %]"></p>
+    <span class="label label-success" id="ajax_response[% id2 %]" style="display:none;"></span>
 </div>

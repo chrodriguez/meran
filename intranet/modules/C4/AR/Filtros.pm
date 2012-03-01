@@ -706,9 +706,13 @@ sub action_button{
     my $icon     = $params_hash_ref{'icon'} || undef;  #obtengo el boton
     my $title    = $params_hash_ref{'title'}; #obtengo el title de la componete
     my $popover  = $params_hash_ref{'popover'} || undef;
+    my $disabled  = $params_hash_ref{'disabled'} || undef;
 
     $button.= " click";
 
+    if ($disabled){
+    	$button .= " disabled";
+    }
     my $popopver_attr = "";
     
     if ($popover){

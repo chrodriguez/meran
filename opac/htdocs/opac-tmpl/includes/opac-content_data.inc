@@ -24,7 +24,6 @@
 	        [% END %]	
 		</p>
 
-		[% IF !((cant_sanciones > 0) || (cantidad_prestamos > 0) || (reservas_asignadas_count > 0) || (reservas_espera_count > 0)) %]
 		<p>
 	        <form class="" action="[% url_prefix %]/opac-busquedasDB.pl" method="get" onsubmit="startOverlay();">
 	            <input type="hidden" name="tipoAccion" value="BUSQUEDA_COMBINABLE" />
@@ -40,7 +39,6 @@
 		        <p><button class="btn btn-primary btn-large" type="submit">[% 'Buscar' | i18n %]</button></p>
 		    </form>
 		</p>
-	    [% END %]
     </div>
 
       <!-- Example row of columns -->

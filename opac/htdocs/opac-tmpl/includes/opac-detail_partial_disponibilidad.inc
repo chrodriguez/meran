@@ -1,49 +1,48 @@
-          <div class="main-subcontent" style="width:100%; float:left">
-                <div style="width:100%;">
-                    <h1 class="orange">[% "Informaci&oacute;n de disponibilidad" | i18n %]</h1>
-                            <li class="detalle_barra_circulacion" style="float:left; margin-left: 40px;">
-                                [% IF CirculationEnabled %]
-                                   [% IF socio_data.usr_nro_socio %]                             
-                                        [% PERL %]
-                                            print C4::AR::Filtros::action_button(   
-                                                                                button   => "btn click",
-                                                                                icon   => "icon-remove",
-                                                                                action => "reservar([% id1 %],[% id2 %])",
-                                                                                title   => "[% 'Reservar' | i18n %]",
-                                                                        );
-                                        [% END %]
-                                   [% END %]
-                                [% END %]
-                            </li>
+<div class="alert alert-success">
+			<dl>
+                            <dt class="inline left rightMargin">[% "Disponibilidad Actual Para Pr&eacute;stamo:" | i18n %]</dt>
+                            <dd>[% cantParaPrestamoActual %]</dd>
 
-                    <div class="detalle_total">
-                        <ul>
-                            <li>
-                                [% "Disponibilidad Actual Para Pr&eacute;stamo:" | i18n %] <b>[% cantParaPrestamoActual %]</b>
-                            </li>
-                            <li>
-                                [% "Disponibilidad Actual Para Sala de Lectura:" | i18n %] <b>[% cantParaSalaActual %]</b>
-                            </li>
-                            <li>
-                                [% "Cantidad Actual de Reservas:" | i18n %] <b>[% cantReservas %]</b>
-                            </li>  
-                            <li>
-                                [% "Cantidad Actual de Pr&eacute;stamos:" | i18n %] <b>[% cantPrestados %]</b>
-                            </li>  
-                        </ul>
-                    </div>
-                </div>
-           </div>
+                            <dt class="inline left rightMargin">[% "Disponibilidad Actual Para Sala de Lectura:" | i18n %]</dt>
+                            <dd>[% cantParaSalaActual %]</dd>
+
+                            <dt class="inline left rightMargin">[% "Cantidad Actual de Reservas:" | i18n %]</dt>  
+                            <dd>[% cantReservas %]</dd>
+
+                            <dt class="inline left rightMargin">[% "Cantidad Actual de Pr&eacute;stamos:" | i18n %]</dt>  
+                            <dd>[% cantPrestados %]</dd>
+			</dl>
+		           [% IF CirculationEnabled %]
+		                                   [% IF socio_data.usr_nro_socio %]                             
+		                                        [% PERL %]
+		                                            print C4::AR::Filtros::action_button(   
+		                                                                                button   => "btn btn-primary",
+		                                                                                icon   => "icon-white icon-shopping-cart",
+		                                                                                action => "showReservar();",
+		                                                                                title   => "[% 'Reservar un ejemplar' | i18n %]",
+		                                                                                [% IF cantParaPrestamoActual == 0 %]
+		                                                                                	disabled => 1,
+		                                                                                [% END %]
+		                                                                        );
+		                                        [% END %]
+		                                   [% END %]
+		           [% END %]
+
+
+
+</div>
 
           [% IF socio_data %]
               [% INCLUDE 'rating.inc' %]
           [% END %]
           <h3>
             [% PERL %]
-                print C4::AR::Filtros::link_to( text    => "[% 'Revisiones' | i18n %] ([% cant_reviews %])",
+                print C4::AR::Filtros::action_link_button(
                                                 url     => "reviews.pl", 
+                                                button	=> "btn btn-info",
                                                 params  => ["id2=[% id2 %]"],
-                                                title   => "[% 'Revisiones' | i18n %]"
+                                                title   => " [% 'Comentarios de la edici&oacute;n' | i18n %] ([% cant_reviews %])",
+                                                icon	=> "icon-white icon-pencil",
                                             ) ;
             [% END %]
           </h3>

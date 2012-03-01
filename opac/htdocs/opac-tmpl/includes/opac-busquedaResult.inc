@@ -171,20 +171,32 @@
 	                    </a>
 			        [% END %]
 			    [% END %]
+			<br />
+          [% IF external_search %]
+	          [% IF cant_external_servers %]
+					                          [% PERL %]
+					                                  print C4::AR::Filtros::action_button( 
+					                                                                  button        => "btn btn-success",
+					                                                                  action       	=> 'doExternalSearches("[% buscoPor | html %]")', 
+					                                                                  icon         	=> "icon-white icon-search ",
+                                                                                      title        	=> "[% 'Buscar en servidores externos' | i18n %]",
+                                                                                      popover		=> {title=>'[% "Cat&aacute;logos externos" | i18n %]',
+                                                                                      					text => '[% "Esta b&uacute;squeda se realiza sobre otros cat&aacute;logos, 
+                                                                                      							     ajenos a &eacute;sta Biblioteca. Los resultados llevan a esos cat&aacute;logos.
+                                                                                      							     Puede llevar un tiempo considerable" | i18n %].' },
+					                                                              ) ;
+
+					                          [% END %]
+	          [% END %]
+          [% END %]
 
             </div>
         </section>    
 
           [% IF only_available %]
-                <h2 class="advice"> [% 'Solo se muestran ejemplares disponibles.' | i18n %] <a href="[% url_todos %]">([% ' Mostrar todos' | i18n %])</a></h2>
+                <div class="alert alert-info"> [% 'Solo se muestran ejemplares disponibles.' | i18n %] <a href="[% url_todos %]">([% ' Mostrar todos' | i18n %])</a></div>
           [% END %]
 
-
-          [% IF external_search %]
-	          [% IF cant_external_servers %]
-	                <h2 class="advice"> [% 'Buscar en servidores externos.' | i18n %] <a href="#" onclick="doExternalSearches('[% buscoPor | html %]')">([% ' Buscar en servidores externos' | i18n %])</a></h2>
-	          [% END %]
-          [% END %]
 [% END %]
 
 [% IF (cantidad > 0) || ( (!from_suggested) && (suggested) )%]
@@ -415,7 +427,7 @@
 				                      print C4::AR::Filtros::action_button( 
 				                                                      button    => "btn btn-info click",
 				                                                      action    => "addFavorite([% NIVEL.id1 %]);",
-				                                                      icon      => "icon-star icon-white",
+				                                                      icon      => "icon-heart icon-white",
 				                                                      popover => {text => "Agrega este registro a tu estante privado de favoritos", title => "Favoritos"},
 				                                                  ) ;
 				

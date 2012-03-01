@@ -6,26 +6,34 @@
 /*
 * Funcion Ajax que hace una reserva
 */
+
+function showReservar(){
+	$('#modal_reservar').modal();
+}
+
+
+function hideReservar(){
+	$('#modal_reservar').modal('hide');
+}
+
 function reservar(id1, id2){
-    bootbox.confirm(ESTA_SEGURO_QUE_DESEA_RESERVAR,OPAC_ALERT_TITLE, function (ok){ 
-        if (ok){
-            objAH               = new AjaxHelper(updateInfoReserva);
-            objAH.debug         = true;
-            objAH.showOverlay   = true;
-            //para busquedas combinables
-            objAH.url           = URL_PREFIX+'/opac-reservar.pl';
-            objAH.id1           = id1;
-            objAH.id2           = id2;
-            objAH.sendToServer();
-        }
-    });
+
+	hideReservar();
+	objAH               = new AjaxHelper(updateInfoReserva);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    //para busquedas combinables
+    objAH.url           = URL_PREFIX+'/opac-reservar.pl';
+    objAH.id1           = id1;
+    objAH.id2           = id2;
+    objAH.sendToServer();
+        
 }
 
 /*
 * Funcion que muestra la informacion de las reservas
 */
 function updateInfoReserva(responseText){
-  
     var Messages = JSONstring.toObject(responseText);
     setMessages(Messages);
     

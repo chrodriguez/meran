@@ -65,3 +65,12 @@ body {
 .rightMargin{
     margin-right: 5px;
 }
+
+#last_new{
+    background-color: #DFF0D8;
+    border-radius: 4px;	
+}
+
+#last_new h2, #last_new p{
+    padding: 5px;
+}

@@ -1,8 +1,7 @@
-<div class="column1-unit">
-            <div class="contactform">
-                <form id="form_circulacion_rapida" class="classform form-horizontal" action="[% url_prefix %]/opac-busquedasDB.pl" method="get">
+<section class="center-section-form"> 
+		<form id="form_circulacion_rapida" class="classform form-horizontal" action="[% url_prefix %]/opac-busquedasDB.pl" method="get">
                     <fieldset>
-                        <section class="center-section-form"> 
+                    	<legend class="title">[% 'B&uacute;squeda avanzada' | i18n %]</legend>
                         <div class="control-group">
                                           <label for="titulo" class="control-label">[% 'T&iacute;tulo' | i18n %]</label>
                                           <div class="controls">
@@ -51,11 +50,9 @@
                         <div class="form-actions" id="acciones">
                               <input type="submit" name="submit" id="submit" class="btn btn-primary" value="[% 'Buscar' | i18n %]" tabindex="6" />
                         </div>                        
-                    </section>
                 </fieldset>
                 <input type="hidden" name="tipoAccion" value="BUSQUEDA_AVANZADA" />
                 <input type="hidden" name="tipo" value="normal" />
                 <input type="hidden" name="token" value="[% token %]" />
-            </form>
-      </div>
- </div>
+		</form>
+</section>

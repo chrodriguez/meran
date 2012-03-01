@@ -35,5 +35,12 @@
                     <hr  class="clear-contentunit">
                 [% END %]
 	</div>
-		<a href="#" class="btn btn-primary">[% "Ver pr&eacute;stamos" | i18n %]</a>
+                [% PERL %]
+                   print C4::AR::Filtros::action_link_button( 
+                                                     button         => "btn btn-inverse",
+                                                     url       	=> "[% url_prefix %]/opac-prestamos_vigentes.pl",
+                                                     params		=> ["token=[% token %]"],
+                                                     title        => "[% 'Ver pr&eacute;stamos' | i18n %]",
+                                       ) ;
+                [% END %]
 </div>
