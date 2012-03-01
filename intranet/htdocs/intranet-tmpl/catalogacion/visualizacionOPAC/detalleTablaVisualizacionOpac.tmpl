@@ -78,7 +78,7 @@
         [% END %]
 
             <tbody id="sortable_subcampo">
-                <input type="checkbox" name="enable_sort_subcampo" id="enable_sort_subcampo" /> Seleccione para Ordenar
+                <input type="checkbox" name="enable_sort_subcampo" id="enable_sort_subcampo" /> [% 'Seleccione para Ordenar' | i18n %]
                 [% FOREACH campo IN visualizacion %]
                     <tr id="[% campo.getId %]" align="center">
                         <td>[% campo.getCampo %]</td>
@@ -103,4 +103,16 @@
                 [% END %]
             </tbody>
         </table>
+        <div class="form-actions">
+	             [% PERL %]
+	                   print C4::AR::Filtros::action_button( 
+	                                                   button       => "btn btn-primary",
+	                                                   action       => "showAddVistaOPAC()", 
+	                                                   icon         => "icon-add icon-white",
+	                                                   title        => "Agregar vista",
+	                                               ) ;
+	
+	
+	             [% END %]
+        </div>
 </fieldset>

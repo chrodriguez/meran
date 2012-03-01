@@ -110,75 +110,85 @@
         mostrarTabla();
         eleccionDeEjemplar();
     }
+    
+    
+    function showAddVistaOPAC(){
+    	('#add_vista_opac').modal();
+    }
+
+    
+    function hideAddVistaOPAC(){
+        ('#add_vista_opac').modal('hide');
+    }
 </script>
-<div class="form-horizontal">
-<fieldset>
-    <legend>[% "Agregar Visualizaci&oacute;n:" | i18n %]</legend>
-    <div class="divTablaAgregarVisualizacion" id="divTablaAgregarVisualizacion">
-    <section class="center-section-form">
-        <div class="control-group">
-            <label class="control-label" for="campoX"> [% "Selecci&oacute;n" | i18n %]: </label>
-            <div class="controls">
-                [% selectCampoX %]
-            </div>
-        </div>
-        
-        <div class="control-group">
-            <label class="control-label" for="campo"> [% "Campo" | i18n %]: </label>
-            <div class="controls">
-                <select name="campo" id="campo" onChange="eleccionCampo()">
-                        <option value="-1">[% 'Seleccionar CampoX' | i18n %]</option>
-                    </select>
-                [% 'Nombre' | i18n %]: <strong><span id="nombre_campo"></span></strong>
-            </div>
-        </div>
-        
-        <div class="control-group">
-            <label class="control-label" for="subcampo"> [% "Subcampo" | i18n %]: </label>
-            <div class="controls">
-                <select name="subcampo" id="subcampo" onChange="eleccionSubCampo()">
-                        <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
-                </select>
-            </div>
-        </div>
-        
-        <div class="control-group">
-            <label class="control-label" for="pre"> [% "Pre" | i18n %]: </label>
-            <div class="controls">
-                <input id="pre" type="text" value="" size="50">
-            </div>
-        </div>
-        
-        <div class="control-group">
-            <label class="control-label" for="liblibrarian"> [% "Vista en Intranet" | i18n %]: </label>
-            <div class="controls">
-                <input id="liblibrarian" type="text" value="" size="90">
-            </div>
-        </div>
-        
-        <div class="control-group">
-            <label class="control-label" for="post"> [% "Post" | i18n %]: </label>
-            <div class="controls">
-                <input id="post" type="text" value="" size="50">
-            </div>
-        </div>
 
-        <div class="form-actions">
-            [% PERL %]
-                    print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Vista' | i18n %]",
-                                                        boton   => "btn btn-primary",
-                                                        onClick => "agregarVisualizacion()",
-                                                        title   => "[% 'Agregar Vista' | i18n %]",
-                                                        width => "auto",
-                                                        alternClass => "botonCentrado",
-                                                        inline => "1"
-                            ) ;
-            [% END %]
-
-      </div>
-    </div>
-    </section>
-</fieldset>
+<div id="add_vista_opac" class="modal hide fade">
+	<div class="form-horizontal">
+		<fieldset>
+		    <legend>[% "Agregar Visualizaci&oacute;n:" | i18n %]</legend>
+		    
+		        <div class="control-group">
+		            <label class="control-label" for="campoX"> [% "Selecci&oacute;n" | i18n %]: </label>
+		            <div class="controls">
+		                [% selectCampoX %]
+		            </div>
+		        </div>
+		        
+		        <div class="control-group">
+		            <label class="control-label" for="campo"> [% "Campo" | i18n %]: </label>
+		            <div class="controls">
+		                <select name="campo" id="campo" onChange="eleccionCampo()">
+		                        <option value="-1">[% 'Seleccionar CampoX' | i18n %]</option>
+		                    </select>
+		                [% 'Nombre' | i18n %]: <strong><span id="nombre_campo"></span></strong>
+		            </div>
+		        </div>
+		        
+		        <div class="control-group">
+		            <label class="control-label" for="subcampo"> [% "Subcampo" | i18n %]: </label>
+		            <div class="controls">
+		                <select name="subcampo" id="subcampo" onChange="eleccionSubCampo()">
+		                        <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
+		                </select>
+		            </div>
+		        </div>
+		        
+		        <div class="control-group">
+		            <label class="control-label" for="pre"> [% "Pre" | i18n %]: </label>
+		            <div class="controls">
+		                <input id="pre" type="text" value="" size="50">
+		            </div>
+		        </div>
+		        
+		        <div class="control-group">
+		            <label class="control-label" for="liblibrarian"> [% "Vista en Intranet" | i18n %]: </label>
+		            <div class="controls">
+		                <input id="liblibrarian" type="text" value="" size="90">
+		            </div>
+		        </div>
+		        
+		        <div class="control-group">
+		            <label class="control-label" for="post"> [% "Post" | i18n %]: </label>
+		            <div class="controls">
+		                <input id="post" type="text" value="" size="50">
+		            </div>
+		        </div>
+		
+		        <div class="form-actions">
+		            [% PERL %]
+		                    print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Vista' | i18n %]",
+		                                                        boton   => "btn btn-primary",
+		                                                        onClick => "agregarVisualizacion()",
+		                                                        title   => "[% 'Agregar Vista' | i18n %]",
+		                                                        width => "auto",
+		                                                        alternClass => "botonCentrado",
+		                                                        inline => "1"
+		                            ) ;
+		            [% END %]
+		
+		      </div>
+		</fieldset>
+	</div>
 </div>
 
 <div id="divAgregarModificarVisualizacion"></div>
