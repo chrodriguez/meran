@@ -53,3 +53,15 @@ body {
 .medium_font{
 	font-size: 40px !important;
 }
+
+.inline{
+    display: inline;
+}
+
+.left{
+    float: left;
+}
+
+.rightMargin{
+    margin-right: 5px;
+}
