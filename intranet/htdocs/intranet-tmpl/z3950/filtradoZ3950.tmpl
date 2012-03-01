@@ -123,75 +123,75 @@ $(document).ready(function() {
 });
 </script>
 
-<fieldset class="resultados_busqueda">
-<legend class="titulo_legend">[% "B&uacute;squeda Z3950" | i18n %]:</legend>
-<div class="datos_tabla_div_z3950">
-    <ul>
-        <li class="item" >
-        <label for="titutlo">
-            [% "T&iacute;tulo" | i18n %]
-        </label>
-        <input type="text" id="titulo" size="20" tabindex=1>
-    </li>
-        <li class="item" >
-        <label for="autor">
-            [% "Autor" | i18n %]
-        </label>
-        <input type="text" id="autor" size="20" tabindex=2>
-    </li>
- </ul>
- </div>
-  <div class="datos_tabla_div_z3950">
- <ul>
-    <li class="item" >
-        <label for="isbn">
-            [% "ISBN" | i18n %]
-        </label>
-        <input type="text" id="isbn" size="20" tabindex=3>
-    </li>
-    
-    <li class="item" >
-        <label for="issn">
-            [% "ISSN" | i18n %]
-        </label>
-        <input type="text" id="issn" size="20" tabindex=4>
-    </li>
-    
-</ul>
-</div>
- <div class="datos_tabla_div_z3950">
- <ul>
-    <li class="item" >
-        <label for="termino">
-            [% "B&uacute;squeda General" | i18n %]
-        </label>
-        <input type="text" id="termino" size="20" tabindex=3>
-    </li>
-    
-    <li class="item" >
-        <label for="termino-pqf">
-            [% "B&uacute;squeda PQF" | i18n %]
-        </label>
-        <input type="text" id="pqf" size="20" tabindex=4>
-    </li>
-    
-</ul>
-</div>
 
-<div class="datos_tabla_div_z3950">
-<ul>
-    <li class="click" >
-         [% PERL %]
-                                print C4::AR::Filtros::to_Icon(
-                                                                    boton   => "icon_buscar",
-                                                                    onClick => "agregarBusquedaZ3950();",
-                                                                    title   => "[% 'Buscar' | i18n %]",
-                                        ) ;
-            [% END %]
-    </li>
-    </ul>
-</div>
-</fieldset>
+<section class="center-section-form">
+    <form class="form-horizontal" onsubmit="return false;">
+        <fieldset class="resultados_busqueda">
+        <legend class="titulo_legend">[% "B&uacute;squeda Z3950" | i18n %]</legend>
+        
+            <div class="control-group">
+                <label class="control-label" for="titutlo">[% "T&iacute;tulo" | i18n %]</label>
+                <div class="controls"> 
+                      <input type="text" id="titulo" size="20" tabindex=1>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="autor">    [% "Autor" | i18n %]</label>
+                <div class="controls"> 
+                       <input type="text" id="autor" tabindex=2>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="autor">[% "Autor" | i18n %]</label>
+                <div class="controls"> 
+                       <input type="text" id="autor" tabindex=3>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="isbn">  [% "ISBN" | i18n %]</label>
+                <div class="controls"> 
+                       <input type="text" id="isbn" tabindex=4>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="issn">[% "ISSN" | i18n %]</label>
+                <div class="controls"> 
+                       <input type="text" id="issn" tabindex=5>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="termino"> [% "B&uacute;squeda General" | i18n %]</label>
+                <div class="controls"> 
+                       <input type="text" id="termino" tabindex=6>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="pqf">[% "B&uacute;squeda PQF" | i18n %]</label>
+                <div class="controls"> 
+                       <input type="text" id="pqf" tabindex=7>
+                </div>
+            </div>
+
+
+            <div class="form-actions" >      
+               
+                        [% PERL %]
+                                            print C4::AR::Filtros::action_button( 
+                                                                            button       => "btn btn-primary",
+                                                                            action       => "agregarBusquedaZ3950();", 
+                                                                            icon         => "",
+                                                                            title        => "[% 'Buscar' | i18n %]",
+                                                                        ) ;
+
+                        [% END %]
+
+
+
+             </div>
+              
+      </fieldset>
+  </form>
+</section>
 
 <div id="busquedasZ3950"></div>
 <div id="resultadoZ3950"></div>
