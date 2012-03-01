@@ -2042,7 +2042,7 @@ helper.token=token;var params="obj="+JSONstring.make(helper);this.log("AjaxHelpe
 $.ajax({type:"POST",url:helper.url,data:params,async:helper.async,beforeSend:function(){if(helper.showState){_Init({debug:helper.debug,showStatusIn:helper.showStatusIn,showOverlay:helper.showOverlay,offIndicator:helper.offIndicator});}
 if(helper.onBeforeSend){helper.onBeforeSend();}},complete:function(ajax){_HiddeState({showStatusIn:helper.showStatusIn,showOverlay:helper.showOverlay});if(helper.onComplete){if(ajax.responseText=='CLIENT_REDIRECT'){window.location=URL_PREFIX+"/redirectController.pl";}else{if(helper.cache){if($.jCache)
 $.jCache.setItem(_hash_key,ajax.responseText);}
-helper.onComplete(ajax.responseText);}}}});}}function clearMessages(){$('#end_top').html("<div id='mensajes' class='alert hide pagination-centered'><br /> </div>");}
+helper.onComplete(ajax.responseText);}}}});}}function clearMessages(){$('#end_top').html("<div id='mensajes' class='alert hide pagination-centered'><a class='close' data-dismiss='alert'>x</a><br /> </div>");}
 function verificarRespuesta(responseText){if(responseText==0){jAlert(DATOS_ENVIADOS_INCORRECTOS,'Info','errboxid');return(0);}else{return(1);}}
 function setMessages(Messages_hashref){//@params
 var hayError=0;try{_createContentMessages();var i;if(Messages_hashref.error==1)

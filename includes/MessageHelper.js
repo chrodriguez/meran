@@ -32,7 +32,7 @@
 // }
 
 function clearMessages(){
-	$('#end_top').html("<div id='mensajes' class='alert hide pagination-centered'><br /> </div>");
+	$('#end_top').html("<div id='mensajes' class='alert hide pagination-centered'><a class='close' data-dismiss='alert'>x</a><br /> </div>");
 }
 
 function verificarRespuesta(responseText){

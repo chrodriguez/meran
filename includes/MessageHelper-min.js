@@ -1,4 +1,4 @@
-function clearMessages(){$('#end_top').html("<div id='mensajes' class='alert hide pagination-centered'><br /> </div>");}
+function clearMessages(){$('#end_top').html("<div id='mensajes' class='alert hide pagination-centered'><a class='close' data-dismiss='alert'>x</a><br /> </div>");}
 function verificarRespuesta(responseText){if(responseText==0){jAlert(DATOS_ENVIADOS_INCORRECTOS,'Info','errboxid');return(0);}else{return(1);}}
 function setMessages(Messages_hashref){//@params
 var hayError=0;try{_createContentMessages();var i;if(Messages_hashref.error==1)
