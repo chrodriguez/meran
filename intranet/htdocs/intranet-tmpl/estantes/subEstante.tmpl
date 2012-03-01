@@ -37,7 +37,7 @@
         [% END %]
 
             </div>
-           <ul class="ul_tabla_div_subestante_[% estante.getId %]">
+           <ul class="ul_tabla_div_subestante_[% estante.getId %] unstyled">
            [% IF cant_subestantes %]
             [% FOREACH subestante IN SUBESTANTES %]
              <li>
@@ -49,7 +49,7 @@
            </ul>
 
 <fieldset class="resultados_busqueda">
-<legend class="titulo_legend">[% "Contenido" | i18n %] :</legend>
+<legend class="titulo_legend">[% "Contenido" | i18n %]</legend>
 
 [% IF estante.contenido %]
 

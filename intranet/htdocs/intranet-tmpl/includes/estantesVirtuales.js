@@ -190,7 +190,7 @@ function ordenar(orden){
                 objAH.estante=$("#input_nuevo_estante").val();
                 objAH.tipo= 'AGREGAR_ESTANTE';
                 objAH.sendToServer();
-		$.modal.close();
+		$('#nuevo_estante').modal('hide');
 	    }
         }
 
