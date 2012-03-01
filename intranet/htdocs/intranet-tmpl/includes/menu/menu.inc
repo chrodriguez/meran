@@ -425,8 +425,7 @@
                                                                             ) ;
                                             [% END %]
                                 </li>
-                                </li>
-                                                            <li>
+                                <li>
                                             [% PERL %]
                                                 print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'Configuraci&oacute;n de Estilos' | i18n %]",
                                                                                 url =>      "[% url_prefix %]/admin/global/estilos_config.pl",
