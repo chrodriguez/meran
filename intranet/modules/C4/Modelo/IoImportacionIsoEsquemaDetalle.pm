@@ -177,10 +177,6 @@ sub setOrden{
 sub getSeparador{
     my ($self)  = shift;
     
-    if (!C4::AR::Utilidades::validateString($self->separador)){
-        return(" ");
-    }
-        
     return $self->separador;
 }
 
