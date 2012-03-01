@@ -2,31 +2,37 @@
 <script type="text/javascript" src="/intranet-tmpl/includes/estantesVirtuales.js"></script>
 
 <div id="nuevo_estante" class="modal hide fade">
-	<fieldset class="resultados_busqueda">
-	   <legend class="titulo_legend trigger click">  [% "Nuevo Estante" | i18n %] </legend>
-	            <input type="text" id="input_nuevo_estante">
-	            <script type="text/javascript">
-	                        $(document).ready(function() {
-	                                    $('#input_nuevo_estante').keypress(function(e){if(e.which==13){if(this.value!=''){agregarEstante();}}});
-	                        });
-	            </script>
-    </fieldset>
-	                      [% PERL %]
-	                                                print C4::AR::Filtros::action_button(   
-	                                                                            
-	                                                                                    button   => "btn btn-primary",
-	                                                                                    action   => 'agregarEstante();',
-	                                                                                    title    => "[% 'Guardar' | i18n %]",
-	                                                                               
-	                                                        ) ;
-	                      [% END %]
+      <div class="modal-header">
+            <h3>[% "Nuevo Estante" | i18n %]</h3>
+      </div>
+      <div class="modal-body">
+            <input type="text" id="input_nuevo_estante">
+              <script type="text/javascript">
+                          $(document).ready(function() {
+                                      $('#input_nuevo_estante').keypress(function(e){if(e.which==13){if(this.value!=''){agregarEstante();}}});
+                          });
+              </script>
+      </div>
+      <div class="modal-footer">
+              [% PERL %]
+                                        print C4::AR::Filtros::action_button(   
+                                                                    
+                                                                            button   => "btn btn-primary",
+                                                                            action   => 'agregarEstante();',
+                                                                            title    => "[% 'Guardar' | i18n %]",
+                                                                      
+                                                ) ;
+              [% END %]
+      </div>
+
 </div>
 
 <div id="nuevo_sub_estante" style="display:none">
+    
     <fieldset class="resultados_busqueda">
-    <legend class="titulo_legend trigger click">  [% "Nuevo Estante" | i18n %] </legend>
-	    <input type="hidden" id="estante_nuevo_sub_estante">
-	    <input type="hidden" id="padre_nuevo_sub_estante">
+        <legend class="titulo_legend trigger click">  [% "Nuevo Estante" | i18n %] </legend>
+            <input type="hidden" id="estante_nuevo_sub_estante">
+            <input type="hidden" id="padre_nuevo_sub_estante">
             <input type="text" id="input_nuevo_sub_estante">
             
             <script type="text/javascript">
@@ -34,20 +40,22 @@
                             $('#input_nuevo_sub_estante').keypress(function(e){if(e.which==13){if(this.value!=''){agregarSubEstante();}}});
                   });
             </script>
-            </fieldset>
-                              [% PERL %]
-                                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
-                                                                                            boton   => "boton_guardar",
-                                                                                            onClick => 'agregarSubEstante();',
-                                                                                            title   => "[% 'Guardar' | i18n %]",
-                                                                                            alternClass => "botonCentrado"
-                                                                ) ;
-                              [% END %]
+     </fieldset>
+   
+     [% PERL %]
+                              print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
+                                                                  boton   => "boton_guardar",
+                                                                  onClick => 'agregarSubEstante();',
+                                                                  title   => "[% 'Guardar' | i18n %]",
+                                                                  alternClass => "botonCentrado"
+                                      ) ;
+     [% END %]
+
 </div>
 
 <div id="editar_estante" style="display:none">
         <fieldset class="resultados_busqueda">
-        <legend class="titulo_legend trigger click">  [% "Estante" | i18n %] </legend>
+            <legend class="titulo_legend trigger click">  [% "Estante" | i18n %] </legend>
                 <input type="hidden" id="input_id_estante">
                 <input type="hidden" id="input_padre_estante">
                 <input type="hidden" id="input_abuelo_estante">
@@ -58,92 +66,90 @@
                             });
                 </script>
         </fieldset>
-              [% PERL %]
+              
+        [% PERL %]
                                         print C4::AR::Filtros::action_button(   
                                                                             button   => "btn btn-primary",
                                                                             action   => 'modificarEstante();',
                                                                             title   => "[% 'Guardar' | i18n %]",
                                                                         
                                                 ) ;
-              [% END %]
+        [% END %]
 </div>
 
 
 <div id="contenido_estante" style="display:none">
-      <div id="busqueda_contenido_estante">
-            <fieldset class="resultados_busqueda">
+    <div id="busqueda_contenido_estante">
+         <fieldset class="resultados_busqueda">
             <legend class="titulo_legend">  [% "Buscar Contenido" | i18n %] </legend>
-                        <input type="hidden" id="input_contenido_id_estante">
-                        <input type="hidden" id="input_contenido_id_padre_estante">
-                        <input class="horizontal" type="text" id="input_busqueda_contenido">
-                        
-                        <script type="text/javascript">
-                              $(document).ready(function() {
-                                        $('#input_busqueda_contenido').keypress(function(e){if(e.which==13){if(this.value!=''){buscarContenido();}}});
-                              });
-                        </script>
-                            [% PERL %]
-                                                print C4::AR::Filtros::action_button(
-                                                                                    button   => "btn btn-primary",
-                                                                                    icon     => "icon-search",
-                                                                                    action   => 'buscarContenido();',
-                                                                                    title    => "[% 'Buscar' | i18n %]",
-                                                        ) ;
-                            [% END %]
-            </fieldset>
-      </div>    
-      <div id="resultado_contenido_estante"> </div>
+                  <input type="hidden" id="input_contenido_id_estante">
+                  <input type="hidden" id="input_contenido_id_padre_estante">
+                  <input class="horizontal" type="text" id="input_busqueda_contenido">
+                  
+                  <script type="text/javascript">
+                        $(document).ready(function() {
+                                  $('#input_busqueda_contenido').keypress(function(e){if(e.which==13){if(this.value!=''){buscarContenido();}}});
+                        });
+                  </script>
+
+                  [% PERL %]
+                                      print C4::AR::Filtros::action_button(
+                                                                          button   => "btn btn-primary",
+                                                                          icon     => "icon-search",
+                                                                          action   => 'buscarContenido();',
+                                                                          title    => "[% 'Buscar' | i18n %]",
+                                              ) ;
+                  [% END %]
+
+          </fieldset>
+    </div>    
+    <div id="resultado_contenido_estante"> </div>
 </div>
 
 <div id="estante">
-<fieldset class="resultados_busqueda">
-<legend class="titulo_legend trigger click">[% "Estantes" | i18n %]</legend>
-        <div class="datos_tabla_div_estantes">
+    <fieldset class="resultados_busqueda">
+        <legend class="titulo_legend trigger click">[% "Estantes" | i18n %]</legend>
+            <div class="datos_tabla_div_estantes">
             
-           <ul class="unstyled" >
-              [% FOREACH estante IN ESTANTES %]
-                  <li>
-                      <input type=checkbox name="[% estante.getEstante %]" value="[% estante.getId %]">
-                      <a class="click" onClick="verSubEstantes([% estante.getId %],0)">[% estante.getEstante %]</a>
-                  </li>
-              [% END %]
-           </ul>
+                  <ul class="unstyled">
+                      [% FOREACH estante IN ESTANTES %]
+                          <li>
+                              <input type=checkbox name="[% estante.getEstante %]" value="[% estante.getId %]">
+                              <a class="click" onClick="verSubEstantes([% estante.getId %],0)">[% estante.getEstante %]</a>
+                          </li>
+                      [% END %]
+                  </ul>
 
+                  <div class="form-actions">
+                        [% IF cant_estantes %]
+                              [% PERL %]
+                                            print C4::AR::Filtros::action_button(
+                                                                                button  => "btn btn-danger",
+                                                                                action => "borrarEstantesSeleccionados(0,0);",
+                                                                                title   => "[% 'Borrar seleccionados' | i18n %]",
+                                                    ) ;
+                              [% END %]
+                        [% END %]
 
-            <div class="form-actions">
-            [% IF cant_estantes %]
-                  [% PERL %]
-                                print C4::AR::Filtros::action_button(
-                                                                    button  => "btn btn-danger",
-                                                                    action => "borrarEstantesSeleccionados(0,0);",
-                                                                    title   => "[% 'Borrar seleccionados' | i18n %]",
-                                        ) ;
-                   [% END %]
-            [% END %]
-
-            [% PERL %]
-                                print C4::AR::Filtros::action_button(
-                                                                    button   => "btn btn-primary",
-                                                                    title   => "[% 'Agregar estante' | i18n %]",
-                                                                    action => "agregarNuevoEstante();",
-                                        ) ;
-            [% END %]
-            
-
-     
-
+                        [% PERL %]
+                                            print C4::AR::Filtros::action_button(
+                                                                                button   => "btn btn-primary",
+                                                                                title   => "[% 'Agregar estante' | i18n %]",
+                                                                                action => "agregarNuevoEstante();",
+                                                    ) ;
+                        [% END %]
+                        
+                  </div>
             </div>
-
-
-
-
-
-        </div>
-</fieldset>
+    </fieldset>
 </div>
+
 <script>
- makeToggle('datos_tabla_div_estantes','trigger',null,false);
+      makeToggle('datos_tabla_div_estantes','trigger',null,false);
 </script>
+
 <div id="subestante">
+
 </div>
+
 [% INCLUDE "intranet-bottom.inc" %]
