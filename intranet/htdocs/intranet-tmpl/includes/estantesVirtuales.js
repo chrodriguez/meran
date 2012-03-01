@@ -178,13 +178,7 @@ function ordenar(orden){
 	function agregarNuevoEstante(){
 	    objAH=new AjaxHelper();
 	    objAH.showOverlay       = true;
-	    $('#nuevo_estante').modal({   containerCss:{
-		    backgroundColor:"#fff",
-		    height:170,
-		    padding:0,
-		    width:300
-		},
-	    });
+	    $('#nuevo_estante').modal();
 	}
 
         function agregarEstante(){
