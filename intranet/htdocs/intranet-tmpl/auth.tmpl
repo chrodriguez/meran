@@ -57,7 +57,21 @@
         </font>
     </div>
 </noscript>
-<div class="container span100 no-margin">
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container" style="width: auto;">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </a>
+
+        <div id="logo"><a href="[% url_prefix %]/mainpage.pl?token=[% token %]">[% 'MERAN' | i18n %]</a></div>
+      </div>
+    </div>
+</div>
+<div class="container span100 no-margin padding_nav">
 	[% IF mensaje %]
 	    <div class="alert [% class_mensaje %]">
 	        <strong>[[% 'Informaci&oacute;n' | i18n %]]</strong> [% mensaje %]
@@ -74,7 +88,6 @@
 	                <label class="control-label" for="username">[% 'Usuario' | i18n %]</label>
 	                <div class="controls">
 	                  <input type="text" class="input-xlarge" id="username" name="username"">
-	                  <p class="help-block">[% 'Conocido tambi&eacute;n como Tarjeta de Identificaci&oacute;n' | i18n %]</p>
 	                </div>
 	            </div>
 	            <div class="control-group">
@@ -89,24 +102,23 @@
 			    <button type="submit" class="btn btn-primary" onclick="enviar();">[% 'Iniciar sesi&oacute;n' | i18n %]</button>
 			</div>	
 		</div> 
+        [%  IF mostrar_captcha  %]
+             <p style="margin-left:270px; height:30px; text-align:center; width: 800px; border-width: 1px; border-style: solid; border-color:#B40404; background:#F5A9A9">[% 'Comprobaci&oacute;n de seguridad: Debido a que ha intentado iniciar sesi&oacute;n varias veces con el mismo usuario, deber&aacute; ingresar el siguiente c&oacute;digo de seguridad' | i18n %]</p>    
+             <div id="captcha"> 
+               <script src="https://www.google.com/recaptcha/api/challenge?k=6LehoMQSAAAAAOhylvTt_7RrPKVdll7CN0jJRdaf" type="text/javascript"></script>
+               <noscript><iframe frameborder="0" height="30" src="http://www.google.com/recaptcha/api/noscript?k=6LehoMQSAAAAAOhylvTt_7RrPKVdll7CN0jJRdaf" width="500"></iframe>
+                         <textarea cols="40" name="recaptcha_challenge_field" rows="3"></textarea>
+                         <input name="recaptcha_response_field" type="hidden" value="manual_challenge" />
+               </noscript>
+             </div>
+        [% END %]
 	</div><!-- content -->
 
 
     <form action='[% url_prefix %]/mainpage.pl' method="post" name="datosAEnviar" id="datosAEnviar">
                 <input type="hidden" name="userid" id="userid" >
                 <input type="hidden" name="password" id="password">
-                [%  IF mostrar_captcha  %]
-                      
-                      <p style="margin-left:270px; height:30px; text-align:center; width: 800px; border-width: 1px; border-style: solid; border-color:#B40404; background:#F5A9A9">[% 'Comprobaci&oacute;n de seguridad: Debido a que ha intentado iniciar sesi&oacute;n varias veces con el mismo usuario, deber&aacute; ingresar el siguiente c&oacute;digo de seguridad' | i18n %]</p>    
-                      <div id="captcha"> 
-                        <script src="https://www.google.com/recaptcha/api/challenge?k=6LehoMQSAAAAAOhylvTt_7RrPKVdll7CN0jJRdaf" type="text/javascript"></script>
-                        <noscript><iframe frameborder="0" height="30" src="http://www.google.com/recaptcha/api/noscript?k=6LehoMQSAAAAAOhylvTt_7RrPKVdll7CN0jJRdaf" width="500"></iframe>
-                                  <textarea cols="40" name="recaptcha_challenge_field" rows="3"></textarea>
-                                  <input name="recaptcha_response_field" type="hidden" value="manual_challenge" />
-                        </noscript>
-                      </div>
-                [% END %]
-        </form>
+     </form>
 </div>
 
 
