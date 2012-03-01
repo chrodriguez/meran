@@ -212,31 +212,17 @@ sub updateAuthOrder{
 sub checkBrowser{
 
     my @blacklist = qw(
-        Firefox_9
-        Firefox_8
-        Firefox_7
-        Firefox_6
-        Firefox_5
         Firefox_4
         Firefox_3
-        Chrome_16
-        Chrome_15
-        Chrome_14
-        Chrome_13
-        Chrome_12
-        Chrome_11
         Chrome_10
         Chrome_9
         Chrome_8
         Chrome_7
         Chrome_6
-        MSIE_9
         MSIE_8
         MSIE_7
         MSIE_6
         MSIE_5
-        IceWeasel_6
-        IceWeasel_5
         IceWeasel_4
         IceWeasel_3
     );
