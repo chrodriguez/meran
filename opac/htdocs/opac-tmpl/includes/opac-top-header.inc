@@ -117,9 +117,13 @@
 		            <a href="#" class="dropdown-toggle" data-toggle="dropdown">[% socio_data.usr_nombre %]&nbsp;[% socio_data.usr_apellido %]<b class="caret"></b></a>
 		            <ul class="dropdown-menu">
 		                <li>
-		                	<a href="[% url_prefix %]/usuarios/reales/settings.pl?token=[% token %]&amp;nro_socio=[% socio_data.usr_nro_socio %]">
-		                		<i class="icon-cog"></i> [% "Ajustes" | i18n %]
-		                	</a>
+		                
+		                    [% PERL %]
+                              print C4::AR::Filtros::link_to( text    =>  '<i class="icon-cog"></i> [% "Ajustes" | i18n %]',
+                                                              url     =>  '[% url_prefix %]/settings.pl',
+                                                              title   =>  "[% 'Ajustes' | i18n %]",
+                                      ) ;
+                            [% END %]
 		                </li>
 		                <li>
                             [% PERL %]

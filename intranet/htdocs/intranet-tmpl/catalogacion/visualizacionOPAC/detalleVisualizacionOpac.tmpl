@@ -2,183 +2,80 @@
     $(document).ready(function() {
         mostrarTabla();
     });
-    
-    function mostrarTabla(){
-        objAH               = new AjaxHelper(updateMostrarTabla);
-        objAH.debug         = true;
-        objAH.showOverlay   = true;  
-        objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
-        objAH.tipoAccion    = 'MOSTRAR_TABLA_CAMPO';
-        objAH.ejemplar      = $("#tipo_nivel3_id").val();
-        objAH.nivel         = $("#eleccion_nivel").val();
-        objAH.sendToServer();
-    }
-    
-    function updateMostrarTabla(responseText){
-        $("#tablaResultCampos").html(responseText);
-        //zebra("tabla_datos");  
-    }
-    
-    function actualizarOrdenCampo(){
-        objAH               = new AjaxHelper(updateSortable);
-        objAH.debug         = true;
-        objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
-        objAH.showOverlay   = true;
-        objAH.tipoAccion    = "ACTUALIZAR_ORDEN_AGRUPANDO";
-        objAH.newOrderArray = $('#sortable').sortable('toArray');
-        objAH.sendToServer(); 
-    }
-    
-    function updateSortable(){
-        mostrarTabla();        
-    }
-    
-    var campo;
-    function editSubcampos(campo_parametro){
-        campo               = campo_parametro;
-        objAH               = new AjaxHelper(updateEditSubcampos);
-        objAH.debug         = true;
-        objAH.showOverlay   = true;  
-        objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
-        objAH.tipoAccion    = 'MOSTRAR_TABLA_VISUALIZACION';
-        objAH.campo         = campo;
-        objAH.nivel         = $("#eleccion_nivel").val();
-        objAH.template      = $("#tipo_nivel3_id").val();;
-        objAH.sendToServer();
-    }
-    
-    function updateEditSubcampos(responseText){
-        $("#tablaResultSubCampos").html(responseText);
-        //zebra("tabla_datos_sub_campos");  
-    }
-    
-        function actualizarOrdenSubCampos(){
-        objAH               = new AjaxHelper(updateSortableSC);
-        objAH.debug         = true;
-        objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
-        objAH.showOverlay   = true;
-        objAH.tipoAccion    = "ACTUALIZAR_ORDEN_SUBCAMPOS";
-        objAH.newOrderArray = $('#sortable_subcampo').sortable('toArray');
-        objAH.sendToServer(); 
-    }
-    
-    function updateSortableSC(){
-        editSubcampos(campo);        
-    }
-    
-    function actualizarOrden(){
-        objAH               = new AjaxHelper(updateSortable);
-        objAH.debug         = true;
-        objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
-        objAH.showOverlay   = true;
-        // si estamos agrupando por campo o no
-        if($("#ordenar_campos").is(':checked')){
-            objAH.tipoAccion    = "ACTUALIZAR_ORDEN_AGRUPANDO";
-        }else{
-            objAH.tipoAccion    = "ACTUALIZAR_ORDEN";
-        }
-        objAH.newOrderArray = $('#sortable').sortable('toArray');
-        objAH.sendToServer(); 
-    }
-    
-    function updateSortable(){
-        mostrarTabla();        
-    }
-    
-    function eliminarTodoElCampo(campo){
-        objAH               = new AjaxHelper(updateEliminarTodoCampo);
-        objAH.debug         = true;
-        objAH.showOverlay   = true;  
-        objAH.url           = URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";
-        objAH.tipoAccion    = 'ELIMINAR_TODO_EL_CAMPO';
-        objAH.nivel         = $("#eleccion_nivel").val();
-        objAH.ejemplar      = $("#tipo_nivel3_id").val();
-        
-        if (campo){
-        jConfirm(SEGURO_QUE_DESEA_ELIMINAR_TODO_EL_CAMPO,CATALOGO_ALERT_TITLE, function(confirmStatus){
-            if (confirmStatus){
-                objAH.campo         = campo;
-                objAH.sendToServer();
-            }
-        });
-    }
-    }
-    
-    function updateEliminarTodoCampo(responseText){
-        var Messages        = JSONstring.toObject(responseText);
-        setMessages(Messages);
-        mostrarTabla();
-        eleccionDeEjemplar();
-    }
 </script>
-<div class="form-horizontal">
-<fieldset>
-    <legend>[% "Agregar Visualizaci&oacute;n:" | i18n %]</legend>
-    <div class="divTablaAgregarVisualizacion" id="divTablaAgregarVisualizacion">
-    <section class="center-section-form">
-        <div class="control-group">
-            <label class="control-label" for="campoX"> [% "Selecci&oacute;n" | i18n %]: </label>
-            <div class="controls">
-                [% selectCampoX %]
-            </div>
-        </div>
-        
-        <div class="control-group">
-            <label class="control-label" for="campo"> [% "Campo" | i18n %]: </label>
-            <div class="controls">
-                <select name="campo" id="campo" onChange="eleccionCampo()">
-                        <option value="-1">[% 'Seleccionar CampoX' | i18n %]</option>
-                    </select>
-                [% 'Nombre' | i18n %]: <strong><span id="nombre_campo"></span></strong>
-            </div>
-        </div>
-        
-        <div class="control-group">
-            <label class="control-label" for="subcampo"> [% "Subcampo" | i18n %]: </label>
-            <div class="controls">
-                <select name="subcampo" id="subcampo" onChange="eleccionSubCampo()">
-                        <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
-                </select>
-            </div>
-        </div>
-        
-        <div class="control-group">
-            <label class="control-label" for="pre"> [% "Pre" | i18n %]: </label>
-            <div class="controls">
-                <input id="pre" type="text" value="" size="50">
-            </div>
-        </div>
-        
-        <div class="control-group">
-            <label class="control-label" for="liblibrarian"> [% "Vista en Intranet" | i18n %]: </label>
-            <div class="controls">
-                <input id="liblibrarian" type="text" value="" size="90">
-            </div>
-        </div>
-        
-        <div class="control-group">
-            <label class="control-label" for="post"> [% "Post" | i18n %]: </label>
-            <div class="controls">
-                <input id="post" type="text" value="" size="50">
-            </div>
-        </div>
 
-        <div class="form-actions">
-            [% PERL %]
-                    print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Vista' | i18n %]",
-                                                        boton   => "btn btn-primary",
-                                                        onClick => "agregarVisualizacion()",
-                                                        title   => "[% 'Agregar Vista' | i18n %]",
-                                                        width => "auto",
-                                                        alternClass => "botonCentrado",
-                                                        inline => "1"
-                            ) ;
-            [% END %]
 
-      </div>
+<div id="add_vista_opac" class="modal hide fade">
+    <div class="modal-header">
+         <a href="#" class="close" data-dismiss="modal">×</a>
+        <h3>[% "Agregar Visualizaci&oacute;n:" | i18n %]</h3>
     </div>
-    </section>
-</fieldset>
+
+     <div class="modal-body">
+            <div class="form-horizontal">
+		        <div class="control-group">
+		            <label class="control-label" for="campoX"> [% "Selecci&oacute;n" | i18n %]: </label>
+		            <div class="controls">
+		                [% selectCampoX %]
+		            </div>
+		        </div>
+		        
+		        <div class="control-group">
+		            <label class="control-label" for="campo"> [% "Campo" | i18n %]: </label>
+		            <div class="controls">
+		                <select name="campo" id="campo" onChange="eleccionCampo()">
+		                        <option value="-1">[% 'Seleccionar CampoX' | i18n %]</option>
+		                    </select>
+		                [% 'Nombre' | i18n %]: <strong><span id="nombre_campo"></span></strong>
+		            </div>
+		        </div>
+		        
+		        <div class="control-group">
+		            <label class="control-label" for="subcampo"> [% "Subcampo" | i18n %]: </label>
+		            <div class="controls">
+		                <select name="subcampo" id="subcampo" onChange="eleccionSubCampo()">
+		                        <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
+		                </select>
+		            </div>
+		        </div>
+		        
+		        <div class="control-group">
+		            <label class="control-label" for="pre"> [% "Pre" | i18n %]: </label>
+		            <div class="controls">
+		                <input id="pre" type="text" value="" size="50">
+		            </div>
+		        </div>
+		        
+		        <div class="control-group">
+		            <label class="control-label" for="liblibrarian"> [% "Vista en Intranet" | i18n %]: </label>
+		            <div class="controls">
+		                <input id="liblibrarian" type="text" value="" size="90">
+		            </div>
+		        </div>
+		        
+		        <div class="control-group">
+		            <label class="control-label" for="post"> [% "Post" | i18n %]: </label>
+		            <div class="controls">
+		                <input id="post" type="text" value="" size="50">
+		            </div>
+		        </div>
+		</div>
+	</div>
+
+    <div class="modal-footer">
+        [% PERL %]
+                print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Vista' | i18n %]",
+                                                    boton   => "btn btn-primary",
+                                                    onClick => "agregarVisualizacion()",
+                                                    title   => "[% 'Agregar Vista' | i18n %]",
+                                                    width => "auto",
+                                                    alternClass => "botonCentrado",
+                                                    inline => "1"
+                        ) ;
+        [% END %]
+
+  </div>
+
 </div>
 
 <div id="divAgregarModificarVisualizacion"></div>

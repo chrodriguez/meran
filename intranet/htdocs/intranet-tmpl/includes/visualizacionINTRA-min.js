@@ -2,7 +2,7 @@ var objAH;CAMPOS_ARRAY=new Array();SUBCAMPOS_ARRAY=new Array();function eliminar
 function agregarVisualizacion(){objAH=new AjaxHelper(updateAgregarVisualizacion);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";objAH.tipoAccion='AGREGAR_VISUALIZACION';var ejemplar=$("#tipo_nivel3_id").val();var nivel=$("#eleccion_nivel").val();var campo=$.trim($("#campo").val());var subcampo=$.trim($("#subcampo").val());var liblibrarian=$.trim($("#liblibrarian").val());var pre=$.trim($("#pre").val());var post=$.trim($("#post").val());if((ejemplar)&&(campo)&&(subcampo)&&(liblibrarian)){objAH.ejemplar=ejemplar;objAH.nivel=nivel;objAH.campo=campo;objAH.subcampo=subcampo;objAH.liblibrarian=liblibrarian;objAH.pre=pre;objAH.post=post;objAH.sendToServer();}else{jAlert(SELECCIONE_VISTA_INTRA,CATALOGO_ALERT_TITLE);}}
 function updateAgregarVisualizacion(responseText){var Messages=JSONstring.toObject(responseText);setMessages(Messages);if(!(hayError(Messages))){eleccionDeEjemplar();$("#tablaResultSubCampos").html("");}}
 function eleccionDeEjemplar(){var ejemplar=$("#tipo_nivel3_id").val();var ObjDiv=$("#result");if(!isNaN(ejemplar)){ObjDiv.hide();}else{ObjDiv.show();objAH=new AjaxHelper(updateEleccionDeNivel);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";objAH.tipoAccion='MOSTRAR_VISUALIZACION';objAH.ejemplar=ejemplar;objAH.sendToServer();}}
-function updateEleccionDeNivel(responseText){$("#result").html(responseText);}
+function updateEleccionDeNivel(responseText){$("#result").html(responseText);scrollTo("result");}
 function eleccionCampoX(){if($("#campoX").val()!=-1){objAH=new AjaxHelper(updateEleccionCampoX);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";objAH.campoX=$('#campoX').val();objAH.tipoAccion="GENERAR_ARREGLO_CAMPOS";objAH.sendToServer();}
 else
 enable_disableSelects();}
@@ -24,3 +24,16 @@ function eleccionSubCampo(){if($('#subcampo').val()!=-1){$('#liblibrarian').val(
 else
 enable_disableSelects();}
 function mostrarTablaRef(){objAH=new AjaxHelper(updateMostrarTablaRef);objAH.showOverlay=true;objAH.debug=true;objAH.url=URL_PREFIX+"/utils/utilsDB.pl";objAH.tipoAccion="GENERAR_ARREGLO_TABLA_REF";objAH.sendToServer();}
+function mostrarTabla(){objAH=new AjaxHelper(updateMostrarTabla);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";objAH.tipoAccion='MOSTRAR_TABLA_CAMPO';objAH.ejemplar=$("#tipo_nivel3_id").val();objAH.nivel=$("#eleccion_nivel").val();objAH.sendToServer();}
+function updateMostrarTabla(responseText){$("#tablaResultCampos").html(responseText);scrollTo("tablaResultCampos");}
+var campo;function editSubcampos(campo_parametro){campo=campo_parametro;objAH=new AjaxHelper(updateEditSubcampos);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";objAH.tipoAccion='MOSTRAR_TABLA_VISUALIZACION';objAH.campo=campo
+objAH.nivel=$("#eleccion_nivel").val();objAH.template=$("#tipo_nivel3_id").val();;objAH.sendToServer();}
+function updateEditSubcampos(responseText){$("#tablaResultSubCampos").html(responseText);scrollTo("tablaResultSubCampos");}
+function actualizarOrdenSubCampos(){objAH=new AjaxHelper(updateSortableSC);objAH.debug=true;objAH.url=URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";objAH.showOverlay=true;objAH.tipoAccion="ACTUALIZAR_ORDEN_SUBCAMPOS";objAH.newOrderArray=$('#sortable_subcampo').sortable('toArray');objAH.sendToServer();}
+function updateSortableSC(){editSubcampos(campo);}
+function actualizarOrdenCampo(){objAH=new AjaxHelper(updateSortable);objAH.debug=true;objAH.url=URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";objAH.showOverlay=true;objAH.tipoAccion="ACTUALIZAR_ORDEN_AGRUPANDO";objAH.newOrderArray=$('#sortable').sortable('toArray');objAH.sendToServer();}
+function updateSortable(){mostrarTabla();}
+function eliminarTodoElCampo(campo){objAH=new AjaxHelper(updateEliminarTodoCampo);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";objAH.tipoAccion='ELIMINAR_TODO_EL_CAMPO';objAH.nivel=$("#eleccion_nivel").val();objAH.ejemplar=$("#tipo_nivel3_id").val();if(campo){jConfirm(SEGURO_QUE_DESEA_ELIMINAR_TODO_EL_CAMPO,CATALOGO_ALERT_TITLE,function(confirmStatus){if(confirmStatus){objAH.campo=campo;objAH.sendToServer();}});}}
+function updateEliminarTodoCampo(responseText){var Messages=JSONstring.toObject(responseText);setMessages(Messages);mostrarTabla();eleccionDeEjemplar();}
+function showAddVistaINTRA(){$('#add_vista_intra').modal();}
+function hideAddVistaINTRA(){$('#add_vista_intra').modal('hide');}

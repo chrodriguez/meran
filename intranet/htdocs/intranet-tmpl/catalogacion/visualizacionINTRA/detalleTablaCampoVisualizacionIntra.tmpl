@@ -72,4 +72,18 @@
                 [% END %]
             </tbody>
         </table>
+            <div class="form-actions">
+                     [% PERL %]
+                           print C4::AR::Filtros::action_button( 
+                                                           button       => "btn btn-success",
+                                                           action       => "showAddVistaINTRA()", 
+                                                           icon         => "icon-plus-sign icon-white",
+                                                           title        => "Agregar vista",
+                                                       ) ;
+        
+        
+                     [% END %]
+            </div>
+            
+        
 </fieldset>

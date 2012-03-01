@@ -71,12 +71,11 @@ else{
 
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
     }
-    elsif ($accion eq "CHANGE_VISIVILIDAD"){
+    elsif ($accion eq "CHANGE_VISIBILIDAD"){
     
         my $tabla  = $obj->{'tabla'};
         my $campo  = $obj->{'campo'};
-        
-        
+               
         my ($user, $session, $flags)= checkauth(  $input, 
                                                   $authnotrequired, 
                                                   {   ui                => 'ANY', 
@@ -88,13 +87,7 @@ else{
 
         my ($data)          = C4::Modelo::PrefTablaReferenciaConf::cambiarVisivilidad($tabla,$campo);
         
-#        my ($Message_arrayref)  = C4::Modelo::PrefTablaReferenciaConf::cambiarVisivilidad($tabla,$campo);
-#        my $infoOperacionJSON   = to_json $Message_arrayref;
-
-#        C4::AR::Auth::print_header($session);
-#        print $infoOperacionJSON;  
-
-return  1;
+        return  1;
 
     }
 }

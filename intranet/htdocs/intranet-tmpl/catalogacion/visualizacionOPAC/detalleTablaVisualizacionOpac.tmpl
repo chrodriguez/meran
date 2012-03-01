@@ -78,16 +78,16 @@
         [% END %]
 
             <tbody id="sortable_subcampo">
-                <input type="checkbox" name="enable_sort_subcampo" id="enable_sort_subcampo" /> Seleccione para Ordenar
+                <input type="checkbox" name="enable_sort_subcampo" id="enable_sort_subcampo" /> [% 'Seleccione para Ordenar' | i18n %]
                 [% FOREACH campo IN visualizacion %]
                     <tr id="[% campo.getId %]" align="center">
                         <td>[% campo.getCampo %]</td>
                         <td>[% campo.getSubCampo %]</td>
                         <td class="pre" id="[% campo.id %]">[% campo.getPre %]</td>
                         <td class="editable" id="[% campo.id %]">[% campo.getVistaOpac %]</td>
-                        <td class="post" id="[% campo.id %]">[% campo.getPost %]</td>
-                        <td class="nivel" id="[% campo.id %]">[% campo.getNivel %]</td>
-                        <td align="center">
+                        <td id="[% campo.id %]">[% campo.getPost %]</td>
+                        <td id="[% campo.id %]">[% campo.getNivel %]</td>
+                        <td >
                             [% PERL %]
                                   print C4::AR::Filtros::action_button( 
                                                                   button       => "btn click btn-danger",
