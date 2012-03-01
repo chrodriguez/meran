@@ -36,17 +36,27 @@
                 <td class="edit_nombre" id="[% dato.getCampo %],[% dato.getTabla %]">[% dato.getCampoAlias %]</td>
                 
                 <td>
-                
+                [% IF dato.getVisible == 1 %]
                     [% PERL %]
                           print C4::AR::Filtros::action_button( 
-                                                          button    => "btn btn-primary",
+                                                          button    => "btn btn-success",
                                                           action    => 'cambiarVisibilidad("[% dato.getCampo %]","[% dato.getTabla %]");', 
-                                                          icon      => "icon-edit icon-white",
+                                                          icon      => "icon-eye-open icon-white",
                                                       ) ;
 
 
                     [% END %]
-                
+                [% ELSE %]
+                    [% PERL %]
+                          print C4::AR::Filtros::action_button( 
+                                                          button    => "btn btn-inverse",
+                                                          action    => 'cambiarVisibilidad("[% dato.getCampo %]","[% dato.getTabla %]");', 
+                                                          icon      => "icon-white icon-eye-close",
+                                                      ) ;
+
+
+                    [% END %]
+                [% END %]
                 </td>
             </tr>
             [% END %]
