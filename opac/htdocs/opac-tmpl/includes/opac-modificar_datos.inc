@@ -110,7 +110,7 @@
         <div class="control-group">
             <label class="control-label" for="ciudad">[% 'Ciudad' |  i18n %]* :</label>
             <div class="controls">
-                <input type="text" name="ciudad" id="ciudad" required value="[% socio_data.ciudad %]" tabindex="8" />
+                <input type="text" name="ciudad" id="ciudad" required value="[% socio_data.usr_ciudad_nombre %]" tabindex="8" />
                 <input type="hidden" name="id_ciudad" id="id_ciudad" value="[% socio_data.ciudad_ref.id %]"/>
             </div>
         </div>
