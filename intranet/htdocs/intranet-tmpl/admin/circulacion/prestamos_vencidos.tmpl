@@ -109,29 +109,27 @@
 		        </tr>
 		      [% END %]
 		     </tbody>
-		    <tfoot>
-		    <tr>
-		      <td>[% PERL %]
-		              print C4::AR::Filtros::action_button(
-		                                              button       => "btn click btn-warning",
-		                                              action       => "enviarMailsATodos();",
-		                                              icon         => "",
-		                                              title        => "Enviar a todos",
-		                                          ) ;
-		       
-		      [% END %]
-		      [% PERL %]
-		              print C4::AR::Filtros::action_button(
-		                                              button       => "btn click btn-primary",
-		                                              action       => "enviarMailsASeleccionados();",
-		                                              icon         => "",
-		                                              title        => "Enviar a seleccionados",
-		                                          ) ;
-		       
-		      [% END %]</td>
-		    </tr>
-		    </tfoot>
   </table>
+  <div class="form-actions">
+       [% PERL %]
+               print C4::AR::Filtros::action_button(
+                                               button       => "btn click btn-warning",
+                                               action       => "enviarMailsATodos();",
+                                               icon         => "",
+                                               title        => "Enviar a todos",
+                                           ) ;
+        
+       [% END %]
+       [% PERL %]
+               print C4::AR::Filtros::action_button(
+                                               button       => "btn click btn-primary",
+                                               action       => "enviarMailsASeleccionados();",
+                                               icon         => "",
+                                               title        => "Enviar a seleccionados",
+                                           ) ;
+        
+       [% END %]
+  </div>
 [% ELSE %]
         <div class="alert alert-info">[% "No hay pr&eacute;stamos vencidos" | i18n %]</div> 
 [% END %]

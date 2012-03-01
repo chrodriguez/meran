@@ -68,6 +68,8 @@
 
 
                       [% END %]
+                  [% ELSE %]
+					<i class="icon-ban-circle"></i>
                   [% END %]
                   </td>
             </tr>

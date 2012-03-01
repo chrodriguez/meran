@@ -232,33 +232,26 @@ $(document).ready( function() {
 
 
 <div id="divSancionesReglas"></div>
-<fieldset>
-    <legend class="titulo_legend">[% "Nuevo tipo de sancion" | i18n %] </legend>
-    <section class="center-section-form"> 
-            <form class="form-horizontal">
-                  <div id="divSanciones">
-                      <div id="divSancionesTiposSocios">
-                        
-                            <div class="control-group">
-                            <!-- <tr class="titulo_tabla_resultado">-->
-                                  <label class="control-label">[% "Tipos de pr&eacute;stamo" | i18n %]</label>
-                                  <div class="controls">
-                                      <span>[% tipos_de_prestamos %]</span>   
-                                  </div>
-                            </div>
-                            <div class="control-group">
-                                  <label class="control-label">[% "Categorias de usuario" | i18n %]</label>
-                                  <div class="controls">
-                                          <span>[% categorias_de_socio %]</span>
-                                  </div>
-                              </div>
-                          
+
+<section class="center-section-form"> 
+    <form class="form-horizontal">
+		<fieldset>
+		    <legend class="titulo_legend">[% "Nuevo tipo de sancion" | i18n %] </legend>
+                <div class="control-group">
+                      <label class="control-label">[% "Tipos de pr&eacute;stamo" | i18n %]</label>
+                      <div class="controls">
+                          <span>[% tipos_de_prestamos %]</span>   
+                      </div>
+                </div>
+                <div class="control-group">
+                      <label class="control-label">[% "Categorias de usuario" | i18n %]</label>
+                      <div class="controls">
+                              <span>[% categorias_de_socio %]</span>
                       </div>
                   </div>
-           
              <div id="divSancionesTiposPrestamos"></div>
-              </form>
-  </section>                     
-</fieldset>
+        </fieldset>
+    </form>
+</section>                     
 
 [% INCLUDE "intranet-bottom.inc" %]

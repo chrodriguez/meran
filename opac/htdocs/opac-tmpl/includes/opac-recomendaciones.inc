@@ -192,15 +192,13 @@ $(document).ready( function() {
 </script>         
  
 <div class="column1-unit">
-  <!--    [% message %]--> 
       <div style= "width: 200%;" class="recomendacionform">
               <input type="hidden" name="action" value="agregar">
-              <fieldset> <legend class="titulo_legend trigger click">[% "Busqueda de Datos del Material" | i18n %]</legend>
-                          <!-- <li class="item">-->
-                                <p><label for="catalogo_search" style="float: left; padding-right:10px">[% 'Keyword' | i18n %]</label>
-                                <input type='text' id='catalogo_search' name='catalogo_search' value='' size=40 tabindex='3' style="float: left"></p>
-                                <input type='hidden' id='catalogo_search_hidden' name='catalogo_search_hidden' value=''>
-                         <!--   </li>  -->                 
+              <fieldset> 
+              	<legend class="titulo_legend trigger click">[% "Busqueda de Datos del Material" | i18n %]</legend>
+                     <p><label for="catalogo_search" style="float: left; padding-right:10px">[% 'Keyword' | i18n %]</label>
+                     <input type='text' id='catalogo_search' name='catalogo_search' value='' size=40 tabindex='3' style="float: left"></p>
+                     <input type='hidden' id='catalogo_search_hidden' name='catalogo_search_hidden' value=''>
               </fieldset>
               <div id="ediciones"></div>
 

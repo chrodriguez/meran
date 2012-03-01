@@ -4,7 +4,7 @@
     <fieldset class="datos_usuario">
         <legend class="titulo_legend_resaltado">[% 'Datos de Usuario' | i18n %]</legend>
 	
-		   <div class="left span3">
+		   <div class="left span3 control-group">
 	             [% IF socio.tieneFoto %]  
 	                 <a class="fancylink" rel="group" href="/uploads/pictures/[% socio.tieneFoto %]">
 	                     <img border="0" src="/uploads/pictures/[% socio.tieneFoto %]"
@@ -13,6 +13,11 @@
 	                           title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
 	                     >
 	                 </a>
+	             [% ELSE %]
+                         <img border="0" src="/includes/css/images/no_picture_user.png"
+                               style="height: 120px; width: 120x;" 
+                               alt='[% "Usuario sin foto" | i18n %]'
+                         >
 	             [% END %]
 	       </div>
 	     <div class="left span6">
