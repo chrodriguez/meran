@@ -214,12 +214,18 @@ sub getCampoSubcampoJoined{
                     $dato = $field->subfield($detalle->getSubcampoOrigen);
                 }
             if ($dato){
-                    $join.=$detalle->getSeparador. $dato;
+				if($detalle->getSeparador){
+                    $join.=$detalle->getSeparador.$dato;
+                    C4::AR::Debug::debug("SEPARADOR  ###".$detalle->getSeparador."###" );
+                   }
+                   else{
+					   $join.=$dato;
+					   }
              }
         }
      }
 
-    return ($join);
+    return (C4::AR::Utilidades::trim($join));
 }
 
 sub getIdentificacion{
@@ -408,3 +414,66 @@ sub getNiveles {
     return  $niveles;
 }
 
+
+sub getDetalleCompleto{
+     my ($self)   = shift;
+
+     my $detalle_completo = C4::AR::ImportacionIsoMARC::detalleCompletoRegistro($self->getId);
+
+    return $detalle_completo;
+}
+
+sub aplicarImportacion {
+     my ($self)   = shift;
+
+     my $detalle = $self->getDetalleCompleto();
+	
+=begin DETALLE_REGISTRO
+	$detalle->{'nivel1'} 		   => MARC Array_
+												 |=> {'campo'}           		= CAMPO
+												 |=> {'subcampo'}        		= SUBCAMPO
+												 |=> {'liblibrarian'}			= NOMBRE
+												 |=> {'orden'}					= ORDEN
+												 |=> {'dato'}					= DATO
+												 |=> {'referencia'}				= ES UNA REFERENCIA?
+												 |=> {'referencia_encontrada'}	= SE ENCONTRO EN LA BASE? (SI SE ENCUENTRA TIENE EL id)
+												 |=> {'referencia_tabla'}		= TABLA DE LA REFERENCIA
+												 |_
+    $detalle->{'marc_record'}      => MARC Record del Nivel 1
+    $detalle->{'nivel1_template'}  => Template a usar por el Nivel 1
+    $detalle->{'cantItemN1'}       => Cantidad de Ejemplares (lo usa la vista previa)
+    $detalle->{'nivel2'}           => Arreglo de Niveles 2 =>
+												 |=> {'nivel2_array'}           	= MARC Array_
+												 |												 |=> {'campo'}           		= CAMPO
+												 |												 |=> {'subcampo'}        		= SUBCAMPO
+												 |												 |=> {'liblibrarian'}			= NOMBRE
+												 |												 |=> {'orden'}					= ORDEN
+												 |												 |=> {'dato'}					= DATO
+											 	 |												 |=> {'referencia'}				= ES UNA REFERENCIA?
+												 |												 |=> {'referencia_encontrada'}	= SE ENCONTRO EN LA BASE? (SI SE ENCUENTRA TIENE EL id)
+												 |												 |=> {'referencia_tabla'}		= TABLA DE LA REFERENCIA
+												 |												 |_
+												 |=> {'marc_record'}           		= MARC Record del Nivel 2																							 
+												 |=> {'nivel2_template'}       		= Template a usar por el Nivel 2
+												 |=> {'tipo_documento'}       		= Objeto Tipo de Documento (CatRefTipoNivel3)
+												 |=> {'nivel_bibliografico'}       	= Objeto Nivel Bibliográfico (RefNivelBibliografico)
+												 |=> {'tiene_indice'}       		= Indice del Nivel 2 (865&a)
+												 |=> {'disponibles'}       			= Cant. ejemplares disponibles
+												 |=> {'no_disponibles'}       		= Cant. ejemplares NO disponibles
+												 |=> {'disponibles_sala'}       	= Cant. ejemplares disponibles para Sala
+												 |=> {'disponibles_domiciliario'}   = Cant. ejemplares disponibles para Domicilio
+												 |=> {'cant_nivel3'}   				= Cant. Niveles 3
+												 |=> {'nivel3'}   					= ARREGLO DE NIVELES 3
+												 |												 |=> {'marc_record'}           	= MARC Record del Nivel 3
+												 |												 |=> {'tipo_documento'}        	= Tipo de Documento (CatRefTipoNivel3->id_tipo_doc)
+												 |												 |=> {'barcode'}				= BARCODE
+												 |												 |=> {'signatura_topografica'}	= SIGNATURA TOPOGRAFICA
+												 |												 |=> {'disponibilidad'}			= OBJETO Disponibilidad (RefDisponibilidad)
+											 	 |												 |=> {'estado'}					= OBJETO Estado (RefEstado)
+												 |												 |_
+												 |_
+        
+=cut
+     
+
+}

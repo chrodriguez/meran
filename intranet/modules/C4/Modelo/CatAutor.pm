@@ -202,6 +202,7 @@ sub getAll{
         my @filtros_or;
         push(@filtros_or, (nombre => {like => $filtro.'%'}) );
         push(@filtros_or, (apellido => {like => $filtro.'%'}) );
+        push(@filtros_or, (completo => {like => $filtro.'%'}) );
         push(@filtros, (or => \@filtros_or) );
     }
     my $ref_valores;
@@ -219,12 +220,13 @@ sub getAll{
     my $ref_cant = C4::Modelo::CatAutor::Manager->get_cat_autor_count(query => \@filtros,);
     my $self_nombre = $self->getNombre;
     my $self_apellido = $self->getApellido;
+    my $self_completo = $self->getCompleto;
 
     my $match = 0;
     if ($matchig_or_not){
         my @matched_array;
         foreach my $autor (@$ref_valores){
-          $match = ((distance($self_nombre,$autor->getNombre)<=1) || (distance($self_apellido,$autor->getApellido)<=1));
+          $match = ((distance($self_nombre,$autor->getNombre)<=1) || (distance($self_apellido,$autor->getApellido)<=1) || (distance($self_completo,$autor->getCompleto)<=1));
           if ($match){
             push (@matched_array,$autor);
           }

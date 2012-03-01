@@ -18,7 +18,7 @@ __PACKAGE__->meta->setup(
         nivel                       => { type => 'integer',     overflow => 'truncate', length => 2,   },
         ignorar                     => { type => 'integer',     overflow => 'truncate', length => 2,   not_null => 1, default => 0},
         orden                       => { type => 'integer',     overflow => 'truncate', length => 2, default => 0  },
-        separador                   => { type => 'varchar',   overflow => 'truncate', length => 32,    },
+        separador                   => { type => 'varchar', 	overflow => 'truncate', length => 32},
 
 
     ],
@@ -176,8 +176,9 @@ sub setOrden{
 
 sub getSeparador{
     my ($self)  = shift;
-    
-    return $self->separador;
+    my $value = $self->separador; 
+    chop($value); #quito el | agregado 
+    return ($value); 
 }
 
 sub setSeparador{
@@ -187,7 +188,7 @@ sub setSeparador{
     if (!C4::AR::Utilidades::validateString($separador)){
         $separador = " ";
     }
-    $self->separador($separador);
+    $self->separador($separador."|"); # se agrega el | para delimitar el string (PROBLEMA DE STRINGS EN MYSQL: QUITA LOS ESPACIOS FINALES)
 }
 
 sub setNextOrden{

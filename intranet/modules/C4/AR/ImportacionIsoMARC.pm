@@ -1320,7 +1320,7 @@ sub toMARC_Array {
 					my ($clave_tabla_referer_involved,$tabla_referer_involved) =  C4::AR::Referencias::getTablaInstanceByAlias($hash_temp{'referencia'});
 					$hash_temp{'referencia_tabla'} = $tabla_referer_involved->meta->table;
 					C4::AR::Debug::debug("Tabla REF  ==>  ".$tabla_referer_involved);
-					my ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getAll(0,0,1,$dato);
+					my ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getAll(1,0,0,$dato);
 					
 					if (($campo eq '910')&&($subcampo eq 'a')){
 							C4::AR::Debug::debug("REF CANT ==>  ".$ref_cantidad);
