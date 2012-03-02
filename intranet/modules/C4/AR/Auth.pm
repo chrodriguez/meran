@@ -231,16 +231,12 @@ sub checkBrowser{
 	my $browser_string  = $browser->browser_string();
 	my $browser_major   = $browser->major();
 	my $search          = $browser_string."_".$browser_major;
-	
-	C4::AR::Debug::debug("HTTP USER AGENT ===================================> ".$search);
-	
-	C4::AR::Debug::debug("session : " . $session);
-	C4::AR::Utilidades::printHASH($session);
+
 	
 	if ($search ~~ @blacklist){
 	    if (!$session->param('check_browser_allowed')){
             if($session->param('type') eq "opac"){
-                redirectTo(C4::AR::Utilidades::getUrlPrefix().'/checkBrowser.pl');
+                redirectTo(C4::AR::Utilidades::getUrlPrefix().'/checkBrowser.pl?token='.$session->param('token'));
             }else{
                 redirectTo(C4::AR::Utilidades::getUrlPrefix().'/checkBrowser.pl?token='.$session->param('token'));
             }    

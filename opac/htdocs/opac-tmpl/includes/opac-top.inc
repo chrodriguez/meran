@@ -29,7 +29,7 @@
        
   <link rel="stylesheet" href="[% temas %]/[% user_theme %]/includes/opac.css" />
   <link rel="stylesheet" href="/includes/css/ui.stars.css" />
-<!--   <link rel="icon" type="image/x-icon" href="[% temas %]/[% user_theme %]/imagenes/favicon.ico" /> -->
+  <link media="screen" rel="stylesheet" href="/includes/css/fancybox.css" type="text/css">
 
   <script type="text/javascript">
     var token               = '[% token %]';
@@ -56,6 +56,9 @@
   <script src="/includes/sha1.js" type="text/javascript"></script>
   <script src="/includes/jsthread.js" type="text/javascript"></script>
   <script type="text/javascript" src="/includes/opac.js"></script>	
+  <script type="text/javascript" src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
+  <script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox.js"></script>
+  <script type="text/javascript" src="/includes/jquery/fancybox/jquery.mousewheel.js"></script>
   
   <title>
     [% IF titulo_nombre_ui %]
@@ -93,7 +96,7 @@
     <script type="text/javascript">    
 
       $(document).ready(function() {
-			$('.popover_button').popover({delay: { show: 800, hide: 100 }, placement: 'right',});
+			$('.popover_button').popover({delay: { show: 800, hide: 100 }, placement: 'left',});
 			$(".alert").alert();
           
                     $(function () {
@@ -118,6 +121,12 @@
 	    
 	<body lang="es-Es">
 	<!-- POAR AHORA ES LA NAV -->
+
+	  <div id="ajax-indicator" class="modal hide fade loading">
+			<div class="circle"></div>
+			<div class="circle1"></div>
+  	  </div>
+	
 	   [% INCLUDE 'opac-top-header.inc' %]
 		<div class="container main_content">	
 				  <div id="end_top">

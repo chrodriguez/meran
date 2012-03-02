@@ -92,7 +92,25 @@ body {
     margin-right: 5px;
 }
  
- 
+
+.span90 {
+    width: 90%;
+}
+
+.span100 {
+    width: 100%;
+}
+
+.novedad_contacto {
+    min-width: 500px;
+    background-color:#E6E6DD;
+}
+.msj_contacto{
+    min-width: 500px;
+    background-color:#E6E6DD;
+}
+
+
 /* LOADERS  */
 
 .ball {
@@ -180,24 +198,6 @@ body {
     0%{-webkit-transform: scale(1.2);opacity:1;}
     100%{-webkit-transform: scale(0.7);opacity:0.1;}
 }
-
-.span90 {
-    width: 90%;
-}
-
-.span100 {
-    width: 100%;
-}
-
-.novedad_contacto {
-    min-width: 500px;
-    background-color:#E6E6DD;
-}
-.msj_contacto{
-    min-width: 500px;
-    background-color:#E6E6DD;
-}
-
 
 .circle {
     background-color: rgba(0,0,0,0);
