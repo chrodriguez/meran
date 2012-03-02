@@ -20,13 +20,15 @@ my ($template, $session, $t_params)= get_template_and_user({
                                                             entorno         => 'undefined'},
                                     });
 
-C4::AR::Auth::checkBrowser();
+
 
 my $nro_socio                       = $session->param('nro_socio');            
 my ($cantidad,$grupos)              = C4::AR::Nivel1::getUltimosGrupos();
 
 #solo si hay socio logueado se hace todo esto
 if($nro_socio){
+
+    C4::AR::Auth::checkBrowser();
 
     my $orden                       = 'date_due desc';
     my $ini                         = 1;
