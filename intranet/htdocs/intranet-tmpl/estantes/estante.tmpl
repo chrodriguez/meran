@@ -73,16 +73,18 @@
                                                                             action   => 'modificarEstante();',
                                                                             title   => "[% 'Guardar' | i18n %]",
                                                                         
-                                                ) ;
+                                        ) ;
         [% END %]
 </div>
 
 
-<div id="contenido_estante" style="display:none">
-    <div id="busqueda_contenido_estante">
-         <fieldset class="resultados_busqueda">
-            <legend class="titulo_legend">  [% "Buscar Contenido" | i18n %] </legend>
-                  <input type="hidden" id="input_contenido_id_estante">
+<div id="contenido_estante" class="modal hide fade">
+
+      <div class="modal-header">
+            <h3> [% "Buscar Contenido" | i18n %]</h3>
+      </div>
+      <div class="modal-body">
+              <input type="hidden" id="input_contenido_id_estante">
                   <input type="hidden" id="input_contenido_id_padre_estante">
                   <input class="horizontal" type="text" id="input_busqueda_contenido">
                   
@@ -92,18 +94,22 @@
                         });
                   </script>
 
+               
+      </div>
+      <div class="modal-footer">
                   [% PERL %]
                                       print C4::AR::Filtros::action_button(
                                                                           button   => "btn btn-primary",
-                                                                          icon     => "icon-search",
-                                                                          action   => 'buscarContenido();',
+                                                                          icon     => "icon-search icon-white",
+                                                                          action   => "buscarContenido();",
                                                                           title    => "[% 'Buscar' | i18n %]",
                                               ) ;
-                  [% END %]
+                  [% END %] 
 
-          </fieldset>
-    </div>    
-    <div id="resultado_contenido_estante"> </div>
+      </div>
+      <div id="resultado_contenido_estante"> </div>
+</div>  
+    
 </div>
 
 <div id="estante">
@@ -121,6 +127,15 @@
                   </ul>
 
                   <div class="form-actions">
+                        
+
+                        [% PERL %]
+                                            print C4::AR::Filtros::action_button(
+                                                                                button   => "btn btn-primary",
+                                                                                title   => "[% 'Agregar estante' | i18n %]",
+                                                                                action => "agregarNuevoEstante();",
+                                                    ) ;
+                        [% END %]
                         [% IF cant_estantes %]
                               [% PERL %]
                                             print C4::AR::Filtros::action_button(
@@ -129,14 +144,6 @@
                                                                                 title   => "[% 'Borrar seleccionados' | i18n %]",
                                                     ) ;
                               [% END %]
-                        [% END %]
-
-                        [% PERL %]
-                                            print C4::AR::Filtros::action_button(
-                                                                                button   => "btn btn-primary",
-                                                                                title   => "[% 'Agregar estante' | i18n %]",
-                                                                                action => "agregarNuevoEstante();",
-                                                    ) ;
                         [% END %]
                         
                   </div>

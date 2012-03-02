@@ -48,11 +48,11 @@
                             [% END %]
                             </div>
                             [% PERL %]
-                                    print C4::AR::Filtros::to_Icon(
-                                                                        boton   => "icon_mas",
-                                                                        onClick => "agregarContenidoAEstante([% id2 %]);",
+                                    print C4::AR::Filtros::action_button(
+                                                                        button  => "icon_plus icon-white",
+                                                                        action => "agregarContenidoAEstante([% id2 %]);",
                                                                         title   => "[% 'Agregar a Estante Actual' | i18n %]",
-                                                                        alternClass => "botonCentrado"
+                                                                        alternClass => ""
                                             ) ;
 			    [% END %]
                             </li>

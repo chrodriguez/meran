@@ -11,7 +11,7 @@ use C4::AR::Busquedas;
 my $input = new CGI;
 
 my ($template, $session, $t_params)= get_template_and_user({
-                                    template_name => "includes/opac-busquedaResult.inc",
+                                    template_name => "includes/opac-favoritosResult.inc",
                                     query => $input,
                                     type => "opac",
                                     authnotrequired => 1,

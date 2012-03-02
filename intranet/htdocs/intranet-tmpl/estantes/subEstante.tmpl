@@ -1,133 +1,137 @@
-
 <div id="contenido-[% estante.getId %]">
-<fieldset class="resultados_busqueda">
 
-<legend class="titulo_legend trigger click"> <span class="editable_[% estante.getId %]">[% estante.getEstante %]</span> </legend>
+    <fieldset class="resultados_busqueda">
+    <legend class="titulo_legend trigger click"> <span class="editable_[% estante.getId %]">[% estante.getEstante %]</span> </legend>
 
         <div class="datos_tabla_div_subestante_[% estante.getId %]">
             <div class="botonera_estantes">
-            <div id="boton_nuevo_subestante_[% estante.getId %]">
-            [% PERL %]
-                                print C4::AR::Filtros::to_Icon(
-                                                                    boton   => "icon_agregar",
-                                                                    title   => "[% 'Agregar estante' | i18n %]",
-                                                                    onClick => "agregarNuevoSubEstante([% estante.getId %],[% estante.getPadre %]);",
-                                        ) ;
-            [% END %]
-            </div>
-
-	    <div class="edit_trigger_[% estante.getId %]">
-            [% PERL %]
-                                print C4::AR::Filtros::to_Icon(
-                                                                    boton   => "icon_edicion",
-                                                                    onClick => "editarEstante('[% estante.getEstante %]',[% estante.getId %],[% estante.getPadre %],[% IF estante.padre %][% estante.estante_padre.getPadre %][% ELSE %]-1[% END %]);",
-                                                                    title   => "[%  'Editar estante actual' | i18n %]",
-                                        ) ;
-            [% END %]
-            </div>
-
-        [% IF cant_subestantes %]
-            [% PERL %]
-                                print C4::AR::Filtros::to_Icon(
-                                                                    boton   => "icon_borrar",
-                                                                    onClick => "borrarEstantesSeleccionados([% estante.getId %],[% estante.getPadre %]);",
-                                                                    title   => "[% 'Borrar seleccionados' | i18n %]",
-                                        ) ;
-            [% END %]
-        [% END %]
-
-            </div>
-           <ul class="ul_tabla_div_subestante_[% estante.getId %] unstyled">
-           [% IF cant_subestantes %]
-            [% FOREACH subestante IN SUBESTANTES %]
-             <li>
-             <input type=checkbox name="[% subestante.getEstante %]" value="[% subestante.getId %]">
-              <a class="click" onClick="verSubEstantes([% subestante.getId %],[% subestante.getPadre %])">[% subestante.getEstante %]</a>
-            </li>
-            [% END %]
-            [% END %]
-           </ul>
-
-<fieldset class="resultados_busqueda">
-<legend class="titulo_legend">[% "Contenido" | i18n %]</legend>
-
-[% IF estante.contenido %]
-
-        <div id="div_contenido_[% estante.getId %]" class="datos_tabla_div_contenido_[% estante.getId %]">
-           <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
-                <thead>
-                <tr class="titulo_tabla_resultado">
-                    <th width="4%"><a href="#" onclick="checkedAllById('div_contenido_[% estante.getId %]')">V</a></th>
-                    <th class="click" onclick="ordenar('titulo')" 
-                        Title="[% 'Ordenar por título' | i18n %]" width="33%">[% "T&iacute;tulo" | i18n %]
-                    </th>
-
-                    <th class="click" onclick="ordenar('autor')" 
-                        Title="[% 'Ordenar por autor' | i18n %]" align="left" width="23%">[% "Autor" | i18n %]
-                    </th>
-                    <th class="click" onclick="ordenar('lugar')" 
-                        Title="[% 'Ordenar por lugar' | i18n %]" width="20%">[% "Lugar" | i18n %]
-                    </th>
-                    <th class="click" onclick="ordenar('edicion')" 
-                        Title="[% 'Ordenar por edici&oacute;n' | i18n %]" width="20%">[% "Edic&iacute;on" | i18n %]
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                [% FOREACH contenido_estante IN estante.contenido %]
-                <tr>
-                    <td>
-                    <input type='checkbox' class="chk_contenido_[% estante.getId %]" name="[% contenido_estante.nivel2.nivel1.getTitulo %] ([% contenido_estante.nivel2.nivel1.getAutor %])" value="[% contenido_estante.getId2 %]">
-                    </td>
-                    <td class="titulo_result">
-                        [% PERL %]
-                            print C4::AR::Filtros::link_to( text =>     "[% contenido_estante.nivel2.nivel1.getTitulo %]",
-                                                            url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
-                                                            params =>   ["id1=[% contenido_estante.nivel2.id1 %]"],
-                                                            title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
+                    <div id="boton_nuevo_subestante_[% estante.getId %]">
+                            [% PERL %]
+                                                print C4::AR::Filtros::to_Icon(
+                                                                                    boton   => "icon_agregar",
+                                                                                    title   => "[% 'Agregar estante' | i18n %]",
+                                                                                    onClick => "agregarNuevoSubEstante([% estante.getId %],[% estante.getPadre %]);",
                                                         ) ;
-                        [% END %]
-                    </td>
-                    <td class="autor_result">
-                            [% contenido_estante.nivel2.nivel1.getAutor %]
-                    </td>
-                    <td align=center>
-                     [% contenido_estante.nivel2.getCiudadObject.getNombre %]
-                    </td>
-                    <td align=center>
-                      [% IF contenido_estante.nivel2.getEdicion %]
-                                [% contenido_estante.nivel2.getEdicion %] &nbsp;
                             [% END %]
-                            [% IF contenido_estante.nivel2.getAnio_publicacion %]
-                                ([% contenido_estante.nivel2.getAnio_publicacion %])
-                            [% END %]
-                    </td>
-                </tr>
-                [% END %]
-                </tbody>
-            </table>
-        [% END %]
-            <div class="botonera_estantes">
-                [% PERL %]
-                                print C4::AR::Filtros::to_Icon(
-                                                                    boton   => "icon_anadir",
-                                                                    onClick => "agregarContenido([% estante.getId %],[% estante.getPadre %]);",
-                                                                    title   => "[% 'Agregar contenido' | i18n %]",
-                                        ) ;
-                [% END %]
+                    </div>
 
-            [% IF estante.contenido %]
-            [% PERL %]
-                                print C4::AR::Filtros::to_Icon(
-                                                                    boton   => "icon_borrar",
-                                                                    onClick => "borrarContenidoSeleccionado([% estante.getId %],[% estante.getPadre %]);",
-                                                                    title   => "[% 'Borrar seleccionados' | i18n %]",
-                                        ) ;
-            [% END %]   
-            [% END %]
+                    <div class="edit_trigger_[% estante.getId %]">
+                            [% PERL %]
+                                                print C4::AR::Filtros::to_Icon(
+                                                                                    boton   => "icon_edicion",
+                                                                                    onClick => "editarEstante('[% estante.getEstante %]',[% estante.getId %],[% estante.getPadre %],[% IF estante.padre %][% estante.estante_padre.getPadre %][% ELSE %]-1[% END %]);",
+                                                                                    title   => "[%  'Editar estante actual' | i18n %]",
+                                                        ) ;
+                            [% END %]
+                    </div>
+
+                    [% IF cant_subestantes %]
+                            [% PERL %]
+                                                print C4::AR::Filtros::to_Icon(
+                                                                                    boton   => "icon_borrar",
+                                                                                    onClick => "borrarEstantesSeleccionados([% estante.getId %],[% estante.getPadre %]);",
+                                                                                    title   => "[% 'Borrar seleccionados' | i18n %]",
+                                                        ) ;
+                            [% END %]
+                    [% END %]
             </div>
-        </div>
-</fieldset>
+            <ul class="ul_tabla_div_subestante_[% estante.getId %] unstyled">
+                  [% IF cant_subestantes %]
+                    [% FOREACH subestante IN SUBESTANTES %]
+                        <li>
+                              <input type=checkbox name="[% subestante.getEstante %]" value="[% subestante.getId %]">
+                              <a class="click" onClick="verSubEstantes([% subestante.getId %],[% subestante.getPadre %])">[% subestante.getEstante %]</a>
+                        </li>
+                    [% END %]
+                  [% ELSE %]
+                              <div class="alert alert-info">[% 'El estante seleccionado no contiene subestantes' | i18n %]</div>
+                  
+            </ul>
+                  [% END %]
+
+
+       
+             [% IF estante.contenido %]
+
+                    <fieldset class="resultados_busqueda">
+                      <legend class="titulo_legend">[% "Contenido" | i18n %]</legend>
+
+                        <div id="div_contenido_[% estante.getId %]" class="datos_tabla_div_contenido_[% estante.getId %]">
+                          [% PERL %]
+                             print C4::AR::Filtros::tableHeader(   
+                                            id              => "tablaResult",
+                                            selectAll_id    => "div_contenido_[% estante.getId %]",
+                                            columns         => ['[% "T&iacute;tulo" | i18n %]','[% "Autor" | i18n %]',
+                                                                '[% "Lugar" | i18n %]','[% "Edic&iacute;on" | i18n %]'
+                                                              ]
+                                                                            
+                                                  ) ;
+                              
+                              [% END %]  
+                                <tbody>
+                                      [% FOREACH contenido_estante IN estante.contenido %]
+                                          <tr>
+                                              <td>
+                                              <input type='checkbox' class="chk_contenido_[% estante.getId %]" name="[% contenido_estante.nivel2.nivel1.getTitulo %] ([% contenido_estante.nivel2.nivel1.getAutor %])" value="[% contenido_estante.getId2 %]">
+                                              </td>
+                                              <td class="titulo_result">
+                                                  [% PERL %]
+                                                      print C4::AR::Filtros::link_to( text =>     "[% contenido_estante.nivel2.nivel1.getTitulo %]",
+                                                                                      url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                                                                      params =>   ["id1=[% contenido_estante.nivel2.id1 %]"],
+                                                                                      title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
+                                                                                  ) ;
+                                                  [% END %]
+                                              </td>
+                                              <td class="autor_result">
+                                                      [% contenido_estante.nivel2.nivel1.getAutor %]
+                                              </td>
+                                              <td>
+                                              [% contenido_estante.nivel2.getCiudadObject.getNombre %]
+                                              </td>
+                                              <td>
+                                                    [% IF contenido_estante.nivel2.getEdicion %]
+                                                            [% contenido_estante.nivel2.getEdicion %] &nbsp;
+                                                    [% END %]
+                                                    [% IF contenido_estante.nivel2.getAnio_publicacion %]
+                                                            ([% contenido_estante.nivel2.getAnio_publicacion %])
+                                                    [% END %]
+                                              </td>
+                                          </tr>
+                                      [% END %]
+                                  </tbody>
+                              </table>
+              
+                        
+           
+        
+                  <div class="form-actions">
+                      [% PERL %]            
+                                  print C4::AR::Filtros::action_button(
+                                                                                      button   => "btn btn-primary",
+                                                                                      title   => "[% 'Agregar contenido' | i18n %]",
+                                                                                      action => "agregarContenido([% estante.getId %],[% estante.getPadre %]);",,
+                                                          ) ;
+                      [% END %]
+                        [% END %]
+                  
+                  [% IF estante.contenido %]
+                        [% PERL %]
+                                          
+                                            print C4::AR::Filtros::action_button(
+                                                                                        button  => "btn btn-danger",
+                                                                                        action => "borrarContenidoSeleccionado([% estante.getId %],[% estante.getPadre %]);",
+                                                                                        title   => "[% 'Borrar seleccionados' | i18n %]",
+                                                            ) ;
+
+
+
+                        [% END %]   
+                  [% END %]
+            </div>
+          </div>
+      </fieldset>
+ 
  </div>
 </fieldset>
 </div>

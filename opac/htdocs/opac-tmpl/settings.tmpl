@@ -43,7 +43,8 @@
 			                               print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
 			                                                                   boton   => "btn btn-primary",
 			                                                                   onClick => "function(){$('#user-settings').submit();}",
-			                                       ) ;
+                                                                               inline  => "1",
+ 			                                       ) ;
 			           [% END %]
 			    </div>
         </fieldset>

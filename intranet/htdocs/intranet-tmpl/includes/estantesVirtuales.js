@@ -23,7 +23,7 @@ function ordenar(orden){
 
         function updateVerEstanteDesdeBusqueda(responseText){
                 $('#estante').html(responseText);
-		$('.datos_tabla_div').hide();
+                $('.datos_tabla_div').hide();
         }
 
         function verEstantes(){
@@ -36,7 +36,7 @@ function ordenar(orden){
 
         function updateVerEstantes(responseText){
                 $('#estante').html(responseText);
-		$('#subestante').html('');
+                $('#subestante').html('');
                 makeToggle('datos_tabla_div_estantes','trigger',null,false);
         }
 
@@ -45,13 +45,7 @@ function ordenar(orden){
 		    $('#estante_nuevo_sub_estante').val(estante);
 		    objAH=new AjaxHelper();
 		    objAH.showOverlay       = true;
-		    $('#nuevo_sub_estante').modal({   containerCss:{
-			    backgroundColor:"#fff",
-			    height:170,
-			    padding:0,
-			    width:300
-			},
-		    });
+		    $('#nuevo_sub_estante').modal();
 	}
 	
         function agregarSubEstante(){
@@ -59,13 +53,13 @@ function ordenar(orden){
 	    if ( objAH.valor= $("#input_nuevo_sub_estante").val() ) {
                 objAH=new AjaxHelper(updateAgregarSubEstante);
                 objAH.debug= true;
-		objAH.padre= $("#padre_nuevo_sub_estante").val();
+                objAH.padre= $("#padre_nuevo_sub_estante").val();
                 objAH.estante= $("#estante_nuevo_sub_estante").val();
                 objAH.valor= $("#input_nuevo_sub_estante").val();
                 objAH.url= 'estanteDB.pl';
                 objAH.tipo= 'AGREGAR_SUBESTANTE';
                 objAH.sendToServer();
-		$.modal.close();
+                $('#nuevo_sub_estante').modal('hide');
 	    }
         }
 
@@ -79,12 +73,12 @@ function ordenar(orden){
         function verSubEstantes(estante,padre){
                 objAH=new AjaxHelper(updateVerSubEstantes);
                 objAH.debug= true;
-		objAH.showOverlay= true;
+                objAH.showOverlay= true;
                 objAH.url= 'estanteDB.pl';
                 objAH.estante= estante;
-		objAH.padre= padre;
+                objAH.padre= padre;
                 objAH.tipo= 'VER_SUBESTANTE';
-		objAH.async = false;
+                objAH.async = false;
                 objAH.sendToServer();
         }
 
@@ -175,23 +169,23 @@ function ordenar(orden){
          verSubEstantes(objAH.estante,objAH.padre);
         }
 
-	function agregarNuevoEstante(){
-	    objAH=new AjaxHelper();
-	    objAH.showOverlay       = true;
-	    $('#nuevo_estante').modal();
-	}
+        function agregarNuevoEstante(){
+            objAH=new AjaxHelper();
+            objAH.showOverlay       = true;
+            $('#nuevo_estante').modal();
+        }
 
         function agregarEstante(){
-	    if($("#input_nuevo_estante").val()){
-                objAH=new AjaxHelper(updateAgregarEstante);
-                objAH.debug= true;
-                objAH.url= 'estanteDB.pl';
-		objAH.padre=0;
-                objAH.estante=$("#input_nuevo_estante").val();
-                objAH.tipo= 'AGREGAR_ESTANTE';
-                objAH.sendToServer();
-		$('#nuevo_estante').modal('hide');
-	    }
+            if($("#input_nuevo_estante").val()){
+                    objAH=new AjaxHelper(updateAgregarEstante);
+                    objAH.debug= true;
+                    objAH.url= 'estanteDB.pl';
+                    objAH.padre=0;
+                    objAH.estante=$("#input_nuevo_estante").val();
+                    objAH.tipo= 'AGREGAR_ESTANTE';
+                    objAH.sendToServer();
+                    $('#nuevo_estante').modal('hide');
+            }
         }
 
         function updateAgregarEstante(responseText){
@@ -211,13 +205,7 @@ function ordenar(orden){
 		    $('#input_abuelo_estante').val(abuelo);
 		    objAH=new AjaxHelper();
 		    objAH.showOverlay       = true;
-		    $('#editar_estante').modal({   containerCss:{
-			    backgroundColor:"#fff",
-			    height:170,
-			    padding:0,
-			    width:300
-			},
-		    });
+		    $('#editar_estante').modal();
         }
 
 	function modificarEstante(){
@@ -231,7 +219,7 @@ function ordenar(orden){
                 objAH.valor=$('#input_valor_estante').val();
                 objAH.tipo= 'MODIFICAR_ESTANTE';
                 objAH.sendToServer();
-				$.modal.close();
+				$('#editar_estante').modal('hide');
 	    }
         }
 
@@ -250,26 +238,19 @@ function ordenar(orden){
         }
         
         function agregarContenido(estante,padre){
-		$('#input_contenido_id_estante').val(estante);
-		$('#input_contenido_id_padre_estante').val(padre);
-		objAH=new AjaxHelper();
-		objAH.showOverlay       = true;
-		$('#contenido_estante').modal({
-			    containerCss:{
-			    backgroundColor:"#fff",
-			    height:500,
-			    padding:0,
-			    width:800
-			},
-		    });
-	}
+              $('#input_contenido_id_estante').val(estante);
+              $('#input_contenido_id_padre_estante').val(padre);
+              objAH=new AjaxHelper();
+              objAH.showOverlay       = true;
+              $('#contenido_estante').modal();
+        }
 	
-	function buscarContenido(){
+        function buscarContenido(){
                 objAH=new AjaxHelper(updateBuscarContenido);
                 objAH.debug= true;
                 objAH.url= 'estanteDB.pl';
-		objAH.showStatusIn  = 'busqueda_contenido_estante';
-		objAH.funcion = "changePage";
+                objAH.showStatusIn  = 'busqueda_contenido_estante';
+                objAH.funcion = "changePage";
                 objAH.valor=$('#input_busqueda_contenido').val();
                 objAH.tipo= 'BUSCAR_CONTENIDO';
                 objAH.sendToServer();
@@ -285,8 +266,8 @@ function ordenar(orden){
                 objAH.debug= true;
                 objAH.url= 'estanteDB.pl';
                 objAH.estante=$('#input_contenido_id_estante').val();
-		objAH.padre=$('#input_contenido_id_padre_estante').val();
-		objAH.id2=id2;
+                objAH.padre=$('#input_contenido_id_padre_estante').val();
+                objAH.id2=id2;
                 objAH.tipo= 'AGREGAR_CONTENIDO';
                 objAH.sendToServer();
 		$.modal.close();
@@ -302,15 +283,15 @@ function ordenar(orden){
 	
 	
 	function mostrarEstantesVirtualesDeGrupo(id2){
-	  objAH               = new AjaxHelper(updateInfoEstantesVirtualesDeGrupo);
-	  objAH.showOverlay       = true;
-	  objAH.url           = URL_PREFIX+'/busquedas/busquedasDB.pl';
-	  //se setea la funcion para cambiar de pagina
-	  objAH.debug         = true;
-	  objAH.funcion       = 'changePage';
-	  objAH.estantes_grupo	= id2;
-	  objAH.tipoAccion    = "BUSQUEDA_ESTANTE_DE_GRUPO";
-	  objAH.sendToServer();
+            objAH               = new AjaxHelper(updateInfoEstantesVirtualesDeGrupo);
+            objAH.showOverlay       = true;
+            objAH.url           = URL_PREFIX+'/busquedas/busquedasDB.pl';
+            //se setea la funcion para cambiar de pagina
+            objAH.debug         = true;
+            objAH.funcion       = 'changePage';
+            objAH.estantes_grupo	= id2;
+            objAH.tipoAccion    = "BUSQUEDA_ESTANTE_DE_GRUPO";
+            objAH.sendToServer();
       }
       
       function updateInfoEstantesVirtualesDeGrupo(responseText){

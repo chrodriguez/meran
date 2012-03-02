@@ -45,9 +45,9 @@
                             [% PERL %]
                                 print C4::AR::Filtros::link_to( text    =>  "[% subestante.getEstante %]",
                                                                 url     =>  '[% url_prefix %]/opac-estante.pl',
-                                        params =>   ["id_estante=[% subestante.getId %]"],
-                                        title =>    "[% 'Mostrar Detalle del Estante' | i18n %]",
-                                        class => "link_to_detail"
+                                                                params =>   ["id_estante=[% subestante.getId %]"],
+                                                                title =>    "[% 'Mostrar Detalle del Estante' | i18n %]",
+                                                                  class => "link_to_detail"
                                         ) ;
                             [% END %]
                           </dd>
