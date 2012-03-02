@@ -181,97 +181,110 @@ var loaderPath= "";
                       <dd>[% PERL %] print C4::AR::Utilidades::translateTipoCredencial('[% socio.getCredentialType %]') [% END %]</dd>
                 </dl>
 
-                <fieldset id="datos_Secundarios">
-                    <legend class="titulo_legend_resaltado trigger click titulo_legend" title='[% "click para acceder a informaci&oacute;n adicional" | i18n %]'>
-                            [% "Datos secundarios" | i18n %]
-                    </legend>
-                    <div class="toggle_container_datos_sec">
-                        <dl>
-                            <dt class="inline left rightMargin">[% "Fecha de nacimiento:" | i18n %]</dt>
-                            <dd>[% socio.persona.getNacimiento %]</dd>
-                            <dt class="inline left rightMargin">[% "Sexo:" | i18n %]</dt>
-                            <dd>[% socio.persona.getSexoPrint %]</dd>
-                            
-                            [% IF socio.persona.getTelefono %]
-                                <dt class="inline left rightMargin">[% "Tel&eacute;fono:" | i18n %]</dt>
-                                <dd>[% socio.persona.getTelefono %]</dd>  
-                            [% END %]
-                            
-                            [% IF socio.persona.getAlt_telefono %]
-                                <dt class="inline left rightMargin">[% "Tel&eacute;fono Alt:" | i18n %]</dt>
-                                <dd>[% socio.persona.getAlt_telefono %]</dd>  
-                            [% END %]
-                            
-                            [% IF socio.persona.getEmail %]
-                                <dt class="inline left rightMargin">[% "E-mail:" | i18n %]</dt>
-                                <dd><a href="mailto:[% socio.persona.getEmail %]">[% socio.persona.getEmail %]</a></dd>
-                            [% END %]
-                            
-                            <dt class="inline left rightMargin">[% "Legajo :" | i18n %]</dt>
-                            <dd>[%  socio.persona.getLegajo %]</dd>
-
-                            <dt class="inline left rightMargin">[% "Ciudad :" | i18n %]</dt>
-                            [% TRY %] 
-                                <dd>[%  socio.persona.ciudad_ref.getNombre %]</dd>
-                            [% CATCH %] 
-                                <dd class="alert alert-error clear">[% 'Ciudad inv&aacute;lida - Actualizar' | i18n %]</dd> 
-                            [% END %]
-
-                            <dt class="inline left rightMargin">[% "Calle :" | i18n %]</dt>
-                            <dd>[%  socio.persona.getCalle %]</dd>
-
-                            <dt class="inline left rightMargin">[% "ID de usuario:" | i18n %]</dt>
-                            <dd>[%  socio.nro_socio %]</dd>
-
-                            <dt class="inline left rightMargin">[% "Incorporaci&oacute;n a Biblioteca:" | i18n %]</dt>
-                            <dd>[%  socio.ui.nombre %]</dd>
-                            
-                            [% IF usercourse %]
-                                <dt class="inline left rightMargin">[% "Realiz&oacute; el curso para usuarios. Dado de alta el d&iacute;a" | i18n %]</dt>
-                                <dd>[% usercourse %]</dd>
-                            [% END %]
-          
-                            <dt class="inline left rightMargin">[% "Instituci&oacute;n :" | i18n %]</dt>
-                            <dd>[% socio.persona.getInstitucion %]</dd>
-                            
-                            <dt class="inline left rightMargin">[% "Carrera :" | i18n %] </dt>
-                            <dd>[%  socio.persona.getCarrera %]</dd>
-
-                            <dt class="inline left rightMargin">[% "A&ntilde;o :" | i18n %] </dt>
-                            <dd>[%  socio.persona.getAnio %]</dd>
-
-                            <dt class="inline left rightMargin">[% "Divisi&oacute;n :" | i18n %] </dt>
-                            <dd>[%  socio.persona.getDivision %]</dd>
-                        </dl>
+                    <div class="accordion" id="datos_Secundarios">
+                        <div class="accordion-group">
+	                        <div class="accordion-heading">
+	                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#datos_Secundarios" href="#data_user">[% "Datos secundarios" | i18n %]</a>
+	                         </div>
+		                     <div id="data_user" class="accordion-body collapse">
+		                        <div class="accordion-inner">
+			                        <dl>
+			                            <dt class="inline left rightMargin">[% "Fecha de nacimiento:" | i18n %]</dt>
+			                            <dd>[% socio.persona.getNacimiento %]</dd>
+			                            <dt class="inline left rightMargin">[% "Sexo:" | i18n %]</dt>
+			                            <dd>[% socio.persona.getSexoPrint %]</dd>
+			                            
+			                            [% IF socio.persona.getTelefono %]
+			                                <dt class="inline left rightMargin">[% "Tel&eacute;fono:" | i18n %]</dt>
+			                                <dd>[% socio.persona.getTelefono %]</dd>  
+			                            [% END %]
+			                            
+			                            [% IF socio.persona.getAlt_telefono %]
+			                                <dt class="inline left rightMargin">[% "Tel&eacute;fono Alt:" | i18n %]</dt>
+			                                <dd>[% socio.persona.getAlt_telefono %]</dd>  
+			                            [% END %]
+			                            
+			                            [% IF socio.persona.getEmail %]
+			                                <dt class="inline left rightMargin">[% "E-mail:" | i18n %]</dt>
+			                                <dd><a href="mailto:[% socio.persona.getEmail %]">[% socio.persona.getEmail %]</a></dd>
+			                            [% END %]
+			                            
+			                            <dt class="inline left rightMargin">[% "Legajo :" | i18n %]</dt>
+			                            <dd>[%  socio.persona.getLegajo %]</dd>
+			
+			                            <dt class="inline left rightMargin">[% "Ciudad :" | i18n %]</dt>
+			                            [% TRY %] 
+			                                <dd>[%  socio.persona.ciudad_ref.getNombre %]</dd>
+			                            [% CATCH %] 
+			                                <dd class="alert alert-error clear">[% 'Ciudad inv&aacute;lida - Actualizar' | i18n %]</dd> 
+			                            [% END %]
+			
+			                            <dt class="inline left rightMargin">[% "Calle :" | i18n %]</dt>
+			                            <dd>[%  socio.persona.getCalle %]</dd>
+			
+			                            <dt class="inline left rightMargin">[% "ID de usuario:" | i18n %]</dt>
+			                            <dd>[%  socio.nro_socio %]</dd>
+			
+			                            <dt class="inline left rightMargin">[% "Incorporaci&oacute;n a Biblioteca:" | i18n %]</dt>
+			                            <dd>[%  socio.ui.nombre %]</dd>
+			                            
+			                            [% IF usercourse %]
+			                                <dt class="inline left rightMargin">[% "Realiz&oacute; el curso para usuarios. Dado de alta el d&iacute;a" | i18n %]</dt>
+			                                <dd>[% usercourse %]</dd>
+			                            [% END %]
+			          
+			                            <dt class="inline left rightMargin">[% "Instituci&oacute;n :" | i18n %]</dt>
+			                            <dd>[% socio.persona.getInstitucion %]</dd>
+			                            
+			                            <dt class="inline left rightMargin">[% "Carrera :" | i18n %] </dt>
+			                            <dd>[%  socio.persona.getCarrera %]</dd>
+			
+			                            <dt class="inline left rightMargin">[% "A&ntilde;o :" | i18n %] </dt>
+			                            <dd>[%  socio.persona.getAnio %]</dd>
+			
+			                            <dt class="inline left rightMargin">[% "Divisi&oacute;n :" | i18n %] </dt>
+			                            <dd>[%  socio.persona.getDivision %]</dd>
+			                        </dl>
+			                    </div>
+		                    </div>
+                        </div>
                     </div>
-                </fieldset>
-        
-                [% IF socio.tieneAutorizado %]
-                    <fieldset>
-                        <legend class="trigger click">[% 'Usuario adicional' | i18n %]</legend>
-                          <div class="authorizedBack toggle_container_autorizado" style="display:block;">
-                              <dl>
-                                  <dt class="inline left rightMargin">[% "Nombre y Apellido: " | i18n %]</dt>
-                                  <dd>[% socio.getNombre_apellido_autorizado%]</dd>
-
-                                  <dt class="inline left rightMargin">[% "DNI: " | i18n %]</dt>
-                                  <dd>[% socio.getDni_autorizado %]</dd>
-
-                                  <dt class="inline left rightMargin">[% "Tel&eacute;fono: " | i18n %]</dt>
-                                  <dd>[% socio.getTelefono_autorizado %]</dd>
-                              </dl>
-                          </div>
-                    </fieldset>
-                [% END %]
-
-                <fieldset>
-                    <legend class="trigger click" title='[% "click para acceder a las notas registradas sobre el usuario" | i18n %]'>[% "Notas" | i18n %]</legend>
-                    <div class="toggle_container_nota" >
-			            <div class="alert fade in">
-			                <span class="nota">[% notas %]</span>
-			            </div>                          
+	                [% IF socio.tieneAutorizado %]
+	                    <div class="accordion" id="usuario_adicional">
+			                <div class="accordion-group">
+		                        <div class="accordion-heading">
+		                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#usuario_adicional" href="#user_add">[% "Usuario adicional" | i18n %]</a>
+		                         </div>
+		                          <div id="user_add" class="accordion-body collapse">
+		                              <div class="accordion-inner">
+			                             <dl>
+			                                 <dt class="inline left rightMargin">[% "Nombre y Apellido: " | i18n %]</dt>
+			                                 <dd>[% socio.getNombre_apellido_autorizado%]</dd>
+			
+			                                 <dt class="inline left rightMargin">[% "DNI: " | i18n %]</dt>
+			                                 <dd>[% socio.getDni_autorizado %]</dd>
+			
+			                                 <dt class="inline left rightMargin">[% "Tel&eacute;fono: " | i18n %]</dt>
+			                                 <dd>[% socio.getTelefono_autorizado %]</dd>
+			                             </dl>
+		                           </div>
+		                         </div>
+	                        </div>
+	                     </div>
+	                [% END %]
+	                <div class="accordion" id="notas_usuario">
+	                    <div class="accordion-group">
+	                        <div class="accordion-heading">
+	                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#notas_usuario" href="#notas_div">[% "Notas" | i18n %]</a>
+	                        </div>
+	                         <div id="notas_div" class="accordion-body collapse [% IF notas %] in [% END %] ">
+	                             <div class="accordion-inner">
+						                <span class="nota">[% notas %]</span>
+	                             </div>
+	                        </div>
+	                    </div>
                     </div>
-                </fieldset>
+          </div>
 </div><!--columna izq -->
 
 <div id="modificar-datos-usuario" class="modal hide fade bigModal"></div>

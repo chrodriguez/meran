@@ -1,5 +1,9 @@
-[% INCLUDE 'localized_messages.inc' %]
-[% INCLUDE  'WindowHelper.inc'  %]
+<!-- <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/docs.css" /> -->
+<style>
+	.main_content{
+		width: 84% !important;
+	}
+</style>
 
 <script type="text/javascript">
 	function mostrarIndice(id2){
@@ -20,20 +24,6 @@
 
 [% IF !ajax %]
     <script src="/includes/jquery/jquery.jqpageflow.js" type="text/javascript"></script>
-	<script type="text/javascript"> 
-	    $(document).ready(function(){
-	        $("#main_content").flexiPagination({
-	            url: "[% url_prefix %]/opac-detail.pl?id1=[% id1 %]&ajax=1&token=[% token %]",
-	            totalResults: [% cant_total %],
-	            perPage: [% per_page %],
-	            container: "#main_content",
-	            append_loader: "#loading_items",
-	            pagerVar : "page",
-	            loaderImgPath: imagesForJS+"/loader_grupos.gif",
-	            debug : 1
-	        });	});
-	</script>
-    
 [% END %]
 
 [% IF estadoDeColeccion %]

@@ -678,7 +678,7 @@ sub detalleDisponibilidadNivel3{
                     $infoNivel3{'cantParaPrestamo'}++;
 
             unless($hash_nivel3{'estaPrestado'}||$hash_nivel3{'estaReservado'}){
-            $infoNivel3{'cantParaPrestamoActual'}++;
+                $infoNivel3{'cantParaPrestamoActual'}++;
             }
                 }elsif($esParaSala){
                     #es PARA SALA
@@ -764,8 +764,10 @@ sub detalleCompletoOPAC{
     my $nivel1= C4::AR::Nivel1::getNivel1FromId1OPAC($id1);
     my $config_visualizacion= C4::AR::Preferencias::getConfigVisualizacionOPAC();
     #recupero todos los nivel2 segun el id1 pasado por parametro
-    my $page_number = $t_params->{'page'} || 0;
-    my $cant_grupos = C4::Context->config("cant_grupos_per_query") || 5;
+
+# YA NO SE USA MAS LA PAGINACION ON-DEMAND POR LOS ANCLAS
+#    my $page_number = $t_params->{'page'} || 0;
+#    my $cant_grupos = C4::Context->config("cant_grupos_per_query") || 5;
 
     my $id2 =  $t_params->{'id2'} || 0;
     my $nivel2_array_ref;
@@ -779,8 +781,8 @@ sub detalleCompletoOPAC{
     my @nivel2;
 
     my $cantidad_total = scalar(@$nivel2_array_ref);
-    my $inicio = (($page_number) * $cant_grupos);
-    my $cantidad = $inicio + $cant_grupos;  
+    my $inicio = 0;
+    my $cantidad = $cantidad_total;  
     
     
     for(my $i=$inicio;$i<$cantidad;$i++){
@@ -788,6 +790,7 @@ sub detalleCompletoOPAC{
             my $hash_nivel2;
             $nivel2_array_ref->[$i]->load();
             $hash_nivel2->{'id2'}                       = $nivel2_array_ref->[$i]->getId2;
+            $hash_nivel2->{'edicion'}                   = $nivel2_array_ref->[$i]->getEdicion;
             $hash_nivel2->{'tipo_documento'}            = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getNombre();
             $hash_nivel2->{'disponible'}                = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getDisponible();
             $hash_nivel2->{'isbn'}        		        = $nivel2_array_ref->[$i]->getISBN;
@@ -829,9 +832,6 @@ sub detalleCompletoOPAC{
 
             push(@nivel2, $hash_nivel2);
         };
-        if ($i >= ($cantidad_total-1)){
-            last;
-        }
     }
 
     #Es una Revista? Armo el estado de colección

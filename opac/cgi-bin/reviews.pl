@@ -66,6 +66,7 @@ eval{
     $t_params->{'reviews'}              = C4::AR::Nivel2::getReviews($id2);
     $t_params->{'partial_template'}     = "reviews.inc";
     $t_params->{'id2'}                  = $id2;
+    $t_params->{'nivel2_obj'}           = $nivel2;
 };
  
 if ($@){

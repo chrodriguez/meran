@@ -8,19 +8,18 @@
 </script>
 
 [% USE HTML %]
-<fieldset>
-    <legend> [% 'Revisiones de ' | i18n %] [% titulo %]</legend>
+	<div class="page-header">
+	    <h1>[% 'Revisiones ' | i18n %] <small> [% titulo %] [% IF nivel2_obj.getEdicion %]([% nivel2_obj.getEdicion %]) [% END %]</small></h1>
+	</div>      
       <a class="fancylink" rel="group" href="/uploads/covers/[% portada_registro_big %]" >
       <img  name="cover" src="/uploads/covers/[% portada_registro_medium %]" title="Portada" style="float:left" />
     </a>
 
-</fieldset>
-<div id="reviews_all" style="width: 100%;">
+<section id="reviews_all">
     [% IF reviews %]
     <div class="review">
         [% FOREACH review IN reviews %]
                 <div class="well">
-                    
                     [% IF socio_data.usr_nro_socio != review.socio.getNro_socio %]
                          <strong>[% 'Escrito por' | i18n %]: </strong><span class="user_cite_other">[% review.socio.persona.getApellido %], [% review.socio.persona.getNombre %] ([% review.socio.getNro_socio %]) </span><br>
                     [% ELSE %]
@@ -34,10 +33,10 @@
         [% END %]
       </div>
     [% ELSE %]
-        <div class="alert alert-info"> [% 'Este ejemplar no tiene ninguna revisi&oacute;n' | i18n %]</div>
+        <div class="alert alert-info"> [% 'Esta edici&oacute;n no tiene ninguna revisi&oacute;n' | i18n %]</div>
     [% END %]
 
-</div>
+</section>
 
 [% IF socio_data.usr_permisos_opac %]
 

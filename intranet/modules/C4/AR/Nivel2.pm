@@ -23,6 +23,7 @@ use vars qw(@EXPORT_OK @ISA);
         getNivel2FromId2
         getFirstItemTypeFromN1
         getNivel2FromId2_asArray
+        buildNavForGroups
         
 );
 
@@ -610,6 +611,22 @@ sub reviewNivel2{
     $rating_obj->setReview($review);
     $rating_obj->save();
 }
+
+sub buildNavForGroups{
+	my ($nivel2_array_ref) = @_;
+	
+	my @elem_array;
+	foreach my $n2 (@$nivel2_array_ref){
+		my %hash = {};
+		$hash{'id'} = "detalle_grupo_".$n2->{'id2'};
+		$hash{'title'} = $n2->{'edicion'} || "#".$n2->{'id2'}; 
+		
+		push (@elem_array,\%hash);
+	}
+	
+	return \@elem_array;
+}
+
 
 END { }       # module clean-up code here (global destructor)
 

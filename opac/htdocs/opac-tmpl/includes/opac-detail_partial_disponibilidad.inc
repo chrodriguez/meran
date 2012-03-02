@@ -18,10 +18,13 @@
 		                                            print C4::AR::Filtros::action_button(   
 		                                                                                button   => "btn btn-primary",
 		                                                                                icon   => "icon-white icon-shopping-cart",
-		                                                                                action => "showReservar();",
 		                                                                                title   => "[% 'Reservar un ejemplar' | i18n %]",
 		                                                                                [% IF cantParaPrestamoActual == 0 %]
 		                                                                                	disabled => 1,
+		                                                                                      popover		=> {title=>'[% "No se puede reservar" | i18n %]',
+		                                                                                      					text => '[% "Dir&iacute;jase a la Biblioteca a regularizar su situaci&oacute;n" | i18n %].' },
+																						[% ELSE %]
+			                                                                                action => "showReservar();",
 		                                                                                [% END %]
 		                                                                        );
 		                                        [% END %]

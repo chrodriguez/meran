@@ -419,6 +419,7 @@
 				                                                      button    => "btn btn-danger click",
 				                                                      action    =>  "deleteFavorite([% NIVEL.id1 %]);",
 				                                                      icon      => "icon-remove icon-white",
+				                                                      id		=> "fav_[% NIVEL.id1 %]",
 				                                                  ) ;
 				
 				                    [% END %]
@@ -428,12 +429,16 @@
 				                                                      button    => "btn btn-info click",
 				                                                      action    => "addFavorite([% NIVEL.id1 %]);",
 				                                                      icon      => "icon-heart icon-white",
+				                                                      id		=> "fav_[% NIVEL.id1 %]",
 				                                                      popover => {text => "Agrega este registro a tu estante privado de favoritos", title => "Favoritos"},
 				                                                  ) ;
 				
 				                    [% END %]
 	                            [% END %]
 	                        </td>
+	                        <script type="text/javascript">    
+								$('#fav_[% NIVEL.id1 %]').popover({delay: { show: 800, hide: 100 }, placement: 'left',});
+							</script>
 	                     [% END %]
                     </tr>
                 [% END %]

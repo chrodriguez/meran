@@ -22,7 +22,6 @@ my ($template, $session, $t_params) = get_template_and_user({
 my $idNivel1 = $input->param('id1');
 
 $t_params->{'id2'} = $input->param('id2') || 0;
-$t_params->{'page'} = $input->param('page') || 0;
 my $cant_total      = 0;
 
 eval{ 
@@ -42,5 +41,6 @@ $t_params->{'per_page'}             = C4::Context->config("cant_grupos_per_query
 $t_params->{'ajax'}                 = $ajax;
 $t_params->{'pref_e_documents'}     = C4::AR::Preferencias::getValorPreferencia("e_documents");
 $t_params->{'mostrar_ui_opac'}      = C4::AR::Preferencias::getValorPreferencia("mostrar_ui_opac");
+$t_params->{'nav_elements'}         = C4::AR::Nivel2::buildNavForGroups($t_params->{'nivel2'});
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

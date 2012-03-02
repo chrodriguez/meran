@@ -42,36 +42,42 @@
 		}
 		</script>
 
-		<fieldset class="trigger">
-		
-		    <legend class="titulo_legend trigger trigger_4_[% id2 %] click">[% "Documentos electr&oacute;nicos"| i18n %]</legend>
-		
-		    <div id="lista_docs_[% id2 %]" class="lista_docs_[% id2 %]">
-		        <ul>
-		               [% FOREACH file IN lista_docs %] 
-		                    <dl>
-		                           <dt>
-			                           [% PERL %]
-			                               print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(file.getTitle) %]",
-			                                                               url =>      "getDocument.pl", 
-			                                                               params =>   ["id=[% file.getId %]"],
-			                                                               title =>    "[% HTML.escape(file.getTitle) %]"
-			                                                           ) ;
-			                           [% END %]
-			                           <img style="height: 25px; width: 25px; border: none; float:left;" src='[% temas %]/[% user_theme_intra %]/imagenes/iconos/[% file.getIconType %].png' />
-			                           [% PERL %]
-			                               print C4::AR::Filtros::action_link_button( 
-			                               								   title =>     "",
-			                                                               url =>      "deleteDocument.pl", 
-			                                                               params =>   ["id=[% file.getId %]","id1=[% id1 %]"],
-			                                                               button =>    "btn btn-danger click",
-			                                                               icon	  =>  "icon-white icon-trash",
-			                                                           ) ;
-			                           [% END %]
-	                           	  </dt>
-		                    </dl>
-		            [% END %]
-		        </ul>
+
+
+	<div class="accordion" id="lista_docs_[% id2 %]">
+            <div class="accordion-group">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#lista_docs_[% id2 %]" href="#e_docs[% id2 %]">
+                  [% "Documentos electr&oacute;nicos"| i18n %]
+                </a>
+              </div>
+              <div id="e_docs[% id2 %]" class="accordion-body collapse">
+                <div class="accordion-inner">
+			        <ul>
+			               [% FOREACH file IN lista_docs %] 
+			                    <dl>
+			                           <dt>
+				                           [% PERL %]
+				                               print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(file.getTitle) %]",
+				                                                               url =>      "getDocument.pl", 
+				                                                               params =>   ["id=[% file.getId %]"],
+				                                                               title =>    "[% HTML.escape(file.getTitle) %]"
+				                                                           ) ;
+				                           [% END %]
+				                           <img style="height: 25px; width: 25px; border: none; float:left;" src='[% temas %]/[% user_theme_intra %]/imagenes/iconos/[% file.getIconType %].png' />
+				                           [% PERL %]
+				                               print C4::AR::Filtros::action_link_button( 
+				                               								   title =>     "",
+				                                                               url =>      "deleteDocument.pl", 
+				                                                               params =>   ["id=[% file.getId %]","id1=[% id1 %]"],
+				                                                               button =>    "btn btn-danger click",
+				                                                               icon	  =>  "icon-white icon-trash",
+				                                                           ) ;
+				                           [% END %]
+		                           	  </dt>
+			                    </dl>
+			            [% END %]
+			        </ul>
 				    <div id="file-uploader_[% id2 %]" class="fileUploader_catalogo [% IF cant_docs %] right [% ELSE %] left [% END %]">
 						<form id="form_file-uploader_[% id2 %]" enctype="multipart/form-data" method="post" 
 								action="[% url_prefix %]/catalogacion/estructura/uploadDocument.pl">
@@ -89,7 +95,6 @@
 								  	<input type="text" name="filename" id="filename_[% id2 %]" required /><br />
 							  	  </div>
 							  </div>
-<!-- 							  <div class="row" id="submit_button_div_[% id2 %]"> -->
 								<div class="form-actions">
 							  		<div class="controls">
 		                                  [% PERL %]
@@ -103,7 +108,6 @@
 		                                  [% END %]
 							  			
 						  			</div>
-<!-- 							  </div> -->
 							  <div id="fileInfo_[% id2 %]" class="fileInfo">
 							    <div id="fileName_[% id2 %]" class="fileName"></div>
 							    <div id="fileSize_[% id2 %]" class="fileSize"></div>
@@ -125,10 +129,11 @@
 							  </div>  
 						</form>
 				    </div>
-		    </div>
-			    
-            <script type="text/javascript">makeToggle('lista_docs_[% id2 %]','trigger_4_[% id2 %]',null,true);</script>
-		        
-		</fieldset>
+		    	</div>
+			</div>			    
+		 </div>
+	 </div>       
 [% END %]	
+		
+		
 		

@@ -59,7 +59,9 @@
   <script type="text/javascript" src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
   <script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox.js"></script>
   <script type="text/javascript" src="/includes/jquery/fancybox/jquery.mousewheel.js"></script>
-  
+  [% INCLUDE 'localized_messages.inc' %]
+  [% INCLUDE  'WindowHelper.inc'  %]  
+
   <title>
     [% IF titulo_nombre_ui %]
         [% titulo_nombre_ui %]
@@ -96,7 +98,7 @@
     <script type="text/javascript">    
 
       $(document).ready(function() {
-			$('.popover_button').popover({delay: { show: 800, hide: 100 }, placement: 'left',});
+			$('.popover_button').popover({delay: { show: 800, hide: 100 }, placement: 'right',});
 			$(".alert").alert();
           
                     $(function () {
@@ -128,6 +130,7 @@
   	  </div>
 	
 	   [% INCLUDE 'opac-top-header.inc' %]
+	   [% INCLUDE 'opac-side_bar.inc' 	%]	   
 		<div class="container main_content">	
 				  <div id="end_top">
 					    [% IF mensaje %]

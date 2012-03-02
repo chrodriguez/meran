@@ -247,3 +247,11 @@ body {
     position: relative;
 }
 /* FIN LOADERS */
+
+.side_bar{
+	position: fixed;
+	top: 143px;
+	width: 52px;
+	height: 90%;
+	overflow: auto;	
+}

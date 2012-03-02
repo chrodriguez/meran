@@ -7,10 +7,15 @@
 		    });
 		
 		</script>
-		
-		<fieldset>
-		    <legend class="trigger trigger_2_[% id2 %] click">[% "Ejemplares" | i18n %]</legend>
-		    <div id="ejemplaresDelGrupo[% id2 %]" class="ejemplaresDelGrupo[% id2 %]" >
+<div class="accordion" id="ejemplares_del_grupo_[% id2 %]">
+            <div class="accordion-group">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#ejemplares_del_grupo_[% id2 %]" href="#ejemplares_[% id2 %]">
+                  [% "Ejemplares" | i18n %]
+                </a>
+              </div>
+              <div id="ejemplares_[% id2 %]" class="accordion-body collapse">
+                <div class="accordion-inner">
 					<div class="alert alert-info">
 					    <dl>
 							<dt class="inline left rightMargin">[% "Ejemplares Disponibles:"|i18n %]</dt>
@@ -101,7 +106,7 @@
 						                            [% END %]
 						                        [% END %]
 						                    [% END %]
-
+                                            <br />
 					                        [% nivel3_obj.getDisponibilidadObject.getNombre %]
 						                </td>
 						                <td>
@@ -115,7 +120,7 @@
 					                        [% END %]
 						                </td>
 	                                    [% IF circularDesdeDetalleDelRegistro %]
-							                <td >
+							                <td style="width:100px;">
 							                          [% IF disponible %]
 							                              [% IF prestamo.getNro_socio %]
 												                [% PERL %]
@@ -250,8 +255,11 @@
 					
 					[% END %]<!-- END FOREACH NIVEL 3 -->
                   </form>
-    </div> <!--end <div id="ejemplaresDelGrupo -->
-</fieldset>
+             </div>
+         </div>
+       </div>
+</div>      
+
 <script type="text/javascript">makeToggle('ejemplaresDelGrupo[% id2 %]','trigger_2_[% id2 %]',null,false);</script>
 [% ELSE %]
     [% IF nivel2_template == 'ANA' %]

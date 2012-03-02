@@ -236,6 +236,7 @@
 			$('.tooltip_link').tooltip({delay: { show: 1000, hide: 100 },});
 			$('.popover_button').popover({delay: { show: 800, hide: 100 },});
 			$(".alert").alert();
+			$(".collapse").collapse({toggle: false,});
 			$('input[type="text"]').focus(function() {  
 			    $(this).removeClass("textInput").addClass("focusInput");  
 			});
