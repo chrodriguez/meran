@@ -129,7 +129,7 @@ sub agregar{
     $self->setMarcRecord($marc_record);
     $self->setTemplate($params->{'id_tipo_doc'});
 
-    my $mr = MARC::Record->new_from_usmarc($marc_record);
+#     my $mr = MARC::Record->new_from_usmarc($marc_record);
 
     $self->save();
 
@@ -146,17 +146,18 @@ sub agregar{
 
 sub modificar{
     my ($self)              = shift;
-    my ($marc_record, $db)  = @_;
+    my ($params, $marc_record, $db)  = @_;
 
     $self->setMarcRecord($marc_record);
 
-    my $mr = MARC::Record->new_from_usmarc($marc_record);
+#     my $mr = MARC::Record->new_from_usmarc($marc_record);
 
 # TODO ver si tiene analica
 # FIXME falta buscar y modificar, sino hay q borrarla y agregarla nuevamente
     if($self->getTemplate() eq "ANA"){
         my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $db );
-        $cat_registro_n2_analitica->setId2Padre(C4::AR::Catalogacion::getRefFromStringConArrobas($mr->subfield("773","a")));
+#         $cat_registro_n2_analitica->setId2Padre(C4::AR::Catalogacion::getRefFromStringConArrobas($mr->subfield("773","a")));
+        $cat_registro_n2_analitica->setId2Padre($params->{'id2_padre'});
         $cat_registro_n2_analitica->setId2Hijo($self->getId2());
 #         $cat_registro_n2_analitica->save();
     }
@@ -193,13 +194,19 @@ sub eliminar{
 
     #HACER ALGO SI ES NECESARIO
 
+    #elimino los ejemplares del grupo
     my ($nivel3) = C4::AR::Nivel3::getNivel3FromId2($self->getId2(), $self->db);
 
     foreach my $n3 (@$nivel3){
-      $n3->eliminar();
+        $n3->eliminar();
     }
 
-# TODO que se hace con la analítica
+    my $cat_registro_marc_n2_analitica = C4::AR::Nivel2::getAllNivel2FromAnaliticasById($self->getId2(), $self->db);
+
+    #elimino las analíticas de "cat_registro_marc_n2_analitica" si es que existen
+    foreach my $n2_analitica (@$cat_registro_marc_n2_analitica){
+        $n2_analitica->delete();
+    }
 
     $self->delete();
 }

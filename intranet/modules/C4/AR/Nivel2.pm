@@ -482,7 +482,7 @@ sub t_modificarNivel2 {
     
         eval {
             my $marc_record = C4::AR::Catalogacion::meran_nivel2_to_meran($params);
-            $cat_registro_marc_n2->modificar($marc_record->as_usmarc, $db);  
+            $cat_registro_marc_n2->modificar($params, $marc_record->as_usmarc, $db);  
             $db->commit;
             eval {
                 C4::AR::Sphinx::generar_indice($cat_registro_marc_n2->getId1, 'R_PARTIAL', 'UPDATE');
@@ -512,6 +512,31 @@ sub t_modificarNivel2 {
     }
 
     return ($msg_object, $cat_registro_marc_n2);
+}
+
+sub getAllNivel2FromAnaliticasById{
+    my($id2, $db) = @_;
+
+    $db = $db || C4::Modelo::CatRegistroMarcN2Analitica->new()->db();
+
+    my @filtros;
+    push (@filtros, (or   => [
+                                'cat_registro_marc_n2_id'       => { eq => $id2 }, 
+                                'cat_registro_marc_n2_hijo_id'  => { eq => $id2 },
+                                ])
+    );
+
+    my $nivel2_analiticas_array_ref = C4::Modelo::CatRegistroMarcN2Analitica::Manager->get_cat_registro_marc_n2_analitica(
+                                                                        db      => $db,
+                                                                        query   => \@filtros,
+                                                                );
+
+
+    if( scalar(@$nivel2_analiticas_array_ref) > 0){
+        return ($nivel2_analiticas_array_ref);
+    }else{
+        return 0;
+    }
 }
 
 sub getRating{
