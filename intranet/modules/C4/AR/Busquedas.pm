@@ -518,16 +518,14 @@ sub obtenerDisponibilidadTotal{
         }
 	}
 
-    $disponibilidad[$i]->{'tipoPrestamo'}   = "Domicilio:";
-    $disponibilidad[$i]->{'cantTotal'}      = $cant_para_domicilio;
+    $disponibilidad[$i]->{'tipoPrestamo'}   = "Domicilio";
+    $disponibilidad[$i]->{'domicilio'}      = 1;
+    $disponibilidad[$i]->{'cantTotal'}      = $cant_para_domicilio || 0;
 
     $i++;
-    $disponibilidad[$i]->{'tipoPrestamo'}   = "Sala:";
-    $disponibilidad[$i]->{'cantTotal'}      = $cant_para_sala;
-
-    #     $i++;
-    #     $disponibilidad[$i]->{'tipoPrestamo'}   = "Circulaci&oacute;n";
-    #     $disponibilidad[$i]->{'cantTotal'}      = $cant_para_domicilio + $cant_para_sala;
+    $disponibilidad[$i]->{'tipoPrestamo'}   = "Sala";
+    $disponibilidad[$i]->{'domicilio'}      = 0;
+    $disponibilidad[$i]->{'cantTotal'}      = $cant_para_sala || 0;
 
     $disponibilidad[$i]->{'nodisponibles'}  = "No Disponibles: ".$cant_no_disponible;
     $disponibilidad[$i]->{'prestados'}      = "Prestados: ".C4::AR::Prestamos::getCountPrestamosDelRegistro($id1);

@@ -251,7 +251,7 @@ body {
 .side_bar{
 	position: fixed;
 	top: 143px;
-	width: 52px;
+	width: 70px;
 	height: 90%;
 	overflow: auto;	
 }

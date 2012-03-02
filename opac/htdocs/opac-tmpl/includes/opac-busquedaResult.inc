@@ -371,20 +371,18 @@
                         <td>
                             [% IF NIVEL.disponibilidad %]
                                 [% FOREACH NIVEL.disponibilidad %]
-                                    <b>[% tipoPrestamo %]</b> [% cantTotal %]
-                                    <div style="margin-right:4px">
-                                        [% IF reservados != 0 %]
-                                            [% reservados %]
-                                        [% END %] 
-                                        
-                                        [% IF prestados != 0 %]
-                                            [% prestados %]
-                                        [% END %] 
-                                    </div>
-                                    <br />
+                                	[% flag = 0 %]
+                                    [% IF cantTotal %]
+                                        [% IF flag %]
+                                    		[% 'Disponible para ' | i18n %]&nbsp;
+                                			[% flag = 1 %]
+                                    	[% END %]
+                                    	<span class="label [% IF domicilio %] label-success [% END %]">[% tipoPrestamo %]</span>
+                                        <br /><br />
+                                    [% END %]
                                 [% END %]
                             [% ELSE %]
-                                &nbsp;
+                               <span class="label label-important">[% 'No disponible' | i18n %]</span>
                             [% END %]
                         </td>
                         <td class="span2">

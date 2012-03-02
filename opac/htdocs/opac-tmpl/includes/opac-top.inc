@@ -28,6 +28,7 @@
     <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
        
   <link rel="stylesheet" href="[% temas %]/[% user_theme %]/includes/opac.css" />
+  <link rel='stylesheet' media='screen and (max-width: 900px)' href="[% temas %]/[% user_theme %]/includes/opac-FF_fix.css" />  
   <link rel="stylesheet" href="/includes/css/ui.stars.css" />
   <link media="screen" rel="stylesheet" href="/includes/css/fancybox.css" type="text/css">
 

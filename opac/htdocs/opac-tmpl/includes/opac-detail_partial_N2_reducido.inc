@@ -100,7 +100,10 @@
                 <h3>[% 'Reserva de ejemplar' | i18n %]</h3>
               </div>
               <div class="modal-body">
-                <p>[% 'Est&aacute; a punto de reservar un ejemplar de' | i18n %] <h4> [% nivel1_obj.getTitulo %] <span class="label label-info">[% edicion %]</span></p>
+                <p>
+                   [% 'Est&aacute; a punto de reservar un ejemplar de' | i18n %] <h4> [% nivel1_obj.getTitulo %]
+                   [% IF edicion %]<span class="label label-info">[% edicion %]</span>[% END %]
+                </p>
               </div>
               <div class="modal-footer">
                 <a href="#" class="btn btn-primary" onclick="reservar([% id1 %],[% id2 %]);">[% 'Reservar' | i18n %]</a>

@@ -22,7 +22,7 @@
 		                                                                                [% IF cantParaPrestamoActual == 0 %]
 		                                                                                	disabled => 1,
 		                                                                                      popover		=> {title=>'[% "No se puede reservar" | i18n %]',
-		                                                                                      					text => '[% "Dir&iacute;jase a la Biblioteca a regularizar su situaci&oacute;n" | i18n %].' },
+		                                                                                      					text => '[% "No hay disponibilidad para domicilio sobre esta edici&oacute;n" | i18n %].' },
 																						[% ELSE %]
 			                                                                                action => "showReservar();",
 		                                                                                [% END %]
