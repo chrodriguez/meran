@@ -150,18 +150,6 @@ sub modificar{
 
     $self->setMarcRecord($marc_record);
 
-#     my $mr = MARC::Record->new_from_usmarc($marc_record);
-
-# TODO ver si tiene analica
-# FIXME falta buscar y modificar, sino hay q borrarla y agregarla nuevamente
-    if($self->getTemplate() eq "ANA"){
-        my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $db );
-#         $cat_registro_n2_analitica->setId2Padre(C4::AR::Catalogacion::getRefFromStringConArrobas($mr->subfield("773","a")));
-        $cat_registro_n2_analitica->setId2Padre($params->{'id2_padre'});
-        $cat_registro_n2_analitica->setId2Hijo($self->getId2());
-#         $cat_registro_n2_analitica->save();
-    }
-
     $self->save();
 }
 
