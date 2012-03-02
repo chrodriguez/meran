@@ -1078,7 +1078,7 @@ sub updateUserProfile{
 
 sub getEsquemaRegularidades{
 	
-	my $regularidades = C4::Modelo::UsrRegularidad::Manager->get_usr_regularidad(require_objects => ['estado','categoria'], sort_by => ['categoria.description, estado.nombre ASC'],);
+	my $regularidades = C4::Modelo::UsrRegularidad::Manager->get_usr_regularidad(require_objects => ['estado','categoria'], sort_by => ['categoria.description, estado.nombre, estado.fuente ASC'],);
 	
 	return $regularidades;
 	
