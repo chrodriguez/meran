@@ -191,8 +191,8 @@
 		    objAH.texto               = $('#respuesta').val();
 		    objAH.asunto              = $('#asunto').val();
 		    objAH.email               = $('#email').val();
-		    objAH.mensaje_contacto    = $('#mensaje_contacto').val();
-            objAH.sendToServer();
+		    objAH.mensaje_contacto    = $('.modal-body :first-child').html();
+        objAH.sendToServer();
         
 	  }
 		  
