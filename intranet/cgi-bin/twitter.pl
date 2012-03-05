@@ -46,14 +46,9 @@ if($obj){
       if ($action = "PUBLICAR_TWITTER"){
             $post = $obj->{'post'};
       }
-
 } else {  
-    
       $post =$input->param('textarea_twitter');
-
 }
-
-C4::AR::Debug::debug($post);
 
 $mensaje= C4::AR::Social::sendPost($post);
 
