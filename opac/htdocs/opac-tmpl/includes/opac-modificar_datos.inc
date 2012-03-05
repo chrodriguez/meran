@@ -138,15 +138,20 @@
 
         <input type="hidden" name="token" id="token" value="[% token %]" />
         
-<!--                 Cambio de foto -->
+<!-- Cambio de foto. SE MAMA TODO EL ESTILO, ES UNA VERGA !!! 
            [% IF UploadPictureFromOPAC %] 
-                  [% IF mensaje_error_foto %] 
-                    <li>
-                            <font color="red">[% mensaje_error_foto %]</font>
-                    </li>
-                  [% END %]
-
-                   <div id="div_boton_eliminar_foto" style="display: none">
+                <div class="control-group">
+                [% IF foto_name %] 
+                    <div id="fotoUsuario"> 
+                        <a class="fancylink" rel="group" href="/pictures/[% foto_name %]">
+                            <img border="0" src="/pictures/[% foto_name %]"
+                                  style="width: 60%; max-width: 120px;" 
+                                  alt="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                                  title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                            >
+                        </a>
+                    </div>
+                    <div id="div_boton_eliminar_foto" style="display: none">
                       <li>
                             [% PERL %]
                                         print C4::AR::Filtros::to_Button(   text    => "[% 'Eliminar Foto' | i18n %]",
@@ -156,19 +161,19 @@
                             [% END %]
                       </li>
                     </div>
-                    <li style="margin: 0 auto; width: 60%; list-style: none">
-                        <label for="file-uploader" id="label-file-uploader">
-                            <h4>[% 'Seleccione una im&aacute;gen apropiada' | i18n %]</h4>
-                        </label>
-                        <div id="file-uploader">
-                            <noscript>          
-                                <p>[% 'Please enable JavaScript to use file uploader.' | i18n %]</p>
-                                <!-- or put a simple form for upload here -->
-                            </noscript>                          
-                        </div>
-                    </li>
-                </ul>
-            [% END %]
+                [% ELSE %]
+                    <form name="foto" method="post" enctype="multipart/form-data"  action="[% url_prefix %]/upload.pl" >
+                        <input type="file" name="filepath" id="filepath">
+                        <input type="hidden" name="nro_socio" value='[% socio_data.getNro_socio %]'>
+                            <a  onMouseOut="swap('up','[% themelang %]/images/upload.png')" 
+                                onMouseOver="swap('up','[% themelang %]/images/uploadbis.png')" onClick="document.foto.submit();">
+                                <input name="up" id="up" type="image" value="[% 'Subir Foto' | i18n %]"  src="[% themelang %]/images/upload.png" border="0">
+                            </a>
+                    </form>
+
+                [% END %]
+                </div>
+            [% END %]-->
            <!-- CAMPOS PARA CAMBIO DE PASSWORD -->
            <input type="hidden" name="new_password1" id="new_password1" />
            <input type="hidden" name="new_password2" id="new_password2" />

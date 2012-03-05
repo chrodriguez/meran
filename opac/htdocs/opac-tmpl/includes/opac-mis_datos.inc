@@ -1,3 +1,14 @@
+[% IF !foto_name %] 
+    <style type="text/css">
+        #footerDatosUsuario{   margin-top:125px;     }
+    </style>
+[% END %]
+
+<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme_intra %]/includes/fileuploader.css">
+<script>
+    var user_picture_name = "[% foto_name %]";
+</script>
+<script type="text/javascript" src="/includes/jquery/fileuploader.js"></script>
 <script type="text/javascript" language="javascript">
  
     $(document).ready(function(){
@@ -6,8 +17,6 @@
 
         [% IF !foto_name %] 
             $('#div_uploader').show();
-        [% ELSE %]
-            $('#div_boton_eliminar_foto').show();
         [% END %]
 
         $('.fancylink').fancybox();
@@ -60,6 +69,22 @@
         <dt class="inline left rightMargin">[% 'E-mail' |  i18n %] :</dt>
             <dd>[% socio_data.usr_email %]</dd>
     </dl>
+      
+    <div id="footerDatosUsuario">
+        <ul>
+            <li>
+                <label for="file-uploader" id="label-file-uploader">
+                    <h6>[% 'Seleccione una im&aacute;gen' | i18n %]</h6>
+                </label>
+                <div id="file-uploader">
+                    <noscript>          
+                        <p>[% 'Please enable JavaScript to use file uploader.' | i18n %]</p>
+                        <!-- or put a simple form for upload here -->
+                    </noscript>                          
+                </div>
+            </li>
+        </ul>
+    </div>
     
     <div id="fotoUsuario">
         [% IF foto_name %]  
