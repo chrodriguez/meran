@@ -36,6 +36,10 @@ body {
     width: 90%;
 }
 
+.span330 {
+    width: 330px;
+}
+
 .bigInput{
 	height: 32px;
 	font-size: 23px;

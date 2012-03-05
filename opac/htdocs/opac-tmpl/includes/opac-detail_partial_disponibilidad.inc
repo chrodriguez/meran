@@ -19,7 +19,7 @@
 	        	</small>
 	        [% ELSE %]
 				[% IF cantReservas %]
-		        	<small>[% "Tener en cuenta que existen " | i18n %] [% cantReservas%] 
+		        	<small>[% "Tener en cuenta que existen " | i18n %] [% cantReservas%] [% "reservas " | i18n %]
 		        	</small>
 		        [% ELSE %]
 					[% IF cantPrestados %]
