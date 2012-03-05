@@ -276,15 +276,13 @@
                                                   url       => "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
                                                   params    => ["id1=[% nivel1_padre %]"],
                                                   title     => "[% 'Detalle del registro padre' | i18n %]",
-                                                  blank     => 1,
                                                   class     => 'btn btn-warning'
                                             );
             [% END %]
-
     [% ELSE %]
 		<div class="alert fade in">
            <strong>[% 'Este grupo no dispone de ejemplares' | i18n %]</strong>
 		</div>    
     [% END %]
-
 [% END %]
+<br />
