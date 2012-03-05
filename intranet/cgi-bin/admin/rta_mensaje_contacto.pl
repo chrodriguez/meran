@@ -13,7 +13,7 @@ use CGI;
 my $input               = new CGI;
 my $obj                 = $input->param('obj')||"";
 $obj                    = C4::AR::Utilidades::from_json_ISO($obj);
-my $asunto              = $obj->{'asunto'} || "Respuesta a mail de contacto";
+my $asunto              = $obj->{'asunto'} || "Respuesta a mail de contacto (sin asunto)";
 my $email               = $obj->{'email'};
 my $texto               = $obj->{'texto'};
 my $mensaje_contacto    = $obj->{'mensaje_contacto'};
