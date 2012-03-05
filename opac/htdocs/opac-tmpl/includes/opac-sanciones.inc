@@ -10,40 +10,41 @@
 	</div>
 	<div class="modal-body">
                 [% FOREACH sancion IN sanciones %]
-                      <li>
-                            <h2>[% sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]</h2>
-                            <b>[% IF sancion.tipo_sancion %]
-                                [% FOREACH ts IN sancion.ref_tipo_prestamo_sancion %] 
-                                    [% ts.ref_tipo_prestamo.descripcion %]<br>
-                                [% END %]
-                                [% ELSE %]
-                                    [% "Reserva no retirada" | i18n %]
-                                [% END %]
-                            </b>
-                            </br>
-                            <dl>
-                            
+                      <dl>
+                            <dt> 
+
+	                            [% IF sancion.tipo_sancion %]
+	                                [% FOREACH ts IN sancion.ref_tipo_prestamo_sancion %] 
+	                                    [% ts.ref_tipo_prestamo.descripcion %]
+	                                    [% BREAK %]
+	                                [% END %]
+	                                [% ELSE %]
+	                                    [% "Reserva no retirada" | i18n %]
+	                             [% END %]
+                            </dt>
+							                            
+								<div class="well">
+		                            <dt class="inline left rightMargin">[% "Autor: " | i18n %]</dt>
+		                            <dd>[% sancion.nivel3.nivel1.getAutor %]</dd>
+		
+		                            <dt class="inline left rightMargin">[% "Titulo: " | i18n %]</dt>
+		                            <dd>[% sancion.nivel3.nivel1.getTitulo %]</dd>
+	
+									[% IF sancion.nivel3.nivel2.getEdicion %] 
+			                            <dt class="inline left rightMargin">[% "Edicion: " | i18n %]</dt>
+			                            <dd>		
+	                                           [% sancion.nivel3.nivel2.getEdicion %]
+			                            </dd>
+                                    [% END %]
+	                            </div>
+
 	                            <dt class="inline left rightMargin">[% "Desde el: " | i18n %]</dt>
-	                            <dd>[% sancion.getFecha_comienzo_formateada %]<b>[% " hasta el: " | i18n %]</b>[% sancion.getFecha_final_formateada %]</dd>
-	
-	                            <dt class="inline left rightMargin">[% "Autor: " | i18n %]</dt>
-	                            <dd>[% sancion.nivel3.nivel1.getAutor %]</dd>
-	
-	                            <dt class="inline left rightMargin">[% "Titulo: " | i18n %]</dt>
-	                            <dd>[% sancion.nivel3.nivel1.getTitulo %]</dd>
-	
-	                            <dt class="inline left rightMargin">[% "Edicion: " | i18n %]</dt>
-	                            <dd>		
-	                            		[% IF sancion.nivel3.nivel2.getEdicion %] 
-	                                                             [% sancion.nivel3.nivel2.getEdicion %]
-	                                                           [% ELSE %]
-	                                                             --
-	                                                           [% END %]
-	                            </dd>
+	                            <dd>[% sancion.getFecha_comienzo_formateada %]<b>[% " hasta el: " | i18n %]</b>[% sancion.getFecha_final_formateada %] ([% sancion.getDias_sancion %] [% "d&iacute;as" | i18n %]) </dd>
+								
                             </dl>
-                            <hr  class="clear-contentunit">
-                        </li>      
-                    
+                 [% IF !loop.last %]
+                 	<hr />
+                 [% END %]
                 [% END %]
 	</div>
 		<a href="#" class="btn btn-primary">[% "Ver sanciones" | i18n %]</a>

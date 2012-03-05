@@ -823,13 +823,20 @@ sub detalleCompletoOPAC{
             $hash_nivel2->{'cat_ref_tipo_nivel3_name'}  = C4::AR::Referencias::translateTipoNivel3($hash_nivel2->{'cat_ref_tipo_nivel3'});
             $hash_nivel2->{'rating'}                    = C4::AR::Nivel2::getRating($hash_nivel2->{'id2'},$nivel1->db);
             $hash_nivel2->{'cant_reviews'}              = C4::AR::Nivel2::getCantReviews($hash_nivel2->{'id2'}, $nivel1->db);
-            $hash_nivel2->{'nivel1_obj'}                    = $nivel1;
+            $hash_nivel2->{'nivel1_obj'}                = $nivel1;
+            $hash_nivel2->{'nivel2_obj'}                = $nivel2_array_ref;
 
             my ($cant_docs,$e_docs)                     = getListaDeDocs($hash_nivel2->{'id2'});  
             
             $hash_nivel2->{'lista_docs'}                = $e_docs;
             $hash_nivel2->{'cant_docs'}                 = $cant_docs;
 
+            #cosas si es revista
+            $hash_nivel2->{'anio_revista'}              = $nivel2_array_ref->[$i]->getAnioRevista ? $nivel2_array_ref->[$i]->getAnioRevista : '#';
+            $hash_nivel2->{'volumen_revista'}           = $nivel2_array_ref->[$i]->getVolumenRevista ? $nivel2_array_ref->[$i]->getVolumenRevista : '#';
+            $hash_nivel2->{'numero_revista'}            = $nivel2_array_ref->[$i]->getNumeroRevista ? $nivel2_array_ref->[$i]->getNumeroRevista : '#';
+            
+            
             push(@nivel2, $hash_nivel2);
         };
     }
@@ -839,7 +846,10 @@ sub detalleCompletoOPAC{
         my ($cant_revistas ,$estadoDeColeccion) = C4::AR::Busquedas::obtenerEstadoDeColeccion($id1, $nivel1->getTemplate(), "INTRA");
         if($cant_revistas > 0){
             $t_params->{'estadoDeColeccion'}  = $estadoDeColeccion;
+        }else{
+        	$t_params->{'estadoDeColeccion'}  = 0;
         }
+        
     }
     
     $t_params->{'nivel1'}   = $nivel1->toMARC_Opac,

@@ -20,11 +20,12 @@
 		 }
 	   }
 	 }
-</script>
 
-[% IF !ajax %]
-    <script src="/includes/jquery/jquery.jqpageflow.js" type="text/javascript"></script>
-[% END %]
+    $(document).ready(function() {
+    	$('.fancylink').fancybox();
+    	$('.nano').nanoScroller();
+    });
+</script>
 
 [% IF estadoDeColeccion %]
     <div class="detalle_completo_niveles">

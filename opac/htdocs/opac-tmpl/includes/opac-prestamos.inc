@@ -32,7 +32,6 @@
 	                          [% END %]
                           </dd>
                     </div>
-                    <hr  class="clear-contentunit">
                 [% END %]
 	</div>
                 [% PERL %]

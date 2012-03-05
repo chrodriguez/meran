@@ -52,6 +52,7 @@
   <script src="/opac-tmpl/includes/circulacionOPAC.js" type="text/javascript"></script>
   <script src="/opac-tmpl/includes/favoritos.js" type="text/javascript"></script>
   <script type="text/javascript" src="/includes/jquery/jquery.expander.js"></script>
+  <script type="text/javascript" src="/includes/jquery/jquery.nanoscroller.js"></script>
   <script src="/includes/util.js" type="text/javascript"></script>
   <script src="/includes/md5.js" type="text/javascript"></script>
   <script src="/includes/sha1.js" type="text/javascript"></script>
@@ -60,6 +61,8 @@
   <script type="text/javascript" src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
   <script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox.js"></script>
   <script type="text/javascript" src="/includes/jquery/fancybox/jquery.mousewheel.js"></script>
+
+
   [% INCLUDE 'localized_messages.inc' %]
   [% INCLUDE  'WindowHelper.inc'  %]  
 
@@ -122,7 +125,7 @@
 	<!-- Global IE fix to avoid layout crash when single word size wider than column width -->
 	<!--[if IE]><style type="text/css"> body {word-wrap: break-word;}</style><![endif]-->
 	    
-	<body lang="es-Es">
+	<body lang="es-Es" data-spy="scroll" data-target=".side_bar">
 	<!-- POAR AHORA ES LA NAV -->
 
 	  <div id="ajax-indicator" class="modal hide fade loading">

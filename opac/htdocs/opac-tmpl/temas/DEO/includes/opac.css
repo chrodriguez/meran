@@ -1,5 +1,6 @@
 @import url("/includes/bootstrap/css/bootstrap.css");
 @import url("/includes/bootstrap/css/bootstrap-responsive.css");
+@import url("/includes/css/nanoscroller.css");
 
 .title{
     background-color: #FAFAFA;
@@ -48,6 +49,7 @@ body {
 
 .main_content {
   padding-top: 60px;
+  width: 90% !important;
 }
 
 .medium_font{
@@ -251,7 +253,7 @@ body {
 .side_bar{
 	position: fixed;
 	top: 143px;
-	width: 70px;
+	width: 80px !important;
 	height: 90%;
 	overflow: auto;	
 }
@@ -260,3 +262,13 @@ body {
     float:left;
     width:83%;
 }
+
+.mid-center{
+	margin: 0 auto;
+	width: 200px;
+}
+
+
+.nano .content      { padding: 1px; }
+.nano .pane         { background: #444; }
+.nano .pane .slider { background: #111; }
