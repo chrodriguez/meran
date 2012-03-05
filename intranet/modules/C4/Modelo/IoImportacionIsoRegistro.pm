@@ -216,7 +216,7 @@ sub getCampoSubcampoJoined{
             if ($dato){
 				if($detalle->getSeparador){
                     $join.=$detalle->getSeparador.$dato;
-                    C4::AR::Debug::debug("SEPARADOR  ###".$detalle->getSeparador."###" );
+                    #C4::AR::Debug::debug("SEPARADOR  ###".$detalle->getSeparador."###" );
                    }
                    else{
 					   $join.=$dato;
@@ -474,6 +474,162 @@ sub aplicarImportacion {
 												 |_
         
 =cut
+     #Proceso el nivel 1 agregando las referencias que no existen!!
+          
      
+     # Detalle params_n1: 
+     #				##Nivel1##					##Nivel2##					##Nivel3##
+	 #		$params->{'id_tipo_doc'} 	 | $params->{'tipo_ejemplar'}	| $params->{'tipo_ejemplar'}
+	 #		$params->{'infoArrayNivel1'} | $params->{'infoArrayNivel2'} | $params->{'infoArrayNivel3'}	
+	 #				##infoArrayNivel##
+	 #		$infoArrayNivel->[$i]->{'indicador_primario'};
+	 #		$infoArrayNivel->[$i]->{'indicador_secundario'};
+	 #   	$infoArrayNivel->[$i]->{'campo'};
+     #   	$infoArrayNivel->[$i]->{'subcampos_hash'};
+     #   	$infoArrayNivel->[$i]->{'subcampos_array'};
+	 #   	$infoArrayNivel->[$i]->{'cant_subcampos'};
+   
+   my $nivel1 = $detalle->{'nivel1'};
+	 my $infoArrayNivel =  $self->prepararNivelParaImportar($nivel1);
+   
+   my $params_n1;
+	 $params_n1->{'id_tipo_doc'} = $detalle->{'nivel1_template'};
+	 $params_n1->{'infoArrayNivel1'} = $infoArrayNivel;
+   my ($msg_object, $id1) = C4::AR::Nivel1::t_guardarNivel1($params_n1);
+   
+   C4::AR::Debug::debug("Nivel 1 creado ".$id1);
+   
+   
+   if (!$msg_object->{'error'}){
+    my $niveles2 = $detalle->{'nivel2'};
+    foreach my $nivel2 (@$niveles2){
+      my $infoArrayNivel =  $self->prepararNivelParaImportar($nivel2->{'nivel2_array'});   
+      my $params_n2;
+      $params_n2->{'id_tipo_doc'} = $nivel2->{'nivel2_template'};
+      $params_n2->{'tipo_ejemplar'} = $nivel2->{'nivel2_template'};
+      $params_n2->{'infoArrayNivel2'} = $infoArrayNivel;
+      $params_n2->{'id1'}=$id1;
+      my ($msg_object2,$id1,$id2) = C4::AR::Nivel2::t_guardarNivel2($params_n2);
+      # Hay que agregar el indice aca
+      #  $nivel2->{'tiene_indice'}
+        if (!$msg_object2->{'error'}){  
+          my $niveles3 = $nivel2->{'nivel3'};
+          foreach my $nivel3 (@$niveles3){
+            my $params_n3;
+            $params_n3->{'id_tipo_doc'} = $nivel3->{'tipo_documento'};
+            $params_n3->{'tipo_ejemplar'} = $nivel3->{'tipo_documento'};
+            $params_n3->{'id1'}=$id1;
+            $params_n3->{'id2'}=$id2;
+            $params_n3->{'ui_origen'}=$nivel3->{'ui_origen'};
+            $params_n3->{'ui_duenio'}=$nivel3->{'ui_duenio'};            
+            $params_n3->{'cantEjemplares'} = 1;
+            
+            #Hay que autogenerar el barcode o no???
+            if (!$nivel3->{'generar_barcode'}){
+              $params_n3->{'esPorBarcode'} = 'true';
+              my @barcodes_array=();
+              $barcodes_array[0]=$nivel3->{'barcode'};
+              $params_n3->{'BARCODES_ARRAY'} = \@barcodes_array;
+            }
+            
+            my @infoArrayNivel=();
+            
+            my %hash_temp = {};
+            $hash_temp{'indicador_primario'}  = '#';
+            $hash_temp{'indicador_secundario'}  = '#';
+            $hash_temp{'campo'}   = '995';
+            $hash_temp{'subcampos_array'}	=();
+            $hash_temp{'cant_subcampos'}   = 0;
+        
+        
+            my %hash_sub_temp = {};
+            
+            #UI origen
+            my $hash;
+            $hash->{'d'}= $params_n3->{'ui_origen'};
+            $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
+            $hash_temp{'cant_subcampos'}++;
+            #UI duenio
+            my $hash;
+            $hash->{'c'}= $params_n3->{'ui_duenio'};
+            $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
+            $hash_temp{'cant_subcampos'}++;
+            #Estado
+            my $hash;
+            $hash->{'e'}= $nivel3->{'estado'}->getCodigo();
+            $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
+            $hash_temp{'cant_subcampos'}++;
+            #Disponibilidad
+            my $hash;
+            $hash->{'o'}= $nivel3->{'disponibilidad'}->getCodigo();
+            $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
+            $hash_temp{'cant_subcampos'}++;
+            #Signatura
+            my $hash;
+            $hash->{'t'}= $nivel3->{'signatura_topografica'};
+            $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
+            $hash_temp{'cant_subcampos'}++;
+            
+            $hash_temp{'subcampos_hash'} =\%hash_sub_temp;
+          
+            if ($hash_temp{'cant_subcampos'}){
+              push (@infoArrayNivel,\%hash_temp)
+            }
+            
+            $params_n3->{'infoArrayNivel3'} = \@infoArrayNivel;
+            my ($msg_object3) = C4::AR::Nivel3::t_guardarNivel3($params_n3);
+            
+          }
+         } 
+      }
+    }
+    
+	return $msg_object;
+}
 
+
+sub prepararNivelParaImportar{
+     my ($self)   = shift;
+     my ($MARC_Array) = @_;
+
+
+   my @infoArrayNivel=();
+   
+	 foreach my $nivel (@$MARC_Array){
+		 
+			my %hash_temp = {};
+			 $hash_temp{'indicador_primario'}  = '#';
+			 $hash_temp{'indicador_secundario'}  = '#';
+			 $hash_temp{'campo'}   = $nivel->{'campo'};
+			 $hash_temp{'subcampos_array'}	=();
+			 $hash_temp{'cant_subcampos'}   = 0;
+
+			my $key = $nivel->{'subcampo'};
+			my $value = $nivel->{'dato'}; 
+			 #es una referencia??		 
+			 if ($nivel->{'referencia'}) {
+				#Existe la referencia en la base?
+				if($nivel->{'referencia_encontrada'}){
+						$value = $nivel->{'referencia_encontrada'};
+					}
+				else{ #no existe la referencia, hay que crearla 
+						$value = C4::AR::ImportacionIsoMARC::procesarReferencia($nivel);
+					}
+				}
+		if ($value ){
+		C4::AR::Debug::debug("CAMPO: ". $hash_temp{'campo'}." SUBCAMPO: ".$key." => ".$value);
+		my %hash_sub_temp = {};
+			my $hash;
+			$hash->{$key}= $value;
+			$hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
+			$hash_temp{'subcampos_hash'} =\%hash_sub_temp;
+			$hash_temp{'cant_subcampos'}++;
+		}
+		
+		if ($hash_temp{'cant_subcampos'}){
+			push (@infoArrayNivel,\%hash_temp)
+			}
+	}
+      
+    return  \@infoArrayNivel;
 }
