@@ -62,7 +62,7 @@
 										[% END %]
 									</ul>
 									[% IF issn %]
-										<div class="rating">
+										<div class="right">
 											<div class="google-books">
 												<a id="ISSN:[% issn %]"  style="display:none" target="_blank">
 													<img src="/includes/css/gbs_preview_button1.gif" border="0" style="margin: 0"/>

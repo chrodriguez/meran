@@ -36,6 +36,10 @@ body {
     width: 90%;
 }
 
+.span330 {
+    width: 330px;
+}
+
 .bigInput{
 	height: 32px;
 	font-size: 23px;
@@ -62,6 +66,10 @@ body {
 
 .left{
     float: left;
+}
+
+.right{
+    float: right;
 }
 
 .rightMargin{
@@ -266,6 +274,10 @@ body {
 .mid-center{
 	margin: 0 auto;
 	width: 200px;
+}
+
+.book_cover{
+	margin-left:22px;
 }
 
 .nano .content      { padding: 1px; }

@@ -11,20 +11,24 @@
 							    <h1>[% nivel1_obj.getTitulo %] <small> [% edicion %]</small></h1>
 							</div>                          
 							<div class="well">
-	                                <div class="cover_detalle_container">
-	                                        [% IF portada_registro %]
-	                                            <a class="fancylink" href="/uploads/covers/[% portada_registro_big %]">
-	                                                <img src="/uploads/covers/[% portada_registro_medium %]" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" />
-	                                            </a>
-	                                        [% ELSE %]
-	                                              <img src="/uploads/covers/[% cat_ref_tipo_nivel3 %].png" alt="[% 'Sin Portada' | i18n %]" title="[% 'Sin Portada' | i18n %]" />
-	                                        [% END %]
-	                                        <br />
-	                                        <div style="font-weight: bold; font-size: 10px; clear:both;" >[% cat_ref_tipo_nivel3_name %] </div>
-	                               </div>       
-	                       
+									  	 [% IF isbn %]
+											<div class="right">
+												<a id="ISBN:[% isbn %]"  style="display:none" target="_blank">
+													<img src="/includes/css/gbs_preview_button1.gif" border="0" style="margin: 0"/>
+												</a>
+											</div>
+											<script src="http://books.google.com/books?jscmd=viewapi&bibkeys=ISBN:[% isbn %]&callback=ProcessGBSBookInfo"></script>
+										 [% END %]
 	
 	                               <div class="detalle_total">                            
+			                                <div class="">
+		                                        [% IF portada_registro %]
+		                                            <a class="fancylink" href="/uploads/covers/[% portada_registro_big %]">
+		                                                <img src="/uploads/covers/[% portada_registro_medium %]" class="book_cover" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" />
+		                                            </a>
+		                                        [% END %]
+			                                </div>       
+	                                        <input class="btn btn-info" disabled value="[% cat_ref_tipo_nivel3_name %]" />
 	                                    [% INCLUDE 'opac-detail_partial_N1.inc' %]
 	                                      <dl class="listado_sin_margen">
 	                                          [% FOREACH nivel2_array %]
@@ -37,7 +41,6 @@
 	                                      </dl>
 	                  
 	
-										<div class="">  
 											[% IF tiene_indice %]
 												[% PERL %]
 														print C4::AR::Filtros::action_button(  
@@ -66,23 +69,15 @@
 											[% IF esta_en_estante_virtual %]
 												  <a href="[% url_prefix %]/opac-busquedasDB.pl?tipoAccion=BUSQUEDA_AVANZADA&estantes_grupo=[% id2 %]" class="contenedor_boton">
 													  [% PERL %]
-														 print  C4::AR::Filtros::to_Icon(  
-																							   boton   => "icon_estvirtuales",
-																							   title   => "[% 'Ver estantes virtuales en los que se encuentra' | i18n %]",
+														 print  C4::AR::Filtros::action_button(  
+																							   button   => "btn btn-inverse",
+																							   title   => "[% 'Ver estantes' | i18n %]",
 																		 );
 													  [% END %]
 												  </a>
+												  <br />
 										   [% END %]
 										   
-										  	 [% IF isbn %]
-												<div class="google-books">
-													<a id="ISBN:[% isbn %]"  style="display:none" target="_blank">
-												<img src="/includes/css/gbs_preview_button1.gif" border="0" style="margin: 0"/>
-													</a>
-												</div>
-												<script src="http://books.google.com/books?jscmd=viewapi&bibkeys=ISBN:[% isbn %]&callback=ProcessGBSBookInfo"></script>
-											 [% END %]
-										</div>
 	                                  </div>
 	                            </div>
 	                            

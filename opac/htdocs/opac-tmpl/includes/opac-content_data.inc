@@ -38,7 +38,7 @@
 
       <!-- Example row of columns -->
       <div class="row">
-	        <div class="span4" id="[% IF novedad %]last_new[% END %]">
+	        <div class="span330" id="[% IF novedad %]last_new[% END %]">
 		        [% IF novedad %]
 			          <h2>[% novedad.getTitulo %]</h2>
 			           <p>[% novedad.getResumen %]</p>
