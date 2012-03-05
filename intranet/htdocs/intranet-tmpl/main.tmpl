@@ -87,6 +87,9 @@ var jobID = 0;
 [% IF twitter_enabled %]
 
 <div id="twitter_container" class="clear">
+    <div id="twitter_result" class="alert alert-success" style="display:none;">
+        <a class="close" data-dismiss="alert">×</a>
+    </div>
     [% IF twitter_username_to_search %]
 	   <div id="tweets" class="tweets">
 	       <div class="loading">[% 'Cargando tweets...' | i18n %]</div>
@@ -97,6 +100,7 @@ var jobID = 0;
     <a class="fancy_link" href="[% url_prefix %]/admin/publicar_twitter.pl?token=[% token %]" > 
       <img id="button_twitter" src="[% temas %]/[% tema %]/imagenes/botones/button_twitter_normal.png" alt="Twitter" />
     </a>
+    
 </div>
 [% END %]
 
