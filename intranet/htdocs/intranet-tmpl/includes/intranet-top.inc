@@ -269,7 +269,7 @@
 	<!--  </div> -->
 	  
 	  <div id="marco_principal">
-	     <div id="container" class="container span90">
+	     <div id="container" class="container span96">
 	  
 	  
 		  <div id="marco_contenido_datos" class="contenido">

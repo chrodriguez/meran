@@ -64,6 +64,10 @@ body {
     float: left;
 }
 
+.right{
+    float: right;
+}
+
 .rightMargin{
     margin-right: 5px;
 }
@@ -266,6 +270,10 @@ body {
 .mid-center{
 	margin: 0 auto;
 	width: 200px;
+}
+
+.book_cover{
+	margin-left:22px;
 }
 
 .nano .content      { padding: 1px; }

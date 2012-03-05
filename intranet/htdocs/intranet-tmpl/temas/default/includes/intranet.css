@@ -97,6 +97,10 @@ body {
     width: 90%;
 }
 
+.span96 {
+    width: 96%;
+}
+
 .span100 {
     width: 100%;
 }
@@ -582,3 +586,6 @@ body {
     width: 800px;
 }
 
+.width_200{
+	width: 200px;
+}

@@ -7,7 +7,7 @@
 		    });
 		
 		</script>
-<div class="accordion" id="ejemplares_del_grupo_[% id2 %]">
+    <div class="accordion" id="ejemplares_del_grupo_[% id2 %]">
             <div class="accordion-group">
               <div class="accordion-heading">
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#ejemplares_del_grupo_[% id2 %]" href="#ejemplares_[% id2 %]">
@@ -183,7 +183,7 @@
 						                       ---
 						                    [% END %]
 						                </td>
-						                <td>
+						                <td style="min-width:100px;">
 			                              [% PERL %]
 			                                  print C4::AR::Filtros::action_set_button(    
                                                     title           => "[% 'Ejemplar' | i18n %]",
@@ -211,37 +211,8 @@
 					[%   IF loop.last %]
 						</tbody>
                       </tbody>
-                </table>
+                    </table>
 					    [%   IF loop.count > 1 %]
-					        <div class="form-actions">
-	                                  <td>
-						               [% "Para los elementos que est&aacute;n marcados:" | i18n %]
-	                                     [% PERL %]
-	                                         print C4::AR::Filtros::action_set_button(    
-	                                               title           => "[% 'Ejemplares' | i18n %]",
-	                                               button          => 'btn btn-primary',
-	
-	                                               actions         => [
-	                                                                   {title => "Modificar", 
-	                                                                    action=>"generarForm([% id1 %],[% id2 %])",
-	                                                                    icon=>"icon-edit"
-	                                                                   },
-	                                                                   {title => "Etiquetas", 
-	                                                                    action=>"generarVariasEtiquetas([% id2 %])", 
-	                                                                    icon=>"icon-barcode"
-	                                                                   },
-	                                                                   {title => "Borrar", 
-	                                                                    action=>"borrarEjemplaresN3([% id2 %])", 
-	                                                                    icon=>"icon-trash"
-	                                                                   },
-	                                                                   ],
-	                                                popover       => {text=>'Esta acci&oacute;n se aplica para todos los ejemplares seleccionados', 
-	                                                                  title=> 'Atenci&oacute;n'}
-	                     
-	                                                 ) ;
-	                                     [% END %]
-	                                  </td>
-	                            </div>
 					        
 					        <form id="edicion_grupal[% id2 %]" name="edicion_grupal" action="datosDocumento.pl" method="post">
 					          
@@ -252,13 +223,49 @@
 					
 					[% END %]<!-- END IF loop.last -->
 					
-					
+					<script>
+                    $('#ejemplares_del_grupo_[% id2 %]').on('hidden', function () {
+                        $('#actions_ejemplares_[% id2 %]').hide();
+                      })                  
+                      $('#ejemplares_del_grupo_[% id2 %]').on('shown', function () {
+                            $('#actions_ejemplares_[% id2 %]').show();
+                          })                  
+					</script>
 					[% END %]<!-- END FOREACH NIVEL 3 -->
                   </form>
              </div>
          </div>
-       </div>
-</div>      
+     <div class="form-actions" id="actions_ejemplares_[% id2 %]">
+               <td>
+                [% "Para los elementos que est&aacute;n marcados:" | i18n %]
+                  [% PERL %]
+                      print C4::AR::Filtros::action_set_button(    
+                            title           => "[% 'Ejemplares' | i18n %]",
+                            button          => 'btn btn-primary',
+
+                            actions         => [
+                                                {title => "Modificar", 
+                                                 action=>"generarForm([% id1 %],[% id2 %])",
+                                                 icon=>"icon-edit"
+                                                },
+                                                {title => "Etiquetas", 
+                                                 action=>"generarVariasEtiquetas([% id2 %])", 
+                                                 icon=>"icon-barcode"
+                                                },
+                                                {title => "Borrar", 
+                                                 action=>"borrarEjemplaresN3([% id2 %])", 
+                                                 icon=>"icon-trash"
+                                                },
+                                                ],
+                             popover       => {text=>'Esta acci&oacute;n se aplica para todos los ejemplares seleccionados', 
+                                               title=> 'Atenci&oacute;n'}
+  
+                              ) ;
+                  [% END %]
+               </td>
+	         </div>       
+	    </div>
+    </div>      
 
 <script type="text/javascript">makeToggle('ejemplaresDelGrupo[% id2 %]','trigger_2_[% id2 %]',null,false);</script>
 [% ELSE %]
