@@ -41,6 +41,6 @@ $t_params->{'per_page'}             = C4::Context->config("cant_grupos_per_query
 $t_params->{'ajax'}                 = $ajax;
 $t_params->{'pref_e_documents'}     = C4::AR::Preferencias::getValorPreferencia("e_documents");
 $t_params->{'mostrar_ui_opac'}      = C4::AR::Preferencias::getValorPreferencia("mostrar_ui_opac");
-$t_params->{'nav_elements'}         = C4::AR::Nivel2::buildNavForGroups($t_params->{'nivel2'});
+$t_params->{'nav_elements'}         = C4::AR::Nivel2::buildNavForGroups($t_params);
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

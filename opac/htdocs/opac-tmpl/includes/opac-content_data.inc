@@ -17,11 +17,6 @@
 	            </div>
 	        [% END %]
 	
-	        [% IF reservas_espera_count > 0 %]
-	             <div class="reservas_espera_opac_main">
-	                  [% INCLUDE 'opac-reservas_espera.inc' %]
-	            </div>
-	        [% END %]	
 		</p>
 
 		<p>
