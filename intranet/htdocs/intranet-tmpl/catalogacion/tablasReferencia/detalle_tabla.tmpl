@@ -14,17 +14,19 @@
 </script>
 
 <div class="datos_tabla_div" id="datos_tabla_div">
+        
 
-        [% PERL %]
-            print C4::AR::Filtros::tableHeader(   
-                      id              => "tablaResult",
-                      columns         => ['[% "Campo"|i18n %]','[% "Visible"|i18n %]',
-                                            '[% "Nombre"|i18n %]', '[% "Cambiar Visivilidad"|i18n %]',
-                                         ]
+      
+              [% PERL %]
+                  print C4::AR::Filtros::tableHeader(   
+                            id              => "tablaResult",
+                            columns         => ['[% "Campo"|i18n %]','[% "Visible"|i18n %]',
+                                                  '[% "Nombre"|i18n %]', '[% "Cambiar Visibilidad"|i18n %]',
+                                              ]
 
-                                                    
-                        ) ;
-        [% END %]
+                                                          
+                              ) ;
+              [% END %]
 
         <tbody>
             [% FOREACH dato IN data %]
@@ -62,4 +64,5 @@
             [% END %]
         </tbody>
     </table>
+  
 </div>

@@ -1,3 +1,4 @@
+
 <form id="contactform" name="contactform" method="POST" action="[% url_prefix %]/opac-contact.pl" class="form-horizontal">
     <section class="center-section-form">
     <fieldset><legend>[% 'Informaci&oacute;n de contacto' | i18n %]</legend>

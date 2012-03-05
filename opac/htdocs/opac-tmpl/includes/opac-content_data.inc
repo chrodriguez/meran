@@ -1,3 +1,4 @@
+
 [% USE HTML %]
     <div class="hero-unit" id="search-bar">
      	<h1 class="medium_font">[% 'Bienvenido ' | i18n %]<small>[% ui.getNombre %]</small></h1>
