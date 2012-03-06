@@ -60,6 +60,21 @@ function updateAgregarAFavoritos(){
 
 function borrarDeFavoritos(){
 
+// 	var result="";
+// //hacer con jquery
+// 	var checks=document.getElementsByTagName("input");
+// 	if (checks.length>0){
+// 		for(i=0;i<checks.length;i++)
+// 		{
+// 			if((checks[i].type == "checkbox")&&(checks[i].checked)){ 		
+// 				result= result + checks[i].name + '#';
+// 			}
+// 		}       
+// 	}
+// // 	params= result;
+
+
+
 	var chck=$("input[@name=checkbox]:checked");
 	var array= new Array;
 	var long=chck.length;
@@ -86,13 +101,10 @@ function borrarDeFavoritos(){
 
 function obtenerFavoritos(){
     objAH=new AjaxHelper(updateObtenerFavoritos);
-    
-    objAH.showOverlay  = true;
+    objAH.showOverlay       = true;
     objAH.debug= true;
     objAH.url=URL_PREFIX+'/opac-favoritosDB.pl';
-    objAH.debug= true;
     objAH.action='get_favoritos';
-    objAH.showStatusIn='ajax-indicator';
     objAH.sendToServer();
 }
 
@@ -104,18 +116,15 @@ function updateObtenerFavoritos(responseText){
 }
 
 function eliminarFavorito(id_favorito){
-	bootbox.confirm(FAVORITE_CONFIRM_DELETE, function (ok){ 
-		if (ok){
+	
             objAH=new AjaxHelper(updateEliminarFavorito);
-            objAH.showOverlay       = true;
+            objAH.showOverlay       = false;
             objAH.debug= true;
             objAH.url=URL_PREFIX+'/opac-favoritosDB.pl';
-            objAH.debug= true;
             objAH.action='delete_favorite';
             objAH.id1=id_favorito;
             objAH.sendToServer();
-        }
-    });
+    
 }
 
 function updateEliminarFavorito(responseText){

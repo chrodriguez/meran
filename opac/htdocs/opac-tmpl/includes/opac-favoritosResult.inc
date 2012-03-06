@@ -192,7 +192,7 @@
                                     [% PERL %]
                                       print C4::AR::Filtros::action_button( 
                                                                       button    => "btn btn-danger click",
-                                                                      action    =>  "deleteFavorite([% NIVEL.id1 %]);",
+                                                                      action    =>  "eliminarFavorito([% NIVEL.id1 %]);",
                                                                       icon      => "icon-remove icon-white",
                                                                   ) ;
                 
