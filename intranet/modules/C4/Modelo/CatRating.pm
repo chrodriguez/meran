@@ -98,5 +98,19 @@ sub setReview{
     $self->review($review);
 }
 
+
+sub getDate{
+    my ($self) = shift;
+
+    return ($self->date);
+}
+
+sub setDate{
+    my ($self) = shift;
+    my ($date) = @_;
+
+    $self->review($date);
+}
+
 1;
 
