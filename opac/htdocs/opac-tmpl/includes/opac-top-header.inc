@@ -7,7 +7,7 @@
           <span class="icon-bar"></span>
         </a>
         [% IF ui.tieneLogoOpacMenu %]
-        	<a href="[% url_prefix %]/opac-main.pl" class="brand logo_opac_menu">
+        	<a href="[% url_prefix %]/opac-main.pl" class="logo_opac_menu">
         		<img src="[% temas %]/[% user_theme %]/imagenes/logo_ui_opac_menu.png" />
         	</a>
         [% ELSE %]
@@ -27,6 +27,7 @@
 			            <li>
 			                [% PERL %]
 			                    print C4::AR::Filtros::link_to( text    =>  "[% 'B&uacute;squeda Avanzada' | i18n %]",
+                                  							    icon    => "icon-search",
 			                                                    url     =>  '[% url_prefix %]/opac-advanced_search.pl',
 			                                                    title   =>  "[% 'B&uacute;squeda Avanzada' | i18n %]",
 			                            ) ;
@@ -56,17 +57,10 @@
                             </li>
                             <li>
                                 [% PERL %]
-                                  print C4::AR::Filtros::link_to( text    =>  "[% 'Historial de pr&eacute;stamos' | i18n %]",
-                                                                  url     =>  '[% url_prefix %]/opac-historial_prestamos.pl',
-                                                                  title   =>  "[% 'Historial de pr&eacute;stamos' | i18n %]",
-                                          ) ;
-                                [% END %]
-                            </li>
-                            <li>
-                                [% PERL %]
-                                  print C4::AR::Filtros::link_to( text    =>  "[% 'Historial de reservas' | i18n %]",
-                                                                  url     =>  '[% url_prefix %]/opac-historial_reservas.pl',
-                                                                  title   =>  "[% 'Historial de reservas' | i18n %]",
+                                  print C4::AR::Filtros::link_to( text    =>  "[% 'Reservas' | i18n %]",
+                                                                  url     =>  '[% url_prefix %]/opac-info_reservas.pl',
+                                                                  params  =>   ["action=detalle_asignadas","token=[% token %]"],
+                                                                  title   =>  "[% 'Reservas' | i18n %]",
                                           ) ;
                                 [% END %]
                             </li>
@@ -83,11 +77,30 @@
                             <li>
                                 [% PERL %]
                                   print C4::AR::Filtros::link_to( text    =>  "[% 'Favoritos' | i18n %]",
+                                  								  icon    => "icon-heart",
                                                                   url     =>  '[% url_prefix %]/opac-favoritos.pl',
                                                                   title   =>  "[% 'Favoritos' | i18n %]",
                                           ) ;
                                 [% END %]
                             </li>		                  
+                            <li>
+                                [% PERL %]
+                                  print C4::AR::Filtros::link_to( text    =>  "[% 'Historial de pr&eacute;stamos' | i18n %]",
+                                                                  url     =>  '[% url_prefix %]/opac-historial_prestamos.pl',
+                                  								  icon    => "icon-shopping-cart",
+                                                                  title   =>  "[% 'Historial de pr&eacute;stamos' | i18n %]",
+                                          ) ;
+                                [% END %]
+                            </li>
+                            <li>
+                                [% PERL %]
+                                  print C4::AR::Filtros::link_to( text    =>  "[% 'Historial de reservas' | i18n %]",
+                                  								  icon    => "icon-inbox",
+                                                                  url     =>  '[% url_prefix %]/opac-historial_reservas.pl',
+                                                                  title   =>  "[% 'Historial de reservas' | i18n %]",
+                                          ) ;
+                                [% END %]
+                            </li>
                             <li class="divider"></li>          
                         </ul>
                     </li>     

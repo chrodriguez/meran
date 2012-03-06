@@ -2,6 +2,11 @@
 @import url("/includes/bootstrap/css/bootstrap-responsive.css");
 @import url("/includes/css/nanoscroller.css");
 
+
+.alert-success blockquote{
+	border-left:5px solid #DFF0D8 !important; 
+}
+
 .title{
     background-color: #FAFAFA;
     font-size: 20px;
@@ -49,6 +54,9 @@ body {
 .logo_opac_menu{
 	float: left;
 	line-height:0;
+	width: 65px;
+	margin-top: 5px;
+	margin-left: 5px;	
 }
 
 .main_content {
