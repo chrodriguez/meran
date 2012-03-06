@@ -101,7 +101,7 @@ function borrarDeFavoritos(){
 
 function obtenerFavoritos(){
     objAH=new AjaxHelper(updateObtenerFavoritos);
-    objAH.showOverlay       = true;
+    objAH.showOverlay  = true;
     objAH.debug= true;
     objAH.url=URL_PREFIX+'/opac-favoritosDB.pl';
     objAH.debug= true;

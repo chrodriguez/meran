@@ -53,16 +53,21 @@
 											[% END %]
 			
 											[% IF indice %]
-												<div style="display:none">
-	                                                  <div id="indice_data[% id2 %]"  title="[% 'Indice del grupo' | i18n %]">
+												<div id="indice_data[% id2 %]"  class="modal hide fade">
+	                                                  <div class="modal-header">
+														<a href="#" class="close" data-dismiss="modal">×</a>
+	                                                  	<h3>[% 'Indice del grupo' | i18n %]</h3>
+	                                                  </div>
+	                                                  <div class="modal-body">
 	                                                      <ul>
 	                                                      [% FOREACH elem IN indice %]
 	                                                          [% FOREACH word IN elem.split(' ') %]
-	                                                              <li class="li_items_indice">[% word %]</li>
+	                                                              <li>[% word %]</li>
 	                                                          [% END %]
 	                                                      [% END %]
 	                                                      </ul>
 	                                                  </div>
+	                                                  <div class="modal-footer"></div>
 	                                          </div>
 											[% END %]
 											 
@@ -80,8 +85,6 @@
 										   
 	                                  </div>
 	                            </div>
-	                            
-	                            
 	                            
 			<div id="modal_reservar" class="modal hide fade">
 		              <div class="modal-header">
@@ -108,9 +111,15 @@
 	
 			              	[% INCLUDE 'e-docs_grupo.inc' %]
 			                                        
+							[% IF !preferencias.resumido %]
+							    [% INCLUDE 'opac-detail_partial_N2_ejemplares.inc' %]
+							[% END %]	                            
+
 			     			[% IF disponible %]
 			                   [% INCLUDE 'opac-detail_partial_disponibilidad.inc' %]
 			            	[% END %]
+			            	
+			            	
 					</section>
 
 

@@ -7,7 +7,7 @@
 
 <script type="text/javascript">
 	function mostrarIndice(id2){
-	    $("#indice_data" + id2).dialog({ width: 800, position: 'center', modal: true }); 
+	    $("#indice_data" + id2).modal(); 
 	}
 	
 	function ProcessGBSBookInfo(booksInfo) {
@@ -20,6 +20,22 @@
 		 }
 	   }
 	 }
+
+	function detalleMARC(id3){
+		objAH               = new AjaxHelper(updateInfoMARC);
+		objAH.debug         = true;
+	    objAH.showOverlay   = true;
+		objAH.url			= URL_PREFIX+"/opac-MARCDetail.pl";
+		objAH.id3           = id3;
+		//se envia la consulta
+		objAH.sendToServer();
+	}
+
+	function updateInfoMARC(responseText){
+		        $('#detalleMARC').html(responseText);
+				$('#detalleMARC').modal();
+	}
+		 
 
     $(document).ready(function() {
     	$('.fancylink').fancybox();
@@ -80,10 +96,5 @@
 	<script type="text/javascript">makeToggle('estado_coleccion[% id1 %]','trigger_estado_coleccion_[% id1 %]',null,false);</script>
 [% END %]
 
-[% IF preferencias.resumido %]
-    [% INCLUDE 'opac-detail_partial_N2_reducido.inc' %]
-[% ELSE %]
-    [% INCLUDE 'opac-detail_partial_N2_completo.inc' %]
-[% END %]
-
+[% INCLUDE 'opac-detail_partial_N2_reducido.inc' %]
 <div id="resultadoReserva"></div>

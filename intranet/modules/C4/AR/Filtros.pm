@@ -865,7 +865,9 @@ sub action_group_link_button{
 sub tabbedPane{
     my (%params) = @_;
     
-    my $html = "<div class='span12 columns'>";
+    my $span = $params{'span'} ||'span12';
+    
+    my $html = "<div class='$span columns'>";
 
     $html .= "<h2>".$params{'titulo'}."</h2>";
     $html .= "<p>".$params{'subtitulo'}."</p>";
