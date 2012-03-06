@@ -12,7 +12,6 @@ function obtenerTabla(){
 
 function updateObtenerTabla(responseText){
     $('#detalle_tabla').html(responseText);
-    zebra('detalle_tabla');
 
 }
 
@@ -32,14 +31,13 @@ function obtenerTablaFiltrada(){
 function updateObtenerTablaFiltrada(responseText){
 
     $('#detalle_tabla').html(responseText);
-    zebra('detalle_tabla');
 }
 
 
 function eliminarReferencia(tabla,id){
 
     $('#fieldset_tablaResult_involved').addClass("warning");
-    jConfirm(TITLE_DELETE_REFERENCE+id+"?","Titulo",function(confirmed){
+    bootbox.confirm(TITLE_DELETE_REFERENCE+id+"?",function(confirmed){
         if (confirmed){
             objAH=new AjaxHelper(updateEliminarReferencia);
             objAH.url= URL_PREFIX+'/admin/referencias/referenciasDB.pl';
@@ -75,7 +73,6 @@ function agregarRegistro(tabla){
 function updateAgregarRegistro(responseText){
 
     $('#detalle_tabla').html(responseText);
-    zebra('detalle_tabla');
 
 }
 
@@ -94,7 +91,7 @@ function mostrarReferencias(tabla,value_id){
 
 function asignarReferencia(tabla,related_id,referer_involved,referer_involved_show){
     $('#fieldset_tablaResult_involved').addClass("warning");
-    jConfirm(TITLE_FIRST_ASSIGN_REFERENCIES+referer_involved_show+TITLE_TO_ASSIGN_REFERENCIES+related_id,"Titulo",function(confirmed){
+    bootbox.confirm(TITLE_FIRST_ASSIGN_REFERENCIES+referer_involved_show+TITLE_TO_ASSIGN_REFERENCIES+related_id,function(confirmed){
         if (confirmed){
             objAH=new AjaxHelper(updateObtenerTabla);
             objAH.url= URL_PREFIX+'/admin/referencias/referenciasDB.pl';
@@ -112,7 +109,7 @@ function asignarReferencia(tabla,related_id,referer_involved,referer_involved_sh
 
 function asignarEliminarReferencia(tabla,related_id,referer_involved,referer_involved_show){
     $('#fieldset_tablaResult_involved').addClass("warning");
-    jConfirm(TITLE_FIRST_ASSIGN_DELETE_REFERENCIES+referer_involved_show+TITLE_TO_ASSIGN_REFERENCIES+related_id,"Titulo",function(confirmed){
+    bootbox.confirm(TITLE_FIRST_ASSIGN_DELETE_REFERENCIES+referer_involved_show+TITLE_TO_ASSIGN_REFERENCIES+related_id,function(confirmed){
         if (confirmed){
             objAH=new AjaxHelper(updateObtenerTabla);
             objAH.url= URL_PREFIX+'/admin/referencias/referenciasDB.pl';
