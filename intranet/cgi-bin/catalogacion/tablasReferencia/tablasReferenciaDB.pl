@@ -67,7 +67,9 @@ else{
                         });
 
         my ($data)          = C4::Modelo::PrefTablaReferenciaConf::getConfTabla($alias_tabla);
+
         $t_params->{'data'} = $data;
+       
 
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
     }

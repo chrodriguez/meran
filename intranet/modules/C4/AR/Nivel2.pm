@@ -613,9 +613,10 @@ sub getReviews{
     
     push (@filtros, (id2 => {eq => $id2}));
     push (@filtros, (review => {ne => NULL}));
-    my $reviews = C4::Modelo::CatRating::Manager->get_cat_rating(query => \@filtros,
+    my $reviews = C4::Modelo::CatRating::Manager->get_cat_rating(   query => \@filtros,
                                                                     db => $db,
-                                                                 include_objects => ['socio'],
+                                                                    include_objects => ['socio'],
+                                                                    sort_by => 'date',
                                                                  );
     if (scalar(@$reviews) > 0){
         return $reviews

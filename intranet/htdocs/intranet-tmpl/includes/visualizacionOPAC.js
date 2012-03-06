@@ -99,7 +99,7 @@ function eliminarTodoElCampo(campo){
     objAH.ejemplar      = $("#tipo_nivel3_id").val();
     
     if (campo){
-    jConfirm(SEGURO_QUE_DESEA_ELIMINAR_TODO_EL_CAMPO,CATALOGO_ALERT_TITLE, function(confirmStatus){
+    bootbox.confirm(SEGURO_QUE_DESEA_ELIMINAR_TODO_EL_CAMPO, function(confirmStatus){
         if (confirmStatus){
             objAH.campo         = campo;
             objAH.sendToServer();
@@ -133,7 +133,7 @@ function eliminarVista(vista_id){
     objAH.tipoAccion    = 'ELIMINAR_VISUALIZACION';
     
     if ( vista_id ){
-        jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_ALERT_TITLE, function(confirmStatus){
+        bootbox.confirm(ESTA_SEGURO_QUE_DESEA_BORRARLO, function(confirmStatus){
             if (confirmStatus){
                 objAH.vista_id= vista_id;
                 objAH.sendToServer();

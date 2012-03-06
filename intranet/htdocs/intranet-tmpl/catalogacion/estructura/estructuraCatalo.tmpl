@@ -94,7 +94,7 @@ function habilitado(id){
 
 //Elimina el campo en la estructura inicial del catalogo
 function eliminarCampo(id){
-    jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_TITLE, function(confirmStatus){
+    bootbox.confirm(ESTA_SEGURO_QUE_DESEA_BORRARLO, function(confirmStatus){
         if (confirmStatus){
             objAH               = new AjaxHelper(eleccionDeNivel);
             objAH.debug         = true;
@@ -510,7 +510,7 @@ function modificarEstructuraCatalogacion(id){
 }
 
 function updateModificarEstructuraCatalogacion(responseText){
-	$("#resultModificarCampo").modal();
+	$("#resultModificarCampo").modal('hide');
     var Messages = JSONstring.toObject(responseText);
     setMessages(Messages);
     if (! (hayError(Messages) ) ){

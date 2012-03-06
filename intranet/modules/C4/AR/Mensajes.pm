@@ -96,6 +96,7 @@ my %mensajesOPAC = (
     'U605' => 'Compruebe el texto de verificaci&oacute;n.',
     'U606' => 'Hubo un problema en el proceso de restablecer su clave. Int&eacute;ntelo de nuevo. Si el problema persiste, dir&iacute;jase a la biblioteca.',
     'U607' => 'Para operar en el cat&aacute;logo p&uacute;blico, debe iniciar sesi&oacute; nuevamente. Disculpe las molestias.',
+    'U608' => 'El mensaje de contacto ha sido enviado. En breve sera respondido por el personal de la biblioteca.',
     'F700' => 'Disculpe, no se pudo agregar el favorito, intente nuevamente.',
     'F701' => 'Se agrego el favorito con &eacute;xito',
     'F702' => 'Se elimin&oacute; el favorito con &eacute;xito',

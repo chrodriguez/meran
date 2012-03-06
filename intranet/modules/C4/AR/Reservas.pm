@@ -1038,6 +1038,8 @@ sub _verificaciones {
     C4::AR::Debug::debug("Reservas.pm => _verificaciones => FIN ".$msg_object->{'error'}." !!!\n\n");
     C4::AR::Debug::debug("Reservas.pm => _verificaciones => FIN VERIFICACION !!!\n\n");
 
+    C4::AR::Debug::debug($msg_object->{'codMsg'});
+
     return ($msg_object);
 }
 

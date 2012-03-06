@@ -11,7 +11,7 @@
         print C4::AR::Filtros::tableHeader(   
                           id              => "tablaHistorial",
                           columns         => ['[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]','[% "Edici&oacute;n"|i18n %]',
-                                                '[% "Pr&eacute;stamo"|i18n %]', '[% "Dev"|i18n %]',
+                                                '[% "Pr&eacute;stamo"|i18n %]', '[% "Devoluci&oacute;n"|i18n %]',
                                              ]
 
                                                             
@@ -48,10 +48,10 @@
                         &nbsp;([% prestamo.nivel3.nivel2.getAnio_publicacion %])
                     [% END %]
                 </td>
-                <td align=center>
+                <td>
                     [% prestamo.getFecha_prestamo_formateada %]&nbsp;
                 </td>
-                <td align=center>
+                <td>
                     [% prestamo.getFecha_devolucion_formateada %]&nbsp;
                 </td>
             </tr>
