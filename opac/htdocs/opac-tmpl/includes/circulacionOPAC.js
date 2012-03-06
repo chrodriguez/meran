@@ -6,6 +6,7 @@
 /*
 * Funcion Ajax que hace una reserva
 */
+var BUTTON_ID = 0;
 
 function showReservar(){
 	$('#modal_reservar').modal();
@@ -198,37 +199,44 @@ function updateInfoSanciones(responseText){
 }
 
 
-function addFavorite(id1){
+function addFavorite(id1,button_id){
     objAH               = new AjaxHelper(updateAddFavorite);
-    objAH.debug         = true;
+    objAH.debug         = false;
     objAH.showOverlay   = true;
     objAH.url           = URL_PREFIX+'/opac-favoritosDB.pl';
     objAH.action        = 'add_favorite';
     objAH.id1           = id1;
     objAH.sendToServer();
+    BUTTON_ID				= button_id;
+    
 }
 
 function updateAddFavorite(responseText){
-    if (responseText == 1)
-        jAlert(FAVORITE_ADDED,CATALOGO_TITLE);
-    else
+    if (responseText == 0)
         jAlert(FAVORITE_ADDED_ERROR,CATALOGO_TITLE);
+    else
+        $('#'+BUTTON_ID).html(responseText);
 }
 
 
-function deleteFavorite(id1){
+function deleteFavorite(id1,button_id,from_busqueda){
     objAH                   = new AjaxHelper(updateDeleteFavorite);
     objAH.debug             = true;
-    objAH.showOverlay       = true;
+    objAH.showOverlay       = false;
     objAH.url               = URL_PREFIX+'/opac-favoritosDB.pl';
     objAH.action            = 'delete_favorite';
     objAH.id1               = id1;
+    if (from_busqueda)
+        objAH.from_busqueda= 1;
+
     objAH.sendToServer();
+    BUTTON_ID				= button_id;
 }
 
 function updateDeleteFavorite(responseText){
-    if (responseText != 0)
-        jAlert(FAVORITE_DELETED);
-    else
+    if (responseText == 0)
         jAlert(FAVORITE_DELETED_ERROR);
+    else
+        $('#'+BUTTON_ID).html(responseText);
+
 }

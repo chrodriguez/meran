@@ -60,21 +60,6 @@ function updateAgregarAFavoritos(){
 
 function borrarDeFavoritos(){
 
-// 	var result="";
-// //hacer con jquery
-// 	var checks=document.getElementsByTagName("input");
-// 	if (checks.length>0){
-// 		for(i=0;i<checks.length;i++)
-// 		{
-// 			if((checks[i].type == "checkbox")&&(checks[i].checked)){ 		
-// 				result= result + checks[i].name + '#';
-// 			}
-// 		}       
-// 	}
-// // 	params= result;
-
-
-
 	var chck=$("input[@name=checkbox]:checked");
 	var array= new Array;
 	var long=chck.length;
@@ -101,6 +86,7 @@ function borrarDeFavoritos(){
 
 function obtenerFavoritos(){
     objAH=new AjaxHelper(updateObtenerFavoritos);
+    
     objAH.showOverlay  = true;
     objAH.debug= true;
     objAH.url=URL_PREFIX+'/opac-favoritosDB.pl';

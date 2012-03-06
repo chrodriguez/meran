@@ -410,33 +410,29 @@
 	                         [% END %]
                         </td>
                         [% IF socio_data.usr_permisos_opac %]
-	                        <td>
+	                        <td id="fav_[% NIVEL.id1 %]">
 	                            [% IF NIVEL.esta_en_favoritos %]
 				                    [% PERL %]
 				                      print C4::AR::Filtros::action_button( 
-				                                                      button    => "btn btn-danger click",
-				                                                      action    =>  "deleteFavorite([% NIVEL.id1 %]);",
-				                                                      icon      => "icon-remove icon-white",
-				                                                      id		=> "fav_[% NIVEL.id1 %]",
+				                                                      button    => "btn btn-info click",
+				                                                      action    =>  'deleteFavorite([% NIVEL.id1 %],"fav_[% NIVEL.id1 %]",1);',
+				                                                      icon      => "icon-heart icon-white",
+				                                                      disabled	=> 1,
 				                                                  ) ;
 				
 				                    [% END %]
 	                            [% ELSE %]
 				                    [% PERL %]
 				                      print C4::AR::Filtros::action_button( 
-				                                                      button    => "btn btn-info click",
-				                                                      action    => "addFavorite([% NIVEL.id1 %]);",
+				                                                      button    => "btn btn-primary click",
+				                                                      action    => 'addFavorite([% NIVEL.id1 %],"fav_[% NIVEL.id1 %]");',
+				                                                      id		=> "button_[% id1 %]",
 				                                                      icon      => "icon-heart icon-white",
-				                                                      id		=> "fav_[% NIVEL.id1 %]",
-				                                                      popover => {text => "Agrega este registro a tu estante privado de favoritos", title => "Favoritos"},
 				                                                  ) ;
 				
 				                    [% END %]
 	                            [% END %]
 	                        </td>
-	                        <script type="text/javascript">    
-								$('#fav_[% NIVEL.id1 %]').popover({delay: { show: 800, hide: 100 }, placement: 'left',});
-							</script>
 	                     [% END %]
                     </tr>
                 [% END %]

@@ -32,20 +32,46 @@ $t_params->{'no_content_message'}= C4::AR::Filtros::i18n("UD. no ha marcado ning
 
 if ($action eq "add_favorite"){
     print $session->header;
-    print C4::AR::Nivel1::addToFavoritos($id1,$nro_socio);
+    my $result = C4::AR::Nivel1::addToFavoritos($id1,$nro_socio);
+    if ($result){
+                                      print C4::AR::Filtros::action_button( 
+                                                                      button    => "btn btn-primary click",
+                                                                      action    => 'deleteFavorite($id1,"fav_$id1");',
+                                                                      id        => "button_favorite_id1",
+                                                                      icon      => "icon-heart icon-white",
+                                                                      disabled  => 1,
+                                                                  ) ;
+    	
+    }else{
+        print $result;	
+    }
 }
 elsif ($action eq "delete_favorite"){
 
-    C4::AR::Nivel1::removeFromFavoritos($id1,$nro_socio);
+    my $result = C4::AR::Nivel1::removeFromFavoritos($id1,$nro_socio);
     
-    my ($cantidad,$resultsarray)= C4::AR::Nivel1::getFavoritos($nro_socio);
-
-    $t_params->{'cantidad'}= $cantidad;
-    $t_params->{'nro_socio'}= $session->param('nro_socio');
-    $t_params->{'SEARCH_RESULTS'}= $resultsarray;
-    $t_params->{'content_title'}= C4::AR::Filtros::i18n("Sus favoritos: ".$cantidad);
+    if ($obj->{'from_busqueda'}){
+    	if ($result){
+    		                          print $session->header;
+                                      print C4::AR::Filtros::action_button( 
+                                                                      button    => "btn btn-primary click",
+                                                                      action    => 'addFavorite($id1,"fav_$id1");',
+                                                                      id        => "button_favorite_id1",
+                                                                      icon      => "icon-heart icon-white",
+                                                                  ) ;
+    		
+    	}
+    }else{
     
-    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+	    my ($cantidad,$resultsarray)= C4::AR::Nivel1::getFavoritos($nro_socio);
+	
+	    $t_params->{'cantidad'}= $cantidad;
+	    $t_params->{'nro_socio'}= $session->param('nro_socio');
+	    $t_params->{'SEARCH_RESULTS'}= $resultsarray;
+	    $t_params->{'content_title'}= C4::AR::Filtros::i18n("Sus favoritos: ".$cantidad);
+	    
+	    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+    }
 }
 elsif ($action eq "get_favoritos"){
 

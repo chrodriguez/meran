@@ -58,6 +58,7 @@
   <script src="/includes/sha1.js" type="text/javascript"></script>
   <script src="/includes/jsthread.js" type="text/javascript"></script>
   <script type="text/javascript" src="/includes/opac.js"></script>	
+  <script type="text/javascript" src="/includes/jquery/jquery.alerts.js"></script>	
   <script type="text/javascript" src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
   <script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox.js"></script>
   <script type="text/javascript" src="/includes/jquery/fancybox/jquery.mousewheel.js"></script>
