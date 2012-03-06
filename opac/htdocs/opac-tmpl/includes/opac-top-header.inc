@@ -77,7 +77,7 @@
                             <li>
                                 [% PERL %]
                                   print C4::AR::Filtros::link_to( text    =>  "[% 'Favoritos' | i18n %]",
-                                  								  icon    => "icon-heart",
+                                  								  icon    => "icon-star",
                                                                   url     =>  '[% url_prefix %]/opac-favoritos.pl',
                                                                   title   =>  "[% 'Favoritos' | i18n %]",
                                           ) ;
