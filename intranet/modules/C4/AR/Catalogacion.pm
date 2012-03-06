@@ -1197,9 +1197,9 @@ sub getEstructuraYDatosDeNivel{
     #paso todo a MARC
     my $nivel_info_marc_array = undef;
 
-    eval{
+#     eval{
       $nivel_info_marc_array = $nivel->toMARC; #mapea los campos de la tabla nivel 1, 2, o 3 a MARC
-    };
+#     };
 
     my $campo;
     my $repetible;

@@ -391,7 +391,8 @@ function updateMostrarEstructuraDelNivel1(responseText){
     validateForm('formNivel1',guardarModificarDocumentoN1);
 //     addRules();
     
-    scrollTo('datos_del_leader');  
+//     scrollTo('datos_del_leader');
+    scrollTo('nivel1Tabla');  
 }
 
 function mostrarEstructuraDelNivel2(){
@@ -2272,6 +2273,9 @@ function modificarN1(id1, template){
 function _mostrarAccion(mensaje){
     $('#estado_accion').html(mensaje);
     $('#estado_accion').show();
+    
+    $('.estado_accion').html(mensaje);
+    $('.estado_accion').show();
 }
 
 function updateModificarN1(responseText){

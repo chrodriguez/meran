@@ -101,7 +101,7 @@ $(document).ready( function() {
 	                [% comboTipoNivelBibliografico %]
 	            </div>
             </div>
-	         <legend><div id="estado_accion" class="titulos" style="display:none"></div></legend>
+	         <legend><div id="estado_accion" class="titulos estado_accion" style="display:none"></div></legend>
 	                      
 	</form>
 	
@@ -190,7 +190,7 @@ $(document).ready( function() {
 
 	<form id="formNivel1" name="formNivel1" class="form-horizontal" onsubmit="return false;">
 		<fieldset>
-		<legend class="titulo_legend">[% "Datos del registro" | i18n %]</legend>
+            <legend class="titulo_legend">[% "Datos del registro" | i18n %]<div id="estado_accion" class="titulos estado_accion alert pagination-centered" style="display:none"></div></legend>
 		<!--     CAMPOS DINAMICOS DEL NIVEL1 -->
 		    <div id= "estructuraDelNivel1"></div>
 		    <input type="hidden" name="token" value="[% token %]" />
@@ -217,7 +217,7 @@ $(document).ready( function() {
         
     <form id="formNivel2" name="formNivel2" class="form-horizontal" onsubmit="return false;">
 		  <fieldset>
-			    <legend class="titulo_legend">[% "Datos del grupo" | i18n %]</legend>
+			    <legend class="titulo_legend">[% "Datos del grupo" | i18n %]<div id="estado_accion" class="titulos estado_accion alert pagination-centered" style="display:none"></div></legend>
 			    <!--     CAMPOS DINAMICOS DEL NIVEL 2 -->
 			        <div id= "estructuraDelNivel2"></div>
 			        <input type="hidden" name="token" value="[% token %]" />
@@ -245,7 +245,7 @@ $(document).ready( function() {
 
 	<form id="formNivel3" name="formNivel3" class="form-horizontal" onsubmit="return false;">
 		<fieldset>
-		    <legend class="titulo_legend">[% "Datos del ejemplar" | i18n %]</legend>
+                <legend class="titulo_legend">[% "Datos del ejemplar" | i18n %]<div id="estado_accion" class="titulos estado_accion alert pagination-centered" style="display:none"></div></legend>
 			<div id="divCantEjemplares" class="control-group">
 	            <label for="cantEjemplares" class="control-label warning">Cant. Ejemplares: </label>
 			    <div class="controls">
