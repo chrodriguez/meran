@@ -433,7 +433,9 @@ sub getRegistrosParaImportar{
     
    #Solo registros sin ERROR
     push (@filtros, ( estado => { ne => 'ERROR' }));
-    
+   
+   require C4::Modelo::IoImportacionIsoRegistro;
+   require C4::Modelo::IoImportacionIsoRegistro::Manager;
    my $registros_array_ref= C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro(query => \@filtros);
    return  $registros_array_ref;
 }
@@ -457,7 +459,9 @@ sub getRegistrosParaActualizar{
     
    #Solo registros sin ERROR
     push (@filtros, ( estado => { ne => 'ERROR' }));
-    
+   
+   require C4::Modelo::IoImportacionIsoRegistro;
+   require C4::Modelo::IoImportacionIsoRegistro::Manager;
    my $registros_array_ref= C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro(query => \@filtros);
    return  $registros_array_ref;
 }
