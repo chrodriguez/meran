@@ -35,7 +35,6 @@
                       </section>
                       </fieldset>
 
-<<<<<<< HEAD
                   </form>
                   [% END %]
             </div>
@@ -62,7 +61,7 @@
 
       [% ELSE %]
 
-          <div class="alert alert-info"> [% 'Esta edici&oacute;n no tiene ninguna revisi&oacute;n' | i18n %]</div>
+          <div class="alert alert-info"> [% 'Esta edici&oacute;n no tiene ningun comentario' | i18n %]</div>
       [% END %]
       <hr>
        
@@ -77,25 +76,6 @@
                                                                                   
                                               );
           [% END %]
-=======
-[% IF socio_data.usr_permisos_opac %]
-
-	<form class="form-horizontal" action="[% url_prefix %]/reviews.pl" method="post">
-	  <section >
-	    <fieldset>
-	    <legend> [% 'Enviar comentario ' | i18n %]</legend>
-	    
-	        <textarea id="review" name="review" class="self_review" style="width: 88.3%;height: 150px;"></textarea>
-	        <input type="hidden" name="token" value="[% token %]" />
-	        <input type="hidden" name="id2" value="[% HTML.escape(id2) %]" />
-	        <div class="form-actions">
-	              <button class="btn btn-primary" type="submit"><i class="icon-white icon-comment"></i> [% 'Enviar comentario' | i18n %]</button>
-	        </div>
-	    </fieldset>
-	   </section>
-	</form>
-[% END %]
->>>>>>> 48d51e6ac5bd5736580460ee9fb8b67ef4fd538a
 
 </fieldset>
                    
