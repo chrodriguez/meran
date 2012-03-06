@@ -113,20 +113,22 @@ $(document).ready( function() {
 	</fieldset>
 </div>
 
+
 <div id="datos_esquema" class="modal fade hide">
-	<!-- <div id="datos_esquema"> -->
-    <form class="well form-horizontal" onsubmit="return false;">
-	    <legend class="titulo_legend">[% "Datos del esquema" | i18n %]</legend>
-	        <div class="control-group">
+	    <div class="modal-header">
+               <h3>[% "Datos del esquema" | i18n %]</h3>
+            </div>
+	      <div class="modal-body">
+                <div class="control-group">
 	            <label for="tipo_nivel3_id">
 	                [% "Esquema de ingreso de datos:" | i18n %]
 	            </label>
 	            <div class="controls">
 		                [% comboTipoDocumento %]
-		        </div>
+		    </div>
 	        </div>
-            <div class='form-actions'>
-                <p style='text-align: center; margin: 0;'>	            
+             </div>
+            <div class='modal-footer'>
 	                [% PERL %]
 	                        print C4::AR::Filtros::to_Button(     text   => "[% 'Usar esquema' | i18n %]",
 	                                                            boton   => "btn btn-primary",
@@ -143,9 +145,7 @@ $(document).ready( function() {
 		                                                        id          => "boton_guardar_esquema",
 		                            ) ;
 		            [% END %]
-	           </p>
-	       </div>
-	</form>
+	   </div>
 </div>
 
 <div id="datos_indice" class="modal fade hide">
