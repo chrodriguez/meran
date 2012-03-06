@@ -416,7 +416,7 @@
 				                      print C4::AR::Filtros::action_button( 
 				                                                      button    => "btn btn-info click",
 				                                                      action    =>  'deleteFavorite([% NIVEL.id1 %],"fav_[% NIVEL.id1 %]",1);',
-				                                                      icon      => "icon-heart icon-white",
+				                                                      icon      => "icon-star icon-white",
 				                                                      disabled	=> 1,
 				                                                  ) ;
 				
@@ -427,7 +427,7 @@
 				                                                      button    => "btn btn-primary click",
 				                                                      action    => 'addFavorite([% NIVEL.id1 %],"fav_[% NIVEL.id1 %]");',
 				                                                      id		=> "button_[% id1 %]",
-				                                                      icon      => "icon-heart icon-white",
+				                                                      icon      => "icon-star-empty icon-white",
 				                                                  ) ;
 				
 				                    [% END %]

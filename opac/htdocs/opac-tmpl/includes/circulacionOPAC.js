@@ -48,7 +48,7 @@ function updateInfoReserva(responseText){
 function cancelarReserva(id_reserva){
 
 
-    jConfirm(ESTA_SEGURO_QUE_DESEA_CANCELAR_RESERVA,OPAC_ALERT_TITLE, function(confirmStatus){
+    bootbox.confirm(ESTA_SEGURO_QUE_DESEA_CANCELAR_RESERVA,function(confirmStatus){
         if (confirmStatus){
         
             objAH               = new AjaxHelper(updateInfoCancelarReserva);
