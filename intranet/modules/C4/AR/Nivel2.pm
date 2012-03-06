@@ -18,7 +18,7 @@ use vars qw(@EXPORT_OK @ISA);
 @ISA    = qw(Exporter);
 
 @EXPORT_OK = qw(
-		getCantPrestados
+        getCantPrestados
         getNivel2FromId1
         getNivel2FromId2
         getFirstItemTypeFromN1
@@ -275,7 +275,7 @@ sub getFirstItemTypeFromN1{
     my $nivel2 = getNivel2FromId1($id1);
     
     if (scalar(@$nivel2)){
-    	return ($nivel2->[0]->getTipoDocumento);
+        return ($nivel2->[0]->getTipoDocumento);
     }
     
     return ('DEFAULT');
@@ -473,8 +473,8 @@ sub t_modificarNivel2 {
 
     if(!$msg_object->{'error'}){
     #No hay error
-		
-		$params->{'modificado'} = 1;
+        
+        $params->{'modificado'} = 1;
 #         my $db = $cat_registro_marc_n2->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
@@ -639,18 +639,32 @@ sub reviewNivel2{
 }
 
 sub buildNavForGroups{
-	my ($nivel2_array_ref) = @_;
-	
-	my @elem_array;
-	foreach my $n2 (@$nivel2_array_ref){
-		my %hash = {};
-		$hash{'id'} = "detalle_grupo_".$n2->{'id2'};
-		$hash{'title'} = $n2->{'edicion'} || "#".$n2->{'id2'}; 
-		
-		push (@elem_array,\%hash);
-	}
-	
-	return \@elem_array;
+    my ($params) = @_;
+    
+    my @elem_array;
+    
+    my $is_rev = $params->{'estadoDeColeccion'};
+    my $nivel2 = $params->{'nivel2'};
+
+    if ($is_rev){
+        foreach my $n2 (@$nivel2){
+            my %hash = {};
+            $hash{'id'} = "detalle_grupo_".$n2->{'id2'};
+            $hash{'title'} = $n2->{'anio_revista'}." - ".$n2->{'numero_revista'};
+            
+            push (@elem_array,\%hash);
+        }
+    }else{
+        foreach my $n2 (@$nivel2){
+            my %hash = {};
+            $hash{'id'} = "detalle_grupo_".$n2->{'id2'};
+            $hash{'title'} = $n2->{'edicion'} || "#".$n2->{'id2'}; 
+            
+            push (@elem_array,\%hash);
+        }
+    }
+        
+    return \@elem_array;
 }
 
 

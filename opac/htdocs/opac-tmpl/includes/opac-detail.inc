@@ -20,11 +20,12 @@
 		 }
 	   }
 	 }
-</script>
 
-[% IF !ajax %]
-    <script src="/includes/jquery/jquery.jqpageflow.js" type="text/javascript"></script>
-[% END %]
+    $(document).ready(function() {
+    	$('.fancylink').fancybox();
+    	$('.nano').nanoScroller();
+    });
+</script>
 
 [% IF estadoDeColeccion %]
     <div class="detalle_completo_niveles">
@@ -61,7 +62,7 @@
 										[% END %]
 									</ul>
 									[% IF issn %]
-										<div class="rating">
+										<div class="right">
 											<div class="google-books">
 												<a id="ISSN:[% issn %]"  style="display:none" target="_blank">
 													<img src="/includes/css/gbs_preview_button1.gif" border="0" style="margin: 0"/>

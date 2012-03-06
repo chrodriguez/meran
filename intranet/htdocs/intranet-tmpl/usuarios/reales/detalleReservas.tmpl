@@ -1,8 +1,5 @@
-[% IF circularDesdeDetalleUsuario == 0 %]
-    [% INCLUDE 'partials/usuarios/detalleReservas-noCirculation.inc' %]
-[% ELSE %]
-   [% USE HTML %] 
-
+[% USE HTML %] 
+[% IF reservas_asignadas_count %]
     <fieldset>
     <legend class="titulo_legend_resaltado">[% "Ejemplares Asignados" | i18n %]</legend>
 
@@ -112,8 +109,9 @@
      [% ELSE %]
             <div class="alert alert-info">[% 'El usuario no tiene ninguna reserva asignada.'| i18n %]</div>
      [% END %]
-    
-    
+[% END %]   
+
+[% IF reservas_espera_count %]   
     <fieldset>
        <legend class="titulo_legend">[% "Reservas en espera" | i18n %]</legend>
 
@@ -174,3 +172,4 @@
       [% END %]
     </fieldset>
 [% END %]
+

@@ -736,6 +736,7 @@ sub action_set_button{
     my $title       = $params_hash_ref{'title'}; #obtengo el title de la componete
     my $action      = $params_hash_ref{'action'} || undef;
     my $url         = $params_hash_ref{'url'} || undef;
+    my $class       = $params_hash_ref{'class'} || undef;
     
     my $icon  = $params_hash_ref{'icon'} || 'icon white user'; #obtengo el title de la componete
 
@@ -754,7 +755,7 @@ sub action_set_button{
     }
 
     
-    my $html = "<div class='btn-group'>";
+    my $html = "<div class='btn-group $class'>";
     
     if ($url){
             my $params   =  $params_hash_ref{'params'} ||  $url;

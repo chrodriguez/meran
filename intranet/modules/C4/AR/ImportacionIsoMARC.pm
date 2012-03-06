@@ -1318,7 +1318,7 @@ sub toMARC_Array {
 					#my $referer_involved = $tabla_referer_involved->getByPk($value_id);
 					$hash_temp{'referencia'} = $estructura->infoReferencia->getReferencia;
 					my ($clave_tabla_referer_involved,$tabla_referer_involved) =  C4::AR::Referencias::getTablaInstanceByAlias($hash_temp{'referencia'});
-					$hash_temp{'referencia_tabla'} = $tabla_referer_involved->meta->table;
+					$hash_temp{'referencia_tabla'} = $hash_temp{'referencia'}; #$tabla_referer_involved->meta->table;
 					C4::AR::Debug::debug("Tabla REF  ==>  ".$tabla_referer_involved);
 					my ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getAll(1,0,0,$dato);
 					
@@ -1404,7 +1404,13 @@ sub getEjemplarFromMarcRecord{
 	$hash_nivel3{'marc_record'}          	= $nivel3;
 	$hash_nivel3{'tipo_documento'}          = $tipo_documento;
 	$hash_nivel3{'barcode'}            		=  C4::AR::ImportacionIsoMARC::generaCodigoBarraFromMarcRecord($nivel3,$tipo_documento);
-	$hash_nivel3{'signatura_topografica'}   =  $nivel3->subfield('995','t');
+  if($hash_nivel3{'barcode'} eq 'AUTOGENERADO'){
+    $hash_nivel3{'generar_barcode'}=1;
+    }
+  
+  $hash_nivel3{'ui_origen'} = C4::AR::ImportacionIsoMARC::getUIFromMarcRecord($nivel3);
+  $hash_nivel3{'ui_duenio'} = C4::AR::ImportacionIsoMARC::getUIFromMarcRecord($nivel3);
+  $hash_nivel3{'signatura_topografica'}   =  $nivel3->subfield('995','t');
 	$hash_nivel3{'disponibilidad'}   		=  C4::AR::ImportacionIsoMARC::getDisponibilidadEjemplar_Object($nivel3);
 	$hash_nivel3{'estado'}   				=  C4::AR::ImportacionIsoMARC::getEstadoEjemplar_Object($nivel3);
 	
@@ -1532,7 +1538,7 @@ sub generaCodigoBarraFromMarcRecord{
 	
 	if ((C4::AR::Nivel3::existeBarcode($barcode))||(!$barcode)){
 		# Si no viene el códifo en el campo 995, f  o ya existe se busca el máximo de su tipo
-  	    $barcode  = $like.'AUTOGENERADO';
+  	    $barcode  = 'AUTOGENERADO';
      }
      
     return ($barcode);
@@ -1544,6 +1550,62 @@ sub referenciasFromMarcRecord{
 
 }
 
+sub procesarReferencia{
+    my($params) = @_;
+#Hay que agregar la referencia a la tabla correspondiente y devolver el id
+# TABLAS => cat_autor, cat_tema, ref_localidad, 
+	if($params->{'referencia'}){
+		if($params->{'referencia_encontrada'}) {
+			return $params->{'referencia_encontrada'};
+			}
+		else{
+			my ($clave_tabla_referer_involved,$tabla_referer_involved) =  C4::AR::Referencias::getTablaInstanceByAlias($params->{'referencia_tabla'});
+			
+			use Switch;
+			switch ($params->{'referencia_tabla'}) {
+				case 'tema' { 
+					$tabla_referer_involved->setNombre($params->{'dato'});
+					$tabla_referer_involved->save();
+					C4::AR::Debug::debug("NUEVO TEMA: ".$params->{'dato'}." => ".$tabla_referer_involved->getId());
+					return $tabla_referer_involved->getId();
+					}
+				case 'autor' {
+					my $autor = $params->{'dato'};
+					$tabla_referer_involved->setCompleto($params->{'dato'});
+					
+					my @autor = split(', ', $params->{'dato'});
+					if ($autor[0]){
+						$tabla_referer_involved->setApellido($autor[0]);
+            if ($autor[1]){					
+              $tabla_referer_involved->setNombre($autor[1]);
+            } 
+            else{
+              $tabla_referer_involved->setNombre($autor[0]);
+              }
+            
+					} else {
+            if ($autor[1]){					
+              $tabla_referer_involved->setApellido($autor[1]);
+              $tabla_referer_involved->setNombre($autor[1]);
+            }
+          }
+          
+
+					$tabla_referer_involved->save();
+					C4::AR::Debug::debug("NUEVO AUTOR: ".$params->{'dato'}." => ".$tabla_referer_involved->getId());
+					return $tabla_referer_involved->getId();
+					}
+				case 'ciudad' {
+					$tabla_referer_involved->setNombre($params->{'dato'});
+					$tabla_referer_involved->save();
+					C4::AR::Debug::debug("NUEVA CIUDAD: ".$params->{'dato'}." => ".$tabla_referer_involved->getId());
+					return $tabla_referer_involved->getId();
+					}
+            }
+			
+		}
+	}
+}
 
 END { }       # module clean-up code here (global destructor)
 

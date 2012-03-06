@@ -315,9 +315,21 @@ $(document).ready(function(){
     USUARIO.ID      = '[% socio_modificar.getNro_socio %]';
 	detalleUsuario();
 
-    makeToggle('toggle_container_block','trigger1',mostrarHistorialDePrestamos, 'historialPrestamos',true);
-    makeToggle('toggle_container_block','trigger2',mostrarHistorialDeSanciones, 'historialSanciones',true);
-    makeToggle('toggle_container_block','trigger3',mostrarHistorialDeReservas, 'historialReservas',true);
+    
+    $('#historico_prestamos_usuario').on('show', function () {
+        mostrarHistorialDePrestamos();
+    })
+
+
+    $('#historico_reservas_usuario').on('show', function () {
+    	mostrarHistorialDeReservas();
+    })
+    
+
+    $('#historico_sanciones_usuario').on('show', function () {
+    	mostrarHistorialDeSanciones();
+    })
+
 });
 
 </script>
@@ -326,46 +338,57 @@ $(document).ready(function(){
 
     <div id="resultBusqueda">
 	<!-- 	DETALLE USUARIO -->
-	<div id="detalleUsuario"></div><br>
+	<div id="detalleUsuario"></div>
 		
 	<!--DETALLE DE PRESTAMOS-->
-	<div id="prestamos"></div><br>
+	<div id="prestamos"></div>
 	
 	<!-- DETALLE DE RESERVAS -->
-	<div id="reservas"></div><br>
+	<div id="reservas"></div>
 	
 	<!-- DETALLE DE SANCIONES -->
 	<div id="sanciones"></div>
 
-    <div>
-        <fieldset>
-            <legend class="titulo_legend_resaltado trigger1 click titulo_legend" title='[% "click para acceder al Historial de Pr&eacute;stamos" | i18n %]'>
-                            [% "Historial de Pr&eacute;stamos" | i18n %]
-            </legend>
-	        <!-- DETALLE DEL HISTORICO DE PRESTAMOS DEL USUARIO -->
-	        <div id="historialPrestamos" class="toggle_container_block" style="display:none"></div>
-        </fieldset>
+
+    <div class="accordion" id="historico_prestamos_usuario">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#historico_prestamos_usuario" href="#prestamos_div">[% "Historial de Pr&eacute;stamos" | i18n %]</a>
+            </div>
+             <div id="prestamos_div" class="accordion-body collapse">
+                 <div class="accordion-inner">
+                        <span id="historialPrestamos"></span>
+                 </div>
+            </div>
+        </div>
     </div>
 
-    <div>
-        <fieldset>
-            <legend class="titulo_legend_resaltado trigger3 click titulo_legend" title='[% "click para acceder al Historial de Reservas" | i18n %]'>
-                            [% "Historial de Reservas" | i18n %]
-            </legend>   
-            <!-- DETALLE DEL HISTORICO DE RESERVAS DEL USUARIO -->
-            <div id="historialReservas" class="toggle_container_block" style="display:none"></div>
-        </fieldset>
+    <div class="accordion" id="historico_reservas_usuario">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#historico_prestamos_usuario" href="#reservas_div">[% "Historial de reservas" | i18n %]</a>
+            </div>
+             <div id="reservas_div" class="accordion-body collapse">
+                 <div class="accordion-inner">
+                        <span id="historialReservas"></span>
+                 </div>
+            </div>
+        </div>
     </div>
 
-    <div>
-        <fieldset>
-            <legend class="titulo_legend_resaltado trigger2 click titulo_legend" title='[% "click para acceder al Historial de Sanciones" | i18n %]'>
-                            [% "Historial de Sanciones" | i18n %]
-            </legend>   
-            <!-- DETALLE DEL HISTORICO DE SANCIONES DEL USUARIO -->
-            <div id="historialSanciones" class="toggle_container_block" style="display:none"></div>
-        </fieldset>
+    <div class="accordion" id="historico_sanciones_usuario">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#historico_prestamos_usuario" href="#sanciones_div">[% "Historial de sanciones" | i18n %]</a>
+            </div>
+             <div id="sanciones_div" class="accordion-body collapse">
+                 <div class="accordion-inner">
+                        <span id="historialSanciones"></span>
+                 </div>
+            </div>
+        </div>
     </div>
+    
     <div class="ticket" id="ticket" ></div>
 </div>
 

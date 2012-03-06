@@ -1,35 +1,53 @@
 <div class="alert alert-success">
-			<dl>
-                            <dt class="inline left rightMargin">[% "Disponibilidad Actual Para Pr&eacute;stamo:" | i18n %]</dt>
-                            <dd>[% cantParaPrestamoActual %]</dd>
-
-                            <dt class="inline left rightMargin">[% "Disponibilidad Actual Para Sala de Lectura:" | i18n %]</dt>
-                            <dd>[% cantParaSalaActual %]</dd>
-
-                            <dt class="inline left rightMargin">[% "Cantidad Actual de Reservas:" | i18n %]</dt>  
-                            <dd>[% cantReservas %]</dd>
-
-                            <dt class="inline left rightMargin">[% "Cantidad Actual de Pr&eacute;stamos:" | i18n %]</dt>  
-                            <dd>[% cantPrestados %]</dd>
-			</dl>
-		           [% IF CirculationEnabled %]
-		                                   [% IF socio_data.usr_nro_socio %]                             
-		                                        [% PERL %]
-		                                            print C4::AR::Filtros::action_button(   
-		                                                                                button   => "btn btn-primary",
-		                                                                                icon   => "icon-white icon-shopping-cart",
-		                                                                                title   => "[% 'Reservar un ejemplar' | i18n %]",
-		                                                                                [% IF cantParaPrestamoActual == 0 %]
-		                                                                                	disabled => 1,
-		                                                                                      popover		=> {title=>'[% "No se puede reservar" | i18n %]',
-		                                                                                      					text => '[% "No hay disponibilidad para domicilio sobre esta edici&oacute;n" | i18n %].' },
-																						[% ELSE %]
-			                                                                                action => "showReservar();",
-		                                                                                [% END %]
-		                                                                        );
-		                                        [% END %]
-		                                   [% END %]
-		           [% END %]
+		<blockquote>
+			[% IF cantParaPrestamoActual && cantParaSalaActual%]
+	        	<p>[% "Se cuenta con disponibilidad para llevar a domicilio o leer en la sala de lectura" | i18n %].</p>
+			[% ELSE %]
+				[% IF cantParaPrestamoActual %]
+		        	<p>[% "Se cuenta con disponibilidad para llevar a domicilio" | i18n %].</p>
+		        [% ELSE %]
+					[% IF cantParaSalaActual %]
+			        	<p>[% "Se cuenta con disponibilidad solamente para leer en la sala de lectura" | i18n %].</p>
+					[% ELSE %]
+						<p>[% "No existe ning&uacute;n ejemplar disponible" | i18n %].</p>
+					[% END %]
+				[% END %]
+			[% END %]
+			[% IF cantReservas && cantPrestados %]
+	        	<small>[% "Tener en cuenta que existen " | i18n %] [% cantReservas%] 
+        		<cite title=""> [% " y " | i18n %] [% cantPrestados %] [% "prestados" | i18n %]</cite>
+	        	</small>
+	        [% ELSE %]
+				[% IF cantReservas %]
+		        	<small>[% "Tener en cuenta que existen " | i18n %] [% cantReservas%] [% "reservas " | i18n %]
+		        	</small>
+		        [% ELSE %]
+					[% IF cantPrestados %]
+			        	<small>[% "Tener en cuenta que existen " | i18n %] [% cantPrestados%] [% "prestados" | i18n %]
+			        	</small>
+			        [% END %]
+				[% END%]
+			[% END %]	        
+      	</blockquote>
+			
+           [% IF CirculationEnabled %]
+                                   [% IF socio_data.usr_nro_socio %]                             
+                                        [% PERL %]
+                                            print C4::AR::Filtros::action_button(   
+                                                                                button   => "btn btn-primary",
+                                                                                icon   => "icon-white icon-shopping-cart",
+                                                                                title   => "[% 'Reservar un ejemplar' | i18n %]",
+                                                                                [% IF cantParaPrestamoActual == 0 %]
+                                                                                	disabled => 1,
+                                                                                      popover		=> {title=>'[% "No se puede reservar" | i18n %]',
+                                                                                      					text => '[% "No hay disponibilidad para domicilio sobre esta edici&oacute;n" | i18n %].' },
+																				[% ELSE %]
+	                                                                                action => "showReservar();",
+                                                                                [% END %]
+                                                                        );
+                                        [% END %]
+                                   [% END %]
+           [% END %]
 
 
 

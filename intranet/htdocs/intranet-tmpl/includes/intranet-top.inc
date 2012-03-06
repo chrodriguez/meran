@@ -191,8 +191,8 @@
 		    objAH.texto               = $('#respuesta').val();
 		    objAH.asunto              = $('#asunto').val();
 		    objAH.email               = $('#email').val();
-		    objAH.mensaje_contacto    = $('#mensaje_contacto').val();
-            objAH.sendToServer();
+		    objAH.mensaje_contacto    = $('.modal-body :first-child').html();
+        objAH.sendToServer();
         
 	  }
 		  
@@ -269,7 +269,7 @@
 	<!--  </div> -->
 	  
 	  <div id="marco_principal">
-	     <div id="container" class="container span90">
+	     <div id="container" class="container span96">
 	  
 	  
 		  <div id="marco_contenido_datos" class="contenido">

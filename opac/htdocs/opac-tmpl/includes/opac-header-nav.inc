@@ -8,8 +8,6 @@
   
         <div class="nav_logged">
             
-          <a class="meranlogo" href="[% url_prefix %]/opac-about.pl?token=[% token %]" title="[% 'Ir al inicio' | i18n %]"></a>
-            
 	      [% IF socio_data.usr_nro_socio %]
                 <div id="drop_down_login" class="drop_down_login"> 
 	                <a class="single_link" href="[% url_prefix %]/opac-main.pl?token=[% token %]" title="[% 'Ir a la p&aacute;gina de inicio' | i18n %]">[% 'Inicio' | i18n %]</a>
@@ -28,7 +26,6 @@
                             &nbsp;|&nbsp;
                             <a id="iniciar_sesion" href="login" class="signin"><span>Iniciar Sesion</span></a>
                             <fieldset id="signin_menu">
-                                    <!-- ORIGINAL  <form id="datosAEnviar" method="post" action="[% url_prefix %]/opac-main.pl" onsubmit="return enviar()" autocomplete="off">-->
                                     <form method="post" id="signin" action="[% url_prefix %]/opac-main.pl" onsubmit="return enviar()">
                                           <p><input type="hidden" name="remember_me" value="0" /></p>
                                           <label for="userid">[% 'Usuario' | i18n %]</label>
@@ -42,7 +39,6 @@
                                           <p class="remember">
                                                 <input id="signin_submit" name="cmdweblogin" value="[% 'Enviar' | i18n %]" tabindex="6" type="submit">
                                           </p>
-
 
                                           [%  IF mostrar_captcha  %]
                                               <div id=captcha>
@@ -64,14 +60,11 @@
             <!--</ul>-->
         </div>
       </div>
-      <!-- A.2 HEADER MIDDLE -->
-      <div class="header-middle">    
-      </div>
-      <!-- A.3 HEADER BOTTOM -->
+
+      <div class="header-middle"></div>
+
       <div class="header-bottom">
-        <!-- Navigation Level 2 (Drop-down menus) -->
         <div class="nav2">
-          <!-- Navigation item -->
           <ul>
             <li>
                 [% PERL %]
@@ -127,9 +120,6 @@
             [% END %]
         </div>
  
-      <!-- A.4 HEADER BREADCRUMBS -->
-
-      <!-- Breadcrumbs -->
 
         <div class="header-breadcrumbs">
           [% INCLUDE 'opac-search_form.inc' %]

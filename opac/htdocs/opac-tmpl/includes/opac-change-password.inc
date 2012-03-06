@@ -7,8 +7,6 @@ function objeto_usuario(){
     this.ID;
 }
 
-
-     //muestra los ejemplares del grupo
 function guardarCambiarPassword(){
 
     var changed = $.trim($('#actualpassword').val());
@@ -61,7 +59,6 @@ $(document).ready(function() {
         <input type="hidden" name="token" value="[% token %]">
 </form>
 
-<div class="contactform" style="width: 50%">
 
 <div class='tableMsgUser'>
     <font class='fontMsgUser'>
@@ -72,20 +69,43 @@ $(document).ready(function() {
         </b>
     </font>
 </div>
+
+<section class="center-section-form">
+<form onsubmit="return false" class="form-horizontal">
 <fieldset>
-    <legend>
-        &nbsp;
-        <span id="name_card">
-            [% 'Cambio de contrase&ntilde;a obligatorio' | i18n %]
-        </span>
-        &nbsp;
-    </legend>
-        <p><label for="pass" class="left">Contrase&ntilde;a Actual:&nbsp;</label>
-        <input type="password" name="" id="actualpassword"></p>
-        <p><label for="pass" class="left">Nueva Contrase&ntilde;a:&nbsp;</label>
-        <input type="password" name="" id="newpassword1"></p>
-        <p><label for="pass" class="left">Repetir Contrase&ntilde;a:&nbsp;</label>
-        <input type="password" name=""  id="newpassword2"></p>
-	    <p><input type="button" value="Aceptar" onClick="guardarCambiarPassword()"></p>
+    <legend>[% 'Cambio de contrase&ntilde;a obligatorio' | i18n %]</legend>
+        <div class="control-group">
+            <label class="control-label" for="password">[% 'Contrase&ntilde;a Actual' | i18n %] :</label>
+            <div class="controls">
+                <input type="password" required name="" id="actualpassword">
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="newpassword1">[% 'Nueva Contrase&ntilde;a' | i18n %] :</label>
+            <div class="controls">
+                <input type="password" required name="" id="newpassword1">
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="newpassword2">[% 'Repetir Contrase&ntilde;a' | i18n %] :</label>
+            <div class="controls">
+                <input type="password" required name="" id="newpassword2">
+            </div>
+        </div>
+        
+        <div class="form-actions">
+        [% PERL %]
+              print C4::AR::Filtros::action_button( 
+                                              button    => "btn btn-primary click",
+                                              action    => "guardarCambiarPassword()", 
+                                              title     => "Aceptar",
+                                          ) ;
+
+
+        [% END %]
+        </div>
 </fieldset>
-</div>
+</form>
+</section>
