@@ -58,7 +58,7 @@ function agregarIndice(id2){ID_N2=id2;$('#datos_indice').modal({containerCss:{ba
 function mostrarIndice(id2){$("#indice_data"+id2).modal();}
 function guardarIndice(){objAH=new AjaxHelper(updateGuadarIndice);objAH.showOverlay=true;objAH.debug=true;objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";objAH.tipoAccion="GUARDAR_INDICE";objAH.id2=ID_N2;objAH.indice=$("#indice_id").val();objAH.sendToServer();close_window_indice();}
 function updateGuadarIndice(responseText){var info=JSONstring.toObject(responseText);var Messages=info.Message_arrayref;setMessages(Messages);}
-function close_window_indice(){$('#datos_indice').dialog('close');}
+function close_window_indice(){$('#datos_indice').modal('hide');}
 function agregarN2(){_NIVEL_ACTUAL=2;ID_TIPO_EJEMPLAR=$("#tipo_nivel3_id").val();MODIFICAR=0;inicializar();open_esquema();}
 function agregarN3(id2,tipo_documento){_NIVEL_ACTUAL=3;ID_N2=id2;ID_TIPO_EJEMPLAR=tipo_documento;MODIFICAR=0;inicializar();_mostrarAccion("Agregando ejemplares"+crearBotonEsquema());$('#divCantEjemplares').show();open_esquema();}
 function mostrarInfoAltaNivel1(id1){ID_N1=id1;objAH=new AjaxHelper(updateMostrarInfoAltaNivel1);objAH.showOverlay=true;objAH.debug=true;objAH.showStatusIn='nivel1';objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";objAH.tipoAccion="MOSTRAR_INFO_NIVEL1_LATERAL";objAH.id1=ID_N1;objAH.sendToServer();}

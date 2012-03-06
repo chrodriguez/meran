@@ -659,7 +659,7 @@ function updateGuadarIndice(responseText){
 }
 
 function close_window_indice(){
-    $('#datos_indice').dialog('close');
+    $('#datos_indice').modal('hide');
 }  
 
 function agregarN2(){
