@@ -35,10 +35,10 @@ if ($action eq "add_favorite"){
     my $result = C4::AR::Nivel1::addToFavoritos($id1,$nro_socio);
     if ($result){
                                       print C4::AR::Filtros::action_button( 
-                                                                      button    => "btn btn-primary click",
-                                                                      action    => 'deleteFavorite($id1,"fav_$id1");',
+                                                                      button    => "btn btn-info click",
+                                                                      action    => 'deleteFavorite('.$id1.',"fav_'.$id1.'",1);',
                                                                       id        => "button_favorite_id1",
-                                                                      icon      => "icon-heart icon-white",
+                                                                      icon      => "icon-star icon-white",
                                                                       disabled  => 1,
                                                                   ) ;
     	
@@ -55,9 +55,9 @@ elsif ($action eq "delete_favorite"){
     		                          print $session->header;
                                       print C4::AR::Filtros::action_button( 
                                                                       button    => "btn btn-primary click",
-                                                                      action    => 'addFavorite($id1,"fav_$id1");',
+                                                                      action    => 'addFavorite('.$id1.',"fav_'.$id1.'");',
                                                                       id        => "button_favorite_id1",
-                                                                      icon      => "icon-heart icon-white",
+                                                                      icon      => "icon-star-empty icon-white",
                                                                   ) ;
     		
     	}
