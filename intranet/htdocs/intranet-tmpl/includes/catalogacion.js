@@ -1111,8 +1111,10 @@ function open_esquema(){
     
     if(MODIFICAR == 1){
         $("#boton_guardar_esquema").show();
+        $("#boton_seleccionar_esquema").hide();  
     } else {
         $("#boton_guardar_esquema").hide();
+        $("#boton_seleccionar_esquema").show();    
     } 
 }
 
@@ -1915,6 +1917,7 @@ function crearBotones(obj){
     } else {
         $("#div_botones" + obj.getIdCompCliente() + "_lista").append(crearBotonAgregarSubcampoRepetible(obj));
         $("#div_botones" + obj.getIdCompCliente() + "_lista").append(crearBotonEliminarSubcampoRepetible(obj));
+        $("#div_botones" + obj.getIdCompCliente() + "_lista").append(crearBotonAgregarReferenciaSubcampo(obj));  
     }
 }
 
@@ -2024,26 +2027,38 @@ function cambiarValorEnHidden(id){
     $(id + "_hidden").val(valor);
 }
 
+
+// FIXME si el subcampo es repetible el boton se cae y queda abajo
 function crearAuto(obj){
     var comp = "<input type='text' id='" + obj.getIdCompCliente() + "' name='"+ obj.getIdCompCliente() +"' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+" class='horizontal' >";
 
     $("#div" + obj.getIdCompCliente()).append(comp);
     crearBotones(obj);
     
+//     FIXME creo q no se usa mas!!!!!!!!!!!!
     // TODO parche FEO, falta cambiar el ID, el que se tiene q guardar es el del combo
-    if((obj.getCampo() == '773')&&(obj.getSubCampo() == 'a')){
+//     if((obj.getCampo() == '773')&&(obj.getSubCampo() == 'a')){
         // FIXME parche para el doble combo de analiticas
-        var comp = "<div id='ediciones'></div>";
-        $(comp).insertAfter("#div" + obj.getIdCompCliente());        
-    }      
+//         var comp = "<div id='ediciones'></div>";
+//         $(comp).insertAfter("#div" + obj.getIdCompCliente());        
+//     }      
     
-    comp = "<div class='icon_agregar horizontal' onclick=agregarTablaReferencias('" + obj.getReferenciaTabla() + "') title='Agregar referencia al subcampo " + obj.getSubCampo() + " para el campo " + obj.getCampo() + "' />"
-    $(comp).insertAfter("#div" + obj.getIdCompCliente());
+//     comp = "<div class='icon_agregar horizontal' onclick=agregarTablaReferencias('" + obj.getReferenciaTabla() + "') title='Agregar referencia al subcampo " + obj.getSubCampo() + " para el campo " + obj.getCampo() + "' />"
+//     $(comp).insertAfter("#div" + obj.getIdCompCliente());
     _cearAutocompleteParaCamponente(obj);
     //se crea un input hidden para guardar el ID del elemento de la lista que se selecciono
     comp = crearHidden(obj);
     $(comp).insertAfter("#div" + obj.getIdCompCliente());
 
+}
+
+function crearBotonAgregarReferenciaSubcampo(obj){
+
+    if(obj.getRepetible() == '1'){
+        return '<li><a class="click" onclick=agregarTablaReferencias("'+ obj.getIdCompCliente() +'")><i class="icon-plus"></i> Agregar referencia al subcampo '+ obj.getSubCampo() + ' para el campo ' + obj.getCampo() +'</a></li>';
+    }else{  
+        return '';
+    }
 }
 
 function crearCalendar(obj){

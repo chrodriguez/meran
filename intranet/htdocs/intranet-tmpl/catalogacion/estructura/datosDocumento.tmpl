@@ -73,11 +73,13 @@ $(document).ready( function() {
 
     $('#datos_indice').hide();
 
+// FIXME se hace ne los dos casos ahora parece
     if(MODIFICAR) {
         $('#datos_del_leader').hide();
     } else {
         mostrarEstructuraDelNivel1();
 //         $('#datos_del_leader').show();
+        $('#datos_del_leader').hide();
     }
     
 } );
@@ -101,7 +103,7 @@ $(document).ready( function() {
 	                [% comboTipoNivelBibliografico %]
 	            </div>
             </div>
-	         <legend><div id="estado_accion" class="titulos estado_accion" style="display:none"></div></legend>
+<!-- 	         <legend><div id="estado_accion" class="titulos estado_accion" style="display:none"></div></legend> -->
 	                      
 	</form>
 	
@@ -131,9 +133,10 @@ $(document).ready( function() {
             <div class='modal-footer'>
 	                [% PERL %]
 	                        print C4::AR::Filtros::to_Button(     text   => "[% 'Usar esquema' | i18n %]",
-	                                                            boton   => "btn btn-primary",
-	                                                            onClick => "seleccionar_esquema();",
-	                                                            title   => "[% 'Usar esquema' | i18n %]",
+                                                                  boton   => "btn btn-primary",
+                                                                  onClick => "seleccionar_esquema();",
+                                                                  title   => "[% 'Usar esquema' | i18n %]",
+                                                                  id      => "boton_seleccionar_esquema",
 	                                ) ;
 	                [% END %]
 	                
