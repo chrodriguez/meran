@@ -13,7 +13,7 @@ __PACKAGE__->meta->setup(
         id                             => { type => 'serial', overflow => 'truncate', not_null => 1 },
         id_importacion_iso             => { type => 'integer', overflow => 'truncate', not_null => 1},
         type                           => { type => 'varchar', overflow => 'truncate', length => 25},
-        estado                         => { type => 'integer', overflow => 'truncate', length => 2},
+        estado                         => { type => 'varchar', overflow => 'truncate', length => 25},
         matching                       => { type => 'integer', overflow => 'truncate'},
         id_matching                    => { type => 'integer', overflow => 'truncate'},
         identificacion                 => { type => 'varchar', overflow => 'truncate', length => 255},

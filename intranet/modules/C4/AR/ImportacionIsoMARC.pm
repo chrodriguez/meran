@@ -1552,11 +1552,6 @@ sub generaCodigoBarraFromMarcRecord{
 }
 
 
-sub referenciasFromMarcRecord{
-    my($marc_record) = @_;
-
-}
-
 sub procesarReferencia{
     my($params) = @_;
 #Hay que agregar la referencia a la tabla correspondiente y devolver el id
@@ -1609,6 +1604,50 @@ sub procesarReferencia{
             }
 			
 		}
+	}
+}
+
+
+sub procesarImportacion {
+    my($id) = @_;
+    
+	my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($id);
+	
+	#Se obtienen los registros NO IGNORADOS; NI IMPORTADOS;  NI QUE MATCHEEN
+	my $registros_importar = $importacion->getRegistrosParaImportar();
+	
+	foreach my $io_rec (@$registros_importar){
+	  eval{
+		$io_rec->aplicarImportacion();
+		$io_rec->setEstado('IMPORTADO');
+		$io_rec->save();
+	  };
+	  
+	  if ($@){
+	   &C4::AR::Mensajes::printErrorDB($@, 'B450',"INTRA");
+	   C4::AR::Debug::debug("Importacion => ERROR en registro ".$io_rec->getId());
+	   $io_rec->setEstado('ERROR');
+	   $io_rec->save();
+	   }
+	}
+	
+	#Ahora hay que Actualizar los Registros que MATCHEAN y NO ESTAN IGNORADOS.
+	#TODO 
+	my $registros_actualizar = $importacion->getRegistrosParaActualizar();
+	
+	foreach my $io_rec (@$registros_actualizar){
+	  eval{
+		#$io_rec->aplicarImportacion();
+		#$io_rec->setEstado('IMPORTADO');
+		#$io_rec->save();
+	  };
+	  
+	  if ($@){
+	   &C4::AR::Mensajes::printErrorDB($@, 'B450',"INTRA");
+	   C4::AR::Debug::debug("Importacion => ERROR en registro ".$io_rec->getId());
+	   $io_rec->setEstado('ERROR');
+	   $io_rec->save();
+	   }
 	}
 }
 

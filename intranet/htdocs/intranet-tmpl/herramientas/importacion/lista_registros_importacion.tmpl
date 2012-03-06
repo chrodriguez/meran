@@ -96,26 +96,9 @@ function cambiarFiltro (filtro){
 
                       <td>
                         [% IF detalle_importacion.getMatching %]
-                        <span class="label label-warning">
-							[% PERL %]
-                            print C4::AR::Filtros::link_to( text =>     "Si",
-                                                            url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
-                                                            params =>   ["id1=[% detalle_importacion.getIdMatching %]"],
-                                                            title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
-                                                        ) ;
-							[% END %]
+                        <span class="label label-success">
+							Si
 						</span>
-                      <div class="click">
-                            [% PERL %]
-                            print C4::AR::Filtros::to_Icon(
-                                                             boton         => "icon_borrar",
-                                                             onClick       => "quitarMatcheoRegistro('[% detalle_importacion.getIdImportacionIso %]','[% detalle_importacion.getId %]');",
-                                                             title         => "[% 'No es el mismo registro' | i18n %]",
-                                                             alternClass   => "botonCentradoTabla",
-                                                           ) ;
-
-                            [% END %]
-                        </div>
                         [% ELSE %]
                         <span class="label label-info">No</span>
                         [% END %]
@@ -128,7 +111,7 @@ function cambiarFiltro (filtro){
                         [% ELSIF detalle_importacion.getEstado == "ERROR" %]
                         <span class="label label-important">Error</span>
                         [% ELSE %]
-						<span class="label label-info">Inicial</span>
+						<span class="label label-info">Procesar</span>
                         [% END %]
                         
                       </td>
@@ -136,29 +119,61 @@ function cambiarFiltro (filtro){
                       <!--  BOTONES ACCIONES (Editar, Borrar, Ver detalle) -->
                       <td>
 							   [% IF detalle_importacion.getEstado != "IGNORADO" %]
-	                              [% PERL %]
-	                               print C4::AR::Filtros::action_set_button(    
-										title           => "[% 'Registro' | i18n %]",
-	                                    button          => 'btn btn-primary',
-	                                    action			=> 'detalleRegistroMARC("[% detalle_importacion.getId %]")',
-	                                    actions         => [
-											{title => "Detalle", action=>'detalleRegistroMARC("[% detalle_importacion.getId %]")',icon=>"icon-search"},
-	                                        {title => "Ignorar", action=>'cambiarEstadoRegistro("[% detalle_importacion.getIdImportacionIso %]","[% detalle_importacion.getId %]","IGNORADO")', icon=>"icon-ban-circle"},
-	                                                       ],
-									);
+							   	   [% IF detalle_importacion.getMatching %]
+	                                 [% PERL %]
+									   print C4::AR::Filtros::action_set_button(    
+											title           => "[% 'Registro' | i18n %]",
+											button          => 'btn btn-primary',
+											action			=> 'detalleRegistroMARC("[% detalle_importacion.getId %]")',
+											actions         => [
+												{title => "Detalle", action=>'detalleRegistroMARC("[% detalle_importacion.getId %]");',icon=>"icon-search"},
+												{title => "Ignorar", action=>'cambiarEstadoRegistro("[% detalle_importacion.getIdImportacionIso %]","[% detalle_importacion.getId %]","IGNORADO")', icon=>"icon-ban-circle"},
+												{title => "Ver Registro",  url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl",  params =>   ["id1=[% detalle_importacion.getIdMatching %]"], icon=>"icon-search"},
+												{title => "No es el mismo Registro",  action=>'quitarMatcheoRegistro("[% detalle_importacion.getIdImportacionIso %]","[% detalle_importacion.getId %]");', icon=>"icon-minus-sign"},
+															   ],
+										);
+									  [% END %]
+	                              [% ELSE %]
+									  [% PERL %]
+									   print C4::AR::Filtros::action_set_button(    
+											title           => "[% 'Registro' | i18n %]",
+											button          => 'btn btn-primary',
+											action			=> 'detalleRegistroMARC("[% detalle_importacion.getId %]")',
+											actions         => [
+												{title => "Detalle", action=>'detalleRegistroMARC("[% detalle_importacion.getId %]")',icon=>"icon-search"},
+												{title => "Ignorar", action=>'cambiarEstadoRegistro("[% detalle_importacion.getIdImportacionIso %]","[% detalle_importacion.getId %]","IGNORADO")', icon=>"icon-ban-circle"},
+															   ],
+										);
+									  [% END %]
 	                              [% END %]
 	                           [% ELSE %]
-	                              [% PERL %]
-	                               print C4::AR::Filtros::action_set_button(    
-										title           => "[% 'Registro' | i18n %]",
-	                                    button          => 'btn btn-primary',
-	                                    action			=> 'detalleRegistroMARC("[% detalle_importacion.getId %]")',
-	                                    actions         => [
-											{title => "Detalle", action=>'detalleRegistroMARC("[% detalle_importacion.getId %]");',icon=>"icon-search"},
-	                                        {title => "Procesar", action=>'cambiarEstadoRegistro("[% detalle_importacion.getIdImportacionIso %]","[% detalle_importacion.getId %]","PROCESAR");', icon=>"icon-ok-circle"},
-	                                                       ],
-									);
-	                              [% END %]
+	                             [% IF detalle_importacion.getMatching %]
+	                                 [% PERL %]
+									   print C4::AR::Filtros::action_set_button(    
+											title           => "[% 'Registro' | i18n %]",
+											button          => 'btn btn-primary',
+											action			=> 'detalleRegistroMARC("[% detalle_importacion.getId %]")',
+											actions         => [
+												{title => "Detalle", action=>'detalleRegistroMARC("[% detalle_importacion.getId %]");',icon=>"icon-search"},
+												{title => "Procesar", action=>'cambiarEstadoRegistro("[% detalle_importacion.getIdImportacionIso %]","[% detalle_importacion.getId %]","PROCESAR");', icon=>"icon-ok-circle"},
+												{title => "Ver Registro",  url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl",  params =>   ["id1=[% detalle_importacion.getIdMatching %]"], icon=>"icon-search"},
+												{title => "No es el mismo Registro",  action=>'quitarMatcheoRegistro("[% detalle_importacion.getIdImportacionIso %]","[% detalle_importacion.getId %]");', icon=>"icon-minus-sign"},
+															   ],
+										);
+									  [% END %]
+	                              [% ELSE %]
+									  [% PERL %]
+									   print C4::AR::Filtros::action_set_button(    
+											title           => "[% 'Registro' | i18n %]",
+											button          => 'btn btn-primary',
+											action			=> 'detalleRegistroMARC("[% detalle_importacion.getId %]")',
+											actions         => [
+												{title => "Detalle", action=>'detalleRegistroMARC("[% detalle_importacion.getId %]");',icon=>"icon-search"},
+												{title => "Procesar", action=>'cambiarEstadoRegistro("[% detalle_importacion.getIdImportacionIso %]","[% detalle_importacion.getId %]","PROCESAR");', icon=>"icon-ok-circle"},
+															   ],
+										);
+									  [% END %]
+								 [% END %]
 							   [% END %]
                       </td>
                 </tr>

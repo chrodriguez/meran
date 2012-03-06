@@ -414,6 +414,54 @@ sub getRegistrosPadre{
     return $registros;
 }
 
+sub getRegistrosParaImportar{
+    my ($self)   = shift;
+
+    my @filtros;
+    push (@filtros, ( id_importacion_iso => { eq => $self->getId }));
+    #Solo registros padre por defecto
+    push (@filtros, ( relacion => { eq => '' }));
+    
+    #Solo registros que no matcheen
+    push (@filtros, ( matching => { eq => undef }));
+    
+    #Solo registros no ignorados
+    push (@filtros, ( estado => { ne => 'IGNORADO' }));
+    
+   #Solo registros no importados anteriormente
+    push (@filtros, ( estado => { ne => 'IMPORTADO' }));
+    
+   #Solo registros sin ERROR
+    push (@filtros, ( estado => { ne => 'ERROR' }));
+    
+   my $registros_array_ref= C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro(query => \@filtros);
+   return  $registros_array_ref;
+}
+
+sub getRegistrosParaActualizar{
+	my ($self)   = shift;
+
+    my @filtros;
+    push (@filtros, ( id_importacion_iso => { eq => $self->getId }));
+    #Solo registros padre por defecto
+    push (@filtros, ( relacion => { eq => '' }));
+    
+    #Solo registros que matcheen
+    push (@filtros, ( matching => { ne => undef }));
+    
+    #Solo registros no ignorados
+    push (@filtros, ( estado => { ne => 'IGNORADO' }));
+    
+   #Solo registros no importados anteriormente
+    push (@filtros, ( estado => { ne => 'IMPORTADO' }));
+    
+   #Solo registros sin ERROR
+    push (@filtros, ( estado => { ne => 'ERROR' }));
+    
+   my $registros_array_ref= C4::Modelo::IoImportacionIsoRegistro::Manager->get_io_importacion_iso_registro(query => \@filtros);
+   return  $registros_array_ref;
+}
+
 sub getRegistros{
     my ($self)   = shift;
 
