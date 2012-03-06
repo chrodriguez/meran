@@ -7,7 +7,9 @@
 [% USE HTML %]
   
         <div class="nav_logged">
+                    <a class="meranlogo" href="[% url_prefix %]/opac-about.pl?token=[% token %]" title="[% 'Ir al inicio' | i18n %]">vo</a>
             
+          
 	      [% IF socio_data.usr_nro_socio %]
                 <div id="drop_down_login" class="drop_down_login"> 
 	                <a class="single_link" href="[% url_prefix %]/opac-main.pl?token=[% token %]" title="[% 'Ir a la p&aacute;gina de inicio' | i18n %]">[% 'Inicio' | i18n %]</a>

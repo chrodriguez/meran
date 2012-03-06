@@ -43,6 +43,15 @@
 	                 [% END %]
 	             [% END %]
    </div>
+                [% PERL %]
+                   print C4::AR::Filtros::action_link_button( 
+                                                     button         => "btn btn-success",
+                                                     url       	=> "[% url_prefix %]/opac-info_reservas.pl",
+                                                     params		=> ["action=detalle_asignadas","token=[% token %]"],
+                                                     title        => "[% 'Ver reservas' | i18n %]",
+                                       ) ;
+                [% END %]
+   
 </div>
 
 

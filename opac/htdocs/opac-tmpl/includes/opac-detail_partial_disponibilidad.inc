@@ -63,7 +63,7 @@
                                                 button	=> "btn btn-info",
                                                 params  => ["id2=[% id2 %]"],
                                                 title   => " [% 'Comentarios de la edici&oacute;n' | i18n %] ([% cant_reviews %])",
-                                                icon	=> "icon-white icon-pencil",
+                                                icon	=> "icon-white icon-comment",
                                             ) ;
             [% END %]
           </h3>

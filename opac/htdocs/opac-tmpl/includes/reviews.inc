@@ -40,20 +40,20 @@
 
 [% IF socio_data.usr_permisos_opac %]
 
-<form class="form-horizontal" action="[% url_prefix %]/reviews.pl" method="post">
-  <section >
-    <fieldset>
-    <legend> [% 'Enviar comentario ' | i18n %]</legend>
-    
-        <textarea id="review" name="review" class="self_review" style="width: 88.3%;height: 150px;"></textarea>
-        <input type="hidden" name="token" value="[% token %]" />
-        <input type="hidden" name="id2" value="[% HTML.escape(id2) %]" />
-        <div class="form-actions">
-              <input class="btn btn-primary" type="submit" value="[% 'Enviar' | i18n %]" />
-        </div>
-    </fieldset>
-   </section>
-</form>
+	<form class="form-horizontal" action="[% url_prefix %]/reviews.pl" method="post">
+	  <section >
+	    <fieldset>
+	    <legend> [% 'Enviar comentario ' | i18n %]</legend>
+	    
+	        <textarea id="review" name="review" class="self_review" style="width: 88.3%;height: 150px;"></textarea>
+	        <input type="hidden" name="token" value="[% token %]" />
+	        <input type="hidden" name="id2" value="[% HTML.escape(id2) %]" />
+	        <div class="form-actions">
+	              <button class="btn btn-primary" type="submit"><i class="icon-white icon-comment"></i> [% 'Enviar comentario' | i18n %]</button>
+	        </div>
+	    </fieldset>
+	   </section>
+	</form>
 [% END %]
 
 [% PERL %]
