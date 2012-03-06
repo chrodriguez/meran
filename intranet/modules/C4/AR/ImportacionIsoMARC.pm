@@ -1576,10 +1576,21 @@ sub procesarReferencia{
 					my @autor = split(', ', $params->{'dato'});
 					if ($autor[0]){
 						$tabla_referer_involved->setApellido($autor[0]);
-					}
-					if ($autor[1]){					
-						$tabla_referer_involved->setNombre($autor[1]);
-					}
+            if ($autor[1]){					
+              $tabla_referer_involved->setNombre($autor[1]);
+            } 
+            else{
+              $tabla_referer_involved->setNombre($autor[0]);
+              }
+            
+					} else {
+            if ($autor[1]){					
+              $tabla_referer_involved->setApellido($autor[1]);
+              $tabla_referer_involved->setNombre($autor[1]);
+            }
+          }
+          
+
 					$tabla_referer_involved->save();
 					C4::AR::Debug::debug("NUEVO AUTOR: ".$params->{'dato'}." => ".$tabla_referer_involved->getId());
 					return $tabla_referer_involved->getId();
