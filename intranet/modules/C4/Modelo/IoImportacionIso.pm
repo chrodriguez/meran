@@ -423,7 +423,7 @@ sub getRegistrosParaImportar{
     push (@filtros, ( relacion => { eq => '' }));
     
     #Solo registros que no matcheen
-    push (@filtros, ( matching => { eq => undef }));
+    push (@filtros, ( matching => { ne => 1}));
     
     #Solo registros no ignorados
     push (@filtros, ( estado => { ne => 'IGNORADO' }));
@@ -449,7 +449,7 @@ sub getRegistrosParaActualizar{
     push (@filtros, ( relacion => { eq => '' }));
     
     #Solo registros que matcheen
-    push (@filtros, ( matching => { ne => undef }));
+    push (@filtros, ( matching => { eq => 1 }));
     
     #Solo registros no ignorados
     push (@filtros, ( estado => { ne => 'IGNORADO' }));
