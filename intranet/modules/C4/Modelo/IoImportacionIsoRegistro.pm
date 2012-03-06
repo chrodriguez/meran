@@ -584,6 +584,12 @@ sub aplicarImportacion {
       }
     }
     
+    if ($msg_object->{'error'}){
+		$self->setEstado('ERROR');
+		}
+	else{
+		$self->setEstado('IMPORTADO');
+		}
 	return $msg_object;
 }
 

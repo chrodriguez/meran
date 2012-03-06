@@ -244,7 +244,7 @@ sub getRegistrosFromImportacion {
         push (@filtros, ( matching => { eq => 1 }));
         }
     elsif($filter eq 'IGNORED'){
-        push (@filtros, ( estado => { eq => 'I' }));
+        push (@filtros, ( estado => { eq => 'IGNORADO' }));
         }
     elsif($filter eq 'ALL'){
         #si se muestran todos no se agregan mas filtros
@@ -1047,15 +1047,22 @@ sub getNivelesFromRegistro {
 				switch ($estructura->getNivel) {
 				case 1 { 
 						#El campo es de Nivel 1 
-						if ($marc_record_n1->field($campo)){
-							#Existe el campo, agrego el subcampo
-							$marc_record_n1->field($campo)->add_subfields($subcampo => $dato);
+						
+						if(($marc_record_n1->subfield($campo,$subcampo))&&(!$estructura->getRepetible)){
+							#Ya existe, pero no es repetible!! ALGO ESTÁ MAL!!!
+							C4::AR::Debug::debug("CAMPO NO REPETIBLE REPETIDO!!!! ".$campo."&".$subcampo." => ".$dato);	
 						}
 						else{
-							#No existe el campo, se crea
-							my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
-							$marc_record_n1->append_fields($field);
+							if ($marc_record_n1->field($campo)){
+								#Existe el campo, agrego el subcampo
+								$marc_record_n1->field($campo)->add_subfields($subcampo => $dato);
 							}
+							else{
+								#No existe el campo, se crea
+								my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
+								$marc_record_n1->append_fields($field);
+								}
+						}
 					}
 				case 2 {
 						#Nivel 2
@@ -1576,21 +1583,19 @@ sub procesarReferencia{
 					my @autor = split(', ', $params->{'dato'});
 					if ($autor[0]){
 						$tabla_referer_involved->setApellido($autor[0]);
-            if ($autor[1]){					
-              $tabla_referer_involved->setNombre($autor[1]);
-            } 
-            else{
-              $tabla_referer_involved->setNombre($autor[0]);
-              }
-            
-					} else {
-            if ($autor[1]){					
-              $tabla_referer_involved->setApellido($autor[1]);
-              $tabla_referer_involved->setNombre($autor[1]);
-            }
-          }
-          
-
+						if ($autor[1]){					
+						  $tabla_referer_involved->setNombre($autor[1]);
+						} 
+						else{
+						  $tabla_referer_involved->setNombre($autor[0]);
+						  }
+						
+								} else {
+						if ($autor[1]){					
+						  $tabla_referer_involved->setApellido($autor[1]);
+						  $tabla_referer_involved->setNombre($autor[1]);
+						}
+					  }
 					$tabla_referer_involved->save();
 					C4::AR::Debug::debug("NUEVO AUTOR: ".$params->{'dato'}." => ".$tabla_referer_involved->getId());
 					return $tabla_referer_involved->getId();
@@ -1599,7 +1604,7 @@ sub procesarReferencia{
 					$tabla_referer_involved->setNombre($params->{'dato'});
 					$tabla_referer_involved->save();
 					C4::AR::Debug::debug("NUEVA CIUDAD: ".$params->{'dato'}." => ".$tabla_referer_involved->getId());
-					return $tabla_referer_involved->getId();
+					return $tabla_referer_involved->getIdLocalidad();
 					}
             }
 			

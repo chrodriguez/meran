@@ -70,7 +70,7 @@ function cambiarFiltro (filtro){
 													  '[% "Identificaci&oacute;n"|i18n %]',
 													  '[% "Tipo"|i18n %]',
 													  '[% "Encontrado"|i18n %]',
-													  '[% "Ignorado"|i18n %]',
+													  '[% "Estado"|i18n %]',
 													  '[% "Acciones"|i18n %]',
                                                      ]
                                         );
@@ -96,14 +96,15 @@ function cambiarFiltro (filtro){
 
                       <td>
                         [% IF detalle_importacion.getMatching %]
+                        <span class="label label-warning">
 							[% PERL %]
                             print C4::AR::Filtros::link_to( text =>     "Si",
                                                             url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
                                                             params =>   ["id1=[% detalle_importacion.getIdMatching %]"],
                                                             title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
-                                                            class => "rojo"
                                                         ) ;
 							[% END %]
+						</span>
                       <div class="click">
                             [% PERL %]
                             print C4::AR::Filtros::to_Icon(
@@ -116,16 +117,25 @@ function cambiarFiltro (filtro){
                             [% END %]
                         </div>
                         [% ELSE %]
-							<span class='verde'>No</span>
+                        <span class="label label-info">No</span>
                         [% END %]
                       </td>
                       <td>
-                        [% IF detalle_importacion.getEstado == "I" %]<span class='rojo'>Si</span>[% ELSE %]<span class='verde'>No</span>[% END %]
+                        [% IF detalle_importacion.getEstado == "IGNORADO" %]
+                        <span class="label label-warning">Ignorado</span>
+                        [% ELSIF detalle_importacion.getEstado == "IMPORTADO" %]
+                        <span class="label label-success">Importado</span>
+                        [% ELSIF detalle_importacion.getEstado == "ERROR" %]
+                        <span class="label label-important">Error</span>
+                        [% ELSE %]
+						<span class="label label-info">Inicial</span>
+                        [% END %]
+                        
                       </td>
 
                       <!--  BOTONES ACCIONES (Editar, Borrar, Ver detalle) -->
                       <td>
-							   [% IF detalle_importacion.getEstado != "I" %]
+							   [% IF detalle_importacion.getEstado != "IGNORADO" %]
 	                              [% PERL %]
 	                               print C4::AR::Filtros::action_set_button(    
 										title           => "[% 'Registro' | i18n %]",
@@ -133,7 +143,7 @@ function cambiarFiltro (filtro){
 	                                    action			=> 'detalleRegistroMARC("[% detalle_importacion.getId %]")',
 	                                    actions         => [
 											{title => "Detalle", action=>'detalleRegistroMARC("[% detalle_importacion.getId %]")',icon=>"icon-search"},
-	                                        {title => "Ignorar", action=>'cambiarEstadoRegistro("[% detalle_importacion.getIdImportacionIso %]","[% detalle_importacion.getId %]","I")', icon=>"icon-ban-circle"},
+	                                        {title => "Ignorar", action=>'cambiarEstadoRegistro("[% detalle_importacion.getIdImportacionIso %]","[% detalle_importacion.getId %]","IGNORADO")', icon=>"icon-ban-circle"},
 	                                                       ],
 									);
 	                              [% END %]
@@ -145,7 +155,7 @@ function cambiarFiltro (filtro){
 	                                    action			=> 'detalleRegistroMARC("[% detalle_importacion.getId %]")',
 	                                    actions         => [
 											{title => "Detalle", action=>'detalleRegistroMARC("[% detalle_importacion.getId %]");',icon=>"icon-search"},
-	                                        {title => "Procesar", action=>'cambiarEstadoRegistro("[% detalle_importacion.getIdImportacionIso %]","[% detalle_importacion.getId %]","P");', icon=>"icon-ok-circle"},
+	                                        {title => "Procesar", action=>'cambiarEstadoRegistro("[% detalle_importacion.getIdImportacionIso %]","[% detalle_importacion.getId %]","PROCESAR");', icon=>"icon-ok-circle"},
 	                                                       ],
 									);
 	                              [% END %]
