@@ -6,14 +6,14 @@
           makeToggle('datos_tabla_div_referenced','trigger',null,false);
           makeToggle('datos_tabla_div_related','trigger',null,false);
           makeDataTable('#tablaResult_similares');
-          zebra('datos_tabla');
           scrollTo('fieldset_tablaResult_involved');
       });
 </script>
-<fieldset class="resultados_busqueda" id="fieldset_tablaResult_involved">
-    <legend class="titulo_legend trigger click">[% "Registro " | i18n %]:</legend>
+<fieldset id="fieldset_tablaResult_involved">
+    <legend class="trigger click">[% "Registro " | i18n %]:</legend>
         <div class="datos_tabla_div_referenced" id="datos_tabla_div">
-            <table id="tablaResult_involved" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%">
+        
+            <table id="tablaResult_involved" class="table table-striped">
               [% IF referer_involved %]
                   <thead>
                       <tr class="titulo_tabla_resultado">
@@ -29,17 +29,18 @@
                       <tr>
                           [% referer_involved.printAsTableElement %]
                           [% IF used == 0 %]
-                              <td>
-                                  [% PERL %]
-                                      print C4::AR::Filtros::to_Icon(  
-                                                                          boton   => "icon_cancelar",
-                                                                          onClick => "eliminarReferencia('[% tabla_related %]','[% referer_involved.getPkValue %]');",
-                                                                          title   => "[% 'Eliminar' | i18n %]",
-                                                                          alternClass => "botonCentradoTabla",
-                                                                          elem => 'span',
-                                                                          style => 'float: left;',
-                                              ) ;
-                                  [% END %]
+                              <td>                                  
+                                [% PERL %]
+                                
+                                  print C4::AR::Filtros::action_button( 
+                                              button    => "btn btn-danger click",
+                                              action    => 'eliminarReferencia("[% tabla_related %]","[% referer_involved.getPkValue %]")', 
+                                              icon      => "icon-white icon-remove",
+                                              title     => "[% 'Eliminar' | i18n %]",
+                                      ) ;
+
+
+                                [% END %]
                               </td>
                           [% END %]
                       </tr>
@@ -56,11 +57,12 @@
             </table>
         </div>
 </fieldset>
-
-<fieldset class="resultados_busqueda">
+</br>
+</br>
+<fieldset>
     <legend class="titulo_legend trigger click">[% "Relaciones " | i18n %]: [% tabla %]</legend>
         <div class="datos_tabla_div" id="datos_tabla_div">
-            <table id="tablaResult_relacionados" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%">
+            <table id="tablaResult_relacionados" class="table table-striped">
                 <thead>
                     <tr class="titulo_tabla_resultado">
                             <th> [% "Tablas relacionadas " | i18n %]</th>
@@ -80,11 +82,12 @@
             </table>
         </div>
 </fieldset>
-
-<fieldset class="resultados_busqueda">
+</br>
+</br>
+<fieldset>
     <legend class="titulo_legend trigger click">[% "Similares " | i18n %]: [% tabla %]</legend>
         <div class="datos_tabla_div_related" id="datos_tabla_div">
-            <table id="tablaResult_similares" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%">
+            <table id="tablaResult_similares" class="table table-striped">
                 <thead>
                     [% IF referer_involved %]
                         <tr class="titulo_tabla_resultado">
@@ -104,28 +107,31 @@
                                     [% related.printAsTableElement %]
                                 </span>
                                 <td>
+                                    
                                     [% PERL %]
-                                        print C4::AR::Filtros::to_Icon(  
-                                                                            boton   => "icon_cancelar",
-                                                                            onClick => "asignarReferencia('[% tabla_related %]','[% related.getPkValue %]','[% referer_involved.getPkValue %]','[% referer_involved.get_key_value %]');",
-                                                                            title   => "[% 'Asignar' | i18n %]",
-                                                                            alternClass => "botonCentradoTabla",
-                                                                            elem => 'span',
-                                                                            style => 'float: left;',
-                                                ) ;
+                                        print C4::AR::Filtros::action_button( 
+                                                button      => "btn btn-warning click",
+                                                action      => 'asignarReferencia("[% tabla_related %]","[% related.getPkValue %]","[% referer_involved.getPkValue %]","[% referer_involved.get_key_value %]");', 
+                                                icon        => "icon-move icon-white",
+                                          ) ;
+
+
                                     [% END %]
+                          
+                          
                                 </td>
-                                <td>
+                                <td>                                    
+                                    
                                     [% PERL %]
-                                        print C4::AR::Filtros::to_Icon(  
-                                                                            boton   => "icon_cancelar",
-                                                                            onClick => "asignarEliminarReferencia('[% tabla_related %]','[% related.getPkValue %]','[% referer_involved.getPkValue %]','[% referer_involved.get_key_value %]');",
-                                                                            title   => "[% 'Asignar y Eliminar' | i18n %]",
-                                                                            alternClass => "botonCentradoTabla",
-                                                                            elem => 'span',
-                                                                            style => 'float: left;',
-                                                ) ;
+                                        print C4::AR::Filtros::action_button( 
+                                                button      => "btn btn-danger click",
+                                                action      => 'asignarEliminarReferencia("[% tabla_related %]","[% related.getPkValue %]","[% referer_involved.getPkValue %]","[% referer_involved.get_key_value %]");', 
+                                                icon        => "icon-move icon-white",
+                                          ) ;
+
+
                                     [% END %]
+                                    
                                 </td>
                             </tr>
                         [% END %]
