@@ -18,7 +18,7 @@
 			                              print C4::AR::Filtros::link_to( text =>     "[% reserva.nivel2.nivel1.getTitulo %]",
 			                                                              url =>      "[% url_prefix %]/opac-info_reservas.pl", 
 			                                                              params =>   ["action=detalle_asignadas"],
-			                                                              title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
+			                                                              title =>    "[% 'Reservas' | i18n %]"
 			                                                          ) ;
 			                    [% END %]
 		                    </dt>
