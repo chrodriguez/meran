@@ -117,6 +117,10 @@
                             });
                         }
                     });
+             [% IF portada %]
+             	$('.carousel').carousel();
+          	 [% END %]
+             	
         });
 	</script>
 	

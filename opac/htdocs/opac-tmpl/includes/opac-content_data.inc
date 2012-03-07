@@ -20,6 +20,23 @@
 	
 		</p>
 
+		<div id="carousel_container" class="span9">
+			<div id="carousel_portada_opac" class="carousel slide">
+	            <div class="carousel-inner">
+	            [% FOREACH p IN portada %]
+	              <div class="item">
+	                <img src="[% url_prefix %]/uploads/portada/[% p.getImagePath %]" alt="">
+	                [% IF p.getFooter %]
+		                <div class="carousel-caption">
+		                  <h4>[% p.getFooterTitle %]</h4>
+		                  <p>[% p.getFooter %]</p>
+		                </div>
+		            [% END %]
+	              </div>
+	            [% END %]
+	        </div>
+		</div>
+
 		<p>
 	        <form class="" action="[% url_prefix %]/opac-busquedasDB.pl" method="get" onsubmit="startOverlay();">
 	            <input type="hidden" name="tipoAccion" value="BUSQUEDA_COMBINABLE" />
