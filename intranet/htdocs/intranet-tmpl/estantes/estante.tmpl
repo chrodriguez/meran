@@ -77,9 +77,7 @@
         [% END %]
 </div>
 
-
 <div id="contenido_estante" class="modal hide fade">
-
       <div class="modal-header">
             <h3> [% "Buscar Contenido" | i18n %]</h3>
       </div>
@@ -107,56 +105,10 @@
                   [% END %] 
 
       </div>
-      <div id="resultado_contenido_estante"> </div>
 </div>  
     
-</div>
 
-<div id="estante">
-    <fieldset class="resultados_busqueda">
-        <legend class="titulo_legend trigger click">[% "Estantes" | i18n %]</legend>
-            <div class="datos_tabla_div_estantes">
-            
-                  <ul class="unstyled">
-                      [% FOREACH estante IN ESTANTES %]
-                          <li>
-                              <input type=checkbox name="[% estante.getEstante %]" value="[% estante.getId %]">
-                              <a class="click" onClick="verSubEstantes([% estante.getId %],0)">[% estante.getEstante %]</a>
-                          </li>
-                      [% END %]
-                  </ul>
 
-                  <div class="form-actions">
-                        
-
-                        [% PERL %]
-                                            print C4::AR::Filtros::action_button(
-                                                                                button   => "btn btn-primary",
-                                                                                title   => "[% 'Agregar estante' | i18n %]",
-                                                                                action => "agregarNuevoEstante();",
-                                                    ) ;
-                        [% END %]
-                        [% IF cant_estantes %]
-                              [% PERL %]
-                                            print C4::AR::Filtros::action_button(
-                                                                                button  => "btn btn-danger",
-                                                                                action => "borrarEstantesSeleccionados(0,0);",
-                                                                                title   => "[% 'Borrar seleccionados' | i18n %]",
-                                                    ) ;
-                              [% END %]
-                        [% END %]
-                        
-                  </div>
-            </div>
-    </fieldset>
-</div>
-
-<script>
-      makeToggle('datos_tabla_div_estantes','trigger',null,false);
-</script>
-
-<div id="subestante">
-
-</div>
+[% INCLUDE "verEstante.inc" %]
 
 [% INCLUDE "intranet-bottom.inc" %]

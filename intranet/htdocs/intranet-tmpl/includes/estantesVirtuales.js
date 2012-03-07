@@ -35,7 +35,7 @@ function ordenar(orden){
         }
 
         function updateVerEstantes(responseText){
-                $('#estante').html(responseText);
+                $('#estante_collapse').html(responseText);
                 $('#subestante').html('');
                 makeToggle('datos_tabla_div_estantes','trigger',null,false);
         }
@@ -85,24 +85,28 @@ function ordenar(orden){
         function updateVerSubEstantes(responseText){
             if(objAH.padre == 0){
                 $('#subestante').html(responseText);
-                $('.datos_tabla_div_estantes').hide();
+           //     $('.datos_tabla_div_estantes').hide();
             }
             else{
                 $('#subestante-'+ objAH.padre).html(responseText);
                 zebra('datos_tabla');
-                $('.datos_tabla_div_subestante_'+objAH.padre).hide();
+             //   $('.datos_tabla_div_subestante_'+objAH.padre).hide();
             }
         }
 
         function borrarEstantesSeleccionados(estante,padre) {
             var checks;
-            if(estante == 0) { checks=$(".ul_tabla_div_estante_0 input[type='checkbox']:checked");}
-                else { checks=$(".ul_tabla_div_subestante_"+estante+" input[type='checkbox']:checked");}
+            if(estante == 0) { 
+                                checks=$("#ul_tabla_div_estante_0 input[type='checkbox']:checked");
+            } else { 
+                                checks=$(".ul_tabla_div_subestante_"+estante+" input[type='checkbox']:checked");
+            }
+            
             var array=checks.get();
             var theStatus="";
             var estantes=new Array();
             var cant=checks.length;
-            if (cant>0){
+            if (cant > 0){
                 theStatus= ELIMINAR_LOS_ESTANTES+":\n";
 
                 for(i=0;i<checks.length;i++) {
@@ -110,9 +114,10 @@ function ordenar(orden){
                     estantes[i]=array[i].value;
                 }
                 theStatus=theStatus + ESTA_SEGURO+"?";
-                jConfirm(theStatus,ELIMINAR_ESTANTE_TITLE, function(confirmStatus){if (confirmStatus) borrarEstantes(estantes,estante,padre);});
-            }
-            else{ jAlert(NO_SE_SELECCIONO_NINGUN_ESTANTE,ELIMINAR_ESTANTE_TITLE);}
+      
+                bootbox.confirm(theStatus, function(confirmStatus){if (confirmStatus) borrarEstantes(estantes,estante,padre);});
+            } else { 
+                jAlert(NO_SE_SELECCIONO_NINGUN_ESTANTE,ELIMINAR_ESTANTE_TITLE);}
         }
 
         function borrarEstantes(estantes,estante,padre) {
