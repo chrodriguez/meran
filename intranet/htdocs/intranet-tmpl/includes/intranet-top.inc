@@ -237,10 +237,6 @@
 			$('.popover_button').popover({delay: { show: 800, hide: 100 },});
 			$(".alert").alert();
 			$(".collapse").collapse({toggle: false,});
-			$('input[type="text"]').focus(function() {  
-			    $(this).removeClass("textInput").addClass("focusInput");  
-			});
-	        $('input[type="text"]').addClass("textInput");    
 	        $('.dropdown-toggle').dropdown();
 			if (UNLOAD == 1)
 				enableAlert();
@@ -266,21 +262,18 @@
 	  <header>
 	  	[% INCLUDE   'menu.inc'  %]
 	  </header>
-	<!--  </div> -->
 	  
 	  <div id="marco_principal">
 	     <div id="container" class="container span96">
-	  
-	  
-		  <div id="marco_contenido_datos" class="contenido">
-		  <!--  usado como referencia por el MessageHelper -->
-		  <div id="end_top">
-		    [% IF mensaje %]
-					<div class="alert [% mensaje_class %]">
-					        <strong>Info</strong> [% mensaje %]
-					</div>
-		    [% END %]
-		  </div>
-
-		<div id="confirmar_div" class="modal hide fade"></div>
-	    <div id="basic-modal-content" class="modal hide fade"></div>
+			  <div id="marco_contenido_datos" class="contenido">
+				  <!--  usado como referencia por el MessageHelper -->
+				  <div id="end_top">
+				    [% IF mensaje %]
+							<div class="alert [% mensaje_class %]">
+							        <strong>[% 'Info' | i18n %]</strong> [% mensaje %]
+							</div>
+				    [% END %]
+				  </div>
+		
+				<div id="confirmar_div" class="modal hide fade"></div>
+			    <div id="basic-modal-content" class="modal hide fade"></div>

@@ -78,6 +78,7 @@
     </table>
 
 [% ELSE %]
+
     <div class="alert alert-info"> [% 'Ud. no tiene pr&eacute;stamos vigentes.' | i18n %] </div>
 
 [% END %]

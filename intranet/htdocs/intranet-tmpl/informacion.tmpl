@@ -1,17 +1,7 @@
 [% INCLUDE "intranet-top.inc" %] 
 
-<div class='tableMsgUser'>
-    <font class='fontMsgUser'>
-            <strong>
-            <div id='mensajes' class="mensajes_informacion">
-                [% mensaje %]
-            </div>
-            </strong>
-    </font>
+<div class="form-actions"> 
+    <a class="btn btn-warning" href="#" onclick="history.back()">[% 'Volver a intentar' | i18n %] </a>
 </div>
-    <h2>
-<a class="mensajes_informacion" href="#" onClick="history.back()"> Volver a intentar </a>
-    </h2>
-
 
 [% INCLUDE "intranet-bottom.inc" %]

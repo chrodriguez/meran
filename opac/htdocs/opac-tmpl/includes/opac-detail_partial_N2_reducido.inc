@@ -86,27 +86,27 @@
 	                                  </div>
 	                            </div>
 	                            
-			<div id="modal_reservar" class="modal hide fade">
-		              <div class="modal-header">
-		                <a href="#" class="close" data-dismiss="modal">×</a>
-		                <h3>[% 'Reserva de ejemplar' | i18n %]</h3>
-		              </div>
-		              <div class="modal-body">
-			             [% IF portada_registro %]
-			             	<div class="mid-center" >
-		                     	<img src="/uploads/covers/[% portada_registro_medium %]" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" />
-			                </div>
-			             [% END %]
-		                
-		                <p>
-		                   [% 'Est&aacute; a punto de reservar un ejemplar de' | i18n %] 
-		                   <h4>[% nivel1_obj.getTitulo %]</h4> [% IF edicion %]<span class="label label-info">[% edicion %]</span>[% END %]
-		                </p>
-		              </div>
-		              <div class="modal-footer">
-		                <a href="#" class="btn btn-primary" onclick="reservar([% id1 %],[% id2 %]);">[% 'Reservar' | i18n %]</a>
-		              </div>
-			</div>
+								<div id="modal_reservar" class="modal hide fade">
+							              <div class="modal-header">
+							                <a href="#" class="close" data-dismiss="modal">×</a>
+							                <h3>[% 'Reserva de ejemplar' | i18n %]</h3>
+							              </div>
+							              <div class="modal-body">
+								             [% IF portada_registro %]
+								             	<div class="mid-center" >
+							                     	<img src="/uploads/covers/[% portada_registro_medium %]" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" />
+								                </div>
+								             [% END %]
+							                
+							                <p>
+							                   [% 'Est&aacute; a punto de reservar un ejemplar de' | i18n %] 
+							                   <h4>[% nivel1_obj.getTitulo %]</h4> [% IF edicion %]<span class="label label-info">[% edicion %]</span>[% END %]
+							                </p>
+							              </div>
+							              <div class="modal-footer">
+							                <a href="#" class="btn btn-primary" onclick="reservar([% id1 %],[% id2 %]);">[% 'Reservar' | i18n %]</a>
+							              </div>
+								</div>
 	                		[% END %]  <!--END  IF nivel2_array -->
 	
 			              	[% INCLUDE 'e-docs_grupo.inc' %]

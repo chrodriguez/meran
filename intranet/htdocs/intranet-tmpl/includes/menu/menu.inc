@@ -474,6 +474,15 @@
                                                                         ) ;
                                         [% END %]
                                 </li>
+                                <li>
+                                        [% PERL %]
+                                            print C4::AR::Filtros::link_to( text =>     " [% 'Configuraci&oacute;n de la portada' | i18n %]",
+                                                                            url =>      "[% url_prefix %]/admin/portada_opac.pl",
+                                                                            icon=>		"icon-picture",
+                                                                            title =>    "[% 'Configuraci&oacute;n de la portada' | i18n %]"
+                                                                        ) ;
+                                        [% END %]
+                                </li>
           </ul>
       [% END %]
           

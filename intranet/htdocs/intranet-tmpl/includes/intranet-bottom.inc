@@ -1,17 +1,11 @@
-<div id="resultBusqueda"></div>
-<div id="result"></div>
+							<div id="resultBusqueda"></div>
+							<div id="result"></div>
+						</div><!-- marco_datos -->
+					</div> <!--marco_contenido -->
+				  </div>
 
-</div><!-- marco_datos -->
-</div> <!--marco_contenido -->
-
-</div></div>
-	
-</div>
-<div id="loading_items" class="loading_items"></div>
-
-</div>
-
-</footer>
-</div> <!-- container_test -->
-</body>
+			<div id="loading_items" class="loading_items"></div>
+			
+		</div> <!-- container_test -->
+	</body>
 </html>
