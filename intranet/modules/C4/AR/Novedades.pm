@@ -11,12 +11,13 @@ use C4::Modelo::SysNovedadNoMostrar::Manager;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw( 
-    &getNovedadesNoMostrar
-    &getUltimasNovedades
-    &getNovedad
-    &listar
-    &agregar
-    &getNovedadesByFecha
+    getNovedadesNoMostrar
+    getUltimasNovedades
+    getNovedad
+    listar
+    agregar
+    getNovedadesByFecha
+    getPortadaOpac
 );
 
 
@@ -162,7 +163,6 @@ sub eliminar{
 
     #Obtengo la cant total de sys_novedads para el paginador
     if(scalar(@$novedades_array_ref) > 0){
-    C4::AR::Debug::debug("que pasa???????????????????");
         return ($novedades_array_ref->[0]->delete());
     }else{
         return (0);
@@ -189,5 +189,16 @@ sub getNovedadesByFecha{
     }
 }
 
+
+sub getPortadaOpac{
+	
+	use C4::Modelo::PortadaOpac::Manager;
+	
+	my @filtros;
+	
+	my $portada = C4::Modelo::PortadaOpac::Manager->get_portada_opac();
+	
+	return $portada;
+}
 
 1;

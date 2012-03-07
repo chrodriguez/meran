@@ -237,10 +237,6 @@
 			$('.popover_button').popover({delay: { show: 800, hide: 100 },});
 			$(".alert").alert();
 			$(".collapse").collapse({toggle: false,});
-			$('input[type="text"]').focus(function() {  
-			    $(this).removeClass("textInput").addClass("focusInput");  
-			});
-	        $('input[type="text"]').addClass("textInput");    
 	        $('.dropdown-toggle').dropdown();
 			if (UNLOAD == 1)
 				enableAlert();
@@ -274,7 +270,7 @@
 				  <div id="end_top">
 				    [% IF mensaje %]
 							<div class="alert [% mensaje_class %]">
-							        <strong>Info</strong> [% mensaje %]
+							        <strong>[% 'Info' | i18n %]</strong> [% mensaje %]
 							</div>
 				    [% END %]
 				  </div>

@@ -1,4 +1,71 @@
 [% INCLUDE 'intranet-top.inc' %]
 [% USE HTML %]
 
+<script type="text/javascript">
+      $(document).ready(function() {
+          $('.fancy_link').fancybox();
+      });
+</script>
+
+<fieldset>
+    <legend>[% "Portada del OPAC" | i18n %]:</legend>
+        [% IF portada %]
+				[% PERL %]
+				    print C4::AR::Filtros::tableHeader(   
+                                           id              => "portada_opac_result",
+                                           class           => "",
+                                           columns         => ['[% "Foto"|i18n %]','[% "Nota al pie"|i18n %]','[% "Orden"|i18n %]','[% "Acciones"|i18n %]',]
+				                ) ;
+				[% END %]
+				
+				<tbody>
+				[% FOREACH p IN portada %]
+				    <tr>
+				        <td>
+				            <a class="fancylink" href="[% url_prefix %]/uploads/portada/[% p.getImagePath %]">[% p.getImagePath %]</a>
+			            </td>
+				        <td>[% p.getFooter %]</td>
+				        <td>[% p.getOrden %]</td>
+				        <td style="min-width: 100px;">
+				                  [% PERL %]
+				                      print C4::AR::Filtros::action_set_button(    
+				                            title           => "[% 'Entrada' | i18n %]",
+				                            button          => 'btn btn-primary',
+				
+				                            actions         => [
+				                                                {title => "Modificar", 
+				                                                 action=>"generarVariasEtiquetas([% id2 %])", 
+				                                                 icon=>"icon-edit"
+				                                                },
+				                                                {title => "Eliminar", 
+				                                                 action=>"borrarEjemplaresN3([% id2 %])", 
+				                                                 icon=>"icon-trash"
+				                                                },
+				                                                ],
+				                             popover       => {text=>'Esta acci&oacute;n se aplica para todos los ejemplares seleccionados', 
+				                                               title=> 'Atenci&oacute;n'}
+				  
+				                              ) ;
+				                  [% END %]
+				
+				        </td>
+				    </tr>    
+				[% END %]
+				</tbody>
+             </table>
+        [% ELSE %]
+            <div class="alert alert-info">[% 'No hay niguna entrada para la portada' | i18n %]</div>
+        [% END %]
+</fieldset>
+<div class="form-actions">
+	[% PERL %]
+	            print C4::AR::Filtros::to_Button(   
+	                    text    => "[% 'Agregar entrada' | i18n %]",
+	                    boton   => "btn btn-primary",
+	                    url     => "[% url_prefix %]/admin/agregar_novedad.pl?token=[% token %]",
+	                    title   => "[% 'Agregar entrada' | i18n %]",
+	                ) ;
+	[% END %]
+</div>
+				
 [% INCLUDE 'intranet-bottom.inc' %]

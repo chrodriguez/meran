@@ -2,6 +2,7 @@
 
 use strict;
 use C4::AR::Auth;
+use C4::AR::Novedades;
 use CGI;
 use C4::AR::MensajesContacto;
 my $input = new CGI;
@@ -20,7 +21,15 @@ my ($template, $session, $t_params) = get_template_and_user({
 
 my %hash_temp   = {};
 my $obj         = \%hash_temp;
-my $accion      = $obj->{'tipoAccion'} = $input->param('tipoAccion');
+
+my $accion      = $obj->{'tipoAccion'} || $input->param('tipoAccion') || undef;
 my $id_mensaje  = $input->param('id') || 0;
+
+if (!$accion){
+	
+	$t_params->{'portada'} = C4::AR::Novedades::getPortadaOpac();
+}
+
+
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

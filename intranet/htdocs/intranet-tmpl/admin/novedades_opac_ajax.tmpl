@@ -88,13 +88,13 @@
         [% END %]
 </fieldset>
 <div class="form-actions">
-[% PERL %]
-            print C4::AR::Filtros::to_Button(   
-                    text    => "[% 'Agregar novedad' | i18n %]",
-                    boton   => "boton_buscar",
-                    url     => "[% url_prefix %]/admin/agregar_novedad.pl?token=[% token %]",
-                    width   => "auto",
-                    title   => "[% 'Agregar novedad' | i18n %]",
-                ) ;
-[% END %]
-</div
+	[% PERL %]
+	            print C4::AR::Filtros::to_Button(   
+	                    text    => "[% 'Agregar novedad' | i18n %]",
+	                    boton   => "boton_buscar",
+	                    url     => "[% url_prefix %]/admin/agregar_novedad.pl?token=[% token %]",
+	                    width   => "auto",
+	                    title   => "[% 'Agregar novedad' | i18n %]",
+	                ) ;
+	[% END %]
+</div>
