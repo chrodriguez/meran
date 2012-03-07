@@ -266,21 +266,18 @@
 	  <header>
 	  	[% INCLUDE   'menu.inc'  %]
 	  </header>
-	<!--  </div> -->
 	  
 	  <div id="marco_principal">
 	     <div id="container" class="container span96">
-	  
-	  
-		  <div id="marco_contenido_datos" class="contenido">
-		  <!--  usado como referencia por el MessageHelper -->
-		  <div id="end_top">
-		    [% IF mensaje %]
-					<div class="alert [% mensaje_class %]">
-					        <strong>Info</strong> [% mensaje %]
-					</div>
-		    [% END %]
-		  </div>
-
-		<div id="confirmar_div" class="modal hide fade"></div>
-	    <div id="basic-modal-content" class="modal hide fade"></div>
+			  <div id="marco_contenido_datos" class="contenido">
+				  <!--  usado como referencia por el MessageHelper -->
+				  <div id="end_top">
+				    [% IF mensaje %]
+							<div class="alert [% mensaje_class %]">
+							        <strong>Info</strong> [% mensaje %]
+							</div>
+				    [% END %]
+				  </div>
+		
+				<div id="confirmar_div" class="modal hide fade"></div>
+			    <div id="basic-modal-content" class="modal hide fade"></div>
