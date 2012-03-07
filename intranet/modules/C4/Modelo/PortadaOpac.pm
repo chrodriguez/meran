@@ -11,6 +11,7 @@ __PACKAGE__->meta->setup(
         id             => { type => 'serial', overflow => 'truncate', not_null => 1 },
         image_path     => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         footer         => { type => 'text', overflow => 'truncate', not_null => 0 },
+        footer_title   => { type => 'varchar', overflow => 'truncate', length => 64, not_null => 1 },
         orden          => { type => 'integer', length => 10, default => 1, not_null => 1 },
     ],
     primary_key_columns => [ 'id' ],
@@ -51,6 +52,19 @@ sub setFooter{
     my ($footer) = @_;
 
     $self->footer($footer);
+}
+
+sub getFooterTitle{
+    my ($self) = shift;
+
+    return ($self->footer_title);
+}
+
+sub setFooterTitle{
+    my ($self) = shift;
+    my ($footer_title) = @_;
+
+    $self->footer_title($footer_title);
 }
 
 sub getOrden{

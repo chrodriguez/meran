@@ -19,13 +19,14 @@
 	        [% END %]
 	
 		</p>
-
+          	
+		[% IF portada %]
 		<div id="carousel_container" class="span9">
 			<div id="carousel_portada_opac" class="carousel slide">
 	            <div class="carousel-inner">
 	            [% FOREACH p IN portada %]
-	              <div class="item">
-	                <img src="[% url_prefix %]/uploads/portada/[% p.getImagePath %]" alt="">
+	              <div class="item [% IF loop.first %]active[% END %]">
+	                <img src="/opac-tmpl/uploads/portada/[% p.getImagePath %]" style="max-width: 900px;" "alt>
 	                [% IF p.getFooter %]
 		                <div class="carousel-caption">
 		                  <h4>[% p.getFooterTitle %]</h4>
@@ -34,24 +35,24 @@
 		            [% END %]
 	              </div>
 	            [% END %]
-	        </div>
+	        	</div>
+			</div>
 		</div>
+		[% END %]
 
-		<p>
-	        <form class="" action="[% url_prefix %]/opac-busquedasDB.pl" method="get" onsubmit="startOverlay();">
-	            <input type="hidden" name="tipoAccion" value="BUSQUEDA_COMBINABLE" />
-	            <input type="hidden" name="token" value="[% token %]" />
-		        <p>
-		        	<input type="text" name="string" class="input-medium search-query span90 bigInput"
-	                 		  x-webkit-speech onwebkitspeechchange="javascript:startSearch();" 
-	                   		  speech onspeechchange="javascript:startSearch();"
-	                   		  placeholder="[% 'Qu&eacute; necesit&aacute;s' | i18n %]?"
-		        	>
-		        </p>
-		        
-		        <p><button class="btn btn-primary btn-large" type="submit">[% 'Buscar' | i18n %]</button></p>
-		    </form>
-		</p>
+        <form class="" action="[% url_prefix %]/opac-busquedasDB.pl" method="get" onsubmit="startOverlay();">
+            <input type="hidden" name="tipoAccion" value="BUSQUEDA_COMBINABLE" />
+            <input type="hidden" name="token" value="[% token %]" />
+	        <p>
+	        	<input type="text" name="string" class="input-medium search-query span90 bigInput"
+                 		  x-webkit-speech onwebkitspeechchange="javascript:startSearch();" 
+                   		  speech onspeechchange="javascript:startSearch();"
+                   		  placeholder="[% 'Qu&eacute; necesit&aacute;s' | i18n %]?"
+	        	>
+	        </p>
+	        
+	        <p><button class="btn btn-primary btn-large" type="submit">[% 'Buscar' | i18n %]</button></p>
+	    </form>
     </div>
 
       <!-- Example row of columns -->

@@ -14,7 +14,7 @@
 				    print C4::AR::Filtros::tableHeader(   
                                            id              => "portada_opac_result",
                                            class           => "",
-                                           columns         => ['[% "Foto"|i18n %]','[% "Nota al pie"|i18n %]','[% "Orden"|i18n %]','[% "Acciones"|i18n %]',]
+                                           columns         => ['[% "Foto"|i18n %]','[% "T&iacute;tulo"|i18n %]','[% "Nota al pie"|i18n %]','[% "Orden"|i18n %]','[% "Acciones"|i18n %]',]
 				                ) ;
 				[% END %]
 				
@@ -22,9 +22,10 @@
 				[% FOREACH p IN portada %]
 				    <tr>
 				        <td>
-				            <a class="fancylink" href="[% url_prefix %]/uploads/portada/[% p.getImagePath %]">[% p.getImagePath %]</a>
+				            <a class="fancylink" href="/opac-tmpl/uploads/portada/[% p.getImagePath %]">[% p.getImagePath %]</a>
 			            </td>
-				        <td>[% p.getFooter %]</td>
+                        <td>[% p.getFooterTitle %]</td>
+                        <td>[% p.getFooter %]</td>
 				        <td>[% p.getOrden %]</td>
 				        <td style="min-width: 100px;">
 				                  [% PERL %]
