@@ -378,11 +378,24 @@
 				  <b class="caret"></b>
 			  </a>
               <ul class="dropdown-menu">
+		          <li>
+		                    [% PERL %]
+		                       print C4::AR::Filtros::link_to( text =>     " [% 'Mis datos' | i18n %]",
+		                                                   url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+		                                                   title =>    "[% 'Mis datos' | i18n %]",
+		                                                   params =>   ["nro_socio=[% nro_socio %]"],
+		                                                   icon => "icon-user",
+		                                                   tooltip => "['Ver y/o modificar sus datos' | i18n ]"
+		                           );
+		                   [% END %]
+		          </li>
+                
                 <li>
                 	<a href="[% url_prefix %]/usuarios/reales/settings.pl?token=[% token %]&amp;nro_socio=[% socio_data.usr_nro_socio %]">
                 		<i class="icon-cog"></i> [% "Ajustes" | i18n %]
                 	</a>
                 </li>
+
                 <li class="divider"></li>
                 <li><a href="[% url_prefix %]/logout.pl?token=[% token %]"><i class="icon-off"></i> [% "Salir" | i18n %]</a></li>
               </ul>

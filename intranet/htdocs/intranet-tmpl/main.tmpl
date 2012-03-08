@@ -63,22 +63,6 @@ var jobID = 0;
 </script>
 
 <h1>[% 'Principal' | i18n %] <small>[% 'Accesos frecuentes, novedades, mensajes' | i18n %]</small></h1>
-<div class="well span4 " style="padding: 8px 0;">
-        <ul class="nav nav-list">
-          <li>
-                    [% PERL %]
-                       print C4::AR::Filtros::link_to( text =>     "[% 'Mis datos' | i18n %]",
-                                                   url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
-                                                   title =>    "[% 'Mis datos' | i18n %]",
-                                                   params =>   ["nro_socio=[% nro_socio %]"],
-                                                   icon => "icon-user",
-                                                   tooltip => "['Ver y/o modificar sus datos' | i18n ]"
-                           );
-                   [% END %]
-          </li>
-        </ul>
-</div>        
-
 
 <div id="resultNovedades" class="clear"></div>
 

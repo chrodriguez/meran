@@ -506,6 +506,11 @@ my %mensajesINTRA = (
     'UP04' => 'El nombre del archivo no tiene un formato correcto',
     'UP05' => 'Hay un error y el archivo no puede eliminarse del servidor',
     'UP06' => 'El archivo "*?*" se ha eliminado correctamente',
+    'UP07' => 'El archivo excede el tama&ntilde;o m&aacute;ximo permitido ("*?*")',
+    'UP08' => 'El archivo se ha cargado correctamente',
+    'UP09' => 'La portada se ha eliminado correctamente',
+    'UP10' => 'La portada se ha modificado correctamente',
+    'UP11' => 'La portada no se ha podido modificar',
 
 #ERRORES DE BASE DE DATOS
     'B400' => '',

@@ -21,12 +21,12 @@
 		</p>
           	
 		[% IF portada %]
-		<div id="carousel_container" class="span9">
+		<div id="carousel_container" class="center_carousel">
 			<div id="carousel_portada_opac" class="carousel slide">
 	            <div class="carousel-inner">
 	            [% FOREACH p IN portada %]
 	              <div class="item [% IF loop.first %]active[% END %]">
-	                <img src="/opac-tmpl/uploads/portada/[% p.getImagePath %]" style="max-width: 900px;" "alt>
+	                <img src="/opac-tmpl/uploads/portada/[% p.getImagePath %]" alt>
 	                [% IF p.getFooter %]
 		                <div class="carousel-caption">
 		                  <h4>[% p.getFooterTitle %]</h4>

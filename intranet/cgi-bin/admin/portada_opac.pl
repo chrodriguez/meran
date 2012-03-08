@@ -2,9 +2,8 @@
 
 use strict;
 use C4::AR::Auth;
-use C4::AR::Novedades;
 use CGI;
-use C4::AR::MensajesContacto;
+use C4::AR::Novedades;
 my $input = new CGI;
 
 my ($template, $session, $t_params) = get_template_and_user({
@@ -19,17 +18,83 @@ my ($template, $session, $t_params) = get_template_and_user({
 			    });
 
 
-my %hash_temp   = {};
-my $obj         = \%hash_temp;
+my $obj         = $input->param('obj');
 
-my $accion      = $obj->{'tipoAccion'} || $input->param('tipoAccion') || undef;
-my $id_mensaje  = $input->param('id') || 0;
+my $editing     = 0;
+ 
+if ($obj){
+	$obj=C4::AR::Utilidades::from_json_ISO($obj);
+}else{
+    $obj = $input->Vars; 
+}
 
-if (!$accion){
-	
+
+my $accion      = $obj->{'tipoAccion'} || undef;
+
+if ($accion){
+    if ($accion eq "ADD"){
+        my $msg_object = C4::AR::Novedades::addPortadaOpac($obj,$input->upload('imagen'));
+        my $codMsg = C4::AR::Mensajes::getFirstCodeError($msg_object);
+        
+        $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje($codMsg,'INTRA');
+        if (C4::AR::Mensajes::hayError($msg_object)){
+            $t_params->{'mensaje_class'} = "alert-error";
+        }else{
+            $t_params->{'mensaje_class'} = "alert-success";
+        }
+    }elsif ($accion eq "DEL"){
+        my $msg_object = C4::AR::Novedades::delPortadaOpac($obj->{'id_portada'});
+
+        my $codMsg = C4::AR::Mensajes::getFirstCodeError($msg_object);
+        
+        $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje($codMsg,'INTRA');
+        if (C4::AR::Mensajes::hayError($msg_object)){
+            $t_params->{'mensaje_class'} = "alert-error";
+        }else{
+            $t_params->{'mensaje_class'} = "alert-success";
+        }
+    }elsif ($accion eq "SHOW_MOD_PORTADA"){
+
+        my $portada = C4::AR::Novedades::getPortadaOpacById($obj->{'id_portada'});
+        
+        $editing = 1;
+
+		my ($template, $session, $t_params) = get_template_and_user({
+		                                    template_name   => "includes/form_portada_opac.inc",
+		                                    query           => $input,
+		                                    type            => "intranet",
+		                                    authnotrequired => 0,
+		                                    flagsrequired   => {  ui => 'ANY', 
+		                                                        accion => 'TODOS', 
+		                                                        entorno => 'usuarios'},
+		                                    debug => 1,
+		                });
+		
+		$t_params->{'editing'} = $editing;
+        $t_params->{'portada'} = $portada;
+
+	    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+
+    }elsif ($accion eq "MOD"){
+        my $msg_object = C4::AR::Novedades::modPortadaOpac($obj);
+
+        my $codMsg = C4::AR::Mensajes::getFirstCodeError($msg_object);
+        
+        $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje($codMsg,'INTRA');
+        if (C4::AR::Mensajes::hayError($msg_object)){
+            $t_params->{'mensaje_class'} = "alert-error";
+        }else{
+            $t_params->{'mensaje_class'} = "alert-success";
+        }
+    
+    }
+}
+
+if (!$editing){
 	$t_params->{'portada'} = C4::AR::Novedades::getPortadaOpac();
+	C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 
 
 
-C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+

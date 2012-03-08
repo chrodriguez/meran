@@ -238,6 +238,7 @@
 			$(".alert").alert();
 			$(".collapse").collapse({toggle: false,});
 	        $('.dropdown-toggle').dropdown();
+            $('.fancy_link').fancybox();
 			if (UNLOAD == 1)
 				enableAlert();
 			else
@@ -260,7 +261,7 @@
   	  </div>
 
 	  <header>
-	  	[% INCLUDE   'menu.inc'  %]
+	  	[% INCLUDE  'menu.inc'  %]
 	  </header>
 	  
 	  <div id="marco_principal">
