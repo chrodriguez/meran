@@ -67,6 +67,8 @@ function inicializar(){
     BARCODES_ARRAY      = [];
     TAB_INDEX           = 0;
     EDICION_N3_GRUPAL   = 0;
+    
+    $('#datos_del_leader').hide();  
 }
 
 //libera espacio de memoria utilizada por los arreglos
@@ -1244,8 +1246,19 @@ function procesarInfoJson(marc_object_array, id_padre){
         }
 
         $("#marc_group" + id_temp + "_buttons_lista").append(crearBotonAgregarCampoRepetible(campo_marc_conf_obj,"marc_group" + id_temp));
-        $("#marc_group" + id_temp + "_buttons_lista").append(crearBotonEliminarCampoRepetible(campo_marc_conf_obj,"marc_group" + id_temp, campo_marc_conf_obj.getFirst()));
-
+        
+//         $("#marc_group" + id_temp + "_buttons_lista").append(crearBotonEliminarCampoRepetible(campo_marc_conf_obj,"marc_group" + id_temp, campo_marc_conf_obj.getFirst()));
+        $("#marc_group" + id_temp + "_buttons_lista").append(crearBotonEliminarCampoRepetible(campo_marc_conf_obj, campo_marc_conf_obj.getFirst()));  
+        
+//         alert("first => "+campo_marc_conf_obj.getFirst());
+        
+        if(!campo_marc_conf_obj.getFirst()){
+            $("#boton_eliminar_marc_group" + id_temp).show(); 
+//             alert("boton_eliminar_marc_group" + id_temp);
+        }
+        
+//         alert("boton_eliminar_marc_group" + id_temp);
+        
         //seteo los datos de los indicadores
         $("#select_indicador_primario" + MARC_OBJECT_ARRAY.length).val(campo_marc_conf_obj.getIndicadorPrimarioDato());
         $("#select_indicador_secundario" + MARC_OBJECT_ARRAY.length).val(campo_marc_conf_obj.getIndicadorSecundarioDato());
@@ -1273,6 +1286,7 @@ function procesarInfoJson(marc_object_array, id_padre){
         
         strComp = "<script type='text/javascript'>toggle_component('trigger_"+ id_temp +"','MARC_content_"+ id_temp +"');</script>";
         $("#marc_group" + id_temp).append(strComp);
+
     }
 
     if(objetos.length != 1) {
@@ -1291,6 +1305,7 @@ function procesarInfoJson(marc_object_array, id_padre){
             $('#'+_getIdComponente('910','a')).val($('#tipo_nivel3_id').val());
         });
     }
+      
 }
 
 function crearBotonAyudaCampo(campo,id_div_alta_indicador,indicadores){
@@ -1384,7 +1399,8 @@ function procesarSubCampo(objeto, marc_group){
     if(marc_conf_obj.getTieneEstructura() == '0'){ 
         //no existe estructura de catalogacion configurada para este campo, subcampo
 // TODO armar una funcion q genere esto
-        vista_intra         = "<div class='divComponente'><input type='text' id='" + marc_conf_obj.getIdCompCliente() + "' value='" + marc_conf_obj.getDato() + "' size='55' disabled></div>";
+        vista_intra         = "<div class='divComponente' style='float:left'><input type='text' id='" + marc_conf_obj.getIdCompCliente() + "' value='" + marc_conf_obj.getDato() + "' size='55' disabled></div>";
+//         vista_intra         = "<span class='label label-important' style='float:left; width:273px; height:15px;'>" + marc_conf_obj.getDato() + "</span>";
         vista_intra         = vista_intra + crearIconWarning(marc_conf_obj);
         vista_intra         = vista_intra + crearBotonEliminarSubcampo(marc_conf_obj);
         tiene_estructura    = 0;
@@ -1623,14 +1639,16 @@ function cloneSubCampo(id){
 }
 
 //clona un campo 
-//@params: marc_group es el marc_group del padre
-function cloneCampo(marc_group){
+//@params: marc_group_id es el marc_group del padre
+function cloneCampo(marc_group_id){
     var id_componente   = generarIdComponente();
-    var campo_temp      = _getCampoMARC_conf_ById(marc_group);
+    var campo_temp      = _getCampoMARC_conf_ById(marc_group_id);
     var campo_obj       = copy(campo_temp);      //se genera una copia del campo
 
     //ahora cambio el id del campo
-    campo_obj.setIdCompCliente(generarIdComponente());
+//     campo_obj.setIdCompCliente(generarIdComponente());
+    campo_obj.setIdCompCliente(id_componente);  
+    alert("id_componente" + id_componente);
     //ahora cambio los id's de los subcampos
     var subcampos_array         = campo_temp.getSubCamposArray();
     var subcampos_array_destino = new Array();
@@ -1640,17 +1658,20 @@ function cloneCampo(marc_group){
         subcampo_obj = copy(subcampos_array[i]);                //se genera una copia del subcampo
         subcampo_obj.setIdCompCliente(generarIdComponente());   //ahora cambio los id's de los subcampos
         subcampo_obj.posCampo = campo_temp.posCampo;
+        subcampo_obj.setFirst(false);
         subcampos_array_destino.push(subcampo_obj);
     }
 
 // FIXME no funciona!!!!!!
-    campo_obj.setFirst(0);
+    campo_obj.setFirst(false);
     campo_obj.subcampos_hash = copy(campo_obj.getSubCamposHash());
     campo_obj.setSubCamposArray(subcampos_array_destino);
-
+//     alert("cloneCampo => getFirst => "+campo_obj.getFirst());
+    
     temp = new Array();
     temp.push(campo_obj)
-    procesarInfoJson(temp, marc_group);
+    procesarInfoJson(temp, marc_group_id);   
+ 
 }
 
 function remove(id){
@@ -1725,7 +1746,7 @@ function crearBotonEliminarSubcampo(obj){
 function crearIconWarning(obj){
 
     //return "<div class='icon_warning horizontal' title='NO TIENE ESTRUCTURA'/>";
-    return "<a class='btn btn-warning' >Sin estructura</a>";
+    return "<div style='float:left; margin-left:5px'><span class='label label-warning'>Sin estructura</span></div>";
 }
 
 function crearBotonAgregarCampoRepetible(obj, id_padre){
@@ -1749,7 +1770,7 @@ function crearBotonEliminarCampoRepetible(obj, show){
 // display = "block";
 
     if(obj.getRepetible() == '1'){
-        return '<li style= "display:' + display + '"><a class="click" onclick=remove("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar</a></li>';
+        return '<li id="boton_eliminar_'+ obj.getIdCompCliente() +'" style= "display:' + display + '"><a class="click" onclick=remove("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar</a></li>';
     }else{  
         return "";
     }
@@ -2265,8 +2286,8 @@ function updateBorrarEjemplaresN3(responseText){
  */
 function modificarN1(id1, template){
     scroll              = "N1";
-     $('#datos_del_leader').show();
     inicializar();
+    $('#datos_del_leader').show();
   
     TEMPLATE_ACTUAL     = template;
     ID_N1               = id1;

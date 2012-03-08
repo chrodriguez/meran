@@ -34,13 +34,14 @@ $(document).ready( function() {
     TIENE_NIVEL_2           = [% tiene_nivel_2 %];
     TEMPLATE_ACTUAL         = $('#tipo_nivel3_id').val();
 
-    $('#datos_del_leader').show();
+    $('#datos_del_leader').hide();
 
     [% IF tipoAccion == "MODIFICAR_NIVEL_1" %]
         MODIFICAR               = 1;
         FROM_DETALLE_REGISTRO   = 1;
         TEMPLATE_ACTUAL         = '[% template_catalogo %]';
         cargarNivel1(params, TEMPLATE_ACTUAL);
+        $('#datos_del_leader').show();
     [% ELSIF tipoAccion == "MODIFICAR_NIVEL_2" %]
         MODIFICAR               = 1;
         FROM_DETALLE_REGISTRO   = 1;
@@ -75,11 +76,11 @@ $(document).ready( function() {
 
 // FIXME se hace ne los dos casos ahora parece
     if(MODIFICAR) {
-        $('#datos_del_leader').hide();
+//         $('#datos_del_leader').hide();
     } else {
         mostrarEstructuraDelNivel1();
 //         $('#datos_del_leader').show();
-        $('#datos_del_leader').hide();
+//         $('#datos_del_leader').hide();
     }
     
 } );

@@ -11,10 +11,10 @@
             <div class="accordion-group">
               <div class="accordion-heading">
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#ejemplares_del_grupo_[% id2 %]" href="#ejemplares_[% id2 %]">
-                  [% "Ejemplares" | i18n %]
+                  [% "Ejemplares" | i18n %] ([% disponibles %])
                 </a>
               </div>
-              <div id="ejemplares_[% id2 %]" class="accordion-body collapse in">
+              <div id="ejemplares_[% id2 %]" class="accordion-body collapse">
                 <div class="accordion-inner">
 					<div class="alert alert-info">
 					    <dl>
@@ -224,12 +224,12 @@
 					[% END %]<!-- END IF loop.last -->
 					
 					<script>
-                    $('#ejemplares_del_grupo_[% id2 %]').on('hidden', function () {
-                        $('#actions_ejemplares_[% id2 %]').hide();
-                      })                  
-                      $('#ejemplares_del_grupo_[% id2 %]').on('shown', function () {
+                        $('#ejemplares_del_grupo_[% id2 %]').on('hidden', function () {
+                            $('#actions_ejemplares_[% id2 %]').hide();
+                        })                  
+                        $('#ejemplares_del_grupo_[% id2 %]').on('shown', function () {
                             $('#actions_ejemplares_[% id2 %]').show();
-                          })                  
+                        })  
 					</script>
 					[% END %]<!-- END FOREACH NIVEL 3 -->
                   </form>
@@ -265,7 +265,11 @@
                </td>
 	         </div>       
 	    </div>
-    </div>      
+    </div>    
+
+    <script>
+        $('#actions_ejemplares_[% id2 %]').hide();
+    </script>  
 
 <script type="text/javascript">makeToggle('ejemplaresDelGrupo[% id2 %]','trigger_2_[% id2 %]',null,false);</script>
 [% ELSE %]
