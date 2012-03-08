@@ -425,14 +425,16 @@ sub getRegistrosParaImportar{
     #Solo registros que no matcheen
     push (@filtros, ( matching => { ne => 1}));
     
+    
+    # MAL SQL!!!
     #Solo registros no ignorados
-    push (@filtros, ( estado => { ne => 'IGNORADO' }));
+    #push (@filtros, ( estado => { ne => 'IGNORADO' }));
     
    #Solo registros no importados anteriormente
-    push (@filtros, ( estado => { ne => 'IMPORTADO' }));
+    #push (@filtros, ( estado => { ne => 'IMPORTADO' }));
     
    #Solo registros sin ERROR
-    push (@filtros, ( estado => { ne => 'ERROR' }));
+    #push (@filtros, ( estado => { ne => 'ERROR' }));
    
    require C4::Modelo::IoImportacionIsoRegistro;
    require C4::Modelo::IoImportacionIsoRegistro::Manager;

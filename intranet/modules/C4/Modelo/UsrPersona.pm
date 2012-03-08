@@ -516,6 +516,17 @@ sub setBarrio{
 
 sub getCiudad{
     my ($self) = shift;
+    
+    eval {
+		$self->ciudad_ref;
+        };
+        
+    if($@){
+        C4::AR::Debug::debug("UsrPersona => getCiudad => no existe la ciudad, se setea la ciudad por defecto, gracias Guarani");
+         $self->setCiudad( C4::AR::Preferencias::getValorPreferencia("defaultCiudad"));
+		$self->save();
+    }
+   
     return ($self->ciudad);
 }
 
@@ -593,7 +604,7 @@ sub setAlt_barrio{
 }
 
 sub getAlt_ciudad{
-    my ($self) = shift;
+    my ($self) = shift;   
     return ($self->alt_ciudad);
 }
 
