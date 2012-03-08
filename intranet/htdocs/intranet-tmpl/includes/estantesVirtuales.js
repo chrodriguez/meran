@@ -26,6 +26,8 @@ function ordenar(orden){
                 $('.datos_tabla_div').hide();
         }
 
+
+
         function verEstantes(){
                 objAH=new AjaxHelper(updateVerEstantes);
                 objAH.debug= true;
@@ -35,32 +37,36 @@ function ordenar(orden){
         }
 
         function updateVerEstantes(responseText){
-                $('#estante').html(responseText);
+                $('#estante_collapse').html(responseText);
                 $('#subestante').html('');
                 makeToggle('datos_tabla_div_estantes','trigger',null,false);
         }
 
-	function agregarNuevoSubEstante(estante,padre){
-		    $('#padre_nuevo_sub_estante').val(padre);
-		    $('#estante_nuevo_sub_estante').val(estante);
-		    objAH=new AjaxHelper();
-		    objAH.showOverlay       = true;
-		    $('#nuevo_sub_estante').modal();
-	}
+
+
+        function agregarNuevoSubEstante(estante,padre){
+                $('#padre_nuevo_sub_estante').val(padre);
+                $('#estante_nuevo_sub_estante').val(estante);
+                objAH=new AjaxHelper();
+                objAH.showOverlay       = true;
+                $('#nuevo_sub_estante').modal();
+        }
+	
+
 	
         function agregarSubEstante(){
 	    
-	    if ( objAH.valor= $("#input_nuevo_sub_estante").val() ) {
-                objAH=new AjaxHelper(updateAgregarSubEstante);
-                objAH.debug= true;
-                objAH.padre= $("#padre_nuevo_sub_estante").val();
-                objAH.estante= $("#estante_nuevo_sub_estante").val();
-                objAH.valor= $("#input_nuevo_sub_estante").val();
-                objAH.url= 'estanteDB.pl';
-                objAH.tipo= 'AGREGAR_SUBESTANTE';
-                objAH.sendToServer();
-                $('#nuevo_sub_estante').modal('hide');
-	    }
+          if ( objAH.valor= $("#input_nuevo_sub_estante").val() ) {
+                  objAH=new AjaxHelper(updateAgregarSubEstante);
+                  objAH.debug= true;
+                  objAH.padre= $("#padre_nuevo_sub_estante").val();
+                  objAH.estante= $("#estante_nuevo_sub_estante").val();
+                  objAH.valor= $("#input_nuevo_sub_estante").val();
+                  objAH.url= 'estanteDB.pl';
+                  objAH.tipo= 'AGREGAR_SUBESTANTE';
+                  objAH.sendToServer();
+                  $('#nuevo_sub_estante').modal('hide');
+          }
         }
 
         function updateAgregarSubEstante(responseText){
@@ -68,6 +74,8 @@ function ordenar(orden){
                 setMessages(Messages);
                  verSubEstantes(objAH.estante,objAH.padre);
         }
+
+
 
 
         function verSubEstantes(estante,padre){
@@ -85,24 +93,31 @@ function ordenar(orden){
         function updateVerSubEstantes(responseText){
             if(objAH.padre == 0){
                 $('#subestante').html(responseText);
-                $('.datos_tabla_div_estantes').hide();
+           //     $('.datos_tabla_div_estantes').hide();
             }
             else{
                 $('#subestante-'+ objAH.padre).html(responseText);
                 zebra('datos_tabla');
-                $('.datos_tabla_div_subestante_'+objAH.padre).hide();
+             //   $('.datos_tabla_div_subestante_'+objAH.padre).hide();
             }
         }
 
+
+
+
         function borrarEstantesSeleccionados(estante,padre) {
             var checks;
-            if(estante == 0) { checks=$(".ul_tabla_div_estante_0 input[type='checkbox']:checked");}
-                else { checks=$(".ul_tabla_div_subestante_"+estante+" input[type='checkbox']:checked");}
+            if(estante == 0) { 
+                                checks=$("#ul_tabla_div_estante_0 input[type='checkbox']:checked");
+            } else { 
+                                checks=$(".ul_tabla_div_subestante_"+estante+" input[type='checkbox']:checked");
+            }
+            
             var array=checks.get();
             var theStatus="";
             var estantes=new Array();
             var cant=checks.length;
-            if (cant>0){
+            if (cant > 0){
                 theStatus= ELIMINAR_LOS_ESTANTES+":\n";
 
                 for(i=0;i<checks.length;i++) {
@@ -110,9 +125,18 @@ function ordenar(orden){
                     estantes[i]=array[i].value;
                 }
                 theStatus=theStatus + ESTA_SEGURO+"?";
-                jConfirm(theStatus,ELIMINAR_ESTANTE_TITLE, function(confirmStatus){if (confirmStatus) borrarEstantes(estantes,estante,padre);});
-            }
-            else{ jAlert(NO_SE_SELECCIONO_NINGUN_ESTANTE,ELIMINAR_ESTANTE_TITLE);}
+      
+                bootbox.confirm(theStatus, function(confirmStatus){if (confirmStatus) borrarEstantes(estantes,estante,padre);});
+            } else { 
+                jAlert(NO_SE_SELECCIONO_NINGUN_ESTANTE,ELIMINAR_ESTANTE_TITLE);}
+        }
+
+
+        function updateBorrarEstantesSeleccionados(responseText){
+            var Messages= JSONstring.toObject(responseText);
+            setMessages(Messages);
+            if (objAH.estante == 0) {verEstantes();} 
+                else {verSubEstantes(objAH.estante,objAH.padre);}
         }
 
         function borrarEstantes(estantes,estante,padre) {
@@ -126,14 +150,9 @@ function ordenar(orden){
                 objAH.sendToServer();
         }
 
-        function updateBorrarEstantesSeleccionados(responseText){
-         var Messages= JSONstring.toObject(responseText);
-         setMessages(Messages);
-         if (objAH.estante == 0) {verEstantes();} 
-            else {verSubEstantes(objAH.estante,objAH.padre);}
-        }
+     
 
-  function borrarContenidoSeleccionado (estante,padre) {
+        function borrarContenidoSeleccionado (estante,padre) {
             var checks=$(".datos_tabla_div_contenido_"+estante+" input[type='checkbox']:checked");
             var array=checks.get();
             var theStatus="";
@@ -152,6 +171,12 @@ function ordenar(orden){
             else{ jAlert(NO_SE_SELECCIONO_NINGUN_CONTENIDO ,ELIMINAR_CONTENIDO_TITLE);}
         }
 
+        function updateBorrarContenidoSeleccionado(responseText){
+                var Messages= JSONstring.toObject(responseText);
+                setMessages(Messages);
+                verSubEstantes(objAH.estante,objAH.padre);
+        }
+
         function borrarContenido(contenido,estante,padre) {
                 objAH=new AjaxHelper(updateBorrarContenidoSeleccionado);
                 objAH.debug= true;
@@ -163,11 +188,7 @@ function ordenar(orden){
                 objAH.sendToServer();
         }
 
-        function updateBorrarContenidoSeleccionado(responseText){
-         var Messages= JSONstring.toObject(responseText);
-         setMessages(Messages);
-         verSubEstantes(objAH.estante,objAH.padre);
-        }
+     
 
         function agregarNuevoEstante(){
             objAH=new AjaxHelper();
@@ -208,19 +229,19 @@ function ordenar(orden){
 		    $('#editar_estante').modal();
         }
 
-	function modificarEstante(){
-	    if($('#input_valor_estante').val()){
-                objAH=new AjaxHelper(updateModificarEstante);
-                objAH.debug= true;
-                objAH.url= 'estanteDB.pl';
-                objAH.estante= $('#input_id_estante').val();
-				objAH.abuelo= $('#input_abuelo_estante').val();
-                objAH.padre= $('#input_padre_estante').val();
-                objAH.valor=$('#input_valor_estante').val();
-                objAH.tipo= 'MODIFICAR_ESTANTE';
-                objAH.sendToServer();
-				$('#editar_estante').modal('hide');
-	    }
+        function modificarEstante(){
+            if($('#input_valor_estante').val()){
+                    objAH=new AjaxHelper(updateModificarEstante);
+                    objAH.debug= true;
+                    objAH.url= 'estanteDB.pl';
+                    objAH.estante= $('#input_id_estante').val();
+                    objAH.abuelo= $('#input_abuelo_estante').val();
+                    objAH.padre= $('#input_padre_estante').val();
+                    objAH.valor=$('#input_valor_estante').val();
+                    objAH.tipo= 'MODIFICAR_ESTANTE';
+                    objAH.sendToServer();
+                    $('#editar_estante').modal('hide');
+            }
         }
 
         function updateModificarEstante(responseText){
@@ -248,6 +269,7 @@ function ordenar(orden){
         function buscarContenido(){
                 objAH=new AjaxHelper(updateBuscarContenido);
                 objAH.debug= true;
+                 objAH.showOverlay       = true;
                 objAH.url= 'estanteDB.pl';
                 objAH.showStatusIn  = 'busqueda_contenido_estante';
                 objAH.funcion = "changePage";
@@ -270,7 +292,7 @@ function ordenar(orden){
                 objAH.id2=id2;
                 objAH.tipo= 'AGREGAR_CONTENIDO';
                 objAH.sendToServer();
-		$.modal.close();
+		
 	}
 	
 	function updateAgregarContenidoAEstante(responseText){
