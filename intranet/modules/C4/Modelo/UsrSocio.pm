@@ -1333,9 +1333,9 @@ sub puedeReservar{
 sub getIdReserva{
     
     my ($self) = shift;
-    my ($id2)= @_;
+    my ($nro_socio)= @_;
     
-    my ($reservas,$cant_reservas) = C4::AR::Reservas::getReservasDeSocio($self->getNro_socio, $id2);
+    my ($reservas,$cant_reservas) = C4::AR::Reservas::getReservasDeSocio($self->getNro_socio, $nro_socio);
 
     if ($cant_reservas){
     	return $reservas->[0]->id_reserva;
