@@ -1,7 +1,69 @@
 [% INCLUDE 'intranet-top.inc' %]
-<link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/wysiwyg.css" />
-<script src="/includes/jquery/jquery.wysiwyg.js"></script>
+<!--<link rel="stylesheet" type="text/css" media="screen,projection,print" href="/includes/css/wysiwyg.css" />-->
+
+<style type="text/css" media="screen">
+    @charset 'UTF-8';
+    /*
+     * jQuery File Upload UI Plugin CSS 6.2.1
+     * https://github.com/blueimp/jQuery-File-Upload
+     *
+     * Copyright 2010, Sebastian Tschan
+     * https://blueimp.net
+     *
+     * Licensed under the MIT license:
+     * http://www.opensource.org/licenses/MIT
+     */
+
+    .fileinput-button {
+      position: relative;
+      overflow: hidden;
+      float: left;
+      margin-right: 4px;
+    }
+    .fileinput-button input {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: 0;
+      border: solid transparent;
+      border-width: 0 0 100px 200px;
+      opacity: 0;
+      filter: alpha(opacity=0);
+      -moz-transform: translate(-300px, 0) scale(4);
+      direction: ltr;
+      cursor: pointer;
+    }
+
+    /* Fix for IE 6: */
+    *html .fileinput-button {
+      line-height: 22px;
+      margin: 1px -3px 0 0;
+    }
+
+    /* Fix for IE 7: */
+    *+html .fileinput-button {
+      margin: 1px 0 0 0;
+    }
+    
+    #imagesList {
+        margin-left: 0;
+        text-align: right;
+        width: 50%;
+    }
+</style>
+
+<!--<script src="/includes/jquery/jquery.wysiwyg.js"></script>-->
+
+<script type="text/javascript" language="javascript">
+function MultiSelector( list_target, max ){this.list_target = list_target;this.count = 0;this.id = 0;if( max ){this.max = max;} else {this.max = -1;};this.addElement = function( element ){if( element.tagName == 'INPUT' && element.type == 'file' ){element.name = 'file_' + this.id++;element.multi_selector = this;element.onchange = function(){var new_element = document.createElement( 'input' );new_element.type = 'file';this.parentNode.insertBefore( new_element, this );this.multi_selector.addElement( new_element );this.multi_selector.addListRow( this );this.style.position = 'absolute';this.style.left = '-1000px';};if( this.max != -1 && this.count >= this.max ){element.disabled = true;};this.count++;this.current_element = element;} else {alert( 'Error: not a file input element' );};};this.addListRow = function( element ){var new_row = document.createElement( 'div' );var new_row_button = document.createElement( 'input' );new_row_button.type = 'button';new_row_button.value = 'Delete';new_row.element = element;new_row_button.onclick= function(){this.parentNode.element.parentNode.removeChild( this.parentNode.element );this.parentNode.parentNode.removeChild( this.parentNode );this.parentNode.element.multi_selector.count--;this.parentNode.element.multi_selector.current_element.disabled = false;return false;};new_row.innerHTML = element.value;new_row.appendChild( new_row_button );this.list_target.appendChild( new_row );};};
+</script>
+
 <script>
+
+    //cantidad maxima de archivos a subir
+    var fileMax = 5;
+    
+    
     function modificar(){
         $('#form_novedad').submit();
     }
@@ -9,7 +71,25 @@
     function agregar(){
         $('#form_novedad').submit();
     }
+    
+  
+    
+    $(document).ready(function() {
+    
+        var multi_selector = new MultiSelector( document.getElementById( 'imagesList' ), 5 ); 
+        multi_selector.addElement( document.getElementById( 'imagesInput' ) );
+        
+        
+    });
+    
 </script>
+
+
+
+
+
+
+<!----------------------------------------- fin del header ------------------------------------>
 
 [% USE HTML %]
 
@@ -27,21 +107,21 @@
                 <div class="control-group">
                     <label class="control-label" for="titulo">[% "Titulo" | i18n %]</label>
                     <div class="controls">
-                        <input type="text" id="titulo" name="titulo" value="[% novedad.getTitulo %]">
+                        <input type="text" id="titulo" required name="titulo" value="[% novedad.getTitulo %]">
                     </div>
                 </div>
                 
                 <div class="control-group">
                     <label class="control-label" for="categoria">[% "Categor&iacute;a" | i18n %]</label>
                     <div class="controls">
-                        <input type="text" id="categoria" name="categoria" value="[% novedad.getCategoria %]">
+                        <input type="text" id="categoria" required name="categoria" value="[% novedad.getCategoria %]">
                     </div>
                 </div>
                 
                 <div class="control-group">
                     <label class="control-label" for="contenido">[% "Contenido" | i18n %]</label>
                     <div class="controls">
-                        <textarea id="contenido" name="contenido" style="width: 88.3%" >[%novedad.getContenido %]</textarea>
+                        <textarea id="contenido" required name="contenido" style="width: 88.3%" >[%novedad.getContenido %]</textarea>
                     </div>
                 </div>
 
@@ -54,6 +134,31 @@
                     </div>
 
                 [% END %]
+                
+                <div class="control-group">
+                    <label class="control-label" for="contenido">[% "Imagen/es" | i18n %]</label>
+                    <div class="controls">
+                        <!-- The fileinput-button span is used to style the file input field as button -->
+                        <span class="btn btn-success fileinput-button">
+                            <span><i class="icon-plus icon-white"></i>[% " Agregar archivos..." | i18n %]</span>
+                            <input type="file" id="imagesInput" multiple>
+                        </span>
+                        <button type="submit" class="btn btn-primary start">
+                            <i class="icon-upload icon-white"></i>[% " Comenzar carga" | i18n %]
+                        </button>
+                        <button type="reset" class="btn btn-warning cancel">
+                            <i class="icon-ban-circle icon-white"></i>[% " Cancelar carga" | i18n %]
+                        </button>
+                        <button type="button" class="btn btn-danger delete">
+                            <i class="icon-trash icon-white"></i>[% " Eliminar" | i18n %]
+                        </button>
+                        <input type="checkbox" class="toggle">
+                    </div>
+                    
+                    <div id="imagesList"></div>
+                    
+                </div>
+            
                 <input type="hidden" id="token" name="token" value="[% token %]">
                 <div class="form-actions">
                 [% IF editing %]
@@ -66,17 +171,8 @@
                                                       ) ;
 
                     [% END %]
-                
-                    [% PERL %]
-                          print C4::AR::Filtros::action_button( 
-                                                            button      => "btn btn-primary",
-                                                            action      => "modificar()", 
-                                                            icon        => "",
-                                                            title       => "[% 'Modificar' | i18n %]",
-                                                      ) ;
-
-
-                    [% END %]
+                    
+                    <button class="btn btn-primary" type="submit">[% 'Modificar' | i18n %]</button>
                     
                 [% ELSE %]
                 
@@ -88,17 +184,7 @@
                                                       ) ;
 
                     [% END %]
-                
-                     [% PERL %]
-                          print C4::AR::Filtros::action_button( 
-                                                            button      => "btn btn-primary",
-                                                            action      => "agregar()", 
-                                                            icon        => "",
-                                                            title       => "[% 'Agregar' | i18n %]",
-                                                      ) ;
-
-
-                    [% END %]
+                    <button class="btn btn-primary" type="submit">[% 'Agregar' | i18n %]</button>
                     
                 [% END %]
                 </div>

@@ -18,26 +18,18 @@ __PACKAGE__->meta->setup(
 
     primary_key_columns => [ 'id' ],
 
-     relationships =>
-    [
-      socio => 
-      {
-        class       => 'C4::Modelo::UsrSocio',
-        key_columns => { usuario => 'nro_socio' },
-        type        => 'one to one',
-      },
-    ]
 );
 
 
 sub agregar{
 
-    my ($self) = shift;
-    my (%params) = @_;
-    my $usuario = C4::AR::Auth::getSessionNroSocio();
-    $self->setTitulo($params{'titulo'});
-    $self->setContenido($params{'contenido'});
-    $self->setCategoria($params{'categoria'});
+    my ($self)      = shift;
+    my ($params)    = @_;    
+    my $usuario     = C4::AR::Auth::getSessionNroSocio();
+    
+    $self->setTitulo($params->{'titulo'}[0]);
+    $self->setContenido($params->{'contenido'}[0]);
+    $self->setCategoria($params->{'categoria'}[0]);
     $self->setUsuario($usuario);
 
     return($self->save());

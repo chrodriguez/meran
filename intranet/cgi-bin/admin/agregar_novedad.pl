@@ -29,8 +29,36 @@ my $twitter_enabled=C4::AR::Social::twitterEnabled();
 my $contenido= Encode::decode('utf8', $input->param('contenido'));
 
 my $cont;
+
+#estamos agregando o editando
 if ($action){
-    my $status = C4::AR::Novedades::agregar($input);
+
+    #me quedo con las hash que tengan 'file_'
+    
+    my @arrayFiles;
+    
+    #copio la referencia de la hash
+    my $hash        = $input->{'param'};
+    
+    #me quedo con las key, la trato a la referencia como una hash
+    my @keys        = keys %$hash;
+    
+    #hago un grep para quedarme con las 'file_*'
+    my @file_key    = grep { $_ =~ /^file_/; } @keys;
+    
+    foreach my $key ( @file_key ){
+    
+#        C4::AR::Utilidades::printARRAY($hash->{$key});
+#        C4::AR::Debug::debug("pepe : " . $hash->{$key}[0]);
+
+        #solo los que tengan algo adentro  
+        if($hash->{$key}[0] ne ""){
+            push(@arrayFiles, $hash->{$key}[0]);
+        } 
+        
+    }
+     
+    my $status = C4::AR::Novedades::agregar($input, @arrayFiles);
    
     if ($input->param('check_publicar')){
 

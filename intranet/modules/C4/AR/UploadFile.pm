@@ -26,9 +26,11 @@ use C4::AR::Mensajes;
 use C4::AR::Utilidades;
 use C4::AR::Preferencias;
 use Image::Resize;
+use File::LibMagic;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(
+        uploadFotoNovedadOpac
         uploadPhoto
         deletePhoto
         uploadFile
@@ -38,6 +40,79 @@ use vars qw(@EXPORT @ISA);
     );
 
 my $picturesDir = C4::Context->config("picturesdir");
+
+sub uploadFotoNovedadOpac{
+
+    my ($array_image) = @_;
+
+    use Digest::MD5;
+
+    my $uploaddir       = C4::Context->config("picturesdir");
+    my $uploaddir_oapc  = C4::Context->config("picturesdir_opac");
+    my $maxFileSize     = 2048 * 2048; # 1/2mb max file size...
+    my $hash_unique     = Digest::MD5::md5_hex(localtime());
+    my $file            = $array_image;
+    my $name            = $file.$hash_unique;
+    my $type            = '';
+#    my $flm             = File::LibMagic->new();
+    
+#    my $file_type       = $flm->describe_contents($file);
+    
+#    C4::AR::Debug::debug("file typeee : " . $file_type); die();
+
+
+    if (C4::AR::Auth::getSessionType() eq "opac"){
+        $uploaddir = $uploaddir_oapc;
+    }
+
+    if ($file =~ /^GIF/i) {
+        $type = "gif";
+    } elsif ($file =~ /PNG/i) {
+        $type = "png";
+    } elsif ($file =~ /JFIF/i) {
+        $type = "jpg";
+    } else {
+        $type = "jpg";
+    }
+
+#    C4::AR::Debug::debug("nombre : " . $file);
+#    C4::AR::Debug::debug("type : " . $type); die();
+
+    if (!$type) {
+        print qq|{ "success": false, "error": "Invalid file type..." }|;
+        print STDERR "file has been NOT been uploaded... \n";
+    }
+
+#    $type = "jpg";
+
+    open(WRITEIT, ">$uploaddir/$name.$type") or die "Cant write to $uploaddir/$name.$type. Reason: $!";
+        print WRITEIT $file;
+    close(WRITEIT);
+
+    my $check_size = -s "$uploaddir/$name.$type";
+
+#    print STDERR qq|Main filesize: $check_size  Max Filesize: $maxFileSize \n\n|;
+
+#    print $query->header();
+
+#    if ($check_size < 1) {
+#        print STDERR "ooops, its empty - gonna get rid of it!\n";
+#        print qq|{ "success": false, "error": "File is empty..." }|;
+#        print STDERR "file has been NOT been uploaded... \n";
+#    } elsif ($check_size > $maxFileSize) {
+#        print STDERR "ooops, its too large - gonna get rid of it!\n";
+#        print qq|{ "success": false, "error": "File is too large..." }|;
+#        print STDERR "file has been NOT been uploaded... \n";
+#    } else  {
+#        print qq|{ "success": true }|;
+#        print STDERR "file has been successfully uploaded... thank you.\n";
+
+#    }
+    
+    return ("$name.$type");
+
+
+}
 
 sub uploadPhoto{
     my ($query) = @_;

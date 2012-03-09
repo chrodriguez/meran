@@ -20,7 +20,29 @@
                     <dt>[% 'Categoria' | i18n %]:</dt>
                     <dd>[% HTML.escape(novedad.getCategoria) %]</dd>
                 [% END %] 
+            </dl>
 	    </div>
+	    
+        [% IF cant %]
+            <div class="imagenes">
+	        
+	            [% FOREACH imagen IN imagenes_hash %]
+	            
+	                <a class="fancylink" rel="group" href="/pictures/[% imagen.getImageName %]">
+                        <img border="0" src="/pictures/[% foto_name %]"
+                              style="width: 60%; max-width: 120px;" 
+                              alt="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                              title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                        >
+                    </a>
+<!--	               <img src="/pictures/[% imagen.getImageName %]" alt="description" title="description" width="" height="" />-->
+	            
+	            [% END %]
+	            
+	       </div>
+	        
+        [% END %] 
+	    
 	    <div class="form-actions">
 	        [% PERL %]
                 print C4::AR::Filtros::action_link_button( 

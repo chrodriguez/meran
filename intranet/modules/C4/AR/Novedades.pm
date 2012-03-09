@@ -23,19 +23,70 @@ use vars qw(@EXPORT @ISA);
 
 sub agregar{
 
-    my ($input) = @_;
-    my %params;
-    my $novedad = C4::Modelo::SysNovedad->new();
+    my ($params, @arrayFiles)    = @_;
+    my $novedad     = C4::Modelo::SysNovedad->new();
+    my $msg_object  = C4::AR::Mensajes::create();
+    my $db          = $novedad->db;
+    
+    use C4::AR::UploadFile;
+    use C4::Modelo::ImagenesNovedadesOpac;
+    
+    if (!($msg_object->{'error'})){
+    
+        $db->{connect_options}->{AutoCommit} = 0;
+        $db->begin_work;
+        
+        my $imagenes_novedades_opac;
+        my $image_name;
+        
+#        eval{
 
-    my $contenido = $input->param('contenido');
+            #agregamos primero la novedad
+            #para sacarle el id despues
+            C4::AR::Utilidades::printHASH($params->{'param'});
+            $novedad->agregar($params->{'param'});
+        
+            #recorremos todas las imagenes y las guardamos      
+            foreach my  $value (@arrayFiles) {
+#                C4::AR::Debug::debug("valueeeee: $value\n");
+                     
+                #pasarle la data necesaria
+                $image_name = C4::AR::UploadFile::uploadFotoNovedadOpac($value);
+                
+                $imagenes_novedades_opac = C4::Modelo::ImagenesNovedadesOpac->new(db => $db);                 
+                $imagenes_novedades_opac->saveImagenNovedad($image_name, $novedad->getId());                
+                
+                $msg_object->{'error'}= 0;
+                
+            }
+            
+            $db->commit;
+
+#        };
+
+        if ($@){
+        
+           &C4::AR::Mensajes::printErrorDB($@, 'B449',"INTRA");
+           $msg_object->{'error'}= 1;
+           C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'B449', 'params' => []} ) ;
+           $db->rollback;
+           
+        }
+
+        $db->{connect_options}->{AutoCommit} = 1;
+     }
+     
+     return ($msg_object);
+
+#    my $contenido = $input->param('contenido');
 
 #   Escapa codigo HTML
 #     C4::AR::Debug::debug($contenido);
 
-    %params = $input->Vars;
-    $params{'contenido'} = $contenido;
+#    %params = $input->Vars;
+#    $params{'contenido'} = $contenido;
 
-    return ($novedad->agregar(%params));
+#    return ($novedad->agregar(%params));
 }
 
 
@@ -149,6 +200,31 @@ sub getNovedad{
     }else{
         return (0);
     }
+}
+
+
+=item
+    Trae las imagenes (si las hay) apartir de un id_novedad
+=cut
+sub getImagenesNovedad{
+
+    my ($id_novedad) = @_;
+    my @filtros;
+
+    use C4::Modelo::ImagenesNovedadesOpac;
+    use C4::Modelo::ImagenesNovedadesOpac::Manager;
+    
+    push (@filtros, (id_novedad => {eq => $id_novedad}) );
+    
+    my $novedades_array_ref = C4::Modelo::ImagenesNovedadesOpac::Manager->get_imagenes_novedades_opac( query => \@filtros,
+                                                                              );
+
+    if(scalar(@$novedades_array_ref) > 0){
+        return ($novedades_array_ref->[0], scalar(@$novedades_array_ref));
+    }else{
+        return (0,0);
+    }
+    
 }
 
 sub eliminar{
