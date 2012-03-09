@@ -994,6 +994,7 @@ sub getSessionSocioObject {
 }
 
 sub getSessionType{
+sub getSessionType{
     my ($session) = @_;
 
     unless($session){
