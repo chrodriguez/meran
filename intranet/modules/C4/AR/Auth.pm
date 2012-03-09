@@ -1171,6 +1171,7 @@ sub buildSocioData{
     $session->param('usr_credential_type', $socio->getCredentialType());
     $session->param('usr_permisos_opac', $socio->tienePermisosOPAC);
     $session->param('remindFlag', $socio->getRemindFlag());
+    $session->param('socio_object', $socio);
 }
 
 sub buildSocioDataHashFromSession{
@@ -1198,6 +1199,7 @@ sub buildSocioDataHashFromSession{
     $socio_data{'ciudad_ref'}{'id'}         = $session->param('usr_ciudad_id'); 
     $socio_data{'remindFlag'}               = $session->param('remindFlag'); 
     $socio_data{'usr_credential_type'}      = $session->param('usr_credential_type'); 
+    $socio_data{'object'}                   = $session->param('socio_object'); 
     
     return (\%socio_data);
 }
@@ -1547,7 +1549,10 @@ sub _operacionesDeOPAC{
     $db->begin_work;
 	eval{
 	    #Si es un usuario de opac que esta sancionado entonces se borran sus reservas
-	    my ($isSanction,$endDate)= C4::AR::Sanciones::permisoParaPrestamo($socio, C4::AR::Preferencias::getValorPreferencia("defaultissuetype"));
+	    my ($status_hash)= C4::AR::Sanciones::permisoParaPrestamo($socio, C4::AR::Preferencias::getValorPreferencia("defaultissuetype"));
+	    
+	    my $isSanction           =$status_hash->{'deudaSancion'};
+	    
 	    my $regular = $socio->esRegular;
 	    my $userid = $socio->getNro_socio();
 	    if ($isSanction || !$regular ){

@@ -979,6 +979,7 @@ sub _verificaciones {
     
     C4::AR::Debug::debug("Reservas.pm => _verificaciones => sancionado: $sancionado ------ fechaFin: $fechaFin\n");
     if( !($msg_object->{'error'}) && ($sancionado || $fechaFin) ){
+
         $msg_object->{'error'}  = 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=>  $cod_error, 'params' => [C4::Date::format_date($fechaFin, $dateformat)]} ) ;
         C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de sanciones");
@@ -1030,14 +1031,14 @@ sub _verificaciones {
 #Se verifica que el usuario no tenga un prestamo sobre el mismo grupo para el mismo tipo prestamo (o no, depende de la preferencia "prestar_mismo_grupo_distintos_tipos_prestamo")
     if( !($msg_object->{'error'}) && (&C4::AR::Prestamos::getCountPrestamosDeGrupoPorUsuario($nro_socio, $id2, $tipo_prestamo)) ){
         $msg_object->{'error'}= 1;
-	
-	if(C4::AR::Preferencias::getValorPreferencia('prestar_mismo_grupo_distintos_tipos_prestamo')){
-	  C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'P100', 'params' => []} ) ;
-	  C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de prestamos iguales, sobre el mismo grupo y tipo de prestamo");
-	}else{
-	  C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'P129', 'params' => []} ) ;
-	  C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de prestamos iguales, sobre el mismo grupo sin importar el tipo de prestamo");
-	}
+        
+		if( C4::AR::Preferencias::getValorPreferencia('prestar_mismo_grupo_distintos_tipos_prestamo')){
+		  C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'P100', 'params' => []} ) ;
+		  C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de prestamos iguales, sobre el mismo grupo y tipo de prestamo");
+		}else{
+		  C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'P129', 'params' => []} ) ;
+		  C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de prestamos iguales, sobre el mismo grupo sin importar el tipo de prestamo");
+		}
     }
 
     C4::AR::Debug::debug("Reservas.pm => _verificaciones => FIN ".$msg_object->{'error'}." !!!\n\n");

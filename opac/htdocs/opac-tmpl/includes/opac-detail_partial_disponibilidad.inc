@@ -31,20 +31,28 @@
       	</blockquote>
 			
            [% IF CirculationEnabled %]
-                                   [% IF socio_data.usr_nro_socio %]                             
-                                        [% PERL %]
-                                            print C4::AR::Filtros::action_button(   
-                                                                                button   => "btn btn-primary",
-                                                                                icon   => "icon-white icon-shopping-cart",
-                                                                                title   => "[% 'Reservar un ejemplar' | i18n %]",
-                                                                                 action => 'showReservar("modal_reservar_[% id2 %]");',
-                                                                                [% IF cantParaPrestamoActual == 0 %]
-                                                                                	disabled => 1,
-                                                                                      popover		=> {title=>'[% "Disponibilidad" | i18n %]',
-                                                                                      					text => '[% "No hay disponibilidad para domicilio sobre esta edici&oacute;n, su reserva quedar&aacute; en espera" | i18n %].' },
-	                                                                            [% END %]
-                                                                        );
-                                        [% END %]
+                                   [% IF socio_data.usr_nro_socio %]    
+	                                   [% IF socio_data.object.puedeReservar([% id2 %]) %]    
+	                                                            
+	                                        [% PERL %]
+	                                            print C4::AR::Filtros::action_button(   
+	                                                                                button   => "btn btn-primary",
+	                                                                                icon   => "icon-white icon-shopping-cart",
+	                                                                                title   => "[% 'Reservar un ejemplar' | i18n %]",
+	                                                                                action => 'showReservar("modal_reservar_[% id2 %]");',
+	                                                                                [% IF cantParaPrestamoActual == 0 %]
+	                                                                                	disabled => 1,
+	                                                                                      popover		=> {title=>'[% "Disponibilidad" | i18n %]',
+	                                                                                      					text => '[% "No hay disponibilidad para domicilio sobre esta edici&oacute;n, su reserva quedar&aacute; en espera" | i18n %].' },
+		                                                                            [% END %]
+	                                                                        );
+	                                        [% END %]
+	                                        
+	                                    [% ELSE %]
+	                                    
+	                                    		ACA VA EL BOTON PARA CANCELAR LA RESERVA
+	                                    		
+	                                    [% END %]
                                    [% END %]
            [% END %]
 
