@@ -54,11 +54,8 @@
 	                                                                                icon   => "icon-white icon-remove",
 	                                                                                title   => "[% 'Cancelar reserva' | i18n %]",
 	                                                                                action => 'cancelarReserva([% socio_data.object.getIdReserva(id2) %]);',
-	                                                                                [% IF cantParaPrestamoActual == 0 %]
-	                                                                                	disabled => 1,
-	                                                                                      popover		=> {title=>'[% "Disponibilidad" | i18n %]',
-	                                                                                      					text => '[% "No hay disponibilidad para domicilio sobre esta edici&oacute;n, su reserva quedar&aacute; en espera" | i18n %].' },
-		                                                                            [% END %]
+                                                                                    popover		=> {title=>'[% "Disponibilidad" | i18n %]',
+	                                                                                      					text => '[% "UD. ya tiene una reserva sobre esta edici&oacute;n" | i18n %].' },
 	                                                                        );
 	                                        [% END %]
 	                                    [% END %]

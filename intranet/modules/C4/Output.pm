@@ -155,10 +155,6 @@ sub gettemplate {
     return ($template, \%params);
 }
 
-BEGIN{
-      C4::AR::Preferencias::reloadAllPreferences();
-};
-
 END { }       # module clean-up code here (global destructor)
 
 1;
