@@ -53,7 +53,7 @@
 	                                                                                button   => "btn btn-danger",
 	                                                                                icon   => "icon-white icon-remove",
 	                                                                                title   => "[% 'Cancelar reserva' | i18n %]",
-	                                                                                action => 'cancelarReserva("[% socio_data.usr_nro_socio %]");',
+	                                                                                action => 'cancelarReserva([% socio_data.object.getIdReserva(id2) %]);',
 	                                                                                [% IF cantParaPrestamoActual == 0 %]
 	                                                                                	disabled => 1,
 	                                                                                      popover		=> {title=>'[% "Disponibilidad" | i18n %]',
