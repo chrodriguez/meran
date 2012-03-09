@@ -2308,9 +2308,9 @@ sub existeNivel1{
     my $sphinx      = Sphinx::Search->new();
     $titulo         = unac_string('utf8',$titulo);
     $autor          = unac_string('utf8',$autor);
-    my $query       = '@titulo "'.$titulo.'*"';
-       $query      .= ' @autor "'.$autor.'*"';
-    my $tipo        = 'SPH_MATCH_EXTENDED';
+    my $query       = '@titulo "'.$titulo.'"';
+       $query      .= ' @autor "'.$autor.'"';
+    my $tipo        = 'SPH_MATCH_PHRASE';
     my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
     $sphinx->SetMatchMode($tipo_match);

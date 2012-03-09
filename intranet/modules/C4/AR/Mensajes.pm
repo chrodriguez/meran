@@ -69,6 +69,7 @@ my %mensajesOPAC = (
     'P131' => 'Disculpe, no puede efectuar la renovación porque el usuario tiene ejemplar/es vencido/s.',
     'S200' => 'Disculpe, no puede efectuar reservas porque usted esta sancionado hasta el *?*',
     'S204' => 'Disculpe, no puede efectuar el pr&eacute;stamo porque tiene ejemplar/es vencido/s.',
+    'S205' => 'Disculpe, usted tiene una sanci&oacute;n para este tipo de pr&eacute;stamo hasta el *?*.',
     'S201' => 'Disculpe, no puede efectuar reservas porque usted tiene una posible sanci&oacute;n pendiente.',
     'U300' => 'Disculpe, no puede efectuar reservas porque comple la condici&oacute;n debido a las normas de la Biblioteca.',
     'U301' => 'Disculpe, no puede efectuar reservas porque usted no ha realizado a&uacute;n el curso para usuarios.',
@@ -506,6 +507,11 @@ my %mensajesINTRA = (
     'UP04' => 'El nombre del archivo no tiene un formato correcto',
     'UP05' => 'Hay un error y el archivo no puede eliminarse del servidor',
     'UP06' => 'El archivo "*?*" se ha eliminado correctamente',
+    'UP07' => 'El archivo excede el tama&ntilde;o m&aacute;ximo permitido ("*?*")',
+    'UP08' => 'El archivo se ha cargado correctamente',
+    'UP09' => 'La portada se ha eliminado correctamente',
+    'UP10' => 'La portada se ha modificado correctamente',
+    'UP11' => 'La portada no se ha podido modificar',
 
 #ERRORES DE BASE DE DATOS
     'B400' => '',
@@ -729,7 +735,7 @@ sub add {
     #encodeamos en utf8 para mostrar bien los acentros
     encodeUtf8Msj($msg_hashref->{'params'});
 
-    my $messageString   = &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'}, $tipo, $msg_hashref->{'params'});
+    my $messageString   = C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'}, $tipo, $msg_hashref->{'params'});
     $msg_hashref->{'message'}= $messageString;
     $msg_hashref->{'codMsg'}= $msg_hashref->{'codMsg'};
 # C4::AR::Debug::debug("Mensajes::add => message: ".$messageString."\n");

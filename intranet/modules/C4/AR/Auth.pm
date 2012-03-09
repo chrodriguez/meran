@@ -1154,10 +1154,13 @@ sub buildSocioData{
     $session->param('usr_documento_version', $socio->persona->getVersion_documento());
     $session->param('usr_nro_documento', $socio->persona->getNro_documento());
     $session->param('usr_calle', $socio->persona->getCalle());
-    if($socio->persona->ciudad_ref){
-        $session->param('usr_ciudad_nombre', $socio->persona->ciudad_ref->getNombre());
-        $session->param('usr_ciudad_id',$socio->persona->ciudad_ref->id);
-    } 
+
+	if($socio->persona->getCiudad){
+		$session->param('usr_ciudad_nombre', $socio->persona->ciudad_ref->getNombre());
+		$session->param('usr_ciudad_id',$socio->persona->ciudad_ref->id);
+	} 
+
+    
     $session->param('usr_categoria_desc', $socio->categoria->getDescription());
     $session->param('usr_fecha_nac', $socio->persona->getNacimiento());
     $session->param('usr_sexo', $socio->persona->getSexo());
@@ -1168,6 +1171,7 @@ sub buildSocioData{
     $session->param('usr_credential_type', $socio->getCredentialType());
     $session->param('usr_permisos_opac', $socio->tienePermisosOPAC);
     $session->param('remindFlag', $socio->getRemindFlag());
+    $session->param('socio_object', $socio);
 }
 
 sub buildSocioDataHashFromSession{
@@ -1195,6 +1199,7 @@ sub buildSocioDataHashFromSession{
     $socio_data{'ciudad_ref'}{'id'}         = $session->param('usr_ciudad_id'); 
     $socio_data{'remindFlag'}               = $session->param('remindFlag'); 
     $socio_data{'usr_credential_type'}      = $session->param('usr_credential_type'); 
+    $socio_data{'object'}                   = $session->param('socio_object'); 
     
     return (\%socio_data);
 }
@@ -1339,11 +1344,10 @@ sub _checkRequisito{
 
     my $status = 1;
     
-    if (C4::AR::Preferencias::getValorPreferencia("requisito_necesario") ){
-	    my $cumple_condicion = $socio->getCumple_requisito;
-
-		$status = $status && ($cumple_condicion && ($cumple_condicion ne "0000000000:00:00"));
-    }
+#    if (C4::AR::Preferencias::getValorPreferencia("requisito_necesario") ){
+#	    my $cumple_condicion = $socio->getCumple_requisito;
+#		$status = $status && ($cumple_condicion && ($cumple_condicion ne "0000000000:00:00"));
+#    }
     
     $status = $status && ($socio->getActivo);
 
@@ -1545,7 +1549,10 @@ sub _operacionesDeOPAC{
     $db->begin_work;
 	eval{
 	    #Si es un usuario de opac que esta sancionado entonces se borran sus reservas
-	    my ($isSanction,$endDate)= C4::AR::Sanciones::permisoParaPrestamo($socio, C4::AR::Preferencias::getValorPreferencia("defaultissuetype"));
+	    my ($status_hash)= C4::AR::Sanciones::permisoParaPrestamo($socio, C4::AR::Preferencias::getValorPreferencia("defaultissuetype"));
+	    
+	    my $isSanction           =$status_hash->{'deudaSancion'};
+	    
 	    my $regular = $socio->esRegular;
 	    my $userid = $socio->getNro_socio();
 	    if ($isSanction || !$regular ){

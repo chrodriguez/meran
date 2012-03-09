@@ -86,7 +86,11 @@
                                       [% socio.categoria.getDescription %]
                                   </td> 
                                   <td>
-                                      [% socio.estado.getFuente %]
+                                      [% TRY %]
+                                        [% socio.estado.getFuente %]
+                                       [% CATCH %]
+                                        [% 'SIN ESTADO' | i18n %]
+                                       [% END %]  
                                   </td> 
 			                      <td>
 			                          [% socio.esRegularToString %]

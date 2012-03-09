@@ -2,31 +2,55 @@
 [% USE HTML %]
 
 <script type="text/javascript">
-      $(document).ready(function() {
-          $('.fancy_link').fancybox();
-      });
+
+        function submitForm(){
+            $('#post_novedad_form').modal('hide');
+            $('#post_novedad_form').submit();
+            startOverlay();
+        }
+
+
+		function modificarPortada(id){
+		    objAH                   = new AjaxHelper(updateModificarPortada);
+		    objAH.showOverlay       = true;
+		    objAH.url               = URL_PREFIX+'/admin/portada_opac.pl';
+		    objAH.id_portada        = id;
+		    objAH.tipoAccion        = 'SHOW_MOD_PORTADA';
+		    objAH.sendToServer();
+		}
+		
+		function updateModificarPortada(responseText){
+            $('#add_cover_form').html(responseText);
+            $('#add_cover_form').modal();
+		}
+
+
+      function agregarPortada_show(){
+    	  $('#add_cover_form').modal();
+      }
 </script>
 
 <fieldset>
-    <legend>[% "Portada del OPAC" | i18n %]:</legend>
+    <legend>[% "Portada del OPAC" | i18n %]</legend>
         [% IF portada %]
 				[% PERL %]
 				    print C4::AR::Filtros::tableHeader(   
                                            id              => "portada_opac_result",
                                            class           => "",
-                                           columns         => ['[% "Foto"|i18n %]','[% "T&iacute;tulo"|i18n %]','[% "Nota al pie"|i18n %]','[% "Orden"|i18n %]','[% "Acciones"|i18n %]',]
+                                           columns         => ['[% "Foto"|i18n %]','[% "T&iacute;tulo"|i18n %]','[% "Nota al pie"|i18n %]','[% "Acciones"|i18n %]',]
 				                ) ;
 				[% END %]
 				
 				<tbody>
 				[% FOREACH p IN portada %]
 				    <tr>
-				        <td>
-				            <a class="fancylink" href="/opac-tmpl/uploads/portada/[% p.getImagePath %]">[% p.getImagePath %]</a>
+				        <td class="userImage">
+				            <a class="fancy_link" href="http://[% SERVER_ADDRESS %]/opac-tmpl/uploads/portada/[% p.getImagePath %]">
+                                  <img border="0" src="http://[% SERVER_ADDRESS %]/opac-tmpl/uploads/portada/[% p.getImagePath %]" alt >
+				            </a>
 			            </td>
                         <td>[% p.getFooterTitle %]</td>
                         <td>[% p.getFooter %]</td>
-				        <td>[% p.getOrden %]</td>
 				        <td style="min-width: 100px;">
 				                  [% PERL %]
 				                      print C4::AR::Filtros::action_set_button(    
@@ -34,18 +58,16 @@
 				                            button          => 'btn btn-primary',
 				
 				                            actions         => [
-				                                                {title => "Modificar", 
-				                                                 action=>"generarVariasEtiquetas([% id2 %])", 
-				                                                 icon=>"icon-edit"
-				                                                },
-				                                                {title => "Eliminar", 
-				                                                 action=>"borrarEjemplaresN3([% id2 %])", 
-				                                                 icon=>"icon-trash"
-				                                                },
+					                                                {title => "Modificar", 
+					                                                 action=>"modificarPortada([% p.id %])", 
+					                                                 icon=>"icon-edit"
+					                                                },
+					                                                {title  => "Eliminar", 
+					                                                 url    =>"[% url_prefix %]/admin/portada_opac.pl",
+					                                                 params =>['id_portada=[% p.id %]','tipoAccion=DEL'], 
+					                                                 icon   =>"icon-trash"
+					                                                },
 				                                                ],
-				                             popover       => {text=>'Esta acci&oacute;n se aplica para todos los ejemplares seleccionados', 
-				                                               title=> 'Atenci&oacute;n'}
-				  
 				                              ) ;
 				                  [% END %]
 				
@@ -58,15 +80,26 @@
             <div class="alert alert-info">[% 'No hay niguna entrada para la portada' | i18n %]</div>
         [% END %]
 </fieldset>
+
 <div class="form-actions">
 	[% PERL %]
-	            print C4::AR::Filtros::to_Button(   
-	                    text    => "[% 'Agregar entrada' | i18n %]",
-	                    boton   => "btn btn-primary",
-	                    url     => "[% url_prefix %]/admin/agregar_novedad.pl?token=[% token %]",
+	            print C4::AR::Filtros::action_button(   
+	                    button   => "btn btn-primary",
+	                    action   => 'agregarPortada_show();',
 	                    title   => "[% 'Agregar entrada' | i18n %]",
 	                ) ;
 	[% END %]
 </div>
+
+<div class="alert alert-block">
+        <h4 class="alert-heading">Atenci&oacute;n</h4>
+        <p>Cargue fotos exactamente  del mismo tama&ntilde;o, de lo contrario, la portada va a sufrir cambios de tama&ntilde;o, provocando molestia visual.</p>
+      </div>
+<div id="add_cover_form" class="modal hide fade" >
+    [% INCLUDE 'form_portada_opac.inc' %]
+</div>
+
+
+
 				
 [% INCLUDE 'intranet-bottom.inc' %]

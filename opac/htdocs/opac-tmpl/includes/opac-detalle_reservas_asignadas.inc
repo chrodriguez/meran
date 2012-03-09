@@ -68,7 +68,7 @@
 	                            [% PERL %]
 	                                print C4::AR::Filtros::action_button(   
 	                                                                    button   => "btn click btn-danger",
-	                                                                    icon => "icon-trash icon-white",
+	                                                                    icon => "icon-remove icon-white",
 	                                                                    action => "cancelarReserva([% reserva.getId_reserva %])",
 	                                                                    title   => "",
 	                                                                    alternClass => ""

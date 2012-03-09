@@ -18,6 +18,8 @@ use vars qw(@EXPORT @ISA);
     agregar
     getNovedadesByFecha
     getPortadaOpac
+    addPortadaOpac
+    modPortadaOpac
 );
 
 
@@ -272,9 +274,157 @@ sub getPortadaOpac{
 	
 	my @filtros;
 	
-	my $portada = C4::Modelo::PortadaOpac::Manager->get_portada_opac();
+	my $portada = C4::Modelo::PortadaOpac::Manager->get_portada_opac( sort_by => ['orden ASC']);
 	
 	return $portada;
 }
+
+sub addPortadaOpac{
+	my ($params,$postdata) = @_;
+	
+	my $portada = C4::Modelo::PortadaOpac->new();
+	
+	if (C4::AR::Utilidades::validateString($params->{'footer'})){
+		$portada->setFooter($params->{'footer'});
+		$portada->setFooterTitle($params->{'footer_title'});
+	}
+	
+	my ($image,$msg) = uploadCoverImage($postdata);
+	
+	$portada->setImagePath($image);
+	
+	if (!$msg->{'error'}){
+	   $portada->save();
+	}
+	
+	return ($msg);
+	
+}
+
+sub modPortadaOpac{
+    my ($params) = @_;
+    
+    my $msg_object  = C4::AR::Mensajes::create();
+    
+    
+    
+    eval{
+	    my $portada = getPortadaOpacById($params->{'id_portada'});
+	
+	    if (C4::AR::Utilidades::validateString($params->{'footer'})){
+	        $portada->setFooter($params->{'footer'});
+	        $portada->setFooterTitle($params->{'footer_title'});
+	    }
+	    
+	    $portada->save();
+    };
+    
+    
+    if ($@){
+    	$msg_object->{'error'} = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP11', 'params' => []} ) ;
+    }else{
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP10', 'params' => []} ) ;
+    }
+      
+    return ($msg_object);
+    
+}
+
+
+
+sub getPortadaOpacById{
+    
+    my ($id) = @_;
+    
+    use C4::Modelo::PortadaOpac::Manager;
+    
+    my @filtros;
+    
+    push (@filtros, (id => {eq => $id}) );
+    
+    my $portada = C4::Modelo::PortadaOpac::Manager->get_portada_opac( query => \@filtros,);
+    
+    return $portada->[0];
+}
+
+
+sub delPortadaOpac{
+    my ($id) = @_;
+    
+    my $msg_object  = C4::AR::Mensajes::create();
+
+    my $portada = getPortadaOpacById($id);
+    
+    my $uploaddir       = C4::Context->config("opachtdocs")."/uploads/portada";
+    
+    if ($portada){
+	    my $image_name = $portada->getImagePath();
+	    unlink($uploaddir."/".$image_name);
+	    $portada->delete();
+	    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP09', 'params' => ['jpg','png','gif']} ) ;
+    }
+            
+    return ($msg_object);
+    
+}
+
+
+sub uploadCoverImage{
+    my ($postdata) = @_;
+
+    use Digest::MD5;
+    
+    my $uploaddir       = C4::Context->config("opachtdocs")."/uploads/portada";
+    my $maxFileSize     = 512 * 512; # 1/2mb max file size...
+    my $file            = $postdata;
+    my $type            = "";
+    my $msg_object  = C4::AR::Mensajes::create();
+
+    my $new_name        = Digest::MD5::md5_hex(localtime());
+    
+    if ($file =~ /^GIF/i) {
+        $type = "gif";
+    } elsif ($file =~ /PNG/i) {
+        $type = "png";
+    } elsif ($file =~ /JFIF/i) {
+        $type = "jpg";
+    } else {
+        $type = "jpg";
+    }
+
+
+    if (!$type) {
+         $msg_object->{'error'}= 1;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP00', 'params' => ['jpg','png','gif']} ) ;
+    }
+
+    
+    if (!$msg_object->{'error'}){
+	    open ( WRITEIT, ">$uploaddir/$new_name.$type" ) or die "$!"; 
+	    binmode WRITEIT; 
+	    while ( <$postdata> ) { 
+	    	print WRITEIT; 
+	    }
+	    close(WRITEIT);
+    }
+    
+    if (!$msg_object->{'error'}){
+	    my $check_size = -s "$uploaddir/$new_name.$type";
+	
+	    if ($check_size > $maxFileSize) {
+	         $msg_object->{'error'}= 1;
+             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP07', 'params' => ['512 KB']} ) ;
+	    } 
+    }    
+    
+    if (!$msg_object->{'error'}){
+    	C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP08', 'params' => ['512 KB']} ) ;
+    }
+    
+    return ($new_name.".".$type,$msg_object);
+
+}
+
 
 1;

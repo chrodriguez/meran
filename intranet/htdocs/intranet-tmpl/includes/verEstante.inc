@@ -1,12 +1,11 @@
 
-
 <div id="estante_collapse" class="accordion">
    <!-- <fieldset class="resultados_busqueda">-->
               <div class="accordion-group">
                     <div class="accordion-heading">
-                         <a class="accordion-toggle" data-toggle="collapse" data-parent="#estante_collapse" href="#contenido_estante">[% "Estantes" | i18n %]</a>
+                         <a class="accordion-toggle" data-toggle="collapse" data-parent="#estante_collapse" href="#cont_estante">[% "Estantes" | i18n %]</a>
                     </div>
-                    <div id="contenido_estante" class="accordion-body collapse in">
+                    <div id="cont_estante" class="accordion-body collapse in ">
                           <div class="accordion-inner">
 
                                <!-- <legend class="titulo_legend trigger click">[% "Estantes" | i18n %]</legend>-->
@@ -22,15 +21,6 @@
                                           </ul>
 
                                           <div class="form-actions">
-                                                
-
-                                                [% PERL %]
-                                                                    print C4::AR::Filtros::action_button(
-                                                                                                        button   => "btn btn-primary",
-                                                                                                        title   => "[% 'Agregar estante' | i18n %]",
-                                                                                                        action => "agregarNuevoEstante();",
-                                                                            ) ;
-                                                [% END %]
                                                 [% IF cant_estantes %]
                                                       [% PERL %]
                                                                     print C4::AR::Filtros::action_button(
@@ -40,12 +30,22 @@
                                                                             ) ;
                                                       [% END %]
                                                 [% END %]
+
+                                                [% PERL %]
+                                                                    print C4::AR::Filtros::action_button(
+                                                                                                        button   => "btn btn-success",
+                                                                                                        title   => "[% 'Agregar estante' | i18n %]",
+                                                                                                        action => "agregarNuevoEstante();",
+                                                                            ) ;
+                                                [% END %]
+                                           
                                                 
                                           </div>
                                     </div>
                           </div>
                     </div>
         </div>
-<!--    </fieldset>-->
+</div>
+<div id="subestante">
 </div>
 

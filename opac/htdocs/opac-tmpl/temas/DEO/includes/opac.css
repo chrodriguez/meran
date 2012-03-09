@@ -62,7 +62,6 @@ body {
 .main_content {
   padding-top: 60px;
   width: 92% !important;
-  min-width: 940px;
 }
 
 .medium_font{
@@ -291,4 +290,3 @@ body {
 
 .nano .content      { padding: 1px; }
 .nano .pane         { background: #444; }
-.nano .pane .slider { background: #111; }

@@ -1,6 +1,6 @@
 
 [% USE HTML %]
-    <div class="hero-unit" id="search-bar">
+    <div class="hero-unit row" id="search-bar">
      	<h1 class="medium_font">[% 'Bienvenido ' | i18n %]<small>[% ui.getNombre %]</small></h1>
         <p>
 	        [% IF cant_sanciones > 0 %]
@@ -21,12 +21,12 @@
 		</p>
           	
 		[% IF portada %]
-		<div id="carousel_container" class="span9">
+		<div id="carousel_container" class="span8 columns">
 			<div id="carousel_portada_opac" class="carousel slide">
 	            <div class="carousel-inner">
 	            [% FOREACH p IN portada %]
 	              <div class="item [% IF loop.first %]active[% END %]">
-	                <img src="/opac-tmpl/uploads/portada/[% p.getImagePath %]" style="max-width: 900px;" "alt>
+	                <img src="/opac-tmpl/uploads/portada/[% p.getImagePath %]" alt>
 	                [% IF p.getFooter %]
 		                <div class="carousel-caption">
 		                  <h4>[% p.getFooterTitle %]</h4>

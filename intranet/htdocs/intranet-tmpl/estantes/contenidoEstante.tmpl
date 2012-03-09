@@ -1,24 +1,26 @@
-
 <fieldset class="resultados_busqueda">
-    <legend class="titulo_legend">
-        [% "Resultados de la b&uacute;squeda" | i18n %]:</legend>
-        <div class="datos_tabla_div" id="datos_tabla_div">
-            <div class="resultados_consulta">[% "Total de registros" | i18n %]: [% cantidad %] </div>
-            <div>[% paginador %]</div>
-            <table id="tablaResultHeader" class="datos_tabla modal_result" border=0 cellspacing=0 cellpadding=0 width=100%>
-                <tr class="titulo_tabla_resultado">
-                    <td width="35%" class="click" onClick="ordenar('titulo')" Title='[% "Ordenar por T&iacute;tulo" | i18n %]'>
-                        [% "T&iacute;tulo" | i18n %]
-                    </td>
-                    <td width="25%" class="click" onClick="ordenar('nomCompleto')" Title='[% "Ordenar por Autor" | i18n %]'>
-                        [% "Autor" | i18n %]
-                    </td>
-                    <td width="35%">[% "Edici&oacute;n/A&ntilde;o" | i18n %]</td>
-                </tr>
-            </table>
-            <div id="div_resultado" style="overflow:auto; width: 100%; height: 350px">
-            <table id="tablaResult" class="datos_tabla modal_result" border=0 cellspacing=0 cellpadding=0 width=100%>
-            <!-- Actual Resultados de la b&uacute;squeda -->
+    <legend class="titulo_legend">[% "Resultados de la b&uacute;squeda" | i18n %]:</legend>
+    
+            <div class="well">
+                <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: <strong>[% HTML.escape(socio_busqueda) %]</strong></div> 
+                 [% IF cantidad %]
+                          <div class="resultados_consulta">[% "Total de registros" | i18n %]: <strong>[% cantidad %]</strong></div>
+                 [% END %]
+            </div>
+         [% IF cantidad %]
+                  <div class="contenedor_paginador">[% paginador %]</div>  
+                  [% PERL %]
+                      print C4::AR::Filtros::tableHeader(   
+                                        id              => "tablaResult",
+                                        class           => "",
+                                        selectAll_id    => "",
+                                        columns         => ['[% "Titulo" | i18n %]','[% 'Autor' | i18n %]',
+                                                            '[% "Edicion" | i18n %]',
+                                                            ]
+                                                                        
+                                              ) ;
+                  [% END %]
+
             [% FOREACH SEARCH_RESULTS %]
                 <tr>
                     <td>
@@ -30,38 +32,48 @@
                                                         ) ;
                         [% END %]
                     </td>
-
                     <td>
                             [% nomCompleto %]
-                    </td>
-            
+                    </td>    
                     <td>
-			<ul class='listado_a_izquierda'>
-                        [% FOREACH grupos %]
-			    <li  style="clear:both;">
-			    <div style="float:left;">
-                            [% IF edicion %]
-                                [% edicion %]
-                            [% END %]
-                            [% IF anio_publicacion %]
-                                ([% anio_publicacion %])
-                            [% END %]
-                            </div>
+                   
                             [% PERL %]
-                                    print C4::AR::Filtros::action_button(
-                                                                        button  => "icon_plus icon-white",
-                                                                        action => "agregarContenidoAEstante([% id2 %]);",
-                                                                        title   => "[% 'Agregar a Estante Actual' | i18n %]",
-                                                                        alternClass => ""
-                                            ) ;
-			    [% END %]
-                            </li>
-                        [% END %]
-                        </ul>
-                    </td>
+                                        print C4::AR::Filtros::action_set_button(    
+                                              title           => "",
+                                              icon            =>"icon-plus icon-white",
+                                              button          => 'btn btn-info',
+
+
+                                              actions         => [ [% FOREACH grupos %]
+                                                                      {title => " [% IF edicion %]
+                                                                                            [% edicion %]
+                                                                                  [% END %]
+                                                                                  [% IF anio_publicacion %]
+                                                                                      ([% anio_publicacion %])
+                                                                                  [% END %]", 
+                                                                                  action=>"agregarContenidoAEstante([% id2 %])",
+                                                                                
+                                                                        },
+                                                                         [% END %]
+                                                                
+                                                                  ],
+                                                popover       => {text=>'Esta acci&oacute;n se aplica para todos los ejemplares seleccionados', 
+                                                                  title=> 'Atenci&oacute;n'}
+
+                     
+                                                ) ;
+                              [% END %]
+
+
+                   </td>
+
                 </tr>
             [% END %]
             </table>
+
+            [% ELSE %]
+                 <div class="alert alert-info">[% 'No hay registros que coincidan con el criterio de busqueda'| i18n %]</div>
+             [% END %]
           </div>
         </div>
 </fieldset>

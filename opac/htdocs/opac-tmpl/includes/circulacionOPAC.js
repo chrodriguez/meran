@@ -8,18 +8,18 @@
 */
 var BUTTON_ID = 0;
 
-function showReservar(){
-	$('#modal_reservar').modal();
+function showReservar(id){
+	$('#'+id).modal();
 }
 
 
-function hideReservar(){
-	$('#modal_reservar').modal('hide');
+function hideReservar(id){
+	$('#modal_reservar_'+id).modal('hide');
 }
 
 function reservar(id1, id2){
 
-	hideReservar();
+	hideReservar(id2);
 	objAH               = new AjaxHelper(updateInfoReserva);
     objAH.debug         = true;
     objAH.showOverlay   = true;
@@ -28,6 +28,7 @@ function reservar(id1, id2){
     objAH.id1           = id1;
     objAH.id2           = id2;
     objAH.sendToServer();
+    
         
 }
 

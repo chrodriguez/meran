@@ -1,47 +1,6 @@
 [% INCLUDE "intranet-top.inc" %]
 <script type="text/javascript" src="/intranet-tmpl/includes/estantesVirtuales.js"></script>
 
-<div id="nuevo_estante" style="display:none">
-<fieldset class="resultados_busqueda">
-<legend class="titulo_legend trigger click">  [% "Nuevo Estante" | i18n %] </legend>
-            <input type="text" id="input_nuevo_estante">
-            <script type="text/javascript">
-            $(document).ready(function() {
-		$('#input_nuevo_estante').keypress(function(e){if(e.which==13){if(this.value!=''){agregarEstante();}}});
-            });
-            </script>
-</fieldset>
-           [% PERL %]
-                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
-                                                                        boton   => "boton_guardar",
-                                                                        onClick => 'agregarEstante();',
-                                                                        title   => "[% 'Guardar' | i18n %]",
-                                                                        alternClass => "botonCentrado"
-                                            ) ;
-           [% END %]
-</div>
-
-<div id="nuevo_sub_estante" style="display:none">
-<fieldset class="resultados_busqueda">
-<legend class="titulo_legend trigger click">  [% "Nuevo Estante" | i18n %] </legend>
-	    <input type="hidden" id="estante_nuevo_sub_estante">
-	    <input type="hidden" id="padre_nuevo_sub_estante">
-            <input type="text" id="input_nuevo_sub_estante">
-            <script type="text/javascript">
-            $(document).ready(function() {
-		$('#input_nuevo_sub_estante').keypress(function(e){if(e.which==13){if(this.value!=''){agregarSubEstante();}}});
-            });
-            </script>
-</fieldset>
-           [% PERL %]
-                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
-                                                                        boton   => "boton_guardar",
-                                                                        onClick => 'agregarSubEstante();',
-                                                                        title   => "[% 'Guardar' | i18n %]",
-                                                                        alternClass => "botonCentrado"
-                                            ) ;
-           [% END %]
-</div>
 
 <div id="editar_estante" style="display:none">
 <fieldset class="resultados_busqueda">
