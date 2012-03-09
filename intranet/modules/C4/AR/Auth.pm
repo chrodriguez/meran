@@ -1584,24 +1584,25 @@ sub _operacionesDeINTRA{
     $db->{connect_options}->{AutoCommit} = 0;
     $db->begin_work;
     my $userid = $socio->getNro_socio();
+    my $responsable = 'Sistema';
 	eval{
 		my $reserva=C4::Modelo::CircReserva->new(db=> $db);
 
 		#Se borran las reservas vencidas
 		C4::AR::Debug::debug("_operacionesDeINTRA=> Se cancelan las reservas vencidas ");
-		$reserva->cancelar_reservas_vencidas($userid);
+		$reserva->cancelar_reservas_vencidas($responsable);
 
 		#Ademas, se borran las reservas vencidas de usuarios con prestamos vencidos
 		C4::AR::Debug::debug("_operacionesDeINTRA=> Se cancelan las reservas de usuarios con prestamos vencidos ");
-		$reserva->cancelar_reservas_usuarios_morosos($userid);
+		$reserva->cancelar_reservas_usuarios_morosos($responsable);
 
 		#Ademas, se borran las reservas de todos los usuarios sancionados
                 C4::AR::Debug::debug("_operacionesDeINTRA=> Se cancelan las reservas de todos los usuarios sancionados ");
-		$reserva->cancelar_reservas_sancionados($userid);
+		$reserva->cancelar_reservas_sancionados($responsable);
 
 		#Ademas, se borran las reservas de los usuarios que no son alumnos regulares
 		C4::AR::Debug::debug("_operacionesDeINTRA=> Se cancelan las reservas de los usuarios que no son alumnos regulares ");
-		$reserva->cancelar_reservas_no_regulares($userid);
+		$reserva->cancelar_reservas_no_regulares($responsable);
 	
 		$db->commit;
 	};
