@@ -4,7 +4,7 @@
 	        	<p>[% "Se cuenta con disponibilidad para llevar a domicilio o leer en la sala de lectura" | i18n %].</p>
 			[% ELSE %]
 				[% IF cantParaPrestamoActual %]
-		        	<p>[% "Se cuenta con disponibilidad para llevar a domicilio" | i18n %].</p>
+		        	<p>[% "Se cuenta con disponibilidad inmediata para llevar a domicilio" | i18n %].</p>
 		        [% ELSE %]
 					[% IF cantParaSalaActual %]
 			        	<p>[% "Se cuenta con disponibilidad solamente para leer en la sala de lectura" | i18n %].</p>
@@ -37,13 +37,12 @@
                                                                                 button   => "btn btn-primary",
                                                                                 icon   => "icon-white icon-shopping-cart",
                                                                                 title   => "[% 'Reservar un ejemplar' | i18n %]",
+                                                                                 action => 'showReservar("modal_reservar_[% id2 %]");',
                                                                                 [% IF cantParaPrestamoActual == 0 %]
                                                                                 	disabled => 1,
-                                                                                      popover		=> {title=>'[% "No se puede reservar" | i18n %]',
-                                                                                      					text => '[% "No hay disponibilidad para domicilio sobre esta edici&oacute;n" | i18n %].' },
-																				[% ELSE %]
-	                                                                                action => "showReservar();",
-                                                                                [% END %]
+                                                                                      popover		=> {title=>'[% "Disponibilidad" | i18n %]',
+                                                                                      					text => '[% "No hay disponibilidad para domicilio sobre esta edici&oacute;n, su reserva quedar&aacute; en espera" | i18n %].' },
+	                                                                            [% END %]
                                                                         );
                                         [% END %]
                                    [% END %]

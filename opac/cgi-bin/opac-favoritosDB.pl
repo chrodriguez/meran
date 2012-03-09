@@ -38,7 +38,7 @@ if ($action eq "add_favorite"){
                                                                       button    => "btn btn-info click",
                                                                       action    => 'deleteFavorite('.$id1.',"fav_'.$id1.'",1);',
                                                                       id        => "button_favorite_id1",
-                                                                      icon      => "icon-star icon-white",
+                                                                      icon      => "icon-minus icon-white",
                                                                       disabled  => 1,
                                                                   ) ;
     	
@@ -57,7 +57,7 @@ elsif ($action eq "delete_favorite"){
                                                                       button    => "btn btn-primary click",
                                                                       action    => 'addFavorite('.$id1.',"fav_'.$id1.'");',
                                                                       id        => "button_favorite_id1",
-                                                                      icon      => "icon-star-empty icon-white",
+                                                                      icon      => "icon-heart icon-white",
                                                                   ) ;
     		
     	}

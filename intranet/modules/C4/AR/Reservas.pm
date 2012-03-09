@@ -971,9 +971,14 @@ sub _verificaciones {
     }
 
 #Se verfica si el usuario esta sancionado o tiene libros vencidos 
-    my ($sancionado, $fechaFin, $cod_error) = C4::AR::Sanciones::permisoParaPrestamo($nro_socio, $tipo_prestamo);
+    my ($status_hash) = C4::AR::Sanciones::permisoParaPrestamo($nro_socio, $tipo_prestamo);
+    
+    my $sancionado = $status_hash->{'deudaSancion'};
+    my $cod_error  = $status_hash->{'cod_error'};
+    my $fechaFin   = $status_hash->{'hasta'};
+    
     C4::AR::Debug::debug("Reservas.pm => _verificaciones => sancionado: $sancionado ------ fechaFin: $fechaFin\n");
-    if( !($msg_object->{'error'}) && ($sancionado||$fechaFin) ){
+    if( !($msg_object->{'error'}) && ($sancionado || $fechaFin) ){
         $msg_object->{'error'}  = 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=>  $cod_error, 'params' => [C4::Date::format_date($fechaFin, $dateformat)]} ) ;
         C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de sanciones");

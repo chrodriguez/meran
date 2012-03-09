@@ -1342,11 +1342,10 @@ sub _checkRequisito{
 
     my $status = 1;
     
-    if (C4::AR::Preferencias::getValorPreferencia("requisito_necesario") ){
-	    my $cumple_condicion = $socio->getCumple_requisito;
-
-		$status = $status && ($cumple_condicion && ($cumple_condicion ne "0000000000:00:00"));
-    }
+#    if (C4::AR::Preferencias::getValorPreferencia("requisito_necesario") ){
+#	    my $cumple_condicion = $socio->getCumple_requisito;
+#		$status = $status && ($cumple_condicion && ($cumple_condicion ne "0000000000:00:00"));
+#    }
     
     $status = $status && ($socio->getActivo);
 

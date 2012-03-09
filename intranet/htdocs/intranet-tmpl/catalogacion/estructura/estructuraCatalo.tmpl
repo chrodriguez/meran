@@ -118,9 +118,8 @@ function mostrarAgregarCampo(id){
 
 function updateMostrarAgregarCampo(responseText){
     inicializar();
-    $("#resultAgregarCampo").show();
     $("#resultAgregarCampo").html(responseText);
-    scrollTo('resultAgregarCampo');
+    $("#resultAgregarCampo").modal();
     enable_disableSelects();
 }
 
@@ -463,6 +462,7 @@ function agregarEstructuraCatalogacion(){
     ok                  = checkEstructuraCatalogacion();
 	if(ok){
     	objAH.tipoAccion= "GUARDAR_ESTRUCTURA_CATALOGACION";
+    	$('#resultAgregarCampo').modal('hide');
     	objAH.sendToServer();
 	}else{
       jAlert(DEBE_SELECCIONAR_TODOS_LOS_CAMPOS_REQUERIDOS,CATALOGO_ALERT_TITLE);
@@ -506,6 +506,7 @@ function modificarEstructuraCatalogacion(id){
     }
 
     objAH.tipoAccion        = "MODIFICAR_ESTRUCTURA_CATALOGACION";
+    $('#resultAgregarCampo').modal('hide');
     objAH.sendToServer();
 }
 
@@ -562,7 +563,7 @@ function updateModificarEstructuraCatalogacion(responseText){
 <!-- PARA MOSTRAR TEMPLATE PARA MODIFICAR CAMPOS -->
 <div id="resultModificarCampo" class="modal hide fade"></div>
 <!-- PARA MOSTRAR TEMPLATE PARA AGREGAR CAMPOS -->
-<div id= "resultAgregarCampo"></div>
+<div id= "resultAgregarCampo" class="modal hide fade"></div>
 <!-- PARA MOSTRAR LO CATALOGADO -->
 <div id= "resultCatalogacion"></div>
 
