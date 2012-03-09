@@ -49,17 +49,19 @@
 	                                   [% END %]
 	                               </li>
 	
-		            <li class="divider"></li>
 		                               <li>
 		                                   [% PERL %]
-		                                       print C4::AR::Filtros::link_to( text =>     "[% 'Adquisiciones' | i18n %]",
+		                                       print C4::AR::Filtros::link_to( text =>     " [% 'Adquisiciones' | i18n %]",
 		                                                                       url =>      "[% url_prefix %]/catalogacion/adquisiciones.pl",
-		                                                                       title =>    "[% 'Adquisiciones' | i18n %]"
+		                                                                       title =>    " [% 'Adquisiciones' | i18n %]",
+		                                                                       icon	=>		"icon-shopping-cart",
+		                                                                       
 		                                                                   ) ;
 		                                   [% END %]
 		                               </li>
-					<li class="divider"></li>
 	      [% IF socio_data.usr_credential_type == "superLibrarian" %]
+                            <li class="nav-header">[% 'Preferencias' | i18n %]</li>	
+	              			<li class="divider"></li>
 					
                              <li>
                              [% PERL %]
@@ -119,13 +121,14 @@
                                 </li>
            [% END %]
 	      [% IF socio_data.usr_credential_type == "superLibrarian" %]
-						<li class="divider"></li>	
+                            <li class="nav-header">[% 'Importaciones' | i18n %]</li>	
+	              			<li class="divider"></li>
 									
 										<li>
                                            [% PERL %]
                                                       print C4::AR::Filtros::link_to( text =>     "<i class='icon-download-alt'></i> [% 'Nueva Importaci&oacute;n' | i18n %]",
                                                                                       url =>      "[% url_prefix %]/herramientas/importacion/subirNuevaImportacion.pl",
-                                                                                      title =>    "[% 'Nueva Importaci&oacute;n' | i18n %]"
+                                                                                      title =>    "[% 'Nueva' | i18n %]"
                                                                                   ) ;
                                                   [% END %]
                                         </li>
@@ -133,7 +136,7 @@
                                                   [% PERL %]
                                                       print C4::AR::Filtros::link_to( text =>     "<i class='icon-download-alt'></i> [% 'Importaciones' | i18n %]",
                                                                                       url =>      "[% url_prefix %]/herramientas/importacion/importar.pl",
-                                                                                      title =>    "[% 'Importaciones' | i18n %]"
+                                                                                      title =>    "[% 'Listar' | i18n %]"
                                                                                   ) ;
                                                   [% END %]
                                         </li>
@@ -141,7 +144,7 @@
                                                   [% PERL %]
                                                       print C4::AR::Filtros::link_to( text =>     "<i class='icon-download-alt'></i> [% 'Esquemas de Importaci&oacute;n' | i18n %]",
                                                                                       url =>      "[% url_prefix %]/herramientas/importacion/esquemas_importacion.pl",
-                                                                                      title =>    "[% 'Esquemas de Importaci&oacute;n' | i18n %]"
+                                                                                      title =>    "[% 'Esquemas' | i18n %]"
                                                                                   ) ;
                                                   [% END %]
                                         </li>
@@ -309,9 +312,9 @@
                               [% END %]
                     </li>
                 [% IF socio_data.usr_credential_type == "superLibrarian" %]
+                            <li class="nav-header">[% 'Preferencias' | i18n %]</li>	
+	              			<li class="divider"></li>
                     
-                    <li class="divider"></li>
-
                                 <li>
                                             [% PERL %]
                                                 print C4::AR::Filtros::link_to( text  => "<i class='icon-cog'></i> [% 'Preferencias' | i18n %]",
@@ -470,12 +473,13 @@
                                                                              ) ;
                                              [% END %]
                                 </li>
-	              <li class="divider"></li>
+                            <li class="nav-header">[% 'Personal' | i18n %]</li>	
+	              			<li class="divider"></li>
                                 <li>
                                           [% PERL %]
                                               print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'OPAC - Novedades' | i18n %]",
                                                                               url =>      "[% url_prefix %]/admin/novedades_opac.pl",
-                                                                              title =>    "[% 'Novedades de OPAC' | i18n %]"
+                                                                              title =>    "[% 'Novedades' | i18n %]"
                                                                           ) ;
                                           [% END %]
                                 </li>
