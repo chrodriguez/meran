@@ -573,6 +573,7 @@ sub detalleCompletoINTRA {
         $hash_nivel2->{'portada_registro'}          = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'S');
         $hash_nivel2->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'M');
         $hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'L');
+        $hash_nivel2->{'edicion'}                   = $nivel2_array_ref->[$i]->getEdicion;
         
         #Para el google book preview
         $hash_nivel2->{'isbn'}        		        = $nivel2_array_ref->[$i]->getISBN;
