@@ -1,6 +1,6 @@
 
 [% USE HTML %]
-    <div class="hero-unit" id="search-bar">
+    <div class="hero-unit row" id="search-bar">
      	<h1 class="medium_font">[% 'Bienvenido ' | i18n %]<small>[% ui.getNombre %]</small></h1>
         <p>
 	        [% IF cant_sanciones > 0 %]
@@ -21,7 +21,7 @@
 		</p>
           	
 		[% IF portada %]
-		<div id="carousel_container" class="center_carousel">
+		<div id="carousel_container" class="span8 columns">
 			<div id="carousel_portada_opac" class="carousel slide">
 	            <div class="carousel-inner">
 	            [% FOREACH p IN portada %]

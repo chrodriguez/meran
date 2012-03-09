@@ -12,8 +12,7 @@
           <div class="control-group">
             <label class="control-label" for="titulo_footer">[% 'T&iacute;tulo del pie' | i18n %]</label>
             <div class="controls">
-              <input type="text" class="input-xlarge" id="footer_title" name="footer_title" value="[% portada.getTituloFooter %]">
-              <p class="help-block">[% 'Algo llamativo y descriptivo' | i18n %].</p>
+              <input type="text" class="input-xlarge" id="footer_title" name="footer_title" value="[% portada.getFooterTitle %]">
             </div>
           </div>
           
@@ -21,7 +20,6 @@
             <label class="control-label" for="footer">[% 'Pie de nota' | i18n %]</label>
             <div class="controls">
                 <textarea class="input-xlarge" id="footer" name="footer" >[% portada.getFooter %]</textarea>
-                <p class="help-block">[% 'Algo llamativo y descriptivo' | i18n %].</p>
             </div>
           </div>
             

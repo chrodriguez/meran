@@ -31,13 +31,13 @@
 </script>
 
 <fieldset>
-    <legend>[% "Portada del OPAC" | i18n %]:</legend>
+    <legend>[% "Portada del OPAC" | i18n %]</legend>
         [% IF portada %]
 				[% PERL %]
 				    print C4::AR::Filtros::tableHeader(   
                                            id              => "portada_opac_result",
                                            class           => "",
-                                           columns         => ['[% "Foto"|i18n %]','[% "T&iacute;tulo"|i18n %]','[% "Nota al pie"|i18n %]','[% "Orden"|i18n %]','[% "Acciones"|i18n %]',]
+                                           columns         => ['[% "Foto"|i18n %]','[% "T&iacute;tulo"|i18n %]','[% "Nota al pie"|i18n %]','[% "Acciones"|i18n %]',]
 				                ) ;
 				[% END %]
 				
@@ -51,7 +51,6 @@
 			            </td>
                         <td>[% p.getFooterTitle %]</td>
                         <td>[% p.getFooter %]</td>
-				        <td>[% p.getOrden %]</td>
 				        <td style="min-width: 100px;">
 				                  [% PERL %]
 				                      print C4::AR::Filtros::action_set_button(    
@@ -92,7 +91,10 @@
 	[% END %]
 </div>
 
-
+<div class="alert alert-block">
+        <h4 class="alert-heading">Atenci&oacute;n</h4>
+        <p>Cargue fotos exactamente  del mismo tama&ntilde;o, de lo contrario, la portada va a sufrir cambios de tama&ntilde;o, provocando molestia visual.</p>
+      </div>
 <div id="add_cover_form" class="modal hide fade" >
     [% INCLUDE 'form_portada_opac.inc' %]
 </div>
