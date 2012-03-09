@@ -47,6 +47,15 @@
                  [% END %]
                 [% END %]
 	</div>
-		<a href="#" class="btn btn-primary">[% "Ver sanciones" | i18n %]</a>
+                [% PERL %]
+                   print C4::AR::Filtros::action_link_button( 
+                                                     button     => "btn btn-inverse",
+                                                     url        => "[% url_prefix %]/opac-detalle_sanciones.pl",
+                                                     params     => ["token=[% token %]"],
+                                                     title      => "[% 'Ver sanciones' | i18n %]",
+                                       ) ;
+                [% END %]
+
+
 </div>
                 

@@ -290,3 +290,12 @@ body {
 
 .nano .content      { padding: 1px; }
 .nano .pane         { background: #444; }
+
+
+#signin{
+         min-width: 500px; 
+}
+
+#form-actions-signin{
+          min-width: 500px;
+}
