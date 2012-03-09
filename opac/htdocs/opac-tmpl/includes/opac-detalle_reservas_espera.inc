@@ -2,6 +2,7 @@
 <div id="detalleReservas">
     [% IF reservas_espera_count %]
 
+
         [% PERL %]
                 print C4::AR::Filtros::tableHeader(   
                                   id              => "tabla_datos tope",
@@ -45,13 +46,15 @@
                     <td>
                             [% IF CirculationEnabled %]
                                     <ul>
-                                            [% PERL %]
-                                                print C4::AR::Filtros::action_button(   
-                                                                                    button   => "btn btn-danger",
-                                                                                    action => "cancelarReserva([% reserva.getId_reserva %])",
-                                                                                    title   => "[% 'Cancelar Reserva' | i18n %]",
-                                                                            );
-                                            [% END %]
+                                        [% PERL %]
+                                                            print C4::AR::Filtros::action_button(   
+                                                                    button   => "btn click btn-danger",
+                                                                    icon => "icon-remove icon-white",
+                                                                    action => "cancelarReserva([% reserva.getId_reserva %])",
+                                                                    title   => "",
+                                                                    alternClass => ""
+                                                            );
+                                        [% END %]
                                     </ul>
 
                                 [% ELSE %]
@@ -61,7 +64,7 @@
              </tr>
            [% END %]
        </table>
-                 
+                
 [% ELSE %]
      <div class="alert alert-info"> [% 'Ud. no tiene reservas en espera.' | i18n %] </div>
 [% END %]

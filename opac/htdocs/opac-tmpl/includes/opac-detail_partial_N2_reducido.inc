@@ -8,7 +8,7 @@
                 [% IF nivel2_array %]
                 	<section class="detalle_grupo" id="detalle_grupo_[% id2 %]">
 							<div class="page-header">
-							    <h1>[% nivel1_obj.getTitulo %] <small> [% edicion %]</small></h1>
+							    <h1>[% nivel1_obj.getTitulo %] <small> [% edicion %]</small></h1>[% id2 %]
 							</div>                          
 							<div class="well">
 									  	 [% IF isbn %]
@@ -86,7 +86,7 @@
 	                                  </div>
 	                            </div>
 	                            
-								<div id="modal_reservar" class="modal hide fade">
+								<div id="modal_reservar_[% id2 %]" class="modal hide fade">
 							              <div class="modal-header">
 							                <a href="#" class="close" data-dismiss="modal">×</a>
 							                <h3>[% 'Reserva de ejemplar' | i18n %]</h3>

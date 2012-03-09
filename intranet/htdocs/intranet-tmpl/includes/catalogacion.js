@@ -1996,7 +1996,7 @@ function crearHidden(obj){
 
 function agregarTablaReferencias(tabla){
     objAH               = new AjaxHelper(updateAgregarTablaReferencias);
-    objAH.showOverlay       = true;
+    objAH.showOverlay   = true;
     objAH.url           = URL_PREFIX+'/admin/referencias/referenciasDB.pl';
     objAH.accion        = "AGREGAR_REGISTRO";
     objAH.alias_tabla   = tabla;
@@ -2005,14 +2005,7 @@ function agregarTablaReferencias(tabla){
 
 function updateAgregarTablaReferencias(responseText){
     $('#basic-modal-content').html(responseText);
-    $('#basic-modal-content').modal({   containerCss:{
-            backgroundColor:"#fff",
-    //         borderColor:"#0063dc",
-            height:380,
-            padding:0,
-            width:830
-        },
-    });
+    $('#basic-modal-content').modal();
 
     crearEditor();
 }
@@ -2021,8 +2014,6 @@ function crearEditor(){
     var loaderPath= "";
     loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>'
     makeToggle('datos_tabla_div','trigger',null,false);
-//     makeDataTable('#tablaResult');
-//     zebraId('tablaResult');
     onEnter('search_tabla',obtenerTablaFiltrada);
     $('.editable').editable(URL_PREFIX+'/admin/referencias/referenciasDB.pl', { 
             type      : 'text',
@@ -2075,8 +2066,8 @@ function crearAuto(obj){
 
 function crearBotonAgregarReferenciaSubcampo(obj){
 
-    if(obj.getRepetible() == '1'){
-        return '<li><a class="click" onclick=agregarTablaReferencias("'+ obj.getIdCompCliente() +'")><i class="icon-plus"></i> Agregar referencia al subcampo '+ obj.getSubCampo() + ' para el campo ' + obj.getCampo() +'</a></li>';
+    if ( (obj.getRepetible() == '1') && (obj.getReferenciaTabla()) ){
+        return '<li><a class="click" onclick=agregarTablaReferencias("'+ obj.getReferenciaTabla() +'")><i class="icon-plus"></i> Agregar referencia al subcampo '+ obj.getSubCampo() + ' para el campo ' + obj.getCampo() +'</a></li>';
     }else{  
         return '';
     }

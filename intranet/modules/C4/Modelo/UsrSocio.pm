@@ -1319,6 +1319,13 @@ sub setId_categoria{
     $self->save();
 }
 
+sub puedeReservar{
+	
+    my ($self) = shift;
+    my ($id2)= @_;
+    
 
+    return (1);    
+}
 
 1;
