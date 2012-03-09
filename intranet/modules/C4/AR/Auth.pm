@@ -856,12 +856,17 @@ sub checkauth {
 						if( $flags = $socio->tienePermisos($flagsrequired) ){
 							_realizarOperacionesLogin($type,$socio);
 						}
+						
+						C4::AR::Debug::debug("C4::AR::Auth::checkauth => fin operaciones login");
+						
 						#Si se logueo correctamente en intranet entonces guardo la fecha
 						my $now = Date::Manip::ParseDate("now");
 						if ($session->param('type') eq "intranet"){
 							$socio->setLast_login($now);
 							$socio->save();
 						}
+						C4::AR::Debug::debug("C4::AR::Auth::checkauth => fecha ".$now);
+						
 						my $referer  = $ENV{'HTTP_REFERER'};
                         my $fromAuth = index($referer,'auth.pl');
                         $referer     = C4::AR::Utilidades::addParamToUrl($referer,"token",$session->param('token'));
