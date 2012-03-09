@@ -130,7 +130,8 @@ sub permisoParaPrestamo {
   	my $deudaOsancion   = 0; #Se supone que no esta sancionado
   	my $hasta           = undef;
     my $cod_error;
-
+    my %status_hash     = {};
+    
   	if (tieneLibroVencido($nro_socio)) {
         $deudaOsancion  = 1; #Tiene libros vencidos 
         C4::AR::Debug::debug("Sanciones::permisoParaPrestamo => tieneLibroVencido ");
@@ -143,7 +144,11 @@ sub permisoParaPrestamo {
         C4::AR::Debug::debug("Sanciones::permisoParaPrestamo => estaSancionado ");
   	}
 
-  	return($deudaOsancion, $hasta, $cod_error);
+    $status_hash{'deudaSancion'} = $deudaOsancion;
+    $status_hash{'hasta'}        = $hasta;
+    $status_hash{'cod_error'}    = $cod_error;
+    
+  	return(\%status_hash);
 }
 
 
