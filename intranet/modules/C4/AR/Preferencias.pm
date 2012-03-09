@@ -183,11 +183,6 @@ sub getAllPreferencias {
 }
 
 
-BEGIN
-{
-      C4::AR::Preferencias::reloadAllPreferences();
-}
-
 sub getMenuPreferences{
 
     my $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( 
@@ -483,6 +478,7 @@ sub getMetodosAuthAll{
 
 	return ($metodos_auth);
 }
+
 
 END { }       # module clean-up code here (global destructor)
 

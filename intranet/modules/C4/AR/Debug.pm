@@ -6,6 +6,7 @@ require Exporter;
 # use C4::AR::Authldap;
 # use C4::Membersldap;
 use C4::Context;
+use C4::AR::Auth;
 #use Log::Log4perl qw(:easy);
 
 use vars qw(@EXPORT @ISA);
