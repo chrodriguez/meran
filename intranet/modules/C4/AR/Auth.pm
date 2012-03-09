@@ -1171,7 +1171,6 @@ sub buildSocioData{
     $session->param('usr_credential_type', $socio->getCredentialType());
     $session->param('usr_permisos_opac', $socio->tienePermisosOPAC);
     $session->param('remindFlag', $socio->getRemindFlag());
-    $session->param('socio_object', $socio);
 }
 
 sub buildSocioDataHashFromSession{
@@ -1199,7 +1198,7 @@ sub buildSocioDataHashFromSession{
     $socio_data{'ciudad_ref'}{'id'}         = $session->param('usr_ciudad_id'); 
     $socio_data{'remindFlag'}               = $session->param('remindFlag'); 
     $socio_data{'usr_credential_type'}      = $session->param('usr_credential_type'); 
-    $socio_data{'object'}                   = $session->param('socio_object'); 
+    $socio_data{'object'}                   = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio_data{'usr_nro_socio'});
     
     return (\%socio_data);
 }
