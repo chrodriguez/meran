@@ -8,10 +8,9 @@ use Template;
 use Template::Filters;
 use HTML::Template; #LUEGO DE PASAR TODO ELIMINAR PM, NO SE USA MAS
 use HTML::Template::Expr; #LUEGO DE PASAR TODO ELIMINAR PM, NO SE USA MAS
-
 use C4::AR::Filtros;
-#use C4::AR::Preferencias;
 use C4::AR::Auth;
+use C4::AR::Preferencias;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
