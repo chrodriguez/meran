@@ -14,7 +14,7 @@
 				[% END %]
 			[% END %]
 			[% IF cantReservas && cantPrestados %]
-	        	<small>[% "Tener en cuenta que existen " | i18n %] [% cantReservas%] 
+	        	<small>[% "Tener en cuenta que existen " | i18n %] [% cantReservas %] 
         		<cite title=""> [% " y " | i18n %] [% cantPrestados %] [% "prestados" | i18n %]</cite>
 	        	</small>
 	        [% ELSE %]
@@ -32,8 +32,7 @@
 			
            [% IF CirculationEnabled %]
                                    [% IF socio_data.usr_nro_socio %]    
-	                                   [% IF socio_data.object.puedeReservar([% id2 %]) %]    
-	                                                            
+	                                   [% IF socio_data.object.puedeReservar( 2 ) %]
 	                                        [% PERL %]
 	                                            print C4::AR::Filtros::action_button(   
 	                                                                                button   => "btn btn-primary",
@@ -47,11 +46,21 @@
 		                                                                            [% END %]
 	                                                                        );
 	                                        [% END %]
-	                                        
 	                                    [% ELSE %]
-	                                    
-	                                    		ACA VA EL BOTON PARA CANCELAR LA RESERVA
-	                                    		
+	                                        [% PERL %]
+	                                            my $id_reserva = socio_data.object.getIdReservas([% id2 %]);
+	                                            print C4::AR::Filtros::action_button(   
+	                                                                                button   => "btn btn-primary",
+	                                                                                icon   => "icon-white icon-remove",
+	                                                                                title   => "[% 'Cancelar reserva' | i18n %]",
+	                                                                                action => 'cancelarReserva([% id_reserva %]);',
+	                                                                                [% IF cantParaPrestamoActual == 0 %]
+	                                                                                	disabled => 1,
+	                                                                                      popover		=> {title=>'[% "Disponibilidad" | i18n %]',
+	                                                                                      					text => '[% "No hay disponibilidad para domicilio sobre esta edici&oacute;n, su reserva quedar&aacute; en espera" | i18n %].' },
+		                                                                            [% END %]
+	                                                                        );
+	                                        [% END %]
 	                                    [% END %]
                                    [% END %]
            [% END %]

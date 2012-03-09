@@ -31,7 +31,6 @@ $VERSION = 3.0;
     DatosReservas
     getDatosReservaDeId3
     CheckWaiting
-    tiene_reservas
     Enviar_Email_Asignacion_Reserva
     Enviar_Email_Cancelacion_Reserva
     Enviar_Email_Reserva_A_Espera
