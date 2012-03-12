@@ -38,11 +38,12 @@
 	                                                                                button   => "btn btn-primary",
 	                                                                                icon   => "icon-white icon-shopping-cart",
 	                                                                                title   => "[% 'Reservar un ejemplar' | i18n %]",
-	                                                                                action => 'showReservar("modal_reservar_[% id2 %]");',
-	                                                                                [% IF cantParaPrestamoActual == 0 %]
-	                                                                                	disabled => 1,
+	                                                                                [% IF cantParaPrestamo == 0 %]
+                                                                                   	      disabled => 1,
 	                                                                                      popover		=> {title=>'[% "Disponibilidad" | i18n %]',
 	                                                                                      					text => '[% "No hay disponibilidad para domicilio sobre esta edici&oacute;n, su reserva quedar&aacute; en espera" | i18n %].' },
+		                                                                            [% ELSE %]
+			                                                                                action => 'showReservar("modal_reservar_[% id2 %]");',
 		                                                                            [% END %]
 	                                                                        );
 	                                        [% END %]

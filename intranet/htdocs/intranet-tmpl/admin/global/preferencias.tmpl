@@ -236,7 +236,7 @@ function guardarModificacion(){
 	objAH               = new AjaxHelper(updateGuardarModificacion);
 	objAH.debug         = true;
 	objAH.url=URL_PREFIX+"/admin/global/preferenciasDB.pl";
-    objAH.showOverlay       = true;
+    objAH.showOverlay    = true;
 	objAH.variable      = $("#variable").val();
 	objAH.valor         = $("#valor").val();
     objAH.categoria     = 'sistema';
