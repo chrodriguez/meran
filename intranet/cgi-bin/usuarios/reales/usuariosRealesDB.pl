@@ -302,19 +302,25 @@ Se elimina el usuario
             my %params;
             $params{'default'}              = $socio->getId_categoria;
             #se genera el combo de categorias de usuario
-            my $comboDeCategorias           = &C4::AR::Utilidades::generarComboCategoriasDeSocio(\%params);
+            my $comboDeCategorias           = C4::AR::Utilidades::generarComboCategoriasDeSocio(\%params);
 
             $params{'default'}              = $socio->persona->documento->getId;
             #se genera el combo de tipos de documento
-            my $comboDeTipoDeDoc            = &C4::AR::Utilidades::generarComboTipoDeDocConValuesIds(\%params);
+            my $comboDeTipoDeDoc            = C4::AR::Utilidades::generarComboTipoDeDocConValuesIds(\%params);
             #se genera el combo de las bibliotecas
-            my $comboDeUI                   = &C4::AR::Utilidades::generarComboUI(\%params);
+            my $comboDeUI                   = C4::AR::Utilidades::generarComboUI(\%params);
+            
+            $params{'default'}              = $socio->getId_estado;
+            my $comboDeEstados              = C4::AR::Utilidades::generarComboDeEstados(\%params);
+
 
             $t_params->{'socio_modificar'}  = $socio;
-            my $comboDeCredentials          = &C4::AR::Utilidades::generarComboDeCredentials($t_params); #llama a getSocioInfoPorNroSocio
+            my $comboDeCredentials          = C4::AR::Utilidades::generarComboDeCredentials($t_params); #llama a getSocioInfoPorNroSocio
+            
             $t_params->{'combo_temas'}      = C4::AR::Utilidades::generarComboTemasINTRA($nro_socio); #llama a getSocioInfoPorNroSocio
             $t_params->{'comboDeCredentials'}   = $comboDeCredentials;
             $t_params->{'combo_tipo_documento'} = $comboDeTipoDeDoc;
+            $t_params->{'comboDeEstados'}       = $comboDeEstados;
             $t_params->{'comboDeCategorias'}    = $comboDeCategorias;
             $t_params->{'comboDeUI'}            = $comboDeUI;
             $t_params->{'addBorrower'}          = 0;
