@@ -29,6 +29,7 @@ sub agregar{
     my $novedad     = C4::Modelo::SysNovedad->new();
     my $msg_object  = C4::AR::Mensajes::create();
     my $db          = $novedad->db;
+    my $image_name;
     
     use C4::AR::UploadFile;
     use C4::Modelo::ImagenesNovedadesOpac;
@@ -39,9 +40,9 @@ sub agregar{
         $db->begin_work;
         
         my $imagenes_novedades_opac;
-        my $image_name;
         
-#        eval{
+        
+        eval{
 
             #agregamos primero la novedad
             #para sacarle el id despues
@@ -50,7 +51,6 @@ sub agregar{
         
             #recorremos todas las imagenes y las guardamos      
             foreach my  $value (@arrayFiles) {
-#                C4::AR::Debug::debug("valueeeee: $value\n");
                      
                 #pasarle la data necesaria
                 $image_name = C4::AR::UploadFile::uploadFotoNovedadOpac($value);
@@ -64,7 +64,7 @@ sub agregar{
             
             $db->commit;
 
-#        };
+        };
 
         if ($@){
         
@@ -78,17 +78,8 @@ sub agregar{
         $db->{connect_options}->{AutoCommit} = 1;
      }
      
-     return ($msg_object);
+     return ($image_name);
 
-#    my $contenido = $input->param('contenido');
-
-#   Escapa codigo HTML
-#     C4::AR::Debug::debug($contenido);
-
-#    %params = $input->Vars;
-#    $params{'contenido'} = $contenido;
-
-#    return ($novedad->agregar(%params));
 }
 
 
@@ -222,7 +213,7 @@ sub getImagenesNovedad{
                                                                               );
 
     if(scalar(@$novedades_array_ref) > 0){
-        return ($novedades_array_ref->[0], scalar(@$novedades_array_ref));
+        return ($novedades_array_ref, scalar(@$novedades_array_ref));
     }else{
         return (0,0);
     }

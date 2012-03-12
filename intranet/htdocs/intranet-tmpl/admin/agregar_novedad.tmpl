@@ -74,32 +74,60 @@ function MultiSelector( list_target, max ){this.list_target = list_target;this.c
     
   
     
-    $(document).ready(function() {
-    
-        var multi_selector = new MultiSelector( document.getElementById( 'imagesList' ), 5 ); 
-        multi_selector.addElement( document.getElementById( 'imagesInput' ) );
+    $(document).ready(function() {      
         
+        [% IF editing %]
+        
+            $('.fancylink').fancybox();
+               
+        [% ELSE %]
+        
+            var multi_selector = new MultiSelector( document.getElementById( 'imagesList' ), 5 ); 
+            multi_selector.addElement( document.getElementById( 'imagesInput' ) );
+        
+        [% END %]
         
     });
     
+    function eliminarFotos(){
+    
+        var cant = 0;
+    
+        $(':checkbox').each( 
+            function() { 
+                if($(this).attr('checked')){
+                    cant++;
+                }
+            } 
+        );  
+        
+        if(cant == 0){
+            jAlert('Seleccione al menos una imagen')
+        }
+        
+        $(':checkbox').each( 
+            function() { 
+                //$('#imagen_')
+                alert($(this).id)
+            } 
+        ); 
+        
+        
+        //llamado ajax
+    
+    }
+    
 </script>
-
-
-
-
-
-
-<!----------------------------------------- fin del header ------------------------------------>
 
 [% USE HTML %]
 
 [% IF editing %]
-    <form id="form_novedad" action="[% url_prefix %]/admin/editar_novedad.pl" method="POST" class="form-horizontal">
+    <form id="form_novedad" action="[% url_prefix %]/admin/editar_novedad.pl" method="POST" class="form-horizontal" enctype="multipart/form-data">
         <input type="hidden" id="action" name="action" value="editar">
         <input type="hidden" id="token" name="token" value="[% token %]">
         <input type="hidden" id="novedad_id" name="novedad_id" value="[% novedad.id %]">
 [% ELSE %]
-    <form id="form_novedad" action="[% url_prefix %]/admin/agregar_novedad.pl" method="POST" class="form-horizontal">
+    <form id="form_novedad" action="[% url_prefix %]/admin/agregar_novedad.pl" method="POST" class="form-horizontal" enctype="multipart/form-data">
         <input type="hidden" id="action" name="action" value="agregar">
 [% END %]
 <fieldset>
@@ -135,29 +163,55 @@ function MultiSelector( list_target, max ){this.list_target = list_target;this.c
 
                 [% END %]
                 
-                <div class="control-group">
-                    <label class="control-label" for="contenido">[% "Imagen/es" | i18n %]</label>
-                    <div class="controls">
-                        <!-- The fileinput-button span is used to style the file input field as button -->
-                        <span class="btn btn-success fileinput-button">
-                            <span><i class="icon-plus icon-white"></i>[% " Agregar archivos..." | i18n %]</span>
-                            <input type="file" id="imagesInput" multiple>
-                        </span>
-                        <button type="submit" class="btn btn-primary start">
-                            <i class="icon-upload icon-white"></i>[% " Comenzar carga" | i18n %]
-                        </button>
-                        <button type="reset" class="btn btn-warning cancel">
-                            <i class="icon-ban-circle icon-white"></i>[% " Cancelar carga" | i18n %]
-                        </button>
-                        <button type="button" class="btn btn-danger delete">
-                            <i class="icon-trash icon-white"></i>[% " Eliminar" | i18n %]
-                        </button>
-                        <input type="checkbox" class="toggle">
+                [% IF editing %]
+                
+                    <div class="control-group">
+                        <label class="control-label" for="contenido">[% "Imagen/es" | i18n %]</label>
+                        <div class="controls">
+                            [% FOREACH imagen IN imagenes_hash %]
+	                            <a class="fancylink" id="imagen_[% imagen.getImageName %]" rel="group" href="http://[% SERVER_ADDRESS %]/opac-tmpl/uploads/novedades/[% imagen.getImageName %]">
+                                    <img border="0" src="http://[% SERVER_ADDRESS %]/opac-tmpl/uploads/novedades/[% imagen.getImageName %]"
+                                          style="width: 60%; max-width: 120px;" 
+                                          alt="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                                          title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                                    >
+                                </a>
+                                <input type="checkbox" name="eliminar_imagen_[% imagen.getId %]"  id="[% imagen.getImageName %]" />
+	                        [% END %]
+	                        
+	                        </br>
+	                        [% PERL %]
+                                  print C4::AR::Filtros::action_button( 
+                                                                  button    => "btn btn-danger",
+                                                                  action    => 'eliminarFotos()',
+                                                                  title     => 'Eliminar foto/s seleccionadas'
+                                                              ) ;
+
+                            [% END %]
+                        </div>
+                        
+                        <div id="imagesList"></div>
+                        
                     </div>
-                    
-                    <div id="imagesList"></div>
-                    
-                </div>
+                
+                
+                [% ELSE %]
+                
+                    <div class="control-group">
+                        <label class="control-label" for="contenido">[% "Imagen/es" | i18n %]</label>
+                        <div class="controls">
+                            <!-- The fileinput-button span is used to style the file input field as button -->
+                            <span class="btn btn-success fileinput-button">
+                                <span><i class="icon-plus icon-white"></i>[% " Agregar archivos..." | i18n %]</span>
+                                <input type="file" id="imagesInput" multiple>
+                            </span>
+                        </div>
+                        
+                        <div id="imagesList"></div>
+                        
+                    </div>
+                
+                [% END %]
             
                 <input type="hidden" id="token" name="token" value="[% token %]">
                 <div class="form-actions">

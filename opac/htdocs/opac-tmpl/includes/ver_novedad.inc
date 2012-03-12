@@ -1,6 +1,14 @@
 [% USE HTML %]
 
 [% IF novedad.getContenido %]
+
+<script type="text/javascript" language="javascript">
+    $(document).ready(function() {
+    
+        $('.fancylink').fancybox();
+    
+    });
+</script>
     
     <fieldset>
         <legend>Detalle de la novedad <strong>[% HTML.escape(novedad.getTitulo) %]</strong></legend>
@@ -24,15 +32,14 @@
 	    </div>
 	    
         [% IF cant %]
-            <div class="imagenes">
+            <div class="well">
 	        
 	            [% FOREACH imagen IN imagenes_hash %]
-	            
-	                <a class="fancylink" rel="group" href="/pictures/[% imagen.getImageName %]">
-                        <img border="0" src="/pictures/[% foto_name %]"
+	                <a class="fancylink" rel="group" href="/opac-tmpl/uploads/novedades/[% imagen.getImageName %]">
+                        <img border="0" src="/opac-tmpl/uploads/novedades/[% imagen.getImageName %]"
                               style="width: 60%; max-width: 120px;" 
-                              alt="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
-                              title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                              alt="novedad_[% imagen.getIdNovedad %]"
+                              title="novedad_[% imagen.getIdNovedad %]"
                         >
                     </a>
 <!--	               <img src="/pictures/[% imagen.getImageName %]" alt="description" title="description" width="" height="" />-->

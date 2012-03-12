@@ -29,10 +29,13 @@ if ($action eq 'editar'){
     }
 }
 else{
-    $t_params->{'novedad'} = C4::AR::Novedades::getNovedad($id);
-    $t_params->{'editing'} = 1;
+    my ($imagenes_novedad,$cant)    = C4::AR::Novedades::getImagenesNovedad($id);
+    
+    $t_params->{'imagenes_hash'}    = $imagenes_novedad;
+    
+    $t_params->{'novedad'}          = C4::AR::Novedades::getNovedad($id);
+    
+    $t_params->{'editing'}          = 1;
 }
-
-
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -28,12 +28,11 @@ my ($imagenes_novedad,$cant)        = C4::AR::Novedades::getImagenesNovedad($id_
 
 C4::AR::Debug::debug("imagenes opac ! : " . $imagenes_novedad . " cantidad  : " . $cant);
 
-C4::AR::Utilidades::printHASH($imagenes_novedad);
+#C4::AR::Utilidades::printHASH($imagenes_novedad);
 
 #solo si hay imagenes para esa novedad
 if($cant){
 
-    $t_params->{'imagen_path'}      = C4::Context->config("picturesdir_opac");
     $t_params->{'imagenes_hash'}    = $imagenes_novedad;
 
 }

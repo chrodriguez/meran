@@ -30,11 +30,12 @@ my $contenido= Encode::decode('utf8', $input->param('contenido'));
 
 my $cont;
 
+
+
 #estamos agregando o editando
 if ($action){
 
-    #me quedo con las hash que tengan 'file_'
-    
+    #me quedo con las hash que tengan 'file_*'
     my @arrayFiles;
     
     #copio la referencia de la hash
@@ -47,13 +48,10 @@ if ($action){
     my @file_key    = grep { $_ =~ /^file_/; } @keys;
     
     foreach my $key ( @file_key ){
-    
-#        C4::AR::Utilidades::printARRAY($hash->{$key});
-#        C4::AR::Debug::debug("pepe : " . $hash->{$key}[0]);
 
         #solo los que tengan algo adentro  
         if($hash->{$key}[0] ne ""){
-            push(@arrayFiles, $hash->{$key}[0]);
+            push(@arrayFiles, $input->param($key));
         } 
         
     }
