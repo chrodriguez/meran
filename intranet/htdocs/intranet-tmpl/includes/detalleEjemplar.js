@@ -127,8 +127,7 @@ function updateBuscarUsuario(responseText){
 
 }
 
-function prestarUsuarioConReserva(nroSocio, id3){
-     
+function prestarUsuarioConReserva(nroSocio, id3){    
      items_array[0]=id3;
      socio     = nroSocio;
      confirmarPrestamo();
@@ -290,7 +289,6 @@ function updateInfoDevolver(responseText){
 function confirmarPrestamo(){
 
     if (socio){
-
         objAH               = new AjaxHelper(generaDivPrestamo);
         USUARIO             = new objeto_usuario();
         objAH.debug         = true;
@@ -298,13 +296,12 @@ function confirmarPrestamo(){
         objAH.url           = URL_PREFIX+'/circ/circulacionDB.pl';
         objAH.tipoAccion    = 'CONFIRMAR_PRESTAMO';
         objAH.datosArray    = items_array;
-        USUARIO.ID = socio;
+        USUARIO.ID           = socio;
         objAH.nro_socio     = USUARIO.ID;
         //se envia la consulta
         objAH.sendToServer();
         $('#basic-modal-content').modal('hide');
-    }  else {
-  
+    }  else {  
         if( $('#campoUsuario').val() != ''){
             objAH               = new AjaxHelper(generaDivPrestamo);
             objAH.debug         = true;
