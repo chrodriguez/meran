@@ -374,7 +374,7 @@ sub cancelar_reserva{
    $data_hash->{'id2'}          = $self->getId2;
    $data_hash->{'id3'}          = $self->getId3;
    $data_hash->{'nro_socio'}    = $self->getNro_socio;
-   $data_hash->{'responsable'}  = 'Sistema'; #ticket #3054, se pone responsable sistema. $responsable;
+   $data_hash->{'responsable'}  = $responsable;
    $data_hash->{'hasta'}        = undef;
    $data_hash->{'tipo_prestamo'}='-';
    $data_hash->{'id_ui'}        = $self->getId_ui;

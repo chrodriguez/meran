@@ -137,12 +137,6 @@ function updateRealizarAccion(responseText){
 		var messageArray    = infoHash.messages;
 		var ticketsArray    = infoHash.tickets;
 		var mensajes        = '';
-
-// 		for(var i=0; i<messageArray.length;i++){
-// 			imprimirTicket(ticketsArray[i].ticket,i);
-// 			setMessages(messageArray[i]);
-// 		}
-
         var hayError=0;
 
     
@@ -158,7 +152,6 @@ function updateRealizarAccion(responseText){
 
 		//borro la cache del autocomplete
 		$('#barcode').flushCache();
-		$('#acciones').hide();
 	}else{
 		var Messages        = JSONstring.toObject(responseText);
 		setMessages(Messages);
@@ -362,8 +355,7 @@ $(document).ready(function() {
 	<form id="form_circulacion_rapida" class="classform form-horizontal" onsubmit="return false;">
 		<fieldset>
 		    <legend class="titulo_legend"><span class="titulos">[% 'Circulaci&oacute;n R&aacute;pida' | i18n %]</span></legend>
-		       <!-- <ul>-->
-		            <!--<li class="sub_item">-->
+
 		            <div class="control-group">
 		                  <label for="operacion" class="control-label">[% 'Operaci&oacute;n' | i18n %]</label>
 		                  <div class="controls">
@@ -373,10 +365,9 @@ $(document).ready(function() {
 		                      <option value="renovar">[% 'Renovaci&oacute;n' | i18n %]</option> 
 		                  </select>
 		                  </div>
-		                  <!--<div id="cambo_tipo_prestamo" style="display: none">-->
+
 		            </div>
-		            <!--</li>-->
-		        <!--    <li class="sub_item">-->
+
 			        <div id="divInfoEjemplar" class="control-group">
 			                <label for="barcode"  class="control-label">[% 'C&oacute;digo de Barras' | i18n %]
 			                 [% PERL %]
@@ -391,11 +382,8 @@ $(document).ready(function() {
 		                        <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
 		                    </div>
 		            </div>
-		            <!--</li>-->
-		            <!--<li>-->
+
 		            <div id="datos_ejemplar"></div>
-		           <!-- </li>-->
-		           <!-- <li class="sub_item">-->
 		            <div id="divInfoUsuario" class="control-group" >
 		                <label for="usuario" class="control-label">[% 'Usuario' | i18n %]
 		                    [% PERL %]
@@ -407,14 +395,9 @@ $(document).ready(function() {
 		                    <div id="estadoUsuario"></div>
 		                    <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
 		                </div>
-		  <!--                  <input type="button" class="nonForm" onclick="agregarAutorizado()" id="save_button" value="[% 'Agregar Adicional' | i18n %]" > -->
 		            </div>
-		           <!-- </li>-->
-		            <!--<li>-->
 		                <div id="datosAutorizado"></div>
 		                <div id="detalleUsuario"></div>
-		            <!--</li>-->
-		            <!--<li class="sub_item">-->
 		            <div id="divInfoUsuario">
 		                  <div id="cambo_tipo_prestamo" class="control-group">
 		                      <label for="operacion">[% 'Tipo de Pr&eacute;stamo' | i18n %]</label>
@@ -423,8 +406,6 @@ $(document).ready(function() {
 		                      </div>
 		                  </div>
 		             
-		           <!-- </li>-->
-		       <!--   </ul>-->
 		        <div class="form-actions" id="acciones">
 		        [% PERL %]
 		        
@@ -448,12 +429,10 @@ $(document).ready(function() {
 		</fieldset>
     </form>
 	
-	<!-- DELTALLE DEL USUARIO -->
-	<br>
+    <!-- DETALLE DE SANCIONES -->
+    <div id="sanciones"></div>
 	<!-- DETALLE DE PRESTAMOS -->
 	<div id="tablaPrestamos" style="clear: both;"></div>
 	<div class="ticket" id="ticket" ></div>
-	<!-- DETALLE DE SANCIONES -->
-	<div id="sanciones"></div>
 </section>
 [% INCLUDE 'intranet-bottom.inc' %]

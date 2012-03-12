@@ -32,7 +32,7 @@
 			
            [% IF CirculationEnabled %]
                                    [% IF socio_data.usr_nro_socio %]    
-	                                   [% IF socio_data.object.puedeReservar( 2 ) %]
+	                                   [% IF socio_data.object.puedeReservar( id2 ) %]
 	                                        [% PERL %]
 	                                            print C4::AR::Filtros::action_button(   
 	                                                                                button   => "btn btn-primary",
@@ -48,17 +48,14 @@
 	                                        [% END %]
 	                                    [% ELSE %]
 	                                        [% PERL %]
-	                                            my $id_reserva = socio_data.object.getIdReservas([% id2 %]);
+	                                            
 	                                            print C4::AR::Filtros::action_button(   
-	                                                                                button   => "btn btn-primary",
+	                                                                                button   => "btn btn-danger",
 	                                                                                icon   => "icon-white icon-remove",
 	                                                                                title   => "[% 'Cancelar reserva' | i18n %]",
-	                                                                                action => 'cancelarReserva([% id_reserva %]);',
-	                                                                                [% IF cantParaPrestamoActual == 0 %]
-	                                                                                	disabled => 1,
-	                                                                                      popover		=> {title=>'[% "Disponibilidad" | i18n %]',
-	                                                                                      					text => '[% "No hay disponibilidad para domicilio sobre esta edici&oacute;n, su reserva quedar&aacute; en espera" | i18n %].' },
-		                                                                            [% END %]
+	                                                                                action => 'cancelarReserva([% socio_data.object.getIdReserva(id2) %]);',
+                                                                                    popover		=> {title=>'[% "Disponibilidad" | i18n %]',
+	                                                                                      					text => '[% "UD. ya tiene una reserva sobre esta edici&oacute;n" | i18n %].' },
 	                                                                        );
 	                                        [% END %]
 	                                    [% END %]

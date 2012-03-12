@@ -58,8 +58,8 @@ function cancelarReserva(id_reserva){
             objAH.url           = URL_PREFIX+'/reservasDB.pl';
             objAH.id_reserva    = id_reserva;
             objAH.accion        = 'CANCELAR_RESERVA';
-            
             objAH.sendToServer();
+            
         }
     });
 }
