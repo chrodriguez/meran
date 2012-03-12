@@ -161,14 +161,11 @@ sub getAllPreferencias {
 	
     my %preferencias_hash;
 
-    C4::AR::Debug::debug("Preferencias () ===> getAllPreferencias !!");
-
 	require C4::Modelo::PrefPreferenciaSistema;
 	require C4::Modelo::PrefPreferenciaSistema::Manager;
 
     my $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema();
 
-  C4::AR::Debug::debug("Preferencias () ===> getAllPreferencias 2 !!");
     if ($preferencias_array_ref){
 
         foreach my $p (@$preferencias_array_ref){
