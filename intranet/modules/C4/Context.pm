@@ -1,26 +1,7 @@
-# Copyright 2002 Katipo Communications
-#
-# This file is part of Koha.
-#
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
-#
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,f
-# Suite 330, Boston, MA  02111-1307 USA
-
-# $Id: Context.pm,v 1.14 2003/06/05 17:03:32 tipaul Exp $
-
 package C4::Context;
+
 use strict;
 use DBI;
-#Einar use CGI::Session;
 
 use vars qw($VERSION $AUTOLOAD),
 	qw($context),
@@ -32,65 +13,6 @@ our @EXPORT_OK = qw(1024);
 $VERSION = do { my @v = '$Revision: 1.14 $' =~ /\d+/g;
 		shift(@v) . "." . join("_", map {sprintf "%03d", $_ } @v); };
 
-=head1 NAME
-
-C4::Context - Maintain and manipulate the context of a Koha script
-
-=head1 SYNOPSIS
-
-  use C4::Context;
-
-  use C4::Context("/path/to/koha.conf");
-
-  $config_value = C4::Context->config("config_variable");
-  $db_handle = C4::Context->dbh;
-  $stopwordhash = C4::Context->stopwords;
-
-=head1 DESCRIPTION
-
-When a Koha script runs, it makes use of a certain number of things:
-configuration settings in F</etc/koha.conf>, a connection to the Koha
-database, and so forth. These things make up the I<context> in which
-the script runs.
-
-This module takes care of setting up the context for a script:
-figuring out which configuration file to load, and loading it, opening
-a connection to the right database, and so forth.
-
-Most scripts will only use one context. They can simply have
-
-  use C4::Context;
-
-at the top.
-
-Other scripts may need to use several contexts. For instance, if a
-library has two databases, one for a certain collection, and the other
-for everything else, it might be necessary for a script to use two
-different contexts to search both databases. Such scripts should use
-the C<&set_context> and C<&restore_context> functions, below.
-
-By default, C4::Context reads the configuration from
-F</etc/koha.conf>. This may be overridden by setting the C<$KOHA_CONF>
-environment variable to the pathname of a configuration file to use.
-
-=head1 METHODS
-
-=over 2
-
-=cut
-#'
-# In addition to what is said in the POD above, a Context object is a
-# reference-to-hash with the following fields:
-#
-# config
-#	A reference-to-hash whose keys and values are the
-#	configuration variables and values specified in the config
-#	file (/etc/koha.conf).
-# dbh
-#	A handle to the appropriate database for this context.
-# dbh_stack
-#	Used by &set_dbh and &restore_dbh to hold other database
-#	handles for this context.
 
 use constant CONFIG_FNAME => "/etc/meran/meran.conf";
 				# Default config file, if none is specified
@@ -153,20 +75,6 @@ sub import
 	$context->set_context;
 }
 
-=item new
-
-  $context = new C4::Context;
-  $context = new C4::Context("/path/to/koha.conf");
-
-Allocates a new context. Initializes the context from the specified
-file, which defaults to either the file given by the C<$KOHA_CONF>
-environment variable, or F</etc/koha.conf>.
-
-C<&new> does not set this context as the new default context; for
-that, use C<&set_context>.
-
-=cut
-#'
 sub new
 {
 	my $class = shift;
@@ -561,26 +469,7 @@ sub _new_stopwords
 }
 
 1;
+
 __END__
 
-=back
 
-=head1 ENVIRONMENT
-
-=over 4
-
-=item C<KOHA_CONF>
-
-Specifies the configuration file to read.
-
-=back
-
-=head1 SEE ALSO
-
-DBI(3)
-
-=head1 AUTHOR
-
-Andrew Arensburger <arensb at ooblick dot com>
-
-=cut

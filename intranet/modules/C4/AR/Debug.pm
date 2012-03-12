@@ -3,9 +3,7 @@ package C4::AR::Debug;
 use strict;
 
 require Exporter;
-# use C4::AR::Authldap;
-# use C4::Membersldap;
-use C4::Output;
+
 
 use vars qw(@EXPORT @ISA);
 @ISA = qw(Exporter);
@@ -191,11 +189,6 @@ sub printSession {
     C4::AR::Debug::debug("*****************************************END**SESSION****************************************************");
     C4::AR::Debug::debug("\n");
 }
-=pod
-
-=back
-
-=cut
 
 1;
 
