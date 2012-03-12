@@ -263,7 +263,9 @@
                                 [% END %] <!-- END FOREACH nivel2_array -->
                                 <br />
                             </dl>
-                        [% INCLUDE "estructura/ejemplaresDelGrupo.tmpl" %]
+                        <span id="ejemplaresDelGrupo[% id2 %]">
+                            [% INCLUDE "estructura/ejemplaresDelGrupo.tmpl" %]
+                        </span>
 	                    [% IF nivel1_analiticas_cant %]
                                   [% INCLUDE "estructura/analiticasDelGrupo.tmpl" %]
                         [% END %]
