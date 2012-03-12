@@ -15,8 +15,8 @@ my $authnotrequired = 0;
 #tipoAccion = PRESTAMO, RESREVA, DEVOLUCION, CONFIRMAR_PRESTAMO
 my $tipoAccion      = C4::AR::Utilidades::trim($obj->{'tipoAccion'})||"";
 my $nro_socio       = C4::AR::Utilidades::trim($obj->{'nro_socio'});
-C4::AR::Debug::debug("ACCION -> ".$tipoAccion);
-C4::AR::Debug::debug("SOCIO -> ".$nro_socio);
+#C4::AR::Debug::debug("ACCION -> ".$tipoAccion);
+#C4::AR::Debug::debug("SOCIO -> ".$nro_socio);
 
 #***************************************************DEVOLUCION**********************************************
 if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
