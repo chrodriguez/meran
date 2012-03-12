@@ -158,11 +158,17 @@ sub getPreferenciasByArray {
 
 
 sub getAllPreferencias {
-    my @filtros;
+	
     my %preferencias_hash;
 
-    my $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( query => \@filtros );
+    C4::AR::Debug::debug("Preferencias () ===> getAllPreferencias !!");
 
+	require C4::Modelo::PrefPreferenciaSistema;
+	require C4::Modelo::PrefPreferenciaSistema::Manager;
+
+    my $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema();
+
+  C4::AR::Debug::debug("Preferencias () ===> getAllPreferencias 2 !!");
     if ($preferencias_array_ref){
 
         foreach my $p (@$preferencias_array_ref){
@@ -176,11 +182,6 @@ sub getAllPreferencias {
     }
 }
 
-
-BEGIN
-{
-      reloadAllPreferences();
-}
 
 sub getMenuPreferences{
 
@@ -477,6 +478,8 @@ sub getMetodosAuthAll{
 
 	return ($metodos_auth);
 }
+
+
 
 END { }       # module clean-up code here (global destructor)
 

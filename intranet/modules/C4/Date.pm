@@ -287,7 +287,7 @@ sub proximosHabiles {
 		$hasta = $desde;
 # 		C4::AR::Debug::debug("********** HASTA ANTES DEL CALCULO ".$hasta);
 		for (my $iter_habil = 1; $iter_habil <= $cantidad; $iter_habil++ ){
-			$hasta = DateCalc($hasta,"+ 1 days",\$err,2);
+			$hasta = DateCalc($hasta,"+ 1 business days",\$err);
 		}
 	}else{
         #esto es si no importa quetodos los dias del periodo sean habiles, los que deben ser habiles son el 1ero y el ultimo		
@@ -306,7 +306,7 @@ sub proximosHabiles {
 # 		C4::AR::Debug::debug("_______________________________________ HASTA __________________________________ ".C4::Date::format_date($hasta,$dateformat));
 # 		C4::AR::Debug::debug("_______________________________________FERIADO______________________________ ".$feriado->getFecha);
 		if( C4::Date::format_date($hasta,$dateformat) eq $feriado->getFecha ) {
-			$hasta=DateCalc($hasta,"+ 1 days",\$err,2);
+			$hasta=DateCalc($hasta,"+ 1 business days",\$err);
 # 			C4::AR::Debug::debug("_______________________________________ SUMA 1!!! __________________________________ ");
 		}
 	}

@@ -5,8 +5,7 @@ use strict;
 require Exporter;
 # use C4::AR::Authldap;
 # use C4::Membersldap;
-use C4::Context;
-#use Log::Log4perl qw(:easy);
+use C4::Output;
 
 use vars qw(@EXPORT @ISA);
 @ISA = qw(Exporter);

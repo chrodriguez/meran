@@ -14,7 +14,7 @@
 				[% END %]
 			[% END %]
 			[% IF cantReservas && cantPrestados %]
-	        	<small>[% "Tener en cuenta que existen " | i18n %] [% cantReservas%] 
+	        	<small>[% "Tener en cuenta que existen " | i18n %] [% cantReservas %] 
         		<cite title=""> [% " y " | i18n %] [% cantPrestados %] [% "prestados" | i18n %]</cite>
 	        	</small>
 	        [% ELSE %]
@@ -32,8 +32,7 @@
 			
            [% IF CirculationEnabled %]
                                    [% IF socio_data.usr_nro_socio %]    
-	                                   [% IF socio_data.object.puedeReservar([% id2 %]) %]    
-	                                                            
+	                                   [% IF socio_data.object.puedeReservar( id2 ) %]
 	                                        [% PERL %]
 	                                            print C4::AR::Filtros::action_button(   
 	                                                                                button   => "btn btn-primary",
@@ -47,11 +46,18 @@
 		                                                                            [% END %]
 	                                                                        );
 	                                        [% END %]
-	                                        
 	                                    [% ELSE %]
-	                                    
-	                                    		ACA VA EL BOTON PARA CANCELAR LA RESERVA
-	                                    		
+	                                        [% PERL %]
+	                                            
+	                                            print C4::AR::Filtros::action_button(   
+	                                                                                button   => "btn btn-danger",
+	                                                                                icon   => "icon-white icon-remove",
+	                                                                                title   => "[% 'Cancelar reserva' | i18n %]",
+	                                                                                action => 'cancelarReserva([% socio_data.object.getIdReserva(id2) %]);',
+                                                                                    popover		=> {title=>'[% "Disponibilidad" | i18n %]',
+	                                                                                      					text => '[% "UD. ya tiene una reserva sobre esta edici&oacute;n" | i18n %].' },
+	                                                                        );
+	                                        [% END %]
 	                                    [% END %]
                                    [% END %]
            [% END %]

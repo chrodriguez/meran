@@ -1125,14 +1125,19 @@ function close_esquema(){
 }
 
 function guardar_indicadores(id_div_indicadores, i){
+// function guardar_indicadores(i){
     var key_indicador_primario      = $("#select_indicador_primario" + i).val();
     var key_indicador_secundario    = $("#select_indicador_secundario" + i).val();
 
-    var str                         = "<span>" + key_indicador_primario + "</span>";
-        str                         = str + "<span class='indSeparator'>|</span><span>" + key_indicador_secundario + "</span>";
+//     var str                         = "<span>" + key_indicador_primario + "</span>";
+//         str                         = str + "<span class='indSeparator'>|</span><span>" + key_indicador_secundario + "</span>";
 
-    $('#'+id_div_indicadores).html(str);
-    closeModal(id_div_indicadores);
+        
+    $("#indicador_primario_" + i).html(key_indicador_primario);
+    $("#indicador_secundario_" + i).html(key_indicador_secundario);
+        
+//     $('#'+id_div_indicadores).html(str);
+    close_alta_indicador(id_div_indicadores);
 
     //seteo los valores en los combos ocultos para luego guardarlos en la base
     $("#select_indicador_primario" + i).val(key_indicador_primario); 
@@ -1191,7 +1196,8 @@ function procesarInfoJson(marc_object_array, id_padre){
         strIndicadores = strIndicadores + "<div class='form-actions'><p style='text-align: center; margin: 0;'>";
         
         strIndicadores = strIndicadores + "<button class='btn horizontal' onclick=close_alta_indicador('"+id_div_alta_indicador+"');>Cancelar</button>";
-        strIndicadores = strIndicadores + "<button class='btn btn-primary horizontal' onclick='guardar_indicadores(" + id_div_indicadores + ", " + id_aux +");'>Aceptar</button></p>";
+        strIndicadores = strIndicadores + "<button class='btn btn-primary horizontal' onclick='guardar_indicadores(" + id_div_alta_indicador + ", " + i +");'>Aceptar</button></p>";
+//         strIndicadores = strIndicadores + "<button class='btn btn-primary horizontal' onclick='guardar_indicadores(" + id_div_alta_indicador + ");'>Aceptar</button></p>";
         strIndicadores = strIndicadores + "</div>";
         //cierro UL de indicadores
         strComp = strComp + "</div>"; //end div buttonContainerHorizontal
@@ -1203,9 +1209,20 @@ function procesarInfoJson(marc_object_array, id_padre){
         strComp = strComp + "<div class='MARCHeader_info'>";
 
         //header LEFT
-        strComp = strComp + "<div style='width:10%;float:left'>";
-        strComp = strComp + crearBotonAyudaCampo(campo_marc_conf_obj.getCampo(),id_div_alta_indicador,campo_marc_conf_obj.getIndicadoresPrimarios());
-
+        strComp = strComp + "<div style='width:12%;float:left'>";
+//         strComp = strComp + crearBotonAyudaCampo(campo_marc_conf_obj.getCampo(),id_div_alta_indicador,campo_marc_conf_obj.getIndicadoresPrimarios());
+        strComp = strComp + crearBotonAyudaCampo(campo_marc_conf_obj.getCampo());
+        if(campo_marc_conf_obj.getIndicadoresPrimarios() != 0){
+            strComp = strComp + "<a id='indicador_primario_" + i + "' class='btn click' onclick=open_alta_indicador('" + id_div_alta_indicador + "') title='Indicadores'>" + campo_marc_conf_obj.getIndicadorPrimarioDato() + "</a>" + "|";
+        }    
+        
+        if(campo_marc_conf_obj.getIndicadoresSecundarios() != 0){
+            strComp = strComp + "<a id='indicador_secundario_" + i + "' class='btn click' onclick=open_alta_indicador('" + id_div_alta_indicador + "') title='Indicadores'>" + campo_marc_conf_obj.getIndicadorSecundarioDato(); 
+        }
+//             if (indicadores != '0'){
+//         html += "<a class='btn click' onclick=open_alta_indicador('" + id_div_alta_indicador + "') title='Indicadores'><i class='icon-align-justify'></i></a>";
+//     }
+        
         strComp = strComp + "</div>";
 
         //header CENTER
@@ -1308,18 +1325,20 @@ function procesarInfoJson(marc_object_array, id_padre){
       
 }
 
-function crearBotonAyudaCampo(campo,id_div_alta_indicador,indicadores){
+function crearBotonAyudaCampo(campo, funcion){
+// function crearBotonAyudaCampo(campo,id_div_alta_indicador,indicadores){
     var funcion = "ayudaParaCampo('" + campo + "')";
     
     
     var html = "<div class='btn-group inline'>"+"<a class='btn click' onclick=" + funcion + " title='Info'><i class='icon-info-sign'></i></a>";
     
-    if (indicadores != '0')
-        html += "<a class='btn click' onclick=open_alta_indicador('" + id_div_alta_indicador + "') title='Indicadores'><i class='icon-align-justify'></i></a>";
+//     if (indicadores != '0'){
+//         html += "<a class='btn click' onclick=open_alta_indicador('" + id_div_alta_indicador + "') title='Indicadores'><i class='icon-align-justify'></i></a>";
+//     }
 
     html += "</div>";
-    return html;
     
+    return html;
 }
 
 function crearBotonEsquema(){
@@ -1648,7 +1667,7 @@ function cloneCampo(marc_group_id){
     //ahora cambio el id del campo
 //     campo_obj.setIdCompCliente(generarIdComponente());
     campo_obj.setIdCompCliente(id_componente);  
-    alert("id_componente" + id_componente);
+//     alert("id_componente" + id_componente);
     //ahora cambio los id's de los subcampos
     var subcampos_array         = campo_temp.getSubCamposArray();
     var subcampos_array_destino = new Array();

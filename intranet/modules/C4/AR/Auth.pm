@@ -53,7 +53,6 @@ use Digest::MD5 qw(md5_base64);
 use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
 use C4::AR::Usuarios qw(getSocioInfoPorNroSocio);
 use Locale::Maketext::Gettext::Functions qw(bindtextdomain textdomain get_handle);
-use C4::Output;              # to get the template
 use C4::Context;
 use C4::Modelo::SistSesion;
 use C4::Modelo::SistSesion::Manager;
@@ -856,12 +855,17 @@ sub checkauth {
 						if( $flags = $socio->tienePermisos($flagsrequired) ){
 							_realizarOperacionesLogin($type,$socio);
 						}
+						
+						C4::AR::Debug::debug("C4::AR::Auth::checkauth => fin operaciones login");
+						
 						#Si se logueo correctamente en intranet entonces guardo la fecha
 						my $now = Date::Manip::ParseDate("now");
 						if ($session->param('type') eq "intranet"){
 							$socio->setLast_login($now);
 							$socio->save();
 						}
+						C4::AR::Debug::debug("C4::AR::Auth::checkauth => fecha ".$now);
+						
 						my $referer  = $ENV{'HTTP_REFERER'};
                         my $fromAuth = index($referer,'auth.pl');
                         $referer     = C4::AR::Utilidades::addParamToUrl($referer,"token",$session->param('token'));
@@ -1171,7 +1175,6 @@ sub buildSocioData{
     $session->param('usr_credential_type', $socio->getCredentialType());
     $session->param('usr_permisos_opac', $socio->tienePermisosOPAC);
     $session->param('remindFlag', $socio->getRemindFlag());
-    $session->param('socio_object', $socio);
 }
 
 sub buildSocioDataHashFromSession{
@@ -1199,7 +1202,7 @@ sub buildSocioDataHashFromSession{
     $socio_data{'ciudad_ref'}{'id'}         = $session->param('usr_ciudad_id'); 
     $socio_data{'remindFlag'}               = $session->param('remindFlag'); 
     $socio_data{'usr_credential_type'}      = $session->param('usr_credential_type'); 
-    $socio_data{'object'}                   = $session->param('socio_object'); 
+    $socio_data{'object'}                   = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio_data{'usr_nro_socio'});
     
     return (\%socio_data);
 }
@@ -1588,24 +1591,25 @@ sub _operacionesDeINTRA{
     $db->{connect_options}->{AutoCommit} = 0;
     $db->begin_work;
     my $userid = $socio->getNro_socio();
+    my $responsable = 'Sistema';
 	eval{
 		my $reserva=C4::Modelo::CircReserva->new(db=> $db);
 
 		#Se borran las reservas vencidas
 		C4::AR::Debug::debug("_operacionesDeINTRA=> Se cancelan las reservas vencidas ");
-		$reserva->cancelar_reservas_vencidas($userid);
+		$reserva->cancelar_reservas_vencidas($responsable);
 
 		#Ademas, se borran las reservas vencidas de usuarios con prestamos vencidos
 		C4::AR::Debug::debug("_operacionesDeINTRA=> Se cancelan las reservas de usuarios con prestamos vencidos ");
-		$reserva->cancelar_reservas_usuarios_morosos($userid);
+		$reserva->cancelar_reservas_usuarios_morosos($responsable);
 
 		#Ademas, se borran las reservas de todos los usuarios sancionados
                 C4::AR::Debug::debug("_operacionesDeINTRA=> Se cancelan las reservas de todos los usuarios sancionados ");
-		$reserva->cancelar_reservas_sancionados($userid);
+		$reserva->cancelar_reservas_sancionados($responsable);
 
 		#Ademas, se borran las reservas de los usuarios que no son alumnos regulares
 		C4::AR::Debug::debug("_operacionesDeINTRA=> Se cancelan las reservas de los usuarios que no son alumnos regulares ");
-		$reserva->cancelar_reservas_no_regulares($userid);
+		$reserva->cancelar_reservas_no_regulares($responsable);
 	
 		$db->commit;
 	};
@@ -2283,6 +2287,11 @@ sub printValue{
     print $value;
     	
 }
+
+
+BEGIN{
+      C4::AR::Preferencias::reloadAllPreferences();
+};
 
 END { }       # module clean-up code here (global destructor)
 1;
