@@ -1,11 +1,12 @@
 package C4::AR::Debug;
 
 use strict;
+use warnings;
 
 require Exporter;
 # use C4::AR::Authldap;
 # use C4::Membersldap;
-use C4::Output;
+# use C4::Output;
 
 use vars qw(@EXPORT @ISA);
 @ISA = qw(Exporter);
