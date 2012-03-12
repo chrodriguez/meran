@@ -127,6 +127,13 @@ function updateBuscarUsuario(responseText){
 
 }
 
+function prestarUsuarioConReserva(nroSocio, id3){
+     
+     items_array[0]=id3;
+     socio     = nroSocio;
+     confirmarPrestamo();
+}
+
 /*=============================================================FIN====REVISADO================================================================*/
 
 function detalleMARC(id3){
@@ -183,6 +190,7 @@ function objeto_datos(){
 var items_array = new Array();
 // parche, ver si se puede hacer mejor
 var grupo;
+var socio;
 
 
 function renovarPrestamo(userId,userNom,id2,id_prestamo){
@@ -281,22 +289,39 @@ function updateInfoDevolver(responseText){
 
 function confirmarPrestamo(){
 
-	if( $('#campoUsuario').val() != ''){
-		objAH               = new AjaxHelper(generaDivPrestamo);
-		objAH.debug         = true;
+    if (socio){
+
+        objAH               = new AjaxHelper(generaDivPrestamo);
+        USUARIO             = new objeto_usuario();
+        objAH.debug         = true;
         objAH.showOverlay   = true;
-		objAH.url			= URL_PREFIX+'/circ/circulacionDB.pl';
-		objAH.tipoAccion    = 'CONFIRMAR_PRESTAMO';
-		objAH.datosArray    = items_array;
-		objAH.nro_socio     = USUARIO.ID;
-		//se envia la consulta
-		objAH.sendToServer();
-		$('#basic-modal-content').modal('hide');
-	}else{
-		jAlert(INGRESE_EL_USUARIO);
-		$('#campoUsuario').focus();
-	}
-}
+        objAH.url           = URL_PREFIX+'/circ/circulacionDB.pl';
+        objAH.tipoAccion    = 'CONFIRMAR_PRESTAMO';
+        objAH.datosArray    = items_array;
+        USUARIO.ID = socio;
+        objAH.nro_socio     = USUARIO.ID;
+        //se envia la consulta
+        objAH.sendToServer();
+        $('#basic-modal-content').modal('hide');
+    }  else {
+  
+        if( $('#campoUsuario').val() != ''){
+            objAH               = new AjaxHelper(generaDivPrestamo);
+            objAH.debug         = true;
+            objAH.showOverlay   = true;
+            objAH.url			= URL_PREFIX+'/circ/circulacionDB.pl';
+            objAH.tipoAccion    = 'CONFIRMAR_PRESTAMO';
+            objAH.datosArray    = items_array;
+            objAH.nro_socio     = USUARIO.ID;
+            //se envia la consulta
+            objAH.sendToServer();
+            $('#basic-modal-content').modal('hide');
+        }else{
+            jAlert(INGRESE_EL_USUARIO);
+            $('#campoUsuario').focus();
+        }
+    }
+ }
 
 
 //esta funcion esta REDEFINIDA de la libreria de circulacion.js, es invocada desde la funcion prestar()
