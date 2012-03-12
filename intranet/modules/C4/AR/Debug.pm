@@ -1,10 +1,9 @@
 package C4::AR::Debug;
 
 use strict;
+use warnings;
 
 require Exporter;
-
-
 use vars qw(@EXPORT @ISA);
 @ISA = qw(Exporter);
 @EXPORT = qw(
