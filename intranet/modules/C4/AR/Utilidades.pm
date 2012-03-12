@@ -100,6 +100,7 @@ use vars qw(@EXPORT_OK @ISA);
     generarComboPerfiles
     generarComboNivel2
     generarComboTipoDeOperacion
+    generarComboDeEstados
     existeInArray
     paginarArreglo
     capitalizarString
@@ -1888,13 +1889,13 @@ sub generarComboDeDisponibilidad{
 
     my ($params) = @_;
 
-    my @select_disponibilidades_array;
-    my %select_disponibilidades_hash;
+    my @select_estados_array;
+    my %select_estados_hash;
     my ($disponibilidades_array_ref)= C4::AR::Referencias::obtenerDisponibilidades();
 
     foreach my $disponibilidad (@$disponibilidades_array_ref) {
-        push(@select_disponibilidades_array, $disponibilidad->getCodigo);
-        $select_disponibilidades_hash{$disponibilidad->getCodigo}= $disponibilidad->nombre;
+        push(@select_estados_array, $disponibilidad->getCodigo);
+        $select_estados_hash{$disponibilidad->getCodigo}= $disponibilidad->nombre;
     }
 
     my %options_hash;
@@ -1915,9 +1916,9 @@ sub generarComboDeDisponibilidad{
     $options_hash{'multiple'}= $params->{'multiple'}||0;
     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultDisponibilidad");
 
-    push (@select_disponibilidades_array, 'SIN SELECCIONAR');
-    $options_hash{'values'}= \@select_disponibilidades_array;
-    $options_hash{'labels'}= \%select_disponibilidades_hash;
+    push (@select_estados_array, 'SIN SELECCIONAR');
+    $options_hash{'values'}= \@select_estados_array;
+    $options_hash{'labels'}= \%select_estados_hash;
 
     my $comboDeDisponibilidades= CGI::scrolling_list(\%options_hash);
 
@@ -4607,6 +4608,49 @@ sub demo_test{
         C4::AR::Debug::debug("-------------------------- JOB -------------- \n\n\n\n\n");
     }
     
+}
+
+sub generarComboDeEstados{
+	
+    my ($params) = @_;
+
+	my ($estados) = C4::AR::Referencias::obtenerEstados();
+
+    my @select_estados_array;
+    my %select_estados_hash;
+
+    foreach my $estado (@$estados) {
+        push(@select_estados_array, $estado->getId_estado);
+        $select_estados_hash{$estado->getId_estado}= $estado->nombre;
+    }
+
+    my %options_hash;
+
+    if ( $params->{'onChange'} ){
+        $options_hash{'onChange'}= $params->{'onChange'};
+    }
+    if ( $params->{'onFocus'} ){
+        $options_hash{'onFocus'}= $params->{'onFocus'};
+    }
+    if ( $params->{'onBlur'} ){
+        $options_hash{'onBlur'}= $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}= $params->{'name'}||'estado_name';
+    $options_hash{'id'}= $params->{'id'}||'estado_id';
+    $options_hash{'size'}=  $params->{'size'}||1;
+    $options_hash{'multiple'}= $params->{'multiple'}||0;
+    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultUsrEstado") ||1;
+
+    push (@select_estados_array, 'SIN SELECCIONAR');
+    $options_hash{'values'}= \@select_estados_array;
+    $options_hash{'labels'}= \%select_estados_hash;
+
+    my $comboDeDisponibilidades= CGI::scrolling_list(\%options_hash);
+
+    return $comboDeDisponibilidades;
+	
+	
 }
 
 END { }       # module clean-up code here (global destructor)

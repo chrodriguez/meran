@@ -157,13 +157,8 @@ sub convertirEnSocio{
     my $socio = C4::Modelo::UsrSocio->new(db => $db);
         $data_hash->{'id_persona'} = $self->getId_persona;
 
-    my $estado = C4::Modelo::UsrEstado->new(db => $db);
-        $data_hash->{'regular'}=1; #por defecto cumple condicion
-        $data_hash->{'categoria'}='NN';
-        $data_hash->{'fuente'}="ES UNA FUENTE DEFAULT, PREGUNTARLE A EINAR....";
-        $estado->agregar($data_hash);
         $socio->agregar($data_hash);
-        $socio->setId_estado($estado->getId_estado);
+        $socio->setId_estado(($data_hash->{'id_estado'}));
         $socio->setThemeINTRA($data_hash->{'tema'} || 'default');
 }
 
