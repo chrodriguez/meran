@@ -413,12 +413,15 @@ function generaDivRenovacion(responseText){
 	var infoArray= new Array;
 	INFO_PRESTAMOS_ARRAY= new Array();
 	infoArray= JSONstring.toObject(responseText);
-	var html="<div class='divCirculacion'> <p class='fontMsgConfirmation'>";
+	var html="<div id='div_circ_rapida_devolucion' class=''>";
 	var accion=infoArray[0].accion;
-	html=html + infoArray[0].accion +":<br>";
+	html="<div class='modal-header'><a href='#' class='close' data-dismiss='modal'>×</a><h3>"+ infoArray[0].accion + "</h3></div>";
+	html					+= "<div class='modal-body'><dl>";
+
 	for(var i=0; i<infoArray.length;i++){
 	
 		var infoDevRenObj= new infoPrestamo();
+		
 		infoDevRenObj.nro_socio= infoArray[0].nro_socio;
         infoDevRenObj.id_prestamo= infoArray[i].id_prestamo;
 		infoDevRenObj.id3= infoArray[i].id3;
@@ -426,31 +429,36 @@ function generaDivRenovacion(responseText){
 		INFO_PRESTAMOS_ARRAY[i]= infoDevRenObj;
  
         
-        if((infoArray[i].autor != "")&&(infoArray[i].autor != null)){ 
+		html += "<dt>";
+		if((infoArray[i].autor != "")&&(infoArray[i].autor != null)){ 
             html= html + infoArray[i].autor;
             if((infoArray[i].titulo != "")&&(infoArray[i].titulo != null)){html= html + ", ";}
+        }else{
+    		html += "SIN AUTOR"; 
         }
-        
+		html += "</dt>";
+		html += "<dd>";
         if((infoArray[i].titulo != "")&&(infoArray[i].titulo != null)){
             html= html + infoArray[i].titulo;
         }
-        
+
         if((infoArray[i].edicion != "")&&(infoArray[i].edicion != null)){
             html= html + " - " + infoArray[i].edicion + "<br>"
         };
         
-        html= html + " (" + infoArray[i].barcode + ")<br>"  
-        
-        html= html + "<br>"
+        html= html + " (" + infoArray[i].barcode + ")<br>" 
+        html += "</dd>";
 
 	}
-	html= html + "</p>";
-	html= html + "<center><input type='button' value='Aceptar' onClick=renovar()>";
-	html= html + "<input type='button' value='Cancelar' onClick='cancelarDiv();'></center><br>";
+	
+	
+	html= html + "</div>";
+	html= html + "<div class='modal-footer'><button class='btn btn-primary' onClick='renovar()'>Renovar</button></div>";
 	html= html + "</div>";
 
 	$('#confirmar_div').html(html);
-	scrollTo('confirmar_div');
+	$('#confirmar_div').modal();
+
 }
 
 /*
@@ -467,6 +475,7 @@ function renovar(){
 	objAH.datosArray    = INFO_PRESTAMOS_ARRAY;
 	objAH.nro_socio     = USUARIO.ID;
 	//se envia la consulta
+	$('#confirmar_div').modal('hide');
 	objAH.sendToServer();
 }
 

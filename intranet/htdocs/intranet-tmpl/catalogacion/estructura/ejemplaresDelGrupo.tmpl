@@ -120,7 +120,7 @@
 					                        [% END %]
 						                </td>
 	                                    [% IF circularDesdeDetalleDelRegistro %]
-							                <td style="width:100px;">
+							                <td style="width:120px;">
 							                          [% IF disponible %]
 							                              [% IF prestamo.getNro_socio %]
 												                [% PERL %]
@@ -133,7 +133,7 @@
 					                                                                            [% IF prestamo.sePuedeRenovar %]
 					                                                                                {title => "Renovar", 
 					                                                                                 action=>'renovarPrestamo("[% socio_prestamo.getNro_socio %]","[% socio_prestamo.persona.getApeYNom %]","[% id2 %]","[% prestamo.getId_prestamo %]")', 
-					                                                                                 icon=>"icon-refresh icon-white"
+					                                                                                 icon=>"icon-retweet"
 					                                                                                },
 					                                                                            [% END %]
 					                                                                            ],
