@@ -8,7 +8,7 @@
                 [% IF nivel2_array %]
                 	<section class="detalle_grupo" id="detalle_grupo_[% id2 %]">
 							<div class="page-header">
-							    <h1>[% nivel1_obj.getTitulo %] <small> [% edicion %]</small></h1>[% id2 %]
+							    <h1>[% nivel1_obj.getTitulo %] <small> [% edicion %]</small></h1>
 							</div>                          
 							<div class="well">
 									  	 [% IF isbn %]

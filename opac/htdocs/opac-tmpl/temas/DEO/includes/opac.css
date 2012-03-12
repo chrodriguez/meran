@@ -292,10 +292,17 @@ body {
 .nano .pane         { background: #444; }
 
 
+
 #signin{
          min-width: 500px; 
 }
 
 #form-actions-signin{
           min-width: 500px;
+}
+
+#fotoUsuario{
+	width: 200px;
+	float: right;
+
 }

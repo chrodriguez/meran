@@ -473,7 +473,7 @@
                                                                              ) ;
                                              [% END %]
                                 </li>
-                            <li class="nav-header">[% 'Personal' | i18n %]</li>	
+                            <li class="nav-header">[% 'OPAC' | i18n %]</li>	
 	              			<li class="divider"></li>
                                 <li>
                                           [% PERL %]
