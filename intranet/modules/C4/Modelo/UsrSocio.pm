@@ -256,6 +256,7 @@ sub modificar{
 
     $self->setId_ui($data_hash->{'id_ui'});
     $self->setId_categoria(($data_hash->{'cod_categoria'}));
+    $self->setId_estado(($data_hash->{'id_estado'}));
 
     my $today = Date::Manip::ParseDate("today");
     C4::AR::Debug::debug("TODAY ==================================== >".$today);
