@@ -31,7 +31,7 @@ eval{
 
 if ($@){
 
-    $t_params->{'mensaje'}          = "Ha ocurrido un error";
+    $t_params->{'mensaje'}          = "Ha ocurrido un error al intentar mostrar el detalle del registro";
 
 }
 
