@@ -14,16 +14,16 @@
 				[% END %]
 			[% END %]
 			[% IF cantReservas && cantPrestados %]
-	        	<small>[% "Tener en cuenta que existen " | i18n %] [% cantReservas %] 
+	        	<small>[% "Existen " | i18n %] [% cantReservas %] 
         		<cite title=""> [% " y " | i18n %] [% cantPrestados %] [% "prestados" | i18n %]</cite>
 	        	</small>
 	        [% ELSE %]
 				[% IF cantReservas %]
-		        	<small>[% "Tener en cuenta que existen " | i18n %] [% cantReservas%] [% "reservas " | i18n %]
+		        	<small>[% "Existen " | i18n %] [% cantReservas%] [% "reservas " | i18n %]
 		        	</small>
 		        [% ELSE %]
 					[% IF cantPrestados %]
-			        	<small>[% "Tener en cuenta que existen " | i18n %] [% cantPrestados%] [% "prestados" | i18n %]
+			        	<small>[% "Hay" | i18n %] [% cantPrestados%] [% "ejemplares prestados" | i18n %]
 			        	</small>
 			        [% END %]
 				[% END%]

@@ -9,13 +9,14 @@ use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw( 
 
-    &marcarLeido
-    &marcarNoLeido
-    &eliminar
-    &noLeidos
-    &ver
-    &listar
-    &marcar
+    marcarLeido
+    marcarRespondido
+    marcarNoLeido
+    eliminar
+    noLeidos
+    ver
+    listar
+    marcar
 );
 
 
@@ -34,7 +35,23 @@ sub marcarLeido{
 
 }
 
+sub marcarRespondido{
 
+    my ($id_mensaje) = @_;
+    my @filtros;
+
+    push (@filtros, (id => {eq =>$id_mensaje}) );
+
+    my  $contacto = C4::Modelo::Contacto::Manager->get_contacto(query => \@filtros,);
+
+    my $socio = C4::AR::Auth::getSessionNroSocio();
+    
+    if (scalar(@$contacto)){
+        $contacto->[0]->setRespondido($socio);
+        $contacto->[0]->save();
+    }
+
+}
 
 # Devuelve los mensajes no leidos
 sub noLeidos{

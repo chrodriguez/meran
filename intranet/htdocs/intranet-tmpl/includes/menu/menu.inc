@@ -419,30 +419,6 @@
                                 </li>
                                 <li>
                                             [% PERL %]
-                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-lock'></i> [% 'M&eacute;todos de Autenticaci&oacute;n' | i18n %]",
-                                                                                url =>      "[% url_prefix %]/admin/global/auth_methods.pl",
-                                                                                title =>    "[% 'Configuraci&oacute;n del Mail' | i18n %]"
-                                                                            ) ;
-                                            [% END %]
-                                </li>
-                                <li>
-                                            [% PERL %]
-                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-envelope'></i> [% 'Configuraci&oacute;n del Mail' | i18n %]",
-                                                                                url =>      "[% url_prefix %]/admin/global/mail_config.pl",
-                                                                                title =>    "[% 'Configuraci&oacute;n del Mail' | i18n %]"
-                                                                            ) ;
-                                            [% END %]
-                                </li>
-                                                            <li>
-                                            [% PERL %]
-                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'Configuraci&oacute;n LDAP' | i18n %]",
-                                                                                url =>      "[% url_prefix %]/admin/global/ldap_config.pl",
-                                                                                title =>    "[% 'Configuraci&oacute;n LDAP' | i18n %]"
-                                                                            ) ;
-                                            [% END %]
-                                </li>
-                                <li>
-                                            [% PERL %]
                                                 print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'Configuraci&oacute;n de Estilos' | i18n %]",
                                                                                 url =>      "[% url_prefix %]/admin/global/estilos_config.pl",
                                                                                 title =>    "[% 'Configuraci&oacute;n de Estilos' | i18n %]"
@@ -485,7 +461,7 @@
                                 </li>
                                 <li>
                                         [% PERL %]
-                                            print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'OPAC - Mensajes de Contacto' | i18n %]",
+                                            print C4::AR::Filtros::link_to( text =>     "<i class='icon-comment'></i> [% 'Mensajes de Contacto' | i18n %]",
                                                                             url =>      "[% url_prefix %]/admin/mensajes_contacto.pl",
                                                                             title =>    "[% 'Mensajes de Contacto' | i18n %]"
                                                                         ) ;
@@ -499,6 +475,31 @@
                                                                             title =>    "[% 'Configuraci&oacute;n de la portada' | i18n %]"
                                                                         ) ;
                                         [% END %]
+                                </li>
+                            <li class="nav-header">[% 'Administraci&oacute;n' | i18n %]</li>	
+                                <li>
+                                            [% PERL %]
+                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-lock'></i> [% 'M&eacute;todos de Autenticaci&oacute;n' | i18n %]",
+                                                                                url =>      "[% url_prefix %]/admin/global/auth_methods.pl",
+                                                                                title =>    "[% 'M&eacute;todos de Autenticaci&oacute;n' | i18n %]"
+                                                                            ) ;
+                                            [% END %]
+                                </li>
+                                <li>
+                                            [% PERL %]
+                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-envelope'></i> [% 'Configuraci&oacute;n del Mail' | i18n %]",
+                                                                                url =>      "[% url_prefix %]/admin/global/mail_config.pl",
+                                                                                title =>    "[% 'Configuraci&oacute;n del Mail' | i18n %]"
+                                                                            ) ;
+                                            [% END %]
+                                </li>
+                                                            <li>
+                                            [% PERL %]
+                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'Configuraci&oacute;n LDAP' | i18n %]",
+                                                                                url =>      "[% url_prefix %]/admin/global/ldap_config.pl",
+                                                                                title =>    "[% 'Configuraci&oacute;n LDAP' | i18n %]"
+                                                                            ) ;
+                                            [% END %]
                                 </li>
           </ul>
       [% END %]
