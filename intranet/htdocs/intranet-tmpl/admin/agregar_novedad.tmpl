@@ -72,50 +72,35 @@ function MultiSelector( list_target, max ){this.list_target = list_target;this.c
         $('#form_novedad').submit();
     }
     
-  
+    function checkEliminarFotos(){
+    
+        var cant        = 0;
+        
+        $(':checkbox').each( 
+            function() { 
+                if($(this).attr('checked')){
+                    $('#listImagesDelete').append('<input type="hidden" name="imagen_' + cant +'" value="' + $(this).attr('id') + '">');
+                    cant++;
+                }
+            } 
+        ); 
+        
+        $('#form_novedad').submit();
+    
+    }
     
     $(document).ready(function() {      
         
         [% IF editing %]
         
             $('.fancylink').fancybox();
-               
-        [% ELSE %]
-        
-            var multi_selector = new MultiSelector( document.getElementById( 'imagesList' ), 5 ); 
-            multi_selector.addElement( document.getElementById( 'imagesInput' ) );
         
         [% END %]
         
+        var multi_selector = new MultiSelector( document.getElementById( 'imagesList' ), 5 ); 
+        multi_selector.addElement( document.getElementById( 'imagesInput' ) );
+        
     });
-    
-    function eliminarFotos(){
-    
-        var cant = 0;
-    
-        $(':checkbox').each( 
-            function() { 
-                if($(this).attr('checked')){
-                    cant++;
-                }
-            } 
-        );  
-        
-        if(cant == 0){
-            jAlert('Seleccione al menos una imagen')
-        }
-        
-        $(':checkbox').each( 
-            function() { 
-                //$('#imagen_')
-                alert($(this).id)
-            } 
-        ); 
-        
-        
-        //llamado ajax
-    
-    }
     
 </script>
 
@@ -165,8 +150,10 @@ function MultiSelector( list_target, max ){this.list_target = list_target;this.c
                 
                 [% IF editing %]
                 
+                    [% IF cant_novedades %]
+                
                     <div class="control-group">
-                        <label class="control-label" for="contenido">[% "Imagen/es" | i18n %]</label>
+                        <label class="control-label" for="contenido">[% "Imagen/es a eliminar" | i18n %]</label>
                         <div class="controls">
                             [% FOREACH imagen IN imagenes_hash %]
 	                            <a class="fancylink" id="imagen_[% imagen.getImageName %]" rel="group" href="http://[% SERVER_ADDRESS %]/opac-tmpl/uploads/novedades/[% imagen.getImageName %]">
@@ -178,20 +165,39 @@ function MultiSelector( list_target, max ){this.list_target = list_target;this.c
                                 </a>
                                 <input type="checkbox" name="eliminar_imagen_[% imagen.getId %]"  id="[% imagen.getImageName %]" />
 	                        [% END %]
-	                        
-	                        </br>
-	                        [% PERL %]
-                                  print C4::AR::Filtros::action_button( 
-                                                                  button    => "btn btn-danger",
-                                                                  action    => 'eliminarFotos()',
-                                                                  title     => 'Eliminar foto/s seleccionadas'
-                                                              ) ;
 
-                            [% END %]
                         </div>
-                        
-                        <div id="imagesList"></div>
-                        
+                        <div id="listImagesDelete"></div>
+                    </div>
+                    
+                    [% END %]
+                    
+                    <div id="divImages" class="accordion">
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" href="#addImages" data-parent="#divImages" data-toggle="collapse"> Agregar nuevas imagenes </a>
+                            </div>
+                                
+                            <div id="addImages" class="accordion-body collapse">
+                                <div class="accordion-inner">
+                                
+                                    <div class="control-group">
+                                        <label class="control-label" for="contenido">[% "Imagen/es" | i18n %]</label>
+                                        <div class="controls">
+                                            <!-- The fileinput-button span is used to style the file input field as button -->
+                                            <span class="btn btn-success fileinput-button">
+                                                <span><i class="icon-plus icon-white"></i>[% " Agregar archivos..." | i18n %]</span>
+                                                <input type="file" id="imagesInput" multiple>
+                                            </span>
+                                        </div>
+                                        
+                                        <div id="imagesList"></div>
+                                        
+                                    </div>
+                                
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 
                 
@@ -226,7 +232,17 @@ function MultiSelector( list_target, max ){this.list_target = list_target;this.c
 
                     [% END %]
                     
-                    <button class="btn btn-primary" type="submit">[% 'Modificar' | i18n %]</button>
+                    [% PERL %]
+                          print C4::AR::Filtros::action_button( 
+                                                            button      => "btn btn-primary",
+                                                            action      => "checkEliminarFotos()", 
+                                                            title       => "[% 'Modificar' | i18n %]",
+                                                          ) ;
+
+
+                    [% END %]
+                    
+<!--                    <button class="btn btn-primary" type="submit">[% 'Modificar' | i18n %]</button>-->
                     
                 [% ELSE %]
                 

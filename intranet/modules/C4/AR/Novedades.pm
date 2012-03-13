@@ -39,8 +39,7 @@ sub agregar{
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
         
-        my $imagenes_novedades_opac;
-        
+        my $imagenes_novedades_opac;   
         
         eval{
 
@@ -220,6 +219,34 @@ sub getImagenesNovedad{
     
 }
 
+=item
+    Trae las imagenes (si las hay) apartir de un id_novedad
+=cut
+sub eliminarImagenesNovedad{
+
+    my ($id_novedad) = @_;
+    my @filtros;
+
+    use C4::Modelo::ImagenesNovedadesOpac;
+    use C4::Modelo::ImagenesNovedadesOpac::Manager;
+    
+    push (@filtros, (id_novedad => {eq => $id_novedad}) );
+    
+    my $novedades_array_ref = C4::Modelo::ImagenesNovedadesOpac::Manager->get_imagenes_novedades_opac( query => \@filtros,
+                                                                              );
+
+    if(scalar(@$novedades_array_ref) > 0){
+    
+        foreach my $imagen (@$novedades_array_ref){
+            $imagen->delete();
+        }
+        
+    }else{
+        return (0);
+    }
+    
+}
+
 sub eliminar{
 
     my ($id_novedad) = @_;
@@ -230,7 +257,6 @@ sub eliminar{
     my $novedades_array_ref = C4::Modelo::SysNovedad::Manager->get_sys_novedad( query => \@filtros,
                                                                               );
 
-    #Obtengo la cant total de sys_novedads para el paginador
     if(scalar(@$novedades_array_ref) > 0){
         return ($novedades_array_ref->[0]->delete());
     }else{
