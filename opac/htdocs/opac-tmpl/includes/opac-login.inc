@@ -37,7 +37,7 @@
           <form class="well form-inline" method="post" id="signin_main" 
           		action="[% url_prefix %]/opac-login.pl" onsubmit="return enviar()">
 	
-	                  <input name="userid" id="userid" value="[% username_input %]" placeholder="[% 'Nro. de socio' | i18n %]" 
+	                  <input name="userid" id="userid" value="[% username_input %]" placeholder="[% 'Usuario' | i18n %]" 
 	                  		 title="username" tabindex="4" type="text" class="input-big">
 	                  <input id="password_plain" name="" value="" title="password" placeholder="[% 'Contrase&ntilde;a' | i18n %]"
 	                  		 tabindex="5" type="password" class="input-big">
