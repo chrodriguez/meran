@@ -45,7 +45,6 @@ sub agregar{
 
             #agregamos primero la novedad
             #para sacarle el id despues
-            C4::AR::Utilidades::printHASH($params->{'param'});
             $novedad->agregar($params->{'param'});
         
             #recorremos todas las imagenes y las guardamos      
@@ -84,19 +83,47 @@ sub agregar{
 
 sub editar{
 
-    my ($input) = @_;
-    my %params;
+    my ($input, $params) = @_;
+
     my $novedad = getNovedad($input->param('novedad_id'));
 
-    use HTML::Entities;
-    my $contenido = $input->param('contenido');
-
-    %params = $input->Vars;
-    $params{'contenido'} = $contenido;
-    $novedad->delete();
-    $novedad = C4::Modelo::SysNovedad->new();
+    $novedad->setTitulo($input->param('titulo'));  
+    $novedad->setContenido($input->param('contenido'));
+    $novedad->setCategoria($input->param('categoria'));
     
-    return ($novedad->agregar(%params));
+    $novedad->save();
+
+    my $dirPath = C4::Context->config("opachtdocs")."/uploads/novedades";
+    
+    if($params->{'arrayDeleteImages'}->[0]){   
+
+        foreach my $file ( $params->{'arrayDeleteImages'} ){
+            _eliminarImageneNovedadByNombre(@$file[0]); # -> WTF!!!
+            unlink($dirPath."/".@$file[0]);
+        }
+        
+    }
+    
+    
+    my $image_name;
+    my $imagenes_novedades_opac;
+    #recorremos todas las imagenes a agregar y las guardamos   
+    
+    if($params->{'arrayNewFiles'}->[0]){      
+    
+        foreach my  $value ( $params->{'arrayNewFiles'} ) {
+                 
+            #pasarle la data necesaria
+            $image_name = C4::AR::UploadFile::uploadFotoNovedadOpac(@$value[0]); # -> WTF!!!
+            
+            $imagenes_novedades_opac = C4::Modelo::ImagenesNovedadesOpac->new();                 
+            $imagenes_novedades_opac->saveImagenNovedad($image_name, $input->param('novedad_id'));                
+
+        }
+    
+    }
+
+    return 1;
 }
 
 
@@ -108,7 +135,6 @@ sub listar{
                                                                                 offset  => $ini,
                                                                               );
 
-    #Obtengo la cant total de sys_novedads para el paginador
     my $novedades_array_ref_count = C4::Modelo::SysNovedad::Manager->get_sys_novedad_count();
     if(scalar(@$novedades_array_ref) > 0){
         return ($novedades_array_ref_count, $novedades_array_ref);
@@ -186,7 +212,6 @@ sub getNovedad{
     my $novedades_array_ref = C4::Modelo::SysNovedad::Manager->get_sys_novedad( query => \@filtros,
                                                                               );
 
-    #Obtengo la cant total de sys_novedads para el paginador
     if(scalar(@$novedades_array_ref) > 0){
         return ($novedades_array_ref->[0]);
     }else{
@@ -220,9 +245,39 @@ sub getImagenesNovedad{
 }
 
 =item
-    Trae las imagenes (si las hay) apartir de un id_novedad
+    Elimina la imagen recibida como parametro (nombre)
 =cut
-sub eliminarImagenesNovedad{
+sub _eliminarImageneNovedadByNombre{
+
+    my ($image_name) = @_;
+    my @filtros;
+    #viene vacio aveces, por la hash que pasamos desde editar_novedad.pl
+    if($image_name){
+
+        use C4::Modelo::ImagenesNovedadesOpac;
+        use C4::Modelo::ImagenesNovedadesOpac::Manager;
+        
+        push (@filtros, (image_name => {eq => $image_name}) );
+        
+        my $novedades_array_ref = C4::Modelo::ImagenesNovedadesOpac::Manager->get_imagenes_novedades_opac( query => \@filtros,
+                                                                                  );
+
+        if(scalar(@$novedades_array_ref) > 0){
+        
+            @$novedades_array_ref->[0]->delete();
+            
+        }else{
+            return (0);
+        }
+    
+    }
+    
+}
+
+=item
+    Elimina las imagenes (si las hay) apartir de un id_novedad de la base
+=cut
+sub _eliminarImagenesNovedad{
 
     my ($id_novedad) = @_;
     my @filtros;
@@ -238,6 +293,7 @@ sub eliminarImagenesNovedad{
     if(scalar(@$novedades_array_ref) > 0){
     
         foreach my $imagen (@$novedades_array_ref){
+            _eliminarArchivoImagenNovedad($imagen->getImageName());
             $imagen->delete();
         }
         
@@ -247,6 +303,22 @@ sub eliminarImagenesNovedad{
     
 }
 
+=item
+    Elimina los archivos imagen de las novedades 
+=cut
+sub _eliminarArchivoImagenNovedad{
+
+    my ($file_name) = @_;
+    
+    my $dirPath     = C4::Context->config("opachtdocs")."/uploads/novedades";
+
+    unlink($dirPath."/".$file_name);
+    
+}
+
+=item
+    Elimina una novedad completa
+=cut
 sub eliminar{
 
     my ($id_novedad) = @_;
@@ -258,7 +330,9 @@ sub eliminar{
                                                                               );
 
     if(scalar(@$novedades_array_ref) > 0){
-        return ($novedades_array_ref->[0]->delete());
+        $novedades_array_ref->[0]->delete();
+        _eliminarImagenesNovedad($id_novedad);
+        
     }else{
         return (0);
     }

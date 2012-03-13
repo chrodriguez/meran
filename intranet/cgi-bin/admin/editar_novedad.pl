@@ -24,6 +24,8 @@ my $id = $input->param('id') || 0;
 
 if ($action eq 'editar'){
 
+    #---------------- imagenes nuevas -----------------
+    
     #me quedo con las hash que tengan 'file_*' por si agregaron nuevas imagenes
     my @arrayNewFiles;
     
@@ -44,8 +46,26 @@ if ($action eq 'editar'){
         } 
         
     }
-
-    my $status = C4::AR::Novedades::editar($input, @arrayNewFiles);
+    #---------------- fin imagenes nuevas -----------------
+    
+    my @arrayDeleteImages;
+    
+    #si marcaron alguna imagen para eliminarla
+    if($input->param('cantidad')){
+        
+        for( my $i=0; $i<$input->param('cantidad'); $i++){
+        
+            push(@arrayDeleteImages, $input->param('imagen_' . $i));
+            
+        }
+    
+    }
+    
+    my %params;
+    $params{'arrayNewFiles'}        = \@arrayNewFiles;
+    $params{'arrayDeleteImages'}    = \@arrayDeleteImages;
+    
+    my $status = C4::AR::Novedades::editar($input, \%params);
     
     if ($status){
         C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix().'/admin/novedades_opac.pl?token='.$input->param('token'));

@@ -85,6 +85,8 @@ function MultiSelector( list_target, max ){this.list_target = list_target;this.c
             } 
         ); 
         
+        $('#listImagesDelete').append('<input type="hidden" name="cantidad" value="' + cant + '">');
+        
         $('#form_novedad').submit();
     
     }
@@ -153,7 +155,7 @@ function MultiSelector( list_target, max ){this.list_target = list_target;this.c
                     [% IF cant_novedades %]
                 
                     <div class="control-group">
-                        <label class="control-label" for="contenido">[% "Imagen/es a eliminar" | i18n %]</label>
+                        <label class="control-label" >[% "Imagen/es a eliminar" | i18n %]</label>
                         <div class="controls">
                             [% FOREACH imagen IN imagenes_hash %]
 	                            <a class="fancylink" id="imagen_[% imagen.getImageName %]" rel="group" href="http://[% SERVER_ADDRESS %]/opac-tmpl/uploads/novedades/[% imagen.getImageName %]">
@@ -204,7 +206,7 @@ function MultiSelector( list_target, max ){this.list_target = list_target;this.c
                 [% ELSE %]
                 
                     <div class="control-group">
-                        <label class="control-label" for="contenido">[% "Imagen/es" | i18n %]</label>
+                        <label class="control-label" >[% "Imagen/es" | i18n %]</label>
                         <div class="controls">
                             <!-- The fileinput-button span is used to style the file input field as button -->
                             <span class="btn btn-success fileinput-button">
