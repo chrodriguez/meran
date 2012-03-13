@@ -3,8 +3,8 @@
 
 use strict;
 use CGI;
-use C4::AR::Nivel1 ;
-use C4::AR::Nivel2 ;
+use C4::AR::Nivel1;
+use C4::AR::Nivel2;
 use C4::AR::Auth;
 use C4::AR::Utilidades;
 use C4::AR::Catalogacion;
@@ -777,7 +777,6 @@ elsif($tipoAccion eq "ELIMINAR_NIVEL"){
 }
 #=============================================================FIN ABM Catalogo===============================================================
 elsif($tipoAccion eq "MOSTRAR_DETALLE_NIVEL3"){
-
 	 my ($template, $session, $t_params)  = get_template_and_user({
 							template_name   => ('catalogacion/estructura/ejemplaresDelGrupo.tmpl'),
 							query           => $input,

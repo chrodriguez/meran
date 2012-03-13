@@ -47,7 +47,7 @@
 	        	<input type="text" name="string" class="input-medium search-query span90 bigInput"
                  		  x-webkit-speech onwebkitspeechchange="javascript:startSearch();" 
                    		  speech onspeechchange="javascript:startSearch();"
-                   		  placeholder="[% 'Qu&eacute; necesit&aacute;s' | i18n %]?"
+                   		  placeholder="[% IF title_search_bar %] [% title_search_bar %] [% ELSE %] [% 'Qu&eacute; necesit&aacute;s' | i18n %]? [% END %]"
 	        	>
 	        </p>
 	        
