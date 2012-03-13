@@ -38,7 +38,7 @@
           <form class="form-horizontal" method="post" id="signin_main" action="[% url_prefix %]/opac-login.pl" onsubmit="return enviar()">
                 <div class="form-search">
                 <div class="control-group">
-                     <label class="control-label" for="username">[% 'Nro. de socio' | i18n %]</label>
+                     <label class="control-label" for="username">[% 'Usuario' | i18n %]</label>
                      <div class="controls">
                           <input name="userid" id="userid" value="[% username_input %]" tabindex="4" type="text" class="input-big">
 	                 </div>
