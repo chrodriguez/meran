@@ -1321,13 +1321,23 @@ sub setId_categoria{
 }
 
 sub puedeReservar{
-	
+    
     my ($self) = shift;
     my ($id2)= @_;
 
     my ($reservas,$cant_reservas) = C4::AR::Reservas::getReservasDeSocio($self->getNro_socio, $id2);
 
-    return ( $cant_reservas == 0 );    
+    return ( ($cant_reservas == 0) && (!$self->loTienePrestado($id2)) );    
+}
+
+sub loTienePrestado{
+    
+    my ($self) = shift;
+    my ($id2)= @_;
+
+    my ($status) = C4::AR::Prestamos::tienePrestamosDeId2($self->getNro_socio, $id2);
+
+    return ( $status );    
 }
 
 sub getIdReserva{

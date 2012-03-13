@@ -393,7 +393,7 @@ sub uploadCoverImage{
     use Digest::MD5;
     
     my $uploaddir       = C4::Context->config("opachtdocs")."/uploads/portada";
-    my $maxFileSize     = 512 * 512; # 1/2mb max file size...
+    my $maxFileSize     = 1024 * 1024; # 1/2mb max file size...
     my $file            = $postdata;
     my $type            = "";
     my $msg_object  = C4::AR::Mensajes::create();
@@ -418,12 +418,18 @@ sub uploadCoverImage{
 
     
     if (!$msg_object->{'error'}){
-	    open ( WRITEIT, ">$uploaddir/$new_name.$type" ) or die "$!"; 
-	    binmode WRITEIT; 
-	    while ( <$postdata> ) { 
-	    	print WRITEIT; 
-	    }
-	    close(WRITEIT);
+    	eval{
+		    open ( WRITEIT, ">$uploaddir/$new_name.$type" ) or die "$!"; 
+		    binmode WRITEIT; 
+		    while ( <$postdata> ) { 
+		    	print WRITEIT; 
+		    }
+		    close(WRITEIT);
+    	};
+    	if ($@){
+	         $msg_object->{'error'}= 1;
+	         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP02',} ) ;
+    	}
     }
     
     if (!$msg_object->{'error'}){

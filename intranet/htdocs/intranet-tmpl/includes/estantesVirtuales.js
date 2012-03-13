@@ -301,6 +301,7 @@ function ordenar(orden){
             if (!(hayError(Messages))){
                     verSubEstantes(objAH.estante,objAH.padre);
                 }
+                
         }
 	
 	
@@ -317,9 +318,9 @@ function ordenar(orden){
       }
       
       function updateInfoEstantesVirtualesDeGrupo(responseText){
-	$('#estantes_'+objAH.estantes_grupo).html(responseText);
-	$('#estantes_'+objAH.estantes_grupo).slideDown("fast");
-	zebra('datos_tabla');
-	$('#grupo_estantes_'+objAH.estantes_grupo).show();
-	scrollTo('grupo_estantes_'+objAH.estantes_grupo);
-}
+            $('#estantes_'+objAH.estantes_grupo).html(responseText);
+            $('#estantes_'+objAH.estantes_grupo).slideDown("fast");
+            zebra('datos_tabla');
+            $('#grupo_estantes_'+objAH.estantes_grupo).show();
+            scrollTo('grupo_estantes_'+objAH.estantes_grupo);
+      }

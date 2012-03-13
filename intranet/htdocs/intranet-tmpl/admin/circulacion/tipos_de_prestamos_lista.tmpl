@@ -1,18 +1,19 @@
-<table class="table table-striped">
-  <thead>
-    <tr>
-        <th>[% "C&oacute;digo" | i18n %]</th>
-        <th>[% "Descripci&oacute;n" | i18n %]</th>
-        <th>[% "M&aacute;xima cantidad de pr&eacute;stamos" | i18n %]</th>
-        <th>[% "D&iacute;as de duraci&oacute;n del pr&eacute;stamo" | i18n %]</th>
-        <th>[% "Renovaciones" | i18n %]</th>
-        <th>[% "D&iacute;as de Renovaci&oacute;n" | i18n %]</th>
-        <th>[% "Cantidad de d&iacute;as para renovar" | i18n %]</th>
-        <th>[% "Para Sala" | i18n %]</th>
-        <th>[% "Habilitado" | i18n %]</th>
-        <th>[% "Editar" | i18n %]</th>
-    </tr>
-  </thead>
+
+
+
+
+
+[% PERL %]
+    print C4::AR::Filtros::tableHeader(   
+                                            id              => "tablaResult",
+                                            class           => "",
+                                            columns         => ['[% "C&oacute;digo" | i18n %]','[% "Descripci&oacute;n" | i18n %]','[% "M&aacute;xima cantidad de pr&eacute;stamos" | i18n %]
+','[% "D&iacute;as de duraci&oacute;n del pr&eacute;stamo" | i18n %]','[% "Renovaciones" | i18n %]','[% "D&iacute;as de Renovaci&oacute;n" | i18n %]
+','[% "Cantidad de d&iacute;as para renovar" | i18n %]','[% "Para Sala" | i18n %]','[% "Habilitado" | i18n %]','[% "Editar" | i18n %]',
+                                                               ]
+                                            
+                ) ;
+[% END %]
 
   <tbody>
     [% FOREACH tipo_prestamo IN TIPOS_PRESTAMOS_LOOP %]

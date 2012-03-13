@@ -180,7 +180,6 @@ function infoReservas(){
     objAH.debug     = true;
     objAH.url       = URL_PREFIX+'/opac-info_reservas.pl';
     objAH.action    = 'detalle_espera';
-    objAH.bubble    = 1;
     objAH.sendToServer();
 }
 

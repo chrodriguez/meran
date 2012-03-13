@@ -95,6 +95,7 @@
 						                    <!-- preguntamos si ya se muestra el usuario en el prestamo, para no mostrarlo dos veces -->
 						                    [% IF !prestamo.getNro_socio %]
 						                        [% IF reserva.getNro_socio %]
+                                                     <input type="hidden" value="[%reserva.getNro_socio%]" id="" > 
 						                             <strong class="[% IF nivel3_obj.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">[% 'Reservado a:' | i18n  %]</strong> 
 						                            [% PERL %]
 						                                print C4::AR::Filtros::link_to(   text =>     "[% socio_reserva.persona.getApeYNom %]",
@@ -144,7 +145,11 @@
                                                                     print C4::AR::Filtros::action_set_button(    
                                                                             title           => '[% " Prestar" | i18n %]',
                                                                             button          => 'btn btn-success',
-                                                                            action          => 'buscarUsuario([% id2 %],[% id3 %])', 
+                                                                            action          => '[% IF reserva.getNro_socio %]
+                                                                                                           prestarUsuarioConReserva("[% reserva.getNro_socio %]", [% id3 %]);
+                                                                                                [% ELSE %]
+                                                                                                           buscarUsuario([% id2 %],[% id3 %])
+                                                                                                [% END %] ', 
                                                                             icon            => "icon-repeat icon-white"
                                                                         );
                                                                 [% END %]
