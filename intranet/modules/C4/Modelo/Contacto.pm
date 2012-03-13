@@ -252,5 +252,20 @@ sub switchState{
     $self->save();
 }
 
+sub getRespondido{
+    my ($self) = shift;
+
+    return (C4::AR::Utilidades::validateString($self->respondido));
+}
+
+sub setRespondido{
+    my ($self) = shift;
+    my ($user) = @_;
+    
+    $self->respondido($user);
+
+    $self->save();
+}
+
 1;
 

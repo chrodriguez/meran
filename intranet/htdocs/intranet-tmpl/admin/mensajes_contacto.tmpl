@@ -47,7 +47,7 @@
                     [% FOREACH mensaje IN mensajes_contacto %]
                         <tr>
                             <td>
-                                    <i class="icon-cog"></i>
+                                  [% IF mensaje.getRespondido %] <i class="icon-share-alt"></i> [% END %]
                                   [% mensaje.getFecha %] 
                             </td>
                             <td>
