@@ -1,5 +1,6 @@
-<b>[% "Material en espera" | i18n %]</b>
-<div id="detalleReservas">
+<div id="info_reservas">
+    <fieldset>
+        <legend> [% 'Material en espera' | i18n %] </legend>
     [% IF reservas_espera_count %]
 
 
@@ -68,4 +69,5 @@
 [% ELSE %]
      <div class="alert alert-info"> [% 'Ud. no tiene reservas en espera.' | i18n %] </div>
 [% END %]
+    </fielset>
 </div>
