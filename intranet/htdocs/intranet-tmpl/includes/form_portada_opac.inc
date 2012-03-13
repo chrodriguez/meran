@@ -27,7 +27,7 @@
 	          <div class="control-group">
 	            <label class="control-label" for="fileInput">[% 'Im&aacute;gen de portada' | i18n %]</label>
 	            <div class="controls">
-	              <input class="input-file" id="imagen" name="imagen"  required type="file">
+	              <input class="input-file" id="imagen" name="imagen" required type="file">
 	            </div>
 	          </div>
 	          <input type="hidden" id="tipoAccion" name="tipoAccion" value="ADD">

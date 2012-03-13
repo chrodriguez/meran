@@ -73,9 +73,9 @@
                              </li>
                              <li>
                              [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'Generaci&oacute;n de Barcodes' | i18n %]",
+                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'C&oacute;digos de inventario' | i18n %]",
                                                                 url =>      "[% url_prefix %]/admin/catalogo/barcode_gen_setup.pl",
-                                                                title =>    "[% 'Preferencias' | i18n %]"
+                                                                title =>    "[% 'C&oacute;digos de inventario' | i18n %]"
                                                             ) ;
                              [% END %]
                              </li>
@@ -477,7 +477,7 @@
 	              			<li class="divider"></li>
                                 <li>
                                           [% PERL %]
-                                              print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'OPAC - Novedades' | i18n %]",
+                                              print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'Novedades de OPAC' | i18n %]",
                                                                               url =>      "[% url_prefix %]/admin/novedades_opac.pl",
                                                                               title =>    "[% 'Novedades' | i18n %]"
                                                                           ) ;

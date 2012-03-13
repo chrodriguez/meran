@@ -5,8 +5,8 @@
 
         function submitForm(){
             $('#post_novedad_form').modal('hide');
-            $('#post_novedad_form').submit();
             startOverlay();
+            $('#post_novedad_form').submit();
         }
 
 
@@ -32,7 +32,7 @@
 
 <fieldset>
     <legend>[% "Portada del OPAC" | i18n %]</legend>
-        [% IF portada %]
+        [% IF cantidad %]
 				[% PERL %]
 				    print C4::AR::Filtros::tableHeader(   
                                            id              => "portada_opac_result",

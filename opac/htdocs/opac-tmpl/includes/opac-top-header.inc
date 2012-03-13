@@ -35,8 +35,9 @@
 			            </li>
 			            <li>
 			                [% PERL %]
-			                    print C4::AR::Filtros::link_to( text    =>  "[% 'Estantes Virtuales' | i18n %]",
+			                    print C4::AR::Filtros::link_to( text    =>  " [% 'Estantes Virtuales' | i18n %]",
 			                                                    url     =>  '[% url_prefix %]/opac-estante.pl',
+			                                                    icon    => "icon-folder-open",
 			                                                    title   =>  "[% 'Estantes Virtuales' | i18n %]",
 			                            ) ;
 			                [% END %]
