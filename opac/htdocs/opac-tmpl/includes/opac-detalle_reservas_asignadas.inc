@@ -1,4 +1,3 @@
-<br />
 <div id="detalleReservas">
 	<fieldset>
 	    <legend> [% 'Material para retirar' | i18n %] </legend>
@@ -85,7 +84,7 @@
 	            </table>
 	            <br>
 	        [% ELSE %]
-	        	<br />
+	
 	            <div class="alert alert-info"> [% 'Ud. no tiene reservas asignadas.' | i18n %]</div>
 	        [% END %]
 	<fielset>

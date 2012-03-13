@@ -30,35 +30,42 @@
 
 <!-- Login -->
 [% IF !socio_data %]
-<section class="center-section-form medium">
+    <section class="center-section-form medium">
 		<div class="page-header">
 		    <h1>Meran <small>[% 'Inicio de sesi&oacute;n' | i18n %]</small></h1>
-		</div>     
-          <form class="well form-inline" method="post" id="signin_main" 
-          		action="[% url_prefix %]/opac-login.pl" onsubmit="return enviar()">
-	
-	                  <input name="userid" id="userid" value="[% username_input %]" placeholder="[% 'Usuario' | i18n %]" 
-	                  		 title="username" tabindex="4" type="text" class="input-big">
-	                  <input id="password_plain" name="" value="" title="password" placeholder="[% 'Contrase&ntilde;a' | i18n %]"
-	                  		 tabindex="5" type="password" class="input-big">
-	
-	                  <input type="hidden" name="password" id="password" tabindex="2" class="field" value="" />
+		</div>  
+        <div id="signin">
+          <form class="form-horizontal" method="post" id="signin_main" action="[% url_prefix %]/opac-login.pl" onsubmit="return enviar()">
+                <div class="form-search">
+                <div class="control-group">
+                     <label class="control-label" for="username">[% 'Usuario' | i18n %]</label>
+                     <div class="controls">
+                          <input name="userid" id="userid" value="[% username_input %]" tabindex="4" type="text" class="input-big">
+	                 </div>
+                </div>
+                <div class="control-group">
+                     <label class="control-label" for="username">[% 'Contrase&ntilde;a' | i18n %]</label>
+                     <div class="controls">
+                          <input id="password_plain" name="" value="" title="password" tabindex="5" type="password" class="input-big">
+                          <input type="hidden" name="password" id="password" tabindex="2" class="field" value="" />
+                     </div>
+                </div>
+         
+                
+                <div class="form-actions">
+                            [% PERL %]
+                                  print C4::AR::Filtros::action_link_button( 
+                                                                  button    => "btn btn-inverse",
+                                                                  url       => "[% url_prefix %]/opac-forgot-password.pl",
+                                                                  title     => "[% 'Olvid&eacute; mi contrase&ntilde;a' | i18n %]",
+                                                              ) ;
+        
+                            [% END %]
+                            <button id="signin_submit_main" class="btn btn-primary" tabindex="6" type="submit">[% 'Iniciar Sesi&oacute;n' | i18n %] </button>
+                                       
+	              </div>
+                
 
-	                  <button id="signin_submit_main" class="btn btn-primary" tabindex="6" type="submit">[% 'Enviar' | i18n %] </button>
-	
-	                  <p class="">
-						<br />
-	                    [% PERL %]
-	                          print C4::AR::Filtros::action_link_button( 
-	                                                          button    => "btn btn-inverse",
-	                                                          url       => "[% url_prefix %]/opac-forgot-password.pl",
-	                                                          title     => "[% 'Olvid&eacute; mi contrase&ntilde;a' | i18n %]",
-	                                                      ) ;
-	
-	                    [% END %]
-                  		
-                  	  </p>                                      
-	              
 	              [%  IF mostrar_captcha  %]
 	                  <div id=captcha>
 	                    <script src="http://www.google.com/recaptcha/api/challenge?k=6LehoMQSAAAAAOhylvTt_7RrPKVdll7CN0jJRdaf" type="text/javascript"></script>
@@ -70,5 +77,6 @@
 	                  </div>
 	                [% END %]
           </form>
-</section>
+        </div>
+    </section>
 [% END %]
