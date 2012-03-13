@@ -91,7 +91,9 @@ if ($accion){
 }
 
 if (!$editing){
-	$t_params->{'portada'} = C4::AR::Novedades::getPortadaOpac();
+	my $portada            = C4::AR::Novedades::getPortadaOpac();
+    $t_params->{'portada'} = $portada;
+    $t_params->{'cantidad'} = scalar(@$portada);
 	C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 

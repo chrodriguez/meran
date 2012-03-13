@@ -63,13 +63,14 @@ function Check(f) {
 <fieldset>
   <section class="center-section-form"> 
     <legend class="titulo_legend">
-[% IF tipo_prestamo %]
-    [% "Modificar Tipo de Pr&eacute;stamo" | i18n %]
-[% ELSE %]
-    [% "Agregar Tipo de Pr&eacute;stamo" | i18n %]
-[% END %]</legend>
+		[% IF tipo_prestamo %]
+		    [% "Modificar Tipo de Pr&eacute;stamo" | i18n %]
+		[% ELSE %]
+		    [% "Agregar Tipo de Pr&eacute;stamo" | i18n %]
+		[% END %]
+    </legend>
     
-          <form class="form-horizontal">
+          <div class="form-horizontal">
                 <div class="control-group">
                       [% IF tipo_prestamo %]
                           <label for="tipo_prestamo" class="control-label">[% 'Tipo de pr&eacute;stamo' | i18n %]</label>
@@ -143,19 +144,6 @@ function Check(f) {
                 </div>
 
                 <div class="form-actions">
-                          <!--        [% PERL %]
- 
-                                          print C4::AR::Filtros::action_button(
-                                                                                button       => "btn click",
-                                                                                action       => "detalleMARC([% id3 %])",
-                                                                                icon         => "icon-info-sign",
-                                                                                title        => "",
-                                                                          ) ;
-       
-                                                                    
-
-                                  [% END %]-->
-
                                   [% IF tipo_prestamo %]
                                       [% PERL %]
                                           print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
@@ -179,5 +167,5 @@ function Check(f) {
                                   [% END %]
                   </div>
           </section>
-      </form>
+      </div>
 </fieldset>

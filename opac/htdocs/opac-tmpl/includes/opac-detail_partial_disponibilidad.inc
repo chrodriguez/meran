@@ -1,6 +1,6 @@
 <div class="alert alert-success">
 		<blockquote>
-			[% IF cantParaPrestamoActual && cantParaSalaActual%]
+			[% IF cantParaPrestamo && cantParaSala %]
 	        	<p>[% "Se cuenta con disponibilidad para llevar a domicilio o leer en la sala de lectura" | i18n %].</p>
 			[% ELSE %]
 				[% IF cantParaPrestamoActual %]
@@ -48,17 +48,33 @@
 	                                                                        );
 	                                        [% END %]
 	                                    [% ELSE %]
-	                                        [% PERL %]
-	                                            
-	                                            print C4::AR::Filtros::action_button(   
-	                                                                                button   => "btn btn-danger",
-	                                                                                icon   => "icon-white icon-remove",
-	                                                                                title   => "[% 'Cancelar reserva' | i18n %]",
-	                                                                                action => 'cancelarReserva([% socio_data.object.getIdReserva(id2) %]);',
-                                                                                    popover		=> {title=>'[% "Disponibilidad" | i18n %]',
-	                                                                                      					text => '[% "UD. ya tiene una reserva sobre esta edici&oacute;n" | i18n %].' },
-	                                                                        );
-	                                        [% END %]
+	                                    
+	                                    
+	                                        [% IF socio_data.object.loTienePrestado( id2 ) %]
+		                                        [% PERL %]
+		                                            
+		                                            print C4::AR::Filtros::action_button(   
+		                                                                                button   => "btn btn-inverse",
+		                                                                                icon   => "icon-white icon-ban-circle",
+		                                                                                disabled	=> 1,
+		                                                                                title   => "[% 'Ejemplar en pr&eacute;stamo' | i18n %]",
+	                                                                                    popover		=> {title=>'[% "Disponibilidad" | i18n %]',
+		                                                                                      					text => '[% "UD. ya tiene un pr&eacute;stamo sobre esta edici&oacute;n" | i18n %].' },
+		                                                                        );
+		                                        [% END %]
+	                                    	[% ELSE %]
+		                                        [% PERL %]
+		                                            
+		                                            print C4::AR::Filtros::action_button(   
+		                                                                                button   => "btn btn-danger",
+		                                                                                icon   => "icon-white icon-remove",
+		                                                                                title   => "[% 'Cancelar reserva' | i18n %]",
+		                                                                                action => 'cancelarReserva([% socio_data.object.getIdReserva(id2) %]);',
+	                                                                                    popover		=> {title=>'[% "Disponibilidad" | i18n %]',
+		                                                                                      					text => '[% "UD. ya tiene una reserva sobre esta edici&oacute;n" | i18n %].' },
+		                                                                        );
+		                                        [% END %]
+		                                    [% END %]
 	                                    [% END %]
                                    [% END %]
            [% END %]

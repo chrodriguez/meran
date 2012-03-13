@@ -28,32 +28,33 @@ $VERSION = 3;
 
 @EXPORT_OK = qw(
 
-    &t_devolver
-    &t_renovar
-    &t_renovarOPAC
-    &t_realizarPrestamo
-    &_verificarMaxTipoPrestamo
-    &chequeoDeFechas
-    &prestamosHabilitadosPorTipo
-    &getTipoPrestamo
-    &getPrestamoDeId3
-    &getPrestamosDeSocio
-    &getTipoPrestamo
-    &obtenerPrestamosDeSocio
-    &cantidadDePrestamosPorUsuario
-    &crearTicket
-    &t_eliminarTipoPrestamo
-    &t_agregarTipoPrestamo
-    &t_modificarTipoPrestamo
-    &cantidadDeUsoTipoPrestamo
-    &getInfoPrestamo
-    &getHistorialPrestamosVigentesParaTemplate
-    &tienePrestamos
-    &enviarRecordacionDePrestamo
-    &getAllPrestamosVencidos
-    &getAllPrestamosActivos
-    &setPrestamosVencidosTemp
-    &getAllPrestamosVencidosParaMail
+    t_devolver
+    t_renovar
+    t_renovarOPAC
+    t_realizarPrestamo
+    _verificarMaxTipoPrestamo
+    chequeoDeFechas
+    prestamosHabilitadosPorTipo
+    getTipoPrestamo
+    getPrestamoDeId3
+    getPrestamosDeSocio
+    getTipoPrestamo
+    obtenerPrestamosDeSocio
+    cantidadDePrestamosPorUsuario
+    crearTicket
+    t_eliminarTipoPrestamo
+    t_agregarTipoPrestamo
+    t_modificarTipoPrestamo
+    cantidadDeUsoTipoPrestamo
+    getInfoPrestamo
+    getHistorialPrestamosVigentesParaTemplate
+    tienePrestamos
+    enviarRecordacionDePrestamo
+    getAllPrestamosVencidos
+    getAllPrestamosActivos
+    setPrestamosVencidosTemp
+    getAllPrestamosVencidosParaMail
+    tienePrestamosDeId2
 );
 
 
@@ -320,6 +321,28 @@ sub getPrestamosDeSocio {
         return ($prestamos__array_ref);
 }
 
+=item
+getPrestamosDeSocio
+Esta funcion retorna los prestamos actuales de un socio
+=cut
+sub tienePrestamosDeId2 {
+    my ($nro_socio,$id2)=@_;
+
+        use C4::Modelo::CircPrestamo;
+        use C4::Modelo::CircPrestamo::Manager;
+
+        my @filtros;
+
+        push(@filtros, ( nro_socio      => { eq => $nro_socio } ));
+        push(@filtros, ( 'nivel3.id2'   => { eq => $id2} ));
+        
+
+        my $prestamos_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(query => \@filtros,
+                                                                        require_objects => ['nivel3.nivel2','socio','ui'],
+                                                                      );
+
+        return ($prestamos_count);
+}
 
 
 
