@@ -22,6 +22,7 @@ __PACKAGE__->meta->setup(
         mensaje        => { type => 'text', overflow => 'truncate', not_null => 1 },
         fecha          => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 0 },
         leido          => { type => 'integer', overflow => 'truncate', not_null => 1, default => 0 },
+        respondido     => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 0 },
     ],
     primary_key_columns => [ 'id' ],
 );

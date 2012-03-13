@@ -20,6 +20,7 @@ use vars qw(@EXPORT @ISA);
     getPortadaOpac
     addPortadaOpac
     modPortadaOpac
+    ordenPortadaOpac
 );
 
 
@@ -293,6 +294,24 @@ sub delPortadaOpac{
     
 }
 
+sub ordenPortadaOpac{
+    my ($params) = @_;
+    
+    use C4::Modelo::PortadaOpac::Manager;
+    
+    my $order_array = $params->{'newOrderArray'};
+    
+    my $orden = 1;
+    foreach my $p (@$order_array){
+
+    	 my $portada = getPortadaOpacById($p);
+    	 $portada->setOrden($orden++);
+    	 
+    	 $portada->save();
+    }
+    return ();
+	
+}
 
 sub uploadCoverImage{
     my ($postdata) = @_;
