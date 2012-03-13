@@ -103,7 +103,6 @@ function ejemplaresDelGrupo(id2){
 
 function updateEjemplaresDelGrupo(responseText){
 	$('#ejemplaresDelGrupo'+objAH.id2).html(responseText);
-	zebra('tablaResult');
 }
 
 

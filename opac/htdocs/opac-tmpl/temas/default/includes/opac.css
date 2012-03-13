@@ -4,7 +4,7 @@
 
 
 .alert-success blockquote{
-	border-left:5px solid #DFF0D8 !important; 
+    border-left:5px solid #DFF0D8 !important; 
 }
 
 .title{
@@ -17,7 +17,7 @@
 }
 
 legend {
-	font-size: 16.5px;
+    font-size: 16.5px;
 }
 
 body {
@@ -46,17 +46,17 @@ body {
 }
 
 .bigInput{
-	height: 32px;
-	font-size: 23px;
-	color: #999;
+    height: 32px;
+    font-size: 23px;
+    color: #999;
 }
 
 .logo_opac_menu{
-	float: left;
-	line-height:0;
-	width: 65px;
-	margin-top: 5px;
-	margin-left: 5px;	
+    float: left;
+    line-height:0;
+    max-width: 150px;
+    margin-top: 5px;
+    margin-left: 5px;   
 }
 
 .main_content {
@@ -65,7 +65,7 @@ body {
 }
 
 .medium_font{
-	font-size: 40px !important;
+    font-size: 40px !important;
 }
 
 .inline{
@@ -86,7 +86,7 @@ body {
 
 #last_new{
     background-color: #DFF0D8;
-    border-radius: 4px;	
+    border-radius: 4px; 
 }
 
 #last_new h2, #last_new p{
@@ -267,11 +267,11 @@ body {
 /* FIN LOADERS */
 
 .side_bar{
-	position: fixed;
-	top: 143px;
-	width: 80px !important;
-	height: 90%;
-	overflow: auto;	
+    position: fixed;
+    top: 143px;
+    width: 80px !important;
+    height: 90%;
+    overflow: auto; 
 }
 
 .listaUsuarioLeft{
@@ -280,18 +280,18 @@ body {
 }
 
 .mid-center{
-	margin: 0 auto;
-	width: 200px;
+    margin: 0 auto;
+    width: 200px;
 }
 
 .book_cover{
-	margin-left:22px;
+    margin-left:22px;
 }
 
 .nano .content      { padding: 1px; }
 .nano .pane         { background: #444; }
 
 #fotoUsuario{
-	width: 200px;
-	float: right;
+    width: 200px;
+    float: right;
 }

@@ -29,7 +29,7 @@
                                                         actions         => [
                                                                             {title => "Modificar", action=>'modificarN2("[% nivel2.getId2 %]", "[% nivel2.getTemplate %]")',icon=>"icon-edit"},
                                                                             {title => "Eliminar", action=>'borrarN2([% nivel2.getId2 %])', icon=>"icon-trash"},
-                                                                            {title => "Agregar Nivel 3", action=>'agregarN3("[% nivel2.getId2 %]","[% nivel2.getTipoDocumento %]")', icon=>"icon-plus-sign"},
+                                                                            {title => "Agregar ejemplares", action=>'agregarN3("[% nivel2.getId2 %]","[% nivel2.getTipoDocumento %]")', icon=>"icon-plus-sign"},
                                                                             {title => "Mostrar ejemplares", action=>'mostrarInfoAltaNivel3([% nivel2.getId2 %])', icon=>"icon-book"},
                                                                             {title => "Eliminar", action=>'borrarN2([% nivel2.getId2 %])', icon=>"icon-trash"},
                                                                             [% IF indice_edit == 1 %]
@@ -62,19 +62,11 @@
                 </dl>
 
         <br />
-        <fieldset>
-            <legend class="titulo_legend trigger trigger_n3_[% nivel2.getId2 %] click">
-                 <div class="alert alert-info">
-                    <h2>[% "Ejemplares" | i18n %]<small></small></h2>
-                 </div>
-            </legend>
-            <!-- detalle del Nivel 3, segun Nivel 2 seleccionado -->
-            <div id="ejemplares_nive2_id_[% nivel2.getId2 %]" class="ejemplares_nive2_id_[% nivel2.getId2 %]"></div>
-<!--             <div id="detalleDelNivel3" class="nivel3Footer"></div> -->
-        </fieldset>
+        <span id="ejemplaresDelGrupo[% id2 %]">
+            [% INCLUDE "estructura/ejemplaresDelGrupo_edicion.tmpl" %]
+        </span>
+        
         <script type="text/javascript">makeToggle("nive2_id_[% nivel2.getId2 %]","trigger_n2_[% nivel2.getId2 %]",null,false);</script>
-        <script type="text/javascript">makeToggle("ejemplares_nive2_id_[% nivel2.getId2 %]","trigger_n3_[% nivel2.getId2 %]",null,false);</script>
-
             </fieldset>
         </div>
         </span>

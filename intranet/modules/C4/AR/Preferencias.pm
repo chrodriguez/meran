@@ -476,6 +476,10 @@ sub getMetodosAuthAll{
 	return ($metodos_auth);
 }
 
+BEGIN{
+      C4::AR::Preferencias::reloadAllPreferences();
+};
+
 
 
 END { }       # module clean-up code here (global destructor)

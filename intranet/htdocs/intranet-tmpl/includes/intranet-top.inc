@@ -30,6 +30,9 @@
 	<script type="text/javascript" src="/includes/json/jsonStringify.js"></script>
 	<script type="text/javascript" src="/includes/completo-intranet-top.js"></script>
 	[% INCLUDE "BootstrapToolkit.inc" %]
+
+    <link rel="shortcut icon" href="/includes/css/favicon.ico">
+	
 	<link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranet.css">
 	<link media="screen" rel="stylesheet" href="/includes/css/fancybox.css" type="text/css">
 

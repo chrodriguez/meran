@@ -54,7 +54,7 @@ body {
 .logo_opac_menu{
 	float: left;
 	line-height:0;
-	width: 65px;
+	max-width: 150px;
 	margin-top: 5px;
 	margin-left: 5px;	
 }

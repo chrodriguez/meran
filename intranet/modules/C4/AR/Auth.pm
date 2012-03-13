@@ -2289,10 +2289,6 @@ sub printValue{
 }
 
 
-BEGIN{
-      C4::AR::Preferencias::reloadAllPreferences();
-};
-
 END { }       # module clean-up code here (global destructor)
 1;
 __END__
