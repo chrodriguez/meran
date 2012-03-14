@@ -24,19 +24,6 @@ my ($template, $session, $t_params);
                         debug           => 1,
  });
 
-#my $authnotrequired= 0;
-
-#my ($userid, $session, $flags) = C4::AR::Auth::checkauth(   $input, 
-#                                                        $authnotrequired,
-#                                                        {   ui => 'ANY', 
-#                                                            tipo_documento => 'ANY', 
-#                                                            accion => 'CONSULTA', 
-#                                                            entorno => 'usuarios',
-#                                                            tipo_permiso => 'catalogo'
-#                                                        },
-#                                                        "intranet"
-#                            );
-
 my $nro_socio   = $input->param('nro_socio');
 my $msg_object  = C4::AR::Usuarios::_verificarLibreDeuda($nro_socio);
 
@@ -66,11 +53,13 @@ if (!($msg_object->{'error'})){
         use Encode;
         $t_params->{'cuerpo_mensaje'}   = Encode::decode_utf8($cuerpo_mensaje);
         
-        $t_params->{'escudo'}           = C4::Context->config('intrahtdocs') . '/temas/'
-                  . C4::AR::Preferencias::getValorPreferencia('defaultUI')
-                  . '/imagenes/escudo-DEFAULT'
-                  . '.jpg';
-            
+	     $t_params->{'escudo'}  =
+	        C4::Context->config('intrahtdocs') . '/temas/'
+	      . 'default'
+	      . '/imagenes/escudo-DEFAULT'
+	      . '.jpg';
+	
+
         $t_params->{'titulo'}           = "CERTIFICADO DE LIBRE DEUDA";
         $t_params->{'atencion'}         =  C4::AR::Preferencias::getValorPreferencia('open') . " a "
             . C4::AR::Preferencias::getValorPreferencia('close') ;

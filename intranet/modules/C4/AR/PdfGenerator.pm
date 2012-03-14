@@ -630,7 +630,7 @@ sub libreDeuda {
       . '.jpg';
 
     
-
+        C4::AR::Debug::debug("\n\n\n EL ESCUDO ESTA, Y ES ".$escudo);
     if (-e $escudo){
         $pdf->addImgScaled($escudo, $x ,  ($y) + 570 , 5/100);
         ($pdf) = &imprimirEncabezado( $pdf, $branchname, $x + 50, $pagewidth, $pageheight + 120, \%titulo, );

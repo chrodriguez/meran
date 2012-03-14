@@ -365,6 +365,6 @@ function updateInfoPrestarReserva(responseText){
 
 
 function generarEtiqueta(id3,barcode){
-	window.open (URL_PREFIX+"/catalogacion/barcode_gen.pl?token="+token+"&id="+id3, "Barcode "+barcode,"width=650,height=550,status=no,location=no,menubar=no,personalbar=no,resizable=no,scrollbars=no");
+	document.location = (URL_PREFIX+"/catalogacion/barcode_gen.pl?token="+token+"&id="+id3);
 	
 }
