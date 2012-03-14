@@ -54,11 +54,7 @@ if($input->param('remindFlag') eq "on"){
 
 
 my $fields_to_check;
-if ($data_hash{'eliminar_autorizado'}){
-      $fields_to_check = ['nombre','apellido','direccion','numero_telefono','id_ciudad','email'];
-} else {
-      $fields_to_check = ['nombre','apellido','direccion','numero_telefono','id_ciudad','email','auth_nombre','auth_dni','auth_telefono'];
-}
+
 my $update_password = C4::AR::Utilidades::validateString($data_hash{'actual_password'});
 
 if ($update_password){
@@ -81,23 +77,15 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
     	eval {
 	        $socio->persona->modificarVisibilidadOPAC(\%data_hash);
 	        $socio->remindFlag($data_hash{'remindFlag'});
-	        $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio->getNro_socio);
-	        C4::AR::Auth::buildSocioData($session,$socio);
             $cod_msg = 'U338';
+            $t_params->{'mensaje_class'} = "alert-success";
     	};
     	
     	if (@$){
     		$cod_msg = 'U339';
+            $t_params->{'mensaje_class'} = "alert-error";
     	}
     }
-
-    if (!$msg_object->{'error'}) {
-            $socio->agregarAutorizado(\%data_hash);
-
-    } else{
-       $cod_msg = C4::AR::Mensajes::getFirstCodeError($msg_object);
-    }
-
 
     C4::AR::Mensajes::add($msg_object, {'codMsg'=> $cod_msg, 'params' => []} ) ;
     $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje($cod_msg,'opac');
@@ -106,15 +94,13 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
         $socio->setThemeSave($data_hash{'tema'});
     }
 
-    my $dateformat = C4::Date::get_date_format();
-
-
-    $t_params->{'partial_template'}= "informacion.inc";
+    $t_params->{'foto_name'}        = $socio->tieneFoto();
+    $t_params->{'partial_template'} = "opac-mis_datos.inc";
+    
 }else{
-    $t_params->{'combo_temas'} = C4::AR::Utilidades::generarComboTemasOPAC();
-    $t_params->{'socio'} = $socio;
-    $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje('VA002','opac');
-    $t_params->{'partial_template'}= "opac-modificar_datos.inc";
+    $t_params->{'combo_temas'}      = C4::AR::Utilidades::generarComboTemasOPAC();
+    $t_params->{'mensaje'}          = C4::AR::Mensajes::getMensaje('VA002','opac');
+    $t_params->{'partial_template'} = "opac-modificar_datos.inc";
 }
 
 $t_params->{'socio'}= $socio;
