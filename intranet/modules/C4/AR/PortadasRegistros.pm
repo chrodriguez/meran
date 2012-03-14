@@ -88,7 +88,7 @@ sub getImageByIsbn {
         my $isbnaux=$isbn;
         #Realiza la Busqueda
         $isbnaux =~ s/-//g; # Quito los - para buscar
-        
+        $isbnaux =~ s/ //g; # Quito los blancos para buscar        
 		#Archivo a guardar
         $file= $isbnaux."-".$size.".jpg";
 
