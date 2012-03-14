@@ -1,9 +1,7 @@
 [% INCLUDE "intranet-top.inc" %]
 
-<script type="text/javascript" src="/includes/jquery/jquery-ui-1.8.13.sortable.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {    
-	    zebra('tabla_datos'); 
     });
     
     $(function() {
@@ -13,7 +11,7 @@
                     objAH               = new AjaxHelper(updateSortable);
 	                objAH.debug         = true;
 	                objAH.url           = URL_PREFIX+"/admin/global/auth_methodsDB.pl";
-                    objAH.showOverlay   = true;
+                    objAH.showOverlay   = false;
 	                objAH.tipoAccion    = "ACTUALIZAR_ORDEN";
 	                objAH.newOrderArray = $('#sortable').sortable('toArray');
 	                objAH.sendToServer(); 
@@ -23,7 +21,7 @@
 		    $("#sortable").disableSelection();
     
 		    function updateSortable(responseText){ }
-	    });
+    });
     
     function changeMethod(id){
         var newValue = $('#enable'+id).val();

@@ -87,7 +87,9 @@ if ($accion){
             $t_params->{'mensaje_class'} = "alert-success";
         }
     
-    }
+    }elsif ($accion eq "ORDEN"){
+        my $msg_object = C4::AR::Novedades::ordenPortadaOpac($obj);
+    }    
 }
 
 if (!$editing){

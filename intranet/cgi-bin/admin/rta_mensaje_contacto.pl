@@ -17,6 +17,7 @@ my $asunto              = $obj->{'asunto'} || "Respuesta a mail de contacto (sin
 my $email               = $obj->{'email'};
 my $texto               = $obj->{'texto'};
 my $mensaje_contacto    = $obj->{'mensaje_contacto'};
+my $id_mensaje_contacto = $obj->{'dm_id'};
 my $authnotrequired     = 0;
 
 my ($user, $session, $flags) = checkauth($input, 
@@ -53,6 +54,7 @@ my  $msg = C4::AR::Mensajes::create();
 if ($msg_error){
     C4::AR::Mensajes::add($msg, {'codMsg'=> 'U427', 'params' => []} ) ;
 }else{
+	C4::AR::MensajesContacto::marcarRespondido($id_mensaje_contacto);
     C4::AR::Mensajes::add($msg, {'codMsg'=> 'U426', 'params' => []} ) ;
 }
 

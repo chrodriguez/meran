@@ -26,9 +26,11 @@ use C4::AR::Mensajes;
 use C4::AR::Utilidades;
 use C4::AR::Preferencias;
 use Image::Resize;
+use File::LibMagic;
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(
+        uploadFotoNovedadOpac
         uploadPhoto
         deletePhoto
         uploadFile
@@ -38,6 +40,40 @@ use vars qw(@EXPORT @ISA);
     );
 
 my $picturesDir = C4::Context->config("picturesdir");
+
+sub uploadFotoNovedadOpac{
+
+    my ($imagen) = @_;
+
+    use Digest::MD5;
+
+    my $uploaddir       = C4::Context->config("opachtdocs")."/uploads/novedades";
+    my $maxFileSize     = 2048 * 2048; # 1/2mb max file size...
+    my $hash_unique     = Digest::MD5::md5_hex(localtime());
+    my $file            = $imagen;
+    my $name            = $file.$hash_unique;
+    my $type            = '';
+
+    if ($file =~ /^GIF/i) {
+        $type = "gif";
+    } elsif ($file =~ /PNG/i) {
+        $type = "png";
+    } elsif ($file =~ /JFIF/i) {
+        $type = "jpg";
+    } else {
+        $type = "jpg";
+    }
+
+    open ( WRITEIT, ">$uploaddir/$name.$type" ) or die "$!"; 
+    binmode WRITEIT; 
+    while ( <$imagen> ) { 
+    	print WRITEIT; 
+    }
+    close(WRITEIT);
+
+    return ($name. "." .$type);
+
+}
 
 sub uploadPhoto{
     my ($query) = @_;

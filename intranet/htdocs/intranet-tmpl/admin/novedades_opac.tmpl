@@ -21,12 +21,12 @@
     function eliminarNovedad(id_novedad){
         bootbox.confirm(ELIMINAR_NOVEDAD, function(confirmStatus){
             if (confirmStatus){
-                objAH               =new AjaxHelper(updateEliminarNovedad);
+                objAH               = new AjaxHelper(updateEliminarNovedad);
                 objAH.debug         = true;
                 objAH.url           = URL_PREFIX+'/admin/novedades_opacDB.pl';
                 objAH.showOverlay   = true;
                 objAH.tipoAccion    = 'ELIMINAR';
-                objAH.id=id_novedad;
+                objAH.id            = id_novedad;
                 objAH.sendToServer();
             }
         });
@@ -36,7 +36,6 @@
             if (!verificarRespuesta(responseText))
                 return(0);
             $('#novedades_opac_ajax').html(responseText);
-            //zebra('datos_tabla');
     }
 </script>
 

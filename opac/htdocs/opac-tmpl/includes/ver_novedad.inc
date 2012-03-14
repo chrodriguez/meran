@@ -1,6 +1,14 @@
 [% USE HTML %]
 
 [% IF novedad.getContenido %]
+
+<script type="text/javascript" language="javascript">
+    $(document).ready(function() {
+    
+        $('.fancylink').fancybox();
+    
+    });
+</script>
     
     <fieldset>
         <legend>Detalle de la novedad <strong>[% HTML.escape(novedad.getTitulo) %]</strong></legend>
@@ -20,7 +28,28 @@
                     <dt>[% 'Categoria' | i18n %]:</dt>
                     <dd>[% HTML.escape(novedad.getCategoria) %]</dd>
                 [% END %] 
+            </dl>
 	    </div>
+	    
+        [% IF cant %]
+            <div class="well">
+	        
+	            [% FOREACH imagen IN imagenes_hash %]
+	                <a class="fancylink" rel="group" href="/opac-tmpl/uploads/novedades/[% imagen.getImageName %]">
+                        <img border="0" src="/opac-tmpl/uploads/novedades/[% imagen.getImageName %]"
+                              style="width: 60%; max-width: 120px;" 
+                              alt="novedad_[% imagen.getIdNovedad %]"
+                              title="novedad_[% imagen.getIdNovedad %]"
+                        >
+                    </a>
+<!--	               <img src="/pictures/[% imagen.getImageName %]" alt="description" title="description" width="" height="" />-->
+	            
+	            [% END %]
+	            
+	       </div>
+	        
+        [% END %] 
+	    
 	    <div class="form-actions">
 	        [% PERL %]
                 print C4::AR::Filtros::action_link_button( 

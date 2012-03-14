@@ -67,7 +67,7 @@
        </table>
                 
 [% ELSE %]
-     <div class="alert alert-info"> [% 'Ud. no tiene reservas en espera.' | i18n %] </div>
+     <div class="alert alert-info"> [% 'No ten&eacute;s reservas en espera.' | i18n %] </div>
 [% END %]
     </fielset>
 </div>

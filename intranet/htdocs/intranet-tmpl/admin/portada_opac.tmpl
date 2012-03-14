@@ -1,6 +1,7 @@
 [% INCLUDE 'intranet-top.inc' %]
 [% USE HTML %]
 
+
 <script type="text/javascript">
 
         function submitForm(){
@@ -28,6 +29,28 @@
       function agregarPortada_show(){
     	  $('#add_cover_form').modal();
       }
+      
+      $(function() {
+
+          $("#portada_opac_result_sortable").sortable({
+              stop: function(event, ui) { 
+                  objAH               = new AjaxHelper(updateSortable);
+                  objAH.debug         = true;
+                  objAH.url           = URL_PREFIX+"/admin/portada_opac.pl";
+                  objAH.showOverlay   = false;
+                  objAH.tipoAccion    = "ORDEN";
+                  objAH.newOrderArray = $('#portada_opac_result_sortable').sortable('toArray');
+                  objAH.sendToServer(); 
+              }
+          });
+          
+          $("#portada_opac_result_sortable").disableSelection();
+  
+          function updateSortable(responseText){ }
+     });
+  
+      
+      
 </script>
 
 <fieldset>
@@ -41,9 +64,9 @@
 				                ) ;
 				[% END %]
 				
-				<tbody>
+				<tbody id="portada_opac_result_sortable">
 				[% FOREACH p IN portada %]
-				    <tr>
+				    <tr id="[% p.id %]">
 				        <td class="userImage">
 				            <a class="fancy_link" href="http://[% SERVER_ADDRESS %]/opac-tmpl/uploads/portada/[% p.getImagePath %]">
                                   <img border="0" src="http://[% SERVER_ADDRESS %]/opac-tmpl/uploads/portada/[% p.getImagePath %]" alt >

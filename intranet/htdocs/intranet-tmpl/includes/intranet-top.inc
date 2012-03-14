@@ -49,11 +49,13 @@
 	<script type="text/javascript" src="/includes/modernizr.js"></script>
 	<script type="text/javascript" src="/includes/workers.js"></script>
 	<script type="text/javascript" scrc="/includes/intranet-top.js"></script>
+	<script type="text/javascript" src="/includes/jquery/jquery-ui-1.8.13.sortable.min.js"></script>
 	
 	<script type="text/javascript">
 
 		var worker = new Worker('/includes/workers.js');
-
+		var id_actual_dm = 0;
+		
 		function enableAlert(){
 		    $(window).bind('beforeunload', function(){ 
 		    	return("[% 'ATENCION: Se perderan los elementos que no haya guardado' | i18n %]");
@@ -194,8 +196,9 @@
 		    objAH.texto               = $('#respuesta').val();
 		    objAH.asunto              = $('#asunto').val();
 		    objAH.email               = $('#email').val();
+		    objAH.dm_id			      = id_actual_dm; 
 		    objAH.mensaje_contacto    = $('.modal-body :first-child').html();
-        objAH.sendToServer();
+        	objAH.sendToServer();
         
 	  }
 		  
@@ -210,6 +213,7 @@
 		function showDirectMessage(id){
 
 			var objAH_novedad      	 		= new AjaxHelper(updateShowDirectMessage);
+			id_actual_dm					= id;
 			objAH_novedad.showOverlay       = true;
 			objAH_novedad.debug             = true;
 			objAH_novedad.url               = '[% url_prefix %]/admin/ver_mensaje.pl';

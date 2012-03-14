@@ -85,7 +85,7 @@
 	            <br>
 	        [% ELSE %]
 	
-	            <div class="alert alert-info"> [% 'Ud. no tiene reservas asignadas.' | i18n %]</div>
+	            <div class="alert alert-info"> [% 'No ten&eacute;s material para retirar.' | i18n %]</div>
 	        [% END %]
 	<fielset>
 </div>
