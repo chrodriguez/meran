@@ -6,6 +6,7 @@
 </style>
 
 <script type="text/javascript">
+
 	function mostrarIndice(id2){
 	    $("#indice_data" + id2).modal(); 
 	}

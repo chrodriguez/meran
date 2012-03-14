@@ -2,6 +2,25 @@
     $(document).ready(function() {
     	$('.fancylink').fancybox();
     });
+
+//         function mostrarEstantesVirtualesDeGrupo(id2){
+//             objAH               = new AjaxHelper(updateInfoEstantesVirtualesDeGrupo);
+//             objAH.showOverlay   = true;
+//             objAH.url           = URL_PREFIX+'/opac-busquedasDB.pl';
+//             //se setea la funcion para cambiar de pagina
+//             objAH.debug         = true;
+//             objAH.estantes_grupo  = id2;
+//             objAH.sendToServer();
+//       }
+//       
+//       function updateInfoEstantesVirtualesDeGrupo(responseText){
+//             $('#estantes_'+objAH.estantes_grupo).html(responseText);
+//             $('grupo_estantes_'+objAH.estantes_grupo).modal();
+//       }
+
+
+
+
 </script>
 
 [% FOREACH nivel2 %]
@@ -44,8 +63,8 @@
 											[% IF tiene_indice %]
 												[% PERL %]
 														print C4::AR::Filtros::action_button(  
-																							button   => "btn btn-success",
-																							action => "mostrarIndice([% id2 %]);",
+																							button  => "btn btn-success",
+																							action  => 'mostrarIndice([% id2 %]);',
 																							icon	=> "icon-white icon-book",
 																							title   => "[% 'Ver &iacute;ndice' | i18n %]",
 																) ;
@@ -72,15 +91,41 @@
 											[% END %]
 											 
 											[% IF esta_en_estante_virtual %]
-												  <a href="[% url_prefix %]/opac-busquedasDB.pl?tipoAccion=BUSQUEDA_AVANZADA&estantes_grupo=[% id2 %]" class="contenedor_boton">
-													  [% PERL %]
-														 print  C4::AR::Filtros::action_button(  
-																							   button   => "btn btn-inverse",
-																							   title   => "[% 'Ver estantes' | i18n %]",
-																		 );
-													  [% END %]
-												  </a>
-												  <br />
+                                                    
+                                       <!--         [% PERL %]
+                                                        print C4::AR::Filtros::action_button(  
+                                                                                            button  => "btn btn-inverse",
+                                                                                            action  => 'mostrarEstantesVirtualesDeGrupo([% id2 %]);',
+                                                                                            icon    => "",
+                                                                                            title   => "[% 'Ver Estante' | i18n %]",
+                                                                ) ;
+                                                [% END %]
+
+                                                      <div id="estantes_[% id2 %]"  class="modal hide fade">
+                                                              <div class="modal-header">
+                                                                <a href="#" class="close" data-dismiss="modal">×</a>
+                                            
+                                                              </div>
+                                                              <div class="modal-body">
+                                                                  <div id="grupo_estantes_[% id2 %]">
+                                                                 </div>
+                                                              </div>
+                                                              <div class="modal-footer"></div>
+                                                      </div>
+                                                        -->
+
+                                                    [% PERL %]
+
+                                                       print C4::AR::Filtros::action_link_button( 
+                                                                          button    => "btn btn-inverse",
+                                                                          url       => "[% url_prefix %]/opac-busquedasDB.pl", 
+                                                                          params    => ["tipoAccion=BUSQUEDA_AVANZADA",
+                                                                                         "estantes_grupo=[% id2 %]"],
+                                                                          icon      => "",
+                                                                          title     => "[% 'Ver estantes' | i18n %]",
+                                                                      );
+                                                    [% END %]
+
 										   [% END %]
 										   
 	                                  </div>
