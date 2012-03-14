@@ -47,7 +47,7 @@
                     [% FOREACH mensaje IN mensajes_contacto %]
                         <tr>
                             <td>
-                                  [% IF mensaje.getRespondido %] <i class="icon-share-alt"></i> [% END %]
+                                  [% IF mensaje.getRespondido %] <i class="icon-share-alt" title="[% 'Respondido por ' | i18n %][% mensaje.respondido %]"></i> [% END %]
                                   [% mensaje.getFecha %] 
                             </td>
                             <td>

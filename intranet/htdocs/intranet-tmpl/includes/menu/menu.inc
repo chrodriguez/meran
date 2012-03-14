@@ -453,7 +453,7 @@
 	              			<li class="divider"></li>
                                 <li>
                                           [% PERL %]
-                                              print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'Novedades de OPAC' | i18n %]",
+                                              print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'Novedades' | i18n %]",
                                                                               url =>      "[% url_prefix %]/admin/novedades_opac.pl",
                                                                               title =>    "[% 'Novedades' | i18n %]"
                                                                           ) ;
