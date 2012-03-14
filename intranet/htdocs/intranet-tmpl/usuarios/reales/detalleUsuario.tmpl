@@ -109,7 +109,9 @@ var loaderPath= "";
                                                                        {title => "Libre Deuda", action=>'generarLibreDeuda()', icon=>"icon-asterisk"},
 	                                                                   {title => "Prest. Interbibliotecario", action=>'prestamosInterBibliotecarios()', icon=>"icon-shopping-cart"},
 	                                                                   {title => "Cambiar Credenciales", action=>'cambiarCredencial()', icon=>"icon-eye-open"},
-	                                                                   {title => 'Eliminar Foto', action=>'eliminarFoto()', icon=>'icon-picture'},
+	                                                                   [% IF foto_name %]
+	                                                                       {title => 'Eliminar Foto', action=>'eliminarFoto()', icon=>'icon-picture'},
+	                                                                   [% END %]
 	                                                                 ]
 	
 	                           );
@@ -158,6 +160,12 @@ var loaderPath= "";
                                       title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
                                 >
                             </a>
+                        [% ELSE %]
+                            <img  border="0" src="[% temas %]/[% tema %]/imagenes/no_foto.jpg" 
+                                  style="height: 60%; width: 60%; max-width: 120px; max-height: 120px;" 
+                                  alt="[% 'Usuario sin foto' | i18n %]"
+                                  title="[% 'Usuario sin foto' | i18n %]"
+                            >
                         [% END %]
                       </li>
                       <dt class="inline left rightMargin">[% "Apellido:" | i18n %]</dt>
