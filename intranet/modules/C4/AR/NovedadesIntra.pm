@@ -21,17 +21,18 @@ use vars qw(@EXPORT @ISA);
 
 sub agregar{
 
-    my ($input) = @_;
+    my ($input)             = @_;
     my %params;
-    my $novedad = C4::Modelo::SysNovedadIntra->new();
+    my $novedad             = C4::Modelo::SysNovedadIntra->new();
 
-    my $contenido = $input->param('contenido');
+    my $contenido           = $input->param('contenido');
 
 #   Escapa codigo HTML
 #     C4::AR::Debug::debug($contenido);
 
-    %params = $input->Vars;
-    $params{'contenido'} = $contenido;
+    %params                 = $input->Vars;
+    $params{'contenido'}    = $contenido;
+    $params{'link'}         = $input->param('links');
 
     return ($novedad->agregar(%params));
 }
@@ -39,17 +40,19 @@ sub agregar{
 
 sub editar{
 
-    my ($input) = @_;
+    my ($input)             = @_;
     my %params;
-    my $novedad = getNovedad($input->param('novedad_id'));
+    my $novedad             = getNovedad($input->param('novedad_id'));
 
     use HTML::Entities;
-    my $contenido = $input->param('contenido');
+    my $contenido           = $input->param('contenido');
 
-    %params = $input->Vars;
-    $params{'contenido'} = $contenido;
+    %params                 = $input->Vars;
+    $params{'contenido'}    = $contenido;
+    C4::AR::Debug::debug("links : " . $input->param('links'));
+    $params{'link'}         = $input->param('links');
     $novedad->delete();
-    $novedad = C4::Modelo::SysNovedadIntra->new();
+    $novedad                = C4::Modelo::SysNovedadIntra->new();
     
     return ($novedad->agregar(%params));
 }

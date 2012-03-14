@@ -65,10 +65,13 @@ if ($action eq 'editar'){
     $params{'arrayNewFiles'}        = \@arrayNewFiles;
     $params{'arrayDeleteImages'}    = \@arrayDeleteImages;
     
-    my $status = C4::AR::Novedades::editar($input, \%params);
+    my ($Message_arrayref) = C4::AR::Novedades::editar($input, \%params);
     
-    if ($status){
+    if($Message_arrayref->{'error'} == 0){
+
         C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix().'/admin/novedades_opac.pl?token='.$input->param('token'));
+    }else{
+        $t_params->{'mensaje'} = $Message_arrayref->{'messages'}[0]->{'message'};
     }
     
 }else{

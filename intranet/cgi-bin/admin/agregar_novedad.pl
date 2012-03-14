@@ -20,17 +20,10 @@ my ($template, $session, $t_params) = get_template_and_user({
 									debug => 1,
 			    });
 
-my $action = $input->param('action') || 0;
-
-# Se arma el texto que va a mostrarse en Twitter
-
-my $twitter_enabled=C4::AR::Social::twitterEnabled();
-
-my $contenido= Encode::decode('utf8', $input->param('contenido'));
-
+my $action          = $input->param('action') || 0;
+my $twitter_enabled = C4::AR::Social::twitterEnabled();
+my $contenido       = $input->param('contenido');
 my $cont;
-
-
 
 #estamos agregando o editando
 if ($action){
@@ -56,23 +49,28 @@ if ($action){
         
     }
      
-    my $status = C4::AR::Novedades::agregar($input, @arrayFiles);
+    my ($Message_arrayref, $novedad) = C4::AR::Novedades::agregar($input, @arrayFiles);
+    
+    if($Message_arrayref->{'error'} == 0){
    
-    if ($input->param('check_publicar')){
+        if ($input->param('check_publicar')){
 
-          my $link = C4::AR::Social::shortenUrl($status->{'id'});
+              my $link      = C4::AR::Social::shortenUrl($novedad->getId());
 
-          $cont = $status->getResumen();
-          $cont = Encode::decode_utf8($cont);
-          my $post= C4::AR::Preferencias::getValorPreferencia('prefijo_twitter')." ".$cont."... Ver mas en: ".$link;
+              $cont         = $novedad->getResumen();
+              $cont         = Encode::decode_utf8($cont);
+              my $post      = C4::AR::Preferencias::getValorPreferencia('prefijo_twitter')." ".$cont."... Ver mas en: ".$link;
 
+              #  Posteo en twitter. En C4::AR::Social::sendPost se verifica si la preferencia twitter_enabled esta activada
+              my $mensaje   = C4::AR::Social::sendPost($post);
+        }
 
-          #  Posteo en twitter. En C4::AR::Social::sendPost se verifica si la preferencia twitter_enabled esta activada
-          my $mensaje= C4::AR::Social::sendPost($post);
-    }
-
-    if ($status){
         C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix().'/admin/novedades_opac.pl?token='.$input->param('token'));
+        
+    }else{
+    
+        $t_params->{'mensaje'} = $Message_arrayref->{'messages'}[0]->{'message'};
+        
     }
 }
 

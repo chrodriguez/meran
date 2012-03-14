@@ -21,8 +21,8 @@
                                           selectAll_id    => "",
                                           columns         => ['[% "Fecha"|i18n %]','[% "Usuario"|i18n %]',
                                                             '[% "T&iacute;tulo"|i18n %]', '[% "Resumen"|i18n %]',
-                                                            '[% "Categor&iacute;a"|i18n %]', '[% "Eliminar"|i18n %]',
-                                                            '[% "Editar"|i18n %]',
+                                                            '[% "Categor&iacute;a"|i18n %]',  '[% "Links"|i18n %]',
+                                                            '[% "Eliminar"|i18n %]', '[% "Editar"|i18n %]',
                                                              ]
              
                                                 ) ;
@@ -52,7 +52,10 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="#">[% novedad.getCategoria %]</a>
+                                    [% novedad.getCategoria %]
+                                </td>
+                                <td>
+                                    [% novedad.getLinks %]
                                 </td>
                                 <td>
                                     [% PERL %]

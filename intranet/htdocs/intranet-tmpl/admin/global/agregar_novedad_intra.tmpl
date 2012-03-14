@@ -57,6 +57,21 @@
                         <textarea id="contenido" name="contenido" style="width: 88.3%" >[%novedad.getContenido %]</textarea>
                     </div>
                 </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="links">[% "Links" | i18n %]</label>
+                    <div class="controls">
+                        <input type="text" id="links" name="links" value="[% novedad.getLinks %]">
+                        [% PERL %]
+                        
+                            print C4::AR::Filtros::setHelpInput(
+                                                    text => "[% 'Ingrese los links separados por espacio.' | i18n %]",
+                            
+                            );
+                        
+                        [% END %]
+                    </div>
+                </div>
 
                 <input type="hidden" id="token" name="token" value="[% token %]">
                 

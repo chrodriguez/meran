@@ -14,6 +14,7 @@ __PACKAGE__->meta->setup(
         titulo        => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 255 },
         categoria     => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 255 },
         contenido     => { type => 'text', overflow => 'truncate', not_null => 1 },
+        links           => { type => 'varchar', overflow => 'truncate', not_null => 0, length => 1024 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -39,6 +40,7 @@ sub agregar{
     $self->setContenido($params{'contenido'});
     $self->setCategoria($params{'categoria'});
     $self->setUsuario($usuario);
+    $self->setLinks($params{'links'});
 
     return($self->save());
 
@@ -48,6 +50,19 @@ sub getId{
     my ($self) = shift;
 
     return ($self->id);
+}
+
+sub getLinks{
+    my ($self) = shift;
+
+    return ($self->links);
+}
+
+sub setLinks{
+    my ($self) = shift;
+    my ($links) = @_;
+
+    $self->links($links);
 }
 
 sub getUsuario{
