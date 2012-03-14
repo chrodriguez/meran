@@ -388,7 +388,7 @@
 		                       print C4::AR::Filtros::link_to( text =>     " [% 'Mis datos' | i18n %]",
 		                                                   url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
 		                                                   title =>    "[% 'Mis datos' | i18n %]",
-		                                                   params =>   ["nro_socio=[% nro_socio %]"],
+		                                                   params =>   ["nro_socio=[% socio_data.usr_nro_socio %]"],
 		                                                   icon => "icon-user",
 		                                                   tooltip => "['Ver y/o modificar sus datos' | i18n ]"
 		                           );
