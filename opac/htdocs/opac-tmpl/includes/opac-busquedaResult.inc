@@ -372,12 +372,14 @@
                             [% IF NIVEL.disponibilidad %]
                                 [% FOREACH NIVEL.disponibilidad %]
                                 	[% flag = 0 %]
+                                    [% IF cantTotal %]
                                         [% IF flag %]
                                     		[% 'Disponible para ' | i18n %]&nbsp;
                                 			[% flag = 1 %]
                                     	[% END %]
                                     	<span class="label [% IF domicilio %] label-success [% END %]">[% tipoPrestamo %]</span>
                                         <br /><br />
+                                    [% END %]
                                 [% END %]
                             [% ELSE %]
                                <span class="label label-important">[% 'No disponible' | i18n %]</span>
