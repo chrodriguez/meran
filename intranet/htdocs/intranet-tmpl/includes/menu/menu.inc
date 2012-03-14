@@ -34,8 +34,9 @@
 	
 	                               <li>
 	                                   [% PERL %]
-	                                       print C4::AR::Filtros::link_to( text =>     "[% 'Agregar documento' | i18n %]",
+	                                       print C4::AR::Filtros::link_to( text =>     " [% 'Agregar documento' | i18n %]",
 	                                                                       url =>      "[% url_prefix %]/catalogacion/estructura/datosDocumento.pl",
+		                                                                   icon	=>		"icon-plus",
 	                                                                       title =>    "[% 'Agregar documento' | i18n %]"
 	                                                                   ) ;
 	                                   [% END %]
@@ -197,8 +198,9 @@
 	                    </li>
 	                    <li>
 	                              [% PERL %]
-	                                  print C4::AR::Filtros::link_to( text =>     "[% 'Agregar Usuarios' | i18n %]",
+	                                  print C4::AR::Filtros::link_to( text =>     " [% 'Agregar Usuarios' | i18n %]",
 	                                                                  url =>      "[% url_prefix %]/usuarios/reales/agregarUsuario.pl",
+                                                                      icon	=>		"icon-plus",
 	                                                                  title =>    "[% 'Agregar Usuarios' | i18n %]"
 	                                                              ) ;
 	                              [% END %]
