@@ -23,8 +23,6 @@ my ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
                                                         entorno         => 'undefined'},
 });
 
-C4::AR::Auth::checkBrowser();
-
 if($tipoAccion eq "GENERAR_ETIQUETAS"){
 	($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
 	                                    template_name   => "includes/partials/reportes/_reporte_usuarios_result.inc",

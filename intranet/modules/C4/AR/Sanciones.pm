@@ -287,8 +287,9 @@ If $subtract is non-zero, the delta produced is:
   my $delta= &DateCalc($fecha_vencimiento,$fecha_devolucion,\$err,0);
   
   my $dias= &Delta_Format($delta,0,"%dh");
-  
+
   C4::AR::Debug::debug("CUANTOS DIAS??? FECHA:".$fecha_vencimiento." DEVOLUCION:".$fecha_devolucion." DELTA:".$delta." DIAS: ".$dias);
+
   #Si es un prestamo especial, si se pasa de la hora se toma como si se pasara un dia
   if ($tipo_prestamo eq 'ES'){$dias++;}
 C4::AR::Debug::debug("DIAS Excedido -->>> ".$dias);

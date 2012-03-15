@@ -48,27 +48,30 @@ if ($action eq 'editar'){
     }
     #---------------- fin imagenes nuevas -----------------
     
+    
+    
+    #------------------- imagenes a borrar --------------------
     my @arrayDeleteImages;
     
     #si marcaron alguna imagen para eliminarla
     if($input->param('cantidad')){
-        
+    
         for( my $i=0; $i<$input->param('cantidad'); $i++){
         
             push(@arrayDeleteImages, $input->param('imagen_' . $i));
             
-        }
-    
+        }    
     }
     
-    my %params;
-    $params{'arrayNewFiles'}        = \@arrayNewFiles;
-    $params{'arrayDeleteImages'}    = \@arrayDeleteImages;
+    #---------------- fin imagenes a borrar -----------------
     
-    my $status = C4::AR::Novedades::editar($input, \%params);
+    my ($Message_arrayref) = C4::AR::Novedades::editar($input, \@arrayNewFiles, \@arrayDeleteImages);
     
-    if ($status){
+    if($Message_arrayref->{'error'} == 0){
+
         C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix().'/admin/novedades_opac.pl?token='.$input->param('token'));
+    }else{
+        $t_params->{'mensaje'} = $Message_arrayref->{'messages'}[0]->{'message'};
     }
     
 }else{
