@@ -157,7 +157,9 @@ my %LABELS_COMPONENTS = (   "-1"            => C4::AR::Filtros::i18n("SIN SELECC
     Recibe un archivo y devuelve el magic number.
     Tambien recibe un array con los tipos de archivos permitidos.
     Lo escribe en /temp para esto.
-    Si no es del tipo permitido lo borra.
+    Si no es del tipo permitido lo borra y devuelve 0.
+    En cambio, si es correcto devuelve el tipo del archivo.
+    
 =cut
 sub checkFileMagic{
 
