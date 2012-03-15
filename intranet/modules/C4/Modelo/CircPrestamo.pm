@@ -827,6 +827,21 @@ sub sePuedeRenovar {
 	return ( !$msg_object->{'error'} );
 }
 
+
+sub sePuedeRenovar_text{
+    my ($self) = shift;
+
+    #Si no dan errores las verificaciones, se puede renovar
+    my ($msg_object) = C4::AR::Mensajes::create();
+    $msg_object->{'error'} = 0;
+    $self->_verificarParaRenovar($msg_object,);
+    
+    my $cod_msg = C4::AR::Mensajes::getFirstCodeError($msg_object);
+    
+    return ( C4::AR::Mensajes::getMensaje($cod_msg,$msg_object->{'tipo'}) );
+	
+}
+
 =item 
 renovar
 =cut

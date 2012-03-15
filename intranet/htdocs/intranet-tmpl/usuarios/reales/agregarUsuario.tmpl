@@ -68,7 +68,7 @@
             
          
             <div class="control-group error">
-                  <label class="control-label" for="apellido">[% "Apellido" | i18n %]</label>
+                  <label class="control-label" for="apellido">[% "Apellido" | i18n %]*</label>
                   <div class="controls">
                         <input id="apellido" name="apellido" required  type="text" class="input focused" value="[% socio_modificar.persona.getApellido %]" autofocus>
                         
@@ -80,15 +80,15 @@
                   </div>
             </div>
 
-            <div class="control-group">
-                  <label class="control-label" for="nombre">[% "Nombres" | i18n %]</label>
+            <div class="control-group error">
+                  <label class="control-label" for="nombre">[% "Nombres" | i18n %]*</label>
                   <div class="controls">
                         <input  id="nombre" name="nombre" required class="input focused" type="text" value="[% socio_modificar.persona.getNombre %]">
                   </div>
             </div>
             
-            <div class="control-group">
-                <label class="control-label" for="nro_documento">[% "Documento" | i18n %]</label>    
+            <div class="control-group error">
+                <label class="control-label" for="nro_documento">[% "Documento" | i18n %]*</label>    
                       <div class="controls">
                           [% combo_tipo_documento %] 
                           <input  id="nro_documento" name="nro_documento" required class="input focused" type="text" value="[% socio_modificar.persona.getNro_documento %]">
@@ -103,7 +103,7 @@
                   </div>
             </div>
 
-            <div class="control-group">
+            <div class="control-group error">
                       <label class="control-label" for="sexo">[% "Sexo" | i18n %] </label>
                       <div class="controls">
                            <input type="radio" name="sexo" value="F" required [% IF socio_modificar.persona.getSexo == 'F' %] checked="checked" [% END %] /> F
@@ -111,8 +111,8 @@
                       </div>
             </div>
             
-            <div class="control-group">
-                      <label class="control-label" for="nacimiento"> [% "Fecha de nacimiento " | i18n %] </label>
+            <div class="control-group error">
+                      <label class="control-label" for="nacimiento"> [% "Fecha de nacimiento " | i18n %]* </label>
                       <div class="controls">
                             <input type="text" id="nacimiento" name="nacimiento" data-datepicker="datepicker"  value="[% socio_modificar.persona.getNacimiento %]" required>
                       </div>
@@ -122,30 +122,30 @@
         <fieldset>
             <legend class="titulo_legend">[% "Informaci&oacute;n de contacto" | i18n %] </legend>
 
-              <div class="control-group">
-                    <label class="control-label" for="calle"> [% "Direcci&oacute;n" | i18n %]</label>
+              <div class="control-group error">
+                    <label class="control-label" for="calle"> [% "Direcci&oacute;n" | i18n %]*</label>
                     <div class="controls">
                           <input  id="calle" name="calle" class="input focused" required type="text" value="[% socio_modificar.persona.getCalle %]">
                     </div>
               </div>
 
-              <div class="control-group">
-                    <label class="control-label" for="codigo_postal"> [% "C&oacute;digo Postal" | i18n %]</label>
+              <div class="control-group error">
+                    <label class="control-label" for="codigo_postal"> [% "C&oacute;digo Postal" | i18n %]*</label>
                     <div class="controls">
                           <input  id="codigo_postal" name="codigo_postal" class="input focused" type="number" value="[% socio_modificar.persona.codigo_postal %]">
                     </div>
               </div>
 
-              <div class="control-group">
-                    <label class="control-label" for="ciudad"> [% "Ciudad" | i18n %]</label>
+              <div class="control-group error">
+                    <label class="control-label" for="ciudad"> [% "Ciudad" | i18n %]*</label>
                     <div class="controls">
                           <input  id="ciudad" name="ciudad" class="input focused" type="text" value="[% TRY %] [% socio_modificar.persona.ciudad_ref.getNombre %] [% CATCH %] [% END %]">
                           <input type="hidden" id="id_ciudad" name="id_ciudad" value="[% TRY %] [% socio_modificar.persona.ciudad_ref.id %] [% CATCH %] [% END %]">
                     </div>
               </div>
 
-              <div class="control-group ">
-                    <label class="control-label" for="telefono"> [% "Tel&eacute;fono particular" | i18n %] </label>
+              <div class="control-group error">
+                    <label class="control-label" for="telefono"> [% "Tel&eacute;fono particular" | i18n %]*</label>
                     <div class="controls">
                           <input  id="telefono" name="telefono" required class="input focused" type="number" value="[% socio_modificar.persona.getTelefono %]">
                     </div>
@@ -173,10 +173,10 @@
                     </div>
               </div>
           
-              <div class="control-group">
-                    <label class="control-label" for="email">[% "E-Mail" | i18n %]</label>
+              <div class="control-group error">
+                    <label class="control-label" for="email">[% "E-Mail" | i18n %]*</label>
                     <div class="controls">
-                          <input  id="email" name="email" class="input focused" required type="text" value="[% socio_modificar.persona.getEmail %]">
+                          <input  id="email" name="email" class="input focused" required type="email" value="[% socio_modificar.persona.getEmail %]">
                     </div>
               </div>
         </fieldset>
@@ -196,15 +196,15 @@
                     </div>
             </div>
 
-            <div class="control-group">
-                    <label class="control-label" for="categoria_socio_id">[% "Categor&iacute;ao" | i18n %]</label>
+            <div class="control-group error">
+                    <label class="control-label" for="categoria_socio_id">[% "Categor&iacute;ao" | i18n %]*</label>
                     <div class="controls">
                           [% comboDeCategorias %]
                     </div>
             </div>
 
-            <div class="control-group">
-                    <label class="control-label" for="estadi_socio_id">[% "Estado" | i18n %]</label>
+            <div class="control-group error">
+                    <label class="control-label" for="estadi_socio_id">[% "Estado" | i18n %]*</label>
                     <div class="controls">
                           [% comboDeEstados %]
                     </div>
@@ -306,6 +306,7 @@
 
                 
             </fieldset>
+            <p class="help-block">* [% 'Datos obligatorios' | i18n %].</p>                              
 
             <div class="form-actions">
                
@@ -331,6 +332,7 @@
      </fieldset>
   </section>
 </form>
+
 [% IF addBorrower %]
     [% INCLUDE "intranet-bottom.inc" %]
 [% END %]

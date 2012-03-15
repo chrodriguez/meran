@@ -69,7 +69,10 @@
 
                       [% END %]
                   [% ELSE %]
-					<i class="icon-ban-circle"></i>
+					<i id="popover_[% prestamo.id %]" rel="popover" data-content="[% prestamo.sePuedeRenovar_text%]" data-original-title="[% 'Renovaciones' | i18n %]" class="icon-ban-circle"></i>
+					<script>
+						$('#popover_[% prestamo.id %]').popover({placement: 'left',})
+					</script>
                   [% END %]
                   </td>
             </tr>
