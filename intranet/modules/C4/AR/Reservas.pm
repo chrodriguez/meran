@@ -1063,10 +1063,10 @@ sub t_reservarOPAC {
             $db->commit;
             #Se setean los parametros para el mensaje de la reserva SIN ERRORES
             if($paramsReserva->{'estado'} eq 'E'){
-            C4::AR::Debug::debug("SE RESERVO CON EXITO UN EJEMPLAR!!! codMsg: U302");
-            #SE RESERVO CON EXITO UN EJEMPLAR
+	            C4::AR::Debug::debug("SE RESERVO CON EXITO UN EJEMPLAR!!! codMsg: U302");
+	            #SE RESERVO CON EXITO UN EJEMPLAR
                 $msg_object->{'error'} = 0;
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U302', 'params' => [    
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U302', 'tipo'=> 'opac', 'params' => [    
                                                                                         $paramsReserva->{'hasta'},
                                                                                         $paramsReserva->{'hastah'}
                                 ]} ) ;
@@ -1076,7 +1076,7 @@ sub t_reservarOPAC {
                 C4::AR::Debug::debug("SE REALIZO UN RESERVA DE GRUPO codMsg: U303");
                 my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
                 $msg_object->{'error'}= 0;
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U303', 'params' => [$socio->persona->getEmail]} ) ;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U303', 'tipo'=> 'opac', 'params' => [$socio->persona->getEmail]} ) ;
             }
             #Se agrega la reserva al historial
             C4::AR::Reservas::agregarReservaAHistorial($reserva);

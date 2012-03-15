@@ -74,8 +74,9 @@ my %mensajesOPAC = (
     'U300' => 'Disculpe, no puede efectuar reservas porque comple la condici&oacute;n debido a las normas de la Biblioteca.',
     'U301' => 'Disculpe, no puede efectuar reservas porque usted no ha realizado a&uacute;n el curso para usuarios.',
     'U302' => 'El libro que acaba de reservar deber&aacute; ser retirado antes del d&iacute;a: *?* hasta las *?*',
-    'U303' => 'En este momento no hay ejemplares disponibles para el pr&eacute;stamo inmediato. Cuando haya alg&uacute;n ejemplar a su disposici&oacute;n se le informar&aacute; a su cuenta de usuario y a su mail:
-    <br><i> *?* </i><br>Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.',
+    'U303' => 'En este momento no hay ejemplares disponibles para pr&eacute;stamo inmediato. 
+                Cuando haya alg&uacute;n ejemplar a su disposici&oacute;n se le informar&aacute; a 
+                <br><i> *?* </i><br>Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.',
     'U304' => 'Disculpe, no puede reservar porque no hizo el curso para usuarios.',
     'U308' => 'Se cancel&oacute; la reserva con &eacute;xito.',
     'U315' => 'Las passwords no coinciden, ingrese la password nuevamente.',
@@ -185,8 +186,9 @@ my %mensajesINTRA = (
 
     'U300' => 'El usuario no puede reservar porque no es un alumno regular.',
     'U301' => 'El usuario no puede reservar porque no ha realizado a&uacute;n el curso para usuarios.',
-    'U302' => '',
-    'U303' => '',
+    'U303' => 'En este momento no hay ejemplares disponibles para pr&eacute;stamo inmediato. 
+                Cuando haya alg&uacute;n ejemplar a su disposici&oacute;n se le informar&aacute; a 
+                <br><i> *?* </i><br>Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.',
     'U304' => 'El usuario no hizo el curso de MERAN.',
     'U305' => 'Disculpe, no se pudo eliminar el item con c&oacute;digo de barras *?*, intente nuevamente.',
     'U306' => 'Disculpe, no se pudo eliminar el grupo *?*, intente nuevamente.',
@@ -585,7 +587,7 @@ sub getMensaje {
 
     $tipo = C4::AR::Utilidades::capitalizarString($tipo);
 
-    (($tipo eq "Opac")) ? ($msj=$mensajesOPAC{$codigo}):($msj=$mensajesINTRA{$codigo});
+    ((lc($tipo) eq "opac")) ? ($msj=$mensajesOPAC{$codigo}):($msj=$mensajesINTRA{$codigo});
 
     my $p;
 
@@ -733,7 +735,7 @@ sub add {
     #se obtiene el texto del mensaje
 #       my $messageString= &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'},$Message_hashref->{'tipo'},$msg_hashref->{'params'});
     my $session         = CGI::Session->load();
-    my $tipo            = $session->param('type')||'INTRA';
+    my $tipo            = $msg_hashref->{'tipo'}||$session->param('type')||'INTRA';
 
     #encodeamos en utf8 para mostrar bien los acentros
     encodeUtf8Msj($msg_hashref->{'params'});

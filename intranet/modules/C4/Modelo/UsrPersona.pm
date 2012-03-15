@@ -381,7 +381,7 @@ sub setApellido{
     my ($self) = shift;
     my ($apellido) = @_;
     Encode::encode_utf8($apellido);
-    $self->apellido($apellido);
+    $self->apellido(C4::AR::Utilidades::capitalizarString($apellido));
 }
 
 sub getNombre{
@@ -393,7 +393,7 @@ sub setNombre{
     my ($self) = shift;
     my ($nombre) = @_;
     Encode::encode_utf8($nombre);
-    $self->nombre($nombre);
+    $self->nombre(C4::AR::Utilidades::capitalizarString($nombre));
 }
 
 sub getApeYNom{

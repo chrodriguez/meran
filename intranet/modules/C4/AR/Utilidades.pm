@@ -3456,9 +3456,14 @@ sub capitalizarString{
 
     my ($string) = @_;
 
-    $string = ucfirst(lc trim($string));
+    my @words = split(/ /,$string);
+    my $final_string = "";
+    
+    foreach my $word (@words){
+        $final_string .= ucfirst(lc($word))." ";
+    }
 
-    return ($string);
+    return ($final_string);
 }
 =item
 Esta funcion ordena una HASH de strings

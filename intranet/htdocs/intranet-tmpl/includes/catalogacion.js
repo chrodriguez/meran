@@ -1205,7 +1205,7 @@ function procesarInfoJson(marc_object_array, id_padre){
 
         //genero el header para el campo q contiene todos los subcampos
 //         strComp = strComp + "<div id='marc_group" + id_temp + "'><li id='trigger_" + id_temp + "' class='MARCHeader click trigger trigger_" + id_temp + "'>";
-        strComp = strComp + "<div id='marc_group" + id_temp + "' class='row underline' style='width: 80%;'><li class='MARCHeader'>";
+        strComp = strComp + "<div id='marc_group" + id_temp + "' class='row underline' style='width: 80%; margin-left: 0;'><li class='MARCHeader'>";
         strComp = strComp + "<div class='MARCHeader_info'>";
 
         //header LEFT
