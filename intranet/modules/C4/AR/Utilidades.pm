@@ -159,7 +159,6 @@ my %LABELS_COMPONENTS = (   "-1"            => C4::AR::Filtros::i18n("SIN SELECC
     Lo escribe en /temp para esto.
     Si no es del tipo permitido lo borra y devuelve 0.
     En cambio, si es correcto devuelve el tipo del archivo.
-    
 =cut
 sub checkFileMagic{
 
