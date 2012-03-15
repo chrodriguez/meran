@@ -40,7 +40,7 @@
                     [% HTML.escape(reserva.nivel2.getEdicion) %]
                 </td>
                 <td>
-                    &nbsp;[% reserva.getFecha_reserva_formateada %]&nbsp;
+                    &nbsp;[% reserva.getFecha_formateada %]&nbsp;
                 </td>
             [% END %] <!-- FOREACH PRIMERO -->
         </tbody>

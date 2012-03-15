@@ -22,23 +22,19 @@
         $('.fancylink').fancybox();
 
         //Inicializacion del FileUploader
-        [% IF !foto_name %]  
             $('#label-file-uploader').show();
 	        var uploader = new qq.FileUploader({
 	            element: document.getElementById('file-uploader'),
-	            action: '[% url_prefix %]/usuarios/reales/uploadPicture.pl',
+	            action: '[% url_prefix %]/uploadPicture.pl',
 	            params: {
 	            	nro_socio: '[% nro_socio %]',
 	            },
 	            allowedExtensions: ["bmp","jpg","gif","png","jpeg"],
-	            onComplete: function(id, fileName){detalleUsuario();},
+	            onComplete: function(id, fileName){location.href='[% url_prefix %]/misDatos.pl?token=[% token %]';},
+	            showMessage: function(message){ jAlert(message); },
 	            debug: true,
 	            multiple: false,
 	        });
-        [% ELSE %]
-            $('#label-file-uploader').hide();
-        [% END %]
-        
     });
 </script>
 <section class="center-section-form">
@@ -48,6 +44,17 @@
 	    </legend>
 	    
 	    <dl class="">
+		    <dt class="inline left rightMargin" id="fotoUsuario">
+		        [% IF foto_name %]  
+		            <a class="fancylink" rel="group" href="/uploads/pictures-opac/[% foto_name %]">
+		                <img border="0" src="/uploads/pictures-opac/[% foto_name %]"
+		                      style="width: 60%; max-width: 120px;" 
+		                      alt="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+		                      title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+		                >
+		            </a>
+		        [% END %]
+		    </dt>
 	        <dt class="inline left rightMargin">[% 'Nombre/s' |  i18n %] :</dt>
 	            <dd>[% socio_data.usr_nombre %]</dd>
 	        <dt class="inline left rightMargin">[% 'Apellido/s' |  i18n %] :</dt>
@@ -71,8 +78,8 @@
 	    </dl>
 	      
 	    <div id="footerDatosUsuario">
-	        <ul>
-	            <li>
+	        <dl>
+	            <dt>
 	                <label for="file-uploader" id="label-file-uploader">
 	                    <h6>[% 'Seleccione una im&aacute;gen' | i18n %]</h6>
 	                </label>
@@ -82,22 +89,10 @@
 	                        <!-- or put a simple form for upload here -->
 	                    </noscript>                          
 	                </div>
-	            </li>
-	        </ul>
+	            </dt>
+	        </dl>
 	    </div>
 	    
-	    <div id="fotoUsuario">
-	        [% IF foto_name %]  
-	            <a class="fancylink" rel="group" href="/pictures/[% foto_name %]">
-	                <img border="0" src="/uploads/pictures-opac/[% foto_name %]"
-	                      style="width: 60%; max-width: 120px;" 
-	                      alt="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
-	                      title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
-	                >
-	            </a>
-	        [% END %]
-	    </div>
-	
 	    <div class="form-actions">
 	        [% PERL %]
 	              print C4::AR::Filtros::action_link_button( 

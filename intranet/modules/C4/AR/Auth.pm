@@ -1147,6 +1147,7 @@ sub buildSocioData{
     my ($session,$socio) = @_;
     use C4::Modelo::UsrSocio;
     
+    $session->flush();
     $session->param('urs_theme', $socio->getTheme());
     $session->param('usr_theme_intra', $socio->getThemeINTRA());
     $session->param('last_auth_method', $socio->getLastAuthMethod());
@@ -1175,6 +1176,8 @@ sub buildSocioData{
     $session->param('usr_credential_type', $socio->getCredentialType());
     $session->param('usr_permisos_opac', $socio->tienePermisosOPAC);
     $session->param('remindFlag', $socio->getRemindFlag());
+    
+    $session->flush();
 }
 
 sub buildSocioDataHashFromSession{
@@ -1209,6 +1212,7 @@ sub buildSocioDataHashFromSession{
 
 sub updateLoggedUserTemplateParams{
 	my ($session,$t_params,$socio) = @_;
+	
 	buildSocioData($session,$socio);
 	$t_params->{'socio_data'} = buildSocioDataHashFromSession();
 }

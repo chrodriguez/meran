@@ -77,7 +77,7 @@
                             <li class="nav-header">[% 'Personal' | i18n %]</li>	
                             <li>
                                 [% PERL %]
-                                  print C4::AR::Filtros::link_to( text    =>  "[% 'Favoritos' | i18n %]",
+                                  print C4::AR::Filtros::link_to( text    =>  " [% 'Favoritos' | i18n %]",
                                   								  icon    => "icon-star",
                                                                   url     =>  '[% url_prefix %]/opac-favoritos.pl',
                                                                   title   =>  "[% 'Favoritos' | i18n %]",
@@ -86,7 +86,7 @@
                             </li>		                  
                             <li>
                                 [% PERL %]
-                                  print C4::AR::Filtros::link_to( text    =>  "[% 'Historial de pr&eacute;stamos' | i18n %]",
+                                  print C4::AR::Filtros::link_to( text    =>  " [% 'Historial de pr&eacute;stamos' | i18n %]",
                                                                   url     =>  '[% url_prefix %]/opac-historial_prestamos.pl',
                                   								  icon    => "icon-shopping-cart",
                                                                   title   =>  "[% 'Historial de pr&eacute;stamos' | i18n %]",
@@ -95,7 +95,7 @@
                             </li>
                             <li>
                                 [% PERL %]
-                                  print C4::AR::Filtros::link_to( text    =>  "[% 'Historial de reservas' | i18n %]",
+                                  print C4::AR::Filtros::link_to( text    =>  " [% 'Historial de reservas' | i18n %]",
                                   								  icon    => "icon-inbox",
                                                                   url     =>  '[% url_prefix %]/opac-historial_reservas.pl',
                                                                   title   =>  "[% 'Historial de reservas' | i18n %]",

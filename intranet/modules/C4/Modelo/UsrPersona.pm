@@ -233,43 +233,6 @@ sub modificarVisibilidadOPAC{
     $self->save();
 }
 
-# sub sortByString{
-#     my ($self)      = shift;
-#     my ($campo)     = @_;
-# 
-#     my $fieldsString = &C4::AR::Utilidades::joinArrayOfString($self->meta->columns);
-# #   C4::AR::Debug::debug("UsrPersona=> sortByString => fieldsString: ".$fieldsString);
-#     C4::AR::Debug::debug("UsrPersona=> campo: ".$campo);
-# 
-#     my $index;  
-#     my $campos_salida;
-#     my @fields_out;
-#     my @fields = split /,/, $campo;
-# 
-#     foreach my $f (@fields){
-#         $index = rindex $fieldsString,$f;
-# 
-#         if ($index != -1){
-#         #agrego un campo valido
-#             C4::AR::Debug::debug("UsrPersona=> sortByString => f ".$f);
-#             push (@fields_out, $f)
-#         }
-#     }
-# 
-#     if(scalar(@fields_out) > 0){
-#         foreach my $fo (@fields_out){
-#             $campos_salida = $campos_salida.", ";
-#         }
-#     
-#         C4::AR::Debug::debug("UsrPersona=> sortByString => campos_salida ".$campos_salida);
-#         return $campos_salida;
-#   
-#     } else {
-#         return ("persona.apellido");
-#     }
-# }
-
-
 sub sortByString{
     my ($self) = shift;
     my ($campo) = @_;
