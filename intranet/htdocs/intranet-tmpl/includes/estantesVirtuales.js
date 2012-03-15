@@ -2,7 +2,6 @@
  * LIBRERIA Estantes Virtuales v 1.0
  *
  */
-function zebra(classObj){$("."+classObj+" tr:gt(0):odd").addClass("impar");$("."+classObj+" tr:gt(0):even").addClass("par");}
 
 function changePage(ini){
         objAH.changePage(ini);
@@ -312,15 +311,17 @@ function ordenar(orden){
             //se setea la funcion para cambiar de pagina
             objAH.debug         = true;
             objAH.funcion       = 'changePage';
-            objAH.estantes_grupo	= id2;
+            objAH.estantes_grupo = id2;
             objAH.tipoAccion    = "BUSQUEDA_ESTANTE_DE_GRUPO";
             objAH.sendToServer();
       }
       
       function updateInfoEstantesVirtualesDeGrupo(responseText){
             $('#estantes_'+objAH.estantes_grupo).html(responseText);
-            $('#estantes_'+objAH.estantes_grupo).slideDown("fast");
-            zebra('datos_tabla');
-            $('#grupo_estantes_'+objAH.estantes_grupo).show();
+             $('#estantes_'+objAH.estantes_grupo).slideDown("fast");
+//             zebra('datos_tabla');
+//             $('#grupo_estantes_'+objAH.estantes_grupo).show();
             scrollTo('grupo_estantes_'+objAH.estantes_grupo);
       }
+      
+     

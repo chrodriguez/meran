@@ -18,10 +18,16 @@ my $ini= $obj->{'ini'};
 
 my $tipoAccion= $obj->{'tipoAccion'}||"";
 
-if(($tipoAccion eq "BUSQUEDA_POR_ESTANTE")||($tipoAccion eq "BUSQUEDA_ESTANTE_DE_GRUPO")){
-    $template_name = 'busquedas/estante.tmpl';
+if($tipoAccion eq "BUSQUEDA_POR_ESTANTE"){
+   $template_name = 'busquedas/estante.tmpl';
+} elsif ($tipoAccion eq "BUSQUEDA_ESTANTE_DE_GRUPO"){
+   $template_name = 'estantes/estantesGrupo.tmpl';
 }
 
+
+
+
+ 
 
 my ($template, $session, $t_params) = get_template_and_user ({
                             template_name   => $template_name,

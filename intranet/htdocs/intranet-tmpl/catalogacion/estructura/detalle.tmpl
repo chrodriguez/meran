@@ -17,7 +17,7 @@
                 loaderImgPath: imagesForJS+"/loader_grupos.gif",
                 debug : 1
               });
-            
+          
              inicializar();
              zebra("tablaResult");
             });
@@ -228,18 +228,8 @@
 								            </div>
 
                           </div>
-
-	                        [% IF esta_en_estante_virtual %]
-                                [% PERL %]
-                                        print C4::AR::Filtros::action_button( 
-                                                                        button         => "btn click",
-                                                                        action       => "mostrarEstantesVirtualesDeGrupo([% id2 %])", 
-                                                                        icon         => "icon-info-sign",
-                                                                        title        => "[% 'Ver estantes virtuales en los que se encuentra' | i18n %]",
-                                                                    ) ;
-
-                                [% END %]
-	                        [% END %]
+                            
+	            
 
 			                <br>
 			                
@@ -253,6 +243,7 @@
 							   </div>
 							[% END %]
 							
+                        
 			                <dl>
 				                [% FOREACH nivel2_array %]
                                     [% IF liblibrarian %]
@@ -264,6 +255,36 @@
                                 [% END %] <!-- END FOREACH nivel2_array -->
                                 <br />
                             </dl>
+
+                        [% IF esta_en_estante_virtual %]
+                        <div id="estantes_grupo">
+                              <div class="accordion" id="estantes_del_grupo_[% id2 %]" onclick="mostrarEstantesVirtualesDeGrupo([% id2 %])">
+                                <div class="accordion-group">
+                                  <div class="accordion-heading">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#estantes_del_grupo_[% id2 %]" href="#estantes_[% id2 %]">
+                                      [% "Estantes" | i18n %] 
+                                    </a>
+                                  </div>
+                                  <div id="estantes_[% id2 %]" class="accordion-body collapse">
+                                    <div class="accordion-inner">
+                                          
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                        </div>
+                            <!-- [% PERL %]
+                                    print C4::AR::Filtros::action_button( 
+                                                                    button         => "btn click",
+                                                                    action       => "mostrarEstantesVirtualesDeGrupo([% id2 %])", 
+                                                                    icon         => "icon-info-sign",
+                                                                    title        => "[% 'Ver estantes virtuales en los que se encuentra' | i18n %]",
+                                                                ) ;
+
+                            [% END %]-->
+                        [% END %]
+
+
                         <span id="ejemplaresDelGrupo[% id2 %]">
                             [% INCLUDE "estructura/ejemplaresDelGrupo.tmpl" %]
                         </span>
