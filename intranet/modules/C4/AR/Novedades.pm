@@ -88,7 +88,7 @@ sub agregar{
 
 sub editar{
 
-    my ($input, $params) = @_;
+    my ($input, $arrayNewFiles, $arrayDeleteImages) = @_;
     
     my $msg_object  = C4::AR::Mensajes::create();
 
@@ -107,31 +107,32 @@ sub editar{
     #imagenes a borrar
     my $dirPath = C4::Context->config("opachtdocs")."/uploads/novedades";
     
-    if($params->{'arrayDeleteImages'}->[0]){   
+    if(scalar(@$arrayDeleteImages)){   
 
-        foreach my $file ( $params->{'arrayDeleteImages'} ){
-            _eliminarImageneNovedadByNombre(@$file[0]); # -> WTF!!!
-            unlink($dirPath."/".@$file[0]);
+        foreach my $file ( @$arrayDeleteImages ){
+        
+            C4::AR::Debug::debug("imagen a eliminar : " . $file);
+            
+            _eliminarImageneNovedadByNombre($file); # -> WTF!!!
+            unlink($dirPath."/".$file);
         }
         
     }
     #fin imagenes a borrar
-    
     
     #nuevas imagenes
     my $image_name;
     my $imagenes_novedades_opac;
     #recorremos todas las imagenes a agregar y las guardamos   
     
-    if($params->{'arrayNewFiles'}->[0]){      
+    if(scalar(@$arrayNewFiles)){      
     
-        foreach my  $value ( $params->{'arrayNewFiles'} ) {
+        foreach my  $value ( @$arrayNewFiles ) {
                  
             #pasarle la data necesaria
-            $image_name = C4::AR::UploadFile::uploadFotoNovedadOpac(@$value[0]); # -> WTF!!!
+            $image_name = C4::AR::UploadFile::uploadFotoNovedadOpac($value); # -> WTF!!!
             
             if(!$image_name){
-                C4::AR::Debug::debug("subio una imagen valida");
                 $msg_object->{'error'}= 1;
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP13', 'params' => []} );
 

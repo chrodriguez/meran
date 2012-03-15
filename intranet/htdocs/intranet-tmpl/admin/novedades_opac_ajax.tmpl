@@ -22,7 +22,7 @@
                                           columns         => ['[% "Fecha"|i18n %]','[% "Usuario"|i18n %]',
                                                             '[% "T&iacute;tulo"|i18n %]', '[% "Resumen"|i18n %]',
                                                             '[% "Categor&iacute;a"|i18n %]',  '[% "Links"|i18n %]',
-                                                            '[% "Eliminar"|i18n %]', '[% "Editar"|i18n %]',
+                                                            '[% "Acciones"|i18n %]', 
                                                              ]
              
                                                 ) ;
@@ -57,29 +57,33 @@
                                 <td>
                                     [% novedad.getLinks %]
                                 </td>
-                                <td>
+                                <td style="width=110px">
+                                
                                     [% PERL %]
-                                      print C4::AR::Filtros::action_button( 
-                                                                      button    => "btn btn-danger click",
-                                                                      action    => 'eliminarNovedad("[% novedad.id %]")', 
-                                                                      icon      => "icon-white icon-remove",
-                                                                      title     => "",
-                                                                  ) ;
+                                        print C4::AR::Filtros::action_set_button(    
+                                              title           => "[% 'Novedad Opac' | i18n %]",
+                                              button          => 'btn btn-primary',
 
 
+                                              actions         => [
+                                                                  { title   => "Editar", 
+                                                                    url     => "[% url_prefix %]/admin/editar_novedad.pl",
+                                                                    params  =>  ["id=[% novedad.id %]"],
+                                                                    icon    => "icon-edit"
+                                                                  },
+                                                                  { title   => "Eliminar", 
+                                                                    action  => 'eliminarNovedad("[% novedad.id %]")', 
+                                                                    icon    => "icon-remove",
+                                                                   },
+                                                                  ],
+
+                     
+                                                ) ;
                                     [% END %]
-                                </td>
-                                <td>
-                                     [% PERL %]
-                                          print C4::AR::Filtros::action_link_button( 
-                                                                          button    => "btn btn-primary click",
-                                                                          url       => "[% url_prefix %]/admin/editar_novedad.pl", 
-                                                                          params    =>  ["id=[% novedad.id %]"],
-                                                                          icon      => "icon-white icon-edit",
-                                                                          title     => "",
-                                                                      ) ;
-
-                                    [% END %]
+                                
+                                
+                                
+                            
                                 </td>
                             </tr>
                         [% END %]

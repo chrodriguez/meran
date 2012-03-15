@@ -48,24 +48,24 @@ if ($action eq 'editar'){
     }
     #---------------- fin imagenes nuevas -----------------
     
+    
+    
+    #------------------- imagenes a borrar --------------------
     my @arrayDeleteImages;
     
     #si marcaron alguna imagen para eliminarla
     if($input->param('cantidad')){
-        
+    
         for( my $i=0; $i<$input->param('cantidad'); $i++){
         
             push(@arrayDeleteImages, $input->param('imagen_' . $i));
             
-        }
-    
+        }    
     }
     
-    my %params;
-    $params{'arrayNewFiles'}        = \@arrayNewFiles;
-    $params{'arrayDeleteImages'}    = \@arrayDeleteImages;
+    #---------------- fin imagenes a borrar -----------------
     
-    my ($Message_arrayref) = C4::AR::Novedades::editar($input, \%params);
+    my ($Message_arrayref) = C4::AR::Novedades::editar($input, \@arrayNewFiles, \@arrayDeleteImages);
     
     if($Message_arrayref->{'error'} == 0){
 
