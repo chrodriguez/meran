@@ -8,12 +8,13 @@ __PACKAGE__->meta->setup(
     table   => 'sys_novedad',
 
     columns => [
-        id            => { type => 'serial', overflow => 'truncate', length => 16 },
-        usuario       => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 16 },
-        fecha         => { type => 'integer', overflow => 'truncate', not_null => 1, length => 16 },
-        titulo        => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 255 },
-        categoria     => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 255 },
-        contenido     => { type => 'text', overflow => 'truncate', not_null => 1 },
+        id              => { type => 'serial', overflow => 'truncate', length => 16 },
+        usuario         => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 16 },
+        fecha           => { type => 'integer', overflow => 'truncate', not_null => 1, length => 16 },
+        titulo          => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 255 },
+        categoria       => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 255 },
+        contenido       => { type => 'text', overflow => 'truncate', not_null => 1 },
+        links           => { type => 'varchar', overflow => 'truncate', not_null => 0, length => 1024 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -30,6 +31,7 @@ sub agregar{
     $self->setTitulo($params->{'titulo'}[0]);
     $self->setContenido($params->{'contenido'}[0]);
     $self->setCategoria($params->{'categoria'}[0]);
+    $self->setLinks($params->{'links'}[0]);
     $self->setUsuario($usuario);
 
     return($self->save());
@@ -53,6 +55,19 @@ sub setUsuario{
     my ($usuario) = @_;
 
     $self->usuario($usuario);
+}
+
+sub getLinks{
+    my ($self) = shift;
+
+    return ($self->links);
+}
+
+sub setLinks{
+    my ($self) = shift;
+    my ($links) = @_;
+
+    $self->links($links);
 }
 
 sub getFechaLegible{

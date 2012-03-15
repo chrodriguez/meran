@@ -136,6 +136,7 @@ use vars qw(@EXPORT_OK @ISA);
     translateYesNo_fromNumber
     translateYesNo_toNumber
     printAjaxPercent
+    checkFileMagic
 );
 
 
@@ -150,6 +151,59 @@ my %LABELS_COMPONENTS = (   "-1"            => C4::AR::Filtros::i18n("SIN SELECC
                             "anio"          => C4::AR::Filtros::i18n("Anual"),
                             "rango_anio"    => C4::AR::Filtros::i18n("Anual rango")
                         );
+
+
+=item
+    Recibe un archivo y devuelve el magic number.
+    Tambien recibe un array con los tipos de archivos permitidos.
+    Lo escribe en /temp para esto.
+    Si no es del tipo permitido lo borra y devuelve 0.
+    En cambio, si es correcto devuelve el tipo del archivo.
+=cut
+sub checkFileMagic{
+
+    my ($file, @filesAllowed) = @_;
+
+    use File::LibMagic;
+    
+    my $flm         = File::LibMagic->new();
+    my $hash_unique = Digest::MD5::md5_hex(localtime());   
+    my $path        = "/tmp";
+    
+    #escribimos el archivo
+    open ( WRITEIT, ">$path/$hash_unique" ) or die "$!"; 
+    binmode WRITEIT; 
+    while ( <$file> ) { 
+    	print WRITEIT; 
+    }
+    close(WRITEIT);
+    
+    my $mime    = $flm->checktype_filename($path . "/" . $hash_unique);
+
+    #vemos si esta en la whitelist
+    my $ok      = 0;
+    my $type    = '';
+    
+    foreach my $t (@filesAllowed){
+    
+        if($mime =~ m/$t/){
+            $ok = 1;
+            $type = $t;
+        }
+    
+    }
+    
+    if (!$ok){
+    
+        #no esta, borramos el archivo y devolvemos 0
+        unlink($path . "/" . $hash_unique);
+        return 0;
+    
+    }
+    
+    return ($type); 
+
+}
 
 
 
@@ -3402,9 +3456,14 @@ sub capitalizarString{
 
     my ($string) = @_;
 
-    $string = ucfirst(lc trim($string));
+    my @words = split(/ /,$string);
+    my $final_string = "";
+    
+    foreach my $word (@words){
+        $final_string .= ucfirst(lc($word))." ";
+    }
 
-    return ($string);
+    return ($final_string);
 }
 =item
 Esta funcion ordena una HASH de strings

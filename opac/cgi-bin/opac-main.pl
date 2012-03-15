@@ -28,8 +28,6 @@ my ($cantidad,$grupos)              = C4::AR::Nivel1::getUltimosGrupos();
 #solo si hay socio logueado se hace todo esto
 if($nro_socio){
 
-    C4::AR::Auth::checkBrowser();
-
     my $orden                       = 'date_due desc';
     my $ini                         = 1;
     my ($ini,$pageNumber,$cantR)    = C4::AR::Utilidades::InitPaginador($ini);

@@ -502,7 +502,7 @@ sub obtenerDisponibilidadTotal{
     foreach my $n3 (@$cat_ref_tipo_nivel3_array_ref){
         C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => BARCODE => ".$n3->getBarcode());
         if($n3->estadoDisponible){
-            if (($n3->esParaPrestamo)&&(!$n3->estaReservado())) {
+            if ($n3->esParaPrestamo) {
             #DOMICILIO    
                 C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => DOMICILIO");
                 $cant_para_domicilio++;

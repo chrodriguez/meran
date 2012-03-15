@@ -65,8 +65,6 @@
 
 
   [% INCLUDE 'localized_messages.inc' %]
-  [% INCLUDE  'WindowHelper.inc'  %]  
-
   <title>
     [% IF titulo_nombre_ui %]
         [% titulo_nombre_ui %]

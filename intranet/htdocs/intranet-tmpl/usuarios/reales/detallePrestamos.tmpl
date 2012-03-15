@@ -94,8 +94,8 @@ $(document).ready(function(){
                         
                                 <td>
                                     [% IF prestamo.getFecha_vencimiento %]
-                                      <span class="[% IF prestamo.estaVencido %]fecha_vencida[% ELSE %]fecha_cumple[% END %]">
-                                      [% prestamo.getFecha_vencimiento_formateada %]
+                                     <span class="label [% IF prestamo.estaVencido %]label-important[% ELSE %] label-success[% END%]">
+                                         [% prestamo.getFecha_vencimiento_formateada %]
                                       </span>
                                     [% ELSE %]
                                         - 

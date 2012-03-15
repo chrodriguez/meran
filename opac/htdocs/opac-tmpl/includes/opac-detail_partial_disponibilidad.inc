@@ -9,17 +9,17 @@
 					[% IF cantParaSalaActual %]
 			        	<p>[% "Se cuenta con disponibilidad solamente para leer en la sala de lectura" | i18n %].</p>
 					[% ELSE %]
-						<p>[% "No existe ning&uacute;n ejemplar disponible" | i18n %].</p>
+						<p>[% "En este momento no hay ning&uacute;n ejemplar disponible" | i18n %].</p>
 					[% END %]
 				[% END %]
 			[% END %]
 			[% IF cantReservas && cantPrestados %]
-	        	<small>[% "Existen " | i18n %] [% cantReservas %] 
+	        	<small>[% "Existen " | i18n %] [% cantReservas %] [% "reservas" | i18n %]
         		<cite title=""> [% " y " | i18n %] [% cantPrestados %] [% "prestados" | i18n %]</cite>
 	        	</small>
 	        [% ELSE %]
 				[% IF cantReservas %]
-		        	<small>[% "Existen " | i18n %] [% cantReservas%] [% "reservas " | i18n %]
+		        	<small>[% "Existen " | i18n %] [% cantReservas %] [% "reservas " | i18n %]
 		        	</small>
 		        [% ELSE %]
 					[% IF cantPrestados %]

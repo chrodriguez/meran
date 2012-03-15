@@ -28,6 +28,15 @@
                     <dt>[% 'Categoria' | i18n %]:</dt>
                     <dd>[% HTML.escape(novedad.getCategoria) %]</dd>
                 [% END %] 
+                
+                [% IF cant_links %]
+                    <dt>[% 'Links' | i18n %]:</dt>
+                    [% FOREACH link IN links %]
+                        <a target="_blank" href="[% link %]">[% link %]</a></br>
+                        
+                    [% END %] 
+                    
+                [% END %] 
             </dl>
 	    </div>
 	    
@@ -42,7 +51,6 @@
                               title="novedad_[% imagen.getIdNovedad %]"
                         >
                     </a>
-<!--	               <img src="/pictures/[% imagen.getImageName %]" alt="description" title="description" width="" height="" />-->
 	            
 	            [% END %]
 	            

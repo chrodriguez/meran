@@ -46,32 +46,36 @@ sub uploadFotoNovedadOpac{
     my ($imagen) = @_;
 
     use Digest::MD5;
+    use C4::AR::Utilidades;
+    
+    my @filesAllowed    = qw(
+                                jpeg
+                                gif
+                                png
+                                jpg
+                            );
 
     my $uploaddir       = C4::Context->config("opachtdocs")."/uploads/novedades";
     my $maxFileSize     = 2048 * 2048; # 1/2mb max file size...
-    my $hash_unique     = Digest::MD5::md5_hex(localtime());
-    my $file            = $imagen;
-    my $name            = $file.$hash_unique;
-    my $type            = '';
+    my $hash_unique     = Digest::MD5::md5_hex(localtime() + rand(10));
+    my $file_type       = C4::AR::Utilidades::checkFileMagic($imagen, @filesAllowed);
+    
+    #es un archivo valido
+    if($file_type){
+        C4::AR::Debug::debug("vamos a subir : $hash_unique.$file_type " );
+        
+        open ( WRITEIT, ">$uploaddir/$hash_unique.$file_type" ) or die "$!"; 
+        binmode WRITEIT; 
+        while ( <$imagen> ) { 
+        	print WRITEIT; 
+        }
+        close(WRITEIT);
 
-    if ($file =~ /^GIF/i) {
-        $type = "gif";
-    } elsif ($file =~ /PNG/i) {
-        $type = "png";
-    } elsif ($file =~ /JFIF/i) {
-        $type = "jpg";
-    } else {
-        $type = "jpg";
+        return ("$hash_unique.$file_type");
+        
     }
-
-    open ( WRITEIT, ">$uploaddir/$name.$type" ) or die "$!"; 
-    binmode WRITEIT; 
-    while ( <$imagen> ) { 
-    	print WRITEIT; 
-    }
-    close(WRITEIT);
-
-    return ($name. "." .$type);
+    
+    return 0;
 
 }
 
@@ -84,8 +88,10 @@ sub uploadPhoto{
     my $uploaddir_oapc  = C4::Context->config("picturesdir_opac");
     my $maxFileSize     = 2048 * 2048; # 1/2mb max file size...
     my $file            = $query->param('POSTDATA');
-    my $nro_socio       = C4::AR::Auth::getSessionNroSocio();
+    my $nro_socio       = $query->url_param('nro_socio');
     my $name            = $nro_socio;
+    
+    
     my $socio           = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
     my $type            = '';
 
@@ -104,9 +110,12 @@ sub uploadPhoto{
         $type = "jpg";
     }
 
-    if ($socio->tieneFoto){
-        unlink($socio->tieneFoto);
-    }
+    eval{
+	    if ($socio->tieneFoto){
+	        unlink($socio->tieneFoto);
+	    }
+    };
+    
     if (!$type) {
         print qq|{ "success": false, "error": "Invalid file type..." }|;
         print STDERR "file has been NOT been uploaded... \n";

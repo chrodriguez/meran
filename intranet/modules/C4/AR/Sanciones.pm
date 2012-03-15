@@ -277,6 +277,7 @@ C4::AR::Debug::debug("Corresponde una sancion vamos a calcular de cuantos dias!"
   my $err;
   my $delta= &DateCalc($fecha,$devolucion,\$err, "semi");
   my $dias= &Delta_Format($delta,0,"%dh");
+
   C4::AR::Debug::debug("CUANTOS DIAS??? FECHA:".$fecha." DEVOLUCION:".$devolucion." DELTA SEMI:".$delta." DIAS: ".$dias);
   #Si es un prestamo especial, si se pasa de la hora se toma como si se pasara un dia
   if ($tipo_prestamo eq 'ES'){$dias++;}

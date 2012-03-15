@@ -34,12 +34,6 @@
       
     }
 
-    function eliminarAutorizado(){
-           $('#nombre_autorizado').val("");
-           $('#dni_autorizado').val("");
-           $('#telefono_autorizado').val("");
-           $('#eliminar_autorizado').val("true");
-    }
 
     $(document).ready(function() {
         CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'});
@@ -182,34 +176,6 @@
            </section>
         </fieldset>
           
-        <fieldset>
-            <legend>[% 'Usuario adicional' | i18n %]</legend>
-            <section class="center-section-form">
-                <div class="control-group">
-                    <label class="control-label" for="nombre_autorizado">[% 'Nombre y Apellido' |  i18n %] :</label>
-                    <div class="controls">
-                        <input type="text" name="nombre_autorizado" id="nombre_autorizado" value="[% socio.getNombre_apellido_autorizado %]" tabindex="12" />
-                    </div>
-                </div>
-                
-                <div class="control-group">
-                    <label class="control-label" for="dni_autorizado">[% 'DNI' |  i18n %] :</label>
-                    <div class="controls">
-                        <input type="text" name="dni_autorizado" id="dni_autorizado" value="[% socio.getDni_autorizado %]" tabindex="13" />
-                    </div>
-                </div>
-                
-                <div class="control-group">
-                    <label class="control-label" for="telefono_autorizado">[% 'Tel&eacute;fono' |  i18n %] :</label>
-                    <div class="controls">
-                        <input type="text" name="telefono_autorizado" id="telefono_autorizado" value="[% socio.getTelefono_autorizado %]" tabindex="14" /> 
-                    </div>
-                </div>
-        
-                 <p><a onclick="eliminarAutorizado();" style="margin:11px;">Eliminar Autorizado</a></p>
-                 <input type="hidden" name="eliminar_autorizado" id="eliminar_autorizado" value=""/> 
-            </section>       
-        </fieldset>
         <fieldset>
             <legend>[% 'Cambio de contrase&ntilde;a' | i18n %] ([% 'Dejar en blanco para descartar' | i18n %])</legend>
             <section class="center-section-form">
