@@ -20,8 +20,5 @@ my ($template, $session, $t_params)= get_template_and_user({
                                                             accion          => 'CONSULTA', 
                                                             entorno         => 'undefined'},
                                     });
-
-C4::AR::Auth::checkBrowser();
-
-
+                                    
 C4::AR::Auth::redirectTo('/meran/opac-main.pl');

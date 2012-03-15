@@ -18,8 +18,7 @@
                                           selectAll_id    => "",
                                           columns         => ['[% "Fecha"|i18n %]','[% "Usuario"|i18n %]',
                                                             '[% "T&iacute;tulo"|i18n %]', '[% "Resumen"|i18n %]',
-                                                            '[% "Categor&iacute;a"|i18n %]',  '[% "Links"|i18n %]',
-                                                            '[% "Acciones"|i18n %]', 
+                                                            '[% "Categor&iacute;a"|i18n%]', '[% "Acciones"|i18n %]', 
                                                              ]
              
                                                 ) ;
@@ -51,10 +50,7 @@
                                 <td>
                                     [% novedad.getCategoria %]
                                 </td>
-                                <td>
-                                    [% novedad.getLinks %]
-                                </td>
-                                <td style="width=110px">
+                                <td style="width:150px">
                                 
                                     [% PERL %]
                                         print C4::AR::Filtros::action_set_button(    

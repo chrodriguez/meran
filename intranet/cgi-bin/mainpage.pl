@@ -18,8 +18,6 @@ my ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
                                                         entorno         => 'undefined'},
 });
 
-C4::AR::Auth::checkBrowser();
-
 my $twitter_enabled             = C4::AR::Preferencias::getValorPreferencia("twitter_enabled");
 my $twitter_username_to_search  = C4::AR::Preferencias::getValorPreferencia("twitter_username_to_search");
 
