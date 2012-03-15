@@ -29,17 +29,17 @@
                         [% FOREACH novedad IN novedades %]
                             <tr class="leido[% novedad.getLeido %]">
                                 <td>
-                                    <a class="fancy_link" href="[% url_prefix %]/admin/ver_novedad.pl?token=[% token %]&id=[% novedad.id %]">
+                                    <a class="fancy_link" href='#' onclick="showNovedad([% novedad.id %]);">
                                         [% novedad.getFechaLegible %]
                                     </a>
                                 </td>
                                 <td>
-                                    <a class="fancy_link" href="[% url_prefix %]/admin/ver_novedad.pl?token=[% token %]&id=[% novedad.id %]">
+                                    <a class="fancy_link" href='#' onclick="showNovedad([% novedad.id %]);">
                                         [% novedad.getUsuario%] 
                                     </a>
                                 </td>
                                 <td>
-                                    <a class="fancy_link" href="[% url_prefix %]/admin/ver_novedad.pl?token=[% token %]&id=[% novedad.id %]">
+                                    <a class="fancy_link" href='#' onclick="showNovedad([% novedad.id %]);">
                                         [% novedad.getTitulo %] 
                                     </a>
                                 </td>
