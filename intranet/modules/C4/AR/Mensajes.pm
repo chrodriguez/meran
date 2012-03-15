@@ -514,6 +514,8 @@ my %mensajesINTRA = (
     'UP09' => 'La portada se ha eliminado correctamente',
     'UP10' => 'La portada se ha modificado correctamente',
     'UP11' => 'La portada no se ha podido modificar',
+    'UP12' => 'Ocurrio un error subiendo las imagenes',
+    'UP13' => 'El tipo de archivo subido no esta permitido',
 
 #ERRORES DE BASE DE DATOS
     'B400' => '',
@@ -576,6 +578,7 @@ my %mensajesINTRA = (
     'B457' => 'Error en funcion C4::AR::ImportacionIsoMARC::procesarRelacionRegistroEjemplares',
     'PERCENTAGE_VALUE' => "*?*",
     'B458' => 'Error en funcion C4::AR::ImportacionIsoMARC::procesarReglasMatcheo',
+    'B459' => 'Error en funcion C4::Modelo::ImagenesNovedadesOpac SAVE',
 );
 
 sub getMensaje {

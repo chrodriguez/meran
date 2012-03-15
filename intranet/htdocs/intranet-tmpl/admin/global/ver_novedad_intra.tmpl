@@ -6,6 +6,14 @@
 </div>
 <div class="modal-body">
   <p>[% HTML.escape(novedad.getContenido) %]</p>
+  
+  [% IF cant_links %]
+    <p><strong>Links: </strong></p>
+    [% FOREACH link IN links %]
+        <a target="_blank" href="[% link %]">[% link %]</a></br>      
+    [% END %]
+  [% END %]
+  
 </div>
 <div class="modal-footer">
    <h4> [% novedad.getFechaLegible %]</h4>

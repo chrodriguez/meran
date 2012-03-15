@@ -1,10 +1,43 @@
 [% USE HTML %]
-<div class="novedad_contacto">
-    <h2>[% 'Titulo' | i18n %]: [% novedad.getTitulo %]</h2>
-    <fieldset>
-        <legend>[% 'Cuerpo de la novedad' | i18n %]:</legend>
-        <h3>[% novedad.getContenido %]</h3>
-        <h4> [% novedad.getFechaLegible %]</h4>
-    </fieldset>
-    <a href="#">[% novedad.getFechaLegible %] </a>
+<script type="text/javascript" language="javascript">
+    $('.fancylink').fancybox();
+</script>
+
+<div class="modal-header">
+  <a href="#" class="close" data-dismiss="modal">×</a>
+  <h3>[% HTML.escape(novedad.getTitulo) %]</h3>
+</div>
+<div class="modal-body">
+    <p>[% HTML.escape(novedad.getContenido) %]</p>
+
+    [% IF cant_links %]
+        <p><strong>Links: </strong></p>
+        [% FOREACH link IN links %]
+            <a target="_blank" href="[% link %]">[% link %]</a></br>      
+        [% END %]
+    [% END %]
+
+    [% IF cant_novedades %]
+    </br>      
+    <div class="control-group">
+        <label class="control-label" >[% "Imagen/es " | i18n %]</label>
+        <div class="controls">
+            [% FOREACH imagen IN imagenes_hash %]
+                <a class="fancylink" id="imagen_[% imagen.getImageName %]" rel="group" href="http://[% SERVER_ADDRESS %]/opac-tmpl/uploads/novedades/[% imagen.getImageName %]">
+                    <img border="0" src="http://[% SERVER_ADDRESS %]/opac-tmpl/uploads/novedades/[% imagen.getImageName %]"
+                          style="width: 60%; max-width: 120px;" 
+                          alt="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                          title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+                    >
+                </a>
+            [% END %]
+
+        </div>
+    </div>
+    
+[% END %]
+  
+</div>
+<div class="modal-footer">
+   <h4> [% novedad.getFechaLegible %]</h4>
 </div>
