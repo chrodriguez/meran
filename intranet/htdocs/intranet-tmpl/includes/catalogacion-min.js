@@ -156,7 +156,7 @@ var elem='<div class="btn-group" style="float: left; margin-left: 5px;" id="'+id
 function closeDivButtonContainer(id){var elem='</ul></div>';return elem;}
 function crearBotonAgregarSubcampoRepetible(obj){if(obj.getRepetible()=='1'){return'<li><a class="click" onclick=cloneSubCampo("'+obj.getIdCompCliente()+'")><i class="icon-plus"></i> Agregar</a></li>';}else{return"";}}
 function crearBotonEliminarSubcampoRepetible(obj){if(obj.getRepetible()=='1'){return'<li><a class="click" onclick=removeSubcampo("'+obj.getIdCompCliente()+'")><i class="icon-trash"></i> Eliminar</a></li>';}else{return"";}}
-function crearBotonEliminarSubcampo(obj){return'<a class="click" onclick=removeSubcampo("'+obj.getIdCompCliente()+'")><i class="icon-trash"></i> Eliminar</a></li>';}
+function crearBotonEliminarSubcampo(obj){return'<a class="click btn btn-danger" onclick=removeSubcampo("'+obj.getIdCompCliente()+'")><i class="icon-trash"></i> Eliminar</a></li>';}
 function crearIconWarning(obj){return"<div style='float:left; margin-left:5px'><span class='label label-warning'>Sin estructura</span></div>";}
 function crearBotonAgregarCampoRepetible(obj,id_padre){if(obj.getRepetible()=='1'){return"<li><a class='click' onclick=cloneCampo('"+id_padre+"')><i class='icon-plus'></i> Agregar</a></li>";}else{return"";}}
 function crearBotonEliminarCampoRepetible(obj,show){display="none";if(!show){display="block";}

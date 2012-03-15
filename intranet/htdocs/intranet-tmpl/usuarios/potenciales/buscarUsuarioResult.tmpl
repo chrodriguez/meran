@@ -93,7 +93,7 @@
                                        [% END %]  
                                   </td> 
 			                      <td>
-			                          [% socio.esRegularToString %]
+			                          <span class="label [% IF socio.esRegular %]label-success[% ELSE %]label-important[% END %]">[% socio.esRegularToString %]</span>
 			                      </td>
 			                      <td>
 			                          [% activo %]

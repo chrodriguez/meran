@@ -19,13 +19,13 @@
                 <td>[% regla_tipo.getOrden %]</td>
                 <td>[% regla_tipo.ref_regla.getDias_demora %]</td>
                 <td>[% regla_tipo.ref_regla.getDias_sancion %]</td>
-                <td>[% IF regla_tipo.getCantidad %] [% regla_tipo.getCantidad %]  [% ELSE %] Infinito [% END %]</td>
+                <td>[% IF regla_tipo.getCantidad %] [% regla_tipo.getCantidad %]  [% ELSE %] <i class="icon-refresh" title="[% 'Infinito' | i18n %]"></i> [% END %]</td>
                 <td>
                 [% PERL %]
-                        print C4::AR::Filtros::to_Icon(  
-                                                            boton   => "icon_borrar",
-                                                            onClick => "eliminarReglaTipoSancion([% regla_tipo.getTipo_sancion %],[% regla_tipo.getRegla_sancion %]);",
-                                                            title   => "[% 'Eliminar' | i18n %]",
+                        print C4::AR::Filtros::action_button(  
+                                                            button  => "btn btn-danger",
+                                                            action  => "eliminarReglaTipoSancion([% regla_tipo.getTipo_sancion %],[% regla_tipo.getRegla_sancion %]);",
+                                                            icon    => "icon-white icon-remove",
                                 ) ;
                 [% END %]
                 </td>
@@ -46,24 +46,25 @@
         <tbody>
           <tr>
                   <td>[% ordenes %]</td>
-                  <td>[% reglas_de_sancion %]
+                  <td>
+                    [% reglas_de_sancion %]
                     [% PERL %]
-                          print C4::AR::Filtros::to_Icon(  
-                                                              boton   => "icon_edicion",
-                                                              onClick => "editarReglas();",
-                                                              title   => "[% 'Editar Reglas' | i18n %]",
+                          print C4::AR::Filtros::action_button(  
+                                                              button   => "btn btn-info",
+                                                              action => "editarReglas();",
+                                                              icon  => "icon-white icon-pencil",
                                   ) ;
                       [% END %]
                   </td>
                   <td>[% cantidades %]</td>
-                  <td>
-                  [% PERL %]
-                          print C4::AR::Filtros::to_Icon(  
-                                                              boton   => "icon_anadir",
-                                                              onClick => "agregarReglaTipoSancion();",
-                                                              title   => "[% 'Agregar' | i18n %]",
-                                  ) ;
-                  [% END %]
+                  <td style="width: 120px;">
+	                  [% PERL %]
+	                          print C4::AR::Filtros::action_button(  
+	                                                              button   => "btn btn-primary",
+	                                                              action => "agregarReglaTipoSancion();",
+                                                                  icon  => "icon-white icon-plus",
+	                                  ) ;
+	                  [% END %]
                   </td>
           </tr>
         </tbody>

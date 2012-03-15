@@ -1758,14 +1758,13 @@ function crearBotonEliminarSubcampoRepetible(obj){
 }
 
 function crearBotonEliminarSubcampo(obj){
-    return '<a class="click" onclick=removeSubcampo("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar</a></li>';
+    return '<a class="click btn btn-danger" onclick=removeSubcampo("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar</a></li>';
 }
 
 
 function crearIconWarning(obj){
 
-    //return "<div class='icon_warning horizontal' title='NO TIENE ESTRUCTURA'/>";
-    return "<div style='float:left; margin-left:5px'><span class='label label-warning'>Sin estructura</span></div>";
+    return "<div style='float:left; margin-left:5px'><span class='label label-info'>Sin estructura</span></div>";
 }
 
 function crearBotonAgregarCampoRepetible(obj, id_padre){
