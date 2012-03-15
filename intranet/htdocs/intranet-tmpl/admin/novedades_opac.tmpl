@@ -2,6 +2,24 @@
 
 <script type="text/javascript">
 
+    function showNovedad(id){
+
+		var objAH_novedad      	 		= new AjaxHelper(updateShowNovedad);
+		objAH_novedad.showOverlay       = true;
+		objAH_novedad.debug             = true;
+		objAH_novedad.url               = '[% url_prefix %]/admin/ver_novedad.pl';
+		objAH_novedad.id				= id;
+		objAH_novedad.sendToServer();
+	}
+
+	function updateShowNovedad(responseText){
+	    if (!verificarRespuesta(responseText))
+	        return(0);
+
+	    $('#mostrar_novedad').html(responseText);
+	    $('#mostrar_novedad').modal();
+	}
+
     function obtenerNovedades(){
         objAH               =new AjaxHelper(updateObtenerNovedades);
         objAH.debug         = true;
