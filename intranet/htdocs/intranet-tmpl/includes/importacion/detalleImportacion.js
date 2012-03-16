@@ -252,7 +252,7 @@ function cargarCampoReglasMatcheo(){
                 resultado=resultado+"<td>"+regla_actual_arr[0]+"</td>";
                 resultado=resultado+"<td>"+regla_actual_arr[1]+"</td>";
                 resultado=resultado+"<td>"+regla_actual_arr[2]+"</td>";
-                resultado=resultado+"<td><input type='button' name='-' id='-' value='-' onclick=eliminarCampoReglasMatcheo('"+regla+"')></td>";
+                resultado=resultado+'<td><a onclick="eliminarCampoReglasMatcheo('+regla+')" class="btn btn-danger click" id=""><i class="icon-minus icon-white"></i> </a></td>';
                 resultado=resultado+"</tr>";
             }
         }

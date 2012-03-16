@@ -95,13 +95,11 @@ function eleccionSubCampo(){
                         <option value="-1">[% 'Seleccionar SubCampo' | i18n %]</option>
               </select>
               <strong><span id="nombre_subcampo"></span></strong>
-              
-           <input type='button' name="+" id="+" value="+" onclick="agregarCampoReglasMatcheo()">
 
          [% PERL %]
                              print C4::AR::Filtros::action_button( 
                                                                  button   => "btn btn-primary",
-                                                                 icon	  => "icon-plus",
+                                                                 icon	  => "icon-plus icon-white",
                                                                  action => 'agregarCampoReglasMatcheo();',
                                      ) ;
          [% END %]
