@@ -5,15 +5,15 @@
 </script>
 
 <fieldset>
-    <legend>[% "Resultados de la b&uacute;squeda" | i18n %]</legend>
+[% IF cantidad %]
+   <legend>[% "Resultados de la b&uacute;squeda" | i18n %]</legend>
         <div class="datos_tabla_div" id="datos_tabla_div">
-        <div class="well">
-              [% "La cantidad de Importaciones es" | i18n %]: <strong>[%cantidad %]</strong>
+       <div class="well">
+              [% "La cantidad reservas  es" | i18n %]: <strong>[%cantidad %]</strong>
         </div>
         
               <div class="contenedor_paginador">[% paginador %]</div>
 
-              [% IF cantidad %]
            
              
 

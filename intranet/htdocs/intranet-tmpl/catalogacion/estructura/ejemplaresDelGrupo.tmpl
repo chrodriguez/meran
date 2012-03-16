@@ -173,17 +173,27 @@
 						
 						                    [% IF nivel3_obj.getNota != "" %]
 	
-	                                              <div id="nota_ejemplar_[% id3 %]" style="display:none">[% nivel3_obj.getNota %]</div>	
+	                                              <div id="nota_ejemplar_[% id3 %]" class="modal hide fade">
+	                                                   <div class="modal-header">
+                                                            <a href="#" class="close" data-dismiss="modal">×</a>
+	                                                        <h3>[% 'Nota del ejemplar' | i18n %]</h3>
+	                                                   </div>
+	                                                   <div id="text_nota_[% id3 %]" 
+	                                                        class="modal-body">[% nivel3_obj.getNota %]</div>
+                                                   </div>	
 	
 						                          [% PERL %]
-						                                  print C4::AR::Filtros::to_Icon( 
-						                                                                  boton         => "icon_globo",
-						                                                                  title         => "[% nivel3_obj.getNota %]",
-						                                                                  alternClass   => "botonCentradoTabla",
-	                                                                                      onClick       => "verNota('[% id3 %]');",
+						                                  print C4::AR::Filtros::action_button( 
+						                                                                  button   => "btn",
+	                                                                                      action   => 'verNota([% id3 %]);',
+	                                                                                      icon     => "icon-comment",
+	                                                                                      id       => 'text_nota_[% id3 %]',
+	                                                                                      popover => { title   =>'[% "Nota" | i18n %]',
+	                                                                                                   text    => "[% nivel3_obj.getNota %]",
+	                                                                                                   placement => "left",
+	                                                                                                 }
 						                                                              ) ;
 						                          [% END %]
-	
 						                    [% ELSE %]
 						                       ---
 						                    [% END %]

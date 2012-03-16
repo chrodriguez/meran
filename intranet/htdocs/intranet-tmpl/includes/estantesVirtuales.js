@@ -14,7 +14,7 @@ function ordenar(orden){
         function verEstanteDesdeBusqueda(idEstante){
                 objAH=new AjaxHelper(updateVerEstanteDesdeBusqueda);
                 objAH.debug= true;
-		objAH.estante= idEstante;
+                objAH.estante= idEstante;
                 objAH.url= '../estantes/estanteDB.pl';
                 objAH.tipo= 'VER_ESTANTE_BY_ID';
                 objAH.sendToServer();
@@ -92,10 +92,12 @@ function ordenar(orden){
         function updateVerSubEstantes(responseText){
             if(objAH.padre == 0){
                 $('#subestante').html(responseText);
+                scrollTo('subestante');
            //     $('.datos_tabla_div_estantes').hide();
             }
             else{
                 $('#subestante-'+ objAH.padre).html(responseText);
+                scrollTo('subestante-'+ objAH.padre);
                 zebra('datos_tabla');
              //   $('.datos_tabla_div_subestante_'+objAH.padre).hide();
             }

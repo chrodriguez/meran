@@ -1209,7 +1209,7 @@ function procesarInfoJson(marc_object_array, id_padre){
         strComp = strComp + "<div class='MARCHeader_info'>";
 
         //header LEFT
-        strComp = strComp + "<div style='width:12%;float:left'>";
+        strComp = strComp + "<div style='width:120px;float:left'>";
 //         strComp = strComp + crearBotonAyudaCampo(campo_marc_conf_obj.getCampo(),id_div_alta_indicador,campo_marc_conf_obj.getIndicadoresPrimarios());
         strComp = strComp + crearBotonAyudaCampo(campo_marc_conf_obj.getCampo());
         if(campo_marc_conf_obj.getIndicadoresPrimarios() != 0){
@@ -1758,14 +1758,13 @@ function crearBotonEliminarSubcampoRepetible(obj){
 }
 
 function crearBotonEliminarSubcampo(obj){
-    return '<a class="click" onclick=removeSubcampo("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar</a></li>';
+    return '<a class="click btn btn-danger" onclick=removeSubcampo("'+ obj.getIdCompCliente() +'")><i class="icon-trash"></i> Eliminar</a></li>';
 }
 
 
 function crearIconWarning(obj){
 
-    //return "<div class='icon_warning horizontal' title='NO TIENE ESTRUCTURA'/>";
-    return "<div style='float:left; margin-left:5px'><span class='label label-warning'>Sin estructura</span></div>";
+    return "<div style='float:left; margin-left:5px'><span class='label label-info'>Sin estructura</span></div>";
 }
 
 function crearBotonAgregarCampoRepetible(obj, id_padre){

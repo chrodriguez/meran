@@ -676,9 +676,10 @@ sub action_link_button{
     
     if ($popover){
         $button.= " popover_button ";
-    	my $text_pop = $popover->{'text'};
-    	my $title_pop= $popover->{'title'};
-    	$popopver_attr.= " rel='popover' data-content='$text_pop' data-original-title='$title_pop' ";   
+        my $placement = $popover->{'placement'}||'right';
+        my $text_pop = $popover->{'text'};
+        my $title_pop= $popover->{'title'};
+        $popopver_attr.= " rel='popover' data-content='$text_pop' rel='popover' data-placement='$placement' data-original-title='$title_pop' ";   
     }
     
     my $params   = $params_hash_ref{'params'}; #obtengo el llamado a la funcion en el evento onclick
@@ -718,9 +719,10 @@ sub action_button{
     
     if ($popover){
         $button.= " popover_button ";
+        my $placement = $popover->{'placement'}||'right';
         my $text_pop = $popover->{'text'};
         my $title_pop= $popover->{'title'};
-        $popopver_attr.= " rel='popover' data-content='$text_pop' data-original-title='$title_pop' ";   
+        $popopver_attr.= " rel='popover' data-content='$text_pop' rel='popover' data-placement='$placement' data-original-title='$title_pop' ";   
     }
     
     
@@ -749,9 +751,10 @@ sub action_set_button{
     
     if ($popover){
         $button.= " popover_button ";
+        my $placement = $popover->{'placement'}||'right';
         my $text_pop = $popover->{'text'};
         my $title_pop= $popover->{'title'};
-        $popopver_attr.= " rel='popover' data-content='$text_pop' data-original-title='$title_pop' ";   
+        $popopver_attr.= " rel='popover' data-content='$text_pop' rel='popover' data-placement='$placement' data-original-title='$title_pop' ";   
     }
 
     

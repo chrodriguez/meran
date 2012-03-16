@@ -98,7 +98,7 @@ function updateObtenerTiposDePrestamos(responseText){
     $('#cambo_tipo_prestamo').show();
     
     if(( tieneSancion != 0 ) &&( tipoPrestamo_array_hash_ref.length == 0 )){
-        $('#spanComboTipoPrestamo').html("<div class='alert alert-danger'>El usuario tiene una sanci&oacute;n del sistema. No puede realizar ning&uacute;n tipo de pr&eacute;stamo para este ejemplar.</div>");
+        $('#spanComboTipoPrestamo').html("<div class='alert alert-danger'>[% 'El usuario tiene una sanci&oacute;n del sistema. No puede realizar ning&uacute;n tipo de pr&eacute;stamo para este ejemplar' | i18n %].</div>");
         $('#cambo_tipo_prestamo label').fadeOut(0);
         $('#acciones').hide();
     }else{

@@ -228,8 +228,23 @@
 								            </div>
 
                           </div>
+<!--<<<<<<< HEAD
                             
 	            
+=======
+
+	                        [% IF esta_en_estante_virtual %]
+                                [% PERL %]
+                                        print C4::AR::Filtros::action_button( 
+                                                                        button         => "btn click",
+                                                                        action       => "mostrarEstantesVirtualesDeGrupo([% id2 %])", 
+                                                                        icon         => "icon-info-sign",
+                                                                        title        => "[% 'Ver estantes' | i18n %]",
+                                                                    ) ;
+
+                                [% END %]
+	                        [% END %]
+>>>>>>> c5eeac15551d24f3562c3e42f0c7e48a99618e45-->
 
 			                <br>
 			                

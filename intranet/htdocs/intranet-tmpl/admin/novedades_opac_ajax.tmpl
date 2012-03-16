@@ -54,16 +54,12 @@
                                 
                                     [% PERL %]
                                         print C4::AR::Filtros::action_set_button(    
-                                              title           => "[% 'Novedad Opac' | i18n %]",
-                                              button          => 'btn btn-primary',
-
-
+                                              title   => " [% 'Editar' | i18n %]",
+                                              button  => 'btn btn-primary',
+                                              url     => "[% url_prefix %]/admin/editar_novedad.pl",
+                                              params  =>  ["id=[% novedad.id %]"],
+                                              icon    => "icon-white icon-edit",
                                               actions         => [
-                                                                  { title   => "Editar", 
-                                                                    url     => "[% url_prefix %]/admin/editar_novedad.pl",
-                                                                    params  =>  ["id=[% novedad.id %]"],
-                                                                    icon    => "icon-edit"
-                                                                  },
                                                                   { title   => "Eliminar", 
                                                                     action  => 'eliminarNovedad("[% novedad.id %]")', 
                                                                     icon    => "icon-remove",

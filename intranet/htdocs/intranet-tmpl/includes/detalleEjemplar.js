@@ -158,14 +158,7 @@ function updateInfoMARC(responseText){
 }
 
 function verNota(id3){
-    $('#nota_ejemplar_'+id3).modal({   containerCss:{
-            backgroundColor:"#fff",
-    //         borderColor:"#0063dc",
-            height:"500px",
-            padding:"1",
-            width:"800px",
-        },
-    });
+    $('#nota_ejemplar_'+id3).modal();
 }
 
 function verDivs(){

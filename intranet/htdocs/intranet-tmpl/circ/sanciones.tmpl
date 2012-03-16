@@ -40,11 +40,11 @@ function borrarSanciones(chck){
     var array = new Array;
     var long  = chck.length;
     if ( long == 0){
-        jConfirm("Elija al menos una sancion para eliminar");
+        jAlert("Elija al menos una sancion para eliminar");
     }
     else{
 
-        jConfirm(ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_SANCION,SANCIONES_TITLE, function(confirmStatus){if (confirmStatus) {
+        bootbox.confirm(ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_SANCION, function(confirmStatus){if (confirmStatus) {
 
             for(var i=0; i< long; i++){
               array[i]=chck[i].value;
