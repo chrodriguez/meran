@@ -71,7 +71,6 @@ my $defaultCodMSG = 'U000';
 $VERSION = 1.0;
 @ISA = qw(Exporter);
 @EXPORT = qw(
-        checkBrowser
         checkauth		
         get_template_and_user
         output_html_with_http_headers
@@ -205,43 +204,44 @@ sub updateAuthOrder{
 
 
 =item 
+    DEPRECATED
     Checkea si el browser es uno ideal
     Chromium Browser y Google Chrome lo detecta con el mismo user agent
 =cut
 sub checkBrowser{
 
-    my @blacklist = qw(
-        Firefox_4
-        Firefox_3
-        Chrome_10
-        Chrome_9
-        Chrome_8
-        Chrome_7
-        Chrome_6
-        MSIE_8
-        MSIE_7
-        MSIE_6
-        MSIE_5
-        IceWeasel_4
-        IceWeasel_3
-    );
-    my $session         = CGI::Session->load();
-	my $browser         = HTTP::BrowserDetect->new($ENV{'HTTP_USER_AGENT'});
-	my $browser_string  = $browser->browser_string();
-	my $browser_major   = $browser->major();
-	my $search          = $browser_string."_".$browser_major;
+#    my @blacklist = qw(
+#        Firefox_4
+#        Firefox_3
+#        Chrome_10
+#        Chrome_9
+#        Chrome_8
+#        Chrome_7
+#        Chrome_6
+#        MSIE_8
+#        MSIE_7
+#        MSIE_6
+#        MSIE_5
+#        IceWeasel_4
+#        IceWeasel_3
+#    );
+#    my $session         = CGI::Session->load();
+#	my $browser         = HTTP::BrowserDetect->new($ENV{'HTTP_USER_AGENT'});
+#	my $browser_string  = $browser->browser_string();
+#	my $browser_major   = $browser->major();
+#	my $search          = $browser_string."_".$browser_major;
 
-	
-	if ($search ~~ @blacklist){
-	    if (!$session->param('check_browser_allowed')){
-            if($session->param('type') eq "opac"){
-                redirectTo(C4::AR::Utilidades::getUrlPrefix().'/checkBrowser.pl?token='.$session->param('token'));
-            }else{
-                redirectTo(C4::AR::Utilidades::getUrlPrefix().'/checkBrowser.pl?token='.$session->param('token'));
-            }    
-	    }
-	    
-	}
+#	
+#	if ($search ~~ @blacklist){
+#	    if (!$session->param('check_browser_allowed')){
+#            if($session->param('type') eq "opac"){
+#                redirectTo(C4::AR::Utilidades::getUrlPrefix().'/checkBrowser.pl?token='.$session->param('token'));
+#            }else{
+#                redirectTo(C4::AR::Utilidades::getUrlPrefix().'/checkBrowser.pl?token='.$session->param('token'));
+#            }    
+#	    }
+#	    
+#	}
 }
 
 =item sub _generarNroRandom
@@ -529,7 +529,7 @@ sub get_template_and_user {
                                                                          $in->{'authnotrequired'}, 
                                                                          $in->{'flagsrequired'}, 
                                                                          $in->{'type'}, 
-                                                                         $in->{'changepassword'},
+                                                                         $in->{'change_password'},
                                                                          $in->{'template_params'}
                                                              );
     #C4::AR::Debug::debug("la SESSION en el get template and user ".$session);    
@@ -762,6 +762,12 @@ sub checkauth {
                       $flags=$socio->tienePermisos($flagsrequired);
                       loginSuccess($socio->getNro_socio);
 					  _init_i18n({ type => $type });
+					  
+					  #Se verifica si el usuario tiene que cambiar la password
+                      if ( ($userid) && ( new_password_is_needed($userid, $socio) ) && !$change_password ) {
+                          _change_Password_Controller($query, $userid, $type, $token);
+                      }
+					  
                       if ($flags) {
                           $loggedin = 1;
                       } else {
@@ -804,10 +810,8 @@ sub checkauth {
                   #por aca se permite llegar a paginas que no necesitan autenticarse
                   my $insecure = C4::AR::Preferencias::getValorPreferencia('insecure');
                   if ($loggedin || $authnotrequired || (defined($insecure) && $insecure)) {
-                      #Se verifica si el usuario tiene que cambiar la password
-                      if ( ($userid) && ( new_password_is_needed($userid, $socio) ) && !$change_password ) {
-                          _change_Password_Controller($query, $userid, $type, $token);
-                      }
+                      
+                      # que se hace aca ?
       
                   return ($userid, $session, $flags, $socio);
                   }
@@ -1284,6 +1288,7 @@ sub desencriptar{
 sub _change_Password_Controller {
 	my ($query, $userid, $type, $token) = @_;
     if ($type eq 'opac') {
+        C4::AR::Debug::debug("redirigiendo al OPAC ------------------------ ");
             redirectTo(C4::AR::Utilidades::getUrlPrefix().'/change_password.pl?token='.$token);
     } else {
             redirectTo(C4::AR::Utilidades::getUrlPrefix().'/usuarios/change_password.pl?token='.$token);
