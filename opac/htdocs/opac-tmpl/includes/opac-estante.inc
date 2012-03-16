@@ -1,6 +1,5 @@
 [% IF estante %]
     <div id='listaEstantes'>
-       <!-- <h2>-->
       <ul class="breadcrumb">
             <li>
 
@@ -33,29 +32,40 @@
       [% IF cant_subestantes > 0 %]
             <div id='subestantes'>
          
-              <fieldset>
-                  <section class="center-section-form"> 
-                    <legend class="titulo_legend"><span class="titulos">[% 'Estantes' | i18n %]</span></legend>
+              <fieldset><br>
+       
+               <!--     <legend class="titulo_legend"><span class="titulos">[% 'Estantes' | i18n %]</span></legend>-->
                     <!-- ESTE LOOP MUESTRA LOS ESTANTES -->
-                 
-                    <dl>
-                    [% FOREACH subestante IN SUBESTANTES %]
+                      [% PERL %]
+                            print C4::AR::Filtros::tableHeader(   
+                                              id              => "tablaResult",
+                                              class           => "",
+                                              selectAll_id    => "",
+                                              columns         => ['[% "Estantes"|i18n %]']                                  
+                            ) ;
+                       [% END %]
                        
-                          <dd> 
-                            [% PERL %]
-                                print C4::AR::Filtros::link_to( text    =>  "[% subestante.getEstante %]",
-                                                                url     =>  '[% url_prefix %]/opac-estante.pl',
-                                                                params =>   ["id_estante=[% subestante.getId %]"],
-                                                                title =>    "[% 'Mostrar Detalle del Estante' | i18n %]",
-                                                                  class => "link_to_detail"
-                                        ) ;
-                            [% END %]
-                          </dd>
-                    
-                    [% END %]
-                    </dl>
-                 
-                  </section>
+                        <tbody>
+                              
+                                  [% FOREACH subestante IN SUBESTANTES %]
+                                
+                                    <tr>
+                                        <td>
+                                      [% PERL %]
+                                          print C4::AR::Filtros::link_to( text    =>  "[% subestante.getEstante %]",
+                                                                          url     =>  '[% url_prefix %]/opac-estante.pl',
+                                                                          params =>   ["id_estante=[% subestante.getId %]"],
+                                                                          title =>    "[% 'Mostrar Detalle del Estante' | i18n %]",
+                                                                          class => "link_to_detail"
+                                                  ) ;
+                                      [% END %]
+                                        </td>
+                                  </tr>
+                                   [% END %]
+                              </tr>
+                         </tbody>
+                        </table>
+  
             </div>
       [% END %]
       [% ELSE %]
@@ -77,9 +87,9 @@
           ); 
         </script>
 
-
+        
         <div id='contenido'>
-
+         <!--   <fieldset> <legend>-->
                [% PERL %]
                       print C4::AR::Filtros::tableHeader(   
                                         id              => "tablaResult",
@@ -129,6 +139,7 @@
                       [% END %]
                  </tbody>
              </table>
+            </fielset>
         </div>
         [% END %]
       [% END %]

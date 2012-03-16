@@ -2,7 +2,6 @@
  * LIBRERIA Estantes Virtuales v 1.0
  *
  */
-function zebra(classObj){$("."+classObj+" tr:gt(0):odd").addClass("impar");$("."+classObj+" tr:gt(0):even").addClass("par");}
 
 function changePage(ini){
         objAH.changePage(ini);
@@ -15,7 +14,7 @@ function ordenar(orden){
         function verEstanteDesdeBusqueda(idEstante){
                 objAH=new AjaxHelper(updateVerEstanteDesdeBusqueda);
                 objAH.debug= true;
-		objAH.estante= idEstante;
+                objAH.estante= idEstante;
                 objAH.url= '../estantes/estanteDB.pl';
                 objAH.tipo= 'VER_ESTANTE_BY_ID';
                 objAH.sendToServer();
@@ -93,10 +92,12 @@ function ordenar(orden){
         function updateVerSubEstantes(responseText){
             if(objAH.padre == 0){
                 $('#subestante').html(responseText);
+                scrollTo('subestante');
            //     $('.datos_tabla_div_estantes').hide();
             }
             else{
                 $('#subestante-'+ objAH.padre).html(responseText);
+                scrollTo('subestante-'+ objAH.padre);
                 zebra('datos_tabla');
              //   $('.datos_tabla_div_subestante_'+objAH.padre).hide();
             }
@@ -312,15 +313,17 @@ function ordenar(orden){
             //se setea la funcion para cambiar de pagina
             objAH.debug         = true;
             objAH.funcion       = 'changePage';
-            objAH.estantes_grupo	= id2;
+            objAH.estantes_grupo = id2;
             objAH.tipoAccion    = "BUSQUEDA_ESTANTE_DE_GRUPO";
             objAH.sendToServer();
       }
       
       function updateInfoEstantesVirtualesDeGrupo(responseText){
             $('#estantes_'+objAH.estantes_grupo).html(responseText);
-            $('#estantes_'+objAH.estantes_grupo).slideDown("fast");
-            zebra('datos_tabla');
-            $('#grupo_estantes_'+objAH.estantes_grupo).show();
+             $('#estantes_'+objAH.estantes_grupo).slideDown("fast");
+//             zebra('datos_tabla');
+//             $('#grupo_estantes_'+objAH.estantes_grupo).show();
             scrollTo('grupo_estantes_'+objAH.estantes_grupo);
       }
+      
+     

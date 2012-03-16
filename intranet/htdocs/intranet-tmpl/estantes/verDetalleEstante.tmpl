@@ -53,7 +53,7 @@
 
 <div id="estante">
 <fieldset class="resultados_busqueda">
-<legend class="titulo_legend trigger click">[% "Estantes" | i18n %]</legend>
+<legend>[% "Detalle de Estantes" | i18n %]</legend>
         <div class="datos_tabla_div_estantes">
             <div class="botonera_estantes">
             <div id="boton_nuevo_estante_0">
@@ -77,16 +77,31 @@
         [% END %]
 
             </div>
+        
+            <div class="accordion" id="estantes">
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#estantes" href="#estantes_contenido">
+                    [% "Estantes" | i18n %] 
+                  </a>
+                </div>
+                <div id="estantes_contenido" class="accordion-body collapse in">
+                  <div class="accordion-inner">
+                        <ul class="ul_tabla_div_estante_0 unstyled" >
+                              [% FOREACH estante IN ESTANTES %]
+                              <li>
+                              <input type=checkbox name="[% estante.getEstante %]" value="[% estante.getId %]">
+                              <a class="click" onClick="verSubEstantes([% estante.getId %],0)">[% estante.getEstante %]</a>
+                              </li>
+                              [% END %]
+                        </ul>
 
-           <ul class="ul_tabla_div_estante_0" >
-            [% FOREACH estante IN ESTANTES %]
-             <li>
-            <input type=checkbox name="[% estante.getEstante %]" value="[% estante.getId %]">
-             <a class="click" onClick="verSubEstantes([% estante.getId %],0)">[% estante.getEstante %]</a>
-            </li>
-            [% END %]
-                </ul>
-
+                  </div>
+                </div>
+              </div>
+            </div>
+       
+           
         </div>
 </fieldset>
 </div>
@@ -94,7 +109,7 @@
 </div>
 
 <script>
- makeToggle('datos_tabla_div_estantes','trigger',null,false);
+//  makeToggle('datos_tabla_div_estantes','trigger',null,false);
 
  [% FOREACH es IN LISTA_ESTANTES %]
      verSubEstantes([% es.getId %],[% es.getPadre %]);
