@@ -1,30 +1,32 @@
 <script type="text/javascript">
-    $(function(){
-        $("#rating[% id2 %]").children().not(":radio").hide();
-        $("#rating[% id2 %]").stars({
-            callback: function(ui, type, value)
-            {
-                $.post("[% url_prefix %]/rating.pl", {rate: value, id2: [% id2 %]}, function(data)
-                {
-                    $("#ajax_response[% id2 %]").html(data);
-                    $("#ajax_response[% id2 %]").show();
-                });
-            },
-            cancelShow: false,
-            split: 2,
-            [% IF !socio_data.usr_nro_socio %]
-               disabled: true,
-            [% END %]
-        });
-        $("#rating[% id2 %]").stars("select",[% rating %]);
-    });
+
+	$('.rateit').bind('rated reset', function (e) {
+	    var ri = $(this);
+		
+	    ri.rateit('readonly', true);
+		var value = ri.rateit('value');
+		var itemid = ri.data('itemid');
+
+	    $.ajax({
+	        url: '[% url_prefix %]/rating.pl',
+	        data: {rate: value, id2: itemid}, 
+	        type: 'POST',
+	        success: function (data) {
+                $("#ajax_response[% id2 %]").html(data);
+                $("#ajax_response[% id2 %]").show();
+	
+	        },
+	        error: function (jxhr, msg, err) {
+	            $('#response').append('<li style="color:red">' + msg + '</li>');
+	        }
+	    });
+	});
+
 </script>
 
-<div class="rating well">
+<div id="rating_form_[% id2 %]" class="well">
     <h4>[% "Valoraci&oacute;n" | i18n %]</h4>
-
-
-	<div class="rateit bigstars" data-rateit-starwidth="32" data-rateit-starheight="32"></div>
+	<div class="rateit bigstars" data-rateit-value="[% rating %]" data-rateit-starwidth="32" data-rateit-starheight="32" data-itemid="[% id2 %]"></div>
 
     <br style="clear:both" />
     <span class="label label-success" id="ajax_response[% id2 %]" style="display:none;"></span>
