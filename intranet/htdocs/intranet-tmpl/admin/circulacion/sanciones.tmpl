@@ -132,7 +132,7 @@ function updateAgregarReglaTipoSancion(responseText){
  *  eliminarReglaTipoSancion
  */
 function eliminarReglaTipoSancion(tipo_sancion, regla_sancion){
-    jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,'Confirme', function(confirmStatus){ 
+    bootbox.confirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,function(confirmStatus){ 
         if (confirmStatus) {
             objAH                   = new AjaxHelper(updateEliminarReglaTipoSancion);
             objAH.debug             = true;

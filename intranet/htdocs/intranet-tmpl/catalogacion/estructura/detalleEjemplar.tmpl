@@ -8,6 +8,7 @@
 var AUTO_GENERAR_COMPROBANTE = '[% auto_generar_comprobante_prestamo %]';
     //2 objetos AJAX para que funcionen los paginadores a la vez en el mismo tmpl
     var objAH,objAHCirculacion;
+    var ID_N2 = 0;
     function changePage(ini){
         objAH.changePage(ini);
     }
@@ -112,6 +113,15 @@ var AUTO_GENERAR_COMPROBANTE = '[% auto_generar_comprobante_prestamo %]';
 		                                        );
 		        [% END %]
 		       </dd>
+                        [% PERL %]
+                             print C4::AR::Filtros::action_set_button(
+                                     title           => '[% " Prestar" | i18n %]',
+                                     button          => 'btn btn-success',
+                                     action          => 'prestarUsuarioConReserva("[% socio_reserva.getNro_socio %]", [% nivel3.id %]);',
+                                     icon            => "icon-repeat icon-white",
+                                 );
+                         [% END %]
+
 		   [% ELSE %]
                 [% IF nivel3.estaPrestado %]
                        [% PERL %]

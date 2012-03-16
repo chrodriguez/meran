@@ -112,9 +112,6 @@ function MultiSelector( list_target, max ){this.list_target = list_target;this.c
     <form id="form_novedad" action="[% url_prefix %]/admin/editar_novedad.pl" method="POST" class="form-horizontal" enctype="multipart/form-data">
 <fieldset>
     <legend>[% "Editar novedad de OPAC" | i18n %]:</legend>
-        <input type="hidden" id="action" name="action" value="editar">
-        <input type="hidden" id="token" name="token" value="[% token %]">
-        <input type="hidden" id="novedad_id" name="novedad_id" value="[% novedad.id %]">
 [% ELSE %]
     <form id="form_novedad" action="[% url_prefix %]/admin/agregar_novedad.pl" method="POST" class="form-horizontal" enctype="multipart/form-data">
 <fieldset>
@@ -169,7 +166,10 @@ function MultiSelector( list_target, max ){this.list_target = list_target;this.c
                             [% END %]
                         </div>
                     </div>
-                
+                    <input type="hidden" id="action" name="action" value="editar">
+                    <input type="hidden" id="token" name="token" value="[% token %]">
+                    <input type="hidden" id="novedad_id" name="novedad_id" value="[% novedad.id %]">
+ 
                     [% IF cant_novedades %]
                 
                     <div class="control-group">
