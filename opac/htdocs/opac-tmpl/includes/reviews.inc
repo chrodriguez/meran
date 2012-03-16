@@ -52,8 +52,8 @@
                       [% ELSE %]
                           <strong>[% 'Escrito por' | i18n %]: </strong><span class="user_cite">[% 'usted' | i18n %]</span><br>
                       [% END %]
-                      <strong>[% 'Fecha' | i18n %]: </strong>[% review.date %]<br>
-                      <strong>[% 'Mensaje' | i18n %]: </strong>[% review.getReview %]
+                      <strong>[% 'Fecha' | i18n %]: </strong>[% review.getDate %]<br>
+                      <strong>[% 'Mensaje' | i18n %]: </strong>[% HTML.escape(review.getReview) %]
                   
                   </div>    <br>
             
