@@ -1973,7 +1973,7 @@ function esBrowser(browser){browser=browser.toLowerCase();ok=false;jQuery.each(j
 ok=true;});return(ok);}
 function makeToggle(container_class,trigger,afterToggleFunction,hide){if(hide)
 $("."+container_class).hide();$("legend."+trigger).toggle(function(){if(afterToggleFunction!=null)
-afterToggleFunction();$(this).addClass("label");},function(){$(this).removeClass("label");});$("legend."+trigger).click(function(){$(this).next("."+container_class).slideToggle("fast");});}
+afterToggleFunction();$(this).addClass("active");},function(){$(this).removeClass("active");});$("legend."+trigger).click(function(){$(this).next("."+container_class).slideToggle("fast");});}
 function makeDataTable(id){try{$(id).dataTable({"bFilter":true,"bPaginate":false,"bDestroy":true,"oLanguage":{"sLengthMenu":S_LENGTH_MENU,"sZeroRecords":S_ZERO_RECORDS,"sInfo":S_INFO,"sInfoEmpty":S_INFO_EMPTY,"sInfoFiltered":S_INFO_FILTERED,"sSearch":S_SEARCH,}});}catch(e){}}
 function changePage(ini){objAH.changePage(ini);}
 function registrarTooltips(){$('input[type=text]').tooltip({track:true,});$('a').tooltip({showURL:false,track:true,});$('li').tooltip({showURL:false,track:true,});$('tr td').tooltip({showURL:false,track:true,});$('select option').tooltip({track:true,delay:0,showURL:false,opacity:1,fixPNG:true,showBody:" - ",extraClass:"pretty fancy",top:-15,left:5});}

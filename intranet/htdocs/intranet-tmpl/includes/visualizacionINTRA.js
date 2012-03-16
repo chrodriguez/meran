@@ -27,6 +27,7 @@ function eliminarVista(vista_id){
 
 function agregarVisualizacion(){
 
+    $('#add_vista_intra').modal('hide');
     objAH               = new AjaxHelper(updateAgregarVisualizacion);
     objAH.debug         = true;
     objAH.showOverlay   = true;
@@ -50,7 +51,7 @@ function agregarVisualizacion(){
         objAH.post          = post;
         objAH.sendToServer();
     }else{
-        jAlert(SELECCIONE_VISTA_INTRA,CATALOGO_ALERT_TITLE);
+        jAlert(SELECCIONE_VISTA_INTRA);
     }
     
 }

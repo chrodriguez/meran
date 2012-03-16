@@ -121,24 +121,19 @@ var loaderPath= "";
 	
 	
 	                      [% IF mensaje_error_foto %] 
-	                        <li>
-	                                <font color="red">[% mensaje_error_foto %]</font>
-	                        </li>
+                                <div class="alert alert-error">[% mensaje_error_foto %]</div>
 	                      [% END %]
 	
-	                        <ul>
-                             <li>
-	                            <label for="file-uploader" id="label-file-uploader">
-	                                <h6>[% 'Seleccione una im&aacute;gen' | i18n %]</h6>
-	                            </label>
-	                            <div id="file-uploader">
-	                                <noscript>          
-	                                    <p>[% 'Please enable JavaScript to use file uploader.' | i18n %]</p>
-	                                    <!-- or put a simple form for upload here -->
-	                                </noscript>                          
-	                            </div>
-	                        </li>
-	                       </ul>
+	                        <dl>
+	                             <dt>
+		                                <h6>[% 'Seleccione una im&aacute;gen' | i18n %]</h6>
+		                            <div id="file-uploader">
+		                                <noscript>          
+		                                    <p>[% 'Please enable JavaScript to use file uploader.' | i18n %]</p>
+		                                    <!-- or put a simple form for upload here -->
+		                                </noscript>                          
+		                         </dt>
+	                       </dl>
 	
 	</div>
 
@@ -153,7 +148,7 @@ var loaderPath= "";
 
      <div class="span12" >
                 <dl>
-                      <li id="foto"> 
+                      <dt id="foto"> 
                         [% IF foto_name %]  
                             <a class="fancylink" rel="group" href="/uploads/pictures/[% foto_name %]">
                                 <img border="0" src="/uploads/pictures/[% foto_name %]"
@@ -169,7 +164,7 @@ var loaderPath= "";
                                   title="[% 'Usuario sin foto' | i18n %]"
                             >
                         [% END %]
-                      </li>
+                      </dt>
                       <dt class="inline left rightMargin">[% "Apellido:" | i18n %]</dt>
                       <dd>[% socio.persona.getApellido %] </dd>
 

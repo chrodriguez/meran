@@ -184,14 +184,6 @@ function tieneApoderado(){
 }
 
 function updateTieneAutorizado(responseText){
-// 	if(responseText != '0'){
-// 		$('#divAutorizado').show();
-// 		$('#divAgregarAutorizado').hide();
-// 	}else{
-// 		$('#divAgregarAutorizado').show();
-// 		$('#divAutorizado').hide();
-// 	}
-
     $('#datosAutorizado').html(responseText);
 	$('#aceptar').focus();
 	refreshTipoPrestamo();
@@ -339,7 +331,6 @@ $(document).ready(function() {
 
 	onChangeOperacion();
 	
-	$('#operacion').focus();
 	$('#acciones').hide();
     $('#cambo_tipo_prestamo').hide();
 	$('#divAutorizado').hide();
@@ -359,7 +350,7 @@ $(document).ready(function() {
 		            <div class="control-group">
 		                  <label for="operacion" class="control-label">[% 'Operaci&oacute;n' | i18n %]</label>
 		                  <div class="controls">
-		                  <select id='operacion' tabindex='1' onChange='onChangeOperacion()'>	
+		                  <select id='operacion' tabindex='-1' onChange='onChangeOperacion()'>	
 		                      <option value="prestar">[% 'Pr&eacute;stamo' | i18n %]</option>
 		                      <option value="devolver">[% 'Devoluci&oacute;n' | i18n %]</option>
 		                      <option value="renovar">[% 'Renovaci&oacute;n' | i18n %]</option> 
@@ -375,7 +366,7 @@ $(document).ready(function() {
 			                 [% END %]
 			                </label>
 		                    <div class="controls">
-		                        <input type="text" id="barcode" name="barcode" value="" tabindex='2' style="display: none;">
+		                        <input type="text" id="barcode" name="barcode" value="" tabindex='1' style="display: none;" autofocus>
 		                        <input type='hidden' id='barcode_hidden' value='' tabindex='-1'>
 		                        <input type="text" id="barcodePrestado" value='' tabindex='2' style="display: none;">
 		                        <!-- para guardar el nro_socio del usuario al que se le realizo el prestamo -->

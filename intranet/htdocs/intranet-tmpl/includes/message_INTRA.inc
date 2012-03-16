@@ -11,7 +11,7 @@
     /*================================================Circulacion=================================================*/
     FALLO_NOTA = "[% 'La nota no se ha podido guardar' | i18n %]";
     NOTA_GUARDADA = "[% 'La nota se actualizo correctamente' | i18n %]";
-
+    CIRCULACION = "[% 'Circulaci&oacute;n' | i18n %]";
     /*================================================Catalogacion===================================================*/
     CAMPO_NO_PUEDE_ESTAR_EN_BLANCO= "[% 'El campo no puede estar en blanco' | i18n %]";
     ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO= "[% 'Este campo es requerido, no lo deje en blanco' | i18n %]";

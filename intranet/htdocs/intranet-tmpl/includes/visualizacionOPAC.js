@@ -205,7 +205,6 @@ function eleccionDeEjemplar(){
 
 function updateEleccionDeNivel(responseText){
     $("#result").html(responseText);
-    zebra("tabla_datos");       
 }
 
 
