@@ -11,11 +11,9 @@ use Encode;
 use URI::Escape;
 use C4::AR::PdfGenerator;
 
-my $input          = new CGI;
-my $string         = ($input->param('string')) || "";
-my $to_pdf         = $input->param('export') || 0;
-
-
+my $input                   = new CGI;
+my $string                  = ($input->param('string')) || "";
+my $to_pdf                  = $input->param('export') || 0;
 
 my ($template, $session, $t_params);
 
@@ -37,14 +35,14 @@ $obj->{'tipo_nivel3_name'}  = ($input->param('tipo_nivel3_name'));
 $obj->{'tipoBusqueda'}      = 'all';
 $obj->{'token'}             = CGI::escapeHTML($input->param('token'));
 
-
 C4::AR::Validator::validateParams('U389',$obj,['tipoAccion']);
 
 #se corta el parametro page en 6 numeros nada mas, sino rompe error 500
 my $page                    = ($input->param('page'));
 my $ini                     = $obj->{'ini'} = substr($page,0,5);
 
-my $start                   = [ Time::HiRes::gettimeofday() ]; #se toma el tiempo de inicio de la búsqueda
+#se toma el tiempo de inicio de la búsqueda
+my $start                   = [ Time::HiRes::gettimeofday() ]; 
 
 my $cantidad;
 my $suggested;
@@ -53,12 +51,11 @@ my $resultsarray;
 $obj->{'type'}              = 'OPAC';
 $obj->{'session'}           = $session;
 
-my ($ini,$pageNumber,$cantR) = C4::AR::Utilidades::InitPaginador($ini);
+my ($ini,$pageNumber,$cantR)= C4::AR::Utilidades::InitPaginador($ini);
 
 #actualizamos el ini del $obj para que pagine correctamente
 $obj->{'ini'}               = $ini;
 $obj->{'cantR'}             = $cantR;
-
 
 my $url;
 my $url_todos;
@@ -156,6 +153,10 @@ if ($to_pdf){
                     $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"tema",$obj->{'tema'});
                     $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"autor",$obj->{'autor'});
                     $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"only_available",0);
+                    $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"tipo",$obj->{'tipo'});
+                    
+                    #para que limite los resultados
+                    $obj->{'only_sphinx'} = 1;
                     
                     ($cantidad, $resultsarray)= C4::AR::Busquedas::busquedaAvanzada_newTemp($obj,$session);
                 }

@@ -978,18 +978,15 @@ sub busquedaAvanzada_newTemp{
     
     my $only_sphinx     = $params->{'only_sphinx'};
     my $only_available  = $params->{'only_available'};
-    C4::AR::Debug::debug("ONLY SPHINX ".$only_sphinx);
-
-    my $sphinx  = Sphinx::Search->new();
-
+    my $sphinx          = Sphinx::Search->new();
 
     if ($only_sphinx){
-           if ($params->{'report'}){ 
-                $sphinx->SetLimits($params->{'ini'}, 100000);
+        if ($params->{'report'}){ 
+            $sphinx->SetLimits($params->{'ini'}, 100000);
  
-           } else {
-                $sphinx->SetLimits($params->{'ini'}, C4::AR::Preferencias::getValorPreferencia('renglones_autocomplete'));  
-           }
+       } else {            
+            $sphinx->SetLimits($params->{'ini'}, C4::AR::Preferencias::getValorPreferencia('renglones'));  
+       }
 
     }
 
@@ -1243,13 +1240,13 @@ sub busquedaCombinada_newTemp{
     my $sphinx = Sphinx::Search->new();
 
     if ($only_sphinx){
-           if ($sphinx_options->{'report'}){ 
+        if ($sphinx_options->{'report'}){ 
         
-                $sphinx->SetLimits($obj_for_log->{'ini'}, 100000);
+            $sphinx->SetLimits($obj_for_log->{'ini'}, 100000);
  
-           } else {
-                    $sphinx->SetLimits($obj_for_log->{'ini'}, C4::AR::Preferencias::getValorPreferencia('renglones_autocomplete'));  
-           }
+       } else {
+            $sphinx->SetLimits($obj_for_log->{'ini'}, C4::AR::Preferencias::getValorPreferencia('renglones'));  
+       }
             
     }
 
