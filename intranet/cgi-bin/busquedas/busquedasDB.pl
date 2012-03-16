@@ -90,6 +90,7 @@ if (C4::AR::Utilidades::validateString($tipoAccion)){
 
 	my $funcion                     = $obj->{'funcion'};
 	my $ini                         = ($obj->{'ini'}||'');
+	$obj->{'only_sphinx'}           = 1;
 
 	my ($cantidad, $array_nivel1)   = C4::AR::Busquedas::busquedaAvanzada_newTemp($obj, $session);
 	    
