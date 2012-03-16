@@ -22,19 +22,10 @@
 
 <div class="rating well">
     <h4>[% "Valoraci&oacute;n" | i18n %]</h4>
-    <form id="rating[% id2 %]" class="ratings" action="[% url_prefix %]/rating.pl" method="post">
-        <input type="radio" name="rate" value="1" id="rate1" />
-        <input type="radio" name="rate" value="2" id="rate2" />
-        <input type="radio" name="rate" value="3" id="rate3" />
-        <input type="radio" name="rate" value="4" id="rate4" />
-        <input type="radio" name="rate" value="5" id="rate5" />
-        <input type="radio" name="rate" value="6" id="rate6" />
-        <input type="radio" name="rate" value="7" id="rate7" />
-        <input type="radio" name="rate" value="8" id="rate8" />
-        <input type="radio" name="rate" value="9" id="rate9" />
-        <input type="radio" name="rate" value="10" id="rate10" />
-        <input type="submit" value="Enviar" />
-    </form>
+
+
+	<div class="rateit bigstars" data-rateit-starwidth="32" data-rateit-starheight="32"></div>
+
     <br style="clear:both" />
     <span class="label label-success" id="ajax_response[% id2 %]" style="display:none;"></span>
 </div>

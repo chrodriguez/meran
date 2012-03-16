@@ -2,7 +2,6 @@
 @import url("/includes/bootstrap/css/bootstrap-responsive.css");
 @import url("/includes/css/nanoscroller.css");
 
-
 .alert-success blockquote{
     border-left:5px solid #DFF0D8 !important; 
 }

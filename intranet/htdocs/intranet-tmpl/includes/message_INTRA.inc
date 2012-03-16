@@ -91,6 +91,8 @@
     /*================================================Catalogo=======================================================*/
     INGRESE_EL_USUARIO= "[% 'Ingrese el Usuario' | i18n %]";
     ERROR_ITSELF= "[% 'Error' | i18n %]";
+    var CAMPO_NO_PUEDE_ESTAR_EN_BLANCO= "[% 'El campo no puede estar en blanco.' | i18n %]";
+    
     /*================================================Fin==Catalogo==================================================*/
     /*================================================Circulacion===================================================*/
     ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_RESERVA= "&iquest;[% 'Esta seguro que desea cancelar la reserva' | i18n %]?";

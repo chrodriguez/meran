@@ -29,8 +29,8 @@
        
   <link rel="stylesheet" href="[% temas %]/[% user_theme %]/includes/opac.css" />
   <link rel='stylesheet' media='screen and (max-width: 900px)' href="[% temas %]/[% user_theme %]/includes/opac-FF_fix.css" />  
-  <link rel="stylesheet" href="/includes/css/ui.stars.css" />
   <link media="screen" rel="stylesheet" href="/includes/css/fancybox.css" type="text/css">
+  <link media="screen" rel="stylesheet" href="/includes/css/rateit.css" type="text/css">
 
   <script type="text/javascript">
     var token               = '[% token %]';
@@ -62,6 +62,7 @@
   <script type="text/javascript" src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
   <script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox.js"></script>
   <script type="text/javascript" src="/includes/jquery/fancybox/jquery.mousewheel.js"></script>
+  <script type="text/javascript" src="/includes/jquery/jquery.rateit.min.js"></script>
 
 
   [% INCLUDE 'localized_messages.inc' %]
