@@ -15,6 +15,7 @@ if(C4::AR::Preferencias::getValorPreferencia("permite_cambio_password_desde_opac
                                         query           => $input,
                                         type            => "opac",
                                         authnotrequired => 0,
+                                        change_password => 1, #-> indicamos a checkauth que ya estamos cambiando la password
                                         flagsrequired   => {    ui              => 'ANY', 
                                                                 tipo_documento  => 'ANY', 
                                                                 accion          => 'CONSULTA', 
