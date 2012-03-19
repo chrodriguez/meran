@@ -44,17 +44,17 @@
 	    </legend>
 	    
 	    <dl class="">
-		    <dt class="inline left rightMargin" id="fotoUsuario">
-		        [% IF foto_name %]  
-		            <a class="fancylink" rel="group" href="/uploads/pictures-opac/[% foto_name %]">
-		                <img border="0" src="/uploads/pictures-opac/[% foto_name %]"
-		                      style="width: 60%; max-width: 120px;" 
-		                      alt="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
-		                      title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
-		                >
-		            </a>
-		        [% END %]
-		    </dt>
+		        [% IF socio.tieneFoto('opac') %]  
+				    <dt class="inline left rightMargin" id="fotoUsuario">
+				        <a class="fancylink" rel="group" href="/uploads/pictures-opac/[% socio.tieneFoto('opac') %]">
+				                <img border="0" src="/uploads/pictures-opac/[% socio.tieneFoto('opac') %]"
+				                      style="width: 60%; max-width: 120px;" 
+				                      alt="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+				                      title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
+				                >
+				            </a>
+				    </dt>
+	            [% END %]
 	        <dt class="inline left rightMargin">[% 'Nombre/s' |  i18n %] :</dt>
 	            <dd>[% socio_data.usr_nombre %]</dd>
 	        <dt class="inline left rightMargin">[% 'Apellido/s' |  i18n %] :</dt>
