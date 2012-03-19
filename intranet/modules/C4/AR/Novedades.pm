@@ -392,6 +392,17 @@ sub getPortadaOpac{
 	return $portada;
 }
 
+sub getCantPortadaOpac{
+    
+    use C4::Modelo::PortadaOpac::Manager;
+    
+    my @filtros;
+    
+    my $portada = C4::Modelo::PortadaOpac::Manager->get_portada_opac_count();
+    
+    return $portada;
+}
+
 sub addPortadaOpac{
 	my ($params,$postdata) = @_;
 	
