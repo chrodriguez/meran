@@ -840,7 +840,12 @@ sub checkauth {
 						
 						my $c = Captcha::reCAPTCHA->new;
 						$captchaResult = $c->check_answer($reCaptchaPrivateKey, $ENV{'REMOTE_ADDR'},$reCaptchaChallenge, $reCaptchaResponse);
-					} else {  #else del  if ($login_attempts > 2 )
+
+						C4::AR::Debug::debug("ERROR DE CAPTCHA: ".$captchaResult->{error});
+						
+						
+					} else {  
+						#else del  if ($login_attempts > 2 )
 						$sin_captcha = 1; 
 					}  
 					if (($sin_captcha || $captchaResult->{is_valid}) && $socio){
