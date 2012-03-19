@@ -589,9 +589,13 @@ sub libreDeuda {
 
     my $branchname = $socio->ui->getNombrePDF;
 
-    my $branchcode= 'default';
 
-    my $biblio=C4::AR::Busquedas::getBranch($branchcode);
+    
+    my $branchcode= $socio->getId_ui ||'default';
+
+    my $biblio=  C4::AR::Referencias::obtenerDefaultUI();;
+
+ 
 
 # ESCUDO
      my $escudo =
@@ -600,7 +604,7 @@ sub libreDeuda {
       . '/imagenes/escudo-DEFAULT'
       . '.jpg';
 
-
+  
 # ESCUDO UI
     my $escudoUI =
         C4::Context->config('intrahtdocs') . '/temas/'
@@ -609,7 +613,7 @@ sub libreDeuda {
       . $branchcode
       . '.jpg';
    
-    C4::AR::Debug::debug("\n\n\n EL ESCUDO ESTA, Y ES ".$escudo);
+    C4::AR::Debug::debug("\n\n\n EL ESCUDO ESTA, Y ES ".$escudoUI);
 
 
 #   TITULO
@@ -634,8 +638,6 @@ sub libreDeuda {
      $cuerpo_mensaje[0]=  $cuerpo_mensaje[0];
 
 
-
-   
 
 
 # 	my ($pdf, $pagewidth, $pageheight ) = &inicializarPDF();
