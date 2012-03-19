@@ -224,7 +224,7 @@ Se obtienen los registros de la importacion
 =cut
 sub getRegistrosFromImportacion {
 
-    my ($id_importacion,$filter,$ini,$cantR,$db) = @_;
+    my ($id_importacion,$filter,$ini,$cantR,$search,$db) = @_;
 
     require C4::Modelo::IoImportacionIsoRegistro;
     require C4::Modelo::IoImportacionIsoRegistro::Manager;
@@ -232,7 +232,12 @@ sub getRegistrosFromImportacion {
 
     my @filtros;
     push (@filtros, ( id_importacion_iso => { eq => $id_importacion}));
-
+    
+    if ($search){
+        push (@filtros, ( marc_record => { like => '%'.$search.'%'}));
+    	
+    }
+    
     if((!$filter)||($filter eq 'MAIN')){
         #Solo registros padre por defecto
         push (@filtros, ( relacion => { eq => '' }));

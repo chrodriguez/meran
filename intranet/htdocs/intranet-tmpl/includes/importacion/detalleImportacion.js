@@ -15,12 +15,19 @@ function ordenar(orden){
 function detalleImportacion(id_importacion){
 
     objAH=new AjaxHelper(updateDetalleImportacion);
+    
+    search					= $('#search_importacion').val();
+    search					= $.trim(search);
+    
     objAH.url               = URL_PREFIX+'/herramientas/importacion/importarDB.pl';
     objAH.debug             = true;
     objAH.showOverlay       = true;
     objAH.funcion           = 'changePage';
     objAH.tipoAccion        = "DETALLE";
-    objAH.id_importacion  = id_importacion;
+    objAH.id_importacion  	= id_importacion;
+    if (search)
+		objAH.search		= search;
+    
     objAH.record_filter  =  $('#record_filter').val();
     objAH.sendToServer();
 
