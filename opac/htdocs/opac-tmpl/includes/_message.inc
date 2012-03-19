@@ -1,3 +1,3 @@
 [% USE HTML %]
 
-<h1>[% message %]</h1>
+<div class="alert">[% message %]</div>

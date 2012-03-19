@@ -4,7 +4,7 @@ use strict;
 require Exporter;
 use C4::Context;
 use PDF::Report;
-
+use Encode;
 use C4::AR::Usuarios;
 use HTML::HTMLDoc;
 
@@ -583,71 +583,119 @@ sub libreDeuda {
 
 	my $nombre = $socio->persona->getApeYNom;
 	my $dni    = $socio->persona->getNro_documento;
+   
 
-	my $categ = $socio->categoria->getDescription;
+    my $categ = $socio->categoria->getDescription;
 
-	my $branchname = $socio->ui->getNombrePDF;
+    my $branchname = $socio->ui->getNombrePDF;
 
-    my $branchcode= 'default';
 
-	my ( $pdf, $pagewidth, $pageheight ) = &inicializarPDF();
-
-	my $x = 50;
-	my $y =
-	  180;  #pos 'y' a partir de donde se van a escribir la parte del contenido.
-	my %titulo;
-	$titulo{'titulo'} = "CERTIFICADO DE LIBRE DEUDA";
-	$titulo{'posx'}   = 170;
-	my @parrafo;
-	$parrafo[0] =
-	  Encode::decode_utf8( "       Certificamos que " 
-		  . Encode::decode_utf8($nombre)
-		  . ", de la "
-		  . $branchname
-		  . ", " );
-	$parrafo[1] =
-	  Encode::decode_utf8( " con numero de documento " 
-		  . $dni
-		  . ", no adeuda material bibliográfico en esta Biblioteca." );
-	$parrafo[2] = Encode::decode_utf8(
-"       Se extiende el presente certificado para ser presentado ante quién corresponda, con una"
-	);
-	$parrafo[3] = Encode::decode_utf8(
-		" validez de 10 días corridos a partir de su fecha de emisión.");
     
+    my $branchcode= $socio->getId_ui ||'default';
+
+    my $biblio=  C4::AR::Referencias::obtenerDefaultUI();;
+
+ 
+
+# ESCUDO
      my $escudo =
         C4::Context->config('intrahtdocs') . '/temas/'
       . 'default'
       . '/imagenes/escudo-DEFAULT'
       . '.jpg';
 
-
+  
+# ESCUDO UI
     my $escudoUI =
         C4::Context->config('intrahtdocs') . '/temas/'
       . 'default'
       . '/imagenes/escudo-'
       . $branchcode
       . '.jpg';
+   
+    C4::AR::Debug::debug("\n\n\n EL ESCUDO ESTA, Y ES ".$escudoUI);
+
+
+#   TITULO
+    my $titulo= "CERTIFICADO DE LIBRE DEUDA";
+
+
+#   FECHA EMISION
+    my @datearr = localtime(time);
+    my $anio = 1900 + $datearr[5];
+    my $mes  = &C4::Date::mesString( $datearr[4] + 1 );
+    my $dia  = $datearr[3];
+
+    my $fecha= "La Plata ".$dia." de ".$mes." de ".$anio;
+
+# CUERPO
+     my @cuerpo_mensaje;
+     $cuerpo_mensaje[0]  = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('libreDeudaMensaje'));
+     $cuerpo_mensaje[0]  =~ s/SOCIO/$socio->{'persona'}->{'nombre'}\ $socio->{'persona'}->{'apellido'}/;
+     $cuerpo_mensaje[0]  =~ s/UI_NAME/$branchname/;
+     $cuerpo_mensaje[0]  =~ s/DOC/$socio->{'persona'}->{'nro_documento'}/;
+     
+     $cuerpo_mensaje[0]=  $cuerpo_mensaje[0];
+
+
+
+
+# 	my ($pdf, $pagewidth, $pageheight ) = &inicializarPDF();
+
+# 	my $x = 50;
+# 	my $y = 180;  #pos 'y' a partir de donde se van a escribir la parte del contenido.
+# 	my %titulo;
+	
+#     $titulo{'titulo'} = "CERTIFICADO DE LIBRE DEUDA";
+# 	$titulo{'posx'}   = 170;
+
+
+# 	my @parrafo;
+# 	$parrafo[0] =
+# 	  Encode::decode_utf8( "       Certificamos que " 
+# 		  . Encode::decode_utf8($nombre)
+# 		  . ", de la "
+# 		  . $branchname
+# 		  . ", " );
+# 	$parrafo[1] =
+# 	  Encode::decode_utf8( " con numero de documento " 
+# 		  . $dni
+# 		  . ", no adeuda material bibliográfico en esta Biblioteca." );
+# 	$parrafo[2] = Encode::decode_utf8(
+# "       Se extiende el presente certificado para ser presentado ante quién corresponda, con una"
+# 	);
+# 	$parrafo[3] = Encode::decode_utf8(
+# 		" validez de 10 días corridos a partir de su fecha de emisión.");
+   
+
+
+
+
+#     if (-e $escudo){
+#         $pdf->addImgScaled($escudo, $x ,  ($y) + 570 , 5/100);
+#         ($pdf) = &imprimirEncabezado( $pdf, $branchname, $x + 50, $pagewidth, $pageheight + 120, \%titulo, );
+#     }  else{
+#         ($pdf) = &imprimirEncabezado( $pdf, $branchname, $x, $pagewidth, $pageheight + 120, \%titulo, );
+#     
+#     }
+
+#     if (-e $escudoUI){
+#         $pdf->addImgScaled($escudoUI, $x + 400 ,  ($y) + 570 , 3/100);
+#     }
+ 
+#     ($pdf, $y) = &imprimirContenido($pdf, $x, $y, $pageheight, 15, \@cuerpo_mensaje);
+#    
+# 	($pdf, $y) = &imprimirFirma($pdf, $y + 50, $pageheight);
+#     $pdf=   &imprimirPiePag($pdf, $y, $pageheight, $biblio);
+# 
+#     C4::AR::Debug::debug($pdf);
 
     
-        C4::AR::Debug::debug("\n\n\n EL ESCUDO ESTA, Y ES ".$escudo);
-    if (-e $escudo){
-        $pdf->addImgScaled($escudo, $x ,  ($y) + 570 , 5/100);
-        ($pdf) = &imprimirEncabezado( $pdf, $branchname, $x + 50, $pagewidth, $pageheight + 120, \%titulo, );
-    }  else{
-        ($pdf) = &imprimirEncabezado( $pdf, $branchname, $x, $pagewidth, $pageheight + 120, \%titulo, );
-    
-    }
 
-    if (-e $escudoUI){
-        $pdf->addImgScaled($escudoUI, $x + 400 ,  ($y) + 570 , 3/100);
-    }
 
-        
-    ( $pdf, $y ) =
-	  &imprimirContenido( $pdf, $x, $y, $pageheight, 15, \@parrafo );
-	( $pdf, $y ) = &imprimirFirma( $pdf, $y + 50, $pageheight );
-	&imprimirFinal( $pdf, $tmpFileName );
+    return (\@cuerpo_mensaje, $escudo, $escudoUI, $fecha, $titulo, $biblio);
+# 	&imprimirFinal($pdf, $tmpFileName);
+
 }
 
 
@@ -660,8 +708,8 @@ sub inicializarPDF {
 	my $pdf = newPdf();
 	$pdf->newpage(1);
 	$pdf->openpage(1);
-	my ( $pagewidth, $pageheight ) = $pdf->getPageDimensions();
-	return ( $pdf, $pagewidth, $pageheight );
+	my ($pagewidth, $pageheight) = $pdf->getPageDimensions();
+	return ($pdf, $pagewidth, $pageheight );
 }
 
 =item
@@ -726,6 +774,7 @@ Imprime el contenido de del documento.
 sub imprimirContenido {
 	my ( $pdf, $x, $y, $pageheight, $tamRenglon, $parrafo ) = @_;
 	for ( my $i = 0 ; $i < scalar(@$parrafo) ; $i++ ) {
+        C4::AR::Debug::debug($parrafo->[$i]);
 		$pdf->addRawText( ($parrafo->[$i]), $x, $pageheight - $y );
 		$y = $y + $tamRenglon;
 	}

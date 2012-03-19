@@ -583,12 +583,21 @@ my %mensajesINTRA = (
 );
 
 sub getMensaje {
-    my($codigo,$tipo,$param)=@_;
-    my $msj="";
-
-    $tipo = C4::AR::Utilidades::capitalizarString($tipo);
-
-    ((lc($tipo) eq "opac")) ? ($msj=$mensajesOPAC{$codigo}):($msj=$mensajesINTRA{$codigo});
+    my($codigo,$tipo,$param)    = @_;
+    my $msj                     = "";
+    $tipo                       = lc($tipo);
+    
+    if($tipo eq 'opac'){
+    
+        $msj = $mensajesOPAC{$codigo};
+        C4::AR::Debug::debug("mensaje de OPAC");
+        
+    }else{
+    
+        C4::AR::Debug::debug("mensaje de INTRA");
+        $msj = $mensajesINTRA{$codigo};
+     
+    }
 
     my $p;
 

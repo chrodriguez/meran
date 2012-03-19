@@ -2121,7 +2121,7 @@ sub recoverPassword{
                 eval{
                     _logClientIpAddress('recover_password',$socio);
 		            $message                    = C4::AR::Mensajes::getMensaje('U600','opac');
-	                ($isError)                      = _sendRecoveryPasswordMail_Unactive($socio);
+	                ($isError)                  = _sendRecoveryPasswordMail_Unactive($socio);
 	            };    
                 if (($@) || $isError){
                     $message = C4::AR::Mensajes::getMensaje('U606','opac');

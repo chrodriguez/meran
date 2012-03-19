@@ -34,40 +34,18 @@ if (!($msg_object->{'error'})){
     
     #si levanta un socio valido
     if($socio){
-        my $cuerpo_mensaje              = C4::AR::Preferencias::getValorPreferencia('libreDeudaMensaje');
-        my $branchcode                  = C4::AR::Preferencias::getValorPreferencia('defaultUI');
-        my $biblio                      = C4::AR::Busquedas::getBranch($branchcode);
-        
-        $cuerpo_mensaje                 =~ s/SOCIO/$socio->{'persona'}->{'nombre'}\ $socio->{'persona'}->{'apellido'}/;
-        $cuerpo_mensaje                 =~ s/UI_NAME/$biblio->{'nombre'}/;
-        $cuerpo_mensaje                 =~ s/DOC/$socio->{'persona'}->{'nro_documento'}/;
-        
-        my @datearr                     = localtime(time);
-	    my $anio                        = 1900 + $datearr[5];
-	    my $mes                         = &C4::Date::mesString( $datearr[4] + 1 );
-	    my $dia                         = $datearr[3];
 
-        $t_params->{'fecha'}            = "La Plata ".$dia." de ".$mes." de ".$anio;
-        $t_params->{'biblio'}           = $biblio;
-        C4::AR::Utilidades::printHASH($biblio);
-        use Encode;
-        $t_params->{'cuerpo_mensaje'}   = Encode::decode_utf8($cuerpo_mensaje);
+        my ($cuerpo_mensaje, $escudo, $escudoUI, $fecha, $titulo, $biblio) = C4::AR::PdfGenerator::libreDeuda($socio);
+        $t_params->{'cuerpo_mensaje'}  = @$cuerpo_mensaje[0];
         
-	     $t_params->{'escudo'}  =
-	        C4::Context->config('intrahtdocs') . '/temas/'
-	      . 'default'
-	      . '/imagenes/escudo-DEFAULT'
-	      . '.jpg';
-	
-
-        $t_params->{'titulo'}           = "CERTIFICADO DE LIBRE DEUDA";
-        $t_params->{'atencion'}         =  C4::AR::Preferencias::getValorPreferencia('open') . " a "
-            . C4::AR::Preferencias::getValorPreferencia('close') ;
-
+	    $t_params->{'escudo'}  = $escudo;
+	    $t_params->{'escudoUI'}  = $escudoUI;
+	    $t_params->{'fecha'}  = $fecha;
+        $t_params->{'titulo'} = $titulo; 
+        $t_params->{'biblio'} = $biblio;
                    
         $t_params->{'print_format'}     = C4::AR::Preferencias::getValorPreferencia('libre_deuda_fill_a4');
-        
-        C4::AR::Debug::debug("libreeeeeee".C4::AR::Preferencias::getValorPreferencia('libre_deuda_fill_a4'));
+
         my $out         = C4::AR::Auth::get_html_content($template, $t_params, $session);
         my $filename    = C4::AR::PdfGenerator::pdfFromHTML($out);
         print C4::AR::PdfGenerator::pdfHeader();
