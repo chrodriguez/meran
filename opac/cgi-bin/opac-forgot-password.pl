@@ -44,4 +44,7 @@ if (!C4::AR::Utilidades::validateString($user_id)){
 		  $t_params->{'partial_template'}= "_message.inc";
 	}
 }
+
+$t_params->{'re_captcha_public_key'} = C4::AR::Preferencias::getValorPreferencia('re_captcha_public_key');
+
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

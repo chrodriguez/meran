@@ -40,7 +40,7 @@
                 <div class="control-group">
                      <label class="control-label" for="username">[% 'Usuario' | i18n %]</label>
                      <div class="controls">
-                          <input name="userid" id="userid" value="[% username_input %]" tabindex="4" type="text" class="input-big">
+                          <input name="userid" id="userid" value="[% username_input %]" tabindex="4" type="text" class="input-big" autofocus>
 	                 </div>
                 </div>
                 <div class="control-group">
