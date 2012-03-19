@@ -1960,8 +1960,9 @@ function crearText(obj){
 }
 
 function crearBotones(obj){
-    if(obj.getRepetible() == '1')
+    if((obj.getRepetible() == '1')||(obj.getReferenciaTabla())){
         $(openDivButtonContainer("div_botones" + obj.getIdCompCliente())).insertAfter("#div" + obj.getIdCompCliente());
+    }
 
     if((obj.getEdicionGrupal() == "0")&&(MODIFICAR == 1)&&(EDICION_N3_GRUPAL == 1)){  
         disableComponent(obj.getIdCompCliente());  
@@ -2097,9 +2098,10 @@ function crearAuto(obj){
 
 function crearBotonAgregarReferenciaSubcampo(obj){
 
-    if ( (obj.getRepetible() == '1') && (obj.getReferenciaTabla()) ){
+//     if ( (obj.getRepetible() == '1') && (obj.getReferenciaTabla()) ){
+    if (obj.getReferenciaTabla()) {
         return '<li><a class="click" onclick=agregarTablaReferencias("'+ obj.getReferenciaTabla() +'")><i class="icon-plus"></i> Agregar referencia al subcampo '+ obj.getSubCampo() + ' para el campo ' + obj.getCampo() +'</a></li>';
-    }else{  
+    } else {  
         return '';
     }
 }

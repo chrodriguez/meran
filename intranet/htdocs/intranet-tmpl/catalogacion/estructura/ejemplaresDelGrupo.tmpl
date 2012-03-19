@@ -205,7 +205,7 @@
                                                     button          => 'btn btn-primary',
 
                                                     actions         => [
-                                                                        {title => "Editar", 
+                                                                        {title => "Modificar", 
                                                                          action=>"editarEjemplar([% id2 %],[% id3 %])",
                                                                          icon=>"icon-edit"
                                                                         },
@@ -227,6 +227,7 @@
 						</tbody>
                       </tbody>
                     </table>
+<!-- FIXME y esto para q esta!!! -->
 					    [%   IF loop.count > 1 %]
 					        
 					        <form id="edicion_grupal[% id2 %]" name="edicion_grupal" action="datosDocumento.pl" method="post">
@@ -234,7 +235,10 @@
 					        </form>
 					
 					    [% END %]
-					
+
+                            <form id="edicion_grupal[% id2 %]" name="edicion_grupal" action="datosDocumento.pl" method="post">
+                              
+                            </form>					
 					
 					[% END %]<!-- END IF loop.last -->
 					
