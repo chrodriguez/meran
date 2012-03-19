@@ -27,7 +27,6 @@
           
                     <div class="form-actions">
                         <button class="btn btn-primary" type="submit">[% 'Enviar' | i18n %]</button>
-                        <button class="btn">Cancel</button>
                     </div> 
                     
             </fieldset>            
