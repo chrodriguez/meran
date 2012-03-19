@@ -203,15 +203,6 @@
     
       [% FOREACH NIVEL IN SEARCH_RESULTS %]
                 <script type="text/javascript">
-                    $(function(){
-                        $("#rating[% NIVEL.id1 %]").children().not(":radio").hide();
-                        $("#rating[% NIVEL.id1 %]").stars({
-                            cancelShow: false,
-                            split: 2,
-                            disabled: true
-                        });
-                        $("#rating[% NIVEL.id1 %]").stars("select",[% NIVEL.rating %]);
-                    });
                 </script>
     [% END %]
 
@@ -387,24 +378,7 @@
                         </td>
                         <td class="span2">
                             [% IF NIVEL.rating > 0 %]
-	                            <div class="rating">
-	                                <form id="rating[% NIVEL.id1 %]" class="ratings" action="">
-	                                    <div>
-	                                      <input type="radio" name="rate" value="1" />
-	                                      <input type="radio" name="rate" value="2" />
-	                                      <input type="radio" name="rate" value="3" />
-	                                      <input type="radio" name="rate" value="4" />
-	                                      <input type="radio" name="rate" value="5" />
-	                                      <input type="radio" name="rate" value="6" />
-	                                      <input type="radio" name="rate" value="7" />
-	                                      <input type="radio" name="rate" value="8" />
-	                                      <input type="radio" name="rate" value="9" />
-	                                      <input type="radio" name="rate" value="10" />
-	                                      <input type="submit" value="Enviar" />
-	                                    </div>
-	                                </form>
-	                                <br style="clear:both" />
-	                            </div>
+								<div class="rateit" data-rateit-value="[% NIVEL.rating %]" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
 	                         [% ELSE %]
 	                           <p> [% '----------' %]
 	                         [% END %]

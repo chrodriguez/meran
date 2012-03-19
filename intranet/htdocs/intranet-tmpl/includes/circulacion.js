@@ -188,6 +188,11 @@ function generaDivPrestamo(responseText){
 	
 	var html                = "<div id='div_circ_rapida_devolucion' class=''>";
 	var accion              = infoArray[0].accion;
+	
+	if (!accion){
+		accion = CIRCULACION;
+	}
+	
 	html                    += "<div class='modal-header'><a href='#' class='close' data-dismiss='modal'>×</a><h3>"+ infoArray[0].accion + "</h3></div>";
 	html					+= "<div class='modal-body'>";
 

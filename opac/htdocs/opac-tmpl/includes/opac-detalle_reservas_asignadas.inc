@@ -69,8 +69,7 @@
 	                                                                    button   => "btn click btn-danger",
 	                                                                    icon => "icon-remove icon-white",
 	                                                                    action => "cancelarReserva([% reserva.getId_reserva %])",
-	                                                                    title   => "",
-	                                                                    alternClass => ""
+	                                                                    title   => " [% 'Cancelar' | i18n %]",
 	                                                            );
 	                            [% END %]
 	

@@ -632,8 +632,6 @@ sub reviewNivel2{
 
     $rating_obj = $rating_obj->getObjeto($nro_socio, $id2);
     
-    $review = encode_entities($review);
-    
     $rating_obj->setReview($review);
     $rating_obj->save();
 }
