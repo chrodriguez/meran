@@ -1349,6 +1349,15 @@ function crearBotonEsquema(){
     return html;
 }
 
+function crearBotonAgregarEjemplares(ID2,TIPO_DOC){
+
+	var html = "<a class='btn btn-success click' title='"+ADD_EJEMPLARES+"' onclick='agregarN3("+ID2+","+TIPO_DOC+");' ><i class='icon-white icon-plus-sign'></i> "+ADD_EJEMPLARES+"</a>";
+    
+    
+    return html;
+	
+}
+
 function ayudaParaCampo(campo){
     alert("crear ventana con ayuda para campo " + campo);
 }
@@ -2335,7 +2344,7 @@ function modificarN2(id2, template){
     ID_N2               = id2;
     ID_TIPO_EJEMPLAR    = template;
 // TODO falta agregar boton para modificar el template
-    _mostrarAccion("<h4>Modificando el grupo (" + ID_N2 + ") con el esquema: " + ID_TIPO_EJEMPLAR + "</h4>" + crearBotonEsquema());  
+    _mostrarAccion("<h4>Modificando el grupo (" + ID_N2 + ") con el esquema: " + ID_TIPO_EJEMPLAR + "</h4>" + crearBotonEsquema() + crearBotonAgregarEjemplares(ID_N2,template));  
     objAH               = new AjaxHelper(updateModificarN2);
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;
