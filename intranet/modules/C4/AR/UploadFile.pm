@@ -95,14 +95,13 @@ sub uploadPhoto{
     my $maxFileSize     = 2048 * 2048; # 1/2mb max file size...
     my $file            = $query->param('POSTDATA');
     my $nro_socio       = $query->url_param('nro_socio');
-    my $name            = $nro_socio;
     my $socio           = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
     my $msg_object      = C4::AR::Mensajes::create();
     
     #checkeamos con libmagic el tipo del archivo
     my $type            = C4::AR::Utilidades::checkFileMagic($query->param('POSTDATA'), @filesAllowed);
-    
     my $sessionType     = C4::AR::Auth::getSessionType();
+    my $name            = $socio->fotoName($sessionType);
       
     if ($sessionType eq "opac"){
         $uploaddir = $uploaddir_oapc;
@@ -111,16 +110,16 @@ sub uploadPhoto{
     if($type){
 
         eval{
-	        if ($socio->tieneFoto($sessionType)){
-	            unlink($uploaddir . "/" . $socio->tieneFoto($sessionType));
+	        if ($name){
+	            unlink($uploaddir . "/" . $name);
 	        }
         };
 
-        open(WRITEIT, ">$uploaddir/$name.$type") or die "Cant write to $uploaddir/$name.$type. Reason: $!";
+        open(WRITEIT, ">$uploaddir/$name") or die "Cant write to $uploaddir/$name. Reason: $!";
             print WRITEIT $file;
         close(WRITEIT);
 
-        my $check_size = -s "$uploaddir/$name.$type";
+        my $check_size = -s "$uploaddir/$name";
 
         if ($check_size < 1) {
             $msg_object->{'error'} = 1;

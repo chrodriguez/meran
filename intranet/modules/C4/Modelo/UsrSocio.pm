@@ -40,6 +40,7 @@ __PACKAGE__->meta->setup(
         recover_date_of                  => { type => 'timestamp'  },
         last_auth_method                 => { type => 'varchar', overflow => 'truncate', default => 'mysql', length => 255 },
         id_categoria                     => { type => 'integer', overflow => 'truncate', length =>2, not_null => 1, default => 8 },       
+        foto             => { type => 'varchar', overflow => 'truncate', length => 255 },
         
     ],
 
@@ -87,6 +88,28 @@ use C4::Modelo::UsrPersona;
 use C4::Modelo::UsrPersona::Manager;
 use Switch;
 use C4::Date;
+
+
+sub buildFotoNameHash{
+    my ($self) = shift;
+    use Digest::SHA;
+    my $hash;
+    
+    $hash = sha1_hex($self->getId_persona.$self->getNro_socio.$self->getId_ui.$self->getId_socio);
+    
+    return $hash;
+}
+
+sub setFoto{
+    my ($self) = shift;
+    my ($foto) = @_;
+    $self->foto($foto);
+}
+
+sub getFoto{
+    my ($self) = shift;
+    return($self->foto);
+}
 
 
 sub setCredentialType{
@@ -180,6 +203,7 @@ sub agregar{
 
     $self->save();
     $self->setId_categoria(($data_hash->{'cod_categoria'}));
+    $self->setFoto($self->buildFotoNameHash());
     $self->save();
     $self->setCredentials($data_hash->{'credential_type'});
 
@@ -1236,26 +1260,47 @@ sub setLocale{
 }
 
 
+sub fotoName{
+    my ($self)          = shift;
+    my ($session_type)  = shift;
+    
+    my $picturesDir = C4::Context->config("picturesdir");
+    my $path;
+
+    my $foto_name   =   $self->getFoto;
+
+    if (lc($session_type) eq "opac"){
+        $picturesDir = C4::Context->config("picturesdir_opac");
+        $foto_name =   $self->persona->getFoto;
+    }
+
+    $path           = $picturesDir."/".$foto_name;
+
+     return $foto_name;
+}
+
+
 sub tieneFoto{
     my ($self)          = shift;
     my ($session_type)  = shift;
     
     my $picturesDir = C4::Context->config("picturesdir");
-    
-    if ($session_type eq "opac"){
+    my $path;
+
+    my $foto_name   =   $self->getFoto;
+
+    if (lc($session_type) eq "opac"){
     	$picturesDir = C4::Context->config("picturesdir_opac");
+    	$foto_name =   $self->persona->getFoto;
     }
-    my $foto;
-  
-    if (opendir(DIR, $picturesDir)) {
-        my $pattern = $self->getNro_socio."[.].";
-        my @file    = grep { /$pattern/ } readdir(DIR);
-        $foto       = join("",@file);
-        closedir DIR;
-    } else {
-        $foto = 0;
+
+    $path           = $picturesDir."/".$foto_name;
+
+    if ( -e $path ){
+    	return $foto_name;
+    }else{
+    	return undef;
     }
-    return $foto;
 }
 
 sub needsValidation{

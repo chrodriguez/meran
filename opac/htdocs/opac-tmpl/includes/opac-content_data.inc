@@ -37,8 +37,8 @@
 		            [% END %]
 		        	</div>
 				 <!-- Carousel nav -->
-				  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-				  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>	        	
+				  <a class="carousel-control left" href="#carousel_container" data-slide="prev">&lsaquo;</a>
+				  <a class="carousel-control right" href="#carousel_container" data-slide="next">&rsaquo;</a>	        	
 				</div>
 			</div>
 		[% END %]

@@ -40,6 +40,7 @@ __PACKAGE__->meta->setup(
         carrera          => { type => 'varchar', overflow => 'truncate', length => 255 },
         anio             => { type => 'varchar', overflow => 'truncate', length => 255 },
         division         => { type => 'varchar', overflow => 'truncate', length => 255 },
+        foto             => { type => 'varchar', overflow => 'truncate', length => 255 },
     ],
 
      relationships =>
@@ -142,7 +143,7 @@ sub agregar{
     $self->setCarrera($data_hash->{'carrera'});
     $self->setAnio($data_hash->{'anio'});
     $self->setDivision($data_hash->{'division'});
-    
+    $self->setFoto($self->buildFotoNameHash());
     $self->save();
     $self->convertirEnSocio($data_hash);
 
@@ -325,6 +326,27 @@ sub setId_persona{
     my ($self) = shift;
     my ($id_persona) = @_;
     $self->id_persona($id_persona);
+}
+
+sub buildFotoNameHash{
+    my ($self) = shift;
+    use Digest::SHA;
+    my $hash;
+    
+    $hash = sha1_hex($self->getId_persona.$self->getNro_documento.$self->getApellido.$self->getNombre);
+    
+    return $hash;
+}
+
+sub setFoto{
+    my ($self) = shift;
+    my ($foto) = @_;
+    $self->foto($foto);
+}
+
+sub getFoto{
+    my ($self) = shift;
+    return($self->foto);
 }
 
 sub setEs_socio{
