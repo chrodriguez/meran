@@ -34,9 +34,9 @@ $VERSION = 0.01;
 
 # %mensajes mapea codigo de mensaje con la descripcion del mismo
 my %mensajesOPAC = (
-        '000' => '',
-        'R001' => 'Disculpe, usted no puede realizar m&aacute;s de *?* reservas',
-        'R002' => 'Disculpe, no puede efectuar reservas porque ya tiene una reserva para el mismo grupo y tipo de prestamo ',
+    '000' => '',
+    'R001' => 'Disculpe, usted no puede realizar m&aacute;s de *?* reservas',
+    'R002' => 'Disculpe, no puede efectuar reservas porque ya tiene una reserva para el mismo grupo y tipo de prestamo ',
     'R003' => 'Disculpe, usted no puede tener m&aacute;s de *?* reservas en espera.',
     'R004' => '',
     'R005' => '',
@@ -110,6 +110,22 @@ my %mensajesOPAC = (
     'RC04' => 'La recomendacion ha sido enviada',
     'VA001' => 'Error de parametros, inconsistentes o faltantes, don\'t HACK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',
     'VA002' => 'Por favor, complete todos los datos requeridos e intente nuevamente. Gracias.',
+    
+    #Mensajes Upload Files
+    'UP00' => 'Solo se permiten archivos del tipo ("*?*") [Fallo de extension]',
+    'UP01' => 'Hay un error y el archivo no puede escribirse en el servidor',
+    'UP02' => 'El archivo "*?*" ("*?*") se ha cargado correctamente',
+    'UP03' => 'Ocurrio un error mientras se intentaba subir el archivo de la importaci&oacute;n',
+    'UP04' => 'El nombre del archivo no tiene un formato correcto',
+    'UP05' => 'Hay un error y el archivo no puede eliminarse del servidor',
+    'UP06' => 'El archivo "*?*" se ha eliminado correctamente',
+    'UP07' => 'El archivo excede el tama&ntilde;o m&aacute;ximo permitido ("*?*")',
+    'UP08' => 'El archivo se ha cargado correctamente',
+    'UP09' => 'La portada se ha eliminado correctamente',
+    'UP10' => 'La portada se ha modificado correctamente',
+    'UP11' => 'La portada no se ha podido modificar',
+    'UP12' => 'Ocurrio un error subiendo las imagenes',
+    'UP13' => 'El tipo de archivo subido no esta permitido',
 
    #ERRORES DE BASE DE DATOS
     'B400' => 'Error al intentar reservar desde OPAC, funcion C4::AR::Reservas::reservarOPAC.',
