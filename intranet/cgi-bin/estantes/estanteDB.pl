@@ -213,7 +213,16 @@ elsif($tipo eq "BORRAR_CONTENIDO"){
                                                 'intranet'
                                );
     my $id_estante= $obj->{'estante'};
-    my $contenido_array_ref= $obj->{'contenido'};
+ 
+    my $cont = $obj->{'contenido'};
+
+ 
+    my $contenido_array_ref= $cont;
+
+
+
+    
+
     ($Messages_arrayref)= &C4::AR::Estantes::borrarContenido($id_estante,$contenido_array_ref);
 
     my $infoOperacionJSON=to_json $Messages_arrayref;

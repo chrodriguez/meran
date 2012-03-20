@@ -125,7 +125,6 @@ sub borrarEstantes {
 
 sub borrarContenido {
     my ($id_estante,$contenido_array_ref)=@_;
-
     C4::AR::Debug::debug("Antes de verificar");
     my $msg_object= C4::AR::Mensajes::create();
     $msg_object->{'tipo'}="INTRA";
@@ -140,6 +139,7 @@ sub borrarContenido {
     $db->{connect_options}->{AutoCommit} = 0;
     $db->begin_work;
 
+    C4::AR::Utilidades::printARRAY($contenido_array_ref);
     eval{
         C4::AR::Debug::debug("VAMOS A ELIMINAR EL CONTENIDO");
         foreach my $id2 (@$contenido_array_ref){

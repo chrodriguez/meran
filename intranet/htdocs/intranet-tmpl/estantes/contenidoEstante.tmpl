@@ -1,3 +1,25 @@
+<script type="text/javascript">
+function agregarCont(id2){
+           $('#optionsCheckbox'+id2).unbind('onclick');
+           $('#optionsCheckbox'+id2).click(function(){
+                                     borrarCont(id2,$('#input_contenido_id_estante').val(),$('#input_contenido_id_padre_estante').val())    
+           });
+
+            agregarContenidoAEstante(id2);
+         
+}
+
+
+function borrarCont(cont, estante, padre){
+      $('#optionsCheckbox'+id2).unbind('onclick');
+      $('#optionsCheckbox'+id2).click(function(){
+                                     agregarCont(cont);    
+                       });
+      borrarContenido(cont, estante, padre);
+}
+</script>
+
+
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend">[% "Resultados de la b&uacute;squeda" | i18n %]:</legend>
     
@@ -35,34 +57,28 @@
                     <td>
                             [% nomCompleto %]
                     </td>    
-                    <td>
+                    <td width="150px">
                    
-                            [% PERL %]
-                                        print C4::AR::Filtros::action_set_button(    
-                                              title           =>    "Ediciones",
-                                              icon            =>    "icon-plus icon-white",
-                                              button          =>    'btn btn-info',
-
-
-                                              actions         => [ [% FOREACH grupos %]
-                                                                      {title => " [% IF edicion %]
-                                                                                            [% edicion %]
-                                                                                  [% END %]
-                                                                                  [% IF anio_publicacion %]
-                                                                                      ([% anio_publicacion %])
-                                                                                  [% END %]", 
-                                                                                  action=>"agregarContenidoAEstante([% id2 %])",
-                                                                                
-                                                                        },
-                                                                         [% END %]
-                                                                
-                                                                  ],
-                                                popover       => {  text=>'La edicion seleccionada se agregara como contenido del estante actual', 
-                                                                    title=> 'Atenci&oacute;n'}
-
-                     
-                                                ) ;
-                              [% END %]
+                               
+                              <ul class="unstyled">   
+                                  [% FOREACH grupos %]
+                                         <li> [% IF edicion %] 
+                                                <label class="checkbox">
+                                                      <input type="checkbox" onclick="agregarCont([% id2 %])" value="[% id2 %]" id="optionsCheckbox[% id2 %]">
+                                                      [% edicion %]
+                                                    
+                                              [% END %]
+                                              [% IF anio_publicacion %]
+                                                   
+                                                            <input type="checkbox"  onclick="agregarCont([% id2 %])" value="[% id2 %]" id="optionsCheckbox[% id2 %]" >
+                                                            [% anio_publicacion %]
+                                                                             
+                                              [% END %] 
+                                          </label> 
+                                          </li>
+                                  [% END %]
+                                </ul>
+                            
 
 
                    </td>
