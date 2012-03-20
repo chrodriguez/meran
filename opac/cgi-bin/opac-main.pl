@@ -86,5 +86,6 @@ $t_params->{'title_search_bar'}    = C4::AR::Preferencias::getValorPreferencia("
 $t_params->{'partial_template'}     = "opac-content_data.inc";
 $t_params->{'noAjaxRequests'}       = 0;
 $t_params->{'portada'}              = C4::AR::Novedades::getPortadaOpac();
+$t_params->{'cant_portada'}         = C4::AR::Novedades::getCantPortadaOpac();
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
