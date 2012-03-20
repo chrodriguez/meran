@@ -22,8 +22,8 @@
                     </div>
 
              
-                    <script src="http://www.google.com/recaptcha/api/challenge?k=6LehoMQSAAAAAOhylvTt_7RrPKVdll7CN0jJRdaf" type="text/javascript"></script>
-                    <noscript><iframeframeborder="0" height="300" src="http://www.google.com/recaptcha/api/noscript?k=6LehoMQSAAAAAOhylvTt_7RrPKVdll7CN0jJRdaf" width="500"></iframe><textarea cols="40" name="recaptcha_challenge_field" rows="3"></textarea><input name="recaptcha_response_field" type="hidden" value="manual_challenge" /></noscript>
+                    <script src="http://www.google.com/recaptcha/api/challenge?k=[% re_captcha_public_key %]" type="text/javascript"></script>
+                    <noscript><iframeframeborder="0" height="300" src="http://www.google.com/recaptcha/api/noscript?k=[% re_captcha_public_key %]" width="500"></iframe><textarea cols="40" name="recaptcha_challenge_field" rows="3"></textarea><input name="recaptcha_response_field" type="hidden" value="manual_challenge" /></noscript>
           
                     <div class="form-actions">
                         <button class="btn btn-primary" type="submit">[% 'Enviar' | i18n %]</button>

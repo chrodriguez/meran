@@ -190,7 +190,6 @@
 		                                                        actions         => [
 		                                                                            {title => "Modificar", action=>'modificarNivel2("[% id2 %]")',icon=>"icon-edit"},
 		                                                                            {title => "Eliminar", action=>"borrarN2([% id2 %])", icon=>"icon-trash"},   
-                                                                                    {title => "Agregar ejemplares", action=>'agregarN3("[% id2 %]","[% nivel2_template %]")', icon=>"icon-plus-sign"},
                                                                                     {title => "Editar &iacute;ndice", action=>'agregarIndice([% id2 %])', icon=>"icon-list"},
                                                                                 [% IF show_action == 1 %]
                                                                                     {title => "Agregar analítica", action=>"agregarAnalitica([% id2 %])", icon=>"icon-edit"},
@@ -317,10 +316,7 @@
 [% END %]<!-- END FOREACH Nivel 2-->
 
 </div> <!-- Fin DIV detalleComun -->
+
 [% IF !ajax %]
-	<div id='basic-modal-content'></div>
-	<!-- para mostrar el contenido del indice -->
-	
-	
 	[% INCLUDE  "intranet-bottom.inc" %]
 [% END %]

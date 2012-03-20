@@ -360,7 +360,8 @@ function updateCambiarCredencial(responseText){
 }
 
 function guardarModificacionCredenciales(){
-
+	 $('#basic-modal-content').modal('hide');
+	 
     objAH               = new AjaxHelper(updateModificacionCredenciales);
     objAH.url           = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
     objAH.showOverlay   = true;

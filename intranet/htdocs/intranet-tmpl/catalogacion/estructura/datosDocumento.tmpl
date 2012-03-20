@@ -219,7 +219,9 @@ $(document).ready( function() {
         
     <form id="formNivel2" name="formNivel2" class="form-horizontal" onsubmit="return false;">
 		  <fieldset>
-			    <legend class="titulo_legend">[% "Datos del grupo" | i18n %]<div id="estado_accion" class="titulos estado_accion alert pagination-centered" style="display:none"></div></legend>
+			    <legend class="titulo_legend">[% "Datos del grupo" | i18n %]
+    			     <div id="estado_accion" class="titulos estado_accion alert pagination-centered" style="display:none"></div>
+			    </legend>
 			    <!--     CAMPOS DINAMICOS DEL NIVEL 2 -->
 			        <div id= "estructuraDelNivel2"></div>
 			        <input type="hidden" name="token" value="[% token %]" />
@@ -230,7 +232,6 @@ $(document).ready( function() {
     </form>
 
           <div class="form-actions">
-      
               [% PERL %]
                       print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 2' | i18n %]",
                                                           boton   => "btn btn-primary",

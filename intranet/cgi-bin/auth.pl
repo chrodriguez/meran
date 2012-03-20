@@ -32,4 +32,6 @@ if ($t_params->{'loginAttempt'} & !($t_params->{'mostrar_captcha'}) ){
   $t_params->{'mensaje'}    = C4::AR::Mensajes::getMensaje('U357','intranet');
 }
 
+$t_params->{'re_captcha_public_key'} = C4::AR::Preferencias::getValorPreferencia('re_captcha_public_key');
+
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

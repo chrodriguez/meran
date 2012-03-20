@@ -3,6 +3,7 @@
     $(document).ready(function() {
           makeToggle('datos_tabla_div_importacion','trigger',null,false);
           makeToggle('filtro_importacion','trigger',null,true);
+          onEnter('search_importacion',detalleImportacion,'[% id_importacion %]');
     });
 
 function cambiarFiltro (filtro){
@@ -55,7 +56,11 @@ function cambiarFiltro (filtro){
 			</div>
         </div>
 
-
+		<div class="well form-search">
+		        <input type="text" class="input-medium search-query" id="search_importacion">
+		        <button type="submit" class="btn" onclick="detalleImportacion([% id_importacion %]);">[% "Buscar" | i18n %]</button>
+		</div>        
+		
         <div class="contenedor_paginador">[% paginador %]</div>
         <div class="datos_tabla_div_importacion">
             <div class="well">
