@@ -20,27 +20,27 @@
 	
 		</p>
           	
-		[% IF portada %]
-		<div id="carousel_container" class="span8 columns">
-			<div id="carousel_portada_opac" class="carousel slide">
-	            <div class="carousel-inner">
-	            [% FOREACH p IN portada %]
-	              <div class="item [% IF loop.first %]active[% END %]">
-	                <img src="/opac-tmpl/uploads/portada/[% p.getImagePath %]" alt>
-	                [% IF p.getFooter %]
-		                <div class="carousel-caption">
-		                  <h4>[% p.getFooterTitle %]</h4>
-		                  <p>[% p.getFooter %]</p>
-		                </div>
+		[% IF cant_portada %]
+			<div id="carousel_container" class="span8 columns">
+				<div id="carousel_portada_opac" class="carousel slide">
+		            <div class="carousel-inner">
+		            [% FOREACH p IN portada %]
+		              <div class="item [% IF loop.first %]active[% END %]">
+		                <img src="/opac-tmpl/uploads/portada/[% p.getImagePath %]" alt>
+		                [% IF p.getFooter %]
+			                <div class="carousel-caption">
+			                  <h4>[% p.getFooterTitle %]</h4>
+			                  <p>[% p.getFooter %]</p>
+			                </div>
+			            [% END %]
+		              </div>
 		            [% END %]
-	              </div>
-	            [% END %]
-	        	</div>
-			 <!-- Carousel nav -->
-			  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-			  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>	        	
+		        	</div>
+				 <!-- Carousel nav -->
+				  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+				  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>	        	
+				</div>
 			</div>
-		</div>
 		[% END %]
 
         <form class="" action="[% url_prefix %]/opac-busquedasDB.pl" method="get" onsubmit="startOverlay();">

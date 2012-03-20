@@ -673,14 +673,18 @@ function agregarN2(){
     open_esquema();
 }
 
+function completarArgregarN3(){
+    _mostrarAccion("Agregando ejemplares" + crearBotonEsquema());
+    $('#divCantEjemplares').show();
+
+}
+
 function agregarN3(id2, tipo_documento){
     _NIVEL_ACTUAL       = 3;
     ID_N2               = id2; 
     ID_TIPO_EJEMPLAR    = tipo_documento;
     MODIFICAR           = 0;
     inicializar();  
-    _mostrarAccion("Agregando ejemplares" + crearBotonEsquema());
-    $('#divCantEjemplares').show();
 //  mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
     open_esquema();
 }
@@ -1349,6 +1353,15 @@ function crearBotonEsquema(){
     return html;
 }
 
+function crearBotonAgregarEjemplares(ID2,TIPO_DOC){
+
+	var html = "<a class='btn btn-success click' title='"+ADD_EJEMPLARES+"' onclick=agregarN3("+ID2+",'"+TIPO_DOC+"'); completarArgregarN3(); ><i class='icon-white icon-plus-sign'></i> "+ADD_EJEMPLARES+"</a>";
+    
+    
+    return html;
+	
+}
+
 function ayudaParaCampo(campo){
     alert("crear ventana con ayuda para campo " + campo);
 }
@@ -1947,8 +1960,9 @@ function crearText(obj){
 }
 
 function crearBotones(obj){
-    if(obj.getRepetible() == '1')
+    if((obj.getRepetible() == '1')||(obj.getReferenciaTabla())){
         $(openDivButtonContainer("div_botones" + obj.getIdCompCliente())).insertAfter("#div" + obj.getIdCompCliente());
+    }
 
     if((obj.getEdicionGrupal() == "0")&&(MODIFICAR == 1)&&(EDICION_N3_GRUPAL == 1)){  
         disableComponent(obj.getIdCompCliente());  
@@ -2084,9 +2098,10 @@ function crearAuto(obj){
 
 function crearBotonAgregarReferenciaSubcampo(obj){
 
-    if ( (obj.getRepetible() == '1') && (obj.getReferenciaTabla()) ){
+//     if ( (obj.getRepetible() == '1') && (obj.getReferenciaTabla()) ){
+    if (obj.getReferenciaTabla()) {
         return '<li><a class="click" onclick=agregarTablaReferencias("'+ obj.getReferenciaTabla() +'")><i class="icon-plus"></i> Agregar referencia al subcampo '+ obj.getSubCampo() + ' para el campo ' + obj.getCampo() +'</a></li>';
-    }else{  
+    } else {  
         return '';
     }
 }
@@ -2335,7 +2350,7 @@ function modificarN2(id2, template){
     ID_N2               = id2;
     ID_TIPO_EJEMPLAR    = template;
 // TODO falta agregar boton para modificar el template
-    _mostrarAccion("<h4>Modificando el grupo (" + ID_N2 + ") con el esquema: " + ID_TIPO_EJEMPLAR + "</h4>" + crearBotonEsquema());  
+    _mostrarAccion("<h4>Modificando el grupo (" + ID_N2 + ") con el esquema: " + ID_TIPO_EJEMPLAR + "</h4>" + crearBotonEsquema() + "&nbsp;&nbsp;&nbsp;&nbsp;" + crearBotonAgregarEjemplares(ID_N2,template));  
     objAH               = new AjaxHelper(updateModificarN2);
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;

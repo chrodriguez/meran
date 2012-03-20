@@ -25,7 +25,7 @@ my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio(C4::AR::Auth::getSessionNr
 
 C4::AR::Auth::buildSocioData($session,$socio);
 
-$t_params->{'foto_name'}                = $socio->tieneFoto();
+$t_params->{'socio'}                    = $socio;
 $t_params->{'partial_template'}         = "opac-mis_datos.inc";
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

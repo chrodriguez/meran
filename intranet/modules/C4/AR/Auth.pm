@@ -840,7 +840,12 @@ sub checkauth {
 						
 						my $c = Captcha::reCAPTCHA->new;
 						$captchaResult = $c->check_answer($reCaptchaPrivateKey, $ENV{'REMOTE_ADDR'},$reCaptchaChallenge, $reCaptchaResponse);
-					} else {  #else del  if ($login_attempts > 2 )
+
+						C4::AR::Debug::debug("ERROR DE CAPTCHA: ".$captchaResult->{error});
+						
+						
+					} else {  
+						#else del  if ($login_attempts > 2 )
 						$sin_captcha = 1; 
 					}  
 					if (($sin_captcha || $captchaResult->{is_valid}) && $socio){
@@ -1396,27 +1401,30 @@ sub _autenticar{
 	use Switch;
 	my ($userid, $password, $nroRandom,$metodo) = @_;
 	my $socio = undef;
-	C4::AR::Debug::debug("metodo ".$metodo." userid ".$userid);
-	switch ($metodo){
-		case "ldap" {
-                ($socio) = C4::AR::Authldap::checkPassword($userid,$password,$nroRandom); 
-                C4::AR::Debug::debug("Devolviendo casi al final el socio".$socio);      
-		}
-		case "mysql"{
-			($socio) = C4::AR::AuthMysql::checkPassword($userid,$password,$nroRandom);       
-			    C4::AR::Debug::debug("Vamos bien???".$socio);      
-		}
-		else{
-			}
-	   }
-	if ( (defined $socio) && (! _checkRequisito($socio))  ){
-        C4::AR::Debug::debug("Gaspo me esta rompiendo las pelotas".$socio);      
-		$socio=undef ;
-
-	}elsif (defined $socio){
-        $socio->setLastAuthMethod($metodo);
-	}
 	
+	eval{
+		C4::AR::Debug::debug("metodo ".$metodo." userid ".$userid);
+		switch ($metodo){
+			case "ldap" {
+	                ($socio) = C4::AR::Authldap::checkPassword($userid,$password,$nroRandom); 
+	                C4::AR::Debug::debug("Devolviendo casi al final el socio".$socio);      
+			}
+			case "mysql"{
+				($socio) = C4::AR::AuthMysql::checkPassword($userid,$password,$nroRandom);       
+				    C4::AR::Debug::debug("Vamos bien???".$socio);      
+			}
+			else{
+				}
+		   }
+		if ( (defined $socio) && (! _checkRequisito($socio))  ){
+	        C4::AR::Debug::debug("Gaspo me esta rompiendo las pelotas".$socio);      
+			$socio=undef ;
+	
+		}elsif (defined $socio){
+	        $socio->setLastAuthMethod($metodo);
+		}
+	};
+		
     return ($socio);
 }
 
