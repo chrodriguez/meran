@@ -1058,7 +1058,7 @@ sub t_reservarOPAC {
            $db->{connect_options}->{AutoCommit} = 0;
            $db->begin_work;
 
-        eval {
+#        eval {
             ($paramsReserva)= $reserva->reservar($params);
             $db->commit;
             #Se setean los parametros para el mensaje de la reserva SIN ERRORES
@@ -1080,7 +1080,7 @@ sub t_reservarOPAC {
             }
             #Se agrega la reserva al historial
             C4::AR::Reservas::agregarReservaAHistorial($reserva);
-        };
+#        };
 
         if ($@){
             #Se loguea error de Base de Datos

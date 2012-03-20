@@ -15,7 +15,6 @@ $VERSION = 0.01;
 @ISA = qw(Exporter);
 
 @EXPORT = qw(
-    display_date_format
     format_date
     format_date_hour
     format_date_in_iso
@@ -49,31 +48,85 @@ sub esHabil{
 	
 }
 
-sub display_date_format
-{
-# 	my $dateformat = get_date_format();
-	my ($dateformat)=@_;
 
-	if ( $dateformat eq "us" )
-	{
-		return "mm/dd/aaaa";
-	}
-	elsif ( $dateformat eq "metric" )
-	{
-		return "dd/mm/aaaa";
-	}
-	elsif ( $dateformat eq "iso" )
-	{
-		return "aaaa-mm-dd";
-	}
-	else
-	{
-		return "Invalid date format: $dateformat. Please change in system preferences";
-	}
+sub format_date
+{
+
+    my ($olddate, $dateformat)=@_;
+
+    my $date = new Date::Manip::Date;
+    
+    my $newdate;
+    
+    my $format;
+
+    if ( ! $olddate )
+    {
+        return "";
+    }
+
+    if ( $dateformat eq "us" )
+    {
+        $date->config("DateFormat","US");
+        $format = '%m/%d/%Y';
+    }
+    elsif ( $dateformat eq "metric" )
+    {
+        $date->config("DateFormat","metric");
+        $format = '%d/%m/%Y';
+    }
+    elsif ( $dateformat eq "iso" )
+    {
+        $date->config("DateFormat","iso");
+        $format = '%Y-%m-%d';
+    }
+    
+    $date->parse($olddate);
+
+    $newdate = $date->printf($format);
+    
+    return ($newdate);
 }
 
-# Miguel - cambie esta funcion para que no se llame dentro get_date_format, idem format_date_hour format_date_in_iso, display_date_format
-sub format_date
+sub format_date_complete
+{
+    my ($olddate, $dateformat)=@_;
+
+    my $date = new Date::Manip::Date;
+    
+    my $newdate;
+    
+    my $format;
+
+    if ( ! $olddate )
+    {
+        return "";
+    }
+
+    if ( $dateformat eq "us" )
+    {
+        $date->config("DateFormat","US");
+        $format = '%m/%d/%Y %H:%M:%S';
+    }
+    elsif ( $dateformat eq "metric" )
+    {
+        $date->config("DateFormat","metric");
+        $format = '%d/%m/%Y %H:%M:%S';
+    }
+    elsif ( $dateformat eq "iso" )
+    {
+        $date->config("DateFormat","iso");
+        $format = '%Y-%m-%d %H:%M:%S';
+    }
+    
+    $date->parse($olddate);
+
+    $newdate = $date->printf($format);
+    
+    return ($newdate);
+}
+
+sub format_date_OLD
 {
 
 	my ($olddate, $dateformat)=@_;
@@ -109,7 +162,7 @@ sub format_date
 	}
 }
 
-sub format_date_complete
+sub format_date_complete_OLD
 {
     my ($olddate, $dateformat)=@_;
 
@@ -144,8 +197,45 @@ sub format_date_complete
     }
 }
 
-
 sub format_date_hour
+{
+    my ($olddate, $dateformat)=@_;
+
+    my $date = new Date::Manip::Date;
+    
+    my $newdate;
+    
+    my $format;
+
+    if ( ! $olddate )
+    {
+        return "";
+    }
+
+    if ( $dateformat eq "us" )
+    {
+        $date->config("DateFormat","US");
+        $format = '%m/%d/%Y %H:%M';
+    }
+    elsif ( $dateformat eq "metric" )
+    {
+        $date->config("DateFormat","metric");
+        $format = '%d/%m/%Y %H:%M';
+    }
+    elsif ( $dateformat eq "iso" )
+    {
+        $date->config("DateFormat","iso");
+        $format = '%Y-%m-%d %H:%M';
+    }
+    
+    $date->parse($olddate);
+
+    $newdate = $date->printf($format);
+    
+    return ($newdate);
+}
+
+sub format_date_hour_OLD
 {
 	my ($olddate, $dateformat)=@_;
 
@@ -182,6 +272,23 @@ sub format_date_hour
 
 sub calc_beginES
 {
+    my $close = C4::AR::Preferencias::getValorPreferencia("close");
+    my $beginESissue = C4::AR::Preferencias::getValorPreferencia("beginESissue");
+    
+    my $cierre  = new Date::Manip::Date;
+    my $comienzo= new Date::Manip::Date;
+    
+    
+    my $err_close   = $cierre->parse($close);
+    my $err_open    = $comienzo->parse($beginESissue);
+    
+    my $delta = $cierre->calc($comienzo);
+        
+    return $delta;
+}
+
+sub calc_beginES_OLD
+{
 	my $close = C4::AR::Preferencias::getValorPreferencia("close");
 	my $beginESissue = C4::AR::Preferencias::getValorPreferencia("beginESissue");
 	my $err;
@@ -190,8 +297,24 @@ sub calc_beginES
 	return $hour;
 }
 
-
 sub calc_endES
+{
+    my $open = C4::AR::Preferencias::getValorPreferencia("open");
+    my $endESissue = C4::AR::Preferencias::getValorPreferencia("endESissue");
+   
+    my $date = new Date::Manip::Date;
+    
+    $date = $date->parse($open);
+     
+    my $delta = $date->new_delta();
+    
+    $delta->parse($endESissue);
+    
+    return $date->calc($delta);
+}
+
+
+sub calc_endES_OLD
 {
 	my $open = C4::AR::Preferencias::getValorPreferencia("open");
 	my $endESissue = C4::AR::Preferencias::getValorPreferencia("endESissue");
@@ -202,11 +325,41 @@ sub calc_endES
 	return $hour;
 }
 
+sub format_date_in_iso{
+    my ($olddate, $dateformat)=@_;
+
+    my $date = new Date::Manip::Date;
+    my $newdate;
+    my $format;
+
+    if ( ! $olddate )
+    {
+        return "";
+    }
+
+    if ( $dateformat eq "us" )
+    {
+        $date->config("DateFormat","US");
+    }
+    elsif ( $dateformat eq "metric" )
+    {
+        $date->config("DateFormat","metric");
+    }
+    elsif ( $dateformat eq "iso" )
+    {
+        $date->config("DateFormat","iso");
+    }
+    
+    $date->parse($olddate);
+
+    $format = '%Y-%m-%d';
+    $newdate = $date->printf($format);
+    
+    return ($newdate);
+}
 
 
-
-sub format_date_in_iso
-{
+sub format_date_in_iso_OLD{
 	my ($olddate, $dateformat)=@_;
     my $newdate;
    
@@ -241,6 +394,7 @@ sub format_date_in_iso
 }
 
 sub updateForHoliday{
+#FIXME Queda sin la API O.O. VER!!!!
 #Recibe una fecha que es la que se puso o se saco como feriado
 #Si $sign es "+" entonces se puso como feriado
 #Si $sign es "-" entonces se saco como feriado
@@ -259,8 +413,72 @@ sub updateForHoliday{
 	$sth->execute($fecha_nueva_inicio,$fecha_nueva_fin,$fecha);
 }
 
-
 sub proximosHabiles {
+    my ($cantidad,$todosHabiles,$desde)=@_;
+    
+    my $apertura                = C4::AR::Preferencias::getValorPreferencia("open");
+    my $cierre                  = C4::AR::Preferencias::getValorPreferencia("close");
+    my $first_day_week          = C4::AR::Preferencias::getValorPreferencia("primer_dia_semana");
+    my $last_day_week           = C4::AR::Preferencias::getValorPreferencia("ultimo_dia_semana");
+    my $date                    = new Date::Manip::Date;
+    my $desde_date              = new Date::Manip::Date;
+    my $delta                   = $date->new_delta();
+    my ($actual,$min,$hora)    = localtime;
+    
+    $actual=($hora).':'.$min;
+    Date_Init("WorkDayBeg=".$apertura,"WorkDayEnd=".$cierre);
+    Date_Init("WorkWeekBeg=".$first_day_week,"WorkWeekEnd=".$last_day_week);
+
+    my $err= "Error con la fecha";
+    my $hoy= $date->parse("today");
+
+    $desde_date->parse($desde||"today");
+
+    $desde= $desde_date;
+    
+    my $hasta;
+
+    if ($todosHabiles) {
+        $hasta = $desde;
+        $delta->parse("+ 1 business days");
+        for (my $iter_habil = 1; $iter_habil <= $cantidad; $iter_habil++ ){
+            $hasta = $hasta->calc($delta);
+        }
+    }else{
+        #esto es si no importa quetodos los dias del periodo sean habiles, los que deben ser habiles son el 1ero y el ultimo     
+        $delta->parse("+ ".$cantidad. " days");
+        $hasta = $hasta->calc($delta);
+
+        if (!($hasta->is_business_day)){
+            $hasta = Date_NextWorkDay($hasta);
+        } 
+    }
+    #Se sume un dia si es feriado el ultimo dia.
+    my $dateformat= C4::Date::get_date_format();
+    $hasta = C4::Date::format_date_in_iso($hasta, $dateformat);
+    
+    my $proximos_feriados = C4::AR::Utilidades::getProximosFeriados($hasta);
+    
+    foreach my $feriado (@$proximos_feriados) {
+        if( C4::Date::format_date($hasta,$dateformat) eq $feriado->getFecha ) {
+        	$delta->parse("+ 1 business days");
+            $hasta = $hasta->calc($delta);
+        }
+    }
+    
+    my $desde_string
+    $desde = C4::Date::format_date_in_iso($desde_string, $dateformat);
+    my $hasta_string = 
+    $hasta = C4::Date::format_date_in_iso($hasta_string, $dateformat);
+
+    return (    $desde,
+                $hasta,
+                $apertura,
+                $cierre
+    );
+}
+
+sub proximosHabiles_OLD {
 	my ($cantidad,$todosHabiles,$desde)=@_;
 	my $apertura               =C4::AR::Preferencias::getValorPreferencia("open");
 	my $cierre                 =C4::AR::Preferencias::getValorPreferencia("close");
