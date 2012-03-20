@@ -49,6 +49,10 @@ sub agregar{
 
     $self->setIdImportacionIso($params->{'id_importacion_iso'});
     $self->setMarcRecord($params->{'marc_record'});
+    if ($params->{'estado'}){
+          $self->setEstado($params->{'estado'});
+      }
+    
     $self->save();
 }
 

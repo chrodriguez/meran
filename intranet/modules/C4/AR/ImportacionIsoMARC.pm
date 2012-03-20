@@ -17,11 +17,12 @@ use C4::Modelo::IoImportacionIsoRegistro;
 
 use MARC::Record;
 use MARC::Field;
-use MARC::Moose::Record;
-use MARC::Moose::Reader::File::Isis;
-use MARC::Moose::Reader::File::Iso2709;
-use MARC::Moose::Reader::File::Marcxml;
 
+use MARC::Moose::Record;
+use MARC::Moose::Formater::Iso2709;
+use MARC::Moose::Reader::File::Iso2709;
+use MARC::Moose::Reader::File::Isis;
+use MARC::Moose::Reader::File::Marcxml;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -52,6 +53,13 @@ sub guardarNuevaImportacion {
     my $Io_importacion          = C4::Modelo::IoImportacionIso->new(db=> $db);
     my $nuevo_esquema =0;
     #Si el esquema es nuevo hay que crearlo vacio al menos!
+    
+    C4::AR::Debug::debug("Nuevo esquema?? ".$params->{'nuevo_esquema'}." o usamos uno existente: ". $params->{'esquemaImportacion'});
+
+	if (!$params->{'nombreEsquema'}) {
+		   $params->{'esquemaImportacion'}     = $params->{'esquemaImportacion'};
+		}
+	else{
     if($params->{'nuevo_esquema'}){
        #Crear Nuevo Esquema
            my %parametros;
@@ -63,7 +71,8 @@ sub guardarNuevaImportacion {
        #Necesitamos el id del nuevo esquema ACA!
            $params->{'esquemaImportacion'}     = $nuevo_esquema->getId;
         }
-
+	}
+	
     $Io_importacion->agregar($params);
 
     #Obtengo los campos/subcampos para ver si por si es necesario realizar un corrimiento de campos
@@ -76,7 +85,7 @@ sub guardarNuevaImportacion {
     C4::AR::ImportacionIsoMARC::guardarRegistrosNuevaImportacion($Io_importacion,$params,$msg_object,$db);
 
     #Si el esquema es nuevo hay que llenarlo con los datos de los registros cargados
-    if($nuevo_esquema){
+    if($params->{'nuevo_esquema'}){
        #Armar nuevo esquema (hash de hashes)
         my $detalle_esquema = $Io_importacion->obtenerCamposSubcamposDeRegistros();
 
@@ -130,7 +139,7 @@ sub guardarRegistrosNuevaImportacion {
     while ( my $record = $reader->read() ) {
     eval {
          my $marc_record = MARC::Record->new();
-
+         my $registro_erroneo=0;
          for my $field ( @{$record->fields} ) {
              my $new_field=0;
 
@@ -174,6 +183,12 @@ sub guardarRegistrosNuevaImportacion {
                         else{
                             $new_field->add_subfields( $subfield->[0] => $subfield->[1] );
                         }
+                        
+                       if($subfield->[1] =~ m/\x1e/g){
+                          #Encuentro un delimitador en un campo de texto, algo está mal, REGISTRO ERRONEO
+                          $registro_erroneo=1;
+                        }
+                
                     }
                 }
              if($new_field){
@@ -184,6 +199,9 @@ sub guardarRegistrosNuevaImportacion {
             my %parametros;
             $parametros{'id_importacion_iso'}      = $importacion->getId;
             $parametros{'marc_record'}   = $marc_record->as_usmarc();
+            if ($registro_erroneo) {
+              $parametros{'estado'}   = "ERROR";
+            }
 
             my $Io_registro_importacion          = C4::Modelo::IoImportacionIsoRegistro->new(db => $db);
             $Io_registro_importacion->agregar(\%parametros);
@@ -249,7 +267,7 @@ sub getRegistrosFromImportacion {
         push (@filtros, ( matching => { eq => 1 }));
         }
     elsif($filter eq 'IGNORED'){
-        push (@filtros, ( estado => { eq => 'IGNORADO' }));
+        push (@filtros, ( or => [ estado => { eq => 'IGNORADO' }, estado => { eq => 'ERROR' }]));
         }
     elsif($filter eq 'ALL'){
         #si se muestran todos no se agregan mas filtros
@@ -874,7 +892,7 @@ sub obtenerCamposDeArchivo {
 
     my %detalleCampos=();
     use Switch;
-    my $reader;
+    my $reader; 
     switch ($params->{'formatoImportacion'}) {
         case "iso"   {$reader=MARC::Moose::Reader::File::Iso2709->new(file   => $params->{'write_file'})}
         case "isis"  {$reader=MARC::Moose::Reader::File::Isis->new(file   => $params->{'write_file'})}
