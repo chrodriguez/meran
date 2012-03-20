@@ -56,7 +56,7 @@ sub agregar{
                 if(!$image_name){
                     C4::AR::Debug::debug("subio una imagen valida");
                     $msg_object->{'error'}= 1;
-                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP13', 'params' => []} );
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP13', 'intra'} );
                     $db->rollback;
                 }else{
                     $imagenes_novedades_opac = C4::Modelo::ImagenesNovedadesOpac->new(db => $db);                 
@@ -73,7 +73,7 @@ sub agregar{
         
            &C4::AR::Mensajes::printErrorDB($@, 'B459',"INTRA");
            $msg_object->{'error'}= 1;
-           C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP12', 'params' => []} ) ;
+           C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP12', 'intra'} ) ;
            $db->rollback;
            
         }
@@ -113,7 +113,7 @@ sub editar{
         
             C4::AR::Debug::debug("imagen a eliminar : " . $file);
             
-            _eliminarImageneNovedadByNombre($file); # -> WTF!!!
+            _eliminarImageneNovedadByNombre($file);
             unlink($dirPath."/".$file);
         }
         
@@ -130,11 +130,11 @@ sub editar{
         foreach my  $value ( @$arrayNewFiles ) {
                  
             #pasarle la data necesaria
-            $image_name = C4::AR::UploadFile::uploadFotoNovedadOpac($value); # -> WTF!!!
+            $image_name = C4::AR::UploadFile::uploadFotoNovedadOpac($value);
             
             if(!$image_name){
                 $msg_object->{'error'}= 1;
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP13', 'params' => []} );
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP13', 'intra'} );
 
             }else{
                 $imagenes_novedades_opac = C4::Modelo::ImagenesNovedadesOpac->new();                 

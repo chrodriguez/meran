@@ -28,6 +28,7 @@ my $cont;
 #estamos agregando o editando
 if ($action){
 
+    #--------- imagenes nuevas -----------
     #me quedo con las hash que tengan 'file_*'
     my @arrayFiles;
     
@@ -48,6 +49,25 @@ if ($action){
         } 
         
     }
+    #-------- FIN imagenes nuevas ----------
+    
+    
+    #--------- links -----------
+    my $linksTodos  = $input->param('links');  
+    my @links       = split('\ ', $linksTodos);   
+    my $linksFinal  = "";
+    
+    foreach my $link (@links){
+    
+        if($link !~ /^http/){
+            $linksFinal .= " http://" . $link;
+        }else{
+            $linksFinal .= " " . $link;
+        }
+    }
+    
+    $input->param('links', $linksFinal);
+    #------- FIN links ---------
      
     my ($Message_arrayref, $novedad) = C4::AR::Novedades::agregar($input, @arrayFiles);
     
