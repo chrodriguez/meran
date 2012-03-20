@@ -651,11 +651,11 @@ sub generarIndice {
             $subcampo                       = $subfield->[0];
             $dato                           = $subfield->[1];
             eval{
-                $self->debug("DATO ANTES ".$dato);
+#                 $self->debug("DATO ANTES ".$dato);
                 my $nivel                       = C4::AR::EstructuraCatalogacionBase::getNivelFromEstructuraBaseByCampoSubcampo($campo, $subcampo);
                 $dato_ref                       = C4::AR::Catalogacion::getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato,$self->getTemplate,$nivel);
                 $dato                           = C4::AR::Catalogacion::getDatoFromReferencia($campo, $subcampo, $dato_ref, $self->getTemplate,$nivel);
-                $self->debug("REF".$dato_ref."->".$dato);
+#                 $self->debug("REF".$dato_ref."->".$dato);
                 if (($dato)&&($dato ne 'NULL')){
                     #Guardo el dato en el marc record solamente
                     if ($new_field){
@@ -716,8 +716,8 @@ sub generarIndice {
         } #END foreach my $subfield ($field->subfields())
     } #END foreach my $field ($marc_record->fields)
 
-     $self->debug("C4::AR::Sphinx::generar_indice => superstring!!!!!!!!!!!!!!!!!!! => ".$superstring);
-     $self->debug("C4::AR::Sphinx::generar_indice => marc_record_datos!!!!!!!!!!!!!!!!!!! => ".$marc_record_datos->as_usmarc);
+#      $self->debug("C4::AR::Sphinx::generar_indice => superstring!!!!!!!!!!!!!!!!!!! => ".$superstring);
+#      $self->debug("C4::AR::Sphinx::generar_indice => marc_record_datos!!!!!!!!!!!!!!!!!!! => ".$marc_record_datos->as_usmarc);
 
     ###################AUTORES################AUTORES##################AUTORES##################
     my @autores;
