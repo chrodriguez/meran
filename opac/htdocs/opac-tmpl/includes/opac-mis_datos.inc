@@ -31,7 +31,7 @@
 	            },
 	            allowedExtensions: ["bmp","jpg","gif","png","jpeg"],
 	            onComplete: function(id, fileName){location.href='[% url_prefix %]/misDatos.pl?token=[% token %]';},
-	            showMessage: function(message){ jAlert(message); },
+	            showMessage: function(message){  },
 	            debug: true,
 	            multiple: false,
 	        });

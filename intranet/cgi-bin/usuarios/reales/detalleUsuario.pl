@@ -53,7 +53,7 @@ my $msgError                        = $input->param('error');
 ($msgError) || ($msgError=0);
 
 $t_params->{'id_socio'}             = $socio->getId_socio;
-$t_params->{'foto_name'}            = $socio->tieneFoto();
+$t_params->{'foto_name'}            = $socio->tieneFoto(C4::AR::Auth::getSessionType());
 $t_params->{'mensaje_error_foto'}   = $msgFoto;
 $t_params->{'mensaje_error_borrar'} = $msgError;
 $t_params->{'error'}                = 0;

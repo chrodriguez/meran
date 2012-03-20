@@ -53,7 +53,7 @@ sub format_date
 {
 
     my ($olddate, $dateformat)=@_;
-
+C4::AR::Debug::debug("Date.pm ----- format_date ----- Me vino ---- ".$olddate);
     my $date = new Date::Manip::Date;
     
     my $newdate;
@@ -67,24 +67,20 @@ sub format_date
 
     if ( $dateformat eq "us" )
     {
-        $date->config("DateFormat","US");
+        $date->config("DateFormat",'US');
         $format = '%m/%d/%Y';
     }
-    elsif ( $dateformat eq "metric" )
+    else
     {
-        $date->config("DateFormat","metric");
-        $format = '%d/%m/%Y';
-    }
-    elsif ( $dateformat eq "iso" )
-    {
-        $date->config("DateFormat","iso");
+        $date->config("DateFormat",'non-US');
         $format = '%Y-%m-%d';
     }
     
     $date->parse($olddate);
 
     $newdate = $date->printf($format);
-    
+
+C4::AR::Debug::debug("Date.pm ----- format_date ----- DEVUELVO ---- ".$newdate);    
     return ($newdate);
 }
 
@@ -108,17 +104,12 @@ sub format_date_complete
         $date->config("DateFormat","US");
         $format = '%m/%d/%Y %H:%M:%S';
     }
-    elsif ( $dateformat eq "metric" )
+    else
     {
-        $date->config("DateFormat","metric");
-        $format = '%d/%m/%Y %H:%M:%S';
-    }
-    elsif ( $dateformat eq "iso" )
-    {
-        $date->config("DateFormat","iso");
+        $date->config("DateFormat","non-US");
         $format = '%Y-%m-%d %H:%M:%S';
     }
-    
+
     $date->parse($olddate);
 
     $newdate = $date->printf($format);
@@ -217,15 +208,10 @@ sub format_date_hour
         $date->config("DateFormat","US");
         $format = '%m/%d/%Y %H:%M';
     }
-    elsif ( $dateformat eq "metric" )
+    else
     {
-        $date->config("DateFormat","metric");
+        $date->config("DateFormat","non-US");
         $format = '%d/%m/%Y %H:%M';
-    }
-    elsif ( $dateformat eq "iso" )
-    {
-        $date->config("DateFormat","iso");
-        $format = '%Y-%m-%d %H:%M';
     }
     
     $date->parse($olddate);
@@ -326,13 +312,13 @@ sub calc_endES_OLD
 }
 
 sub format_date_in_iso{
-    my ($olddate, $dateformat)=@_;
+    my ($olddate_string, $dateformat)=@_;
 
     my $date = new Date::Manip::Date;
     my $newdate;
     my $format;
 
-    if ( ! $olddate )
+    if ( ! $olddate_string )
     {
         return "";
     }
@@ -341,16 +327,12 @@ sub format_date_in_iso{
     {
         $date->config("DateFormat","US");
     }
-    elsif ( $dateformat eq "metric" )
+    else
     {
-        $date->config("DateFormat","metric");
-    }
-    elsif ( $dateformat eq "iso" )
-    {
-        $date->config("DateFormat","iso");
+        $date->config("DateFormat","non-US");
     }
     
-    $date->parse($olddate);
+    $date->parse($olddate_string);
 
     $format = '%Y-%m-%d';
     $newdate = $date->printf($format);
@@ -442,12 +424,12 @@ sub proximosHabiles {
         $hasta = $desde;
         $delta->parse("+ 1 business days");
         for (my $iter_habil = 1; $iter_habil <= $cantidad; $iter_habil++ ){
-            $hasta = $hasta->calc($delta);
+            $hasta->calc($delta);
         }
     }else{
         #esto es si no importa quetodos los dias del periodo sean habiles, los que deben ser habiles son el 1ero y el ultimo     
         $delta->parse("+ ".$cantidad. " days");
-        $hasta = $hasta->calc($delta);
+        $hasta->calc($delta);
 
         if (!($hasta->is_business_day)){
             $hasta = Date_NextWorkDay($hasta);
@@ -455,24 +437,24 @@ sub proximosHabiles {
     }
     #Se sume un dia si es feriado el ultimo dia.
     my $dateformat= C4::Date::get_date_format();
-    $hasta = C4::Date::format_date_in_iso($hasta, $dateformat);
+    #$hasta = C4::Date::format_date_in_iso($hasta, $dateformat);
     
     my $proximos_feriados = C4::AR::Utilidades::getProximosFeriados($hasta);
     
     foreach my $feriado (@$proximos_feriados) {
         if( C4::Date::format_date($hasta,$dateformat) eq $feriado->getFecha ) {
         	$delta->parse("+ 1 business days");
-            $hasta = $hasta->calc($delta);
+            $hasta->calc($delta);
         }
     }
     
-    my $desde_string
-    $desde = C4::Date::format_date_in_iso($desde_string, $dateformat);
-    my $hasta_string = 
-    $hasta = C4::Date::format_date_in_iso($hasta_string, $dateformat);
+    my $desde_string = $desde->printf($dateformat);
+    C4::AR::Debug::debug("DESDE STRING: ".$desde_string);
+    my $hasta_string = $hasta->printf($dateformat);
+    C4::AR::Debug::debug("HASTA  STRING: ".$hasta_string);
 
-    return (    $desde,
-                $hasta,
+    return (    $desde_string,
+                $hasta_string,
                 $apertura,
                 $cierre
     );
