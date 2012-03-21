@@ -59,6 +59,9 @@ $(document).ready( function() {
             ID3_ARRAY.push([% n3 %]);
         [% END %]
 
+        REGISTRO_ID = [% id1 %];
+        TOKEN       = '[% token %]';
+
         modificarEjemplaresN3FromRegistro(params.id1);
     [% ELSIF tipoAccion == "AGREGAR_ANALITICA" %]  
         TEMPLATE_ACTUAL         = "ANA";

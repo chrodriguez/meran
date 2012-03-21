@@ -620,22 +620,22 @@ sub detalleDisponibilidadNivel3{
     $db = $db || C4::Modelo::CatRegistroMarcN3->new->db;
     
     #recupero todos los nivel3 segun el id2 pasado por parametro
-    my $nivel3_array_ref                = C4::AR::Nivel3::getNivel3FromId2($id2,$db);
+    my $nivel3_array_ref                        = C4::AR::Nivel3::getNivel3FromId2($id2,$db);
     my @result;
     my %hash_nivel2;
-    my $i                               = 0;
-    my $cantDisponibles                 = 0;
+    my $i                                       = 0;
+    my $cantDisponibles                         = 0;
     my %infoNivel3;
     my $esParaSala;
-    $infoNivel3{'cantParaSala'}         = 0;
-    $infoNivel3{'cantParaPrestamo'}     = 0;
-    $infoNivel3{'cantParaSalaActual'}         = 0;
-    $infoNivel3{'cantParaPrestamoActual'}     = 0;
-    $infoNivel3{'disponibles'}          = 0;
-    $infoNivel3{'cantPrestados'}        = C4::AR::Nivel2::getCantPrestados($id2,$db);
-    $infoNivel3{'cantReservas'}         = C4::AR::Reservas::cantReservasPorGrupo($id2,$db);
-    $infoNivel3{'cantReservasEnEspera'} = C4::AR::Reservas::cantReservasPorGrupoEnEspera($id2,$db);
-    $infoNivel3{'cantReservasAsignadas'}= C4::AR::Reservas::cantReservasPorGrupoAsignadas($id2,$db);
+    $infoNivel3{'cantParaSala'}                 = 0;
+    $infoNivel3{'cantParaPrestamo'}             = 0;
+    $infoNivel3{'cantParaSalaActual'}           = 0;
+    $infoNivel3{'cantParaPrestamoActual'}       = 0;
+    $infoNivel3{'disponibles'}                  = 0;
+    $infoNivel3{'cantPrestados'}                = C4::AR::Nivel2::getCantPrestados($id2,$db);
+    $infoNivel3{'cantReservas'}                 = C4::AR::Reservas::cantReservasPorGrupo($id2,$db);
+    $infoNivel3{'cantReservasEnEspera'}         = C4::AR::Reservas::cantReservasPorGrupoEnEspera($id2,$db);
+    $infoNivel3{'cantReservasAsignadas'}        = C4::AR::Reservas::cantReservasPorGrupoAsignadas($id2,$db);
 
     for(my $i=0;$i<scalar(@$nivel3_array_ref);$i++){
         my %hash_nivel3;
@@ -649,7 +649,7 @@ sub detalleDisponibilidadNivel3{
         $hash_nivel3{'nivel3_obj'}          = $nivel3_array_ref->[$i]; 
         $hash_nivel3{'id3'}                 = $nivel3_array_ref->[$i]->getId3;
         $hash_nivel3{'estaPrestado'}        = $nivel3_array_ref->[$i]->estaPrestado;
-        $hash_nivel3{'estaReservado'}        = $nivel3_array_ref->[$i]->estaReservado;
+        $hash_nivel3{'estaReservado'}       = $nivel3_array_ref->[$i]->estaReservado;
         $hash_nivel3{'id_ui_poseedora'}     = $nivel3_array_ref->[$i]->getId_ui_poseedora();
         $hash_nivel3{'id_ui_origen'}        = $nivel3_array_ref->[$i]->getId_ui_origen();
         $esParaSala                         = $nivel3_array_ref->[$i]->esParaSala();

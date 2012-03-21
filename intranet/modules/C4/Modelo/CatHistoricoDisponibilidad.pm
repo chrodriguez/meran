@@ -86,9 +86,9 @@ sub agregar {
     my ($data_hash) = @_;
 
 
-    $self->debug("HISTORICO DE DISPONIBILIDAD ==> ".$data_hash->{'id3'});
-    $self->debug("HISTORICO DE DISPONIBILIDAD ==> ".$data_hash->{'detalle'});
-    $self->debug("HISTORICO DE DISPONIBILIDAD ==> ".$data_hash->{'tipo_prestamo'});
+#     $self->debug("HISTORICO DE DISPONIBILIDAD ==> ".$data_hash->{'id3'});
+#     $self->debug("HISTORICO DE DISPONIBILIDAD ==> ".$data_hash->{'detalle'});
+#     $self->debug("HISTORICO DE DISPONIBILIDAD ==> ".$data_hash->{'tipo_prestamo'});
 
     #Asignando data...
     $self->setId3( $data_hash->{'id3'} );
@@ -96,7 +96,7 @@ sub agregar {
     $self->setTipo_prestamo( $data_hash->{'tipo_prestamo'} );
     $self->save();
 
-    $self->debug("SE AGREGO EL HISTORICO DE DISPONIBILIDAD");
+#     $self->debug("SE AGREGO EL HISTORICO DE DISPONIBILIDAD");
 }
 
 1;
