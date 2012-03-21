@@ -572,7 +572,6 @@ sub setPassword{
     my ($password) = @_;
 
     $self->password($password);
-    $self->save();
 }
 
 sub getLast_login{
@@ -606,7 +605,6 @@ sub setLast_change_password{
     my ($last_change_password) = @_;
     $last_change_password = C4::Date::format_date_in_iso($last_change_password,$dateformat);
     $self->last_change_password($last_change_password);
-    $self->save();
     
 }
 
@@ -646,7 +644,6 @@ sub setChange_password{
     my ($self) = shift;
     my ($change_password) = @_;
     $self->change_password($change_password);
-    $self->save();
 }
 
 sub cumpleRequisito{
@@ -694,7 +691,6 @@ sub setThemeSave{
     my ($self) = shift;
     my ($theme) = @_;
     $self->theme($theme);
-    $self->save();
 }
 
 sub esRegularToString{

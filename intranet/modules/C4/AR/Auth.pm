@@ -1871,6 +1871,8 @@ sub _validarCambioPassword {
 	    my $today = Date::Manip::ParseDate("today");
 	    $socio->setLast_change_password($today);
 	    $socio->setChange_password(0);
+	    
+	    $socio->save();
     }
        
     return ($msg_object);
@@ -1900,7 +1902,6 @@ sub _validarPasswordActual{
         }
         else{}
     }
-    
     return ($socio,$msg_object);
 }
 

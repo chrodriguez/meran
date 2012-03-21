@@ -10,16 +10,30 @@
         var changed = $.trim($('#actualpassword').val());
         if (changed != ''){
             [% IF plainPassword == 0 %]
+            
                 var nroRandom   = [% nroRandom %];
 	            var hash_actual = b64_sha256(b64_sha256(b64_md5($("#actualpassword").val()))+nroRandom);
 	            var key         = b64_sha256(b64_md5($("#actualpassword").val()));
 	            var hash_new1   = encriptar(b64_md5($("#newpassword1").val()),key);
 	            var hash_new2   = encriptar(b64_md5($("#newpassword2").val()),key);
+	            
+	            //checkeo que las pass nuevas sean iguales
+	            var aes = new pidCrypt.AES.CBC()
+	            if(aes.decryptText($("#new_password1").val(),key, {nBits: 256}) != 
+	                aes.decryptText($("#new_password2").val(),key, {nBits: 256}))
+                {
+	                jAlert('Por favor verifique que las nuevas passwords sean iguales');
+	                return false;
+                }
+                
 
 	            $("#actual_password").val(hash_actual);
+	            //mando solo una pass al servidor
 	            $('#new_password1').val(hash_new1);
-	            $('#new_password2').val(hash_new2);
+	            $('#new_password2').val(hash_new1);
+        	           
 	        [% ELSE %]
+	        
 	            var hash_actual = $("#actualpassword").val();
 	            var hash_new1   = $("#newpassword1").val();
 	            var hash_new2   = $("#newpassword2").val();
@@ -27,7 +41,9 @@
                 $("#actual_password").val(hash_actual);
                 $('#new_password1').val(hash_new1);
                 $('#new_password2').val(hash_new2);
+                
             [% END %]
+            
 	        $("#datosAEnviar").submit();
 	        return true;
 	     }        	
@@ -132,42 +148,6 @@
 
         <input type="hidden" name="token" id="token" value="[% token %]" />
         
-<!-- Cambio de foto. SE MAMA TODO EL ESTILO, ES UNA VERGA !!! 
-           [% IF UploadPictureFromOPAC %] 
-                <div class="control-group">
-                [% IF foto_name %] 
-                    <div id="fotoUsuario"> 
-                        <a class="fancylink" rel="group" href="/pictures/[% foto_name %]">
-                            <img border="0" src="/pictures/[% foto_name %]"
-                                  style="width: 60%; max-width: 120px;" 
-                                  alt="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
-                                  title="[% socio.persona.getApellido %], [% socio.persona.getNombre %] ([% socio.getNro_socio %])"
-                            >
-                        </a>
-                    </div>
-                    <div id="div_boton_eliminar_foto" style="display: none">
-                      <li>
-                            [% PERL %]
-                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Eliminar Foto' | i18n %]",
-                                                                            boton   => "boton_borrar",
-                                                                            onClick => "eliminarFoto('[% foto_name %] ');",
-                                                                         );
-                            [% END %]
-                      </li>
-                    </div>
-                [% ELSE %]
-                    <form name="foto" method="post" enctype="multipart/form-data"  action="[% url_prefix %]/upload.pl" >
-                        <input type="file" name="filepath" id="filepath">
-                        <input type="hidden" name="nro_socio" value='[% socio_data.getNro_socio %]'>
-                            <a  onMouseOut="swap('up','[% themelang %]/images/upload.png')" 
-                                onMouseOver="swap('up','[% themelang %]/images/uploadbis.png')" onClick="document.foto.submit();">
-                                <input name="up" id="up" type="image" value="[% 'Subir Foto' | i18n %]"  src="[% themelang %]/images/upload.png" border="0">
-                            </a>
-                    </form>
-
-                [% END %]
-                </div>
-            [% END %]-->
            <!-- CAMPOS PARA CAMBIO DE PASSWORD -->
            <input type="hidden" name="new_password1" id="new_password1" />
            <input type="hidden" name="new_password2" id="new_password2" />

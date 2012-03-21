@@ -10,46 +10,46 @@ my $query = new CGI;
 
 my $input = $query;
 
-my ($template, $session, $t_params)= get_template_and_user({
-                                    template_name => "opac-main.tmpl",
-                                    query => $query,
-                                    type => "opac",
+my ($template, $session, $t_params) = get_template_and_user({
+                                    template_name   => "opac-main.tmpl",
+                                    query           => $query,
+                                    type            => "opac",
                                     authnotrequired => 1,
-                                    flagsrequired => {  ui => 'ANY', 
-                                                        tipo_documento => 'ANY', 
-                                                        accion => 'CONSULTA', 
-                                                        entorno => 'undefined'},
+                                    flagsrequired   => {ui              => 'ANY', 
+                                                        tipo_documento  => 'ANY', 
+                                                        accion          => 'CONSULTA', 
+                                                        entorno         => 'undefined'},
              });
 
 
-my $nro_socio = C4::AR::Auth::getSessionNroSocio();
-my ($socio, $flags) = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+my $nro_socio                       = C4::AR::Auth::getSessionNroSocio();
+my ($socio, $flags)                 = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
 C4::AR::Validator::validateObjectInstance($socio);
 
 my %data_hash;
-my $msg_object                  = C4::AR::Mensajes::create();
-$data_hash{'nombre'}            = $input->param('nombre');
-$data_hash{'apellido'}          = $input->param('apellido');
-$data_hash{'direccion'}         = $input->param('direccion');
-$data_hash{'numero_telefono'}   = $input->param('telefono');
-$data_hash{'id_ciudad'}         = $input->param('id_ciudad');
-$data_hash{'email'}             = $input->param('email');
+my $msg_object                      = C4::AR::Mensajes::create();
+$data_hash{'nombre'}                = $input->param('nombre');
+$data_hash{'apellido'}              = $input->param('apellido');
+$data_hash{'direccion'}             = $input->param('direccion');
+$data_hash{'numero_telefono'}       = $input->param('telefono');
+$data_hash{'id_ciudad'}             = $input->param('id_ciudad');
+$data_hash{'email'}                 = $input->param('email');
 
-$data_hash{'auth_nombre'}       = $input->param('nombre_autorizado');
-$data_hash{'auth_dni'}          = $input->param('dni_autorizado');
-$data_hash{'auth_telefono'}     = $input->param('telefono_autorizado');
+$data_hash{'auth_nombre'}           = $input->param('nombre_autorizado');
+$data_hash{'auth_dni'}              = $input->param('dni_autorizado');
+$data_hash{'auth_telefono'}         = $input->param('telefono_autorizado');
 $data_hash{'eliminar_autorizado'}   = $input->param('eliminar_autorizado');
 
-$data_hash{'actual_password'}   = $input->param('actual_password');
-$data_hash{'new_password1'}     = $input->param('new_password1');
-$data_hash{'new_password2'}     = $input->param('new_password2');
-$data_hash{'tema'}              = $input->param('temas_opac') || 0;
+$data_hash{'actual_password'}       = $input->param('actual_password');
+$data_hash{'new_password1'}         = $input->param('new_password1');
+$data_hash{'new_password2'}         = $input->param('new_password2');
+$data_hash{'tema'}                  = $input->param('temas_opac') || 0;
 
 if($input->param('remindFlag') eq "on"){
-    $data_hash{'remindFlag'}    = 1;
+    $data_hash{'remindFlag'}        = 1;
 }else{
-    $data_hash{'remindFlag'}    = 0;
+    $data_hash{'remindFlag'}        = 0;
 }
 
 
@@ -91,7 +91,9 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
     $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje($cod_msg,'opac');
     
     if ($data_hash{'tema'}){
+        $socio->load();
         $socio->setThemeSave($data_hash{'tema'});
+        $socio->save();
     }
 
     $t_params->{'foto_name'}        = $socio->tieneFoto();
