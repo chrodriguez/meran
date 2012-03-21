@@ -95,7 +95,7 @@ sub buildFotoNameHash{
     use Digest::SHA;
     my $hash;
     
-    $hash = sha1_hex($self->getId_persona.$self->getNro_socio.$self->getId_ui.$self->getId_socio);
+    $hash = Digest::SHA::sha1_hex($self->getId_persona.$self->getNro_socio.$self->getId_ui.$self->getId_socio).".jpg";
     
     return $hash;
 }
@@ -296,6 +296,7 @@ sub modificar{
     
     $self->persona->modificar($data_hash);
     $self->agregarAutorizado($data_hash);
+
     $self->save();
 }
 
@@ -1268,10 +1269,21 @@ sub fotoName{
     my $path;
 
     my $foto_name   =   $self->getFoto;
-
+    
+    if (!C4::AR::Utilidades::validateString($foto_name)){
+        $foto_name = $self->buildFotoNameHash();
+        $self->setFoto($foto_name);
+    }
+    
+    
     if (lc($session_type) eq "opac"){
         $picturesDir = C4::Context->config("picturesdir_opac");
         $foto_name =   $self->persona->getFoto;
+
+	    if (!C4::AR::Utilidades::validateString($foto_name)){
+	        $foto_name = $self->persona->buildFotoNameHash();
+            $self->persona->setFoto($foto_name);
+	    }
     }
 
     $path           = $picturesDir."/".$foto_name;

@@ -213,7 +213,7 @@ sub modificarDatosDeOPAC{
     $self->setCiudad($data_hash->{'id_ciudad'});
     $self->setTelefono($data_hash->{'numero_telefono'});
     $self->setEmail($data_hash->{'email'});
-
+    
     $self->save();
 }
 
@@ -333,7 +333,7 @@ sub buildFotoNameHash{
     use Digest::SHA;
     my $hash;
     
-    $hash = sha1_hex($self->getId_persona.$self->getNro_documento.$self->getApellido.$self->getNombre);
+    $hash = Digest::SHA::sha1_hex($self->getId_persona.$self->getNro_documento.$self->getApellido.$self->getNombre).".jpg";
     
     return $hash;
 }
@@ -342,6 +342,7 @@ sub setFoto{
     my ($self) = shift;
     my ($foto) = @_;
     $self->foto($foto);
+    $self->save();
 }
 
 sub getFoto{

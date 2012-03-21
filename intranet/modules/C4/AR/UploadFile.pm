@@ -102,7 +102,7 @@ sub uploadPhoto{
     my $type            = C4::AR::Utilidades::checkFileMagic($query->param('POSTDATA'), @filesAllowed);
     my $sessionType     = C4::AR::Auth::getSessionType();
     my $name            = $socio->fotoName($sessionType);
-      
+    
     if ($sessionType eq "opac"){
         $uploaddir = $uploaddir_oapc;
     }

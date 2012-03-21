@@ -14,7 +14,7 @@
                   [% "Ejemplares" | i18n %] ([% disponibles %])
                 </a>
               </div>
-              <div id="ejemplares_[% id2 %]" class="accordion-body collapse">
+              <div id="ejemplares_[% id2 %]" class="accordion-body collapse in">
                 <div class="accordion-inner">
 					<div class="alert alert-info">
 					    <dl>
@@ -292,7 +292,7 @@
     </div>    
 
     <script>
-        $('#actions_ejemplares_[% id2 %]').hide();
+       // $('#actions_ejemplares_[% id2 %]').hide();
     </script>  
 
 <script type="text/javascript">makeToggle('ejemplaresDelGrupo[% id2 %]','trigger_2_[% id2 %]',null,false);</script>
