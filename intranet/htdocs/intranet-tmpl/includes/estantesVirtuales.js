@@ -185,6 +185,9 @@ function ordenar(orden){
                 objAH.estante= estante;
                 objAH.padre= padre;
                 objAH.contenido= contenido;
+                if ($('#eliminar_uno').val== contenido){
+                  objAH.eliminar_uno= 1;
+                }
                 objAH.tipo= 'BORRAR_CONTENIDO';
                 objAH.sendToServer();
         }
@@ -298,10 +301,12 @@ function ordenar(orden){
 	
 	function updateAgregarContenidoAEstante(responseText){
             var Messages= JSONstring.toObject(responseText);
+            
             setMessages(Messages);
             if (!(hayError(Messages))){
                     verSubEstantes(objAH.estante,objAH.padre);
-                }
+            }
+            
                 
         }
 	

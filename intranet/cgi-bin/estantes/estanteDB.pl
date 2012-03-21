@@ -212,21 +212,27 @@ elsif($tipo eq "BORRAR_CONTENIDO"){
                                                     entorno => 'undefined' },
                                                 'intranet'
                                );
+
     my $id_estante= $obj->{'estante'};
- 
-    my $cont = $obj->{'contenido'};
+    my $contenido_array_ref;
 
- 
-    my $contenido_array_ref= $cont;
+    if ($obj->{'eliminar_uno'}){
+          my @array_contenido;
+          @array_contenido=$obj->{'contenido'};
+            
+          ($Messages_arrayref)= &C4::AR::Estantes::borrarContenido($id_estante,\@array_contenido);
 
+    } else {
 
+          $contenido_array_ref= $obj->{'contenido'};
+          ($Messages_arrayref)= &C4::AR::Estantes::borrarContenido($id_estante,$contenido_array_ref);
+    }
 
-    
-
-    ($Messages_arrayref)= &C4::AR::Estantes::borrarContenido($id_estante,$contenido_array_ref);
 
     my $infoOperacionJSON=to_json $Messages_arrayref;
 
     C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
-}
+
+
+}  

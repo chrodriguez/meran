@@ -139,8 +139,8 @@ sub borrarContenido {
     $db->{connect_options}->{AutoCommit} = 0;
     $db->begin_work;
 
-    C4::AR::Utilidades::printARRAY($contenido_array_ref);
-    eval{
+
+#     eval{
         C4::AR::Debug::debug("VAMOS A ELIMINAR EL CONTENIDO");
         foreach my $id2 (@$contenido_array_ref){
 	    C4::AR::Debug::debug("CONTENIDO ".$id2);
@@ -157,7 +157,7 @@ sub borrarContenido {
         C4::AR::Debug::debug("EL CONTENIDO SE ELIMINO CON EXITO");
         $db->commit;
         $msg_object->{'error'}= 0;
-    };
+#     };
     if ($@){
         C4::AR::Debug::debug("ERROR");
         &C4::AR::Mensajes::printErrorDB($@, '',"INTRA");

@@ -1,21 +1,20 @@
 <script type="text/javascript">
 function agregarCont(id2){
-           $('#optionsCheckbox'+id2).unbind('onclick');
-           $('#optionsCheckbox'+id2).click(function(){
-                                     borrarCont(id2,$('#input_contenido_id_estante').val(),$('#input_contenido_id_padre_estante').val())    
-           });
-
+           $('#optionsCheckbox'+id2).replaceWith("<a class='btn btn-danger' href='#' onclick=borrarCont("+id2+","+ $('#input_contenido_id_estante').val()+","+$('#input_contenido_id_padre_estante').val()+"); id=optionsCheckbox"+id2+">"
+              +"<i class='icon-remove icon-white'></i></a><br>");
+            $('#eliminar_uno').val= id2;
             agregarContenidoAEstante(id2);
-         
+            $('#eliminar_uno').val= '';
+   
 }
 
 
 function borrarCont(cont, estante, padre){
-      $('#optionsCheckbox'+id2).unbind('onclick');
-      $('#optionsCheckbox'+id2).click(function(){
-                                     agregarCont(cont);    
-                       });
-      borrarContenido(cont, estante, padre);
+//       $('#optionsCheckbox'+cont).replaceWith("<input type=button class='btn btn-info' onclick=agregarCont("+cont+"); id=optionsCheckbox"+cont+">");
+      $('#optionsCheckbox'+cont).replaceWith("<br><a class='btn btn-success' href='#' onclick=agregarCont("+cont+"); id=optionsCheckbox"+cont+"><i class='icon-plus icon-white'></i></a><br>");
+       $('#eliminar_uno').val= id2;
+      borrarContenido(cont, estante,padre);
+       $('#eliminar_uno').val= '';
 }
 </script>
 
@@ -57,25 +56,32 @@ function borrarCont(cont, estante, padre){
                     <td>
                             [% nomCompleto %]
                     </td>    
-                    <td width="150px">
+                    <td width="200px">
                    
                                
                               <ul class="unstyled">   
                                   [% FOREACH grupos %]
-                                         <li> [% IF edicion %] 
-                                                <label class="checkbox">
-                                                      <input type="checkbox" onclick="agregarCont([% id2 %])" value="[% id2 %]" id="optionsCheckbox[% id2 %]">
-                                                      [% edicion %]
-                                                    
-                                              [% END %]
-                                              [% IF anio_publicacion %]
-                                                   
-                                                            <input type="checkbox"  onclick="agregarCont([% id2 %])" value="[% id2 %]" id="optionsCheckbox[% id2 %]" >
-                                                            [% anio_publicacion %]
-                                                                             
-                                              [% END %] 
-                                          </label> 
-                                          </li>
+                                         <li id="optionsCheckbox[% id2 %]">   
+                                                <input type="hidden" class="btn btn-info" value="[% id2 %]" id="eliminar_uno">
+
+                                                        [% PERL %]            
+                                                              print C4::AR::Filtros::action_button(
+                                                                                                    button  => "btn btn-success",
+                                                                                                    title   => "",
+                                                                                                    icon    => "icon-plus icon-white",
+                                                                                                    action  => 'agregarCont([% id2 %]);',
+                                                                                                 
+                                                                        ) ;
+                                                        [% END %]
+                                                        
+                                              
+                                          
+                                          </li>         [% IF edicion%]
+                                                                   [% edicion %]
+                                                        [% END %]
+                                                        [% IF anio_publicacion %]
+                                                                   [% anio_publicacion %]
+                                                        [% END %]
                                   [% END %]
                                 </ul>
                             
