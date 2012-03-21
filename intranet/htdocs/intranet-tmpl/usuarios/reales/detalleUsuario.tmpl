@@ -86,8 +86,8 @@ var loaderPath= "";
 
 
 <fieldset>
-<legend class="titulo_legend_resaltado">[% 'Datos del Usuario' | i18n %]</legend>
-	<div id="acciones_usuario" class="right" stlyle="margin-right: 25px;">
+    <legend class="titulo_legend_resaltado">[% 'Datos del Usuario' | i18n %]</legend>
+	<div id="acciones_usuario" class="right" style="margin-right: 60px;">
 	        [% PERL %]
 	         print C4::AR::Filtros::action_set_button(    
 	                                             title           => "[% socio.persona.getNombre %], [% socio.persona.getApellido %]",
@@ -146,7 +146,7 @@ var loaderPath= "";
 	    <input type=hidden name="token" value="[% token %]" >
 	</form>
 
-     <div class="span12" >
+     <div class="_span96">
                 <dl>
                       <dt id="foto"> 
                         [% IF foto_name %]  
