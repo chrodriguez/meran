@@ -1931,9 +1931,10 @@ sub _setearPassword{
 
 
 sub _passwordsIguales{
+
     my ($nuevaPassword1,$nuevaPassword2,$socio) = @_;
-    my $auth_method = $socio->getLastAuthMethod();
-    my $result = 0;
+    my $auth_method                             = $socio->getLastAuthMethod();
+    my $result                                  = 0;
     
     use Switch;
     switch ($auth_method){

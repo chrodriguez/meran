@@ -137,11 +137,11 @@ var loaderPath= "";
 	
 	</div>
 
-    <form id="formCambioPassword" method="get" action="/meran/usuarios/change_password.pl">
+    <form id="formCambioPassword" method="get" action="[% url_prefix %]/usuarios/change_password.pl">
                <input type="hidden" value="[% token %]" name="token">
     </form>
                          
-	<form action=[% url_prefix %]/usuarios/cardGenerator.pl method=get name="formCarnet">
+	<form action="[% url_prefix %]/usuarios/cardGenerator.pl" method=get name="formCarnet">
 	    <input type=hidden name="nro_socio" value="[% socio.getNro_socio %]" >
 	    <input type=hidden name="token" value="[% token %]" >
 	</form>

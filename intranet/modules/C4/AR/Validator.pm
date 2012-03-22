@@ -224,6 +224,7 @@ sub checkPassword{
     }
 
     if (!(&checkLength($password, C4::AR::Preferencias::getValorPreferencia('minPassLength')))) {
+        C4::AR::Debug::debug("------------- es mas corta -----------------");
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U316', 'params' => []} ) ;
         return ($msg_object);

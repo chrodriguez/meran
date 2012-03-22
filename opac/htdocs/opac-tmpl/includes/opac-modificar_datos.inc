@@ -18,9 +18,7 @@
 	            var hash_new2   = encriptar(b64_md5($("#newpassword2").val()),key);
 	            
 	            //checkeo que las pass nuevas sean iguales
-	            var aes = new pidCrypt.AES.CBC()
-	            if(aes.decryptText($("#new_password1").val(),key, {nBits: 256}) != 
-	                aes.decryptText($("#new_password2").val(),key, {nBits: 256}))
+	            if(desencriptar(hash_new1, key) != desencriptar(hash_new2, key))
                 {
 	                jAlert('Por favor verifique que las nuevas passwords sean iguales');
 	                return false;
