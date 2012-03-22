@@ -14,7 +14,7 @@
                   [% "Ejemplares" | i18n %] ([% disponibles %])
                 </a>
               </div>
-              <div id="ejemplares_[% id2 %]" class="accordion-body collapse">
+              <div id="ejemplares_[% id2 %]" class="accordion-body collapse in">
                 <div class="accordion-inner">
 					<div class="alert alert-info">
 					    <dl>
@@ -107,7 +107,7 @@
 						                            [% END %]
 						                        [% END %]
 						                    [% END %]
-                                            <br />
+                                            
 					                        [% nivel3_obj.getDisponibilidadObject.getNombre %]
 						                </td>
 						                <td>
@@ -205,7 +205,7 @@
                                                     button          => 'btn btn-primary',
 
                                                     actions         => [
-                                                                        {title => "Editar", 
+                                                                        {title => "Modificar", 
                                                                          action=>"editarEjemplar([% id2 %],[% id3 %])",
                                                                          icon=>"icon-edit"
                                                                         },
@@ -227,6 +227,7 @@
 						</tbody>
                       </tbody>
                     </table>
+<!-- FIXME y esto para q esta!!! -->
 					    [%   IF loop.count > 1 %]
 					        
 					        <form id="edicion_grupal[% id2 %]" name="edicion_grupal" action="datosDocumento.pl" method="post">
@@ -234,7 +235,10 @@
 					        </form>
 					
 					    [% END %]
-					
+
+                            <form id="edicion_grupal[% id2 %]" name="edicion_grupal" action="datosDocumento.pl" method="post">
+                              
+                            </form>					
 					
 					[% END %]<!-- END IF loop.last -->
 					
@@ -288,7 +292,7 @@
     </div>    
 
     <script>
-        $('#actions_ejemplares_[% id2 %]').hide();
+       // $('#actions_ejemplares_[% id2 %]').hide();
     </script>  
 
 <script type="text/javascript">makeToggle('ejemplaresDelGrupo[% id2 %]','trigger_2_[% id2 %]',null,false);</script>

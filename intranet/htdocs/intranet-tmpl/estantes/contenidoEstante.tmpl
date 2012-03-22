@@ -1,6 +1,27 @@
+<script type="text/javascript">
+function agregarCont(id2){
+           $('#optionsCheckbox'+id2).replaceWith("<span id=optionsCheckbox"+id2+"><a class='btn btn-danger' href='#' onclick=borrarCont("+id2+","+ $('#input_contenido_id_estante').val()+","+$('#input_contenido_id_padre_estante').val()+"); id=optionsCheckbox"+id2+">"
+              +"<i class='icon-remove icon-white'></i></a></span>");
+            $('#eliminar_uno').val(id2) ;
+            agregarContenidoAEstante(id2);
+            $('#eliminar_uno').val('');
+   
+}
+
+
+function borrarCont(cont, estante, padre){
+//       $('#optionsCheckbox'+cont).replaceWith("<input type=button class='btn btn-info' onclick=agregarCont("+cont+"); id=optionsCheckbox"+cont+">");
+      $('#optionsCheckbox'+cont).replaceWith("<span id=optionsCheckbox"+cont+"><a class='btn btn-success' href='#' onclick=agregarCont("+cont+"); id=optionsCheckbox"+cont+"><i class='icon-plus icon-white'></i></a></span>");
+      $('#eliminar_uno').val(cont);
+      borrarContenido(cont, estante,padre);
+      $('#eliminar_uno').val('');
+}
+</script>
+
+
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend">[% "Resultados de la b&uacute;squeda" | i18n %]:</legend>
-    
+            <input type="hidden" class="btn btn-info" value="" id="eliminar_uno">  
             <div class="well">
                 <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: <strong>[% HTML.escape(socio_busqueda) %]</strong></div> 
                  [% IF cantidad %]
@@ -35,34 +56,38 @@
                     <td>
                             [% nomCompleto %]
                     </td>    
-                    <td>
-                   
-                            [% PERL %]
-                                        print C4::AR::Filtros::action_set_button(    
-                                              title           =>    "Ediciones",
-                                              icon            =>    "icon-plus icon-white",
-                                              button          =>    'btn btn-info',
-
-
-                                              actions         => [ [% FOREACH grupos %]
-                                                                      {title => " [% IF edicion %]
-                                                                                            [% edicion %]
-                                                                                  [% END %]
-                                                                                  [% IF anio_publicacion %]
-                                                                                      ([% anio_publicacion %])
-                                                                                  [% END %]", 
-                                                                                  action=>"agregarContenidoAEstante([% id2 %])",
-                                                                                
-                                                                        },
-                                                                         [% END %]
-                                                                
-                                                                  ],
-                                                popover       => {  text=>'La edicion seleccionada se agregara como contenido del estante actual', 
-                                                                    title=> 'Atenci&oacute;n'}
-
-                     
-                                                ) ;
-                              [% END %]
+                    <td width="250px"> 
+                              <ul class="unstyled">
+                             
+                                  [% FOREACH grupos %]
+                                        
+                                         <li>
+                                               
+                                                <div>
+                                                  <span id="optionsCheckbox[% id2 %]">
+                                                        [% PERL %]            
+                                                              print C4::AR::Filtros::action_button(
+                                                                                                    button  => "btn btn-success",
+                                                                                                    title   => "",
+                                                                                                    icon    => "icon-plus icon-white",
+                                                                                                    action  => 'agregarCont([% id2 %]);',
+                                                                                                 
+                                                                        ) ;
+                                                        [% END %]
+                                                    </span>
+                                                    <span class="help-inline">
+                                                        [% IF edicion%]
+                                                                   [% edicion %]
+                                                        [% END %]
+                                                        [% IF anio_publicacion %]
+                                                                   [% anio_publicacion %]
+                                                        [% END %]
+                                                    </span>
+                                                </div> <br>
+                                          </li>        
+                                  [% END %]
+                                </ul>
+                            
 
 
                    </td>

@@ -62,7 +62,6 @@ sub uploadFotoNovedadOpac{
     
     #es un archivo valido
     if($file_type){
-        C4::AR::Debug::debug("vamos a subir : $hash_unique.$file_type " );
         
         open ( WRITEIT, ">$uploaddir/$hash_unique.$file_type" ) or die "$!"; 
         binmode WRITEIT; 
@@ -83,70 +82,64 @@ sub uploadPhoto{
     my ($query) = @_;
 
     use C4::Modelo::UsrSocio;
+    
+    my @filesAllowed    = qw(
+                                jpeg
+                                gif
+                                png
+                                jpg
+                            );
 
     my $uploaddir       = C4::Context->config("picturesdir");
     my $uploaddir_oapc  = C4::Context->config("picturesdir_opac");
     my $maxFileSize     = 2048 * 2048; # 1/2mb max file size...
     my $file            = $query->param('POSTDATA');
     my $nro_socio       = $query->url_param('nro_socio');
-    my $name            = $nro_socio;
-    
-    
     my $socio           = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
-    my $type            = '';
-
-
-    if (C4::AR::Auth::getSessionType() eq "opac"){
+    my $msg_object      = C4::AR::Mensajes::create();
+    
+    #checkeamos con libmagic el tipo del archivo
+    my $type            = C4::AR::Utilidades::checkFileMagic($query->param('POSTDATA'), @filesAllowed);
+    my $sessionType     = C4::AR::Auth::getSessionType();
+    my $name            = $socio->fotoName($sessionType);
+    
+    if ($sessionType eq "opac"){
         $uploaddir = $uploaddir_oapc;
     }
-
-    if ($file =~ /^GIF/i) {
-        $type = "jpg";
-    } elsif ($file =~ /PNG/i) {
-        $type = "jpg";
-    } elsif ($file =~ /JFIF/i) {
-        $type = "jpg";
-    } else {
-        $type = "jpg";
-    }
-
-    eval{
-	    if ($socio->tieneFoto){
-	        unlink($socio->tieneFoto);
-	    }
-    };
     
-    if (!$type) {
-        print qq|{ "success": false, "error": "Invalid file type..." }|;
-        print STDERR "file has been NOT been uploaded... \n";
+    if($type){
+
+        eval{
+	        if ($name){
+	            unlink($uploaddir . "/" . $name);
+	        }
+        };
+
+        open(WRITEIT, ">$uploaddir/$name") or die "Cant write to $uploaddir/$name. Reason: $!";
+            print WRITEIT $file;
+        close(WRITEIT);
+
+        my $check_size = -s "$uploaddir/$name";
+
+        if ($check_size < 1) {
+            $msg_object->{'error'} = 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP01', $sessionType} ) ;
+        } elsif ($check_size > $maxFileSize) {
+            $msg_object->{'error'} = 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP01', $sessionType} ) ;
+        } else  {
+            $msg_object->{'error'} = 0;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP08', $sessionType} ) ;
+        }
+        
+    }else{
+    
+        $msg_object->{'error'} = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP13', $sessionType} ) ;
+    
     }
-
-    $type = "jpg";
-
-    open(WRITEIT, ">$uploaddir/$name.$type") or die "Cant write to $uploaddir/$name.$type. Reason: $!";
-        print WRITEIT $file;
-    close(WRITEIT);
-
-    my $check_size = -s "$uploaddir/$name.$type";
-
-    print STDERR qq|Main filesize: $check_size  Max Filesize: $maxFileSize \n\n|;
-
-    print $query->header();
-
-    if ($check_size < 1) {
-        print STDERR "ooops, its empty - gonna get rid of it!\n";
-        print qq|{ "success": false, "error": "File is empty..." }|;
-        print STDERR "file has been NOT been uploaded... \n";
-    } elsif ($check_size > $maxFileSize) {
-        print STDERR "ooops, its too large - gonna get rid of it!\n";
-        print qq|{ "success": false, "error": "File is too large..." }|;
-        print STDERR "file has been NOT been uploaded... \n";
-    } else  {
-        print qq|{ "success": true }|;
-        print STDERR "file has been successfully uploaded... thank you.\n";
-
-    }
-
+    
+    return ($msg_object);
 
 }
 

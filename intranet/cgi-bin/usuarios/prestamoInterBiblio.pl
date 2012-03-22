@@ -73,6 +73,25 @@ $t_params->{'director'}= $director;
 $t_params->{'atencion'}=  C4::AR::Preferencias::getValorPreferencia('open') . " a "
 . C4::AR::Preferencias::getValorPreferencia('close');
 
+ my $escudo =
+        C4::Context->config('intrahtdocs') . '/temas/'
+      . 'default'
+      . '/imagenes/escudo-DEFAULT'
+      . '.jpg';
+
+  
+# ESCUDO UI
+    my $escudoUI =
+        C4::Context->config('intrahtdocs') . '/temas/'
+      . 'default'
+      . '/imagenes/escudo-'
+      . $branchcode
+      . '.jpg';
+   
+
+$t_params->{'escudo'}= $escudo;
+$t_params->{'escudoUI'}= $escudoUI;
+
 # Encode::decode_utf8(" Sábados: ")
 # . C4::AR::Preferencias::getValorPreferencia('open_sabado'). " a " .C4::AR::Preferencias::getValorPreferencia('close_sabado');
 $t_params->{'datos'}= \@datos;

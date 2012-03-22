@@ -65,6 +65,24 @@ if ($action eq 'editar'){
     
     #---------------- fin imagenes a borrar -----------------
     
+    
+    #--------- links -----------
+    my $linksTodos  = $input->param('links');  
+    my @links       = split('\ ', $linksTodos);   
+    my $linksFinal  = "";
+    
+    foreach my $link (@links){
+    
+        if($link !~ /^http/){
+            $linksFinal .= " http://" . $link;
+        }else{
+            $linksFinal = " " . $link;
+        }
+    }
+    
+    $input->param('links', $linksFinal);
+    #------- FIN links ---------
+    
     my ($Message_arrayref) = C4::AR::Novedades::editar($input, \@arrayNewFiles, \@arrayDeleteImages);
     
     if($Message_arrayref->{'error'} == 0){

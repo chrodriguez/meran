@@ -110,7 +110,7 @@ sub validar {
         my $subcampos_array = $campo_hash_ref->{'subcampos_array'};
 
         foreach my $subcampo_hash_ref (@{$subcampos_array}) {
-            C4::AR::Debug::debug("CatRegistroMarcN3 => validar => campo, subcampo ".$campo_hash_ref->{'campo'}.", ".$subcampo_hash_ref->{'subcampo'});
+#             C4::AR::Debug::debug("CatRegistroMarcN3 => validar => campo, subcampo ".$campo_hash_ref->{'campo'}.", ".$subcampo_hash_ref->{'subcampo'});
 
 
             if(($campo_hash_ref->{'campo'} eq '995')&&($subcampo_hash_ref->{'subcampo'} eq 'f')){
@@ -120,7 +120,7 @@ sub validar {
             #validaciones para la signatura topografica, la signatura es unica en el registro (no hay que chequear si el ejemplar es compartido)
 
                 if ($self->seRepiteSignatura($subcampo_hash_ref->{'dato'}) && (! ESTADO_COMPARTIDO( C4::AR::Catalogacion::getRefFromStringConArrobas(C4::AR::Utilidades::trim($marc_record->subfield("995","e"))))) ) {
-                    C4::AR::Debug::debug("CatRegistroMarcN3 => validar => se repite la signatura");
+#                     C4::AR::Debug::debug("CatRegistroMarcN3 => validar => se repite la signatura");
                     $msg_object->{'error'} = 1;
                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U417', 'params' => [$subcampo_hash_ref->{'dato'}]} ) ;
                 }
@@ -130,9 +130,9 @@ sub validar {
 
 
     if($msg_object->{'error'}){
-        C4::AR::Debug::debug("CatRegistroMarcN3 => DATOS INVALIDOS!!!!");
+#         C4::AR::Debug::debug("CatRegistroMarcN3 => DATOS INVALIDOS!!!!");
     } else {
-        C4::AR::Debug::debug("CatRegistroMarcN3 => DATOS VALIDOS!!!!");
+#         C4::AR::Debug::debug("CatRegistroMarcN3 => DATOS VALIDOS!!!!");
     }
 }
 
@@ -293,9 +293,10 @@ sub modificar {
 #                             C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => campo     => ".$field->tag);
 #                             C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => subcampo  => ".$sub_campo);
 #                             C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => dato      => ".$dato);
+
                               if(permiteEdicionGrupal($field->tag, $sub_campo, $cat_estructura_catalogacion)){
 
-                                if(($dato eq "")||($dato eq "-1")||($dato eq "NULL")){
+                                if(($dato eq "")||($dato eq "-1")||($dato eq "NULL")||($dato =~ m/NULL/)){
 #                                         C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => el dato ".$dato." no fue modificado");
 #                                     C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => se mantiene el dato ".$marc_record_base->subfield($field->tag, $sub_campo)." de la base");
                                 } else {
@@ -310,7 +311,7 @@ sub modificar {
         }
 
         $self->setMarcRecord($marc_record_base->as_usmarc);
-        C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => marc_record as_usmarc para la base ".$marc_record_base->as_usmarc);
+#         C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => marc_record as_usmarc para la base ".$marc_record_base->as_usmarc);
         ($MARC_result_array) = C4::AR::Catalogacion::marc_record_to_meran(MARC::Record->new_from_usmarc($marc_record_base->as_usmarc), $params->{'tipo_ejemplar'});
 
     } else {
@@ -321,7 +322,7 @@ sub modificar {
     $self->setCodigoBarra($marc_record_cliente->subfield("995","f"));
     $self->setSignatura($marc_record_cliente->subfield("995","t"));
 
-   C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => self->getId3() => ANTES ".$self->getId3());
+#    C4::AR::Debug::debug("CatRegistroMarcN3 => modificar => self->getId3() => ANTES ".$self->getId3());
 
     $self->validar($msg_object, $MARC_result_array, $params, 'UPDATE', $db);
 

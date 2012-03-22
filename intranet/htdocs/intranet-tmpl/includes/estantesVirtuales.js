@@ -167,7 +167,7 @@ function ordenar(orden){
                     contenido[i]=array[i].value;
                 }
                 theStatus=theStatus + ESTA_SEGURO+"?";
-                jConfirm(theStatus,ELIMINAR_CONTENIDO_TITLE, function(confirmStatus){if (confirmStatus) borrarContenido(contenido,estante,padre);});
+                 bootbox.confirm(theStatus, function(confirmStatus){if (confirmStatus) borrarContenido(contenido,estante,padre);});
             }
             else{ jAlert(NO_SE_SELECCIONO_NINGUN_CONTENIDO ,ELIMINAR_CONTENIDO_TITLE);}
         }
@@ -185,6 +185,9 @@ function ordenar(orden){
                 objAH.estante= estante;
                 objAH.padre= padre;
                 objAH.contenido= contenido;
+                if ($('#eliminar_uno').val() == contenido){
+                  objAH.eliminar_uno= 1;
+                }
                 objAH.tipo= 'BORRAR_CONTENIDO';
                 objAH.sendToServer();
         }
@@ -298,10 +301,12 @@ function ordenar(orden){
 	
 	function updateAgregarContenidoAEstante(responseText){
             var Messages= JSONstring.toObject(responseText);
+            
             setMessages(Messages);
             if (!(hayError(Messages))){
                     verSubEstantes(objAH.estante,objAH.padre);
-                }
+            }
+            
                 
         }
 	

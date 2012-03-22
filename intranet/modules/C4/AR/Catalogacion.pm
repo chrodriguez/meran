@@ -172,7 +172,9 @@ sub meran_nivel3_to_meran{
 
     my $campos_autorizados  = C4::AR::EstructuraCatalogacionBase::getSubCamposByNivel(3);
     #si es una edicion grupa del nivel3 no se traen las referencias, se procesan luego
-    my $with_references     = $data_hash->{'EDICION_N3_GRUPAL'}?0:1;
+# FIXME esto no se pq estaba asi, si lo dejo como antes no funciona la edicion grupal
+#     my $with_references     = $data_hash->{'EDICION_N3_GRUPAL'}?0:1;
+    my $with_references     = 1;
     my $nivel               = 3;
     my $marc_record         = _meran_to_marc($data_hash->{'infoArrayNivel3'},$campos_autorizados,$data_hash->{'tipo_ejemplar'}, $with_references, $nivel);
 
@@ -691,7 +693,7 @@ sub as_stringReloaded {
     my $db      = undef;
     my $campo   = $field->tag;
     my $nivel   = $params->{'nivel'};
-    C4::AR::Debug::debug("Catalogacion => as_stringReloaded => campo => ".$campo." itemype => ".$itemtype." nivel => ".$nivel);
+#     C4::AR::Debug::debug("Catalogacion => as_stringReloaded => campo => ".$campo." itemype => ".$itemtype." nivel => ".$nivel);
 
     my @array_subcampos;
 
@@ -701,7 +703,7 @@ sub as_stringReloaded {
         my $dato                            = $subfield->[1];
         $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype, $nivel);
         $dato                               = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $nivel);
-        C4::AR::Debug::debug("Catalogacion => as_stringReloaded => campo => ".$campo." subcampo => ".$subcampo." dato => ".$dato);
+#         C4::AR::Debug::debug("Catalogacion => as_stringReloaded => campo => ".$campo." subcampo => ".$subcampo." dato => ".$dato);
         $hash_temp{'dato_link'}             = C4::AR::Filtros::show_componente( ('campo' => $campo, 'subcampo' => $subcampo, 'dato' => $dato , 'id1' => $params->{'id1'}, 'id2' => $params->{'id2'}) );
 
         if($hash_temp{'dato_link'} ne "NO_LINK"){
@@ -723,7 +725,7 @@ sub as_stringReloaded {
             $hash_temp{'orden_subcampo'}    = $cat_estruct_info_array->getOrdenSubCampo();
         }
 
-        C4::AR::Debug::debug("Catalogacion => as_stringReloaded => text => ".$text);
+#         C4::AR::Debug::debug("Catalogacion => as_stringReloaded => text => ".$text);
 #         push( @subs, $text );
         push (@array_subcampos, \%hash_temp);
     } # foreach
@@ -2069,13 +2071,13 @@ sub _getEstructuraFromCampoSubCampo{
 
 #         for (my $i=0;$i <= scalar(@$cat_estruct_info_array);$i++){
         for (my $i=0;$i < scalar(@$cat_estruct_info_array);$i++){
-C4::AR::Debug::debug("Catalocagion => _getEstructuraFromCampoSubCampo => ".$cat_estruct_info_array->[$i]." i => ".$i);
+# C4::AR::Debug::debug("Catalocagion => _getEstructuraFromCampoSubCampo => ".$cat_estruct_info_array->[$i]." i => ".$i);
             if($cat_estruct_info_array->[$i]->getItemType() eq $itemtype){
                 return $cat_estruct_info_array->[$i];
             } elsif ($cat_estruct_info_array->[$i]->getItemType() eq "ALL") {
                 $index_all = $i;
             }
-            C4::AR::Debug::debug("C4::AR::Catalocagion::_getEstructuraFromCampoSubCampo => campo, subcampo, itemtype, nivel ".$cat_estruct_info_array->[$i]->getId().", ".$cat_estruct_info_array->[$i]->getCampo().", ".$cat_estruct_info_array->[$i]->getSubcampo().", ".$cat_estruct_info_array->[$i]->getItemType().", ".$cat_estruct_info_array->[$i]->getNivel());
+#             C4::AR::Debug::debug("C4::AR::Catalocagion::_getEstructuraFromCampoSubCampo => campo, subcampo, itemtype, nivel ".$cat_estruct_info_array->[$i]->getId().", ".$cat_estruct_info_array->[$i]->getCampo().", ".$cat_estruct_info_array->[$i]->getSubcampo().", ".$cat_estruct_info_array->[$i]->getItemType().", ".$cat_estruct_info_array->[$i]->getNivel());
         }
 
     } else {

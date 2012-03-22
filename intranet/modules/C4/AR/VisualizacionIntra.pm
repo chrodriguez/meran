@@ -497,7 +497,7 @@ sub getVisualizacionFromCampoAndNivel{
                                         );  
 
     if(scalar(@$cat_estruct_info_array) > 0){
-      C4::AR::Debug::debug("VisualizacionIntra => getVisualizacionFromCampoSubCampo => lo encontre!!!");
+#       C4::AR::Debug::debug("VisualizacionIntra => getVisualizacionFromCampoSubCampo => lo encontre!!!");
       return $cat_estruct_info_array->[0];
     }else{
       return 0;

@@ -497,7 +497,9 @@ function updateMostrarEstructuraDelNivel3(responseText){
     //no se trata de una edicion grupal se agregan las reglas para validar los campos, sino se permiten campos nulos
 //         addRules();
     } else {
-        $("#nivel3Tabla").before("<div class='reference'>Complete sólo los campos que desee modificar</div>");  
+        $("#nivel3Tabla").before("<div class='alert alert-heading'>Registro: <a href='detalle.pl?id1=" + REGISTRO_ID + "&amp;token='" + TOKEN + "' title='Ver Detalle del Registro'>" + REGISTRO_ID + "</a> <br> Complete sólo los campos que desee modificar</div>");  
+        
+        
     }
 }
 
@@ -1960,12 +1962,13 @@ function crearText(obj){
 }
 
 function crearBotones(obj){
-    if(obj.getRepetible() == '1')
+    if((obj.getRepetible() == '1')||(obj.getReferenciaTabla())){
         $(openDivButtonContainer("div_botones" + obj.getIdCompCliente())).insertAfter("#div" + obj.getIdCompCliente());
+    }
 
     if((obj.getEdicionGrupal() == "0")&&(MODIFICAR == 1)&&(EDICION_N3_GRUPAL == 1)){  
         disableComponent(obj.getIdCompCliente());  
-        $('#'+ obj.getIdCompCliente()).val("No se permite edicion grupal");  
+        $('#'+ obj.getIdCompCliente()).after("<p class='help-block'>No se permite edicion grupal</p>");
     } else {
         $("#div_botones" + obj.getIdCompCliente() + "_lista").append(crearBotonAgregarSubcampoRepetible(obj));
         $("#div_botones" + obj.getIdCompCliente() + "_lista").append(crearBotonEliminarSubcampoRepetible(obj));
@@ -2097,9 +2100,10 @@ function crearAuto(obj){
 
 function crearBotonAgregarReferenciaSubcampo(obj){
 
-    if ( (obj.getRepetible() == '1') && (obj.getReferenciaTabla()) ){
+//     if ( (obj.getRepetible() == '1') && (obj.getReferenciaTabla()) ){
+    if (obj.getReferenciaTabla()) {
         return '<li><a class="click" onclick=agregarTablaReferencias("'+ obj.getReferenciaTabla() +'")><i class="icon-plus"></i> Agregar referencia al subcampo '+ obj.getSubCampo() + ' para el campo ' + obj.getCampo() +'</a></li>';
-    }else{  
+    } else {  
         return '';
     }
 }

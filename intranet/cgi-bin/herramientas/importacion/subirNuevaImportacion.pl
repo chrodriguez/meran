@@ -37,14 +37,17 @@ if ($input->param('upfile')){
     $parametros{'comentario'}  = $input->param('comentario');
     $parametros{'esquemaImportacion'}     = $input->param('esquemaImportacion');
     $parametros{'formatoImportacion'}    = $input->param('formatoImportacion');
-
+C4::AR::Debug::debug("antes de subir - Nuevo esquema?? ".$input->{'nombreEsquema'}." o usamos uno existente: ". $input->{'esquemaImportacion'});
     #Si el esquema es nuevo hay que crearlo vacio al menos!
     if($input->param('nuevo_esquema')){
        $parametros{'nombreEsquema'}     = $input->param('nombreEsquema');
        $parametros{'nuevo_esquema'}     = $input->param('nuevo_esquema');
        $parametros{'esquemaImportacion'} = -1;
         }
-
+	if (!$input->{'nombreEsquema'}){
+		#FIXME hasta que el pelado se decida a arreglarme el combo
+		$parametros{'esquemaImportacion'} = $input->param('esquemaImportacion');
+		}
     my ($msg_object) = C4::AR::UploadFile::uploadImport(\%parametros);
 
 	print $session->header();

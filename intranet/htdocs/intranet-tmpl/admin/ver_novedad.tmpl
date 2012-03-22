@@ -20,7 +20,6 @@
     [% IF cant_novedades %]
     </br>      
     <div class="control-group">
-        <label class="control-label" >[% "Imagen/es " | i18n %]</label>
         <div class="controls">
             [% FOREACH imagen IN imagenes_hash %]
                 <a class="fancylink" id="imagen_[% imagen.getImageName %]" rel="group" href="http://[% SERVER_ADDRESS %]/opac-tmpl/uploads/novedades/[% imagen.getImageName %]">

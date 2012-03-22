@@ -179,6 +179,20 @@ sub checkFileMagic{
     close(WRITEIT);
     
     my $mime    = $flm->checktype_filename($path . "/" . $hash_unique);
+    
+    #el archivo vino en binario, hay que escribirlo de otra forma
+    if($mime =~ m/charset=binary/){
+    
+        #borramos el archivo y lo escribimos de nuevo
+        unlink($path . "/" . $hash_unique);
+    
+        open(WRITEIT, ">$path/$hash_unique") or die "Cant write to $path/$hash_unique. Reason: $!";
+            print WRITEIT $file;
+        close(WRITEIT);
+    
+    }
+    
+    $mime    = $flm->checktype_filename($path . "/" . $hash_unique);
 
     #vemos si esta en la whitelist
     my $ok      = 0;
@@ -193,10 +207,11 @@ sub checkFileMagic{
     
     }
     
+    unlink($path . "/" . $hash_unique);
+    
     if (!$ok){
     
         #no esta, borramos el archivo y devolvemos 0
-        unlink($path . "/" . $hash_unique);
         return 0;
     
     }
