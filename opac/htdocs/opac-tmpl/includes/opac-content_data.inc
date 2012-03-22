@@ -1,61 +1,65 @@
 
 [% USE HTML %]
     <div class="hero-unit row" id="search-bar">
-     	<h1 class="medium_font">[% 'Bienvenido ' | i18n %]<small>[% ui.getNombre %]</small></h1>
-        <p>
-	        [% IF cant_sanciones > 0 %]
-	              [% INCLUDE 'opac-sanciones.inc' %]
-	        [% END %]
-	        [% IF cantidad_prestamos > 0  %]
-	            <div class="prestamos_opac_main">
-	                  [% INCLUDE 'opac-prestamos.inc' %]
-	            </div>
-	        [% END %]
-	
-	        [% IF reservas_asignadas_count > 0 %]
-	             <div class="reservas_asig_opac_main">
-	                  [% INCLUDE 'opac-reservas_asignadas.inc' %]
-	            </div>
-	        [% END %]
-	
-		</p>
-          	
-		[% IF cant_portada %]
-			<div id="carousel_container" class="span8 columns">
-				<div id="carousel_portada_opac" class="carousel slide">
-		            <div class="carousel-inner">
-		            [% FOREACH p IN portada %]
-		              <div class="item [% IF loop.first %]active[% END %]">
-		                <img src="/opac-tmpl/uploads/portada/[% p.getImagePath %]" alt>
-		                [% IF p.getFooter %]
-			                <div class="carousel-caption">
-			                  <h4>[% p.getFooterTitle %]</h4>
-			                  <p>[% p.getFooter %]</p>
-			                </div>
-			            [% END %]
-		              </div>
-		            [% END %]
-		        	</div>
-				 <!-- Carousel nav -->
-				  <a class="carousel-control left" href="#carousel_container" data-slide="prev">&lsaquo;</a>
-				  <a class="carousel-control right" href="#carousel_container" data-slide="next">&rsaquo;</a>	        	
-				</div>
-			</div>
-		[% END %]
-
-        <form class="" action="[% url_prefix %]/opac-busquedasDB.pl" method="get" onsubmit="startOverlay();">
-            <input type="hidden" name="tipoAccion" value="BUSQUEDA_COMBINABLE" />
-            <input type="hidden" name="token" value="[% token %]" />
+      <div class="span10 columns">
+	     	<h1 class="medium_font">[% 'Bienvenido ' | i18n %]<small>[% ui.getNombre %]</small></h1>
 	        <p>
-	        	<input type="text" name="string" class="input-medium search-query span90 bigInput"
-                 		  x-webkit-speech onwebkitspeechchange="javascript:startSearch();" 
-                   		  speech onspeechchange="javascript:startSearch();"
-                   		  placeholder="[% IF title_search_bar %] [% title_search_bar %] [% ELSE %] [% 'Qu&eacute; necesit&aacute;s' | i18n %]? [% END %]"
-	        	>
-	        </p>
-	        
-	        <p><button class="btn btn-primary btn-large" type="submit">[% 'Buscar' | i18n %]</button></p>
-	    </form>
+		        [% IF cant_sanciones > 0 %]
+		              [% INCLUDE 'opac-sanciones.inc' %]
+		        [% END %]
+		        [% IF cantidad_prestamos > 0  %]
+		            <div class="prestamos_opac_main">
+		                  [% INCLUDE 'opac-prestamos.inc' %]
+		            </div>
+		        [% END %]
+		
+		        [% IF reservas_asignadas_count > 0 %]
+		             <div class="reservas_asig_opac_main">
+		                  [% INCLUDE 'opac-reservas_asignadas.inc' %]
+		            </div>
+		        [% END %]
+		
+			</p>
+	          	
+			[% IF cant_portada %]
+				<div id="carousel_container" class="carousel slide">
+					<div id="carousel_portada_opac" class="carousel slide">
+			            <div class="carousel-inner">
+			            [% FOREACH p IN portada %]
+			              <div class="item [% IF loop.first %]active[% END %]">
+			                <img src="/opac-tmpl/uploads/portada/[% p.getImagePath %]" alt>
+			                [% IF p.getFooter %]
+				                <div class="carousel-caption">
+				                  <h4>[% p.getFooterTitle %]</h4>
+				                  <p>[% p.getFooter %]</p>
+				                </div>
+				            [% END %]
+			              </div>
+			            [% END %]
+			        	</div>
+			         [% IF cant_portada > 1 %]
+						 <!-- Carousel nav -->
+						  <a class="carousel-control left" href="#carousel_container" data-slide="prev">&lsaquo;</a>
+						  <a class="carousel-control right" href="#carousel_container" data-slide="next">&rsaquo;</a>
+					 [% END %]	        	
+					</div>
+				</div>
+			[% END %]
+	
+	        <form class="" action="[% url_prefix %]/opac-busquedasDB.pl" method="get" onsubmit="startOverlay();">
+	            <input type="hidden" name="tipoAccion" value="BUSQUEDA_COMBINABLE" />
+	            <input type="hidden" name="token" value="[% token %]" />
+		        <p>
+		        	<input type="text" name="string" class="input-medium search-query span90 bigInput"
+	                 		  x-webkit-speech onwebkitspeechchange="javascript:startSearch();" 
+	                   		  speech onspeechchange="javascript:startSearch();"
+	                   		  placeholder="[% IF title_search_bar %] [% title_search_bar %] [% ELSE %] [% 'Qu&eacute; necesit&aacute;s' | i18n %]? [% END %]"
+		        	>
+		        </p>
+		        
+		        <p><button class="btn btn-primary btn-large" type="submit">[% 'Buscar' | i18n %]</button></p>
+		    </form>
+	 </div>
     </div>
 
       <!-- Example row of columns -->

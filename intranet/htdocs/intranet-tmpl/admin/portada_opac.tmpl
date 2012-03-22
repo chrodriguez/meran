@@ -77,14 +77,11 @@
 				        <td style="min-width: 100px;">
 				                  [% PERL %]
 				                      print C4::AR::Filtros::action_set_button(    
-				                            title           => "[% 'Entrada' | i18n %]",
+                                            title => "Modificar", 
+                                            action=>"modificarPortada([% p.id %])", 
+                                            icon=>"icon-white icon-edit",
 				                            button          => 'btn btn-primary',
-				
 				                            actions         => [
-					                                                {title => "Modificar", 
-					                                                 action=>"modificarPortada([% p.id %])", 
-					                                                 icon=>"icon-edit"
-					                                                },
 					                                                {title  => "Eliminar", 
 					                                                 url    =>"[% url_prefix %]/admin/portada_opac.pl",
 					                                                 params =>['id_portada=[% p.id %]','tipoAccion=DEL'], 
