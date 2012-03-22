@@ -1,27 +1,27 @@
 <script type="text/javascript">
 function agregarCont(id2){
-           $('#optionsCheckbox'+id2).replaceWith("<a class='btn btn-danger' href='#' onclick=borrarCont("+id2+","+ $('#input_contenido_id_estante').val()+","+$('#input_contenido_id_padre_estante').val()+"); id=optionsCheckbox"+id2+">"
-              +"<i class='icon-remove icon-white'></i></a><br>");
-            $('#eliminar_uno').val= id2;
+           $('#optionsCheckbox'+id2).replaceWith("<span id=optionsCheckbox"+id2+"><a class='btn btn-danger' href='#' onclick=borrarCont("+id2+","+ $('#input_contenido_id_estante').val()+","+$('#input_contenido_id_padre_estante').val()+"); id=optionsCheckbox"+id2+">"
+              +"<i class='icon-remove icon-white'></i></a></span>");
+            $('#eliminar_uno').val(id2) ;
             agregarContenidoAEstante(id2);
-            $('#eliminar_uno').val= '';
+            $('#eliminar_uno').val('');
    
 }
 
 
 function borrarCont(cont, estante, padre){
 //       $('#optionsCheckbox'+cont).replaceWith("<input type=button class='btn btn-info' onclick=agregarCont("+cont+"); id=optionsCheckbox"+cont+">");
-      $('#optionsCheckbox'+cont).replaceWith("<br><a class='btn btn-success' href='#' onclick=agregarCont("+cont+"); id=optionsCheckbox"+cont+"><i class='icon-plus icon-white'></i></a><br>");
-       $('#eliminar_uno').val= id2;
+      $('#optionsCheckbox'+cont).replaceWith("<span id=optionsCheckbox"+cont+"><a class='btn btn-success' href='#' onclick=agregarCont("+cont+"); id=optionsCheckbox"+cont+"><i class='icon-plus icon-white'></i></a></span>");
+      $('#eliminar_uno').val(cont);
       borrarContenido(cont, estante,padre);
-       $('#eliminar_uno').val= '';
+      $('#eliminar_uno').val('');
 }
 </script>
 
 
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend">[% "Resultados de la b&uacute;squeda" | i18n %]:</legend>
-    
+            <input type="hidden" class="btn btn-info" value="" id="eliminar_uno">  
             <div class="well">
                 <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: <strong>[% HTML.escape(socio_busqueda) %]</strong></div> 
                  [% IF cantidad %]
@@ -56,14 +56,15 @@ function borrarCont(cont, estante, padre){
                     <td>
                             [% nomCompleto %]
                     </td>    
-                    <td width="200px">
-                   
-                               
-                              <ul class="unstyled">   
+                    <td width="250px"> 
+                              <ul class="unstyled">
+                             
                                   [% FOREACH grupos %]
-                                         <li id="optionsCheckbox[% id2 %]">   
-                                                <input type="hidden" class="btn btn-info" value="[% id2 %]" id="eliminar_uno">
-
+                                        
+                                         <li>
+                                               
+                                                <div>
+                                                  <span id="optionsCheckbox[% id2 %]">
                                                         [% PERL %]            
                                                               print C4::AR::Filtros::action_button(
                                                                                                     button  => "btn btn-success",
@@ -73,15 +74,17 @@ function borrarCont(cont, estante, padre){
                                                                                                  
                                                                         ) ;
                                                         [% END %]
-                                                        
-                                              
-                                          
-                                          </li>         [% IF edicion%]
+                                                    </span>
+                                                    <span class="help-inline">
+                                                        [% IF edicion%]
                                                                    [% edicion %]
                                                         [% END %]
                                                         [% IF anio_publicacion %]
                                                                    [% anio_publicacion %]
                                                         [% END %]
+                                                    </span>
+                                                </div> <br>
+                                          </li>        
                                   [% END %]
                                 </ul>
                             

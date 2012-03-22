@@ -185,7 +185,7 @@ function ordenar(orden){
                 objAH.estante= estante;
                 objAH.padre= padre;
                 objAH.contenido= contenido;
-                if ($('#eliminar_uno').val== contenido){
+                if ($('#eliminar_uno').val() == contenido){
                   objAH.eliminar_uno= 1;
                 }
                 objAH.tipo= 'BORRAR_CONTENIDO';
