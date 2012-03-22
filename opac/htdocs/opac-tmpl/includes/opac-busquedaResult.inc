@@ -372,8 +372,6 @@
                                         <br /><br />
                                     [% END %]
                                 [% END %]
-                            [% ELSE %]
-                               <span class="label label-important">[% 'No disponible' | i18n %]</span>
                             [% END %]
                         </td>
                         <td class="span2">

@@ -511,12 +511,12 @@ sub actualizarSocio {
         $dbh->{AutoCommit} = 0;  # enable transactions, if possible
         $dbh->{RaiseError} = 1;
 
-        eval {
+        #eval {
             my $socio = getSocioInfoPorNroSocio($params->{'nro_socio'});
             $socio->modificar($params);
 #            $socio->setThemeINTRA($params->{'tema'} || 'default');
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U338', 'params' => []} ) ;
-        };
+        #};
 
         if ($@){
             #Se loguea error de Base de Datos

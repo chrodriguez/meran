@@ -294,3 +294,7 @@ body {
     width: 200px;
     float: right;
 }
+
+.carousel{
+	max-width: 600px;
+}

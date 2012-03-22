@@ -3,10 +3,13 @@
 	$('.rateit').bind('rated reset', function (e) {
 	    var ri = $(this);
 		
-	    ri.rateit('readonly', true);
 		var value = ri.rateit('value');
 		var itemid = ri.data('itemid');
 
+		[% IF !socio_data.usr_nro_socio %]
+	    	ri.rateit('readonly', true);
+		[% END %]
+		
 	    $.ajax({
 	        url: '[% url_prefix %]/rating.pl',
 	        data: {rate: value, id2: itemid}, 

@@ -5,8 +5,8 @@ use C4::Context;
 use  C4::AR::ImportacionIsoMARC;
 
 my $tt1 = time();
-
-C4::AR::ImportacionIsoMARC::procesarImportacion(2);
+my $importacion = $ARGV[0] || 1;
+C4::AR::ImportacionIsoMARC::procesarImportacion($importacion);
 
 my $end1 = time();
 my $tardo1=($end1 - $st1);
