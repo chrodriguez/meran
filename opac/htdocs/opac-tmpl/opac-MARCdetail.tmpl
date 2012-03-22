@@ -1,20 +1,20 @@
 <div id="tabs" class="modal-header">
     <a href="#" class="close" data-dismiss="modal">×</a>
     <h3>[% 'Detalle MARC' | i18n %]</h3>
-</dic>
+</div>
 
-    [% PERL %]
-        print C4::AR::Filtros::tabbedPane( 
-                                     content   => [ {id => 'detalle', text=> "[% 'Detalls' | i18n %]" },
-                                                    {id => 'marc', text => "[% 'MARC' | i18n %]"},
-                                                  ],
-                                     content_id=> ['detalle_marc_tabs'],
-                                     active_id => 'marc',
-                                     span       => "span5",
-        
-        );
-    
-    [% END %]
+  [% PERL %]
+      print C4::AR::Filtros::tabbedPane( 
+                                   content   => [ {id => 'detalle', text=> "[% 'Detalls' | i18n %]" },
+                                                  {id => 'marc', text => "[% 'MARC' | i18n %]"},
+                                                ],
+                                   content_id=> ['detalle_marc_tabs'],
+                                   active_id => 'marc',
+                                   span       => "span5",
+      
+      );
+  
+  [% END %]
             <div class="tab-pane fade" id="detalle">
                 <ul>
                 [% FOREACH MARCDetail_array %]
@@ -39,5 +39,5 @@
               <pre>[% detalle_marc %]</pre>
             </div>
 
-</div>
+</section>
 

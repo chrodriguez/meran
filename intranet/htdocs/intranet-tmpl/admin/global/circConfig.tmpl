@@ -4,7 +4,6 @@
 
 $(document).ready(function() {
     actualizarTabla();
-    zebra('datos_tabla');
 });
 
 function actualizarTabla(){
@@ -18,7 +17,6 @@ function actualizarTabla(){
 
 function updateActualizarTabla(responseText){
     $("#result").html(responseText);
-    zebra('datos_tabla');
 }
 
 function modificarVariable(variable,tipo){

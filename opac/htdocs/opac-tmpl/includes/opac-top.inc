@@ -102,7 +102,7 @@
     <script type="text/javascript">    
 
       $(document).ready(function() {
-			$('.popover_button').popover({delay: { show: 800, hide: 100 }, placement: 'right',});
+			$('.popover_button').popover({delay: { show: 100, hide: 100 },});
 			$(".alert").alert();
           
                     $(function () {
