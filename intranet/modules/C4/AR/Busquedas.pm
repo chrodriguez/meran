@@ -1069,7 +1069,9 @@ sub busquedaAvanzada_newTemp{
 
     # NOTA: sphinx necesita el string decode_utf8
    
-    my $results = $sphinx->Query($query);
+    my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
+    
+    my $results = $sphinx->Query($query,'test1');
 
     my @id1_array;
     my $matches = $results->{'matches'};
@@ -1159,7 +1161,9 @@ sub busquedaPorTitulo{
     $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
     # NOTA: sphinx necesita el string decode_utf8
-    my $results = $sphinx->Query($query);
+    my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
+    
+    my $results = $sphinx->Query($query,'test1');
 
     my @id1_array;
     my $matches                 = $results->{'matches'};
@@ -1192,7 +1196,9 @@ sub busquedaPorAutor{
     $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
     # NOTA: sphinx necesita el string decode_utf8
-    my $results = $sphinx->Query($query);
+    my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
+    
+    my $results = $sphinx->Query($query,'test1');
 
     my @id1_array;
     my $matches                 = $results->{'matches'};
@@ -1314,7 +1320,10 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
     C4::AR::Debug::debug("C4::AR::Busquedas::busquedaCombinada_newTemp => cantR => ".$obj_for_log->{'cantR'});
 
     # NOTA: sphinx necesita el string decode_utf8
-    my $results = $sphinx->Query($query);
+    
+    my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
+    
+    my $results = $sphinx->Query($query,'test1');
 
     my ($total_found_paginado, $resultsarray);
     my @id1_array;
@@ -1557,7 +1566,10 @@ sub filtrarPorAutor{
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
     $sphinx->SetLimits($params->{'ini'}, $params->{'cantR'});
     # NOTA: sphinx necesita el string decode_utf8
-    my $results = $sphinx->Query($query);
+
+    my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
+    
+    my $results = $sphinx->Query($query,'test1');
 
     my @id1_array;
     my $matches = $results->{'matches'};
@@ -2018,7 +2030,9 @@ sub getRegistrosFromRange {
     # $sphinx->SetLimits($params->{'ini'}, $params->{'cantR'});
     # NOTA: sphinx necesita el string decode_utf8
     C4::AR::Debug::debug("Busquedas.pm => query: ".$query);
-    my $results = $sphinx->Query($query);
+    my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
+    
+    my $results = $sphinx->Query($query,'test1');
 
     my @id1_array;
     my @id1_array_aux;

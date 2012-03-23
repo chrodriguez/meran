@@ -54,7 +54,6 @@ sub agregar{
                 $image_name = C4::AR::UploadFile::uploadFotoNovedadOpac($value);
                 
                 if(!$image_name){
-                    C4::AR::Debug::debug("subio una imagen valida");
                     $msg_object->{'error'}= 1;
                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP13', 'intra'} );
                     $db->rollback;
@@ -65,8 +64,7 @@ sub agregar{
                 }
             }
             
-            $db->commit;
-
+            if($image_name){ $db->commit; }
         };
 
         if ($@){
@@ -105,43 +103,61 @@ sub editar{
     
 
     #imagenes a borrar
-    my $dirPath = C4::Context->config("opachtdocs")."/uploads/novedades";
+    eval{
     
-    if(scalar(@$arrayDeleteImages)){   
+        my $dirPath = C4::Context->config("opachtdocs")."/uploads/novedades";
+        
+        if(scalar(@$arrayDeleteImages)){   
 
-        foreach my $file ( @$arrayDeleteImages ){
-        
-            C4::AR::Debug::debug("imagen a eliminar : " . $file);
+            foreach my $file ( @$arrayDeleteImages ){
             
-            _eliminarImageneNovedadByNombre($file);
-            unlink($dirPath."/".$file);
+                C4::AR::Debug::debug("imagen a eliminar : " . $file);
+                
+                _eliminarImageneNovedadByNombre($file);
+                unlink($dirPath."/".$file);
+            }
+            
         }
+    };
+    if ($@){
         
+           $msg_object->{'error'}= 1;
+           C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP14', 'intra'} ) ;
+           
     }
     #fin imagenes a borrar
     
     #nuevas imagenes
-    my $image_name;
-    my $imagenes_novedades_opac;
-    #recorremos todas las imagenes a agregar y las guardamos   
+    eval{
     
-    if(scalar(@$arrayNewFiles)){      
-    
-        foreach my  $value ( @$arrayNewFiles ) {
-                 
-            #pasarle la data necesaria
-            $image_name = C4::AR::UploadFile::uploadFotoNovedadOpac($value);
-            
-            if(!$image_name){
-                $msg_object->{'error'}= 1;
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP13', 'intra'} );
+        my $image_name;
+        my $imagenes_novedades_opac;
+        #recorremos todas las imagenes a agregar y las guardamos   
+        
+        if(scalar(@$arrayNewFiles)){      
+        
+            foreach my  $value ( @$arrayNewFiles ) {
+                     
+                #pasarle la data necesaria
+                $image_name = C4::AR::UploadFile::uploadFotoNovedadOpac($value);
+                
+                if(!$image_name){
+                    $msg_object->{'error'}= 1;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP13', 'intra'} );
 
-            }else{
-                $imagenes_novedades_opac = C4::Modelo::ImagenesNovedadesOpac->new();                 
-                $imagenes_novedades_opac->saveImagenNovedad($image_name, $input->param('novedad_id'));     
-                $msg_object->{'error'}= 0;
-            }
-        } 
+                }else{
+                    $imagenes_novedades_opac = C4::Modelo::ImagenesNovedadesOpac->new();                 
+                    $imagenes_novedades_opac->saveImagenNovedad($image_name, $input->param('novedad_id'));     
+                    $msg_object->{'error'}= 0;
+                }
+            } 
+        }
+    };
+    if ($@){
+        
+           $msg_object->{'error'}= 1;
+           C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP12', 'intra'} ) ;
+           
     }
     #fin nuevas imagenes
 

@@ -121,21 +121,21 @@ function MultiSelector( list_target, max ){this.list_target = list_target;this.c
                 <div class="control-group">
                     <label class="control-label" for="titulo">[% "Titulo" | i18n %]</label>
                     <div class="controls">
-                        <input type="text" id="titulo" required name="titulo" value="[% novedad.getTitulo %]">
+                        <input type="text" id="titulo" required name="titulo" value="[% novedad.getTitulo %] [% titulo %]">
                     </div>
                 </div>
                 
                 <div class="control-group">
                     <label class="control-label" for="categoria">[% "Categor&iacute;a" | i18n %]</label>
                     <div class="controls">
-                        <input type="text" id="categoria" required name="categoria" value="[% novedad.getCategoria %]">
+                        <input type="text" id="categoria" required name="categoria" value="[% novedad.getCategoria %] [% categoria %]">
                     </div>
                 </div>
                 
                 <div class="control-group">
                     <label class="control-label" for="contenido">[% "Contenido" | i18n %]</label>
                     <div class="controls">
-                        <textarea id="contenido" required name="contenido" style="width: 88.3%" >[%novedad.getContenido %]</textarea>
+                        <textarea id="contenido" required name="contenido" style="width: 88.3%" >[%novedad.getContenido %] [% contenido %]</textarea>
                     </div>
                 </div>
 
@@ -143,7 +143,7 @@ function MultiSelector( list_target, max ){this.list_target = list_target;this.c
                 
                     <div class="control-group">
                         <div class="controls">
-                            <input type="checkbox" id="check_publicar" name="check_publicar" value="publicar">[% " Publicar en Twitter" | i18n %]
+                            <input type="checkbox" [% IF twiter %] checked="checked" [% END %]id="check_publicar" name="check_publicar" value="publicar">[% " Publicar en Twitter" | i18n %]
                         </div>
                     </div>
 
@@ -154,7 +154,7 @@ function MultiSelector( list_target, max ){this.list_target = list_target;this.c
                     <div class="control-group">
                         <label class="control-label" for="links">[% "Links" | i18n %]</label>
                         <div class="controls">
-                            <input type="text" id="links" name="links" value="[% novedad.getLinks %]">
+                            <input type="text" id="links" name="links" value="[% novedad.getLinks %] [% links %]">
                             [% PERL %]
                             
                                 print C4::AR::Filtros::setHelpInput(
@@ -276,8 +276,6 @@ function MultiSelector( list_target, max ){this.list_target = list_target;this.c
 
 
                     [% END %]
-                    
-<!--                    <button class="btn btn-primary" type="submit">[% 'Modificar' | i18n %]</button>-->
                     
                 [% ELSE %]
                 

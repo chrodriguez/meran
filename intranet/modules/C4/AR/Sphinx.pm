@@ -43,7 +43,10 @@ sub reindexar{
         #C4::AR::Sphinx::sphinx_start($mgr);
 
         my @args;
-        push (@args, '--all');
+        
+        my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';        
+        
+        push (@args, $index_to_use);
         push (@args, '--rotate');
         push (@args, '--quiet');
         $mgr->indexer_sudo("sudo");
