@@ -325,10 +325,10 @@ function ordenar(orden){
       
       function updateInfoEstantesVirtualesDeGrupo(responseText){
             $('#estantes_'+objAH.estantes_grupo).html(responseText);
-             $('#estantes_'+objAH.estantes_grupo).slideDown("fast");
+            $('#estantes_'+objAH.estantes_grupo).slideDown("fast");
 //             zebra('datos_tabla');
 //             $('#grupo_estantes_'+objAH.estantes_grupo).show();
-            scrollTo('grupo_estantes_'+objAH.estantes_grupo);
+            scrollTo('estantes_grupo_'+objAH.estantes_grupo);
       }
       
      

@@ -224,23 +224,6 @@
 								            </div>
 
                           </div>
-<!--<<<<<<< HEAD
-                            
-	            
-=======
-
-	                        [% IF esta_en_estante_virtual %]
-                                [% PERL %]
-                                        print C4::AR::Filtros::action_button( 
-                                                                        button         => "btn click",
-                                                                        action       => "mostrarEstantesVirtualesDeGrupo([% id2 %])", 
-                                                                        icon         => "icon-info-sign",
-                                                                        title        => "[% 'Ver estantes' | i18n %]",
-                                                                    ) ;
-
-                                [% END %]
-	                        [% END %]
->>>>>>> c5eeac15551d24f3562c3e42f0c7e48a99618e45-->
 
 			                <br>
 			                
@@ -268,34 +251,24 @@
                             </dl>
 
                         [% IF esta_en_estante_virtual %]
-                        <div id="estantes_grupo">
-                              <div class="accordion" id="estantes_del_grupo_[% id2 %]" onclick="mostrarEstantesVirtualesDeGrupo([% id2 %])">
-                                <div class="accordion-group">
-                                  <div class="accordion-heading">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#estantes_del_grupo_[% id2 %]" href="#estantes_[% id2 %]">
-                                      [% "Estantes" | i18n %] 
-                                    </a>
-                                  </div>
-                                  <div id="estantes_[% id2 %]" class="accordion-body collapse">
-                                    <div class="accordion-inner">
-                                          
+                              <div id="estantes_grupo">
+                                    <div class="accordion" id="estantes_del_grupo_[% id2 %]" onclick="mostrarEstantesVirtualesDeGrupo([% id2 %])">
+                                      <div class="accordion-group">
+                                        <div class="accordion-heading">
+                                          <a class="accordion-toggle" data-toggle="collapse" data-parent="#estantes_del_grupo_[% id2 %]" href="#estantes_[% id2 %]">
+                                            [% "Estantes" | i18n %] 
+                                          </a>
+                                        </div>
+                                        <div id="estantes_[% id2 %]" class="accordion-body collapse">
+                                          <div class="accordion-inner">
+                                               
+                                          </div>
+                                        </div>
+                                      </div>
                                     </div>
-                                  </div>
-                                </div>
                               </div>
-                        </div>
-                            <!-- [% PERL %]
-                                    print C4::AR::Filtros::action_button( 
-                                                                    button         => "btn click",
-                                                                    action       => "mostrarEstantesVirtualesDeGrupo([% id2 %])", 
-                                                                    icon         => "icon-info-sign",
-                                                                    title        => "[% 'Ver estantes virtuales en los que se encuentra' | i18n %]",
-                                                                ) ;
-
-                            [% END %]-->
-                        [% END %]
-
-
+                          [% END %]
+ 
                         <span id="ejemplaresDelGrupo[% id2 %]">
                             [% INCLUDE "estructura/ejemplaresDelGrupo.tmpl" %]
                         </span>
