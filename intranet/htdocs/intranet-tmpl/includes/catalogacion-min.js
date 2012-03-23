@@ -151,7 +151,7 @@ function remove(id){var campo_temp=_getIndexCampoMARC_conf_ById(id);var _from=ca
 function removeSubcampo(id){var subcampo_temp=_getSubCampoMARC_conf_ById(id);var _from=_getPosBySubCampoMARC_conf_ById(id);var _to=_from;$('#LI'+id).remove();removeFromArray(MARC_OBJECT_ARRAY[subcampo_temp.posCampo].getSubCamposArray(),_from,_to);}
 function openDivButtonContainer(id,tipo){var clase="btn btn-info ";var clase_dropdown="btn btn-info dropdown-toggle ";var title="Campo"
 if(tipo!='campo'){clase="btn ";clase_dropdown="btn dropdown-toggle ";title="Subcampo";}
-var elem='<div class="btn-group" style="float: left; margin-left: 5px;" id="'+id+'">'+
+var elem='<div class="btn-group" style="float: right; margin-left: 5px;" id="'+id+'">'+
 '<a class="'+clase+'"><i class="icon white user"></i> '+title+'</a>'+
 '<a class="'+clase_dropdown+'" data-toggle="dropdown" ><span class="caret"></span></a>'+
 '<ul class="dropdown-menu" id="'+id+"_lista"+'">'+'</ul></div>';return elem;}

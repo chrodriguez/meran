@@ -1314,7 +1314,10 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
     C4::AR::Debug::debug("C4::AR::Busquedas::busquedaCombinada_newTemp => cantR => ".$obj_for_log->{'cantR'});
 
     # NOTA: sphinx necesita el string decode_utf8
-    my $results = $sphinx->Query($query);
+    
+    my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
+    
+    my $results = $sphinx->Query($query,'test1');
 
     my ($total_found_paginado, $resultsarray);
     my @id1_array;

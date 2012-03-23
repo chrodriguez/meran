@@ -440,9 +440,9 @@
                                 </li>
                                 <li>
                                           [% PERL %]
-                                              print C4::AR::Filtros::link_to( text =>     "<i class='icon-info-sign'></i> [% 'Novedades de INTRA' | i18n %]",
+                                              print C4::AR::Filtros::link_to( text =>     "<i class='icon-info-sign'></i> [% 'Novedades' | i18n %]",
                                                                               url =>      "[% url_prefix %]/admin/global/novedades_intra.pl",
-                                                                              title =>    "[% 'Novedades de INTRA' | i18n %]"
+                                                                              title =>    "[% 'Novedades' | i18n %]"
                                                                           ) ;
                                           [% END %]
                                 </li>
