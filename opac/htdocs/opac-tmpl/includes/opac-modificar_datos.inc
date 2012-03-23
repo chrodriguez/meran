@@ -1,7 +1,4 @@
 [% INCLUDE 'ChangePasswordHelper.inc' %]
-<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme %]/includes/fileuploader.css">
-
-<script type="text/javascript" src="/includes/jquery/fileuploader.js"></script>
 
 <script type="text/javascript">
 
@@ -23,6 +20,30 @@
 	                jAlert('Por favor verifique que las nuevas passwords sean iguales');
 	                return false;
                 }
+                
+                /*if($("#newpassword1").val().length <= [% minPassLength %])
+                {
+                    jAlert('Por favor verifique que lanueva password contenga al menos [% minPassLength %] caracteres.');
+	                return false;
+                }
+                
+                if($("#newpassword1").val().length <= [% minPassSymbol %])
+                {
+                    jAlert('Por favor verifique que lanueva password contenga al menos [% minPassLength %] caracteres.');
+	                return false;
+                }*/
+                	
+
+                //TODO:
+                /*var RegExPattern = /(?!^[0-9]{[% minPassNumeric %],}$)(?!^[a-zA-Z]{[% minPassAlpha %],}$)^([a-zA-Z0-9]{[% minPassLength %],})$/;
+                var errorMessage = 'La nueva password ingresada no cumple con los siguientes requisitos:\n ' +
+                    ' longitud minima: [% minPassLength %]\n cantidad de numeros : [% minPassNumeric %] ' +
+                    ' cantidad de caracteres especiales : [% minPassSymbol %].';
+                    
+                if (!$("#newpassword1").val().match(RegExPattern)) {
+                    jAlert(errorMessage);
+                    return false;
+                } */
                 
 
 	            $("#actual_password").val(hash_actual);
@@ -51,39 +72,7 @@
 
     $(document).ready(function() {
         CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'});
-        $("#temas_opac").change(function() {
-            $("link").attr("href","[% temas %]/"+$("#temas_opac").val()+"/includes/opac.css");
-            return false;
-        });
-
-        $('.fancylink').fancybox();
-        
-        
-        [% IF UploadPictureFromOPAC %] 
-
-	        [% IF !foto_name %] 
-	            $('#div_uploader').show();
-	        [% ELSE %]
-	            $('#div_boton_eliminar_foto').show();
-	        [% END %]
-	
-	
-	        //Inicializacion del FileUploader
-	        [% IF !foto_name %]  
-	            $('#label-file-uploader').show();
-	            var uploader = new qq.FileUploader({
-	                element: document.getElementById('file-uploader'),
-	                action: '[% url_prefix %]/uploadPicture.pl',
-	                allowedExtensions: ["bmp","jpg","gif","png","jpeg"],
-	                debug: true,
-	                multiple: false,
-	            });
-	        [% ELSE %]
-	            $('#label-file-uploader').hide();
-	        [% END %]
-	    [% END %]
-        
-        
+        $('.fancylink').fancybox();       
     });
 </script>
         [% IF mensaje %]
