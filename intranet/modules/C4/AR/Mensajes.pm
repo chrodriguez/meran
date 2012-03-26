@@ -717,7 +717,9 @@ sub create {
     $msg_object{'error'}    = 0;
     $msg_object{'messages'} = [];
     my $session = CGI::Session->load();
-
+ 
+    $session->{'msg_object'} = \%msg_object;
+    
     $msg_object{'tipo'}     = $session->param('type')||'INTRA';
 
     return \%msg_object;
@@ -763,7 +765,7 @@ sub add {
 #       my $messageString= &C4::AR::Mensajes::getMensaje($msg_hashref->{'codMsg'},$Message_hashref->{'tipo'},$msg_hashref->{'params'});
     my $session         = CGI::Session->load();
     my $tipo            = $msg_hashref->{'tipo'}||$session->param('type')||'INTRA';
-
+    
     #encodeamos en utf8 para mostrar bien los acentros
     encodeUtf8Msj($msg_hashref->{'params'});
 
@@ -773,6 +775,8 @@ sub add {
 # C4::AR::Debug::debug("Mensajes::add => message: ".$messageString."\n");
 # C4::AR::Debug::debug("Mensajes::add => params: ".$msg_hashref->{'params'}->[0]."\n");
 
+    push (@{$session->{'msg_object'}->{'messages'}}, $msg_hashref);
+    
     push (@{$Message_hashref->{'messages'}}, $msg_hashref);
 }
 
