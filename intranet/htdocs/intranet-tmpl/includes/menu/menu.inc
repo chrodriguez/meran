@@ -121,46 +121,7 @@
                                             [% END %]
                                 </li>
            [% END %]
-	      [% IF socio_data.usr_credential_type == "superLibrarian" %]
-                            <li class="nav-header">[% 'Importaciones' | i18n %]</li>	
-	              			<li class="divider"></li>
-									
-										<li>
-                                           [% PERL %]
-                                                      print C4::AR::Filtros::link_to( text =>     "<i class='icon-download-alt'></i> [% 'Nueva Importaci&oacute;n' | i18n %]",
-                                                                                      url =>      "[% url_prefix %]/herramientas/importacion/subirNuevaImportacion.pl",
-                                                                                      title =>    "[% 'Nueva' | i18n %]"
-                                                                                  ) ;
-                                                  [% END %]
-                                        </li>
-                                        <li>
-                                                  [% PERL %]
-                                                      print C4::AR::Filtros::link_to( text =>     "<i class='icon-download-alt'></i> [% 'Importaciones' | i18n %]",
-                                                                                      url =>      "[% url_prefix %]/herramientas/importacion/importar.pl",
-                                                                                      title =>    "[% 'Listar' | i18n %]"
-                                                                                  ) ;
-                                                  [% END %]
-                                        </li>
-                                        <li>
-                                                  [% PERL %]
-                                                      print C4::AR::Filtros::link_to( text =>     "<i class='icon-download-alt'></i> [% 'Esquemas de Importaci&oacute;n' | i18n %]",
-                                                                                      url =>      "[% url_prefix %]/herramientas/importacion/esquemas_importacion.pl",
-                                                                                      title =>    "[% 'Esquemas' | i18n %]"
-                                                                                  ) ;
-                                                  [% END %]
-                                        </li>
-	                                  <li>
-	                                              [% PERL %]
-	                                                  print C4::AR::Filtros::link_to( text =>     "<i class='icon-share'></i> [% 'Exportar' | i18n %]",
-	                                                                                  url =>      "[% url_prefix %]/herramientas/exportacion/exportar.pl",
-	                                                                                  title =>    "[% 'Exportaci&oacute;n' | i18n %]"
-	                                                                              ) ;
-	                                              [% END %]
-	                                  </li>
-                              
-					
-			[% END %]
-				<li class="divider"></li>
+        	<li class="divider"></li>
 	      [% IF socio_data.usr_credential_type == "librarian" OR  socio_data.usr_credential_type == "superLibrarian" %]
 	                    
                                 <li>
@@ -375,41 +336,11 @@
 		    <input type="text" id="socio-bar" class="search-query span2" name="socio-bar" placeholder='[% "Usuarios" | i18n %]' onkeypress="socioSearchEvent(event)">
             
           </form>
-          <ul class="nav pull-right">
-            <li class="divider-vertical"></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-	              [% socio_data.usr_nro_socio %]
-				  <b class="caret"></b>
-			  </a>
-              <ul class="dropdown-menu">
-		          <li>
-		                    [% PERL %]
-		                       print C4::AR::Filtros::link_to( text =>     " [% 'Mis datos' | i18n %]",
-		                                                   url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
-		                                                   title =>    "[% 'Mis datos' | i18n %]",
-		                                                   params =>   ["nro_socio=[% socio_data.usr_nro_socio %]"],
-		                                                   icon => "icon-user",
-		                                                   tooltip => "['Ver y/o modificar sus datos' | i18n ]"
-		                           );
-		                   [% END %]
-		          </li>
-                
-                <li>
-                	<a href="[% url_prefix %]/usuarios/reales/settings.pl?token=[% token %]&amp;nro_socio=[% socio_data.usr_nro_socio %]">
-                		<i class="icon-cog"></i> [% "Ajustes" | i18n %]
-                	</a>
-                </li>
 
-                <li class="divider"></li>
-                <li><a href="[% url_prefix %]/logout.pl?token=[% token %]"><i class="icon-off"></i> [% "Salir" | i18n %]</a></li>
-              </ul>
-            </li>
-          </ul>
       [% IF socio_data.usr_credential_type == "superLibrarian" %]
           <ul class="nav">
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">[% 'Administraci&oacute;n' | i18n %] <b class="caret"></b></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">[% 'Sistema' | i18n %] <b class="caret"></b></a>
               <ul class="dropdown-menu">
                             <li class="nav-header">[% 'Intranet' | i18n %]</li>	
 	              			<li class="divider"></li>
@@ -481,8 +412,9 @@
                                                                         ) ;
                                         [% END %]
                                 </li>
-                            <li class="nav-header">[% 'Administraci&oacute;n' | i18n %]</li>	
-                                <li>
+                            	<li class="nav-header">[% 'Administraci&oacute;n' | i18n %]</li>	
+	              				<li class="divider"></li>
+                            	<li>
                                             [% PERL %]
                                                 print C4::AR::Filtros::link_to( text =>     "<i class='icon-lock'></i> [% 'M&eacute;todos de Autenticaci&oacute;n' | i18n %]",
                                                                                 url =>      "[% url_prefix %]/admin/global/auth_methods.pl",
@@ -498,7 +430,8 @@
                                                                             ) ;
                                             [% END %]
                                 </li>
-                                                            <li>
+                                                            
+                                <li>
                                             [% PERL %]
                                                 print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'Configuraci&oacute;n LDAP' | i18n %]",
                                                                                 url =>      "[% url_prefix %]/admin/global/ldap_config.pl",
@@ -506,9 +439,77 @@
                                                                             ) ;
                                             [% END %]
                                 </li>
+                            	<li class="nav-header">[% 'Importar' | i18n %]</li>	
+	              				<li class="divider"></li>
+             							<li>
+                                           			[% PERL %]
+                                                      print C4::AR::Filtros::link_to( text =>     "<i class='icon-download-alt'></i> [% 'Nueva Importaci&oacute;n' | i18n %]",
+                                                                                      url =>      "[% url_prefix %]/herramientas/importacion/subirNuevaImportacion.pl",
+                                                                                      title =>    "[% 'Nueva' | i18n %]"
+                                                                                  ) ;
+                                                  [% END %]
+                                        </li>
+                                        <li>
+                                                  [% PERL %]
+                                                      print C4::AR::Filtros::link_to( text =>     "<i class='icon-download-alt'></i> [% 'Importaciones' | i18n %]",
+                                                                                      url =>      "[% url_prefix %]/herramientas/importacion/importar.pl",
+                                                                                      title =>    "[% 'Listar' | i18n %]"
+                                                                                  ) ;
+                                                  [% END %]
+                                        </li>
+                                        <li>
+                                                  [% PERL %]
+                                                      print C4::AR::Filtros::link_to( text =>     "<i class='icon-download-alt'></i> [% 'Esquemas de Importaci&oacute;n' | i18n %]",
+                                                                                      url =>      "[% url_prefix %]/herramientas/importacion/esquemas_importacion.pl",
+                                                                                      title =>    "[% 'Esquemas' | i18n %]"
+                                                                                  ) ;
+                                                  [% END %]
+                                        </li>
+	                                  <li>
+	                                              [% PERL %]
+	                                                  print C4::AR::Filtros::link_to( text =>     "<i class='icon-share'></i> [% 'Exportar' | i18n %]",
+	                                                                                  url =>      "[% url_prefix %]/herramientas/exportacion/exportar.pl",
+	                                                                                  title =>    "[% 'Exportaci&oacute;n' | i18n %]"
+	                                                                              ) ;
+	                                              [% END %]
+	                                  </li>
+	              				
+                   </ul>
+               </li>
           </ul>
+
       [% END %]
-          
+	           <ul class="nav pull-right">
+	            <li class="divider-vertical"></li>
+	            <li class="dropdown">
+	              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+		              <i class="icon-white icon-user" title="[% socio_data.usr_nro_socio %]"></i>
+		              <b class="caret"></b>
+				  </a>
+	              <ul class="dropdown-menu">
+			          <li>
+			                    [% PERL %]
+			                       print C4::AR::Filtros::link_to( text =>     " [% 'Mis datos' | i18n %]",
+			                                                   url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+			                                                   title =>    "[% 'Mis datos' | i18n %]",
+			                                                   params =>   ["nro_socio=[% socio_data.usr_nro_socio %]"],
+			                                                   icon => "icon-user",
+			                                                   tooltip => "['Ver y/o modificar sus datos' | i18n ]"
+			                           );
+			                   [% END %]
+			          </li>
+	                
+	                <li>
+	                	<a href="[% url_prefix %]/usuarios/reales/settings.pl?token=[% token %]&amp;nro_socio=[% socio_data.usr_nro_socio %]">
+	                		<i class="icon-cog"></i> [% "Ajustes" | i18n %]
+	                	</a>
+	                </li>
+	
+	                <li class="divider"></li>
+	                <li><a href="[% url_prefix %]/logout.pl?token=[% token %]"><i class="icon-off"></i> [% "Salir" | i18n %]</a></li>
+	              </ul>
+	            </li>
+	         </ul>         
         </div><!-- /.nav-collapse -->
       </div>
     </div><!-- /navbar-inner -->
