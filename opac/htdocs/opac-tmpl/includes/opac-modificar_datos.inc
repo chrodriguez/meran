@@ -21,30 +21,29 @@
 	                return false;
                 }
                 
-                /*if($("#newpassword1").val().length <= [% minPassLength %])
+               /* if($("#newpassword1").val().length < [% minPassLength %])
                 {
-                    jAlert('Por favor verifique que lanueva password contenga al menos [% minPassLength %] caracteres.');
+                    jAlert('Por favor verifique que la nueva password contenga al menos [% minPassLength %] caracteres.');
 	                return false;
                 }
                 
-                if($("#newpassword1").val().length <= [% minPassSymbol %])
+                if (!$("#newpassword1").val().match(/([0-9]{[% minPassNumeric %],})/)) 
                 {
-                    jAlert('Por favor verifique que lanueva password contenga al menos [% minPassLength %] caracteres.');
+                    jAlert('Por favor verifique que la nueva password contenga al menos [% minPassNumeric %] numeros.');
+	                return false;
+                }
+                
+                if (!$("#newpassword1").val().match(/([a-zA-Z]{[% minPassAlpha %],})/)) 
+                {
+                    jAlert('Por favor verifique que la nueva password contenga al menos [% minPassAlpha %] letras.');
+	                return false;
+                }
+                
+                if (!$("#newpassword1").val().match(/(\W{[% minPassSymbol %],})/)) 
+                {
+                    jAlert('Por favor verifique que la nueva password contenga al menos [% minPassSymbol %] simbolos.');
 	                return false;
                 }*/
-                	
-
-                //TODO:
-                /*var RegExPattern = /(?!^[0-9]{[% minPassNumeric %],}$)(?!^[a-zA-Z]{[% minPassAlpha %],}$)^([a-zA-Z0-9]{[% minPassLength %],})$/;
-                var errorMessage = 'La nueva password ingresada no cumple con los siguientes requisitos:\n ' +
-                    ' longitud minima: [% minPassLength %]\n cantidad de numeros : [% minPassNumeric %] ' +
-                    ' cantidad de caracteres especiales : [% minPassSymbol %].';
-                    
-                if (!$("#newpassword1").val().match(RegExPattern)) {
-                    jAlert(errorMessage);
-                    return false;
-                } */
-                
 
 	            $("#actual_password").val(hash_actual);
 	            //mando solo una pass al servidor
@@ -76,10 +75,9 @@
     });
 </script>
         [% IF mensaje %]
-            <div class="alert alert-error">
+            <div class="[% mensaje_class %]">
                 <a class="close" data-dismiss="alert">×</a>
-                <strong>[% 'Error en datos.' | i18n %]</strong>
-                [% 'Corrigalos y vuelva a intentarlo' | i18n %]
+                [% mensaje %]
             </div>
         [% END %]
 <div>

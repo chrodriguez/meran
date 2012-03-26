@@ -87,6 +87,8 @@ sub passwordsIguales{
 	
     $nuevaPassword1 = C4::AR::Auth::desencriptar($nuevaPassword1, $key);
     $nuevaPassword2 = C4::AR::Auth::desencriptar($nuevaPassword2, $key);
+    
+    C4::AR::Debug::debug("pass desencriptada en el servidor : " . $nuevaPassword1); die();
 	
 	return ($nuevaPassword1 eq $nuevaPassword2);
 	

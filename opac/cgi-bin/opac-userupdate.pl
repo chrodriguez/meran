@@ -71,6 +71,7 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
     if ($update_password){
         $data_hash{'nro_socio'} = $socio->getNro_socio;
         $msg_object = C4::AR::Auth::cambiarPassword(\%data_hash);
+        $cod_msg    = C4::AR::Mensajes::getFirstCodeError($msg_object);
     }
 
     if (!$msg_object->{'error'}){
@@ -104,7 +105,7 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
     $t_params->{'partial_template'} = "opac-mis_datos.inc";
     
 }else{
-    $t_params->{'combo_temas'}      = C4::AR::Utilidades::generarComboTemasOPAC();
+    $t_params->{'mensaje_class'}    = "alert-error";
     $t_params->{'mensaje'}          = C4::AR::Mensajes::getMensaje('VA002','opac');
     $t_params->{'partial_template'} = "opac-modificar_datos.inc";
 }
@@ -112,7 +113,7 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
 $t_params->{'socio'}= $socio;
 $t_params->{'opac'} = 1;
 
-if ($update_password){
+if ($update_password && (!$msg_object->{'error'})){
     #si cambio la pass, destruimos la sesion obligando un nuevo logueo
     C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix().'/sessionDestroy.pl');
 }
