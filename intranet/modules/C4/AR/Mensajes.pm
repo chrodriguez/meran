@@ -533,6 +533,7 @@ my %mensajesINTRA = (
     'UP11' => 'La portada no se ha podido modificar',
     'UP12' => 'Ocurrio un error subiendo las imagenes',
     'UP13' => 'El tipo de archivo subido no esta permitido',
+    'UP14' => 'Ocurrio un error mientras se eliminaban lasi magenes',
 
 #ERRORES DE BASE DE DATOS
     'B400' => '',

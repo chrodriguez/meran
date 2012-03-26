@@ -1,10 +1,6 @@
 
 <fieldset class="resultados_busqueda">
-            <br>
-            <div class="well">
-                <div class="resultados_consulta"><strong>[% buscoPor | html %]</strong></div>
-                <div class="resultados_consulta">[% "Total de registros" | i18n %]: <b>[% cantidad %]</b></div>
-           </div>
+         
             <div class="contenedor_paginador">[% paginador %]</div>
 
             [% PERL %]
@@ -12,7 +8,7 @@
                                         id              => "tablaResult",
                                         class           => "",
                                         selectAll_id    => "",
-                                        columns         => ['[% "Estante"|i18n %]']                                  
+                                        columns         => ['']                                  
                       ) ;
             [% END %]
 

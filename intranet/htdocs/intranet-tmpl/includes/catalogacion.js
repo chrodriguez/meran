@@ -1740,7 +1740,7 @@ function openDivButtonContainer(id,tipo){
         title           = "Subcampo";
     }
     
-    var elem =  '<div class="btn-group" style="float: left; margin-left: 5px;" id="'+id+'">'+
+    var elem =  '<div class="btn-group" style="float: right; margin-left: 5px;" id="'+id+'">'+
                 '<a class="'+clase+'"><i class="icon white user"></i> '+title+'</a>'+
                 '<a class="'+clase_dropdown+'" data-toggle="dropdown" ><span class="caret"></span></a>'+
                 '<ul class="dropdown-menu" id="'+id+"_lista"+'">'+'</ul></div>';

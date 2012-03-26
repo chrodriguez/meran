@@ -411,6 +411,9 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">[% 'Administraci&oacute;n' | i18n %] <b class="caret"></b></a>
               <ul class="dropdown-menu">
+                            <li class="nav-header">[% 'Intranet' | i18n %]</li>	
+	              			<li class="divider"></li>
+              
                                 <li>
                                             [% PERL %]
                                                 print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'Preferencias' | i18n %]",
@@ -437,9 +440,9 @@
                                 </li>
                                 <li>
                                           [% PERL %]
-                                              print C4::AR::Filtros::link_to( text =>     "<i class='icon-info-sign'></i> [% 'Novedades de INTRA' | i18n %]",
+                                              print C4::AR::Filtros::link_to( text =>     "<i class='icon-info-sign'></i> [% 'Novedades' | i18n %]",
                                                                               url =>      "[% url_prefix %]/admin/global/novedades_intra.pl",
-                                                                              title =>    "[% 'Novedades de INTRA' | i18n %]"
+                                                                              title =>    "[% 'Novedades' | i18n %]"
                                                                           ) ;
                                           [% END %]
                                 </li>
@@ -455,7 +458,7 @@
 	              			<li class="divider"></li>
                                 <li>
                                           [% PERL %]
-                                              print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'Novedades' | i18n %]",
+                                              print C4::AR::Filtros::link_to( text =>     "<i class='icon-info-sign'></i> [% 'Novedades' | i18n %]",
                                                                               url =>      "[% url_prefix %]/admin/novedades_opac.pl",
                                                                               title =>    "[% 'Novedades' | i18n %]"
                                                                           ) ;

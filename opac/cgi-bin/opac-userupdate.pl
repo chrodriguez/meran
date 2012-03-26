@@ -75,8 +75,11 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
 
     if (!$msg_object->{'error'}){
     	eval {
+    	    #recargamos el objeto socio para que no pise la password nueva
+    	    $socio->load();
 	        $socio->persona->modificarVisibilidadOPAC(\%data_hash);
 	        $socio->remindFlag($data_hash{'remindFlag'});
+	        $socio->save();
             $cod_msg = 'U338';
             $t_params->{'mensaje_class'} = "alert-success";
     	};
@@ -91,6 +94,7 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
     $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje($cod_msg,'opac');
     
     if ($data_hash{'tema'}){
+        #recargamos el objeto socio para que no pise la password nueva
         $socio->load();
         $socio->setThemeSave($data_hash{'tema'});
         $socio->save();
@@ -108,6 +112,10 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
 $t_params->{'socio'}= $socio;
 $t_params->{'opac'} = 1;
 
-C4::AR::Auth::updateLoggedUserTemplateParams($session,$t_params,$socio);
+if ($update_password){
+    #si cambio la pass, destruimos la sesion obligando un nuevo logueo
+    C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix().'/sessionDestroy.pl');
+}
 
+C4::AR::Auth::updateLoggedUserTemplateParams($session,$t_params,$socio);
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

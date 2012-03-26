@@ -1,7 +1,7 @@
 
 [% USE HTML %]
     <div class="hero-unit row" id="search-bar">
-      <div class="span10 columns">
+      <section>
 	     	<h1 class="medium_font">[% 'Bienvenido ' | i18n %]<small>[% ui.getNombre %]</small></h1>
 	        <p>
 		        [% IF cant_sanciones > 0 %]
@@ -31,7 +31,7 @@
 			                [% IF p.getFooter %]
 				                <div class="carousel-caption">
 				                  <h4>[% p.getFooterTitle %]</h4>
-				                  <p>[% p.getFooter %]</p>
+				                  <p style="font-size: 13px;">[% p.getFooter %]</p>
 				                </div>
 				            [% END %]
 			              </div>
@@ -50,7 +50,7 @@
 	            <input type="hidden" name="tipoAccion" value="BUSQUEDA_COMBINABLE" />
 	            <input type="hidden" name="token" value="[% token %]" />
 		        <p>
-		        	<input type="text" name="string" class="input-medium search-query span90 bigInput"
+		        	<input type="text" name="string" class="input-medium search-query span98 bigInput"
 	                 		  x-webkit-speech onwebkitspeechchange="javascript:startSearch();" 
 	                   		  speech onspeechchange="javascript:startSearch();"
 	                   		  placeholder="[% IF title_search_bar %] [% title_search_bar %] [% ELSE %] [% 'Qu&eacute; necesit&aacute;s' | i18n %]? [% END %]"
@@ -59,11 +59,12 @@
 		        
 		        <p><button class="btn btn-primary btn-large" type="submit">[% 'Buscar' | i18n %]</button></p>
 		    </form>
-	 </div>
+	 </section>
     </div>
 
       <!-- Example row of columns -->
       <div class="row">
+         <div class="columns">
 	        <div class="span4" id="[% IF novedad %]last_new[% END %]">
 		        [% IF novedad %]
 			          <h2>[% novedad.getTitulo %]</h2>
@@ -105,5 +106,6 @@
                 [% END %]
           	  </p>
 	        </div>
+	     </div>
       </div>
 

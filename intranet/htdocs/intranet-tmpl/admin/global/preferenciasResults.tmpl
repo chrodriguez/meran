@@ -1,49 +1,37 @@
+     [% PERL %]
+           print C4::AR::Filtros::tableHeader(   
+                             id              => "preferenciasTable",
+                             class           => "",
+                             selectAll_id    => "",
+                             columns         => ['[% "Variable"|i18n %]','[% "Valor"|i18n %]',
+                                               '[% "Explicaci&oacute;n"|i18n %]', '[% "Editar"|i18n %]',
+                                                ]
 
-<script type="text/javascript">
-      $(document).ready(function() {
-        makeToggle('tablaResultado_preferencias','trigger',null,false);
-        zebra('datos_tabla');
-      });
-</script>
-<fieldset>
-    <div class="tablaResultado_preferencias" id="tablaResultado_preferencias" >
-    
-        [% PERL %]
-              print C4::AR::Filtros::tableHeader(   
-                                id              => "preferenciasTable",
-                                class           => "",
-                                selectAll_id    => "",
-                                columns         => ['[% "Variable"|i18n %]','[% "Valor"|i18n %]',
-                                                  '[% "Explicaci&oacute;n"|i18n %]', '[% "Editar"|i18n %]',
-                                                   ]
+                                                               
+                                   ) ;
+     [% END %]
 
-                                                                  
-                                      ) ;
-        [% END %]
+     <tbody>
+     [% FOREACH preferencia IN preferencias %]
+         <tr>
+             <td>[% preferencia.getVariable %]</td>
+             <td>[% preferencia.getShowValue %]</td>
+             <td>[% preferencia.getExplanation %]</td>
+             <td>
+                 [% PERL %]
+                   print C4::AR::Filtros::action_button( 
+                                                   button    => "btn btn-primary click",
+                                                   action    => 'modificarVariable("[% preferencia.getVariable %]","[% preferencia.getType %]")', 
+                                                   icon      => "icon-edit icon-white",
+                                                   title     => "",
+                                               ) ;
 
-        <tbody>
-        [% FOREACH preferencia IN preferencias %]
-            <tr>
-                <td>[% preferencia.getVariable %]</td>
-                <td>[% preferencia.getShowValue %]</td>
-                <td>[% preferencia.getExplanation %]</td>
-                <td>
-                    [% PERL %]
-                      print C4::AR::Filtros::action_button( 
-                                                      button    => "btn btn-primary click",
-                                                      action    => 'modificarVariable("[% preferencia.getVariable %]","[% preferencia.getType %]")', 
-                                                      icon      => "icon-edit icon-white",
-                                                      title     => "",
-                                                  ) ;
-
-                    [% END %]
-                </td>
-            
-            </tr>
-        
-        [% END %]
-        
-            </tbody>
-        </table>
-    </div>
-</fieldset>
+                 [% END %]
+             </td>
+         </tr>
+     
+     [% END %]
+     
+      </tbody>
+   </table>
+ 

@@ -28,6 +28,15 @@ my $cont;
 #estamos agregando o editando
 if ($action){
 
+    #------------ data de los inputs-------------
+    $t_params->{'titulo'}       = $input->param('titulo');
+    $t_params->{'categoria'}    = $input->param('categoria');
+    $t_params->{'contenido'}    = $input->param('contenido');
+    $t_params->{'twiter'}       = $input->param('check_publicar');
+    $t_params->{'links'}        = $input->param('links');
+    #--------- FIN data de los inputs -----------
+    
+
     #--------- imagenes nuevas -----------
     #me quedo con las hash que tengan 'file_*'
     my @arrayFiles;

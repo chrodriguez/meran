@@ -83,10 +83,10 @@ sub checkPassword{
 sub passwordsIguales{
 	my ($nuevaPassword1,$nuevaPassword2,$socio) = @_;
 	
-    my $key = $socio->getPassword;
+    my $key         = $socio->getPassword;
 	
-    $nuevaPassword1 = C4::AR::Auth::desencriptar($nuevaPassword1,$key);
-    $nuevaPassword2 = C4::AR::Auth::desencriptar($nuevaPassword2,$key);
+    $nuevaPassword1 = C4::AR::Auth::desencriptar($nuevaPassword1, $key);
+    $nuevaPassword2 = C4::AR::Auth::desencriptar($nuevaPassword2, $key);
 	
 	return ($nuevaPassword1 eq $nuevaPassword2);
 	

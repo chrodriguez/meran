@@ -152,8 +152,6 @@ sub setRemindFlag{
 	my ($remindFlag) = shift;
 	
 	$self->remindFlag($remindFlag);
-	
-	$self->save();
 }
 
 sub agregar{

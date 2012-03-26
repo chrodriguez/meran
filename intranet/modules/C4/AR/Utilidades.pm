@@ -181,7 +181,7 @@ sub checkFileMagic{
     my $mime    = $flm->checktype_filename($path . "/" . $hash_unique);
     
     #el archivo vino en binario, hay que escribirlo de otra forma
-    if($mime =~ m/charset=binary/){
+    if($mime =~ m/application\/x-empty; charset=binary/i){
     
         #borramos el archivo y lo escribimos de nuevo
         unlink($path . "/" . $hash_unique);
@@ -200,7 +200,7 @@ sub checkFileMagic{
     
     foreach my $t (@filesAllowed){
     
-        if($mime =~ m/$t/){
+        if($mime =~ m/$t/i){
             $ok = 1;
             $type = $t;
         }
@@ -210,7 +210,7 @@ sub checkFileMagic{
     unlink($path . "/" . $hash_unique);
     
     if (!$ok){
-    
+        C4::AR::Debug::debug("el tipo de archivo no estaba en la whitelist");
         #no esta, borramos el archivo y devolvemos 0
         return 0;
     
