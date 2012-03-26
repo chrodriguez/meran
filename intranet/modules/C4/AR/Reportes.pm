@@ -1169,6 +1169,58 @@ sub estantesVirtuales {
 
 }
 
+sub getBusquedasDeUsuario {
+
+    my ( $datos_busqueda ) = @_;
+
+    my $nro_socio= $datos_busqueda->{'usuario'};
+    my $categoria= $datos_busqueda->{'categoria'};
+    my $interfaz= $datos_busqueda->{'interfaz'};
+    my $valor= $datos_busqueda->{'valor'};
+    my $fecha_inicio= $datos_busqueda->{'fecha_inicio'};
+    my $fecha_fin= $datos_busqueda->{'fecha_fin'};
+    my $statistics= $datos_busqueda->{'statistics'};
+
+    my @filtros;
+    my $resultsarray;
+
+    if ($nro_socio){
+         my $usuario= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);    
+         push( @filtros, (or [ nro_socio => {eq $usuario->nro_socio }, ]));
+    
+    if ($categoria){
+         push( @filtros, (or [ busqueda.categoria_socio =>  {eq  $categoria},] ) );
+    }
+  
+    if ($interfaz){
+         push( @filtros, (or [ busqueda.tipo => { or => $interfaz},] ) );
+    }
+    
+    if ($valor){
+        push( @filtros, (or [ valor  =>  { like => '% '.$valor.'%'},] ) );
+    }
+   
+    if ($fecha_inicio && $fecha_fin){
+        push( @filtros, (or [ busqueda.fecha => { eq => $fecha_inicio, gt => $fecha_fin }, ]));
+  
+    }
+
+#     if ($statistics){
+# 
+#     }
+
+    my $resultsarray = C4::Modelo::RepHistorialBusqueda::Manager->get_usr_socio( 
+                                                                      query   => \@filtros,
+                                                                      require_objects => ['busqueda'],
+                                                                      with_objects => [],
+                                                                      select       => ['busqueda.*','rep_historial_busqueda.*'],
+                                                          );
+
+
+    return ( $resultsarray );
+
+}
+
 END { }    # module clean-up code here (global destructor)
 
 1;

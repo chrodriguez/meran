@@ -5,12 +5,38 @@
 <script type="text/javascript" src="/intranet-tmpl/includes/reports.js"></script>
 <script>
 
-    function lala(){
-        alert("sdfsdf");
+    
+    function generarReporteBusquedas(){
 
+        objAH               = new AjaxHelper(updateGenerarReporteBusquedas);
+        objAH.debug         = true;
+        objAH.cache         = true;
+        objAH.showOverlay   = true;
+        objAH.url           = URL_PREFIX+'/reports/catalogoDB.pl';
+        objAH.tipoAccion    =  "BUSQUEDAS";
+//         objAH.usuario       =  $('#usuario');
+//         objAH.categoria     =  $('#categoria').val();
+//         objAH.interfaz      =  $('#interfaz').val();
+//         objAH.valor         =  $('#valor');
+//         objAH.fecha_inicio  =  $('#date-from');
+//         objAH.fecha_fin     =  $('#date-to');
+//         objAH.statistics    =  $('#statistics').val;
+        //se envia la consulta
+        objAH.sendToServer();
     }
 
+    function updateGenerarReporteBusquedas(responseText){
+        $('#report_result_busq').html(responseText);
+        $('#report_result_busq').show();
+
+    }   
+   
+
     $(document).ready( function(){ 
+         if (!Modernizr.inputtypes.date) {
+              $("date-from").datepicker();
+              $("date-to").datepicker();
+        }
         $(".cb-enable").click(function(){
             var parent = $(this).parents('.switch');
             $('.cb-disable',parent).removeClass('selected');
@@ -34,7 +60,7 @@
 </script>
 
 <div class="center_fieldset report_form_container">
-      <form class="form-horizontal" onsubmit="generarEtiquetas('report_result_cards'); return false;">
+      <form class="form-horizontal" onsubmit="return false;">
      <!--     <div class="control-group">
             <label class="control-label"  for="name">Parte del nombre/apellido del usuario</label>
             <div class="controls">
@@ -83,15 +109,15 @@
           <div class="control-group">
             <label class="control-label"  for="name">Valor</label>
             <div class="controls">
-              <input class="xlarge" id="name" name="name" size="30" type="text">
-              <p class="help-block">Econom&iacute;a</p>
+              <input class="xlarge" id="valor" name="valor" size="30" type="text">
+              <p class="help-block">Ej. Econom&iacute;a</p>
             </div>
           </div><!-- /control-group -->
           <div class="control-group">
             <label class="control-label"  for="name">Estantes virtuales/subestante</label>
             <div class="controls">
-              <input class="xlarge" id="name" name="name" size="30" type="text">
-              <p class="help-block">Econom&iacute;a</p>
+              <input class="xlarge" id="estante" name="estante" size="30" type="text">
+              <p class="help-block">Ej. Econom&iacute;a</p>
             </div>
           </div><!-- /control-group -->
            <div class="control-group">
@@ -105,16 +131,24 @@
             </div>
           </div><!-- /control-group -->
           <div class="control-group">
-                <label class="checkbox"  for="statistics_check">Generar estadisticas</label>
-                <div class="controls">
-                    <input type="checkbox" name="statistics_check" id="statistics_check" />
-                </div>
-          </div>
-
+                    <label class="checkbox" for="statistics_check">Generar estadisticas
+           <!--     <div class="controls">-->
+                    <input type="checkbox" name="statistics_check" id="statistics_check"/></label>
+              <!--  </div>-->
+          </div>        
+          
           <div class="form-actions">
-            <input type="submit" class="btn btn-primary" value="Consultar">
+     <!--     <input type="submit" class="btn btn-primary" value="Consultar">-->
+            [% PERL %]
+                  print C4::AR::Filtros::action_button( 
+                                                  button       => "btn btn-primary",
+                                                  action       => "generarReporteBusquedas();", 
+                                                  icon         => "",
+                                                  title        => "Consultar",
+                                              ) ;
+            [% END %]
           </div>
       </form>
  </div>
  
-<div id="report_result_cards" style="display:none;"></div>
+<div id="report_result_busq" style="display:none;"></div>
