@@ -412,12 +412,13 @@ sub detalleNivel3{
     if($nivel2_object){
 
         $hash_nivel2{'id2'}                     = $id2;
+        
         eval{
             $hash_nivel2{'tipo_documento'}          = $nivel2_object->getTipoDocumentoObject->getNombre();
         };
         if (@$){
             $hash_nivel2{'tipo_documento'}          = C4::AR::Filtros::i18n("SIN DEFINIR");
-¡        }
+        }
         
         $hash_nivel2{'nivel2_array'}            = $nivel2_object->toMARC_Intra; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
 
