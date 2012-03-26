@@ -22,8 +22,7 @@
 			</p>
 	          	
 			[% IF cant_portada %]
-				<div id="carousel_container" class="carousel slide">
-					<div id="carousel_portada_opac" class="carousel slide">
+			     <div id="carousel_portada_opac" class="carousel">
 			            <div class="carousel-inner">
 			            [% FOREACH p IN portada %]
 			              <div class="item [% IF loop.first %]active[% END %]">
@@ -42,7 +41,6 @@
 						  <a class="carousel-control left" href="#carousel_container" data-slide="prev">&lsaquo;</a>
 						  <a class="carousel-control right" href="#carousel_container" data-slide="next">&rsaquo;</a>
 					 [% END %]	        	
-					</div>
 				</div>
 			[% END %]
 	

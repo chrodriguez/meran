@@ -378,7 +378,7 @@ sub getTipoDocumentoObject{
 
     my $tipo_doc_object = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3 ( query => [  'id_tipo_doc' => { eq => $tipo_doc } ] );
 
-    if(scalar($tipo_doc_object) > 0){
+    if(scalar(@$tipo_doc_object) > 0){
         return $tipo_doc_object->[0];
     } else {
 #         C4::AR::Debug::debug("CatRegistroMarcN2 => getTipoDocumentoObject()=> EL OBJECTO (ID) CatRefTipoNivel3 NO EXISTE");

@@ -117,7 +117,8 @@
                         }
                     });
              [% IF portada %]
-             	$('.carousel').carousel();
+             	$('#carousel_portada_opac').carousel({
+                });
           	 [% END %]
              	
         });
