@@ -53,32 +53,31 @@
               </div>
               <div id="e_docs[% id2 %]" class="accordion-body collapse">
                 <div class="accordion-inner">
-			        <ul>
+			        <dl>
 			               [% FOREACH file IN lista_docs %] 
-			                    <dl>
 			                           <dt>
 				                           [% PERL %]
 				                               print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(file.getTitle) %]",
 				                                                               url =>      "getDocument.pl", 
 				                                                               params =>   ["id=[% file.getId %]"],
-				                                                               title =>    "[% HTML.escape(file.getTitle) %]"
+				                                                               title =>    "[% HTML.escape(file.getTitle) %]",
+				                                                               icon => "icon-file",
 				                                                           ) ;
 				                           [% END %]
-				                           <img style="height: 25px; width: 25px; border: none; float:left;" src='[% temas %]/[% user_theme_intra %]/imagenes/iconos/[% file.getIconType %].png' />
+
 				                           [% PERL %]
 				                               print C4::AR::Filtros::action_link_button( 
 				                               								   title =>     "",
 				                                                               url =>      "deleteDocument.pl", 
 				                                                               params =>   ["id=[% file.getId %]","id1=[% id1 %]"],
-				                                                               button =>    "btn btn-danger click",
+				                                                               button =>    "btn-small btn-danger click",
 				                                                               icon	  =>  "icon-white icon-trash",
 				                                                           ) ;
 				                           [% END %]
 		                           	  </dt>
-			                    </dl>
 			            [% END %]
-			        </ul>
-				    <div id="file-uploader_[% id2 %]" class="form-horizontal [% IF cant_docs %] right [% END %]">
+			        </dl>
+				    <div id="file-uploader_[% id2 %]" class="form-horizontal">
 						<form id="form_file-uploader_[% id2 %]" enctype="multipart/form-data" method="post" 
 								action="[% url_prefix %]/catalogacion/estructura/uploadDocument.pl">
 				               <input type="hidden" name="id2" id="id2" value="[% id2 %]" /><br />

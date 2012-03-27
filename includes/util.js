@@ -494,6 +494,7 @@ function uploadProgress(evt) {
 				.toString()
 				+ '%';
 		document.getElementById('progressBar' + '_' + ID2_file).style.width = percentComplete.toString()+ '%';
+		
 		document.getElementById('transferBytesInfo' + '_' + ID2_file).innerHTML = bytesTransfered;
 		if (percentComplete == 100) {
 			var uploadResponse = document.getElementById('uploadResponse' + '_'	+ ID2_file);
