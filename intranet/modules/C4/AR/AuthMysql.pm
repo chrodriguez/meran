@@ -87,11 +87,8 @@ sub passwordsIguales{
 	
     $nuevaPassword1 = C4::AR::Auth::desencriptar($nuevaPassword1, $key);
     $nuevaPassword2 = C4::AR::Auth::desencriptar($nuevaPassword2, $key);
-    
-    C4::AR::Debug::debug("pass desencriptada en el servidor : " . $nuevaPassword1); die();
 	
 	return ($nuevaPassword1 eq $nuevaPassword2);
-	
 	
 }
 sub validarPassword{
@@ -141,6 +138,12 @@ sub setearPassword{
     my $key = $socio->getPassword;
             
     $nuevaPassword = C4::AR::Auth::desencriptar($nuevaPassword,$key);
+    
+    #lo hasheamos con MD5_B64 porque desde el cliente ya viene sin hashear con ese algoritmo
+    #esto viene asi para poder tener la pass plana de este lado y hacer las validaciones
+    #correspondientes cuando cambia la pass el socio
+    $nuevaPassword = C4::AR::Auth::hashear_password($nuevaPassword,'MD5_B64');
+    
     $nuevaPassword = C4::AR::Auth::hashear_password($nuevaPassword,C4::AR::Auth::getMetodoEncriptacion());
 
     $socio->setPassword($nuevaPassword);	

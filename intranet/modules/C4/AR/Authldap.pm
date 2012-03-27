@@ -346,7 +346,12 @@ sub setearPassword{
     #si esto da error, es porque la codificacion falla, lo cual, seguramente no esté encriptada por ser un reseteo de password
     if (!$isReset){
         $user_ldap_password = C4::AR::Auth::hashear_password($user_ldap_password, 'SHA_256_B64');
-        $nuevaPassword=C4::AR::Auth::desencriptar($nuevaPassword,$user_ldap_password);
+        $nuevaPassword      = C4::AR::Auth::desencriptar($nuevaPassword,$user_ldap_password);
+        
+        #lo hasheamos con MD5_B64 porque desde el cliente ya viene sin hashear con ese algoritmo
+        #esto viene asi para poder tener la pass plana de este lado y hacer las validaciones
+        #correspondientes cuando cambia la pass el socio
+        $nuevaPassword      = C4::AR::Auth::hashear_password($nuevaPassword, 'MD5_B64');
     }
     
     C4::AR::Debug::debug("PASSWORDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD ".$nuevaPassword);

@@ -11,8 +11,9 @@
                 var nroRandom   = [% nroRandom %];
 	            var hash_actual = b64_sha256(b64_sha256(b64_md5($("#actualpassword").val()))+nroRandom);
 	            var key         = b64_sha256(b64_md5($("#actualpassword").val()));
-	            var hash_new1   = encriptar(b64_md5($("#newpassword1").val()),key);
-	            var hash_new2   = encriptar(b64_md5($("#newpassword2").val()),key);
+	            var hash_new1   = encriptar($("#newpassword1").val(),key);
+	            var hash_new2   = encriptar($("#newpassword2").val(),key);
+	            //encriptar(b64_md5($("#newpassword2").val()),key);
 	            
 	            //checkeo que las pass nuevas sean iguales
 	            if(desencriptar(hash_new1, key) != desencriptar(hash_new2, key))
@@ -20,35 +21,43 @@
 	                jAlert('Por favor verifique que las nuevas passwords sean iguales');
 	                return false;
                 }
-                
-               /* if($("#newpassword1").val().length < [% minPassLength %])
+                /*
+                [% IF minPassLength %]
+                if($("#newpassword1").val().length < [% minPassLength %])
                 {
                     jAlert('Por favor verifique que la nueva password contenga al menos [% minPassLength %] caracteres.');
 	                return false;
                 }
+                [% END %]
                 
+                [% IF minPassNumeric %]
                 if (!$("#newpassword1").val().match(/([0-9]{[% minPassNumeric %],})/)) 
                 {
                     jAlert('Por favor verifique que la nueva password contenga al menos [% minPassNumeric %] numeros.');
 	                return false;
                 }
+                [% END %]
                 
+                [% IF minPassAlpha %]
                 if (!$("#newpassword1").val().match(/([a-zA-Z]{[% minPassAlpha %],})/)) 
                 {
                     jAlert('Por favor verifique que la nueva password contenga al menos [% minPassAlpha %] letras.');
 	                return false;
                 }
+                [% END %]
                 
+                [% IF minPassSymbol %]
                 if (!$("#newpassword1").val().match(/(\W{[% minPassSymbol %],})/)) 
                 {
                     jAlert('Por favor verifique que la nueva password contenga al menos [% minPassSymbol %] simbolos.');
 	                return false;
-                }*/
-
+                }
+                [% END %]
+*/
 	            $("#actual_password").val(hash_actual);
 	            //mando solo una pass al servidor
 	            $('#new_password1').val(hash_new1);
-	            $('#new_password2').val(hash_new1);
+	            $('#new_password2').val(hash_new2);
         	           
 	        [% ELSE %]
 	        

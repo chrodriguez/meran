@@ -1845,15 +1845,16 @@ sub _validarCambioPassword {
         C4::AR::Debug::debug("--------------------------------------NUEVO PASSWORD 2---------------- ".$new_password_2);
         C4::AR::Debug::debug("--------------------------------------ACTUAL PASSWORD---------------- ".$socio->getPassword());
         C4::AR::Debug::debug("--------------------------------------ACTUAL PASSWORD---------------- ".$socio->getPassword());
-        if ( !(_passwordsIguales($new_password_1, $new_password_2,$socio))) {
+        if (_passwordsIguales($new_password_1, $new_password_2, $socio)) {
         
-            #SACADO PORQUE NO PODEMOS VALIDAR LA PASSWORD ACA, YA ESTA HASHEADA
-	        #($msg_object)= C4::AR::Validator::checkPassword($params->{'new_password1'});
-
-        
-            #las nuevas password son distintas
+            my $key         = $socio->getPassword;
+            my $passPlana   = C4::AR::Auth::desencriptar($new_password_1, $key);
+	        ($msg_object)   = C4::AR::Validator::checkPassword($passPlana);
+       
+	    }else{
+	        #las nuevas password son distintas
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U315', 'params' => []} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U315', 'params' => []} ) ;	    
 	    }          
     }else{
       	#no es valida la pass actual

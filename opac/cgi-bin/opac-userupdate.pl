@@ -92,7 +92,7 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
     }
 
     C4::AR::Mensajes::add($msg_object, {'codMsg'=> $cod_msg, 'params' => []} ) ;
-    $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje($cod_msg,'opac');
+    $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje($cod_msg);
     
     if ($data_hash{'tema'}){
         #recargamos el objeto socio para que no pise la password nueva
