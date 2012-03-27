@@ -30,7 +30,7 @@ sub marcarLeido{
     my  $contacto = C4::Modelo::Contacto::Manager->get_contacto(query => \@filtros,);
 
     if (scalar(@$contacto)){
-        $contacto->[0]->setLeido();
+        $contacto->[0]->setLeido(1);
     }
 
 }
@@ -48,6 +48,7 @@ sub marcarRespondido{
     
     if (scalar(@$contacto)){
         $contacto->[0]->setRespondido($socio);
+        $contacto->[0]->setLeido(1);
         $contacto->[0]->save();
     }
 
@@ -130,7 +131,6 @@ sub ver{
     my  $contacto = C4::Modelo::Contacto::Manager->get_contacto(query => \@filtros,);
 
     if (scalar(@$contacto)){
-        marcarLeido($id_mensaje);
         return ($contacto->[0]);
     }else{
         return (0);

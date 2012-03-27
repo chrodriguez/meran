@@ -20,21 +20,12 @@
 
 [% USE HTML %]
 
-<fieldset class="resultados_busqueda">
+<form id="form_novedad" action="[% url_prefix %]/admin/global/editar_novedad_intra.pl" class="form-horizontal" method="POST">
+    <fieldset class="resultados_busqueda">
             [% IF editing %]
                 <legend>[% "Editar novedad de INTRA" | i18n %]:</legend>
-                    <div class="form">
-            
-                <form id="form_novedad" action="[% url_prefix %]/admin/global/editar_novedad_intra.pl" class="form-horizontal" method="POST">
-                    <input type="hidden" id="action" name="action" value="editar">
-                    <input type="hidden" id="token" name="token" value="[% token %]">
-                    <input type="hidden" id="novedad_id" name="novedad_id" value="[% novedad.id %]">
             [% ELSE %]
-            
                 <legend>[% "Agregar novedad de INTRA" | i18n %]:</legend>
-                    <div class="form">
-                <form id="form_novedad" action="[% url_prefix %]/admin/global/agregar_novedad_intra.pl" class="form-horizontal" method="POST">
-                    <input type="hidden" id="action" name="action" value="agregar">
             [% END %]
             
                 <div class="control-group">
@@ -72,6 +63,14 @@
                         [% END %]
                     </div>
                 </div>
+
+            [% IF editing %]
+                    <input type="hidden" id="action" name="action" value="editar">
+                    <input type="hidden" id="token" name="token" value="[% token %]">
+                    <input type="hidden" id="novedad_id" name="novedad_id" value="[% novedad.id %]">
+            [% ELSE %]
+                    <input type="hidden" id="action" name="action" value="agregar">
+            [% END %]
 
                 <input type="hidden" id="token" name="token" value="[% token %]">
                 
@@ -122,8 +121,8 @@
                                     
                         [% END %]
                 </div>
-            </form>
         </div>
-</fieldset>
+   </fieldset>
+ </form>
 
 [% INCLUDE 'intranet-bottom.inc' %]

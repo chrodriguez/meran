@@ -6,9 +6,7 @@
 		var value = ri.rateit('value');
 		var itemid = ri.data('itemid');
 
-		[% IF !socio_data.usr_nro_socio %]
-	    	ri.rateit('readonly', true);
-		[% END %]
+    	ri.rateit('readonly', true);
 		
 	    $.ajax({
 	        url: '[% url_prefix %]/rating.pl',
@@ -29,7 +27,12 @@
 
 <div id="rating_form_[% id2 %]" class="well">
     <h4>[% "Valoraci&oacute;n" | i18n %]</h4>
-	<div class="rateit bigstars" data-rateit-value="[% rating %]" data-rateit-starwidth="32" data-rateit-starheight="32" data-itemid="[% id2 %]"></div>
+	<div 	class="rateit bigstars" data-rateit-value="[% rating %]" data-rateit-starwidth="32" 
+			data-rateit-starheight="32" data-itemid="[% id2 %]"
+			[% IF !socio_data.usr_nro_socio %]
+			   data-rateit-readonly="true"
+			[% END %]
+	></div>
 
     <br style="clear:both" />
     <span class="label label-success" id="ajax_response[% id2 %]" style="display:none;"></span>
