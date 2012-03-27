@@ -22,10 +22,13 @@ my ($template, $session, $t_params) = get_template_and_user({
 
 my %params_combo;
 $params_combo{'class'}          = 'horizontal';
+$params_combo{'onChange'}       = 'eleccionDeNivel();';
+
 my $comboTiposNivel3            = C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
 $t_params->{'selectItemType'}   = $comboTiposNivel3;
 
 my %params_combo;
+$params_combo{'onChange'}       = 'eleccionDeNivel();';
 $params_combo{'class'}          = 'horizontal';
 my $selectNivel                 = &C4::AR::Utilidades::generarComboNiveles(\%params_combo);
 

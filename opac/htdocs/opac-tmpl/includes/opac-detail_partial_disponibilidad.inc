@@ -1,13 +1,13 @@
 <div class="alert alert-success">
 		<blockquote>
-			[% IF cantParaPrestamo && cantParaSala %]
-	        	<p>[% "Se cuenta con disponibilidad para llevar a domicilio o leer en la sala de lectura" | i18n %].</p>
+			[% IF cantParaPrestamoActual && cantParaSalaActual %]
+	        	<p>[% "Se cuenta con disponibilidad inmediata para llevar a domicilio o leer en la sala de lectura" | i18n %].</p>
 			[% ELSE %]
 				[% IF cantParaPrestamoActual %]
 		        	<p>[% "Se cuenta con disponibilidad inmediata para llevar a domicilio" | i18n %].</p>
 		        [% ELSE %]
 					[% IF cantParaSalaActual %]
-			        	<p>[% "Se cuenta con disponibilidad solamente para leer en la sala de lectura" | i18n %].</p>
+			        	<p>[% "En este momento solamente se cuenta con disponibilidad solamente para leer en la sala de lectura" | i18n %].</p>
 					[% ELSE %]
 						<p>[% "En este momento no hay ning&uacute;n ejemplar disponible" | i18n %].</p>
 					[% END %]
@@ -41,7 +41,7 @@
 	                                                                                [% IF cantParaPrestamo == 0 %]
                                                                                    	      disabled => 1,
 	                                                                                      popover		=> {title=>'[% "Disponibilidad" | i18n %]',
-	                                                                                      					text => '[% "No hay disponibilidad para domicilio sobre esta edici&oacute;n, su reserva quedar&aacute; en espera" | i18n %].' },
+	                                                                                      					text => '[% "No hay disponibilidad para domicilio sobre esta edici&oacute;n" | i18n %].' },
 		                                                                            [% ELSE %]
 			                                                                                action => 'showReservar("modal_reservar_[% id2 %]");',
 		                                                                            [% END %]
