@@ -77,7 +77,7 @@ bytesTransfered=(Math.round(bytesUploaded*100/1024)/100)
 +'KB';else
 bytesTransfered=(Math.round(bytesUploaded*100)/100)
 .toString()
-+'Bytes';document.getElementById('progressNumber'+'_'+ID2_file).innerHTML=percentComplete
++'Bytes';$('#'+'progressIndicator'+'_'+ID2_file).removeClass('hide');document.getElementById('progressNumber'+'_'+ID2_file).innerHTML=percentComplete
 .toString()
 +'%';document.getElementById('progressBar'+'_'+ID2_file).style.width=percentComplete.toString()+'%';document.getElementById('transferBytesInfo'+'_'+ID2_file).innerHTML=bytesTransfered;if(percentComplete==100){var uploadResponse=document.getElementById('uploadResponse'+'_'+ID2_file);uploadResponse.innerHTML='<span style="font-size: 18pt; font-weight: bold;">Procesando...</span>';uploadResponse.style.display='block';}}else{document.getElementById('progressBar').innerHTML='No se pudo completar';}}
 function uploadComplete(evt){clearInterval(intervalTimer);var uploadResponse=document.getElementById('uploadResponse'+'_'+ID2_file);uploadResponse.innerHTML=evt.target.responseText;uploadResponse.style.display='block';}

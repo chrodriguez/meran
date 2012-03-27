@@ -490,6 +490,8 @@ function uploadProgress(evt) {
 					.toString()
 					+ 'Bytes';
 
+                $('#'+'progressIndicator' + '_' + ID2_file).removeClass('hide');
+
 		document.getElementById('progressNumber' + '_' + ID2_file).innerHTML = percentComplete
 				.toString()
 				+ '%';
