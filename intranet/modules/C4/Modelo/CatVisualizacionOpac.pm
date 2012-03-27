@@ -99,27 +99,39 @@ sub modificarPost{
 }
 
 sub getPre{
-    my ($self)=shift;
+    my ($self) = shift;
 
-    return $self->pre;
+# C4::AR::Debug::debug("CatVisualizacionIntra => getPre =>|".$self->pre."|");
+#     return $self->pre();
+    my $value = $self->pre;
+    chop($value); #quito el | agregado 
+    return $value;
 }
 
 sub setPre{
-    my ($self) = shift;
-    my ($pre) = @_;
-    $self->pre($pre);
+    my ($self)  = shift;
+    my ($pre)   = @_;
+#     $self->pre($pre);
+    $pre =~ s/ /&nbsp;/g;
+
+    $self->pre($pre."|"); # se agrega el | para delimitar el string (PROBLEMA DE STRINGS EN MYSQL: QUITA LOS ESPACIOS FINALES)
 }
 
 sub getPost{
-    my ($self)=shift;
+    my ($self) = shift;
 
-    return $self->post;
+    my $value = $self->post;
+    chop($value); #quito el | agregado 
+    return $value;
 }
 
 sub setPost{
     my ($self) = shift;
     my ($post) = @_;
-    $self->post($post);
+#     $self->post($post);
+    $post =~ s/ /&nbsp;/g;
+
+    $self->post($post."|"); # se agrega el | para delimitar el string (PROBLEMA DE STRINGS EN MYSQL: QUITA LOS ESPACIOS FINALES)
 }
 
 sub getNivel{
