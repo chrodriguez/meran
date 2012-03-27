@@ -1,13 +1,14 @@
 
 package C4::AR::Reportes;
 
+
 use strict;
 no strict "refs";
 use C4::Date;
 use vars qw(@EXPORT_OK @ISA);
 @ISA       = qw(Exporter);
 @EXPORT_OK = qw(
-
+  &getBusquedasDeUsuario 
   &getReportFilter
   &getItemTypes
   &getConsultasOPAC
@@ -1184,32 +1185,43 @@ sub getBusquedasDeUsuario {
     my @filtros;
     my $resultsarray;
 
-    if ($nro_socio){
-         my $usuario= C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);    
-         push( @filtros, (or [ nro_socio => {eq $usuario->nro_socio }, ]));
+    my $filtro;
+    $filtro= "(or => [";
     
+    if ($nro_socio){
+         $filtro .="'nro_socio' => {eq  => $nro_socio },";
+
+#          push( @filtros, (or => [ 'nro_socio' => {eq  => $nro_socio }, ]));
+    }
     if ($categoria){
-         push( @filtros, (or [ busqueda.categoria_socio =>  {eq  $categoria},] ) );
+         $filtro .="'busqueda.categoria_socio' =>  {eq => $categoria},";
+#          push( @filtros, (or => [ 'busqueda.categoria_socio' =>  {eq => $categoria},] ) );
     }
   
     if ($interfaz){
-         push( @filtros, (or [ busqueda.tipo => { or => $interfaz},] ) );
+            $filtro .=" 'tipo' => { eq => $interfaz},";
+#          push( @filtros, (or => [ 'tipo' => { eq => $interfaz},] ) );
     }
     
     if ($valor){
-        push( @filtros, (or [ valor  =>  { like => '% '.$valor.'%'},] ) );
+          $filtro .=" 'tipo' => { like => '% '.$valor.'%'},";
+#         push( @filtros, (or => [ 'valor'  =>  { like => '% '.$valor.'%'},] ) );
     }
    
     if ($fecha_inicio && $fecha_fin){
-        push( @filtros, (or [ busqueda.fecha => { eq => $fecha_inicio, gt => $fecha_fin }, ]));
-  
+         $filtro .=" 'busqueda.fecha' => { gt => $fecha_inicio, lt => $fecha_fin },";
+#           push( @filtros, (or => [ 'busqueda.fecha' => { eq => $fecha_inicio, gt => $fecha_fin }, ]));
+#   
     }
 
+    $filtro .= "])";
+    
+     push( @filtros, $filtro);
 #     if ($statistics){
 # 
 #     }
 
-    my $resultsarray = C4::Modelo::RepHistorialBusqueda::Manager->get_usr_socio( 
+    my $resultsarray = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda( 
                                                                       query   => \@filtros,
                                                                       require_objects => ['busqueda'],
                                                                       with_objects => [],

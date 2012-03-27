@@ -14,13 +14,13 @@
         objAH.showOverlay   = true;
         objAH.url           = URL_PREFIX+'/reports/catalogoDB.pl';
         objAH.tipoAccion    =  "BUSQUEDAS";
-//         objAH.usuario       =  $('#usuario');
-//         objAH.categoria     =  $('#categoria').val();
-//         objAH.interfaz      =  $('#interfaz').val();
-//         objAH.valor         =  $('#valor');
-//         objAH.fecha_inicio  =  $('#date-from');
-//         objAH.fecha_fin     =  $('#date-to');
-//         objAH.statistics    =  $('#statistics').val;
+        objAH.usuario       =  $('#nro_socio_hidden').val();
+        objAH.categoria     =  $('#user_category').val();
+        objAH.interfaz      =  $('#interfaz').val();
+        objAH.valor         =  $('#valor').val();
+        objAH.fecha_inicio  =  $('#date-from').val();
+        objAH.fecha_fin     =  $('#date-to').val();
+        objAH.statistics    =  $('#statistics_check').val();
         //se envia la consulta
         objAH.sendToServer();
     }
@@ -121,7 +121,7 @@
             </div>
           </div><!-- /control-group -->
            <div class="control-group">
-                    <label class="control-label" for="desde"> [% "Rango de Fechas" | i18n %] </label>
+                    <label class="control-label"> [% "Rango de Fechas" | i18n %] </label>
                     <div class="controls">
                           <input type="date" id="date-from" name="date-from" data-datepicker="datepicker" placeholder="Desde" value="" required>
                           <input type="date" id="date-to" name="date-to" data-datepicker="datepicker" placeholder="Hasta" value="" required>
