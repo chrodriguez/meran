@@ -78,12 +78,12 @@
 			                    </dl>
 			            [% END %]
 			        </ul>
-				    <div id="file-uploader_[% id2 %]" class="fileUploader_catalogo [% IF cant_docs %] right [% ELSE %] left [% END %]">
+				    <div id="file-uploader_[% id2 %]" class="form-horizontal [% IF cant_docs %] right [% END %]">
 						<form id="form_file-uploader_[% id2 %]" enctype="multipart/form-data" method="post" 
 								action="[% url_prefix %]/catalogacion/estructura/uploadDocument.pl">
 				               <input type="hidden" name="id2" id="id2" value="[% id2 %]" /><br />
 				               <input type="hidden" name="id1" id="id1" value="[% id1 %]" /><br />
-							  <div class="control-group">
+							   <div class="control-group">
 							    <label class="control-label" for="fileToUpload_[% id2 %]">[% "Seleccione un archivo" | i18n %]</label>
 							    <div class="controls">
 							    	<input type="file" name="fileToUpload" id="fileToUpload_[% id2 %]" onchange="fileSelected([% id2 %]);"/>
@@ -95,28 +95,20 @@
 								  	<input type="text" name="filename" id="filename_[% id2 %]" required /><br />
 							  	  </div>
 							  </div>
-								<div class="form-actions">
-							  		<div class="controls">
-		                                  [% PERL %]
-		                                          print C4::AR::Filtros::action_button( 
-		                                                                          button         => "btn btn-primary click",
-		                                                                          action       => 'uploadFile("[% id2 %]","[% id1 %]","[% url_prefix %]/catalogacion/estructura/uploadDocument.pl")', 
-		                                                                          icon         => "",
-		                                                                          title        => "[% 'Subir archivo' | i18n %]",
-		                                                                      ) ;
-		
-		                                  [% END %]
-							  			
-						  			</div>
-							  <div id="fileInfo_[% id2 %]" class="fileInfo">
+							  
+							  <div id="fileInfo_[% id2 %]" class="alert alert-info hide">
 							    <div id="fileName_[% id2 %]" class="fileName"></div>
 							    <div id="fileSize_[% id2 %]" class="fileSize"></div>
 							    <div id="fileType_[% id2 %]" class="fileType"></div>
 							  </div>
+							  
+		  
 							  <div class="row"></div>
 							  <div id="progressIndicator_[% id2 %]" clas="progressIndicator" > 
-							    <div id="progressBar_[% id2 %]" class="floatLeft progressBar">
-							    </div>
+
+								<div  class="progress progress-success progress-striped active">
+								  <div id="progressBar_[% id2 %]" class="bar"></div>
+								</div>
 							    <div id="progressNumber_[% id2 %]" class="floatRight">&nbsp;</div>
 							    <div class="clear"></div>
 							    <div>
@@ -127,6 +119,22 @@
 							    </div>    
 							    <div id="uploadResponse_[% id2 %]" class="uploadResponse"></div>
 							  </div>  
+							  
+							  
+							  <div class="form-actions">
+						  		<div class="controls">
+	                                  [% PERL %]
+	                                          print C4::AR::Filtros::action_button( 
+	                                                                          button         => "btn btn-primary click",
+	                                                                          action       => 'uploadFile("[% id2 %]","[% id1 %]","[% url_prefix %]/catalogacion/estructura/uploadDocument.pl")', 
+	                                                                          icon         => "",
+	                                                                          title        => "[% 'Subir archivo' | i18n %]",
+	                                                                      ) ;
+	
+	                                  [% END %]
+                                </div>
+						  			
+  				  			  </div>
 						</form>
 				    </div>
 		    	</div>
