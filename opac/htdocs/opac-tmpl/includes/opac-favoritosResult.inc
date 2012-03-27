@@ -1,4 +1,5 @@
 
+  <script type="text/javascript" src="/includes/jquery/jquery.rateit.min.js"></script>
 
 [% USE HTML %]
     
@@ -146,45 +147,24 @@
                         <td>
                             [% IF NIVEL.disponibilidad %]
                                 [% FOREACH NIVEL.disponibilidad %]
-                                    <b>[% tipoPrestamo %]</b> [% cantTotal %]
-                                    <div style="margin-right:4px">
-                                        [% IF reservados != 0 %]
-                                            [% reservados %]
-                                        [% END %] 
-                                        
-                                        [% IF prestados != 0 %]
-                                            [% prestados %]
-                                        [% END %] 
-                                    </div>
-                                    <br />
+                                	[% flag = 0 %]
+                                    [% IF cantTotal %]
+                                        [% IF flag %]
+                                    		[% 'Disponible para ' | i18n %]&nbsp;
+                                			[% flag = 1 %]
+                                    	[% END %]
+                                    	<span class="label [% IF domicilio %] label-success [% END %]">[% tipoPrestamo %]</span>
+                                        <br /><br />
+                                    [% END %]
                                 [% END %]
-                            [% ELSE %]
-                                &nbsp;
                             [% END %]
                         </td>
                         <td class="span2">
                             [% IF NIVEL.rating > 0 %]
-                                <div class="rating">
-                                    <form id="rating[% NIVEL.id1 %]" class="ratings" action="">
-                                        <div>
-                                          <input type="radio" name="rate" value="1" />
-                                          <input type="radio" name="rate" value="2" />
-                                          <input type="radio" name="rate" value="3" />
-                                          <input type="radio" name="rate" value="4" />
-                                          <input type="radio" name="rate" value="5" />
-                                          <input type="radio" name="rate" value="6" />
-                                          <input type="radio" name="rate" value="7" />
-                                          <input type="radio" name="rate" value="8" />
-                                          <input type="radio" name="rate" value="9" />
-                                          <input type="radio" name="rate" value="10" />
-                                          <input type="submit" value="Enviar" />
-                                        </div>
-                                    </form>
-                                    <br style="clear:both" />
-                                </div>
-                             [% ELSE %]
-                               <p> [% '----------' %]
-                             [% END %]
+								<div class="rateit" data-rateit-value="[% NIVEL.rating %]" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+	                         [% ELSE %]
+	                           <p> [% '----------' %]
+	                         [% END %]
                         </td>
                         [% IF socio_data.usr_permisos_opac %]
                             <td>
@@ -215,8 +195,6 @@
              </tbody>
         </table>
         <div class="contenedor_paginador">[% paginador %]</div>
-  
-    <!-- FIX PARA W3C PORQUE NO SE PERMITEN SCRIPT DENTRO DE TABLAS -->
   [% ELSE %]
     
     [% IF no_content_message %]

@@ -204,7 +204,7 @@
       [% FOREACH NIVEL IN SEARCH_RESULTS %]
                 <script type="text/javascript">
                 </script>
-    [% END %]
+      [% END %]
 
     [% IF !from_suggested %]
             
@@ -412,7 +412,6 @@
         </table>
         <div class="contenedor_paginador">[% paginador %]</div>
   	[% END %]
-    <!-- FIX PARA W3C PORQUE NO SE PERMITEN SCRIPT DENTRO DE TABLAS -->
   [% ELSE %]
     
     [% IF no_content_message %]
