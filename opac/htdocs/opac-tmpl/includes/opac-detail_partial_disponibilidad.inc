@@ -7,7 +7,7 @@
 		        	<p>[% "Se cuenta con disponibilidad inmediata para llevar a domicilio" | i18n %].</p>
 		        [% ELSE %]
 					[% IF cantParaSalaActual %]
-			        	<p>[% "En este momento solamente se cuenta con disponibilidad solamente para leer en la sala de lectura" | i18n %].</p>
+			        	<p>[% "En este momento solamente se cuenta con disponibilidad para leer en la sala de lectura" | i18n %].</p>
 					[% ELSE %]
 						<p>[% "En este momento no hay ning&uacute;n ejemplar disponible" | i18n %].</p>
 					[% END %]

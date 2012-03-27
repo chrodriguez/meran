@@ -5,6 +5,7 @@
   <h3>[% HTML.escape(novedad.getTitulo) %]</h3>
 </div>
 <div class="modal-body">
+  <span class="label right" title="[% 'Categor&iacute;a' | i18n %]">[% novedad.getCategoria %]</span>
   <p>[% HTML.escape(novedad.getContenido) %]</p>
   
   [% IF cant_links %]
@@ -15,8 +16,7 @@
   
 </div>
 <div class="modal-footer">
-    <span class="label right" title="[% 'Categor&iacute;a' | i18n %]">[% novedad.getCategoria %]</span>
-   <h4>[% novedad.getFechaLegible %]</h4>
+   <h4 class="left">[% novedad.getFechaLegible %]</h4>
   <p class="help-block">
         [% 'Creado por ' | i18n %]
         [% PERL %]

@@ -119,7 +119,7 @@
              [% IF portada %]
              	$('#carousel_portada_opac').carousel({
              		pause: "hover",
-             		interval: 3000,
+             		interval: 5000,
                 });
           	 [% END %]
              	
