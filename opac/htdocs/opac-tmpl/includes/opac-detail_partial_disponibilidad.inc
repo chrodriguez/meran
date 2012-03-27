@@ -1,13 +1,13 @@
 <div class="alert alert-success">
 		<blockquote>
 			[% IF cantParaPrestamoActual && cantParaSalaActual %]
-	        	<p>[% "Se cuenta con disponibilidad inmediata para llevar a domicilio o leer en la sala de lectura" | i18n %].</p>
+	        	<p>[% "Se cuenta con disponibilidad inmediata para domicilio o la sala de lectura" | i18n %].</p>
 			[% ELSE %]
 				[% IF cantParaPrestamoActual %]
 		        	<p>[% "Se cuenta con disponibilidad inmediata para llevar a domicilio" | i18n %].</p>
 		        [% ELSE %]
 					[% IF cantParaSalaActual %]
-			        	<p>[% "En este momento solamente se cuenta con disponibilidad para leer en la sala de lectura" | i18n %].</p>
+			        	<p>[% "En este momento solamente se cuenta con disponibilidad para sala de lectura" | i18n %].</p>
 					[% ELSE %]
 						<p>[% "En este momento no hay ning&uacute;n ejemplar disponible" | i18n %].</p>
 					[% END %]
