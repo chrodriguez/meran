@@ -38,8 +38,8 @@
 			        	</div>
 			         [% IF cant_portada > 1 %]
 						 <!-- Carousel nav -->
-						  <a class="carousel-control left" href="#carousel_container" data-slide="prev">&lsaquo;</a>
-						  <a class="carousel-control right" href="#carousel_container" data-slide="next">&rsaquo;</a>
+						  <a class="carousel-control left" href="#carousel_portada_opac" data-slide="prev">&lsaquo;</a>
+						  <a class="carousel-control right" href="#carousel_portada_opac" data-slide="next">&rsaquo;</a>
 					 [% END %]	        	
 				</div>
 			[% END %]

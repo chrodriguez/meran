@@ -725,8 +725,7 @@ sub as_stringReloaded {
             $hash_temp{'orden_subcampo'}    = $cat_estruct_info_array->getOrdenSubCampo();
         }
 
-#         C4::AR::Debug::debug("Catalogacion => as_stringReloaded => text => ".$text);
-#         push( @subs, $text );
+#         C4::AR::Debug::debug("Catalogacion => as_stringReloaded => text =>".$text."-");
         push (@array_subcampos, \%hash_temp);
     } # foreach
 
@@ -806,7 +805,11 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
             # veo que separador lleva cada subcampo para el $field dependiendo del campo y subcampo que se este procesando
             my $field_as_string                 = as_stringReloaded($field, $itemtype, $params);
 
+C4::AR::Debug::debug("Catalocagion::marc_record_to_meran_to_detail_view_as_not_extended=> field_as_string =>".$field_as_string."-");
+
             $hash_temp_aux{'dato'}              = ($hash_temp_aux{'dato'} ne "")?$hash_temp_aux{'dato'}.";".$field_as_string:$field_as_string;
+
+C4::AR::Debug::debug("Catalocagion::marc_record_to_meran_to_detail_view_as_not_extended=> hash_temp_aux{'dato'} =>".$hash_temp_aux{'dato'}."-");
 
             $hash_temp_aux{'campo'}             = $campo;
             $hash_temp_aux{'orden'}             = getOrdenFromCampo($campo, $params->{'nivel'}, $itemtype, $type, $db);
@@ -814,6 +817,7 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
             if($type eq "INTRA"){
                 #muestro el label configurado, si no existe muestro el label de la BIBLIA
                 $hash_temp_aux{'liblibrarian'}      = C4::AR::VisualizacionIntra::getVistaCampo($campo, $itemtype, $params->{'nivel'})||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
+
             } else {
                 #en el OPAC no se permiten datos blancos ni nulos
                 if((C4::AR::Utilidades::trim($hash_temp_aux{'dato'}) eq "")||($hash_temp_aux{'dato'} eq 'NO_TIENE')){
@@ -831,6 +835,7 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
             } else {
             #EXISTE EL CAMPO => campo, subcampo REPETIBLE
                 @MARC_result_array[$index]->{'dato'} = (@MARC_result_array[$index]->{'dato'} ne "")?@MARC_result_array[$index]->{'dato'}.$field_as_string:$field_as_string;
+C4::AR::Debug::debug("Catalocagion::marc_record_to_meran_to_detail_view_as_not_extended=> field_as_string2 =>".$field_as_string."-");
             }
 
         } #END if(! $field->is_control_field)
