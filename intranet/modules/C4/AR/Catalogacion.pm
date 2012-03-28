@@ -1353,6 +1353,7 @@ sub agregarCamposVacios {
 
         my @campos_array = $marc_record->field($campo);
 
+        #si el registro TIENE datos
         if(scalar(@campos_array) > 0){
 
             foreach my $c (@campos_array){
@@ -1364,6 +1365,7 @@ sub agregarCamposVacios {
                 }
             }
         } else {
+        #si el registro NO TIENE datos
 
             my $campo_subcampo;
 
@@ -1379,8 +1381,10 @@ sub agregarCamposVacios {
                     $campo_subcampo->add_subfields( $subcampo->{'subcampo'} => " " );
                 }
 
-                $marc_record->append_fields( $campo_subcampo );
+#                 $marc_record->append_fields( $campo_subcampo );
             }
+
+            $marc_record->append_fields( $campo_subcampo );
         }
     }# END for(my $j=0;$j<scalar(@$catalogaciones_array_ref);$j++)
 
