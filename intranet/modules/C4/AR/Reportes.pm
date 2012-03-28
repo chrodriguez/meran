@@ -1172,9 +1172,15 @@ sub estantesVirtuales {
 
 sub getBusquedasDeUsuario {
 
-    my ( $datos_busqueda ) = @_;
+    my ( $datos_busqueda, $orden, $ini, $cantR ) = @_;
+
+
+    my $limit_pref          = C4::AR::Preferencias::getValorPreferencia('limite_resultados_autocompletables') || 20;
+    $cantR                  = $cantR || $limit_pref;
 
     my $nro_socio= $datos_busqueda->{'usuario'};
+    C4::AR::Debug::debug($nro_socio);
+    
     my $categoria= $datos_busqueda->{'categoria'};
     my $interfaz= $datos_busqueda->{'interfaz'};
     my $valor= $datos_busqueda->{'valor'};
@@ -1185,51 +1191,55 @@ sub getBusquedasDeUsuario {
     my @filtros;
     my $resultsarray;
 
-    my $filtro;
-    $filtro= "(or => [";
+    my @filtro;
     
     if ($nro_socio){
-         $filtro .="'nro_socio' => {eq  => $nro_socio },";
 
-#          push( @filtros, (or => [ 'nro_socio' => {eq  => $nro_socio }, ]));
+         push(@filtro,('nro_socio' => {eq  => $nro_socio }));
     }
     if ($categoria){
-         $filtro .="'busqueda.categoria_socio' =>  {eq => $categoria},";
-#          push( @filtros, (or => [ 'busqueda.categoria_socio' =>  {eq => $categoria},] ) );
+         push(@filtro,('busqueda.categoria_socio' =>  {eq => $categoria} ));
     }
   
     if ($interfaz){
-            $filtro .=" 'tipo' => { eq => $interfaz},";
-#          push( @filtros, (or => [ 'tipo' => { eq => $interfaz},] ) );
+         push(@filtro,('tipo' => { eq => $interfaz}));
     }
-    
+  
     if ($valor){
-          $filtro .=" 'tipo' => { like => '% '.$valor.'%'},";
-#         push( @filtros, (or => [ 'valor'  =>  { like => '% '.$valor.'%'},] ) );
+        push(@filtro, ('valor'  =>  { like => '% '.$valor.'%'}));
     }
    
     if ($fecha_inicio && $fecha_fin){
-         $filtro .=" 'busqueda.fecha' => { gt => $fecha_inicio, lt => $fecha_fin },";
-#           push( @filtros, (or => [ 'busqueda.fecha' => { eq => $fecha_inicio, gt => $fecha_fin }, ]));
-#   
+        push( @filtro, and => [ 'busqueda.fecha' => { gt => $fecha_inicio, eq => $fecha_inicio },
+                                'busqueda.fecha' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
     }
 
-    $filtro .= "])";
-    
-     push( @filtros, $filtro);
+     push( @filtros,( or => [@filtro] ));
 #     if ($statistics){
 # 
 #     }
 
     my $resultsarray = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda( 
                                                                       query   => \@filtros,
+                                                                      sort_by => $orden,
+                                                                      limit   => $cantR,
+                                                                      offset  => $ini,
                                                                       require_objects => ['busqueda'],
                                                                       with_objects => [],
                                                                       select       => ['busqueda.*','rep_historial_busqueda.*'],
                                                           );
 
+   
+    my ($rep_busqueda_count) = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda_count(
+                                                                              query   => \@filtros,
+                                                                              require_objects => ['busqueda'],
+                                                                              with_objects => [],
+                                                                              select       => ['busqueda.*','rep_historial_busqueda.*'],
+                                                                            );
+                                                                            
 
-    return ( $resultsarray );
+
+    return ($resultsarray, $rep_busqueda_count);
 
 }
 
