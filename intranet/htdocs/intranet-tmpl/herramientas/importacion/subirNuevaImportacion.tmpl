@@ -58,7 +58,7 @@
 </script>
 
 
-<div class="fileUploader_catalogo" style="width: 100%;">
+<div class="form-horizontal" >
 	<form id="uploadfile" action="subirNuevaImportacion.pl" enctype="multipart/form-data" method="POST" class="form-horizontal">
         <fieldset>
         <legend>[% "Nueva Importaci&oacute;n:" | i18n %]</legend>
@@ -76,6 +76,14 @@
                     <input type="file" name="upfile" id="fileToUpload_1" required accept="iso,xml" onchange="fileSelected(1);">
                 </div>
             </div>
+
+
+              <div id="fileInfo_1" class="alert alert-info hide">
+                <div id="fileName_1" class="fileName"></div>
+                <div id="fileSize_1" class="fileSize"></div>
+                <div id="fileType_1" class="fileType"></div>
+              </div>
+
             
             <div class="control-group">
                 <label class="control-label">[% 'Formato' | i18n %]: </label>
@@ -101,7 +109,8 @@
             <div class="control-group">
                 <label class="control-label" for="nombreEsquema">[% 'Nombre Nuevo Esquema' | i18n %]: </label>
                 <div class="controls">
-                    <input type="text" name="nombreEsquema" id="nombreEsquema" > ([% 'Si se deja en blanco se utiliza el nombre del archivo' | i18n %].)
+                    <input type="text" name="nombreEsquema" id="nombreEsquema" > 
+                    <p class="help-block">*[% 'Si se deja en blanco se utiliza el nombre del archivo' | i18n %]</p>
                 </div>
             </div>
             
@@ -111,21 +120,16 @@
                     <input type="checkbox" name="nuevo_esquema" id="nuevo_esquema">
                 </div>
             </div>
-	      
-
-             <div class="form-actions">
-               <input type="button" class="btn btn-primary" onclick="uploadFile('[% url_prefix %]/herramientas/importacion/subirNuevaImportacion.pl')" value="[% 'Subir' | i18n %]" />
-             </div>
-             <div style="margin: 0 auto; width: 50%;">
-              <div id="fileInfo_1" class="fileInfo">
-                <div id="fileName_1" class="fileName"></div>
-                <div id="fileSize_1" class="fileSize"></div>
-                <div id="fileType_1" class="fileType"></div>
-              </div>
+	
+             
               <div class="row"></div>
-              <div id="progressIndicator_1" clas="progressIndicator" > 
-                <div id="progressBar_1" class="floatLeft progressBar">
+              <div id="progressIndicator_1" class="progressIndicator hide" > 
+
+                <div  class="progress progress-success progress-striped active">
+                  <div id="progressBar_1" class="bar"></div>
                 </div>
+
+
                 <div id="progressNumber_1" class="floatRight">&nbsp;</div>
                 <div>
                   <div id="transferSpeedInfo_1" class="floatLeft" style="width: 80px;">&nbsp;</div>
@@ -133,10 +137,14 @@
                   <div id="transferBytesInfo_1" class="floatRight" style="text-align: right;">&nbsp;</div>
                 </div>    
                 <div id="uploadResponse_1" class="uploadResponse"></div>
-               </div> 
+               </div> 	      
+
+             <div class="form-actions">
+               <input type="button" class="btn-large btn-primary" onclick="uploadFile('[% url_prefix %]/herramientas/importacion/subirNuevaImportacion.pl')" value="[% 'Subir' | i18n %]" />
              </div>
+
+
 		</fieldset>
-		
 	</form>
 </div>
 
