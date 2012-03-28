@@ -103,7 +103,7 @@
 							  
 		  
 							  <div class="row"></div>
-							  <div id="progressIndicator_[% id2 %]" clas="progressIndicator" > 
+							  <div id="progressIndicator_[% id2 %]" class="progressIndicator hide" > 
 
 								<div  class="progress progress-success progress-striped active">
 								  <div id="progressBar_[% id2 %]" class="bar"></div>
