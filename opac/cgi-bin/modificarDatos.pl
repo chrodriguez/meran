@@ -38,10 +38,7 @@ $t_params->{'foto_name'}                = $socio->tieneFoto();
 #preferencias para generar nueva password
 $t_params->{'minPassLength'}            = C4::AR::Preferencias::getValorPreferencia('minPassLength');
 $t_params->{'minPassSymbol'}            = C4::AR::Preferencias::getValorPreferencia('minPassSymbol');
-$t_params->{'minPassAlphaNumeric'}      = C4::AR::Preferencias::getValorPreferencia('minPassAlphaNumeric');
 $t_params->{'minPassAlpha'}             = C4::AR::Preferencias::getValorPreferencia('minPassAlpha');
 $t_params->{'minPassNumeric'}           = C4::AR::Preferencias::getValorPreferencia('minPassNumeric');
-$t_params->{'minPassLower'}             = C4::AR::Preferencias::getValorPreferencia('minPassLower');
-$t_params->{'minPassUpper'}             = C4::AR::Preferencias::getValorPreferencia('minPassUpper');
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

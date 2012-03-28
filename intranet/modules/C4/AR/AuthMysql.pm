@@ -29,7 +29,7 @@ sub _checkPwPlana{
 }
 
 =item
-    Funcion que recibe un userid, un nroRandom y un password e intenta validarlo ante un ldap utilizando el mecanismo interno de Meran, si      lo logra devuelve un objeto Socio.
+    Funcion que recibe un userid, un nroRandom y un password e intenta validarlo por mysql utilizando el mecanismo interno de Meran, si lo logra devuelve un objeto Socio.
 =cut
 sub _checkPwEncriptada{
     my ($userid, $password, $nroRandom) = @_;
@@ -80,6 +80,7 @@ sub checkPassword{
 	
 }	
 	
+#TODO: checkear si viene plainPassword	
 sub passwordsIguales{
 	my ($nuevaPassword1,$nuevaPassword2,$socio) = @_;
 	
@@ -91,62 +92,63 @@ sub passwordsIguales{
 	return ($nuevaPassword1 eq $nuevaPassword2);
 	
 }
+
+=item
+    Verifica que la password nueva no sea igual a la que ya tiene el socio
+    Es independiente del flag de plainPassword en meran.conf
+    Porque viene del cliente la pass nueva encriptada con AES
+    usando como kay la password vieja del socio ( $socio->getPassword )
+=cut
 sub validarPassword{
-   my( $userid,$password,$nuevaPassword,$nroRandom)= @_;
-   my $socio=undef;
-   my $msg_object= C4::AR::Mensajes::create();
+    my ($userid,$password,$nuevaPassword,$nroRandom) = @_;
+    my $socio        = undef;
+    my $msg_object   = C4::AR::Mensajes::create();
 
-   C4::AR::Debug::debug("\nPassword actual ".$password."\nNuevo password ".$nuevaPassword);
+    C4::AR::Debug::debug("\nPassword actual ".$password."\nNuevo password ".$nuevaPassword);
    
-   if (!C4::Context->config('plainPassword')){
-            ($socio) = _checkPwEncriptada($userid,$password,$nroRandom);
+    ($socio) = _checkPwEncriptada($userid,$password,$nroRandom);
             
-            if (!$socio){
-            	return undef;
-            }
+    if (!$socio){
+    	return undef;
+    }
             
-		    my $key = $socio->getPassword;
-		    
-		    $nuevaPassword = C4::AR::Auth::desencriptar($nuevaPassword,$key);
-
-            $nuevaPassword = C4::AR::Auth::hashear_password($nuevaPassword,C4::AR::Auth::getMetodoEncriptacion());
-            $nuevaPassword = C4::AR::Auth::hashear_password($nuevaPassword.$nroRandom,C4::AR::Auth::getMetodoEncriptacion());
-            
-            if (($socio) && ($password eq $nuevaPassword)){
-                $msg_object->{'error'}=1;
-            }
-   }elsif($password ne $nuevaPassword){
-            ($socio) = checkPwPlana($userid,$password);       
-   }
-    else{
-            #esto quiere decir que el password actual es igual al nuevo
-           
-           $msg_object->{'error'}=1; 
-         }
-    if ($msg_object->{'error'}) { C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U499', 'params' => []} ) ;}
+    my $key         = $socio->getPassword;
+    
+    $nuevaPassword = C4::AR::Auth::desencriptar($nuevaPassword,$key);
+    $nuevaPassword = C4::AR::Auth::hashear_password($nuevaPassword,'MD5_B64');
+    $nuevaPassword = C4::AR::Auth::hashear_password($nuevaPassword,C4::AR::Auth::getMetodoEncriptacion());
+    $nuevaPassword = C4::AR::Auth::hashear_password($nuevaPassword.$nroRandom,C4::AR::Auth::getMetodoEncriptacion());
+    
+    if (($socio) && ($password eq $nuevaPassword)){
+    
+        #esto quiere decir que el password actual es igual al nuevo  
+        $msg_object->{'error'} = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U499', 'params' => []} );
+        
+    }
 	
     return ($socio,$msg_object);
 }
 
 =item
-    Función que setea el password de un socio, es independiente del tipo de authtencacion q se use, simplemente desencripta el password que viene encriptado con la password vieja del usuario
-    y lo setea en la base
+    Función que setea el password de un socio. Usada en el cambio de password del socio.
+    Es independiente del valor de 'plainPassword' porque se manda siempre con AES desde el cliente
+    usando como key = ( b64_sha256 ( b64_md5 ( passwordVieja ) ) ) => passwordVieja como esta en la base
 =cut
 sub setearPassword{
     
-    my ($socio,$nuevaPassword) = @_;
-    my $key = $socio->getPassword;
-            
-    $nuevaPassword = C4::AR::Auth::desencriptar($nuevaPassword,$key);
+    my ($socio,$nuevaPassword)  = @_;
+
+    my $key                     = $socio->getPassword;
+        
+    $nuevaPassword              = C4::AR::Auth::desencriptar($nuevaPassword,$key);
+
+    $nuevaPassword              = C4::AR::Auth::hashear_password($nuevaPassword,'MD5_B64');
     
-    #lo hasheamos con MD5_B64 porque desde el cliente ya viene sin hashear con ese algoritmo
-    #esto viene asi para poder tener la pass plana de este lado y hacer las validaciones
-    #correspondientes cuando cambia la pass el socio
-    $nuevaPassword = C4::AR::Auth::hashear_password($nuevaPassword,'MD5_B64');
-    
-    $nuevaPassword = C4::AR::Auth::hashear_password($nuevaPassword,C4::AR::Auth::getMetodoEncriptacion());
+    $nuevaPassword              = C4::AR::Auth::hashear_password($nuevaPassword,C4::AR::Auth::getMetodoEncriptacion());
 
     $socio->setPassword($nuevaPassword);	
+
     return $socio;
 }
 
