@@ -479,26 +479,12 @@ sub aplicarImportacion {
         
 =cut
      #Proceso el nivel 1 agregando las referencias que no existen!!
-          
-     
-     # Detalle params_n1: 
-     #				##Nivel1##					##Nivel2##					##Nivel3##
-	 #		$params->{'id_tipo_doc'} 	 | $params->{'tipo_ejemplar'}	| $params->{'tipo_ejemplar'}
-	 #		$params->{'infoArrayNivel1'} | $params->{'infoArrayNivel2'} | $params->{'infoArrayNivel3'}	
-	 #				##infoArrayNivel##
-	 #		$infoArrayNivel->[$i]->{'indicador_primario'};
-	 #		$infoArrayNivel->[$i]->{'indicador_secundario'};
-	 #   	$infoArrayNivel->[$i]->{'campo'};
-     #   	$infoArrayNivel->[$i]->{'subcampos_hash'};
-     #   	$infoArrayNivel->[$i]->{'subcampos_array'};
-	 #   	$infoArrayNivel->[$i]->{'cant_subcampos'};
    
-   my $nivel1 = $detalle->{'nivel1'};
-	 my $infoArrayNivel =  $self->prepararNivelParaImportar($nivel1);
+	 my $infoArrayNivel1 =  $self->prepararNivelParaImportar($detalle->{'marc_record'},$detalle->{'nivel1_template'},1);
    
    my $params_n1;
 	 $params_n1->{'id_tipo_doc'} = $detalle->{'nivel1_template'};
-	 $params_n1->{'infoArrayNivel1'} = $infoArrayNivel;
+	 $params_n1->{'infoArrayNivel1'} = $infoArrayNivel1;
    my ($msg_object, $id1) = C4::AR::Nivel1::t_guardarNivel1($params_n1);
    
    C4::AR::Debug::debug("Nivel 1 creado ".$id1);
@@ -507,11 +493,11 @@ sub aplicarImportacion {
    if (!$msg_object->{'error'}){
     my $niveles2 = $detalle->{'nivel2'};
     foreach my $nivel2 (@$niveles2){
-      my $infoArrayNivel =  $self->prepararNivelParaImportar($nivel2->{'nivel2_array'});   
+      my $infoArrayNivel2 =  $self->prepararNivelParaImportar($nivel2->{'marc_record'},$nivel2->{'nivel2_template'},2);   
       my $params_n2;
       $params_n2->{'id_tipo_doc'} = $nivel2->{'nivel2_template'};
       $params_n2->{'tipo_ejemplar'} = $nivel2->{'nivel2_template'};
-      $params_n2->{'infoArrayNivel2'} = $infoArrayNivel;
+      $params_n2->{'infoArrayNivel2'} = $infoArrayNivel2;
       $params_n2->{'id1'}=$id1;
       my ($msg_object2,$id1,$id2) = C4::AR::Nivel2::t_guardarNivel2($params_n2);
       # Hay que agregar el indice aca
@@ -600,46 +586,66 @@ sub aplicarImportacion {
 
 sub prepararNivelParaImportar{
      my ($self)   = shift;
-     my ($MARC_Array) = @_;
+     my ($marc_record, $itemtype, $nivel) = @_;
 
 
    my @infoArrayNivel=();
    
-	 foreach my $nivel (@$MARC_Array){
-		 
-			my %hash_temp = {};
-			 $hash_temp{'indicador_primario'}  = '#';
-			 $hash_temp{'indicador_secundario'}  = '#';
-			 $hash_temp{'campo'}   = $nivel->{'campo'};
-			 $hash_temp{'subcampos_array'}	=();
-			 $hash_temp{'cant_subcampos'}   = 0;
+   
+       foreach my $field ($marc_record->fields) {
+        if(! $field->is_control_field){
+            
+            my %hash_temp = {};
+            $hash_temp{'campo'}               = $field->tag;
+            $hash_temp{'indicador_primario'}  = $field->indicator(1);
+            $hash_temp{'indicador_secundario'}= $field->indicator(2);
+            $hash_temp{'subcampos_array'}	    = ();
+            $hash_temp{'subcampos_hash'}	    = ();
+            $hash_temp{'cant_subcampos'}      = 0;
+            
+            my %hash_sub_temp = {};
+            my @subcampos_array;
+            #proceso todos los subcampos del campo
+            foreach my $subfield ($field->subfields()) {
+                my $subcampo          = $subfield->[0];
+                my $dato              = $subfield->[1];
+                my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo( $hash_temp{'campo'}, $subcampo, $itemtype, $nivel);
+                if($estructura->getReferencia){
+                    #es una referencia, yo tengo el dato nomás (luego se verá si hay que crear una nueva o ya existe en la base)
+                    my ($clave_tabla_referer_involved,$tabla_referer_involved) =  C4::AR::Referencias::getTablaInstanceByAlias($estructura->infoReferencia->getReferencia);
+                    my ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getAll(1,0,0,$dato);
+                    my $tabla = $estructura->infoReferencia->getReferencia;
 
-			my $key = $nivel->{'subcampo'};
-			my $value = $nivel->{'dato'}; 
-			 #es una referencia??		 
-			 if ($nivel->{'referencia'}) {
-				#Existe la referencia en la base?
-				if($nivel->{'referencia_encontrada'}){
-						$value = $nivel->{'referencia_encontrada'};
-					}
-				else{ #no existe la referencia, hay que crearla 
-						$value = C4::AR::ImportacionIsoMARC::procesarReferencia($nivel);
-					}
-				}
-		if ($value ){
-		C4::AR::Debug::debug("CAMPO: ". $hash_temp{'campo'}." SUBCAMPO: ".$key." => ".$value);
-		my %hash_sub_temp = {};
-			my $hash;
-			$hash->{$key}= $value;
-			$hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
-			$hash_temp{'subcampos_hash'} =\%hash_sub_temp;
-			$hash_temp{'cant_subcampos'}++;
-		}
-		
-		if ($hash_temp{'cant_subcampos'}){
-			push (@infoArrayNivel,\%hash_temp)
-			}
-	}
-      
+                    if ($ref_cantidad){
+                      #REFERENCIA ENCONTRADA
+                        $dato =  $ref_valores->[0]->get_key_value;
+                      }
+                    else { #no existe la referencia, hay que crearla 
+                      $dato = C4::AR::ImportacionIsoMARC::procesarReferencia($dato,$tabla,$clave_tabla_referer_involved,$tabla_referer_involved);
+                    }
+                 }  
+                #ahora guardo el dato para importar 
+                if ($dato){
+                    
+                  C4::AR::Debug::debug("CAMPO: ". $hash_temp{'campo'}." SUBCAMPO: ".$subcampo." => ".$dato);
+                  my $hash; 
+                  $hash->{$subcampo}= $dato;
+                  
+                  $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
+                  push(@subcampos_array, ($subcampo => $dato));
+                  
+                  $hash_temp{'cant_subcampos'}++;
+                }
+                 
+              }
+                    
+          if ($hash_temp{'cant_subcampos'}){
+            $hash_temp{'subcampos_hash'} =\%hash_sub_temp;
+            $hash_temp{'subcampos_array'} =\@subcampos_array;
+            push (@infoArrayNivel,\%hash_temp)
+          }
+        }
+      }
+    
     return  \@infoArrayNivel;
 }
