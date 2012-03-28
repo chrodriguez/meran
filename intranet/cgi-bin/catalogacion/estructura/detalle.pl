@@ -23,10 +23,10 @@ $t_params->{'id2'}              = $input->param('id2') || 0;
 $t_params->{'page'}             = $input->param('page') || 0;
 
 #si ponen un id que no existe muestra internal server error 
-eval{ 
+# eval{ 
     my ($cant_total)            =  C4::AR::Nivel3::detalleCompletoINTRA($id1, $t_params);
     $t_params->{'cant_total'}   = $cant_total;
-};
+# };
 
 
 $t_params->{'per_page'}                             = C4::Context->config("cant_grupos_per_query") || 5;
