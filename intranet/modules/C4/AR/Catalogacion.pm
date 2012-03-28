@@ -94,8 +94,9 @@ sub _meran_to_marc{
             my $subcampo_hash_ref = $subcampos_hash->{$j};
              C4::AR::Debug::debug("_meran_to_marc => subcampo_hash_ref => ".$subcampo_hash_ref);
             while ( my ($key, $value) = each(%$subcampo_hash_ref) ) {
-                 C4::AR::Debug::debug("_meran_to_marc => subcampo, dato => ".$key.", ".$subcampos_array->[$j]->{'dato'});
-                 C4::AR::Debug::debug("_meran_to_marc => subcampo, datoReferencia => ".$key.", ".$subcampos_array->[$j]->{'datoReferencia'});
+                 C4::AR::Debug::debug("_meran_to_marc => hash key value => ".$key.", ".$value);
+              #   C4::AR::Debug::debug("_meran_to_marc => subcampo, dato => ".$key.", ".$subcampos_array->[$j]->{'dato'});
+              #   C4::AR::Debug::debug("_meran_to_marc => subcampo, datoReferencia => ".$key.", ".$subcampos_array->[$j]->{'datoReferencia'});
 
                 if($with_references){
                     $value = _procesar_referencia($campo, $key, $value, $itemtype, $nivel);
