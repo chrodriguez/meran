@@ -259,19 +259,17 @@
                   
              </div>
          </div>
-     <div class="form-actions" id="actions_ejemplares_[% id2 %]">
+     <div class="form-actions" id="actions_ejemplares_[% id2 %]" style="margin-bottom: 0;">
                <td>
                 [% "Para los elementos que est&aacute;n marcados:" | i18n %]
                   [% PERL %]
                       print C4::AR::Filtros::action_set_button(    
-                            title           => "[% 'Ejemplares' | i18n %]",
                             button          => 'btn btn-primary',
-
+                            title => "[% 'Modificar' | i18n %]",
+                            action =>"generarForm([% id1 %],[% id2 %])",
+                            icon =>"icon-white icon-edit",
+                                                
                             actions         => [
-                                                {title => "Modificar", 
-                                                 action=>"generarForm([% id1 %],[% id2 %])",
-                                                 icon=>"icon-edit"
-                                                },
                                                 {title => "Etiquetas", 
                                                  action=>"generarVariasEtiquetas([% id2 %])", 
                                                  icon=>"icon-barcode"

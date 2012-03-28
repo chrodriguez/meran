@@ -2,25 +2,6 @@
     $(document).ready(function() {
     	$('.fancylink').fancybox();
     });
-
-//         function mostrarEstantesVirtualesDeGrupo(id2){
-//             objAH               = new AjaxHelper(updateInfoEstantesVirtualesDeGrupo);
-//             objAH.showOverlay   = true;
-//             objAH.url           = URL_PREFIX+'/opac-busquedasDB.pl';
-//             //se setea la funcion para cambiar de pagina
-//             objAH.debug         = true;
-//             objAH.estantes_grupo  = id2;
-//             objAH.sendToServer();
-//       }
-//       
-//       function updateInfoEstantesVirtualesDeGrupo(responseText){
-//             $('#estantes_'+objAH.estantes_grupo).html(responseText);
-//             $('grupo_estantes_'+objAH.estantes_grupo).modal();
-//       }
-
-
-
-
 </script>
 
 [% FOREACH nivel2 %]
@@ -91,28 +72,6 @@
 											[% END %]
 											 
 											[% IF esta_en_estante_virtual %]
-                                                    
-                                       <!--         [% PERL %]
-                                                        print C4::AR::Filtros::action_button(  
-                                                                                            button  => "btn btn-inverse",
-                                                                                            action  => 'mostrarEstantesVirtualesDeGrupo([% id2 %]);',
-                                                                                            icon    => "",
-                                                                                            title   => "[% 'Ver Estante' | i18n %]",
-                                                                ) ;
-                                                [% END %]
-
-                                                      <div id="estantes_[% id2 %]"  class="modal hide fade">
-                                                              <div class="modal-header">
-                                                                <a href="#" class="close" data-dismiss="modal">×</a>
-                                            
-                                                              </div>
-                                                              <div class="modal-body">
-                                                                  <div id="grupo_estantes_[% id2 %]">
-                                                                 </div>
-                                                              </div>
-                                                              <div class="modal-footer"></div>
-                                                      </div>
-                                                        -->
 
                                                     [% PERL %]
 
