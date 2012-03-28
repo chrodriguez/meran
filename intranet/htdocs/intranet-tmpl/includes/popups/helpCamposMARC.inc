@@ -39,25 +39,25 @@ $(document).ready(function() {
 <div id=windowHelp>
 	<div id="contentWindow" class="formElemets">
 		<fieldset>
-              <ul id="ayuda_marc">
-              <li>
-                  <label for="campoHelp">Ingrese el campo o palabra:</label><br>
-                  <input type="text" id="campoHelp" class="campoHelp" onClick="clearInput();" name="campoHelp" style="width:90%; max-width:100%;">
+            <div class="modal-header">Ayuda MARC</div>
+            <div class="modal-body">
+                <div class="control-group">
+                  <label for="campoHelp">Ingrese el campo o palabra:</label>
+                  <!--<input type="text" id="campoHelp" class="campoHelp" onClick="clearInput();" name="campoHelp" style="width:90%; max-width:100%;">-->
+                  <input type="text" id="campoHelp" class="campoHelp" name="campoHelp" style="width:90%; max-width:100%;">
+
                   <input type="hidden" id="campoHelpId" name="campoHelpId">
-              </li>
-              <li>
-      <!-- 			<label for="subcampo"> -->
-                  Sub Campo:
-      <!-- 			</label> -->
-              </li>
-              <li>
+
+                  <label for="subcampos">
+                    Sub Campo:
+                  </label>
                   <textarea id="subcampos" name="subcampos" rows="7" style="width:90%; max-width:100%;" readonly=readonly></textarea>
-              </li>
-              <li >
-                  <a href="http://www.loc.gov/marc/classification/eccdspa.html" target="_blanc">
-                  para mas informaci&oacute;n MARC</a>
-              </li>
-              </ul>
+                  <div class='modal-footer'>
+                      <a href="http://www.loc.gov/marc/classification/eccdspa.html" target="_blanc">
+                      para mas informaci&oacute;n MARC</a>
+                  </div>
+              </div>
+          </div>
         </fieldset>
 	</div> <!--end div contentWindow-->
 </div> <!--end div windowHelp-->
