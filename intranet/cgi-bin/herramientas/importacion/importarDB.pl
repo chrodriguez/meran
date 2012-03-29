@@ -267,10 +267,11 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS_ESQUEMA_ORIGEN"){
                                       );
 
       my $id   = $obj->{'id'};
-	  my ($registros_array_ref_count, $registros_array_ref)  = C4::AR::ImportacionIsoMARC::getRegistrosFromImportacion($id);
-	  if ($registros_array_ref_count){
-	   $registros_array_ref->[2]->aplicarImportacion();
-	  }
+
+
+      C4::AR::Debug::debug("IMPORTAR ".$id);
+      C4::AR::ImportacionIsoMARC::procesarImportacion($id);
+
       my $Message_arrayref = C4::AR::Mensajes::create();
       my $infoOperacionJSON   = to_json $Message_arrayref;
 
