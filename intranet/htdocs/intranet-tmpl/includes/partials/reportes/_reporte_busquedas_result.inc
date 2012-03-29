@@ -6,51 +6,51 @@
 </div>
 
 [% IF cantidad %]
-<!--                   <div class="contenedor_paginador">[% paginador %]</div>   -->
-     <!--   [% PERL %]
+                  <div class="contenedor_paginador">[% paginador %]</div>  
+      [% PERL %]
             print C4::AR::Filtros::tableHeader(   
                               id              => "tablaResult",
                               class           => "",
                               selectAll_id    => "",
                               columns         => ['[% "Valor" | i18n %]','[% 'Campo' | i18n %]',
-                                                  '[% "Usuario" | i18n %]','[% "Documento" | i18n %]',
-                                                  '[% "Fecha" | i18n %]'
+                                                  '[% "Usuario" | i18n %]','[% "Fecha" | i18n %]',
+                                                  '[% "Estante" | i18n %]'
                                                   ]
                                                               
                                     ) ;
         [% END %]
 
         <tbody>      
-              [% FOREACH results %]   
+              [% FOREACH res IN results %]   
                 <tr>
                   <td>
-                      [% valor %]
+                      [% res.valor %]
                   </td>
                   <td>
-                      [% campo %]
+                      [% res.campo %]
                   </td>
                   <td>
                       [% IF nro_socio %] 
-                              [% nro_socio %]                 
-                      [% END %]
-                  </td>
-                  <td>
-                      [% fecha %]
-                  </td>
-                  <td>
-                      [% PERL %]
-                          print C4::AR::Filtros::link_to(   text =>     "[% nro_socio %]",
+                                [% PERL %]
+                                      print C4::AR::Filtros::link_to(   text =>     "[% nro_socio %]",
                                                             url=>"      [% url_prefix %]/usuarios/reales/datosUsuario.pl", 
                                                             params =>   ["nro_socio=[% nro_socio %]"],
                                                             title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
                                                       );
+                                [% END %]             
                       [% END %]
+                  </td>
+                  <td>
+                      [% res.busqueda.fecha %]
+                  </td>
+                  <td>
+                      
                   </td>
                
                 </tr>
              [% END %]
         </tbody>
- </table>-->
+ </table>
 [% END %]
 
 

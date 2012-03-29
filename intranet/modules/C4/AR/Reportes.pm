@@ -1172,7 +1172,7 @@ sub estantesVirtuales {
 
 sub getBusquedasDeUsuario {
 
-    my ( $datos_busqueda, $orden, $ini, $cantR ) = @_;
+    my ( $datos_busqueda, $ini, $cantR ) = @_;
 
 
     my $limit_pref          = C4::AR::Preferencias::getValorPreferencia('limite_resultados_autocompletables') || 20;
@@ -1209,19 +1209,18 @@ sub getBusquedasDeUsuario {
         push(@filtro, ('valor'  =>  { like => '% '.$valor.'%'}));
     }
    
-    if ($fecha_inicio && $fecha_fin){
+    if ($fecha_inicio != 'Desde' && $fecha_fin != 'Hasta'){
         push( @filtro, and => [ 'busqueda.fecha' => { gt => $fecha_inicio, eq => $fecha_inicio },
                                 'busqueda.fecha' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
     }
 
-     push( @filtros,( or => [@filtro] ));
+     push( @filtros,( and => [@filtro] ));
 #     if ($statistics){
 # 
 #     }
 
     my $resultsarray = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda( 
                                                                       query   => \@filtros,
-                                                                      sort_by => $orden,
                                                                       limit   => $cantR,
                                                                       offset  => $ini,
                                                                       require_objects => ['busqueda'],
@@ -1232,6 +1231,8 @@ sub getBusquedasDeUsuario {
    
     my ($rep_busqueda_count) = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda_count(
                                                                               query   => \@filtros,
+                                                                              limit   => $cantR,
+                                                                              offset  => $ini,
                                                                               require_objects => ['busqueda'],
                                                                               with_objects => [],
                                                                               select       => ['busqueda.*','rep_historial_busqueda.*'],

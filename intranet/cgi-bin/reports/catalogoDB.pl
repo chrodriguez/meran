@@ -31,7 +31,7 @@ if($tipoAccion eq "BUSQUEDAS"){
                                                             entorno         => 'undefined'},
     });
 
-    my $orden=$obj->{'orden'}||'fecha';
+#     my $orden=$obj->{'orden'}||'fecha';
     $obj->{'ini'} = $obj->{'ini'} || 1;
     my $ini=$obj->{'ini'};
     my $funcion=$obj->{'funcion'}|| 'changepage';
@@ -43,7 +43,7 @@ if($tipoAccion eq "BUSQUEDAS"){
     my ($results, $cantidad);
     my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
-   ($results, $cantidad)= C4::AR::Reportes::getBusquedasDeUsuario($obj,$orden,$ini,$cantR);
+   ($results, $cantidad)= C4::AR::Reportes::getBusquedasDeUsuario($obj,$ini,$cantR);
   
     $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 #     ($results, $cantidad)= C4::AR::Reportes::getBusquedasDeUsuario($obj);

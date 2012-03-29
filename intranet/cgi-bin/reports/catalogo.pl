@@ -17,4 +17,8 @@ my ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
                                                         entorno         => 'undefined'},
 });
 
+my $comboDeCategorias           = C4::AR::Utilidades::generarComboCategoriasDeSocio();
+
+$t_params->{'comboDeCategorias'} =$comboDeCategorias;
+
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

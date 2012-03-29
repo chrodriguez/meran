@@ -5,6 +5,9 @@
 <script type="text/javascript" src="/intranet-tmpl/includes/reports.js"></script>
 <script>
 
+    function changePageBusquedas(ini){
+        objAH.changePage(ini);
+    }
     
     function generarReporteBusquedas(){
 
@@ -14,6 +17,7 @@
         objAH.showOverlay   = true;
         objAH.url           = URL_PREFIX+'/reports/catalogoDB.pl';
         objAH.tipoAccion    =  "BUSQUEDAS";
+        objAH.funcion       = "changePageBusquedas";
         objAH.usuario       =  $('#nro_socio_hidden').val();
         objAH.categoria     =  $('#user_category').val();
         objAH.interfaz      =  $('#interfaz').val();
@@ -84,14 +88,8 @@
   
           <div class="control-group">
             <label class="control-label"  for="user_category">Categor&iacute;­a del usuario</label>
-            <div class="controls">
-              <select name="user_category" id="user_category">
-                <option>Docente</option>
-                <option>No docente</option>
-                <option>Alumno</option>
-                <option>Bibliotecario</option>
-                <option>Cocinero</option>
-              </select>
+            <div class="controls">  
+                          [% comboDeCategorias %]          
             </div>
           </div><!-- /control-group -->
 
@@ -101,6 +99,7 @@
                 <select name="interfaz" id="interfaz">
                   <option>OPAC</option>
                   <option>Intra</option>
+                  <option>Ambas</option>
                 </select>
               </div>
             </div><!-- /control-group -->
