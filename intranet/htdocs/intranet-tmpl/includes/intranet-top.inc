@@ -168,24 +168,6 @@
 		    });     
 		}
 
-		function showNovedad(id){
-
-			var objAH_novedad      	 		= new AjaxHelper(updateShowNovedad);
-			objAH_novedad.showOverlay       = true;
-			objAH_novedad.debug             = true;
-			objAH_novedad.url               = '[% url_prefix %]/admin/global/ver_novedad_intra.pl';
-			objAH_novedad.id				= id;
-			objAH_novedad.sendToServer();
-		}
-
-		function updateShowNovedad(responseText){
-		    if (!verificarRespuesta(responseText))
-		        return(0);
-
-		    $('#mostrar_novedad').html(responseText);
-		    $('#mostrar_novedad').modal();
-		}
-
 		function responderMail(){
 		    closeDM();
 		    objAH                     = new AjaxHelper(updateResponderMail);

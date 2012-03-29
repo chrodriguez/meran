@@ -1,12 +1,4 @@
 [% USE HTML %]
-<script type="text/javascript">
-      $(document).ready(function() {
-          $('.fancy_link').fancybox({
-              'frameWidth':   600,
-              'frameHeight':  500,
-          });
-      });
-</script>
 <fieldset>
     <legend>[% "Novedades de INTRA" | i18n %]:</legend>
         <div class="contenedor_paginador">[% paginador %]</div>
@@ -31,22 +23,22 @@
                         [% FOREACH novedad IN novedades %]
                             <tr class="leido[% novedad.getLeido %]">
                                 <td>
-                                    <a class="fancy_link" href="[% url_prefix %]/admin/global/ver_novedad_intra.pl?token=[% token %]&id=[% novedad.id %]">
+                                    <a class="fancy_link" href="#" onclick="showNovedad([% novedad.id %]);">
                                         [% novedad.getFechaLegible %]
                                     </a>
                                 </td>
                                 <td>
-                                    <a class="fancy_link" href="[% url_prefix %]/admin/global/ver_novedad_intra.pl?token=[% token %]&id=[% novedad.id %]">
+                                    <a class="fancy_link" href="#" onclick="showNovedad([% novedad.id %]);">
                                         [% novedad.getUsuario%] 
                                     </a>
                                 </td>
                                 <td>
-                                    <a class="fancy_link" href="[% url_prefix %]/admin/global/ver_novedad_intra.pl?token=[% token %]&id=[% novedad.id %]">
+                                    <a class="fancy_link" href="#" onclick="showNovedad([% novedad.id %]);">
                                         [% novedad.getTitulo %] 
                                     </a>
                                 </td>
                                 <td>
-                                    <a class="fancy_link" href="[% url_prefix %]/admin/global/ver_novedad_intra.pl?token=[% token %]&id=[% novedad.id %]">
+                                    <a class="fancy_link" href="#" onclick="showNovedad([% novedad.id %]);">
                                         [% novedad.getResumen %] 
                                     </a>
                                 </td>
@@ -95,3 +87,4 @@
                     ) ;
 [% END %]
 </div>
+<div id="mostrar_novedad" class="modal hide fade"></div>
