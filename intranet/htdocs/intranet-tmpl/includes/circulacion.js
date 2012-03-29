@@ -307,7 +307,6 @@ function updateInfoPrestarReserva(responseText){
     var hayError=0;
     
    	for(i=0; i<messageArray.length;i++){
-//         imprimirTicket(ticketsArray[i].ticket,i);
         setMessages(messageArray[i]);
     }
      
