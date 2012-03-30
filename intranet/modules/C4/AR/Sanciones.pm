@@ -45,7 +45,9 @@ sub getSancionesLike {
     
     C4::AR::Utilidades::printARRAY(\@searchstring_array);
 
+    #Primero filtro sanciones
     
+    push (@filtros,(fecha_comienzo  => { le => $hoy },fecha_final     => { ge => $hoy}));
 
     foreach my $s (@searchstring_array){ 
                 push (  @filtros, ( or   => [   
@@ -57,10 +59,6 @@ sub getSancionesLike {
                                                 legajo              => { like => '%'.$s.'%' },
                                                 nro_socio           => { like => '%'.$s.'%' }          
                                             ],
-                    
-                    fecha_comienzo  => { le => $hoy },
-                    fecha_final     => { ge => $hoy},  
-          
          ));
     }
 

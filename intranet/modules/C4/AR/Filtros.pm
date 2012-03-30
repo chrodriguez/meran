@@ -512,13 +512,14 @@ sub show_componente {
 
 sub ayuda_marc{
 
-    my $icon= to_Icon(  
-                boton   => "icon_ayuda_marc",
-                onclick => "abrirVentanaHelperMARC();",
-                title   => i18n("Ayuda MARC"),
-            ) ;
+#     my $icon= to_Icon(  
+#                 boton   => "icon_ayuda_marc",
+#                 onclick => "abrirVentanaHelperMARC();",
+#                 title   => i18n("Ayuda MARC"),
+#             ) ;
 
-    return "<div style='float: right;'><span class='click'>".$icon."</span></div><div id='ayuda_marc_content'></div>";
+#     return "<div style='float: right;'><span class='click'>".$icon."</span></div><div id='ayuda_marc_content'></div>";
+return "<i class='click icon-question-sign' onclick='abrirVentanaHelperMARC();'><div id='ayuda_marc_content' class='modal fade hide'></div></i>";
 }
 
 

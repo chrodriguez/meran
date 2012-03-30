@@ -1622,6 +1622,10 @@ function _cearAutocompleteParaCamponente(o){
                                                     IdInputHidden: o.getIdCompCliente() + '_hidden' }
                                     );
         break;
+        case "editorial": CrearAutocompleteEditoriales(  {IdInput: o.getIdCompCliente(),   
+                                                    IdInputHidden: o.getIdCompCliente() + '_hidden' }
+                                    );
+        break;        
         
 // TODO estoy probando el link de las analiticas
         case "nivel2": CrearAutocompleteNivel2(       { IdInput: o.getIdCompCliente(), 
@@ -2038,6 +2042,7 @@ function agregarTablaReferencias(tabla){
 }
 
 function updateAgregarTablaReferencias(responseText){
+	$('#basic-modal-content').addClass('bigModal');
     $('#basic-modal-content').html(responseText);
     $('#basic-modal-content').modal();
 

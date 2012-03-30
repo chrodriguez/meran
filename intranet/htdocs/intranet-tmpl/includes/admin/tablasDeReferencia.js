@@ -6,6 +6,7 @@ function obtenerTabla(){
     objAH.accion="OBTENER_TABLAS";
     objAH.alias_tabla = $('#tablas_ref').val();
     objAH.funcion= 'changePage';
+    objAH.asignar       = 1;
     objAH.sendToServer();
 }
 
@@ -24,6 +25,7 @@ function obtenerTablaFiltrada(){
     objAH.alias_tabla = $('#tablas_ref').val();
     objAH.filtro = $.trim($('#search_tabla').val());
     objAH.funcion= 'changePage';
+    objAH.asignar       = 1;
     objAH.sendToServer();
 }
 
@@ -66,6 +68,7 @@ function agregarRegistro(tabla){
     objAH.showOverlay       = true;
     objAH.accion="AGREGAR_REGISTRO";
     objAH.alias_tabla = tabla;
+    objAH.asignar       = 1;
     objAH.sendToServer();
 }
 
@@ -85,6 +88,7 @@ function mostrarReferencias(tabla,value_id){
     objAH.accion="MOSTRAR_REFERENCIAS";
     objAH.alias_tabla = tabla;
     objAH.value_id = value_id;
+    objAH.asignar       = 1;
     objAH.sendToServer();
 }
 
@@ -101,6 +105,7 @@ function asignarReferencia(tabla,related_id,referer_involved,referer_involved_sh
             objAH.referer_involved= referer_involved;
             objAH.alias_tabla = tabla;
             objAH.related_id = related_id;
+            objAH.asignar       = 1;
             objAH.sendToServer();
         }
         $('#fieldset_tablaResult_involved').removeClass("warning");
@@ -119,6 +124,7 @@ function asignarEliminarReferencia(tabla,related_id,referer_involved,referer_inv
             objAH.alias_tabla = tabla;
             objAH.referer_involved= referer_involved;
             objAH.related_id = related_id;
+            objAH.asignar       = 1;
             objAH.sendToServer();
         }
         $('#fieldset_tablaResult_involved').removeClass("warning");

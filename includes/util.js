@@ -490,6 +490,8 @@ function uploadProgress(evt) {
 					.toString()
 					+ 'Bytes';
 
+                $('#'+'progressIndicator' + '_' + ID2_file).removeClass('hide');
+
 		document.getElementById('progressNumber' + '_' + ID2_file).innerHTML = percentComplete
 				.toString()
 				+ '%';
@@ -508,7 +510,9 @@ function uploadProgress(evt) {
 
 function uploadComplete(evt) {
 	clearInterval(intervalTimer);
-	var uploadResponse = document.getElementById('uploadResponse' + '_' + ID2_file);
+        $('#'+'progressIndicator' + '_' + ID2_file + ' > div').removeClass('active');
+	$('#'+'progressIndicator' + '_' + ID2_file + ' > div').removeClass('progress-striped');
+        var uploadResponse = document.getElementById('uploadResponse' + '_' + ID2_file);
 	uploadResponse.innerHTML = evt.target.responseText;
 	uploadResponse.style.display = 'block';
 }

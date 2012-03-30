@@ -46,11 +46,7 @@ var jobID = 0;
         mostrarNovedades();
         mensajesContacto();
 
-        mensajes_interval_id = setInterval(mensajesContacto,10000);
-        $("#button_twitter").hover(twitter_hover, twitter_normal);
- 
-        $("#button_twitter").click(twitter_click);
-        
+        mensajes_interval_id = setInterval(mensajesContacto,20000);
         [% IF twitter_username_to_search %]
             $('#tweets').liveTwitter('[% twitter_username_to_search %]', {limit: 5, imageSize: 32}, function(){
                 $('#tweets .loading').remove();
@@ -69,23 +65,22 @@ var jobID = 0;
 <div id="mensajes_contacto" class="clear"></div>
 
 [% IF twitter_enabled %]
-
-<div id="twitter_container" class="clear">
-    <div id="twitter_result" class="alert alert-success" style="display:none;">
-        <a class="close" data-dismiss="alert">×</a>
-    </div>
-    [% IF twitter_username_to_search %]
-	   <div id="tweets" class="tweets">
-	       <div class="loading">[% 'Cargando tweets...' | i18n %]</div>
-       </div>
-	   <br />
-    [% END %]
-    <br />
-    <a class="fancy_link btn btn-inverse" href="[% url_prefix %]/admin/publicar_twitter.pl?token=[% token %]" > 
-        <i class="icon-white icon-retweet"></i> [% 'Twitter' | i18n %]
-    </a>
-    
-</div>
+	<div id="twitter_container" class="clear">
+	    <div id="twitter_result" class="alert alert-success" style="display:none;">
+	        
+	    </div>
+	    [% IF twitter_username_to_search %]
+		   <div id="tweets" class="tweets">
+		       <div class="loading">[% 'Cargando tweets...' | i18n %]</div>
+	       </div>
+		   <br />
+	    [% END %]
+	    <br />
+	    <a class="fancy_link btn btn-inverse" href="[% url_prefix %]/admin/publicar_twitter.pl?token=[% token %]" > 
+	        <i class="icon-white icon-retweet"></i> [% 'Twitter' | i18n %]
+	    </a>
+	    
+	</div>
 [% END %]
 
 [% INCLUDE 'partials/_percent_bar.inc' %]

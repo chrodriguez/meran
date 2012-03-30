@@ -29,6 +29,21 @@ function eleccionSubCampo(){
 
 </script>
 
+
+<div class="right ">
+         [% PERL %]
+             print C4::AR::Filtros::action_link_button( 
+                                                 button   => "btn btn-warning",
+                                                 url=>"[% url_prefix %]/herramientas/importacion/detalle_importacion.pl",
+                                                 params =>   ["id_importacion=[% importacion.getId %]"],
+                                                 icon => "icon-search",
+                                                 title   => "[% 'Detalle Importaci&oacute;n' | i18n %]",
+                     ) ;
+         [% END %]
+
+</div>
+
+
     [% PERL %]
     print C4::AR::Filtros::tabbedPane( titulo    => "[% 'Configuraci&oacute;n de la Importaci&oacute;n' | i18n %] ([% importacion.getNombre %])",
                                  subtitulo => "[% 'Navegue por las pesta&ntilde;as para acceder a las distintas configuraciones' | i18n %]",

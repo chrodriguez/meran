@@ -69,6 +69,8 @@ elsif ($accion eq "OBTENER_TABLAS"){
     my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
     my ($cantidad,$clave,$tabla,$datos,$campos) = C4::AR::Referencias::getTabla($alias_tabla,$filtro,$cantR,$ini);
     $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
+    
+    $t_params->{'mostrar_asignar'}  = $obj->{'asignar'} || 0;
     $t_params->{'campos'}           = $campos;
     $t_params->{'datos'}            = $datos;
     $t_params->{'tabla'}            = $tabla;
@@ -95,7 +97,8 @@ elsif ($accion eq "AGREGAR_REGISTRO"){
                     });
 
     my ($clave,$tabla,$datos,$campos) = C4::AR::Referencias::agregarRegistro($alias_tabla);
-
+    
+    $t_params->{'mostrar_asignar'} = $obj->{'asignar'} || 0;
     $t_params->{'campos'} = $campos;
     $t_params->{'datos'} = $datos;
     $t_params->{'tabla'} = $tabla;
@@ -127,7 +130,7 @@ elsif ($accion eq "MOSTRAR_REFERENCIAS"){
     
         $t_params->{'involved'} = $items_involved;
         $t_params->{'used'} = $used_or_not;
-
+        $t_params->{'mostrar_asignar'} = $obj->{'asignar'} || 0;
         $t_params->{'referer_involved'} = $referer_involved;
         $t_params->{'related_referers'} = $related_referers;
         $t_params->{'tabla_related'} = $tabla_related;
@@ -160,7 +163,7 @@ elsif ($accion eq "ASIGNAR_REFERENCIA"){
 
     $t_params->{'involved'} = $items_involved;
     $t_params->{'used'} = $used_or_not;
-
+    $t_params->{'mostrar_asignar'} = $obj->{'asignar'} || 0;
     $t_params->{'referer_involved'} = $referer_involved;
     $t_params->{'related_referers'} = $related_referers;
     $t_params->{'tabla_related'} = $tabla_related;
@@ -189,7 +192,7 @@ elsif ($accion eq "ASIGNAR_Y_ELIMINAR_REFERENCIA"){
     my ($used_or_not,$referer_involved,$items_involved)=C4::AR::Referencias::mostrarReferencias($alias_tabla,$related_id);
     my ($tabla_related,$related_referers) = C4::AR::Referencias::mostrarSimilares($alias_tabla,$related_id);
 
-
+    $t_params->{'mostrar_asignar'} = $obj->{'asignar'} || 0;
     $t_params->{'involved'} = $items_involved;
     $t_params->{'used'} = $used_or_not;
 
@@ -220,7 +223,7 @@ elsif ($accion eq "ELIMINAR_REFERENCIA"){
 
     my ($msj_object) = C4::AR::Referencias::eliminarReferencia($alias_tabla,$item_id);
     my $infoOperacionJSON=to_json $msj_object;
-
+    
     C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }

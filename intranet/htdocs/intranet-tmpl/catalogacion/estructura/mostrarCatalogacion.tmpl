@@ -91,17 +91,15 @@
 	                <td>    
 	                    [% catalogacion.getItemType %]
 	                </td>
-	                <td style="width: 92px;">
+	                <td style="width: 130px;">
 		                [% IF catalogacion.soyFijo != 1 %]
 		                    [% PERL %]
 		                        print C4::AR::Filtros::action_set_button(    
-		                              title           => "[% 'Campo' | i18n %]",
+                                      title    => "[% 'Editar' | i18n %]", 
+                                      action  => 'mostrarModificarCampo("[% catalogacion.getId %]");',
+                                      icon    => "icon-white icon-pencil",
 		                              button          => 'btn btn-primary',
 		                              actions         => [
-		                                                  {title    => "[% 'Editar' | i18n %]", 
-		                                                    action  => 'mostrarModificarCampo("[% catalogacion.getId %]");',
-		                                                    icon    => "icon-pencil"
-		                                                  },
 		                                                   {title   => "[% 'Eliminar' | i18n %]", 
 		                                                    action  => 'eliminarCampo("[% catalogacion.getId %]");',
 		                                                    icon    => "icon-trash"

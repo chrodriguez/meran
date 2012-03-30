@@ -21,31 +21,6 @@
 	                return false;
                 }
                 
-                /*if($("#newpassword1").val().length <= [% minPassLength %])
-                {
-                    jAlert('Por favor verifique que lanueva password contenga al menos [% minPassLength %] caracteres.');
-	                return false;
-                }
-                
-                if($("#newpassword1").val().length <= [% minPassSymbol %])
-                {
-                    jAlert('Por favor verifique que lanueva password contenga al menos [% minPassLength %] caracteres.');
-	                return false;
-                }*/
-                	
-
-                //TODO:
-                /*var RegExPattern = /(?!^[0-9]{[% minPassNumeric %],}$)(?!^[a-zA-Z]{[% minPassAlpha %],}$)^([a-zA-Z0-9]{[% minPassLength %],})$/;
-                var errorMessage = 'La nueva password ingresada no cumple con los siguientes requisitos:\n ' +
-                    ' longitud minima: [% minPassLength %]\n cantidad de numeros : [% minPassNumeric %] ' +
-                    ' cantidad de caracteres especiales : [% minPassSymbol %].';
-                    
-                if (!$("#newpassword1").val().match(RegExPattern)) {
-                    jAlert(errorMessage);
-                    return false;
-                } */
-                
-
 	            $("#actual_password").val(hash_actual);
 	            //mando solo una pass al servidor
 	            $('#new_password1').val(hash_new1);
@@ -86,10 +61,8 @@
     <form method="post" action="[% url_prefix %]/opac-userupdate.pl" onSubmit="return (checkPassword() && startOverlay())" class="form-horizontal">
     
     <fieldset>
-        <legend>
-            [% 'Detalle de ' | i18n %] <strong >[% socio_data.usr_apellido %], [% socio_data.usr_nombre %] </strong>
-        </legend>
         <section class="center-section-form">
+        <br />
         <div class="control-group">
             <label class="control-label" for="nombre">[% 'Nombres' |  i18n %]* :</label>
             <div class="controls">
@@ -146,6 +119,7 @@
         <fieldset>
             <legend>[% 'Cambio de contrase&ntilde;a' | i18n %] ([% 'Dejar en blanco para descartar' | i18n %])</legend>
             <section class="center-section-form">
+        	<br />
             <div class="control-group">
                 <label class="control-label" for="actualpassword">[% 'Contrase&ntilde;a Actual' |  i18n %] :</label>
                 <div class="controls">
@@ -171,6 +145,7 @@
         <fieldset>
             <legend>[% 'Personalizacion de visualizaicion' | i18n %]</legend>
             <section class="center-section-form">
+        	<br />
             <div class="control-group">
                 <label class="control-label" for="temas_opac">[% 'Tema' |  i18n %] :</label>
                 <div class="controls">
@@ -182,7 +157,8 @@
         <fieldset>
             <legend>[% 'Recordatorio de vencimiento de pr&eacute;stamos' | i18n %]</legend>
             <section class="center-section-form">
-                <div class="control-group">
+        	<br />
+            <div class="control-group">
                     <label class="control-label" for="remindFlag">[% 'Recibir notificaci&oacute;nes' |  i18n %] :</label>
                     <div class="controls">
                         <input type="checkbox" name="remindFlag" id="remindFlag" [% IF socio_data.remindFlag %] checked="checked" [% END %]/> 
