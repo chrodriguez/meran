@@ -1,10 +1,12 @@
+
+[% IF cantidad %]
  <div class="well">
                 <!--<div class="resultados_consulta">[% "Ha buscado por" | i18n %]: <strong>[% HTML.escape(socio_busqueda) %]</strong></div> -->
-                 [% IF cantidad %]
+         
                           <div class="resultados_consulta">[% "La cantidad de busquedas es" | i18n %]: <strong>[% cantidad %]</strong></div>
-                 [% END %]
+                 
 </div>
-
+[% END %]
 [% IF cantidad %]
                   <div class="contenedor_paginador">[% paginador %]</div>  
       [% PERL %]
@@ -38,7 +40,11 @@
                                                             title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
                                                       );
                                 [% END %]             
+                      [% ELSE %]
+                                '[% "Desconocido" | i18n %]'
                       [% END %]
+                      
+
                   </td>
                   <td>
                       [% res.busqueda.fecha %]
@@ -51,6 +57,11 @@
              [% END %]
         </tbody>
  </table>
+[% ELSE %]
+    <div class="alert alert-info">
+              [% 'No hay resultados para mostrar' | i18n  %]
+    </div>
+
 [% END %]
 
 

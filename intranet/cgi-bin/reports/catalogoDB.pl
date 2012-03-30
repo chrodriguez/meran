@@ -34,7 +34,7 @@ if($tipoAccion eq "BUSQUEDAS"){
 #     my $orden=$obj->{'orden'}||'fecha';
     $obj->{'ini'} = $obj->{'ini'} || 1;
     my $ini=$obj->{'ini'};
-    my $funcion=$obj->{'funcion'}|| 'changepage';
+    my $funcion=$obj->{'funcion'};
     my $inicial=$obj->{'inicial'};
 
 #     C4::AR::Validator::validateParams('U389',$obj,['socio','ini','funcion'] );
@@ -45,12 +45,14 @@ if($tipoAccion eq "BUSQUEDAS"){
 
    ($results, $cantidad)= C4::AR::Reportes::getBusquedasDeUsuario($obj,$ini,$cantR);
   
+
+
     $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 #     ($results, $cantidad)= C4::AR::Reportes::getBusquedasDeUsuario($obj);
 
     $t_params->{'cantidad'} = $cantidad;
     $t_params->{'results'} = $results;
-
+    $t_params->{'nro_socio'} = $obj->{'usuario'};
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
 }

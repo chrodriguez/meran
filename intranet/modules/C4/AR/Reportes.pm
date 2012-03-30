@@ -1175,11 +1175,10 @@ sub getBusquedasDeUsuario {
     my ( $datos_busqueda, $ini, $cantR ) = @_;
 
 
-    my $limit_pref          = C4::AR::Preferencias::getValorPreferencia('limite_resultados_autocompletables') || 20;
+    my $limit_pref          = C4::AR::Preferencias::getValorPreferencia('renglones') || 20;
     $cantR                  = $cantR || $limit_pref;
 
     my $nro_socio= $datos_busqueda->{'usuario'};
-    C4::AR::Debug::debug($nro_socio);
     
     my $categoria= $datos_busqueda->{'categoria'};
     my $interfaz= $datos_busqueda->{'interfaz'};
@@ -1194,17 +1193,16 @@ sub getBusquedasDeUsuario {
     my @filtro;
     
     if ($nro_socio){
-
          push(@filtro,('nro_socio' => {eq  => $nro_socio }));
     }
     if ($categoria){
          push(@filtro,('busqueda.categoria_socio' =>  {eq => $categoria} ));
     }
   
-    if ($interfaz){
-         push(@filtro,('tipo' => { eq => $interfaz}));
-    }
-  
+    if ($interfaz ne "Ambas" ){     
+             push(@filtro,('tipo' => { eq => $interfaz}));
+    }   
+
     if ($valor){
         push(@filtro, ('valor'  =>  { like => '% '.$valor.'%'}));
     }
@@ -1231,11 +1229,9 @@ sub getBusquedasDeUsuario {
    
     my ($rep_busqueda_count) = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda_count(
                                                                               query   => \@filtros,
-                                                                              limit   => $cantR,
-                                                                              offset  => $ini,
                                                                               require_objects => ['busqueda'],
                                                                               with_objects => [],
-                                                                              select       => ['busqueda.*','rep_historial_busqueda.*'],
+                                                              
                                                                             );
                                                                             
 

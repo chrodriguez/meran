@@ -19,7 +19,7 @@
         objAH.tipoAccion    =  "BUSQUEDAS";
         objAH.funcion       = "changePageBusquedas";
         objAH.usuario       =  $('#nro_socio_hidden').val();
-        objAH.categoria     =  $('#user_category').val();
+        objAH.categoria     =  $('#categoria_socio_id').val();
         objAH.interfaz      =  $('#interfaz').val();
         objAH.valor         =  $('#valor').val();
         objAH.fecha_inicio  =  $('#date-from').val();
@@ -87,7 +87,7 @@
           </div>
   
           <div class="control-group">
-            <label class="control-label"  for="user_category">Categor&iacute;­a del usuario</label>
+            <label class="control-label"  for="categoria_socio_id">Categor&iacute;­a del usuario</label>
             <div class="controls">  
                           [% comboDeCategorias %]          
             </div>
