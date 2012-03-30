@@ -16,7 +16,7 @@
       if (!verificarRespuesta(responseText))
                 return(0);
         var text=JSONstring.toObject(responseText).messages[0].message;
-        $("#twitter_result").append(text);
+        $("#twitter_result").html('<a class="close" data-dismiss="alert">×</a>'+text);
         $("#twitter_result").alert();
         $("#twitter_result").show();
         

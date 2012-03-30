@@ -2042,6 +2042,7 @@ function agregarTablaReferencias(tabla){
 }
 
 function updateAgregarTablaReferencias(responseText){
+	$('#basic-modal-content').addClass('bigModal');
     $('#basic-modal-content').html(responseText);
     $('#basic-modal-content').modal();
 
