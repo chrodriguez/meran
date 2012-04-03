@@ -2,9 +2,20 @@
     <div id='listaEstantes'>
       <ul class="breadcrumb">
             <li>
+                [% auxEstante = estante %]
+                [% listaEstantes = [] %]
+                [% PERL %]
+                      print C4::AR::Filtros::link_to( text =>     "[%  'Estantes Principales' %]",
+                                      url=> '[% url_prefix %]/opac-estante.pl', 
+                                      params =>   [],
+                                      title =>    "[% 'Mostrar Detalle del Estante' | i18n %]",
+                                      class => "link_to_detail"
+                                  ) ;
+                [% END %]
+            
+                <span class="divider">/</span> 
 
-			    [% auxEstante = estante %]
-			    [% listaEstantes = [] %]
+			
 			    [% WHILE auxEstante > 0 %]
                       [% listaEstantes.unshift(auxEstante) %]
                       [% IF auxEstante.getPadre %]
@@ -13,6 +24,7 @@
                           [% auxEstante = 0 %]
                       [% END %]
                 [% END %]
+               
                 [% FOREACH auxEstante IN listaEstantes %]
                     [% PERL %]
 				      print C4::AR::Filtros::link_to( text =>     "[% auxEstante.getEstante %]",
@@ -22,6 +34,7 @@
 								      class => "link_to_detail"
 								  ) ;
                     [% END %]
+            
                      <span class="divider">/</span>  
                 [% END %]
                
