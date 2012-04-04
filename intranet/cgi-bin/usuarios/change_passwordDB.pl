@@ -24,6 +24,7 @@ $params{'nro_socio'}        = $input->param('usuario');
 $params{'actual_password'}  = $input->param('actual_password');
 $params{'new_password1'}    = $input->param('new_password1');
 $params{'new_password2'}    = $input->param('new_password2');
+$params{'key'}              = $input->param('key');
 $params{'changePassword'}   = $input->param('changePassword');
 $params{'token'}            = $input->param('token');
 
