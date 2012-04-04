@@ -958,6 +958,7 @@ sub getDatoFromReferencia{
                     };
 
                     if ($@){
+# TODO cuando se guarden los errores en la sesion, este error hay q guardarlo ahi
                         C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia, ERROR en campo, subcampo, dato => ".$campo.", ".$subcampo." => ".$dato);
                         C4::AR::Mensajes::printErrorDB($@, 'B451',"INTRA");
 #                         $dato = "error en configuracion del catalogo";
