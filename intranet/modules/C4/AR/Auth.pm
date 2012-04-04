@@ -1401,17 +1401,16 @@ sub _autenticar{
 	use Switch;
 	my ($userid, $password, $nroRandom,$metodo) = @_;
 	my $socio = undef;
-	
 	eval{
 		C4::AR::Debug::debug("metodo ".$metodo." userid ".$userid);
 		switch ($metodo){
 			case "ldap" {
-	                ($socio) = C4::AR::Authldap::checkPassword($userid,$password,$nroRandom); 
-	                C4::AR::Debug::debug("Devolviendo casi al final el socio".$socio);      
+                ($socio) = C4::AR::Authldap::checkPassword($userid,$password,$nroRandom); 
+                C4::AR::Debug::debug("Devolviendo casi al final el socio".$socio);      
 			}
 			case "mysql"{
 				($socio) = C4::AR::AuthMysql::checkPassword($userid,$password,$nroRandom);       
-				    C4::AR::Debug::debug("Vamos bien???".$socio);      
+			    C4::AR::Debug::debug("Vamos bien???".$socio);      
 			}
 			else{
 				}
@@ -1817,63 +1816,67 @@ sub cambiarPassword {
 }
 
 =item
-    Modulo que recibe una hash con newpassword y  newpassword1, para checkear que sean iguales. 
-    Retortan 0 en caso de exito y 1 en error.
-    Retorna la hash usada $msg_object
+    Modulo que recibe una hash con passwordActual, newpassword1 y newpassword2, y hace las validaciones necesarias
+    Las nuevas passwords vienen encriptadas en AES, usando como key la passwordActual
+    Retortan un objeto Mensaje
 =cut
 sub _validarCambioPassword {
-    my ($params)=@_;
+    my ($params)    = @_;
+    my $socio       = undef;
+    my $msg_object  = C4::AR::Mensajes::create();
     my $new_password_1;
-    my $new_password_2;
-    my $socio=undef;
-    my $msg_object=C4::AR::Mensajes::create();
+    my $new_password_2; 
+    my $passPlana; 
+    my $key;  
     
-   ($socio,$msg_object)=_validarPasswordActual($params->{'actual_password'},C4::AR::Auth::getSessionNroSocio(),$params->{'new_password1'},C4::AR::Auth::getSessionNroRandom());
-   if ($socio && !$msg_object->{'error'}) {
-       my $key;
-       #FIXME esto deberia estar centralizado, pero me cambia si se usa plainPassword o no
-       if (C4::Context->config('plainPassword')){
-            #FIXME aca habria q buscar la forma en que llegue encriptado desde la pagina web, actualmente llega plano.
-            $key=$params->{'actual_password'};}
-       else{
-           $key=$socio->getPassword();
-           }
+   ($socio,$msg_object)=_validarPasswordActual($params->{'actual_password'},C4::AR::Auth::getSessionNroSocio(),$params->{'new_password1'},C4::AR::Auth::getSessionNroRandom(),$params->{'key'});
+
+    if ($socio && !$msg_object->{'error'}) {
+
         $new_password_1 = $params->{'new_password1'};
         $new_password_2 = $params->{'new_password2'};
         
-        C4::AR::Debug::debug("--------------------------------------NUEVO PASSWORD 1---------------- ".$new_password_1);
-        C4::AR::Debug::debug("--------------------------------------NUEVO PASSWORD 2---------------- ".$new_password_2);
-        C4::AR::Debug::debug("--------------------------------------ACTUAL PASSWORD---------------- ".$socio->getPassword());
-        C4::AR::Debug::debug("--------------------------------------ACTUAL PASSWORD---------------- ".$socio->getPassword());
-        if ( !(_passwordsIguales($new_password_1, $new_password_2,$socio))) {
-        
-            #SACADO PORQUE NO PODEMOS VALIDAR LA PASSWORD ACA, YA ESTA HASHEADA
-	        #($msg_object)= C4::AR::Validator::checkPassword($params->{'new_password1'});
-
-        
-            #las nuevas password son distintas
-            $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U315', 'params' => []} ) ;
+        if (_passwordsIguales($new_password_1, $new_password_2, $socio)) {
+            
+            #comun a todos los metodos
+            $key            = $params->{'key'};
+            $passPlana      = C4::AR::Auth::desencriptar($new_password_1, $key);
+            ($msg_object)   = C4::AR::Validator::checkPassword($passPlana); 
+ 
+	    }else{
+	    
+	        #las nuevas password son distintas
+            $msg_object->{'error'} = 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U315', 'params' => []} ) ;	
+                
 	    }          
+	    
     }else{
-      	#no es valida la pass actual
-         $msg_object->{'error'}= 1;
-         C4::AR::Debug::debug("ENTRA EN #no es valida la pass actual");
-         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U357', 'params' => []} ) ;            
+    
+        #no es valida la pass actual
+        $msg_object->{'error'} = 1;
+        C4::AR::Debug::debug("ENTRA EN #no es valida la pass actual");
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U357', 'params' => []} ) ;    
+                 
     }
 
     if ( !($msg_object->{'error'}) && ( C4::AR::Auth::getSessionNroSocio() != $params->{'nro_socio'} ) ){
+    
         #no coincide el usuario logueado con el usuario al que se le va a cambiar la password
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U362', 'params' => [$params->{'nro_socio'}]} ) ;
+        
     }
+    
     if (!($msg_object->{'error'})) {
-    	_setearPassword($socio,$new_password_1,C4::AR::Auth::getSessionNroRandom());
+    
+    	_setearPassword($socio,$new_password_1,C4::AR::Auth::getSessionNroRandom(),$passPlana);
 	    my $today = Date::Manip::ParseDate("today");
 	    $socio->setLast_change_password($today);
 	    $socio->setChange_password(0);
 	    
 	    $socio->save();
+	    
     }
        
     return ($msg_object);
@@ -1887,15 +1890,15 @@ Funcion que recibe $password,$nroRandom,$socio y verifica si el password es el q
 
 =cut
 sub _validarPasswordActual{
-	my ($password,$userid,$nuevaPassword,$nroRandom) = @_;
+	my ($password,$userid,$nuevaPassword,$nroRandom,$key) = @_;
     my $auth_method = getSessionAuthMethod();
     my $msg_object;
-    my $socio=undef;
+    my $socio       = undef;
+    
     use Switch;
-        C4::AR::Debug::debug($auth_method. " En el validaPasswordActual pass ". $password." nroRandom ".$nroRandom." nro_socio ".$userid." newpass ".$nuevaPassword);
     switch ($auth_method){
         case "ldap" {
-                ($socio,$msg_object) = C4::AR::Authldap::validarPassword($userid,$password,$nuevaPassword,$nroRandom);       
+                ($socio,$msg_object) = C4::AR::Authldap::validarPassword($userid,$password,$nuevaPassword,$nroRandom,$key);       
         }
         case "mysql"{
                 ($socio,$msg_object) = C4::AR::AuthMysql::validarPassword($userid,$password,$nuevaPassword,$nroRandom);       
@@ -1910,15 +1913,17 @@ sub _validarPasswordActual{
 sub _cambiarPassword
 
 Funcion que recibe $password,$nroRandom,$socio y verifica si el password es el que corresponde con el actual del usuario
+$passPlana es usada para LDAP
 
 =cut
 sub _setearPassword{
-	my ($socio,$nuevaPassword,$nroRandom) = @_;
-    my $auth_method = $socio->getLastAuthMethod();
+	my ($socio,$nuevaPassword,$nroRandom,$passPlana)   = @_;
+    my $auth_method                         = $socio->getLastAuthMethod();
+    
     use Switch;
     switch ($auth_method){
         case "ldap" {
-                ($socio) = C4::AR::Authldap::setearPassword($socio,$nuevaPassword);       
+                ($socio) = C4::AR::Authldap::setearPassword($socio,$passPlana);       
         }
         case "mysql"{
                 ($socio) = C4::AR::AuthMysql::setearPassword($socio,$nuevaPassword);       
@@ -1967,7 +1972,7 @@ Esta funcion devuelve el password del socio desde el ultimo mecanismo utilizado 
     use Switch;
     switch ($auth_method){
         case {"ldap" && C4::AR::Utilidades::existeInArray("ldap",@$metodosDeAutenticacion)} {
-                ($password) = C4::AR::Authldap::obtenerPassword($socio);   
+               ($password) = C4::AR::Authldap::obtenerPassword($socio);  
         }
         else{
 			#en este caso devuelve lo que tiene el obejto en la base de datos.

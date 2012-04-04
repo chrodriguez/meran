@@ -97,7 +97,7 @@
 	        [% PERL %]
 	              print C4::AR::Filtros::action_link_button( 
 	                                              button    => "btn btn-primary",
-	                                              url       => "[% url_prefix %]/modificarDatos.pl", 
+	                                              url       => "[% url_prefix %]/modificarDatos.pl?token=[% token %]", 
 	                                              title     => "[% 'Modificar Datos' |  i18n %]",
 	                                          ) ;
 	
