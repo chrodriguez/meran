@@ -57,7 +57,6 @@ function checkPassword(){
         $("#actual_password").val(hash_actual);
         $('#new_password1').val(hash_new1);
         $('#new_password2').val(hash_new1);
-        $('#key').val(key);
         $("#datosAEnviar").submit();
         return true;
     }        	

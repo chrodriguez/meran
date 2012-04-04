@@ -272,7 +272,7 @@ sub checkPassword{
     usando como kay la password vieja del socio ( $socio->getPassword )
 =cut
 sub validarPassword{
-    my ($userid,$password,$nuevaPassword,$nroRandom,$key) = @_;
+    my ($userid,$password,$nuevaPassword,$nroRandom) = @_;
 	my $socio       = undef;
     my $ldap        =_conectarLDAP();
     
