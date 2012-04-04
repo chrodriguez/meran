@@ -1959,7 +1959,11 @@ function subcampo_marc_conf(obj){
 
 
 function crearText(obj){
-    var comp = "<input class='input-xlarge' type='text' id='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+" name='" + obj.getIdCompCliente() + "' class='horizontal' >";     
+//     var comp = "<input class='input-xlarge' type='text' id='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+" name='" + obj.getIdCompCliente() + "' class='horizontal' >";
+//     var dato = obj.getDato().replace("'", "\/");
+    var dato = obj.getDato().replace(/\"/g,"\'");
+    var dato = dato.replace(/\'/g,"\'");  
+    var comp = "<input class='input-xlarge' type='text' id='" + obj.getIdCompCliente() + "' value='" + dato + "' size='55' tabindex="+TAB_INDEX+" name='" + obj.getIdCompCliente() + "' class='horizontal' >";     
     $("#div" + obj.getIdCompCliente()).append(comp);
     
     crearBotones(obj);
