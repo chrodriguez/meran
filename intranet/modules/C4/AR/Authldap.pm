@@ -331,40 +331,21 @@ sub setearPassword{
     }else{
         $ldapMsg = $ldap->bind() or die "$@";
         }
-    
-#    my $user_ldap_password  = _obtenerPassword($ldap,$LDAP_DB_PREF,$LDAP_FILTER);
-#    my $nroRandom           = C4::AR::Auth::getSessionNroRandom();
 
 
     #si esto da error, es porque la codificacion falla, lo cual, seguramente no esté encriptada por ser un reseteo de password
-    
     #si $isReset = 1, la $nuevaPassword ya viene en b64_md5, es el dni del socio hasheado
+    
     if (!$isReset){
     
-#        FIXME OLD: como andaba esto ? si $nuevaPassword viene desde el cliente PLANA, con plainPassword = 1 y no es reset!
-#        $user_ldap_password = C4::AR::Auth::hashear_password($user_ldap_password, 'SHA_256_B64');
-#        $nuevaPassword      = C4::AR::Auth::desencriptar($nuevaPassword,$user_ldap_password);
 
-#        NEW:
-        # $socio->getPassword viene en plano SE GUARDA PLANO EN LDAP
-        # lo hasheamos con MD5_B64 porque en el reseteo de pass se setea el dni hasheado con md5_b64
-#        $nuevaPassword      = C4::AR::Auth::hashear_password($socio->getPassword(), 'MD5_B64');
-        
-#        $nuevaPassword = $socio->getPassword();
-        
-        C4::AR::Debug::debug("no es reset y passwordnueva : " . $nuevaPassword);
     }
-    
-    C4::AR::Debug::debug("PASSWORDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD ".$nuevaPassword);
 
 #    $ldapMsg = my $result = $ldap->modify(dn=>$LDAP_USER, replace=>{'userPassword'=>$nuevaPassword}); 
     $ldapMsg = $ldap->modify(dn=>$LDAP_USER, replace=>{'userPassword'=>$nuevaPassword}); 
-    
     #LEER http://comments.gmane.org/gmane.comp.lang.perl.modules.ldap/2028
 #    $ldap->set_password( user =>$LDAP_U_PREF.'='.$socio->getNro_socio(), newpassword => $nuevaPassword );
 
-    C4::AR::Debug::debug("LDAP USER ".$LDAP_USER." NEW PASS ".$nuevaPassword." MENSAJE ". $ldapMsg->code());
-#    die();
 }
 
 
