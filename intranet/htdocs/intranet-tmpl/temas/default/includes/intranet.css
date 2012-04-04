@@ -412,6 +412,9 @@ body {
 .bigModal{
     width: 83%;
     left: 30%;
+    /* para hacer scroll */
+    overflow-y: scroll;
+    max-height: 80%;
 }
 
 .title{
