@@ -88,6 +88,7 @@ $(document).ready(function() {
         <input type="hidden" name="new_password2" id="new_password2">
         <input type="hidden" value="[% nro_socio %]" name="usuario" id="usuario">
         <input type="hidden" name="changePassword" id="changePassword">
+        <input type="hidden" name="key" id="key" />
         <input type="hidden" name="actual_password" id="actual_password">
         <input type="hidden" name="token" value="[% token %]">
 </form>
