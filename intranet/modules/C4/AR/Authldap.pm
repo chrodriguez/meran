@@ -109,10 +109,11 @@ sub datosUsuario{
         my $agregar_ldap        = $preferencias_ldap->{'ldap_agregar_user'} || 0; 
         
         if ($agregar_ldap){
-        
+                
                 my $LDAP_DB_PREF    = $preferencias_ldap->{'ldap_prefijo_base'};
                 my $LDAP_U_PREF     = $preferencias_ldap->{'ldap_user_prefijo'};
-                my $LDAP_FILTER     = $LDAP_U_PREF.'=rapo';
+                my $LDAP_FILTER     = $LDAP_U_PREF.'='.$userid;
+                
                 my $entries         = $ldap->search(
                         base   => $LDAP_DB_PREF,
                         filter => "($LDAP_FILTER)"
