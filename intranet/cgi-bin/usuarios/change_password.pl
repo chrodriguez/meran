@@ -13,6 +13,7 @@ my ($template, $session, $t_params) = get_template_and_user({
                                     query           => $input,
                                     type            => "intranet",
                                     authnotrequired => 0,
+                                    change_password => 1, #-> indicamos a checkauth que ya estamos cambiando la password
                                     flagsrequired   => { 
                                                         ui              => 'ANY', 
                                                         tipo_documento  => 'ANY', 

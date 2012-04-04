@@ -1829,7 +1829,7 @@ sub _validarCambioPassword {
     my $passPlana; 
     my $key;  
     
-   ($socio,$msg_object)=_validarPasswordActual($params->{'actual_password'},C4::AR::Auth::getSessionNroSocio(),$params->{'new_password1'},C4::AR::Auth::getSessionNroRandom(),$params->{'key'});
+   ($socio,$msg_object)=_validarPasswordActual($params->{'actual_password'},C4::AR::Auth::getSessionNroSocio(),$params->{'new_password1'},C4::AR::Auth::getSessionNroRandom());
 
     if ($socio && !$msg_object->{'error'}) {
 
@@ -1890,7 +1890,7 @@ Funcion que recibe $password,$nroRandom,$socio y verifica si el password es el q
 
 =cut
 sub _validarPasswordActual{
-	my ($password,$userid,$nuevaPassword,$nroRandom,$key) = @_;
+	my ($password,$userid,$nuevaPassword,$nroRandom) = @_;
     my $auth_method = getSessionAuthMethod();
     my $msg_object;
     my $socio       = undef;
@@ -1898,7 +1898,7 @@ sub _validarPasswordActual{
     use Switch;
     switch ($auth_method){
         case "ldap" {
-                ($socio,$msg_object) = C4::AR::Authldap::validarPassword($userid,$password,$nuevaPassword,$nroRandom,$key);       
+                ($socio,$msg_object) = C4::AR::Authldap::validarPassword($userid,$password,$nuevaPassword,$nroRandom);       
         }
         case "mysql"{
                 ($socio,$msg_object) = C4::AR::AuthMysql::validarPassword($userid,$password,$nuevaPassword,$nroRandom);       
