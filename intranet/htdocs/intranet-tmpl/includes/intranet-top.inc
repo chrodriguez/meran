@@ -121,18 +121,6 @@
 		    $("#resultNovedades").html(responseText);
 		}
 
-		function twitter_hover(){
-		    $("#button_twitter").attr("src","[% temas %]/[% tema %]/imagenes/botones/button_twitter_hover.png");
-		    }
-		  
-		    function twitter_normal(){
-		        $("#button_twitter").attr("src","[% temas %]/[% tema %]/imagenes/botones/button_twitter_normal.png");
-		}
-
-		function twitter_click(){
-		    $("#button_twitter").attr("src","[% temas %]/[% tema %]/imagenes/botones/button_twitter_click.png");
-		}
-
 		function responder(){
 			if (click_responder == 0){
 				$("#respuesta").wysiwyg();

@@ -215,6 +215,7 @@ sub checkLength{
 sub checkPassword{
 
     my($password)=@_;
+    C4::AR::Debug::debug("password en checkPassword : " . $password);
     my $msg_object=C4::AR::Mensajes::create();
 
     if (!(C4::AR::Utilidades::validateString($password))){

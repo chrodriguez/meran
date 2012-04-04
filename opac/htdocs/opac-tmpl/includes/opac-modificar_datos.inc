@@ -5,6 +5,7 @@
 function checkPassword(){
 
     var changed = $.trim($('#actualpassword').val());
+    
     if (changed != ''){
         
         var nroRandom   = [% nroRandom %];
@@ -54,11 +55,9 @@ function checkPassword(){
         [% END %]
     
         $("#actual_password").val(hash_actual);
-        //mando solo una pass al servidor
         $('#new_password1').val(hash_new1);
-        $('#new_password2').val(hash_new2);
-
-            
+        $('#new_password2').val(hash_new1);
+        $('#key').val(key);
         $("#datosAEnviar").submit();
         return true;
     }        	
@@ -81,10 +80,8 @@ function checkPassword(){
     <form method="post" action="[% url_prefix %]/opac-userupdate.pl" onSubmit="return (checkPassword() && startOverlay())" class="form-horizontal">
     
     <fieldset>
-        <legend>
-            [% 'Detalle de ' | i18n %] <strong >[% socio_data.usr_apellido %], [% socio_data.usr_nombre %] </strong>
-        </legend>
         <section class="center-section-form">
+        <br />
         <div class="control-group">
             <label class="control-label" for="nombre">[% 'Nombres' |  i18n %]* :</label>
             <div class="controls">
@@ -133,6 +130,7 @@ function checkPassword(){
            <!-- CAMPOS PARA CAMBIO DE PASSWORD -->
            <input type="hidden" name="new_password1" id="new_password1" />
            <input type="hidden" name="new_password2" id="new_password2" />
+           <input type="hidden" name="key" id="key" />
            <input type="hidden" name="changePassword" id="changePassword" />
            <input type="hidden" name="actual_password" id="actual_password" />
            </section>
@@ -141,6 +139,7 @@ function checkPassword(){
         <fieldset>
             <legend>[% 'Cambio de contrase&ntilde;a' | i18n %] ([% 'Dejar en blanco para descartar' | i18n %])</legend>
             <section class="center-section-form">
+        	<br />
             <div class="control-group">
                 <label class="control-label" for="actualpassword">[% 'Contrase&ntilde;a Actual' |  i18n %] :</label>
                 <div class="controls">
@@ -166,6 +165,7 @@ function checkPassword(){
         <fieldset>
             <legend>[% 'Personalizacion de visualizaicion' | i18n %]</legend>
             <section class="center-section-form">
+        	<br />
             <div class="control-group">
                 <label class="control-label" for="temas_opac">[% 'Tema' |  i18n %] :</label>
                 <div class="controls">
@@ -177,7 +177,8 @@ function checkPassword(){
         <fieldset>
             <legend>[% 'Recordatorio de vencimiento de pr&eacute;stamos' | i18n %]</legend>
             <section class="center-section-form">
-                <div class="control-group">
+        	<br />
+            <div class="control-group">
                     <label class="control-label" for="remindFlag">[% 'Recibir notificaci&oacute;nes' |  i18n %] :</label>
                     <div class="controls">
                         <input type="checkbox" name="remindFlag" id="remindFlag" [% IF socio_data.remindFlag %] checked="checked" [% END %]/> 

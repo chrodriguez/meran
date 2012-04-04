@@ -176,7 +176,7 @@ function crearCombo(obj){var comp=newCombo(obj);$("#div"+obj.getIdCompCliente())
 function crearTextArea(obj){var comp="<textarea class='input-xlarge' id='"+obj.getIdCompCliente()+"' name='"+obj.getIdCompCliente()+"' rows='4' tabindex="+TAB_INDEX+">"+obj.getDato()+"</textarea>";$("#div"+obj.getIdCompCliente()).append(comp);$("#texta"+obj.getIdCompCliente()).val(obj.getDatoReferencia());crearBotones(obj);}
 function crearHidden(obj){return"<input type='hidden' id='"+obj.getIdCompCliente()+"_hidden' name='"+obj.getIdCompCliente()+"' value='"+obj.getDatoReferencia()+"'>";}
 function agregarTablaReferencias(tabla){objAH=new AjaxHelper(updateAgregarTablaReferencias);objAH.showOverlay=true;objAH.url=URL_PREFIX+'/admin/referencias/referenciasDB.pl';objAH.accion="AGREGAR_REGISTRO";objAH.alias_tabla=tabla;objAH.sendToServer();}
-function updateAgregarTablaReferencias(responseText){$('#basic-modal-content').html(responseText);$('#basic-modal-content').modal();crearEditor();}
+function updateAgregarTablaReferencias(responseText){$('#basic-modal-content').addClass('bigModal');$('#basic-modal-content').html(responseText);$('#basic-modal-content').modal();crearEditor();}
 function crearEditor(){var loaderPath="";loaderPath='<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>'
 makeToggle('datos_tabla_div','trigger',null,false);onEnter('search_tabla',obtenerTablaFiltrada);$('.editable').editable(URL_PREFIX+'/admin/referencias/referenciasDB.pl',{type:'text',cancel:CANCELAR,submit:OK,tooltip:EDITABLE_MSG,placeholder:EDITABLE_MSG,style:'display: inline',submitdata:{token:"[% token %]",edit:'1'},indicator:loaderPath,});$('#tablaResult').attr('style','width: 100%');}
 function cambiarValorEnHidden(id){var valor=$('#edicion_id').val();$(id+"_hidden").val(valor);}

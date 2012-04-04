@@ -196,7 +196,7 @@ sub agregarPersona {
     Parametros: 
     ARRAY: con los id de los socios a habilitar
 
-=cut 
+=cut
 sub habilitarPersona {
 
     my ($id_socios_array_ref)=@_;
@@ -228,7 +228,7 @@ sub habilitarPersona {
     Este modulo deshabilita un socio, para que no pueda operar en la biblioteca.
     Parametros:
                 ARRAY: con los id de los socios a deshabilitar
-=cut 
+=cut
 sub deshabilitarPersona {
 
     my ($id_socios_array_ref)=@_;
@@ -261,7 +261,7 @@ sub deshabilitarPersona {
     Este modulo resetea (deja en blanco) el password de acceso de un usuario, que sera su nro_documento.
     Parametros: 
                 HASH: {nro_socio}
-=cut 
+=cut
 sub desautorizarTercero {
 
     my ($params)=@_;
@@ -290,7 +290,7 @@ sub desautorizarTercero {
     Este modulo resetea (deja en blanco) el password de acceso de un usuario, que será su nro_documento.
     Parametros: 
                 HASH: {nro_socio}
-=cut 
+=cut
 sub resetPassword {
 
     my ($params)=@_;
