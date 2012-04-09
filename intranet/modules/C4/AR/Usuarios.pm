@@ -774,18 +774,33 @@ sub BornameSearchForCard {
             push (@filtros, ('persona.id_categoria' => { eq => $params->{'categoria_socio'} }) );
     }
 
-    if (C4::AR::Utilidades::validateString($params->{'apellido1'})){ 
-            push (@filtros, ('persona.'.apellido => { like => $params->{'apellido1'}.'%', gt => $params->{'apellido1'} }) ); # >=
+#     if (C4::AR::Utilidades::validateString($params->{'apellido1'})){ 
+#             push (@filtros, ('persona.'.apellido => { like => $params->{'apellido1'}.'%', gt => $params->{'apellido1'} }) ); # >=
+#     }
+#     
+#     if (C4::AR::Utilidades::validateString($params->{'apellido2'})){ 
+#                 push (@filtros, ('persona.'.apellido => { like => $params->{'apellido2'}.'%', lt => $params->{'apellido2'} }) ); # <=
+#     }
+
+    if ((C4::AR::Utilidades::validateString($params->{'apellido1'})) || (C4::AR::Utilidades::validateString($params->{'apellido2'}))){
+        if ((C4::AR::Utilidades::validateString($params->{'apellido1'})) && (C4::AR::Utilidades::validateString($params->{'apellido2'}))){
+                push (@filtros, ('persona.'.apellido => { gt => $params->{'apellido1'}, like => $params->{'apellido1'}.'%' })); # >=
+                push (@filtros, ('persona.'.apellido => { lt => $params->{'apellido2'}, like => $params->{'apellido2'}.'%' })); # <=
+        }
+        elsif (C4::AR::Utilidades::validateString($params->{'apellido1'})) {
+                push (@filtros, ('persona.'.apellido => { gt => $params->{'apellido1'}}) );
+        }
+        else {
+               push (@filtros, ('persona.'.apellido => { lt => $params->{'apellido2'}}) );
+        }
     }
-    
-    if (C4::AR::Utilidades::validateString($params->{'apellido2'})){ 
-                push (@filtros, ('persona.'.apellido => { like => $params->{'apellido2'}.'%', lt => $params->{'apellido2'} }) ); # <=
-    }
+
+
 
     if ((C4::AR::Utilidades::validateString($params->{'legajo1'})) || (C4::AR::Utilidades::validateString($params->{'legajo2'}))){
         if ((C4::AR::Utilidades::validateString($params->{'legajo1'})) && (C4::AR::Utilidades::validateString($params->{'legajo2'}))){
-                push (@filtros, ('persona.'.legajo => { gt => $params->{'legajo1'}, eq => $params->{'legajo1'} }) ); # >=
-                push (@filtros, ('persona.'.legajo => { lt => $params->{'legajo2'}, eq => $params->{'legajo2'} }) ); # <=
+                push (@filtros, ('persona.'.legajo => { ge => $params->{'legajo1'}})); # >=
+                push (@filtros, ('persona.'.legajo => { le => $params->{'legajo2'}})); # <=
         }
         elsif (C4::AR::Utilidades::validateString($params->{'legajo1'})) {
                 push (@filtros, ('persona.'.legajo => { eq => $params->{'legajo1'}}) );
@@ -803,22 +818,22 @@ sub BornameSearchForCard {
      my $socios_array_ref_count=0;
     eval{
         $socios_array_ref_count = C4::Modelo::UsrSocio::Manager->get_usr_socio_count(   query => \@filtros,
-                                                                            sort_by => ( $socioTemp->sortByString($params->{'orden'}) ),
-                                                              require_objects => ['persona','ui','categoria','persona.ciudad_ref',
+                                                                                sort_by => ( $socioTemp->sortByString($params->{'orden'}) ),
+                                                                                require_objects => ['persona','ui','categoria','persona.ciudad_ref',
                                                                                   'persona.documento'],
         );
         if ($params->{'export'}){
 	        $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
 	                                                                            sort_by => ( $socioTemp->sortByString($params->{'orden'}) ),
-	                                                              require_objects => ['persona','ui','categoria','persona.ciudad_ref',
+                                                                                require_objects => ['persona','ui','categoria','persona.ciudad_ref',
 	                                                                                  'persona.documento'],
 	        );
         }else{
             $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
                                                                                 sort_by => ( $socioTemp->sortByString($params->{'orden'}) ),
-                                                                                 limit => $params->{'cantR'},
-                                                                                 offset => $params->{'ini'},
-                                                                  require_objects => ['persona','ui','categoria','persona.ciudad_ref',
+                                                                                limit => $params->{'cantR'},
+                                                                                offset => $params->{'ini'},
+                                                                                require_objects => ['persona','ui','categoria','persona.ciudad_ref',
                                                                                       'persona.documento'],
             );
         }

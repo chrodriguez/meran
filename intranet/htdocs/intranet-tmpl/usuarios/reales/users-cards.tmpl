@@ -39,7 +39,7 @@
             objAH.ui=$("#ui_id").val();
             objAH.funcion = 'changePage';
             objAH.op='search';
-            inicial = '0';
+            objAH.inicial = '0';
             //se envia la consulta
             objAH.sendToServer();
 //         }
@@ -58,7 +58,8 @@
             objAH.ui=$("#ui_id").val();
             objAH.funcion = 'changePage';
             objAH.op='pdf';
-            inicial = '0';
+            objAH.export=1;
+            objAH.inicial = '0';
             //se envia la consulta
             objAH.sendToServer();
 
@@ -91,7 +92,7 @@
                   <div class="controls">
                         <input type='text' id='surname1' name='surname1' value='[% surname1 %]'>
                         <input type='text' id='surname2' name='surname2' value='[% surname2 %]'>
-                       
+                    
                   </div>
         </div>
         <div class="control-group">

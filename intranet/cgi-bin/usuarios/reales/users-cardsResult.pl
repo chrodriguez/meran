@@ -23,8 +23,13 @@ my ($template, $session, $t_params) = get_template_and_user({
 
 my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 
+#
+$obj->{'ini'} = $obj->{'ini'} || 1;
+my $ini=$obj->{'ini'};
+my $inicial=$obj->{'inicial'} || 0;
+my $funcion = $obj->{'funcion'};
 
-my $ini = $obj->{'inicial'} || 0;
+
 
 $obj->{'orden'}=$obj->{'orden'}||'apellido';
 $obj->{'apellido1'}=$obj->{'surname1'};
@@ -34,9 +39,7 @@ my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
 $obj->{'cantR'} = $cantR;
 $obj->{'pageNumber'} = $pageNumber;
-$obj->{'ini'} = $ini;
-
-my $funcion = $obj->{'funcion'};
+$obj->{'ini'}=$ini;
 
 my ($cantidad,$results)=C4::AR::Usuarios::BornameSearchForCard($obj);
 

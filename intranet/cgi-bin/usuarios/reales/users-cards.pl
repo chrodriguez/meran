@@ -16,18 +16,15 @@ if ($input->param('obj')){
     $op = $obj->{'op'};
 
 }
-
 if ($op eq 'pdf') {
 
-    C4::AR::Debug::debug("mmm?????");
-
     my ($cantidad,$results)=C4::AR::Usuarios::BornameSearchForCard($obj);
+  
 
     #HAY QUE GENERAR EL PDF CON LOS CARNETS
     C4::AR::PdfGenerator::batchCardsGenerator($cantidad,$results);
 
-}else
-{
+}else{
 
     my ($template, $session, $t_params) = get_template_and_user({
                             template_name => "usuarios/reales/users-cards.tmpl",
