@@ -306,15 +306,15 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
 
 	
 	if($params{'operacion'} eq "renovar"){	
-# 		my ($Message_arrayref) = C4::AR::Prestamos::t_renovarPorBarcode(\%params);
-	C4::AR::Debug::debug("circulacionDB.pl => circulacion rapida => renovar barcode: ".$params{'barcode'});	
+        C4::AR::Debug::debug("circulacionDB.pl => circulacion rapida => renovar barcode: ".$params{'datosArray'});	
+        ($Message_arrayref)   = C4::AR::Prestamos::renovarYGenerarTicket(\%params);
 	}
 	elsif($params{'operacion'} eq "devolver"){
 
 		($Message_arrayref)     = C4::AR::Prestamos::t_devolver(\%params);	
 	}
 	elsif($params{'operacion'} eq "prestar"){
-		($Message_arrayref)     = C4::AR::Prestamos::prestarYGenerarTicket(\%params)		
+		($Message_arrayref)     = C4::AR::Prestamos::prestarYGenerarTicket(\%params);
 	}
 	
 	my $infoOperacionJSON       = to_json $Message_arrayref;

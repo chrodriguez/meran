@@ -65,7 +65,7 @@ function obtenerTiposDePrestamos(){
 function obtenerDatosDelEjemplar(){
     var barcode         = $('#barcode_hidden').val();
 
-    if($('#operacion').val() == 'devolver'){
+    if(($('#operacion').val() == 'devolver')||($('#operacion').val() == 'renovar')){
         barcode = $('#barcodePrestado').val();
     }
 
@@ -117,7 +117,7 @@ function realizarAccionCircRapida(){
     objAH.adicional_selected    = $('#auth_selected').is(':checked'); 
     objAH.barcode               = $('#barcode').val();
 
-    if($('#operacion').val() == 'devolver'){
+    if(($('#operacion').val() == 'devolver')||($('#operacion').val() == 'renovar')){
         var prestamos_array = new Array();
 // 		prestamos_array     = prestamos_array.push($('#barcode_hidden').val());
         prestamos_array.push($('#barcode_hidden').val());
@@ -132,7 +132,7 @@ function realizarAccionCircRapida(){
 }
 
 function updateRealizarAccion(responseText){
-	if(objAH.operacion == 'prestar'){
+	if((objAH.operacion == 'prestar')||(objAH.operacion == 'renovar')){
 		var infoHash        = JSONstring.toObject(responseText);
 		var messageArray    = infoHash.messages;
 		var ticketsArray    = infoHash.tickets;
@@ -158,7 +158,10 @@ function updateRealizarAccion(responseText){
 		//borro la cache del autocomplete
 		$('#barcodePrestado').flushCache();
 	}
-	
+    
+	//Limpio los datos del ejemplar
+    onChangeOperacion();
+    
     detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
     detalleSanciones(NRO_SOCIO_AUTH);
 	$('#operacion').focus();
@@ -224,6 +227,9 @@ function onChangeOperacion(){
             detalleSanciones(NRO_SOCIO_AUTH);
 		}
 	}
+    
+    $('#datos_ejemplar').hide();
+    
 }
 
 function updateAutocompleteBarcodes(){
@@ -245,7 +251,7 @@ function refreshTipoPrestamo(){
 
 function mostrarBotonAceptar(){
 	//si se va a devolver y tengo el barcode, muetro el boton para devolver
-	if( $('#operacion').val() == 'devolver' && $('#barcodeprestado').val() != '' ){
+	if( ($('#operacion').val() == 'devolver' || $('#operacion').val() == 'renovar') && $('#barcodeprestado').val() != '' ){
 		$('#acciones').show();
         $('#cambo_tipo_prestamo').hide();
 	}
