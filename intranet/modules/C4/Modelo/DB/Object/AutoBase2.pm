@@ -335,6 +335,28 @@ sub getCamposAsArray{
     return(\@campos_sin_id);
 }
 
+sub validate_fields {
+    my ($self)  = shift;
+    my ($fields_array_ref_to_validate)  = @_;
+
+    my $result              = 0; 
+    my $fields_array_ref    = $self->getCamposAsArray();
+
+    foreach my $fv (@$fields_array_ref_to_validate){
+
+        @res = grep(/$fv/, @$fields_array_ref); 
+        if (scalar(@res) > 0) {
+            $result = 1;
+        }
+    }
+
+    if($result == 0){
+        C4::AR::Debug::debug("AutoBase2 => validate_fields => ERROR en la configuaracion del catalogo tabla => ".$self->meta->table);        
+    }
+
+    return $result;
+}
+
 
 sub getCampos{
     my ($self) = shift;
