@@ -21,6 +21,24 @@ my $action = $input->param('action') || 0;
 my $id = $input->param('id') || 0;
 
 if ($action eq 'editar'){
+
+    #--------- links -----------
+    my $linksTodos  = $input->param('links');  
+    my @links       = split('\ ', $linksTodos);   
+    my $linksFinal  = "";
+    
+    foreach my $link (@links){
+    
+        if($link !~ /^http/){
+            $linksFinal .= " http://" . $link;
+        }else{
+            $linksFinal = " " . $link;
+        }
+    }
+    
+    $input->param('links', $linksFinal);
+    #------- FIN links ---------
+
     my $status = C4::AR::NovedadesIntra::editar($input);
     if ($status){
         C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix().'/admin/global/novedades_intra.pl?token='.$input->param('token'));
