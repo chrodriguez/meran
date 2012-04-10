@@ -29,11 +29,10 @@ my $ini=$obj->{'ini'};
 my $inicial=$obj->{'inicial'} || 0;
 my $funcion = $obj->{'funcion'};
 
-
-
 $obj->{'orden'}=$obj->{'orden'}||'apellido';
 $obj->{'apellido1'}=$obj->{'surname1'};
 $obj->{'apellido2'}=$obj->{'surname2'};
+
 
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 

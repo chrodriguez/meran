@@ -15,7 +15,7 @@
 
              
               <div class="contenedor_paginador">[% paginador %]</div>
-           
+              <form method="post" id="form_cards_gen" onsubmit="[% url_prefix %]/usuarios/reales/users-cards.pl">
 
                 [% PERL %]
                           print C4::AR::Filtros::tableHeader(   
@@ -33,6 +33,7 @@
                 [% END %]
 
                 [% FOREACH socio IN RESULTSLOOP %]
+                   
                     <tr>
                         <td> 
                             [% PERL %]
@@ -44,6 +45,7 @@
                             [% END %]
                       
                         </td>
+                        
                         <td> [% socio.persona.getNombre %] </td>
                         <td> [% socio.persona.getDireccion %]</td>
                         <td> [% socio.getNro_socio %]</td>
@@ -60,24 +62,30 @@
                         <td> [% socio.persona.getNacimiento %]</td>
                         <td> [% socio.persona.categoria.getDescription %]</td>
                         <td><b>[% socio.estado.getRegular %]</b></td>
+                        <input type="hidden" name="[% socio.getNro_socio %]" value="[% socio.getNro_socio %]">
                     </tr>
                 [% END %]
                 
-                </table>
+               </table>
+           
         </div>
+
+      </form>
 </fieldset>
 
 <div class="buttonContainerHorizontal">
+   
     <script> var search2 = 'pdf'; </script>
     [% PERL %]
             print C4::AR::Filtros::action_button( 
                                                 text    =>  "[% 'Carnets' | i18n %]",
                                                 title    =>  "[% 'Carnets' | i18n %]",
                                                 button   =>  "btn click btn-primary",
-                                                action =>  "generarCarnets(search2);",
+                                                action =>  "consultar(search2);",
                                             );
     [% END %]
 </div>
+
  [% ELSE%]
 
         <div class="alert alert-info">[% "No hay resultados para mostrar" | i18n %]</div>

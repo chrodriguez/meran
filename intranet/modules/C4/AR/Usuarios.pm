@@ -770,10 +770,6 @@ sub BornameSearchForCard {
     my @filtros;
     my $socioTemp = C4::Modelo::UsrSocio->new();
 
-    if ((C4::AR::Utilidades::validateString($params->{'categoria_socio'}))&& ($params->{'categoria_socio'} ne 'SIN SELECCIONAR')) {
-            push (@filtros, ('persona.id_categoria' => { eq => $params->{'categoria_socio'} }) );
-    }
-
 #     if (C4::AR::Utilidades::validateString($params->{'apellido1'})){ 
 #             push (@filtros, ('persona.'.apellido => { like => $params->{'apellido1'}.'%', gt => $params->{'apellido1'} }) ); # >=
 #     }
@@ -784,8 +780,8 @@ sub BornameSearchForCard {
 
     if ((C4::AR::Utilidades::validateString($params->{'apellido1'})) || (C4::AR::Utilidades::validateString($params->{'apellido2'}))){
         if ((C4::AR::Utilidades::validateString($params->{'apellido1'})) && (C4::AR::Utilidades::validateString($params->{'apellido2'}))){
-                push (@filtros, ('persona.'.apellido => { gt => $params->{'apellido1'}, like => $params->{'apellido1'}.'%' })); # >=
-                push (@filtros, ('persona.'.apellido => { lt => $params->{'apellido2'}, like => $params->{'apellido2'}.'%' })); # <=
+                push (@filtros, ('persona.'.apellido => { ge => $params->{'apellido1'}})); # >=
+                push (@filtros, ('persona.'.apellido => { le => $params->{'apellido2'}})); # <=
         }
         elsif (C4::AR::Utilidades::validateString($params->{'apellido1'})) {
                 push (@filtros, ('persona.'.apellido => { gt => $params->{'apellido1'}}) );
@@ -794,8 +790,6 @@ sub BornameSearchForCard {
                push (@filtros, ('persona.'.apellido => { lt => $params->{'apellido2'}}) );
         }
     }
-
-
 
     if ((C4::AR::Utilidades::validateString($params->{'legajo1'})) || (C4::AR::Utilidades::validateString($params->{'legajo2'}))){
         if ((C4::AR::Utilidades::validateString($params->{'legajo1'})) && (C4::AR::Utilidades::validateString($params->{'legajo2'}))){
@@ -810,31 +804,32 @@ sub BornameSearchForCard {
         }
     }
 
+    if ($params->{'categoria_socio'} ne '') {
+            push (@filtros, (id_categoria => { eq => $params->{'categoria_socio'} }) );
+    }
+   
      push (@filtros, ('persona.'.es_socio => { eq => 1}) );
      push (@filtros, (activo => { eq => 1}) );
      $params->{'cantR'} = $params->{'cantR'} || 0;
      $params->{'ini'} = $params->{'ini'} || 0;
      my $socios_array_ref=0;
      my $socios_array_ref_count=0;
-    eval{
+     eval{
         $socios_array_ref_count = C4::Modelo::UsrSocio::Manager->get_usr_socio_count(   query => \@filtros,
                                                                                 sort_by => ( $socioTemp->sortByString($params->{'orden'}) ),
-                                                                                require_objects => ['persona','ui','categoria','persona.ciudad_ref',
-                                                                                  'persona.documento'],
+                                                                                require_objects => ['persona'],
         );
         if ($params->{'export'}){
 	        $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
 	                                                                            sort_by => ( $socioTemp->sortByString($params->{'orden'}) ),
-                                                                                require_objects => ['persona','ui','categoria','persona.ciudad_ref',
-	                                                                                  'persona.documento'],
+                                                                                require_objects => ['persona'],
 	        );
         }else{
             $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
                                                                                 sort_by => ( $socioTemp->sortByString($params->{'orden'}) ),
                                                                                 limit => $params->{'cantR'},
                                                                                 offset => $params->{'ini'},
-                                                                                require_objects => ['persona','ui','categoria','persona.ciudad_ref',
-                                                                                      'persona.documento'],
+                                                                                require_objects => ['persona'],
             );
         }
     };

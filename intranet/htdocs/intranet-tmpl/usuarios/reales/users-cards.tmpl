@@ -26,6 +26,7 @@
 //             crearForm(url,params);//Funcion en util.js
 //         }
 //         else{
+
   function consultar(orden){
             objAH=new AjaxHelper(updateInfo);
             objAH.debug= true;
@@ -46,22 +47,24 @@
     }
   
      function generarCarnets(orden){
-            objAH=new AjaxHelper();
-            objAH.debug= true;
-            objAH.showOverlay       = true;
-            objAH.url=URL_PREFIX+"/usuarios/reales/users-cards.pl";
-            objAH.apellido1=$("#surname1").val();
-            objAH.apellido2=$("#surname2").val();
-            objAH.legajo1= $("#legajo1").val();
-            objAH.legajo2= $("#legajo2").val();
-            objAH.categoria_socio=$("#categoria_socio_id").val();
-            objAH.ui=$("#ui_id").val();
-            objAH.funcion = 'changePage';
-            objAH.op='pdf';
-            objAH.export=1;
-            objAH.inicial = '0';
-            //se envia la consulta
-            objAH.sendToServer();
+//             objAH=new AjaxHelper();
+//             objAH.debug= true;
+//             objAH.showOverlay       = true;
+//             objAH.url=URL_PREFIX+"/usuarios/reales/users-cards.pl";
+//             objAH.apellido1=$("#surname1").val();
+//             objAH.apellido2=$("#surname2").val();
+//             objAH.legajo1= $("#legajo1").val();
+//             objAH.legajo2= $("#legajo2").val();
+//             objAH.categoria_socio=$("#categoria_socio_id").val();
+//             objAH.ui=$("#ui_id").val();
+//             objAH.funcion = 'changePage';
+//             objAH.op='pdf';
+//             objAH.export=1;
+//             objAH.inicial = '0';
+//             //se envia la consulta
+//             objAH.sendToServer();
+               $('#form_cards_gen').submit();
+
 
     }
 

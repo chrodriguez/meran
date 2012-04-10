@@ -16,13 +16,18 @@ if ($input->param('obj')){
     $op = $obj->{'op'};
 
 }
-if ($op eq 'pdf') {
 
+
+if ($input->param('type_op')) {
+
+    C4::AR::Utilidades::printHASH($input->{'param'});
+#     C4::AR::Utilidades::printARRAY($input->param('nro_socio'));
     my ($cantidad,$results)=C4::AR::Usuarios::BornameSearchForCard($obj);
   
 
     #HAY QUE GENERAR EL PDF CON LOS CARNETS
     C4::AR::PdfGenerator::batchCardsGenerator($cantidad,$results);
+   
 
 }else{
 

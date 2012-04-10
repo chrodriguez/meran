@@ -439,6 +439,7 @@ sub batchCardsGenerator {
 	}
 	my $tmpFileName = "carnets.pdf";
 	&imprimirFinal( $pdf, $tmpFileName );
+
 }
 
 #genera a partir de una coordenada
