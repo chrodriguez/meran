@@ -553,7 +553,7 @@ sub t_devolver {
     my $msg_object= C4::AR::Mensajes::create();
     my $array_id_prestamos= $params->{'datosArray'};
     my $prestamos_array_validos = C4::AR::Prestamos::validarExistenciaPrestamos($msg_object,$array_id_prestamos);
-    my $loop=scalar(@$array_id_prestamos);
+    my $loop=scalar(@$prestamos_array_validos);
     my $id_prestamo;
     my $prestamo = C4::Modelo::CircPrestamo->new();
     my $db = $prestamo->db;
@@ -599,6 +599,40 @@ sub t_devolver {
     return ($msg_object);
 }
 
+sub renovarYGenerarTicket{
+    my ($params)=@_;
+    
+     my ($infoTickets,$msg_object);
+     
+    #Acomodo la entrada y llamo al renovar 
+    my $array_id_prestamos= $params->{'datosArray'};
+    my $prestamos_array_validos = C4::AR::Prestamos::validarExistenciaPrestamos($msg_object,$array_id_prestamos);
+    
+
+    my @arrayPrestamos=();
+    
+    foreach my $id_prestamo (@$prestamos_array_validos){
+        my %datosPrestamos;
+        my $prestamo            = C4::AR::Prestamos::getInfoPrestamo($id_prestamo);
+        $datosPrestamos{'id3'}        = $prestamo->nivel3->getId3;
+        $datosPrestamos{'barcode'}        = $prestamo->nivel3->getBarcode;
+        $datosPrestamos{'id_prestamo'}    = $prestamo->getId_prestamo;
+        push (@arrayPrestamos, \%datosPrestamos)
+        }
+    
+    $params->{'datosArray'}=\@arrayPrestamos;
+    ($infoTickets,$msg_object)   = C4::AR::Prestamos::t_renovar($params);
+    
+    my @infoMessages;
+    push (@infoMessages, $msg_object);
+
+    my %info;
+    $info{'tickets'}                = $infoTickets;
+    $info{'messages'}               = \@infoMessages;
+    return (\%info);
+}
+
+
 sub t_renovar {
     my ($params)              = @_;
     my $msg_object            = C4::AR::Mensajes::create();
@@ -631,6 +665,9 @@ sub t_renovar {
                         # Si la renovacion se pudo realizar
                         C4::AR::Debug::debug("SE RENOVO SIN ERROR --> SE CREA EL TICKET");
                         my $ticketObj = C4::AR::Prestamos::crearTicket($data->{'id3'},$prestamo->getNro_socio,$params->{'responsable'});
+                        if(!$ticketObj){
+                            $ticketObj = 0;
+                            }
                         my %infoOperacion = (
                                     ticket  => $ticketObj,
                         );

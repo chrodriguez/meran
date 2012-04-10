@@ -69,23 +69,23 @@ sub setDato{
     $self->dato(C4::AR::Utilidades::trim($dato));
 }
 
-sub obtenerValoresCampo {
-    my ($self) = shift;
-    my ($campo,$orden)=@_;
-    my $ref_valores = C4::Modelo::RefSoporte::Manager->get_ref_soporte
-                                                ( select      => ['idSupport' , $campo],
-                                                            sort_by => ($orden) );
-    my @array_valores;
-
-    for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
-        my $valor;
-        $valor->{"clave"}=$ref_valores->[$i]->getIdSupport;
-        $valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
-        push (@array_valores, $valor);
-    }
-    
-    return (scalar(@array_valores), \@array_valores);
-}
+# sub obtenerValoresCampo {
+#     my ($self) = shift;
+#     my ($campo,$orden)=@_;
+#     my $ref_valores = C4::Modelo::RefSoporte::Manager->get_ref_soporte
+#                                                 ( select      => ['idSupport' , $campo],
+#                                                             sort_by => ($orden) );
+#     my @array_valores;
+# 
+#     for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
+#         my $valor;
+#         $valor->{"clave"}=$ref_valores->[$i]->getIdSupport;
+#         $valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
+#         push (@array_valores, $valor);
+#     }
+#     
+#     return (scalar(@array_valores), \@array_valores);
+# }
 
 
 =head2 sub getIndicadoresByCampo
