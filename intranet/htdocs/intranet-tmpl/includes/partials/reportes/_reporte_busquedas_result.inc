@@ -16,7 +16,7 @@
                               selectAll_id    => "",
                               columns         => ['[% "Valor" | i18n %]','[% 'Campo' | i18n %]',
                                                   '[% "Usuario" | i18n %]','[% "Fecha" | i18n %]',
-                                                  '[% "Estante" | i18n %]'
+                                                  
                                                   ]
                                                               
                                     ) ;
