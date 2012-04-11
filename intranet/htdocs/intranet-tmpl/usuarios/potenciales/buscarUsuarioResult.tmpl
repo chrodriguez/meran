@@ -47,7 +47,7 @@
                                         id              => "tablaResult",
                                         class           => "",
                                         selectAll_id    => "checkAllUsuariosPotenciales",
-                                        columns         => ['[% "Apellido y Nombres" | i18n %]','[% "Documento" | i18n %]',
+                                        columns         => ['[% "Apellido y Nombres" | i18n %]','[% "Documento" | i18n %]','[% "Legajo" | i18n %]',
                                                             '[% "Cat." | i18n %]','[% "Fuente" | i18n %]','[% "Estado" | i18n %]','[% "Cumple condici&oacute;n" | i18n %]',
                                                            
                                                             ]
@@ -81,7 +81,9 @@
 			                      <td>
 			                          [% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]
 			                      </td>
-			
+                                  <td>
+                                      [% socio.persona.legajo %]
+                                  </td>
                                   <td>
                                       [% socio.categoria.getDescription %]
                                   </td> 
