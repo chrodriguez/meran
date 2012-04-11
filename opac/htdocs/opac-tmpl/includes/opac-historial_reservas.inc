@@ -9,7 +9,7 @@
             print C4::AR::Filtros::tableHeader(   
                               id              => "tablaResult",
                               columns         => ['[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]','[% "Edici&oacute;n"|i18n %]',
-                                                    '[% "Fecha"|i18n %]',
+                                                    '[% "Fecha"|i18n %]','[% "Operaci&oacute;n" %]'
                                                  ]
 
                                                                 
@@ -41,6 +41,9 @@
                 </td>
                 <td>
                     &nbsp;[% reserva.getFecha_formateada %]&nbsp;
+                </td>
+                <td>
+                    [% reserva.getTipo_operacion %]
                 </td>
             [% END %] <!-- FOREACH PRIMERO -->
         </tbody>
