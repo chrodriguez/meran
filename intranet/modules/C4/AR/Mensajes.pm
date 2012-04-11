@@ -534,6 +534,7 @@ my %mensajesINTRA = (
     'UP12' => 'Ocurrio un error subiendo las imagenes',
     'UP13' => 'El tipo de archivo subido no esta permitido',
     'UP14' => 'Ocurrio un error mientras se eliminaban lasi magenes',
+    'UP15' => 'El logo se ha eliminado correctamente',
 
 #ERRORES DE BASE DE DATOS
     'B400' => '',

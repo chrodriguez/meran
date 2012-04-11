@@ -394,6 +394,15 @@
                                                                              ) ;
                                              [% END %]
                                 </li>
+                                <li>
+                                        [% PERL %]
+                                            print C4::AR::Filtros::link_to( text =>     " [% 'Configuraci&oacute;n de Logos' | i18n %]",
+                                                                            url =>      "[% url_prefix %]/admin/logos.pl",
+                                                                            icon=>		"icon-picture",
+                                                                            title =>    "[% 'Configuraci&oacute;n de Logos' | i18n %]"
+                                                                        ) ;
+                                        [% END %]
+                                </li>
                             <li class="nav-header">[% 'OPAC' | i18n %]</li>	
 	              			<li class="divider"></li>
                                 <li>
