@@ -11,22 +11,7 @@
         objAH.sendToServer();
     }
 
-  
-//         var sur1=$("#surname1").val();
-//         var sur2=$("#surname2").val();
-//         var leg1=$("#legajo1").val();
-//         var leg2=$("#legajo2").val();
-//         var cat=$("#categoria_socio_id").val();
-//         var reg=$("#regular").val();
-//         var ui=$("#ui_id").val();
-//         var params="surname1="+sur1+"&surname2="+sur2+"&legajo1="+leg1+"&legajo2="+leg2+"&categoria_socio="+cat+
-//         "&regular="+reg+"&ui="+ui+"&op="+op+"&orden="+orden;
-//         if(op == "pdf"){
-//             var url= "[% url_prefix %]/usuarios/reales/users-cards.pl";
-//             crearForm(url,params);//Funcion en util.js
-//         }
-//         else{
-
+/*
   function consultar(orden){
             objAH=new AjaxHelper(updateInfo);
             objAH.debug= true;
@@ -42,11 +27,11 @@
             objAH.op='search';
             objAH.inicial = '0';
             //se envia la consulta
-            objAH.sendToServer();
+            objAH.sendToServer();*/
 //         }
-    }
+//     }
   
-     function generarCarnets(orden){
+//      function generarCarnets(orden){
 //             objAH=new AjaxHelper();
 //             objAH.debug= true;
 //             objAH.showOverlay       = true;
@@ -63,10 +48,42 @@
 //             objAH.inicial = '0';
 //             //se envia la consulta
 //             objAH.sendToServer();
-               $('#form_cards_gen').submit();
+//                $('#form_cards_gen').submit();
 
 
-    }
+    function consultar(op,orden){
+         var sur1=$("#surname1").val();
+         var sur2=$("#surname2").val();
+         var leg1=$("#legajo1").val();
+         var leg2=$("#legajo2").val();
+         var cat=$("#categoria_socio_id").val();
+         var reg=$("#regular").val();
+         var ui=$("#ui_id").val();
+         var params="surname1="+sur1+"&surname2="+sur2+"&legajo1="+leg1+"&legajo2="+leg2+"&categoria_socio="+cat+
+         "&regular="+reg+"&ui="+ui+"&op="+op+"&orden="+orden;
+         if(op == "pdf"){
+             var url= "[% url_prefix %]/usuarios/reales/users-cards.pl";
+             crearForm(url,params);//Funcion en util.js
+         }
+         else{
+             objAH=new AjaxHelper(updateInfo);
+              objAH.debug= true;
+              objAH.showOverlay       = true;
+              objAH.url=URL_PREFIX+"/usuarios/reales/users-cardsResult.pl";
+              objAH.surname1= sur1;
+              objAH.surname2= sur2;
+              objAH.legajo1= leg1;
+              objAH.legajo2= leg2;
+              objAH.categoria_socio=cat;
+              objAH.ui=ui;
+              objAH.funcion = 'changePage';
+              objAH.op=op;
+              inicial = '0';
+            //se envia la consulta
+              objAH.sendToServer();
+         }
+     }
+
 
     function updateInfo(responseText){
         $("#result").html(responseText);
@@ -152,3 +169,7 @@
 </div>
 </fieldset>
 [% INCLUDE "intranet-bottom.inc" %]
+
+
+
+

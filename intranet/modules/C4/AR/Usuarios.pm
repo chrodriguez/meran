@@ -770,24 +770,16 @@ sub BornameSearchForCard {
     my @filtros;
     my $socioTemp = C4::Modelo::UsrSocio->new();
 
-#     if (C4::AR::Utilidades::validateString($params->{'apellido1'})){ 
-#             push (@filtros, ('persona.'.apellido => { like => $params->{'apellido1'}.'%', gt => $params->{'apellido1'} }) ); # >=
-#     }
-#     
-#     if (C4::AR::Utilidades::validateString($params->{'apellido2'})){ 
-#                 push (@filtros, ('persona.'.apellido => { like => $params->{'apellido2'}.'%', lt => $params->{'apellido2'} }) ); # <=
-#     }
-
     if ((C4::AR::Utilidades::validateString($params->{'apellido1'})) || (C4::AR::Utilidades::validateString($params->{'apellido2'}))){
         if ((C4::AR::Utilidades::validateString($params->{'apellido1'})) && (C4::AR::Utilidades::validateString($params->{'apellido2'}))){
                 push (@filtros, ('persona.'.apellido => { ge => $params->{'apellido1'}})); # >=
-                push (@filtros, ('persona.'.apellido => { le => $params->{'apellido2'}})); # <=
+                push (@filtros, ('persona.'.apellido => { le => $params->{'apellido2'}, like => $params->{'apellido2'}.'%'})); # <=
         }
         elsif (C4::AR::Utilidades::validateString($params->{'apellido1'})) {
-                push (@filtros, ('persona.'.apellido => { gt => $params->{'apellido1'}}) );
+                push (@filtros, ('persona.'.apellido => {ge => $params->{'apellido1'}}) );
         }
         else {
-               push (@filtros, ('persona.'.apellido => { lt => $params->{'apellido2'}}) );
+               push (@filtros, ('persona.'.apellido => { le => $params->{'apellido2'}}) );
         }
     }
 
@@ -824,6 +816,7 @@ sub BornameSearchForCard {
 	                                                                            sort_by => ( $socioTemp->sortByString($params->{'orden'}) ),
                                                                                 require_objects => ['persona'],
 	        );
+
         }else{
             $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
                                                                                 sort_by => ( $socioTemp->sortByString($params->{'orden'}) ),
@@ -833,6 +826,7 @@ sub BornameSearchForCard {
             );
         }
     };
+
 
     return ($socios_array_ref_count, $socios_array_ref);
 }
