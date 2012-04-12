@@ -112,9 +112,6 @@ sub setIndice{
     my ($self)      = shift;
     my ($indice)    = @_;
     
-    #reemplazamos los enter por <br> para mostrar bien el indice en el template
-    $indice =~ s/\n/<br>/g;
-    
     $self->indice($indice);
 }
 
