@@ -192,6 +192,8 @@
 		                                                                            {title => "Eliminar", action=>"borrarN2([% id2 %])", icon=>"icon-trash"},   
 		                                                                      [% IF tiene_indice %]
                                                                                     {title => "Ver &iacute;ndice", action=>'mostrarIndice([% id2 %])', icon=>"icon-list"},
+                                                                              [% ELSE %]
+                                                                                    {title => "Agregar &iacute;ndice", action=>'agregarIndice([% id2 %])', icon=>"icon-list"},
                                                                               [% END %]
                                                                                 [% IF show_action == 1 %]
                                                                                     {title => "Agregar analítica", action=>"agregarAnalitica([% id2 %])", icon=>"icon-edit"},
@@ -216,7 +218,7 @@
                                   [% END %]
                             [% END %]
 		                
-                           <div id="indice_data[% id2 %]" class="modal hide fade">
+                            <div id="indice_data[% id2 %]" class="modal hide fade">
 								            <div class="modal-header">
 								              <a class="close" data-dismiss="modal">×</a>
 								              <h3>[% 'Indice del grupo' | i18n %]</h3>
@@ -225,7 +227,29 @@
 								              <pre>[% indice | trim %]</pre>
 								            </div>
 
-                          </div>
+                            </div>
+                            
+                            <div id="datos_indice" class="modal hide fade">
+                                <div class="modal-header">
+                                    <a class="close" data-dismiss="modal">×</a>
+                                    <h3>[% 'Datos del Indice' | i18n %]</h3>
+                                </div>
+                                <div class="modal-body">
+                                    <textarea id="indice_id"style="width:519px; height:202px; max-width:650px">
+                                        [% indice_data | trim %]
+                                    </textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    [% PERL %]
+                                                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Indice' | i18n %]",
+                                                                                    boton   => "boton_guardar",
+                                                                                    onClick => "guardarIndice();",
+                                                                                    title   => "[% 'Guardar el Indice' | i18n %]",
+                                                                                    alternClass => "botonCentrado"
+                                                        ) ;
+                                    [% END %]
+                                </div>
+                            </div>
 
 			                <br>
 			                
