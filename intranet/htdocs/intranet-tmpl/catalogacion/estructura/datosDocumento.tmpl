@@ -153,29 +153,27 @@ $(document).ready( function() {
 	   </div>
 </div>
 
-<div id="datos_indice" class="modal fade hide">
-<fieldset>
-    <legend class="titulo_legend">[% "Datos del Indice" | i18n %]</legend>
-    <ul style="clear:both">
-        <li class="sub_item" >
 
-            <textarea id="indice_id" class="tinymce" rows="10" cols="120" style="width:600px; height:202px; max-width:650px">
-            
-                [% indice_data %]
-                
-            </textarea>
-        
-            [% PERL %]
+<div id="datos_indice" class="modal hide fade">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>[% 'Datos del Indice' | i18n %]</h3>
+    </div>
+    <div class="modal-body">
+        <textarea id="indice_id" style="width:519px; height:202px; max-width:650px">
+            [% indice_data | trim %]
+        </textarea>
+    </div>
+    <div class="modal-footer">
+        [% PERL %]
                     print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Indice' | i18n %]",
                                                         boton   => "boton_guardar",
                                                         onClick => "guardarIndice();",
                                                         title   => "[% 'Guardar el Indice' | i18n %]",
                                                         alternClass => "botonCentrado"
                             ) ;
-            [% END %]
-        </li>
-    </ul>
-</fieldset>
+        [% END %]
+    </div>
 </div>
 
 <!-- DATOS DE NIVEL 1 -->
