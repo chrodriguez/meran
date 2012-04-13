@@ -23,7 +23,7 @@ if($tipo eq "VER_ESTANTES"){
                     flagsrequired => {  ui => 'ANY', 
                                         tipo_documento => 'ANY',  
                                         accion => 'CONSULTA', 
-                                        entorno => 'estantes_virtuales'},
+                                        entorno => 'undefined'},
                     });
 
     my $estantes_publicos = C4::AR::Estantes::getListaEstantesPublicos();
@@ -41,7 +41,7 @@ elsif($tipo eq "VER_SUBESTANTE"){
 					flagsrequired => {  ui => 'ANY', 
                                         tipo_documento => 'ANY', 
                                         accion => 'CONSULTA',  
-                                        entorno => 'estantes_virtuales'},
+                                        entorno => 'undefined'},
 					});
 	
     my $id_estante= $obj->{'estante'};
@@ -66,7 +66,7 @@ elsif($tipo eq "VER_ESTANTE_BY_ID"){
 					flagsrequired => {  ui => 'ANY', 
                                         tipo_documento => 'ANY', 
                                         accion => 'CONSULTA',  
-                                        entorno => 'estantes_virtuales'},
+                                        entorno => 'undefined'},
 					});
 	
     my $id_estante= $obj->{'estante'};
@@ -87,7 +87,7 @@ elsif($tipo eq "BORRAR_ESTANTES"){
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
                                                     accion => 'BAJA', 
-                                                    entorno => 'estantes_virtuales' },
+                                                    entorno => 'undefined' },
                                                 'intranet'
                                );
 
@@ -105,7 +105,7 @@ elsif($tipo eq "MODIFICAR_ESTANTE"){
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
                                                     accion => 'MODIFICACION', 
-                                                    entorno => 'estantes_virtuales' },
+                                                    entorno => 'undefined' },
                                                 'intranet'
                                );
 
@@ -124,7 +124,7 @@ elsif($tipo eq "AGREGAR_SUBESTANTE"){
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
                                                     accion => 'ALTA', 
-                                                    entorno => 'estantes_virtuales' },
+                                                    entorno => 'undefined' },
                                                 'intranet'
                                );
 
@@ -143,7 +143,7 @@ elsif($tipo eq "AGREGAR_ESTANTE"){
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
                                                     accion => 'ALTA', 
-                                                    entorno => 'estantes_virtuales' },
+                                                    entorno => 'undefined' },
                                                 'intranet'
                                );
 
@@ -165,7 +165,7 @@ my ($template, $session, $t_params) = get_template_and_user(
 					flagsrequired => {  ui => 'ANY', 
                                         tipo_documento => 'ANY', 
                                         accion => 'CONSULTA', 
-                                        entorno => 'estantes_virtuales'},
+                                        entorno => 'undefined'},
 					});
 					
     my $ini= $obj->{'ini'};
@@ -190,7 +190,7 @@ elsif($tipo eq "AGREGAR_CONTENIDO"){
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
                                                     accion => 'ALTA', 
-                                                    entorno => 'estantes_virtuales' },
+                                                    entorno => 'undefined' },
                                                 'intranet'
                                );
 
@@ -209,7 +209,7 @@ elsif($tipo eq "BORRAR_CONTENIDO"){
                                                 {   ui => 'ANY', 
                                                     tipo_documento => 'ANY', 
                                                     accion => 'BAJA', 
-                                                    entorno => 'estantes_virtuales' },
+                                                    entorno => 'undefined' },
                                                 'intranet'
                                );
 
