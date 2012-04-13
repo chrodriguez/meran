@@ -1186,6 +1186,8 @@ sub getBusquedasDeUsuario {
     my $fecha_inicio= $datos_busqueda->{'fecha_inicio'};
     my $fecha_fin= $datos_busqueda->{'fecha_fin'};
     my $statistics= $datos_busqueda->{'statistics'};
+    my $orden= $datos_busqueda->{'orden'};
+
 
     my @filtros;
     my $resultsarray;
@@ -1224,6 +1226,7 @@ sub getBusquedasDeUsuario {
                                                                       require_objects => ['busqueda'],
                                                                       with_objects => [],
                                                                       select       => ['busqueda.*','rep_historial_busqueda.*'],
+                                                                      sort_by => $orden,
                                                           );
 
    

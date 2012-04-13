@@ -36,7 +36,13 @@ if($tipoAccion eq "BUSQUEDAS"){
     my $ini=$obj->{'ini'};
     my $funcion=$obj->{'funcion'};
     my $inicial=$obj->{'inicial'};
-
+    $obj->{'orden'} = $obj->{'orden'} || 'valor';
+   
+    if ($obj->{'asc'}){
+       $obj->{'orden'}.= ' ASC';
+    } else {
+       $obj->{'orden'}.= ' DESC';
+    }
 #     C4::AR::Validator::validateParams('U389',$obj,['socio','ini','funcion'] );
 
 
