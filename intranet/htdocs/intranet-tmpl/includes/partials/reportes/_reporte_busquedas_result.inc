@@ -17,8 +17,12 @@
                               columns         => ['[% "Valor" | i18n %]','[% 'Campo' | i18n %]',
                                                   '[% "Usuario" | i18n %]','[% "Fecha" | i18n %]',
                                                   
-                                                  ]
-                                                              
+                                                  ],
+                              order           => {  'Valor' =>'valor', 
+                                                    'Campo' => 'campo',
+                                                    'Usuario' => 'busqueda.nro_socio', 
+                                                    'Fecha' => 'busqueda.fecha'  
+                                                  }                                
                                     ) ;
         [% END %]
 

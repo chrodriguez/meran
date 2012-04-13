@@ -805,13 +805,41 @@ sub action_set_button{
     return $html;   
 }
 
+# sub tableHeader{
+#     my (%params_hash_ref) = @_;
+#     
+#     my $id          = $params_hash_ref{'id'}; 
+#     my $class       = $params_hash_ref{'class'} || undef;
+#     my $select_all  = $params_hash_ref{'selectAll_id'} || undef;
+# 
+# 
+#     my $columns     = $params_hash_ref{'columns'};
+#     
+#     my $html = "<table id=$id class='table table-striped $class'><thead>";
+#     
+#     if ($select_all){
+#         $html .= "<th><i class='icon-ok-sign click' id='$select_all' title='".C4::AR::Filtros::i18n("Seleccionar todos")."'></th>";
+#     }
+#     
+#     foreach my $column (@$columns){
+#         $html .= "<th>$column</th>";
+#     }
+# 
+#     $html .= "</thead>";
+#     
+#     return $html;	
+# }
+
+
 sub tableHeader{
     my (%params_hash_ref) = @_;
     
     my $id          = $params_hash_ref{'id'}; 
     my $class       = $params_hash_ref{'class'} || undef;
     my $select_all  = $params_hash_ref{'selectAll_id'} || undef;
-    
+    my $order       = $params_hash_ref{'order'} || undef;
+
+
     my $columns     = $params_hash_ref{'columns'};
     
     my $html = "<table id=$id class='table table-striped $class'><thead>";
@@ -820,14 +848,21 @@ sub tableHeader{
         $html .= "<th><i class='icon-ok-sign click' id='$select_all' title='".C4::AR::Filtros::i18n("Seleccionar todos")."'></th>";
     }
     
-    foreach my $column (@$columns){
-        $html .= "<th>$column</th>";
+    if ($order){
+      foreach my $column (@$columns){
+            $html .= "<th class='click' onclick=ordenar('".$order->{$column}."')>$column</th>";
+      }
+    } else {
+        foreach my $column (@$columns){
+            $html .= "<th>$column</th>";
+        }
     }
-
+    
     $html .= "</thead>";
     
-    return $html;	
+    return $html;   
 }
+
 
 sub action_group_link_button{
 	my (%params_hash_ref) = @_;

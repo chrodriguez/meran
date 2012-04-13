@@ -5,10 +5,21 @@
 <script type="text/javascript" src="/intranet-tmpl/includes/reports.js"></script>
 <script>
 
+    var ORDEN;
+    var ASC= 1;
+
     function changePageBusquedas(ini){
         objAH.changePage(ini);
     }
     
+    function ordenar(orden){
+              if (orden == ORDEN) {
+                  ASC= !ASC;
+              }
+              ORDEN = orden;
+              generarReporteBusquedas();
+    }
+
     function generarReporteBusquedas(){
 
         objAH               = new AjaxHelper(updateGenerarReporteBusquedas);
@@ -25,6 +36,8 @@
         objAH.fecha_inicio  =  $('#date-from').val();
         objAH.fecha_fin     =  $('#date-to').val();
         objAH.statistics    =  $('#statistics_check').val();
+        objAH.orden         = ORDEN;
+        objAH.asc           = ASC;
         //se envia la consulta
         objAH.sendToServer();
     }
