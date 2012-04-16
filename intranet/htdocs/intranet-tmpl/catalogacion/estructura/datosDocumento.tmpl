@@ -18,6 +18,30 @@
 
 <script type="text/javascript">
 
+    //copiado de detalle.tmpl
+    //FIXME: deberia estar en catalogacion.js
+    function editarEjemplar(id2,id3){
+        window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&id2="+id2+"&id3="+id3+"&tipoAccion=MODIFICAR_NIVEL_3";
+    	
+    }
+    
+    function detalleMARC(id3){
+	objAH               = new AjaxHelper(updateInfoMARC);
+	objAH.debug         = true;
+    objAH.showOverlay   = true;
+	objAH.url			= URL_PREFIX+"/busquedas/MARCDetalle.pl";
+	objAH.id3           = id3;
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+    function updateInfoMARC(responseText){
+
+        $('#detalleMARC').html(responseText);
+        $('#detalleMARC').modal();
+            
+    }
+
 var TIENE_NIVEL_2 = 0;
 
 //Funcion que se ejecuta cuando se carga la pagina, dependiendo de donde viene ejecuta las funciones correspondientes.
@@ -286,6 +310,8 @@ $(document).ready( function() {
 </div> <!--END <div class="centro">-->
 
 </div> <!--END <div class="todo">-->
+
+<div id="detalleMARC" class="modal hide fade"></div>
 
 [% INCLUDE "intranet-bottom.inc" %]
 

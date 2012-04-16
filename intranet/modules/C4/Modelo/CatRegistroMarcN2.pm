@@ -153,6 +153,16 @@ sub modificar{
     $self->save();
 }
 
+=item
+    Llama a la misma funcion en el Nivel3.
+    Es por el ticket #4226
+=cut
+sub getDetalleDisponibilidadNivel3{
+     my ($self)      = shift;
+
+    return C4::AR::Nivel3::detalleDisponibilidadNivel3($self->getId2);
+}
+
 sub getIdN1Padre {
     my ($self)      = shift;
 
