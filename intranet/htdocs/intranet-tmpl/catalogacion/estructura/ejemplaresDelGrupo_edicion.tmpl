@@ -1,3 +1,14 @@
+<!--esto viene por el ticket #4226, para no repetir codigo armamos la data aca arriba-->
+[% UNLESS cant_nivel3 %]
+    [% IF nivel2 %]
+        [% cant_nivel3 = nivel2.getCantEjemplares %]
+        [% id2 = nivel2.getId2 %]
+        [% nivel3 = nivel2.getDetalleDisponibilidadNivel3 %]
+        [% disponibles = nivel3.first.disponibles %]
+        [% nivel3 = nivel3.slice(1,cant_nivel3) %]
+    [% END %]    
+[% END %]
+
 [% IF cant_nivel3 %]
 		<script>
 		
@@ -183,10 +194,10 @@
     <script>
         $('#actions_ejemplares_[% id2 %]').hide();
     </script>  
-
 <script type="text/javascript">makeToggle('ejemplaresDelGrupo[% id2 %]','trigger_2_[% id2 %]',null,false);</script>
 [% ELSE %]
-    [% IF nivel2_template == 'ANA' %]
+
+    [% IF nivel2.getTemplate == 'ANA' %]
 
             [% PERL %]
                 print C4::AR::Filtros::link_to(   text      => "Detalle del registro padre",
@@ -197,9 +208,12 @@
                                             );
             [% END %]
     [% ELSE %]
-		<div class="alert fade in">
-           <strong>[% 'Este grupo no dispone de ejemplares' | i18n %]</strong>
-		</div>    
+        <span id="ejemplaresDelGrupo[% nivel2.id %]">
+            [% INCLUDE "estructura/ejemplaresDelGrupo.tmpl" %]
+        </span>
+<!--		<div class="alert fade in">-->
+<!--           <strong>[% 'Este grupo no dispone de ejemplares' | i18n %]</strong>-->
+<!--		</div>    -->
     [% END %]
 [% END %]
 <br />

@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+use C4::Context;
 use C4::Modelo::CatRegistroMarcN2;
 use C4::Modelo::CatRegistroMarcN2::Manager;
 
