@@ -13,21 +13,14 @@
 					[% END %]
 				[% END %]
 			[% END %]
-			[% IF cantReservas && cantPrestados %]
-	        	<small>[% "Existen " | i18n %] [% cantReservas %] [% "reservas" | i18n %]
-        		<cite title=""> [% " y " | i18n %] [% cantPrestados %] [% "prestados" | i18n %]</cite>
-	        	</small>
-	        [% ELSE %]
-				[% IF cantReservas %]
-		        	<small>[% "Existen " | i18n %] [% cantReservas %] [% "reservas " | i18n %]
-		        	</small>
-		        [% ELSE %]
-					[% IF cantPrestados %]
-			        	<small>[% "Hay" | i18n %] [% cantPrestados%] [% "ejemplares prestados" | i18n %]
-			        	</small>
-			        [% END %]
-				[% END%]
-			[% END %]	        
+		<br>
+          <small>[% "Disponibilidad Actual Para Pr&eacute;stamo: " | i18n %] [% cantParaPrestamoActual %] [% " " | i18n %]</small>
+          <small>[% "Disponibilidad Actual Para Sala de Lectura: " | i18n %] [% cantParaSalaActual %] [% " " | i18n %]</small>
+
+          <small>[% "Cantidad Actual de Reservas:  " | i18n %] [% cantReservas %]</small>
+      
+          <small>[% "Cantidad Actual de Pr&eacute;stamos:" | i18n %] [% cantPrestados%]</small>
+			             
       	</blockquote>
 			
            [% IF CirculationEnabled %]

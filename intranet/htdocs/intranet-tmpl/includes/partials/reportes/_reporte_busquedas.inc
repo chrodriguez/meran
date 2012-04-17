@@ -78,13 +78,6 @@
 
 <div class="center_fieldset report_form_container">
       <form class="form-horizontal" onsubmit="return false;">
-     <!--     <div class="control-group">
-            <label class="control-label"  for="name">Parte del nombre/apellido del usuario</label>
-            <div class="controls">
-              <input class="xlarge" id="name" name="name" size="30" type="text">
-              <p class="help-block">Perez juan, etc.</p>
-            </div>
-          </div><!-- /control-group -->
 
           <div id="divInfoUsuario" class="control-group" >
               <label for="usuario" class="control-label">[% 'Usuario' | i18n %]
@@ -115,7 +108,7 @@
                   <option>Ambas</option>
                 </select>
               </div>
-            </div><!-- /control-group -->
+          </div><!-- /control-group -->
 
 
           <div class="control-group">
@@ -139,14 +132,14 @@
                           <input type="date" id="date-to" name="date-to" data-datepicker="datepicker" placeholder="Hasta" value="" required>
 
                     </div>
-            </div>
-            </div>
-          </div><!-- /control-group -->
+          </div>
           <div class="control-group">
-                    <label class="checkbox" for="statistics_check">Generar estadisticas
-           <!--     <div class="controls">-->
-                    <input type="checkbox" name="statistics_check" id="statistics_check"/></label>
-              <!--  </div>-->
+                    <label  class="control-label" for="statistics_check">Generar estadisticas</label>
+                    <div class="controls">
+                        <label class="checkbox">
+                          <input type="checkbox" name="statistics_check" id="statistics_check"/>
+                        </label>
+                    </div>
           </div>        
           
           <div class="form-actions">
