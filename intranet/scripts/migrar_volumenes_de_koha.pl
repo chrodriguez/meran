@@ -49,7 +49,7 @@ use C4::Modelo::CatRegistroMarcN2::Manager;
     print $marc_record->as_formatted."\n\n";
     
     $nivel2->setMarcRecord($marc_record->as_usmarc);
-    #$nivel2->save();
+    $nivel2->save();
   }
  }
  close (FILE); 
