@@ -45,9 +45,30 @@ use C4::Modelo::CatRegistroMarcN2::Manager;
        my $new_field = new MARC::Field('505','#','#', @subcampos_array);
        $marc_record->append_fields($new_field);
       }
+    
+    #AHORA LIMPIAMOS!!
+    
+    my $field_440 = $marc_record->field('440');
+    
+    if ($field_440){
+      if($field_440->subfield('a') == $marc_record->subfield('505','g')){
+        #Se borra el 440a
+          $field_440->delete_subfield(code => 'a');
+        }
+      
+      if($field_440->subfield('p') == $marc_record->subfield('505','t')){
+        #Se borra el 440p
+          $field_440->delete_subfield(code => 'p');
+        }
+       if( ! $field_440->subfields() ){
+        #Si el campo 440 quedo sin subcampos lo eliminamos.
+          $marc_record->delete_field($field_440);
+         }
+    }
+
     print "ID2 = ".$id2."\n";
     print $marc_record->as_formatted."\n\n";
-    
+        
     $nivel2->setMarcRecord($marc_record->as_usmarc);
     $nivel2->save();
   }
