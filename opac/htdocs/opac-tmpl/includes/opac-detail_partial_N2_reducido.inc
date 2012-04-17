@@ -38,9 +38,10 @@
 	                                                          [% END %]
 	                                                      [% END %]
 	                                          [% END %]
+                                            
+                                                
 	                                      </dl>
-	                  
-	
+                                          <p>[% 'Puede solicitar m&aacute;s f&aacute;cilmente el ejemplar con:' | i18n %] <strong> [% primer_signatura %]</strong></p>
 											[% IF tiene_indice %]
 												[% PERL %]
 														print C4::AR::Filtros::action_button(  
