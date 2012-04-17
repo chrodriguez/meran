@@ -51,9 +51,9 @@ use C4::Modelo::CatRegistroMarcN2::Manager;
     my $field_440 = $marc_record->field('440');
     
     if ($field_440){
-      if($field_440->subfield('a') == $marc_record->subfield('505','g')){
+      if($field_440->subfield('v') == $marc_record->subfield('505','g')){
         #Se borra el 440a
-          $field_440->delete_subfield(code => 'a');
+          $field_440->delete_subfield(code => 'v');
         }
       
       if($field_440->subfield('p') == $marc_record->subfield('505','t')){
