@@ -45,7 +45,7 @@ use C4::Modelo::CatRegistroMarcN2::Manager;
        my $new_field = new MARC::Field('505','#','#', @subcampos_array);
        $marc_record->append_fields($new_field);
       }
-    
+    print "ID2 = ".$id2."\n";
     print $marc_record->as_formatted."\n\n";
     
     $nivel2->setMarcRecord($marc_record->as_usmarc);
