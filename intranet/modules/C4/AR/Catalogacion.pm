@@ -1118,9 +1118,10 @@ sub _setDatos_de_estructura {
 #     C4::AR::Debug::debug("_setDatos_de_estructura => campo, subcampo: ".$cat->getCampo.", ".$cat->getSubcampo);
 #     C4::AR::Debug::debug("_setDatos_de_estructura => dato: ".$datos_hash_ref->{'dato'});
 #     C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$datos_hash_ref->{'datoReferencia'});
-    if( ($cat->getReferencia) && ($cat->getTipo eq 'combo') ){
+    if( ($cat->getReferencia) && ($cat->getTipo eq 'combo') && defined($cat->infoReferencia) ){
         #tiene una referencia, y es un COMBO
 #         C4::AR::Debug::debug("_setDatos_de_estructura => ======== COMBO ======== ");
+        $hash_ref_result{'referenciaTabla'} = $cat->infoReferencia->getReferencia;
         _obtenerOpciones ($cat, \%hash_ref_result);
 #         $hash_ref_result{'default_value'}       =
 
