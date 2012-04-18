@@ -694,7 +694,7 @@ sub as_stringReloaded {
     my $db      = undef;
     my $campo   = $field->tag;
     my $nivel   = $params->{'nivel'};
-     #C4::AR::Debug::debug("Catalogacion => as_stringReloaded => campo => ".$campo." itemype => ".$itemtype." nivel => ".$nivel);
+    C4::AR::Debug::debug("Catalogacion => as_stringReloaded => campo => ".$campo." itemype => ".$itemtype." nivel => ".$nivel);
 
     my @array_subcampos;
 
@@ -704,7 +704,7 @@ sub as_stringReloaded {
         my $dato                            = $subfield->[1];
         $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype, $nivel);
         $dato                               = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $nivel);
-#         C4::AR::Debug::debug("Catalogacion => as_stringReloaded => campo => ".$campo." subcampo => ".$subcampo." dato => ".$dato);
+        C4::AR::Debug::debug("Catalogacion => as_stringReloaded => campo => ".$campo." subcampo => ".$subcampo." dato => ".$dato);
         $hash_temp{'dato_link'}             = C4::AR::Filtros::show_componente( ('campo' => $campo, 'subcampo' => $subcampo, 'dato' => $dato , 'id1' => $params->{'id1'}, 'id2' => $params->{'id2'}, 'template' => $itemtype ) );
 
         if($hash_temp{'dato_link'} ne "NO_LINK"){
@@ -806,11 +806,11 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
             # veo que separador lleva cada subcampo para el $field dependiendo del campo y subcampo que se este procesando
             my $field_as_string                 = as_stringReloaded($field, $itemtype, $params);
 
-C4::AR::Debug::debug("Catalocagion::marc_record_to_meran_to_detail_view_as_not_extended=> field_as_string =>".$field_as_string."-");
+#C4::AR::Debug::debug("Catalocagion::marc_record_to_meran_to_detail_view_as_not_extended=> field_as_string =>".$field_as_string."-");
 
-            $hash_temp_aux{'dato'}              = ($hash_temp_aux{'dato'} ne "")?$hash_temp_aux{'dato'}.";".$field_as_string:$field_as_string;
+            $hash_temp_aux{'dato'}              = ($hash_temp_aux{'dato'} ne "")?$hash_temp_aux{'dato'}.";".$field_as_string:($type eq "INTRA")?$field_as_string." ":$field_as_string;
 
-C4::AR::Debug::debug("Catalocagion::marc_record_to_meran_to_detail_view_as_not_extended=> hash_temp_aux{'dato'} =>".$hash_temp_aux{'dato'}."-");
+#C4::AR::Debug::debug("Catalocagion::marc_record_to_meran_to_detail_view_as_not_extended=> hash_temp_aux{'dato'} =>".$hash_temp_aux{'dato'}."-");
 
             $hash_temp_aux{'campo'}             = $campo;
             $hash_temp_aux{'orden'}             = getOrdenFromCampo($campo, $params->{'nivel'}, $itemtype, $type, $db);
