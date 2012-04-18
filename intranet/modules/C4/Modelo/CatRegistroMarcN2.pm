@@ -186,6 +186,29 @@ sub getIdN1Padre {
     return 0;
 }
 
+sub getPadre {
+    my ($self)      = shift;
+
+    my $db = C4::Modelo::CatRegistroMarcN2->new()->db();
+
+    my $nivel2_analiticas_array_ref = C4::Modelo::CatRegistroMarcN2Analitica::Manager->get_cat_registro_marc_n2_analitica(
+                                                                        db => $db,
+                                                                        query => [
+                                                                                    cat_registro_marc_n2_hijo_id => { eq => $self->getId2() },
+                                                                            ]
+                                                                );
+
+    if( scalar(@$nivel2_analiticas_array_ref) > 0){
+        my $nivel2 = C4::AR::Nivel2::getNivel2FromId2($nivel2_analiticas_array_ref->[0]->getId2Padre());
+
+        if($nivel2){
+            return $nivel2->nivel1;
+        }
+    }
+
+    return 0;
+}
+
 sub eliminar{
     my ($self)      = shift;
     my ($params)    = @_;

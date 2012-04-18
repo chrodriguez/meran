@@ -357,11 +357,12 @@ sub show_componente {
     my $dato                = $params_hash_ref{'dato'};
     my $id1                 = $params_hash_ref{'id1'};
     my $id2                 = $params_hash_ref{'id2'};
+    my $template            = $params_hash_ref{'template'};
 
     my $session             = CGI::Session->load();
     my $session_type        = $session->param('type') || 'opac';
      
-    if(($campo eq "245")&&($subcampo eq "a")) {
+    if(($campo eq "245")&&($subcampo eq "a")&&($template eq "ANA")) {
 
       my $catRegistroMarcN1   = C4::AR::Nivel1::getNivel1FromId1($id1);
 

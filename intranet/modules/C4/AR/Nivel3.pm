@@ -450,6 +450,8 @@ sub detalleNivel3{
 # FIXED falta levantar del tipo de ejemplar
         if($nivel2_object->getTemplate() eq "ANA"){
             $hash_nivel2{'nivel1_padre'}        = $nivel2_object->getIdN1Padre();
+            $hash_nivel2{'nivel1_titulo_padre'} = ($nivel2_object->getPadre())?$nivel2_object->getPadre()->getTitulo():"";
+            $hash_nivel2{'nivel1_isbn_padre'}   = $nivel2_object->getISBN();
             $hash_nivel2{'show_action'}         = 0;
         }
 
@@ -573,7 +575,8 @@ sub detalleCompletoINTRA {
             eval {
                 $new_id2 = $nivel2_array_ref->[$i]->getId2;
             };
-        eval{
+
+        #eval{
             my ($hash_nivel2) = detalleNivel3($new_id2,$nivel1->db);
                 
             #Para ver la portada en el detalle
@@ -590,7 +593,7 @@ sub detalleCompletoINTRA {
             }
                 
             push(@nivel2, $hash_nivel2);
-        };
+        #};
             
             if ($i >= ($cantidad_total-1)){
                 last;
