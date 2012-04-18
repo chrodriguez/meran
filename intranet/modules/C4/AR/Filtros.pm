@@ -50,17 +50,20 @@ en cada link.
 sub link_to {
     my (%params_hash_ref) = @_;
 
-    my $link    = '';
-    my $params  = $params_hash_ref{'params'} || []; #obtengo los paraametros
-    my $text    = $params_hash_ref{'text'}; #obtengo el texto a mostrar
-    my $url     = $params_hash_ref{'url'}; #obtengo la url
-    my $title   = $params_hash_ref{'title'}; #obtengo el title a mostrar
-    my $class   = $params_hash_ref{'class'}; #obtengo la clase
-    my $boton   = $params_hash_ref{'boton'}; #obtengo el title a mostrar
-    my $width   = $params_hash_ref{'width'};
-    my $blank   = $params_hash_ref{'blank'} || 0;
-    my $icon    = $params_hash_ref{'icon'} || 0;
-    my $tooltip = $params_hash_ref{'tooltip'};
+    my $link            = '';
+    my $params          = $params_hash_ref{'params'} || []; #obtengo los paraametros
+    my $text            = $params_hash_ref{'text'}; #obtengo el texto a mostrar
+    my $url             = C4::AR::Utilidades::trim($params_hash_ref{'url'}); #obtengo la url
+    my $title           = $params_hash_ref{'title'}; #obtengo el title a mostrar
+    my $class           = $params_hash_ref{'class'}; #obtengo la clase
+    my $boton           = $params_hash_ref{'boton'}; #obtengo el title a mostrar
+    my $width           = $params_hash_ref{'width'};
+    my $blank           = $params_hash_ref{'blank'} || 0;
+    my $icon            = $params_hash_ref{'icon'} || 0;
+    my $tooltip         = $params_hash_ref{'tooltip'};
+    my $url_absolute    = $params_hash_ref{'url_absolute'}||0;
+    my $without_token   = $params_hash_ref{'without_token'}||0;
+    
     
     my $cant    = scalar(@$params);
     my @result;
@@ -72,7 +75,7 @@ sub link_to {
     }
 
     my $session = CGI::Session->load();
-    if($session->param('token')){
+    if(($session->param('token'))&&(!$without_token)){        
     #si hay sesion se usa el token, sino no tiene sentido
         my $status = index($url,'?');
          #SI NO HUBO PARAMETROS, EL TOKEN ES EL UNICO EN LA URL, O SEA QUE SE PONE ? EN VEZ DE &
@@ -83,8 +86,13 @@ sub link_to {
         }
     }
 
-
-    $link= "<a href='".$url."'";
+    if($url_absolute){
+        #verifico si la URL contiene http, sino lo agrego
+        ($url =~ m/http/)?$link= "<a href='".$url."'":$link= "<a href='http://".$url."'";        
+        
+    } else {
+        $link= "<a href='".$url."'";
+    }
 
     if ($tooltip ne ''){
         $link .= " data-original-title='$tooltip'";
@@ -100,7 +108,7 @@ sub link_to {
     }
 
     if($blank){
-        $link .= " target='blank'";
+        $link .= " target='_blank'";
     }
     
     $link .= " >";
@@ -390,10 +398,10 @@ sub show_componente {
     if(($campo eq "856")&&($subcampo eq "u")) {
 
 
-        C4::AR::Debug::debug("C4::AR::Filtros::show_componente => campo, subcampo: ".$campo.", ".$subcampo); 
-        C4::AR::Debug::debug("C4::AR::Filtros::show_componente => DENTRO => dato: ".$dato);
+        #C4::AR::Debug::debug("C4::AR::Filtros::show_componente => campo, subcampo: ".$campo.", ".$subcampo); 
+        #C4::AR::Debug::debug("C4::AR::Filtros::show_componente => DENTRO => dato: ".$dato);
         
-        return C4::AR::Filtros::link_to( text => $dato, url => $dato , blank => 1);
+        return C4::AR::Filtros::link_to( text => $dato, url => $dato , blank => 1, url_absolute => 1, without_token => 1);
 
     }
 
