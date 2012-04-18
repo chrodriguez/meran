@@ -1,3 +1,5 @@
+
+
 [% IF cant_nivel3 %]
 		<script>
 		
@@ -7,6 +9,7 @@
 		    });
 		
 		</script>
+
     <div class="accordion" id="ejemplares_del_grupo_[% id2 %]">
             <div class="accordion-group">
               <div class="accordion-heading">
@@ -296,15 +299,24 @@
 <script type="text/javascript">makeToggle('ejemplaresDelGrupo[% id2 %]','trigger_2_[% id2 %]',null,false);</script>
 [% ELSE %]
     [% IF nivel2_template == 'ANA' %]
-
+    <ul>
+		<li>
+    		Título del registro fuente: [% nivel1_titulo_padre %]
+		</li>
+		<li>
+            ISBN: [% nivel1_isbn_padre %]	
+        </li>
+		<li>		
             [% PERL %]
-                print C4::AR::Filtros::link_to(   text      => "Detalle del registro padre",
+                print C4::AR::Filtros::link_to(   text      => "Detalle del registro fuente",
                                                   url       => "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
                                                   params    => ["id1=[% nivel1_padre %]"],
-                                                  title     => "[% 'Detalle del registro padre' | i18n %]",
+                                                  title     => "[% 'Detalle del registro fuente' | i18n %]",
                                                   class     => 'btn btn-warning'
                                             );
             [% END %]
+        </li>
+    </ul> 
     [% ELSE %]
 		<div class="alert fade in">
            <strong>[% 'Este grupo no dispone de ejemplares' | i18n %]</strong>
