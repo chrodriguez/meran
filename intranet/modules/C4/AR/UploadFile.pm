@@ -48,27 +48,40 @@ sub uploadFotoNovedadOpac{
     use Digest::MD5;
     use C4::AR::Utilidades;
     
-    my @filesAllowed    = qw(
-                                jpeg
-                                gif
-                                png
-                                jpg
-                            );
+    my @filesAllowed            = qw(
+                                        jpeg
+                                        gif
+                                        png
+                                        jpg
+                                    );
 
-    my $uploaddir       = C4::Context->config("opachtdocs")."/uploads/novedades";
-    my $maxFileSize     = 2048 * 2048; # 1/2mb max file size...
-    my $hash_unique     = Digest::MD5::md5_hex(localtime() + rand(10));
-    my $file_type       = C4::AR::Utilidades::checkFileMagic($imagen, @filesAllowed);
+    my $uploaddir               = C4::Context->config("novevadesOpacPath");
+    my $maxFileSize             = 2048 * 2048; # 1/2mb max file size...
+    my $hash_unique             = Digest::MD5::md5_hex(localtime() + rand(10));
+    my ($file_type,$notBinary)  = C4::AR::Utilidades::checkFileMagic($imagen, @filesAllowed);
     
     #es un archivo valido
     if($file_type){
+    
+        if($notBinary){
         
-        open ( WRITEIT, ">$uploaddir/$hash_unique.$file_type" ) or die "$!"; 
-        binmode WRITEIT; 
-        while ( <$imagen> ) { 
-        	print WRITEIT; 
+            #no hay que escribirlo con binmode
+            C4::AR::Debug::debug("UploadFile => uploadFotoNovedadOpac => vamos a escribirla sin binmode");
+            open(WRITEIT, ">$uploaddir/$hash_unique.$file_type") or die "$!";
+            print WRITEIT $imagen;
+            close(WRITEIT);
+   
+        }else{
+        
+            C4::AR::Debug::debug("UploadFile => uploadFotoNovedadOpac => vamos a escribirla CON binmode");
+            open ( WRITEIT, ">$uploaddir/$hash_unique.$file_type" ) or die "$!"; 
+            binmode WRITEIT; 
+            while ( <$imagen> ) { 
+            	print WRITEIT; 
+            }
+            close(WRITEIT);
+        
         }
-        close(WRITEIT);
 
         return ("$hash_unique.$file_type");
         
