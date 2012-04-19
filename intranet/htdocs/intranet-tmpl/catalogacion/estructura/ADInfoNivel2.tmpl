@@ -48,15 +48,21 @@
                      <dd>[% nivel2.getEdicion %]&nbsp;</dd>
                 
                      <dt class="inline left rightMargin">[% 'Fecha:' | i18n %]</dt>
-                     [% FOREACH fecha IN nivel2.getAnio_publicacion %] 
-                         <dd>[% fecha %] [% IF !loop.last() %],[% END %]</dd> 
-                     [% END %]
+                        <dd>   
+                             [% FOREACH fecha IN nivel2.getAnio_publicacion %] 
+                                 [% fecha %] [% IF !loop.last() %],[% END %]
+                             [% END %]
+                        </dd> 
                      <dt class="inline left rightMargin">[% 'Soporte:' | i18n %]</dt> 
                      <dd>[% nivel2.getSoporteObject.getDescription %]</dd>
                      <dt class="inline left rightMargin">[% 'Lugar:' | i18n %]</dt> 
                      <dd>[% nivel2.getCiudadObject.getNombre %]</dd>
                      <dt class="inline left rightMargin">[% 'Volumen:' | i18n %]</dt> 
-                     <dd>[% nivel2.getVolumen %]</dd>
+                        <dd>   
+                             [% FOREACH v IN nivel2.getVolumen %]
+                                    [% v %] [% IF !loop.last() %],[% END %]
+                             [% END %]   
+                        </dd>
                      <dt class="inline left rightMargin">[% 'Idioma:' | i18n %]</dt> 
                      <dd>[% nivel2.getIdiomaObject.getDescription %]</dd>
                 </dl>
