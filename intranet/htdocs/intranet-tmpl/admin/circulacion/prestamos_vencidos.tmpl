@@ -79,8 +79,10 @@
                                   id              => "prestamosVencidos",
                                   class           => "",
                                   selectAll_id    => "prestamos_vencidos",
-                                  columns         => ['[% "Tipo de pr&eacute;stamo"|i18n %]','[% "Fecha de pr&eacute;stamo"|i18n %]',
-                                                      '[% "Ejemplar"|i18n %]','[% "N&uacute;mero de Socio"|i18n %]',
+                                  columns         => ['[% "Apellido y nombre"|i18n %]','[% "N&uacute;mero de Socio"|i18n %]',
+                                                    '[% "Ejemplar"|i18n %]','[% "Tipo de pr&eacute;stamo"|i18n %]',
+                                                    '[% "Fecha de pr&eacute;stamo"|i18n %]',
+                                                    
                                                      ]
                                                                    
                                         ) ;
@@ -89,23 +91,37 @@
 			<tbody>
 		      [% FOREACH prestamo IN prestamos %]
 		      	<tr>
-		     		<td>
+		      	    <td>
 		     		    <input type="checkbox" id="[% prestamo.getId_prestamo %]" name="prestamo" >
 				    </td>
-				
-		          	<td>
-		                [% prestamo.getTipo_prestamo %]
+		      	    <td>
+		                [% prestamo.socio.persona.getApeYNom %]
 				    </td>
-		          	<td>
-		          	    [% prestamo.getFecha_prestamo %]
+		      	    <td>
+		                [% PERL %]
+                            print C4::AR::Filtros::link_to(   text   => "[% prestamo.socio.getNro_socio %]",
+                                                              url    => "[% url_prefix %]/usuarios/reales/datosUsuario.pl",
+                                                              params => ["nro_socio=[% prestamo.socio.getNro_socio %]"],
+                                                              title  => "[% 'Mostrar Detalle del Usuario' | i18n %]",
+                                                              blank  => 1,
+                                                        );
+                        [% END %]
 				    </td>
 				    <td>
-		          	    [% prestamo.nivel3.codigo_barra %]
+		          	    [% PERL %]
+                            print C4::AR::Filtros::link_to( text    => "[% prestamo.nivel3.codigo_barra %]",
+                                                            url     => "[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
+                                                            params  => ["id3=[% prestamo.nivel3.getId3 %]"],
+                                                            title   => "[% prestamo.nivel3.codigo_barra %]"
+                                                        );
+                        [% END %]
 				    </td>
-		     		<td>
-		                [% prestamo.socio.getNro_socio %]
+		          	<td>
+		                [% prestamo.tipo.getDescripcion %]
 				    </td>
-		
+		          	<td>
+		          	    [% prestamo.getFecha_prestamo_formateada %]
+				    </td>
 		        </tr>
 		      [% END %]
 		     </tbody>

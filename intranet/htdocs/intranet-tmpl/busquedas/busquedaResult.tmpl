@@ -139,18 +139,22 @@
 						[% ELSE %]
 							[% IF grupos %]
 								<span id="grupos_[% id1 %]">
+                                    <ul class="lista_limpia">
 									[% FOREACH grupos %]
-										[% IF edicion %]
-											[% edicion %] &nbsp;
+                                        [% valor = '' %]
+										
+                                        [% IF edicion %]
+											[% valor = edicion %]
 										[% END %]
-										[% IF loop.prev.anio_publicacion != anio_publicacion %]
-											<br />
-											[% IF anio_publicacion %]
-												([% anio_publicacion %])
-											[% END %]
+                                        
+                                        [% IF anio_publicacion %]
+                                            [% IF valor %] [% valor = valor _ " " %] [% END %]
+											[% valor = valor  _  "(" _  anio_publicacion  _  ")" %]
 										[% END %]
-											
+                                        
+                                        [% IF valor %]<li> [% valor %] </li>[% END %]
 									[% END %]
+                                    </ul>
 								</span>
 						  <script type="text/javascript">$("#grupos_[% id1 %]").expander({
 							  slicePoint: 2000, 

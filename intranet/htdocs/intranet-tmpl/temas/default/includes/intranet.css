@@ -602,3 +602,8 @@ body {
 ._span96 {
     width: 96%;
 }
+
+.lista_limpia{
+    width:100px;
+    list-style-type: none;
+}
