@@ -603,7 +603,6 @@ body {
     width: 96%;
 }
 
-.lista_limpia{
-    width:100px;
+.listado_sin_margen{
     list-style-type: none;
 }
