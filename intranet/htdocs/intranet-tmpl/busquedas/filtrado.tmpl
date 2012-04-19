@@ -8,6 +8,9 @@
 
 <script type="text/javascript">
 
+    var ORDEN;
+    var ASC= 1;
+
 $(document).ready(function() {
 
     onEnter('keyword',buscar,true);
@@ -64,6 +67,21 @@ function limpiarCampos(side){
         limpiarCentro();
     }
 }
+
+
+
+    function changePageBusquedas(ini){
+        objAH.changePage(ini);
+    }
+    
+    function ordenar(orden){
+              if (orden == ORDEN) {
+                  ASC= !ASC;
+              }
+              ORDEN = orden;
+              buscar();
+    }
+
 
 </script>
 

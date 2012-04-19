@@ -1259,7 +1259,7 @@ sub busquedaCombinada_newTemp{
     my $query = "";
     my @boolean_ops = ("&","|","!","-");
     my $tipo        = $obj_for_log->{'match_mode'}||'SPH_MATCH_ALL';
-    my $orden       = $obj_for_log->{'orden'};
+    my $orden       = $obj_for_log->{'orden'} || 'titulo';
     my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
     C4::AR::Debug::debug("Busquedas => match_mode ".$tipo);
@@ -1300,7 +1300,7 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
     $sphinx->SetMatchMode($tipo_match);
 
     if ($orden eq 'autor'){
-        $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"autor");
+        $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"autor_local");
     }else{
     	$sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
     }
@@ -2076,6 +2076,12 @@ sub cantServidoresExternos{
 sub getServidoresExternos{
     return (C4::Modelo::SysExternosMeran::Manager->get_sys_externos_meran(require_objects => ['ui'],));
 }
+
+
+
+
+
+
 #***************************************Fin**Soporte MARC*********************************************************************
 
 
