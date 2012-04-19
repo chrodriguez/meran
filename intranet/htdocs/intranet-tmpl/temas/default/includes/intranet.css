@@ -1,4 +1,5 @@
 @import url("/includes/bootstrap/css/bootstrap.css");
+@import url("/includes/css/nanoscroller.css");
 
 /* MERAN */
 #logo a {
@@ -19,6 +20,17 @@
     text-indent: -9999px;
     width: 140px;
 }
+
+.side_bar{
+    position: fixed;
+    top: 143px;
+    width: 80px !important;
+    height: 90%;
+    overflow: auto; 
+}
+
+.nano .content      { padding: 1px; }
+.nano .pane         { background: #444; }
 
 .pagination {
     margin-top: 11px;

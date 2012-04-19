@@ -7,7 +7,7 @@
      var AUTO_GENERAR_COMPROBANTE = '[% auto_generar_comprobante_prestamo %]';
 
         $(document).ready(function(){
-            $("#main_content").flexiPagination({
+           /* $("body").flexiPagination({
                 url: "[% url_prefix %]/catalogacion/estructura/detalle.pl?id1=[% id1 %]&ajax=1&token=[% token %]",
                 totalResults: [% cant_total %],
                 perPage: [% per_page %],
@@ -16,10 +16,9 @@
                 pagerVar : "page",
                 loaderImgPath: imagesForJS+"/loader_grupos.gif",
                 debug : 1
-              });
+              });*/
           
              inicializar();
-             zebra("tablaResult");
             });
             
         function modificarNivel1(){
@@ -163,7 +162,7 @@
 [% END %] <!-- End de If ajax  -->
 [% FOREACH nivel2 %]
 
-        <section id="detalle_grupo[% id2 %]">
+        <section id="detalle_grupo_[% id2 %]">
 	        <fieldset>
 	            <legend class="trigger_3_[% id2 %] click">
 	               <div class="alert alert-success">

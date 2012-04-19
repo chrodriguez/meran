@@ -241,7 +241,9 @@
 	  	[% INCLUDE  'menu.inc'  %]
 	  </header>
 	  
-	     <div id="marco_principal" class="container">
+	    [% INCLUDE 'detalleSideBar.inc' 	%]
+	  
+	     <div id="marco_principal" class="container">   
 			  <div id="marco_contenido_datos" class="contenido">
 				  <!--  usado como referencia por el MessageHelper -->
 				  <div id="end_top">
