@@ -4,6 +4,17 @@ var combinables     = ['titulo', 'autor', 'tipo', 'signatura', 'tipo_nivel3_id']
 var noCombinables   = ['keyword', 'isbn', 'dictionary', 'codBarra', 'estante', 'tema'];
 var shouldScroll    = true;
 
+
+
+function ordenar(orden){
+          if (orden == ORDEN) {
+              ASC= !ASC;
+          }
+          ORDEN = orden;
+          buscar();
+}
+
+
 function updateInfoBusquedas(responseText){
 
     $("#volver").hide();
@@ -57,7 +68,8 @@ function busquedaCombinable(){
     objAH_search.codBarra      	= $('#codBarra').val();
 
     objAH_search.isbn				= $('#isbn').val();
-    
+    objAH_search.orden              = ORDEN;
+    objAH_search.asc                = ASC;
     objAH_search.tipoAccion        = 'BUSQUEDA_AVANZADA';
     //se setea la funcion para cambiar de pagina
     objAH_search.funcion           = 'changePage_search';
@@ -72,11 +84,11 @@ function updateBusquedaCombinable(responseText){
 function changePage_search(ini){
     objAH_search.changePage(ini);
 }
-
+/*
 function ordenarPor(ord){
     //seteo el orden de los resultados
     objAH_search.sort(ord);
-}
+}*/
 
 
 function buscarBar(){
@@ -100,6 +112,7 @@ function buscar(doScroll){
     var cumple_limite       = true;
     var cumple_vacio        = true;
 
+    
     //primero verifico las busquedas individuales
     if (doScroll)
         shouldScroll = doScroll;
@@ -173,6 +186,8 @@ function busquedaPorKeyword(suggested){
         objAH_search.keyword= keyword;
     }
 
+    objAH_search.orden              = ORDEN;
+    objAH_search.asc                = ASC;
     objAH_search.match_mode = $('#match_mode').val();
     objAH_search.only_available 	= ( $('#only_available').attr('checked') )?1:0;
     objAH_search.tipoAccion= 'BUSQUEDA_COMBINADA';
@@ -243,10 +258,10 @@ function buscarPorAutor(completo){
     objAH_search.sendToServer();
 }
 
-function ordenar(ord){
-    //seteo el orden de los resultados
-    objAH_search.sort(ord);
-}
+// function ordenar(ord){
+//     //seteo el orden de los resultados
+//     objAH_search.sort(ord);
+// }
 
 // FIXME DEPRECATEDDDDDDDDd
 // function mostrarDetalle(id1){
