@@ -35,5 +35,6 @@ $t_params->{'page_sub_title'}                       = C4::AR::Filtros::i18n("Cat
 $t_params->{'mensaje'}                              = $input->url_param('msg_file');
 $t_params->{'pref_e_documents'}                     = C4::AR::Preferencias::getPreferencia("e_documents");
 $t_params->{'auto_generar_comprobante_prestamo'}    = C4::AR::Preferencias::getValorPreferencia('auto_generar_comprobante_prestamo');
+$t_params->{'nav_elements'}                         = C4::AR::Nivel2::buildNavForGroups($t_params);
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

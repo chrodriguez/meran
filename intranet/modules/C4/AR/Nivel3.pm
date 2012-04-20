@@ -564,9 +564,14 @@ sub detalleCompletoINTRA {
 
     my @nivel2;
 
+#    FIXME: esto es cuando pagina con el plugin, que no esta andando
+#    my $cantidad_total = scalar(@$nivel2_array_ref);
+#    my $inicio = (($page_number) * $cant_grupos);
+#    my $cantidad = $inicio + $cant_grupos;  
+    
     my $cantidad_total = scalar(@$nivel2_array_ref);
-    my $inicio = (($page_number) * $cant_grupos);
-    my $cantidad = $inicio + $cant_grupos;  
+    my $inicio = 0;
+    my $cantidad = $cantidad_total;  
     
     if($cantidad_total != 0){
         for(my $i=$inicio;$i<$cantidad;$i++){
