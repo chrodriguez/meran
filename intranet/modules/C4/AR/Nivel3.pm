@@ -448,7 +448,7 @@ sub detalleNivel3{
         $hash_nivel2{'enable_nivel3'}           = $nivel2_object->getTipoDocumentoObject->enableNivel3();
 
 # FIXED falta levantar del tipo de ejemplar
-        if($nivel2_object->getTemplate() eq "ANA"){
+        if($nivel2_object->getTemplate() eq "ANA" || $nivel2_object->getTemplate() eq "ELE"){
             $hash_nivel2{'nivel1_padre'}        = $nivel2_object->getIdN1Padre();
             $hash_nivel2{'nivel1_titulo_padre'} = ($nivel2_object->getPadre())?$nivel2_object->getPadre()->getTitulo():"";
             $hash_nivel2{'nivel1_isbn_padre'}   = $nivel2_object->getISBN();
