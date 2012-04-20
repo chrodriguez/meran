@@ -1566,6 +1566,7 @@ sub UTF8toISO {
 sub from_json_ISO {
     my ($data) = @_;
     eval {
+        #C4::AR::Debug::debug("JSON => Utilidades.pm => " . $data);
         #quita el caracter tab en todo el string $data
         $data =~ s/\t//g;
         $data = UTF8toISO($data);
