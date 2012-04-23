@@ -1,5 +1,3 @@
-
-
 [% IF cant_nivel3 %]
 		<script>
 		
@@ -298,29 +296,38 @@
 
 <script type="text/javascript">makeToggle('ejemplaresDelGrupo[% id2 %]','trigger_2_[% id2 %]',null,false);</script>
 [% ELSE %]
-    [% IF nivel2_template == 'ANA' %]
-    <ul>
-		<li>
-    		Título del registro fuente: [% nivel1_titulo_padre %]
-		</li>
-		<li>
-            ISBN: [% nivel1_isbn_padre %]	
-        </li>
-		<li>		
-            [% PERL %]
-                print C4::AR::Filtros::link_to(   text      => "Detalle del registro fuente",
-                                                  url       => "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
-                                                  params    => ["id1=[% nivel1_padre %]"],
-                                                  title     => "[% 'Detalle del registro fuente' | i18n %]",
-                                                  class     => 'btn btn-warning'
-                                            );
-            [% END %]
-        </li>
-    </ul> 
+
+    [% IF enable_nivel3 == 0 %]
+    <!-- ANA y ELE  no tienen nivel3 -->
+    <!-- si es ELE no muestro nada -->
+        [% IF nivel2_template == 'ANA' %]
+        
+            <dt class="inline left rightMargin">Título del registro fuente:</dt>
+            <dd>[% nivel1_titulo_padre %]</dd>
+            
+            <dt class="inline left rightMargin">ISBN:</dt>
+            <dd>[% nivel1_isbn_padre %]</dd>
+
+            <br />
+		    <dt>		
+                [% PERL %]
+                    print C4::AR::Filtros::link_to(   text      => "Detalle del registro fuente",
+                                                      url       => "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                                      params    => ["id1=[% nivel1_padre %]"],
+                                                      title     => "[% 'Detalle del registro fuente' | i18n %]",
+                                                      class     => 'btn btn-warning'
+                                                );
+                [% END %]
+            </dt>
+            <br />
+        [% END %]
+        
     [% ELSE %]
-		<div class="alert fade in">
+    
+	    <div class="alert fade in">
            <strong>[% 'Este grupo no dispone de ejemplares' | i18n %]</strong>
-		</div>    
+	    </div> 
+ 
     [% END %]
 [% END %]
 
