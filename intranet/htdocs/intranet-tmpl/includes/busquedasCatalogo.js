@@ -9,8 +9,9 @@ var shouldScroll    = true;
 function ordenar(orden){
           if (orden == ORDEN) {
               ASC= !ASC;
+          } else {
+            ORDEN = orden;
           }
-          ORDEN = orden;
           buscar();
 }
 

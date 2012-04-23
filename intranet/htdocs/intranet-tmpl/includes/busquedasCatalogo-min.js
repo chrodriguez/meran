@@ -1,5 +1,5 @@
-var objAH_search;var combinables=['titulo','autor','tipo','signatura','tipo_nivel3_id'];var noCombinables=['keyword','isbn','dictionary','codBarra','estante','tema'];var shouldScroll=true;function ordenar(orden){if(orden==ORDEN){ASC=!ASC;}
-ORDEN=orden;buscar();}
+var objAH_search;var combinables=['titulo','autor','tipo','signatura','tipo_nivel3_id'];var noCombinables=['keyword','isbn','dictionary','codBarra','estante','tema'];var shouldScroll=true;function ordenar(orden){if(orden==ORDEN){ASC=!ASC;}else{ORDEN=orden;}
+buscar();}
 function updateInfoBusquedas(responseText){$("#volver").hide();$('#resultBusqueda').html(responseText);closeModal();$("#resultBusqueda").slideDown("fast");if(shouldScroll)
 scrollTo('resultBusqueda');}
 function updateInfoBusquedasBar(responseText){clearInterval(mensajes_interval_id);$('#marco_contenido_datos').html("<div id='resultBusqueda'/><div id='result'/>");updateInfoBusquedas(responseText);$(window).unbind('scroll');}

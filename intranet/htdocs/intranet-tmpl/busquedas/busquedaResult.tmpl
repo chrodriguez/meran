@@ -44,13 +44,14 @@
                                                          columns         => ['[% "Tipo"|i18n %]','[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]',
                                                                              '[% "Edici&oacute;n"|i18n %]','[% "Disponibilidad"|i18n %]', [% IF signatura_filter %] '[% "Signatura"|i18n %]' [% END %],
                                                                             ],
-                                                          order          => {  'Tipo' => '',
-                                                                               'Titulo' =>'titulo', 
+                                                         order          => {  'Tipo' => '',
+                                                                               'T&iacute;tulo' =>'titulo', 
                                                                                'Autor' => 'autor',
-                                                                               'Edicion' => '',
-                                                                               'Dsponibilidad' =>'',
+                                                                               'Edici&oacute;n' => '',
+                                                                               'Disponibilidad' =>'',
                                                                                [% IF signatura_filter %] 'Signatura' => '' [% END %]
-                                                                             }              
+                                                                             },
+                                                        
                                                          
                              ) ;
              [% END %]

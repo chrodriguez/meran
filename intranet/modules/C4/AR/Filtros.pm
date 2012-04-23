@@ -859,7 +859,11 @@ sub tableHeader{
     
     if ($order){
       foreach my $column (@$columns){
-            $html .= "<th class='click' onclick=ordenar('".$order->{$column}."')>$column</th>";
+          if ($order->{$column}){
+              $html .= "<th class='click' id='$order->{$column}' onclick=ordenar('".$order->{$column}."')>$column <i class='icon-chevron-up click' style='float:right;'></th>";
+          } else {
+              $html .= "<th>$column</th>";
+          }
       }
     } else {
         foreach my $column (@$columns){
