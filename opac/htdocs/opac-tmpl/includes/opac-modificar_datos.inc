@@ -163,7 +163,7 @@ function checkPassword(){
             </section>
         </fieldset>
         <fieldset>
-            <legend>[% 'Personalizacion de visualizaicion' | i18n %]</legend>
+            <legend>[% 'Personalizaci&oacute;n de visualizaci&oacute;n' | i18n %]</legend>
             <section class="center-section-form">
         	<br />
             <div class="control-group">
