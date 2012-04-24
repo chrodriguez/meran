@@ -656,7 +656,7 @@ sub buildNavForGroups{
         foreach my $n2 (@$nivel2){
             my %hash = {};
             $hash{'id'} = "detalle_grupo_".$n2->{'id2'};
-            $hash{'title'} = $n2->{'edicion'} || $n2->{'año_publicacio'} ||"#".$n2->{'id2'}; 
+            $hash{'title'} = $n2->{'edicion'} || $n2->{'año_publicacion'} ||"#".$n2->{'id2'}; 
             
             push (@elem_array,\%hash);
         }
