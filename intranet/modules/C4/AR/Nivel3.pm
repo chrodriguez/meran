@@ -589,6 +589,9 @@ sub detalleCompletoINTRA {
             $hash_nivel2->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'M');
             $hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'L');
             $hash_nivel2->{'edicion'}                   = $nivel2_array_ref->[$i]->getEdicion;
+            #para los nav-tabs
+            $hash_nivel2->{'año_publicacion'}           = $nivel2_array_ref->[$i]->getAnio_publicacion;
+            $hash_nivel2->{'volumen'}                   = $nivel2_array_ref->[$i]->getVolumen;
             
             #Para el google book preview
             $hash_nivel2->{'isbn'}        		        = $nivel2_array_ref->[$i]->getISBN;
@@ -811,6 +814,9 @@ sub detalleCompletoOPAC{
             $hash_nivel2->{'tipo_documento'}            = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getNombre();
             $hash_nivel2->{'disponible'}                = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getDisponible();
             $hash_nivel2->{'isbn'}        		        = $nivel2_array_ref->[$i]->getISBN;
+            #para los nav-tabs
+            $hash_nivel2->{'año_publicacion'}           = $nivel2_array_ref->[$i]->getAnio_publicacion;
+            $hash_nivel2->{'volumen'}                   = $nivel2_array_ref->[$i]->getVolumen;
             if(($nivel2_array_ref->[$i]->getISSN)&&(!$t_params->{'issn'})){
 			#Se supone que no cambian dentro de la misma publicación seriada, se toma solo el primero
 				$t_params->{'issn'}        				= $nivel2_array_ref->[$i]->getISSN;
