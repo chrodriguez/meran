@@ -311,7 +311,7 @@ sub getVolumen{
 }
 
 =head2
-sub getVolumen
+sub getVolumenDesc
 
 Funcion que devuelve la desc del volumen del grupo
 =cut
