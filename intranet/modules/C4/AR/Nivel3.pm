@@ -811,6 +811,7 @@ sub detalleCompletoOPAC{
             $hash_nivel2->{'tipo_documento'}            = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getNombre();
             $hash_nivel2->{'disponible'}                = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getDisponible();
             $hash_nivel2->{'isbn'}        		        = $nivel2_array_ref->[$i]->getISBN;
+            $hash_nivel2->{'año_publicacion'}           = $nivel2_array_ref->[$i]->getAnio_publicacion;
             if(($nivel2_array_ref->[$i]->getISSN)&&(!$t_params->{'issn'})){
 			#Se supone que no cambian dentro de la misma publicación seriada, se toma solo el primero
 				$t_params->{'issn'}        				= $nivel2_array_ref->[$i]->getISSN;
