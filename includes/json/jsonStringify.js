@@ -31,8 +31,10 @@ JSONstring={
 		//esto no se permite, segun lo que indica el patron
 //		x =  temp.replace(/[\@áéíóúàèìòù|#;'?!¡¿ü]+/g,'');
 // 		x =  temp.replace(/[\@|#;'?¿]+/g,'');
-        x =  temp.replace(/[|#;'\t]+/g,'');
-        x =  x.replace(/"/,'\"');
+
+//      sacado por el ticket #3984. Comillas (') en AJAX
+//        x =  temp.replace(/[|#;'\t]+/g,'');
+//        x =  x.replace(/"/,'\"');
         x = encodeURIComponent(x);
 
 		this.log("jsconStringify => clearData: "+x);

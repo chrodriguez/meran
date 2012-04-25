@@ -1,9 +1,4 @@
 [% USE HTML %]
-<script type="text/javascript">
-      $(document).ready(function() {
-          //$('.fancy_link').modal();
-      });
-</script>
 <fieldset>
     <legend>[% "Novedades de OPAC" | i18n %]:</legend>
         <div class="contenedor_paginador">[% paginador %]</div>
@@ -28,24 +23,16 @@
                         [% FOREACH novedad IN novedades %]
                             <tr class="leido[% novedad.getLeido %]">
                                 <td>
-                                    <a class="fancy_link" href='#' onclick="showNovedad([% novedad.id %]);">
-                                        [% novedad.getFechaLegible %]
-                                    </a>
+                                    [% novedad.getFechaLegible %]
                                 </td>
                                 <td>
-                                    <a class="fancy_link" href='#' onclick="showNovedad([% novedad.id %]);">
-                                        [% novedad.getUsuario%] 
-                                    </a>
+                                    [% novedad.getUsuario%] 
                                 </td>
                                 <td>
-                                    <a class="fancy_link" href='#' onclick="showNovedad([% novedad.id %]);">
-                                        [% novedad.getTitulo %] 
-                                    </a>
+                                    [% novedad.getTitulo %] 
                                 </td>
                                 <td>
-                                    <a class="fancy_link" href='#' onclick="showNovedad([% novedad.id %]);">
-                                        [% novedad.getResumen %] 
-                                    </a>
+                                    [% novedad.getResumen %] 
                                 </td>
                                 <td>
                                     [% novedad.getCategoria %]
@@ -54,13 +41,17 @@
                                 
                                     [% PERL %]
                                         print C4::AR::Filtros::action_set_button(    
-                                              title   => " [% 'Editar' | i18n %]",
+                                              title   => " [% 'Novedad' | i18n %]",
                                               button  => 'btn btn-primary',
-                                              url     => "[% url_prefix %]/admin/editar_novedad.pl",
-                                              params  =>  ["id=[% novedad.id %]"],
+                                              action     => 'showNovedad("[% novedad.id %]")',
                                               icon    => "icon-white icon-edit",
                                               actions         => [
-                                                                  { title   => "Eliminar", 
+                                                                  { title   => "Editar", 
+                                                                    url     => "[% url_prefix %]/admin/editar_novedad.pl",
+                                                                    icon    => "icon-edit",
+                                                                     params => ["id=[% novedad.id %]"],
+                                                                   },
+                                                                   { title   => "Eliminar", 
                                                                     action  => 'eliminarNovedad("[% novedad.id %]")', 
                                                                     icon    => "icon-remove",
                                                                    },
@@ -69,9 +60,6 @@
                      
                                                 ) ;
                                     [% END %]
-                                
-                                
-                                
                             
                                 </td>
                             </tr>

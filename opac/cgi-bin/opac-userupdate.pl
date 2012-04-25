@@ -44,6 +44,7 @@ $data_hash{'eliminar_autorizado'}   = $input->param('eliminar_autorizado');
 $data_hash{'actual_password'}       = $input->param('actual_password');
 $data_hash{'new_password1'}         = $input->param('new_password1');
 $data_hash{'new_password2'}         = $input->param('new_password2');
+$data_hash{'key'}                   = $input->param('key');
 $data_hash{'tema'}                  = $input->param('temas_opac') || 0;
 
 if($input->param('remindFlag') eq "on"){
@@ -71,6 +72,7 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
     if ($update_password){
         $data_hash{'nro_socio'} = $socio->getNro_socio;
         $msg_object = C4::AR::Auth::cambiarPassword(\%data_hash);
+        $cod_msg    = C4::AR::Mensajes::getFirstCodeError($msg_object);
     }
 
     if (!$msg_object->{'error'}){
@@ -91,7 +93,7 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
     }
 
     C4::AR::Mensajes::add($msg_object, {'codMsg'=> $cod_msg, 'params' => []} ) ;
-    $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje($cod_msg,'opac');
+    $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje($cod_msg);
     
     if ($data_hash{'tema'}){
         #recargamos el objeto socio para que no pise la password nueva
@@ -104,7 +106,7 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
     $t_params->{'partial_template'} = "opac-mis_datos.inc";
     
 }else{
-    $t_params->{'combo_temas'}      = C4::AR::Utilidades::generarComboTemasOPAC();
+    $t_params->{'mensaje_class'}    = "alert-error";
     $t_params->{'mensaje'}          = C4::AR::Mensajes::getMensaje('VA002','opac');
     $t_params->{'partial_template'} = "opac-modificar_datos.inc";
 }
@@ -112,7 +114,7 @@ if (C4::AR::Validator::checkParams('VA002',\%data_hash,$fields_to_check)){
 $t_params->{'socio'}= $socio;
 $t_params->{'opac'} = 1;
 
-if ($update_password){
+if ($update_password && (!$msg_object->{'error'})){
     #si cambio la pass, destruimos la sesion obligando un nuevo logueo
     C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix().'/sessionDestroy.pl');
 }

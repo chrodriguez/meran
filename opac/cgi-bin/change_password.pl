@@ -31,7 +31,12 @@ if(C4::AR::Preferencias::getValorPreferencia("permite_cambio_password_desde_opac
     $t_params->{'partial_template'} = "opac-change-password.inc";
     $t_params->{'noAjaxRequests'}   = 1;
 	$t_params->{'nroRandom'}        = C4::AR::Auth::getSessionNroRandom();
-	$t_params->{'plainPassword'}    = C4::Context->config('plainPassword');
+	
+	#preferencias para generar nueva password
+    $t_params->{'minPassLength'}            = C4::AR::Preferencias::getValorPreferencia('minPassLength');
+    $t_params->{'minPassSymbol'}            = C4::AR::Preferencias::getValorPreferencia('minPassSymbol');
+    $t_params->{'minPassAlpha'}             = C4::AR::Preferencias::getValorPreferencia('minPassAlpha');
+    $t_params->{'minPassNumeric'}           = C4::AR::Preferencias::getValorPreferencia('minPassNumeric');
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 

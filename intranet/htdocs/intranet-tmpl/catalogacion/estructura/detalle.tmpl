@@ -7,7 +7,7 @@
      var AUTO_GENERAR_COMPROBANTE = '[% auto_generar_comprobante_prestamo %]';
 
         $(document).ready(function(){
-            $("#main_content").flexiPagination({
+           /* $("body").flexiPagination({
                 url: "[% url_prefix %]/catalogacion/estructura/detalle.pl?id1=[% id1 %]&ajax=1&token=[% token %]",
                 totalResults: [% cant_total %],
                 perPage: [% per_page %],
@@ -16,10 +16,9 @@
                 pagerVar : "page",
                 loaderImgPath: imagesForJS+"/loader_grupos.gif",
                 debug : 1
-              });
+              });*/
           
              inicializar();
-             zebra("tablaResult");
             });
             
         function modificarNivel1(){
@@ -74,9 +73,10 @@
 	
 	
 	<fieldset>
-		   <div class="page-header">
-            <h1>[% "Detalles de Nivel 1 registro" | i18n %] [% id1 %] <small>([% nivel1_template %])</small></h1>
-           </div>
+		   	<div class="page-header">
+        		<h1>#[% id1 %] - [% titulo %] <small>([% nivel1_template %])</small></h1>
+            	<h2>[% autor %] </h2>	
+           	</div>
 		      
 	
 		<div id="detalle1" class="detalle1">
@@ -163,10 +163,10 @@
 [% END %] <!-- End de If ajax  -->
 [% FOREACH nivel2 %]
 
-        <section id="detalle_grupo[% id2 %]">
+        <section id="detalle_grupo_[% id2 %]">
 	        <fieldset>
 	            <legend class="trigger_3_[% id2 %] click">
-	               <div class="alert alert-success">
+	               <div class="group_separator">
 						<div class="page-header">
 	                       <h2>[% "Detalle de Nivel 2 " | i18n %] <small>([% edicion %])</small> <small>[% "GRUPO" | i18n %] [% id2 %] - [% tipo_documento %] ([% nivel2_template %])</small></h2>
                         </div>                   
@@ -190,7 +190,11 @@
 		                                                        actions         => [
 		                                                                            {title => "Modificar", action=>'modificarNivel2("[% id2 %]")',icon=>"icon-edit"},
 		                                                                            {title => "Eliminar", action=>"borrarN2([% id2 %])", icon=>"icon-trash"},   
-                                                                                    {title => "Editar &iacute;ndice", action=>'agregarIndice([% id2 %])', icon=>"icon-list"},
+		                                                                      [% IF tiene_indice %]
+                                                                                    {title => "Ver &iacute;ndice", action=>'mostrarIndice([% id2 %])', icon=>"icon-list"},
+                                                                              [% ELSE %]
+                                                                                    {title => "Agregar &iacute;ndice", action=>'agregarIndice([% id2 %])', icon=>"icon-list"},
+                                                                              [% END %]
                                                                                 [% IF show_action == 1 %]
                                                                                     {title => "Agregar analítica", action=>"agregarAnalitica([% id2 %])", icon=>"icon-edit"},
                                                                                 [% END %]
@@ -214,16 +218,38 @@
                                   [% END %]
                             [% END %]
 		                
-                           <div id="indice_data[% id2 %]" class="modal hide fade">
+                            <div id="indice_data[% id2 %]" class="modal hide fade">
 								            <div class="modal-header">
 								              <a class="close" data-dismiss="modal">×</a>
 								              <h3>[% 'Indice del grupo' | i18n %]</h3>
 								            </div>
 								            <div class="modal-body">
-								              <p>[% indice %]</p>
+								              <pre>[% indice | trim %]</pre>
 								            </div>
 
-                          </div>
+                            </div>
+                            
+                            <div id="datos_indice" class="modal hide fade">
+                                <div class="modal-header">
+                                    <a class="close" data-dismiss="modal">×</a>
+                                    <h3>[% 'Datos del Indice' | i18n %]</h3>
+                                </div>
+                                <div class="modal-body">
+                                    <textarea id="indice_id"style="width:519px; height:202px; max-width:650px">
+                                        [% indice_data | trim %]
+                                    </textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    [% PERL %]
+                                                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Indice' | i18n %]",
+                                                                                    boton   => "boton_guardar",
+                                                                                    onClick => "guardarIndice();",
+                                                                                    title   => "[% 'Guardar el Indice' | i18n %]",
+                                                                                    alternClass => "botonCentrado"
+                                                        ) ;
+                                    [% END %]
+                                </div>
+                            </div>
 
 			                <br>
 			                
@@ -269,15 +295,16 @@
                               </div>
                           [% END %]
  
-                        <span id="ejemplaresDelGrupo[% id2 %]">
-                            [% INCLUDE "estructura/ejemplaresDelGrupo.tmpl" %]
-                        </span>
 	                    [% IF nivel1_analiticas_cant %]
                                   [% INCLUDE "estructura/analiticasDelGrupo.tmpl" %]
                         [% END %]
 	
 	                [% INCLUDE  "partials/e-docs_grupo.inc" %]
 	                [% INCLUDE  "partials/estantes_grupo.inc" %]
+
+                        <span id="ejemplaresDelGrupo[% id2 %]">
+                            [% INCLUDE "estructura/ejemplaresDelGrupo.tmpl" %]
+                        </span>
 	                <div class="ticket" id="ticket" ></div>
 	            </div> <!--Fin <div id="grupo[  id2 ]-->
 	        </fieldset>

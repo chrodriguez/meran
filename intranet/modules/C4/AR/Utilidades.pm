@@ -159,6 +159,7 @@ my %LABELS_COMPONENTS = (   "-1"            => C4::AR::Filtros::i18n("SIN SELECC
     Lo escribe en /temp para esto.
     Si no es del tipo permitido lo borra y devuelve 0.
     En cambio, si es correcto devuelve el tipo del archivo.
+    Tambien devuelve si el archivo hay que escribirlo en modo binario o no.
 =cut
 sub checkFileMagic{
 
@@ -169,6 +170,7 @@ sub checkFileMagic{
     my $flm         = File::LibMagic->new();
     my $hash_unique = Digest::MD5::md5_hex(localtime());   
     my $path        = "/tmp";
+    my $notBinary   = 0;
     
     #escribimos el archivo
     open ( WRITEIT, ">$path/$hash_unique" ) or die "$!"; 
@@ -183,6 +185,8 @@ sub checkFileMagic{
     #el archivo vino en binario, hay que escribirlo de otra forma
     if($mime =~ m/application\/x-empty; charset=binary/i){
     
+        #indicamos que hay que escribirlo sin modo binario
+        $notBinary = 1;
         #borramos el archivo y lo escribimos de nuevo
         unlink($path . "/" . $hash_unique);
     
@@ -216,7 +220,7 @@ sub checkFileMagic{
     
     }
     
-    return ($type); 
+    return ($type,$notBinary); 
 
 }
 
@@ -1562,6 +1566,7 @@ sub UTF8toISO {
 sub from_json_ISO {
     my ($data) = @_;
     eval {
+        #C4::AR::Debug::debug("JSON => Utilidades.pm => " . $data);
         #quita el caracter tab en todo el string $data
         $data =~ s/\t//g;
         $data = UTF8toISO($data);

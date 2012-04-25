@@ -166,6 +166,15 @@
 	                                                              ) ;
 	                              [% END %]
 	                    </li>
+                        <li>
+                                  [% PERL %]
+                                      print C4::AR::Filtros::link_to( text =>     " [% 'Generar Carnets' | i18n %]",
+                                                                      url =>      "[% url_prefix %]/usuarios/reales/users-cards.pl",
+                                                                      icon  =>      "icon-cog",
+                                                                      title =>    "[% 'Agregar Usuarios' | i18n %]"
+                                                                  ) ;
+                                  [% END %]
+                        </li>
 	      [% END %]
 	      [% IF socio_data.usr_credential_type == "superLibrarian" %]
 	                    
@@ -384,6 +393,15 @@
                                                                                  title =>    "[% 'Acerca De...' | i18n %]"
                                                                              ) ;
                                              [% END %]
+                                </li>
+                                <li>
+                                        [% PERL %]
+                                            print C4::AR::Filtros::link_to( text =>     " [% 'Configuraci&oacute;n de Logos' | i18n %]",
+                                                                            url =>      "[% url_prefix %]/admin/logos.pl",
+                                                                            icon=>		"icon-picture",
+                                                                            title =>    "[% 'Configuraci&oacute;n de Logos' | i18n %]"
+                                                                        ) ;
+                                        [% END %]
                                 </li>
                             <li class="nav-header">[% 'OPAC' | i18n %]</li>	
 	              			<li class="divider"></li>

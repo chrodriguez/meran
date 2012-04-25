@@ -109,9 +109,9 @@ sub getIndice{
 }
 
 sub setIndice{
-    my ($self)          = shift;
-    my ($indice)   = @_;
-
+    my ($self)      = shift;
+    my ($indice)    = @_;
+    
     $self->indice($indice);
 }
 
@@ -153,6 +153,16 @@ sub modificar{
     $self->save();
 }
 
+=item
+    Llama a la misma funcion en el Nivel3.
+    Es por el ticket #4226
+=cut
+sub getDetalleDisponibilidadNivel3{
+     my ($self)      = shift;
+
+    return C4::AR::Nivel3::detalleDisponibilidadNivel3($self->getId2);
+}
+
 sub getIdN1Padre {
     my ($self)      = shift;
 
@@ -170,6 +180,29 @@ sub getIdN1Padre {
 
         if($nivel2){
             return $nivel2->getId1();
+        }
+    }
+
+    return 0;
+}
+
+sub getPadre {
+    my ($self)      = shift;
+
+    my $db = C4::Modelo::CatRegistroMarcN2->new()->db();
+
+    my $nivel2_analiticas_array_ref = C4::Modelo::CatRegistroMarcN2Analitica::Manager->get_cat_registro_marc_n2_analitica(
+                                                                        db => $db,
+                                                                        query => [
+                                                                                    cat_registro_marc_n2_hijo_id => { eq => $self->getId2() },
+                                                                            ]
+                                                                );
+
+    if( scalar(@$nivel2_analiticas_array_ref) > 0){
+        my $nivel2 = C4::AR::Nivel2::getNivel2FromId2($nivel2_analiticas_array_ref->[0]->getId2Padre());
+
+        if($nivel2){
+            return $nivel2->nivel1;
         }
     }
 
@@ -273,8 +306,22 @@ sub getVolumen{
      my ($self)      = shift;
 
      my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+     
+     return $marc_record->subfield("505","g");
+}
 
-     return $marc_record->subfield("300","a");
+=head2
+sub getVolumenDesc
+
+Funcion que devuelve la desc del volumen del grupo
+=cut
+
+sub getVolumenDesc{
+     my ($self)      = shift;
+
+     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+     
+     return $marc_record->subfield("505","t");
 }
 
 sub getAllImage {

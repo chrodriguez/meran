@@ -450,6 +450,8 @@ sub detalleNivel3{
 # FIXED falta levantar del tipo de ejemplar
         if($nivel2_object->getTemplate() eq "ANA"){
             $hash_nivel2{'nivel1_padre'}        = $nivel2_object->getIdN1Padre();
+            $hash_nivel2{'nivel1_titulo_padre'} = ($nivel2_object->getPadre())?$nivel2_object->getPadre()->getTitulo():"";
+            $hash_nivel2{'nivel1_isbn_padre'}   = $nivel2_object->getISBN();
             $hash_nivel2{'show_action'}         = 0;
         }
 
@@ -562,9 +564,14 @@ sub detalleCompletoINTRA {
 
     my @nivel2;
 
+#    FIXME: esto es cuando pagina con el plugin, que no esta andando
+#    my $cantidad_total = scalar(@$nivel2_array_ref);
+#    my $inicio = (($page_number) * $cant_grupos);
+#    my $cantidad = $inicio + $cant_grupos;  
+    
     my $cantidad_total = scalar(@$nivel2_array_ref);
-    my $inicio = (($page_number) * $cant_grupos);
-    my $cantidad = $inicio + $cant_grupos;  
+    my $inicio = 0;
+    my $cantidad = $cantidad_total;  
     
     if($cantidad_total != 0){
         for(my $i=$inicio;$i<$cantidad;$i++){
@@ -573,7 +580,8 @@ sub detalleCompletoINTRA {
             eval {
                 $new_id2 = $nivel2_array_ref->[$i]->getId2;
             };
-        eval{
+
+        #eval{
             my ($hash_nivel2) = detalleNivel3($new_id2,$nivel1->db);
                 
             #Para ver la portada en el detalle
@@ -581,6 +589,9 @@ sub detalleCompletoINTRA {
             $hash_nivel2->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'M');
             $hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'L');
             $hash_nivel2->{'edicion'}                   = $nivel2_array_ref->[$i]->getEdicion;
+            #para los nav-tabs
+            $hash_nivel2->{'año_publicacion'}           = $nivel2_array_ref->[$i]->getAnio_publicacion;
+            $hash_nivel2->{'volumen'}                   = $nivel2_array_ref->[$i]->getVolumen;
             
             #Para el google book preview
             $hash_nivel2->{'isbn'}        		        = $nivel2_array_ref->[$i]->getISBN;
@@ -590,7 +601,7 @@ sub detalleCompletoINTRA {
             }
                 
             push(@nivel2, $hash_nivel2);
-        };
+        #};
             
             if ($i >= ($cantidad_total-1)){
                 last;
@@ -610,6 +621,8 @@ sub detalleCompletoINTRA {
     $t_params->{'nivel1'}           = $nivel1->toMARC_Intra;
     $t_params->{'nivel1_template'}  = $nivel1->getTemplate();
     $t_params->{'id1'}              = $id1;
+    $t_params->{'titulo'}           = $nivel1->getTitulo();    
+    $t_params->{'autor'}            = $nivel1->getAutor();
     $t_params->{'cantItemN1'}       = C4::AR::Nivel3::cantNiveles3FromId1($id1,$nivel1->db);
     $t_params->{'nivel2'}           = \@nivel2;
     #se ferifica si la preferencia "circularDesdeDetalleDelRegistro" esta seteada
@@ -803,6 +816,9 @@ sub detalleCompletoOPAC{
             $hash_nivel2->{'tipo_documento'}            = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getNombre();
             $hash_nivel2->{'disponible'}                = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getDisponible();
             $hash_nivel2->{'isbn'}        		        = $nivel2_array_ref->[$i]->getISBN;
+            #para los nav-tabs
+            $hash_nivel2->{'año_publicacion'}           = $nivel2_array_ref->[$i]->getAnio_publicacion;
+            $hash_nivel2->{'volumen'}                   = $nivel2_array_ref->[$i]->getVolumen;
             if(($nivel2_array_ref->[$i]->getISSN)&&(!$t_params->{'issn'})){
 			#Se supone que no cambian dentro de la misma publicación seriada, se toma solo el primero
 				$t_params->{'issn'}        				= $nivel2_array_ref->[$i]->getISSN;

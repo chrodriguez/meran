@@ -18,6 +18,30 @@
 
 <script type="text/javascript">
 
+    //copiado de detalle.tmpl
+    //FIXME: deberia estar en catalogacion.js
+    function editarEjemplar(id2,id3){
+        window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&id2="+id2+"&id3="+id3+"&tipoAccion=MODIFICAR_NIVEL_3";
+    	
+    }
+    
+    function detalleMARC(id3){
+	objAH               = new AjaxHelper(updateInfoMARC);
+	objAH.debug         = true;
+    objAH.showOverlay   = true;
+	objAH.url			= URL_PREFIX+"/busquedas/MARCDetalle.pl";
+	objAH.id3           = id3;
+	//se envia la consulta
+	objAH.sendToServer();
+}
+
+    function updateInfoMARC(responseText){
+
+        $('#detalleMARC').html(responseText);
+        $('#detalleMARC').modal();
+            
+    }
+
 var TIENE_NIVEL_2 = 0;
 
 //Funcion que se ejecuta cuando se carga la pagina, dependiendo de donde viene ejecuta las funciones correspondientes.
@@ -153,29 +177,27 @@ $(document).ready( function() {
 	   </div>
 </div>
 
-<div id="datos_indice" class="modal fade hide">
-<fieldset>
-    <legend class="titulo_legend">[% "Datos del Indice" | i18n %]</legend>
-    <ul style="clear:both">
-        <li class="sub_item" >
 
-            <textarea id="indice_id" class="tinymce" rows="10" cols="120" style="width:600px; height:202px; max-width:650px">
-            
-                [% indice_data %]
-                
-            </textarea>
-        
-            [% PERL %]
+<div id="datos_indice" class="modal hide fade">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>[% 'Datos del Indice' | i18n %]</h3>
+    </div>
+    <div class="modal-body">
+        <textarea id="indice_id" style="width:519px; height:202px; max-width:650px">
+            [% indice_data | trim %]
+        </textarea>
+    </div>
+    <div class="modal-footer">
+        [% PERL %]
                     print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Indice' | i18n %]",
                                                         boton   => "boton_guardar",
                                                         onClick => "guardarIndice();",
                                                         title   => "[% 'Guardar el Indice' | i18n %]",
                                                         alternClass => "botonCentrado"
                             ) ;
-            [% END %]
-        </li>
-    </ul>
-</fieldset>
+        [% END %]
+    </div>
 </div>
 
 <!-- DATOS DE NIVEL 1 -->
@@ -288,6 +310,8 @@ $(document).ready( function() {
 </div> <!--END <div class="centro">-->
 
 </div> <!--END <div class="todo">-->
+
+<div id="detalleMARC" class="modal hide fade"></div>
 
 [% INCLUDE "intranet-bottom.inc" %]
 

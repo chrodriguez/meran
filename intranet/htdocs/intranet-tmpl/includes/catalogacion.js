@@ -1273,14 +1273,12 @@ function procesarInfoJson(marc_object_array, id_padre){
 //         $("#marc_group" + id_temp + "_buttons_lista").append(crearBotonEliminarCampoRepetible(campo_marc_conf_obj,"marc_group" + id_temp, campo_marc_conf_obj.getFirst()));
         $("#marc_group" + id_temp + "_buttons_lista").append(crearBotonEliminarCampoRepetible(campo_marc_conf_obj, campo_marc_conf_obj.getFirst()));  
         
-//         alert("first => "+campo_marc_conf_obj.getFirst());
+       // alert("first => "+campo_marc_conf_obj.getFirst());
+       // alert("getIdCompCliente => "+campo_marc_conf_obj.getIdCompCliente());
         
-        if(!campo_marc_conf_obj.getFirst()){
+        //if(!campo_marc_conf_obj.getFirst()){
             $("#boton_eliminar_marc_group" + id_temp).show(); 
-//             alert("boton_eliminar_marc_group" + id_temp);
-        }
-        
-//         alert("boton_eliminar_marc_group" + id_temp);
+        //}
         
         //seteo los datos de los indicadores
         $("#select_indicador_primario" + MARC_OBJECT_ARRAY.length).val(campo_marc_conf_obj.getIndicadorPrimarioDato());
@@ -1684,9 +1682,8 @@ function cloneCampo(marc_group_id){
     var campo_obj       = copy(campo_temp);      //se genera una copia del campo
 
     //ahora cambio el id del campo
-//     campo_obj.setIdCompCliente(generarIdComponente());
     campo_obj.setIdCompCliente(id_componente);  
-//     alert("id_componente" + id_componente);
+    campo_obj.setFirst(false);
     //ahora cambio los id's de los subcampos
     var subcampos_array         = campo_temp.getSubCamposArray();
     var subcampos_array_destino = new Array();
@@ -1701,13 +1698,14 @@ function cloneCampo(marc_group_id){
     }
 
 // FIXME no funciona!!!!!!
-    campo_obj.setFirst(false);
+    
     campo_obj.subcampos_hash = copy(campo_obj.getSubCamposHash());
     campo_obj.setSubCamposArray(subcampos_array_destino);
-//     alert("cloneCampo => getFirst => "+campo_obj.getFirst());
+    //alert("cloneCampo => getFirst => "+campo_obj.getFirst());
+    //alert("getIdCompCliente => "+campo_obj.getIdCompCliente());
     
-    temp = new Array();
-    temp.push(campo_obj)
+    var temp = new Array();
+    temp.push(campo_obj);
     procesarInfoJson(temp, marc_group_id);   
  
 }
@@ -1959,7 +1957,18 @@ function subcampo_marc_conf(obj){
 
 
 function crearText(obj){
-    var comp = "<input class='input-xlarge' type='text' id='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+" name='" + obj.getIdCompCliente() + "' class='horizontal' >";     
+    //     var comp = "<input class='input-xlarge' type='text' id='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='55' tabindex="+TAB_INDEX+" name='" + obj.getIdCompCliente() + "' class='horizontal' >";
+//    var dato = "";    
+    if(obj.getDato() != null){
+        dato = obj.getDato();    
+    }
+      
+    //ticket #3984, se rompian los input con la comilla simple ('). por las dudas se agregó
+    //las comillas dobles (") tambien
+    dato = dato.replace(/'/g,"&#039");  
+    dato = dato.replace(/\"/g,"&#034");  
+
+    var comp = "<input class='input-xlarge' type='text' id='" + obj.getIdCompCliente() + "' value='" + dato + "' size='55' tabindex="+TAB_INDEX+" name='" + obj.getIdCompCliente() + "' class='horizontal' >";     
     $("#div" + obj.getIdCompCliente()).append(comp);
     
     crearBotones(obj);

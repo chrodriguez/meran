@@ -1,5 +1,6 @@
 [% INCLUDE "intranet-top.inc" %]
 [% INCLUDE 'datePicker.inc' %]
+[% USE HTML %]
 
     <script src="/intranet-tmpl/includes/circulacion-min.js"></script>
     <script src="/intranet-tmpl/includes/detalleEjemplar.js"></script>
@@ -86,7 +87,7 @@ var AUTO_GENERAR_COMPROBANTE = '[% auto_generar_comprobante_prestamo %]';
 	    </legend>
 	
 	    <dl>
-            <dt class="inline left rightMargin"> [% "Sig. Top."|i18n %]:</dt>        <dd>[% nivel3.getSignatura_topografica %]</dd>
+            <dt class="inline left rightMargin"> [% "Sig. Top."|i18n %]:</dt>        <dd>[% HTML.escape(nivel3.getSignatura_topografica) %]</dd>
             <dt class="inline left rightMargin"> [% "C&oacute;digo"|i18n %]:</dt>    <dd>[% nivel3.getBarcode  %]</dd>
             <dt class="inline left rightMargin"> [% "Disponibilidad"|i18n %]:</dt>   <dd>[% nivel3.getDisponibilidadObject.getNombre  %]</dd>
             <dt class="inline left rightMargin"> [% "Estado"|i18n %]:</dt>           <dd>[% nivel3.getEstadoObject.getNombre  %]</dd>

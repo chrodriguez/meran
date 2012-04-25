@@ -77,6 +77,7 @@ if($tipoAccion eq "MODIFICAR_NIVEL_1"){
         $template_catalogo          = $nivel3->getTemplate();
         $t_params->{'indice_data'}  = C4::AR::Nivel2::getNivel2FromId1($id1)->[0]->getIndice() || "";
     }
+
 }
 
 $t_params->{'template_catalogo'}                = $template_catalogo;

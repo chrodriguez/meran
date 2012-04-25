@@ -1,13 +1,14 @@
 
 package C4::AR::Reportes;
 
+
 use strict;
 no strict "refs";
 use C4::Date;
 use vars qw(@EXPORT_OK @ISA);
 @ISA       = qw(Exporter);
 @EXPORT_OK = qw(
-
+  &getBusquedasDeUsuario 
   &getReportFilter
   &getItemTypes
   &getConsultasOPAC
@@ -1166,6 +1167,143 @@ sub estantesVirtuales {
     );
 
 	return ( $resultsarray );
+
+}
+
+sub getBusquedasDeUsuario {
+
+    my ( $datos_busqueda, $ini, $cantR ) = @_;
+
+
+    my $limit_pref          = C4::AR::Preferencias::getValorPreferencia('renglones') || 20;
+    $cantR                  = $cantR || $limit_pref;
+
+    my $nro_socio= $datos_busqueda->{'usuario'};
+    
+    my $categoria= $datos_busqueda->{'categoria'};
+    my $interfaz= $datos_busqueda->{'interfaz'};
+    my $valor= $datos_busqueda->{'valor'};
+    my $fecha_inicio= $datos_busqueda->{'fecha_inicio'};
+    my $fecha_fin= $datos_busqueda->{'fecha_fin'};
+    my $statistics= $datos_busqueda->{'statistics'};
+    my $orden= $datos_busqueda->{'orden'};
+
+
+    my @filtros;
+    my $resultsarray;
+
+    my @filtro;
+    
+    if ($nro_socio){
+         push(@filtro,('nro_socio' => {eq  => $nro_socio }));
+    }
+    if ($categoria){
+         push(@filtro,('busqueda.categoria_socio' =>  {eq => $categoria} ));
+    }
+  
+    if ($interfaz ne "Ambas" ){     
+             push(@filtro,('tipo' => { eq => $interfaz}));
+    }   
+
+    if ($valor){
+        push(@filtro, ('valor'  =>  { like => '% '.$valor.'%'}));
+    }
+   
+    if ($fecha_inicio != 'Desde' && $fecha_fin != 'Hasta'){
+        push( @filtro, and => [ 'busqueda.fecha' => { gt => $fecha_inicio, eq => $fecha_inicio },
+                                'busqueda.fecha' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
+    }
+
+     push( @filtros,( and => [@filtro] ));
+#     if ($statistics){
+# 
+#     }
+
+    my $resultsarray = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda( 
+                                                                      query   => \@filtros,
+                                                                      limit   => $cantR,
+                                                                      offset  => $ini,
+                                                                      require_objects => ['busqueda'],
+                                                                      with_objects => [],
+                                                                      select       => ['busqueda.*','rep_historial_busqueda.*'],
+                                                                      sort_by => $orden,
+                                                          );
+
+   
+    my ($rep_busqueda_count) = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda_count(
+                                                                              query   => \@filtros,
+                                                                              require_objects => ['busqueda'],
+                                                                              with_objects => [],
+                                                              
+                                                                            );
+                                                                            
+
+
+    return ($resultsarray, $rep_busqueda_count);
+
+}
+
+=item
+	Funcion que busca las reservas en circulacion
+=cut
+sub getReservasCirculacion {
+
+    my ( $datos_busqueda, $ini, $cantR ) = @_;
+
+
+    my $limit_pref 		= C4::AR::Preferencias::getValorPreferencia('renglones') || 20;
+    $cantR          	= $cantR || $limit_pref;
+ 
+    my $categoria 		= $datos_busqueda->{'categoriaSocio'};
+    my $tipoReserva 	= $datos_busqueda->{'tipoReserva'};
+    my $tipoDoc 		= $datos_busqueda->{'tipoDoc'};
+    my $titulo 			= $datos_busqueda->{'titulo'};
+    my $edicion 		= $datos_busqueda->{'edicion'};
+    my $estadoReserva 	= $datos_busqueda->{'estadoReserva'};
+    my $fecha_inicio 	= $datos_busqueda->{'fecha_inicio'};
+    my $fecha_fin 		= $datos_busqueda->{'fecha_fin'};
+    my $statistics 		= $datos_busqueda->{'statistics'};
+    my $orden 			= $datos_busqueda->{'orden'};
+
+    my @filtros;
+    my $resultsarray;
+
+    my @filtro;
+
+    if ($categoria){
+         push(@filtro,('busqueda.categoria_socio' =>  {eq => $categoria} ));
+    }
+
+    if ($fecha_inicio != 'Desde' && $fecha_fin != 'Hasta'){
+        push( @filtro, and => [ 'busqueda.fecha' => { gt => $fecha_inicio, eq => $fecha_inicio },
+                                'busqueda.fecha' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
+    }
+
+     push( @filtros,( and => [@filtro] ));
+#     if ($statistics){
+# 
+#     }
+
+    my $resultsarray = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
+                                                                      # query   => \@filtros,
+                                                                      limit   => $cantR,
+                                                                      offset  => $ini,
+                                                                      # require_objects => ['busqueda'],
+                                                                      # with_objects => [],
+                                                                      # select       => ['busqueda.*','rep_historial_busqueda.*'],
+                                                                      # sort_by => $orden,
+                                                          );
+
+   
+    my ($rep_busqueda_count) = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(
+                                                                              # query   => \@filtros,
+                                                                              # require_objects => ['busqueda'],
+                                                                              # with_objects => [],                                                           
+                                                                            );
+                                                                            
+
+
+    return ($resultsarray, $rep_busqueda_count);
 
 }
 

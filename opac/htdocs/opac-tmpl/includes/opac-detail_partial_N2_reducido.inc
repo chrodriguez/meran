@@ -1,3 +1,4 @@
+[% USE HTML %]
 <script type="text/javascript">
     $(document).ready(function() {
     	$('.fancylink').fancybox();
@@ -38,9 +39,10 @@
 	                                                          [% END %]
 	                                                      [% END %]
 	                                          [% END %]
+                                            
+                                                
 	                                      </dl>
-	                  
-	
+                                          <p>[% 'Puede solicitar m&aacute;s f&aacute;cilmente el ejemplar con:' | i18n %] <strong> [% HTML.escape(primer_signatura) %]</strong></p>
 											[% IF tiene_indice %]
 												[% PERL %]
 														print C4::AR::Filtros::action_button(  
@@ -59,13 +61,9 @@
 	                                                  	<h3>[% 'Indice del grupo' | i18n %]</h3>
 	                                                  </div>
 	                                                  <div class="modal-body">
-	                                                      <ul>
-	                                                      [% FOREACH elem IN indice %]
-	                                                          [% FOREACH word IN elem.split(' ') %]
-	                                                              <li>[% word %]</li>
-	                                                          [% END %]
-	                                                      [% END %]
-	                                                      </ul>
+	                                                      <pre>
+	                                                        [% indice | trim %]
+	                                                      </pre>
 	                                                  </div>
 	                                                  <div class="modal-footer"></div>
 	                                          </div>

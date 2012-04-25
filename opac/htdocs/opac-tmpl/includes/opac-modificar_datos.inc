@@ -2,47 +2,67 @@
 
 <script type="text/javascript">
 
-    function checkPassword(){
+function checkPassword(){
 
-        var changed = $.trim($('#actualpassword').val());
-        if (changed != ''){
-            [% IF plainPassword == 0 %]
-            
-                var nroRandom   = [% nroRandom %];
-	            var hash_actual = b64_sha256(b64_sha256(b64_md5($("#actualpassword").val()))+nroRandom);
-	            var key         = b64_sha256(b64_md5($("#actualpassword").val()));
-	            var hash_new1   = encriptar(b64_md5($("#newpassword1").val()),key);
-	            var hash_new2   = encriptar(b64_md5($("#newpassword2").val()),key);
-	            
-	            //checkeo que las pass nuevas sean iguales
-	            if(desencriptar(hash_new1, key) != desencriptar(hash_new2, key))
-                {
-	                jAlert('Por favor verifique que las nuevas passwords sean iguales');
-	                return false;
-                }
-                
-	            $("#actual_password").val(hash_actual);
-	            //mando solo una pass al servidor
-	            $('#new_password1').val(hash_new1);
-	            $('#new_password2').val(hash_new1);
-        	           
-	        [% ELSE %]
-	        
-	            var hash_actual = $("#actualpassword").val();
-	            var hash_new1   = $("#newpassword1").val();
-	            var hash_new2   = $("#newpassword2").val();
-
-                $("#actual_password").val(hash_actual);
-                $('#new_password1').val(hash_new1);
-                $('#new_password2').val(hash_new2);
-                
-            [% END %]
-            
-	        $("#datosAEnviar").submit();
-	        return true;
-	     }        	
-      
-    }
+    var changed = $.trim($('#actualpassword').val());
+    
+    if (changed != ''){
+        
+        var nroRandom   = [% nroRandom %];
+        var hash_actual = b64_sha256(b64_sha256(b64_md5($("#actualpassword").val()))+nroRandom);
+        var key         = b64_sha256(b64_md5($("#actualpassword").val()));
+        var hash_new1   = encriptar($("#newpassword1").val(),key);
+        var hash_new2   = encriptar($("#newpassword2").val(),key);
+        //encriptar(b64_md5($("#newpassword2").val()),key);
+        
+        //checkeo que las pass nuevas sean iguales
+        if(desencriptar(hash_new1, key) != desencriptar(hash_new2, key))
+        {
+            jAlert('Por favor verifique que las nuevas passwords sean iguales');
+            return false;
+        }
+        
+        [% IF minPassLength %]
+        if($("#newpassword1").val().length < [% minPassLength %])
+        {
+            jAlert('Por favor verifique que la nueva password contenga al menos [% minPassLength %] caracteres.');
+            return false;
+        }
+        [% END %]
+        
+        [% IF minPassNumeric %]
+        if (!$("#newpassword1").val().match(/([0-9]{[% minPassNumeric %],})/)) 
+        {
+            jAlert('Por favor verifique que la nueva password contenga al menos [% minPassNumeric %] numeros.');
+            return false;
+        }
+        [% END %]
+        
+        [% IF minPassAlpha %]
+        if (!$("#newpassword1").val().match(/([a-zA-Z]{[% minPassAlpha %],})/)) 
+        {
+            jAlert('Por favor verifique que la nueva password contenga al menos [% minPassAlpha %] letras.');
+            return false;
+        }
+        [% END %]
+        
+        [% IF minPassSymbol %]
+        if (!$("#newpassword1").val().match(/(\W{[% minPassSymbol %],})/)) 
+        {
+            jAlert('Por favor verifique que la nueva password contenga al menos [% minPassSymbol %] simbolos.');
+            return false;
+        }
+        [% END %]
+    
+        $("#actual_password").val(hash_actual);
+        $('#new_password1').val(hash_new1);
+        $('#new_password2').val(hash_new1);
+        $('#key').val(key);
+        $("#datosAEnviar").submit();
+        return true;
+    }        	
+  
+}
 
 
     $(document).ready(function() {
@@ -51,10 +71,9 @@
     });
 </script>
         [% IF mensaje %]
-            <div class="alert alert-error">
+            <div class="[% mensaje_class %]">
                 <a class="close" data-dismiss="alert">×</a>
-                <strong>[% 'Error en datos.' | i18n %]</strong>
-                [% 'Corrigalos y vuelva a intentarlo' | i18n %]
+                [% mensaje %]
             </div>
         [% END %]
 <div>
@@ -111,6 +130,7 @@
            <!-- CAMPOS PARA CAMBIO DE PASSWORD -->
            <input type="hidden" name="new_password1" id="new_password1" />
            <input type="hidden" name="new_password2" id="new_password2" />
+           <input type="hidden" name="key" id="key" />
            <input type="hidden" name="changePassword" id="changePassword" />
            <input type="hidden" name="actual_password" id="actual_password" />
            </section>
@@ -143,7 +163,7 @@
             </section>
         </fieldset>
         <fieldset>
-            <legend>[% 'Personalizacion de visualizaicion' | i18n %]</legend>
+            <legend>[% 'Personalizaci&oacute;n de visualizaci&oacute;n' | i18n %]</legend>
             <section class="center-section-form">
         	<br />
             <div class="control-group">

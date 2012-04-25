@@ -6,6 +6,7 @@
 
 <script>
 
+    
     $(document).ready(function(){
     });
 
@@ -15,7 +16,7 @@
 [% PERL %]
     print C4::AR::Filtros::tabbedPane( titulo    => "[% 'Reportes de Cat&aacute;logo' | i18n %]",
                                  subtitulo => "[% 'Navegue por las pesta&ntilde;as para acceder a los distintos reportes' | i18n %]",
-                                 content   => [ {id => 'labels', text=> "[% 'B&aacute;squedas OPAC' | i18n %]" },
+                                 content   => [ {id => 'labels', text=> "[% 'B&uacute;squedas' | i18n %]" },
                                                 {id => 'registro', text => "[% 'Otro' | i18n %]"},
                                               ],
                                  content_id=> ['reportes_usuarios'],
@@ -26,7 +27,7 @@
 [% END %]
 
         <div class="tab-pane fade in active" id="labels">
-            [% INCLUDE 'partials/reportes/_reporte_busquedas_opac.inc' %]
+            [% INCLUDE 'partials/reportes/_reporte_busquedas.inc' %]
         </div>
         <div class="tab-pane fade" id="registro">
           <p></p>

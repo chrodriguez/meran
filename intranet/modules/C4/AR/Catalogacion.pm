@@ -694,7 +694,7 @@ sub as_stringReloaded {
     my $db      = undef;
     my $campo   = $field->tag;
     my $nivel   = $params->{'nivel'};
-#     C4::AR::Debug::debug("Catalogacion => as_stringReloaded => campo => ".$campo." itemype => ".$itemtype." nivel => ".$nivel);
+    C4::AR::Debug::debug("Catalogacion => as_stringReloaded => campo => ".$campo." itemype => ".$itemtype." nivel => ".$nivel);
 
     my @array_subcampos;
 
@@ -704,8 +704,8 @@ sub as_stringReloaded {
         my $dato                            = $subfield->[1];
         $dato                               = getRefFromStringConArrobasByCampoSubcampo($campo, $subcampo, $dato, $itemtype, $nivel);
         $dato                               = getDatoFromReferencia($campo, $subcampo, $dato, $itemtype, $nivel);
-#         C4::AR::Debug::debug("Catalogacion => as_stringReloaded => campo => ".$campo." subcampo => ".$subcampo." dato => ".$dato);
-        $hash_temp{'dato_link'}             = C4::AR::Filtros::show_componente( ('campo' => $campo, 'subcampo' => $subcampo, 'dato' => $dato , 'id1' => $params->{'id1'}, 'id2' => $params->{'id2'}) );
+        C4::AR::Debug::debug("Catalogacion => as_stringReloaded => campo => ".$campo." subcampo => ".$subcampo." dato => ".$dato);
+        $hash_temp{'dato_link'}             = C4::AR::Filtros::show_componente( ('campo' => $campo, 'subcampo' => $subcampo, 'dato' => $dato , 'id1' => $params->{'id1'}, 'id2' => $params->{'id2'}, 'template' => $itemtype ) );
 
         if($hash_temp{'dato_link'} ne "NO_LINK"){
             $dato                           = $hash_temp{'dato_link'};
@@ -806,11 +806,11 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
             # veo que separador lleva cada subcampo para el $field dependiendo del campo y subcampo que se este procesando
             my $field_as_string                 = as_stringReloaded($field, $itemtype, $params);
 
-C4::AR::Debug::debug("Catalocagion::marc_record_to_meran_to_detail_view_as_not_extended=> field_as_string =>".$field_as_string."-");
+#C4::AR::Debug::debug("Catalocagion::marc_record_to_meran_to_detail_view_as_not_extended=> field_as_string =>".$field_as_string."-");
 
-            $hash_temp_aux{'dato'}              = ($hash_temp_aux{'dato'} ne "")?$hash_temp_aux{'dato'}.";".$field_as_string:$field_as_string;
+            $hash_temp_aux{'dato'}              = ($hash_temp_aux{'dato'} ne "")?$hash_temp_aux{'dato'}.";".$field_as_string:($type eq "INTRA")?$field_as_string." ":$field_as_string;
 
-C4::AR::Debug::debug("Catalocagion::marc_record_to_meran_to_detail_view_as_not_extended=> hash_temp_aux{'dato'} =>".$hash_temp_aux{'dato'}."-");
+#C4::AR::Debug::debug("Catalocagion::marc_record_to_meran_to_detail_view_as_not_extended=> hash_temp_aux{'dato'} =>".$hash_temp_aux{'dato'}."-");
 
             $hash_temp_aux{'campo'}             = $campo;
             $hash_temp_aux{'orden'}             = getOrdenFromCampo($campo, $params->{'nivel'}, $itemtype, $type, $db);
@@ -958,6 +958,7 @@ sub getDatoFromReferencia{
                     };
 
                     if ($@){
+# TODO cuando se guarden los errores en la sesion, este error hay q guardarlo ahi
                         C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia, ERROR en campo, subcampo, dato => ".$campo.", ".$subcampo." => ".$dato);
                         C4::AR::Mensajes::printErrorDB($@, 'B451',"INTRA");
 #                         $dato = "error en configuracion del catalogo";
@@ -1117,9 +1118,10 @@ sub _setDatos_de_estructura {
 #     C4::AR::Debug::debug("_setDatos_de_estructura => campo, subcampo: ".$cat->getCampo.", ".$cat->getSubcampo);
 #     C4::AR::Debug::debug("_setDatos_de_estructura => dato: ".$datos_hash_ref->{'dato'});
 #     C4::AR::Debug::debug("_setDatos_de_estructura => datoReferencia: ".$datos_hash_ref->{'datoReferencia'});
-    if( ($cat->getReferencia) && ($cat->getTipo eq 'combo') ){
+    if( ($cat->getReferencia) && ($cat->getTipo eq 'combo') && defined($cat->infoReferencia) ){
         #tiene una referencia, y es un COMBO
 #         C4::AR::Debug::debug("_setDatos_de_estructura => ======== COMBO ======== ");
+        $hash_ref_result{'referenciaTabla'} = $cat->infoReferencia->getReferencia;
         _obtenerOpciones ($cat, \%hash_ref_result);
 #         $hash_ref_result{'default_value'}       =
 

@@ -1,3 +1,4 @@
+[% USE HTML %]
 [% IF cant_nivel3 %]
 		<script>
 		
@@ -7,6 +8,7 @@
 		    });
 		
 		</script>
+
     <div class="accordion" id="ejemplares_del_grupo_[% id2 %]">
             <div class="accordion-group">
               <div class="accordion-heading">
@@ -65,7 +67,7 @@
 						                <td class="span1">
 						                    <input type="checkbox" id="checkEjemplares[% id2 %]" name="checkEjemplares[% id2 %]" class="icon_seleccionar" value="[% nivel3_obj.getId3 %]">
 						                </td>
-						                <td>[% nivel3_obj.getSignatura_topografica %]</td>
+						                <td>[% HTML.escape(nivel3_obj.getSignatura_topografica) %]</td>
 						                <td>
 							                [% PERL %]
 							                    print C4::AR::Filtros::link_to( text => "[% nivel3_obj.getBarcode %]",
@@ -295,20 +297,38 @@
 
 <script type="text/javascript">makeToggle('ejemplaresDelGrupo[% id2 %]','trigger_2_[% id2 %]',null,false);</script>
 [% ELSE %]
-    [% IF nivel2_template == 'ANA' %]
 
-            [% PERL %]
-                print C4::AR::Filtros::link_to(   text      => "Detalle del registro padre",
-                                                  url       => "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
-                                                  params    => ["id1=[% nivel1_padre %]"],
-                                                  title     => "[% 'Detalle del registro padre' | i18n %]",
-                                                  class     => 'btn btn-warning'
-                                            );
-            [% END %]
+    [% IF enable_nivel3 == 0 %]
+    <!-- ANA y ELE  no tienen nivel3 -->
+    <!-- si es ELE no muestro nada -->
+        [% IF nivel2_template == 'ANA' %]
+        
+            <dt class="inline left rightMargin">Título del registro fuente:</dt>
+            <dd>[% nivel1_titulo_padre %]</dd>
+            
+            <dt class="inline left rightMargin">ISBN:</dt>
+            <dd>[% nivel1_isbn_padre %]</dd>
+
+            <br />
+		    <dt>		
+                [% PERL %]
+                    print C4::AR::Filtros::link_to(   text      => "Detalle del registro fuente",
+                                                      url       => "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                                      params    => ["id1=[% nivel1_padre %]"],
+                                                      title     => "[% 'Detalle del registro fuente' | i18n %]",
+                                                      class     => 'btn btn-warning'
+                                                );
+                [% END %]
+            </dt>
+            <br />
+        [% END %]
+        
     [% ELSE %]
-		<div class="alert fade in">
+    
+	    <div class="alert fade in">
            <strong>[% 'Este grupo no dispone de ejemplares' | i18n %]</strong>
-		</div>    
+	    </div> 
+ 
     [% END %]
 [% END %]
 
