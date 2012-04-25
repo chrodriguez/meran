@@ -240,9 +240,9 @@
 	  <header>
 	  	[% INCLUDE  'menu.inc'  %]
 	  </header>
-	  
-	    [% INCLUDE 'detalleSideBar.inc' 	%]
-	  
+	  <div id="navBarResult">
+	    [% INCLUDE 'detalleSideBar.inc' %]
+	  </div>
 	     <div id="marco_principal" class="container">   
 			  <div id="marco_contenido_datos" class="contenido">
 				  <!--  usado como referencia por el MessageHelper -->
