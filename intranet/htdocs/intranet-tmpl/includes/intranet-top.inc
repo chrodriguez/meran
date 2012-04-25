@@ -32,9 +32,8 @@
 	[% INCLUDE "BootstrapToolkit.inc" %]
 
     <link rel="shortcut icon" href="/includes/css/favicon.ico">
-	
+
 	<link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranet.css">
-	<link media="screen" rel="stylesheet" href="/includes/css/fancybox.css" type="text/css">
 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
