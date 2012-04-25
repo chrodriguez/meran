@@ -6,4 +6,4 @@ if [ $(uname -a|grep amd64|wc -l) -gt 0 ]
 		 PATH=$PATH:$(pwd)/node/bin/;
 fi;
 export PATH;
-lessc --compress bootstrap/less/meran.less  > ../intranet/htdocs/intranet-tmpl/temas/default/includes/intranet.css
+lessc --compress bootstrapless/meran.less  > ../intranet/htdocs/intranet-tmpl/temas/default/includes/intranet.css
