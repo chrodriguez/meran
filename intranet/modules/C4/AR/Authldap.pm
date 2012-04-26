@@ -195,11 +195,12 @@ sub checkPwEncriptada{
     my $passwordLDAP;
     my $ldapMsg             = undef;
     my $ldap                = _conectarLDAP();
-    my $userDN              = $LDAP_ROOT.','.$LDAP_DB_PREF;
-    
+#    my $userDN              = $LDAP_ROOT.','.$LDAP_DB_PREF;
+    my $userDN              = $LDAP_U_PREF.'='.$userid.','.$LDAP_DB_PREF;
+ 
     if ($LDAP_ROOT ne ''){    
-        $ldapMsg = $ldap->bind( $userDN , password => $LDAP_PASS) or die "$@";
-        C4::AR::Debug::debug("ERROR DEL LDAP con ".$LDAP_ROOT ." y ".$LDAP_PASS. " dio ".$ldapMsg->error);        
+        $ldapMsg = $ldap->bind( $LDAP_ROOT , password => $LDAP_PASS) or die "$@";
+        C4::AR::Debug::debug("checkPwEncriptada >> ERROR DEL LDAP con ".$LDAP_ROOT ." y ".$LDAP_PASS. " dio ".$ldapMsg->error);        
     }else{    
         $ldapMsg = $ldap->bind() or die "$@";        
     }
@@ -216,7 +217,9 @@ sub checkPwEncriptada{
       
         if (defined $entry){        
             $passwordLDAP = $entry->get_value("userPassword");
-            $socio        =_verificar_password_con_metodo($userid,$password, $passwordLDAP, $nroRandom, $ldap);           
+
+     C4::AR::Debug::debug("checkPwEncriptada >> passLDAP  ".$passwordLDAP );
+           $socio        =_verificar_password_con_metodo($userid,$password, $passwordLDAP, $nroRandom, $ldap);           
         }
         
         $ldap->unbind;
@@ -239,10 +242,14 @@ sub checkPwEncriptada{
 sub _verificar_password_con_metodo {
     my ($userid, $password, $passwordLDAP, $nroRandom, $ldap) = @_;
   
-    my $passwordParaComparar    = C4::AR::Auth::hashear_password($passwordLDAP, 'MD5_B64');
-    $passwordParaComparar       = C4::AR::Auth::hashear_password($passwordParaComparar, C4::AR::Auth::getMetodoEncriptacion());
+#    my $passwordParaComparar    = C4::AR::Auth::hashear_password($passwordLDAP, 'MD5_B64');
+    my $passwordParaComparar       = C4::AR::Auth::hashear_password($passwordLDAP, C4::AR::Auth::getMetodoEncriptacion());
     $passwordParaComparar       = C4::AR::Auth::hashear_password($passwordParaComparar.$nroRandom, C4::AR::Auth::getMetodoEncriptacion());
-  
+ 
+
+   C4::AR::Debug::debug("checkPwEncriptada >> passwordParaComparar  ".$passwordParaComparar ."   ==  ".$password);
+
+ 
     if ($password eq $passwordParaComparar) {
         #PASSWORD VALIDA
         return datosUsuario($userid,$ldap);
@@ -312,6 +319,9 @@ sub setearPassword{
     my ($socio,$nuevaPassword,$isReset) = @_;
     my $preferencias_ldap               = getLdapPreferences();
 
+
+ C4::AR::Debug::debug("setearPassword>>> $nuevaPassword");
+
     my $LDAP_DB_PREF                    = $preferencias_ldap->{'ldap_prefijo_base'};
     my $LDAP_U_PREF                     = $preferencias_ldap->{'ldap_user_prefijo'};
     my $LDAP_USER                       = $LDAP_U_PREF.'='.$socio->getNro_socio().','.$LDAP_DB_PREF;
@@ -325,7 +335,7 @@ sub setearPassword{
     $isReset = $isReset || 0;
     
     if ($LDAP_ROOT ne ''){
-        $ldapMsg = $ldap->bind( $LDAP_ROOT.','.$LDAP_DB_PREF , password => $LDAP_PASS) or die "$@";
+        $ldapMsg = $ldap->bind( $LDAP_ROOT , password => $LDAP_PASS) or die "$@";
         C4::AR::Debug::debug("bind es $LDAP_ROOT y pass $LDAP_PASS");
         C4::AR::Debug::debug("Authldap => smsj ". $ldapMsg->error. " codigo ". $ldapMsg->code() );
     }else{
@@ -337,7 +347,9 @@ sub setearPassword{
     #si $isReset = 1, la $nuevaPassword ya viene en b64_md5, es el dni del socio hasheado
     
     if (!$isReset){
-    
+   	#encriptar con md5_b64
+	$nuevaPassword    = C4::AR::Auth::hashear_password($nuevaPassword, 'MD5_B64');
+ 
 
     }
 
@@ -383,8 +395,8 @@ sub obtenerPassword{
     my $ldap                =_conectarLDAP();
 
     if ($LDAP_ROOT ne ''){
-        $ldapMsg= $ldap->bind( $LDAP_ROOT , password => $LDAP_PASS) or die "$@";
-        C4::AR::Debug::debug("obtenerPassword : ERROR DEL LDAP con ".$LDAP_ROOT ." y ".$LDAP_PASS. " dio ".$ldapMsg->error);
+        $ldapMsg= $ldap->bind( $preferencias_ldap->{'ldap_bind_dn'} , password => $LDAP_PASS) or die "$@";
+        C4::AR::Debug::debug("obtenerPassword : ERROR DEL LDAP con ".$preferencias_ldap->{'ldap_bind_dn'} ." y ".$LDAP_PASS. " dio ".$ldapMsg->error);
     }else{
         $ldapMsg= $ldap->bind() or die "$@";
         }
