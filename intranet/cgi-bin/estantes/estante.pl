@@ -10,6 +10,9 @@ use C4::AR::Estantes;
 
 my $input = new CGI;
 
+my $estante_actual;
+
+ 
 my ($template, $session, $t_params) = get_template_and_user ({
                                         template_name   => 'estantes/estante.tmpl',
                                         query       => $input,
@@ -22,8 +25,17 @@ my ($template, $session, $t_params) = get_template_and_user ({
                                         debug => 1,
                  });
 
+
+
+if ($input->param('id_estante')){
+  $estante_actual= $input->param('id_estante');
+}
+
+
 my $estantes_publicos = C4::AR::Estantes::getListaEstantesPublicos();
+$t_params->{'estante'}= $estante;
 $t_params->{'cant_estantes'}= @$estantes_publicos;
 $t_params->{'ESTANTES'}= $estantes_publicos;
+
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

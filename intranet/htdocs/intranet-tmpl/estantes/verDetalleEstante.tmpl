@@ -4,7 +4,6 @@
 
 
 <div id="editar_estante" class="modal hide fade">
-
       <div class="modal-header">
             <h3>[% "Editar Subestante" | i18n %]</h3>
       </div>
@@ -16,7 +15,8 @@
                 <script type="text/javascript">
                           $(document).ready(function() {
                               $('#input_valor_estante').keypress(function(e){if(e.which==13){if(this.value!=''){modificarEstante();}}});
-                            });
+                              verSubEstantes([% estante %],0);
+                          });
                 </script>
       </div>
       <div class="modal-footer">
