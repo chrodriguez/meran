@@ -14,7 +14,7 @@ var objAH;//Objeto AjaxHelper.
  * Actualizacion de los datos despues de una consulta ajax. El resultado se inserta en el div result.
  */
 function updateInfoConsulta(responseText){
-	$("#divResultado").html(responseText);
+	$("#result").html(responseText);
 	if(objAH.funcion == 1){
 		tablaOrdenada();
 	}
@@ -236,7 +236,7 @@ function guardarModificacion(){
 	objAH               = new AjaxHelper(updateGuardarModificacion);
 	objAH.debug         = true;
 	objAH.url=URL_PREFIX+"/admin/global/preferenciasDB.pl";
-    objAH.showOverlay       = true;
+    objAH.showOverlay    = true;
 	objAH.variable      = $("#variable").val();
 	objAH.valor         = $("#valor").val();
     objAH.categoria     = 'sistema';
@@ -284,7 +284,7 @@ function buscarPreferencia(){
 
 function updateBuscarPreferencia(responseText){
 	mostrarCombos();
-	$("#divResultado").html(responseText);
+	$("#result").html(responseText);
 	tablaOrdenada();
 }
 
@@ -306,10 +306,6 @@ function modificarVariable(variable,tipo){
 	borrarDiv();
 	ocultarCombos();
 
-	//compo.attr("disabled","disabled");
-	//$("#tabla").remove();
-	//$("#campo").remove();
-	//$("#categoria").remove();
 
 	objAH=new AjaxHelper(updateModificarVariable);
 	objAH.debug= true;
@@ -321,7 +317,7 @@ function modificarVariable(variable,tipo){
 }
 
 function updateModificarVariable(responseText){
-	$("#divResultado").html(responseText);
+	$("#result").html(responseText);
 }
 
 /*
@@ -382,12 +378,22 @@ $(document).ready( function() {
 
 </script>
 
-<div class="titulos"></div>
-<fieldset id="reportes">
-    <legend class="titulo_legend"> [% "Administraci&oacute;n de Preferencias del Sistema" | i18n %] </legend>
-    <ul>
-        <li class="sub_item filtros">
+<div class="titulos">
+    <h3> [% "Administraci&oacute;n de preferencias del Sistema" | i18n %]</h3>
+</div>
+
+<form class="well form-search" onsubmit="return false">
             <input type="text" id="buscar" name="buscar" >
+            
+              [% PERL %]
+	                                print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
+	                                                                    boton   => "btn",
+	                                                                    onClick => "limpiar();",
+	                                                                    title   => "[% 'Limpiar' | i18n %]",
+	                                                                    inline  => 1,
+	                                        ) ;
+	            [% END %]
+	            
 	            [% PERL %]
 	                                print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
 	                                                                    boton   => "boton_buscar",
@@ -396,19 +402,10 @@ $(document).ready( function() {
 	                                                                    inline  => 1,
 	                                        ) ;
 	            [% END %]
-	            [% PERL %]
-	                                print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
-	                                                                    boton   => "boton_borrar",
-	                                                                    onClick => "limpiar();",
-	                                                                    title   => "[% 'Limpiar' | i18n %]",
-	                                                                    inline  => 1,
-	                                        ) ;
-	            [% END %]
-       </li>
-    </ul>
-</fieldset>
+	            
+</form>
 
-<div id="divResultado" style="clear: both;"></div>
+<div id="result"></div>
 
 
 [% INCLUDE "intranet-bottom.inc" %]

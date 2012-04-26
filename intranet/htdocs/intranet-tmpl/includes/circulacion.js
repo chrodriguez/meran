@@ -185,13 +185,23 @@ function realizarAccion(accion,id_table,funcion) {
 function generaDivPrestamo(responseText){
 	var infoArray       = new Array;
 	infoArray           = JSONstring.toObject(responseText);
-	var html            = "<div class='divCirculacion'> <p class='fontMsgConfirmation'>";
-	var i;
-    
+	
+	var html                = "<div id='div_circ_rapida_devolucion' class=''>";
+	var accion              = infoArray[0].accion;
+	
+	if (!accion){
+		accion = CIRCULACION;
+	}
+	
+	html                    += "<div class='modal-header'><a href='#' class='close' data-dismiss='modal'>×</a><h3>"+ infoArray[0].accion + "</h3></div>";
+	html					+= "<div class='modal-body'>";
 
+	var i;
 	for(i=0; i<infoArray.length;i++){
 	
         var coma                = "";
+        html					+= "<p>";
+        html					+= "<dl>";
 		var infoPrestamoObj     = new infoPrestamo();
 		infoPrestamoObj.id3Old  = infoArray[i].id3Old;
 		INFO_PRESTAMOS_ARRAY[i] = infoPrestamoObj;
@@ -200,27 +210,35 @@ function generaDivPrestamo(responseText){
 		var comboTipoPrestamo   = crearComboDeItems(infoArray[i].tipoPrestamo, 'tiposPrestamos' + i);
       
 		if((infoArray[i].autor != "")&&(infoArray[i].autor != null)){ 
+			html    += "<dt>";
             html    = html + infoArray[i].autor;
-            coma    = ", ";
+            html    += "</dt>";
         };
 
 		if((infoArray[i].titulo != "")&&(infoArray[i].titulo != null)){ 
-            html= html + coma + infoArray[i].titulo;
-            coma    = ", ";
-        };
+			html    += "<dd>";
+            html= html + infoArray[i].titulo;
 
-		if((infoArray[i].edicion != "")&&(infoArray[i].edicion != null)){ html= html + coma + infoArray[i].edicion};
+            if((infoArray[i].edicion != "")&&(infoArray[i].edicion != null)){ 
+            	html= html + ", " + infoArray[i].edicion
+        	};
+        	
+			html    += "</dd>";
+        };
+		html    += "</dl>";
+
+		
 		html= html + "<br>C&oacute;digo de barras: " + comboItems;
 		html= html + "<br>Tipo de pr&eacute;stamo: " + comboTipoPrestamo;
+		html					+= "</p>";
 	}
 
-	html= html + "</p>";
-	html= html + "<center><input type='button' value='Aceptar' onClick='prestar()'>";
-	html= html + "<input type='button' value='Cancelar' onClick='cancelarDiv();'></center><br>";
+	html= html + "</div>";
+	html= html + "<div class='modal-footer'><button class='btn btn-primary' onClick='prestar(1)'>Prestar</button></div>";
 	html= html + "</div>";
 
 	$('#confirmar_div').html(html);
-	scrollTo('confirmar_div');
+	$('#confirmar_div').modal();
 }
 
 /*
@@ -251,7 +269,7 @@ function crearComboDeItems(items_array, idSelect, itemSelected){
  * Funcion que realiza los prestamos correspondientes a los items seleccionados.
  * prestamos.tmpl---> se prestan los libros.
  */
-function prestar(){
+function prestar(is_modal){
 
 	for(var i=0; i< INFO_PRESTAMOS_ARRAY.length; i++){
 		//se setea el id3 que se va a prestar
@@ -270,7 +288,9 @@ function prestar(){
 	objAH.nro_socio     = USUARIO.ID;
 	//se envia la consulta
 	objAH.sendToServer();
-
+	
+	if (is_modal)
+		$('#confirmar_div').modal('hide');
 }
 
 /*
@@ -287,7 +307,6 @@ function updateInfoPrestarReserva(responseText){
     var hayError=0;
     
    	for(i=0; i<messageArray.length;i++){
-//         imprimirTicket(ticketsArray[i].ticket,i);
         setMessages(messageArray[i]);
     }
      
@@ -320,9 +339,8 @@ function cancelarDiv(){
  * prestamos.tmpl---> se cancela la reserva.
  */
 function cancelarReserva(reserveNumber){
-
-	jConfirm(ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_RESERVA,'Info',function(is_confirmed){
-        if (is_confirmed) {
+    bootbox.confirm(ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_RESERVA, function (ok){ 
+        if (ok){
             objAH               = new AjaxHelper(updateInfoCancelacion);
             objAH.debug         = true;
             objAH.showOverlay   = true;  
@@ -353,23 +371,25 @@ function updateInfoCancelacion(responseText){
  * Genera el div con los datos de los items que se van a devolver o renovar.
  */
 function generaDivDevolucion(responseText){
-
 	var infoArray           = new Array;
 	INFO_PRESTAMOS_ARRAY    = new Array();
 	infoArray               = JSONstring.toObject(responseText);
-	var html                = "<div class='divCirculacion'> <p class='fontMsgConfirmation'>";
+	var html                = "<div id='div_circ_rapida_devolucion' class=''>";
 	var accion              = infoArray[0].accion;
-	html                    = html + infoArray[0].accion +":<br>";
+	html                    += "<div class='modal-header'><a href='#' class='close' data-dismiss='modal'>×</a><h3>"+ infoArray[0].accion + "</h3></div>";
 
+	html					+= "<div class='modal-body'><dl>";
 	for(var i=0; i<infoArray.length;i++){
-	
 		INFO_PRESTAMOS_ARRAY[i]= infoArray[i].id_prestamo;
- 
+		html += "<dt>";
 		if((infoArray[i].autor != "")&&(infoArray[i].autor != null)){ 
             html= html + infoArray[i].autor;
             if((infoArray[i].titulo != "")&&(infoArray[i].titulo != null)){html= html + ", ";}
+        }else{
+    		html += "SIN AUTOR"; 
         }
-
+		html += "</dt>";
+		html += "<dd>";
         if((infoArray[i].titulo != "")&&(infoArray[i].titulo != null)){
             html= html + infoArray[i].titulo;
         }
@@ -378,18 +398,15 @@ function generaDivDevolucion(responseText){
             html= html + " - " + infoArray[i].edicion + "<br>"
         };
         
-        html= html + " (" + infoArray[i].barcode + ")<br>"  
-  
-        html= html + "<br>"
+        html= html + " (" + infoArray[i].barcode + ")<br>" 
+        html += "</dd>";
 	}
-
-	html= html + "</p>";
-	html= html + "<center><input type='button' value='Aceptar' onClick=devolver()>";
-	html= html + "<input type='button' value='Cancelar' onClick='cancelarDiv();'></center><br>";
+	html= html + "</div>";
+	html= html + "<div class='modal-footer'><button class='btn btn-primary' onClick='devolver(1)'>Devolver</button></div>";
 	html= html + "</div>";
 
 	$('#confirmar_div').html(html);
-	scrollTo('confirmar_div');
+	$('#confirmar_div').modal();
 }
 
 /*
@@ -400,12 +417,15 @@ function generaDivRenovacion(responseText){
 	var infoArray= new Array;
 	INFO_PRESTAMOS_ARRAY= new Array();
 	infoArray= JSONstring.toObject(responseText);
-	var html="<div class='divCirculacion'> <p class='fontMsgConfirmation'>";
+	var html="<div id='div_circ_rapida_devolucion' class=''>";
 	var accion=infoArray[0].accion;
-	html=html + infoArray[0].accion +":<br>";
+	html="<div class='modal-header'><a href='#' class='close' data-dismiss='modal'>×</a><h3>"+ infoArray[0].accion + "</h3></div>";
+	html					+= "<div class='modal-body'><dl>";
+
 	for(var i=0; i<infoArray.length;i++){
 	
 		var infoDevRenObj= new infoPrestamo();
+		
 		infoDevRenObj.nro_socio= infoArray[0].nro_socio;
         infoDevRenObj.id_prestamo= infoArray[i].id_prestamo;
 		infoDevRenObj.id3= infoArray[i].id3;
@@ -413,31 +433,36 @@ function generaDivRenovacion(responseText){
 		INFO_PRESTAMOS_ARRAY[i]= infoDevRenObj;
  
         
-        if((infoArray[i].autor != "")&&(infoArray[i].autor != null)){ 
+		html += "<dt>";
+		if((infoArray[i].autor != "")&&(infoArray[i].autor != null)){ 
             html= html + infoArray[i].autor;
             if((infoArray[i].titulo != "")&&(infoArray[i].titulo != null)){html= html + ", ";}
+        }else{
+    		html += "SIN AUTOR"; 
         }
-        
+		html += "</dt>";
+		html += "<dd>";
         if((infoArray[i].titulo != "")&&(infoArray[i].titulo != null)){
             html= html + infoArray[i].titulo;
         }
-        
+
         if((infoArray[i].edicion != "")&&(infoArray[i].edicion != null)){
             html= html + " - " + infoArray[i].edicion + "<br>"
         };
         
-        html= html + " (" + infoArray[i].barcode + ")<br>"  
-        
-        html= html + "<br>"
+        html= html + " (" + infoArray[i].barcode + ")<br>" 
+        html += "</dd>";
 
 	}
-	html= html + "</p>";
-	html= html + "<center><input type='button' value='Aceptar' onClick=renovar()>";
-	html= html + "<input type='button' value='Cancelar' onClick='cancelarDiv();'></center><br>";
+	
+	
+	html= html + "</div>";
+	html= html + "<div class='modal-footer'><button class='btn btn-primary' onClick='renovar()'>Renovar</button></div>";
 	html= html + "</div>";
 
 	$('#confirmar_div').html(html);
-	scrollTo('confirmar_div');
+	$('#confirmar_div').modal();
+
 }
 
 /*
@@ -454,6 +479,7 @@ function renovar(){
 	objAH.datosArray    = INFO_PRESTAMOS_ARRAY;
 	objAH.nro_socio     = USUARIO.ID;
 	//se envia la consulta
+	$('#confirmar_div').modal('hide');
 	objAH.sendToServer();
 }
 
@@ -496,7 +522,7 @@ function updateInfoRenovar(responseText){
 /* devolver
 * realiza la devolucion de 1 a n ejemplares segun INFO_PRESTAMOS_ARRAY
 */
-function devolver(){
+function devolver(is_modal){
 	objAH               = new AjaxHelper(updateInfoDevolver);
 	objAH.debug         = true;
     objAH.showOverlay   = true;
@@ -506,6 +532,8 @@ function devolver(){
 	objAH.nro_socio     = USUARIO.ID;
 	//se envia la consulta
 	objAH.sendToServer();
+	if (is_modal)
+		$('#confirmar_div').modal('hide');
 }
 
 /*

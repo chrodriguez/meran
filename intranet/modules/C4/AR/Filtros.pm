@@ -6,15 +6,20 @@ require Exporter;
 use Locale::Maketext::Gettext::Functions qw(__);
 use Template::Plugin::Filter;
 use CGI::Session;
+use HTML::Entities;
 use base qw( Template::Plugin::Filter );
 
 use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
 @EXPORT_OK=qw( 
-    &setHelpIco
-    &i18n
-    &link_to
-    &to_Button
+    setHelpIco
+    i18n
+    link_to
+    to_Button
+    action_link_button
+    action_button
+    setHelpInput
+    action_set_button
 );
 
 =item
@@ -45,15 +50,21 @@ en cada link.
 sub link_to {
     my (%params_hash_ref) = @_;
 
-    my $link    = '';
-    my $params  = $params_hash_ref{'params'} || []; #obtengo los paraametros
-    my $text    = $params_hash_ref{'text'}; #obtengo el texto a mostrar
-    my $url     = $params_hash_ref{'url'}; #obtengo la url
-    my $title   = $params_hash_ref{'title'}; #obtengo el title a mostrar
-    my $class   = $params_hash_ref{'class'}; #obtengo la clase
-    my $boton   = $params_hash_ref{'boton'}; #obtengo el title a mostrar
-    my $width   = $params_hash_ref{'width'};
-    my $blank   = $params_hash_ref{'blank'} || 0;
+    my $link            = '';
+    my $params          = $params_hash_ref{'params'} || []; #obtengo los paraametros
+    my $text            = $params_hash_ref{'text'}; #obtengo el texto a mostrar
+    my $url             = C4::AR::Utilidades::trim($params_hash_ref{'url'}); #obtengo la url
+    my $title           = $params_hash_ref{'title'}; #obtengo el title a mostrar
+    my $class           = $params_hash_ref{'class'}; #obtengo la clase
+    my $boton           = $params_hash_ref{'boton'}; #obtengo el title a mostrar
+    my $width           = $params_hash_ref{'width'};
+    my $blank           = $params_hash_ref{'blank'} || 0;
+    my $icon            = $params_hash_ref{'icon'} || 0;
+    my $tooltip         = $params_hash_ref{'tooltip'};
+    my $url_absolute    = $params_hash_ref{'url_absolute'}||0;
+    my $without_token   = $params_hash_ref{'without_token'}||0;
+    
+    
     my $cant    = scalar(@$params);
     my @result;
     
@@ -64,7 +75,7 @@ sub link_to {
     }
 
     my $session = CGI::Session->load();
-    if($session->param('token')){
+    if(($session->param('token'))&&(!$without_token)){        
     #si hay sesion se usa el token, sino no tiene sentido
         my $status = index($url,'?');
          #SI NO HUBO PARAMETROS, EL TOKEN ES EL UNICO EN LA URL, O SEA QUE SE PONE ? EN VEZ DE &
@@ -75,11 +86,21 @@ sub link_to {
         }
     }
 
-    $link= "<a href='".$url."'";
-    if ($class ne ''){
-        if (!$boton){ #Porque si es con boton, la clase la lleva el li
-            $link .= " class=".$class;
-        }
+    if($url_absolute){
+        #verifico si la URL contiene http, sino lo agrego
+        ($url =~ m/http/)?$link= "<a href='".$url."'":$link= "<a href='http://".$url."'";        
+        
+    } else {
+        $link= "<a href='".$url."'";
+    }
+
+    if ($tooltip ne ''){
+        $link .= " data-original-title='$tooltip'";
+        $class.= ' tooltip_link';
+    }
+
+    if (C4::AR::Utilidades::validateString($class)){
+         $link .= " class='$class'";
     }
 
     if($title ne ''){
@@ -87,31 +108,16 @@ sub link_to {
     }
 
     if($blank){
-        $link .= " target='blank'";
+        $link .= " target='_blank'";
     }
-
+    
     $link .= " >";
 
-    my $button;
 
-    if($boton){
-        $button .=  "<li id='boton_medio' style='width:".$width."px' class='".$class."' > ";
-        $button .=  $link;
-        $button .=  "   <div id=".$boton."> ";
-        $button .=  "   </div> ";
-        $button .=  "   <div id='boton_der'> ";
-        $button .=  "   </div> ";
-        $button .=  "   <div id='boton_texto'>".$text."</div> ";
-        $button .=  "   </a> ";
-        $button .=  "</li> ";
-
-        return $button;
-    }else{
-        $link .= $text."</a>"; 
+    if ($icon){
+        $link .= "<i class='$icon'></i>";    	
     }
-
-#   C4::AR::Debug::debug("url: ".$url);
-#   C4::AR::Debug::debug("link: ".$link);
+    $link .= $text."</a>"; 
 
     return $link;
 }
@@ -184,18 +190,20 @@ sub to_Button{
     my (%params_hash_ref) = @_;
 
     my $button= '';
-    my @array_clases_buttons = ('clean-gray','thoughtbot');
-    
+
+
+    my @array_clases_buttons = ('btn btn-large btn-primary', 'btn btn-large', 'btn btn-primary','btn');  
+
     if ($params_hash_ref{'url'}){
       $button .="<a href="."$params_hash_ref{'url'}"."> ";
     }
 
     my $text    = $params_hash_ref{'text'}; #obtengo el texto a mostrar
     
-    my $boton   = $params_hash_ref{'boton'} || "clean-gray"; #obtengo el boton
+    my $boton   = $params_hash_ref{'boton'} || "btn btn-primary"; #obtengo el boton
     
     if (!C4::AR::Utilidades::existeInArray($boton,@array_clases_buttons)){
-        $boton = "clean-gray";
+        $boton = "btn btn-primary";
     }
     
     my $onclick     = $params_hash_ref{'onclick'} || $params_hash_ref{'onClick'}; #obtengo el llamado a la funcion en el evento onclick
@@ -244,9 +252,65 @@ sub setHelp{
     my (%params_hash_ref) = @_;
 
     my $help    = '';
-    $help       =  "<div class='reference'>".i18n($params_hash_ref{'text'})."</div>";
-
+#     $help       =  "<div class='reference'>".i18n($params_hash_ref{'text'})."</div>";
+    $help       =  "<span class='help-inline'>".i18n($params_hash_ref{'text'})."</span>";
     return $help;
+}
+
+
+=item 
+Funcion que crea los mensajes de ayuda en los inputs
+Recibe como parametro una hash con:
+    textLabel: texto del label
+    class: clase del label (para darle colores, sino pone una por default)
+    text: texto de ayuda
+    
+Ejemplo:
+        text        => "[% 'El M&eacute;todo se agrega deshabilitado por defecto.' | i18n %]",
+        class       => "info",
+        textLabel   => "NOTA:"    
+=cut
+sub setHelpInput{
+
+    my (%params_hash_ref)       = @_;
+    
+    my @array_clases_labels     = ('success','warning', 'important', 'info');
+    
+    my $classLabel              = $params_hash_ref{'class'} || "label";
+    my $textLabel               = $params_hash_ref{'textLabel'} || "";
+    my $help                    = "";
+    my $icon                    = $params_hash_ref{'icon'};
+    
+    if (!C4::AR::Utilidades::existeInArray($classLabel,@array_clases_labels)){
+        $classLabel = "label";
+    }
+    
+    if($classLabel ne "label"){
+        $classLabel = "label label-" . $classLabel;
+    }
+    
+    if($textLabel eq ""){
+        
+            if ($icon){
+                  $help                = "<p class='help-block'><i class='$icon'></i>"
+                                          . $params_hash_ref{'text'} . "</p>";
+            } else {
+                $help                    = "<p class='help-block'>"
+                                          . $params_hash_ref{'text'} . "</p>";
+            }
+
+  
+    }   else {
+       
+        $help                    = "<p class='help-block'><span class='"
+                                        . $classLabel . "'>"
+                                        . $params_hash_ref{'textLabel'} . "</span>"
+                                        . $params_hash_ref{'text'} . "</p>";
+                                    
+    }
+
+    return $help;                                    
+   
 }
 
 
@@ -301,11 +365,12 @@ sub show_componente {
     my $dato                = $params_hash_ref{'dato'};
     my $id1                 = $params_hash_ref{'id1'};
     my $id2                 = $params_hash_ref{'id2'};
+    my $template            = $params_hash_ref{'template'};
 
     my $session             = CGI::Session->load();
     my $session_type        = $session->param('type') || 'opac';
      
-    if(($campo eq "245")&&($subcampo eq "a")) {
+    if(($campo eq "245")&&($subcampo eq "a")&&($template eq "ANA")) {
 
       my $catRegistroMarcN1   = C4::AR::Nivel1::getNivel1FromId1($id1);
 
@@ -333,10 +398,10 @@ sub show_componente {
     if(($campo eq "856")&&($subcampo eq "u")) {
 
 
-        C4::AR::Debug::debug("C4::AR::Filtros::show_componente => campo, subcampo: ".$campo.", ".$subcampo); 
-        C4::AR::Debug::debug("C4::AR::Filtros::show_componente => DENTRO => dato: ".$dato);
+        #C4::AR::Debug::debug("C4::AR::Filtros::show_componente => campo, subcampo: ".$campo.", ".$subcampo); 
+        #C4::AR::Debug::debug("C4::AR::Filtros::show_componente => DENTRO => dato: ".$dato);
         
-        return C4::AR::Filtros::link_to( text => $dato, url => $dato , blank => 1);
+        return C4::AR::Filtros::link_to( text => $dato, url => $dato , blank => 1, url_absolute => 1, without_token => 1);
 
     }
 
@@ -456,13 +521,14 @@ sub show_componente {
 
 sub ayuda_marc{
 
-    my $icon= to_Icon(  
-                boton   => "icon_ayuda_marc",
-                onclick => "abrirVentanaHelperMARC();",
-                title   => i18n("Ayuda MARC"),
-            ) ;
+#     my $icon= to_Icon(  
+#                 boton   => "icon_ayuda_marc",
+#                 onclick => "abrirVentanaHelperMARC();",
+#                 title   => i18n("Ayuda MARC"),
+#             ) ;
 
-    return "<div style='float: right;'><span class='click'>".$icon."</span></div><div id='ayuda_marc_content'></div>";
+#     return "<div style='float: right;'><span class='click'>".$icon."</span></div><div id='ayuda_marc_content'></div>";
+return "<i class='click icon-question-sign' onclick='abrirVentanaHelperMARC();'><div id='ayuda_marc_content' class='modal fade hide'></div></i>";
 }
 
 
@@ -604,8 +670,276 @@ sub getComboValidadores {
     return $html;
 }
 
+sub action_link_button{
 
-END { }       # module clean-up code here (global destructor)
+    my (%params_hash_ref) = @_;
+
+    my $url      = $params_hash_ref{'url'} || $params_hash_ref{'url'};
+    my $button   = $params_hash_ref{'button'};
+    my $icon     = $params_hash_ref{'icon'} || undef;
+    my $params   = $params_hash_ref{'params'} || $params_hash_ref{'url'};
+    my $title    = $params_hash_ref{'title'};
+
+
+    my $popover = $params_hash_ref{'popover'} ||undef;
+    my $popopver_attr = "";
+    
+    if ($popover){
+        $button.= " popover_button ";
+        my $placement = $popover->{'placement'}||'right';
+        my $text_pop = $popover->{'text'};
+        my $title_pop= $popover->{'title'};
+        $popopver_attr.= " rel='popover' data-content='$text_pop' rel='popover' data-placement='$placement' data-original-title='$title_pop' ";   
+    }
+    
+    my $params   = $params_hash_ref{'params'}; #obtengo el llamado a la funcion en el evento onclick
+    my $title    = $params_hash_ref{'title'}; #obtengo el title de la componete
+    my $popover  = $params_hash_ref{'popover'} || undef;
+    my @result;
+    
+    foreach my $p (@$params){
+        @result = split(/=/,$p);
+
+        $url = C4::AR::Utilidades::addParamToUrl($url,@result[0],@result[1]);
+    }
+    
+    my $html = "<a class='".$button."' $popopver_attr href='".$url."'><i class='".$icon."'></i>".$title."</a>";
+    
+    return $html;
+}
+
+sub action_button{
+
+    my (%params_hash_ref) = @_;
+
+    my $action   = $params_hash_ref{'action'};
+    my $button   = $params_hash_ref{'button'}; #obtengo el boton
+    my $icon     = $params_hash_ref{'icon'} || undef;  #obtengo el boton
+    my $title    = $params_hash_ref{'title'}; #obtengo el title de la componete
+    my $id       = $params_hash_ref{'id'} || undef;
+    my $popover  = $params_hash_ref{'popover'} || undef;
+    my $disabled = $params_hash_ref{'disabled'} || undef;
+
+    $button.= " click";
+
+    if ($disabled){
+    	$button .= " disabled";
+    }
+    my $popopver_attr = "";
+    
+    if ($popover){
+        $button.= " popover_button ";
+        my $placement = $popover->{'placement'}||'right';
+        my $text_pop = $popover->{'text'};
+        my $title_pop= $popover->{'title'};
+        $popopver_attr.= " rel='popover' data-content='$text_pop' rel='popover' data-placement='$placement' data-original-title='$title_pop' ";   
+    }
+    
+    
+    my $html = "<a id='$id' class='".$button."' $popopver_attr onclick='".$action."'><i class='".$icon."'></i> ".$title."</a>";
+    
+    return $html;
+}
+
+
+sub action_set_button{
+    my (%params_hash_ref) = @_;
+    
+    my $title       = $params_hash_ref{'title'}; #obtengo el title de la componete
+    my $action      = $params_hash_ref{'action'} || undef;
+    my $url         = $params_hash_ref{'url'} || undef;
+    my $class       = $params_hash_ref{'class'} || undef;
+    
+    my $icon  = $params_hash_ref{'icon'} || 'icon white user'; #obtengo el title de la componete
+
+    my $actions     = $params_hash_ref{'actions'} || [];
+    
+    my $button   = $params_hash_ref{'button'} || "btn btn-primary";
+
+    my $popover = $params_hash_ref{'popover'} ||undef;
+    my $popopver_attr = "";
+    
+    if ($popover){
+        $button.= " popover_button ";
+        my $placement = $popover->{'placement'}||'right';
+        my $text_pop = $popover->{'text'};
+        my $title_pop= $popover->{'title'};
+        $popopver_attr.= " rel='popover' data-content='$text_pop' rel='popover' data-placement='$placement' data-original-title='$title_pop' ";   
+    }
+
+    
+    my $html = "<div class='btn-group $class'>";
+    
+    if ($url){
+            my $params   =  $params_hash_ref{'params'} ||  $url;
+            my @result;
+            foreach my $p (@$params){
+                @result = split(/=/,$p);
+                $url = C4::AR::Utilidades::addParamToUrl($url,@result[0],@result[1]);
+            }
+        $html.= "<a class='$button' $popopver_attr href='$url'><i class='$icon'></i> $title</a>";
+        
+    }else{
+        $html.= "<a class='$button' $popopver_attr class='click' onclick='$action'><i class='$icon'></i> $title</a>";
+    }
+
+
+    if (scalar(@$actions)){
+	    $html.= "<a class='$button dropdown-toggle' data-toggle='dropdown' href='#'><span class='caret'></span></a>";
+	    $html.= "<ul class='dropdown-menu'>";
+	    
+	    foreach my $action (@$actions){
+	        my $name = $action->{'title'};
+	        my $func = $action->{'action'};
+	        my $url  = $action->{'url'};
+	        my $icon = $action->{'icon'};
+	        if ($func){
+	            $html .= "<li><a class='click' onclick='$func' ><i class='$icon' ></i> $name</a></li>";
+	        }else{
+	            my $params   =  $action->{'params'} ||  $action->{'url'};
+	            my @result;
+	            foreach my $p (@$params){
+	                @result = split(/=/,$p);
+	                $url = C4::AR::Utilidades::addParamToUrl($url,@result[0],@result[1]);
+	            }
+	            $html .= "<li><a href='$url'><i class='$icon'></i> $name</a></li>";
+	        }
+	
+	    }
+	
+	    $html.= "</ul>";
+    }    
+    $html.= "</div>";
+
+    return $html;   
+}
+
+# sub tableHeader{
+#     my (%params_hash_ref) = @_;
+#     
+#     my $id          = $params_hash_ref{'id'}; 
+#     my $class       = $params_hash_ref{'class'} || undef;
+#     my $select_all  = $params_hash_ref{'selectAll_id'} || undef;
+# 
+# 
+#     my $columns     = $params_hash_ref{'columns'};
+#     
+#     my $html = "<table id=$id class='table table-striped $class'><thead>";
+#     
+#     if ($select_all){
+#         $html .= "<th><i class='icon-ok-sign click' id='$select_all' title='".C4::AR::Filtros::i18n("Seleccionar todos")."'></th>";
+#     }
+#     
+#     foreach my $column (@$columns){
+#         $html .= "<th>$column</th>";
+#     }
+# 
+#     $html .= "</thead>";
+#     
+#     return $html;	
+# }
+
+
+sub tableHeader{
+    my (%params_hash_ref) = @_;
+    
+    my $id          = $params_hash_ref{'id'}; 
+    my $class       = $params_hash_ref{'class'} || undef;
+    my $select_all  = $params_hash_ref{'selectAll_id'} || undef;
+    my $order       = $params_hash_ref{'order'} || undef;
+
+
+    my $columns     = $params_hash_ref{'columns'};
+    
+    my $html = "<table id=$id class='table table-striped $class'><thead>";
+    
+    if ($select_all){
+        $html .= "<th><i class='icon-ok-sign click' id='$select_all' title='".C4::AR::Filtros::i18n("Seleccionar todos")."'></th>";
+    }
+    
+    if ($order){
+      foreach my $column (@$columns){
+            $html .= "<th class='click' onclick=ordenar('".$order->{$column}."')>$column</th>";
+      }
+    } else {
+        foreach my $column (@$columns){
+            $html .= "<th>$column</th>";
+        }
+    }
+    
+    $html .= "</thead>";
+    
+    return $html;   
+}
+
+
+sub action_group_link_button{
+	my (%params_hash_ref) = @_;
+	
+    my $actions     = $params_hash_ref{'actions'} || [];
+    
+    
+    my $html = "<div class='btn-group'>";
+   
+    foreach my $action (@$actions){
+        my $url   =  $action->{'url'}; #obtengo la url si es un link 
+        my $title = $action->{'title'};
+		my $icon  = $action->{'icon'};
+		my $class = $action->{'class'};
+		
+        if($url){
+			#ES UN LINK
+			my $params   =  $action->{'params'} ||  $action->{'url'}; #obtengo el llamado a la funcion en el evento onclick
+			my @result;
+			foreach my $p (@$params){
+				@result = split(/=/,$p);
+				$url = C4::AR::Utilidades::addParamToUrl($url,@result[0],@result[1]);
+			}
+			$html .= "<a class='click btn $class' href='$url'><i class='$icon'></i>$title</a>";
+		}
+		else{
+			#ES UNA ACCION
+			my $func = $action->{'action'}; #obtengo la funcion si es una accion
+			$html .= "<a class='click btn $class' onclick='$func' ><i class='$icon'></i>$title</a>";
+		}
+
+    }
+
+    $html.= "</div>";
+    
+    return $html;	
+}
+
+sub tabbedPane{
+    my (%params) = @_;
+    
+    my $span = $params{'span'} ||'';
+    
+    my $html = "<section class='$span'>";
+
+    $html .= "<h2>".$params{'titulo'}."</h2>";
+    $html .= "<p>".$params{'subtitulo'}."</p>";
+    $html .= "<ul id='tab' class='nav nav-tabs'>";    
+    
+    my $content_elems = $params{'content'};
+    foreach my $elem (@$content_elems){
+    	my $active = "";
+    	
+    	if ($elem->{'id'} eq $params{'active_id'}){
+    		$active = "class='active'";
+    	}
+    	$html .= "<li $active><a href='#".$elem->{'id'}."' data-toggle='tab'>".$elem->{'text'}."</a></li>";
+    }
+    
+    $html .= "</ul>";
+    
+    $html .= "<div id='".$params{'content_id'}."' class='tab-content'>";
+    
+    return $html;
+    
+}
+
+END { }
 
 1;
 __END__

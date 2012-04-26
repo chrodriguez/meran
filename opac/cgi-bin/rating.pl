@@ -34,6 +34,6 @@ my $id2 = $input->param('id2');
 C4::AR::Nivel2::rate($rate,$id2,$nro_socio);
 
 print $session->header;
-print "<b>".C4::AR::Filtros::i18n("Gracias por votar!")."</b>";
+print C4::AR::Filtros::i18n("Gracias por votar!");
 
 1;

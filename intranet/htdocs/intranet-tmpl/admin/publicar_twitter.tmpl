@@ -1,4 +1,3 @@
-<script type="text/javascript" src="/includes/jquery/jquery.gritter.js"></script>
 <script>
 
 
@@ -17,50 +16,51 @@
       if (!verificarRespuesta(responseText))
                 return(0);
         var text=JSONstring.toObject(responseText).messages[0].message;
-        $.extend($.gritter.options, {
-            class_name: 'gritter', // for light notifications (can be added directly to $.gritter.add too)
-            position: 'bottom-right', // possibilities: bottom-left, bottom-right, top-left, top-right
-            fade_in_speed: 100, // how fast notifications fade in (string or int)
-            fade_out_speed: 100, // how fast the notices fade out
-            time: 3000 // hang on the screen for...
-        });
-        $.gritter.add({
-                // (string | mandatory) the heading of the notification
-                title: 'Twitter',
-                // (string | mandatory) the text inside the notification
-                text: text,
-                // (bool | optional) if you want it to fade out on its own or just sit there
-                sticky: false,
-                // (int | optional) the time you want it to be alive for before fading out
-                time: ''
-        });
-
+        $("#twitter_result").html('<a class="close" data-dismiss="alert">×</a>'+text);
+        $("#twitter_result").alert();
+        $("#twitter_result").show();
+        
   }
 
+  function enableDisableButton(){
+	  var chars = $('#post_twitter').val().length;
+	  
+	  if (chars > 140){
+		  $('#publicar_twitter').attr('disabled','');
+	      $('#publicar_twitter').removeClass("btn-primary");
+	  }else{
+    	  $('#publicar_twitter').removeAttr('disabled');
+          $('#publicar_twitter').addClass("btn-primary");
+	  }
+  }
 
   $(document).ready(function() {
         $('#publicar_twitter').click(function() {
              publicar_twitter();
              $.fancybox.close();
         });      
-        
+        $('#post_twitter').focus();
         $("#post_twitter").charCount({
             limit: 0,        
             warning: 10,
             counterElement: 'p',
-            css: 'textareaCounter',
-            cssWarning: 'textareaCounterwarning',
-            cssExceeded: 'textareaCounterExceeded',
-            counterText: 'Caraceteres restantes: '    
+            cssExceeded: 'label label-important',
+            counterText: "[% 'Caraceteres restantes' | i18n %]: ",    
         });
  });
 
 </script>
-    <div class="fancybox_twitter" id="fancybox_twitter">
-        <fieldset>
-                <legend>[% 'Cuerpo del mensaje' | i18n %]:</legend>
-                <textarea id="post_twitter" onkeyup='' name="textarea_twitter" style="padding:5px" rows="5" cols="50"></textarea>
-                <input class= "fancybox_button" id="publicar_twitter" type="button" value="Enviar">
-            <!--</form>-->
-        </fieldset>
-    </div>
+
+<div class="modal" style="position: relative; top: auto; left: auto; margin: 0 auto; z-index: 1">
+              <div class="modal-header">
+                <h3>[% 'Nuevo tweet' | i18n %]<h3>
+              </div>
+              <div class="modal-body">
+                              <textarea id="post_twitter" name="textarea_twitter" class="input-xxlarge" onkeyup="enableDisableButton();" autofocus="autofocus"></textarea>
+                              <p class="help-block">[% 'Sea breve, no m&aacute;s de 140 caracteres' | i18n %].</p>
+                </div>                
+              </div>
+              <div class="modal-footer">
+                  <button type="submit" id="publicar_twitter" class="btn btn-primary">[% 'Tweetear' | i18n %]</button>
+              </div>
+</div>    

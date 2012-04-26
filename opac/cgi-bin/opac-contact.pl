@@ -32,11 +32,15 @@ if ($post){
         #verificamos que los campos requeridos tengan valor
     if( ($params_hash->{'nombre'} eq "") || ($params_hash->{'apellido'} eq "") || ($params_hash->{'email'} eq "") || ($params_hash->{'mensaje'} eq "") ){
         $t_params->{'mensaje_error'} = 1;
+        $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje('VA002','opac');
+
     }else{
   	    $contacto->agregar($params_hash);
+        $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje('U608','opac');
+       $t_params->{'partial_template'} = "opac-contact.inc";
     }
         
-    $t_params->{'partial_template'} = "opac-contact_posted.inc";
+#     $t_params->{'partial_template'} = "opac-contact.inc";
     
 }else{
     $t_params->{'partial_template'} = "opac-contact.inc";

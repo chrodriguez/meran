@@ -1,5 +1,4 @@
 [% INCLUDE "intranet-top.inc" %]
-[% INCLUDE "WindowHelper.inc" %]
 
 <script type="text/javascript">
 
@@ -45,11 +44,12 @@ function guardarTiposQueAplica(){
     objAH.tipoAccion        = "GUARDAR_TIPOS_PRESTAMOS_QUE_APLICA";
     borrarDiv();
     objAH.sendToServer();
+    agregarSancion_hide();
 }
 
 function updateGuardarTiposQueAplica(responseText){
      respuesta(responseText);
-	buscarTiposPrestamosSancionados();
+    buscarTiposPrestamosSancionados();
 }
 
 /*
@@ -67,7 +67,7 @@ function respuesta(responseText){
  */
 function buscarTiposPrestamosSancionados(){
     
-	if( ( $("#tipo_prestamo_id").val() != 'SIN SELECCIONAR') && ( $("#categoria_socio_id").val() != 'SIN SELECCIONAR')) {
+    if( ( $("#tipo_prestamo_id").val() != 'SIN SELECCIONAR') && ( $("#categoria_socio_id").val() != 'SIN SELECCIONAR')) {
         objAH                   = new AjaxHelper(updateTiposPrestamosSancionados);
         objAH.debug             = true;
         objAH.showOverlay       = true;
@@ -77,7 +77,7 @@ function buscarTiposPrestamosSancionados(){
         objAH.tipoAccion        = "TIPOS_PRESTAMOS_SANCIONADOS";
         borrarDiv();
         objAH.sendToServer();
-	}
+    }
 }
 
 function updateTiposPrestamosSancionados(responseText){
@@ -131,7 +131,7 @@ function updateAgregarReglaTipoSancion(responseText){
  *  eliminarReglaTipoSancion
  */
 function eliminarReglaTipoSancion(tipo_sancion, regla_sancion){
-    jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,'Confirme', function(confirmStatus){ 
+    bootbox.confirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,function(confirmStatus){ 
         if (confirmStatus) {
             objAH                   = new AjaxHelper(updateEliminarReglaTipoSancion);
             objAH.debug             = true;
@@ -167,16 +167,16 @@ function editarReglas(){
 function updateEditarReglas(responseText){
 
     $('#basic-modal-content').html(responseText);
-    $('#basic-modal-content').modal({   containerCss:{
-            backgroundColor:"#fff",
-    //         borderColor:"#0063dc",
-            height:320,
-            padding:0,
-            width:650
-        },
-    });
+    $('#basic-modal-content').modal();
 }
 
+function agregarSancion_show(){
+    $('#moda-nueva-sancion').modal();
+}
+
+function agregarSancion_hide(){
+    $('#moda-nueva-sancion').modal('hide');
+}
 
 /*
  *  eliminarReglaSancion
@@ -216,7 +216,7 @@ function agregarReglaSancion(){
     objAH.tipoAccion    = "AGREGAR_REGLA_SANCION";
     objAH.sendToServer();
     //Cierro la ventana
-    vReglasSanciones.close();
+    $('#basic-modal-content').modal('hide');
 }
 
 function updateAgregarReglaSancion(responseText){
@@ -230,27 +230,40 @@ $(document).ready( function() {
 
 </script>
 
-<fieldset>
-    <legend class="titulo_legend">[% "Tipos de sanciones" | i18n %] </legend>
-    <div>
-        <div id="divSanciones">
-            <div id="divSancionesTiposSocios">
-                <table border=0 cellspacing=0 cellpadding=0 align='center' width="100%" >
-	                <tr class="titulo_tabla_resultado">
-                                <td>[% "Tipos de pr&eacute;stamo" | i18n %]</td>
-                                <td>[% "Categorias de usuario" | i18n %]</td>
-	                </tr>
-                    <tr valign=middle align='center'>
-				                <td>[% tipos_de_prestamos %]</td>
-				                <td>[% categorias_de_socio %]</td>
-	                </tr>
-                </table>
+
+<div id="divSancionesReglas"></div>
+
+<div class="form-actions">
+    [% PERL %]
+                print C4::AR::Filtros::action_button(   
+                        button   => "btn btn-primary",
+                        action   => 'agregarSancion_show();',
+                        title   => "[% 'Agregar sanci&oacute;n' | i18n %]",
+                    ) ;
+    [% END %]
+
+</div>
+
+<div id="moda-nueva-sancion" class="modal hide fade"> 
+    <div class="modal-header">
+            <a href="#" class="close" data-dismiss="modal">×</a>
+            <h2>[% "Nuevo tipo de sanci&oacute;n" | i18n %] </h2>
+    </div>
+    <div class="modal-body">
+          <div class="control-group">
+                <label class="control-label">[% "Tipos de pr&eacute;stamo" | i18n %]</label>
+                <div class="controls">
+                    <span>[% tipos_de_prestamos %]</span>   
+                </div>
+          </div>
+          <div class="control-group">
+                <label class="control-label">[% "Categorias de usuario" | i18n %]</label>
+                <div class="controls">
+                        <span>[% categorias_de_socio %]</span>
+                </div>
             </div>
-            <div id="divSancionesTiposPrestamos">
-            </div>
-        </div>
-        <div id="divSancionesReglas">
-        </div>
-</fieldset>
+        <div id="divSancionesTiposPrestamos"></div>
+   </div>
+</div>                     
 
 [% INCLUDE "intranet-bottom.inc" %]

@@ -3,10 +3,13 @@
 <script>
     $(document).ready(function() {
     	$("#usuario").focus();
-    }
+    	CrearAutocompleteUsuarios({ IdInput: 'usuario', 
+                                    IdInputHidden: 'nro_socio_hidden', 
+                                 });
+    });
 </script>
 
-<div class="titulos" >[% "Administraci&oacute;n de permisos" | i18n %]</div>
+<div class="title">[% "Administraci&oacute;n de permisos" | i18n %]</div>
 
 [% INCLUDE "partials/admin/_permisos.inc" %]
 

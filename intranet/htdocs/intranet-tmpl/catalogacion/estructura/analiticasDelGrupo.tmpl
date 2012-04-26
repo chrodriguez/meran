@@ -1,3 +1,4 @@
+[% IF tiene_analiticas %]
 		<script>
 		
 		    $(document).ready(function(){
@@ -7,26 +8,29 @@
 		
 		</script>
 		
-		<fieldset>
-		    <legend class="trigger trigger_analiticas_[% id2 %] click">[% "Anal&iacute;ticas del grupo" | i18n %] [% id2 %]</legend>
-		    <div id="analiticasDelGrupo[% id2 %]" class="analiticasDelGrupo[% id2 %]" >
-				<ul class="listado_sin_margen"> 
-						<li></li>
-                        [% FOREACH nivel1_analiticas_array %]
-                        <li>
-						<dl class="listado_sin_margen">  
-                            [% FOREACH nivel1_analitica %]
-                                [% IF liblibrarian %]
-                                    [% IF dato %]
-                                    <dt> [% liblibrarian %]: <strong>[% dato %]</strong></dt>
-                                    [% END %]
-                                [% END %]
-                            [% END %] <!-- END FOREACH nivel1_analitica -->
-						</dl>
-						</li>
-                        [% END %]  <!-- END FOREACH nivel1_analiticas_array -->      
-                 </ul>
-		    </div> <!--end <div id="analiticasDelGrupo -->
-		</fieldset>
-		<script type="text/javascript">makeToggle('analiticasDelGrupo[% id2 %]','trigger_analiticas_[% id2 %]',null,true);</script>
-  
+	<div class="accordion" id="analiticas_del_grupo[% id %]">
+	            <div class="accordion-group">
+		              <div class="accordion-heading">
+		                <a class="accordion-toggle" data-toggle="collapse" data-parent="#analiticas_del_grupo[% id %]" href="#analiticas[% id2 %]">
+		                  [% 'Anal&iacute;ticas' | i18n %]
+		                </a>
+		              </div>
+		              <div id="analiticas[% id2 %]" class="accordion-body collapse">
+			                <div class="accordion-inner">
+				                [% FOREACH nivel1_analiticas_array %]
+				                <dl>  
+				                    [% FOREACH nivel1_analitica %]
+				                        [% IF liblibrarian %]
+				                            [% IF dato %]
+				                                  <dt class="inline left rightMargin">[% liblibrarian %]:&nbsp;</dt> 
+				                                  <dd>[% dato %]&nbsp;</dd>
+				                            [% END %]
+				                        [% END %]
+				                    [% END %] <!-- END FOREACH nivel1_analitica -->
+				                </dl>
+				                [% END %]  <!-- END FOREACH nivel1_analiticas_array -->      
+					      </div> <!--end <div id="analiticasDelGrupo -->
+				     </div>
+			     </div>
+	</div>
+[% END %]

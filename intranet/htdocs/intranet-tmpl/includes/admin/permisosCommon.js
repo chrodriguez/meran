@@ -168,7 +168,7 @@ function actualizarPermisos(){
         confirmMessage += SUPER_USER_GRANTED;
     else
         confirmMessage += PERMISSION_GRANTED;
-	    jConfirm(confirmMessage,GRANT_PERMISSION_TITLE, function(confirmStatus){
+	    bootbox.confirm(confirmMessage, function(confirmStatus){
 	    	if (confirmStatus) objAH.sendToServer();
 		});
 }
@@ -201,7 +201,7 @@ function nuevoPermiso(){
         confirmMessage = NEW_GRANT+"\n\n";
         if (superUserGranted == 1)
             confirmMessage += SUPER_USER_GRANTED;
-        jConfirm(confirmMessage,GRANT_PERMISSION_TITLE, function(confirmStatus){if (confirmStatus) objAH.sendToServer();});
+        bootbox.confirm(confirmMessage, function(confirmStatus){if (confirmStatus) objAH.sendToServer();});
     }else{
         jAlert(NO_SE_SELECCIONO_NINGUN_USUARIO, ERROR_ITSELF);
         $('#usuario').focus();

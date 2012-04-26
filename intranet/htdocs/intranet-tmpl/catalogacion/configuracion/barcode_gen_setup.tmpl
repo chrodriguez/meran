@@ -1,7 +1,5 @@
 [% INCLUDE "intranet-top.inc" %]
 
-[% INCLUDE  'WindowHelper.inc'  %]
-
 [% INCLUDE  'AutocompleteHelper.inc'  %] 
 
 
@@ -61,26 +59,30 @@
 	});
 </script>
 
-<input type="hidden" id="idEncabezado">
+<section class="center-section-form">
+	<form class="form-horizontal" onsubmit="return false;">
+		<fieldset>
+		    <legend>[% 'Configuraci&oacute;n de formatos de &oacute;digos de inventario' | i18n %]</legend>
+			    <div class="control-group">
+                    <label class="control-label" for="tipo_nivel3_id">[% 'Tipo de documento' | i18n %]</label>		
+                    <div class="controls">	       
+			             [% selectItemType %]
+	                </div>
+			    </div>
+			    <div class="form-actions">
+					[% PERL %]
+					                    print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+					                                                        onClick => "eleccionDeBarcodeFormat();",
+					                                                        boton    => "btn btn-primary",
+					                                                        inline => "1",
+					                            ) ;
+					[% END %]
+			    </div>    
+		</fieldset>
+	</div>
+</section>
 
-<div class="titulos" >[% 'Configuraci&oacute;n de formatos de Barcode' | i18n %]</div>
-
-<fieldset>
-    <legend><strong>[% "Seleccione el tipo de documento a configurar:" | i18n %]</strong></legend>
-
-    [% PERL %]
-            print C4::AR::Filtros::to_Icon(   
-                                                boton   => "icon_buscar",
-                                                onClick => "eleccionDeBarcodeFormat();",
-                                                title   => "[% 'Buscar' | i18n %]",
-                    ) ;
-    [% END %]
-    [% selectItemType %]
-    
-    <div id="result"></div>
-
-</fieldset>
-
+<div id="result"></div>
 
 
 [% INCLUDE "intranet-bottom.inc" %]

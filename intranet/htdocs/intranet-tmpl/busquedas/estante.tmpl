@@ -12,45 +12,50 @@
                 <h2><i>[% buscoPor %]</i></h2>
             </div>
             <div class="resultados_consulta">[% "Total de registros" | i18n %]: <b>[% cantidad %]</b>  en ([% timeSeg %] segundos)</div>
+           
             <div class="contenedor_paginador">[% paginador %]</div>
 
-
-            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
-                <tr class="titulo_tabla_resultado">
-                    <td width="35%" >
-                        [% "Estante" | i18n %]
-                    </td>
-                </tr>
-            <!-- Actual Resultados de la b&uacute;squeda -->
-            [% FOREACH estante IN SEARCH_RESULTS %]
-                <tr class="datos_tabla_estantes">
-                    <td>
-			  [% auxEstante = estante %]
-			  [% listaEstantes = '' %]
-			  [% WHILE auxEstante > 0 %]
-			      [% IF listaEstantes != ''%] [%  listaEstantes = ' / ' _ listaEstantes %] [% END %]
-			      [%  listaEstantes = auxEstante.getEstante _ listaEstantes %]
-			      [% IF auxEstante.getPadre %]
-				[% auxEstante = auxEstante.estante_padre %]
-			      [% ELSE %]
-				[% auxEstante = 0 %]
-			      [% END %]
-			 [% END %]
-
-			      [% PERL %]
-				  print C4::AR::Filtros::link_to( text =>     "[% listaEstantes %]",
-								  url=>"[% url_prefix %]/estantes/verDetalleEstante.pl", 
-								  params =>   ["id_estante=[% estante.getId %]"],
-								  title =>    "[% 'Mostrar Detalle del Estante' | i18n %]",
-								  class => "link_to_detail"
-							      ) ;
-			      [% END %]
-
-                    </td>
-                </tr>
+            [% PERL %]
+                      print C4::AR::Filtros::tableHeader(   
+                                        id              => "tablaResult",
+                                        class           => "",
+                                        selectAll_id    => "",
+                                        columns         => ['[% "Estante"|i18n %]']                                  
+                      ) ;
             [% END %]
+
+              <tbody>
+                      <!-- Actual Resultados de la b&uacute;squeda -->
+                      [% FOREACH estante IN SEARCH_RESULTS %]
+                          <tr class="datos_tabla_estantes">
+                              <td>
+                                    [% auxEstante = estante %]
+                                    [% listaEstantes = '' %]
+                                    [% WHILE auxEstante > 0 %]
+                                        [% IF listaEstantes != ''%] [%  listaEstantes = ' / ' _ listaEstantes %] [% END %]
+                                        [%  listaEstantes = auxEstante.getEstante _ listaEstantes %]
+                                        [% IF auxEstante.getPadre %]
+                                              [% auxEstante = auxEstante.estante_padre %]
+                                        [% ELSE %]
+                                              [% auxEstante = 0 %]
+                                        [% END %]
+                                    [% END %]
+
+                                    [% PERL %]
+                                    print C4::AR::Filtros::link_to( text =>     "[% listaEstantes %]",
+                                                    url=>"[% url_prefix %]/estantes/verDetalleEstante.pl", 
+                                                    params =>   ["id_estante=[% estante.getId %]"],
+                                                    title =>    "[% 'Mostrar Detalle del Estante' | i18n %]",
+                                                    class => "link_to_detail"
+                                                    ) ;
+                                    [% END %]
+
+                              </td>
+                          </tr>
+                      [% END %]
+              </tbody>
             </table>
         </div>
-        <div class="contenedor_paginador">[% paginador %]</div>
+        
         
 </fieldset>

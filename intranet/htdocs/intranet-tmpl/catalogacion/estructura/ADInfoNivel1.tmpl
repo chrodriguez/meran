@@ -15,46 +15,38 @@
                 print C4::AR::Filtros::link_to( text =>     [% nivel1.getId1 %],
                                                 url=>"detalle.pl", 
                                                 params =>   ["id1=[% nivel1.getId1 %]"],
-                                                title =>    "[% 'Editar Registro' | i18n %]"
+                                                title =>    "[% 'Ver Detalle del Registro' | i18n %]"
                                             ) ;
             [% END %]
 
             <span id="template_[% nivel1.getId1 %]">([% nivel1.getTemplate %])</span>
     </legend>
-            <ul class="listado_sin_margen">
-            <li class="titulos"> [% nivel1.getTitulo %] </li>
-            <li> <strong>[% "Autor:" | i18n %] </strong> [% nivel1.getAutorObject.getCompleto %]  </li>
-            <li>
-                <strong>[% 'Nivel bibliogr&aacute;fico:' | i18n %]</strong> [% nivel1.getNivelBibliograficoObject.getDescription %]
-            </li>
-            <li class="botonera_horizontal">
-                <ul class="listado_sin_margen">
+
+
+            <dl>
+	            <dt class="inline left rightMargin"> [% 'T&iacute;tulo' %] </dt>
+	            <dd>[% nivel1.getTitulo %]</dd>
+	            
+	            <dt class="inline left rightMargin">[% "Autor:" | i18n %] </dt> 
+	            <dd>[% nivel1.getAutorObject.getCompleto %]</dd>
+
+	            <dt class="inline left rightMargin">[% 'Nivel bibliogr&aacute;fico:' | i18n %]</dt> 
+	            <dd>[% nivel1.getNivelBibliograficoObject.getDescription %]</dd>
+            </dl>
+
                 [% PERL %]
-                        print C4::AR::Filtros::to_Icon(  
-                                                            boton   => "icon_edicion",
-                                                            onClick => "modificarN1('[% nivel1.getId1 %]','[% nivel1.getTemplate %]');",
-                                                            title   => "[% 'Modificar nivel 1' | i18n %]",
-                                                            li => 1,
-                                ) ;
+                    print C4::AR::Filtros::action_set_button(    
+                                                        title           => "[% 'Registro' | i18n %]",
+                                                        button          => 'btn btn-primary',
+
+                                                        actions         => [
+                                                                            {title => "Modificar", action=>'modificarN1("[% nivel1.getId1 %]", "[% nivel1.getTemplate %]")',icon=>"icon-edit"},
+                                                                            {title => "Eliminar", action=>'borrarN1([% nivel2.getId1 %])', icon=>"icon-trash"},
+                                                                            {title => "Agregar Nivel 2", action=>'agregarN2("[% nivel1.getId1 %]")', icon=>"icon-plus-sign"},
+                                                                            ],
+
+                            ) ;
                 [% END %]
-                [% PERL %]
-                        print C4::AR::Filtros::to_Icon(  
-                                                            boton   => "icon_agregar",
-                                                            onClick => "agregarN2();",
-                                                            title   => "[% 'Agregar nivel 2' | i18n %]",
-                                                            li => 1,
-                                ) ;
-                [% END %]
-                [% PERL %]
-                        print C4::AR::Filtros::to_Icon(   
-                                                            boton   => "icon_borrar",
-                                                            onClick => "borrarN1('[% nivel1.getId1 %]');",
-                                                            title   => "[% 'Borrar nivel 1' | i18n %]",
-                                                            li => 1,
-                                ) ;
-                [% END %]
-            </ul>
-            </li>
-        </ul>
     </fieldset>
     [% END %]
+ <br />

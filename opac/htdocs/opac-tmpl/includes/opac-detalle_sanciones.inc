@@ -1,44 +1,54 @@
-[% IF sanciones %]
-    <table class="tabla_datos" width="98%" align="center"  border="0" cellpadding="0" cellspacing="0" >
-      <tr>
-        <td valign="top">
-            <table class="tabla_datos" cellpadding="0" cellspacing="0" border="0">
-              <tr>
-                <td>
-                  <font color="red" size="3">
-                    <b>[% "Ud. est&aacute; sancionado para los siguientes tipos de pr&eacute;stamo:" | i18n %]
-                  </font></b>
-                  <ul>
-                    [% FOREACH sancion IN sanciones %]
-	                    <li class="sancionesOPAC">
-                            <h2>[% sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]</h2>
-                            <b>[% IF sancion.tipo_sancion %]
-		                        [% FOREACH ts IN sancion.ref_tipo_prestamo_sancion %] 
-			                        [% ts.ref_tipo_prestamo.descripcion %]<br>
-		                        [% END %]
-		                        [% ELSE %]
-		                            [% "Reserva no retirada" | i18n %]
-		                        [% END %]
-		                    </b>
-		                    </br>
-		                    <b>[% "Desde el: " | i18n %]</b>[% sancion.getFecha_comienzo_formateada %]<b>[% " hasta el: " | i18n %]</b>[% sancion.getFecha_final_formateada %]</br>
-                            <b>[% "Autor: " | i18n %]</b>[% sancion.nivel3.nivel1.getAutor %]</br>
-                            <b>[% "Titulo: " | i18n %]</b>[% sancion.nivel3.nivel1.getTitulo %]</br>
-                            <b>[% "Edicion: " | i18n %]</b>[% IF sancion.nivel3.nivel2.getEdicion %] 
-                                                             [% sancion.nivel3.nivel2.getEdicion %]
-                                                           [% ELSE %]
-                                                             --
-                                                           [% END %]</br>
 
-	                    </li>      
-                    [% END %]
-                  <ul>
-                </td>
-              </tr>
+[% IF sanciones %]
+            
+                  [% PERL %]
+                      print C4::AR::Filtros::tableHeader(   
+                                        id              => "detalle_sanciones",
+                                        class           => "",
+                                        selectAll_id    => "",
+                                        columns         => ['[% "Tipo de prestamo"|i18n %]','[% "Titulo"|i18n %]',
+                                                            '[% "Desde"|i18n %]','[% "Hasta"|i18n %]'
+                                                          ]
+
+                                                                          
+                                              ) ;
+                  [% END %]
+
+                   <tbody>  
+                        [% FOREACH sancion IN sanciones %]
+                        <tr>  
+                            <td>
+                                  [% IF sancion.tipo_sancion %] 
+                                        [% sancion.ref_tipo_sancion.ref_tipo_prestamo.getDescripcion %]
+                                  [% ELSE %]
+                                        [% "Reserva no retirada" | i18n %]
+                                  [% END %]
+                            </td>
+                            <td>
+
+                                   [% PERL %]
+                                                print C4::AR::Filtros::link_to( text =>     "[% sancion.nivel3.nivel1.getTitulo %]",
+                                                                                url =>      "[% url_prefix %]/opac-detail.pl", 
+                                                                                params => [ "id1=[% sancion.nivel3.nivel1.getId1 %]", ],
+                                                                            ) ;
+                                  [% END %]
+                            </td>
+                            <td>
+                                  [% sancion.getFecha_comienzo_formateada %]
+                            </td>
+                            <td>
+                                  [% sancion.getFecha_final_formateada %]
+                            </td>
+                        </tr>       
+                        [% END %]
+                  </tbody> 
             </table>
-        </td>
-      </tr>
-    </table>
+
 [% ELSE %]
-    <h1> [% 'Ud. no ha sido sancionado.' | i18n %]
+      <div class="alert alert-info">[% 'No ten&eacute;s ninguna sanci&oacute;n' | i18n %]</div>
 [% END %]
+
+
+
+<!--<br> <h4>[% "Ud. est&aacute; sancionado para los siguientes tipos de pr&eacute;stamo:" | i18n %]</h4--> 
+        

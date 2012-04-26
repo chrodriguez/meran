@@ -3,7 +3,7 @@ package C4::Modelo::DB::AutoBase1;
 use strict;
 
 use base 'Rose::DB';
-    use C4::Context;
+#    use C4::Context;
 __PACKAGE__->use_private_registry;
 
     my $context = new C4::Context;

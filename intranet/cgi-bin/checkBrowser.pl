@@ -11,7 +11,7 @@ my ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
 									template_name   => "checkBrowser.tmpl",
 									query           => $input,
 									type            => "intranet",
-									authnotrequired => 0,
+									authnotrequired => 1,
                                     flagsrequired   => {  ui            => 'ANY', 
                                                         tipo_documento  => 'ANY', 
                                                         accion          => 'CONSULTA', 

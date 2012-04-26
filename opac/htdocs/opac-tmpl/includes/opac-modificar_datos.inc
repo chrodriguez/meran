@@ -1,206 +1,193 @@
 [% INCLUDE 'ChangePasswordHelper.inc' %]
-<link rel="stylesheet" type="text/css" href="[% temas %]/[% user_theme %]/includes/fileuploader.css">
-
-<script type="text/javascript" src="/includes/jquery/fileuploader.js"></script>
 
 <script type="text/javascript">
 
-    function checkPassword(){
+function checkPassword(){
 
-        var changed = $.trim($('#actualpassword').val());
-        if (changed != ''){
-            [% IF plainPassword == 0 %]
-                var nroRandom   = [% nroRandom %];
-	            var hash_actual = b64_sha256(b64_sha256(b64_md5($("#actualpassword").val()))+nroRandom);
-	            var key         = b64_sha256(b64_md5($("#actualpassword").val()));
-	            var hash_new1   = encriptar(b64_md5($("#newpassword1").val()),key);
-	            var hash_new2   = encriptar(b64_md5($("#newpassword2").val()),key);
+    var changed = $.trim($('#actualpassword').val());
+    
+    if (changed != ''){
+        
+        var nroRandom   = [% nroRandom %];
+        var hash_actual = b64_sha256(b64_sha256(b64_md5($("#actualpassword").val()))+nroRandom);
+        var key         = b64_sha256(b64_md5($("#actualpassword").val()));
+        var hash_new1   = encriptar($("#newpassword1").val(),key);
+        var hash_new2   = encriptar($("#newpassword2").val(),key);
+        //encriptar(b64_md5($("#newpassword2").val()),key);
+        
+        //checkeo que las pass nuevas sean iguales
+        if(desencriptar(hash_new1, key) != desencriptar(hash_new2, key))
+        {
+            jAlert('Por favor verifique que las nuevas passwords sean iguales');
+            return false;
+        }
+        
+        [% IF minPassLength %]
+        if($("#newpassword1").val().length < [% minPassLength %])
+        {
+            jAlert('Por favor verifique que la nueva password contenga al menos [% minPassLength %] caracteres.');
+            return false;
+        }
+        [% END %]
+        
+        [% IF minPassNumeric %]
+        if (!$("#newpassword1").val().match(/([0-9]{[% minPassNumeric %],})/)) 
+        {
+            jAlert('Por favor verifique que la nueva password contenga al menos [% minPassNumeric %] numeros.');
+            return false;
+        }
+        [% END %]
+        
+        [% IF minPassAlpha %]
+        if (!$("#newpassword1").val().match(/([a-zA-Z]{[% minPassAlpha %],})/)) 
+        {
+            jAlert('Por favor verifique que la nueva password contenga al menos [% minPassAlpha %] letras.');
+            return false;
+        }
+        [% END %]
+        
+        [% IF minPassSymbol %]
+        if (!$("#newpassword1").val().match(/(\W{[% minPassSymbol %],})/)) 
+        {
+            jAlert('Por favor verifique que la nueva password contenga al menos [% minPassSymbol %] simbolos.');
+            return false;
+        }
+        [% END %]
+    
+        $("#actual_password").val(hash_actual);
+        $('#new_password1').val(hash_new1);
+        $('#new_password2').val(hash_new1);
+        $('#key').val(key);
+        $("#datosAEnviar").submit();
+        return true;
+    }        	
+  
+}
 
-	            $("#actual_password").val(hash_actual);
-	            $('#new_password1').val(hash_new1);
-	            $('#new_password2').val(hash_new2);
-	        [% ELSE %]
-	            var hash_actual = $("#actualpassword").val();
-	            var hash_new1   = $("#newpassword1").val();
-	            var hash_new2   = $("#newpassword2").val();
-
-                $("#actual_password").val(hash_actual);
-                $('#new_password1').val(hash_new1);
-                $('#new_password2').val(hash_new2);
-            [% END %]
-	        $("#datosAEnviar").submit();
-	        return true;
-	     }        	
-      
-    }
-
-    function eliminarAutorizado(){
-           $('#nombre_autorizado').val("");
-           $('#dni_autorizado').val("");
-           $('#telefono_autorizado').val("");
-           $('#eliminar_autorizado').val("true");
-    }
 
     $(document).ready(function() {
         CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'});
-        $("#temas_opac").change(function() {
-            $("link").attr("href","[% temas %]/"+$("#temas_opac").val()+"/includes/opac.css");
-            return false;
-        });
-
-        $('.fancylink').fancybox();
-        
-        
-        [% IF UploadPictureFromOPAC %] 
-
-	        [% IF !foto_name %] 
-	            $('#div_uploader').show();
-	        [% ELSE %]
-	            $('#div_boton_eliminar_foto').show();
-	        [% END %]
-	
-	
-	        //Inicializacion del FileUploader
-	        [% IF !foto_name %]  
-	            $('#label-file-uploader').show();
-	            var uploader = new qq.FileUploader({
-	                element: document.getElementById('file-uploader'),
-	                action: '[% url_prefix %]/uploadPicture.pl',
-	                allowedExtensions: ["bmp","jpg","gif","png","jpeg"],
-	                debug: true,
-	                multiple: false,
-	            });
-	        [% ELSE %]
-	            $('#label-file-uploader').hide();
-	        [% END %]
-	    [% END %]
-        
-        
+        $('.fancylink').fancybox();       
     });
 </script>
-    <!--    <h1 class="block">[% 'Modificar sus datos personales' | i18n%]</h1>-->
         [% IF mensaje %]
-            <h1 class="block error_field">[% 'Error en datos, s&iacute;rvase corregirlos' | i18n%]</h1>
+            <div class="[% mensaje_class %]">
+                <a class="close" data-dismiss="alert">×</a>
+                [% mensaje %]
+            </div>
         [% END %]
-        <div class="column1-unit" style="width: 500px">
-          <div class="contactform" style="width: 100%">
-            <form method="post" action="[% url_prefix %]/opac-userupdate.pl" onSubmit="return (checkPassword() && startOverlay())">
-              <fieldset>
-
-                <legend>&nbsp;
-                            <span id="name_card">
-                                [% 'Detalle de ' | i18n %] [% socio_data.usr_apellido %], [% socio_data.usr_nombre %]
-                            </span>
-                        &nbsp;
-                </legend>
-
-                <p><label for="contact_firstname" class="left">[% 'Nombres' |  i18n %]* :</label>
-                   <input type="text" name="nombre" id="nombre" class="field [% IF !socio_data.usr_nombre %] error_field [% END %]" value="[% socio_data.usr_nombre %]" tabindex="6" /></p>
-
-                <p><label for="apellido" class="left">[% 'Apellido/s' |  i18n %]* :</label>
-                   <input type="text" name="apellido" id="apellido" class="field [% IF !socio_data.usr_apellido %] error_field [% END %]" value="[% socio_data.usr_apellido %]" tabindex="7" /></p>
-
-                <p><label for="ciudad" class="left">[% 'Ciudad' |  i18n %]* :</label>
-                   <input type="text" name="ciudad" id="ciudad" class="field [% IF !socio_data.usr_ciudad_nombre %] error_field [% END %]" value="[% socio_data.usr_ciudad_nombre %]" tabindex="8" />
-                   <input type="hidden" name="id_ciudad" id="id_ciudad" class="field" value="[% socio_data.ciudad_ref.id %]"/> </p>
-
-                <p><label for="direccion" class="left">[% 'Direcci&oacute;n' |  i18n %]* :</label>
-                   <input type="text" name="direccion" id="direccion" class="field [% IF !socio_data.usr_calle %] error_field [% END %]" value="[% socio_data.usr_calle %]" tabindex="9" /></p>
-
-                <p><label for="telefono" class="left">[% 'Tel&eacute;fono' |  i18n %]* :</label>
-                   <input type="text" name="telefono" id="telefono" class="field [% IF !socio_data.usr_telefono %] error_field [% END %]" value="[% socio_data.usr_telefono %]" tabindex="10" /></p>
-
-                <p><label for="email" class="left">[% 'E-mail' |  i18n %]* :</label>
-                   <input type="text" name="email" id="email" class="field [% IF !socio_data.usr_email %] error_field [% END %]" value="[% socio_data.usr_email %]" tabindex="11" /></p>
-                   <input type="hidden" name="token" id="token" value="[% token %]" />
-<!--                 Cambio de foto -->
-                   [% IF UploadPictureFromOPAC %] 
-	                      [% IF mensaje_error_foto %] 
-	                        <li>
-	                                <font color="red">[% mensaje_error_foto %]</font>
-	                        </li>
-	                      [% END %]
-	
-	                       <div id="div_boton_eliminar_foto" style="display: none">
-	                          <li>
-	                                [% PERL %]
-	                                            print C4::AR::Filtros::to_Button(   text    => "[% 'Eliminar Foto' | i18n %]",
-	                                                                                boton   => "boton_borrar",
-	                                                                                onClick => "eliminarFoto('[% foto_name %] ');",
-	                                                                             );
-	                                [% END %]
-	                          </li>
-	                        </div>
-	                        <li style="margin: 0 auto; width: 60%; list-style: none">
-	                            <label for="file-uploader" id="label-file-uploader">
-	                                <h4>[% 'Seleccione una im&aacute;gen apropiada' | i18n %]</h4>
-	                            </label>
-	                            <div id="file-uploader">
-	                                <noscript>          
-	                                    <p>[% 'Please enable JavaScript to use file uploader.' | i18n %]</p>
-	                                    <!-- or put a simple form for upload here -->
-	                                </noscript>                          
-	                            </div>
-	                        </li>
-	                    </ul>
-                    [% END %]
-                   <!-- CAMPOS PARA CAMBIO DE PASSWORD -->
-                   <input type="hidden" name="new_password1" id="new_password1" />
-                   <input type="hidden" name="new_password2" id="new_password2" />
-                   <input type="hidden" name="changePassword" id="changePassword" />
-                   <input type="hidden" name="actual_password" id="actual_password" />
-              </fieldset>
-              
-              <fieldset>
-                            <legend class="titulo_legend_resaltado">[% 'Usuario adicional' | i18n %]</legend>
-                              <div class="authorizedBack">
-                                 <p>
-                                    <label class="left" for="nombre_autorizado"> [% "Nombre y Apellido" | i18n %]:</label>
-                                    <input type="text" name="nombre_autorizado" id="nombre_autorizado" class="field [% IF !socio.getNombre_apellido_autorizado %] error_field [% END %]" value="[% socio.getNombre_apellido_autorizado %]" tabindex="10" />
-                                 </p>
-                                 <p>    
-                                    <label class="left" for="dni_autorizado"> [% "DNI" | i18n %]: </label> 
-                                    <input type="text" name="dni_autorizado" id="dni_autorizado" class="field [% IF !socio.getDni_autorizado %] error_field [% END %]" value="[% socio.getDni_autorizado %]" tabindex="10" />
-                                 </p>
-                                 <p>
-                                    <label class="left" for="telefono_autorizado">[% "Tel&eacute;fono" | i18n %]:</label>
-                                    <input type="text" name="telefono_autorizado" id="telefono_autorizado" class="field [% IF !socio.getTelefono_autorizado %] error_field [% END %]" value="[% socio.getTelefono_autorizado %]" tabindex="10" /> 
-                                 </p>
-                                 <p><a onclick="eliminarAutorizado();" style="margin:11px;">Eliminar Autorizado</a></p>
-                                 <input type="hidden" name="eliminar_autorizado" id="eliminar_autorizado" value=""/> 
-                                 
-                            </div>
-              </fieldset>
-              <fieldset>
-                  <legend>&nbsp;[% 'Cambio de contrase&ntilde;a' | i18n %] ([% 'Dejar en blanco para descartar' | i18n %])&nbsp;</legend>
-                  <p>
-                      <label for="actualpassword" class="left">[% 'Contrase&ntilde;a Actual' | i18n %]:</label>
-                      <input type="password" name="" id="actualpassword" class="field" autocomplete="off" />
-                  </p>
-                  <p>
-                      <label for="newpassword1" class="left">[% 'Nueva Contrase&ntilde;a' | i18n %]:</label>
-                      <input type="password" name="" id="newpassword1" class="field" autocomplete="off" />
-                  </p>
-                  <p>
-                      <label for="newpassword2" class="left">[% 'Repetir contrase&ntilde;a' | i18n %]:</label>
-                      <input type="password" name="" id="newpassword2" class="field" autocomplete="off" />
-                  </p>
-              </fieldset>
-              <fieldset>
-                  <legend>&nbsp;[% 'Personalizacion de visualizaicion' | i18n %]&nbsp;</legend>
-                  <p>
-                      <label for="temas_opac" class="left">[% 'Tema' | i18n %]:</label>
-                      [% combo_temas %]
-                  </p>
-              </fieldset>
-              <fieldset>
-                  <legend>&nbsp;[% 'Recordatorio de vencimiento de pr&eacute;stamos' | i18n %]&nbsp;</legend>
-                  <p>
-                      <label for="remindFlag" class="left">[% 'Recibir notificaci&oacute;nes' | i18n %]:</label>
-                      <input type="checkbox" name="remindFlag" id="remindFlag" [% IF socio_data.remindFlag %] checked="checked" [% END %]/> 
-                  </p>
-              </fieldset>
-              <p><input type="submit" name="submit" id="submit" class="button" value="[% 'Modificar datos' |  i18n %]" tabindex="12" /></p>
-            </form>
-          </div>
+<div>
+    <form method="post" action="[% url_prefix %]/opac-userupdate.pl" onSubmit="return (checkPassword() && startOverlay())" class="form-horizontal">
+    
+    <fieldset>
+        <section class="center-section-form">
+        <br />
+        <div class="control-group">
+            <label class="control-label" for="nombre">[% 'Nombres' |  i18n %]* :</label>
+            <div class="controls">
+                <input type="text" name="nombre" id="nombre" required value="[% socio_data.usr_nombre %]" tabindex="6" />
+            </div>
         </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="apellido">[% 'Apellido/s' |  i18n %]* :</label>
+            <div class="controls">
+                <input type="text" name="apellido" id="apellido" required value="[% socio_data.usr_apellido %]" tabindex="7" />
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="ciudad">[% 'Ciudad' |  i18n %]* :</label>
+            <div class="controls">
+                <input type="text" name="ciudad" id="ciudad" required value="[% socio_data.usr_ciudad_nombre %]" tabindex="8" />
+                <input type="hidden" name="id_ciudad" id="id_ciudad" value="[% socio_data.ciudad_ref.id %]"/>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="direccion">[% 'Direcci&oacute;n' |  i18n %]* :</label>
+            <div class="controls">
+                <input type="text" name="direccion" id="direccion" required value="[% socio_data.usr_calle %]" tabindex="9" />
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="telefono">[% 'Tel&eacute;fono' |  i18n %]* :</label>
+            <div class="controls">
+                <input type="text" name="telefono" id="telefono" required value="[% socio_data.usr_telefono %]" tabindex="10" />
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="email">[% 'E-mail' |  i18n %]* :</label>
+            <div class="controls">
+                <input type="email" name="email" required id="email" value="[% socio_data.usr_email %]" tabindex="11" />
+            </div>
+        </div>
+
+        <input type="hidden" name="token" id="token" value="[% token %]" />
+        
+           <!-- CAMPOS PARA CAMBIO DE PASSWORD -->
+           <input type="hidden" name="new_password1" id="new_password1" />
+           <input type="hidden" name="new_password2" id="new_password2" />
+           <input type="hidden" name="key" id="key" />
+           <input type="hidden" name="changePassword" id="changePassword" />
+           <input type="hidden" name="actual_password" id="actual_password" />
+           </section>
+        </fieldset>
+          
+        <fieldset>
+            <legend>[% 'Cambio de contrase&ntilde;a' | i18n %] ([% 'Dejar en blanco para descartar' | i18n %])</legend>
+            <section class="center-section-form">
+        	<br />
+            <div class="control-group">
+                <label class="control-label" for="actualpassword">[% 'Contrase&ntilde;a Actual' |  i18n %] :</label>
+                <div class="controls">
+                    <input type="password" name="" id="actualpassword" autocomplete="off" tabindex="15"/>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="newpassword1">[% 'Nueva Contrase&ntilde;a ' |  i18n %] :</label>
+                <div class="controls">
+                    <input type="password" name="" id="newpassword1" autocomplete="off" tabindex="16"/>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="newpassword2">[% 'Repetir Contrase&ntilde;a ' |  i18n %] :</label>
+                <div class="controls">
+                    <input type="password" name="" id="newpassword2" autocomplete="off" tabindex="17"/>
+                </div>
+            </div>
+            </section>
+        </fieldset>
+        <fieldset>
+            <legend>[% 'Personalizaci&oacute;n de visualizaci&oacute;n' | i18n %]</legend>
+            <section class="center-section-form">
+        	<br />
+            <div class="control-group">
+                <label class="control-label" for="temas_opac">[% 'Tema' |  i18n %] :</label>
+                <div class="controls">
+                    [% combo_temas %]
+                </div>
+            </div>
+            </section>
+        </fieldset>
+        <fieldset>
+            <legend>[% 'Recordatorio de vencimiento de pr&eacute;stamos' | i18n %]</legend>
+            <section class="center-section-form">
+        	<br />
+            <div class="control-group">
+                    <label class="control-label" for="remindFlag">[% 'Recibir notificaci&oacute;nes' |  i18n %] :</label>
+                    <div class="controls">
+                        <input type="checkbox" name="remindFlag" id="remindFlag" [% IF socio_data.remindFlag %] checked="checked" [% END %]/> 
+                    </div>
+                </div>
+            </section>
+        </fieldset>
+        <div class="form-actions">  
+            <button class="btn btn-primary" type="submit">[% 'Modificar datos' |  i18n %]</button>
+        </div>
+    </form>
+  </div>

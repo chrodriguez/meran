@@ -11,7 +11,7 @@
     /*================================================Circulacion=================================================*/
     FALLO_NOTA = "[% 'La nota no se ha podido guardar' | i18n %]";
     NOTA_GUARDADA = "[% 'La nota se actualizo correctamente' | i18n %]";
-
+    CIRCULACION = "[% 'Circulaci&oacute;n' | i18n %]";
     /*================================================Catalogacion===================================================*/
     CAMPO_NO_PUEDE_ESTAR_EN_BLANCO= "[% 'El campo no puede estar en blanco' | i18n %]";
     ESTE_CAMPO_NO_PUEDE_ESTAR_EN_BLANCO= "[% 'Este campo es requerido, no lo deje en blanco' | i18n %]";
@@ -29,6 +29,7 @@
     DEBE_SELECCIONAR_UNA_TABLA_DE_REFERENCIA = "[% 'Debe seleccionar una tabla de referencia.' %]";
     DEBE_SELECCIONAR_AL_MENOS_UN_CAMPO = "[% 'Debe seleccionar al menos un campo.' %]";
     DEBE_SELECCIONAR_MAS_DE_UN_EJEMPLAR = "[% 'Debe seleccionar m&aacute;s de un ejemplar.' %]";
+    ADD_EJEMPLARES						= "[% 'Agregar ejemplares' %]";
     /*=============================================Fin===Catalogacion=================================================*/
 
     ELIMINAR_NOVEDAD = "[% 'Elminar la novedad?' %]";
@@ -49,8 +50,9 @@
 
     NEW_GRANT = "[% 'ATENCION: DANDO DE ALTA UN NUEVO PERMISO YA QUE EL USUARIO NO CUENTA CON PRIVILEGIOS PARA TAL COMBINACION ' | i18n %]";
     // mensaje compuesto
-    UD_ESTA_A_PUNTO= "[% 'Usted est\u00e1 a punto de' | i18n %]";
+    UD_ESTA_A_PUNTO= "[% 'Usted est\u00e1 a punto de habilitar' | i18n %]";
     A_LOS_PROPIETARIOS= "[% 'a los propietarios de' | i18n %]:";
+    HABILITAR_POTENCIALES_CONFIRM = "[% 'Habilitar a los usuarios seleccionados?' | i18n %]"; 
     // fin mensaje compuesto
 
     PERMISOS_DE_ACCESO= "[% 'Permisos de Acceso' | i18n %]";
@@ -90,6 +92,8 @@
     /*================================================Catalogo=======================================================*/
     INGRESE_EL_USUARIO= "[% 'Ingrese el Usuario' | i18n %]";
     ERROR_ITSELF= "[% 'Error' | i18n %]";
+    var CAMPO_NO_PUEDE_ESTAR_EN_BLANCO= "[% 'El campo no puede estar en blanco.' | i18n %]";
+    
     /*================================================Fin==Catalogo==================================================*/
     /*================================================Circulacion===================================================*/
     ESTA_SEGURO_QUE_DESEA_CANCELAR_LA_RESERVA= "&iquest;[% 'Esta seguro que desea cancelar la reserva' | i18n %]?";
@@ -133,7 +137,7 @@
     /*=============================================Fin===Visualizacion Opac===========================================*/
     /*================================================Busquedas==============================================*/
     INGRESE_DATOS_PARA_LA_BUSQUEDA = "[% 'Ingrese datos para la b\u00fasqueda' | i18n %]";
-    INGRESE_AL_MENOS_TRES_CARACTERES_PARA_REALIZAR_LA_BUSQUEDA = "[% 'Ingrese al menos 3 caracteres para realizar la b\u00fasqueda' | i18n %]";    
+    INGRESE_AL_MENOS_TRES_CARACTERES_PARA_REALIZAR_LA_BUSQUEDA = "[% 'Ingrese al menos 3 caracteres para realizar la b\u00fasqueda' | i18n %]";
     /*=============================================Fin===Busquedas===========================================*/
 
     /*================================================Reglas Sanciones==============================================*/
@@ -197,16 +201,16 @@
     POR_FAVOR_INGRESE_UNA_FORMA_DE_ENVIO            = "[% 'Por favor seleccione alg&uacute;na forma de envio' | i18n %]";
     POR_FAVOR_SELECCIONE_LAS_RECOMENDACIONES        = "[% 'Por favor seleccione las recomendaciones que desea incluir' | i18n %]";
     POR_FAVOR_SELECCIONE_PROVEEDORES_A_PRESUPUESTAR = "[% 'Por favor seleccione los proveedores que desea presupuestar' | i18n %]";
-    
+
     /*=================================================Fin===Proveedor=======================================================*/
 
     /*=================================================File Uploader=========================================================*/
     TYPE_ERROR  = " Error en {file}: Solamente se permiten extensiones {extensions}";
     SIZE_ERROR  = "{file} es muy grande, el maximo tama&ntilde;o es {sizeLimit}.";
     EMPTY_ERROR = "{file} esta vacio. Elija un archivo con contenido, por favor.";
-    ON_LEAVE    = "[% 'The files are being uploaded, if you leave now the upload will be cancelled.' | i18n %]";  
+    ON_LEAVE    = "[% 'The files are being uploaded, if you leave now the upload will be cancelled.' | i18n %]";
     /*=================================================Fin File Uploader======================================================*/
-     
+
     /*=================================================Servidores z3950=========================================================*/
     POR_FAVOR_INGRESE_SERVER_SERVIDOR   = "[% 'Por favor ingrese el servidor z3950' | i18n %]";
     POR_FAVOR_INGRESE_PUERTO_SERVIDOR   = "[% 'Por favor ingrese el puerto del servidor z3950' | i18n %]";
@@ -216,10 +220,14 @@
     POR_FAVOR_INGRESE_NOMBRE_SERVIDOR   = "[% 'Por favor ingrese el nombre del servidor z3950' | i18n %]";
     POR_FAVOR_INGRESE_SINTAXIS_SERVIDOR = "[% 'Por favor ingrese la sintaxis del servidor z3950' | i18n %]";
     /*================================================Fin Servidores z3950====================================================*/
-    
+
     /*=================================================Mails prestamos vencidos===============================================*/
     PRESTAMO_TITLE =  "[% 'Advertencia' | i18n %]";
     POR_FAVOR_SELECCIONE_ALGUN_PRESTAMO  = "[% 'Por favor seleccione al menos un pr&eacute;stamo' | i18n %]";
     /*==========================================Fin Mails prestamos vencidos==================================================*/
-     
+
+    /*====================================================Importacion/Exportacion==========================================================*/
+    IMPORTACION_ALERT_TITLE =  "[% 'Advertencia' | i18n %]";
+
+    /*=================================================Fin===Estante=======================================================*/
 </script>

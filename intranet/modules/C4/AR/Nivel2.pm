@@ -18,11 +18,12 @@ use vars qw(@EXPORT_OK @ISA);
 @ISA    = qw(Exporter);
 
 @EXPORT_OK = qw(
-		getCantPrestados
+        getCantPrestados
         getNivel2FromId1
         getNivel2FromId2
         getFirstItemTypeFromN1
         getNivel2FromId2_asArray
+        buildNavForGroups
         
 );
 
@@ -274,7 +275,7 @@ sub getFirstItemTypeFromN1{
     my $nivel2 = getNivel2FromId1($id1);
     
     if (scalar(@$nivel2)){
-    	return ($nivel2->[0]->getTipoDocumento);
+        return ($nivel2->[0]->getTipoDocumento);
     }
     
     return ('DEFAULT');
@@ -472,8 +473,8 @@ sub t_modificarNivel2 {
 
     if(!$msg_object->{'error'}){
     #No hay error
-		
-		$params->{'modificado'} = 1;
+        
+        $params->{'modificado'} = 1;
 #         my $db = $cat_registro_marc_n2->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
@@ -481,7 +482,7 @@ sub t_modificarNivel2 {
     
         eval {
             my $marc_record = C4::AR::Catalogacion::meran_nivel2_to_meran($params);
-            $cat_registro_marc_n2->modificar($marc_record->as_usmarc, $db);  
+            $cat_registro_marc_n2->modificar($params, $marc_record->as_usmarc, $db);  
             $db->commit;
             eval {
                 C4::AR::Sphinx::generar_indice($cat_registro_marc_n2->getId1, 'R_PARTIAL', 'UPDATE');
@@ -511,6 +512,31 @@ sub t_modificarNivel2 {
     }
 
     return ($msg_object, $cat_registro_marc_n2);
+}
+
+sub getAllNivel2FromAnaliticasById{
+    my($id2, $db) = @_;
+
+    $db = $db || C4::Modelo::CatRegistroMarcN2Analitica->new()->db();
+
+    my @filtros;
+    push (@filtros, (or   => [
+                                'cat_registro_marc_n2_id'       => { eq => $id2 }, 
+                                'cat_registro_marc_n2_hijo_id'  => { eq => $id2 },
+                                ])
+    );
+
+    my $nivel2_analiticas_array_ref = C4::Modelo::CatRegistroMarcN2Analitica::Manager->get_cat_registro_marc_n2_analitica(
+                                                                        db      => $db,
+                                                                        query   => \@filtros,
+                                                                );
+
+
+    if( scalar(@$nivel2_analiticas_array_ref) > 0){
+        return ($nivel2_analiticas_array_ref);
+    }else{
+        return 0;
+    }
 }
 
 sub getRating{
@@ -587,9 +613,10 @@ sub getReviews{
     
     push (@filtros, (id2 => {eq => $id2}));
     push (@filtros, (review => {ne => NULL}));
-    my $reviews = C4::Modelo::CatRating::Manager->get_cat_rating(query => \@filtros,
+    my $reviews = C4::Modelo::CatRating::Manager->get_cat_rating(   query => \@filtros,
                                                                     db => $db,
-                                                                 include_objects => ['socio'],
+                                                                    include_objects => ['socio'],
+                                                                    sort_by => 'date',
                                                                  );
     if (scalar(@$reviews) > 0){
         return $reviews
@@ -605,11 +632,41 @@ sub reviewNivel2{
 
     $rating_obj = $rating_obj->getObjeto($nro_socio, $id2);
     
-    $review = encode_entities($review);
-    
     $rating_obj->setReview($review);
     $rating_obj->save();
 }
+
+sub buildNavForGroups{
+    my ($params) = @_;
+    
+    my @elem_array;
+    
+    my $is_rev = $params->{'estadoDeColeccion'};
+    my $nivel2 = $params->{'nivel2'};
+
+    if ($is_rev){
+        foreach my $n2 (@$nivel2){
+            my %hash = {};
+            $hash{'id'} = "detalle_grupo_".$n2->{'id2'};
+            $hash{'title'} = $n2->{'anio_revista'}." - ".$n2->{'numero_revista'};
+            
+            push (@elem_array,\%hash);
+        }
+    }else{
+        foreach my $n2 (@$nivel2){
+            my %hash = {};
+            $hash{'id'} = "detalle_grupo_".$n2->{'id2'};
+            $hash{'title'} = $n2->{'edicion'} || $n2->{'volumen'} || $n2->{'año_publicacion'} ||"#".$n2->{'id2'}; 
+            
+            push (@elem_array,\%hash);
+        }
+    }
+        
+    return \@elem_array;
+}
+
+
+
 
 END { }       # module clean-up code here (global destructor)
 

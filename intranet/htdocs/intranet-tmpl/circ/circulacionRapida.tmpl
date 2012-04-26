@@ -19,7 +19,7 @@ function clear_usuario(){
     $('#detalleUsuario').slideUp('slow');
     $('#tablaPrestamos').slideUp('slow');
     $('#sanciones').slideUp('slow');
-    $('#aceptar').hide();
+    $('#acciones').hide();
     $('#cambo_tipo_prestamo').hide();
 }
 
@@ -65,7 +65,7 @@ function obtenerTiposDePrestamos(){
 function obtenerDatosDelEjemplar(){
     var barcode         = $('#barcode_hidden').val();
 
-    if($('#operacion').val() == 'devolver'){
+    if(($('#operacion').val() == 'devolver')||($('#operacion').val() == 'renovar')){
         barcode = $('#barcodePrestado').val();
     }
 
@@ -98,9 +98,9 @@ function updateObtenerTiposDePrestamos(responseText){
     $('#cambo_tipo_prestamo').show();
     
     if(( tieneSancion != 0 ) &&( tipoPrestamo_array_hash_ref.length == 0 )){
-        $('#spanComboTipoPrestamo').html("<span style='color:red;margin-left:20%;'>El usuario tiene una sanci&oacute;n del sistema. No puede realizar ning&uacute;n tipo de pr&eacute;stamo para este ejemplar.</span>");
+        $('#spanComboTipoPrestamo').html("<div class='alert alert-danger'>[% 'El usuario tiene una sanci&oacute;n del sistema. No puede realizar ning&uacute;n tipo de pr&eacute;stamo para este ejemplar' | i18n %].</div>");
         $('#cambo_tipo_prestamo label').fadeOut(0);
-        $('#aceptar').hide();
+        $('#acciones').hide();
     }else{
         $('#spanComboTipoPrestamo').html(comboTipoPrestamo_html);
         $('#cambo_tipo_prestamo label').fadeIn(0);
@@ -117,7 +117,7 @@ function realizarAccionCircRapida(){
     objAH.adicional_selected    = $('#auth_selected').is(':checked'); 
     objAH.barcode               = $('#barcode').val();
 
-    if($('#operacion').val() == 'devolver'){
+    if(($('#operacion').val() == 'devolver')||($('#operacion').val() == 'renovar')){
         var prestamos_array = new Array();
 // 		prestamos_array     = prestamos_array.push($('#barcode_hidden').val());
         prestamos_array.push($('#barcode_hidden').val());
@@ -132,32 +132,19 @@ function realizarAccionCircRapida(){
 }
 
 function updateRealizarAccion(responseText){
-	if(objAH.operacion == 'prestar'){
+	if((objAH.operacion == 'prestar')||(objAH.operacion == 'renovar')){
 		var infoHash        = JSONstring.toObject(responseText);
 		var messageArray    = infoHash.messages;
 		var ticketsArray    = infoHash.tickets;
 		var mensajes        = '';
-
-// 		for(var i=0; i<messageArray.length;i++){
-// 			imprimirTicket(ticketsArray[i].ticket,i);
-// 			setMessages(messageArray[i]);
-// 		}
-
         var hayError=0;
 
-        setMessages(messageArray);
     
         for(i=0; i<messageArray.length;i++){
-//         imprimirTicket(ticketsArray[i].ticket,i);
-            setMessages(messageArray[i]);
+            if (setMessages(messageArray[i]))
+            	hayError = 1;
         }
      
-        for(i=0; i<messageArray.length;i++){
-            if  (messageArray[i].error){
-                hayError= 1;
-            }
-        }
-          
         if (!hayError){
               imprimirTicket(ticketsArray);
         }
@@ -165,14 +152,16 @@ function updateRealizarAccion(responseText){
 
 		//borro la cache del autocomplete
 		$('#barcode').flushCache();
-		$('#aceptar').hide();
 	}else{
 		var Messages        = JSONstring.toObject(responseText);
 		setMessages(Messages);
 		//borro la cache del autocomplete
 		$('#barcodePrestado').flushCache();
 	}
-	
+    
+	//Limpio los datos del ejemplar
+    onChangeOperacion();
+    
     detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
     detalleSanciones(NRO_SOCIO_AUTH);
 	$('#operacion').focus();
@@ -198,14 +187,6 @@ function tieneApoderado(){
 }
 
 function updateTieneAutorizado(responseText){
-// 	if(responseText != '0'){
-// 		$('#divAutorizado').show();
-// 		$('#divAgregarAutorizado').hide();
-// 	}else{
-// 		$('#divAgregarAutorizado').show();
-// 		$('#divAutorizado').hide();
-// 	}
-
     $('#datosAutorizado').html(responseText);
 	$('#aceptar').focus();
 	refreshTipoPrestamo();
@@ -236,7 +217,8 @@ function onChangeOperacion(){
         $('#cambo_tipo_prestamo').hide();
 		$('#spanComboTipoPrestamo').hide();
 		$('#tablaPrestamos').show();
-		$('#aceptar').hide();
+		$('#acciones').hide();
+    
 		
 
 		if( $('#usuario').val() !='' ){
@@ -245,6 +227,9 @@ function onChangeOperacion(){
             detalleSanciones(NRO_SOCIO_AUTH);
 		}
 	}
+    
+    $('#datos_ejemplar').hide();
+    
 }
 
 function updateAutocompleteBarcodes(){
@@ -266,13 +251,13 @@ function refreshTipoPrestamo(){
 
 function mostrarBotonAceptar(){
 	//si se va a devolver y tengo el barcode, muetro el boton para devolver
-	if( $('#operacion').val() == 'devolver' && $('#barcodeprestado').val() != '' ){
-		$('#aceptar').show();
+	if( ($('#operacion').val() == 'devolver' || $('#operacion').val() == 'renovar') && $('#barcodeprestado').val() != '' ){
+		$('#acciones').show();
         $('#cambo_tipo_prestamo').hide();
 	}
 
 	if( $('#operacion').val() == 'prestar' && $('#barcode').val() != '' && $('#usuario').val() != '' && $('#comboTipoPrestamo').val() != '' ){
-		$('#aceptar').show();
+		$('#acciones').show();
         $('#cambo_tipo_prestamo').show();
 	}
 }
@@ -331,7 +316,7 @@ function updateInfoDevolver(responseText){
 }
 
 $(document).ready(function() {
-
+   
 	CrearAutocompleteUsuarios({	
                                                 IdInput: 'usuario', 
 								                IdInputHidden: 'nro_socio_hidden', 
@@ -352,88 +337,99 @@ $(document).ready(function() {
 
 	onChangeOperacion();
 	
-	$('#operacion').focus();
-	$('#aceptar').hide();
+	$('#acciones').hide();
     $('#cambo_tipo_prestamo').hide();
 	$('#divAutorizado').hide();
 	$('#divAgregarAutorizado').hide();
+   
 
 });
 
 </script>
 
 <div id="confirmar_div" ></div>
-<fieldset>
-    <legend class="titulo_legend"><span class="titulos">[% 'Circulaci&oacute;n R&aacute;pida' | i18n %]</span></legend>
-        <form id="form_circulacion_rapida" class="classform">
-        <ul>
-            <li class="sub_item">
-                  <label for="operacion">[% 'Operaci&oacute;n:' | i18n %]</label>
-                  <select id='operacion' tabindex='1' onChange='onChangeOperacion()'>	
-                      <option value="prestar">[% 'Pr&eacute;stamo' | i18n %]</option>
-                      <option value="devolver">[% 'Devoluci&oacute;n' | i18n %]</option>
-                      <option value="renovar">[% 'Renovaci&oacute;n' | i18n %]</option> 
-                  </select>
-                  <!--<div id="cambo_tipo_prestamo" style="display: none">-->
-            </li>
-            <li class="sub_item">
-	            <div id="divInfoEjemplar">
-	                <label for="barcode">[% 'C&oacute;digo de Barras:' | i18n %]
-	                 [% PERL %]
-	                     print C4::AR::Filtros::setHelpIcon( text => "[% 'Campo autocompletable, ingrese el nro. de inventario, por ej. DEO-LIB-0' | i18n %]",);
-	                 [% END %]
-	                </label>
-	                <input type="text" id="barcode" name="barcode" value="" tabindex='2' style="display: none;">
-	                <input type='hidden' id='barcode_hidden' value='' tabindex='-1'>
-	                <input type="text" id="barcodePrestado" value='' tabindex='2' style="display: none;">
-	                <!-- para guardar el nro_socio del usuario al que se le realizo el prestamo -->
-	                <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
-	            </div>
-            </li>
-            <li>
-                <div id="datos_ejemplar"></div>
-            </li>
-            <li class="sub_item">
-                    <div id="divInfoUsuario">
-                        <label for="usuario">[% 'Usuario:' | i18n %]
-	                        [% PERL %]
-	                            print C4::AR::Filtros::setHelpIcon( text => "[% 'Campo autocompletable, b&uacute;squeda por nombre, apellido, nro. de documento, legajo, nro. socio' | i18n %]",);
-	                        [% END %]
-                        </label>
-                        <input type='text' id='usuario' name='usuario' value='' size=32 tabindex='3' style="float: left" onclick="clear_usuario();">
-                        <div id="estadoUsuario"></div>
-                        <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
-  <!--                  <input type="button" class="nonForm" onclick="agregarAutorizado()" id="save_button" value="[% 'Agregar Adicional' | i18n %]" > -->
-                    </div>
-            </li>
-            <li>
-                <div id="datosAutorizado"></div>
-            </li>
-            <li class="sub_item">
-                  <div id="cambo_tipo_prestamo">
-                      <label for="operacion">[% 'Tipo de Pr&eacute;stamo:' | i18n %]</label>
-                      <div id="spanComboTipoPrestamo"></div>
-                  </div>
-            </li>
-          </ul>
-        </form>
-        [% PERL %]
-                            print C4::AR::Filtros::to_Button(     text    => "[% 'Aceptar' | i18n %]",
-                                                                  id      => "aceptar",
-                                                                  onClick => "realizarAccionCircRapida();",
-                                                                  title   => "[% 'realizar operaci&oacute;n' | i18n %]",
-                                    ) ;
-        [% END %]
+<section class="center-section-form"> 
+	<form id="form_circulacion_rapida" class="classform form-horizontal" onsubmit="return false;">
+		<fieldset>
+		    <legend class="titulo_legend"><span class="titulos">[% 'Circulaci&oacute;n R&aacute;pida' | i18n %]</span></legend>
 
-</fieldset>
+		            <div class="control-group">
+		                  <label for="operacion" class="control-label">[% 'Operaci&oacute;n' | i18n %]</label>
+		                  <div class="controls">
+		                  <select id='operacion' tabindex='-1' onChange='onChangeOperacion()'>	
+		                      <option value="prestar">[% 'Pr&eacute;stamo' | i18n %]</option>
+		                      <option value="devolver">[% 'Devoluci&oacute;n' | i18n %]</option>
+		                      <option value="renovar">[% 'Renovaci&oacute;n' | i18n %]</option> 
+		                  </select>
+		                  </div>
 
-<!-- DELTALLE DEL USUARIO -->
-<div id="detalleUsuario"></div>
-<br>
-<!-- DETALLE DE PRESTAMOS -->
-<div id="tablaPrestamos" style="clear: both;"></div>
-<div class="ticket" id="ticket" ></div>
-<!-- DETALLE DE SANCIONES -->
-<div id="sanciones"></div>
+		            </div>
 
+			        <div id="divInfoEjemplar" class="control-group">
+			                <label for="barcode"  class="control-label">[% 'C&oacute;digo de Barras' | i18n %]
+			                 [% PERL %]
+			                     print C4::AR::Filtros::setHelpIcon( text => "[% 'Campo autocompletable, ingrese el nro. de inventario, por ej. DEO-LIB-0' | i18n %]",);
+			                 [% END %]
+			                </label>
+		                    <div class="controls">
+		                        <input type="text" id="barcode" name="barcode" value="" tabindex='1' style="display: none;" autofocus>
+		                        <input type='hidden' id='barcode_hidden' value='' tabindex='-1'>
+		                        <input type="text" id="barcodePrestado" value='' tabindex='2' style="display: none;">
+		                        <!-- para guardar el nro_socio del usuario al que se le realizo el prestamo -->
+		                        <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
+		                    </div>
+		            </div>
+
+		            <div id="datos_ejemplar"></div>
+		            <div id="divInfoUsuario" class="control-group" >
+		                <label for="usuario" class="control-label">[% 'Usuario' | i18n %]
+		                    [% PERL %]
+		                        print C4::AR::Filtros::setHelpIcon( text => "[% 'Campo autocompletable, b&uacute;squeda por nombre, apellido, nro. de documento, legajo, nro. socio' | i18n %]",);
+		                    [% END %]
+		                </label>
+		                <div class="controls">
+		                    <input type='text' id='usuario' name='usuario' value='' size=32 tabindex='3' style="float: left" onclick="clear_usuario();">
+		                    <div id="estadoUsuario"></div>
+		                    <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
+		                </div>
+		            </div>
+		                <div id="datosAutorizado"></div>
+		                <div id="detalleUsuario"></div>
+		            <div id="divInfoUsuario">
+		                  <div id="cambo_tipo_prestamo" class="control-group">
+		                      <label for="operacion">[% 'Tipo de Pr&eacute;stamo' | i18n %]</label>
+		                      <div class="controls">
+		                          <div id="spanComboTipoPrestamo"></div>
+		                      </div>
+		                  </div>
+		             
+		        <div class="form-actions" id="acciones">
+		        [% PERL %]
+		        
+		                            print C4::AR::Filtros::to_Button(     text    => "[% 'Cancelar' | i18n %]",
+		                                                                  id      => "cancelar",
+		                                                                  boton   => "btn",
+		                                                                  onClick => "",
+		                                                                  inline  => "1",
+		                                                                  title   => "[% 'cancelar operaci&oacute;n' | i18n %]",
+		                                    ) ;
+		
+		                            print C4::AR::Filtros::to_Button(     text    => "[% 'Aceptar' | i18n %]",
+		                                                                  id      => "aceptar",
+		                                                                  boton   => "btn btn-primary",
+		                                                                  onClick => "realizarAccionCircRapida();",
+		                                                                  inline  => "1",
+		                                                                  title   => "[% 'realizar operaci&oacute;n' | i18n %]",
+		                                    ) ;
+		        [% END %]
+		        </div>
+		</fieldset>
+    </form>
+	
+    <!-- DETALLE DE SANCIONES -->
+    <div id="sanciones"></div>
+	<!-- DETALLE DE PRESTAMOS -->
+	<div id="tablaPrestamos" style="clear: both;"></div>
+	<div class="ticket" id="ticket" ></div>
+</section>
 [% INCLUDE 'intranet-bottom.inc' %]

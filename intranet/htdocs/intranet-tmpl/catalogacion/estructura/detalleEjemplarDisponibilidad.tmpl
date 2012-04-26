@@ -1,34 +1,37 @@
-<fieldset class="resultados_busqueda">
-    <legend class="titulo_legend">[% "Hist&oacute;rico de Disponibilidad" | i18n %]:</legend>
-
-        <div class="contenedor_paginador">[% paginador %]</div>
-        <div class="datos_tabla_div_user">
-            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
-                <thead>
-                <tr class="titulo_tabla_resultado">
-                    <th>[% "Disponibilidad" | i18n %]</th>
-                    <th>[% "Estado" | i18n %]</th>
-                    <th>[% "Fecha" | i18n %]</th>
-
-                </tr>
-                </thead>
-                <tbody>
-                    [% FOREACH historico IN historico_disponibilidad %]
-                        <tr>
-                            <td>
-                                [% historico.getTipo_prestamo %] 
-                            </td>
-                            <td>
-                                [% historico.getDetalle %] 
-                            </td>
-                            <td>
-                                [% historico.getFecha %] 
-                            </td>
-                        </tr>
-                    [% END %]
-                </tbody>
-            </table>
-            <div class="resultados_consulta">[% "La cantidad en el historial de disponibilidad es" | i18n %]: [% cant_historico %]</div>
+<fieldset>
+    <legend>[% "Hist&oacute;rico de Disponibilidad" | i18n %]:</legend>
+    [% IF cant_historico %]
             <div class="contenedor_paginador">[% paginador %]</div>
-        </div>
+              [% PERL %]
+                  print C4::AR::Filtros::tableHeader(   
+                                                          id              => "historico_disponibilidad",
+                                                          class           => "",
+                                                          columns         => [                                                                             
+                                                                              '[% "Disponibilidad" |i18n %]','[% "Estado" |i18n %]','[% "Fecha" |i18n %]',
+                                                                             ]
+                                                          
+                              ) ;
+              [% END %]
+              <tbody>
+                  [% FOREACH historico IN historico_disponibilidad %]
+                      <tr>
+                          <td>
+                              [% historico.getTipo_prestamo %] 
+                          </td>
+                          <td>
+                              [% historico.getDetalle %] 
+                          </td>
+                          <td>
+                              [% historico.getFecha %] 
+                          </td>
+                      </tr>
+                  [% END %]
+              </tbody>
+              <tfoot>
+	            <p class="help-block">[% "Este ejemplar a tenido " | i18n %] [% cant_historico %][% " cambios en su disponibilidad " | i18n %]</p>
+              </tfoot>
+          </table>
+     [% ELSE %]
+        <div class="alert alert-info">[% 'No hay hist&oacute;rico de disponibilidad'| i18n %]</div>
+     [% END %]
 </fieldset>

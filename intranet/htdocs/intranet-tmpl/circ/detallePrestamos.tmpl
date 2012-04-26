@@ -7,56 +7,51 @@
 [% IF prestamos_cant %]
 
 
-<div class="titulo_tabla">[% "PR&Eacute;STAMOS" | i18n %]</div>
+      [% PERL %]
+                print C4::AR::Filtros::tableHeader(   
+                                  id              => "table_tablaPrestamos",
+                                  class           => "",
+                                  selectAll_id    => "checkAllPrestamos",
+                                  columns         => ['[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]',
+                                                      '[% "C&oacute;digo de Barras" %]','[% "Pr&eacute;stamo" %]',
+                                                      '[% "Vencimiento" %]','[% "Tipo" %]'
+                                                     ]
+                                                                   
+                                        ) ;
+      [% END %]
 
-<table id="table_tablaPrestamos" class="tablaPrestamos datos_tabla" border="0" cellpadding="0" cellspacing="0" width="100%" align="center">
-	<tr class="titulo_tabla_resultado">
 
-		<td>
-			<a class="click" id="checkAllPrestamos">
-			<img 	src="[% temas %]/[% tema %]/imagenes/iconos/check.png" border="0" 
-				title="[% 'Invertir la selecci&oacute;n' | i18n %]">
-			</a>
-		</td>
-
-                <td>[% 'T&iacute;tulo' | i18n %]</td>
-                <td>[% 'Autor' | i18n %]</td>
-                <td valign="middle">[% 'C&oacute;digo de Barras' | i18n %]</td>
-                <td>[% 'Pr&eacute;stamo' | i18n %]</td>
-                <td>[% 'Vencimiento' | i18n %]</td>
-                <td>[% 'Tipo' | i18n %]</td>
-
-	</tr>
+    <tbody>
      [% FOREACH prestamo IN PRESTAMOS %]
-	<tr align="center">
+	<tr>
 	
 		<td>
 			 <input type="checkbox" name="chkboxPrestamos" value="[% prestamo.getId_prestamo %]" id="[% prestamo.getId_prestamo %]">
 		</td>
-                <td>
+        <td>
                 <a href="[% url_prefix %]/catalogacion/estructura/detalle.pl?id1=[% prestamo.nivel3.nivel1.getId1 %]">
                     [% prestamo.nivel3.nivel1.getTitulo %]
                 </a>
 		</td>
-            	<td>
+        <td>
 		        [% IF prestamo.nivel3.nivel1.getAutor %]
                     [% prestamo.nivel3.nivel1.getAutor %]
                 [% ELSE %]
                     &nbsp;
                 [% END %]
 		</td>
-            	<td align="center">
+        <td>
                 <a href='[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl?id3=[% prestamo.getId3 %]' title='Detalle del Ejemplar'> 
                 [% prestamo.nivel3.getBarcode %]</a>
-                </td>
-          	<td align="center">
+        </td>
+        <td>
 			[% IF prestamo.getFecha_prestamo %] 
                 [% prestamo.getFecha_prestamo_formateada %]
             [% ELSE %]
                 - 
             [% END %]
 		</td>
-           	<td align="center">
+        <td>
                 [% IF prestamo.getFecha_vencimiento %]
 				<span class="[% IF prestamo.estaVencido %]fecha_vencida[% ELSE %]fecha_cumple[% END %]">
 				[% prestamo.getFecha_vencimiento_formateada %]
@@ -65,7 +60,7 @@
                     - 
                 [% END %]
                	</td>
-          	<td  align="center">
+         <td>
                 [% IF prestamo.tipo.id_tipo_prestamo %]
                         [% prestamo.tipo.getDescripcion %]
                 [% END %]
@@ -73,31 +68,34 @@
         	
 	</tr>
      [% END %]
+  </tbody>
 </table>
+<div class="form-actions">
+             [% PERL %]
+                                  print C4::AR::Filtros::action_button(
+                                                                  button       => "btn btn-info",
+                                                                  title        => '[% "Devolver" | i18n %]',
+                                                                  action       => 'realizarAccion("DEVOLUCION","table_tablaPrestamos",generaDivDevolucion);',
+                                  ) ;
+              [% END %]
 
-            [% PERL %]
-                                print C4::AR::Filtros::to_Icon( text    => "[% 'Devolver' | i18n %]",
-                                                                boton   => "icon_devolver",
-                                                                onClick => "realizarAccion('DEVOLUCION','table_tablaPrestamos',generaDivDevolucion);",
-                                                                title   => "[% 'Devolver' | i18n %]",
-                                                                alternClass => "botonCentrado"
-                                        ) ;
-            [% END %]
 
         [% IF algunoSeRenueva %]
-            [% PERL %]
-                        print C4::AR::Filtros::to_Icon(     text    => "[% 'Renovar' | i18n %]",
-                                                            boton   => "icon_renovar",                                                            
-                                                            onClick => "realizarAccion('RENOVACION','table_tablaPrestamos',generaDivRenovacion);",
-                                                            title   => "[% 'Renovar' | i18n %]",
-                                                            alternClass => "botonCentrado"
-                                ) ;
-            [% END %]
-        [% END %]
+              [% PERL %]
+                                  print C4::AR::Filtros::action_button(
+                                                                  button       => "btn btn-info",
+                                                                  title        => '[% "Renovar" | i18n %]',
+                                                                  action       => 'realizarAccion("RENOVACION","table_tablaPrestamos",generaDivRenovacion);',
+                                  ) ;
+              [% END %]
 
+
+
+        [% END %]
+</div>
     [% ELSE %]
 
-<div class="resultados_consulta">[% "El usuario no tiene ejemplares asignados"| i18n %]</div>
+        <div class="alert alert-info">[% "El usuario no tiene ejemplares asignados"| i18n %]</div>
 
     [% END %]
     </fieldset>

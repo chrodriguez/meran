@@ -31,7 +31,6 @@ $VERSION = 3.0;
     DatosReservas
     getDatosReservaDeId3
     CheckWaiting
-    tiene_reservas
     Enviar_Email_Asignacion_Reserva
     Enviar_Email_Cancelacion_Reserva
     Enviar_Email_Reserva_A_Espera
@@ -928,7 +927,7 @@ sub _verificaciones {
 
 #Se verifica que el EJEMPLAR no se encuentre prestado.
 #SOLO PARA INTRA, ES UN PRESTAMO INMEDIATO.
-    if( !($msg_object->{'error'}) && $tipo eq "INTRA" &&  C4::AR::Prestamos::estaPrestado($id3) ){
+    if( !($msg_object->{'error'}) && ($tipo eq "INTRA") &&  C4::AR::Prestamos::estaPrestado($id3) ){
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'P126', 'params' => [$barcode]} ) ;
         C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if que verifica si el ejemplar se encuentra prestado");
@@ -971,9 +970,15 @@ sub _verificaciones {
     }
 
 #Se verfica si el usuario esta sancionado o tiene libros vencidos 
-    my ($sancionado, $fechaFin, $cod_error) = C4::AR::Sanciones::permisoParaPrestamo($nro_socio, $tipo_prestamo);
+    my ($status_hash) = C4::AR::Sanciones::permisoParaPrestamo($nro_socio, $tipo_prestamo);
+    
+    my $sancionado = $status_hash->{'deudaSancion'};
+    my $cod_error  = $status_hash->{'cod_error'};
+    my $fechaFin   = $status_hash->{'hasta'};
+    
     C4::AR::Debug::debug("Reservas.pm => _verificaciones => sancionado: $sancionado ------ fechaFin: $fechaFin\n");
-    if( !($msg_object->{'error'}) && ($sancionado||$fechaFin) ){
+    if( !($msg_object->{'error'}) && ($sancionado || $fechaFin) ){
+
         $msg_object->{'error'}  = 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=>  $cod_error, 'params' => [C4::Date::format_date($fechaFin, $dateformat)]} ) ;
         C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de sanciones");
@@ -1023,20 +1028,15 @@ sub _verificaciones {
     }
 
 #Se verifica que el usuario no tenga un prestamo sobre el mismo grupo para el mismo tipo prestamo (o no, depende de la preferencia "prestar_mismo_grupo_distintos_tipos_prestamo")
-    if( !($msg_object->{'error'}) && (&C4::AR::Prestamos::getCountPrestamosDeGrupoPorUsuario($nro_socio, $id2, $tipo_prestamo)) ){
+    if( !($msg_object->{'error'}) && (C4::AR::Prestamos::getCountPrestamosDeGrupoPorUsuario($nro_socio, $id2, $tipo_prestamo)) ){
         $msg_object->{'error'}= 1;
-	
-	if(C4::AR::Preferencias::getValorPreferencia('prestar_mismo_grupo_distintos_tipos_prestamo')){
-	  C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'P100', 'params' => []} ) ;
-	  C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de prestamos iguales, sobre el mismo grupo y tipo de prestamo");
-	}else{
-	  C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'P129', 'params' => []} ) ;
-	  C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de prestamos iguales, sobre el mismo grupo sin importar el tipo de prestamo");
-	}
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=>  'P100', 'params' => []} ) ;
     }
 
     C4::AR::Debug::debug("Reservas.pm => _verificaciones => FIN ".$msg_object->{'error'}." !!!\n\n");
     C4::AR::Debug::debug("Reservas.pm => _verificaciones => FIN VERIFICACION !!!\n\n");
+
+    C4::AR::Debug::debug($msg_object->{'codMsg'});
 
     return ($msg_object);
 }
@@ -1063,10 +1063,10 @@ sub t_reservarOPAC {
             $db->commit;
             #Se setean los parametros para el mensaje de la reserva SIN ERRORES
             if($paramsReserva->{'estado'} eq 'E'){
-            C4::AR::Debug::debug("SE RESERVO CON EXITO UN EJEMPLAR!!! codMsg: U302");
-            #SE RESERVO CON EXITO UN EJEMPLAR
+	            C4::AR::Debug::debug("SE RESERVO CON EXITO UN EJEMPLAR!!! codMsg: U302");
+	            #SE RESERVO CON EXITO UN EJEMPLAR
                 $msg_object->{'error'} = 0;
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U302', 'params' => [    
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U302', 'tipo'=> 'opac', 'params' => [    
                                                                                         $paramsReserva->{'hasta'},
                                                                                         $paramsReserva->{'hastah'}
                                 ]} ) ;
@@ -1076,7 +1076,7 @@ sub t_reservarOPAC {
                 C4::AR::Debug::debug("SE REALIZO UN RESERVA DE GRUPO codMsg: U303");
                 my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
                 $msg_object->{'error'}= 0;
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U303', 'params' => [$socio->persona->getEmail]} ) ;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U303', 'tipo'=> 'opac', 'params' => [$socio->persona->getEmail]} ) ;
             }
             #Se agrega la reserva al historial
             C4::AR::Reservas::agregarReservaAHistorial($reserva);

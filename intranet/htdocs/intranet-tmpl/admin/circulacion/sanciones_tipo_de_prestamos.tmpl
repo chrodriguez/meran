@@ -1,22 +1,26 @@
-  <table border=0 cellspacing=0 cellpadding=0 width="100%" align='center'>
-
-	[% IF tipo_sancion %]
-	    <tr class="titulo_tabla_resultado">
-                <td>[% "Se aplica a" | i18n %]</td>
-	    </tr>
-	    [% FOREACH tipo_prestamo IN TIPOS_PRESTAMOS %]
-		<tr><td>
-			    <input type="checkbox" name="chkTP" id="chkTP" value="[% tipo_prestamo.getId_tipo_prestamo %]" [% IF tipo_sancion.aplicaAlTipoDePrestamo( tipo_prestamo.getId_tipo_prestamo ) %] checked="checked" [% END %] > [% tipo_prestamo.getDescripcion %]
-		</td></tr>
-	    [% END %]
-    [% END %]
-    <tr><td>
+[% IF tipo_sancion %]
+		<h4 >[% "Se aplica a" | i18n %]</h4>
+		<hr />
+		<dl style="width:60%;">
+          [% FOREACH tipo_prestamo IN TIPOS_PRESTAMOS %]
+                <dt class="inline  rightMargin">&nbsp;&nbsp;&nbsp;[% tipo_prestamo.getDescripcion %]</dt>
+                <dd class="left">
+                 <input type="checkbox" name="chkTP" id="chkTP_[% tipo_prestamo.getId_tipo_prestamo %]" 
+                           value="[% tipo_prestamo.getId_tipo_prestamo %]" 
+                           [% IF tipo_sancion.aplicaAlTipoDePrestamo( tipo_prestamo.getId_tipo_prestamo ) %] checked="checked" [% END %] 
+                 > 
+                </dd>
+                <br />
+          [% END %]
+        </dl>
+[% END %]
+<div class="form-actions">
     [% PERL %]
                         print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
                                                             boton   => "boton_guardar",
+                                                            inline => "1",
                                                             onClick => "guardarTiposQueAplica();",
                                                             title   => "[% 'Guardar' | i18n %]",
                                 ) ;
     [% END %]
-     </td></tr>
-</table>
+</div> 

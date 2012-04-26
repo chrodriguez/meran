@@ -100,6 +100,7 @@ use vars qw(@EXPORT_OK @ISA);
     generarComboPerfiles
     generarComboNivel2
     generarComboTipoDeOperacion
+    generarComboDeEstados
     existeInArray
     paginarArreglo
     capitalizarString
@@ -132,6 +133,10 @@ use vars qw(@EXPORT_OK @ISA);
     generarComboTablasDeReferenciaByNombreTabla
     serverName
     translateTipoCredencial
+    translateYesNo_fromNumber
+    translateYesNo_toNumber
+    printAjaxPercent
+    checkFileMagic
 );
 
 
@@ -146,6 +151,78 @@ my %LABELS_COMPONENTS = (   "-1"            => C4::AR::Filtros::i18n("SIN SELECC
                             "anio"          => C4::AR::Filtros::i18n("Anual"),
                             "rango_anio"    => C4::AR::Filtros::i18n("Anual rango")
                         );
+
+
+=item
+    Recibe un archivo y devuelve el magic number.
+    Tambien recibe un array con los tipos de archivos permitidos.
+    Lo escribe en /temp para esto.
+    Si no es del tipo permitido lo borra y devuelve 0.
+    En cambio, si es correcto devuelve el tipo del archivo.
+    Tambien devuelve si el archivo hay que escribirlo en modo binario o no.
+=cut
+sub checkFileMagic{
+
+    my ($file, @filesAllowed) = @_;
+
+    use File::LibMagic;
+    
+    my $flm         = File::LibMagic->new();
+    my $hash_unique = Digest::MD5::md5_hex(localtime());   
+    my $path        = "/tmp";
+    my $notBinary   = 0;
+    
+    #escribimos el archivo
+    open ( WRITEIT, ">$path/$hash_unique" ) or die "$!"; 
+    binmode WRITEIT; 
+    while ( <$file> ) { 
+    	print WRITEIT; 
+    }
+    close(WRITEIT);
+    
+    my $mime    = $flm->checktype_filename($path . "/" . $hash_unique);
+    
+    #el archivo vino en binario, hay que escribirlo de otra forma
+    if($mime =~ m/application\/x-empty; charset=binary/i){
+    
+        #indicamos que hay que escribirlo sin modo binario
+        $notBinary = 1;
+        #borramos el archivo y lo escribimos de nuevo
+        unlink($path . "/" . $hash_unique);
+    
+        open(WRITEIT, ">$path/$hash_unique") or die "Cant write to $path/$hash_unique. Reason: $!";
+            print WRITEIT $file;
+        close(WRITEIT);
+    
+    }
+    
+    $mime    = $flm->checktype_filename($path . "/" . $hash_unique);
+
+    #vemos si esta en la whitelist
+    my $ok      = 0;
+    my $type    = '';
+    
+    foreach my $t (@filesAllowed){
+    
+        if($mime =~ m/$t/i){
+            $ok = 1;
+            $type = $t;
+        }
+    
+    }
+    
+    unlink($path . "/" . $hash_unique);
+    
+    if (!$ok){
+        C4::AR::Debug::debug("el tipo de archivo no estaba en la whitelist");
+        #no esta, borramos el archivo y devolvemos 0
+        return 0;
+    
+    }
+    
+    return ($type,$notBinary); 
+
+}
 
 
 
@@ -1285,38 +1362,38 @@ sub armarPaginas{
 
     my $themelang= $t_params->{'themelang'};
 
-    my $paginador= "<div class='pagination'><div id='content_paginator'  align='center' >";
+    my $paginador= "<div class='pagination pagination-centered'><ul>";
     my $class="paginador";
 
     if($actual > 1){
         #a la primer pagina
         my $ant= $actual-1;
-        $paginador .= "<a class='click previous' onClick='".$funcion."(1)' title='".$first_text."'> ".$first_text."</a>";
-        $paginador .= "<a class='click previous' onClick='".$funcion."(".$ant.")' title='".$previous_text."'> ".$previous_text."</a>";
+        $paginador .= "<li class='prev'><a  onClick='".$funcion."(1)' title='".$first_text."'> ".$first_text."</a></li>";
+        $paginador .= "<li class='prev'><a  onClick='".$funcion."(".$ant.")' title='".$previous_text."'> ".$previous_text."</a></li>";
 
     }else{
-        $paginador .= "<span class='disabled' title='".$previous_text."'>".$previous_text."</span>";
+        $paginador .= "<li class='prev'> <a href='#' title='".$previous_text."'>".$previous_text."</a></li>";
     }
 
     for (my $i=$limInf; ($totalPaginas >1 and $i <= $totalPaginas and $i <= $limSup) ; $i++ ) {
         my $onClick = "";
         if($actual == $i){
-            $class="'current'";
+            $class="'active click'";
         }else{
-            $class="'pagination click'";
+            $class="'click'";
             $onClick = "onClick='".$funcion."(".$i.")'";
         }
-        $paginador .= "<a class=".$class." ".$onClick."> ".$i." </a>";
+        $paginador .= "<li class=".$class."><a class=".$class."$onClick> ".$i." </a></li>";
     }
 
     if($actual >= 1 && $actual < $totalPaginas){
         my $sig= $actual+1;
-        $paginador .= "<a class='click next' onClick='".$funcion."(".$sig.")' title='".$next_text."'>".$next_text."</a>";
-        $paginador .= "<a class='click next' onClick='".$funcion."(".$totalPaginas.")' title='".$last_text."'>".$last_text."</a>";
+        $paginador .= "<li class='next'><a class='click next' onClick='".$funcion."(".$sig.")' title='".$next_text."'>".$next_text."</a></li>";
+        $paginador .= "<li class='next'><a class='click next' onClick='".$funcion."(".$totalPaginas.")' title='".$last_text."'>".$last_text."</a></li>";
 
     }
 
-    $paginador .= "</div></div>";
+    $paginador .= "</ul></div>";
 
     if ($totalPaginas <= 1){
       $paginador="";
@@ -1489,6 +1566,7 @@ sub UTF8toISO {
 sub from_json_ISO {
     my ($data) = @_;
     eval {
+        #C4::AR::Debug::debug("JSON => Utilidades.pm => " . $data);
         #quita el caracter tab en todo el string $data
         $data =~ s/\t//g;
         $data = UTF8toISO($data);
@@ -1711,6 +1789,26 @@ sub getNivelBibliograficoByCode{
     }
 }
 
+=item
+getNombreFromEstadoByCodigo
+=cut
+sub getNombreFromEstadoByCodigo{
+    my ($codigo)   = @_;
+
+    my @filtros;
+
+    push(@filtros, ( codigo => { eq => $codigo }) );
+
+    my $estado = C4::Modelo::RefEstado::Manager->get_ref_estado( query => \@filtros );
+
+    if(scalar(@$estado) > 0){
+        return ($estado->[0]->nombre);
+    } else {
+        return "NULL";
+    }
+}
+
+
 =head2
 # Esta funcioin remueve los blancos del principio y el final del string
 =cut
@@ -1865,13 +1963,13 @@ sub generarComboDeDisponibilidad{
 
     my ($params) = @_;
 
-    my @select_disponibilidades_array;
-    my %select_disponibilidades_hash;
+    my @select_estados_array;
+    my %select_estados_hash;
     my ($disponibilidades_array_ref)= C4::AR::Referencias::obtenerDisponibilidades();
 
     foreach my $disponibilidad (@$disponibilidades_array_ref) {
-        push(@select_disponibilidades_array, $disponibilidad->getCodigo);
-        $select_disponibilidades_hash{$disponibilidad->getCodigo}= $disponibilidad->nombre;
+        push(@select_estados_array, $disponibilidad->getCodigo);
+        $select_estados_hash{$disponibilidad->getCodigo}= $disponibilidad->nombre;
     }
 
     my %options_hash;
@@ -1892,9 +1990,9 @@ sub generarComboDeDisponibilidad{
     $options_hash{'multiple'}= $params->{'multiple'}||0;
     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultDisponibilidad");
 
-    push (@select_disponibilidades_array, 'SIN SELECCIONAR');
-    $options_hash{'values'}= \@select_disponibilidades_array;
-    $options_hash{'labels'}= \%select_disponibilidades_hash;
+    push (@select_estados_array, 'SIN SELECCIONAR');
+    $options_hash{'values'}= \@select_estados_array;
+    $options_hash{'labels'}= \%select_estados_hash;
 
     my $comboDeDisponibilidades= CGI::scrolling_list(\%options_hash);
 
@@ -2824,6 +2922,7 @@ sub generarComboCampoX{
 
     my $onReadyFunction = shift;
     my $defaultCampoX = shift;
+    my $idCombo = shift;
     #Filtro de numero de campo
     my %camposX;
     my @values;
@@ -2838,9 +2937,9 @@ sub generarComboCampoX{
         $camposX{$i}=$option;
     }
     my $defaulCX= $defaultCampoX || 'Elegir';
-
-    my $selectCampoX=CGI::scrolling_list(  -name      => 'campoX',
-                    -id    => 'campoX',
+    my $idCX= $idCombo || 'campoX';
+    my $selectCampoX=CGI::scrolling_list(  -name      => $idCX,
+                    -id    => $idCX,
                     -values    => \@values,
                     -labels    => \%camposX,
                     -defaults  => $defaulCX,
@@ -2880,6 +2979,102 @@ sub generarComboTipoDeOperacion{
                                                     );
 
     return $CGISelectTipoOperacion;
+}
+
+
+sub generarComboEsquemasImportacion {
+
+    my ($params) = @_;
+
+    require C4::Modelo::IoImportacionIsoEsquema::Manager;
+    my @select_esquemasImportacion_Values;
+    my %select_esquemasImportacion_Labels;
+    my $result = C4::Modelo::IoImportacionIsoEsquema::Manager->get_io_importacion_iso_esquema();
+    my $result_count = C4::Modelo::IoImportacionIsoEsquema::Manager->get_io_importacion_iso_esquema_count();
+
+    if ($result_count){
+        foreach my $esquemaImportacion (@$result) {
+                push (@select_esquemasImportacion_Values, $esquemaImportacion->id);
+                $select_esquemasImportacion_Labels{$esquemaImportacion->id} = $esquemaImportacion->nombre;
+        }
+
+
+        my %options_hash;
+
+        if ( $params->{'onChange'} ){
+             $options_hash{'onChange'}  = $params->{'onChange'};
+        }
+
+        if ( $params->{'onFocus'} ){
+          $options_hash{'onFocus'}      = $params->{'onFocus'};
+        }
+
+        if ( $params->{'class'} ){
+             $options_hash{'class'}     = $params->{'class'};
+        }
+
+        if ( $params->{'onBlur'} ){
+          $options_hash{'onBlur'}       = $params->{'onBlur'};
+        }
+
+        $options_hash{'name'}           = $params->{'name'}||'esquemaImportacion';
+        $options_hash{'id'}             = $params->{'id'}||'esquemaImportacion';
+        $options_hash{'size'}           =  $params->{'size'}||1;
+        $options_hash{'multiple'}       = $params->{'multiple'}||0;
+
+        $options_hash{'values'}         = \@select_esquemasImportacion_Values;
+        $options_hash{'labels'}         = \%select_esquemasImportacion_Labels;
+
+        my $CGISelectEsquemaImportacion                   = CGI::scrolling_list(\%options_hash);
+        return $CGISelectEsquemaImportacion;
+    }else{
+        return 0;
+    }
+}
+
+sub generarComboFormatosImportacion {
+
+    my ($params) = @_;
+
+    my @select_formatosImportacion_Values;
+    my %select_formatosImportacion_Labels;
+
+    my %options_hash;
+
+    if ( $params->{'onChange'} ){
+         $options_hash{'onChange'}  = $params->{'onChange'};
+    }
+
+    if ( $params->{'onFocus'} ){
+      $options_hash{'onFocus'}      = $params->{'onFocus'};
+    }
+
+    if ( $params->{'class'} ){
+         $options_hash{'class'}     = $params->{'class'};
+    }
+
+    if ( $params->{'onBlur'} ){
+      $options_hash{'onBlur'}       = $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}           = $params->{'name'}||'formatoImportacion';
+    $options_hash{'id'}             = $params->{'id'}||'formatoImportacion';
+    $options_hash{'size'}           =  $params->{'size'}||1;
+    $options_hash{'multiple'}       = $params->{'multiple'}||0;
+    $options_hash{'defaults'}       = 'ISO 2709';
+
+    push (@select_formatosImportacion_Values, 'iso');
+    $select_formatosImportacion_Labels{'iso'}            ='ISO 2709';
+    push (@select_formatosImportacion_Values, 'isis');
+    $select_formatosImportacion_Labels{'isis'}            ='ISIS';
+    push (@select_formatosImportacion_Values, 'xml');
+    $select_formatosImportacion_Labels{'xml'}            ='XML';
+
+    $options_hash{'values'}         = \@select_formatosImportacion_Values;
+    $options_hash{'labels'}         = \%select_formatosImportacion_Labels;
+
+    my $CGISelectFormatosImportacion                   = CGI::scrolling_list(\%options_hash);
+    return $CGISelectFormatosImportacion;
 }
 
 sub generarComboNiveles{
@@ -3281,9 +3476,14 @@ sub capitalizarString{
 
     my ($string) = @_;
 
-    $string = ucfirst(lc trim($string));
+    my @words = split(/ /,$string);
+    my $final_string = "";
+    
+    foreach my $word (@words){
+        $final_string .= ucfirst(lc($word))." ";
+    }
 
-    return ($string);
+    return ($final_string);
 }
 =item
 Esta funcion ordena una HASH de strings
@@ -3984,36 +4184,35 @@ sub armarPaginasOPAC{
 
     my $themelang= $t_params->{'themelang'};
 
-    my $paginador= "<div class='pagination'><div id='content_paginator' align='center' >";
+    my $paginador= "<div class='pagination pagination-centered'><ul>";
     my $class="paginador";
 
     if($actual > 1){
         #a la primer pagina
         my $ant= $actual-1;
-        $paginador .= "<a href='".$url."&page=1' class='previous' title='".$first_text."'> ".$first_text."</a>";
-        $paginador .= "<a href='".$url."&page=".$ant."' class='previous' title='".$previous_text."'> ".$previous_text."</a>";
+        $paginador .= "<li class='prev'><a href='".$url."&page=1' class='previous' title='".$first_text."'> ".$first_text."</a></li>";
+        $paginador .= "<li class='prev'><a href='".$url."&page=".$ant."' class='previous' title='".$previous_text."'> ".$previous_text."</a></li>";
 
     }else{
-        $paginador .= "<span class='disabled' title='".$previous_text."'>".$previous_text."</span>";
+        $paginador .= "<li class='prev'><a href='#' title='".$previous_text."'>".$previous_text."</a></li>";
     }
 
     for (my $i=$limInf; ($totalPaginas >1 and $i <= $totalPaginas and $i <= $limSup) ; $i++ ) {
         if($actual == $i){
-            $class="'current'";
-            $paginador .= "<span class=".$class."> ".$i." </span>";
+            $class="'active click'";
         }else{
-            $class="'pagination'";
-            $paginador .= "<a href='".$url."&page=".$i."' class=".$class."> ".$i." </a>";
+            $class="'click'";
         }
+        $paginador .= "<li class=".$class."><a href='".$url."&page=".$i."' class=".$class."> ".$i." </a></li>";
     }
 
     if($actual >= 1 && ($actual < $totalPaginas)){
         my $sig= $actual+1;
-        $paginador .= "<a href='".$url."&page=".$sig."' class='next' title='".$next_text."'>".$next_text."</a>";
-        $paginador .= "<a href='".$url."&page=".$totalPaginas."' class='next' title='".$last_text."'>".$last_text."</a>";
+        $paginador .= "<li class='next'><a href='".$url."&page=".$sig."' class='next' title='".$next_text."'>".$next_text."</a></li>";
+        $paginador .= "<li class='next'><a href='".$url."&page=".$totalPaginas."' class='next' title='".$last_text."'>".$last_text."</a></li>";
 
     }
-    $paginador .= "</div></div>";
+    $paginador .= "</div>";
 
     if ($totalPaginas <= 1){
       $paginador="";
@@ -4432,6 +4631,105 @@ sub modificarCampoGlobalmente {
  my $min= $tardo1/60;
  print "Tardo $min minutos !!!\n";
 
+}
+
+sub translateYesNo_fromNumber{
+    my ($value) = @_;
+
+    if ($value == 1){
+        return C4::AR::Filtros::i18n('Si');
+    }else{
+        return C4::AR::Filtros::i18n('No');
+    }
+}
+
+sub translateYesNo_toNumber{
+    my ($value) = @_;
+
+    if ($value eq C4::AR::Filtros::i18n('Si')){
+        return 1;
+    }else{
+        return 0
+    }
+}
+
+sub printAjaxPercent{
+	my ($total,$actual) = @_;
+	
+	my $percent = 0;
+	
+	eval{
+	   $percent = ($actual * 100) / $total;
+	};
+    
+    my $session = CGI::Session->load();
+
+    C4::AR::Auth::print_header($session);
+    print $percent;
+    
+    return ($percent);
+}
+
+sub demo_test{
+    
+    my ($job) = @_;
+    
+    use C4::AR::BackgroundJob;
+    
+    if (!$job){
+        $job = C4::AR::BackgrounJob->new("DEMO","NULL",10);        
+    }
+     
+    for (my $x=1; $x<=10; $x++){
+        sleep(1);
+        my $percent = printAjaxPercent(10,$x);
+        $job->progress($percent);
+        C4::AR::Debug::debug("-------------------------- JOB -------------- \n\n\n\n\n");
+    }
+    
+}
+
+sub generarComboDeEstados{
+	
+    my ($params) = @_;
+
+	my ($estados) = C4::AR::Referencias::obtenerEstados();
+
+    my @select_estados_array;
+    my %select_estados_hash;
+
+    foreach my $estado (@$estados) {
+        push(@select_estados_array, $estado->getId_estado);
+        $select_estados_hash{$estado->getId_estado}= $estado->nombre;
+    }
+
+    my %options_hash;
+
+    if ( $params->{'onChange'} ){
+        $options_hash{'onChange'}= $params->{'onChange'};
+    }
+    if ( $params->{'onFocus'} ){
+        $options_hash{'onFocus'}= $params->{'onFocus'};
+    }
+    if ( $params->{'onBlur'} ){
+        $options_hash{'onBlur'}= $params->{'onBlur'};
+    }
+
+    $options_hash{'name'}= $params->{'name'}||'estado_name';
+    $options_hash{'id'}= $params->{'id'}||'estado_id';
+    $options_hash{'size'}=  $params->{'size'}||1;
+    $options_hash{'multiple'}= $params->{'multiple'}||0;
+    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultUsrEstado") ||1;
+
+    push (@select_estados_array, 'SIN SELECCIONAR');
+    $options_hash{'values'}= \@select_estados_array;
+    $options_hash{'labels'}= \%select_estados_hash;
+
+    my $comboDeDisponibilidades= CGI::scrolling_list(\%options_hash);
+
+    return $comboDeDisponibilidades;
+	
+	
 }
 
 END { }       # module clean-up code here (global destructor)

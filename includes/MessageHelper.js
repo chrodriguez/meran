@@ -32,9 +32,7 @@
 // }
 
 function clearMessages(){
-    $('#mensajes').css({opacity:0,"filter":"alpha(opacity=0)"});
-    $('#mensajes').hide();
-	$('#mensajes').html('');
+	$('#end_top').html("<div id='mensajes' class='alert hide pagination-centered'><a class='close' data-dismiss='alert'>x</a><br /> </div>");
 }
 
 function verificarRespuesta(responseText){
@@ -56,37 +54,29 @@ function setMessages(Messages_hashref){
 //Message.messages: [message_1, message_2, ... , message_n]
 //message1: 	codMsg: 'U324'
 //		message: 'Texto para informar'
+	var hayError = 0;
     try{
-
-//         if (!($('#mensajes').html()))
          _createContentMessages();
         var i;
         //se agregan todos los mensajes
+        if (Messages_hashref.error == 1)
+        	$('#mensajes').addClass('alert-error');
+        hayError = Messages_hashref.error;
         for(i=0;i<Messages_hashref.messages.length;i++){
-            $('#mensajes').append('<div class="message_text" >'+Messages_hashref.messages[i].message + '</div>');
+            $('#mensajes').append('<p>' + Messages_hashref.messages[i].message + '</p>');
             
         }
-        $('#mensajes').css("display","block");
-
-        _show();
+        $('#mensajes').removeClass('hide');
         $('html, body').animate({scrollTop:0}, 'slow');
-        _delay(clearMessages, 180);
+        _delay(clearMessages, 60);
     }
     catch (e){
       // We do nothing ;)
     }
+    
+    return hayError;
 }
 
-
-function assignCloseButton(){
-    $('#close_message').click(function()
-    {
-      //the messagebox gets scrool down with top property and gets hidden with zero opacity
-      $('#mensajes').animate({opacity:0}, "slow");
-      clearMessages();
-    });
-
-}
 //crea el contenedor para los mensajes, si ya esta creado, borra el contenido
 function _createContentMessages(){
 
@@ -95,20 +85,12 @@ function _createContentMessages(){
 	if(contenedor == null){
      //no existe el contenedor, se crea
 		//console.log("MessageHelper: Se crea el div cotenedor");
-		$('#end_top').append("<div class='mensajes_informacion'><div id='mensajes'><img id='close_message' style='float:right;cursor:pointer' src="+imagesForJS+'/iconos/12-em-cross.png'+" /></div></div>");
+		$('#end_top').append("<div id='mensajes' class='alert hide pagination-centered'><a class='close' data-dismiss='alert'>×</a><br /> </div>"); //faltaria agregar la clase warning, success o danger
 	}
 	else{
     //existe el contenedor, lo limpio
         clearMessages();
-        $('#mensajes').append("<img id='close_message' style='float:right;cursor:pointer' src='"+imagesForJS+'/iconos/12-em-cross.png'+ " />");
 	}
-
-    _show();
-    assignCloseButton();
-}
-
-function _show(){
-    $('#mensajes').animate({opacity:90,"filter":"alpha(opacity=90)"}, "fast");
 }
 
 //luego de x segundos se ejecuta la funcion pasada por parametro

@@ -6,7 +6,7 @@ package C4::AR::Preferencias;
 
 use strict;
 require Exporter;
-use C4::Context;
+#use C4::Context;
 use C4::Date;
 use C4::Modelo::PrefPreferenciaSistema;
 use C4::Modelo::PrefPreferenciaSistema::Manager;
@@ -158,10 +158,13 @@ sub getPreferenciasByArray {
 
 
 sub getAllPreferencias {
-    my @filtros;
+	
     my %preferencias_hash;
 
-    my $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( query => \@filtros );
+	require C4::Modelo::PrefPreferenciaSistema;
+	require C4::Modelo::PrefPreferenciaSistema::Manager;
+
+    my $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema();
 
     if ($preferencias_array_ref){
 
@@ -176,11 +179,6 @@ sub getAllPreferencias {
     }
 }
 
-
-BEGIN
-{
-      reloadAllPreferences();
-}
 
 sub getMenuPreferences{
 
@@ -477,6 +475,12 @@ sub getMetodosAuthAll{
 
 	return ($metodos_auth);
 }
+
+BEGIN{
+      C4::AR::Preferencias::reloadAllPreferences();
+};
+
+
 
 END { }       # module clean-up code here (global destructor)
 

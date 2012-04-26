@@ -1,142 +1,137 @@
 [% IF nivel != 'Niveles' %]
 
-    [% IF cant != 0 %]
+[% IF cant != 0 %]
 
-<script type="text/javascript">
-      $(document).ready(function() {
-        makeToggle('datos_tabla_div','trigger',null,false);
-        checkedAll('checkAllCampos','checkCampos');
-      });
-</script>
+	<script type="text/javascript">
+	      $(document).ready(function() {
+	        makeToggle('datos_tabla_div','trigger',null,false);
+	        checkedAll('checkAllCampos','checkCampos');
+	      });
+	</script>
+	
+	<fieldset>
+	    <legend>[% "Campos Modificados del nivel" | i18n %]:</legend>
+	        <div>
+	        
+	        [% PERL %]
+	                print C4::AR::Filtros::tableHeader(   
+	                                  id              => "creacionCatalogo_table",
+	                                  class           => "",
+	                                  selectAll_id    => "",
+	                                  columns         => ['[% "MARC"|i18n %]','[% "Vista en Intranet"|i18n %]','[% "Tipo"|i18n %]',
+	                                                    '[% "Validador"|i18n %]','[% "Referencia"|i18n %]','[% "Campo referencia"|i18n %]',
+	                                                    '[% "Orden"|i18n %]','[% "Fijo"|i18n %]','[% "Obligatorio"|i18n %]',
+	                                                    '[% "Visible"|i18n %]','[% "Esquema"|i18n %]','[% "Acciones"|i18n %]',
+	                                                     ]
+	
+	                                                                    
+	                                        ) ;
+	        [% END %]
+	
+	        <tdoby>
+	        [% FOREACH catalogacion IN catalogaciones %]
+		        <tr>
+	    
+			        <td>
+				        <b>[% catalogacion.getCampo %]</b>, <b>[% catalogacion.getSubcampo %]</b>
+			        </td>
+			        <td>
+				        [% catalogacion.getLiblibrarian %]
+			        </td>
+	                <td>    
+	                   [% catalogacion.getTipoString %]
+	                </td>
+	                <td>    
+	                  [% catalogacion.getRulesToString %]
+	                </td>
+	                <td>    
+	                         [% IF catalogacion.tieneReferencia == 1 %]
+	                                 [% catalogacion.infoReferencia.getReferencia %]
+	                         [% ELSE %]
+	                                 [% "No tiene" | i18n %]
+	                         [% END %]
+	                </td>
+	                <td>    
+	                         [% IF catalogacion.tieneReferencia == 1 %]
+	                                 [% catalogacion.infoReferencia.getCampos %]
+	                         [% ELSE %]
+	                                 [% "No tiene" | i18n %]
+	                         [% END %]
+	                </td>
+	                <td>    
+	                        [% IF catalogacion.tieneReferencia == 1 %]
+	                                [% catalogacion.infoReferencia.getOrden %]
+	                        [% ELSE %]
+	                                [% "No tiene" | i18n %]
+	                        [% END %]
+	                </td>
+	                <td>    
+	                       [% IF catalogacion.soyFijo == 1 %]
+	                               <span class="verde">[% "Si" | i18n %]</span>
+	                       [% ELSE %]
+	                               <span class="rojo">[% "No" | i18n %]</span>
+	                       [% END %]
+	                </td>
+	                <td>    
+		                   [% IF catalogacion.getObligatorio == 1 %]
+		                           <span class="verde">[% "Si" | i18n %]</span>
+		                   [% ELSE %]
+		                           <span class="rojo">[% "No" | i18n %]</span>
+		                   [% END %]
+	                </td>
+	                <td>
+		                [% IF catalogacion.getObligatorio != 1 %]
+		                    <input type="checkbox" id="[% id %]" value="[% catalogacion.getVisible %]" onChange="visibilidad('[% catalogacion.getId %]')" 
+		                    value="[% catalogacion.getVisible %]"   [% IF catalogacion.getVisible %] 
+		                                                                checked
+		                                                            [% END %] 
+		                    >
+		                [% END %]
+	                </td>
+	                <td>    
+	                    [% catalogacion.getItemType %]
+	                </td>
+	                <td style="width: 130px;">
+		                [% IF catalogacion.soyFijo != 1 %]
+		                    [% PERL %]
+		                        print C4::AR::Filtros::action_set_button(    
+                                      title    => "[% 'Editar' | i18n %]", 
+                                      action  => 'mostrarModificarCampo("[% catalogacion.getId %]");',
+                                      icon    => "icon-white icon-pencil",
+		                              button          => 'btn btn-primary',
+		                              actions         => [
+		                                                   {title   => "[% 'Eliminar' | i18n %]", 
+		                                                    action  => 'eliminarCampo("[% catalogacion.getId %]");',
+		                                                    icon    => "icon-trash"
+		                                                   },
+		                                                  ],
+		                                popover       => {text  => 'Esta acci&oacute;n se aplica para todos los ejemplares seleccionados', 
+		                                                  title => 'Atenci&oacute;n'},
+		
+		                                ) ;
+		                    [% END %]    
+		                [% END %]
+	                </td> 
+		        </tr>
+	        [% END %]
+	        </tdoby>
+	     </table>
+	  </div>    
+	</fieldset>
 
-<fieldset class="resultados_busqueda">
-    <legend class="titulo_legend trigger click">[% "Campos Modificados del nivel" | i18n %]:</legend>
-        <div class="datos_tabla_div" id="datos_tabla_div">
-        <table id="tablaCamposMod" class="tabla_datos" width="100%" cellspacing="0" cellpadding="0" border="0">
-
-	        <tr class="titulo_tabla_resultado">
-
-		        <td width="10%">[% 'MARC' | i18n %]</td>
-		        <td width="20%">[% 'Vista en Intranet' | i18n %]</td>
-                <td width="10%">[% 'Tipo' | i18n %]</td>
-                <td width="10%">[% 'Validador' | i18n %]</td>
-                <td width="10%">[% 'Referencia' | i18n %]</td>
-                <td width="10%">[% 'Campo referencia' | i18n %]</td>
-                <td width="10%">[% 'Orden' | i18n %]</td>
-                <td width="4%">[% 'Fijo' | i18n %]</td>
-                <td width="5%">[% 'Obligatorio' | i18n %]</td>
-                <td width="5%">[% 'Visible' | i18n %]</td>
-                <td width="5%">[% 'Esquema' | i18n %]</td>
-                <td width="5%">[% 'Acciones' | i18n %]</td>
-
-	        </tr>
-        [% FOREACH catalogacion IN catalogaciones %]
-	        <tr align="center" >
+[% END %]
     
-		        <td>
-			        <b>[% catalogacion.getCampo %]</b>, <b>[% catalogacion.getSubcampo %]</b>
-		        </td>
-		        <td>
-			        [% catalogacion.getLiblibrarian %]
-		        </td>
-                <td>    
-                        &nbsp;  [% catalogacion.getTipoString %]
-                </td>
-                <td>    
-                        &nbsp;  [% catalogacion.getRulesToString %]
-                </td>
-                <td>    
-                                    [% IF catalogacion.tieneReferencia == 1 %]
-                                            [% catalogacion.infoReferencia.getReferencia %]
-                                    [% ELSE %]
-                                            [% "No tiene" | i18n %]
-                                    [% END %]
-                </td>
-                <td>    
-                                    [% IF catalogacion.tieneReferencia == 1 %]
-                                            [% catalogacion.infoReferencia.getCampos %]
-                                    [% ELSE %]
-                                            [% "No tiene" | i18n %]
-                                    [% END %]
-                </td>
-                <td>    
-                                    [% IF catalogacion.tieneReferencia == 1 %]
-                                            [% catalogacion.infoReferencia.getOrden %]
-                                    [% ELSE %]
-                                            [% "No tiene" | i18n %]
-                                    [% END %]
-                </td>
-                <td>    
-                                    [% IF catalogacion.soyFijo == 1 %]
-                                            <span class="verde">[% "Si" | i18n %]</span>
-                                    [% ELSE %]
-                                            <span class="rojo">[% "No" | i18n %]</span>
-                                    [% END %]
-                </td>
-                <td>    
-                                    [% IF catalogacion.getObligatorio == 1 %]
-                                            <span class="verde">[% "Si" | i18n %]</span>
-                                    [% ELSE %]
-                                            <span class="rojo">[% "No" | i18n %]</span>
-                                    [% END %]
-                </td>
-                <td>
-                [% IF catalogacion.getObligatorio != 1 %]
-                    <input type="checkbox" id="[% id %]" value="[% catalogacion.getVisible %]" onChange="visibilidad('[% catalogacion.getId %]')" 
-                    value="[% catalogacion.getVisible %]"   [% IF catalogacion.getVisible %] 
-                                                                checked
-                                                            [% END %] 
-                    >
-                [% END %]
-                </td>
-                <td>    
-                                    [% catalogacion.getItemType %]
-                </td>
-                <td>
-                
-                [% IF catalogacion.soyFijo != 1 %]
-                        [% PERL %]
-                            print C4::AR::Filtros::to_Icon(    
-                                                                boton   => "icon_edicion",
-                                                                onClick => "mostrarModificarCampo('[% catalogacion.getId %]');",
-                                                                title   => "[% 'Modificar Campo' | i18n %]",
-                                                                alternClass => "botonCentradoTabla"
-                                    ) ;
-                        [% END %]
-                [% END %]
-                
-                [% IF catalogacion.soyFijo != 1 %]
-                        [% PERL %]
-                            print C4::AR::Filtros::to_Icon(    
-                                                                boton   => "icon_borrar",
-                                                                onClick => "eliminarCampo('[% catalogacion.getId %]');",
-                                                                title   => "[% 'Eliminar Campo' | i18n %]",
-                                                                alternClass => "botonCentradoTabla"
-                                    ) ;
-                        [% END %]
-                [% END %]
-                
-                </td> 
-	        </tr>
-        [% END %]
-            
-        </table>
-  </div>    
-</fieldset>
-
-    [% END %]
-    
-    
+<div class="form-actions">    
     [% PERL %]
                 print C4::AR::Filtros::to_Button(       text    => "[% 'Agregar Campo' | i18n %]",
-                                                        boton   => "boton_agregar",
+                                                        boton   => "btn btn-primary",
                                                         onClick => "mostrarAgregarCampo();",
                                                         title   => "[% 'Agregar Campo' | i18n %]",
                                                         width   => "auto",
                                                         alternClass => "botonCentrado"
                         ) ;
     [% END %]    
-       
+</div>     
 [% END %] <!-- END IF niveles -->
 
 <div id="groups_content"></div>

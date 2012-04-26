@@ -25,40 +25,64 @@
     });
 </script>
 <fieldset>
-    <legend class="titulo_legend trigger click"><strong>[% "Configuraci&oacute;n de la Visualizaci&oacute;n de Campo:" | i18n %]</strong></legend> 
-      <table id="tabla_datos_visualizacion_intra" class="tabla_datos" cellspacing=0 border="0" cellpadding=0 style="width:100%;">
-            <thead>
-                <tr class="titulo_tabla_resultado">
-                    <td>[% "Campo" | i18n %]</td>
-                    <td>[% "Vista Campo" | i18n %]</td>
-                    <td>[% "Acciones" | i18n %]</td>
-                </tr>
-            </thead>
+    <legend>[% "Configuraci&oacute;n de la Visualizaci&oacute;n de Campo:" | i18n %]</legend> 
+    
+        [% PERL %]
+                print C4::AR::Filtros::tableHeader(   
+                                  id              => "visualizacionOpac_table",
+                                  class           => "",
+                                  selectAll_id    => "",
+                                  columns         => ['[% "Campo"|i18n %]','[% "Vista OPAC"|i18n %]','[% "Acciones"|i18n %]',
+                                                     ]
+
+                                                                    
+                                        ) ;
+        [% END %]
+        
             <tbody id="sortable">
                 <input type="checkbox" name="enable_sort_campo" id="enable_sort_campo" /> Seleccione para Ordenar
                 [% FOREACH campo IN visualizacion %]
                     <tr id="[% campo.getId %]" align="center">
                         <td>[% campo.getCampo %]</td>
                         <td class="vista_campo" id="[% campo.getCampo %]">[% campo.getVistaCampo %]</td>
-                        <td align="center">
+                        <td style="width: 110px;">
+                                                   
                             [% PERL %]
-                                print C4::AR::Filtros::to_Icon( text    => "[% 'Editar Subcampos' | i18n %]",
-                                                                onClick => "editSubcampos('[% campo.getCampo %]')",
-                                                                boton   => "icon_edicion",
-                                                                title   => "[% 'Editar Subcampos' | i18n %]",
-                                                                
-                                                            );
+                                print C4::AR::Filtros::action_set_button(    
+                                      title           => "[% 'Campo' | i18n %]",
+                                      button          => 'btn btn-primary',
+                                      actions         => [
+                                                          {title    => "[% 'Editar Subcampos' | i18n %]", 
+                                                            action  => 'editSubcampos("[% campo.getCampo %]");',
+                                                            icon    => "icon-pencil"
+                                                          },
+                                                           {title   => "[% 'Eliminar Campo' | i18n %]", 
+                                                            action  => 'eliminarTodoElCampo("[% campo.getCampo %]");',
+                                                            icon    => "icon-trash"
+                                                           },
+                                                          ],
+                                        popover       => {text  => 'Esta acci&oacute;n se aplica para todos los ejemplares seleccionados', 
+                                                          title => 'Atenci&oacute;n'},
+
+                                        ) ;
                             [% END %]
-                            [% PERL %]
-                            print C4::AR::Filtros::to_Icon( text    => "[% 'Eliminar Campo' | i18n %]",
-                                                                onClick => "eliminarTodoElCampo('[% campo.getCampo %]')",
-                                                                boton   => "icon_borrar",
-                                                                title   => "[% 'Eliminar Campo' | i18n %]",
-                                                            );
-                            [% END %]
+
                         </td>
                     </tr>
                 [% END %]
             </tbody>
         </table>
+            <div class="form-actions">
+                     [% PERL %]
+                           print C4::AR::Filtros::action_button( 
+                                                           button       => "btn btn-success",
+                                                           action       => "showAddVistaOPAC()", 
+                                                           icon         => "icon-plus-sign icon-white",
+                                                           title        => "Agregar vista",
+                                                       ) ;
+        
+        
+                     [% END %]
+            </div>
+            
 </fieldset>

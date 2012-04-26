@@ -1,16 +1,85 @@
 [% USE HTML %]
+
 [% IF novedad.getContenido %]
-	<h1><a href="#">[% novedad.getTitulo %]</a></h1>
-	<h3>[% novedad.getFechaLegible %]</a></h3>
-	<p>
-	    [% novedad.getContenido %]
-	</p>
-	<p class="details"> 
-	[% IF novedad.getCategoria %]
-		[% 'Categor&iacute;a' | i18n %]: 
-		<a href="#">[% novedad.getCategoria %]</a>
-	[% END %] 
-	</p>
+
+<script type="text/javascript" language="javascript">
+    $(document).ready(function() {
+    
+        $('.fancylink').fancybox();
+    
+    });
+</script>
+    
+    <fieldset>
+        <legend>Detalle de la novedad <strong>[% HTML.escape(novedad.getTitulo) %]</strong></legend>
+
+        <div>
+            <dl>
+                <dt>[% 'T&iacute;tulo' | i18n %]:</dt>
+                <dd>[% HTML.escape(novedad.getTitulo) %]</dd>
+                
+                <dt>[% 'Fecha' | i18n %]:</dt>
+                <dd>[% HTML.escape(novedad.getFechaLegible) %]</dd>
+                
+                <dt>[% 'Contenido' | i18n %]:</dt>
+                <dd>[% HTML.escape(novedad.getContenido) %]</dd>
+                
+	            [% IF novedad.getCategoria %]
+                    <dt>[% 'Categoria' | i18n %]:</dt>
+                    <dd>[% HTML.escape(novedad.getCategoria) %]</dd>
+                [% END %] 
+                
+                [% IF cant_links %]
+                    <dt>[% 'Links' | i18n %]:</dt>
+                    [% FOREACH link IN links %]
+                        <a target="_blank" href="[% link %]">[% link %]</a></br>
+                        
+                    [% END %] 
+                    
+                [% END %] 
+            </dl>
+	    </div>
+	    
+        [% IF cant %]
+            <div class="well">
+	        
+	            [% FOREACH imagen IN imagenes_hash %]
+	                <a class="fancylink" rel="group" href="/opac-tmpl/uploads/novedades/[% imagen.getImageName %]">
+                        <img border="0" src="/opac-tmpl/uploads/novedades/[% imagen.getImageName %]"
+                              style="width: 60%; max-width: 120px;" 
+                              alt="novedad_[% imagen.getIdNovedad %]"
+                              title="novedad_[% imagen.getIdNovedad %]"
+                        >
+                    </a>
+	            
+	            [% END %]
+	            
+	       </div>
+	        
+        [% END %] 
+	    
+	    <div class="form-actions">
+	        [% PERL %]
+                print C4::AR::Filtros::action_link_button( 
+                                                button          => "btn btn-primary click",
+                                                url             => "[% url_prefix %]/opac-novedades.pl", 
+                                                title           => "Volver al listado",
+                                          ) ;
+
+            [% END %]
+	    </div>
+	</fieldset>
+	
 [% ELSE %]
-        <h1>[% 'La novedad solictada no existe.' | i18n %]</h1>
+        <div class="alert alert-info">[% 'La novedad solictada no existe.' | i18n %]</div>
+        <div class="form-actions">
+	        [% PERL %]
+                print C4::AR::Filtros::action_link_button( 
+                                                button          => "btn btn-primary click",
+                                                url             => "[% url_prefix %]/opac-novedades.pl", 
+                                                title           => "Volver al listado",
+                                          ) ;
+
+            [% END %]
+	    </div>
 [% END %]

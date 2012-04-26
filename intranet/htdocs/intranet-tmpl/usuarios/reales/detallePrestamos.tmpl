@@ -1,137 +1,139 @@
 <script type="text/javascript" charset="utf-8">
-checkTr();
-</script>
-[% IF circularDesdeDetalleUsuario == 0 %]
-    [% INCLUDE 'partials/usuarios/detallePrestamos-noCirculation.inc' %]
-[% ELSE %]
-	[% IF prestamos_cant %]
-		
-		[% USE HTML %]
-		
-		<fieldset> <legend class="titulo_legend_resaltado">[% "Ejemplares Prestados" | i18n %]</legend>
-			<table id="table_tablaPrestamos" class="prestamosResult datos_tabla" cellspacing=0  cellpadding=0 border=0  width="100%" > 
-			
-				<tr valign=middle class="titulo_tabla_resultado">
-			
-					<th>
-						<a class="click" id="checkAllPrestamos">
-						<img src="[% temas %]/[% tema %]/imagenes/iconos/check.png" border="0" 
-							title='[% "Seleccionar todos" | i18n %]'>
-						</a>
-					</th>
-			
-					<th>[% "T&iacute;tulo" | i18n %]</th>
-					<th>[% "Autor" | i18n %]</th>
-					<th>[% "C. Barra" | i18n %]</th>
-					<th>[% "Sig. Top." | i18n %]</th>
-					<th>[% "Ed." | i18n %]</th>
-					<th>[% "Vol." | i18n %]</th>
-					<th>[% "Pr&eacute;stamo" | i18n %]</th>
-					<th>[% "Vencimiento" | i18n %]</th>
-					<th>[% "Tipo" | i18n %]</th>
-			
-				</tr>
-			[% FOREACH prestamo IN PRESTAMOS %]
-				<tr align="center">
-			
-					<td>
-                        <input type="checkbox" name="chkboxPrestamos" value="[% prestamo.getId_prestamo %]" id="[% prestamo.getId_prestamo %]">
-					</td>
 
-					<td width="14%" >
-					[% PERL %]
-						print C4::AR::Filtros::link_to(	text => "[% prestamo.nivel3.nivel1.getTitulo %]",
-		                                        url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
-		                                        params =>	["id1=[% prestamo.nivel3.nivel1.getId1 %]"],
+$(document).ready(function(){
+    checkTr();
+    $('.popover_button').popover({delay: { show: 800, hide: 100 },});
+});
+</script>
+
+[% USE HTML %]
+[% IF prestamos_cant %]		
+		<fieldset> 
+              <legend class="titulo_legend_resaltado">[% "Ejemplares Prestados" | i18n %]</legend>
+                     [% IF prestamos_cant %]
+                        <div class="well">
+                            [% "Cantidad de ejemplares prestados" | i18n %]: <strong>[% prestamos_cant %]</strong> 
+                        </div>
+
+                          [% PERL %]
+                                print C4::AR::Filtros::tableHeader(   
+                                            id              => "table_tablaPrestamos",
+                                            class           => "",
+                                            selectAll_id    => "checkAllPrestamos",
+                                            columns         => ['[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]',
+                                                                '[% "C&oacute;digo de Barras" %]','[% "Sig. Top." | i18n %]',
+                                                                '[% "Ed." | i18n %]','[% "Vol." | i18n %]','[% "Pr&eacute;stamo" %]',
+                                                                '[% "Vencimiento" %]','[% "Tipo" %]'
+                                                              ]
+                                                                            
+                                                  ) ;
+                          [% END %]
+        
+                        
+                        <tbody>
+                        [% FOREACH prestamo IN PRESTAMOS %]
+                            <tr>
+                        
+                                <td>
+                                    <input type="checkbox" name="chkboxPrestamos" value="[% prestamo.getId_prestamo %]" id="[% prestamo.getId_prestamo %]">
+                                </td>
+
+                                <td>
+                                [% PERL %]
+                                    print C4::AR::Filtros::link_to(	text => "[% prestamo.nivel3.nivel1.getTitulo %]",
+                                                            url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                                            params =>	["id1=[% prestamo.nivel3.nivel1.getId1 %]"],
+                                                          ) ;
+                                [% END %]
+                                </td>
+                                <td>
+                                [% IF prestamo.nivel3.nivel1.getAutor %]
+                                    [% prestamo.nivel3.nivel1.getAutor %]
+                                [% ELSE %]
+                                    &nbsp;
+                                [% END %]
+                                </td>
+                        
+                                <td>
+                                [% PERL %]
+                                    print C4::AR::Filtros::link_to(	text => 	"[% prestamo.nivel3.getBarcode %]",
+                                                                    url => 		"[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
+                                                                    params =>	["id3=[% prestamo.getId3 %]"],
+                                                                    title =>	"[% 'Detalle del Ejemplar' | i18n %]"
+                                                                ) ;
+                                [% END %]
+                                </td>
+                        
+                                <td>
+                                    [% IF prestamo.nivel3.getSignatura_topografica %] 
+                                        [% PERL %]
+                                            print C4::AR::Filtros::link_to(	text => 	"[% prestamo.nivel3.getSignatura_topografica %]",
+                                                                            url => 		"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                                                            params =>	["id1=[% prestamo.nivel3.nivel1.getId1 %]"],
+                                                                ) ;
+                                        [% END %]
+                                    [% END %]
+                                </td>
+                        
+                                <td>  
+                                [% IF prestamo.nivel3.nivel2.getEdicion %] [% prestamo.nivel3.nivel2.getEdicion %] [% ELSE %] - [% END %]
+                                </td>
+                        
+                                <td> 
+                                [% IF prestamo.nivel3.nivel2.getVolumen %] t [% prestamo.nivel3.nivel2.getVolumen %] 
+                                    [% IF prestamo.nivel3.nivel2.getVolumenDesc %] ([% prestamo.nivel3.nivel2.getVolumenDesc %])  [% END %] 
+                                [% END %]
+                                </td>
+                                <td>
+                                [% IF prestamo.getFecha_prestamo %] 
+                                    [% prestamo.getFecha_prestamo_formateada %]
+                                [% ELSE %]
+                                    - 
+                                [% END %]
+                                </td>
+                        
+                                <td>
+                                    [% IF prestamo.getFecha_vencimiento %]
+                                     <span class="label [% IF prestamo.estaVencido %]label-important[% ELSE %] label-success[% END%]">
+                                         [% prestamo.getFecha_vencimiento_formateada %]
+                                      </span>
+                                    [% ELSE %]
+                                        - 
+                                    [% END %]
+                                </td>
+		
+                                <td>
+                                    [% IF prestamo.tipo.id_tipo_prestamo %]
+                                            [% prestamo.tipo.getDescripcion %]
+                                    [% END %]
+                                </td>
+                          </tr>
+                      [% END %] <!-- FOREACH prestamos -->
+                    </tbody>  
+                  
+			</table> 
+				[% IF circularDesdeDetalleUsuario == 1 %]
+		            <div class="form-actions">
+		                      [% PERL %]
+		                              print C4::AR::Filtros::action_set_button(    
+		                                                                  title           => "[% 'Pr&eacute;stamos' | i18n %]",
+		                                                                  button          => 'btn btn-primary',
+		
+		                                                                  actions         => [
+		                                                                                      [% IF prestamos_cant %]{title => "Devolver", action=>'realizarAccion("DEVOLUCION","table_tablaPrestamos",generaDivDevolucion)',icon=>"icon-share-alt"}[% END %],
+		                                                                                      [% IF (algunoSeRenueva > 0) && (vencidos == 0) %]
+		                                                                                          {title => "Renovar", action=>'realizarAccion("RENOVACION","table_tablaPrestamos",generaDivRenovacion)', icon=>"icon-repeat"},
+	                                                                                          [% END %]
+		                                                                                      ],
+		                                                                  popover           => {title => "[% 'Pr&eacute;stamos' | i18n %]",
+		                                                                                        text => "[% 'Renovar (si aplica) o devolver ejemplares' | i18n %]" }
+		
 		                                      ) ;
-					[% END %]
-					</td>
-					<td>
-					[% IF prestamo.nivel3.nivel1.getAutor %]
-						[% prestamo.nivel3.nivel1.getAutor %]
-					[% ELSE %]
-						&nbsp;
-					[% END %]
-					</td>
-			
-					<td>
-					[% PERL %]
-						print C4::AR::Filtros::link_to(	text => 	"[% prestamo.nivel3.getBarcode %]",
-														url => 		"[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
-														params =>	["id3=[% prestamo.getId3 %]"],
-														title =>	"[% 'Detalle del Ejemplar' | i18n %]"
-													) ;
-					[% END %]
-					</td>
-			
-					<td>
-						[% IF prestamo.nivel3.getSignatura_topografica %] 
-							[% PERL %]
-								print C4::AR::Filtros::link_to(	text => 	"[% prestamo.nivel3.getSignatura_topografica %]",
-																url => 		"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
-																params =>	["id1=[% prestamo.nivel3.nivel1.getId1 %]"],
-													) ;
-							[% END %]
-						[% END %]
-					</td>
-			
-					<td>  
-					[% IF prestamo.nivel3.nivel2.getEdicion %] [% prestamo.nivel3.nivel2.getEdicion %] [% ELSE %] - [% END %]
-					</td>
-			
-					<td> 
-					[% IF prestamo.nivel3.nivel2.getVolumen %] t [% prestamo.nivel3.nivel2.getVolumen %] 
-						[% IF prestamo.nivel3.nivel2.getVolumenDesc %] ([% prestamo.nivel3.nivel2.getVolumenDesc %])  [% END %] 
-					[% END %]
-					</td>
-					<td>
-					[% IF prestamo.getFecha_prestamo %] 
-						[% prestamo.getFecha_prestamo_formateada %]
-					[% ELSE %]
-						- 
-					[% END %]
-					</td>
-			
-					<td>
-						[% IF prestamo.getFecha_vencimiento %]
-						  <span class="[% IF prestamo.estaVencido %]fecha_vencida[% ELSE %]fecha_cumple[% END %]">
-		  				  [% prestamo.getFecha_vencimiento_formateada %]
-						  </span>
-						[% ELSE %]
-		          - 
-		        [% END %]
-		      </td>
-		
-					<td>
-						[% IF prestamo.tipo.id_tipo_prestamo %]
-								[% prestamo.tipo.getDescripcion %]
-						[% END %]
-					</td>
-		    </tr>
-			[% END %] <!-- FOREACH prestamos -->
-			
-			</table>
-		    [% IF prestamos_cant %]	
-		         [% PERL %]
-		             print C4::AR::Filtros::to_Icon(  
-		                                                 boton   => "icon_devolver",
-		                                                 onClick => "realizarAccion('DEVOLUCION','table_tablaPrestamos',generaDivDevolucion);",
-		                                                 title   => "[% 'Devolver' | i18n %]",
-		                                                alternClass => "botonCentrado"
-		                    ) ;
-		        [% END %]
-			[% END %]	
-			[% IF algunoSeRenueva>0 && vencidos == 0 %]
-		        [% PERL %]
-		            print C4::AR::Filtros::to_Icon(  
-		                                                boton   => "icon_renovar",
-		                                                onClick => "realizarAccion('RENOVACION','table_tablaPrestamos',generaDivRenovacion);",
-		                                                title   => "[% 'Renovar' | i18n %]",
-		                                                alternClass => "botonCentrado"
-		                    ) ;
-		        [% END %]
-			[% END %]
-		
+		                      [% END %]
+	                </div>
+	            [% END %]
+            [% ELSE %]
+                <div class="alert alert-info">[% 'El usuario no tiene ning&uacute;n ejemplar en su poder.'| i18n %]</div>
+            [% END %]
 		</fieldset>
-	[% END %]
 [% END %]

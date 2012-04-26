@@ -46,6 +46,12 @@ sub getIdLocalidad{
     return (C4::AR::Utilidades::trim($self->id));
 }
 
+sub setNombre{
+    my ($self) = shift;
+     my ($nombre)=@_;
+     $self->NOMBRE($nombre);
+}
+
 sub getNombre{
     my ($self) = shift;
     return (C4::AR::Utilidades::trim($self->NOMBRE));

@@ -33,13 +33,12 @@ __PACKAGE__->meta->setup(
 
 #----------------------------------- FUNCIONES DEL MODELO ------------------------------------------------
 
-sub addEsquema{
+sub agregar{
     my ($self)   = shift;
     my ($params) = @_;
 
-    #$self->setProveedorId($params->{'id_proveedor'});
-    #$self->setRefEstadoPresupuestoId(1);
-    #$self->setRefPedidoCotizacionId($params->{'pedido_cotizacion_id'});
+    $self->setNombre($params->{'nombre'});
+    $self->setDescripcion($params->{'descripcion'});
 
     $self->save();
 }
@@ -75,4 +74,51 @@ sub getNombre{
 sub getDescripcion{
     my ($self)  = shift;
     return $self->descripcion;
+}
+
+
+sub getDetalleByCampoSubcampoDestino{
+    my ($self)  = shift;
+    my ($campo,$subcampo) = @_;
+
+    require C4::Modelo::IoImportacionIsoEsquemaDetalle;
+    require C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager;
+
+    my @filtros;
+    push(@filtros,(id_importacion_esquema   => { eq => $self->getId }));
+    push(@filtros,(campo_destino            => { eq => $campo}));
+    push(@filtros,(subcampo_destino         => { eq => $subcampo }));
+
+    my $detalleTemp = C4::Modelo::IoImportacionIsoEsquemaDetalle->new();
+    my $ordenAux= $detalleTemp->sortByString('orden');
+    my $detalle_completo = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
+                                                                                        query => \@filtros,
+                                                                                        sort_by => $ordenAux,
+     );
+
+    return $detalle_completo;
+}
+
+
+sub getDetalleDestino{
+    my ($self)  = shift;
+
+    require C4::Modelo::IoImportacionIsoEsquemaDetalle;
+    require C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager;
+
+    my @filtros;
+    push(@filtros,(id_importacion_esquema   => { eq => $self->getId }));
+    push(@filtros,(campo_destino            => { ne => undef}));
+    push(@filtros,(subcampo_destino         => { ne => undef}));
+
+    my $detalleTemp = C4::Modelo::IoImportacionIsoEsquemaDetalle->new();
+    my $ordenAux= $detalleTemp->sortByString('orden');
+    my $detalle_completo = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
+                                                                                        distinct => 1,
+                                                                                        select => [ 'campo_destino','subcampo_destino' ],
+                                                                                        query => \@filtros,
+                                                                                        sort_by => $ordenAux,
+     );
+
+    return $detalle_completo;
 }

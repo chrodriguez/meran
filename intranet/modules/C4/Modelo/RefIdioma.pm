@@ -78,21 +78,26 @@ sub setDescription{
 }
 
 sub obtenerValoresCampo {
-    my ($self)=shift;
-    my ($campo,$orden)=@_;
-	my $ref_valores = C4::Modelo::RefIdioma::Manager->get_ref_idioma
- 						( select   => ['idLanguage', $campo],
-#                        ( select   => ['id', $campo],
-						  sort_by => ($orden) );
+    my ($self)              = shift;
+    my ($campo,$orden)      = @_;
+
     my @array_valores;
+    my @fields  = ($campo, $orden);
+    my $v       = $self->validate_fields(\@fields);
 
-    for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
-		my $valor;
- 		$valor->{"clave"} = $ref_valores->[$i]->getIdLanguage;
-#        $valor->{"clave"} = $ref_valores->[$i]->getId();
-		$valor->{"valor"} = $ref_valores->[$i]->getCampo($campo);
+    if($v){
 
-        push (@array_valores, $valor);
+        my $ref_valores = C4::Modelo::RefIdioma::Manager->get_ref_idioma
+                            ( select   => ['idLanguage', $campo],
+                              sort_by => ($orden) );
+
+        for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
+            my $valor;
+            $valor->{"clave"} = $ref_valores->[$i]->getIdLanguage;
+            $valor->{"valor"} = $ref_valores->[$i]->getCampo($campo);
+
+            push (@array_valores, $valor);
+        }
     }
 	
     return (scalar(@array_valores), \@array_valores);

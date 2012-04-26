@@ -7,6 +7,7 @@ use C4::Output;  # contains gettemplate
 use C4::AR::Auth;
 use C4::Context;
 use CGI::Session;
+use C4::AR::Preferencias;
 
 my $input = new CGI;
 
@@ -32,5 +33,12 @@ $t_params->{'plainPassword'}            = C4::Context->config('plainPassword');
 $t_params->{'partial_template'}         = "opac-modificar_datos.inc";
 $t_params->{'content_title'}            = C4::AR::Filtros::i18n("Modificar datos");
 $t_params->{'UploadPictureFromOPAC'}    = C4::AR::Preferencias::getValorPreferencia("UploadPictureFromOPAC");
+$t_params->{'foto_name'}                = $socio->tieneFoto();
+
+#preferencias para generar nueva password
+$t_params->{'minPassLength'}            = C4::AR::Preferencias::getValorPreferencia('minPassLength');
+$t_params->{'minPassSymbol'}            = C4::AR::Preferencias::getValorPreferencia('minPassSymbol');
+$t_params->{'minPassAlpha'}             = C4::AR::Preferencias::getValorPreferencia('minPassAlpha');
+$t_params->{'minPassNumeric'}           = C4::AR::Preferencias::getValorPreferencia('minPassNumeric');
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

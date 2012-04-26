@@ -1,48 +1,58 @@
-        <div class="column1-unit">
-            <div class="contactform">
-                <form action="[% url_prefix %]/opac-busquedasDB.pl" method="get">
+<section class="center-section-form"> 
+		<form id="form_circulacion_rapida" class="classform form-horizontal" action="[% url_prefix %]/opac-busquedasDB.pl" method="get">
                     <fieldset>
-                        <p>
-                            <label for="titulo" class="left">[% 'T&iacute;tulo' | i18n %]:</label>
-                            <input type="text" name="titulo" id="titulo" class="field" tabindex="1" />
-                        </p>
-
-                        <p>
-                            <label for="autor" class="left">[% 'Autor' | i18n %]:</label>
-                            <input type="text" name="autor" id="autor" class="field" tabindex="1" />
-                        </p>
-
-                        <p>
-                            <label for="isbn" class="left">[% 'ISBN' | i18n %]:</label>
-                            <input type="text" name="isbn" id="isbn" class="field" tabindex="1" />
-                        </p>
-
-                        <p>
-                            <label for="contact_title" class="left">[% 'Tipo de documento' | i18n %]:</label>
-                            [% combo_tipo_documento %]
-                        </p>
-
-                        <p>
-                            <label for="tema" class="left">[% 'Tema' | i18n %]:</label>
-                            <input type="text" name="tema" id="tema" class="field" tabindex="1" />
-                        </p>
-
-                        <p>
-                            <label for="estantes" class="left">[% 'Estantes Virtuales' | i18n %]:</label>
-                            <input type="text" name="estantes" id="estantes" class="field" tabindex="1" />
-                        </p>
-
-                        <p>
-                            <label for="only_available" class="left">[% 'S&oacute;lo Disponibles para Pr&eacute;stamo' | i18n %]:</label>
-                            <input type="checkbox" name="only_available" id="only_available" class="field" tabindex="1" />
-                        </p>
-                        <p>
-                          <input type="submit" name="submit" id="submit" class="button" value="[% 'Buscar' | i18n %]" tabindex="6" />
-                        </p>
-                    </fieldset>
-                    <input type="hidden" name="tipoAccion" value="BUSQUEDA_AVANZADA" />
-                    <input type="hidden" name="tipo" value="normal" />
-                    <input type="hidden" name="token" value="[% token %]" />
-                </form>
-            </div>
-        </div>
+                    	<legend class="title">[% 'B&uacute;squeda avanzada' | i18n %]</legend>
+                        <div class="control-group">
+                                          <label for="titulo" class="control-label">[% 'T&iacute;tulo' | i18n %]</label>
+                                          <div class="controls">
+                                              <input type="text" name="titulo" id="titulo" tabindex="1" />
+                                          </div>
+                        </div>
+                        <div class="control-group">
+                                          <label for="autor" class="control-label">[% 'Autor' | i18n %]</label>
+                                          <div class="controls">
+                                              <input type="text" name="autor" id="autor" tabindex="2" />
+                                          </div>
+                        </div>
+                        <div class="control-group">
+                                          <label for="isbn" class="control-label">[% 'ISBN' | i18n %]</label>
+                                          <div class="controls">
+                                              <input type="text" name="isbn" id="isbn" tabindex="3" />
+                                          </div>
+                        </div>
+                        <div class="control-group">
+                                          <label for="contact_title" class="control-label">[% 'Tipo de documento' | i18n %]</label>
+                                          <div class="controls">
+                                             [% combo_tipo_documento %]
+                                          </div>
+                        </div>
+                        <div class="control-group">
+                                          <label for="tema" class="control-label">[% 'Tema' | i18n %]</label>
+                                          <div class="controls">
+                                              <input type="text" name="tema" id="tema" tabindex="4" />
+                                          </div>
+                        </div>
+                        <div class="control-group">
+                                          <label for="estantes" class="control-label">[% 'Estantes Virtuales' | i18n %]</label>
+                                          <div class="controls">
+                                              <input type="text" name="estantes" id="estantes" tabindex="5" />
+                                          </div>
+                        </div>
+                        <div class="control-group">
+                                        
+                                          <div class="controls">
+                                          <label class="checkbox">
+                                              <input type="checkbox" name="only_available" id="only_available" tabindex="6">[% ' S&oacute;lo Disponibles para Pr&eacute;stamo' | i18n %]
+                                          </label>
+                                          </div>
+                        </div>
+                       
+                        <div class="form-actions" id="acciones">
+                              <input type="submit" name="submit" id="submit" class="btn btn-primary" value="[% 'Buscar' | i18n %]" tabindex="6" />
+                        </div>                        
+                </fieldset>
+                <input type="hidden" name="tipoAccion" value="BUSQUEDA_AVANZADA" />
+                <input type="hidden" name="tipo" value="normal" />
+                <input type="hidden" name="token" value="[% token %]" />
+		</form>
+</section>

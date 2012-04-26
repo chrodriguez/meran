@@ -1,70 +1,91 @@
-<fieldset class="resultados_busqueda">
-<legend class="titulo_legend trigger click">[% "B&uacute;squedas Z3950" | i18n %] :</legend>
-
-[% IF cant_busquedas %]
-
 <script type="text/javascript">
-            $(document).ready(function() {
-                makeToggle('datos_busquedas_div','trigger',null,false);
+                  $(document).ready(function() {
+                      makeToggle('datos_busquedas_div','trigger',null,false);
 
-            });
-</script>
+                  });
+</script> 
 
-         <div class="datos_busquedas_div" id="datos_busquedas_div">
-           <table id="tablaBusquedas" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
-                <thead>
-                <tr class="titulo_tabla_resultado">
-                    <th width="55%">[% "B&uacute;squeda" | i18n %]</th>
-                    <th width="15%">[% "Estado" | i18n %]</th>
-                    <th width="15%">[% "Resultados" | i18n %]</th>
-                    <th width="5%">&nbsp;</th>
-                </tr>
-                </thead>
-                <tbody>
-                [% FOREACH busqueda IN BUSQUEDAS %]
-                <tr>
-                    <td class="titulo_result">
-                     [% busqueda.getBusqueda %]
-                    </td>
-                    <td class="titulo_result">
-                    [% IF busqueda.getFin %]
-                       <font color="green"> [% "Finalizada" | i18n %]</font>
-                    [% ELSE %]
-                            [% IF busqueda.getComienzo %]
-                         <font color="red">  [% "Buscando" | i18n %]</font>
-                            [% ELSE %]
-                            <font color="orange"> [% "Encolada" | i18n %]</font>
+
+<fieldset>
+      <legend class="titulo_legend trigger click">[% "B&uacute;squedas Z3950" | i18n %]</legend>
+
+            <div class="datos_busquedas_div" id="datos_busquedas_div">
+                  [% IF cant_busquedas %]
+                    <div class="well">
+                           [% "La cantidad de registros es" | i18n %]: <strong>[% cant_resultados %]</strong>
+  
+                    </div>
+                            [% PERL %]
+                                  print C4::AR::Filtros::tableHeader(   
+                                                            id              => "tablaBusquedas",
+                                                            class           => "",
+                                                            selectAll_id    => "",
+                                                            columns         => ['[% "B&uacute;squeda" | i18n %]','[% "Estado" | i18n %]',
+                                                                                '[% "Resultados" | i18n %]','[% "Bajar" | i18n %]',
+                                                                            
+                                                                              ]
+                                                                                              
+                                                                  ) ;
                             [% END %]
-                    [% END %]
-                    </td>
-                    <td class="titulo_result">
-                       [% IF busqueda.getFin %] [% busqueda.getCantResultados %] [% ELSE %]-[% END %]
-                    </td>
+                                        
+                            <tbody>
+                                      [% FOREACH busqueda IN BUSQUEDAS %]
+                                          <tr>
+                                              <td>
+                                                    [% busqueda.getBusqueda %]
+                                              </td>
+                                      
+                                              <td>
+                                                    [% IF busqueda.getFin %]
+                                                          <span class="label label-success">[% "Finalizada" | i18n %]</span>
+                                                    [% ELSE %]
+                                                          [% IF busqueda.getComienzo %]
+                                                                <span class="label label-danger">[% "Buscando" | i18n %]</span>
+                                                          [% ELSE %]
+                                                                <span class="label label-info">[% "Encolada" | i18n %]</span>
+                                                          [% END %]
+                                                    [% END %]
+                                              </td>                        
+                                              <td>
+                                                  [% IF busqueda.getFin %] 
+                                                            [% busqueda.getCantResultados %] 
+                                                  [% ELSE %]-
+                                                  [% END %]
+                                              </td>
 
-                    <td width="5%">
-                        [% IF busqueda.getFin %] 
-                        [% PERL %]
-                                print C4::AR::Filtros::to_Icon(
-                                                                    boton   => "icon_bajar",
-                                                                    onClick => "verResultadosZ3950([% busqueda.getId %]);",
-                                                                    title   => "[% 'Ver Resultados' | i18n %]",
-                                        ) ;
-                        [% END %]
-                        [% ELSE %]-[% END %]
-                    </td>
-                </tr>
-                [% END %]
-                </tbody>
-            </table>
-        <div class="guardarMARC">
-            [% PERL %]
-                                print C4::AR::Filtros::to_Icon(
-                                                                    boton   => "icon_anadir",
-                                                                    onClick => "verBusquedas();",
-                                                                    title   => "[% 'Actualizar' | i18n %]",
-                                        ) ;
-            [% END %]
-        </div>
-        [% END %]
-        </div>
+                                              <td>
+                                                  [% IF busqueda.getFin %] 
+                                                  [% PERL %]
+                                                          print C4::AR::Filtros::action_button(
+                                                                                              button  => "btn btn-primary",
+                                                                                              action  => 'verResultadosZ3950([% busqueda.getId %]);',
+                                                                                              icon    => "",
+                                                                                              title   => "[% 'Ver Resultados' | i18n %]",
+                                                                  ) ;
+
+                                                  [% END %]
+                                                  [% ELSE %]-
+                                                  [% END %]
+                                              </td>
+                                        </tr>
+                                    [% END %]
+                      </tbody>
+                  
+                      <div class="form-actions">
+                          [% PERL %]
+                                              print C4::AR::Filtros::action_button(
+                                                                                            button  => "btn btn-primary",
+                                                                                            action  => "verBusquedas();",
+                                                                                            title   => "[% 'Actualizar' | i18n %]",
+                                                                  ) ;
+                          [% END %]
+                      </div>
+              </table>
+              [% ELSE %]
+                    
+                      <div class="alert alert-info">[% 'No hay resultados para mostrar'| i18n %]</div>
+
+              [% END %] 
+            
+              </div>
 </fieldset>

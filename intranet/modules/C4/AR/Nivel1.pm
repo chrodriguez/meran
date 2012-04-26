@@ -41,8 +41,8 @@ C4::AR::Nivel1 - Funciones que manipulan datos del catálogo de nivel 1
 
 =item sub verificar_Alta_Nivel1
 
-campos clave => 
-  
+campos clave =>
+
       titulo => 245, a
       autor => 100, a
       edicion => 250, a
@@ -50,40 +50,37 @@ campos clave =>
 
 sub verificar_Alta_Nivel1 {
     my ($marc_record, $msg_object) = @_;
+
+    use Text::Unaccent;
     # FIXME la edicion no la puedo validar con los datos de N1
 
-    my $ref_autor   = $marc_record->subfield("100","a");
-    my $titulo      = $marc_record->subfield("245","a");
-
-    my ($cant_titulo, $id1_array_ref) = C4::AR::Busquedas::busquedaPorTitulo($titulo);
-#     C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => cantidad titulos => ".$cant_titulo);
-
+    my $ref_autor       = $marc_record->subfield("100","a");
+    my $titulo          = $marc_record->subfield("245","a");
     my $id_autor        = C4::AR::Catalogacion::getRefFromStringConArrobas($ref_autor);
     my $autor           = C4::Modelo::CatAutor->getByPk($id_autor);
     my $nombre_completo = $autor->getCompleto();
 
-    my ($cant_autor, $id1_array_ref)    = C4::AR::Busquedas::busquedaPorAutor($nombre_completo);
-#     C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => autor 100, a => ".$nombre_completo);
-#     C4::AR::Debug::debug("C4::AR::verificar_Alta_Nivel1 => cantidad autores 100, a => ".$cant_autor);
+    my ($cant, $result_array_ref) = C4::AR::Catalogacion::existeNivel1($titulo,$nombre_completo);
 
-    if (C4::AR::Catalogacion::existeNivel1($titulo,$autor)){
+    if ($cant){
         $msg_object->{'error'} = 1;
-  
+
         my %params_hash;
-        %params_hash    = ('id1' => $id1_array_ref->[0]->{'id1'});
+        #muestro el id1 de al menos el primer registro que coincide
+        %params_hash    = ('id1' => $result_array_ref->[0]->{'id1'});
         my $url         = C4::AR::Utilidades::url_for("/catalogacion/estructura/detalle.pl", \%params_hash);
-        my $link        = C4::AR::Filtros::link_to( text    => $id1_array_ref->[0]->{'id1'},
-                                                    url     => $url 
+        my $link        = C4::AR::Filtros::link_to( text    => $result_array_ref->[0]->{'id1'},
+                                                    url     => $url
                                               );
 
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U501', 'params' => [$titulo." - ".$nombre_completo, $link]} ) ;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U501', 'params' => [unac_string('utf8',$titulo)." - ".unac_string('utf8',$nombre_completo), $link]} ) ;
     }
 }
 
 =head2
 sub t_guardarNivel1
 
-    Esta funcion se invoca desde el template para guardar los datos de nivel1, se apoya en una funcion de Catalogacion.pm que lo que hace es transformar los datos que llegan a un objeto MARC::Record que luego va a insertarse en la base de datos a traves de un objeto CatRegistroMarcN1, ese dato estara filtrado de acuerdo a los datos que corresponden al nivel, solo conteniendo datos que 
+    Esta funcion se invoca desde el template para guardar los datos de nivel1, se apoya en una funcion de Catalogacion.pm que lo que hace es transformar los datos que llegan a un objeto MARC::Record que luego va a insertarse en la base de datos a traves de un objeto CatRegistroMarcN1, ese dato estara filtrado de acuerdo a los datos que corresponden al nivel, solo conteniendo datos que
 =cut
 sub t_guardarNivel1 {
     my($params) = @_;
@@ -91,8 +88,10 @@ sub t_guardarNivel1 {
     my $id1;
 
     my $marc_record     = C4::AR::Catalogacion::meran_nivel1_to_meran($params);
-    
+
     verificar_Alta_Nivel1($marc_record, $msg_object);
+
+C4::AR::Debug::debug("C4::AR::Nivel1::t_guardarNivel1 => msg_object->{'error'} ".$msg_object->{'error'});
 
     if(!$msg_object->{'error'}){
         ($msg_object, $id1) = guardarRealmente($msg_object,$marc_record,$params);
@@ -111,22 +110,22 @@ sub guardarRealmente{
 
     my $id1;
     if(!$msg_object->{'error'}){
-        my $catRegistroMarcN1 = C4::Modelo::CatRegistroMarcN1->new();  
+        my $catRegistroMarcN1 = C4::Modelo::CatRegistroMarcN1->new();
         my $db = $catRegistroMarcN1->db;
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
-        
+
         eval {
             $catRegistroMarcN1->agregar($marc_record->as_usmarc,$params);
-            $db->commit;            
+            $db->commit;
             #recupero el id1 recien agregado
-            $id1 = $catRegistroMarcN1->getId1; 
+            $id1 = $catRegistroMarcN1->getId1;
             eval {
                 C4::AR::Sphinx::generar_indice($id1, 'R_PARTIAL', 'INSERT');
                 #ahora el indice se encuentra DESACTUALIZADO
                 C4::AR::Preferencias::setVariable('indexado', 0, $db);
-            };    
+            };
             if ($@){
                 C4::AR::Debug::debug("ERROR AL REINDEXAR EN EL REGISTRO: ".$id1." !!! ( ".$@." )");
             }
@@ -135,7 +134,7 @@ sub guardarRealmente{
             $msg_object->{'error'} = 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U368', 'params' => [$id1]} ) ;
         };
-    
+
         if ($@){
             #Se loguea error de Base de Datos
             &C4::AR::Mensajes::printErrorDB($@, 'B427',"INTRA");
@@ -153,7 +152,7 @@ sub guardarRealmente{
 }
 
 
-=head2 
+=head2
 sub getNivel1FromId1
 
 Recupero un nivel 1 a partir de un id1
@@ -162,11 +161,11 @@ retorna un objeto o 0 si no existe
 sub getNivel1FromId1{
     my ($id1, $db) = @_;
 
-    $db = $db || C4::Modelo::CatRegistroMarcN3->new()->db();
-    
+    $db = $db || C4::Modelo::CatRegistroMarcN1->new()->db();
+
     my $nivel1_array_ref = C4::Modelo::CatRegistroMarcN1::Manager->get_cat_registro_marc_n1(
-                                                                        db => $db,    
-                                                                        query => [ 
+                                                                        db => $db,
+                                                                        query => [
                                                                                     id => { eq => $id1 },
                                                                             ]
                                                                 );
@@ -178,7 +177,7 @@ sub getNivel1FromId1{
     }
 }
 
-=head2 
+=head2
 sub getNivel1Completo
 
 Se recupera TODOS los nivel 1
@@ -188,10 +187,10 @@ sub getNivel1Completo {
     my ($db) = @_;
 
     $db = $db || C4::Modelo::CatRegistroMarcN3->new()->db();
-    
+
     my $nivel1_array_ref = C4::Modelo::CatRegistroMarcN1::Manager->get_cat_registro_marc_n1(
-                                                                        db => $db,    
-#                                                                         query => [ 
+                                                                        db => $db,
+#                                                                         query => [
 #                                                                                     id => { eq => $id1 },
 #                                                                             ]
                                                                 );
@@ -216,9 +215,9 @@ sub getNivel1FromId1OPAC{
     $db = $db || C4::Modelo::CatRegistroMarcN3->new()->db();
 
     my $nivel1 = getNivel1FromId1($id1, $db);
-    
-    
-    
+
+
+
 }
 
 
@@ -226,27 +225,27 @@ sub getNivel1FromId1OPAC{
 
 
 sub getAutoresAdicionales(){
-	my ($id)=@_;
+    my ($id)=@_;
 
-# 	falta implementar, seria un campo de nivel 1 repetibles
+#   falta implementar, seria un campo de nivel 1 repetibles
 }
 
 
 sub getColaboradores(){
-	my ($id)=@_;
+    my ($id)=@_;
 
-# 	falta implementar, seria un campo de nivel 1 repetibles
+#   falta implementar, seria un campo de nivel 1 repetibles
 }
 
 =item sub getUnititle
 
-	$titulo_unico=getUnititle($id_nivel1);
-	Esta funcion retorna el untitle segun un id1
+    $titulo_unico=getUnititle($id_nivel1);
+    Esta funcion retorna el untitle segun un id1
 =cut
 # TODO DEPRECATED
 sub getUnititle {
-	my($id1)= @_;
-	return C4::AR::Busquedas::buscarDatoDeCampoRepetible($id1,"245","b","1");
+    my($id1)= @_;
+    return C4::AR::Busquedas::buscarDatoDeCampoRepetible($id1,"245","b","1");
 }
 
 
@@ -256,7 +255,7 @@ sub getUnititle {
 =cut
 sub t_modificarNivel1 {
     my($params) = @_;
- 
+
     my $msg_object= C4::AR::Mensajes::create();
     my $id1 = 0;
 
@@ -275,7 +274,7 @@ sub t_modificarNivel1 {
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
          $db->begin_work;
-    
+
         eval {
             my $marc_record = C4::AR::Catalogacion::meran_nivel1_to_meran($params);
 
@@ -286,7 +285,7 @@ sub t_modificarNivel1 {
                 C4::AR::Sphinx::generar_indice($cat_registro_marc_n1->getId1(), 'R_PARTIAL', 'UPDATE');
                 #ahora el indice se encuentra DESACTUALIZADO
                 C4::AR::Preferencias::setVariable('indexado', 0, $db);
-            };    
+            };
             if ($@){
                 C4::AR::Debug::debug("ERROR AL REINDEXAR EN EL REGISTRO: ".$cat_registro_marc_n1->getId1()." !!! ( ".$@." )");
             }
@@ -295,7 +294,7 @@ sub t_modificarNivel1 {
             $msg_object->{'error'}= 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U380', 'params' => [$cat_registro_marc_n1->getId1]} ) ;
         };
-    
+
         if ($@){
             #Se loguea error de Base de Datos
             &C4::AR::Mensajes::printErrorDB($@, 'B430',"INTRA");
@@ -339,7 +338,7 @@ sub _verificarDeleteNivel1 {
 =cut
 sub t_eliminarNivel1{
    my ($id1) = @_;
-   
+
    my $msg_object = C4::AR::Mensajes::create();
 
 # FIXME falta verificar si es posible eliminar el nivel 1
@@ -357,7 +356,7 @@ sub t_eliminarNivel1{
     }else{
         #EXISTE EL OBJETO
         $params->{'id1'} = $id1;
-        #verifico condiciones necesarias antes de eliminar     
+        #verifico condiciones necesarias antes de eliminar
         _verificarDeleteNivel1($msg_object, $params, $cat_registro_marc_n1);
     }
 
@@ -367,16 +366,16 @@ sub t_eliminarNivel1{
         # enable transactions, if possible
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
-    
+
         eval {
-            $cat_registro_marc_n1->eliminar;  
+            $cat_registro_marc_n1->eliminar;
             $db->commit;
             eval {
-				#Se eliminar del indice el registro eliminado
+                #Se eliminar del indice el registro eliminado
                 C4::AR::Sphinx::generar_indice($cat_registro_marc_n1->getId1(), 'R_PARTIAL', 'DELETE');
                 #ahora el indice se encuentra DESACTUALIZADO
                 C4::AR::Preferencias::setVariable('indexado', 0, $db);
-            };    
+            };
             if ($@){
                 C4::AR::Debug::debug("ERROR AL REINDEXAR EN EL REGISTRO: ".$cat_registro_marc_n1->getId1()." !!! ( ".$@." )");
             }
@@ -384,7 +383,7 @@ sub t_eliminarNivel1{
             $msg_object->{'error'}= 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U374', 'params' => [$id1]} ) ;
         };
-    
+
         if ($@){
             #Se loguea error de Base de Datos
             &C4::AR::Mensajes::printErrorDB($@, 'B429',"INTRA");
@@ -456,12 +455,12 @@ sub estaEnFavoritos{
 
     my @filtros;
     my $nro_socio = C4::AR::Auth::getSessionNroSocio();
-    
+
     push (@filtros, (nro_socio => {eq => $nro_socio}) );
     push (@filtros, (id1 => {eq => $id1}) );
 
     my $favoritos_count = C4::Modelo::CatFavoritosOpac::Manager->get_cat_favoritos_opac_count(query => \@filtros,);
-    
+
     return ($favoritos_count);
 
 }
@@ -478,7 +477,7 @@ sub getFavoritos{
                                                                                     select    => ['id1'],
                                                                                   );
     my @arreglo_temp;
-    
+
     foreach my $favorito (@$favoritos){
         push (@arreglo_temp,$favorito);
     }

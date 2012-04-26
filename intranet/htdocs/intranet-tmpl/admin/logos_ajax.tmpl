@@ -1,0 +1,106 @@
+[% USE HTML %]
+
+<script type="text/javascript">
+    function agregarPortada_show(){
+        $('#agregarLogoForm').modal();
+    } 
+      
+    function submitForm(){
+        $('#agregarLogoForm').modal('hide');
+        startOverlay();
+        $('#formAgregarLogo').submit();
+    }
+    
+    function modificarLogo(id){
+	    objAH                   = new AjaxHelper(updateModificarLogo);
+	    objAH.showOverlay       = true;
+	    objAH.url               = URL_PREFIX+'/admin/logosDB.pl';
+	    objAH.idLogo            = id;
+	    objAH.tipoAccion        = 'SHOW_MOD_LOGO';
+	    objAH.sendToServer();
+	}
+	
+	function updateModificarLogo(responseText){
+	    if (!verificarRespuesta(responseText))
+            return(0);
+        $('#agregarLogoForm').html(responseText);
+        $('#agregarLogoForm').modal();
+	}
+    
+    $(document).ready(function() {
+        $('.fancy_link').fancybox();
+    });
+</script>
+
+<fieldset>
+    <legend>[% "Listado de Logos" | i18n %]:</legend>
+        <div class="contenedor_paginador">[% paginador %]</div>
+        [% IF logos %]
+            <div class="datos_tabla_div_user">
+                <div class="well">[% "La cantidad de logos es" | i18n %]: [% cant_logos %]</div>
+                
+                    [% PERL %]
+                        print C4::AR::Filtros::tableHeader(   
+                                          id              => "logosTable",
+                                          class           => "",
+                                          selectAll_id    => "",
+                                          columns         => ['[% "Nombre"|i18n %]','[% "Tama&ntilde;o"|i18n %]','[% "Acciones"|i18n %]',
+                                                             ]
+             
+                                                ) ;
+                    [% END %]
+
+                    <tbody>
+                        [% FOREACH logo IN logos %]
+                            <tr>
+                                <td class="userImage">
+                                    <a class="fancy_link" href="https://[% SERVER_ADDRESS %]/private-uploads/logos/[% logo.getImagenPath %]">
+                                          <img border="0" src="https://[% SERVER_ADDRESS %]/private-uploads/logos/[% logo.getImagenPath %]" alt="[% logo.getNombre %]" >
+				                    </a>
+                                </td>
+                                <td>
+                                    <strong>Ancho:</strong> [% logo.getAncho %], <strong>Alto:</strong> [% logo.getAlto %]
+                                </td>
+                                <td style="width:150px">
+                                
+                                    [% PERL %]
+                                        print C4::AR::Filtros::action_set_button(    
+                                              title   => " [% 'Editar' | i18n %]",
+                                              button  => 'btn btn-primary',
+                                              action  => "modificarLogo([% logo.id %])", 
+                                              icon    => "icon-white icon-edit",
+                                              actions         => [
+                                                                  { title   => "Eliminar", 
+                                                                    action  => 'eliminarLogo("[% logo.id %]")', 
+                                                                    icon    => "icon-remove",
+                                                                   },
+                                                                  ],
+
+                     
+                                                ) ;
+                                    [% END %]
+                            
+                                </td>
+                            </tr>
+                        [% END %]
+                    </tbody>
+                </table>
+            </div>
+        [% ELSE %]
+            <div class="alert alert-info">[% 'No hay logos que listar' | i18n %]</div>
+        [% END %]
+</fieldset>
+
+<div class="form-actions">	                
+	[% PERL %]
+        print C4::AR::Filtros::action_button(   
+            button   => "btn btn-primary",
+            action   => 'agregarPortada_show();',
+            title   => "[% 'Agregar Logo' | i18n %]",
+        ) ;
+	[% END %]
+</div>
+
+<div id="agregarLogoForm" class="modal hide fade" >
+    [% INCLUDE 'formAgregarLogo.inc' %]
+</div>

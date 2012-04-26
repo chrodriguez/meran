@@ -268,6 +268,8 @@ elsif ($accion eq "ACTUALIZAR_PERMISOS_CIRCULACION"){
     my $id_ui = $obj->{'id_ui'};
     my $tipo_documento = $obj->{'tipo_documento'};
     my $permisos = $obj->{'permisos'};
+    
+    C4::AR::Debug::debug("entrooooooooooooooooooooooooooooooooooooooooooooooooo");
 
     my ($template, $session, $t_params)  = get_template_and_user({  
                             template_name => "admin/permisos/detalle_permisos_circulacion.tmpl",

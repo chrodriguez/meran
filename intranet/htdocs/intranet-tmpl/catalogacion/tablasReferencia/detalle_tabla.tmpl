@@ -12,33 +12,22 @@
 
     });
 </script>
-<script type="text/javascript" language="javascript">
-function cambiarVisibilidad(campo, tabla){
-    objAH               = new AjaxHelper(updateCambiarVisualizacion);
-    objAH.url           = URL_PREFIX+'/catalogacion/tablasReferencia/tablasReferenciaDB.pl';
-    objAH.cache         = false;
-    objAH.showOverlay   = true;
-    objAH.accion        = "CHANGE_VISIVILIDAD";
-    objAH.tabla         = tabla;
-    objAH.campo         = campo;
-    objAH.sendToServer();
 
-}
-
-function updateCambiarVisualizacion(){
-    obtenerTabla();
-}
-</script>
 <div class="datos_tabla_div" id="datos_tabla_div">
-    <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0>
-        <thead>
-            <tr class="titulo_tabla_resultado">
-                <th>[% "Campo" | i18n %]</th>
-                <th>[% "Visible" | i18n %]</th>
-                <th>[% "Nombre" | i18n %]</th>
-                <th>[% "Cambiar Visivilidad" | i18n %]</th>
-            </tr>
-        </thead>
+        
+
+      
+              [% PERL %]
+                  print C4::AR::Filtros::tableHeader(   
+                            id              => "tablaResult",
+                            columns         => ['[% "Campo"|i18n %]','[% "Visible"|i18n %]',
+                                                  '[% "Nombre"|i18n %]', '[% "Cambiar Visibilidad"|i18n %]',
+                                              ]
+
+                                                          
+                              ) ;
+              [% END %]
+
         <tbody>
             [% FOREACH dato IN data %]
             <tr>
@@ -49,17 +38,31 @@ function updateCambiarVisualizacion(){
                 <td class="edit_nombre" id="[% dato.getCampo %],[% dato.getTabla %]">[% dato.getCampoAlias %]</td>
                 
                 <td>
-                [% PERL %]
-                            print C4::AR::Filtros::to_Icon(    
-                                            boton   => "icon_edicion",
-                                            onClick => "cambiarVisibilidad('[% dato.getCampo %]','[% dato.getTabla %]');",
-                                            title   => "[% 'Modificar Visivilidad' | i18n %]",
-                                            alternClass => "botonCentradoTabla"
-                                    ) ;
+                [% IF dato.getVisible == 1 %]
+                    [% PERL %]
+                          print C4::AR::Filtros::action_button( 
+                                                          button    => "btn btn-success",
+                                                          action    => 'cambiarVisibilidad("[% dato.getCampo %]","[% dato.getTabla %]");', 
+                                                          icon      => "icon-eye-open icon-white",
+                                                      ) ;
+
+
+                    [% END %]
+                [% ELSE %]
+                    [% PERL %]
+                          print C4::AR::Filtros::action_button( 
+                                                          button    => "btn btn-inverse",
+                                                          action    => 'cambiarVisibilidad("[% dato.getCampo %]","[% dato.getTabla %]");', 
+                                                          icon      => "icon-white icon-eye-close",
+                                                      ) ;
+
+
+                    [% END %]
                 [% END %]
                 </td>
             </tr>
             [% END %]
         </tbody>
     </table>
+  
 </div>

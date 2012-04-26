@@ -1,110 +1,38 @@
-[% INCLUDE "intranet-top.inc" %]
+[% INCLUDE 'intranet-top.inc' %] 
+[% INCLUDE 'BootstrapToolkit.inc' %]
 
-[% INCLUDE  'WindowHelper.inc'  %]
-[% INCLUDE 'datePicker.inc' %]
-
-<script src="/includes/jquery/validate/jquery.validate.js"></script>
-<script type="text/javascript" src="/intranet-tmpl/reports/reports.js"></script>
+[% USE HTML %]
 
 
-<script type="text/javascript">
+<script>
 
-var objAH;
-
-function ordenar(orden){
-	objAH.sort(orden);
-}
-
-function changePage(ini){
-	objAH.changePage(ini);
-}
-
-function updateInfo(responseText){
-	$("#result").html(responseText);
-    scrollTo('result');
-	zebra("datos_tabla");
-	objAH.id    = "";
-	objAH.notas = "";
-}
-
-
-function consultar(){
-	objAH                   = new AjaxHelper(updateInfo);
-	objAH.url=URL_PREFIX+"/reports/usuariosResult.pl";
-    objAH.debug             = true;
-    objAH.showOverlay       = true;
-	objAH.year              = $("#year").val();
-    objAH.category          = $("#categoria_socio_id").val();
-    objAH.ui                = $("#id_ui").val();
-    objAH.name_from         = $("#name_from").val();
-    objAH.name_to           = $("#name_to").val();
-	objAH.funcion           = "changePage";
-	objAH.sendToServer();
-}
-
-
-
-$(document).ready(function() {
-    crearDatePicker('dateselected');
-    crearDatePicker('dateselectedEnd');
-
-});
+    $(document).ready(function(){
+    });
 
 </script>
 
-<!--<div class="titulos">[% "Registro de Usuarios" | i18n %]</div>-->
 
-<fieldset class="formulario_busqueda">
-    <legend class="titulo_legend"><span class="titulos">[% 'Registro de Usuarios' | i18n %]</span></legend>   
-<!-- FIXME para los tipos, el script anda mal, los toma como el check de fecha o el radio operacion -->
-<fieldset>
-    <legend class="titulo_legend">[% "Filtrar por:" | i18n %]</legend>
-    <ul>
-    <li class="sub_item">
-        <label for="year">[% "A&ntilde;o de alta" | i18n %]:</label>
-        [% select_year %]
-    </li>
-    <br />
-    <li class="sub_item">
-        <label for="categoria_socio_id">[% "Categor&iacute;a del socio/a" | i18n %]:</label>
-        [% select_category %]
-    </li>
-    <br />
-    <li class="sub_item">
-        <label for="id_ui">[% "Unidad de Informaci&oacute;n" | i18n %]:</label>
-        [% select_ui %]
-    </li>
-    <br />
-    <fieldset>
-        <legend class="titulo_legend">[% "Filtrar por Apellido:" | i18n %]</legend>
-        <ul>
-            <li class="sub_item">
-                <label for="name_from">[% "Desde" | i18n %]:</label>
-                <input type='text' id='name_from' name='name_from' value='[% name_from %]'>
-            </li>
-            <br />
-            <li class="sub_item">
-                <label for="name_to">[% "Hasta" | i18n %]:</label>
-                <input type='text' id='name_to' name='name_to' value='[% name_to %]'>
-            </li>
-            <br />
-        </ul>
-    </fieldset>
+[% PERL %]
+    print C4::AR::Filtros::tabbedPane( titulo    => "[% 'Reportes de usuarios' | i18n %]",
+                                 subtitulo => "[% 'Navegue por las pesta&ntilde;as para acceder a los distintos reportes' | i18n %]",
+                                 content   => [ {id => 'labels', text=> "[% 'Generar etiquetas' | i18n %]" },
+                                                {id => 'registro', text => "[% 'Registro de usuarios' | i18n %]"},
+                                              ],
+                                 content_id=> ['reportes_usuarios'],
+                                 active_id => 'labels',
+    
+    );
 
-</ul>
-</fieldset>
-<!-- </div> -->
-<div class="buttonContainerHorizontal">
-        [% PERL %]
-            print C4::AR::Filtros::to_Button( 
-                                                text    =>  "[% 'Buscar' | i18n %]",
-                                                boton   =>  "boton_buscar",
-                                                onClick =>  "consultar();",
-                    ) ;
-        [% END %]
-</div>
+[% END %]
 
-<div id="result" ></div>
-</fieldset>
-[% INCLUDE "intranet-bottom.inc" %]
+        <div class="tab-pane fade in active" id="labels">
+            [% INCLUDE 'partials/reportes/_reporte_usuarios.inc' %]
+        </div>
+        <div class="tab-pane fade" id="registro">
+          <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>
+        </div>
+      </div>
+</section>
+
+[% INCLUDE 'intranet-bottom.inc' %]
 

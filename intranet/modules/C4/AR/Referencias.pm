@@ -55,7 +55,8 @@ use vars qw(@EXPORT_OK @ISA);
                     obtenerEstantes
                     obtenerUIByIdUi
                     obtenerDefaultUI
-                    
+                    obtenerEstados
+                    idCategoriaDeSocio
         );
 
 
@@ -180,6 +181,20 @@ sub obtenerCategoriaDeSocio {
     }
 
     return(\@results);
+}
+
+
+sub idCategoriaDeSocio {
+	my ($codigo) = @_;
+
+    my @filtros;
+    
+    push (@filtros, (categorycode => {eq =>$codigo}) );
+
+    my $categorias_array_ref = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categoria_socio(query => \@filtros,);
+    my @results;
+
+    return($categorias_array_ref->[0]);
 }
 
 =item
@@ -784,9 +799,9 @@ sub agregarRegistro{
        
        C4::AR::Debug::debug("ALIAS DE LA TABLA ADDNEWRECORD ======================== ".$alias);
 
-    eval{
+    #eval{
         $object = $tabla->addNewRecord();
-    };
+    #};
 
     $tabla = $tabla->createFromAlias($alias);
 
@@ -817,6 +832,22 @@ sub getValidadores{
     return \%validadores;
 }
 
+sub getTipoNivel3ByCodigo{
+    my ($tipo_nivel3) = @_;
+    
+    my @filtros;
+
+    push (  @filtros, ( id_tipo_doc => { eq => $tipo_nivel3 },) );
+
+    my $tiposNivel3 = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3(query => \@filtros);
+
+    if (scalar(@$tiposNivel3)){
+    	return ($tiposNivel3->[0]);
+    }else{
+    	return 0;
+    }
+}
+
 sub translateTipoNivel3{
     my ($tipo_nivel3) = @_;
     
@@ -844,6 +875,17 @@ sub obtenerEstantes{
 	
 }
 
+
+sub obtenerEstados{
+    
+    use C4::Modelo::UsrEstado::Manager;
+    
+    my $estados = C4::Modelo::UsrEstado::Manager->get_usr_estado();
+    
+    return ($estados);
+    
+    
+}
 
 END { }       # module clean-up code here (global destructor)
 

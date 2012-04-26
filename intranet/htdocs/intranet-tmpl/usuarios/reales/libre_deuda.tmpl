@@ -5,7 +5,7 @@
 
 <fieldset class="">
     <div class="encabezado">
-        <img src="[% escudo %]" alt="escudo" width="80px" height="100px" /><br>
+        <img src="[% escudo %]" alt="escudo" width="80px" height="100px" /><img src="[% escudoUI %]" alt="escudoUI" width="120px" height="90px" align="right" /><br>
         [% biblio.titulo_formal %]<br>
         [% "BIBLIOTECA" | i18n  %]<br>
         [% biblio.getNombrePDF %]<br><br>
@@ -54,11 +54,11 @@
    
     </div>   
     <div id="pie" style="clear:both; font-size:9px">
-   <br> <hr>
+   <br> <hr> 
               [% "Biblioteca: " | i18n  %] [% biblio.getNombrePDF %]<br>
               [% "Direcci&oacute;n:" | i18n  %]  [% biblio.getDireccionPDF %]<br>
-              [% "Tel/Fax:" | i18n  %]  [% biblio.telefono %]  [% IF biblio.fax %] / [% biblio.fax %][% END %]  <br>
-           <!--   [% "Atenci&oacute;n: Lunes a Viernes " | i18n  %][% atencion %] <br>--!>
-              [% "E-mail:" | i18n  %] [% biblio.email %]<br>
+              [% "Tel/Fax:" | i18n  %]  [% biblio.getTelefono %]  [% IF biblio.getFax %] / [% biblio.getFax %][% END %]  <br>
+              [% "Sitio web:" | i18n  %] [% biblio.getUrlServidor %]<br>
+              [% "E-mail:" | i18n  %] [% biblio.getEmail %]<br>
     </div>
 </fieldset>
