@@ -16,6 +16,7 @@ function updateInfoBusquedas(responseText){
 
 function updateInfoBusquedasBar(responseText){
 	clearInterval(mensajes_interval_id);
+	$('#navBarResult').html(''); 
 	$('#marco_contenido_datos').html("<div id='resultBusqueda'/><div id='result'/>");
 	updateInfoBusquedas(responseText);
 	$(window).unbind('scroll');	

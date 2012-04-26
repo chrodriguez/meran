@@ -1270,34 +1270,35 @@ sub getReservasCirculacion {
 
     my @filtro;
 
+    #OK
     if ($categoria){
-         push(@filtro,('busqueda.categoria_socio' =>  {eq => $categoria} ));
+         push(@filtros,('socio.id_categoria' =>  {eq => $categoria} ));
     }
 
-    if ($fecha_inicio != 'Desde' && $fecha_fin != 'Hasta'){
-        push( @filtro, and => [ 'busqueda.fecha' => { gt => $fecha_inicio, eq => $fecha_inicio },
-                                'busqueda.fecha' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
-    }
+#    if ($fecha_inicio != 'Desde' && $fecha_fin != 'Hasta'){
+#        push( @filtro, and => [ 'busqueda.fecha' => { gt => $fecha_inicio, eq => $fecha_inicio },
+#                                'busqueda.fecha' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
+#    }
 
-     push( @filtros,( and => [@filtro] ));
+#     push( @filtros,( and => [@filtro] ));
 #     if ($statistics){
 # 
 #     }
 
     my $resultsarray = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
-                                                                      # query   => \@filtros,
+                                                                      query   => \@filtros,
                                                                       limit   => $cantR,
                                                                       offset  => $ini,
-                                                                      # require_objects => ['busqueda'],
+                                                                      require_objects   => ['socio'],
                                                                       # with_objects => [],
-                                                                      # select       => ['busqueda.*','rep_historial_busqueda.*'],
+                                                                      select            => ['socio.*'],
                                                                       # sort_by => $orden,
                                                           );
 
    
     my ($rep_busqueda_count) = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(
                                                                               # query   => \@filtros,
-                                                                              # require_objects => ['busqueda'],
+                                                                              require_objects => ['socio'],
                                                                               # with_objects => [],                                                           
                                                                             );
                                                                             

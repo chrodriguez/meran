@@ -1071,7 +1071,7 @@ sub busquedaAvanzada_newTemp{
    
     my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
     
-    my $results = $sphinx->Query($query,'test1');
+    my $results = $sphinx->Query($query, $index_to_use);
 
     my @id1_array;
     my $matches = $results->{'matches'};
@@ -1163,7 +1163,7 @@ sub busquedaPorTitulo{
     # NOTA: sphinx necesita el string decode_utf8
     my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
     
-    my $results = $sphinx->Query($query,'test1');
+    my $results = $sphinx->Query($query, $index_to_use);
 
     my @id1_array;
     my $matches                 = $results->{'matches'};
@@ -1198,7 +1198,7 @@ sub busquedaPorAutor{
     # NOTA: sphinx necesita el string decode_utf8
     my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
     
-    my $results = $sphinx->Query($query,'test1');
+    my $results = $sphinx->Query($query, $index_to_use);
 
     my @id1_array;
     my $matches                 = $results->{'matches'};
@@ -1323,7 +1323,7 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
     
     my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
     
-    my $results = $sphinx->Query($query,'test1');
+    my $results = $sphinx->Query($query, $index_to_use);
 
     my ($total_found_paginado, $resultsarray);
     my @id1_array;
@@ -1569,7 +1569,7 @@ sub filtrarPorAutor{
 
     my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
     
-    my $results = $sphinx->Query($query,'test1');
+    my $results = $sphinx->Query($query,$index_to_use);
 
     my @id1_array;
     my $matches = $results->{'matches'};
@@ -2032,7 +2032,7 @@ sub getRegistrosFromRange {
     C4::AR::Debug::debug("Busquedas.pm => query: ".$query);
     my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
     
-    my $results = $sphinx->Query($query,'test1');
+    my $results = $sphinx->Query($query, $index_to_use);
 
     my @id1_array;
     my @id1_array_aux;
