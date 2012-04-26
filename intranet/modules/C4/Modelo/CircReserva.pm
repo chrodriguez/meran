@@ -724,7 +724,22 @@ sub borrar_sancion_de_reserva{
     my ($sancion_reserva_array_ref) = C4::Modelo::CircSancion::Manager->get_circ_sancion( db => $db, query => \@filtros);
 
     if(scalar(@$sancion_reserva_array_ref) > 0){
-        $sancion_reserva_array_ref->[0]->delete();
+        #Primero eliminamos la sancion del historial
+        my $sancion = $sancion_reserva_array_ref->[0];
+        my @filtrosHistorial;
+        push(@filtrosHistorial, ( nro_socio       => { eq => $sancion->getNro_socio()}));
+        push(@filtrosHistorial, ( fecha_comienzo  => { eq => $sancion->getFecha_comienzo()}));
+        push(@filtrosHistorial, ( fecha_final     => { eq => $sancion->getFecha_final()}));
+        push(@filtrosHistorial, ( tipo_sancion    => { eq => $sancion->getTipo_sancion()}));
+        my ($historial_sancion_array_ref) = C4::Modelo::RepHistorialSancion::Manager->get_rep_historial_sancion( db => $db, query => \@filtrosHistorial);
+
+        if(scalar(@$historial_sancion_array_ref) > 0){
+            #Se elimina del historial la sancion de la reserva
+            $historial_sancion_array_ref->[0]->delete();
+        }
+        
+        #Se elimina la sanción
+        $sancion->delete();
     }
 }
 

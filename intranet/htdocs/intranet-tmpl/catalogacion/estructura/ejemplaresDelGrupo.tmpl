@@ -1,3 +1,4 @@
+[% USE HTML %]
 [% IF cant_nivel3 %]
 		<script>
 		
@@ -66,7 +67,7 @@
 						                <td class="span1">
 						                    <input type="checkbox" id="checkEjemplares[% id2 %]" name="checkEjemplares[% id2 %]" class="icon_seleccionar" value="[% nivel3_obj.getId3 %]">
 						                </td>
-						                <td>[% nivel3_obj.getSignatura_topografica %]</td>
+						                <td>[% HTML.escape(nivel3_obj.getSignatura_topografica) %]</td>
 						                <td>
 							                [% PERL %]
 							                    print C4::AR::Filtros::link_to( text => "[% nivel3_obj.getBarcode %]",
