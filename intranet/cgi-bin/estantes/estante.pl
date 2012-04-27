@@ -10,7 +10,8 @@ use C4::AR::Estantes;
 
 my $input = new CGI;
 
-my $estante_actual;
+my $subestante_actual;
+my $padre_actual;
 
  
 my ($template, $session, $t_params) = get_template_and_user ({
@@ -28,12 +29,16 @@ my ($template, $session, $t_params) = get_template_and_user ({
 
 
 if ($input->param('id_estante')){
-  $estante_actual= $input->param('id_estante');
+  $subestante_actual= $input->param('id_estante');
+  $padre_actual= $input->param('id_padre');
+  C4::AR::Debug::debug($padre_actual);
 }
 
 
 my $estantes_publicos = C4::AR::Estantes::getListaEstantesPublicos();
-$t_params->{'estante'}= $estante;
+$t_params->{'subestante_actual'}= $subestante_actual;
+$t_params->{'padre_actual'}= $padre_actual;
+
 $t_params->{'cant_estantes'}= @$estantes_publicos;
 $t_params->{'ESTANTES'}= $estantes_publicos;
 
