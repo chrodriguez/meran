@@ -1869,7 +1869,7 @@ sub _validarCambioPassword {
     }
     
     if (!($msg_object->{'error'})) {
-    
+    C4::AR::Debug::debug("PASSpLANA : $passPlana");
     	_setearPassword($socio,$new_password_1,C4::AR::Auth::getSessionNroRandom(),$passPlana);
 	    my $today = Date::Manip::ParseDate("today");
 	    $socio->setLast_change_password($today);
