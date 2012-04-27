@@ -1,3 +1,5 @@
+@import url("/includes/css/nanoscroller.css");
+
 /* MERAN */
 #logo a {
     background: url("images/logo_horizontal.png") no-repeat scroll -10px 5px
@@ -17,6 +19,17 @@
     text-indent: -9999px;
     width: 140px;
 }
+
+.side_bar{
+    position: fixed;
+    top: 143px;
+    width: 80px !important;
+    height: 90%;
+    overflow: auto; 
+}
+
+.nano .content      { padding: 1px; }
+.nano .pane         { background: #444; }
 
 .pagination {
     margin-top: 11px;
@@ -410,6 +423,9 @@ body {
 .bigModal{
     width: 83%;
     left: 30%;
+    /* para hacer scroll */
+    overflow-y: scroll;
+    max-height: 80%;
 }
 
 .title{
@@ -585,3 +601,10 @@ body {
 ._span96 {
     width: 96%;
 }
+
+.listado_sin_margen{
+    list-style-type: none;
+}
+
+legend div.group_separator {background-color:#dff0d8;border-color:#d6e9c6;color:#468847;padding-left: 10px;}
+

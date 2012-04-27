@@ -105,7 +105,7 @@ sub editar{
     #imagenes a borrar
     eval{
     
-        my $dirPath = C4::Context->config("novevadesOpacPath");
+        my $dirPath = C4::Context->config("novedadesOpacPath");
         
         if(scalar(@$arrayDeleteImages)){   
 
@@ -348,7 +348,7 @@ sub _eliminarArchivoImagenNovedad{
 
     my ($file_name) = @_;
     
-    my $dirPath     = C4::Context->config("novevadesOpacPath");
+    my $dirPath     = C4::Context->config("novedadesOpacPath");
 
     unlink($dirPath."/".$file_name);
     

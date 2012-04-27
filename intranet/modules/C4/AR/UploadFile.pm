@@ -55,7 +55,7 @@ sub uploadFotoNovedadOpac{
                                         jpg
                                     );
 
-    my $uploaddir               = C4::Context->config("novevadesOpacPath");
+    my $uploaddir               = C4::Context->config("novedadesOpacPath");
     my $maxFileSize             = 2048 * 2048; # 1/2mb max file size...
     my $hash_unique             = Digest::MD5::md5_hex(localtime() + rand(10));
     my ($file_type,$notBinary)  = C4::AR::Utilidades::checkFileMagic($imagen, @filesAllowed);

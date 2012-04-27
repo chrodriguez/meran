@@ -22,7 +22,7 @@
 #ifndef NODE_CONFIG_H
 #define NODE_CONFIG_H
 
-#define NODE_CFLAGS "-rdynamic -pthread -m32 -g -O3 -DHAVE_OPENSSL=1 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -DHAVE_FDATASYNC=1 -DARCH=\"ia32\" -DPLATFORM=\"linux\" -D__POSIX__=1 -Wno-unused-parameter -D_FORTIFY_SOURCE=2 -I/home/einar/tt/dev-plugins/node/include/node"
-#define NODE_PREFIX "/home/einar/tt/dev-plugins/node"
+#define NODE_CFLAGS "-rdynamic -pthread -m32 -g -O3 -DHAVE_OPENSSL=1 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -DHAVE_FDATASYNC=1 -DARCH=\"ia32\" -DPLATFORM=\"linux\" -D__POSIX__=1 -Wno-unused-parameter -D_FORTIFY_SOURCE=2 -I/usr/share/meran/dev-plugins/node/include/node"
+#define NODE_PREFIX "/usr/share/meran/dev-plugins/node"
 
 #endif /* NODE_CONFIG_H */
