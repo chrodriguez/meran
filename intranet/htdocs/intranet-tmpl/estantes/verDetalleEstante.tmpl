@@ -1,47 +1,7 @@
 [% INCLUDE "intranet-top.inc" %]
-<script type="text/javascript" src="/intranet-tmpl/includes/estantesVirtuales.js"></script>
+<script type="text/javascript" src="/intranet-tmpl/includes/estantesVirtuales.js">
+</script>
 
-<div id="nuevo_estante" style="display:none">
-<fieldset class="resultados_busqueda">
-<legend class="titulo_legend trigger click">  [% "Nuevo Estante" | i18n %] </legend>
-            <input type="text" id="input_nuevo_estante">
-            <script type="text/javascript">
-            $(document).ready(function() {
-		$('#input_nuevo_estante').keypress(function(e){if(e.which==13){if(this.value!=''){agregarEstante();}}});
-            });
-            </script>
-</fieldset>
-           [% PERL %]
-                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
-                                                                        boton   => "boton_guardar",
-                                                                        onClick => 'agregarEstante();',
-                                                                        title   => "[% 'Guardar' | i18n %]",
-                                                                        alternClass => "botonCentrado"
-                                            ) ;
-           [% END %]
-</div>
-
-<div id="nuevo_sub_estante" style="display:none">
-<fieldset class="resultados_busqueda">
-<legend class="titulo_legend trigger click">  [% "Nuevo Estante" | i18n %] </legend>
-	    <input type="hidden" id="estante_nuevo_sub_estante">
-	    <input type="hidden" id="padre_nuevo_sub_estante">
-            <input type="text" id="input_nuevo_sub_estante">
-            <script type="text/javascript">
-            $(document).ready(function() {
-		$('#input_nuevo_sub_estante').keypress(function(e){if(e.which==13){if(this.value!=''){agregarSubEstante();}}});
-            });
-            </script>
-</fieldset>
-           [% PERL %]
-                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar' | i18n %]",
-                                                                        boton   => "boton_guardar",
-                                                                        onClick => 'agregarSubEstante();',
-                                                                        title   => "[% 'Guardar' | i18n %]",
-                                                                        alternClass => "botonCentrado"
-                                            ) ;
-           [% END %]
-</div>
 
 <div id="editar_estante" style="display:none">
 <fieldset class="resultados_busqueda">
@@ -77,7 +37,9 @@
             
             <script type="text/javascript">
             $(document).ready(function() {
-		$('#input_busqueda_contenido').keypress(function(e){if(e.which==13){if(this.value!=''){buscarContenido();}}});
+            $('#input_busqueda_contenido').keypress(function(e){if(e.which==13){if(this.value!=''){buscarContenido();}}});
+             
+
             });
             </script>
            [% PERL %]
@@ -94,7 +56,7 @@
 
 <div id="estante">
 <fieldset class="resultados_busqueda">
-<legend class="titulo_legend trigger click">[% "Estantes" | i18n %]</legend>
+<legend>[% "Detalle de Estantes" | i18n %]</legend>
         <div class="datos_tabla_div_estantes">
             <div class="botonera_estantes">
             <div id="boton_nuevo_estante_0">
@@ -118,16 +80,31 @@
         [% END %]
 
             </div>
+        
+            <div class="accordion" id="estantes">
+              <div class="accordion-group">
+                <div class="accordion-heading">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#estantes" href="#estantes_contenido">
+                    [% "Estantes" | i18n %] 
+                  </a>
+                </div>
+                <div id="estantes_contenido" class="accordion-body collapse in">
+                  <div class="accordion-inner">
+                        <ul class="ul_tabla_div_estante_0 unstyled" >
+                              [% FOREACH estante IN ESTANTES %]
+                              <li>
+                              <input type=checkbox name="[% estante.getEstante %]" value="[% estante.getId %]">
+                              <a class="click" onClick="verSubEstantes([% estante.getId %],0)">[% estante.getEstante %]</a>
+                              </li>
+                              [% END %]
+                        </ul>
 
-           <ul class="ul_tabla_div_estante_0" >
-            [% FOREACH estante IN ESTANTES %]
-             <li>
-            <input type=checkbox name="[% estante.getEstante %]" value="[% estante.getId %]">
-             <a class="click" onClick="verSubEstantes([% estante.getId %],0)">[% estante.getEstante %]</a>
-            </li>
-            [% END %]
-                </ul>
-
+                  </div>
+                </div>
+              </div>
+            </div>
+       
+           
         </div>
 </fieldset>
 </div>
@@ -135,7 +112,7 @@
 </div>
 
 <script>
- makeToggle('datos_tabla_div_estantes','trigger',null,false);
+//  makeToggle('datos_tabla_div_estantes','trigger',null,false);
 
  [% FOREACH es IN LISTA_ESTANTES %]
      verSubEstantes([% es.getId %],[% es.getPadre %]);

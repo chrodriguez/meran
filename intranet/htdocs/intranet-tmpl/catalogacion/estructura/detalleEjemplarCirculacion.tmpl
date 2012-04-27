@@ -1,100 +1,101 @@
+[% INCLUDE "AjaxTemplateJSReadyActivations.inc" %]
+
 <fieldset class="resultados_busqueda">
-    <legend class="titulo_legend">[% "Hist&oacute;rico de Circulaci&oacute;n" | i18n %]:</legend>
-    <ul>
-                <li class="sub_item">
-                     <label for="descripcion">[% "Fecha Inicial" | i18n %]</label>
-                     <input type=text id="fecha_inicial" class="required" name="fecha_inicial" size=10 value="[% fecha_inicial %]">
-                </li>
-                <li class="sub_item">
-                     <label for="sala">[% "Fecha Final" | i18n %]</label>
-                     <input type=text id="fecha_final" class="required" name="fecha_final" size=10 value="[% fecha_final %]">
-
-                                [% PERL %]
-                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Filtrar' | i18n %]",
-                                                                        boton   => "boton_buscar",
-                                                                        onClick => "verHistoricoCirculacion('[% nivel3.id %]');",
-                                                                        title   => "[% 'Filtrar' | i18n %]",
-                                                                        alternClass => "botonCentrado"
-                                            ) ;
-                                [% END %]
-                </li>
-    </ul>
-
-        <div class="contenedor_paginador">[% paginador %]</div>
-        <div class="datos_tabla_div_user">
-            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
-                <thead>
-                <tr id="tr_sin_clase" class="titulo_tabla_resultado">
-                    <th class="click" onclick="ordenarHistorialCirculacion('persona.apellido')" 
-		                Title='[% "Ordenar por Usuario" | i18n %]'>
-		                [% "Usuario" | i18n %]
-			        </th>
-                    <!-- hay que ordenar por t5 por ROSE -->
-			        <th class="click" onclick="ordenarHistorialCirculacion('t5.apellido')" 
-		                Title='[% "Ordenar por Responsable" | i18n %]'>
-		                [% "Responsable" | i18n %]
-			        </th>
-			        <th class="click" onclick="ordenarHistorialCirculacion('fecha')" 
-		                Title='[% "Ordenar por Fecha" | i18n %]'>
-		                [% "Fecha" | i18n %]
-			        </th>
-			        <th class="click" onclick="ordenarHistorialCirculacion('fecha_fin')" 
-		                Title='[% "Ordenar por Fecha Fin" | i18n %]'>
-		                [% "Fecha Fin" | i18n %]
-			        </th>
-			        <th class="click" onclick="ordenarHistorialCirculacion('tipo_operacion')" 
-		                Title='[% "Ordenar por Operaci&oacute;n" | i18n %]'>
-		                [% "Operaci&oacute;n" | i18n %]
-			        </th>
-			        <th class="click" onclick="ordenarHistorialCirculacion('tipo_prestamo')" 
-		                Title='[% "Ordenar por Tipo de Pr&eacute;stamo" | i18n %]'>
-		                [% "Tipo de Pr&eacute;stamo" | i18n %]
-			        </th>
-                </tr>
-                </thead>
-                <tbody>
-                    [% FOREACH historico IN historico_circulacion %]
-                        <tr>
-                              <td align='left' class="tarjetaId">
-                                  [% PERL %]
-                                      print C4::AR::Filtros::link_to(   text =>     "[% historico.socio.persona.getApeYNom %]",
-                                                                        url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
-                                                                        params =>   ["nro_socio=[% historico.socio.getNro_socio %]"],
-                                                                        title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
-                                                                  );
-                                  [% END %]
-                              </td>
-                              <td align='left' class="tarjetaId">
-                                    [% IF historico.responsable == "Sistema" %]
-										Sistema 
-									[% ELSE %]
-									  [% PERL %]
-										  print C4::AR::Filtros::link_to(   text =>     "[% historico.responsable_ref.persona.getApeYNom %]",
-																			url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
-																			params =>   ["nro_socio=[% historico.responsable_ref.getNro_socio %]"],
-																			title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
-																	  );
-									  [% END %]
-									[% END %]
-                                  
-                              </td>
-                            <td>
-                                [% historico.getFecha_formateada %]
-                            </td>
-                            <td>
-                                [% historico.getFecha_fin_formateada %]
-                            </td>
-                            <td>
-                                [% historico.getTipo_operacion %] 
-                            </td>
-                            <td>
-                                [% IF historico.tipo_prestamo_ref %][% historico.tipo_prestamo_ref.getDescripcion %][% ELSE %]-[% END %]
-                            </td>
-                        </tr>
-                    [% END %]
-                </tbody>
-            </table>
-            <div class="resultados_consulta">[% "La cantidad en el historial de circulaci&oacute;n es" | i18n %]: [% cant_historico %]</div>
-            <div class="contenedor_paginador">[% paginador %]</div>
-        </div>
-</fieldset>
+        <legend>[% "Hist&oacute;rico de Circulaci&oacute;n" | i18n %]:</legend>
+    [% IF cant_historico %]
+		<form class="form-horizontal">
+		            <div class="control-group">
+		                <label class="control-label" for="fecha_inicial">[% "Fecha Inicial" | i18n %]</label>
+		                <div class="controls">
+		                     <input type=text id="fecha_inicial" class="required" name="fecha_inicial" size=10 value="[% fecha_inicial %]">
+		                </div>
+		            </div>
+		
+		            <div class="control-group">
+		                <label class="control-label" for="fecha_final">[% "Fecha Inicial" | i18n %]</label>
+		                <div class="controls">
+		                    <input type=text id="fecha_final" class="required" name="fecha_final" size=10 value="[% fecha_final %]">
+		                </div>
+		            </div>
+		        <div class="form-actions">
+		                        [% PERL %]
+		                            print C4::AR::Filtros::to_Button(   text    => "[% 'Filtrar' | i18n %]",
+		                                                                boton   => 'btn btn-primary',
+		                                                                onClick => "verHistoricoCirculacion('[% nivel3.id %]');",
+		                                                                title   => "[% 'Filtrar' | i18n %]",
+		                                    ) ;
+		                        [% END %]
+		        </div>
+		</form>
+	        <div class="contenedor_paginador">[% paginador %]</div>
+	         [% PERL %]
+	             print C4::AR::Filtros::tableHeader(   
+	                                                     id              => "historico_disponibilidad",
+	                                                     class           => "",
+	                                                     columns         => [                                                                             
+	                                                                         '[% "Usuario" |i18n %]','[% "Responsable" |i18n %]','[% "Fecha" |i18n %]',
+	                                                                         '[% "Fecha Fin" | i18n %]','[% "Operaci&oacute;n" | i18n %]','[% "Tipo de Pr&eacute;stamo" | i18n %]'
+	                                                                        ]
+	                                                     
+	                         ) ;
+	         [% END %]
+	                <tbody>
+	                    [% FOREACH historico IN historico_circulacion %]
+	                        <tr>
+	                              <td>
+	                               [% TRY %]
+	                                  [% PERL %]
+	                                      print C4::AR::Filtros::link_to(   text =>     "[% historico.socio.persona.getApeYNom %]",
+	                                                                        url     =>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+	                                                                        params =>   ["nro_socio=[% historico.socio.getNro_socio %]"],
+	                                                                        tooltip =>   "[% 'Mostrar Detalle del Usuario' | i18n %]",
+	                                                                  );
+	                                  [% END %]
+                                   [% CATCH %]
+                                      [% 'Ususario inexistente' | i18n %] ([% historico.nro_socio %])
+                                   [% END %]
+	                                  
+	                              </td>
+	                              <td>
+	                                    [% IF historico.responsable == "Sistema" %]
+											[% 'Sistema' | i18n %] 
+										[% ELSE %]
+										   
+										  [% TRY %]
+											  [% PERL %]
+												  print C4::AR::Filtros::link_to(   text      =>     "[% historico.responsable_ref.persona.getApeYNom %]",
+																					url       =>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+																					params    =>   ["nro_socio=[% historico.responsable_ref.getNro_socio %]"],
+		                                                                            tooltip   =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
+																			  );
+											  [% END %]
+										   [% CATCH %]
+										      [% 'Ususario inexistente' | i18n %] ([% historico.responsable %])
+										   [% END %]
+										   
+										[% END %]
+	                                  
+	                              </td>
+	                            <td>
+	                                [% historico.getFecha_formateada %]
+	                            </td>
+	                            <td>
+	                                [% historico.getFecha_fin_formateada %]
+	                            </td>
+	                            <td>
+	                                [% historico.getTipo_operacion %] 
+	                            </td>
+	                            <td>
+	                                [% IF historico.tipo_prestamo_ref %][% historico.tipo_prestamo_ref.getDescripcion %][% ELSE %]-[% END %]
+	                            </td>
+	                        </tr>
+	                    [% END %]
+	                </tbody>
+	                <tfoot>
+	                    <p class="help-block">[% "La cantidad en el historial de circulaci&oacute;n es" | i18n %]: [% cant_historico %]</p>
+	                </tfoot>
+	            </table>
+        [% ELSE %]
+            <div class="alert alert-info">[% 'No hay hist&oacute;rico de circulaci&oacute;n'| i18n %]</div>        
+        [% END %]
+ </fieldset>

@@ -15,7 +15,7 @@ function eliminarVista(vista_id){
     objAH.showOverlay   = true;
     
     if ( vista_id ){
-        jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_ALERT_TITLE, function(confirmStatus){
+        bootbox.confirm(ESTA_SEGURO_QUE_DESEA_BORRARLO, function(confirmStatus){
             if (confirmStatus){
                 objAH.vista_id= vista_id;
                 objAH.sendToServer();
@@ -27,6 +27,7 @@ function eliminarVista(vista_id){
 
 function agregarVisualizacion(){
 
+    $('#add_vista_intra').modal('hide');
     objAH               = new AjaxHelper(updateAgregarVisualizacion);
     objAH.debug         = true;
     objAH.showOverlay   = true;
@@ -50,7 +51,7 @@ function agregarVisualizacion(){
         objAH.post          = post;
         objAH.sendToServer();
     }else{
-        jAlert(SELECCIONE_VISTA_INTRA,CATALOGO_ALERT_TITLE);
+        jAlert(SELECCIONE_VISTA_INTRA);
     }
     
 }
@@ -86,7 +87,7 @@ function eleccionDeEjemplar(){
 
 function updateEleccionDeNivel(responseText){
     $("#result").html(responseText);
-    zebra("tabla_datos");
+    scrollTo("result");
 }
 
 
@@ -115,10 +116,10 @@ function updateEleccionCampoX(responseText){
     //Arreglo de Objetos Global
     var campos_array = JSONstring.toObject(responseText);
     //se inicializa el combo
-    $("#campo").html('')
+    $("#campo").html('');
     var options = "<option value='-1'>Seleccionar CampoX</option>";
     
-    for (x=0;x < campos_array.length;x++){
+    for (var x=0;x < campos_array.length;x++){
          CAMPOS_ARRAY[campos_array[x].campo]= $.trim(campos_array[x].liblibrarian);   
          options+= "<option value=" + campos_array[x].campo +" >" + campos_array[x].campo + "</option>";
     }
@@ -151,6 +152,8 @@ function updateEleccionCampo(responseText){
     var subcampos_array=JSONstring.toObject(responseText);
     //se inicializa el combo
     $("#subcampo").html('');
+    $("#liblibrarian").val('');
+    $("#liblibrarian_esquema").html('');
     var options = "<option value='-1'>Seleccionar SubCampo</option>";
 //     var subcampo = new Object;    
 //     subcampo.liblibrarian = '';
@@ -224,4 +227,104 @@ function mostrarTablaRef(){
     objAH.url=URL_PREFIX+"/utils/utilsDB.pl";
     objAH.tipoAccion="GENERAR_ARREGLO_TABLA_REF";
     objAH.sendToServer();
+}
+
+
+function mostrarTabla(){
+    objAH               = new AjaxHelper(updateMostrarTabla);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;  
+    objAH.url           = URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
+    objAH.tipoAccion    = 'MOSTRAR_TABLA_CAMPO';
+    objAH.ejemplar      = $("#tipo_nivel3_id").val();
+    objAH.nivel         = $("#eleccion_nivel").val();
+    objAH.sendToServer();
+}
+
+function updateMostrarTabla(responseText){
+    $("#tablaResultCampos").html(responseText);
+    scrollTo("tablaResultCampos");  
+}
+
+var campo;
+
+function editSubcampos(campo_parametro){
+    campo               = campo_parametro;
+    objAH               = new AjaxHelper(updateEditSubcampos);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;  
+    objAH.url           = URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
+    objAH.tipoAccion    = 'MOSTRAR_TABLA_VISUALIZACION';
+    objAH.campo         = campo
+    objAH.nivel         = $("#eleccion_nivel").val();
+    objAH.template      = $("#tipo_nivel3_id").val();;
+    objAH.sendToServer();
+}
+
+function updateEditSubcampos(responseText){
+    $("#tablaResultSubCampos").html(responseText);
+    scrollTo("tablaResultSubCampos");  
+}
+
+function actualizarOrdenSubCampos(){
+    objAH               = new AjaxHelper(updateSortableSC);
+    objAH.debug         = true;
+    objAH.url           = URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
+    objAH.showOverlay   = true;
+    objAH.tipoAccion    = "ACTUALIZAR_ORDEN_SUBCAMPOS";
+    objAH.newOrderArray = $('#sortable_subcampo').sortable('toArray');
+    objAH.sendToServer(); 
+}
+
+function updateSortableSC(){
+    editSubcampos(campo);        
+}
+
+function actualizarOrdenCampo(){
+    objAH               = new AjaxHelper(updateSortable);
+    objAH.debug         = true;
+    objAH.url           = URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
+    objAH.showOverlay   = true;
+    objAH.tipoAccion    = "ACTUALIZAR_ORDEN_AGRUPANDO";
+    objAH.newOrderArray = $('#sortable').sortable('toArray');
+    objAH.sendToServer(); 
+}
+
+function updateSortable(){
+    mostrarTabla();        
+}
+
+function eliminarTodoElCampo(campo){
+    objAH               = new AjaxHelper(updateEliminarTodoCampo);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;  
+    objAH.url           = URL_PREFIX+"/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl";
+    objAH.tipoAccion    = 'ELIMINAR_TODO_EL_CAMPO';
+    objAH.nivel         = $("#eleccion_nivel").val();
+    objAH.ejemplar      = $("#tipo_nivel3_id").val();
+    
+    if (campo){
+        bootbox.confirm(SEGURO_QUE_DESEA_ELIMINAR_TODO_EL_CAMPO, function(confirmStatus){
+            if (confirmStatus){
+                objAH.campo         = campo;
+                objAH.sendToServer();
+            }
+        });
+    }
+}
+
+function updateEliminarTodoCampo(responseText){
+    var Messages        = JSONstring.toObject(responseText);
+    setMessages(Messages);
+    mostrarTabla();
+    eleccionDeEjemplar();
+}
+
+function showAddVistaINTRA(){
+	$('#add_vista_intra').modal();
+}
+
+
+function hideAddVistaINTRA(){
+    $('#add_vista_intra').modal('hide');
 }

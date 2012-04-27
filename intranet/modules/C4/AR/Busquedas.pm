@@ -502,7 +502,7 @@ sub obtenerDisponibilidadTotal{
     foreach my $n3 (@$cat_ref_tipo_nivel3_array_ref){
         C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => BARCODE => ".$n3->getBarcode());
         if($n3->estadoDisponible){
-            if (($n3->esParaPrestamo)&&(!$n3->estaReservado())) {
+            if ($n3->esParaPrestamo) {
             #DOMICILIO    
                 C4::AR::Debug::debug("Busquedas => obtenerDisponibilidadTotal => DOMICILIO");
                 $cant_para_domicilio++;
@@ -518,16 +518,14 @@ sub obtenerDisponibilidadTotal{
         }
 	}
 
-    $disponibilidad[$i]->{'tipoPrestamo'}   = "Domicilio:";
-    $disponibilidad[$i]->{'cantTotal'}      = $cant_para_domicilio;
+    $disponibilidad[$i]->{'tipoPrestamo'}   = "Domicilio";
+    $disponibilidad[$i]->{'domicilio'}      = 1;
+    $disponibilidad[$i]->{'cantTotal'}      = $cant_para_domicilio || 0;
 
     $i++;
-    $disponibilidad[$i]->{'tipoPrestamo'}   = "Sala:";
-    $disponibilidad[$i]->{'cantTotal'}      = $cant_para_sala;
-
-    #     $i++;
-    #     $disponibilidad[$i]->{'tipoPrestamo'}   = "Circulaci&oacute;n";
-    #     $disponibilidad[$i]->{'cantTotal'}      = $cant_para_domicilio + $cant_para_sala;
+    $disponibilidad[$i]->{'tipoPrestamo'}   = "Sala";
+    $disponibilidad[$i]->{'domicilio'}      = 0;
+    $disponibilidad[$i]->{'cantTotal'}      = $cant_para_sala || 0;
 
     $disponibilidad[$i]->{'nodisponibles'}  = "No Disponibles: ".$cant_no_disponible;
     $disponibilidad[$i]->{'prestados'}      = "Prestados: ".C4::AR::Prestamos::getCountPrestamosDelRegistro($id1);
@@ -980,18 +978,15 @@ sub busquedaAvanzada_newTemp{
     
     my $only_sphinx     = $params->{'only_sphinx'};
     my $only_available  = $params->{'only_available'};
-    C4::AR::Debug::debug("ONLY SPHINX ".$only_sphinx);
-
-    my $sphinx  = Sphinx::Search->new();
-
+    my $sphinx          = Sphinx::Search->new();
 
     if ($only_sphinx){
-           if ($params->{'report'}){ 
-                $sphinx->SetLimits($params->{'ini'}, 100000);
+        if ($params->{'report'}){ 
+            $sphinx->SetLimits($params->{'ini'}, 100000);
  
-           } else {
-                $sphinx->SetLimits($params->{'ini'}, C4::AR::Preferencias::getValorPreferencia('renglones_autocomplete'));  
-           }
+       } else {            
+            $sphinx->SetLimits($params->{'ini'}, C4::AR::Preferencias::getValorPreferencia('renglones'));  
+       }
 
     }
 
@@ -1074,7 +1069,9 @@ sub busquedaAvanzada_newTemp{
 
     # NOTA: sphinx necesita el string decode_utf8
    
-    my $results = $sphinx->Query($query);
+    my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
+    
+    my $results = $sphinx->Query($query, $index_to_use);
 
     my @id1_array;
     my $matches = $results->{'matches'};
@@ -1164,7 +1161,9 @@ sub busquedaPorTitulo{
     $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
     # NOTA: sphinx necesita el string decode_utf8
-    my $results = $sphinx->Query($query);
+    my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
+    
+    my $results = $sphinx->Query($query, $index_to_use);
 
     my @id1_array;
     my $matches                 = $results->{'matches'};
@@ -1197,7 +1196,9 @@ sub busquedaPorAutor{
     $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
     # NOTA: sphinx necesita el string decode_utf8
-    my $results = $sphinx->Query($query);
+    my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
+    
+    my $results = $sphinx->Query($query, $index_to_use);
 
     my @id1_array;
     my $matches                 = $results->{'matches'};
@@ -1245,13 +1246,13 @@ sub busquedaCombinada_newTemp{
     my $sphinx = Sphinx::Search->new();
 
     if ($only_sphinx){
-           if ($sphinx_options->{'report'}){ 
+        if ($sphinx_options->{'report'}){ 
         
-                $sphinx->SetLimits($obj_for_log->{'ini'}, 100000);
+            $sphinx->SetLimits($obj_for_log->{'ini'}, 100000);
  
-           } else {
-                    $sphinx->SetLimits($obj_for_log->{'ini'}, C4::AR::Preferencias::getValorPreferencia('renglones_autocomplete'));  
-           }
+       } else {
+            $sphinx->SetLimits($obj_for_log->{'ini'}, C4::AR::Preferencias::getValorPreferencia('renglones'));  
+       }
             
     }
 
@@ -1319,7 +1320,10 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
     C4::AR::Debug::debug("C4::AR::Busquedas::busquedaCombinada_newTemp => cantR => ".$obj_for_log->{'cantR'});
 
     # NOTA: sphinx necesita el string decode_utf8
-    my $results = $sphinx->Query($query);
+    
+    my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
+    
+    my $results = $sphinx->Query($query, $index_to_use);
 
     my ($total_found_paginado, $resultsarray);
     my @id1_array;
@@ -1562,7 +1566,10 @@ sub filtrarPorAutor{
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
     $sphinx->SetLimits($params->{'ini'}, $params->{'cantR'});
     # NOTA: sphinx necesita el string decode_utf8
-    my $results = $sphinx->Query($query);
+
+    my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
+    
+    my $results = $sphinx->Query($query,$index_to_use);
 
     my @id1_array;
     my $matches = $results->{'matches'};
@@ -2023,7 +2030,9 @@ sub getRegistrosFromRange {
     # $sphinx->SetLimits($params->{'ini'}, $params->{'cantR'});
     # NOTA: sphinx necesita el string decode_utf8
     C4::AR::Debug::debug("Busquedas.pm => query: ".$query);
-    my $results = $sphinx->Query($query);
+    my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
+    
+    my $results = $sphinx->Query($query, $index_to_use);
 
     my @id1_array;
     my @id1_array_aux;

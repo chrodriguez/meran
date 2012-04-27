@@ -34,8 +34,8 @@ sub agregar{
 
     $self->campo($params->{'campo'});
     $self->nivel($params->{'nivel'});
-    $self->pre($params->{'pre'});
-    $self->post($params->{'post'});
+    $self->setPre($params->{'pre'});
+    $self->setPost($params->{'post'});
     $self->subcampo($params->{'subcampo'});
     $self->vista_intra($params->{'liblibrarian'});
     
@@ -155,25 +155,38 @@ sub getPre{
     my ($self) = shift;
 
 # C4::AR::Debug::debug("CatVisualizacionIntra => getPre =>|".$self->pre."|");
-    return $self->pre();
+#     return $self->pre();
+    my $value = $self->pre;
+    chop($value); #quito el | agregado 
+    return $value;
 }
 
 sub setPre{
     my ($self)  = shift;
     my ($pre)   = @_;
-    $self->pre($pre);
+#     $self->pre($pre);
+    $pre =~ s/ /&nbsp;/g;
+# C4::AR::Debug::debug("CatVisualizacionIntra => setPost =>".$pre."-");
+    $self->pre($pre."|"); # se agrega el | para delimitar el string (PROBLEMA DE STRINGS EN MYSQL: QUITA LOS ESPACIOS FINALES)
 }
 
 sub getPost{
     my ($self) = shift;
 
-    return $self->post;
+    my $value = $self->post;
+    chop($value); #quito el | agregado 
+    return $value;
 }
 
 sub setPost{
     my ($self) = shift;
     my ($post) = @_;
-    $self->post($post);
+#     $self->post($post);
+    $post =~ s/ /&nbsp;/g;
+
+# C4::AR::Debug::debug("CatVisualizacionIntra => setPost =>".$post."-");
+
+    $self->post($post."|"); # se agrega el | para delimitar el string (PROBLEMA DE STRINGS EN MYSQL: QUITA LOS ESPACIOS FINALES)
 }
 
 sub getNivel{

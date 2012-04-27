@@ -1,9 +1,14 @@
-[% INCLUDE 'localized_messages.inc' %]
-[% INCLUDE  'WindowHelper.inc'  %]
+<!-- <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/docs.css" /> -->
+<style>
+	.main_content{
+		width: 84% !important;
+	}
+</style>
 
 <script type="text/javascript">
+
 	function mostrarIndice(id2){
-	    $("#indice_data" + id2).dialog({ width: 800, position: 'center', modal: true }); 
+	    $("#indice_data" + id2).modal(); 
 	}
 	
 	function ProcessGBSBookInfo(booksInfo) {
@@ -16,25 +21,28 @@
 		 }
 	   }
 	 }
-</script>
 
-[% IF !ajax %]
-    <script src="/includes/jquery/jquery.jqpageflow.js" type="text/javascript"></script>
-	<script type="text/javascript"> 
-	    $(document).ready(function(){
-	        $("#main_content").flexiPagination({
-	            url: "[% url_prefix %]/opac-detail.pl?id1=[% id1 %]&ajax=1&token=[% token %]",
-	            totalResults: [% cant_total %],
-	            perPage: [% per_page %],
-	            container: "#main_content",
-	            append_loader: "#loading_items",
-	            pagerVar : "page",
-	            loaderImgPath: imagesForJS+"/loader_grupos.gif",
-	            debug : 1
-	        });	});
-	</script>
-    
-[% END %]
+	function detalleMARC(id3){
+		objAH               = new AjaxHelper(updateInfoMARC);
+		objAH.debug         = true;
+	    objAH.showOverlay   = true;
+		objAH.url			= URL_PREFIX+"/opac-MARCDetail.pl";
+		objAH.id3           = id3;
+		//se envia la consulta
+		objAH.sendToServer();
+	}
+
+	function updateInfoMARC(responseText){
+		        $('#detalleMARC').html(responseText);
+				$('#detalleMARC').modal();
+	}
+		 
+
+    $(document).ready(function() {
+    	$('.fancylink').fancybox();
+    	$('.nano').nanoScroller();
+    });
+</script>
 
 [% IF estadoDeColeccion %]
     <div class="detalle_completo_niveles">
@@ -71,7 +79,7 @@
 										[% END %]
 									</ul>
 									[% IF issn %]
-										<div class="rating">
+										<div class="right">
 											<div class="google-books">
 												<a id="ISSN:[% issn %]"  style="display:none" target="_blank">
 													<img src="/includes/css/gbs_preview_button1.gif" border="0" style="margin: 0"/>
@@ -89,10 +97,5 @@
 	<script type="text/javascript">makeToggle('estado_coleccion[% id1 %]','trigger_estado_coleccion_[% id1 %]',null,false);</script>
 [% END %]
 
-[% IF preferencias.resumido %]
-    [% INCLUDE 'opac-detail_partial_N2_reducido.inc' %]
-[% ELSE %]
-    [% INCLUDE 'opac-detail_partial_N2_completo.inc' %]
-[% END %]
-
+[% INCLUDE 'opac-detail_partial_N2_reducido.inc' %]
 <div id="resultadoReserva"></div>

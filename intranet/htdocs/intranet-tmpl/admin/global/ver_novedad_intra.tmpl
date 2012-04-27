@@ -1,10 +1,30 @@
 [% USE HTML %]
-<div class="novedad_contacto">
-    <h2>[% 'Titulo' | i18n %]: [% HTML.escape(novedad.getTitulo) %]</h2>
-    <fieldset>
-        <legend>[% 'Cuerpo de la novedad' | i18n %]:</legend>
-        <h3>[% HTML.escape(novedad.getContenido) %]</h3>
-        <h4> [% novedad.getFechaLegible %]</h4>
-    </fieldset>
-    <a href="#">[% novedad.getFechaLegible %] </a>
+
+<div class="modal-header">
+  <a href="#" class="close" data-dismiss="modal">×</a>
+  <h3>[% HTML.escape(novedad.getTitulo) %]</h3>
+</div>
+<div class="modal-body">
+  <span class="label right" title="[% 'Categor&iacute;a' | i18n %]">[% novedad.getCategoria %]</span>
+  <p>[% HTML.escape(novedad.getContenido) %]</p>
+  
+  [% IF cant_links %]
+    [% FOREACH link IN links %]
+        <a target="_blank" href="[% link %]">[% link %]</a></br>      
+    [% END %]
+  [% END %]
+  
+</div>
+<div class="modal-footer">
+   <h4 class="left">[% novedad.getFechaLegible %]</h4>
+  <p class="help-block">
+        [% 'Creado por ' | i18n %]
+        [% PERL %]
+            print C4::AR::Filtros::link_to(   text =>     "[% novedad.getUsuario %]",
+                                              url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+                                              params =>   ["nro_socio=[% novedad.getUsuario %]"],
+                                              title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
+                                        );
+        [% END %]
+    </p>        
 </div>

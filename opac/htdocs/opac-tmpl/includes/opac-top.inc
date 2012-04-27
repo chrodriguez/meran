@@ -1,5 +1,5 @@
-<!doctype html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<!DOCTYPE html>
+<html lang="es-ES">
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -13,44 +13,59 @@
   <meta name="distribution" content="global" />
   <meta name="description" content="OPAC" />
   <meta name="keywords" content="Your keywords, keywords, keywords, here ..." />
-  <link rel="stylesheet" type="text/css" media="screen,projection,print" href="[% temas %]/[% user_theme %]/includes/opac.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
 
-  <link rel="icon" type="image/x-icon" href="[% temas %]/[% user_theme %]/imagenes/favicon.ico" />
-<!-- variables de entorno sacadas de las preferencias del sistema -->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="/includes/css/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+       
+  <link rel="stylesheet" href="[% temas %]/[% user_theme %]/includes/opac.css" />
+  <link rel='stylesheet' media='screen and (max-width: 900px)' href="[% temas %]/[% user_theme %]/includes/opac-FF_fix.css" />  
+  <link media="screen" rel="stylesheet" href="/includes/css/fancybox.css" type="text/css">
+  <link media="screen" rel="stylesheet" href="/includes/css/rateit.css" type="text/css">
+
   <script type="text/javascript">
-    var token= '[% token %]';
-    var imagesForJS = '[% temas %]/[% tema %]/imagenes';
-// TODO no esta recuperando este valor
+    var token               = '[% token %]';
+    var imagesForJS         = '[% temas %]/[% tema %]/imagenes';
     var M_LIMITE_RESULTADOS = [% limite_resultados_autocompletables %] + "";
-    var URL_PREFIX  = '[% url_prefix %]';
-
+    var URL_PREFIX          = '[% url_prefix %]';
   </script>
 
   [% INCLUDE 'message_OPAC.inc' %]
-  <script src="/includes/jquery/jquery.js" type="text/javascript"></script>
+  [% INCLUDE 'BootstrapToolkit.inc' %]
   <script src="/includes/AjaxHelper.js" type="text/javascript"></script>
-  <script src="/includes/jquery/jquery.alerts.js" type="text/javascript"></script>
   <script src="/includes/jquery/ui/ui-min.js" type="text/javascript"></script>
   <script src="/includes/jquery/ui/core.js" type="text/javascript"></script>
   <script src="/includes/jquery/ui.stars.js" type="text/javascript"></script>
+  [% INCLUDE 'AutocompleteHelper.inc' %]
   <script src="/includes/jquery/jquery.wysiwyg.js" type="text/javascript"></script>
   <script src="/includes/json/jsonStringify.js" type="text/javascript"></script>
-  [% INCLUDE 'AutocompleteHelper.inc'  %]
   <script src="/includes/MessageHelper.js" type="text/javascript"></script>
   <script src="/opac-tmpl/includes/circulacionOPAC.js" type="text/javascript"></script>
-  <script src="/includes/jquery/fancybox/jquery.easing.1.3.js" type="text/javascript"></script>
-  <script src="/includes/jquery/fancybox/jquery.fancybox.js" type="text/javascript"></script>
-  <script type="text/javascript" src="/includes/jquery/modal/jquery.simplemodal.js"></script>
   <script src="/opac-tmpl/includes/favoritos.js" type="text/javascript"></script>
   <script type="text/javascript" src="/includes/jquery/jquery.expander.js"></script>
+  <script type="text/javascript" src="/includes/jquery/jquery.nanoscroller.js"></script>
   <script src="/includes/util.js" type="text/javascript"></script>
   <script src="/includes/md5.js" type="text/javascript"></script>
   <script src="/includes/sha1.js" type="text/javascript"></script>
   <script src="/includes/jsthread.js" type="text/javascript"></script>
-  <script type="text/javascript" src="/includes/jquery/jquery.tmpl.js"></script>	
-  
-  <link media="screen" rel="stylesheet" href="/includes/jquery/modal/basic-min.css" type="text/css" />
+  <script type="text/javascript" src="/includes/opac.js"></script>	
+  <script type="text/javascript" src="/includes/jquery/jquery.alerts.js"></script>	
+  <script type="text/javascript" src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
+  <script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox.js"></script>
+  <script type="text/javascript" src="/includes/jquery/fancybox/jquery.mousewheel.js"></script>
+  <script type="text/javascript" src="/includes/jquery/jquery.rateit.min.js"></script>
 
+
+  [% INCLUDE 'localized_messages.inc' %]
   <title>
     [% IF titulo_nombre_ui %]
         [% titulo_nombre_ui %]
@@ -58,55 +73,38 @@
         Meran - OPAC
     [% END %]
   </title>
-  
-  <script type="text/javascript">
-      [% IF socio_data.usr_permisos_opac %]
-	      [% IF !noAjaxRequests %]
-	          $(document).ready(function() {
-	            infoReservas();
-	            infoSanciones();
-	            setInterval(infoReservas,[% IF timeInterval %]
-	                                        [% timeInterval %]
-	                                     [% ELSE %]
-	                                        300000
-	                                     [% END %]
-	                                     );
-	            setInterval(infoSanciones,[% IF timeInterval %]
-	                                        [% timeInterval %]
-	                                     [% ELSE %]
-	                                        300000
-	                                     [% END %]
-	                                     );
-	          });
-      [% END %]
-      [% END %]
-      
 
-	
-  </script>
+  [% IF socio_data.usr_permisos_opac %]
+        [% IF !noAjaxRequests %]
+        <script type="text/javascript">
+/*          $(document).ready(function() {
+
+        	infoReservas();
+            infoSanciones();
+            setInterval(infoReservas,[% IF timeInterval %]
+                                        [% timeInterval %]
+                                     [% ELSE %]
+                                        300000
+                                     [% END %]
+                                     );
+            setInterval(infoSanciones,[% IF timeInterval %]
+                                        [% timeInterval %]
+                                     [% ELSE %]
+                                        300000
+                                     [% END %]
+                                     );
+          });
+*/
+          </script>
+        [% END %]
+    [% END %]
 
     <script type="text/javascript">    
 
-        function enviar(){
-              [% IF plainPassword == 0 %]
-                  var nroRandom   = [% nroRandom %];
-                  var hash        = b64_sha256(b64_sha256(b64_md5($("#password_plain").val()))+nroRandom);
-                  $("#password").val(hash);
-              [% ELSE %]
-                  $("#password").val($("#password_plain").val());
-              [% END %]
-              return true;
-      }
-      var RecaptchaOptions = {
-   
-        theme : 'white',
-//         lang : 'es,   
-        
-      }
-      
       $(document).ready(function() {
-
-
+			$('.popover_button').popover({delay: { show: 100, hide: 100 },});
+			$(".alert").alert();
+          
                     $(function () {
                         var $alert = $('#alert_msg_main');
                         if($alert.length)
@@ -118,74 +116,46 @@
                             });
                         }
                     });
-
-
-                  //onEnter con foco en input, ejecuta la busqueda
-                    var RecaptchaOptions = {
-                        theme : 'blue', /* tema color blanco */
-                        lang : 'es' /* idioma español */
-                    };    
-
-                    onEnter("password",enviar);
-
-
-                    // When you click on #search
-                    $("#search").focus(function(){
-
-                        // If the value is equal to "Search..."
-                        if($(this).val() == "Buscar...") {
-                            // remove all the text and the class of .empty
-                            $(this).val("").removeClass("empty");;
-                        }
-
-                    });
-
-                    [% IF !loginFailed  %]
-                        try {$("#search").focus();} catch (e){}
-                    [% ELSE %]
-                    try {$("#userid").focus();} catch (e){}
-                    [% END %]
-
-            $(".signin").click(function(e) {          
-                e.preventDefault();
-                $("fieldset#signin_menu").toggle();
-                $(".signin").toggleClass("menu-open");
-            });
-            
-            $("fieldset#signin_menu").mouseup(function() {
-                return false
-            });
-            $(document).mouseup(function(e) {
-                if($(e.target).parent("a.signin").length==0) {
-                    $(".signin").removeClass("menu-open");
-                    $("fieldset#signin_menu").hide();
-                }
-            });         
-            
+             [% IF portada %]
+             	$('#carousel_portada_opac').carousel({
+             		pause: "hover",
+             		interval: 5000,
+                });
+          	 [% END %]
+             	
         });
-</script>
+	</script>
+	
+	
+	</head>
+	
+	<!-- Global IE fix to avoid layout crash when single word size wider than column width -->
+	<!--[if IE]><style type="text/css"> body {word-wrap: break-word;}</style><![endif]-->
+	    
+	<body lang="es-Es" data-spy="scroll" data-target=".side_bar">
+	<!-- POAR AHORA ES LA NAV -->
 
-
-</head>
-
-<!-- Global IE fix to avoid layout crash when single word size wider than column width -->
-<!--[if IE]><style type="text/css"> body {word-wrap: break-word;}</style><![endif]-->
-    
-<body lang="es-Es">
-  <!-- Main Page Container -->
-  <noscript> 
-      <p>[% 'DEBE HABILITAR SOPORTE PARA JAVASCRIPT EN SU NAVEGADOR, DE LO CONTRARIO NO PODRA NAVEGAR EL SITIO.' | i18n %]</p> 
-  </noscript>
-
-[% IF mostrar_fondo_home %]
-  <div class="page-container page-container-background">
-[% ELSE %]
-  <div class="page-container">
-[% END %]
-    <!-- For alternative headers START PASTE here -->
-        [% INCLUDE 'opac-top-header.inc' %]
-        [% INCLUDE 'opac-main_content.inc' %]
-        [% INCLUDE 'opac-main_sub_content.inc' %]
-        <div id="loading_items" class="loading_items"><br /></div>
-        
-  </div>
+	  <div id="ajax-indicator" class="modal hide fade loading">
+			<div class="circle"></div>
+			<div class="circle1"></div>
+  	  </div>
+	
+	   [% INCLUDE 'opac-top-header.inc' %]
+	   [% INCLUDE 'opac-side_bar.inc' 	%]	   
+		<div class="container main_content">	
+				  <div id="end_top">
+					    [% IF mensaje %]
+								<div class="alert [% mensaje_class %]">
+								        <strong>Info</strong> [% mensaje %]
+								</div>
+					    [% END %]
+		  			</div>	   
+			        [% IF content_title %]
+			        	<fieldset>
+			        		<legend class="title">[% content_title %]</legend>
+			        	</fieldset>
+			        [% END %]
+			        [% IF partial_template %]
+			              [% INCLUDE $partial_template %]
+			        [% END %]
+		        

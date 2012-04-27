@@ -17,8 +17,9 @@ my ($template, $session, $t_params) = C4::AR::Auth::get_template_and_user({
                                                         entorno         => 'undefined'},
 });
 
-my @prestamos_array_ref   = C4::AR::Prestamos::getAllPrestamosVencidos();
-$t_params->{'prestamos'}  = \@prestamos_array_ref;
+my $prestamos_array_ref   = C4::AR::Prestamos::getAllPrestamosVencidos();
+$t_params->{'prestamos'}  = $prestamos_array_ref;
+$t_params->{'cantidad'}   = $prestamos_array_ref?scalar(@$prestamos_array_ref):0;
 
 if(C4::AR::Preferencias::getValorPreferencia('enableMailPrestVencidos')){
 

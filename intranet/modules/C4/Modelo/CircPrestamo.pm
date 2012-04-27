@@ -680,7 +680,7 @@ sub estaEnFechaDeRenovacion {
 	my $err;
 	my $dateformat = C4::Date::get_date_format();
 	my $hoy =  C4::Date::format_date_in_iso(Date::Manip::DateCalc( Date::Manip::ParseDate("today"), "+ 0 days", \$err ), $dateformat );
-	my $desde = C4::Date::format_date_in_iso(Date::Manip::DateCalc($self->getFecha_vencimiento,"- ".$self->tipo->getDias_antes_renovacion . " days",\$err, 2),$dateformat );
+	my $desde = C4::Date::format_date_in_iso(Date::Manip::DateCalc($self->getFecha_vencimiento,"- ".$self->tipo->getDias_antes_renovacion . " business days",\$err),$dateformat );
 	my $flag = Date_Cmp( $desde, $hoy );
 
 	#comparo la fecha de hoy con el inicio del plazo de renovacion
@@ -825,6 +825,21 @@ sub sePuedeRenovar {
 	$msg_object->{'error'} = 0;
 	$self->_verificarParaRenovar($msg_object);
 	return ( !$msg_object->{'error'} );
+}
+
+
+sub sePuedeRenovar_text{
+    my ($self) = shift;
+
+    #Si no dan errores las verificaciones, se puede renovar
+    my ($msg_object) = C4::AR::Mensajes::create();
+    $msg_object->{'error'} = 0;
+    $self->_verificarParaRenovar($msg_object,);
+    
+    my $cod_msg = C4::AR::Mensajes::getFirstCodeError($msg_object);
+    
+    return ( C4::AR::Mensajes::getMensaje($cod_msg,$msg_object->{'tipo'}) );
+	
 }
 
 =item 

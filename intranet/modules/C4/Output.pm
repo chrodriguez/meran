@@ -8,10 +8,9 @@ use Template;
 use Template::Filters;
 use HTML::Template; #LUEGO DE PASAR TODO ELIMINAR PM, NO SE USA MAS
 use HTML::Template::Expr; #LUEGO DE PASAR TODO ELIMINAR PM, NO SE USA MAS
-
 use C4::AR::Filtros;
-use C4::AR::Preferencias;
 use C4::AR::Auth;
+use C4::AR::Preferencias;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
@@ -55,8 +54,8 @@ sub gettemplate {
 # C4::AR::Debug::debug("tema_opac ".$preferencias_hash_ref->{'defaultUI'});
 
     my $htdocs;
-    my $tema_opac   = C4::AR::Preferencias::getValorPreferencia('defaultUI');
-    my $tema_intra  = C4::AR::Preferencias::getValorPreferencia('defaultUI');
+    my $tema_opac   = C4::AR::Preferencias::getValorPreferencia('tema_opac_default') || C4::AR::Preferencias::getValorPreferencia('defaultUI');
+    my $tema_intra  = "default"; #para volver a tener temas, poner la linea de arriba 
     my $temas       = C4::Context->config('temas');
     my $tema;
     my $type;
@@ -116,7 +115,9 @@ sub gettemplate {
     my ($session)       = CGI::Session->load();
 
     $user_theme         = $session->param('urs_theme') || $tema_opac;
-    $user_theme_intra   = $session->param('usr_theme_intra') || $tema_intra;
+    
+    #para volver a tener temas, poner $session->param('usr_theme_intra') || $tema_intra;
+    $user_theme_intra   = $tema_intra;
 
     if ($loging_out){
         $user_theme         = $tema_opac;

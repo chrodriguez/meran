@@ -24,7 +24,6 @@ __PACKAGE__->meta->setup(
         telefono         => { type => 'varchar', overflow => 'truncate', length => 255 },
         email            => { type => 'varchar', overflow => 'truncate', length => 255 },
         fax              => { type => 'varchar', overflow => 'truncate', length => 255 },
-        id_estado        => { type => 'integer', overflow => 'truncate', not_null => 1,  default => 20 },
         msg_texto        => { type => 'varchar', overflow => 'truncate', length => 255 },
         alt_calle        => { type => 'varchar', overflow => 'truncate', length => 255 },
         alt_barrio       => { type => 'varchar', overflow => 'truncate', length => 255 },
@@ -41,6 +40,7 @@ __PACKAGE__->meta->setup(
         carrera          => { type => 'varchar', overflow => 'truncate', length => 255 },
         anio             => { type => 'varchar', overflow => 'truncate', length => 255 },
         division         => { type => 'varchar', overflow => 'truncate', length => 255 },
+        foto             => { type => 'varchar', overflow => 'truncate', length => 255 },
     ],
 
      relationships =>
@@ -63,13 +63,6 @@ __PACKAGE__->meta->setup(
         key_columns => { tipo_documento => 'id' },
         type        => 'one to one',
       },
-     estado => 
-      {
-        class       => 'C4::Modelo::UsrEstado',
-        key_columns => { id_estado => 'id_estado' },
-        type        => 'one to one',
-      },
-
       
     ],
     
@@ -80,7 +73,7 @@ __PACKAGE__->meta->setup(
 use utf8;
 use C4::Modelo::UsrPersona;
 use C4::Modelo::UsrEstado;
-
+use C4::Modelo::UsrRegularidad::Manager;
 
 
 =item
@@ -111,24 +104,6 @@ sub load{
     }
 
     return $error;
-}
-
-sub getId_estado{
-    my ($self) = shift;
-    return ($self->id_estado);
-}
-
-sub setId_estado{
-    my ($self) = shift;
-    my ($id_estado) = @_;
-    $self->id_estado($id_estado);
-}
-
-sub getCategoria{
-    my ($self)=shift;
-    my $socio_array_ref = C4::Modelo::UsrPersona::Manager->get_usr_persona( query => [ id_persona => { eq => $self->getId_persona } ]);
-
-    return ($socio_array_ref->[0]->categoria->getDescription);
 }
 
 sub agregar{
@@ -168,7 +143,7 @@ sub agregar{
     $self->setCarrera($data_hash->{'carrera'});
     $self->setAnio($data_hash->{'anio'});
     $self->setDivision($data_hash->{'division'});
-    
+    $self->setFoto($self->buildFotoNameHash());
     $self->save();
     $self->convertirEnSocio($data_hash);
 
@@ -183,37 +158,10 @@ sub convertirEnSocio{
     my $socio = C4::Modelo::UsrSocio->new(db => $db);
         $data_hash->{'id_persona'} = $self->getId_persona;
 
-    my $estado = C4::Modelo::UsrEstado->new(db => $db);
-        $data_hash->{'regular'}=1; #por defecto cumple condicion
-        $data_hash->{'categoria'}='NN';
-        $data_hash->{'fuente'}="ES UNA FUENTE DEFAULT, PREGUNTARLE A EINAR....";
-        $estado->agregar($data_hash);
-        $self->setId_estado($estado->getId_estado);
         $socio->agregar($data_hash);
+        $socio->setId_estado(($data_hash->{'id_estado'}));
         $socio->setThemeINTRA($data_hash->{'tema'} || 'default');
 }
-
-sub esRegularToString{
-    my ($self) = shift;
-
-    my ($estado) = C4::Modelo::UsrEstado->new(id_estado => $self->getId_estado);
-    $estado->load();
-
-    my $estado_alumno = C4::AR::Filtros::i18n("IRREGULAR");
-    if($estado->getRegular){$estado_alumno = C4::AR::Filtros::i18n("REGULAR")}
-    
-    return $estado_alumno;
-}
-
-sub esRegular{
-    my ($self) = shift;
-
-    my ($estado) = C4::Modelo::UsrEstado->new(id_estado => $self->getId_estado);
-    $estado->load();
-
-    return $estado->getRegular;
-}
-
 
 sub modificar{
     my ($self)=shift;
@@ -265,7 +213,7 @@ sub modificarDatosDeOPAC{
     $self->setCiudad($data_hash->{'id_ciudad'});
     $self->setTelefono($data_hash->{'numero_telefono'});
     $self->setEmail($data_hash->{'email'});
-
+    
     $self->save();
 }
 
@@ -285,43 +233,6 @@ sub modificarVisibilidadOPAC{
 
     $self->save();
 }
-
-# sub sortByString{
-#     my ($self)      = shift;
-#     my ($campo)     = @_;
-# 
-#     my $fieldsString = &C4::AR::Utilidades::joinArrayOfString($self->meta->columns);
-# #   C4::AR::Debug::debug("UsrPersona=> sortByString => fieldsString: ".$fieldsString);
-#     C4::AR::Debug::debug("UsrPersona=> campo: ".$campo);
-# 
-#     my $index;  
-#     my $campos_salida;
-#     my @fields_out;
-#     my @fields = split /,/, $campo;
-# 
-#     foreach my $f (@fields){
-#         $index = rindex $fieldsString,$f;
-# 
-#         if ($index != -1){
-#         #agrego un campo valido
-#             C4::AR::Debug::debug("UsrPersona=> sortByString => f ".$f);
-#             push (@fields_out, $f)
-#         }
-#     }
-# 
-#     if(scalar(@fields_out) > 0){
-#         foreach my $fo (@fields_out){
-#             $campos_salida = $campos_salida.", ";
-#         }
-#     
-#         C4::AR::Debug::debug("UsrPersona=> sortByString => campos_salida ".$campos_salida);
-#         return $campos_salida;
-#   
-#     } else {
-#         return ("persona.apellido");
-#     }
-# }
-
 
 sub sortByString{
     my ($self) = shift;
@@ -417,6 +328,28 @@ sub setId_persona{
     $self->id_persona($id_persona);
 }
 
+sub buildFotoNameHash{
+    my ($self) = shift;
+    use Digest::SHA;
+    my $hash;
+    
+    $hash = Digest::SHA::sha1_hex($self->getId_persona.$self->getNro_documento.$self->getApellido.$self->getNombre).".jpg";
+    
+    return $hash;
+}
+
+sub setFoto{
+    my ($self) = shift;
+    my ($foto) = @_;
+    $self->foto($foto);
+    $self->save();
+}
+
+sub getFoto{
+    my ($self) = shift;
+    return($self->foto);
+}
+
 sub setEs_socio{
     my ($self) = shift;
     my ($status) = @_;
@@ -471,7 +404,7 @@ sub setApellido{
     my ($self) = shift;
     my ($apellido) = @_;
     Encode::encode_utf8($apellido);
-    $self->apellido($apellido);
+    $self->apellido(C4::AR::Utilidades::capitalizarString($apellido));
 }
 
 sub getNombre{
@@ -483,7 +416,7 @@ sub setNombre{
     my ($self) = shift;
     my ($nombre) = @_;
     Encode::encode_utf8($nombre);
-    $self->nombre($nombre);
+    $self->nombre(C4::AR::Utilidades::capitalizarString($nombre));
 }
 
 sub getApeYNom{
@@ -564,6 +497,17 @@ sub setBarrio{
 
 sub getCiudad{
     my ($self) = shift;
+    
+    eval {
+		$self->ciudad_ref;
+        };
+        
+    if($@){
+        C4::AR::Debug::debug("UsrPersona => getCiudad => no existe la ciudad, se setea la ciudad por defecto, gracias Guarani");
+         $self->setCiudad( C4::AR::Preferencias::getValorPreferencia("defaultCiudad"));
+		$self->save();
+    }
+   
     return ($self->ciudad);
 }
 
@@ -641,7 +585,7 @@ sub setAlt_barrio{
 }
 
 sub getAlt_ciudad{
-    my ($self) = shift;
+    my ($self) = shift;   
     return ($self->alt_ciudad);
 }
 

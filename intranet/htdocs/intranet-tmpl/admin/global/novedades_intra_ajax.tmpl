@@ -1,75 +1,69 @@
 [% USE HTML %]
-<script type="text/javascript">
-      $(document).ready(function() {
-          $('.fancy_link').fancybox({
-              'frameWidth':   600,
-              'frameHeight':  500,
-          });
-      });
-</script>
-<fieldset class="resultados_busqueda">
-    <legend class="titulo_legend trigger click">[% "Novedades de INTRA" | i18n %]:</legend>
+<fieldset>
+    <legend>[% "Novedades de INTRA" | i18n %]:</legend>
         <div class="contenedor_paginador">[% paginador %]</div>
         [% IF novedades %]
             <div class="datos_tabla_div_user">
-                <div class="resultados_consulta">[% "La cantidad de novedades es" | i18n %]: [% cant_novedades %]</div>
-                <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
-                    <thead>
-                        <tr class="titulo_tabla_resultado">
-                            <th>[% "Fecha" | i18n %]</th>
-                            <th>[% "Usuario" | i18n %]</th>
-                            <th>[% "Titulo" | i18n %]</th>
-                            <th>[% "Resumen" | i18n %]</th>
-                            <th>[% "Categor&iacute;a" | i18n %]</th>
-                            <th>[% "Eliminar" | i18n %]</th>
-                            <th>[% "Editar" | i18n %]</th>
-                        </tr>
-                    </thead>
+                <div class="well">[% "La cantidad de novedades es" | i18n %]: [% cant_novedades %]</div>
+                
+                [% PERL %]
+                        print C4::AR::Filtros::tableHeader(   
+                                          id              => "novedades_intra_table",
+                                          class           => "",
+                                          selectAll_id    => "",
+                                          columns         => ['[% "Fecha"|i18n %]','[% "Usuario"|i18n %]',
+                                                            '[% "T&iacute;tulo"|i18n %]', '[% "Resumen"|i18n %]',
+                                                            '[% "Categor&iacute;a"|i18n %]', '[% "Acciones"|i18n %]'
+                                                             ]
+             
+                                                ) ;
+                    [% END %]
+
                     <tbody>
                         [% FOREACH novedad IN novedades %]
                             <tr class="leido[% novedad.getLeido %]">
                                 <td>
-                                    <a class="fancy_link" href="[% url_prefix %]/admin/global/ver_novedad_intra.pl?token=[% token %]&id=[% novedad.id %]">
-                                        [% novedad.getFechaLegible %]
-                                    </a>
+                                    [% novedad.getFechaLegible %]
                                 </td>
                                 <td>
-                                    <a class="fancy_link" href="[% url_prefix %]/admin/global/ver_novedad_intra.pl?token=[% token %]&id=[% novedad.id %]">
-                                        [% novedad.getUsuario%] 
-                                    </a>
+                                    [% novedad.getUsuario%] 
                                 </td>
                                 <td>
-                                    <a class="fancy_link" href="[% url_prefix %]/admin/global/ver_novedad_intra.pl?token=[% token %]&id=[% novedad.id %]">
-                                        [% novedad.getTitulo %] 
-                                    </a>
+                                    [% novedad.getTitulo %] 
                                 </td>
                                 <td>
-                                    <a class="fancy_link" href="[% url_prefix %]/admin/global/ver_novedad_intra.pl?token=[% token %]&id=[% novedad.id %]">
-                                        [% novedad.getResumen %] 
-                                    </a>
+                                    [% novedad.getResumen %] 
                                 </td>
                                 <td>
-                                    <a href="#">[% novedad.getCategoria %]</a>
+                                    [% novedad.getCategoria %]
                                 </td>
-                                <td>
+                                
+                                <td style="width:150px">
+                                
                                     [% PERL %]
-                                                print C4::AR::Filtros::to_Icon(   text    => "[% 'Eliminar' | i18n %]",
-                                                        boton   => "icon_borrar",
-                                                        onClick => "eliminarNovedad('[% novedad.id %]')",
-                                                        width => "auto",
-                                                        title   => "[% 'Eliminar novedad' | i18n %]",
-                                                        ) ;
+                                        print C4::AR::Filtros::action_set_button(    
+                                              title   => " [% 'Novedad' | i18n %]",
+                                              button  => 'btn btn-primary',
+                                              action  => 'showNovedad("[% novedad.id %]")',
+                                              icon    => "icon-white icon-edit",
+                                              actions         => [
+                                                                  { title   => "Editar", 
+                                                                    url     => "[% url_prefix %]/admin/global/editar_novedad_intra.pl",
+                                                                    params  =>  ["id=[% novedad.id %]"],
+                                                                    icon    => "icon-edit",
+                                                                   },
+                                                                   { title   => "Eliminar", 
+                                                                    action  => 'eliminarNovedad("[% novedad.id %]")', 
+                                                                    icon    => "icon-remove",
+                                                                   },
+                                                                  ],
+
+                     
+                                                ) ;
                                     [% END %]
+                            
                                 </td>
-                                <td>
-                                    [% PERL %]
-                                            print C4::AR::Filtros::link_to( text =>     C4::AR::Filtros::to_Icon( boton   => "icon_edicion" ),
-                                                                            url =>      "[% url_prefix %]/admin/global/editar_novedad_intra.pl", 
-                                                                            params =>   ["id=[% novedad.id %]"],
-                                                                            title =>    "[% 'Editar novedad' | i18n %]"
-                                                                        ) ;
-                                    [% END %]
-                                </td>
+                                
                             </tr>
                         [% END %]
                     </tbody>
@@ -79,6 +73,7 @@
             <h2>[% 'No hay novedades' | i18n %]</h2>
         [% END %]
 </fieldset>
+<div class="form-actions">
 [% PERL %]
             print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar novedad' | i18n %]",
                     boton   => "boton_buscar",
@@ -87,3 +82,5 @@
                     title   => "[% 'Agregar novedad' | i18n %]",
                     ) ;
 [% END %]
+</div>
+<div id="mostrar_novedad" class="modal hide fade"></div>

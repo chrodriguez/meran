@@ -36,6 +36,24 @@ sub nextMember{
     return(C4::Modelo::UsrRefTipoDocumento->new());
 }
 
+
+sub conformarUsrRegularidad{
+    my ($self)=shift;
+
+    my ($estados_array_ref)  = C4::AR::Referencias::obtenerEstados();
+
+    foreach my $estado (@$estados_array_ref) {
+        my $regularidad = C4::Modelo::UsrRegularidad->new();
+        my %data_hash ={};
+
+        $data_hash{'usr_estado_id'} = $estado->getId_estado;
+        $data_hash{'usr_ref_categoria_id'} = $self->getId();
+        $data_hash{'Condicion'} = 0;
+        $regularidad->agregar(\%data_hash);
+    }    
+    
+}
+
 sub getId{
     my ($self) = shift;
     return ($self->id);    
@@ -176,20 +194,26 @@ sub setBorrowing_days{
 
 
 sub obtenerValoresCampo {
-    my ($self)=shift;
-    my ($campo, $orden)=@_;
+    my ($self)              = shift;
+    my ($campo, $orden)     = @_;
 
-    
-    my $ref_valores = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categoria_socio
-                        ( select   => [$self->meta->primary_key ,$campo],
-                          sort_by => ($orden) );
     my @array_valores;
+    my @fields  = ($campo, $orden);
+    my $v       = $self->validate_fields(\@fields);
 
-    for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
-        my $valor;
-        $valor->{"clave"}=$ref_valores->[$i]->getCategory_code;
-        $valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
-        push (@array_valores, $valor);
+    if($v){
+    
+        my $ref_valores = C4::Modelo::UsrRefCategoriaSocio::Manager->get_usr_ref_categoria_socio
+                            ( select   => [$self->meta->primary_key ,$campo],
+                              sort_by => ($orden) );
+
+
+        for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
+            my $valor;
+            $valor->{"clave"}=$ref_valores->[$i]->getCategory_code;
+            $valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
+            push (@array_valores, $valor);
+        }
     }
     
     return (scalar(@array_valores), \@array_valores);

@@ -12,6 +12,7 @@ __PACKAGE__->meta->setup(
         id2           => { type => 'integer', overflow => 'truncate', not_null => 1, length => 11 },
         rate          => { type => 'float', not_null => 0, },
         review        => { type => 'text', overflow => 'truncate' },
+        date          => { type => 'varchar', overflow => 'truncate', length => 10, not_null => 1 },
     ],
 
     primary_key_columns => [ 'nro_socio','id2' ],
@@ -38,7 +39,7 @@ sub getObjeto{
 	my ($self) = shift;
 	my ($socio,$id2) = @_;
 
-	my $objecto= C4::Modelo::CatRating->new(nro_socio => $socio, id2 => $id2);
+	my $objecto= C4::Modelo::CatRating->new(nro_socio => $socio, id2 => $id2, date => C4::Date::getCurrentTimestamp());
 	$objecto->load();
 	return $objecto;
 }
@@ -95,6 +96,20 @@ sub setReview{
     my ($review) = @_;
 
     $self->review($review);
+}
+
+
+sub getDate{
+    my ($self) = shift;
+
+    return ($self->date);
+}
+
+sub setDate{
+    my ($self) = shift;
+    my ($date) = @_;
+
+    $self->review($date);
 }
 
 1;

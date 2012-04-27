@@ -11,7 +11,7 @@ my ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
 									template_name   => "opac-checkBrowser.tmpl",
 									query           => $input,
 									type            => "opac",
-									authnotrequired => 0,
+									authnotrequired => 1,
                                     flagsrequired   => {  ui            => 'ANY', 
                                                         tipo_documento  => 'ANY', 
                                                         accion          => 'CONSULTA', 
@@ -21,7 +21,7 @@ my ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
 if($acepto_browser){
     # ya acepto en el tmpl, lo seteamos en la session
     $session->param('check_browser_allowed', '1');
-    my $url = C4::AR::Utilidades::getUrlPrefix().'/opac-main.pl?token='.$session->param('token');
+    my $url = C4::AR::Utilidades::getUrlPrefix().'/opac-main.pl';
     C4::AR::Auth::redirectTo($url); 
 }
 

@@ -55,76 +55,101 @@
 
 <fieldset id="reportes">
     <legend class="titulo_legend"> [% "Configuraci&oacute;n del servidor de mail" | i18n %] </legend>
-<form action="[% url_prefix %]/admin/global/mail_config.pl?token=[% token %]" name="form_mail_config" id="form_mail_config" method="post">
+    <form action="[% url_prefix %]/admin/global/mail_config.pl?token=[% token %]" name="form_mail_config" id="form_mail_config" method="post" class="form-horizontal">
         <input type="hidden" name="accion" id="accion" value=''>
         <input type="hidden" name="post_form" value='1'>
-    <ul>
-
-        <li class="sub_item">
-            <label for="smtp_server_sendmail">[% "Servidor SMTP Sendmail" | i18n %]</label> 
-            <input  type="checkbox" name="smtp_server_sendmail" id="smtp_server_sendmail" value='[% preferencias.smtp_server_sendmail %]' 
+        
+        <div class="control-group">
+            <label class="control-label" for="smtp_server_sendmail">[% 'Servidor SMTP Sendmail' | i18n %]: </label>
+            <div class="controls">
+                <input  type="checkbox" name="smtp_server_sendmail" id="smtp_server_sendmail" value='[% preferencias.smtp_server_sendmail %]' 
                     [% IF preferencias.smtp_server_sendmail %] checked=true [% END %]>
-        </li>
-        <li class="sub_item">
-            <label for="smtp_server">[% "Servidor SMTP" | i18n %]</label> 
-            <input type="text" name="smtp_server" id="smtp_server" value='[% preferencias.smtp_server %]'>
-        </li>
-        <li class="sub_item">
-            <label for="port_mail">[% "Port" | i18n %]</label>
-            <input type="text" name="port_mail" id="port_mail" value='[% preferencias.port_mail %]'>
-        </li>
-        <li class="sub_item">
-            <label for="username_mail">[% "Usuario" | i18n %]</label>
-            <input type="text" name="username_mail" id="username_mail" value='[% preferencias.username_mail %]' size="50">
-        </li>
-        <li class="sub_item">
-            <label for="password_mail">[% "Password" | i18n %]</label>
-            <input type="password" name="password_mail" id="password_mail" value='[% preferencias.password_mail %]'>
-        </li>
-        <li class="sub_item">
-            <label for="smtp_metodo">[% "M&eacute;todo" | i18n %]</label>
-            <select name="smtp_metodo" id="smtp_metodo">
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="smtp_server">[% 'Servidor SMTP' | i18n %]: </label>
+            <div class="controls">
+                <input type="text" name="smtp_server" id="smtp_server" value='[% preferencias.smtp_server %]'>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="port_mail">[% 'Port' | i18n %]: </label>
+            <div class="controls">
+                <input type="text" name="port_mail" id="port_mail" value='[% preferencias.port_mail %]'>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="username_mail">[% 'Usuario' | i18n %]: </label>
+            <div class="controls">
+                <input type="text" name="username_mail" id="username_mail" value='[% preferencias.username_mail %]' size="50">
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="password_mail">[% 'Password' | i18n %]: </label>
+            <div class="controls">
+                <input type="password" name="password_mail" id="password_mail" value='[% preferencias.password_mail %]'>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="smtp_metodo">[% 'M&eacute;todo' | i18n %]: </label>
+            <div class="controls">
+                <select name="smtp_metodo" id="smtp_metodo">
 <!-- TODO cuando se arme paquete debian de TLS cambiar -->
                 <option value="TLS" [% IF preferencias.smtp_metodo == 'TLS'  %]  selected="selected" [% END %] >[% "TLS" | i18n %]</option>
                 <option value="SSL" [% IF preferencias.smtp_metodo == 'SSL'  %]  selected="selected" [% END %] >[% "SSL" | i18n %]</option>
                 <option value="PLANO" [% IF preferencias.smtp_metodo == 'PLANO'  %]  selected="selected" [% END %] >[% "PLANO" | i18n %]</option>
-            </select>            
-            [% "(TLS / SSL / PLANO)" | i18n %]
-        </li>
-        <li class="sub_item">
-            <label for="mailFrom">[% "Mail From" | i18n %]</label>
-            <input type="text" name="mailFrom" id="mailFrom" value='[% preferencias.mailFrom %]' size="50">
-        </li>
-        <li class="sub_item">
-            <label for="reserveFrom">[% "Reserve From" | i18n %]</label>
-            <input type="text" name="reserveFrom" id="reserveFrom" value='[% preferencias.reserveFrom %]' size="50">
-        </li>
-        <li class="sub_item">
+            </select> 
+            [% PERL %]
+                    print C4::AR::Filtros::setHelpInput(   
+                                                    text        => "[% '(TLS / SSL / PLANO).' | i18n %]",
+                                            ) ;
+                    
+            [% END %]
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="mailFrom">[% 'Mail From' | i18n %]: </label>
+            <div class="controls">
+                <input type="text" name="mailFrom" id="mailFrom" value='[% preferencias.mailFrom %]' size="50">
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="reserveFrom">[% 'Reserve From' | i18n %]: </label>
+            <div class="controls">
+                <input type="text" name="reserveFrom" id="reserveFrom" value='[% preferencias.reserveFrom %]' size="50">
+            </div>
+        </div>
 
+        <div class="form-actions">
             [% PERL %]
                         print C4::AR::Filtros::to_Button(   text    => "[% 'Probar' | i18n %]",
-                                                            boton   => "boton_agregar",
+                                                            boton   => "btn",
                                                             onClick => "probarConfiguracion();",
                                                             title   => "[% 'se enviar&aacute; un correo a su cuenta personal' | i18n %]",
-                                                            alternClass => "botonCentrado"
+                                                            alternClass => "botonCentrado",
+                                                            inline  => "1"
                                 ) ;
             [% END %]
-        </li>
-        <li class="sub_item">
+
             [% PERL %]
                         print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
                                                             boton   => "boton_agregar",
                                                             onClick => "guardarConfiguracion();",
                                                             title   => "[% 'Guardar Cambios' | i18n %]",
-                                                            alternClass => "botonCentrado"
+                                                            alternClass => "botonCentrado",
+                                                            inline  => "1"
                                 ) ;
             [% END %]
-        </li>
+        </div>
+        
 </form>
-
-    </ul>
 </fieldset>
-
-
 
 [% INCLUDE "intranet-bottom.inc" %]

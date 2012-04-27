@@ -7,21 +7,7 @@ use base 'Rose::DB::Object';
 
 use C4::Modelo::DB::AutoBase1;
 use base qw(Rose::DB::Object::Helpers);
-# sub init_db { C4::Modelo::DB::AutoBase1->new}
-#sub init_db {
-#      if($ENV{'MOD_PERL'})
-#     {
-#         C4::AR::Debug::debug("AutoBase2 => init_db => CACHED");
-#       *init_db = sub { 
-#                 C4::Modelo::DB::AutoBase1->new_or_cached; 
-#         };
-#     }
-#     else # act "normally" when not under mod_perl
-#     {
-#         C4::AR::Debug::debug("AutoBase2 => init_db => NO CACHED");
-#      *init_db = sub { C4::Modelo::DB::AutoBase1->new };
-#     }
-#}
+
 
 sub init_db { C4::Modelo::DB::AutoBase1->new_or_cached }
 =item
@@ -349,6 +335,28 @@ sub getCamposAsArray{
     return(\@campos_sin_id);
 }
 
+sub validate_fields {
+    my ($self)  = shift;
+    my ($fields_array_ref_to_validate)  = @_;
+
+    my $result              = 0; 
+    my $fields_array_ref    = $self->getCamposAsArray();
+
+    foreach my $fv (@$fields_array_ref_to_validate){
+
+        @res = grep(/$fv/, @$fields_array_ref); 
+        if (scalar(@res) > 0) {
+            $result = 1;
+        }
+    }
+
+    if($result == 0){
+        C4::AR::Debug::debug("AutoBase2 => validate_fields => ERROR en la configuaracion del catalogo tabla => ".$self->meta->table);        
+    }
+
+    return $result;
+}
+
 
 sub getCampos{
     my ($self) = shift;
@@ -368,6 +376,12 @@ sub addNewRecord{
     }
 
     $self->save();
+    
+    #parche loco
+    
+    if ($self->meta->table eq "usr_ref_categoria_socio"){
+    	$self->conformarUsrRegularidad();
+    }
     
     return $self;
 

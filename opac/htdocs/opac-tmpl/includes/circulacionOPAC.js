@@ -6,27 +6,36 @@
 /*
 * Funcion Ajax que hace una reserva
 */
+var BUTTON_ID = 0;
+
+function showReservar(id){
+	$('#'+id).modal();
+}
+
+
+function hideReservar(id){
+	$('#modal_reservar_'+id).modal('hide');
+}
+
 function reservar(id1, id2){
 
-    jConfirm(ESTA_SEGURO_QUE_DESEA_RESERVAR,OPAC_ALERT_TITLE, function(confirmStatus){
-        if (confirmStatus){
-            objAH               = new AjaxHelper(updateInfoReserva);
-            objAH.debug         = true;
-            objAH.showOverlay   = true;
-            //para busquedas combinables
-            objAH.url           = URL_PREFIX+'/opac-reservar.pl';
-            objAH.id1           = id1;
-            objAH.id2           = id2;
-            objAH.sendToServer();
-        }
-    });
+	hideReservar(id2);
+	objAH               = new AjaxHelper(updateInfoReserva);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    //para busquedas combinables
+    objAH.url           = URL_PREFIX+'/opac-reservar.pl';
+    objAH.id1           = id1;
+    objAH.id2           = id2;
+    objAH.sendToServer();
+    
+        
 }
 
 /*
 * Funcion que muestra la informacion de las reservas
 */
 function updateInfoReserva(responseText){
-  
     var Messages = JSONstring.toObject(responseText);
     setMessages(Messages);
     
@@ -40,7 +49,7 @@ function updateInfoReserva(responseText){
 function cancelarReserva(id_reserva){
 
 
-    jConfirm(ESTA_SEGURO_QUE_DESEA_CANCELAR_RESERVA,OPAC_ALERT_TITLE, function(confirmStatus){
+    bootbox.confirm(ESTA_SEGURO_QUE_DESEA_CANCELAR_RESERVA,function(confirmStatus){
         if (confirmStatus){
         
             objAH               = new AjaxHelper(updateInfoCancelarReserva);
@@ -49,8 +58,8 @@ function cancelarReserva(id_reserva){
             objAH.url           = URL_PREFIX+'/reservasDB.pl';
             objAH.id_reserva    = id_reserva;
             objAH.accion        = 'CANCELAR_RESERVA';
-            
             objAH.sendToServer();
+            
         }
     });
 }
@@ -171,7 +180,6 @@ function infoReservas(){
     objAH.debug     = true;
     objAH.url       = URL_PREFIX+'/opac-info_reservas.pl';
     objAH.action    = 'detalle_espera';
-    objAH.bubble    = 1;
     objAH.sendToServer();
 }
 
@@ -191,37 +199,44 @@ function updateInfoSanciones(responseText){
 }
 
 
-function addFavorite(id1){
+function addFavorite(id1,button_id){
     objAH               = new AjaxHelper(updateAddFavorite);
-    objAH.debug         = true;
+    objAH.debug         = false;
     objAH.showOverlay   = true;
     objAH.url           = URL_PREFIX+'/opac-favoritosDB.pl';
     objAH.action        = 'add_favorite';
     objAH.id1           = id1;
     objAH.sendToServer();
+    BUTTON_ID				= button_id;
+    
 }
 
 function updateAddFavorite(responseText){
-    if (responseText == 1)
-        jAlert(FAVORITE_ADDED,CATALOGO_TITLE);
-    else
+    if (responseText == 0)
         jAlert(FAVORITE_ADDED_ERROR,CATALOGO_TITLE);
+    else
+        $('#'+BUTTON_ID).html(responseText);
 }
 
 
-function deleteFavorite(id1){
+function deleteFavorite(id1,button_id,from_busqueda){
     objAH                   = new AjaxHelper(updateDeleteFavorite);
     objAH.debug             = true;
-    objAH.showOverlay       = true;
+    objAH.showOverlay       = false;
     objAH.url               = URL_PREFIX+'/opac-favoritosDB.pl';
     objAH.action            = 'delete_favorite';
     objAH.id1               = id1;
+    if (from_busqueda)
+        objAH.from_busqueda= 1;
+
     objAH.sendToServer();
+    BUTTON_ID				= button_id;
 }
 
 function updateDeleteFavorite(responseText){
-    if (responseText == 1)
-        jAlert(FAVORITE_DELETED,CATALOGO_TITLE);
+    if (responseText == 0)
+        jAlert(FAVORITE_DELETED_ERROR);
     else
-        jAlert(FAVORITE_DELETED_ERROR,CATALOGO_TITLE);
+        $('#'+BUTTON_ID).html(responseText);
+
 }

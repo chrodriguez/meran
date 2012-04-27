@@ -16,5 +16,7 @@ function abrirVentanaHelperMARC(){
 
 function updateAbrirVentanaHelperMARC(responseText){
     $('#ayuda_marc_content').html(responseText);
-    $('#windowHelp').dialog({ width: 510 });
+//     $('#windowHelp').dialog({ width: 510 });
+    
+    $("#ayuda_marc_content").modal();    
 }

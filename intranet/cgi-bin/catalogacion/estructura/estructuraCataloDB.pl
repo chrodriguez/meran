@@ -3,8 +3,8 @@
 
 use strict;
 use CGI;
-use C4::AR::Nivel1 ;
-use C4::AR::Nivel2 ;
+use C4::AR::Nivel1;
+use C4::AR::Nivel2;
 use C4::AR::Auth;
 use C4::AR::Utilidades;
 use C4::AR::Catalogacion;
@@ -39,7 +39,7 @@ if($tipoAccion eq "MOSTRAR_CAMPOS"){
 			        });
 
 
-C4::AR::Debug::debug("getEstructuraCatalogacionFromDBCompleta => itemType FROM PL => ".$itemType);
+# C4::AR::Debug::debug("getEstructuraCatalogacionFromDBCompleta => itemType FROM PL => ".$itemType);
 # TODO en el template esta haciendo una consulta por cada fila
     my ($cant, $catalogaciones_array_ref) = C4::AR::Catalogacion::getEstructuraCatalogacionFromDBCompleta($nivel, $itemType, $orden);
     
@@ -548,13 +548,15 @@ elsif($tipoAccion eq "GUARDAR_NIVEL_1"){
                                                     entorno => 'datos_nivel1'}, 
                                                 'intranet'
                                     );
-    $obj->{'responsable'}=$user;
+
+
+    $obj->{'responsable'}           = $user;
 	#Se guarda informacion del NIVEL 1
-    my ($Message_arrayref, $id1) = C4::AR::Nivel1::t_guardarNivel1($obj);
+    my ($Message_arrayref, $id1)    = C4::AR::Nivel1::t_guardarNivel1($obj);
     
     my %info;
-    $info{'Message_arrayref'} = $Message_arrayref;
-    $info{'id1'} = $id1;
+    $info{'Message_arrayref'}       = $Message_arrayref;
+    $info{'id1'}                    = $id1;
 
     C4::AR::Auth::print_header($session);
     print to_json \%info;
@@ -775,7 +777,6 @@ elsif($tipoAccion eq "ELIMINAR_NIVEL"){
 }
 #=============================================================FIN ABM Catalogo===============================================================
 elsif($tipoAccion eq "MOSTRAR_DETALLE_NIVEL3"){
-
 	 my ($template, $session, $t_params)  = get_template_and_user({
 							template_name   => ('catalogacion/estructura/ejemplaresDelGrupo.tmpl'),
 							query           => $input,

@@ -12,47 +12,51 @@
         }
 </script>
 
-<div class="titulos">Reglas para sancionar</div>
 
-<div class="divSancionesEdicionReglas">
-	<table border=0 cellspacing=0 cellpadding=0 align='center' width="80%">
-                <tr class="titulo_tabla_resultado">	
-                        <td>[% "D&iacute;as de demora" | i18n %]</td>
-                        <td>[% "D&iacute;as de sanci&oacute;n" | i18n %]</td>
-                        <td>[% "Eliminar" | i18n %]</td>
-                </tr>
-               [% FOREACH regla IN REGLAS_SANCIONES %]
-                <tr valign=middle align='center'>
-                <td>[% regla.getDias_demora %]</td>
-                <td>[% regla.getDias_sancion %]</td>
-                <td>
-                    [% PERL %]
-                            print C4::AR::Filtros::to_Icon(  
-                                                                boton   => "icon_borrar",
-                                                                onClick => "eliminarReglaSancion([% regla.getRegla_sancion %]);",
-                                                                title   => "[% 'Eliminar Regla' | i18n %]",
-                                    ) ;
-                    [% END %]
-               </td>
-               </tr>
-               [% END %]
-                <tr class="titulo_tabla_resultado">
-                        <td>[% "D&iacute;as de demora" | i18n %]</td>
-                        <td>[% "D&iacute;as de sanci&oacute;n" | i18n %]</td>
-                        <td>[% "Agregar" | i18n %]</td>
-                </tr>
-		        <tr>
-                <td><input type="text" id="dias_demora" name="dias_demora"></td>
-                <td><input type="text" id="dias_sancion" name="dias_sancion"></td>
-                <td>
-                    [% PERL %]
-                            print C4::AR::Filtros::to_Icon(  
-                                                                boton   => "icon_anadir",
-                                                                onClick => "agregarReglaSancion();",
-                                                                title   => "[% 'Agregar Regla' | i18n %]",
-                                    ) ;
-                    [% END %]
-               </td>
-		        </tr>
-	  </table>
+<div class="modal-header">
+    <a href="#" class="close" data-dismiss="modal">×</a>
+    <h2>Reglas para sancionar</h2>
+</div>
+<div class="modal-body">
+      [% PERL %]
+          print C4::AR::Filtros::tableHeader(   
+                                                  id              => "tablaResult",
+                                                  class           => "",
+                                                  columns         => ['[% "D&iacute;as de demora" | i18n %]','[% "D&iacute;as de sanci&oacute;n" | i18n %]',
+                                                                        '[% "Eliminar"|i18n %]',
+                                                                     ]
+                                                  
+                      ) ;
+      [% END %]
+      <tbody>
+      [% FOREACH regla IN REGLAS_SANCIONES %]
+           <tr>
+            <td>[% regla.getDias_demora %]</td>
+            <td>[% regla.getDias_sancion %]</td>
+            <td>
+                [% PERL %]
+                        print C4::AR::Filtros::action_button(  
+                                                            button   => "btn btn-danger",
+                                                            action => "eliminarReglaSancion([% regla.getRegla_sancion %]);",
+                                                            icon   => "icon-white icon-remove",
+                                ) ;
+                [% END %]
+           </td>
+          </tr>
+      [% END %]
+       </tbody>
+  </table>
+  
+          <div class="well form-inline">
+            <input type="text" class="input-medium" id="dias_demora" name="dias_demora" placeholder="[% 'D&iacute;as de demora' | i18n %]">
+            <input type="text" class="input-medium" id="dias_sancion" name="dias_sancion" placeholder="[% 'D&iacute;as de sanci&oacute;n' | i18n %]">
+             [% PERL %]
+                     print C4::AR::Filtros::action_button(  
+                                                         button   => "btn btn-primary",
+                                                         action => "agregarReglaSancion();",
+                                                         title   => "[% 'Agregar Regla' | i18n %]",
+                             ) ;
+             [% END %]
+          </div>
+  
 </div>

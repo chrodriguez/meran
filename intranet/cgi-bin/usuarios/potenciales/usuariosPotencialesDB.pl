@@ -32,7 +32,7 @@ if($obj->{'tipoAccion'} eq "HABILITAR_PERSON"){
                                             "intranet"
                                 );
 
-	($Messages_arrayref)= &C4::AR::Usuarios::habilitarPersona($id_personas_array_ref);
+	($Messages_arrayref)= C4::AR::Usuarios::habilitarPersona($id_personas_array_ref);
 
 	my $infoOperacionJSON=to_json $Messages_arrayref;
 

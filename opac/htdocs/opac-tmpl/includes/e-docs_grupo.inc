@@ -2,23 +2,25 @@
 
 [% IF pref_e_documents %]
 	[% IF cant_docs > 0 %]
-	            <h1 class="orange">[% "Documentos electr&oacute;nicos" | i18n %]</h1>		    
-	            <div id="lista_docs_[% id2 %]" class="lista_docs">
-			        <ul>
-			               [% FOREACH file IN lista_docs %] 
-			                    <li class="item">
-			                           [% PERL %]
-			                               print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(file.getTitle) %]",
-			                                                               url =>      "getDocument.pl", 
-			                                                               params =>   ["id=[% file.getId %]"],
-			                                                               title =>    "[% HTML.escape(file.getTitle) %]"
-			                                                           ) ;
-			                           [% END %]
-			                        <img style="height: 25px; width: 25px; border: none; float:left;" src='[% temas %]/[% user_theme_intra %]/imagenes/iconos/[% file.getIconType %].png' />
-			                    </li>
-			            [% END %]
-			        </ul>
-			    </div>
+	            <div class="alert ">
+		            <h4>[% "La edici&oacute;n contiene los siguientes documentos electr&oacute;nicos para descargar" | i18n %]:</h4>		    
+		            <div id="lista_docs_[% id2 %]" class="">
+				        <dl>
+				               [% FOREACH file IN lista_docs %] 
+									<dt>
+				                           [% PERL %]
+				                               print C4::AR::Filtros::link_to( text =>     " [% HTML.escape(file.getTitle) %]",
+				                                                               url =>      "getDocument.pl", 
+				                                                               params =>   ["id=[% file.getId %]"],
+				                                                               title =>    "[% HTML.escape(file.getTitle) %]",
+				                                                               icon => "icon-file",
+				                                                           ) ;
+				                           [% END %]
+		                           </dt>
+				            [% END %]
+				        </dl>
+				    </div>
+				</div>
 	[% END %]	
 [% END %]   
 		

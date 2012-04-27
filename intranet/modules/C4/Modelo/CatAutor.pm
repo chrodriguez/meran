@@ -144,21 +144,28 @@ sub nextMember{
 }
 
 sub obtenerValoresCampo {
-	my ($self) = shift;
-    my ($campo, $orden) = @_;
+	my ($self)              = shift;
+    my ($campo, $orden)     = @_;
 
-    my $ref_valores = C4::Modelo::CatAutor::Manager->get_cat_autor
-						( select   => [$campo],
-						  sort_by => ($orden) );
+
     my @array_valores;
+    my @fields  = ($campo, $orden);
+    my $v       = $self->validate_fields(\@fields);
 
-    for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
-		my $valor;
-		$valor->{"clave"}=$ref_valores->[$i]->getId;
-		$valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
-        push (@array_valores, $valor);
+    if($v){
+
+        my $ref_valores = C4::Modelo::CatAutor::Manager->get_cat_autor
+                            ( select   => [$campo],
+                              sort_by => ($orden) );
+
+        for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
+            my $valor;
+            $valor->{"clave"}=$ref_valores->[$i]->getId;
+            $valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
+            push (@array_valores, $valor);
+        }
     }
-	
+      
     return (scalar(@array_valores), \@array_valores);
 }
 
@@ -202,6 +209,7 @@ sub getAll{
         my @filtros_or;
         push(@filtros_or, (nombre => {like => $filtro.'%'}) );
         push(@filtros_or, (apellido => {like => $filtro.'%'}) );
+        push(@filtros_or, (completo => {like => $filtro.'%'}) );
         push(@filtros, (or => \@filtros_or) );
     }
     my $ref_valores;
@@ -219,12 +227,13 @@ sub getAll{
     my $ref_cant = C4::Modelo::CatAutor::Manager->get_cat_autor_count(query => \@filtros,);
     my $self_nombre = $self->getNombre;
     my $self_apellido = $self->getApellido;
+    my $self_completo = $self->getCompleto;
 
     my $match = 0;
     if ($matchig_or_not){
         my @matched_array;
         foreach my $autor (@$ref_valores){
-          $match = ((distance($self_nombre,$autor->getNombre)<=1) || (distance($self_apellido,$autor->getApellido)<=1));
+          $match = ((distance($self_nombre,$autor->getNombre)<=1) || (distance($self_apellido,$autor->getApellido)<=1) || (distance($self_completo,$autor->getCompleto)<=1));
           if ($match){
             push (@matched_array,$autor);
           }

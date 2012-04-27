@@ -301,6 +301,7 @@ sub getNivel3FromId3{
 #                                                                     select          => ['cat_registro_marc_n1.*']    
 #                                                                     require_objects => ['ref_disponibilidad', 'ref_estado']
                                                                 );
+    C4::AR::Debug::debug(scalar(@$nivel3_array_ref));
 
     if( scalar(@$nivel3_array_ref) > 0){
         return ($nivel3_array_ref->[0]);
@@ -411,7 +412,14 @@ sub detalleNivel3{
     if($nivel2_object){
 
         $hash_nivel2{'id2'}                     = $id2;
-        $hash_nivel2{'tipo_documento'}          = $nivel2_object->getTipoDocumentoObject->getNombre();
+        
+        eval{
+            $hash_nivel2{'tipo_documento'}          = $nivel2_object->getTipoDocumentoObject->getNombre();
+        };
+        if (@$){
+            $hash_nivel2{'tipo_documento'}          = C4::AR::Filtros::i18n("SIN DEFINIR");
+        }
+        
         $hash_nivel2{'nivel2_array'}            = $nivel2_object->toMARC_Intra; #arreglo de los campos fijos de Nivel 2 mapeado a MARC
 
         $hash_nivel2{'nivel2_template'}         = $nivel2_object->getTemplate();
@@ -436,18 +444,22 @@ sub detalleNivel3{
         $hash_nivel2{'lista_docs'}              = $e_docs;
         $hash_nivel2{'cant_docs'}               = $cant_docs;
 
-        if($nivel2_object->getTemplate() eq "ANA"){
-        #soy una ANALITICA tengo q obtener el ID2 del campo 773, a para obtener el ID1, link al registro padre
-#             C4::AR::Debug::debug("Nivel3 => detalleNivel3 => getAnalitica => ".$nivel2_object->getAnalitica());
-            my $nivel2_object_padre             = C4::AR::Nivel2::getNivel2FromId2($nivel2_object->getAnalitica(),$db);
+        $hash_nivel2{'show_action'}             = 1; #muestra la accion agregar analitica
+        $hash_nivel2{'enable_nivel3'}           = $nivel2_object->getTipoDocumentoObject->enableNivel3();
 
-            if($nivel2_object_padre){
-                $hash_nivel2{'nivel1_padre'}        = $nivel2_object_padre->getId1();
-            }
+# FIXED falta levantar del tipo de ejemplar
+        if($nivel2_object->getTemplate() eq "ANA"){
+            $hash_nivel2{'nivel1_padre'}        = $nivel2_object->getIdN1Padre();
+            $hash_nivel2{'nivel1_titulo_padre'} = ($nivel2_object->getPadre())?$nivel2_object->getPadre()->getTitulo():"";
+            $hash_nivel2{'nivel1_isbn_padre'}   = $nivel2_object->getISBN();
+            $hash_nivel2{'show_action'}         = 0;
         }
 
+
         #otengo las analiticas
-        my $cat_reg_marc_n2_analiticas = $nivel2_object->getAnaliticas();
+        my $cat_reg_marc_n2_analiticas          = $nivel2_object->getAnaliticas();
+
+        $hash_nivel2{'tiene_analiticas'}        = ($cat_reg_marc_n2_analiticas)?scalar(@$cat_reg_marc_n2_analiticas):$cat_reg_marc_n2_analiticas;
 
         my @nivel1_analitica_array;
         my @nivel2_analitica_array;
@@ -495,14 +507,14 @@ sub migrarAnaliticas{
   
         if($cat_reg_marc_n2_analitica_id ne ""){
 
-            C4::AR::Debug::debug("ANALITICA? ============= ".$cat_reg_marc_n2_analitica_id);
+#             C4::AR::Debug::debug("ANALITICA? ============= ".$cat_reg_marc_n2_analitica_id);
 
 
             my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new();
             $cat_registro_n2_analitica->setId2Padre($cat_reg_marc_n2_analitica_id);
             $cat_registro_n2_analitica->setId2Hijo($nivel2_object->getId2());
 
-            $cat_registro_n2_analitica->save();
+#             $cat_registro_n2_analitica->save();
         }
     }
 }
@@ -552,39 +564,50 @@ sub detalleCompletoINTRA {
 
     my @nivel2;
 
+#    FIXME: esto es cuando pagina con el plugin, que no esta andando
+#    my $cantidad_total = scalar(@$nivel2_array_ref);
+#    my $inicio = (($page_number) * $cant_grupos);
+#    my $cantidad = $inicio + $cant_grupos;  
+    
     my $cantidad_total = scalar(@$nivel2_array_ref);
-    my $inicio = (($page_number) * $cant_grupos);
-    my $cantidad = $inicio + $cant_grupos;  
+    my $inicio = 0;
+    my $cantidad = $cantidad_total;  
     
-    
-    for(my $i=$inicio;$i<$cantidad;$i++){
+    if($cantidad_total != 0){
+        for(my $i=$inicio;$i<$cantidad;$i++){
 
-        my $new_id2 = 0;
-        eval {
-            $new_id2 = $nivel2_array_ref->[$i]->getId2;
-        };
-    #eval{
-        my ($hash_nivel2) = detalleNivel3($new_id2,$nivel1->db);
+            my $new_id2 = 0;
+            eval {
+                $new_id2 = $nivel2_array_ref->[$i]->getId2;
+            };
+
+        #eval{
+            my ($hash_nivel2) = detalleNivel3($new_id2,$nivel1->db);
+                
+            #Para ver la portada en el detalle
+            $hash_nivel2->{'portada_registro'}          = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'S');
+            $hash_nivel2->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'M');
+            $hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'L');
+            $hash_nivel2->{'edicion'}                   = $nivel2_array_ref->[$i]->getEdicion;
+            #para los nav-tabs
+            $hash_nivel2->{'año_publicacion'}           = $nivel2_array_ref->[$i]->getAnio_publicacion;
+            $hash_nivel2->{'volumen'}                   = $nivel2_array_ref->[$i]->getVolumen;
             
-        #Para ver la portada en el detalle
-        $hash_nivel2->{'portada_registro'}          = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'S');
-        $hash_nivel2->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'M');
-        $hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'L');
+            #Para el google book preview
+            $hash_nivel2->{'isbn'}        		        = $nivel2_array_ref->[$i]->getISBN;
+            if(($nivel2_array_ref->[$i]->getISSN)&&(!$t_params->{'issn'})){
+            #Se supone que no cambian dentro de la misma publicación seriada, se toma solo el primero
+                $t_params->{'issn'}        				= $nivel2_array_ref->[$i]->getISSN;
+            }
+                
+            push(@nivel2, $hash_nivel2);
+        #};
+            
+            if ($i >= ($cantidad_total-1)){
+                last;
+            }
         
-        #Para el google book preview
-        $hash_nivel2->{'isbn'}        		        = $nivel2_array_ref->[$i]->getISBN;
-        if(($nivel2_array_ref->[$i]->getISSN)&&(!$t_params->{'issn'})){
-        #Se supone que no cambian dentro de la misma publicación seriada, se toma solo el primero
-            $t_params->{'issn'}        				= $nivel2_array_ref->[$i]->getISSN;
         }
-			
-        push(@nivel2, $hash_nivel2);
-    #};
-        
-        if ($i >= ($cantidad_total-1)){
-            last;
-        }
-    
     }
     
     #Es una Revista? Armo el estado de colección
@@ -598,6 +621,8 @@ sub detalleCompletoINTRA {
     $t_params->{'nivel1'}           = $nivel1->toMARC_Intra;
     $t_params->{'nivel1_template'}  = $nivel1->getTemplate();
     $t_params->{'id1'}              = $id1;
+    $t_params->{'titulo'}           = $nivel1->getTitulo();    
+    $t_params->{'autor'}            = $nivel1->getAutor();
     $t_params->{'cantItemN1'}       = C4::AR::Nivel3::cantNiveles3FromId1($id1,$nivel1->db);
     $t_params->{'nivel2'}           = \@nivel2;
     #se ferifica si la preferencia "circularDesdeDetalleDelRegistro" esta seteada
@@ -616,22 +641,22 @@ sub detalleDisponibilidadNivel3{
     $db = $db || C4::Modelo::CatRegistroMarcN3->new->db;
     
     #recupero todos los nivel3 segun el id2 pasado por parametro
-    my $nivel3_array_ref                = C4::AR::Nivel3::getNivel3FromId2($id2,$db);
+    my $nivel3_array_ref                        = C4::AR::Nivel3::getNivel3FromId2($id2,$db);
     my @result;
     my %hash_nivel2;
-    my $i                               = 0;
-    my $cantDisponibles                 = 0;
+    my $i                                       = 0;
+    my $cantDisponibles                         = 0;
     my %infoNivel3;
     my $esParaSala;
-    $infoNivel3{'cantParaSala'}         = 0;
-    $infoNivel3{'cantParaPrestamo'}     = 0;
-    $infoNivel3{'cantParaSalaActual'}         = 0;
-    $infoNivel3{'cantParaPrestamoActual'}     = 0;
-    $infoNivel3{'disponibles'}          = 0;
-    $infoNivel3{'cantPrestados'}        = C4::AR::Nivel2::getCantPrestados($id2,$db);
-    $infoNivel3{'cantReservas'}         = C4::AR::Reservas::cantReservasPorGrupo($id2,$db);
-    $infoNivel3{'cantReservasEnEspera'} = C4::AR::Reservas::cantReservasPorGrupoEnEspera($id2,$db);
-    $infoNivel3{'cantReservasAsignadas'}= C4::AR::Reservas::cantReservasPorGrupoAsignadas($id2,$db);
+    $infoNivel3{'cantParaSala'}                 = 0;
+    $infoNivel3{'cantParaPrestamo'}             = 0;
+    $infoNivel3{'cantParaSalaActual'}           = 0;
+    $infoNivel3{'cantParaPrestamoActual'}       = 0;
+    $infoNivel3{'disponibles'}                  = 0;
+    $infoNivel3{'cantPrestados'}                = C4::AR::Nivel2::getCantPrestados($id2,$db);
+    $infoNivel3{'cantReservas'}                 = C4::AR::Reservas::cantReservasPorGrupo($id2,$db);
+    $infoNivel3{'cantReservasEnEspera'}         = C4::AR::Reservas::cantReservasPorGrupoEnEspera($id2,$db);
+    $infoNivel3{'cantReservasAsignadas'}        = C4::AR::Reservas::cantReservasPorGrupoAsignadas($id2,$db);
 
     for(my $i=0;$i<scalar(@$nivel3_array_ref);$i++){
         my %hash_nivel3;
@@ -645,7 +670,7 @@ sub detalleDisponibilidadNivel3{
         $hash_nivel3{'nivel3_obj'}          = $nivel3_array_ref->[$i]; 
         $hash_nivel3{'id3'}                 = $nivel3_array_ref->[$i]->getId3;
         $hash_nivel3{'estaPrestado'}        = $nivel3_array_ref->[$i]->estaPrestado;
-        $hash_nivel3{'estaReservado'}        = $nivel3_array_ref->[$i]->estaReservado;
+        $hash_nivel3{'estaReservado'}       = $nivel3_array_ref->[$i]->estaReservado;
         $hash_nivel3{'id_ui_poseedora'}     = $nivel3_array_ref->[$i]->getId_ui_poseedora();
         $hash_nivel3{'id_ui_origen'}        = $nivel3_array_ref->[$i]->getId_ui_origen();
         $esParaSala                         = $nivel3_array_ref->[$i]->esParaSala();
@@ -675,7 +700,7 @@ sub detalleDisponibilidadNivel3{
                     $infoNivel3{'cantParaPrestamo'}++;
 
             unless($hash_nivel3{'estaPrestado'}||$hash_nivel3{'estaReservado'}){
-            $infoNivel3{'cantParaPrestamoActual'}++;
+                $infoNivel3{'cantParaPrestamoActual'}++;
             }
                 }elsif($esParaSala){
                     #es PARA SALA
@@ -761,8 +786,10 @@ sub detalleCompletoOPAC{
     my $nivel1= C4::AR::Nivel1::getNivel1FromId1OPAC($id1);
     my $config_visualizacion= C4::AR::Preferencias::getConfigVisualizacionOPAC();
     #recupero todos los nivel2 segun el id1 pasado por parametro
-    my $page_number = $t_params->{'page'} || 0;
-    my $cant_grupos = C4::Context->config("cant_grupos_per_query") || 5;
+
+# YA NO SE USA MAS LA PAGINACION ON-DEMAND POR LOS ANCLAS
+#    my $page_number = $t_params->{'page'} || 0;
+#    my $cant_grupos = C4::Context->config("cant_grupos_per_query") || 5;
 
     my $id2 =  $t_params->{'id2'} || 0;
     my $nivel2_array_ref;
@@ -776,8 +803,8 @@ sub detalleCompletoOPAC{
     my @nivel2;
 
     my $cantidad_total = scalar(@$nivel2_array_ref);
-    my $inicio = (($page_number) * $cant_grupos);
-    my $cantidad = $inicio + $cant_grupos;  
+    my $inicio = 0;
+    my $cantidad = $cantidad_total;  
     
     
     for(my $i=$inicio;$i<$cantidad;$i++){
@@ -785,9 +812,13 @@ sub detalleCompletoOPAC{
             my $hash_nivel2;
             $nivel2_array_ref->[$i]->load();
             $hash_nivel2->{'id2'}                       = $nivel2_array_ref->[$i]->getId2;
+            $hash_nivel2->{'edicion'}                   = $nivel2_array_ref->[$i]->getEdicion;
             $hash_nivel2->{'tipo_documento'}            = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getNombre();
             $hash_nivel2->{'disponible'}                = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getDisponible();
             $hash_nivel2->{'isbn'}        		        = $nivel2_array_ref->[$i]->getISBN;
+            #para los nav-tabs
+            $hash_nivel2->{'año_publicacion'}           = $nivel2_array_ref->[$i]->getAnio_publicacion;
+            $hash_nivel2->{'volumen'}                   = $nivel2_array_ref->[$i]->getVolumen;
             if(($nivel2_array_ref->[$i]->getISSN)&&(!$t_params->{'issn'})){
 			#Se supone que no cambian dentro de la misma publicación seriada, se toma solo el primero
 				$t_params->{'issn'}        				= $nivel2_array_ref->[$i]->getISSN;
@@ -817,17 +848,22 @@ sub detalleCompletoOPAC{
             $hash_nivel2->{'cat_ref_tipo_nivel3_name'}  = C4::AR::Referencias::translateTipoNivel3($hash_nivel2->{'cat_ref_tipo_nivel3'});
             $hash_nivel2->{'rating'}                    = C4::AR::Nivel2::getRating($hash_nivel2->{'id2'},$nivel1->db);
             $hash_nivel2->{'cant_reviews'}              = C4::AR::Nivel2::getCantReviews($hash_nivel2->{'id2'}, $nivel1->db);
+            $hash_nivel2->{'nivel1_obj'}                = $nivel1;
+            $hash_nivel2->{'nivel2_obj'}                = $nivel2_array_ref;
 
             my ($cant_docs,$e_docs)                     = getListaDeDocs($hash_nivel2->{'id2'});  
             
             $hash_nivel2->{'lista_docs'}                = $e_docs;
             $hash_nivel2->{'cant_docs'}                 = $cant_docs;
 
+            #cosas si es revista
+            $hash_nivel2->{'anio_revista'}              = $nivel2_array_ref->[$i]->getAnioRevista ? $nivel2_array_ref->[$i]->getAnioRevista : '#';
+            $hash_nivel2->{'volumen_revista'}           = $nivel2_array_ref->[$i]->getVolumenRevista ? $nivel2_array_ref->[$i]->getVolumenRevista : '#';
+            $hash_nivel2->{'numero_revista'}            = $nivel2_array_ref->[$i]->getNumeroRevista ? $nivel2_array_ref->[$i]->getNumeroRevista : '#';
+            
+            
             push(@nivel2, $hash_nivel2);
         };
-        if ($i >= ($cantidad_total-1)){
-            last;
-        }
     }
 
     #Es una Revista? Armo el estado de colección
@@ -835,7 +871,10 @@ sub detalleCompletoOPAC{
         my ($cant_revistas ,$estadoDeColeccion) = C4::AR::Busquedas::obtenerEstadoDeColeccion($id1, $nivel1->getTemplate(), "INTRA");
         if($cant_revistas > 0){
             $t_params->{'estadoDeColeccion'}  = $estadoDeColeccion;
+        }else{
+        	$t_params->{'estadoDeColeccion'}  = 0;
         }
+        
     }
     
     $t_params->{'nivel1'}   = $nivel1->toMARC_Opac,

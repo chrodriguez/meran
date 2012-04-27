@@ -11,7 +11,6 @@
 <script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox.js"></script>
 <script type="text/javascript" src="/includes/jquery/jquery.jPrintElement.js"></script>
 
-[% INCLUDE "WindowHelper.inc" %] 
 [% INCLUDE "ChangePasswordHelper.inc"  %]
 
 <script type="text/javascript">
@@ -54,7 +53,7 @@ function changePageSanciones(ini){
 function mostrarHistorialDePrestamos(){
 	objAHPrestamos               = new AjaxHelper(updateMostrarHistorialDePrestamos);
 	objAHPrestamos.debug         = true;
-    objAHPrestamos.cache         = true;
+    objAHPrestamos.cache         = false;
     objAHPrestamos.showOverlay   = true;
 	objAHPrestamos.url           = URL_PREFIX+'/usuarios/reales/historialPrestamos.pl';
 	objAHPrestamos.nro_socio     = USUARIO.ID;
@@ -71,7 +70,7 @@ function updateMostrarHistorialDePrestamos(responseText){
 function mostrarHistorialDeReservas(){
     objAHReservas               = new AjaxHelper(updateMostrarHistorialDeReservas);
     objAHReservas.debug         = true;
-    objAHReservas.cache         = true;
+    objAHReservas.cache         = false;
     objAHReservas.showOverlay   = true;
     objAHReservas.url           = URL_PREFIX+'/usuarios/reales/historialReservas.pl';
     objAHReservas.nro_socio     = USUARIO.ID;
@@ -81,7 +80,6 @@ function mostrarHistorialDeReservas(){
 
 function updateMostrarHistorialDeReservas(responseText){
     $('#historialReservas').html(responseText);
-    zebra('tablaHistorialReservas');
     $.scrollTo('#historialReseravs');
 }
 
@@ -92,7 +90,7 @@ function updateMostrarHistorialDeReservas(responseText){
 function mostrarHistorialDeSanciones(){
     objAHSanciones               = new AjaxHelper(updateMostrarHistorialDeSanciones);
     objAHSanciones.debug         = true;
-    objAHSanciones.cache         = true;
+    objAHSanciones.cache         = false;
     objAHSanciones.showOverlay   = true;
     objAHSanciones.url           = URL_PREFIX+'/usuarios/reales/historialSanciones.pl';
     objAHSanciones.nro_socio     = USUARIO.ID;
@@ -102,7 +100,6 @@ function mostrarHistorialDeSanciones(){
 
 function updateMostrarHistorialDeSanciones(responseText){
     $('#historialSanciones').html(responseText);
-    zebra('tablaHistorialSanciones');
     $.scrollTo('#historialSanciones');
 }
 
@@ -220,14 +217,7 @@ function updatePrestamosInterBibliotecarios(responseText){
         return(0);
 
     $('#basic-modal-content').html(responseText);
-    $('#basic-modal-content').modal({   containerCss:{
-            backgroundColor:"#fff",
-    //         borderColor:"#0063dc",
-            height:420,
-            padding:0,
-            width:650
-        },
-    });
+    $('#basic-modal-content').modal();
 }
 
 
@@ -324,25 +314,28 @@ $(document).ready(function(){
     USUARIO.ID      = '[% socio_modificar.getNro_socio %]';
 	detalleUsuario();
 
-//     $('#fancybox_ticket').modal({   containerCss:{
-//             backgroundColor:"#fff",
-//     //         borderColor:"#0063dc",
-//             height:420,
-//             padding:0,
-//             width:650
-//         },
-//     );
+    
+    $('#historico_prestamos_usuario').on('show', function () {
+        mostrarHistorialDePrestamos();
+    })
 
-    makeToggle('toggle_container_block','trigger1',mostrarHistorialDePrestamos, 'historialPrestamos',true);
-    makeToggle('toggle_container_block','trigger2',mostrarHistorialDeSanciones, 'historialSanciones',true);
-    makeToggle('toggle_container_block','trigger3',mostrarHistorialDeReservas, 'historialReservas',true);
+
+    $('#historico_reservas_usuario').on('show', function () {
+    	mostrarHistorialDeReservas();
+    })
+    
+
+    $('#historico_sanciones_usuario').on('show', function () {
+    	mostrarHistorialDeSanciones();
+    })
+
 });
 
 </script>
 
     <div id="confirmar_div"></div>
 
-<div id="resultBusqueda">
+    <div id="resultBusqueda">
 	<!-- 	DETALLE USUARIO -->
 	<div id="detalleUsuario"></div>
 		
@@ -355,35 +348,46 @@ $(document).ready(function(){
 	<!-- DETALLE DE SANCIONES -->
 	<div id="sanciones"></div>
 
-    <div>
-        <fieldset>
-            <legend class="titulo_legend_resaltado trigger1 click titulo_legend" title='[% "click para acceder al Historial de Pr&eacute;stamos" | i18n %]'>
-                            [% "Historial de Pr&eacute;stamos" | i18n %]
-            </legend>
-	        <!-- DETALLE DEL HISTORICO DE PRESTAMOS DEL USUARIO -->
-	        <div id="historialPrestamos" class="toggle_container_block" style="display:none"></div>
-        </fieldset>
+
+    <div class="accordion" id="historico_prestamos_usuario">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#historico_prestamos_usuario" href="#prestamos_div">[% "Historial de Pr&eacute;stamos" | i18n %]</a>
+            </div>
+             <div id="prestamos_div" class="accordion-body collapse">
+                 <div class="accordion-inner">
+                        <span id="historialPrestamos"></span>
+                 </div>
+            </div>
+        </div>
     </div>
 
-    <div>
-        <fieldset>
-            <legend class="titulo_legend_resaltado trigger3 click titulo_legend" title='[% "click para acceder al Historial de Reservas" | i18n %]'>
-                            [% "Historial de Reservas" | i18n %]
-            </legend>   
-            <!-- DETALLE DEL HISTORICO DE RESERVAS DEL USUARIO -->
-            <div id="historialReservas" class="toggle_container_block" style="display:none"></div>
-        </fieldset>
+    <div class="accordion" id="historico_reservas_usuario">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#historico_prestamos_usuario" href="#reservas_div">[% "Historial de reservas" | i18n %]</a>
+            </div>
+             <div id="reservas_div" class="accordion-body collapse">
+                 <div class="accordion-inner">
+                        <span id="historialReservas"></span>
+                 </div>
+            </div>
+        </div>
     </div>
 
-    <div>
-        <fieldset>
-            <legend class="titulo_legend_resaltado trigger2 click titulo_legend" title='[% "click para acceder al Historial de Sanciones" | i18n %]'>
-                            [% "Historial de Sanciones" | i18n %]
-            </legend>   
-            <!-- DETALLE DEL HISTORICO DE SANCIONES DEL USUARIO -->
-            <div id="historialSanciones" class="toggle_container_block" style="display:none"></div>
-        </fieldset>
+    <div class="accordion" id="historico_sanciones_usuario">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#historico_prestamos_usuario" href="#sanciones_div">[% "Historial de sanciones" | i18n %]</a>
+            </div>
+             <div id="sanciones_div" class="accordion-body collapse">
+                 <div class="accordion-inner">
+                        <span id="historialSanciones"></span>
+                 </div>
+            </div>
+        </div>
     </div>
+    
     <div class="ticket" id="ticket" ></div>
 </div>
 

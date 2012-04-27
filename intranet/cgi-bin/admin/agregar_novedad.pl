@@ -20,35 +20,89 @@ my ($template, $session, $t_params) = get_template_and_user({
 									debug => 1,
 			    });
 
-my $action = $input->param('action') || 0;
-
-# Se arma el texto que va a mostrarse en Twitter
-
-my $twitter_enabled=C4::AR::Social::twitterEnabled();
-
-my $contenido= Encode::decode('utf8', $input->param('contenido'));
-
+my $action          = $input->param('action') || 0;
+my $twitter_enabled = C4::AR::Social::twitterEnabled();
+my $contenido       = $input->param('contenido');
 my $cont;
+
+#estamos agregando o editando
 if ($action){
-    my $status = C4::AR::Novedades::agregar($input);
-   
-    if ($input->param('check_publicar')){
 
-          my $link = C4::AR::Social::shortenUrl($status->{'id'});
+    #------------ data de los inputs-------------
+    $t_params->{'titulo'}       = $input->param('titulo');
+    $t_params->{'categoria'}    = $input->param('categoria');
+    $t_params->{'contenido'}    = $input->param('contenido');
+    $t_params->{'twiter'}       = $input->param('check_publicar');
+    $t_params->{'links'}        = $input->param('links');
+    #--------- FIN data de los inputs -----------
+    
 
-          $cont = $status->getResumen();
-          $cont = Encode::decode_utf8($cont);
-          my $post= C4::AR::Preferencias::getValorPreferencia('prefijo_twitter')." ".$cont."... Ver mas en: ".$link;
+    #--------- imagenes nuevas -----------
+    #me quedo con las hash que tengan 'file_*'
+    my @arrayFiles;
+    
+    #copio la referencia de la hash
+    my $hash        = $input->{'param'};
+    
+    #me quedo con las key, la trato a la referencia como una hash
+    my @keys        = keys %$hash;
+    
+    #hago un grep para quedarme con las 'file_*'
+    my @file_key    = grep { $_ =~ /^file_/; } @keys;
+    
+    foreach my $key ( @file_key ){
 
-
-          #  Posteo en twitter. En C4::AR::Social::sendPost se verifica si la preferencia twitter_enabled esta activada
-          my $mensaje= C4::AR::Social::sendPost($post);
+        #solo los que tengan algo adentro  
+        if($hash->{$key}[0] ne ""){
+            push(@arrayFiles, $input->param($key));
+        } 
+        
     }
+    #-------- FIN imagenes nuevas ----------
+    
+    
+    #--------- links -----------
+    my $linksTodos  = $input->param('links');  
+    my @links       = split('\ ', $linksTodos);   
+    my $linksFinal  = "";
+    
+    foreach my $link (@links){
+    
+        if($link !~ /^http/){
+            $linksFinal .= " http://" . $link;
+        }else{
+            $linksFinal .= " " . $link;
+        }
+    }
+    
+    $input->param('links', $linksFinal);
+    #------- FIN links ---------
+     
+    my ($Message_arrayref, $novedad) = C4::AR::Novedades::agregar($input, @arrayFiles);
+    
+    if($Message_arrayref->{'error'} == 0){
+   
+        if ($input->param('check_publicar')){
 
-    if ($status){
+              my $link      = C4::AR::Social::shortenUrl($novedad->getId());
+
+              $cont         = $novedad->getResumen();
+              $cont         = Encode::decode_utf8($cont);
+              my $post      = C4::AR::Preferencias::getValorPreferencia('prefijo_twitter')." ".$cont."... Ver mas en: ".$link;
+
+              #  Posteo en twitter. En C4::AR::Social::sendPost se verifica si la preferencia twitter_enabled esta activada
+              my $mensaje   = C4::AR::Social::sendPost($post);
+        }
+
         C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix().'/admin/novedades_opac.pl?token='.$input->param('token'));
+        
+    }else{
+    
+        $t_params->{'mensaje'} = $Message_arrayref->{'messages'}[0]->{'message'};
+        
     }
 }
 
-$t_params->{'twitter_enabled'} = $twitter_enabled; 
+$t_params->{'twitter_enabled'}  = $twitter_enabled; 
+$t_params->{'page_sub_title'}   = C4::AR::Filtros::i18n("Agregar Novedad");
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

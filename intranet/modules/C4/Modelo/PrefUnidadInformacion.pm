@@ -235,18 +235,25 @@ sub nextMember{
 }
 
 sub obtenerValoresCampo {
-    my ($self)=shift;
-    my ($campo,$orden)=@_;
- 	my $ref_valores = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion
-						( select   => ['id_ui' , $campo],
-						  sort_by => ($orden) );
-    my @array_valores;
+    my ($self)              = shift;
+    my ($campo,$orden)      = @_;
 
-    for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
-		my $valor;
-		$valor->{"clave"}=$ref_valores->[$i]->getId_ui;
-		$valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
-        push (@array_valores, $valor);
+    my @array_valores;
+    my @fields  = ($campo, $orden);
+    my $v       = $self->validate_fields(\@fields);
+
+    if($v){
+
+        my $ref_valores = C4::Modelo::PrefUnidadInformacion::Manager->get_pref_unidad_informacion
+                            ( select   => ['id_ui' , $campo],
+                              sort_by => ($orden) );
+
+        for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
+            my $valor;
+            $valor->{"clave"}=$ref_valores->[$i]->getId_ui;
+            $valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
+            push (@array_valores, $valor);
+        }
     }
 	
     return (scalar(@array_valores), \@array_valores);
@@ -285,6 +292,23 @@ sub getCampo{
 	return (0);
 }
 
+sub tieneLogoOpacMenu{
+	my ($self) = shift;
+	
+	my $tema_opac   = C4::AR::Preferencias::getValorPreferencia('tema_opac_default') || $self->getId_ui;
+    my $logo =
+        C4::Context->config('opachtdocs') . '/temas/'
+      . $tema_opac
+      . '/imagenes/logo_ui_opac_menu.png';
+
+    C4::AR::Debug::debug("TIENE LOGO OPAC MENU: ".$logo);
+    if ( -e $logo ){
+    	return 1;
+    }else{
+    	return 0;
+    }
+    
+}
 
 sub getAll{
 

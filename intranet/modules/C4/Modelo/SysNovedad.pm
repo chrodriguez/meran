@@ -8,36 +8,30 @@ __PACKAGE__->meta->setup(
     table   => 'sys_novedad',
 
     columns => [
-        id            => { type => 'serial', overflow => 'truncate', length => 16 },
-        usuario       => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 16 },
-        fecha         => { type => 'integer', overflow => 'truncate', not_null => 1, length => 16 },
-        titulo        => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 255 },
-        categoria     => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 255 },
-        contenido     => { type => 'text', overflow => 'truncate', not_null => 1 },
+        id              => { type => 'serial', overflow => 'truncate', length => 16 },
+        usuario         => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 16 },
+        fecha           => { type => 'integer', overflow => 'truncate', not_null => 1, length => 16 },
+        titulo          => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 255 },
+        categoria       => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 255 },
+        contenido       => { type => 'text', overflow => 'truncate', not_null => 1 },
+        links           => { type => 'varchar', overflow => 'truncate', not_null => 0, length => 1024 },
     ],
 
     primary_key_columns => [ 'id' ],
 
-     relationships =>
-    [
-      socio => 
-      {
-        class       => 'C4::Modelo::UsrSocio',
-        key_columns => { usuario => 'nro_socio' },
-        type        => 'one to one',
-      },
-    ]
 );
 
 
 sub agregar{
 
-    my ($self) = shift;
-    my (%params) = @_;
-    my $usuario = C4::AR::Auth::getSessionNroSocio();
-    $self->setTitulo($params{'titulo'});
-    $self->setContenido($params{'contenido'});
-    $self->setCategoria($params{'categoria'});
+    my ($self)      = shift;
+    my ($params)    = @_;    
+    my $usuario     = C4::AR::Auth::getSessionNroSocio();
+    
+    $self->setTitulo($params->{'titulo'}[0]);
+    $self->setContenido($params->{'contenido'}[0]);
+    $self->setCategoria($params->{'categoria'}[0]);
+    $self->setLinks($params->{'links'}[0]);
     $self->setUsuario($usuario);
 
     return($self->save());
@@ -61,6 +55,19 @@ sub setUsuario{
     my ($usuario) = @_;
 
     $self->usuario($usuario);
+}
+
+sub getLinks{
+    my ($self) = shift;
+
+    return ($self->links);
+}
+
+sub setLinks{
+    my ($self) = shift;
+    my ($links) = @_;
+
+    $self->links($links);
 }
 
 sub getFechaLegible{
@@ -121,7 +128,7 @@ sub setContenido{
 sub getResumen{
     my ($self) = shift;
 
-    my $string_sub = substr ($self->contenido,0,75);
+    my $string_sub = substr ($self->contenido,0,150);
     return ($string_sub."...");
 }
 

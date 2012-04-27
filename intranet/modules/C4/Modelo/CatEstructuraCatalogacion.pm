@@ -78,7 +78,16 @@ sub agregar{
 
     #recupero la configuracion de la estructura de catalogacion para verificar si ya existe una configuracion anterior 
     #que se encuentre NO VISIBLE
-    my $estructura_array = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo(
+
+#     my $estructura_array = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo(
+#                                                                                     $data_hash->{'campo'},
+#                                                                                     $data_hash->{'subcampo'},
+#                                                                                     $data_hash->{'itemtype'}||'ALL',
+#                                                                                     $data_hash->{'nivel'},
+#                                                                                     $self->db,
+#                                                                             );
+
+    my $estructura_array = C4::AR::Catalogacion::_existeConfiguracionEnCatalogo(
                                                                                     $data_hash->{'campo'},
                                                                                     $data_hash->{'subcampo'},
                                                                                     $data_hash->{'itemtype'}||'ALL',
@@ -86,12 +95,13 @@ sub agregar{
                                                                                     $self->db,
                                                                             );
 
-    if($estructura_array) {
-        #EXISTE configuracion para campo, subcampo, itemtype
-        $estructura_array->setVisible(1); #se setea como VISIBLE
-        $estructura_array->save();
-        C4::AR::Debug::debug("El campo, subcampo, itemtype ".$data_hash->{'campo'}.", ".$data_hash->{'subcampo'}.", ".$data_hash->{'itemtype'}." EXISTE");
-    } else {
+
+#     if($estructura_array) {
+#         #EXISTE configuracion para campo, subcampo, itemtype
+#         $estructura_array->setVisible(1); #se setea como VISIBLE
+#         $estructura_array->save();
+#         C4::AR::Debug::debug("El campo, subcampo, itemtype ".$data_hash->{'campo'}.", ".$data_hash->{'subcampo'}.", ".$data_hash->{'itemtype'}." EXISTE");
+#     } else {
         #NO EXISTE configuracion para campo, subcampo, itemtype
         $self->setCampo($data_hash->{'campo'});
         $self->setSubcampo($data_hash->{'subcampo'});
@@ -110,11 +120,7 @@ sub agregar{
         $self->setIdCompCliente(md5_hex(time()));
         $self->setFijo(0); #por defecto, todo lo que se ingresa como estructura del catalogo NO ES FIJO
         $self->save();
-    
-#         if($self->tieneReferencia){
-#         #si tiene referencia....
-# 
-#         }
+   
 
         if ($data_hash->{'referencia'}) {
             #es necesario informacion de referencia se crea una nueva
@@ -128,7 +134,7 @@ sub agregar{
 
         $self->save();
 
-    }
+#     }
 
 } 
 

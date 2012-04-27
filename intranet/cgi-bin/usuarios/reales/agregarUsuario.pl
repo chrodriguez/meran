@@ -21,15 +21,17 @@ my ($template, $session, $t_params) = get_template_and_user({
                     debug           => 1,
                 });
 
-my $comboDeCategorias           = &C4::AR::Utilidades::generarComboCategoriasDeSocio();
-my $comboDeTipoDeDoc            = &C4::AR::Utilidades::generarComboTipoDeDocConValuesIds();
-my $comboDeUI                   = &C4::AR::Utilidades::generarComboUI();
-my $comboDeCredentials          = &C4::AR::Utilidades::generarComboDeCredentials();
+my $comboDeCategorias           = C4::AR::Utilidades::generarComboCategoriasDeSocio();
+my $comboDeTipoDeDoc            = C4::AR::Utilidades::generarComboTipoDeDocConValuesIds();
+my $comboDeUI                   = C4::AR::Utilidades::generarComboUI();
+my $comboDeCredentials          = C4::AR::Utilidades::generarComboDeCredentials();
+my $comboDeEstados              = C4::AR::Utilidades::generarComboDeEstados();
 
 $t_params->{'combo_temas'}          = C4::AR::Utilidades::generarComboTemasINTRA();
 $t_params->{'combo_tipo_documento'} = $comboDeTipoDeDoc;
 $t_params->{'comboDeCategorias'}    = $comboDeCategorias;
 $t_params->{'comboDeCredentials'}   = $comboDeCredentials;
+$t_params->{'comboDeEstados'}       = $comboDeEstados;
 $t_params->{'comboDeUI'}            = $comboDeUI;
 $t_params->{'addBorrower'}          = 1;
 

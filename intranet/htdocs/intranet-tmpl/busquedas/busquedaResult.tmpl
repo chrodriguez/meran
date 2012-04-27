@@ -8,85 +8,78 @@
 
 <script type="text/javascript">
       $(document).ready(function() {
-        makeToggle('datos_tabla_div','trigger',null,false);
         $('.fancylink').fancybox();
         disableAlert();
       });
 </script>
 <fieldset class="resultados_busqueda">
-    <legend class="titulo_legend trigger click" title='[% "click para acceder a los resultados de la b&uacute;squeda" | i18n %]'>
+    <legend class="titulo_legend" title='[% "click para acceder a los resultados de la b&uacute;squeda" | i18n %]'>
         [% "Resultados de la b&uacute;squeda (cat&aacute;logo)" | i18n %]:</legend>
         <div class="datos_tabla_div" id="datos_tabla_div">
-            <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda" | i18n %]: 
+
+        <section class="center-section-form">
+            <div class="well">
+                <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: <strong>[% HTML.escape(buscoPor) %]</strong></div> 
             
-                <h2><i>[% buscoPor %]</i></h2>
-            
+	            [% IF cantidad %]
+	                <div class="resultados_consulta">[% "Total de registros" | i18n %]: <b>[% cantidad %]</b>  en ([% timeSeg %] segundos)</div>
+	            [% END %]
+
                 [% IF !from_suggested %]
 			        [% IF suggested %]
-			                <div class="suggested_search click">
-			                    <a onclick="buscarSuggested('[% suggested %]')">
-			                        [% "Usted quiso decir" | i18n %] <span style="font-style: italic">[% suggested %]</span>?
-			                    </a>
-			                </div>
+	                    <a href="#" onclick="buscarSuggested('[% suggested %]')">
+	                        [% "Usted quiso decir" | i18n %] <span style="font-style: italic">[% suggested %]</span>?
+	                    </a>
 			        [% END %]
 			    [% END %]
-            
-            
+
             </div>
-            <div class="resultados_consulta">[% "Total de registros" | i18n %]: <b>[% cantidad %]</b>  en ([% timeSeg %] segundos)</div>
+        </section>    
+        [% IF cantidad %]
             <div class="contenedor_paginador">[% paginador %]</div>
+             [% PERL %]
+                 print C4::AR::Filtros::tableHeader(   
+                                                         id              => "tablaResult",
+                                                         class           => "",
+                                                         columns         => ['[% "Tipo"|i18n %]','[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]',
+                                                                             '[% "Edici&oacute;n"|i18n %]','[% "Disponibilidad"|i18n %]', [% IF signatura_filter %] '[% "Signatura"|i18n %]' [% END %],
+                                                                            ]
+                                                         
+                             ) ;
+             [% END %]
 
-
-            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
-                <tr class="titulo_tabla_resultado">
-                    <td style="width: 11%;">[% "Tipo" | i18n %]</td>
-                    <td width="35%" class="click" onclick="ordenarPor('titulo')">
-                        [% "T&iacute;tulo" | i18n %]
-                    </td>
-                    <td width=28%" class="click" onclick="ordenarPor('autor')">
-                        [% "Autor" | i18n %]
-                    </td>
-                    <td width="11%">[% "Edici&oacute;n/A&ntilde;o" | i18n %]</td>
-                    <td width="10%"> [% "Disponibilidad" | i18n %] </td>
-                    [% IF signatura_filter %]
-                        <td>[% "Signatura" | i18n %]</td>
-                    [% END %]
-                    
-                    
-                </tr>
-            <!-- Actual Resultados de la b&uacute;squeda -->
             [% FOREACH SEARCH_RESULTS %]
                 <tr>
-                        <td class="titulo_result">
-                            [% IF portadas_grupo_cant > 0 %]
-                                    [% FOREACH portada IN portadas_grupo %]
-                                        [% IF loop.count < 4 %]
-		                                    [% IF portada.portada_registro_big %]
-		                                        <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada.portada_registro_big %]">
-		                                            <img alt="cover" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
-		                                        </a>
-		                                    [% ELSE %]
-		                                        [% IF portada.portada_registro_medium %]
-		                                            <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada.portada_registro_medium %]">
-		                                                <img alt="cover" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
-		                                            </a>
-		                                        [% ELSE %]
-		                                                <img alt="cover" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
-		                                        [% END %]
-		                                    [% END %]
-                                        [% END %]
-                                    [% END %]
-                            [% ELSE %]
-                                  <img src="/uploads/covers/[% cat_ref_tipo_nivel3 %].png" 
-                                        alt="[% 'Sin Portada' | i18n %]"
-                                        title="[% 'Sin Portada' | i18n %]" />
-                            [% END %]
-                            <br />
-                            <center><div style="font-weight: bold; font-size: 10px; clear:both;" >[% cat_ref_tipo_nivel3_name %] </div></center>
-                        </td>
+                     <td>
+                         [% IF portadas_grupo_cant > 0 %]
+                                 [% FOREACH portada IN portadas_grupo %]
+                                     [% IF loop.count < 4 %]
+                                   [% IF portada.portada_registro_big %]
+                                       <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada.portada_registro_big %]">
+                                           <img alt="cover" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
+                                       </a>
+                                   [% ELSE %]
+                                       [% IF portada.portada_registro_medium %]
+                                           <a class="fancylink" rel="group_[% grupo %]" href="/uploads/covers/[% portada.portada_registro_medium %]">
+                                               <img alt="cover" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
+                                           </a>
+                                       [% ELSE %]
+                                               <img alt="cover" src="/uploads/covers/[% portada.portada_registro %]" title="Portada" />
+                                       [% END %]
+                                   [% END %]
+                                     [% END %]
+                                 [% END %]
+                         [% ELSE %]
+                               <img src="/uploads/covers/[% cat_ref_tipo_nivel3 %].png" 
+                                     alt="[% 'Sin Portada' | i18n %]"
+                                     title="[% 'Sin Portada' | i18n %]" />
+                         [% END %]
+                         <br />
+                         <center><div style="font-weight: bold; font-size: 10px; clear:both;" >[% cat_ref_tipo_nivel3_name %] </div></center>
+                     </td>
 
 
-                    <td class="titulo_result">
+                    <td >
                         [% PERL %]
                             print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(titulo) %]",
                                                             url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
@@ -97,7 +90,7 @@
                         [% END %]
                     </td>
             
-                    <td class="autor_result">
+                    <td>
                         <a class="click" onClick="buscarPorAutor('[% nomCompleto %]')" title="[% 'Filtrar por Autor' | i18n %]">
                             [% nomCompleto %]
                         </a>
@@ -146,18 +139,22 @@
 						[% ELSE %]
 							[% IF grupos %]
 								<span id="grupos_[% id1 %]">
+                                    <ul class="listado_sin_margen">
 									[% FOREACH grupos %]
-										[% IF edicion %]
-											[% edicion %] &nbsp;
+                                        [% valor = '' %]
+										
+                                        [% IF edicion %]
+											[% valor = "<b>" _  edicion  _  "</b>" %]
 										[% END %]
-										[% IF loop.prev.anio_publicacion != anio_publicacion %]
-											<br />
-											[% IF anio_publicacion %]
-												([% anio_publicacion %])
-											[% END %]
+                                        
+                                        [% IF anio_publicacion %]
+                                            [% IF valor %] [% valor = valor _ " " %] [% END %]
+											[% valor = valor  _  "(" _  anio_publicacion  _  ")" %]
 										[% END %]
-											
+                                        
+                                        [% IF valor %]<li> [% valor %] </li>[% END %]
 									[% END %]
+                                    </ul>
 								</span>
 						  <script type="text/javascript">$("#grupos_[% id1 %]").expander({
 							  slicePoint: 2000, 
@@ -191,7 +188,9 @@
             </table>
         </div>
         <div class="contenedor_paginador">[% paginador %]</div>
-        
+     [% ELSE %]
+        <div class="alert alert-info">[% 'No hay resultados para el criterio de b&uacute;squeda'| i18n %]</div>
+     [% END %]
 </fieldset>
 
 [% IF HEADERS %]

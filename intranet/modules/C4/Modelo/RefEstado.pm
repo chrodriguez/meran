@@ -99,18 +99,25 @@ sub setNombre{
 }
 
 sub obtenerValoresCampo {
-    my ($self)=shift;
-    my ($campo,$orden)=@_;
-	my $ref_valores = C4::Modelo::RefEstado::Manager->get_ref_estado
-						( select => [ $self->getPk  , $campo],
-						  sort_by => ($orden) );
-    my @array_valores;
+    my ($self)              = shift;
+    my ($campo,$orden)      = @_;
 
-    for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
-		my $valor;
-		$valor->{"clave"}=$ref_valores->[$i]->getPkValue;
-		$valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
-        push (@array_valores, $valor);
+    my @array_valores;
+    my @fields  = ($campo, $orden);
+    my $v       = $self->validate_fields(\@fields);
+
+    if($v){
+
+        my $ref_valores = C4::Modelo::RefEstado::Manager->get_ref_estado
+                            ( select => [ $self->getPk  , $campo],
+                              sort_by => ($orden) );
+
+        for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
+            my $valor;
+            $valor->{"clave"}=$ref_valores->[$i]->getPkValue;
+            $valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
+            push (@array_valores, $valor);
+        }
     }
 	
     return (scalar(@array_valores), \@array_valores);
@@ -145,6 +152,11 @@ sub getCampo{
 
 sub nextMember{
     return(C4::Modelo::RefLocalidad->new());
+}
+
+sub get_key_value{
+    my ($self) = shift;
+    return ($self->getCodigo);
 }
 
 sub getAll{

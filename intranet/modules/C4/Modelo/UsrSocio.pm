@@ -12,8 +12,6 @@ __PACKAGE__->meta->setup(
         id_socio                         => { type => 'serial', overflow => 'truncate', not_null => 1 , length => 11},
         nro_socio                        => { type => 'varchar', overflow => 'truncate', length => 16, not_null => 1 },
         id_ui                            => { type => 'varchar', overflow => 'truncate', length => 4, not_null => 1 },
-        #id_categoria = 1 es Estudiante en la 17.10
-        id_categoria                     => { type => 'integer', overflow => 'truncate', length =>2, not_null => 1, default => 8 },
         fecha_alta                       => { type => 'date' },
         expira                           => { type => 'date' },
         flags                            => { type => 'integer', overflow => 'truncate' },
@@ -22,6 +20,7 @@ __PACKAGE__->meta->setup(
         last_change_password             => { type => 'date' },
         change_password                  => { type => 'integer', overflow => 'truncate', default => '0', not_null => 1 },
         cumple_requisito                 => { type => 'varchar', overflow => 'truncate', length=>32, not_null => 1, default => '0'},
+        id_estado                        => { type => 'integer', overflow => 'truncate', not_null => 1,  default => 20 },
         activo                           => { type => 'integer', overflow => 'truncate', default => 0, not_null => 1 },
         agregacion_temp                  => { type => 'varchar', overflow => 'truncate', length => 255 },
         note                             => { type => 'text', not_null => 1 },
@@ -40,6 +39,8 @@ __PACKAGE__->meta->setup(
         client_ip_recover_pwd            => { type => 'varchar', overflow => 'truncate', length => 255 },
         recover_date_of                  => { type => 'timestamp'  },
         last_auth_method                 => { type => 'varchar', overflow => 'truncate', default => 'mysql', length => 255 },
+        id_categoria                     => { type => 'integer', overflow => 'truncate', length =>2, not_null => 1, default => 8 },       
+        foto             => { type => 'varchar', overflow => 'truncate', length => 255 },
         
     ],
 
@@ -66,6 +67,13 @@ __PACKAGE__->meta->setup(
         type        => 'one to one',
       },
 
+     estado => 
+      {
+        class       => 'C4::Modelo::UsrEstado',
+        key_columns => { id_estado => 'id_estado' },
+        type        => 'one to one',
+      },
+
     ],
 
     primary_key_columns => [ 'id_socio' ],
@@ -80,6 +88,28 @@ use C4::Modelo::UsrPersona;
 use C4::Modelo::UsrPersona::Manager;
 use Switch;
 use C4::Date;
+
+
+sub buildFotoNameHash{
+    my ($self) = shift;
+    use Digest::SHA;
+    my $hash;
+    
+    $hash = Digest::SHA::sha1_hex($self->getId_persona.$self->getNro_socio.$self->getId_ui.$self->getId_socio).".jpg";
+    
+    return $hash;
+}
+
+sub setFoto{
+    my ($self) = shift;
+    my ($foto) = @_;
+    $self->foto($foto);
+}
+
+sub getFoto{
+    my ($self) = shift;
+    return($self->foto);
+}
 
 
 sub setCredentialType{
@@ -122,8 +152,6 @@ sub setRemindFlag{
 	my ($remindFlag) = shift;
 	
 	$self->remindFlag($remindFlag);
-	
-	$self->save();
 }
 
 sub agregar{
@@ -143,8 +171,6 @@ sub agregar{
     }
 
     $self->setId_ui($data_hash->{'id_ui'});
-    $self->setId_categoria($data_hash->{'cod_categoria'});
-
 
     my $dateformat = C4::Date::get_date_format();
     my $fecha_alta = $data_hash->{'fecha_alta'} || C4::Date::format_date_in_iso(C4::AR::Utilidades::getToday(),$dateformat);
@@ -174,6 +200,9 @@ sub agregar{
     }
 
     $self->save();
+    $self->setId_categoria(($data_hash->{'cod_categoria'}));
+    $self->setFoto($self->buildFotoNameHash());
+    $self->save();
     $self->setCredentials($data_hash->{'credential_type'});
 
 }
@@ -201,6 +230,19 @@ sub desautorizarTercero{
 
     $self->save();
 }
+
+
+sub getId_estado{
+    my ($self) = shift;
+    return ($self->id_estado);
+}
+
+sub setId_estado{
+    my ($self) = shift;
+    my ($id_estado) = @_;
+    $self->id_estado($id_estado);
+}
+
 
 sub tieneAutorizado{
 
@@ -235,7 +277,8 @@ sub modificar{
     my ($data_hash)=@_;
 
     $self->setId_ui($data_hash->{'id_ui'});
-    $self->setId_categoria($data_hash->{'cod_categoria'});
+    $self->setId_categoria(($data_hash->{'cod_categoria'}));
+    $self->setId_estado(($data_hash->{'id_estado'}));
 
     my $today = Date::Manip::ParseDate("today");
     C4::AR::Debug::debug("TODAY ==================================== >".$today);
@@ -251,6 +294,7 @@ sub modificar{
     
     $self->persona->modificar($data_hash);
     $self->agregarAutorizado($data_hash);
+
     $self->save();
 }
 
@@ -381,6 +425,17 @@ sub activar{
     my ($self) = shift;
     $self->setActivo(1);
     $self->persona->activar();
+
+    my ($credential_type) = $self->getCredentialType;
+
+    switch ($credential_type){
+
+      case 'estudiante'      {$self->convertirEnEstudiante}
+      case 'librarian'       {$self->convertirEnLibrarian}
+      case 'superLibrarian'  {$self->convertirEnSuperLibrarian; $self->setIs_super_user(1);}
+      else                   {$self->convertirEnEstudiante}
+    }
+
     $self->save();
 }
 
@@ -470,6 +525,12 @@ sub setId_ui{
     $self->id_ui($id_ui);
 }
 
+sub getCategoria{
+    my ($self) = shift;
+    return ($self->categoria);
+}
+
+
 sub getCod_categoria{
     my ($self) = shift;
     return ($self->categoria->getCategory_code);
@@ -478,12 +539,6 @@ sub getCod_categoria{
 sub getId_categoria{
     my ($self) = shift;
     return ($self->id_categoria);
-}
-
-sub setId_categoria{
-    my ($self) = shift;
-    my ($id_categoria) = @_;
-    $self->id_categoria($id_categoria);
 }
 
 sub getFecha_alta{
@@ -538,9 +593,8 @@ sub getPassword{
 sub setPassword{
     my ($self) = shift;
     my ($password) = @_;
-    C4::AR::Debug::debug("NUEVO PASSWORD EN SOCIOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO ".$password);
+
     $self->password($password);
-    $self->save();
 }
 
 sub getLast_login{
@@ -574,7 +628,6 @@ sub setLast_change_password{
     my ($last_change_password) = @_;
     $last_change_password = C4::Date::format_date_in_iso($last_change_password,$dateformat);
     $self->last_change_password($last_change_password);
-    $self->save();
     
 }
 
@@ -614,7 +667,6 @@ sub setChange_password{
     my ($self) = shift;
     my ($change_password) = @_;
     $self->change_password($change_password);
-    $self->save();
 }
 
 sub cumpleRequisito{
@@ -662,21 +714,55 @@ sub setThemeSave{
     my ($self) = shift;
     my ($theme) = @_;
     $self->theme($theme);
-    $self->save();
-}
-
-sub esRegular{
-    my ($self) = shift;
-
-    return $self->persona->esRegular;
 }
 
 sub esRegularToString{
     my ($self) = shift;
 
-    return $self->persona->esRegularToString;
+    my $object = $self->getCondicion_object;
+    my $result;
+    
+    eval{
+        $result =  $object?$object->estado->getNombre:C4::AR::Filtros::i18n("INDEFINIDO");
+        if ($result == 1){
+        	
+        }
+    };
+    
+    if ($@){
+        return C4::AR::Filtros::i18n("INDEFINIDO");
+    }else{
+    	return $result;
+    }
 }
 
+sub esRegular{
+    my ($self) = shift;
+    
+    my $object = $self->getCondicion_object();
+    
+    if ($object){
+        return $object->getCondicion;
+    }else{
+        return 0;
+    }
+}
+
+
+sub getCondicion_object{
+    my ($self) = shift;
+
+    use C4::Modelo::UsrRegularidad::Manager;
+
+    my @filtros;
+    
+    push (@filtros, (usr_estado_id => {eq => $self->getId_estado }) );
+    push (@filtros, (usr_ref_categoria_id => {eq => $self->getId_categoria }) );
+    
+    my ($estados) = C4::Modelo::UsrRegularidad::Manager->get_usr_regularidad(query => \@filtros, require_objects => ['categoria','estado']);
+    
+    return $estados->[0];
+}
 sub getIs_super_user{
     my ($self) = shift;
 
@@ -998,6 +1084,7 @@ sub tienePermisos {
 
     my ($self) = shift;
     my ($flagsrequired) = @_;
+    
     if (!($self->getActivo)){ 
         C4::AR::Debug::debug("UsrSocio => TIPO_PERMISO => el socio no es activo");
         return 0;
@@ -1031,6 +1118,24 @@ sub tienePermisos {
         C4::AR::Debug::debug("UsrSocio => NO TIENE EL PERMISO");
         return 0;
     }
+}
+
+
+sub tieneSeteadosPermisos{
+    my ($self) = shift;
+
+    my @filtros;
+    
+    push (@filtros, ( nro_socio => { eq =>$self->getNro_socio}) );
+    push (@filtros, ( ui => { eq =>$self->getId_ui} ) );
+    push (@filtros, ( tipo_documento => { eq =>"ALL"}) );
+     
+    my $permisos = C4::Modelo::PermCatalogo::Manager::get_perm_catalogo(query => \@filtros,);
+    
+    my $result = $permisos->[0] || undef;
+    
+    return $result;
+	
 }
 
 sub tienePermisosOPAC{
@@ -1150,26 +1255,58 @@ sub setLocale{
 }
 
 
+sub fotoName{
+    my ($self)          = shift;
+    my ($session_type)  = shift;
+    
+    my $picturesDir = C4::Context->config("picturesdir");
+    my $path;
+
+    my $foto_name   =   $self->getFoto;
+    
+    if (!C4::AR::Utilidades::validateString($foto_name)){
+        $foto_name = $self->buildFotoNameHash();
+        $self->setFoto($foto_name);
+    }
+    
+    
+    if (lc($session_type) eq "opac"){
+        $picturesDir = C4::Context->config("picturesdir_opac");
+        $foto_name =   $self->persona->getFoto;
+
+	    if (!C4::AR::Utilidades::validateString($foto_name)){
+	        $foto_name = $self->persona->buildFotoNameHash();
+            $self->persona->setFoto($foto_name);
+	    }
+    }
+
+    $path           = $picturesDir."/".$foto_name;
+
+     return $foto_name;
+}
+
+
 sub tieneFoto{
     my ($self)          = shift;
     my ($session_type)  = shift;
     
     my $picturesDir = C4::Context->config("picturesdir");
-    
-    if ($session_type eq "opac"){
+    my $path;
+
+    my $foto_name   =   $self->getFoto;
+
+    if (lc($session_type) eq "opac"){
     	$picturesDir = C4::Context->config("picturesdir_opac");
+    	$foto_name =   $self->persona->getFoto;
     }
-    my $foto;
-  
-    if (opendir(DIR, $picturesDir)) {
-        my $pattern = $self->getNro_socio."[.].";
-        my @file    = grep { /$pattern/ } readdir(DIR);
-        $foto       = join("",@file);
-        closedir DIR;
-    } else {
-        $foto = 0;
+
+    $path           = $picturesDir."/".$foto_name;
+
+    if ( -e $path ){
+    	return $foto_name;
+    }else{
+    	return undef;
     }
-    return $foto;
 }
 
 sub needsValidation{
@@ -1220,4 +1357,49 @@ sub replaceBy{
 }
 
 
+sub getId_categoria{
+    my ($self) = shift;
+    
+    return ($self->id_categoria);
+}
+
+sub setId_categoria{
+    my ($self) = shift;
+    my ($id) = shift;
+    
+    $self->id_categoria($id);
+    $self->save();
+}
+
+sub puedeReservar{
+    
+    my ($self) = shift;
+    my ($id2)= @_;
+
+    my ($reservas,$cant_reservas) = C4::AR::Reservas::getReservasDeSocio($self->getNro_socio, $id2);
+
+    return ( ($cant_reservas == 0) && (!$self->loTienePrestado($id2)) );    
+}
+
+sub loTienePrestado{
+    
+    my ($self) = shift;
+    my ($id2)= @_;
+
+    my ($status) = C4::AR::Prestamos::tienePrestamosDeId2($self->getNro_socio, $id2);
+
+    return ( $status );    
+}
+
+sub getIdReserva{
+    
+    my ($self) = shift;
+    my ($id2)= @_;
+    
+    my ($reservas,$cant_reservas) = C4::AR::Reservas::getReservasDeSocio($self->getNro_socio, $id2);
+
+    if ($cant_reservas){
+    	return $reservas->[0]->id_reserva;
+    }
+}
 1;

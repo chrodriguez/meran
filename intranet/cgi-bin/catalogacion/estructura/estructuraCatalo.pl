@@ -21,17 +21,17 @@ my ($template, $session, $t_params) = get_template_and_user({
 	    });
 
 my %params_combo;
-$params_combo{'onChange'}       = 'eleccionDeNivel()';
 $params_combo{'class'}          = 'horizontal';
+$params_combo{'onChange'}       = 'eleccionDeNivel();';
+
 my $comboTiposNivel3            = C4::AR::Utilidades::generarComboTipoNivel3(\%params_combo);
 $t_params->{'selectItemType'}   = $comboTiposNivel3;
 
 my %params_combo;
-$params_combo{'onChange'}       = 'eleccionDeNivel()';
+$params_combo{'onChange'}       = 'eleccionDeNivel();';
 $params_combo{'class'}          = 'horizontal';
-my $selectNivel                 = &C4::AR::Utilidades::generarComboNiveles(\%params_combo);
-
-$t_params->{'selectNivel'}      = $selectNivel;
-$t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Catalogaci&oacute;n - Estructura");
+$params_combo{'default'}		= '1';
+$t_params->{'selectNivel'}      = &C4::AR::Utilidades::generarComboNiveles(\%params_combo);
+$t_params->{'page_sub_title'}	= C4::AR::Filtros::i18n("Catalogaci&oacute;n - Estructura");
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

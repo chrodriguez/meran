@@ -1,7 +1,6 @@
 [% INCLUDE 'intranet-top.inc' %]
 [% USE HTML %]
 
-<link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/css/fancybox/jquery.fancybox.css">
 <script type="text/javascript" src="/includes/jquery/jquery.wysiwyg.js"></script>
 <link rel="stylesheet" href="/includes/css/wysiwyg.css" type="text/css" media="screen"/>
 
@@ -26,54 +25,52 @@
 </script>
 
 
-<fieldset class="resultados_busqueda">
-    <legend class="titulo_legend trigger click">[% "Mensajes de Contacto" | i18n %]:</legend>
-        <div class="contenedor_paginador">[% paginador %]</div>
+<fieldset>
+    <legend>[% "Mensajes de Contacto" | i18n %]:</legend>
+        <div>[% paginador %]</div>
         <div class="datos_tabla_div_user">
-            <div class="resultados_consulta">[% "La cantidad de mensajes es" | i18n %]: [% cant_mensajes %]</div>
-            <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
-                <thead>
-                <tr class="titulo_tabla_resultado">
-                    <th>[% "Fecha" | i18n %]</th>
-                    <th>[% "Asunto" | i18n %]</th>
-                    <th>[% "Remitente" | i18n %]</th>
-                    <th>[% "Marcar Como Leido/No Leido" | i18n %]</th>
-                    <th>[% "Eliminar" | i18n %]</th>
-                </tr>
-                </thead>
+            <div class="well">[% "La cantidad de mensajes es" | i18n %]: [% cant_mensajes %]</div>
+            
+            [% PERL %]
+                print C4::AR::Filtros::tableHeader(   
+                                  id              => "mensajes_contacto_table",
+                                  class           => "",
+                                  selectAll_id    => "",
+                                  columns         => ['[% "Fecha"|i18n %]','[% "Asunto"|i18n %]',
+                                                    '[% "Remitente"|i18n %]','[% "Eliminar"|i18n %]',
+                                                     ]
+     
+                                        ) ;
+            [% END %]
+            
                 <tbody>
                     [% FOREACH mensaje IN mensajes_contacto %]
-                        <tr class="leido[% mensaje.getLeido %]">
+                        <tr>
                             <td>
-                                <a class="fancy_link" href="[% url_prefix %]/admin/ver_mensaje.pl?token=[% token %]&id=[% mensaje.id %]">
-                                    [% mensaje.getFecha %] 
-                                </a>
+                                  [% IF mensaje.getRespondido %] <i class="icon-share-alt" title="[% 'Respondido por ' | i18n %][% mensaje.respondido %]"></i> [% END %]
+                                  [% mensaje.getFecha %] 
                             </td>
                             <td>
-                                <a class="fancy_link" href="[% url_prefix %]/admin/ver_mensaje.pl?token=[% token %]&id=[% mensaje.id %]">
-                                    [% HTML.escape(mensaje.getAsunto) %] 
-                                </a>
+                               <a href="#" onclick="showDirectMessage([% mensaje.id%])">
+                                    [% HTML.escape(mensaje.getAsunto) %]
+                               </a>
                             </td>
                             <td>
-                                <a class="fancy_link" href="[% url_prefix %]/admin/ver_mensaje.pl?token=[% token %]&id=[% mensaje.id %]">
+                                <a href="#" onclick="showDirectMessage([% mensaje.id%])">
                                     [% HTML.escape(mensaje.getApellido) %], [% HTML.escape(mensaje.getNombre) %] 
                                 </a>
                             </td>
                             <td>
-                                <a class="" 
-                                    href="[% url_prefix %]/admin/mensajes_contacto.pl?token=[% token %]&id=[% mensaje.id %]&tipoAccion=marcar">
-                                    [% IF mensaje.getLeido == 1%]
-                                        [% 'Leido' | i18n %]
-                                    [% ELSE %]
-                                        [% 'No Leido' | i18n %]
-                                    [% END %]
-                                </a>
-                            </td>
-                            <td>
-                                <a class="" 
-                                    href="[% url_prefix %]/admin/mensajes_contacto.pl?token=[% token %]&id=[% mensaje.id %]&tipoAccion=eliminar">
-                                    [% 'Eliminar' | i18n %]
-                                </a>
+                                
+                                [% PERL %]
+                                  print C4::AR::Filtros::action_link_button( 
+                                                                  button    => "btn btn-danger click",
+                                                                  url       => "[% url_prefix %]/admin/mensajes_contacto.pl?token=[% token %]&id=[% mensaje.id %]&tipoAccion=eliminar", 
+                                                                  icon      => "icon-remove icon-white",
+                                                                  title     => "",
+                                                              ) ;
+
+                                [% END %]
                             </td>
                         </tr>
                     [% END %]
@@ -81,5 +78,5 @@
             </table>
         </div>
 </fieldset>
-
+<div id="mostrar_mensaje" class="modal hide fade"></div>
 [% INCLUDE 'intranet-bottom.inc' %]

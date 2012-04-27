@@ -28,32 +28,33 @@ $VERSION = 3;
 
 @EXPORT_OK = qw(
 
-    &t_devolver
-    &t_renovar
-    &t_renovarOPAC
-    &t_realizarPrestamo
-    &_verificarMaxTipoPrestamo
-    &chequeoDeFechas
-    &prestamosHabilitadosPorTipo
-    &getTipoPrestamo
-    &getPrestamoDeId3
-    &getPrestamosDeSocio
-    &getTipoPrestamo
-    &obtenerPrestamosDeSocio
-    &cantidadDePrestamosPorUsuario
-    &crearTicket
-    &t_eliminarTipoPrestamo
-    &t_agregarTipoPrestamo
-    &t_modificarTipoPrestamo
-    &cantidadDeUsoTipoPrestamo
-    &getInfoPrestamo
-    &getHistorialPrestamosVigentesParaTemplate
-    &tienePrestamos
-    &enviarRecordacionDePrestamo
-    &getAllPrestamosVencidos
-    &getAllPrestamosActivos
-    &setPrestamosVencidosTemp
-    &getAllPrestamosVencidosParaMail
+    t_devolver
+    t_renovar
+    t_renovarOPAC
+    t_realizarPrestamo
+    _verificarMaxTipoPrestamo
+    chequeoDeFechas
+    prestamosHabilitadosPorTipo
+    getTipoPrestamo
+    getPrestamoDeId3
+    getPrestamosDeSocio
+    getTipoPrestamo
+    obtenerPrestamosDeSocio
+    cantidadDePrestamosPorUsuario
+    crearTicket
+    t_eliminarTipoPrestamo
+    t_agregarTipoPrestamo
+    t_modificarTipoPrestamo
+    cantidadDeUsoTipoPrestamo
+    getInfoPrestamo
+    getHistorialPrestamosVigentesParaTemplate
+    tienePrestamos
+    enviarRecordacionDePrestamo
+    getAllPrestamosVencidos
+    getAllPrestamosActivos
+    setPrestamosVencidosTemp
+    getAllPrestamosVencidosParaMail
+    tienePrestamosDeId2
 );
 
 
@@ -245,7 +246,7 @@ sub chequeoDeFechas{
     my $err= "Error con la fecha";
     my $dateformat = C4::Date::get_date_format();
     my $hoy=C4::Date::format_date_in_iso(DateCalc(ParseDate("today"),"+ 0 days",\$err),$dateformat);#se saco el 2 para que ande bien.
-    my $desde=C4::Date::format_date_in_iso(DateCalc($vencimiento,"- ".$intervalo_vale_renovacion." days",\$err,2),$dateformat);#SE AGREGO EL 2 PARA QUE SALTEE LOS SABADOS Y DOMINGOS. 01/10/2007
+    my $desde=C4::Date::format_date_in_iso(DateCalc($vencimiento,"- ".$intervalo_vale_renovacion." business days",\$err),$dateformat);#Se cambio el 2 por business days
     my $flag = Date_Cmp($desde,$hoy);
     #comparo la fecha de hoy con el inicio del plazo de renovacion  
     if (!($flag gt 0)){ 
@@ -320,6 +321,28 @@ sub getPrestamosDeSocio {
         return ($prestamos__array_ref);
 }
 
+=item
+getPrestamosDeSocio
+Esta funcion retorna los prestamos actuales de un socio
+=cut
+sub tienePrestamosDeId2 {
+    my ($nro_socio,$id2)=@_;
+
+        use C4::Modelo::CircPrestamo;
+        use C4::Modelo::CircPrestamo::Manager;
+
+        my @filtros;
+
+        push(@filtros, ( nro_socio      => { eq => $nro_socio } ));
+        push(@filtros, ( 'nivel3.id2'   => { eq => $id2} ));
+        
+
+        my $prestamos_count = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo_count(query => \@filtros,
+                                                                        require_objects => ['nivel3.nivel2','socio','ui'],
+                                                                      );
+
+        return ($prestamos_count);
+}
 
 
 
@@ -530,7 +553,7 @@ sub t_devolver {
     my $msg_object= C4::AR::Mensajes::create();
     my $array_id_prestamos= $params->{'datosArray'};
     my $prestamos_array_validos = C4::AR::Prestamos::validarExistenciaPrestamos($msg_object,$array_id_prestamos);
-    my $loop=scalar(@$array_id_prestamos);
+    my $loop=scalar(@$prestamos_array_validos);
     my $id_prestamo;
     my $prestamo = C4::Modelo::CircPrestamo->new();
     my $db = $prestamo->db;
@@ -576,6 +599,40 @@ sub t_devolver {
     return ($msg_object);
 }
 
+sub renovarYGenerarTicket{
+    my ($params)=@_;
+    
+     my ($infoTickets,$msg_object);
+     
+    #Acomodo la entrada y llamo al renovar 
+    my $array_id_prestamos= $params->{'datosArray'};
+    my $prestamos_array_validos = C4::AR::Prestamos::validarExistenciaPrestamos($msg_object,$array_id_prestamos);
+    
+
+    my @arrayPrestamos=();
+    
+    foreach my $id_prestamo (@$prestamos_array_validos){
+        my %datosPrestamos;
+        my $prestamo            = C4::AR::Prestamos::getInfoPrestamo($id_prestamo);
+        $datosPrestamos{'id3'}        = $prestamo->nivel3->getId3;
+        $datosPrestamos{'barcode'}        = $prestamo->nivel3->getBarcode;
+        $datosPrestamos{'id_prestamo'}    = $prestamo->getId_prestamo;
+        push (@arrayPrestamos, \%datosPrestamos)
+        }
+    
+    $params->{'datosArray'}=\@arrayPrestamos;
+    ($infoTickets,$msg_object)   = C4::AR::Prestamos::t_renovar($params);
+    
+    my @infoMessages;
+    push (@infoMessages, $msg_object);
+
+    my %info;
+    $info{'tickets'}                = $infoTickets;
+    $info{'messages'}               = \@infoMessages;
+    return (\%info);
+}
+
+
 sub t_renovar {
     my ($params)              = @_;
     my $msg_object            = C4::AR::Mensajes::create();
@@ -608,6 +665,9 @@ sub t_renovar {
                         # Si la renovacion se pudo realizar
                         C4::AR::Debug::debug("SE RENOVO SIN ERROR --> SE CREA EL TICKET");
                         my $ticketObj = C4::AR::Prestamos::crearTicket($data->{'id3'},$prestamo->getNro_socio,$params->{'responsable'});
+                        if(!$ticketObj){
+                            $ticketObj = 0;
+                            }
                         my %infoOperacion = (
                                     ticket  => $ticketObj,
                         );
@@ -1319,15 +1379,12 @@ sub getAllPrestamosVencidos{
     my @arrayPrestamos;
 
     if(scalar(@$prestamos_array_ref) > 0){
-    # recorremos todos los prestamos, y guardamos los vencidos
         foreach my $prestamo (@$prestamos_array_ref){
-        
             if ($prestamo->estaVencido()){        
                 push(@arrayPrestamos,($prestamo));
             }
         }  
-        
-        return (@arrayPrestamos);     
+        return (\@arrayPrestamos);     
     }else{
         return 0;
     }

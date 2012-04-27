@@ -9,62 +9,73 @@
                });
     </script>
 
-                <div class="datos_tabla_div" id="datos_tabla_div">
-                <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width=100%>
-                <thead>
-                <tr class="titulo_tabla_resultado">
-                    <th>[% "Servidor" | i18n %]</th>
-                    <th>[% "T&iacute;tulo" | i18n %]</th>
-                    <th>&nbsp;</th>
-                    <th>[% "Autor" | i18n %]</th>
-                    <th>[% "Edici&oacute;n" | i18n %]</th>
-                    <th>[% "A&ntilde;o" | i18n %]</th>
-                    <th>&nbsp;</th>
-                </tr>
-                </thead>
-                <tbody>
-                    [% FOREACH resultado IN RESULTADO.resultados %]
-                    <tr>
-                        <td width="15%" > 
-                        [% resultado.servidor.nombre %]
-                        </td>
+    <div class="datos_tabla_div" id="datos_tabla_div">
 
-                        <td>
-                        <p class="titulo_result" width="45%">[% resultado.getRegistroMARC.title %]</p>
-                        </td>
-                        <td>
-                            [% IF resultado.getPortada %]
-                                <img name="cover"  VALUE="" BORDER=0 src="/uploads/covers/[% resultado.getPortada.getSmall %]" title="Portada">
-                            [% ELSE %]
-                                <img src="/uploads/covers/no_image.jpg" alt="[% 'Sin Portada' | i18n %]" title="[% 'Sin Portada' | i18n %]" />
-                            [% END %]
-                        </td>
-                        <td width="15%">
-                        [% resultado.getRegistroMARC.author %] 
-                        </td>
-                        <td width="5%">
-                        [% resultado.getRegistroMARC.edition %] 
-                        </td>
-                        <td width="5%">
-                        [% resultado.getRegistroMARC.publication_date %] 
-                        </td>
-                        <td width="5%">
-                         [% PERL %]
-                                print C4::AR::Filtros::to_Icon(
-                                                                    boton   => "icon_ayuda_marc",
-                                                                    onClick => "mostrarDetalleMARC('[% resultado.getId %]')",
-                                                                    title   => "[% 'MARC' | i18n %]",
-                                        ) ;
-                        [% END %]
-                        </td>
-                    </tr>
-                    [% END %]
-                </tbody>
-            </table>
-            </div>
-[% ELSE %]
-<legend>[% "No hay resultados" | i18n %]</legend>
-[% END %]
+              <div class="well">
+                    
+                  [% IF cantidad %]
+                    
+                      [% "La cantidad de registros es" | i18n %]: <strong>[% cant_resultados %]</strong>
+              </div>
+
+
+                                  [% PERL %]
+                                        print C4::AR::Filtros::tableHeader(   
+                                                                  id              => "tablaResult",
+                                                                  class           => "",
+                                                                  selectAll_id    => "",
+                                                                  columns         => ['[% "Servidor" | i18n %]','[% "T&iacute;tulo" | i18n %]',
+                                                                                      '[% "Portada" | i18n %]','[% "Autor" | i18n %]',
+                                                                                      '[% "Edici&oacute;n" | i18n %]','[% "A&ntilde;o" | i18n %]',
+                                                                                      '[% "Detalle" | i18n %]',
+                                                                                    ]
+                                                                                                    
+                                                                        ) ;
+                                  [% END %]
+                          <tbody>
+                              [% FOREACH resultado IN RESULTADO.resultados %]
+                              <tr>
+                                  <td> 
+                                        [% resultado.servidor.nombre %]
+                                  </td>
+                                  <td>
+                                        [% resultado.getRegistroMARC.title %]
+                                  </td>
+                                  <td>
+                                      [% IF resultado.getPortada %]
+                                          <img name="cover"  VALUE="" BORDER=0 src="/uploads/covers/[% resultado.getPortada.getSmall %]" title="Portada">
+                                      [% ELSE %]
+                                          <img src="/uploads/covers/no_image.jpg" alt="[% 'Sin Portada' | i18n %]" title="[% 'Sin Portada' | i18n %]" />
+                                      [% END %]
+                                  </td>
+                                  <td>
+                                      [% resultado.getRegistroMARC.author %] 
+                                  </td>
+                                  <td>
+                                      [% resultado.getRegistroMARC.edition %] 
+                                  </td>
+                                  <td>
+                                      [% resultado.getRegistroMARC.publication_date %] 
+                                  </td>
+                                  <td>
+                                  [% PERL %]
+                                          print C4::AR::Filtros::to_Icon(
+                                                                              boton   => "icon_ayuda_marc",
+                                                                              onClick => "mostrarDetalleMARC('[% resultado.getId %]')",
+                                                                              title   => "[% 'MARC' | i18n %]",
+                                                  ) ;
+                                  [% END %]
+                                  </td>
+                              </tr>
+                              [% END %]
+                          </tbody>
+                      </table>
+            [% ELSE %]
+                <div class="alert alert-info">[% 'No hay resultados para mostrar'| i18n %]</div>
+
+            [% END %]
+
+        </div>
 </fieldset>
 
 <div id="detalleMARC"></div>

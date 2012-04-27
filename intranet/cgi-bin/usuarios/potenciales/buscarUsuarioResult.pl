@@ -45,18 +45,15 @@ $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $
 
 if($socios){
 
-	my $comboDeCategorias= &C4::AR::Utilidades::generarComboCategoriasDeSocio();
+	my $comboDeCategorias= C4::AR::Utilidades::generarComboCategoriasDeSocio();
 	
 	my @resultsdata; 
 	my $i=0;
 	
 	foreach my $socio (@$socios){
 		my $clase="";
-		if ($socio->getActivo == 0){
-			$activo = "NO";
-		}else{
-			$activo = "SI";
-		}
+
+    	$activo = C4::AR::Utilidades::translateYesNo_fromNumber($socio->esRegular);
 		
 		my %row = (
 				clase=> $clase,
@@ -69,9 +66,10 @@ if($socios){
 	}
 	
 	$t_params->{'resultsloop'}= \@resultsdata;
-	$t_params->{'cantidad'}= $cantidad;
-	$t_params->{'socio_busqueda'}= $socioBuscado;
+	
 
 }#END if($socios)
 
+$t_params->{'cantidad'}= $cantidad;
+$t_params->{'socio_busqueda'}= $socioBuscado;
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

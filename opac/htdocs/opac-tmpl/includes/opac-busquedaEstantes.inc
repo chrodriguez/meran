@@ -1,51 +1,56 @@
 [% USE HTML %]
 [% IF show_search_details %]
-
-     <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda:" | i18n %] <strong>[% buscoPor | html %]</strong></div>
-  
-     <div class="resultados_consulta">[% "Cantidad de Registros:" | i18n %] [% cantidad %] en ([% timeSeg %] segundos)</div>
-
+   <div class="well">
+          <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda:" | i18n %] <strong>[% buscoPor | html %]</strong></div>
+        
+          <div class="resultados_consulta">[% "Cantidad de Registros:" | i18n %] [% cantidad %] en ([% timeSeg %] segundos)</div>
+   </div>
      <div class="contenedor_paginador">[% paginador %]</div>
 [% END %]
 
     [% IF cantidad > 0 %]
 
-        <table id="tablaResult" class="tabla_datos" cellspacing='0' cellpadding='0' style="text-align:center; width:100%; border:1;">
-                <tr class="tablaresultadoTitle">
-                    <th align="center">
-                        [% "Estante" | i18n %]
-                    </th>
-                </tr>
-            <!-- Actual Resultados de la b&uacute;squeda -->
-            [% FOREACH estante IN SEARCH_RESULTS %]
-                <tr class="datos_tabla_estantes">
-                    <td>
-			  [% auxEstante = estante %]
-			  [% listaEstantes = '' %]
-			  [% WHILE auxEstante > 0 %]
-			      [% IF listaEstantes != ''%] [%  listaEstantes = ' / ' _ listaEstantes %] [% END %]
-			      [%  listaEstantes = auxEstante.getEstante _ listaEstantes %]
-			      [% IF auxEstante.getPadre %]
-				[% auxEstante = auxEstante.estante_padre %]
-			      [% ELSE %]
-				[% auxEstante = 0 %]
-			      [% END %]
-			 [% END %]
-
-			      [% PERL %]
-				  print C4::AR::Filtros::link_to( text =>     "[% listaEstantes %]",
-								  url=>"[% url_prefix %]/opac-estante.pl", 
-								  params =>   ["id_estante=[% estante.getId %]"],
-								  title =>    "[% 'Mostrar Detalle del Estante' | i18n %]",
-								  class => "link_to_detail"
-							      ) ;
-			      [% END %]
-
-                    </td>
-                </tr>
+            [% PERL %]
+                      print C4::AR::Filtros::tableHeader(   
+                                        id              => "tablaResult",
+                                        class           => "",
+                                        selectAll_id    => "",
+                                        columns         => ['[% "Estante"|i18n %]']                                  
+                      ) ;
             [% END %]
+    
+            </tbody>
+            <!-- Actual Resultados de la b&uacute;squeda -->
+                  [% FOREACH estante IN SEARCH_RESULTS %]
+                      <tr class="datos_tabla_estantes">
+                          <td>
+                    [% auxEstante = estante %]
+                    [% listaEstantes = '' %]
+                    [% WHILE auxEstante > 0 %]
+                        [% IF listaEstantes != ''%] [%  listaEstantes = ' / ' _ listaEstantes %] [% END %]
+                        [%  listaEstantes = auxEstante.getEstante _ listaEstantes %]
+                        [% IF auxEstante.getPadre %]
+                      [% auxEstante = auxEstante.estante_padre %]
+                        [% ELSE %]
+                      [% auxEstante = 0 %]
+                        [% END %]
+                  [% END %]
+
+                        [% PERL %]
+                        print C4::AR::Filtros::link_to( text =>     "[% listaEstantes %]",
+                                        url=>"[% url_prefix %]/opac-estante.pl", 
+                                        params =>   ["id_estante=[% estante.getId %]"],
+                                        title =>    "[% 'Mostrar Detalle del Estante' | i18n %]",
+                                        class => "link_to_detail"
+                                        ) ;
+                        [% END %]
+
+                          </td>
+                      </tr>
+                  [% END %]
+              </tbody>
         </table>
-        <br />
+ 
         <div class="contenedor_paginador">[% paginador %]</div>
 
 [% ELSE %]

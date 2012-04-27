@@ -1,49 +1,51 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-
+<!doctype html>
 <html>
-
 <head>
-<title>Meran::UNLP</title>
-<link rel="stylesheet" type="text/css" href="[% temas %]/[% tema %]/includes/login_screen.css">
-<script type="text/javascript">
-    var URL_PREFIX  = '[% url_prefix %]';
-</script>
-<script type="text/javascript" src="/includes/jquery/jquery-min.js"></script>
-<script type="text/javascript" src="/includes/util-min.js"></script>
-<script type="text/javascript" src="/includes/md5-min.js"></script>
-<script type="text/javascript" src="/includes/sha1-min.js"></script>
-
-<script type="text/javascript">
-	 var RecaptchaOptions = {
-	 };
-</script>
-
-
-<script type="text/javascript">
-    function enviar(){
-        [% IF plainPassword == 0 %]
-            var nroRandom   = [% nroRandom %];
-            var hash        = b64_sha256(b64_sha256(b64_md5($("#password_plain").val()))+nroRandom);
-            $("#password").val(hash);
-        [% ELSE %]
-            $("#password").val($("#password_plain").val());
-        [% END %]
-        var username    = $.trim($("#username").val());
-        $("#userid").val(username);
-        $("#datosAEnviar").submit();
-    }
-
-
-    $(document).ready(function() {
-        //onEnter con foco en input, ejecuta la busqueda
-          onEnter("username",enviar);
-          onEnter("password_plain",enviar);
-          onEnter("recaptcha_response_field",enviar);
-          $('#username').focus();
-    });
-
-</script>
-
+	<title>Meran::UNLP</title>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	[% INCLUDE 'intranet-top.inc' %]	
+	
+	<script type="text/javascript">
+	    var URL_PREFIX  = '[% url_prefix %]';
+	</script>
+	[% INCLUDE "BootstrapToolkit.inc" %]
+	<script type="text/javascript" src="/includes/util-min.js"></script>
+	<script type="text/javascript" src="/includes/md5-min.js"></script>
+	<script type="text/javascript" src="/includes/sha1-min.js"></script>
+	
+	<script type="text/javascript">
+		 var RecaptchaOptions = {
+		 };
+	</script>
+	
+	
+	<script type="text/javascript">
+	    function enviar(){
+	        [% IF plainPassword == 0 %]
+	            var nroRandom   = [% nroRandom %];
+	            var hash        = b64_sha256(b64_sha256(b64_md5($("#password_plain").val()))+nroRandom);
+	            $("#password").val(hash);
+	        [% ELSE %]
+	            $("#password").val($("#password_plain").val());
+	        [% END %]
+	        var username    = $.trim($("#username").val());
+	        $("#userid").val(username);
+	        $("#datosAEnviar").submit();
+	    }
+	
+	
+	    $(document).ready(function() {
+	        //onEnter con foco en input, ejecuta la busqueda
+	          onEnter("username",enviar);
+	          onEnter("password_plain",enviar);
+	          onEnter("recaptcha_response_field",enviar);
+	          $('#username').focus();
+	    });
+	
+	</script>
+	
 </head>
 <body>
 <noscript>
@@ -53,49 +55,62 @@
         </font>
     </div>
 </noscript>
-[% IF mensaje %]
-  <div class='tableMsgUser'>
-    <div id='mensajes' class="mensajes_informacion auth_info">
-      <font class='fontMsgUser'><b>[% mensaje %]</b></font>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container" style="width: auto;">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </a>
+
+        <div id="logo"><a>[% 'MERAN' | i18n %]</a></div>
+      </div>
     </div>
-  </div>
-[% END %]
-<div style="padding-top: 15%; height: 100%;" >
-        
-        <div id="login">
-            <div id="contenido_login">
-                <div class="entry">     
-                        <label for="username" class="login">[% 'Identificaci&oacute;n:' | i18n %]</label>
-                        <input size=15  name="username" id="username" >
-                </div>
-                <div class="entry">
-                        <label for="password_plain" class="login">[% 'Contrase&ntilde;a:' | i18n %]</label>
-                        <input  size=15 type="password" name="password_plain" id="password_plain">
-                </div>
-                <div id="boton_login">
-                    <ul>
-                        <li class="click horizontal " onclick="enviar(); return(false);" style="width:10ex" title="Entrar">     
-                            <div class="boton_entrar"></div>    
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-
-    <form action='[% url_prefix %]/mainpage.pl' method="post" name="datosAEnviar" id="datosAEnviar">
-                <input type="hidden" name="userid" id="userid" >
-                <input type="hidden" name="password" id="password">
-                [%  IF mostrar_captcha  %]
-                      
-                      <p style="margin-left:270px; height:30px; text-align:center; width: 800px; border-width: 1px; border-style: solid; border-color:#B40404; background:#F5A9A9">[% 'Comprobaci&oacute;n de seguridad: Debido a que ha intentado iniciar sesi&oacute;n varias veces con el mismo usuario, deber&aacute; ingresar el siguiente c&oacute;digo de seguridad' | i18n %]</p>    
-                      <div id="captcha"> 
-                        <script src="https://www.google.com/recaptcha/api/challenge?k=6LehoMQSAAAAAOhylvTt_7RrPKVdll7CN0jJRdaf" type="text/javascript"></script>
-                        <noscript><iframe frameborder="0" height="30" src="http://www.google.com/recaptcha/api/noscript?k=6LehoMQSAAAAAOhylvTt_7RrPKVdll7CN0jJRdaf" width="500"></iframe>
-                                  <textarea cols="40" name="recaptcha_challenge_field" rows="3"></textarea>
-                                  <input name="recaptcha_response_field" type="hidden" value="manual_challenge" />
-                        </noscript>
-                      </div>
-                [% END %]
-        </form>
 </div>
+<div class="container span100 no-margin padding_nav">
+    
+	<div id="content" class="login-form">
+		<div class="page-header">
+		    <h1>MERAN <small>[% 'Ingresar a Intranet' | i18n %]</small></h1>
+		</div>		
+		<div class="form-horizontal" id="login-form">
+		    <fieldset>
+	            <div class="control-group">
+	                <label class="control-label" for="username">[% 'Usuario' | i18n %]</label>
+	                <div class="controls">
+	                  <input type="text" class="input-xlarge" id="username" name="username" autofocus>
+	                </div>
+	            </div>
+	            <div class="control-group">
+	                <label class="control-label" for="username">[% 'Contrase&ntilde;a' | i18n %]</label>
+	                <div class="controls">
+	                  <input type="password" class="input-xlarge" id="password_plain" name="password_plain">
+	                </div>
+	            </div>
+		    </fieldset>
+		
+			<div class="form-actions">
+			    <button type="submit" class="btn btn-primary" onclick="enviar();">[% 'Iniciar sesi&oacute;n' | i18n %]</button>
+			</div>	
+		</div> 
+	     <form action='[% url_prefix %]/mainpage.pl' method="post" name="datosAEnviar" id="datosAEnviar">
+	        [%  IF mostrar_captcha  %]
+	             <div class="alert alert-error">[% 'Comprobaci&oacute;n de seguridad: Debido a que ha intentado iniciar sesi&oacute;n varias veces con el mismo usuario, deber&aacute; ingresar el siguiente c&oacute;digo de seguridad' | i18n %]</p>    
+	             <div id="captcha"> 
+	               <script src="https://www.google.com/recaptcha/api/challenge?k=[% re_captcha_public_key %]" type="text/javascript"></script>
+	               <noscript><iframe frameborder="0" height="30" src="http://www.google.com/recaptcha/api/noscript?k=[% re_captcha_public_key %]" width="500"></iframe>
+	                         <textarea cols="40" name="recaptcha_challenge_field" rows="3"></textarea>
+	                         <input name="recaptcha_response_field" type="hidden" value="manual_challenge" />
+	               </noscript>
+	             </div>
+	        [% END %]
+	                <input type="hidden" name="userid" id="userid" >
+	                <input type="hidden" name="password" id="password">
+	     </form>
+	</div><!-- content -->
+</div>
+
+
+

@@ -42,7 +42,6 @@ use C4::AR::Prestamos qw(cantidadDePrestamosPorUsuario);
 use C4::Modelo::UsrPersona;
 use C4::Modelo::UsrPersona::Manager;
 use C4::Modelo::UsrEstado;
-use C4::Modelo::UsrEstado::Manager;
 use C4::Modelo::UsrSocio;
 use C4::Modelo::UsrSocio::Manager;
 use C4::AR::Preferencias;
@@ -81,6 +80,8 @@ use vars qw(@EXPORT_OK @ISA);
     _verificarLibreDeuda
     updateUserProfile
     modificarCredencialesSocio
+    getEsquemaRegularidades
+    editarRegularidadEsquema
 );
 
 =item
@@ -195,7 +196,7 @@ sub agregarPersona {
     Parametros: 
     ARRAY: con los id de los socios a habilitar
 
-=cut 
+=cut
 sub habilitarPersona {
 
     my ($id_socios_array_ref)=@_;
@@ -227,7 +228,7 @@ sub habilitarPersona {
     Este modulo deshabilita un socio, para que no pueda operar en la biblioteca.
     Parametros:
                 ARRAY: con los id de los socios a deshabilitar
-=cut 
+=cut
 sub deshabilitarPersona {
 
     my ($id_socios_array_ref)=@_;
@@ -260,7 +261,7 @@ sub deshabilitarPersona {
     Este modulo resetea (deja en blanco) el password de acceso de un usuario, que sera su nro_documento.
     Parametros: 
                 HASH: {nro_socio}
-=cut 
+=cut
 sub desautorizarTercero {
 
     my ($params)=@_;
@@ -289,7 +290,7 @@ sub desautorizarTercero {
     Este modulo resetea (deja en blanco) el password de acceso de un usuario, que será su nro_documento.
     Parametros: 
                 HASH: {nro_socio}
-=cut 
+=cut
 sub resetPassword {
 
     my ($params)=@_;
@@ -510,12 +511,12 @@ sub actualizarSocio {
         $dbh->{AutoCommit} = 0;  # enable transactions, if possible
         $dbh->{RaiseError} = 1;
 
-        eval {
+        #eval {
             my $socio = getSocioInfoPorNroSocio($params->{'nro_socio'});
             $socio->modificar($params);
-            $socio->setThemeINTRA($params->{'tema'} || 'default');
+#            $socio->setThemeINTRA($params->{'tema'} || 'default');
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U338', 'params' => []} ) ;
-        };
+        #};
 
         if ($@){
             #Se loguea error de Base de Datos
@@ -769,22 +770,23 @@ sub BornameSearchForCard {
     my @filtros;
     my $socioTemp = C4::Modelo::UsrSocio->new();
 
-    if ((C4::AR::Utilidades::validateString($params->{'categoria_socio'}))&& ($params->{'categoria_socio'} ne 'SIN SELECCIONAR')) {
-            push (@filtros, (id_categoria => { eq => $params->{'categoria_socio'} }) );
-    }
-
-    if (C4::AR::Utilidades::validateString($params->{'apellido1'})){ 
-            push (@filtros, ('persona.'.apellido => { like => $params->{'apellido1'}.'%', gt => $params->{'apellido1'} }) ); # >=
-    }
-    
-    if (C4::AR::Utilidades::validateString($params->{'apellido2'})){ 
-                push (@filtros, ('persona.'.apellido => { like => $params->{'apellido2'}.'%', lt => $params->{'apellido2'} }) ); # <=
+    if ((C4::AR::Utilidades::validateString($params->{'apellido1'})) || (C4::AR::Utilidades::validateString($params->{'apellido2'}))){
+        if ((C4::AR::Utilidades::validateString($params->{'apellido1'})) && (C4::AR::Utilidades::validateString($params->{'apellido2'}))){
+                push (@filtros, ('persona.'.apellido => { ge => $params->{'apellido1'}})); # >=
+                push (@filtros, ('persona.'.apellido => { le => $params->{'apellido2'}, like => $params->{'apellido2'}.'%'})); # <=
+        }
+        elsif (C4::AR::Utilidades::validateString($params->{'apellido1'})) {
+                push (@filtros, ('persona.'.apellido => {ge => $params->{'apellido1'}}) );
+        }
+        else {
+               push (@filtros, ('persona.'.apellido => { le => $params->{'apellido2'}}) );
+        }
     }
 
     if ((C4::AR::Utilidades::validateString($params->{'legajo1'})) || (C4::AR::Utilidades::validateString($params->{'legajo2'}))){
         if ((C4::AR::Utilidades::validateString($params->{'legajo1'})) && (C4::AR::Utilidades::validateString($params->{'legajo2'}))){
-                push (@filtros, ('persona.'.legajo => { gt => $params->{'legajo1'}, eq => $params->{'legajo1'} }) ); # >=
-                push (@filtros, ('persona.'.legajo => { lt => $params->{'legajo2'}, eq => $params->{'legajo2'} }) ); # <=
+                push (@filtros, ('persona.'.legajo => { ge => $params->{'legajo1'}})); # >=
+                push (@filtros, ('persona.'.legajo => { le => $params->{'legajo2'}})); # <=
         }
         elsif (C4::AR::Utilidades::validateString($params->{'legajo1'})) {
                 push (@filtros, ('persona.'.legajo => { eq => $params->{'legajo1'}}) );
@@ -794,34 +796,37 @@ sub BornameSearchForCard {
         }
     }
 
+    if ($params->{'categoria_socio'} ne '') {
+            push (@filtros, (id_categoria => { eq => $params->{'categoria_socio'} }) );
+    }
+   
      push (@filtros, ('persona.'.es_socio => { eq => 1}) );
      push (@filtros, (activo => { eq => 1}) );
      $params->{'cantR'} = $params->{'cantR'} || 0;
      $params->{'ini'} = $params->{'ini'} || 0;
      my $socios_array_ref=0;
      my $socios_array_ref_count=0;
-    eval{
+     eval{
         $socios_array_ref_count = C4::Modelo::UsrSocio::Manager->get_usr_socio_count(   query => \@filtros,
-                                                                            sort_by => ( $socioTemp->sortByString($params->{'orden'}) ),
-                                                              require_objects => ['persona','ui','categoria','persona.ciudad_ref',
-                                                                                  'persona.documento'],
+                                                                                sort_by => ( $socioTemp->sortByString($params->{'orden'}) ),
+                                                                                require_objects => ['persona'],
         );
         if ($params->{'export'}){
 	        $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
 	                                                                            sort_by => ( $socioTemp->sortByString($params->{'orden'}) ),
-	                                                              require_objects => ['persona','ui','categoria','persona.ciudad_ref',
-	                                                                                  'persona.documento'],
+                                                                                require_objects => ['persona'],
 	        );
+
         }else{
             $socios_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio(   query => \@filtros,
                                                                                 sort_by => ( $socioTemp->sortByString($params->{'orden'}) ),
-                                                                                 limit => $params->{'cantR'},
-                                                                                 offset => $params->{'ini'},
-                                                                  require_objects => ['persona','ui','categoria','persona.ciudad_ref',
-                                                                                      'persona.documento'],
+                                                                                limit => $params->{'cantR'},
+                                                                                offset => $params->{'ini'},
+                                                                                require_objects => ['persona'],
             );
         }
     };
+
 
     return ($socios_array_ref_count, $socios_array_ref);
 }
@@ -1066,7 +1071,7 @@ sub updateUserProfile{
 	eval{
 		$socio->persona->setEmail($params->{'email'});
         $socio->setLocale($params->{'language'});
-        $socio->setThemeINTRA($params->{'temas_intra'});
+        #$socio->setThemeINTRA($params->{'temas_intra'});
         #SAVE DATA
 		$socio->persona->save();
 		$socio->save();
@@ -1074,6 +1079,39 @@ sub updateUserProfile{
 	
 	return ($socio);
 }
+
+sub getEsquemaRegularidades{
+	
+	my $regularidades = C4::Modelo::UsrRegularidad::Manager->get_usr_regularidad(require_objects => ['estado','categoria'], sort_by => ['categoria.description, estado.nombre, estado.fuente ASC'],);
+	
+	return $regularidades;
+	
+}
+
+
+sub editarRegularidadEsquema{
+	
+	my ($ref,$value) = @_;
+
+    my @filtros;
+
+    my @id_array = split('_',$ref);
+    
+    $ref = @id_array[1];
+    push (@filtros, (id => {eq =>$ref}) );
+	
+	my $regularidades = C4::Modelo::UsrRegularidad::Manager->update_usr_regularidad(   where => \@filtros, 
+	                                                                                   set => {condicion => C4::AR::Utilidades::translateYesNo_toNumber($value)} );
+	
+	
+	return ($value);
+	
+}
+
+
+
+
+
 
 END { }       # module clean-up code here (global destructor)
 

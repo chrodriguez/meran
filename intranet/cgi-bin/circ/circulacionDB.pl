@@ -15,8 +15,8 @@ my $authnotrequired = 0;
 #tipoAccion = PRESTAMO, RESREVA, DEVOLUCION, CONFIRMAR_PRESTAMO
 my $tipoAccion      = C4::AR::Utilidades::trim($obj->{'tipoAccion'})||"";
 my $nro_socio       = C4::AR::Utilidades::trim($obj->{'nro_socio'});
-C4::AR::Debug::debug("ACCION -> ".$tipoAccion);
-C4::AR::Debug::debug("SOCIO -> ".$nro_socio);
+#C4::AR::Debug::debug("ACCION -> ".$tipoAccion);
+#C4::AR::Debug::debug("SOCIO -> ".$nro_socio);
 
 #***************************************************DEVOLUCION**********************************************
 if($tipoAccion eq "DEVOLUCION" || $tipoAccion eq "RENOVACION"){
@@ -83,6 +83,8 @@ elsif($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 	for(my $i=0;$i<$cant;$i++){
 		my $id3_a_prestar                       = $array_ids3_a_prestar->[$i];
 		my $nivel3aPrestar                      = C4::AR::Nivel3::getNivel3FromId3($id3_a_prestar);
+    
+#         C4::AR::Debug::debug("lajsdlsakjdlaksjdl".$nivel3aPrestar);
 		#Busco ejemplares no prestados con estado disponible e igual disponibilidad que el que se quiere prestar
 		my $items_array_ref                     = C4::AR::Nivel3::buscarNivel3PorDisponibilidad($nivel3aPrestar);
 		#Busco los tipos de prestamo habilitados y con la misma disponibilidad del nivel 3 a prestar
@@ -304,15 +306,15 @@ elsif($tipoAccion eq "CIRCULACION_RAPIDA"){
 
 	
 	if($params{'operacion'} eq "renovar"){	
-# 		my ($Message_arrayref) = C4::AR::Prestamos::t_renovarPorBarcode(\%params);
-	C4::AR::Debug::debug("circulacionDB.pl => circulacion rapida => renovar barcode: ".$params{'barcode'});	
+        C4::AR::Debug::debug("circulacionDB.pl => circulacion rapida => renovar barcode: ".$params{'datosArray'});	
+        ($Message_arrayref)   = C4::AR::Prestamos::renovarYGenerarTicket(\%params);
 	}
 	elsif($params{'operacion'} eq "devolver"){
 
 		($Message_arrayref)     = C4::AR::Prestamos::t_devolver(\%params);	
 	}
 	elsif($params{'operacion'} eq "prestar"){
-		($Message_arrayref)     = C4::AR::Prestamos::prestarYGenerarTicket(\%params)		
+		($Message_arrayref)     = C4::AR::Prestamos::prestarYGenerarTicket(\%params);
 	}
 	
 	my $infoOperacionJSON       = to_json $Message_arrayref;

@@ -14,14 +14,10 @@
                     var claseOriginal;
 					for (var i = start; i < end; i++) {
 						tr[i].childNodes[1].childNodes[1].checked = chk;
-                        clase = tr[i].getAttribute('class');
-                        claseOriginal = clase.split(' ');
                         if(chk == false){         
-                            tr[i].setAttribute('class', claseOriginal[0]);
-                        }else{
-                            if(claseOriginal[1] != 'marked'){ 
-                                tr[i].setAttribute('class', clase+' marked');
-                            }
+                            tr[i].setAttribute('class', '');
+                        }else{ 
+                            tr[i].setAttribute('class', ' marked');
                         }
 					}
 				} else {

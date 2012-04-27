@@ -113,6 +113,10 @@ else {
     if ($nivel3) {
         $t_params->{'nivel3'} = $nivel3;
     }
+    if ($nivel3->estaPrestado){
+        $t_params->{'socio_prestamo'} = C4::AR::Prestamos::getPrestamoDeId3($nivel3->id)->socio;        
+        $t_params->{'prestamo'} = C4::AR::Prestamos::getPrestamoDeId3($nivel3->id);        
+    }
     
     #traemos el socio de la reserva, si es que existe
     my $socio_reserva               = C4::AR::Reservas::getSocioFromReserva($nivel3->getId3());

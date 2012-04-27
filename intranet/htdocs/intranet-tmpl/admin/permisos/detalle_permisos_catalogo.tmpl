@@ -14,400 +14,559 @@
 
 [% INCLUDE 'partials/admin/_nuevoPermiso.inc' %]
 
-<div class="permisos_box">
-    <fieldset id="datos_nivel1">
-        <legend class="titulo_legend_resaltado"> Entorno Nivel 1</legend>
-        <ul class="permission_grant" >
-            <li class="inline_input">
-                <label for="permission_5"> TODOS </label>
-                <input type="checkbox" id="datos_nivel1_todos" name="datos_nivel1_todos" onChange="adviceGrant(this,'datos_nivel1','high');"
-                        [% IF permisos.datos_nivel1.TODOS %] checked="checked" [% END %] />
-            </li>
-            <li class="inline_input">
-                <label for="permission_2"> Baja </label>
-                <input type="checkbox" id="datos_nivel1_baja" name="datos_nivel1_baja" onChange="adviceGrant(this,'datos_nivel1','high');"
-                        [% IF permisos.datos_nivel1.BAJA %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_3"> Modificaci&oacute;n </label>
-                <input type="checkbox" id="datos_nivel1_modif" name="datos_nivel1_modif" onChange="adviceGrant(this,'datos_nivel1','high');"
-                        [% IF permisos.datos_nivel1.MODIFICACION %] checked="checked" [% END %] />
-            </li>
-            <li class="inline_input">
-                <label for="permission_1"> Alta </label>
-                <input type="checkbox" id="datos_nivel1_alta" name="datos_nivel1_alta" onChange="adviceGrant(this,'datos_nivel1','medium');"
-                        [% IF permisos.datos_nivel1.ALTA %] checked="checked" [% END %] />
-            </li>
-            <li class="inline_input">
-                <label for="permission_4"> Consulta </label>
-                <input type="checkbox" id="datos_nivel1_consulta" name="datos_nivel1_consulta" onChange="adviceGrant(this,'datos_nivel1','low');"
-                        [% IF permisos.datos_nivel1.CONSULTA %] checked="checked" [% END %]/>
-            </li>
-        </ul>
+<form class="form-horizontal" onsubmit="return false;">
+<div>
+    <fieldset>
+        <legend> Entorno Nivel 1</legend>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="datos_nivel1_todos">TODOS</label>
+            <div class="controls">
+                <input type="checkbox" id="datos_nivel1_todos" name="datos_nivel1_todos" 
+                [% IF permisos.datos_nivel1.TODOS %] checked="checked" [% END %] />
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="datos_nivel1_baja">Baja</label>
+            <div class="controls">
+                <input type="checkbox" id="datos_nivel1_baja" name="datos_nivel1_baja"
+                [% IF permisos.datos_nivel1.BAJA %] checked="checked" [% END %]/>
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="datos_nivel1_modif">Modificaci&oacute;n</label>
+            <div class="controls">
+                <input type="checkbox" id="datos_nivel1_modif" name="datos_nivel1_modif" 
+                [% IF permisos.datos_nivel1.MODIFICACION %] checked="checked" [% END %] />
+            </div>
+        </div>
+        
+        <div class="control-group alert">
+            <label class="control-label" for="datos_nivel1_alta">Alta</label>
+            <div class="controls">
+                <input type="checkbox" id="datos_nivel1_alta" name="datos_nivel1_alta" 
+                [% IF permisos.datos_nivel1.ALTA %] checked="checked" [% END %] />
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-success">
+            <label class="control-label" for="datos_nivel1_consulta">Consulta</label>
+            <div class="controls">
+                <input type="checkbox" id="datos_nivel1_consulta" name="datos_nivel1_consulta"
+                [% IF permisos.datos_nivel1.CONSULTA %] checked="checked" [% END %]/>
+            </div>
+        </div>
      </fieldset>
 </div>
 
 <div>
-    <fieldset id="datos_nivel2">
-        <legend class="titulo_legend_resaltado"> Entorno Nivel 2</legend>
-        <ul class="permission_grant" >
-            <li class="inline_input">
-                <label for="permission_5"> TODOS </label>
-                <input type="checkbox" id="datos_nivel2_todos" name="datos_nivel2_todos" onChange="adviceGrant(this,'datos_nivel2','high');"
-                        [% IF permisos.datos_nivel2.TODOS %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_2"> Baja </label>
-                <input type="checkbox" id="datos_nivel2_baja" name="datos_nivel2_baja" onChange="adviceGrant(this,'datos_nivel2','high');"
-                        [% IF permisos.datos_nivel2.BAJA %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_3"> Modificaci&oacute;n </label>
-                <input type="checkbox" id="datos_nivel2_modif" name="datos_nivel2_modif" onChange="adviceGrant(this,'datos_nivel2','high');"
+    <fieldset>
+        <legend> Entorno Nivel 2</legend>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="datos_nivel2_todos">TODOS</label>
+            <div class="controls">
+                <input type="checkbox" id="datos_nivel2_todos" name="datos_nivel2_todos"
+                [% IF permisos.datos_nivel2.TODOS %] checked="checked" [% END %]/>
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="datos_nivel2_baja">Baja</label>
+            <div class="controls">
+                <input type="checkbox" id="datos_nivel2_baja" name="datos_nivel2_baja"
+                [% IF permisos.datos_nivel2.BAJA %] checked="checked" [% END %]/>
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="datos_nivel2_modif">Modificaci&oacute;n</label>
+            <div class="controls">
+                <input type="checkbox" id="datos_nivel2_modif" name="datos_nivel2_modif" 
                         [% IF permisos.datos_nivel2.MODIFICACION %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_1"> Alta </label>
-                <input type="checkbox" id="datos_nivel2_alta" name="datos_nivel2_alta" onChange="adviceGrant(this,'datos_nivel2','medium');"
+            </div>
+        </div>
+        
+        <div class="control-group alert">
+            <label class="control-label" for="datos_nivel2_alta">Alta</label>
+            <div class="controls">
+                <input type="checkbox" id="datos_nivel2_alta" name="datos_nivel2_alta" 
                         [% IF permisos.datos_nivel2.ALTA %] checked="checked" [% END %] />
-            </li>
-            <li class="inline_input">
-                <label for="permission_4"> Consulta </label>
-                <input type="checkbox" id="datos_nivel2_consulta" name="datos_nivel2_consulta" onChange="adviceGrant(this,'datos_nivel2','low');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-success">
+            <label class="control-label" for="datos_nivel2_consulta">Consulta</label>
+            <div class="controls">
+                <input type="checkbox" id="datos_nivel2_consulta" name="datos_nivel2_consulta" 
                         [% IF permisos.datos_nivel2.CONSULTA %] checked="checked" [% END %]/>
             </li>
-        </ul>
+            </div>
+        </div>
     </fieldset>
 </div>
 
 <div>
-    <fieldset id="datos_nivel3">
-        <legend class="titulo_legend_resaltado"> Entorno Nivel 3</legend>
-        <ul class="permission_grant" >
-            <li class="inline_input">
-                <label for="permission_5"> TODOS </label>
-                <input type="checkbox" id="datos_nivel3_todos" name="datos_nivel3_todos" onChange="adviceGrant(this,'datos_nivel3','high');"
+    <fieldset>
+        <legend> Entorno Nivel 3</legend>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="datos_nivel3_todos">TODOS</label>
+            <div class="controls">
+                <input type="checkbox" id="datos_nivel3_todos" name="datos_nivel3_todos" 
                     [% IF permisos.datos_nivel3.TODOS %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_2"> Baja </label>
-                <input type="checkbox" id="datos_nivel3_baja" name="datos_nivel3_baja" onChange="adviceGrant(this,'datos_nivel3','high');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="datos_nivel3_baja">Baja</label>
+            <div class="controls">
+                <input type="checkbox" id="datos_nivel3_baja" name="datos_nivel3_baja" 
                     [% IF permisos.datos_nivel3.BAJA %] checked="checked" [% END %]/>
-            <li>
-            <li class="inline_input">
-                <label for="permission_3"> Modificaci&oacute;n </label>
-                <input type="checkbox" id="datos_nivel3_modif" name="datos_nivel3_modif" onChange="adviceGrant(this,'datos_nivel3','high');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="datos_nivel3_modif">Modificaci&oacute;n</label>
+            <div class="controls">
+                <input type="checkbox" id="datos_nivel3_modif" name="datos_nivel3_modif" 
                     [% IF permisos.datos_nivel3.MODIFICACION %] checked="checked" [% END %]/>
-            <li>
-            <li class="inline_input">
-                <label for="permission_1"> Alta </label>
-                <input type="checkbox" id="datos_nivel3_alta" name="datos_nivel3_alta" onChange="adviceGrant(this,'datos_nivel3','medium');"
+            </div>
+        </div>
+        
+        <div class="control-group alert">
+            <label class="control-label" for="datos_nivel3_alta">Alta</label>
+            <div class="controls">
+                <input type="checkbox" id="datos_nivel3_alta" name="datos_nivel3_alta" 
                     [% IF permisos.datos_nivel3.ALTA %] checked="checked" [% END %] />
-            <li>
-            <li class="inline_input">
-                <label for="permission_4"> Consulta </label>
-                <input type="checkbox" id="datos_nivel3_consulta" name="datos_nivel3_consulta" onChange="adviceGrant(this,'datos_nivel3','low');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-success">
+            <label class="control-label" for="datos_nivel3_consulta">Consulta</label>
+            <div class="controls">
+                <input type="checkbox" id="datos_nivel3_consulta" name="datos_nivel3_consulta" 
                     [% IF permisos.datos_nivel3.CONSULTA %] checked="checked" [% END %]/>
-            <li>
-        </ul>
+        </div>
     </fieldset>
 </div>
 
 <div>
-    <fieldset id="estantes_virtuales">
-        <legend class="titulo_legend_resaltado"> Estantes Virtuales</legend>
-        <ul class="permission_grant" >
-            <li class="inline_input">
-                <label for="permission_5"> TODOS </label>
-                <input type="checkbox" id="estantes_virtuales_todos" name="estantes_virtuales_todos" onChange="adviceGrant(this,'estantes_virtuales','high');"
+    <fieldset>
+        <legend> Estantes Virtuales</legend>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="estantes_virtuales_todos">TODOS</label>
+            <div class="controls">
+                <input type="checkbox" id="estantes_virtuales_todos" name="estantes_virtuales_todos"
                     [% IF permisos.estantes_virtuales.TODOS %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_2"> Baja </label>
-                <input type="checkbox" id="estantes_virtuales_baja" name="estantes_virtuales_baja" onChange="adviceGrant(this,'estantes_virtuales','high');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="estantes_virtuales_baja">Baja</label>
+            <div class="controls">
+                <input type="checkbox" id="estantes_virtuales_baja" name="estantes_virtuales_baja" 
                     [% IF permisos.estantes_virtuales.BAJA %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_3"> Modificaci&oacute;n </label>
-                <input type="checkbox" id="estantes_virtuales_modif" name="estantes_virtuales_modif" onChange="adviceGrant(this,'estantes_virtuales','high');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="estantes_virtuales_modif">Modificaci&oacute;n</label>
+            <div class="controls">
+                <input type="checkbox" id="estantes_virtuales_modif" name="estantes_virtuales_modif" 
                     [% IF permisos.estantes_virtuales.MODIFICACION %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_1"> Alta </label>
-                <input type="checkbox" id="estantes_virtuales_alta" name="estantes_virtuales_alta" onChange="adviceGrant(this,'estantes_virtuales','medium');"
+            </div>
+        </div>
+        
+        <div class="control-group alert">
+            <label class="control-label" for="estantes_virtuales_alta">Alta</label>
+            <div class="controls">
+                <input type="checkbox" id="estantes_virtuales_alta" name="estantes_virtuales_alta"
                     [% IF permisos.estantes_virtuales.ALTA %] checked="checked" [% END %] />
-            </li>
-            <li class="inline_input">
-                <label for="permission_4"> Consulta </label>
-                <input type="checkbox" id="estantes_virtuales_consulta" name="estantes_virtuales_consulta" onChange="adviceGrant(this,'estantes_virtuales','low');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-success">
+            <label class="control-label" for="estantes_virtuales_consulta">Consulta</label>
+            <div class="controls">
+                <input type="checkbox" id="estantes_virtuales_consulta" name="estantes_virtuales_consulta"
                     [% IF permisos.estantes_virtuales.CONSULTA %] checked="checked" [% END %]/>
             </li>
-        </ul>
+            </div>
+        </div>
     </fieldset>
 </div>
 
 <div>
-    <fieldset id="estructura_catalogacion_n1">
-        <legend class="titulo_legend_resaltado"> Estructura del Cat&aacute;logo Nivel 1</legend>
-        <ul class="permission_grant" >
-            <li class="inline_input">
-                <label for="permission_5"> TODOS </label>
-                <input type="checkbox" id="estructura_catalogacion_n1_todos" name="estructura_catalogacion_n1_todos" onChange="adviceGrant(this,'estructura_catalogacion_n1','high');"
+    <fieldset>
+        <legend> Estructura del Cat&aacute;logo Nivel 1</legend>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="estructura_catalogacion_n1_todos">TODOS</label>
+            <div class="controls">
+                <input type="checkbox" id="estructura_catalogacion_n1_todos" name="estructura_catalogacion_n1_todos"
                     [% IF permisos.estructura_catalogacion_n1.TODOS %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-               <label for="permission_2"> Baja </label>
-                <input type="checkbox" id="estructura_catalogacion_n1_baja" name="estructura_catalogacion_n1_baja" onChange="adviceGrant(this,'estructura_catalogacion_n1','high');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="estructura_catalogacion_n1_baja">Baja</label>
+            <div class="controls">
+                <input type="checkbox" id="estructura_catalogacion_n1_baja" name="estructura_catalogacion_n1_baja" 
                     [% IF permisos.estructura_catalogacion_n1.BAJA %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-               <label for="permission_3"> Modificaci&oacute;n </label>
-                <input type="checkbox" id="estructura_catalogacion_n1_modif" name="estructura_catalogacion_n1_modif" onChange="adviceGrant(this,'estructura_catalogacion_n1','high');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="estructura_catalogacion_n1_modif">Modificaci&oacute;n</label>
+            <div class="controls">
+                <input type="checkbox" id="estructura_catalogacion_n1_modif" name="estructura_catalogacion_n1_modif" 
                     [% IF permisos.estructura_catalogacion_n1.MODIFICACION %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-               <label for="permission_1"> Alta </label>
-                <input type="checkbox" id="estructura_catalogacion_n1_alta" name="estructura_catalogacion_n1_alta" onChange="adviceGrant(this,'estructura_catalogacion_n1','medium');"
+            </div>
+        </div>
+        
+        <div class="control-group alert">
+            <label class="control-label" for="estructura_catalogacion_n1_alta">Alta</label>
+            <div class="controls">
+                <input type="checkbox" id="estructura_catalogacion_n1_alta" name="estructura_catalogacion_n1_alta" 
                     [% IF permisos.estructura_catalogacion_n1.ALTA %] checked="checked" [% END %] />
-            </li>
-            <li class="inline_input">
-                <label for="permission_4"> Consulta </label>
-                <input type="checkbox" id="estructura_catalogacion_n1_consulta" name="estructura_catalogacion_n1_consulta" onChange="adviceGrant(this,'estructura_catalogacion_n1','low');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-success">
+            <label class="control-label" for="estructura_catalogacion_n1_consulta">Consulta</label>
+            <div class="controls">
+                <input type="checkbox" id="estructura_catalogacion_n1_consulta" name="estructura_catalogacion_n1_consulta" 
                     [% IF permisos.estructura_catalogacion_n1.CONSULTA %] checked="checked" [% END %]/>
-            </li>
-        </ul>
+            </div>
+        </div>
     </fieldset>
 </div>
 
 <div>
-    <fieldset id="estructura_catalogacion_n2">
-        <legend class="titulo_legend_resaltado"> Estructura del Cat&aacute;logo Nivel 2</legend>
-        <ul class="permission_grant" >
-            <li class="inline_input">
-                <label for="permission_5"> TODOS </label>
-                <input type="checkbox" id="estructura_catalogacion_n2_todos" name="estructura_catalogacion_n2_todos" onChange="adviceGrant(this,'estructura_catalogacion_n2','high');"
+    <fieldset>
+        <legend> Estructura del Cat&aacute;logo Nivel 2</legend>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="estructura_catalogacion_n2_todos">TODOS</label>
+            <div class="controls">
+                <input type="checkbox" id="estructura_catalogacion_n2_todos" name="estructura_catalogacion_n2_todos" 
                     [% IF permisos.estructura_catalogacion_n2.TODOS %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_2"> Baja </label>
-                <input type="checkbox" id="estructura_catalogacion_n2_baja" name="estructura_catalogacion_n2_baja" onChange="adviceGrant(this,'estructura_catalogacion_n2','high');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="estructura_catalogacion_n2_baja">Baja</label>
+            <div class="controls">
+                <input type="checkbox" id="estructura_catalogacion_n2_baja" name="estructura_catalogacion_n2_baja" 
                     [% IF permisos.estructura_catalogacion_n2.BAJA %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_3"> Modificaci&oacute;n </label>
-                <input type="checkbox" id="estructura_catalogacion_n2_modif" name="estructura_catalogacion_n2_modif" onChange="adviceGrant(this,'estructura_catalogacion_n2','high');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="estructura_catalogacion_n2_modif">Modificaci&oacute;n</label>
+            <div class="controls">
+                <input type="checkbox" id="estructura_catalogacion_n2_modif" name="estructura_catalogacion_n2_modif" 
                     [% IF permisos.estructura_catalogacion_n2.MODIFICACION %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_1"> Alta </label>
-                <input type="checkbox" id="estructura_catalogacion_n2_alta" name="estructura_catalogacion_n2_alta" onChange="adviceGrant(this,'estructura_catalogacion_n2','medium');"
+            </div>
+        </div>
+        
+        <div class="control-group alert">
+            <label class="control-label" for="estructura_catalogacion_n2_alta">Alta</label>
+            <div class="controls">
+                <input type="checkbox" id="estructura_catalogacion_n2_alta" name="estructura_catalogacion_n2_alta" 
                     [% IF permisos.estructura_catalogacion_n2.ALTA %] checked="checked" [% END %] />
-            </li>
-            <li class="inline_input">
-                <label for="permission_4"> Consulta </label>
-                <input type="checkbox" id="estructura_catalogacion_n2_consulta" name="estructura_catalogacion_n2_consulta" onChange="adviceGrant(this,'estructura_catalogacion_n2','low');"    
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-success">
+            <label class="control-label" for="estructura_catalogacion_n2_consulta">Consulta</label>
+            <div class="controls">
+                <input type="checkbox" id="estructura_catalogacion_n2_consulta" name="estructura_catalogacion_n2_consulta"    
                     [% IF permisos.estructura_catalogacion_n2.CONSULTA %] checked="checked" [% END %]/>
-            </li>
-        </ul>
+            </div>
+        </div>
     </fieldset>
 </div>
 
 <div> 
-    <fieldset id="estructura_catalogacion_n3">
-        <legend class="titulo_legend_resaltado"> Estructura del Cat&aacute;logo Nivel 3</legend>
-        <ul class="permission_grant" >
-            <li class="inline_input">
-                <label for="permission_5"> TODOS </label>
-                <input type="checkbox" id="estructura_catalogacion_n3_todos" name="estructura_catalogacion_n3_todos" onChange="adviceGrant(this,'estructura_catalogacion_n3','high');"
+    <fieldset>
+        <legend> Estructura del Cat&aacute;logo Nivel 3</legend>
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="estructura_catalogacion_n3_todos">TODOS</label>
+            <div class="controls">
+                <input type="checkbox" id="estructura_catalogacion_n3_todos" name="estructura_catalogacion_n3_todos" 
                     [% IF permisos.estructura_catalogacion_n3.TODOS %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_2"> Baja </label>
-                <input type="checkbox" id="estructura_catalogacion_n3_baja" name="estructura_catalogacion_n3_baja" onChange="adviceGrant(this,'estructura_catalogacion_n3','high');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="estructura_catalogacion_n3_baja">Baja</label>
+            <div class="controls">
+                <input type="checkbox" id="estructura_catalogacion_n3_baja" name="estructura_catalogacion_n3_baja" 
                     [% IF permisos.estructura_catalogacion_n3.BAJA %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_3"> Modificaci&oacute;n </label>
-                <input type="checkbox" id="estructura_catalogacion_n3_modif" name="estructura_catalogacion_n3_modif" onChange="adviceGrant(this,'estructura_catalogacion_n3','high');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="estructura_catalogacion_n3_modif">Modificaci&oacute;n</label>
+            <div class="controls">
+                <input type="checkbox" id="estructura_catalogacion_n3_modif" name="estructura_catalogacion_n3_modif" 
                     [% IF permisos.estructura_catalogacion_n3.MODIFICACION %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_1"> Alta </label>
-                <input type="checkbox" id="estructura_catalogacion_n3_alta" name="estructura_catalogacion_n3_alta" onChange="adviceGrant(this,'estructura_catalogacion_n3','medium');"
-                    [% IF permisos.estructura_catalogacion_n3.ALTA %] checked="checked" [% END %] />
-            </li>
-            <li class="inline_input">
-                <label for="permission_4"> Consulta </label>
-                <input type="checkbox" id="estructura_catalogacion_n3_consulta" name="estructura_catalogacion_n3_consulta" onChange="adviceGrant(this,'estructura_catalogacion_n3','low');"
+            </div>
+        </div>
+        
+        <div class="control-group alert">
+            <label class="control-label" for="estructura_catalogacion_n3_alta">Alta</label>
+            <div class="controls">
+                <input type="checkbox" id="estructura_catalogacion_n3_modif" name="estructura_catalogacion_n3_modif" 
+                    [% IF permisos.estructura_catalogacion_n3.MODIFICACION %] checked="checked" [% END %]/>
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-success">
+            <label class="control-label" for="estructura_catalogacion_n3_consulta">Consulta</label>
+            <div class="controls">
+                <input type="checkbox" id="estructura_catalogacion_n3_consulta" name="estructura_catalogacion_n3_consulta" 
                     [% IF permisos.estructura_catalogacion_n3.CONSULTA %] checked="checked" [% END %]/>
-            </li>
-        </ul>
+            </div>
+        </div>
     </fieldset>
 </div>
 
 <div>
-    <fieldset id="tablas_de_refencia">
-        <legend class="titulo_legend_resaltado"> Tablas De Referencia</legend>
-        <ul class="permission_grant" >
-            <li class="inline_input">
-                <label for="permission_5"> TODOS </label>
-                <input type="checkbox" id="tablas_de_refencia_todos" name="tablas_de_refencia_todos" onChange="adviceGrant(this,'tablas_de_refencia','high');"
+    <fieldset>
+        <legend> Tablas De Referencia</legend>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="tablas_de_refencia_todos">TODOS</label>
+            <div class="controls">
+                <input type="checkbox" id="tablas_de_refencia_todos" name="tablas_de_refencia_todos" 
                     [% IF permisos.tablas_de_refencia.TODOS %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_2"> Baja </label>
-                <input type="checkbox" id="tablas_de_refencia_baja" name="tablas_de_refencia_baja" onChange="adviceGrant(this,'tablas_de_refencia','high');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="tablas_de_refencia_baja">Baja</label>
+            <div class="controls">
+                <input type="checkbox" id="tablas_de_refencia_baja" name="tablas_de_refencia_baja" 
                     [% IF permisos.tablas_de_refencia.BAJA %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_3"> Modificaci&oacute;n </label>
-                <input type="checkbox" id="tablas_de_refencia_modif" name="tablas_de_refencia_modif" onChange="adviceGrant(this,'tablas_de_refencia','high');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="tablas_de_refencia_modif">Modificaci&oacute;n</label>
+            <div class="controls">
+                <input type="checkbox" id="tablas_de_refencia_modif" name="tablas_de_refencia_modif" 
                     [% IF permisos.tablas_de_refencia.MODIFICACION %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_1"> Alta </label>
-                <input type="checkbox" id="tablas_de_refencia_alta" name="tablas_de_refencia_alta" onChange="adviceGrant(this,'tablas_de_refencia','medium');"
+            </div>
+        </div>
+        
+        <div class="control-group alert">
+            <label class="control-label" for="tablas_de_refencia_alta">Alta</label>
+            <div class="controls">
+                <input type="checkbox" id="tablas_de_refencia_alta" name="tablas_de_refencia_alta" 
                     [% IF permisos.tablas_de_refencia.ALTA %] checked="checked" [% END %] />
-            </li>
-            <li class="inline_input">
-                <label for="permission_4"> Consulta </label>
-                <input type="checkbox" id="tablas_de_refencia_consulta" name="tablas_de_refencia_consulta" onChange="adviceGrant(this,'tablas_de_refencia','low');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-success">
+            <label class="control-label" for="tablas_de_refencia_consulta">Consulta</label>
+            <div class="controls">
+                <input type="checkbox" id="tablas_de_refencia_consulta" name="tablas_de_refencia_consulta" 
                     [% IF permisos.tablas_de_refencia.CONSULTA %] checked="checked" [% END %]/>
-            </li>
-        </ul>
+            </div>
+        </div>
     </fieldset>
 </div>
 
 <div>
-    <fieldset id="control_de_autoridades">
-        <legend class="titulo_legend_resaltado"> Control de Autoridades</legend>
-        <ul class="permission_grant" >
-            <li class="inline_input">
-                <label for="permission_5"> TODOS </label>
-                <input type="checkbox" id="control_de_autoridades_todos" name="control_de_autoridades_todos" onChange="adviceGrant(this,'control_de_autoridades','high');"
+    <fieldset>
+        <legend> Control de Autoridades</legend>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="control_de_autoridades_todos">TODOS</label>
+            <div class="controls">
+                <input type="checkbox" id="control_de_autoridades_todos" name="control_de_autoridades_todos" 
                     [% IF permisos.control_de_autoridades.TODOS %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_2"> Baja </label>
-                <input type="checkbox" id="control_de_autoridades_baja" name="control_de_autoridades_baja" onChange="adviceGrant(this,'control_de_autoridades','high');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="control_de_autoridades_baja">Baja</label>
+            <div class="controls">
+                <input type="checkbox" id="control_de_autoridades_baja" name="control_de_autoridades_baja" 
                     [% IF permisos.control_de_autoridades.BAJA %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_3"> Modificaci&oacute;n </label>
-                <input type="checkbox" id="control_de_autoridades_modif" name="control_de_autoridades_modif" onChange="adviceGrant(this,'control_de_autoridades','high');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="control_de_autoridades_modif">Modificaci&oacute;n</label>
+            <div class="controls">
+                <input type="checkbox" id="control_de_autoridades_modif" name="control_de_autoridades_modif"
                         [% IF permisos.control_de_autoridades.MODIFICACION %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_1"> Alta </label>
-                <input type="checkbox" id="control_de_autoridades_alta" name="control_de_autoridades_alta" onChange="adviceGrant(this,'control_de_autoridades','medium');"
+            </div>
+        </div>
+        
+        <div class="control-group alert">
+            <label class="control-label" for="control_de_autoridades_alta">Alta</label>
+            <div class="controls">
+                <input type="checkbox" id="control_de_autoridades_alta" name="control_de_autoridades_alta" 
                     [% IF permisos.control_de_autoridades.ALTA %] checked="checked" [% END %] />
-            </li>
-            <li class="inline_input">
-                <label for="permission_4"> Consulta </label>
-                <input type="checkbox" id="control_de_autoridades_consulta" name="control_de_autoridades_consulta" onChange="adviceGrant(this,'control_de_autoridades','low');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-success">
+            <label class="control-label" for="control_de_autoridades_consulta">Consulta</label>
+            <div class="controls">
+                <input type="checkbox" id="control_de_autoridades_consulta" name="control_de_autoridades_consulta" 
                         [% IF permisos.control_de_autoridades.CONSULTA %] checked="checked" [% END %]/>
-            </li>
-        </ul>
+            </div>
+        </div>
     </fieldset>
 </div>
 
 <div>
-    <fieldset id="usuarios">
-        <legend class="titulo_legend_resaltado"> Administraci&oacute;n de Usuarios </legend>
-        <ul class="permission_grant" >
-            <li class="inline_input">
-                <label for="permission_5"> TODOS </label>
-                <input type="checkbox" id="usuarios_todos" name="usuarios_todos" onChange="adviceGrant(this,'usuarios','high');"
+    <fieldset>
+        <legend> Administraci&oacute;n de Usuarios </legend>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="usuarios_todos">TODOS</label>
+            <div class="controls">
+                <input type="checkbox" id="usuarios_todos" name="usuarios_todos" 
                     [% IF permisos.usuarios.TODOS %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_2"> Baja </label>
-                <input type="checkbox" id="usuarios_baja" name="usuarios_baja" onChange="adviceGrant(this,'usuarios','high');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="usuarios_baja">Baja</label>
+            <div class="controls">
+                <input type="checkbox" id="usuarios_baja" name="usuarios_baja" 
                     [% IF permisos.usuarios.BAJA %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_3"> Modificaci&oacute;n </label>
-                <input type="checkbox" id="usuarios_modif" name="usuarios_modif" onChange="adviceGrant(this,'usuarios','high');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="usuarios_baja">Modificaci&oacute;n</label>
+            <div class="controls">
+                <input type="checkbox" id="usuarios_modif" name="usuarios_modif" 
                     [% IF permisos.usuarios.MODIFICACION %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_1"> Alta </label>
-                <input type="checkbox" id="usuarios_alta" name="usuarios_alta" onChange="adviceGrant(this,'usuarios','medium');"
+            </div>
+        </div>
+        
+        <div class="control-group alert">
+            <label class="control-label" for="usuarios_alta">Alta</label>
+            <div class="controls">
+                <input type="checkbox" id="usuarios_alta" name="usuarios_alta" 
                     [% IF permisos.usuarios.ALTA %] checked="checked" [% END %] />
-            </li>
-            <li class="inline_input">
-                <label for="permission_4"> Consulta </label>
-                <input type="checkbox" id="usuarios_consulta" name="usuarios_consulta" onChange="adviceGrant(this,'usuarios','low');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-success">
+            <label class="control-label" for="usuarios_consulta">Consulta</label>
+            <div class="controls">
+                <input type="checkbox" id="usuarios_consulta" name="usuarios_consulta" 
                     [% IF permisos.usuarios.CONSULTA %] checked="checked" [% END %]/>
-            </li>
-        </ul>
+            </div>
+        </div>
     </fieldset>
 </div>
 
 <div>
-    <fieldset id="sistema">
-        <legend class="titulo_legend_resaltado"> Administraci&oacute;n del Sistema </legend>
-        <ul class="permission_grant" >
-            <li class="inline_input">
-                <label for="permission_5"> TODOS </label>
-                <input type="checkbox" id="sistema_todos" name="sistema_todos" onChange="adviceGrant(this,'sistema','high');"
+    <fieldset>
+        <legend> Administraci&oacute;n del Sistema </legend>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="sistema_todos">TODOS</label>
+            <div class="controls">
+                <input type="checkbox" id="sistema_todos" name="sistema_todos" 
                     [% IF permisos.sistema.TODOS %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_2"> Baja </label>
-                <input type="checkbox" id="sistema_baja" name="sistema_baja" onChange="adviceGrant(this,'sistema','high');"
+            </div>
+        </div>
+        
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="sistema_baja">Baja</label>
+            <div class="controls">
+                <input type="checkbox" id="sistema_baja" name="sistema_baja" 
                     [% IF permisos.sistema.BAJA %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_3"> Modificaci&oacute;n </label>
-                <input type="checkbox" id="sistema_modif" name="sistema_modif" onChange="adviceGrant(this,'sistema','high');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="sistema_modif">Modificaci&oacute;n</label>
+            <div class="controls">
+                <input type="checkbox" id="sistema_modif" name="sistema_modif" 
                     [% IF permisos.sistema.MODIFICACION %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_1"> Alta </label>
-                <input type="checkbox" id="sistema_alta" name="sistema_alta" onChange="adviceGrant(this,'sistema','medium');"
+            </div>
+        </div>
+        
+        <div class="control-group alert">
+            <label class="control-label" for="sistema_alta">Alta</label>
+            <div class="controls">
+                <input type="checkbox" id="sistema_alta" name="sistema_alta"
                     [% IF permisos.sistema.ALTA %] checked="checked" [% END %] />
-            </li>
-            <li class="inline_input">
-                <label for="permission_4"> Consulta </label>
-                <input type="checkbox" id="sistema_consulta" name="sistema_consulta" onChange="adviceGrant(this,'sistema','low');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-success">
+            <label class="control-label" for="sistema_consulta">Consulta</label>
+            <div class="controls">
+                <input type="checkbox" id="sistema_consulta" name="sistema_consulta" 
                     [% IF permisos.sistema.CONSULTA %] checked="checked" [% END %]/>
-            </li>
-        </ul>
+            </div>
+        </div>
     </fieldset>
 </div>
 
 <div>
-    <fieldset id="undefined">
-        <legend class="titulo_legend_resaltado"> Undefined </legend>
-        <ul class="permission_grant" >
-            <li class="inline_input">
-                <label for="permission_5"> TODOS </label>
-                <input type="checkbox" id="undefined_todos" name="undefined_todos" onChange="adviceGrant(this,'undefined','high');"
+    <fieldset>
+        <legend> Undefined </legend>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="undefined_todos">TODOS</label>
+            <div class="controls">
+                <input type="checkbox" id="undefined_todos" name="undefined_todos" 
                     [% IF permisos.undefined.TODOS %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_2"> Baja </label>
-                <input type="checkbox" id="undefined_baja" name="undefined_baja" onChange="adviceGrant(this,'undefined','high');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="undefined_baja">Baja</label>
+            <div class="controls">
+                <input type="checkbox" id="undefined_baja" name="undefined_baja" 
                     [% IF permisos.undefined.BAJA %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_3"> Modificaci&oacute;n </label>
-                <input type="checkbox" id="undefined_modif" name="undefined_modif" onChange="adviceGrant(this,'undefined','high');"
+            </div>
+        </div>
+
+        <div class="control-group alert alert-error">
+            <label class="control-label" for="undefined_modif">Modificaci&oacute;n</label>
+            <div class="controls">
+                <input type="checkbox" id="undefined_modif" name="undefined_modif"
                     [% IF permisos.undefined.MODIFICACION %] checked="checked" [% END %]/>
-            </li>
-            <li class="inline_input">
-                <label for="permission_1"> Alta </label>
-                <input type="checkbox" id="undefined_alta" name="undefined_alta" onChange="adviceGrant(this,'undefined','medium');"
+            </div>
+        </div>
+        
+        <div class="control-group alert">
+            <label class="control-label" for="undefined_alta">Alta</label>
+            <div class="controls">
+                <input type="checkbox" id="undefined_alta" name="undefined_alta" 
                     [% IF permisos.undefined.ALTA %] checked="checked" [% END %] />
-            </li>
-            <li class="inline_input">
-                <label for="permission_4"> Consulta </label>
-                <input type="checkbox" id="undefined_consulta" name="undefined_consulta" onChange="adviceGrant(this,'undefined','low');"
+            </div>
+        </div>
+        
+        <div class="control-group alert alert-success">
+            <label class="control-label" for="undefined_consulta">Consulta</label>
+            <div class="controls">
+                <input type="checkbox" id="undefined_consulta" name="undefined_consulta" 
                     [% IF permisos.undefined.CONSULTA %] checked="checked" [% END %]/>
-            </li>
-        </ul>
+            </div>
+        </div>
     </fieldset>
 </div>
+</form>
 
 [% INCLUDE 'partials/admin/_guardarPermisos.inc' %]

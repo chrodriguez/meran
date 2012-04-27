@@ -1,63 +1,73 @@
-<div id="detalleReservas">
+<div id="info_reservas">
+    <fieldset>
+        <legend> [% 'Material en espera' | i18n %] </legend>
     [% IF reservas_espera_count %]
-    <table class="tabla_datos tope" style="width:100%; text-align:center">
-      <tr class="tablaResultadoTitulo">
-        <td>
-            <b>[% "Material en espera" | i18n %]</b>
-        </td>
-      </tr>
-      <tr class="tablaResultadoTitulo" >
-        <th>[% "T&iacute;tulo" | i18n %]</th>
-        <th>[% "Autor" | i18n %]</th>
-        <th>[% "Edici&oacute;n" | i18n %]</th>
-        <th>[% "Acci&oacute;n" | i18n %]</th>
-      </tr>
-    <!-- ESTE LOOP MUESTRA LAS RESERVAS -->
-    [% FOREACH reserva IN RESERVAS_ESPERA %]
-      <tr>
-        <td>
-         [% PERL %]
-                              print C4::AR::Filtros::link_to( text =>     "[% reserva.nivel2.nivel1.getTitulo %]",
-                                                              url =>      "[% url_prefix %]/opac-detail.pl", 
-                                                              params =>   ["id1=[% reserva.nivel2.nivel1.getId1 %]"],
-                                                              title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
-                                                          ) ;
-        [% END %]
-        </td>
-        <td >
-        [% IF reserva.nivel2.nivel1.getAutor %]
-            [% reserva.nivel2.nivel1.getAutor %]
-            </a>
-        [% ELSE %]
-            &nbsp;
-        [% END %]
-        </td>
-        <td> 
-        [% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
-        </td>
-        <td>
-            [% IF CirculationEnabled %]
-                 <ul>
-                        [% PERL %]
-                            print C4::AR::Filtros::to_Icon(   text    => "[% 'Cancelar' | i18n %]",
-                                                                boton   => "icon_cancelar",
-                                                                width   => "100",
-                                                                onClick => "cancelarReserva([% reserva.getId_reserva %])",
-                                                                title   => "[% 'Cancelar Reserva' | i18n %]",
-                                                                alternClass => "botonCentradoTabla"
-                                                        );
-                        [% END %]
-                </ul>
 
-            [% ELSE %]
-                [% "No disponible" | i18n %]
-            [% END %]
-        </td>
-      </tr>
-    [% END %]
-    </table>
-    <br />
+
+        [% PERL %]
+                print C4::AR::Filtros::tableHeader(   
+                                  id              => "tabla_datos tope",
+                                  class           => "",
+                                  selectAll_id    => "",
+                                  columns         => ['[% "T&iacute;tulo" | i18n %]','[% "Autor" | i18n %]',
+                                                      '[% "Edici&oacute;n" | i18n %]','[% "Acci&oacute;n" | i18n %]'
+                                                     ]
+
+                                                                    
+                                        ) ;
+          [% END %]
+
+    
+
+          <tbody>
+            <!-- ESTE LOOP MUESTRA LAS RESERVAS -->
+            [% FOREACH reserva IN RESERVAS_ESPERA %]
+              <tr>
+                    <td>
+                          [% PERL %]
+                                                print C4::AR::Filtros::link_to( text =>     "[% reserva.nivel2.nivel1.getTitulo %]",
+                                                                                url =>      "[% url_prefix %]/opac-detail.pl", 
+                                                                                params =>   ["id1=[% reserva.nivel2.nivel1.getId1 %]"],
+                                                                                title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
+                                                                            ) ;
+                          [% END %]
+                    </td>
+
+                    <td >
+                          [% IF reserva.nivel2.nivel1.getAutor %]
+                              [% reserva.nivel2.nivel1.getAutor %]
+                              </a>
+                          [% ELSE %]
+                              &nbsp;
+                          [% END %]
+                    </td>
+                    <td> 
+                            [% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
+                    </td>
+                    <td>
+                            [% IF CirculationEnabled %]
+                                    <ul>
+                                        [% PERL %]
+                                                            print C4::AR::Filtros::action_button(   
+                                                                    button   => "btn click btn-danger",
+                                                                    icon => "icon-remove icon-white",
+                                                              
+                                                                    action => "cancelarReserva([% reserva.getId_reserva %])",
+                                                                    title   => " [% '' | i18n %]",
+                                                            );
+                                        [% END %]
+                                    </ul>
+
+                                [% ELSE %]
+                                    [% "No disponible" | i18n %]
+                                [% END %]
+                    </td>
+             </tr>
+           [% END %]
+       </table>
+                
 [% ELSE %]
-    <h1> [% 'Ud. no tiene reservas en espera.' | i18n %] </h1>
+     <div class="alert alert-info"> [% 'No ten&eacute;s reservas en espera.' | i18n %] </div>
 [% END %]
+    </fielset>
 </div>

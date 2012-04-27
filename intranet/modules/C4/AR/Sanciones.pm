@@ -45,6 +45,10 @@ sub getSancionesLike {
     
     C4::AR::Utilidades::printARRAY(\@searchstring_array);
 
+    #Primero filtro sanciones
+    
+    push (@filtros,(fecha_comienzo  => { le => $hoy },fecha_final     => { ge => $hoy}));
+
     foreach my $s (@searchstring_array){ 
                 push (  @filtros, ( or   => [   
                                                 'socio.persona.nombre'    => { like => $s.'%'},   
@@ -55,10 +59,6 @@ sub getSancionesLike {
                                                 legajo              => { like => '%'.$s.'%' },
                                                 nro_socio           => { like => '%'.$s.'%' }          
                                             ],
-                    
-                    fecha_comienzo  => { le => $hoy },
-                    fecha_final     => { ge => $hoy},  
-          
          ));
     }
 
@@ -92,7 +92,7 @@ sub tieneSanciones {
 																			fecha_comienzo 	=> { le => $hoy },
 																			fecha_final    	=> { ge => $hoy},
 																		],
-                                                                    require_objetcs => ['ref_tipo_prestamo_sancion','nivel3'],
+                                                                    require_objetcs => ['ref_tipo_prestamo_sancion','nivel3','tipo_sancion.ref_tipo_prestamo'],
 									);
   if (scalar(@$sanciones_array_ref) == 0){
         return 0;
@@ -128,7 +128,8 @@ sub permisoParaPrestamo {
   	my $deudaOsancion   = 0; #Se supone que no esta sancionado
   	my $hasta           = undef;
     my $cod_error;
-
+    my %status_hash     = {};
+    
   	if (tieneLibroVencido($nro_socio)) {
         $deudaOsancion  = 1; #Tiene libros vencidos 
         C4::AR::Debug::debug("Sanciones::permisoParaPrestamo => tieneLibroVencido ");
@@ -141,7 +142,11 @@ sub permisoParaPrestamo {
         C4::AR::Debug::debug("Sanciones::permisoParaPrestamo => estaSancionado ");
   	}
 
-  	return($deudaOsancion, $hasta, $cod_error);
+    $status_hash{'deudaSancion'} = $deudaOsancion;
+    $status_hash{'hasta'}        = $hasta;
+    $status_hash{'cod_error'}    = $cod_error;
+    
+  	return(\%status_hash);
 }
 
 
@@ -223,17 +228,17 @@ sub diasDeSancion {
 # Retorna la cantidad de dias de sancion que corresponden a una devolucion
 # Si retorna 0 (cero) entonces no corresponde una sancion
 # Recibe la fecha de devolucion (returndate), la fecha hasta la que podia devolverse (date_due), la categoria del usuario (categorycode) y el tipo de prestamo (issuecode)
-    my ($devolucion, $fecha, $categoria, $tipo_prestamo)=@_;
+    my ($fecha_devolucion, $fecha_vencimiento, $categoria, $tipo_prestamo)=@_;
 
 
       C4::AR::Debug::debug("EN DiasDeSancion ?");
 
 
-    if (Date_Cmp($fecha, $devolucion) >= 0) {
+    if (Date_Cmp($fecha_vencimiento, $fecha_devolucion) >= 0) {
         #Si es un prestamo especial debe devolverlo antes de una determinada hora
         if ($tipo_prestamo ne 'ES'){return(0);}
         else{#Prestamo especial
-            if (Date_Cmp($fecha, $devolucion) == 0){#Se tiene que devolver hoy   
+            if (Date_Cmp($fecha_vencimiento, $fecha_devolucion) == 0){#Se tiene que devolver hoy   
                 
                 my $begin = ParseDate(C4::AR::Preferencias::getValorPreferencia("open"));
                 my $end =  C4::Date::calc_endES();
@@ -267,9 +272,21 @@ C4::AR::Debug::debug("Corresponde una sancion vamos a calcular de cuantos dias!"
 
   my $reglas_tipo_array_ref=$tipo_sancion_array_ref->[0]->ref_regla_tipo_sancion;
 
+=item
+Date-Date calculations
+$delta  = $date->calc($date2 [,$subtract] [,$mode]);
+Two dates can be worked with and a delta will be produced which is the amount of time between the two dates.
+$date1 and $date2 are Date::Manip::Date objects with valid dates. The Date::Manip::Delta object returned is the amount of time between them. If $subtract is not passed in (or is 0), the delta produced is:
+	DELTA = DATE2 - DATE1
+If $subtract is non-zero, the delta produced is:
+	DELTA = DATE1 - DATE2
+=cut
   my $err;
-  my $delta= &DateCalc($fecha,$devolucion,\$err);
+  my $delta= &DateCalc($fecha_vencimiento,$fecha_devolucion,\$err,0);
+  
   my $dias= &Delta_Format($delta,0,"%dh");
+
+  C4::AR::Debug::debug("CUANTOS DIAS??? FECHA:".$fecha_vencimiento." DEVOLUCION:".$fecha_devolucion." DELTA:".$delta." DIAS: ".$dias);
 
   #Si es un prestamo especial, si se pasa de la hora se toma como si se pasara un dia
   if ($tipo_prestamo eq 'ES'){$dias++;}

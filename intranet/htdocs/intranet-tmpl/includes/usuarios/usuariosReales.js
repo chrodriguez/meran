@@ -25,18 +25,13 @@ function updateModificarDatosDeUsuario(responseText){
         if (!verificarRespuesta(responseText))
             return(0);
 
-        $('#basic-modal-content').html(responseText);
-        $('#basic-modal-content').modal({   containerCss:{
-                backgroundColor:"#fff",
-                height:420,
-                padding:0,
-                width:900
-            },
-        });
+        $('#modificar-datos-usuario').html(responseText);
+        $('#modificar-datos-usuario').modal();
 }
 
 function guardarModificacionUsuario(){
 
+	$('#modificar-datos-usuario').modal('hide');
 	objAH                   = new AjaxHelper(updateGuardarModificacionUsuario);
 	objAH.url               = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
 	objAH.debug             = true;
@@ -49,10 +44,11 @@ function guardarModificacionUsuario(){
     objAH.email             = $('#email').val();
     objAH.telefono          = $('#telefono').val();
     objAH.cod_categoria     = $('#categoria_socio_id').val();
+    objAH.id_estado     	= $('#estado_id').val();
     objAH.ciudad            = $('#id_ciudad').val();
     objAH.alt_calle         = $('#alt_calle').val();
     objAH.alt_ciudad        = $('#id_alt_ciudad').val();
-    objAH.alt_telefono      = $('#alt_telefono').val();
+    objAH.alt_telefono      = $('#telefono_laboral').val();
     objAH.apellido          = $('#apellido').val();
     objAH.id_ui             = $('#id_ui').val();
     objAH.codigo_postal		= $('#codigo_postal').val();
@@ -66,7 +62,6 @@ function guardarModificacionUsuario(){
     objAH.changepassword    = ( $('#changepassword').attr('checked') )?1:0;
     objAH.cumple_requisito	= ($('#cumple_requisito').attr('checked') )?1:0;    
 	objAH.tipoAccion        = 'GUARDAR_MODIFICACION_USUARIO';
-    objAH.tema              = $('#temas_intra').val();
     objAH.auth_nombre       = $('#auth_nombre').val();
     objAH.auth_dni          = $('#auth_dni').val();
     objAH.auth_telefono     = $('#auth_telefono').val();
@@ -79,7 +74,6 @@ function updateGuardarModificacionUsuario(responseText){
 	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
 	detalleUsuario();
-    $.modal.close();
 }
 
 //*********************************************Fin***Modificar Datos Usuario***************************************
@@ -101,19 +95,18 @@ function save_modif(){
 //************************************************Eliminar Usuario**********************************************
 function eliminarUsuario(){
 
-	var is_confirmed = confirm(CONFIRMA_LA_BAJA);
-
-	if (is_confirmed) {
-
-		objAH=new AjaxHelper(updateEliminarUsuario);
-		objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
-		objAH.debug= true;
-	    objAH.showOverlay       = true;
-		objAH.nro_socio= USUARIO.ID;
-		objAH.tipoAccion= 'ELIMINAR_USUARIO';
-		objAH.sendToServer();
-		startOverlay();
-	}
+	bootbox.confirm(CONFIRMA_LA_BAJA, function (ok){ 
+		if (ok){
+			objAH=new AjaxHelper(updateEliminarUsuario);
+			objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
+			objAH.debug= true;
+		    objAH.showOverlay       = true;
+			objAH.nro_socio= USUARIO.ID;
+			objAH.tipoAccion= 'ELIMINAR_USUARIO';
+			objAH.sendToServer();
+			startOverlay();
+		}
+	});
 }
 
 
@@ -133,14 +126,14 @@ function updateEliminarUsuario(responseText){
 //*********************************************Fin***Eliminar Usuario*********************************************
 
 
-//************************************************gu Usuario**********************************************
+//************************************************Usuario**********************************************
 function agregarUsuario(){
 
       objAH         = new AjaxHelper(updateAgregarUsuario);
       objAH.url     = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
       objAH.showOverlay       = true;
       objAH.debug   = true;
-      if ( (($.trim(nro_socio)).length == 0 ) || ( $('#nro_socio').val() == 'Auto-generar' ) ) {
+      if ( (($.trim(nro_socio)).length == 0 ) || ( $('#nro_socio').val() == AUTO_GENERAR_LABEL ) ) {
         objAH.auto_nro_socio=1;
       }else{
         objAH.nro_socio= $('#nro_socio').val();
@@ -153,6 +146,7 @@ function agregarUsuario(){
       objAH.email           = $('#email').val();
       objAH.telefono        = $('#telefono').val();
       objAH.cod_categoria   = $('#categoria_socio_id').val();
+      objAH.id_estado     	= $('#estado_id').val();
       objAH.ciudad          = $('#id_ciudad').val();
       objAH.alt_ciudad      = $('#id_alt_ciudad').val();
       objAH.alt_calle       = $('#alt_calle').val();
@@ -171,10 +165,8 @@ function agregarUsuario(){
       objAH.cumple_requisito= ($('#cumple_requisito').attr('checked') )?1:0;
       objAH.changepassword  = ($('#changepassword').attr('checked') )?1:0;
       objAH.tipoAccion      = 'AGREGAR_USUARIO';
-      objAH.tema            = $('#temas_intra').val();
 
       objAH.sendToServer();
-      startOverlay();
 
 }
 
@@ -190,20 +182,62 @@ function updateAgregarUsuario(responseText){
 
 //*************************************************Cambiar Password*******************************************
 
+
+function agregarAutorizado(){
+    objAH               = new AjaxHelper(updateAgregarAutorizado);
+    objAH.showOverlay   = true;
+    objAH.url           = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
+    objAH.tipoAccion    = "MOSTRAR_VENTANA_AGREGAR_AUTORIZADO";
+    objAH.debug         = true;
+    objAH.sendToServer();
+}
+
+function updateAgregarAutorizado(responseText){
+    if (!verificarRespuesta(responseText))
+            return(0);
+
+    $('#basic-modal-content').html(responseText);
+    $('#basic-modal-content').modal();
+}
+
+
+function confirmarAgregarAutorizado(){
+
+    if (verificarDatos()){
+        objAH                   = new AjaxHelper(updateConfirmarAgregarAutorizado);
+        objAH.url               = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
+        objAH.debug             = true;
+        objAH.showOverlay       = true;
+        objAH.nro_socio         = NRO_SOCIO_AUTH; 
+        objAH.auth_nombre       = $('#nombreAutorizado').val();
+        objAH.auth_dni          = $('#dniAutorizado').val();
+        objAH.auth_telefono     = $('#telefonoAutorizado').val();
+        objAH.tipoAccion        = 'AGREGAR_AUTORIZADO';
+        objAH.sendToServer();
+    }
+}
+
+function updateConfirmarAgregarAutorizado(responseText){
+    var Messages = JSONstring.toObject(responseText);
+    setMessages(Messages);
+    $('#basic-modal-content').modal('hide');
+    detalleUsuario();
+        
+}
+
 function desautorizarTercero(claveUsuario, confirmeClave){
 
-    jConfirm(CONFIRMAR_ELIMINAR_AFILIADO, USUARIOS_ALERT_TITLE, function(confirmStatus){
-
-    	if (confirmStatus){
-	    	objAH=new AjaxHelper(updateDesautorizarTercero);
-	        objAH.debug= true;
-	        objAH.showOverlay       = true;
-	        objAH.url= URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
-	        objAH.nro_socio= USUARIO.ID;
-	        objAH.tipoAccion= 'ELIMINAR_AUTORIZADO';
-	        //se envia la consulta
-	        objAH.sendToServer();
-    	}
+    	bootbox.confirm(CONFIRMAR_ELIMINAR_AFILIADO, function (ok){ 
+    		if (ok){
+	        	objAH=new AjaxHelper(updateDesautorizarTercero);
+		        objAH.debug= true;
+		        objAH.showOverlay       = true;
+		        objAH.url= URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
+		        objAH.nro_socio= USUARIO.ID;
+		        objAH.tipoAccion= 'ELIMINAR_AUTORIZADO';
+		        //se envia la consulta
+		        objAH.sendToServer();
+    		}
     });
 }
 
@@ -218,16 +252,16 @@ function updateDesautorizarTercero(responseText){
 
 
 function resetPassword(claveUsuario, confirmeClave){
-    jConfirm(RESET_PASSWORD, USUARIOS_ALERT_TITLE, function(confirmStatus){
-        if (confirmStatus){
-            objAH=new AjaxHelper(updateResetPassword);
+	bootbox.confirm(RESET_PASSWORD, function (ok){ 
+		if (ok){
+    		objAH=new AjaxHelper(updateResetPassword);
             objAH.showOverlay       = true;
             objAH.url= URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
             objAH.nro_socio= USUARIO.ID;
             objAH.tipoAccion= 'RESET_PASSWORD';
             //se envia la consulta
             objAH.sendToServer();
-        }
+		}
     });
 }
 
@@ -252,9 +286,10 @@ function cambiarPassword(){
 //***********************************************Fin**Cambiar Password*****************************************
 
 function eliminarFoto(foto){
+	foto = user_picture_name;
 
-    jConfirm(CONFIRMAR_ELIMINAR_FOTO, USUARIOS_ALERT_TITLE, function(confirmStatus){
-    	if (confirmStatus){
+	bootbox.confirm(CONFIRMAR_ELIMINAR_FOTO, function (ok){
+		if (ok){
 			objAH               = new AjaxHelper(updateEliminarFoto);
 		 	objAH.debug         = true;
 		    objAH.showOverlay       = true;
@@ -263,8 +298,8 @@ function eliminarFoto(foto){
 			objAH.foto_name     = foto;
 			objAH.nro_socio     = USUARIO.ID;
 			objAH.sendToServer();
-    	}
-    });
+		}
+	});	
 }
 
 function updateEliminarFoto(responseText){
@@ -279,30 +314,6 @@ function updateEliminarFoto(responseText){
     $('#div_uploader').show();
     $('#div_boton_eliminar_foto').hide();
     detalleUsuario();
-}
-
-function agregarAutorizado(){
-    objAH               = new AjaxHelper(updateAgregarAutorizado);
-    objAH.showOverlay   = true;
-    objAH.url           = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
-    objAH.tipoAccion    = "MOSTRAR_VENTANA_AGREGAR_AUTORIZADO";
-    objAH.debug         = true;
-    objAH.sendToServer();
-}
-
-function updateAgregarAutorizado(responseText){
-    if (!verificarRespuesta(responseText))
-            return(0);
-
-    $('#basic-modal-content').html(responseText);
-    $('#basic-modal-content').modal({   containerCss:{
-            backgroundColor:"#fff",
-    //         borderColor:"#0063dc",
-            height:200,
-            padding:0,
-            width:650
-        },
-    });
 }
 
 function validarDatosCensales(){
@@ -345,18 +356,12 @@ function updateCambiarCredencial(responseText){
         return(0);
 
     $('#basic-modal-content').html(responseText);
-    $('#basic-modal-content').modal({   containerCss:{
-            backgroundColor:"#fff",
-    //         borderColor:"#0063dc",
-            height:117,
-            padding:0,
-            width:404
-        },
-    });
+    $('#basic-modal-content').modal();
 }
 
 function guardarModificacionCredenciales(){
-
+	 $('#basic-modal-content').modal('hide');
+	 
     objAH               = new AjaxHelper(updateModificacionCredenciales);
     objAH.url           = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
     objAH.showOverlay   = true;

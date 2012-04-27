@@ -13,22 +13,39 @@ __PACKAGE__->meta->setup
     table   => 'usr_estado',
     columns => [
         id_estado        => { type => 'serial', overflow => 'truncate', not_null => 1, length => 11 },
-        regular          => { type => 'integer', overflow => 'truncate', not_null => 1, length => 1 },
-        categoria        => { type => 'character', overflow => 'truncate', length => 2, not_null => 1 },
+        nombre           => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         fuente           => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
     ],
 
     primary_key_columns => [ 'id_estado' ],
 );
 
+
+sub conformarUsrRegularidad{
+    my ($self)=shift;
+
+    my ($categorias_array_ref)  = C4::AR::Referencias::obtenerCategoriaDeSocio();
+
+    foreach my $categoria (@$categorias_array_ref) {
+        my $regularidad = C4::Modelo::UsrRegularidad->new();
+        my %data_hash ={};
+
+        $data_hash{'usr_estado_id'} = $self->getId_estado;
+        $data_hash{'usr_ref_categoria_id'} = $categoria->getId();
+        $data_hash{'Condicion'} = 0;
+        $regularidad->agregar(\%data_hash);
+    }    
+	
+}
+
 sub agregar{
     my ($self)=shift;
     my ($data_hash)=@_;
     #Asignando data...
     $self->setFuente($data_hash->{'fuente'});
-    $self->setRegular($data_hash->{'regular'});
-    $self->setCategoria($data_hash->{'categoria'});
+    $self->setNombre($data_hash->{'categoria'});
     $self->save();
+    $self->conformarUsrRegularidad();
 }
 
 sub getId_estado{
@@ -36,26 +53,15 @@ sub getId_estado{
     return ($self->id_estado);
 }
 
-sub getRegular{
+sub getNombre{
     my ($self) = shift;
-    return ($self->regular);
+    return (C4::AR::Utilidades::trim($self->nombre));
 }
 
-sub setRegular{
+sub setNombre{
     my ($self) = shift;
-    my ($regular) = @_;
-    $self->regular($regular);
-}
-
-sub getCategoria{
-    my ($self) = shift;
-    return (C4::AR::Utilidades::trim($self->categoria));
-}
-
-sub setCategoria{
-    my ($self) = shift;
-    my ($categoria) = @_;
-    $self->categoria($categoria);
+    my ($nombre) = @_;
+    $self->nombre($nombre);
 }
 
 sub getFuente{
