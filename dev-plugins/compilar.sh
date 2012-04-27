@@ -13,4 +13,9 @@ if [ $# -eq 0 ]
 	fi
 	
 export PATH;
-lessc --compress bootstrapless/meran.less  > ../intranet/htdocs/intranet-tmpl/temas/$TEMA/includes/intranet.css
+cd bootstrapless/intranet/$TEMA/ 
+lessc --verbose --compress meran.less  > $OLDPWD/../intranet/htdocs/intranet-tmpl/temas/$TEMA/includes/intranet.css
+cd $OLDPWD
+cd bootstrapless/opac/$TEMA/
+lessc --compress meran.less  > $OLDPWD/../opac/htdocs/opac-tmpl/temas/$TEMA/includes/opac.css
+cd $OLDPWD
