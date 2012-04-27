@@ -334,9 +334,9 @@ table .span21{float:none;width:1644px;margin-left:0;float:none;width:1644px;marg
 table .span22{float:none;width:1724px;margin-left:0;float:none;width:1724px;margin-left:0;}
 table .span23{float:none;width:1804px;margin-left:0;float:none;width:1804px;margin-left:0;}
 table .span24{float:none;width:1884px;margin-left:0;float:none;width:1884px;margin-left:0;}
-[class^="icon-"],[class*=" icon-"]{display:inline-block;width:14px;height:14px;line-height:14px;vertical-align:text-top;background-image:url("../img/glyphicons-halflings.png");background-position:14px 14px;background-repeat:no-repeat;*margin-right:.3em;*margin-right:.3em;}[class^="icon-"]:last-child,[class*=" icon-"]:last-child{*margin-left:0;}
+[class^="icon-"],[class*=" icon-"]{display:inline-block;width:14px;height:14px;line-height:14px;vertical-align:text-top;background-image:url("/includes/bootstrap/img/glyphicons-halflings.png");background-position:14px 14px;background-repeat:no-repeat;*margin-right:.3em;*margin-right:.3em;}[class^="icon-"]:last-child,[class*=" icon-"]:last-child{*margin-left:0;}
 [class^="icon-"]:last-child,[class*=" icon-"]:last-child{*margin-left:0;}
-.icon-white{background-image:url("../img/glyphicons-halflings-white.png");}
+.icon-white{background-image:url("/includes/bootstrap/img/glyphicons-halflings-white.png");}
 .icon-glass{background-position:0 0;}
 .icon-music{background-position:-24px 0;}
 .icon-search{background-position:-48px 0;}
@@ -832,7 +832,7 @@ body{padding-bottom:60px;}
 .span330{width:330px;}
 .bigInput{height:32px;font-size:23px;color:#999;}
 .logo_opac_menu{float:left;line-height:0;max-width:150px;margin-top:5px;margin-left:5px;}
-.main_content{padding-top:60px;width:93% !important;}
+.main_content{padding-top:60px;}
 .medium_font{font-size:40px !important;}
 .inline{display:inline;}
 .left{float:left;}
@@ -863,4 +863,3 @@ body{padding-bottom:60px;}
 .nano .content{padding:1px;}
 .nano .pane{background:#444;}
 #fotoUsuario{width:200px;float:right;}
-.carousel{max-width:600px;}
