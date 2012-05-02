@@ -832,7 +832,7 @@ body{padding-bottom:60px;}
 .span330{width:330px;}
 .bigInput{height:32px;font-size:23px;color:#999;}
 .logo_opac_menu{float:left;line-height:0;max-width:150px;margin-top:5px;margin-left:5px;}
-.main_content{padding-top:60px;width:93% !important;}
+.main_content{padding-top:60px;}
 .medium_font{font-size:40px !important;}
 .inline{display:inline;}
 .left{float:left;}
@@ -863,4 +863,3 @@ body{padding-bottom:60px;}
 .nano .content{padding:1px;}
 .nano .pane{background:#444;}
 #fotoUsuario{width:200px;float:right;}
-.carousel{max-width:600px;}
