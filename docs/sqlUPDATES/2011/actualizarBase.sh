@@ -1,18 +1,24 @@
 #!/bin/sh
-conf="/etc/meran/revisionLocal"
-pathRelativo=$(dirname $0)
-if [ ! -f $conf ]; then
-    echo 0 > $conf
-fi
-anterior=$(($(cat $conf)+1))
-echo "Estamos verificando si es necesario aplicar cambios en la base";
-echo "En caso de serlo es recomendable que realice un BACKUP de su base previamente";
-BASE=$(grep ^database /etc/meran/meran.conf| awk '{split($0,a,"="); print a[2]}')
-PASSWD=$(grep ^passINTRA /etc/meran/meran.conf| awk '{split($0,a,"="); print a[2]}')
-USER=$(grep ^userINTRA /etc/meran/meran.conf| awk '{split($0,a,"="); print a[2]}')
+if [ $# -eq 0 ] 
+	then
+        	echo "Falta pasar por parametro el archivo de configuracion"; exit;
+	fi;
+REVISIONLOCAL=$(grep ^revisionLocal $1| awk '{split($0,a,"="); print a[2]}')
+BASE=$(grep ^database $1| awk '{split($0,a,"="); print a[2]}')
+PASSWD=$(grep ^passINTRA $1| awk '{split($0,a,"="); print a[2]}')
+USER=$(grep ^userINTRA $1| awk '{split($0,a,"="); print a[2]}')
 echo $BASE;
 echo $PASSWD;
 echo $USER;
+echo $REVISIONLOCAL;
+pathRelativo=$(dirname $0)
+exit;
+if [ ! -f $REVISIONLOCAL ]; then
+    echo 0 > $REVISIONLOCAL
+fi
+anterior=$(($(cat $REVISIONLOCAL)+1))
+echo "Estamos verificando si es necesario aplicar cambios en la base";
+echo "En caso de serlo es recomendable que realice un BACKUP de su base previamente";
 hasta=$(cat $pathRelativo/revision)
 if [ $1 ]
 then
@@ -28,4 +34,4 @@ for i in `seq $anterior $hasta`; do
             mysql --default-character-set=utf8 $BASE -u$USER -p$PASSWD < $pathRelativo/sql.rev$i;
         fi;
 done;
-echo $hasta > $conf
+echo $hasta > $REVISIONLOCAL

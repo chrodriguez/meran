@@ -1,5 +1,4 @@
 #!/bin/sh
-conf="/etc/meran/revisionLocal"
 pathRelativo=$(dirname $0)
 contador=$(cat $pathRelativo/revision)
 touch $pathRelativo/sql.rev$(($contador+1))
