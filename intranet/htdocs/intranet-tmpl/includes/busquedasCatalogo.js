@@ -1,5 +1,8 @@
 var objAH_search;
 
+var ORDEN;
+
+
 var combinables     = ['titulo', 'autor', 'tipo', 'signatura', 'tipo_nivel3_id'];
 var noCombinables   = ['keyword', 'isbn', 'dictionary', 'codBarra', 'estante', 'tema'];
 var shouldScroll    = true;
@@ -10,8 +13,9 @@ function ordenar_busqueda_catalogo(orden){
           } else {
             ORDEN = orden;
           }
-          buscar();
+          objAH_search.sort(orden);
 }
+
 
 
 function updateInfoBusquedas(responseText){
@@ -68,8 +72,7 @@ function busquedaCombinable(){
     objAH_search.codBarra      	= $('#codBarra').val();
 
     objAH_search.isbn				= $('#isbn').val();
-    objAH_search.orden              = ORDEN;
-    objAH_search.asc                = ASC;
+//     objAH_search.asc                = ASC;
     objAH_search.tipoAccion        = 'BUSQUEDA_AVANZADA';
     //se setea la funcion para cambiar de pagina
     objAH_search.funcion           = 'changePage_search';
@@ -81,14 +84,14 @@ function updateBusquedaCombinable(responseText){
     updateInfoBusquedas(responseText);
 }
 
-function changePage_search(ini){
+function changePage_search(ini, orden){
     objAH_search.changePage(ini);
 }
-/*
-function ordenarPor(ord){
-    //seteo el orden de los resultados
-    objAH_search.sort(ord);
-}*/
+
+// function ordenarPor(ord){
+//     seteo el orden de los resultados
+//     objAH_search.sort(ord);
+// }
 
 
 function buscarBar(){
@@ -102,7 +105,6 @@ function buscarBar(){
     //se setea la funcion para cambiar de pagina
     objAH_search.match_mode = "SPH_MATCH_ALL";
     objAH_search.funcion= 'changePage_search';
-  
     if (jQuery.trim(objAH_search.keyword).length > 0)
     	objAH_search.sendToServer();	
 }
@@ -186,8 +188,6 @@ function busquedaPorKeyword(suggested){
         objAH_search.keyword= keyword;
     }
 
-    objAH_search.orden              = ORDEN;
-    objAH_search.asc                = ASC;
     objAH_search.match_mode = $('#match_mode').val();
     objAH_search.only_available 	= ( $('#only_available').attr('checked') )?1:0;
     objAH_search.tipoAccion= 'BUSQUEDA_COMBINADA';
@@ -254,6 +254,7 @@ function buscarPorAutor(completo){
     objAH_search.funcion       = 'changePage_search';
     objAH_search.only_available = ( $('#only_available').attr('checked') )?1:0;
     objAH_search.completo      = completo;
+
     objAH_search.tipoAccion    = "BUSQUEDA_POR_AUTOR";
     objAH_search.sendToServer();
 }
