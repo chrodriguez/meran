@@ -4,7 +4,11 @@ if [ $# -eq 0 ]; then
         	echo "Falta pasar por parametro el archivo de configuracion"; 
 		echo "Se va a utilizar el archivo por defecto /etc/meran/meran.conf";
 		CONF="/etc/meran/meran.conf";
-		echo $CONF;
+		
+	fi;
+if [ ! -e $CONF ]; then
+		echo "no existe el archivo $CONF. ABORTANDO!!!!";
+		exit;
 	fi;
 REVISIONLOCAL=$(grep ^revisionLocal $CONF| awk '{split($0,a,"="); print a[2]}')
 echo "REVISIONLOCAL $REVISIONLOCAL";
