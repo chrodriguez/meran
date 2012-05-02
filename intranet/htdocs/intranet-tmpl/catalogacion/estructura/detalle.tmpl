@@ -74,7 +74,7 @@
 	
 	<fieldset>
 		   	<div class="page-header">
-        		<h1>#[% id1 %] - [% titulo %] <small>([% nivel1_template %])</small></h1>
+        		<h1><small>#[% id1 %]</small> - [% titulo %] <small>([% nivel1_template %])</small></h1>
             	<h2>[% autor %] </h2>	
            	</div>
 		      
@@ -96,9 +96,10 @@
                 [% END %]
 	            
 	        </div>
-		    
+		   
 		    <dl>
 			    [% FOREACH nivel1 %]
+
 			            [% IF liblibrarian %]
 			                [% IF dato %]
 				                <dt class="inline left rightMargin">[% liblibrarian %]:&nbsp;</dt> 
