@@ -4,9 +4,7 @@ var combinables     = ['titulo', 'autor', 'tipo', 'signatura', 'tipo_nivel3_id']
 var noCombinables   = ['keyword', 'isbn', 'dictionary', 'codBarra', 'estante', 'tema'];
 var shouldScroll    = true;
 
-
-
-function ordenar(orden){
+function ordenar_busqueda_catalogo(orden){
           if (orden == ORDEN) {
               ASC= !ASC;
           } else {

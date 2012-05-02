@@ -1,4 +1,4 @@
-var objAH_search;var combinables=['titulo','autor','tipo','signatura','tipo_nivel3_id'];var noCombinables=['keyword','isbn','dictionary','codBarra','estante','tema'];var shouldScroll=true;function ordenar(orden){if(orden==ORDEN){ASC=!ASC;}else{ORDEN=orden;}
+var objAH_search;var combinables=['titulo','autor','tipo','signatura','tipo_nivel3_id'];var noCombinables=['keyword','isbn','dictionary','codBarra','estante','tema'];var shouldScroll=true;function ordenar_busqueda_catalogo(orden){if(orden==ORDEN){ASC=!ASC;}else{ORDEN=orden;}
 buscar();}
 function updateInfoBusquedas(responseText){$("#volver").hide();$('#resultBusqueda').html(responseText);closeModal();$("#resultBusqueda").slideDown("fast");if(shouldScroll)
 scrollTo('resultBusqueda');}

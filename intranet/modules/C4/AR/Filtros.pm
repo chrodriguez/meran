@@ -847,6 +847,7 @@ sub tableHeader{
     my $class       = $params_hash_ref{'class'} || undef;
     my $select_all  = $params_hash_ref{'selectAll_id'} || undef;
     my $order       = $params_hash_ref{'order'} || undef;
+    my $order_name_function =  $params_hash_ref{'order_name_function'} || undef;
 
 
     my $columns     = $params_hash_ref{'columns'};
@@ -860,7 +861,7 @@ sub tableHeader{
     if ($order){
       foreach my $column (@$columns){
           if ($order->{$column}){
-              $html .= "<th class='click' id='$order->{$column}' onclick=ordenar('".$order->{$column}."')>$column <i class='icon-chevron-up click' style='float:right;'></th>";
+              $html .= "<th class='click' id='$order->{$column}' onclick=ordenar_$order_name_function('".$order->{$column}."')>$column <i class='icon-chevron-up click' style='float:right;'></th>";
           } else {
               $html .= "<th>$column</th>";
           }
