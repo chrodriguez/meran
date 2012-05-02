@@ -1,5 +1,6 @@
 [% INCLUDE "intranet-top.inc" %]
 
+<script type="text/javascript" src="/includes/jquery/jquery.uitablefilter.js" ></script>
 <script type="text/javascript" language="javascript">
 
     $(document).ready( function() {
@@ -32,9 +33,10 @@
         objAH.url               = URL_PREFIX+"/admin/circulacion/prestamos_vencidosDB.pl";
         objAH.showOverlay       = true;
         objAH.tipoAccion        = "ENVIAR_A_SELECCION_MAILS_PRESTAMOS_VENCIDOS";
-        getSeleccionados();
-        objAH.ids_prestamos     = selected;
-        objAH.sendToServer();
+        if(getSeleccionados()){
+            objAH.ids_prestamos     = selected;
+            objAH.sendToServer();
+        }
 
     }
 
@@ -63,16 +65,27 @@
         }else{
         
             jAlert(POR_FAVOR_SELECCIONE_ALGUN_PRESTAMO);
+            return false;
             
-        }
-
-        
+        }   
     }
+    
+    $(function() {
+		  theTable = $("#prestamosVencidos");
+		  $("#q").keyup(function() {
+			$.uiTableFilter(theTable, this.value);
+		  });
+	});
 
 </script>
 
 <fieldset>
     <legend class="titulo_legend">[% "Pr&eacute;stamos vencidos" | i18n %] </legend>
+
+    <form class="well form-search" onsubmit="return false">
+        <input class="placeholder" placeholder="Filtrar resultados" type="text" id="q" name="q">
+    </form>
+
  [% IF cantidad  %]
       [% PERL %]
                 print C4::AR::Filtros::tableHeader(   
