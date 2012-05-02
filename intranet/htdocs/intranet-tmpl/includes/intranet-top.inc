@@ -34,6 +34,7 @@
     <link rel="shortcut icon" href="/includes/css/favicon.ico">
 
 	<link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranet.css">
+	<link rel='stylesheet' media='screen and (max-width: 900px)' href="[% temas %]/default/includes/intra-FF_fix.css" />
 
   <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
@@ -45,6 +46,7 @@
 	<script type="text/javascript" src="/includes/jquery/fancybox/jquery.mousewheel.js"></script>
 	<script type="text/javascript" src="/includes/jquery/jquery-ui-1.8.9.custom.min.js"></script>
 	<script type="text/javascript" src="/includes/jquery/jquery.expander.js"></script>
+	<script type="text/javascript" src="/includes/jquery/jquery.nanoscroller.js"></script>
 	<script type="text/javascript" src="/includes/modernizr.js"></script>
 	<script type="text/javascript" src="/includes/workers.js"></script>
 	<script type="text/javascript" scrc="/includes/intranet-top.js"></script>
@@ -222,7 +224,7 @@
 	    });
 	</script>
 	</head>
-	<body data-spy="scroll" data-target=".subnav">
+	<body data-spy="scroll" data-spy="scroll" data-target=".side_bar">
 	  <noscript>
 	      <div class='tableMsgUser'>
 	          <font class='fontMsgUser'>
