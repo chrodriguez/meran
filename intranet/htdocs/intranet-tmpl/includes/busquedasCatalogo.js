@@ -205,18 +205,33 @@ function busquedaPorEstante(){
     objAH_search.sendToServer();
 }
 
-function verTema(idtema,tema){
+// OLD:
+//function verTema(idtema,tema){
 
-    objAH_search=new AjaxHelper(updateInfoBusquedas);
-    objAH_search.debug= true;
-    objAH_search.showOverlay       = true;
-    objAH_search.url= URL_PREFIX+'/busquedas/busqueda.pl';
-    objAH_search.idTema= idtema;
-    objAH_search.tema= tema;
+//    objAH_search=new AjaxHelper(updateInfoBusquedas);
+//    objAH_search.debug= true;
+//    objAH_search.showOverlay       = true;
+//    objAH_search.url= URL_PREFIX+'/busquedas/busqueda.pl';
+//    objAH_search.idTema= idtema;
+//    objAH_search.tema= tema;
 
-    //se setea la funcion para cambiar de pagina
-    objAH_search.funcion= 'changePage_search';
+//    //se setea la funcion para cambiar de pagina
+//    objAH_search.funcion= 'changePage_search';
+//    objAH_search.sendToServer();
+//    
+//}
+
+function verTema(tema){   
+    
+    objAH_search                = new AjaxHelper(updateInfoBusquedas);
+    objAH_search.showOverlay    = true;
+    objAH_search.url            = URL_PREFIX+'/busquedas/busquedasDB.pl';
+    objAH_search.debug          = true;
+    objAH_search.funcion        = 'changePage_search';
+    objAH_search.tema           = tema;
+    objAH_search.tipoAccion     = "BUSQUEDA_POR_TEMA";
     objAH_search.sendToServer();
+    
 }
 
 

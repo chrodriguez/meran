@@ -27,7 +27,7 @@ function updateBusquedaPorKeyword(responseText){updateInfoBusquedas(responseText
 keyword=$('#keyword').val();else
 keyword=$('#keyword-bar').val();}
 function busquedaPorEstante(){objAH_search=new AjaxHelper(updateInfoBusquedas);objAH_search.showOverlay=true;objAH_search.url=URL_PREFIX+'/busquedas/busquedasDB.pl';objAH_search.debug=true;objAH_search.funcion='changePage_search';objAH_search.estante=$('#estante').val();objAH_search.tipoAccion="BUSQUEDA_POR_ESTANTE";objAH_search.sendToServer();}
-function verTema(idtema,tema){objAH_search=new AjaxHelper(updateInfoBusquedas);objAH_search.debug=true;objAH_search.showOverlay=true;objAH_search.url=URL_PREFIX+'/busquedas/busqueda.pl';objAH_search.idTema=idtema;objAH_search.tema=tema;objAH_search.funcion='changePage_search';objAH_search.sendToServer();}
+function verTema(tema){objAH_search=new AjaxHelper(updateInfoBusquedas);objAH_search.showOverlay=true;objAH_search.url=URL_PREFIX+'/busquedas/busquedasDB.pl';objAH_search.debug=true;objAH_search.funcion='changePage_search';objAH_search.tema=tema;objAH_search.tipoAccion="BUSQUEDA_POR_TEMA";objAH_search.sendToServer();}
 function cambiarEstadoCampos(campos,clase){for(i=0;i<campos.length;i++){$('#'+campos[i]).attr('class',clase);}}
 function buscarPorAutor(completo){objAH_search=new AjaxHelper(updateInfoBusquedas);objAH_search.showOverlay=true;objAH_search.url=URL_PREFIX+'/busquedas/busquedasDB.pl';objAH_search.debug=true;objAH_search.funcion='changePage_search';objAH_search.only_available=($('#only_available').attr('checked'))?1:0;objAH_search.completo=completo;objAH_search.tipoAccion="BUSQUEDA_POR_AUTOR";objAH_search.sendToServer();}
 function ordenar(ord){objAH_search.sort(ord);}
