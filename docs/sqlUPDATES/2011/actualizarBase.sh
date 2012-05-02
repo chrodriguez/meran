@@ -17,6 +17,10 @@ if [ "$REVISIONLOCAL" = "" ]; then
 		echo "Se utiliza por defecto /etc/meran/revisionLocal";
 		REVISIONLOCAL="/etc/meran/revisionLocal";
 	fi;
+if [ ! -e $REVISIONLOCAL ]; then
+		echo "no existe el archivo $REVISIONLOCAL. ABORTANDO!!!!";
+		exit;
+	fi;
 BASE=$(grep ^database $CONF| awk '{split($0,a,"="); print a[2]}')
 PASSWD=$(grep ^passINTRA $CONF| awk '{split($0,a,"="); print a[2]}')
 USER=$(grep ^userINTRA $CONF| awk '{split($0,a,"="); print a[2]}')
