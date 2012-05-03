@@ -993,7 +993,7 @@ sub busquedaAvanzada_newTemp{
     my $query   = '';
     my $tipo    = 'SPH_MATCH_EXTENDED';
     my $orden   = $params->{'orden'} || 'titulo';
-
+    my $sentido_orden   = $params->{'sentido_orden'};
     my $keyword;
    
     if($params->{'titulo'} ne ""){
@@ -1060,9 +1060,17 @@ sub busquedaAvanzada_newTemp{
     $sphinx->SetMatchMode($tipo_match);
 
     if ($orden eq 'autor'){
-            $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"autor_local");
+            if ($sentido_orden){
+                $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"autor_local");
+            } else {
+                $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"autor_local");
+            }
     }else{
-            $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
+           if ($sentido_orden){
+                $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
+            } else {
+                $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"titulo_local");
+            }
     }
     
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
@@ -1269,6 +1277,8 @@ sub busquedaCombinada_newTemp{
     my @boolean_ops = ("&","|","!","-");
     my $tipo        = $obj_for_log->{'match_mode'}||'SPH_MATCH_ALL';
     my $orden       = $obj_for_log->{'orden'} || 'titulo';
+    my $sentido_orden = $obj_for_log->{'sentido_orden'};
+
     my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
     C4::AR::Debug::debug("Busquedas => match_mode ".$tipo);
@@ -1309,9 +1319,17 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
     $sphinx->SetMatchMode($tipo_match);
 
     if ($orden eq 'autor') {
+            if ($sentido_orden){
                 $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"autor_local");
+            } else {
+                $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"autor_local");
+            }
     } else {
-            $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
+            if ($sentido_orden){
+                $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
+            } else {
+                $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"titulo_local");
+            }
     }
  
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);

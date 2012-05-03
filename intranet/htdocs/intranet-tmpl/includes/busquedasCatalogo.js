@@ -1,6 +1,7 @@
 var objAH_search;
 
 var ORDEN;
+var SENTIDO_ORDEN=1; //1 para ASC - 0 DESC
 
 
 var combinables     = ['titulo', 'autor', 'tipo', 'signatura', 'tipo_nivel3_id'];
@@ -8,14 +9,25 @@ var noCombinables   = ['keyword', 'isbn', 'dictionary', 'codBarra', 'estante', '
 var shouldScroll    = true;
 
 function ordenar_busqueda_catalogo(orden){
+     
           if (orden == ORDEN) {
-              ASC= !ASC;
+              SENTIDO_ORDEN= !SENTIDO_ORDEN;
           } else {
-            ORDEN = orden;
+              SENTIDO_ORDEN= 1;
+              ORDEN = orden;
           }
-          objAH_search.sort(orden);
+          objAH_search.sentido_orden = SENTIDO_ORDEN;
+          objAH_search.sort(orden);        
 }
 
+
+function cambiarSentidoOrd(){
+  if (SENTIDO_ORDEN){
+    $('#icon_'+ ORDEN).attr("class","icon-chevron-up click");
+  } else {
+    $('#icon_'+ ORDEN).attr("class","icon-chevron-down click");
+  }
+}
 
 
 function updateInfoBusquedas(responseText){
@@ -26,13 +38,18 @@ function updateInfoBusquedas(responseText){
     $("#resultBusqueda").slideDown("fast");
     if (shouldScroll)
       scrollTo('resultBusqueda');
+
 }
 
 function updateInfoBusquedasBar(responseText){
+  
 	clearInterval(mensajes_interval_id);
 	$('#navBarResult').html(''); 
 	$('#marco_contenido_datos').html("<div id='resultBusqueda'/><div id='result'/>");
 	updateInfoBusquedas(responseText);
+    if (ORDEN){
+      cambiarSentidoOrd();
+    }
 	$(window).unbind('scroll');	
 }
 
@@ -70,7 +87,6 @@ function busquedaCombinable(){
     objAH_search.tipo_nivel3_name  = $('#tipo_nivel3_id').val();
     objAH_search.tema				= $('#tema').val();
     objAH_search.codBarra      	= $('#codBarra').val();
-
     objAH_search.isbn				= $('#isbn').val();
 //     objAH_search.asc                = ASC;
     objAH_search.tipoAccion        = 'BUSQUEDA_AVANZADA';
@@ -82,6 +98,9 @@ function busquedaCombinable(){
 
 function updateBusquedaCombinable(responseText){
     updateInfoBusquedas(responseText);
+    if (ORDEN){
+      cambiarSentidoOrd();
+    }
 }
 
 function changePage_search(ini, orden){
@@ -204,6 +223,9 @@ function updateBusquedaPorKeyword(responseText){
     	keyword = $('#keyword').val();
 	else
 		keyword = $('#keyword-bar').val();
+    if (ORDEN){
+      cambiarSentidoOrd();
+    }
 
 }
 
