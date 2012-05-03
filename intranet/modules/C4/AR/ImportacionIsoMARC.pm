@@ -1278,9 +1278,33 @@ sub detalleCompletoRegistro {
         $hash_nivel2{'disponibles_sala'}=0;
         $hash_nivel2{'disponibles_domiciliario'}=0;
         
+        #POR SI SOLO SE ENCUENTRA 1 EN TODO EL REGISTRO!!!
+        my $signaturaBase='';
+        my $uiBase='';
         #C4::AR::Debug::debug(" Ejemplares ".scalar(@$ejemplares));
             foreach my $nivel3 (@$ejemplares){
+    
                     my $n3 =  C4::AR::ImportacionIsoMARC::getEjemplarFromMarcRecord($nivel3,$tipo_documento->getId_tipo_doc());
+                    
+                    #Guardo algunos datos por si vienen una única vez por grupo
+                    if($n3->{'ui_origen'}){
+                            $uiBase=$n3->{'ui_origen'};
+                    } elsif ($uiBase){
+                            $n3->{'ui_origen'}=$uiBase;
+                    }
+                    
+                    if($n3->{'ui_duenio'}){
+                            $uiBase=$n3->{'ui_duenio'};
+                    } elsif ($uiBase){
+                            $n3->{'ui_duenio'}=$uiBase;
+                    }
+                    
+                    if($n3->{'signatura_topografica'}){
+                            $signaturaBase = $n3->{'signatura_topografica'};
+                    } elsif ($signaturaBase){
+                            $n3->{'signatura_topografica'}=$signaturaBase;
+                    }
+                    
                     #Calcular las disponibilidades
                     my $estado= $n3->{'estado'};
                     my $disponibilidad= $n3->{'disponibilidad'};

@@ -504,6 +504,7 @@ sub aplicarImportacion {
       #  $nivel2->{'tiene_indice'}
         if (!$msg_object2->{'error'}){  
           my $niveles3 = $nivel2->{'nivel3'};
+
           foreach my $nivel3 (@$niveles3){
             my $params_n3;
             $params_n3->{'id_tipo_doc'} = $nivel3->{'tipo_documento'};
@@ -511,7 +512,7 @@ sub aplicarImportacion {
             $params_n3->{'id1'}=$id1;
             $params_n3->{'id2'}=$id2;
             $params_n3->{'ui_origen'}=$nivel3->{'ui_origen'};
-            $params_n3->{'ui_duenio'}=$nivel3->{'ui_duenio'};            
+            $params_n3->{'ui_duenio'}=$nivel3->{'ui_duenio'};
             $params_n3->{'cantEjemplares'} = 1;
             
             #Hay que autogenerar el barcode o no???
