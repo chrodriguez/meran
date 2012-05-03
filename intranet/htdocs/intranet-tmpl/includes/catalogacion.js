@@ -625,9 +625,24 @@ function updateGuardarEsquema(responseText){
     
 }
 
+function editarIndice(id2){
+    
+ID_N2 = id2;
+   
+    $('#datos_indice').modal({   containerCss:{
+                backgroundColor:"#fff",
+                height:343,
+                padding:0,
+                width:900
+            },
+        });
+}
+
+
+
 function agregarIndice(id2){
     ID_N2 = id2;
-
+   
     $('#datos_indice').modal({   containerCss:{
                 backgroundColor:"#fff",
                 height:343,
@@ -639,7 +654,6 @@ function agregarIndice(id2){
 }
 
 function mostrarIndice(id2){
-
     $("#indice_data" + id2).modal();
 }
 

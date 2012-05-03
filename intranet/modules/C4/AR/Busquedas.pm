@@ -992,7 +992,8 @@ sub busquedaAvanzada_newTemp{
 
     my $query   = '';
     my $tipo    = 'SPH_MATCH_EXTENDED';
-    my $orden   = $params->{'orden'};
+    my $orden   = $params->{'orden'} || 'titulo';
+    my $sentido_orden   = $params->{'sentido_orden'};
     my $keyword;
    
     if($params->{'titulo'} ne ""){
@@ -1059,9 +1060,17 @@ sub busquedaAvanzada_newTemp{
     $sphinx->SetMatchMode($tipo_match);
 
     if ($orden eq 'autor'){
-        $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"autor");
+            if ($sentido_orden){
+                $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"autor_local");
+            } else {
+                $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"autor_local");
+            }
     }else{
-        $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
+           if ($sentido_orden){
+                $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
+            } else {
+                $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"titulo_local");
+            }
     }
     
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
@@ -1114,6 +1123,7 @@ sub busquedaPorTema{
     my ($cantidad, $resultId1, $suggested) = C4::AR::Busquedas::busquedaCombinada_newTemp($tema, $session, $obj_for_log);
 
 
+
     return ($cantidad, $resultId1, $suggested); 
 }
 
@@ -1151,13 +1161,20 @@ sub busquedaPorTitulo{
     my ($titulo) = @_;
 
     use Sphinx::Search;
-
+    
     my $sphinx      = Sphinx::Search->new();
     my $query       = '@titulo '.$titulo;
     my $tipo        = 'SPH_MATCH_EXTENDED';
     my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
     $sphinx->SetMatchMode($tipo_match);
+
+#     if ($orden eq 'autor'){
+#             $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"autor");
+#     }else{
+#             $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
+#     }
+
     $sphinx->SetSortMode(SPH_SORT_RELEVANCE);
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
     # NOTA: sphinx necesita el string decode_utf8
@@ -1259,7 +1276,9 @@ sub busquedaCombinada_newTemp{
     my $query = "";
     my @boolean_ops = ("&","|","!","-");
     my $tipo        = $obj_for_log->{'match_mode'}||'SPH_MATCH_ALL';
-    my $orden       = $obj_for_log->{'orden'};
+    my $orden       = $obj_for_log->{'orden'} || 'titulo';
+    my $sentido_orden = $obj_for_log->{'sentido_orden'};
+
     my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
     C4::AR::Debug::debug("Busquedas => match_mode ".$tipo);
@@ -1299,10 +1318,18 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
 
     $sphinx->SetMatchMode($tipo_match);
 
-    if ($orden eq 'autor'){
-        $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"autor");
-    }else{
-    	$sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
+    if ($orden eq 'autor') {
+            if ($sentido_orden){
+                $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"autor_local");
+            } else {
+                $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"autor_local");
+            }
+    } else {
+            if ($sentido_orden){
+                $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
+            } else {
+                $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"titulo_local");
+            }
     }
  
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
@@ -1554,7 +1581,6 @@ sub filtrarPorAutor{
 #             $query .= "*";
 #         }
 #     }
-
     $query = '@autor '.$params->{'completo'};
     C4::AR::Debug::debug("Busquedas => query string => ".$query);
 #     C4::AR::Debug::debug("query string ".$query);
@@ -2076,6 +2102,12 @@ sub cantServidoresExternos{
 sub getServidoresExternos{
     return (C4::Modelo::SysExternosMeran::Manager->get_sys_externos_meran(require_objects => ['ui'],));
 }
+
+
+
+
+
+
 #***************************************Fin**Soporte MARC*********************************************************************
 
 

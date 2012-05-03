@@ -19,6 +19,9 @@ $obj = C4::AR::Utilidades::from_json_ISO($obj);
 if($obj){
 
     my $ini= $obj->{'ini'};
+    
+    my $orden= $obj->{'orden'};
+    my $sentido_orden= $obj->{'sentido_orden'};
 
     my $tipoAccion= $obj->{'tipoAccion'}||"";
 

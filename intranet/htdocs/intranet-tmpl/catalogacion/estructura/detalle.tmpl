@@ -192,7 +192,7 @@
 		                                                                            {title => "Modificar", action=>'modificarNivel2("[% id2 %]")',icon=>"icon-edit"},
 		                                                                            {title => "Eliminar", action=>"borrarN2([% id2 %])", icon=>"icon-trash"},   
 		                                                                      [% IF tiene_indice %]
-                                                                                    {title => "Ver &iacute;ndice", action=>'mostrarIndice([% id2 %])', icon=>"icon-list"},
+                                                                                    {title => "Editar &iacute;ndice", action=>'editarIndice([% id2 %])', icon=>"icon-list"},
                                                                               [% ELSE %]
                                                                                     {title => "Agregar &iacute;ndice", action=>'agregarIndice([% id2 %])', icon=>"icon-list"},
                                                                               [% END %]
@@ -236,8 +236,8 @@
                                     <h3>[% 'Datos del Indice' | i18n %]</h3>
                                 </div>
                                 <div class="modal-body">
-                                    <textarea id="indice_id"style="width:519px; height:202px; max-width:650px">
-                                        [% indice_data | trim %]
+                                    <textarea id="indice_id" style="width:519px; height:202px; max-width:650px">
+                                        [% indice | trim %]
                                     </textarea>
                                 </div>
                                 <div class="modal-footer">

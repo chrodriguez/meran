@@ -40,10 +40,19 @@
              [% PERL %]
                  print C4::AR::Filtros::tableHeader(   
                                                          id              => "tablaResult",
-                                                         class           => "",
+                                                         class           => "table table-bordered",
                                                          columns         => ['[% "Tipo"|i18n %]','[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]',
                                                                              '[% "Edici&oacute;n"|i18n %]','[% "Disponibilidad"|i18n %]', [% IF signatura_filter %] '[% "Signatura"|i18n %]' [% END %],
-                                                                            ]
+                                                                            ],
+                                                         order          => {  'Tipo' => '',
+                                                                               'T&iacute;tulo' =>'titulo', 
+                                                                               'Autor' => 'autor',
+                                                                               'Edici&oacute;n' => '',
+                                                                               'Disponibilidad' =>'',
+                                                                               [% IF signatura_filter %] 'Signatura' => '' [% END %]
+                                                                             },
+                                                        order_name_function => "busqueda_catalogo"
+                                                        
                                                          
                              ) ;
              [% END %]

@@ -37,7 +37,7 @@ function ordenar(orden){
 
         function updateVerEstantes(responseText){
                 $('#estante_collapse').html(responseText);
-                $('#subestante').html('');
+              //  $('#subestante').html('');
                 makeToggle('datos_tabla_div_estantes','trigger',null,false);
         }
 
@@ -223,7 +223,6 @@ function ordenar(orden){
 
 
         function editarEstante(estante,id,padre,abuelo){
-
 		    $('#input_id_estante').val(id);
 		    $('#input_valor_estante').val(estante);
 		    $('#input_padre_estante').val(padre);
@@ -241,7 +240,7 @@ function ordenar(orden){
                     objAH.estante= $('#input_id_estante').val();
                     objAH.abuelo= $('#input_abuelo_estante').val();
                     objAH.padre= $('#input_padre_estante').val();
-                    objAH.valor=$('#input_valor_estante').val();
+                    objAH.valor=$('#input_valor_estante').val();   
                     objAH.tipo= 'MODIFICAR_ESTANTE';
                     objAH.sendToServer();
                     $('#editar_estante').modal('hide');
