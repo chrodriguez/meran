@@ -407,29 +407,34 @@ sub show_componente {
     
     if((($campo eq "700")||($campo eq "100"))&&($subcampo eq "a")) {
    
-# TODO  
-#        if(C4::AR::Auth::getSessionType() eq 'intra'){
+        if($session_type eq 'intranet'){
     
             return "<a class='click' onClick='buscarPorAutor(&#039$dato&#039)' title='" . i18n('Filtrar por Autor') . "'>$dato</a>";
         
-#        }
+        }else{
+        
+            my %params_hash    = ('autor' => $dato, 'tipoAccion' => 'BUSQUEDA_AVANZADA');
+            my $url            = C4::AR::Utilidades::url_for("/opac-busquedasDB.pl", \%params_hash);
+            
+            return C4::AR::Filtros::link_to( text => $dato, url => $url );
+        
+        }
     }
   
     if((($campo eq "650")||($campo eq "653"))&&($subcampo eq "a")) {
-
-#TODO    
-#        if(C4::AR::Auth::getSessionType() eq 'intra'){
+  
+        if($session_type eq 'intranet'){
     
             return "<a class='click' onClick='verTema(&#039$dato&#039)' title='" . i18n('Filtrar por Tema') . "'>$dato</a>";
 
-#        }
-#        else{
-        
-#         http://163.10.10.120/cgi-bin/koha/opac-busquedasDB.pl?titulo=&autor=&isbn=&tipo_nivel3_name=LIB&tema=HISTORIA+ECON%C3%93MICA&estantes=&submit=Buscar&tipoAccion=BUSQUEDA_AVANZADA&tipo=normal&token=
+        }else{
 
-#            return C4::AR::Filtros::link_to( text => $dato, url => $url_prefix."opac-busquedasDB.pl?titulo=&autor=&isbn=&tipo_nivel3_name=LIB&tema=".$dato."&estantes=&submit=Buscar&tipoAccion=BUSQUEDA_AVANZADA&tipo=normal", blank => 0, url_absolute => 1, without_token => 0);
-        
-#        }
+            my %params_hash    = ('tema' => $dato, 'tipoAccion' => 'BUSQUEDA_AVANZADA');
+            my $url            = C4::AR::Utilidades::url_for("/opac-busquedasDB.pl", \%params_hash);
+            
+            return C4::AR::Filtros::link_to( text => $dato, url => $url );
+
+        }
     }
 
     if(($campo eq "773")&&($subcampo eq "a")&&($dato ne "")) {
