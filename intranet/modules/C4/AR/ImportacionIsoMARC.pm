@@ -1551,7 +1551,10 @@ sub getNivelBibliograficoFromMarcRecord{
                     $resultado =C4::AR::Preferencias::getValorPreferencia("defaultUI");
                     }
                 }
-            }
+            }else{
+                     #Valor por defecto
+                    $resultado =C4::AR::Preferencias::getValorPreferencia("defaultUI");
+                }
             
     return $resultado;
 }
