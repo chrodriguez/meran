@@ -61,9 +61,7 @@
 	                                                  	<h3>[% 'Indice del grupo' | i18n %]</h3>
 	                                                  </div>
 	                                                  <div class="modal-body">
-	                                                      <pre>
-	                                                        [% indice | trim %]
-	                                                      </pre>
+	                                                      <pre>[% indice | trim %]</pre>
 	                                                  </div>
 	                                                  <div class="modal-footer"></div>
 	                                          </div>

@@ -17,9 +17,9 @@
                 loaderImgPath: imagesForJS+"/loader_grupos.gif",
                 debug : 1
               });*/
-          
-             inicializar();
-            });
+            $('.nano').nanoScroller();
+            inicializar();
+        });
             
         function modificarNivel1(){
             window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&tipoAccion=MODIFICAR_NIVEL_1";
@@ -74,7 +74,7 @@
 	
 	<fieldset>
 		   	<div class="page-header">
-        		<h1>#[% id1 %] - [% titulo %] <small>([% nivel1_template %])</small></h1>
+        		<h1>[% titulo %] <small>([% nivel1_template %]) - #[% id1 %]</small></h1>
             	<h2>[% autor %] </h2>	
            	</div>
 		      
@@ -96,9 +96,10 @@
                 [% END %]
 	            
 	        </div>
-		    
+		   
 		    <dl>
 			    [% FOREACH nivel1 %]
+
 			            [% IF liblibrarian %]
 			                [% IF dato %]
 				                <dt class="inline left rightMargin">[% liblibrarian %]:&nbsp;</dt> 
