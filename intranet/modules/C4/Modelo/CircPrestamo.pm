@@ -271,7 +271,7 @@ sub prestar {
 		}
 
 	}
-	elsif ( $cant == 1 && $disponibilidad eq "Para Sala" ) {
+	elsif ( $cant == 1 && $disponibilidad eq "Sala de Lectura" ) {
 
 #FALTA!!! SE PUEDE PONER EN EL ELSE???
 #llamar a la funcion verificaciones!!
@@ -315,9 +315,7 @@ sub prestar {
 					$seReserva = 0;
 
 				#Hay error no se permite realizar una reserva de grupo en intra.
-					$self->debug(
-"Hay error no se permite realizar una reserva de grupo en intra"
-					);
+					$self->debug("Hay error no se permite realizar una reserva de grupo en intra");
 					$msg_object->{'error'} = 1;
 					C4::AR::Mensajes::add( $msg_object,
 						{ 'codMsg' => 'R004', 'params' => [] } );
