@@ -52,7 +52,15 @@ sub verificar_Alta_Nivel1 {
     my ($marc_record, $msg_object) = @_;
 
     use Text::Unaccent;
+    use C4::Modelo::CatRegistroMarcN1;
     # FIXME la edicion no la puedo validar con los datos de N1
+
+
+    my $catRegistroMarcN1       = C4::Modelo::CatRegistroMarcN1->new();
+    my $clave_unicidad_alta     = $catRegistroMarcN1->generar_clave_unicidad($marc_record);
+
+    C4::AR::Debug::debug("Nivel1 => clave_unicidad_alta => ".$clave_unicidad_alta);
+
 
     my $ref_autor       = $marc_record->subfield("100","a");
     my $titulo          = $marc_record->subfield("245","a");
@@ -60,16 +68,18 @@ sub verificar_Alta_Nivel1 {
     my $autor           = C4::Modelo::CatAutor->getByPk($id_autor);
     my $nombre_completo = $autor->getCompleto();
 
-    my ($cant, $result_array_ref) = C4::AR::Catalogacion::existeNivel1($titulo,$nombre_completo);
+# TODO DEPRECATED
+    # my ($cant, $result_array_ref) = C4::AR::Catalogacion::existeNivel1($titulo,$nombre_completo, $clave_unicidad_alta);
+    my $n1 = C4::AR::Nivel1::getNivel1ByClaveUnicidad($clave_unicidad_alta);
 
-    if ($cant){
+    if ($n1){
         $msg_object->{'error'} = 1;
 
         my %params_hash;
         #muestro el id1 de al menos el primer registro que coincide
-        %params_hash    = ('id1' => $result_array_ref->[0]->{'id1'});
+        %params_hash    = ('id1' => $n1->getId1());
         my $url         = C4::AR::Utilidades::url_for("/catalogacion/estructura/detalle.pl", \%params_hash);
-        my $link        = C4::AR::Filtros::link_to( text    => $result_array_ref->[0]->{'id1'},
+        my $link        = C4::AR::Filtros::link_to( text    => $n1->getId1(),
                                                     url     => $url
                                               );
 
@@ -177,6 +187,25 @@ sub getNivel1FromId1{
     }
 }
 
+
+sub getNivel1ByClaveUnicidad{
+    my ($clave, $db) = @_;
+
+    $db = $db || C4::Modelo::CatRegistroMarcN1->new()->db();
+
+    my $nivel1_array_ref = C4::Modelo::CatRegistroMarcN1::Manager->get_cat_registro_marc_n1(
+                                                                        db => $db,
+                                                                        query => [
+                                                                                    clave_unicidad => { eq => $clave },
+                                                                            ]
+                                                                );
+
+    if( scalar(@$nivel1_array_ref) > 0){
+        return ($nivel1_array_ref->[0]);
+    }else{
+        return 0;
+    }
+}
 =head2
 sub getNivel1Completo
 

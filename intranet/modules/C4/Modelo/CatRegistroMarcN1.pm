@@ -8,9 +8,10 @@ __PACKAGE__->meta->setup(
     table   => 'cat_registro_marc_n1',
 
     columns => [
-        id              => { type => 'serial', overflow => 'truncate', not_null => 1 },
-        marc_record     => { type => 'text', overflow => 'truncate' },
-        template        => { type => 'varchar', overflow => 'truncate', not_null => 1 },
+        id                  => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        marc_record         => { type => 'text', overflow => 'truncate' },
+        template            => { type => 'varchar', overflow => 'truncate', not_null => 1 },
+        clave_unicidad    => { type => 'text', overflow => 'truncate', length => 65535, not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -34,6 +35,19 @@ sub getId1{
 sub getMarcRecord{
     my ($self) = shift;
     return (C4::AR::Utilidades::trim($self->marc_record));
+}
+
+sub getClaveUnicidad{
+    my ($self) = shift;
+    return ($self->clave_unicidad);
+}
+
+
+sub setClaveUnicidad{
+    my ($self)          = shift;
+    my ($clave)   = @_;
+
+    $self->clave_unicidad($clave);
 }
 
 sub getMarcRecordObject{
@@ -113,18 +127,66 @@ sub setearLeader {
     $self->save();
 }
 
+sub generar_clave_unicidad {
+    my ($self)          = shift;
+    my ($marc_record)   = @_;
+
+    use Digest::SHA  qw(sha1 sha1_hex sha1_base64 sha256_base64 );
+
+    # $marc_record    = MARC::Record->new_from_usmarc($marc_record);
+
+    my $clave       = "";
+    my $autor_100   = $marc_record->subfield("100","a");
+    C4::AR::Debug::debug("CatRegistroMarcN1 => generar_clave_unicidad => CLAVE UNICIDAD => 100,a => ".$autor_100);   
+    my $autor_110   = $marc_record->subfield("110","a");
+    my $titulo      = $marc_record->subfield("245","a");
+
+    $clave = $clave.$autor_100;
+    $clave = $clave.$autor_110;
+    $clave = $clave.$titulo;
+
+    my @campos_array = $marc_record->field("700");
+    my @ids_700;
+
+    foreach my $campo (@campos_array){
+        # $clave = $clave.$campo->subfield("a");               
+        push (@ids_700, $campo->subfield("a"));
+    }
+
+    #ordeno el arreglo de ids del campo 700 en orden descendente
+    @ids_700 = sort(@ids_700);
+
+    foreach my $id (@ids_700){
+        $clave = $clave.$id;               
+        C4::AR::Debug::debug("CatRegistroMarcN1 => generar_clave_unicidad => CLAVE UNICIDAD => id => ".$id);   
+        # push (@ids_700, $campo->subfield("a"));
+    }
+    
+
+    # C4::AR::Debug::debug("CatRegistroMarcN1 => CLAVE UNICIDAD => metodo => ".C4::AR::Auth::getMetodoEncriptacion()); 
+    C4::AR::Debug::debug("CatRegistroMarcN1 => generar_clave_unicidad => CLAVE UNICIDAD => clave antes de hashear => ".$clave); 
+    $clave = C4::AR::Auth::hashear_password($clave, C4::AR::Auth::getMetodoEncriptacion());
+    C4::AR::Debug::debug("CatRegistroMarcN1 => generar_clave_unicidad => CLAVE UNICIDAD => ".$clave);    
+
+    return $clave;
+}
+
 sub agregar{
     my ($self)                  = shift;
     my ($marc_record, $params)  = @_;
 
+    $marc_record = MARC::Record->new_from_usmarc($marc_record);
+
     $self->setMarcRecord($marc_record);
     $self->setTemplate($params->{'id_tipo_doc'});
+    $self->setClaveUnicidad($self->generar_clave_unicidad($marc_record));
     $self->save();
 
     #seteo datos del LEADER
     $self->setearLeader($params);
 
-    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+# FIXME para que esta esto????
+    # my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
 #     C4::AR::Debug::debug("CatRegistroMarcN1 => agregar => LEADER guardado !!!!!!!!!!!!! ".$marc_record->leader());
 }
 
@@ -132,13 +194,17 @@ sub modificar{
     my ($self)                  = shift;
     my ($marc_record, $params)  = @_;
 
+    $marc_record = MARC::Record->new_from_usmarc($marc_record);
+
     $self->setMarcRecord($marc_record);
+    $self->setClaveUnicidad($self->generar_clave_unicidad($marc_record));
     $self->save();
 
     #seteo datos del LEADER
     $self->setearLeader($params);
 
-    my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
+# FIXME para que esta esto????
+    # my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
 #     C4::AR::Debug::debug("CatRegistroMarcN1 => agregar => LEADER modificado !!!!!!!!!!!!! ".$marc_record->leader());
 # die;
 }

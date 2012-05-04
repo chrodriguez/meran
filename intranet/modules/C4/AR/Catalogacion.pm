@@ -2316,6 +2316,8 @@ sub footerDCXML{
 sub existeNivel1{
     my ($titulo, $autor) = @_;
 
+# TODO validar 100,a; 110,a; 245,a; 700, a
+
     use Sphinx::Search;
     use Text::Unaccent;
 
