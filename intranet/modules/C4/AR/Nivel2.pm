@@ -658,10 +658,15 @@ sub buildNavForGroups{
             $hash{'id'} = "detalle_grupo_".$n2->{'id2'};
 #            $hash{'title'} = $n2->{'edicion'} || $n2->{'volumen'} || $n2->{'año_publicacion'} ||"#".$n2->{'id2'}; 
 
-            if($n2->{'edicion'} && $n2->{'volumen'}){
-                $hash{'title'} = $n2->{'volumen'} . " - " . $n2->{'edicion'};
-            }else{     
-                $hash{'title'} = $n2->{'volumen'} || $n2->{'edicion'} || $n2->{'año_publicacion'} ||"#".$n2->{'id2'};         
+            #ticket #4264
+            if($n2->{'edicion'} && $n2->{'volumen'} && $n2->{'año_publicacion'}){
+                $hash{'title'} = $n2->{'volumen'} . " - " . $n2->{'edicion'} . " (" . $n2->{'año_publicacion'} . ")";
+            }elsif($n2->{'edicion'} && $n2->{'año_publicacion'}){
+                $hash{'title'} = $n2->{'edicion'} . " (" . $n2->{'edicion'} . ")";
+            }elsif($n2->{'volumen'} && $n2->{'año_publicacion'}){
+                $hash{'title'} = $n2->{'volumen'} . " (" . $n2->{'año_publicacion'} . ")";
+            }elsif($n2->{'año_publicacion'}){
+                $hash{'title'} = $n2->{'año_publicacion'};
             }
 
             
