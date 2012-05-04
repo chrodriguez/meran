@@ -611,7 +611,7 @@ sub getGrupos {
 
     #recupero todos los grupos de nivel 1
     my ($nivel2_object_array) = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(
-                                                                        query => [ id => { eq => $self->getId1 } ]
+                                                                        query => [ id1 => { eq => $self->getId1 } ]
                                                                    );
     return $nivel2_object_array;
 }
