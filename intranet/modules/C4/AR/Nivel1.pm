@@ -227,6 +227,18 @@ sub getNivel1Completo {
     return ($nivel1_array_ref);
 }
 
+sub generar_clave_unicidad_masiva {
+    my $n1_array = getNivel1Completo();
+    my $marc_record;
+
+    foreach my $n1 (@$n1_array){
+        $marc_record = $n1->getMarcRecord();
+        $marc_record    = MARC::Record->new_from_usmarc($marc_record);
+        $n1->setClaveUnicidad($n1->generar_clave_unicidad($marc_record));
+        $n1->save();
+    }
+}
+
 sub getNivel1FromId3{
     my ($id3) = @_;
     my $nivel3 = C4::AR::Nivel3::getNivel3FromId3($id3);
