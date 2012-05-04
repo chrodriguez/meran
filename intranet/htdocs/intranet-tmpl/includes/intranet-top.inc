@@ -126,6 +126,8 @@
 			if (click_responder == 0){
 				$("#respuesta").wysiwyg();
 			    $(".responder").show(); 
+                $("#btn_responder").hide();
+                $("#btn_enviar").show();
 			    $(".wysiwyg").css('width','388px');   
 			    $("#fancybox-wrap").css('top','25px');
 			    $("#respuestaIFrame").css('width','388px');

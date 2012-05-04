@@ -12,36 +12,39 @@
   <p>[% HTML.escape(mensaje.getMensaje) %]</p>
 
   <input type="hidden" name="email" id="email" value="[% HTML.escape(mensaje.getEmail) %]">
-	[% PERL %]
-	        print C4::AR::Filtros::action_button( 
-	                                        button         => "btn click",
-	                                        action       => "responder()", 
-	                                        icon         => "icon-share",
-	                                        title        => "[% 'Responder' | i18n %]",
-	                                    ) ;
 	
-	[% END %]
 
   <div class="responder" style="display:none; padding-top:10px;">
       <textarea id="respuesta" name="respuesta" class="self_review" style="width: 377px"></textarea>
-      <div class="">
-		   [% PERL %]
-		           print C4::AR::Filtros::action_button( 
-		                                           button         => "btn btn-primary click",
-		                                           action       => "responderMail()", 
-		                                           icon         => "icon-white icon-share",
-		                                           title        => "[% 'Enviar' | i18n %]",
-		                                       ) ;
-		   
-		   [% END %]
-      </div>
   </div>
 
 
 
 </div>
 <div class="modal-footer">
-   <h5>[% 'De' | i18n %]: [% HTML.escape(mensaje.getApellido) %], [% HTML.escape(mensaje.getNombre) %] ([% HTML.escape(mensaje.getEmail) %])</h5>
+  <div id="btn_enviar"  class="left" hidden>
+           [% PERL %]
+                   print C4::AR::Filtros::action_button( 
+                                                   button       => "btn btn-primary click",
+                                                   action       => "responderMail()", 
+                                                   icon         => "icon-white icon-share",
+                                                   title        => "[% 'Enviar' | i18n %]",
+                                               ) ;
+           
+           [% END %]
+  </div>
+  <div id="btn_responder" class="left">
+    [% PERL %]
+                print C4::AR::Filtros::action_button( 
+                                                button         => "btn click",
+                                                action       => "responder()", 
+                                                icon         => "icon-share",
+                                                title        => "[% 'Responder' | i18n %]",
+                                            ) ;
+        
+        [% END %]
+  </div>
+  <h5>[% 'De' | i18n %]: [% HTML.escape(mensaje.getApellido) %], [% HTML.escape(mensaje.getNombre) %] ([% HTML.escape(mensaje.getEmail) %])</h5>
 </div>
 
 

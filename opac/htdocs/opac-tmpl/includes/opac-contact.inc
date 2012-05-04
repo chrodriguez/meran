@@ -75,9 +75,9 @@
     <fieldset><legend>[% 'Motivo de la consulta' | i18n %]</legend>
         
         <div class="control-group">
-            <label class="control-label" for="asunto">[% 'Asunto' | i18n %]:</label>
+            <label class="control-label" for="asunto">[% 'Asunto *' | i18n %]:</label>
             <div class="controls">
-                <input type="text" name="asunto" id="asunto" class="field" value="" tabindex="14" />
+                <input type="text" name="asunto" id="asunto" required class="field" value="" tabindex="14" />
             </div>
         </div>
         
