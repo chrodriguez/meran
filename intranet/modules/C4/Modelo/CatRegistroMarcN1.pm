@@ -175,11 +175,11 @@ sub agregar{
     my ($self)                  = shift;
     my ($marc_record, $params)  = @_;
 
-    $marc_record = MARC::Record->new_from_usmarc($marc_record);
+    # $marc_record = MARC::Record->new_from_usmarc($marc_record);
 
     $self->setMarcRecord($marc_record);
     $self->setTemplate($params->{'id_tipo_doc'});
-    $self->setClaveUnicidad($self->generar_clave_unicidad($marc_record));
+    $self->setClaveUnicidad($self->generar_clave_unicidad(MARC::Record->new_from_usmarc($marc_record)));
     $self->save();
 
     #seteo datos del LEADER
@@ -194,10 +194,11 @@ sub modificar{
     my ($self)                  = shift;
     my ($marc_record, $params)  = @_;
 
-    $marc_record = MARC::Record->new_from_usmarc($marc_record);
+    # $marc_record = MARC::Record->new_from_usmarc($marc_record);
 
     $self->setMarcRecord($marc_record);
-    $self->setClaveUnicidad($self->generar_clave_unicidad($marc_record));
+    # $self->setClaveUnicidad($self->generar_clave_unicidad($marc_record));
+    $self->setClaveUnicidad($self->generar_clave_unicidad(MARC::Record->new_from_usmarc($marc_record)));
     $self->save();
 
     #seteo datos del LEADER
