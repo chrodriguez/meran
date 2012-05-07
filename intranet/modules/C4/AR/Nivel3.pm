@@ -341,7 +341,7 @@ sub getBarcodesLike {
     
     my $limit = C4::AR::Preferencias::getValorPreferencia('limite_resultados_autocompletables') || 20;
      
-    push(@filtros, ( marc_record => { like => '%'.$barcode.'%' }) );
+    push(@filtros, ( codigo_barra => { like => '%'.$barcode.'%' }) );
     
     $barcodes_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3( 
                                                         query => \@filtros, 

@@ -1,7 +1,7 @@
 package C4::Modelo::DB::AutoBase1;
 
 use strict;
-
+use C4::Context;
 use base 'Rose::DB';
 #    use C4::Context;
 __PACKAGE__->use_private_registry;

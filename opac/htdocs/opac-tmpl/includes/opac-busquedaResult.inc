@@ -31,7 +31,7 @@
 			}		
 		
 			function doExternalSearches(keyword){
-				$('#main_content').html("");
+				$('#principal').html("");
 				startOverlay();
 				SEARCH = keyword;
 				
@@ -40,18 +40,18 @@
 						results = false;
 						for (x=0; x<servidores.length ;x++){
 							externalSearch(SEARCH,servidores[x],server_name[servidores[x]]);
-							$('#main_content').append("<br />");
-							$('#main_content').append("<br />");
+							$('#principal').append("<br />");
+							$('#principal').append("<br />");
 						} 
 						closeModal();
 						if (results){
 							if (numPag > 1)
-								$('#main_content').append("<input class='js_paging' type='button' onclick='prevPage();' value= [% 'Anterior' | i18n %] /> ");
-							$('#main_content').append("<input class='js_paging' type='button' onclick='nextPage();' value= [% 'Siguiente' | i18n %] /> ");
+								$('#principal').append("<a class='btn' type='button' onclick='prevPage();'>[% 'Anterior' | i18n %]</a> ");
+							$('#principal').append("<a class='btn btn-primary' type='button' onclick='nextPage();'> [% 'Siguiente' | i18n %] </a> ");
 			
-							$('#main_content').append("<br />");
+							$('#principal').append("<br />");
 						}else{
-							$('#main_content').append("[% ' LOS SERVIDORES EXTERNOS NO DISPONEN DE MAS RESULTADOS SEGUN SU CRITERIO ' %]");
+							$('#principal').append("[% ' LOS SERVIDORES EXTERNOS NO DISPONEN DE MAS RESULTADOS SEGUN SU CRITERIO ' %]");
 						}
 					});
 				}
@@ -138,7 +138,7 @@
 		
 				table += '</tbody></table>';
 				if (cant_dc > 0){
-					$('#main_content').append(table);
+					$('#principal').append(table);
 					results = true;
 				}
 				
@@ -180,10 +180,6 @@
 					                                                                  action       	=> 'doExternalSearches("[% buscoPor | html %]")', 
 					                                                                  icon         	=> "icon-white icon-search ",
                                                                                       title        	=> "[% 'Buscar en servidores externos' | i18n %]",
-                                                                                      popover		=> {title=>'[% "Cat&aacute;logos externos" | i18n %]',
-                                                                                      					text => '[% "Esta b&uacute;squeda se realiza sobre otros cat&aacute;logos, 
-                                                                                      							     ajenos a &eacute;sta Biblioteca. Los resultados llevan a esos cat&aacute;logos.
-                                                                                      							     Puede llevar un tiempo considerable" | i18n %].' },
 					                                                              ) ;
 
 					                          [% END %]

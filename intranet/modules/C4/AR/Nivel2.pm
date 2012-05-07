@@ -662,7 +662,7 @@ sub buildNavForGroups{
             if($n2->{'edicion'} && $n2->{'volumen'} && $n2->{'año_publicacion'}){
                 $hash{'title'} = $n2->{'volumen'} . " - " . $n2->{'edicion'} . " (" . $n2->{'año_publicacion'} . ")";
             }elsif($n2->{'edicion'} && $n2->{'año_publicacion'}){
-                $hash{'title'} = $n2->{'edicion'} . " (" . $n2->{'edicion'} . ")";
+                $hash{'title'} = $n2->{'edicion'} . " (" . $n2->{'año_publicacion'} . ")";
             }elsif($n2->{'volumen'} && $n2->{'año_publicacion'}){
                 $hash{'title'} = $n2->{'volumen'} . " (" . $n2->{'año_publicacion'} . ")";
             }elsif($n2->{'año_publicacion'}){
