@@ -1058,19 +1058,22 @@ sub busquedaAvanzada_newTemp{
     my $tipo_match = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
     $sphinx->SetMatchMode($tipo_match);
-
+    
+    
     if ($orden eq 'autor'){
             if ($sentido_orden){
                 $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"autor_local");
             } else {
                 $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"autor_local");
             }
-    }else{
-           if ($sentido_orden){
+    }elsif ($orden eq 'titulo') {
+            if ($sentido_orden){
                 $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
             } else {
                 $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"titulo_local");
             }
+    } else {
+            $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
     }
     
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
@@ -1324,12 +1327,14 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
             } else {
                 $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"autor_local");
             }
-    } else {
+    } elsif ($orden eq 'titulo') {
             if ($sentido_orden){
                 $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
             } else {
                 $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"titulo_local");
             }
+    } else {
+            $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
     }
  
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);

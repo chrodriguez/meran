@@ -11,8 +11,9 @@
               <script type="text/javascript">
                           $(document).ready(function() {
                                       $('#input_nuevo_estante').keypress(function(e){if(e.which==13){if(this.value!=''){agregarEstante();}}});
-                                      verSubEstantes('[% subestante_actual %]',0);
-                                      
+                                      if ('[% subestante_actual %]'){
+                                          verSubEstantes('[% subestante_actual %]',0);
+                                      }
                           });
               </script>
       </div>
