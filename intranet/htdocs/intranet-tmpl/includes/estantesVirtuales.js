@@ -4,7 +4,10 @@
  */
 
 function changePage(ini){
+        $('#layer').css('opacity','0.2');
+        $('#layer').focus();
         objAH.changePage(ini);
+        
     }
 
 function ordenar(orden){
@@ -287,6 +290,7 @@ function ordenar(orden){
         $('#buscarContBoton').replaceWith("<a id=buscarContBoton class='btn btn-primary click' onclick=buscarContenido();><i class='icon-search icon-white'></i> Buscar</a>"); 
 		$('#resultado_contenido_estante').html(responseText);
 		zebra('datos_tabla');
+        $('#layer').css('opacity','1');
         }
 
         function agregarContenidoAEstante(id2 ){
