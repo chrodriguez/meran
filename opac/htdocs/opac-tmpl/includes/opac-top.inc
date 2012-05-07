@@ -63,7 +63,8 @@
   <script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox.js"></script>
   <script type="text/javascript" src="/includes/jquery/fancybox/jquery.mousewheel.js"></script>
   <script type="text/javascript" src="/includes/jquery/jquery.rateit.min.js"></script>
-
+  <script type="text/javascript" src="/includes/jquery/jquery.tmpl.js"></script>
+  
 
   [% INCLUDE 'localized_messages.inc' %]
   <title>
@@ -102,7 +103,7 @@
     <script type="text/javascript">    
 
       $(document).ready(function() {
-			$('.popover_button').popover({delay: { show: 100, hide: 100 },});
+			$('.popover_button').popover({delay: { show: 300, hide: 100 },});
 			$(".alert").alert();
           
                     $(function () {
@@ -142,7 +143,7 @@
 	
 	   [% INCLUDE 'opac-top-header.inc' %]
 	   [% INCLUDE 'opac-side_bar.inc' 	%]	   
-		<div class="container main_content">	
+		<div class="container main_content" id="principal">	
 				  <div id="end_top">
 					    [% IF mensaje %]
 								<div class="alert [% mensaje_class %]">
