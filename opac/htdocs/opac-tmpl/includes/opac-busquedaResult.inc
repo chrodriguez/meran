@@ -84,10 +84,10 @@
 		    	    td : '<td>#{cell}</td>'
 		    	};
 
-		    	table  = '<fieldset><legend class="server_name">'+SERVER+'</legend></fieldset><table class="external_results"><thead>';
+		    	table  = '<fieldset><legend class="server_name">'+SERVER+'</legend></fieldset><table class="table table-striped"><thead>';
 				table += '<tr>';
 		        table += '<th>[% "T&iacute;tulo" | i18n %]</th>'; 
-//		        table += '<th>[% "Autor" | i18n %]';
+		        table += '<th>[% "Autor" | i18n %]';
 		
 				table += '</tr></thead><tbody>';
 		         
@@ -132,7 +132,7 @@
 		            }
 		            table += '<tr>';
 		    	    table += $.tmpl(templates.td, {cell: DC_hash.link});
-		    	   // table += $.tmpl(templates.td, {cell: DC_hash.creator});
+		    	    table += $.tmpl(templates.td, {cell: DC_hash.creator});
 		            table += '</tr>';
 		        });
 		
