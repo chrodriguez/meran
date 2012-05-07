@@ -598,6 +598,8 @@ my %mensajesINTRA = (
     'PERCENTAGE_VALUE' => "*?*",
     'B458' => 'Error en funcion C4::AR::ImportacionIsoMARC::procesarReglasMatcheo',
     'B459' => 'Error en funcion C4::Modelo::ImagenesNovedadesOpac SAVE',
+    #caracter blanco en una busqueda AJA
+    'B460' => 'Error en la palabra ingresada'
 );
 
 sub getMensaje {

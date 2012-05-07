@@ -7,58 +7,49 @@ use Time::HiRes;
 use CGI;
 use C4::AR::Busquedas qw(busquedaPorBarcode armarBuscoPor busquedaCombinada_newTemp);
 
-my $input = new CGI;
+my $input           = new CGI;
 
-my $template_name ='busquedas/busquedaResult.tmpl';
+my $template_name   = 'busquedas/busquedaResult.tmpl';
 
-my $authnotrequired= 0;
-my $obj=$input->param('obj');
-$obj = C4::AR::Utilidades::from_json_ISO($obj);
+my $authnotrequired = 0;
+my $obj             = $input->param('obj');
+$obj                = C4::AR::Utilidades::from_json_ISO($obj);
 
-#si se rompio el JSON viene un 0
-if($obj){
+#si se rompio C4::AR::Utilidades::from_json_ISO viene un 0
+eval{    
 
-    my $ini= $obj->{'ini'};
-    
-    my $orden= $obj->{'orden'};
-    my $sentido_orden= $obj->{'sentido_orden'};
-
-    my $tipoAccion= $obj->{'tipoAccion'}||"";
+    my $ini             = $obj->{'ini'};   
+    my $orden           = $obj->{'orden'};
+    my $sentido_orden   = $obj->{'sentido_orden'};
+    my $tipoAccion      = $obj->{'tipoAccion'}||"";
 
     if($tipoAccion eq "BUSQUEDA_POR_ESTANTE"){
        $template_name = 'busquedas/estante.tmpl';
     } elsif ($tipoAccion eq "BUSQUEDA_ESTANTE_DE_GRUPO"){
        $template_name = 'estantes/estantesGrupo.tmpl';
-    }
-
-
-
-
-     
+    }   
 
     my ($template, $session, $t_params) = get_template_and_user ({
                                 template_name   => $template_name,
                                 query           => $input,
                                 type            => "intranet",
                                 authnotrequired => 0,
-                                flagsrequired   =>  {   ui => 'ANY', 
-                                                        tipo_documento => 'ANY', 
-                                                        accion => 'CONSULTA', 
-                                                        entorno => 'undefined'},
+                                flagsrequired   =>  {   ui              => 'ANY', 
+                                                        tipo_documento  => 'ANY', 
+                                                        accion          => 'CONSULTA', 
+                                                        entorno         => 'undefined'},
                             });
 
 
-    my $start = [ Time::HiRes::gettimeofday( ) ]; #se toma el tiempo de inicio de la busqueda
+    my $start                   = [ Time::HiRes::gettimeofday( ) ]; #se toma el tiempo de inicio de la busqueda
+    my $dateformat              = C4::Date::get_date_format();
+    my ($ini,$pageNumber,$cantR)= C4::AR::Utilidades::InitPaginador($ini);
 
-    my $dateformat = C4::Date::get_date_format();
-    my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
+    $t_params->{'ini'}          = $obj->{'ini'} = $ini;
+    $t_params->{'cantR'}        = $obj->{'cantR'} = $cantR;
+    $obj->{'type'}              = 'INTRA';
 
-    $t_params->{'ini'}      = $obj->{'ini'} = $ini;
-    $t_params->{'cantR'}    = $obj->{'cantR'} = $cantR;
-    $obj->{'type'}          = 'INTRA';
-
-    my $only_available = $obj->{'only_available'};
-
+    my $only_available          = $obj->{'only_available'};
 
     if (C4::AR::Utilidades::validateString($tipoAccion)){
         if($tipoAccion eq "BUSQUEDA_POR_AUTOR"){
@@ -170,4 +161,8 @@ if($obj){
         
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
     }
+};
+
+if($@){
+    C4::AR::Utilidades::redirectAndAdvice('B460');
 }
