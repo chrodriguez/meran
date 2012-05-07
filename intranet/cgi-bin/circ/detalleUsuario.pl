@@ -4,8 +4,6 @@ use strict;
 use CGI;
 use C4::AR::Auth;
 
-use HTML::Template;
-
 my $input=new CGI;
 
 my ($template, $session, $t_params, $usuario_logueado) =  get_template_and_user ({
