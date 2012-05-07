@@ -5,9 +5,10 @@ require Exporter;
 use C4::Modelo::Contacto;
 use C4::Modelo::Contacto::Manager;
 
-use vars qw(@EXPORT @ISA);
+use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
-@EXPORT=qw( 
+
+@EXPORT_OK=qw( 
 
     marcarLeido
     marcarRespondido

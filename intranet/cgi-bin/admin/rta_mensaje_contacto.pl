@@ -8,6 +8,7 @@ use C4::AR::Auth;
 use JSON;
 use C4::Context;
 use C4::AR::Mail;
+use C4::AR::MensajesContacto;
 use CGI;
 
 my $input               = new CGI;
