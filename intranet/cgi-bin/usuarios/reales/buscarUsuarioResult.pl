@@ -29,6 +29,8 @@ my $obj=C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $orden=$obj->{'orden'}||'apellido';
 my $socio=$obj->{'socio'};
 my $string = $socio;
+
+C4::AR::Debug::debug("socio string : " . $socio);
  
 $obj->{'ini'} = $obj->{'ini'} || 1;
 my $ini=$obj->{'ini'};
@@ -65,8 +67,8 @@ foreach my $socio (@$socios){
 	push(@resultsdata, \%row);
 }
 	
-$t_params->{'resultsloop'}= \@resultsdata;
-$t_params->{'cantidad'}= $cantidad;
-$t_params->{'socio_busqueda'}=$string;
+$t_params->{'resultsloop'}      = \@resultsdata;
+$t_params->{'cantidad'}         = $cantidad;
+$t_params->{'socio_busqueda'}   = Encode::encode_utf8($string); #acentos
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

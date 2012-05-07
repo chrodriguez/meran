@@ -38,7 +38,7 @@ sub debugObject{
     my $context = new C4::Context;
 
     my $type = C4::AR::Auth::getSessionType();
-    my $nro_socio = C4::AR::Auth::getSessionNroSocio() || '';
+    my $nro_socio = C4::AR::Auth::getSessionNroSocio() || 'SIN_SOCIO_EN_SESION';
 
     if($context->config('debug')){
         my $debug_file = $context->config('debug_file') || "/usr/local/koha/logs/debug.txt";
@@ -84,7 +84,7 @@ sub _write_debug{
     my $debug_file = $context->config('debug_file') || "/usr/local/koha/logs/debug.txt";
     open(Z, ">>".$debug_file);
     my $type = C4::AR::Auth::getSessionType();
-    my $nro_socio = C4::AR::Auth::getSessionNroSocio();
+    my $nro_socio = C4::AR::Auth::getSessionNroSocio() || "";
     if (C4::AR::Utilidades::validateString($nro_socio)){
     	$nro_socio.=" -- ";
     }

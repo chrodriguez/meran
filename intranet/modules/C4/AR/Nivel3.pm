@@ -593,6 +593,9 @@ sub detalleCompletoINTRA {
             $hash_nivel2->{'año_publicacion'}           = $nivel2_array_ref->[$i]->getAnio_publicacion;
             $hash_nivel2->{'volumen'}                   = $nivel2_array_ref->[$i]->getVolumen;
             
+            #si tiene volumen se le concatena una "v. ". HARDCODED!!
+            if($hash_nivel2->{'volumen'}){ $hash_nivel2->{'volumen'} = "v. " . $hash_nivel2->{'volumen'}; }
+            
             #Para el google book preview
             $hash_nivel2->{'isbn'}        		        = $nivel2_array_ref->[$i]->getISBN;
             if(($nivel2_array_ref->[$i]->getISSN)&&(!$t_params->{'issn'})){
@@ -819,6 +822,7 @@ sub detalleCompletoOPAC{
             #para los nav-tabs
             $hash_nivel2->{'año_publicacion'}           = $nivel2_array_ref->[$i]->getAnio_publicacion;
             $hash_nivel2->{'volumen'}                   = $nivel2_array_ref->[$i]->getVolumen;
+            if($hash_nivel2->{'volumen'}){ $hash_nivel2->{'volumen'} = "v. " . $hash_nivel2->{'volumen'}; }
             if(($nivel2_array_ref->[$i]->getISSN)&&(!$t_params->{'issn'})){
 			#Se supone que no cambian dentro de la misma publicación seriada, se toma solo el primero
 				$t_params->{'issn'}        				= $nivel2_array_ref->[$i]->getISSN;
