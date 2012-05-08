@@ -145,7 +145,7 @@ sub getAll{
     my @filtros;
     if ($filtro){
         my @filtros_or;
-        push(@filtros_or, (idLanguage => {like => '%'.$filtro.'%'}) );
+        push(@filtros_or, (idLanguage => {eq => $filtro }) );
         push(@filtros_or, (description => {like => '%'.$filtro.'%'}) );
         push(@filtros, (or => \@filtros_or) );
     }
