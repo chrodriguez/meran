@@ -90,7 +90,24 @@
 		  }
 	  }
 
-		
+	    function showNovedad(id){
+
+			var objAH_novedadIntra	 		= new AjaxHelper(updateShowNovedadIntra);
+			objAH_novedadIntra.showOverlay  = true;
+			objAH_novedadIntra.debug        = true;
+			objAH_novedadIntra.url          = '[% url_prefix %]/admin/global/ver_novedad_intra.pl';
+			objAH_novedadIntra.id			= id;
+			objAH_novedadIntra.sendToServer();
+		}
+
+		function updateShowNovedadIntra(responseText){
+		    if (!verificarRespuesta(responseText))
+		        return(0);
+
+		    $('#mostrar_novedad').html(responseText);
+		    $('#mostrar_novedad').modal();
+		}
+				
 		function enableAlert(){
 		    $(window).bind('beforeunload', function(){ 
 		    	return("[% 'ATENCION: Se perderan los elementos que no haya guardado' | i18n %]");
