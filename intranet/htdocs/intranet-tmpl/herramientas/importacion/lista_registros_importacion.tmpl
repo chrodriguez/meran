@@ -86,10 +86,14 @@ function cambiarFiltro (filtro){
             [% FOREACH detalle_importacion IN resultsloop %]
                 <tr>
                       <td>
-                            [% detalle_importacion.getTitulo %]
+                            [% FOREACH titulo IN detalle_importacion.getTitulo %]
+                              [% titulo %]<br>
+                            [% END %]
                       </td>
                       <td>
-                            [% detalle_importacion.getAutor %]
+                            [% FOREACH autor IN detalle_importacion.getAutor %]
+                              [% autor %]<br>
+                            [% END %]
                       </td>
                       <td>
                            [% detalle_importacion.getIdentificacion %]
