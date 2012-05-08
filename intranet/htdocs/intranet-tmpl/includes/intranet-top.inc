@@ -54,6 +54,42 @@
 		var worker = new Worker('/includes/workers.js');
 		var id_actual_dm = 0;
 		var click_responder = 0;
+
+
+	  function publicar_twitter(){
+            objAH               = new AjaxHelper(updatePublicarTwitter);
+            objAH.debug         = true;
+            objAH.url           = URL_PREFIX+'/twitter.pl';
+            
+            objAH.tipoAccion    = "PUBLICAR_TWITTER";
+            objAH.post          = $("#post_twitter").val();
+            objAH.sendToServer();
+
+    }
+
+	   function updatePublicarTwitter(responseText){
+	      if (!verificarRespuesta(responseText))
+	                return(0);
+	        var text=JSONstring.toObject(responseText).messages[0].message;
+	        $("#twitter_result").html('<a class="close" data-dismiss="alert">×</a>'+text);
+	        $("#twitter_result").alert();
+	        $("#twitter_result").show();
+	        $('#show_twitter').modal('hide');
+	        
+	  }
+
+	  function enableDisableButton(){
+		  var chars = $('#post_twitter').val().length;
+		  
+		  if (chars > 140){
+			  $('#publicar_twitter').attr('disabled','');
+		      $('#publicar_twitter').removeClass("btn-primary");
+		  }else{
+	    	  $('#publicar_twitter').removeAttr('disabled');
+	          $('#publicar_twitter').addClass("btn-primary");
+		  }
+	  }
+
 		
 		function enableAlert(){
 		    $(window).bind('beforeunload', function(){ 
@@ -203,6 +239,21 @@
 	    	 });
 		}		
 
+		  
+		function showTwitter(responseText){
+		    $('#show_twitter').modal('show');
+	        $('#post_twitter').focus();
+	        $("#post_twitter").charCount({
+	            limit: 0,        
+	            warning: 10,
+	            counterElement: 'p',
+	            cssExceeded: 'label label-important',
+	            counterText: "[% 'Caraceteres restantes' | i18n %]: ",    
+	        });
+			
+		    
+		}
+				
 		function closeDM(){
 			reading_dm = false;
 			$('#mostrar_mensaje').modal('hide');
@@ -219,6 +270,8 @@
 				enableAlert();
 			else
 		        disableAlert();
+
+
 	    });
 	</script>
 	</head>
