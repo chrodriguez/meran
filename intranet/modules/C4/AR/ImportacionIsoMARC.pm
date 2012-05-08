@@ -1140,9 +1140,15 @@ sub getNivelesFromRegistro {
                           }				
                           
                           if ((($campo eq '910')&&($subcampo eq 'a'))&&($marc_record_n2->subfield($campo,$subcampo))){
-                                  #ya existe el 910,a, no sirve que haya varios
+                                  #ya existe el 910,a TIPO DOC, no sirve que haya varios
                                   next;
                               }
+                          
+                          if ((($campo eq '041')&&($subcampo eq 'a'))&&($marc_record_n2->subfield($campo,$subcampo))){
+                                  #ya existe el 041,a IDIOMA, no sirve que haya varios
+                                  next;
+                           }
+                           
                           
                           #El campo es de Nivel 2
                           if (($marc_record_n2->field($campo))&&($estructura->getRepetible)){
