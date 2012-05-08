@@ -31,6 +31,8 @@
 			}		
 		
 			function doExternalSearches(keyword){
+				
+				$('.popover_button').popover('hide');
 				$('#principal').html("");
 				startOverlay();
 				SEARCH = keyword;
@@ -149,14 +151,37 @@
 
     $(document).ready(function() {
         $('.fancylink').fancybox();
+        scrollTo('tablaResult');
     });
 </script>
 
 [% USE HTML %]
 
 [% IF show_search_details %]
+          [% IF external_search %]
+	          [% IF cant_external_servers %]
+	          <div class="right" style="margin-top: 10px">
+					[% PERL %]
+						print C4::AR::Filtros::action_button( 
+							button        => "btn btn-success",
+							action       	=> 'doExternalSearches("[% buscoPor | html %]")', 
+							icon         	=> "icon-white icon-search ",
+							title        	=> "[% 'Externos' | i18n %]",
+							popover => { 
+								title   =>'[% "Atenci&oacute;n" | i18n %]',
+								text    => '[% "Buscar en servidores externos hace la misma b&uacute;squeda 
+												en cat&aacute;logos ajenos a esta biblioteca. 
+												Tenga en cuenta que puede llevar un tiempo considerable." | i18n %]',
+								placement => "left",
+							},
+							
+						) ;
+					[% END %]
+				</div>
+	          [% END %]
+          [% END %]
 
-        <section class="center-section-form">
+        <section class="center-section-form" style="margin-top: 20px" >
             <div class="well">
                 <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: <strong>[% HTML.escape(buscoPor) %]</strong></div> 
             
@@ -171,20 +196,7 @@
 	                    </a>
 			        [% END %]
 			    [% END %]
-			<br />
-          [% IF external_search %]
-	          [% IF cant_external_servers %]
-					                          [% PERL %]
-					                                  print C4::AR::Filtros::action_button( 
-					                                                                  button        => "btn btn-success",
-					                                                                  action       	=> 'doExternalSearches("[% buscoPor | html %]")', 
-					                                                                  icon         	=> "icon-white icon-search ",
-                                                                                      title        	=> "[% 'Buscar en servidores externos' | i18n %]",
-					                                                              ) ;
-
-					                          [% END %]
-	          [% END %]
-          [% END %]
+				<br />
 
             </div>
         </section>    
@@ -215,8 +227,6 @@
     [% END %]
     
     [% IF cantidad > 0 %]
-        	 <div class="contenedor_paginador">[% paginador %]</div>
-        	
              [% PERL %]
                  print C4::AR::Filtros::tableHeader(   
                                                          id              => "tablaResult",
