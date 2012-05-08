@@ -168,8 +168,8 @@ sub getAll{
     my @filtros;
     if ($filtro){
         my @filtros_or;
-        push(@filtros_or, (iso => {eq => '%'.$filtro.'%'}) );
-        push(@filtros_or, (iso3 => {eq => '%'.$filtro.'%'}) );
+        push(@filtros_or, (iso => {eq => $filtro}) );
+        push(@filtros_or, (iso3 => {eq => $filtro}) );
         push(@filtros_or, (nombre => {like => '%'.$filtro.'%'}) );
         push(@filtros_or, (nombre_largo => {like => '%'.$filtro.'%'}) );
         push(@filtros, (or => \@filtros_or) );
