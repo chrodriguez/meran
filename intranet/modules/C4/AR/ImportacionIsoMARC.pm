@@ -493,18 +493,24 @@ sub getEsquema{
                                                                                                         group_by => ['campo_origen,subcampo_origen'],
 							                                                                            limit   => $limit,
 						                                                                                offset  => $offset,
+						                                                                                sort_by => ['campo_origen']
         );
     }else{
         $detalle_esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
                                                                                                         query => \@filtros,
                                                                                                         group_by => ['campo_origen,subcampo_origen'],
+                                                                                                        sort_by => ['campo_origen']
         );
     	
     }
 
-    my $cant_total = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle_count(
+    my $cant_total = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
                                                                                                         query => \@filtros,
+                                                                                                        group_by => ['campo_origen,subcampo_origen'],
+
     );
+    
+    $cant_total = scalar(@$cant_total);
     
     my $esquema = getEsquemaObject($id_esquema);
 
