@@ -14,6 +14,10 @@
 			                <div class="resultados_consulta">[% "Total de campos" | i18n %]: <b>[% cantidad %]</b></div>
 			                [% END %]
                         
+						<form class="well form-search" onsubmit="showEsquemaImportacion(); return false;">
+						      <input type="text" class="input-medium search-query" id="campo_search" name="campo_search">
+						      <button class="btn" onclick="">[% "Buscar"|i18n %]</button>
+   				        </form>                            
                         
                             [% PERL %]
                                 print C4::AR::Filtros::tableHeader(   

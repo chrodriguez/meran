@@ -43,8 +43,8 @@ if (!$editing){
 	
 	    $t_params->{'ini'}          = $obj->{'ini'} = $ini;
 	    $t_params->{'cantR'}        = $obj->{'cantR'} = $cantR;
-	     
-	    my ($detalle_esquema,$esquema,$cantidad_total)  = C4::AR::ImportacionIsoMARC::getEsquema($id_esquema,$ini,$cantR);
+	    my $campo_search            = $obj->{'filtro'};
+	    my ($detalle_esquema,$esquema,$cantidad_total)  = C4::AR::ImportacionIsoMARC::getEsquema($id_esquema,$campo_search,$ini,$cantR);
 
 	    C4::AR::Debug::debug("ESQUEMA EN DETALLE: ".$esquema);
         $t_params->{'esquema'} = $detalle_esquema;

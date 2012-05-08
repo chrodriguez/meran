@@ -1368,11 +1368,9 @@ sub armarPaginas{
     if($actual > 1){
         #a la primer pagina
         my $ant= $actual-1;
-        $paginador .= "<li class='prev'><a  onClick='".$funcion."(1)' title='".$first_text."'> ".$first_text."</a></li>";
-        $paginador .= "<li class='prev'><a  onClick='".$funcion."(".$ant.")' title='".$previous_text."'> ".$previous_text."</a></li>";
+        $paginador .= "<li class='prev click'><a  onClick='".$funcion."(1)' title='".$first_text."'> ".$first_text."</a></li>";
+        $paginador .= "<li class='prev click'><a  onClick='".$funcion."(".$ant.")' title='".$previous_text."'> ".$previous_text."</a></li>";
 
-    }else{
-        $paginador .= "<li class='prev'> <a href='#' title='".$previous_text."'>".$previous_text."</a></li>";
     }
 
     for (my $i=$limInf; ($totalPaginas >1 and $i <= $totalPaginas and $i <= $limSup) ; $i++ ) {

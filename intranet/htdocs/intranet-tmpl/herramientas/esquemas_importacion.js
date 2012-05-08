@@ -35,6 +35,7 @@ function showEsquemaImportacion_func(){
     objAH.esquema	 	= $('#esquemaImportacion').val();
     objAH.accion        = "OBTENER_ESQUEMA";
     objAH.funcion		= 'changePage';
+    objAH.filtro		= $('#campo_search').val();
     esquema_padre		= $('#esquemaImportacion').val();
     
     objAH.sendToServer();	

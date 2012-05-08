@@ -472,7 +472,7 @@ Obtiene un esquema de importacion
 =cut
 
 sub getEsquema{
-    my ($id_esquema,$offset,$limit) = @_;
+    my ($id_esquema,$campo_search,$offset,$limit) = @_;
 
     use C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager;
     my @filtros;
@@ -481,6 +481,9 @@ sub getEsquema{
     $limit = $limit || 0;
     
     push(@filtros,(id_importacion_esquema => {eq =>$id_esquema}));
+    if ($campo_search){
+        push(@filtros,(campo_origen => {like =>$campo_search.'%'}));
+    }
 
     my $detalle_esquema; 
 
