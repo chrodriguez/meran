@@ -1,9 +1,24 @@
+<script>
+    $(document).ready(function() {
+    	$('.dropdown-toggle').dropdown();
+    });
+</script>
+    
     <div id="tabla_referencia">
         <fieldset>
             <legend>[% "Detalle del esquema " | i18n %] [% esquema_title %]</legend>
+            
+                  [% IF esquema.size %]               
 
-                        [% IF esquema.size %]               
-                                
+			            [% IF cantidad %]
+			                <div class="resultados_consulta">[% "Total de campos" | i18n %]: <b>[% cantidad %]</b></div>
+			                [% END %]
+                        
+						<form class="well form-search" onsubmit="showEsquemaImportacion(); return false;">
+						      <input type="text" class="input-medium search-query" id="campo_search" name="campo_search">
+						      <button class="btn" onclick="">[% "Buscar"|i18n %]</button>
+   				        </form>                            
+                        
                             [% PERL %]
                                 print C4::AR::Filtros::tableHeader(   
                                                   id              => "datos_tabla_div_esquema",
@@ -35,21 +50,17 @@
         
                                            }); 
                                         </script>
-                                        <td>
+                                        <td style="width: 100px;">
                                             [% PERL %]
                                                 print C4::AR::Filtros::action_set_button(    
-                                                      title           => "[% 'Esquema' | i18n %]",
+                                                      title           => "[% 'Editar' | i18n %]",
                                                       button          => 'btn btn-primary',
-                                                      action=>"editarOrdenEsquema([% detalle.id %]);",
+                                                      action		  => "editarOrdenEsquema([% detalle.id %]);",
                                                       actions         => [
                                                                           { title => "[% 'Eliminar' | i18n %]", 
                                                                             action=> "eliminarEsquemaRow([% detalle.id %]);",
                                                                             icon=>"icon-trash"
                                                                           },
-                                                                           {title => "[% 'Editar Orden' | i18n %]", 
-                                                                            action=>"editarOrdenEsquema([% detalle.id %]);",
-                                                                            icon=>"icon-edit"
-                                                                           },
                                                                            {title => "[% 'Agregar campo' | i18n %]", 
                                                                             action=>"agregarCampoAEsquema([% detalle.id %]);",
                                                                             icon  =>"icon-plus"
@@ -63,6 +74,8 @@
                                 [% END %]
                             </tbody>
                         </table>
+                        <div class="contenedor_paginador">[% paginador %]</div>
+                        
                 [% ELSE %]
                 
                     <div class="alert alert-info">[% 'No hay detalle para mostrar'| i18n %]</div>

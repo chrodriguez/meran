@@ -9,18 +9,11 @@
     function agregar(){
         $('#form_novedad').submit();
     }
-
-//     $(document).ready(function() {
-//         $(function()
-//         {
-// //             $('#contenido').wysiwyg();
-//         });
-//     });
 </script>
 
 [% USE HTML %]
 
-<form id="form_novedad" action="[% url_prefix %]/admin/global/editar_novedad_intra.pl" class="form-horizontal" method="POST">
+<form id="form_novedad" action="[% url_prefix %]/admin/global/editar_novedad_intra.pl" class="form-horizontal" method="POST" >
     <fieldset class="resultados_busqueda">
             [% IF editing %]
                 <legend>[% "Editar novedad de INTRA" | i18n %]:</legend>
