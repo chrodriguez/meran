@@ -1401,10 +1401,10 @@ sub toMARC_Array {
                     $hash_temp{'referencia_tabla'} = $hash_temp{'referencia'}; #$tabla_referer_involved->meta->table;
                     C4::AR::Debug::debug("Tabla REF  ==>  ".$hash_temp{'referencia'});
                     my ($ref_cantidad,$ref_valores);
-                    if($tabla_referer_involved->meta->table eq 'ref_idioma'){
+                    if($hash_temp{'referencia'} eq 'idioma'){
                       ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getIdiomaById($dato);
                     }
-                    elsif($tabla_referer_involved->meta->table eq 'ref_pais'){
+                    elsif($hash_temp{'referencia'} eq 'pais'){
                       ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getPaisByIso($dato);
                     }
                     else{
