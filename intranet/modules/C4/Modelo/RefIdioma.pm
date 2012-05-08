@@ -152,7 +152,7 @@ sub getIdiomaById{
 
         query   => \@filtros,
         select  => ['*'],
-        sort_by => 'descripcion ASC',
+        sort_by => 'description ASC',
         limit   => 1,
         offset  => 0,
     );
