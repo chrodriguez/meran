@@ -1399,7 +1399,7 @@ sub toMARC_Array {
                     $hash_temp{'referencia'} = $estructura->infoReferencia->getReferencia;
                     my ($clave_tabla_referer_involved,$tabla_referer_involved) =  C4::AR::Referencias::getTablaInstanceByAlias($hash_temp{'referencia'});
                     $hash_temp{'referencia_tabla'} = $hash_temp{'referencia'}; #$tabla_referer_involved->meta->table;
-                    C4::AR::Debug::debug("Tabla REF  ==>  ".$tabla_referer_involved);
+                    C4::AR::Debug::debug("Tabla REF  ==>  ".$hash_temp{'referencia'});
                     my ($ref_cantidad,$ref_valores);
                     if($tabla_referer_involved eq 'RefIdioma'){
                       ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getIdiomaById($dato);
