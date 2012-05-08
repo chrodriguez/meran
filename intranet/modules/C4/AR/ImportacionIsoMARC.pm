@@ -472,21 +472,43 @@ Obtiene un esquema de importacion
 =cut
 
 sub getEsquema{
-    my ($id_esquema) = @_;
+    my ($id_esquema,$campo_search,$offset,$limit) = @_;
 
     use C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager;
     my @filtros;
 
+    $offset = $offset || 0;
+    $limit = $limit || 0;
+    
     push(@filtros,(id_importacion_esquema => {eq =>$id_esquema}));
+    if ($campo_search){
+        push(@filtros,(campo_origen => {like =>$campo_search.'%'}));
+    }
 
-    my $detalle_esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
+    my $detalle_esquema; 
+
+    if ($limit){
+        $detalle_esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
                                                                                                         query => \@filtros,
                                                                                                         group_by => ['campo_origen,subcampo_origen'],
-    );
+							                                                                            limit   => $limit,
+						                                                                                offset  => $offset,
+        );
+    }else{
+        $detalle_esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
+                                                                                                        query => \@filtros,
+                                                                                                        group_by => ['campo_origen,subcampo_origen'],
+        );
+    	
+    }
 
+    my $cant_total = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle_count(
+                                                                                                        query => \@filtros,
+    );
+    
     my $esquema = getEsquemaObject($id_esquema);
 
-    return ($detalle_esquema,$esquema);
+    return ($detalle_esquema,$esquema,$cant_total);
 }
 
 sub addEsquema{
@@ -1071,23 +1093,17 @@ sub getNivelesFromRegistro {
                 use Switch;
                 switch ($estructura->getNivel) {
                 case 1 { 
+                      C4::AR::Debug::debug("NIVEL 1  ".$campo."&".$subcampo."=".$dato." ".$marc_record_n1->subfield($campo,$subcampo)." repetible? ".$estructura->getRepetible);
                         #El campo es de Nivel 1 
-                        
-                        if(($marc_record_n1->subfield($campo,$subcampo))&&(!$estructura->getRepetible)){
-                            #Ya existe, pero no es repetible!! ALGO ESTÁ MAL!!!
-                            C4::AR::Debug::debug("CAMPO NO REPETIBLE REPETIDO!!!! ".$campo."&".$subcampo." => ".$dato);	
+                        if (($marc_record_n1->field($campo))&&($estructura->getRepetible)){
+                            #Existe el campo y es repetible, agrego el subcampo
+                            $marc_record_n1->field($campo)->add_subfields($subcampo => $dato);
                         }
                         else{
-                            if ($marc_record_n1->field($campo)){
-                                #Existe el campo, agrego el subcampo
-                                $marc_record_n1->field($campo)->add_subfields($subcampo => $dato);
+                            #No existe el campo o existe y no es repetible, se crea uno nuevo
+                            my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
+                            $marc_record_n1->append_fields($field);
                             }
-                            else{
-                                #No existe el campo, se crea
-                                my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
-                                $marc_record_n1->append_fields($field);
-                                }
-                        }
                     }
                 case 2 {
                         #Nivel 2
@@ -1127,12 +1143,12 @@ sub getNivelesFromRegistro {
                             }
                         
                         #El campo es de Nivel 2
-                        if ($marc_record_n2->field($campo)){
-                            #Existe el campo, agrego el subcampo
+                        if (($marc_record_n2->field($campo))&&($estructura->getRepetible)){
+                            #Existe el campo y es repetible, agrego el subcampo
                             $marc_record_n2->field($campo)->add_subfields($subcampo => $dato);
                         }
                         else{
-                            #No existe el campo, se crea
+                            #No existe el campo o no es repetible, se crea uno nuevo
                             my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
                             $marc_record_n2->append_fields($field);
                             }

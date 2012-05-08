@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-use HTML::Template;
 use strict;
 require Exporter;
 use C4::Output;  # contains gettemplate

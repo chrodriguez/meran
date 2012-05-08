@@ -41,9 +41,6 @@
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
 
-	<script type="text/javascript" src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
-	<script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox.js"></script>
-	<script type="text/javascript" src="/includes/jquery/fancybox/jquery.mousewheel.js"></script>
 	<script type="text/javascript" src="/includes/jquery/jquery-ui-1.8.9.custom.min.js"></script>
 	<script type="text/javascript" src="/includes/jquery/jquery.expander.js"></script>
 	<script type="text/javascript" src="/includes/jquery/jquery.nanoscroller.js"></script>
@@ -57,7 +54,60 @@
 		var worker = new Worker('/includes/workers.js');
 		var id_actual_dm = 0;
 		var click_responder = 0;
-		
+
+
+	  function publicar_twitter(){
+            objAH               = new AjaxHelper(updatePublicarTwitter);
+            objAH.debug         = true;
+            objAH.url           = URL_PREFIX+'/twitter.pl';
+            
+            objAH.tipoAccion    = "PUBLICAR_TWITTER";
+            objAH.post          = $("#post_twitter").val();
+            objAH.sendToServer();
+
+    }
+
+	   function updatePublicarTwitter(responseText){
+	      if (!verificarRespuesta(responseText))
+	                return(0);
+	        var text=JSONstring.toObject(responseText).messages[0].message;
+	        $("#twitter_result").html('<a class="close" data-dismiss="alert">×</a>'+text);
+	        $("#twitter_result").alert();
+	        $("#twitter_result").show();
+	        $('#show_twitter').modal('hide');
+	        
+	  }
+
+	  function enableDisableButton(){
+		  var chars = $('#post_twitter').val().length;
+		  
+		  if (chars > 140){
+			  $('#publicar_twitter').attr('disabled','');
+		      $('#publicar_twitter').removeClass("btn-primary");
+		  }else{
+	    	  $('#publicar_twitter').removeAttr('disabled');
+	          $('#publicar_twitter').addClass("btn-primary");
+		  }
+	  }
+
+	    function showNovedad(id){
+
+			var objAH_novedadIntra	 		= new AjaxHelper(updateShowNovedadIntra);
+			objAH_novedadIntra.showOverlay  = true;
+			objAH_novedadIntra.debug        = true;
+			objAH_novedadIntra.url          = '[% url_prefix %]/admin/global/ver_novedad_intra.pl';
+			objAH_novedadIntra.id			= id;
+			objAH_novedadIntra.sendToServer();
+		}
+
+		function updateShowNovedadIntra(responseText){
+		    if (!verificarRespuesta(responseText))
+		        return(0);
+
+		    $('#mostrar_novedad').html(responseText);
+		    $('#mostrar_novedad').modal();
+		}
+				
 		function enableAlert(){
 		    $(window).bind('beforeunload', function(){ 
 		    	return("[% 'ATENCION: Se perderan los elementos que no haya guardado' | i18n %]");
@@ -206,6 +256,21 @@
 	    	 });
 		}		
 
+		  
+		function showTwitter(responseText){
+		    $('#show_twitter').modal('show');
+	        $('#post_twitter').focus();
+	        $("#post_twitter").charCount({
+	            limit: 0,        
+	            warning: 10,
+	            counterElement: 'p',
+	            cssExceeded: 'label label-important',
+	            counterText: "[% 'Caraceteres restantes' | i18n %]: ",    
+	        });
+			
+		    
+		}
+				
 		function closeDM(){
 			reading_dm = false;
 			$('#mostrar_mensaje').modal('hide');
@@ -218,11 +283,12 @@
 			$(".alert").alert();
 			$(".collapse").collapse({toggle: false,});
 	        $('.dropdown-toggle').dropdown();
-            $('.fancy_link').fancybox();
 			if (UNLOAD == 1)
 				enableAlert();
 			else
 		        disableAlert();
+
+
 	    });
 	</script>
 	</head>

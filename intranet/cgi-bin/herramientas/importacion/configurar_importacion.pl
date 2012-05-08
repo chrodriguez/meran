@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-use HTML::Template;
 use strict;
 require Exporter;
 

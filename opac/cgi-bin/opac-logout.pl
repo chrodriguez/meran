@@ -3,7 +3,6 @@
 use CGI;
 use C4::Context;
 use C4::Output;
-use HTML::Template;
 
 my $query=new CGI;
 

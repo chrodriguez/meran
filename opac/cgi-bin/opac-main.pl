@@ -1,11 +1,10 @@
 #!/usr/bin/perl
 use strict;
 require Exporter;
-use C4::Output;  # contains gettemplate
+use C4::Output;  
 use C4::AR::Auth;
 use C4::AR::Novedades;
 use CGI;
-use HTML::Template;
 
 my $query = new CGI;
 

@@ -3,7 +3,7 @@ package C4::Modelo::IoImportacionIsoRegistro;
 use strict;
 
 use C4::Modelo::IoImportacionIsoRegistro;
-
+use C4::AR::EstructuraCatalogacionBase;
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -78,15 +78,16 @@ sub getRegistroMARCOriginal{
 sub getRegistroMARCResultado{
     my ($self)      = shift;
     my ($params) = @_;
-
-    my $marc_record_original = $self->getRegistroMARCOriginal();
+    
     my $marc_record = MARC::Record->new();
     my $detalle_destino = $self->ref_importacion->esquema->getDetalleDestino();
 
     foreach my $detalle (@$detalle_destino){
         my $new_field=0;
-        my $dato = $self->getCampoSubcampoJoined($detalle->getCampoDestino,$detalle->getSubcampoDestino);
-        if($dato){
+        my $datos = $self->getCampoSubcampoJoined($detalle->getCampoDestino,$detalle->getSubcampoDestino);
+        my $estructura  = C4::AR::EstructuraCatalogacionBase::getEstructuraBaseFromCampoSubCampo($detalle->getCampoDestino, $detalle->getSubcampoDestino);
+        
+        foreach my $dato (@$datos){
             #Hay dato en el campo
             if ($detalle->getCampoDestino ne 'ZZZ'){
                 #Sino no esta configurado
@@ -96,22 +97,33 @@ sub getRegistroMARCResultado{
                    }
                 else {
                     my $field = $marc_record->field($detalle->getCampoDestino);
-                    if($field){
-                        #Existe el campo, se agrega el subcampo
+                    #Hay que ver si es repetible
+                    if(($field)&&($estructura->getRepetible)){
+                        #Existe el campo y no es repetible , se agrega el subcampo
                         $field->add_subfields( $detalle->getSubcampoDestino => $dato );
                         }
                     else{
-                        #No existe el campo, se crea uno nuevo
+                        #No existe el campo o existe y no es repetible, se crea uno nuevo
+                        my $campo=$detalle->getCampoDestino;
+                        my $subcampo=$detalle->getSubcampoDestino;
+                        
+                        if (($field)&&(($campo eq '100')&&($subcampo eq 'a'))){
+                           #Parche de AUTORES, si hay muchos 100 a => el resto va al 700 a
+                                $campo='700';
+                          }
+                          
                         my $ind1='#';
                         my $ind2='#';
-                        $new_field= MARC::Field->new($detalle->getCampoDestino, $ind1, $ind2,$detalle->getSubcampoDestino => $dato);
+                        $new_field= MARC::Field->new($campo, $ind1, $ind2,$subcampo => $dato);
                     }
                     }
                 if($new_field){
                     $marc_record->append_fields($new_field);
                 }
              }
+          
         }
+        
        }
 
     #Ahora agregamos los registros hijo
@@ -205,11 +217,18 @@ sub getCampoSubcampoJoined{
 
     my $detalle_completo = $self->ref_importacion->esquema->getDetalleByCampoSubcampoDestino($campo,$subcampo);
 
-    my $join='';
+    my @resultado=();
     foreach my $detalle (@$detalle_completo){
-        my $dato ='';
-        my $field = $marc->field($detalle->getCampoOrigen);
-        if ($field){
+        
+        #Pueden venis muchos campos, se los agarra en orden para armar el resultado
+        my @fields = $marc->field($detalle->getCampoOrigen);
+        
+        if (@fields){
+          #indice que mantiene el orden
+          my $indice_campos=0;
+          #Para cada campo lo agrego al resultado
+          foreach my $field (@fields){
+            my $dato='';
             if($field->is_control_field()){
                     #Campo de Control
                    $dato = $field->data();
@@ -217,19 +236,33 @@ sub getCampoSubcampoJoined{
                 else {
                     $dato = $field->subfield($detalle->getSubcampoOrigen);
                 }
+            
             if ($dato){
-				if($detalle->getSeparador){
-                    $join.=$detalle->getSeparador.$dato;
-                    #C4::AR::Debug::debug("SEPARADOR  ###".$detalle->getSeparador."###" );
-                   }
-                   else{
-					   $join.=$dato;
-					   }
+              #Le agrego el separado
+              if($detalle->getSeparador){
+                          $dato=$detalle->getSeparador.$dato;
+                          #C4::AR::Debug::debug("SEPARADOR  ###".$detalle->getSeparador."###" );
+              }
+              
+              #AHORA HAY QUE AGREGARLO A LOS RESULTADOS
+              if($resultado[$indice_campos]){
+                  #Ya hay resultado en esa posición? concateno el dato
+                  $resultado[$indice_campos].=$dato;
+                }
+              else{
+                  #no existe, agrego
+                  push(@resultado,$dato);
+                }
+              #avanzo el índice
+              $indice_campos++;
              }
+             
+           }
+             
         }
      }
 
-    return (C4::AR::Utilidades::trim($join));
+    return (\@resultado);
 }
 
 sub getIdentificacion{
@@ -239,7 +272,7 @@ sub getIdentificacion{
 
 sub getTitulo{
     my ($self) = shift;
-    my $titulo = ($self->getCampoSubcampoJoined('245','a'));
+    my $titulo= $self->getCampoSubcampoJoined('245','a');
 
     if(!$titulo){
         my $padre=$self->getRegistroPadre;
@@ -252,7 +285,8 @@ sub getTitulo{
 
 sub getAutor{
     my ($self) = shift;
-    my $autor = ($self->getCampoSubcampoJoined('100','a'));
+    
+    my $autor= $self->getCampoSubcampoJoined('100','a');
 
     if(!$autor){
         my $padre=$self->getRegistroPadre;
@@ -400,7 +434,7 @@ sub getDatosFromReglasMatcheo{
 
     foreach my $regla (@$reglas){
 
-        my $dato = $self->getCampoSubcampoJoined($regla->{'campo'},$regla->{'subcampo'});
+        my $dato = join('',$self->getCampoSubcampoJoined($regla->{'campo'},$regla->{'subcampo'}));
 
         if ($dato){
             $regla->{'dato'}=$dato;

@@ -28,7 +28,7 @@
 </script>
 <fieldset>
     <legend class="titulo_legend trigger click">
-        [% "Campos destino para " | i18n %][% esquema_padre.getCampoOrigen %]$<smallstyle="text-transform: lowercase;">[% esquema_padre.getSubcampoOrigen %]</small>
+        [% "Campos destino para " | i18n %][% esquema_padre.getCampoOrigen %]$<span style="text-transform: lowercase;">[% esquema_padre.getSubcampoOrigen %]</span>
     </legend>
              [% PERL %]
                  print C4::AR::Filtros::tableHeader(   
@@ -45,8 +45,8 @@
                 <input type="checkbox" name="enable_sort_subcampo" id="enable_sort_subcampo" /> Seleccione para Ordenar
                 [% FOREACH detalle IN esquema %]
                     <tr id="[% detalle.id %]" align="center">
-                        <td>[% detalle.getCampoDestino %]</td>
-                        <td>[% detalle.getSubcampoDestino %]</td>
+                        <td class="editable" id="[% detalle.id %]___cd">[% detalle.getCampoDestino %]</td>
+                        <td class="editable" id="[% detalle.id %]___scd">[% detalle.getSubcampoDestino %]</td>
                         <td class="editable" id="[% detalle.id %]___sep">[% detalle.getSeparador %]</td>
                         <td>
 		                        [% PERL %]

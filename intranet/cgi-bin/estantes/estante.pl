@@ -5,7 +5,6 @@ use CGI;
 use C4::Output;
 use C4::AR::Auth;
 
-use HTML::Template;
 use C4::AR::Estantes;
 
 my $input = new CGI;

@@ -4,9 +4,7 @@ use strict;
 use CGI;
 use C4::AR::Auth;
 # use C4::Output;
-# 
 use C4::AR::Utilidades;
-use HTML::Template;
 
 my $input = new CGI;
 
