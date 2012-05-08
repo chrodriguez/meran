@@ -16,9 +16,16 @@ my $obj             = $input->param('obj');
 $obj                = C4::AR::Utilidades::from_json_ISO($obj);
 
 #si se rompio C4::AR::Utilidades::from_json_ISO viene un 0
+#solo lo hacemos con una linea y ya basta
 eval{    
+    my $ini             = $obj->{'ini'};     
+};
 
-    my $ini             = $obj->{'ini'};   
+if($@){
+    C4::AR::Utilidades::redirectAndAdvice('B460');
+}
+
+    my $ini             = $obj->{'ini'};     
     my $orden           = $obj->{'orden'};
     my $sentido_orden   = $obj->{'sentido_orden'};
     my $tipoAccion      = $obj->{'tipoAccion'}||"";
@@ -161,8 +168,3 @@ eval{
         
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
     }
-};
-
-if($@){
-    C4::AR::Utilidades::redirectAndAdvice('B460');
-}
