@@ -205,5 +205,31 @@ sub getAll{
     }
 }
 
+
+=head2
+    sub getPaisByIso
+=cut
+sub getPaisByIso{
+    my ($self) = shift;
+    my ($pais) = @_;
+
+    my @filtros;
+
+    push(@filtros, ( iso => { eq => $pais}) );
+
+    my $paises_array_ref = C4::Modelo::RefPais::Manager->get_ref_pais(
+
+        query   => \@filtros,
+        select  => ['*'],
+        sort_by => 'nombre_largo ASC',
+        limit   => 1,
+        offset  => 0,
+    );
+
+    return (scalar(@$paises_array_ref), $paises_array_ref);
+
+
+}
+
 1;
 
