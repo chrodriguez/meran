@@ -57,6 +57,32 @@ sub agregar{
 
 #----------------------------------- GETTERS y SETTERS------------------------------------------------
 
+#esto arma el destino dependiendo del campo y subcampo, y busca todo ese conjunto
+sub getDestino{
+    my ($self) = shift;
+
+    my $campo_origen = $self->getCampoOrigen;
+    my $subcampo_origen = $self->getSubcampoOrigen;
+    
+    my @filtros;
+    
+    push (@filtros, (campo_origen => {eq =>$campo_origen}) );
+    push (@filtros, (subcampo_origen => {eq =>$subcampo_origen}) );
+
+    my $matches = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(query => \@filtros,);
+    
+    
+    my $destino_string = "";
+    foreach my $destino (@$matches){
+    	if (C4::AR::Utilidades::validateString($destino->getCampoDestino)){
+    	   $destino_string .= $destino->getCampoDestino."\$".(lc $destino->getSubcampoDestino)." ";
+    	}
+    }
+    
+    return $destino_string;
+	
+}
+
 sub setIdImportacionEsquema {
     my ($self) = shift;
     my ($esquema) = @_;
