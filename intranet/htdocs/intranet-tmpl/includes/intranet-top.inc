@@ -41,9 +41,6 @@
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
 
-	<script type="text/javascript" src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
-	<script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox.js"></script>
-	<script type="text/javascript" src="/includes/jquery/fancybox/jquery.mousewheel.js"></script>
 	<script type="text/javascript" src="/includes/jquery/jquery-ui-1.8.9.custom.min.js"></script>
 	<script type="text/javascript" src="/includes/jquery/jquery.expander.js"></script>
 	<script type="text/javascript" src="/includes/jquery/jquery.nanoscroller.js"></script>
@@ -218,7 +215,6 @@
 			$(".alert").alert();
 			$(".collapse").collapse({toggle: false,});
 	        $('.dropdown-toggle').dropdown();
-            $('.fancy_link').fancybox();
 			if (UNLOAD == 1)
 				enableAlert();
 			else

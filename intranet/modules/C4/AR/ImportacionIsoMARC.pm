@@ -472,21 +472,40 @@ Obtiene un esquema de importacion
 =cut
 
 sub getEsquema{
-    my ($id_esquema) = @_;
+    my ($id_esquema,$offset,$limit) = @_;
 
     use C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager;
     my @filtros;
 
+    $offset = $offset || 0;
+    $limit = $limit || 0;
+    
     push(@filtros,(id_importacion_esquema => {eq =>$id_esquema}));
 
-    my $detalle_esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
+    my $detalle_esquema; 
+
+    if ($limit){
+        $detalle_esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
                                                                                                         query => \@filtros,
                                                                                                         group_by => ['campo_origen,subcampo_origen'],
-    );
+							                                                                            limit   => $limit,
+						                                                                                offset  => $offset,
+        );
+    }else{
+        $detalle_esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
+                                                                                                        query => \@filtros,
+                                                                                                        group_by => ['campo_origen,subcampo_origen'],
+        );
+    	
+    }
 
+    my $cant_total = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle_count(
+                                                                                                        query => \@filtros,
+    );
+    
     my $esquema = getEsquemaObject($id_esquema);
 
-    return ($detalle_esquema,$esquema);
+    return ($detalle_esquema,$esquema,$cant_total);
 }
 
 sub addEsquema{

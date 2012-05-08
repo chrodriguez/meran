@@ -203,14 +203,11 @@
 						                <td style="min-width:100px;">
 			                              [% PERL %]
 			                                  print C4::AR::Filtros::action_set_button(    
-                                                    title           => "[% 'Ejemplar' | i18n %]",
-                                                    button          => 'btn btn-primary',
-
-                                                    actions         => [
-                                                                        {title => "Modificar", 
-                                                                         action=>"editarEjemplar([% id2 %],[% id3 %])",
-                                                                         icon=>"icon-edit"
-                                                                        },
+                                                    button  => 'btn btn-primary',
+                                                    title   => "[% 'Modificar' | i18n %]",
+                                                    action  => "editarEjemplar([% id2 %],[% id3 %])",
+                                                    icon    => "icon-edit",
+                                                    actions => [
                                                                         {title => "Borrar", 
                                                                          action=>"borrarN3([% id2 %],[% id3 %])", 
                                                                          icon=>"icon-trash"

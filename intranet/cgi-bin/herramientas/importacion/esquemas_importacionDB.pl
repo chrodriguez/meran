@@ -35,15 +35,27 @@ if (!$editing){
 		                });
 	
 	    my $id_esquema = $obj->{'esquema'} || 0;
+
+        my $ini             = $obj->{'ini'};   
+	    my ($ini,$pageNumber,$cantR)= C4::AR::Utilidades::InitPaginador($ini);
+	    
+	    $cantR = 25;
+	
+	    $t_params->{'ini'}          = $obj->{'ini'} = $ini;
+	    $t_params->{'cantR'}        = $obj->{'cantR'} = $cantR;
 	     
-	    my ($detalle_esquema,$esquema)  = C4::AR::ImportacionIsoMARC::getEsquema($id_esquema);
+	    my ($detalle_esquema,$esquema,$cantidad_total)  = C4::AR::ImportacionIsoMARC::getEsquema($id_esquema,$ini,$cantR);
+
 	    C4::AR::Debug::debug("ESQUEMA EN DETALLE: ".$esquema);
         $t_params->{'esquema'} = $detalle_esquema;
         if ($esquema){
 	        $t_params->{'info_esquema'} = $esquema;
 	        $t_params->{'esquema_title'} = $esquema->getNombre;
         }
-        $t_params->{'id_esquema'} = $id_esquema;
+        $t_params->{'id_esquema'}   = $id_esquema;
+        $t_params->{'cantidad'}     = $cantidad_total;
+        $t_params->{'paginador'}          = C4::AR::Utilidades::crearPaginador($cantidad_total,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
+        
 	}
     elsif($tipoAccion eq "AGREGAR_CAMPO"){ #DELETE WHEN AGREGAR_CAMPO_A_ESQUEMA completed
               ($template, $session, $t_params)  = get_template_and_user({  
