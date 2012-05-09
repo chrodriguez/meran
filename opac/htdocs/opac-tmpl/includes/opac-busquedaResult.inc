@@ -1,5 +1,8 @@
 <script type="text/javascript">
 
+    ORDEN ="";
+    SENTIDO_ORDEN = 1;
+
     function submitForm(form_id) {
         $('#' + form_id).submit();
     }
@@ -147,7 +150,20 @@
 				return (table);
 		    }
           [% END %]
-       [% END %]		    
+       [% END %]	
+
+    function ordenar_busqueda_opac(orden){
+
+        if (orden == ORDEN) {
+              SENTIDO_ORDEN= !SENTIDO_ORDEN;
+        } else {
+              SENTIDO_ORDEN= 1;
+              ORDEN = orden;
+        }
+        $('#orden').value(ORDEN);
+        $('#sentido_orden').value(SENTIDO_ORDEN);
+
+    }   
 
     $(document).ready(function() {
         $('.fancylink').fancybox();
@@ -182,6 +198,23 @@
           [% END %]
 
         <section class="center-section-form" style="margin-top: 20px" >
+            <div id="catos_busqueda">
+                <form id="ordenar_tabla">
+                    <input type="hidden" id="string" name="string" value="[% string %]"/>
+                    <input type="hidden" id="titulo" name="titulo" value="[% string %]"/>
+                    <input type="hidden" id="autor" name="autor" value="[% string %]"/>
+                    <input type="hidden" id="isbn" name="isbn" value="[% string %]"/>
+                    <input type="hidden" id="tipoDocumento" name="tipoDocumento" value="[% string %]"/>
+                    <input type="hidden" id="tema" name="tema" value="[% string %]"/>
+                    <input type="hidden" id="estante" name="estante" value="[% string %]"/>
+                    <input type="hidden" id="tipoAccion" name="tipoAccion" value="BUSQUEDA_AVANZADA" />
+                    <input type="hidden" id="tipo" name="tipo" value="normal" />
+                    <input type="hidden" id="token" name="token" value="[% token %]" />
+                    <input type="hidden" id="orden" name="orden" value="" />
+                    <input type="hidden" id="sentido_orden" name="sentido_orden" value="" />
+                </form>
+            </div>
+
             <div class="well">
                 <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: <strong>[% HTML.escape(buscoPor) %]</strong></div> 
             
@@ -230,13 +263,25 @@
              [% PERL %]
                  print C4::AR::Filtros::tableHeader(   
                                                          id              => "tablaResult",
-                                                         class           => "",
+                                                         class           => "table table-bordered",
                                                          columns         => ['[% "Tipo"|i18n %]','[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]',
                                                                              '[% "Edici&oacute;n"|i18n %]','[% "Disponibilidad"|i18n %]', '[% "Valoraci&oacute;n" | i18n %]',
                                                                              [% IF socio_data.usr_permisos_opac %]'[% "Favoritos" | i18n %]'[% END %]
-                                                                            ]
+                                                                            ],
+                                                          order          => {  'Tipo' => '',
+                                                                               'T&iacute;tulo' =>'titulo', 
+                                                                               'Autor' => 'autor',
+                                                                               'Edici&oacute;n' => '',
+                                                                               'Disponibilidad' =>'',
+                                                                               'Valoracion' =>'',
+                                                                      
+                                                                             },
+                                                          order_name_function => "busqueda_opac"
                                                          
                              ) ;
+
+ 
+
              [% END %]
              <tbody>  
                 [% FOREACH NIVEL IN SEARCH_RESULTS %]

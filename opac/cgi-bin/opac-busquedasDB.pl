@@ -34,6 +34,8 @@ $obj->{'from_suggested'}    = CGI::escapeHTML($input->param('from_suggested'));
 $obj->{'tipo_nivel3_name'}  = ($input->param('tipo_nivel3_name'));
 $obj->{'tipoBusqueda'}      = 'all';
 $obj->{'token'}             = CGI::escapeHTML($input->param('token'));
+$obj->{'orden'}             = $input->param('orden')|| "";
+$obj->{'sentido_orden'}     = $input->param('sentido_orden')|| "";
 
 C4::AR::Validator::validateParams('U389',$obj,['tipoAccion']);
 
@@ -198,6 +200,22 @@ if ($to_pdf){
         $t_params->{'buscoPor'}                 = C4::AR::Busquedas::armarBuscoPor($obj);
         $t_params->{'cantidad'}                 = $cantidad || 0;
         $t_params->{'show_search_details'}      = 1;
+
+
+        # Se usan para poder ordenar la tabla segun el campo seleccionado (se pasan todos para poder realizar la busqueda por los mismos criterios)
+        $t_params->{'tipoAccion'}   = $obj->{'tipoAccion'};
+        $t_params->{'titulo'}       = $obj->{'titulo'}; 
+        $t_params->{'autor'}        = $obj->{'autor'}; 
+        $t_params->{'isbn'}         = $obj->{'isbn'};
+        $t_params->{'estantes'}     = $obj->{'estantes'};
+        $t_params->{'estantes_grupo'}     = $obj->{'estantes_grupo'}; 
+        $t_params->{'tema'}     = $obj->{'tema'};
+        $t_params->{'tipo'}     = $obj->{'tipo'}; 
+        $t_params->{'only_available'}     = $obj->{'only_available'} || 0;
+        $t_params->{'from_suggested'}     = $obj->{'from_suggested'};
+        $t_params->{'tipo_nivel3_name'}   = $obj->{'tipo_nivel3_name'};
+        $t_params->{'tipoBusqueda'}   = $obj->{'tipoBusqueda'};
+        $t_params->{'token'}   = $obj->{'token'};
 
         #pdf
         $t_params->{'pdf_titulo'}             = $obj->{'titulo'};
