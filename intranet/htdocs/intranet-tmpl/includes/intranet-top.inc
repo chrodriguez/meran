@@ -264,14 +264,6 @@
 		function showTwitter(responseText){
 		    $('#show_twitter').modal('show');
 	        $('#post_twitter').focus();
-	        $("#post_twitter").charCount({
-	            limit: 0,        
-	            warning: 10,
-	            counterElement: 'p',
-	            cssExceeded: 'label label-important',
-	            counterText: "[% 'Caraceteres restantes' | i18n %]: ",    
-	        });
-			
 		    
 		}
 				
