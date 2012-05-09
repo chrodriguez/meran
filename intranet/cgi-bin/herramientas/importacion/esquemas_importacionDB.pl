@@ -39,10 +39,9 @@ if (!$editing){
         my $ini             = $obj->{'ini'};   
 	    my ($ini,$pageNumber,$cantR)= C4::AR::Utilidades::InitPaginador($ini);
 	    
-	    $cantR = 25;
-	
 	    $t_params->{'ini'}          = $obj->{'ini'} = $ini;
 	    $t_params->{'cantR'}        = $obj->{'cantR'} = $cantR;
+	    
 	    my $campo_search            = $obj->{'filtro'};
 	    my ($detalle_esquema,$esquema,$cantidad_total)  = C4::AR::ImportacionIsoMARC::getEsquema($id_esquema,$campo_search,$ini,$cantR);
 

@@ -493,18 +493,24 @@ sub getEsquema{
                                                                                                         group_by => ['campo_origen,subcampo_origen'],
 							                                                                            limit   => $limit,
 						                                                                                offset  => $offset,
+						                                                                                sort_by => ['campo_origen']
         );
     }else{
         $detalle_esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
                                                                                                         query => \@filtros,
                                                                                                         group_by => ['campo_origen,subcampo_origen'],
+                                                                                                        sort_by => ['campo_origen']
         );
     	
     }
 
-    my $cant_total = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle_count(
+    my $cant_total = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
                                                                                                         query => \@filtros,
+                                                                                                        group_by => ['campo_origen,subcampo_origen'],
+
     );
+    
+    $cant_total = scalar(@$cant_total);
     
     my $esquema = getEsquemaObject($id_esquema);
 
@@ -1090,109 +1096,117 @@ sub getNivelesFromRegistro {
                 my $dato              = $subfield->[1];
                 my $estructura        = C4::AR::EstructuraCatalogacionBase::getEstructuraBaseFromCampoSubCampo($campo, $subcampo);
                 
-                use Switch;
-                switch ($estructura->getNivel) {
-                case 1 { 
-                      C4::AR::Debug::debug("NIVEL 1  ".$campo."&".$subcampo."=".$dato." ".$marc_record_n1->subfield($campo,$subcampo)." repetible? ".$estructura->getRepetible);
-                        #El campo es de Nivel 1 
-                        if (($marc_record_n1->field($campo))&&($estructura->getRepetible)){
-                            #Existe el campo y es repetible, agrego el subcampo
-                            $marc_record_n1->field($campo)->add_subfields($subcampo => $dato);
-                        }
-                        else{
-                            #No existe el campo o existe y no es repetible, se crea uno nuevo
-                            my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
-                            $marc_record_n1->append_fields($field);
-                            }
-                    }
-                case 2 {
-                        #Nivel 2
-    
-                        #HAY QUE CREAR UNO NUEVO??
-                        #C4::AR::Debug::debug("HAY QUE CREAR UNO NUEVO??  ".$campo."&".$subcampo."=".$dato." ".$marc_record_n2->subfield($campo,$subcampo)." repetible? ".$estructura->getRepetible);
-    
-                        if(($marc_record_n2->subfield($campo,$subcampo))&&(!$estructura->getRepetible)&&(($campo ne '910')&&($subcampo ne 'a'))){
-                            #Existe el subcampo y no es repetible ==> es un nivel 2 nuevo
-                            #C4::AR::Debug::debug("Existe el subcampo y no es repetible ==> es un nivel 2 nuevo  ".$campo."&".$subcampo."=".$dato);
-                                            
-                            #Agrego el último ejemplar y lo guardo
-                            if (scalar($marc_record_n3->fields())){
-                                #C4::AR::Debug::debug("EJEMPLAR ".$marc_record_n3->as_formatted);	
-                                push(@ejemplares,$marc_record_n3);
-                                $marc_record_n3 = MARC::Record->new();
-                            }
-                                
-                            #Guardo el nivel 2 con sus ejemplares
-                            $tipo_ejemplar = C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord($marc_record_n2);
-                            my %hash_temp;
-                            $hash_temp{'grupo'}  = $marc_record_n2;
-                            $hash_temp{'tipo_ejemplar'}  = $tipo_ejemplar;
-                            $hash_temp{'cant_ejemplares'}   = scalar(@ejemplares);
-                            $total_ejemplares+=$hash_temp{'cant_ejemplares'};
-                            my @ejemplares_grupo =   @ejemplares; #esto hace la copia del arreglo
-                            $hash_temp{'ejemplares'}   = \@ejemplares_grupo;
-                            #C4::AR::Debug::debug("GRUPO CON ".$hash_temp{'cant_ejemplares'}." EJEMPLARES");
-                            push (@grupos, \%hash_temp);
-                            $marc_record_n2 = MARC::Record->new();
-                            @ejemplares = ();
-                        }				
-                        
-                        if ((($campo eq '910')&&($subcampo eq 'a'))&&($marc_record_n2->subfield($campo,$subcampo))){
-                                #ya existe el 910,a, no sirve que haya varios
-                                next;
-                            }
-                        
-                        #El campo es de Nivel 2
-                        if (($marc_record_n2->field($campo))&&($estructura->getRepetible)){
-                            #Existe el campo y es repetible, agrego el subcampo
-                            $marc_record_n2->field($campo)->add_subfields($subcampo => $dato);
-                        }
-                        else{
-                            #No existe el campo o no es repetible, se crea uno nuevo
-                            my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
-                            $marc_record_n2->append_fields($field);
-                            }
-                        }
-                case 3 {
-                        #Nivel 3 
-                        #Aca no hay ningun campo que sea repetible, si ya existe el subcampo es un nuevo ejemplar.
-                        
-                         if($marc_record_n3->subfield($campo,$subcampo)){
-                            #Existe el subcampo y no es repetible ==> es un nivel 3 nuevo							
-                            #Agrego el último ejemplar y lo guardo
-                            #C4::AR::Debug::debug("EJEMPLAR ".$marc_record_n3->as_formatted);	
-                                push(@ejemplares,$marc_record_n3);
-                                $marc_record_n3 = MARC::Record->new();
-                            }
-                        #C4::AR::Debug::debug("EJ ".$campo."&".$subcampo."=".$dato);
-                        #El campo es de Nivel 3
-                        if ($marc_record_n3->field($campo)){
-                            #Existe el campo, agrego el subcampo
-                            $marc_record_n3->field($campo)->add_subfields($subcampo => $dato);
-                        }
-                        else{
-                            #No existe el campo, se crea
-                            my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
-                            $marc_record_n3->append_fields($field);
-                            }
-                        }
-                case 0 {
-                    C4::AR::Debug::debug("CAMPO MULTINIVEL ".$campo."&".$subcampo."=".$dato);
-                    #FIXME va en el 1 por ahora
-                        #El campo es de Nivel 1 
-                        if ($marc_record_n1->field($campo)){
-                            #Existe el campo, agrego el subcampo
-                            $marc_record_n1->field($campo)->add_subfields($subcampo => $dato);
-                        }
-                        else{
-                            #No existe el campo, se crea
-                            my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
-                            $marc_record_n1->append_fields($field);
-                            }
+                if($estructura) {
                 
-                    }
-                } # END SWITCH
-                
+                  use Switch;
+                  switch ($estructura->getNivel) {
+                  case 1 { 
+                        C4::AR::Debug::debug("NIVEL 1  ".$campo."&".$subcampo."=".$dato." ".$marc_record_n1->subfield($campo,$subcampo)." repetible? ".$estructura->getRepetible);
+                          #El campo es de Nivel 1 
+                          if (($marc_record_n1->field($campo))&&($estructura->getRepetible)){
+                              #Existe el campo y es repetible, agrego el subcampo
+                              $marc_record_n1->field($campo)->add_subfields($subcampo => $dato);
+                          }
+                          else{
+                              #No existe el campo o existe y no es repetible, se crea uno nuevo
+                              my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
+                              $marc_record_n1->append_fields($field);
+                              }
+                      }
+                  case 2 {
+                          #Nivel 2
+      
+                          #HAY QUE CREAR UNO NUEVO??
+                          #C4::AR::Debug::debug("HAY QUE CREAR UNO NUEVO??  ".$campo."&".$subcampo."=".$dato." ".$marc_record_n2->subfield($campo,$subcampo)." repetible? ".$estructura->getRepetible);
+      
+                          if(($marc_record_n2->subfield($campo,$subcampo))&&(!$estructura->getRepetible)&&(($campo ne '910')&&($subcampo ne 'a'))){
+                              #Existe el subcampo y no es repetible ==> es un nivel 2 nuevo
+                              #C4::AR::Debug::debug("Existe el subcampo y no es repetible ==> es un nivel 2 nuevo  ".$campo."&".$subcampo."=".$dato);
+                                              
+                              #Agrego el último ejemplar y lo guardo
+                              if (scalar($marc_record_n3->fields())){
+                                  #C4::AR::Debug::debug("EJEMPLAR ".$marc_record_n3->as_formatted);	
+                                  push(@ejemplares,$marc_record_n3);
+                                  $marc_record_n3 = MARC::Record->new();
+                              }
+                                  
+                              #Guardo el nivel 2 con sus ejemplares
+                              $tipo_ejemplar = C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord($marc_record_n2);
+                              my %hash_temp;
+                              $hash_temp{'grupo'}  = $marc_record_n2;
+                              $hash_temp{'tipo_ejemplar'}  = $tipo_ejemplar;
+                              $hash_temp{'cant_ejemplares'}   = scalar(@ejemplares);
+                              $total_ejemplares+=$hash_temp{'cant_ejemplares'};
+                              my @ejemplares_grupo =   @ejemplares; #esto hace la copia del arreglo
+                              $hash_temp{'ejemplares'}   = \@ejemplares_grupo;
+                              #C4::AR::Debug::debug("GRUPO CON ".$hash_temp{'cant_ejemplares'}." EJEMPLARES");
+                              push (@grupos, \%hash_temp);
+                              $marc_record_n2 = MARC::Record->new();
+                              @ejemplares = ();
+                          }				
+                          
+                          if ((($campo eq '910')&&($subcampo eq 'a'))&&($marc_record_n2->subfield($campo,$subcampo))){
+                                  #ya existe el 910,a TIPO DOC, no sirve que haya varios
+                                  next;
+                              }
+                          
+                          if ((($campo eq '041')&&($subcampo eq 'a'))&&($marc_record_n2->subfield($campo,$subcampo))){
+                                  #ya existe el 041,a IDIOMA, no sirve que haya varios
+                                  next;
+                           }
+                           
+                          
+                          #El campo es de Nivel 2
+                          if (($marc_record_n2->field($campo))&&($estructura->getRepetible)){
+                              #Existe el campo y es repetible, agrego el subcampo
+                              $marc_record_n2->field($campo)->add_subfields($subcampo => $dato);
+                          }
+                          else{
+                              #No existe el campo o no es repetible, se crea uno nuevo
+                              my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
+                              $marc_record_n2->append_fields($field);
+                              }
+                          }
+                  case 3 {
+                          #Nivel 3 
+                          #Aca no hay ningun campo que sea repetible, si ya existe el subcampo es un nuevo ejemplar.
+                          
+                           if($marc_record_n3->subfield($campo,$subcampo)){
+                              #Existe el subcampo y no es repetible ==> es un nivel 3 nuevo							
+                              #Agrego el último ejemplar y lo guardo
+                              #C4::AR::Debug::debug("EJEMPLAR ".$marc_record_n3->as_formatted);	
+                                  push(@ejemplares,$marc_record_n3);
+                                  $marc_record_n3 = MARC::Record->new();
+                              }
+                          #C4::AR::Debug::debug("EJ ".$campo."&".$subcampo."=".$dato);
+                          #El campo es de Nivel 3
+                          if ($marc_record_n3->field($campo)){
+                              #Existe el campo, agrego el subcampo
+                              $marc_record_n3->field($campo)->add_subfields($subcampo => $dato);
+                          }
+                          else{
+                              #No existe el campo, se crea
+                              my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
+                              $marc_record_n3->append_fields($field);
+                              }
+                          }
+                  case 0 {
+                      C4::AR::Debug::debug("CAMPO MULTINIVEL ".$campo."&".$subcampo."=".$dato);
+                      #FIXME va en el 1 por ahora
+                          #El campo es de Nivel 1 
+                          if ($marc_record_n1->field($campo)){
+                              #Existe el campo, agrego el subcampo
+                              $marc_record_n1->field($campo)->add_subfields($subcampo => $dato);
+                          }
+                          else{
+                              #No existe el campo, se crea
+                              my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
+                              $marc_record_n1->append_fields($field);
+                              }
+                  
+                      }
+                  } # END SWITCH
+              }
             }
             
         }
@@ -1391,8 +1405,17 @@ sub toMARC_Array {
                     $hash_temp{'referencia'} = $estructura->infoReferencia->getReferencia;
                     my ($clave_tabla_referer_involved,$tabla_referer_involved) =  C4::AR::Referencias::getTablaInstanceByAlias($hash_temp{'referencia'});
                     $hash_temp{'referencia_tabla'} = $hash_temp{'referencia'}; #$tabla_referer_involved->meta->table;
-                    C4::AR::Debug::debug("Tabla REF  ==>  ".$tabla_referer_involved);
-                    my ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getAll(1,0,0,$dato);
+                    C4::AR::Debug::debug("Tabla REF  ==>  ".$hash_temp{'referencia'});
+                    my ($ref_cantidad,$ref_valores);
+                    if($hash_temp{'referencia'} eq 'idioma'){
+                      ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getIdiomaById($dato);
+                    }
+                    elsif($hash_temp{'referencia'} eq 'pais'){
+                      ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getPaisByIso($dato);
+                    }
+                    else{
+                    ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getAll(1,0,0,$dato);
+                    }
                     
                     if (($campo eq '910')&&($subcampo eq 'a')){
                             C4::AR::Debug::debug("REF CANT ==>  ".$ref_cantidad);

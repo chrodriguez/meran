@@ -137,6 +137,31 @@ sub nextMember{
     return(C4::Modelo::RefPais->new());
 }
 
+=head2
+    sub getIdiomaById
+=cut
+sub getIdiomaById{
+    my ($self) = shift;
+    my ($idioma) = @_;
+
+    my @filtros;
+
+    push(@filtros, ( idLanguage => { eq => $idioma}) );
+
+    my $idiomas_array_ref = C4::Modelo::RefIdioma::Manager->get_ref_idioma(
+
+        query   => \@filtros,
+        select  => ['*'],
+        sort_by => 'description ASC',
+        limit   => 1,
+        offset  => 0,
+    );
+
+    return (scalar(@$idiomas_array_ref), $idiomas_array_ref);
+
+}
+
+
 sub getAll{
 
     my ($self) = shift;
@@ -145,6 +170,7 @@ sub getAll{
     my @filtros;
     if ($filtro){
         my @filtros_or;
+        push(@filtros_or, (idLanguage => {eq => $filtro }) );
         push(@filtros_or, (description => {like => '%'.$filtro.'%'}) );
         push(@filtros, (or => \@filtros_or) );
     }

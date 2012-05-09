@@ -39,8 +39,17 @@
                     
                     [% PERL %]
                         print C4::AR::Filtros::to_Button(   text    => "[% 'Nuevo esquema' | i18n %]",
-                                                            boton   => "boton_agregar",
+                                                            boton   => "btn",
                                                             onClick => "nuevoEsquemaImportacion_dialog();",
+                                                            title   => "[% 'Nuevo esquema' | i18n %]",
+                                                            inline  => 1
+                                ) ;
+                    [% END %]
+
+                    [% PERL %]
+                        print C4::AR::Filtros::to_Button(   text    => "[% 'Detalle esquema' | i18n %]",
+                                                            boton   => "btn btn-primary",
+                                                            onClick => "showEsquemaImportacion();",
                                                             title   => "[% 'Nuevo esquema' | i18n %]",
                                                             inline  => 1
                                 ) ;
