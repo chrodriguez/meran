@@ -382,7 +382,7 @@
                         </td>
                         <td class="span2">
                             [% IF NIVEL.rating > 0 %]
-								<div class="rateit" data-rateit-value="[% NIVEL.rating %]" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+								<div class="rateit" data-rateit-max="5" data-rateit-value="[% NIVEL.rating %]" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
 	                         [% ELSE %]
 	                           <p> [% '----------' %]
 	                         [% END %]

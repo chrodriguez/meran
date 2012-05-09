@@ -3,11 +3,7 @@ function jAlert(message){
 }
 
 function jConfirm(message,funcion){
-	var result = false;
-	bootbox.confirm(message, function (ok){ 
-												eval(funcion);
-											}
-	);
+
 }
 
 

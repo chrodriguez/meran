@@ -63,19 +63,20 @@ function updateBorrarN2(responseText){
 function borrarN3(id2, id3){
 //id2 es necesario para luego de eliminar un ejemplar, se debe refrescar los ejemplares del nivel3
 
-    jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,CATALOGO_TITLE, function(confirmStatus){if (confirmStatus) {
-		ID_N2               = id2;
-		objAH               = new AjaxHelper(updateBorrarN3);
-		objAH.debug         = true;
-        objAH.showOverlay   = true;
-		objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
- 		objAH.id3_array     = [id3];
-		objAH.nivel         = 3;
-		objAH.itemtype      = $("#id_tipo_doc").val();
-		objAH.tipoAccion    = "ELIMINAR_NIVEL";
-		objAH.sendToServer();
-	}
-});
+    bootbox.confirm(ESTA_SEGURO_QUE_DESEA_BORRARLO, function (confirmStatus){     
+    	if(confirmStatus){
+			ID_N2               = id2;
+			objAH               = new AjaxHelper(updateBorrarN3);
+			objAH.debug         = true;
+	        objAH.showOverlay   = true;
+			objAH.url=URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+	 		objAH.id3_array     = [id3];
+			objAH.nivel         = 3;
+			objAH.itemtype      = $("#id_tipo_doc").val();
+			objAH.tipoAccion    = "ELIMINAR_NIVEL";
+			objAH.sendToServer();
+		}
+    });
 }
 
 function updateBorrarN3(responseText){

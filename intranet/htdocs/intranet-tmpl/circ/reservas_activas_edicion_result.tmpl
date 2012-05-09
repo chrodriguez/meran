@@ -1,9 +1,4 @@
-<script type="text/javascript">
-      $(document).ready(function() {
-        makeToggle('datos_tabla_div','trigger',null,false);
-        zebra('datos_tabla');
-      });
-</script>
+
 [% IF cantidad > 0%]
 	<fieldset class="resultados_busqueda" style="width: 680px;">
 	    <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda" | i18n %]:</legend>
@@ -68,5 +63,5 @@
 	</fieldset>
 	<br>
 [% ELSE %]
-<h2>[% 'Nadie ha reservado sobre este grupo/ejemplar' | i18n %]</h2>
+    <div class="alert alert-info"><h3>[% 'Nadie ha reservado sobre este grupo/ejemplar' | i18n %]</h3></div>
 [% END %]

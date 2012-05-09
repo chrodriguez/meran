@@ -1,15 +1,9 @@
-<script type="text/javascript">
-      $(document).ready(function() {
-        makeToggle('datos_tabla_div','trigger',null,false);
-      });
-</script>
-
 <fieldset>
 [% IF cantidad %]
    <legend>[% "Resultados de la b&uacute;squeda" | i18n %]</legend>
         <div class="datos_tabla_div" id="datos_tabla_div">
        <div class="well">
-              [% "La cantidad reservas  es" | i18n %]: <strong>[%cantidad %]</strong>
+              [% "La cantidad reservas  es" | i18n %]: <strong>[% cantidad %]</strong>
         </div>
         
               <div class="contenedor_paginador">[% paginador %]</div>
@@ -82,8 +76,4 @@
       </div>
 </fieldset>
 <br>
-
-<!-- <a href="mail.pl?branch=[% branch %]&tipo=1">  -->
-<!--     <input id="contacto" type="image" src="[% themelang %]/images/contactar.png" title="[% 'Enviar mail a usuarios con reservas asignadas' | i18n %]" > -->
-<!-- </a>  -->
 
