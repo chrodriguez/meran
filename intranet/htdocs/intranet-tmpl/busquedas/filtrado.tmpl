@@ -68,6 +68,12 @@ function limpiarCampos(side){
     }
 }
 
+function limpiar(){
+	limpiarAbajo();
+	limpiarCentro();
+	limpiarArriba();
+}
+
 function changePageBusquedas(ini){
     objAH.changePage(ini);
 }
@@ -185,13 +191,22 @@ function changePageBusquedas(ini){
 
 	              
                                 <div class="form-actions">
-					                [% PERL %]
-					                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
-					                                                                        onClick => "buscar();",
-					                                                                        boton    => "btn btn-primary",
+                                    [% PERL %]
+                                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
+                                                                                            onClick => "limpiar();",
+                                                                                            boton    => "btn",
                                                                                             inline => "1",
-					                                            ) ;
-					                [% END %]
+                                                                ) ;
+                                    [% END %]
+
+                                    [% PERL %]
+                                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+                                                                                            onClick => "buscar();",
+                                                                                            boton    => "btn btn-primary",
+                                                                                            inline => "1",
+                                                                ) ;
+                                    [% END %]
+
                                 </div>
 	                    
 	                

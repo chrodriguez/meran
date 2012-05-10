@@ -23,7 +23,7 @@ function inicializar(){
 	$('#detalleUsuario').slideUp('slow');
 	$('#detalleUsuario').html('');
 
-	$('#botonDevolver').hide();
+	$('#formActions').hide();
 	//oculto la tabla de prestamos
 	$('#tablaPrestamos').slideUp('slow');
 	$('#tablaPrestamos').html('');
@@ -44,7 +44,7 @@ function onCompleteAutocompleteUsuarios(){
 	    detalleUsuario(nro_socio);
 	    detallePrestamos(nro_socio, updateDetallePrestamos);
     // 	detalleSanciones(nro_socio);
-	    $('#botonDevolver').hide();
+	    $('#formActions').hide();
     }
 }
 
@@ -58,7 +58,7 @@ function onCompleteAutocompleteBarcodesPrestados(){
     if($('#prestamo_hidden').val() != '-1'){
 	    var prestamo    = $('#prestamo_hidden').val();
         $('#barcode').attr('readonly', true);
-	    $('#botonDevolver').show();
+	    $('#formActions').show();
 	    //detalleUsuario esta implementado en circulacion,js
 	    getSocioFromPrestamo(prestamo);
     }
@@ -142,55 +142,50 @@ $(document).ready(function() {
 
 </script>
 <div id="confirmar_div"></div>
+<section class="center-section-form">
+    <form id="dev_rev" class="form-horizontal" onsubmit="return false;">
+        <fieldset>
+            <legend class="titulo_legend">[% "Devoluciones y renovaciones" | i18n %]</legend>
 
-<fieldset class="formulario_busqueda">
+	        <div class="control-group">
+	                <label for="usuarioAutocomplete" class="control-label">[% 'Apellido y Nombres, DNI o Legajo' | i18n %]</label>
+	                <div class="controls">
+		                <input id="usuarioAutocomplete" type="text" size="40" onClick="inicializar();">
+		                <input id="nro_socio_hidden" type="hidden">
+	                </div>
+	        </div>
 
-    <legend class="titulo_legend"><span class="titulos">[% 'Devoluciones y Renovaciones' | i18n %]</span></legend>	
-    <ul class="listado_sin_margen">
-      <li class="sub_item">
-        <div id="buscarUsuario">
-                <strong><label for="usuarioAutocomplete">[% 'Apellido y Nombres, DNI o Legajo' | i18n %]</label></strong>
-                <input id="usuarioAutocomplete" type="text" size="40" onClick="inicializar();">
-                <input id="nro_socio_hidden" type="hidden">
-        </div>
-      </li>
-      <li class="sub_item">
-        <div id="buscarCodigoDeBarras">
-          <strong><label for="barcode">[% 'Ingrese el c&oacute;digo de barras' | i18n %]</label></strong>
-              <input id="barcode" type="text" size="40" onClick="inicializar();">
-<!--           <input id="barcode_hidden" type="hidden"> -->
-          <input id="prestamo_hidden" type="hidden">
-        </div>
-      </li>
-    </ul>
-</fieldset>
+            <div class="control-group">
+	          <label for="barcode" class="control-label">[% 'Ingrese el c&oacute;digo de barras' | i18n %]</label>
+	          <div class="controls">
+	              <input id="barcode" type="text" size="40" onClick="inicializar();">
+	<!--           <input id="barcode_hidden" type="hidden"> -->
+	               <input id="prestamo_hidden" type="hidden">
+              </div>
+            </div>
+         </fieldset>
 
-<div id="botonDevolver" align ="center">
-                <ul class="listaMenuBotones">
-                    <li>
-                                [% PERL %]
-                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Devolver' | i18n %]",
-                                                                            boton   => "boton_enviar",
-                                                                            onClick => "devolverPrestamo();",
-                                                                            title   => "[% 'Devolver' | i18n %]",
-                                                                            width   => "auto",
-                                                                            alternClass => "botonCentrado"
-                                                ) ;
-                                [% END %]
-                    </li>
-                    <li>
-                            [% PERL %]
-                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Cancelar' | i18n %]",
-                                                                        boton   => "boton_borrar",
-                                                                        onClick => "cancelarDevolucion();",
-                                                                        title   => "[% 'Cancelar' | i18n %]",
-                                                                        width   => "auto",
-                                                                        alternClass => "botonCentrado"
-                                            ) ;
-                            [% END %]
-                    </li>
-              </ul>
-</div>
+
+		<div class="form-actions" id="formActions">
+
+                   [% PERL %]
+                           print C4::AR::Filtros::action_button( 
+                                                           button         => "btn btn-danger",
+                                                           action       => "cancelarDevolucion()", 
+                                                           title        => "[% 'Cancelar' | i18n %]",
+                                                       ) ;
+    
+                   [% END %]
+
+                   [% PERL %]
+                           print C4::AR::Filtros::action_button( 
+                                                           button         => "btn btn-primary",
+                                                           action       => "devolverPrestamo()", 
+                                                           title        => "[% 'Devolver' | i18n %]",
+                                                       ) ;
+    
+                   [% END %]
+	    </div>
 <!-- DELTALLE DEL USUARIO -->
 <div id="detalleUsuario"></div>
 <!-- DELTALLE DE SANCIONES -->
