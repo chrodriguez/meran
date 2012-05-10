@@ -20,7 +20,8 @@
                                                     'Estado'            => 'estado', 
                                                     'Usuario'           => 'usuario',
                                                     'Categor&iacute;a'  => 'categoria'
-                                                  }                                
+                                                  } ,   
+                              order_name_function => "reporte_circ",                            
                                     ) ;
         [% END %]
 

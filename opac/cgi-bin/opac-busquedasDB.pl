@@ -17,6 +17,7 @@ my $to_pdf                  = $input->param('export') || 0;
 
 my ($template, $session, $t_params);
 
+
 #se escapea algun tag html si existe, evita XSS 
 #Guardo los parametros q vienen por URL
 my $obj; 
@@ -34,6 +35,8 @@ $obj->{'from_suggested'}    = CGI::escapeHTML($input->param('from_suggested'));
 $obj->{'tipo_nivel3_name'}  = ($input->param('tipo_nivel3_name'));
 $obj->{'tipoBusqueda'}      = 'all';
 $obj->{'token'}             = CGI::escapeHTML($input->param('token'));
+$obj->{'orden'}             = $input->param('orden')|| "";
+$obj->{'sentido_orden'}     = $input->param('sentido_orden')|| "";
 
 C4::AR::Validator::validateParams('U389',$obj,['tipoAccion']);
 
@@ -144,6 +147,8 @@ if ($to_pdf){
                     $url = C4::AR::Utilidades::addParamToUrl($url,"isbn",$obj->{'isbn'});
                     $url = C4::AR::Utilidades::addParamToUrl($url,"tema",$obj->{'tema'});
                     $url = C4::AR::Utilidades::addParamToUrl($url,"autor",$obj->{'autor'});
+                    $url = C4::AR::Utilidades::addParamToUrl($url,"orden",$obj->{'orden'});
+                    $url = C4::AR::Utilidades::addParamToUrl($url,"sentido_orden",$obj->{'sentido_orden'});
                     $url = C4::AR::Utilidades::addParamToUrl($url,"only_available",$obj->{'only_available'});
 
                     $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"titulo",$obj->{'titulo'});
@@ -152,6 +157,8 @@ if ($to_pdf){
                     $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"isbn",$obj->{'isbn'});
                     $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"tema",$obj->{'tema'});
                     $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"autor",$obj->{'autor'});
+                    $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"orden",$obj->{'orden'});
+                    $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"sentido_orden",$obj->{'sentido_orden'});
                     $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"only_available",0);
                     $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"tipo",$obj->{'tipo'});
                     
@@ -163,7 +170,7 @@ if ($to_pdf){
         }      
     }  else {
 
-        $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
+        $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'}."&orden=".$obj->{'orden'}."&sentido_orden=".$obj->{'sentido_orden'};
         $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'};
 
         ($cantidad, $resultsarray,$suggested)  = C4::AR::Busquedas::busquedaCombinada_newTemp($string,$session,$obj);   
@@ -198,6 +205,24 @@ if ($to_pdf){
         $t_params->{'buscoPor'}                 = C4::AR::Busquedas::armarBuscoPor($obj);
         $t_params->{'cantidad'}                 = $cantidad || 0;
         $t_params->{'show_search_details'}      = 1;
+
+
+        # Se usan para poder ordenar la tabla segun el campo seleccionado (se pasan todos para poder realizar la busqueda por los mismos criterios)
+        $t_params->{'tipoAccion'}   = $obj->{'tipoAccion'};
+        $t_params->{'titulo'}       = $obj->{'titulo'}; 
+        $t_params->{'autor'}        = $obj->{'autor'}; 
+        $t_params->{'isbn'}         = $obj->{'isbn'};
+        $t_params->{'estantes'}     = $obj->{'estantes'};
+        $t_params->{'estantes_grupo'}     = $obj->{'estantes_grupo'}; 
+        $t_params->{'tema'}     = $obj->{'tema'};
+        $t_params->{'tipo'}     = $obj->{'tipo'}; 
+        $t_params->{'only_available'}     = $obj->{'only_available'} || 0;
+        $t_params->{'from_suggested'}     = $obj->{'from_suggested'};
+        $t_params->{'tipo_nivel3_name'}   = $obj->{'tipo_nivel3_name'};
+        $t_params->{'tipoBusqueda'}   = $obj->{'tipoBusqueda'};
+        $t_params->{'token'}   = $obj->{'token'};
+        $t_params->{'orden'}   = $obj->{'orden'};   
+        $t_params->{'sentido_orden'}   = $obj->{'sentido_orden'};
 
         #pdf
         $t_params->{'pdf_titulo'}             = $obj->{'titulo'};

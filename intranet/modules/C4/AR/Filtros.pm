@@ -879,8 +879,10 @@ sub tableHeader{
     my $class       = $params_hash_ref{'class'} || undef;
     my $select_all  = $params_hash_ref{'selectAll_id'} || undef;
     my $order       = $params_hash_ref{'order'} || undef;
+
     my $order_name_function =  $params_hash_ref{'order_name_function'} || undef;
 
+   
 
     my $columns     = $params_hash_ref{'columns'};
     

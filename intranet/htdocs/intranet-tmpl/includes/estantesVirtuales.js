@@ -3,9 +3,20 @@
  *
  */
 
-function changePage(ini){
+function mostrarLayer(){
         $('#layer').css('opacity','0.2');
+        $('#layer').css('z-index','10000');
         $('#layer').focus();
+}
+
+
+function ocultarLayer(){
+        $('#layer').css('opacity','1');
+        $('#layer').css('z-index','-1');
+}
+
+function changePage(ini){
+        mostrarLayer();
         objAH.changePage(ini);
         
     }
@@ -290,7 +301,7 @@ function ordenar(orden){
         $('#buscarContBoton').replaceWith("<a id=buscarContBoton class='btn btn-primary click' onclick=buscarContenido();><i class='icon-search icon-white'></i> Buscar</a>"); 
 		$('#resultado_contenido_estante').html(responseText);
 		zebra('datos_tabla');
-        $('#layer').css('opacity','1');
+        ocultarLayer();
         }
 
         function agregarContenidoAEstante(id2 ){

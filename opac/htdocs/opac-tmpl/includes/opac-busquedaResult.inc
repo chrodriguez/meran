@@ -1,5 +1,18 @@
 <script type="text/javascript">
 
+    ORDEN ="[% orden %]";
+    SENTIDO_ORDEN = "[% sentido_orden %]";
+
+
+    function cambiarSentidoOrd(){
+      if (SENTIDO_ORDEN){
+        $('#icon_'+ ORDEN).attr("class","icon-chevron-up click");
+      } else {
+        $('#icon_'+ ORDEN).attr("class","icon-chevron-down click");
+      }
+    }
+
+
     function submitForm(form_id) {
         $('#' + form_id).submit();
     }
@@ -147,7 +160,26 @@
 				return (table);
 		    }
           [% END %]
-       [% END %]		    
+       [% END %]	
+
+    function ordenar_busqueda_opac(orden){
+        if (orden == ORDEN) {
+              if ( SENTIDO_ORDEN ){
+                  SENTIDO_ORDEN=0;
+              } else{
+                  SENTIDO_ORDEN=1;
+              }
+        } else {
+              SENTIDO_ORDEN= 1;
+              ORDEN = orden;
+        }
+        $('#orden').val(ORDEN);
+        $('#sentido_orden').val(SENTIDO_ORDEN);
+
+        cambiarSentidoOrd();
+        $('#ordenar_tabla').submit();
+
+    }   
 
     $(document).ready(function() {
         $('.fancylink').fancybox();
@@ -182,6 +214,22 @@
           [% END %]
 
         <section class="center-section-form" style="margin-top: 20px" >
+            <div id="datos_busqueda">
+                <form id="ordenar_tabla" action="[% url_prefix %]/opac-busquedasDB.pl" method="get">
+                    <input type="hidden" id="string" name="string" value="[% keyword %]"/>
+                    <input type="hidden" id="titulo" name="titulo" value="[% titulo %]"/>
+                    <input type="hidden" id="autor" name="autor" value="[% autor %]"/>
+                    <input type="hidden" id="isbn" name="isbn" value="[% isbn %]"/>
+                    <input type="hidden" id="tipo" name="tipo" value="[% tipo %]"/>
+                    <input type="hidden" id="tema" name="tema" value="[% tema %]"/>
+                    <input type="hidden" id="estante" name="estante" value="[% estante %]"/>
+                    <input type="hidden" id="tipoAccion" name="tipoAccion" value="[% tipoAccion %]" />
+                    <input type="hidden" id="token" name="token" value="[% token %]" />
+                    <input type="hidden" id="orden" name="orden" value="[% orden %]" />
+                    <input type="hidden" id="sentido_orden" name="sentido_orden" value="[% sentido_orden %]" />
+                </form>
+            </div>
+
             <div class="well">
                 <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: <strong>[% HTML.escape(buscoPor) %]</strong></div> 
             
@@ -230,13 +278,25 @@
              [% PERL %]
                  print C4::AR::Filtros::tableHeader(   
                                                          id              => "tablaResult",
-                                                         class           => "",
+                                                         class           => "table table-bordered",
                                                          columns         => ['[% "Tipo"|i18n %]','[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]',
                                                                              '[% "Edici&oacute;n"|i18n %]','[% "Disponibilidad"|i18n %]', '[% "Valoraci&oacute;n" | i18n %]',
                                                                              [% IF socio_data.usr_permisos_opac %]'[% "Favoritos" | i18n %]'[% END %]
-                                                                            ]
+                                                                            ],
+                                                          order          => {  'Tipo' => '',
+                                                                               'T&iacute;tulo' =>'titulo', 
+                                                                               'Autor' => 'autor',
+                                                                               'Edici&oacute;n' => '',
+                                                                               'Disponibilidad' =>'',
+                                                                               'Valoracion' =>'',
+                                                                      
+                                                                             },
+                                                          order_name_function => "busqueda_opac"
                                                          
                              ) ;
+
+ 
+
              [% END %]
              <tbody>  
                 [% FOREACH NIVEL IN SEARCH_RESULTS %]
