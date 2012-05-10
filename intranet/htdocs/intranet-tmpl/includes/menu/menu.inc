@@ -16,17 +16,19 @@
               <ul class="dropdown-menu">
 	              <li>
 	                  [% PERL %]
-	                  print C4::AR::Filtros::link_to( text =>     "[% 'B&uacute;squeda avanzada' | i18n %]",
+	                  print C4::AR::Filtros::link_to( text =>     " [% 'B&uacute;squeda avanzada' | i18n %]",
 	              									  url =>      "[% url_prefix %]/busquedas/filtrado.pl",
-	                                                  title =>    "[% 'B&uacute;squeda avanzada' | i18n %]"
+	              									  icon	=>		"icon-search",
+	                                                  title =>    " [% 'B&uacute;squeda avanzada' | i18n %]"
 	                                                );
 	                  [% END %]
 	              </li>
 				  <li>
 					[% PERL %]
-	                print C4::AR::Filtros::link_to( text =>     "[% 'B&uacute;squeda Z3950' | i18n %]",
+	                print C4::AR::Filtros::link_to( text =>     " [% 'B&uacute;squeda Z3950' | i18n %]",
 	                                                url =>      "[% url_prefix %]/z3950/filtradoZ3950.pl",
-	                                                title =>    "[% 'B&uacute;squeda Z3950' | i18n %]"
+													icon	=>		"icon-road",	                                                
+	                                                title =>    " [% 'B&uacute;squeda Z3950' | i18n %]"
 												  ) ;
 	                [% END %]
 	              </li>
