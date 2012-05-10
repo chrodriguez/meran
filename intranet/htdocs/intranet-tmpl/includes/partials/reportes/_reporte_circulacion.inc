@@ -12,7 +12,7 @@
         objAH.changePage(ini);
     }
 
-    function ordenar(orden){
+    function ordenar_reporte_circ(orden){
 
         if (orden == ORDEN) {
           ASC= !ASC;
@@ -49,6 +49,9 @@
     function updateGenerarReporteCirculacion(responseText){
         $('#reportResultCirc').html(responseText);
         $('#reportResultCirc').show();
+        if (ORDEN){
+              cambiarSentidoOrd();
+        } 
 
     }   
    

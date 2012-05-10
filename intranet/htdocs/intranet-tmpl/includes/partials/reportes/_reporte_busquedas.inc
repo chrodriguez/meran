@@ -11,14 +11,16 @@
     function changePageBusquedas(ini){
         objAH.changePage(ini);
     }
-    
-    function ordenar(orden){
+
+
+    function ordenar_reporte_busquedas(orden){
               if (orden == ORDEN) {
                   ASC= !ASC;
               }
-              ORDEN = orden;
+              ORDEN = orden;       
               generarReporteBusquedas();
     }
+
 
     function generarReporteBusquedas(){
 
@@ -45,8 +47,10 @@
     function updateGenerarReporteBusquedas(responseText){
         $('#report_result_busq').html(responseText);
         $('#report_result_busq').show();
-
-    }   
+        if (ORDEN){
+              cambiarSentidoOrd();
+        } 
+    }
    
 
     $(document).ready( function(){ 

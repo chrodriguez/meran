@@ -20,6 +20,13 @@ function generarEtiquetas(id){
 
 
 
+function cambiarSentidoOrd(){
+      if (ASC){
+        $('#icon_'+ ORDEN).attr("class","icon-chevron-up click");
+      } else {
+        $('#icon_'+ ORDEN).attr("class","icon-chevron-down click");
+      }
+}
 
 
 function mostrarResultados(responseText){
