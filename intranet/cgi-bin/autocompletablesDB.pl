@@ -85,6 +85,13 @@ elsif ($accion eq 'autocomplete_catalogo'){
 elsif ($accion eq 'autocomplete_nivel2'){
     $result = C4::AR::Utilidades::catalogoAutocomplete($string);
 }
+elsif ($accion eq 'autocomplete_catalogo_id'){
+
+    $result = C4::AR::Utilidades::catalogoAutocompleteId($string);
+}
+elsif ($accion eq 'autocomplete_nivel2_id'){
+    $result = C4::AR::Utilidades::catalogoAutocompleteId($string);
+}
 
 
 C4::AR::Auth::print_header($session);

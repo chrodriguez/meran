@@ -3904,6 +3904,43 @@ sub catalogoAutocomplete{
      return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
 }
 
+sub catalogoAutocompleteId{
+
+     my ($string_utf8_encoded) = @_;
+
+     $string_utf8_encoded       = Encode::decode_utf8($string_utf8_encoded);
+     my @data_array;
+     my %params                 = {};
+
+     $params{'tipo'}            = "normal";
+     $params{'ini'}             = 0;
+     $params{'cantR'}           = 20;
+     $params{'from_suggested'}  = 1;
+
+     my $session = CGI::Session->load();
+     my ($cantidad, $resultado_busquedas, $suggested)= C4::AR::Busquedas::busquedaCombinada_newTemp($string_utf8_encoded, $session, \%params, 0);
+
+     my $textout = "";
+
+
+      foreach my $documento (@$resultado_busquedas){
+            my %has_temp;
+            $has_temp{'id'}= $documento->{'id1'};
+
+            C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
+            $has_temp{'dato'} = $documento->{'titulo'};
+        if($documento->{'nomCompleto'}){ $has_temp{'dato'} .= " (".$documento->{'nomCompleto'}.")";}
+        $has_temp{'dato'} .= "\n";
+            push (@data_array, \%has_temp);
+
+#              C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
+#              $textout.= $documento->{'id1'}."|".$documento->{'titulo'}."\n";
+      }
+
+     $textout= getTextOutSorted(\@data_array, {'DESC' => 1, 'ORDER_BY' => 'dato'});
+
+     return ($textout eq '')?"-1|".C4::AR::Filtros::i18n("SIN RESULTADOS"):$textout;
+}
 
 
 sub temasAutocomplete{
