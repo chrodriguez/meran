@@ -1320,7 +1320,6 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
     C4::AR::Debug::debug("Busquedas => query string ".$query);
 
     $sphinx->SetMatchMode($tipo_match);
-
     if ($orden eq 'autor') {
             if ($sentido_orden){
                 $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"autor_local");

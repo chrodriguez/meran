@@ -17,6 +17,7 @@ my $to_pdf                  = $input->param('export') || 0;
 
 my ($template, $session, $t_params);
 
+
 #se escapea algun tag html si existe, evita XSS 
 #Guardo los parametros q vienen por URL
 my $obj; 
@@ -146,6 +147,8 @@ if ($to_pdf){
                     $url = C4::AR::Utilidades::addParamToUrl($url,"isbn",$obj->{'isbn'});
                     $url = C4::AR::Utilidades::addParamToUrl($url,"tema",$obj->{'tema'});
                     $url = C4::AR::Utilidades::addParamToUrl($url,"autor",$obj->{'autor'});
+                    $url = C4::AR::Utilidades::addParamToUrl($url,"orden",$obj->{'orden'});
+                    $url = C4::AR::Utilidades::addParamToUrl($url,"sentido_orden",$obj->{'sentido_orden'});
                     $url = C4::AR::Utilidades::addParamToUrl($url,"only_available",$obj->{'only_available'});
 
                     $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"titulo",$obj->{'titulo'});
@@ -154,6 +157,8 @@ if ($to_pdf){
                     $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"isbn",$obj->{'isbn'});
                     $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"tema",$obj->{'tema'});
                     $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"autor",$obj->{'autor'});
+                    $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"orden",$obj->{'orden'});
+                    $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"sentido_orden",$obj->{'sentido_orden'});
                     $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"only_available",0);
                     $url_todos = C4::AR::Utilidades::addParamToUrl($url_todos,"tipo",$obj->{'tipo'});
                     
@@ -165,7 +170,7 @@ if ($to_pdf){
         }      
     }  else {
 
-        $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'};
+        $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'}."&only_available=".$obj->{'only_available'}."&orden=".$obj->{'orden'}."&sentido_orden=".$obj->{'sentido_orden'};
         $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&string=".$obj->{'string'}."&tipoAccion=".$obj->{'tipoAccion'};
 
         ($cantidad, $resultsarray,$suggested)  = C4::AR::Busquedas::busquedaCombinada_newTemp($string,$session,$obj);   
@@ -216,6 +221,8 @@ if ($to_pdf){
         $t_params->{'tipo_nivel3_name'}   = $obj->{'tipo_nivel3_name'};
         $t_params->{'tipoBusqueda'}   = $obj->{'tipoBusqueda'};
         $t_params->{'token'}   = $obj->{'token'};
+        $t_params->{'orden'}   = $obj->{'orden'};   
+        $t_params->{'sentido_orden'}   = $obj->{'sentido_orden'};
 
         #pdf
         $t_params->{'pdf_titulo'}             = $obj->{'titulo'};

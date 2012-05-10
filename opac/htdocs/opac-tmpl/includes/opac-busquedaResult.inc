@@ -1,7 +1,17 @@
 <script type="text/javascript">
 
-    ORDEN ="";
-    SENTIDO_ORDEN = 1;
+    ORDEN ="[% orden %]";
+    SENTIDO_ORDEN = "[% sentido_orden %]";
+
+
+    function cambiarSentidoOrd(){
+      if (SENTIDO_ORDEN){
+        $('#icon_'+ ORDEN).attr("class","icon-chevron-up click");
+      } else {
+        $('#icon_'+ ORDEN).attr("class","icon-chevron-down click");
+      }
+    }
+
 
     function submitForm(form_id) {
         $('#' + form_id).submit();
@@ -153,15 +163,21 @@
        [% END %]	
 
     function ordenar_busqueda_opac(orden){
-
         if (orden == ORDEN) {
-              SENTIDO_ORDEN= !SENTIDO_ORDEN;
+              if ( SENTIDO_ORDEN ){
+                  SENTIDO_ORDEN=0;
+              } else{
+                  SENTIDO_ORDEN=1;
+              }
         } else {
               SENTIDO_ORDEN= 1;
               ORDEN = orden;
         }
-        $('#orden').value(ORDEN);
-        $('#sentido_orden').value(SENTIDO_ORDEN);
+        $('#orden').val(ORDEN);
+        $('#sentido_orden').val(SENTIDO_ORDEN);
+
+        cambiarSentidoOrd();
+        $('#ordenar_tabla').submit();
 
     }   
 
@@ -198,20 +214,19 @@
           [% END %]
 
         <section class="center-section-form" style="margin-top: 20px" >
-            <div id="catos_busqueda">
-                <form id="ordenar_tabla">
-                    <input type="hidden" id="string" name="string" value="[% string %]"/>
-                    <input type="hidden" id="titulo" name="titulo" value="[% string %]"/>
-                    <input type="hidden" id="autor" name="autor" value="[% string %]"/>
-                    <input type="hidden" id="isbn" name="isbn" value="[% string %]"/>
-                    <input type="hidden" id="tipoDocumento" name="tipoDocumento" value="[% string %]"/>
-                    <input type="hidden" id="tema" name="tema" value="[% string %]"/>
-                    <input type="hidden" id="estante" name="estante" value="[% string %]"/>
-                    <input type="hidden" id="tipoAccion" name="tipoAccion" value="BUSQUEDA_AVANZADA" />
-                    <input type="hidden" id="tipo" name="tipo" value="normal" />
+            <div id="datos_busqueda">
+                <form id="ordenar_tabla" action="[% url_prefix %]/opac-busquedasDB.pl" method="get">
+                    <input type="hidden" id="string" name="string" value="[% keyword %]"/>
+                    <input type="hidden" id="titulo" name="titulo" value="[% titulo %]"/>
+                    <input type="hidden" id="autor" name="autor" value="[% autor %]"/>
+                    <input type="hidden" id="isbn" name="isbn" value="[% isbn %]"/>
+                    <input type="hidden" id="tipo" name="tipo" value="[% tipo %]"/>
+                    <input type="hidden" id="tema" name="tema" value="[% tema %]"/>
+                    <input type="hidden" id="estante" name="estante" value="[% estante %]"/>
+                    <input type="hidden" id="tipoAccion" name="tipoAccion" value="[% tipoAccion %]" />
                     <input type="hidden" id="token" name="token" value="[% token %]" />
-                    <input type="hidden" id="orden" name="orden" value="" />
-                    <input type="hidden" id="sentido_orden" name="sentido_orden" value="" />
+                    <input type="hidden" id="orden" name="orden" value="[% orden %]" />
+                    <input type="hidden" id="sentido_orden" name="sentido_orden" value="[% sentido_orden %]" />
                 </form>
             </div>
 
