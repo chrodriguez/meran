@@ -1,6 +1,6 @@
 <script type="text/javascript">
-
-	$('.rateit').bind('rated reset', function (e) {
+$(document).ready(function() {
+	$('#rating_form_[% id2 %] .rateit').bind('rated reset', function (e) {
 	    var ri = $(this);
 		
 		var value = ri.rateit('value');
@@ -22,13 +22,15 @@
 	        }
 	    });
 	});
-
+});
 </script>
 
 <div id="rating_form_[% id2 %]" class="well">
     <h4>[% "Valoraci&oacute;n" | i18n %]</h4>
-	<div 	class="rateit bigstars" data-rateit-value="[% rating %]" data-rateit-starwidth="32" 
-			data-rateit-starheight="32" data-itemid="[% id2 %]"
+	<div 	class="rateit bigstars"  data-rateit-max="5" 
+			data-rateit-step="0.5" data-rateit-value="[% rating %]" data-rateit-starwidth="32" 
+			data-rateit-starheight="32" data-itemid="[% id2 %]" 
+
 			[% IF !socio_data.usr_nro_socio %]
 			   data-rateit-readonly="true"
 			[% END %]

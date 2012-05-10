@@ -225,10 +225,12 @@ sub eliminar{
     my $cat_registro_marc_n2_analitica = C4::AR::Nivel2::getAllNivel2FromAnaliticasById($self->getId2(), $self->db);
 
     #elimino las analíticas de "cat_registro_marc_n2_analitica" si es que existen
-    foreach my $n2_analitica (@$cat_registro_marc_n2_analitica){
-        $n2_analitica->delete();
+    if ($cat_registro_marc_n2_analitica){
+	    foreach my $n2_analitica (@$cat_registro_marc_n2_analitica){
+	        $n2_analitica->delete();
+	    }
     }
-
+    
     $self->delete();
 }
 

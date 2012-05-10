@@ -29,7 +29,7 @@
        
   <link rel="stylesheet" href="[% temas %]/[% user_theme %]/includes/opac.css" />
   <link rel='stylesheet' media='screen and (max-width: 900px)' href="[% temas %]/[% user_theme %]/includes/opac-FF_fix.css" />  
-  <link media="screen" rel="stylesheet" href="/includes/css/fancybox.css" type="text/css">
+  <link rel="stylesheet" href="/includes/jquery/fancybox/fancybox.css" type="text/css" media="screen" />
   <link media="screen" rel="stylesheet" href="/includes/css/rateit.css" type="text/css">
 
   <script type="text/javascript">
@@ -59,9 +59,7 @@
   <script src="/includes/jsthread.js" type="text/javascript"></script>
   <script type="text/javascript" src="/includes/opac.js"></script>	
   <script type="text/javascript" src="/includes/jquery/jquery.alerts.js"></script>	
-  <script type="text/javascript" src="/includes/jquery/fancybox/jquery.easing.1.3.js"></script>
-  <script type="text/javascript" src="/includes/jquery/fancybox/jquery.fancybox.js"></script>
-  <script type="text/javascript" src="/includes/jquery/fancybox/jquery.mousewheel.js"></script>
+  <script type="text/javascript" src="/includes/jquery/fancybox/fancybox.js"></script>
   <script type="text/javascript" src="/includes/jquery/jquery.rateit.min.js"></script>
   <script type="text/javascript" src="/includes/jquery/jquery.tmpl.js"></script>
   
@@ -78,24 +76,7 @@
   [% IF socio_data.usr_permisos_opac %]
         [% IF !noAjaxRequests %]
         <script type="text/javascript">
-/*          $(document).ready(function() {
 
-        	infoReservas();
-            infoSanciones();
-            setInterval(infoReservas,[% IF timeInterval %]
-                                        [% timeInterval %]
-                                     [% ELSE %]
-                                        300000
-                                     [% END %]
-                                     );
-            setInterval(infoSanciones,[% IF timeInterval %]
-                                        [% timeInterval %]
-                                     [% ELSE %]
-                                        300000
-                                     [% END %]
-                                     );
-          });
-*/
           </script>
         [% END %]
     [% END %]

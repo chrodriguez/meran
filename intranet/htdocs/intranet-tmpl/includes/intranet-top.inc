@@ -32,7 +32,8 @@
 	[% INCLUDE "BootstrapToolkit.inc" %]
 
     <link rel="shortcut icon" href="/includes/css/favicon.ico">
-
+	<link rel="stylesheet" href="/includes/jquery/fancybox/fancybox.css" type="text/css" media="screen" />
+    
 	<link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranet.css">
 	<link rel='stylesheet' media='screen and (max-width: 900px)' href="[% temas %]/default/includes/intra-FF_fix.css" />
 
@@ -45,6 +46,9 @@
 	<script type="text/javascript" src="/includes/jquery/jquery.expander.js"></script>
 	<script type="text/javascript" src="/includes/jquery/jquery.nanoscroller.js"></script>
 	<script type="text/javascript" src="/includes/modernizr.js"></script>
+
+	<script type="text/javascript" src="/includes/jquery/fancybox/fancybox.js"></script>
+
 	<script type="text/javascript" src="/includes/workers.js"></script>
 	<script type="text/javascript" scrc="/includes/intranet-top.js"></script>
 	<script type="text/javascript" src="/includes/jquery/jquery-ui-1.8.13.sortable.min.js"></script>
@@ -260,14 +264,6 @@
 		function showTwitter(responseText){
 		    $('#show_twitter').modal('show');
 	        $('#post_twitter').focus();
-	        $("#post_twitter").charCount({
-	            limit: 0,        
-	            warning: 10,
-	            counterElement: 'p',
-	            cssExceeded: 'label label-important',
-	            counterText: "[% 'Caraceteres restantes' | i18n %]: ",    
-	        });
-			
 		    
 		}
 				
@@ -283,6 +279,7 @@
 			$(".alert").alert();
 			$(".collapse").collapse({toggle: false,});
 	        $('.dropdown-toggle').dropdown();
+	        $('.fancy_link').fancybox();
 			if (UNLOAD == 1)
 				enableAlert();
 			else

@@ -884,7 +884,7 @@ function updateGuardarDocumentoN2(responseText){
 function guardarDocumentoN3(){
     if( verificarAgregarDocumentoN3() ){
         syncComponentesArray();
-        var porBarcode          = $("#cantEjemplares").attr("readonly");
+        var porBarcode          = $("#cantEjemplares").attr("readonly")?true:false;
         objAH                   = new AjaxHelper(updateGuardarDocumentoN3);
         objAH.debug             = true;
         objAH.showOverlay       = true;

@@ -61,9 +61,10 @@ sub t_guardarNivel3 {
         $params->{'tipo_ejemplar'} = $params->{'id_tipo_doc'} || C4::AR::Nivel2::getTipoEjemplarFromId2($params->{'id2'});
         #se genera el arreglo de barcodes validos para agregar a la base y se setean los mensajes para el usuario (mensajes de ERROR)
         my ($barcodes_para_agregar) = _generarArreglo($params, $msg_object);
-
+C4::AR::Debug::debug("\n\n\n ENTRANDO A FOR DE BARCODES \n\n\n");
         foreach my $barcode (@$barcodes_para_agregar){
-
+C4::AR::Debug::debug("\n\n\n PROCESANDO BARCODE ".$barcode."\n\n\n");
+        
             #se procesa un barcode por vez junto con la info del nivel 3 y nivel3 repetible
             my $marc_record         = C4::AR::Catalogacion::meran_nivel3_to_meran($params);
             $catRegistroMarcN3      = C4::Modelo::CatRegistroMarcN3->new(db => $db);  

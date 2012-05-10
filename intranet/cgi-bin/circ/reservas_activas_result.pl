@@ -22,10 +22,15 @@ my ($template, $session, $t_params) = get_template_and_user({
 
 my $obj         =   C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 my $id_ui       =   C4::AR::Preferencias::getValorPreferencia("defaultUI");
+
+if (!$obj){
+	$obj = $input->Vars;
+}
+
 my $orden       =   $obj->{'orden'} || 0;
 my $tipoReserva =   $obj->{'tipoReserva'}; # Tipo de reserva
 
-C4::AR::Validator::validateParams('VA001',$obj,['tipoReserva','funcion']);
+C4::AR::Validator::validateParams('VA001',$obj,['tipoReserva']);
 
 my $funcion =   $obj->{'funcion'};
 

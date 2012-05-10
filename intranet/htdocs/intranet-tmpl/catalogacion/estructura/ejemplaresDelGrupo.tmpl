@@ -26,8 +26,9 @@
 							   <dd> 
                                   [% PERL %]
                                       print C4::AR::Filtros::link_to( text => "[% cantReservasAsignadas %]",
-                                                                      url=>"[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
+                                                                      url=>"[% url_prefix %]/circ/reservas_activas_edicion.pl", 
                                                                       params => ["id2=[% id2 %]","tipoReserva=EJ"],
+                                                                      class => "fancy_link fancybox.iframe",
                                                                       tooltip => '[% "Reservas sobre el grupo con ejemplares asignados (en orden)" | i18n %]',
                                                                   ) ;
                                   [% END %]
@@ -35,8 +36,9 @@
 							<dt class="inline left rightMargin">[% "Reservas en Espera:"|i18n %]</dt>
 					           <dd> 
                                   [% PERL %]
-                                      print C4::AR::Filtros::link_to( text => "[% cantReservasAsignadas %]",
-                                                                      url=>"[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
+                                      print C4::AR::Filtros::link_to( text => "[% cantReservasEnEspera %]",
+                                                                      url=>"[% url_prefix %]/circ/reservas_activas_edicion.pl", 
+                                                                      class => "fancy_link fancybox.iframe",
                                                                       params => ["id2=[% id2 %]","tipoReserva=GR"],
                                                                       tooltip => '[% "Reservas sobre el grupo en espera (en orden)" | i18n %]',
                                                                   ) ;
@@ -206,7 +208,7 @@
                                                     button  => 'btn btn-primary',
                                                     title   => "[% 'Modificar' | i18n %]",
                                                     action  => "editarEjemplar([% id2 %],[% id3 %])",
-                                                    icon    => "icon-edit",
+                                                    icon    => "icon-white icon-edit",
                                                     actions => [
                                                                         {title => "Borrar", 
                                                                          action=>"borrarN3([% id2 %],[% id3 %])", 
