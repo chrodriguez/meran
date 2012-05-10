@@ -28,32 +28,28 @@ $(document).ready(function() {
 
 </script>
 
-<!--<label for="usuarioAutocomplete" class="titulos">[% 'Pr&eacute;stamos' | i18n %]</label>-->
-<fieldset class="formulario_busqueda">
-
-    <legend class="titulo_legend"><span class="titulos">[% 'Pr&eacute;stamos' | i18n %]</span></legend>    
-    <div id="confirmar_div"></div>
-    <br>
-
-    <div id="buscarUsuario" style="clear:both;">
-       <!-- <fieldset>-->
-        <ul>
-            <li class="sub_item">
-                <strong><label for="usuarioAutocomplete">[% 'Apellido y Nombres, DNI o Legajo' | i18n %]</label></strong>
-            </li>
-        <li>
-                <input id="usuarioAutocomplete" type="text" size="40">
-                <input id="nro_socio_hidden" type="hidden">
-            </li>
-        </ul>
-       <!-- </fieldset>-->
-    </div> 
-
+<section class="center-section-form"> 
+    <form id="form_circulacion_rapida" class="classform form-horizontal" onsubmit="return false;">
+        <fieldset>
+            <legend class="titulo_legend"><span class="titulos">[% 'Pr&eacute;stamos' | i18n %]</span></legend>
+                
+			    <div id="buscarUsuario"  class="control-group">
+			
+		                <label for="usuarioAutocomplete" class="control-label">[% 'Apellido y Nombres, DNI o Legajo' | i18n %]</label>
+		                <div class="controls">
+		                  <input id="usuarioAutocomplete" type="text" size="40">
+	                    </div>
+		                
+		                <input id="nro_socio_hidden" type="hidden">
+			    </div> 
+        </fieldset>
+      </form>
+      
     <!-- DELTALLE DEL USUARIO -->
     <div id="detalleUsuario"></div>
     <!-- DELTALLE DE SANCIONES -->
     <div id="sanciones"></div>
     <!-- DETALLE DE PRESTAMOS -->
     <div id="tablaReservas"></div>
-
+</section>
 [% INCLUDE 'intranet-bottom.inc' %]

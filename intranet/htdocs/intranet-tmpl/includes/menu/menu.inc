@@ -145,17 +145,19 @@
 	            
 	                    <li>
 	                              [% PERL %]
-	                                  print C4::AR::Filtros::link_to( text =>     "[% 'Usuarios Reales' | i18n %]",
+	                                  print C4::AR::Filtros::link_to( text =>     " [% 'Usuarios Reales' | i18n %]",
 	                                                                  url =>      "[% url_prefix %]/usuarios/reales/buscarUsuario.pl",
-	                                                                  title =>    "[% 'Usuarios Reales' | i18n %]"
+																	  icon	=>		"icon-user",
+	                                                                  title =>    " [% 'Usuarios Reales' | i18n %]"
 	                                                              ) ;
 	                              [% END %]
 	                    </li>
 	                    <li>
 	                              [% PERL %]
-	                                  print C4::AR::Filtros::link_to( text =>     "[% 'Usuarios Potenciales' | i18n %]",
+	                                  print C4::AR::Filtros::link_to( text =>     " [% 'Usuarios Potenciales' | i18n %]",
 	                                                                  url =>      "[% url_prefix %]/usuarios/potenciales/buscarUsuario.pl",
-	                                                                  title =>    "[% 'Usuarios Potenciales' | i18n %]"
+	                                                                  icon	=>		"icon-random",
+	                                                                  title =>    " [% 'Usuarios Potenciales' | i18n %]"
 	                                                              ) ;
 	                              [% END %]
 	                    </li>
