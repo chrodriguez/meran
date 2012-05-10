@@ -90,7 +90,13 @@ elsif ($accion eq 'autocomplete_catalogo_id'){
     $result = C4::AR::Utilidades::catalogoAutocompleteId($string);
 }
 elsif ($accion eq 'autocomplete_nivel2_id'){
-    $result = C4::AR::Utilidades::catalogoAutocompleteId($string);
+	my $id1 = C4::AR::Nivel2::getNivel2FromId2($string);
+	if ($id1){
+	   $id1   =  $id1->getId1;
+	}else{
+		$id1 = "-1";
+	}
+    $result = C4::AR::Utilidades::catalogoAutocompleteId($id1);
 }
 
 

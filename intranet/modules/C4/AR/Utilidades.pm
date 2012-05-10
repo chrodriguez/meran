@@ -3918,7 +3918,7 @@ sub catalogoAutocompleteId{
      $params{'from_suggested'}  = 1;
 
      my $session = CGI::Session->load();
-     my ($cantidad, $resultado_busquedas, $suggested)= C4::AR::Busquedas::busquedaCombinada_newTemp($string_utf8_encoded, $session, \%params, 0);
+     my ($cantidad, $resultado_busquedas, $suggested)= C4::AR::Busquedas::busquedaPorId($string_utf8_encoded, $session);
 
      my $textout = "";
 
