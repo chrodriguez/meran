@@ -91,11 +91,10 @@
 	                <td>    
 	                    [% catalogacion.getItemType %]
 	                </td>
-	                <td style="width: 130px;">
+	                <td style="min-width: 70px;">
 		                [% IF catalogacion.soyFijo != 1 %]
 		                    [% PERL %]
 		                        print C4::AR::Filtros::action_set_button(    
-                                      title    => "[% 'Editar' | i18n %]", 
                                       action  => 'mostrarModificarCampo("[% catalogacion.getId %]");',
                                       icon    => "icon-white icon-pencil",
 		                              button          => 'btn btn-primary',
