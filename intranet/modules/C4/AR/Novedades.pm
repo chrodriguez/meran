@@ -37,9 +37,6 @@ sub agregar{
     
     if (!($msg_object->{'error'})){
     
-        $db->{connect_options}->{AutoCommit} = 0;
-        $db->begin_work;
-        
         my $imagenes_novedades_opac;   
         
         eval{
@@ -56,7 +53,6 @@ sub agregar{
                 if(!$image_name){
                     $msg_object->{'error'}= 1;
                     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP13', 'intra'} );
-                    $db->rollback;
                 }else{
                     $imagenes_novedades_opac = C4::Modelo::ImagenesNovedadesOpac->new(db => $db);                 
                     $imagenes_novedades_opac->saveImagenNovedad($image_name, $novedad->getId());    
@@ -64,19 +60,8 @@ sub agregar{
                 }
             }
             
-            if($image_name){ $db->commit; }
         };
 
-        if ($@){
-        
-           &C4::AR::Mensajes::printErrorDB($@, 'B459',"INTRA");
-           $msg_object->{'error'}= 1;
-           C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP12', 'intra'} ) ;
-           $db->rollback;
-           
-        }
-
-        $db->{connect_options}->{AutoCommit} = 1;
      }
      
      return ($msg_object, $novedad);
