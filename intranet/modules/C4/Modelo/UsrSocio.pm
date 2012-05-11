@@ -40,7 +40,8 @@ __PACKAGE__->meta->setup(
         recover_date_of                  => { type => 'timestamp'  },
         last_auth_method                 => { type => 'varchar', overflow => 'truncate', default => 'mysql', length => 255 },
         id_categoria                     => { type => 'integer', overflow => 'truncate', length =>2, not_null => 1, default => 8 },       
-        foto             => { type => 'varchar', overflow => 'truncate', length => 255 },
+        foto                             => { type => 'varchar', overflow => 'truncate', length => 255 },
+        es_admin                         => { type => 'integer', overflow => 'truncate', length =>1, not_null => 0, default => 0 },       
         
     ],
 
@@ -1293,11 +1294,11 @@ sub tieneFoto{
     my $picturesDir = C4::Context->config("picturesdir");
     my $path;
 
-    my $foto_name   =   $self->getFoto;
+    my $foto_name   =   $self->persona->getFoto;
 
     if (lc($session_type) eq "opac"){
     	$picturesDir = C4::Context->config("picturesdir_opac");
-    	$foto_name =   $self->persona->getFoto;
+    	$foto_name =   $self->getFoto;
     }
 
     $path           = $picturesDir."/".$foto_name;
@@ -1402,4 +1403,12 @@ sub getIdReserva{
     	return $reservas->[0]->id_reserva;
     }
 }
+
+
+sub esAdmin{
+	my ($self) = shift;
+	
+	return ($self->es_admin);
+}
+
 1;

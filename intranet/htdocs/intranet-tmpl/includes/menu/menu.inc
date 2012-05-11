@@ -444,68 +444,69 @@
                                                                         ) ;
                                         [% END %]
                                 </li>
-                            	<li class="nav-header">[% 'Administraci&oacute;n' | i18n %]</li>	
-	              				<li class="divider"></li>
-                            	<li>
-                                            [% PERL %]
-                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-lock'></i> [% 'M&eacute;todos de Autenticaci&oacute;n' | i18n %]",
-                                                                                url =>      "[% url_prefix %]/admin/global/auth_methods.pl",
-                                                                                title =>    "[% 'M&eacute;todos de Autenticaci&oacute;n' | i18n %]"
-                                                                            ) ;
-                                            [% END %]
-                                </li>
-                                <li>
-                                            [% PERL %]
-                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-envelope'></i> [% 'Configuraci&oacute;n del Mail' | i18n %]",
-                                                                                url =>      "[% url_prefix %]/admin/global/mail_config.pl",
-                                                                                title =>    "[% 'Configuraci&oacute;n del Mail' | i18n %]"
-                                                                            ) ;
-                                            [% END %]
-                                </li>
-                                                            
-                                <li>
-                                            [% PERL %]
-                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'Configuraci&oacute;n LDAP' | i18n %]",
-                                                                                url =>      "[% url_prefix %]/admin/global/ldap_config.pl",
-                                                                                title =>    "[% 'Configuraci&oacute;n LDAP' | i18n %]"
-                                                                            ) ;
-                                            [% END %]
-                                </li>
-                            	<li class="nav-header">[% 'Importar' | i18n %]</li>	
-	              				<li class="divider"></li>
-             							<li>
-                                           			[% PERL %]
-                                                      print C4::AR::Filtros::link_to( text =>     "<i class='icon-download-alt'></i> [% 'Nueva Importaci&oacute;n' | i18n %]",
-                                                                                      url =>      "[% url_prefix %]/herramientas/importacion/subirNuevaImportacion.pl",
-                                                                                      title =>    "[% 'Nueva' | i18n %]"
-                                                                                  ) ;
-                                                  [% END %]
-                                        </li>
-                                        <li>
-                                                  [% PERL %]
-                                                      print C4::AR::Filtros::link_to( text =>     "<i class='icon-download-alt'></i> [% 'Importaciones' | i18n %]",
-                                                                                      url =>      "[% url_prefix %]/herramientas/importacion/importar.pl",
-                                                                                      title =>    "[% 'Listar' | i18n %]"
-                                                                                  ) ;
-                                                  [% END %]
-                                        </li>
-                                        <li>
-                                                  [% PERL %]
-                                                      print C4::AR::Filtros::link_to( text =>     "<i class='icon-download-alt'></i> [% 'Esquemas de Importaci&oacute;n' | i18n %]",
-                                                                                      url =>      "[% url_prefix %]/herramientas/importacion/esquemas_importacion.pl",
-                                                                                      title =>    "[% 'Esquemas' | i18n %]"
-                                                                                  ) ;
-                                                  [% END %]
-                                        </li>
-	                                  <li>
-	                                              [% PERL %]
-	                                                  print C4::AR::Filtros::link_to( text =>     "<i class='icon-share'></i> [% 'Exportar' | i18n %]",
-	                                                                                  url =>      "[% url_prefix %]/herramientas/exportacion/exportar.pl",
-	                                                                                  title =>    "[% 'Exportaci&oacute;n' | i18n %]"
-	                                                                              ) ;
-	                                              [% END %]
-	                                  </li>
-	              				
+                                [% IF socio_data.object.esAdmin %]
+	                            	<li class="nav-header">[% 'Administraci&oacute;n' | i18n %]</li>	
+		              				<li class="divider"></li>
+	                            	<li>
+	                                            [% PERL %]
+	                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-lock'></i> [% 'M&eacute;todos de Autenticaci&oacute;n' | i18n %]",
+	                                                                                url =>      "[% url_prefix %]/admin/global/auth_methods.pl",
+	                                                                                title =>    "[% 'M&eacute;todos de Autenticaci&oacute;n' | i18n %]"
+	                                                                            ) ;
+	                                            [% END %]
+	                                </li>
+	                                <li>
+	                                            [% PERL %]
+	                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-envelope'></i> [% 'Configuraci&oacute;n del Mail' | i18n %]",
+	                                                                                url =>      "[% url_prefix %]/admin/global/mail_config.pl",
+	                                                                                title =>    "[% 'Configuraci&oacute;n del Mail' | i18n %]"
+	                                                                            ) ;
+	                                            [% END %]
+	                                </li>
+	                                                            
+	                                <li>
+	                                            [% PERL %]
+	                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'Configuraci&oacute;n LDAP' | i18n %]",
+	                                                                                url =>      "[% url_prefix %]/admin/global/ldap_config.pl",
+	                                                                                title =>    "[% 'Configuraci&oacute;n LDAP' | i18n %]"
+	                                                                            ) ;
+	                                            [% END %]
+	                                </li>
+	                            	<li class="nav-header">[% 'Importar' | i18n %]</li>	
+		              				<li class="divider"></li>
+	             							<li>
+	                                           			[% PERL %]
+	                                                      print C4::AR::Filtros::link_to( text =>     "<i class='icon-download-alt'></i> [% 'Nueva Importaci&oacute;n' | i18n %]",
+	                                                                                      url =>      "[% url_prefix %]/herramientas/importacion/subirNuevaImportacion.pl",
+	                                                                                      title =>    "[% 'Nueva' | i18n %]"
+	                                                                                  ) ;
+	                                                  [% END %]
+	                                        </li>
+	                                        <li>
+	                                                  [% PERL %]
+	                                                      print C4::AR::Filtros::link_to( text =>     "<i class='icon-download-alt'></i> [% 'Importaciones' | i18n %]",
+	                                                                                      url =>      "[% url_prefix %]/herramientas/importacion/importar.pl",
+	                                                                                      title =>    "[% 'Listar' | i18n %]"
+	                                                                                  ) ;
+	                                                  [% END %]
+	                                        </li>
+	                                        <li>
+	                                                  [% PERL %]
+	                                                      print C4::AR::Filtros::link_to( text =>     "<i class='icon-download-alt'></i> [% 'Esquemas de Importaci&oacute;n' | i18n %]",
+	                                                                                      url =>      "[% url_prefix %]/herramientas/importacion/esquemas_importacion.pl",
+	                                                                                      title =>    "[% 'Esquemas' | i18n %]"
+	                                                                                  ) ;
+	                                                  [% END %]
+	                                        </li>
+		                                  <li>
+		                                              [% PERL %]
+		                                                  print C4::AR::Filtros::link_to( text =>     "<i class='icon-share'></i> [% 'Exportar' | i18n %]",
+		                                                                                  url =>      "[% url_prefix %]/herramientas/exportacion/exportar.pl",
+		                                                                                  title =>    "[% 'Exportaci&oacute;n' | i18n %]"
+		                                                                              ) ;
+		                                              [% END %]
+		                                  </li>
+              					[% END %]
                    </ul>
                </li>
           </ul>

@@ -108,10 +108,15 @@
 		     		    <input type="checkbox" id="[% prestamo.getId_prestamo %]" name="prestamo" >
 				    </td>
 		      	    <td>
-		                [% prestamo.socio.persona.getApeYNom %]
+		      	      [% TRY %]
+		                  [% prestamo.socio.persona.getApeYNom %]
+		              [% CATCH %]
+		                  [% 'Usuario inexistente' | i18n %]
+		              [% END %]
 				    </td>
 		      	    <td>
-		                [% PERL %]
+                      [% TRY %]
+                        [% PERL %]
                             print C4::AR::Filtros::link_to(   text   => "[% prestamo.socio.getNro_socio %]",
                                                               url    => "[% url_prefix %]/usuarios/reales/datosUsuario.pl",
                                                               params => ["nro_socio=[% prestamo.socio.getNro_socio %]"],
@@ -119,6 +124,9 @@
                                                               blank  => 1,
                                                         );
                         [% END %]
+                      [% CATCH %]
+                          [% 'Usuario inexistente' | i18n %] ([% prestamo.nro_socio %])
+                      [% END %]
 				    </td>
 				    <td>
 		          	    [% PERL %]

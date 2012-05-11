@@ -19,7 +19,7 @@ my ($template, $session, $t_params)= get_template_and_user({
 			});
 
 my $ini                         = $input->param('page') || 0;
-my $orden                       = 'titulo';
+my $orden                       = 'id DESC';
 my $url                         = C4::AR::Utilidades::getUrlPrefix()."/opac-historial_prestamos.pl?token=".$input->param('token');
 my $nro_socio                   = C4::AR::Auth::getSessionNroSocio($session);
 my ($ini,$pageNumber,$cantR)    = &C4::AR::Utilidades::InitPaginador($ini);

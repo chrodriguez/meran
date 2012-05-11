@@ -929,7 +929,7 @@ sub getHistorialPrestamos {
                                                     limit   => $cantR,
                                                     offset  => $ini,
                                                     require_objects => ['nivel3','nivel3.nivel1'],
-                                                    sort_by => ['fecha_devolucion DESC']
+                                                    sort_by => ['id_historial_prestamo DESC']
            
 );
 
@@ -941,59 +941,6 @@ sub getHistorialPrestamos {
 
 
     return($cantidad,$historialPrestamos);
-  
-
-
-#     if($orden eq 'autor'){
-#         $orden= 'cat_autor.apellido';
-#     }elsif($orden eq 'titulo'){
-#         $orden= 'cat_nivel1.titulo';
-#     }elsif($orden eq 'barcode'){
-#         $orden= 'cat_nivel3.barcode';
-#     }elsif($orden eq 'fecha_devolucion'){
-#         $orden= 'circ_prestamo.fecha_devolucion';
-#     }else{$orden= 'cat_nivel1.titulo';} #ordena por titulo por defecto
-# 
-#     my $select = "SELECT CN1.id1, RHP.fecha_prestamo, RHP.fecha_devolucion\n";
-# 
-#     my $from = "FROM rep_historial_prestamo RHP INNER JOIN cat_nivel3 CN3 ON RHP.id3 = CN3.id3\n
-#                                  INNER JOIN cat_nivel1 CN1 ON CN3.id1 = CN1.id1\n
-#                                  INNER JOIN cat_autor CA ON CN1.autor = CA.id\n" ;
-# 
-#     my $where = "WHERE (RHP.nro_socio = ? )\n";
-#     my $limit = "LIMIT ".$ini.", ".$cantR."\n";
-#     my $query = $select.$from.$where.$limit;
-# 
-#     my $dbh = C4::Context->dbh;
-#     my $sth = $dbh->prepare($query);
-#     $sth->execute($nro_socio);
-#     my @prestamos_array;
-#     my $dateformat = C4::Date::get_date_format();
-# 
-#     while(my $data=$sth->fetchrow_hashref){
-#         $data->{'fecha_prestamo'} = C4::Date::format_date_in_iso($data->{'fecha_prestamo'},$dateformat);
-#         $data->{'fecha_devolucion'} = C4::Date::format_date_in_iso($data->{'fecha_devolucion'},$dateformat);
-#         push(@prestamos_array,$data);
-#     }
-#     my ($obj_for_log) = {};
-#     my ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log, @prestamos_array);
-# 
-#     C4::AR::Debug::debug("ARRAY PRESTAMOS".$resultsarray);
-#         C4::AR::Utilidades::printARRAY($resultsarray);
-# 
-#     my $count = "SELECT COUNT(*) AS cantidad\n".$from.$where;
-#     $sth = $dbh->prepare($count);
-#     $sth->execute($nro_socio);
-#     my $total_found = $sth->fetchrow_hashref;
-#     $total_found = $total_found->{'cantidad'};
-#     if ($total_found == 0){
-#         $resultsarray = 0;
-#     }
-# 
-#     
-#     return ($total_found, $resultsarray);
-
-   
 
 }
 
