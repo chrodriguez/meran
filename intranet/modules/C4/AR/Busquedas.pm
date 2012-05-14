@@ -58,6 +58,7 @@ use vars qw(@EXPORT_OK @ISA);
     busquedaSignaturaBetween
     busquedaPorEstante
     busquedaEstanteDeGrupo
+    busquedaPorId
     filtrarPorAutor
     MARCRecordById3
     MARCDetail
@@ -1046,7 +1047,7 @@ sub busquedaAvanzada_newTemp{
     if ($params->{'tema'} ne ""){
         C4::AR::Debug::debug("tema en el pm : ".$params->{'tema'});
         $keyword = unac_string('utf8',$params->{'tema'});
-        $query .= ' @string "'."cat_tema%".$sphinx->EscapeString($keyword).'*"';
+        $query .= ' @string "'."cat_tema%".$sphinx->EscapeString($keyword).'"~8';
     }
 
     
@@ -1113,7 +1114,59 @@ sub busquedaAvanzada_newTemp{
 }
 
 
+sub busquedaPorId{
+    my ($string,$session) = @_;
 
+    use Sphinx::Search;
+    use Text::Unaccent;
+    
+    my $sphinx          = Sphinx::Search->new();
+
+    my $query   = '';
+    my $tipo    = 'SPH_MATCH_EXTENDED';
+    my $keyword;
+   
+    $keyword = unac_string('utf8',$string);
+    $query .= ' @id "'.$sphinx->EscapeString($keyword).'"';
+    
+
+    my $tipo_match = C4::AR::Utilidades::getSphinxMatchMode($tipo);
+
+    $sphinx->SetMatchMode($tipo_match);
+    
+    
+    $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
+#     $sphinx->SetLimits($params->{'ini'}, $params->{'cantR'});
+
+    # NOTA: sphinx necesita el string decode_utf8
+   
+    my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
+    
+    my $results = $sphinx->Query($query, $index_to_use);
+
+    my @id1_array;
+    my $matches = $results->{'matches'};
+    my $total_found = $results->{'total_found'};
+    my %params = {};
+    $params{'total_found'} = $total_found;
+
+    foreach my $hash (@$matches){
+        my %hash_temp = {};
+        $hash_temp{'id1'} = $hash->{'doc'};
+        $hash_temp{'hits'} = $hash->{'weight'};
+
+        push (@id1_array, \%hash_temp);
+    }
+
+    my ($total_found_paginado, $resultsarray);
+    #arma y ordena el arreglo para enviar al cliente
+    ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1(\%params, @id1_array);
+    #se loquea la busqueda
+
+    C4::AR::Busquedas::logBusqueda(\%params, $session);
+
+    return ($total_found, $resultsarray);
+}
 
 sub busquedaPorTema{
     

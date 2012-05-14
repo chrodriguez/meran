@@ -2098,7 +2098,9 @@ function CrearAutocompleteEditoriales(options){_CrearAutocomplete({IdInput:optio
 function CrearAutocompleteAyudaMARC(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_ayuda_marc',callBackFunction:options.callBackFunction,});}
 function CrearAutocompleteUI(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,accion:'autocomplete_UI',callBackFunction:options.callBackFunction,});}
 function CrearAutocompleteCatalogo(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,IdInputAutor:options.IdInputAutor,accion:'autocomplete_catalogo',callBackFunction:options.callBackFunction,});}
-function CrearAutocompleteNivel2(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,IdInputAutor:options.IdInputAutor,accion:'autocomplete_nivel2',callBackFunction:options.callBackFunction,});}var hexcase=0;var b64pad="";var chrsz=8;function hex_md5(s){return binl2hex(core_md5(str2binl(s),s.length*chrsz));}
+function CrearAutocompleteNivel2(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,IdInputAutor:options.IdInputAutor,accion:'autocomplete_nivel2',callBackFunction:options.callBackFunction,});}
+function CrearAutocompleteCatalogoId(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,IdInputAutor:options.IdInputAutor,accion:'autocomplete_catalogo_id',callBackFunction:options.callBackFunction,});}
+function CrearAutocompleteNivel2Id(options){_CrearAutocomplete({IdInput:options.IdInput,IdInputHidden:options.IdInputHidden,IdInputAutor:options.IdInputAutor,accion:'autocomplete_nivel2_id',callBackFunction:options.callBackFunction,});}var hexcase=0;var b64pad="";var chrsz=8;function hex_md5(s){return binl2hex(core_md5(str2binl(s),s.length*chrsz));}
 function b64_md5(s){return binl2b64(core_md5(str2binl(s),s.length*chrsz));}
 function str_md5(s){return binl2str(core_md5(str2binl(s),s.length*chrsz));}
 function hex_hmac_md5(key,data){return binl2hex(core_hmac_md5(key,data));}

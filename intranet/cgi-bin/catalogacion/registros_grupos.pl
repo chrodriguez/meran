@@ -8,7 +8,7 @@ use C4::AR::Auth;
 my $input = new CGI;
 
 my ($template, $session, $t_params) =  get_template_and_user ({
-            template_name   => 'circ/sanciones.tmpl',
+            template_name   => 'catalogacion/registros_grupos.tmpl',
             query       => $input,
             type        => "intranet",
             authnotrequired => 0,

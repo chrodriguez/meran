@@ -27,7 +27,7 @@ sub agregar{
     my ($self)      = shift;
     my ($params)    = @_;    
     my $usuario     = C4::AR::Auth::getSessionNroSocio();
-    
+
     $self->setTitulo($params->{'titulo'}[0]);
     $self->setContenido($params->{'contenido'}[0]);
     $self->setCategoria($params->{'categoria'}[0]);

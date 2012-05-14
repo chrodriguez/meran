@@ -245,3 +245,22 @@ function CrearAutocompleteNivel2(options){
                             callBackFunction: options.callBackFunction,
                     });
 }
+
+function CrearAutocompleteCatalogoId(options){
+    _CrearAutocomplete({	IdInput: options.IdInput, 
+							IdInputHidden: options.IdInputHidden,
+							IdInputAutor: options.IdInputAutor,
+							accion: 'autocomplete_catalogo_id', 
+							callBackFunction: options.callBackFunction,
+					});
+}
+
+//TODO estoy probando el link de analiticas
+function CrearAutocompleteNivel2Id(options){
+    _CrearAutocomplete({   IdInput: options.IdInput, 
+                           IdInputHidden: options.IdInputHidden,
+                           IdInputAutor: options.IdInputAutor,
+                           accion: 'autocomplete_nivel2_id', 
+                           callBackFunction: options.callBackFunction,
+                   });
+}

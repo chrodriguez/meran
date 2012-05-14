@@ -14,13 +14,15 @@
 				[% END %]
 			[% END %]
 		<br>
-          <small>[% "Disponibilidad Actual Para Pr&eacute;stamo: " | i18n %] [% cantParaPrestamoActual %] [% " " | i18n %]</small>
-          <small>[% "Disponibilidad Actual Para Sala de Lectura: " | i18n %] [% cantParaSalaActual %] [% " " | i18n %]</small>
-
-          <small>[% "Cantidad Actual de Reservas:  " | i18n %] [% cantReservas %]</small>
-      
-          <small>[% "Cantidad Actual de Pr&eacute;stamos:" | i18n %] [% cantPrestados%]</small>
-			             
+		
+		  [% IF mostrarDetalleDisponibilidad %]
+	          <small>[% "Disponibilidad Actual Para Pr&eacute;stamo: " | i18n %] [% cantParaPrestamoActual %] [% " " | i18n %]</small>
+	          <small>[% "Disponibilidad Actual Para Sala de Lectura: " | i18n %] [% cantParaSalaActual %] [% " " | i18n %]</small>
+	
+	          <small>[% "Cantidad Actual de Reservas:  " | i18n %] [% cantReservas %]</small>
+	      
+	          <small>[% "Cantidad Actual de Pr&eacute;stamos:" | i18n %] [% cantPrestados%]</small>
+		  [% END %]			             
       	</blockquote>
 			
            [% IF CirculationEnabled %]

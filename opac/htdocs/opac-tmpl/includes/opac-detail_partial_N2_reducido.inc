@@ -42,7 +42,10 @@
                                             
                                                 
 	                                      </dl>
-                                          <p>[% 'Puede solicitar m&aacute;s f&aacute;cilmente el ejemplar con:' | i18n %] <strong> [% HTML.escape(primer_signatura) %]</strong></p>
+	                                      
+	                                      [% IF mostrarSignaturaEnDetalleOPAC %]
+                                          	<p>[% 'Puede solicitar m&aacute;s f&aacute;cilmente el ejemplar con:' | i18n %] <strong> [% HTML.escape(primer_signatura) %]</strong></p>
+                                          [% END %]
 											[% IF tiene_indice %]
 												[% PERL %]
 														print C4::AR::Filtros::action_button(  
