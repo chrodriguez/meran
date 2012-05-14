@@ -6,6 +6,29 @@
 
 <script>
 
+    function exportarXLS(){
+
+            $("#tablaResult").tabletojson({
+                    headers: "Valor, Campo, Usuario, Fecha",
+                    attribHeaders: "{}",
+                    returnElement: "#table",
+                    complete: function(x){
+                        objAH                     = new AjaxHelper(updateExportarXLS);
+                        objAH.url                 = URL_PREFIX+'/reports/exportaciones_reportes.pl';
+                        objAH.debug               = true;
+                        objAH.showOverlay         = true;
+                        objAH.table               = JSONstring.toObject(x);
+                        objAH.tipoAccion          = 'EXPORTAR_XLS';
+                        objAH.sendToServer();
+                    }
+              })
+      }
+
+
+     function updateExportarXLS(responseText){
+           
+     }
+
     
     $(document).ready(function(){
     });
