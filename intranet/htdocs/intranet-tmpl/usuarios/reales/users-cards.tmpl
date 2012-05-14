@@ -11,46 +11,6 @@
         objAH.sendToServer();
     }
 
-/*
-  function consultar(orden){
-            objAH=new AjaxHelper(updateInfo);
-            objAH.debug= true;
-            objAH.showOverlay       = true;
-            objAH.url=URL_PREFIX+"/usuarios/reales/users-cardsResult.pl";
-            objAH.surname1=$("#surname1").val();
-            objAH.surname2=$("#surname2").val();
-            objAH.legajo1= $("#legajo1").val();
-            objAH.legajo2= $("#legajo2").val();
-            objAH.categoria_socio=$("#categoria_socio_id").val();
-            objAH.ui=$("#ui_id").val();
-            objAH.funcion = 'changePage';
-            objAH.op='search';
-            objAH.inicial = '0';
-            //se envia la consulta
-            objAH.sendToServer();*/
-//         }
-//     }
-  
-//      function generarCarnets(orden){
-//             objAH=new AjaxHelper();
-//             objAH.debug= true;
-//             objAH.showOverlay       = true;
-//             objAH.url=URL_PREFIX+"/usuarios/reales/users-cards.pl";
-//             objAH.apellido1=$("#surname1").val();
-//             objAH.apellido2=$("#surname2").val();
-//             objAH.legajo1= $("#legajo1").val();
-//             objAH.legajo2= $("#legajo2").val();
-//             objAH.categoria_socio=$("#categoria_socio_id").val();
-//             objAH.ui=$("#ui_id").val();
-//             objAH.funcion = 'changePage';
-//             objAH.op='pdf';
-//             objAH.export=1;
-//             objAH.inicial = '0';
-//             //se envia la consulta
-//             objAH.sendToServer();
-//                $('#form_cards_gen').submit();
-
-
     function consultar(op,orden){
          var sur1=$("#surname1").val();
          var sur2=$("#surname2").val();
@@ -99,14 +59,13 @@
 </script>
 
 <!--<div class="titulos" >[% "Generar Carnets de Usuarios" | i18n %]</div>-->
-<fieldset class="formulario_busqueda">
-    <legend class="titulo_legend"><span class="titulos">[% 'Generar Carnets de Usuarios' | i18n %]</span></legend>   
 
 <div class="filtros_reportes">
 
-<fieldset>
   <section class="center-section-form"> 
     <form class="form-horizontal" name="filtros_reportes" id="filtros_reportes" onsubmit="return false;">
+      <fieldset>
+        <legend class="titulo_legend"><span class="titulos">[% 'Generar Carnets de Usuarios' | i18n %]</span></legend>   
         <div class="control-group">
                   <label class="control-label" for="apellido">[% "Apellido" | i18n %]</label>
                   <div class="controls">
@@ -167,7 +126,7 @@
 <!-- Formulario para poder crear el pdf -->
 <div id="formulario">
 </div>
-</fieldset>
+
 [% INCLUDE "intranet-bottom.inc" %]
 
 

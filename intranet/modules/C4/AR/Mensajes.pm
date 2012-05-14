@@ -616,7 +616,6 @@ sub getMensaje {
     
         C4::AR::Debug::debug("mensaje de INTRA");
         $msj = $mensajesINTRA{$codigo};
-     
     }
 
     my $p;
