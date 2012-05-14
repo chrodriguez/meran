@@ -474,27 +474,11 @@
 	                                </li>
 	                            	<li class="nav-header">[% 'Importar' | i18n %]</li>	
 		              				<li class="divider"></li>
-	             							<li>
-	                                           			[% PERL %]
-	                                                      print C4::AR::Filtros::link_to( text =>     "<i class='icon-download-alt'></i> [% 'Nueva Importaci&oacute;n' | i18n %]",
-	                                                                                      url =>      "[% url_prefix %]/herramientas/importacion/subirNuevaImportacion.pl",
-	                                                                                      title =>    "[% 'Nueva' | i18n %]"
-	                                                                                  ) ;
-	                                                  [% END %]
-	                                        </li>
 	                                        <li>
 	                                                  [% PERL %]
-	                                                      print C4::AR::Filtros::link_to( text =>     "<i class='icon-download-alt'></i> [% 'Importaciones' | i18n %]",
+	                                                      print C4::AR::Filtros::link_to( text =>     "<i class='icon-download-alt'></i> [% 'Importar' | i18n %]",
 	                                                                                      url =>      "[% url_prefix %]/herramientas/importacion/importar.pl",
 	                                                                                      title =>    "[% 'Listar' | i18n %]"
-	                                                                                  ) ;
-	                                                  [% END %]
-	                                        </li>
-	                                        <li>
-	                                                  [% PERL %]
-	                                                      print C4::AR::Filtros::link_to( text =>     "<i class='icon-download-alt'></i> [% 'Esquemas de Importaci&oacute;n' | i18n %]",
-	                                                                                      url =>      "[% url_prefix %]/herramientas/importacion/esquemas_importacion.pl",
-	                                                                                      title =>    "[% 'Esquemas' | i18n %]"
 	                                                                                  ) ;
 	                                                  [% END %]
 	                                        </li>

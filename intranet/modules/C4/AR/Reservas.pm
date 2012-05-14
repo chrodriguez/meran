@@ -726,7 +726,8 @@ sub obtenerReservasDeSocio {
                                                     db => $db,
                                                     query => [ nro_socio => { eq => $socio }, estado => {ne => 'P'}],
                                                     require_objects     => [ 'nivel3.nivel2' ], # INNER JOIN
-                                                    with_objects        => [ 'nivel3' ] #LEFT JOIN
+                                                    with_objects        => [ 'nivel3' ], #LEFT JOIN
+                                                    sorty_by            => ['circ_reserva.id_reserva DESC'],
                                 ); 
 
     if(scalar(@$reservas_array_ref) > 0){
