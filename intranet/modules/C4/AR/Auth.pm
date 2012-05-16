@@ -252,7 +252,9 @@ sub checkBrowser{
 =cut
 
 sub _generarNroRandom {
-    return (int(rand()*100000));  
+    my $nroRandom = (int(rand()*100000));
+    C4::AR::Debug::debug("generarNroRandom -> nro generado : " . $nroRandom);
+    return $nroRandom;  
 }
 =item sub 
     Función que devuelve el codigo de mensaje 
@@ -480,6 +482,7 @@ sub inicializarAuth{
 
     #Guardo la sesion en la base
     #FIXME C4::AR::Auth::_save_session_db($session->param('sessionID'), undef, $params{'ip'} , $params{'nroRandom'}, $params{'token'});
+    C4::AR::Debug::debug("inicializarAuth - > " . $session->param('sessionID') . " nroRandom : " . $session->param('nroRandom'));
     $t_params->{"nroRandom"}        = $params{'nroRandom'};
     $t_params->{"plainPassword"}    = C4::Context->config('plainPassword');
     $t_params->{'socio_data'}       = undef;
@@ -644,28 +647,31 @@ sub _verificarSession {
     my $valido_token=C4::Context->config("token") || 0;
     my $code_MSG;
 
- 
-    my $type_session    = C4::AR::Utilidades::capitalizarString($session->param('type'));
-    $type               = C4::AR::Utilidades::capitalizarString($type);
-    
-    if ($type ne $type_session){
-        C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => SESSION INVALIDA, VENIA DESDE OPAC/INTRA HACIA INTRA/OPAC");
-        
-        if ($type eq "Opac"){
-        	$code_MSG = "U607";
-        }else{
-        	$code_MSG = "U601";
-        }
-        	    
-    	return ($code_MSG,"sesion_invalida");
-    }
-    
+    C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => type ($type) != type_session (".$session->param('type').")");
+      
     if(defined $session and $session->is_expired()){
         #EXPIRO LA SESION
         $code_MSG='U355';     
         C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => expiro");    
     } else {
         #NO EXPIRO LA SESION
+           
+        my $type_session    = C4::AR::Utilidades::capitalizarString($session->param('type'));
+        $type               = C4::AR::Utilidades::capitalizarString($type);
+        
+        if ($type ne $type_session){
+            #Esta pasando de la intra al opac o al revés
+            C4::AR::Debug::debug("C4::AR::Auth::_verificarSession => SESSION INVALIDA, VENIA DESDE OPAC/INTRA HACIA INTRA/OPAC -- type ($type) != type_session ($type_session)");
+        
+            if ($type eq "Opac"){
+            	$code_MSG = "U607";
+            }else{
+            	$code_MSG = "U601";
+            }
+            
+    	    return ($code_MSG,"sesion_invalida");
+        }
+        
         _init_i18n({ type => $type });
         if ($session->param('userid')) {
 
@@ -731,12 +737,15 @@ sub checkauth {
     my $token=_obtenerToken($query);
     my $loggedin = 0;
     my ($session) = CGI::Session->load();
-  
+  C4::AR::Debug::debug("antes del if existe sesion en checkauth, nroRandom - > " . $session->param('nroRandom') . " sessionid : " . $session->param('sessionID'));
     my $userid= undef;
    
     if ($session){
+        C4::AR::Debug::debug("existe sesion en checkauth");
+        C4::AR::Debug::debug("existe sesion en checkauth, nroRandom - > " . $session->param('nroRandom') . " sessionid : " . $session->param('sessionID'));
         $userid= $session->param('userid');
     }else{
+        C4::AR::Debug::debug("NO existe sesion en checkauth, se generara");
     	$session = _generarSession();
     }
     my $flags=0;
@@ -833,6 +842,7 @@ sub checkauth {
 					$userid           = $query->param('userid');
 					my $password      = $query->param('password');
 					my $nroRandom     = $session->param('nroRandom');
+					C4::AR::Debug::debug("checkauth -> nroRandom en sesion Auth.pm -> " . $nroRandom . " sessionId : " . $sessionID);
 					$session->param('username_input',$userid);
 					my $error_login	= 0;
 					my $mensaje;
@@ -1031,12 +1041,14 @@ sub getSessionNroRandom {
     }
     
     if ($session->param('nroRandom')){
-    	C4::AR::Debug::debug("------------------------------ NRO RANDOM DE SESSION --------------- : ".$session->param('nroRandom'));
+    	C4::AR::Debug::debug("getSessionNroRandom -> NRO RANDOM DE SESSION EXISTENTE : " . $session->param('nroRandom'));
         return $session->param('nroRandom');
     }else{
     	my $nroRandom = _generarNroRandom();
-
+    	
     	$session->param('nroRandom',$nroRandom);
+    	C4::AR::Debug::debug("getSessionNroRandom -> NRO RANDOM DE SESSION RECIEN GENERADO EN PERL : ".$session->param('nroRandom'));
+    	C4::AR::Debug::debug("getSessionNroRandom-> NRO RANDOM DE SESSION RECIEN GENERADO EN SESION : ".$session->param('nroRandom'));
 
         return $nroRandom;
     }
@@ -1389,14 +1401,15 @@ sub _checkRequisito{
 
 =cut
 sub _verificarPassword {
+	my ($userid, $password, $nroRandom) = @_;
     my ($socio) = undef;
 	my $metodosDeAutenticacion= C4::AR::Preferencias::getMetodosAuth();
 	my $metodo;
 
 	while (scalar(@$metodosDeAutenticacion) && (!(defined $socio)) ) {
 			$metodo = shift(@$metodosDeAutenticacion);
-			$socio  = _autenticar(@_,$metodo);
-			C4::AR::Debug::debug("Socio ".$socio." METODO ".$metodo);
+			C4::AR::Debug::debug("Socio ".$userid." METODO ".$metodo . " nroRandom " . $nroRandom);
+			$socio  = _autenticar($userid, $password, $nroRandom, $metodo);
     }
 
 	return $socio;
@@ -1411,7 +1424,7 @@ sub _autenticar{
 	my ($userid, $password, $nroRandom,$metodo) = @_;
 	my $socio = undef;
 	eval{
-		C4::AR::Debug::debug("metodo ".$metodo." userid ".$userid);
+		C4::AR::Debug::debug("metodo ".$metodo." userid ".$userid . " nroRandom : " . $nroRandom);
 		switch ($metodo){
 			case "ldap" {
                 ($socio) = C4::AR::Authldap::checkPassword($userid,$password,$nroRandom); 

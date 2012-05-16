@@ -11,15 +11,12 @@
             print C4::AR::Filtros::tableHeader(   
                               id              => "tablaResultCirculacion",
                               columns         => ['[% "Autor" | i18n %]','[% 'T&iacute;tulo' | i18n %]',
-                                                  '[% 'Estado' | i18n %]','[% "Usuario" | i18n %]',
-                                                  '[% "Categor&iacute;a" | i18n %]',
+                                                  '[% "Usuario" | i18n %]',
                                                   
                                                   ],
                               order           => {  'Autor'             => 'autor', 
                                                     'T&iacute;tulo'     => 'titulo',
-                                                    'Estado'            => 'estado', 
                                                     'Usuario'           => 'usuario',
-                                                    'Categor&iacute;a'  => 'categoria'
                                                   } ,   
                               order_name_function => "reporte_circ",                            
                                     ) ;
@@ -29,17 +26,17 @@
               [% FOREACH res IN results %]   
                 <tr>
                   <td>
-                      [% res.valor %]
+                      [% res.nivel1.getAutor %]
                   </td>
                   <td>
-                      [% res.campo %]
+                      [% res.nivel1.getTitulo %]
                   </td>
                   <td>
                       [% IF nro_socio %] 
                                 [% PERL %]
-                                      print C4::AR::Filtros::link_to(   text =>     "[% nro_socio %]",
+                                      print C4::AR::Filtros::link_to(   text =>     "[% res.nro_socio %]",
                                                             url=>"      [% url_prefix %]/usuarios/reales/datosUsuario.pl", 
-                                                            params =>   ["nro_socio=[% nro_socio %]"],
+                                                            params =>   ["nro_socio=[% res.nro_socio %]"],
                                                             title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
                                                       );
                                 [% END %]             
@@ -48,12 +45,6 @@
                       [% END %]
                       
 
-                  </td>
-                  <td>
-                      [% res.busqueda.fecha %]
-                  </td>
-                  <td>
-                      
                   </td>
                
                 </tr>
