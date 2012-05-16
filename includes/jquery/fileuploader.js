@@ -485,8 +485,8 @@ qq.FileUploader = function(o){
         listElement: null,
                 
         template: '<div class="qq-uploader">' + 
-                '<div class="qq-upload-drop-area"><span>Arraste el archivo aqui para subir</span></div>' +
-                '<div class="qq-upload-button">Subir archivo</div>' +
+                '<div class="alert alert-error drop-area"><span>'+ARRASTRAR_IMAGEN+'</span></div>' +
+                '<div class="alert alert-success button-image">'+SUBIR_IMAGEN+'</div>' +
                 '<ul class="qq-upload-list"></ul>' + 
              '</div>',
 
@@ -501,8 +501,8 @@ qq.FileUploader = function(o){
         
         classes: {
             // used to get elements from templates
-            button: 'qq-upload-button',
-            drop: 'qq-upload-drop-area',
+            button: 'button-image',
+            drop: 'drop-area',
             dropActive: 'qq-upload-drop-area-active',
             list: 'qq-upload-list',
                         
@@ -758,7 +758,7 @@ qq.UploadButton = function(o){
         // name attribute of file input
         name: 'file',
         onChange: function(input){},
-        hoverClass: 'qq-upload-button-hover',
+        hoverClass: 'alert alert-info',
         focusClass: 'qq-upload-button-focus'                       
     };
     

@@ -44,7 +44,8 @@
     TARJETA_NRO= "[% ' -  Tarjeta nro ' | i18n %]";
     DATOS_ENVIADOS_INCORRECTOS= "[% 'No se recibieron datos del servidor, posiblemente debido a que se ha enviado informacion incorrecta.' | i18n %]";
     // fin mensaje compuesto
-
+	SUBIR_IMAGEN = "[% 'Seleccionar imagen' | i18n %]";
+	ARRASTRAR_IMAGEN = "[% 'Arrastre para subir la imagen' | i18n %]";
     SUPER_USER_GRANTED = "[% 'Ha concedido algunos permisos de super usuario, esta seguro que quiere continuar' | i18n %]?";
     PERMISSION_GRANTED = "[% 'Ha concedido permisos, esta seguro que quiere continuar' | i18n %]?";
 

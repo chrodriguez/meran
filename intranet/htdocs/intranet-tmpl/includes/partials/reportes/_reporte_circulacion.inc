@@ -84,9 +84,9 @@
             <label for="tipoReserva" class="control-label">[% 'Tipo de reserva' | i18n %]</label>  
             <div class="controls">
                 <select name="tipoReserva" id="tipoReserva">
-                    <option>Ejemplar</option>
-                    <option>Grupo</option>
-                    <option>TODAS</option>
+                    <option value="ejemplar">Ejemplar</option>
+                    <option value="grupo">Grupo</option>
+                    <option value="">TODAS</option>
                 </select>
             </div>
         </div>
@@ -124,9 +124,9 @@
             <label for="estadoReserva" class="control-label">[% 'Estado de reserva' | i18n %]</label>  
             <div class="controls">
                 <select name="estadoReserva" id="estadoReserva">
-                    <option>Asignada</option>
-                    <option>Anulada</option>
-                    <option>Vencida</option>
+                    <option value="asignada">Asignada</option>
+                    <option value="anulada">Anulada</option>
+                    <option value="vencida">Vencida</option>
                 </select>
             </div>
         </div>

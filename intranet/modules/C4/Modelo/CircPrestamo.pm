@@ -254,7 +254,9 @@ sub prestar {
 # Si no esta prestado se puede hacer lo de abajo, lo que sigue (estaba pensado para esa situacion).
 # Tener en cuenta los prestamos especiales, $tipo_prestamo ==> ES ---> SA. **** VER!!!!!!
 	my $disponibilidad = C4::AR::Reservas::getDisponibilidad($id3);
-	if ( $cant == 1 && $disponibilidad eq "Domiciliario" ) {
+	
+	my $ejemplar  = C4::AR::Nivel3::getNivel3FromId3($id3);
+	if ( $cant == 1 && $ejemplar->esParaPrestamo ) {
 
 		#El usuario ya tiene la reserva,
 		$self->debug( "El usuario ya tiene una reserva ID::: " . $reservas->[0]->getId_reserva );
@@ -271,79 +273,77 @@ sub prestar {
 		}
 
 	}
-	elsif ( $cant == 1 && $disponibilidad eq "Sala de Lectura" ) {
 
-#FALTA!!! SE PUEDE PONER EN EL ELSE???
-#llamar a la funcion verificaciones!!
-#verificar disponibilidad del item??? ya esta prestado- hay libre para prestamo de SALA.
-#es un prestamo ES ?????? ****VER****
-	}
 	else {
-
-		#NO EXITE LA RESERVA -> HAY QUE RESERVAR!!!
-		$self->debug("NO EXITE LA RESERVA -> HAY QUE RESERVAR!!!");
-
-		my $seReserva = 1;
-
-		#Se verifica disponibilidad del item;
-		my $reserva = C4::AR::Reservas::getReservaDeId3($id3,$self->db);
-
-		if ($reserva) {
-			$self->debug("El item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario");
-
-#el item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario
-			my ($nivel3) = C4::AR::Reservas::getNivel3ParaReserva( $params->{'id2'},$self->db );
-			if ($nivel3) {
-
-		 #CAMBIAMOS EL ID3 A OTRO LIBRE Y ASI LIBERAMOS EL QUE SE QUIERE PRESTAR
-				$self->debug("CAMBIAMOS EL ID3 A OTRO LIBRE Y ASI LIBERAMOS EL QUE SE QUIERE PRESTAR : Reserva: ".$reserva->getId_reserva." Nuevo id3: ".$nivel3->getId3);
-				$reserva->setId3( $nivel3->getId3 );
-				$reserva->save();
-
-				# el id3 de params quedo libre para ser reservado
-
-			}
-			else {
-				$self->debug("NO HAY EJEMPLARES LIBRES PARA EL PRESTAMO");
-
-   # NO HAY EJEMPLARES LIBRES PARA EL PRESTAMO, SE PONE EL ID3 EN "" PARA QUE SE
-   # REALIZE UNA RESERVA DE GRUPO, SI SE PERMITE.
-				$params->{'id3'} = "";
-				if (!C4::AR::Preferencias::getValorPreferencia('intranetGroupReserve')){
-
-					#NO SE PERMITE LA RESERVA DE GRUPO
-					$seReserva = 0;
-
-				#Hay error no se permite realizar una reserva de grupo en intra.
-					$self->debug("Hay error no se permite realizar una reserva de grupo en intra");
-					$msg_object->{'error'} = 1;
-					C4::AR::Mensajes::add( $msg_object,
-						{ 'codMsg' => 'R004', 'params' => [] } );
+        if (($cant == 1) && ($ejemplar->esParaSala) && (!C4::AR::Preferencias::getValorPreferencia("prestar_mismo_grupo_distintos_tipos_prestamo"))){
+        	$msg_object->{'error'} = 1;
+            C4::AR::Mensajes::add( $msg_object,{ 'codMsg' => 'R005', 'params' => [] } );
+        }else{
+			#NO EXITE LA RESERVA -> HAY QUE RESERVAR!!!
+			$self->debug("NO EXITE LA RESERVA -> HAY QUE RESERVAR!!!");
+	
+			my $seReserva = 1;
+	
+			#Se verifica disponibilidad del item;
+			my $reserva = C4::AR::Reservas::getReservaDeId3($id3,$self->db);
+	
+			if ($reserva) {
+				$self->debug("El item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario");
+	
+	#el item se encuentra reservado, y hay que buscar otro item del mismo grupo para asignarlo a la reserva del otro usuario
+				my ($nivel3) = C4::AR::Reservas::getNivel3ParaReserva( $params->{'id2'},$self->db );
+				if ($nivel3) {
+	
+			 #CAMBIAMOS EL ID3 A OTRO LIBRE Y ASI LIBERAMOS EL QUE SE QUIERE PRESTAR
+					$self->debug("CAMBIAMOS EL ID3 A OTRO LIBRE Y ASI LIBERAMOS EL QUE SE QUIERE PRESTAR : Reserva: ".$reserva->getId_reserva." Nuevo id3: ".$nivel3->getId3);
+					$reserva->setId3( $nivel3->getId3 );
+					$reserva->save();
+	
+					# el id3 de params quedo libre para ser reservado
+	
 				}
 				else {
-
-					#SE PERMITE LA RESERVA DE GRUPO
-					$self->debug(
-						"No hay error, se realiza una reserva de grupo");
-
-					#No hay error, se realiza una reserva de grupo.
-					$msg_object->{'error'} = 1;
-					C4::AR::Mensajes::add( $msg_object,
-						{ 'codMsg' => 'R005', 'params' => [] } );
+					$self->debug("NO HAY EJEMPLARES LIBRES PARA EL PRESTAMO");
+	
+	   # NO HAY EJEMPLARES LIBRES PARA EL PRESTAMO, SE PONE EL ID3 EN "" PARA QUE SE
+	   # REALIZE UNA RESERVA DE GRUPO, SI SE PERMITE.
+					$params->{'id3'} = "";
+					if (!C4::AR::Preferencias::getValorPreferencia('intranetGroupReserve')){
+	
+						#NO SE PERMITE LA RESERVA DE GRUPO
+						$seReserva = 0;
+	
+					#Hay error no se permite realizar una reserva de grupo en intra.
+						$self->debug("Hay error no se permite realizar una reserva de grupo en intra");
+						$msg_object->{'error'} = 1;
+						C4::AR::Mensajes::add( $msg_object,
+							{ 'codMsg' => 'R004', 'params' => [] } );
+					}
+					else {
+	
+						#SE PERMITE LA RESERVA DE GRUPO
+						$self->debug(
+							"No hay error, se realiza una reserva de grupo");
+	
+						#No hay error, se realiza una reserva de grupo.
+						$msg_object->{'error'} = 1;
+						C4::AR::Mensajes::add( $msg_object,
+							{ 'codMsg' => 'R005', 'params' => [] } );
+					}
 				}
 			}
-		}
-
-		#Se realiza una reserva
-		if ($seReserva) {
-			$self->debug("Se realiza una reserva!! ");
-
-			my ($reserva) = C4::Modelo::CircReserva->new( db => $self->db );
-			my ($paramsReserva) = $reserva->reservar($params);
-			$params->{'id_reserva'} = $reserva->getId_reserva;
-			$self->debug(
-				"Se realizo la reserva ID: " . $params->{'id_reserva'} );
-		}
+	
+			#Se realiza una reserva
+			if ($seReserva) {
+				$self->debug("Se realiza una reserva!! ");
+	
+				my ($reserva) = C4::Modelo::CircReserva->new( db => $self->db );
+				my ($paramsReserva) = $reserva->reservar($params);
+				$params->{'id_reserva'} = $reserva->getId_reserva;
+				$self->debug(
+					"Se realizo la reserva ID: " . $params->{'id_reserva'} );
+			}
+        }
 	}
 
 	if ( !$msg_object->{'error'} ) {
