@@ -3481,7 +3481,7 @@ sub capitalizarString{
         $final_string .= ucfirst(lc($word))." ";
     }
 
-    return (chomp($final_string)); #Quitamos el último espacio
+    return (C4::AR::Utilidades::trim($final_string)); #Quitamos el último espacio
 }
 =item
 Esta funcion ordena una HASH de strings
