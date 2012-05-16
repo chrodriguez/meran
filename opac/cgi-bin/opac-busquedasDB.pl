@@ -35,8 +35,17 @@ $obj->{'from_suggested'}    = CGI::escapeHTML($input->param('from_suggested'));
 $obj->{'tipo_nivel3_name'}  = ($input->param('tipo_nivel3_name'));
 $obj->{'tipoBusqueda'}      = 'all';
 $obj->{'token'}             = CGI::escapeHTML($input->param('token'));
-$obj->{'orden'}             = $input->param('orden')|| "";
-$obj->{'sentido_orden'}     = $input->param('sentido_orden')|| "";
+$obj->{'orden'}             = $input->param('orden')|| "titulo";
+$obj->{'sentido_orden'}     = $input->param('sentido_orden') || 1;
+
+# if ($obj->{'sentido_orden'} eq "ASC") {
+#     $obj->{'sentido_orden'}= 1;    
+# } else {
+#      $obj->{'sentido_orden'}= 0 ;
+# }
+#     
+
+C4::AR::Debug::debug("sadfisdoifpdoisfpoidspofipods".$obj->{'sentido_orden'});
 
 C4::AR::Validator::validateParams('U389',$obj,['tipoAccion']);
 

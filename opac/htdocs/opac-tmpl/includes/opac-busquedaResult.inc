@@ -1,8 +1,7 @@
 <script type="text/javascript">
 
     ORDEN ="[% orden %]";
-    SENTIDO_ORDEN = "[% sentido_orden %]";
-
+    SENTIDO_ORDEN ="[% sentido_orden %]";
 
     function cambiarSentidoOrd(){
       if (SENTIDO_ORDEN){
@@ -162,17 +161,24 @@
           [% END %]
        [% END %]	
 
-    function ordenar_busqueda_opac(orden){
+      function ordenar_busqueda_opac(orden){
+          
+
+       
         if (orden == ORDEN) {
-              if ( SENTIDO_ORDEN ){
-                  SENTIDO_ORDEN=0;
-              } else{
-                  SENTIDO_ORDEN=1;
-              }
-        } else {
-              SENTIDO_ORDEN= 1;
-              ORDEN = orden;
+                if (SENTIDO_ORDEN == 1){
+                    alert("hay sentido orden es 1")
+                    SENTIDO_ORDEN= 0;
+                } else{
+                    SENTIDO_ORDEN= 1;
+                }
+        }  else {
+                  alert("hay sentido orden es 0")
+                  SENTIDO_ORDEN= 0;
+                  ORDEN = orden;
         }
+   
+      
         $('#orden').val(ORDEN);
         $('#sentido_orden').val(SENTIDO_ORDEN);
 

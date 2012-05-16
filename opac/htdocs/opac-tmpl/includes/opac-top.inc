@@ -37,6 +37,7 @@
     var imagesForJS         = '[% temas %]/[% tema %]/imagenes';
     var M_LIMITE_RESULTADOS = [% limite_resultados_autocompletables %] + "";
     var URL_PREFIX          = '[% url_prefix %]';
+    var SENTIDO_ORDEN;
   </script>
 
   [% INCLUDE 'message_OPAC.inc' %]
