@@ -755,6 +755,14 @@ sub checkauth {
     if ($authnotrequired) {
     	my $socio_object = getSessionSocioObject();
     	if ($userid){
+
+
+                      $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
+                      #Se verifica si el usuario tiene que cambiar la password
+                      if ( ($userid) && ( new_password_is_needed($userid, $socio) ) && !$change_password ) {
+                          _change_Password_Controller($query, $userid, $type, $token);
+                      }
+    		
     		buildSocioData($session,$socio_object);
     	}
         return ($userid, $session, $flags, $socio_object);

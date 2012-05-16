@@ -1,4 +1,6 @@
 [% USE HTML %] 
+
+
 [% IF reservas_asignadas_count %]
     <fieldset>
     <legend class="titulo_legend_resaltado">[% "Ejemplares Asignados" | i18n %]</legend>
@@ -103,7 +105,7 @@
                                                     button   => "btn btn-primary",
                                                     action => 'realizarAccion("CONFIRMAR_PRESTAMO","reseravsAsignadasResult",generaDivPrestamo);',
                                                     title   => "[% 'Prestar' | i18n %]",
-                                                    icon   => "icon-white icon-share-alt"
+                                                    icon   => "icon-white icon-share"
                         ) ;
             [% END %]
      [% ELSE %]
@@ -124,7 +126,7 @@
                    print C4::AR::Filtros::tableHeader(   
                                id              => "reseravsEsperaResult",
                                class           => "",
-                               selectAll_id    => "checkAllReservas",
+                               selectAll_id    => "",
                                columns         => ['[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]',
                                                    '[% "Ed." | i18n %]','[% "Cancelar" %]', 
                                                  ]
@@ -158,7 +160,6 @@
                                 print C4::AR::Filtros::action_button(  
                                                                     button   => "btn click btn-danger",
                                                                     action => "cancelarReserva('[% reserva.getId_reserva %]');",
-                                                                    title   => "[% 'Cancelar' | i18n %]",
                                                                     icon   => "icon-white icon-remove"
                                         ) ;
                             [% END %]

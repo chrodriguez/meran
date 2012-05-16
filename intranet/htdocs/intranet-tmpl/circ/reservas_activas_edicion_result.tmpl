@@ -1,37 +1,26 @@
 
 [% IF cantidad > 0%]
 	<fieldset class="resultados_busqueda" style="width: 680px;">
-	    <legend class="titulo_legend trigger click">[% "Resultados de la b&uacute;squeda" | i18n %]:</legend>
+	    <legend>[% "Hay " | i18n %] [% cantidad %] [% "reservas" | i18n %]</legend>
 	        <div class="datos_tabla_div" id="datos_tabla_div">
-	            <div class="resultados_consulta">[% "Total de registros" | i18n %]: [% cantidad %]</div>
-	            <div class="contenedor_paginador">[% paginador %]</div>
-	                <table id="tablaResult" class="datos_tabla" border=0 cellspacing=0 cellpadding=0 width="100%" align="center">
-	                    <tr class="titulo_tabla_resultado">
-	                
-	                        <td > [% "Apellido" | i18n %]</td>
-	                        <td > [% "Nombre" | i18n %]</td>
-	                        <td >
-	                            [% "N&uacute;mero de socio" | i18n %]
-	                        </td>
-	                        <td >[% "Fecha de reserva" | i18n %]</td>
-	                        <td >
-	                            [% "Fecha de vencimiento" | i18n %]
-	                        </td>
-	                        <td title="[% 'C&oacute;digo de barra del ejemplar' | i18n %]">
-	                            [% "C&oacute;digo de barra" | i18n %]
-	                        </td>
-	                
-	                    </tr>
+			             [% PERL %]
+			                   print C4::AR::Filtros::tableHeader(   
+			                               id              => "reseravsEsperaResult",
+			                               class           => "",
+			                               selectAll_id    => "",
+			                               columns         => ['[% "Usuario"|i18n %]','[% "Nro. de Socio"|i18n %]',
+			                                                   '[% "Fecha reserva" | i18n %]','[% "Fecha vencimiento" %]',
+			                                                   '[% "Ejemplar" %]', 
+			                                                 ]
+			                                                               
+			                                     ) ;
+			             [% END %]	   
+			       <tbody>                     
 	                [% FOREACH reserva IN reservas %]
-	                    <tr align='center'>
+	                    <tr>
 	                        <td> 
 	                            <a href="[% url_prefix %]/usuarios/reales/datosUsuario.pl?nro_socio=[% reserva.socio.getNro_socio %]">
-	                                [% reserva.socio.persona.getApellido %]
-	                            </a>
-	                        </td>
-	                        <td> 
-	                            <a href="[% url_prefix %]/usuarios/reales/datosUsuario.pl?nro_socio=[% reserva.socio.getNro_socio %]">
-	                                [% reserva.socio.persona.getNombre%]
+	                                [% reserva.socio.persona.getApellido %], [% reserva.socio.persona.getNombre%]
 	                            </a>
 	                        </td>
 	                        <td> 
@@ -58,7 +47,8 @@
 	                        </td>
 	                    </tr>
 	                [% END %]
-	                </table>
+	               </tbody>
+	          </table>
 	      </div>
 	</fieldset>
 	<br>

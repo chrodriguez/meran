@@ -183,36 +183,48 @@
 
     $(document).ready(function() {
         $('.fancylink').fancybox();
-        scrollTo('tablaResult');
     });
 </script>
 
 [% USE HTML %]
+	        	<div>
+		        	[% IF external_search %]
+					          [% IF cant_external_servers %]
+						          <div class="right" style="margin-top: 10px">
+									[% PERL %]
+										print C4::AR::Filtros::action_button( 
+											button        => "btn btn-success",
+											action       	=> 'doExternalSearches("[% buscoPor | html %]")', 
+											icon         	=> "icon-white icon-search ",
+											title        	=> "[% 'Externos' | i18n %]",
+											popover => { 
+												title   =>'[% "Atenci&oacute;n" | i18n %]',
+												text    => '[% "Buscar en servidores externos hace la misma b&uacute;squeda 
+																en cat&aacute;logos ajenos a esta biblioteca. 
+																Tenga en cuenta que puede llevar un tiempo considerable." | i18n %]',
+												placement => "left",
+											},
+											
+										) ;
+									[% END %]
+								</div>
+				          	[% END %]
+			          [% END %]
+			          
+            		<div class="page-header" style="border-bottom: none; padding-bottom: 0px;">
+            			<h3>
+		            		[% IF buscoPor %]
+		            			[% buscoPor %]
+		            		[% END %]
+	            			<small>[% 'Se han encontrado' | i18n %] [% cantidad %] [% 'resultados' | i18n %]</small>
+            			</h3>
+            		</div>
+            		
+            		
+			    </div>
+
 
 [% IF show_search_details %]
-          [% IF external_search %]
-	          [% IF cant_external_servers %]
-	          <div class="right" style="margin-top: 10px">
-					[% PERL %]
-						print C4::AR::Filtros::action_button( 
-							button        => "btn btn-success",
-							action       	=> 'doExternalSearches("[% buscoPor | html %]")', 
-							icon         	=> "icon-white icon-search ",
-							title        	=> "[% 'Externos' | i18n %]",
-							popover => { 
-								title   =>'[% "Atenci&oacute;n" | i18n %]',
-								text    => '[% "Buscar en servidores externos hace la misma b&uacute;squeda 
-												en cat&aacute;logos ajenos a esta biblioteca. 
-												Tenga en cuenta que puede llevar un tiempo considerable." | i18n %]',
-								placement => "left",
-							},
-							
-						) ;
-					[% END %]
-				</div>
-	          [% END %]
-          [% END %]
-
         <section class="center-section-form" style="margin-top: 20px" >
             <div id="datos_busqueda">
                 <form id="ordenar_tabla" action="[% url_prefix %]/opac-busquedasDB.pl" method="get">
@@ -228,24 +240,6 @@
                     <input type="hidden" id="orden" name="orden" value="[% orden %]" />
                     <input type="hidden" id="sentido_orden" name="sentido_orden" value="[% sentido_orden %]" />
                 </form>
-            </div>
-
-            <div class="well">
-                <div class="resultados_consulta">[% "Ha buscado por" | i18n %]: <strong>[% HTML.escape(buscoPor) %]</strong></div> 
-            
-	            [% IF cantidad %]
-	                <div class="resultados_consulta">[% "Total de registros" | i18n %]: <b>[% cantidad %]</b>  en ([% timeSeg %] segundos)</div>
-	            [% END %]
-
-                [% IF !from_suggested %]
-			        [% IF suggested %]
-	                    <a href="#" onclick="buscarSuggested('[% suggested %]')">
-	                        [% "Usted quiso decir" | i18n %] <span style="font-style: italic">[% suggested %]</span>?
-	                    </a>
-			        [% END %]
-			    [% END %]
-				<br />
-
             </div>
         </section>    
 

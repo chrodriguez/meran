@@ -1,10 +1,4 @@
-<script type="text/javascript" charset="utf-8">
 
-$(document).ready(function(){
-    checkTr();
-    $('.popover_button').popover({delay: { show: 800, hide: 100 },});
-});
-</script>
 
 [% USE HTML %]
 [% IF prestamos_cant %]		
@@ -113,24 +107,26 @@ $(document).ready(function(){
                   
 			</table> 
 				[% IF circularDesdeDetalleUsuario == 1 %]
-		            <div class="form-actions">
-		                      [% PERL %]
-		                              print C4::AR::Filtros::action_set_button(    
-		                                                                  title           => "[% 'Pr&eacute;stamos' | i18n %]",
-		                                                                  button          => 'btn btn-primary',
-		
-		                                                                  actions         => [
-		                                                                                      [% IF prestamos_cant %]{title => "Devolver", action=>'realizarAccion("DEVOLUCION","table_tablaPrestamos",generaDivDevolucion)',icon=>"icon-share-alt"}[% END %],
-		                                                                                      [% IF (algunoSeRenueva > 0) && (vencidos == 0) %]
-		                                                                                          {title => "Renovar", action=>'realizarAccion("RENOVACION","table_tablaPrestamos",generaDivRenovacion)', icon=>"icon-repeat"},
-	                                                                                          [% END %]
-		                                                                                      ],
-		                                                                  popover           => {title => "[% 'Pr&eacute;stamos' | i18n %]",
-		                                                                                        text => "[% 'Renovar (si aplica) o devolver ejemplares' | i18n %]" }
-		
-		                                      ) ;
-		                      [% END %]
-	                </div>
+				   [% IF prestamos_cant %]
+			            <div class="form-actions">
+			                      [% PERL %]
+			                              print C4::AR::Filtros::action_set_button(    
+			                                                                  button          => 'btn btn-primary',
+	                                                                          title => "Devolver", 
+	                                                                          action=>'realizarAccion("DEVOLUCION","table_tablaPrestamos",generaDivDevolucion)',
+	                                                                          icon=>"icon-white icon-share-alt",
+			                                                                  actions         => [
+			                                                                                      [% IF (algunoSeRenueva > 0) && (vencidos == 0) %]
+			                                                                                          {title => "Renovar", action=>'realizarAccion("RENOVACION","table_tablaPrestamos",generaDivRenovacion)', icon=>"icon-repeat"},
+		                                                                                          [% END %]
+			                                                                                      ],
+			                                                                  popover           => {title => "[% 'Pr&eacute;stamos' | i18n %]",
+			                                                                                        text => "[% 'Renovar (si aplica) o devolver ejemplares' | i18n %]" }
+			
+			                                      ) ;
+			                      [% END %]
+		                </div>
+	               [% END %]
 	            [% END %]
             [% ELSE %]
                 <div class="alert alert-info">[% 'El usuario no tiene ning&uacute;n ejemplar en su poder.'| i18n %]</div>

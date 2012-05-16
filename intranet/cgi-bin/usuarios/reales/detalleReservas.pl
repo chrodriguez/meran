@@ -48,6 +48,7 @@ if($reservas){
 			$recount++;
 		}
 	}
+	
 	$t_params->{'RESERVAS_ASIGNADAS'}           = \@reservas_asignadas;
 	$t_params->{'reservas_asignadas_count'}     = $racount;
 	$t_params->{'RESERVAS_ESPERA'}              = \@reservas_espera;

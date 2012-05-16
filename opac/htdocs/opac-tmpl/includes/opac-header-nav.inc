@@ -121,13 +121,7 @@
                 </li>
             [% END %]
         </div>
- 
-
-        <div class="header-breadcrumbs">
-          [% INCLUDE 'opac-search_form.inc' %]
-        </div>
-
-      </div>
+    </div>
         
     </div>
     <div class="msg_main_div">   

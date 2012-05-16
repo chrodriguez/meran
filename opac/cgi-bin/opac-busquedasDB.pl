@@ -184,9 +184,9 @@ if ($to_pdf){
         }else{
                 
             $t_params->{'partial_template'}     = "opac-busquedaResult.inc";
+            $t_params->{'search_term'}          = $obj->{'string'};;
         }
 
-        $t_params->{'content_title'}            = C4::AR::Filtros::i18n("Resultados de la b&uacute;squeda");
         $t_params->{'suggested'}                = $suggested;
         $t_params->{'tipoAccion'}               = $obj->{'tipoAccion'};
         $t_params->{'url_todos'}                = $url_todos;
@@ -202,7 +202,11 @@ if ($to_pdf){
         $t_params->{'SEARCH_RESULTS'}           = $resultsarray;
         $obj->{'keyword'}                       = $obj->{'string'};
         $t_params->{'keyword'}                  = $obj->{'string'};
-        $t_params->{'buscoPor'}                 = C4::AR::Busquedas::armarBuscoPor($obj);
+
+        if ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
+            $t_params->{'buscoPor'}                 = C4::AR::Busquedas::armarBuscoPor($obj);
+        }
+
         $t_params->{'cantidad'}                 = $cantidad || 0;
         $t_params->{'show_search_details'}      = 1;
 

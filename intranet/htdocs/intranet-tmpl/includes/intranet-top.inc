@@ -288,6 +288,16 @@
 
 	    });
 	</script>
+	
+	
+<!-- 	<style> -->
+/* 	.dropdown-menu { */
+/* 		max-height: 500px; */
+/* 		overflow: hidden; */
+/* 		overflow-y: auto; */
+/* 	} */
+</style>
+	
 	</head>
 	<body data-spy="scroll" data-spy="scroll" data-target=".side_bar">
 	  <noscript>
