@@ -1,4 +1,3 @@
-<!-- <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/docs.css" /> -->
 <style>
 	.main_content{
 		width: 84% !important;
