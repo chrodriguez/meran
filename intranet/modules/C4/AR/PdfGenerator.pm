@@ -629,10 +629,12 @@ sub libreDeuda {
 
     my $fecha= "La Plata ".$dia." de ".$mes." de ".$anio;
 
+    my $nombre = Encode::decode_utf8($socio->{'persona'}->{'nombre'});
+    my $apellido = Encode::decode_utf8($socio->{'persona'}->{'apellido'});
 # CUERPO
      my @cuerpo_mensaje;
      $cuerpo_mensaje[0]  = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('libreDeudaMensaje'));
-     $cuerpo_mensaje[0]  =~ s/SOCIO/$socio->{'persona'}->{'nombre'}\ $socio->{'persona'}->{'apellido'}/;
+     $cuerpo_mensaje[0]  =~ s/SOCIO/$nombre\ $apellido/;
      $cuerpo_mensaje[0]  =~ s/UI_NAME/$branchname/;
      $cuerpo_mensaje[0]  =~ s/DOC/$socio->{'persona'}->{'nro_documento'}/;
      
@@ -1082,6 +1084,7 @@ sub generateBookLabelA4 {
     my $posicion = 0;
     foreach my $sig (@sigs) {
         if (C4::AR::Utilidades::validateString($sig)){
+          $sig=  Encode::decode_utf8($sig);
 #         $pdf->addRawText( "$sig", $x + 15, $pageheight + 50 + ( $y - 120 ) - $posicion );
           $pdf->addRawText( "$sig", $x + 5, 250 + ( $y - 90 ) - $posicion );
           $posicion += 10;
@@ -1186,6 +1189,7 @@ sub generateBookLabel{
 	my $posicion = 0;
 	foreach my $sig (@sigs) {
         if (C4::AR::Utilidades::validateString($sig)){
+          $sig=  Encode::decode_utf8($sig);
           $pdf->addRawText( "$sig", $x + 15, $pageheight + ( $y - 110 ) - $posicion );
           $posicion += 10;
         }

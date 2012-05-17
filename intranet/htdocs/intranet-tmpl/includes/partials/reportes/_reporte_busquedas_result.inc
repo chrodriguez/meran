@@ -1,3 +1,4 @@
+<script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/tabletojson.js"> </script>
 
 [% IF cantidad %]
  <div class="well">
@@ -61,6 +62,23 @@
              [% END %]
         </tbody>
  </table>
+ <div class="form-actions">
+                              [% PERL %]
+                                      print C4::AR::Filtros::action_set_button(    
+                                                                          title           => "[% 'Exportar resultados' | i18n %]",
+                                                                          button          => 'btn btn-primary',
+        
+                                                                          actions         => [  {title => "DOC", action=>'exportarXLS()'},
+                                                                                                {title => "XLS", action=>'exportarXLS()'},
+                                                                                                {title => "ODT", action=>'realizarAccion()'},
+                                                                                                {title => "ODS", action=>'realizarAccion()'},
+                                                                                              ],
+                                                                          popover           => {title => "[% 'Pr&eacute;stamos' | i18n %]",
+                                                                                                text => "[% 'Renovar (si aplica) o devolver ejemplares' | i18n %]" }
+        
+                                              ) ;
+                              [% END %]
+ </div>
 [% ELSE %]
     <div class="alert alert-info">
               [% 'No hay resultados para mostrar' | i18n  %]

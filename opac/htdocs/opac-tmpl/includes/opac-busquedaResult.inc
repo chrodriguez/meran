@@ -1,8 +1,7 @@
 <script type="text/javascript">
-
     ORDEN ="[% orden %]";
-    SENTIDO_ORDEN = "[% sentido_orden %]";
-
+    SENTIDO_ORDEN ="[% sentido_orden %]";
+    PRIMERA_VEZ = "[% primera_vez %]";
 
     function cambiarSentidoOrd(){
       if (SENTIDO_ORDEN){
@@ -162,19 +161,26 @@
           [% END %]
        [% END %]	
 
-    function ordenar_busqueda_opac(orden){
-        if (orden == ORDEN) {
-              if ( SENTIDO_ORDEN ){
-                  SENTIDO_ORDEN=0;
-              } else{
-                  SENTIDO_ORDEN=1;
-              }
-        } else {
-              SENTIDO_ORDEN= 1;
-              ORDEN = orden;
+      function ordenar_busqueda_opac(orden){
+        if (PRIMERA_VEZ == "2"){
+             SENTIDO_ORDEN= 0;
+             PRIMERA_VEZ="1";
+       } else {
+            if (orden == ORDEN) {
+                    if (SENTIDO_ORDEN == 1){
+                        SENTIDO_ORDEN= 0;
+                    } else{
+                        SENTIDO_ORDEN= 1;
+                    }
+            }  else {
+                      SENTIDO_ORDEN= 0;
+                      ORDEN = orden;
+            }
         }
+      
         $('#orden').val(ORDEN);
         $('#sentido_orden').val(SENTIDO_ORDEN);
+        $('#primera_vez').val(PRIMERA_VEZ);
 
         cambiarSentidoOrd();
         $('#ordenar_tabla').submit();
@@ -237,8 +243,9 @@
                     <input type="hidden" id="estante" name="estante" value="[% estante %]"/>
                     <input type="hidden" id="tipoAccion" name="tipoAccion" value="[% tipoAccion %]" />
                     <input type="hidden" id="token" name="token" value="[% token %]" />
-                    <input type="hidden" id="orden" name="orden" value="[% orden %]" />
-                    <input type="hidden" id="sentido_orden" name="sentido_orden" value="[% sentido_orden %]" />
+                    <input type="hidden" id="orden" name="orden" value="" />
+                    <input type="hidden" id="sentido_orden" name="sentido_orden" value="" />
+                    <input type="hidden" id="primera_vez" name="primera_vez" value="" />
                 </form>
             </div>
         </section>    
