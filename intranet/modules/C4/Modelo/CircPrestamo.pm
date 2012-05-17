@@ -244,9 +244,12 @@ sub prestar {
 	C4::AR::Debug::debug( "_chequeoParaPrestamo=> tipo_prestamo: " . $params->{'tipo_prestamo'} );
 
 	#Se verifica si ya se tiene la reserva sobre el grupo
+
     my ( $reservas, $cant_reservas_asignadas )  = C4::AR::Reservas::getReservasDeSocioAsignadas( $nro_socio, $id2 ,$self->db);
 
     my ( $reservas, $cant_reservas_espera )     = C4::AR::Reservas::getReservasDeSocioEnEspera( $nro_socio, $id2 ,$self->db);
+
+    my ( $reservas )  = C4::AR::Reservas::getReservasDeSocio( $nro_socio, $id2 ,$self->db);
 
     my $cant_reservas_total                     = $cant_reservas_asignadas + $cant_reservas_espera;
 #********************************        VER!!!!!!!!!!!!!! *************************************************
