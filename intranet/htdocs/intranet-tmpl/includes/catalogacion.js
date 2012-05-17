@@ -2522,9 +2522,10 @@ function cargarNivel1(params, TEMPLATE_ACTUAL){
         modificarN1(params.id1, TEMPLATE_ACTUAL);
     }
 
-    mostrarInfoAltaNivel1(params.id1, TEMPLATE_ACTUAL);
-    mostrarInfoAltaNivel2(params.id2, TEMPLATE_ACTUAL); 
-    mostrarInfoAltaNivel3(params.id2, TEMPLATE_ACTUAL);  
+// No quieren q se muestre mas el resto de los divs, ya q redirecciona SIEMPRE
+    // mostrarInfoAltaNivel1(params.id1, TEMPLATE_ACTUAL);
+    // mostrarInfoAltaNivel2(params.id2, TEMPLATE_ACTUAL); 
+    // mostrarInfoAltaNivel3(params.id2, TEMPLATE_ACTUAL);  
 }
 
 function validateForm(formID, func){
