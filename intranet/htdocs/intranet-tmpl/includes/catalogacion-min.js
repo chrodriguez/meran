@@ -211,5 +211,5 @@ function borrarGrupo(id1,id2){objAH=new AjaxHelper(updateBorrarGrupo);objAH.show
 function updateBorrarGrupo(){}
 function cargarNivel1(params,TEMPLATE_ACTUAL){ID_N1=params.id1;ID_N2=params.id2;if(params.tipoAccion=='MODIFICAR_NIVEL_2'){modificarN2(params.id2,TEMPLATE_ACTUAL);}else
 if(params.tipoAccion=='MODIFICAR_NIVEL_3'){modificarN3(params.id3,TEMPLATE_ACTUAL);}else{modificarN1(params.id1,TEMPLATE_ACTUAL);}
-mostrarInfoAltaNivel1(params.id1,TEMPLATE_ACTUAL);mostrarInfoAltaNivel2(params.id2,TEMPLATE_ACTUAL);mostrarInfoAltaNivel3(params.id2,TEMPLATE_ACTUAL);}
+}
 function validateForm(formID,func){$.validator.setDefaults({submitHandler:func,});var _message=LLENE_EL_CAMPO;$().ready(function(){$("#"+formID).validate({errorElement:"span",errorClass:"help-inline",messages:HASH_MESSAGES,})});$("#"+formID).validate();}
