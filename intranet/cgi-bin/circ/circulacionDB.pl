@@ -88,7 +88,7 @@ elsif($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 		#Busco ejemplares no prestados con estado disponible e igual disponibilidad que el que se quiere prestar
 		my $items_array_ref                     = C4::AR::Nivel3::buscarNivel3PorDisponibilidad($nivel3aPrestar);
 		#Busco los tipos de prestamo habilitados y con la misma disponibilidad del nivel 3 a prestar
-		my ($tipoPrestamos)                     = &C4::AR::Prestamos::prestamosHabilitadosPorTipo($nivel3aPrestar->getIdDisponibilidad,$nro_socio);
+		my ($tipoPrestamos)                     = C4::AR::Prestamos::prestamosHabilitadosPorTipo($nivel3aPrestar->getIdDisponibilidad,$nro_socio);
 
 		$infoPrestamo[$i]->{'id3Old'}           = $id3_a_prestar;
 		my ($nivel2)                            = C4::AR::Nivel2::getNivel2FromId2($nivel3aPrestar->nivel2->getId2);

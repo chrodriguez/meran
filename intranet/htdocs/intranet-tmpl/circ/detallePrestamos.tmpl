@@ -73,9 +73,10 @@
 <div class="form-actions">
              [% PERL %]
                                   print C4::AR::Filtros::action_button(
-                                                                  button       => "btn btn-info",
-                                                                  title        => '[% "Devolver" | i18n %]',
-                                                                  action       => 'realizarAccion("DEVOLUCION","table_tablaPrestamos",generaDivDevolucion);',
+                                                                  button        => "btn btn-danger",
+                                                                  icon          => "icon-white icon-share-alt",
+                                                                  title         => '[% "Devolver" | i18n %]',
+                                                                  action        => 'realizarAccion("DEVOLUCION","table_tablaPrestamos",generaDivDevolucion);',
                                   ) ;
               [% END %]
 
@@ -84,6 +85,7 @@
               [% PERL %]
                                   print C4::AR::Filtros::action_button(
                                                                   button       => "btn btn-info",
+                                                                  icon          => "icon-white icon-retweet",
                                                                   title        => '[% "Renovar" | i18n %]',
                                                                   action       => 'realizarAccion("RENOVACION","table_tablaPrestamos",generaDivRenovacion);',
                                   ) ;

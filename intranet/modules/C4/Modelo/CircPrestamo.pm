@@ -244,9 +244,11 @@ sub prestar {
 	C4::AR::Debug::debug( "_chequeoParaPrestamo=> tipo_prestamo: " . $params->{'tipo_prestamo'} );
 
 	#Se verifica si ya se tiene la reserva sobre el grupo
-	my ( $reservas, $cant ) =
-	  C4::AR::Reservas::getReservasDeSocio( $nro_socio, $id2 ,$self->db);
+    my ( $reservas, $cant_reservas_asignadas )  = C4::AR::Reservas::getReservasDeSocioAsignadas( $nro_socio, $id2 ,$self->db);
 
+    my ( $reservas, $cant_reservas_espera )     = C4::AR::Reservas::getReservasDeSocioEnEspera( $nro_socio, $id2 ,$self->db);
+
+    my $cant_reservas_total                     = $cant_reservas_asignadas + $cant_reservas_espera;
 #********************************        VER!!!!!!!!!!!!!! *************************************************
 # Si tiene un ejemplar prestado de ese grupo no devuelve la reserva porque en el where estado <> P, Salta error cuando se quiere crear una nueva reserva por el else de abajo. El error es el correcto, pero se puede detectar antes.
 # Tendria que devolver todas las reservas y despues verificar los tipos de prestamos de cada ejemplar (notforloan)
@@ -256,7 +258,7 @@ sub prestar {
 	my $disponibilidad = C4::AR::Reservas::getDisponibilidad($id3);
 	
 	my $ejemplar  = C4::AR::Nivel3::getNivel3FromId3($id3);
-	if ( $cant == 1 && $ejemplar->esParaPrestamo ) {
+	if ( ($cant_reservas_total >= 1) && ($ejemplar->esParaPrestamo) ) {
 
 		#El usuario ya tiene la reserva,
 		$self->debug( "El usuario ya tiene una reserva ID::: " . $reservas->[0]->getId_reserva );
@@ -275,7 +277,7 @@ sub prestar {
 	}
 
 	else {
-        if (($cant == 1) && ($ejemplar->esParaSala) && (!C4::AR::Preferencias::getValorPreferencia("prestar_mismo_grupo_distintos_tipos_prestamo"))){
+        if (($cant_reservas_asignadas >= 1) && ($ejemplar->esParaSala) && (!C4::AR::Preferencias::getValorPreferencia("prestar_mismo_grupo_distintos_tipos_prestamo"))){
         	$msg_object->{'error'} = 1;
             C4::AR::Mensajes::add( $msg_object,{ 'codMsg' => 'R005', 'params' => [] } );
         }else{

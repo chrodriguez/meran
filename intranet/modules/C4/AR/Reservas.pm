@@ -43,6 +43,8 @@ $VERSION = 3.0;
     getHistorialReservasParaTemplate
     cancelarReservaDesdeGrupoYSocio
     cantReservasPorGrupoAsignadas
+    getReservasDeSocioAsignadas
+    getReservasDeSocioEnEspera
 );
 
 
@@ -677,6 +679,44 @@ sub getReservasDeSocio {
     return ($reservas_array_ref,scalar(@$reservas_array_ref));
 }
 
+=head2
+    sub getReservasDeSocio
+    devuelve las reservas EN ESPERA de grupo del usuario
+=cut
+sub getReservasDeSocioEnEspera {
+    my ($nro_socio,$id2, $db)=@_;
+
+    $db = $db || C4::Modelo::CircReserva->new()->db;
+
+    my @filtros;
+    push(@filtros, ( id2        => { eq => $id2}));
+    push(@filtros, ( id3        => { eq => undef}));
+    push(@filtros, ( nro_socio  => { eq => $nro_socio} ));
+    push(@filtros, ( estado     => { eq => 'G'} ));
+
+    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(  db => $db, query => \@filtros);
+
+    return ($reservas_array_ref,scalar(@$reservas_array_ref));
+}
+
+=head2
+    sub getReservasDeSocio
+    devuelve las reservas EN ESPERA de grupo del usuario
+=cut
+sub getReservasDeSocioAsignadas {
+    my ($nro_socio,$id2, $db)=@_;
+
+    $db = $db || C4::Modelo::CircReserva->new()->db;
+
+    my @filtros;
+    push(@filtros, ( id2        => { eq => $id2}));
+    push(@filtros, ( nro_socio  => { eq => $nro_socio} ));
+    push(@filtros, ( estado     => { eq => 'E'} ));
+
+    my $reservas_array_ref = C4::Modelo::CircReserva::Manager->get_circ_reserva(  db => $db, query => \@filtros);
+
+    return ($reservas_array_ref,scalar(@$reservas_array_ref));
+}
 =head2
     sub getReservasDeId2
     devuelve las reservas de grupo
