@@ -83,7 +83,9 @@
 						                <td>
 						           
 						
+                                           [% nivel3_obj.getDisponibilidadObject.getNombre %]
 						                   [% IF prestamo.getNro_socio %]
+						                   <br />
 						                        <strong class="[% IF nivel3_obj.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">[% 'Prestado a:' | i18n  %]</strong> 
 						                        [% PERL %]
 						                            print C4::AR::Filtros::link_to(   text =>     "[% socio_prestamo.persona.getApeYNom %]",
@@ -97,22 +99,21 @@
 						                    [% END %]
 						                    
 						                    <!-- preguntamos si ya se muestra el usuario en el prestamo, para no mostrarlo dos veces -->
-						                    [% IF !prestamo.getNro_socio %]
-						                        [% IF reserva.getNro_socio %]
+                                            [% IF !prestamo.getNro_socio %]
+                                                [% IF reserva.getNro_socio %]
+                                                     <br />
                                                      <input type="hidden" value="[%reserva.getNro_socio%]" id="" > 
-						                             <strong class="[% IF nivel3_obj.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">[% 'Reservado a:' | i18n  %]</strong> 
-						                            [% PERL %]
-						                                print C4::AR::Filtros::link_to(   text =>     "[% socio_reserva.persona.getApeYNom %]",
-						                                                                  url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
-						                                                                  params =>   ["nro_socio=[% socio_reserva.getNro_socio %]"],
-						                                                                  title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
-						                                                                  blank =>  1,
-						                                                            );
-						                            [% END %]
-						                        [% END %]
-						                    [% END %]
-                                            
-					                        [% nivel3_obj.getDisponibilidadObject.getNombre %]
+                                                     <strong class="[% IF nivel3_obj.estadoDisponible %]disponible[% ELSE %]nodisponible[% END %]">[% 'Reservado a:' | i18n  %]</strong> 
+                                                    [% PERL %]
+                                                        print C4::AR::Filtros::link_to(   text =>     "[% socio_reserva.persona.getApeYNom %]",
+                                                                                          url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
+                                                                                          params =>   ["nro_socio=[% socio_reserva.getNro_socio %]"],
+                                                                                          title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
+                                                                                          blank =>  1,
+                                                                                    );
+                                                    [% END %]
+                                                [% END %]
+                                            [% END %]
 						                </td>
 						                <td>
 					                        [% nivel3_obj.getEstadoObject.getNombre %]

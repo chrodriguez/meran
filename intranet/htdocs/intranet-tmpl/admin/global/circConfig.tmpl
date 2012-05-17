@@ -32,9 +32,9 @@ function modificarVariable(variable,tipo){
 }
 
 function updateModificarVariable(responseText){
-    $("#divResultado").show();
-	$("#divResultado").html(responseText);
-	scrollTo('divResultado');
+    $("#result").show();
+	$("#result").html(responseText);
+	scrollTo('result');
 }
 
 
@@ -61,7 +61,7 @@ function guardarModificacion(){
 
 function updateGuardarModificacion(responseText){
     actualizarTabla();
-    $("#divResultado").hide();
+    $("#result").hide();
 	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
 }
@@ -121,6 +121,6 @@ function limpiar(){$("#buscar").val("");}
 	            
 </form>
 
-<div id="result"></div>
+<div id="divResultado"></div>
 
 [% INCLUDE "intranet-bottom.inc" %]

@@ -48,6 +48,7 @@
                         <strong class="label [% IF nivel3.estadoDisponible %] label-success [% ELSE %] label-important [% END %]">[% nivel3.getEstadoObject.getNombre  %]</strong>
                     [% END %]
                     [% IF socio_reserva %]
+                    <br />
                         [% 'Reservado a:' | i18n  %]
                         <strong>
                         [% PERL %]

@@ -67,14 +67,14 @@ sub uploadFotoNovedadOpac{
         
             #no hay que escribirlo con binmode
             C4::AR::Debug::debug("UploadFile => uploadFotoNovedadOpac => vamos a escribirla sin binmode");
-            open(WRITEIT, ">$uploaddir/$hash_unique.$file_type") or die "$!";
+            open(WRITEIT, ">$uploaddir/$hash_unique.$file_type") or die "Cant write to $uploaddir/$hash_unique.$file_type. Reason: $!";
             print WRITEIT $imagen;
             close(WRITEIT);
    
         }else{
         
             C4::AR::Debug::debug("UploadFile => uploadFotoNovedadOpac => vamos a escribirla CON binmode");
-            open ( WRITEIT, ">$uploaddir/$hash_unique.$file_type" ) or die "$!"; 
+            open ( WRITEIT, ">$uploaddir/$hash_unique.$file_type" ) or die "Cant write to $uploaddir/$hash_unique.$file_type. Reason: $!"; 
             binmode WRITEIT; 
             while ( <$imagen> ) { 
             	print WRITEIT; 

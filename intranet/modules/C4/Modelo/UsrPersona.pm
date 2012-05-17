@@ -416,6 +416,7 @@ sub setNombre{
     my ($self) = shift;
     my ($nombre) = @_;
     Encode::encode_utf8($nombre);
+    C4::AR::Debug::debug("\n\n\n\n NOMREEEEEEEEEEEEEEEEEEEEEEEEEEE ".C4::AR::Utilidades::capitalizarString($nombre)."\n\n\n\n");
     $self->nombre(C4::AR::Utilidades::capitalizarString($nombre));
 }
 
