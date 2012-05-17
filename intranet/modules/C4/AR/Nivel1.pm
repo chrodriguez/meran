@@ -528,7 +528,7 @@ sub getFavoritos{
 
 }
 
-END { }       # module clean-up code here (global destructor)
+END { }       
 
 1;
 __END__

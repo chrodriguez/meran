@@ -128,7 +128,7 @@
                                class           => "",
                                selectAll_id    => "",
                                columns         => ['[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]',
-                                                   '[% "Ed." | i18n %]','[% "Cancelar" %]', 
+                                                   '[% "Ed." | i18n %]',[% IF cancelar_reservas_intranet %] '[% "Cancelar" %]' [% END %],
                                                  ]
                                                                
                                      ) ;
@@ -154,16 +154,17 @@
                         <td>  
                            [% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
                         </td>
-                
-                        <td> 
-                            [% PERL %]
-                                print C4::AR::Filtros::action_button(  
-                                                                    button   => "btn click btn-danger",
-                                                                    action => "cancelarReserva('[% reserva.getId_reserva %]');",
-                                                                    icon   => "icon-white icon-remove"
-                                        ) ;
-                            [% END %]
-                        </td>
+                        [% IF cancelar_reservas_intranet %]
+	                        <td> 
+	                            [% PERL %]
+	                                print C4::AR::Filtros::action_button(  
+	                                                                    button   => "btn click btn-danger",
+	                                                                    action => "cancelarReserva('[% reserva.getId_reserva %]');",
+	                                                                    icon   => "icon-white icon-remove"
+	                                        ) ;
+	                            [% END %]
+	                        </td>
+                       [% END %]
                     </tr>
                 [% END %]
             </tbody>

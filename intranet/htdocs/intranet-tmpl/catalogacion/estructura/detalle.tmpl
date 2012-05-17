@@ -74,7 +74,7 @@
 	
 	<fieldset>
 		   	<div class="page-header">
-        		<h1>[% titulo %] <small>([% nivel1_template %]) - #[% id1 %]</small></h1>
+        		<h1>[% titulo %] <small>[% tipo_documento %] - #[% id1 %]</small></h1>
             	<h2>[% autor %] </h2>	
            	</div>
 		      
@@ -157,7 +157,10 @@
 		</div>
 	[% END %] <!-- End de If estadoColeccion  -->
 	
-		<h4>[% "N&uacute;mero Total de Ejemplares" | i18n %]:<b> [% cantItemN1 %]</b></h4>
+
+         <h4><span class="badge badge-warning">[% cantItemN1 %]</span>&nbsp;&nbsp;[% "Ejemplares" | i18n %]</h4>
+         <br />
+
 		</div>
 	</fieldset>
 	<script type="text/javascript">makeToggle('estado_coleccion[% id1 %]','trigger_estado_coleccion_[% id1 %]',null,false);</script>
@@ -169,7 +172,10 @@
 	            <legend class="trigger_3_[% id2 %] click">
 	               <div class="group_separator">
 						<div class="page-header">
-	                       <h2>[% "Detalle de Nivel 2 " | i18n %] <small>([% edicion %])</small> <small>[% "GRUPO" | i18n %] [% id2 %] - [% tipo_documento %] ([% nivel2_template %])</small></h2>
+	                       <h2> [% IF edicion %] [% edicion %] [% ELSE %] [% 'Detalle del Nivel 2' | i18n %] [% END %]
+	                               <small>[% "GRUPO" | i18n %] [% id2 %]</small>
+                           </h2>
+	                       <span class="label label-info"> [% tipo_documento %] ([% nivel2_template %])</span>
                         </div>                   
                    </div>
                  </legend>
