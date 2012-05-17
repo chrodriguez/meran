@@ -36,16 +36,16 @@ $obj->{'tipo_nivel3_name'}  = ($input->param('tipo_nivel3_name'));
 $obj->{'tipoBusqueda'}      = 'all';
 $obj->{'token'}             = CGI::escapeHTML($input->param('token'));
 $obj->{'orden'}             = $input->param('orden')|| "titulo";
-$obj->{'sentido_orden'}     = $input->param('sentido_orden') || 1;
+$obj->{'primera_vez'}       = $input->param('primera_vez') || "2";
 
-# if ($obj->{'sentido_orden'} eq "ASC") {
-#     $obj->{'sentido_orden'}= 1;    
-# } else {
-#      $obj->{'sentido_orden'}= 0 ;
-# }
-#     
 
-C4::AR::Debug::debug("sadfisdoifpdoisfpoidspofipods".$obj->{'sentido_orden'});
+
+if ($obj->{'primera_vez'} eq "2"){
+          $obj->{'sentido_orden'}   = 0;
+          $obj->{'primera_vez'} = "1";
+} else {
+          $obj->{'sentido_orden'}     = $input->param('sentido_orden');
+} 
 
 C4::AR::Validator::validateParams('U389',$obj,['tipoAccion']);
 
@@ -235,9 +235,30 @@ if ($to_pdf){
         $t_params->{'tipoBusqueda'}   = $obj->{'tipoBusqueda'};
         $t_params->{'token'}   = $obj->{'token'};
         $t_params->{'orden'}   = $obj->{'orden'};   
-        $t_params->{'sentido_orden'}   = $obj->{'sentido_orden'};
-
+        $t_params->{'primera_vez'}   = $obj->{'primera_vez'}; 
+        $t_params->{'sentido_orden'}   = $obj->{'sentido_orden'};   
+        
+#         if ($obj->{'primera_vez'} == 1){
+#           $t_params->{'sentido_orden'}   = 1;
+#           $t_params->{'primera_vez'} = 1;
+#         } else {
+#                 $t_params->{'sentido_orden'} = $obj->{'sentido_orden'};
+#         }
+          
+        
+        
+#         if ($obj->{'primera_vez'} == 1){
+#           $t_params->{'sentido_orden'}   = 1;
+#           $t_params->{'primera_vez'} = 1;
+#         } else {
+#                 $t_params->{'sentido_orden'} = $obj->{'sentido_orden'};
+#         }
         #pdf
+
+        C4::AR::Debug::debug($t_params->{'sentido_orden'});
+        C4::AR::Debug::debug( $t_params->{'primera_vez'} );
+        C4::AR::Debug::debug($t_params->{'orden'});
+
         $t_params->{'pdf_titulo'}             = $obj->{'titulo'};
         $t_params->{'pdf_autor'}              = $obj->{'autor'};
         $t_params->{'pdf_isbn'}               = $obj->{'isbn'};

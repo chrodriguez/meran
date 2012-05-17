@@ -1375,15 +1375,15 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
     $sphinx->SetMatchMode($tipo_match);
     if ($orden eq 'autor') {
             if ($sentido_orden){
-                $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"autor_local");
-            } else {
                 $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"autor_local");
+            } else {
+                $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"autor_local");
             }
     } elsif ($orden eq 'titulo') {
             if ($sentido_orden){
-                $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
-            } else {
                 $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"titulo_local");
+            } else {
+                $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
             }
     } else {
             $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
