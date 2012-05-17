@@ -844,8 +844,30 @@ sub generarIndice {
 
 
 #         C4::AR::Debug::debug("C4::AR::Sphinx::generar_indice => UPDATE => id1 => ".$registro_marc_n1->{'id'});
-    }
+}
 
+sub getNombreTipoDoc{
+	my($self) = shift;
+
+    my $id_tipo_doc = $self->getTemplate();
+    use C4::Modelo::CatRefTipoNivel3::Manager;
+    
+    my @filtros;
+    
+    push (@filtros,(id_tipo_doc => {eq => $id_tipo_doc,}));
+    
+    my $cat_ref_tipo_nivel3 = C4::Modelo::CatRefTipoNivel3::Manager->get_cat_ref_tipo_nivel3(
+                                                                                          query => \@filtros,
+                                                                                       );   
+    
+    my $doc = $cat_ref_tipo_nivel3->[0];
+    
+    if ($doc){
+        return $doc->getNombre;
+    }else{
+        return $id_tipo_doc;
+    }
+}
 
 1;
 
