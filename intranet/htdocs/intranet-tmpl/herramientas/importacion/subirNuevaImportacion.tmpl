@@ -59,12 +59,17 @@
             function() {
               if ($('#nuevo_esquema').attr('checked')){
                     $('#esquema_nuevo').show();
+                    $('#nombreEsquema').attr('required',true);
                     $('#seleccionar_esquema').hide();
+                    $('#nuevo_esquema_name').show();
+                    
                   }
                  else{
                      $('#esquema_nuevo').hide();
+                     $('#nombreEsquema').removeAttr('required');
                      $('#seleccionar_esquema').show();
-                     }
+                     $('#nuevo_esquema_name').hide();
+                 }
             }
         );
       });
@@ -72,6 +77,17 @@
 
 
 <div class="form-horizontal" >
+            <div class="right">
+                            [% PERL %]
+                                                print C4::AR::Filtros::action_link_button(   text    => "[% 'Esquemas' | i18n %]",
+                                                                                    button   => "btn btn-warning",
+                                                                                    url => "[% url_prefix %]/herramientas/importacion/esquemas_importacion.pl",
+                                                                                    params => ["token=[% token%]",],
+                                                                                    title   => "[% 'Esquemas' | i18n %]",
+                                                        ) ;
+                            [% END %]
+            </div>
+
 	<form id="uploadfile" action="subirNuevaImportacion.pl" enctype="multipart/form-data" method="POST" class="form-horizontal">
         <fieldset>
         <legend>[% "Nueva Importaci&oacute;n:" | i18n %]</legend>
@@ -79,7 +95,7 @@
 		    <div class="control-group">
                 <label class="control-label" for="titulo">[% 'T&iacute;tulo del archivo' | i18n %]: </label>
                 <div class="controls">
-                    <input type="text" name="titulo" id="titulo" >
+                    <input type="text" name="titulo" id="titulo">
                 </div>
             </div>
             
@@ -119,14 +135,14 @@
                 </div>
             </div>
             
-            <div class="control-group"  id="seleccionar_esquema">
+            <div class="control-group" id="seleccionar_esquema">
                 <label class="control-label">[% 'Seleccionar Esquema' | i18n %]: </label>
                 <div class="controls">
                     [% IF combo_esquemas %][% combo_esquemas %][% ELSE %] [% 'No hay ning&uacute;n esquema definido.' %][% END %]
                 </div>
             </div>
             
-            <div class="control-group">
+            <div class="control-group" id="nuevo_esquema_name" style="display: none;">
                 <label class="control-label" for="nombreEsquema">[% 'Nombre Nuevo Esquema' | i18n %]: </label>
                 <div class="controls">
                     <input type="text" name="nombreEsquema" id="nombreEsquema" > 

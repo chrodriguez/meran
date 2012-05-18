@@ -1200,7 +1200,7 @@ function procesarInfoJson(marc_object_array, id_padre){
         if(campo_marc_conf_obj.getIndicadorPrimario() != ''){
             strIndicadores = "<div class='control-group'>" + "<label for='"+id_div_alta_indicador+"'>Indicador Primero: " + campo_marc_conf_obj.getIndicadorPrimario() + "</label>"+"<div class='controls'>";
             strIndicadores = strIndicadores + crearSelectIndicadoresPrimarios(campo_marc_conf_obj, id_aux);
-            strIndicadores = strIndicadores + "<p class='help-block'>Seleccione un indicador primario para el campo</p>";
+            strIndicadores = strIndicadores + "<p class='help-inline'>Seleccione un indicador primario para el campo</p>";
             strIndicadores = strIndicadores + "</div></div>";
         }
 

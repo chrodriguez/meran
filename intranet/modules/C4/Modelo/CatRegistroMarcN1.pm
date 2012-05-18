@@ -137,7 +137,7 @@ sub generar_clave_unicidad {
 
     my $clave       = "";
     my $autor_100   = $marc_record->subfield("100","a");
-    C4::AR::Debug::debug("CatRegistroMarcN1 => generar_clave_unicidad => CLAVE UNICIDAD => 100,a => ".$autor_100);   
+    # C4::AR::Debug::debug("CatRegistroMarcN1 => generar_clave_unicidad => CLAVE UNICIDAD => 100,a => ".$autor_100);   
     my $autor_110   = $marc_record->subfield("110","a");
     my $titulo      = $marc_record->subfield("245","a");
 
@@ -158,15 +158,14 @@ sub generar_clave_unicidad {
 
     foreach my $id (@ids_700){
         $clave = $clave.$id;               
-        C4::AR::Debug::debug("CatRegistroMarcN1 => generar_clave_unicidad => CLAVE UNICIDAD => id => ".$id);   
+        # C4::AR::Debug::debug("CatRegistroMarcN1 => generar_clave_unicidad => CLAVE UNICIDAD => id => ".$id);   
         # push (@ids_700, $campo->subfield("a"));
     }
     
 
-    # C4::AR::Debug::debug("CatRegistroMarcN1 => CLAVE UNICIDAD => metodo => ".C4::AR::Auth::getMetodoEncriptacion()); 
-    C4::AR::Debug::debug("CatRegistroMarcN1 => generar_clave_unicidad => CLAVE UNICIDAD => clave antes de hashear => ".$clave); 
+    # C4::AR::Debug::debug("CatRegistroMarcN1 => generar_clave_unicidad => CLAVE UNICIDAD => clave antes de hashear => ".$clave); 
     $clave = C4::AR::Auth::hashear_password($clave, C4::AR::Auth::getMetodoEncriptacion());
-    C4::AR::Debug::debug("CatRegistroMarcN1 => generar_clave_unicidad => CLAVE UNICIDAD => ".$clave);    
+    # C4::AR::Debug::debug("CatRegistroMarcN1 => generar_clave_unicidad => CLAVE UNICIDAD => ".$clave);    
 
     return $clave;
 }
@@ -424,6 +423,27 @@ sub getAutorObject{
 #     C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> ref => ".$ref_autor);
 
     my $autor       = C4::Modelo::CatAutor->getByPk($ref);
+    # C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> AUTOR 100a ".$autor->getCompleto()."-");
+    # C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> AUTOR 100a ".$autor);
+    # C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> AUTOR 100a ref ".$ref);
+
+    if(C4::AR::Utilidades::trim($autor->getCompleto()) eq ""){
+        $ref_autor      = $marc_record->subfield("110","a");
+        $ref            = C4::AR::Catalogacion::getRefFromStringConArrobas($ref_autor);
+        # C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> AUTOR 110a ref ".$ref);
+        $autor          = C4::Modelo::CatAutor->getByPk($ref);
+        # C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> AUTOR 110a ".$autor->getCompleto()."-");
+        # C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> AUTOR 110a ".$autor);
+    }
+
+    if(C4::AR::Utilidades::trim($autor->getCompleto()) eq ""){
+        $ref_autor      = $marc_record->subfield("111","a");
+        $ref            = C4::AR::Catalogacion::getRefFromStringConArrobas($ref_autor);
+        # C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> AUTOR 111a ref ".$ref);
+        $autor          = C4::Modelo::CatAutor->getByPk($ref);
+        # C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> AUTOR 111a ".$autor->getCompleto()."-");
+        # C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> AUTOR 111a ".$autor);
+    }
 
     if(!$autor){
         C4::AR::Debug::debug("CatRegistroMarcN1 => getAutorObject()=> EL OBJECTO (ID) AUTOR NO EXISTE");
@@ -453,7 +473,7 @@ sub getNivelBibliografico{
 # bit 7 del Leader
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
-#     C4::AR::Debug::debug("CatRegistroMarcN1 => getNivelBibliografico => LEADER !!!!!!!!!!!!!!!! ".substr ($marc_record->leader(),7,1));
+#     C4::AR::Debug::debug("CatRegistroMarcN1 => getNivautorelBibliografico => LEADER !!!!!!!!!!!!!!!! ".substr ($marc_record->leader(),7,1));
     return substr ($marc_record->leader(),7,1);
 }
 

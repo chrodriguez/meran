@@ -418,7 +418,7 @@ Se elimina el usuario
                 my $socio= C4::AR::Usuarios::getSocioInfoPorNroSocio($obj->{'nro_socio'});
                 my $url = C4::AR::Utilidades::getUrlPrefix().'/usuarios/libreDeuda.pl?nro_socio='.$obj->{'nro_socio'}.'&token='.$session->param('token');
                 my $boton ="<a href='".$url."'>Imprimir</a>";
-                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U423', 'params' => [$socio->persona->getApeYNom,$boton]} ) ;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U423', 'params' => [Encode::decode_utf8($socio->persona->getApeYNom),$boton]} ) ;
             }
 
                 my $infoOperacionJSON=to_json $msg_object;

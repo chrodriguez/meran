@@ -804,7 +804,7 @@ sub toMARC_Intra{
 sub ESTADO_DISPONIBLE{
    my ($estado) = @_;
 
-    C4::AR::Debug::debug("CatRegistroMarcN3 => ESTADO_DISPONIBLE => ==".C4::Modelo::RefEstado::estadoDisponibleValue()."==> ".($estado eq C4::Modelo::RefEstado::estadoDisponibleValue()));
+    # C4::AR::Debug::debug("CatRegistroMarcN3 => ESTADO_DISPONIBLE => ==".C4::Modelo::RefEstado::estadoDisponibleValue()."==> ".($estado eq C4::Modelo::RefEstado::estadoDisponibleValue()));
    return ($estado eq C4::Modelo::RefEstado::estadoDisponibleValue());
 }
 

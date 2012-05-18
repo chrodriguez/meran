@@ -737,15 +737,15 @@ sub checkauth {
     my $token=_obtenerToken($query);
     my $loggedin = 0;
     my ($session) = CGI::Session->load();
-  C4::AR::Debug::debug("antes del if existe sesion en checkauth, nroRandom - > " . $session->param('nroRandom') . " sessionid : " . $session->param('sessionID'));
+  # C4::AR::Debug::debug("antes del if existe sesion en checkauth, nroRandom - > " . $session->param('nroRandom') . " sessionid : " . $session->param('sessionID'));
     my $userid= undef;
    
     if ($session){
-        C4::AR::Debug::debug("existe sesion en checkauth");
-        C4::AR::Debug::debug("existe sesion en checkauth, nroRandom - > " . $session->param('nroRandom') . " sessionid : " . $session->param('sessionID'));
+        # C4::AR::Debug::debug("existe sesion en checkauth");
+        # C4::AR::Debug::debug("existe sesion en checkauth, nroRandom - > " . $session->param('nroRandom') . " sessionid : " . $session->param('sessionID'));
         $userid= $session->param('userid');
     }else{
-        C4::AR::Debug::debug("NO existe sesion en checkauth, se generara");
+        # C4::AR::Debug::debug("NO existe sesion en checkauth, se generara");
     	$session = _generarSession();
     }
     my $flags=0;
@@ -783,7 +783,7 @@ sub checkauth {
            
                   if ($estado eq "sesion_valida"){ 
                 
-                      C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_valida");
+                      # C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_valida");
                       $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($session->param('userid'));
                       $flags=$socio->tienePermisos($flagsrequired);
                       loginSuccess($socio->getNro_socio);
@@ -804,21 +804,21 @@ sub checkauth {
                     } 
                   }
                   elsif ($estado eq "datos_censales_invalidos"){
-                      C4::AR::Debug::debug("C4::AR::Auth::checkauth => datos_censales_invalidos");
+                      # C4::AR::Debug::debug("C4::AR::Auth::checkauth => datos_censales_invalidos");
                       $url = C4::AR::Utilidades::getUrlPrefix().'/auth.pl';
                       $session->param('codMsg', $code_MSG);
                       $session->param('redirectTo', $url);
                       redirectTo($url); 
                   }
                   elsif ($estado eq "sesion_invalida") { 
-                      C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_invalida");
+                      # C4::AR::Debug::debug("C4::AR::Auth::checkauth => session_invalida");
                       $url = C4::AR::Utilidades::getUrlPrefix().'/auth.pl';
                       $session->param('codMsg', $code_MSG);
                       $session->param('redirectTo', $url);
                       redirectTo($url); 
                   } 
                   elsif ($estado eq "sin_sesion") { 
-                      C4::AR::Debug::debug("C4::AR::Auth::checkauth => sin_sesion");
+                      # C4::AR::Debug::debug("C4::AR::Auth::checkauth => sin_sesion");
                       #ESTO DEBERIA PASAR solo cuando la sesion esta sin iniciar
                       #_destruirSession('U406', $template_params);
                       inicializarAuth($template_params);
@@ -826,7 +826,7 @@ sub checkauth {
                       }
                   else { 
                       #ESTO MENOS
-                      C4::AR::Debug::debug("C4::AR::Auth::checkauth => ESTO MENOS ???");
+                      # C4::AR::Debug::debug("C4::AR::Auth::checkauth => ESTO MENOS ???");
                       _destruirSession(($code_MSG || 'U406'), $template_params);
                       $session->param('codMsg', $code_MSG);
                       $session->param('redirectTo', C4::AR::Utilidades::getUrlPrefix().'/error.pl');
@@ -850,7 +850,7 @@ sub checkauth {
 					$userid           = $query->param('userid');
 					my $password      = $query->param('password');
 					my $nroRandom     = $session->param('nroRandom');
-					C4::AR::Debug::debug("checkauth -> nroRandom en sesion Auth.pm -> " . $nroRandom . " sessionId : " . $sessionID);
+					# C4::AR::Debug::debug("checkauth -> nroRandom en sesion Auth.pm -> " . $nroRandom . " sessionId : " . $sessionID);
 					$session->param('username_input',$userid);
 					my $error_login	= 0;
 					my $mensaje;
@@ -892,7 +892,7 @@ sub checkauth {
 							_realizarOperacionesLogin($type,$socio);
 						}
 						
-						C4::AR::Debug::debug("C4::AR::Auth::checkauth => fin operaciones login");
+						# C4::AR::Debug::debug("C4::AR::Auth::checkauth => fin operaciones login");
 						
 						#Si se logueo correctamente en intranet entonces guardo la fecha
 						my $now = Date::Manip::ParseDate("now");

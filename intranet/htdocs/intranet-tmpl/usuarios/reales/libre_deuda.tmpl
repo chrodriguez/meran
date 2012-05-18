@@ -55,10 +55,10 @@
     </div>   
     <div id="pie" style="clear:both; font-size:9px">
    <br> <hr> 
-              [% "Biblioteca: " | i18n  %] [% biblio.getNombrePDF %]<br>
-              [% "Direcci&oacute;n:" | i18n  %]  [% biblio.getDireccionPDF %]<br>
-              [% "Tel/Fax:" | i18n  %]  [% biblio.getTelefono %]  [% IF biblio.getFax %] / [% biblio.getFax %][% END %]  <br>
-              [% "Sitio web:" | i18n  %] [% biblio.getUrlServidor %]<br>
-              [% "E-mail:" | i18n  %] [% biblio.getEmail %]<br>
+              [% "Biblioteca: " | i18n  %] [% biblio.getNombrePDF %][% "&nbsp;" %]<br> 
+              [% "Direcci&oacute;n:" | i18n  %]  [% biblio.getDireccionPDF %][% "&nbsp;" %]<br>
+              [% "Tel/Fax:" | i18n  %]  [% biblio.getTelefono %]  [% IF biblio.getFax %] / [% biblio.getFax %][% END %] [% "&nbsp;" %] <br>
+              [% "Sitio web:" | i18n  %] [% biblio.getUrlServidor %][% "&nbsp;" %]<br>
+              [% "E-mail:" | i18n  %] [% biblio.getEmail %][% "&nbsp;" %]<br>
     </div>
 </fieldset>
