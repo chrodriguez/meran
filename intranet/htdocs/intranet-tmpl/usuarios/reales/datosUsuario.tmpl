@@ -232,11 +232,9 @@ function generarLibreDeuda(){
 }
 
 function updateGenerarLibreDeuda(responseText){
-
     if (!verificarRespuesta(responseText))
         return(0);
-
-    var Messages=JSONstring.toObject(responseText);
+    var Messages=JSONstring.toObject(responseText);   
     if(Messages){
         setMessages(Messages);
     }
