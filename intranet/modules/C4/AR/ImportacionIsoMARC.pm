@@ -24,6 +24,8 @@ use MARC::Moose::Reader::File::Iso2709;
 use MARC::Moose::Reader::File::Isis;
 use MARC::Moose::Reader::File::Marcxml;
 
+use Spreadsheet::Read;
+
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw(
@@ -74,6 +76,8 @@ sub guardarNuevaImportacion {
     }
     
     $Io_importacion->agregar($params);
+
+    C4::AR::Debug::debug("Obtener Campos !!");
 
     #Obtengo los campos/subcampos para ver si por si es necesario realizar un corrimiento de campos
      my $campos_archivo = C4::AR::ImportacionIsoMARC::obtenerCamposDeArchivo($params);
@@ -128,8 +132,57 @@ Guarda los registros de una nueva imporatción
 sub guardarRegistrosNuevaImportacion {
     my ($importacion,$params,$msg_object,$db) = @_;
 
-    use Switch;
 
+    if($params->{'formatoImportacion'} eq "xls"){
+        #ES UNA PLANILLA DE CALCULO
+        
+        # NO HAY CAMPOS Y SUBCAMPOS
+        # Los campo se van a ir agregando a partir del 100 en adelante con subcampo a
+        my $campo = 100;
+        my $subcampo = 'a';
+        
+        my $ref = Spreadsheet::Read::ReadData($params->{'write_file'}, parser => $params->{'file_ext'});
+        
+        my @rows = Spreadsheet::Read::rows($ref->[1]);
+        
+        my $primera_fila = $params->{'xls_first'};
+        
+        foreach my $fila (@rows){
+            if(!$primera_fila){
+                my $marc_record = MARC::Record->new();
+                my $campo = 100;
+                my $subcampo='a';
+                foreach my $dato (@$fila){
+                    
+                    my $dato_fila = C4::AR::Utilidades::trim($dato);
+                    
+                    $dato_fila = Encode::decode_utf8(Encode::encode_utf8($dato_fila));
+                    
+                    if($dato_fila ne ''){
+                        C4::AR::Debug::debug( "LEO EXCEL!!! campo: ". $campo." => dato: ".$dato_fila);
+                        my $new_field= MARC::Field->new($campo,'#','#',$subcampo => $dato_fila);
+                        $marc_record->append_fields($new_field);
+                    }
+                    
+                    $campo++;
+                    }
+                
+                my %parametros;
+                $parametros{'id_importacion_iso'}   = $importacion->getId;
+                $parametros{'marc_record'}          = $marc_record->as_usmarc();
+                my $Io_registro_importacion         = C4::Modelo::IoImportacionIsoRegistro->new(db => $db);
+                $Io_registro_importacion->agregar(\%parametros);
+                
+            }else{
+                $primera_fila=0;
+            }
+        }
+        
+    }
+    else {
+        #ES UN ISO
+        
+    use Switch;
     my $reader;
     switch ($params->{'formatoImportacion'}) {
         case "iso"   {$reader=MARC::Moose::Reader::File::Iso2709->new(file   => $params->{'write_file'})}
@@ -154,7 +207,6 @@ sub guardarRegistrosNuevaImportacion {
                         if(!$new_field){
                             my $ind1=$field->ind1?$field->ind1:'#';
                             my $ind2=$field->ind2?$field->ind2:'#';
-
                             my $campo = $field->tag;
                             #Si es un campo de CONTROL pero tiene SUBCAMPOS hay que moverlo a un 900 para que no se pierdan los datos.
                              if(($field->tag < '010')&&($field->{'subf'})){
@@ -219,7 +271,7 @@ sub guardarRegistrosNuevaImportacion {
      }
 
     } # WHILE  ( my $record = $reader->read()
-
+  } # IF EXCEL
 }
 
 =item sub getImportaciones
@@ -921,23 +973,51 @@ sub obtenerCamposDeArchivo {
     my ($params)    = @_;
 
     my %detalleCampos=();
-    use Switch;
-    my $reader; 
-    switch ($params->{'formatoImportacion'}) {
-        case "iso"   {$reader=MARC::Moose::Reader::File::Iso2709->new(file   => $params->{'write_file'})}
-        case "isis"  {$reader=MARC::Moose::Reader::File::Isis->new(file   => $params->{'write_file'})}
-        case "xml"   {$reader=MARC::Moose::Reader::File::Marcxml->new(file   => $params->{'write_file'})}
-    }
+    
+    if($params->{'formatoImportacion'} eq "xls"){
+        #ES UNA PLANILLA DE CALCULO
+        # NO HAY CAMPOS Y SUBCAMPOS
+        # Los campo se van a ir agregando a partir del 100 en adelante con subcampo a
+        my $campo = 100;
+        my $subcampo = 'a';
+        
+        C4::AR::Debug::debug( "EXCEL!!! ".$params->{'write_file'}." parser => ".$params->{'file_ext'});
+        my $ref = Spreadsheet::Read::ReadData($params->{'write_file'}, parser => $params->{'file_ext'});
+        C4::AR::Debug::debug( "EXCEL REF ".$ref->[1]{'label'});
+        my @rows = Spreadsheet::Read::rows($ref->[1]);
+        my $first_row = $rows[0];
+        foreach my $columna (@$first_row){
+            
+                if(!$detalleCampos{$campo.""}){
+                    #Lo transformo a str :) 
+                    $detalleCampos{$campo.""}= $columna;
+                    C4::AR::Debug::debug( "LEO EXCEL!!! columna: ". $columna." => campo: ".$campo);
+                    $campo++;
+                }
+            
+        }
+    } 
+    else {
+        #ES UN ISO
+        
+        use Switch;
+        my $reader;
+        switch ($params->{'formatoImportacion'}) {
+            case "iso"   {$reader=MARC::Moose::Reader::File::Iso2709->new(file   => $params->{'write_file'})}
+            case "isis"  {$reader=MARC::Moose::Reader::File::Isis->new(file   => $params->{'write_file'})}
+            case "xml"   {$reader=MARC::Moose::Reader::File::Marcxml->new(file   => $params->{'write_file'})}
+        }
 
-    while ( my $record = $reader->read() ) {
-    eval {
-         for my $field ( @{$record->fields} ) {
-             my $campo = $field->tag;
-             if(!$detalleCampos{$campo}){
-                $detalleCampos{$campo}= 1;
-            }
-         }
-        };
+        while ( my $record = $reader->read() ) {
+        eval {
+             for my $field ( @{$record->fields} ) {
+                 my $campo = $field->tag;
+                 if(!$detalleCampos{$campo}){
+                    $detalleCampos{$campo}= 1;
+                }
+             }
+            };
+        }
     }
     return(\%detalleCampos);
 }
@@ -1143,7 +1223,7 @@ sub getNivelesFromRegistro {
                               push (@grupos, \%hash_temp);
                               $marc_record_n2 = MARC::Record->new();
                               @ejemplares = ();
-                          }				
+                          }
                           
                           if ((($campo eq '910')&&($subcampo eq 'a'))&&($marc_record_n2->subfield($campo,$subcampo))){
                                   #ya existe el 910,a TIPO DOC, no sirve que haya varios

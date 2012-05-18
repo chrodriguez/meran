@@ -3067,6 +3067,9 @@ sub generarComboFormatosImportacion {
     $select_formatosImportacion_Labels{'isis'}            ='ISIS';
     push (@select_formatosImportacion_Values, 'xml');
     $select_formatosImportacion_Labels{'xml'}            ='XML';
+    
+    push (@select_formatosImportacion_Values, 'xls');
+    $select_formatosImportacion_Labels{'xls'}            ='Planilla de Cálculo';
 
     $options_hash{'values'}         = \@select_formatosImportacion_Values;
     $options_hash{'labels'}         = \%select_formatosImportacion_Labels;

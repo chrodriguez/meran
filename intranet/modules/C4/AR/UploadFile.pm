@@ -345,7 +345,7 @@ sub uploadImport {
 #if ($check_size > $maxFileSize) { blabla }
 
 
-        my @extensiones_permitidas=("iso","xml");
+        my @extensiones_permitidas=("iso","xml","xls", "ods", "cvs");
         my $size = scalar(@nombreYextension) - 1;
         my $ext= @nombreYextension[$size];
 
@@ -361,6 +361,7 @@ sub uploadImport {
             my $file_type = $ext;
             my $hash_unique = Digest::MD5::md5_hex(localtime());
             $params->{'file_name'} = $name.".".$ext."_".$hash_unique;
+            $params->{'file_ext'}=$ext;
             my $write_file= $importsDir."/".$params->{'file_name'};
 
             if (!open(WFD,">$write_file")) {
