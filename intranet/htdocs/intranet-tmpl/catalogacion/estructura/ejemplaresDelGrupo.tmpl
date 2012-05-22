@@ -91,6 +91,7 @@
 						                            print C4::AR::Filtros::link_to(   text =>     "[% socio_prestamo.persona.getApeYNom %]",
 						                                                              url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
 						                                                              params =>   ["nro_socio=[% socio_prestamo.getNro_socio %]"],
+						                                                              ancla   => "prestamos",
 						                                                              title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]",
 						                                                              blank =>  1,
 						                                                        );

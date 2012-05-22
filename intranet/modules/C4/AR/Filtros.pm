@@ -63,6 +63,7 @@ sub link_to {
     my $tooltip         = $params_hash_ref{'tooltip'};
     my $url_absolute    = $params_hash_ref{'url_absolute'}||0;
     my $without_token   = $params_hash_ref{'without_token'}||0;
+    my $ancla           = $params_hash_ref{'ancla'}||0;
     
     
     my $cant    = scalar(@$params);
@@ -84,6 +85,10 @@ sub link_to {
         }else{
             $url .= '?token='.$session->param('token'); 
         }
+    }
+
+    if ($ancla){
+        $url .= "#".$ancla;
     }
 
     if($url_absolute){

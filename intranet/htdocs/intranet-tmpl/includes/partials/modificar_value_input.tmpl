@@ -2,10 +2,16 @@
     <fieldset>
 	     <legend>[% "Modificar Preferencia:" | i18n %]</legend>
 	      <div class="control-group">
-	                 <h6>[% 'Formato de Inventario para ' | i18n %] [% tipo_doc %]</h6>
-	                 <div class="controls">
-	                     <input id="unique_modify_value" type="text" placeholder="[% 'SIN FORMATO' | i18n %]" value="[% value %]" onkeypress="searchKeyPress();" />
-	                  <input type="hidden" id="edit" name="edit" value="1" />
+	                 <h4>[% 'Formato de Inventario para ' | i18n %] [% tipo_doc %]</h4>
+                     <div class="controls">
+                         <input id="unique_modify_value" type="text" placeholder="[% 'SIN FORMATO' | i18n %]" value="[% value %]" onkeypress="searchKeyPress();" />
+                         <input type="hidden" id="edit" name="edit" value="1" />
+                      </div>
+                      
+                     <br />
+                     <h4>[% 'Cantidad de d&iacute;gitos secuenciales' | i18n %]</h4>
+                     <div class="controls">
+                         <input id="digits_input" type="text" value="[% long_value %]" />
 	                 </div>
 	     </div>
 	     
