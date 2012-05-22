@@ -35,6 +35,7 @@
         objAH.url            = URL_PREFIX+'/admin/catalogo/barcode_gen_setup.pl';
         objAH.id_tipo_doc    = $('#tipo_nivel3_id').val();
         objAH.barcode_format =$('#unique_modify_value').val();
+        objAH.barcode_long   =$('#digits_input').val();
         objAH.tipoAccion     = "MODIFICACION_BARCODE";
         //se envia la consulta
         objAH.sendToServer();

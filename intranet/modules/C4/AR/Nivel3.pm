@@ -905,8 +905,8 @@ sub generaCodigoBarra{
    
    C4::AR::Debug::debug("\n\n\n GENERANDO BARCODE PARA TIPO DE EJEMPLAR: ".$tipo_ejemplar."  ".$parametros->{'id_tipo_doc'}."\n\n\n");
    
-   
-   my @estructurabarcode = split(',',C4::AR::Catalogacion::getBarcodeFormat($tipo_ejemplar));
+   my ($format,$new_long) = C4::AR::Catalogacion::getBarcodeFormat($tipo_ejemplar);
+   my @estructurabarcode = split(',',$format);
     
     my $like = '';
 
@@ -929,8 +929,8 @@ sub generaCodigoBarra{
 
     my @barcodes_array_ref;
     for(my $i=1;$i<=$cant;$i++){
-    C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => completarConCeros => ".completarConCeros($max_codigo + $i));
-        $barcode  = $like.completarConCeros($max_codigo + $i);
+    C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => completarConCeros => ".completarConCeros($max_codigo + $i,$tipo_ejemplar));
+        $barcode  = $like.completarConCeros($max_codigo + $i,$tipo_ejemplar);
         C4::AR::Debug::debug("Nivel3 => generaCodigoBarra => barcode => ".$barcode);
         push(@barcodes_array_ref, $barcode);
     }
@@ -938,10 +938,15 @@ sub generaCodigoBarra{
 }
 
 sub completarConCeros {
-    my ($numero) = @_;
+    my ($numero,$tipo_ejemplar) = @_;
 
     my $ceros = '';
-    for(my $j=0;(($j + length($numero)) < C4::AR::Preferencias::getValorPreferencia("longitud_barcode")) ;$j++){
+    
+    my ($format,$long) = C4::AR::Catalogacion::getBarcodeFormat($tipo_ejemplar,"NO");
+    
+    my $longitud = $long;
+    
+    for(my $j=0;(($j + length($numero)) < $longitud) ;$j++){
         $ceros.= "0";
     }
 
