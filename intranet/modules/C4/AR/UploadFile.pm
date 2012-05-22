@@ -37,9 +37,62 @@ use vars qw(@EXPORT @ISA);
         deleteDocument
         uploadImport
         deleteImport
+        uploadAdjuntoNovedadOpac
     );
 
 my $picturesDir = C4::Context->config("picturesdir");
+
+
+sub uploadAdjuntoNovedadOpac{
+
+    my ($adjunto) = @_;
+
+    use Digest::MD5;
+    use C4::AR::Utilidades;
+    
+    my @whiteList            = qw(
+                                        pdf
+                                        xls
+                                        doc
+                                        odt
+                                    );
+
+    my $uploaddir               = C4::Context->config("novedadesOpacPath");
+    my $maxFileSize             = 2048 * 2048; # 1/2mb max file size...
+    my $hash_unique             = Digest::MD5::md5_hex(localtime() + rand(10));
+    my ($file_type,$notBinary)  = C4::AR::Utilidades::checkFileMagic($adjunto, @whiteList);
+    
+    #es un archivo valido
+    if($file_type){
+    
+        if($notBinary){
+        
+            #no hay que escribirlo con binmode
+            C4::AR::Debug::debug("UploadFile => uploadAdjuntoNovedadOpac => vamos a escribirla sin binmode");
+            open(WRITEIT, ">$uploaddir/$hash_unique.$file_type") or die "Cant write to $uploaddir/$hash_unique.$file_type. Reason: $!";
+            print WRITEIT $adjunto;
+            close(WRITEIT);
+   
+        }else{
+        
+            C4::AR::Debug::debug("UploadFile => uploadAdjuntoNovedadOpac => vamos a escribirla CON binmode");
+            open ( WRITEIT, ">$uploaddir/$hash_unique.$file_type" ) or die "Cant write to $uploaddir/$hash_unique.$file_type. Reason: $!"; 
+            binmode WRITEIT; 
+            while ( <$adjunto> ) { 
+            	print WRITEIT; 
+            }
+            close(WRITEIT);
+        
+        }
+
+        return ("$hash_unique.$file_type");
+        
+    }
+    
+    return 0;
+
+
+}
 
 sub uploadFotoNovedadOpac{
 

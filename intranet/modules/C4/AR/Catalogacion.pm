@@ -2058,7 +2058,10 @@ sub _getEstructuraFromCampoSubCampo{
 
     push(@filtros, ( campo      => { eq => $campo } ) );
     push(@filtros, ( subcampo   => { eq => $subcampo } ) );
-    push(@filtros, ( nivel      => { eq => $nivel } ) );
+    
+    if ($nivel != 0){
+        push(@filtros, ( nivel      => { eq => $nivel } ) );
+    }
 
     push (  @filtros, ( or   => [   itemtype   => { eq => $itemtype },
                                     itemtype   => { eq => 'ALL'     }

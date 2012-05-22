@@ -26,11 +26,15 @@ use vars qw(@EXPORT @ISA);
 
 sub agregar{
 
-    my ($params, @arrayFiles)    = @_;
+    my ($parametros)    = @_;
     my $novedad     = C4::Modelo::SysNovedad->new();
     my $msg_object  = C4::AR::Mensajes::create();
     my $db          = $novedad->db;
     my $image_name;
+    
+    my $datosNovedad = $parametros->{'datosNovedad'};
+    my $paramAdjunto = $parametros->{'adjunto'};
+    my $arrFiles     = $parametros->{'arrayFiles'};
     
     use C4::AR::UploadFile;
     use C4::Modelo::ImagenesNovedadesOpac;
@@ -39,14 +43,32 @@ sub agregar{
     
         my $imagenes_novedades_opac;   
         
-#        eval{
+        eval{
+
+        C4::AR::Debug::debug("datosnovedad titulo : " . $datosNovedad->{'titulo'});
 
             #agregamos primero la novedad
             #para sacarle el id despues
-            $novedad->agregar($params->{'param'});
+            $novedad->agregar($datosNovedad);
+            
+            my $adjuntoName = 0;
+            
+            if($paramAdjunto){
+                $adjuntoName = C4::AR::UploadFile::uploadAdjuntoNovedadOpac($paramAdjunto);
+                
+                C4::AR::Debug::debug("adjuntoName : " . $adjuntoName);
+            
+                if(!$adjuntoName){
+                    $msg_object->{'error'}= 1;
+                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP13', 'intra'} );
+                }else{
+                    $novedad->setAdjunto($adjuntoName);
+                    $novedad->save();
+                }
+            }
         
             #recorremos todas las imagenes y las guardamos      
-            foreach my  $value (@arrayFiles) {
+            foreach my  $value (@$arrFiles) {
             
                 $image_name = C4::AR::UploadFile::uploadFotoNovedadOpac($value);
                 
@@ -60,7 +82,7 @@ sub agregar{
                 }
             }
             
-#        };
+        };
 
      }
      

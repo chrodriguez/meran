@@ -21,7 +21,7 @@
 	}
 
     function obtenerNovedades(){
-        objAH               =new AjaxHelper(updateObtenerNovedades);
+        objAH               = new AjaxHelper(updateObtenerNovedades);
         objAH.debug         = true;
         objAH.showOverlay   = true;
         objAH.url           = URL_PREFIX+'/admin/novedades_opacDB.pl';
@@ -33,7 +33,6 @@
             if (!verificarRespuesta(responseText))
                 return(0);
             $('#novedades_opac_ajax').html(responseText);
-            //zebra('datos_tabla');
     }
     
     function eliminarNovedad(id_novedad){
