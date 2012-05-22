@@ -33,6 +33,7 @@ if ($action){
     $t_params->{'categoria'}    = $input->param('categoria');
     $t_params->{'contenido'}    = $input->param('contenido');
     $t_params->{'twiter'}       = $input->param('check_publicar');
+    $t_params->{'nombreAdjunto'}= $input->param('nombreAdjunto');
     $t_params->{'links'}        = $input->param('links');
     #--------- FIN data de los inputs -----------
     
@@ -75,10 +76,26 @@ if ($action){
         }
     }
     
-    $input->param('links', $linksFinal);
+#    $input->param('links', $linksFinal);
     #------- FIN links ---------
+    
+    my %novedad;
+    
+    $novedad{'titulo'}          = $input->param('titulo');
+    $novedad{'contenido'}       = $input->param('contenido');
+    $novedad{'links'}           = $linksFinal;
+    $novedad{'categoria'}       = $input->param('categoria');
+    $novedad{'nombreAdjunto'}   = $input->param('nombreAdjunto');
      
-    my ($Message_arrayref, $novedad) = C4::AR::Novedades::agregar($input, @arrayFiles);
+    my %paramHash;
+    
+    C4::AR::Debug::debug("titulo : " . $novedad{'titulo'});
+    
+    $paramHash{'datosNovedad'} = \%novedad;
+    $paramHash{'arrayFiles'}   = \@arrayFiles;
+    $paramHash{'adjunto'}      = $input->upload('adjunto');
+     
+    my ($Message_arrayref, $novedad) = C4::AR::Novedades::agregar(\%paramHash);
     
     if($Message_arrayref->{'error'} == 0){
    

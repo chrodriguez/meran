@@ -3,10 +3,8 @@
 [% IF novedad.getContenido %]
 
 <script type="text/javascript" language="javascript">
-    $(document).ready(function() {
-    
+    $(document).ready(function() {   
         $('.fancylink').fancybox();
-    
     });
 </script>
     
@@ -29,11 +27,15 @@
                     <dd>[% HTML.escape(novedad.getCategoria) %]</dd>
                 [% END %] 
                 
+                [% IF novedad.getAdjunto %]
+                    <dt>[% 'Archivo adjunto' | i18n %]:</dt>
+                    <dd><a href="/opac-tmpl/uploads/novedades/[% novedad.getAdjunto %]">[% novedad.getNombreAdjunto %]</a></dd>
+                [% END %]
+                
                 [% IF cant_links %]
                     <dt>[% 'Links' | i18n %]:</dt>
                     [% FOREACH link IN links %]
                         <a target="_blank" href="[% link %]">[% link %]</a></br>
-                        
                     [% END %] 
                     
                 [% END %] 
@@ -44,8 +46,8 @@
             <div class="well">
 	        
 	            [% FOREACH imagen IN imagenes_hash %]
-	                <a class="fancylink" rel="group" href="/uploads/novedades/[% imagen.getImageName %]">
-                        <img border="0" src="/uploads/novedades/[% imagen.getImageName %]"
+	                <a class="fancylink" rel="group" href="/opac-tmpl/uploads/novedades/[% imagen.getImageName %]">
+                        <img border="0" src="/opac-tmpl/uploads/novedades/[% imagen.getImageName %]"
                               style="width: 60%; max-width: 120px;" 
                               alt="novedad_[% imagen.getIdNovedad %]"
                               title="novedad_[% imagen.getIdNovedad %]"

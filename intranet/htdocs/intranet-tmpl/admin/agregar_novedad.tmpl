@@ -149,6 +149,24 @@ function MultiSelector( list_target, max ){this.list_target = list_target;this.c
 
                 [% END %]
                 
+                <div class="control-group">
+                    <label class="control-label" for="contenido">[% "Archivo adjunto" | i18n %]</label>
+                    <div class="controls">
+                        <input type="file" name="adjunto" />
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="contenido">[% "Nombre del adjunto" | i18n %]</label>
+                    <div class="controls">
+                        [% IF editing %]
+                            <input type="file" value="[% nombreAdjunto %]" name="nombreAdjunto" />
+                        [% ELSE %]
+                            <input type="text" value="" name="nombreAdjunto" />
+                        [% END %]
+                    </div>
+                </div>
+                
                 [% IF editing %]
                 
                     <div class="control-group">

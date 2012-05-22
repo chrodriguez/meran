@@ -15,6 +15,8 @@ __PACKAGE__->meta->setup(
         categoria       => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 255 },
         contenido       => { type => 'text', overflow => 'truncate', not_null => 1 },
         links           => { type => 'varchar', overflow => 'truncate', not_null => 0, length => 1024 },
+        adjunto         => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 255 },
+        nombreAdjunto   => { type => 'varchar', overflow => 'truncate', not_null => 0, length => 255 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -28,10 +30,11 @@ sub agregar{
     my ($params)    = @_;    
     my $usuario     = C4::AR::Auth::getSessionNroSocio();
 
-    $self->setTitulo($params->{'titulo'}[0]);
-    $self->setContenido($params->{'contenido'}[0]);
-    $self->setCategoria($params->{'categoria'}[0]);
-    $self->setLinks($params->{'links'}[0]);
+    $self->setTitulo($params->{'titulo'});
+    $self->setContenido($params->{'contenido'});
+    $self->setCategoria($params->{'categoria'});
+    $self->setLinks($params->{'links'});
+    $self->setNombreAdjunto($params->{'nombreAdjunto'});
     $self->setUsuario($usuario);
 
     return($self->save());
@@ -68,6 +71,32 @@ sub setLinks{
     my ($links) = @_;
 
     $self->links($links);
+}
+
+sub getNombreAdjunto{
+    my ($self) = shift;
+
+    return ($self->nombreAdjunto);
+}
+
+sub setNombreAdjunto{
+    my ($self) = shift;
+    my ($nombreAdjunto) = @_;
+
+    $self->nombreAdjunto($nombreAdjunto);
+}
+
+sub getAdjunto{
+    my ($self) = shift;
+
+    return ($self->adjunto);
+}
+
+sub setAdjunto{
+    my ($self) = shift;
+    my ($adjunto) = @_;
+
+    $self->adjunto($adjunto);
 }
 
 sub getFechaLegible{

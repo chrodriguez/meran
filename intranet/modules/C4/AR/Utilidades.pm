@@ -172,6 +172,8 @@ sub checkFileMagic{
     my $path        = "/tmp";
     my $notBinary   = 0;
     
+    my @nombreYextension = split('\.',$file);
+    
     #escribimos el archivo
     open ( WRITEIT, ">$path/$hash_unique" ) or die "$!"; 
     binmode WRITEIT; 
@@ -197,6 +199,7 @@ sub checkFileMagic{
     }
     
     $mime    = $flm->checktype_filename($path . "/" . $hash_unique);
+    C4::AR::Debug::debug("mime del archivo $file: " . $mime);
 
     #vemos si esta en la whitelist
     my $ok      = 0;
@@ -204,7 +207,9 @@ sub checkFileMagic{
     
     foreach my $t (@filesAllowed){
     
-        if($mime =~ m/$t/i){
+#        C4::AR::Debug::debug("dentro del foreach, chekeando la whitelist $mime y $t: " . $mime =~ m/$t/i . " y esto @nombreYextension[1] : " .$mime =~ m/@nombreYextension[1]/i);
+        
+        if(($mime =~ m/$t/i) && ($mime =~ m/@nombreYextension[1]/i )){
             $ok = 1;
             $type = $t;
         }
