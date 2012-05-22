@@ -52,7 +52,6 @@ if($tipoAccion eq "BUSQUEDAS"){
    ($results, $cantidad)= C4::AR::Reportes::getBusquedasDeUsuario($obj,$ini,$cantR);
   
 
-
     $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
 #     ($results, $cantidad)= C4::AR::Reportes::getBusquedasDeUsuario($obj);
 
