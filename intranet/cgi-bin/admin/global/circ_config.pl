@@ -7,7 +7,7 @@ use C4::AR::Auth;
 my $input = new CGI;
 
 my ($template, $session, $t_params, $socio)  = get_template_and_user({
-                            template_name       => "admin/global/circConfig.tmpl",
+                            template_name       => "admin/global/circResultConfig.tmpl",
                             query               => $input,
                             type                => "intranet",
                             authnotrequired     => 0,
@@ -18,7 +18,86 @@ my ($template, $session, $t_params, $socio)  = get_template_and_user({
                             debug => 1,
                  });
 
-my $preferencias_circulacion  = C4::AR::Preferencias::getPreferenciasByCategoria('circulacion');
-$t_params->{'preferencias'}   = $preferencias_circulacion;
+my $preferenciasCirculacion = C4::AR::Preferencias::getPreferenciasByCategoria('circulacion');
+
+#si estamos haciendo el post del form hay que guardar los cambios
+if($input->param('editando')){
+
+    my $msg_object = C4::AR::Mensajes::create();
+    
+    foreach my $preferencia (@$preferenciasCirculacion){ 
+        
+        my $Message_arrayref  = C4::AR::Preferencias::t_modificarVariable($preferencia->getVariable,$input->param($preferencia->getVariable),$preferencia->getExplanation,'circulacion');
+        
+    #    my $infoOperacionJSON = to_json $Message_arrayref;
+    #    C4::AR::Auth::print_header($session);
+    #    print $infoOperacionJSON;  
+        
+    }
+    
+    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP000', 'params' => []} ) ;
+
+    $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje('SP000','intranet');
+}
+
+my @arrayPreferencias;
+my $campo       = "";
+my $tabla       = "";
+
+#armamos la data para pasar al template
+foreach my $preferencia (@$preferenciasCirculacion){
+        
+    if($preferencia->getOptions ne ""){		    
+        if($preferencia->getType eq "referencia"){	    
+                my @array;
+		        @array = split(/\|/,$preferencia->getOptions);
+		        $tabla = $array[0];
+		        $campo = $array[1];			    
+	    }
+    }
+    
+    my $nuevoCampo;
+    my %labels;
+    my @values;
+    my %hash;
+    
+    $hash{'preferencia'} = $preferencia;
+
+    if($preferencia->getType eq "bool"){
+        push(@values,1);
+        push(@values,0);
+        $labels{1}  = "Si";
+        $labels{0}  = "No";
+        $nuevoCampo = C4::AR::Utilidades::crearComponentes("radio",$preferencia->getVariable,\@values,\%labels,$preferencia->getValue);
+    }
+    
+    elsif($preferencia->getType eq "texta"){
+        $nuevoCampo = C4::AR::Utilidades::crearComponentes("texta",$preferencia->getVariable,58,4,$preferencia->getValue);
+    }
+     
+    elsif($preferencia->getType eq "referencia"){
+        my $orden = $campo;
+        my ($cantidad,$valores) = C4::AR::Referencias::obtenerValoresTablaRef($tabla,$campo,$orden);
+        foreach my $val(@$valores){
+	        $labels{$val->{"clave"}} = $val->{"valor"};	
+	        push(@values,$val->{"clave"});
+        }
+        $nuevoCampo = C4::AR::Utilidades::crearComponentes("combo",$preferencia->getVariable,\@values,\%labels,$preferencia->getValue);
+        $hash{'tabla'} = $tabla;
+        $hash{'campo'} = $campo;
+
+    }	elsif($preferencia->getType eq "text"){
+        $nuevoCampo = C4::AR::Utilidades::crearComponentes("text",$preferencia->getVariable,50,0,$preferencia->getValue);
+    }
+
+    $hash{'tipo'}  = $preferencia->getType;
+    $hash{'valor'} = $nuevoCampo;
+    
+    push(@arrayPreferencias, \%hash);
+}
+
+$t_params->{'preferencias'}   = \@arrayPreferencias;
+
 $t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Configuraci&oacute;n de Circulaci&oacute;n");
+
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

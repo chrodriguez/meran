@@ -1,39 +1,44 @@
-<fieldset class="resultados_busqueda">
-    <div class="tablaResultado_preferencias" id="tablaResultado_preferencias" >
-        <table name="tablaResult" class="table table-striped">
-            <thead>
-                <tr>
-                    <th>[% "Variable" | i18n %]</th>
-                    <th>[% "Valor" | i18n %]</th>
-                    <th>[% "Explicaci&oacute;n" | i18n %]</th>
-                    <th>[% "Editar" | i18n %]</th>
-                </tr>
-            </thead>
-            <tbody>
+[% INCLUDE "intranet-top.inc" %]
+
+<form class="form-horizontal" action="[% url_prefix %]/admin/global/circ_config.pl?token=[% token %]" method="post">
+    <fieldset class="resultados_busqueda">
+    <legend>[% "Administraci&oacute;n de preferencias de Circulac&oacute;n" | i18n %]</legend>
+
+    <input type="hidden" id="editando" name="editando" value="1">
+    
             [% FOREACH preferencia IN preferencias %]
-              <tr>
-                <td >[% preferencia.getVariable %]</td>
-                <td >[% preferencia.getShowValue %]</td>
-                <td >[% preferencia.getExplanation %]</td>
-                <td>
-                    [% PERL %]
-                            print C4::AR::Filtros::action_button(
-                                                            button       => "btn btn-primary click",
-                                                            action       => 'modificarVariable("[% preferencia.getVariable %]","[% preferencia.getType %]");',
-                                                            icon         => "icon-white icon-edit",
-                                                            title        => "",
-                            ) ;
+            
+                <div class="control-group">
+                    <label class="control-label">[% preferencia.preferencia.getVariable %]</label>
+                    <div class="preferenciasControls">
+                    
+                        [% IF preferencia.valor %]
+                            [%  preferencia.valor %]
+                        [% ELSE %]
+                            <input id="valor" type="text" size="50" name="valor">
+                        [% END %]
+                        
+                        [% IF preferencia.tabla %]<input type="hidden" id="[% preferencia.preferencia.getId %]_tabla" value="[% preferencia.tabla %]">[% END %]
+		                [% IF preferencia.campo %]<input type="hidden" id="[% preferencia.preferencia.getId %]_campo" value="[% preferencia.campo %]">[% END %]
+		                
+                        [% PERL %]
+	                        print C4::AR::Filtros::setHelpInput(   
+	                                            text        => "[% preferencia.preferencia.getExplanation %]",
+	                                    ) ;
+	                        
+	                    [% END %]
+                    </div>
+                </div>
 
-                    [% END %]
-
-                </td>
-              </tr>
-        
             [% END %]
-        
-            </tbody>
-        </table>
+    <div class="form-actions">
+	    [% PERL %]
+	                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
+	                                                    type    => "submit",
+	                                                    boton   => "boton_agregar",
+	                        ) ;
+	    [% END %]
     </div>
-</fieldset>
+</form>
 
-<div id="divResultado" style="clear: both;"></div>
+[% INCLUDE "intranet-bottom.inc" %]
