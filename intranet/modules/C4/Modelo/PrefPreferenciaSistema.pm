@@ -44,6 +44,13 @@ sub setVariable{
     $self->variable($variable);
 }
 
+sub getId{
+    my ($self) = shift;
+
+#     return (&C4::AR::Utilidades::trim($self->value));
+    return ($self->id);
+}
+
 sub getValue{
     my ($self) = shift;
 
