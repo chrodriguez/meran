@@ -2359,7 +2359,7 @@ sub existeNivel1{
 
 
 sub updateBarcodeFormat{
-    my ($tipo_documento,$format) = @_;
+    my ($tipo_documento,$format,$long) = @_;
     use C4::Modelo::BarcodeFormat::Manager;
 
     my $msg_object  = C4::AR::Mensajes::create();
@@ -2375,6 +2375,7 @@ sub updateBarcodeFormat{
     #eval{
         if (C4::AR::Utilidades::validateString($format)){
            $format = $format_n3->setFormat($format);
+           $format_n3->setLong($long);
            $format_n3->setId_tipo_doc($tipo_documento);
            $format_n3->save();
            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'CB001', 'params' => [$tipo_documento]} ) ;
@@ -2397,6 +2398,7 @@ sub getBarcodeFormat{
     $for_catalogue = $for_catalogue || 1;
     my $format = undef;
     my $default_format = C4::AR::Preferencias::getValorPreferencia("barcodeFormat");
+    my $default_long   = C4::AR::Preferencias::getValorPreferencia("longitud_barcode");
 
     my $format_n3      = C4::Modelo::BarcodeFormat::Manager->get_barcode_format(query=> [id_tipo_doc => $tipo_documento],);
 
@@ -2405,15 +2407,17 @@ sub getBarcodeFormat{
     }else{
         $format_n3 = $format_n3->[0];
     }
+    
     if (C4::AR::Utilidades::validateString($format_n3->getFormat())){
        $format = $format_n3->getFormat();
+       $default_long = $format_n3->getLong()?$format_n3->getLong():$default_long;
     }else{
         if ($for_catalogue ne "NO"){
             $format = $default_format;
         }
     }
 
-    return ($format);
+    return ($format,$default_long);
 
 }
 

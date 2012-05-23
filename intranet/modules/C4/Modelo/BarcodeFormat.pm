@@ -11,6 +11,7 @@ __PACKAGE__->meta->setup(
         id              => { type => 'serial', overflow => 'truncate', length => 16 },
         id_tipo_doc     => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 4 },
         format          => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 255 },
+        long            => { type => 'integer', overflow => 'truncate', not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -35,6 +36,7 @@ sub agregar{
 
     $self->setId_tipo_doc($params-{'id_tipo_doc'});
     $self->setFormat($params-{'format'});
+    $self->setLong($params-{'long'});
 
     return($self->save());
 
@@ -58,6 +60,12 @@ sub getFormat{
     return ($self->format);
 }
 
+sub getLong{
+    my ($self) = shift;
+
+    return ($self->long);
+}
+
 sub setId_tipo_doc{
     my ($self)  = shift;
     my ($Id_tipo_doc) = @_;
@@ -71,6 +79,14 @@ sub setFormat{
     my ($Format) = @_;
 
     $self->format($Format);
+    
+}
+
+sub setLong{
+    my ($self)  = shift;
+    my ($long) = @_;
+
+    $self->long($long);
     
 }
 1;

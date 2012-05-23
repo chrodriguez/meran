@@ -33,7 +33,7 @@ if ($obj){
     if ($tipoAccion eq "ELECCION_BARCODE"){
         $t_params->{'id_tipo_doc'} = $tipoN3;
         $t_params->{'tipo_doc'}     = C4::AR::Referencias::translateTipoNivel3($tipoN3);
-        $t_params->{'value'}       = C4::AR::Catalogacion::getBarcodeFormat($tipoN3,"NO");
+        ($t_params->{'value'},$t_params->{'long_value'}) = C4::AR::Catalogacion::getBarcodeFormat($tipoN3,"NO");
         $t_params->{'function'}    = 'actualizarBarcode();';
 
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
@@ -41,7 +41,8 @@ if ($obj){
     }
     elsif($tipoAccion eq "MODIFICACION_BARCODE"){
         my $format                  = $obj->{'barcode_format'};
-        my ($Message_arrayref)      = C4::AR::Catalogacion::updateBarcodeFormat($tipoN3,$format);
+        my $long                    = $obj->{'barcode_long'};
+        my ($Message_arrayref)      = C4::AR::Catalogacion::updateBarcodeFormat($tipoN3,$format,$long);
         my $infoOperacionJSON       = to_json $Message_arrayref;
         
         C4::AR::Auth::print_header($session);
