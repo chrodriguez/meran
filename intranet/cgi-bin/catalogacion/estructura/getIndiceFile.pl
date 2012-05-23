@@ -23,11 +23,11 @@ my ($template, $session, $t_params)  = get_template_and_user({
                     });
 
 # por si meten por URL un id no valido                   
-#eval{                
+eval{                
 
     my $file_id         = $input->param('id2');
     my $eDocsDir        = C4::Context->config('edocsdir');
-    my ($nivel2,$file)   = C4::AR::Catalogacion::getIndiceFile($file_id);
+    my ($nivel2,$file)  = C4::AR::Catalogacion::getIndiceFile($file_id);
     my $tmpFileName     = $eDocsDir.'/'.$file;
 
     open INF, $tmpFileName or die "\nCan't open $tmpFileName for reading: $!\n";
@@ -41,7 +41,7 @@ my ($template, $session, $t_params)  = get_template_and_user({
     #SE ESCRIBE EL ARCHIVO EN EL CLIENTE
     while (read (INF, $buffer, 65536) and print $buffer ) {};
 
-#};
+};
 
 # redirigimos
 if($@){
