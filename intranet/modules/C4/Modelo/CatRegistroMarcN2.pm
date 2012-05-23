@@ -12,6 +12,7 @@ __PACKAGE__->meta->setup(
         marc_record     => { type => 'text', overflow => 'truncate' },
         id1             => { type => 'integer', overflow => 'truncate', not_null => 1 },
         indice          => { type => 'text', overflow => 'truncate' },
+        indice_file_path=> { type => 'varchar', overflow => 'truncate', not_null => 1, length => 255, },
         template        => { type => 'varchar', overflow => 'truncate', not_null => 1 },
     ],
 
@@ -113,6 +114,49 @@ sub setIndice{
     my ($indice)    = @_;
     
     $self->indice($indice);
+}
+
+sub getIndiceFilePath{
+    my ($self) = shift;
+    return ($self->indice_file_path);
+}
+
+sub setIndiceFilePath{
+    my ($self)      = shift;
+    my ($indice_file_path)    = @_;
+    
+    $self->indice_file_path($indice_file_path);
+}
+
+sub tieneArchivoIndice{
+    my ($self)      = shift;
+
+    my $status = C4::AR::Utilidades::validateString($self->getIndiceFilePath);
+    my $edocsDir = C4::Context->config("edocsdir");
+    
+    if ($status){
+        my $path = $edocsDir."/".$self->getIndiceFilePath;
+
+	    if ( -e $path ){
+	        $status =  $self->getIndiceFilePath;
+	    }else{
+	        $status = undef;
+	    }            
+    }
+    
+    return $status;	
+}
+
+sub getIndiceFileType{
+	
+	my ($self)      = shift;
+	
+	my $edocsDir = C4::Context->config("edocsdir");
+	my $path = $edocsDir."/".$self->getIndiceFilePath;
+	my $isValidFileType = C4::AR::Utilidades::isValidFile($path);
+	
+	return ($isValidFileType);
+	
 }
 
 sub tiene_indice {
