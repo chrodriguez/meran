@@ -1229,6 +1229,15 @@ sub getBusquedasDeUsuario {
                                                                       sort_by => $orden,
                                                           );
 
+
+    my $all_results = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda( 
+                                                                      query   => \@filtros,           
+                                                                      require_objects => ['busqueda'],
+                                                                      with_objects => [],
+                                                                      select       => ['busqueda.*','rep_historial_busqueda.*'],
+                                                                      sort_by => $orden,
+                                                          );
+
    
     my ($rep_busqueda_count) = C4::Modelo::RepHistorialBusqueda::Manager->get_rep_historial_busqueda_count(
                                                                               query   => \@filtros,
@@ -1238,8 +1247,7 @@ sub getBusquedasDeUsuario {
                                                                             );
                                                                             
 
-
-    return ($resultsarray, $rep_busqueda_count);
+    return ($resultsarray, $rep_busqueda_count, $all_results);
 
 }
 

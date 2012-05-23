@@ -29,7 +29,7 @@
         [% END %]
 
         <tbody>      
-              [% FOREACH res IN results %]   
+              [% FOREACH res IN results %]
                 <tr>
                   <td>
                       [% res.valor %]
