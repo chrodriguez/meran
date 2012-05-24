@@ -553,6 +553,8 @@ sub getAnaliticasFromNivel2{
         # $hash_nivel2{'nivel1_analiticas_cant'}  = scalar(@nivel1_analitica_array);
     # }
 
+# C4::AR::Debug::debug("Nivel2 => getAnaliticasFromNivel2 => ".scalar(@analitica_array));
+
     return @analitica_array;
 }
 
