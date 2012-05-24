@@ -30,6 +30,7 @@ use vars qw(@EXPORT_OK @ISA);
   getRefFromStringConArrobas
   getDocumentById
   saveEDocument
+  saveIndice
   headerDCXML
   footerDCXML
   existeNivel1
@@ -2248,11 +2249,35 @@ sub getDocumentById{
 
 }
 
+sub getIndiceFile{
+    my ($id2) = @_;
+    use C4::Modelo::EDocument::Manager;
+
+    my ($nivel2) = C4::AR::Nivel2::getNivel2FromId2($id2);
+
+    if ($nivel2){
+        return ($nivel2,$nivel2->getIndiceFilePath);
+    }else{
+    	return ($nivel2,undef);
+    }
+
+}
+
 sub saveEDocument{
     my ($id2,$filepath,$file_type,$name) = @_;
 
     my $e_doc = C4::Modelo::EDocument->new();
     $e_doc->agregar($id2,$filepath,$file_type,$name);
+
+}
+
+sub saveIndice{
+    my ($id2,$filepath) = @_;
+
+    my $nivel2 = C4::AR::Nivel2::getNivel2FromId2($id2);
+    
+    $nivel2->setIndiceFilePath($filepath);
+    $nivel2->save();
 
 }
 

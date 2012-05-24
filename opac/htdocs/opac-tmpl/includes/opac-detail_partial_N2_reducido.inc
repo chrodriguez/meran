@@ -66,7 +66,17 @@
 	                                                  </div>
 	                                                  <div class="modal-body">
 	                                                      <pre>[% indice | trim %]</pre>
-	                                                  </div>
+						                                    [% IF hay_indice_file %]
+						                                           [% PERL %]
+						                                               print C4::AR::Filtros::link_to( text =>     " [% 'Contenido del &iacute;ndice' |i18n %]",
+						                                                                               url =>      "getIndiceFile.pl", 
+						                                                                               params =>   ["id2=[% id2 %]"],
+						                                                                               title =>    "[% 'Contenido del &iacute;ndice' |i18n %]",
+						                                                                               icon => "icon-file",
+						                                                                           ) ;
+						                                           [% END %]
+		                                                    [% END %]
+	                                                      </div>
 	                                                  <div class="modal-footer"></div>
 	                                          </div>
 											[% END %]

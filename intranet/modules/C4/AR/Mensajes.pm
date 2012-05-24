@@ -377,6 +377,7 @@ my %mensajesINTRA = (
     'M901' => 'Se elimin&oacute; con &eacute;xito el item con c&oacute;digo de barras *?* .',
     'M902' => 'Se elimin&oacute; con &eacute;xito el grupo *?* .',
     'M903' => 'Se elimin&oacute; con &eacute;xito el Registro *?* .',
+    'SP000' => 'Las preferencias han sido modificadas con &eacute;xito.',
     'SP001' => 'Se produjo un error al actualizar la preferencia.',
     'SP002' => 'Se produjo un error al guardar la preferencia.',
     'SP003' => 'La preferencia ha sido modificada con &eacute;xito.',
