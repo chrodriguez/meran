@@ -13,13 +13,25 @@
     }
 
 
+    function exportarPDF(){
+        $('#accion').val('EXPORTAR_PDF');
+        
+        $('#form_reporte_busquedas').submit();
+    }
+
+    function updateExportarPDF(responseText){
+        
+    }
+    
+
+
     function ordenar_reporte_busquedas(orden){
               if (orden == ORDEN) {
                   ASC= !ASC;
               }
               ORDEN = orden; 
-              $('#orden').val(orden);
-              $('#sentido_orden').val(ASC);
+              $('#orden').val(ORDEN);
+              $('#asc').val(ASC);
               generarReporteBusquedas();
     }
 
@@ -72,6 +84,8 @@
             $(this).addClass('selected');
             $('.checkbox',parent).attr('checked', false);
         });
+        $('#orden').val(ORDEN);
+        $('#asc').val(ASC);
 
         CrearAutocompleteUsuarios({ 
                                                     IdInput: 'usuario', 
@@ -86,7 +100,7 @@
       <form class="form-horizontal" id="form_reporte_busquedas" action="[% url_prefix %]/reports/catalogoDB.pl" method="get">
           <input type='hidden' id='accion' name="accion" value=''>
           <input type='hidden' id='orden' name="orden" value=''>
-          <input type='hidden' id='sentido_orden' name="sentido_orden" value=''>
+          <input type='hidden' id='asc' name="asc" value=''>
           <div id="divInfoUsuario" class="control-group" >
               <label for="usuario" class="control-label">[% 'Usuario' | i18n %]
                   [% PERL %]

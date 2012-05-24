@@ -67,6 +67,12 @@ sub getFecha{
    return ($self->fecha);
 }
 
+sub getFecha_formateada {
+    my ($self) = shift;
+    my $dateformat = C4::Date::get_date_format();
+    return C4::Date::format_date( $self->getFecha, $dateformat );
+}
+
 sub setNro_socio{
 
    my ($self) = shift;
@@ -80,6 +86,7 @@ sub setFecha{
    my ($fecha) = @_;
    $self->fecha($fecha);
 }
+
 
 1;
 

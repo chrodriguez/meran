@@ -54,7 +54,7 @@
                       
                   </td>
                   <td>
-                      [% res.busqueda.fecha %]
+                      [% res.busqueda.getFecha_formateada %]
                   </td>
                   <td>
                       
