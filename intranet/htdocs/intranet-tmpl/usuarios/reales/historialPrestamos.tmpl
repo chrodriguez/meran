@@ -1,9 +1,9 @@
 [% USE HTML %]
-    <div class="well">
     [% IF cant %]
+                <div class="well">
 
-                  [% "Cantidad de pr&eacute;stamos realizados" | i18n %]: &nbsp;<strong>[% cant %]</strong>
-                  </div>
+                      [% "Cantidad de pr&eacute;stamos realizados" | i18n %]: &nbsp;<strong>[% cant %]</strong>
+                </div>
                   <div class="contenedor_paginador">[% paginador %]</div>
                   
                   [% PERL %]
@@ -100,5 +100,5 @@
 		</table>
   [% ELSE %]
        </div>
-            <div class="alert alert-info">[% 'No hay importaciones para mostrar'| i18n %]</div>
+            <div class="alert alert-info">[% 'No hay pr&eacute;stamos para mostrar'| i18n %]</div>
 [% END %]

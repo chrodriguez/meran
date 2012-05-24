@@ -1,3 +1,5 @@
+=item
+
 #!/usr/bin/perl
 
 use strict;
@@ -107,7 +109,7 @@ else{
     }
 
     $t_params->{'socio'}= $socio,
-    $t_params->{'LibraryName'}= C4::AR::Preferencias::getValorPreferencia("LibraryName");
+#    $t_params->{'LibraryName'}= C4::AR::Preferencias::getValorPreferencia("LibraryName");
 
     #otra vez einar con Guarani
 
@@ -119,3 +121,4 @@ else{
 
 }
 
+=cut

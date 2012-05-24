@@ -1,10 +1,8 @@
 [% USE HTML %]
 
-
-
-<div class="well">
 [% IF cant %]
-		[% "Cantidad de registros en el historial de sanciones" | i18n %]: <strong>[% cant %]</strong></div> 
+        <div class="well">
+		  [% "Cantidad de registros en el historial de sanciones" | i18n %]: <strong>[% cant %]</strong></div> 
         
 		<div class="contenedor_paginador">[% paginador %]</div>
 

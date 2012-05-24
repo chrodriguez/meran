@@ -522,7 +522,7 @@ sub uploadIndiceFile{
 #if ($check_size > $maxFileSize) { blabla }
 
 
-        my @extensiones_permitidas=("bmp","jpg","gif","png","jpeg","doc","docx","odt","pdf","xls","zip","rar");
+        my @extensiones_permitidas=("bmp","jpg","gif","png","jpeg","doc","docx","odt","pdf","xls");
         my $size = scalar(@nombreYextension) - 1;
         my $ext= @nombreYextension[$size];
 
