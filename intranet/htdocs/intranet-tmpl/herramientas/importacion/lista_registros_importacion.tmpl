@@ -112,15 +112,21 @@ function cambiarFiltro (filtro){
                         <span class="label label-info">No</span>
                         [% END %]
                       </td>
+                      
                       <td>
                         [% IF detalle_importacion.getEstado == "IGNORADO" %]
-                        <span class="label label-warning">Ignorado</span>
+                            <span class="label label-warning" >[% 'Ignorado' | i18n %]</span>
                         [% ELSIF detalle_importacion.getEstado == "IMPORTADO" %]
-                        <span class="label label-success">Importado</span>
+                            <span class="label label-success">[% 'Importado' | i18n %]</span>
                         [% ELSIF detalle_importacion.getEstado == "ERROR" %]
-                        <span class="label label-important">Error</span>
+                            <span class="label label-warning popover_button" 
+                                  rel="popover" 
+                                  data-content="[% detalle_importacion.getDetalle %]" 
+                                  data-original-title="[% 'Error' | i18n %]" >
+                            [% 'Error' | i18n %]
+                            </span>
                         [% ELSE %]
-						<span class="label label-info">Procesar</span>
+						    <span class="label label-info">[% 'Procesar' | i18n %]</span>
                         [% END %]
                         
                       </td>

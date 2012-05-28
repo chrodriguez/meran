@@ -93,7 +93,6 @@ $t_params->{'escudo'}= $escudo;
 $t_params->{'escudoUI'}= $escudoUI;
 
 # Encode::decode_utf8(" Sábados: ")
-# . C4::AR::Preferencias::getValorPreferencia('open_sabado'). " a " .C4::AR::Preferencias::getValorPreferencia('close_sabado');
 $t_params->{'datos'}= \@datos;
 
 

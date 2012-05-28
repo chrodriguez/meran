@@ -67,7 +67,6 @@ if ($san->{'id3'}) {
 }
 if (scalar(@$sanc) > 0){$t_params->{'sanciones_loop'}= $sanc;}
 =cut
-$t_params->{'updatedata'} =(!C4::AR::Preferencias::getValorPreferencia('CheckUpdateDataEnabled'));
 #$t_params->{'LibraryName'}= C4::AR::Preferencias::getValorPreferencia("LibraryName");
 $t_params->{'pagetitle'}= "Usuarios";
 
