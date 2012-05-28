@@ -14,6 +14,7 @@ __PACKAGE__->meta->setup(
         id_importacion_iso             => { type => 'integer', overflow => 'truncate', not_null => 1},
         type                           => { type => 'varchar', overflow => 'truncate', length => 25},
         estado                         => { type => 'varchar', overflow => 'truncate', length => 25},
+        detalle                        => { type => 'text', overflow => 'truncate'},
         matching                       => { type => 'integer', overflow => 'truncate'},
         id_matching                    => { type => 'integer', overflow => 'truncate'},
         identificacion                 => { type => 'varchar', overflow => 'truncate', length => 255},
@@ -169,6 +170,19 @@ sub getIdImportacionIso{
 sub getMarcRecord{
     my ($self) = shift;
     return ($self->marc_record);
+}
+
+
+sub getDetalle{
+    my ($self) = shift;
+    return ($self->detalle);
+}
+
+
+sub setDetalle{
+    my ($self) = shift;
+    my ($detalle) = @_;
+    $self->detalle($detalle);
 }
 
 
@@ -513,96 +527,25 @@ sub aplicarImportacion {
         
 =cut
      #Proceso el nivel 1 agregando las referencias que no existen!!
-   
-	 my $infoArrayNivel1 =  $self->prepararNivelParaImportar($detalle->{'marc_record'},$detalle->{'nivel1_template'},1);
-   
-   my $params_n1;
-	 $params_n1->{'id_tipo_doc'} = $detalle->{'nivel1_template'};
-	 $params_n1->{'infoArrayNivel1'} = $infoArrayNivel1;
-   my ($msg_object, $id1) = C4::AR::Nivel1::t_guardarNivel1($params_n1);
+   my ($msg_object, $id1) = $self->guardarNivel1DeImportacion($detalle);
    
    C4::AR::Debug::debug("Nivel 1 creado ".$id1);
    
-   
    if (!$msg_object->{'error'}){
+       
     my $niveles2 = $detalle->{'nivel2'};
+    
     foreach my $nivel2 (@$niveles2){
-      my $infoArrayNivel2 =  $self->prepararNivelParaImportar($nivel2->{'marc_record'},$nivel2->{'nivel2_template'},2);   
-      my $params_n2;
-      $params_n2->{'id_tipo_doc'} = $nivel2->{'nivel2_template'};
-      $params_n2->{'tipo_ejemplar'} = $nivel2->{'nivel2_template'};
-      $params_n2->{'infoArrayNivel2'} = $infoArrayNivel2;
-      $params_n2->{'id1'}=$id1;
-      my ($msg_object2,$id1,$id2) = C4::AR::Nivel2::t_guardarNivel2($params_n2);
-      # Hay que agregar el indice aca
-      #  $nivel2->{'tiene_indice'}
-        if (!$msg_object2->{'error'}){  
+        
+      my ($msg_object2,$id1,$id2) = $self->guardarNivel2DeImportacion($id1,$nivel2);
+      
+        if (!$msg_object2->{'error'}){
+            
           my $niveles3 = $nivel2->{'nivel3'};
-
-          foreach my $nivel3 (@$niveles3){
-            my $params_n3;
-            $params_n3->{'id_tipo_doc'} = $nivel3->{'tipo_documento'};
-            $params_n3->{'tipo_ejemplar'} = $nivel3->{'tipo_documento'};
-            $params_n3->{'id1'}=$id1;
-            $params_n3->{'id2'}=$id2;
-            $params_n3->{'ui_origen'}=$nivel3->{'ui_origen'};
-            $params_n3->{'ui_duenio'}=$nivel3->{'ui_duenio'};
-            $params_n3->{'cantEjemplares'} = 1;
-            
-            #Hay que autogenerar el barcode o no???
-            if (!$nivel3->{'generar_barcode'}){
-              $params_n3->{'esPorBarcode'} = 'true';
-              my @barcodes_array=();
-              $barcodes_array[0]=$nivel3->{'barcode'};
-              $params_n3->{'BARCODES_ARRAY'} = \@barcodes_array;
-            }
-            
-            my @infoArrayNivel=();
-            
-            my %hash_temp = {};
-            $hash_temp{'indicador_primario'}  = '#';
-            $hash_temp{'indicador_secundario'}  = '#';
-            $hash_temp{'campo'}   = '995';
-            $hash_temp{'subcampos_array'}	=();
-            $hash_temp{'cant_subcampos'}   = 0;
-        
-        
-            my %hash_sub_temp = {};
-            
-            #UI origen
-            my $hash;
-            $hash->{'d'}= $params_n3->{'ui_origen'};
-            $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
-            $hash_temp{'cant_subcampos'}++;
-            #UI duenio
-            my $hash;
-            $hash->{'c'}= $params_n3->{'ui_duenio'};
-            $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
-            $hash_temp{'cant_subcampos'}++;
-            #Estado
-            my $hash;
-            $hash->{'e'}= $nivel3->{'estado'}->getCodigo();
-            $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
-            $hash_temp{'cant_subcampos'}++;
-            #Disponibilidad
-            my $hash;
-            $hash->{'o'}= $nivel3->{'disponibilidad'}->getCodigo();
-            $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
-            $hash_temp{'cant_subcampos'}++;
-            #Signatura
-            my $hash;
-            $hash->{'t'}= $nivel3->{'signatura_topografica'};
-            $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
-            $hash_temp{'cant_subcampos'}++;
-            
-            $hash_temp{'subcampos_hash'} =\%hash_sub_temp;
           
-            if ($hash_temp{'cant_subcampos'}){
-              push (@infoArrayNivel,\%hash_temp)
-            }
-            
-            $params_n3->{'infoArrayNivel3'} = \@infoArrayNivel;
-            my ($msg_object3) = C4::AR::Nivel3::t_guardarNivel3($params_n3);
+          foreach my $nivel3 (@$niveles3){
+              
+            my ($msg_object3) = $self->guardarNivel3DeImportacion($id1,$id2,$nivel3);
             
           }
          } 
@@ -610,14 +553,166 @@ sub aplicarImportacion {
     }
     
     if ($msg_object->{'error'}){
-		$self->setEstado('ERROR');
-		}
-	else{
-		$self->setEstado('IMPORTADO');
-		}
-	return $msg_object;
+        #HAY UN ERROR
+        my $mensajes=$msg_object->{'messages'};
+        
+        if ($mensajes->[0]->{'codMsg'} eq 'U501') {
+            #Error de Registro Duplicado!!!! Debo agregar los ejemplares!!
+             my $n1 = $self->buscarRegistroDuplicado($detalle);
+            
+            if ($n1){
+                #Encontré el registro duplicado
+                my $niveles2 = $detalle->{'nivel2'};
+                foreach my $nivel2 (@$niveles2){
+                    my $niveles3 = $nivel2->{'nivel3'};
+                    foreach my $nivel3 (@$niveles3){
+                        my $grupos = $n1->getGrupos();
+                        my ($msg_object3) = $self->guardarNivel3DeImportacion($n1->getId1,$grupos->[0]->getId2,$nivel3);
+
+                    
+                }
+                
+            }
+            }
+            
+        }
+        else{
+            my $detalle = $mensajes->[0]->{'message'}." (".$mensajes->[0]->{'codMsg'}.")";
+            C4::AR::Debug::debug("ERROR : ". $detalle);
+            $self->setEstado('ERROR');
+            $self->setDetalle($detalle);
+            }
+        }
+    else{
+        $self->setEstado('IMPORTADO');
+        }
+        
+    $self->save();
+    
+    return $msg_object;
 }
 
+sub buscarRegistroDuplicado{
+    my ($self)   = shift;
+    my ($nivel1) = @_;
+    
+    
+    my $infoArrayNivel1 =  $self->prepararNivelParaImportar($nivel1->{'marc_record'},$nivel1->{'nivel1_template'},1);
+    
+    my $params_n1;
+    $params_n1->{'id_tipo_doc'} = $nivel1->{'nivel1_template'};
+    $params_n1->{'infoArrayNivel1'} = $infoArrayNivel1;
+    
+     my $marc_record            = C4::AR::Catalogacion::meran_nivel1_to_meran($params_n1);
+     my $catRegistroMarcN1       = C4::Modelo::CatRegistroMarcN1->new();
+     my $clave_unicidad_alta    = $catRegistroMarcN1->generar_clave_unicidad($marc_record);
+     my $n1 = C4::AR::Nivel1::getNivel1ByClaveUnicidad($clave_unicidad_alta);
+     
+    return $n1;
+}
+
+sub guardarNivel1DeImportacion{
+    my ($self)   = shift;
+    my ($nivel1) = @_;
+    
+	 my $infoArrayNivel1 =  $self->prepararNivelParaImportar($nivel1->{'marc_record'},$nivel1->{'nivel1_template'},1);
+   
+   my $params_n1;
+    $params_n1->{'id_tipo_doc'} = $nivel1->{'nivel1_template'};
+    $params_n1->{'infoArrayNivel1'} = $infoArrayNivel1;
+   my ($msg_object, $id1) = C4::AR::Nivel1::t_guardarNivel1($params_n1);
+
+    return ($msg_object,$id1);
+}
+
+
+sub guardarNivel2DeImportacion{
+    my ($self)   = shift;
+    my ($id1,$nivel2) = @_;
+    
+    my $infoArrayNivel2 =  $self->prepararNivelParaImportar($nivel2->{'marc_record'},$nivel2->{'nivel2_template'},2);   
+    my $params_n2;
+    $params_n2->{'id_tipo_doc'} = $nivel2->{'nivel2_template'};
+    $params_n2->{'tipo_ejemplar'} = $nivel2->{'nivel2_template'};
+    $params_n2->{'infoArrayNivel2'} = $infoArrayNivel2;
+    $params_n2->{'id1'}=$id1;
+    my ($msg_object2,$id1,$id2) = C4::AR::Nivel2::t_guardarNivel2($params_n2);
+     # Hay que agregar el indice aca
+     #  $nivel2->{'tiene_indice'}
+     
+    return ($msg_object2,$id1,$id2);
+}
+
+sub guardarNivel3DeImportacion{
+    my ($self)   = shift;
+    my ($id1, $id2, $nivel3) = @_;
+    
+    my $params_n3;
+    $params_n3->{'id_tipo_doc'} = $nivel3->{'tipo_documento'};
+    $params_n3->{'tipo_ejemplar'} = $nivel3->{'tipo_documento'};
+    $params_n3->{'id1'}=$id1;
+    $params_n3->{'id2'}=$id2;
+    $params_n3->{'ui_origen'}=$nivel3->{'ui_origen'};
+    $params_n3->{'ui_duenio'}=$nivel3->{'ui_duenio'};
+    $params_n3->{'cantEjemplares'} = 1;
+    
+    #Hay que autogenerar el barcode o no???
+    if (!$nivel3->{'generar_barcode'}){
+      $params_n3->{'esPorBarcode'} = 'true';
+      my @barcodes_array=();
+      $barcodes_array[0]=$nivel3->{'barcode'};
+      $params_n3->{'BARCODES_ARRAY'} = \@barcodes_array;
+    }
+    
+    my @infoArrayNivel=();
+    
+    my %hash_temp = {};
+    $hash_temp{'indicador_primario'}  = '#';
+    $hash_temp{'indicador_secundario'}  = '#';
+    $hash_temp{'campo'}   = '995';
+    $hash_temp{'subcampos_array'}   =();
+    $hash_temp{'cant_subcampos'}   = 0;
+
+
+    my %hash_sub_temp = {};
+    
+    #UI origen
+    my $hash;
+    $hash->{'d'}= $params_n3->{'ui_origen'};
+    $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
+    $hash_temp{'cant_subcampos'}++;
+    #UI duenio
+    my $hash;
+    $hash->{'c'}= $params_n3->{'ui_duenio'};
+    $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
+    $hash_temp{'cant_subcampos'}++;
+    #Estado
+    my $hash;
+    $hash->{'e'}= $nivel3->{'estado'}->getCodigo();
+    $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
+    $hash_temp{'cant_subcampos'}++;
+    #Disponibilidad
+    my $hash;
+    $hash->{'o'}= $nivel3->{'disponibilidad'}->getCodigo();
+    $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
+    $hash_temp{'cant_subcampos'}++;
+    #Signatura
+    my $hash;
+    $hash->{'t'}= $nivel3->{'signatura_topografica'};
+    $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
+    $hash_temp{'cant_subcampos'}++;
+    
+    $hash_temp{'subcampos_hash'} =\%hash_sub_temp;
+  
+    if ($hash_temp{'cant_subcampos'}){
+      push (@infoArrayNivel,\%hash_temp)
+    }
+    
+    $params_n3->{'infoArrayNivel3'} = \@infoArrayNivel;
+    my ($msg_object3) = C4::AR::Nivel3::t_guardarNivel3($params_n3);
+    
+    return $msg_object3;
+}
 
 sub prepararNivelParaImportar{
      my ($self)   = shift;
