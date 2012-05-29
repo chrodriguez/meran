@@ -51,7 +51,12 @@ function log(string){if(window.console){window.console.log(string);}}
 function replaceAccents(s){var r=s.toLowerCase();r=r.replace(new RegExp(/\s/g),"");r=r.replace(new RegExp(/[àáâãäå]/g),"a");r=r.replace(new RegExp(/æ/g),"ae");r=r.replace(new RegExp(/ç/g),"c");r=r.replace(new RegExp(/[èéêë]/g),"e");r=r.replace(new RegExp(/[ìíîï]/g),"i");r=r.replace(new RegExp(/ñ/g),"n");r=r.replace(new RegExp(/[òóôõö]/g),"o");r=r.replace(new RegExp(/œ/g),"oe");r=r.replace(new RegExp(/[ùúûü]/g),"u");r=r.replace(new RegExp(/[ýÿ]/g),"y");r=r.replace(new RegExp(/\W/g),"");return r;}
 function replaceNonAccents(s){var r=s.toLowerCase();r=r.replace(new RegExp(/\s/g),"");r=r.replace(new RegExp(/[àaâãäå]/g),"á");r=r.replace(new RegExp(/[èeêë]/g),"é");r=r.replace(new RegExp(/[ìiîï]/g),"í");r=r.replace(new RegExp(/n/g),"ñ");r=r.replace(new RegExp(/[òoôõö]/g),"ó");r=r.replace(new RegExp(/[ùuûü]/g),"ú");r=r.replace(new RegExp(/[y]/g),"ÿ");r=r.replace(new RegExp(/\W/g),"");return r;}
 function disableComponent(id){$('#'+id).attr('disabled',true);}
-var bytesUploaded=0;var bytesTotal=0;var previousBytesLoaded=0;var intervalTimer=0;var ID2_file;var xhr;function fileSelected(id2){ID2_file=id2;var file=document.getElementById('fileToUpload'+'_'+ID2_file).files[0];var fileSize=0;if(file.size>1024*1024)
+var bytesUploaded=0;var bytesTotal=0;var previousBytesLoaded=0;var intervalTimer=0;var ID2_file;var xhr;function fileSelectedIndice(id2){ID2_file=id2;var file=document.getElementById('indiceToUpload'+'_'+ID2_file).files[0];var fileSize=0;if(file.size>1024*1024)
+fileSize=(Math.round(file.size*100/(1024*1024))/100)
+.toString()
++'MB';else
+fileSize=(Math.round(file.size*100/1024)/100).toString()+'KB';document.getElementById('indiceInfo'+'_'+ID2_file).style.display='block';document.getElementById('indiceName'+'_'+ID2_file).innerHTML='Name: '+file.name;document.getElementById('indiceSize'+'_'+ID2_file).innerHTML='Size: '+fileSize;document.getElementById('indiceType'+'_'+ID2_file).innerHTML='Type: '+file.type;}
+function fileSelected(id2){ID2_file=id2;var file=document.getElementById('fileToUpload'+'_'+ID2_file).files[0];var fileSize=0;if(file.size>1024*1024)
 fileSize=(Math.round(file.size*100/(1024*1024))/100)
 .toString()
 +'MB';else
