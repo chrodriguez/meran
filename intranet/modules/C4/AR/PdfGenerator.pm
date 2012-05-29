@@ -1209,7 +1209,7 @@ sub pdfFromHTML {
 	my ($out,$params) = @_;
 	
 	$out               = _unformat($out);
-	my $is_report      = $params->{'is_report'};   
+	my $is_report      = $params->{'is_report'} || 1;   
 	my $htmldoc        = new HTML::HTMLDoc( 'mode' => 'file', 'tmpdir' => '/tmp' );
 
 	$htmldoc->set_html_content($out);
