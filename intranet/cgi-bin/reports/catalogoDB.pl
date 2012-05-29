@@ -43,7 +43,7 @@ if ($input->param('obj')){
   $obj->{'fecha_inicio'}= $input->param('date-from');
   $obj->{'fecha_fin'}= $input->param('date-to');
   $obj->{'fecha_fin'}= $input->param('date-to');
-#   $obj->{'is_report'}= 0;
+  $obj->{'is_report'}= "SI";
 
   ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
                                           template_name   => "includes/partials/reportes/_reporte_busquedas_result_export.inc",

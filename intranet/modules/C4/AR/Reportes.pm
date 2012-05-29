@@ -5,6 +5,9 @@ package C4::AR::Reportes;
 use strict;
 no strict "refs";
 use C4::Date;
+use PDF::ReportWriter;
+
+
 use vars qw(@EXPORT_OK @ISA);
 @ISA       = qw(Exporter);
 @EXPORT_OK = qw(
@@ -1357,6 +1360,100 @@ sub getReservasCirculacion {
     return ($resultsArray, $rep_busqueda_count);
 
 }
+
+
+sub 
+
+
+sub reportToPDF(){
+    my ($datos, $cantidad, $headers ) = @_;
+
+    my $reporte = {
+                      destination        => "/home/dan/my_fantastic_report.pdf",
+                      paper              => "A4",
+                      orientation        => "portrait",
+#                       template           => '/home/dan/my_page_template.pdf',
+                      font_list          => [ "Verdana" ],
+                      default_font       => "Verdana",
+                      default_font_size  => "10",
+                      x_margin           => 10 * mm,
+                      y_margin           => 10 * mm,
+                      info               => {
+                                                Author      => "Meran",
+#                                                 Keywords    => "Fantastic, Amazing, Superb",
+#                                                 Subject     => "Stuff",
+                                                Title       => "Reporte"
+                                            }
+
+    };
+
+    my $pdf = PDF::ReportWriter->new($reporte);
+    my @campos;
+    my %hash_campo;    
+
+    foreach my $campo (keys %$headers) {
+            %hash_campo =  {
+                      name               => $campo,                               # 'Date' will appear in field headers
+                      percent            => 35,                                   # The percentage of X-space the cell will occupy
+                      align              => "centre",                             # Content will be centred
+                      colour             => "blue",                               # Text will be blue
+                      font_size          => 12,                                   # Override the default_font_size with '12' for this cell
+                      header_colour      => "white"                               # Field headers will be rendered in white
+             }
+            
+            push(@campos, \%hash_campo);
+    }
+
+   my $data = {
+
+                background              => {                                  # Set up a default background for all cells ...
+                                                border      => "grey"          # ... a grey border
+                                            },
+                fields                  => $fields,
+                groups                  => $groups,
+                page                    => $page,
+                data_array              => $datos,
+                headings                => {                                  # This is where we set up field header properties ( not a perfect idea, I know )
+                                                background  => {
+                                                                  shape     => "box",
+                                                                  colour    => "darkgrey"
+                                                              }
+                                            }
+
+    };
+
+    $pdf->render_data( $data );
+    C4::AR::PdfGenerator::imprimirFinal($pdf, );
+#     $pdf->save;
+
+
+}
+
+sub exportarReporte {
+      my ( $params ) = @_;
+  
+      $datos= $params->{'datos'};
+      $cantidad_datos = $params->{'cantidad_datos'};
+      $headers= $params->{'headers'};
+      $formato_exportacion= $params->{'formato_exportacion'};
+
+      if ($formato_exportacion eq "PDF"){
+#           LLAMA A LA FUNCION QUE GENERA EL PDF
+
+      } elsif  ($formato_exportacion eq "XLS")  {
+            reportToPDF($datos, $cantidad, $headers);
+        
+      } else {
+#          LLAMA A LA FUNCION QUE GENERA EL GRAFICO
+
+      }
+      
+
+}
+
+
+
+
 
 END { }    # module clean-up code here (global destructor)
 
