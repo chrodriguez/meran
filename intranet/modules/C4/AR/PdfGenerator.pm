@@ -876,7 +876,7 @@ sub imprimirPiePag {
 	$texto[3] =
 	    Encode::decode_utf8("Atención: lunes a viernes: ")
 	  . C4::AR::Preferencias::getValorPreferencia('open') . " a "
-	  . C4::AR::Preferencias::getValorPreferencia('close'). Encode::decode_utf8(" Síabados: ")
+	  . C4::AR::Preferencias::getValorPreferencia('close'). Encode::decode_utf8(" Sabados: ")
       . C4::AR::Preferencias::getValorPreferencia('open_sabado'). " a " .C4::AR::Preferencias::getValorPreferencia('close_sabado');
 	$texto[4] = "E-mail: " . $biblio->getEmail;
 # 	$texto[5] = Encode::decode_utf8("Sitio web: "). $ENV{'SERVER_NAME'};

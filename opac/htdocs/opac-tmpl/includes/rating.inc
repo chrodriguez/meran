@@ -38,4 +38,7 @@ $(document).ready(function() {
 
     <br style="clear:both" />
     <span class="label label-success" id="ajax_response[% id2 %]" style="display:none;"></span>
+
+    
+    
 </div>

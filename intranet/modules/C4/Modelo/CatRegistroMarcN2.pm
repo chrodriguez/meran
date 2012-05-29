@@ -8,12 +8,12 @@ __PACKAGE__->meta->setup(
     table   => 'cat_registro_marc_n2',
 
     columns => [
-        id              => { type => 'serial', overflow => 'truncate', not_null => 1 },
-        marc_record     => { type => 'text', overflow => 'truncate' },
-        id1             => { type => 'integer', overflow => 'truncate', not_null => 1 },
-        indice          => { type => 'text', overflow => 'truncate' },
-        indice_file_path=> { type => 'varchar', overflow => 'truncate', not_null => 1, length => 255, },
-        template        => { type => 'varchar', overflow => 'truncate', not_null => 1 },
+        id                  => { type => 'serial', overflow => 'truncate', not_null => 1 },
+        marc_record         => { type => 'text', overflow => 'truncate' },
+        id1                 => { type => 'integer', overflow => 'truncate', not_null => 1 },
+        indice              => { type => 'text', overflow => 'truncate' },
+        indice_file_path    => { type => 'varchar', overflow => 'truncate', not_null => 0, length => 255, },
+        template            => { type => 'varchar', overflow => 'truncate', not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],

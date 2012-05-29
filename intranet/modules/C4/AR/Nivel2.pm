@@ -553,6 +553,8 @@ sub getAnaliticasFromNivel2{
         # $hash_nivel2{'nivel1_analiticas_cant'}  = scalar(@nivel1_analitica_array);
     # }
 
+# C4::AR::Debug::debug("Nivel2 => getAnaliticasFromNivel2 => ".scalar(@analitica_array));
+
     return @analitica_array;
 }
 
@@ -698,17 +700,32 @@ sub buildNavForGroups{
         foreach my $n2 (@$nivel2){
             my %hash = {};
             $hash{'id'} = "detalle_grupo_".$n2->{'id2'};
-#            $hash{'title'} = $n2->{'edicion'} || $n2->{'volumen'} || $n2->{'año_publicacion'} ||"#".$n2->{'id2'}; 
 
+
+            my $edicion = C4::AR::Utilidades::trim($n2->{'edicion'});
+            my $volumen = C4::AR::Utilidades::trim($n2->{'volumen'});
+            my $anio_publicacion= C4::AR::Utilidades::trim($n2->{'año_publicacion'});
+            
             #ticket #4264
-            if($n2->{'edicion'} && $n2->{'volumen'} && $n2->{'año_publicacion'}){
-                $hash{'title'} = $n2->{'volumen'} . " - " . $n2->{'edicion'} . " (" . $n2->{'año_publicacion'} . ")";
-            }elsif($n2->{'edicion'} && $n2->{'año_publicacion'}){
-                $hash{'title'} = $n2->{'edicion'} . " (" . $n2->{'año_publicacion'} . ")";
-            }elsif($n2->{'volumen'} && $n2->{'año_publicacion'}){
-                $hash{'title'} = $n2->{'volumen'} . " (" . $n2->{'año_publicacion'} . ")";
-            }elsif($n2->{'año_publicacion'}){
-                $hash{'title'} = $n2->{'año_publicacion'};
+            if( C4::AR::Utilidades::validateString($edicion) 
+                && C4::AR::Utilidades::validateString($volumen)
+                && C4::AR::Utilidades::validateString($anio_publicacion)
+               ){
+               $hash{'title'} = $volumen . " - " . $edicion . " (" . $anio_publicacion . ")";
+            }elsif(
+                C4::AR::Utilidades::validateString($edicion)
+                && C4::AR::Utilidades::validateString($anio_publicacion)
+              ){
+                $hash{'title'} = $edicion . " (" . $anio_publicacion . ")";
+            }elsif(
+                C4::AR::Utilidades::validateString($volumen) 
+                && C4::AR::Utilidades::validateString($anio_publicacion) 
+             ){
+                $hash{'title'} = $volumen . " (" . $anio_publicacion . ")";
+            }elsif(C4::AR::Utilidades::validateString($anio_publicacion)){
+                $hash{'title'} = $anio_publicacion;
+            }else{
+                $hash{'title'} = $n2->{'id2'};
             }
 
             

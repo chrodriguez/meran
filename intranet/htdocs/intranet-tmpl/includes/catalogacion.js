@@ -2512,6 +2512,7 @@ function cargarNivel1(params, TEMPLATE_ACTUAL){
     if(params.tipoAccion == 'MODIFICAR_NIVEL_2'){
 // FIXME falta template
         modificarN2(params.id2, TEMPLATE_ACTUAL);
+        mostrarInfoAltaNivel2(params.id2, TEMPLATE_ACTUAL); 
     }else   
     if(params.tipoAccion == 'MODIFICAR_NIVEL_3'){
 // FIXME falta template
@@ -2520,6 +2521,7 @@ function cargarNivel1(params, TEMPLATE_ACTUAL){
 // FIXME falta template
         //por defecto se carga el Nivel 1 para modificar
         modificarN1(params.id1, TEMPLATE_ACTUAL);
+        mostrarInfoAltaNivel1(params.id1, TEMPLATE_ACTUAL);
     }
 
 // No quieren q se muestre mas el resto de los divs, ya q redirecciona SIEMPRE

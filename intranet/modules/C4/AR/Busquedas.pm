@@ -1406,6 +1406,12 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
     # NOTA: sphinx necesita el string decode_utf8
     
     my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
+
+
+#NUEVO
+	$sphinx->SetLimits( 0, 10, 10 );
+	$sphinx->SetRankingMode( SPH_RANK_PROXIMITY_BM25 );
+#NUEVO
     
     my $results = $sphinx->Query($query, $index_to_use);
 
@@ -1444,6 +1450,55 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
         $string_suggested = getSuggestion($string_utf8_encoded,$total_found,$obj_for_log,$sphinx_options);
     }
     
+  
+  
+
+
+##NUEVO FACETED
+
+$sphinx->SetLimits( 0, 100, 100 );
+$sphinx->SetRankingMode ( SPH_RANK_NONE );
+
+my @config_filters = ('autor');
+my %attrs_search = {"one"=>10};
+
+for(my $i=0; $i<scalar(@config_filters); $i++) {
+    my $current_filter = @config_filters[$i];
+
+    $sphinx->ResetFilters();
+    $sphinx->ResetGroupBy();
+
+  #  foreach my $item (@attrs_search){
+	    while ( my ( $key, $value ) = each(%attrs_search) ) {
+	        if( $key != $current_filter) {
+	            $sphinx->SetFilter( $key, $value );
+	        }
+	
+	    }
+   # }
+    $sphinx->SetGroupBy($current_filter, SPH_GROUPBY_ATTR, "\@count desc");
+    $sphinx->AddQuery( $query, $index_to_use );
+}
+
+my $tmp_filters_results = $sphinx->RunQueries();
+
+my @bundle_filters_results = ();
+for(my $i=0; $i<scalar(@config_filters); $i++) {
+    my $current_filter = @config_filters[$i];
+
+    @bundle_filters_results[$current_filter] = $tmp_filters_results->[0];
+    
+    C4::AR::Debug::debug("\n\n\n\n\n\nTEMP RESULT DE FACETED: ".$current_filter."\n\n\n\n\n");
+    C4::AR::Utilidades::printHASH($tmp_filters_results->[0]);
+}
+
+##NUEVO FACETED
+
+
+
+
+  
+  
   
     return ($total_found, $resultsarray,$string_suggested);
 }
