@@ -1368,7 +1368,7 @@ sub detalleCompletoRegistro {
         
         ##PAIS##
         if($nivel2_marc->subfield('043','c')){
-            $hash_nivel2{'pais'}      = C4::AR::ImportacionIsoMARC::getIdiomaFromMarcRecord_Object($nivel2_marc);
+            $hash_nivel2{'pais'}      = C4::AR::ImportacionIsoMARC::getPaisFromMarcRecord_Object($nivel2_marc);
             my $pais  = $hash_nivel2{'pais'};
             #Seteo bien el pais
             $nivel2_marc->field('043')->update( 'c' => $pais->getNombre_largo());
