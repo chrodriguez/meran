@@ -40,7 +40,8 @@ if ($input->param('upfile')){
     $parametros{'xls_first'}            = $input->param('xls_first');
     $parametros{'esquemaImportacion'}   = $input->param('esquemaImportacion');
     $parametros{'formatoImportacion'}   = $input->param('formatoImportacion');
-    C4::AR::Debug::debug("antes de subir - Nuevo esquema?? ".$input->{'nombreEsquema'}." o usamos uno existente: ". $input->{'esquemaImportacion'});
+    C4::AR::Debug::debug("antes de subir - Nuevo esquema?? ".$input->param('nombreEsquema')." o usamos uno existente: ". $input->param('esquemaImportacion'));
+    C4::AR::Debug::debug("XLS?? FIRST ".$input->param('xls_first'));
     #Si el esquema es nuevo hay que crearlo vacio al menos!
     if($input->param('nuevo_esquema')){
        $parametros{'nombreEsquema'}     = $input->param('nombreEsquema');

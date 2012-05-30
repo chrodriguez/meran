@@ -526,7 +526,8 @@ sub aplicarImportacion {
 												 |_
         
 =cut
-     #Proceso el nivel 1 agregando las referencias que no existen!!
+    
+    #Proceso el nivel 1 agregando las referencias que no existen!!
    my ($msg_object, $id1) = $self->guardarNivel1DeImportacion($detalle);
    
    C4::AR::Debug::debug("Nivel 1 creado ".$id1);
@@ -561,6 +562,7 @@ sub aplicarImportacion {
              my $n1 = $self->buscarRegistroDuplicado($detalle);
             
             if ($n1){
+                
                 #Encontré el registro duplicado
                 my $niveles2 = $detalle->{'nivel2'};
                 foreach my $nivel2 (@$niveles2){
@@ -570,22 +572,35 @@ sub aplicarImportacion {
                         my ($msg_object3) = $self->guardarNivel3DeImportacion($n1->getId1,$grupos->[0]->getId2,$nivel3);
 
                     
+                    }
                 }
                 
-            }
-            }
-            
-        }
-        else{
-            my $detalle = $mensajes->[0]->{'message'}." (".$mensajes->[0]->{'codMsg'}.")";
-            C4::AR::Debug::debug("ERROR : ". $detalle);
-            $self->setEstado('ERROR');
-            $self->setDetalle($detalle);
+                #Solucioné el error
+                $msg_object->{'error'}=0;
+                #Nuevo id1
+                $id1=$n1->getId1;
             }
         }
+    }
+    
+    my $mensajes=$msg_object->{'messages'};
+    if ($msg_object->{'error'}){
+                my $detalle = $mensajes->[0]->{'message'}." (".$mensajes->[0]->{'codMsg'}.")";
+                C4::AR::Debug::debug("ERROR : ". $detalle);
+                $self->setEstado('ERROR');
+                $self->setDetalle($detalle);
+    }
     else{
-        $self->setEstado('IMPORTADO');
+        my $detalle = "Importado en el registro: ".$id1;
+        
+        if($mensajes->[0]->{'message'}){
+            #Hay algún mensaje
+            $detalle .="\n ".$mensajes->[0]->{'message'}." (".$mensajes->[0]->{'codMsg'}.")";
         }
+        
+        $self->setEstado('IMPORTADO');
+        $self->setDetalle($detalle);
+    }
         
     $self->save();
     
