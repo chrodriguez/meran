@@ -170,8 +170,15 @@ sub getAll{
         my @filtros_or;
         push(@filtros_or, (iso => {eq => $filtro}) );
         push(@filtros_or, (iso3 => {eq => $filtro}) );
-        push(@filtros_or, (nombre => {like => '%'.$filtro.'%'}) );
-        push(@filtros_or, (nombre_largo => {like => '%'.$filtro.'%'}) );
+        
+        if ($matchig_or_not){
+            push(@filtros_or, (nombre => {like => '%'.$filtro.'%'}) );
+            push(@filtros_or, (nombre_largo => {like => '%'.$filtro.'%'}) );
+        }else{
+            push(@filtros_or, (nombre => {eq => $filtro}) );
+            push(@filtros_or, (nombre_largo => {eq => $filtro}) );
+            }
+        
         push(@filtros, (or => \@filtros_or) );
     }
     my $ref_valores;
