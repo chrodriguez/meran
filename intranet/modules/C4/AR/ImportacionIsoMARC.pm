@@ -1371,7 +1371,7 @@ sub detalleCompletoRegistro {
             $hash_nivel2{'pais'}      = C4::AR::ImportacionIsoMARC::getIdiomaFromMarcRecord_Object($nivel2_marc);
             my $pais  = $hash_nivel2{'pais'};
             #Seteo bien el pais
-            $nivel2_marc->field('043')->update( 'c' => $pais->getDescription());
+            $nivel2_marc->field('043')->update( 'c' => $pais->getNombre_largo());
         }
         
         ##NIVEL BIBLIOGRAFICO##
