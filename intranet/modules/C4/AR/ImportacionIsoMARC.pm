@@ -146,7 +146,7 @@ sub guardarRegistrosNuevaImportacion {
         my @rows = Spreadsheet::Read::rows($ref->[1]);
         
         my $primera_fila = $params->{'xls_first'};
-        
+        C4::AR::Debug::debug( "PRIMERA FILA?? ". $primera_fila);
         foreach my $fila (@rows){
             if(!$primera_fila){
                 my $marc_record = MARC::Record->new();
@@ -1346,6 +1346,8 @@ sub detalleCompletoRegistro {
     foreach my $nivel2 (@$grupos){
         my $nivel2_marc = $nivel2->{'grupo'};
         my %hash_nivel2=();
+        
+        ##TIPO DE DOCUMENTO##
         $hash_nivel2{'tipo_documento'}      = C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord_Object($nivel2_marc);
         $tipo_documento 					= $hash_nivel2{'tipo_documento'};
         #Seteo bien el código de tipo de documento
@@ -1356,10 +1358,26 @@ sub detalleCompletoRegistro {
                 $nivel2_marc->append_fields($new_field);
             }
             
-        $hash_nivel2{'nivel_bibliografico'}      = C4::AR::ImportacionIsoMARC::getNivelBibliograficoFromMarcRecord_Object($nivel2_marc);
+        ##IDIOMA##
+        if($nivel2_marc->subfield('041','a')){
+            $hash_nivel2{'idioma'}      = C4::AR::ImportacionIsoMARC::getIdiomaFromMarcRecord_Object($nivel2_marc);
+            my $idioma  = $hash_nivel2{'idioma'};
+            #Seteo bien el idioma
+            $nivel2_marc->field('041')->update( 'a' => $idioma->getDescription());
+        }
         
+        ##PAIS##
+        if($nivel2_marc->subfield('043','c')){
+            $hash_nivel2{'pais'}      = C4::AR::ImportacionIsoMARC::getPaisFromMarcRecord_Object($nivel2_marc);
+            my $pais  = $hash_nivel2{'pais'};
+            #Seteo bien el pais
+            $nivel2_marc->field('043')->update( 'c' => $pais->getNombre_largo());
+        }
+        
+        ##NIVEL BIBLIOGRAFICO##
+        $hash_nivel2{'nivel_bibliografico'}      = C4::AR::ImportacionIsoMARC::getNivelBibliograficoFromMarcRecord_Object($nivel2_marc);        
         my $nivel_bibliografico					 = $hash_nivel2{'nivel_bibliografico'};
-        #Seteo bien el código de tipo de documento
+        #Seteo bien el código del nivel bibliográfico
         if($nivel2_marc->field('900')){
             $nivel2_marc->field('900')->update( 'b' => $nivel_bibliografico->getDescription());
         }else{
@@ -1487,15 +1505,17 @@ sub toMARC_Array {
                     $hash_temp{'referencia_tabla'} = $hash_temp{'referencia'}; #$tabla_referer_involved->meta->table;
                     C4::AR::Debug::debug("Tabla REF  ==>  ".$hash_temp{'referencia'});
                     my ($ref_cantidad,$ref_valores);
-                    if($hash_temp{'referencia'} eq 'idioma'){
-                      ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getIdiomaById($dato);
-                    }
-                    elsif($hash_temp{'referencia'} eq 'pais'){
-                      ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getPaisByIso($dato);
-                    }
-                    else{
+                    #if($hash_temp{'referencia'} eq 'idioma'){
+                    #  ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getIdiomaById($dato);
+                    #}
+                    #els
+                    
+                    #if($hash_temp{'referencia'} eq 'pais'){
+                    #  ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getPaisByIso($dato);
+                    #}
+                    #else{
                     ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getAll(1,0,0,$dato);
-                    }
+                    #}
                     
                     if (($campo eq '910')&&($subcampo eq 'a')){
                             C4::AR::Debug::debug("REF CANT ==>  ".$ref_cantidad);
@@ -1571,7 +1591,6 @@ sub getDisponibilidadEjemplar_Object{
 	return $object_disponibilidad;
 }
 
-
 sub getEjemplarFromMarcRecord{
 	my ($nivel3,$tipo_documento) = @_;
 	    
@@ -1634,7 +1653,7 @@ sub getNivelBibliograficoFromMarcRecord{
         }
     return $resultado;
     }
-    
+
     sub getNivelBibliograficoFromMarcRecord_Object{
         my ($marc_record) = @_;
         my $nivel_bibliografico = C4::AR::ImportacionIsoMARC::getNivelBibliograficoFromMarcRecord($marc_record);
@@ -1645,8 +1664,110 @@ sub getNivelBibliograficoFromMarcRecord{
         C4::AR::Debug::debug("OBJETO  NIVEL BIBLIOGRAFICO  ".$object_nivel_bibliografico );
         return $object_nivel_bibliografico;
     }
+
+sub getIdiomaFromMarcRecord_Object{
+		my ($marc_record) = @_;
+		my $idioma = C4::AR::ImportacionIsoMARC::getIdiomaFromMarcRecord($marc_record);
+        
+        use C4::Modelo::RefIdioma;
+        my ($cantidad, $objetos) = (C4::Modelo::RefIdioma->new())->getIdiomaById($idioma);
+       
+        if($cantidad){
+             return $objetos->[0];
+        }
+       
+	  	return 0;
+}
+
     
-    sub getUIFromMarcRecord {
+sub getIdiomaFromMarcRecord{
+    my ($marc_record) = @_;
+    
+    my $idioma = $marc_record->subfield('041','a');
+        
+    #Valor por defecto
+    my $resultado = C4::AR::Preferencias::getValorPreferencia("defaultUI");
+    
+    
+   if ($idioma){
+       
+       use C4::Modelo::RefIdioma;
+       
+       my ($cantidad, $objetos) = (C4::Modelo::RefIdioma->new())->getIdiomaById($idioma);
+       
+        if($cantidad){
+             $resultado = $objetos->[0]->getIdLanguage();
+        }
+        else{
+            use Switch;
+            switch ($idioma) {
+                case 'CASTELLANO' { 
+                    $resultado = "es";
+                    }
+                case 'INGLES' { 
+                    $resultado = "en";
+                    }
+                case 'FRANCES' { 
+                    $resultado = "fr";
+                    }
+                case 'GALLEGO' { 
+                    $resultado = "gl";
+                    }
+            }
+        }
+    
+    }
+    
+    return $resultado;
+}
+
+
+
+sub getPaisFromMarcRecord_Object{
+		my ($marc_record) = @_;
+		my $pais = C4::AR::ImportacionIsoMARC::getPaisFromMarcRecord($marc_record);
+        
+        use C4::Modelo::RefPais;
+        my ($cantidad, $objetos) = (C4::Modelo::RefPais->new())->getPaisByIso($pais);
+       
+        if($cantidad){
+             return $objetos->[0];
+        }
+       
+	  	return 0;
+}
+
+    
+sub getPaisFromMarcRecord{
+    my ($marc_record) = @_;
+    
+    my $pais = $marc_record->subfield('043','c');
+        
+    #Valor por defecto
+    my $resultado = C4::AR::Preferencias::getValorPreferencia("defaultPais");
+
+   if ($pais){
+       use C4::Modelo::RefPais;
+       my ($cantidad, $objetos) = (C4::Modelo::RefPais->new())->getPaisByIso($pais);
+       
+        if($cantidad){
+             $resultado = $objetos->[0]->getIso();
+        }
+        else {
+            #NO lo encontre por iso voy a buscar por nombre exacto
+            use C4::Modelo::RefPais;
+            my ($cantidad, $objetos) = (C4::Modelo::RefPais->new())->getPaisByName($pais);
+            if($cantidad){
+                 $resultado = $objetos->[0]->getIso();
+            }
+        }
+    }
+    
+    return $resultado;
+}
+
+
+sub getUIFromMarcRecord {
         my ($marc_record) = @_;
     #FIXME	Debería ir a una tabla de referencia de alias o sinónimos
         my $ui = $marc_record->subfield('995','c');
@@ -1752,7 +1873,7 @@ sub procesarReferencia {
                           }
                         
                                 } else {
-                        if ($autor[1]){					
+                        if ($autor[1]){
                           $tabla_referer_involved->setApellido($autor[1]);
                           $tabla_referer_involved->setNombre($autor[1]);
                         }

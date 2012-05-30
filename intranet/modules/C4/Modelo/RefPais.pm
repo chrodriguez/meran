@@ -170,8 +170,15 @@ sub getAll{
         my @filtros_or;
         push(@filtros_or, (iso => {eq => $filtro}) );
         push(@filtros_or, (iso3 => {eq => $filtro}) );
-        push(@filtros_or, (nombre => {like => '%'.$filtro.'%'}) );
-        push(@filtros_or, (nombre_largo => {like => '%'.$filtro.'%'}) );
+        
+        if ($matchig_or_not){
+            push(@filtros_or, (nombre => {like => '%'.$filtro.'%'}) );
+            push(@filtros_or, (nombre_largo => {like => '%'.$filtro.'%'}) );
+        }else{
+            push(@filtros_or, (nombre => {eq => $filtro}) );
+            push(@filtros_or, (nombre_largo => {eq => $filtro}) );
+            }
+        
         push(@filtros, (or => \@filtros_or) );
     }
     my $ref_valores;
@@ -214,8 +221,39 @@ sub getPaisByIso{
     my ($pais) = @_;
 
     my @filtros;
+    my @filtros_or;
+    push(@filtros_or, (iso => {eq => $pais}) );
+    push(@filtros_or, (iso3 => {eq => $pais}) );
+    push(@filtros, (or => \@filtros_or) );
 
-    push(@filtros, ( iso => { eq => $pais}) );
+
+    my $paises_array_ref = C4::Modelo::RefPais::Manager->get_ref_pais(
+
+        query   => \@filtros,
+        select  => ['*'],
+        sort_by => 'nombre_largo ASC',
+        limit   => 1,
+        offset  => 0,
+    );
+
+    return (scalar(@$paises_array_ref), $paises_array_ref);
+
+
+}
+
+=head2
+    sub getPaisByName
+=cut
+sub getPaisByName{
+    my ($self) = shift;
+    my ($pais) = @_;
+
+    my @filtros;
+    my @filtros_or;
+    push(@filtros_or, (nombre => {eq => $pais}) );
+    push(@filtros_or, (nombre_largo => {eq => $pais}) );
+    push(@filtros, (or => \@filtros_or) );
+
 
     my $paises_array_ref = C4::Modelo::RefPais::Manager->get_ref_pais(
 
@@ -232,4 +270,3 @@ sub getPaisByIso{
 }
 
 1;
-
