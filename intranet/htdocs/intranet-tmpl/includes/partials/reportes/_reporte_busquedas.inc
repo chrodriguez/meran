@@ -1,5 +1,3 @@
-
-[% INCLUDE 'intranet-top.inc' %]
 [% INCLUDE  'AutocompleteHelper.inc'  %]
 
 <script type="text/javascript" src="/intranet-tmpl/includes/reports.js"></script>
@@ -14,17 +12,11 @@
 
 
     function exportarPDF(){
-        $('#accion').val('EXPORTAR_PDF');
-        
+        $('#accion').val('EXPORTAR_PDF');  
         $('#form_reporte_busquedas').submit();
     }
 
-    function updateExportarPDF(responseText){
-        
-    }
-    
-
-
+  
     function ordenar_reporte_busquedas(orden){
               if (orden == ORDEN) {
                   ASC= !ASC;
@@ -67,32 +59,33 @@
     }
    
 
-    $(document).ready( function(){ 
-         if (!Modernizr.inputtypes.date) {
-              $("date-from").datepicker();
-              $("date-to").datepicker();
-        }
-        $(".cb-enable").click(function(){
-            var parent = $(this).parents('.switch');
-            $('.cb-disable',parent).removeClass('selected');
-            $(this).addClass('selected');
-            $('.checkbox',parent).attr('checked', true);
-        });
-        $(".cb-disable").click(function(){
-            var parent = $(this).parents('.switch');
-            $('.cb-enable',parent).removeClass('selected');
-            $(this).addClass('selected');
-            $('.checkbox',parent).attr('checked', false);
-        });
-        $('#orden').val(ORDEN);
-        $('#asc').val(ASC);
-
-        CrearAutocompleteUsuarios({ 
-                                                    IdInput: 'usuario', 
-                                                    IdInputHidden: 'nro_socio_hidden', 
-                                                    callBackFunction: '',
-                                });
-    });
+//     $(document).ready( function(){ 
+//         $(".cb-enable").click(function(){
+//             var parent = $(this).parents('.switch');
+//             $('.cb-disable',parent).removeClass('selected');
+//             $(this).addClass('selected');
+//             $('.checkbox',parent).attr('checked', true);
+//         });
+//         $(".cb-disable").click(function(){
+//             var parent = $(this).parents('.switch');
+//             $('.cb-enable',parent).removeClass('selected');
+//             $(this).addClass('selected');
+//             $('.checkbox',parent).attr('checked', false);
+//         });
+//          if (!Modernizr.inputtypes.date) {
+//               $("date-from").datepicker();
+//               $("date-to").datepicker();
+//         }
+//        
+//         $('#orden').val(ORDEN);
+//         $('#asc').val(ASC);
+// 
+//         CrearAutocompleteUsuarios({ 
+//                                                     IdInput: 'usuario', 
+//                                                     IdInputHidden: 'nro_socio_hidden', 
+//                                                     callBackFunction: '',
+//                                 });
+//     });
         
 </script>
 

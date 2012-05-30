@@ -1362,11 +1362,8 @@ sub getReservasCirculacion {
 }
 
 
-sub 
-
-
-sub reportToPDF(){
-    my ($datos, $cantidad, $headers ) = @_;
+sub reportToPDF{
+    my ($datos, $cantidad, $headers) = @_;
 
     my $reporte = {
                       destination        => "/home/dan/my_fantastic_report.pdf",
@@ -1376,8 +1373,6 @@ sub reportToPDF(){
                       font_list          => [ "Verdana" ],
                       default_font       => "Verdana",
                       default_font_size  => "10",
-                      x_margin           => 10 * mm,
-                      y_margin           => 10 * mm,
                       info               => {
                                                 Author      => "Meran",
 #                                                 Keywords    => "Fantastic, Amazing, Superb",
@@ -1399,18 +1394,17 @@ sub reportToPDF(){
                       colour             => "blue",                               # Text will be blue
                       font_size          => 12,                                   # Override the default_font_size with '12' for this cell
                       header_colour      => "white"                               # Field headers will be rendered in white
-             }
+             };
             
             push(@campos, \%hash_campo);
-    }
-
+   }
+   my $page = 1;
    my $data = {
 
                 background              => {                                  # Set up a default background for all cells ...
                                                 border      => "grey"          # ... a grey border
                                             },
-                fields                  => $fields,
-                groups                  => $groups,
+                fields                  => @campos,
                 page                    => $page,
                 data_array              => $datos,
                 headings                => {                                  # This is where we set up field header properties ( not a perfect idea, I know )
@@ -1423,7 +1417,7 @@ sub reportToPDF(){
     };
 
     $pdf->render_data( $data );
-    C4::AR::PdfGenerator::imprimirFinal($pdf, );
+    C4::AR::PdfGenerator::imprimirFinal($pdf );
 #     $pdf->save;
 
 
@@ -1432,16 +1426,16 @@ sub reportToPDF(){
 sub exportarReporte {
       my ( $params ) = @_;
   
-      $datos= $params->{'datos'};
-      $cantidad_datos = $params->{'cantidad_datos'};
-      $headers= $params->{'headers'};
-      $formato_exportacion= $params->{'formato_exportacion'};
+      my $datos= $params->{'datos'};
+      my $cantidad_datos = $params->{'cantidad_datos'};
+      my $headers= $params->{'headers'};
+      my $formato_exportacion= $params->{'formato_exportacion'};
 
       if ($formato_exportacion eq "PDF"){
 #           LLAMA A LA FUNCION QUE GENERA EL PDF
-
+            reportToPDF($datos,  $cantidad_datos, $headers);
       } elsif  ($formato_exportacion eq "XLS")  {
-            reportToPDF($datos, $cantidad, $headers);
+           
         
       } else {
 #          LLAMA A LA FUNCION QUE GENERA EL GRAFICO
