@@ -34,6 +34,8 @@ use C4::Modelo::AdqTipoMaterial::Manager;
 use C4::Modelo::AdqFormaEnvio::Manager;
 use C4::Modelo::AdqPresupuesto::Manager;
 use C4::Modelo::RefColaborador;
+use C4::Modelo::RefSignatura;
+use C4::Modelo::RefAcm;
 
 
 use JSON;

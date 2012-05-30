@@ -306,32 +306,20 @@ function updateArmarComboCampos(responseText){
     //se inicializa el combo
     $("#camposSelect").html(""); //orden
     $("#camposRef").html("");   //campos tabla
-    var options = "<option value='-1'>SIN SELECCIONAR</option>";
+    var options = "";
     var joinedFields = "";
-//     for (x=0;x < camposSelect_array.length;x++){
-//         if (x == (camposSelect_array.length-1) ) //SI ES EL FINAL
-//          joinedFields+= camposSelect_array[x].campo;
-//         else
-//          joinedFields+= camposSelect_array[x].campo+", ";
-//          options+= "<option value=" + camposSelect_array[x].campo +" selected>" + camposSelect_array[x].campo + "</option>";
-//     }
+
     for (x=0;x < camposSelect_array.length;x++){
         if (x == (camposSelect_array.length-1) ) //SI ES EL FINAL
          joinedFields+= camposSelect_array[x].key;
         else
          joinedFields+= camposSelect_array[x].key+", ";
-         options+= "<option value=" + camposSelect_array[x].key +" selected>" + camposSelect_array[x].value + "</option>";
+         options+= "<option value='" + camposSelect_array[x].key +"' selected='selected'>" + camposSelect_array[x].value + "</option>";
     }
 
     //se agrega la info al combo
     $("#camposSelect").append(options);
 	$("#camposRef").append(options);
-
-	if( camposSelect_array.length > 0){
-	//si los combos tienen opciones dejo seleccionado el primero
-		$('#camposSelect')[0].selectedIndex = 2;
-		$('#camposRef')[0].selectedIndex = 2;
-	}
 
     $("#divCamposRef").show();
     enable_disableSelects();

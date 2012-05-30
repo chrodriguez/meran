@@ -876,7 +876,6 @@ sub renovar {
 	my ($historial_circulacion) =  C4::Modelo::RepHistorialCirculacion->new( db => $self->db );
 	$historial_circulacion->agregar($data_hash);
 
-#*******************************Fin***Se registra el movimiento en rep_historial_circulacion*************************
 }
 
 sub getInvolvedCount {

@@ -119,13 +119,13 @@ function cambiarFiltro (filtro){
                                   rel="popover" 
                                   data-content="[% detalle_importacion.getDetalle %]" 
                                   data-original-title="[% 'Ignorado' | i18n %]" >
-                            >[% 'Ignorado' | i18n %]</span>
+                            [% 'Ignorado' | i18n %]</span>
                         [% ELSIF detalle_importacion.getEstado == "IMPORTADO" %]
                             <span class="label label-success"
                                   rel="popover" 
                                   data-content="[% detalle_importacion.getDetalle %]" 
                                   data-original-title="[% 'Importado' | i18n %]" >
-                            >[% 'Importado' | i18n %]</span>
+                            [% 'Importado' | i18n %]</span>
                         [% ELSIF detalle_importacion.getEstado == "ERROR" %]
                             <span class="label label-warning popover_button" 
                                   rel="popover" 
