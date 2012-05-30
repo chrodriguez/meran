@@ -413,6 +413,23 @@ var intervalTimer = 0;
 var ID2_file;
 var xhr;
 
+function fileSelectedIndice(id2) {
+	ID2_file = id2;
+	var file = document.getElementById('indiceToUpload'+ '_' + ID2_file).files[0];
+	var fileSize = 0;
+	if (file.size > 1024 * 1024)
+		fileSize = (Math.round(file.size * 100 / (1024 * 1024)) / 100)
+				.toString()
+				+ 'MB';
+	else
+		fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB';
+
+	document.getElementById('indiceInfo'+ '_' + ID2_file).style.display = 'block';
+	document.getElementById('indiceName'+ '_' + ID2_file).innerHTML = 'Name: ' + file.name;
+	document.getElementById('indiceSize'+ '_' + ID2_file).innerHTML = 'Size: ' + fileSize;
+	document.getElementById('indiceType'+ '_' + ID2_file).innerHTML = 'Type: ' + file.type;
+}
+
 function fileSelected(id2) {
 	ID2_file = id2;
 	var file = document.getElementById('fileToUpload'+ '_' + ID2_file).files[0];
