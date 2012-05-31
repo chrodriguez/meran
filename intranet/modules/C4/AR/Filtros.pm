@@ -133,8 +133,10 @@ y hacer la traduccion del mismo, obteniedola del binario correspondiente, por ej
 =cut
 sub i18n {
     my ($text)      = @_;
-# La inicializacion se paso toda a auth => checkauth
-    return __($text);
+    # La inicializacion se paso toda a auth => checkauth
+
+    # Esto es por acentos, decode y encode
+    return __(Encode::decode_utf8(Encode::encode_utf8($text)));
 }
 
 

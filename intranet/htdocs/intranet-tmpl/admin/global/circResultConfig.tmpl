@@ -2,15 +2,15 @@
 
 <form class="form-horizontal" action="[% url_prefix %]/admin/global/circ_config.pl?token=[% token %]" method="post">
     <fieldset class="resultados_busqueda">
-    <legend>[% "Administraci&oacute;n de preferencias de Circulac&oacute;n" | i18n %]</legend>
+    <legend>[% "Administraci&oacute;n de preferencias de Circulaci&oacute;n" | i18n %]</legend>
 
     <input type="hidden" id="editando" name="editando" value="1">
     
             [% FOREACH preferencia IN preferencias %]
             
                 <div class="control-group">
-                    <label class="control-label">[% preferencia.preferencia.getVariable %]</label>
-                    <div class="preferenciasControls">
+                    <label class="control-label">[% preferencia.preferencia.getLabel | i18n %]</label>
+                    <div class="controls">
                     
                         [% IF preferencia.valor %]
                             [%  preferencia.valor %]
@@ -23,7 +23,7 @@
 		                
                         [% PERL %]
 	                        print C4::AR::Filtros::setHelpInput(   
-	                                            text        => "[% preferencia.preferencia.getExplanation %]",
+	                                            text        => "[% preferencia.preferencia.getExplanation | i18n %]",
 	                                    ) ;
 	                        
 	                    [% END %]
