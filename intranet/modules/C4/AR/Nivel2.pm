@@ -692,7 +692,8 @@ sub buildNavForGroups{
         foreach my $n2 (@$nivel2){
             my %hash = {};
             $hash{'id'} = "detalle_grupo_".$n2->{'id2'};
-            $hash{'title'} = $n2->{'anio_revista'}." - ".$n2->{'numero_revista'};
+            my $n2_temp = C4::AR::Nivel2::getNivel2FromId2($n2->{'id2'}); 
+            $hash{'title'} = $n2_temp->getNavString();
             
             push (@elem_array,\%hash);
         }

@@ -592,7 +592,7 @@ sub detalleCompletoINTRA {
             $hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'L');
             $hash_nivel2->{'edicion'}                   = $nivel2_array_ref->[$i]->getEdicion;
             #para los nav-tabs
-            $hash_nivel2->{'año_publicacion'}           = $nivel2_array_ref->[$i]->getAnio_publicacion;
+            $hash_nivel2->{'anio_publicacion'}          = $nivel2_array_ref->[$i]->getAnio_publicacion;
             $hash_nivel2->{'volumen'}                   = $nivel2_array_ref->[$i]->getVolumen;
             
             #si tiene volumen se le concatena una "v. ". HARDCODED!!

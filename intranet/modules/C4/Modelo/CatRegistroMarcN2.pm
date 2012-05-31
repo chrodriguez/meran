@@ -966,5 +966,21 @@ sub getMarcRecordConDatosFull{
     return $marc_record;
 }
 
+sub getNavString{
+	my ($self) = shift;
+	my $string = "";
+	my $tipo_doc = $self->getTipoDocumento();
+    
+    use Switch;
+    
+    switch ($tipo_doc){
+    	case 'REV' {$string = $self->getAnioRevista . " " . $self->getVolumen. " (". $self->getNumeroRevista. ")"} 
+    	
+    };	
+	
+	
+	
+	return ($string)
+}
 1;
 
