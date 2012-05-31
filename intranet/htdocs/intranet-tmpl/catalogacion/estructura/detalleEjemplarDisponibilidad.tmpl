@@ -28,7 +28,11 @@
                   [% END %]
               </tbody>
               <tfoot>
-	            <p class="help-block">[% "Este ejemplar a tenido " | i18n %] [% cant_historico %][% " cambios en su disponibilidad " | i18n %]</p>
+                   <div class="page-header" style="border-bottom: none; padding-bottom: 0px;">
+                        <h3>
+                            <small>[% "Este ejemplar a tenido " | i18n %] [% cant_historico %][% " cambios en su disponibilidad " | i18n %]</small>
+                        </h3>
+                    </div>
               </tfoot>
           </table>
      [% ELSE %]

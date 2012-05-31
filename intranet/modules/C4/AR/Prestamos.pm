@@ -377,7 +377,7 @@ sub prestarYGenerarTicket{
     $params->{'id_ui_prestamo'}     = C4::AR::Preferencias::getValorPreferencia('defaultUI');
     $params->{'tipo'}               = "INTRA";
 
-    my ($msg_object)    = &C4::AR::Prestamos::t_realizarPrestamo($params);
+    my ($msg_object)    = C4::AR::Prestamos::t_realizarPrestamo($params);
     my $ticketObj       = 0;
 
     C4::AR::Debug::debug("Prestamos => prestarYGenerarTicket => adicional_selected=> ".$params->{'adicional_selected'});

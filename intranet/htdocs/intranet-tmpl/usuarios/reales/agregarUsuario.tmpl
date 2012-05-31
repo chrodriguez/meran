@@ -40,7 +40,7 @@
                 return false;
             });
         [% END %]
-
+        $('#nacimiento').datepicker();
         CrearAutocompleteCiudades({IdInput: 'ciudad', IdInputHidden: 'id_ciudad'});
         CrearAutocompleteCiudades({IdInput: 'alt_ciudad', IdInputHidden: 'id_alt_ciudad'});
     });
