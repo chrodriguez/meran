@@ -417,10 +417,10 @@ sub t_realizarPrestamo{
         my $db = $prestamo->db;
            $db->{connect_options}->{AutoCommit} = 0;
            $db->begin_work;
-        #eval{
+        eval{
             $prestamo->prestar($params,$msg_object);
             $db->commit;
-        #};
+        };
         if ($@){
             C4::AR::Debug::debug("ERROR");
             #Se loguea error de Base de Datos
@@ -667,7 +667,7 @@ sub t_renovar {
                         my $ticketObj = C4::AR::Prestamos::crearTicket($data->{'id3'},$prestamo->getNro_socio,$params->{'responsable'});
                         if(!$ticketObj){
                             $ticketObj = 0;
-                            }
+                        }
                         my %infoOperacion = (
                                     ticket  => $ticketObj,
                         );
@@ -679,7 +679,7 @@ sub t_renovar {
                     };
                     if ($@){
                     #Se loguea error de Base de Datos
-                        &C4::AR::Mensajes::printErrorDB($@, 'B405',"INTRA");
+                        C4::AR::Mensajes::printErrorDB($@, 'B405',"INTRA");
                         $db->rollback;
                     #Se setea error para el usuario
                         $msg_object->{'error'}= 1;
