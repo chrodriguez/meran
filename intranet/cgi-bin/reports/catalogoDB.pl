@@ -4,6 +4,7 @@ require Exporter;
 use C4::AR::Auth;
 use C4::AR::PdfGenerator;
 use C4::AR::Reportes;
+use C4::AR::Busquedas;
 use C4::Modelo::RepBusqueda;
 use C4::Modelo::RepHistorialBusqueda;
 use CGI;
@@ -123,7 +124,26 @@ if($tipoAccion eq "BUSQUEDAS"){
 
 } elsif ($tipoAccion eq "REPORTE_GEN_ETIQUETAS") {
 
+      ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
+                                                template_name   => "includes/partials/reportes/_reporte_gen_etiquetas_result.inc",
+                                                query           => $input,
+                                                type            => "intranet",
+                                                authnotrequired => 0,
+                                                flagsrequired   => {  ui            => 'ANY', 
+                                                                    tipo_documento  => 'ANY', 
+                                                                    accion          => 'CONSULTA', 
+                                                                    entorno         => 'undefined'},
+      });
 
+      my ($cantidad, $array_nivel1)   = C4::AR::Busquedas::busquedaAvanzada_newTemp($obj, $session);
+
+      $obj->{'cantidad'}              = $cantidad;
+      $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
+      $t_params->{'SEARCH_RESULTS'}   = $array_nivel1;
+      $t_params->{'cantidad'}         = $cantidad;
+
+
+      C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
 
 

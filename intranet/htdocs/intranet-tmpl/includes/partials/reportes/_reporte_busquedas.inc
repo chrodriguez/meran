@@ -59,33 +59,33 @@
     }
    
 
-//     $(document).ready( function(){ 
-//         $(".cb-enable").click(function(){
-//             var parent = $(this).parents('.switch');
-//             $('.cb-disable',parent).removeClass('selected');
-//             $(this).addClass('selected');
-//             $('.checkbox',parent).attr('checked', true);
-//         });
-//         $(".cb-disable").click(function(){
-//             var parent = $(this).parents('.switch');
-//             $('.cb-enable',parent).removeClass('selected');
-//             $(this).addClass('selected');
-//             $('.checkbox',parent).attr('checked', false);
-//         });
-//          if (!Modernizr.inputtypes.date) {
-//               $("date-from").datepicker();
-//               $("date-to").datepicker();
-//         }
-//        
-//         $('#orden').val(ORDEN);
-//         $('#asc').val(ASC);
-// 
-//         CrearAutocompleteUsuarios({ 
-//                                                     IdInput: 'usuario', 
-//                                                     IdInputHidden: 'nro_socio_hidden', 
-//                                                     callBackFunction: '',
-//                                 });
-//     });
+    $(document).ready( function(){ 
+        $(".cb-enable").click(function(){
+            var parent = $(this).parents('.switch');
+            $('.cb-disable',parent).removeClass('selected');
+            $(this).addClass('selected');
+            $('.checkbox',parent).attr('checked', true);
+        });
+        $(".cb-disable").click(function(){
+            var parent = $(this).parents('.switch');
+            $('.cb-enable',parent).removeClass('selected');
+            $(this).addClass('selected');
+            $('.checkbox',parent).attr('checked', false);
+        });
+         if (!Modernizr.inputtypes.date) {
+              $("date-from").datepicker();
+              $("date-to").datepicker();
+        }
+       
+        $('#orden').val(ORDEN);
+        $('#asc').val(ASC);
+
+        CrearAutocompleteUsuarios({ 
+                                                    IdInput: 'usuario', 
+                                                    IdInputHidden: 'nro_socio_hidden', 
+                                                    callBackFunction: '',
+                                });
+    });
         
 </script>
 
