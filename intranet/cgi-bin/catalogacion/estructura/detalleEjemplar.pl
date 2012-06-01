@@ -112,21 +112,20 @@ else {
 
     if ($nivel3) {
         $t_params->{'nivel3'} = $nivel3;
-    }
-    if ($nivel3->estaPrestado){
-        my $prestamo = C4::AR::Prestamos::getPrestamoDeId3($nivel3->id);
-        $t_params->{'prestamo'} = $prestamo; 
-        if($prestamo){
-            $t_params->{'socio_prestamo'} = $prestamo->socio;  
-            }
-    }
-    
-    #traemos el socio de la reserva, si es que existe
-    my $socio_reserva               = C4::AR::Reservas::getSocioFromReserva($nivel3->getId3());
-    $t_params->{'socio_reserva'}    = $socio_reserva; 
-    
-    C4::AR::Debug::debug("socio reserva : ".$socio_reserva);
+	    if ($nivel3->estaPrestado){
+	        my $prestamo = C4::AR::Prestamos::getPrestamoDeId3($nivel3->id);
+	        $t_params->{'prestamo'} = $prestamo; 
+	        if($prestamo){
+	            $t_params->{'socio_prestamo'} = $prestamo->socio;  
+	            }
+	    }
+	    #traemos el socio de la reserva, si es que existe
+	    my $socio_reserva               = C4::AR::Reservas::getSocioFromReserva($nivel3->getId3());
+	    $t_params->{'socio_reserva'}    = $socio_reserva; 
+	    
+	    C4::AR::Debug::debug("socio reserva : ".$socio_reserva);
 
+    }    
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

@@ -15,6 +15,7 @@ __PACKAGE__->meta->setup(
         options     => { type => 'text', overflow => 'truncate', length => 65535 },
         type        => { type => 'varchar', overflow => 'truncate', length => 20 },
         categoria   => { type => 'varchar', overflow => 'truncate', length => 20 },
+        label       => { type => 'varchar', overflow => 'truncate', length => 128 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -42,6 +43,17 @@ sub setVariable{
     my ($self) = shift;
     my ($variable) = @_;
     $self->variable($variable);
+}
+
+sub getLabel{
+    my ($self) = shift;
+    return ($self->label);
+}
+
+sub setLabel{
+    my ($self) = shift;
+    my ($label) = @_;
+    $self->label($label);
 }
 
 sub getId{

@@ -59,10 +59,6 @@
 						} 
 						closeModal();
 						if (results){
-							if (numPag > 1)
-								$('#principal').append("<a class='btn' type='button' onclick='prevPage();'>[% 'Anterior' | i18n %]</a> ");
-							$('#principal').append("<a class='btn btn-primary' type='button' onclick='nextPage();'> [% 'Siguiente' | i18n %] </a> ");
-			
 							$('#principal').append("<br />");
 						}else{
 							$('#principal').append("[% ' LOS SERVIDORES EXTERNOS NO DISPONEN DE MAS RESULTADOS SEGUN SU CRITERIO ' %]");
@@ -154,6 +150,20 @@
 				if (cant_dc > 0){
 					$('#principal').append(table);
 					results = true;
+
+					var previous 	= '<li class="previous"><a href="#" onclick="prevPage();">&larr; [% "Anterior" | i18n %]</a></li>';
+					var next 		= '<li class="next"><a href="#" onclick="nextPage();">[% "Siguiente" | i18n %] &rarr;</a></li>';
+					var ul_open 	= '<div class="" style="width: 300px; margin: 0 auto;"><ul class="pager">';
+					var ul_close	= '</ul></div>';
+					var html		= ""+ul_open;
+					
+					if (numPag > 1){
+						html += previous;
+					}
+					html += next+ul_close;
+					
+					$('#principal').append(html);
+					
 				}
 				
 				return (table);

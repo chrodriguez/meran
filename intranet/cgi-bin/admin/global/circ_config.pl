@@ -11,11 +11,11 @@ my ($template, $session, $t_params, $socio)  = get_template_and_user({
                             query               => $input,
                             type                => "intranet",
                             authnotrequired     => 0,
-                            flagsrequired       => {    ui => 'ANY', 
-                                                        tipo_documento => 'ANY', 
-                                                        accion => 'CONSULTA', 
-                                                        entorno => 'undefined'},
-                            debug => 1,
+                            flagsrequired       => {    ui              => 'ANY', 
+                                                        tipo_documento  => 'ANY', 
+                                                        accion          => 'CONSULTA', 
+                                                        entorno         => 'undefined'},
+                            debug               => 1,
                  });
 
 my $preferenciasCirculacion = C4::AR::Preferencias::getPreferenciasByCategoria('circulacion');
@@ -24,14 +24,11 @@ my $preferenciasCirculacion = C4::AR::Preferencias::getPreferenciasByCategoria('
 if($input->param('editando')){
 
     my $msg_object = C4::AR::Mensajes::create();
+    my $tmp;
     
     foreach my $preferencia (@$preferenciasCirculacion){ 
         
-        my $Message_arrayref  = C4::AR::Preferencias::t_modificarVariable($preferencia->getVariable,$input->param($preferencia->getVariable),$preferencia->getExplanation,'circulacion');
-        
-    #    my $infoOperacionJSON = to_json $Message_arrayref;
-    #    C4::AR::Auth::print_header($session);
-    #    print $infoOperacionJSON;  
+        $tmp = C4::AR::Preferencias::t_modificarVariable($preferencia->getVariable,$input->param($preferencia->getVariable),$preferencia->getExplanation,'circulacion');
         
     }
     
@@ -97,7 +94,6 @@ foreach my $preferencia (@$preferenciasCirculacion){
 }
 
 $t_params->{'preferencias'}   = \@arrayPreferencias;
-
 $t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Configuraci&oacute;n de Circulaci&oacute;n");
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

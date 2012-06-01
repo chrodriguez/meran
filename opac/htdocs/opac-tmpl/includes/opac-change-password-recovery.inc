@@ -22,10 +22,6 @@
               <fieldset>
                 <legend>[% 'Restablecimiento de clave ' | i18n %]</legend>
                    <!-- CAMPOS PARA CAMBIO DE PASSWORD -->
-                   <input type="hidden" name="new_password1" id="new_password1" />
-                   <input type="hidden" name="new_password2" id="new_password2" />
-                   <input type="hidden" name="key" id="key" value="[% key %]"/>
-                   
                    <div class="control-group">
                         <label class="control-label" for="newpassword1">[% 'Nueva Contrase&ntilde;a' | i18n %]:</label>
                         <div class="controls">
@@ -40,6 +36,10 @@
                         </div>
                     </div>
                     
+                   <input type="hidden" name="new_password1" id="new_password1" />
+                   <input type="hidden" name="new_password2" id="new_password2" />
+                   <input type="hidden" name="key" id="key" value="[% key %]"/>
+                   
                     <div class="form-actions">
                         <button class="btn btn-primary" type="submit">[% 'Confirme contrase&ntilde;a' |  i18n %]</button>
                     </div> 

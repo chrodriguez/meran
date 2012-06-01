@@ -38,6 +38,6 @@ INSERT INTO `pref_tabla_referencia_conf` (`id`, `tabla`, `campo`, `campo_alias`,
 VALUES (NULL, 'ref_acm', 'codigo', 'Código CDU', '1'), 
 (NULL, 'ref_signatura', 'signatura', 'Signatura topográfica', '1');
 
-INSERT INTO `econo2meran`.`pref_tabla_referencia_conf` (`id`, `tabla`, `campo`, `campo_alias`, `visible`) 
+INSERT INTO `pref_tabla_referencia_conf` (`id`, `tabla`, `campo`, `campo_alias`, `visible`) 
 VALUES (NULL, 'ref_acm', 'id', 'id', '0'), 
 (NULL, 'ref_signatura', 'id', 'id', '0');

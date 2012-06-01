@@ -90,7 +90,7 @@
                                     print C4::AR::Filtros::action_button(  
                                                                         button   => "btn btn-danger",
                                                                         icon    => "icon-white icon-remove",
-                                                                        action => 'cancelarReserva("[% reserva.getId_reserva %]");',
+                                                                        action => 'cancelarReserva([% reserva.getId_reserva %]);',
                                             ) ;
                                 [% END %]
                 
@@ -159,7 +159,7 @@
 	                            [% PERL %]
 	                                print C4::AR::Filtros::action_button(  
 	                                                                    button   => "btn click btn-danger",
-	                                                                    action => "cancelarReserva('[% reserva.getId_reserva %]');",
+	                                                                    action => "cancelarReserva([% reserva.getId_reserva %]);",
 	                                                                    icon   => "icon-white icon-remove"
 	                                        ) ;
 	                            [% END %]

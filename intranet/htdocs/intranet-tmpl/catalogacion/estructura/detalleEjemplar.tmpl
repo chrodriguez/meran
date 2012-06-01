@@ -39,7 +39,6 @@ var AUTO_GENERAR_COMPROBANTE = '[% auto_generar_comprobante_prestamo %]';
 
     function updateHistoricoDisponibilidad(responseText){
         $('#historicoDisponibilidad').html(responseText);
-        zebra('datos_tabla');
     }
 
     function verHistoricoCirculacion(id3){
@@ -57,10 +56,6 @@ var AUTO_GENERAR_COMPROBANTE = '[% auto_generar_comprobante_prestamo %]';
 
     function updateHistoricoCirculacion(responseText){
         $('#historicoCirculacion').html(responseText);
-        zebra('datos_tabla');
-        crearDatePicker('fecha_inicial');
-        crearDatePicker('fecha_final');
-        $('#tr_sin_clase').removeClass('impar');
     }
 
     $(document).ready(function(){

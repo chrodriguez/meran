@@ -1,20 +1,28 @@
+<script>
+
+$(document).ready(function(){
+    $('#fecha_inicial').datepicker();
+    $('#fecha_final').datepicker();
+});
+</script>
+
 [% INCLUDE "AjaxTemplateJSReadyActivations.inc" %]
 
-<fieldset class="resultados_busqueda">
-        <legend>[% "Hist&oacute;rico de Circulaci&oacute;n" | i18n %]:</legend>
     [% IF cant_historico %]
-		<form class="form-horizontal">
+		<div class="form-horizontal">
+			<fieldset class="resultados_busqueda">
+			        <legend>[% "Hist&oacute;rico de Circulaci&oacute;n" | i18n %]:</legend>
 		            <div class="control-group">
 		                <label class="control-label" for="fecha_inicial">[% "Fecha Inicial" | i18n %]</label>
 		                <div class="controls">
-		                     <input type=text id="fecha_inicial" class="required" name="fecha_inicial" size=10 value="[% fecha_inicial %]">
+		                     <input type=text id="fecha_inicial" class="required" data-datepicker="datepicker"  name="fecha_inicial" value="[% fecha_inicial %]">
 		                </div>
 		            </div>
 		
 		            <div class="control-group">
-		                <label class="control-label" for="fecha_final">[% "Fecha Inicial" | i18n %]</label>
+		                <label class="control-label" for="fecha_final">[% "Fecha Final" | i18n %]</label>
 		                <div class="controls">
-		                    <input type=text id="fecha_final" class="required" name="fecha_final" size=10 value="[% fecha_final %]">
+		                    <input type=text id="fecha_final" class="required" data-datepicker="datepicker"  name="fecha_final" value="[% fecha_final %]">
 		                </div>
 		            </div>
 		        <div class="form-actions">
@@ -26,7 +34,10 @@
 		                                    ) ;
 		                        [% END %]
 		        </div>
-		</form>
+             </fieldset>
+		        
+		</div>
+		
 	        <div class="contenedor_paginador">[% paginador %]</div>
 	         [% PERL %]
 	             print C4::AR::Filtros::tableHeader(   
@@ -92,10 +103,14 @@
 	                    [% END %]
 	                </tbody>
 	                <tfoot>
-	                    <p class="help-block">[% "La cantidad en el historial de circulaci&oacute;n es" | i18n %]: [% cant_historico %]</p>
+	                   <div class="page-header" style="border-bottom: none; padding-bottom: 0px;">
+	                        <h3>
+	                            <small>[% "La cantidad en el historial de circulaci&oacute;n es" | i18n %] [% cant_historico %]</small>
+	                        </h3>
+	                    </div>	                    
 	                </tfoot>
 	            </table>
         [% ELSE %]
             <div class="alert alert-info">[% 'No hay hist&oacute;rico de circulaci&oacute;n'| i18n %]</div>        
         [% END %]
- </fieldset>
+ 
