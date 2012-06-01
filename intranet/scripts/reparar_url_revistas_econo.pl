@@ -41,7 +41,7 @@ foreach my $nivel1 (@$revistas){
                     
                     if (!$campo->subfields()){
                         #si no hay mas subcampos en el campo, lo elimino
-                        $marc_record2->delete_field($campo);
+                        $marc_record2->delete_field('856');
                     }
                     
                     if(!$urlNueva){
@@ -50,7 +50,7 @@ foreach my $nivel1 (@$revistas){
                     
                     print "#################### NIVEL 2 SIN URLS ################## \n";
                     print $marc_record2->as_formatted."\n\n";
-                    
+                    print "#################### NIVEL 2 SIN URLS FIN ################## \n";
                     $nivel2->setMarcRecord($marc_record2->as_usmarc);
                     #$nivel2->save();
                 }
@@ -74,10 +74,12 @@ foreach my $nivel1 (@$revistas){
                my $new_field = new MARC::Field('856','#','#', @subcampos_array);
                $marc_record1->append_fields($new_field);
             }
-        
+            print "#################### NIVEL 1 CON URLS ################## \n";
+            print "#################### NIVEL 1 CON URLS ################## \n";
+            print "#################### NIVEL 1 CON URLS ################## \n";
             print "URL NUEVA = ".$urlNueva."\n";
             print $marc_record1->as_formatted."\n\n";
-
+            print "#################### NIVEL 1 CON URLS FIN################## \n";
             $nivel1->setMarcRecord($marc_record1->as_usmarc);
             #$nivel1->save();
         
