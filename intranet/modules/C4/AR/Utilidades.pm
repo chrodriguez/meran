@@ -183,12 +183,7 @@ sub crearRadioButtonBootstrap{
     #agrego un input hidden para poder agarrar en el POST del form el valor del radio
     $radio = $radio . '<input type="hidden" id="' . $id . '" name="' . $id . '"value="">';
 
-    #agrego el script que modifica el value del input hidden
-    #$radio = $radio . '<script type="text/javascript">  $("#radios_' . $id . '").change(function () {' .
-    #                'alert($("#radios_' . $id . ' > button.active").val()) });</script>';
-
     return $radio;
-
 }
 
 =item
