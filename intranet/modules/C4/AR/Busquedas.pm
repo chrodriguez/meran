@@ -1407,12 +1407,12 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
     
     my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
 
-
+=item
 #NUEVO
 	$sphinx->SetLimits( 0, 10, 10 );
 	$sphinx->SetRankingMode( SPH_RANK_PROXIMITY_BM25 );
-#NUEVO
-    
+#FIN NUEVO
+=cut
     my $results = $sphinx->Query($query, $index_to_use);
 
     my ($total_found_paginado, $resultsarray);
@@ -1453,7 +1453,7 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
   
   
 
-
+=item
 ##NUEVO FACETED
 
 $sphinx->SetLimits( 0, 100, 100 );
@@ -1492,12 +1492,8 @@ for(my $i=0; $i<scalar(@config_filters); $i++) {
     C4::AR::Utilidades::printHASH($tmp_filters_results->[0]);
 }
 
-##NUEVO FACETED
-
-
-
-
-  
+##FIN NUEVO FACETED
+=cut
   
   
     return ($total_found, $resultsarray,$string_suggested);
