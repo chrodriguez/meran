@@ -31,17 +31,19 @@ foreach my $nivel1 (@$revistas){
             
             my $marc_record2 = $nivel2->getMarcRecordObject();
             my $campo = $marc_record2->field('856');
+
             
             if($campo){
                 my $urlGrupo = $campo->subfield('u');
                     
                 if($urlGrupo){
                     #Existe la url, la eliminamos del nivel2
-                    $campo->delete_subfields(code => 'u');
+                    $campo->delete_subfield(code => 'u');
                     
                     if (!$campo->subfields()){
                         #si no hay mas subcampos en el campo, lo elimino
-                        $marc_record2->delete_field('856');
+                        print "delete field\n\n";
+                        $marc_record2->delete_field($campo);
                     }
                     
                     if(!$urlNueva){
