@@ -1361,6 +1361,148 @@ sub getReservasCirculacion {
 
 }
 
+sub reporteGenEtiquetas{
+    my ($params,$session) = @_;
+
+    C4::AR::Debug::debug("sdfsdfsdfsdfssssssssssssssssssssssssssssssss");
+
+    use Sphinx::Search;
+    use Text::Unaccent;
+    
+    my $only_sphinx     = $params->{'only_sphinx'};
+    my $only_available  = $params->{'only_available'};
+    my $sphinx          = Sphinx::Search->new();
+
+    if ($only_sphinx){
+        if ($params->{'report'}){ 
+            $sphinx->SetLimits($params->{'ini'}, 100000);
+ 
+       } else {            
+            $sphinx->SetLimits($params->{'ini'}, C4::AR::Preferencias::getValorPreferencia('renglones'));  
+       }
+
+    }
+
+    my $query   = '';
+    my $tipo    = 'SPH_MATCH_EXTENDED';
+    my $orden   = $params->{'orden'} || 'titulo';
+    my $sentido_orden   = $params->{'sentido_orden'};
+    my $keyword;
+   
+    if($params->{'titulo'} ne ""){
+        $keyword = unac_string('utf8',$params->{'titulo'});
+        #le sacamos los acentos para que busque indistintamente
+#        $params->{'titulo'} = unac_string('utf8',$params->{'titulo'});
+        $query .= ' @titulo "'.$keyword;
+        if($params->{'tipo'} eq "normal"){
+            $query .= "*";
+        }
+        $query .='"';
+    }
+
+    if($params->{'autor'} ne ""){
+        $keyword = unac_string('utf8',$params->{'autor'});
+#        $params->{'autor'} = unac_string('utf8',$params->{'autor'});
+#        C4::AR::Debug::debug("autorrrrrrrrrrrr --------------------------- : ".$params->{'autor'});
+        $query .= ' @autor "'.$keyword;
+
+        if($params->{'tipo'} eq "normal"){
+            $query .= "*";
+        }
+        $query .='"';
+    }
+
+    if( $params->{'codBarra'} ne "") {
+        $query .= ' @string "'."barcode%".$sphinx->EscapeString($params->{'codBarra'})."*'";
+        $query .='*"';
+    }
+
+    if ($params->{'signatura'}){
+        $query .= ' @string "'."signatura%".$sphinx->EscapeString($params->{'signatura'}).'*"';
+    }
+    
+ 
+
+
+    C4::AR::Debug::debug("Busquedas => query string => ".$query);
+
+    my $tipo_match = C4::AR::Utilidades::getSphinxMatchMode($tipo);
+
+    $sphinx->SetMatchMode($tipo_match);
+    
+    
+#     if ($orden eq 'autor'){
+#             if ($sentido_orden){
+#                 $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"autor_local");
+#             } else {
+#                 $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"autor_local");
+#             }
+#     }elsif ($orden eq 'titulo') {
+#             if ($sentido_orden){
+#                 $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"titulo_local");
+#             } else {
+#                 $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
+#             }
+#     } else {
+#             $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
+#     }
+    
+    $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
+#     $sphinx->SetLimits($params->{'ini'}, $params->{'cantR'});
+
+    # NOTA: sphinx necesita el string decode_utf8
+   
+    my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
+    
+    my $results = $sphinx->Query($query, $index_to_use);
+
+    my @datos_array;
+    my $matches = $results->{'matches'};
+    my $total_found = $results->{'total_found'};
+    $params->{'total_found'} = $total_found;
+
+    C4::AR::Debug::debug("total_found: ".$total_found);
+    C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
+    C4::AR::Debug::debug("MATCH_MODE => ".$tipo);
+    
+    foreach my $hash (@$matches){
+        my %hash_temp = {};
+        $hash_temp{'id1'} = $hash->{'doc'};
+        $hash_temp{'hits'} = $hash->{'weight'};
+
+        push (@datos_array, \%hash_temp);
+    }
+
+    my ($total_found_paginado, $resultsarray);
+    #arma y ordena el arreglo para enviar al cliente
+    ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params, @datos_array);
+    #se loquea la busqueda
+
+ 
+    C4::AR::Busquedas::logBusqueda($params, $session);
+    my @datos;
+    foreach my $res (@$resultsarray){
+        my %hash_temp;
+        $hash_temp{'nivel1'}= $res;
+        $hash_temp{'nivel2'}= C4::AR::Nivel2::getNivel2FromId1($res->{'id1'});
+        $hash_temp{'nivel3'}= C4::AR::Nivel3::getNivel3FromId2(%hash_temp->{'nivel2'}[0]->{'id'});
+ 
+        push (@datos, \%hash_temp);
+       
+    }
+    C4::AR::Utilidades::printHASH(@datos[0]); 
+     
+
+    return ($total_found, \@datos);
+}
+
+
+
+
+
+
+
+
 
 sub reportToPDF{
     my ($datos, $cantidad, $headers) = @_;
