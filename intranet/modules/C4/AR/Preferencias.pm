@@ -31,7 +31,7 @@ use vars qw(@EXPORT_OK @ISA),qw($PREFERENCES);
     verificar_preferencias
     getPreferenciasLikeCategoria
     getMetodosAuth
-    
+    getPreferenciasBooleanas
 );
 
 
@@ -191,6 +191,23 @@ sub getMenuPreferences{
     }
 
     return (\%hash);
+}
+
+=item
+    Devuelve las preferencias booleanas de la categoria recibida como parametro
+=cut
+sub getPreferenciasBooleanas{
+
+    my ($categoria) = @_;
+  
+    my $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( 
+                                        #select  => ['variable'],
+                                        query   => [    categoria   => { eq => $categoria },
+                                                        type        => { eq => 'bool' },
+                                        ],
+                                ); 
+
+    return $preferencias_array_ref;
 }
 
 =item
