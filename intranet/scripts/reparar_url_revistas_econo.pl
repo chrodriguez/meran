@@ -54,7 +54,7 @@ foreach my $nivel1 (@$revistas){
                     print $marc_record2->as_formatted."\n\n";
                     print "#################### NIVEL 2 SIN URLS FIN ################## \n";
                     $nivel2->setMarcRecord($marc_record2->as_usmarc);
-                    #$nivel2->save();
+                    $nivel2->save();
                 }
             }
         }
@@ -83,7 +83,7 @@ foreach my $nivel1 (@$revistas){
             print $marc_record1->as_formatted."\n\n";
             print "#################### NIVEL 1 CON URLS FIN################## \n";
             $nivel1->setMarcRecord($marc_record1->as_usmarc);
-            #$nivel1->save();
+            $nivel1->save();
         
         }
 
