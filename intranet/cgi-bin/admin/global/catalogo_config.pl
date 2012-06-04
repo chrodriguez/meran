@@ -69,10 +69,10 @@ foreach my $preferencia (@$preferenciasCatalogo){
     $hash{'preferencia'} = $preferencia;
 
     if($preferencia->getType eq "bool"){
-        push(@values,1);
-        push(@values,0);
-        push(@labels,"Si");
-        push(@labels,"No");
+        push(@values, 1);
+        push(@values, 0);
+        push(@labels, C4::AR::Filtros::i18n('Si'));
+        push(@labels, C4::AR::Filtros::i18n('No'));
         $nuevoCampo = C4::AR::Utilidades::crearRadioButtonBootstrap($preferencia->getVariable,\@values,\@labels,$preferencia->getValue);
     }
     
