@@ -70,8 +70,8 @@ foreach my $preferencia (@$preferenciasCirculacion){
     if($preferencia->getType eq "bool"){
         push(@values,1);
         push(@values,0);
-        push(@labels,"Si");
-        push(@labels,"No");
+        push(@labels,"[% Si | i18n %]");
+        push(@labels,"[% No | i18n %]");
         $nuevoCampo = C4::AR::Utilidades::crearRadioButtonBootstrap($preferencia->getVariable,\@values,\@labels,$preferencia->getValue);
     
     }
