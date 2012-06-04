@@ -9,12 +9,14 @@
 
     [% ELSE %]
 
+    [% INCLUDE  "estructura/link_a_registro.tmpl" %]
+
         [% FOREACH nivel2 IN nivel2_array %]    
         <span id="grupo_[% nivel2.getId2 %]">
         <fieldset>
             <legend class="nivel2Selected trigger trigger_n2_[% nivel2.getId2 %] click">
                 <div class="alert alert-success">
-                    <h2>[% 'Grupo:' | i18n %] <small>[% nivel2.getId2 %] - [% nivel2.getTipoDocumentoObject.getNombre %] ([% nivel2.getTemplate %])</small></h2>
+                    <h2>[% 'Edici&oacute;n:' | i18n %] <small>[% nivel2.getId2 %] - [% nivel2.getTipoDocumentoObject.getNombre %] ([% nivel2.getTemplate %])</small></h2>
                 </div>
             </legend>
           <div id="nive2_id_[% nivel2.getId2 %]" class="nive2_id_[% nivel2.getId2 %]">
@@ -23,7 +25,7 @@
                    
                 [% PERL %]
                     print C4::AR::Filtros::action_set_button(    
-                                                        title           => "[% 'Grupo' | i18n %]",
+                                                        title           => "[% 'Edici&oacute;n' | i18n %]",
                                                         button          => 'btn btn-primary',
 
                                                         actions         => [

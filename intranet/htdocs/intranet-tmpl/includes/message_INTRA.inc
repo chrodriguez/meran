@@ -30,6 +30,7 @@
     DEBE_SELECCIONAR_AL_MENOS_UN_CAMPO = "[% 'Debe seleccionar al menos un campo.' %]";
     DEBE_SELECCIONAR_MAS_DE_UN_EJEMPLAR = "[% 'Debe seleccionar m&aacute;s de un ejemplar.' %]";
     ADD_EJEMPLARES						= "[% 'Agregar ejemplares' %]";
+    ADD_EDICION                      = "[% 'Agregar edición' %]";
     /*=============================================Fin===Catalogacion=================================================*/
 
     ELIMINAR_NOVEDAD = "[% 'Elminar la novedad?' %]";

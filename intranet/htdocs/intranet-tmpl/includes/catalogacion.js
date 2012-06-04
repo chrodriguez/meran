@@ -731,12 +731,23 @@ function updateMostrarInfoAltaNivel1(responseText){
         scrollTo('nivel1tabla');
 }
 
+
+function getNivel2(id2){
+    objAH               = new AjaxHelper(updateMostrarInfoAltaNivel2);
+    objAH.showOverlay   = true;
+    objAH.debug         = true;
+    objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.tipoAccion    = "MOSTRAR_INFO_NIVEL2";
+    objAH.id2           = id2; //mostrar todos los nivel 2 del nivel1 con el q se esta trabajando, asi este vuela
+    objAH.id1           = ID_N1;
+    objAH.sendToServer();
+}
+
 //esta funcion muestra la info en la barra laterarl del NIVEL 2 luego de ser guardado
 function mostrarInfoAltaNivel2(id2){
     objAH               = new AjaxHelper(updateMostrarInfoAltaNivel2);
     objAH.showOverlay   = true;
     objAH.debug         = true;
-//     objAH.showStatusIn  = 'nivel2';
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.tipoAccion    = "MOSTRAR_INFO_NIVEL2_LATERAL";
     objAH.id2           = id2; //mostrar todos los nivel 2 del nivel1 con el q se esta trabajando, asi este vuela
@@ -1374,6 +1385,15 @@ function crearBotonAgregarEjemplares(ID2,TIPO_DOC){
     
     return html;
 	
+}
+
+function crearBotonAgregarEdicion(ID2,TIPO_DOC){
+
+    var html = "<a class='btn btn-success click' title='"+ADD_EDICION+"' onclick=agregarN3("+ID2+",'"+TIPO_DOC+"'); completarArgregarN3(); ><i class='icon-white icon-plus-sign'></i> "+ADD_EDICION+"</a>";
+    
+    
+    return html;
+    
 }
 
 function ayudaParaCampo(campo){
@@ -2512,11 +2532,13 @@ function cargarNivel1(params, TEMPLATE_ACTUAL){
     if(params.tipoAccion == 'MODIFICAR_NIVEL_2'){
 // FIXME falta template
         modificarN2(params.id2, TEMPLATE_ACTUAL);
-        mostrarInfoAltaNivel2(params.id2, TEMPLATE_ACTUAL); 
+        // mostrarInfoAltaNivel2(params.id2, TEMPLATE_ACTUAL); 
+        getNivel2(params.id2);
     }else   
     if(params.tipoAccion == 'MODIFICAR_NIVEL_3'){
 // FIXME falta template
         modificarN3(params.id3, TEMPLATE_ACTUAL);
+        mostrarInfoAltaNivel3(params.id2, TEMPLATE_ACTUAL);  
     }else{
 // FIXME falta template
         //por defecto se carga el Nivel 1 para modificar
