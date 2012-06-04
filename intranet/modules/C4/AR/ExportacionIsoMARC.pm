@@ -361,7 +361,7 @@ sub marc_record_to_ISO_from_range {
     use Time::HiRes;
     my $start = [ Time::HiRes::gettimeofday( ) ];
 
-    my ($cant, @biblios_array) = C4::AR::ExportacionIsoMARC::getBibliosFromRange( $query );
+    my ($cant, @biblios_array) = C4::AR::ExportacionIsoMARC::getRecordsFromRange( $query );
     my @records_array;
     my $marc_record_array_ref;
     my $field_ident_biblioteca  = MARC::Field->new('910','','','a' => C4::Context->preference("defaultbranch"));
@@ -425,23 +425,23 @@ sub getDatoFromReferencia {
     my ($campo, $subcampo, $referencia) = @_;  
 
     use Switch;
-    use C4::Search;
+ #   use C4::Search;
 #     C4::AR::Debug::debug("getDatoFromReferencia => campo: ".$campo." subcampo: ".$subcampo." dato: ".$referencia);
 
     my $dato = $referencia;
 
-    switch($campo.$subcampo) {
+#    switch($campo.$subcampo) {
       # Referencias a Autores
-      case "100a" { $dato = C4::Search::getautor($referencia)->{'completo'}; }  # - biblio.author (100 a) --> autores.id --> autores.completo     
-      case "110a" { $dato = C4::Search::getautor($referencia)->{'completo'}; }  # - biblio.author (110 a) --> autores.id --> autores.completo     
-      case "111a" { $dato = C4::Search::getautor($referencia)->{'completo'}; }  # - biblio.author (111 a) --> autores.id --> autores.completo     
-      case "700a" { $dato = C4::Search::getautor($referencia)->{'completo'}; }  # - additionalauthors.author (700 a) --> autores.id --> autores.completo
-      case "710a" { $dato = C4::Search::getautor($referencia)->{'completo'}; }  # - colaboradores.idColaborador (710 a) --> autores.id --> autores.completo
+#      case "100a" { $dato = C4::Search::getautor($referencia)->{'completo'}; }  # - biblio.author (100 a) --> autores.id --> autores.completo     
+#      case "110a" { $dato = C4::Search::getautor($referencia)->{'completo'}; }  # - biblio.author (110 a) --> autores.id --> autores.completo     
+#      case "111a" { $dato = C4::Search::getautor($referencia)->{'completo'}; }  # - biblio.author (111 a) --> autores.id --> autores.completo     
+#      case "700a" { $dato = C4::Search::getautor($referencia)->{'completo'}; }  # - additionalauthors.author (700 a) --> autores.id --> autores.completo
+#      case "710a" { $dato = C4::Search::getautor($referencia)->{'completo'}; }  # - colaboradores.idColaborador (710 a) --> autores.id --> autores.completo
       # Referencias a Temas
-      case "650a" { $dato = C4::Search::getTema($referencia)->{'nombre'}; }     # - bibliosubjet.subject (650 a) --> temas.id --> temas.nombre
-      case "651a" { $dato = C4::Search::getTema($referencia)->{'nombre'}; }     # - bibliosubjet.subject (651 a) --> temas.id --> temas.nombre
-      case "653a" { $dato = C4::Search::getTema($referencia)->{'nombre'}; }     # - bibliosubjet.subject (653 a) --> temas.id --> temas.nombre
-    }
+#      case "650a" { $dato = C4::Search::getTema($referencia)->{'nombre'}; }     # - bibliosubjet.subject (650 a) --> temas.id --> temas.nombre
+#      case "651a" { $dato = C4::Search::getTema($referencia)->{'nombre'}; }     # - bibliosubjet.subject (651 a) --> temas.id --> temas.nombre
+#      case "653a" { $dato = C4::Search::getTema($referencia)->{'nombre'}; }     # - bibliosubjet.subject (653 a) --> temas.id --> temas.nombre
+#    }
 
 #     C4::AR::Debug::debug("getDatoFromReferencia => salida: ".$dato);
     return $dato;
@@ -725,99 +725,41 @@ sub GetAllBiblios {
     return($cant,@result);
 }
 
-=item sub getBibliosFromRange
+=item sub getRecordsFromRange
 
-Retorna todos los registros que se encuentran dentro del rango [$biblio_ini, $biblio_fin]
+Retorna todos los registros para exportar
 =cut
-sub getBibliosFromRange {
-    my ( $cgi ) = @_;
+sub getRecordsFromRange {
+    my ( $params ) = @_;
 
-    my $dbh     = C4::Context->dbh;
-    my @result;
-    my @params;
-    my @joins;
-    my @where;
-
-    my $query   = " SELECT * FROM biblio b ";
-
-   
-
+    my @filtros;
+    
+    
+    
+    
     if ($cgi->param('select_itemtypes') ne "") {
         #filtro por tipo de ejemplar
-        push (@where, " (itemtype = ?) ");
-        push (@params, $cgi->param('select_itemtypes'));
+        push (@filtros, ( template => { eq => $params->param('select_itemtypes')}));
     } 
 
-    if ($cgi->param('select_nivel_bibliografico') ne "") {
-            #filtro por rango de blbionumber
-            push (@where, " ( bi.classification = ? ) ");
-            push (@params, $cgi->param('select_nivel_bibliografico'));
-    } 
 
-    if (($cgi->param('select_itemtypes') ne "") || ($cgi->param('select_nivel_bibliografico') ne "")) {
-        push (@joins, " INNER JOIN biblioitems bi ON (b.biblionumber = bi.biblionumber) ");
-    }
-
-    if ( ($cgi->param('biblio_ini') ne "") && ($cgi->param('biblio_fin') ne "") ){
+    if ( ($cgi->param('registro_ini') ne "") && ($cgi->param('registro_fin') ne "") ){
         #filtro por rango de blbionumber
-        push (@where, " ( b.biblionumber >= ? AND b.biblionumber <= ? ) ");
-        push (@params, $cgi->param('biblio_ini'));
-        push (@params, $cgi->param('biblio_fin'));
+        push (@filtros, ( id => { ge => $params->param('registro_ini')}));
+        push (@filtros, ( id => { le => $params->param('registro_fin')}));
     } 
-
-
-    if ($cgi->param('branch') ne "") {
-        #filtro por homebranch
-
-        push (@joins, " INNER JOIN items i ON (b.biblionumber = i.biblionumber) AND (bi.biblioitemnumber = i.biblioitemnumber) ");
-        push (@where, " ( i.homebranch = ? ) ");
-        push (@params, $cgi->param('branch'));
-    }     
-
-
-    foreach my $j (@joins){
-    #armo los joins
-        $query  .= $j;
+      
+    if ($cgi->param('busqueda')){
+        push (@filtros, ( marc_record => { like => '%'.$search.'%'}));
     }
-
-    my $cant_where = scalar(@where);
-
-    if ($cant_where > 0) {
-        $query     .= " WHERE ";
+     my $registros_array_ref;
+    if($params->param('limit')){
+        $registros_array_ref= C4::Modelo::CatRegistroMarcN1::Manager->get_cat_registro_n1( query => \@filtros, limit => $params->param('limit'),offset  => 0);
     }
-
-    for(my $i=0;$i < $cant_where;$i++){
-    #armo el where
-        $query  .= @where[$i];
-        if ($i < $cant_where - 1) {
-            $query  .= " AND ";
-        }
+    else{
+        $registros_array_ref= C4::Modelo::CatRegistroMarcN1::Manager->get_cat_registro_n1( query => \@filtros);
     }
-    
-    $query      .= " ORDER BY b.biblionumber ";
-
-    if ($cgi->param('limit') ne "") {
-        #muesrto los primeros "limit" registros
-
-        $query  .= " LIMIT 0,".$cgi->param('limit')." ;";
-        #push (@params, int($cgi->param('limit')));
-    }   
-
-    C4::AR::Debug::debug("getBibliosFromRange => SQL => ".$query);
-
-
-    my $sth     = $dbh->prepare($query);
-    my $cant    = 0;
-    $sth->execute(@params);
-
-    while (my $data=$sth->fetchrow_hashref){
-        push (@result, $data);
-        $cant++;
-    }
-
-    $sth->finish;
-
-    return ($cant, @result);
+    return  $registros_array_ref;
 }
 
 sub getMarcRecordForOAI {

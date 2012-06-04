@@ -7,39 +7,6 @@ use CGI;
 use C4::AR::ExportacionIsoMARC;
 
 my $query = new CGI;
-my $op          = $query->param('op') || '';
-
-if ($op eq 'export') {
-
-    my $filename    = $query->param('filename');
-
-    if (!$filename){
-        my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst)=localtime(time);
-        $year       += 1900;
-        my $dt      = "$hour$min-$mday-$mon-$year";
-        $filename   = 'export-'.$dt.'.'.$query->param('export_format');
-    }
-
-    C4::AR::Debug::debug("Exportar => OP: ".$op);
-    C4::AR::Debug::debug("Exportar => : ".$filename);
-    print $query->header(
-                                -type           => 'application/octet-stream',
-                                -attachment     => $filename,
-                                -expires        => '0',
-                      );
-
-    eval {
-
-        C4::AR::ExportacionIsoMARC::marc_record_to_ISO_from_range( $query );
-    };
-
-    if($@){
-          my $msg_error = "ERORROROROR $@";
-          C4::AR::Debug::debug($msg_error);
-    }
-}
-else {
-
 
 my ($template, $session, $t_params)= get_template_and_user({
                                     template_name => "herramientas/exportacion/exportar.tmpl",
@@ -67,4 +34,3 @@ my ($template, $session, $t_params)= get_template_and_user({
     $t_params->{'combo_nivel_bibliogratico'}    = C4::AR::Utilidades::generarComboNivelBibliografico(\%params_combo3);
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params,$session);
-}

@@ -24,10 +24,10 @@
 <div style="width: 100%; clear: both; margin: 0 auto;">
 <fieldset >
 <legend class="titulo_legend">Opciones de exportaci&oacute;n</legend>
- <ul>
+     <ol>
       <li class="sub_item" >
         <label for="biblio_ini">Del registro n&uacute;mero :</label>
-        <input type="text" id="biblio_ini" name="biblio_ini" size="15"> al : <input type="text" name="biblio_fin" size="15">
+        <input type="text" id="registro_ini" name="registro_ini" size="15"> al : <input type="text" name="registro_fin" id="registro_fin" size="15">
       </li>
        <li class="sub_item" >
         <label for="limit">Limitar a los primeros </label>
@@ -38,18 +38,10 @@
         [% combo_tipo_documento %]
       </li>
       <li class="sub_item" >
-        <label for="id_ui">Unidad de Informaci&oacute;n :</label>
-          [% combo_ui %]
-      </li>
-      <li class="sub_item" >
-        <label>Nivel Bibliogr&aacute;fico:</label>
-        [% combo_nivel_bibliogratico %]
-      </li>
-      <li class="sub_item" >
         <label>Exportar Ejemplares </label>
         <input type="checkbox" name="exportar_ejemplares" value="1" checked>
       </li>
-      </ul>
+      </ol>
     </fieldset>
     <div style="width: 100%; clear: both; margin: 0 auto;text-align:center;">
     <fieldset>
@@ -64,7 +56,7 @@
     </fieldset>
     </div>
     <div style="text-align:center;">
-        <input type="hidden" id="op" name="op" value="export">
+        <input type="hidden" id="tipoAccion" name="tipoAccion" value="EXPORTAR">
 
           [% PERL %]
                      print C4::AR::Filtros::to_Button(   
@@ -87,4 +79,3 @@
 </fieldset>
 
 [% INCLUDE 'intranet-bottom.inc' %]
-
