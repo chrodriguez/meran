@@ -559,12 +559,20 @@ sub t_agregar_configuracion {
         };
 
         if ($@){
+            my $errorDB = $@;
             #Se loguea error de Base de Datos
+
             &C4::AR::Mensajes::printErrorDB($@, 'B432',"INTRA");
             $db->rollback;
             #Se setea error para el usuario
             $msg_object->{'error'} = 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U606', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}]} ) ;
+
+            if($errorDB =~ 'Duplicate entry'){
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U613', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}]} ) ;
+            }else{
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U606', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}]} ) ;
+            } 
+            
         }
 
         $db->{connect_options}->{AutoCommit} = 1;

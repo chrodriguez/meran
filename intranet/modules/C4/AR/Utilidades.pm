@@ -153,6 +153,39 @@ my %LABELS_COMPONENTS = (   "-1"            => C4::AR::Filtros::i18n("SIN SELECC
                         );
 
 
+
+=item
+    Crea un radio button para bootstrap
+=cut
+sub crearRadioButtonBootstrap{
+
+    my ($id,$values,$labels,$valor) = @_;
+
+    my $radio   = '<div id="radios_' . $id . '" class="btn-group" data-toggle="buttons-radio">';
+
+    my $i       = 0;
+
+    foreach my $label (@$labels){
+
+        #es la seleccionada
+        if(@$values[$i] eq $valor){
+            $radio = $radio . '<button class="btn btn-primary active">' . $label . '</button>';
+        }else{
+            $radio = $radio . '<button class="btn btn-primary">' . $label . '</button>';
+        }
+
+        $i++;
+        
+    }
+
+    $radio = $radio . '</div>';
+
+    #agrego un input hidden para poder agarrar en el POST del form el valor del radio
+    $radio = $radio . '<input type="hidden" id="' . $id . '" name="' . $id . '"value="">';
+
+    return $radio;
+}
+
 =item
     Recibe un archivo y devuelve el magic number.
     Tambien recibe un array con los tipos de archivos permitidos.

@@ -310,7 +310,7 @@ sub getDefaultValue{
         case 'nivel_bibliografico' {return C4::AR::Preferencias::getValorPreferencia("defaultNivelBibliografico");}
 #         case 'tema' {return C4::AR::Preferencias::getValorPreferencia("defaultUI");}
 #         case 'tipo_socio' {return C4::AR::Preferencias::getValorPreferencia("defaultUI");}
-#         case 'tipo_documento_usr' {return C4::AR::Preferencias::getValorPreferencia("defaultTipoDoc");}
+        case 'tipo_documento_usr' {return C4::AR::Preferencias::getValorPreferencia("defaultTipoDoc");}
         case 'estado' {return C4::AR::Preferencias::getValorPreferencia("defaultEstado");}
         case 'ciudad' {return C4::AR::Preferencias::getValorPreferencia("defaultCiudad");}
 #         case 'editorial' {return C4::AR::Preferencias::getValorPreferencia("defaultUI");}

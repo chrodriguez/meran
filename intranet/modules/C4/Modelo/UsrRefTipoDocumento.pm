@@ -61,7 +61,7 @@ sub obtenerValoresCampo {
     if($v){
 
         my $ref_valores = C4::Modelo::UsrRefTipoDocumento::Manager->get_usr_ref_tipo_documento
-                            ( select   => [$campo],
+                            ( select   => ['nombre',$campo],
                               sort_by => ($orden) );
 
         for(my $i=0; $i<scalar(@$ref_valores); $i++ ){

@@ -1,10 +1,39 @@
 [% INCLUDE "intranet-top.inc" %]
 
-<form class="form-horizontal" action="[% url_prefix %]/admin/global/circ_config.pl?token=[% token %]" method="post">
+<script type="text/javascript">
+
+    var prefBooleanas = new Array();
+
+    [% FOREACH pref IN preferenciasBooleanas %]
+    
+        prefBooleanas.push('[% pref.variable %]');
+
+    [% END %]
+
+
+    //actualizo los input hidden con los valores de los radio button de bootstrap
+    function guardarPreferencias(){
+
+        for(pref in prefBooleanas){
+
+            if($('#radios_' + prefBooleanas[pref] + '').find('.active').text() == "[% PERL %] print 'Si' | i18n; [% END %]"){
+                $('#' + prefBooleanas[pref] +'').val(1);
+            }else{
+                $('#' + prefBooleanas[pref] +'').val(0);
+            }
+            
+        }
+
+        $('#formPreferencias').submit();
+
+    }
+
+</script>
+
+<form id="formPreferencias" onclick="return false;" class="form-horizontal" action="[% url_prefix %]/admin/global/circ_config.pl?token=[% token %]" method="post">
     <fieldset class="resultados_busqueda">
     <legend>[% "Administraci&oacute;n de preferencias de Circulaci&oacute;n" | i18n %]</legend>
 
-    <input type="hidden" id="editando" name="editando" value="1">
     
             [% FOREACH preferencia IN preferencias %]
             
@@ -29,6 +58,7 @@
 	                    [% END %]
                     </div>
                 </div>
+    <input type="hidden" id="editando" name="editando" value="1">
 
             [% END %]
     <div class="form-actions">
@@ -36,6 +66,7 @@
 	                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
 	                                                    type    => "submit",
 	                                                    boton   => "boton_agregar",
+                                                        onclick => "guardarPreferencias();"
 	                        ) ;
 	    [% END %]
     </div>

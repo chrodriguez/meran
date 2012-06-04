@@ -20,6 +20,9 @@ my ($template, $session, $t_params, $socio)  = get_template_and_user({
 
 my $preferenciasCirculacion = C4::AR::Preferencias::getPreferenciasByCategoria('circulacion');
 
+#trae las preferencias que son renderizadas como un radio button de bootstrap
+my $preferenciasBooleanas   = C4::AR::Preferencias::getPreferenciasBooleanas('circulacion');
+
 #si estamos haciendo el post del form hay que guardar los cambios
 if($input->param('editando')){
 
@@ -27,7 +30,7 @@ if($input->param('editando')){
     my $tmp;
     
     foreach my $preferencia (@$preferenciasCirculacion){ 
-        
+
         $tmp = C4::AR::Preferencias::t_modificarVariable($preferencia->getVariable,$input->param($preferencia->getVariable),$preferencia->getExplanation,'circulacion');
         
     }
@@ -36,6 +39,9 @@ if($input->param('editando')){
 
     $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje('SP000','intranet');
 }
+
+#hay que recargarlas de nuevo para mostrar los valores actualizados
+$preferenciasCirculacion = C4::AR::Preferencias::getPreferenciasByCategoria('circulacion');
 
 my @arrayPreferencias;
 my $campo       = "";
@@ -54,18 +60,20 @@ foreach my $preferencia (@$preferenciasCirculacion){
     }
     
     my $nuevoCampo;
-    my %labels;
+    my @labels;
     my @values;
+    my %labels;
     my %hash;
     
     $hash{'preferencia'} = $preferencia;
 
     if($preferencia->getType eq "bool"){
-        push(@values,1);
-        push(@values,0);
-        $labels{1}  = "Si";
-        $labels{0}  = "No";
-        $nuevoCampo = C4::AR::Utilidades::crearComponentes("radio",$preferencia->getVariable,\@values,\%labels,$preferencia->getValue);
+        push(@values, 1);
+        push(@values, 0);
+        push(@labels, C4::AR::Filtros::i18n('Si'));
+        push(@labels, C4::AR::Filtros::i18n('No'));
+        $nuevoCampo = C4::AR::Utilidades::crearRadioButtonBootstrap($preferencia->getVariable,\@values,\@labels,$preferencia->getValue);
+    
     }
     
     elsif($preferencia->getType eq "texta"){
@@ -93,7 +101,8 @@ foreach my $preferencia (@$preferenciasCirculacion){
     push(@arrayPreferencias, \%hash);
 }
 
-$t_params->{'preferencias'}   = \@arrayPreferencias;
-$t_params->{'page_sub_title'} = C4::AR::Filtros::i18n("Configuraci&oacute;n de Circulaci&oacute;n");
+$t_params->{'preferencias'}             = \@arrayPreferencias;
+$t_params->{'preferenciasBooleanas'}    = $preferenciasBooleanas;
+$t_params->{'page_sub_title'}           = C4::AR::Filtros::i18n("Configuraci&oacute;n de Circulaci&oacute;n");
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
