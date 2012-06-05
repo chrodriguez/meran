@@ -1,0 +1,14 @@
+--- #YAML:1.0
+name:                Net-Z3950-ZOOM
+version:             1.28
+abstract:            Perl extension for invoking the ZOOM-C API.
+license:             ~
+author:              
+    - Mike Taylor <mike@>
+generated_by:        ExtUtils::MakeMaker version 6.42
+distribution_type:   module
+requires:     
+    MARC::Record:                  1.38
+meta-spec:
+    url:     http://module-build.sourceforge.net/META-spec-v1.3.html
+    version: 1.3

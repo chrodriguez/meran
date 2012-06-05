@@ -1,0 +1,27 @@
+0.04    2005-05-17
+
+- Added parsing for TIMESTAMP as returned by MySQL 4.1.  Patch by Mike
+Bissett.
+
+
+0.0301  2004-07-07
+
+- No code or doc changes, just a new version to force it be reindexed
+after some PAUSE confusion.
+
+
+0.03    2003-04-22
+
+- Internals cleanup by Iain Truskett.
+
+
+0.02    2003-04-01
+
+- Switch to Module::Build for installation.
+
+- Switch to using DateTime::Format::Builder internally.
+
+
+0.01    2003-03-19
+
+- First release

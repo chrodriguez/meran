@@ -1,0 +1,63 @@
+{
+   "abstract" : "Determine Web browser, version, and platform from an HTTP user agent string",
+   "author" : [
+      "Lee Semel <lee@semel.net>",
+      "Peter Walsham",
+      "Olaf Alders <olaf@wundercounter.com> (current maintainer)"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Dist::Zilla version 4.300010, CPAN::Meta::Converter version 2.120630",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "HTTP-BrowserDetect",
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "Module::Build" : "0.3601"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "6.30",
+            "Module::Build" : "0.3601"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Exporter" : "0",
+            "strict" : "0",
+            "vars" : "0"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "Data::Dump" : "0",
+            "English" : "0",
+            "File::Slurp" : "0",
+            "FindBin" : "0",
+            "JSON::PP" : "0",
+            "Test::More" : "0",
+            "warnings" : "0"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "http://github.com/oalders/HTTP-BrowserDetect/issues"
+      },
+      "homepage" : "https://metacpan.org/release/HTTP-BrowserDetect",
+      "repository" : {
+         "type" : "git",
+         "url" : "https://github.com/oalders/http-browserdetect.git",
+         "web" : "https://github.com/oalders/http-browserdetect"
+      }
+   },
+   "version" : "1.44"
+}
+

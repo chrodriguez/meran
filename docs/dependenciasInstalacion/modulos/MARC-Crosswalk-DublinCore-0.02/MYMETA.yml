@@ -1,0 +1,22 @@
+---
+abstract: 'Convert data between MARC and Dublin Core'
+author:
+  - 'Brian Cassidy <bricas@cpan.org>'
+build_requires:
+  ExtUtils::MakeMaker: 0
+dynamic_config: 0
+generated_by: 'Module::Build version 0.2609, CPAN::Meta::Converter version 2.112150'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: MARC-Crosswalk-DublinCore
+provides:
+  MARC::Crosswalk::DublinCore:
+    file: lib/MARC/Crosswalk/DublinCore.pm
+    version: 0.02
+requires:
+  DublinCore::Record: 0
+  MARC::Record: 0
+  Test::More: 0
+version: 0.02

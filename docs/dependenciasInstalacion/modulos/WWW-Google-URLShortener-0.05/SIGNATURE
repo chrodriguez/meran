@@ -1,0 +1,39 @@
+This file contains message digests of all files listed in MANIFEST,
+signed via the Module::Signature module, version 0.68.
+
+To verify the content in this distribution, first make sure you have
+Module::Signature installed, then type:
+
+    % cpansign -v
+
+It will check each file's integrity, as well as the signature's
+validity.  If "==> Signature verified OK! <==" is not displayed,
+the distribution may already have been compromised, and you should
+not run its Makefile.PL or Build.PL.
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+SHA1 4e5ab4466add7ef3809b7eddace8d5f75f9d1997 Build.PL
+SHA1 6cd2c82e45ba0f760a1b002240aa4439a985b3aa Changes
+SHA1 bcc14c4d2e4d7ecb8649ca3305c1b64cdfda4168 MANIFEST
+SHA1 7d20e4e840781030202bb045d5ab81b3fd1b68b0 MANIFEST.SKIP
+SHA1 bf90793573e3fc08874415e42dae44bfa0b2da3c META.yml
+SHA1 7612435dd29c1b46bf0dcaa378289f746d029eec Makefile.PL
+SHA1 e8eb11fae7ab38e06ef776ee59570d3984353d57 README
+SHA1 8618097780dd4c550d0deea6a1f88d154d1b6d5c lib/WWW/Google/URLShortener.pm
+SHA1 3f89a40cf3ce96754c90671e464eaf2e2c06b799 t/00-load.t
+SHA1 144feeede87f27dba20abc2abaad2b20df5c5b8d t/01-unit-test.t
+SHA1 2b8ffb7e4f399af95d092743846ac8d438f2c53e t/manifest.t
+SHA1 0765c9ff0cc4319f415bb08d0053b7717a8284a2 t/pod.t
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.14 (MingW32)
+
+iQEcBAEBAgAGBQJOP9GGAAoJEPYcXBXhRYOhdZoIAKU1qdiUBBF+frFIUD5Mp6m7
+ZQofP3pPI1n5lR1945HAg14yR0gAIpBYSyauEmmxrBboGNcNC4fzehI2jDUrCbBR
+t8vlnmIva0iidmv4gFQXbwsRirFbFqLLlCe+5mRAcXr7wZv2R0ua1aVknM+xa0Aa
+/ufpPfl/OoLqpZKz/ALz2KxOI1VSUiL+3O8BbXjRkKUTFBkvZIacvkudffQOXLnE
+6ZxObmtHnJxlFYthQnUrO8ba3+M2yUKfI52PS6U5nu20JjyYjqsLzuigCtILhg1B
+Vv+kz4KRdXwnY53xuI0j2lfZAuyQYxVIbKgkQToqKR1e/mu8aX6zcFQeeUA3CEg=
+=VoHQ
+-----END PGP SIGNATURE-----

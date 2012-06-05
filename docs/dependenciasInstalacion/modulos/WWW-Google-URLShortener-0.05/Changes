@@ -1,0 +1,19 @@
+Revision history for WWW-Google-URLShortener
+
+0.05    Mon Aug 08 13:06:11 2011
+        - Made Readonly v1.03 as minimum requirement.
+        - Prepared the distribution using the Module::Signature v0.68.
+
+0.04    Wed May 25 11:26:34 2011
+        - Added link to the License information.
+
+0.03    Tue May 10 12:34:12 2011
+        - Fixed typo in the method shorten_url(), misspelt 'croak'.
+        - Fixed typo in the method expand_url(), misspelt 'croak'.
+        - Fixed typo in the method get_analytics(), misspelt 'croak'.
+
+0.02    Thu May 05 16:47:10 2011
+        - Fixed typo in the pod for title "DESCRIPTION".
+
+0.01    Thu May 05 11:43:01 2011
+        - First version, released.

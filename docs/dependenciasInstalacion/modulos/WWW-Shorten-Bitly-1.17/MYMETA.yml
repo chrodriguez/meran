@@ -1,0 +1,25 @@
+---
+abstract: 'Interface to shortening URLs using L<http://bitly.com>'
+author:
+  - 'Pankaj Jain <pjain@cpan.org>'
+build_requires:
+  ExtUtils::MakeMaker: 0
+configure_requires:
+  ExtUtils::MakeMaker: 0
+dynamic_config: 0
+generated_by: 'ExtUtils::MakeMaker version 6.56, CPAN::Meta::Converter version 2.112150'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: WWW-Shorten-Bitly
+no_index:
+  directory:
+    - t
+    - inc
+requires:
+  JSON::Any: 1.18
+  Test::More: 0
+  WWW::Shorten: 1.9
+  XML::Simple: 2.18
+version: 1.17

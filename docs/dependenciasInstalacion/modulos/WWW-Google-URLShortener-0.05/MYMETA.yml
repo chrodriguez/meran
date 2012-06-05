@@ -1,0 +1,29 @@
+---
+abstract: 'Interface to Google URL Shortener API.'
+author:
+  - 'Mohammad S Anwar <mohammad.anwar@yahoo.com>'
+build_requires:
+  ExtUtils::MakeMaker: 0
+configure_requires:
+  Module::Build: 0.36
+dynamic_config: 0
+generated_by: 'Module::Build version 0.3607, CPAN::Meta::Converter version 2.112150'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: WWW-Google-URLShortener
+provides:
+  WWW::Google::URLShortener:
+    file: lib/WWW/Google/URLShortener.pm
+    version: 0.05
+requires:
+  Data::Validate::URI: 0.05
+  HTTP::Request: 1.40
+  JSON: 2.15
+  LWP::UserAgent: 2.33
+  Readonly: 1.03
+  Test::More: 0
+resources:
+  license: http://dev.perl.org/licenses/
+version: 0.05
