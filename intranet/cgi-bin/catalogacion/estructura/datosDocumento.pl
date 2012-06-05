@@ -59,7 +59,8 @@ if($tipoAccion eq "MODIFICAR_NIVEL_1"){
     my $nivel1      = C4::AR::Nivel1::getNivel1FromId1($id1);
 
     if($nivel1){
-        $template_catalogo = $nivel1->getTemplate();
+        $template_catalogo      = $nivel1->getTemplate();
+        $t_params->{'nivel1'}   = $nivel1;
     }
 
 }elsif($tipoAccion eq "MODIFICAR_NIVEL_2"){
@@ -68,6 +69,7 @@ if($tipoAccion eq "MODIFICAR_NIVEL_1"){
     if($nivel2){
         $template_catalogo          = $nivel2->getTemplate();
         $t_params->{'indice_data'}  = $nivel2->getIndice() || "";
+        $t_params->{'nivel1'}       = $nivel2->nivel1;
     }
     
 }elsif($tipoAccion eq "MODIFICAR_NIVEL_3"){
@@ -76,6 +78,7 @@ if($tipoAccion eq "MODIFICAR_NIVEL_1"){
     if($nivel3){
         $template_catalogo          = $nivel3->getTemplate();
         $t_params->{'indice_data'}  = C4::AR::Nivel2::getNivel2FromId1($id1)->[0]->getIndice() || "";
+        $t_params->{'nivel1'}       = $nivel3->nivel1;
     }
 
 }
@@ -89,7 +92,6 @@ $params_combo{'onChange'}                       = '';
 $params_combo{'default'}                        = C4::AR::Preferencias::getValorPreferencia("defaultlevel");#'SIN SELECCIONAR';
 $t_params->{'comboTipoNivelBibliografico'}      = &C4::AR::Utilidades::generarComboNivelBibliografico(\%params_combo);
 $t_params->{'page_sub_title'}                   = C4::AR::Filtros::i18n("Catalogaci&oacute;n - Datos del documento");
-
-$t_params->{'unload_alert'} = 1;
+$t_params->{'unload_alert'}                     = 1;
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

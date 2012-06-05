@@ -10,18 +10,6 @@
 
     [% ELSE %]
     <fieldset>
-    <legend class="titulo_legend">[% "Registro:" | i18n %]
-            [% PERL %]
-                print C4::AR::Filtros::link_to( text =>     [% nivel1.getId1 %],
-                                                url=>"detalle.pl", 
-                                                params =>   ["id1=[% nivel1.getId1 %]"],
-                                                title =>    "[% 'Ver Detalle del Registro' | i18n %]"
-                                            ) ;
-            [% END %]
-
-            <span id="template_[% nivel1.getId1 %]">([% nivel1.getTemplate %])</span>
-    </legend>
-
 
             <dl>
 	            <dt class="inline left rightMargin"> [% 'T&iacute;tulo' %] </dt>
@@ -42,7 +30,7 @@
                                                         actions         => [
                                                                             {title => "Modificar", action=>'modificarN1("[% nivel1.getId1 %]", "[% nivel1.getTemplate %]")',icon=>"icon-edit"},
                                                                             {title => "Eliminar", action=>'borrarN1([% nivel2.getId1 %])', icon=>"icon-trash"},
-                                                                            {title => "Agregar Nivel 2", action=>'agregarN2("[% nivel1.getId1 %]")', icon=>"icon-plus-sign"},
+                                                                            {title => "Agregar Edición", action=>'agregarN2("[% nivel1.getId1 %]")', icon=>"icon-plus-sign"},
                                                                             ],
 
                             ) ;

@@ -530,7 +530,7 @@ sub getAnaliticasFromNivel2{
     my @analitica_array;
   
 
-    # if($cat_reg_marc_n2_analiticas){
+    if($cat_reg_marc_n2_analiticas){
 
         foreach my $n2 (@$cat_reg_marc_n2_analiticas){
             # my %hash_nivel1_aux;
@@ -538,24 +538,36 @@ sub getAnaliticasFromNivel2{
     
             my $n2_object = C4::AR::Nivel2::getNivel2FromId2($n2->getId2Hijo(),$db);
             if ($n2_object){
-                my $n1_object = C4::AR::Nivel1::getNivel1FromId1($n2_object->getId1(),$db);
+                # my $n1_object = C4::AR::Nivel1::getNivel1FromId1($n2_object->getId1(),$db);
 
                 # $hash_nivel1_aux{'nivel1_analitica'}        = $n1_object->toMARC_Intra;
                 # push(@nivel1_analitica_array, \%hash_nivel1_aux);
                 #Esto mostraba cosas de más, perdón Mike.
                 $hash_nivel2_aux{'nivel2_analitica'}        = $n2_object->toMARC_Intra;
+
+# C4::AR::Debug::debug("nivel2_analitica => ".$hash_nivel2_aux{'nivel2_analitica'});
+
                 push(@analitica_array, \%hash_nivel2_aux);
             }
             
         }
+    }
+
+# my %hash_temp = @analitica_array[0]->{'nivel2_analitica'};
+# C4::AR::Debug::debug("dato ".$hash_temp{'dato'});
+
+# foreach $a (@analitica_array){
+#     my $hash_temp = $a->{'nivel2_analitica'};  
+#     C4::AR::Debug::debug("dato ".$hash_temp->{'dato'});
+# }
 
         # $hash_nivel2{'nivel1_analiticas_array'} = \@nivel1_analitica_array;
         # $hash_nivel2{'nivel1_analiticas_cant'}  = scalar(@nivel1_analitica_array);
     # }
 
-# C4::AR::Debug::debug("Nivel2 => getAnaliticasFromNivel2 => ".scalar(@analitica_array));
+C4::AR::Debug::debug("Nivel2 => getAnaliticasFromNivel2 => ".scalar(@analitica_array));
 
-    return @analitica_array;
+    return \@analitica_array;
 }
 
 sub getAllNivel2FromAnaliticasById{
