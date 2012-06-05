@@ -514,7 +514,46 @@ elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL2_LATERAL"){
 	
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
+elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL2"){
+#Se muestran las catalogaciones
 
+    my ($template, $session, $t_params) = get_template_and_user({
+                            template_name => "catalogacion/estructura/ADInfoNivel2.tmpl",
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => {      ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'CONSULTA', 
+                                                    entorno => 'datos_nivel1' },
+                            debug => 1,
+                    });
+
+    my $nivel2_array_ref;
+
+    C4::AR::Validator::validateParams('U389', $obj,['id2']);
+    my $nivel2              = C4::AR::Nivel2::getNivel2FromId2($obj->{'id2'});
+    
+    push  (@$nivel2_array_ref, $nivel2);
+
+    #se envia al cliente todos los objetos nivel2 segun id1
+    $t_params->{'nivel2_array'} = $nivel2_array_ref;
+    $t_params->{'OK'} = 1;
+
+    $t_params->{'indice_edit'} = 0;
+    
+    if($obj->{'id2'}){
+    # obtenemos el indice, si es que tiene
+    
+        my $indice = $nivel2_array_ref->[0]->getIndice();   
+        
+        if($indice ne ""){
+            $t_params->{'indice_edit'} = 1;
+        }
+    }
+    
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+}
 elsif($tipoAccion eq "MOSTRAR_INFO_NIVEL3_TABLA"){
 #Se muestran las catalogaciones
 

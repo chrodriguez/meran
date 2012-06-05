@@ -220,10 +220,10 @@ $(document).ready( function() {
 
            <div class="form-actions">
                     [% PERL %]
-                            print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 1' | i18n %]",
+                            print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Registro' | i18n %]",
                                                                 boton   => "btn btn-primary",
                                                                 onClick => "guardar(1);",
-                                                                title   => "[% 'Guardar el nivel 1' | i18n %]",
+                                                                title   => "[% 'Guardar Registro' | i18n %]",
                                     ) ;
                     [% END %]
            </div>
@@ -231,10 +231,12 @@ $(document).ready( function() {
 
 <!--            Manejo del Nivel 2 -->
 <div id="nivel2Tabla" style="display:none">
+
+    [% INCLUDE  "estructura/link_a_registro.tmpl" %]
         
     <form id="formNivel2" name="formNivel2" class="form-horizontal" onsubmit="return false;">
 		  <fieldset>
-			    <legend class="titulo_legend">[% "Datos del grupo" | i18n %]
+			    <legend class="titulo_legend">[% "Datos de la edici&oacute;n" | i18n %]
     			     <div id="estado_accion" class="titulos estado_accion alert pagination-centered" style="display:none"></div>
 			    </legend>
 			    <!--     CAMPOS DINAMICOS DEL NIVEL 2 -->
@@ -259,7 +261,9 @@ $(document).ready( function() {
 
 
 <!--            Manejo del Nivel 3 -->
-<div id="nivel3Tabla" style="display:none">   
+<div id="nivel3Tabla" style="display:none"> 
+
+    [% INCLUDE  "estructura/link_a_registro.tmpl" %]
 
 	<form id="formNivel3" name="formNivel3" class="form-horizontal" onsubmit="return false;">
 		<fieldset>

@@ -695,7 +695,7 @@ sub as_stringReloaded {
     my $db      = undef;
     my $campo   = $field->tag;
     my $nivel   = $params->{'nivel'};
-    C4::AR::Debug::debug("Catalogacion => as_stringReloaded => campo => ".$campo." itemype => ".$itemtype." nivel => ".$nivel);
+    # C4::AR::Debug::debug("Catalogacion => as_stringReloaded => campo => ".$campo." itemype => ".$itemtype." nivel => ".$nivel);
 
     my @array_subcampos;
 
@@ -792,7 +792,7 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
     $type           = $type || "__NO_TYPE";
     my $itemtype    = $params->{'id_tipo_doc'};
 
-#     C4::AR::Debug::debug("marc_record->as_usmarc => ".$marc_record->as_formatted);
+    C4::AR::Debug::debug("Catalogacion => marc_record_to_meran_to_detail_view_as_not_extended => marc_record->as_usmarc => ".$marc_record->as_formatted);
 
     foreach my $field ($marc_record->fields) {
         my %hash_temp_aux;
@@ -807,11 +807,11 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
             # veo que separador lleva cada subcampo para el $field dependiendo del campo y subcampo que se este procesando
             my $field_as_string                 = as_stringReloaded($field, $itemtype, $params);
 
-#C4::AR::Debug::debug("Catalocagion::marc_record_to_meran_to_detail_view_as_not_extended=> field_as_string =>".$field_as_string."-");
+            # C4::AR::Debug::debug("Catalocagion::marc_record_to_meran_to_detail_view_as_not_extended=> field_as_string =>".$field_as_string."-");
 
             $hash_temp_aux{'dato'}              = ($hash_temp_aux{'dato'} ne "")?$hash_temp_aux{'dato'}.";".$field_as_string:($type eq "INTRA")?$field_as_string." ":$field_as_string;
 
-#C4::AR::Debug::debug("Catalocagion::marc_record_to_meran_to_detail_view_as_not_extended=> hash_temp_aux{'dato'} =>".$hash_temp_aux{'dato'}."-");
+# C4::AR::Debug::debug("Catalocagion::marc_record_to_meran_to_detail_view_as_not_extended=> hash_temp_aux{'dato'} =>".$hash_temp_aux{'dato'}."-");
 
             $hash_temp_aux{'campo'}             = $campo;
             $hash_temp_aux{'orden'}             = getOrdenFromCampo($campo, $params->{'nivel'}, $itemtype, $type, $db);
@@ -837,7 +837,7 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
             } else {
             #EXISTE EL CAMPO => campo, subcampo REPETIBLE
                 @MARC_result_array[$index]->{'dato'} = (@MARC_result_array[$index]->{'dato'} ne "")?@MARC_result_array[$index]->{'dato'}.$field_as_string:$field_as_string;
-C4::AR::Debug::debug("Catalocagion::marc_record_to_meran_to_detail_view_as_not_extended=> field_as_string2 =>".$field_as_string."-");
+# C4::AR::Debug::debug("Catalocagion::marc_record_to_meran_to_detail_view_as_not_extended=> field_as_string2 =>".$field_as_string."-");
             }
 
         } #END if(! $field->is_control_field)
@@ -945,14 +945,14 @@ sub getDatoFromReferencia{
 
                         my $pref_tabla_referencia = C4::Modelo::PrefTablaReferencia->new();
                         my $obj_generico    = $pref_tabla_referencia->getObjeto($estructura->infoReferencia->getReferencia);
-                        C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => campo tabla:                 ".$estructura->infoReferencia->getCampos);
-                        C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => id tabla:                    ".$dato);
+                        # C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => campo tabla:                 ".$estructura->infoReferencia->getCampos);
+                        # C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => id tabla:                    ".$dato);
 #                                                                                         campo_tabla,                id_tabla
                         $valor_referencia   = $obj_generico->obtenerValorCampo($estructura->infoReferencia->getCampos, $dato);
 
-                        C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Tabla:               ".$obj_generico->getTableName);
-                        C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Modulo:              ".$obj_generico->toString);
-                        C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Valor referencia:    ".$valor_referencia);
+                        # C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Tabla:               ".$obj_generico->getTableName);
+                        # C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Modulo:              ".$obj_generico->toString);
+                        # C4::AR::Debug::debug("Catalogacion => getDatoFromReferencia => Valor referencia:    ".$valor_referencia);
 
                         $dato = $valor_referencia;
 
