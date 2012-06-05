@@ -68,7 +68,8 @@
             objAH.tipoAccion    = "PUBLICAR_TWITTER";
             objAH.post          = $("#post_twitter").val();
             objAH.sendToServer();
-
+	        $('#show_twitter').modal('hide');
+            startOverlay();
     }
 
 	   function updatePublicarTwitter(responseText){
@@ -78,8 +79,7 @@
 	        $("#twitter_result").html('<a class="close" data-dismiss="alert">×</a>'+text);
 	        $("#twitter_result").alert();
 	        $("#twitter_result").show();
-	        $('#show_twitter').modal('hide');
-	        
+	        closeModal();
 	  }
 
 	  function enableDisableButton(){
@@ -263,8 +263,9 @@
 		  
 		function showTwitter(responseText){
 		    $('#show_twitter').modal('show');
+	        $('#post_twitter').val('');
 	        $('#post_twitter').focus();
-		    
+		    		    
 		}
 				
 		function closeDM(){
