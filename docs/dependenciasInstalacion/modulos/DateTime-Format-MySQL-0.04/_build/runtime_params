@@ -1,8 +1,0 @@
-do{ my $x = {
-       'install_base' => '/home/einar/meran/intranet/modules/externos',
-       'config' => {
-                     'installman3dir' => '/home/einar/meran/intranet/modules/externos/usr/local/lib/perl5/man/man3',
-                     'installman1dir' => '/home/einar/meran/intranet/modules/externos/usr/local/lib/perl5/man'
-                   }
-     };
-$x; }
