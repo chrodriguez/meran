@@ -24,7 +24,7 @@ my $obj = C4::AR::Utilidades::from_json_ISO($input->param('obj'));
 C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
 
 my $nro_socio                   = $obj->{'nro_socio'};
-my $orden                       = $obj->{'orden'}||'id DESC';
+my $orden                       = 'id DESC';
 my $ini                         = $obj->{'ini'};
 my $funcion                     = $obj->{'funcion'};
 
