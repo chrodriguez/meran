@@ -590,10 +590,10 @@ sub detalleCompletoINTRA {
             $hash_nivel2->{'portada_registro'}          = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'S');
             $hash_nivel2->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'M');
             $hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'L');
-            $hash_nivel2->{'edicion'}                   = $nivel2_array_ref->[$i]->getEdicion;
+            $hash_nivel2->{'edicion'}                   = $nivel2_array_ref->[$i]->getEdicion();
             #para los nav-tabs
-            $hash_nivel2->{'anio_publicacion'}          = $nivel2_array_ref->[$i]->getAnio_publicacion;
-            $hash_nivel2->{'volumen'}                   = $nivel2_array_ref->[$i]->getVolumen;
+            $hash_nivel2->{'anio_publicacion'}          = $nivel2_array_ref->[$i]->getAnio_publicacion();
+            $hash_nivel2->{'volumen'}                   = $nivel2_array_ref->[$i]->getVolumen();
             
             #si tiene volumen se le concatena una "v. ". HARDCODED!!
             if($hash_nivel2->{'volumen'}){ $hash_nivel2->{'volumen'} = "v. " . $hash_nivel2->{'volumen'}; }
@@ -1265,4 +1265,3 @@ END { }       # module clean-up code here (global destructor)
 
 1;
 __END__
-
