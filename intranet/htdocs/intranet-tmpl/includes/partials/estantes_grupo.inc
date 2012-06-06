@@ -1,12 +1,14 @@
 [% USE HTML %]
-<div id="grupo_estantes_[% id2 %]" class="grupo_estantes_[% id2 %]">
-    <fieldset>
-	<legend class="titulo_legend trigger trigger_4_[% id2 %] click">[% "Estantes virtuales del grupo"| i18n %]:</legend>
-    
-	<div id="estantes_[% id2 %]" class="estantes_[% id2 %]"></div>
-    <script type="text/javascript">
-      makeToggle('estantes_[% id2 %]','trigger_4_[% id2 %]',null,true);
-      $('#grupo_estantes_[% id2 %]').hide();
-    </script>
-    </fieldset>	
+
+<div class="accordion grupo_estantes_[% id2 %]" id="grupo_estantes_[% id2 %]">
+            <div class="accordion-group">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#grupo_estantes_[% id2 %]" href="#estantes_[% id2 %]">
+                  [% "Estantes virtuales del grupo"| i18n %]
+                </a>
+              </div>
+			<div id="estantes_[% id2 %]" class="accordion-body collapse estantes_[% id2 %]">
+					<div id="estantes_inner[% id2 %]" class="accordion-inner"></div>	
+			</div>
+		</div>
 </div>

@@ -48,7 +48,7 @@
             <div class="accordion-group">
               <div class="accordion-heading">
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#lista_docs_[% id2 %]" href="#e_docs[% id2 %]">
-                  [% "Documentos electr&oacute;nicos"| i18n %]
+                  [% "Documentos electr&oacute;nicos"| i18n %] <span class="badge badge-info" style="cursor: default;">[% cant_docs %]</span>
                 </a>
               </div>
               <div id="e_docs[% id2 %]" class="accordion-body collapse">

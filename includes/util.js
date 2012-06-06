@@ -488,6 +488,43 @@ function secondsToString(seconds) {
 			+ (s < 10 ? "0" : "") + s);
 }
 
+function uploadProgressIndice(evt) {
+	if (evt.lengthComputable) {
+		bytesUploaded = evt.loaded;
+		bytesTotal = evt.total;
+		var percentComplete = Math.round(evt.loaded * 100 / evt.total);
+		var bytesTransfered = '';
+		if (bytesUploaded > 1024 * 1024)
+			bytesTransfered = (Math.round(bytesUploaded * 100 / (1024 * 1024)) / 100)
+					.toString()
+					+ 'MB';
+		else if (bytesUploaded > 1024)
+			bytesTransfered = (Math.round(bytesUploaded * 100 / 1024) / 100)
+					.toString()
+					+ 'KB';
+		else
+			bytesTransfered = (Math.round(bytesUploaded * 100) / 100)
+					.toString()
+					+ 'Bytes';
+
+                $('#'+'progressIndicatorIndice' + '_' + ID2_file).removeClass('hide');
+
+		document.getElementById('progressNumberIndice' + '_' + ID2_file).innerHTML = percentComplete
+				.toString()
+				+ '%';
+		document.getElementById('progressBarIndice' + '_' + ID2_file).style.width = percentComplete.toString()+ '%';
+		
+		document.getElementById('transferBytesInfoIndice' + '_' + ID2_file).innerHTML = bytesTransfered;
+		if (percentComplete == 100) {
+			var uploadResponse = document.getElementById('uploadResponseIndice' + '_'	+ ID2_file);
+			uploadResponse.innerHTML = '<span style="font-size: 18pt; font-weight: bold;">Procesando...</span>';
+			uploadResponse.style.display = 'block';
+		}
+	} else {
+		document.getElementById('progressBarIndice'+ '_' + ID2_file).innerHTML = 'No se pudo completar';
+	}
+}
+
 function uploadProgress(evt) {
 	if (evt.lengthComputable) {
 		bytesUploaded = evt.loaded;
