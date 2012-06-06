@@ -195,7 +195,7 @@ sub getNivel3FromId2{
                                                                                     id2 => { eq => $id2 },
                                                                             ], 
                                         );
-    return ($nivel3_array_ref, $nivel3_array_ref_count);
+    return ($nivel3_array_ref);
 }
 
 =head2 sub getNivel3Completo
@@ -653,7 +653,7 @@ sub detalleDisponibilidadNivel3{
     $db = $db || C4::Modelo::CatRegistroMarcN3->new->db;
     
     #recupero todos los nivel3 segun el id2 pasado por parametro
-    my ($nivel3_array_ref,$nivel3_array_ref_count) = C4::AR::Nivel3::getNivel3FromId2($id2,$db);
+    my ($nivel3_array_ref) = C4::AR::Nivel3::getNivel3FromId2($id2,$db);
     
     my @result;
     my %hash_nivel2;
@@ -670,7 +670,7 @@ sub detalleDisponibilidadNivel3{
     $infoNivel3{'cantReservas'}                 = C4::AR::Reservas::cantReservasPorGrupo($id2,$db);
     $infoNivel3{'cantReservasEnEspera'}         = C4::AR::Reservas::cantReservasPorGrupoEnEspera($id2,$db);
     $infoNivel3{'cantReservasAsignadas'}        = C4::AR::Reservas::cantReservasPorGrupoAsignadas($id2,$db);
-    $infoNivel3{'cant_ejemplares'}              = $nivel3_array_ref_count;
+    $infoNivel3{'cant_ejemplares'}              = scalar(@$nivel3_array_ref);
 
     for(my $i=0;$i<scalar(@$nivel3_array_ref);$i++){
         my %hash_nivel3;
