@@ -24,15 +24,17 @@ function updateEdit(responseText){
     <legend class="titulo_legend">Datos de la Biblioteca</legend>
     <form onsubmit="return false" class="well form-search">
         [% info_about.descripcion %]+
-        
-        [% PERL %]
-	    print C4::AR::Filtros::to_Button(   text    => "[% 'Editar Informacion' | i18n %]",
-	                                                          boton   => "boton_buscar",
-	                                                          onClick => "edit()",
-	                                                          title   => "[% 'Editar Informacion' | i18n %]",
-	                                                          id      => "[% 'edit_about' %]",
-	                                                                ) ;
-	    [% END %]
+        <div class="form-actions">
+	        [% PERL %]
+		    print C4::AR::Filtros::action_button(                 text    => "[% 'Editar informaci&oacute;n' | i18n %]",
+		                                                          button   => "btn btn-primary",
+		                                                          action => "edit()",
+		                                                          icon => "icon-white icon-edit",
+		                                                          title   => "[% 'Editar informaci&oacute;n' | i18n %]",
+		                                                          id      => "[% 'edit_about' %]",
+		                                                                ) ;
+		    [% END %]
+	    </div>
     
     </form>
 </fieldset>
