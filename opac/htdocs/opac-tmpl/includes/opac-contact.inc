@@ -18,56 +18,56 @@
         <div class="control-group">
             <label class="control-label" for="nombre">[% 'Nombre/s *' | i18n %]:</label>
             <div class="controls">
-                <input type="text" name="nombre" id="nombre" required value="[% socio.persona.getNombre %]" tabindex="6" />
+                <input type="text" name="nombre" id="nombre" required value="[% socio.persona.getNombre || params_form.nombre %]" tabindex="6" />
             </div>
         </div>
         
         <div class="control-group">
             <label class="control-label" for="apellido">[% 'Apellido/s *' | i18n %]:</label>
             <div class="controls">
-                <input type="text" name="apellido" id="apellido" required value="[% socio.persona.getApellido %]" tabindex="7" />
+                <input type="text" name="apellido" id="apellido" required value="[% socio.persona.getApellido || params_form.apellido %]" tabindex="7" />
             </div>
         </div>
         
         <div class="control-group">
             <label class="control-label" for="direccion">[% 'Direcci&oacute;n' | i18n %]:</label>
             <div class="controls">
-                <input type="text" name="direccion" id="direccion"  value="[% socio.persona.getCalle %]" tabindex="8" />
+                <input type="text" name="direccion" id="direccion"  value="[% socio.persona.getCalle || params_form.direccion %]" tabindex="8" />
             </div>
         </div>
         
         <div class="control-group">
             <label class="control-label" for="codigo_postal">[% 'C&oacute;digo Postal' | i18n %]:</label>
             <div class="controls">
-                <input type="text" name="codigo_postal" id="codigo_postal" value="" tabindex="9" />
+                <input type="text" name="codigo_postal" id="codigo_postal" value="[% params_form.codigo_postal %]" tabindex="9" />
             </div>
         </div>
         
         <div class="control-group">
             <label class="control-label" for="ciudad">[% 'Ciudad' | i18n %]:</label>
             <div class="controls">
-                <input type="text" name="ciudad" id="ciudad" value="[% socio.persona.ciudad_ref.NOMBRE %]" tabindex="10" />
+                <input type="text" name="ciudad" id="ciudad" value="[% socio.persona.ciudad_ref.NOMBRE  || params_form.ciudad %]" tabindex="10" />
             </div>
         </div>
         
         <div class="control-group">
             <label class="control-label" for="pais">[% 'Pa&iacute;s' | i18n %]:</label>
             <div class="controls">
-                <input type="text" name="pais" id="pais"  tabindex="11" />
+                <input type="text" name="pais" id="pais"  tabindex="11" value="[% params_form.pais %]" />
             </div>
         </div>
         
         <div class="control-group">
             <label class="control-label" for="telefono">[% 'Tel&eacute;fono' | i18n %]:</label>
             <div class="controls">
-                <input type="text" name="telefono" id="telefono" value="[% socio.persona.getTelefono %]" tabindex="12" />
+                <input type="text" name="telefono" id="telefono" value="[% socio.persona.getTelefono || params_form.telefono %]" tabindex="12" />
             </div>
         </div>
         
         <div class="control-group">
             <label class="control-label" for="email">[% 'E-mail *' | i18n %]:</label>
             <div class="controls">
-                <input type="email" name="email" id="email" required value="[% socio.persona.getEmail %]" tabindex="13" />
+                <input type="email" name="email" id="email" required value="[% socio.persona.getEmail || params_form.email %]" tabindex="13" />
             </div>
         </div>
     </fieldset>
@@ -77,14 +77,14 @@
         <div class="control-group">
             <label class="control-label" for="asunto">[% 'Asunto *' | i18n %]:</label>
             <div class="controls">
-                <input type="text" name="asunto" id="asunto" required class="field" value="" tabindex="14" />
+                <input type="text" name="asunto" id="asunto" required class="field" value="[% params_form.asunto %]" tabindex="14" />
             </div>
         </div>
         
         <div class="control-group">
             <label class="control-label" for="mensaje">[% 'Mensaje *' | i18n %]:</label>
             <div class="controls">
-                <textarea name="mensaje" id="mensaje" cols="45" required rows="10" tabindex="15"></textarea>
+                <textarea name="mensaje" id="mensaje" cols="45" required rows="10" tabindex="15">[% params_form.mensaje %]</textarea>
             </div>
         </div>
         
