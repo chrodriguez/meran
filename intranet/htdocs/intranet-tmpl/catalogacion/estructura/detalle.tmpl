@@ -95,7 +95,7 @@
             /* If you want to simply post the entire form, use this */
             // var fd = document.getElementById('form1').getFormData();
             xhr = new XMLHttpRequest();
-            xhr.upload.addEventListener("progress", uploadProgress, false);
+            xhr.upload.addEventListener("progress", uploadProgressIndice, false);
             xhr.addEventListener("load", uploadCompleteCloseModal, false);
             xhr.addEventListener("error", uploadFailed, false);
             xhr.addEventListener("abort", uploadCanceled, false);
@@ -335,20 +335,20 @@
 										                              
 										          
 										                              <div class="row"></div>
-										                              <div id="progressIndicator_[% id2 %]" class="progressIndicator hide" > 
+										                              <div id="progressIndicatorIndice_[% id2 %]" class="progressIndicator hide" > 
 										
 										                                <div  class="progress progress-success progress-striped active">
-										                                  <div id="progressBar_[% id2 %]" class="bar"></div>
+										                                  <div id="progressBarIndice_[% id2 %]" class="bar"></div>
 										                                </div>
-										                                <div id="progressNumber_[% id2 %]" class="floatRight">&nbsp;</div>
+										                                <div id="progressNumberIndice_[% id2 %]" class="floatRight">&nbsp;</div>
 										                                <div class="clear"></div>
 										                                <div>
-										                                  <div id="transferSpeedInfo_[% id2 %]" class="floatLeft" style="width: 80px;">&nbsp;</div>
-										                                  <div id="timeRemainingInfo_[% id2 %]" class="floatLeft" style="margin-left: 10px;">&nbsp;</div>
-										                                  <div id="transferBytesInfo_[% id2 %]" class="floatRight" style="text-align: right;">&nbsp;</div>
+										                                  <div id="transferSpeedInfoIndice_[% id2 %]" class="floatLeft" style="width: 80px;">&nbsp;</div>
+										                                  <div id="timeRemainingInfoIndice_[% id2 %]" class="floatLeft" style="margin-left: 10px;">&nbsp;</div>
+										                                  <div id="transferBytesInfoIndice_[% id2 %]" class="floatRight" style="text-align: right;">&nbsp;</div>
 										                                  <div class="clear"></div>
 										                                </div>    
-										                                <div id="uploadResponse_[% id2 %]" class="uploadResponse"></div>
+										                                <div id="uploadResponseIndice_[% id2 %]" class="uploadResponse"></div>
 										                              </div>  
 										                              
 										                              
@@ -443,7 +443,6 @@
                         [% END %]
 	
 	                [% INCLUDE  "partials/e-docs_grupo.inc" %]
-	                [% INCLUDE  "partials/estantes_grupo.inc" %]
 
                         <span id="ejemplaresDelGrupo[% id2 %]">
                             [% INCLUDE "estructura/ejemplaresDelGrupo.tmpl" %]

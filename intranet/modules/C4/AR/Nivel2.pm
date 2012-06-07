@@ -697,55 +697,16 @@ sub buildNavForGroups{
     
     my @elem_array;
     
-    my $is_rev = $params->{'estadoDeColeccion'};
     my $nivel2 = $params->{'nivel2'};
 
-    if ($is_rev){
         foreach my $n2 (@$nivel2){
             my %hash = {};
             $hash{'id'} = "detalle_grupo_".$n2->{'id2'};
             my $n2_temp = C4::AR::Nivel2::getNivel2FromId2($n2->{'id2'}); 
-            $hash{'title'} = $n2_temp->getNavString();
-            
+            $hash{'title'} = $n2_temp->getNavString();   
             push (@elem_array,\%hash);
         }
-    }else{
-        foreach my $n2 (@$nivel2){
-            my %hash = {};
-            $hash{'id'} = "detalle_grupo_".$n2->{'id2'};
-
-
-            my $edicion = C4::AR::Utilidades::trim($n2->{'edicion'});
-            my $volumen = C4::AR::Utilidades::trim($n2->{'volumen'});
-            my $anio_publicacion= C4::AR::Utilidades::trim($n2->{'año_publicacion'});
-            
-            #ticket #4264
-            if( C4::AR::Utilidades::validateString($edicion) 
-                && C4::AR::Utilidades::validateString($volumen)
-                && C4::AR::Utilidades::validateString($anio_publicacion)
-               ){
-               $hash{'title'} = $volumen . " - " . $edicion . " (" . $anio_publicacion . ")";
-            }elsif(
-                C4::AR::Utilidades::validateString($edicion)
-                && C4::AR::Utilidades::validateString($anio_publicacion)
-              ){
-                $hash{'title'} = $edicion . " (" . $anio_publicacion . ")";
-            }elsif(
-                C4::AR::Utilidades::validateString($volumen) 
-                && C4::AR::Utilidades::validateString($anio_publicacion) 
-             ){
-                $hash{'title'} = $volumen . " (" . $anio_publicacion . ")";
-            }elsif(C4::AR::Utilidades::validateString($anio_publicacion)){
-                $hash{'title'} = $anio_publicacion;
-            }else{
-                $hash{'title'} = $n2->{'id2'};
-            }
-
-            
-            push (@elem_array,\%hash);
-        }
-    }
-        
+ 
     return \@elem_array;
 }
 

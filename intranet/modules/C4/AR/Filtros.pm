@@ -10,8 +10,8 @@ use HTML::Entities;
 use base qw( Template::Plugin::Filter );
 
 use vars qw(@EXPORT_OK @ISA);
-@ISA=qw(Exporter);
-@EXPORT_OK=qw( 
+@ISA        = qw(Exporter);
+@EXPORT_OK  = qw( 
     setHelpIco
     i18n
     link_to
@@ -20,7 +20,58 @@ use vars qw(@EXPORT_OK @ISA);
     action_button
     setHelpInput
     action_set_button
+    crearCheckButtonsBootstrap
 );
+
+=item
+    Crea un grupo de checkbox para estilos bootstrap
+    Utilizado para permisos.pl
+=cut
+sub crearCheckButtonsBootstrap {
+
+    my $params  = shift;
+
+    # el tipo lo usamos como id en el div generado
+    my $tipo    = shift;
+
+    my $text    = '<div class="btn-group" id="' . $tipo . '"data-toggle="buttons-checkbox">';
+
+
+    if ($params->{'TODOS'}) { 
+        $text .= '<button class="btn btn-danger active">'.i18n("Todos").' </button>';
+    } else {
+        $text .= '<button class="btn btn-danger">'.i18n("Todos").' </button>';
+    }
+
+    if ($params->{'BAJA'}) { 
+        $text .= '<button class="btn btn-danger active">'.i18n("Baja").' </button>';
+    } else {
+        $text .= '<button class="btn btn-danger">'.i18n("Baja").' </button>';
+    }
+
+    if ($params->{'MODIFICACION'}) { 
+        $text .= '<button class="btn btn-danger active">'.i18n("Modificaci&oacute;n").' </button>';
+    } else {
+        $text .= '<button class="btn btn-danger">'.i18n("Modificaci&oacute;n").' </button>';
+    }
+
+    if ($params->{'ALTA'}) { 
+        $text .= '<button class="btn btn-warning active">'.i18n("Alta").' </button>';
+    } else {
+        $text .= '<button class="btn btn-warning">'.i18n("Alta").' </button>';
+    }
+
+    if ($params->{'CONSULTA'}) { 
+        $text .= '<button class="btn btn-success active">'.i18n("Consulta").' </button>';
+    } else {
+        $text .= '<button class="btn btn-success">'.i18n("Consulta").' </button>';
+    }
+
+    $text .= '</div>';
+
+    return $text;   
+
+}
 
 =item
     Esta funcion despliega un texto sobre un icono, una especia de ayuda.

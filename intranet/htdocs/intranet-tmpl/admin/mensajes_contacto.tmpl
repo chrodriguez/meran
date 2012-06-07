@@ -5,23 +5,15 @@
 <link rel="stylesheet" href="/includes/css/wysiwyg.css" type="text/css" media="screen"/>
 
 <script type="text/javascript">
+var objAH;
       $(document).ready(function() {
         $('.fancy_link').fancybox({
             'frameWidth':   600,
             'frameHeight':  500,
         });
-        zebra('datos_tabla');
       });
 
-      function responder(){
-            $("#respuesta").wysiwyg();
-            $(".responder").show(); 
-            $(".wysiwyg").css('width','388px');   
-            $("#fancybox-wrap").css('top','25px');
-            $("#respuestaIFrame").css('width','388px');
-            $("#responder").attr('onclick', ' '); 
-      }
-    
+
 </script>
 
 

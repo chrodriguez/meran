@@ -1,250 +1,70 @@
-<!-- NUNCA CAMBIAR EL ORDEN FISICO DE LOS PERMISOS, ES POR PRIORIDAD -->
-<!-- NUNCA CAMBIAR EL ORDEN FISICO DE LOS PERMISOS, ES POR PRIORIDAD -->
-<!-- NUNCA CAMBIAR EL ORDEN FISICO DE LOS PERMISOS, ES POR PRIORIDAD -->
-<!-- NUNCA CAMBIAR EL ORDEN FISICO DE LOS PERMISOS, ES POR PRIORIDAD -->
-<!-- NUNCA CAMBIAR EL ORDEN FISICO DE LOS PERMISOS, ES POR PRIORIDAD -->
-<!-- NUNCA CAMBIAR EL ORDEN FISICO DE LOS PERMISOS, ES POR PRIORIDAD -->
-<!-- NUNCA CAMBIAR EL ORDEN FISICO DE LOS PERMISOS, ES POR PRIORIDAD -->
-<!-- NUNCA CAMBIAR EL ORDEN FISICO DE LOS PERMISOS, ES POR PRIORIDAD -->
-<!-- NUNCA CAMBIAR EL ORDEN FISICO DE LOS PERMISOS, ES POR PRIORIDAD -->
-<!-- NUNCA CAMBIAR EL ORDEN FISICO DE LOS PERMISOS, ES POR PRIORIDAD -->
-<!-- NUNCA CAMBIAR EL ORDEN FISICO DE LOS PERMISOS, ES POR PRIORIDAD -->
-<!-- NUNCA CAMBIAR EL ORDEN FISICO DE LOS PERMISOS, ES POR PRIORIDAD -->
-<!-- NUNCA CAMBIAR EL ORDEN FISICO DE LOS PERMISOS, ES POR PRIORIDAD -->
-
 [% INCLUDE 'partials/admin/_nuevoPermiso.inc' %]
 
-<form class="form-horizontal" onsubmit="return false;">
-<div>
-    <fieldset>
-        <legend> Reportes </legend>
-        
-        <div class="control-group alert alert-error">
-            <label class="control-label" for="reportes_todos">TODOS</label>
-            <div class="controls">
-                <input type="checkbox" id="reportes_todos" name="reportes_todos"
-                    [% IF permisos.reportes.TODOS %] checked="checked" [% END %] />
-            </div>
-        </div>
-        
-        <div class="control-group alert alert-error">
-            <label class="control-label" for="reportes_baja">Baja</label>
-            <div class="controls">
-                <input type="checkbox" id="reportes_baja" name="reportes_baja"
-                    [% IF permisos.reportes.BAJA %] checked="checked" [% END %]/>
-            </div>
-        </div>
-        
-        <div class="control-group alert alert-error">
-            <label class="control-label" for="reportes_baja">Modificaci&oacute;n</label>
-            <div class="controls">
-                <input type="checkbox" id="reportes_modif" name="reportes_modif"
-                    [% IF permisos.reportes.MODIFICACION %] checked="checked" [% END %] />
-            </div>
-        </div>
-        
-        <div class="control-group alert">
-            <label class="control-label" for="reportes_alta">Alta</label>
-            <div class="controls">
-                <input type="checkbox" id="reportes_alta" name="reportes_alta"
-                    [% IF permisos.reportes.ALTA %] checked="checked" [% END %] />
-            </div>
-        </div>
-        
-        <div class="control-group alert alert-success">
-            <label class="control-label" for="reportes_consulta">Consulta</label>
-            <div class="controls">
-                <input type="checkbox" id="reportes_consulta" name="reportes_consulta" 
-                    [% IF permisos.reportes.CONSULTA %] checked="checked" [% END %]/>
-            </div>
-        </div>
-    </fieldset>
-</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Permisos</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>[% "Reportes" | i18n %]</td>
+            <td>
+                [% reportes %]
+            </td>
+            <input type="checkbox" id="reportes_todos" name="reportes" style="display:none;"/>
+            <input type="checkbox" id="reportes_baja" name="reportes" style="display:none;"/>
+            <input type="checkbox" id="reportes_modif" name="reportes" style="display:none;"/>
+            <input type="checkbox" id="reportes_alta" name="reportes" style="display:none;"/>
+            <input type="checkbox" id="reportes_consulta" name="reportes" style="display:none;"/>
+        </tr>
+        <tr>
+            <td>[% "Preferencias" | i18n %]</td>
+            <td>
+                [% preferencias %]
+            </td>
+            <input type="checkbox" id="preferencias_todos" name="preferencias" style="display:none;"/>
+            <input type="checkbox" id="preferencias_baja" name="preferencias" style="display:none;"/>
+            <input type="checkbox" id="preferencias_modif" name="preferencias" style="display:none;"/>
+            <input type="checkbox" id="preferencias_alta" name="preferencias" style="display:none;"/>
+            <input type="checkbox" id="preferencias_consulta" name="preferencias" style="display:none;"/>
+        </tr>
+        <tr>
+            <td>[% "Permisos" | i18n %]</td>
+            <td>
+                [% permisosButton %]
+            </td>
+            <input type="checkbox" id="permisos_todos" name="permisos" style="display:none;"/>
+            <input type="checkbox" id="permisos_baja" name="permisos" style="display:none;"/>
+            <input type="checkbox" id="permisos_modif" name="permisos"  style="display:none;"/>
+            <input type="checkbox" id="permisos_alta" name="permisos"  style="display:none;"/>
+            <input type="checkbox" id="permisos_consulta" name="permisos" style="display:none;"/>
+        </tr>
+        <tr>
+            <td>[% "Adquisiciones OPAC" | i18n %]</td>
+            <td>
+                [% adq_opac %]
+            </td>
+            <input type="checkbox" id="adq_opac_todos" name="adq_opac" style="display:none;"/>
+            <input type="checkbox" id="adq_opac_todos" name="adq_opac" style="display:none;"/>
+            <input type="checkbox" id="adq_opac_modif" name="adq_opac" style="display:none;"/>
+            <input type="checkbox" id="adq_opac_alta" name="adq_opac" style="display:none;"/>
+            <input type="checkbox" id="adq_opac_consulta" name="adq_opac" style="display:none;"/>
+        </tr>
+        <tr>
+            <td>[% "Adquisiciones INTRA" | i18n %]</td>
+            <td>
+                [% adq_intra %]
+            </td>
+            <input type="checkbox" id="adq_intra_todos" name="adq_intra" style="display:none;"/>
+            <input type="checkbox" id="adq_intra_baja" name="adq_intra" style="display:none;"/>
+            <input type="checkbox" id="adq_intra_modif" name="adq_intra" style="display:none;"/>
+            <input type="checkbox" id="adq_intra_alta" name="adq_intra" style="display:none;"/>
+            <input type="checkbox" id="adq_intra_consulta" name="adq_intra" style="display:none;"/>
+        </tr>
 
-<div>
-    <fieldset>
-        <legend> Preferencias </legend>
-        
-        <div class="control-group alert alert-error">
-            <label class="control-label" for="preferencias_todos">TODOS</label>
-            <div class="controls">
-                <input type="checkbox" id="preferencias_todos" name="preferencias_todos" 
-                    [% IF permisos.preferencias.TODOS %] checked="checked" [% END %] />
-            </div>
-        </div>
-        
-        <div class="control-group alert alert-error">
-            <label class="control-label" for="preferencias_baja">Baja</label>
-            <div class="controls">
-                <input type="checkbox" id="preferencias_baja" name="preferencias_baja" 
-                    [% IF permisos.preferencias.BAJA %] checked="checked" [% END %]/>
-            </div>
-        </div>
-        
-        <div class="control-group alert alert-error">
-            <label class="control-label" for="preferencias_modif">Modificaci&oacute;n</label>
-            <div class="controls">
-                <input type="checkbox" id="preferencias_modif" name="preferencias_modif" 
-                    [% IF permisos.preferencias.MODIFICACION %] checked="checked" [% END %] />
-            </div>
-        </div>
-        
-        <div class="control-group alert">
-            <label class="control-label" for="preferencias_alta">Alta</label>
-            <div class="controls">
-                <input type="checkbox" id="preferencias_alta" name="preferencias_alta" 
-                    [% IF permisos.preferencias.ALTA %] checked="checked" [% END %] />
-            </div>
-        </div>
-               
-        <div class="control-group alert alert-success">
-            <label class="control-label" for="preferencias_consulta">Consulta</label>
-            <div class="controls">
-                <input type="checkbox" id="preferencias_consulta" name="preferencias_consulta"
-                    [% IF permisos.preferencias.CONSULTA %] checked="checked" [% END %]/>
-            </div>
-        </div>
-    </fieldset>
-</div>
-
-<div>
-    <fieldset>
-        <legend> Permisos </legend>
-        
-        <div class="control-group alert alert-error">
-            <label class="control-label" for="permisos_todos">TODOS</label>
-            <div class="controls">
-                <input type="checkbox" id="permisos_todos" name="permisos_todos"
-                    [% IF permisos.permisos.TODOS %] checked="checked" [% END %] />
-            </div>
-        </div>
-        
-        <div class="control-group alert alert-error">
-            <label class="control-label" for="permisos_baja">Baja</label>
-            <div class="controls">
-                <input type="checkbox" id="permisos_baja" name="permisos_baja"
-                    [% IF permisos.permisos.BAJA %] checked="checked" [% END %]/>
-            </div>
-        </div>
-        
-        <div class="control-group alert alert-error">
-            <label class="control-label" for="permisos_modif">Modificaci&oacute;n</label>
-            <div class="controls">
-                <input type="checkbox" id="permisos_modif" name="permisos_modif"
-                    [% IF permisos.permisos.MODIFICACION %] checked="checked" [% END %] />
-            </div>
-        </div>
-        
-        <div class="control-group alert">
-            <label class="control-label" for="permisos_alta">Alta</label>
-            <div class="controls">
-                <input type="checkbox" id="permisos_alta" name="permisos_alta"
-                    [% IF permisos.permisos.ALTA %] checked="checked" [% END %] />
-            </div>
-        </div>
-        
-        <div class="control-group alert-success">
-            <label class="control-label" for="permisos_consulta">Consulta</label>
-            <div class="controls">
-                <input type="checkbox" id="permisos_consulta" name="permisos_consulta" 
-                    [% IF permisos.permisos.CONSULTA %] checked="checked" [% END %]/>
-            </div>
-        </div>
-    </fieldset>
-</div>
-
-<div>
-    <fieldset>
-        <legend> Adquisiciones en OPAC </legend>
-        
-        <div class="control-group alert alert-error">
-            <label class="control-label" for="adq_opac_todos">TODOS</label>
-            <div class="controls">
-                <input type="checkbox" id="adq_opac_todos" name="adq_opac_todos"
-                    [% IF permisos.adq_opac.TODOS %] checked="checked" [% END %] />
-            </div>
-        </div>
-        
-        <div class="control-group alert alert-error">
-            <label class="control-label" for="adq_opac_baja">Baja</label>
-            <div class="controls">
-                <input type="checkbox" id="adq_opac_baja" name="adq_opac_baja"
-                    [% IF permisos.adq_opac.BAJA %] checked="checked" [% END %]/>
-            </div>
-        </div>
-        
-        <div class="control-group alert alert-error">
-            <label class="control-label" for="adq_opac_modif">Modificaci&oacute;n</label>
-            <div class="controls">
-                <input type="checkbox" id="adq_opac_modif" name="adq_opac_modif" 
-                    [% IF permisos.adq_opac.MODIFICACION %] checked="checked" [% END %] />
-            </div>
-        </div>
-        
-        <div class="control-group alert">
-            <label class="control-label" for="adq_opac_alta">Alta</label>
-            <div class="controls">
-                <input type="checkbox" id="adq_opac_alta" name="adq_opac_alta"
-                    [% IF permisos.adq_opac.ALTA %] checked="checked" [% END %] />
-            </div>
-        </div>
-        
-        <div class="control-group alert  alert-success">
-            <label class="control-label" for="adq_opac_consulta">Consulta</label>
-            <div class="controls">
-                <input type="checkbox" id="adq_opac_consulta" name="adq_opac_consulta"
-                    [% IF permisos.adq_opac.CONSULTA %] checked="checked" [% END %]/>
-            </div>
-        </div>
-    </fieldset>
-</div>
-
-<div>
-    <fieldset>
-        <legend> Adquisiciones en Intranet </legend>
-        
-        <div class="control-group alert alert-error">
-            <label class="control-label" for="adq_intra_todos">TODOS</label>
-            <div class="controls">
-                <input type="checkbox" id="adq_intra_todos" name="adq_intra_todos"
-                    [% IF permisos.adq_intra.TODOS %] checked="checked" [% END %] />
-            </div>
-        </div>
-        
-        <div class="control-group alert alert-error">
-            <label class="control-label" for="adq_intra_baja">Baja</label>
-            <div class="controls">
-                <input type="checkbox" id="adq_intra_baja" name="adq_intra_baja"
-                    [% IF permisos.adq_intra.BAJA %] checked="checked" [% END %]/>
-            </div>
-        </div>
-        
-        <div class="control-group alert alert-error">
-            <label class="control-label" for="adq_intra_modif">Modificaci&oacute;n</label>
-            <div class="controls">
-                <input type="checkbox" id="adq_intra_modif" name="adq_intra_modif"
-                    [% IF permisos.adq_intra.MODIFICACION %] checked="checked" [% END %] />
-            </div>
-        </div>
-        
-        <div class="control-group alert">
-            <label class="control-label" for="adq_intra_alta">Alta</label>
-            <div class="controls">
-                <input type="checkbox" id="adq_intra_alta" name="adq_intra_alta"
-                    [% IF permisos.adq_intra.ALTA %] checked="checked" [% END %] />
-            </div>
-        </div>
-        
-        <div class="control-group alert alert-success">
-            <label class="control-label" for="adq_intra_consulta">Consulta</label>
-            <div class="controls">
-                <input type="checkbox" id="adq_intra_consulta" name="adq_intra_consulta"
-                    [% IF permisos.adq_intra.CONSULTA %] checked="checked" [% END %]/>
-            </div>
-        </div>
-
-    </fieldset>
-</div>
-</form>
+    </tbody>
+</table>
 
 [% INCLUDE 'partials/admin/_guardarPermisos.inc' %]
