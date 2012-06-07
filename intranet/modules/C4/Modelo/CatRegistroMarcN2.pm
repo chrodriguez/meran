@@ -974,13 +974,45 @@ sub getNavString{
     use Switch;
     
     switch ($tipo_doc){
-    	case 'REV' {$string = $self->getAnioRevista . " " . $self->getVolumen. " (". $self->getNumeroRevista. ")"} 
-    	
-    };	
-	
-	
-	
-	return ($string)
+    	case 'REV' {
+            my $anio=$self->getAnioRevista;
+            my $vol=$self->getVolumen;
+            my $num=$self->getNumeroRevista;
+            if ($anio){
+                 $string .= $anio;
+                }
+            if ($vol){
+                if($string){$string .= " ";}
+                 $string .= $vol;
+                }
+            if ($num){
+                if($string){$string .= " ";}
+                 $string .= "(". $num. ")";
+                }
+            }
+        else { #Caso por defecto => LIBRO
+            my $anio=$self->getAnio_publicacion;
+            my $vol=$self->getVolumen;
+            my $ed=$self->getEdicion;
+            
+            if ($vol){
+                 $string .= $vol;
+                }
+            if ($ed){
+                if($string){$string .= " - ";}
+                 $string .= $ed;
+                }
+            if ($anio){
+                if($string){$string .= " ";}
+                 $string .= "(". $anio. ")";
+                }
+            }
+    };
+    
+    if(!$string){
+        $string = $self->getId2;
+    }
+    
+    return ($string)
 }
 1;
-

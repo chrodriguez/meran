@@ -43,19 +43,19 @@
 		</script>
 
 
-
 	<div class="accordion" id="lista_docs_[% id2 %]">
             <div class="accordion-group">
               <div class="accordion-heading">
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#lista_docs_[% id2 %]" href="#e_docs[% id2 %]">
-                  [% "Documentos electr&oacute;nicos"| i18n %]
+                  [% "Documentos electr&oacute;nicos"| i18n %] <span class="badge badge-info" style="cursor: default;">[% cant_docs %]</span>
                 </a>
               </div>
               <div id="e_docs[% id2 %]" class="accordion-body collapse">
                 <div class="accordion-inner">
 			        <dl>
 			               [% FOREACH file IN lista_docs %] 
-			                           <dt>
+			                           <div class="alert alert-success fade in">
+										   <a type="button" class="close" href="[% url_prefix %]/catalogacion/estructura/deleteDocument.pl?id=[% file.getId %]&id1=[% id1 %]&token=[% token %]">×</button>			                           
 				                           [% PERL %]
 				                               print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(file.getTitle) %]",
 				                                                               url =>      "getDocument.pl", 
@@ -65,16 +65,8 @@
 				                                                           ) ;
 				                           [% END %]
 
-				                           [% PERL %]
-				                               print C4::AR::Filtros::action_link_button( 
-				                               								   title =>     "",
-				                                                               url =>      "deleteDocument.pl", 
-				                                                               params =>   ["id=[% file.getId %]","id1=[% id1 %]"],
-				                                                               button =>    "btn-small btn-danger click",
-				                                                               icon	  =>  "icon-white icon-trash",
-				                                                           ) ;
-				                           [% END %]
-		                           	  </dt>
+		                           	  </div>
+			               
 			            [% END %]
 			        </dl>
 				    <div id="file-uploader_[% id2 %]" class="form-horizontal">

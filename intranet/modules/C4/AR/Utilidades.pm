@@ -4269,8 +4269,6 @@ sub armarPaginasOPAC{
         $paginador .= "<li class='prev'><a href='".$url."&page=1' class='previous' title='".$first_text."'> ".$first_text."</a></li>";
         $paginador .= "<li class='prev'><a href='".$url."&page=".$ant."' class='previous' title='".$previous_text."'> ".$previous_text."</a></li>";
 
-    }else{
-        $paginador .= "<li class='prev'><a href='#' title='".$previous_text."'>".$previous_text."</a></li>";
     }
 
     for (my $i=$limInf; ($totalPaginas >1 and $i <= $totalPaginas and $i <= $limSup) ; $i++ ) {
