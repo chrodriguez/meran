@@ -9,7 +9,8 @@ __PACKAGE__->meta->setup(
 
     columns => [
         cat_registro_marc_n2_id             => { type => 'integer', overflow => 'truncate', not_null => 1 },
-       	cat_registro_marc_n2_hijo_id        => { type => 'integer', overflow => 'truncate', not_null => 1 },
+       	cat_registro_marc_n2_hijo_id        => { type => 'integer', overflow => 'truncate', not_null => 0 }, #DEPRECATED
+        cat_registro_marc_n1_id             => { type => 'integer', overflow => 'truncate', not_null => 1 }
     ],
 
 #     primary_key_columns => [ 'cat_registro_marc_n2_id', 'cat_registro_marc_n2_hijo_id' ],
@@ -24,6 +25,11 @@ __PACKAGE__->meta->setup(
         nivel2_padre  => {
             class       => 'C4::Modelo::CatRegistroMarcN2',
             key_columns => { cat_registro_marc_n2_id => 'id' },
+            type        => 'one to one',
+        },
+        nivel1  => {
+            class       => 'C4::Modelo::CatRegistroMarcN1',
+            key_columns => { cat_registro_marc_n1_id => 'id' },
             type        => 'one to one',
         },
 
@@ -57,7 +63,12 @@ sub setId2Hijo{
     $self->cat_registro_marc_n2_hijo_id($id2);
 }
 
+sub setId1{
+    my ($self)  = shift;
+    my ($id1)   = @_;
 
+    $self->cat_registro_marc_n1_id($id1);
+}
 
 sub agregar{
     my ($self)      = shift;

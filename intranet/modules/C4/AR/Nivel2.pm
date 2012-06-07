@@ -522,7 +522,7 @@ sub getAnaliticasFromNivel2{
 
     $db                                     = $db || C4::Modelo::CircPrestamo->new()->db;
     my $nivel2_object                       = C4::AR::Nivel2::getNivel2FromId2($id2);
-    my $cat_reg_marc_n2_analiticas          = $nivel2_object->getAnaliticas();
+    my $cat_reg_marc_n2_analiticas          = ($nivel2_object)?$nivel2_object->getAnaliticas():0;
 
     # $hash_nivel2{'tiene_analiticas'}        = ($cat_reg_marc_n2_analiticas)?scalar(@$cat_reg_marc_n2_analiticas):$cat_reg_marc_n2_analiticas;
 
@@ -565,7 +565,7 @@ sub getAnaliticasFromNivel2{
         # $hash_nivel2{'nivel1_analiticas_cant'}  = scalar(@nivel1_analitica_array);
     # }
 
-C4::AR::Debug::debug("Nivel2 => getAnaliticasFromNivel2 => ".scalar(@analitica_array));
+# C4::AR::Debug::debug("Nivel2 => getAnaliticasFromNivel2 => ".scalar(@analitica_array));
 
     return \@analitica_array;
 }

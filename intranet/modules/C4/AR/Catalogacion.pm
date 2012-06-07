@@ -689,13 +689,12 @@ sub marc_record_with_data {
 
 # TODO ver tema de performance, habria q llamar a getVisualizacionFromCampo y levantar toda la conf una vez
 sub as_stringReloaded {
-    my ($field, $itemtype, $params) = @_;
+    my ($field, $itemtype, $params, $index) = @_;
 
     my @subs;
     my $db      = undef;
     my $campo   = $field->tag;
     my $nivel   = $params->{'nivel'};
-    # C4::AR::Debug::debug("Catalogacion => as_stringReloaded => campo => ".$campo." itemype => ".$itemtype." nivel => ".$nivel);
 
     my @array_subcampos;
 
@@ -715,9 +714,8 @@ sub as_stringReloaded {
         my $cat_estruct_info_array          = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($field->tag, $subcampo, $itemtype, $nivel, $db);
         my $text                            = "";
         if($cat_estruct_info_array){
-#             C4::AR::Debug::debug("getPre =>|".$cat_estruct_info_array->getPre()."|");
-#             C4::AR::Debug::debug("getPost =>|".$cat_estruct_info_array->getPost()."|");
-            if(C4::AR::Utilidades::trim($dato) ne ""){
+
+            if((C4::AR::Utilidades::trim($dato) ne "")&&($index != -1)){
                 $text                           = $cat_estruct_info_array->getPre().$dato.$cat_estruct_info_array->getPost();
             } else {
                 $text                           = $dato;
@@ -727,7 +725,6 @@ sub as_stringReloaded {
             $hash_temp{'orden_subcampo'}    = $cat_estruct_info_array->getOrdenSubCampo();
         }
 
-#         C4::AR::Debug::debug("Catalogacion => as_stringReloaded => text =>".$text."-");
         push (@array_subcampos, \%hash_temp);
     } # foreach
 
@@ -804,15 +801,13 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
             my $indicador_primario_dato     = $field->indicator(1);
             my $indicador_secundario_dato   = $field->indicator(2);
 
-            # veo que separador lleva cada subcampo para el $field dependiendo del campo y subcampo que se este procesando
-            my $field_as_string                 = as_stringReloaded($field, $itemtype, $params);
+            #verifico si el campo que estoy procesando esta en el arreglo de campos
+            $index = C4::AR::Utilidades::getIndexFromArrayByString($campo,\@MARC_result_array);
 
-            # C4::AR::Debug::debug("Catalocagion::marc_record_to_meran_to_detail_view_as_not_extended=> field_as_string =>".$field_as_string."-");
+            # veo que separador lleva cada subcampo para el $field dependiendo del campo y subcampo que se este procesando
+            my $field_as_string                 = as_stringReloaded($field, $itemtype, $params, $index);
 
             $hash_temp_aux{'dato'}              = ($hash_temp_aux{'dato'} ne "")?$hash_temp_aux{'dato'}.";".$field_as_string:($type eq "INTRA")?$field_as_string." ":$field_as_string;
-
-# C4::AR::Debug::debug("Catalocagion::marc_record_to_meran_to_detail_view_as_not_extended=> hash_temp_aux{'dato'} =>".$hash_temp_aux{'dato'}."-");
-
             $hash_temp_aux{'campo'}             = $campo;
             $hash_temp_aux{'orden'}             = getOrdenFromCampo($campo, $params->{'nivel'}, $itemtype, $type, $db);
 
@@ -829,7 +824,7 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
                 $hash_temp_aux{'liblibrarian'}      = C4::AR::VisualizacionOpac::getVistaCampo($campo, $itemtype, $params->{'nivel'})||C4::AR::EstructuraCatalogacionBase::getLabelByCampo($campo);
             }
 
-            $index = C4::AR::Utilidades::getIndexFromArrayByString($campo,\@MARC_result_array);
+            # $index = C4::AR::Utilidades::getIndexFromArrayByString($campo,\@MARC_result_array);
 
             if($index == -1){
             #NO EXISTE EL CAMPO
@@ -837,7 +832,6 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
             } else {
             #EXISTE EL CAMPO => campo, subcampo REPETIBLE
                 @MARC_result_array[$index]->{'dato'} = (@MARC_result_array[$index]->{'dato'} ne "")?@MARC_result_array[$index]->{'dato'}.$field_as_string:$field_as_string;
-# C4::AR::Debug::debug("Catalocagion::marc_record_to_meran_to_detail_view_as_not_extended=> field_as_string2 =>".$field_as_string."-");
             }
 
         } #END if(! $field->is_control_field)

@@ -78,9 +78,25 @@ if($tipoAccion eq "MODIFICAR_NIVEL_1"){
     if($nivel3){
         $template_catalogo          = $nivel3->getTemplate();
         $t_params->{'indice_data'}  = C4::AR::Nivel2::getNivel2FromId1($id1)->[0]->getIndice() || "";
-        $t_params->{'nivel1'}       = $nivel3->nivel1;
+        # $t_params->{'nivel1'}       = $nivel3->nivel1;
     }
 
+}elsif($tipoAccion eq "AGREGAR_EDICION"){
+    my $nivel1      = C4::AR::Nivel1::getNivel1FromId1($id1);
+
+    if($nivel1){
+        $template_catalogo      = $nivel1->getTemplate();
+        $t_params->{'nivel1'}   = $nivel1;
+    }
+
+}elsif($tipoAccion eq "AGREGAR_ANALITICA"){
+
+    my $nivel1      = C4::AR::Nivel1::getNivel1FromId1($id1);
+
+    if($nivel1){
+        $template_catalogo      = $nivel1->getTemplate();
+        $t_params->{'nivel1'}   = $nivel1;
+    }
 }
 
 $t_params->{'template_catalogo'}                = $template_catalogo;

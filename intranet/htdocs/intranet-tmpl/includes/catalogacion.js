@@ -401,7 +401,7 @@ function mostrarEstructuraDelNivel2(){
     _NIVEL_ACTUAL       = 2;
     
     if(MODIFICAR == 0){
-        _mostrarAccion("<h4>Agregando grupo con el esquema: " + $('#tipo_nivel3_id option:selected').html() + " (" + TEMPLATE_ACTUAL + ")</h4>" + crearBotonEsquema());
+        _mostrarAccion("<h4>Agregando edici&oacute;n con el esquema: " + $('#tipo_nivel3_id option:selected').html() + " (" + TEMPLATE_ACTUAL + ")</h4>" + crearBotonEsquema());
     }
     
     objAH               = new AjaxHelper(updateMostrarEstructuraDelNivel2);
@@ -819,6 +819,7 @@ function guardarDocumentoN1(){
     _sacarOpciones();
     objAH.infoArrayNivel1           = MARC_OBJECT_ARRAY;
     objAH.id1                       = ID_N1;
+    objAH.id2_padre                 = ID_N2_PADRE;
 
     objAH.sendToServer();
 }
@@ -887,6 +888,12 @@ function updateGuardarDocumentoN2(responseText){
         } else {
             disableAlert();
             window.location = "detalle.pl?id1=" + ID_N1_PADRE;
+        }
+
+
+        if (FROM_DETALLE_REGISTRO == 1) {
+            disableAlert();
+            window.location = "detalle.pl?id1=" + ID_N1;
         }
     }
 }
@@ -2400,7 +2407,7 @@ function modificarN2(id2, template){
     ID_N2               = id2;
     ID_TIPO_EJEMPLAR    = template;
 // TODO falta agregar boton para modificar el template
-    _mostrarAccion("<h4>Modificando el grupo (" + ID_N2 + ") con el esquema: " + ID_TIPO_EJEMPLAR + "</h4>" + crearBotonEsquema() + "&nbsp;&nbsp;&nbsp;&nbsp;" + crearBotonAgregarEjemplares(ID_N2,template));  
+    _mostrarAccion("<h4>Modificando el edici&oacute;n (" + ID_N2 + ") con el esquema: " + ID_TIPO_EJEMPLAR + "</h4>" + crearBotonEsquema() + "&nbsp;&nbsp;&nbsp;&nbsp;" + crearBotonAgregarEjemplares(ID_N2,template));  
     objAH               = new AjaxHelper(updateModificarN2);
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;
@@ -2534,12 +2541,12 @@ function cargarNivel1(params, TEMPLATE_ACTUAL){
         modificarN2(params.id2, TEMPLATE_ACTUAL);
         // mostrarInfoAltaNivel2(params.id2, TEMPLATE_ACTUAL); 
         getNivel2(params.id2);
-    }else   
+    } else   
     if(params.tipoAccion == 'MODIFICAR_NIVEL_3'){
 // FIXME falta template
         modificarN3(params.id3, TEMPLATE_ACTUAL);
         mostrarInfoAltaNivel3(params.id2, TEMPLATE_ACTUAL);  
-    }else{
+    } else {
 // FIXME falta template
         //por defecto se carga el Nivel 1 para modificar
         modificarN1(params.id1, TEMPLATE_ACTUAL);

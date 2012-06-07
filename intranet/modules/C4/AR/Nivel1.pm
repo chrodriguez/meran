@@ -127,7 +127,7 @@ sub guardarRealmente{
         $db->begin_work;
 
         eval {
-            $catRegistroMarcN1->agregar($marc_record->as_usmarc,$params);
+            $catRegistroMarcN1->agregar($marc_record->as_usmarc,$params, $db);
             $db->commit;
             #recupero el id1 recien agregado
             $id1 = $catRegistroMarcN1->getId1;
@@ -187,6 +187,24 @@ sub getNivel1FromId1{
     }
 }
 
+sub getNivel1FromId2{
+    my ($id2, $db) = @_;
+
+    $db = $db || C4::Modelo::CatRegistroMarcN2->new()->db();
+
+    my $nivel2_array_ref = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(
+                                                                        db => $db,
+                                                                        query => [
+                                                                                    id => { eq => $id2 },
+                                                                            ]
+                                                                );
+
+    if( scalar(@$nivel2_array_ref) > 0){
+        return ($nivel2_array_ref->[0]->nivel1);
+    }else{
+        return 0;
+    }
+}
 
 sub getNivel1ByClaveUnicidad{
     my ($clave, $db) = @_;
