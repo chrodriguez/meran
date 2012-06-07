@@ -138,6 +138,8 @@ function updateNuevoPermisoSHOW(responseText){
 
 function permiso(nombre){
 
+    actualizarCheckBoxes(nombre);
+
     this.nombre = nombre;
     this.alta = ($('#'+nombre+'_alta').is(':checked'))?1:0;
     this.baja = ($('#'+nombre+'_baja').is(':checked'))?1:0;
@@ -149,6 +151,40 @@ function permiso(nombre){
 
 }
 
+/*
+* Actualiza todos los input checkbox ocultos para actualizar bien en el backend
+*/
+function actualizarCheckBoxes(nombre){
+
+    var checked = $('#'+nombre).find('.active');
+
+    // checked.text() tiene los nombres de los checkeados separados por un espacio
+    var arrayText = checked.text().split(" ");
+
+    //recorremos todos los textos que esten seleccionados
+    for(text in arrayText){ 
+        switch(arrayText[text])
+        {
+        case 'Todos':
+            $('#'+nombre+'_todos').attr('checked', 'checked');
+            break;
+        case 'Baja':
+            $('#'+nombre+'_baja').attr('checked', 'checked');
+            break;
+        case 'Modificación':
+            $('#'+nombre+'_modif').attr('checked', 'checked');
+            break;
+        case 'Alta':
+            $('#'+nombre+'_alta').attr('checked', 'checked');
+            break;
+        case 'Consulta':
+            $('#'+nombre+'_consulta').attr('checked', 'checked');
+            break;
+        }
+
+    }
+}
+
 function actualizarPermisos(){
     objAH               = new AjaxHelper(updateActualizarPermisos);
     objAH.url           = URL_PREFIX+'/admin/permisos/permisosDB.pl';
@@ -156,14 +192,15 @@ function actualizarPermisos(){
     objAH.showOverlay   = true;  
     objAH.nro_socio     = $('#nro_socio_hidden').val();
 
+
     if ($('#id_ui').val() != "SIN SELECCIONAR")
         objAH.id_ui = $('#id_ui').val();
     else
         objAH.id_ui = 0;
 
-    objAH.accion="ACTUALIZAR_PERMISOS_"+tipoPermiso;
-    objAH.permisos = armarArregloDePermisosSave();
-    confirmMessage = "\n\n";
+    objAH.accion    = "ACTUALIZAR_PERMISOS_"+tipoPermiso;
+    objAH.permisos  = armarArregloDePermisosSave();
+    confirmMessage  = "\n\n";
     if (superUserGranted == 1)
         confirmMessage += SUPER_USER_GRANTED;
     else
@@ -174,7 +211,7 @@ function actualizarPermisos(){
 }
 
 function updateActualizarPermisos(responseText){
-	var Messages=JSONstring.toObject(responseText);
+	var Messages = JSONstring.toObject(responseText);
 
 	setMessages(Messages);
 	
@@ -210,7 +247,7 @@ function nuevoPermiso(){
 }
 
 function updateNuevoPermiso(responseText){
-	var Messages=JSONstring.toObject(responseText);
+	var Messages = JSONstring.toObject(responseText);
 
 	setMessages(Messages);
 	
@@ -270,8 +307,6 @@ function armarArregloDePermisos(){
 
 
 /* FUNCIONES ESPECIFICAS PARA CADA TIPO DE PERMISO */
-
-
 
 function armarArregloDePermisosSave_CATALOGO(){
 
@@ -365,8 +400,3 @@ function armarArregloDePermisos_GENERAL(){
 
     return(arreglo);
 }
-
-
-
-
-
