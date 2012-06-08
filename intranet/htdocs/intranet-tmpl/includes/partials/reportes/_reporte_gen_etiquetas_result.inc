@@ -55,7 +55,8 @@
                     </table>
                   </div>  
                 <script type="text/javascript">
-                      checkedAll("selectAll"+ "[% nivel1.id1 %]", "checkEjemplares"+"[% nivel1.id1 %]");
+
+                            checkedAll("selectAll"+ "[% nivel1.id1 %]", "checkEjemplares"+"[% nivel1.id1 %]");                      
                 </script>
                
           [% END %]

@@ -29,28 +29,30 @@
                                             if ($(this).is(':checked')){
                                                   id_tr = $(this).val();
                                                   id_tr = id_tr + "_tr";
+                                                  id1= $(this).attr('id').substring(15);
                                                   $(this).attr('checked', false);
                                                   $('#' + id_tr).hide();
                                                   barcode= $('#barcode'+ $(this).val()).html();
-                                                  $('#seleccionados').append(" <span class='label label-info' id='label"+barcode+"'>" +barcode+ " <span class='click' id='"+barcode+"'>X</span> </span> ");
+                                                  $('#seleccionados').append(" <span class='label label-info' name='"+ id1  + "' id='label"+barcode+"'>" +barcode+ " <span class='click' id='"+barcode+"'>X</span> </span> ");
                                               
-                                                  id1= $(this).attr('id').substring(15);
+                                                  
 
                                                   id_tabla= '#tablaResult'+ id1;
 
                                                   cant_visibles_tabla= $(id_tabla + ' tr:visible').length;
-                                                  alert( '#grupo' + id1);
+                                                 
                                                   if (cant_visibles_tabla <= 1){
                                                           $('#grupo' + id1).hide();
                                                   } else {
                                                           $('#grupo' + id1).show();
                                                   }
-                                                      
-                                
-
+    
                                                   $('.click').click( function (){
                                                               $('#label'+ $(this).attr('id')).remove(); 
-                                                              $('#' + id_tr).show();
+                                                              $('#' + id_tr).show(); 
+//                                                                 alert('#grupo' + $('#label'+ $(this).attr('id')).attr('name'));
+//                                                               $('#grupo' +  $('#label'+ $(this).attr('id')).attr('name')).show();
+                                                          
                                                   });
                                               }
                                             }
