@@ -151,40 +151,6 @@ function permiso(nombre){
 
 }
 
-/*
-* Actualiza todos los input checkbox ocultos para actualizar bien en el backend
-*/
-function actualizarCheckBoxes(nombre){
-
-    var checked = $('#'+nombre).find('.active');
-
-    // checked.text() tiene los nombres de los checkeados separados por un espacio
-    var arrayText = checked.text().split(" ");
-
-    //recorremos todos los textos que esten seleccionados
-    for(text in arrayText){ 
-        switch(arrayText[text])
-        {
-        case 'Todos':
-            $('#'+nombre+'_todos').attr('checked', 'checked');
-            break;
-        case 'Baja':
-            $('#'+nombre+'_baja').attr('checked', 'checked');
-            break;
-        case 'Modificación':
-            $('#'+nombre+'_modif').attr('checked', 'checked');
-            break;
-        case 'Alta':
-            $('#'+nombre+'_alta').attr('checked', 'checked');
-            break;
-        case 'Consulta':
-            $('#'+nombre+'_consulta').attr('checked', 'checked');
-            break;
-        }
-
-    }
-}
-
 function actualizarPermisos(){
     objAH               = new AjaxHelper(updateActualizarPermisos);
     objAH.url           = URL_PREFIX+'/admin/permisos/permisosDB.pl';
