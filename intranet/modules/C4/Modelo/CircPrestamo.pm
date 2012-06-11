@@ -26,7 +26,9 @@ __PACKAGE__->meta->setup(
 	],
 
 	primary_key_columns => ['id_prestamo'],
-
+    
+    unique_key          => ['id3','nro_socio'],
+    
 	relationships => [
 
 		nivel3 => {
