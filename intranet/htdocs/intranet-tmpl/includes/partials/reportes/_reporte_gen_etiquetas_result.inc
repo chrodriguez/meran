@@ -1,9 +1,75 @@
 <script type="text/javascript" src="/intranet-tmpl/includes/adquisiciones/tabletojson.js"> </script>
 <script type="text/javascript" src="/includes/jquery/jquery.nanoscroller.js"></script>
     
+<script>
+function seleccionarTr(){
+      $('[type=checkbox]').change( function (){ 
+
+            if ($(this).is(':checked')){
+                  id_tr = $(this).val();
+                  id_tr = id_tr + "_tr";
+                  id1= $(this).attr('id').substring(15);
+                  $(this).attr('checked', false);
+                  $('#' + id_tr).hide();
+                  barcode= $('#barcode'+ $(this).val()).html();
+                  $('#seleccionados').append(" <span class='label label-info' name='"+ id1  + "' id='label"+barcode+"'><input type='hidden' value='"+id_tr+"'>" +barcode+ " <span class='click' id='"+barcode+"'>X</span> </span> ");
+              
+                  
+
+                  id_tabla= '#tablaResult'+ id1;
+
+                  cant_visibles_tabla= $(id_tabla + ' tr:visible').length;
+                 
+                  if (cant_visibles_tabla <= 1){
+                          $('#grupo' + id1).hide();
+                  } else {
+                          $('#grupo' + id1).show();
+                  }
+
+                  $('.click').click( function (){  
+                   
+                              labelClosed=$('#label'+ $(this).attr('id')).attr('name');
+                              $('#grupo' + labelClosed).show();          
+                              $('#' + $(this).parent().children(":input").val()).show();                    
+                              $('#label'+ $(this).attr('id')).remove(); 
+                                     
+                  });
+              }
+            }
+        );
+    }
 
 
- <div class="alert alert-info" id="seleccionados">
+    function checkedAllTrs(id,nombreCheckbox){
+              $("#"+id).toggle(
+              function(){
+                $("input[name="+nombreCheckbox+"]").each(
+                    function(){
+                      this.checked=true;
+                      $(this).parent().parent().addClass("marked");$(this).parent().parent().children().each(
+                        function(){
+                            $(this).addClass("marked");
+                        });
+                    })
+             
+              },
+              
+              function(){ 
+                    $("input[name="+nombreCheckbox+"]").each(function(){
+                      this.checked=false;$(this).parent().parent().removeClass("marked");
+                        $(this).parent().parent().children().each(function(){
+                            $(this).removeClass("marked");
+                        });
+                    })
+              });
+
+    }
+     $(document).ready(function() {
+        seleccionarTr();
+     });
+</script>
+
+<div class="alert alert-info" id="seleccionados">
 </div>
 
 
@@ -55,8 +121,9 @@
                     </table>
                   </div>  
                 <script type="text/javascript">
-
-                            checkedAll("selectAll"+ "[% nivel1.id1 %]", "checkEjemplares"+"[% nivel1.id1 %]");                      
+                            seleccionarTr(); 
+                            checkedAll("selectAll"+ "[% nivel1.id1 %]", "checkEjemplares"+"[% nivel1.id1 %]");
+                           
                 </script>
                
           [% END %]
