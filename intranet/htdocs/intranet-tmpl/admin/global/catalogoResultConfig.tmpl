@@ -58,9 +58,9 @@
                         [% END %]
                     </div>
                 </div>
-    <input type="hidden" id="editando" name="editando" value="1">
-
             [% END %]
+            
+    <input type="hidden" id="editando" name="editando" value="1">
     <div class="form-actions">
         [% PERL %]
                     print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",

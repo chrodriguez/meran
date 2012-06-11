@@ -1,8 +1,8 @@
 package C4::AR::Logos;
 
 use strict;
-use C4::Modelo::Logo;
-use C4::Modelo::Logo::Manager;
+use C4::Modelo::LogoEtiquetas;
+use C4::Modelo::LogoEtiquetas::Manager;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -16,6 +16,25 @@ use vars qw(@EXPORT @ISA);
 #/intranet/htdocs/private-uploads/logos  (INTRA) --> /usr/share/meran/intranet/htdocs/private-uploads/logos
 #/opac/htdocs/logos (OPAC) --> /usr/share/meran/opac/htdocs/htdocs/logos
 
+
+=item
+    Devuelve el path del archivo del logo de etiquetas
+=cut
+sub getPathLogoEtiquetas{
+
+    my $logosArrayRef = C4::Modelo::LogoEtiquetas::Manager->get_logoEtiquetas( 
+                                                                                sort_by => ['id DESC'],
+                                                                                limit   => 1,
+                                                                            );
+
+    if(scalar(@$logosArrayRef) > 0){
+        return $logosArrayRef->[0]->getImagenPath;
+    }else{
+        return (0);
+    }
+
+
+}
 
 sub eliminarLogo{
     my ($params)    = @_;
@@ -44,15 +63,56 @@ sub eliminarLogo{
 }
 
 
+sub deleteLogos{
+    
+    my $logos       = C4::Modelo::LogoEtiquetas::Manager->get_logoEtiquetas();
+
+    my $uploaddir   = C4::Context->config('logosIntraPath');
+
+    foreach my $logo (@$logos){
+
+        my $image_name = $logo->getImagenPath();
+        unlink($uploaddir."/".$image_name);
+        $logo->delete();
+
+    }
+
+}
+
+
+sub modificarLogo{
+
+    my ($params)    = @_;
+
+    my $msg_object  = C4::AR::Mensajes::create();
+
+    my $logo = getLogoById($params->{'idLogo'});
+
+    if (C4::AR::Utilidades::validateString($params->{'alto'})){
+        $logo->setAlto($params->{'alto'});
+    }
+    
+    if (C4::AR::Utilidades::validateString($params->{'ancho'})){
+        $logo->setAncho($params->{'ancho'});
+    }
+
+    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP08', 'params' => ['512 KB']} ) ;
+    $logo->save();
+
+    return ($msg_object);
+    
+}
+
 sub agregarLogo{
 
 	my ($params,$postdata) = @_;
+
+    #borramos algun logo que este, para pisarlo con este nuevo
+    deleteLogos();
 	
-	my $logo = C4::Modelo::Logo->new();
-	
-	if (C4::AR::Utilidades::validateString($params->{'nombre'})){
-		$logo->setNombre($params->{'nombre'});
-	}
+	my $logo = C4::Modelo::LogoEtiquetas->new();
+
+    $logo->setNombre('DEO-booklabels');
 	
 	if (C4::AR::Utilidades::validateString($params->{'alto'})){
 		$logo->setAlto($params->{'alto'});
@@ -62,7 +122,7 @@ sub agregarLogo{
 		$logo->setAncho($params->{'ancho'});
 	}
 	
-	my ($image,$msg) = uploadLogo($postdata, $params->{'nombre'}, $params->{'context'});
+	my ($image,$msg) = uploadLogo($postdata,'DEO-booklabels', $params->{'context'});
 	
 	$logo->setImagenPath($image);
 	
@@ -95,29 +155,38 @@ sub uploadLogo{
     my $msg_object      = C4::AR::Mensajes::create();
     
     #checkeamos con libmagic el tipo del archivo
-    my $type            = C4::AR::Utilidades::checkFileMagic($query, @filesAllowed);
+    my ($type,$notBinary)            = C4::AR::Utilidades::checkFileMagic($query, @filesAllowed);
+    C4::AR::Debug::debug("type en logos.pm : " . $type);
     
     C4::AR::Debug::debug("vamos a escribir $name en el context $context y type $type en el dir $uploaddir y mono $uploaddir/$name.$type");
       
     if (!$type) {
         $msg_object->{'error'}= 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP00', 'params' => ['jpg','png','gif']} ) ;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP00', 'params' => ['jpg','png','gif','jpeg']} ) ;
     }
 
     
     if (!$msg_object->{'error'}){
-#    	eval{
-		    open ( WRITEIT, ">$uploaddir/$name.$type" ) or die "$!"; 
-		    binmode WRITEIT; 
-		    while ( <$query> ) { 
-		    	print WRITEIT; 
-		    }
-		    close(WRITEIT);
-#    	};
-#    	if ($@){
-#	         $msg_object->{'error'}= 1;
-#	         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP01',} ) ;
-#    	}
+
+        if($notBinary){
+        
+            #no hay que escribirlo con binmode
+            C4::AR::Debug::debug("UploadFile => uploadAdjuntoNovedadOpac => vamos a escribirla sin binmode");
+            open(WRITEIT, ">$uploaddir/$name.$type") or die "Cant write to $uploaddir/$name.$type. Reason: $!";
+            print WRITEIT $query;
+            close(WRITEIT);
+   
+        }else{
+        
+            C4::AR::Debug::debug("UploadFile => uploadAdjuntoNovedadOpac => vamos a escribirla CON binmode");
+            open ( WRITEIT, ">$uploaddir/$name.$type" ) or die "Cant write to $uploaddir/$name.$type. Reason: $!"; 
+            binmode WRITEIT; 
+            while ( <$query> ) { 
+                print WRITEIT; 
+            }
+            close(WRITEIT);
+        
+        }
     }
     
     if (!$msg_object->{'error'}){
@@ -141,27 +210,22 @@ sub getLogoById{
     
     my ($id) = @_;
     
-    use C4::Modelo::Logo::Manager;
+    use C4::Modelo::LogoEtiquetas::Manager;
     
     my @filtros;
     
     push (@filtros, (id => {eq => $id}) );
     
-    my $logo = C4::Modelo::Logo::Manager->get_logo( query => \@filtros,);
+    my $logo = C4::Modelo::LogoEtiquetas::Manager->get_logoEtiquetas( query => \@filtros,);
     
     return $logo->[0];
 }
 
 
 sub listar{
-    my ($ini,$cantR) = @_;
-    my $logos_array_ref = C4::Modelo::Logo::Manager->get_logo( 
-                                                                                sort_by => ['id DESC'],
-                                                                                limit   => $cantR,
-                                                                                offset  => $ini,
-                                                                              );
+    my $logos_array_ref = C4::Modelo::LogoEtiquetas::Manager->get_logoEtiquetas();
 
-    my $logos_array_ref_count = C4::Modelo::Logo::Manager->get_logo_count();
+    my $logos_array_ref_count = C4::Modelo::LogoEtiquetas::Manager->get_logoEtiquetas_count();
     if(scalar(@$logos_array_ref) > 0){
         return ($logos_array_ref_count, $logos_array_ref);
     }else{

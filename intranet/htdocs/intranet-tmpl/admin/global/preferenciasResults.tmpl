@@ -1,37 +1,75 @@
-     [% PERL %]
-           print C4::AR::Filtros::tableHeader(   
-                             id              => "preferenciasTable",
-                             class           => "",
-                             selectAll_id    => "",
-                             columns         => ['[% "Variable"|i18n %]','[% "Valor"|i18n %]',
-                                               '[% "Explicaci&oacute;n"|i18n %]', '[% "Editar"|i18n %]',
-                                                ]
+[% INCLUDE "intranet-top.inc" %]
 
-                                                               
-                                   ) ;
-     [% END %]
+<script type="text/javascript">
 
-     <tbody>
-     [% FOREACH preferencia IN preferencias %]
-         <tr>
-             <td>[% preferencia.getVariable %]</td>
-             <td>[% preferencia.getShowValue %]</td>
-             <td>[% preferencia.getExplanation %]</td>
-             <td>
-                 [% PERL %]
-                   print C4::AR::Filtros::action_button( 
-                                                   button    => "btn btn-primary click",
-                                                   action    => 'modificarVariable("[% preferencia.getVariable %]","[% preferencia.getType %]")', 
-                                                   icon      => "icon-edit icon-white",
-                                                   title     => "",
-                                               ) ;
+    var prefBooleanas = new Array();
 
-                 [% END %]
-             </td>
-         </tr>
-     
-     [% END %]
-     
-      </tbody>
-   </table>
- 
+    [% FOREACH pref IN preferenciasBooleanas %]
+    
+        prefBooleanas.push('[% pref.variable %]');
+
+    [% END %]
+
+
+    //actualizo los input hidden con los valores de los radio button de bootstrap
+    function guardarPreferencias(){
+
+        for(pref in prefBooleanas){
+
+            if($('#radios_' + prefBooleanas[pref] + '').find('.active').text() == "[% "Si" | i18n %]"){
+                $('#' + prefBooleanas[pref] +'').val(1);
+            }else{
+                $('#' + prefBooleanas[pref] +'').val(0);
+            }
+            
+        }
+
+        $('#formPreferencias').submit();
+
+    }
+
+</script>
+
+<form id="formPreferencias" onclick="return false;" class="form-horizontal" action="[% url_prefix %]/admin/global/preferencias.pl?token=[% token %]" method="post">
+    <fieldset class="resultados_busqueda">
+    <legend>[% "Administraci&oacute;n de preferencias de Circulaci&oacute;n" | i18n %]</legend>
+
+    
+            [% FOREACH preferencia IN preferencias %]
+            
+                <div class="control-group">
+                    <label class="control-label">[% preferencia.preferencia.getLabel | i18n %]</label>
+                    <div class="controls">
+                    
+                        [% IF preferencia.valor %]
+                            [%  preferencia.valor %]
+                        [% ELSE %]
+                            <input id="valor" type="text" size="50" name="[% preferencia.preferencia.getVariable %]">
+                        [% END %]
+                        
+                        [% IF preferencia.tabla %]<input type="hidden" id="[% preferencia.preferencia.getId %]_tabla" value="[% preferencia.tabla %]">[% END %]
+                    [% IF preferencia.campo %]<input type="hidden" id="[% preferencia.preferencia.getId %]_campo" value="[% preferencia.campo %]">[% END %]
+                    
+                        [% PERL %]
+                          print C4::AR::Filtros::setHelpInput(   
+                                              text        => "[% preferencia.preferencia.getExplanation | i18n %]",
+                                      ) ;
+                          
+                      [% END %]
+                    </div>
+                </div>
+            [% END %]
+
+    <input type="hidden" id="editando" name="editando" value="1">
+    <div class="form-actions">
+      [% PERL %]
+                  print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
+                                                      type    => "submit",
+                                                      boton   => "boton_agregar",
+                                                      onclick => "guardarPreferencias();"
+                          ) ;
+      [% END %]
+    </div>
+</form>
+
+[% INCLUDE "intranet-bottom.inc" %]

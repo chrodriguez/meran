@@ -11,8 +11,11 @@
 /*
  * esta variable ancla se setea cuando se crea el ancla con el string correspondiente al tag <a>
  */
-ancla = "";
+var ancla = "";
 
+function refreshMeranPage(){
+	location.reload(true);
+}
 /*
  * Esta funcion crea un ancla antes del elemento con el id que viene como
  * parametro @param id es el id del elemento antes del cual se va crea el ancla.
@@ -569,6 +572,7 @@ function uploadComplete(evt) {
         var uploadResponse = document.getElementById('uploadResponse' + '_' + ID2_file);
 	uploadResponse.innerHTML = evt.target.responseText;
 	uploadResponse.style.display = 'block';
+	setTimeout(refreshMeranPage,4000);
 }
 
 function uploadFailed(evt) {

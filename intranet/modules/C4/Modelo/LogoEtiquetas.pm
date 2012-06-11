@@ -1,11 +1,11 @@
-package C4::Modelo::Logo;
+package C4::Modelo::LogoEtiquetas;
 
 use strict;
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
-    table   => 'logo',
+    table   => 'logoEtiquetas',
 
     columns => [
         id              => { type => 'serial', overflow => 'truncate', length => 16 },
@@ -26,7 +26,7 @@ sub agregar{
     my ($data_hash) = @_;
 
     $self->setImagenPath($data_hash->{'imagenPath'});
-    $self->setNombre($data_hash->{'nombre'});
+    $self->setNombre('DEO-booklabels');
 
     $self->save();
 
