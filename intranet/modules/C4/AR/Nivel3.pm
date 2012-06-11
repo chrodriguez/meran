@@ -472,37 +472,6 @@ sub detalleNivel3{
         $hash_nivel2{'tiene_analiticas'}        = $tiene_analiticas;
         $hash_nivel2{'show_action'}             = 1; #muestra la accion agregar analitica
         $hash_nivel2{'show_analiticas'}         = $tiene_analiticas; #muestra la accion "Ver analíticas" si el grupo tiene analíticas
-
-        # my @nivel1_analitica_array;
-        # my @nivel2_analitica_array;
-      
-# FIXME DEPRECATED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  
-#         if($cat_reg_marc_n2_analiticas){
-  
-#             foreach my $n2 (@$cat_reg_marc_n2_analiticas){
-#                 my %hash_nivel1_aux;
-#                 my %hash_nivel2_aux;    
-        
-# #                 C4::AR::Debug::debug("id 2 ============= ".$n2->getId2Hijo());
-# #PATCH_ADAMS VERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
-#                 my $n2_object = C4::AR::Nivel2::getNivel2FromId2($n2->getId2Hijo(),$db);
-#                 if ($n2_object){
-# 	                my $n1_object = C4::AR::Nivel1::getNivel1FromId1($n2_object->getId1(),$db);
-	
-# 	                $hash_nivel1_aux{'nivel1_analitica'}        = $n1_object->toMARC_Intra;
-# 	                push(@nivel1_analitica_array, \%hash_nivel1_aux);
-#                     #Esto mostraba cosas de más, perdón Mike.
-#                     $hash_nivel2_aux{'nivel2_analitica'}        = $n2_object->toMARC_Intra;
-#                     push(@nivel2_analitica_array, \%hash_nivel2_aux);
-#                 }
-                
-#             }
-
-#             $hash_nivel2{'nivel1_analiticas_array'} = \@nivel1_analitica_array;
-#             $hash_nivel2{'nivel1_analiticas_cant'}  = scalar(@nivel1_analitica_array);
-#         }
-
     }
 
     return (\%hash_nivel2);

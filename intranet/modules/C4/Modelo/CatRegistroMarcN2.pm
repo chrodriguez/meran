@@ -306,7 +306,7 @@ sub getAnaliticas{
 #     C4::AR::Debug::debug("C4::AR::CatRegistroMarcN2::getAnaliticas => el grupo ".$self->getId2()." tiene ".scalar(@$nivel2_analiticas_array_ref)." analiticas");
 
     # if( scalar(@$nivel2_analiticas_array_ref) > 0){
-        return ($nivel2_analiticas_array_ref);
+    return ($nivel2_analiticas_array_ref);
     # }else{
         # return 0;
     # }

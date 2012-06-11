@@ -17,12 +17,12 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'cat_registro_marc_n2_id' ],  
 
     relationships => [
-        nivel2_hijo  => {
-            class       => 'C4::Modelo::CatRegistroMarcN2',
-            key_columns => { cat_registro_marc_n2_hijo_id => 'id' },
-            type        => 'one to one',
-        },
-        nivel2_padre  => {
+        # nivel2_hijo  => {
+        #     class       => 'C4::Modelo::CatRegistroMarcN2',
+        #     key_columns => { cat_registro_marc_n2_hijo_id => 'id' },
+        #     type        => 'one to one',
+        # },
+        nivel2  => {
             class       => 'C4::Modelo::CatRegistroMarcN2',
             key_columns => { cat_registro_marc_n2_id => 'id' },
             type        => 'one to one',
@@ -41,6 +41,12 @@ sub getId2Padre{
     my ($self)  = shift;
 
     return $self->cat_registro_marc_n2_id;
+}
+
+sub getId1 {
+    my ($self)  = shift;
+    
+    return $self->cat_registro_marc_n1_id;
 }
 
 sub getId2Hijo{
