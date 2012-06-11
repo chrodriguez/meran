@@ -560,11 +560,7 @@ sub getAllNivel2FromAnaliticasById{
     $db = $db || C4::Modelo::CatRegistroMarcN2Analitica->new()->db();
 
     my @filtros;
-    push (@filtros, (or   => [
-                                'cat_registro_marc_n2_id'       => { eq => $id2 }, 
-                                'cat_registro_marc_n2_hijo_id'  => { eq => $id2 },
-                                ])
-    );
+    push (@filtros, ('cat_registro_marc_n2_id'       => { eq => $id2 } ));
 
     my $nivel2_analiticas_array_ref = C4::Modelo::CatRegistroMarcN2Analitica::Manager->get_cat_registro_marc_n2_analitica(
                                                                         db      => $db,
