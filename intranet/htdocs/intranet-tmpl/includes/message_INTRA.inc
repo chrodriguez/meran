@@ -89,6 +89,7 @@
     FALTA_INGRESAR_EL_DNI_DEL_AUTORIZADO= "[% 'Falta ingresar el DNI del autorizado' | i18n %]";
     FALTA_INGRESAR_EL_TELEFONO_DEL_AUTORIZADO= "[% 'Falta ingresar el Tel\u00e9fono del autorizado' | i18n %]";
     RESET_PASSWORD= "[% 'Desea reestablecer el password del usuario?' | i18n %]";
+    CONFIRMA_LA_ELIMINACION = "[% 'Esta operaci\u00f3n no se puede reparar. Desea eliminar el usuario por completo?' | i18n %]";
     /*================================================Fin==Usuarios==================================================*/
 
     /*================================================Catalogo=======================================================*/
