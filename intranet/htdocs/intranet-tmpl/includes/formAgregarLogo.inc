@@ -9,12 +9,6 @@
   
     <div class="modal-body">
         <form class="form-horizontal" id="formAgregarLogo" method="post" action="[% url_prefix %]/admin/logos.pl" enctype="multipart/form-data">
-          <div class="control-group">
-            <label class="control-label" for="titulo_footer">[% 'Nombre' | i18n %]</label>
-            <div class="controls">
-              <input type="text" class="input-xlarge" requiered id="nombre" name="nombre" value="[% logo.getNombre %]">
-            </div>
-          </div>
           
           <div class="control-group">
             <label class="control-label" for="titulo_footer">[% 'Alto' | i18n %]</label>

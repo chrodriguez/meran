@@ -23,9 +23,9 @@ my $obj        = $input->Vars;
 
 my $accion  = $obj->{'tipoAccion'} || undef;	
 
-if ($accion){
+if ($accion) {
 
-    if ($accion eq "ADD"){	
+    if ($accion eq "ADD") {	
         
         my $msg_object          = C4::AR::Logos::agregarLogo($obj,$input->upload('imagen'));
         my $codMsg              = C4::AR::Mensajes::getFirstCodeError($msg_object);
@@ -38,10 +38,23 @@ if ($accion){
             $t_params->{'mensaje_class'} = "alert-success";
         }
     
+    } elsif ($accion eq "MOD") {
+
+        my $msg_object          = C4::AR::Logos::modificarLogo($obj);
+        my $codMsg              = C4::AR::Mensajes::getFirstCodeError($msg_object);
+        
+        $t_params->{'mensaje'}  = C4::AR::Mensajes::getMensaje($codMsg,'INTRA');
+        
+        if (C4::AR::Mensajes::hayError($msg_object)){
+            $t_params->{'mensaje_class'} = "alert-error";
+        }else{
+            $t_params->{'mensaje_class'} = "alert-success";
+        }
+
     }
     
 }	    
 
 $t_params->{'logosPath'}        = C4::Context->config('logosOpacPath');
-$t_params->{'page_sub_title'}   = C4::AR::Filtros::i18n("Listado de Logos INTRA");
+$t_params->{'page_sub_title'}   = C4::AR::Filtros::i18n("Logos para etiquetas");
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

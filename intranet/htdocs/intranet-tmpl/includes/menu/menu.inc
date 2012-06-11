@@ -410,10 +410,10 @@
                                 </li>
                                 <li>
                                         [% PERL %]
-                                            print C4::AR::Filtros::link_to( text =>     " [% 'Configuraci&oacute;n de Logos' | i18n %]",
+                                            print C4::AR::Filtros::link_to( text =>     " [% 'Logos de etiquetas' | i18n %]",
                                                                             url =>      "[% url_prefix %]/admin/logos.pl",
                                                                             icon=>		"icon-picture",
-                                                                            title =>    "[% 'Configuraci&oacute;n de Logos' | i18n %]"
+                                                                            title =>    "[% 'Logos de etiquetas' | i18n %]"
                                                                         ) ;
                                         [% END %]
                                 </li>
