@@ -1121,10 +1121,10 @@ sub eliminarPotencial{
     if(!$msg_object->{'error'}){
 
         eval {
-            my ($error,$cod_msg) = $socio->desactivar;
+            my ($error,$cod_msg) = $socio->eliminar;
             
             $error = $error || 0;
-            $cod_msg = $cod_msg || 'U320'; 
+            $cod_msg = $cod_msg || 'U900'; 
             $msg_object->{'error'}= $error;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> $cod_msg, 'params' => [($socio->getNro_socio)]} ) ;
         };

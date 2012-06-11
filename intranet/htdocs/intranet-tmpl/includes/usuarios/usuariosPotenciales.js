@@ -124,7 +124,8 @@ function eliminarPermanentemente(nro_socio){
 }
 
 function updateEliminarPermanentemente(responseText){
-	setMessages(responseText)
+ 	var Messages=JSONstring.toObject(responseText);
+ 	setMessages(Messages);
 }
 
 
