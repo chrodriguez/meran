@@ -1164,6 +1164,7 @@ sub getNivelesFromRegistro {
     my @grupos=();
     my @ejemplares=();
     my $tipo_ejemplar='';
+    my $nivel_bibliografico='';
     my $total_ejemplares=0;
     foreach my $field ($marc_record_to_meran->fields) {
         if(! $field->is_control_field){
@@ -1215,6 +1216,7 @@ sub getNivelesFromRegistro {
                               my %hash_temp;
                               $hash_temp{'grupo'}  = $marc_record_n2;
                               $hash_temp{'tipo_ejemplar'}  = $tipo_ejemplar;
+                              $hash_temp{'nivel_bibliografico'}  = $nivel_bibliografico;
                               $hash_temp{'cant_ejemplares'}   = scalar(@ejemplares);
                               $total_ejemplares+=$hash_temp{'cant_ejemplares'};
                               my @ejemplares_grupo =   @ejemplares; #esto hace la copia del arreglo
@@ -1225,10 +1227,14 @@ sub getNivelesFromRegistro {
                               @ejemplares = ();
                           }
                           
-                          if ((($campo eq '910')&&($subcampo eq 'a'))&&($marc_record_n2->subfield($campo,$subcampo))){
+                          if ((($campo eq '910')&&($subcampo eq 'a'))&&($nivel_bibliografico)){
                                   #ya existe el 910,a TIPO DOC, no sirve que haya varios
-                                  next;
-                              }
+                                   $dato=$nivel_bibliografico;
+                            }
+                            else{
+                                  #Si no existe lo seteo
+                                  $nivel_bibliografico=$dato;
+                            }
                           
                           if ((($campo eq '041')&&($subcampo eq 'a'))&&($marc_record_n2->subfield($campo,$subcampo))){
                                   #ya existe el 041,a IDIOMA, no sirve que haya varios
