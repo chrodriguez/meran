@@ -1178,7 +1178,7 @@ sub getNivelesFromRegistro {
                 my $estructura        = C4::AR::EstructuraCatalogacionBase::getEstructuraBaseFromCampoSubCampo($campo, $subcampo);
                 
                 if($estructura) {
-                
+                C4::AR::Debug::debug("NIVEL ??  ".$estructura->getNivel); 
                   use Switch;
                   switch ($estructura->getNivel) {
                   case 1 { 
@@ -1221,7 +1221,7 @@ sub getNivelesFromRegistro {
                               $total_ejemplares+=$hash_temp{'cant_ejemplares'};
                               my @ejemplares_grupo =   @ejemplares; #esto hace la copia del arreglo
                               $hash_temp{'ejemplares'}   = \@ejemplares_grupo;
-                              #C4::AR::Debug::debug("GRUPO CON ".$hash_temp{'cant_ejemplares'}." EJEMPLARES");
+                              C4::AR::Debug::debug("GRUPO CON ".$hash_temp{'cant_ejemplares'}." EJEMPLARES");
                               push (@grupos, \%hash_temp);
                               $marc_record_n2 = MARC::Record->new();
                               @ejemplares = ();
@@ -1264,7 +1264,7 @@ sub getNivelesFromRegistro {
                            if($marc_record_n3->subfield($campo,$subcampo)){
                               #Existe el subcampo y no es repetible ==> es un nivel 3 nuevo							
                               #Agrego el último ejemplar y lo guardo
-                              #C4::AR::Debug::debug("EJEMPLAR ".$marc_record_n3->as_formatted);	
+                              C4::AR::Debug::debug("EJEMPLAR ".$marc_record_n3->as_formatted);	
                                   push(@ejemplares,$marc_record_n3);
                                   $marc_record_n3 = MARC::Record->new();
                               }
