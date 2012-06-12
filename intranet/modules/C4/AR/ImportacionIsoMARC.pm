@@ -1198,7 +1198,7 @@ sub getNivelesFromRegistro {
                           #Nivel 2
       
                           #HAY QUE CREAR UNO NUEVO??
-                          #C4::AR::Debug::debug("HAY QUE CREAR UNO NUEVO??  ".$campo."&".$subcampo."=".$dato." ".$marc_record_n2->subfield($campo,$subcampo)." repetible? ".$estructura->getRepetible);
+                          C4::AR::Debug::debug("HAY QUE CREAR UNO NUEVO??  ".$campo."&".$subcampo."=".$dato." ".$marc_record_n2->subfield($campo,$subcampo)." repetible? ".$estructura->getRepetible);
       
                           if(($marc_record_n2->subfield($campo,$subcampo))&&(!$estructura->getRepetible)&&(($campo ne '910')&&($subcampo ne 'a'))&&(($campo ne '900')&&($subcampo ne 'b'))){
                               #Existe el subcampo y no es repetible ==> es un nivel 2 nuevo
