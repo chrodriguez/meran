@@ -1229,7 +1229,7 @@ sub getNivelesFromRegistro {
                           
                           if ((($campo eq '900')&&($subcampo eq 'b'))&&($nivel_bibliografico)){
                                   #ya existe el 900,b NIVEL BIBLIOGRAFICO, no sirve que haya varios
-                                   $dato=$nivel_bibliografico;
+                                  # $dato=$nivel_bibliografico;
                             }
                             else{
                                   #Si no existe lo seteo
