@@ -1,7 +1,7 @@
 [% USE HTML %]
 
 <script type="text/javascript">
-    function agregarPortada_show(){
+    function agregarPortada_showUI(){
         $('#agregarLogoForm').modal();
     } 
       
@@ -16,7 +16,7 @@
 	    objAH.showOverlay       = true;
 	    objAH.url               = URL_PREFIX+'/admin/logosDB.pl';
 	    objAH.idLogo            = id;
-	    objAH.tipoAccion        = 'SHOW_MOD_LOGO';
+	    objAH.tipoAccion        = 'SHOW_MOD_LOGO_UI';
 	    objAH.sendToServer();
 	}
 	
@@ -33,7 +33,7 @@
 </script>
 
 <fieldset>
-    <legend>[% "Listado de Logos de etiquetas" | i18n %]:</legend>
+    <legend>[% "Listado de Logos de la UI" | i18n %]:</legend>
         [% IF logos %]
             <div class="datos_tabla_div_user">
                 
@@ -93,22 +93,12 @@
 	[% PERL %]
         print C4::AR::Filtros::action_button(   
             button   => "btn btn-primary",
-            action   => 'agregarPortada_show();',
+            action   => 'agregarPortada_showUI();',
             title   => "[% 'Agregar Logo' | i18n %]",
         ) ;
 	[% END %]
 </div>
 
 <div id="agregarLogoForm" class="modal hide fade" >
-    [% INCLUDE 'formAgregarLogo.inc' %]
-</div>
-
-
-<div class="alert alert-block">
-  <h4 class="alert-heading">Atención</h4>
-  <p>
-  Cargue fotos exactamente del mismo tamaño, de lo contrario, los logos va a sufrir cambios de tamaño, provocando molestia visual.
-  <br>
-  El tamaño óptimo para un logo correcto es de 739x937 px (manteniendo el aspecto).
-  </p>
+    [% INCLUDE 'formAgregarLogoUI.inc' %]
 </div>

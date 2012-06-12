@@ -34,6 +34,48 @@ if ($tipoAccion eq 'LISTAR'){
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
     
+}elsif($tipoAccion eq 'LISTAR_UI'){
+
+    my ($template, $session, $t_params) = get_template_and_user({
+                                        template_name       => "admin/logos_ajax_ui.tmpl",
+                                        query               => $input,
+                                        type                => "intranet",
+                                        authnotrequired     => 0,
+                                        flagsrequired       => {  ui            => 'ANY', 
+                                                            tipo_documento      => 'ANY', 
+                                                            accion              => 'CONSULTA', 
+                                                            entorno             => 'usuarios'},
+                                        debug               => 1,
+    });
+    
+    my ($cant_logos,$logos)         = C4::AR::Logos::listarUI();
+
+    $t_params->{'logos'}            = $logos;
+    $t_params->{'cant_logos'}       = $cant_logos;
+
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+
+}elsif($tipoAccion eq 'SHOW_MOD_LOGO_UI'){
+
+    my $logo    = C4::AR::Logos::getLogoById($obj->{'idLogo'});      
+    my $editing = 1;
+
+    my ($template, $session, $t_params) = get_template_and_user({
+                                        template_name   => "includes/formAgregarLogoUI.inc",
+                                        query           => $input,
+                                        type            => "intranet",
+                                        authnotrequired => 0,
+                                        flagsrequired   => {  ui    => 'ANY', 
+                                                            accion  => 'TODOS', 
+                                                            entorno => 'usuarios'},
+                                        debug           => 1,
+                    });
+    
+    $t_params->{'editing'}  = $editing;
+    $t_params->{'logo'}     = $logo;
+
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+
 }elsif($tipoAccion eq 'SHOW_MOD_LOGO'){
 
     my $logo    = C4::AR::Logos::getLogoById($obj->{'idLogo'});      

@@ -3,6 +3,8 @@ package C4::AR::Logos;
 use strict;
 use C4::Modelo::LogoEtiquetas;
 use C4::Modelo::LogoEtiquetas::Manager;
+use C4::Modelo::LogoUI;
+use C4::Modelo::LogoUI::Manager;
 
 use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
@@ -28,12 +30,27 @@ sub getPathLogoEtiquetas{
                                                                             );
 
     if(scalar(@$logosArrayRef) > 0){
-        return $logosArrayRef->[0]->getImagenPath;
+        return C4::Context->config('logosIntraPath') . "/" . $logosArrayRef->[0]->getImagenPath;
     }else{
         return (0);
     }
+}
 
+=item
+    Devuelve el tamaño del archivo del logo de etiquetas
+=cut
+sub getSizeLogoEtiquetas{
 
+    my $logosArrayRef = C4::Modelo::LogoEtiquetas::Manager->get_logoEtiquetas( 
+                                                                                sort_by => ['id DESC'],
+                                                                                limit   => 1,
+                                                                            );
+
+    if(scalar(@$logosArrayRef) > 0){
+        return ($logosArrayRef->[0]->getAncho, $logosArrayRef->[0]->getAlto);
+    }else{
+        return (0,0);
+    }
 }
 
 sub eliminarLogo{
@@ -62,6 +79,22 @@ sub eliminarLogo{
     
 }
 
+
+sub deleteLogosUI{
+    
+    my $logos       = C4::Modelo::LogoUI::Manager->get_logoUI();
+
+    my $uploaddir   = C4::Context->config('logosIntraPath');
+
+    foreach my $logo (@$logos){
+
+        my $image_name = $logo->getImagenPath();
+        unlink($uploaddir."/".$image_name);
+        $logo->delete();
+
+    }
+
+}
 
 sub deleteLogos{
     
@@ -103,6 +136,39 @@ sub modificarLogo{
     
 }
 
+sub agregarLogoUI{
+
+    my ($params,$postdata) = @_;
+
+    #borramos algun logo que este, para pisarlo con este nuevo
+    deleteLogosUI();
+    
+    my $logo = C4::Modelo::LogoUI->new();
+
+    $logo->setNombre('DEO-UI');
+    
+    # if (C4::AR::Utilidades::validateString($params->{'alto'})){
+        # $logo->setAlto($params->{'alto'});
+        # $logo->setAlto('1');
+    # }
+    
+    # if (C4::AR::Utilidades::validateString($params->{'ancho'})){
+        # $logo->setAncho($params->{'ancho'});
+        # $logo->setAlto('1');
+    # }
+    
+    my ($image,$msg) = uploadLogo($postdata,'DEO-UI', $params->{'context'});
+    
+    $logo->setImagenPath($image);
+    
+    if (!$msg->{'error'}){
+       $logo->save();
+    }
+    
+    return ($msg);
+    
+}
+
 sub agregarLogo{
 
 	my ($params,$postdata) = @_;
@@ -114,13 +180,15 @@ sub agregarLogo{
 
     $logo->setNombre('DEO-booklabels');
 	
-	if (C4::AR::Utilidades::validateString($params->{'alto'})){
-		$logo->setAlto($params->{'alto'});
-	}
+	# if (C4::AR::Utilidades::validateString($params->{'alto'})){
+		# $logo->setAlto($params->{'alto'});
+        $logo->setAlto('1');
+	# }
 	
-	if (C4::AR::Utilidades::validateString($params->{'ancho'})){
-		$logo->setAncho($params->{'ancho'});
-	}
+	# if (C4::AR::Utilidades::validateString($params->{'ancho'})){
+		# $logo->setAncho($params->{'ancho'});
+        $logo->setAlto('1');
+	# }
 	
 	my ($image,$msg) = uploadLogo($postdata,'DEO-booklabels', $params->{'context'});
 	
@@ -226,6 +294,19 @@ sub listar{
     my $logos_array_ref = C4::Modelo::LogoEtiquetas::Manager->get_logoEtiquetas();
 
     my $logos_array_ref_count = C4::Modelo::LogoEtiquetas::Manager->get_logoEtiquetas_count();
+    if(scalar(@$logos_array_ref) > 0){
+        return ($logos_array_ref_count, $logos_array_ref);
+    }else{
+        return (0,0);
+    }
+}
+
+sub listarUI{
+
+    my $logos_array_ref = C4::Modelo::LogoUI::Manager->get_logoUI();
+
+    my $logos_array_ref_count = C4::Modelo::LogoUI::Manager->get_logoUI_count();
+
     if(scalar(@$logos_array_ref) > 0){
         return ($logos_array_ref_count, $logos_array_ref);
     }else{
