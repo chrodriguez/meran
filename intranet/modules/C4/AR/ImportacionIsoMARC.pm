@@ -1382,13 +1382,13 @@ sub detalleCompletoRegistro {
         $hash_nivel2{'nivel_bibliografico'}      = C4::AR::ImportacionIsoMARC::getNivelBibliograficoFromMarcRecord_Object($nivel2_marc);        
         my $nivel_bibliografico					 = $hash_nivel2{'nivel_bibliografico'};
         if($nivel_bibliografico){
-        #Seteo bien el código del nivel bibliográfico
-        if($nivel2_marc->field('900')){
-            $nivel2_marc->field('900')->update( 'b' => $nivel_bibliografico->getDescription());
-        }else{
-                my $new_field= MARC::Field->new('900','#','#','b' => $nivel_bibliografico->getDescription());
-                $nivel2_marc->append_fields($new_field);
-            }
+            #Seteo bien el código del nivel bibliográfico
+            if($nivel2_marc->field('900')){
+                $nivel2_marc->field('900')->update( 'b' => $nivel_bibliografico->getDescription());
+            }else{
+                    my $new_field= MARC::Field->new('900','#','#','b' => $nivel_bibliografico->getDescription());
+                    $nivel2_marc->append_fields($new_field);
+                }
         }
         $hash_nivel2{'marc_record'}             = $nivel2_marc;
         $hash_nivel2{'nivel2_array'}            = C4::AR::ImportacionIsoMARC::toMARC_Array($nivel2_marc,$tipo_documento->getId_tipo_doc(),'',2);
