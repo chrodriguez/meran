@@ -2,16 +2,32 @@
 <script type="text/javascript" src="/includes/jquery/jquery.nanoscroller.js"></script>
     
 <script>
-function seleccionarTr(){
-      $('[type=checkbox]').change( function (){ 
 
-            if ($(this).is(':checked')){
-                  id_tr = $(this).val();
+
+// function exportarPDF(){
+//     objAH               = new AjaxHelper(updateEjemplaresDelGrupo);
+//     objAH.debug         = true;
+//       objAH.showOverlay   = true;
+//     objAH.url=URL_PREFIX+'/catalogacion/estructura/estructuraCataloDB.pl';
+//     objAH.id2           = id2;
+//     objAH.tipoAccion    = 'MOSTRAR_DETALLE_NIVEL3';
+//     //se envia la consulta
+//     objAH.sendToServer();
+
+// }
+
+function seleccionarTr(trSelected){
+
+         if (trSelected.is(':checked')){
+
+                  id_tr = trSelected.val();
                   id_tr = id_tr + "_tr";
-                  id1= $(this).attr('id').substring(15);
-                  $(this).attr('checked', false);
+                  id1= trSelected.attr('id').substring(15);
+
+                  trSelected.attr('checked', false);
                   $('#' + id_tr).hide();
-                  barcode= $('#barcode'+ $(this).val()).html();
+                  barcode= $('#barcode'+ trSelected.val()).html();
+                  ARRAY_ETIQUETAS.push(barcode); 
                   $('#seleccionados').append(" <span class='label label-info' name='"+ id1  + "' id='label"+barcode+"'><input type='hidden' value='"+id_tr+"'>" +barcode+ " <span class='click' id='"+barcode+"'>X</span> </span> ");
               
                   
@@ -27,7 +43,6 @@ function seleccionarTr(){
                   }
 
                   $('.click').click( function (){  
-                   
                               labelClosed=$('#label'+ $(this).attr('id')).attr('name');
                               $('#grupo' + labelClosed).show();          
                               $('#' + $(this).parent().children(":input").val()).show();                    
@@ -35,42 +50,49 @@ function seleccionarTr(){
                                      
                   });
               }
+
+
+}
+
+
+function onSelectTr(){
+      $('[type=checkbox]').change( function (){ 
+                seleccionarTr($(this));
             }
         );
-    }
-
-
-    function checkedAllTrs(id,nombreCheckbox){
-              $("#"+id).toggle(
-              function(){
-                $("input[name="+nombreCheckbox+"]").each(
+}
+  
+function checkedAllTrs(id,nombreCheckbox){
+            $("#"+id).toggle(
                     function(){
-                      this.checked=true;
-                      $(this).parent().parent().addClass("marked");$(this).parent().parent().children().each(
-                        function(){
-                            $(this).addClass("marked");
-                        });
-                    })
-             
-              },
-              
-              function(){ 
-                    $("input[name="+nombreCheckbox+"]").each(function(){
-                      this.checked=false;$(this).parent().parent().removeClass("marked");
-                        $(this).parent().parent().children().each(function(){
-                            $(this).removeClass("marked");
-                        });
-                    })
-              });
+                          $("input[name="+nombreCheckbox+"]").each(
+                                  function(index){
+                                      this.checked=true;
+                                      seleccionarTr($(this));
+                                  }
+                          )
+                    },
 
-    }
-     $(document).ready(function() {
-        seleccionarTr();
-     });
+                    function(){
+                          $("input[name="+nombreCheckbox+"]").each(
+                                  function(){
+                                      this.checked=false;
+                                      $(this).parent().parent().removeClass("marked");
+                                      $(this).parent().parent().children().each(
+                                                function(){
+                                                    $(this).removeClass("marked");
+                                                }
+                                      );
+                                  }
+                            )
+                    }
+            );
+}
+
+
+
+
 </script>
-
-<div class="alert alert-info" id="seleccionados">
-</div>
 
 
 
@@ -81,7 +103,7 @@ function seleccionarTr(){
                       
       </div>
 [% END %]
-
+[% IF cantidad %]
 <div>        
           [% FOREACH SEARCH_RESULTS %]
           <div id="grupo[% nivel1.id1 %]">  
@@ -121,13 +143,31 @@ function seleccionarTr(){
                     </table>
                   </div>  
                 <script type="text/javascript">
-                            seleccionarTr(); 
-                            checkedAll("selectAll"+ "[% nivel1.id1 %]", "checkEjemplares"+"[% nivel1.id1 %]");
+                            onSelectTr(); 
+                            checkedAllTrs("selectAll"+ "[% nivel1.id1 %]", "checkEjemplares"+"[% nivel1.id1 %]");
                            
                 </script>
                
           [% END %]
     
 </div>
+<div class="form-actions">
+[% PERL %]
+print C4::AR::Filtros::action_set_button(    
+                  title           => "[% 'Generar Etiquetas' | i18n %]",
+                  button          => 'btn btn-primary',
+                  actions         => [ {title => "PDF", action=>'exportarPDF()'},
+                                      ],
+                  popover         => {title => "[% 'Etiquetas' | i18n %]",
+                                        text => "[% 'Generacion de etiquetas' | i18n %]" }
 
- 
+      ) ;
+[% END %]
+ </div>
+
+
+
+
+[% ELSE %]
+      <div class="alert alert-info">No se han encontrado resultados.</div>
+[% END %]

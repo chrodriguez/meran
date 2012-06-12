@@ -1364,8 +1364,6 @@ sub getReservasCirculacion {
 sub reporteGenEtiquetas{
     my ($params,$session) = @_;
 
-    C4::AR::Debug::debug("sdfsdfsdfsdfssssssssssssssssssssssssssssssss");
-
     use Sphinx::Search;
     use Text::Unaccent;
     
@@ -1421,9 +1419,6 @@ sub reporteGenEtiquetas{
         $query .= ' @string "'."signatura%".$sphinx->EscapeString($params->{'signatura'}).'*"';
     }
     
- 
-
-
     C4::AR::Debug::debug("Busquedas => query string => ".$query);
 
     my $tipo_match = C4::AR::Utilidades::getSphinxMatchMode($tipo);
@@ -1489,16 +1484,7 @@ sub reporteGenEtiquetas{
  
         push (@datos, \%hash_temp);
        
-    }
-   
-#       C4::AR::Utilidades::printHASH(@datos[0]->{'nivel1'});
-#       C4::AR::Utilidades::printARRAY(@datos[0]->{'nivel2'});
-#       C4::AR::Utilidades::printARRAY(@datos[0]->{'nivel3'});
-        foreach my $n3 (@datos[1]->{'nivel3'}){
-              C4::AR::Utilidades::printHASH(@$n3[0]);
-
-        }
-      
+    }      
 
     return ($total_found, \@datos);
 }
