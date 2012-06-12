@@ -456,6 +456,21 @@ sub desactivar{
     return (0,'U320')
 }
 
+sub eliminar{
+    my ($self) = shift;
+    use C4::AR::Prestamos;
+    
+    my ($vencidos,$prestamos) = C4::AR::Prestamos::cantidadDePrestamosPorUsuario($self->getNro_socio);
+    
+    if ($vencidos || $prestamos){
+        return (1,'U421');
+    }
+    $self->persona->delete;
+    $self->delete;
+    
+    return (0,'U900')
+}
+
 sub getActivo{
     my ($self) = shift;
     return ($self->activo);

@@ -26,6 +26,7 @@ use C4::Output;
 use CGI;
 use C4::Context;
 use C4::AR::UploadFile;
+use JSON;
 
 my $input = new CGI;
 
@@ -39,13 +40,15 @@ my ($nro_socio, $session, $flags) = checkauth(
                                                             "intranet"
                         );  
 
-my $params = $input->Vars;
+my $params=$input->param('obj');
+$params=C4::AR::Utilidades::from_json_ISO($params);
 
 $params->{'nro_socio'} = $nro_socio;
 
-my $msg = C4::AR::UploadFile::deleteDocument($input,$params);
+my $msg_object = C4::AR::UploadFile::deleteDocument($input,$params);
 
-my $redirect_url = C4::AR::Utilidades::getUrlPrefix()."/catalogacion/estructura/detalle.pl?id1=".$params->{'id1'}."&msg_file=".$msg;
+my $infoOperacionJSON=to_json $msg_object;
 
-C4::AR::Auth::redirectTo($redirect_url);
+C4::AR::Auth::print_header($session);
+print $infoOperacionJSON;
 

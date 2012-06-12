@@ -15,12 +15,24 @@
             window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&tipoAccion=MODIFICAR_NIVEL_1";
         }
 
-        function modificarNivel2(id2){
+        // function modificarNivel2(id2){
+        //     window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&id2="+id2+"&tipoAccion=AGREGAR_NIVEL_2";
+        // }
+       function modificarNivel2(id2){
             window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&id2="+id2+"&tipoAccion=MODIFICAR_NIVEL_2";
+        }
+
+        function agregarEdicion(id1){
+            window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&tipoAccion=AGREGAR_EDICION";
         }
 
         function agregarAnalitica(id2){
             window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&id2="+id2+"&tipoAccion=AGREGAR_ANALITICA";
+        }
+
+        function verAnaliticas(id2){
+//TODO podría abrirse en otra ventana        	
+            window.location.href="[% url_prefix %]/catalogacion/estructura/analiticas.pl?id2="+id2;
         }
         
         function editarEjemplar(id2,id3){
@@ -128,12 +140,13 @@
 	               
                 [% PERL %]
                     print C4::AR::Filtros::action_set_button(    
-                                                        title           => "[% 'Nivel 1' | i18n %]",
+                                                        title           => "[% 'Registro' | i18n %]",
                                                         button          => 'btn btn-primary',
 
                                                         actions         => [
                                                                             {title => "Modificar", action=>"modificarNivel1()",icon=>"icon-edit"},
                                                                             {title => "Eliminar", action=>"borrarN1([% id1 %])", icon=>"icon-trash"},
+                                                                            {title => "Agregar Edición", action=>'agregarEdicion("[% id1 %]")', icon=>"icon-plus-sign"},
                                                                             ],
 
                             ) ;
@@ -216,10 +229,10 @@
 	            <legend class="trigger_3_[% id2 %] click">
 	               <div class="group_separator">
 						<div class="page-header">
-	                       <h2> [% IF edicion %] [% edicion %] [% ELSE %] [% 'Detalle del Nivel 2' | i18n %] [% END %]
-	                               <small>[% "GRUPO" | i18n %] [% id2 %]</small>
+	                       <h2> [% IF edicion %] [% edicion %] [% ELSE %] [% 'Datos de la Edici&oacute;n' | i18n %] [% END %]
+	                               <small>[% tipo_documento %] - #[% id2 %]</small>
                            </h2>
-	                       <span class="label label-info"> [% tipo_documento %] ([% nivel2_template %])</span>
+	                       <!-- <span class="label label-info"> [% tipo_documento %] ([% nivel2_template %])</span> -->
                         </div>                   
                    </div>
                  </legend>
@@ -241,7 +254,7 @@
 
 		                [% PERL %]
 		                    print C4::AR::Filtros::action_set_button(    
-		                                                        title           => "[% 'Nivel 2' | i18n %]",
+		                                                        title           => "[% 'Edici&oacute;n' | i18n %]",
 		                                                        button          => 'btn btn-primary',
 		                                                        class           => "width_200",
 		                                                        actions         => [
@@ -253,7 +266,10 @@
                                                                                     {title => "Agregar &iacute;ndice", action=>'agregarIndice([% id2 %])', icon=>"icon-list"},
                                                                               [% END %]
                                                                                 [% IF show_action == 1 %]
-                                                                                    {title => "Agregar analítica", action=>"agregarAnalitica([% id2 %])", icon=>"icon-edit"},
+                                                                                    {title => "Agregar anal&iacute;tica", action=>"agregarAnalitica([% id2 %])", icon=>"icon-edit"},
+                                                                                [% END %]
+                                                                                [% IF show_analiticas > 0 %]
+                                                                                    {title => "Ver anal&iacute;ticas", action=>"verAnaliticas([% id2 %])", icon=>"icon-edit"},
                                                                                 [% END %]
 		                                                                            ],
 		

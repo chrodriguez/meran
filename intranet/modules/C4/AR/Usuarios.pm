@@ -82,6 +82,7 @@ use vars qw(@EXPORT_OK @ISA);
     modificarCredencialesSocio
     getEsquemaRegularidades
     editarRegularidadEsquema
+    eliminarPotencial
 );
 
 =item
@@ -590,6 +591,7 @@ sub getSocioInfoPorMixed{
         push (@filtros, (or   => [
                                    'usr_persona.email' => { eq => $user_id }, 
                                    'usr_persona.nro_documento' => { eq => $user_id },
+                                   'nro_socio' => { eq => $user_id },
                                    ])
         );
         
@@ -1109,8 +1111,35 @@ sub editarRegularidadEsquema{
 }
 
 
+sub eliminarPotencial{
+	my ($nro_socio) = shift;
+
+    my $msg_object= C4::AR::Mensajes::create();
+    my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
 
+    if(!$msg_object->{'error'}){
+
+        eval {
+            my ($error,$cod_msg) = $socio->eliminar;
+            
+            $error = $error || 0;
+            $cod_msg = $cod_msg || 'U900'; 
+            $msg_object->{'error'}= $error;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> $cod_msg, 'params' => [($socio->getNro_socio)]} ) ;
+        };
+
+        if ($@){
+            #Se loguea error de Base de Datos
+            &C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
+            #Se setea error para el usuario
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U319', 'params' => [($socio->getNro_socio)]} ) ;
+        }
+    }
+
+    return ($msg_object);
+}	
 
 
 END { }       # module clean-up code here (global destructor)

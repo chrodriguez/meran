@@ -152,13 +152,17 @@ sub prestamosHabilitadosPorTipo {
             }# END foreach my $sancion (@$sanciones)
         }
 
+        my $tipo;
+
         if(!$estaSancionado){
             #solo se agrega si no esta sancionado para ese tipo de prestamo
-            my $tipo;
             $tipo->{'value'}= $tipo_prestamo->getId_tipo_prestamo;
             $tipo->{'label'}= $tipo_prestamo->getDescripcion;
-            push(@tipos,$tipo)
+        }else{
+            $tipo->{'value'}= "-1";
+            $tipo->{'label'}= C4::AR::Filtros::i18n("USUARIO SANCIONADO");
         }
+        push(@tipos,$tipo)
     }
 
     return(\@tipos);

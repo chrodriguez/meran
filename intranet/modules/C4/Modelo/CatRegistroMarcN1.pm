@@ -172,7 +172,7 @@ sub generar_clave_unicidad {
 
 sub agregar{
     my ($self)                  = shift;
-    my ($marc_record, $params)  = @_;
+    my ($marc_record, $params, $db)  = @_;
 
     # $marc_record = MARC::Record->new_from_usmarc($marc_record);
 
@@ -180,6 +180,14 @@ sub agregar{
     $self->setTemplate($params->{'id_tipo_doc'});
     $self->setClaveUnicidad($self->generar_clave_unicidad(MARC::Record->new_from_usmarc($marc_record)));
     $self->save();
+
+    if($params->{'id_tipo_doc'} eq "ANA"){
+        my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $db );
+        $cat_registro_n2_analitica->setId2Padre($params->{'id2_padre'});
+        # $cat_registro_n2_analitica->setId2Hijo($self->getId2()); #DEPRECATED
+        $cat_registro_n2_analitica->setId1($self->getId1());
+        $cat_registro_n2_analitica->save();
+    }
 
     #seteo datos del LEADER
     $self->setearLeader($params);

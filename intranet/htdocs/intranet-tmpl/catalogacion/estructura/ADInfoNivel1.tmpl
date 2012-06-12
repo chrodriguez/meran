@@ -9,6 +9,8 @@
             [% END %]
 
     [% ELSE %]
+
+
     <fieldset>
 
             <dl>
@@ -30,7 +32,7 @@
                                                         actions         => [
                                                                             {title => "Modificar", action=>'modificarN1("[% nivel1.getId1 %]", "[% nivel1.getTemplate %]")',icon=>"icon-edit"},
                                                                             {title => "Eliminar", action=>'borrarN1([% nivel2.getId1 %])', icon=>"icon-trash"},
-                                                                            {title => "Agregar Edición", action=>'agregarN2("[% nivel1.getId1 %]")', icon=>"icon-plus-sign"},
+                                                                            {title => "Agregar Edición", action=>'agregarN2()', icon=>"icon-plus-sign"},
                                                                             ],
 
                             ) ;

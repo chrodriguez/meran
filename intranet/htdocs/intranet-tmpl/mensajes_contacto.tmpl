@@ -17,10 +17,11 @@
          </dl>
            [% PERL %]
 	           print C4::AR::Filtros::action_link_button( 
-	                 text =>     "[% 'Ver Mensajes' | i18n %]",
+	                 text =>     " [% 'Ver Mensajes' | i18n %]",
 	                 button => "btn btn-info",
 	                 url=>"[% url_prefix %]/admin/mensajes_contacto.pl", 
-	                 title =>    "[% 'Mensajes' | i18n %]",
+	                 title =>    " [% 'Mensajes' | i18n %]",
+	                 icon  => "icon-white icon-comment",
 	                 );
            [% END %]           
     </fieldset> 

@@ -1,0 +1,99 @@
+	[% INCLUDE  "intranet-top.inc" %]
+
+
+
+<!-- Detalle del nivel 1 -->
+
+
+	<fieldset>
+		   	<div class="page-header">
+        		<h1>[% titulo %] <small>[% tipo_documento %] - #[% id1 %]</small></h1>
+            	<h2>[% autor %] </h2>	
+           	</div>
+		      
+	
+		<div id="detalle1" class="detalle1">
+		   
+		    <dl>
+			    [% FOREACH nivel1 %]
+
+			            [% IF liblibrarian %]
+			                [% IF dato %]
+				                <dt class="inline left rightMargin">[% liblibrarian %]:&nbsp;</dt> 
+				                <dd>[% dato %]&nbsp;</dd>
+			                [% END %]
+			            [% END %]
+			    [% END %]
+		    </dl>
+	
+
+         <h4><span class="badge badge-warning" style="cursor: default;">[% cantItemN1 %]</span>&nbsp;&nbsp;[% "Ejemplares" | i18n %]</h4>
+         <br />
+
+		</div>
+	</fieldset>
+
+    <fieldset>
+        <legend>
+           <div class="group_separator">
+				<div class="page-header">
+                   <h2> [% IF edicion %] [% edicion %] [% ELSE %] [% 'Datos de la Edici&oacute;n' | i18n %] [% END %]
+                           <small>[% tipo_documento %] - #[% id2 %]</small>
+                   </h2>
+                   <!-- <span class="label label-info"> [% tipo_documento %] ([% nivel2_template %])</span> -->
+                </div>                   
+           </div>
+         </legend>
+ 	</fieldset>
+
+<!-- Detalle del nivel 2 -->
+
+    <dl>
+        [% FOREACH nivel2 %]
+            [% IF liblibrarian %]
+                [% IF dato %]
+                    <dt class="inline left rightMargin">[% liblibrarian %]:&nbsp;</dt> 
+                    <dd>[% dato %]&nbsp;</dd>
+                [% END %]
+            [% END %]
+        [% END %] <!-- END FOREACH nivel2_array -->
+        <br />
+    </dl>
+
+
+<fieldset>
+    <legend>		
+	<div class="group_separator">
+          <div>
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#analiticas_del_grupo[% id %]" href="#analiticas[% id2 %]">
+              [% 'Anal&iacute;ticas' | i18n %]
+            </a>
+          </div>
+  	</legend>
+</fieldset>
+          <div id="analiticas[% id2 %]" >
+                <div>
+	                [% FOREACH analiticas_array %]
+          			<div class="alert fade in">
+  					</div>
+	                <dl>  
+	                    [% FOREACH nivel1_analitica %]
+                              <!-- <dt class="inline left rightMargin">[% liblibrarian %]:&nbsp; [% dato %]&nbsp;</dt> -->
+                               	<dt class="inline left rightMargin">[% liblibrarian %]:&nbsp;</dt> 
+								<dd>[% dato %]&nbsp;</dd>
+	                    [% END %] <!-- END FOREACH nivel1_analitica -->
+	                </dl>
+	                <dl>  
+	                    [% FOREACH nivel2_analitica_array %]
+		                    [% FOREACH nivel2_analitica %]
+	                              <!-- <dt class="inline left rightMargin">[% liblibrarian %]:&nbsp; [% dato %]&nbsp;</dt> -->
+	                              	<dt class="inline left rightMargin">[% liblibrarian %]:&nbsp;</dt> 
+									<dd>[% dato %]&nbsp;</dd>
+							[% END %]
+	                    [% END %] <!-- END FOREACH nivel1_analitica -->
+	                </dl>
+	                [% END %]  <!-- END FOREACH nivel1_analiticas_array -->      
+		      </div> <!--end <div id="analiticasDelGrupo -->
+	     </div>
+	</div>
+

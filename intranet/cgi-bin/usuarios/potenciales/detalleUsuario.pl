@@ -25,7 +25,7 @@ my ($template, $session, $t_params) =  C4::AR::Auth::get_template_and_user ({
     $obj=C4::AR::Utilidades::from_json_ISO($obj);
     my $msg_object= C4::AR::Mensajes::create();
     my $nro_socio= $obj->{'nro_socio'};
-	my $socio=C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
+	my $socio=C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio) || C4::AR::Utilidades::redirectAndAdvice('U353');
 
 	$t_params->{'nro_socio'}= $nro_socio;
     $t_params->{'socio'}= $socio;

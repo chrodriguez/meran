@@ -27,10 +27,8 @@ if ($tipoAccion eq 'LISTAR'){
                                         debug               => 1,
     });
     
-    my ($ini,$pageNumber,$cantR)    = C4::AR::Utilidades::InitPaginador($ini);
-    my ($cant_logos,$logos)         = C4::AR::Logos::listar($ini,$cantR);
+    my ($cant_logos,$logos)         = C4::AR::Logos::listar();
 
-    $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginadorOPAC($cant_logos,$cantR, $pageNumber,$url,$t_params);
     $t_params->{'logos'}            = $logos;
     $t_params->{'cant_logos'}       = $cant_logos;
 

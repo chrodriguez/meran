@@ -126,7 +126,8 @@ my %mensajesOPAC = (
     'UP11' => 'La portada no se ha podido modificar',
     'UP12' => 'Ocurrio un error subiendo las imagenes',
     'UP13' => 'El tipo de archivo subido no esta permitido',
-
+    'UP14' => 'El manejo de archivos no esta habilitado',
+ 
    #ERRORES DE BASE DE DATOS
     'B400' => 'Error al intentar reservar desde OPAC, funcion C4::AR::Reservas::reservarOPAC.',
     'B401' => '',
@@ -356,7 +357,7 @@ my %mensajesINTRA = (
     'U611' => 'Disculpe, no se pudo agregar el &iacute;ndice',
     'U612' => 'Se modifico el esquema correctamente',
     'U613' => 'Disculpe, error al intentar agregar la configuraci&oacute;n (campo, subcampo, perfil) (*?*, *?*, *?*). Esta configuraci&oacute;n ya existe',
-
+    'U900' => 'El usuario ha sido eliminado del sistema.',
     'C500' => 'Los items fueron guardados correctamente.',
     'C501' => 'Se produjo un error al intentar guardar los datos del item, repita la operacion.',
     'C502' => 'Se produjo un error, el codigo de barra ingresado esta repetido. Vuelva a intentarlo',

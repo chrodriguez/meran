@@ -350,8 +350,8 @@ sub deleteDocument {
     my ($query,$params)=@_;
 
     my $eDocsDir= C4::Context->config("edocsdir");
-    my $msg='';
     my $file_id = $params->{'id'};
+    my $msg_object  = C4::AR::Mensajes::create();
 
     if (C4::AR::Preferencias::getPreferencia("e_documents")){
         my $file = C4::AR::Catalogacion::getDocumentById($file_id);
@@ -359,17 +359,19 @@ sub deleteDocument {
         my $write_file= $eDocsDir."/".$file->getFilename;
 
         if (!open(WFD,"$write_file")) {
-                $msg=C4::AR::Filtros::i18n("Hay un error y el archivo no puede eliminarse del servidor.");
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP05', 'params' => []} ) ;
+                $msg_object->{'error'}= 1;
         }else{
             unlink($write_file);
-            $msg= C4::AR::Filtros::i18n("El archivo ").$file->getTitle.C4::AR::Filtros::i18n(" se ha eliminado correctamente");
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP06', 'params' => [$file->getTitle]} ) ;
             $file->delete();
         }
     }else{
-        $msg= C4::AR::Filtros::i18n("El manejo de archivos no esta habilitado.");
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP14', 'params' => []} ) ;
+                $msg_object->{'error'}= 1;
     }
 
-    return($msg);
+    return($msg_object);
 }
 
 

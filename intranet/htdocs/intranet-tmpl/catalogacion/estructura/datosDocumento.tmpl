@@ -87,6 +87,13 @@ $(document).ready( function() {
         TOKEN       = '[% token %]';
 
         modificarEjemplaresN3FromRegistro(params.id1);
+    [% ELSIF tipoAccion == "AGREGAR_EDICION" %]  
+        MODIFICAR               = 1;
+        FROM_DETALLE_REGISTRO   = 1;
+        TEMPLATE_ACTUAL         = '[% template_catalogo %]';
+        _NIVEL_ACTUAL           = 2;
+        ID_N1                   = [% id1 %];
+        agregarN2();
     [% ELSIF tipoAccion == "AGREGAR_ANALITICA" %]  
         TEMPLATE_ACTUAL         = "ANA";
         $('#id_nivel_bibliografico').val(1); //ta medio FIXEDDDDD!!!!!!!!
@@ -95,6 +102,9 @@ $(document).ready( function() {
         ACTION                  = "AGREGAR_ANALITICA";
         ID_N2_PADRE             = [% id2 %];
         ID_N1_PADRE             = [% id1 %];
+        mostrarEstructuraDelNivel1();
+    [% ELSE %]
+        mostrarEstructuraDelNivel1();
     [% END %]
 
     $('#datos_indice').hide();
@@ -103,7 +113,8 @@ $(document).ready( function() {
     if(MODIFICAR) {
 //         $('#datos_del_leader').hide();
     } else {
-        mostrarEstructuraDelNivel1();
+        // alert("entro aca");
+        // mostrarEstructuraDelNivel1();
 //         $('#datos_del_leader').show();
 //         $('#datos_del_leader').hide();
     }
@@ -204,6 +215,10 @@ $(document).ready( function() {
 <!-- aca se va mostrando la accion que se va realizando -->
 <!--            Manejo del Nivel 1 -->
 <div id="nivel1Tabla" style="display:none">
+    [% IF tipoAccion == "MODIFICAR_NIVEL_1" || tipoAccion == "AGREGAR_ANALITICA" %]
+            [% INCLUDE  "estructura/link_a_registro.tmpl" %]
+    [% END %]
+
 
 	<form id="formNivel1" name="formNivel1" class="form-horizontal" onsubmit="return false;">
 		<fieldset>
@@ -232,7 +247,9 @@ $(document).ready( function() {
 <!--            Manejo del Nivel 2 -->
 <div id="nivel2Tabla" style="display:none">
 
-    [% INCLUDE  "estructura/link_a_registro.tmpl" %]
+    [% IF tipoAccion == "MODIFICAR_NIVEL_2" || tipoAccion == "AGREGAR_EDICION" %]
+            [% INCLUDE  "estructura/link_a_registro.tmpl" %]
+    [% END %]
         
     <form id="formNivel2" name="formNivel2" class="form-horizontal" onsubmit="return false;">
 		  <fieldset>
@@ -263,7 +280,6 @@ $(document).ready( function() {
 <!--            Manejo del Nivel 3 -->
 <div id="nivel3Tabla" style="display:none"> 
 
-    [% INCLUDE  "estructura/link_a_registro.tmpl" %]
 
 	<form id="formNivel3" name="formNivel3" class="form-horizontal" onsubmit="return false;">
 		<fieldset>

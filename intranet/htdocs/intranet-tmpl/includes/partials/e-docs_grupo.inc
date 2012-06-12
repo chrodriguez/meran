@@ -2,6 +2,32 @@
 
 [% IF pref_e_documents %]
 		<script type="text/javascript">
+		var doc_id = 0;
+
+		function deleteDocument(file_id){
+			bootbox.confirm(ELIMINAR_E_DOC, function (ok){ 
+				if (ok){
+					var objAH                   = new AjaxHelper(updateDeleteDocument);
+				    objAH.showOverlay       = true;
+					objAH.debug             = true;
+					objAH.url               = URL_PREFIX+'/catalogacion/estructura/deleteDocument.pl';
+					objAH.debug             = true; 
+					objAH.id         		= file_id;
+					doc_id					= file_id;
+					objAH.sendToServer();
+				}
+			});			
+		}
+
+		function updateDeleteDocument(responseText){
+			var Messages=JSONstring.toObject(responseText);
+
+			if (!Messages.error)
+				$('#edoc_alert_div_'+doc_id).hide();
+			setMessages(Messages);
+			doc_id = 0;
+		}
+
 		
 		function refreshPage(fileName, responseJSON){
 		   
@@ -54,8 +80,8 @@
                 <div class="accordion-inner">
 			        <dl>
 			               [% FOREACH file IN lista_docs %] 
-			                           <div class="alert alert-success fade in">
-										   <a type="button" class="close" href="[% url_prefix %]/catalogacion/estructura/deleteDocument.pl?id=[% file.getId %]&id1=[% id1 %]&token=[% token %]">×</button>			                           
+			                           <div class="alert alert-success fade in" id="edoc_alert_div_[% file.getId %]">
+										   <a type="button" class="close" onclick="deleteDocument('[% file.getId %]');">×</button>			                           
 				                           [% PERL %]
 				                               print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(file.getTitle) %]",
 				                                                               url =>      "getDocument.pl", 

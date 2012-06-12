@@ -34,10 +34,8 @@
 
 <fieldset>
     <legend>[% "Listado de Logos" | i18n %]:</legend>
-        <div class="contenedor_paginador">[% paginador %]</div>
         [% IF logos %]
             <div class="datos_tabla_div_user">
-                <div class="well">[% "La cantidad de logos es" | i18n %]: [% cant_logos %]</div>
                 
                     [% PERL %]
                         print C4::AR::Filtros::tableHeader(   

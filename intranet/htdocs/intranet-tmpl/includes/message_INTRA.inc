@@ -89,6 +89,7 @@
     FALTA_INGRESAR_EL_DNI_DEL_AUTORIZADO= "[% 'Falta ingresar el DNI del autorizado' | i18n %]";
     FALTA_INGRESAR_EL_TELEFONO_DEL_AUTORIZADO= "[% 'Falta ingresar el Tel\u00e9fono del autorizado' | i18n %]";
     RESET_PASSWORD= "[% 'Desea reestablecer el password del usuario?' | i18n %]";
+    CONFIRMA_LA_ELIMINACION = "[% 'Esta operaci\u00f3n no se puede reparar. Desea eliminar el usuario por completo?' | i18n %]";
     /*================================================Fin==Usuarios==================================================*/
 
     /*================================================Catalogo=======================================================*/
@@ -172,6 +173,7 @@
     /*====================================================Estante==========================================================*/
     ELIMINAR_ESTANTE_TITLE =  "[% 'Advertencia' | i18n %]";
     ELIMINAR_LOS_ESTANTES = "[% 'Usted est\u00e1 a punto de eliminar los estantes' | i18n %]";
+    ELIMINAR_E_DOC= "[% 'Desea eliminar el documento digital seleccionado?' | i18n %]";
     NO_SE_SELECCIONO_NINGUN_ESTANTE= "[% 'No seleccion\u00f3 ning\u00fan estante' | i18n %]";
 
     ELIMINAR_CONTENIDO_TITLE =  "[% 'Advertencia' | i18n %]";
