@@ -1234,7 +1234,11 @@ sub getNivelesFromRegistro {
                                   #ya existe el 041,a IDIOMA, no sirve que haya varios
                                   next;
                            }
-                           
+
+                          if ((($campo eq '900')&&($subcampo eq 'b'))&&($marc_record_n2->subfield($campo,$subcampo))){
+                                  #ya existe el 900,b NIVEL BIBLIOGRAFICO, no sirve que haya varios
+                                  next;
+                           }                           
                           
                           #El campo es de Nivel 2
                           if (($marc_record_n2->field($campo))&&($estructura->getRepetible)){
