@@ -417,6 +417,15 @@
                                                                         ) ;
                                         [% END %]
                                 </li>
+                                <li>
+                                        [% PERL %]
+                                            print C4::AR::Filtros::link_to( text =>     " [% 'Logos de la UI' | i18n %]",
+                                                                            url =>      "[% url_prefix %]/admin/logosUI.pl",
+                                                                            icon=>    "icon-picture",
+                                                                            title =>    "[% 'Logos de la UI' | i18n %]"
+                                                                        ) ;
+                                        [% END %]
+                                </li>
                             <li class="nav-header">[% 'OPAC' | i18n %]</li>	
 	              			<li class="divider"></li>
                                 <li>

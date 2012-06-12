@@ -1,11 +1,11 @@
-package C4::Modelo::LogoEtiquetas;
+package C4::Modelo::LogoUI;
 
 use strict;
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
-    table   => 'logoEtiquetas',
+    table   => 'logoUI',
 
     columns => [
         id              => { type => 'serial', overflow => 'truncate', length => 16 },

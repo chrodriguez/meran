@@ -1006,23 +1006,27 @@ sub generateBookLabelA4 {
     $pdf->drawBarcode( $x + 100, $y + 75, 70 / 100, 1, "3of9", $codigo, undef, 10,10, 25, 10 );
 
     my $posy = 100;
-    my $escudo =
-        C4::Context->config('intrahtdocs') . '/temas/'
-      . 'default'
-      . '/imagenes/escudo-'
-      . $branchcode . '.jpg';
 
+    #OLD WAY:
+    # my $escudo =
+    #     C4::Context->config('intrahtdocs') . '/temas/'
+    #   . 'default'
+    #   . '/imagenes/escudo-'
+    #   . $branchcode . '.jpg';
 
-    if ( !( ( -e $escudo ) && ( -r $escudo ) ) ) {
+    use C4::AR::Logos;
 
+    #NEW WAY: trae el nombre del archivo o 0 si no hay nada
+    my $escudo = C4::AR::Logos::getPathLogoEtiquetas();
 
+    if ( !($escudo) ) {
         $escudo =
             C4::Context->config('intrahtdocs') . '/temas/'
           . 'default'
           . '/imagenes/escudo-DEFAULT.jpg';
         $pdf->addImgScaled($escudo, $x + 100 , 120 + ($y) , 5/100);
     }else{
-        $pdf->addImgScaled($escudo,  $x + 90 , 130 + ($y) , 2/100);
+        $pdf->addImgScaled($escudo,  $x + 100 , 120 + ($y) , 5/100);
     }
    
     #Write the borrower data into the pdf file
@@ -1128,20 +1132,27 @@ sub generateBookLabel{
 
 	my $posy = 100;
 	my $scale = 2/100;
-	my $escudo =
-	    C4::Context->config('intrahtdocs') . '/temas/'
-      . 'default'
-	  . '/imagenes/escudo-'
-	  . $branchcode . '.jpg';
 
-    if ( !( ( -e $escudo ) && ( -r $escudo ) ) ) {
+	#OLD WAY
+	# my $escudo =
+	#     C4::Context->config('intrahtdocs') . '/temas/'
+ 	#   . 'default'
+	#   . '/imagenes/escudo-'
+	#   . $branchcode . '.jpg';
+
+	use C4::AR::Logos;
+
+	#NEW WAY, trae el path al archivo, 0 si no hay ninguno cargado
+	my $escudo = C4::AR::Logos::getPathLogoEtiquetas();
+
+    if ( !(  $escudo ) ) {
         $escudo =
             C4::Context->config('intrahtdocs') . '/temas/'
           . 'default'
           . '/imagenes/escudo-DEFAULT.jpg';
         $pdf->addImgScaled($escudo, $x + 110 , 40 + ($y) , 5/100);
     }else{
-        $pdf->addImgScaled($escudo, $x + 100 , 50 + ($y) , 2/100);
+        $pdf->addImgScaled($escudo, $x + 100 , 50 + ($y) , 5/100);
     }
 
 	#Write the borrower data into the pdf file
