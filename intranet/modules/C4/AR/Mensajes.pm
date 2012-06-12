@@ -126,7 +126,8 @@ my %mensajesOPAC = (
     'UP11' => 'La portada no se ha podido modificar',
     'UP12' => 'Ocurrio un error subiendo las imagenes',
     'UP13' => 'El tipo de archivo subido no esta permitido',
-
+    'UP14' => 'El manejo de archivos no esta habilitado',
+ 
    #ERRORES DE BASE DE DATOS
     'B400' => 'Error al intentar reservar desde OPAC, funcion C4::AR::Reservas::reservarOPAC.',
     'B401' => '',

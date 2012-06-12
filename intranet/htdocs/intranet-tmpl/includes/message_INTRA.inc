@@ -173,6 +173,7 @@
     /*====================================================Estante==========================================================*/
     ELIMINAR_ESTANTE_TITLE =  "[% 'Advertencia' | i18n %]";
     ELIMINAR_LOS_ESTANTES = "[% 'Usted est\u00e1 a punto de eliminar los estantes' | i18n %]";
+    ELIMINAR_E_DOC= "[% 'Desea eliminar el documento digital seleccionado?' | i18n %]";
     NO_SE_SELECCIONO_NINGUN_ESTANTE= "[% 'No seleccion\u00f3 ning\u00fan estante' | i18n %]";
 
     ELIMINAR_CONTENIDO_TITLE =  "[% 'Advertencia' | i18n %]";
