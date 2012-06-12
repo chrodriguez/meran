@@ -1390,7 +1390,7 @@ sub detalleCompletoRegistro {
         
         ##NIVEL BIBLIOGRAFICO##
         $hash_nivel2{'nivel_bibliografico'}      = C4::AR::ImportacionIsoMARC::getNivelBibliograficoFromMarcRecord_Object($nivel2_marc);        
-        my $nivel_bibliografico					 = $hash_nivel2{'nivel_bibliografico'};
+        my $nivel_bibliografico	                 = $hash_nivel2{'nivel_bibliografico'};
         if($nivel_bibliografico){
             #Seteo bien el código del nivel bibliográfico
             if($nivel2_marc->field('900')){
