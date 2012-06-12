@@ -1362,21 +1362,26 @@ sub detalleCompletoRegistro {
         if($nivel2_marc->subfield('041','a')){
             $hash_nivel2{'idioma'}      = C4::AR::ImportacionIsoMARC::getIdiomaFromMarcRecord_Object($nivel2_marc);
             my $idioma  = $hash_nivel2{'idioma'};
-            #Seteo bien el idioma
-            $nivel2_marc->field('041')->update( 'a' => $idioma->getDescription());
+            if($idioma){
+                #Seteo bien el idioma
+                $nivel2_marc->field('041')->update( 'a' => $idioma->getDescription());
+            }
         }
         
         ##PAIS##
         if($nivel2_marc->subfield('043','c')){
             $hash_nivel2{'pais'}      = C4::AR::ImportacionIsoMARC::getPaisFromMarcRecord_Object($nivel2_marc);
             my $pais  = $hash_nivel2{'pais'};
-            #Seteo bien el pais
-            $nivel2_marc->field('043')->update( 'c' => $pais->getNombre_largo());
+            if($pais){
+                #Seteo bien el pais
+                $nivel2_marc->field('043')->update( 'c' => $pais->getNombre_largo());
+            }
         }
         
         ##NIVEL BIBLIOGRAFICO##
         $hash_nivel2{'nivel_bibliografico'}      = C4::AR::ImportacionIsoMARC::getNivelBibliograficoFromMarcRecord_Object($nivel2_marc);        
         my $nivel_bibliografico					 = $hash_nivel2{'nivel_bibliografico'};
+        if($nivel_bibliografico){
         #Seteo bien el código del nivel bibliográfico
         if($nivel2_marc->field('900')){
             $nivel2_marc->field('900')->update( 'b' => $nivel_bibliografico->getDescription());
@@ -1384,7 +1389,7 @@ sub detalleCompletoRegistro {
                 my $new_field= MARC::Field->new('900','#','#','b' => $nivel_bibliografico->getDescription());
                 $nivel2_marc->append_fields($new_field);
             }
-        
+        }
         $hash_nivel2{'marc_record'}             = $nivel2_marc;
         $hash_nivel2{'nivel2_array'}            = C4::AR::ImportacionIsoMARC::toMARC_Array($nivel2_marc,$tipo_documento->getId_tipo_doc(),'',2);
         $hash_nivel2{'nivel2_template'}         = $nivel2->{'tipo_ejemplar'};
