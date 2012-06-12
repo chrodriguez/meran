@@ -1227,8 +1227,8 @@ sub getNivelesFromRegistro {
                               @ejemplares = ();
                           }
                           
-                          if ((($campo eq '910')&&($subcampo eq 'a'))&&($nivel_bibliografico)){
-                                  #ya existe el 910,a TIPO DOC, no sirve que haya varios
+                          if ((($campo eq '900')&&($subcampo eq 'b'))&&($nivel_bibliografico)){
+                                  #ya existe el 900,b NIVEL BIBLIOGRAFICO, no sirve que haya varios
                                    $dato=$nivel_bibliografico;
                             }
                             else{
@@ -1241,10 +1241,10 @@ sub getNivelesFromRegistro {
                                   next;
                            }
 
-                          if ((($campo eq '900')&&($subcampo eq 'b'))&&($marc_record_n2->subfield($campo,$subcampo))){
-                                  #ya existe el 900,b NIVEL BIBLIOGRAFICO, no sirve que haya varios
+                          if ((($campo eq '910')&&($subcampo eq 'a'))&&($marc_record_n2->subfield($campo,$subcampo))){
+                                  #ya existe el 910,a TIPO DOC, no sirve que haya varios
                                   next;
-                           }                           
+                           }   
                           
                           #El campo es de Nivel 2
                           if (($marc_record_n2->field($campo))&&($estructura->getRepetible)){
