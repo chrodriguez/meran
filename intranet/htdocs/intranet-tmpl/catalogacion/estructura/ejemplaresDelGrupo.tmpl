@@ -301,13 +301,6 @@
     <!-- si es ELE no muestro nada -->
         [% IF nivel2_template == 'ANA' %]
         
-            <dt class="inline left rightMargin">Título del registro fuente:</dt>
-            <dd>[% nivel1_titulo_padre %]</dd>
-            
-            <dt class="inline left rightMargin">ISBN:</dt>
-            <dd>[% nivel1_isbn_padre %]</dd>
-
-            <br />
 		    <dt>		
                 [% PERL %]
                     print C4::AR::Filtros::link_to(   text      => "Detalle del registro fuente",

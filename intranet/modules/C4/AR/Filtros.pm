@@ -428,30 +428,29 @@ sub show_componente {
     my $session             = CGI::Session->load();
     my $session_type        = $session->param('type') || 'opac';
      
-    if(($campo eq "245")&&($subcampo eq "a")&&($template eq "ANA")) {
 
-      my $catRegistroMarcN1   = C4::AR::Nivel1::getNivel1FromId1($id1);
+# NO SE VA A USAR MAS PARECE, LO DEJO POR LAS DUDAS AUN!!!!
+    # if(($campo eq "245")&&($subcampo eq "a")&&($template eq "ANA")) {
 
-#       C4::AR::Debug::debug("C4::AR::Filtros::show_componente => campo, subcampo: ".$campo.", ".$subcampo); 
-#       C4::AR::Debug::debug("C4::AR::Filtros::show_componente => DENTRO => dato: ".$dato);
+    #   my $catRegistroMarcN1   = C4::AR::Nivel1::getNivel1FromId1($id1);
 
-        if($catRegistroMarcN1){
-            my %params_hash;
-            my $text        = $catRegistroMarcN1->getTitulo(); 
-            %params_hash    = ('id1' => $catRegistroMarcN1->getId1());
-            my $url;
+    #     if($catRegistroMarcN1){
+    #         my %params_hash;
+    #         my $text        = $catRegistroMarcN1->getTitulo(); 
+    #         %params_hash    = ('id1' => $catRegistroMarcN1->getId1());
+    #         my $url;
 
-            if ($session_type eq 'intranet'){
-                $url         = C4::AR::Utilidades::url_for("/catalogacion/estructura/detalle.pl", \%params_hash);
-            }else{
-                $url         = C4::AR::Utilidades::url_for("/opac-detail.pl", \%params_hash);
-            }
+    #         if ($session_type eq 'intranet'){
+    #             $url         = C4::AR::Utilidades::url_for("/catalogacion/estructura/detalle.pl", \%params_hash);
+    #         }else{
+    #             $url         = C4::AR::Utilidades::url_for("/opac-detail.pl", \%params_hash);
+    #         }
 
-            return C4::AR::Filtros::link_to( text => $text, url => $url , blank => 1);
-        }
+    #         return C4::AR::Filtros::link_to( text => $text, url => $url , blank => 1);
+    #     }
         
-        return "NO_LINK";
-    }
+    #     return "NO_LINK";
+    # }
     
     if(($campo eq "856")&&($subcampo eq "u")) {
 

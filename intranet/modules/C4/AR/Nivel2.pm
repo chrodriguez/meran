@@ -575,6 +575,27 @@ sub getAllNivel2FromAnaliticasById{
     }
 }
 
+sub getAllNivel2FromAnaliticasById1{
+    my($id1, $db) = @_;
+
+    $db = $db || C4::Modelo::CatRegistroMarcN2Analitica->new()->db();
+
+    my @filtros;
+    push (@filtros, ('cat_registro_marc_n1_id'       => { eq => $id1 } ));
+
+    my $nivel2_analiticas_array_ref = C4::Modelo::CatRegistroMarcN2Analitica::Manager->get_cat_registro_marc_n2_analitica(
+                                                                        db      => $db,
+                                                                        query   => \@filtros,
+                                                                );
+
+
+    if( scalar(@$nivel2_analiticas_array_ref) > 0){
+        return ($nivel2_analiticas_array_ref);
+    }else{
+        return 0;
+    }
+}
+
 sub getRating{
     my($id2,$db) = @_;
 

@@ -458,12 +458,16 @@ sub detalleNivel3{
         $hash_nivel2{'enable_nivel3'}           = $nivel2_object->getTipoDocumentoObject->enableNivel3();
 
 # FIXED falta levantar del tipo de ejemplar
-        if($nivel2_object->getTemplate() eq "ANA"){
-            $hash_nivel2{'nivel1_padre'}        = $nivel2_object->getIdN1Padre();
-            $hash_nivel2{'nivel1_titulo_padre'} = ($nivel2_object->getPadre())?$nivel2_object->getPadre()->getTitulo():"";
-            $hash_nivel2{'nivel1_isbn_padre'}   = $nivel2_object->getISBN();
-            $hash_nivel2{'show_action'}         = 0;
-        }
+        # if($nivel2_object->getTemplate() eq "ANA"){
+        
+
+        #     my $n2 = getId2Padre
+
+        #     $hash_nivel2{'nivel1_padre'}        = $nivel2_object->getIdN1Padre();
+        #     # $hash_nivel2{'nivel1_titulo_padre'} = ($nivel2_object->getPadre())?$nivel2_object->getPadre()->getTitulo():"";
+        #     # $hash_nivel2{'nivel1_isbn_padre'}   = $nivel2_object->getISBN();
+        #     $hash_nivel2{'show_action'}         = 0;
+        # }
 
 
         #otengo las analiticas
@@ -472,6 +476,26 @@ sub detalleNivel3{
         $hash_nivel2{'tiene_analiticas'}        = $tiene_analiticas;
         $hash_nivel2{'show_action'}             = 1; #muestra la accion agregar analitica
         $hash_nivel2{'show_analiticas'}         = $tiene_analiticas; #muestra la accion "Ver analíticas" si el grupo tiene analíticas
+
+        if($nivel2_object->getTemplate() eq "ANA"){
+
+            #recupero las analiticas por el id1    
+            my $cat_reg_analiticas_array_ref = C4::AR::Nivel2::getAllNivel2FromAnaliticasById1($nivel2_object->getId1());
+
+            if(scalar(@$cat_reg_analiticas_array_ref) > 0){
+                my $n2 = C4::AR::Nivel2::getNivel2FromId2($cat_reg_analiticas_array_ref->[0]->getId2Padre());
+
+                if($n2){
+                    $hash_nivel2{'nivel1_padre'} = $n2->getId1();
+                    C4::AR::Debug::debug("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaannnnnnnnnnn ".$n2->getId1());
+                }
+            }
+
+            # $hash_nivel2{'nivel1_padre'}        = $nivel2_object->getIdN1Padre();
+            # $hash_nivel2{'nivel1_titulo_padre'} = ($nivel2_object->getPadre())?$nivel2_object->getPadre()->getTitulo():"";
+            # $hash_nivel2{'nivel1_isbn_padre'}   = $nivel2_object->getISBN();
+            $hash_nivel2{'show_action'}         = 0;
+        }
     }
 
     return (\%hash_nivel2);

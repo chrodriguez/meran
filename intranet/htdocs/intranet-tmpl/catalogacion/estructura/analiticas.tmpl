@@ -1,16 +1,22 @@
 	[% INCLUDE  "intranet-top.inc" %]
 
 
+	<script type="text/javascript"> 
+
+        function agregarAnalitica(){
+            window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&id2=[% id2 %]&tipoAccion=AGREGAR_ANALITICA";
+        }
+
+
+    </script>
 
 <!-- Detalle del nivel 1 -->
-
 
 	<fieldset>
 		   	<div class="page-header">
         		<h1>[% titulo %] <small>[% tipo_documento %] - #[% id1 %]</small></h1>
             	<h2>[% autor %] </h2>	
-           	</div>
-		      
+           	</div>    
 	
 		<div id="detalle1" class="detalle1">
 		   
@@ -25,11 +31,6 @@
 			            [% END %]
 			    [% END %]
 		    </dl>
-	
-
-         <h4><span class="badge badge-warning" style="cursor: default;">[% cantItemN1 %]</span>&nbsp;&nbsp;[% "Ejemplares" | i18n %]</h4>
-         <br />
-
 		</div>
 	</fieldset>
 
@@ -97,3 +98,15 @@
 	     </div>
 	</div>
 
+    <div class="form-actions">
+ 
+                    [% PERL %]
+                            print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar analítica' | i18n %]",
+                                                                boton   => "btn btn btn-primary",
+                                                                onClick => "agregarAnalitica();",
+                                                                title   => "[% 'Agregar analítica' | i18n %]",
+                                    ) ;
+                    [% END %]
+    </div>  
+
+[% INCLUDE "intranet-bottom.inc" %]
