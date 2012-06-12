@@ -1202,7 +1202,7 @@ sub getNivelesFromRegistro {
       
                           if(($marc_record_n2->subfield($campo,$subcampo))&&(!$estructura->getRepetible)&&((($campo ne '910')&&($subcampo ne 'a'))||(($campo ne '900')&&($subcampo ne 'b')))){
                               #Existe el subcampo y no es repetible ==> es un nivel 2 nuevo
-                              #C4::AR::Debug::debug("Existe el subcampo y no es repetible ==> es un nivel 2 nuevo  ".$campo."&".$subcampo."=".$dato);
+                              C4::AR::Debug::debug("Existe el subcampo y no es repetible ==> es un nivel 2 nuevo  ".$campo."&".$subcampo."=".$dato);
                                               
                               #Agrego el último ejemplar y lo guardo
                               if (scalar($marc_record_n3->fields())){
@@ -1229,7 +1229,7 @@ sub getNivelesFromRegistro {
                           
                           if ((($campo eq '900')&&($subcampo eq 'b'))&&($nivel_bibliografico)){
                                   #ya existe el 900,b NIVEL BIBLIOGRAFICO, no sirve que haya varios
-                                   $dato=$nivel_bibliografico;
+                                  # $dato=$nivel_bibliografico;
                             }
                             else{
                                   #Si no existe lo seteo
