@@ -1361,7 +1361,7 @@ sub busquedaCombinada_newTemp{
         }else{
 #            $string = $sphinx->EscapeString($string);
         	
-            $query .=  "*".$string."*";
+            $query .=  " *".$string."*";
 C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      -----------------------------> : ".$string);
         }
     }
