@@ -2,8 +2,6 @@
 <script type="text/javascript" src="/intranet-tmpl/includes/busquedasCatalogo-min.js"></script>
 <script>
 
-var ARRAY_ETIQUETAS = new Array();   
-
     function busqueda(){
 
         objAH_search                   = new AjaxHelper(updateBusqueda);
@@ -101,5 +99,10 @@ var ARRAY_ETIQUETAS = new Array();
       </form>
       
  </div>
-<div class="alert alert-info" id="seleccionados"></div>
+
+<form id="formSeleccionados" name="formSeleccionados" action="[% url_prefix %]/catalogacion/barcode_gen.pl" method="post">
+    <input type='hidden' name='etiquetas' value='etiquetas'>
+    <div class="alert alert-info" id="seleccionados" name="seleccionados"></div>
+</form>
+
 <div id="report_result_gen_etiquetas" style="display:none;"></div>

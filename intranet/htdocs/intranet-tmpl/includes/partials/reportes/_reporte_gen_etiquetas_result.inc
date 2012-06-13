@@ -4,17 +4,9 @@
 <script>
 
 
-// function exportarPDF(){
-//     objAH               = new AjaxHelper(updateEjemplaresDelGrupo);
-//     objAH.debug         = true;
-//       objAH.showOverlay   = true;
-//     objAH.url=URL_PREFIX+'/catalogacion/estructura/estructuraCataloDB.pl';
-//     objAH.id2           = id2;
-//     objAH.tipoAccion    = 'MOSTRAR_DETALLE_NIVEL3';
-//     //se envia la consulta
-//     objAH.sendToServer();
-
-// }
+function exportarPDF(){
+      $('#formSeleccionados').submit();
+}
 
 function seleccionarTr(trSelected){
 
@@ -23,12 +15,12 @@ function seleccionarTr(trSelected){
                   id_tr = trSelected.val();
                   id_tr = id_tr + "_tr";
                   id1= trSelected.attr('id').substring(15);
-
+                  id3= trSelected.val();
                   trSelected.attr('checked', false);
                   $('#' + id_tr).hide();
                   barcode= $('#barcode'+ trSelected.val()).html();
-                  ARRAY_ETIQUETAS.push(barcode); 
-                  $('#seleccionados').append(" <span class='label label-info' name='"+ id1  + "' id='label"+barcode+"'><input type='hidden' value='"+id_tr+"'>" +barcode+ " <span class='click' id='"+barcode+"'>X</span> </span> ");
+                
+                  $('#seleccionados').append("<span class='label label-info' style='margin:2px;' name='"+ id1  + "' id='label"+barcode+"'><input type='hidden' name='"+id3+"' value='"+id_tr+"'>" + barcode + "<span class='click' id='"+barcode+"'> X </span></span>");
               
                   
 
