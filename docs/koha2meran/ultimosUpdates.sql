@@ -31,49 +31,49 @@
 
     ALTER TABLE circ_prestamo DROP `return`;
       
-      ALTER TABLE `usr_persona` CHANGE `personnumber` `id_persona` INT(11) NOT NULL AUTO_INCREMENT, 
-       CHANGE `borrowernumber` id_socio INT(11) NULL DEFAULT NULL, 
-       CHANGE `cardnumber` nro_socio VARCHAR(16) NOT NULL, 
-       CHANGE `documentnumber` `nro_documento` VARCHAR(16) NOT NULL, 
-       CHANGE `documenttype` `tipo_documento` CHAR(3) NOT NULL, 
-       CHANGE `surname` `apellido` TEXT NOT NULL, 
-       CHANGE `firstname` `nombre` TEXT  NOT NULL, 
-       CHANGE `title` `titulo` TEXT NULL DEFAULT NULL, 
-       CHANGE `othernames` `otros_nombres` TEXT NULL DEFAULT NULL, 
-       CHANGE `initials` `iniciales` TEXT NULL DEFAULT NULL,
-       CHANGE `streetaddress` `calle` TEXT NULL DEFAULT NULL,
-       CHANGE `suburb` `barrio` TEXT NULL DEFAULT NULL,
-       CHANGE `city` `ciudad` TEXT NULL DEFAULT NULL,
-       CHANGE `phone` `telefono` TEXT NULL DEFAULT NULL,
-       CHANGE `emailaddress` `email` TEXT NULL DEFAULT NULL,
-       CHANGE `faxnumber` `fax` TEXT NULL DEFAULT NULL,
-       CHANGE `textmessaging` `msg_texto` TEXT NULL DEFAULT NULL,
-       CHANGE `altstreetaddress` `alt_calle` TEXT NULL DEFAULT NULL,
-       CHANGE `altsuburb` `alt_barrio` TEXT NULL DEFAULT NULL,
-       CHANGE `altcity` `alt_ciudad` TEXT NULL DEFAULT NULL,
-       CHANGE `altphone` `alt_telefono` TEXT NULL DEFAULT NULL,
-       CHANGE `dateofbirth` `nacimiento` DATE NULL DEFAULT NULL,
-       CHANGE `dateenrolled` `fecha_alta` DATE NULL DEFAULT NULL,
-       CHANGE `studentnumber` legajo VARCHAR( 8 ) NOT NULL, 
-       CHANGE `sex` `sexo` CHAR(1) NULL DEFAULT NULL, 
-       CHANGE `phoneday` `telefono_laboral` VARCHAR(50)  NULL DEFAULT NULL,
-       CHANGE `regular` `cumple_condicion` TINYINT(1) NOT NULL DEFAULT '0';
+      ALTER TABLE `usr_persona` CHANGE `personnumber` `id_persona` INT(11) NOT NULL AUTO_INCREMENT;
+      ALTER TABLE `usr_persona` CHANGE `borrowernumber` id_socio INT(11) NULL DEFAULT NULL;
+      ALTER TABLE `usr_persona` CHANGE `cardnumber` nro_socio VARCHAR(16) NOT NULL;
+      ALTER TABLE `usr_persona` CHANGE `documentnumber` `nro_documento` VARCHAR(16) NOT NULL;
+       ALTER TABLE `usr_persona` CHANGE `documenttype` `tipo_documento` CHAR(3) NOT NULL;
+       ALTER TABLE `usr_persona` CHANGE `surname` `apellido` TEXT NOT NULL; 
+       ALTER TABLE `usr_persona` CHANGE `firstname` `nombre` TEXT  NOT NULL;
+       ALTER TABLE `usr_persona` CHANGE `title` `titulo` TEXT NULL DEFAULT NULL;
+       ALTER TABLE `usr_persona` CHANGE `othernames` `otros_nombres` TEXT NULL DEFAULT NULL;
+       ALTER TABLE `usr_persona` CHANGE `initials` `iniciales` TEXT NULL DEFAULT NULL;
+       ALTER TABLE `usr_persona` CHANGE `streetaddress` `calle` TEXT NULL DEFAULT NULL;
+       ALTER TABLE `usr_persona` CHANGE `suburb` `barrio` TEXT NULL DEFAULT NULL;
+       ALTER TABLE `usr_persona` CHANGE `city` `ciudad` TEXT NULL DEFAULT NULL;
+       ALTER TABLE `usr_persona` CHANGE `phone` `telefono` TEXT NULL DEFAULT NULL;
+       ALTER TABLE `usr_persona` CHANGE `emailaddress` `email` TEXT NULL DEFAULT NULL;
+       ALTER TABLE `usr_persona` CHANGE `faxnumber` `fax` TEXT NULL DEFAULT NULL;
+       ALTER TABLE `usr_persona` CHANGE `textmessaging` `msg_texto` TEXT NULL DEFAULT NULL;
+       ALTER TABLE `usr_persona` CHANGE `altstreetaddress` `alt_calle` TEXT NULL DEFAULT NULL;
+       ALTER TABLE `usr_persona` CHANGE `altsuburb` `alt_barrio` TEXT NULL DEFAULT NULL;
+       ALTER TABLE `usr_persona` CHANGE `altcity` `alt_ciudad` TEXT NULL DEFAULT NULL;
+       ALTER TABLE `usr_persona` CHANGE `altphone` `alt_telefono` TEXT NULL DEFAULT NULL;
+       ALTER TABLE `usr_persona` CHANGE `dateofbirth` `nacimiento` DATE NULL DEFAULT NULL;
+       ALTER TABLE `usr_persona` CHANGE `dateenrolled` `fecha_alta` DATE NULL DEFAULT NULL;
+       ALTER TABLE `usr_persona` CHANGE `studentnumber` legajo VARCHAR( 8 ) NOT NULL;
+       ALTER TABLE `usr_persona` CHANGE `sex` `sexo` CHAR(1) NULL DEFAULT NULL;
+       ALTER TABLE `usr_persona` CHANGE `phoneday` `telefono_laboral` VARCHAR(50)  NULL DEFAULT NULL;
+       ALTER TABLE `usr_persona` CHANGE `regular` `cumple_condicion` TINYINT(1) NOT NULL DEFAULT '0';
        
         ALTER TABLE `usr_persona` DROP `gonenoaddress`,  DROP `lost`,  DROP `debarred`,  DROP `school`,  DROP `contactname`,  DROP `borrowernotes`,  DROP `guarantor`,  DROP `area`,  DROP `ethnicity`,  DROP `ethnotes`,  DROP `expiry`,  DROP `altnotes`,  DROP `altrelationship`,  DROP `streetcity`,  DROP `preferredcont`,  DROP `physstreet`,  DROP `homezipcode`,  DROP `zipcode`,  DROP `userid`,  DROP `flags`;
        
        ALTER TABLE `usr_persona` ADD PRIMARY KEY ( `id_persona` ) ;
        ALTER TABLE `usr_persona` DROP INDEX `personnumber` ;
 
-        ALTER TABLE `usr_socio` CHANGE `cardnumber` `nro_socio` VARCHAR( 16 ) NOT NULL ,
-        CHANGE `borrowernumber` `id_socio` INT( 11 ) NOT NULL AUTO_INCREMENT ,
-        CHANGE `branchcode` `id_ui` VARCHAR( 4 ) NOT NULL ,
-        CHANGE `categorycode` `cod_categoria` CHAR( 2 ) NOT NULL ,
-        CHANGE `dateenrolled` `fecha_alta` DATE NULL DEFAULT NULL ,
-        CHANGE `expiry` `expira` DATE NULL DEFAULT NULL ,
-        CHANGE `lastlogin` `last_login` DATETIME NULL DEFAULT NULL ,
-        CHANGE `lastchangepassword` `last_change_password` DATE NULL DEFAULT NULL ,
-        CHANGE `changepassword` `change_password` TINYINT( 1 ) NULL DEFAULT '0',
-        CHANGE `usercourse` `cumple_requisito` DATE NULL DEFAULT NULL;
+        ALTER TABLE `usr_socio` CHANGE `cardnumber` `nro_socio` VARCHAR( 16 ) NOT NULL ;
+        ALTER TABLE `usr_socio` CHANGE `borrowernumber` `id_socio` INT( 11 ) NOT NULL AUTO_INCREMENT ;
+        ALTER TABLE `usr_socio` CHANGE `branchcode` `id_ui` VARCHAR( 4 ) NOT NULL ;
+        ALTER TABLE `usr_socio` CHANGE `categorycode` `cod_categoria` CHAR( 2 ) NOT NULL ;
+        ALTER TABLE `usr_socio` CHANGE `dateenrolled` `fecha_alta` DATE NULL DEFAULT NULL ;
+        ALTER TABLE `usr_socio` CHANGE `expiry` `expira` DATE NULL DEFAULT NULL ;
+        ALTER TABLE `usr_socio` CHANGE `lastlogin` `last_login` DATETIME NULL DEFAULT NULL ;
+        ALTER TABLE `usr_socio` CHANGE `lastchangepassword` `last_change_password` DATE NULL DEFAULT NULL ;
+        ALTER TABLE `usr_socio` CHANGE `changepassword` `change_password` TINYINT( 1 ) NULL DEFAULT '0';
+        ALTER TABLE `usr_socio` CHANGE `usercourse` `cumple_requisito` DATE NULL DEFAULT NULL;
 
       ALTER TABLE `usr_socio` ADD PRIMARY KEY ( `id_socio` );
         
@@ -657,6 +657,6 @@ ALTER TABLE `cat_estructura_catalogacion` ADD `edicion_grupal` TINYINT NOT NULL 
 
 ALTER TABLE `usr_socio` ADD  `lastValidation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
 
-UPDATE `usr_persona` SET `ciudad` =1 WHERE ciudad IS NULL OR ciudad = '';
+UPDATE `usr_persona` SET `ciudad` =999999 WHERE ciudad IS NULL OR ciudad = '';
 
 INSERT INTO cat_ref_tipo_nivel3( id_tipo_doc, nombre, notforloan ) VALUES ('ANA', 'Analítica', 1 );

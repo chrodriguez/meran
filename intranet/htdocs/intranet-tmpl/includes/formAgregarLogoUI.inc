@@ -8,7 +8,7 @@
     </div>
   
     <div class="modal-body">
-        <form class="form-horizontal" id="formAgregarLogo" method="post" action="[% url_prefix %]/admin/logos.pl?token=[% token %]" enctype="multipart/form-data">
+        <form class="form-horizontal" id="formAgregarLogo" method="post" action="[% url_prefix %]/admin/logosUI.pl?token=[% token %]" enctype="multipart/form-data">
           <!-- 
           <div class="control-group">
             <label class="control-label" for="titulo_footer">[% 'Alto' | i18n %]</label>
@@ -47,12 +47,4 @@
   </div>
   <div class="modal-footer">
       <button class="btn btn-primary" onclick="submitForm()">[% 'Aceptar' | i18n %]</button>
-  </div>
-  <div class="alert alert-block">
-    <h4 class="alert-heading">Atención</h4>
-    <p>
-    Cargue fotos exactamente del mismo tamaño, de lo contrario, los logos va a sufrir cambios de tamaño, provocando molestia visual.
-    <br>
-    El tamaño óptimo para un logo correcto es de 739x937 px (manteniendo el aspecto).
-    </p>
   </div>

@@ -96,7 +96,7 @@ var loaderPath= "";
 	                                                                       {title => "Validar datos Censales", action=>'validarDatosCensales();',icon=>"icon-share-alt"},
 	                                                                   [% END %]
 	                                                                   {title => "Modificar Datos", action=>'modificarDatosDeUsuario()', icon=>"icon-edit"},
-	                                                                   {title => "Eliminar Usuario", action=>'eliminarUsuario()', icon=>"icon-trash"},
+	                                                                   {title => "Deshabilitar Usuario", action=>'eliminarUsuario()', icon=>"icon-trash"},
 	                                                                   [% IF !socio.tieneAutorizado %]
 	                                                                         {title => "Agregar Usuario Adicional", action=>'agregarAutorizado()', icon=>"icon-plus-sign"},
 	                                                                   [% ELSE %]

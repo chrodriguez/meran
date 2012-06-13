@@ -1164,6 +1164,7 @@ sub getNivelesFromRegistro {
     my @grupos=();
     my @ejemplares=();
     my $tipo_ejemplar='';
+    my $nivel_bibliografico='';
     my $total_ejemplares=0;
     foreach my $field ($marc_record_to_meran->fields) {
         if(! $field->is_control_field){
@@ -1177,7 +1178,7 @@ sub getNivelesFromRegistro {
                 my $estructura        = C4::AR::EstructuraCatalogacionBase::getEstructuraBaseFromCampoSubCampo($campo, $subcampo);
                 
                 if($estructura) {
-                
+                C4::AR::Debug::debug("NIVEL ??  ".$estructura->getNivel); 
                   use Switch;
                   switch ($estructura->getNivel) {
                   case 1 { 
@@ -1197,11 +1198,11 @@ sub getNivelesFromRegistro {
                           #Nivel 2
       
                           #HAY QUE CREAR UNO NUEVO??
-                          #C4::AR::Debug::debug("HAY QUE CREAR UNO NUEVO??  ".$campo."&".$subcampo."=".$dato." ".$marc_record_n2->subfield($campo,$subcampo)." repetible? ".$estructura->getRepetible);
+                          C4::AR::Debug::debug("HAY QUE CREAR UNO NUEVO??  ".$campo."&".$subcampo."=".$dato." ".$marc_record_n2->subfield($campo,$subcampo)." repetible? ".$estructura->getRepetible);
       
-                          if(($marc_record_n2->subfield($campo,$subcampo))&&(!$estructura->getRepetible)&&(($campo ne '910')&&($subcampo ne 'a'))){
+                          if(($marc_record_n2->subfield($campo,$subcampo))&&(!$estructura->getRepetible)&&((($campo ne '910')&&($subcampo ne 'a'))||(($campo ne '900')&&($subcampo ne 'b')))){
                               #Existe el subcampo y no es repetible ==> es un nivel 2 nuevo
-                              #C4::AR::Debug::debug("Existe el subcampo y no es repetible ==> es un nivel 2 nuevo  ".$campo."&".$subcampo."=".$dato);
+                              C4::AR::Debug::debug("Existe el subcampo y no es repetible ==> es un nivel 2 nuevo  ".$campo."&".$subcampo."=".$dato);
                                               
                               #Agrego el último ejemplar y lo guardo
                               if (scalar($marc_record_n3->fields())){
@@ -1215,26 +1216,35 @@ sub getNivelesFromRegistro {
                               my %hash_temp;
                               $hash_temp{'grupo'}  = $marc_record_n2;
                               $hash_temp{'tipo_ejemplar'}  = $tipo_ejemplar;
+                              $hash_temp{'nivel_bibliografico'}  = $nivel_bibliografico;
                               $hash_temp{'cant_ejemplares'}   = scalar(@ejemplares);
                               $total_ejemplares+=$hash_temp{'cant_ejemplares'};
                               my @ejemplares_grupo =   @ejemplares; #esto hace la copia del arreglo
                               $hash_temp{'ejemplares'}   = \@ejemplares_grupo;
-                              #C4::AR::Debug::debug("GRUPO CON ".$hash_temp{'cant_ejemplares'}." EJEMPLARES");
+                              C4::AR::Debug::debug("GRUPO CON ".$hash_temp{'cant_ejemplares'}." EJEMPLARES");
                               push (@grupos, \%hash_temp);
                               $marc_record_n2 = MARC::Record->new();
                               @ejemplares = ();
                           }
                           
-                          if ((($campo eq '910')&&($subcampo eq 'a'))&&($marc_record_n2->subfield($campo,$subcampo))){
-                                  #ya existe el 910,a TIPO DOC, no sirve que haya varios
-                                  next;
-                              }
+                          if ((($campo eq '900')&&($subcampo eq 'b'))&&($nivel_bibliografico)){
+                                  #ya existe el 900,b NIVEL BIBLIOGRAFICO, no sirve que haya varios
+                                  # $dato=$nivel_bibliografico;
+                            }
+                            else{
+                                  #Si no existe lo seteo
+                                  $nivel_bibliografico=$dato;
+                            }
                           
                           if ((($campo eq '041')&&($subcampo eq 'a'))&&($marc_record_n2->subfield($campo,$subcampo))){
                                   #ya existe el 041,a IDIOMA, no sirve que haya varios
                                   next;
                            }
-                           
+
+                          if ((($campo eq '910')&&($subcampo eq 'a'))&&($marc_record_n2->subfield($campo,$subcampo))){
+                                  #ya existe el 910,a TIPO DOC, no sirve que haya varios
+                                  next;
+                           }   
                           
                           #El campo es de Nivel 2
                           if (($marc_record_n2->field($campo))&&($estructura->getRepetible)){
@@ -1254,7 +1264,7 @@ sub getNivelesFromRegistro {
                            if($marc_record_n3->subfield($campo,$subcampo)){
                               #Existe el subcampo y no es repetible ==> es un nivel 3 nuevo							
                               #Agrego el último ejemplar y lo guardo
-                              #C4::AR::Debug::debug("EJEMPLAR ".$marc_record_n3->as_formatted);	
+                              C4::AR::Debug::debug("EJEMPLAR ".$marc_record_n3->as_formatted);	
                                   push(@ejemplares,$marc_record_n3);
                                   $marc_record_n3 = MARC::Record->new();
                               }
@@ -1362,29 +1372,34 @@ sub detalleCompletoRegistro {
         if($nivel2_marc->subfield('041','a')){
             $hash_nivel2{'idioma'}      = C4::AR::ImportacionIsoMARC::getIdiomaFromMarcRecord_Object($nivel2_marc);
             my $idioma  = $hash_nivel2{'idioma'};
-            #Seteo bien el idioma
-            $nivel2_marc->field('041')->update( 'a' => $idioma->getDescription());
+            if($idioma){
+                #Seteo bien el idioma
+                $nivel2_marc->field('041')->update( 'a' => $idioma->getDescription());
+            }
         }
         
         ##PAIS##
         if($nivel2_marc->subfield('043','c')){
             $hash_nivel2{'pais'}      = C4::AR::ImportacionIsoMARC::getPaisFromMarcRecord_Object($nivel2_marc);
             my $pais  = $hash_nivel2{'pais'};
-            #Seteo bien el pais
-            $nivel2_marc->field('043')->update( 'c' => $pais->getNombre_largo());
+            if($pais){
+                #Seteo bien el pais
+                $nivel2_marc->field('043')->update( 'c' => $pais->getNombre_largo());
+            }
         }
         
         ##NIVEL BIBLIOGRAFICO##
         $hash_nivel2{'nivel_bibliografico'}      = C4::AR::ImportacionIsoMARC::getNivelBibliograficoFromMarcRecord_Object($nivel2_marc);        
-        my $nivel_bibliografico					 = $hash_nivel2{'nivel_bibliografico'};
-        #Seteo bien el código del nivel bibliográfico
-        if($nivel2_marc->field('900')){
-            $nivel2_marc->field('900')->update( 'b' => $nivel_bibliografico->getDescription());
-        }else{
-                my $new_field= MARC::Field->new('900','#','#','b' => $nivel_bibliografico->getDescription());
-                $nivel2_marc->append_fields($new_field);
-            }
-        
+        my $nivel_bibliografico	                 = $hash_nivel2{'nivel_bibliografico'};
+        if($nivel_bibliografico){
+            #Seteo bien el código del nivel bibliográfico
+            if($nivel2_marc->field('900')){
+                $nivel2_marc->field('900')->update( 'b' => $nivel_bibliografico->getDescription());
+            }else{
+                    my $new_field= MARC::Field->new('900','#','#','b' => $nivel_bibliografico->getDescription());
+                    $nivel2_marc->append_fields($new_field);
+                }
+        }
         $hash_nivel2{'marc_record'}             = $nivel2_marc;
         $hash_nivel2{'nivel2_array'}            = C4::AR::ImportacionIsoMARC::toMARC_Array($nivel2_marc,$tipo_documento->getId_tipo_doc(),'',2);
         $hash_nivel2{'nivel2_template'}         = $nivel2->{'tipo_ejemplar'};

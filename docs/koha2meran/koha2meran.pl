@@ -58,7 +58,7 @@ my $tt1 = time();
  print "Quitando tablas de mas \n";
   quitarTablasDeMas();
  print "Hasheando passwords \n";
- #   hashearPasswords();
+  hashearPasswords();
  print "Limpiamos las tablas de circulacion \n";
 # limpiarCirculacion();
  print "Referencias de usuarios en circulacion \n";
