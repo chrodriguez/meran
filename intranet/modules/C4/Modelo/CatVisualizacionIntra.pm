@@ -39,9 +39,11 @@ sub agregar{
     $self->subcampo($params->{'subcampo'});
     $self->vista_intra($params->{'liblibrarian'});
     
-    my $vista_campo_temp = C4::AR::EstructuraCatalogacionBase::getLabelByCampo($params->{'campo'});
-    C4::AR::Debug::debug("vista_campo en el modelo, agregando : ".$vista_campo_temp);
-    $self->vista_campo($vista_campo_temp);
+# FIXME WF!!!!!!!!!! para q esta esto??
+    # my $vista_campo_temp = C4::AR::EstructuraCatalogacionBase::getLabelByCampo($params->{'campo'});
+    # C4::AR::Debug::debug("vista_campo en el modelo, agregando : ".$vista_campo_temp);
+    # $self->vista_campo($vista_campo_temp);
+    $self->vista_campo($params->{'liblibrarian'});
 
 #   este chequeo no se para que serviria ahora. Se agrega el tipo de ejemplar de una con el nivel que ya viene
 #    if(C4::AR::EstructuraCatalogacionBase::getNivelFromEstructuraBaseByCampoSubcampo($params->{'campo'}, $params->{'subcampo'}) <= 1){

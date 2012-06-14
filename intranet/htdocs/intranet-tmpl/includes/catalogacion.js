@@ -366,7 +366,7 @@ function getDivDelNivel(){
 function mostrarEstructuraDelNivel1(){
     _NIVEL_ACTUAL       = 1;
    
-    if(MODIFICAR == 0){
+    if((MODIFICAR == 0)&&(ACTION != "AGREGAR_ANALITICA")){
         _mostrarAccion("<h4>Agregando registro con el esquema: " + $('#tipo_nivel3_id option:selected').html() + " (" + TEMPLATE_ACTUAL + ")</h4>" + crearBotonEsquema());
     } 
 
@@ -391,16 +391,13 @@ function updateMostrarEstructuraDelNivel1(responseText){
     procesarInfoJson(objetos_array, null); 
     //asigno el handler para el validador
     validateForm('formNivel1',guardarModificarDocumentoN1);
-//     addRules();
-    
-//     scrollTo('datos_del_leader');
     scrollTo('nivel1Tabla');  
 }
 
 function mostrarEstructuraDelNivel2(){
     _NIVEL_ACTUAL       = 2;
     
-    if(MODIFICAR == 0){
+    if((MODIFICAR == 0)&&(ACTION != "AGREGAR_ANALITICA")){
         _mostrarAccion("<h4>Agregando edici&oacute;n con el esquema: " + $('#tipo_nivel3_id option:selected').html() + " (" + TEMPLATE_ACTUAL + ")</h4>" + crearBotonEsquema());
     }
     
@@ -413,6 +410,7 @@ function mostrarEstructuraDelNivel2(){
     objAH.nivel         = 2;
     objAH.id_tipo_doc   = TEMPLATE_ACTUAL;
     objAH.sendToServer();
+
 }
 
 function updateMostrarEstructuraDelNivel2(responseText){
@@ -424,7 +422,6 @@ function updateMostrarEstructuraDelNivel2(responseText){
     procesarInfoJson(objetos_array, null); 
     //asigno el handler para el validador
     validateForm('formNivel2',guardarModificarDocumentoN2);
-//     addRules();
     
     if(!MODIFICAR){
         if(ID_TIPO_EJEMPLAR == 0){
@@ -889,12 +886,14 @@ function updateGuardarDocumentoN2(responseText){
         } else {
             disableAlert();
             window.location = "detalle.pl?id1=" + ID_N1_PADRE;
+            $('#ajax-indicator').modal({show:true, keyboard: false, backdrop: false,});
         }
 
 
         if (FROM_DETALLE_REGISTRO == 1) {
             disableAlert();
             window.location = "detalle.pl?id1=" + ID_N1;
+            $('#ajax-indicator').modal({show:true, keyboard: false, backdrop: false,});
         }
     }
 }
@@ -985,6 +984,7 @@ function updateGuardarModificacionDocumentoN1(responseText){
         if (FROM_DETALLE_REGISTRO == 1) {
             disableAlert();
             window.location = "detalle.pl?id1=" + ID_N1;
+            $('#ajax-indicator').modal({show:true, keyboard: false, backdrop: false,});
         }
         
         MODIFICAR = 0;
@@ -1026,6 +1026,7 @@ function updateGuardarModificacionDocumentoN2(responseText){
         if (FROM_DETALLE_REGISTRO == 1){
             disableAlert();
             window.location = "detalle.pl?id1=" + ID_N1;
+            $('#ajax-indicator').modal({show:true, keyboard: false, backdrop: false,});
         }
         MODIFICAR = 0;
     }
@@ -1073,6 +1074,7 @@ function updateGuardarModificacionDocumentoN3(responseText){
         if (FROM_DETALLE_REGISTRO == 1){
             disableAlert();
             window.location = "detalle.pl?id1=" + ID_N1;
+            $('#ajax-indicator').modal({show:true, keyboard: false, backdrop: false,});
         }
         MODIFICAR = 0;
     }
@@ -2251,6 +2253,7 @@ function updateBorrarN1(responseText){
         $("#detalleComun").html("");
         disableAlert();
         window.location = "mainpage.pl";
+        $('#ajax-indicator').modal({show:true, keyboard: false, backdrop: false,});
     }
 }
 
