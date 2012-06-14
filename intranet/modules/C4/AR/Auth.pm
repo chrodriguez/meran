@@ -866,7 +866,10 @@ sub checkauth {
 						use Captcha::reCAPTCHA;
 						
 						my $c = Captcha::reCAPTCHA->new;
-						$captchaResult = $c->check_answer($reCaptchaPrivateKey, $ENV{'REMOTE_ADDR'},$reCaptchaChallenge, $reCaptchaResponse);
+                        
+                        eval{
+						   $captchaResult = $c->check_answer($reCaptchaPrivateKey, $ENV{'REMOTE_ADDR'},$reCaptchaChallenge, $reCaptchaResponse);
+                        };
 
 						C4::AR::Debug::debug("ERROR DE CAPTCHA: ".$captchaResult->{error});
 						

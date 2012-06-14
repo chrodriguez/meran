@@ -3,20 +3,21 @@
 
 [% IF reservas_asignadas_count %]
     <fieldset>
-    <legend class="titulo_legend_resaltado">[% "Ejemplares Asignados" | i18n %]</legend>
+    <legend class="titulo_legend_resaltado">
+        [% "Ejemplares Asignados" | i18n %]
+          [% IF reservas_asignadas_count %] 
+              <span class="badge badge-success" style="cursor: default;">[% reservas_asignadas_count %]</span>
+          [% END %]
+    </legend>
 
             [% IF reservas_asignadas_count %]
-                <div class="well">
-                    [% "Cantidad de ejemplares para retirar" | i18n %]: <strong>[% reservas_asignadas_count %]</strong> 
-                </div>
-
                 [% PERL %]
                       print C4::AR::Filtros::tableHeader(   
                                   id              => "reseravsAsignadasResult",
                                   class           => "",
                                   selectAll_id    => "checkAllReservas",
                                   columns         => ['[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]',
-                                                      '[% "C&oacute;digo de Barras" %]','[% "Sig. Top." | i18n %]',
+                                                     '[% "C&oacute;digo de Barras" %]','[% "Sig. Top." | i18n %]',
                                                       '[% "Ed." | i18n %]','[% "Vencimiento" %]','[% "Retira en" %]',
                                                        [% IF cancelar_reservas_intranet %]'[% "Cancelar" %]'[% END %], 
                                                     ]
@@ -115,13 +116,15 @@
 
 [% IF reservas_espera_count %]   
     <fieldset>
-       <legend class="titulo_legend">[% "Reservas en espera" | i18n %]</legend>
+       <legend class="titulo_legend">
+            [% "Reservas en espera" | i18n %]
+              [% IF reservas_espera_count %] 
+                  <span class="badge badge-info" style="cursor: default;">[% reservas_espera_count %]</span>
+              [% END %]
+
+        </legend>
 
        [% IF reservas_espera_count %]
-          <div class="well">
-              [% "Cantidad de reservas en espera" | i18n %]: <strong>[% reservas_espera_count %]</strong> 
-          </div>
-
              [% PERL %]
                    print C4::AR::Filtros::tableHeader(   
                                id              => "reseravsEsperaResult",
@@ -155,15 +158,15 @@
                            [% IF reserva.nivel2.getEdicion %] [% reserva.nivel2.getEdicion %] [% ELSE %] - [% END %]
                         </td>
                         [% IF cancelar_reservas_intranet %]
-	                        <td> 
-	                            [% PERL %]
-	                                print C4::AR::Filtros::action_button(  
-	                                                                    button   => "btn click btn-danger",
-	                                                                    action => "cancelarReserva([% reserva.getId_reserva %]);",
-	                                                                    icon   => "icon-white icon-remove"
-	                                        ) ;
-	                            [% END %]
-	                        </td>
+                            <td> 
+                                [% PERL %]
+                                    print C4::AR::Filtros::action_button(  
+                                                                        button   => "btn click btn-danger",
+                                                                        action => "cancelarReserva([% reserva.getId_reserva %]);",
+                                                                        icon   => "icon-white icon-remove"
+                                            ) ;
+                                [% END %]
+                            </td>
                        [% END %]
                     </tr>
                 [% END %]

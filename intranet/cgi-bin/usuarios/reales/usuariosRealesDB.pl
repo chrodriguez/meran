@@ -117,6 +117,25 @@ if ($editing){
 
         } #end if($tipoAccion eq "RESET_PASSWORD")
 
+        elsif($tipoAccion eq "CAMBIAR_NRO_SOCIO"){
+            my ($userid, $session, $flags) = checkauth( $input, 
+                                                $authnotrequired,
+                                                {   ui => 'ANY', 
+                                                    tipo_documento => 'ANY', 
+                                                    accion => 'MODIFICACION', 
+                                                    entorno => 'usuarios'},
+                                                "intranet"
+                                    );
+
+            C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
+
+            my ($Message_arrayref)= C4::AR::Usuarios::cambiarNroSocio($obj);
+            my $infoOperacionJSON=to_json $Message_arrayref;
+
+            C4::AR::Auth::print_header($session);
+            print $infoOperacionJSON;
+
+        }
 
         elsif($tipoAccion eq "AGREGAR_AUTORIZADO"){
             my ($userid, $session, $flags) = checkauth( $input, 

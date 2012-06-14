@@ -83,6 +83,7 @@ use vars qw(@EXPORT_OK @ISA);
     getEsquemaRegularidades
     editarRegularidadEsquema
     eliminarPotencial
+    cambiarNroSocio
 );
 
 =item
@@ -1141,6 +1142,34 @@ sub eliminarPotencial{
     return ($msg_object);
 }	
 
+sub cambiarNroSocio{
+    my ($params) = shift;
+
+    my $msg_object= C4::AR::Mensajes::create();
+    my ($socio)     = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
+
+    if ($socio){
+        my $db = $socio->db;
+        $db->{connect_options}->{AutoCommit} = 0;
+        $db->begin_work;
+
+
+        eval {
+            $socio->updateNroSocio($params->{'nuevo_nro_socio'});
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U338', 'params' => []} ) ;
+        };
+
+        if ($@){
+            &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U339', 'params' => []} ) ;
+            $db->rollback;
+        }
+        $db->{connect_options}->{AutoCommit} = 1;
+    }
+
+
+}
 
 END { }       # module clean-up code here (global destructor)
 
