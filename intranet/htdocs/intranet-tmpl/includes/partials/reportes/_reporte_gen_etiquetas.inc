@@ -57,6 +57,7 @@
       
 </script>
 
+
 <div class="center_fieldset report_form_container">
       <form class="form-horizontal" id="form_reporte_gen_etiquetas" onsubmit="false">
                 <div class="control-group">
@@ -83,6 +84,14 @@
                     </label>
                     <div class="controls">
                         <input type="text" size="25" id="codBarra">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="signatura">
+                        [% "Signatura Topogr&aacute;fica" | i18n %]
+                    </label>
+                    <div class="controls">
+                        <input type="text" size="25" id="signatura">
                     </div>
                 </div>
           

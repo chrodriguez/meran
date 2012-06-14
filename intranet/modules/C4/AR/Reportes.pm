@@ -1392,10 +1392,9 @@ sub reporteGenEtiquetas{
         #le sacamos los acentos para que busque indistintamente
 #        $params->{'titulo'} = unac_string('utf8',$params->{'titulo'});
         $query .= ' @titulo "'.$keyword;
-        if($params->{'tipo'} eq "normal"){
-            $query .= "*";
-        }
-        $query .='"';
+       	$query .= "*";
+	  	$query .='"';
+        
     }
 
     if($params->{'autor'} ne ""){
@@ -1403,20 +1402,21 @@ sub reporteGenEtiquetas{
 #        $params->{'autor'} = unac_string('utf8',$params->{'autor'});
 #        C4::AR::Debug::debug("autorrrrrrrrrrrr --------------------------- : ".$params->{'autor'});
         $query .= ' @autor "'.$keyword;
+        $query .= "*";
+	  	$query .='"';
 
-        if($params->{'tipo'} eq "normal"){
-            $query .= "*";
-        }
-        $query .='"';
     }
 
     if( $params->{'codBarra'} ne "") {
-        $query .= ' @string "'."barcode%".$sphinx->EscapeString($params->{'codBarra'})."*'";
-        $query .='*"';
+        $query .= ' @string "'."barcode%".$sphinx->EscapeString($params->{'codBarra'});
+       	$query .= "*";
+	  	$query .='"';
     }
 
     if ($params->{'signatura'}){
-        $query .= ' @string "'."signatura%".$sphinx->EscapeString($params->{'signatura'}).'*"';
+        $query .= ' @string "'."signatura%".$sphinx->EscapeString($params->{'signatura'});
+       	$query .= "*";
+	  	$query .='"';
     }
     
     C4::AR::Debug::debug("Busquedas => query string => ".$query);

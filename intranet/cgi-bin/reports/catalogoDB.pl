@@ -144,8 +144,12 @@ if($tipoAccion eq "BUSQUEDAS"){
 
 
       C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
-}
 
+} elsif ($tipoAccion eq "GEN_ETIQUETAS_PDF"){
+      
+      # C4::AR::PdfGenerator::batchBookLabelGenerator(scalar(@arreglo),\@arreglo);
+}
+ 
 
 
 #C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
