@@ -52,6 +52,7 @@ if ($tipoAccion eq 'LISTAR'){
 
     $t_params->{'logos'}            = $logos;
     $t_params->{'cant_logos'}       = $cant_logos;
+    $t_params->{'opac_htdocs'}      = C4::Context->config('temasOPAC');
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
@@ -125,10 +126,44 @@ if ($tipoAccion eq 'LISTAR'){
         $t_params->{'mensaje_class'} = "alert-success";
     }
     
-    my ($ini,$pageNumber,$cantR)    = C4::AR::Utilidades::InitPaginador($ini);
-    my ($cant_logos,$logos)         = C4::AR::Logos::listar($ini,$cantR);
+    my ($cant_logos,$logos)         = C4::AR::Logos::listar();
 
-    $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginadorOPAC($cant_logos,$cantR, $pageNumber,$url,$t_params);
+    $t_params->{'logos'}            = $logos;
+    $t_params->{'cant_logos'}       = $cant_logos;
+
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+
+
+}elsif ($tipoAccion eq 'DEL_LOGO_UI'){
+
+    my ($template, $session, $t_params) = get_template_and_user({
+                                        template_name       => "admin/novedades_opac_ajax_ui.tmpl",
+                                        query               => $input,
+                                        type                => "intranet",
+                                        authnotrequired     => 0,
+                                        flagsrequired       => {  ui        => 'ANY', 
+                                                            tipo_documento  => 'ANY', 
+                                                            accion          => 'CONSULTA', 
+                                                            entorno         => 'usuarios'},
+                                        debug               => 1,
+    });
+    
+#    my $idLogo                      = $obj->{'id'} || 0;
+    
+    my $msg_object                  = C4::AR::Logos::eliminarLogoUI($obj);
+    
+    my $codMsg                      = C4::AR::Mensajes::getFirstCodeError($msg_object);
+        
+    $t_params->{'mensaje'}          = C4::AR::Mensajes::getMensaje($codMsg,'INTRA');
+    
+    if (C4::AR::Mensajes::hayError($msg_object)){
+        $t_params->{'mensaje_class'} = "alert-error";
+    }else{
+        $t_params->{'mensaje_class'} = "alert-success";
+    }
+    
+    my ($cant_logos,$logos)         = C4::AR::Logos::listarUI();
+
     $t_params->{'logos'}            = $logos;
     $t_params->{'cant_logos'}       = $cant_logos;
 

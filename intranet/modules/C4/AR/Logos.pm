@@ -10,14 +10,54 @@ use vars qw(@EXPORT @ISA);
 @ISA=qw(Exporter);
 @EXPORT=qw( 
     listar
+    listarUI
     agregarLogo
+    agregarLogoUI
     getLogoById
     eliminarLogo
+    getPathLogoUI
+    getPathLogoEtiquetas
+    deleteLogosUI
+    deleteLogos
 );
 
 #/intranet/htdocs/private-uploads/logos  (INTRA) --> /usr/share/meran/intranet/htdocs/private-uploads/logos
 #/opac/htdocs/logos (OPAC) --> /usr/share/meran/opac/htdocs/htdocs/logos
 
+
+=item
+    Devuelve el nombre del archivo del logo UI
+=cut
+sub getNombreLogoUI{
+
+    my $logosArrayRef = C4::Modelo::LogoUI::Manager->get_logoUI( 
+                                                                                sort_by => ['id DESC'],
+                                                                                limit   => 1,
+                                                                            );
+
+    if(scalar(@$logosArrayRef) > 0){
+        return $logosArrayRef->[0]->getImagenPath;
+    }else{
+        return ('logo_ui_opac_menu.png');
+    }
+}
+
+=item
+    Devuelve el path del archivo del logo UI
+=cut
+sub getPathLogoUI{
+
+    my $logosArrayRef = C4::Modelo::LogoUI::Manager->get_logoUI( 
+                                                                                sort_by => ['id DESC'],
+                                                                                limit   => 1,
+                                                                            );
+
+    if(scalar(@$logosArrayRef) > 0){
+        return "https://" . $ENV{'SERVER_NAME'} . "/private-uploads/logos/" . $logosArrayRef->[0]->getImagenPath;
+    }else{
+        return "http://" . $ENV{'SERVER_NAME'} . "/images/logo_horizontal.png";
+    }
+}
 
 =item
     Devuelve el path del archivo del logo de etiquetas
@@ -79,12 +119,37 @@ sub eliminarLogo{
     
 }
 
+sub eliminarLogoUI{
+    my ($params)    = @_;
+    
+    my $msg_object  = C4::AR::Mensajes::create();
+
+    my $logo        = getLogoByIdUI($params->{'idLogo'});
+    
+    my $uploaddir   = C4::Context->config('opachtdocs') . '/temas/' 
+                    . C4::AR::Preferencias::getValorPreferencia('tema_opac_default') 
+                    . '/imagenes';
+    
+    if ($logo){
+    
+        my $image_name = $logo->getImagenPath();
+        unlink($uploaddir."/".$image_name);
+        $logo->delete();
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP15',} ) ;
+    }
+            
+    return ($msg_object);
+    
+}
+
 
 sub deleteLogosUI{
     
     my $logos       = C4::Modelo::LogoUI::Manager->get_logoUI();
 
-    my $uploaddir   = C4::Context->config('logosIntraPath');
+    my $uploaddir   = C4::Context->config('opachtdocs') . '/temas/' 
+                    . C4::AR::Preferencias::getValorPreferencia('tema_opac_default') 
+                    . '/imagenes'; 
 
     foreach my $logo (@$logos){
 
@@ -157,7 +222,7 @@ sub agregarLogoUI{
         # $logo->setAlto('1');
     # }
     
-    my ($image,$msg) = uploadLogo($postdata,'DEO-UI', $params->{'context'});
+    my ($image,$msg) = uploadLogoUI($postdata,'DEO-UI', $params->{'context'});
     
     $logo->setImagenPath($image);
     
@@ -178,7 +243,7 @@ sub agregarLogo{
 	
 	my $logo = C4::Modelo::LogoEtiquetas->new();
 
-    $logo->setNombre('DEO-booklabels');
+    $logo->setNombre('logo_ui_opac_menu');
 	
 	# if (C4::AR::Utilidades::validateString($params->{'alto'})){
 		# $logo->setAlto($params->{'alto'});
@@ -190,7 +255,7 @@ sub agregarLogo{
         $logo->setAlto('1');
 	# }
 	
-	my ($image,$msg) = uploadLogo($postdata,'DEO-booklabels', $params->{'context'});
+	my ($image,$msg) = uploadLogo($postdata,'logo_ui_opac_menu', $params->{'context'});
 	
 	$logo->setImagenPath($image);
 	
@@ -212,21 +277,18 @@ sub uploadLogo{
                                 jpg
                             );
 
-    my $uploaddir;
-    if($context eq "opac"){
-        $uploaddir       = C4::Context->config('logosOpacPath');
-    }else{
-        $uploaddir       = C4::Context->config('logosIntraPath');
-    }
+    # my $uploaddir;
+    # if($context eq "opac"){
+     # $uploaddir       = C4::Context->config('logosOpacPath');
+    # }else{
+    my $uploaddir       = C4::Context->config('logosIntraPath');
+    # }
     
     my $maxFileSize     = 2048 * 2048; # 1/2mb max file size...
     my $msg_object      = C4::AR::Mensajes::create();
     
     #checkeamos con libmagic el tipo del archivo
-    my ($type,$notBinary)            = C4::AR::Utilidades::checkFileMagic($query, @filesAllowed);
-    C4::AR::Debug::debug("type en logos.pm : " . $type);
-    
-    C4::AR::Debug::debug("vamos a escribir $name en el context $context y type $type en el dir $uploaddir y mono $uploaddir/$name.$type");
+    my ($type,$notBinary) = C4::AR::Utilidades::checkFileMagic($query, @filesAllowed);
       
     if (!$type) {
         $msg_object->{'error'}= 1;
@@ -274,6 +336,78 @@ sub uploadLogo{
 
 }
 
+sub uploadLogoUI{
+    my ($query,$name,$context) = @_;
+    
+    my @filesAllowed    = qw(
+                                jpeg
+                                gif
+                                png
+                                jpg
+                            );
+
+    # my $uploaddir;
+    # if($context eq "opac"){
+        # $uploaddir       = C4::Context->config('logosOpacPath');
+    my $uploaddir       = C4::Context->config('opachtdocs') . '/temas/' 
+                        . C4::AR::Preferencias::getValorPreferencia('tema_opac_default') 
+                        . '/imagenes'; 
+    # }else{
+    #     $uploaddir       = C4::Context->config('logosIntraPath');
+    # }
+    
+    my $maxFileSize     = 2048 * 2048; # 1/2mb max file size...
+    my $msg_object      = C4::AR::Mensajes::create();
+    
+    #checkeamos con libmagic el tipo del archivo
+    my ($type,$notBinary) = C4::AR::Utilidades::checkFileMagic($query, @filesAllowed);
+      
+    if (!$type) {
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP00', 'params' => ['jpg','png','gif','jpeg']} ) ;
+    }
+
+    
+    if (!$msg_object->{'error'}){
+
+        if($notBinary){
+        
+            #no hay que escribirlo con binmode
+            C4::AR::Debug::debug("UploadFile => uploadAdjuntoNovedadOpac => vamos a escribirla sin binmode");
+            open(WRITEIT, ">$uploaddir/$name.$type") or die "Cant write to $uploaddir/$name.$type. Reason: $!";
+            print WRITEIT $query;
+            close(WRITEIT);
+   
+        }else{
+        
+            C4::AR::Debug::debug("UploadFile => uploadAdjuntoNovedadOpac => vamos a escribirla CON binmode");
+            open ( WRITEIT, ">$uploaddir/$name.$type" ) or die "Cant write to $uploaddir/$name.$type. Reason: $!"; 
+            binmode WRITEIT; 
+            while ( <$query> ) { 
+                print WRITEIT; 
+            }
+            close(WRITEIT);
+        
+        }
+    }
+    
+    if (!$msg_object->{'error'}){
+        my $check_size = -s "$uploaddir/$name.$type";
+    
+        if ($check_size > $maxFileSize) {
+             $msg_object->{'error'}= 1;
+             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP07', 'params' => ['512 KB']} ) ;
+        } 
+    }    
+    
+    if (!$msg_object->{'error'}){
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP08', 'params' => ['512 KB']} ) ;
+    }
+    
+    return ($name.".".$type,$msg_object);
+
+}
+
 sub getLogoById{
     
     my ($id) = @_;
@@ -285,6 +419,21 @@ sub getLogoById{
     push (@filtros, (id => {eq => $id}) );
     
     my $logo = C4::Modelo::LogoEtiquetas::Manager->get_logoEtiquetas( query => \@filtros,);
+    
+    return $logo->[0];
+}
+
+sub getLogoByIdUI{
+    
+    my ($id) = @_;
+    
+    use C4::Modelo::LogoUI::Manager;
+    
+    my @filtros;
+    
+    push (@filtros, (id => {eq => $id}) );
+    
+    my $logo = C4::Modelo::LogoUI::Manager->get_logoUI( query => \@filtros,);
     
     return $logo->[0];
 }

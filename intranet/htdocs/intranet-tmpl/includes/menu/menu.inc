@@ -410,19 +410,10 @@
                                 </li>
                                 <li>
                                         [% PERL %]
-                                            print C4::AR::Filtros::link_to( text =>     " [% 'Logos de etiquetas' | i18n %]",
+                                            print C4::AR::Filtros::link_to( text =>     " [% 'Logos' | i18n %]",
                                                                             url =>      "[% url_prefix %]/admin/logos.pl",
                                                                             icon=>		"icon-picture",
-                                                                            title =>    "[% 'Logos de etiquetas' | i18n %]"
-                                                                        ) ;
-                                        [% END %]
-                                </li>
-                                <li>
-                                        [% PERL %]
-                                            print C4::AR::Filtros::link_to( text =>     " [% 'Logos de la UI' | i18n %]",
-                                                                            url =>      "[% url_prefix %]/admin/logosUI.pl",
-                                                                            icon=>    "icon-picture",
-                                                                            title =>    "[% 'Logos de la UI' | i18n %]"
+                                                                            title =>    "[% 'Logos' | i18n %]"
                                                                         ) ;
                                         [% END %]
                                 </li>
