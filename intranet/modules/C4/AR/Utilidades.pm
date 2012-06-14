@@ -2084,7 +2084,7 @@ sub generarComboCategoriasDeSocio{
 
     my @select_categorias_array;
     my %select_categorias_hash;
-    my ($categorias_array_ref)  = &C4::AR::Referencias::obtenerCategoriaDeSocio();
+    my ($categorias_array_ref)  = C4::AR::Referencias::obtenerCategoriaDeSocio();
 
     foreach my $categoria (@$categorias_array_ref) {
         push(@select_categorias_array, $categoria->getId);

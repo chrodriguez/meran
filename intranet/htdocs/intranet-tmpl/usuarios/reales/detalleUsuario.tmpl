@@ -180,7 +180,13 @@ var loaderPath= "";
                       [% END %]
 
                       <dt class="inline left rightMargin">[% "Categor&iacute;a:" | i18n %] </dt>
-                      <dd>[%  socio.categoria.getDescription %]</dd>
+                      <dd>
+                          [% TRY %]
+                            [% socio.categoria.getDescription %]
+                          [% CATCH %]
+                            [% 'Sin categor&iacute;a' | i18n %]
+                          [% END %] 
+                      </dd>
                       
                       <dt class="inline left rightMargin">[% "Estado:" | i18n %] </dt>
                       <dd><span class="label [% IF socio.esRegular %]label-success[% ELSE %]label-important[% END %]">[% socio.esRegularToString %]</span></dd>
