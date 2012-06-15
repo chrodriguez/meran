@@ -1370,16 +1370,10 @@ sub reporteGenEtiquetas{
     my $only_sphinx     = $params->{'only_sphinx'};
     my $only_available  = $params->{'only_available'};
     my $sphinx          = Sphinx::Search->new();
+    
+	 
+    $sphinx->SetLimits($params->{'ini'}, C4::AR::Preferencias::getValorPreferencia('renglones'));  
 
-    if ($only_sphinx){
-        if ($params->{'report'}){ 
-            $sphinx->SetLimits($params->{'ini'}, 100000);
- 
-       } else {            
-            $sphinx->SetLimits($params->{'ini'}, C4::AR::Preferencias::getValorPreferencia('renglones'));  
-       }
-
-    }
 
     my $query   = '';
     my $tipo    = 'SPH_MATCH_EXTENDED';

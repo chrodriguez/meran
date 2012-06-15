@@ -13,7 +13,7 @@
 @import "../../reset.less";
 
 // Core variables and mixins
-@import "../default/variables.less"; // Modify this for custom colors, font-sizes, etc
+@import "variables.less"; // Modify this for custom colors, font-sizes, etc
 @import "../../mixins.less";
 
 // Grid system and page structure
@@ -63,8 +63,12 @@
 // Utility classes
 @import "../../utilities.less"; // Has to be last to override when necessary
 
+
 // El responsive
 @import "../../responsive.less";
 
-//El propio local
-@import "../default/propio.less";
+//El propio general
+@import "../general.less";
+
+//El propio local del tema
+@import "propio.less";

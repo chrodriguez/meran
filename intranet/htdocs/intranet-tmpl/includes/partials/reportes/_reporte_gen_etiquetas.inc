@@ -2,23 +2,33 @@
 <script type="text/javascript" src="/intranet-tmpl/includes/busquedasCatalogo-min.js"></script>
 <script>
 
+    var objAH_repE;
+
+
     function busqueda(){
 
-        objAH_search                   = new AjaxHelper(updateBusqueda);
-        objAH_search.debug             = true;
-        objAH_search.showOverlay       = true;
+        objAH_repE                   = new AjaxHelper(updateBusqueda);
+        objAH_repE.debug             = true;
+        objAH_repE.showOverlay       = true;
         //para busquedas combinables
-        objAH_search.url               = URL_PREFIX+'/reports/catalogoDB.pl';
-        objAH_search.titulo            = $('#titulo').val();
-        objAH_search.autor             = $('#autor').val();
-        objAH_search.codBarra          = $('#codBarra').val();
-        //  objAH_search.asc                = ASC;
-        objAH_search.tipoAccion        = 'REPORTE_GEN_ETIQUETAS';
+        objAH_repE.url               = URL_PREFIX+'/reports/catalogoDB.pl';
+        objAH_repE.titulo            = $('#titulo').val();
+        objAH_repE.autor             = $('#autor').val();
+        objAH_repE.codBarra          = $('#codBarra').val();
+        //  objAH_repE.asc                = ASC;
+        objAH_repE.tipoAccion        = 'REPORTE_GEN_ETIQUETAS';
         //  se setea la funcion para cambiar de pagina
-        objAH_search.funcion           = 'changePage_search';
+        objAH_repE.funcion           = 'changePage_ReporteGenEtiquetas';
         //  se envia la consulta
-        objAH_search.sendToServer();
+        objAH_repE.sendToServer();
     }
+
+
+    function changePage_ReporteGenEtiquetas(ini){
+        alert(ini);
+        objAH_repE.changePage(ini);
+    }
+
 
     function updateBusqueda(responseText){
         $('#report_result_gen_etiquetas').html(responseText);
@@ -108,10 +118,11 @@
       </form>
       
  </div>
-
+<header id="overview" class="jumbotron subhead">
 <form id="formSeleccionados" name="formSeleccionados" action="[% url_prefix %]/catalogacion/barcode_gen.pl" method="post">
     <input type='hidden' name='etiquetas' value='etiquetas'>
-    <div class="alert alert-info" id="seleccionados" name="seleccionados"></div>
+    <div class="alert alert-info subnav" id="seleccionados" name="seleccionados" style="max-width: 1400px !important;"></div>
 </form>
+<header>
 
 <div id="report_result_gen_etiquetas" style="display:none;"></div>

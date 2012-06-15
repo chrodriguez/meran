@@ -20,7 +20,7 @@ function seleccionarTr(trSelected){
                   $('#' + id_tr).hide();
                   barcode= $('#barcode'+ trSelected.val()).html();
                 
-                  $('#seleccionados').append("<span class='label label-info' style='margin:2px;' name='"+ id1  + "' id='label"+barcode+"'><input type='hidden' name='"+id3+"' value='"+id_tr+"'>" + barcode + "<span class='click' id='"+barcode+"'> X </span></span>");
+                  $('#seleccionados').append("<div class='label label-info barcode-box' name='"+ id1  + "' id='label"+barcode+"'><input type='hidden' name='"+id3+"' value='"+id_tr+"'>" + barcode + "<span class='click' id='"+barcode+"'> X </span></div>");
               
                   
 
@@ -96,6 +96,7 @@ function checkedAllTrs(id,nombreCheckbox){
       </div>
 [% END %]
 [% IF cantidad %]
+<div class="contenedor_paginador">[% paginador %]</div> 
 <div>        
           [% FOREACH SEARCH_RESULTS %]
           <div id="grupo[% nivel1.id1 %]">  
