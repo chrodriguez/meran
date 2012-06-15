@@ -175,8 +175,8 @@ var loaderPath= "";
 
                       [% IF !(socio.getNro_socio == socio.getNro_documento) %]
                           <dt class="inline left rightMargin">
-                            [% "Tarjeta de identificaci&oacute;n :" | i18n %]</dt>
-                          <dd><span class="label label-info">[% socio.getNro_socio %]</span></dd>
+                            [% "Nro. de Socio:" | i18n %]</dt>
+                          <dd><span class="label label-info click" onclick="showModalCambiarNroSocio();" >[% socio.getNro_socio %]</span></dd>
                       [% END %]
 
                       <dt class="inline left rightMargin">[% "Categor&iacute;a:" | i18n %] </dt>
@@ -307,5 +307,29 @@ var loaderPath= "";
 </div><!--columna izq -->
 
 <div id="modificar-datos-usuario" class="modal hide fade bigModal"></div>
+
+
+<div id="modificar-nro-socio" class="modal hide fade">
+
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal">×</a>
+		<h3>[% 'Modificar Nro. de socio' | i18n %]</h3>
+	</div>
+	<div class="modal-body">
+		<div class="form-horizontal">
+			<div class="control-group">
+				<label class="control-label" for="nuevo_nro_socio">[% 'Nuevo Nro. de socio' | i18n %]</label>
+				<div class="controls">
+					<input type="text" id="nuevo_nro_socio" name="nuevo_nro_socio" value=""/>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a class="btn" data-dismiss="modal">[% 'Cancelar' | i18n %]</a>
+		<a onclick="cambiarNroSocio();" class="btn btn-primary">[% 'Aceptar' | i18n %]</a>
+	</div>
+
+</div>
 
 
