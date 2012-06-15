@@ -8,7 +8,7 @@
     </div>
   
     <div class="modal-body">
-        <form class="form-horizontal" id="formAgregarLogo" method="post" action="[% url_prefix %]/admin/logosUI.pl?token=[% token %]" enctype="multipart/form-data">
+        <form class="form-horizontal" id="agregarLogoUIForm" method="post" action="[% url_prefix %]/admin/logos.pl?token=[% token %]" enctype="multipart/form-data">
           <!-- 
           <div class="control-group">
             <label class="control-label" for="titulo_footer">[% 'Alto' | i18n %]</label>
@@ -37,14 +37,14 @@
 	              <input class="input-file" id="imagen" name="imagen" required type="file">
 	            </div>
 	          </div>
-	          <input type="hidden" id="tipoAccion" name="tipoAccion" value="ADD">
+	          <input type="hidden" id="tipoAccion" name="tipoAccion" value="ADD_UI">
 	          <input type="hidden" id="context" name="context" value="intranet">
 	      [% ELSE %]
-              <input type="hidden" id="tipoAccion" name="tipoAccion" value="MOD">
+              <input type="hidden" id="tipoAccion" name="tipoAccion" value="MOD_UI">
               <input type="hidden" id="idLogo" name="idLogo" value="[% logo.getId %]">
 	      [% END %]
 	 </form>
   </div>
   <div class="modal-footer">
-      <button class="btn btn-primary" onclick="submitForm()">[% 'Aceptar' | i18n %]</button>
+      <button class="btn btn-primary" onclick="submitFormUI()">[% 'Aceptar' | i18n %]</button>
   </div>

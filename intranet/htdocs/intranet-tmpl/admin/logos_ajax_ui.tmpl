@@ -2,13 +2,13 @@
 
 <script type="text/javascript">
     function agregarPortada_showUI(){
-        $('#agregarLogoForm').modal();
+        $('#agregarLogoUI').modal();
     } 
       
-    function submitForm(){
-        $('#agregarLogoForm').modal('hide');
+    function submitFormUI(){
+        $('#agregarLogoUI').modal('hide');
         startOverlay();
-        $('#formAgregarLogo').submit();
+        $('#agregarLogoUIForm').submit();
     }
     
     function modificarLogo(id){
@@ -23,8 +23,8 @@
 	function updateModificarLogo(responseText){
 	    if (!verificarRespuesta(responseText))
             return(0);
-        $('#agregarLogoForm').html(responseText);
-        $('#agregarLogoForm').modal();
+        $('#agregarLogoUI').html(responseText);
+        $('#agregarLogoUI').modal();
 	}
     
     $(document).ready(function() {
@@ -52,8 +52,8 @@
                         [% FOREACH logo IN logos %]
                             <tr>
                                 <td class="userImage">
-                                    <a class="fancy_link" href="https://[% SERVER_ADDRESS %]/private-uploads/logos/[% logo.getImagenPath %]">
-                                          <img border="0" src="https://[% SERVER_ADDRESS %]/private-uploads/logos/[% logo.getImagenPath %]" alt="[% logo.getNombre %]" >
+                                    <a class="fancy_link" href="http://[% SERVER_ADDRESS %][% opac_htdocs %]/[% user_theme %]/imagenes/[% logo.getImagenPath %]">
+                                          <img border="0" src="http://[% SERVER_ADDRESS %][% opac_htdocs %]/[% user_theme %]/imagenes/[% logo.getImagenPath %]" alt="[% logo.getNombre %]" >
 				                    </a>
                                 </td>
                                 <td>
@@ -63,16 +63,10 @@
                                 
                                     [% PERL %]
                                         print C4::AR::Filtros::action_set_button(    
-                                              title   => " [% 'Editar' | i18n %]",
-                                              button  => 'btn btn-primary',
-                                              action  => "modificarLogo([% logo.id %])", 
-                                              icon    => "icon-white icon-edit",
-                                              actions         => [
-                                                                  { title   => "Eliminar", 
-                                                                    action  => 'eliminarLogo("[% logo.id %]")', 
-                                                                    icon    => "icon-remove",
-                                                                   },
-                                                                  ],
+                                              title   => " [% 'Eliminar' | i18n %]",
+                                              button  => 'btn btn-danger',
+                                              action  => "eliminarLogoUI([% logo.id %])", 
+                                              icon    => "icon-white icon-remove",
 
                      
                                                 ) ;
@@ -99,6 +93,15 @@
 	[% END %]
 </div>
 
-<div id="agregarLogoForm" class="modal hide fade" >
+<div id="agregarLogoUI" class="modal hide fade" >
     [% INCLUDE 'formAgregarLogoUI.inc' %]
+</div>
+
+<div class="alert alert-block">
+  <h4 class="alert-heading">Atención</h4>
+  <p>
+  Cargue fotos exactamente del mismo tamaño, de lo contrario, los logos va a sufrir cambios de tamaño, provocando molestia visual.
+  <br>
+  El tamaño óptimo para un logo correcto es de 147x32 px (manteniendo el aspecto).
+  </p>
 </div>

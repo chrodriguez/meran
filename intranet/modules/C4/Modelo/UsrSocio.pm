@@ -1426,4 +1426,112 @@ sub esAdmin{
 	return ($self->es_admin);
 }
 
+sub updateNroSocio{
+
+    my ($self)          = shift;
+    my ($old_nro_socio) = @_;
+
+    my $db = $self->db;
+    my @filtros;
+    my @set;
+
+    push (  @where, ( nro_socio => { eq => old_nro_socio},) );
+    push (  @set, ( nro_socio => $self->getNro_socio,) );
+
+
+    C4::Modelo::CircPrestamo::Manager->update_circ_prestamo(     
+                                                            where => \@where,
+                                                            set   => \@set,
+                                                            db    => $db,
+                                                    );
+
+    C4::Modelo::CircPrestamoVencidoTemp::Manager->update_circ_prestamo_vencido_temp(     
+                                                            where => \@where,
+                                                            set   => \@set,
+                                                            db    => $db,
+                                                    );
+
+    C4::Modelo::CircReserva::Manager->update_circ_reserva(     
+                                                            where => \@where,
+                                                            set   => \@set,
+                                                            db    => $db,
+                                                    );
+
+    C4::Modelo::CircSancion::Manager->update_circ_sancion(     
+                                                            where => \@where,
+                                                            set   => \@set,
+                                                            db    => $db,
+                                                    );
+
+    C4::Modelo::PermCatalogo::Manager->update_perm_catalogo(     
+                                                            where => \@where,
+                                                            set   => \@set,
+                                                            db    => $db,
+                                                    );
+
+    C4::Modelo::PermCirculacion::Manager->update_perm_circulacion(     
+                                                            where => \@where,
+                                                            set   => \@set,
+                                                            db    => $db,
+                                                    );
+
+    C4::Modelo::PermGeneral::Manager->update_perm_general(     
+                                                            where => \@where,
+                                                            set   => \@set,
+                                                            db    => $db,
+                                                    );
+
+    C4::Modelo::RepBusqueda::Manager->update_rep_busqueda(     
+                                                            where => \@where,
+                                                            set   => \@set,
+                                                            db    => $db,
+                                                    );
+
+    C4::Modelo::RepHistorialCirculacion::Manager->update_rep_historial_circulacion(     
+                                                            where => \@where,
+                                                            set   => \@set,
+                                                            db    => $db,
+                                                    );
+
+    C4::Modelo::RepHistorialPrestamo::Manager->update_rep_historial_prestamo(     
+                                                            where => \@where,
+                                                            set   => \@set,
+                                                            db    => $db,
+                                                    );
+
+    C4::Modelo::RepHistorialSancion::Manager->update_rep_historial_sancion(     
+                                                            where => \@where,
+                                                            set   => \@set,
+                                                            db    => $db,
+                                                    );
+
+    C4::Modelo::SistSesion::Manager->update_sist_sesion(     
+                                                            where => (userid => {eq =>$old_nro_socio})),
+                                                            set   => (userid => $self->getNro_socio,),
+                                                            db    => $db,
+                                                    );
+
+    C4::Modelo::SysNovedad::Manager->update_sys_novedad(     
+                                                            where => (usuario => {eq =>$old_nro_socio})),
+                                                            set   => (usuario => $self->getNro_socio,),
+                                                            db    => $db,
+                                                    );
+
+    C4::Modelo::SysNovedadIntraNoMostrar::Manager->update_sys_novedad_intra_no_mostrar(     
+                                                            where => (usuario_novedad => {eq =>$old_nro_socio})),
+                                                            set   => (usuario_novedad => $self->getNro_socio,),
+                                                            db    => $db,
+                                                    );
+
+    C4::Modelo::UsrLoginAttempts::Manager->update_usr_login_attempts(     
+                                                            where => \@where,
+                                                            set   => \@set,
+                                                            db    => $db,
+                                                    );
+
+
+
+
+}
+
 1;

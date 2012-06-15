@@ -83,7 +83,11 @@
                                           [% socio.persona.getLegajo %]
                                       </td>
                                       <td>
-                                          [% socio.categoria.getDescription %]
+                                          [% TRY %]
+                                            [% socio.categoria.getDescription %]
+                                          [% CATCH %]
+                                            [% 'Sin categor&iacute;a' | i18n %]
+                                          [% END %] 
                                       </td>
                                       <td>
                                           [% issue %]

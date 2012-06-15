@@ -17,7 +17,7 @@
         $('#logos_ajax').html(responseText);
     }
     
-    function eliminarLogo(id){
+    function eliminarLogoUI(id){
 	    objAH                   = new AjaxHelper(updateEliminarLogo);
 	    objAH.showOverlay       = true;
 	    objAH.url               = URL_PREFIX+'/admin/logosDB.pl';

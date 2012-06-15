@@ -1,5 +1,27 @@
-	[% INCLUDE 'intranet-top.inc' %]	
+<!doctype html>
+<html>
+	<head>
+
+	[% INCLUDE "message_INTRA.inc" %]
 	
+	[% IF page_sub_title %]
+	    <title>Meran::UNLP::[% page_sub_title %]</title>
+	[% ELSE %]
+	    <title>Meran::UNLP</title>
+	[% END %]
+	
+	<meta charset="utf-8" />
+	<meta http-equiv="cache-control" content="public">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="/includes/css/favicon.ico">
+	<link rel="stylesheet" href="/includes/jquery/fancybox/fancybox.css" type="text/css" media="screen" />
+    
+	<link rel="stylesheet" type="text/css" href="[% temas %]/default/includes/intranet.css">
+	<link rel='stylesheet' media='screen and (max-width: 900px)' href="[% temas %]/default/includes/intra-FF_fix.css" />
+
+
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	
 	<script type="text/javascript">
@@ -50,7 +72,7 @@
         </font>
     </div>
 </noscript>
-
+<header>
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container" style="width: auto;">
@@ -61,11 +83,21 @@
         </a>
 
         <div id="logo"><a>[% 'MERAN' | i18n %]</a></div>
+        <div class="nav-collapse"></div>
       </div>
     </div>
 </div>
+</header>
 <div class="container span100 no-margin padding_nav">
-    
+    <div id="marco_principal" class="container">   
+  	<div id="marco_contenido_datos" class="contenido">
+	  <!--  usado como referencia por el MessageHelper -->
+  	<div id="end_top">
+    [% IF mensaje %]
+			<div class="alert [% mensaje_class %]">
+			        <strong>[% 'Info' | i18n %]</strong> [% mensaje %]
+			</div>
+    [% END %]
 	<div id="content" class="login-form">
 		<div class="page-header">
 		    <h1>MERAN <small>[% 'Ingresar a Intranet' | i18n %]</small></h1>
@@ -106,6 +138,8 @@
 	     </form>
 	</div><!-- content -->
 </div>
-
-
-
+</div>
+</div>
+</div> <!-- container_test -->
+</body>
+</html>

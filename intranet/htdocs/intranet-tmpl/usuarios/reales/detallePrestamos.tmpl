@@ -3,12 +3,13 @@
 [% USE HTML %]
 [% IF prestamos_cant %]		
 		<fieldset> 
-              <legend class="titulo_legend_resaltado">[% "Ejemplares Prestados" | i18n %]</legend>
+              <legend class="titulo_legend_resaltado">
+                    [% "Ejemplares Prestados" | i18n %]
+                  [% IF prestamos_cant %] 
+                      <span class="badge badge-error" style="cursor: default;">[% prestamos_cant %]</span>
+                  [% END %]
+             </legend>
                      [% IF prestamos_cant %]
-                        <div class="well">
-                            [% "Cantidad de ejemplares prestados" | i18n %]: <strong>[% prestamos_cant %]</strong> 
-                        </div>
-
                           [% PERL %]
                                 print C4::AR::Filtros::tableHeader(   
                                             id              => "table_tablaPrestamos",
