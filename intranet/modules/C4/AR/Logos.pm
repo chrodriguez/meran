@@ -30,10 +30,7 @@ use vars qw(@EXPORT @ISA);
 =cut
 sub getNombreLogoUI{
 
-    my $logosArrayRef = C4::Modelo::LogoUI::Manager->get_logoUI( 
-                                                                                sort_by => ['id DESC'],
-                                                                                limit   => 1,
-                                                                            );
+    my $logosArrayRef = C4::Modelo::LogoUI::Manager->get_logoUI( limit => 1 );
 
     if(scalar(@$logosArrayRef) > 0){
         return $logosArrayRef->[0]->getImagenPath;
@@ -47,10 +44,7 @@ sub getNombreLogoUI{
 =cut
 sub getPathLogoUI{
 
-    my $logosArrayRef = C4::Modelo::LogoUI::Manager->get_logoUI( 
-                                                                                sort_by => ['id DESC'],
-                                                                                limit   => 1,
-                                                                            );
+    my $logosArrayRef = C4::Modelo::LogoUI::Manager->get_logoUI( limit => 1 );
 
     if(scalar(@$logosArrayRef) > 0){
         return "https://" . $ENV{'SERVER_NAME'} . "/private-uploads/logos/" . $logosArrayRef->[0]->getImagenPath;
@@ -64,10 +58,7 @@ sub getPathLogoUI{
 =cut
 sub getPathLogoEtiquetas{
 
-    my $logosArrayRef = C4::Modelo::LogoEtiquetas::Manager->get_logoEtiquetas( 
-                                                                                sort_by => ['id DESC'],
-                                                                                limit   => 1,
-                                                                            );
+    my $logosArrayRef = C4::Modelo::LogoEtiquetas::Manager->get_logoEtiquetas( limit => 1 );
 
     if(scalar(@$logosArrayRef) > 0){
         return C4::Context->config('logosIntraPath') . "/" . $logosArrayRef->[0]->getImagenPath;
@@ -81,10 +72,7 @@ sub getPathLogoEtiquetas{
 =cut
 sub getSizeLogoEtiquetas{
 
-    my $logosArrayRef = C4::Modelo::LogoEtiquetas::Manager->get_logoEtiquetas( 
-                                                                                sort_by => ['id DESC'],
-                                                                                limit   => 1,
-                                                                            );
+    my $logosArrayRef = C4::Modelo::LogoEtiquetas::Manager->get_logoEtiquetas( limit => 1 );
 
     if(scalar(@$logosArrayRef) > 0){
         return ($logosArrayRef->[0]->getAncho, $logosArrayRef->[0]->getAlto);
@@ -98,45 +86,70 @@ sub eliminarLogo{
     
     my $msg_object  = C4::AR::Mensajes::create();
 
-    my $logo        = getLogoById($params->{'idLogo'});
-    
-    my $uploaddir;
-    if($params->{'context'} eq "opac"){
-        $uploaddir       = C4::Context->config('logosOpacPath');
-    }else{
-        $uploaddir       = C4::Context->config('logosIntraPath');
-    }
-    
-    if ($logo){
-    
-	    my $image_name = $logo->getImagenPath();
-	    unlink($uploaddir."/".$image_name);
-	    $logo->delete();
-	    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP15',} ) ;
-    }
+    eval {
+
+        my $logo        = getLogoById($params->{'idLogo'});
+        
+        my $uploaddir;
+        if($params->{'context'} eq "opac"){
+            $uploaddir       = C4::Context->config('logosOpacPath');
+        }else{
+            $uploaddir       = C4::Context->config('logosIntraPath');
+        }
+        
+        if ($logo){
+        
+            my $image_name = $logo->getImagenPath();
+            unlink($uploaddir."/".$image_name);
+            $logo->delete();
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP15',} ) ;
+        }
+
+    };
+ 
+     if ($@){
+         #Se loguea error de Base de Datos
+         &C4::AR::Mensajes::printErrorDB($@, 'B462','INTRA');
+         #Se setea error para el usuario
+         $msg_object->{'error'}= 1;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP14', 'params' => []} ) ;
+     }
             
     return ($msg_object);
     
 }
 
 sub eliminarLogoUI{
+
     my ($params)    = @_;
-    
+
     my $msg_object  = C4::AR::Mensajes::create();
 
-    my $logo        = getLogoByIdUI($params->{'idLogo'});
-    
-    my $uploaddir   = C4::Context->config('opachtdocs') . '/temas/' 
-                    . C4::AR::Preferencias::getValorPreferencia('tema_opac_default') 
-                    . '/imagenes';
-    
-    if ($logo){
-    
-        my $image_name = $logo->getImagenPath();
-        unlink($uploaddir."/".$image_name);
-        $logo->delete();
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP15',} ) ;
-    }
+    eval {
+
+        my $logo        = getLogoByIdUI($params->{'idLogo'});
+        
+        my $uploaddir   = C4::Context->config('opachtdocs') . '/temas/' 
+                        . C4::AR::Preferencias::getValorPreferencia('tema_opac_default') 
+                        . '/imagenes';
+        
+        if ($logo){
+        
+            my $image_name = $logo->getImagenPath();
+            unlink($uploaddir."/".$image_name);
+            $logo->delete();
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP15',} ) ;
+        }
+
+    };
+ 
+     if ($@){
+         #Se loguea error de Base de Datos
+         &C4::AR::Mensajes::printErrorDB($@, 'B462','INTRA');
+         #Se setea error para el usuario
+         $msg_object->{'error'}= 1;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP14', 'params' => []} ) ;
+     }
             
     return ($msg_object);
     
@@ -144,8 +157,10 @@ sub eliminarLogoUI{
 
 
 sub deleteLogosUI{
+
+    my ($db)        = @_;
     
-    my $logos       = C4::Modelo::LogoUI::Manager->get_logoUI();
+    my $logos       = C4::Modelo::LogoUI::Manager->get_logoUI(db => $db);
 
     my $uploaddir   = C4::Context->config('opachtdocs') . '/temas/' 
                     . C4::AR::Preferencias::getValorPreferencia('tema_opac_default') 
@@ -162,8 +177,10 @@ sub deleteLogosUI{
 }
 
 sub deleteLogos{
+
+    my ($db)        = @_;
     
-    my $logos       = C4::Modelo::LogoEtiquetas::Manager->get_logoEtiquetas();
+    my $logos       = C4::Modelo::LogoEtiquetas::Manager->get_logoEtiquetas(db => $db);
 
     my $uploaddir   = C4::Context->config('logosIntraPath');
 
@@ -171,6 +188,7 @@ sub deleteLogos{
 
         my $image_name = $logo->getImagenPath();
         unlink($uploaddir."/".$image_name);
+        C4::AR::Debug::debug("vamos a borrar un logo " . $logo->getNombre);
         $logo->delete();
 
     }
@@ -205,70 +223,110 @@ sub agregarLogoUI{
 
     my ($params,$postdata) = @_;
 
-    #borramos algun logo que este, para pisarlo con este nuevo
-    deleteLogosUI();
-    
-    my $logo = C4::Modelo::LogoUI->new();
+    my $logo        = C4::Modelo::LogoUI->new();
+    my $msg_object  = C4::AR::Mensajes::create();
+    my $db          = $logo->db;
 
-    $logo->setNombre('DEO-UI');
+    $db->{connect_options}->{AutoCommit} = 0;
+    $db->begin_work;
+
+    eval{
+
+        #borramos algun logo que este, para pisarlo con este nuevo
+        deleteLogosUI($db);
+
+        $logo->setNombre('DEO-UI');
+        
+        # if (C4::AR::Utilidades::validateString($params->{'alto'})){
+            # $logo->setAlto($params->{'alto'});
+            # $logo->setAlto('1');
+        # }
+        
+        # if (C4::AR::Utilidades::validateString($params->{'ancho'})){
+            # $logo->setAncho($params->{'ancho'});
+            # $logo->setAlto('1');
+        # }
+        
+        my ($image,$msg_object) = uploadLogoUI($postdata,'DEO-UI', $params->{'context'},$msg_object);
+        
+        $logo->setImagenPath($image);
+        
+        if (!$msg_object->{'error'}){
+            $logo->save();
+            $msg_object->{'error'} = 0;
+            $db->commit;
+        }
     
-    # if (C4::AR::Utilidades::validateString($params->{'alto'})){
-        # $logo->setAlto($params->{'alto'});
-        # $logo->setAlto('1');
-    # }
-    
-    # if (C4::AR::Utilidades::validateString($params->{'ancho'})){
-        # $logo->setAncho($params->{'ancho'});
-        # $logo->setAlto('1');
-    # }
-    
-    my ($image,$msg) = uploadLogoUI($postdata,'DEO-UI', $params->{'context'});
-    
-    $logo->setImagenPath($image);
-    
-    if (!$msg->{'error'}){
-       $logo->save();
+    };
+    if ($@){
+        # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
+       &C4::AR::Mensajes::printErrorDB($@, 'B461',"INTRA");
+       $msg_object->{'error'}= 1;
+       C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP16', 'params' => []} ) ;
+       $db->rollback;
     }
+
+    $db->{connect_options}->{AutoCommit} = 1;
     
-    return ($msg);
+    return ($msg_object);
     
 }
 
 sub agregarLogo{
 
-	my ($params,$postdata) = @_;
+    my ($params,$postdata) = @_;
 
-    #borramos algun logo que este, para pisarlo con este nuevo
-    deleteLogos();
-	
-	my $logo = C4::Modelo::LogoEtiquetas->new();
+    my $logo        = C4::Modelo::LogoEtiquetas->new();
+    my $msg_object  = C4::AR::Mensajes::create();
+    my $db          = $logo->db;
 
-    $logo->setNombre('logo_ui_opac_menu');
-	
-	# if (C4::AR::Utilidades::validateString($params->{'alto'})){
-		# $logo->setAlto($params->{'alto'});
-        $logo->setAlto('1');
-	# }
-	
-	# if (C4::AR::Utilidades::validateString($params->{'ancho'})){
-		# $logo->setAncho($params->{'ancho'});
-        $logo->setAlto('1');
-	# }
-	
-	my ($image,$msg) = uploadLogo($postdata,'logo_ui_opac_menu', $params->{'context'});
-	
-	$logo->setImagenPath($image);
-	
-	if (!$msg->{'error'}){
-	   $logo->save();
-	}
-	
-	return ($msg);
-	
+    $db->{connect_options}->{AutoCommit} = 0;
+    $db->begin_work;
+
+    eval{
+
+        #borramos algun logo que este, para pisarlo con este nuevo
+        deleteLogos($db);
+
+        $logo->setNombre('logo_ui_opac_menu');
+        
+        # if (C4::AR::Utilidades::validateString($params->{'alto'})){
+            # $logo->setAlto($params->{'alto'});
+            $logo->setAlto('1');
+        # }
+        
+        # if (C4::AR::Utilidades::validateString($params->{'ancho'})){
+            # $logo->setAncho($params->{'ancho'});
+            $logo->setAlto('1');
+        # }
+        
+        my ($image,$msg_object) = uploadLogo($postdata,'logo_ui_opac_menu', $params->{'context'},$msg_object);
+        
+        $logo->setImagenPath($image);
+        
+        if (!$msg_object->{'error'}){
+            $logo->save();
+            $msg_object->{'error'} = 0;
+            $db->commit;
+        }
+
+    };
+    if ($@){
+        # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
+       &C4::AR::Mensajes::printErrorDB($@, 'B461',"INTRA");
+       $msg_object->{'error'}= 1;
+       C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP16', 'params' => []} ) ;
+       $db->rollback;
+    }
+
+    $db->{connect_options}->{AutoCommit} = 1;
+    
+    return ($msg_object);
+    
 }
 
 sub uploadLogo{
-    my ($query,$name,$context) = @_;
+    my ($query,$name,$context,$msg_object) = @_;
     
     my @filesAllowed    = qw(
                                 jpeg
@@ -285,7 +343,6 @@ sub uploadLogo{
     # }
     
     my $maxFileSize     = 2048 * 2048; # 1/2mb max file size...
-    my $msg_object      = C4::AR::Mensajes::create();
     
     #checkeamos con libmagic el tipo del archivo
     my ($type,$notBinary) = C4::AR::Utilidades::checkFileMagic($query, @filesAllowed);
@@ -320,16 +377,16 @@ sub uploadLogo{
     }
     
     if (!$msg_object->{'error'}){
-	    my $check_size = -s "$uploaddir/$name.$type";
-	
-	    if ($check_size > $maxFileSize) {
-	         $msg_object->{'error'}= 1;
+        my $check_size = -s "$uploaddir/$name.$type";
+    
+        if ($check_size > $maxFileSize) {
+             $msg_object->{'error'}= 1;
              C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP07', 'params' => ['512 KB']} ) ;
-	    } 
+        } 
     }    
     
     if (!$msg_object->{'error'}){
-    	C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP08', 'params' => ['512 KB']} ) ;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP08', 'params' => ['512 KB']} ) ;
     }
     
     return ($name.".".$type,$msg_object);
@@ -337,7 +394,7 @@ sub uploadLogo{
 }
 
 sub uploadLogoUI{
-    my ($query,$name,$context) = @_;
+    my ($query,$name,$context,$msg_object) = @_;
     
     my @filesAllowed    = qw(
                                 jpeg
@@ -357,7 +414,6 @@ sub uploadLogoUI{
     # }
     
     my $maxFileSize     = 2048 * 2048; # 1/2mb max file size...
-    my $msg_object      = C4::AR::Mensajes::create();
     
     #checkeamos con libmagic el tipo del archivo
     my ($type,$notBinary) = C4::AR::Utilidades::checkFileMagic($query, @filesAllowed);
@@ -440,9 +496,10 @@ sub getLogoByIdUI{
 
 
 sub listar{
-    my $logos_array_ref = C4::Modelo::LogoEtiquetas::Manager->get_logoEtiquetas();
+    my $logos_array_ref = C4::Modelo::LogoEtiquetas::Manager->get_logoEtiquetas( limit   => 1,);
 
     my $logos_array_ref_count = C4::Modelo::LogoEtiquetas::Manager->get_logoEtiquetas_count();
+
     if(scalar(@$logos_array_ref) > 0){
         return ($logos_array_ref_count, $logos_array_ref);
     }else{
@@ -452,7 +509,7 @@ sub listar{
 
 sub listarUI{
 
-    my $logos_array_ref = C4::Modelo::LogoUI::Manager->get_logoUI();
+    my $logos_array_ref = C4::Modelo::LogoUI::Manager->get_logoUI( limit   => 1,);
 
     my $logos_array_ref_count = C4::Modelo::LogoUI::Manager->get_logoUI_count();
 
