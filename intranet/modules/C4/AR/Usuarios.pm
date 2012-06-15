@@ -102,7 +102,6 @@ sub modificarCredencialesSocio {
 
 
         eval {
-            $socio->setCredentials($params->{'credenciales'});
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U338', 'params' => []} ) ;
         };
 
@@ -1150,11 +1149,12 @@ sub cambiarNroSocio{
 
     if ($socio){
         my $db = $socio->db;
-        $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
 
         eval {
-            $socio->updateNroSocio($params);
+            if ($socio->updateNroSocio($params)){
+                $db->commit;
+            }
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U338', 'params' => []} ) ;
         };
 
@@ -1172,8 +1172,6 @@ sub cambiarNroSocio{
                 $session->param('userid',$socio->getNro_socio);
             }
         }
-
-        $db->{connect_options}->{AutoCommit} = 1;
     }
 
     return $msg_object;
