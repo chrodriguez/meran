@@ -7,6 +7,7 @@
  */
 var nro_socio_temp; //SOLO USADO PARA MODIFICAR_USUARIO
 var vDatosUsuario = 0;
+
 //*********************************************Modificar Datos Usuario*********************************************
 function modificarDatosDeUsuario(){
 	objAH                   = new AjaxHelper(updateModificarDatosDeUsuario);
@@ -380,6 +381,46 @@ function updateModificacionCredenciales(responseText){
 	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
 	detalleUsuario(USUARIO.ID);
+}
+
+function showModalCambiarNroSocio(){
+  $('#modificar-nro-socio').modal('show');
+  $('#nuevo_nro_socio').val(USUARIO.ID);
+}
+
+
+function cambiarNroSocio(nuevo_nro_socio){
+
+  $('#modificar-nro-socio').modal('hide');
+
+  if (!nuevo_nro_socio)
+      nuevo_nro_socio = $('#nuevo_nro_socio').val();
+
+  objAH                   = new AjaxHelper(updateGuardarModificacionUsuario);
+  objAH.url               = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
+  objAH.debug             = true;
+  objAH.showOverlay       = true;
+  objAH.nro_socio         = USUARIO.ID; 
+  objAH.nuevo_nro_socio   = nuevo_nro_socio; 
+  objAH.tipoAccion        = 'CAMBIAR_NRO_SOCIO';
+
+  nro_socio_temp          = USUARIO.ID;
+  USUARIO.ID              = nuevo_nro_socio;
+
+
+  objAH.sendToServer();
+  startOverlay();
+
+}
+
+function updateGuardarModificacionUsuario(responseText){
+  var Messages=JSONstring.toObject(responseText);
+  setMessages(Messages);
+
+  if (Messages.error)
+      USUARIO.ID = nro_socio_temp;
+
+  detalleUsuario();
 }
 
 /************************************* FIN - Cambiar credenciales **********************************/

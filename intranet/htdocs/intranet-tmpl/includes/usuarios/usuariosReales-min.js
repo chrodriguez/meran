@@ -37,3 +37,8 @@ return(0);$('#basic-modal-content').html(responseText);$('#basic-modal-content')
 function guardarModificacionCredenciales(){$('#basic-modal-content').modal('hide');objAH=new AjaxHelper(updateModificacionCredenciales);objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';objAH.showOverlay=true;objAH.debug=false;objAH.nro_socio=USUARIO.ID;objAH.tipoAccion='GUARDAR_MODIFICACION_CREDENCIALES';objAH.credenciales=$('#credential').val();objAH.sendToServer();}
 function updateModificacionCredenciales(responseText){if(!verificarRespuesta(responseText))
 return(0);var Messages=JSONstring.toObject(responseText);setMessages(Messages);detalleUsuario(USUARIO.ID);}
+function showModalCambiarNroSocio(){$('#modificar-nro-socio').modal('show');$('#nuevo_nro_socio').val(USUARIO.ID);}
+function cambiarNroSocio(nuevo_nro_socio){$('#modificar-nro-socio').modal('hide');if(!nuevo_nro_socio)
+nuevo_nro_socio=$('#nuevo_nro_socio').val();objAH=new AjaxHelper(updateGuardarModificacionUsuario);objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';objAH.debug=true;objAH.showOverlay=true;objAH.nro_socio=USUARIO.ID;objAH.nuevo_nro_socio=nuevo_nro_socio;objAH.tipoAccion='CAMBIAR_NRO_SOCIO';nro_socio_temp=USUARIO.ID;USUARIO.ID=nuevo_nro_socio;objAH.sendToServer();startOverlay();}
+function updateGuardarModificacionUsuario(responseText){var Messages=JSONstring.toObject(responseText);setMessages(Messages);if(Messages.error)
+USUARIO.ID=nro_socio_temp;detalleUsuario();}

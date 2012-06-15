@@ -1153,21 +1153,30 @@ sub cambiarNroSocio{
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
 
-
         eval {
-            $socio->updateNroSocio($params->{'nuevo_nro_socio'});
+            $socio->updateNroSocio($params);
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U338', 'params' => []} ) ;
         };
 
         if ($@){
-            &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
+            C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
             $msg_object->{'error'}= 1;
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U339', 'params' => []} ) ;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U500', 'params' => []} ) ;
             $db->rollback;
+        }else{
+            my $loggedInUser = C4::AR::Auth::getSessionNroSocio();
+
+            if ($loggedInUser eq $params->{'nro_socio'}){
+                my $session = CGI::Session->load();
+
+                $session->param('userid',$socio->getNro_socio);
+            }
         }
+
         $db->{connect_options}->{AutoCommit} = 1;
     }
 
+    return $msg_object;
 
 }
 
