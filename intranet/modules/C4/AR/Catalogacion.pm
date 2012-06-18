@@ -7,8 +7,6 @@ use C4::AR::Busquedas;
 use C4::Date;
 use C4::AR::Utilidades qw(ASCIItoHEX existeInArray);
 use MARC::Record;
-use C4::Modelo::CatPrefMapeoKohaMarc;
-use C4::Modelo::CatPrefMapeoKohaMarc::Manager;
 use C4::AR::EstructuraCatalogacionBase;
 use C4::Modelo::CatRegistroMarcN2::Manager qw(get_cat_registro_marc_n2_count);
 use C4::AR::VisualizacionOpac;

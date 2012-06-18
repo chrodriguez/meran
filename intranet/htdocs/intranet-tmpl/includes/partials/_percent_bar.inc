@@ -3,8 +3,9 @@ var percent_progress_bar = 0;
 var interval_ID = 0;
 	function updateProgress(percentage){
 		$('#progress_bar').show();
-		$('#progress_bar').val(percentage);
-                percent_progress_bar = parseInt(percentage);
+		$('#progress_bar_value').css('width',percent_progress_bar+'%');
+		$('#progress_bar_value').html(percent_progress_bar+"%");
+        percent_progress_bar = parseInt(percentage);
 	}
 
 
@@ -17,6 +18,7 @@ var interval_ID = 0;
 	        objAH.jobID             = jobID; 
 	        objAH.sendToServer();
     	}else{
+    		updatePollTest(percent_progress_bar);
 			percent_progress_bar = null;
             clearInterval(interval_ID);
             jAlert("EHHHH LOCO, TERMINO!!!!!!!!!!!");
@@ -36,4 +38,6 @@ var interval_ID = 0;
 	
 </script>
 
-<progress id="progress_bar" max="100" style="display:none;" ></progress>
+<div id="progress_bar" class="progress progress-success progress-striped hide" style="margin-bottom: 9px;margin-top: 25px;">
+        <div class="bar" id="progress_bar_value" style="width: 0"></div>
+</div>
