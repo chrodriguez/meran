@@ -242,7 +242,8 @@ sub checkFileMagic{
     
         C4::AR::Debug::debug("dentro del foreach, chekeando la whitelist $mime y $t: " . $mime =~ m/$t/i . " y esto @nombreYextension[1] : " .$mime =~ m/@nombreYextension[1]/i);
         
-        if(($mime =~ m/$t/i) && ($mime =~ m/@nombreYextension[1]/i )){
+        # if(($mime =~ m/$t/i) && ($mime =~ m/@nombreYextension[1]/i )){
+        if($t =~ m/@nombreYextension[1]/i){
             $ok = 1;
             $type = $t;
             

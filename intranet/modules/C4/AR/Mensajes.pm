@@ -606,7 +606,11 @@ my %mensajesINTRA = (
     #caracter blanco en una busqueda AJA
     'B460' => 'Error en la palabra ingresada',
     'B461' => 'Error subiendo logos. Funcion C4::AR::Logos::uploadLogo',
-    'B462' => 'Error subiendo logos. Funcion C4::AR::Logos::eliminarLogo'
+    'B462' => 'Error subiendo logos. Funcion C4::AR::Logos::eliminarLogo',
+
+    #mensajes ayuda marc
+    'AM00' => 'La ayuda MARC ha sido guardada exitosamente',
+    'AM01' => 'Error guardando la ayuda MARC'
 );
 
 sub getMensaje {

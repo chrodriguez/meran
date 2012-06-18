@@ -40,8 +40,13 @@ sub getId_ui{
     my ($self) = shift;
 
     return ($self->id_ui);
-}  
+} 
 
+sub getId{
+    my ($self) = shift;
+
+    return ($self->id);
+}  
 
 sub setId_ui{
     my ($self) = shift;
