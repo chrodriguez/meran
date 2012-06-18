@@ -19,14 +19,6 @@ my ($template, $session, $t_params) = get_template_and_user({
 									debug               => 1,
 			    });
 
-my ($ayudasMarc,$cant)    = C4::AR::AyudaMarc::getAyudaMarc();
-
-C4::AR::Debug::debug("cantrtt : " . $cant);
-
-$t_params->{'cant'}   		= $cant;    
-$t_params->{'ayudasMarc'}  	= $ayudasMarc;
-$t_params->{'selectCampoX'} = C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
-
 $t_params->{'page_sub_title'}   = C4::AR::Filtros::i18n("Ayudas MARC");
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

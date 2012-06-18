@@ -16,7 +16,29 @@ my $tipoAccion      = $obj->{'tipoAccion'} || "";
 
 my $authnotrequired = 0;
 
-if($tipoAccion eq "AGREGAR_VISUALIZACION"){
+if($tipoAccion eq "LISTAR"){
+
+    my ($template, $session, $t_params) = get_template_and_user({
+                  template_name       => "admin/ayudaMarcAjax.tmpl",
+                  query               => $input,
+                  type                => "intranet",
+                  authnotrequired     => 0,
+                  flagsrequired       => {    ui              => 'ANY', 
+                                              tipo_documento  => 'ANY', 
+                                              accion          => 'CONSULTA', 
+                                              entorno         => 'usuarios'},
+                  debug               => 1,
+          });
+
+    my ($ayudasMarc,$cant)    = C4::AR::AyudaMarc::getAyudaMarc();
+
+    $t_params->{'cant'}       = $cant;    
+    $t_params->{'ayudasMarc'}   = $ayudasMarc;
+    $t_params->{'selectCampoX'} = C4::AR::Utilidades::generarComboCampoX('eleccionCampoX()');
+
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+
+}elsif($tipoAccion eq "AGREGAR_VISUALIZACION"){
 
     my ($user, $session, $flags)= checkauth(  $input, 
                                               $authnotrequired, 

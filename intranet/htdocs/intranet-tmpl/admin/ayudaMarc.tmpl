@@ -111,69 +111,30 @@
         var Messages        = JSONstring.toObject(responseText);
         setMessages(Messages);
         if (! (hayError(Messages) ) ){
-    //        mostrarTabla(); 
-            eleccionDeEjemplar(); 
-            $("#tablaResultSubCampos").html("");
+            mostrarTabla(); 
         }   
     }
+
+    function mostrarTabla(){
+        objAH               = new AjaxHelper(updateMostrarTabla);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;
+        objAH.url           = URL_PREFIX+"/admin/ayudaMarc/ayudaMarcDB.pl";
+        objAH.tipoAccion    = 'LISTAR';
+
+        objAH.sendToServer();
+    }
+
+    function updateMostrarTabla(responseText){
+        $("#resultAyudaMarc").html(responseText);
+    }
+
+    $(document).ready(function() {
+        mostrarTabla();
+    });
       
 </script>
 
-<fieldset>
-    <legend>[% "Ayudas MARC" | i18n %]</legend>
-        [% IF cant %]
-                [% PERL %]
-                    print C4::AR::Filtros::tableHeader(   
-                                           id              => "portada_opac_result",
-                                           class           => "",
-                                           columns         => ['[% "UI"|i18n %]','[% "Campo"|i18n %]','[% "Subcampo"|i18n %]','[% "Acciones"|i18n %]',]
-                                ) ;
-                [% END %]
-                
-                <tbody id="portada_opac_result_sortable">
-                [% FOREACH a IN ayudasMarc %]
-                    <tr id="[% a.id %]">
-                        <td>[% a.unidad_informacion.getNombre %]</td>
-                        <td>[% a.getCampo %]</td>
-                        <td>[% a.getSubCampo %]</td>
-                        <td>
-                              [% PERL %]
-                                      print C4::AR::Filtros::action_set_button(    
-                                            title => "Modificar", 
-                                            action=>"modificarPortada([% p.id %])", 
-                                            icon=>"icon-white icon-edit",
-                                            button          => 'btn btn-primary',
-                                            actions         => [
-                                                                    {title  => "Eliminar", 
-                                                                     url    =>"[% url_prefix %]/admin/portada_opac.pl",
-                                                                     params =>['id_portada=[% p.id %]','tipoAccion=DEL'], 
-                                                                     icon   =>"icon-trash"
-                                                                    },
-                                                                ],
-                                              ) ;
-                            [% END %]
-                        </td>
-                    </tr>    
-                [% END %]
-                </tbody>
-             </table>
-        [% ELSE %]
-            <div class="alert alert-info">[% 'No hay niguna ayuda MARC' | i18n %]</div>
-        [% END %]
-</fieldset>
-
-<div class="form-actions">
-    [% PERL %]
-                print C4::AR::Filtros::action_button(   
-                        button   => "btn btn-primary",
-                        action   => 'agregarAyudaMarcShow();',
-                        title   => "[% 'Agregar ayuda' | i18n %]",
-                    ) ;
-    [% END %]
-</div>
-
-<div id="addAyudaMarcForm" class="modal hide fade" >
-    [% INCLUDE 'form_ayuda_marc.inc' %]
-</div>
+<div id="resultAyudaMarc"> </div>
                 
 [% INCLUDE 'intranet-bottom.inc' %]
