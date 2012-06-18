@@ -1241,18 +1241,21 @@ sub getNivelesFromRegistro {
                               $marc_record_n2 = MARC::Record->new();
                               @ejemplares = ();
                           }
-                          
-                          
-                          #El campo es de Nivel 2
-                          if (($marc_record_n2->field($campo))&&($estructura->getRepetible)){
-                              #Existe el campo y es repetible, agrego el subcampo
-                              $marc_record_n2->field($campo)->add_subfields($subcampo => $dato);
-                          }
                           else{
-                              #No existe el campo o no es repetible, se crea uno nuevo
-                              my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
-                              $marc_record_n2->append_fields($field);
+                          
+                              #El campo es de Nivel 2
+                              if (($marc_record_n2->field($campo))&&(!$marc_record_n2->subfield($campo,$subcampo))){
+                                  #Existe el campo pero no el subcampo, agrego el subcampo
+                                  $marc_record_n2->field($campo)->add_subfields($subcampo => $dato);
                               }
+                              else{
+                                C4::AR::Debug::debug("CAMPO NUEVO");
+                                  #No existe el campo, se crea uno nuevo
+                                  my $field = MARC::Field->new($campo,'','',$subcampo => $dato);
+                                  $marc_record_n2->append_fields($field);
+                                  }
+                                  
+                            }
                           }
                   case 3 {
                           #Nivel 3 
@@ -1280,8 +1283,8 @@ sub getNivelesFromRegistro {
                   case 0 {
                       C4::AR::Debug::debug("CAMPO MULTINIVEL ".$campo."&".$subcampo."=".$dato);
                       #FIXME va en el 1 por ahora
-                          #El campo es de Nivel 1 
-                          if ($marc_record_n1->field($campo)){
+                          #El campo es de Nivel 1
+                          if (($marc_record_n1->field($campo))&&(!$marc_record_n1->subfield($campo,$subcampo))){
                               #Existe el campo, agrego el subcampo
                               $marc_record_n1->field($campo)->add_subfields($subcampo => $dato);
                           }
@@ -1316,16 +1319,16 @@ sub getNivelesFromRegistro {
         @ejemplares=();
         push (@grupos, \%hash_temp);
     
-        #C4::AR::Debug::debug("###########################################################################################");
-        #foreach my $grupo (@grupos){
-            #my $ej = $grupo->{'ejemplares'};
-            #C4::AR::Debug::debug(" GRUPO con ".scalar(@$ej)." ej");
-            #C4::AR::Debug::debug(" Grupo  ".$grupo->{'grupo'}->as_formatted);
-                #foreach my $ejemplar (@$ej){
-                        #C4::AR::Debug::debug(" Ejemplar  ".$ejemplar->as_formatted);
-                #}
-        #}
-        #C4::AR::Debug::debug("###########################################################################################");
+        C4::AR::Debug::debug("###########################################################################################");
+        foreach my $grupo (@grupos){
+            my $ej = $grupo->{'ejemplares'};
+            C4::AR::Debug::debug(" GRUPO con ".scalar(@$ej)." ej");
+            C4::AR::Debug::debug(" Grupo  ".$grupo->{'grupo'}->as_formatted);
+                foreach my $ejemplar (@$ej){
+                        C4::AR::Debug::debug(" Ejemplar  ".$ejemplar->as_formatted);
+                }
+        }
+        C4::AR::Debug::debug("###########################################################################################");
         
         my %hash_temp;
         $hash_temp{'registro'}  = $marc_record_n1;
