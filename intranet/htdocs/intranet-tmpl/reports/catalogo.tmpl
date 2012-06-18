@@ -11,26 +11,39 @@
 </script>
 
 
-[% PERL %]
+<!-- [% PERL %]
     print C4::AR::Filtros::tabbedPane( titulo    => "[% 'Reportes de Cat&aacute;logo' | i18n %]",
                                  subtitulo => "[% 'Navegue por las pesta&ntilde;as para acceder a los distintos reportes' | i18n %]",
                                  content   => [ {id => 'labels', text=> "[% 'B&uacute;squedas' | i18n %]" },
-                                                {id => 'registro', text => "[% 'Otro' | i18n %]"},
+                                                {id => 'registro', text => "[% 'Generaci&oacute;n de Etiquetas' | i18n %]"},
                                               ],
                                  content_id=> 'reportes_catalogo',
                                  active_id => 'labels',
     
     );
 
+[% END %] -->
+
+[% PERL %]
+    print C4::AR::Filtros::tabbedPane( titulo    => "[% 'Reportes de Cat&aacute;logo' | i18n %]",
+                                 subtitulo => "[% 'Navegue por las pesta&ntilde;as para acceder a los distintos reportes' | i18n %]",
+                                 content   => [ 
+                                                {id => 'registro', text => "[% 'Generaci&oacute;n de Etiquetas' | i18n %]"},
+                                              ],
+                                 content_id=> 'reportes_catalogo',
+                                 active_id => 'registro',
+    
+    );
+
 [% END %]
 
-        
-        <div class="tab-pane fade in active" id="labels">
-            [% INCLUDE 'partials/reportes/_reporte_busquedas.inc' %]
-        </div>
-        <div class="tab-pane fade" id="registro">
+         <div class="tab-pane fade in active" id="registro">
             [% INCLUDE 'partials/reportes/_reporte_gen_etiquetas.inc' %]
         </div>
+        <div class="tab-pane fade " id="labels">
+            [% INCLUDE 'partials/reportes/_reporte_busquedas.inc' %]
+        </div>
+       
       </div>
 </section>
 
