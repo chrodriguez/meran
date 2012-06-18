@@ -32,11 +32,15 @@ function cambiarSentidoOrd(){
 
 function updateInfoBusquedas(responseText){
 
+    var result_div_id = "marco_contenido_datos";
+
+    if (es_avanzada)
+        result_div_id = "resultBusqueda";
     $("#volver").hide();
-    $('#resultBusqueda').html(responseText);
+    $('#'+result_div_id).html(responseText);
     closeModal();
     if (shouldScroll)
-      scrollTo('resultBusqueda');
+      scrollTo(result_div_id);
 
 }
 

@@ -332,60 +332,60 @@ $(document).ready(function(){
 
     <div id="confirmar_div"></div>
 
-    <div id="resultBusqueda">
-	<!-- 	DETALLE USUARIO -->
-	<section id="detalleUsuario"></section>
-		
-	<!--DETALLE DE PRESTAMOS-->
-	<section id="prestamos"></section>
-	
-	<!-- DETALLE DE RESERVAS -->
-	<section id="reservas"></section>
-	
-	<!-- DETALLE DE SANCIONES -->
-	<section id="sanciones"></section>
+    <div id="datos_usuario">
+    	<!-- 	DETALLE USUARIO -->
+    	<section id="detalleUsuario"></section>
+    		
+    	<!--DETALLE DE PRESTAMOS-->
+    	<section id="prestamos"></section>
+    	
+    	<!-- DETALLE DE RESERVAS -->
+    	<section id="reservas"></section>
+    	
+    	<!-- DETALLE DE SANCIONES -->
+    	<section id="sanciones"></section>
 
 
-    <div class="accordion" id="historico_prestamos_usuario">
-        <div class="accordion-group">
-            <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#historico_prestamos_usuario" href="#prestamos_div">[% "Historial de Pr&eacute;stamos" | i18n %]</a>
-            </div>
-             <div id="prestamos_div" class="accordion-body collapse">
-                 <div class="accordion-inner">
-                        <span id="historialPrestamos"></span>
-                 </div>
+        <div class="accordion" id="historico_prestamos_usuario">
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#historico_prestamos_usuario" href="#prestamos_div">[% "Historial de Pr&eacute;stamos" | i18n %]</a>
+                </div>
+                 <div id="prestamos_div" class="accordion-body collapse">
+                     <div class="accordion-inner">
+                            <span id="historialPrestamos"></span>
+                     </div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="accordion" id="historico_reservas_usuario">
-        <div class="accordion-group">
-            <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#historico_prestamos_usuario" href="#reservas_div">[% "Historial de reservas" | i18n %]</a>
-            </div>
-             <div id="reservas_div" class="accordion-body collapse">
-                 <div class="accordion-inner">
-                        <span id="historialReservas"></span>
-                 </div>
+        <div class="accordion" id="historico_reservas_usuario">
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#historico_prestamos_usuario" href="#reservas_div">[% "Historial de reservas" | i18n %]</a>
+                </div>
+                 <div id="reservas_div" class="accordion-body collapse">
+                     <div class="accordion-inner">
+                            <span id="historialReservas"></span>
+                     </div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="accordion" id="historico_sanciones_usuario">
-        <div class="accordion-group">
-            <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#historico_prestamos_usuario" href="#sanciones_div">[% "Historial de sanciones" | i18n %]</a>
-            </div>
-             <div id="sanciones_div" class="accordion-body collapse">
-                 <div class="accordion-inner">
-                        <span id="historialSanciones"></span>
-                 </div>
+        <div class="accordion" id="historico_sanciones_usuario">
+            <div class="accordion-group">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#historico_prestamos_usuario" href="#sanciones_div">[% "Historial de sanciones" | i18n %]</a>
+                </div>
+                 <div id="sanciones_div" class="accordion-body collapse">
+                     <div class="accordion-inner">
+                            <span id="historialSanciones"></span>
+                     </div>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <div class="ticket" id="ticket" ></div>
+        
+        <div class="ticket" id="ticket" ></div>
 </div>
 
 [% INCLUDE "intranet-bottom.inc" %]

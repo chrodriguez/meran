@@ -12,7 +12,7 @@
 	    var mensajes_interval_id;
 	    var loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
 	    var reading_dm = false;
-	    
+    	var es_avanzada = [% IF advanced %] true [% ELSE %] false [% END %];
 	    
 	</script>
 	
