@@ -10,8 +10,8 @@ else
 {if(busqueda.substr(0,6).toUpperCase()=='FILTRO'){busqueda=busqueda.substr(8,1);$('#socio').val(busqueda);consultar(busqueda);}}}
 if(jQuery.trim(busqueda).length>0){objAH_usuarios.url=URL_PREFIX+'/usuarios/reales/buscarUsuarioResult.pl';objAH_usuarios.showOverlay=true;objAH_usuarios.debug=true;objAH_usuarios.funcion='changePage_usuarios';objAH_usuarios.socio=busqueda;objAH_usuarios.sendToServer();}
 else{jAlert(INGRESE_UN_DATO,USUARIOS_ALERT_TITLE);$('#socio').focus();}}
-function updateInfoUsuarios(responseText){$('#result').html(responseText);zebra('datos_tabla');var idArray=[];var classes=[];idArray[0]='socio';classes[0]='nomCompleto';classes[1]='documento';classes[2]='legajo';classes[3]='tarjetaId';busqueda=jQuery.trim($('#socio').val());$("#resultBusqueda").slideUp("slow");scrollTo('result');}
-function updateInfoUsuariosBar(responseText){$('#marco_contenido_datos').html("<div id='resultBusqueda'/><div id='result'/>");updateInfoUsuarios(responseText);}
+function updateInfoUsuarios(responseText){$('#resultBusqueda').html(responseText);var idArray=[];var classes=[];idArray[0]='socio';classes[0]='nomCompleto';classes[1]='documento';classes[2]='legajo';classes[3]='tarjetaId';busqueda=jQuery.trim($('#socio').val());scrollTo('resultBusqueda');}
+function updateInfoUsuariosBar(responseText){updateInfoUsuarios(responseText);}
 function Borrar(){$('#socio').val('');}
 function checkFilter(eventType){var str=$('#socio').val();if(eventType.toUpperCase()=='FOCUS'){if(str.substr(0,6).toUpperCase()=='FILTRO'){globalSearchTemp=$('#socio').val();Borrar();}}
 else

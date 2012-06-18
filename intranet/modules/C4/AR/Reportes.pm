@@ -5,7 +5,6 @@ package C4::AR::Reportes;
 use strict;
 no strict "refs";
 use C4::Date;
-use PDF::ReportWriter;
 
 
 use vars qw(@EXPORT_OK @ISA);

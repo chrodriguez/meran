@@ -1,7 +1,7 @@
 var objAH_search;var ORDEN;var SENTIDO_ORDEN=1;var combinables=['titulo','autor','tipo','signatura','tipo_nivel3_id'];var noCombinables=['keyword','isbn','dictionary','codBarra','estante','tema'];var shouldScroll=true;function ordenar_busqueda_catalogo(orden){if(orden==ORDEN){SENTIDO_ORDEN=!SENTIDO_ORDEN;}else{SENTIDO_ORDEN=1;ORDEN=orden;}
 objAH_search.sentido_orden=SENTIDO_ORDEN;objAH_search.sort(orden);}
 function cambiarSentidoOrd(){if(SENTIDO_ORDEN){$('#icon_'+ORDEN).attr("class","icon-chevron-up click");}else{$('#icon_'+ORDEN).attr("class","icon-chevron-down click");}}
-function updateInfoBusquedas(responseText){$("#volver").hide();$('#resultBusqueda').html(responseText);closeModal();$("#resultBusqueda").slideDown("fast");if(shouldScroll)
+function updateInfoBusquedas(responseText){$("#volver").hide();$('#resultBusqueda').html(responseText);closeModal();if(shouldScroll)
 scrollTo('resultBusqueda');}
 function updateInfoBusquedasBar(responseText){clearInterval(mensajes_interval_id);$('#navBarResult').html('');updateInfoBusquedas(responseText);if(ORDEN){cambiarSentidoOrd();}
 $(window).unbind('scroll');}
