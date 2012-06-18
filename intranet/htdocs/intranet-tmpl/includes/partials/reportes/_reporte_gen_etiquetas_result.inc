@@ -19,7 +19,8 @@ function seleccionarTr(trSelected){
                   trSelected.attr('checked', false);
                   $('#' + id_tr).hide();
                   barcode= $('#barcode'+ trSelected.val()).html();
-                
+                  $('#seleccionados').show();
+                    $('#button-seleccionados').show();
                   $('#seleccionados').append("<div class='label label-info barcode-box' name='"+ id1  + "' id='label"+barcode+"'><input type='hidden' name='"+id3+"' value='"+id_tr+"'>" + barcode + "<span class='click' id='"+barcode+"'> X </span></div>");
               
                   
@@ -39,6 +40,10 @@ function seleccionarTr(trSelected){
                               $('#grupo' + labelClosed).show();          
                               $('#' + $(this).parent().children(":input").val()).show();                    
                               $('#label'+ $(this).attr('id')).remove(); 
+                              if ($('#seleccionados').children().size() == 0){
+                                    $('#seleccionados').hide();
+                                    $('#button-seleccionados').hide();
+                              };
                                      
                   });
               }
@@ -144,23 +149,16 @@ function checkedAllTrs(id,nombreCheckbox){
           [% END %]
     
 </div>
-<div class="form-actions">
-[% PERL %]
-print C4::AR::Filtros::action_set_button(    
-                  title           => "[% 'Generar Etiquetas' | i18n %]",
-                  button          => 'btn btn-primary',
-                  actions         => [ {title => "PDF", action=>'exportarPDF()'},
-                                      ],
-                  popover         => {title => "[% 'Etiquetas' | i18n %]",
-                                        text => "[% 'Generacion de etiquetas' | i18n %]" }
-
-      ) ;
-[% END %]
- </div>
-
-
-
-
+<div class="form-actions"  id="button-seleccionados"> 
+    [% PERL %]
+                print C4::AR::Filtros::action_button( 
+                                                button      => "btn btn-primary",
+                                                action      => "exportarPDF()",
+                                                icon        => "",
+                                                title       => "[% 'Generar Etiquetas' | i18n %]"
+                                            ) ;
+            [% END %]
+</div>
 [% ELSE %]
       <div class="alert alert-info">No se han encontrado resultados.</div>
 [% END %]

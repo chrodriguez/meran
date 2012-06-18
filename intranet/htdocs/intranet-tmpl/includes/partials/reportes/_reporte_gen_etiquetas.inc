@@ -33,10 +33,25 @@
     function updateBusqueda(responseText){
         $('#report_result_gen_etiquetas').html(responseText);
         $('#report_result_gen_etiquetas').show();
-
-       
-        
     }
+
+
+    $(document).scroll(function(){
+    // If has not activated (has no attribute "data-top"
+    if (!$('.subnav').attr('data-top')) {
+        // If already fixed, then do nothing
+        if ($('.subnav').hasClass('subnav-fixed')) return;
+        // Remember top position
+        var offset = $('.subnav').offset()
+        $('.subnav').attr('data-top', offset.top);
+    }
+
+    if ($('.subnav').attr('data-top') - $('.subnav').outerHeight() <= $(this).scrollTop())
+        $('.subnav').addClass('subnav-fixed');
+    else
+        $('.subnav').removeClass('subnav-fixed');
+    });
+
 
     function generarReporteGenEtiquetas(){
 
@@ -118,11 +133,11 @@
       </form>
       
  </div>
-<header id="overview" class="jumbotron subhead">
-<form id="formSeleccionados" name="formSeleccionados" action="[% url_prefix %]/catalogacion/barcode_gen.pl" method="post">
-    <input type='hidden' name='etiquetas' value='etiquetas'>
-    <div class="alert alert-info subnav" id="seleccionados" name="seleccionados" style="max-width: 1400px !important;"></div>
-</form>
-<header>
 
-<div id="report_result_gen_etiquetas" style="display:none;"></div>
+    <form id="formSeleccionados" name="formSeleccionados" action="[% url_prefix %]/catalogacion/barcode_gen.pl" method="post">      
+        <input type='hidden' name='etiquetas' value='etiquetas'>
+        <div class="alert alert-info subnav" id="seleccionados" name="seleccionados" style="max-width: 1400px !important; display:none;">
+        </div>
+    </form>
+
+    <div id="report_result_gen_etiquetas" style="display:none;"></div>
