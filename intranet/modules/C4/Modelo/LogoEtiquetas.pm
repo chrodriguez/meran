@@ -58,7 +58,7 @@ sub getAncho{
 }
 
 sub setAncho{
-    my ($self) = shift;
+    my ($self)  = shift;
     my ($ancho) = @_;
 
     $self->ancho($ancho);

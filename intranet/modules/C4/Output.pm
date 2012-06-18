@@ -9,6 +9,7 @@ use Template::Filters;
 use C4::AR::Filtros;
 use C4::AR::Auth;
 use C4::AR::Preferencias;
+use C4::AR::Logos;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
@@ -145,6 +146,7 @@ sub gettemplate {
             plainPassword               => C4::Context->config('plainPassword') || 0,
             nroRandom                   => C4::AR::Auth::getSessionNroRandom(),
             unload_alert                => 0,
+            logo                        => C4::AR::Logos::getNombreLogoUI(),
                         
         );
 

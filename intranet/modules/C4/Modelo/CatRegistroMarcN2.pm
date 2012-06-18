@@ -997,7 +997,7 @@ sub getNavString{
             my $ed=$self->getEdicion;
             
             if ($vol){
-                 $string .= $vol;
+                 $string .= "v." . $vol;
                 }
             if ($ed){
                 if($string){$string .= " - ";}

@@ -83,6 +83,7 @@ use vars qw(@EXPORT_OK @ISA);
     getEsquemaRegularidades
     editarRegularidadEsquema
     eliminarPotencial
+    cambiarNroSocio
 );
 
 =item
@@ -101,7 +102,6 @@ sub modificarCredencialesSocio {
 
 
         eval {
-            $socio->setCredentials($params->{'credenciales'});
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U338', 'params' => []} ) ;
         };
 
@@ -563,9 +563,9 @@ sub getSocioInfoPorNroSocio {
     if ($nro_socio){
         my $socio_array_ref = C4::Modelo::UsrSocio::Manager->get_usr_socio( 
                                                     query => [ nro_socio => { eq => $nro_socio } ],
-                                                    require_objects => ['persona','ui','categoria',
+                                                    require_objects => ['persona','ui',
                                                                         'persona.documento'],
-                                                    with_objects => ['persona.alt_ciudad_ref','persona.ciudad_ref'],
+                                                    with_objects => ['persona.alt_ciudad_ref','persona.ciudad_ref','categoria'],
                                                     select       => ['persona.*','usr_socio.*'],
                                         );
 
@@ -1141,6 +1141,42 @@ sub eliminarPotencial{
     return ($msg_object);
 }	
 
+sub cambiarNroSocio{
+    my ($params) = shift;
+
+    my $msg_object= C4::AR::Mensajes::create();
+    my ($socio)     = C4::AR::Usuarios::getSocioInfoPorNroSocio($params->{'nro_socio'});
+
+    if ($socio){
+        my $db = $socio->db;
+        $db->begin_work;
+
+        eval {
+            if ($socio->updateNroSocio($params)){
+                $db->commit;
+            }
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U338', 'params' => []} ) ;
+        };
+
+        if ($@){
+            C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U500', 'params' => []} ) ;
+            $db->rollback;
+        }else{
+            my $loggedInUser = C4::AR::Auth::getSessionNroSocio();
+
+            if ($loggedInUser eq $params->{'nro_socio'}){
+                my $session = CGI::Session->load();
+
+                $session->param('userid',$socio->getNro_socio);
+            }
+        }
+    }
+
+    return $msg_object;
+
+}
 
 END { }       # module clean-up code here (global destructor)
 

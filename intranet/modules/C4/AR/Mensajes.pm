@@ -73,7 +73,7 @@ my %mensajesOPAC = (
     'S201' => 'Disculpe, no puede efectuar reservas porque usted tiene una posible sanci&oacute;n pendiente.',
     'U300' => 'Disculpe, no puede efectuar reservas porque comple la condici&oacute;n debido a las normas de la Biblioteca.',
     'U301' => 'Disculpe, no puede efectuar reservas porque usted no ha realizado a&uacute;n el curso para usuarios.',
-    'U302' => 'El libro que acaba de reservar puede ser retirado hasta del d&iacute;a: *?* a las *?*',
+    'U302' => 'El ejemplar que acaba de reservar puede ser retirado hasta el d&iacute;a: *?* a las *?*',
     'U303' => 'En este momento no hay ejemplares disponibles para pr&eacute;stamo inmediato. 
                 Cuando haya alg&uacute;n ejemplar a su disposici&oacute;n se le informar&aacute; a 
                 <br><i> *?* </i><br>Verifique que sus datos sean correctos ya que el mensaje se enviar&aacute; a esta direcci&oacute;n.',
@@ -81,7 +81,7 @@ my %mensajesOPAC = (
     'U308' => 'Se cancel&oacute; la reserva con &eacute;xito.',
     'U315' => 'Las passwords no coinciden, ingrese la password nuevamente.',
     'U338' => 'Se modificaron los datos del usuario correctamente.',
-    'U339' => 'Disculpe, no se pudo modificar los datos del usuario, intente nuevamente.',
+    'U339' => 'No se pudieron modificar los datos del usuario, intente nuevamente.',
     'U309' => 'No puede iniciar sesi&oacute;n porque sus datos censales est&aacute;n desactualizados, debe dirigirse a la biblioteca para actualizarlos.',
     'U354' => 'Disculpe, usted no tiene permisos suficientes para acceder a esta p&aacute;gina.',
     'U357' => 'Ha ingresado un nombre de usuario o password incorrecto. Por favor intente nuevamente.',
@@ -244,7 +244,7 @@ my %mensajesINTRA = (
     'U800' => 'El tipo de documento no puede estar en blanco.',
     'U337' => 'El nombre de la ciudad no puede estar en blanco.',
     'U338' => 'Se modificaron los datos del usuario correctamente.',
-    'U339' => 'Disculpe, no se pudo modificar los datos del usuario, intente nuevamente.',
+    'U339' => 'No se pudieron modificar los datos del usuario, intente nuevamente.',
     'U340' => 'Se subi&oacute; la foto con &eacute;xito.',
     'U341' => 'S&oacute;lo se permiten im&aacute;genes de tipo JPG,BMP,GIF o PNG.',
     'U342' => 'Hay un error y el archivo no puede escribirse en el servidor.',
@@ -536,8 +536,10 @@ my %mensajesINTRA = (
     'UP11' => 'La portada no se ha podido modificar',
     'UP12' => 'Ocurrio un error subiendo las imagenes',
     'UP13' => 'El tipo de archivo subido no esta permitido',
-    'UP14' => 'Ocurrio un error mientras se eliminaban lasi magenes',
+    'UP14' => 'Ocurrio un error mientras se eliminaban las imagenes',
     'UP15' => 'El logo se ha eliminado correctamente',
+    'UP16' => 'Ocurrio un error mientras se cargaban las imagenes',
+
 
 #ERRORES DE BASE DE DATOS
     'B400' => '',
@@ -602,7 +604,13 @@ my %mensajesINTRA = (
     'B458' => 'Error en funcion C4::AR::ImportacionIsoMARC::procesarReglasMatcheo',
     'B459' => 'Error en funcion C4::Modelo::ImagenesNovedadesOpac SAVE',
     #caracter blanco en una busqueda AJA
-    'B460' => 'Error en la palabra ingresada'
+    'B460' => 'Error en la palabra ingresada',
+    'B461' => 'Error subiendo logos. Funcion C4::AR::Logos::uploadLogo',
+    'B462' => 'Error subiendo logos. Funcion C4::AR::Logos::eliminarLogo',
+
+    #mensajes ayuda marc
+    'AM00' => 'La ayuda MARC ha sido guardada exitosamente',
+    'AM01' => 'Error guardando la ayuda MARC'
 );
 
 sub getMensaje {

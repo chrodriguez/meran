@@ -609,6 +609,7 @@ function updateGuardarEsquema(responseText){
 
     setMessages(Messages);
     
+    $('#datos_esquema').modal('hide');
     if(_NIVEL_ACTUAL == 1){  
         modificarN1(ID_N1, TEMPLATE_ACTUAL);
         mostrarInfoAltaNivel1(ID_N1);   

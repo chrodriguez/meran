@@ -1,5 +1,3 @@
-
-[% INCLUDE 'intranet-top.inc' %]
 [% INCLUDE  'AutocompleteHelper.inc'  %]
 
 <script type="text/javascript" src="/intranet-tmpl/includes/reports.js"></script>
@@ -13,11 +11,19 @@
     }
 
 
+    function exportarPDF(){
+        $('#accion').val('EXPORTAR_PDF');  
+        $('#form_reporte_busquedas').submit();
+    }
+
+  
     function ordenar_reporte_busquedas(orden){
               if (orden == ORDEN) {
                   ASC= !ASC;
               }
-              ORDEN = orden;       
+              ORDEN = orden; 
+              $('#orden').val(ORDEN);
+              $('#asc').val(ASC);
               generarReporteBusquedas();
     }
 
@@ -54,10 +60,6 @@
    
 
     $(document).ready( function(){ 
-         if (!Modernizr.inputtypes.date) {
-              $("date-from").datepicker();
-              $("date-to").datepicker();
-        }
         $(".cb-enable").click(function(){
             var parent = $(this).parents('.switch');
             $('.cb-disable',parent).removeClass('selected');
@@ -70,6 +72,13 @@
             $(this).addClass('selected');
             $('.checkbox',parent).attr('checked', false);
         });
+         if (!Modernizr.inputtypes.date) {
+              $("date-from").datepicker();
+              $("date-to").datepicker();
+        }
+       
+        $('#orden').val(ORDEN);
+        $('#asc').val(ASC);
 
         CrearAutocompleteUsuarios({ 
                                                     IdInput: 'usuario', 
@@ -81,8 +90,10 @@
 </script>
 
 <div class="center_fieldset report_form_container">
-      <form class="form-horizontal" onsubmit="return false;">
-
+      <form class="form-horizontal" id="form_reporte_busquedas" action="[% url_prefix %]/reports/catalogoDB.pl" method="get">
+          <input type='hidden' id='accion' name="accion" value=''>
+          <input type='hidden' id='orden' name="orden" value=''>
+          <input type='hidden' id='asc' name="asc" value=''>
           <div id="divInfoUsuario" class="control-group" >
               <label for="usuario" class="control-label">[% 'Usuario' | i18n %]
                   [% PERL %]
@@ -92,7 +103,7 @@
               <div class="controls">
                   <input type='text' id='usuario' name='usuario' value='' size=32 tabindex='3' style="float: left">
                   <div id="estadoUsuario"></div>
-                  <input type='hidden' id='nro_socio_hidden' value='' tabindex='-1'>
+                  <input type='hidden' id='nro_socio_hidden' name="nro_socio" value='' tabindex='-1'>
               </div>
           </div>
   
@@ -118,7 +129,7 @@
           <div class="control-group">
             <label class="control-label"  for="name">Valor</label>
             <div class="controls">
-              <input class="xlarge" id="valor" name="valor" size="30" type="text">
+                <input class="xlarge" id="valor" name="valor" size="30" type="text">
               <p class="help-block">Ej. Econom&iacute;a</p>
             </div>
           </div><!-- /control-group -->
@@ -153,7 +164,7 @@
                                                   button       => "btn btn-primary",
                                                   action       => "generarReporteBusquedas();", 
                                                   icon         => "",
-                                                  title        => "Consultar",
+                                                  title        => "Generar Reporte",
                                               ) ;
             [% END %]
           </div>

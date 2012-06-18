@@ -594,7 +594,7 @@ sub libreDeuda {
     
     my $branchcode= $socio->getId_ui ||'default';
 
-    my $biblio=  C4::AR::Referencias::obtenerDefaultUI();;
+    my $biblio=  C4::AR::Referencias::obtenerDefaultUI();
 
  
 
@@ -1220,12 +1220,13 @@ sub pdfFromHTML {
 	my ($out,$params) = @_;
 	
 	$out               = _unformat($out);
-	my $is_report      = $params->{'is_report'} || 1;   
+	my $is_report      = $params->{'is_report'} || "NO";   
+
 	my $htmldoc        = new HTML::HTMLDoc( 'mode' => 'file', 'tmpdir' => '/tmp' );
 
 	$htmldoc->set_html_content($out);
-	if (!$is_report){
- 		$htmldoc->landscape();
+	if ($is_report eq "SI"){
+        $htmldoc->landscape();
 		$htmldoc->set_header( 't', '.', 'D' );
 	}
 	$htmldoc->color_on();

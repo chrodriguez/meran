@@ -319,7 +319,8 @@ sub cantReservasPorGrupoEnEspera{
 
     my @filtros;
     push(@filtros, ( id2    => { eq => $id2}));
-    push(@filtros, ( estado => { ne => 'G'} ));
+    push(@filtros, ( id3    => { eq => undef}));
+    push(@filtros, ( estado => { eq => 'G'} ));
 
     my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( query => \@filtros); 
 
@@ -331,6 +332,7 @@ sub cantReservasPorGrupoAsignadas{
 
     my @filtros;
     push(@filtros, ( id2    => { eq => $id2}));
+    push(@filtros, ( id3    => { ne => undef}));
     push(@filtros, ( estado => { eq => 'E'} ));
 
     my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( query => \@filtros); 
@@ -1580,7 +1582,7 @@ sub getHistorialReservasParaTemplate {
     
     my @filtros;
     push(@filtros, ( nro_socio => { eq => $nro_socio }));
-    push(@filtros, ( tipo_operacion => { eq => ['cancelacion','reserva','espera' ] } ) );
+    push(@filtros, ( tipo_operacion => { eq => ['cancelacion','reserva','espera','notificacion' ] } ) );
 
     my $reservas_array_ref = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                           query             => \@filtros,

@@ -33,11 +33,11 @@ C4::AR::Validator::validateParams('U389',$obj,['nro_socio'] );
 
 my $socio       = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
+C4::AR::Validator::validateObjectInstance($socio);
+
 if ($socio->getNro_socio eq C4::AR::Auth::getSessionNroSocio() ){
     C4::AR::Auth::updateLoggedUserTemplateParams($session,$t_params,$socio);
 }
-
-C4::AR::Validator::validateObjectInstance($socio);
 
 #### Verifica si la foto ya esta cargada
 

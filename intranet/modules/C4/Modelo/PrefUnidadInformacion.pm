@@ -40,8 +40,13 @@ sub getId_ui{
     my ($self) = shift;
 
     return ($self->id_ui);
-}  
+} 
 
+sub getId{
+    my ($self) = shift;
+
+    return ($self->id);
+}  
 
 sub setId_ui{
     my ($self) = shift;
@@ -294,12 +299,14 @@ sub getCampo{
 
 sub tieneLogoOpacMenu{
 	my ($self) = shift;
+
+    use C4::AR::Logos;
 	
 	my $tema_opac   = C4::AR::Preferencias::getValorPreferencia('tema_opac_default') || $self->getId_ui;
     my $logo =
         C4::Context->config('opachtdocs') . '/temas/'
       . $tema_opac
-      . '/imagenes/logo_ui_opac_menu.png';
+      . '/imagenes/' . C4::AR::Logos::getNombreLogoUI();
 
     C4::AR::Debug::debug("TIENE LOGO OPAC MENU: ".$logo);
     if ( -e $logo ){

@@ -9,7 +9,8 @@
 </div>
 [% END %]
 [% IF cantidad %]
-                  <div class="contenedor_paginador">[% paginador %]</div>  
+      <div class="contenedor_paginador">[% paginador %]</div>  
+     
       [% PERL %]
             print C4::AR::Filtros::tableHeader(   
                               id              => "tablaResult",
@@ -28,7 +29,7 @@
         [% END %]
 
         <tbody>      
-              [% FOREACH res IN results %]   
+              [% FOREACH res IN results %]
                 <tr>
                   <td>
                       [% res.valor %]
@@ -44,15 +45,16 @@
                                                             params =>   ["nro_socio=[% nro_socio %]"],
                                                             title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
                                                       );
-                                [% END %]             
+                                [% END %] 
+                             
                       [% ELSE %]
                                 '[% "Desconocido" | i18n %]'
+                               
                       [% END %]
                       
-
                   </td>
                   <td>
-                      [% res.busqueda.fecha %]
+                      [% res.busqueda.getFecha_formateada %]
                   </td>
                   <td>
                       
@@ -62,16 +64,17 @@
              [% END %]
         </tbody>
  </table>
+
  <div class="form-actions">
                               [% PERL %]
                                       print C4::AR::Filtros::action_set_button(    
                                                                           title           => "[% 'Exportar resultados' | i18n %]",
                                                                           button          => 'btn btn-primary',
         
-                                                                          actions         => [  {title => "DOC", action=>'exportarXLS()'},
-                                                                                                {title => "XLS", action=>'exportarXLS()'},
-                                                                                                {title => "ODT", action=>'realizarAccion()'},
-                                                                                                {title => "ODS", action=>'realizarAccion()'},
+                                                                          actions         => [  {title => "DOC", action=>'exportarDoc()'},
+                                                                                                {title => "PDF", action=>'exportarPDF()'},
+                                                                                                {title => "ODT", action=>'realizarODT()'},
+                                                                                                {title => "ODS", action=>'realizarODS()'},
                                                                                               ],
                                                                           popover           => {title => "[% 'Pr&eacute;stamos' | i18n %]",
                                                                                                 text => "[% 'Renovar (si aplica) o devolver ejemplares' | i18n %]" }

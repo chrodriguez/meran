@@ -242,7 +242,8 @@ sub checkFileMagic{
     
         C4::AR::Debug::debug("dentro del foreach, chekeando la whitelist $mime y $t: " . $mime =~ m/$t/i . " y esto @nombreYextension[1] : " .$mime =~ m/@nombreYextension[1]/i);
         
-        if(($mime =~ m/$t/i) && ($mime =~ m/@nombreYextension[1]/i )){
+        # if(($mime =~ m/$t/i) && ($mime =~ m/@nombreYextension[1]/i )){
+        if($t =~ m/@nombreYextension[1]/i){
             $ok = 1;
             $type = $t;
             
@@ -2084,7 +2085,7 @@ sub generarComboCategoriasDeSocio{
 
     my @select_categorias_array;
     my %select_categorias_hash;
-    my ($categorias_array_ref)  = &C4::AR::Referencias::obtenerCategoriaDeSocio();
+    my ($categorias_array_ref)  = C4::AR::Referencias::obtenerCategoriaDeSocio();
 
     foreach my $categoria (@$categorias_array_ref) {
         push(@select_categorias_array, $categoria->getId);
@@ -4755,7 +4756,7 @@ sub demo_test{
         $job = C4::AR::BackgrounJob->new("DEMO","NULL",10);        
     }
      
-    for (my $x=1; $x<=10; $x++){
+    for (my $x=1; $x<=30; $x++){
         sleep(1);
         my $percent = printAjaxPercent(10,$x);
         $job->progress($percent);

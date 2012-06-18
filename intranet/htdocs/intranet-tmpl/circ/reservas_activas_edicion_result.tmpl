@@ -31,8 +31,8 @@
 	                        <td> 
 	                            [% reserva.getFecha_reserva_formateada %]
 	                        </td>
-	                        <td> 
-	                            [% IF rerserva.esEspera %]
+	                        <td>
+	                            [% IF reserva.esEspera %]
 	                               [% 'En espera de asignaci&oacute;n' | i18n %]
 	                            [% ELSE %]
 	                               [% reserva.getFecha_recordatorio_formateada %]

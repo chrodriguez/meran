@@ -1164,7 +1164,6 @@ sub getNivelesFromRegistro {
     my @grupos=();
     my @ejemplares=();
     my $tipo_ejemplar='';
-    my $nivel_bibliografico='';
     my $total_ejemplares=0;
     foreach my $field ($marc_record_to_meran->fields) {
         if(! $field->is_control_field){
@@ -1197,10 +1196,27 @@ sub getNivelesFromRegistro {
                   case 2 {
                           #Nivel 2
       
+      
+                          if ((($campo eq '900')&&($subcampo eq 'b'))&&($marc_record_n2->subfield($campo,$subcampo))){
+                                  #ya existe el 900,b NIVEL BIBLIOGRAFICO, no sirve que haya varios
+                                  next;
+                            }
+                          
+                          if ((($campo eq '041')&&($subcampo eq 'a'))&&($marc_record_n2->subfield($campo,$subcampo))){
+                                  #ya existe el 041,a IDIOMA, no sirve que haya varios
+                                  next;
+                           }
+
+                          if ((($campo eq '910')&&($subcampo eq 'a'))&&($marc_record_n2->subfield($campo,$subcampo))){
+                                  #ya existe el 910,a TIPO DOC, no sirve que haya varios
+                                  next;
+                           }   
+                           
+                           
                           #HAY QUE CREAR UNO NUEVO??
                           C4::AR::Debug::debug("HAY QUE CREAR UNO NUEVO??  ".$campo."&".$subcampo."=".$dato." ".$marc_record_n2->subfield($campo,$subcampo)." repetible? ".$estructura->getRepetible);
       
-                          if(($marc_record_n2->subfield($campo,$subcampo))&&(!$estructura->getRepetible)&&((($campo ne '910')&&($subcampo ne 'a'))||(($campo ne '900')&&($subcampo ne 'b')))){
+                          if(($marc_record_n2->subfield($campo,$subcampo))&&(!$estructura->getRepetible)){
                               #Existe el subcampo y no es repetible ==> es un nivel 2 nuevo
                               C4::AR::Debug::debug("Existe el subcampo y no es repetible ==> es un nivel 2 nuevo  ".$campo."&".$subcampo."=".$dato);
                                               
@@ -1216,7 +1232,6 @@ sub getNivelesFromRegistro {
                               my %hash_temp;
                               $hash_temp{'grupo'}  = $marc_record_n2;
                               $hash_temp{'tipo_ejemplar'}  = $tipo_ejemplar;
-                              $hash_temp{'nivel_bibliografico'}  = $nivel_bibliografico;
                               $hash_temp{'cant_ejemplares'}   = scalar(@ejemplares);
                               $total_ejemplares+=$hash_temp{'cant_ejemplares'};
                               my @ejemplares_grupo =   @ejemplares; #esto hace la copia del arreglo
@@ -1227,24 +1242,6 @@ sub getNivelesFromRegistro {
                               @ejemplares = ();
                           }
                           
-                          if ((($campo eq '900')&&($subcampo eq 'b'))&&($nivel_bibliografico)){
-                                  #ya existe el 900,b NIVEL BIBLIOGRAFICO, no sirve que haya varios
-                                  # $dato=$nivel_bibliografico;
-                            }
-                            else{
-                                  #Si no existe lo seteo
-                                  $nivel_bibliografico=$dato;
-                            }
-                          
-                          if ((($campo eq '041')&&($subcampo eq 'a'))&&($marc_record_n2->subfield($campo,$subcampo))){
-                                  #ya existe el 041,a IDIOMA, no sirve que haya varios
-                                  next;
-                           }
-
-                          if ((($campo eq '910')&&($subcampo eq 'a'))&&($marc_record_n2->subfield($campo,$subcampo))){
-                                  #ya existe el 910,a TIPO DOC, no sirve que haya varios
-                                  next;
-                           }   
                           
                           #El campo es de Nivel 2
                           if (($marc_record_n2->field($campo))&&($estructura->getRepetible)){

@@ -150,7 +150,7 @@
 									                           [% PERL %]
                                                                     print C4::AR::Filtros::action_set_button(    
                                                                             title           => '[% " Prestar" | i18n %]',
-                                                                            button          => 'btn btn-success',
+                                                                            button          => 'btn [% IF reserva.getNro_socio %] btn-info [% ELSE %] btn-success [% END %]',
                                                                             action          => '[% IF reserva.getNro_socio %]
                                                                                                            prestarUsuarioConReserva("[% reserva.getNro_socio %]", [% id3 %]);
                                                                                                 [% ELSE %]
