@@ -4755,7 +4755,7 @@ sub demo_test{
         $job = C4::AR::BackgrounJob->new("DEMO","NULL",10);        
     }
      
-    for (my $x=1; $x<=10; $x++){
+    for (my $x=1; $x<=30; $x++){
         sleep(1);
         my $percent = printAjaxPercent(10,$x);
         $job->progress($percent);
