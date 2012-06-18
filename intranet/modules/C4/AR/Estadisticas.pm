@@ -1081,6 +1081,7 @@ sub reservas{
     
     if($tipo eq "GR"){
         push (@filtros, ( estado => { eq => 'G'}) );
+
     
     }
     elsif($tipo eq "EJ"){
@@ -1114,17 +1115,20 @@ sub reservasEdicion{
     my @results;
 
     my $ordenAux    = 'timestamp ASC';
+
+    $ordenAux    = 'id_reserva DESC';
     
     push (@filtros, ( id_ui => { eq => $id_ui}) );
     push (@filtros, ( id2 => { eq => $id2}) );
     
     if($tipo eq "GR"){
         push (@filtros, ( estado => { eq => 'G'}) );
-        $ordenAux    = 'id_reserva DESC';
+        push (@filtros, ( id3 => { eq => undef}) );
     
     }
     else{
         push (@filtros, ( estado => { eq => 'E'}) );
+        push (@filtros, ( id3 => { ne => undef}) );
     }
     
     my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count(   query => \@filtros,

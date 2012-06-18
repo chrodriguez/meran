@@ -660,3 +660,67 @@ ALTER TABLE `usr_socio` ADD  `lastValidation` timestamp NOT NULL DEFAULT CURRENT
 UPDATE `usr_persona` SET `ciudad` =999999 WHERE ciudad IS NULL OR ciudad = '';
 
 INSERT INTO cat_ref_tipo_nivel3( id_tipo_doc, nombre, notforloan ) VALUES ('ANA', 'Analítica', 1 );
+
+DROP TABLE `usr_permiso` ;
+
+CREATE TABLE IF NOT EXISTS `cat_colaborador` (
+  `id1` int(11) NOT NULL,
+  `idColaborador` int(11) NOT NULL,
+  `tipo` varchar(10) DEFAULT NULL,
+  KEY `idColaborador` (`idColaborador`),
+  KEY `biblionumber` (`id1`,`idColaborador`,`tipo`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `cat_ref_colaborador` (
+  `descripcion` varchar(35) DEFAULT NULL,
+  `codigo` varchar(8) DEFAULT NULL,
+  `index` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`index`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=19 ;
+
+
+INSERT INTO `cat_ref_colaborador` (`descripcion`, `codigo`, `index`) VALUES
+('Compilador, compiler', 'comp.', 1),
+('Director', 'dir.', 2),
+('Editor', 'ed.', 3),
+('Ilustrador', 'il.', 4),
+('Introducción', 'introd.', 5),
+('Prefacio', 'pref.', 6),
+('Prólogo', 'pról.', 7),
+('Revisado, a.', 'rev.', 8),
+('Traductor, translator, traducción', 'tr.', 9),
+('Colaborador', 'colab.', 10),
+('Coordinador', 'coord.', 11),
+('Profesor', 'prof.', 12),
+('Sonido', 'son.', 13),
+('Montaje', 'mon.', 14),
+('Curador', 'cur.', 15),
+('Diseñador', 'dis.', 16),
+('Grabados', 'grab.', 17),
+('Diagramador', 'diag.', 18);
+
+
+CREATE TABLE IF NOT EXISTS `oai_harvester_register` (
+  `id` tinyint(4) NOT NULL AUTO_INCREMENT,
+  `server_id` tinyint(4) NOT NULL,
+  `oai_identifier` varchar(255) DEFAULT NULL,
+  `record` mediumtext NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+
+CREATE TABLE IF NOT EXISTS `oai_harvester_server` (
+  `id` tinyint(4) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `mail` varchar(255) DEFAULT NULL,
+  `version` varchar(10) DEFAULT NULL,
+  `firstdate` date NOT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `resumptionToken` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+

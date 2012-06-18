@@ -536,8 +536,10 @@ my %mensajesINTRA = (
     'UP11' => 'La portada no se ha podido modificar',
     'UP12' => 'Ocurrio un error subiendo las imagenes',
     'UP13' => 'El tipo de archivo subido no esta permitido',
-    'UP14' => 'Ocurrio un error mientras se eliminaban lasi magenes',
+    'UP14' => 'Ocurrio un error mientras se eliminaban las imagenes',
     'UP15' => 'El logo se ha eliminado correctamente',
+    'UP16' => 'Ocurrio un error mientras se cargaban las imagenes',
+
 
 #ERRORES DE BASE DE DATOS
     'B400' => '',
@@ -602,7 +604,9 @@ my %mensajesINTRA = (
     'B458' => 'Error en funcion C4::AR::ImportacionIsoMARC::procesarReglasMatcheo',
     'B459' => 'Error en funcion C4::Modelo::ImagenesNovedadesOpac SAVE',
     #caracter blanco en una busqueda AJA
-    'B460' => 'Error en la palabra ingresada'
+    'B460' => 'Error en la palabra ingresada',
+    'B461' => 'Error subiendo logos. Funcion C4::AR::Logos::uploadLogo',
+    'B462' => 'Error subiendo logos. Funcion C4::AR::Logos::eliminarLogo'
 );
 
 sub getMensaje {

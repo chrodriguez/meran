@@ -482,7 +482,7 @@ sub detalleNivel3{
             #recupero las analiticas por el id1    
             my $cat_reg_analiticas_array_ref = C4::AR::Nivel2::getAllNivel2FromAnaliticasById1($nivel2_object->getId1());
 
-            if(scalar(@$cat_reg_analiticas_array_ref) > 0){
+            if( ($cat_reg_analiticas_array_ref) && (scalar(@$cat_reg_analiticas_array_ref) > 0) ){
                 my $n2 = C4::AR::Nivel2::getNivel2FromId2($cat_reg_analiticas_array_ref->[0]->getId2Padre());
 
                 if($n2){
