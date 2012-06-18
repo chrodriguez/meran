@@ -37,10 +37,17 @@ if (!C4::AR::Utilidades::validateString($user_id)){
 	}
 	
 }else{
-	my ($error, $msg) = C4::AR::Auth::recoverPassword($params);
-	$t_params->{'message'} = $msg;
 
-	if (!$error){
+	my ($error, $msg);
+	eval{
+		($error, $msg) = C4::AR::Auth::recoverPassword($params);
+		$t_params->{'message'} = $msg;
+	};
+	
+	if ($@){	
+		$t_params->{'message'}  = C4::AR::Mensajes::getMensaje('U606','opac');
+	}elsif
+		(!$error){
 		  $t_params->{'partial_template'}= "_message.inc";
 	}
 }

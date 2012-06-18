@@ -89,7 +89,7 @@ foreach my $preferencia (@$preferenciasSistema){
         my ($cantidad,$valores) = C4::AR::Referencias::obtenerValoresTablaRef($tabla,$campo,$orden);
         foreach my $val(@$valores){
             $labels{$val->{"clave"}} = $val->{"valor"}; 
-            push(@values,$val->{"clave"});
+            push(@values,$val->{"valor"});
         }
         $nuevoCampo = C4::AR::Utilidades::crearComponentes("combo",$preferencia->getVariable,\@values,\%labels,$preferencia->getValue);
         $hash{'tabla'} = $tabla;

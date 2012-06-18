@@ -320,7 +320,7 @@ sub cantReservasPorGrupoEnEspera{
     my @filtros;
     push(@filtros, ( id2    => { eq => $id2}));
     push(@filtros, ( id3    => { eq => undef}));
-    push(@filtros, ( estado => { ne => 'G'} ));
+    push(@filtros, ( estado => { eq => 'G'} ));
 
     my $reservas_count = C4::Modelo::CircReserva::Manager->get_circ_reserva_count( query => \@filtros); 
 
