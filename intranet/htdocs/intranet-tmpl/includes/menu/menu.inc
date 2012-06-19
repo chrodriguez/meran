@@ -74,7 +74,7 @@
 		                               </li>
 	      [% IF socio_data.usr_credential_type == "superLibrarian" %]
                             <li class="nav-header">[% 'Preferencias' | i18n %]</li>	
-	              			<li class="divider"></li>
+	              			      <li class="divider"></li>
 					
                              <li>
                              [% PERL %]
@@ -129,6 +129,14 @@
                                                 print C4::AR::Filtros::link_to( text =>     "<i class='icon-ok'></i> [% 'Control de autoridades' | i18n %]",
                                                                                 url =>      "[% url_prefix %]/admin/referencias/referencias.pl",
                                                                                 title =>    "[% 'Control de autoridades' | i18n %]"
+                                                                            ) ;
+                                            [% END %]
+                                </li>
+                                <li>
+                                            [% PERL %]
+                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-eye-open'></i> [% 'Moderar revisiones' | i18n %]",
+                                                                                url =>      "[% url_prefix %]/admin/catalogo/revisiones_pendientes.pl",
+                                                                                title =>    "[% 'Moderar revisiones' | i18n %]"
                                                                             ) ;
                                             [% END %]
                                 </li>

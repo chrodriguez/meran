@@ -4,8 +4,8 @@
 <script type="text/javascript" language="javascript">
 
     $(document).ready( function() {
-	    makeDataTable('#prestamosVencidos');
-	    checkedAll("prestamos_vencidos", "prestamo");
+      makeDataTable('#prestamosVencidos');
+      checkedAll("prestamos_vencidos", "prestamo");
     });
     
     var selected = new Array();
@@ -56,8 +56,6 @@
 
         if (checkeds.length > 0){
         
-            //alert(selected[0].id)
-            
             for(i = 0; i < checkeds.length; i++) {
                 selected.push(checkeds[i].id);
             }
@@ -70,11 +68,11 @@
     }
     
     $(function() {
-		  theTable = $("#prestamosVencidos");
-		  $("#q").keyup(function() {
-			$.uiTableFilter(theTable, this.value);
-		  });
-	});
+      theTable = $("#prestamosVencidos");
+      $("#q").keyup(function() {
+      $.uiTableFilter(theTable, this.value);
+      });
+  });
 
 </script>
 
@@ -100,20 +98,20 @@
                                         ) ;
       [% END %]
 
-			<tbody>
-		      [% FOREACH prestamo IN prestamos %]
-		      	<tr>
-		      	    <td>
-		     		    <input type="checkbox" id="[% prestamo.getId_prestamo %]" name="prestamo" >
-				    </td>
-		      	    <td>
-		      	      [% TRY %]
-		                  [% prestamo.socio.persona.getApeYNom %]
-		              [% CATCH %]
-		                  [% 'Usuario inexistente' | i18n %]
-		              [% END %]
-				    </td>
-		      	    <td>
+      <tbody>
+          [% FOREACH prestamo IN prestamos %]
+            <tr>
+                <td>
+                <input type="checkbox" id="[% prestamo.getId_prestamo %]" name="prestamo" >
+            </td>
+                <td>
+                  [% TRY %]
+                      [% prestamo.socio.persona.getApeYNom %]
+                  [% CATCH %]
+                      [% 'Usuario inexistente' | i18n %]
+                  [% END %]
+            </td>
+                <td>
                       [% TRY %]
                         [% PERL %]
                             print C4::AR::Filtros::link_to(   text   => "[% prestamo.socio.getNro_socio %]",
@@ -126,25 +124,25 @@
                       [% CATCH %]
                           [% 'Usuario inexistente' | i18n %] ([% prestamo.nro_socio %])
                       [% END %]
-				    </td>
-				    <td>
-		          	    [% PERL %]
+            </td>
+            <td>
+                    [% PERL %]
                             print C4::AR::Filtros::link_to( text    => "[% prestamo.nivel3.codigo_barra %]",
                                                             url     => "[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
                                                             params  => ["id3=[% prestamo.nivel3.getId3 %]"],
                                                             title   => "[% prestamo.nivel3.codigo_barra %]"
                                                         );
                         [% END %]
-				    </td>
-		          	<td>
-		                [% prestamo.tipo.getDescripcion %]
-				    </td>
-		          	<td>
-		          	    [% prestamo.getFecha_prestamo_formateada %]
-				    </td>
-		        </tr>
-		      [% END %]
-		     </tbody>
+            </td>
+                <td>
+                    [% prestamo.tipo.getDescripcion %]
+            </td>
+                <td>
+                    [% prestamo.getFecha_prestamo_formateada %]
+            </td>
+            </tr>
+          [% END %]
+         </tbody>
   </table>
   <div class="form-actions">
        [% PERL %]

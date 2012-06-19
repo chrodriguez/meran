@@ -45,6 +45,13 @@ if ($accion eq "OBTENER_PERMISOS_CATALOGO"){
     my $perfil                  = $obj->{'perfil'} || 0;
     my ($permisos,$newUpdate)   = C4::AR::Permisos::obtenerPermisosCatalogo($nro_socio,$id_ui,$tipo_documento,$perfil);
 
+    $t_params->{'permisos'}     = $permisos;
+
+    if (!$permisos){
+        $permisos = C4::AR::Permisos::armarPerfilCatalogo('E');
+        $permisos = C4::AR::Permisos::parsearPermisos($permisos);
+    }
+
     $t_params->{'permisos_nivel1'} = C4::AR::Filtros::crearCheckButtonsBootstrap($permisos->{'datos_nivel1'}, 'datos_nivel1');
 
     $t_params->{'permisos_nivel2'} = C4::AR::Filtros::crearCheckButtonsBootstrap($permisos->{'datos_nivel2'}, 'datos_nivel2');
@@ -69,8 +76,6 @@ if ($accion eq "OBTENER_PERMISOS_CATALOGO"){
 
     $t_params->{'permisos_undefined'} = C4::AR::Filtros::crearCheckButtonsBootstrap($permisos->{'undefined'}, 'undefined');
     
-    $t_params->{'permisos'}     = $permisos;
-
     if ($newUpdate){
         $t_params->{'nuevoPermiso'}=1;
     }
@@ -175,6 +180,13 @@ elsif ($accion eq "SHOW_NUEVO_PERMISO_CATALOGO"){
     my $perfil = $obj->{'perfil'} || 0;
 
     my ($permisos,$newUpdate) = C4::AR::Permisos::obtenerPermisosGenerales($nro_socio,$id_ui,$tipo_documento,$perfil);
+
+    $t_params->{'permisos'}     = $permisos;
+
+    if (!$permisos){
+        $permisos = C4::AR::Permisos::armarPerfilGeneral('E');
+        $permisos = C4::AR::Permisos::parsearPermisos($permisos);
+    }
     
     $t_params->{'reportes'} = C4::AR::Filtros::crearCheckButtonsBootstrap($permisos->{'reportes'}, 'reportes');
     
@@ -185,10 +197,7 @@ elsif ($accion eq "SHOW_NUEVO_PERMISO_CATALOGO"){
     $t_params->{'adq_opac'} = C4::AR::Filtros::crearCheckButtonsBootstrap($permisos->{'adq_opac'}, 'adq_opac');
 
     $t_params->{'adq_intra'} = C4::AR::Filtros::crearCheckButtonsBootstrap($permisos->{'adq_intra'}, 'adq_intra');
-    
-    $t_params->{'permisos'} = $permisos;
-    
-    
+
     if ($newUpdate){
         $t_params->{'nuevoPermiso'}=1;
     }
@@ -292,6 +301,13 @@ elsif ($accion eq "NUEVO_PERMISO_GENERAL"){
     my $perfil = $obj->{'perfil'} || 0;
 
     my ($permisos,$newUpdate) = C4::AR::Permisos::obtenerPermisosCirculacion($nro_socio,$id_ui,$tipo_documento,$perfil);
+
+    $t_params->{'permisos'}     = $permisos;
+
+    if (!$permisos){
+        $permisos = C4::AR::Permisos::armarPerfilCirculacion('E');
+        $permisos = C4::AR::Permisos::parsearPermisos($permisos);
+    }
     
     $t_params->{'prestamos'} = C4::AR::Filtros::crearCheckButtonsBootstrap($permisos->{'prestamos'}, 'prestamos');
 
@@ -304,8 +320,6 @@ elsif ($accion eq "NUEVO_PERMISO_GENERAL"){
     $t_params->{'circ_devolver'} = C4::AR::Filtros::crearCheckButtonsBootstrap($permisos->{'circ_devolver'}, 'circ_devolver');
 
     $t_params->{'circ_sanciones'} = C4::AR::Filtros::crearCheckButtonsBootstrap($permisos->{'circ_sanciones'}, 'circ_sanciones');
-
-    $t_params->{'permisos'}=$permisos;
 
     if ($newUpdate){
         $t_params->{'nuevoPermiso'}=1;

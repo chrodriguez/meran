@@ -42,7 +42,11 @@ var jobID = 0;
 
         
         mostrarNovedades();
-        mensajesContacto();
+
+        [% IF socio_data.usr_credential_type == "superLibrarian" %]
+          mensajesContacto();
+          revisionesPendientes();
+        [% END %]
 
         mensajes_interval_id = setInterval(mensajesContacto,20000);
         [% IF twitter_username_to_search %]
@@ -65,29 +69,32 @@ var jobID = 0;
 
 <h1>[% 'Principal' | i18n %] <small>[% 'Accesos frecuentes, novedades, mensajes' | i18n %]</small></h1>
 
+<div id="revisiones_pendientes_alert" class="clear"></div>
+
 <div id="resultNovedades" class="clear"></div>
 
 <div id="mensajes_contacto" class="clear"></div>
 
-[% IF twitter_enabled %]
-	<div id="twitter_container" class="clear">
-	    <div id="twitter_result" class="alert alert-success" style="display:none;">
-	        
-	    </div>
-	    [% IF twitter_username_to_search %]
-		   <div id="tweets" class="tweets">
-		       <div class="loading">[% 'Cargando tweets...' | i18n %]</div>
-	       </div>
-		   <br />
-	    [% END %]
-	    <br />
-	    <a class="btn btn-inverse" onclick="showTwitter();" > 
-	        <i class="icon-white icon-retweet"></i> [% 'Twitter' | i18n %]
-	    </a>
-	    
-	</div>
+[% IF socio_data.usr_credential_type == "superLibrarian" %]
+  [% IF twitter_enabled %]
+  	<div id="twitter_container" class="clear">
+  	    <div id="twitter_result" class="alert alert-success" style="display:none;">
+  	        
+  	    </div>
+  	    [% IF twitter_username_to_search %]
+  		   <div id="tweets" class="tweets">
+  		       <div class="loading">[% 'Cargando tweets...' | i18n %]</div>
+  	       </div>
+  		   <br />
+  	    [% END %]
+  	    <br />
+  	    <a class="btn btn-inverse" onclick="showTwitter();" > 
+  	        <i class="icon-white icon-retweet"></i> [% 'Twitter' | i18n %]
+  	    </a>
+  	    
+  	</div>
+  [% END %]
 [% END %]
-
 [% INCLUDE 'partials/_percent_bar.inc' %]
 
 
