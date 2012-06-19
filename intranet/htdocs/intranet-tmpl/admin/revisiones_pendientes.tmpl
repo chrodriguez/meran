@@ -129,7 +129,7 @@
                     [% revision.nivel2.nivel1.getTitulo %]
                 </td>
                 <td>
-                    [% revision.nivel2.getEdicion %]
+                    [% IF revision.nivel2.getEdicion %] [% revision.nivel2.getEdicion %] [% ELSE %] ------ [% END %]
                 </td>
                 <td>
                     [% revision.getDate %]

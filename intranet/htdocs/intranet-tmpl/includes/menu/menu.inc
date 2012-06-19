@@ -136,7 +136,7 @@
                                             [% PERL %]
                                                 print C4::AR::Filtros::link_to( text =>     "<i class='icon-eye-open'></i> [% 'Moderar revisiones' | i18n %]",
                                                                                 url =>      "[% url_prefix %]/admin/catalogo/revisiones_pendientes.pl",
-                                                                                title =>    "[% 'Revisiones pendientes' | i18n %]"
+                                                                                title =>    "[% 'Moderar revisiones' | i18n %]"
                                                                             ) ;
                                             [% END %]
                                 </li>

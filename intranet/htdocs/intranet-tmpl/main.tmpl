@@ -42,9 +42,12 @@ var jobID = 0;
 
         
         mostrarNovedades();
+
         [% IF socio_data.usr_credential_type == "superLibrarian" %]
           mensajesContacto();
+          revisionesPendientes();
         [% END %]
+
         mensajes_interval_id = setInterval(mensajesContacto,20000);
         [% IF twitter_username_to_search %]
             $('#tweets').liveTwitter('[% twitter_username_to_search %]', {limit: 5, imageSize: 32}, function(){
@@ -65,6 +68,8 @@ var jobID = 0;
 </script>
 
 <h1>[% 'Principal' | i18n %] <small>[% 'Accesos frecuentes, novedades, mensajes' | i18n %]</small></h1>
+
+<div id="revisiones_pendientes_alert" class="clear"></div>
 
 <div id="resultNovedades" class="clear"></div>
 

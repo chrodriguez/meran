@@ -168,6 +168,18 @@
 			}
 		}
 
+		function revisionesPendientes(){
+	        var objAH_temp               = new AjaxHelper(updateRevisionesPendientes);
+	        objAH_temp.debug         = false;
+	        this.showState      = false;
+	        objAH_temp.url           = URL_PREFIX+'/admin/catalogo/revisiones_pendientes_check.pl';
+	        objAH_temp.sendToServer();
+		}
+
+		function updateRevisionesPendientes(responseText){
+			$('#revisiones_pendientes_alert').html(responseText);
+		}
+
 		function updateMensajesContacto(responseText){
 			$('#mensajes_contacto').html(responseText);
 		}
