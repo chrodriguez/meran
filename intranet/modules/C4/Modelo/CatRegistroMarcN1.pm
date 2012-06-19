@@ -184,7 +184,6 @@ sub agregar{
     if($params->{'id_tipo_doc'} eq "ANA"){
         my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $db );
         $cat_registro_n2_analitica->setId2Padre($params->{'id2_padre'});
-        # $cat_registro_n2_analitica->setId2Hijo($self->getId2()); #DEPRECATED
         $cat_registro_n2_analitica->setId1($self->getId1());
         $cat_registro_n2_analitica->save();
     }
@@ -230,7 +229,14 @@ sub eliminar{
       $n2->eliminar();
     }
 
-    $self->delete();
+    #elimino los registros que puedan existir en la tabla de analiticas
+    my ($nivel1_analiticas_array_ref) = C4::AR::Nivel2::getAllNivel1FromAnaliticasById($self->getId1(), $self->db);
+
+    foreach my $n1 (@$nivel1_analiticas_array_ref){
+      $n1->eliminar();
+    }  
+
+    $self->delete();  
 }
 
 sub getCDU{

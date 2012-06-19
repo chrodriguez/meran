@@ -175,12 +175,14 @@ sub agregar{
 
     $self->save();
 
+=item
     if($params->{'id_tipo_doc'} eq "ANA"){
         my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $db );
         $cat_registro_n2_analitica->setId2Padre($params->{'id2_padre'});
         $cat_registro_n2_analitica->setId1($params->{'id1'});
         $cat_registro_n2_analitica->save();
     }
+=cut
 }
 
 sub modificar{

@@ -9,19 +9,12 @@ __PACKAGE__->meta->setup(
 
     columns => [
         cat_registro_marc_n2_id             => { type => 'integer', overflow => 'truncate', not_null => 1 },
-       	# cat_registro_marc_n2_hijo_id        => { type => 'integer', overflow => 'truncate', not_null => 0 }, #DEPRECATED
         cat_registro_marc_n1_id             => { type => 'integer', overflow => 'truncate', not_null => 1 }
     ],
 
-#     primary_key_columns => [ 'cat_registro_marc_n2_id', 'cat_registro_marc_n2_hijo_id' ],
-    primary_key_columns => [ 'cat_registro_marc_n2_id' ],  
+    primary_key_columns => [ 'cat_registro_marc_n2_id' , 'cat_registro_marc_n1_id' ],  
 
     relationships => [
-        # nivel2_hijo  => {
-        #     class       => 'C4::Modelo::CatRegistroMarcN2',
-        #     key_columns => { cat_registro_marc_n2_hijo_id => 'id' },
-        #     type        => 'one to one',
-        # },
         nivel2  => {
             class       => 'C4::Modelo::CatRegistroMarcN2',
             key_columns => { cat_registro_marc_n2_id => 'id' },
@@ -97,15 +90,6 @@ sub modificar{
 sub eliminar{
     my ($self)      = shift;
     my ($params)    = @_;
-
-# TODO terminar
-
-# 
-#     my ($nivel3) = C4::AR::Nivel3::getNivel3FromId2($self->getId2(), $self->db);
-# 
-#     foreach my $n3 (@$nivel3){
-#       $n3->eliminar();
-#     }
 
     $self->delete();    
 }
