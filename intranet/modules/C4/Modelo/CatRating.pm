@@ -8,11 +8,12 @@ __PACKAGE__->meta->setup(
     table   => 'cat_rating',
 
     columns => [
-        nro_socio     => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 32 },
-        id2           => { type => 'integer', overflow => 'truncate', not_null => 1, length => 11 },
-        rate          => { type => 'float', not_null => 0, },
-        review        => { type => 'text', overflow => 'truncate' },
-        date          => { type => 'varchar', overflow => 'truncate', length => 10, not_null => 1 },
+        nro_socio       => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 32 },
+        id2             => { type => 'integer', overflow => 'truncate', not_null => 1, length => 11 },
+        review_aprobado => { type => 'integer', overflow => 'truncate', not_null => 1, length => 11, default => 0, },
+        rate            => { type => 'float', not_null => 0, },
+        review          => { type => 'text', overflow => 'truncate' },
+        date            => { type => 'varchar', overflow => 'truncate', length => 10, not_null => 1 },
     ],
 
     primary_key_columns => [ 'nro_socio','id2' ],
@@ -23,6 +24,12 @@ __PACKAGE__->meta->setup(
       {
         class       => 'C4::Modelo::UsrSocio',
         key_columns => { nro_socio => 'nro_socio' },
+        type        => 'one to one',
+      },
+      nivel2 => 
+      {
+        class       => 'C4::Modelo::CatRegistroMarcN2',
+        key_columns => { id2 => 'id' },
         type        => 'one to one',
       },
     ]
@@ -112,5 +119,17 @@ sub setDate{
     $self->review($date);
 }
 
+sub getReviewAprobado{
+    my ($self) = shift;
+
+    return ($self->review_aprobado);
+}
+
+sub setReviewAprobado{
+    my ($self) = shift;
+    my ($status) = @_;
+
+    $self->review_aprobado($status);
+}
 1;
 
