@@ -451,24 +451,10 @@ sub detalleNivel3{
         $hash_nivel2{'cantParaPrestamoActual'}  = $totales_nivel3->{'cantParaPrestamoActual'};
         
         my ($cant_docs,$e_docs)                 = getListaDeDocs($id2);  
-        
+    
         $hash_nivel2{'lista_docs'}              = $e_docs;
         $hash_nivel2{'cant_docs'}               = $cant_docs;
-
         $hash_nivel2{'enable_nivel3'}           = $nivel2_object->getTipoDocumentoObject->enableNivel3();
-
-# FIXED falta levantar del tipo de ejemplar
-        # if($nivel2_object->getTemplate() eq "ANA"){
-        
-
-        #     my $n2 = getId2Padre
-
-        #     $hash_nivel2{'nivel1_padre'}        = $nivel2_object->getIdN1Padre();
-        #     # $hash_nivel2{'nivel1_titulo_padre'} = ($nivel2_object->getPadre())?$nivel2_object->getPadre()->getTitulo():"";
-        #     # $hash_nivel2{'nivel1_isbn_padre'}   = $nivel2_object->getISBN();
-        #     $hash_nivel2{'show_action'}         = 0;
-        # }
-
 
         #otengo las analiticas
         my $cat_reg_marc_n2_analiticas          = $nivel2_object->getAnaliticas();
@@ -487,13 +473,9 @@ sub detalleNivel3{
 
                 if($n2){
                     $hash_nivel2{'nivel1_padre'} = $n2->getId1();
-                    C4::AR::Debug::debug("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaannnnnnnnnnn ".$n2->getId1());
                 }
             }
 
-            # $hash_nivel2{'nivel1_padre'}        = $nivel2_object->getIdN1Padre();
-            # $hash_nivel2{'nivel1_titulo_padre'} = ($nivel2_object->getPadre())?$nivel2_object->getPadre()->getTitulo():"";
-            # $hash_nivel2{'nivel1_isbn_padre'}   = $nivel2_object->getISBN();
             $hash_nivel2{'show_action'}         = 0;
         }
     }

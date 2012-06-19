@@ -622,6 +622,29 @@ sub getAllNivel2FromAnaliticasById{
     }
 }
 
+
+=item
+    Retorna el registro fuente de una analitica a partir de un id1
+=cut
+sub getIdNivel2RegistroFuente {
+    my($id1,$db) = @_;
+
+    $db = $db || C4::Modelo::CatRegistroMarcN2->new()->db();
+
+    my $nivel2_analiticas_array_ref = C4::Modelo::CatRegistroMarcN2Analitica::Manager->get_cat_registro_marc_n2_analitica(
+                                                                        db => $db,
+                                                                        query => [
+                                                                                    cat_registro_marc_n1_id => { eq => $id1 },
+                                                                            ]
+                                                                );
+
+    if( scalar(@$nivel2_analiticas_array_ref) > 0){
+        return $nivel2_analiticas_array_ref->[0]->getId2Padre();
+    }
+
+    return 0; 
+}
+
 sub getRating{
     my($id2,$db) = @_;
 

@@ -42,25 +42,12 @@ sub getId1 {
     return $self->cat_registro_marc_n1_id;
 }
 
-# sub getId2Hijo{
-#     my ($self)  = shift;
-
-#     return $self->cat_registro_marc_n2_hijo_id;
-# }
-
 sub setId2Padre{
     my ($self)  = shift;
     my ($id2)   = @_;
 
     $self->cat_registro_marc_n2_id($id2);
 }
-
-# sub setId2Hijo{
-#     my ($self)  = shift;
-#     my ($id2)   = @_;
-
-#     $self->cat_registro_marc_n2_hijo_id($id2);
-# }
 
 sub setId1{
     my ($self)  = shift;
