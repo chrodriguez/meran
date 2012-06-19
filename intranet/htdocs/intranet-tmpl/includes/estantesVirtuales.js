@@ -286,12 +286,14 @@ function ordenar(orden){
         function buscarContenido(){
               
                 $('#buscarContBoton').text('Cargando...'); 
+                $('#buscarContBoton').toggleClass('disabled');
                 objAH=new AjaxHelper(updateBuscarContenido);
                 objAH.debug= true;
                 objAH.showOverlay       = true;
                 objAH.url= 'estanteDB.pl';
                 objAH.showStatusIn  = 'busqueda_contenido_estante';
                 objAH.funcion = "changePage";
+                objAH.only_sphinx = 1;
                 objAH.valor=$('#input_busqueda_contenido').val();
                 objAH.tipo= 'BUSCAR_CONTENIDO';
                 objAH.sendToServer();
@@ -300,6 +302,7 @@ function ordenar(orden){
         function updateBuscarContenido(responseText){
         $('#buscarContBoton').replaceWith("<a id=buscarContBoton class='btn btn-primary click' onclick=buscarContenido();><i class='icon-search icon-white'></i> Buscar</a>"); 
 		$('#resultado_contenido_estante').html(responseText);
+
 		zebra('datos_tabla');
         ocultarLayer();
         }
