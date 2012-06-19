@@ -88,7 +88,7 @@
             </div>
         </div>
         
-        <div class="form-actions">
+        <div class="form-actions" id="contact_submit_container">
             <button class="btn btn-primary" type="submit" tabindex="16">[% 'Enviar Mensaje' | i18n %]</button>
         </div>
         
