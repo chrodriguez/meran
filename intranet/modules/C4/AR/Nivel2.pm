@@ -26,6 +26,10 @@ use vars qw(@EXPORT_OK @ISA);
         buildNavForGroups
         getAnaliticasFromNivel2
         getRevisionesPendientes
+        getReview
+        eliminarReview
+        aprobarReview
+        eliminarReviews
         
 );
 
@@ -622,14 +626,14 @@ sub getRating{
 
 
 sub getRevisionesPendientes{
-    my($id2,$db) = @_;
+    my($db) = @_;
 
     my @filtros;
 
     $db = $db || C4::Modelo::CatRating->new()->db;
     
-    push (@filtros, (id2 => {eq => $id2}));
-    push (@filtros, (review_aprobado => {eq => '0'}));
+    push (@filtros, (review_aprobado => {eq => 0}));
+    push (@filtros, (review => {ne => undef}));
 
     my $revisiones = C4::Modelo::CatRating::Manager->get_cat_rating(query => \@filtros, db => $db,require_objects=>['socio','nivel2']);
 
@@ -699,9 +703,102 @@ sub getReviews{
     }else{
         return 0;
     }
+}
+
+sub getReview{
+    my($id_review, $db) = @_;
+    my @filtros;
+  
+    $db = $db || C4::Modelo::CatRating->new()->db;
+    
+    push (@filtros, (id => {eq => $id_review}));
+
+    my $reviews = C4::Modelo::CatRating::Manager->get_cat_rating(   query => \@filtros,
+                                                                    db => $db,
+                                                                    include_objects => ['socio'],
+                                                                    sort_by => 'date',
+                                                                 );
+    if (scalar(@$reviews) > 0){
+        return $reviews->[0];
+    }else{
+        return 0;
+    }
+}
+
+sub eliminarReview{
+    my($id_review, $db) = @_;
+
+    my $review = getReview($id_review);
+
+    if ($review){
+        return $review->delete();
+    }
+
+    return 0;
 
 }
 
+sub eliminarReviews{
+    my($id_array) = @_;
+
+    my $msg_object      = C4::AR::Mensajes::create();
+
+    
+    eval {
+         foreach my $revision_id (@$id_array){
+            my $review = getReview($revision_id);
+            $review->delete();
+        }
+
+       C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'REV000'});
+    };
+
+    if ($@){
+        $msg_object->{'error'} = 1;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'REV001'});
+    } 
+
+
+    return $msg_object;
+
+}
+
+sub aprobarReviews{
+    my($id_array) = @_;
+
+    my $msg_object      = C4::AR::Mensajes::create();
+
+    
+    eval {
+         foreach my $revision_id (@$id_array){
+            aprobarReview($revision_id);
+        }
+
+       C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'REV002'});
+    };
+
+    if ($@){
+        $msg_object->{'error'} = 1;
+         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'REV003'});
+    } 
+
+
+    return $msg_object;
+
+}
+sub aprobarReview{
+    my($id_review, $db) = @_;
+
+    my $review = getReview($id_review);
+
+    if ($review){
+        $review->setReviewAprobado(1);
+        return $review->save();
+    }
+
+    return 0;
+
+}
 sub reviewNivel2{
     my ($id2,$review,$nro_socio) = @_;
     my $rating_obj = C4::Modelo::CatRating->new();

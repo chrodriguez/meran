@@ -610,7 +610,12 @@ my %mensajesINTRA = (
 
     #mensajes ayuda marc
     'AM00' => 'La ayuda MARC ha sido guardada exitosamente',
-    'AM01' => 'Error guardando la ayuda MARC'
+    'AM01' => 'Error guardando la ayuda MARC',
+
+    'REV000' => 'La revisiones han sido eliminadas',
+    'REV001' => 'La revisiones no han sido eliminadas, int&eacute;ntelo nuevamente.',
+    'REV002' => 'La revisiones han sido aprobadas para su publicaci&oacute;n.',
+    'REV003' => 'La revisiones no han sido aprobadas, int&eacute;ntelo nuevamente.',
 );
 
 sub getMensaje {
