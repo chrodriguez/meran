@@ -863,4 +863,4 @@ body{padding-bottom:60px;}
 .nano .content{padding:1px;}
 .nano .pane{background:#444;}
 #fotoUsuario{width:200px;float:right;}
-.click{cursor:pointer;}
+#opacLogo img{max-height:40px;max-width:147px;}

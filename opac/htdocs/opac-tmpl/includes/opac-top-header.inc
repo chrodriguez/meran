@@ -7,9 +7,11 @@
           <span class="icon-bar"></span>
         </a>
         [% IF ui.tieneLogoOpacMenu %]
+        <div id="opacLogo">
         	<a href="[% url_prefix %]/opac-main.pl" class="logo_opac_menu">
         		<img src="[% temas %]/[% user_theme %]/imagenes/[% logo %]" />
         	</a>
+        </div>
         [% ELSE %]
 			[% PERL %]
 	                   print C4::AR::Filtros::link_to( text    =>  "[% 'MERAN' | i18n %]",
