@@ -1,3 +1,4 @@
+ALTER TABLE cat_rating DROP PRIMARY KEY;
 ALTER TABLE  `cat_rating` ADD UNIQUE (
 `nro_socio` ,
 `id2`
