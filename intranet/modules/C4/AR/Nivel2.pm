@@ -25,6 +25,7 @@ use vars qw(@EXPORT_OK @ISA);
         getNivel2FromId2_asArray
         buildNavForGroups
         getAnaliticasFromNivel2
+        getRevisionesPendientes
         
 );
 
@@ -619,6 +620,22 @@ sub getRating{
     return $rating_count;
 }
 
+
+sub getRevisionesPendientes{
+    my($id2,$db) = @_;
+
+    my @filtros;
+
+    $db = $db || C4::Modelo::CatRating->new()->db;
+    
+    push (@filtros, (id2 => {eq => $id2}));
+    push (@filtros, (review_aprobado => {eq => '0'}));
+
+    my $revisiones = C4::Modelo::CatRating::Manager->get_cat_rating(query => \@filtros, db => $db,require_objects=>['socio','nivel2']);
+
+    return $revisiones;
+}
+
 sub getRatingPromedio{
     my($nivel2_array_ref) = @_;
 
@@ -657,6 +674,7 @@ sub getCantReviews{
     
     push (@filtros, (id2 => {eq => $id2}));
     push (@filtros, (review => {ne => NULL}));
+    push (@filtros, (review_aprobado => {eq => 1}));
     my $reviews = C4::Modelo::CatRating::Manager->get_cat_rating_count(query => \@filtros, db => $db,);
 
     return $reviews;
@@ -670,6 +688,7 @@ sub getReviews{
     
     push (@filtros, (id2 => {eq => $id2}));
     push (@filtros, (review => {ne => NULL}));
+    push (@filtros, (review_aprobado => {eq => 1}));
     my $reviews = C4::Modelo::CatRating::Manager->get_cat_rating(   query => \@filtros,
                                                                     db => $db,
                                                                     include_objects => ['socio'],
