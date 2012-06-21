@@ -1913,7 +1913,7 @@ sub procesarImportacion {
     my($id,$job) = @_;
     
     if (!$job){
-        $job = C4::AR::BackgrounJob->new("IMPORTACION","NULL",10);        
+        $job = C4::AR::BackgroundJob->new("IMPORTACION","NULL",10);        
     }
      
     my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($id);
