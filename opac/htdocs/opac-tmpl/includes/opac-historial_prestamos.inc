@@ -23,7 +23,7 @@
             <td> 
                     [% IF prestamo.nivel3.nivel1.getId1 %]
                         [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% prestamo.nivel3.nivel1.getTitulo %]",
+                                print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(prestamo.nivel3.nivel1.getTitulo) %]",
                                                                 url =>      "[% url_prefix %]/opac-detail.pl", 
                                                                 params => [ "id1=[% prestamo.nivel3.nivel1.getId1 %]", ],
                                                             ) ;
@@ -34,14 +34,14 @@
                 </td>
                 <td class="autor_result click" onClick="filtrarPorAutor([% idAutor %])" title="[% 'Filtrar por Autor' | i18n %]">
                     [% IF prestamo.nivel3.nivel1.getAutor %]
-                        [% prestamo.nivel3.nivel1.getAutor %]
+                        [% HTML.escape(prestamo.nivel3.nivel1.getAutor) %]
                     [% ELSE %]
                         &nbsp;
                     [% END %]
                 </td>
                 <td>
                     [% IF prestamo.nivel3.nivel2.getEdicion %]
-                        [% prestamo.nivel3.nivel2.getEdicion %]
+                        [% HTML.escape(prestamo.nivel3.nivel2.getEdicion) %]
                     [% END %]
             
                     [% IF prestamo.nivel3.nivel2.getAnio_publicacion %]
