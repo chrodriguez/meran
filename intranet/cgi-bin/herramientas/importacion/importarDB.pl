@@ -68,8 +68,9 @@ elsif($tipoAccion eq "DETALLE"){
       $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
       $t_params->{'resultsloop'}        = $registros;
       $t_params->{'cantidad'}           = $cantidad;
-      $t_params->{'id_importacion'}           = $id_importacion;
-      $t_params->{'record_filter'}           = $record_filter;
+      $t_params->{'id_importacion'}     = $id_importacion;
+      $t_params->{'record_filter'}      = $record_filter;
+      $t_params->{'jobID'}              = C4::AR::ImportacionIsoMARC::getImportacionById($id_importacion)->jobID;
 
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

@@ -422,7 +422,7 @@ sub actualizarDatosReservaEnEspera{
 			$paramsSancion{'fecha_comienzo'}    = $fecha_comienzo_sancion;
 			$paramsSancion{'fecha_final'}       = $fecha_fin_sancion;
 			$paramsSancion{'dias_sancion'}      = $diasDeSancionReserva;
-			$paramsSancion{'id3'}		            = $self->getId3;
+			$paramsSancion{'id3'}		        = $self->getId3;
 
 			$sancion->insertar_sancion(\%paramsSancion);
 		}

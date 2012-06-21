@@ -24,7 +24,7 @@
             <tr>
                     [% IF historial_sancion.getTipo_operacion == "Borrado"  %]
                         <td style="color:red;">
-                        Borrado, el [% historial_sancion.getTimestamp %]
+                        [% 'Borrado el' | i18n %] [% historial_sancion.getTimestamp %]
                     [% ELSE %]
 		                <td>
 		                --
@@ -32,7 +32,7 @@
                 </td>
                 <td>
                     [% IF historial_sancion.responsable == "Sistema" %]
-                        Sistema 
+                        [% 'Sistema' | i18n %]
                     [% ELSE %]
                         [% historial_sancion.usr_responsable.persona.getApeYNom %]
                     [% END %]
@@ -70,7 +70,7 @@
 				    [% END %]
                 </td>
                 <td>
-                   [% historial_sancion.nivel3.nivel2.getEdicion %] [%historial_sancion.nivel3.nivel2.getAnio_publicacion %]
+                   [% historial_sancion.nivel3.nivel2.getEdicion %] [% historial_sancion.nivel3.nivel2.getAnio_publicacion %]
                 </td>
               </tr>
             [% END %] 

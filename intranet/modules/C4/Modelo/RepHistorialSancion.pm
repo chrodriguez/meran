@@ -201,7 +201,7 @@ sub agregar {
     $self->setFecha_comienzo($data_hash->{'fecha_comienzo'});
     $self->setFecha_final($data_hash->{'fecha_final'});
     $self->setTipo_sancion($data_hash->{'tipo_sancion'});
-    $self->setId3($data_hash->{'id3'}||undef);
+    $self->setId3($data_hash->{'id3'} || undef);
     $self->setDias_sancion($data_hash->{'dias_sancion'}||undef);
 
     $self->save();
