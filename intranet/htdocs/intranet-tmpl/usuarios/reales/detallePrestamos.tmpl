@@ -35,7 +35,7 @@
 
                                 <td>
                                 [% PERL %]
-                                    print C4::AR::Filtros::link_to(	text => "HTML.escape([% prestamo.nivel3.nivel1.getTitulo %])",
+                                    print C4::AR::Filtros::link_to(	text => HTML.escape('[% prestamo.nivel3.nivel1.getTitulo %]'),
                                                             url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
                                                             params =>	["id1=[% prestamo.nivel3.nivel1.getId1 %]"],
                                                           ) ;
