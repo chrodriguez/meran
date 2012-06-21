@@ -116,11 +116,12 @@ function realizarAccionCircRapida(){
     objAH.url=URL_PREFIX+"/circ/circulacionDB.pl";
     objAH.nro_socio             = $('#nro_socio_hidden').val();
     objAH.adicional_selected    = $('#auth_selected').is(':checked'); 
-    objAH.barcode               = $('#barcode').val();
+    objAH.barcode               = $('#barcode_hidden').val();
 
     if(($('#operacion').val() == 'devolver')||($('#operacion').val() == 'renovar')){
         var prestamos_array = new Array();
 // 		prestamos_array     = prestamos_array.push($('#barcode_hidden').val());
+		alert($('#barcode_hidden').val());
         prestamos_array.push($('#barcode_hidden').val());
         objAH.datosArray    = prestamos_array;
     }
@@ -276,6 +277,13 @@ function onCompleteUsuarios(){
 // 		esRegular(NRO_SOCIO_AUTH);
 	}
 
+	// if ($('#barcode_hidden').val() != ""){
+	// 	$('#barcode').attr('disabled', 'true');
+	// } else {
+	// 	$('#barcode').attr('active', 'true');
+	// 	$('#acciones').hide();
+	// }
+
     detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
     detalleSanciones(NRO_SOCIO_AUTH);
     startOverlay();
@@ -300,7 +308,7 @@ function updateEsRegular(responseText){
     if(responseText == '0'){
         esRegular= "IRREGULAR";
     }
-    
+
     $('#estadoUsuario').html(esRegular);
 }
 

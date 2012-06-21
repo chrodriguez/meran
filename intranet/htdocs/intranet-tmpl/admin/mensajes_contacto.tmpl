@@ -20,10 +20,10 @@ var objAH;
 <fieldset>
     <legend>[% "Mensajes de Contacto" | i18n %]:</legend>
         [% IF cant_mensajes %]
-	        <div>[% paginador %]</div>
+	  
 	        <div class="datos_tabla_div_user">
 	            <div class="well">[% "La cantidad de mensajes es" | i18n %]: [% cant_mensajes %]</div>
-	            
+	                  <div>[% paginador %]</div>
 	            [% PERL %]
 	                print C4::AR::Filtros::tableHeader(   
 	                                  id              => "mensajes_contacto_table",
