@@ -71,6 +71,34 @@ sub getAyudaMarcById{
     }
 }
 
+=item
+    Obtiene la ayuda marc para el campo recibido por parametro
+    Ademas filtra por la UI actual.
+
+    Si no hay ninguna ayuda con ese campo, devuelce 0
+=cut
+sub getAyudaMarcCampo{
+
+    my ($campo) = @_;
+
+    use C4::Modelo::PrefUnidadInformacion;
+
+    my @filtros;
+
+    my $ui = C4::Modelo::PrefUnidadInformacion->getByCode(C4::AR::Preferencias::getValorPreferencia('defaultUI'));
+
+    push(@filtros, ( ui => { eq => $ui->getId}));
+    push(@filtros, ( campo => { eq => $campo}));
+
+    my $ayudasArrayRef = C4::Modelo::CatAyudaMarc::Manager->get_cat_ayuda_marc( query => \@filtros ); 
+
+    if(scalar(@$ayudasArrayRef) > 0){
+        return ($ayudasArrayRef->[0]);
+    }else{
+        return (0);
+    }
+}
+
 sub existeAyuda{
     my ($params) = @_;
 
