@@ -8,6 +8,7 @@ __PACKAGE__->meta->setup(
     table   => 'cat_rating',
 
     columns => [
+        id              => { type => 'serial', overflow => 'truncate', not_null => 1 , length => 11},
         nro_socio       => { type => 'varchar', overflow => 'truncate', not_null => 1, length => 32 },
         id2             => { type => 'integer', overflow => 'truncate', not_null => 1, length => 11 },
         review_aprobado => { type => 'integer', overflow => 'truncate', not_null => 1, length => 11, default => 0, },
@@ -16,7 +17,8 @@ __PACKAGE__->meta->setup(
         date            => { type => 'varchar', overflow => 'truncate', length => 10, not_null => 1 },
     ],
 
-    primary_key_columns => [ 'nro_socio','id2' ],
+    unique_key => [ 'nro_socio','id2' ],
+    primary_key_columns => [ 'id' ],
 
      relationships =>
     [
@@ -109,7 +111,10 @@ sub setReview{
 sub getDate{
     my ($self) = shift;
 
-    return ($self->date);
+    my $dateformat = C4::Date::get_date_format();
+
+    return ( C4::Date::format_date($self->date,$dateformat) );
+
 }
 
 sub setDate{

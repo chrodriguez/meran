@@ -1909,16 +1909,27 @@ sub procesarReferencia {
 
 
 sub procesarImportacion {
-    my($id) = @_;
+    my($id,$job) = @_;
+
+    use C4::AR::BackgroundJob;
     
+    if (!$job){
+        $job = C4::AR::BackgrounJob->new("IMPORTACION","NULL",10);        
+    }
+     
     my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($id);
     
     #Se obtienen los registros NO IGNORADOS; NI IMPORTADOS;  NI QUE MATCHEEN
     my $registros_importar = $importacion->getRegistrosParaImportar();
     
-    
+    my $count = 1;
+
     foreach my $io_rec (@$registros_importar){
         C4::AR::Debug::debug("Importacion => Procesando registro ".$io_rec->getId());
+        
+        my $percent = C4::AR::Utilidades::printAjaxPercent(scalar(@$registros_importar),$count);
+
+        $job->progress($percent);
       eval{
         $io_rec->aplicarImportacion();
         $io_rec->setEstado('IMPORTADO');
@@ -1931,6 +1942,8 @@ sub procesarImportacion {
        $io_rec->setEstado('ERROR');
        $io_rec->save();
        }
+
+       $count++;
     }
     
     #Ahora hay que Actualizar los Registros que MATCHEAN y NO ESTAN IGNORADOS.

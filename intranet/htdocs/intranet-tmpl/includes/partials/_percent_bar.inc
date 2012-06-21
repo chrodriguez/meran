@@ -39,5 +39,5 @@ var interval_ID = 0;
 </script>
 
 <div id="progress_bar" class="progress progress-success progress-striped hide" style="margin-bottom: 9px;margin-top: 25px;">
-        <div class="bar" id="progress_bar_value" style="width: 0"></div>
+        <div class="bar" id="progress_bar_value" style="width: 0%"></div>
 </div>

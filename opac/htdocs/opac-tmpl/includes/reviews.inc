@@ -14,9 +14,11 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <div class="span2">
-                  <a class="fancylink" rel="group" href="/uploads/covers/[% portada_registro_big %]" >
-                        <img  name="cover" src="/uploads/covers/[% portada_registro_medium %]" title="Portada" style="float:left" />
-                  </a>
+                [% IF portada_registro %]
+                    <a class="fancylink" href="/uploads/covers/[% portada_registro_big %]">
+                        <img src="/uploads/covers/[% portada_registro_medium %]" class="book_cover" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" />
+                    </a>
+                [% END %]
             </div>
             
 
@@ -42,9 +44,8 @@
   </div><br>
 
 <fieldset>
-      <legend> [% 'Comentarios realizados' | i18n %]</legend>
       [% IF reviews %]
-
+           <br />
           [% FOREACH review IN reviews %]
                   <div class="well center-section-form">
                       [% IF socio_data.usr_nro_socio != review.socio.getNro_socio %]
@@ -53,7 +54,7 @@
                           <strong>[% 'Escrito por' | i18n %]: </strong><span class="user_cite">[% 'usted' | i18n %]</span><br>
                       [% END %]
                       <strong>[% 'Fecha' | i18n %]: </strong>[% review.getDate %]<br>
-                      <strong>[% 'Mensaje' | i18n %]: </strong>[% HTML.escape(review.getReview) %]
+                      <strong>[% 'Comentario' | i18n %]: </strong>[% HTML.escape(review.getReview) %]
                   
                   </div>    <br>
             
