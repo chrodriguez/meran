@@ -1,9 +1,5 @@
 [% USE HTML %]
 
-
-[% USE HTML %]
-
-
 <div class="alert">
 	<a class="close" data-dismiss="alert" href="#">×</a>
 	<div class="modal-header">
@@ -15,7 +11,7 @@
 	                    <dl>
 	                    	<dt>
 			                    [% PERL %]
-			                              print C4::AR::Filtros::link_to( text =>     "[% reserva.nivel2.nivel1.getTitulo %]",
+			                              print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
 			                                                              url =>      "[% url_prefix %]/opac-info_reservas.pl", 
 			                                                              params =>   ["action=detalle_asignadas"],
 			                                                              title =>    "[% 'Reservas' | i18n %]"
@@ -24,7 +20,7 @@
 		                    </dt>
 		                    <dd>
 			                    [% IF reserva.nivel2.nivel1.getAutor %]
-			                        [% reserva.nivel2.nivel1.getAutor %]
+			                        [% HTML.escape(reserva.nivel2.nivel1.getAutor) %]
 			                    [% ELSE %]
 			                        &nbsp;
 			                    [% END %]
