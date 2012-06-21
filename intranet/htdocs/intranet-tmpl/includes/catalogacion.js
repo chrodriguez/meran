@@ -1414,7 +1414,19 @@ function crearBotonAgregarEdicion(ID2,TIPO_DOC){
 }
 
 function ayudaParaCampo(campo){
-    alert("crear ventana con ayuda para campo " + campo);
+    objAH                   = new AjaxHelper(updateAyudaParaCampo);
+    objAH.debug             = true;
+    objAH.showOverlay       = true;
+    objAH.url               = URL_PREFIX+'/catalogacion/estructura/estructuraCataloDB.pl';
+    objAH.tipoAccion        = 'SHOW_AYUDA_MARC';
+    objAH.campo               = campo;
+
+    objAH.sendToServer();
+}
+
+function updateAyudaParaCampo(responseText){
+    $('#ayudaMARC').html(responseText);
+    $('#ayudaMARC').modal();
 }
 
 function generarOpcionesParaSelect(array_options){

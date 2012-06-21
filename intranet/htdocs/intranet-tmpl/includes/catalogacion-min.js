@@ -124,7 +124,8 @@ function crearBotonAyudaCampo(campo,funcion){var funcion="ayudaParaCampo('"+camp
 function crearBotonEsquema(){var html="<a class='btn btn-primary click' title='Cambiar el esquema' onclick='open_esquema();' > Esquema</a>";return html;}
 function crearBotonAgregarEjemplares(ID2,TIPO_DOC){var html="<a class='btn btn-success click' title='"+ADD_EJEMPLARES+"' onclick=agregarN3("+ID2+",'"+TIPO_DOC+"'); completarArgregarN3(); ><i class='icon-white icon-plus-sign'></i> "+ADD_EJEMPLARES+"</a>";return html;}
 function crearBotonAgregarEdicion(ID2,TIPO_DOC){var html="<a class='btn btn-success click' title='"+ADD_EDICION+"' onclick=agregarN3("+ID2+",'"+TIPO_DOC+"'); completarArgregarN3(); ><i class='icon-white icon-plus-sign'></i> "+ADD_EDICION+"</a>";return html;}
-function ayudaParaCampo(campo){alert("crear ventana con ayuda para campo "+campo);}
+function ayudaParaCampo(campo){objAH=new AjaxHelper(updateAyudaParaCampo);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/catalogacion/estructura/estructuraCataloDB.pl';objAH.tipoAccion='SHOW_AYUDA_MARC';objAH.campo=campo;objAH.sendToServer();}
+function updateAyudaParaCampo(responseText){$('#ayudaMARC').html(responseText);$('#ayudaMARC').modal();}
 function generarOpcionesParaSelect(array_options){var op;for(var i=0;i<array_options.length;i++){op=op+"<option value='"+array_options[i].clave+"'>"+array_options[i].valor+"</option>\n";}
 return op;}
 function crearSelectIndicadoresPrimarios(campo_marc_conf_obj,campo){var opciones_array=campo_marc_conf_obj.getIndicadoresPrimarios();var indicadores="";if(opciones_array.length>0){indicadores="<select id='select_indicador_primario"+campo+"'>"+generarOpcionesParaSelect(opciones_array)+"</select>";}

@@ -848,3 +848,25 @@ elsif($tipoAccion eq "MOSTRAR_DETALLE_NIVEL3"){
     
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
+#============================================================= Ayudas MARC ===============================================================
+elsif($tipoAccion eq "SHOW_AYUDA_MARC"){
+
+    my ($template, $session, $t_params)  = get_template_and_user({
+                            template_name   => ('catalogacion/estructura/showAyudaMarc.tmpl'),
+                            query           => $input,
+                            type            => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired   => {    ui              => 'ANY', 
+                                                    tipo_documento  => 'ANY', 
+                                                    accion          => 'CONSULTA', 
+                                                    entorno         => 'datos_nivel1' },
+    });
+
+    use C4::AR::AyudaMarc;
+
+    my $ayudaMarc               = C4::AR::AyudaMarc::getAyudaMarcCampo($obj->{'campo'});
+
+    $t_params->{'ayudaMarc'}    = $ayudaMarc->getAyuda;
+
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+}
