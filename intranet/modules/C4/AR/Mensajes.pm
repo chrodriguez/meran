@@ -607,10 +607,14 @@ my %mensajesINTRA = (
     'B460' => 'Error en la palabra ingresada',
     'B461' => 'Error subiendo logos. Funcion C4::AR::Logos::uploadLogo',
     'B462' => 'Error subiendo logos. Funcion C4::AR::Logos::eliminarLogo',
+    'B463' => 'Error aliminando la ayuda MARC. Funcion C4::AR::AyudaMarc::eliminarAyudaMarc',
 
     #mensajes ayuda marc
     'AM00' => 'La ayuda MARC ha sido guardada exitosamente',
     'AM01' => 'Error guardando la ayuda MARC',
+    'AM02' => 'La ayuda MARC (campo, subcampo) (*?*, *?*) ya existe',
+    'AM03' => 'La ayuda MARC fue eliminada con &eacute;xito',
+    'AM04' => 'Error eliminando la ayuda MARC',
 
     'REV000' => 'La revisiones han sido eliminadas',
     'REV001' => 'La revisiones no han sido eliminadas, int&eacute;ntelo nuevamente.',
