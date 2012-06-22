@@ -4758,7 +4758,7 @@ sub demo_test{
      
     for (my $x=1; $x<=30; $x++){
         sleep(1);
-        my $percent = printAjaxPercent(10,$x);
+        my $percent = printAjaxPercent(30,$x);
         $job->progress($percent);
         C4::AR::Debug::debug("-------------------------- JOB -------------- \n\n\n\n\n");
     }

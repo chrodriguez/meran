@@ -308,13 +308,15 @@ sub eliminar_sancion {
 #**********************************Se registra el movimiento en historicSanction***************************
     my $data_hash;
     $data_hash->{'nro_socio'}       = $self->getNro_socio;
-    $data_hash->{'responsable'}    = $responsable;
+    $data_hash->{'responsable'}     = $responsable;
     $data_hash->{'fecha_final'}     = $self->getFecha_final;
     $data_hash->{'fecha_comienzo'}  = $self->getFecha_comienzo;
     $data_hash->{'tipo_sancion'}    = $self->getTipo_sancion;
     $data_hash->{'dias_sancion'}    = $self->getDias_sancion;
     $data_hash->{'id3'}             = $self->getId3;
+
     my ($historial_sancion)         = C4::Modelo::RepHistorialSancion->new(db=>$self->db);
+
     $data_hash->{'tipo_operacion'}  = 'Borrado';
     $historial_sancion->agregar($data_hash);
 #*******************************Fin***Se registra el movimiento en historicSanction*************************

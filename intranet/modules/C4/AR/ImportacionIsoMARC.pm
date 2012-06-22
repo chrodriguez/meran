@@ -17,6 +17,7 @@ use C4::Modelo::IoImportacionIsoRegistro;
 
 use MARC::Record;
 use MARC::Field;
+use C4::AR::BackgroundJob;
 
 use MARC::Moose::Record;
 use MARC::Moose::Formater::Iso2709;
@@ -1910,14 +1911,15 @@ sub procesarReferencia {
 
 sub procesarImportacion {
     my($id,$job) = @_;
-
-    use C4::AR::BackgroundJob;
     
     if (!$job){
-        $job = C4::AR::BackgrounJob->new("IMPORTACION","NULL",10);        
+        $job = C4::AR::BackgroundJob->new("IMPORTACION","NULL",10);        
     }
      
     my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($id);
+
+    $importacion->jobID($job->id);
+    $importacion->save();
     
     #Se obtienen los registros NO IGNORADOS; NI IMPORTADOS;  NI QUE MATCHEEN
     my $registros_importar = $importacion->getRegistrosParaImportar();
@@ -1964,6 +1966,8 @@ sub procesarImportacion {
      #  $io_rec->save();
      #  }
     # }
+    $importacion->jobID(undef);
+    $importacion->save();
 }
 
 END { }       # module clean-up code here (global destructor)

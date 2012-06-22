@@ -39,7 +39,6 @@ function changePage(ini){
 
 function updateDetalleImportacion(responseText){
     $('#detalleImportacion').html(responseText);
-    zebra('datos_tabla');
 }
 
 

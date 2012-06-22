@@ -1,4 +1,4 @@
-
+[% USE HTML %]
     <fieldset>
       <div class="well form-actions">    
         <legend class="titulo_legend">[% "Informaci&oacute;n del ejemplar" | i18n %] </legend>
@@ -7,7 +7,7 @@
             <li>
                 <strong>[% 'T&iacute;tulo: ' | i18n %]</strong>
                      [% PERL %]
-                         print C4::AR::Filtros::link_to( text =>     "[% titulo %]",
+                         print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(titulo) %]",
                                                          url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
                                                          params =>   ["id1=[% nivel3.nivel2.id1 %]"],
                                                          title =>    "[% 'Mostrar Detalle del Registro' | i18n %]",

@@ -25,44 +25,61 @@
                         <tr>  
                             <td>
                                 [% IF reserva.responsable == "Sistema" %]
-                                    Sistema 
+                                    [% 'Sistema' | i18n %]
                                 [% ELSE %]
                                     [% reserva.responsable_ref.persona.getApeYNom %]
                                 [% END %]
                             </td>
                             <td>
-                                [% PERL %]
-                                        print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
-                                                                        url => 		"[% url_prefix %]/catalogacion/estructura/detalle.pl",
-                                                                        params =>	["id1=[% HTML.escape(reserva.nivel2.nivel1.getId1) %]"], 
-                                                                    ) ;
+                                [% TRY %]
+                                    [% PERL %]
+                                            print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
+                                                                            url => 		"[% url_prefix %]/catalogacion/estructura/detalle.pl",
+                                                                            params =>	["id1=[% HTML.escape(reserva.nivel2.nivel1.getId1) %]"], 
+                                                                        ) ;
+                                    [% END %]
+                                [% CATCH %]
+                                    [% "Material inexistente"|i18n %] ([% "Edici&oacute;n n&uacute;mero "|i18n %][% reserva.id2 %])
                                 [% END %]
                             </td>   
                             <td class="autor_result">
-                                <a class="click" onClick="buscarPorAutor('[% reserva.nivel2.nivel1.getAutor %]')" title="[% 'Filtrar por Autor' | i18n %]">
-                                    [% reserva.nivel2.nivel1.getAutor %]
-                                </a>
-                            </td>
-                            <td>
-                                [% IF reserva.nivel2.getEdicion %]
-                                    [% HTML.escape(reserva.nivel2.getEdicion) %]
-                                [% ELSE %]
-                                    --
+                                [% TRY %]
+                                    <a class="click" onClick="buscarPorAutor('[% reserva.nivel2.nivel1.getAutor %]')" title="[% 'Filtrar por Autor' | i18n %]">
+                                        [% reserva.nivel2.nivel1.getAutor %]
+                                    </a>
+                                [% CATCH %]
+                                    [% "Material inexistente"|i18n %]
                                 [% END %]
                             </td>
                             <td>
-                                [% IF reserva.id3 %]
+                                [% TRY %]
+                                    [% IF reserva.nivel2.getEdicion %]
+                                        [% HTML.escape(reserva.nivel2.getEdicion) %]
+                                    [% ELSE %]
+                                        --
+                                    [% END %]
+                                [% CATCH %]
+                                    [% "Material inexistente"|i18n %]
+                                [% END %]
+    
+                            </td>
+                            <td>
+                                [% TRY %]
+                                    [% IF reserva.id3 %]
 
-                                    [% PERL %]
-                                            print C4::AR::Filtros::link_to(	text => 	"[% reserva.nivel3.getBarcode %]",
-                                                                            url => 		"[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
-                                                                            params =>	["id3=[% reserva.getId3 %]"],
-                                                                            title =>	"[% "Detalle del Ejemplar" | i18n %]"
-                                                                        );
-                                    [% END %]	
-                                    
-                                [% ELSE %]
-                                    ([% 'Reserva de grupo' | i18n %])
+                                        [% PERL %]
+                                                print C4::AR::Filtros::link_to(	text => 	"[% reserva.nivel3.getBarcode %]",
+                                                                                url => 		"[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl", 
+                                                                                params =>	["id3=[% reserva.getId3 %]"],
+                                                                                title =>	"[% "Detalle del Ejemplar" | i18n %]"
+                                                                            );
+                                        [% END %]	
+                                        
+                                    [% ELSE %]
+                                        ([% 'Reserva de grupo' | i18n %])
+                                    [% END %]
+                                [% CATCH %]
+                                    [% "Material inexistente"|i18n %]
                                 [% END %]
                             </td>
                             <td>

@@ -54,4 +54,61 @@ if($tipoAccion eq "LISTAR"){
 
     C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
+
+}elsif ($tipoAccion eq "SHOW_MOD_AYUDA"){
+
+    my $ayuda = C4::AR::AyudaMarc::getAyudaMarcById($obj->{'idAyuda'});
+
+    my ($template, $session, $t_params) = get_template_and_user({
+                                        template_name   => "admin/ayudaMarcMod.tmpl",
+                                        query           => $input,
+                                        type            => "intranet",
+                                        authnotrequired => 0,
+                                        flagsrequired   => {  ui => 'ANY', 
+                                                            accion => 'TODOS', 
+                                                            entorno => 'usuarios'},
+                                        debug => 1,
+                    });
+    
+    $t_params->{'ayuda'}    = $ayuda;
+    $t_params->{'idAyuda'}  = $obj->{'idAyuda'};
+
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+
+}elsif ($tipoAccion eq "MOD_VISUALIZACION"){
+
+    my ($user, $session, $flags)= checkauth(  $input, 
+                                              $authnotrequired, 
+                                              {   ui                => 'ANY', 
+                                                  tipo_documento    => 'ANY', 
+                                                  accion            => 'CONSULTA', 
+                                                  entorno           => 'datos_nivel1'}, 
+                                              'intranet'
+                                  );
+
+    my ($Message_arrayref)  = C4::AR::AyudaMarc::modificarAyudaMarc($obj);
+
+    my $infoOperacionJSON   = to_json $Message_arrayref;
+
+    C4::AR::Auth::print_header($session);
+    print $infoOperacionJSON;
+
+}elsif ($tipoAccion eq "ELIMINAR"){
+
+    my ($user, $session, $flags)= checkauth(  $input, 
+                                              $authnotrequired, 
+                                              {   ui                => 'ANY', 
+                                                  tipo_documento    => 'ANY', 
+                                                  accion            => 'CONSULTA', 
+                                                  entorno           => 'datos_nivel1'}, 
+                                              'intranet'
+                                  );
+
+    my ($Message_arrayref)  = C4::AR::AyudaMarc::eliminarAyudaMarc($obj->{'idAyuda'});
+
+    my $infoOperacionJSON   = to_json $Message_arrayref;
+
+    C4::AR::Auth::print_header($session);
+    print $infoOperacionJSON;
+
 }    

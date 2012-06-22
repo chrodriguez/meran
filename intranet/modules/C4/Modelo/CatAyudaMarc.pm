@@ -31,6 +31,7 @@ __PACKAGE__->meta->setup(
 ##################### FUNCIONES DEL MODELO #################
 
 sub agregarAyudaMarc{
+    
     my ($self)   = shift;
     my ($params) = @_;
     
@@ -39,9 +40,19 @@ sub agregarAyudaMarc{
     $self->setAyuda($params->{'ayuda'});
     # $self->setUI($params->{'ui'});
 
-    my $ui          = C4::Modelo::PrefUnidadInformacion->getByCode(C4::AR::Preferencias::getValorPreferencia('defaultUI'));
+    my $ui = C4::Modelo::PrefUnidadInformacion->getByCode(C4::AR::Preferencias::getValorPreferencia('defaultUI'));
 
     $self->setUI($ui->getId);
+
+    $self->save();
+}
+
+sub editarAyudaMarc{
+
+    my ($self)   = shift;
+    my ($params) = @_;
+    
+    $self->setAyuda($params->{'ayuda'});
 
     $self->save();
 }
@@ -91,6 +102,14 @@ sub getAyuda{
     my ($self) = shift;
 
     return ($self->ayuda);
+}
+
+sub getAyudaShort{
+    my ($self) = shift;
+
+    my $subString = substr ($self->ayuda,0,70);
+
+    return ($subString."...");
 }
 
 sub setAyuda{

@@ -4,11 +4,16 @@
           makeToggle('datos_tabla_div_importacion','trigger',null,false);
           makeToggle('filtro_importacion','trigger',null,true);
           onEnter('search_importacion',detalleImportacion,'[% id_importacion %]');
+          [% IF jobID %]
+            jobID = "[% jobID %]";
+            checkProgress();
+            scrollTo('import-footer');
+          [% END %]
     });
 
 function cambiarFiltro (filtro){
 	$('#record_filter').val(filtro);
-	detalleImportacion([% id_importacion %]);
+	 detalleImportacion([% id_importacion %]);
 	}
 	
 </script>
@@ -207,7 +212,11 @@ function cambiarFiltro (filtro){
 
 
 <div id="detalleRegistroMARC"></div>
-<div class="form-actions">
+
+[% INCLUDE 'partials/_percent_bar.inc' %]
+
+<div class="form-actions" id="import-footer">
+  [% IF !jobID %]
          [% PERL %]
                              print C4::AR::Filtros::action_button( 
                                                                  button   => "btn btn-danger",
@@ -215,4 +224,13 @@ function cambiarFiltro (filtro){
                                                                  title   => "[% 'Comenzar Importaci&oacute;n' | i18n %]",
                                      ) ;
          [% END %]
+  [% ELSE %]
+         [% PERL %]
+                             print C4::AR::Filtros::action_button( 
+                                                                 button   => "btn btn-danger disabled",
+                                                                 action => '',
+                                                                 title   => "[% 'Importando' | i18n %]...",
+                                     ) ;
+         [% END %]
+  [% END %]
 </div>

@@ -30,6 +30,7 @@ __PACKAGE__->meta->setup(
         accion_item             => { type => 'varchar',     overflow => 'truncate', length => 255},
         accion_barcode          => { type => 'varchar',     overflow => 'truncate', length => 255},
         reglas_matcheo          => { type => 'text',        overflow => 'truncate'},
+        jobID                   => { type => 'varchar',      overflow => 'truncate', length => 255, not_null => 0,},
 
     ],
 
