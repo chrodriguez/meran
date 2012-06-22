@@ -28,9 +28,12 @@ if ($accion eq "START_DEMO"){
      
 }elsif ($accion eq "COMENZAR_IMPORTACION"){
 
-	 $job = C4::AR::BackgroundJob->new("IMPORTACION","NULL",10);
+	 $job = C4::AR::BackgroundJob->new("IMPORTACION",C4::AR::Auth::getSessionNroSocio,10);
      my $proc = Proc::Simple->new();
      my $id = $obj->{'id'};
+
+#http://search.cpan.org/dist/Proc-Simple/Simple.pm#METHODS
+
      $proc->start(\&C4::AR::ImportacionIsoMARC::procesarImportacion,$id,$job);
      C4::AR::Auth::printValue($job->id);
 
