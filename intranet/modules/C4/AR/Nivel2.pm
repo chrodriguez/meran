@@ -538,7 +538,9 @@ sub getAnaliticasFromNivel2{
             my @nivel2_array; 
     
             my $n1_object                               = C4::AR::Nivel1::getNivel1FromId1($n2->getId1());
-            $hash_nivel1_aux{'nivel1_analitica'}        = $n1_object->toMARC_Intra;
+            if($n1_object){
+                    $hash_nivel1_aux{'nivel1_analitica'}        = $n1_object->toMARC_Intra;
+            }        
 
 # TODO falta levantar los grupos del nivel 1 q estoy procedando!!!!!!!!!!!!!!!!!   
 # es otro foreach         
