@@ -110,6 +110,8 @@ function updateObtenerTiposDePrestamos(responseText){
 }
 
 function realizarAccionCircRapida(){
+	
+	
     objAH                       = new AjaxHelper(updateRealizarAccion);
     objAH.debug                 = true;
     objAH.showOverlay           = true;
@@ -117,6 +119,9 @@ function realizarAccionCircRapida(){
     objAH.nro_socio             = $('#nro_socio_hidden').val();
     objAH.adicional_selected    = $('#auth_selected').is(':checked'); 
     objAH.barcode               = $('#barcode_hidden').val();
+
+	
+	
 
     if(($('#operacion').val() == 'devolver')||($('#operacion').val() == 'renovar')){
         var prestamos_array = new Array();
@@ -276,13 +281,6 @@ function onCompleteUsuarios(){
 	}else if($('#operacion').val() == 'prestar'){
 // 		esRegular(NRO_SOCIO_AUTH);
 	}
-
-	// if ($('#barcode_hidden').val() != ""){
-	// 	$('#barcode').attr('disabled', 'true');
-	// } else {
-	// 	$('#barcode').attr('active', 'true');
-	// 	$('#acciones').hide();
-	// }
 
     detallePrestamos(NRO_SOCIO_AUTH, updateInfoPrestamos);
     detalleSanciones(NRO_SOCIO_AUTH);
