@@ -1,0 +1,42 @@
+<div class="modal-header">
+     <a href="#" class="close" data-dismiss="modal">×</a>
+    <h3>[% "Modificar tipo de documento:" | i18n %]</h3>
+</div>
+
+<div class="modal-body">
+    <div class="form-horizontal">
+        <div class="control-group">
+            <label class="control-label" for="liblibrarian"> [% "Nombre:" | i18n %]</label>
+            <div class="controls">
+                <input type="text" value="[% tipoDocumento.getNombre %]"/>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="liblibrarian">[% "Tipo de documento:" | i18n %]</label>
+            <div class="controls">
+                <input type="text" value="[% tipoDocumento.getId_tipo_doc %]"/>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" for="liblibrarian"> [% "Foto" | i18n %]: </label>
+            <div class="controls">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    [% PERL %]
+            print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar cambios' | i18n %]",
+                                                boton   => "btn btn-primary",
+                                                onClick => 'modificarAyudaMarc([% idAyuda %])',
+                                                title   => "[% 'Agregar Ayuda' | i18n %]",
+                                                width   => "auto",
+                                                alternClass => "botonCentrado",
+                                                inline  => "1"
+                    ) ;
+    [% END %]
+
+</div>

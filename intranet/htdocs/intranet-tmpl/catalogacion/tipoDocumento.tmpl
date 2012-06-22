@@ -1,0 +1,50 @@
+[% INCLUDE 'intranet-top.inc' %]
+[% USE HTML %]
+
+<!-- <script type="text/javascript" src="/intranet-tmpl/includes/ayudaMarc.js"></script> -->
+
+<script type"text/javascript">
+
+    $(document).ready(function() {
+        mostrarTabla();
+    });
+
+    function mostrarTabla(){
+        objAH               = new AjaxHelper(updateMostrarTabla);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;
+        objAH.url           = URL_PREFIX+"/catalogacion/tipoDocumentoDB.pl";
+        objAH.tipoAccion    = 'LISTAR';
+
+        objAH.sendToServer();
+    }
+
+    function updateMostrarTabla(responseText){
+        $("#resultTipoDocumento").html(responseText);
+    }
+
+    function modificarTipoDocumento(idTipoDoc){
+
+        objAH               = new AjaxHelper(updateModificarTipoDocumento);
+        objAH.debug         = true;
+        objAH.showOverlay   = true;
+        objAH.idTipoDoc     = idTipoDoc;
+        objAH.url           = URL_PREFIX+"/catalogacion/tipoDocumentoDB.pl";
+        objAH.tipoAccion    = 'MOD_TIPO_DOC';
+  
+        objAH.sendToServer();
+
+    }
+
+    function updateModificarTipoDocumento(responseText){
+        $('#accionesTipoDocumento').html(responseText);
+        $('#accionesTipoDocumento').modal();
+    }
+
+
+</script>
+
+<div id="resultTipoDocumento"> </div>
+<div id="accionesTipoDocumento" class="modal hide fade"> </div>
+                
+[% INCLUDE 'intranet-bottom.inc' %]
