@@ -340,27 +340,8 @@ function comenzarImportacion(id_importacion){
 
 function updateComenzarImportacion(responseText){
     jobID = responseText;
-    checkProgress();
+    refreshMeranPage();
 }
-
-
-// function comenzarImportacion(id_importacion){
-
-//         objAHDetalle=new AjaxHelper(updateComenzarImportacion);
-//         objAHDetalle.url               = URL_PREFIX+'/herramientas/importacion/importarDB.pl';
-//         objAHDetalle.debug             = true;
-//         objAHDetalle.showOverlay       = true;
-//         objAHDetalle.tipoAccion        = "COMENZAR_IMPORTACION";
-//         objAHDetalle.id = id_importacion;
-//         objAHDetalle.sendToServer();
-
-// }
-
-// function updateComenzarImportacion(responseText){
-//         var Messages=JSONstring.toObject(responseText);
-//         setMessages(Messages);
-//         detalleImportacion(objAHDetalle.id);
-// }
 
 
 

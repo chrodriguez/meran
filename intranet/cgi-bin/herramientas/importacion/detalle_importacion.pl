@@ -21,6 +21,19 @@ my ($template, $session, $t_params)= get_template_and_user({
                                     debug => 1,
             });
 my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($query->param('id_importacion'));
+
+if ($importacion->jobID){
+    eval {
+        my $job = C4::AR::BackgroundJob->fetch($importacion->jobID);
+        $job->progress;
+    };
+
+    if ($@){
+        $importacion->jobID(undef);
+        $importacion->save();
+    }
+}
+
 $t_params->{'importacion'}          = $importacion;
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params,$session);
