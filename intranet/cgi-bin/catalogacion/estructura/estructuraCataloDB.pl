@@ -865,14 +865,14 @@ elsif($tipoAccion eq "SHOW_AYUDA_MARC"){
     use C4::AR::AyudaMarc;
     use C4::AR::EstructuraCatalogacionBase;
 
-    my $ayudaMarc       = C4::AR::AyudaMarc::getAyudaMarcCampo($obj->{'campo'});
+    my $ayudasMarc      = C4::AR::AyudaMarc::getAyudaMarcCampo($obj->{'campo'});
 
     my $ayudaMarcWeb    = C4::AR::EstructuraCatalogacionBase::getCampoByCampo($obj->{'campo'});
 
-    if($ayudaMarc){
-        $t_params->{'ayudaMarc'}    = $ayudaMarc->getAyuda;
+    if($ayudasMarc){
+        $t_params->{'ayudasMarc'}   = $ayudasMarc;
     }else{
-        $t_params->{'ayudaMarc'}    = 0;
+        $t_params->{'ayudasMarc'}    = 0;
     }
 
     $t_params->{'ayudaMarcWeb'}     = $ayudaMarcWeb->getDescripcion;

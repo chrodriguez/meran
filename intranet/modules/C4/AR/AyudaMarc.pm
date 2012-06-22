@@ -93,7 +93,7 @@ sub getAyudaMarcCampo{
     my $ayudasArrayRef = C4::Modelo::CatAyudaMarc::Manager->get_cat_ayuda_marc( query => \@filtros ); 
 
     if(scalar(@$ayudasArrayRef) > 0){
-        return ($ayudasArrayRef->[0]);
+        return ($ayudasArrayRef);
     }else{
         return (0);
     }

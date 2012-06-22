@@ -2,42 +2,34 @@
 
 <div class="modal-header">
     <a href="#" class="close" data-dismiss="modal">×</a>
-
-
-
-
-    [% PERL %]
-        print C4::AR::Filtros::tabbedPane( titulo   => "[% 'Ayuda MARC' | i18n %]",
-                                 subtitulo          => "[% 'Navegue por las pesta&ntilde;as para acceder a las distintas ayudas' | i18n %]",
-                                 content            => [  {id => 'ayudaLocal', text => "[% 'Ayuda MARC' | i18n %]" },
-                                                          {id => 'ayudaWeb', text=> "[% 'Definici&oacute;n MARC' | i18n %]" },
-                                                         
-                                                      ] ,
-                                 active_id => 'ayudaLocal',
-        
-        );
-
-    [% END %]
-
-
-
+    <h3>[% "Ayuda MARC" | i18n %]</h3>
 </div>
 
 <div class="modal-body">    
     
-    <div class="tab-pane fade in active" id="ayudaLocal">
-        [% IF ayudaMarc %]
-            [% ayudaMarc | i18n %]
+    <div id="ayudaLocal">
+        <h3>[% "Ayuda local" | i18n %]</h3>
+        [% IF ayudasMarc %]
+
+            <dl class="dl-horizontal">
+            [% FOREACH a IN ayudasMarc %]
+                    <dt>[% "Campo" | i18n %]</dt>
+                    <dd>[% a.getCampo %]</dd>
+                    <dt>[% "Subcampo" | i18n %]</dt>
+                    <dd>[% a.getSubCampo %]</dd>
+                    <dt>[% "Ayuda" | i18n %]</dt>
+                    <dd>[% a.getAyuda %]</dd>
+                    <hr />
+            [% END %]
+
         [% ELSE %]
             <div class="alert alert-info">[% "No se cargaron ayudas para este campo" | i18n %]</div>
         [% END %]
     </div>
-    <div class="tab-pane fade" id="ayudaWeb">[% ayudaMarcWeb | i18n %]</div>
+
+    <div id="ayudaWeb"><h3>[% "Definici&oacute;n MARC" | i18n %]</h3>[% ayudaMarcWeb | i18n %]</div>
    
-
 </div>
-
-</section>
 
 <div class="modal-footer">
 </div>
