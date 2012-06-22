@@ -22,6 +22,27 @@ use vars qw(@EXPORT @ISA);
     &getEstructuraBaseFromCampoSubCampo
 );
 
+=head2 sub getCamposXLike
+    Retorna un campo segun el recibido por parametro
+=cut
+sub getCampoByCampo{
+
+    my ($campo) = @_;
+
+    use C4::Modelo::PrefEstructuraCampoMarc;
+
+    my @filtros;
+
+    push(@filtros, ( campo => { eq => $campo } ) );
+
+     my $campoMARC = C4::Modelo::PrefEstructuraCampoMarc::Manager->get_pref_estructura_campo_marc(
+                                                                                         query => \@filtros,
+                                                                        );
+
+
+
+    return($campoMARC->[0]);
+}
 
 =head2 sub getCamposXLike
     Busca un campo like..., segun nivel indicado
