@@ -1,6 +1,6 @@
     <div class="modal-header">
          <a href="#" class="close" data-dismiss="modal">×</a>
-        <h3>[% "Agregar Visualizaci&oacute;n:" | i18n %]</h3>
+        <h3>[% "Agregar Ayuda MARC:" | i18n %]</h3>
     </div>
 
      <div class="modal-body">

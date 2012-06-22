@@ -580,7 +580,7 @@ sub getAllNivel2FromAnaliticasById{
     }
 }
 
-sub getAllNivel1FromAnaliticasById{
+sub getAllNivel1FromAnaliticasById1{
     my($id1, $db) = @_;
 
     $db = $db || C4::Modelo::CatRegistroMarcN2Analitica->new()->db();
@@ -601,7 +601,7 @@ sub getAllNivel1FromAnaliticasById{
     }
 }
 
-sub getAllNivel2FromAnaliticasById{
+sub getAllNivel2FromAnaliticasById2{
     my($id2, $db) = @_;
 
     $db = $db || C4::Modelo::CatRegistroMarcN2Analitica->new()->db();

@@ -50,7 +50,7 @@
 	<script type="text/javascript" src="/includes/jquery/fancybox/fancybox.js"></script>
 
 	<script type="text/javascript" src="/includes/workers.js"></script>
-	<script type="text/javascript" scrc="/includes/intranet-top.js"></script>
+	<script type="text/javascript" src="/includes/intranet-top.js"></script>
 	<script type="text/javascript" src="/includes/jquery/jquery-ui-1.8.13.sortable.min.js"></script>
 	
 	<script type="text/javascript">

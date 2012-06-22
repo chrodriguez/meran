@@ -1,0 +1,58 @@
+NameVirtualHost *:80
+<VirtualHost *:80>
+DocumentRoot /usr/share/meran/opac/htdocs
+ErrorLog /var/log/meran/opac-error.log
+TransferLog /var/log/meran/opac-access.log
+SetEnv MERAN_CONF "/etc/meran/meran.conf"
+
+DirectoryIndex /cgi-bin/koha/opac-main.pl
+
+Alias /cgi-bin/koha/ /usr/share/meran/opac/cgi-bin/
+
+<Location /cgi-bin/koha/ >
+      SetHandler perl-script
+      PerlResponseHandler ModPerl::Registry
+      PerlOptions +ParseHeaders
+      Options +ExecCGI
+</Location>
+<Perl>
+use Carp;
+push(@INC,"/usr/share/meran/intranet/modules");
+push(@INC,"/usr/share/meran/intranet/modules/C4/Share/share/perl/5.10.1/");
+push(@INC,"/usr/share/meran/intranet/modules/C4/Share/lib/perl/5.10.1/");
+push(@INC,"/usr/share/meran/intranet/modules/C4/Share/share/perl/5.10/");
+push(@INC,"/usr/share/meran/intranet/modules/C4/Share/share/perl/5.10.1/
+
+</Perl>
+
+ServerSignature Off
+RewriteEngine on
+RewriteCond %{REQUEST_METHOD} ^(TRACE|TRACK)
+RewriteRule .* - [F]
+
+Alias /includes/ "/usr/share/meran/includes/"
+<Directory /usr/share/meran/includes/ >
+    SetOutputFilter DEFLATE
+    BrowserMatch ^Mozilla/4\.0[678] no-gzip\
+    BrowserMatch \bMSI[E] !no-gzip !gzip-only-text/html
+    # Don't compress images
+    SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+    Options  -Indexes
+    Order allow,deny
+    Allow from all
+</Directory>
+
+<FilesMatch "\.(ico|flv|jpe?g|png|gif|js|css|swf)$">
+ ExpiresActive On
+ ExpiresDefault "access plus 1 month"
+</FilesMatch>
+
+Alias /uploads/ "/usr/share/meran/intranet/htdocs/uploads/"
+<Directory /usr/share/meran/intranet/htdocs/uploads/ >
+Order allow,deny
+Allow from all
+</Directory>
+ 
+</VirtualHost>
+
+

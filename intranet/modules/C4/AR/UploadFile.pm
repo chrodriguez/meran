@@ -166,7 +166,7 @@ sub uploadPhoto{
     my $msg_object      = C4::AR::Mensajes::create();
     
     #checkeamos con libmagic el tipo del archivo
-    my $type            = C4::AR::Utilidades::checkFileMagic($query->param('POSTDATA'), @filesAllowed);
+    my $type            = C4::AR::Utilidades::checkFileMagic($file, @filesAllowed);
     my $sessionType     = C4::AR::Auth::getSessionType();
     my $name            = $socio->fotoName($sessionType);
     
@@ -185,6 +185,8 @@ sub uploadPhoto{
         open(WRITEIT, ">$uploaddir/$name") or die "Cant write to $uploaddir/$name. Reason: $!";
             print WRITEIT $file;
         close(WRITEIT);
+
+        C4::AR::Debug::debug("esta en : $uploaddir/$name");
 
         my $check_size = -s "$uploaddir/$name";
 

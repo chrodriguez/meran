@@ -12,7 +12,7 @@
 	                      <dt>
 	                      [% IF prestamo.nivel3.nivel2.id1 %]
 	                          [% PERL %]
-	                                  print C4::AR::Filtros::link_to( text =>     "[% prestamo.nivel3.nivel2.nivel1.getTitulo %]",
+	                                  print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(prestamo.nivel3.nivel2.nivel1.getTitulo) %]",
 	                                                                  url =>      "[% url_prefix %]/opac-prestamos_vigentes.pl", 
 	                                                                  params => [ "id1=[% prestamo.nivel3.nivel2.id1 %]", ],
 	                                                              ) ;
@@ -26,7 +26,7 @@
 	                      </dt>
 						  <dd>
 	                          [% IF prestamo.nivel3.nivel1.getAutor %]
-	                              [% prestamo.nivel3.nivel1.getAutor %]
+	                              [% HTML.escape(prestamo.nivel3.nivel1.getAutor) %]
 	                          [% ELSE %]
 	                              &nbsp;
 	                          [% END %]

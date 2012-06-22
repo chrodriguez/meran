@@ -68,8 +68,9 @@ elsif($tipoAccion eq "DETALLE"){
       $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
       $t_params->{'resultsloop'}        = $registros;
       $t_params->{'cantidad'}           = $cantidad;
-      $t_params->{'id_importacion'}           = $id_importacion;
-      $t_params->{'record_filter'}           = $record_filter;
+      $t_params->{'id_importacion'}     = $id_importacion;
+      $t_params->{'record_filter'}      = $record_filter;
+      $t_params->{'jobID'}              = C4::AR::ImportacionIsoMARC::getImportacionById($id_importacion)->jobID;
 
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
@@ -274,6 +275,27 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS_ESQUEMA_ORIGEN"){
 
       my $Message_arrayref = C4::AR::Mensajes::create();
       my $infoOperacionJSON   = to_json $Message_arrayref;
+
+      C4::AR::Auth::print_header($session);
+      print $infoOperacionJSON;
+    }  
+    elsif($tipoAccion eq "CANCELAR_IMPORTACION"){
+        my ($user, $session, $flags)= checkauth(    $input,
+                                                  $authnotrequired,
+                                                  {   ui => 'ANY',
+                                                      tipo_documento => 'ANY',
+                                                      accion => 'CONSULTA',
+                                                      entorno => 'datos_nivel1'},
+                                                  'intranet'
+                                      );
+
+      my $id       = $obj->{'id'};
+      my $jobID    = $obj->{'jobID'};
+
+      C4::AR::Debug::debug("CANCELAR IMPORTACION ".$id);
+      my $msg_object        =C4::AR::ImportacionIsoMARC::cancelarImportacion($id,$jobID);
+
+      my $infoOperacionJSON = to_json $msg_object;
 
       C4::AR::Auth::print_header($session);
       print $infoOperacionJSON;

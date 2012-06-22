@@ -17,6 +17,7 @@ use C4::Modelo::IoImportacionIsoRegistro;
 
 use MARC::Record;
 use MARC::Field;
+use C4::AR::BackgroundJob;
 
 use MARC::Moose::Record;
 use MARC::Moose::Formater::Iso2709;
@@ -38,6 +39,7 @@ use vars qw(@EXPORT @ISA);
            getRow
            editarValorEsquema
            addCampo
+           cancelarImportacion
 );
 
 =item sub guardarNuevaImportacion
@@ -307,7 +309,7 @@ sub getRegistrosFromImportacion {
     
     if ($search){
         push (@filtros, ( marc_record => { like => '%'.$search.'%'}));
-    	
+        
     }
     
     if((!$filter)||($filter eq 'MAIN')){
@@ -543,9 +545,9 @@ sub getEsquema{
         $detalle_esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
                                                                                                         query => \@filtros,
                                                                                                         group_by => ['campo_origen,subcampo_origen'],
-							                                                                            limit   => $limit,
-						                                                                                offset  => $offset,
-						                                                                                sort_by => ['campo_origen']
+                                                                                                        limit   => $limit,
+                                                                                                        offset  => $offset,
+                                                                                                        sort_by => ['campo_origen']
         );
     }else{
         $detalle_esquema = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
@@ -553,7 +555,7 @@ sub getEsquema{
                                                                                                         group_by => ['campo_origen,subcampo_origen'],
                                                                                                         sort_by => ['campo_origen']
         );
-    	
+        
     }
 
     my $cant_total = C4::Modelo::IoImportacionIsoEsquemaDetalle::Manager->get_io_importacion_iso_esquema_detalle(
@@ -1042,7 +1044,7 @@ sub procesarReglasMatcheo {
         my $tt1 = time();
         # Recorrer cada registro y ver si matchea contra alguno de la base
         my $registros_importacion = $importacion->getRegistrosPadre();
-		my $cant_registros=0;
+        my $cant_registros=0;
         foreach my $registro (@$registros_importacion){
             #Armo las reglas con dato y busco en el catalogo si existe
             my $reglas_registro = $registro->getDatosFromReglasMatcheo($reglas);
@@ -1061,11 +1063,11 @@ sub procesarReglasMatcheo {
                   }
               $registro->save();
             }
-		my $tt2 = time();
-		my $tardo2=($tt2 - $tt1);
-		my $min= $tardo2/60;
-		my $hour= $min/60;
-		C4::AR::Debug::debug( "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!! o mejor $hour horas !!!");
+        my $tt2 = time();
+        my $tardo2=($tt2 - $tt1);
+        my $min= $tardo2/60;
+        my $hour= $min/60;
+        C4::AR::Debug::debug( "AL FIN TERMINO TODO!!! Tardo $tardo2 segundos !!! que son $min minutos !!! o mejor $hour horas !!!");
 
 
         if(!$msg_object->{'error'}){
@@ -1094,26 +1096,26 @@ sub getIdMatchingFromCatalog {
 
     my  $indice_array_ref = C4::AR::Sphinx::getAllIndiceBusqueda();
 
-	if ($indice_array_ref) {
+    if ($indice_array_ref) {
     foreach my $indice ( @$indice_array_ref) {
             my $marc_record=  $indice->getMarcRecordObject;
             my $match=0;
                 foreach my $regla (@$reglas){
                     my @datos = $marc_record->subfield($regla->{'campo'},$regla->{'subcampo'});
                     foreach my $datos (@datos){
-#						C4::AR::Debug::debug("CAMPARANDO ".C4::AR::Utilidades::trim($regla->{'dato'})." <==>".C4::AR::Utilidades::trim($datos));
-						if ( C4::AR::Utilidades::trim($regla->{'dato'}) eq C4::AR::Utilidades::trim($datos)) {
-							C4::AR::Debug::debug("MATCH REGLA=".$regla->{'campo'}."&".$regla->{'subcampo'}." => ".$regla->{'dato'});
-							return $indice->getId;
-							}
-					}
+#                       C4::AR::Debug::debug("CAMPARANDO ".C4::AR::Utilidades::trim($regla->{'dato'})." <==>".C4::AR::Utilidades::trim($datos));
+                        if ( C4::AR::Utilidades::trim($regla->{'dato'}) eq C4::AR::Utilidades::trim($datos)) {
+                            C4::AR::Debug::debug("MATCH REGLA=".$regla->{'campo'}."&".$regla->{'subcampo'}." => ".$regla->{'dato'});
+                            return $indice->getId;
+                            }
+                    }
                 }
 
             if($match){
                 return $indice->getId;
                 }
         }
-	}
+    }
     return(0);
 }
 
@@ -1222,7 +1224,7 @@ sub getNivelesFromRegistro {
                                               
                               #Agrego el último ejemplar y lo guardo
                               if (scalar($marc_record_n3->fields())){
-                                  #C4::AR::Debug::debug("EJEMPLAR ".$marc_record_n3->as_formatted);	
+                                  #C4::AR::Debug::debug("EJEMPLAR ".$marc_record_n3->as_formatted); 
                                   push(@ejemplares,$marc_record_n3);
                                   $marc_record_n3 = MARC::Record->new();
                               }
@@ -1262,9 +1264,9 @@ sub getNivelesFromRegistro {
                           #Aca no hay ningun campo que sea repetible, si ya existe el subcampo es un nuevo ejemplar.
                           
                            if($marc_record_n3->subfield($campo,$subcampo)){
-                              #Existe el subcampo y no es repetible ==> es un nivel 3 nuevo							
+                              #Existe el subcampo y no es repetible ==> es un nivel 3 nuevo                         
                               #Agrego el último ejemplar y lo guardo
-                              C4::AR::Debug::debug("EJEMPLAR ".$marc_record_n3->as_formatted);	
+                              C4::AR::Debug::debug("EJEMPLAR ".$marc_record_n3->as_formatted);  
                                   push(@ejemplares,$marc_record_n3);
                                   $marc_record_n3 = MARC::Record->new();
                               }
@@ -1359,7 +1361,7 @@ sub detalleCompletoRegistro {
         
         ##TIPO DE DOCUMENTO##
         $hash_nivel2{'tipo_documento'}      = C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord_Object($nivel2_marc);
-        $tipo_documento 					= $hash_nivel2{'tipo_documento'};
+        $tipo_documento                     = $hash_nivel2{'tipo_documento'};
         #Seteo bien el código de tipo de documento
         if($nivel2_marc->field('910')){
             $nivel2_marc->field('910')->update( 'a' => $tipo_documento->getNombre());
@@ -1390,7 +1392,7 @@ sub detalleCompletoRegistro {
         
         ##NIVEL BIBLIOGRAFICO##
         $hash_nivel2{'nivel_bibliografico'}      = C4::AR::ImportacionIsoMARC::getNivelBibliograficoFromMarcRecord_Object($nivel2_marc);        
-        my $nivel_bibliografico	                 = $hash_nivel2{'nivel_bibliografico'};
+        my $nivel_bibliografico                  = $hash_nivel2{'nivel_bibliografico'};
         if($nivel_bibliografico){
             #Seteo bien el código del nivel bibliográfico
             if($nivel2_marc->field('900')){
@@ -1408,7 +1410,7 @@ sub detalleCompletoRegistro {
         
         if($nivel2->{'grupo'}->subfield('865','a')){
                 $hash_nivel2{'indice'}              = $nivel2_marc->subfield('865','a');
-                $hash_nivel2{'tiene_indice'}		= 1;
+                $hash_nivel2{'tiene_indice'}        = 1;
             }
         $hash_nivel2{'esta_en_estante_virtual'} = 0;
         
@@ -1557,7 +1559,7 @@ sub getDisponibilidadEjemplar{
     my ($ejemplar) = @_;
         my $dato = $ejemplar->subfield('995','o');
         my $resultado=C4::AR::Preferencias::getValorPreferencia("defaultDisponibilidad");
-        #FIXME	Debería ir a una tabla de referencia de alias o sinónimos
+        #FIXME  Debería ir a una tabla de referencia de alias o sinónimos
         if ($dato){
             use Switch;
             switch ($dato) {
@@ -1576,7 +1578,7 @@ sub getEstadoEjemplar{
     my ($ejemplar) = @_;
         my $dato = $ejemplar->subfield('995','e');
         my $resultado=C4::AR::Preferencias::getValorPreferencia("defaultEstado");
-        #FIXME	Debería ir a una tabla de referencia de alias o sinónimos
+        #FIXME  Debería ir a una tabla de referencia de alias o sinónimos
         if ($dato){
             use Switch;
             switch ($dato) {
@@ -1592,27 +1594,27 @@ sub getEstadoEjemplar{
 }
 
 sub getEstadoEjemplar_Object{
-	my ($ejemplar) = @_;
-	my $estado = C4::AR::ImportacionIsoMARC::getEstadoEjemplar($ejemplar);
-	my $object_estado = C4::Modelo::RefEstado->getByPk($estado);
-	return  $object_estado;
+    my ($ejemplar) = @_;
+    my $estado = C4::AR::ImportacionIsoMARC::getEstadoEjemplar($ejemplar);
+    my $object_estado = C4::Modelo::RefEstado->getByPk($estado);
+    return  $object_estado;
 }
 
 
 sub getDisponibilidadEjemplar_Object{
-	my ($ejemplar) = @_;
-	my $disponibilidad = C4::AR::ImportacionIsoMARC::getDisponibilidadEjemplar($ejemplar);
-	my $object_disponibilidad = C4::Modelo::RefDisponibilidad->getByPk($disponibilidad);
-	return $object_disponibilidad;
+    my ($ejemplar) = @_;
+    my $disponibilidad = C4::AR::ImportacionIsoMARC::getDisponibilidadEjemplar($ejemplar);
+    my $object_disponibilidad = C4::Modelo::RefDisponibilidad->getByPk($disponibilidad);
+    return $object_disponibilidad;
 }
 
 sub getEjemplarFromMarcRecord{
-	my ($nivel3,$tipo_documento) = @_;
-	    
-	my %hash_nivel3=();
-	$hash_nivel3{'marc_record'}          	= $nivel3;
-	$hash_nivel3{'tipo_documento'}          = $tipo_documento;
-	$hash_nivel3{'barcode'}            		=  C4::AR::ImportacionIsoMARC::generaCodigoBarraFromMarcRecord($nivel3,$tipo_documento);
+    my ($nivel3,$tipo_documento) = @_;
+        
+    my %hash_nivel3=();
+    $hash_nivel3{'marc_record'}             = $nivel3;
+    $hash_nivel3{'tipo_documento'}          = $tipo_documento;
+    $hash_nivel3{'barcode'}                 =  C4::AR::ImportacionIsoMARC::generaCodigoBarraFromMarcRecord($nivel3,$tipo_documento);
   if($hash_nivel3{'barcode'} eq 'AUTOGENERADO'){
     $hash_nivel3{'generar_barcode'}=1;
     }
@@ -1620,15 +1622,15 @@ sub getEjemplarFromMarcRecord{
     $hash_nivel3{'ui_origen'} = C4::AR::ImportacionIsoMARC::getUIFromMarcRecord($nivel3);
     $hash_nivel3{'ui_duenio'} = C4::AR::ImportacionIsoMARC::getUIFromMarcRecord($nivel3);
     $hash_nivel3{'signatura_topografica'}   =  $nivel3->subfield('995','t');
-    $hash_nivel3{'disponibilidad'}   		=  C4::AR::ImportacionIsoMARC::getDisponibilidadEjemplar_Object($nivel3);
-    $hash_nivel3{'estado'}   				=  C4::AR::ImportacionIsoMARC::getEstadoEjemplar_Object($nivel3);
+    $hash_nivel3{'disponibilidad'}          =  C4::AR::ImportacionIsoMARC::getDisponibilidadEjemplar_Object($nivel3);
+    $hash_nivel3{'estado'}                  =  C4::AR::ImportacionIsoMARC::getEstadoEjemplar_Object($nivel3);
     
     return \%hash_nivel3;
 }
 
 sub getTipoDocumentoFromMarcRecord{
         my ($marc_record) = @_;
-    #FIXME	Debería ir a una tabla de referencia de alias o sinónimos
+    #FIXME  Debería ir a una tabla de referencia de alias o sinónimos
         my $tipo_documento = $marc_record->subfield('910','a');
         
         my $resultado =C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
@@ -1644,10 +1646,10 @@ sub getTipoDocumentoFromMarcRecord{
 }
 
 sub getTipoDocumentoFromMarcRecord_Object{
-		my ($marc_record) = @_;
-		my $tipo_documento = C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord($marc_record);
-	    my $object_tipo_documento = C4::AR::Referencias::getTipoNivel3ByCodigo($tipo_documento);
-	  	return $object_tipo_documento;
+        my ($marc_record) = @_;
+        my $tipo_documento = C4::AR::ImportacionIsoMARC::getTipoDocumentoFromMarcRecord($marc_record);
+        my $object_tipo_documento = C4::AR::Referencias::getTipoNivel3ByCodigo($tipo_documento);
+        return $object_tipo_documento;
 }
 
 sub getNivelBibliograficoFromMarcRecord{
@@ -1681,8 +1683,8 @@ sub getNivelBibliograficoFromMarcRecord{
     }
 
 sub getIdiomaFromMarcRecord_Object{
-		my ($marc_record) = @_;
-		my $idioma = C4::AR::ImportacionIsoMARC::getIdiomaFromMarcRecord($marc_record);
+        my ($marc_record) = @_;
+        my $idioma = C4::AR::ImportacionIsoMARC::getIdiomaFromMarcRecord($marc_record);
         
         use C4::Modelo::RefIdioma;
         my ($cantidad, $objetos) = (C4::Modelo::RefIdioma->new())->getIdiomaById($idioma);
@@ -1691,7 +1693,7 @@ sub getIdiomaFromMarcRecord_Object{
              return $objetos->[0];
         }
        
-	  	return 0;
+        return 0;
 }
 
     
@@ -1739,8 +1741,8 @@ sub getIdiomaFromMarcRecord{
 
 
 sub getPaisFromMarcRecord_Object{
-		my ($marc_record) = @_;
-		my $pais = C4::AR::ImportacionIsoMARC::getPaisFromMarcRecord($marc_record);
+        my ($marc_record) = @_;
+        my $pais = C4::AR::ImportacionIsoMARC::getPaisFromMarcRecord($marc_record);
         
         use C4::Modelo::RefPais;
         my ($cantidad, $objetos) = (C4::Modelo::RefPais->new())->getPaisByIso($pais);
@@ -1749,7 +1751,7 @@ sub getPaisFromMarcRecord_Object{
              return $objetos->[0];
         }
        
-	  	return 0;
+        return 0;
 }
 
     
@@ -1784,7 +1786,7 @@ sub getPaisFromMarcRecord{
 
 sub getUIFromMarcRecord {
         my ($marc_record) = @_;
-    #FIXME	Debería ir a una tabla de referencia de alias o sinónimos
+    #FIXME  Debería ir a una tabla de referencia de alias o sinónimos
         my $ui = $marc_record->subfield('995','c');
         
         my $resultado = '';
@@ -1825,7 +1827,7 @@ sub generaCodigoBarraFromMarcRecord{
     for (my $i=0; $i<@estructurabarcode; $i++) {
         if (($i % 2) == 0) {
             my $pattern_string ='';
-           	use Switch;
+            use Switch;
             switch ($estructurabarcode[$i]) {
                 case 'UI' { 
                     $pattern_string= C4::AR::ImportacionIsoMARC::getUIFromMarcRecord($marc_record_n3);
@@ -1880,7 +1882,7 @@ sub procesarReferencia {
                     my @autor = split(', ', $dato);
                     if ($autor[0]){
                         $tabla_referer_involved->setApellido($autor[0]);
-                        if ($autor[1]){					
+                        if ($autor[1]){                 
                           $tabla_referer_involved->setNombre($autor[1]);
                         } 
                         else{
@@ -1910,14 +1912,15 @@ sub procesarReferencia {
 
 sub procesarImportacion {
     my($id,$job) = @_;
-
-    use C4::AR::BackgroundJob;
     
+    my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($id);
+
     if (!$job){
-        $job = C4::AR::BackgrounJob->new("IMPORTACION","NULL",10);        
+        $job = C4::AR::BackgroundJob->new("IMPORTACION_".$importacion->getNombre(),"NULL",10);        
     }
      
-    my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($id);
+    $importacion->jobID($job->id);
+    $importacion->save();
     
     #Se obtienen los registros NO IGNORADOS; NI IMPORTADOS;  NI QUE MATCHEEN
     my $registros_importar = $importacion->getRegistrosParaImportar();
@@ -1964,6 +1967,38 @@ sub procesarImportacion {
      #  $io_rec->save();
      #  }
     # }
+    $importacion->jobID(undef);
+    $importacion->save();
+}
+
+
+sub cancelarImportacion{
+    my($id,$jobID) = @_;
+    my $msg_object = C4::AR::Mensajes::create();
+
+    my $job;
+    
+    if ($jobID){
+        $job = C4::AR::BackgroundJob->fetch($jobID);
+    }
+     
+    eval{
+        my $importacion = C4::AR::ImportacionIsoMARC::getImportacionById($id);
+
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IO020', 'params' => []} ) ;
+        $importacion->jobID(undef);
+        if ($job){
+            $job->finish;
+        }
+        $importacion->save();
+    };
+
+    if ($@){
+        $msg_object->{'error'} = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IO019', 'params' => []} ) ;
+    }
+
+    return $msg_object;
 }
 
 END { }       # module clean-up code here (global destructor)

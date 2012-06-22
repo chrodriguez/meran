@@ -520,6 +520,9 @@ my %mensajesINTRA = (
     'IO015' => 'El campo/subcampo ya existe en el esquema',
     'IO016' => 'El Campo "*?*" y Subcampo "*?*" se han agregado correctamente al esquema "*?*"',
     'IO017' => 'El Campo "*?*" fue movido a "*?*" por tener subcampos y no ser de control.',
+    'IO018' => 'Se ha terminado de importar correctamente.',
+    'IO019' => 'No se ha podido cancelar la importaci&oacute;n',
+    'IO020' => 'La importaci&oacute;n ha sido cancelada',
 
     #Mensajes Upload Files
     'UP00' => 'Solo se permiten archivos del tipo ("*?*") [Fallo de extension]',
@@ -607,10 +610,14 @@ my %mensajesINTRA = (
     'B460' => 'Error en la palabra ingresada',
     'B461' => 'Error subiendo logos. Funcion C4::AR::Logos::uploadLogo',
     'B462' => 'Error subiendo logos. Funcion C4::AR::Logos::eliminarLogo',
+    'B463' => 'Error aliminando la ayuda MARC. Funcion C4::AR::AyudaMarc::eliminarAyudaMarc',
 
     #mensajes ayuda marc
     'AM00' => 'La ayuda MARC ha sido guardada exitosamente',
     'AM01' => 'Error guardando la ayuda MARC',
+    'AM02' => 'La ayuda MARC (campo, subcampo) (*?*, *?*) ya existe',
+    'AM03' => 'La ayuda MARC fue eliminada con &eacute;xito',
+    'AM04' => 'Error eliminando la ayuda MARC',
 
     'REV000' => 'La revisiones han sido eliminadas',
     'REV001' => 'La revisiones no han sido eliminadas, int&eacute;ntelo nuevamente.',

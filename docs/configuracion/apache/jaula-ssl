@@ -1,0 +1,76 @@
+NameVirtualHost *:443
+
+<VirtualHost *:443>
+SetEnv MERAN_CONF "/etc/meran/meran.conf"
+DocumentRoot /usr/share/meran/intranet/htdocs
+ServerAdmin koha@info.unlp.edu.ar
+ErrorLog /var/log/meran/meran-error.log
+TransferLog /var/log/meran/meran-access.log
+SSLEngine On
+SSLProtocol -all +SSLv3 +TLSv1
+SSLCipherSuite HIGH:MEDIUM
+SSLCertificateFile /etc/apache2/ssl/apache.pem
+
+SetEnv PERL5LIB "/usr/share/meran/intranet/modules"
+
+#Enabling Compression
+SetOutputFilter DEFLATE
+
+#SIN MODPERL
+#ScriptAlias /cgi-bin/koha/ "/usr/share/meran/intranet/cgi-bin/"
+
+#CON MODPERL
+Alias /cgi-bin/koha/ /usr/share/meran/intranet/cgi-bin/
+<Location /cgi-bin/koha/ >
+       SetHandler perl-script
+       PerlResponseHandler ModPerl::Registry
+       PerlOptions +ParseHeaders
+       Options +ExecCGI
+</Location>
+#	<Perl>
+#	use Carp;
+#	push(@INC,"/usr/share/meran/intranet/modules");
+#	</Perl>
+
+
+<Directory /usr/share/meran/intranet/ >
+Order deny,allow
+Allow from all
+Deny from all
+</Directory>
+
+Alias /uploads/ "/usr/share/meran/intranet/htdocs/uploads/"
+<Directory /usr/share/meran/intranet/htdocs/uploads/ >
+Order allow,deny
+Allow from all
+</Directory>
+
+ErrorDocument 403 http://koha.unlp.edu.ar/
+
+ServerSignature Off
+
+RewriteEngine on
+RewriteCond %{REQUEST_METHOD} ^(TRACE|TRACK)
+RewriteRule .* - [F]
+
+
+Alias /includes/ "/usr/share/meran/includes/"
+<Directory /usr/share/meran/includes/ >
+   Options  -Indexes
+   Order allow,deny
+   Allow from all
+</Directory>
+
+#<FilesMatch "\.(ico|flv|jpe?g|png|gif|js|css|swf)$">
+# ExpiresActive On
+#  ExpiresDefault "access plus 1 year"
+#</FilesMatch>
+
+Alias /cron "/usr/share/meran/intranet/cgi-bin/cron/"
+<Directory /usr/share/meran/intranet/cgi-bin/cron/ >
+ Order deny,allow
+ Allow from 127.0.0.1/255.255.255.255
+ Deny from all
+</Directory>
+
+</VirtualHost>
