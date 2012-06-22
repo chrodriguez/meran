@@ -171,16 +171,16 @@ sub generar_clave_unicidad {
 }
 
 sub agregar{
-    my ($self)                  = shift;
-    my ($marc_record, $params, $db)  = @_;
-
-    # $marc_record = MARC::Record->new_from_usmarc($marc_record);
+    my ($self)                          = shift;
+    my ($marc_record, $params, $db)     = @_;
 
     $self->setMarcRecord($marc_record);
     $self->setTemplate($params->{'id_tipo_doc'});
     $self->setClaveUnicidad($self->generar_clave_unicidad(MARC::Record->new_from_usmarc($marc_record)));
     $self->save();
 
+    #si estoy guardano una analica, guardo en la tabla cat_registro_marc_n2_analitica el id1 que estoy generando
+    #y la referencia al nivel 2, grupo al que pertenece la analitica
     if($params->{'id_tipo_doc'} eq "ANA"){
         my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $db );
         $cat_registro_n2_analitica->setId2Padre($params->{'id2_padre'});
@@ -190,30 +190,18 @@ sub agregar{
 
     #seteo datos del LEADER
     $self->setearLeader($params);
-
-# FIXME para que esta esto????
-    # my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
-#     C4::AR::Debug::debug("CatRegistroMarcN1 => agregar => LEADER guardado !!!!!!!!!!!!! ".$marc_record->leader());
 }
 
 sub modificar{
     my ($self)                  = shift;
     my ($marc_record, $params)  = @_;
 
-    # $marc_record = MARC::Record->new_from_usmarc($marc_record);
-
     $self->setMarcRecord($marc_record);
-    # $self->setClaveUnicidad($self->generar_clave_unicidad($marc_record));
     $self->setClaveUnicidad($self->generar_clave_unicidad(MARC::Record->new_from_usmarc($marc_record)));
     $self->save();
 
     #seteo datos del LEADER
     $self->setearLeader($params);
-
-# FIXME para que esta esto????
-    # my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
-#     C4::AR::Debug::debug("CatRegistroMarcN1 => agregar => LEADER modificado !!!!!!!!!!!!! ".$marc_record->leader());
-# die;
 }
 
 
@@ -233,7 +221,7 @@ sub eliminar{
     my ($nivel1_analiticas_array_ref) = C4::AR::Nivel2::getAllNivel1FromAnaliticasById1($self->getId1(), $self->db);
 
     foreach my $n1 (@$nivel1_analiticas_array_ref){
-      $n1->eliminar();
+        $n1->eliminar();
     }  
 
     $self->delete();  

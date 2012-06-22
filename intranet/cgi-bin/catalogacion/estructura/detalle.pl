@@ -22,6 +22,13 @@ my $id1                         = $input->param('id1');
 $t_params->{'id2'}              = $input->param('id2') || 0;
 $t_params->{'page'}             = $input->param('page') || 0;
 
+
+my $nivel1                      = C4::AR::Nivel1::getNivel1FromId1($id1);
+
+if (!$nivel1){
+    C4::AR::Utilidades::redirectAndAdvice('U614');
+}
+
 #si ponen un id que no existe muestra internal server error 
 #eval{ 
     my ($cant_total)            =  C4::AR::Nivel3::detalleCompletoINTRA($id1, $t_params);
