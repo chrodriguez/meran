@@ -601,6 +601,7 @@ sub getAllNivel1FromAnaliticasById1{
     }
 }
 
+=item
 sub getAllNivel2FromAnaliticasById2{
     my($id2, $db) = @_;
 
@@ -621,7 +622,7 @@ sub getAllNivel2FromAnaliticasById2{
         return 0;
     }
 }
-
+=cut
 
 =item
     Retorna el registro fuente de una analitica a partir de un id1
