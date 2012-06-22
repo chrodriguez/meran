@@ -1419,7 +1419,7 @@ function ayudaParaCampo(campo){
     objAH.showOverlay       = true;
     objAH.url               = URL_PREFIX+'/catalogacion/estructura/estructuraCataloDB.pl';
     objAH.tipoAccion        = 'SHOW_AYUDA_MARC';
-    objAH.campo               = campo;
+    objAH.campo             = campo;
 
     objAH.sendToServer();
 }
