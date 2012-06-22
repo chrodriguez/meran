@@ -332,7 +332,7 @@ function comenzarImportacion(id_importacion){
         objAH.url               = URL_PREFIX+'/start_job.pl';
         objAH.debug             = true;
         objAH.showOverlay       = false;
-        objAH.id         = id_importacion;
+        objAH.id                = id_importacion;
         objAH.accion            = "COMENZAR_IMPORTACION"; 
         objAH.sendToServer();
 
@@ -344,5 +344,24 @@ function updateComenzarImportacion(responseText){
 }
 
 
+function cancelarImportacion(id_importacion){
+        objAH                   = new AjaxHelper(updateCancelarImportacion);
+        objAH.url               = URL_PREFIX+'/herramientas/importacion/importarDB.pl';
+        objAH.debug             = true;
+        objAH.showOverlay       = false;
+        objAH.id                = id_importacion;
+        objAH.jobID             = jobID;
+        objAH.tipoAccion        = "CANCELAR_IMPORTACION"; 
+        objAH.sendToServer();
+
+}
+
+function updateCancelarImportacion(responseText){
+    var Messages=JSONstring.toObject(responseText);
+
+    setMessages(Messages);
+    jobID = 0;
+    refreshMeranPage();
+}
 
 

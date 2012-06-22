@@ -1,8 +1,6 @@
 <script type="text/javascript">
 
     $(document).ready(function() {
-          makeToggle('datos_tabla_div_importacion','trigger',null,false);
-          makeToggle('filtro_importacion','trigger',null,true);
           onEnter('search_importacion',detalleImportacion,'[% id_importacion %]');
           [% IF jobID %]
             jobID = "[% jobID %]";
@@ -228,8 +226,9 @@ function cambiarFiltro (filtro){
          [% PERL %]
                              print C4::AR::Filtros::action_button( 
                                                                  button   => "btn btn-danger disabled",
-                                                                 action => '',
-                                                                 title   => "[% 'Importando' | i18n %]...",
+                                                                 action => 'cancelarImportacion([% id_importacion %]);',
+                                                                 icon    => 'icon-white icon-remove',
+                                                                 title   => " [% 'Importando' | i18n %]...",
                                      ) ;
          [% END %]
   [% END %]
