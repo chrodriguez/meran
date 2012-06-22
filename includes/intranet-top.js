@@ -12,7 +12,7 @@ var interval_ID = 0;
     	if ( (percent_progress_bar != null) && (percent_progress_bar != '-1') && (percent_progress_bar < 100) ) {
 	        objAH                   = new AjaxHelper(updatePollTest);
 	        objAH.url               = URL_PREFIX+'/poll_job.pl';
-	        objAH.debug             = true;
+	        objAH.debug             = false;
 	        objAH.showOverlay       = false;
 	        objAH.jobID             = jobID; 
 	        objAH.sendToServer();
@@ -35,5 +35,5 @@ var interval_ID = 0;
     }
 	
     function checkProgress(){
- 		interval_ID = window.setInterval('pollTest()', 1000);
+ 		interval_ID = window.setInterval('pollTest()', 3000);
     }

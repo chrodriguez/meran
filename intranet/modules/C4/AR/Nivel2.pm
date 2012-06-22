@@ -559,7 +559,7 @@ sub getAnaliticasFromNivel2{
     return \@analitica_array;
 }
 
-sub getAllNivel2FromAnaliticasById{
+sub getAllNivel2FromAnaliticasById2{
     my($id2, $db) = @_;
 
     $db = $db || C4::Modelo::CatRegistroMarcN2Analitica->new()->db();
@@ -580,7 +580,7 @@ sub getAllNivel2FromAnaliticasById{
     }
 }
 
-sub getAllNivel1FromAnaliticasById{
+sub getAllNivel1FromAnaliticasById1{
     my($id1, $db) = @_;
 
     $db = $db || C4::Modelo::CatRegistroMarcN2Analitica->new()->db();
@@ -601,7 +601,8 @@ sub getAllNivel1FromAnaliticasById{
     }
 }
 
-sub getAllNivel2FromAnaliticasById{
+=item
+sub getAllNivel2FromAnaliticasById2{
     my($id2, $db) = @_;
 
     $db = $db || C4::Modelo::CatRegistroMarcN2Analitica->new()->db();
@@ -621,7 +622,7 @@ sub getAllNivel2FromAnaliticasById{
         return 0;
     }
 }
-
+=cut
 
 =item
     Retorna el registro fuente de una analitica a partir de un id1

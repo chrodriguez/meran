@@ -281,7 +281,7 @@ sub eliminar{
         $n3->eliminar();
     }
 
-    my $cat_registro_marc_n2_analitica = C4::AR::Nivel2::getAllNivel2FromAnaliticasById($self->getId2(), $self->db);
+    my $cat_registro_marc_n2_analitica = C4::AR::Nivel2::getAllNivel2FromAnaliticasById2($self->getId2(), $self->db);
 
     #elimino las analíticas de "cat_registro_marc_n2_analitica" si es que existen
     if ($cat_registro_marc_n2_analitica){
