@@ -10,7 +10,7 @@
 
                                <!-- <legend class="titulo_legend trigger click">[% "Estantes" | i18n %]</legend>-->
                                     <div class="datos_tabla_div_estantes">
-                                    
+                                        [% IF cant_estantes %]
                                           <ul id="ul_tabla_div_estante_0" class="unstyled">
                                               [% FOREACH estante IN ESTANTES %]
                                                   <li>
@@ -41,6 +41,11 @@
                                            
                                                 
                                           </div>
+                                      [% ELSE %]
+                                          <div class="alert alert-info">
+                                                [% 'No se encontraron estantes virtuales.' | i18n %]
+                                          </div>
+                                      [% END %]
                                     </div>
                           </div>
                     </div>
