@@ -559,7 +559,7 @@ sub getAnaliticasFromNivel2{
     return \@analitica_array;
 }
 
-sub getAllNivel2FromAnaliticasById{
+sub getAllNivel2FromAnaliticasById2{
     my($id2, $db) = @_;
 
     $db = $db || C4::Modelo::CatRegistroMarcN2Analitica->new()->db();
