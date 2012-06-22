@@ -16,7 +16,13 @@ $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
 my $jobID = $obj->{'jobID'};
 
-$job = C4::AR::BackgroundJob->fetch($jobID);
+eval {
+	$job = C4::AR::BackgroundJob->fetch($jobID);
+	C4::AR::Auth::printValue($job->progress);
+};
 
-C4::AR::Auth::printValue($job->progress);
+if ($@){
+	C4::AR::Auth::printValue("-1");
+}
+
 

@@ -1278,7 +1278,7 @@ sub fotoName{
     my $picturesDir = C4::Context->config("picturesdir");
     my $path;
 
-    my $foto_name   =   $self->getFoto;
+    my $foto_name   =   $self->persona->getFoto;
     
     if (!C4::AR::Utilidades::validateString($foto_name)){
         $foto_name = $self->buildFotoNameHash();
@@ -1288,7 +1288,7 @@ sub fotoName{
     
     if (lc($session_type) eq "opac"){
         $picturesDir = C4::Context->config("picturesdir_opac");
-        $foto_name =   $self->persona->getFoto;
+        $foto_name =   $self->getFoto;
 
 	    if (!C4::AR::Utilidades::validateString($foto_name)){
 	        $foto_name = $self->persona->buildFotoNameHash();

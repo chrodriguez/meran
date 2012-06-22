@@ -98,12 +98,14 @@ sub getRegistroMARCResultado{
                    }
                 else {
                     my $field = $marc_record->field($detalle->getCampoDestino);
+                    my $subfield = $marc_record->subfield($detalle->getCampoDestino,$detalle->getSubcampoDestino);
+												
                     #Hay que ver si es repetible
-                    if(($field)&&($estructura->getRepetible)){
-                        #Existe el campo y no es repetible , se agrega el subcampo
+                    if((($field)&&(!$subfield)) || (($subfield)&&($estructura->getRepetible))){
+                        #Existe el campo pero no el subcampo o existe el subcampo pero es repetible, agrego otro subcampo
                         $field->add_subfields( $detalle->getSubcampoDestino => $dato );
                         }
-                    else{
+                    else {
                         #No existe el campo o existe y no es repetible, se crea uno nuevo
                         my $campo=$detalle->getCampoDestino;
                         my $subcampo=$detalle->getSubcampoDestino;
@@ -116,8 +118,9 @@ sub getRegistroMARCResultado{
                         my $ind1='#';
                         my $ind2='#';
                         $new_field= MARC::Field->new($campo, $ind1, $ind2,$subcampo => $dato);
-                    }
-                    }
+					}
+                }
+                
                 if($new_field){
                     $marc_record->append_fields($new_field);
                 }

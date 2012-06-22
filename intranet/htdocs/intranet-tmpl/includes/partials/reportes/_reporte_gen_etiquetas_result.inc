@@ -20,8 +20,8 @@ function seleccionarTr(trSelected){
                   $('#' + id_tr).hide();
                   barcode= $('#barcode'+ trSelected.val()).html();
                   $('#seleccionados').show();
-                    $('#button-seleccionados').show();
-                  $('#seleccionados').append("<div class='label label-info barcode-box' name='"+ id1  + "' id='label"+barcode+"'><input type='hidden' name='"+id3+"' value='"+id_tr+"'>" + barcode + "<span class='click' id='"+barcode+"'> X </span></div>");
+                  $('#button-seleccionados').show();
+                  $('#seleccionados').append("<div class='label label-info barcode-box' style='width:auto;' name='"+ id1  + "' id='label"+barcode+"'><input type='hidden' name='"+id3+"' value='"+id_tr+"'>" + barcode + "<span class='click' id='"+barcode+"'> X </span></div>");
               
                   
 
@@ -88,6 +88,10 @@ function checkedAllTrs(id,nombreCheckbox){
 
 
 
+$(document).ready(function(){
+      $('#button-seleccionados').hide();
+});
+
 
 </script>
 
@@ -152,7 +156,7 @@ function checkedAllTrs(id,nombreCheckbox){
 <div class="form-actions"  id="button-seleccionados"> 
     [% PERL %]
                 print C4::AR::Filtros::action_button( 
-                                                button      => "btn btn-primary",
+                                                button      => "btn btn-success",
                                                 action      => "exportarPDF()",
                                                 icon        => "",
                                                 title       => "[% 'Generar Etiquetas' | i18n %]"

@@ -76,8 +76,8 @@ function consultar(filtro,doScroll){
 }
 
 function updateInfoUsuarios(responseText){
-    $('#result').html(responseText);
-    zebra('datos_tabla');
+    $('#marco_contenido_datos').html(responseText);
+
     var idArray = [];
     var classes = [];
     idArray[0] = 'socio';
@@ -86,12 +86,10 @@ function updateInfoUsuarios(responseText){
     classes[2] = 'legajo';
     classes[3] = 'tarjetaId';
     busqueda = jQuery.trim($('#socio').val());
-    $("#resultBusqueda").slideUp("slow");
-    scrollTo('result');
+    scrollTo('marco_contenido_datos');
 }
 
 function updateInfoUsuariosBar(responseText){
-	$('#marco_contenido_datos').html("<div id='resultBusqueda'/><div id='result'/>");
 	updateInfoUsuarios(responseText);
 }
 

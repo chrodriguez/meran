@@ -204,9 +204,7 @@ sub checkFileMagic{
     my $hash_unique = Digest::MD5::md5_hex(localtime());   
     my $path        = "/tmp";
     my $notBinary   = 0;
-    
-    my @nombreYextension = split('\.',$file);
-    
+
     #escribimos el archivo
     open ( WRITEIT, ">$path/$hash_unique" ) or die "$!"; 
     binmode WRITEIT; 
@@ -232,17 +230,14 @@ sub checkFileMagic{
     }
     
     $mime    = $flm->checktype_filename($path . "/" . $hash_unique);
-    C4::AR::Debug::debug("mime del archivo $file: " . $mime);
 
     #vemos si esta en la whitelist
     my $ok      = 0;
     my $type    = '';
     
     foreach my $t (@filesAllowed){
-    
-        C4::AR::Debug::debug("dentro del foreach, chekeando la whitelist $mime y $t: " . $mime =~ m/$t/i . " y esto @nombreYextension[1] : " .$mime =~ m/@nombreYextension[1]/i);
-        
-        if(($mime =~ m/$t/i) && ($mime =~ m/@nombreYextension[1]/i )){
+
+        if($mime =~ m/$t/i) {
             $ok = 1;
             $type = $t;
             
@@ -258,7 +253,7 @@ sub checkFileMagic{
         return 0;
     
     }
-    C4::AR::Debug::debug("typeeeeeeeeeeeee: " . $type);
+    
     return ($type,$notBinary); 
 
 }
@@ -4755,9 +4750,9 @@ sub demo_test{
         $job = C4::AR::BackgrounJob->new("DEMO","NULL",10);        
     }
      
-    for (my $x=1; $x<=10; $x++){
+    for (my $x=1; $x<=30; $x++){
         sleep(1);
-        my $percent = printAjaxPercent(10,$x);
+        my $percent = printAjaxPercent(30,$x);
         $job->progress($percent);
         C4::AR::Debug::debug("-------------------------- JOB -------------- \n\n\n\n\n");
     }

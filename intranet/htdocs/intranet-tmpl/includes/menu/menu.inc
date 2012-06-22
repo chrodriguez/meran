@@ -74,7 +74,7 @@
 		                               </li>
 	      [% IF socio_data.usr_credential_type == "superLibrarian" %]
                             <li class="nav-header">[% 'Preferencias' | i18n %]</li>	
-	              			<li class="divider"></li>
+	              			      <li class="divider"></li>
 					
                              <li>
                              [% PERL %]
@@ -129,6 +129,14 @@
                                                 print C4::AR::Filtros::link_to( text =>     "<i class='icon-ok'></i> [% 'Control de autoridades' | i18n %]",
                                                                                 url =>      "[% url_prefix %]/admin/referencias/referencias.pl",
                                                                                 title =>    "[% 'Control de autoridades' | i18n %]"
+                                                                            ) ;
+                                            [% END %]
+                                </li>
+                                <li>
+                                            [% PERL %]
+                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-eye-open'></i> [% 'Moderar revisiones' | i18n %]",
+                                                                                url =>      "[% url_prefix %]/admin/catalogo/revisiones_pendientes.pl",
+                                                                                title =>    "[% 'Moderar revisiones' | i18n %]"
                                                                             ) ;
                                             [% END %]
                                 </li>
@@ -365,59 +373,68 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">[% 'Sistema' | i18n %] <b class="caret"></b></a>
               <ul class="dropdown-menu">
-                            <li class="nav-header">[% 'Intranet' | i18n %]</li>	
+                      <li class="nav-header">[% 'Intranet' | i18n %]</li>	
 	              			<li class="divider"></li>
               
-                                <li>
-                                            [% PERL %]
-                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'Preferencias' | i18n %]",
-                                                                                url =>      "[% url_prefix %]/admin/global/preferencias.pl",
-                                                                                title =>    "[% 'Preferencias' | i18n %]"
-                                                                            ) ;
-                                            [% END %]
-                                </li>
-                                <li>
-                                            [% PERL %]
-                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'Configuraci&oacute;n de Estilos' | i18n %]",
-                                                                                url =>      "[% url_prefix %]/admin/global/estilos_config.pl",
-                                                                                title =>    "[% 'Configuraci&oacute;n de Estilos' | i18n %]"
-                                                                            ) ;
-                                            [% END %]
-                                </li>
-                                <li>
-                                            [% PERL %]
-                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-flag'></i> [% 'Feriados' | i18n %]",
-                                                                                url =>      "[% url_prefix %]/admin/feriados.pl",
-                                                                                title =>    "[% 'Feriados' | i18n %]"
-                                                                            ) ;
-                                            [% END %]
-                                </li>
-                                <li>
-                                          [% PERL %]
-                                              print C4::AR::Filtros::link_to( text =>     "<i class='icon-info-sign'></i> [% 'Novedades' | i18n %]",
-                                                                              url =>      "[% url_prefix %]/admin/global/novedades_intra.pl",
-                                                                              title =>    "[% 'Novedades' | i18n %]"
-                                                                          ) ;
-                                          [% END %]
-                                </li>
-                                <li>
-                                             [% PERL %]
-                                                 print C4::AR::Filtros::link_to( text =>     "<i class='icon-info-sign'></i> [% 'Acerca De...' | i18n %]",
-                                                                                 url =>      "[% url_prefix %]/about/about.pl",
-                                                                                 title =>    "[% 'Acerca De...' | i18n %]"
-                                                                             ) ;
-                                             [% END %]
-                                </li>
-                                <li>
-                                        [% PERL %]
-                                            print C4::AR::Filtros::link_to( text =>     " [% 'Logos' | i18n %]",
-                                                                            url =>      "[% url_prefix %]/admin/logos.pl",
-                                                                            icon=>		"icon-picture",
-                                                                            title =>    "[% 'Logos' | i18n %]"
-                                                                        ) ;
-                                        [% END %]
-                                </li>
-                            <li class="nav-header">[% 'OPAC' | i18n %]</li>	
+                          <li>
+                                      [% PERL %]
+                                          print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'Preferencias' | i18n %]",
+                                                                          url =>      "[% url_prefix %]/admin/global/preferencias.pl",
+                                                                          title =>    "[% 'Preferencias' | i18n %]"
+                                                                      ) ;
+                                      [% END %]
+                          </li>
+                          <li>
+                                      [% PERL %]
+                                          print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'Configuraci&oacute;n de Estilos' | i18n %]",
+                                                                          url =>      "[% url_prefix %]/admin/global/estilos_config.pl",
+                                                                          title =>    "[% 'Configuraci&oacute;n de Estilos' | i18n %]"
+                                                                      ) ;
+                                      [% END %]
+                          </li>
+                          <li>
+                                      [% PERL %]
+                                          print C4::AR::Filtros::link_to( text =>     "<i class='icon-flag'></i> [% 'Feriados' | i18n %]",
+                                                                          url =>      "[% url_prefix %]/admin/feriados.pl",
+                                                                          title =>    "[% 'Feriados' | i18n %]"
+                                                                      ) ;
+                                      [% END %]
+                          </li>
+                          <li>
+                                    [% PERL %]
+                                        print C4::AR::Filtros::link_to( text =>     "<i class='icon-info-sign'></i> [% 'Novedades' | i18n %]",
+                                                                        url =>      "[% url_prefix %]/admin/global/novedades_intra.pl",
+                                                                        title =>    "[% 'Novedades' | i18n %]"
+                                                                    ) ;
+                                    [% END %]
+                          </li>
+                          <li>
+                                       [% PERL %]
+                                           print C4::AR::Filtros::link_to( text =>     "<i class='icon-info-sign'></i> [% 'Acerca De...' | i18n %]",
+                                                                           url =>      "[% url_prefix %]/about/about.pl",
+                                                                           title =>    "[% 'Acerca De...' | i18n %]"
+                                                                       ) ;
+                                       [% END %]
+                          </li>
+                          <li>
+                                  [% PERL %]
+                                      print C4::AR::Filtros::link_to( text =>     " [% 'Logos' | i18n %]",
+                                                                      url =>      "[% url_prefix %]/admin/logos.pl",
+                                                                      icon=>		"icon-picture",
+                                                                      title =>    "[% 'Logos' | i18n %]"
+                                                                  ) ;
+                                  [% END %]
+                          </li>
+                          <li>
+                                  [% PERL %]
+                                      print C4::AR::Filtros::link_to( text  => " [% 'Ayuda MARC' | i18n %]",
+                                                                      url   => "[% url_prefix %]/admin/ayudaMarc.pl",
+                                                                      icon  => "icon-cog",
+                                                                      title =>  "[% 'Ayuda MARC' | i18n %]"
+                                                                  ) ;
+                                  [% END %]
+                          </li>
+                      <li class="nav-header">[% 'OPAC' | i18n %]</li>	
 	              			<li class="divider"></li>
                                 <li>
                                           [% PERL %]

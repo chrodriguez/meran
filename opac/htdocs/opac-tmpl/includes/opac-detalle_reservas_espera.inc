@@ -1,3 +1,4 @@
+[% USE HTML %]
 <div id="info_reservas">
     <fieldset>
         <legend> [% 'Material en espera' | i18n %] </legend>
@@ -25,7 +26,7 @@
               <tr>
                     <td>
                           [% PERL %]
-                                                print C4::AR::Filtros::link_to( text =>     "[% reserva.nivel2.nivel1.getTitulo %]",
+                                                print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
                                                                                 url =>      "[% url_prefix %]/opac-detail.pl", 
                                                                                 params =>   ["id1=[% reserva.nivel2.nivel1.getId1 %]"],
                                                                                 title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
@@ -35,7 +36,7 @@
 
                     <td >
                           [% IF reserva.nivel2.nivel1.getAutor %]
-                              [% reserva.nivel2.nivel1.getAutor %]
+                              [% HTML.escape(reserva.nivel2.nivel1.getAutor) %]
                               </a>
                           [% ELSE %]
                               &nbsp;

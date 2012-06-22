@@ -22,22 +22,34 @@
             <tr>
                 
                 <td class="titulo_result">
-                    [% PERL %]
-                            print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
-                                                            url =>      "[% url_prefix %]/opac-detail.pl",
-                                                            params =>   [   "id1=[% HTML.escape(reserva.nivel2.nivel1.getId1) %]"], 
-                                                        ) ;
+                    [% TRY %]
+                        [% PERL %]
+                                print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(reserva.nivel2.nivel1.getTitulo) %]",
+                                                                url =>      "[% url_prefix %]/opac-detail.pl",
+                                                                params =>   [   "id1=[% HTML.escape(reserva.nivel2.nivel1.getId1) %]"], 
+                                                            ) ;
+                        [% END %]
+                    [% CATCH %]
+                        [% "Edici&oacute;n inexistente"|i18n %]
                     [% END %]
                 </td>
                 
                 <td class="autor_result">
-                    <a class="click" onClick="buscarPorAutor('[% reserva.nivel2.nivel1.getAutor %]')" title="[% 'Filtrar por Autor' | i18n %]">
-                        [% reserva.nivel2.nivel1.getAutor %]
-                    </a>
+                    [% TRY %]
+                        <a class="click" onClick="buscarPorAutor('[% reserva.nivel2.nivel1.getAutor %]')" title="[% 'Filtrar por Autor' | i18n %]">
+                            [% reserva.nivel2.nivel1.getAutor %]
+                        </a>
+                    [% CATCH %]
+                        --------
+                    [% END %]
                 </td>
                 
                 <td>
-                    [% HTML.escape(reserva.nivel2.getEdicion) %]
+                    [% TRY %]
+                        [% HTML.escape(reserva.nivel2.getEdicion) %]
+                    [% CATCH %]
+                        --------
+                    [% END %]
                 </td>
                 <td>
                     &nbsp;[% reserva.getFecha_formateada %]&nbsp;

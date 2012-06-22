@@ -25,15 +25,15 @@
 							                            
 								<div class="well">
 		                            <dt class="inline left rightMargin">[% "Autor: " | i18n %]</dt>
-		                            <dd>[% sancion.nivel3.nivel1.getAutor %]</dd>
+		                            <dd>[% HTML.escape(sancion.nivel3.nivel1.getAutor) %]</dd>
 		
 		                            <dt class="inline left rightMargin">[% "Titulo: " | i18n %]</dt>
-		                            <dd>[% sancion.nivel3.nivel1.getTitulo %]</dd>
+		                            <dd>[% HTML.escape(sancion.nivel3.nivel1.getTitulo) %]</dd>
 	
 									[% IF sancion.nivel3.nivel2.getEdicion %] 
 			                            <dt class="inline left rightMargin">[% "Edicion: " | i18n %]</dt>
 			                            <dd>		
-	                                           [% sancion.nivel3.nivel2.getEdicion %]
+	                                           [% HTML.escape(sancion.nivel3.nivel2.getEdicion) %]
 			                            </dd>
                                     [% END %]
 	                            </div>

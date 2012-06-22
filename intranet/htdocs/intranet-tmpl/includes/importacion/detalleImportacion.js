@@ -39,7 +39,6 @@ function changePage(ini){
 
 function updateDetalleImportacion(responseText){
     $('#detalleImportacion').html(responseText);
-    zebra('datos_tabla');
 }
 
 
@@ -325,20 +324,25 @@ function updateQuitarMatcheoRegistro(responseText){
         setMessages(Messages);
         detalleImportacion(objAHDetalle.id_importacion);
 }
-function comenzarImportacion(id_importacion){
 
-        objAHDetalle=new AjaxHelper(updateComenzarImportacion);
-        objAHDetalle.url               = URL_PREFIX+'/herramientas/importacion/importarDB.pl';
-        objAHDetalle.debug             = true;
-        objAHDetalle.showOverlay       = true;
-        objAHDetalle.tipoAccion        = "COMENZAR_IMPORTACION";
-        objAHDetalle.id = id_importacion;
-        objAHDetalle.sendToServer();
+var jobID = 0;
+
+function comenzarImportacion(id_importacion){
+        objAH                   = new AjaxHelper(updateComenzarImportacion);
+        objAH.url               = URL_PREFIX+'/start_job.pl';
+        objAH.debug             = true;
+        objAH.showOverlay       = false;
+        objAH.id         = id_importacion;
+        objAH.accion            = "COMENZAR_IMPORTACION"; 
+        objAH.sendToServer();
 
 }
 
 function updateComenzarImportacion(responseText){
-        var Messages=JSONstring.toObject(responseText);
-        setMessages(Messages);
-        detalleImportacion(objAHDetalle.id);
+    jobID = responseText;
+    refreshMeranPage();
 }
+
+
+
+

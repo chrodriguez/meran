@@ -173,21 +173,18 @@ sub agregar{
     $self->setMarcRecord($marc_record);
     $self->setTemplate($params->{'id_tipo_doc'});
 
-#     my $mr = MARC::Record->new_from_usmarc($marc_record);
-
     $self->save();
 
-# C4::AR::Debug::debug("CatRgistroMarcN2 => agregar => id2_padre => ".$params->{'id2_padre'});
-# C4::AR::Debug::debug("CatRgistroMarcN2 => agregar => id2_hijo => ".$self->getId2());
-
+=item
     if($params->{'id_tipo_doc'} eq "ANA"){
         my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $db );
         $cat_registro_n2_analitica->setId2Padre($params->{'id2_padre'});
-        # $cat_registro_n2_analitica->setId2Hijo($self->getId2()); #DEPRECATED
         $cat_registro_n2_analitica->setId1($params->{'id1'});
         $cat_registro_n2_analitica->save();
     }
+=cut
 }
+
 
 sub modificar{
     my ($self)              = shift;
@@ -196,6 +193,16 @@ sub modificar{
     $self->setMarcRecord($marc_record);
 
     $self->save();
+
+#verifico si estoy modificando un nivel 2 que linkea a una analitica
+=item
+    if($params->{'id_tipo_doc'} eq "ANA"){
+        my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $db );
+        $cat_registro_n2_analitica->setId2Padre(C4::AR::Nivel2::getIdNivel2RegistroFuente());
+        $cat_registro_n2_analitica->setId1($self->nivel1->getId1());
+        $cat_registro_n2_analitica->save();
+    }
+=cut
 }
 
 =item
@@ -208,6 +215,9 @@ sub getDetalleDisponibilidadNivel3{
     return C4::AR::Nivel3::detalleDisponibilidadNivel3($self->getId2);
 }
 
+
+#DEPRECATEDDDDDDD
+=item
 sub getIdN1Padre {
     my ($self)      = shift;
 
@@ -230,7 +240,10 @@ sub getIdN1Padre {
 
     return 0;
 }
+=cut
 
+#DEPRECATEDDDDDDD
+=tem
 sub getPadre {
     my ($self)      = shift;
 
@@ -251,8 +264,9 @@ sub getPadre {
         }
     }
 
-    return 0;
+    return 0; 
 }
+=cut
 
 sub eliminar{
     my ($self)      = shift;
@@ -997,7 +1011,7 @@ sub getNavString{
             my $ed=$self->getEdicion;
             
             if ($vol){
-                 $string .= $vol;
+                 $string .= "v." . $vol;
                 }
             if ($ed){
                 if($string){$string .= " - ";}

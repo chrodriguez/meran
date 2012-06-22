@@ -12,7 +12,7 @@
 	    var mensajes_interval_id;
 	    var loaderPath = '<img src="'+imagesForJS+'/loaders/loader_facebook.gif"'+'>';
 	    var reading_dm = false;
-	    
+    	var es_avanzada = [% IF advanced %] true [% ELSE %] false [% END %];
 	    
 	</script>
 	
@@ -50,7 +50,7 @@
 	<script type="text/javascript" src="/includes/jquery/fancybox/fancybox.js"></script>
 
 	<script type="text/javascript" src="/includes/workers.js"></script>
-	<script type="text/javascript" scrc="/includes/intranet-top.js"></script>
+	<script type="text/javascript" src="/includes/intranet-top.js"></script>
 	<script type="text/javascript" src="/includes/jquery/jquery-ui-1.8.13.sortable.min.js"></script>
 	
 	<script type="text/javascript">
@@ -166,6 +166,18 @@
 		        objAH_temp.url           = URL_PREFIX+'/mensajes_contacto.pl';
 		        objAH_temp.sendToServer();
 			}
+		}
+
+		function revisionesPendientes(){
+	        var objAH_temp               = new AjaxHelper(updateRevisionesPendientes);
+	        objAH_temp.debug         = false;
+	        this.showState      = false;
+	        objAH_temp.url           = URL_PREFIX+'/admin/catalogo/revisiones_pendientes_check.pl';
+	        objAH_temp.sendToServer();
+		}
+
+		function updateRevisionesPendientes(responseText){
+			$('#revisiones_pendientes_alert').html(responseText);
 		}
 
 		function updateMensajesContacto(responseText){

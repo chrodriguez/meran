@@ -885,15 +885,17 @@ function updateGuardarDocumentoN2(responseText){
             mostrarEstructuraDelNivel3(TEMPLATE_ACTUAL);    
         } else {
             disableAlert();
-            window.location = "detalle.pl?id1=" + ID_N1_PADRE;
+            // FIXME no se si esta funcionand
             $('#ajax-indicator').modal({show:true, keyboard: false, backdrop: false,});
+            window.location = "detalle.pl?id1=" + ID_N1_PADRE;
         }
 
 
         if (FROM_DETALLE_REGISTRO == 1) {
             disableAlert();
-            window.location = "detalle.pl?id1=" + ID_N1;
+            // FIXME no se si esta funcionand
             $('#ajax-indicator').modal({show:true, keyboard: false, backdrop: false,});
+            window.location = "detalle.pl?id1=" + ID_N1;
         }
     }
 }
@@ -983,8 +985,9 @@ function updateGuardarModificacionDocumentoN1(responseText){
         //se esta modificando desde el detalle del registro
         if (FROM_DETALLE_REGISTRO == 1) {
             disableAlert();
-            window.location = "detalle.pl?id1=" + ID_N1;
+            // FIXME no se si esta funcionand
             $('#ajax-indicator').modal({show:true, keyboard: false, backdrop: false,});
+            window.location = "detalle.pl?id1=" + ID_N1;
         }
         
         MODIFICAR = 0;
@@ -1025,9 +1028,11 @@ function updateGuardarModificacionDocumentoN2(responseText){
         //se esta modificando desde el detalle del registro
         if (FROM_DETALLE_REGISTRO == 1){
             disableAlert();
-            window.location = "detalle.pl?id1=" + ID_N1;
+            // FIXME no se si esta funcionand
             $('#ajax-indicator').modal({show:true, keyboard: false, backdrop: false,});
+            window.location = "detalle.pl?id1=" + ID_N1;
         }
+
         MODIFICAR = 0;
     }
 }
@@ -1073,9 +1078,11 @@ function updateGuardarModificacionDocumentoN3(responseText){
         //se esta modificando desde el detalle del registro
         if (FROM_DETALLE_REGISTRO == 1){
             disableAlert();
-            window.location = "detalle.pl?id1=" + ID_N1;
+            // FIXME no se si esta funcionand
             $('#ajax-indicator').modal({show:true, keyboard: false, backdrop: false,});
+            window.location = "detalle.pl?id1=" + ID_N1;
         }
+
         MODIFICAR = 0;
     }
 }
@@ -1407,7 +1414,19 @@ function crearBotonAgregarEdicion(ID2,TIPO_DOC){
 }
 
 function ayudaParaCampo(campo){
-    alert("crear ventana con ayuda para campo " + campo);
+    objAH                   = new AjaxHelper(updateAyudaParaCampo);
+    objAH.debug             = true;
+    objAH.showOverlay       = true;
+    objAH.url               = URL_PREFIX+'/catalogacion/estructura/estructuraCataloDB.pl';
+    objAH.tipoAccion        = 'SHOW_AYUDA_MARC';
+    objAH.campo             = campo;
+
+    objAH.sendToServer();
+}
+
+function updateAyudaParaCampo(responseText){
+    $('#ayudaMARC').html(responseText);
+    $('#ayudaMARC').modal();
 }
 
 function generarOpcionesParaSelect(array_options){
@@ -2247,13 +2266,11 @@ function updateBorrarN1(responseText){
 
     if (! (hayError(Messages) ) ){
         inicializar();
-//      mostrarEstructuraDelNivel1();
-//      mostrarInfoAltaNivel2(ID_N2);
-//         mostrarInfoAltaNivel3(ID_N2);
         $("#detalleComun").html("");
         disableAlert();
-        window.location = "mainpage.pl";
+        // FIXME no se si esta funcionand
         $('#ajax-indicator').modal({show:true, keyboard: false, backdrop: false,});
+        window.location = "mainpage.pl";
     }
 }
 
