@@ -1200,28 +1200,43 @@ function guardar_indicadores(id_div_indicadores, i){
  */
 function procesarInfoJson(marc_object_array, id_padre){
 
-    var objetos = marc_object_array;
-    var campo_ant = '';
+    var objetos     = marc_object_array;
+    var campo_ant   = '';
     var campo;
     var strComp;
     var strIndicadores;
     var marc_group;
+    var campo_marc_conf_obj;
+    var subcampos_array;
+    var id_temp;
+    var id_div_alta_indicador;
+    var id_div_indicadores;
+    var id_aux;
 
     for(var i=0; i < objetos.length; i++){
         //recorro los campos
         strComp = "";
         strIndicadores = "";
     
+    //FIXME Miguel: estoy probando, no se pq estas variables se declaran en cada iteracion for
         //guardo el objeto para luego enviarlo al servidor una vez que este actualizado
+        /*
         var campo_marc_conf_obj     = new campo_marc_conf(objetos[i]);
-        var subcampos_array         = campo_marc_conf_obj.getSubCamposArray();
-        var id_temp                 = generarIdComponente();
+        var subcampos_array         = campo_marc_conf_obj.getSubCamposArray(); 
+        var id_temp                 = generarIdComponente(); 
         var id_div_alta_indicador   = generarIdComponente();
         var id_div_indicadores      = + id_div_alta_indicador + campo_marc_conf_obj.getCampo();
         var id_aux                  = MARC_OBJECT_ARRAY.length;
+        */
+        campo_marc_conf_obj     = new campo_marc_conf(objetos[i]);
+        subcampos_array         = campo_marc_conf_obj.getSubCamposArray(); 
+        id_temp                 = generarIdComponente(); 
+        id_div_alta_indicador   = generarIdComponente();
+        id_div_indicadores      = + id_div_alta_indicador + campo_marc_conf_obj.getCampo();
+        id_aux                  = MARC_OBJECT_ARRAY.length;
 
         //los indicadores quedan ocultos y se muestran en una ventana
-        strComp                     = strComp + "<form id='" + id_div_alta_indicador + "' class= 'modal fade hide form-horizontal well' onsubmit='return false;'>";
+        strComp                 = strComp + "<form id='" + id_div_alta_indicador + "' class= 'modal fade hide form-horizontal well' onsubmit='return false;'>";
    
         
         //genero el indicador primario
@@ -1245,20 +1260,17 @@ function procesarInfoJson(marc_object_array, id_padre){
         
         strIndicadores = strIndicadores + "<button class='btn horizontal' onclick=close_alta_indicador('"+id_div_alta_indicador+"');>Cancelar</button>";
         strIndicadores = strIndicadores + "<button class='btn btn-primary horizontal' onclick='guardar_indicadores(" + id_div_alta_indicador + ", " + i +");'>Aceptar</button></p>";
-//         strIndicadores = strIndicadores + "<button class='btn btn-primary horizontal' onclick='guardar_indicadores(" + id_div_alta_indicador + ");'>Aceptar</button></p>";
         strIndicadores = strIndicadores + "</div>";
         //cierro UL de indicadores
         strComp = strComp + "</div>"; //end div buttonContainerHorizontal
         strComp = strComp + strIndicadores + "</form>";
 
         //genero el header para el campo q contiene todos los subcampos
-//         strComp = strComp + "<div id='marc_group" + id_temp + "'><li id='trigger_" + id_temp + "' class='MARCHeader click trigger trigger_" + id_temp + "'>";
         strComp = strComp + "<div id='marc_group" + id_temp + "' class='row underline' style='width: 80%; margin-left: 0;'><li class='MARCHeader'>";
         strComp = strComp + "<div class='MARCHeader_info'>";
 
         //header LEFT
         strComp = strComp + "<div style='width:120px;float:left'>";
-//         strComp = strComp + crearBotonAyudaCampo(campo_marc_conf_obj.getCampo(),id_div_alta_indicador,campo_marc_conf_obj.getIndicadoresPrimarios());
         strComp = strComp + crearBotonAyudaCampo(campo_marc_conf_obj.getCampo());
         if(campo_marc_conf_obj.getIndicadoresPrimarios() != 0){
             strComp = strComp + "<a id='indicador_primario_" + i + "' class='btn click' onclick=open_alta_indicador('" + id_div_alta_indicador + "') title='Indicadores'>" + campo_marc_conf_obj.getIndicadorPrimarioDato() + "</a>" + "|";
@@ -1267,9 +1279,6 @@ function procesarInfoJson(marc_object_array, id_padre){
         if(campo_marc_conf_obj.getIndicadoresSecundarios() != 0){
             strComp = strComp + "<a id='indicador_secundario_" + i + "' class='btn click' onclick=open_alta_indicador('" + id_div_alta_indicador + "') title='Indicadores'>" + campo_marc_conf_obj.getIndicadorSecundarioDato(); 
         }
-//             if (indicadores != '0'){
-//         html += "<a class='btn click' onclick=open_alta_indicador('" + id_div_alta_indicador + "') title='Indicadores'><i class='icon-align-justify'></i></a>";
-//     }
         
         strComp = strComp + "</div>";
 
@@ -1850,7 +1859,7 @@ function crearBotonEliminarCampoRepetible(obj, show){
     if(!show){
         display = "block";
     }
-    
+
 // FIXME no esta funcionando bien, luego de clonar debería mostrarse igual
 
 // display = "block";
