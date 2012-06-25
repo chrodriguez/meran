@@ -25,11 +25,6 @@ use vars qw(@EXPORT_OK @ISA);
           &twitterEnabled
 );
 
-# my $consumer_key        = "ee4q1gf165jmFQTObJVY2w";
-# my $consumer_secret     = "F4TEnfC1SjYm3XG6vHZ0aJmsYQIFysyu9bwjG9BDdQ";
-# my $token               = "148446079-IL4MsMqXzKU24xMr32No58H5meHmsqLMZHk4qZ0";
-# my $token_secret        = "fSCpzZELbLFYQPJtP7nRJFQjgfGXvR0538a0i0AIcj0"; 
-
 
 sub shortenUrl{
           my ($id) = @_; 
