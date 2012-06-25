@@ -90,9 +90,7 @@ sub modTipoDocumento{
     my ($self)          = shift;
     my ($params)  = @_;
 
-
     $self->nombre($params->{'nombre'});
-    $self->setId_tipo_doc($params->{'tipoDoc'});
 
     $self->save();
 

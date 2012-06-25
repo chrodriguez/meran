@@ -5,10 +5,13 @@ use C4::Modelo::CatRefTipoNivel3;
 use C4::Modelo::CatRefTipoNivel3::Manager;
 
 use vars qw(@EXPORT @ISA);
-@ISA=qw(Exporter);
-@EXPORT=qw( 
+@ISA    = qw(Exporter);
+@EXPORT = qw( 
     getTipoDocumento
     getTipoDocumentoByTipo
+    getTipoDocumentoById
+    modTipoDocumento
+    deleteTipoDocumento
 );
 
 =item
@@ -77,8 +80,6 @@ sub modTipoDocumento{
 
     my ($params, $postdata)    = @_;
 
-    C4::AR::Debug::debug("tipo de doc id : " . $params->{'id'});
-
     my $tipoDoc     = getTipoDocumentoById($params->{'id'});
     my $db          = $tipoDoc->db;
     my $msg_object  = C4::AR::Mensajes::create();
@@ -143,7 +144,89 @@ sub uploadCoverImage{
     }
 
     return $msg_object;
+}
 
+
+=item
+    Elimina el tipo de documento
+    Solo si éste no esta referenciado en nivel_1 y nivel_2. Tambien que no sea el tipo
+    por default.
+=cut
+sub deleteTipoDocumento{
+
+    my ($tipoDoc)       = @_;
+
+    use C4::AR::Nivel1;
+    use C4::AR::Nivel2;
+    use C4::AR::Nivel3;
+
+    my $msg_object      = C4::AR::Mensajes::create();
+
+    my $defaultTipoDoc  = C4::AR::Preferencias::getValorPreferencia('defaultTipoNivel3');
+
+    my $cantReferencias;
+
+    # si es el tipo de doc por defecto no lo dejamos borrar
+    if($defaultTipoDoc ne $tipoDoc){
+    
+        $cantReferencias = C4::AR::Nivel1::checkReferenciaTipoDoc($tipoDoc);
+
+        $cantReferencias = C4::AR::Nivel1::checkReferenciaTipoDoc($tipoDoc, $cantReferencias);
+
+        $cantReferencias = C4::AR::Nivel1::checkReferenciaTipoDoc($tipoDoc, $cantReferencias);
+
+    }else{
+        $cantReferencias = 1;
+    }
+
+
+    if( $cantReferencias ne 0 ) {
+
+        $msg_object->{'error'} = 1;
+
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'TD003', 'params' => []} ) ;
+    
+    }else{
+
+        my $tipoDocumento   = getTipoDocumentoByTipo($tipoDoc);
+        my $db              = $tipoDocumento->db;
+
+        eval{
+
+            $tipoDocumento->delete();
+
+            _eliminarFotoTipoDoc($tipoDoc);
+
+            $msg_object->{'error'} = 0;
+
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'TD004', 'params' => []} ) ;
+
+            $db->commit;
+
+        };
+
+        if($@){
+
+            $msg_object->{'error'} = 1;
+
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'TD005', 'params' => []} ) ;
+
+            $db->rollback;
+
+        }   
+    
+    }
+
+    return $msg_object;
+}
+
+sub _eliminarFotoTipoDoc{
+
+    my ($tipoDoc) = @_;
+
+    my $uploaddir = "/usr/share/meran/intranet/htdocs/uploads/covers";
+
+    unlink($uploaddir . "/" . $tipoDoc . ".png");
 }
 
 1;

@@ -36,13 +36,20 @@
                         <td>[% d.getNombre %]</td>
                         <td>[% d.getId_tipo_doc %]</td>
                         <td>
-                              [% PERL %]
+                            [% PERL %]
                                       print C4::AR::Filtros::action_set_button(    
-                                            title   => "Modificar", 
-                                            action  => 'modificarTipoDocumento("[% d.getId_tipo_doc %]")', 
-                                            icon    => "icon-white icon-edit",
-                                            button  => 'btn btn-primary',
-                                      ) ;
+
+                                            title           => "Modificar", 
+                                            action          => 'modificarTipoDocumento("[% d.getId_tipo_doc %]")', 
+                                            icon            => "icon-white icon-edit",
+                                            button          => 'btn btn-primary',
+                                            actions         => [
+                                                                    {title    => "Eliminar", 
+                                                                     action   => 'eliminarTipoDocumento("[% d.getId_tipo_doc %]")', 
+                                                                     icon     => "icon-trash"
+                                                                    },
+                                                                ],
+                                              ) ;
                             [% END %]
                         </td>
                     </tr>    

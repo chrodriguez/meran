@@ -30,6 +30,7 @@ use vars qw(@EXPORT_OK @ISA);
         eliminarReview
         aprobarReview
         eliminarReviews
+        checkReferenciaTipoDoc
         
 );
 
@@ -50,6 +51,38 @@ C4::AR::Nivel1 - Funciones que manipulan datos del catálogo de nivel 1
 =over 2
 
 =cut
+
+=cut
+
+
+
+=item
+    Checkea que el tipo de documento recibido por parametro no este referenciado en nivel2
+    Si ya recibio que esta referenciado, no hace la consulta
+=cut
+sub checkReferenciaTipoDoc{
+
+    my ($tipoDoc, $cantReferencias) = @_;
+
+    if($cantReferencias ne 0){
+
+        my @filtros;
+
+        push (@filtros, (template       => {eq      => $tipoDoc}) );
+        push (@filtros, (marc_record    => { like   => '%@'.$tipoDoc.'%'}));
+
+        my $countReferences = C4::Modelo::CatRegistroMarcN1::Manager->get_cat_registro_marc_n1_count( 
+                                                                                    query => \@filtros,
+                                                                    );
+
+        return ($countReferences);
+
+    }else{
+
+        return $cantReferencias;
+
+    }
+}
 
 =head2
  getNivel2FromId2t_guardarNivel2
