@@ -1290,6 +1290,103 @@ sub busquedaPorAutor{
     return (scalar(@id1_array), \@id1_array);
 }
 
+
+sub busquedaCombinada_ROSE{
+
+    my ($string_utf8_encoded,$session,$obj_for_log,$sphinx_options) = @_;
+
+    use Text::Unaccent;
+
+    $string_utf8_encoded    = unac_string('utf8',$string_utf8_encoded);
+    $session    =   $session || CGI::Session->load();
+    
+    my $from_suggested = $obj_for_log->{'from_suggested'} || 0;
+    my @searchstring_array = C4::AR::Utilidades::obtenerBusquedas($string_utf8_encoded);
+    my $string_suggested;
+	my @filtros;    
+    my $only_sphinx        = 0;
+    my $only_available     = 0;
+    
+    if ($sphinx_options){
+	    $only_sphinx        = $sphinx_options->{'only_sphinx'} || 0;
+	    $only_available     = $sphinx_options->{'only_available'} || 0;
+    }    
+    my $sphinx = Sphinx::Search->new();
+    my $ini    = $obj_for_log->{'ini'} || 0;
+    my $cantR  = $obj_for_log->{'cantR'} || 0;
+
+    if ($only_sphinx){
+        if ($sphinx_options->{'report'}){ 
+		    $ini    = 0;
+    		$cantR  = 0;
+       }
+            
+    }
+
+
+    my $query = "";
+    my @boolean_ops = ("&","|","!","-");
+    my $tipo        = $obj_for_log->{'match_mode'}||'SPH_MATCH_ALL';
+    my $orden       = $obj_for_log->{'orden'} || 'titulo';
+    my $sentido_orden = $obj_for_log->{'sentido_orden'};
+
+    my $tipo_match  = C4::AR::Utilidades::getSphinxMatchMode($tipo);
+
+    C4::AR::Debug::debug("Busquedas => match_mode ".$tipo);
+
+    #se arma el query string
+    foreach my $string (@searchstring_array){
+
+        if($tipo eq 'SPH_MATCH_PHRASE'){
+            push(@filtros, ( string => { like => '%'.$string.'%'}));
+        } 
+        elsif ($tipo eq 'SPH_MATCH_BOOLEAN'){
+            if ($string eq "AND"){
+            	$string = " AND ";
+            }elsif ($string eq "OR"){
+                $string = "OR";
+            }elsif ($string eq "NOT"){
+                $string = "!";
+            }
+            push(@filtros, ( string => { like => $string.'%'}));
+        }else{
+            push(@filtros, ( string => { like => '%'.$string.'%'}));
+        }
+    }
+
+
+   if ($only_available){
+   	push(@filtros, ( string => { like => '%'.' "ref_disponibilidad_code%'.C4::Modelo::RefDisponibilidad::paraPrestamoValue.'"'.'%'}));
+   }
+
+   my $busqueda_rose = C4::Modelo::IndiceBusqueda::Manager->get_indice_busqueda( query => \@filtros,
+    																			  limit => $cantR,
+    																			  offset => $ini,
+    																			  sort_by => $orden,);
+
+
+
+   my $total_found = C4::Modelo::IndiceBusqueda::Manager->get_indice_busqueda_count( query => \@filtros );
+
+
+   my @id1_array;
+
+    foreach my $hash (@$busqueda_rose){
+        my %hash_temp = {};
+        $hash_temp{'id1'} = $hash->id;
+        push (@id1_array, \%hash_temp);
+    }
+
+    my ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($obj_for_log, @id1_array);
+    #se loquea la busqueda
+    
+    C4::AR::Busquedas::logBusqueda($obj_for_log, $session);
+
+  
+    return ($total_found, $resultsarray,$string_suggested);
+}
+
+
 sub busquedaCombinada_newTemp{
 
     my ($string_utf8_encoded,$session,$obj_for_log,$sphinx_options) = @_;
@@ -1450,51 +1547,6 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
         $string_suggested = getSuggestion($string_utf8_encoded,$total_found,$obj_for_log,$sphinx_options);
     }
     
-  
-  
-
-=item
-##NUEVO FACETED
-
-$sphinx->SetLimits( 0, 100, 100 );
-$sphinx->SetRankingMode ( SPH_RANK_NONE );
-
-my @config_filters = ('autor');
-my %attrs_search = {"one"=>10};
-
-for(my $i=0; $i<scalar(@config_filters); $i++) {
-    my $current_filter = @config_filters[$i];
-
-    $sphinx->ResetFilters();
-    $sphinx->ResetGroupBy();
-
-  #  foreach my $item (@attrs_search){
-	    while ( my ( $key, $value ) = each(%attrs_search) ) {
-	        if( $key != $current_filter) {
-	            $sphinx->SetFilter( $key, $value );
-	        }
-	
-	    }
-   # }
-    $sphinx->SetGroupBy($current_filter, SPH_GROUPBY_ATTR, "\@count desc");
-    $sphinx->AddQuery( $query, $index_to_use );
-}
-
-my $tmp_filters_results = $sphinx->RunQueries();
-
-my @bundle_filters_results = ();
-for(my $i=0; $i<scalar(@config_filters); $i++) {
-    my $current_filter = @config_filters[$i];
-
-    @bundle_filters_results[$current_filter] = $tmp_filters_results->[0];
-    
-    C4::AR::Debug::debug("\n\n\n\n\n\nTEMP RESULT DE FACETED: ".$current_filter."\n\n\n\n\n");
-    C4::AR::Utilidades::printHASH($tmp_filters_results->[0]);
-}
-
-##FIN NUEVO FACETED
-=cut
-  
   
     return ($total_found, $resultsarray,$string_suggested);
 }

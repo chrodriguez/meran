@@ -69,7 +69,7 @@
                                     <fieldset class="resultados_busqueda">
                                       <legend class="titulo_legend">[% "Contenido" | i18n %]</legend>
 
-                                        <div id="div_contenido_[% estante.getId %]" class="datos_tabla_div_contenido_[% estante.getId %]">
+                                        <div id="tabla_estantes_[% estante.getId %]" class="datos_tabla_div_contenido_[% estante.getId %]">
                                               [% PERL %]
                                                       print C4::AR::Filtros::tableHeader(   
                                                                       id              => "tablaResult",
@@ -85,7 +85,7 @@
                                                       [% FOREACH contenido_estante IN estante.contenido %]
                                                           <tr>
                                                               <td>
-                                                              <input type='checkbox' class="chk_contenido_[% estante.getId %]" name="checkbox_[% estante.getId %]" value="[% contenido_estante.getId2 %]">
+                                                              <input type='checkbox' id="checkbox_[% estante.getId %]" name="checkbox_[% estante.getId %]" value="[% contenido_estante.getId2 %]">
                                                               </td>
                                                               <td class="titulo_result">
                                                                   [% PERL %]

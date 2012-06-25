@@ -55,9 +55,9 @@
 	                               </li>
 	                               <li>
 	                                   [% PERL %]
-	                                       print C4::AR::Filtros::link_to( text =>     "<i class='icon-inbox'></i> [% 'Estante virtual' | i18n %]",
+	                                       print C4::AR::Filtros::link_to( text =>     "<i class='icon-inbox'></i> [% 'Estantes virtuales' | i18n %]",
 	                                                                       url =>      "[% url_prefix %]/estantes/estante.pl",
-	                                                                       title =>    "[% 'Estante virtual' | i18n %]"
+	                                                                       title =>    "[% 'Estante virtuales' | i18n %]"
 	                                                                   ) ;
 	                                   [% END %]
 	                               </li>

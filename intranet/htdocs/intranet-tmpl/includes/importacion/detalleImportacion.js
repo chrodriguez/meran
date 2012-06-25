@@ -345,14 +345,18 @@ function updateComenzarImportacion(responseText){
 
 
 function cancelarImportacion(id_importacion){
-        objAH                   = new AjaxHelper(updateCancelarImportacion);
-        objAH.url               = URL_PREFIX+'/herramientas/importacion/importarDB.pl';
-        objAH.debug             = true;
-        objAH.showOverlay       = false;
-        objAH.id                = id_importacion;
-        objAH.jobID             = jobID;
-        objAH.tipoAccion        = "CANCELAR_IMPORTACION"; 
-        objAH.sendToServer();
+    bootbox.confirm(CANCELAR_IMPORTACION, function (ok){ 
+        if (ok){
+            objAH                   = new AjaxHelper(updateCancelarImportacion);
+            objAH.url               = URL_PREFIX+'/herramientas/importacion/importarDB.pl';
+            objAH.debug             = true;
+            objAH.showOverlay       = false;
+            objAH.id                = id_importacion;
+            objAH.jobID             = jobID;
+            objAH.tipoAccion        = "CANCELAR_IMPORTACION"; 
+            objAH.sendToServer();
+        }
+    });
 
 }
 
