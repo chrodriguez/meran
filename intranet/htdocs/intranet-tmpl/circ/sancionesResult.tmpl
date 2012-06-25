@@ -1,8 +1,33 @@
 <script type="text/javascript" >
+        
+      
+
         $(document).ready(function(){
         	checkTr();
                 checkedAll('checkAllSanciones','chkboxSanciones');
         });
+
+
+        function ordenar_result_sanciones(orden){
+          alert(orden);
+
+          if (orden == ORDEN) {
+              SENTIDO_ORDEN= !SENTIDO_ORDEN;
+          } else {
+              SENTIDO_ORDEN= 1;
+              ORDEN = orden;
+          }
+          objAH.sentido_orden = SENTIDO_ORDEN;
+          objAH.sort(orden);        
+        }
+
+        function cambiarSentidoOrd(){
+          if (SENTIDO_ORDEN){
+            $('#icon_'+ ORDEN).attr("class","icon-chevron-up click");
+          } else {
+            $('#icon_'+ ORDEN).attr("class","icon-chevron-down click");
+          }
+        }
 
 </script>
 <div class="contenedor_paginador">[% paginador %]</div>
@@ -13,11 +38,19 @@
                                                   id              => "tablaResult_sanciones",
                                                   class           => "",
                                                   selectAll_id    => "checkAllSanciones",
-                                                  columns         => ['[% "Tarjeta de Id."|i18n %]','[% "Socio"|i18n %]','[% "Legajo"|i18n %]',
-                                                                      '[% "Cat."|i18n %]','[% "Tipo de pr&eacute;stamo"|i18n %]', '[% "Fecha inicio"|i18n %]',
-                                                                      '[% "Fecha fin"|i18n %]','[% "Autor"|i18n %]', '[% "T&iacute;tulo"|i18n %]',
+
+                                                  columns         => ['[% "Id"|i18n %]','[% "Socio"|i18n %]','[% "Legajo"|i18n %]',
+                                                                      '[% "Cat."|i18n %]','[% "Operaci&oacute;n"|i18n %]', '[% "Inicio"|i18n %]',
+                                                                      '[% "Fin"|i18n %]','[% "Autor"|i18n %]', '[% "T&iacute;tulo"|i18n %]',
                                                                       
-                                                                     ]
+                                                                     ],
+
+                                                   order            => {  'Id' =>'nro_socio', 
+                                                                          'Socio' => 'persona.apellido',
+                                                                          'Inicio' => 'fecha_comienzo',
+                                                                          'Legajo' =>'persona.legajo',
+                                                                        },
+                                                  order_name_function => "result_sanciones"
                                                   
                       ) ;
       [% END %]

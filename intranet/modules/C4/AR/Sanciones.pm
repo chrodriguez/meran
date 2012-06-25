@@ -352,6 +352,8 @@ sub sanciones {
  #Esta funcion muestra toda las sanciones que hay
   my ($orden,$ini,$cantR) = @_;
 
+  my $sentido_orden= 
+
   my $dateformat = C4::Date::get_date_format();
   my $hoy        = C4::Date::format_date_in_iso(ParseDate("today"), $dateformat);
 
