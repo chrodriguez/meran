@@ -278,4 +278,25 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS_ESQUEMA_ORIGEN"){
 
       C4::AR::Auth::print_header($session);
       print $infoOperacionJSON;
+    }  
+    elsif($tipoAccion eq "CANCELAR_IMPORTACION"){
+        my ($user, $session, $flags)= checkauth(    $input,
+                                                  $authnotrequired,
+                                                  {   ui => 'ANY',
+                                                      tipo_documento => 'ANY',
+                                                      accion => 'CONSULTA',
+                                                      entorno => 'datos_nivel1'},
+                                                  'intranet'
+                                      );
+
+      my $id       = $obj->{'id'};
+      my $jobID    = $obj->{'jobID'};
+
+      C4::AR::Debug::debug("CANCELAR IMPORTACION ".$id);
+      my $msg_object        =C4::AR::ImportacionIsoMARC::cancelarImportacion($id,$jobID);
+
+      my $infoOperacionJSON = to_json $msg_object;
+
+      C4::AR::Auth::print_header($session);
+      print $infoOperacionJSON;
     }

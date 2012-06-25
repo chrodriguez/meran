@@ -538,7 +538,9 @@ sub getAnaliticasFromNivel2{
             my @nivel2_array; 
     
             my $n1_object                               = C4::AR::Nivel1::getNivel1FromId1($n2->getId1());
-            $hash_nivel1_aux{'nivel1_analitica'}        = $n1_object->toMARC_Intra;
+            if($n1_object){
+                    $hash_nivel1_aux{'nivel1_analitica'}        = $n1_object->toMARC_Intra;
+            }        
 
 # TODO falta levantar los grupos del nivel 1 q estoy procedando!!!!!!!!!!!!!!!!!   
 # es otro foreach         
@@ -559,7 +561,7 @@ sub getAnaliticasFromNivel2{
     return \@analitica_array;
 }
 
-sub getAllNivel2FromAnaliticasById{
+sub getAllNivel2FromAnaliticasById2{
     my($id2, $db) = @_;
 
     $db = $db || C4::Modelo::CatRegistroMarcN2Analitica->new()->db();
@@ -580,7 +582,7 @@ sub getAllNivel2FromAnaliticasById{
     }
 }
 
-sub getAllNivel1FromAnaliticasById{
+sub getAllNivel1FromAnaliticasById1{
     my($id1, $db) = @_;
 
     $db = $db || C4::Modelo::CatRegistroMarcN2Analitica->new()->db();
@@ -601,7 +603,8 @@ sub getAllNivel1FromAnaliticasById{
     }
 }
 
-sub getAllNivel2FromAnaliticasById{
+=item
+sub getAllNivel2FromAnaliticasById2{
     my($id2, $db) = @_;
 
     $db = $db || C4::Modelo::CatRegistroMarcN2Analitica->new()->db();
@@ -621,7 +624,7 @@ sub getAllNivel2FromAnaliticasById{
         return 0;
     }
 }
-
+=cut
 
 =item
     Retorna el registro fuente de una analitica a partir de un id1

@@ -9,10 +9,10 @@ var interval_ID = 0;
 
 
     function pollTest(){
-    	if ( (percent_progress_bar != null) && (percent_progress_bar < 100) ) {
+    	if ( (percent_progress_bar != null) && (percent_progress_bar != '-1') && (percent_progress_bar < 100) ) {
 	        objAH                   = new AjaxHelper(updatePollTest);
 	        objAH.url               = URL_PREFIX+'/poll_job.pl';
-	        objAH.debug             = true;
+	        objAH.debug             = false;
 	        objAH.showOverlay       = false;
 	        objAH.jobID             = jobID; 
 	        objAH.sendToServer();
@@ -25,10 +25,15 @@ var interval_ID = 0;
     }
 	
     function updatePollTest(responseText){
-	   if (parseInt(responseText) >= percent_progress_bar)
-	    	updateProgress(responseText);
+		if (responseText == -1){
+			$('#progress_bar').hide();
+			clearInterval(interval_ID);
+		}else{
+		   if (parseInt(responseText) >= percent_progress_bar)
+		    	updateProgress(responseText);
+		}
     }
 	
     function checkProgress(){
- 		interval_ID = window.setInterval('pollTest()', 1000);
+ 		interval_ID = window.setInterval('pollTest()', 3000);
     }

@@ -174,15 +174,6 @@ sub agregar{
     $self->setTemplate($params->{'id_tipo_doc'});
 
     $self->save();
-
-=item
-    if($params->{'id_tipo_doc'} eq "ANA"){
-        my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $db );
-        $cat_registro_n2_analitica->setId2Padre($params->{'id2_padre'});
-        $cat_registro_n2_analitica->setId1($params->{'id1'});
-        $cat_registro_n2_analitica->save();
-    }
-=cut
 }
 
 
@@ -193,16 +184,6 @@ sub modificar{
     $self->setMarcRecord($marc_record);
 
     $self->save();
-
-#verifico si estoy modificando un nivel 2 que linkea a una analitica
-=item
-    if($params->{'id_tipo_doc'} eq "ANA"){
-        my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new( db => $db );
-        $cat_registro_n2_analitica->setId2Padre(C4::AR::Nivel2::getIdNivel2RegistroFuente());
-        $cat_registro_n2_analitica->setId1($self->nivel1->getId1());
-        $cat_registro_n2_analitica->save();
-    }
-=cut
 }
 
 =item
@@ -214,59 +195,6 @@ sub getDetalleDisponibilidadNivel3{
 
     return C4::AR::Nivel3::detalleDisponibilidadNivel3($self->getId2);
 }
-
-
-#DEPRECATEDDDDDDD
-=item
-sub getIdN1Padre {
-    my ($self)      = shift;
-
-    my $db = C4::Modelo::CatRegistroMarcN2->new()->db();
-
-    my $nivel2_analiticas_array_ref = C4::Modelo::CatRegistroMarcN2Analitica::Manager->get_cat_registro_marc_n2_analitica(
-                                                                        db => $db,
-                                                                        query => [
-                                                                                    cat_registro_marc_n2_hijo_id => { eq => $self->getId2() },
-                                                                            ]
-                                                                );
-
-    if( scalar(@$nivel2_analiticas_array_ref) > 0){
-        my $nivel2 = C4::AR::Nivel2::getNivel2FromId2($nivel2_analiticas_array_ref->[0]->getId2Padre());
-
-        if($nivel2){
-            return $nivel2->getId1();
-        }
-    }
-
-    return 0;
-}
-=cut
-
-#DEPRECATEDDDDDDD
-=tem
-sub getPadre {
-    my ($self)      = shift;
-
-    my $db = C4::Modelo::CatRegistroMarcN2->new()->db();
-
-    my $nivel2_analiticas_array_ref = C4::Modelo::CatRegistroMarcN2Analitica::Manager->get_cat_registro_marc_n2_analitica(
-                                                                        db => $db,
-                                                                        query => [
-                                                                                    cat_registro_marc_n2_hijo_id => { eq => $self->getId2() },
-                                                                            ]
-                                                                );
-
-    if( scalar(@$nivel2_analiticas_array_ref) > 0){
-        my $nivel2 = C4::AR::Nivel2::getNivel2FromId2($nivel2_analiticas_array_ref->[0]->getId2Padre());
-
-        if($nivel2){
-            return $nivel2->nivel1;
-        }
-    }
-
-    return 0; 
-}
-=cut
 
 sub eliminar{
     my ($self)      = shift;
@@ -281,7 +209,7 @@ sub eliminar{
         $n3->eliminar();
     }
 
-    my $cat_registro_marc_n2_analitica = C4::AR::Nivel2::getAllNivel2FromAnaliticasById($self->getId2(), $self->db);
+    my $cat_registro_marc_n2_analitica = C4::AR::Nivel2::getAllNivel2FromAnaliticasById2($self->getId2(), $self->db);
 
     #elimino las analíticas de "cat_registro_marc_n2_analitica" si es que existen
     if ($cat_registro_marc_n2_analitica){

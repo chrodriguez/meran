@@ -16,7 +16,7 @@
         $('.fancylink').fancybox();
 
         [% IF !foto_name %] 
-            $('#div_uploader').show();
+            $('#footerDatosUsuario').show();
         [% END %]
 
         $('.fancylink').fancybox();
@@ -80,9 +80,6 @@
 	    <div id="footerDatosUsuario">
 	        <dl>
 	            <dt>
-	                <label for="file-uploader" id="label-file-uploader">
-	                    <h6>[% 'Seleccione una im&aacute;gen' | i18n %]</h6>
-	                </label>
 	                <div id="file-uploader">
 	                    <noscript>          
 	                        <p>[% 'Please enable JavaScript to use file uploader.' | i18n %]</p>

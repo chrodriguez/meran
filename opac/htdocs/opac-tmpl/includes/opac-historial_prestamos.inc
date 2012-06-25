@@ -21,22 +21,29 @@
         [% FOREACH prestamo IN prestamos %]
             <tr>
             <td> 
-                    [% IF prestamo.nivel3.nivel1.getId1 %]
-                        [% PERL %]
-                                print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(prestamo.nivel3.nivel1.getTitulo) %]",
-                                                                url =>      "[% url_prefix %]/opac-detail.pl", 
-                                                                params => [ "id1=[% prestamo.nivel3.nivel1.getId1 %]", ],
-                                                            ) ;
+                    [% TRY %]
+                        [% IF prestamo.nivel3.nivel1.getId1 %]
+                            [% PERL %]
+                                    print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(prestamo.nivel3.nivel1.getTitulo) %]",
+                                                                    url =>      "[% url_prefix %]/opac-detail.pl", 
+                                                                    params => [ "id1=[% prestamo.nivel3.nivel1.getId1 %]", ],
+                                                                ) ;
+                            [% END %]
+                        [% ELSE %]
+                            &nbsp;
                         [% END %]
-                    [% ELSE %]
-                        &nbsp;
-                    [% END %]
-                </td>
+                    [% CATCH %]
+                        [% "Edici&oacute;n inexistente"|i18n %]
+                    [% END %]                </td>
                 <td class="autor_result click" onClick="filtrarPorAutor([% idAutor %])" title="[% 'Filtrar por Autor' | i18n %]">
-                    [% IF prestamo.nivel3.nivel1.getAutor %]
-                        [% HTML.escape(prestamo.nivel3.nivel1.getAutor) %]
-                    [% ELSE %]
-                        &nbsp;
+                    [% TRY %]
+                        [% IF prestamo.nivel3.nivel1.getAutor %]
+                            [% HTML.escape(prestamo.nivel3.nivel1.getAutor) %]
+                        [% ELSE %]
+                            &nbsp;
+                        [% END %]
+                    [% CATCH %]
+                        -------
                     [% END %]
                 </td>
                 <td>

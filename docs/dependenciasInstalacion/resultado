@@ -2653,3 +2653,185 @@ All tests successful.
 Files=2, Tests=20,  0 wallclock secs ( 0.02 usr  0.00 sys +  0.08 cusr  0.01 csys =  0.11 CPU)
 Result: PASS
 make[1]: se sale del directorio `/home/einar/.cpanplus/5.10.1/build/Perl-OSType-1.002'
+CPAN: File::HomeDir loaded ok (v0.99)
+CPAN: Storable loaded ok (v2.20)
+Reading '/root/.cpan/Metadata'
+  Database was generated on Mon, 18 Jun 2012 15:35:04 GMT
+Running install for module 'Apache::Session'
+Running make for C/CH/CHORNY/Apache-Session-1.89.tar.gz
+CPAN: Digest::SHA loaded ok (v5.71)
+CPAN: Compress::Zlib loaded ok (v2.052)
+Checksum for /root/.cpan/sources/authors/id/C/CH/CHORNY/Apache-Session-1.89.tar.gz ok
+CPAN: Archive::Tar loaded ok (v1.88)
+Apache-Session-1.89
+Apache-Session-1.89/Build.PL
+Apache-Session-1.89/CHANGES
+Apache-Session-1.89/Contributing.txt
+Apache-Session-1.89/INSTALL
+Apache-Session-1.89/Makefile.PL
+Apache-Session-1.89/MANIFEST
+Apache-Session-1.89/META.yml
+Apache-Session-1.89/README
+Apache-Session-1.89/TODO
+Apache-Session-1.89/b
+Apache-Session-1.89/b/dbi.b
+Apache-Session-1.89/b/dbinew.b
+Apache-Session-1.89/b/dbipop.b
+Apache-Session-1.89/b/dbstore.b
+Apache-Session-1.89/b/flexpop.b
+Apache-Session-1.89/b/gdbm.b
+Apache-Session-1.89/b/mysqllock.b
+Apache-Session-1.89/b/uuevsmime.b
+Apache-Session-1.89/eg
+Apache-Session-1.89/eg/example.perl
+Apache-Session-1.89/lib
+Apache-Session-1.89/lib/Apache
+Apache-Session-1.89/lib/Apache/Session.pm
+Apache-Session-1.89/lib/Apache/Session
+Apache-Session-1.89/lib/Apache/Session/DB_File.pm
+Apache-Session-1.89/lib/Apache/Session/File.pm
+Apache-Session-1.89/lib/Apache/Session/Flex.pm
+Apache-Session-1.89/lib/Apache/Session/Informix.pm
+Apache-Session-1.89/lib/Apache/Session/MySQL.pm
+Apache-Session-1.89/lib/Apache/Session/Oracle.pm
+Apache-Session-1.89/lib/Apache/Session/Postgres.pm
+Apache-Session-1.89/lib/Apache/Session/Sybase.pm
+Apache-Session-1.89/lib/Apache/Session/Generate
+Apache-Session-1.89/lib/Apache/Session/Generate/MD5.pm
+Apache-Session-1.89/lib/Apache/Session/Generate/ModUniqueId.pm
+Apache-Session-1.89/lib/Apache/Session/Generate/ModUsertrack.pm
+Apache-Session-1.89/lib/Apache/Session/Lock
+Apache-Session-1.89/lib/Apache/Session/Lock/File.pm
+Apache-Session-1.89/lib/Apache/Session/Lock/MySQL.pm
+Apache-Session-1.89/lib/Apache/Session/Lock/Null.pm
+Apache-Session-1.89/lib/Apache/Session/Lock/Semaphore.pm
+Apache-Session-1.89/lib/Apache/Session/Lock/Sybase.pm
+Apache-Session-1.89/lib/Apache/Session/Serialize
+Apache-Session-1.89/lib/Apache/Session/Serialize/Base64.pm
+Apache-Session-1.89/lib/Apache/Session/Serialize/Storable.pm
+Apache-Session-1.89/lib/Apache/Session/Serialize/Sybase.pm
+Apache-Session-1.89/lib/Apache/Session/Serialize/UUEncode.pm
+Apache-Session-1.89/lib/Apache/Session/Store
+Apache-Session-1.89/lib/Apache/Session/Store/DBI.pm
+Apache-Session-1.89/lib/Apache/Session/Store/DB_File.pm
+Apache-Session-1.89/lib/Apache/Session/Store/File.pm
+Apache-Session-1.89/lib/Apache/Session/Store/Informix.pm
+Apache-Session-1.89/lib/Apache/Session/Store/MySQL.pm
+Apache-Session-1.89/lib/Apache/Session/Store/Oracle.pm
+Apache-Session-1.89/lib/Apache/Session/Store/Postgres.pm
+Apache-Session-1.89/lib/Apache/Session/Store/Sybase.pm
+Apache-Session-1.89/t
+Apache-Session-1.89/t/99base64.t
+Apache-Session-1.89/t/99dbfile.t
+Apache-Session-1.89/t/99dbfilestore.t
+Apache-Session-1.89/t/99file.t
+Apache-Session-1.89/t/99filelock.t
+Apache-Session-1.89/t/99filestore.t
+Apache-Session-1.89/t/99flex.t
+Apache-Session-1.89/t/99md5gen.t
+Apache-Session-1.89/t/99moduniqgen.t
+Apache-Session-1.89/t/99mysql.t
+Apache-Session-1.89/t/99mysqllock.t
+Apache-Session-1.89/t/99mysqlstore.t
+Apache-Session-1.89/t/99nulllock.t
+Apache-Session-1.89/t/99oracle.t
+Apache-Session-1.89/t/99postgres.t
+Apache-Session-1.89/t/99semaphore.t
+Apache-Session-1.89/t/99storable.t
+Apache-Session-1.89/t/99uue.t
+Apache-Session-1.89/t/pod.t
+CPAN: File::Temp loaded ok (v0.22)
+CPAN: Parse::CPAN::Meta loaded ok (v1.4404)
+CPAN: CPAN::Meta loaded ok (v2.112150)
+CPAN: Module::Build loaded ok (v0.4)
+
+  CPAN.pm: Building C/CH/CHORNY/Apache-Session-1.89.tar.gz
+
+
+*** REQUEST ***
+Please use Test::Reporter to report test results - it's the only way to measure
+popularity of distribution.
+
+Created MYMETA.yml and MYMETA.json
+Creating new 'Build' script for 'Apache-Session' version '1.89'
+CPAN: Module::CoreList loaded ok (v2.18)
+---- Unsatisfied dependencies detected during ----
+----     CHORNY/Apache-Session-1.89.tar.gz    ----
+    Test::Deep [build_requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes] Building Apache-Session
+  CHORNY/Apache-Session-1.89.tar.gz
+  ./Build -- OK
+CPAN: YAML loaded ok (v0.81)
+Running Build test
+t/99base64.t ....... 
+Dubious, test returned 2 (wstat 512, 0x200)
+No subtests run 
+t/99dbfile.t ....... 
+Dubious, test returned 2 (wstat 512, 0x200)
+No subtests run 
+t/99dbfilestore.t .. ok
+t/99file.t ......... 
+Dubious, test returned 2 (wstat 512, 0x200)
+No subtests run 
+t/99filelock.t ..... ok
+t/99filestore.t .... ok
+t/99flex.t ......... ok
+t/99md5gen.t ....... ok
+t/99moduniqgen.t ... ok
+t/99mysql.t ........ 
+Dubious, test returned 2 (wstat 512, 0x200)
+No subtests run 
+t/99mysqllock.t .... skipped: Not running RDBM tests without APACHE_SESSION_MAINTAINER=1
+t/99mysqlstore.t ... skipped: Not running RDBM tests without APACHE_SESSION_MAINTAINER=1
+t/99nulllock.t ..... ok
+t/99oracle.t ....... 
+Dubious, test returned 2 (wstat 512, 0x200)
+No subtests run 
+t/99postgres.t ..... 
+Dubious, test returned 2 (wstat 512, 0x200)
+No subtests run 
+t/99semaphore.t .... skipped: Can't tune this test. Help needed.
+t/99storable.t ..... 
+Dubious, test returned 2 (wstat 512, 0x200)
+No subtests run 
+t/99uue.t .......... 
+Dubious, test returned 2 (wstat 512, 0x200)
+No subtests run 
+t/pod.t ............ skipped: Test::Pod 1.14 required for testing POD
+
+Test Summary Report
+-------------------
+t/99base64.t     (Wstat: 512 Tests: 0 Failed: 0)
+  Non-zero exit status: 2
+  Parse errors: No plan found in TAP output
+t/99dbfile.t     (Wstat: 512 Tests: 0 Failed: 0)
+  Non-zero exit status: 2
+  Parse errors: No plan found in TAP output
+t/99file.t       (Wstat: 512 Tests: 0 Failed: 0)
+  Non-zero exit status: 2
+  Parse errors: No plan found in TAP output
+t/99mysql.t      (Wstat: 512 Tests: 0 Failed: 0)
+  Non-zero exit status: 2
+  Parse errors: No plan found in TAP output
+t/99oracle.t     (Wstat: 512 Tests: 0 Failed: 0)
+  Non-zero exit status: 2
+  Parse errors: No plan found in TAP output
+t/99postgres.t   (Wstat: 512 Tests: 0 Failed: 0)
+  Non-zero exit status: 2
+  Parse errors: No plan found in TAP output
+t/99storable.t   (Wstat: 512 Tests: 0 Failed: 0)
+  Non-zero exit status: 2
+  Parse errors: No plan found in TAP output
+t/99uue.t        (Wstat: 512 Tests: 0 Failed: 0)
+  Non-zero exit status: 2
+  Parse errors: No plan found in TAP output
+Files=19, Tests=72,  3 wallclock secs ( 0.13 usr  0.26 sys +  0.71 cusr  0.94 csys =  2.04 CPU)
+Result: FAIL
+  CHORNY/Apache-Session-1.89.tar.gz
+one dependency not OK (Test::Deep); additionally test harness failed
+  ./Build test -- NOT OK
+//hint// to see the cpan-testers results for installing this module, try:
+  reports CHORNY/Apache-Session-1.89.tar.gz
+Running Build install
+  make test had returned bad status, won't install without force

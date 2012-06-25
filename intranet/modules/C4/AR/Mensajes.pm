@@ -357,6 +357,7 @@ my %mensajesINTRA = (
     'U611' => 'Disculpe, no se pudo agregar el &iacute;ndice',
     'U612' => 'Se modifico el esquema correctamente',
     'U613' => 'Disculpe, error al intentar agregar la configuraci&oacute;n (campo, subcampo, perfil) (*?*, *?*, *?*). Esta configuraci&oacute;n ya existe',
+    'U614' => 'No existe el registro que se intenta acceder.',
     'U900' => 'El usuario ha sido eliminado del sistema.',
     'C500' => 'Los items fueron guardados correctamente.',
     'C501' => 'Se produjo un error al intentar guardar los datos del item, repita la operacion.',
@@ -520,6 +521,9 @@ my %mensajesINTRA = (
     'IO015' => 'El campo/subcampo ya existe en el esquema',
     'IO016' => 'El Campo "*?*" y Subcampo "*?*" se han agregado correctamente al esquema "*?*"',
     'IO017' => 'El Campo "*?*" fue movido a "*?*" por tener subcampos y no ser de control.',
+    'IO018' => 'Se ha terminado de importar correctamente.',
+    'IO019' => 'No se ha podido cancelar la importaci&oacute;n',
+    'IO020' => 'La importaci&oacute;n ha sido cancelada',
 
     #Mensajes Upload Files
     'UP00' => 'Solo se permiten archivos del tipo ("*?*") [Fallo de extension]',

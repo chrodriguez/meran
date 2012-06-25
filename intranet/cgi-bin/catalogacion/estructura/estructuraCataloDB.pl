@@ -863,10 +863,19 @@ elsif($tipoAccion eq "SHOW_AYUDA_MARC"){
     });
 
     use C4::AR::AyudaMarc;
+    use C4::AR::EstructuraCatalogacionBase;
 
-    my $ayudaMarc               = C4::AR::AyudaMarc::getAyudaMarcCampo($obj->{'campo'});
+    my $ayudasMarc      = C4::AR::AyudaMarc::getAyudaMarcCampo($obj->{'campo'});
 
-    $t_params->{'ayudaMarc'}    = $ayudaMarc->getAyuda;
+    my $ayudaMarcWeb    = C4::AR::EstructuraCatalogacionBase::getCampoByCampo($obj->{'campo'});
+
+    if($ayudasMarc){
+        $t_params->{'ayudasMarc'}   = $ayudasMarc;
+    }else{
+        $t_params->{'ayudasMarc'}    = 0;
+    }
+
+    $t_params->{'ayudaMarcWeb'}     = $ayudaMarcWeb->getDescripcion;
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

@@ -28,7 +28,8 @@
     CATALOGO_TITLE= '[% "Alerta de Catalogo" | i18n %]';
 
     OPAC_ALERT_TITLE= '[% "Alerta de La Biblioteca" | i18n %]';
-
+    ARRASTRAR_IMAGEN = "[% 'Arrastre para subir la imagen' | i18n %]";
+    SUBIR_IMAGEN = "[% 'Seleccionar imagen' | i18n %]";
     POR_FAVOR_INGRESE_SU_APELLIDO   = "[% 'Por favor, ingrese su apellido' | i18n %]";
     POR_FAVOR_INGRESE_SU_NOMBRE     = "[% 'Por favor, ingrese su/s nombre/s' | i18n %]";
     POR_FAVOR_INGRESE_SU_MENSAJE    = "[% 'Por favor, ingrese su mensaje' | i18n %]";

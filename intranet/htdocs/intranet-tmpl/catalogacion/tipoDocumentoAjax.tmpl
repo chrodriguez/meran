@@ -1,0 +1,69 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.fancy_link').fancybox();
+    });
+</script>
+<fieldset>
+    <legend>[% "Tipo de documento" | i18n %]</legend>
+        [% IF cant %]
+                [% PERL %]
+                    print C4::AR::Filtros::tableHeader(   
+                                           id              => "tipo_documento",
+                                           class           => "",
+                                           columns         => ['[% "Foto"|i18n %]','[% "Nombre"|i18n %]','[% "Tipo de documento"|i18n %]','[% "Acciones"|i18n %]',]
+                                ) ;
+                [% END %]
+                
+                <tbody id="portada_opac_result_sortable">
+
+                <tr id="[% a.id %]">
+                    <td class="tipoDocImage">
+                        <a class="fancy_link" href="https://[% SERVER_ADDRESS %]/uploads/covers/DEFAULT.png">
+                          <img border="0" src="https://[% SERVER_ADDRESS %]/uploads/covers/DEFAULT.png" alt="[% p.getNombre %]" style>
+                        </a>
+                    </td>
+                    <td>Default</td>
+                    <td>Default</td>
+                    <td></td>
+                </tr> 
+                [% FOREACH d IN tiposDocumento %]
+                    <tr id="[% a.id %]">
+                        <td class="tipoDocImage">
+                            <a class="fancy_link" href="https://[% SERVER_ADDRESS %]/uploads/covers/[% d.getId_tipo_doc %].png">
+                              <img border="0" src="https://[% SERVER_ADDRESS %]/uploads/covers/[% d.getId_tipo_doc %].png" alt="[% p.getNombre %]" style>
+                            </a>
+                        </td>
+                        <td>[% d.getNombre %]</td>
+                        <td>[% d.getId_tipo_doc %]</td>
+                        <td>
+                              [% PERL %]
+                                      print C4::AR::Filtros::action_set_button(    
+                                            title   => "Modificar", 
+                                            action  => 'modificarTipoDocumento("[% d.getId_tipo_doc %]")', 
+                                            icon    => "icon-white icon-edit",
+                                            button  => 'btn btn-primary',
+                                      ) ;
+                            [% END %]
+                        </td>
+                    </tr>    
+                [% END %]
+                </tbody>
+             </table>
+        [% ELSE %]
+            <div class="alert alert-info">[% 'No hay niguna ayuda MARC' | i18n %]</div>
+        [% END %]
+</fieldset>
+
+<div class="form-actions">
+    [% PERL %]
+                print C4::AR::Filtros::action_button(   
+                        button   => "btn btn-primary",
+                        action   => 'agregarAyudaMarcShow();',
+                        title   => "[% 'Agregar ayuda' | i18n %]",
+                    ) ;
+    [% END %]
+</div>
+
+<div id="addAyudaMarcForm" class="modal hide fade" >
+    [% INCLUDE 'form_ayuda_marc.inc' %]
+</div>

@@ -880,6 +880,7 @@ body{padding-bottom:60px;}
 .marked{background-color:#DFF0D8;}
 .userImage img{height:50px;width:50px;}
 .logoImage img{max-height:50px;max-width:500px;}
+.tipoDocImage img{max-height:48px;max-width:48px;}
 .table-striped tbody tr:nth-child(odd) td.marked,.table-striped tbody tr:nth-child(odd) th.marked{background-color:#DFF0E8;}
 .clear{clear:both;}
 .bigModal{width:83%;left:30%;overflow-y:scroll;max-height:80%;}

@@ -4,6 +4,7 @@ use strict;
 use C4::Context;
 use C4::AR::Auth;
 use Digest::MD5;
+use C4::Modelo::BackgroundJob::Manager;
 
 =head1 METHODS
 
@@ -37,7 +38,7 @@ sub new {
 }
 
 # store object in CGI session
-sub _serialize {
+sub _serialize_cgi {
     my $self = shift;
 
     my $prefix = "job_" . $self->{'jobID'};
@@ -46,6 +47,37 @@ sub _serialize {
     $session->flush();
 }
 
+sub _serialize_db {
+    my $self = shift;
+
+    my $prefix =$self->{'jobID'};
+    my $po;
+    my @filtros;
+
+    push (@filtros, (jobID => {eq =>$prefix}) );
+
+    my $job_array = C4::Modelo::BackgroundJob::Manager->get_background_job( query => \@filtros,);
+
+    $po = $job_array->[0];
+    unless (defined $po) {
+        $po = C4::Modelo::BackgroundJob->new();
+    }
+
+    $po->name($self->{'name'});
+    $po->invoker($self->{'invoker'});
+    $po->size($self->{'size'});
+    $po->progress($self->{'progress'});
+    $po->status($self->{'status'});
+    $po->jobID($self->{'jobID'});
+
+    $po->save();
+}
+
+sub _serialize {
+    my $self = shift;
+
+    $self->_serialize_db;
+}
 =head2 id
 
  my $jobID = $job->id();
@@ -191,7 +223,7 @@ session.
 
 =cut
 
-sub fetch {
+sub fetch_cgi {
     my $class = shift;
     my $jobID = shift;
 
@@ -203,6 +235,44 @@ sub fetch {
     my $self = $session->param($prefix);
     bless $self, $class;
     return $self;
+}
+
+sub fetch_db {
+    my $class = shift;
+    my $jobID = shift;
+
+    my @filtros;
+
+
+    push (@filtros, (jobID => {eq =>$jobID}) );
+
+    my $job_array = C4::Modelo::BackgroundJob::Manager->get_background_job( query => \@filtros,);
+
+    unless (defined $job_array->[0]) {
+        return undef;
+    }
+
+    my $job = $job_array->[0];
+
+    my $new_job = {};
+    $new_job->{'name'} = $job->name;
+    $new_job->{'invoker'} = $job->invoker;
+    $new_job->{'size'} = $job->size;
+    $new_job->{'progress'} = $job->progress;
+    $new_job->{'status'} = $job->status;
+    $new_job->{'jobID'} = $job->jobID;
+    $new_job->{'status'} = $job->status;
+    $new_job->{'progress'} = $job->progress;
+
+    bless $new_job, $class;
+    return $new_job;
+}
+
+sub fetch {
+    my $class = shift;
+    my $jobID = shift;
+
+    return fetch_db($class,$jobID);
 }
 
 1;
