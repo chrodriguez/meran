@@ -16,7 +16,7 @@ my $tipo= $obj->{'tipo'};
 if($tipo eq "VER_ESTANTES"){
 
     my ($template, $session, $t_params) = get_template_and_user(
-            {template_name => "estantes/verEstante.tmpl",
+            {template_name => "estantes/verEstante.inc",
                     query => $input,
                     type => "intranet",
                     authnotrequired => 0,
@@ -181,6 +181,7 @@ my ($template, $session, $t_params) = get_template_and_user(
     $obj->{'cantidad'}              = $cantidad;
     $t_params->{'SEARCH_RESULTS'}   = $resultId1;
     $t_params->{'cantidad'}         = $cantidad;
+    $t_params->{'socio_busqueda'}         = $valor;
     
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }

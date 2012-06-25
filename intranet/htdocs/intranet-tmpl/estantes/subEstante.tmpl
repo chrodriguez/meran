@@ -1,9 +1,9 @@
  <script>
     
-//         $(document).ready(function(){
-//             checkedAll("div_contenido_[% estante.getId %]", "name_[% estante.getId %]");
+        $(document).ready(function(){
+            checkedAll("div_contenido_[% estante.getId %]", "checkbox_[% estante.getId %]");
             
-//         });
+        });
     
  </script>
 <div id="contenido-[% estante.getId %]" class="accordion">
@@ -85,7 +85,7 @@
                                                       [% FOREACH contenido_estante IN estante.contenido %]
                                                           <tr>
                                                               <td>
-                                                              <input type='checkbox' class="chk_contenido_[% estante.getId %]" name="[% contenido_estante.nivel2.nivel1.getTitulo %] ([% contenido_estante.nivel2.nivel1.getAutor %])" value="[% contenido_estante.getId2 %]">
+                                                              <input type='checkbox' class="chk_contenido_[% estante.getId %]" name="checkbox_[% estante.getId %]" value="[% contenido_estante.getId2 %]">
                                                               </td>
                                                               <td class="titulo_result">
                                                                   [% PERL %]

@@ -280,11 +280,13 @@ function ordenar(orden){
               $('#input_contenido_id_padre_estante').val(padre);
               objAH=new AjaxHelper();
               objAH.showOverlay       = true;
+              $('#resultado_contenido_estante').hide();
+              $('#input_busqueda_contenido').val("");
               $('#contenido_estante').modal();
         }
 	
         function buscarContenido(){
-              
+            
                 $('#buscarContBoton').text('Cargando...'); 
                 $('#buscarContBoton').toggleClass('disabled');
                 objAH=new AjaxHelper(updateBuscarContenido);
@@ -302,7 +304,7 @@ function ordenar(orden){
         function updateBuscarContenido(responseText){
         $('#buscarContBoton').replaceWith("<a id=buscarContBoton class='btn btn-primary click' onclick=buscarContenido();><i class='icon-search icon-white'></i> Buscar</a>"); 
 		$('#resultado_contenido_estante').html(responseText);
-
+        $('#resultado_contenido_estante').show();
 		zebra('datos_tabla');
         ocultarLayer();
         }
