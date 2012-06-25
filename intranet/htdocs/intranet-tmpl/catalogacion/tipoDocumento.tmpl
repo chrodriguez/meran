@@ -30,7 +30,7 @@
         objAH.showOverlay   = true;
         objAH.idTipoDoc     = idTipoDoc;
         objAH.url           = URL_PREFIX+"/catalogacion/tipoDocumentoDB.pl";
-        objAH.tipoAccion    = 'MOD_TIPO_DOC';
+        objAH.tipoAccion    = 'SHOW_MOD_TIPO_DOC';
   
         objAH.sendToServer();
 
@@ -39,6 +39,11 @@
     function updateModificarTipoDocumento(responseText){
         $('#accionesTipoDocumento').html(responseText);
         $('#accionesTipoDocumento').modal();
+    }
+
+    function guardarModificacion(){
+
+        $('#modTipoDocumento').submit();
     }
 
 
