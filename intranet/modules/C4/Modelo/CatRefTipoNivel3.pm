@@ -83,6 +83,19 @@ sub nextMember{
     return(C4::Modelo::PrefUnidadInformacion->new());
 }
 
+=item
+    Modifica el nombre y el ripo de doc
+=cut
+sub modTipoDocumento{
+    my ($self)          = shift;
+    my ($params)  = @_;
+
+    $self->nombre($params->{'nombre'});
+
+    $self->save();
+
+}
+
 
 sub obtenerValoresCampo {
     my ($self)          = shift;

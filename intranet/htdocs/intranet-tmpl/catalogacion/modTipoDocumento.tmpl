@@ -4,35 +4,32 @@
 </div>
 
 <div class="modal-body">
-    <div class="form-horizontal">
+    <form class="form-horizontal" id="modTipoDocumento" method="post" action="[% url_prefix %]/catalogacion/tipo_documento.pl" enctype="multipart/form-data">
         <div class="control-group">
             <label class="control-label" for="liblibrarian"> [% "Nombre:" | i18n %]</label>
             <div class="controls">
-                <input type="text" value="[% tipoDocumento.getNombre %]"/>
-            </div>
-        </div>
-
-        <div class="control-group">
-            <label class="control-label" for="liblibrarian">[% "Tipo de documento:" | i18n %]</label>
-            <div class="controls">
-                <input type="text" value="[% tipoDocumento.getId_tipo_doc %]"/>
+                <input type="text" name="nombre" value="[% tipoDocumento.getNombre %]"/>
             </div>
         </div>
         
         <div class="control-group">
             <label class="control-label" for="liblibrarian"> [% "Foto" | i18n %]: </label>
-            <div class="controls">
+            <div class="controls tipoDocImage">
+                <img border="0" src="https://163.10.10.116/uploads/covers/[% tipoDocumento.getId_tipo_doc %].png" alt="" style="">
+                <input class="input-file" id="imagen" name="imagen" required type="file">
+                <input type="hidden" id="tipoAccion" name="tipoAccion" value="MOD">
+                <input type="hidden" id="id" name="id" value="[% tipoDocumento.getId %]">
             </div>
         </div>
-    </div>
+    </form>
 </div>
 
 <div class="modal-footer">
     [% PERL %]
             print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar cambios' | i18n %]",
                                                 boton   => "btn btn-primary",
-                                                onClick => 'modificarAyudaMarc([% idAyuda %])',
-                                                title   => "[% 'Agregar Ayuda' | i18n %]",
+                                                onClick => "guardarModificacion();",
+                                                title   => "[% 'Guardar cambios' | i18n %]",
                                                 width   => "auto",
                                                 alternClass => "botonCentrado",
                                                 inline  => "1"

@@ -4,7 +4,11 @@
 
 <script language=javascript>
 var objAH;//Objeto AjaxHelper.
-var ORDEN;//orden
+
+
+var ORDEN;
+var SENTIDO_ORDEN=1; //1 para ASC - 0 DESC
+
 /*
  * borrarDiv
  * Borra el div 
@@ -20,6 +24,7 @@ function mostrarSanciones(){
 	objAH.debug         = true;
     objAH.showOverlay   = true;
     objAH.orden         = ORDEN;
+    objAH.sentido_orden = SENTIDO_ORDEN;
 	objAH.url=URL_PREFIX+"/circ/sancionesDB.pl";
 	objAH.accion        = 'MOSTRAR_SANCIONES'
 	objAH.funcion       = 'changePage';
@@ -27,12 +32,16 @@ function mostrarSanciones(){
 }
 function updateMostrarSanciones(responseText){
 	$("#divResultado").html(responseText);
+    if (ORDEN){
+      cambiarSentidoOrd();
+    }
+
 }
 
-function ordenar(orden){
-    ORDEN = orden;
-    mostrarSanciones();
-}
+// function ordenar(orden){
+//     ORDEN = orden;
+//     mostrarSanciones();
+// }
 
 function borrarSanciones(chck){
 
@@ -98,12 +107,16 @@ function buscarSancion(){
 	objAH.url=URL_PREFIX+"/circ/sancionesDB.pl";
 	objAH.string        = $("#buscar").val()
 	objAH.accion        = "BUSCAR_SANCIONES"
+
 	objAH.funcion       = 'changePage';
 	objAH.sendToServer()
 }
 
 function updateBuscaSancion(responseText){
 	$("#divResultado").html(responseText);
+    if (ORDEN){
+      cambiarSentidoOrd();
+    }
 }
 
 

@@ -16,7 +16,7 @@
                 
                 <tbody id="portada_opac_result_sortable">
 
-                <tr id="[% a.id %]">
+                <tr>
                     <td class="tipoDocImage">
                         <a class="fancy_link" href="https://[% SERVER_ADDRESS %]/uploads/covers/DEFAULT.png">
                           <img border="0" src="https://[% SERVER_ADDRESS %]/uploads/covers/DEFAULT.png" alt="[% p.getNombre %]" style>
@@ -27,7 +27,7 @@
                     <td></td>
                 </tr> 
                 [% FOREACH d IN tiposDocumento %]
-                    <tr id="[% a.id %]">
+                    <tr id="[% d.id %]">
                         <td class="tipoDocImage">
                             <a class="fancy_link" href="https://[% SERVER_ADDRESS %]/uploads/covers/[% d.getId_tipo_doc %].png">
                               <img border="0" src="https://[% SERVER_ADDRESS %]/uploads/covers/[% d.getId_tipo_doc %].png" alt="[% p.getNombre %]" style>
@@ -36,13 +36,20 @@
                         <td>[% d.getNombre %]</td>
                         <td>[% d.getId_tipo_doc %]</td>
                         <td>
-                              [% PERL %]
+                            [% PERL %]
                                       print C4::AR::Filtros::action_set_button(    
-                                            title   => "Modificar", 
-                                            action  => 'modificarTipoDocumento("[% d.getId_tipo_doc %]")', 
-                                            icon    => "icon-white icon-edit",
-                                            button  => 'btn btn-primary',
-                                      ) ;
+
+                                            title           => "Modificar", 
+                                            action          => 'modificarTipoDocumento("[% d.getId_tipo_doc %]")', 
+                                            icon            => "icon-white icon-edit",
+                                            button          => 'btn btn-primary',
+                                            actions         => [
+                                                                    {title    => "Eliminar", 
+                                                                     action   => 'eliminarTipoDocumento("[% d.getId_tipo_doc %]")', 
+                                                                     icon     => "icon-trash"
+                                                                    },
+                                                                ],
+                                              ) ;
                             [% END %]
                         </td>
                     </tr>    
@@ -53,17 +60,3 @@
             <div class="alert alert-info">[% 'No hay niguna ayuda MARC' | i18n %]</div>
         [% END %]
 </fieldset>
-
-<div class="form-actions">
-    [% PERL %]
-                print C4::AR::Filtros::action_button(   
-                        button   => "btn btn-primary",
-                        action   => 'agregarAyudaMarcShow();',
-                        title   => "[% 'Agregar ayuda' | i18n %]",
-                    ) ;
-    [% END %]
-</div>
-
-<div id="addAyudaMarcForm" class="modal hide fade" >
-    [% INCLUDE 'form_ayuda_marc.inc' %]
-</div>

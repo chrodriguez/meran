@@ -37,7 +37,7 @@ if($tipoAccion eq "LISTAR"){
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
-}elsif($tipoAccion eq "MOD_TIPO_DOC"){
+}elsif($tipoAccion eq "SHOW_MOD_TIPO_DOC"){
 
     my ($template, $session, $t_params) = get_template_and_user({
                   template_name       => "catalogacion/modTipoDocumento.tmpl",
@@ -56,5 +56,22 @@ if($tipoAccion eq "LISTAR"){
     $t_params->{'tipoDocumento'}    = $tipoDocumento;
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+
+}elsif($tipoAccion eq "DEL_TIPO_DOC"){
+
+    my ($user, $session, $flags)= checkauth(  $input, 
+                                              $authnotrequired, 
+                                              {   ui                => 'ANY', 
+                                                  tipo_documento    => 'ANY', 
+                                                  accion            => 'CONSULTA', 
+                                                  entorno           => 'datos_nivel1'}, 
+                                              'intranet'
+                                  );
+
+    my ($Message_arrayref) = C4::AR::TipoDocumento::deleteTipoDocumento($obj->{'idTipoDoc'});
+    my $infoOperacionJSON  = to_json $Message_arrayref;
+
+    C4::AR::Auth::print_header($session);
+    print $infoOperacionJSON;
 
 }

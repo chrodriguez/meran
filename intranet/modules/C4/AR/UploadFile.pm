@@ -43,6 +43,54 @@ use vars qw(@EXPORT @ISA);
 
 my $picturesDir = C4::Context->config("picturesdir");
 
+=item
+    Sube la imagen del tipo de documento
+=cut
+sub uploadTipoDeDocImage{
+
+    my ($foto, $file_name) = @_;
+
+    use Digest::MD5;
+    use C4::AR::Utilidades;
+    
+    my @whiteList            = qw(
+                                        png
+                                    );
+
+    my $uploaddir               = "/usr/share/meran/intranet/htdocs/uploads/covers";
+    my $maxFileSize             = 2048 * 2048; # 1/2mb max file size...
+    my ($file_type,$notBinary)  = C4::AR::Utilidades::checkFileMagic($foto, @whiteList);
+    
+    #es un archivo valido
+    if($file_type){
+    
+        if($notBinary){
+        
+            #no hay que escribirlo con binmode
+            C4::AR::Debug::debug("UploadFile => uploadAdjuntoNovedadOpac => vamos a escribirla sin binmode");
+            open(WRITEIT, ">$uploaddir/$$file_name.$file_type") or die "Cant write to $uploaddir/$file_name.$file_type. Reason: $!";
+            print WRITEIT $foto;
+            close(WRITEIT);
+   
+        }else{
+        
+            C4::AR::Debug::debug("UploadFile => uploadAdjuntoNovedadOpac => vamos a escribirla CON binmode");
+            open ( WRITEIT, ">$uploaddir/$file_name.$file_type" ) or die "Cant write to $uploaddir/$file_name.$file_type. Reason: $!"; 
+            binmode WRITEIT; 
+            while ( <$foto> ) { 
+                print WRITEIT; 
+            }
+            close(WRITEIT);
+        
+        }
+
+        return ("$file_name.$file_type");
+        
+    }
+    
+    return 0;
+
+}
 
 sub uploadAdjuntoNovedadOpac{
 
@@ -91,7 +139,6 @@ sub uploadAdjuntoNovedadOpac{
     }
     
     return 0;
-
 
 }
 

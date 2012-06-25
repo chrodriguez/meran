@@ -11,6 +11,7 @@ my $obj         = $input->param('obj');
 $obj            = C4::AR::Utilidades::from_json_ISO($obj);
 my $tipoAccion  = $obj->{'accion'};
 my $orden; # usado para el order_by de las consultas
+my $sentido_orden;
 
 my ($template, $session, $t_params) =  get_template_and_user ({
             template_name   => 'circ/sancionesResult.tmpl',
@@ -28,7 +29,20 @@ my ($template, $session, $t_params) =  get_template_and_user ({
 if($tipoAccion eq "MOSTRAR_SANCIONES"){
 
     $orden                          = $obj->{'orden'}||'persona.apellido';
+    
+   
+
+
+    if ($obj->{'sentido_orden'} == "1"){
+        $obj->{'sentido_orden'}= "ASC";
+    }else { 
+        $obj->{'sentido_orden'}= "DESC";
+    }
+    
+    $orden                  .= " ";
+    $orden                  .= $obj->{'sentido_orden'}||"ASC";
     my $ini                         = $obj->{'ini'} || 1;
+
     my $funcion                     = $obj->{'funcion'};
     my ($ini,$pageNumber,$cantR)    = C4::AR::Utilidades::InitPaginador($ini);   
     my ($cantidad,$sanciones)       = C4::AR::Sanciones::sanciones($orden,$ini,$cantR);
