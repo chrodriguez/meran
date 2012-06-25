@@ -31,6 +31,7 @@
     DEBE_SELECCIONAR_MAS_DE_UN_EJEMPLAR = "[% 'Debe seleccionar m&aacute;s de un ejemplar.' %]";
     ADD_EJEMPLARES						= "[% 'Agregar ejemplares' %]";
     ADD_EDICION                      = "[% 'Agregar edición' %]";
+    CANCELAR_IMPORTACION             = "[% 'Esto lleva a cancelar el proceso de importar' %]";
     /*=============================================Fin===Catalogacion=================================================*/
 
     ELIMINAR_NOVEDAD = "[% 'Elminar la novedad?' %]";
