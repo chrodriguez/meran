@@ -5,6 +5,13 @@
     var objAH_repE;
 
 
+    $(document).ready(function(){
+          onEnter('titulo',busqueda,true);
+          onEnter('autor',busqueda,true);
+          onEnter('codBarra',busqueda,true);
+          onEnter('signatura',busqueda,true);
+    });
+
     function busqueda(){
 
         objAH_repE                   = new AjaxHelper(updateBusqueda);
@@ -25,7 +32,6 @@
 
 
     function changePage_ReporteGenEtiquetas(ini){
-        alert(ini);
         objAH_repE.changePage(ini);
     }
 

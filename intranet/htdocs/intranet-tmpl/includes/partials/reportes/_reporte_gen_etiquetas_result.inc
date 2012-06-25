@@ -65,7 +65,8 @@ function checkedAllTrs(id,nombreCheckbox){
                           $("input[name="+nombreCheckbox+"]").each(
                                   function(index){
                                       this.checked=true;
-                                      seleccionarTr($(this));
+                                      if ($(this).is(':visible'))
+                                        seleccionarTr($(this));
                                   }
                           )
                     },
@@ -120,11 +121,7 @@ $(document).ready(function(){
                                             columns         => ['[% "Codigo de Barra" | i18n %]','[% 'Signatura' | i18n %]',
                                                                 '[% "Estado" | i18n %]'               
                                                                 ],
-                                            order           => {  'Codigo de Barra' =>'barcode', 
-                                                                  'Signatura' => 'signatura',
-                                                                  'Estado' => '', 
-                                                                },
-                                            order_name_function => "reporte_gen_etiquetas",
+                                      
                                             ) ;
                       [% END %]
                       <tbody>
@@ -158,8 +155,8 @@ $(document).ready(function(){
                 print C4::AR::Filtros::action_button( 
                                                 button      => "btn btn-success",
                                                 action      => "exportarPDF()",
-                                                icon        => "",
-                                                title       => "[% 'Generar Etiquetas' | i18n %]"
+                                                icon        => "icon-white icon-bookmark",
+                                                title       => " [% 'Generar Etiquetas' | i18n %]"
                                             ) ;
             [% END %]
 </div>

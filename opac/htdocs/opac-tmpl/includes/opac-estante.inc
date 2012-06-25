@@ -16,7 +16,7 @@
                 <span class="divider">/</span> 
 
 			
-			    [% WHILE auxEstante > 0 %]
+			         [% WHILE auxEstante > 0 %]
                       [% listaEstantes.unshift(auxEstante) %]
                       [% IF auxEstante.getPadre %]
                           [% auxEstante = auxEstante.estante_padre %]
@@ -27,12 +27,12 @@
                
                 [% FOREACH auxEstante IN listaEstantes %]
                     [% PERL %]
-				      print C4::AR::Filtros::link_to( text =>     "[% auxEstante.getEstante %]",
-								      url=> '[% url_prefix %]/opac-estante.pl', 
-								      params =>   ["id_estante=[% auxEstante.getId %]"],
-								      title =>    "[% 'Mostrar Detalle del Estante' | i18n %]",
-								      class => "link_to_detail"
-								  ) ;
+      				            print C4::AR::Filtros::link_to( text =>     "[% auxEstante.getEstante %]",
+      								      url=> '[% url_prefix %]/opac-estante.pl', 
+      								      params =>   ["id_estante=[% auxEstante.getId %]"],
+      								      title =>    "[% 'Mostrar Detalle del Estante' | i18n %]",
+      								      class => "link_to_detail"
+      								    ) ;
                     [% END %]
             
                      <span class="divider">/</span>  
@@ -41,6 +41,8 @@
         </li>
      </div>
 [% END %]
+
+
 [% IF SUBESTANTES %]
       [% IF cant_subestantes > 0 %]
             <div id='subestantes'>
@@ -56,14 +58,14 @@
                                               selectAll_id    => "",
                                               columns         => ['[% "Estantes"|i18n %]']                                  
                             ) ;
-                       [% END %]
+                      [% END %]
                        
                         <tbody>
                               
-                                  [% FOREACH subestante IN SUBESTANTES %]
+                           [% FOREACH subestante IN SUBESTANTES %]
                                 
-                                    <tr>
-                                        <td>
+                                  <tr>
+                                    <td>
                                       [% PERL %]
                                           print C4::AR::Filtros::link_to( text    =>  "[% subestante.getEstante %]",
                                                                           url     =>  '[% url_prefix %]/opac-estante.pl',
@@ -72,15 +74,15 @@
                                                                           class => "link_to_detail"
                                                   ) ;
                                       [% END %]
-                                        </td>
+                                    </td>
                                   </tr>
-                                   [% END %]
-                              </tr>
+                      
+                            [% END %]
+                              
                          </tbody>
-                        </table>
+                      </table>
   
             </div>
-      [% END %]
       [% ELSE %]
           <div class="alert alert-info">
                 [% 'No se encontraron estantes virtuales.' | i18n %]
@@ -98,7 +100,7 @@
                   $('th').removeClass('header');
               }  
           ); 
-        </script>
+          </script>
 
         
         <div id='contenido'>
@@ -155,4 +157,5 @@
             </fielset>
         </div>
         [% END %]
-      [% END %]
+[% END %]
+[% END %]

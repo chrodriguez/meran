@@ -1972,7 +1972,7 @@ sub armarBuscoPor{
         if ($params->{'tipo_nivel3_name'} eq 'ALL'){
         	$buscoPor.= C4::AR::Utilidades::verificarValor(C4::AR::Filtros::i18n("TODOS"))."&";
         }else{
-            $buscoPor.= (C4::AR::Utilidades::verificarValor(C4::AR::Referencias::translateTipoNivel3($params->{'tipo_nivel3_name'}))."&");
+            $buscoPor.= Encode::decode_utf8((C4::AR::Utilidades::verificarValor(C4::AR::Referencias::translateTipoNivel3($params->{'tipo_nivel3_name'}))."&"));
         }
 	}
 
