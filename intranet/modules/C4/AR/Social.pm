@@ -16,13 +16,13 @@ use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
 
 @EXPORT_OK=qw(
-          &twitterConsumerKey
-          &twitterConsumerSecret
-          &twitterToken
-          &twitterTokenSecret
-          &connectTwitter
-          &sendPost
-          &twitterEnabled
+          twitterConsumerKey
+          twitterConsumerSecret
+          twitterToken
+          twitterTokenSecret
+          connectTwitter
+          sendPost
+          twitterEnabled
 );
 
 
@@ -55,6 +55,7 @@ sub sendPost{
     
     if (twitterEnabled()){
                   my $nt= connectTwitter();
+
                   eval{
 	                  $result = $nt->update($post);
 	                  if ( my $err = $@ ) {

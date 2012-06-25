@@ -129,7 +129,13 @@ sub setNacionalidad{
 sub getCompleto{
     my ($self) = shift;
 
-    return (C4::AR::Utilidades::trim($self->completo));
+    my $completo = C4::AR::Utilidades::trim($self->completo);
+
+    if (!$completo){
+        $completo = $self->getApellido.", ".$self->getNombre;
+    }
+    
+    return ($completo);
 }
     
 sub setCompleto{
