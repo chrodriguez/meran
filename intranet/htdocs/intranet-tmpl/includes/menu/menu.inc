@@ -142,12 +142,14 @@
                                 </li>
                                 <li>
                                             [% PERL %]
-                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'Tipo de documento' | i18n %]",
+                                                print C4::AR::Filtros::link_to( text =>     "[% ' Tipo de documento' | i18n %]",
                                                                                 url =>      "[% url_prefix %]/catalogacion/tipo_documento.pl",
-                                                                                title =>    "[% 'Tipo de documento' | i18n %]"
+                                                                                title =>    "[% 'Tipo de documento' | i18n %]",
+                                                                                icon => "icon-cog",
                                                                             ) ;
                                             [% END %]
                                 </li>
+                                <li>
            [% END %]
         	<li class="divider"></li>
 	      [% IF socio_data.usr_credential_type == "librarian" OR  socio_data.usr_credential_type == "superLibrarian" %]
