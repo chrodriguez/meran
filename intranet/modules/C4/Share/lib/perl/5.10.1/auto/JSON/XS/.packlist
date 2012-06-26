@@ -1,0 +1,8 @@
+/usr/share/meran/intranet/modules/C4/Share/bin/json_xs
+/usr/share/meran/intranet/modules/C4/Share/lib/perl/5.10.1/JSON/XS.pm
+/usr/share/meran/intranet/modules/C4/Share/lib/perl/5.10.1/JSON/XS/Boolean.pm
+/usr/share/meran/intranet/modules/C4/Share/lib/perl/5.10.1/auto/JSON/XS/XS.bs
+/usr/share/meran/intranet/modules/C4/Share/lib/perl/5.10.1/auto/JSON/XS/XS.so
+/usr/share/meran/intranet/modules/C4/Share/man/man1/json_xs.1p
+/usr/share/meran/intranet/modules/C4/Share/man/man3/JSON::XS.3pm
+/usr/share/meran/intranet/modules/C4/Share/man/man3/JSON::XS::Boolean.3pm
