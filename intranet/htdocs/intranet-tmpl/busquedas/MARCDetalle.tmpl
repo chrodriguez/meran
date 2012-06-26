@@ -8,40 +8,51 @@
 	});
 </script>
 
-<div class="detalle_marc">
+<div class="">
+	<div class="modal-header">
+	                <a class="close" data-dismiss="modal">×</a>
+	                <h3>[% 'Detalle MARC' | i18n %]</h3>
+	</div>	
 
-<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
-	<ul>
-			<li><a href="#tabs-2">Detalle</a></li>
-		<li><a href="#tabs-1">Marc</a></li>
-	</ul>	
-	<div id="tabs-2">
-		<ul class="MARCResult">
-		[% FOREACH MARCDetail_array %]
+	<div class="modal-body">
+		
+		[% PERL %]
+		    print C4::AR::Filtros::tabbedPane( titulo    => "",
+		                                 subtitulo => "",
+		                                 content   => [ {id => 'detalle', text=> "[% 'Detalle' | i18n %]" },
+		                                                {id => 'marc', text => "[% 'MARC' | i18n %]"},
+		                                              ],
+		                                 content_id=> 'detalle_marc_ejemplar',
+		                                 active_id => 'detalle',
+		    
+		    );
 
-			[% IF info_campo_array.size > 0 %]
-				[% IF header %]
-				<li class="MARCHeader">
-					[% campo %]&nbsp;[% header %]
-				</li>
-					[% FOREACH info_campo_array %]
-						[% IF dato.remove('\s+') %]
-							<li class="MARCDetalle">
-								[% subcampo %]&nbsp;[% liblibrarian %]: &nbsp;<b>[% dato %]</b>
+		[% END %]
+
+		         <div class="tab-pane fade in active" id="detalle">
+					<ul class="MARCResult">
+					[% FOREACH MARCDetail_array %]
+
+						[% IF info_campo_array.size > 0 %]
+							[% IF header %]
+							<li class="MARCHeader">
+								[% campo %]&nbsp;[% header %]
 							</li>
+								[% FOREACH info_campo_array %]
+									[% IF dato.remove('\s+') %]
+										<li class="MARCDetalle">
+											[% subcampo %]&nbsp;[% liblibrarian %]: &nbsp;<b>[% dato %]</b>
+										</li>
+									[% END %]
+								[% END %]
+							[% END %]  
 						[% END %]
 					[% END %]
-				[% END %]  
-			[% END %]
-		[% END %]
-		</ul>
+					</ul>        </div>
+		        <div class="tab-pane fade " id="marc">
+		            [% detalle_marc %]
+		        </div>
+		       
+		</section>
 	</div>
-		<div id="tabs-1">
-		<pre>
-			[% detalle_marc %]
-		</pre>
-	</div>
-
-</div>
-
 </div>

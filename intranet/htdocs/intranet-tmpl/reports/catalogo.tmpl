@@ -11,19 +11,6 @@
 </script>
 
 
-<!-- [% PERL %]
-    print C4::AR::Filtros::tabbedPane( titulo    => "[% 'Reportes de Cat&aacute;logo' | i18n %]",
-                                 subtitulo => "[% 'Navegue por las pesta&ntilde;as para acceder a los distintos reportes' | i18n %]",
-                                 content   => [ {id => 'labels', text=> "[% 'B&uacute;squedas' | i18n %]" },
-                                                {id => 'registro', text => "[% 'Generaci&oacute;n de Etiquetas' | i18n %]"},
-                                              ],
-                                 content_id=> 'reportes_catalogo',
-                                 active_id => 'labels',
-    
-    );
-
-[% END %] -->
-
 [% PERL %]
     print C4::AR::Filtros::tabbedPane( titulo    => "[% 'Reportes de Cat&aacute;logo' | i18n %]",
                                  subtitulo => "[% 'Navegue por las pesta&ntilde;as para acceder a los distintos reportes' | i18n %]",
