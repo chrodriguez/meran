@@ -951,10 +951,12 @@ sub tableHeader{
     
     if ($order){
       foreach my $column (@$columns){
-          if ($order->{$column}){
-              $html .= "<th class='click' id='columna_$order->{$column}' onclick=ordenar_$order_name_function('".$order->{$column}."')>$column <i id='icon_$order->{$column}' class='icon-chevron-up click' style='float:right;'></th>";
+          if ($order->{$column}){   
+                my $field_name= $order->{$column};
+                $field_name =~ s/[.]//g;
+                $html .= "<th class='click' id='columna_$field_name' onclick=ordenar_$order_name_function('".$order->{$column}."')>$column <i id='icon_$field_name' class='icon-chevron-up click' style='float:right;'></th>";
           } else {
-              $html .= "<th>$column</th>";
+                 $html .= "<th>$column</th>";
           }
       }
     } else {
@@ -967,6 +969,11 @@ sub tableHeader{
     
     return $html;   
 }
+
+
+
+
+
 
 
 sub action_group_link_button{
