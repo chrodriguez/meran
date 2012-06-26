@@ -31,7 +31,37 @@ use vars qw(@EXPORT_OK @ISA);
     &modificarEstadoItem
     &getNivel3FromId3
     &cantNiveles3FromId1
+    checkReferenciaTipoDoc
 );
+
+
+=item
+    Checkea que el tipo de documento recibido por parametro no este referenciado en nivel3
+    Si ya recibio que esta referenciado, no hace la consulta
+=cut
+sub checkReferenciaTipoDoc{
+
+    my ($tipoDoc, $cantReferencias) = @_;
+
+    if($cantReferencias ne 0){
+
+        my @filtros;
+
+        push (@filtros, (template       => {eq      => $tipoDoc}) );
+        push (@filtros, (marc_record    => { like   => '%@'.$tipoDoc.'%'}));
+
+        my $countReferences = C4::Modelo::CatRegistroMarcN1::Manager->get_cat_registro_marc_n1_count( 
+                                                                                    query => \@filtros,
+                                                                    );
+
+        return ($countReferences);
+
+    }else{
+
+        return $cantReferencias;
+
+    }
+}
 
 =head2
     sub t_guardarNivel3

@@ -19,7 +19,7 @@
                                   columns         => ['[% "Apellido" | i18n %]','[% "Nombre" | i18n %]',
                                                       '[% "N&uacute;mero de socio" | i18n %]','[% "E-mail" | i18n %]',
                                                       '[% "Fecha de reserva" | i18n %]','[% "Fecha de vencimiento" | i18n %]',
-                                                      '[% "C&oacute;digo de barra" | i18n %]'
+                                                      '[% "Ejemplar/Edici&oacute;n" | i18n %]'
                                                      ]
 
                                                                     
@@ -37,7 +37,7 @@
                         </td>
                         <td> 
                             <a href="[% url_prefix %]/usuarios/reales/datosUsuario.pl?nro_socio=[% reserva.socio.getNro_socio %]">
-                                [% reserva.socio.persona.getNombre%]
+                                [% reserva.socio.persona.getNombre %]
                             </a>
                         </td>
                         <td> 
@@ -52,17 +52,21 @@
                             [% reserva.getFecha_reserva_formateada %]
                         </td>
                         <td> 
-                                [% IF rerserva.esEspera %]
-                                   [% 'En espera de asignaci&oacute;n' | i18n %]
+                                [% IF reserva.esEspera %]
+                                   <span class="label label-info">[% 'En espera' | i18n %]</span>
                                 [% ELSE %]
-                                   [% reserva.getFecha_recordatorio_formateada %]
+                                <span class="label label-important">[% reserva.getFecha_recordatorio_formateada %]</span>
                                 [% END %]
                         </td>
                         <td> 
                             [% IF reserva.getId3 %]
-                                <a href="[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl?id3=[% reserva.nivel3.getId %]&token=[% token %]">[% reserva.nivel3.getBarcode %]</a>
+                                <a href="[% url_prefix %]/catalogacion/estructura/detalleEjemplar.pl?id3=[% reserva.nivel3.getId %]&token=[% token %]">
+                                    [% reserva.nivel3.getBarcode %]
+                                </a>
                             [% ELSE %]
-                                <a href="[% url_prefix %]/catalogacion/estructura/detalle.pl?id1=[% reserva.nivel2.getId1 %]&token=[% token %]">Grupo [% reserva.nivel2.getId2 %]</a>
+                                <a href="[% url_prefix %]/catalogacion/estructura/detalle.pl?id1=[% reserva.nivel2.getId1 %]&token=[% token %]">
+                                    Grupo [% reserva.nivel2.getId2 %]
+                                </a>
                             [% END %]
                         </td>
                     </tr>

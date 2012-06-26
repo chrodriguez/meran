@@ -16,19 +16,14 @@ use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
 
 @EXPORT_OK=qw(
-          &twitterConsumerKey
-          &twitterConsumerSecret
-          &twitterToken
-          &twitterTokenSecret
-          &connectTwitter
-          &sendPost
-          &twitterEnabled
+          twitterConsumerKey
+          twitterConsumerSecret
+          twitterToken
+          twitterTokenSecret
+          connectTwitter
+          sendPost
+          twitterEnabled
 );
-
-# my $consumer_key        = "ee4q1gf165jmFQTObJVY2w";
-# my $consumer_secret     = "F4TEnfC1SjYm3XG6vHZ0aJmsYQIFysyu9bwjG9BDdQ";
-# my $token               = "148446079-IL4MsMqXzKU24xMr32No58H5meHmsqLMZHk4qZ0";
-# my $token_secret        = "fSCpzZELbLFYQPJtP7nRJFQjgfGXvR0538a0i0AIcj0"; 
 
 
 sub shortenUrl{
@@ -60,6 +55,7 @@ sub sendPost{
     
     if (twitterEnabled()){
                   my $nt= connectTwitter();
+
                   eval{
 	                  $result = $nt->update($post);
 	                  if ( my $err = $@ ) {

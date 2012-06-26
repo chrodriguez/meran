@@ -19,6 +19,7 @@ use vars qw(@EXPORT_OK @ISA);
                   &getColaboradores
                   &getUnititle
                   &getNivel1FromId1
+                  checkReferenciaTipoDoc
 );
 
 =head1 NAME
@@ -47,6 +48,26 @@ campos clave =>
       autor => 100, a
       edicion => 250, a
 =cut
+
+
+
+=item
+    Checkea que el tipo de documento recibido por parametro no este referenciado en nivel1
+=cut
+sub checkReferenciaTipoDoc{
+
+    my ($tipoDoc) = @_;
+
+    my @filtros;
+
+    push (@filtros, (template => {eq => $tipoDoc}) );
+
+    my $countReferences = C4::Modelo::CatRegistroMarcN1::Manager->get_cat_registro_marc_n1_count( 
+                                                                                query => \@filtros,
+                                                                );
+
+    return ($countReferences);
+}
 
 sub verificar_Alta_Nivel1 {
     my ($marc_record, $msg_object) = @_;

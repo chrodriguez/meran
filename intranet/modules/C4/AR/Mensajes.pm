@@ -624,6 +624,14 @@ my %mensajesINTRA = (
     'REV001' => 'La revisiones no han sido eliminadas, int&eacute;ntelo nuevamente.',
     'REV002' => 'La revisiones han sido aprobadas para su publicaci&oacute;n.',
     'REV003' => 'La revisiones no han sido aprobadas, int&eacute;ntelo nuevamente.',
+
+    #tipo de documentos
+    'TD000' => 'Error guardando la imagen del tipo de documento, int&eacute;ntelo nuevamente.',
+    'TD001' => 'El tipo de documento ha sido guardado exitosamente',
+    'TD002' => 'Error guardando el tipo de documento',
+    'TD003' => 'No se puede eliminar el tipo de documento, ya que se encuentra referenciado',
+    'TD004' => 'El tipo de documento fue eliminado con &eacute;xito',
+    'TD005' => 'Ocurri&oacute; un error mientras se eliminaba el tipo de documento',
 );
 
 sub getMensaje {
