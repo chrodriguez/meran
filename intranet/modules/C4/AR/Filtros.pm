@@ -21,6 +21,7 @@ use vars qw(@EXPORT_OK @ISA);
     setHelpInput
     action_set_button
     crearCheckButtonsBootstrap
+    tabbedPane
 );
 
 =item

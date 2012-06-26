@@ -1,0 +1,14 @@
+/usr/share/meran/intranet/modules/C4/Share/man/man3/AppConfig.3pm
+/usr/share/meran/intranet/modules/C4/Share/man/man3/AppConfig::Args.3pm
+/usr/share/meran/intranet/modules/C4/Share/man/man3/AppConfig::CGI.3pm
+/usr/share/meran/intranet/modules/C4/Share/man/man3/AppConfig::File.3pm
+/usr/share/meran/intranet/modules/C4/Share/man/man3/AppConfig::Getopt.3pm
+/usr/share/meran/intranet/modules/C4/Share/man/man3/AppConfig::State.3pm
+/usr/share/meran/intranet/modules/C4/Share/man/man3/AppConfig::Sys.3pm
+/usr/share/meran/intranet/modules/C4/Share/share/perl/5.10.1/AppConfig.pm
+/usr/share/meran/intranet/modules/C4/Share/share/perl/5.10.1/AppConfig/Args.pm
+/usr/share/meran/intranet/modules/C4/Share/share/perl/5.10.1/AppConfig/CGI.pm
+/usr/share/meran/intranet/modules/C4/Share/share/perl/5.10.1/AppConfig/File.pm
+/usr/share/meran/intranet/modules/C4/Share/share/perl/5.10.1/AppConfig/Getopt.pm
+/usr/share/meran/intranet/modules/C4/Share/share/perl/5.10.1/AppConfig/State.pm
+/usr/share/meran/intranet/modules/C4/Share/share/perl/5.10.1/AppConfig/Sys.pm
