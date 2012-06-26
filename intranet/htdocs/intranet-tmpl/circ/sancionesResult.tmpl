@@ -39,16 +39,15 @@
                                                   selectAll_id    => "checkAllSanciones",
 
                                                   columns         => ['[% "Id"|i18n %]','[% "Socio"|i18n %]','[% "Legajo"|i18n %]',
-                                                                      '[% "Cat."|i18n %]','[% "Operaci&oacute;n"|i18n %]', '[% "Inicio"|i18n %]',
+                                                                      '[% "Categoria"|i18n %]','[% "Operaci&oacute;n"|i18n %]', '[% "Inicio"|i18n %]',
                                                                       '[% "Fin"|i18n %]','[% "Autor"|i18n %]', '[% "T&iacute;tulo"|i18n %]',
-                                                                      '[% "Edici&oacute;n"|i18n %]',
                                                                       
                                                                      ],
 
                                                    order            => {  'Id' =>'nro_socio', 
-                                                                          'Socio' => 'persona.apellido',
-                                                                          'Inicio' => 'fecha_comienzo',
-                                                                          'Legajo' =>'persona.legajo',
+                                                                          'Socio' => 'apellido',
+                                                                          'Inicio' => 'fecha_inicio',
+                                                                          'Legajo' =>'legajo',
                                                                         },
                                                   order_name_function => "result_sanciones"
                                                   
@@ -95,7 +94,7 @@
 
                     [% IF sancion.nivel3.getId %]
                         <td>[% sancion.nivel3.nivel1.getAutor %]</td>
-                        <td>[% sancion.nivel3.nivel1.getTitulo %]</td>
+                        <td style="width:200px;">[% sancion.nivel3.nivel1.getTitulo %]</td>
                         <td>[% sancion.nivel3.nivel2.getEdicion %]</td>
                     [% ELSE %]
                         [% IF sancion.reserva.nivel3.getId %]

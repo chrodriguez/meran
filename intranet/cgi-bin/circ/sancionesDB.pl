@@ -28,11 +28,18 @@ my ($template, $session, $t_params) =  get_template_and_user ({
 
 if($tipoAccion eq "MOSTRAR_SANCIONES"){
 
-    $orden                          = $obj->{'orden'}||'persona.apellido';
-    
+    if ($obj->{'orden'} eq "nro_socio"){
+        $orden = "nro_socio";   
+    } elsif ($obj->{'orden'} eq "apellido"){
+        $orden = "persona.apellido";
+    } elsif ($obj->{'orden'} eq "fecha_inicio"){
+        $orden = "fecha_comienzo";
+    } elsif ($obj->{'orden'} eq "legajo"){
+        $orden = "persona.legajo";
+    } else {
+        $orden  = $obj->{'orden'}||'persona.apellido';
+    }
    
-
-
     if ($obj->{'sentido_orden'} == "1"){
         $obj->{'sentido_orden'}= "ASC";
     }else { 
