@@ -80,6 +80,7 @@
     LAS_CLAVES_SON_DISTINTAS= "[% 'Las claves son distintas.\nIngreselas nuevamente.' | i18n %]";
     CAMBIO_DE_CONTRASENIA= "[% 'Cambio de Contrase&ntilde;a' | i18n %]";
     PRESTAMO_INTER_BIBLIO= "[% 'Pr\u00e9stamo Interbibliotecario' | i18n %]";
+    PRESTAMO_STRING =  "[% 'Pr\u00e9stamo' | i18n %]";
     CONFIRMA_LA_BAJA= "[% 'Confirma la baja ?' | i18n %]";
     FILTRO_POR= "[% 'filtro: ' | i18n %]";
     SOLO_SERA_NUMERICO= "[% 'S\u00f3lo ser\u00e1 num\u00e9rico' | i18n %]";
