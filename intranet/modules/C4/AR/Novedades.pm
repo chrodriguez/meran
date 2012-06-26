@@ -26,7 +26,7 @@ use vars qw(@EXPORT @ISA);
 
 sub agregar{
 
-    my ($parametros)    = @_;
+    my ($parametros)= @_;
     my $novedad     = C4::Modelo::SysNovedad->new();
     my $msg_object  = C4::AR::Mensajes::create();
     my $db          = $novedad->db;
@@ -45,8 +45,6 @@ sub agregar{
         
         eval{
 
-        C4::AR::Debug::debug("datosnovedad titulo : " . $datosNovedad->{'titulo'});
-
             #agregamos primero la novedad
             #para sacarle el id despues
             $novedad->agregar($datosNovedad);
@@ -55,8 +53,6 @@ sub agregar{
             
             if($paramAdjunto){
                 $adjuntoName = C4::AR::UploadFile::uploadAdjuntoNovedadOpac($paramAdjunto);
-                
-                C4::AR::Debug::debug("adjuntoName : " . $adjuntoName);
             
                 if(!$adjuntoName){
                     $msg_object->{'error'}= 1;
