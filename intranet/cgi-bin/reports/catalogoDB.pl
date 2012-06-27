@@ -71,7 +71,24 @@ $obj->{'ini'} = $obj->{'ini'} || 1;
 my $ini=$obj->{'ini'};
 my $funcion=$obj->{'funcion'};
 my $inicial=$obj->{'inicial'};
-$obj->{'orden'} = $obj->{'orden'} || 'valor';
+
+'Valor' =>'valor', 
+'Campo' => 'campo',
+'Usuario' => 'busqueda.nro_socio', 
+'Fecha' => 'busqueda.fecha'  
+
+if ($obj->{'orden'} eq "valor"){
+    $obj->{'orden'} = "valor";
+} elsif ($obj->{'orden'} eq "campo"){
+    $obj->{'orden'} = "campo";
+} elsif ($obj->{'orden'} eq "nro_socio"){
+    $obj->{'orden'} = "busqueda.nro_socio";
+} elsif ($obj->{'orden'} eq "fecha"){
+    $obj->{'orden'} = "busqueda.fecha";
+} else {
+    $obj->{'orden'} = $obj->{'orden'} || 'valor';
+}
+
 
 if ($obj->{'asc'}){
     $obj->{'orden'}.= ' ASC';

@@ -21,8 +21,8 @@
                                                   ],
                               order           => {  'Valor' =>'valor', 
                                                     'Campo' => 'campo',
-                                                    'Usuario' => 'busqueda.nro_socio', 
-                                                    'Fecha' => 'busqueda.fecha'  
+                                                    'Usuario' => 'nro_socio', 
+                                                    'Fecha' => 'fecha'  
                                                   },
                               order_name_function => "reporte_busquedas",
                               ) ;
