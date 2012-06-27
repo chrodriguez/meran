@@ -1233,7 +1233,7 @@ sub _enviarRecordatorio{
             # por ahora lo hacemos solo con mail  
              
             # checkeamos si estan habilitadas las preferencias para mail                 
-            if ((C4::AR::Preferencias::getValorPreferencia('EnabledMailSystem'))&&(C4::AR::Preferencias::getValorPreferencia("reminderMail"))){     
+            if ((C4::AR::Preferencias::getValorPreferencia('EnabledMailSystem')) && (C4::AR::Preferencias::getValorPreferencia("remindUser"))){     
                 # si el socio tiene habilitado el recordatorio de vencimiento
                 if($socio->getRemindFlag()){  
             

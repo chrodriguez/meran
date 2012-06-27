@@ -137,6 +137,7 @@ use vars qw(@EXPORT_OK @ISA);
     translateYesNo_toNumber
     printAjaxPercent
     checkFileMagic
+    isnan
 );
 
 
@@ -153,6 +154,8 @@ my %LABELS_COMPONENTS = (   "-1"            => C4::AR::Filtros::i18n("SIN SELECC
                         );
 
 
+
+sub isnan { return (!defined( $_[0] <=> 9**9**9 )) }
 
 =item
     Crea un radio button para bootstrap
@@ -4791,7 +4794,9 @@ sub generarComboDeEstados{
     $options_hash{'multiple'}= $params->{'multiple'}||0;
     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultUsrEstado") ||1;
 
-    push (@select_estados_array, 'SIN SELECCIONAR');
+
+    push (@select_estados_array, 0);
+    $select_estados_hash{0} = "SIN SELECCIONAR";
     $options_hash{'values'}= \@select_estados_array;
     $options_hash{'labels'}= \%select_estados_hash;
 

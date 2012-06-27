@@ -7,7 +7,9 @@ require Exporter;
 use vars qw(@EXPORT @ISA);
 @ISA = qw(Exporter);
 @EXPORT = qw(
-                &log      
+                log      
+                debug
+                printErrorDBA
 );
 
 
@@ -26,6 +28,16 @@ sub log{
         print Z "\n";
         close(Z);
     }
+}
+
+sub printErrorDB {
+    my($descripcion,$codigo,$tipo)=@_;
+
+    my $paraMens;
+
+    my $message=  C4::AR::Mensajes::getMensaje($codigo,$tipo,$paraMens);
+
+    error($message."   ---  ".$descripcion);
 }
 
 
@@ -79,7 +91,7 @@ sub _write_debug{
 
     my $context = new C4::Context;
 
-    my $debug_file = $context->config('debug_file') || "/usr/local/koha/logs/debug.txt";
+    my $debug_file = $context->config('debug_file') || "/usr/share/meran/logs/debug.txt";
     open(Z, ">>".$debug_file);
     my $type = C4::AR::Auth::getSessionType();
     my $nro_socio = C4::AR::Auth::getSessionNroSocio() || "";
@@ -90,57 +102,51 @@ sub _write_debug{
 	close(Z);        
 }
 
+sub _debugStatus{
+
+  my $context = new C4::Context;
+    
+  return ($context->config('debug'));    
+}
+
+sub error{
+
+    my ($data) = @_;
+
+    my $enabled = _debugStatus();
+
+    (($enabled >= 128) && _write_debug($data));
+
+}
+
+sub warn{
+
+    my ($data) = @_;
+
+    my $enabled = _debugStatus();
+
+    (($enabled >= 256) && _write_debug($data));
+
+}
+
+sub info{
+
+    my ($data) = @_;
+
+    my $enabled = _debugStatus();
+
+    (($enabled >= 512) && _write_debug($data));
+
+}
+
 #debug por linea
 sub debug{
     my ($data) = @_;
 
-    my $context = new C4::Context;
+    my $enabled = _debugStatus();
 
-    my $enabled = $context->config('debug');
-
-    ($enabled && _write_debug($data));
+    (($enabled >= 1024) && _write_debug($data));
 }
-
-sub getLogger{
-    my $context = new C4::Context;
-
-    my $file = $context->config('debug');
-    my $config_file = $context->config('config_log4') || '/etc/meran/log4perl.conf' ;
-    
-    my $logger = Log::Log4perl->get_logger('all');
-    
-    Log::Log4perl::init_and_watch($config_file,10);
-    
-    return ($logger);
-  
-  
-}
-=item
-sub debug{
-    my ($data,$level) = @_;
-
-    my $logger = getLogger();
-    
-    $level = $level || 1;
-
-	# 1 = DEBUG
-	# 2 = INFO
-	# 3 = WARN
-	# 4 = ERROR
-	# 5 = FATAL
-    use Switch;
-    
-    switch($level) {
-		  case 1 {$logger->debug($data);}
-		  case 2 {$logger->info($data);}
-          case 3 {$logger->warn($data);}
-          case 4 {$logger->error($data);}
-          case 5 {$logger->fatal($data);}
-          else   {$logger->debug($data);}
-    }   
-    
-}
-=cut
 
 sub _printHASH {
     my ($hash_ref) = @_;

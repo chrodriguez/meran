@@ -45,6 +45,7 @@ use C4::Modelo::UsrEstado;
 use C4::Modelo::UsrSocio;
 use C4::Modelo::UsrSocio::Manager;
 use C4::AR::Preferencias;
+use C4::AR::Utilidades;
 use Digest::SHA qw(sha256_base64);
 use Switch;
 
@@ -140,7 +141,7 @@ sub agregarAutorizado {
             };
 
             if ($@){
-                &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
+                C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
                 $msg_object->{'error'}= 1;
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U398', 'params' => []} ) ;
                 $db->rollback;
@@ -800,6 +801,10 @@ sub BornameSearchForCard {
 
     if ($params->{'categoria_socio'} ne '') {
             push (@filtros, (id_categoria => { eq => $params->{'categoria_socio'} }) );
+    }
+
+    if ( (!C4::AR::Utilidades::isnan($params->{'regularidad'})) && ($params->{'regularidad'})) {
+            push (@filtros, (id_estado => { eq => $params->{'regularidad'} }) );
     }
    
      push (@filtros, ('persona.'.es_socio => { eq => 1}) );

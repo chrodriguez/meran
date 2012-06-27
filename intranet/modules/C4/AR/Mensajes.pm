@@ -694,22 +694,12 @@ printErrorDB
 Esta funcion logea los bugs que ocurren cuando una transaccion no es ejecutada con exito.
 Guarda los errores en el siguiente archivo: /var/log/koha/debugErrorDBA.txt
 =cut
-# TODO usar Debug::debug
-# TODO esto no deberia estar aca, va en Debug
-sub printErrorDB {
-    my($errorsDB_array,$codigo,$tipo)=@_;
 
-    my $paraMens;
-    my $path=">>".C4::Context->config("kohalogdir")."debugErrorDBA.txt";
-    open(A,$path);
-    print A "\n";
-    print A "**************Error en la transaccion - Fecha:". Date::Manip::ParseDate("now")."**************\n";
-    print A "Codigo: $codigo\n";
-    my $message= &C4::AR::Mensajes::getMensaje($codigo,$tipo,$paraMens);
-    print A "Message: $message\n";
-    print A "Error: $errorsDB_array \n";
-    print A "\n";
-    close(A);
+
+sub printErrorDB {
+    my ($errorsDB_array,$codigo,$tipo)=@_;
+
+    C4::AR::Debug::error($errorsDB_array,$codigo,$tipo);
 }
 
 

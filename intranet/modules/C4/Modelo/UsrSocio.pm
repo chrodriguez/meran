@@ -12,7 +12,7 @@ __PACKAGE__->meta->setup(
         id_socio                         => { type => 'serial', overflow => 'truncate', not_null => 1 , length => 11},
         nro_socio                        => { type => 'varchar', overflow => 'truncate', length => 16, not_null => 1 },
         id_ui                            => { type => 'varchar', overflow => 'truncate', length => 4, not_null => 1 },
-        fecha_alta                       => { type => 'date' },
+        fecha_alta                       => { type => 'varchar' },
         expira                           => { type => 'date' },
         flags                            => { type => 'integer', overflow => 'truncate' },
         password                         => { type => 'varchar', overflow => 'truncate', length => 255 },

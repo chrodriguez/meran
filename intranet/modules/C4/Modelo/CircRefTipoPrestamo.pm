@@ -9,7 +9,7 @@ __PACKAGE__->meta->setup(
 
     columns => [
         id     => { type => 'serial', overflow => 'truncate', not_null => 1 },
-        id_tipo_prestamo    => { type => 'character', overflow => 'truncate', length => 2, not_null => 1 },
+        id_tipo_prestamo    => { type => 'character', overflow => 'truncate', length => 4, not_null => 1 },
         descripcion  => { type => 'text', overflow => 'truncate', length => 65535 },
         codigo_disponibilidad   => { type => 'varchar', overflow => 'truncate', default => '', length => 8, not_null => 1 },
         prestamos    => { type => 'integer', overflow => 'truncate', default => '0', not_null => 1 },

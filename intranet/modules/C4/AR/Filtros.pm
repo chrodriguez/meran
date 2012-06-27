@@ -188,7 +188,13 @@ sub i18n {
     # La inicializacion se paso toda a auth => checkauth
 
     # Esto es por acentos, decode y encode
-    return __(Encode::decode_utf8(Encode::encode_utf8($text)));
+    my $text = C4::AR::Utilidades::trim($text);
+
+    if (C4::AR::Utilidades::validateString($text)){
+        return __(Encode::decode_utf8(Encode::encode_utf8($text)));
+    }else{
+        return ("");
+    }
 }
 
 
