@@ -25,7 +25,7 @@ my $twitter_enabled = C4::AR::Social::twitterEnabled();
 my $contenido       = $input->param('contenido');
 my $cont;
 
-#estamos agregando o editando
+#estamos agregando
 if ($action){
 
     #------------ data de los inputs-------------
@@ -36,27 +36,20 @@ if ($action){
     $t_params->{'nombreAdjunto'}= $input->param('nombreAdjunto');
     $t_params->{'links'}        = $input->param('links');
     #--------- FIN data de los inputs -----------
-    
 
     #--------- imagenes nuevas -----------
-    #me quedo con las hash que tengan 'file_*'
     my @arrayFiles;
     
     #copio la referencia de la hash
     my $hash        = $input->{'param'};
-    
-    #me quedo con las key, la trato a la referencia como una hash
-    my @keys        = keys %$hash;
-    
-    #hago un grep para quedarme con las 'file_*'
-    my @file_key    = grep { $_ =~ /^file_/; } @keys;
-    
-    foreach my $key ( @file_key ){
 
-        #solo los que tengan algo adentro  
-        if($hash->{$key}[0] ne ""){
-            push(@arrayFiles, $input->param($key));
-        } 
+    my $imagenes    = $hash->{'imagenes'};
+
+    foreach my $file ( @$imagenes ){
+
+        if($file){
+            push(@arrayFiles, $file);
+        }
         
     }
     #-------- FIN imagenes nuevas ----------
@@ -75,8 +68,6 @@ if ($action){
             $linksFinal .= " " . $link;
         }
     }
-    
-#    $input->param('links', $linksFinal);
     #------- FIN links ---------
     
     my %novedad;
@@ -88,8 +79,6 @@ if ($action){
     $novedad{'nombreAdjunto'}   = $input->param('nombreAdjunto');
      
     my %paramHash;
-    
-    C4::AR::Debug::debug("titulo : " . $novedad{'titulo'});
     
     $paramHash{'datosNovedad'} = \%novedad;
     $paramHash{'arrayFiles'}   = \@arrayFiles;

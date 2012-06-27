@@ -4,7 +4,6 @@
 <script type="text/javascript" language="javascript">
 
     $(document).ready( function() {
-      makeDataTable('#revisiones_pendientes');
       checkedAll("revisiones_check", "revision");
     });
     
@@ -87,10 +86,6 @@
 <fieldset>
     <legend class="titulo_legend">[% "Revisiones pendientes" | i18n %] </legend>
     <br />
-    <form class="well form-search" onsubmit="return false">
-        <input class="placeholder" placeholder="Filtrar resultados" type="text" id="q" name="q">
-    </form>
-
  [% IF cantidad  %]
       [% PERL %]
                 print C4::AR::Filtros::tableHeader(   

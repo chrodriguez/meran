@@ -940,7 +940,13 @@ sub _verificaciones {
     my $dateformat          = C4::Date::get_date_format();
     my $socio               = C4::AR::Usuarios::getSocioInfoPorNroSocio($nro_socio);
 
-    if ($socio){
+
+    if ( ($tipo_prestamo eq "-1") || (!C4::AR::Utilidades::validateString($tipo_prestamo)) ){
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'S206', 'params' => []} ) ;
+    }
+
+    if ( (!($msg_object->{'error'})) && ($socio) ){
     
       C4::AR::Debug::debug("Reservas.pm => _verificaciones => tipo: $tipo\n");
       C4::AR::Debug::debug("Reservas.pm => _verificaciones => id2: $id2\n");
@@ -949,12 +955,12 @@ sub _verificaciones {
       C4::AR::Debug::debug("Reservas.pm => _verificaciones => tipo_prestamo: $tipo_prestamo\n");
         
     #Se verifica que el usuario sea Regular
-        if( !$socio->esRegular ){
+        if ( (!($msg_object->{'error'})) && (!$socio->esRegular) ){
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U300', 'params' => []} ) ;
             C4::AR::Debug::debug("Reservas.pm => _verificaciones => Entro al if de regularidad\n");
         }
-    }else{
+    }elsif (!($msg_object->{'error'})){
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U321', 'params' => [$nro_socio]} ) ;
     }

@@ -46,14 +46,11 @@ if ($review){
              
     C4::AR::Validator::validateParams('VA002',\%params,['nro_socio', 'id2', 'review']);
     C4::AR::Nivel2::reviewNivel2($id2,$review,$nro_socio);
+
 }
 
 $t_params->{'portada_registro_medium'}  =  C4::AR::PortadasRegistros::getImageForId2($id2,'M');
 $t_params->{'portada_registro_big'}     =  C4::AR::PortadasRegistros::getImageForId2($id2,'L');
-
-# lo hacemos con un eval porque en algunos casos rompe
-# id2=0
-# id2=99999999999999999999999999999999999999999999999
 
 eval{
 
@@ -69,7 +66,12 @@ eval{
 };
  
 if ($@){
-    $t_params->{'mensaje'}              = "Ha ocurrido un error viendo las revisiónes";
+    $t_params->{'mensaje'}              = C4::AR::Filtros::i18n("Ha ocurrido un error viendo las revisiones");
+}else{
+    if ($review){
+        $t_params->{'mensaje'}              = C4::AR::Filtros::i18n("Hemos recibido tu comentario. Cuando el personal de la Biblioteca lo apruebe, va a ser visible.");
+        $t_params->{'mensaje_class'}        = "alert-success";
+    }
 }
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

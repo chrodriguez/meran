@@ -2390,6 +2390,12 @@ function updateBorrarEjemplaresN3(responseText){
         ejemplaresDelGrupo(ID_N2);
     }
 }
+
+function getTemplateString(template_actual){
+    $('#tipo_nivel3_id').val(TEMPLATE_ACTUAL);
+    return $('#tipo_nivel3_id option:selected').val(TEMPLATE_ACTUAL).html();
+}
+
 /*
  * modificarN1
  * Funcion que obtiene los datos ingresados en el nivel 1 para poder crear los componentes con los valores
@@ -2404,7 +2410,9 @@ function modificarN1(id1, template){
     ID_N1               = id1;
     
 // TODO falta agregar boton para modificar el template
-    _mostrarAccion("<h4>Modificando el registro (" + ID_N1 + ") con el esquema: " + $('#tipo_nivel3_id option:selected').html() + " (" + TEMPLATE_ACTUAL + ")</h4>" + crearBotonEsquema());
+    //_mostrarAccion("<h4>Modificando el registro (" + ID_N1 + ") con el esquema: " + $('#tipo_nivel3_id option:selected').html() + " (" + TEMPLATE_ACTUAL + ")</h4>" + crearBotonEsquema());
+    _mostrarAccion("<h4>Modificando el registro (" + ID_N1 + ") con el esquema: " + getTemplateString(TEMPLATE_ACTUAL) + " (" + TEMPLATE_ACTUAL + ")</h4>" + crearBotonEsquema());
+    
     objAH               = new AjaxHelper(updateModificarN1);
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;
@@ -2437,7 +2445,7 @@ function modificarN2(id2, template){
     ID_N2               = id2;
     ID_TIPO_EJEMPLAR    = template;
 // TODO falta agregar boton para modificar el template
-    _mostrarAccion("<h4>Modificando el edici&oacute;n (" + ID_N2 + ") con el esquema: " + ID_TIPO_EJEMPLAR + "</h4>" + crearBotonEsquema() + "&nbsp;&nbsp;&nbsp;&nbsp;" + crearBotonAgregarEjemplares(ID_N2,template));  
+    _mostrarAccion("<h4>Modificando el edici&oacute;n (" + ID_N2 + ") con el esquema: " + getTemplateString(TEMPLATE_ACTUAL) + " (" + TEMPLATE_ACTUAL + ")</h4>" + crearBotonEsquema() + "&nbsp;&nbsp;&nbsp;&nbsp;" + crearBotonAgregarEjemplares(ID_N2,template));  
     objAH               = new AjaxHelper(updateModificarN2);
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.showOverlay   = true;
@@ -2462,7 +2470,7 @@ function modificarN3(id3, template){
     ID_N3               = id3;  
     ID_TIPO_EJEMPLAR    = template;
 // TODO falta agregar boton para modificar el template
-    _mostrarAccion("<h4>Modificando el ejemplar (" + ID_N3 + ") con el esquema: " + ID_TIPO_EJEMPLAR + "</h4>" + crearBotonEsquema());  
+    _mostrarAccion("<h4>Modificando el ejemplar (" + ID_N3 + ") con el esquema: " + getTemplateString(TEMPLATE_ACTUAL) + " (" + TEMPLATE_ACTUAL + ")</h4>" + crearBotonEsquema());  
     objAH               = new AjaxHelper(updateModificarN3);
     objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
     objAH.debug         = true;

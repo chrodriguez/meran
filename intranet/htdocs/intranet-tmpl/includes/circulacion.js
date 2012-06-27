@@ -187,13 +187,11 @@ function generaDivPrestamo(responseText){
 	infoArray           = JSONstring.toObject(responseText);
 	
 	var html                = "<div id='div_circ_rapida_devolucion' class=''>";
-	var accion              = infoArray[0].accion;
+	var accion;
+
+	accion = PRESTAMO_STRING;		
 	
-	if (!accion){
-		accion = CIRCULACION;
-	}
-	
-	html                    += "<div class='modal-header'><a href='#' class='close' data-dismiss='modal'>×</a><h3>"+ infoArray[0].accion + "</h3></div>";
+	html                    += "<div class='modal-header'><a href='#' class='close' data-dismiss='modal'>×</a><h3>"+ accion + "</h3></div>";
 	html					+= "<div class='modal-body'>";
 
 	var i;
@@ -229,6 +227,7 @@ function generaDivPrestamo(responseText){
 
 		
 		html= html + "<br>C&oacute;digo de barras: " + comboItems;
+
 		html= html + "<br>Tipo de pr&eacute;stamo: " + comboTipoPrestamo;
 		html					+= "</p>";
 	}

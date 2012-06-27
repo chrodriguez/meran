@@ -24,29 +24,22 @@ my $id = $input->param('id') || 0;
 
 if ($action eq 'editar'){
 
-    #---------------- imagenes nuevas -----------------
-    
-    #me quedo con las hash que tengan 'file_*' por si agregaron nuevas imagenes
-    my @arrayNewFiles;
+    #--------- imagenes nuevas -----------
+    my @arrayFiles;
     
     #copio la referencia de la hash
     my $hash        = $input->{'param'};
-    
-    #me quedo con las key, la trato a la referencia como una hash
-    my @keys        = keys %$hash;
-    
-    #hago un grep para quedarme con las 'file_*'
-    my @file_key    = grep { $_ =~ /^file_/; } @keys;
-    
-    foreach my $key ( @file_key ){
 
-        #solo los que tengan algo adentro  
-        if($hash->{$key}[0] ne ""){
-            push(@arrayNewFiles, $input->param($key));
-        } 
-        
+    my $imagenes    = $hash->{'imagenes'};
+
+    foreach my $file ( @$imagenes ){
+
+        if($file){
+            push(@arrayFiles, $file);
+        }
+
     }
-    #---------------- fin imagenes nuevas -----------------
+    #-------- FIN imagenes nuevas ----------
     
     
     
@@ -83,7 +76,7 @@ if ($action eq 'editar'){
     $input->param('links', $linksFinal);
     #------- FIN links ---------
     
-    my ($Message_arrayref) = C4::AR::Novedades::editar($input, \@arrayNewFiles, \@arrayDeleteImages);
+    my ($Message_arrayref) = C4::AR::Novedades::editar($input, \@arrayFiles, \@arrayDeleteImages);
     
     if($Message_arrayref->{'error'} == 0){
 

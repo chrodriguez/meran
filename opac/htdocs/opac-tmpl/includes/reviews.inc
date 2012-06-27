@@ -21,55 +21,60 @@
                 [% END %]
             </div>
             
-
-            <div class="span10">
-                  [% IF socio_data.usr_permisos_opac %]
-
-                  <form class="form-horizontal" action="[% url_prefix %]/reviews.pl" method="post">
-                      <fieldset>
-                      <legend> [% 'Enviar comentario ' | i18n %]</legend>
-                      <section class="center-section-form ">
-                          <textarea id="review" name="review" class="self_review" style="width:340px; height:90px;"></textarea><br><br>
-                          <input type="hidden" name="token" value="[% token %]" />
-                          <input type="hidden" name="id2" value="[% HTML.escape(id2) %]" />
-                        
-                                <input class="btn btn-success" type="submit" value="[% 'Enviar' | i18n %]" />
-                      </section>
-                      </fieldset>
-
-                  </form>
-                  [% END %]
-            </div>
         </div>
-  </div><br>
+  </div>
 
 <fieldset>
       [% IF reviews %]
-           <br />
           [% FOREACH review IN reviews %]
-                  <div class="well center-section-form">
+
+            <blockquote>
+              <p>[% HTML.escape(review.getReview) %]</p>
+              <small>
+                  [% TRY %]
                       [% IF socio_data.usr_nro_socio != review.socio.getNro_socio %]
-                          <strong>[% 'Escrito por' | i18n %]: </strong><span class="user_cite_other">[% review.socio.persona.getApellido %], [% review.socio.persona.getNombre %] ([% review.socio.getNro_socio %]) </span><br>
+                          [% review.socio.persona.getApellido %], [% review.socio.persona.getNombre %],
                       [% ELSE %]
-                          <strong>[% 'Escrito por' | i18n %]: </strong><span class="user_cite">[% 'usted' | i18n %]</span><br>
+                          [% 'usted' | i18n %],
                       [% END %]
-                      <strong>[% 'Fecha' | i18n %]: </strong>[% review.getDate %]<br>
-                      <strong>[% 'Comentario' | i18n %]: </strong>[% HTML.escape(review.getReview) %]
-                  
-                  </div>    <br>
-            
+                  [% CATCH %]
+                      [% 'Usuario inexistente' | i18n %],
+                  [% END %]
+                  <cite title=""> [% 'el' | i18n %] [% review.getDate %]</cite>
+              </small>
+            </blockquote>
+
           [% END %]
 
       [% ELSE %]
 
           <div class="alert alert-info"> [% 'Esta edici&oacute;n no tiene ningun comentario' | i18n %]</div>
       [% END %]
+
+
+        [% IF socio_data.usr_permisos_opac %]
+            <form class="form-horizontal" action="[% url_prefix %]/reviews.pl" method="post">
+                <fieldset>
+                  <legend> [% 'Contanos qu&eacute; te parece esta edici&oacute;n ' | i18n %]</legend>
+                      <div class="control-group">
+                          <div class="controls">
+                              <textarea id="review" name="review" class="input-xlarge" rows="6"></textarea>
+                          </div>
+                      </div>
+                      <div class="form-actions">
+                          <input class="btn btn-primary" type="submit" value="[% 'Enviar' | i18n %]" />
+                      </div>
+                      <input type="hidden" name="token" value="[% token %]" />
+                      <input type="hidden" name="id2" value="[% HTML.escape(id2) %]" />
+                </fieldset>
+            </form>
+        [% END %]
       <hr>
        
           [% PERL %]
                   print C4::AR::Filtros::action_link_button( 
                                               
-                                                            button        => "btn click btn-info",
+                                                            button        => "btn click btn-success",
                                                             url           => "[% url_prefix %]/opac-detail.pl", 
                                                             title         => "[% ' Volver al detalle' | i18n %]",
                                                             params =>   ["id1=[% id1 %]"],

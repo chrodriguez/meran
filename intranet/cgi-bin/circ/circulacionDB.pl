@@ -78,7 +78,9 @@ elsif($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 #SE CREAN LOS COMBO PARA SELECCIONAR EL ITEM Y EL TIPO DE PRESTAMO
 	my $array_ids3_a_prestar    = $obj->{'datosArray'};
 	my $cant                    = scalar(@$array_ids3_a_prestar);
-	my @infoPrestamo;
+	my @infoPrestamo            = ();
+
+	$infoPrestamo[0]->{'accion'}      = $tipoAccion;
 
 	for(my $i=0;$i<$cant;$i++){
 		my $id3_a_prestar                       = $array_ids3_a_prestar->[$i];
@@ -100,7 +102,7 @@ elsif($tipoAccion eq "CONFIRMAR_PRESTAMO"){
 		$infoPrestamo[$i]->{'tipoPrestamo'}     = $tipoPrestamos;
 	}
 
-	my $infoPrestamoJSON                        = to_json \@infoPrestamo;
+    my $infoPrestamoJSON                        = to_json \@infoPrestamo;
 
     C4::AR::Auth::print_header($session);
 	print $infoPrestamoJSON;
