@@ -1,7 +1,7 @@
 package C4::Modelo::Contacto;
 
 use strict;
-
+use POSIX qw(strftime);
 use base qw(C4::Modelo::DB::Object::AutoBase2);
 
 __PACKAGE__->meta->setup(
@@ -21,6 +21,7 @@ __PACKAGE__->meta->setup(
         asunto         => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 1 },
         mensaje        => { type => 'text', overflow => 'truncate', not_null => 1 },
         fecha          => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 0 },
+        hora           => { type => 'time',},
         leido          => { type => 'integer', overflow => 'truncate', not_null => 1, default => 0 },
         respondido     => { type => 'varchar', overflow => 'truncate', length => 255, not_null => 0 },
     ],
@@ -42,6 +43,7 @@ sub agregar{
     $self->setEmail($data_hash->{'email'});
     $self->setAsunto($data_hash->{'asunto'});
     $self->setMensaje($data_hash->{'mensaje'});
+    $self->setHora();
     $self->setFecha();
 
     $self->save();
@@ -88,6 +90,23 @@ sub setFecha{
     $self->fecha($fecha);
 	
 }
+
+sub getHora{
+    my ($self) = shift;
+
+    return ( $self->hora);
+}
+
+sub setHora{
+    my ($self) = shift;
+
+
+    my $hora = strftime "%H:%M:%S", localtime;
+
+    $self->hora($hora);
+    
+}
+
 sub getNombre{
     my ($self) = shift;
 

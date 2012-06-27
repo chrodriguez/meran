@@ -31,6 +31,15 @@
 		           <dt class="inline left rightMargin">[% "Documento:" | i18n %]</dt>
 		           <dd>[% socio.persona.getVersion_documento %]&nbsp; [% socio.persona.getNro_documento %]</dd>
 		
+                   <dt class="inline left rightMargin">[% "Categor&iacute;a:" | i18n %] </dt>
+                      <dd>
+                          [% TRY %]
+                            <span class="label label-info">[% socio.categoria.getDescription %]</span>
+                          [% CATCH %]
+                            <span class="label label-inverse">[% 'Sin categor&iacute;a' | i18n %]</span>
+                          [% END %] 
+                      </dd>
+
 		           [% IF !(socio.getNro_socio == socio.getNro_documento) %]
 		               <dt class="inline left rightMargin">[% "Tarjeta de identificaci&oacute;n :" | i18n %] </dt>
 		               <dd>[% socio.getNro_socio %]</dd>

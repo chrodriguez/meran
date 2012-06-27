@@ -106,7 +106,7 @@ sub modificarCredencialesSocio {
         };
 
         if ($@){
-            &C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
+            C4::AR::Mensajes::printErrorDB($@, 'B423',"INTRA");
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U339', 'params' => []} ) ;
             $db->rollback;

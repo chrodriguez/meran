@@ -40,21 +40,19 @@ sub debugObject{
     my $type = C4::AR::Auth::getSessionType();
     my $nro_socio = C4::AR::Auth::getSessionNroSocio() || 'SIN_SOCIO_EN_SESION';
 
-    if($context->config('debug')){
-        my $debug_file = $context->config('debug_file') || "/usr/local/koha/logs/debug.txt";
-        open(Z, ">>".$debug_file);
+    my $debug_file = $context->config('debug_file') || "/usr/local/koha/logs/debug.txt";
+    open(Z, ">>".$debug_file);
+	print Z "\n";
+	if($object){
+		
+	    if (C4::AR::Utilidades::validateString($nro_socio)){
+	        $nro_socio.=" -- ";
+	    }
+		
+		print Z $nro_socio."-- $type -- Object: ".$object->toString."=> ".$data."\n";
 		print Z "\n";
-		if($object){
-			
-		    if (C4::AR::Utilidades::validateString($nro_socio)){
-		        $nro_socio.=" -- ";
-		    }
-			
-			print Z $nro_socio."-- $type -- Object: ".$object->toString."=> ".$data."\n";
-			print Z "\n";
-		}
-		close(Z);        
-    }
+	}
+	close(Z);        
 }
 
 
