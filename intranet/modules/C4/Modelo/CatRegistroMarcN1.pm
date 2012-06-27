@@ -213,16 +213,20 @@ sub eliminar{
 
     my ($nivel2) = C4::AR::Nivel2::getNivel2FromId1($self->getId1(), $self->db);
 
-    foreach my $n2 (@$nivel2){
-      $n2->eliminar();
+    if ($nivel2){
+        foreach my $n2 (@$nivel2){
+          $n2->eliminar();
+        }
     }
 
     #elimino los registros que puedan existir en la tabla de analiticas
     my ($nivel1_analiticas_array_ref) = C4::AR::Nivel2::getAllNivel1FromAnaliticasById1($self->getId1(), $self->db);
 
-    foreach my $n1 (@$nivel1_analiticas_array_ref){
-        $n1->eliminar();
-    }  
+    eval{
+        foreach my $n1 (@$nivel1_analiticas_array_ref){
+            $n1->eliminar();
+        }
+    };
 
     $self->delete();  
 }

@@ -10,7 +10,6 @@
 </div>
 <div class="modal-body">
   <p>[% HTML.escape(mensaje.getMensaje) %]</p>
-
   <input type="hidden" name="email" id="email" value="[% HTML.escape(mensaje.getEmail) %]">
 	
 
@@ -46,6 +45,7 @@
   </div>
   <h5>[% 'De' | i18n %]: [% HTML.escape(mensaje.getApellido) %], [% HTML.escape(mensaje.getNombre) %] ([% HTML.escape(mensaje.getEmail) %])</h5>
   <h6>[% mensaje.getFecha %]</h6>
+  <h6>[% mensaje.getHora %]</h6>
 </div>
 
 
