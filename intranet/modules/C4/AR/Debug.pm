@@ -9,25 +9,15 @@ use vars qw(@EXPORT @ISA);
 @EXPORT = qw(
                 log      
                 debug
-                printErrorDBA
+                printErrorDB
 );
 
 
 sub log{
     my ($object, $data, $metodoLlamador) = @_;
 
-    my $context = new C4::Context;
+    debug("Object: ".$object->toString."=> ".$metodoLlamador."\n");
 
-    if($context->config('debug')){
-        my $debug_file = $context->config('debug_file') || "/usr/local/koha/logs/debug.txt";
-        open(Z, ">>".$debug_file);
-        print Z "\n";
-        print Z "Object: ".$object->toString."=> ".$metodoLlamador."\n";
-        ## FIXME falta ver si se le pasa un arreglo en vez de una HASH
-        _printHASH($data);
-        print Z "\n";
-        close(Z);
-    }
 }
 
 sub printErrorDB {
@@ -47,24 +37,11 @@ debug por linea
 sub debugObject{
     my ($object, $data) = @_;
 
-    my $context = new C4::Context;
-
     my $type = C4::AR::Auth::getSessionType();
     my $nro_socio = C4::AR::Auth::getSessionNroSocio() || 'SIN_SOCIO_EN_SESION';
 
-    my $debug_file = $context->config('debug_file') || "/usr/local/koha/logs/debug.txt";
-    open(Z, ">>".$debug_file);
-	print Z "\n";
-	if($object){
-		
-	    if (C4::AR::Utilidades::validateString($nro_socio)){
-	        $nro_socio.=" -- ";
-	    }
-		
-		print Z $nro_socio."-- $type -- Object: ".$object->toString."=> ".$data."\n";
-		print Z "\n";
-	}
-	close(Z);        
+    debug($nro_socio."-- $type -- Object: ".$object->toString."=> ".$data."\n");
+       
 }
 
 

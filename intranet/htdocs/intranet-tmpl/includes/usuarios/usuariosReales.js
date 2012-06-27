@@ -119,7 +119,6 @@ function updateEliminarUsuario(responseText){
 	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
 	if (!(hayError(Messages))){
-// FIXME esta feo
 		window.location.href = URL_PREFIX+"/usuarios/potenciales/buscarUsuario.pl?token="+token;
 	}
 }

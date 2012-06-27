@@ -699,7 +699,7 @@ Guarda los errores en el siguiente archivo: /var/log/koha/debugErrorDBA.txt
 sub printErrorDB {
     my ($errorsDB_array,$codigo,$tipo)=@_;
 
-    C4::AR::Debug::error($errorsDB_array,$codigo,$tipo);
+    C4::AR::Debug::printErrorDB($errorsDB_array,$codigo,$tipo);
 }
 
 

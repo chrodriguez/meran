@@ -72,10 +72,10 @@ my $ini=$obj->{'ini'};
 my $funcion=$obj->{'funcion'};
 my $inicial=$obj->{'inicial'};
 
-'Valor' =>'valor', 
-'Campo' => 'campo',
-'Usuario' => 'busqueda.nro_socio', 
-'Fecha' => 'busqueda.fecha'  
+'Valor' =>'valor';
+'Campo' => 'campo';
+'Usuario' => 'busqueda.nro_socio';
+'Fecha' => 'busqueda.fecha';
 
 if ($obj->{'orden'} eq "valor"){
     $obj->{'orden'} = "valor";
@@ -166,7 +166,3 @@ if($tipoAccion eq "BUSQUEDAS"){
       
       # C4::AR::PdfGenerator::batchBookLabelGenerator(scalar(@arreglo),\@arreglo);
 }
- 
-
-
-#C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

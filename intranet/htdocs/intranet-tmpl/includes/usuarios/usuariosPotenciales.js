@@ -126,6 +126,10 @@ function eliminarPermanentemente(nro_socio){
 function updateEliminarPermanentemente(responseText){
  	var Messages=JSONstring.toObject(responseText);
  	setMessages(Messages);
+	if (!(hayError(Messages))){
+		window.location.href = URL_PREFIX+"/usuarios/potenciales/buscarUsuario.pl?token="+token;
+	}
+ 	
 }
 
 
