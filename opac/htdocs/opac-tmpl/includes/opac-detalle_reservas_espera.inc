@@ -47,17 +47,16 @@
                     </td>
                     <td>
                             [% IF CirculationEnabled %]
-                                    <ul>
-                                        [% PERL %]
-                                                            print C4::AR::Filtros::action_button(   
-                                                                    button   => "btn click btn-danger",
-                                                                    icon => "icon-remove icon-white",
-                                                              
-                                                                    action => "cancelarReserva([% reserva.getId_reserva %])",
-                                                                    title   => " [% '' | i18n %]",
-                                                            );
-                                        [% END %]
-                                    </ul>
+                      <ul>
+                          [% PERL %]
+                                              print C4::AR::Filtros::action_button(   
+                                                      button=> "btn click btn-danger",
+                                                      icon => "icon-remove icon-white",
+                                                      action => "cancelarReserva([% reserva.getId_reserva %])",
+                                                      title   => "[% "" | i18n %]",
+                                              );
+                          [% END %]
+                      </ul>
 
                                 [% ELSE %]
                                     [% "No disponible" | i18n %]

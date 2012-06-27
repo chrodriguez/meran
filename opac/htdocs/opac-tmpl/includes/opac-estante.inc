@@ -1,55 +1,55 @@
 [% IF estante %]
     <div id='listaEstantes'>
-      <ul class="breadcrumb">
-            <li>
-                [% auxEstante = estante %]
-                [% listaEstantes = [] %]
-                [% PERL %]
-                      print C4::AR::Filtros::link_to( text =>     "[%  'Estantes Principales' %]",
-                                      url=> '[% url_prefix %]/opac-estante.pl', 
-                                      params =>   [],
-                                      title =>    "[% 'Mostrar Detalle del Estante' | i18n %]",
-                                      class => "link_to_detail"
-                                  ) ;
-                [% END %]
-            
-                <span class="divider">/</span> 
-
-			
-			         [% WHILE auxEstante > 0 %]
-                      [% listaEstantes.unshift(auxEstante) %]
-                      [% IF auxEstante.getPadre %]
-                          [% auxEstante = auxEstante.estante_padre %]
-                      [% ELSE %]
-                          [% auxEstante = 0 %]
+              <ul class="breadcrumb">
+                  <li>
+                      [% auxEstante = estante %]
+                      [% listaEstantes = [] %]
+                      [% PERL %]
+                            print C4::AR::Filtros::link_to( text =>     "[%  'Estantes Principales' %]",
+                                            url=> '[% url_prefix %]/opac-estante.pl', 
+                                            params =>   [],
+                                            title =>    "[% 'Mostrar Detalle del Estante' | i18n %]",
+                                            class => "link_to_detail"
+                                        ) ;
                       [% END %]
-                [% END %]
-               
-                [% FOREACH auxEstante IN listaEstantes %]
-                    [% PERL %]
-      				            print C4::AR::Filtros::link_to( text =>     "[% auxEstante.getEstante %]",
-      								      url=> '[% url_prefix %]/opac-estante.pl', 
-      								      params =>   ["id_estante=[% auxEstante.getId %]"],
-      								      title =>    "[% 'Mostrar Detalle del Estante' | i18n %]",
-      								      class => "link_to_detail"
-      								    ) ;
-                    [% END %]
-            
-                     <span class="divider">/</span>  
-                [% END %]
-               
-        </li>
+                  
+                      <span class="divider">/</span> 
+
+      			
+      			         [% WHILE auxEstante > 0 %]
+                            [% listaEstantes.unshift(auxEstante) %]
+                            [% IF auxEstante.getPadre %]
+                                [% auxEstante = auxEstante.estante_padre %]
+                            [% ELSE %]
+                                [% auxEstante = 0 %]
+                            [% END %]
+                      [% END %]
+                     
+                      [% FOREACH auxEstante IN listaEstantes %]
+                          [% PERL %]
+            				            print C4::AR::Filtros::link_to( text =>     "[% auxEstante.getEstante %]",
+            								      url=> '[% url_prefix %]/opac-estante.pl', 
+            								      params =>   ["id_estante=[% auxEstante.getId %]"],
+            								      title =>    "[% 'Mostrar Detalle del Estante' | i18n %]",
+            								      class => "link_to_detail"
+            								    ) ;
+                          [% END %]
+                  
+                           <span class="divider">/</span>  
+                      [% END %]
+                     
+                  </li>
+            </ul>
      </div>
 [% END %]
 
 
 [% IF SUBESTANTES %]
-      [% IF cant_subestantes > 0 %]
-            <div id='subestantes'>
-         
-              <fieldset><br>
+    [% IF cant_subestantes > 0 %]
+          <div id='subestantes'>
+             
        
-               <!--     <legend class="titulo_legend"><span class="titulos">[% 'Estantes' | i18n %]</span></legend>-->
+                    <!--     <legend class="titulo_legend"><span class="titulos">[% 'Estantes' | i18n %]</span></legend>-->
                     <!-- ESTE LOOP MUESTRA LOS ESTANTES -->
                       [% PERL %]
                             print C4::AR::Filtros::tableHeader(   
@@ -60,9 +60,9 @@
                             ) ;
                       [% END %]
                        
-                        <tbody>
+                      <tbody>
                               
-                           [% FOREACH subestante IN SUBESTANTES %]
+                            [% FOREACH subestante IN SUBESTANTES %]
                                 
                                   <tr>
                                     <td>
@@ -83,28 +83,24 @@
                       </table>
   
             </div>
-      [% ELSE %]
-          <div class="alert alert-info">
-                [% 'No se encontraron estantes virtuales.' | i18n %]
-          </div>
-      [% END %]
+    [% END %]
 
-      [% IF estante %]
+    [% IF estante %]
         [% IF estante.contenido %]
-          <script type="text/javascript" language="javascript" src="/opac-tmpl/includes/tablesorter.js"></script>
-          <script type="text/javascript" language="javascript">
-          $(document).ready(function() 
-              { 
-                  $("#tablaResult").tablesorter(); 
-                  // le sacamos la clase 'header' que el plugin le pone a los <th>
-                  $('th').removeClass('header');
-              }  
-          ); 
-          </script>
+            <script type="text/javascript" language="javascript" src="/opac-tmpl/includes/tablesorter.js"></script>
+            <script type="text/javascript" language="javascript">
+            $(document).ready(function() 
+                { 
+                    $("#tablaResult").tablesorter(); 
+                    // le sacamos la clase 'header' que el plugin le pone a los <th>
+                    $('th').removeClass('header');
+                }  
+            ); 
+            </script>
 
         
-        <div id='contenido'>
-         <!--   <fieldset> <legend>-->
+            <div id='contenido'>
+
                [% PERL %]
                       print C4::AR::Filtros::tableHeader(   
                                         id              => "tablaResult",
@@ -154,8 +150,15 @@
                       [% END %]
                  </tbody>
              </table>
-            </fielset>
-        </div>
-        [% END %]
-[% END %]
+          </div>
+       [% ELSE %]
+            [% IF cant_subestantes == 0 %]
+                <div class="alert alert-info">
+                      [% 'El estante no tiene contenido.' | i18n %]
+                </div>
+            [% END %] 
+       [% END %] <!--  end contenido estante -->
+       
+            
+  [% END %] <!--  end estante -->
 [% END %]
