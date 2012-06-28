@@ -10,10 +10,12 @@ apt-get install libhttp-browserdetect-perl libtext-unaccent-perl -y
 apt-get install libmarc-crosswalk-dublincore-perl libmarc-xml-perl -y
 apt-get install libimage-size-perl -y
 apt-get install libdatetime-format-mysql-perl -y
-apt-get install libfile-libmagic-perl
+apt-get install libfile-libmagic-perl -y
+apt-get install libmoosex-types-perl libtest-compile-perl -y
 # OTROS AUN NO!!!
 apt-get install make gcc -y
 cpan -i CPAN 
+cpan -i Bundle::CPAN
 cpan -i YAML
 cpan -i MIME::Lite::TT::HTML
 cpan -i Spreadsheet::WriteExcel::Simple
