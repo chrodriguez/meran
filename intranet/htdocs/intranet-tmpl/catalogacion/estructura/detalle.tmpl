@@ -397,7 +397,7 @@
 			                [% IF portada_edicion_local %]
 
                                 [% FOREACH p IN portada_edicion_local %]
-                                    <div class="item [% IF loop.first %]active[% END %] portadaEdicionImage">
+                                    <div class="item portadaEdicionImage" [% IF !loop.first %]style="display:none;"[% END %]>
                                         <a class="fancylink" id="imagen_[% imagen.getImageName %]" rel="group" href="https://[% SERVER_ADDRESS %]/uploads/covers-added/[% p.getImageName %]">
                                             <img border="0" src="https://[% SERVER_ADDRESS %]/uploads/covers-added/[% p.getImageName %]" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" >
                                         </a>
