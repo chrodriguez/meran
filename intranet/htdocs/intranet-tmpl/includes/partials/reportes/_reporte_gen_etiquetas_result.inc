@@ -131,8 +131,8 @@ $(document).ready(function(){
                                                       <input type="checkbox" value="[% n3.id %]" id="checkEjemplares[% nivel1.id1 %]" name="checkEjemplares[% nivel1.id1 %]">
                                                   </label>
                                               </td> 
-                                              <td id="signatura[% n3.id %]">[% n3.signatura %]</td> 
-                                              <td id="barcode[% n3.id %]">[% n3.getBarcode %]</td> 
+                                              <td id="barcode[% n3.id %]">[% n3.getBarcode %]</td>
+                                              <td id="signatura[% n3.id %]">[% n3.signatura %]</td>
                                               <td id="estado[% n3.id %]">[% n3.getEstadoObject.getNombre %]</td> 
                                       </tr>
                                       

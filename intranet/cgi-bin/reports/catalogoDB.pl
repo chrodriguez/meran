@@ -72,10 +72,6 @@ my $ini=$obj->{'ini'};
 my $funcion=$obj->{'funcion'};
 my $inicial=$obj->{'inicial'};
 
-'Valor' =>'valor';
-'Campo' => 'campo';
-'Usuario' => 'busqueda.nro_socio';
-'Fecha' => 'busqueda.fecha';
 
 if ($obj->{'orden'} eq "valor"){
     $obj->{'orden'} = "valor";

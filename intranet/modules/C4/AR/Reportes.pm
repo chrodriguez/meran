@@ -1367,7 +1367,6 @@ sub reporteGenEtiquetas{
     use Text::Unaccent;
     
     my $only_sphinx     = $params->{'only_sphinx'};
-    my $only_available  = $params->{'only_available'};
     my $sphinx          = Sphinx::Search->new();
     
 	 
@@ -1382,34 +1381,28 @@ sub reporteGenEtiquetas{
    
     if($params->{'titulo'} ne ""){
         $keyword = unac_string('utf8',$params->{'titulo'});
-        #le sacamos los acentos para que busque indistintamente
-#        $params->{'titulo'} = unac_string('utf8',$params->{'titulo'});
         $query .= ' @titulo "'.$keyword;
        	$query .= "*";
-	  	$query .='"';
-        
+	  	$query .= '"';     
     }
 
     if($params->{'autor'} ne ""){
         $keyword = unac_string('utf8',$params->{'autor'});
-#        $params->{'autor'} = unac_string('utf8',$params->{'autor'});
-#        C4::AR::Debug::debug("autorrrrrrrrrrrr --------------------------- : ".$params->{'autor'});
         $query .= ' @autor "'.$keyword;
         $query .= "*";
 	  	$query .='"';
 
     }
 
+
+
     if( $params->{'codBarra'} ne "") {
-        $query .= ' @string "'."barcode%".$sphinx->EscapeString($params->{'codBarra'});
-       	$query .= "*";
-	  	$query .='"';
+     	$query .= ' @string "'."barcode%".$sphinx->EscapeString($params->{'codBarra'})."*'";
+        $query .='*"';
     }
 
     if ($params->{'signatura'}){
-        $query .= ' @string "'."signatura%".$sphinx->EscapeString($params->{'signatura'});
-       	$query .= "*";
-	  	$query .='"';
+        $query .= ' @string "'."signatura%".$sphinx->EscapeString($params->{'signatura'}).'*"';
     }
     
     C4::AR::Debug::debug("Busquedas => query string => ".$query);
@@ -1418,25 +1411,7 @@ sub reporteGenEtiquetas{
 
     $sphinx->SetMatchMode($tipo_match);
     
-    
-#     if ($orden eq 'autor'){
-#             if ($sentido_orden){
-#                 $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"autor_local");
-#             } else {
-#                 $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"autor_local");
-#             }
-#     }elsif ($orden eq 'titulo') {
-#             if ($sentido_orden){
-#                 $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"titulo_local");
-#             } else {
-#                 $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
-#             }
-#     } else {
-#             $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
-#     }
-    
     $sphinx->SetEncoders(\&Encode::encode_utf8, \&Encode::decode_utf8);
-#     $sphinx->SetLimits($params->{'ini'}, $params->{'cantR'});
 
     # NOTA: sphinx necesita el string decode_utf8
    
@@ -1446,8 +1421,11 @@ sub reporteGenEtiquetas{
 
     my @datos_array;
     my $matches = $results->{'matches'};
+
+	C4::AR::Debug::debug("CUANTOSSSSSSSSSSSSSS EN DATOS ARRAY ".scalar(@$matches));
+    
     my $total_found = $results->{'total_found'};
-    $params->{'total_found'} = $total_found;
+    # $params->{'total_found'} = $total_found;
 
     C4::AR::Debug::debug("total_found: ".$total_found);
     C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
@@ -1466,7 +1444,6 @@ sub reporteGenEtiquetas{
     ($total_found_paginado, $resultsarray) = C4::AR::Busquedas::armarInfoNivel1($params, @datos_array);
     #se loquea la busqueda
 
- 
     C4::AR::Busquedas::logBusqueda($params, $session);
     my @datos;
     foreach my $res (@$resultsarray){
@@ -1483,13 +1460,6 @@ sub reporteGenEtiquetas{
 }
 
 
-
-
-
-
-
-
-
 sub reportToPDF{
     my ($datos, $cantidad, $headers) = @_;
 
@@ -1497,7 +1467,7 @@ sub reportToPDF{
                       destination        => "/home/dan/my_fantastic_report.pdf",
                       paper              => "A4",
                       orientation        => "portrait",
-#                       template           => '/home/dan/my_page_template.pdf',
+#                     template           => '/home/dan/my_page_template.pdf',
                       font_list          => [ "Verdana" ],
                       default_font       => "Verdana",
                       default_font_size  => "10",
