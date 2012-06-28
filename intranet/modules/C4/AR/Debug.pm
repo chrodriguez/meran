@@ -92,7 +92,7 @@ sub error{
 
     my $enabled = _debugStatus();
 
-    (($enabled >= 128) && _write_debug($data));
+    (($enabled >= 128) && _write_debug("[error] ".$data));
 
 }
 
@@ -102,7 +102,7 @@ sub warn{
 
     my $enabled = _debugStatus();
 
-    (($enabled >= 256) && _write_debug($data));
+    (($enabled >= 256) && _write_debug("[warn] ".$data));
 
 }
 
@@ -112,7 +112,7 @@ sub info{
 
     my $enabled = _debugStatus();
 
-    (($enabled >= 512) && _write_debug($data));
+    (($enabled >= 512) && _write_debug("[info] ".$data));
 
 }
 
@@ -122,7 +122,7 @@ sub debug{
 
     my $enabled = _debugStatus();
 
-    (($enabled >= 1024) && _write_debug($data));
+    (($enabled >= 1024) && _write_debug("[debug] ".$data));
 }
 
 sub _printHASH {
