@@ -101,9 +101,11 @@ sub modificarCredencialesSocio {
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
 
-
         eval {
+            $socio->setCredentialType($params->{'credenciales'});
+            $db->commit;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U338', 'params' => []} ) ;
+            
         };
 
         if ($@){
