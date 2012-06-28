@@ -240,6 +240,8 @@ sub checkFileMagic{
     
     foreach my $t (@filesAllowed){
 
+        C4::AR::Debug::debug("mime del archivo : " . $mime . " type : " . $t);
+
         if($mime =~ m/$t/i) {
             $ok = 1;
             $type = $t;

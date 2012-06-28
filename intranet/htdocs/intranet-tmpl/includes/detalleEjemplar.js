@@ -1,3 +1,42 @@
+function showAddPortadaEdicion(id2, id1){
+
+    objAH               = new AjaxHelper(updateShowAddPortadaEdicion);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.url           = URL_PREFIX+"/catalogacion/estructura/estructuraCataloDB.pl";
+    objAH.id1           = id1;
+    objAH.id2           = id2;
+    objAH.tipoAccion    = "SHOW_ADD_PORTADA_EDICION";
+    objAH.sendToServer();
+
+}
+
+function updateShowAddPortadaEdicion(responseText){
+
+    $('#addPortadaEdicion').html(responseText);
+    $('#addPortadaEdicion').modal();
+
+}
+
+function checkEliminarPortadasNivel2(){
+    
+    var cant = 0;
+    
+    $(':checkbox').each( 
+        function() { 
+            if($(this).attr('checked')){
+                $('#listImagesDelete').append('<input type="hidden" name="imagen_' + cant +'" value="' + $(this).attr('id') + '">');
+                cant++;
+            }
+        } 
+    ); 
+    
+    $('#listImagesDelete').append('<input type="hidden" name="cantidad" value="' + cant + '">');
+    
+    $('#formAddPortadaEdicion').submit();
+
+}
+
 function generarForm(id1, id2){
 
     if(seleccionoAlgo("checkEjemplares"+id2)){

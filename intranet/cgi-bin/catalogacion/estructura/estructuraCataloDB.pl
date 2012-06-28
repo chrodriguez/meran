@@ -879,3 +879,35 @@ elsif($tipoAccion eq "SHOW_AYUDA_MARC"){
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
+#============================================================= Portadas Edicion ===============================================================
+elsif($tipoAccion eq "SHOW_ADD_PORTADA_EDICION"){
+
+    my ($template, $session, $t_params)  = get_template_and_user({
+                            template_name   => ('catalogacion/estructura/agregarPortadaEdicionModal.tmpl'),
+                            query           => $input,
+                            type            => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired   => {    ui              => 'ANY', 
+                                                    tipo_documento  => 'ANY', 
+                                                    accion          => 'CONSULTA', 
+                                                    entorno         => 'datos_nivel1' },
+    });
+
+    use C4::AR::PortadaNivel2;
+
+    my $portadasEdicion = C4::AR::PortadaNivel2::getPortadasEdicion($obj->{'id2'});
+
+    if($portadasEdicion){
+        $t_params->{'portadasEdicion'}  = $portadasEdicion;
+        $t_params->{'editing'}          = 1;
+    }else{
+        $t_params->{'portadasEdicion'}  = 0;
+        $t_params->{'editing'}          = 0;
+    }
+
+    $t_params->{'id1'}      = $obj->{'id1'};
+    $t_params->{'id2'}      = $obj->{'id2'};
+    $t_params->{'token'}    = $obj->{'token'};
+
+    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+}
