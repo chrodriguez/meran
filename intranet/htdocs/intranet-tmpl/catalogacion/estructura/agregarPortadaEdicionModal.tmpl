@@ -52,7 +52,6 @@
 [% END %]
 
 </div>
-</form>
 
 <div class="modal-footer">
     [% IF editing %]
@@ -69,8 +68,17 @@
         
     [% ELSE %]
 
-        <button class="btn btn-primary" onclick="form.submit();" type="submit">[% 'Guardar' | i18n %]</button>
+        [% PERL %]
+              print C4::AR::Filtros::action_button( 
+                                                button      => "btn btn-primary",
+                                                action      => "guardarFormPortadaEdicion()", 
+                                                title       => "[% 'Guardar' | i18n %]",
+                                              ) ;
+
+
+        [% END %]
         
     [% END %]
     
 </div>
+</form>

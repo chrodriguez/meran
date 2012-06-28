@@ -18,6 +18,12 @@ function updateShowAddPortadaEdicion(responseText){
 
 }
 
+function guardarFormPortadaEdicion(responseText){
+
+    $('#formAddPortadaEdicion').submit();
+
+}
+
 function checkEliminarPortadasNivel2(){
     
     var cant = 0;
