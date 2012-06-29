@@ -13,6 +13,7 @@ __PACKAGE__->use_private_registry;
     my $hostname;
     my $user;
     my $pass;
+    my $DB=undef;
   
 =item
  if (defined($context)){
