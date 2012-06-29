@@ -52,16 +52,16 @@ my $msgFoto = $input->param('msg');
 my $msgError                        = $input->param('error');
 ($msgError) || ($msgError=0);
 
-$t_params->{'id_socio'}             = $socio->getId_socio;
-$t_params->{'foto_name'}            = $socio->tieneFoto(C4::AR::Auth::getSessionType());
-$t_params->{'mensaje_error_foto'}   = $msgFoto;
-$t_params->{'mensaje_error_borrar'} = $msgError;
-$t_params->{'error'}                = 0;
-$t_params->{'nro_socio'}            = $socio->getNro_socio;	
-$t_params->{'notas'}                 = $socio->getNote; 
-$t_params->{'socio'}                = $socio;
-$t_params->{'relativePicturesDir'}  = C4::Context->config("relativePicturesDir");
-$t_params->{'needsDataValidation'} = C4::AR::Usuarios::needsDataValidation($nro_socio);
-
+$t_params->{'id_socio'}                 = $socio->getId_socio;
+$t_params->{'foto_name'}                = $socio->tieneFoto(C4::AR::Auth::getSessionType());
+$t_params->{'mensaje_error_foto'}       = $msgFoto;
+$t_params->{'mensaje_error_borrar'}     = $msgError;
+$t_params->{'error'}                    = 0;
+$t_params->{'nro_socio'}                = $socio->getNro_socio;	
+$t_params->{'notas'}                    = $socio->getNote; 
+$t_params->{'socio'}                    = $socio;
+$t_params->{'relativePicturesDir'}      = C4::Context->config("relativePicturesDir");
+$t_params->{'needsDataValidation'}      = C4::AR::Usuarios::needsDataValidation($nro_socio);
+$t_params->{'requisitoNecesario_pref'}  = C4::AR::Preferencias::getValorPreferencia('requisito_necesario');
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

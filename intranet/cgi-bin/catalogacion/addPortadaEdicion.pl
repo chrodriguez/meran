@@ -68,8 +68,6 @@ my ($template, $session, $t_params) = get_template_and_user({
 
 my ($msg_object)    = C4::AR::PortadaNivel2::agregar(\%paramHash);
 
-# my $mensaje         = $msg_object->getMensaje;
-
 my $url             = C4::AR::Utilidades::getUrlPrefix()."/catalogacion/estructura/detalle.pl?id1=" . $id1 . "&token=" . $query->param('token') . "&msg_file=". $msg_object;
 
 C4::AR::Auth::redirectTo($url);

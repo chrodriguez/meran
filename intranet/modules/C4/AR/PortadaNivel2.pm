@@ -61,10 +61,9 @@ sub agregar{
             
             if(!$image_name){
 
-                #si no guarda una sola ya tiramos la exepcion
-                throw Exception->new("Error subiendo portadas nivel2");
                 $msg_object->{'error'} = 1;
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'POR00', 'intra'} );
+                die;
 
             }else{
 
@@ -78,10 +77,9 @@ sub agregar{
         $msg_object->{'error'} = 0;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'POR01', 'params' => []});
         $db->commit;
-      
-    };
 
-    if ($@){
+        1;
+    }or do{
 
         #borramos las imagenes que ya se hayan guardado en disco
         my $arrayRef    = \@arrayImagenesSaved;
@@ -93,7 +91,7 @@ sub agregar{
         $msg_object->{'error'} = 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'POR00', 'intra'} ) ;
         $db->rollback;
-    }
+    };
 
     $db->{connect_options}->{AutoCommit} = 1;
      
