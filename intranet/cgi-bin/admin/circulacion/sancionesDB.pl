@@ -42,14 +42,11 @@ if($accion eq "TIPOS_PRESTAMOS_SANCIONADOS"){
 		}
 		
 		C4::AR::Debug::debug("tipos sancion        ".$tipo_sancion);
-#		C4::AR::Utilidades::printHASH($tipo_prestamos);		
 		
 		$t_params->{'tipo_sancion'}     = $tipo_sancion;
 
-		my $tipo_prestamos              = &C4::AR::Prestamos::getTiposDePrestamos();
+		my $tipo_prestamos              = C4::AR::Prestamos::getTiposDePrestamos();
 		
-#		C4::AR::Debug::debug("tipos prestamos        ".$tipo_prestamos);
-#		C4::AR::Utilidades::printHASH($tipo_prestamos);
 		
 		$t_params->{'TIPOS_PRESTAMOS'}  = $tipo_prestamos;
 
@@ -68,11 +65,10 @@ elsif ($accion eq "GUARDAR_TIPOS_PRESTAMOS_QUE_APLICA") {
                                 );
 
 	my $tipos_que_aplica=$obj->{'tipos_que_aplica'};
-C4::AR::Debug::debug("tipossss : ".$tipos_que_aplica->[0]);
 	my $tipo_prestamo=$obj->{'tipo_prestamo'};
 	my $categoria_socio=$obj->{'categoria_socio'};
 
-    my $Message_arrayref = &C4::AR::Sanciones::actualizarTiposPrestamoQueAplica($tipo_prestamo,$categoria_socio,$tipos_que_aplica);
+    my $Message_arrayref = C4::AR::Sanciones::actualizarTiposPrestamoQueAplica($tipo_prestamo,$categoria_socio,$tipos_que_aplica);
     my $infoOperacionJSON=to_json $Message_arrayref;
     C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
@@ -94,16 +90,25 @@ elsif($accion eq "REGLAS_SANCIONES"){
     my $tipo_prestamo=$obj->{'tipo_prestamo'};
     my $categoria_socio=$obj->{'categoria_socio'};
 
-    my $tipo_sancion=&C4::AR::Sanciones::getTipoSancion($tipo_prestamo, $categoria_socio);
+    my $tipo_sancion= C4::AR::Sanciones::getTipoSancion($tipo_prestamo, $categoria_socio);
     my $reglas_tipo_sancion;
+    my $cantidad = 0;
+
     if($tipo_sancion){
       $t_params->{'tipo_sancion'}= $tipo_sancion;
-      $reglas_tipo_sancion=&C4::AR::Sanciones::getReglasTipoSancion($tipo_sancion);
+      ($reglas_tipo_sancion)= C4::AR::Sanciones::getReglasTipoSancion($tipo_sancion);
       $t_params->{'REGLAS_TIPOS_SANCIONES'}= $reglas_tipo_sancion;
+      if ($reglas_tipo_sancion){
+        $cantidad = scalar(@$reglas_tipo_sancion);
+      }
+      $t_params->{'cantidad'}= $cantidad;
+      $t_params->{'tipos_prestamo_aplica'} = $tipo_sancion->tiposPrestamoQueAplica();
+
+
     }
 
     ######################Combos de las reglas de sancion##################################
-    my $reglas_sancion=&C4::AR::Sanciones::getReglasSancionNoAplicadas($tipo_sancion);
+    my $reglas_sancion= C4::AR::Sanciones::getReglasSancionNoAplicadas($tipo_sancion);
     if ($reglas_sancion) {
     my %regla_sancionlabels;
     my @regla_sancionvalues;
@@ -169,7 +174,6 @@ elsif($accion eq "REGLAS_SANCIONES"){
                             -multiple => 0 );
 
     $t_params->{'cantidades'}= $CGIcantidad;
-
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }#end if($accion eq "REGLAS_SANCIONES")

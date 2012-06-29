@@ -3,6 +3,7 @@ package C4::Modelo::CircTipoSancion;
 use strict;
 
 use base qw(C4::Modelo::DB::Object::AutoBase2);
+use C4::AR::Debug;
 
 __PACKAGE__->meta->setup(
     table   => 'circ_tipo_sancion',
@@ -39,7 +40,7 @@ __PACKAGE__->meta->setup(
 
 	    ref_categoria_socio => {
             class      => 'C4::Modelo::UsrRefCategoriaSocio',
-            column_map => { categoria_socio => 'id' },
+            column_map => { categoria_socio => 'categorycode' },
             type       => 'one to one',
         },
     ],
@@ -85,12 +86,19 @@ sub setCategoria_socio{
 sub aplicaAlTipoDePrestamo{
     my ($self) = shift;
     my ($tipo_prestamo) = @_;
-	
+    my $result = 0;
+
+    $tipo_prestamo = C4::AR::Utilidades::trim($tipo_prestamo);
+
 	foreach my $tps ($self->ref_tipo_prestamo_sancion) {
-		if($tps->getTipo_prestamo eq $tipo_prestamo){ return 1; }
+
+		if(C4::AR::Utilidades::trim($tps->getTipo_prestamo) eq $tipo_prestamo){ 
+                $result = 1;
+                return $result; 
+        }
 	}
 
-    return 0;
+    return $result;
 }
 
 sub actualizarTiposPrestamoQueAplica {
@@ -113,6 +121,20 @@ sub actualizarTiposPrestamoQueAplica {
 		$ta->setTipo_sancion($self->getTipo_sancion);
    		$ta->save();
     }
+}
+
+sub tiposPrestamoQueAplica{
+    my ($self)                  = shift;
+
+    my @filtros;
+
+    use C4::Modelo::CircTipoPrestamoSancion::Manager;
+    
+    push (@filtros,(tipo_sancion  => { eq => $self->getTipo_sancion }));
+    my $tipos_prestamo = C4::Modelo::CircTipoPrestamoSancion::Manager->get_circ_tipo_prestamo_sancion(query => \@filtros,);
+
+    return $tipos_prestamo;
+
 }
 
 1;

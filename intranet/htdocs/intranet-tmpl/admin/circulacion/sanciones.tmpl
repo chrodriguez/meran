@@ -48,7 +48,7 @@ function guardarTiposQueAplica(){
 }
 
 function updateGuardarTiposQueAplica(responseText){
-     respuesta(responseText);
+    respuesta(responseText);
     buscarTiposPrestamosSancionados();
 }
 
@@ -72,8 +72,8 @@ function buscarTiposPrestamosSancionados(){
         objAH.debug             = true;
         objAH.showOverlay       = true;
         objAH.url=URL_PREFIX+"/admin/circulacion/sancionesDB.pl";
-        objAH.tipo_prestamo     = $("#tipo_prestamo_id").val();
-        objAH.categoria_socio   = $("#categoria_socio_id").val();
+        objAH.tipo_prestamo     = $("#tipo_prestamo_id_add").val();
+        objAH.categoria_socio   = $("#categoria_socio_id_add").val();
         objAH.tipoAccion        = "TIPOS_PRESTAMOS_SANCIONADOS";
         borrarDiv();
         objAH.sendToServer();
@@ -231,37 +231,20 @@ $(document).ready( function() {
 </script>
 
 
+<form class="well form-search">
+      [% tipos_de_prestamos %]
+      [% categorias_de_socio %]
+</form>
+
 <div id="divSancionesReglas"></div>
-
-<div class="form-actions">
-    [% PERL %]
-                print C4::AR::Filtros::action_button(   
-                        button   => "btn btn-primary",
-                        action   => 'agregarSancion_show();',
-                        title   => "[% 'Agregar sanci&oacute;n' | i18n %]",
-                    ) ;
-    [% END %]
-
-</div>
 
 <div id="moda-nueva-sancion" class="modal hide fade"> 
     <div class="modal-header">
             <a href="#" class="close" data-dismiss="modal">×</a>
-            <h2>[% "Nuevo tipo de sanci&oacute;n" | i18n %] </h2>
+            <h4>[% "La sanci&oacute;n se aplica a" | i18n %]...</h4>
     </div>
     <div class="modal-body">
-          <div class="control-group">
-                <label class="control-label">[% "Tipos de pr&eacute;stamo" | i18n %]</label>
-                <div class="controls">
-                    <span>[% tipos_de_prestamos %]</span>   
-                </div>
-          </div>
-          <div class="control-group">
-                <label class="control-label">[% "Categorias de usuario" | i18n %]</label>
-                <div class="controls">
-                        <span>[% categorias_de_socio %]</span>
-                </div>
-            </div>
+
         <div id="divSancionesTiposPrestamos"></div>
    </div>
 </div>                     

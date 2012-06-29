@@ -21,6 +21,11 @@ __PACKAGE__->meta->setup(
             column_map => { regla_sancion => 'regla_sancion' },
             type       => 'one to one',
         },
+        sancion => {
+            class      => 'C4::Modelo::CircTipoSancion',
+            column_map => { tipo_sancion => 'tipo_sancion' },
+            type       => 'one to one',
+        },
     ],
 );
 
