@@ -13,7 +13,11 @@ __PACKAGE__->use_private_registry;
     my $hostname;
     my $user;
     my $pass;
-  
+    my $use_socket;
+    my $socket;
+    
+    my $dsn;
+    
 =item
  if (defined($context)){
     $driverDB = 'mysql';
@@ -45,16 +49,27 @@ opac = ususario comun de OPAC (MENOR cant. de permisos sobre la base)
 	}
 
 #  $user = $context->config('user');
-
+    
     $database = $context->config('database');
-    $hostname = $context->config('hostname');
+    
+    $use_socket = $context->config('use_socket');
+    
+    if ($use_socket){
+        $socket   = $context->config('socket');
+        $dsn="dbi:mysql:dbname=".$database.";mysql_socket=".$socket;
+    }
+    else{
+        $hostname = $context->config('hostname');
+        $dsn="dbi:mysql:dbname=".$database.";host=".$hostname;
+    }
+    
 }
         
 __PACKAGE__->register_db
 (
   connect_options => {RaiseError => 1},
   driver          => $driverDB,
-  dsn             => "dbi:mysql:dbname=".$database.";host=".$hostname,
+  dsn             => $dsn,
   username        => $user,
   password        => $pass,
   #mysql_enable_utf8 => 1,
