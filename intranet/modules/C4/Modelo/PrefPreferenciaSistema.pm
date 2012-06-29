@@ -159,6 +159,8 @@ sub agregar{
     $self->setType($data_hash->{'type'});
     $self->setCategoria($data_hash->{'categoria'}||'sistema');
     $self->save();
+
+    C4::AR::Preferencias::reloadAllPreferences();
 }
 
 sub modificar{
@@ -181,6 +183,8 @@ sub modificar{
     }
 
     $self->save();
+
+    C4::AR::Preferencias::reloadAllPreferences();
 }
 
 

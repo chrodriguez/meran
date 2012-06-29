@@ -13,11 +13,14 @@ __PACKAGE__->use_private_registry;
     my $hostname;
     my $user;
     my $pass;
+
     my $use_socket;
     my $socket;
     
     my $dsn;
     
+    my $DB=undef;
+  
 =item
  if (defined($context)){
     $driverDB = 'mysql';
@@ -33,6 +36,7 @@ __PACKAGE__->use_private_registry;
 	use C4::AR::Debug;
 
 	my $session = CGI::Session->load();
+    
 =item
 $context->config('userINTRA') y/o $context->config('userOPAC') pueden ser:
 admin = usuario Aministrador (TODOS los permisos sobre la base)
