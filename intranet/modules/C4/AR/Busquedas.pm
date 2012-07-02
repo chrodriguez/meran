@@ -474,9 +474,21 @@ sub obtenerEstadoDeColeccion {
 		
 		if($nivel2->getTipoDocumento eq 'REV'){
 			$cant_revistas++;
-			my $anio=$nivel2->getAnioRevista ? $nivel2->getAnioRevista : '#';
-			my $volumen=$nivel2->getVolumenRevista ? $nivel2->getVolumenRevista : '#';
-			my $numero=$nivel2->getNumeroRevista ? $nivel2->getNumeroRevista : '#';
+            
+			my $anio='#';
+            if($nivel2->getAnioRevista ne undef){
+                $anio = $nivel2->getAnioRevista;
+            }
+            
+			my $volumen='#';
+            if($nivel2->getVolumenRevista ne undef){
+                $volumen = $nivel2->getVolumenRevista;
+            }
+            
+            my $numero='#';
+            if($nivel2->getNumeroRevista ne undef){
+                $numero = $nivel2->getNumeroRevista;
+            }
 			
 			$HoH{$anio}->{$volumen}->{$numero}=$nivel2->getId2;
 			
