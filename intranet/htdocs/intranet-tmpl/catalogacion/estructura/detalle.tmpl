@@ -268,6 +268,7 @@
                                                                                 [% IF show_analiticas > 0 %]
                                                                                     {title => "Ver anal&iacute;ticas", action=>"verAnaliticas([% id2 %])", icon=>"icon-edit"},
                                                                                 [% END %]
+                                                                                	{title => "Agregar portada", action=>"showAddPortadaEdicion([% id2 %], [% id1 %])",icon=>"icon-picture"},
 		                                                                            ],
 		
 		                            ) ;
@@ -353,11 +354,11 @@
 										                                <div class="controls">
 										                                      [% PERL %]
 										                                              print C4::AR::Filtros::action_button( 
-										                                                                              button         => "btn btn-primary click",
-										                                                                              action       => 'uploadIndice("[% id2 %]","[% url_prefix %]/catalogacion/estructura/uploadIndice.pl")', 
-										                                                                              icon         => "",
-										                                                                              title        => "[% 'Subir archivo' | i18n %]",
-										                                                                          ) ;
+				                                                                              button         => "btn btn-primary click",
+				                                                                              action       => 'uploadIndice("[% id2 %]","[% url_prefix %]/catalogacion/estructura/uploadIndice.pl")', 
+				                                                                              icon         => "",
+				                                                                              title        => "[% 'Subir archivo' | i18n %]",
+				                                                                          ) ;
 										    
 										                                      [% END %]
 										                                </div>
@@ -369,7 +370,8 @@
 								            </div>
 
                             </div>
-                            
+                            <div id="addPortadaEdicion" class="modal hide fade"></div>
+
                             <div id="datos_indice" class="modal hide fade">
                                 <div class="modal-header">
                                     <a class="close" data-dismiss="modal">×</a>
@@ -392,18 +394,30 @@
                             </div>
 
 			                <br>
-			                
-			                [% IF portada_registro or isbn %]
-			                   <div>
-				                    [% IF portada_registro %]
-				                        <a class="fancy_link" href="/uploads/covers/[% portada_registro_big %]">
-				                            <img style="max-height: 180px; max-width:110px;" src="/uploads/covers/[% portada_registro_medium %]" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" />
-				                        </a>
-				                    [% END %]
-							   </div>
-							[% END %]
+			                [% IF portada_edicion_local %]
+
+                                [% FOREACH p IN portada_edicion_local %]
+                                    <div class="item portadaEdicionImage" [% IF !loop.first %]style="display:none;"[% END %]>
+                                        <a class="fancylink" id="imagen_[% imagen.getImageName %]" rel="group" href="https://[% SERVER_ADDRESS %]/uploads/covers-added/[% p.getImageName %]">
+                                            <img border="0" src="https://[% SERVER_ADDRESS %]/uploads/covers-added/[% p.getImageName %]" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" >
+                                        </a>
+                                    </div>
+                                [% END %]
+
+                            [% ELSE %]
+
+    			                [% IF portada_registro or isbn %]
+    			                   <div>
+    				                    [% IF portada_registro %]
+    				                        <a class="fancy_link" href="/uploads/covers/[% portada_registro_big %]">
+    				                            <img style="max-height: 180px; max-width:110px;" src="/uploads/covers/[% portada_registro_medium %]" title="Portada" alt="[% 'Portada del ejemplar' | i18n %]" />
+    				                        </a>
+    				                    [% END %]
+    							   </div>
+    							[% END %]
+
+                            [% END %]
 							
-                        
 			                <dl>
 				                [% FOREACH nivel2_array %]
                                     [% IF liblibrarian %]

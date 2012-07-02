@@ -197,6 +197,13 @@ var loaderPath= "";
                       <dd>[% PERL %] print C4::AR::Utilidades::translateTipoCredencial('[% socio.getCredentialType %]') [% END %]</dd>
                 </dl>
 
+
+                [% IF (!socio.cumpleRequisito) && (requisitoNecesario_pref) %]
+                	<div class="alert alert-error">
+                			<strong>[% "Atenci&oacute;n" | i18n %]:</strong> [% "el usuario no cumple con la condici&oacute;n impuesta por la Biblioteca, y no puede hacer uso del sistema." | i18n %]
+                	</div>
+                [% END %]
+
                     <div class="accordion" id="datos_Secundarios">
                         <div class="accordion-group">
 	                        <div class="accordion-heading">

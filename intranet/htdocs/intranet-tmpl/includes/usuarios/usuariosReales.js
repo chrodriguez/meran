@@ -365,7 +365,7 @@ function guardarModificacionCredenciales(){
     objAH               = new AjaxHelper(updateModificacionCredenciales);
     objAH.url           = URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';
     objAH.showOverlay   = true;
-    objAH.debug         = false;
+    objAH.debug         = true;
     objAH.nro_socio     = USUARIO.ID;
     objAH.tipoAccion    = 'GUARDAR_MODIFICACION_CREDENCIALES';
     objAH.credenciales  = $('#credential').val();

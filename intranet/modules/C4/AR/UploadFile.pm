@@ -39,9 +39,63 @@ use vars qw(@EXPORT @ISA);
         deleteImport
         uploadAdjuntoNovedadOpac
         deleteIndice
+        uploadPortadaNivel2
     );
 
 my $picturesDir = C4::Context->config("picturesdir");
+
+
+=item
+    Sube una portada a un nivel 2
+=cut
+sub uploadPortadaNivel2{
+
+    my ($foto) = @_;
+
+    use Digest::MD5;
+    use C4::AR::Utilidades;
+    
+    my @whiteList            = qw(
+                                        png
+                                        jpg
+                                        jpeg
+                                        gif
+                                    );
+
+    my $uploaddir               = "/usr/share/meran/intranet/htdocs/uploads/covers-added";
+    my $maxFileSize             = 2048 * 2048; # 1/2mb max file size...
+    my $hash_unique             = Digest::MD5::md5_hex(localtime() + rand(10));
+    my ($file_type,$notBinary)  = C4::AR::Utilidades::checkFileMagic($foto, @whiteList);
+    
+    #es un archivo valido
+    if($file_type){
+    
+        if($notBinary){
+        
+            #no hay que escribirlo con binmode
+            C4::AR::Debug::debug("UploadFile => uploadPortadaNivel2 => vamos a escribirla sin binmode");
+            open(WRITEIT, ">$uploaddir/$hash_unique.$file_type") or die "Cant write to $uploaddir/$hash_unique.$file_type. Reason: $!";
+            print WRITEIT $foto;
+            close(WRITEIT);
+   
+        }else{
+        
+            C4::AR::Debug::debug("UploadFile => uploadPortadaNivel2 => vamos a escribirla CON binmode");
+            open ( WRITEIT, ">$uploaddir/$hash_unique.$file_type" ) or die "Cant write to $uploaddir/$hash_unique.$file_type. Reason: $!"; 
+            binmode WRITEIT; 
+            while ( <$foto> ) { 
+                print WRITEIT; 
+            }
+            close(WRITEIT);
+        
+        }
+
+        return ("$hash_unique.$file_type");
+        
+    }
+    
+    return 0;
+}
 
 =item
     Sube la imagen del tipo de documento
@@ -68,7 +122,7 @@ sub uploadTipoDeDocImage{
         
             #no hay que escribirlo con binmode
             C4::AR::Debug::debug("UploadFile => uploadAdjuntoNovedadOpac => vamos a escribirla sin binmode");
-            open(WRITEIT, ">$uploaddir/$$file_name.$file_type") or die "Cant write to $uploaddir/$file_name.$file_type. Reason: $!";
+            open(WRITEIT, ">$uploaddir/$file_name.$file_type") or die "Cant write to $uploaddir/$file_name.$file_type. Reason: $!";
             print WRITEIT $foto;
             close(WRITEIT);
    

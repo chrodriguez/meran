@@ -2160,7 +2160,7 @@ sub recoverPassword{
 	            };
 	            if (($@) || $isError){
 	                $message = C4::AR::Mensajes::getMensaje('U606','opac');
-	                &C4::AR::Mensajes::printErrorDB($@, 'U606',"opac");
+	                C4::AR::Mensajes::printErrorDB($@, 'U606',"opac");
 	                $db->rollback;
 	            }
 	            $db->{connect_options}->{AutoCommit} = 1;
@@ -2174,6 +2174,7 @@ sub recoverPassword{
 	            };    
                 if (($@) || $isError){
                     $message = C4::AR::Mensajes::getMensaje('U606','opac');
+                    C4::AR::Mensajes::printErrorDB($@, 'U606',"opac");
                 }
             	
             }

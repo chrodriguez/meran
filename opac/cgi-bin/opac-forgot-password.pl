@@ -45,7 +45,8 @@ if (!C4::AR::Utilidades::validateString($user_id)){
 	};
 	
 	if ($@){	
-		$t_params->{'message'}  = C4::AR::Mensajes::getMensaje('U606','opac');
+		my $mensaje = $t_params->{'message'}  = C4::AR::Mensajes::getMensaje('U606','opac');
+		C4::AR::Mensajes::printErrorDB($@, 'U606',"opac");
 	}elsif
 		(!$error){
 		  $t_params->{'partial_template'}= "_message.inc";

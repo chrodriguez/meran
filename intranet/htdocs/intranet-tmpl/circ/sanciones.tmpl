@@ -132,54 +132,53 @@ function limpiar(){
 
 </script>
 
-    <section class="center-section-form">
-<form class="form-horizontal" onsubmit="return false;">
-    
-<fieldset id="reportes">
-    <legend class="titulo_legend"> <span class="titulos">[% "Administraci&oacute;n de Sanciones del Sistema" | i18n %] </span> </legend>
-    <div class="control-group">
-          <div class="controls">
-            <input type="text" id="buscar" name="buscar" value="">
-
-                [% PERL %]
-                    print C4::AR::Filtros::setHelpInput(   
-                                                    text        => "[% ' Ingrese el Apellido, Nombre o Numero de Socio.' | i18n %]",
-                                                    class       => "info",
-                                            ) ;
-                    
-                [% END %]
+<section class="center-section-form">
+    <form class="form-horizontal" onsubmit="return false;">
             
-          </div>    
-        </div>  
+        <fieldset id="reportes">
+            <legend class="titulo_legend"> <span class="titulos">[% "Administraci&oacute;n de Sanciones del Sistema" | i18n %] </span> </legend>
+            <div class="control-group">
+                  <div class="controls">
+                    <input type="text" id="buscar" name="buscar" value="">
 
-        
-        <div class="form-actions">
-              [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
-                                                                    boton   => "btn",
-                                                                    onClick => "limpiar();",
-                                                                    title   => "[% 'Limpiar' | i18n %]",
-                                                                    inline  => 1,
-                                        ) ;
-            [% END %]
+                        [% PERL %]
+                            print C4::AR::Filtros::setHelpInput(   
+                                                            text        => "[% ' Ingrese el Apellido, Nombre o Numero de Socio.' | i18n %]",
+                                                            class       => "info",
+                                                    ) ;
+                            
+                        [% END %]
+                    
+                  </div>    
+                </div>  
 
-            [% PERL %]
-                                print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
-                                                                    boton   => "btn btn-primary",
-                                                                    onClick => "buscarSancion();",
-                                                                    title   => "[% 'Buscar' | i18n %]",
-                                                                    inline  => 1,
-                                        ) ;
-            [% END %]
-        
-          
-        </div>
+                
+                <div class="form-actions">
+                      [% PERL %]
+                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Limpiar' | i18n %]",
+                                                                            boton   => "btn",
+                                                                            onClick => "limpiar();",
+                                                                            title   => "[% 'Limpiar' | i18n %]",
+                                                                            inline  => 1,
+                                                ) ;
+                    [% END %]
+
+                    [% PERL %]
+                                        print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
+                                                                            boton   => "btn btn-primary",
+                                                                            onClick => "buscarSancion();",
+                                                                            title   => "[% 'Buscar' | i18n %]",
+                                                                            inline  => 1,
+                                                ) ;
+                    [% END %]
+                
+                  
+                </div>
+            </fieldset>
+       </form>
+
    </section>
-     <!--   </li>
-    </ul>-->
-   </form>
- </fieldset>
- 
+
 
 <fieldset class="resultados_busqueda">
     <legend class="titulo_legend">[% "Sanciones" | i18n %]</legend>

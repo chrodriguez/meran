@@ -571,6 +571,9 @@ sub detalleCompletoINTRA {
     my $cant_grupos         = C4::Context->config("cant_grupos_per_query") || 5;
     #recupero todos los nivel2 segun el id1 pasado por parametro
 
+    # para traer las portadas locales
+    use C4::AR::PortadaNivel2;
+
     my $id2 =  $t_params->{'id2'} || 0;
     my $nivel2_array_ref;
 
@@ -606,6 +609,7 @@ sub detalleCompletoINTRA {
             $hash_nivel2->{'portada_registro'}          = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'S');
             $hash_nivel2->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'M');
             $hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'L');
+            $hash_nivel2->{'portada_edicion_local'}     = C4::AR::PortadaNivel2::getPortadasEdicion($hash_nivel2->{'id2'});
             $hash_nivel2->{'edicion'}                   = $nivel2_array_ref->[$i]->getEdicion();
             #para los nav-tabs
             $hash_nivel2->{'anio_publicacion'}          = $nivel2_array_ref->[$i]->getAnio_publicacion();
@@ -815,6 +819,9 @@ sub detalleCompletoOPAC{
 #    my $page_number = $t_params->{'page'} || 0;
 #    my $cant_grupos = C4::Context->config("cant_grupos_per_query") || 5;
 
+    # para traer las portadas locales
+    use C4::AR::PortadaNivel2;
+
     my $id2 =  $t_params->{'id2'} || 0;
     my $nivel2_array_ref;
     
@@ -863,6 +870,7 @@ sub detalleCompletoOPAC{
             $hash_nivel2->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'M');
             $hash_nivel2->{'primer_signatura'}          = $nivel2_array_ref->[$i]->getSignaturas->[0];
             $hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'L');
+            $hash_nivel2->{'portada_edicion_local'}     = C4::AR::PortadaNivel2::getPortadasEdicion($hash_nivel2->{'id2'});
             $hash_nivel2->{'cantReservasEnEspera'}      = $totales_nivel3->{'cantReservasEnEspera'};
             $hash_nivel2->{'disponibles'}               = $totales_nivel3->{'disponibles'};
             $hash_nivel2->{'cantParaSala'}              = $totales_nivel3->{'cantParaSala'};

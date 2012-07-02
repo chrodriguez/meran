@@ -240,6 +240,8 @@ sub checkFileMagic{
     
     foreach my $t (@filesAllowed){
 
+        C4::AR::Debug::debug("mime del archivo : " . $mime . " type : " . $t);
+
         if($mime =~ m/$t/i) {
             $ok = 1;
             $type = $t;
@@ -2065,8 +2067,11 @@ sub generarComboCategoriasDeSocioConCodigoCat{
     $options_hash{'multiple'}   = $params->{'multiple'}||0;
     $options_hash{'defaults'}   = $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultCategoriaSocio");
 
-    push (@select_categorias_array, '');
-    $select_categorias_hash{''} = "SIN SELECCIONAR";
+    if (!$params->{'no_default'}){
+        push (@select_categorias_array, '');
+        $select_categorias_hash{''} = "SIN SELECCIONAR";
+    }
+
     $options_hash{'values'}     = \@select_categorias_array;
     $options_hash{'labels'}     = \%select_categorias_hash;
 
@@ -2616,8 +2621,7 @@ sub generarComboTipoPrestamo{
     $options_hash{'size'}=  $params->{'size'}||1;
     $options_hash{'multiple'}= $params->{'multiple'}||0;
 
-#FIXME falta un default no?
-#     $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
+    $options_hash{'defaults'}= $params->{'default'} || C4::AR::Preferencias::getValorPreferencia("defaultissuetype");
 
     push (@select_tipo_nivel3_array, 'SIN SELECCIONAR');
     $options_hash{'values'}= \@select_tipo_nivel3_array;

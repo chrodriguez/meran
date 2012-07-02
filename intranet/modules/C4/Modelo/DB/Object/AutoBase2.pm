@@ -9,7 +9,12 @@ use C4::Modelo::DB::AutoBase1;
 use base qw(Rose::DB::Object::Helpers);
 
 
-sub init_db { C4::Modelo::DB::AutoBase1->new_or_cached }
+sub init_db { 
+    if (!$DB){
+       $DB = C4::Modelo::DB::AutoBase1->new_or_cached;
+    }
+    return $DB;
+ }
 =item
     Returns true (1) if the row was loaded successfully
     undef if the row could not be loaded due to an error, 

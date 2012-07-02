@@ -634,6 +634,11 @@ my %mensajesINTRA = (
     'TD003' => 'No se puede eliminar el tipo de documento, ya que se encuentra referenciado',
     'TD004' => 'El tipo de documento fue eliminado con &eacute;xito',
     'TD005' => 'Ocurri&oacute; un error mientras se eliminaba el tipo de documento',
+
+    #portadas nivel 2
+    'POR00' => 'Error guardando la imagen de la portada, int&eacute;ntelo nuevamente.',
+    'POR01' => 'Las imagenes fueron modificadas con &eacute;xito',
+
 );
 
 sub getMensaje {

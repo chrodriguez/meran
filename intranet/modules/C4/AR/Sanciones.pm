@@ -319,21 +319,28 @@ return($cantidadDeDias);
 sub getTipoSancion{
   #Esta funcion recupera el tipo de sancion a partir del tipo de prestamo y la categoria del usuario
     my ($tipo_prestamo, $categoria_socio,$db)=@_;
-    
+    my @filtros;
     my $tipo_sanciones_array_ref;
+
+
+    if ( ($tipo_prestamo) && (($tipo_prestamo ne C4::AR::Filtros::i18n("SIN SELECCIONAR"))) ){
+      push (@filtros, (tipo_prestamo => {eq =>$tipo_prestamo}) );
+
+    }
+
+    if ( ($categoria_socio) && (($categoria_socio ne C4::AR::Filtros::i18n("SIN SELECCIONAR"))) ){
+      push (@filtros, (categoria_socio => {eq =>$categoria_socio}) );
+
+    }
+
     if($db){ #Si viene $db es porque forma parte de una transaccion
-        $tipo_sanciones_array_ref = C4::Modelo::CircTipoSancion::Manager->get_circ_tipo_sancion (db => $db,
-                                                                    query => [ 
-                                                                            categoria_socio => { eq => $categoria_socio},
-                                                                            tipo_prestamo   => { eq => $tipo_prestamo },
-                                                                        ],
+        $tipo_sanciones_array_ref = C4::Modelo::CircTipoSancion::Manager->get_circ_tipo_sancion (
+                                                                    db => $db,
+                                                                    query => \@filtros,
                                     );
     }else{
         $tipo_sanciones_array_ref = C4::Modelo::CircTipoSancion::Manager->get_circ_tipo_sancion (   
-                                                                    query => [ 
-                                                                            categoria_socio => { eq => $categoria_socio},
-                                                                            tipo_prestamo   => { eq => $tipo_prestamo },
-                                                                        ],
+                                                                    query => \@filtros,
                                     );
     }
 
@@ -445,14 +452,14 @@ sub actualizarTiposPrestamoQueAplica {
     $db->{connect_options}->{AutoCommit} = 0;
     $db->begin_work;
     #Busco el tipo de sanción
-    my $tipo_sancion    = &C4::AR::Sanciones::getTipoSancion($tipo_prestamo, $categoria_socio,$db);
+    my $tipo_sancion    = C4::AR::Sanciones::getTipoSancion($tipo_prestamo, $categoria_socio,$db);
 
 	eval {	
         $tipo_sancion->actualizarTiposPrestamoQueAplica($tiposQueAplica,$db);
         $db->commit;
         $msg_object->{'error'}= 0;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP013', 'params' => []} ) ;
-   };
+    };
    
     if ($@){
 		C4::AR::Mensajes::printErrorDB($@, '',"INTRA");
@@ -508,7 +515,7 @@ sub getReglasSancionNoAplicadas{
    my $reglas_sancion_array_ref = C4::Modelo::CircReglaSancion::Manager->get_circ_regla_sancion(
                                                               sort_by => 'dias_demora , dias_sancion'
                                                                         );
-   my $reglas_tipo_sancion=&C4::AR::Sanciones::getReglasTipoSancion($tipo_sancion);
+   my $reglas_tipo_sancion= C4::AR::Sanciones::getReglasTipoSancion($tipo_sancion);
   
   if ($reglas_sancion_array_ref) {
 
@@ -542,11 +549,14 @@ sub getReglasTipoSancion{
                                                                             tipo_sancion => { eq => $tipo_sancion->getTipo_sancion},
                                                                         ],
                                                                     sort_by      => 'orden ASC',
+                                                                    require_objetcs => ['ref_regla','sancion'],
                                     );
 
-    if ($reglas_sanciones_array_ref->[0]) {return $reglas_sanciones_array_ref;}
+    if ($reglas_sanciones_array_ref->[0]) {
+        return ($reglas_sanciones_array_ref);
+      }
   }
-  return 0;
+  return (0,0);
 
 }
 
