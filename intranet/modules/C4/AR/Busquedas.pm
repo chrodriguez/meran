@@ -1088,6 +1088,16 @@ sub busquedaAvanzada_newTemp{
 
     my @id1_array;
     my $matches = $results->{'matches'};
+
+	C4::AR::Debug::debug("RESULTS ".$results);
+	
+	C4::AR::Utilidades::printARRAY($results->{'matches'});
+
+	C4::AR::Utilidades::printHASH($results);
+
+    C4::AR::Debug::debug("CANTIDAD DE RESULTADOS EN DATOS ARRAY ".scalar(@$matches));
+
+    
     my $total_found = $results->{'total_found'};
     $params->{'total_found'} = $total_found;
 

@@ -1394,8 +1394,6 @@ sub reporteGenEtiquetas{
 
     }
 
-
-
     if( $params->{'codBarra'} ne "") {
      	$query .= ' @string "'."barcode%".$sphinx->EscapeString($params->{'codBarra'})."*'";
         $query .='*"';
@@ -1405,7 +1403,7 @@ sub reporteGenEtiquetas{
         $query .= ' @string "'."signatura%".$sphinx->EscapeString($params->{'signatura'}).'*"';
     }
     
-    C4::AR::Debug::debug("Busquedas => query string => ".$query);
+    C4::AR::Debug::debug("Reportes => query string => ".$query);
 
     my $tipo_match = C4::AR::Utilidades::getSphinxMatchMode($tipo);
 
@@ -1416,19 +1414,25 @@ sub reporteGenEtiquetas{
     # NOTA: sphinx necesita el string decode_utf8
    
     my $index_to_use = C4::AR::Preferencias::getValorPreferencia("nombre_indice_sphinx") || 'test1';
-    
+
     my $results = $sphinx->Query($query, $index_to_use);
 
     my @datos_array;
     my $matches = $results->{'matches'};
 
-	C4::AR::Debug::debug("CUANTOSSSSSSSSSSSSSS EN DATOS ARRAY ".scalar(@$matches));
-    
+	C4::AR::Debug::debug("RESULTS: ".$results);
+
+	C4::AR::Utilidades::printHASH($results);
+	
+	C4::AR::Utilidades::printARRAY($results->{'matches'});
+	
+	C4::AR::Debug::debug("CANTIDAD DE RESULTADOS EN DATOS ARRAY ".scalar(@$matches));
+
     my $total_found = $results->{'total_found'};
     # $params->{'total_found'} = $total_found;
 
     C4::AR::Debug::debug("total_found: ".$total_found);
-    C4::AR::Debug::debug("Busquedas.pm => LAST ERROR: ".$sphinx->GetLastError());
+    C4::AR::Debug::debug("Reportes.pm => LAST ERROR: ".$sphinx->GetLastError());
     C4::AR::Debug::debug("MATCH_MODE => ".$tipo);
     
     foreach my $hash (@$matches){
@@ -1445,6 +1449,7 @@ sub reporteGenEtiquetas{
     #se loquea la busqueda
 
     C4::AR::Busquedas::logBusqueda($params, $session);
+    
     my @datos;
     foreach my $res (@$resultsarray){
         my %hash_temp;
@@ -1458,6 +1463,7 @@ sub reporteGenEtiquetas{
 
     return ($total_found, \@datos);
 }
+
 
 
 sub reportToPDF{
