@@ -62,7 +62,7 @@ sub uploadPortadaNivel2{
                                         gif
                                     );
 
-    my $uploaddir               = "/usr/share/meran/intranet/htdocs/uploads/covers-added";
+    my $uploaddir               = C4::Context->config("portadasNivel2Path");
     my $maxFileSize             = 2048 * 2048; # 1/2mb max file size...
     my $hash_unique             = Digest::MD5::md5_hex(localtime() + rand(10));
     my ($file_type,$notBinary)  = C4::AR::Utilidades::checkFileMagic($foto, @whiteList);
@@ -111,7 +111,7 @@ sub uploadTipoDeDocImage{
                                         png
                                     );
 
-    my $uploaddir               = "/usr/share/meran/intranet/htdocs/uploads/covers";
+    my $uploaddir               = C4::Context->config("tipoDocumentoPath");
     my $maxFileSize             = 2048 * 2048; # 1/2mb max file size...
     my ($file_type,$notBinary)  = C4::AR::Utilidades::checkFileMagic($foto, @whiteList);
     
