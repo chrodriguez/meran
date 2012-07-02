@@ -34,7 +34,7 @@ sub agregar{
     my $image_name;
 
     #hardcodeado
-    my $path                = "/usr/share/meran/intranet/htdocs/uploads/covers-added";
+    my $path                = C4::Context->config("portadasNivel2Path");
 
     my @arrayImagenesSaved;
 

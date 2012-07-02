@@ -68,6 +68,10 @@ my ($template, $session, $t_params) = get_template_and_user({
 
 my ($msg_object)    = C4::AR::PortadaNivel2::agregar(\%paramHash);
 
-my $url             = C4::AR::Utilidades::getUrlPrefix()."/catalogacion/estructura/detalle.pl?id1=" . $id1 . "&token=" . $query->param('token') . "&msg_file=". $msg_object;
+my $code            = C4::AR::Mensajes::getFirstCodeError($msg_object);
+
+my $mensaje         = C4::AR::Mensajes::getMensaje($code, 'intranet');
+
+my $url             = C4::AR::Utilidades::getUrlPrefix()."/catalogacion/estructura/detalle.pl?id1=" . $id1 . "&token=" . $query->param('token') . "&msg_file=". $mensaje;
 
 C4::AR::Auth::redirectTo($url);
