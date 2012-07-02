@@ -283,7 +283,7 @@ sub agregarLogo{
     $db->{connect_options}->{AutoCommit} = 0;
     $db->begin_work;
 
-    eval{
+    #eval{
 
         #borramos algun logo que este, para pisarlo con este nuevo
         deleteLogos($db);
@@ -310,7 +310,7 @@ sub agregarLogo{
             $db->commit;
         }
 
-    };
+#    };
     if ($@){
         # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
        &C4::AR::Mensajes::printErrorDB($@, 'B461',"INTRA");
@@ -335,12 +335,9 @@ sub uploadLogo{
                                 jpg
                             );
 
-    # my $uploaddir;
-    # if($context eq "opac"){
-     # $uploaddir       = C4::Context->config('logosOpacPath');
-    # }else{
+
     my $uploaddir       = C4::Context->config('logosIntraPath');
-    # }
+
     
     my $maxFileSize     = 2048 * 2048; # 1/2mb max file size...
     
@@ -355,15 +352,6 @@ sub uploadLogo{
     
     if (!$msg_object->{'error'}){
 
-        if($notBinary){
-        
-            #no hay que escribirlo con binmode
-            C4::AR::Debug::debug("UploadFile => uploadAdjuntoNovedadOpac => vamos a escribirla sin binmode");
-            open(WRITEIT, ">$uploaddir/$name.$type") or die "Cant write to $uploaddir/$name.$type. Reason: $!";
-            print WRITEIT $query;
-            close(WRITEIT);
-   
-        }else{
         
             C4::AR::Debug::debug("UploadFile => uploadAdjuntoNovedadOpac => vamos a escribirla CON binmode");
             open ( WRITEIT, ">$uploaddir/$name.$type" ) or die "Cant write to $uploaddir/$name.$type. Reason: $!"; 
@@ -372,8 +360,7 @@ sub uploadLogo{
                 print WRITEIT; 
             }
             close(WRITEIT);
-        
-        }
+
     }
     
     if (!$msg_object->{'error'}){
