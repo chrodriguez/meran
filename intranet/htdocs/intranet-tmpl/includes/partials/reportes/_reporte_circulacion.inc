@@ -160,4 +160,3 @@
       </form>
  </div>
  
-<div id="reportResultCirc" style="display:none;"></div>

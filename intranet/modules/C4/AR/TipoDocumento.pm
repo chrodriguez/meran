@@ -224,7 +224,7 @@ sub _eliminarFotoTipoDoc{
 
     my ($tipoDoc) = @_;
 
-    my $uploaddir = "/usr/share/meran/intranet/htdocs/uploads/covers";
+    my $uploaddir = C4::Context->config("tipoDocumentoPath");
 
     unlink($uploaddir . "/" . $tipoDoc . ".png");
 }
