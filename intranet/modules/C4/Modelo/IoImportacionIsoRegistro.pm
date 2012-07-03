@@ -529,64 +529,54 @@ sub aplicarImportacion {
 												 |_
         
 =cut
+    my ($msg_object, $id1);
+   #SE CHEQUEA QUE NO EXISTA EL REGISTRO PRIMERO, SI EXISTE SE AGREGAN LOS EJEMPLARES
+    my $n1 = $self->buscarRegistroDuplicado($detalle);
     
-    #Proceso el nivel 1 agregando las referencias que no existen!!
-   my ($msg_object, $id1) = $self->guardarNivel1DeImportacion($detalle);
-   
-   C4::AR::Debug::debug("Nivel 1 creado ".$id1);
-   
-   if (!$msg_object->{'error'}){
-       
-    my $niveles2 = $detalle->{'nivel2'};
-    
-    foreach my $nivel2 (@$niveles2){
-        
-      my ($msg_object2,$id1,$id2) = $self->guardarNivel2DeImportacion($id1,$nivel2);
-      
-        if (!$msg_object2->{'error'}){
-            
-          my $niveles3 = $nivel2->{'nivel3'};
-          
-          foreach my $nivel3 (@$niveles3){
-              
-            my ($msg_object3) = $self->guardarNivel3DeImportacion($id1,$id2,$nivel3);
-            
-          }
-         } 
-      }
-    }
-    
-    if ($msg_object->{'error'}){
-        #HAY UN ERROR
-        my $mensajes=$msg_object->{'messages'};
-        
-        if ($mensajes->[0]->{'codMsg'} eq 'U501') {
-            #Error de Registro Duplicado!!!! Debo agregar los ejemplares!!
-             my $n1 = $self->buscarRegistroDuplicado($detalle);
-            
-            if ($n1){
-                
-                #Encontré el registro duplicado
-                my $niveles2 = $detalle->{'nivel2'};
-                foreach my $nivel2 (@$niveles2){
-                    my $niveles3 = $nivel2->{'nivel3'};
-                    foreach my $nivel3 (@$niveles3){
-                        my $grupos = $n1->getGrupos();
-                        my ($msg_object3) = $self->guardarNivel3DeImportacion($n1->getId1,$grupos->[0]->getId2,$nivel3);
-
-                    
-                    }
-                }
-                
-                #Solucioné el error
-                $msg_object->{'error'}=0;
-                #Nuevo id1
-                $id1=$n1->getId1;
+    if ($n1){
+        #Encontré el registro duplicado
+        my $niveles2 = $detalle->{'nivel2'};
+        foreach my $nivel2 (@$niveles2){
+            my $niveles3 = $nivel2->{'nivel3'};
+            foreach my $nivel3 (@$niveles3){
+                my $grupos = $n1->getGrupos();
+                my ($msg_object3) = $self->guardarNivel3DeImportacion($n1->getId1,$grupos->[0]->getId2,$nivel3);
             }
+        }
+        #Nuevo id1
+        $id1=$n1->getId1;
+    }
+    else {
+    #NO EXISTE SE IMPORTA TODO!!!
+       #Proceso el nivel 1 agregando las referencias que no existen!!
+       ($msg_object, $id1) = $self->guardarNivel1DeImportacion($detalle);
+       
+       C4::AR::Debug::debug("Nivel 1 creado ".$id1);
+       
+       if (!$msg_object->{'error'}){
+           
+        my $niveles2 = $detalle->{'nivel2'};
+        
+        foreach my $nivel2 (@$niveles2){
+            
+          my ($msg_object2,$id1,$id2) = $self->guardarNivel2DeImportacion($id1,$nivel2);
+          
+            if (!$msg_object2->{'error'}){
+                
+              my $niveles3 = $nivel2->{'nivel3'};
+              
+              foreach my $nivel3 (@$niveles3){
+                  
+                my ($msg_object3) = $self->guardarNivel3DeImportacion($id1,$id2,$nivel3);
+                
+              }
+             } 
+          }
         }
     }
     
     my $mensajes=$msg_object->{'messages'};
+    
     if ($msg_object->{'error'}){
                 my $detalle = $mensajes->[0]->{'message'}." (".$mensajes->[0]->{'codMsg'}.")";
                 C4::AR::Debug::debug("ERROR : ". $detalle);
