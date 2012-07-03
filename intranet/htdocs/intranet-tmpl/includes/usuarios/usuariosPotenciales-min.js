@@ -17,4 +17,4 @@ objAH.tipoAccion=tipoAccion;objAH.id_personas=arrayPersonNumbers;objAH.funcion="
 function updateInfoActualizar(responseText){var Messages=JSONstring.toObject(responseText);setMessages(Messages);if(!fromDetail)
 buscarUsuariosPotenciales();}
 function eliminarPermanentemente(nro_socio){bootbox.confirm(CONFIRMA_LA_ELIMINACION,function(ok){if(ok){bootbox.confirm(CONFIRMA_LA_BAJA,function(status){if(status){var objAH=new AjaxHelper(updateEliminarPermanentemente);objAH.url=URL_PREFIX+"/usuarios/potenciales/usuariosPotencialesDB.pl";objAH.debug=true;objAH.showOverlay=true;objAH.nro_socio=nro_socio;objAH.tipoAccion="ELIMINAR_PERMANENTEMENTE";objAH.sendToServer();}});}});}
-function updateEliminarPermanentemente(responseText){var Messages=JSONstring.toObject(responseText);setMessages(Messages);}
+function updateEliminarPermanentemente(responseText){var Messages=JSONstring.toObject(responseText);setMessages(Messages);if(!(hayError(Messages))){window.location.href=URL_PREFIX+"/usuarios/potenciales/buscarUsuario.pl?token="+token;}}

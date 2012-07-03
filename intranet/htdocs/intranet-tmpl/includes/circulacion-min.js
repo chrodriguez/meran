@@ -18,8 +18,8 @@ html=html+opciones+"</select>";return html;}
 function prestar(is_modal){for(var i=0;i<INFO_PRESTAMOS_ARRAY.length;i++){INFO_PRESTAMOS_ARRAY[i].id3=$('#comboItems'+i).val();INFO_PRESTAMOS_ARRAY[i].barcode=$("#comboItems"+i+" option:selected").text();INFO_PRESTAMOS_ARRAY[i].tipoPrestamo=$('#tiposPrestamos'+i).val();INFO_PRESTAMOS_ARRAY[i].descripcionTipoPrestamo=$("#tiposPrestamos"+i+" option:selected").text();}
 objAH=new AjaxHelper(updateInfoPrestarReserva);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+'/circ/circulacionDB.pl';objAH.tipoAccion='PRESTAMO';objAH.datosArray=INFO_PRESTAMOS_ARRAY;objAH.nro_socio=USUARIO.ID;objAH.sendToServer();if(is_modal)
 $('#confirmar_div').modal('hide');}
-function updateInfoPrestarReserva(responseText){cancelarDiv();var infoHash=JSONstring.toObject(responseText);var messageArray=infoHash.messages;var ticketsArray=infoHash.tickets;var mensajes='';var hayError=0;for(i=0;i<messageArray.length;i++){setMessages(messageArray[i]);}
-for(i=0;i<messageArray.length;i++){if(messageArray[i].error){hayError=1;}}
+function updateInfoPrestarReserva(responseText){cancelarDiv();var infoHash=JSONstring.toObject(responseText);var messageArray=infoHash.messages;var ticketsArray=infoHash.tickets;var mensajes='';var hayError=0;alert(messageArray[0].messages);for(i=0;i<messageArray.length;i++){if(messageArray[i].error){hayError=1;}
+setMessages(messageArray[i].messages);}
 if(!hayError){imprimirTicket(ticketsArray);}
 detalleReservas(USUARIO.ID,updateInfoReservas);ejemplaresDelGrupo(ID_N2);}
 function cancelarDiv(){$('#confirmar_div').html('');}

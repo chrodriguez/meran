@@ -146,13 +146,13 @@ function updateInfoPrestarReserva(responseText){
 	cancelarDiv();
 // 	/*clearMessages*/();
 
-	var infoHash= JSONstring.toObject(responseText);
-	var messageArray= infoHash.messages;
-	var ticketsArray= infoHash.tickets;
-	var mensajes= '';
-	var hayError=0;
+	var infoHash       = JSONstring.toObject(responseText);
+	var messageArray   = infoHash.messages;
+	var ticketsArray   = infoHash.tickets;
+	var mensajes       = '';
+	var hayError       = 0;
 
-    setMessages(messageArray);
+    // setMessages(messageArray);
     
     for(i=0; i<messageArray.length;i++){
 //         imprimirTicket(ticketsArray[i].ticket,i);

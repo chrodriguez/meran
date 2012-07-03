@@ -34,7 +34,7 @@ return(0);var Messages=JSONstring.toObject(responseText);setMessages(Messages);d
 function cambiarCredencial(){objAH=new AjaxHelper(updateCambiarCredencial);objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';objAH.debug=true;objAH.showOverlay=true;objAH.nro_socio=USUARIO.ID;objAH.tipoAccion='CAMBIAR_CREDENCIAL';objAH.sendToServer();}
 function updateCambiarCredencial(responseText){if(!verificarRespuesta(responseText))
 return(0);$('#basic-modal-content').html(responseText);$('#basic-modal-content').modal();}
-function guardarModificacionCredenciales(){$('#basic-modal-content').modal('hide');objAH=new AjaxHelper(updateModificacionCredenciales);objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';objAH.showOverlay=true;objAH.debug=false;objAH.nro_socio=USUARIO.ID;objAH.tipoAccion='GUARDAR_MODIFICACION_CREDENCIALES';objAH.credenciales=$('#credential').val();objAH.sendToServer();}
+function guardarModificacionCredenciales(){$('#basic-modal-content').modal('hide');objAH=new AjaxHelper(updateModificacionCredenciales);objAH.url=URL_PREFIX+'/usuarios/reales/usuariosRealesDB.pl';objAH.showOverlay=true;objAH.debug=true;objAH.nro_socio=USUARIO.ID;objAH.tipoAccion='GUARDAR_MODIFICACION_CREDENCIALES';objAH.credenciales=$('#credential').val();objAH.sendToServer();}
 function updateModificacionCredenciales(responseText){if(!verificarRespuesta(responseText))
 return(0);var Messages=JSONstring.toObject(responseText);setMessages(Messages);detalleUsuario(USUARIO.ID);}
 function showModalCambiarNroSocio(){$('#modificar-nro-socio').modal('show');$('#nuevo_nro_socio').val(USUARIO.ID);}
