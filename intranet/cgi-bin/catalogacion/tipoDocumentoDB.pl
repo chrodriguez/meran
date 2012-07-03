@@ -75,3 +75,21 @@ if($tipoAccion eq "LISTAR"){
     print $infoOperacionJSON;
 
 }
+# elsif($tipoAccion eq "AGREGAR_TIPO_DE_DOCUMENTO"){
+
+#     my ($user, $session, $flags)= checkauth(  $input, 
+#                                               $authnotrequired, 
+#                                               {   ui                => 'ANY', 
+#                                                   tipo_documento    => 'ANY', 
+#                                                   accion            => 'CONSULTA', 
+#                                                   entorno           => 'datos_nivel1'}, 
+#                                               'intranet'
+#                                   );
+
+#     my ($Message_arrayref) = C4::AR::TipoDocumento::agregarTipoDocumento($obj);
+#     my $infoOperacionJSON  = to_json $Message_arrayref;
+
+#     C4::AR::Auth::print_header($session);
+#     print $infoOperacionJSON;
+
+# }

@@ -1,57 +1,80 @@
 $(document).ready(function() {
-        mostrarTabla();
-    });
+    mostrarTabla();
+});
 
-    function mostrarTabla(){
-        objAH               = new AjaxHelper(updateMostrarTabla);
-        objAH.debug         = true;
-        objAH.showOverlay   = true;
-        objAH.url           = URL_PREFIX+"/catalogacion/tipoDocumentoDB.pl";
-        objAH.tipoAccion    = 'LISTAR';
+function agregarTipoDeDocumento(){
+    $('#addTipoDocumento').modal();
+}
 
-        objAH.sendToServer();
-    }
+// function agregarTipoDeDocumento(){
+//     objAH               = new AjaxHelper(updateAgregarTipoDeDocumento);
+//     objAH.debug         = true;
+//     objAH.showOverlay   = true;
+//     objAH.url           = URL_PREFIX+"/catalogacion/tipoDocumentoDB.pl";
+//     objAH.tipoAccion    = 'AGREGAR_TIPO_DE_DOCUMENTO';
 
-    function updateMostrarTabla(responseText){
-        $("#resultTipoDocumento").html(responseText);
-    }
+//     objAH.sendToServer();
+// }
 
-    function modificarTipoDocumento(idTipoDoc){
+// function updateAgregarTipoDeDocumento(responseText){
+//     var Messages = JSONstring.toObject(responseText);
+//     setMessages(Messages);
+//     mostrarTabla();
+// }
 
-        objAH               = new AjaxHelper(updateModificarTipoDocumento);
-        objAH.debug         = true;
-        objAH.showOverlay   = true;
-        objAH.idTipoDoc     = idTipoDoc;
-        objAH.url           = URL_PREFIX+"/catalogacion/tipoDocumentoDB.pl";
-        objAH.tipoAccion    = 'SHOW_MOD_TIPO_DOC';
-  
-        objAH.sendToServer();
+function mostrarTabla(){
+    objAH               = new AjaxHelper(updateMostrarTabla);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.url           = URL_PREFIX+"/catalogacion/tipoDocumentoDB.pl";
+    objAH.tipoAccion    = 'LISTAR';
 
-    }
+    objAH.sendToServer();
+}
 
-    function updateModificarTipoDocumento(responseText){
-        $('#accionesTipoDocumento').html(responseText);
-        $('#accionesTipoDocumento').modal();
-    }
+function updateMostrarTabla(responseText){
+    $("#resultTipoDocumento").html(responseText);
+}
 
-    function eliminarTipoDocumento(idTipoDoc){
-        objAH               = new AjaxHelper(updateEliminarTipoDocumento);
-        objAH.debug         = true;
-        objAH.showOverlay   = true;
-        objAH.idTipoDoc     = idTipoDoc;
-        objAH.url           = URL_PREFIX+"/catalogacion/tipoDocumentoDB.pl";
-        objAH.tipoAccion    = 'DEL_TIPO_DOC';
-  
-        objAH.sendToServer();
-    }
+function modificarTipoDocumento(idTipoDoc){
 
-    function updateEliminarTipoDocumento(responseText){
-        var Messages = JSONstring.toObject(responseText);
-        setMessages(Messages);
-        mostrarTabla();
-    }
+    objAH               = new AjaxHelper(updateModificarTipoDocumento);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.idTipoDoc     = idTipoDoc;
+    objAH.url           = URL_PREFIX+"/catalogacion/tipoDocumentoDB.pl";
+    objAH.tipoAccion    = 'SHOW_MOD_TIPO_DOC';
 
-    function guardarModificacion(){
+    objAH.sendToServer();
 
-        $('#modTipoDocumento').submit();
-    }
+}
+
+function updateModificarTipoDocumento(responseText){
+    $('#accionesTipoDocumento').html(responseText);
+    $('#accionesTipoDocumento').modal();
+}
+
+function eliminarTipoDocumento(idTipoDoc){
+    objAH               = new AjaxHelper(updateEliminarTipoDocumento);
+    objAH.debug         = true;
+    objAH.showOverlay   = true;
+    objAH.idTipoDoc     = idTipoDoc;
+    objAH.url           = URL_PREFIX+"/catalogacion/tipoDocumentoDB.pl";
+    objAH.tipoAccion    = 'DEL_TIPO_DOC';
+
+    objAH.sendToServer();
+}
+
+function updateEliminarTipoDocumento(responseText){
+    var Messages = JSONstring.toObject(responseText);
+    setMessages(Messages);
+    mostrarTabla();
+}
+
+function guardarModificacion(){
+    $('#modTipoDocumento').submit();
+}
+
+function guardarTipoDoc(){
+    $('#addTipoDocumentoForm').submit();
+}

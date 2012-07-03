@@ -29,11 +29,27 @@ if($obj->{'tipoAccion'} eq "MOD"){
 	my $codMsg 		= C4::AR::Mensajes::getFirstCodeError($msg_object);
         
     $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje($codMsg,'INTRA');
+
     if (C4::AR::Mensajes::hayError($msg_object)){
         $t_params->{'mensaje_class'} = "alert-error";
     }else{
         $t_params->{'mensaje_class'} = "alert-success";
     }
+
+}elsif($obj->{'tipoAccion'} eq "ADD"){
+
+	my $msg_object 	= C4::AR::TipoDocumento::agregarTipoDocumento($obj,$input->upload('imagen'));
+
+	my $codMsg 		= C4::AR::Mensajes::getFirstCodeError($msg_object);
+        
+    $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje($codMsg,'INTRA');
+
+    if (C4::AR::Mensajes::hayError($msg_object)){
+        $t_params->{'mensaje_class'} = "alert-error";
+    }else{
+        $t_params->{'mensaje_class'} = "alert-success";
+    }
+
 }
 
 $t_params->{'page_sub_title'}   = C4::AR::Filtros::i18n("Tipo de documento");

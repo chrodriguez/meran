@@ -57,6 +57,13 @@
                 </tbody>
              </table>
         [% ELSE %]
-            <div class="alert alert-info">[% 'No hay niguna ayuda MARC' | i18n %]</div>
+            <div class="alert alert-info">[% 'No hay nigun tipo de documento' | i18n %]</div>
         [% END %]
 </fieldset>
+
+<div class="form-actions">
+    <a class="btn btn-success click" onclick="agregarTipoDeDocumento()">
+        <i class="icon-plus-sign icon-white"></i> 
+        [% 'Agregar' | i18n %]
+    </a>
+</div>

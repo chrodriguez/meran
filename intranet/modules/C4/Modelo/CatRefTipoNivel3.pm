@@ -24,6 +24,24 @@ use C4::Modelo::PrefUnidadInformacion;
 use C4::Modelo::CatRefTipoNivel3::Manager;
 use Text::LevenshteinXS;
 
+
+=item
+    Agrega un objeto CatRefTipoNivel3
+=cut
+sub agregar{
+
+    my ($self)   = shift;
+    my ($params) = @_;
+
+    $self->id_tipo_doc($params->{'tipoDocumento'});
+    $self->nombre($params->{'nombre'});
+    $self->disponible(1);
+    $self->enable_nivel3($params->{'nombre'});
+
+    $self->save();
+
+}
+
 sub get_key_value{
     my ($self) = shift;
     

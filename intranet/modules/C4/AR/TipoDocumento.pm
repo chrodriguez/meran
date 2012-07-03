@@ -12,7 +12,54 @@ use vars qw(@EXPORT @ISA);
     getTipoDocumentoById
     modTipoDocumento
     deleteTipoDocumento
+    agregarTipoDocumento
 );
+
+
+=item
+    Agrega un tipo de documento nuevo
+=cut
+sub agregarTipoDocumento{
+
+    my ($params, $postdata) = @_;
+
+    my $tipoDoc             = C4::Modelo::CatRefTipoNivel3->new();
+    my $db                  = $tipoDoc->db;
+    my $msg_object          = C4::AR::Mensajes::create();
+
+    $db->{connect_options}->{AutoCommit} = 0;
+    $db->begin_work;
+
+    eval{
+
+        $tipoDoc->agregar($params);
+
+        #subir imagen
+
+        if($postdata){
+            $msg_object = uploadCoverImage($postdata, $params->{'tipoDocumento'}, $msg_object);
+        } 
+
+
+        $msg_object->{'error'} = 0;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'TD001', 'params' => []});
+        $db->commit;
+
+    };
+
+    if($@){
+
+        C4::AR::Mensajes::printErrorDB($@, 'AM01',"INTRA");
+        $msg_object->{'error'}= 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'TD002', 'params' => [$params->{'campo'}, $params->{'subcampo'}]} ) ;
+
+        $db->rollback;
+   }
+
+
+   return ($msg_object);
+
+}
 
 =item
     Devuelve los tipos de documentos y la cantidad
