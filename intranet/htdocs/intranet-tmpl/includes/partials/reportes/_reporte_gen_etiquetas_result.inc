@@ -112,8 +112,9 @@ $(document).ready(function(){
           <div id="grupo[% nivel1.id1 %]">  
                     <div class="page-header">
                           <h3>[% nivel1.titulo %] <small> ([% nivel1.nomCompleto %]) </small> </h3>
-                    </div>                             
-                    [% PERL %]
+                    </div>    
+                    [% IF nivel3.size > 0 %]                         
+                        [% PERL %]
                           print C4::AR::Filtros::tableHeader(   
                                             id              => "tablaResult[% nivel1.id1 %]",
                                             class           => "",
@@ -123,8 +124,9 @@ $(document).ready(function(){
                                                                 ],
                                       
                                             ) ;
-                      [% END %]
-                      <tbody>
+                        [% END %]
+                        <tbody>
+                 
                                  [% FOREACH n3 IN nivel3 %]
                                       <tr id="[% n3.id %]_tr">
                                               <td><label class="checkbox">
@@ -138,7 +140,10 @@ $(document).ready(function(){
                                       
                                [% END %]
 
-                        </tbody>
+                          </tbody>
+                    [% ELSE %]
+                          <div class="alert alert-info">No se han encontrado resultados</div>
+                    [% END %]
                     </table>
                   </div>  
                 <script type="text/javascript">

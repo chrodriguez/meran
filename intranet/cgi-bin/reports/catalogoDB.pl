@@ -67,7 +67,7 @@ if ($input->param('obj')){
 my $tipoAccion= $obj->{'tipoAccion'}||"";
 
 #     my $orden=$obj->{'orden'}||'fecha';
-$obj->{'ini'} = $obj->{'ini'} || 1;
+$obj->{'ini'} = $obj->{'ini'} || 0;
 my $ini=$obj->{'ini'};
 my $funcion=$obj->{'funcion'};
 my $inicial=$obj->{'inicial'};
