@@ -2,7 +2,9 @@
 [% USE HTML %]
     <div class="hero-unit row" id="search-bar">
       <section>
-	     	<h1 class="medium_font">[% 'Bienvenido ' | i18n %]<small>[% ui.getNombre %]</small></h1>
+	     	<h1 class="medium_font">[% 'Bienvenido ' | i18n %]
+	     		<div style="display:inline"><small>&nbsp; [% ui.getNombre %]</small></div>
+	     	</h1>
 	        <p>
 		        [% IF cant_sanciones > 0 %]
 		              [% INCLUDE 'opac-sanciones.inc' %]
