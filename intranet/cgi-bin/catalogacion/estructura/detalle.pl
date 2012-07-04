@@ -36,6 +36,7 @@ if (!$nivel1){
 #};
 
 
+$t_params->{'template_nivel1'}                      = $nivel1->getTemplate();
 $t_params->{'per_page'}                             = C4::Context->config("cant_grupos_per_query") || 5;
 $t_params->{'ajax'}                                 = $ajax;
 $t_params->{'page_sub_title'}                       = C4::AR::Filtros::i18n("Catalogaci&oacute;n - Detalle del &iacute;tem");
