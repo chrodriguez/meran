@@ -1930,17 +1930,18 @@ sub procesarImportacion {
     foreach my $io_rec (@$registros_importar){
         C4::AR::Debug::debug("Importacion => Procesando registro ".$io_rec->getId());
         
+          eval{
+            $io_rec->aplicarImportacion();
+            $io_rec->setEstado('IMPORTADO');
+            $io_rec->save();
+          };
+      
         my $percent = C4::AR::Utilidades::printAjaxPercent(scalar(@$registros_importar),$count);
 
         $job->progress($percent);
-      eval{
-        $io_rec->aplicarImportacion();
-        $io_rec->setEstado('IMPORTADO');
-        $io_rec->save();
-      };
-      
+
       if ($@){
-       &C4::AR::Mensajes::printErrorDB($@, 'B450',"INTRA");
+       C4::AR::Mensajes::printErrorDB($@, 'B450',"INTRA");
        C4::AR::Debug::debug("Importacion => ERROR en registro ".$io_rec->getId());
        $io_rec->setEstado('ERROR');
        $io_rec->save();

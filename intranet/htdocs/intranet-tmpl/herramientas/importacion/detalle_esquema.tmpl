@@ -63,7 +63,9 @@
 	                             </tr>
 	                        </tbody>
 	                    </table>
-	        <div class="mensajes_informacion" style="clear:both;"> [% table_error_message_esquema %] </div>
+	        [% IF table_error_message_esquema %]
+	        	<div class="alert alert-info" > [% table_error_message_esquema %] </div>
+	        [% END %]
 	    </fieldset>
 	</div>
 

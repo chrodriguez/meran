@@ -283,7 +283,7 @@ sub agregarLogo{
     $db->{connect_options}->{AutoCommit} = 0;
     $db->begin_work;
 
-    #eval{
+    eval{
 
         #borramos algun logo que este, para pisarlo con este nuevo
         deleteLogos($db);
@@ -310,7 +310,7 @@ sub agregarLogo{
             $db->commit;
         }
 
-#    };
+    };
     if ($@){
         # TODO falta definir el mensaje "amigable" para el usuario informando que no se pudo agregar el proveedor
        &C4::AR::Mensajes::printErrorDB($@, 'B461',"INTRA");

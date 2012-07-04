@@ -111,7 +111,7 @@
                         [% PERL %]
                             print C4::AR::Filtros::link_to(   text   => "[% revision.socio.persona.getApeYNom %]",
                                                               url    => "[% url_prefix %]/usuarios/reales/datosUsuario.pl",
-                                                              params => ["nro_socio=[% prestamo.socio.getNro_socio %]"],
+                                                              params => ["nro_socio=[% revision.socio.getNro_socio %]"],
                                                               title  => "[% 'Mostrar Detalle del Usuario' | i18n %]",
                                                               blank  => 1,
                                                         );

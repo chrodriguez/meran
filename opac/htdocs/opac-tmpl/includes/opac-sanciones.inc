@@ -39,7 +39,7 @@
 	                            </div>
 
 	                            <dt class="inline left rightMargin">[% "Desde el: " | i18n %]</dt>
-	                            <dd>[% sancion.getFecha_comienzo_formateada %]<b>[% " hasta el: " | i18n %]</b>[% sancion.getFecha_final_formateada %] ([% sancion.getDias_sancion %] [% "d&iacute;as" | i18n %]) </dd>
+	                            <dd>[% sancion.getFecha_comienzo_formateada %]<b> [% " hasta el: " | i18n %]</b>[% sancion.getFecha_final_formateada %] ([% sancion.getDias_sancion %] [% "d&iacute;as" | i18n %]) </dd>
 								
                             </dl>
                  [% IF !loop.last %]
