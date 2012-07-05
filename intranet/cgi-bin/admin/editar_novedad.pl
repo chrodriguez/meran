@@ -69,7 +69,7 @@ if ($action eq 'editar'){
         if($link !~ /^http/){
             $linksFinal .= " http://" . $link;
         }else{
-            $linksFinal = " " . $link;
+            $linksFinal .= " " . $link;
         }
     }
     

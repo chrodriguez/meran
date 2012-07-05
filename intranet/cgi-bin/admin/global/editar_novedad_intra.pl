@@ -24,17 +24,23 @@ if ($action eq 'editar'){
 
     #--------- links -----------
     my $linksTodos  = $input->param('links');  
-    my @links       = split('\ ', $linksTodos);   
+    my @links       = split(' ', $linksTodos);   
     my $linksFinal  = "";
+
+    C4::AR::Debug::debug("links todos ---------------- " .$linksTodos . " scalar : " . scalar(@links));
+    # C4::AR::Utilidades::printARRAY(@links);
     
     foreach my $link (@links){
     
         if($link !~ /^http/){
             $linksFinal .= " http://" . $link;
         }else{
-            $linksFinal = " " . $link;
+            $linksFinal .= " " . $link;
         }
+        C4::AR::Debug::debug("links final dentro del foreach " . $linksFinal);
     }
+
+    C4::AR::Debug::debug("links ------------------ " . $linksFinal);
     
     $input->param('links', $linksFinal);
     #------- FIN links ---------
