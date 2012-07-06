@@ -47,6 +47,19 @@
               indicator : loaderPath,
 
         });
+        
+        $('.inter').editable('[% url_prefix %]/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl', { 
+              type      : 'text',
+              cancel    : CANCELAR,
+              submit    : OK,
+              tooltip   : EDITABLE_MSG,
+              placeholder: EDITABLE_MSG,
+              style   : 'display: inline',
+              submitdata : {token: "[% token %]", edit: 1, type: 'inter'},
+              indicator : loaderPath,
+
+        });
+        
         $('.nivel').editable('[% url_prefix %]/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl', { 
               type      : 'text',
               cancel    : CANCELAR,
@@ -68,11 +81,10 @@
                                   id              => "visualizacionOpac_table",
                                   class           => "",
                                   selectAll_id    => "",
-                                  columns         => ['[% "Campo"|i18n %]','[% "Subcampo"|i18n %]','[% "Pre separador"|i18n %]',
-                                                    '[% "Vista en OPAC"|i18n %]','[% "Pos separador"|i18n %]','[% "Nivel"|i18n %]',
-                                                    '[% "Acciones"|i18n %]',
+                                  columns         => ['[% "Campo"|i18n %]','[% "Subcampo"|i18n %]',
+                                                        '[% "Inicial"|i18n %]','[% "Separador" | i18n %]','[% "Final"|i18n %]',
+                                                        '[% "Vista en OPAC" | i18n %]','[% "Nivel"|i18n %]','[% "Acciones"|i18n %]',
                                                      ]
-
                                                                     
                                         ) ;
         [% END %]
@@ -83,9 +95,10 @@
                     <tr id="[% campo.getId %]" align="center">
                         <td>[% campo.getCampo %]</td>
                         <td>[% campo.getSubCampo %]</td>
-                        <td class="pre" id="[% campo.id %]">[% campo.getPre %]</td>
+                        <td class="pre" id="[% campo.id %]">[% campo.getPreLimpio %]</td>
+                        <td class="inter" id="[% campo.id %]">[% campo.getInterLimpio %]</td>
+                        <td class="post" id="[% campo.id %]">[% campo.getPostLimpio %]</td>
                         <td class="editable" id="[% campo.id %]">[% campo.getVistaOpac %]</td>
-                        <td class="post" id="[% campo.id %]">[% campo.getPost %]</td>
                         <td id="[% campo.id %]">[% campo.getNivel %]</td>
                         <td >
                             [% PERL %]

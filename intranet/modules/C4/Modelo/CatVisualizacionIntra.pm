@@ -165,16 +165,24 @@ sub setVistaCampo{
     $self->save();
 }
 
+
 sub getPre{
     my ($self) = shift;
     return $self->pre;
+}
+
+sub getPreLimpio{
+    my ($self) = shift;
+    my $tmp= $self->pre;
+    $tmp =~ s/&nbsp;/ /g; #se limpian las entidades HTML
+    return $tmp;
 }
 
 sub setPre{
     my ($self)  = shift;
     my ($pre)   = @_;
     $pre =~ s/ /&nbsp;/g;
-    $self->pre($pre); # se agrega el | para delimitar el string (PROBLEMA DE STRINGS EN MYSQL: QUITA LOS ESPACIOS FINALES)
+    $self->pre($pre); # se modifican los espacios (PROBLEMA DE STRINGS EN MYSQL: QUITA LOS ESPACIOS FINALES)
 }
 
 sub getPost{
@@ -182,11 +190,20 @@ sub getPost{
     return $self->post;
 }
 
+
+sub getPostLimpio{
+    my ($self) = shift;
+    my $tmp= $self->post;
+    $tmp =~ s/&nbsp;/ /g; #se limpian las entidades HTML
+    return $tmp;
+}
+
+
 sub setPost{
     my ($self) = shift;
     my ($post) = @_;
     $post =~ s/ /&nbsp;/g;
-    $self->post($post); # se agrega el | para delimitar el string (PROBLEMA DE STRINGS EN MYSQL: QUITA LOS ESPACIOS FINALES)
+    $self->post($post); # se modifican los espacios (PROBLEMA DE STRINGS EN MYSQL: QUITA LOS ESPACIOS FINALES)
 }
 
 
@@ -195,12 +212,22 @@ sub getInter{
     return $self->inter;
 }
 
+
+sub getInterLimpio{
+    my ($self) = shift;
+    my $tmp= $self->inter;
+    $tmp =~ s/&nbsp;/ /g; #se limpian las entidades HTML
+    return $tmp;
+}
+
 sub setInter{
     my ($self) = shift;
     my ($inter) = @_;
     $inter =~ s/ /&nbsp;/g;
-    $self->inter($inter); # se agrega el | para delimitar el string (PROBLEMA DE STRINGS EN MYSQL: QUITA LOS ESPACIOS FINALES)
+    $self->inter($inter); # se modifican los espacios (PROBLEMA DE STRINGS EN MYSQL: QUITA LOS ESPACIOS FINALES)
 }
+
+
 
 sub getNivel{
     my ($self) = shift;

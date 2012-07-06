@@ -385,15 +385,15 @@ sub editConfiguracion{
     if ($configuracion->[0]){
         if($type eq "pre"){
             $configuracion->[0]->modificarPre($value);
-            return ($configuracion->[0]->getPre());
+            return ($configuracion->[0]->getPreLimpio());
         }
        elsif($type eq "inter"){
             $configuracion->[0]->modificarInter($value);
-            return ($configuracion->[0]->getInter());
+            return ($configuracion->[0]->getInterLimpio());
         }
         elsif($type eq "post"){
             $configuracion->[0]->modificarPost($value);
-            return ($configuracion->[0]->getPost());
+            return ($configuracion->[0]->getPostLimpio());
         }
         elsif($type eq "nivel"){
             $configuracion->[0]->modificarNivel($value);

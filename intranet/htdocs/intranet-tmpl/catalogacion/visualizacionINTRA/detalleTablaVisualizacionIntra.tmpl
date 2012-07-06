@@ -83,7 +83,7 @@
                                   selectAll_id    => "",
                                   columns         => ['[% "Campo"|i18n %]','[% "Subcampo"|i18n %]',
                                                         '[% "Inicial"|i18n %]','[% "Separador" | i18n %]','[% "Final"|i18n %]',
-                                                        '[% "Vista INTRA" | i18n %]','[% "Nivel"|i18n %]','[% "Acciones"|i18n %]',
+                                                        '[% "Vista en INTRA" | i18n %]','[% "Nivel"|i18n %]','[% "Acciones"|i18n %]',
                                                      ]
 
                                         ) ;
@@ -95,9 +95,9 @@
                     <tr id="[% campo.getId %]" align="center">
                         <td>[% campo.getCampo %]</td>
                         <td>[% campo.getSubCampo %]</td>
-                        <td class="pre" id="[% campo.id %]">[% campo.getPre.replace('&nbsp;',' ') %]</td>
-                        <td class="inter" id="[% campo.id %]">[% campo.getInter.replace('&nbsp;',' ') %]</td>
-                        <td class="post" id="[% campo.id %]">[% campo.getPost.replace('&nbsp;',' ') %]</td>
+                        <td class="pre" id="[% campo.id %]">[% campo.getPreLimpio %]</td>
+                        <td class="inter" id="[% campo.id %]">[% campo.getInterLimpio %]</td>
+                        <td class="post" id="[% campo.id %]">[% campo.getPostLimpio %]</td>
                         <td class="editable" id="[% campo.id %]">[% campo.getVistaIntra %]</td>
                         <td id="[% campo.id %]">[% campo.getNivel %]</td>
                         <td style="width: 110px;">
