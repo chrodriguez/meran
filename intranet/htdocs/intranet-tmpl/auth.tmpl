@@ -88,18 +88,18 @@
 	    </div>
 	</div>
 </header>
-<div class="container span100 no-margin padding_nav">
-    <div id="marco_principal" class="container">   
-  		<div id="marco_contenido_datos" class="contenido">
+<div class="container span100 no-margin padding_nav" style="padding-left:0;">
+    <div id="marco_principal" class="container" style="padding-left:0;" >   
+  		<div id="marco_contenido_datos" class="contenido" style="padding:0;">
 	  		<!--  usado como referencia por el MessageHelper -->
-  			<div id="end_top">
+  			<div id="end_top" style="margin:0; padding:0;">
 			    [% IF mensaje %]
 						<div class="alert [% mensaje_class %]">
 						        <strong>[% 'Info' | i18n %]</strong> [% mensaje %]
 						</div>
 			    [% END %]
 				<!-- <div id="content" class="login-form"> -->
-				 <section class="center-section-form" id="section_login">
+				 <fieldset class="textbox" id="section_login">
 					<div class="page-header">
 					    <h1>MERAN <small>[% 'Ingresar a Intranet' | i18n %]</small></h1>
 					</div>	
@@ -138,10 +138,13 @@
 					                <input type="hidden" name="password" id="password">
 					     </form>
 				<!-- content -->
-			</section>
+			</fieldset>
 			</div><!-- end top -->
 		</div><!--marco_contenido_datos -->
 	</div><!--marco_ppal -->
 </div> <!-- container_test -->
-</body>
+
+
+
+
 </html>
