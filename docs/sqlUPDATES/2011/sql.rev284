@@ -1,5 +1,5 @@
-ALTER TABLE `cat_visualizacion_opac` ADD `inter` VARCHAR( 255 ) NULL AFTER `post` ;
-ALTER TABLE `cat_visualizacion_intra` ADD `inter` VARCHAR( 255 ) NULL AFTER `post` ;
+ALTER TABLE `cat_visualizacion_opac` ADD `inter` VARCHAR( 255 ) NULL AFTER `pre` ;
+ALTER TABLE `cat_visualizacion_intra` ADD `inter` VARCHAR( 255 ) NULL AFTER `pre` ;
 
 ALTER TABLE `cat_visualizacion_opac` CHANGE `pre` `pre` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 CHANGE `post` `post` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ;
