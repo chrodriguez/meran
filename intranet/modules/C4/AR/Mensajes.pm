@@ -11,9 +11,9 @@ $VERSION = 0.01;
 @ISA = qw(Exporter);
 
 @EXPORT = qw(
-    &getMensaje
-    &getAccion
-    &encodeUtf8Msj
+    getMensaje
+    getAccion
+    encodeUtf8Msj
 );
 
 #000 - Todo normal
@@ -368,6 +368,7 @@ my %mensajesINTRA = (
     'CA603' => 'Se produjo un error al intentar eliminar un seud&oacute;nimo, repita la operaci&oacute;n',
     'CA604' => 'Se produjo un error al intentar eliminar un sin&oacute;nimo, repita la operaci&oacute;n',
     'CA605' => 'Se produjo un error al intentar actualizar un sin&oacute;nimo, repita la operaci&oacute;n',
+    'CA900' => 'Los registros se han agregado al &iacute;ndice',
     'VO800' => 'Se agreg&oacute; con &eacute;xito el encabezado',
     'VO801' => 'Disculpe, no se pudo ingresar el Encabezado, intente nuevamente',
     'VO802' => 'Disculpe, no se pudo eliminar el Encabezado, intente nuevamente',

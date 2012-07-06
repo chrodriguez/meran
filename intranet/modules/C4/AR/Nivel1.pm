@@ -15,11 +15,12 @@ use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
 
 @EXPORT_OK = qw(
-                  &getAutoresAdicionales
-                  &getColaboradores
-                  &getUnititle
-                  &getNivel1FromId1
+                  getAutoresAdicionales
+                  getColaboradores
+                  getUnititle
+                  getNivel1FromId1
                   checkReferenciaTipoDoc
+                  addRegistroAlIndice
 );
 
 =head1 NAME
@@ -565,6 +566,20 @@ sub getFavoritos{
 
     return ($cantidad,$results);
 
+}
+
+
+sub addRegistroAlIndice{
+     my($array_id1) = @_;
+
+     my $msg_object = C4::AR::Mensajes::create();
+
+     foreach my $id1 (@$array_id1){
+        C4::AR::Sphinx::generar_indice($id1,"R_PARTIAL");
+     }
+    
+     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'CA900', 'params' => []} ) ;
+     return $msg_object;
 }
 
 END { }       

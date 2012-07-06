@@ -2616,3 +2616,24 @@ function validateForm(formID, func){
 
     $("#"+formID).validate();
 }
+
+function addRegistroAlindice(id1){
+    objAH=new AjaxHelper(updateInfoActualizar);
+    objAH.url           = URL_PREFIX+'/reports/catalogoDB.pl';
+    objAH.tipoAccion    =  "ADD_REGISTRO_AL_INDICE";
+    objAH.debug= true;
+    objAH.showOverlay = true;
+    var array_temp = new Array();
+    array_temp[0] = id1;
+    objAH.array_id1= array_temp;
+    objAH.funcion= "changePage";
+    objAH.sendToServer();
+}
+
+function updateInfoActualizar(responseText){
+
+    var Messages=JSONstring.toObject(responseText);
+    setMessages(Messages);
+    setTimeout(refreshMeranPage,5000);
+    
+}

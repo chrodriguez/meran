@@ -10,17 +10,18 @@ use C4::Date;
 use vars qw(@EXPORT_OK @ISA);
 @ISA       = qw(Exporter);
 @EXPORT_OK = qw(
-  &getBusquedasDeUsuario 
-  &getReportFilter
-  &getItemTypes
-  &getConsultasOPAC
-  &getArrayHash
-  &toXLS
-  &registroDeUsuarios
-  &altasRegistro
-  &estantesVirtuales
-  &listarItemsDeInventarioPorSigTop
-  &listarItemsDeInventarioPorBarcode
+  getBusquedasDeUsuario 
+  getReportFilter
+  getItemTypes
+  getConsultasOPAC
+  getArrayHash
+  toXLS
+  registroDeUsuarios
+  altasRegistro
+  estantesVirtuales
+  listarItemsDeInventarioPorSigTop
+  listarItemsDeInventarioPorBarcode
+  reporteRegistrosNoIndexados
 
 );
 
@@ -1147,6 +1148,36 @@ sub registroDeUsuarios {
 	  
 	return ( $rep_busqueda_count, $rep_busqueda );
 
+}
+
+
+sub reporteRegistrosNoIndexados{
+
+    use C4::Modelo::CatRegistroMarcN1;
+    use C4::Modelo::CatRegistroMarcN1::Manager;
+
+	my @filtros;
+    my @resultsarray;
+    my $params;
+	my $db = C4::Modelo::DB::AutoBase1->new_or_cached;
+	
+	my $sth = $db->dbh->prepare('SELECT id FROM cat_registro_marc_n1 WHERE id NOT IN (SELECT id FROM indice_busqueda)');
+
+	$sth->execute();
+	@resultsarray = $sth->fetchrow_array();
+
+	my @id1_array;
+
+    foreach my $id1 (@resultsarray){
+        my %hash_temp = {};
+        $hash_temp{'id1'} = $id1;
+
+        push (@id1_array, \%hash_temp);
+    }
+
+	my ($total_found_paginado, $result) = C4::AR::Busquedas::armarInfoNivel1($params, @id1_array);
+
+	return ( scalar(@$result),$result );
 }
 
 sub estantesVirtuales {

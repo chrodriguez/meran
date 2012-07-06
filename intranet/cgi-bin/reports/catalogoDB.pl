@@ -158,7 +158,36 @@ if($tipoAccion eq "BUSQUEDAS"){
 
       C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
-} elsif ($tipoAccion eq "GEN_ETIQUETAS_PDF"){
+} elsif ($tipoAccion eq "REGISTROS_NO_INDEXADOS"){
+
+      ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
+                                                template_name   => "includes/partials/reportes/_reporte_gen_registros_no_indexados.inc",
+                                                query           => $input,
+                                                type            => "intranet",
+                                                authnotrequired => 0,
+                                                flagsrequired   => {  ui            => 'ANY', 
+                                                                    tipo_documento  => 'ANY', 
+                                                                    accion          => 'CONSULTA', 
+                                                                    entorno         => 'undefined'},
+      });
+
+      my ($cantidad, $array_nivel1)   = C4::AR::Reportes::reporteRegistrosNoIndexados($obj, $session);  
+
+      $t_params->{'REGISTROS'}      = $array_nivel1;
+      $t_params->{'CANT_REGISTROS'} = $cantidad;
+
+      C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
       
-      # C4::AR::PdfGenerator::batchBookLabelGenerator(scalar(@arreglo),\@arreglo);
+}
+elsif ($tipoAccion eq "ADD_REGISTRO_AL_INDICE"){
+
+
+    my $id1_array = $obj->{'array_id1'};
+
+    my ($Messages_arrayref)= C4::AR::Nivel1::addRegistroAlIndice($id1_array);
+
+     my $infoOperacionJSON=to_json $Messages_arrayref;
+
+    C4::AR::Auth::print_header($session);
+  print $infoOperacionJSON;
 }

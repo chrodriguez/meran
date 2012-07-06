@@ -126,14 +126,6 @@
                               </li>
                                 <li>
                                             [% PERL %]
-                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-ok'></i> [% 'Control de autoridades' | i18n %]",
-                                                                                url =>      "[% url_prefix %]/admin/referencias/referencias.pl",
-                                                                                title =>    "[% 'Control de autoridades' | i18n %]"
-                                                                            ) ;
-                                            [% END %]
-                                </li>
-                                <li>
-                                            [% PERL %]
                                                 print C4::AR::Filtros::link_to( text =>     "<i class='icon-eye-open'></i> [% 'Moderar revisiones' | i18n %]",
                                                                                 url =>      "[% url_prefix %]/admin/catalogo/revisiones_pendientes.pl",
                                                                                 title =>    "[% 'Moderar revisiones' | i18n %]"
@@ -466,6 +458,14 @@
                                 [% IF socio_data.object.esAdmin %]
 	                            	<li class="nav-header">[% 'Administraci&oacute;n' | i18n %]</li>	
 		              				<li class="divider"></li>
+                                <li>
+                                            [% PERL %]
+                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-ok'></i> [% 'Tablas de referencia' | i18n %]",
+                                                                                url =>      "[% url_prefix %]/admin/referencias/referencias.pl",
+                                                                                title =>    "[% 'Tablas de referencia' | i18n %]"
+                                                                            ) ;
+                                            [% END %]
+                                </li>
 	                            	<li>
 	                                            [% PERL %]
 	                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-lock'></i> [% 'M&eacute;todos de Autenticaci&oacute;n' | i18n %]",
