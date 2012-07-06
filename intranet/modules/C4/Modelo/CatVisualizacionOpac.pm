@@ -14,9 +14,9 @@ __PACKAGE__->meta->setup(
         vista_opac      => { type => 'varchar', overflow => 'truncate', length => 255 },
         tipo_ejemplar   => { type => 'char', overflow => 'truncate', length => 3 },
         orden           => { type => 'integer', overflow => 'truncate', length => 11, not_null => 1 },
-        pre             => { type => 'varchar', overflow => 'truncate', length => 12 },
-        inter           => { type => 'varchar', overflow => 'truncate', length => 12 },
-        post            => { type => 'varchar', overflow => 'truncate', length => 12 },
+        pre             => { type => 'varchar', overflow => 'truncate', length => 255 },
+        inter           => { type => 'varchar', overflow => 'truncate', length => 255 },
+        post            => { type => 'varchar', overflow => 'truncate', length => 255 },
 	    nivel           => { type => 'integer', overflow => 'truncate', length => 1 },
 	    vista_campo     => { type => 'varchar', overflow => 'truncate', length => 255 },
 	    orden_subcampo  => { type => 'integer', overflow => 'truncate', length => 11, not_null => 1 }
@@ -113,54 +113,39 @@ sub modificarInter{
 
 sub getPre{
     my ($self) = shift;
-
-# C4::AR::Debug::debug("CatVisualizacionIntra => getPre =>|".$self->pre."|");
-#     return $self->pre();
-    my $value = $self->pre;
-    chop($value); #quito el | agregado 
-    return $value;
+    return $self->pre;
 }
 
 sub setPre{
     my ($self)  = shift;
     my ($pre)   = @_;
-#     $self->pre($pre);
-    #$pre =~ s/ /&nbsp;/g;
-
-    $self->pre($pre."|"); # se agrega el | para delimitar el string (PROBLEMA DE STRINGS EN MYSQL: QUITA LOS ESPACIOS FINALES)
+    $pre =~ s/ /&nbsp;/g;
+    $self->pre($pre); # se agrega el | para delimitar el string (PROBLEMA DE STRINGS EN MYSQL: QUITA LOS ESPACIOS FINALES)
 }
 
 sub getPost{
     my ($self) = shift;
-
-    my $value = $self->post;
-    chop($value); #quito el | agregado 
-    return $value;
+    return $self->post;
 }
 
 sub setPost{
     my ($self) = shift;
     my ($post) = @_;
-#     $self->post($post);
-    #$post =~ s/ /&nbsp;/g;
-
-    $self->post($post."|"); # se agrega el | para delimitar el string (PROBLEMA DE STRINGS EN MYSQL: QUITA LOS ESPACIOS FINALES)
+    $post =~ s/ /&nbsp;/g;
+    $self->post($post); # se agrega el | para delimitar el string (PROBLEMA DE STRINGS EN MYSQL: QUITA LOS ESPACIOS FINALES)
 }
 
 
 sub getInter{
     my ($self) = shift;
-
-    my $value = $self->inter;
-    chop($value); #quito el | agregado 
-    return $value;
+    return $self->inter;
 }
 
 sub setInter{
     my ($self) = shift;
     my ($inter) = @_;
-
-    $self->inter($inter."|"); # se agrega el | para delimitar el string (PROBLEMA DE STRINGS EN MYSQL: QUITA LOS ESPACIOS FINALES)
+    $inter =~ s/ /&nbsp;/g;
+    $self->inter($inter); # se agrega el | para delimitar el string (PROBLEMA DE STRINGS EN MYSQL: QUITA LOS ESPACIOS FINALES)
 }
 
 sub getNivel{

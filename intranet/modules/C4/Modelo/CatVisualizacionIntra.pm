@@ -173,9 +173,7 @@ sub getPre{
 sub setPre{
     my ($self)  = shift;
     my ($pre)   = @_;
-#     $self->pre($pre);
     $pre =~ s/ /&nbsp;/g;
-# C4::AR::Debug::debug("CatVisualizacionIntra => setPost =>".$pre."-");
     $self->pre($pre); # se agrega el | para delimitar el string (PROBLEMA DE STRINGS EN MYSQL: QUITA LOS ESPACIOS FINALES)
 }
 
@@ -187,7 +185,6 @@ sub getPost{
 sub setPost{
     my ($self) = shift;
     my ($post) = @_;
-    
     $post =~ s/ /&nbsp;/g;
     $self->post($post); # se agrega el | para delimitar el string (PROBLEMA DE STRINGS EN MYSQL: QUITA LOS ESPACIOS FINALES)
 }
