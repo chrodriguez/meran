@@ -895,5 +895,20 @@ sub getNombreTipoDoc{
     }
 }
 
+sub estaEnIndice{
+    my($self) = shift;
+
+    my @filtros;
+    
+    push (@filtros,(id => {eq => $self->getId1,}));
+
+    my $indice_result = C4::Modelo::IndiceBusqueda::Manager->get_indice_busqueda(
+                                                                                    query => \@filtros,
+                                                                                );
+
+    return ($indice_result->[0]);
+
+}
+
 1;
 

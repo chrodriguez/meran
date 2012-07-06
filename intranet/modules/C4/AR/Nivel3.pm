@@ -647,6 +647,7 @@ sub detalleCompletoINTRA {
     $t_params->{'nivel1_template'}  = $nivel1->getTemplate();
     $t_params->{'tipo_documento'}   = $nivel1->getNombreTipoDoc();
     $t_params->{'id1'}              = $id1;
+    $t_params->{'indexado'}         = $nivel1->estaEnIndice;
     $t_params->{'titulo'}           = $nivel1->getTitulo();    
     $t_params->{'autor'}            = $nivel1->getAutor();
     $t_params->{'cantItemN1'}       = C4::AR::Nivel3::cantNiveles3FromId1($id1,$nivel1->db);

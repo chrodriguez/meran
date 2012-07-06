@@ -128,10 +128,23 @@
 	<fieldset>
 		   	<div class="page-header">
         		<h1>[% titulo %] <small>[% tipo_documento %] - #[% id1 %]</small></h1>
-            	<h2>[% autor %] </h2>	
+            	<h2>[% autor %]</h2>	
            	</div>
-		      
-	
+		 
+    [% IF !indexado %]
+		<div class="alert alert-error">
+			<strong>[% "Atenci&oacute;n" |i18n %]!</strong> [% "El registro no se encuentra en el &iacute;ndice, y no aparece en las b&uacute;squedas" | i18n %].
+			  [% PERL %]
+			          print C4::AR::Filtros::action_button( 
+			                                          button         => "btn btn-success",
+			                                          action       => "agregarAIndice([% id1 %])", 
+			                                          icon         => "icon-white icon-eye-open",
+			                                          title        => "[% 'Agregar al &iacute;ndice' | i18n %]",
+			                                      ) ;
+
+			  [% END %]
+		</div>
+	[% END %]
 		<div id="detalle1" class="detalle1">
 	        <div class="botones_detalle_nivel1">
 	               
