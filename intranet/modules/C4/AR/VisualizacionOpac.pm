@@ -428,6 +428,10 @@ sub editConfiguracion{
             $configuracion->[0]->modificarPre($value);
             return ($configuracion->[0]->getPre());
         }
+        elsif($type eq "inter"){
+            $configuracion->[0]->modificarInter($value);
+            return ($configuracion->[0]->getInter());
+        }
         elsif($type eq "post"){
             $configuracion->[0]->modificarPost($value);
             return ($configuracion->[0]->getPost());

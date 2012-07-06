@@ -535,16 +535,22 @@ sub aplicarImportacion {
     
     if ($n1){
         #Encontré el registro duplicado
-        my $niveles2 = $detalle->{'nivel2'};
-        foreach my $nivel2 (@$niveles2){
-            my $niveles3 = $nivel2->{'nivel3'};
-            foreach my $nivel3 (@$niveles3){
-                my $grupos = $n1->getGrupos();
-                my ($msg_object3) = $self->guardarNivel3DeImportacion($n1->getId1,$grupos->[0]->getId2,$nivel3);
-            }
-        }
-        #Nuevo id1
+	#Nuevo id1
         $id1=$n1->getId1;
+
+	$self->debug("DUPLICADO CON: ".$id1);
+	my $grupos = $n1->getGrupos();
+	my $primer_grupo=$grupos->[0];
+	if($primer_grupo){
+		$self->debug("DUPLICADO CON: ".$primer_grupo->getId2);
+        	my $niveles2 = $detalle->{'nivel2'};
+        	foreach my $nivel2 (@$niveles2){
+            		my $niveles3 = $nivel2->{'nivel3'};
+            		foreach my $nivel3 (@$niveles3){
+                		my ($msg_object3) = $self->guardarNivel3DeImportacion($id1,$primer_grupo->getId2,$nivel3);
+            		}
+       		}
+	}
     }
     else {
     #NO EXISTE SE IMPORTA TODO!!!

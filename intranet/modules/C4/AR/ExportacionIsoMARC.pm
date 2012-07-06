@@ -737,20 +737,20 @@ sub getRecordsFromRange {
     
     
     
-    if ($cgi->param('select_itemtypes') ne "") {
+    if ($params->param('select_itemtypes') ne "") {
         #filtro por tipo de ejemplar
         push (@filtros, ( template => { eq => $params->param('select_itemtypes')}));
     } 
 
 
-    if ( ($cgi->param('registro_ini') ne "") && ($cgi->param('registro_fin') ne "") ){
+    if ( ($params->param('registro_ini') ne "") && ($params->param('registro_fin') ne "") ){
         #filtro por rango de blbionumber
         push (@filtros, ( id => { ge => $params->param('registro_ini')}));
         push (@filtros, ( id => { le => $params->param('registro_fin')}));
     } 
       
-    if ($cgi->param('busqueda')){
-        push (@filtros, ( marc_record => { like => '%'.$search.'%'}));
+    if ($params->param('busqueda')){
+        push (@filtros, ( marc_record => { like => '%'.$params->param('busqueda').'%'}));
     }
      my $registros_array_ref;
     if($params->param('limit')){

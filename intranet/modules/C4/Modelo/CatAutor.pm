@@ -132,7 +132,21 @@ sub getCompleto{
     my $completo = C4::AR::Utilidades::trim($self->completo);
 
     if (!$completo){
-        $completo = $self->getApellido.", ".$self->getNombre;
+        if($self->getApellido){
+            
+            $completo = $self->getApellido;
+            
+            if($self->getNombre){
+                $completo .= ", ".$self->getNombre;
+            }
+            
+        }else{
+            
+            if($self->getNombre){
+                $completo = $self->getNombre;
+            }
+            
+        }
     }
     
     return ($completo);
@@ -252,4 +266,3 @@ sub getAll{
 }
 
 1;
-

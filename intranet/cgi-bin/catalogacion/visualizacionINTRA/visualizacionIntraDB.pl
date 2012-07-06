@@ -33,10 +33,16 @@ if($editing){
     my $value;   
     my $vista_id;                    
 
+
     if($type eq "pre"){
         $value          = $input->param('value');
         $vista_id       = $input->param('id');
         $configuracion  = C4::AR::VisualizacionIntra::editConfiguracion($vista_id,$value,'pre');
+    }
+    elsif($type eq "inter"){
+        $value          = $input->param('value');
+        $vista_id       = $input->param('id');
+        $configuracion  = C4::AR::VisualizacionIntra::editConfiguracion($vista_id,$value,'inter');
     }
     elsif($type eq "post"){
         $value          = $input->param('value');
@@ -274,4 +280,3 @@ else{
     }
     #**************************************************************************************************
 }
-

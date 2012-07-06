@@ -47,6 +47,19 @@
               indicator : loaderPath,
 
         });
+        
+        $('.inter').editable('[% url_prefix %]/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl', { 
+              type      : 'text',
+              cancel    : CANCELAR,
+              submit    : OK,
+              tooltip   : EDITABLE_MSG,
+              placeholder: EDITABLE_MSG,
+              style   : 'display: inline',
+              submitdata : {token: "[% token %]", edit: 1, type: 'inter'},
+              indicator : loaderPath,
+
+        });
+        
         $('.nivel').editable('[% url_prefix %]/catalogacion/visualizacionINTRA/visualizacionIntraDB.pl', { 
               type      : 'text',
               cancel    : CANCELAR,
@@ -68,14 +81,13 @@
                                   id              => "visualizacionIntra_table",
                                   class           => "",
                                   selectAll_id    => "",
-                                  columns         => ['[% "Campo"|i18n %]','[% "Subcampo"|i18n %]','[% "Pre separador"|i18n %]',
-                                                    '[% "Vista INTRA" | i18n %]','[% "Pos separador"|i18n %]','[% "Nivel"|i18n %]',
-                                                    '[% "Acciones"|i18n %]',
+                                  columns         => ['[% "Campo"|i18n %]','[% "Subcampo"|i18n %]',
+                                                        '[% "Inicial"|i18n %]','[% "Separador" | i18n %]','[% "Final"|i18n %]',
+                                                        '[% "Vista INTRA" | i18n %]','[% "Nivel"|i18n %]','[% "Acciones"|i18n %]',
                                                      ]
 
-                                                                    
                                         ) ;
-        [% END %]
+    [% END %]
 
             <tbody id="sortable_subcampo">
                 <input type="checkbox" name="enable_sort_subcampo" id="enable_sort_subcampo" /> Seleccione para Ordenar
@@ -83,9 +95,10 @@
                     <tr id="[% campo.getId %]" align="center">
                         <td>[% campo.getCampo %]</td>
                         <td>[% campo.getSubCampo %]</td>
-                        <td class="pre" id="[% campo.id %]">[% campo.getPre %]</td>
+                        <td class="pre" id="[% campo.id %]">[% campo.getPre.replace('&nbsp;',' ') %]</td>
+                        <td class="inter" id="[% campo.id %]">[% campo.getInter.replace('&nbsp;',' ') %]</td>
+                        <td class="post" id="[% campo.id %]">[% campo.getPost.replace('&nbsp;',' ') %]</td>
                         <td class="editable" id="[% campo.id %]">[% campo.getVistaIntra %]</td>
-                        <td class="post" id="[% campo.id %]">[% campo.getPost %]</td>
                         <td id="[% campo.id %]">[% campo.getNivel %]</td>
                         <td style="width: 110px;">
                             [% PERL %]
