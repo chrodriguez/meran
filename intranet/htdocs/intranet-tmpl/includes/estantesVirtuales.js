@@ -302,11 +302,12 @@ function ordenar(orden){
         }
 
         function updateBuscarContenido(responseText){
-        $('#buscarContBoton').replaceWith("<a id=buscarContBoton class='btn btn-primary click' onclick=buscarContenido();><i class='icon-search icon-white'></i> Buscar</a>"); 
-		$('#resultado_contenido_estante').html(responseText);
-        $('#resultado_contenido_estante').show();
-		zebra('datos_tabla');
-        ocultarLayer();
+            // var infoHash = JSONstring.toObject(responseText);
+            $('#buscarContBoton').replaceWith("<a id=buscarContBoton class='btn btn-primary click' onclick=buscarContenido();><i class='icon-search icon-white'></i> Buscar</a>"); 
+    		$('#resultado_contenido_estante').html(responseText);
+            $('#resultado_contenido_estante').show();
+    		zebra('datos_tabla');
+            ocultarLayer();
         }
 
         function agregarContenidoAEstante(id2 ){

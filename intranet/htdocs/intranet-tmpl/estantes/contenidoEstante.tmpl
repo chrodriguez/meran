@@ -1,4 +1,30 @@
 <script type="text/javascript">
+
+
+    
+$(document).ready(function(){
+    existeEnContenido();
+});
+    
+function existeEnContenido(){
+       $('#tablaResult input').each(
+                function(){
+                    val_contenido= $(this).val();
+                    $('#tablaResultCont input').each(
+                        function(){
+                       
+                            if ($(this).val() == val_contenido){
+                                $('#optionsCheckbox'+$(this).val()).replaceWith("<span id=optionsCheckbox"+$(this).val()+"><a class='btn btn-danger' href='#' onclick=borrarCont("+$(this).val()+","+ $('#input_contenido_id_estante').val()+","+$('#input_contenido_id_padre_estante').val()+"); id=optionsCheckbox"+$(this).val()+">"
+                                  +"<i class='icon-remove icon-white'></i></a></span>");
+
+                            }
+
+                        }
+                    );
+                }
+        );   
+}
+
 function agregarCont(id2){
            $('#optionsCheckbox'+id2).replaceWith("<span id=optionsCheckbox"+id2+"><a class='btn btn-danger' href='#' onclick=borrarCont("+id2+","+ $('#input_contenido_id_estante').val()+","+$('#input_contenido_id_padre_estante').val()+"); id=optionsCheckbox"+id2+">"
               +"<i class='icon-remove icon-white'></i></a></span>");
@@ -32,7 +58,7 @@ function borrarCont(cont, estante, padre){
                   <div class="contenedor_paginador">[% paginador %]</div>  
                   [% PERL %]
                       print C4::AR::Filtros::tableHeader(   
-                                        id              => "tablaResult",
+                                        id              => "tablaResultCont",
                                         class           => "",
                                         selectAll_id    => "",
                                         columns         => ['[% "Titulo" | i18n %]','[% 'Autor' | i18n %]',
@@ -43,7 +69,7 @@ function borrarCont(cont, estante, padre){
                   [% END %]
 
             [% FOREACH SEARCH_RESULTS %]
-                <tr>
+                <tr class="asasdas">
                     <td>
                         [% PERL %]
                             print C4::AR::Filtros::link_to( text =>     "[% titulo %]",
@@ -56,7 +82,7 @@ function borrarCont(cont, estante, padre){
                     <td>
                             [% nomCompleto %]
                     </td>    
-                    <td width="250px"> 
+                    <td class="button_add_content" width="250px"> 
                               <ul class="unstyled">
                              
                                   [% FOREACH grupos %]
@@ -75,6 +101,7 @@ function borrarCont(cont, estante, padre){
                                                                         ) ;
                                                         [% END %]
                                                     </span>
+                                                    <input type='hidden' value='[% id2 %]'>
                                                     <span class="help-inline">
                                                         [% IF edicion%]
                                                                    [% edicion %]
