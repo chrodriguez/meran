@@ -3,30 +3,27 @@
 
     
 $(document).ready(function(){
-    
-
-    // $('#tablaResult tr').each(
-
-    // );
-
-
-    $('#tablaResultCont tr').each(
-
-                function(){
-
-                  alert($('#this').children("a"));
-
-                 //  button_add_content
-                 //     $('#this').find('span').each(
-                 //            function(){
-                 //                   alert($('#this').find('input').val());
-                 //            }
-                 //     );
-                  }
-    );
-    
+    existeEnContenido();
 });
     
+function existeEnContenido(){
+       $('#tablaResult input').each(
+                function(){
+                    val_contenido= $(this).val();
+                    $('#tablaResultCont input').each(
+                        function(){
+                       
+                            if ($(this).val() == val_contenido){
+                                $('#optionsCheckbox'+$(this).val()).replaceWith("<span id=optionsCheckbox"+$(this).val()+"><a class='btn btn-danger' href='#' onclick=borrarCont("+$(this).val()+","+ $('#input_contenido_id_estante').val()+","+$('#input_contenido_id_padre_estante').val()+"); id=optionsCheckbox"+$(this).val()+">"
+                                  +"<i class='icon-remove icon-white'></i></a></span>");
+
+                            }
+
+                        }
+                    );
+                }
+        );   
+}
 
 function agregarCont(id2){
            $('#optionsCheckbox'+id2).replaceWith("<span id=optionsCheckbox"+id2+"><a class='btn btn-danger' href='#' onclick=borrarCont("+id2+","+ $('#input_contenido_id_estante').val()+","+$('#input_contenido_id_padre_estante').val()+"); id=optionsCheckbox"+id2+">"
@@ -72,7 +69,7 @@ function borrarCont(cont, estante, padre){
                   [% END %]
 
             [% FOREACH SEARCH_RESULTS %]
-                <tr>
+                <tr class="asasdas">
                     <td>
                         [% PERL %]
                             print C4::AR::Filtros::link_to( text =>     "[% titulo %]",

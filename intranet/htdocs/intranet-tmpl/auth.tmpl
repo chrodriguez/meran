@@ -117,15 +117,14 @@
 					                  <input type="password" class="input" id="password_plain" name="password_plain">
 					                </div>
 					            </div>
-						 
-						
 							<div class="form-actions">
 							    <button type="submit" class="btn btn-primary" onclick="enviar();">[% 'Iniciar sesi&oacute;n' | i18n %]</button>
 							</div>	
-						</div> 
+						  </div> 
+						 <form action='[% url_prefix %]/mainpage.pl' method="post" name="datosAEnviar" id="datosAEnviar">
 						 [%  IF mostrar_captcha  %]
-						  <div class="alert alert-error" >[% 'Comprobaci&oacute;n de seguridad: Debido a que ha intentado iniciar sesi&oacute;n varias veces con el mismo usuario, deber&aacute; ingresar el siguiente c&oacute;digo de seguridad' | i18n %]</div>
-					     <form action='[% url_prefix %]/mainpage.pl' method="post" name="datosAEnviar" id="datosAEnviar">
+						  		<div class="alert alert-error" style="width:412px;" >[% 'Comprobaci&oacute;n de seguridad: Debido a que ha intentado iniciar sesi&oacute;n varias veces con el mismo usuario, deber&aacute; ingresar el siguiente c&oacute;digo de seguridad' | i18n %]</div>
+					  
 
 					             <div id="captcha"> 
 					               <script src="https://www.google.com/recaptcha/api/challenge?k=[% re_captcha_public_key %]" type="text/javascript"></script>
