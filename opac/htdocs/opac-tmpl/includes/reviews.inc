@@ -76,7 +76,7 @@
                                               
                                                             button        => "btn click btn-success",
                                                             url           => "[% url_prefix %]/opac-detail.pl", 
-                                                            title         => "[% ' Volver al detalle' | i18n %]",
+                                                            title         => " [% ' Volver al detalle' | i18n %]",
                                                             params =>   ["id1=[% id1 %]"],
                                                             icon          => "icon-arrow-left icon-white",
                                                                                   

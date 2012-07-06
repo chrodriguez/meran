@@ -90,7 +90,9 @@
 	                               ) ;
 	                [% END %]
                 </div>
-            <div class="mensajes_informacion" style="clear:both;"> [% table_error_message %] </div>
+             [% IF table_error_message %] 
+                <div class="alert alert-info" style="clear:both;"> [% table_error_message %] </div>
+             [% END%]
         </fieldset>
     </div>
     <div id="add_campo_esquema_result"></div>

@@ -687,7 +687,7 @@ sub marc_record_with_data {
 
 # TODO ver tema de performance, habria q llamar a getVisualizacionFromCampo y levantar toda la conf una vez
 sub as_stringReloaded {
-    my ($field, $itemtype, $params, $index) = @_;
+    my ($field, $itemtype, $params) = @_;
 
     my @subs;
     my $db      = undef;
@@ -713,11 +713,7 @@ sub as_stringReloaded {
         my $text                            = "";
         if($cat_estruct_info_array){
 
-            if((C4::AR::Utilidades::trim($dato) ne "")&&($index != -1)){
-                $text                           = $cat_estruct_info_array->getPre().$dato.$cat_estruct_info_array->getPost();
-            } else {
-                $text                           = $dato;
-            }
+            $text                           = $cat_estruct_info_array->getPre().$dato.$cat_estruct_info_array->getPost();
 
             $hash_temp{'dato'}              = $text;
             $hash_temp{'orden_subcampo'}    = $cat_estruct_info_array->getOrdenSubCampo();
@@ -803,8 +799,9 @@ sub marc_record_to_meran_to_detail_view_as_not_extended {
             $index = C4::AR::Utilidades::getIndexFromArrayByString($campo,\@MARC_result_array);
 
             # veo que separador lleva cada subcampo para el $field dependiendo del campo y subcampo que se este procesando
-            my $field_as_string                 = as_stringReloaded($field, $itemtype, $params, $index);
+            my $field_as_string                 = as_stringReloaded($field, $itemtype, $params);
 
+# C4::AR::Debug::debug("Catalogacion => field_as_string => ".$field_as_string);
             $hash_temp_aux{'dato'}              = ($hash_temp_aux{'dato'} ne "")?$hash_temp_aux{'dato'}.";".$field_as_string:($type eq "INTRA")?$field_as_string." ":$field_as_string;
             $hash_temp_aux{'campo'}             = $campo;
             $hash_temp_aux{'orden'}             = getOrdenFromCampo($campo, $params->{'nivel'}, $itemtype, $type, $db);
