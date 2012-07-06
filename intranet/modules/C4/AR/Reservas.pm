@@ -934,6 +934,13 @@ sub _verificaciones {
     my $barcode             = $params->{'barcode'};
     my $nro_socio           = $params->{'nro_socio'};
     my $tipo_prestamo       = $params->{'tipo_prestamo'};
+    my $es_reserva;
+    if ($params->{'es_reserva'}){
+        $es_reserva     = $params->{'es_reserva'};
+    } else {
+        $es_reserva = undef;
+    }
+
     my $msg_object          = C4::AR::Mensajes::create();
     $msg_object->{'tipo'}   = $tipo;
 
@@ -1018,7 +1025,7 @@ sub _verificaciones {
     }
 
 #Se verfica si el usuario esta sancionado o tiene libros vencidos 
-    my ($status_hash) = C4::AR::Sanciones::permisoParaPrestamo($nro_socio, $tipo_prestamo);
+    my ($status_hash) = C4::AR::Sanciones::permisoParaPrestamo($nro_socio, $tipo_prestamo, $es_reserva);
     
     my $sancionado = $status_hash->{'deudaSancion'};
     my $cod_error  = $status_hash->{'cod_error'};

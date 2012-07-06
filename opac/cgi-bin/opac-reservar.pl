@@ -38,6 +38,7 @@ $params{'id2'}              = $id2;
 $params{'nro_socio'}        = $socio;
 $params{'responsable'}      = $socio;
 $params{'tipo_prestamo'}    = 'DO';
+$params{'es_reserva'}       = 1;
 
 my ($msg_object)            = C4::AR::Reservas::t_reservarOPAC(\%params);
 
