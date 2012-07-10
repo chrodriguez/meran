@@ -25,8 +25,9 @@ $('#keyword').val(suggested);else
 $('#keyword-bar').val(suggested);}
 function busquedaPorKeyword(suggested){var keyword="";if($('#keyword').val())
 keyword=$('#keyword').val();else
-keyword=$('#keyword-bar').val();keyword=keyword.replace(/\&/g,"AND");keyword=keyword.replace(/\|/g,"OR");keyword=keyword.replace(/\-/g,"NOT");objAH_search=new AjaxHelper(updateBusquedaPorKeyword);objAH_search.showOverlay=true;objAH_search.debug=true;objAH_search.url=URL_PREFIX+'/busquedas/busquedasDB.pl';if(suggested){objAH_search.keyword=suggested;objAH_search.from_suggested=1;}else{objAH_search.keyword=keyword;}
-objAH_search.match_mode=$('#match_mode').val();objAH_search.only_available=($('#only_available').attr('checked'))?1:0;objAH_search.tipoAccion='BUSQUEDA_COMBINADA';objAH_search.funcion='changePage_search';objAH_search.sendToServer();}
+keyword=$('#keyword-bar').val();objAH_search=new AjaxHelper(updateBusquedaPorKeyword);objAH_search.showOverlay=true;objAH_search.debug=true;objAH_search.url=URL_PREFIX+'/busquedas/busquedasDB.pl';objAH_search.match_mode=$('#match_mode').val();if(objAH_search.match_mode=="SPH_MATCH_BOOLEAN"){keyword=keyword.replace(/\&/g," AND ");keyword=keyword.replace(/\|/g," OR ");keyword=keyword.replace(/\-/g," NOT ");}
+if(suggested){objAH_search.keyword=suggested;objAH_search.from_suggested=1;}else{objAH_search.keyword=keyword;}
+objAH_search.only_available=($('#only_available').attr('checked'))?1:0;objAH_search.tipoAccion='BUSQUEDA_COMBINADA';objAH_search.funcion='changePage_search';objAH_search.sendToServer();}
 function updateBusquedaPorKeyword(responseText){updateInfoBusquedas(responseText);var keyword="";if($('#keyword').val())
 keyword=$('#keyword').val();else
 keyword=$('#keyword-bar').val();if(ORDEN){cambiarSentidoOrd();}}
