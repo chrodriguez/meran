@@ -36,6 +36,14 @@ var HASH_MESSAGES           = new Array();
 var AGREGAR_COMPLETO        = 1; //flag para verificar si se esta por agregar un documento desde el nivel 1 o no
 var ID_COMPONENTE           = 1;
 var scroll                  = 'N1';
+var FATAL_ERROR             = 0;
+
+function clear_fatal_error(){
+    $('#nivel1Tabla').html("");
+    $('#nivel2Tabla').html("");
+    $('#nivel3Tabla').html("");
+    $('#nivel1').html("");
+}
 
 function agregarAHash (HASH, name, value){
     HASH[name] = value;
@@ -383,15 +391,23 @@ function mostrarEstructuraDelNivel1(){
 
 
 function updateMostrarEstructuraDelNivel1(responseText){
-    _clearContentsEstructuraDelNivel();
-    _showAndHiddeEstructuraDelNivel(1);
-    //proceso la info del servidor y se crean las componentes en el cliente
-    //ademas se carga el arreglo MARC_OBJECT_ARRAY donde se hace el mapeo de componente del cliente y dato
-    var objetos_array = JSONstring.toObject(responseText);
-    procesarInfoJson(objetos_array, null); 
-    //asigno el handler para el validador
-    validateForm('formNivel1',guardarModificarDocumentoN1);
-    scrollTo('nivel1Tabla');  
+    //se verifica que exista la configuaracion del catalogo
+    var info        = JSONstring.toObject(responseText);
+    var Messages    = info.Message_arrayref;
+    if(setMessages(Messages) == 1){
+        clear_fatal_error();
+    } else {
+
+        _clearContentsEstructuraDelNivel();
+        _showAndHiddeEstructuraDelNivel(1);
+        //proceso la info del servidor y se crean las componentes en el cliente
+        //ademas se carga el arreglo MARC_OBJECT_ARRAY donde se hace el mapeo de componente del cliente y dato
+        var objetos_array = JSONstring.toObject(responseText);
+        procesarInfoJson(objetos_array, null); 
+        //asigno el handler para el validador
+        validateForm('formNivel1',guardarModificarDocumentoN1);
+        scrollTo('nivel1Tabla');  
+    }
 }
 
 function mostrarEstructuraDelNivel2(){
@@ -414,25 +430,33 @@ function mostrarEstructuraDelNivel2(){
 }
 
 function updateMostrarEstructuraDelNivel2(responseText){
-    _clearContentsEstructuraDelNivel();
-    _showAndHiddeEstructuraDelNivel(2);
-    
-    //proceso la info del servidor y se crean las componentes en el cliente
-    var objetos_array = JSONstring.toObject(responseText);
-    procesarInfoJson(objetos_array, null); 
-    //asigno el handler para el validador
-    validateForm('formNivel2',guardarModificarDocumentoN2);
-    
-    if(!MODIFICAR){
-        if(ID_TIPO_EJEMPLAR == 0){
-            $('#'+_getIdComponente('910','a')).val($('#tipo_nivel3_id').val());
-        } else {
-            //dejo seleccionado el tipo de documento segun el esquema  
-            $('#'+_getIdComponente('910','a')).val(ID_TIPO_EJEMPLAR);
-        } 
-    }      
-    
-     scrollTo('nivel2Tabla');   
+    //se verifica que exista la configuaracion del catalogo
+    var info        = JSONstring.toObject(responseText);
+    var Messages    = info.Message_arrayref;
+    if(setMessages(Messages) == 1){
+        clear_fatal_error();
+    } else {
+
+        _clearContentsEstructuraDelNivel();
+        _showAndHiddeEstructuraDelNivel(2);
+        
+        //proceso la info del servidor y se crean las componentes en el cliente
+        var objetos_array = JSONstring.toObject(responseText);
+        procesarInfoJson(objetos_array, null); 
+        //asigno el handler para el validador
+        validateForm('formNivel2',guardarModificarDocumentoN2);
+        
+        if(!MODIFICAR){
+            if(ID_TIPO_EJEMPLAR == 0){
+                $('#'+_getIdComponente('910','a')).val($('#tipo_nivel3_id').val());
+            } else {
+                //dejo seleccionado el tipo de documento segun el esquema  
+                $('#'+_getIdComponente('910','a')).val(ID_TIPO_EJEMPLAR);
+            } 
+        }      
+        
+        scrollTo('nivel2Tabla');   
+    }
 }
 
 
@@ -467,36 +491,44 @@ function mostrarEstructuraDelNivel3(tipo_documento){
 }
 
 function updateMostrarEstructuraDelNivel3(responseText){
-    _clearContentsEstructuraDelNivel();
-    _showAndHiddeEstructuraDelNivel(3);
-      TAB_INDEX= 0;
-    //proceso la info del servidor y se crean las componentes en el cliente
-    var objetos_array = JSONstring.toObject(responseText);
-
-    procesarInfoJson(objetos_array, null); 
-    scrollTo('nivel3Tabla');
-    
-    if($('#cantEjemplares').val() > 0) {
-        $('#'+_getIdComponente('995','f')).removeClass('required');
-    } 
-    //asigno el handler para el validador
-    validateForm('formNivel3',guardarModificarDocumentoN3);
-    if(MODIFICAR == 0){
-        //si se esta agregando se muestra el input para la cantidad    
-        var id = _getIdComponente('995','f');
-        $('#'+id).click(function(){
-            registrarToggleOnChangeForBarcode(id);
-        });
-    }
-
-// TODO fatlta ver esto!!!!!!!
-    if(EDICION_N3_GRUPAL == 0){
-    //no se trata de una edicion grupal se agregan las reglas para validar los campos, sino se permiten campos nulos
-//         addRules();
+    //se verifica que exista la configuaracion del catalogo
+    var info        = JSONstring.toObject(responseText);
+    var Messages    = info.Message_arrayref;
+    if(setMessages(Messages) == 1){
+        clear_fatal_error();
     } else {
-        $("#nivel3Tabla").before("<div class='alert alert-heading'>Registro: <a href='detalle.pl?id1=" + REGISTRO_ID + "&amp;token='" + TOKEN + "' title='Ver Detalle del Registro'>" + REGISTRO_ID + "</a> <br> Complete sólo los campos que desee modificar</div>");  
+
+        _clearContentsEstructuraDelNivel();
+        _showAndHiddeEstructuraDelNivel(3);
+          TAB_INDEX= 0;
+        //proceso la info del servidor y se crean las componentes en el cliente
+        var objetos_array = JSONstring.toObject(responseText);
+
+        procesarInfoJson(objetos_array, null); 
+        scrollTo('nivel3Tabla');
         
-        
+        if($('#cantEjemplares').val() > 0) {
+            $('#'+_getIdComponente('995','f')).removeClass('required');
+        } 
+        //asigno el handler para el validador
+        validateForm('formNivel3',guardarModificarDocumentoN3);
+        if(MODIFICAR == 0){
+            //si se esta agregando se muestra el input para la cantidad    
+            var id = _getIdComponente('995','f');
+            $('#'+id).click(function(){
+                registrarToggleOnChangeForBarcode(id);
+            });
+        }
+
+    // TODO fatlta ver esto!!!!!!!
+        if(EDICION_N3_GRUPAL == 0){
+        //no se trata de una edicion grupal se agregan las reglas para validar los campos, sino se permiten campos nulos
+    //         addRules();
+        } else {
+            $("#nivel3Tabla").before("<div class='alert alert-heading'>Registro: <a href='detalle.pl?id1=" + REGISTRO_ID + "&amp;token='" + TOKEN + "' title='Ver Detalle del Registro'>" + REGISTRO_ID + "</a> <br> Complete sólo los campos que desee modificar</div>");  
+            
+            
+        }
     }
 }
 

@@ -359,6 +359,7 @@ my %mensajesINTRA = (
     'U612' => 'Se modifico el esquema correctamente',
     'U613' => 'Disculpe, error al intentar agregar la configuraci&oacute;n (campo, subcampo, perfil) (*?*, *?*, *?*). Esta configuraci&oacute;n ya existe',
     'U614' => 'No existe el registro que se intenta acceder.',
+    'U615' => 'No existe configuraci&oacute;n para el cat&aacute;logo, para el nivel *?*, equema *?*',
     'U900' => 'El usuario ha sido eliminado del sistema.',
     'C500' => 'Los items fueron guardados correctamente.',
     'C501' => 'Se produjo un error al intentar guardar los datos del item, repita la operacion.',

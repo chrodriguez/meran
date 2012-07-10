@@ -372,10 +372,25 @@ elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL"){
     #Se muestran la estructura de catalogacion segun el nivel pasado por parametro
     my ($cant, $catalogaciones_array_ref)   = C4::AR::Catalogacion::getEstructuraSinDatos($obj);
 
-    my $infoOperacionJSON                   = to_json($catalogaciones_array_ref);
 
-	C4::AR::Auth::print_header($session);
-	print $infoOperacionJSON;
+    if($cant > 0){
+        my $infoOperacionJSON                   = to_json($catalogaciones_array_ref);
+
+        C4::AR::Auth::print_header($session);
+        print $infoOperacionJSON;    
+    } else {
+
+        my %info;
+        my $msg_object          = C4::AR::Mensajes::create();
+        $msg_object->{'error'}  = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U615', 'params' => [$obj->{'nivel'}, $obj->{'id_tipo_doc'}]} ) ;
+
+        $info{'Message_arrayref'}   = $msg_object;
+
+        C4::AR::Auth::print_header($session);
+        print to_json \%info;
+    }
+    
 }
 
 elsif($tipoAccion eq "MOSTRAR_ESTRUCTURA_DEL_NIVEL_CON_DATOS"){
