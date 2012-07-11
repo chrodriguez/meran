@@ -151,6 +151,7 @@ my %mensajesINTRA = (
     '000' => '',
     'CB001' => 'El formato de inventario para el tipo de documento (*?*) se ha acualizado.',
     'CB002' => '[ERROR] El formato de inventario para el tipo de documento (*?*) no se ha podido acualizar.',
+    'CB003' => 'El formato de inventario para el tipo de documento (*?*) ha vuelto a su valor por defecto.',
     'R001' => 'El usuario lleg&oacute; al m&acute;ximo de reservas permitidas (*?*).',
     'R002' => 'El usuario ya tiene una reserva para el mismo tipo de prestamo ',
     'R003' => 'El usuario lleg&oacute; al m&acute;ximo de reservas en espera (*?*).',

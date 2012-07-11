@@ -16,7 +16,7 @@ my $tipo= $obj->{'tipo'};
 if($tipo eq "VER_ESTANTES"){
 
     my ($template, $session, $t_params) = get_template_and_user(
-            {template_name => "estantes/verEstante.inc",
+            {template_name => "includes/verEstante.inc",
                     query => $input,
                     type => "intranet",
                     authnotrequired => 0,

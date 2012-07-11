@@ -1569,7 +1569,7 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
         $string_suggested = getSuggestion($string_utf8_encoded,$total_found,$obj_for_log,$sphinx_options);
     }
     
-  
+  C4::AR::Debug::debug(scalar(@$resultsarray));
     return ($total_found, $resultsarray,$string_suggested);
 }
 
