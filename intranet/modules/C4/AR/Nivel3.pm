@@ -612,11 +612,6 @@ sub detalleCompletoINTRA {
             $hash_nivel2->{'portada_edicion_local'}     = C4::AR::PortadaNivel2::getPortadasEdicion($hash_nivel2->{'id2'});
             $hash_nivel2->{'edicion'}                   = $nivel2_array_ref->[$i]->getEdicion();
             #para los nav-tabs
-            $hash_nivel2->{'anio_publicacion'}          = $nivel2_array_ref->[$i]->getAnio_publicacion();
-            $hash_nivel2->{'volumen'}                   = $nivel2_array_ref->[$i]->getVolumen();
-            
-            #si tiene volumen se le concatena una "v. ". HARDCODED!!
-            if($hash_nivel2->{'volumen'}){ $hash_nivel2->{'volumen'} = "v. " . $hash_nivel2->{'volumen'}; }
             
             #Para el google book preview
             $hash_nivel2->{'isbn'}        		        = C4::AR::Utilidades::trim($nivel2_array_ref->[$i]->getISBN);
@@ -848,10 +843,7 @@ sub detalleCompletoOPAC{
             $hash_nivel2->{'tipo_documento'}            = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getNombre();
             $hash_nivel2->{'disponible'}                = $nivel2_array_ref->[$i]->getTipoDocumentoObject()->getDisponible();
             $hash_nivel2->{'isbn'}        		        = C4::AR::Utilidades::trim($nivel2_array_ref->[$i]->getISBN);
-            #para los nav-tabs
-            $hash_nivel2->{'año_publicacion'}           = $nivel2_array_ref->[$i]->getAnio_publicacion;
-            $hash_nivel2->{'volumen'}                   = $nivel2_array_ref->[$i]->getVolumen;
-            if($hash_nivel2->{'volumen'}){ $hash_nivel2->{'volumen'} = "v. " . $hash_nivel2->{'volumen'}; }
+
             if(($nivel2_array_ref->[$i]->getISSN)&&(!$t_params->{'issn'})){
 			#Se supone que no cambian dentro de la misma publicación seriada, se toma solo el primero
 				$t_params->{'issn'}        				= C4::AR::Utilidades::trim($nivel2_array_ref->[$i]->getISSN);
