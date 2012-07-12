@@ -918,9 +918,9 @@ sub getNavString{
     
     switch ($tipo_doc){
     	case 'REV' {
-            my $anio=$self->getAnioRevista;
-            my $vol=$self->getVolumen;
-            my $num=$self->getNumeroRevista;
+            my $anio = C4::AR::Utilidades::trim($self->getAnioRevista);
+            my $vol  = C4::AR::Utilidades::trim($self->getVolumen);
+            my $num  = C4::AR::Utilidades::trim($self->getNumeroRevista);
             if ($anio){
                  $string .= $anio;
                 }
@@ -934,9 +934,9 @@ sub getNavString{
                 }
             }
         else { #Caso por defecto => LIBRO
-            my $anio=$self->getAnio_publicacion;
-            my $vol=$self->getVolumen;
-            my $ed=$self->getEdicion;
+            my $anio = C4::AR::Utilidades::trim($self->getAnio_publicacion);
+            my $vol  = C4::AR::Utilidades::trim($self->getVolumen);
+            my $ed   = C4::AR::Utilidades::trim($self->getEdicion);
             
             if ($vol){
                  $string .= "v." . $vol;
