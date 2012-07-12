@@ -14,8 +14,8 @@ function existeEnContenido(){
                         function(){
                        
                             if ($(this).val() == val_contenido){
-                                $('#optionsCheckbox'+$(this).val()).replaceWith("<span id=optionsCheckbox"+$(this).val()+"><a class='btn btn-danger' href='#' onclick=borrarCont("+$(this).val()+","+ $('#input_contenido_id_estante').val()+","+$('#input_contenido_id_padre_estante').val()+"); id=optionsCheckbox"+$(this).val()+">"
-                                  +"<i class='icon-remove icon-white'></i></a></span>");
+                                $('#optionsCheckbox'+$(this).val()).replaceWith("<span id=optionsCheckbox"+$(this).val()+"><a class='btn btn-danger' href='#' title='Eliminar de estante' onclick=borrarCont("+$(this).val()+","+ $('#input_contenido_id_estante').val()+","+$('#input_contenido_id_padre_estante').val()+"); id=optionsCheckbox"+$(this).val()+">"
+                                  +"<i class='icon-trash icon-white'></i></a></span>");
 
                             }
 
@@ -26,8 +26,8 @@ function existeEnContenido(){
 }
 
 function agregarCont(id2){
-           $('#optionsCheckbox'+id2).replaceWith("<span id=optionsCheckbox"+id2+"><a class='btn btn-danger' href='#' onclick=borrarCont("+id2+","+ $('#input_contenido_id_estante').val()+","+$('#input_contenido_id_padre_estante').val()+"); id=optionsCheckbox"+id2+">"
-              +"<i class='icon-remove icon-white'></i></a></span>");
+           $('#optionsCheckbox'+id2).replaceWith("<span id=optionsCheckbox"+id2+"><a class='btn btn-danger' title='Eliminar de estante' href='#' onclick=borrarCont("+id2+","+ $('#input_contenido_id_estante').val()+","+$('#input_contenido_id_padre_estante').val()+"); id=optionsCheckbox"+id2+">"
+              +"<i class='icon-trash icon-white'></i></a></span>");
             $('#eliminar_uno').val(id2) ;
             agregarContenidoAEstante(id2);
             $('#eliminar_uno').val('');
@@ -37,7 +37,7 @@ function agregarCont(id2){
 
 function borrarCont(cont, estante, padre){
 //       $('#optionsCheckbox'+cont).replaceWith("<input type=button class='btn btn-info' onclick=agregarCont("+cont+"); id=optionsCheckbox"+cont+">");
-      $('#optionsCheckbox'+cont).replaceWith("<span id=optionsCheckbox"+cont+"><a class='btn btn-success' href='#' onclick=agregarCont("+cont+"); id=optionsCheckbox"+cont+"><i class='icon-plus icon-white'></i></a></span>");
+      $('#optionsCheckbox'+cont).replaceWith("<span id=optionsCheckbox"+cont+"><a class='btn btn-success' title='Agregar a estante' href='#' onclick=agregarCont("+cont+"); id=optionsCheckbox"+cont+"><i class='icon-plus icon-white'></i></a></span>");
       $('#eliminar_uno').val(cont);
       borrarContenido(cont, estante,padre);
       $('#eliminar_uno').val('');
@@ -94,7 +94,7 @@ function borrarCont(cont, estante, padre){
                                                         [% PERL %]            
                                                               print C4::AR::Filtros::action_button(
                                                                                                     button  => "btn btn-success",
-                                                                                                    title   => "",
+                                                                                                    alt_text  => "[% 'Agregar a estante' | i18n %]",
                                                                                                     icon    => "icon-plus icon-white",
                                                                                                     action  => 'agregarCont([% id2 %]);',
                                                                                                  
