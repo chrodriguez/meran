@@ -11,6 +11,8 @@ apt-get install libmarc-crosswalk-dublincore-perl libmarc-xml-perl -y
 apt-get install libimage-size-perl -y
 apt-get install libdatetime-format-mysql-perl -y
 apt-get install libfile-libmagic-perl -y
+apt-get install libxml-checker-perl -y
+apt-get install libdbix-xml-rdb-perl -y
 apt-get install libmoosex-types-perl libtest-compile-perl -y
 # OTROS AUN NO!!!
 apt-get install make gcc -y
