@@ -465,7 +465,7 @@ sub getDatosFromReglasMatcheo{
 sub getNiveles {
      my ($self)   = shift;
 
-    my $niveles= C4::AR::ImportacionIsoMARC::getNivelesFromRegistro($self->getId);
+    my $niveles = C4::AR::ImportacionIsoMARC::getNivelesFromRegistro($self->getId);
     return  $niveles;
 }
 
@@ -480,7 +480,7 @@ sub getDetalleCompleto{
 
 sub aplicarImportacion {
      my ($self)   = shift;
-
+    
      my $detalle = $self->getDetalleCompleto();
 	
 =begin DETALLE_REGISTRO
@@ -529,35 +529,41 @@ sub aplicarImportacion {
 												 |_
         
 =cut
+    
+    
+    $self->debug("IMPORTANDO");
+    
     my ($msg_object, $id1);
    #SE CHEQUEA QUE NO EXISTA EL REGISTRO PRIMERO, SI EXISTE SE AGREGAN LOS EJEMPLARES
     my $n1 = $self->buscarRegistroDuplicado($detalle);
     
     if ($n1){
         #Encontré el registro duplicado
-	#Nuevo id1
+        #Nuevo id1
         $id1=$n1->getId1;
 
-	$self->debug("DUPLICADO CON: ".$id1);
-	my $grupos = $n1->getGrupos();
-	my $primer_grupo=$grupos->[0];
-	if($primer_grupo){
-		$self->debug("DUPLICADO CON: ".$primer_grupo->getId2);
-        	my $niveles2 = $detalle->{'nivel2'};
-        	foreach my $nivel2 (@$niveles2){
-            		my $niveles3 = $nivel2->{'nivel3'};
-            		foreach my $nivel3 (@$niveles3){
-                		my ($msg_object3) = $self->guardarNivel3DeImportacion($id1,$primer_grupo->getId2,$nivel3);
-            		}
-       		}
-	}
+    $self->debug("DUPLICADO CON: ".$id1);
+    my $grupos = $n1->getGrupos();
+    my $primer_grupo=$grupos->[0];
+    if($primer_grupo){
+        $self->debug("DUPLICADO CON: ".$primer_grupo->getId2);
+            my $niveles2 = $detalle->{'nivel2'};
+            foreach my $nivel2 (@$niveles2){
+                    my $niveles3 = $nivel2->{'nivel3'};
+                    foreach my $nivel3 (@$niveles3){
+                        my ($msg_object3) = $self->guardarNivel3DeImportacion($id1,$primer_grupo->getId2,$nivel3);
+                    }
+            }
     }
-    else {
+} else {
     #NO EXISTE SE IMPORTA TODO!!!
+        
+        $self->debug("NO EXISTE SE IMPORTA TODO!!! ");
+       
        #Proceso el nivel 1 agregando las referencias que no existen!!
        ($msg_object, $id1) = $self->guardarNivel1DeImportacion($detalle);
        
-       C4::AR::Debug::debug("Nivel 1 creado ".$id1);
+       C4::AR::Debug::debug("Nivel 1 creado ?? ".$msg_object->{'error'}." id=".$id1);
        
        if (!$msg_object->{'error'}){
            
@@ -566,7 +572,7 @@ sub aplicarImportacion {
         foreach my $nivel2 (@$niveles2){
             
           my ($msg_object2,$id1,$id2) = $self->guardarNivel2DeImportacion($id1,$nivel2);
-          
+           C4::AR::Debug::debug("Nivel 2 creado ?? ".$msg_object2->{'error'}." id=".$id2);
             if (!$msg_object2->{'error'}){
                 
               my $niveles3 = $nivel2->{'nivel3'};
@@ -574,7 +580,7 @@ sub aplicarImportacion {
               foreach my $nivel3 (@$niveles3){
                   
                 my ($msg_object3) = $self->guardarNivel3DeImportacion($id1,$id2,$nivel3);
-                
+                C4::AR::Debug::debug("Nivel 3 creado ?? ".$msg_object3->{'error'});
               }
              } 
           }
@@ -629,7 +635,7 @@ sub guardarNivel1DeImportacion{
     my ($self)   = shift;
     my ($nivel1) = @_;
     
-	 my $infoArrayNivel1 =  $self->prepararNivelParaImportar($nivel1->{'marc_record'},$nivel1->{'nivel1_template'},1);
+    my $infoArrayNivel1 =  $self->prepararNivelParaImportar($nivel1->{'marc_record'},$nivel1->{'nivel1_template'},1);
    
    my $params_n1;
     $params_n1->{'id_tipo_doc'} = $nivel1->{'nivel1_template'};
@@ -754,7 +760,7 @@ sub prepararNivelParaImportar{
                 my $subcampo          = $subfield->[0];
                 my $dato              = $subfield->[1];
                 my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo( $hash_temp{'campo'}, $subcampo, $itemtype, $nivel);
-                if($estructura->getReferencia){
+                if(($estructura)&&($estructura->getReferencia)){
                     #es una referencia, yo tengo el dato nomás (luego se verá si hay que crear una nueva o ya existe en la base)
                     my ($clave_tabla_referer_involved,$tabla_referer_involved) =  C4::AR::Referencias::getTablaInstanceByAlias($estructura->infoReferencia->getReferencia);
                     my ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getAll(1,0,0,$dato);
