@@ -288,9 +288,9 @@
     [% IF cantidad > 0 %]
              [% PERL %]
                  print C4::AR::Filtros::tableHeader(   
-                                                         id              => "tablaResult",
-                                                         class           => "table table-bordered",
-                                                         columns         => ['[% "Tipo"|i18n %]','[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]',
+                                                         id             => "tablaResult",
+                                                         class          => "table table-bordered",
+                                                         columns        => ['[% "Tipo"|i18n %]','[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]',
                                                                              '[% "Edici&oacute;n"|i18n %]','[% "Disponibilidad"|i18n %]', '[% "Valoraci&oacute;n" | i18n %]',
                                                                              [% IF socio_data.usr_permisos_opac %]'[% "Favoritos" | i18n %]'[% END %]
                                                                             ],
@@ -459,48 +459,70 @@
 	                         [% END %]
                         </td>
                         [% IF socio_data.usr_permisos_opac %]
-	                        <td id="fav_[% NIVEL.id1 %]">
-	                            [% IF NIVEL.esta_en_favoritos %]
-				                    [% PERL %]
-				                      print C4::AR::Filtros::action_button( 
-				                                                      button    => "btn btn-info click",
-				                                                      action    =>  'deleteFavorite([% NIVEL.id1 %],"fav_[% NIVEL.id1 %]",1);',
-				                                                      icon      => "icon-minus icon-white",
-				                                                      disabled	=> 1,
-				                                                  ) ;
-				
-				                    [% END %]
-	                            [% ELSE %]
-				                    [% PERL %]
-				                      print C4::AR::Filtros::action_button( 
-				                                                      button    => "btn btn-primary click",
-				                                                      action    => 'addFavorite([% NIVEL.id1 %],"fav_[% NIVEL.id1 %]");',
-				                                                      id		=> "button_[% id1 %]",
-				                                                      icon      => "icon-heart icon-white",
-				                                                  ) ;
-				
-				                    [% END %]
-	                            [% END %]
-	                        </td>
+                        <td id="fav_[% NIVEL.id1 %]">
+                            [% IF NIVEL.esta_en_favoritos %]
+			                    [% PERL %]
+			                      print C4::AR::Filtros::action_button( 
+			                                                      button    => "btn btn-info click",
+			                                                      action    =>  'deleteFavorite([% NIVEL.id1 %],"fav_[% NIVEL.id1 %]",1);',
+			                                                      icon      => "icon-minus icon-white",
+			                                                      disabled	=> 1,
+			                                                  ) ;
+			
+			                    [% END %]
+                            [% ELSE %]
+			                    [% PERL %]
+			                      print C4::AR::Filtros::action_button( 
+			                                                      button    => "btn btn-primary click",
+			                                                      action    => 'addFavorite([% NIVEL.id1 %],"fav_[% NIVEL.id1 %]");',
+			                                                      id		=> "button_[% id1 %]",
+			                                                      icon      => "icon-heart icon-white",
+			                                                  ) ;
+			
+			                    [% END %]
+                            [% END %]
+                        </td>
 	                     [% END %]
                     </tr>
                 [% END %]
              </tbody>
         </table>
         <div class="contenedor_paginador">[% paginador %]</div>
+         <div class="form-actions" id="actions_ejemplares" style="margin-bottom: 0;">
+               <td>
+                  [% PERL %]
+                      	print C4::AR::Filtros::action_set_button(    
+                            button          => 'btn btn-primary',
+                            title => "[% 'Acciones' | i18n %]",
+                            action => "exportar()",
+                            icon => "icon-white icon-edit",
+                                                
+                            actions         => [
+                                                {title => "Exportar a PDF", 
+                                                 action=>"generarVariasEtiquetas([% id2 %])", 
+                                                
+                                                }
+                                                ],
+                             popover       => {text=>'Esta acci&oacute;n se aplica para todos los ejemplares ', 
+                                               title=> 'Atenci&oacute;n'}
+  
+                              ) ;
+                  [% END %]
+               </td>
+	         </div>       
   	[% END %]
   [% ELSE %]
     
-    [% IF no_content_message %]
-        <div class="alert alert-info"> [% no_content_message %] </div>  
-    [% ELSE %]
-        <div class="alert alert-info"> [% 'Nada que mostrar.' | i18n %] </div>
-    [% END %]
-    <br />
+	    [% IF no_content_message %]
+	        <div class="alert alert-info"> [% no_content_message %] </div>  
+	    [% ELSE %]
+	        <div class="alert alert-info"> [% 'Nada que mostrar.' | i18n %] </div>
+	    [% END %]
+	    	<br />
 
-	<div class="page-header">
-	    <h1>Meran <small>[% 'Repetir la b&uacute;squeda con otros criterios' | i18n %]</small></h1>
-	</div> 
+		<div class="page-header">
+		    <h1>Meran <small>[% 'Repetir la b&uacute;squeda con otros criterios' | i18n %]</small></h1>
+		</div> 
   
     
     [% INCLUDE 'opac-advanced_search.inc' %]
