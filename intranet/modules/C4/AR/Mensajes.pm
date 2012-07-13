@@ -531,6 +531,12 @@ my %mensajesINTRA = (
     'IO019' => 'No se ha podido cancelar la importaci&oacute;n',
     'IO020' => 'La importaci&oacute;n ha sido cancelada',
 
+    #importaciones XML
+    'IXML00' => 'La importaci&oacute;n ha sido realizada correctamente',
+    'IXML01' => 'El archivo importado no es v&aacute;lido',
+    'IXML02' => 'Ocurri&oacute; un error mientras se insertaba en la base de datos la importaci&oacute;n',
+    'IXML03' => 'Ocurri&oacute; un error mientras se realizaba la importaci&oacute;n',
+
     #Mensajes Upload Files
     'UP00' => 'Solo se permiten archivos del tipo ("*?*") [Fallo de extension]',
     'UP01' => 'Hay un error y el archivo no puede escribirse en el servidor',
