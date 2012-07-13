@@ -48,3 +48,4 @@ Image::Resize
 GD
 XML::Checker
 DBIx::XML_RDB
+DBI
