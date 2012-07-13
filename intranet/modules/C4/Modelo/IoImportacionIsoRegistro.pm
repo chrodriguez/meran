@@ -745,13 +745,13 @@ sub prepararNivelParaImportar{
        foreach my $field ($marc_record->fields) {
         if(! $field->is_control_field){
             
-            my %hash_temp = {};
-            $hash_temp{'campo'}               = $field->tag;
-            $hash_temp{'indicador_primario'}  = $field->indicator(1);
-            $hash_temp{'indicador_secundario'}= $field->indicator(2);
-            $hash_temp{'subcampos_array'}	    = ();
-            $hash_temp{'subcampos_hash'}	    = ();
-            $hash_temp{'cant_subcampos'}      = 0;
+            my %hash_temp                       = {};
+            $hash_temp{'campo'}                 = $field->tag;
+            $hash_temp{'indicador_primario'}    = $field->indicator(1);
+            $hash_temp{'indicador_secundario'}  = $field->indicator(2);
+            $hash_temp{'subcampos_array'}       = ();
+            $hash_temp{'subcampos_hash'}        = ();
+            $hash_temp{'cant_subcampos'}        = 0;
             
             my %hash_sub_temp = {};
             my @subcampos_array;
@@ -776,7 +776,6 @@ sub prepararNivelParaImportar{
                  }  
                 #ahora guardo el dato para importar 
                 if ($dato){
-                    
                   C4::AR::Debug::debug("CAMPO: ". $hash_temp{'campo'}." SUBCAMPO: ".$subcampo." => ".$dato);
                   my $hash; 
                   $hash->{$subcampo}= $dato;
