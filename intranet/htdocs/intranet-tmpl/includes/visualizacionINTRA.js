@@ -67,6 +67,7 @@ function updateAgregarVisualizacion(responseText){
     }  
 }
 
+//no se justifica armar algo por tipo de documento ya q es el único que tiene este comportamiento
 function agregar_quitar_nivel3(){
         if($("#tipo_nivel3_id").val() == "ANA"){
             //saco el nivel 3
