@@ -1,4 +1,17 @@
+MARC::Moose::Record
+MARC::Crosswalk::DublinCore
+Moose::Meta::Class
+Moose
+MRO::Compat
+Convert::ASN1
+Clone
+Clone::PP
+SQL::ReservedWords
+Bit::Vector::Overload
 Apache::Session
+Class::Singleton
+DateTime::Locale
+Class::Factory::Util
 Captcha::reCAPTCHA
 CGI::Session
 Chart::OFC
@@ -17,7 +30,6 @@ Bundle::libnet
 Locale::Maketext::Gettext
 Mail::Sendmail
 MARC::Crosswalk::DublinCore
-MARC::Moose
 MARC::Record
 MARC::XML
 MIME::Lite::TT::HTML
@@ -46,3 +58,4 @@ Date::Calc
 File::SearchPath
 Image::Resize
 GD
+echo "MARC::Moose a la hora de hacer este tuto no funciona la version estable 0.026, hay que instalar la version 0.018 a mano. Para probarlo ver importación "

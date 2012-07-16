@@ -1,0 +1,1342 @@
+=head2 Thu Jul 12 21:10:54 2012: C<Module> L<MooseX::StrictConstructor|MooseX::StrictConstructor>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.19>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Thu Jul 12 21:11:06 2012: C<Module> L<Chart::OFC|Chart::OFC>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.11>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Thu Jul 12 21:12:03 2012: C<Module> L<Digest::SHA|Digest::SHA>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 5.71>
+
+=item *
+
+C<EXE_FILES: shasum>
+
+=back
+
+=head2 Thu Jul 12 21:12:11 2012: C<Module> L<Image::Size|Image::Size>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 3.232>
+
+=item *
+
+C<EXE_FILES: imgsize>
+
+=back
+
+=head2 Thu Jul 12 21:12:17 2012: C<Module> L<JSON|JSON>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 2.53>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Thu Jul 12 21:12:19 2012: C<Module> L<Net::Telnet|Net::Telnet>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 3.03>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Thu Jul 12 21:12:23 2012: C<Module> L<MARC::Record|MARC::Record>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 2.0.3>
+
+=item *
+
+C<EXE_FILES: bin/marcdump>
+
+=back
+
+=head2 Thu Jul 12 21:12:25 2012: C<Module> L<MARC::XML|MARC::XML>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.4>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Thu Jul 12 21:12:43 2012: C<Module> L<Net::Twitter|Net::Twitter>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 3.18003>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Thu Jul 12 21:12:52 2012: C<Module> L<Rose::DB|Rose::DB>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.769>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Thu Jul 12 21:13:25 2012: C<Module> L<Rose::DB::Object|Rose::DB::Object>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.798>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Thu Jul 12 21:13:32 2012: C<Module> L<Spreadsheet::Read|Spreadsheet::Read>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.47>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Thu Jul 12 21:13:37 2012: C<Module> L<Date::Calc|Date::Calc>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 6.3>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Thu Jul 12 21:22:20 2012: C<Module> L<Digest::SHA|Digest::SHA>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 5.71>
+
+=item *
+
+C<EXE_FILES: shasum>
+
+=back
+
+=head2 Thu Jul 12 21:23:56 2012: C<Module> L<GD|GD>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 2.46>
+
+=item *
+
+C<EXE_FILES: bdf_scripts/bdf2gdfont.pl>
+
+=back
+
+=head2 Thu Jul 12 21:25:10 2012: C<Module> L<Digest::SHA|Digest::SHA>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 5.71>
+
+=item *
+
+C<EXE_FILES: shasum>
+
+=back
+
+=head2 Thu Jul 12 21:31:00 2012: C<Module> L<Net::Z3950::ZOOM|Net::Z3950::ZOOM>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.28>
+
+=item *
+
+C<EXE_FILES: samples/zoom/zselect samples/zoom/zoomdump>
+
+=back
+
+=head2 Thu Jul 12 21:31:37 2012: C<Module> L<Digest::SHA|Digest::SHA>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 5.71>
+
+=item *
+
+C<EXE_FILES: shasum>
+
+=back
+
+=head2 Thu Jul 12 21:33:00 2012: C<Module> L<Digest::SHA|Digest::SHA>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 5.71>
+
+=item *
+
+C<EXE_FILES: shasum>
+
+=back
+
+=head2 Fri Jul 13 12:56:07 2012: C<Module> L<HTML::Tiny|HTML::Tiny>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.05>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 12:56:09 2012: C<Module> L<Captcha::reCAPTCHA|Captcha::reCAPTCHA>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.93>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 12:56:10 2012: C<Module> L<Crypt::CBC|Crypt::CBC>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 2.30>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 12:56:15 2012: C<Module> L<Digest::SHA|Digest::SHA>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 5.71>
+
+=item *
+
+C<EXE_FILES: shasum>
+
+=back
+
+=head2 Fri Jul 13 12:56:26 2012: C<Module> L<Mail::Sendmail|Mail::Sendmail>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.79>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 12:56:29 2012: C<Module> L<Class::Accessor|Class::Accessor>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.34>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 12:56:55 2012: C<Module> L<Net::SSLeay|Net::SSLeay>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.48>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 12:56:56 2012: C<Module> L<Net::SMTP::TLS|Net::SMTP::TLS>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.12>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 12:56:59 2012: C<Module> L<PDF::Report|PDF::Report>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.33>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 12:57:01 2012: C<Module> L<OLE::Storage_Lite|OLE::Storage_Lite>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.19>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 12:57:09 2012: C<Module> L<Spreadsheet::WriteExcel|Spreadsheet::WriteExcel>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 2.37>
+
+=item *
+
+C<EXE_FILES: bin/chartex>
+
+=back
+
+=head2 Fri Jul 13 12:57:22 2012: C<Module> L<Readonly|Readonly>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.03>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 12:57:25 2012: C<Module> L<Crypt::SSLeay|Crypt::SSLeay>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.58>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 12:57:30 2012: C<Module> L<WWW::Facebook::API|WWW::Facebook::API>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.4.18>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 12:58:25 2012: C<Module> L<Digest::SHA|Digest::SHA>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 5.71>
+
+=item *
+
+C<EXE_FILES: shasum>
+
+=back
+
+=head2 Fri Jul 13 12:58:27 2012: C<Module> L<Net::SMTP::SSL|Net::SMTP::SSL>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.01>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 13:02:28 2012: C<Module> L<Digest::SHA|Digest::SHA>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 5.71>
+
+=item *
+
+C<EXE_FILES: shasum>
+
+=back
+
+=head2 Fri Jul 13 13:02:31 2012: C<Module> L<Text::Aspell|Text::Aspell>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.09>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 13:05:14 2012: C<Module> L<Digest::SHA|Digest::SHA>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 5.71>
+
+=item *
+
+C<EXE_FILES: shasum>
+
+=back
+
+=head2 Fri Jul 13 13:10:44 2012: C<Module> L<Digest::SHA|Digest::SHA>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 5.71>
+
+=item *
+
+C<EXE_FILES: shasum>
+
+=back
+
+=head2 Fri Jul 13 13:10:47 2012: C<Module> L<File::LibMagic|File::LibMagic>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.96>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 13:10:55 2012: C<Module> L<Digest::SHA|Digest::SHA>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 5.71>
+
+=item *
+
+C<EXE_FILES: shasum>
+
+=back
+
+=head2 Fri Jul 13 13:14:46 2012: C<Module> L<Digest::SHA|Digest::SHA>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 5.71>
+
+=item *
+
+C<EXE_FILES: shasum>
+
+=back
+
+=head2 Fri Jul 13 13:24:04 2012: C<Module> L<Class::Singleton|Class::Singleton>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.4>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 13:31:24 2012: C<Module> L<Text::Unaccent|Text::Unaccent>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.08>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 14:09:40 2012: C<Module> L<Carp::Clan|Carp::Clan>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 6.04>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 14:09:51 2012: C<Module> L<Bit::Vector|Bit::Vector>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 7.2>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 14:11:08 2012: C<Module> L<Sub::Exporter|Sub::Exporter>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.984>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 14:11:57 2012: C<Module> L<Clone::PP|Clone::PP>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.02>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 14:12:35 2012: C<Module> L<Clone|Clone>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.31>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 15:08:49 2012: C<Module> L<MARC::Charset|MARC::Charset>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.33>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 16:42:38 2012: C<Module> L<MARC-XML|MARC-XML>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.93>
+
+=item *
+
+C<EXE_FILES: bin/marc2xml bin/xml2marc>
+
+=back
+
+=head2 Fri Jul 13 16:45:07 2012: C<Module> L<Convert::ASN1|Convert::ASN1>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.26>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 16:46:44 2012: C<Module> L<MRO::Compat|MRO::Compat>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.11>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 16:50:47 2012: C<Module> L<Moose|Moose>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 2.0603>
+
+=item *
+
+C<EXE_FILES: bin/moose-outdated>
+
+=back
+
+=head2 Fri Jul 13 16:55:40 2012: C<Module> L<XML::Parser|XML::Parser>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 2.41>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 16:55:41 2012: C<Module> L<XML::SAX::Expat|XML::SAX::Expat>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.40>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 16:55:53 2012: C<Module> L<XML::Simple|XML::Simple>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 2.20>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Fri Jul 13 16:55:57 2012: C<Module> L<marc::moose|marc::moose>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.026>
+
+=item *
+
+C<EXE_FILES: bin/marcmoose>
+
+=back
+
+=head2 Mon Jul 16 11:27:06 2012: C<Module> L<Text::Unaccent|Text::Unaccent>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.08>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Mon Jul 16 12:30:45 2012: C<Module> L<MARC-XML|MARC-XML>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.93>
+
+=item *
+
+C<EXE_FILES: bin/marc2xml bin/xml2marc>
+
+=back
+
+=head2 Mon Jul 16 15:32:09 2012: C<Module> L<Moose|Moose>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64/share/perl/5.10.1>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 2.0603>
+
+=item *
+
+C<EXE_FILES: bin/moose-outdated>
+
+=back
+

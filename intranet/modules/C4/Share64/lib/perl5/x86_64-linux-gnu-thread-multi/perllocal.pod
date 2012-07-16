@@ -1,0 +1,44 @@
+=head2 Fri Jul 13 14:39:40 2012: C<Module> L<Sphinx::Search|Sphinx::Search>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64//lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.27.2>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Mon Jul 16 15:41:15 2012: C<Module> L<marc::moose|marc::moose>
+
+=over 4
+
+=item *
+
+C<installed into: /usr/share/meran/intranet/modules/C4/Share64//lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.018>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
