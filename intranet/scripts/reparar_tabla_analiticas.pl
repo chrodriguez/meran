@@ -15,7 +15,7 @@ use C4::AR::Nivel2;
             my $cat_registro_n2_analitica = C4::Modelo::CatRegistroMarcN2Analitica->new();
             $cat_registro_n2_analitica->setId2Padre($registro_padre);
             $cat_registro_n2_analitica->setId1($analitica_object->getId1());
-            #$cat_registro_n2_analitica->save();
+            $cat_registro_n2_analitica->save();
         }
     }
     
