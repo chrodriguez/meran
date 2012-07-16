@@ -585,22 +585,25 @@ sub getAnaliticasFromNivel2{
             my %hash_nivel1_aux;   
             my @nivel2_array; 
     
-            my $n1_object                               = C4::AR::Nivel1::getNivel1FromId1($n2->getId1());
+            my $n1_object                                           = C4::AR::Nivel1::getNivel1FromId1($n2->getId1());
             if($n1_object){
-                    $hash_nivel1_aux{'nivel1_analitica'}        = $n1_object->toMARC_Intra;
+                    $hash_nivel1_aux{'nivel1_analitica'}            = $n1_object->toMARC_Intra;
+                    $hash_nivel1_aux{'nivel1_analitica_titulo'}     = $n1_object->getTitulo();
+                    $hash_nivel1_aux{'nivel1_analitica_autor'}      = $n1_object->getAutor();
+                    $hash_nivel1_aux{'nivel1_analitica_id1'}        = $n1_object->getId1();
             }        
 
 # TODO falta levantar los grupos del nivel 1 q estoy procedando!!!!!!!!!!!!!!!!!   
 # es otro foreach         
-            my $n2_array_ref                            = C4::AR::Nivel2::getNivel2FromId1($n2->getId1());
+            my $n2_array_ref                                = C4::AR::Nivel2::getNivel2FromId1($n2->getId1());
             foreach my $n2 (@$n2_array_ref){
                 my %hash_nivel2_aux;  
 
-                $hash_nivel2_aux{'nivel2_analitica'}    = $n2->toMARC_Intra;
+                $hash_nivel2_aux{'nivel2_analitica'}        = $n2->toMARC_Intra;
                 push(@nivel2_array, \%hash_nivel2_aux);
             }
 
-            $hash_nivel1_aux{'nivel2_analitica_array'} = \@nivel2_array;
+            $hash_nivel1_aux{'nivel2_analitica_array'}      = \@nivel2_array;
         
             push(@analitica_array, \%hash_nivel1_aux);
         }
