@@ -81,12 +81,12 @@
                                print C4::AR::Filtros::link_to( text   => "<h2>[% nivel1_analitica_titulo %]</h2>",
                                                                url    => "[% url_prefix %]/catalogacion/estructura/detalle.pl", 
                                                                params   => ["id1=[% nivel1_analitica_id1 %]"],
-                                                               title  => "[% 'link al registro padre' | i18n %]",
+                                                               title  => "[% 'Detalle del registro' | i18n %]",
                                                            ) ;
                        [% END %]
                         <h3>[% nivel1_analitica_autor %] </h3> 
                     </div>  
-                    
+
   	                <dl>  
   	                    [% FOREACH nivel1_analitica %]
                                  	<dt class="inline left rightMargin">[% liblibrarian %]:&nbsp;</dt> 
