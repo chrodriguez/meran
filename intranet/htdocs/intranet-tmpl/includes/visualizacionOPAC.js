@@ -218,6 +218,18 @@ function eleccionDeEjemplar(){
     if (!isNaN(ejemplar)){
         ObjDiv.hide();
     }else{
+
+        if($("#tipo_nivel3_id").val() == "ANA"){
+            //saco el nivel 3
+            $("#eleccion_nivel option[value='3']").remove();
+        } else {
+            //agrego el nivel 3 si no existe
+            var result = $('#eleccion_nivel').find('option[value="3"]');
+            if(result.length == 0){
+                $("#eleccion_nivel").append('<option value="3">Nivel 3</option>');
+            }
+        }
+
         ObjDiv.show();
         objAH               = new AjaxHelper(updateEleccionDeNivel);
         objAH.debug         = true;
