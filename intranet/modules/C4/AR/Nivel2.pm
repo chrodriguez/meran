@@ -288,6 +288,21 @@ sub getAllNivel2{
     return ($nivel2_array_ref);
 }
 
+
+sub getAllAnaliticas{
+    my ($id1, $db) = @_;
+    
+    $db = $db || C4::Modelo::CatRegistroMarcN2->new()->db();
+
+    my $nivel2_array_ref = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(
+                                                                        db => $db,
+                                                                        query => [
+                                                                                        template => { eq => "ANA" },
+                                                                                ],
+                                                                );
+                                                                
+    return ($nivel2_array_ref);
+}
 =head2
 sub getNivel2FromId1
 
