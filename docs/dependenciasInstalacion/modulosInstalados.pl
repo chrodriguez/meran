@@ -10,6 +10,7 @@ my @modulos_instalados=$instmod->modules();
 
 
 foreach $a (@modulos_instalados) {
+    print "MODULO: ".$a."\n";
   foreach $mod (CPAN::Shell->expand("Module", $a)){
     printf("%-20s %10s %10s %s\n",
       $mod->id,
