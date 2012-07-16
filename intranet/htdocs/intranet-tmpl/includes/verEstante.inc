@@ -21,7 +21,7 @@
                                           </ul>
 
                                           <div class="form-actions">
-                                                [% IF cant_estantes %]
+                                               
                                                       [% PERL %]
                                                                     print C4::AR::Filtros::action_button(
                                                                                                         button  => "btn btn-danger",
@@ -29,8 +29,12 @@
                                                                                                         title   => "[% 'Borrar seleccionados' | i18n %]",
                                                                             ) ;
                                                       [% END %]
-                                                [% END %]
-
+                                            [% ELSE %]
+                                          <div class="alert alert-info">
+                                                [% 'No se encontraron estantes virtuales.' | i18n %]
+                                          </div>
+                                      [% END %]
+                                          
                                                 [% PERL %]
                                                                     print C4::AR::Filtros::action_button(
                                                                                                         button   => "btn btn-success",
@@ -41,11 +45,7 @@
                                            
                                                 
                                           </div>
-                                      [% ELSE %]
-                                          <div class="alert alert-info">
-                                                [% 'No se encontraron estantes virtuales.' | i18n %]
-                                          </div>
-                                      [% END %]
+                                     
                                     </div>
                           </div>
                     </div>

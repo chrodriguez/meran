@@ -4,8 +4,35 @@ CAMPOS_ARRAY= new Array();
 //arreglo de objetos subcampo
 SUBCAMPOS_ARRAY= new Array();
 
+/*
+ * Exporta la visualizacion a un XML
+*/
+function exportarVisualizacion(){
 
+    bootbox.confirm(EXPORTACION_VISUALIZACION, function (ok){ 
 
+        if(ok){
+            $('#formExportarVisualizacion').submit();
+        }
+
+    });
+}
+
+/*
+ * Importa la visualizacion desde un XML
+*/
+function showImportarVisualizacion(){
+
+    $('#importarVisualizacion').modal();
+}
+
+/*
+ * Hace el submit del form para importar
+*/
+function realizarImportacion(){
+
+    $('#formImportarVisualizacion').submit();
+}
 
 function mostrarTabla(){
     objAH               = new AjaxHelper(updateMostrarTabla);

@@ -151,6 +151,7 @@ my %mensajesINTRA = (
     '000' => '',
     'CB001' => 'El formato de inventario para el tipo de documento (*?*) se ha acualizado.',
     'CB002' => '[ERROR] El formato de inventario para el tipo de documento (*?*) no se ha podido acualizar.',
+    'CB003' => 'El formato de inventario para el tipo de documento (*?*) ha vuelto a su valor por defecto.',
     'R001' => 'El usuario lleg&oacute; al m&acute;ximo de reservas permitidas (*?*).',
     'R002' => 'El usuario ya tiene una reserva para el mismo tipo de prestamo ',
     'R003' => 'El usuario lleg&oacute; al m&acute;ximo de reservas en espera (*?*).',
@@ -529,6 +530,12 @@ my %mensajesINTRA = (
     'IO018' => 'Se ha terminado de importar correctamente.',
     'IO019' => 'No se ha podido cancelar la importaci&oacute;n',
     'IO020' => 'La importaci&oacute;n ha sido cancelada',
+
+    #importaciones XML
+    'IXML00' => 'La importaci&oacute;n ha sido realizada correctamente',
+    'IXML01' => 'El archivo importado no es v&aacute;lido',
+    'IXML02' => 'Ocurri&oacute; un error mientras se insertaba en la base de datos la importaci&oacute;n',
+    'IXML03' => 'Ocurri&oacute; un error mientras se realizaba la importaci&oacute;n',
 
     #Mensajes Upload Files
     'UP00' => 'Solo se permiten archivos del tipo ("*?*") [Fallo de extension]',

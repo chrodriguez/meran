@@ -160,5 +160,12 @@
        [% END %] <!--  end contenido estante -->
        
             
-  [% END %] <!--  end estante -->
+  
+    [% ELSE %]
+          [% IF cant_subestantes == 0 %]
+                <div class="alert alert-info">
+                      [% 'El estante no tiene contenido.' | i18n %]
+                </div>
+                         [% END %]
+    [% END %]
 [% END %]

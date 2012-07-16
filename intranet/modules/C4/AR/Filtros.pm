@@ -815,6 +815,7 @@ sub action_button{
     my $id       = $params_hash_ref{'id'} || undef;
     my $popover  = $params_hash_ref{'popover'} || undef;
     my $disabled = $params_hash_ref{'disabled'} || undef;
+    my $alt_text = $params_hash_ref{'alt_text'} || undef;
 
     $button.= " click";
 
@@ -832,7 +833,7 @@ sub action_button{
     }
     
     
-    my $html = "<a id='$id' class='".$button."' $popopver_attr onclick='".$action."'><i class='".$icon."'></i> ".$title."</a>";
+    my $html = "<a id='$id' title='".$alt_text."' class='".$button."' $popopver_attr onclick='".$action."'><i class='".$icon."'></i> ".$title."</a>";
     
     return $html;
 }
