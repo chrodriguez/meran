@@ -212,13 +212,8 @@ function updateAgregarVisualizacion(responseText){
     }   
 }
 
-function eleccionDeEjemplar(){
-    var ejemplar    = $("#tipo_nivel3_id").val();
-    var ObjDiv      = $("#result");
-    if (!isNaN(ejemplar)){
-        ObjDiv.hide();
-    }else{
 
+function agregar_quitar_nivel3(){
         if($("#tipo_nivel3_id").val() == "ANA"){
             //saco el nivel 3
             $("#eleccion_nivel option[value='3']").remove();
@@ -229,6 +224,16 @@ function eleccionDeEjemplar(){
                 $("#eleccion_nivel").append('<option value="3">Nivel 3</option>');
             }
         }
+}
+
+function eleccionDeEjemplar(){
+    var ejemplar    = $("#tipo_nivel3_id").val();
+    var ObjDiv      = $("#result");
+    if (!isNaN(ejemplar)){
+        ObjDiv.hide();
+    }else{
+
+        agregar_quitar_nivel3();
 
         ObjDiv.show();
         objAH               = new AjaxHelper(updateEleccionDeNivel);
