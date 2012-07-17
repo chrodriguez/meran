@@ -36,6 +36,7 @@ use C4::Modelo::SysExternosMeran::Manager;
 use Sphinx::Search  qw(SPH_MATCH_ANY SPH_MATCH_PHRASE SPH_MATCH_BOOLEAN SPH_MATCH_EXTENDED SPH_MATCH_ALL SPH_SORT_RELEVANCE);
 use Sphinx::Manager qw(new);
 use URI::Escape;
+use Text::Unaccent;
 
 use vars qw(@EXPORT_OK @ISA);
 @ISA=qw(Exporter);
@@ -987,7 +988,6 @@ sub busquedaAvanzada_newTemp{
     my ($params,$session) = @_;
 
     use Sphinx::Search;
-    use Text::Unaccent;
     
     my $only_sphinx     = $params->{'only_sphinx'};
     my $only_available  = $params->{'only_available'};
@@ -1140,7 +1140,6 @@ sub busquedaPorId{
     my ($string,$session) = @_;
 
     use Sphinx::Search;
-    use Text::Unaccent;
     
     my $sphinx          = Sphinx::Search->new();
 
@@ -1317,7 +1316,6 @@ sub busquedaCombinada_ROSE{
 
     my ($string_utf8_encoded,$session,$obj_for_log,$sphinx_options) = @_;
 
-    use Text::Unaccent;
 
     $string_utf8_encoded    = unac_string('utf8',$string_utf8_encoded);
     $session    =   $session || CGI::Session->load();
@@ -1415,7 +1413,6 @@ sub busquedaCombinada_newTemp{
 
 	use Sphinx::Search;
 
-    use Text::Unaccent;
     # Se agregó para sacar los acentos y que no se mame el suggest, total es lo mismo porque
     # Sphinx busca con o sin acentos
     $string_utf8_encoded    = unac_string('utf8',$string_utf8_encoded);

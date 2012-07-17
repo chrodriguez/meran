@@ -116,14 +116,6 @@
                                                                   ) ;
                                   [% END %]
                               </li>
-                              <li>
-                                          [% PERL %]
-                                              print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'Visibilidad Campos TR' | i18n %]",
-                                                                              url =>      "[% url_prefix %]/catalogacion/tablasReferencia/tablasReferencia.pl",
-                                                                              title =>    "[% 'Visibilidad Campos TR' | i18n %]"
-                                                                          ) ;
-                                          [% END %]
-                              </li>
                                 <li>
                                             [% PERL %]
                                                 print C4::AR::Filtros::link_to( text =>     "<i class='icon-eye-open'></i> [% 'Moderar revisiones' | i18n %]",
@@ -320,9 +312,10 @@
                                 </li>
                                 <li>
                                             [% PERL %]
-                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-cog'></i> [% 'Tipos de pr&eacute;stamo' | i18n %]",
+                                                print C4::AR::Filtros::link_to( text =>     " [% 'Tipos de pr&eacute;stamo' | i18n %]",
                                                                                 url =>      "[% url_prefix %]/admin/circulacion/tipos_de_prestamos.pl",
-                                                                                title =>    "[% 'Tipos de pr&eacute;stamo' | i18n %]"
+                                                                                icon => "icon-cog",
+                                                                                title =>    " [% 'Tipos de pr&eacute;stamo' | i18n %]"
                                                                             ) ;
                                             [% END %]
                                 </li>
