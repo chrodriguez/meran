@@ -492,6 +492,7 @@ sub detalleNivel3{
         $hash_nivel2{'tiene_analiticas'}        = $tiene_analiticas;
         $hash_nivel2{'show_action'}             = 1; #muestra la accion agregar analitica
         $hash_nivel2{'show_analiticas'}         = $tiene_analiticas; #muestra la accion "Ver analíticas" si el grupo tiene analíticas
+        $hash_nivel2{'cant_analiticas'}         = $tiene_analiticas;
 
         if($nivel2_object->getTemplate() eq "ANA"){
 
