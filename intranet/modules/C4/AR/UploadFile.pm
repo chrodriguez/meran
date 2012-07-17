@@ -66,6 +66,22 @@ sub uploadPortadaNivel2{
     my $maxFileSize             = 2048 * 2048; # 1/2mb max file size...
     my $hash_unique             = Digest::MD5::md5_hex(localtime() + rand(10));
     my ($file_type,$notBinary)  = C4::AR::Utilidades::checkFileMagic($foto, @whiteList);
+
+
+    # FIXME: en arquitecturas de 64 bits guarda la imagen con 0 bytes. Probar asi
+    # if($file_type){
+
+    #     open(WRITEIT, ">$uploaddir/$hash_unique.$file_type") or die "Cant write to $uploaddir/$hash_unique.$file_type. Reason: $!";
+    #         print WRITEIT $foto;
+    #     close(WRITEIT);
+
+    #     return ("$hash_unique.$file_type");
+        
+    # }else{
+    
+    #     return 0;
+
+    # }
     
     #es un archivo valido
     if($file_type){

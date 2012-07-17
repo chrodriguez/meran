@@ -121,8 +121,13 @@ sub getAll{
 
     if ($filtro){
         my @filtros_or;
-        push(@filtros_or, (NOMBRE => {like => '%'.$filtro.'%'}) );
-        push(@filtros_or, (NOMBRE_ABREVIADO => {like => '%'.$filtro.'%'}) );
+        if ($matchig_or_not){
+            push(@filtros_or, (NOMBRE => {like => '%'.$filtro.'%'}) );
+            push(@filtros_or, (NOMBRE_ABREVIADO => {like => '%'.$filtro.'%'}) );
+        }else{
+            push(@filtros_or, (NOMBRE => {eq => $filtro}) );
+            push(@filtros_or, (NOMBRE_ABREVIADO => {eq => $filtro}) );
+        }
         push(@filtros, (or => \@filtros_or) );
     }
     my $ref_valores;
@@ -156,5 +161,30 @@ sub getAll{
     }
 }
 
-1;
 
+sub getLocalidadByName{
+    my ($self) = shift;
+    my ($ciudad) = @_;
+
+    my @filtros;
+    my @filtros_or;
+    push(@filtros_or, (NOMBRE => {eq => $ciudad}) );
+    push(@filtros_or, (NOMBRE_ABREVIADO => {eq => $ciudad}) );
+    push(@filtros, (or => \@filtros_or) );
+
+
+    my $ciudades_array_ref = C4::Modelo::RefLocalidad::Manager->get_ref_pais(
+
+        query   => \@filtros,
+        select  => ['*'],
+        sort_by => 'id ASC',
+        limit   => 1,
+        offset  => 0,
+    );
+
+    return (scalar(@$ciudades_array_ref), $ciudades_array_ref);
+
+
+}
+
+1;
