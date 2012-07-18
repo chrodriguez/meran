@@ -2198,17 +2198,6 @@ function crearAuto(obj){
 
     $("#div" + obj.getIdCompCliente()).append(comp);
     crearBotones(obj);
-    
-//     FIXME creo q no se usa mas!!!!!!!!!!!!
-    // TODO parche FEO, falta cambiar el ID, el que se tiene q guardar es el del combo
-//     if((obj.getCampo() == '773')&&(obj.getSubCampo() == 'a')){
-        // FIXME parche para el doble combo de analiticas
-//         var comp = "<div id='ediciones'></div>";
-//         $(comp).insertAfter("#div" + obj.getIdCompCliente());        
-//     }      
-    
-//     comp = "<div class='icon_agregar horizontal' onclick=agregarTablaReferencias('" + obj.getReferenciaTabla() + "') title='Agregar referencia al subcampo " + obj.getSubCampo() + " para el campo " + obj.getCampo() + "' />"
-//     $(comp).insertAfter("#div" + obj.getIdCompCliente());
     _cearAutocompleteParaCamponente(obj);
     //se crea un input hidden para guardar el ID del elemento de la lista que se selecciono
     comp = crearHidden(obj);
@@ -2217,8 +2206,6 @@ function crearAuto(obj){
 }
 
 function crearBotonAgregarReferenciaSubcampo(obj){
-
-//     if ( (obj.getRepetible() == '1') && (obj.getReferenciaTabla()) ){
     if (obj.getReferenciaTabla()) {
         return '<li><a class="click" onclick=agregarTablaReferencias("'+ obj.getReferenciaTabla() +'")><i class="icon-plus"></i> Agregar referencia al subcampo '+ obj.getSubCampo() + ' para el campo ' + obj.getCampo() +'</a></li>';
     } else {  

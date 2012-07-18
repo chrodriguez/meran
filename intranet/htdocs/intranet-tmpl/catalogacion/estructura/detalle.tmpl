@@ -1,5 +1,7 @@
 [% IF !ajax %]
     [% INCLUDE  "intranet-top.inc" %]
+
+    [% INCLUDE 'AutocompleteHelper.inc' %] 
     
     <script src="/includes/jquery/jquery.jqpageflow.js" type="text/javascript"></script>
     
@@ -36,6 +38,54 @@
             window.location.href="[% url_prefix %]/catalogacion/estructura/datosDocumento.pl?id1=[% id1 %]&id2="+id2+"&id3="+id3+"&tipoAccion=MODIFICAR_NIVEL_3";
         	
         }
+
+        function asociarRegistroFuente(id1){
+        	$('#div_asociar_registro_fuente').modal('show');
+
+			CrearAutocompleteNivel2(       { 	IdInput: buscar_edicion_id, 
+                                                IdInputHidden: buscar_edicion_hidden,
+                                                callBackFunction: buscarEdicion                      
+                                          }
+                                );
+        }
+
+        function cerrar_asociar_registro_fuente(){
+        	$('#div_asociar_registro_fuente').modal('hide');
+        }
+
+	    function buscarEdicion(){
+	        objAH                   = new AjaxHelper(updateBuscarEdicion);
+	        objAH.debug             = true;
+	        objAH.showOverlay       = true;
+	        objAH.url               = URL_PREFIX+'/catalogacion/estructura/estructuraCataloDB.pl';
+	        objAH.tipoAccion        = 'BUSQUEDA_EDICIONES';
+	        objAH.id1               = $('#buscar_edicion_hidden').val();
+	        objAH.sendToServer();
+		}
+
+		function updateBuscarEdicion(responseText){
+		    $('#ediciones').html(responseText);
+		}
+
+		function guardar_asociar_registro_fuente(){
+			
+			if($('#buscar_edicion_hidden').val() == ""){
+				jAlert('Debe seleccionar una edici&oacute;n','Advertencia de catalogo');
+			} else {
+
+			  	objAH                   = new AjaxHelper(updateBuscarEdicion);
+		        objAH.debug             = true;
+		        objAH.showOverlay       = true;
+		        objAH.url               = URL_PREFIX+'/catalogacion/estructura/estructuraCataloDB.pl';
+		        objAH.tipoAccion        = 'ASOCIAR_REGISTRO_FUENTE';
+		        objAH.id1               = [% id1 %];
+		        objAH.id2 				= $('#buscar_edicion_hidden').val();
+		        objAH.sendToServer();
+
+		        $('#div_asociar_registro_fuente').modal('hide');
+
+			}
+		}
         
       	function ProcessGBSBookInfo(booksInfo) {
 			for (id in booksInfo) {
@@ -63,11 +113,11 @@
         
         function uploadCompleteCloseModal(evt) {
             clearInterval(intervalTimer);
-                $('#'+'progressIndicator' + '_' + ID2_file + ' > div').removeClass('active');
+            $('#'+'progressIndicator' + '_' + ID2_file + ' > div').removeClass('active');
             $('#'+'progressIndicator' + '_' + ID2_file + ' > div').removeClass('progress-striped');
-                var uploadResponse = document.getElementById('uploadResponse' + '_' + ID2_file);
-            uploadResponse.innerHTML = evt.target.responseText;
-            uploadResponse.style.display = 'block';
+            var uploadResponse 				= document.getElementById('uploadResponse' + '_' + ID2_file);
+            uploadResponse.innerHTML 		= evt.target.responseText;
+            uploadResponse.style.display 	= 'block';
             setTimeout(closeModalIndice, 2000)
         }
         
@@ -76,9 +126,9 @@
             ID2_file = id2;
             document.getElementById('uploadResponse' + '_' + ID2_file).style.display = 'none';
             document.getElementById('progressNumber' + '_' + ID2_file).innerHTML = '';
-            var progressBar = document.getElementById('progressBar' + '_' + ID2_file);
-            progressBar.style.display = 'block';
-            progressBar.style.width = '0px';
+            var progressBar 			= document.getElementById('progressBar' + '_' + ID2_file);
+            progressBar.style.display 	= 'block';
+            progressBar.style.width 	= '0px';
 
             /*
              * If you want to upload only a file along with arbitary data that is not in
@@ -109,6 +159,42 @@
 	<script src="/intranet-tmpl/includes/detalleEjemplar.js"></script>
 	<script src="/intranet-tmpl/includes/estantesVirtuales.js"></script>
 
+	<div id="div_asociar_registro_fuente" class="modal fade hide">
+	    	<div class="modal-header">
+               <h3>[% "Asociar registro fuente" | i18n %]</h3>
+            </div>
+	      	<div class="modal-body">
+                <div class="control-group">
+	            <label for="tipo_nivel3_id">
+	                [% "Buscar edici&oacute;n:" | i18n %]
+	            </label>
+	            <div class="controls">
+	            	<input type="text" 		id="buscar_edicion_id" value="">
+	            	<input type="hidden" 	id="buscar_edicion_hidden" value="">
+		    	</div>
+	        	</div>
+         	</div>
+            <div class='modal-footer'>
+	                [% PERL %]
+	                        print C4::AR::Filtros::to_Button(     text   => "[% 'Guardar' | i18n %]",
+                                                                  boton   => "btn btn-primary",
+                                                                  onClick => "guardar_asociar_registro_fuente();",
+                                                                  title   => "[% 'Usar esquema' | i18n %]",
+                                                                  id      => "boton_guardar_asociar_registro_fuente",
+	                                ) ;
+	                [% END %]
+	                
+	                [% PERL %]
+		                    print C4::AR::Filtros::to_Button(   text        => "[% 'Cerrar' | i18n %]",
+		                                                        boton       => "btn btn-primary",
+		                                                        onClick     => "cerrar_asociar_registro_fuente();",
+		                                                        title       => "[% 'Cerrar' | i18n | i18n %]",
+		                                                        id          => "boton_cerrar_asociar_registro_fuente",
+		                            ) ;
+		            [% END %]
+	   </div>
+	</div>
+
 	<!-- Se incluyen las librerias necesarias para manejar autocomplete -->
 	<div id="confirmar_div" class="pane"></div>
 	<br>
@@ -136,10 +222,10 @@
 			<strong>[% "Atenci&oacute;n" |i18n %]!</strong> [% "El registro no se encuentra en el &iacute;ndice, y no aparece en las b&uacute;squedas" | i18n %].
 			  [% PERL %]
 			          print C4::AR::Filtros::action_button( 
-			                                          button         => "btn btn-success",
-			                                          action       => "addRegistroAlindice([% id1 %])", 
-			                                          icon         => "icon-white icon-eye-open",
-			                                          title        => "[% 'Agregar al &iacute;ndice' | i18n %]",
+			                                          button 		=> "btn btn-success",
+			                                          action       	=> "addRegistroAlindice([% id1 %])", 
+			                                          icon         	=> "icon-white icon-eye-open",
+			                                          title        	=> "[% 'Agregar al &iacute;ndice' | i18n %]",
 			                                      ) ;
 
 			  [% END %]
@@ -157,6 +243,9 @@
                                                                             {title => "Modificar", action=>"modificarNivel1()",icon=>"icon-edit"},
                                                                             {title => "Eliminar", action=>"borrarN1([% id1 %])", icon=>"icon-trash"},
                                                                             {title => "Agregar Edición", action=>'agregarEdicion("[% id1 %]")', icon=>"icon-plus-sign"},
+	                                                                        [% IF show_asociar_registro_fuente > 0 %]
+	                                                                            {title => "Asociar registro fuente", action=>"asociarRegistroFuente([% id1 %])", icon=>"icon-edit"},
+	                                                                        [% END %]
                                                                             ],
 
                             ) ;
