@@ -547,7 +547,7 @@ sub t_agregar_configuracion {
     if(existeConfiguracion($params)){
 
         $msg_object->{'error'} = 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U602', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}]} ) ;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U602', 'params' => [$params->{'campo'}, $params->{'subcampo'}, $params->{'ejemplar'}, $params->{'nivel'}]} ) ;
 
     } else {
         # enable transactions, if possible
