@@ -220,7 +220,7 @@ sub eliminar{
     }
 
     #elimino los registros que puedan existir en la tabla de analiticas
-    my ($nivel1_analiticas_array_ref) = C4::AR::Nivel2::getAllNivel1FromAnaliticasById1($self->getId1(), $self->db);
+    my ($nivel1_analiticas_array_ref) = C4::AR::Nivel2::getAllAnaliticasById1($self->getId1(), $self->db);
 
     eval{
         foreach my $n1 (@$nivel1_analiticas_array_ref){

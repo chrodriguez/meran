@@ -42,14 +42,14 @@
         function asociarRegistroFuente(id1){
         	$('#div_asociar_registro_fuente').modal('show');
 
-			CrearAutocompleteNivel2(       { 	IdInput: buscar_edicion_id, 
-                                                IdInputHidden: buscar_edicion_hidden,
-                                                callBackFunction: buscarEdicion                      
+			CrearAutocompleteNivel2(       { 	IdInput: 'buscar_edicion_id', 
+                                                IdInputHidden: 'buscar_edicion_hidden',
+                                                callBackFunction: 'buscarEdicion'                      
                                           }
                                 );
         }
 
-        function cerrar_asociar_registro_fuente(){
+        function cerrarAsociarRegistroFuente(){
         	$('#div_asociar_registro_fuente').modal('hide');
         }
 
@@ -67,24 +67,31 @@
 		    $('#ediciones').html(responseText);
 		}
 
-		function guardar_asociar_registro_fuente(){
+		function guardarAsociarRegistroFuente(){
 			
 			if($('#buscar_edicion_hidden').val() == ""){
 				jAlert('Debe seleccionar una edici&oacute;n','Advertencia de catalogo');
 			} else {
 
-			  	objAH                   = new AjaxHelper(updateBuscarEdicion);
+			  	objAH                   = new AjaxHelper(updateGuardarAsociarRegistroFuente);
 		        objAH.debug             = true;
 		        objAH.showOverlay       = true;
 		        objAH.url               = URL_PREFIX+'/catalogacion/estructura/estructuraCataloDB.pl';
 		        objAH.tipoAccion        = 'ASOCIAR_REGISTRO_FUENTE';
-		        objAH.id1               = [% id1 %];
+		        objAH.id1               = '[% id1 %]'; //analitica hija
+		        // FIXME necesito el id2 y me esta devolviendo el ID1!!!!!!!!!!!
 		        objAH.id2 				= $('#buscar_edicion_hidden').val();
 		        objAH.sendToServer();
 
 		        $('#div_asociar_registro_fuente').modal('hide');
 
 			}
+		}
+
+		function updateGuardarAsociarRegistroFuente(responseText){
+	        var info        = JSONstring.toObject(responseText);  
+		    var Messages    = info;
+		    setMessages(Messages);
 		}
         
       	function ProcessGBSBookInfo(booksInfo) {
@@ -169,7 +176,7 @@
 	                [% "Buscar edici&oacute;n:" | i18n %]
 	            </label>
 	            <div class="controls">
-	            	<input type="text" 		id="buscar_edicion_id" value="">
+	            	<input type="text" 		id="buscar_edicion_id" value="" style="width:90%">
 	            	<input type="hidden" 	id="buscar_edicion_hidden" value="">
 		    	</div>
 	        	</div>
@@ -178,7 +185,7 @@
 	                [% PERL %]
 	                        print C4::AR::Filtros::to_Button(     text   => "[% 'Guardar' | i18n %]",
                                                                   boton   => "btn btn-primary",
-                                                                  onClick => "guardar_asociar_registro_fuente();",
+                                                                  onClick => "guardarAsociarRegistroFuente();",
                                                                   title   => "[% 'Usar esquema' | i18n %]",
                                                                   id      => "boton_guardar_asociar_registro_fuente",
 	                                ) ;
@@ -187,7 +194,7 @@
 	                [% PERL %]
 		                    print C4::AR::Filtros::to_Button(   text        => "[% 'Cerrar' | i18n %]",
 		                                                        boton       => "btn btn-primary",
-		                                                        onClick     => "cerrar_asociar_registro_fuente();",
+		                                                        onClick     => "cerrarAsociarRegistroFuente();",
 		                                                        title       => "[% 'Cerrar' | i18n | i18n %]",
 		                                                        id          => "boton_cerrar_asociar_registro_fuente",
 		                            ) ;

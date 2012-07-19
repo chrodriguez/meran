@@ -438,15 +438,8 @@ sub detalleNivel3{
         $db      = $n3_temp->db;
     }
 
-    my $nivel2_object = undef;
-    
+    my $nivel2_object = undef;    
     my $nivel2_object = C4::AR::Nivel2::getNivel2FromId2($id2,$db);
-
-
-# FIXME creo q no es necesario
-    # $hash_nivel2{'nivel1_analiticas_array'}     = undef;
-    # $hash_nivel2{'nivel1_padre'}                = undef; #para el link al registro padre de una analitica
-    
 
     if($nivel2_object){
 
@@ -468,7 +461,7 @@ sub detalleNivel3{
         $hash_nivel2{'esta_en_estante_virtual'} = C4::AR::Estantes::estaEnEstanteVirtual($id2);
         my ($totales_nivel3, @result)           = detalleDisponibilidadNivel3($id2,$nivel2_object->db);
         $hash_nivel2{'nivel3'}                  = \@result;
-        $hash_nivel2{'cant_ejemplares'}       = $totales_nivel3->{'cant_ejemplares'};
+        $hash_nivel2{'cant_ejemplares'}         = $totales_nivel3->{'cant_ejemplares'};
         $hash_nivel2{'cant_nivel3'}             = scalar(@result);
         $hash_nivel2{'cantPrestados'}           = $totales_nivel3->{'cantPrestados'};
         $hash_nivel2{'cantReservas'}            = $totales_nivel3->{'cantReservas'};
@@ -497,17 +490,17 @@ sub detalleNivel3{
         if($nivel2_object->getTemplate() eq "ANA"){
 
             #recupero las analiticas por el id1    
-            my $cat_reg_analiticas_array_ref = C4::AR::Nivel2::getAllNivel1FromAnaliticasById1($nivel2_object->getId1());
+            my $cat_reg_analiticas_array_ref    = C4::AR::Nivel2::getAllAnaliticasById1($nivel2_object->getId1());
 
             if( ($cat_reg_analiticas_array_ref) && (scalar(@$cat_reg_analiticas_array_ref) > 0) ){
                 my $n2 = C4::AR::Nivel2::getNivel2FromId2($cat_reg_analiticas_array_ref->[0]->getId2Padre());
 
                 if($n2){
-                    $hash_nivel2{'nivel1_padre'} = $n2->getId1();
+                    $hash_nivel2{'nivel1_padre'}    = $n2->getId1();
                 }
             }
 
-            $hash_nivel2{'show_action'}         = 0;
+            $hash_nivel2{'show_action'}             = 0;
         }
     }
 

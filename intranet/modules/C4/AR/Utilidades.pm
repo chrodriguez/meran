@@ -3931,12 +3931,15 @@ sub catalogoAutocomplete{
 
       foreach my $documento (@$resultado_busquedas){
             my %has_temp;
-            $has_temp{'id'}= $documento->{'id1'};
-
-            C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
-            $has_temp{'dato'} = $documento->{'titulo'};
-        if($documento->{'nomCompleto'}){ $has_temp{'dato'} .= " (".$documento->{'nomCompleto'}.")";}
-        $has_temp{'dato'} .= "\n";
+            $has_temp{'id'}     = $documento->{'id1'};
+            # C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
+            $has_temp{'dato'}   = $documento->{'titulo'};
+            
+            if($documento->{'nomCompleto'}){ 
+                    $has_temp{'dato'} .= " (".$documento->{'nomCompleto'}.")";
+            }
+            
+            $has_temp{'dato'} .= "\n";
             push (@data_array, \%has_temp);
 
 #              C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
@@ -3969,12 +3972,11 @@ sub catalogoAutocompleteId{
 
       foreach my $documento (@$resultado_busquedas){
             my %has_temp;
-            $has_temp{'id'}= $documento->{'id1'};
-
-            C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
-            $has_temp{'dato'} = $documento->{'titulo'};
-        if($documento->{'nomCompleto'}){ $has_temp{'dato'} .= " (".$documento->{'nomCompleto'}.")";}
-        $has_temp{'dato'} .= "\n";
+            $has_temp{'id'}     = $documento->{'id1'};
+            # C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);
+            $has_temp{'dato'}   = $documento->{'titulo'};
+            if($documento->{'nomCompleto'}){ $has_temp{'dato'} .= " (".$documento->{'nomCompleto'}.")";}
+            $has_temp{'dato'} .= "\n";
             push (@data_array, \%has_temp);
 
 #              C4::AR::Debug::debug("CANTIDAD DE NIVELES ENCONTRADOS EN AUTOCOMPLETE ==============> ".$cantidad);

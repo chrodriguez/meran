@@ -66,10 +66,11 @@ sub agregar{
 }
 
 sub modificar{
-    my ($self)           = shift;
-    my ($marc_record)    = @_;
+    my ($self)      = shift;
+    my ($params)    = @_;
 
-# TODO terminar
+    $self->setId1($params->{'id1'});
+    $self->setId2Padre($params->{'id2'});
 
     $self->save();
 }
