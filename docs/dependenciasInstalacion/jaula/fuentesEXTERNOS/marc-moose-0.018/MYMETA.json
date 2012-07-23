@@ -1,0 +1,52 @@
+{
+   "abstract" : "Moose based MARC records set of tools",
+   "author" : [
+      "Frederic Demians <f.demians@tamil.fr>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Dist::Zilla version 4.102345, CPAN::Meta::Converter version 2.110930, CPAN::Meta::Converter version 2.120351",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "marc-moose",
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "MARC::File::XML" : "0",
+            "Module::Build" : "0.3601",
+            "Test::More" : "0",
+            "Time::HiRes" : "0"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "6.31",
+            "Module::Build" : "0.3601"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Carp" : "0",
+            "JSON" : "0",
+            "MARC::Record" : "0",
+            "Moose" : "1.00",
+            "Moose::Util::TypeConstraints" : "0",
+            "Text::Iconv" : "1.7",
+            "XML::SAX" : "0",
+            "XML::SAX::Base" : "0",
+            "XML::Simple" : "0",
+            "XML::Writer" : "0.606",
+            "YAML" : "0",
+            "YAML::Syck" : "0",
+            "namespace::autoclean" : "0",
+            "overload" : "0"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "version" : "0.018"
+}

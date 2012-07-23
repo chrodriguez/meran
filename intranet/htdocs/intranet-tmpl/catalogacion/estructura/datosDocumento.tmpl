@@ -270,6 +270,9 @@ $(document).ready( function() {
 <!--            Manejo del Nivel 3 -->
 <div id="nivel3Tabla" style="display:none"> 
 
+    [% IF tipoAccion == "MODIFICAR_NIVEL_3" %]
+            [% INCLUDE  "estructura/link_a_registro.tmpl" %]
+    [% END %]
 
 	<form id="formNivel3" name="formNivel3" class="form-horizontal" onsubmit="return false;">
 		<fieldset>

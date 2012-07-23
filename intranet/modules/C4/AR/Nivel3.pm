@@ -438,15 +438,8 @@ sub detalleNivel3{
         $db      = $n3_temp->db;
     }
 
-    my $nivel2_object = undef;
-    
+    my $nivel2_object = undef;    
     my $nivel2_object = C4::AR::Nivel2::getNivel2FromId2($id2,$db);
-
-
-# FIXME creo q no es necesario
-    # $hash_nivel2{'nivel1_analiticas_array'}     = undef;
-    # $hash_nivel2{'nivel1_padre'}                = undef; #para el link al registro padre de una analitica
-    
 
     if($nivel2_object){
 
@@ -468,7 +461,7 @@ sub detalleNivel3{
         $hash_nivel2{'esta_en_estante_virtual'} = C4::AR::Estantes::estaEnEstanteVirtual($id2);
         my ($totales_nivel3, @result)           = detalleDisponibilidadNivel3($id2,$nivel2_object->db);
         $hash_nivel2{'nivel3'}                  = \@result;
-        $hash_nivel2{'cant_ejemplares'}       = $totales_nivel3->{'cant_ejemplares'};
+        $hash_nivel2{'cant_ejemplares'}         = $totales_nivel3->{'cant_ejemplares'};
         $hash_nivel2{'cant_nivel3'}             = scalar(@result);
         $hash_nivel2{'cantPrestados'}           = $totales_nivel3->{'cantPrestados'};
         $hash_nivel2{'cantReservas'}            = $totales_nivel3->{'cantReservas'};
@@ -492,21 +485,22 @@ sub detalleNivel3{
         $hash_nivel2{'tiene_analiticas'}        = $tiene_analiticas;
         $hash_nivel2{'show_action'}             = 1; #muestra la accion agregar analitica
         $hash_nivel2{'show_analiticas'}         = $tiene_analiticas; #muestra la accion "Ver analíticas" si el grupo tiene analíticas
+        $hash_nivel2{'cant_analiticas'}         = $tiene_analiticas;
 
         if($nivel2_object->getTemplate() eq "ANA"){
 
             #recupero las analiticas por el id1    
-            my $cat_reg_analiticas_array_ref = C4::AR::Nivel2::getAllNivel1FromAnaliticasById1($nivel2_object->getId1());
+            my $cat_reg_analiticas_array_ref    = C4::AR::Nivel2::getAllAnaliticasById1($nivel2_object->getId1());
 
             if( ($cat_reg_analiticas_array_ref) && (scalar(@$cat_reg_analiticas_array_ref) > 0) ){
                 my $n2 = C4::AR::Nivel2::getNivel2FromId2($cat_reg_analiticas_array_ref->[0]->getId2Padre());
 
                 if($n2){
-                    $hash_nivel2{'nivel1_padre'} = $n2->getId1();
+                    $hash_nivel2{'nivel1_padre'}    = $n2->getId1();
                 }
             }
 
-            $hash_nivel2{'show_action'}         = 0;
+            $hash_nivel2{'show_action'}             = 0;
         }
     }
 
@@ -638,15 +632,16 @@ sub detalleCompletoINTRA {
         }
     }
 
-    $t_params->{'nivel1'}           = $nivel1->toMARC_Intra;
-    $t_params->{'nivel1_template'}  = $nivel1->getTemplate();
-    $t_params->{'tipo_documento'}   = $nivel1->getNombreTipoDoc();
-    $t_params->{'id1'}              = $id1;
-    $t_params->{'indexado'}         = $nivel1->estaEnIndice;
-    $t_params->{'titulo'}           = $nivel1->getTitulo();    
-    $t_params->{'autor'}            = $nivel1->getAutor();
-    $t_params->{'cantItemN1'}       = C4::AR::Nivel3::cantNiveles3FromId1($id1,$nivel1->db);
-    $t_params->{'nivel2'}           = \@nivel2;
+    $t_params->{'nivel1'}                       = $nivel1->toMARC_Intra;
+    $t_params->{'nivel1_template'}              = $nivel1->getTemplate();
+    $t_params->{'show_asociar_registro_fuente'} = ($nivel1->getTemplate() == "ANA")?1:0;
+    $t_params->{'tipo_documento'}               = $nivel1->getNombreTipoDoc();
+    $t_params->{'id1'}                          = $id1;
+    $t_params->{'indexado'}                     = $nivel1->estaEnIndice;
+    $t_params->{'titulo'}                       = $nivel1->getTitulo();    
+    $t_params->{'autor'}                        = $nivel1->getAutor();
+    $t_params->{'cantItemN1'}                   = C4::AR::Nivel3::cantNiveles3FromId1($id1,$nivel1->db);
+    $t_params->{'nivel2'}                       = \@nivel2;
     #se ferifica si la preferencia "circularDesdeDetalleDelRegistro" esta seteada
     $t_params->{'circularDesdeDetalleDelRegistro'}  = C4::AR::Preferencias::getValorPreferencia('circularDesdeDetalleDelRegistro');
 

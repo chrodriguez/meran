@@ -288,6 +288,21 @@ sub getAllNivel2{
     return ($nivel2_array_ref);
 }
 
+
+sub getAllAnaliticas{
+    my ($id1, $db) = @_;
+    
+    $db = $db || C4::Modelo::CatRegistroMarcN2->new()->db();
+
+    my $nivel2_array_ref = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(
+                                                                        db => $db,
+                                                                        query => [
+                                                                                        template => { eq => "ANA" },
+                                                                                ],
+                                                                );
+                                                                
+    return ($nivel2_array_ref);
+}
 =head2
 sub getNivel2FromId1
 
@@ -570,22 +585,25 @@ sub getAnaliticasFromNivel2{
             my %hash_nivel1_aux;   
             my @nivel2_array; 
     
-            my $n1_object                               = C4::AR::Nivel1::getNivel1FromId1($n2->getId1());
+            my $n1_object                                           = C4::AR::Nivel1::getNivel1FromId1($n2->getId1());
             if($n1_object){
-                    $hash_nivel1_aux{'nivel1_analitica'}        = $n1_object->toMARC_Intra;
+                    $hash_nivel1_aux{'nivel1_analitica'}            = $n1_object->toMARC_Intra;
+                    $hash_nivel1_aux{'nivel1_analitica_titulo'}     = $n1_object->getTitulo();
+                    $hash_nivel1_aux{'nivel1_analitica_autor'}      = $n1_object->getAutor();
+                    $hash_nivel1_aux{'nivel1_analitica_id1'}        = $n1_object->getId1();
             }        
 
 # TODO falta levantar los grupos del nivel 1 q estoy procedando!!!!!!!!!!!!!!!!!   
 # es otro foreach         
-            my $n2_array_ref                            = C4::AR::Nivel2::getNivel2FromId1($n2->getId1());
+            my $n2_array_ref                                = C4::AR::Nivel2::getNivel2FromId1($n2->getId1());
             foreach my $n2 (@$n2_array_ref){
                 my %hash_nivel2_aux;  
 
-                $hash_nivel2_aux{'nivel2_analitica'}    = $n2->toMARC_Intra;
+                $hash_nivel2_aux{'nivel2_analitica'}        = $n2->toMARC_Intra;
                 push(@nivel2_array, \%hash_nivel2_aux);
             }
 
-            $hash_nivel1_aux{'nivel2_analitica_array'} = \@nivel2_array;
+            $hash_nivel1_aux{'nivel2_analitica_array'}      = \@nivel2_array;
         
             push(@analitica_array, \%hash_nivel1_aux);
         }
@@ -594,7 +612,11 @@ sub getAnaliticasFromNivel2{
     return \@analitica_array;
 }
 
-sub getAllNivel2FromAnaliticasById2{
+
+=item
+    Retorna las analiticas que se encuentran relacionadas a una edicion
+=cut
+sub getAllAnaliticasById2{
     my($id2, $db) = @_;
 
     $db = $db || C4::Modelo::CatRegistroMarcN2Analitica->new()->db();
@@ -615,7 +637,7 @@ sub getAllNivel2FromAnaliticasById2{
     }
 }
 
-sub getAllNivel1FromAnaliticasById1{
+sub getAllAnaliticasById1{
     my($id1, $db) = @_;
 
     $db = $db || C4::Modelo::CatRegistroMarcN2Analitica->new()->db();
@@ -635,29 +657,6 @@ sub getAllNivel1FromAnaliticasById1{
         return 0;
     }
 }
-
-=item
-sub getAllNivel2FromAnaliticasById2{
-    my($id2, $db) = @_;
-
-    $db = $db || C4::Modelo::CatRegistroMarcN2Analitica->new()->db();
-
-    my @filtros;
-    push (@filtros, ('cat_registro_marc_n2_id'       => { eq => $id2 } ));
-
-    my $nivel2_analiticas_array_ref = C4::Modelo::CatRegistroMarcN2Analitica::Manager->get_cat_registro_marc_n2_analitica(
-                                                                        db      => $db,
-                                                                        query   => \@filtros,
-                                                                );
-
-
-    if( scalar(@$nivel2_analiticas_array_ref) > 0){
-        return ($nivel2_analiticas_array_ref);
-    }else{
-        return 0;
-    }
-}
-=cut
 
 =item
     Retorna el registro fuente de una analitica a partir de un id1
