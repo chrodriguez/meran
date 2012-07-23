@@ -197,6 +197,12 @@
 
     }   
 
+
+	function generarPDF(form_id) {
+		$('#export').val("1");
+        $('#' + form_id).submit();
+    }
+
     $(document).ready(function() {
         $('.fancylink').fancybox();
     });
@@ -254,6 +260,7 @@
                     <input type="hidden" id="tipoAccion" name="tipoAccion" value="[% tipoAccion %]" />
                     <input type="hidden" id="token" name="token" value="[% token %]" />
                     <input type="hidden" id="orden" name="orden" value="" />
+                    <input type="hidden" id="export" name="export" value="" />
                     <input type="hidden" id="sentido_orden" name="sentido_orden" value="" />
                     <input type="hidden" id="primera_vez" name="primera_vez" value="" />
                 </form>
@@ -493,16 +500,10 @@
                   [% PERL %]
                       	print C4::AR::Filtros::action_set_button(    
                             button          => 'btn btn-primary',
-                            title => "[% 'Acciones' | i18n %]",
-                            action => "exportar()",
+                            title => "[% 'Exportar a PDF' | i18n %]",
+                            action => 'generarPDF("ordenar_tabla")',
                             icon => "icon-white icon-edit",
-                                                
-                            actions         => [
-                                                {title => "Exportar a PDF", 
-                                                 action=>"generarVariasEtiquetas([% id2 %])", 
-                                                
-                                                }
-                                                ],
+                                             
                              popover       => {text=>'Esta acci&oacute;n se aplica para todos los ejemplares ', 
                                                title=> 'Atenci&oacute;n'}
   

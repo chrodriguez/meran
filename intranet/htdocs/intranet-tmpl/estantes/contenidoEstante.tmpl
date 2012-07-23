@@ -2,10 +2,14 @@
 
 <script type="text/javascript">
    
+var ORDEN;
+var SENTIDO_ORDEN=1; //1 para ASC - 0 DESC
+
 $(document).ready(function(){
     existeEnContenido();
 });
-    
+
+
 function existeEnContenido(){
        $('#tablaResult input').each(
                 function(){
@@ -59,13 +63,19 @@ function borrarCont(cont, estante, padre){
                   [% PERL %]
                       print C4::AR::Filtros::tableHeader(   
                                         id              => "tablaResultCont",
-                                        class           => "",
+                                        class           => "table table-bordered",
                                         selectAll_id    => "",
-                                        columns         => ['[% "Titulo" | i18n %]','[% 'Autor' | i18n %]',
+                                        columns         => ['[% "T&iacute;tulo" | i18n %]','[% 'Autor' | i18n %]',
                                                             '[% "Edicion" | i18n %]',
-                                                            ]
-                                                                        
-                                              ) ;
+                                                            ],
+                                        order          => { 
+                                                             'T&iacute;tulo' =>'titulo', 
+                                                             'Autor' => 'autor',
+                                                             'Edici&oacute;n' => '',
+                                                                      
+                                                            },
+                                        order_name_function => "busqueda_contenido",
+                      );
                   [% END %]
 
             [% FOREACH SEARCH_RESULTS %]
