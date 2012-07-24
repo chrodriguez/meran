@@ -8,10 +8,10 @@ use C4::AR::MensajesContacto;
 my $query = new CGI;
 
 my ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
-									template_name   => "main.tmpl",
-									query           => $query,
-									type            => "intranet",
-									authnotrequired => 0,
+                                    template_name   => "main.tmpl",
+                                    query           => $query,
+                                    type            => "intranet",
+                                    authnotrequired => 0,
                                     flagsrequired   => {  ui            => 'ANY', 
                                                         tipo_documento  => 'ANY', 
                                                         accion          => 'CONSULTA', 
