@@ -179,6 +179,7 @@ my ($template, $session, $t_params) = get_template_and_user(
     my ($cantidad, $resultId1, $suggested)      = C4::AR::Busquedas::busquedaCombinada_newTemp($search->{'keyword'}, $session, $obj);
     $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad, $cantR, $pageNumber, $obj->{'funcion'}, $t_params);
     $obj->{'cantidad'}              = $cantidad;
+    $t_params->{'sentido_orden'}    = $obj->{'sentido_orden'};
     $t_params->{'SEARCH_RESULTS'}   = $resultId1;
     $t_params->{'cantidad'}         = $cantidad;
     $t_params->{'socio_busqueda'}         = $valor;

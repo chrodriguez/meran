@@ -500,12 +500,10 @@
                   [% PERL %]
                       	print C4::AR::Filtros::action_set_button(    
                             button          => 'btn btn-primary',
-                            title => "[% 'Exportar a PDF' | i18n %]",
+                            title => "[% 'Guardar B&uacute;squeda' | i18n %]",
                             action => 'generarPDF("ordenar_tabla")',
-                            icon => "icon-white icon-edit",
-                                             
-                             popover       => {text=>'Esta acci&oacute;n se aplica para todos los ejemplares ', 
-                                               title=> 'Atenci&oacute;n'}
+                            icon => "",
+                                          
   
                               ) ;
                   [% END %]

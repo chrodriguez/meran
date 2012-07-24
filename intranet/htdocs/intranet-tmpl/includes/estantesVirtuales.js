@@ -24,7 +24,7 @@ function changePage(ini){
 
 function ordenar(orden){
             objAH.sort(orden);
-        }
+}
 
 function verEstanteDesdeBusqueda(idEstante){
         objAH=new AjaxHelper(updateVerEstanteDesdeBusqueda);
@@ -286,25 +286,6 @@ function agregarContenido(estante,padre){
       $('#contenido_estante').modal();
 }
 
-function cambiarSentidoOrd(){
-  if (SENTIDO_ORDEN == 1){
-    $('#icon_'+ ORDEN).attr("class","icon-chevron-up click");
-  } else {
-    $('#icon_'+ ORDEN).attr("class","icon-chevron-down click");
-  }
-}
-
-
-function ordenar_busqueda_contenido(orden){
-          if (orden == ORDEN) {
-              SENTIDO_ORDEN= !SENTIDO_ORDEN;
-          } else {
-              SENTIDO_ORDEN= 1;
-              ORDEN = orden;
-          }
-          objAH.sentido_orden = SENTIDO_ORDEN;
-          objAH.sort(orden);        
-}
 
 function buscarContenido(){
     
@@ -319,6 +300,8 @@ function buscarContenido(){
         objAH.only_sphinx = 1;
         objAH.valor=$('#input_busqueda_contenido').val();
         objAH.tipo= 'BUSCAR_CONTENIDO';
+        // objAH.sentido_orden= SENTIDO_ORDEN;
+        alert(SENTIDO_ORDEN);
         objAH.sendToServer();
 }
 
@@ -326,13 +309,39 @@ function updateBuscarContenido(responseText){
     // var infoHash = JSONstring.toObject(responseText);
     $('#buscarContBoton').replaceWith("<a id=buscarContBoton class='btn btn-primary click' onclick=buscarContenido();><i class='icon-search icon-white'></i> Buscar</a>"); 
 	$('#resultado_contenido_estante').html(responseText);
-    $('#resultado_contenido_estante').show();
-	zebra('datos_tabla');
-    ocultarLayer();
+    alert(SENTIDO_ORDEN);
     if (ORDEN){
         cambiarSentidoOrd();
     }
+    $('#resultado_contenido_estante').show();
+	zebra('datos_tabla');
+    ocultarLayer();
+    
 }
+
+function cambiarSentidoOrd(){
+    if (objAH.sentido_orden == 1){
+                $('#icon_'+ ORDEN).attr("class","icon-chevron-down click");
+    } else {
+                $('#icon_'+ ORDEN).attr("class","icon-chevron-up click");
+    }   
+}
+
+function ordenar_busqueda_contenido(orden){
+          if (orden == ORDEN) {
+            if (SENTIDO_ORDEN == 1){
+                SENTIDO_ORDEN= 0;
+            } else {
+                SENTIDO_ORDEN= 1;
+            }
+          } else {
+              SENTIDO_ORDEN= 1;
+              ORDEN = orden;
+          }
+          objAH.sentido_orden = SENTIDO_ORDEN;
+          objAH.sort(orden);    
+}
+
 
 function agregarContenidoAEstante(id2 ){
     objAH=new AjaxHelper(updateAgregarContenidoAEstante);
