@@ -1,4 +1,4 @@
-var objAH_search;var ORDEN;var SENTIDO_ORDEN=1;var combinables=['titulo','autor','tipo','signatura','tipo_nivel3_id'];var noCombinables=['keyword','isbn','dictionary','codBarra','estante','tema'];var shouldScroll=true;function ordenar_busqueda_catalogo(orden){if(orden==ORDEN){SENTIDO_ORDEN=!SENTIDO_ORDEN;}else{SENTIDO_ORDEN=1;ORDEN=orden;}
+var objAH_search;var ORDEN="titulo";var SENTIDO_ORDEN=0;var combinables=['titulo','autor','tipo','signatura','tipo_nivel3_id'];var noCombinables=['keyword','isbn','dictionary','codBarra','estante','tema'];var shouldScroll=true;function ordenar_busqueda_catalogo(orden){if(orden==ORDEN){SENTIDO_ORDEN=!SENTIDO_ORDEN;}else{SENTIDO_ORDEN=1;ORDEN=orden;}
 objAH_search.sentido_orden=SENTIDO_ORDEN;objAH_search.sort(orden);}
 function cambiarSentidoOrd(){if(SENTIDO_ORDEN){$('#icon_'+ORDEN).attr("class","icon-chevron-up click");}else{$('#icon_'+ORDEN).attr("class","icon-chevron-down click");}}
 function updateInfoBusquedas(responseText){var result_div_id="marco_contenido_datos";if(es_avanzada)

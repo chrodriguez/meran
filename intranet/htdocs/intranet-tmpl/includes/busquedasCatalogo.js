@@ -1,7 +1,7 @@
 var objAH_search;
 
-var ORDEN;
-var SENTIDO_ORDEN=1; //1 para ASC - 0 DESC
+var ORDEN = "titulo";
+var SENTIDO_ORDEN= 0; //1 para ASC - 0 DESC
 
 
 var combinables     = ['titulo', 'autor', 'tipo', 'signatura', 'tipo_nivel3_id'];

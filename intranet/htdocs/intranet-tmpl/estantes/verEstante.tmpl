@@ -23,20 +23,19 @@
 
                                           <div class="form-actions">
                                                 
-
                                                 [% PERL %]
-                                                                    print C4::AR::Filtros::action_button(
-                                                                                                        button   => "btn btn-success",
-                                                                                                        title   => "[% 'Agregar estante' | i18n %]",
-                                                                                                        action => "agregarNuevoEstante();",
+                                               print C4::AR::Filtros::action_button(
+                                                              button   => "btn btn-success",
+                                                              title   => "[% 'Agregar estante' | i18n %]",
+                                                              action => "agregarNuevoEstante();",
                                                                             ) ;
                                                 [% END %]
                                                 [% IF cant_estantes %]
                                                       [% PERL %]
-                                                                    print C4::AR::Filtros::action_button(
-                                                                                                        button  => "btn btn-danger",
-                                                                                                        action => "borrarEstantesSeleccionados(0,0);",
-                                                                                                        title   => "[% 'Borrar seleccionados' | i18n %]",
+                                                    print C4::AR::Filtros::action_button(
+                                                              button  => "btn btn-danger",
+                                                              action => "borrarEstantesSeleccionados(0,0);",
+                                                              title   => "[% 'Borrar seleccionados' | i18n %]",
                                                                             ) ;
                                                       [% END %]
                                                 [% END %]

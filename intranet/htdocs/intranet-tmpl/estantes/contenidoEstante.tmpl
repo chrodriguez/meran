@@ -1,9 +1,6 @@
  [% USE HTML%]
 
 <script type="text/javascript">
-   
-var ORDEN;
-var SENTIDO_ORDEN= 1; //1 para ASC - 0 DESC
 
 $(document).ready(function(){
     existeEnContenido();
@@ -61,20 +58,21 @@ function borrarCont(cont, estante, padre){
          [% IF cantidad %]
                   <div class="contenedor_paginador">[% paginador %]</div>  
                   [% PERL %]
-                      print C4::AR::Filtros::tableHeader(   
+                      print C4::AR::Filtros::sortableTableHeader(   
                                         id              => "tablaResultCont",
                                         class           => "table table-bordered",
                                         selectAll_id    => "",
                                         columns         => ['[% "T&iacute;tulo" | i18n %]','[% 'Autor' | i18n %]',
                                                             '[% "Edicion" | i18n %]',
                                                             ],
-                                        order          => { 
-                                                             'T&iacute;tulo' =>'titulo', 
+                                        sortable_fields          => {'T&iacute;tulo' => 'titulo', 
                                                              'Autor' => 'autor',
                                                              'Edici&oacute;n' => '',
-                                                                      
-                                                            },
+                                                          },
+                                        order => [% orden %],
+                                        order_direction => [% sentido_orden %],
                                         order_name_function => "busqueda_contenido",
+
                       );
                   [% END %]
 
