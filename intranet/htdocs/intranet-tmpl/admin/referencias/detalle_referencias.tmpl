@@ -10,7 +10,7 @@
       });
 </script>
 <fieldset id="fieldset_tablaResult_involved">
-    <legend class="trigger click">[% "Registro " | i18n %]:</legend>
+    <legend>[% "Registro " | i18n %]:</legend>
         <div class="datos_tabla_div_referenced" id="datos_tabla_div">
         
             <table id="tablaResult_involved" class="table table-striped">
@@ -60,7 +60,7 @@
 </br>
 </br>
 <fieldset>
-    <legend class="titulo_legend trigger click">[% "Relaciones " | i18n %]: [% tabla %]</legend>
+    <legend>[% "Relaciones " | i18n %]: [% tabla %]</legend>
         <div class="datos_tabla_div" id="datos_tabla_div">
             <table id="tablaResult_relacionados" class="table table-striped">
                 <thead>
@@ -71,9 +71,11 @@
                 <tbody>
                         [% IF involved %]
                             [% FOREACH data IN involved %]
-                                <tr>
-                                    <td> [% "El registro tiene " | i18n %][% data.cantidad %][% " tupla(s) relacionada(s) en la tabla " | i18n %] [% data.tabla %]</td>
-                                </tr>
+                                [% IF data.cantidad > 0%]
+                                  <tr>
+                                      <td> [% "El registro tiene " | i18n %] [% data.cantidad %] [% " tupla(s) relacionada(s) en la tabla " | i18n %] [% data.tabla %]</td>
+                                  </tr>
+                                [% END %]
                             [% END %]
                         [% ELSE %]
                               <tr><td>[% "No existe ninguna tabla que haga uso de esta tabla de referencia" | i18n %]</td></tr>
@@ -85,7 +87,7 @@
 </br>
 </br>
 <fieldset>
-    <legend class="titulo_legend trigger click">[% "Similares " | i18n %]: [% tabla %]</legend>
+    <legend>[% "Similares " | i18n %]: [% tabla %]</legend>
         <div class="datos_tabla_div_related" id="datos_tabla_div">
             <table id="tablaResult_similares" class="table table-striped">
                 <thead>
