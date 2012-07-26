@@ -30,6 +30,9 @@ if($@){
     my $sentido_orden   = $obj->{'sentido_orden'};
     my $tipoAccion      = $obj->{'tipoAccion'}||"";
 
+
+
+
     if($tipoAccion eq "BUSQUEDA_POR_ESTANTE"){
        $template_name = 'busquedas/estante.tmpl';
     } elsif ($tipoAccion eq "BUSQUEDA_ESTANTE_DE_GRUPO"){
@@ -48,6 +51,9 @@ if($@){
                             });
 
 
+    $t_params->{'orden'}  = $orden;
+    $t_params->{'sentido_orden'}  = $sentido_orden;
+  
     my $start                   = [ Time::HiRes::gettimeofday( ) ]; #se toma el tiempo de inicio de la busqueda
     my $dateformat              = C4::Date::get_date_format();
     my ($ini,$pageNumber,$cantR)= C4::AR::Utilidades::InitPaginador($ini);

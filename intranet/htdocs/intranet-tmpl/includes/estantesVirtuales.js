@@ -301,7 +301,7 @@ function buscarContenido(){
         
         objAH.orden= ORDEN;
         objAH.sentido_orden= SENTIDO_ORDEN;
-      
+
         objAH.sendToServer();
 }
 
@@ -326,7 +326,11 @@ function updateBuscarContenido(responseText){
 function ordenar_busqueda_contenido(orden){
 
         if (orden == ORDEN) {
-              SENTIDO_ORDEN= !SENTIDO_ORDEN;
+             if (SENTIDO_ORDEN == 1){
+                    SENTIDO_ORDEN= 0;
+             } else {
+                    SENTIDO_ORDEN= 1;
+             }
           } else {
               SENTIDO_ORDEN= 1;
               ORDEN = orden;
