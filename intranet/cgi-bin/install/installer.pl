@@ -39,7 +39,19 @@ sub checkDB{
     }
 }
 
+sub checkDependencies{
 
+
+
+    my @dep = ();
+
+    if (scalar(@dep)){
+        return \@dep;
+    }else{
+        return 0;
+    }
+
+}
 
 
 
@@ -129,6 +141,14 @@ if ($action eq 'base'){
     }
 }else{
     $file = 'index.tmpl';
+
+    if (checkDependencies()){
+        $vars->{'dependencies_not_satisfied'} = checkDependencies();
+
+        $vars->{'mensaje'} = "Su sistema no cumple con los requisitos para que Meran pueda funcionar.";
+        $vars->{'alert_class'} = 'alert-error';
+    }
+
 }
 
 
