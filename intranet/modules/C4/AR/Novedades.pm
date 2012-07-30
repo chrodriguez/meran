@@ -43,6 +43,7 @@ sub agregar{
     
     eval{
 
+
         #agregamos primero la novedad
         #para sacarle el id despues
         $novedad->agregar($datosNovedad);
@@ -74,6 +75,7 @@ sub agregar{
                 $imagenes_novedades_opac->saveImagenNovedad($image_name, $novedad->getId());    
                 $msg_object->{'error'}= 0;
             }
+
         }
         
     };

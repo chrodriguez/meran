@@ -38,19 +38,21 @@
         [% IF cantidad %]
             <div class="contenedor_paginador">[% paginador %]</div>
              [% PERL %]
-                 print C4::AR::Filtros::tableHeader(   
+                 print C4::AR::Filtros::sortableTableHeader(   
                                                          id              => "tablaResult",
                                                          class           => "table table-bordered",
                                                          columns         => ['[% "Tipo"|i18n %]','[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]',
                                                                              '[% "Edici&oacute;n"|i18n %]','[% "Disponibilidad"|i18n %]', [% IF signatura_filter %] '[% "Signatura"|i18n %]' [% END %],
                                                                             ],
-                                                         order          => {  'Tipo' => '',
+                                                         sortable_fields          => {  'Tipo' => '',
                                                                                'T&iacute;tulo' =>'titulo', 
                                                                                'Autor' => 'autor',
                                                                                'Edici&oacute;n' => '',
                                                                                'Disponibilidad' =>'',
                                                                                [% IF signatura_filter %] 'Signatura' => '' [% END %]
                                                                              },
+                                                        order => "[% orden %]",
+                                                        order_direction => "[% sentido_orden %]",
                                                         order_name_function => "busqueda_catalogo"
                                                         
                                                          
