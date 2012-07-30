@@ -64,14 +64,14 @@ function borrarCont(cont, estante, padre){
                                         selectAll_id    => "",
                                         columns         => ["[% 'T&iacute;tulo' | i18n %]","[% 'Autor' | i18n %]","[% 'Edici&oacute;n' | i18n %]",
                                                             ],
-                                        sortable_fields => {'T&iacute;tulo' => 'titulo', 
-                                                             'Autor' => 'autor',
-                                                             'Edici&oacute;n' => '',
-                                                          },
-                                        order => [% orden %],
-                                        order_direction => [% sentido_orden %],
-                                        order_name_function => "busqueda_contenido",
 
+                                        sortable_fields  => { 'T&iacute;tulo' =>'titulo', 
+                                                              'Autor' => 'autor',
+                                                              'Edici&oacute;n' => ''
+                                                            },
+                                        order => "[% orden %]",
+                                        order_direction => "[% sentido_orden %]",
+                                        order_name_function => "busqueda_contenido"
                       );
                   [% END %]
 

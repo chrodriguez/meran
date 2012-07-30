@@ -294,14 +294,14 @@
     
     [% IF cantidad > 0 %]
              [% PERL %]
-                 print C4::AR::Filtros::tableHeader(   
+                 print C4::AR::Filtros::sortableTableHeader(   
                                                          id             => "tablaResult",
                                                          class          => "table table-bordered",
                                                          columns        => ['[% "Tipo"|i18n %]','[% "T&iacute;tulo"|i18n %]','[% "Autor"|i18n %]',
                                                                              '[% "Edici&oacute;n"|i18n %]','[% "Disponibilidad"|i18n %]', '[% "Valoraci&oacute;n" | i18n %]',
                                                                              [% IF socio_data.usr_permisos_opac %]'[% "Favoritos" | i18n %]'[% END %]
                                                                             ],
-                                                          order          => {  'Tipo' => '',
+                                                          sortable_fields  => {  'Tipo' => '',
                                                                                'T&iacute;tulo' =>'titulo', 
                                                                                'Autor' => 'autor',
                                                                                'Edici&oacute;n' => '',
@@ -309,6 +309,8 @@
                                                                                'Valoracion' =>'',
                                                                       
                                                                              },
+                                                          order => "[% orden %]",
+                                                          order_direction => "[% sentido_orden %]",
                                                           order_name_function => "busqueda_opac"
                                                          
                              ) ;
