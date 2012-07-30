@@ -201,6 +201,7 @@ sub uploadAdjuntoNovedadOpac{
             	print WRITEIT; 
             }
             close(WRITEIT);
+            
         
         }
 

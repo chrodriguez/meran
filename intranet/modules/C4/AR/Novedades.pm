@@ -43,7 +43,7 @@ sub agregar{
     
         my $imagenes_novedades_opac;   
         
-        eval{
+        #eval{
 
             #agregamos primero la novedad
             #para sacarle el id despues
@@ -78,7 +78,7 @@ sub agregar{
                 }
             }
             
-        };
+        #};
 
      }
      
