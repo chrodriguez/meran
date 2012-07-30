@@ -3,8 +3,7 @@ objAH_search.orden=orden;objAH_search.sentido_orden=SENTIDO_ORDEN;objAH_search.s
 function updateInfoBusquedas(responseText){var result_div_id="marco_contenido_datos";if(es_avanzada)
 result_div_id="resultBusqueda";$("#volver").hide();$('#'+result_div_id).html(responseText);closeModal();if(shouldScroll)
 scrollTo(result_div_id);}
-function updateInfoBusquedasBar(responseText){clearInterval(mensajes_interval_id);$('#navBarResult').html('');updateInfoBusquedas(responseText);if(ORDEN){cambiarSentidoOrd();}
-$(window).unbind('scroll');}
+function updateInfoBusquedasBar(responseText){clearInterval(mensajes_interval_id);$('#navBarResult').html('');updateInfoBusquedas(responseText);$(window).unbind('scroll');}
 function busquedaPorTipoDoc(){objAH_search=new AjaxHelper(updateBusquedaCombinable);objAH_search.debug=true;objAH_search.showOverlay=true;objAH_search.url=URL_PREFIX+'/busquedas/busquedasDB.pl';objAH_search.only_available=($('#only_available').attr('checked'))?1:0;objAH_search.tipo_nivel3_name=$('#tipo_nivel3_id').val();objAH_search.tipoAccion='BUSQUEDA_AVANZADA';objAH_search.funcion='changePage_search';objAH_search.sendToServer();}
 function busquedaCombinable(){var radio=$("#tipo:checked");var tipo=radio[0].value;objAH_search=new AjaxHelper(updateBusquedaCombinable);objAH_search.debug=true;objAH_search.showOverlay=true;objAH_search.url=URL_PREFIX+'/busquedas/busquedasDB.pl';objAH_search.titulo=$('#titulo').val();objAH_search.tipo=tipo;objAH_search.autor=$('#autor').val();objAH_search.only_available=($('#only_available').attr('checked'))?1:0;objAH_search.signatura=$('#signatura').val();objAH_search.tipo_nivel3_name=$('#tipo_nivel3_id').val();objAH_search.tema=$('#tema').val();objAH_search.codBarra=$('#codBarra').val();objAH_search.isbn=$('#isbn').val();objAH_search.tipoAccion='BUSQUEDA_AVANZADA';objAH_search.funcion='changePage_search';objAH_search.sendToServer();}
 function updateBusquedaCombinable(responseText){updateInfoBusquedas(responseText);}

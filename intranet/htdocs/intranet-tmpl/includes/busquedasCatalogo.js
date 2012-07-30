@@ -46,9 +46,6 @@ function updateInfoBusquedasBar(responseText){
 	clearInterval(mensajes_interval_id);
 	$('#navBarResult').html(''); 
 	updateInfoBusquedas(responseText);
-    if (ORDEN){
-      cambiarSentidoOrd();
-    }
 	$(window).unbind('scroll');	
 }
 
