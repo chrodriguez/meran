@@ -128,7 +128,7 @@ my $template = Template->new({  ABSOLUTE    => 1,
                                             ],
                              });
 
-my $session = CGI::Session->load() || CGI::Session->new();
+my $session = CGI::Session->load() || CGI::Session->new(undef,undef, undef);
 
 my $action  = $params->{'action'} || 'default';
 
@@ -216,14 +216,23 @@ if ($action eq 'base'){
 }
 
 
-                                                  
-print $query->header(   
+my $cookie = new CGI::Cookie(  
+                                -secure     => 1, 
+                                -httponly   => 1, 
+                                -name       =>$session->name, 
+                                -value      =>$session->id, 
+                                -expires    => '+' .$session->expire. 's', 
+                            );
+            
+
+print $query->header(   -cookie=>$cookie, 
                         -type=>'text/html', 
                          charset => C4::Context->config("charset")||'UTF-8', 
                          "Cache-control: public",
                      );
 
 
+$vars->{'session_id'} = $session->id();
 
 $template->process($path.'/templates/'.$file, $vars)
     || die "Template process failed: ", $template->error(), "\n";
