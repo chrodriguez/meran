@@ -37,7 +37,7 @@ if($tipoAccion eq "MOSTRAR_SANCIONES"){
     } elsif ($obj->{'orden'} eq "legajo"){
         $orden = "persona.legajo";
     } else {
-        $orden  = $obj->{'orden'}||'persona.apellido';
+        $orden  = 'persona.apellido';
     }
    
     if ($obj->{'sentido_orden'} == "1"){

@@ -1,11 +1,10 @@
 <script type="text/javascript">
       $(document).ready(function() {
-        makeToggle('datos_tabla_div','trigger',null,false);
         $('.fancylink').fancybox();
       });
 </script>
 <fieldset class="resultados_busqueda">
-    <legend class="titulo_legend trigger click" title='[% "click para acceder a los resultados de la b&uacute;squeda" | i18n %]'>
+    <legend class="click" title='[% "click para acceder a los resultados de la b&uacute;squeda" | i18n %]'>
         [% "Resultados de la b&uacute;squeda (cat&aacute;logo)" | i18n %]:</legend>
         <div class="datos_tabla_div" id="datos_tabla_div">
             <div class="resultados_consulta">[% "T&eacute;rmino de b&uacute;squeda" | i18n %]:           

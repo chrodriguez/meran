@@ -38,51 +38,56 @@ sub agregar{
     
     use C4::AR::UploadFile;
     use C4::Modelo::ImagenesNovedadesOpac;
+   
+    my $imagenes_novedades_opac;   
     
-    if (!($msg_object->{'error'})){
+    eval{
+
+
+        #agregamos primero la novedad
+        #para sacarle el id despues
+        $novedad->agregar($datosNovedad);
+        
+        my $adjuntoName = 0;
+        
+        if($paramAdjunto){
+            $adjuntoName = C4::AR::UploadFile::uploadAdjuntoNovedadOpac($paramAdjunto);
+        
+            if(!$adjuntoName){
+                $msg_object->{'error'}= 1;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP13', 'intra'} );
+            }else{
+                $novedad->setAdjunto($adjuntoName);
+                $novedad->save();
+            }
+        }
     
-        my $imagenes_novedades_opac;   
+        #recorremos todas las imagenes y las guardamos      
+        foreach my  $value (@$arrFiles) {
         
-        eval{
-
-            #agregamos primero la novedad
-            #para sacarle el id despues
-            $novedad->agregar($datosNovedad);
+            $image_name = C4::AR::UploadFile::uploadFotoNovedadOpac($value);
             
-            my $adjuntoName = 0;
-            
-            if($paramAdjunto){
-                $adjuntoName = C4::AR::UploadFile::uploadAdjuntoNovedadOpac($paramAdjunto);
-            
-                if(!$adjuntoName){
-                    $msg_object->{'error'}= 1;
-                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP13', 'intra'} );
-                }else{
-                    $novedad->setAdjunto($adjuntoName);
-                    $novedad->save();
-                }
+            if(!$image_name){
+                $msg_object->{'error'}= 1;
+                C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP13', 'intra'} );
+            }else{
+                $imagenes_novedades_opac = C4::Modelo::ImagenesNovedadesOpac->new(db => $db);                 
+                $imagenes_novedades_opac->saveImagenNovedad($image_name, $novedad->getId());    
+                $msg_object->{'error'}= 0;
             }
+
+        }
         
-            #recorremos todas las imagenes y las guardamos      
-            foreach my  $value (@$arrFiles) {
-            
-                $image_name = C4::AR::UploadFile::uploadFotoNovedadOpac($value);
-                
-                if(!$image_name){
-                    $msg_object->{'error'}= 1;
-                    C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP13', 'intra'} );
-                }else{
-                    $imagenes_novedades_opac = C4::Modelo::ImagenesNovedadesOpac->new(db => $db);                 
-                    $imagenes_novedades_opac->saveImagenNovedad($image_name, $novedad->getId());    
-                    $msg_object->{'error'}= 0;
-                }
-            }
-            
-        };
+    };
 
-     }
+    if ($@){
+    
+       $msg_object->{'error'}= 1;
+       C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP12', 'intra'} ) ;
+       
+    }
      
-     return ($msg_object, $novedad);
+    return ($msg_object, $novedad);
 
 }
 

@@ -61,10 +61,18 @@
                                                   >
                                               </a>
                                           [% ELSE %]
-                                              <img border="0" src="[% temas %]/[% tema %]/imagenes/no_foto.jpg" 
-                                                    alt="[% 'Usuario sin foto' | i18n %]"
-                                                    title="[% 'Usuario sin foto' | i18n %]"
-                                              >
+                                              [% IF socio.persona.sexo == 'F' %]
+                                                   <img border="0" src="[% temas %]/[% tema %]/imagenes/no_foto_female.gif"
+                                                         style="height: 70px; width: 70px;" 
+                                                         alt='[% "Usuario sin foto" | i18n %]'
+                                                   >
+                                              [% ELSE %]
+                                                   <img border="0" src="[% temas %]/[% tema %]/imagenes/no_foto_male.gif"
+                                                         style="height: 70px; width: 70px;" 
+                                                         alt='[% "Usuario sin foto" | i18n %]'
+                                                   >
+                                              [% END %]                                          
+
                                           [% END %]
                                       </td>
                                       <td class="nomCompleto">
