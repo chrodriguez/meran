@@ -4,6 +4,7 @@ use strict;
 use C4::AR::Auth;
 use CGI;
 use C4::AR::Novedades;
+use C4::AR::Utilidades;
 my $input = new CGI;
 
 my ($template, $session, $t_params) = get_template_and_user({
@@ -69,7 +70,7 @@ if ($action eq 'editar'){
     
     
     #--------- links -----------
-    my $linksTodos  = $input->param('links');  
+    my $linksTodos  = C4::AR::Utilidades::trim($input->param('links'));  
     my @links       = split('\ ', $linksTodos);   
     my $linksFinal  = "";
     
