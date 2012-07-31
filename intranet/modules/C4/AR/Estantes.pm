@@ -72,10 +72,12 @@ sub getEstante {
     
     my $estantes_array_ref = C4::Modelo::CatEstante::Manager->get_cat_estante( 
                                                                                 query => \@filtros,
+                                                                                require_objects => ['contenido.nivel2.nivel1.IndiceBusqueda' ],
                                                                                 );
     
     my $estante=  $estantes_array_ref->[0];
     
+
     return ($estante);
 }
 

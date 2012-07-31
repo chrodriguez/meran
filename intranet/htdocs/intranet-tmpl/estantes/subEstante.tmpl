@@ -71,20 +71,13 @@
 
                                         <div id="tabla_estantes_[% estante.getId %]" class="datos_tabla_div_contenido_[% estante.getId %]">
                                               [% PERL %]
-                                                      print C4::AR::Filtros::sortableTableHeader(   
+                                                      print C4::AR::Filtros::tableHeader(   
                                                                       id              => "tablaResult",
                                                                       selectAll_id    => "div_contenido_[% estante.getId %]",
                                                                       columns         => ['[% "T&iacute;tulo" | i18n %]','[% "Autor" | i18n %]',
                                                                                           '[% "Lugar" | i18n %]','[% "Edic&iacute;on" | i18n %]'
                                                                                         ],
-                                                                      sortable_fields  => { 'T&iacute;tulo' =>'titulo', 
-                                                                                            'Autor' => 'autor',
-                                                                                            'Lugar'=> '',
-                                                                                            'Edici&oacute;n' => ''
-                                                            },
-                                        order => "[% orden %]",
-                                        order_direction => "[% sentido_orden %]",
-                                        order_name_function => "busqueda_contenido"
+                                                                     
                                                                                                       
                                                                         ) ;
                                               

@@ -17,8 +17,7 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id' ],
 
     relationships => [
-
-        indice_busqueda => {
+        IndiceBusqueda => {
             class       => 'C4::Modelo::IndiceBusqueda',
             key_columns => { id => 'id' },
             type        => 'one to one',
