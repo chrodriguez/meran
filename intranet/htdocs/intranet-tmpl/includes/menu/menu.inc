@@ -23,15 +23,6 @@
 	                                                );
 	                  [% END %]
 	              </li>
-				  <li>
-					[% PERL %]
-	                print C4::AR::Filtros::link_to( text =>     " [% 'B&uacute;squeda Z3950' | i18n %]",
-	                                                url =>      "[% url_prefix %]/z3950/filtradoZ3950.pl",
-													icon	=>		"icon-road",	                                                
-	                                                title =>    " [% 'B&uacute;squeda Z3950' | i18n %]"
-												  ) ;
-	                [% END %]
-	              </li>
 	         	  <li>
 					[% PERL %]
 	                print C4::AR::Filtros::link_to( text =>     " [% 'Registros y Grupos' | i18n %]",

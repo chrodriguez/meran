@@ -14,8 +14,14 @@
 
 	<fieldset>
 		   	<div class="page-header">
-        		<h1>[% titulo %] <small>[% tipo_documento %] - #[% id1 %]</small></h1>
-            	<h2>[% autor %] </h2>	
+
+               [% PERL %]
+                      print C4::AR::Filtros::link_to( text =>     "<h1>[% titulo %] <small>[% tipo_documento %] - #[% id1 %]</small></h1><h2>[% autor %] </h2>  ",
+                                      url     =>"[% url_prefix %]/catalogacion/estructura/detalle.pl", 
+                                      params  =>   ["id1=[% id1 %]"],
+                                      title   =>    "[% 'Mostrar Detalle del Registro' | i18n %]",
+                                    ) ;
+               [% END %]
         </div>    
 	
 		<div id="detalle1" class="detalle1">
