@@ -24,6 +24,15 @@ my $id = $input->param('id') || 0;
 
 if ($action eq 'editar'){
 
+    #------------ data de los inputs-------------
+    $t_params->{'titulo'}       = $input->param('titulo');
+    $t_params->{'categoria'}    = $input->param('categoria');
+    $t_params->{'contenido'}    = $input->param('contenido');
+    $t_params->{'twiter'}       = $input->param('check_publicar');
+    $t_params->{'nombreAdjunto'}= $input->param('nombreAdjunto');
+    $t_params->{'links'}        = $input->param('links');
+    #--------- FIN data de los inputs -----------
+
     #--------- imagenes nuevas -----------
     my @arrayFiles;
     
