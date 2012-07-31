@@ -4,6 +4,7 @@ use strict;
 use C4::AR::Auth;
 use CGI;
 use C4::AR::Novedades;
+use C4::AR::Utilidades;
 use Encode;
 use C4::AR::Social;
 my $input = new CGI;
@@ -56,7 +57,7 @@ if ($action){
     
     
     #--------- links -----------
-    my $linksTodos  = $input->param('links');  
+    my $linksTodos  = C4::AR::Utilidades::trim($input->param('links'));  
     my @links       = split('\ ', $linksTodos);   
     my $linksFinal  = "";
     

@@ -105,6 +105,20 @@ sub editar{
     $novedad->setContenido($input->param('contenido'));
     $novedad->setCategoria($input->param('categoria'));
     $novedad->setLinks($input->param('links'));
+    $novedad->setNombreAdjunto($input->param('nombreAdjunto'));
+
+    my $paramAdjunto = $input->upload('adjunto');
+
+    if($paramAdjunto){
+        my $adjuntoName = C4::AR::UploadFile::uploadAdjuntoNovedadOpac($paramAdjunto);
+    
+        if(!$adjuntoName){
+            $msg_object->{'error'}= 1;
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP13', 'intra'} );
+        }else{
+            $novedad->setAdjunto($adjuntoName);
+        }
+    }
     
     $novedad->save();
     #fin novedad
