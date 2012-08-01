@@ -1451,14 +1451,6 @@ sub reporteGenEtiquetas{
     my @datos_array;
     my $matches = $results->{'matches'};
 
-	C4::AR::Debug::debug("RESULTS: ".$results);
-
-	C4::AR::Utilidades::printHASH($results);
-	
-	C4::AR::Utilidades::printARRAY($results->{'matches'});
-	
-	C4::AR::Debug::debug("CANTIDAD DE RESULTADOS EN DATOS ARRAY ".scalar(@$matches));
-
     my $total_found = $results->{'total_found'};
     # $params->{'total_found'} = $total_found;
 
@@ -1488,9 +1480,14 @@ sub reporteGenEtiquetas{
         $hash_temp{'nivel2'}= C4::AR::Nivel2::getNivel2FromId1($res->{'id1'});
         $hash_temp{'nivel3'}= C4::AR::Nivel3::getNivel3FromId2(%hash_temp->{'nivel2'}[0]->{'id'});
  
+ 		
         push (@datos, \%hash_temp);
+    
        
     }      
+
+
+C4::AR::Debug::debug($total_found);
 
     return ($total_found, \@datos);
 }

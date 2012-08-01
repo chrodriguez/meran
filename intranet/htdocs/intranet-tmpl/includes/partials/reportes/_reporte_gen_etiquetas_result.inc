@@ -142,7 +142,7 @@ $(document).ready(function(){
 
                           </tbody>
                     [% ELSE %]
-                          <div class="alert alert-info">No se han encontrado resultados</div>
+                          <div class="alert alert-info">Esta edicion no tiene ejemplares</div>
                     [% END %]
                     </table>
                   </div>  
