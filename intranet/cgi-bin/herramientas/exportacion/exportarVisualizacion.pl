@@ -19,7 +19,7 @@ my $dsn     = "dbi:mysql:dbname=" . $db .";host=localhost";
 
 eval{
 
-    my $xmlout  = DBIx::XML_RDB->new ($dsn, "mysql", $user, $pass, 'econo') or die "Failed to make new xmlout";
+    my $xmlout  = DBIx::XML_RDB->new ($dsn, "mysql", $user, $pass, $db) or die "Failed to make new xmlout";
 
     $xmlout->DoSql( "select campo, tipo_ejemplar, pre, post, subcampo, vista_opac, vista_campo, orden, "
                 ." orden_subcampo, nivel FROM cat_visualizacion_opac");

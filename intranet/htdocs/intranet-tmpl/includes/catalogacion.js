@@ -731,7 +731,6 @@ function agregarN3(id2, tipo_documento){
     ID_TIPO_EJEMPLAR    = tipo_documento;
     MODIFICAR           = 0;
     inicializar();  
-//  mostrarEstructuraDelNivel3(ID_TIPO_EJEMPLAR);
     open_esquema();
 }
 
@@ -969,17 +968,26 @@ function updateGuardarDocumentoN3(responseText){
     setMessages(Messages);
 
     if (! (hayError(Messages) ) ){
-        //inicializo el arreglo
-        _freeMemory(ID3_ARRAY);
-        ID3_ARRAY= [];
-        _freeMemory(BARCODES_ARRAY);
-        BARCODES_ARRAY= [];
-        //deja la misma estructura, solo borra el campo dato
-        _clearDataFromComponentesArray();
-        //acutalizo los datos de nivel 2
-        mostrarInfoAltaNivel2(ID_N2);
-        //muestra la tabla con los ejemplares agregados
-        mostrarInfoAltaNivel3(ID_N2);
+
+        if (FROM_DETALLE_REGISTRO == 1) {
+            disableAlert();
+            // FIXME no se si esta funcionand
+            $('#ajax-indicator').modal({show:true, keyboard: false, backdrop: false,});
+            window.location = "detalle.pl?id1=" + ID_N1;
+        } else {
+
+            //inicializo el arreglo
+            _freeMemory(ID3_ARRAY);
+            ID3_ARRAY= [];
+            _freeMemory(BARCODES_ARRAY);
+            BARCODES_ARRAY= [];
+            //deja la misma estructura, solo borra el campo dato
+            _clearDataFromComponentesArray();
+            //acutalizo los datos de nivel 2
+            mostrarInfoAltaNivel2(ID_N2);
+            //muestra la tabla con los ejemplares agregados
+            mostrarInfoAltaNivel3(ID_N2);
+        }
     }
 
 }

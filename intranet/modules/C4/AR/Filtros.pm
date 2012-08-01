@@ -911,43 +911,13 @@ sub action_set_button{
     return $html;   
 }
 
-# sub tableHeader{
-#     my (%params_hash_ref) = @_;
-#     
-#     my $id          = $params_hash_ref{'id'}; 
-#     my $class       = $params_hash_ref{'class'} || undef;
-#     my $select_all  = $params_hash_ref{'selectAll_id'} || undef;
-# 
-# 
-#     my $columns     = $params_hash_ref{'columns'};
-#     
-#     my $html = "<table id=$id class='table table-striped $class'><thead>";
-#     
-#     if ($select_all){
-#         $html .= "<th><i class='icon-ok-sign click' id='$select_all' title='".C4::AR::Filtros::i18n("Seleccionar todos")."'></th>";
-#     }
-#     
-#     foreach my $column (@$columns){
-#         $html .= "<th>$column</th>";
-#     }
-# 
-#     $html .= "</thead>";
-#     
-#     return $html;	
-# }
-
-
 sub tableHeader{
     my (%params_hash_ref) = @_;
     
     my $id          = $params_hash_ref{'id'}; 
     my $class       = $params_hash_ref{'class'} || undef;
     my $select_all  = $params_hash_ref{'selectAll_id'} || undef;
-    my $order       = $params_hash_ref{'order'} || undef;
 
-    my $order_name_function =  $params_hash_ref{'order_name_function'} || undef;
-
-   
 
     my $columns     = $params_hash_ref{'columns'};
     
@@ -957,16 +927,66 @@ sub tableHeader{
         $html .= "<th><i class='icon-ok-sign click' id='$select_all' title='".C4::AR::Filtros::i18n("Seleccionar todos")."'></th>";
     }
     
-    if ($order){
-      foreach my $column (@$columns){
-          if ($order->{$column}){   
-                my $field_name= $order->{$column};
-                $field_name =~ s/[.]//g;
-                $html .= "<th class='click' id='columna_$field_name' onclick=ordenar_$order_name_function('".$order->{$column}."')>$column <i id='icon_$field_name' class='icon-chevron-up click' style='float:right;'></th>";
-          } else {
-                 $html .= "<th>$column</th>";
+    foreach my $column (@$columns){
+        $html .= "<th>$column</th>";
+    }
+
+    $html .= "</thead>";
+    
+    return $html;	
+}
+
+
+sub sortableTableHeader{
+    my (%params_hash_ref) = @_;
+    
+    my $id              = $params_hash_ref{'id'}; 
+    my $class           = $params_hash_ref{'class'} || undef;
+    my $select_all      = $params_hash_ref{'selectAll_id'} || undef;
+    my $sortable_fields = $params_hash_ref{'sortable_fields'} || undef;
+    my $order           = $params_hash_ref{'order'} || undef;
+    my $order_direction = $params_hash_ref{'order_direction'} || undef;
+
+    my $order_name_function =  $params_hash_ref{'order_name_function'} || undef;
+
+    my $columns     = $params_hash_ref{'columns'};
+    
+    my $html = "<table id=$id class='table table-striped $class'><thead>";
+    
+    if ($select_all){
+        $html .= "<th><i class='icon-ok-sign click' id='$select_all' title='".C4::AR::Filtros::i18n("Seleccionar todos")."'></th>";
+    }
+
+    if ($sortable_fields){
+          foreach my $column (@$columns){
+              if ($sortable_fields->{$column}){   
+                    my $field_name= $sortable_fields->{$column};
+                    $field_name =~ s/[.]//g;
+
+                    if ($order){
+                       
+                        if ($order eq $field_name){
+                            
+                            if ($order_direction){
+                               
+                                $html .= "<th class='click' id='columna_$field_name' onclick=ordenar_$order_name_function('".$sortable_fields->{$column}."')>$column <i id='icon_$field_name' class='icon-chevron-down click' style='float:right;'></th>";
+                            } else {
+                                
+                                $html .= "<th class='click' id='columna_$field_name' onclick=ordenar_$order_name_function('".$sortable_fields->{$column}."')>$column <i id='icon_$field_name' class='icon-chevron-up click' style='float:right;'></th>";
+                            }
+                        } else {
+                            
+                             $html .= "<th class='click' id='columna_$field_name' onclick=ordenar_$order_name_function('".$sortable_fields->{$column}."')>$column <i id='icon_$field_name' class='icon-chevron-up click' style='float:right;'></th>";
+                        }
+                    } else {
+                       
+                         $html .= "<th class='click' id='columna_$field_name' onclick=ordenar_$order_name_function('".$sortable_fields->{$column}."')>$column <i id='icon_$field_name' class='icon-chevron-up click' style='float:right;'></th>";
+                    }   
+               
+              } else {
+                     $html .= "<th>$column</th>";
+              }
           }
-      }
     } else {
         foreach my $column (@$columns){
             $html .= "<th>$column</th>";

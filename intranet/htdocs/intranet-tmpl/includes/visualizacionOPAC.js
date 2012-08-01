@@ -31,6 +31,8 @@ function showImportarVisualizacion(){
 */
 function realizarImportacion(){
 
+    $('#importarVisualizacion').modal('hide');
+    startOverlay();
     $('#formImportarVisualizacion').submit();
 }
 

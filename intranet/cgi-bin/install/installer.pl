@@ -10,6 +10,9 @@ use DBD::mysql;
 sub persistConfig{
     my $session = shift;
 
+
+# SE ARMA meran.conf 
+
     my @config_array = ();
 
     push (@config_array,"database=".$session->param('dbname'));
@@ -27,7 +30,7 @@ sub persistConfig{
     push (@config_array,"httpduser=".'www-data');
     push (@config_array,"locale=".'/usr/share/meran/intranet/locale/');
     push (@config_array,"defaultLang=".'es_ES');
-    push (@config_array,"debug=".'1024');
+    push (@config_array,"debug=".'128');
     push (@config_array,"debug_file=".'/var/log/meran/debug_file.txt');
     push (@config_array,"userAdmin=".'userAdmin');
     push (@config_array,"passAdmin=".'kohaadmin');
@@ -68,6 +71,11 @@ sub persistConfig{
     }
 
     close (MERAN_CONF);
+
+
+#SE AGREGA EL USUARIO ADMIN
+
+
 }
 
 sub checkDB{

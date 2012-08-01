@@ -4,8 +4,7 @@
 
 <!-- para manejar la ventana de campos MARC -->
 <script src="/intranet-tmpl/includes/popups/helpCamposMARC-min.js"></script>
-<!-- <script src="/intranet-tmpl/includes/visualizacionOPAC-min.js"></script> -->
-<script src="/intranet-tmpl/includes/visualizacionOPAC.js"></script>
+<script src="/intranet-tmpl/includes/visualizacionOPAC-min.js"></script>
 <script src="/includes/jquery/jquery.jeditable-min.js"></script>
 
 <script>
@@ -25,29 +24,21 @@ $(document).ready(function() {
     print C4::AR::Filtros::ayuda_marc() ;
 [% END %]
 
-<br />
-<div>
-    <div class="btn-group">
-        <a class="btn btn-primary popover_button " rel="popover" data-content="Esta acción exportará la configuración de visualización OPAC a un archivo." data-placement="right" data-original-title="Información" onclick="exportarVisualizacion()"><i class="icon-white icon-share"></i> Exportar</a>
-    </div>
-    <br />
-    <div class="btn-group">
-        <a class="btn btn-primary popover_button " rel="popover" data-content="Esta acción importará la configuración de visualización OPAC desde un archivo." data-placement="right" data-original-title="Información" onclick="showImportarVisualizacion()"><i class="icon-white icon-download-alt"></i> Importar</a>
-    </div>
-</div>
-
 [% PERL %]
     print C4::AR::Filtros::ayuda_in_line("[% 'ayudaaaaa' | i18n %]") ;
 [% END %]
 
 <input type="hidden" id="idEncabezado">
 
-<div class="title">[% 'Visualizaci&oacute;n de campos MARC en OPAC' | i18n %]</div>
+<form class="form-horizontal" onsubmit="return false;">
+    <section class="center-section-form">
+        <div class="right">
+            <a class="btn btn-warning" onclick="exportarVisualizacion()"><i class="icon-white icon-share"></i> Exportar</a>
 
-<section class="center-section-form">
-    <form class="form-horizontal" onsubmit="return false;">
+            <a class="btn btn-success" onclick="showImportarVisualizacion()"><i class="icon-white icon-download-alt"></i> Importar</a>
+        </div>
         <fieldset>
-            <legend>[% "Seleccione el esquema a configurar" | i18n %]</legend>
+            <legend>[% "Visualizaci&oacute;n de campos MARC en OPAC. Seleccione el esquema a configurar" | i18n %]</legend>
             
             <div class="control-group">
                <label class="control-label" for="">[% "Tipo de documento" | i18n %]</label>
@@ -78,8 +69,8 @@ $(document).ready(function() {
             </div>
 
         </fieldset>
-    </form>
-</section>
+    </section>
+</form>
 <div id="result"></div>
 
 <div id="divFormExportarVisualizacion" style="display:none;">

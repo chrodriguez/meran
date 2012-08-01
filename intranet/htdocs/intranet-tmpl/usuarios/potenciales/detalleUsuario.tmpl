@@ -13,12 +13,18 @@
                                 >
                             </a>
                         [% ELSE %]
-                            <img  border="0" src="[% temas %]/[% tema %]/imagenes/no_foto.jpg" 
-                                  style="height: 60%; width: 60%; max-width: 120px; max-height: 120px;" 
-                                  alt="[% 'Usuario sin foto' | i18n %]"
-                                  title="[% 'Usuario sin foto' | i18n %]"
-                            >
-                        [% END %]
+                          [% IF socio.persona.sexo == 'F' %]
+                               <img border="0" src="/includes/css/images/no_foto_female.gif"
+                                     style="height: 120px; width: 120x;" 
+                                     alt='[% "Usuario sin foto" | i18n %]'
+                               >
+                          [% ELSE %]
+                               <img border="0" src="/includes/css/images/no_foto_male.gif"
+                                     style="height: 120px; width: 120x;" 
+                                     alt='[% "Usuario sin foto" | i18n %]'
+                               >
+                          [% END %]                        
+                       [% END %]
                       </dt>
                       <dt class="inline left rightMargin">[% "Apellido:" | i18n %]</dt>
                       <dd>[% socio.persona.getApellido %] </dd>

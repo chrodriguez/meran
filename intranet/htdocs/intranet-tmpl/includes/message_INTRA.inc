@@ -238,6 +238,6 @@
     /*=================================================Fin===Estante=======================================================*/
 
     /*=================================Exportacion Visualizaciones======================================*/
-    EXPORTACION_VISUALIZACION = "[% 'Esta a punto de realizar la exportazci&oacute;n. ¿Desea continuar?' | i18n %]";
+    EXPORTACION_VISUALIZACION = "[% 'Esta a punto de realizar la exportaci&oacute;n. ¿Desea continuar?' | i18n %]";
     /*===============================FIN - Exportacion Visualizaciones====================================*/
 </script>

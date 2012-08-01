@@ -174,6 +174,7 @@ sub uploadAdjuntoNovedadOpac{
                                         xls
                                         doc
                                         odt
+                                        msword
                                     );
 
     my $uploaddir               = C4::Context->config("novedadesOpacPath");
@@ -183,6 +184,9 @@ sub uploadAdjuntoNovedadOpac{
     
     #es un archivo valido
     if($file_type){
+
+        #fix para archivos .doc. El mime es msword y lo guarda con esa extension sino
+        if($file_type eq 'msword'){ $file_type = 'doc'; }
     
         if($notBinary){
         
@@ -201,6 +205,7 @@ sub uploadAdjuntoNovedadOpac{
             	print WRITEIT; 
             }
             close(WRITEIT);
+            
         
         }
 

@@ -13,7 +13,16 @@ use C4::AR::PdfGenerator;
 
 my $input                   = new CGI;
 my $string                  = ($input->param('string')) || "";
-my $to_pdf                  = $input->param('export') || 0;
+my $to_pdf;
+
+C4::AR::Debug::debug("asdfñlksdlñfklñsdkflñdskflñsdkflñksdñlf");
+
+if ($input->param('export')== "1"){
+    $to_pdf                  = $input->param('export');
+} else{
+    $to_pdf = undef;
+}
+
 
 my ($template, $session, $t_params);
 
@@ -74,6 +83,7 @@ my $url_todos;
 my $token;
 
 if ($to_pdf){
+
     $obj->{'ini'}               = 0;
     $obj->{'cantR'}             = "";
     ($template, $session, $t_params) = get_template_and_user({

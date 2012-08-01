@@ -1,7 +1,7 @@
 var objAH_search;
 
-var ORDEN;
-var SENTIDO_ORDEN=1; //1 para ASC - 0 DESC
+var ORDEN = "titulo";
+var SENTIDO_ORDEN= 0; //1 para ASC - 0 DESC
 
 
 var combinables     = ['titulo', 'autor', 'tipo', 'signatura', 'tipo_nivel3_id'];
@@ -11,22 +11,19 @@ var shouldScroll    = true;
 function ordenar_busqueda_catalogo(orden){
      
           if (orden == ORDEN) {
-              SENTIDO_ORDEN= !SENTIDO_ORDEN;
+             if (SENTIDO_ORDEN == 1){
+                    SENTIDO_ORDEN= 0;
+             } else {
+                    SENTIDO_ORDEN= 1;
+             }
           } else {
               SENTIDO_ORDEN= 1;
               ORDEN = orden;
           }
+
+          objAH_search.orden = orden;
           objAH_search.sentido_orden = SENTIDO_ORDEN;
           objAH_search.sort(orden);        
-}
-
-
-function cambiarSentidoOrd(){
-  if (SENTIDO_ORDEN){
-    $('#icon_'+ ORDEN).attr("class","icon-chevron-up click");
-  } else {
-    $('#icon_'+ ORDEN).attr("class","icon-chevron-down click");
-  }
 }
 
 
@@ -49,9 +46,6 @@ function updateInfoBusquedasBar(responseText){
 	clearInterval(mensajes_interval_id);
 	$('#navBarResult').html(''); 
 	updateInfoBusquedas(responseText);
-    if (ORDEN){
-      cambiarSentidoOrd();
-    }
 	$(window).unbind('scroll');	
 }
 
@@ -100,9 +94,6 @@ function busquedaCombinable(){
 
 function updateBusquedaCombinable(responseText){
     updateInfoBusquedas(responseText);
-    if (ORDEN){
-      cambiarSentidoOrd();
-    }
 }
 
 function changePage_search(ini, orden){
@@ -228,9 +219,6 @@ function updateBusquedaPorKeyword(responseText){
     	keyword = $('#keyword').val();
 	else
 		keyword = $('#keyword-bar').val();
-    if (ORDEN){
-      cambiarSentidoOrd();
-    }
 
 }
 

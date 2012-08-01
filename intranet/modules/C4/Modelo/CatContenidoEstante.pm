@@ -22,7 +22,6 @@ __PACKAGE__->meta->setup(
         },
 
         nivel2  => {
-#             class       => 'C4::Modelo::CatNivel2',
             class       => 'C4::Modelo::CatRegistroMarcN2',
             key_columns => { id2 => 'id' },
             type        => 'one to one',

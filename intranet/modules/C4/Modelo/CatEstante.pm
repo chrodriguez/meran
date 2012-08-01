@@ -27,6 +27,10 @@ __PACKAGE__->meta->setup(
             class       => 'C4::Modelo::CatContenidoEstante',
             key_columns => { id => 'id_estante' },
             type        => 'one to many',
+            manager_args => 
+                                {
+                                    sort_by => 'indice_busqueda.titulo ASC'
+                                },
         },
     ],
 );

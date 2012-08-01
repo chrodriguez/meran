@@ -23,15 +23,6 @@
 	                                                );
 	                  [% END %]
 	              </li>
-				  <li>
-					[% PERL %]
-	                print C4::AR::Filtros::link_to( text =>     " [% 'B&uacute;squeda Z3950' | i18n %]",
-	                                                url =>      "[% url_prefix %]/z3950/filtradoZ3950.pl",
-													icon	=>		"icon-road",	                                                
-	                                                title =>    " [% 'B&uacute;squeda Z3950' | i18n %]"
-												  ) ;
-	                [% END %]
-	              </li>
 	         	  <li>
 					[% PERL %]
 	                print C4::AR::Filtros::link_to( text =>     " [% 'Registros y Grupos' | i18n %]",
@@ -62,16 +53,6 @@
 	                                   [% END %]
 	                               </li>
 	
-		                               <li>
-		                                   [% PERL %]
-		                                       print C4::AR::Filtros::link_to( text =>     " [% 'Adquisiciones' | i18n %]",
-		                                                                       url =>      "[% url_prefix %]/catalogacion/adquisiciones.pl",
-		                                                                       title =>    " [% 'Adquisiciones' | i18n %]",
-		                                                                       icon	=>		"icon-shopping-cart",
-		                                                                       
-		                                                                   ) ;
-		                                   [% END %]
-		                               </li>
 	      [% IF socio_data.usr_credential_type == "superLibrarian" %]
                             <li class="nav-header">[% 'Preferencias' | i18n %]</li>	
 	              			      <li class="divider"></li>
@@ -330,11 +311,10 @@
               [% END %]
 
 				</li>
-        <li class="divider">
 			      [% IF socio_data.usr_credential_type == "librarian" OR  socio_data.usr_credential_type == "superLibrarian" %]
-			                    
-		                                <!-- <li> -->
-		                                            [% PERL %]
+<!--                                     <li class="divider">
+		                                <li>
+ -->		                                            [% PERL %]
 		                                                #print C4::AR::Filtros::link_to( text =>     "<i class='icon-print'></i> [% 'Reportes' | i18n %]",
 		                                                #                                url =>      "[% url_prefix %]/reports/circulacion.pl",
 		                                                #                                title =>    "[% 'Reportes' | i18n %]"

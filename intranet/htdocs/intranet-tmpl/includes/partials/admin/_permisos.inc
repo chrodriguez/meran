@@ -4,7 +4,6 @@
   <section class="center-section-form">
     <form class="form-horizontal" onsubmit="return false;">
         <fieldset>
-            <legend class="titulo_legend">[% "Selecci&oacute;n de Permisos" | i18n %]</legend>
             
                 <div class="control-group">
                     <label class="control-label" for="usuario"> Usuario: </label>

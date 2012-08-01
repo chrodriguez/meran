@@ -29,7 +29,11 @@
                 
                 [% IF novedad.getAdjunto %]
                     <dt>[% 'Archivo adjunto' | i18n %]:</dt>
-                    <dd><a href="/opac-tmpl/uploads/novedades/[% novedad.getAdjunto %]">[% novedad.getNombreAdjunto %]</a></dd>
+                    [% IF novedad.getNombreAdjunto %]
+                        <dd><a href="/opac-tmpl/uploads/novedades/[% novedad.getAdjunto %]">[% novedad.getNombreAdjunto %]</a></dd>
+                    [% ELSE %]
+                        <dd><a href="/opac-tmpl/uploads/novedades/[% novedad.getAdjunto %]">[% 'Click para ver el adjunto' | i18n %]</a></dd>
+                    [% END %]
                 [% END %]
                 
                 [% IF cant_links %]

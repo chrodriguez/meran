@@ -14,7 +14,7 @@ generarConfSphinx()
   sed s/reemplazarIUSER/$IUSER_BDD_MERAN/g /tmp/$ID.sphix.conf > /tmp/$ID.sphix2.conf
   sed s/reemplazarIPASS/$IPASS_BDD_MERAN/g /tmp/$ID.sphix2.conf > /tmp/$ID.sphix.conf
   sed s/reemplazarDATABASE/$BDD_MERAN/g /tmp/$ID.sphix.conf > $DESTINO_MERAN/$ID/sphinx/etc/sphinx.conf
-  rm /tmp/$ID.sphix*
+  #rm /tmp/$ID.sphix*
 
 }
 generarLogRotate()
@@ -46,7 +46,7 @@ generarPermisosBDD()
   sed s/reemplazarIPASS/$IPASS_BDD_MERAN/g /tmp/$ID.permisosbdd2 > /tmp/$ID.permisosbdd
   echo "Procederemos a crear la base de datos y asignarle los permisos necesarios"
   mysql -p -uroot < /tmp/$ID.permisosbdd
-  rm /tmp/$ID.permisosbdd*
+  #rm /tmp/$ID.permisosbdd*
 }
 
 
@@ -57,7 +57,7 @@ generarConfiguracion()
   sed s/reemplazarUSER/$USER_BDD_MERAN/g /tmp/$ID.meran.conf > /tmp/$ID.meran2.conf
   sed s/reemplazarPASS/$PASS_BDD_MERAN/g /tmp/$ID.meran2.conf > /tmp/$ID.meran.conf
   sed s/reemplazarDATABASE/$BDD_MERAN/g /tmp/$ID.meran.conf > $CONFIGURACION_MERAN/meran$ID.conf
-  rm /tmp/$ID.meran*
+  #rm /tmp/$ID.meran*
 }
 
 usage()
@@ -74,8 +74,8 @@ OPTIONS:
    -b      Base de datos a usar. Por Defecto meran
    -u      Usuario que se va a conectar a la base de datos. Por defecto kohaadmin
    -p      Pass del usuario que se va a conectar a la base de dato. Por defecto sera un random
-   -iu     Usuario que se va a utilizar en el indic. Por defecto indice
-   -ip     Pass del usuario que se va a utilizar en el indice. Por defecto sera un random
+   -s      Usuario que se va a utilizar en el indic. Por defecto indice
+   -w      Pass del usuario que se va a utilizar en el indice. Por defecto sera un random
    -c      directorio donde se guardará la configuracion de meran
 EOF
 }
@@ -90,7 +90,7 @@ PASS_BDD_MERAN=`</dev/urandom tr -dc A-Za-z0-9 | head -c8`
 IUSER_BDD_MERAN="indice"
 IPASS_BDD_MERAN=`</dev/urandom tr -dc A-Za-z0-9 | head -c8`
 
-while getopts “h:i:d:b:u:p:iu:ip:c” OPTION
+while getopts “h:i:d:b:u:p:s:w:c:” OPTION
 do
      case $OPTION in
          h)
@@ -112,10 +112,10 @@ do
          p)
              PASS_BDD_MERAN=$OPTARG
              ;;
-         iu)
+         s)
              IUSER_BDD_MERAN=$OPTARG
              ;;
-         ip)
+         w)
              IPASS_BDD_MERAN=$OPTARG
              ;;
          c)
@@ -204,11 +204,11 @@ select OPCION in Jaula Sistema
       mkdir -p $DESTINO_MERAN/$ID
       echo "Procedemos a la instalación"
       echo "Descomprimiendo Intranet y Opac" 
-      tar xzvf $sources_MERAN/intranetyopac.tar.gz -C $DESTINO_MERAN/$ID
+      tar xzf $sources_MERAN/intranetyopac.tar.gz -C $DESTINO_MERAN/$ID
       echo "Descomprimiendo las dependencias" 
-      tar xzvf $sources_MERAN/jaula$versionKernel.tar.gz -C $DESTINO_MERAN/$ID/intranet/modules/C4/
+      tar xzf $sources_MERAN/jaula$versionKernel.tar.gz -C $DESTINO_MERAN/$ID/intranet/modules/C4/
       echo "Descomprimiendo sphinxsearch" 
-      tar xzvf $sources_MERAN/sphinx$versionKernel.tar.gz -C $DESTINO_MERAN/$ID
+      tar xzf $sources_MERAN/sphinx$versionKernel.tar.gz -C $DESTINO_MERAN/$ID
       echo "Generando Archivos de logs y logrotate"
       generarLogRotate
       echo "Copiando configuración de sphinx" 
@@ -221,7 +221,7 @@ select OPCION in Jaula Sistema
       echo "Generando la Base de datos"
       echo "FIXXXXXXXX habria q parametrizar la base y la conexion"
       generarPermisosBDD
-      #mysql --default-character-set=utf8  $BDD_MERAN -u$USER_BDD_MERAN -p$PASS_BDD_MERAN < /root/basePrueba.sql
+      mysql --default-character-set=utf8  $BDD_MERAN -u$USER_BDD_MERAN -p$PASS_BDD_MERAN < /root/basePrueba.sql
       
       #Configurar cron
       echo "FIXME Faltan configurar los Crons"
