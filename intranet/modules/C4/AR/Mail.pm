@@ -157,8 +157,8 @@ sub send_mail_PLANO {
                                             $mail_hash_ref->{'smtp_server'},  
                                             Hello       => $mail_hash_ref->{'smtp_server'},  
                                             Port        => $mail_hash_ref->{'smtp_port'},  
-#                                             User        => $mail_hash_ref->{'smtp_user'},  
-#                                             Password    => $mail_hash_ref->{'smtp_pass'},
+                                            User        => $mail_hash_ref->{'smtp_user'},  
+                                            Password    => $mail_hash_ref->{'smtp_pass'},
                                             Timeout     => SMTP_TIME_OUT,
                                             Debug       => DEBUG
                                     );

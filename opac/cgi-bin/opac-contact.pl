@@ -39,6 +39,7 @@ if ($post){
   	    $contacto->agregar($params_hash);
         $t_params->{'mensaje_class'} = 'alert-success';
         $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje('U608','opac');
+        $t_params->{'no_submit'} = 1;
         $t_params->{'partial_template'} = "opac-contact.inc";
     }
     

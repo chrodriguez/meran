@@ -50,11 +50,12 @@ if($post_accion){
     $Message_arrayref           = C4::AR::Preferencias::t_modificarVariable('reserveFrom', $reserveFrom, '',$categoria);
     $Message_arrayref           = C4::AR::Preferencias::t_modificarVariable('smtp_server_sendmail', $smtp_server_sendmail, '',$categoria);
 
-    my $msg_object              = C4::AR::Mensajes::create();
+    my $msg_object              = C4::AR::Mensajes::create();  
+    my $user                    = C4::AR::Usuarios::getSocioInfoPorNroSocio(C4::AR::Auth::getSessionNroSocio());
 
-    my $default_ui          = C4::AR::Preferencias::getValorPreferencia('defaultUI');
-    my $ui                  = C4::Modelo::PrefUnidadInformacion->getByCode($default_ui);
-    my $mail_to             = $ui->getEmail; 
+    my $default_ui              = C4::AR::Preferencias::getValorPreferencia('defaultUI');
+    my $ui                      = C4::Modelo::PrefUnidadInformacion->getByCode($default_ui);
+    my $mail_to                 = $user->persona->getEmail; 
 
     if($accion eq 'PROBAR_CONFIGURACION'){
     #   solo si esta probando la configuracion mandamos el mail de prueba
