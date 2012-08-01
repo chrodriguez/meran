@@ -132,6 +132,14 @@
 	            <li class="dropdown">
 		            <a href="#" class="dropdown-toggle" data-toggle="dropdown">[% socio_data.usr_nombre %]&nbsp;[% socio_data.usr_apellido %]<b class="caret"></b></a>
 		            <ul class="dropdown-menu">
+                    <li>
+                            [% PERL %]
+                              print C4::AR::Filtros::link_to( text    =>  '<i class="icon-user"></i> [% "Mis Datos" | i18n %]',
+                                                              url     =>  '[% url_prefix %]/misDatos.pl',
+                                                              title   =>  "[% 'Mis Datos' | i18n %]",
+                                      ) ;
+                            [% END %]
+                    </li>
 		                <li>
 		                
 		                    [% PERL %]
@@ -141,14 +149,6 @@
                                       ) ;
                             [% END %]
 		                </li>
-		                <li>
-                            [% PERL %]
-                              print C4::AR::Filtros::link_to( text    =>  '<i class="icon-user"></i> [% "Mis Datos" | i18n %]',
-                                                              url     =>  '[% url_prefix %]/misDatos.pl',
-                                                              title   =>  "[% 'Mis Datos' | i18n %]",
-                                      ) ;
-                            [% END %]
-                        </li>
 		                <li class="divider"></li>
 		                <li><a href="[% url_prefix %]/logout.pl?token=[% token %]"><i class="icon-off"></i> [% "Salir" | i18n %]</a></li>
 		            </ul>

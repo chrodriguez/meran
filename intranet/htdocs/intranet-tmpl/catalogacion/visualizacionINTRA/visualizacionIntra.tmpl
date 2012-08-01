@@ -30,42 +30,41 @@ $(document).ready(function() {
 
 <input type="hidden" id="idEncabezado">
 
-<div class="title">[% 'Visualizaci&oacute;n de campos MARC en INTRANET' | i18n %]</div>
 
-<section class="center-section-form">
-	<form class="form-horizontal" onsubmit="return false;">
-	    <fieldset>
-	        <legend>[% "Seleccione el esquema a configurar" | i18n %]</legend>
-	         <div class="control-group">
-                <label class="control-label" for="">[% "Tipo de documento" | i18n %]</label>
-                <div class="controls">
-                    [% combo_ejemplares %]
+<fieldset>
+    <legend>[% 'Visualizaci&oacute;n de campos MARC en INTRANET' | i18n %]</legend>
+    <section class="center-section-form">
+    	<form class="form-horizontal" onsubmit="return false;">
+    	         <div class="control-group">
+                    <label class="control-label" for="">[% "Tipo de documento" | i18n %]</label>
+                    <div class="controls">
+                        [% combo_ejemplares %]
+                    </div>
+    	         </div>
+    	
+                <div class="control-group">
+                   <label class="control-label" for="eleccion_nivel">[% "Nivel" | i18n %]</label>
+                   <div class="controls">
+                        <select name="eleccion_nivel" id="eleccion_nivel" onchange="eleccionDeEjemplar();">
+                            <option value="1">Nivel 1</option>
+                            <option value="2">Nivel 2</option>
+                            <option value="3">Nivel 3</option>
+                        </select>
+                    </div>
                 </div>
-	         </div>
-	
-            <div class="control-group">
-               <label class="control-label" for="eleccion_nivel">[% "Nivel" | i18n %]</label>
-               <div class="controls">
-                    <select name="eleccion_nivel" id="eleccion_nivel" onchange="eleccionDeEjemplar();">
-                        <option value="1">Nivel 1</option>
-                        <option value="2">Nivel 2</option>
-                        <option value="3">Nivel 3</option>
-                    </select>
+                
+                <div class="form-actions">
+    	            [% PERL %]
+    	                    print C4::AR::Filtros::action_button(   
+    	                                                        button   => "btn btn-primary",
+    	                                                        action => "eleccionDeEjemplar();",
+    	                                                        title   => "[% 'Buscar' | i18n %]",
+    	                            ) ;
+    	            [% END %]
                 </div>
-            </div>
-            
-            <div class="form-actions">
-	            [% PERL %]
-	                    print C4::AR::Filtros::action_button(   
-	                                                        button   => "btn btn-primary",
-	                                                        action => "eleccionDeEjemplar();",
-	                                                        title   => "[% 'Buscar' | i18n %]",
-	                            ) ;
-	            [% END %]
-            </div>
-	    </fieldset>
-	</form>
-</section>
+    	</form>
+    </section>
+</fieldset>
 <div id="result"></div>
 
 [% INCLUDE "intranet-bottom.inc" %]

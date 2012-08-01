@@ -1,10 +1,10 @@
 [% INCLUDE "intranet-top.inc" %]
+<div class="page-header">
+    <h1>[% "Ajustes personales " | i18n %] <small>[% socio_data.usr_nro_socio %] ([% socio_data.usr_apellido %], [% socio_data.usr_nombre %])</small></h1>
+</div>
 
 <form class="form-horizontal" id="user-settings" method="POST" action="[% url_prefix %]/usuarios/reales/settings.pl" onsubmit="javascript:startOverlay();">
         <fieldset>
-	          <legend>
-	            [% "Perfil de " | i18n %][% socio_data.usr_nro_socio %] ([% socio_data.usr_apellido %], [% socio_data.usr_nombre %])
-	          </legend>
 	          <div class="control-group">
 	              <label class="control-label" for="languages">[% "Idioma" | i18n %]</label>
 	              <div class="controls">
