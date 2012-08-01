@@ -1,14 +1,14 @@
 NameVirtualHost *:80
 <VirtualHost *:80>
-DirectoryIndex /meran/opac-main.pl 
-DocumentRoot /usr/share/meran/opac/htdocs
-ErrorLog /var/log/meran/opac-error.log
-TransferLog /var/log/meran/opac-access.log
+DirectoryIndex /meran/reemplazarID/opac-main.pl 
+DocumentRoot /usr/share/meran/reemplazarID/opac/htdocs
+ErrorLog /var/log/meran/reemplazarID/opac-error.log
+TransferLog /var/log/meran/reemplazarID/opac-access.log
 SetEnv MERAN_CONF "/etc/meran/meran.conf"
 Header set Access-Control-Allow-Origin *
-#SetEnv PERL5LIB "/usr/share/meran/intranet/modules"
+#SetEnv PERL5LIB "/usr/share/meran/reemplazarID/intranet/modules"
 
-Alias /meran/ /usr/share/meran/opac/cgi-bin/
+Alias /meran/ /usr/share/meran/reemplazarID/opac/cgi-bin/
 
 ErrorDocument 500 /meran/informacion/error.pl
 ErrorDocument 404 /meran/informacion/error.pl
@@ -21,33 +21,32 @@ ErrorDocument 404 /meran/informacion/error.pl
 </Location>
 
 <Perl>
-push(@INC,"/usr/share/meran/intranet/modules");
-push(@INC,"/usr/share/meran/intranet/modules/C4/Share/share/perl/5.10.1/");
-push(@INC,"/usr/share/meran/intranet/modules/C4/Share/lib/perl/5.10.1/");
-push(@INC,"/usr/share/meran/intranet/modules/C4/Share/share/perl/5.10/");
-push(@INC,"/usr/share/meran/intranet/modules/C4/Share/share/perl/5.10.1/");
-push(@INC,"/usr/share/meran/intranet/modules/C4/Share/lib/perl5/");
-
+push(@INC,"/usr/share/meran/reemplazarID/intranet/modules");
+push(@INC,"/usr/share/meran/reemplazarID/intranet/modules/C4/Share/share/perl/5.10.1/");
+push(@INC,"/usr/share/meran/reemplazarID/intranet/modules/C4/Share/lib/perl/5.10.1/");
+push(@INC,"/usr/share/meran/reemplazarID/intranet/modules/C4/Share/share/perl/5.10/");
+push(@INC,"/usr/share/meran/reemplazarID/intranet/modules/C4/Share/share/perl/5.10.1/");
+push(@INC,"/usr/share/meran/reemplazarID/intranet/modules/C4/Share/lib/perl5/");
 </Perl>
 
 #<Perl>
 #PerlPostConfigRequire /etc/meran/iniciando.pl
 #use Carp;
-#push(@INC,"/usr/share/meran/intranet/modules");
+#push(@INC,"/usr/share/meran/reemplazarID/intranet/modules");
 #use utf8;
 #</Perl>
 
 ServerSignature Off
 
-Alias /includes/ "/usr/share/meran/includes/"
-<Directory /usr/share/meran/includes/ >
+Alias /includes/ "/usr/share/meran/reemplazarID/includes/"
+<Directory /usr/share/meran/reemplazarID/includes/ >
  Options  -Indexes
   Order allow,deny
   Allow from all
 </Directory>
 
-Alias /uploads/ "/usr/share/meran/intranet/htdocs/uploads/"
-<Directory /usr/share/meran/intranet/htdocs/uploads/ >
+Alias /uploads/ "/usr/share/meran/reemplazarID/intranet/htdocs/uploads/"
+<Directory /usr/share/meran/reemplazarID/intranet/htdocs/uploads/ >
 Order allow,deny
 Allow from all
 </Directory>
