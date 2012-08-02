@@ -1546,32 +1546,34 @@ sub toMARC_Array {
                 $hash_temp{'referencia'} = 0;
                 $hash_temp{'referencia_encontrada'} = 0;
                 my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo, $itemtype, $nivel);
-                if(($estructura)&&($estructura->getReferencia)){
-                    #C4::AR::Debug::debug("REFERENCIA ==>  ".$campo."&".$subcampo."=".$dato);
-                    #es una referencia, yo tengo el dato nomás (luego se verá si hay que crear una nueva o ya existe en la base)
-                    #my $infoRef = $estructura->infoReferencia->getReferencia;
-                    #my $referer_involved = $tabla_referer_involved->getByPk($value_id);
-                    $hash_temp{'referencia'} = $estructura->infoReferencia->getReferencia;
-                    my ($clave_tabla_referer_involved,$tabla_referer_involved) =  C4::AR::Referencias::getTablaInstanceByAlias($hash_temp{'referencia'});
-                    $hash_temp{'referencia_tabla'} = $hash_temp{'referencia'}; #$tabla_referer_involved->meta->table;
-                    #C4::AR::Debug::debug("Tabla REF  ==>  ".$hash_temp{'referencia'});
-                    my ($ref_cantidad,$ref_valores);
-                    #if($hash_temp{'referencia'} eq 'idioma'){
-                    #  ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getIdiomaById($dato);
-                    #}
-                    #els
-                    
-                    #if($hash_temp{'referencia'} eq 'pais'){
-                    #  ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getPaisByIso($dato);
-                    #}
-                    #else{
-                    ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getAll(1,0,0,$dato);
-                    #}
-                    
-                    if ($ref_cantidad){
-                        # C4::AR::Debug::debug("ENCONTRE!!!  REF  ==>  ".$ref_valores->[0]->get_key_value);
-                        $hash_temp{'referencia_encontrada'} =  $ref_valores->[0]->get_key_value;
-                        }
+                if($estructura){
+                   if($estructura->getReferencia){
+                        #C4::AR::Debug::debug("REFERENCIA ==>  ".$campo."&".$subcampo."=".$dato);
+                        #es una referencia, yo tengo el dato nomás (luego se verá si hay que crear una nueva o ya existe en la base)
+                        #my $infoRef = $estructura->infoReferencia->getReferencia;
+                        #my $referer_involved = $tabla_referer_involved->getByPk($value_id);
+                        $hash_temp{'referencia'} = $estructura->infoReferencia->getReferencia;
+                        my ($clave_tabla_referer_involved,$tabla_referer_involved) =  C4::AR::Referencias::getTablaInstanceByAlias($hash_temp{'referencia'});
+                        $hash_temp{'referencia_tabla'} = $hash_temp{'referencia'}; #$tabla_referer_involved->meta->table;
+                        #C4::AR::Debug::debug("Tabla REF  ==>  ".$hash_temp{'referencia'});
+                        my ($ref_cantidad,$ref_valores);
+                        #if($hash_temp{'referencia'} eq 'idioma'){
+                        #  ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getIdiomaById($dato);
+                        #}
+                        #els
+                        
+                        #if($hash_temp{'referencia'} eq 'pais'){
+                        #  ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getPaisByIso($dato);
+                        #}
+                        #else{
+                        ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getAll(1,0,0,$dato);
+                        #}
+                        
+                        if ($ref_cantidad){
+                            # C4::AR::Debug::debug("ENCONTRE!!!  REF  ==>  ".$ref_valores->[0]->get_key_value);
+                            $hash_temp{'referencia_encontrada'} =  $ref_valores->[0]->get_key_value;
+                            }
+                    }
                 }
 
                 #
