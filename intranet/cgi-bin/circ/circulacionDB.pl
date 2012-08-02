@@ -133,7 +133,7 @@ elsif($tipoAccion eq "PRESTAMO"){
 	my @infoMessages;
 	my @infoTickets;
 	my @errores;
-
+	my $msg_object; 
 C4::AR::Debug::debug("SE PRESTAN ".$loop." EJEMPLARES");
 	
 	for(my $i=0;$i<$loop;$i++){
@@ -162,7 +162,14 @@ C4::AR::Debug::debug("SE VA A PRESTAR ID3:".$id3." (ID3VIEJO: ".$id3Old.") CON E
 			$params{'tipo'}                     = "INTRA";
 			$params{'tipo_prestamo'}            = $tipoPrestamo;
 		
-			my ($msg_object)                    = C4::AR::Prestamos::t_realizarPrestamo(\%params);
+			$msg_object                   = C4::AR::Prestamos::t_realizarPrestamo(\%params);
+
+
+
+			C4::AR::Debug::debug("RESERVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+			C4::AR::Utilidades::printHASH($msg_object);
+			C4::AR::Utilidades::printARRAY($msg_object->{'messages'});
+			
 			my $ticketObj                       = 0;
 
 			if(!$msg_object->{'error'}){
@@ -211,7 +218,11 @@ elsif($tipoAccion eq "REALIZAR_DEVOLUCION"){
 	$obj->{'responsable'}      = $user;
     
 	my ($Message_arrayref)     = C4::AR::Prestamos::t_devolver($obj);
-    
+
+
+	C4::AR::Debug::debug("PRESTAMOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+	C4::AR::Utilidades::printARRAY($Message_arrayref->{'messages'});
+
    	my %info;
     $info{'Messages_arrayref'}  = $Message_arrayref;
 
