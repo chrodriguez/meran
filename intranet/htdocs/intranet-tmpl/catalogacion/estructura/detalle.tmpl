@@ -41,10 +41,12 @@
 
         function asociarRegistroFuente(id1){
         	$('#div_asociar_registro_fuente').modal('show');
+        	onEnter("buscar_edicion_id",buscarEdicion);
 
 			CrearAutocompleteNivel2(       { 	IdInput: 'buscar_edicion_id', 
                                                 IdInputHidden: 'buscar_edicion_hidden',
-                                                callBackFunction: 'buscarEdicion'                      
+                                                // FIXME no esta funcionando el callback
+                                                // callBackFunction: 'buscarEdicion'
                                           }
                                 );
         }
@@ -64,7 +66,7 @@
 		}
 
 		function updateBuscarEdicion(responseText){
-		    $('#ediciones').html(responseText);
+		    $('#ediciones_result').html(responseText);
 		}
 
 		function guardarAsociarRegistroFuente(){
@@ -87,6 +89,20 @@
 
 			}
 		}
+
+		// function buscarEdicionesById1(){
+		// 		objAH                   = new AjaxHelper(updateBuscarEdicionesById);
+		//         objAH.debug             = true;
+		//         objAH.showOverlay       = true;
+		//         objAH.url               = URL_PREFIX+'/catalogacion/estructura/estructuraCataloDB.pl';
+		//         objAH.tipoAccion        = 'BUSCAR_EDICIONES_BY_ID1';
+		//         objAH.id1               = $('#buscar_edicion_hidden').val();
+		//         objAH.sendToServer();
+		// }
+
+		// function updateBuscarEdicionesById(responseText){
+		// 	var ediciones 	= JSONstring.toObject(responseText);  
+		// }
 
 		function updateGuardarAsociarRegistroFuente(responseText){
 	        var info        = JSONstring.toObject(responseText);  
@@ -181,6 +197,9 @@
 		    	</div>
 	        	</div>
          	</div>
+
+         	<div id="ediciones_result"></div>
+
             <div class='modal-footer'>
 	                [% PERL %]
 	                        print C4::AR::Filtros::to_Button(     text   => "[% 'Guardar' | i18n %]",
@@ -199,7 +218,7 @@
 		                                                        id          => "boton_cerrar_asociar_registro_fuente",
 		                            ) ;
 		            [% END %]
-	   </div>
+	   		</div>
 	</div>
 
 	<!-- Se incluyen las librerias necesarias para manejar autocomplete -->
