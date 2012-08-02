@@ -1546,7 +1546,7 @@ sub toMARC_Array {
                 $hash_temp{'referencia'} = 0;
                 $hash_temp{'referencia_encontrada'} = 0;
                 my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo($campo, $subcampo, $itemtype, $nivel);
-                if(($estructura)&&($estructura->getReferencia)){
+                if(($estructura)&&($estructura->infoReferencia)){
                     #C4::AR::Debug::debug("REFERENCIA ==>  ".$campo."&".$subcampo."=".$dato);
                     #es una referencia, yo tengo el dato nomás (luego se verá si hay que crear una nueva o ya existe en la base)
                     #my $infoRef = $estructura->infoReferencia->getReferencia;
