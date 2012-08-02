@@ -4,7 +4,7 @@
       "Frederic Demians <f.demians@tamil.fr>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.102345, CPAN::Meta::Converter version 2.110930, CPAN::Meta::Converter version 2.120351",
+   "generated_by" : "Dist::Zilla version 4.102345, CPAN::Meta::Converter version 2.110930, CPAN::Meta::Converter version 2.112150",
    "license" : [
       "perl_5"
    ],
@@ -16,10 +16,10 @@
    "prereqs" : {
       "build" : {
          "requires" : {
-            "MARC::File::XML" : "0",
+            "MARC::File::XML" : 0,
             "Module::Build" : "0.3601",
-            "Test::More" : "0",
-            "Time::HiRes" : "0"
+            "Test::More" : 0,
+            "Time::HiRes" : 0
          }
       },
       "configure" : {
@@ -30,20 +30,20 @@
       },
       "runtime" : {
          "requires" : {
-            "Carp" : "0",
-            "JSON" : "0",
-            "MARC::Record" : "0",
+            "Carp" : 0,
+            "JSON" : 0,
+            "MARC::Record" : 0,
             "Moose" : "1.00",
-            "Moose::Util::TypeConstraints" : "0",
+            "Moose::Util::TypeConstraints" : 0,
             "Text::Iconv" : "1.7",
-            "XML::SAX" : "0",
-            "XML::SAX::Base" : "0",
-            "XML::Simple" : "0",
+            "XML::SAX" : 0,
+            "XML::SAX::Base" : 0,
+            "XML::Simple" : 0,
             "XML::Writer" : "0.606",
-            "YAML" : "0",
-            "YAML::Syck" : "0",
-            "namespace::autoclean" : "0",
-            "overload" : "0"
+            "YAML" : 0,
+            "YAML::Syck" : 0,
+            "namespace::autoclean" : 0,
+            "overload" : 0
          }
       }
    },

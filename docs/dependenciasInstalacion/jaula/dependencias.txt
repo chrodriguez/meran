@@ -61,4 +61,6 @@ GD
 XML::Checker
 DBIx::XML_RDB
 DBI
+Template
+Text::Unaccent
 echo "MARC::Moose a la hora de hacer este tuto no funciona la version estable 0.026, hay que instalar la version 0.018 a mano. Para probarlo ver importación "
