@@ -43,6 +43,8 @@
                                         print C4::AR::Filtros::action_set_button(    
                                               title   => " [% 'Novedad' | i18n %]",
                                               button  => 'btn btn-primary',
+                                              action  => 'showNovedad("[% novedad.id %]")',
+                                              icon    => "icon-white icon-eye-open",
                                               actions         => [
                                                                   { title   => "Editar", 
                                                                     url     => "[% url_prefix %]/admin/editar_novedad.pl",

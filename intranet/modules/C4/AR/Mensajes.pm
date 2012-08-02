@@ -650,7 +650,10 @@ my %mensajesINTRA = (
 
     #portadas nivel 2
     'POR00' => 'Error guardando la imagen de la portada, int&eacute;ntelo nuevamente.',
-    'POR01' => 'Las imagenes fueron modificadas con exito',
+    'POR01' => 'Las imagenes fueron modificadas con &eacute;xito',
+
+    #novedades
+    'NOV00' => 'La novedad fue guardada con &eacute;xito',
 
 );
 

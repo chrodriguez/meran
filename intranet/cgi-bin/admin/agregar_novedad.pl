@@ -10,15 +10,15 @@ use C4::AR::Social;
 my $input = new CGI;
 
 my ($template, $session, $t_params) = get_template_and_user({
-									template_name => "admin/agregar_novedad.tmpl",
-									query => $input,
-									type => "intranet",
-									authnotrequired => 0,
-									flagsrequired => {  ui => 'ANY', 
-                                                        tipo_documento => 'ANY', 
-                                                        accion => 'CONSULTA', 
-                                                        entorno => 'usuarios'},
-									debug => 1,
+									template_name      => "admin/agregar_novedad.tmpl",
+									query              => $input,
+									type               => "intranet",
+									authnotrequired    => 0,
+									flagsrequired      => { ui              => 'ANY', 
+                                                            tipo_documento  => 'ANY', 
+                                                            accion          => 'CONSULTA', 
+                                                            entorno         => 'usuarios'},
+									debug              => 1,
 			    });
 
 my $action          = $input->param('action') || 0;
@@ -100,6 +100,8 @@ if ($action){
               #  Posteo en twitter. En C4::AR::Social::sendPost se verifica si la preferencia twitter_enabled esta activada
               my $mensaje   = C4::AR::Social::sendPost($post);
         }
+
+        C4::AR::Debug::debug("mensajeee : " . $Message_arrayref->{'messages'}[0]->{'message'});
 
         C4::AR::Auth::redirectTo(C4::AR::Utilidades::getUrlPrefix().'/admin/novedades_opac.pl?token='.$input->param('token'));
         

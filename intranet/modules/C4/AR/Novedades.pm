@@ -58,10 +58,13 @@ sub agregar{
                 C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP13', 'intra'} );
             }else{
                 $novedad->setAdjunto($adjuntoName);
-                $novedad->save();
+                
             }
         }
-    
+
+        $novedad->save();
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'NOV00', 'intra'} );
+        
         #recorremos todas las imagenes y las guardamos      
         foreach my  $value (@$arrFiles) {
         
