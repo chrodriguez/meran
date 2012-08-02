@@ -123,7 +123,9 @@ function agregarAyudaMarc(){
     if ( (campo) && (subcampo) && (ayuda) ){
         objAH.campo         = campo;
         objAH.subcampo      = subcampo;
-        objAH.ayuda         = ayuda;       
+        objAH.ayuda         = ayuda;   
+        $('#addAyudaMarcForm').modal('hide');
+        startOverlay();
         objAH.sendToServer();
     }else{
         jAlert(SELECCIONE_VISTA_OPAC);

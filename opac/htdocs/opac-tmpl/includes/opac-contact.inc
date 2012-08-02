@@ -87,11 +87,11 @@
                 <textarea name="mensaje" id="mensaje" cols="45" required rows="10" tabindex="15">[% params_form.mensaje %]</textarea>
             </div>
         </div>
-        
-        <div class="form-actions" id="contact_submit_container">
-            <button class="btn btn-primary" type="submit" tabindex="16">[% 'Enviar Mensaje' | i18n %]</button>
-        </div>
-        
+        [% IF !no_submit %]
+            <div class="form-actions" id="contact_submit_container">
+                <button class="btn btn-primary" type="submit" tabindex="16">[% 'Enviar Mensaje' | i18n %]</button>
+            </div>
+        [% END %]        
        <input type="hidden" name="post_message" id="post_message" value="1"/>
   </fieldset>
   </section>
