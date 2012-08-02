@@ -8,8 +8,9 @@ my $input       = new CGI;
 my $obj         = $input->param('obj') || 0;
 $obj            = C4::AR::Utilidades::from_json_ISO($obj);
 my $tipoAccion  = $obj->{'tipoAccion'}||"";
+my $funcion     = $obj->{'funcion'}||"";
 my $accion      = $tipoAccion;
-my $ini         = $obj->{'ini'} = $input->param('page') || 0;
+my $ini         = $obj->{'ini'} || 1;
 my $url         = C4::AR::Utilidades::getUrlPrefix()."/admin/novedades_opac.pl?token=".$obj->{'token'}."&tipoAccion=".$obj->{'tipoAccion'};
 
 if ($accion eq 'ELIMINAR'){
@@ -55,7 +56,8 @@ elsif ($accion eq 'LISTAR'){
     my ($ini,$pageNumber,$cantR)    = C4::AR::Utilidades::InitPaginador($ini);
     my ($cant_novedades,$novedades) = C4::AR::Novedades::listar($ini,$cantR);
 
-    $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginadorOPAC($cant_novedades,$cantR, $pageNumber,$url,$t_params);
+    $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cant_novedades,$cantR, $pageNumber,$funcion,$t_params);
+    # $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginadorOPAC($cant_novedades,$cantR, $pageNumber,$url,$t_params);
     $t_params->{'novedades'}        = $novedades;
     $t_params->{'cant_novedades'}   = $cant_novedades;
 
