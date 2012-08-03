@@ -21,14 +21,14 @@
     }
 
     
-    function generarReporteCirculacion(){
+    function generarReporteCirculacionGeneral(){
 
-        objAH                   = new AjaxHelper(updateGenerarReporteCirculacion);
+        objAH                   = new AjaxHelper(updateGenerarReporteCirculacionGeneral);
         objAH.debug             = true;
         objAH.cache             = true;
         objAH.showOverlay       = true;
         objAH.url               = URL_PREFIX+'/reports/circulacionDB.pl';
-        objAH.tipoAccion        = "BUSQUEDAS";
+        objAH.tipoAccion        = "CIRC_GENERAL";
         objAH.funcion           = "changePageBusquedas";
         objAH.categoriaSocio    = $('#categoria_socio_id').val();
         objAH.tipoReserva       = $('#tipoReserva').val();
@@ -44,7 +44,7 @@
         objAH.sendToServer();
     }
 
-    function updateGenerarReporteCirculacion(responseText){
+    function updateGenerarReporteCirculacionGeneral(responseText){
         $('#reportResultCirc').html(responseText);
         $('#reportResultCirc').show();
         if (ORDEN){
@@ -52,39 +52,19 @@
         } 
 
     }   
-   
 
-    $(document).ready( function(){ 
-         if (!Modernizr.inputtypes.date) {
-              $("date-from").datepicker();
-              $("date-to").datepicker();
-        }
-        $(".cb-enable").click(function(){
-            var parent = $(this).parents('.switch');
-            $('.cb-disable',parent).removeClass('selected');
-            $(this).addClass('selected');
-            $('.checkbox',parent).attr('checked', true);
-        });
-        $(".cb-disable").click(function(){
-            var parent = $(this).parents('.switch');
-            $('.cb-enable',parent).removeClass('selected');
-            $(this).addClass('selected');
-            $('.checkbox',parent).attr('checked', false);
-        });
-    });
-        
 </script>
 
 <div class="center_fieldset report_form_container">
     <form class="form-horizontal" onsubmit="return false;">
 
         <div class="control-group" >
-            <label for="tipoReserva" class="control-label">[% 'Tipo de reserva' | i18n %]</label>  
+            <label for="tipoReserva" class="control-label">[% 'Tipo de pr&eacute;stamo' | i18n %]</label>  
             <div class="controls">
                 <select name="tipoReserva" id="tipoReserva">
                     <option>Ejemplar</option>
                     <option>Grupo</option>
-                    <option>TODAS</option>
+                    <option>TODOS</option>
                 </select>
             </div>
         </div>
@@ -93,39 +73,6 @@
             <label class="control-label" for="categoria_socio_id">[% 'Categor&iacute;a del usuario' | i18n %]</label>
             <div class="controls">  
                 [% comboDeCategorias %]          
-            </div>
-        </div>
-
-        <div class="control-group">
-            <label class="control-label" for="tipo_documento_id">[% 'Tipo de documento' | i18n %]</label>
-            <div class="controls">  
-                [% comboDeTipoDoc %]          
-            </div>
-        </div>
-
-
-        <div class="control-group">
-            <label class="control-label" for="titulo">[% 'T&iacute;tulo' | i18n %]</label>
-            <div class="controls">  
-                <input type="text" id="titulo" name="titulo" >       
-            </div>
-        </div>
-
-        <div class="control-group">
-            <label class="control-label" for="edicion">[% 'Edici&oacute;­n' | i18n %]</label>
-            <div class="controls">  
-                <input type="text" id="edicion" name="edicion" >       
-            </div>
-        </div>
-
-        <div class="control-group" >
-            <label for="estadoReserva" class="control-label">[% 'Estado de reserva' | i18n %]</label>  
-            <div class="controls">
-                <select name="estadoReserva" id="estadoReserva">
-                    <option>Asignada</option>
-                    <option>Anulada</option>
-                    <option>Vencida</option>
-                </select>
             </div>
         </div>
 
@@ -149,7 +96,7 @@
             [% PERL %]
                   print C4::AR::Filtros::action_button( 
                                                   button       => "btn btn-primary",
-                                                  action       => "generarReporteCirculacion();", 
+                                                  action       => "generarReporteCirculacionGeneral();", 
                                                   icon         => "",
                                                   title        => "Generar Reporte",
                                               ) ;
