@@ -1,5 +1,3 @@
-
-[% INCLUDE 'intranet-top.inc' %]
 [% INCLUDE 'AutocompleteHelper.inc' %]
 
 <script type="text/javascript" src="/intranet-tmpl/includes/reports.js"></script>
@@ -92,14 +90,14 @@
         </div>
 
         <div class="control-group">
-            <label class="control-label" for="categoria_socio_id">Categor&iacute;­a del usuario</label>
+            <label class="control-label" for="categoria_socio_id">[% 'Categor&iacute;­a del usuario' | i18n %]</label>
             <div class="controls">  
                 [% comboDeCategorias %]          
             </div>
         </div>
 
         <div class="control-group">
-            <label class="control-label" for="tipo_documento_id">Tipo de documento</label>
+            <label class="control-label" for="tipo_documento_id">[% 'Tipo de documento' | i18n %]</label>
             <div class="controls">  
                 [% comboDeTipoDoc %]          
             </div>
@@ -107,14 +105,14 @@
 
 
         <div class="control-group">
-            <label class="control-label" for="titulo">T&iacute;­tulo</label>
+            <label class="control-label" for="titulo">[% 'T&iacute;­tulo' | i18n %]</label>
             <div class="controls">  
                 <input type="text" id="titulo" name="titulo" >       
             </div>
         </div>
 
         <div class="control-group">
-            <label class="control-label" for="edicion">Edici&oacute;­n</label>
+            <label class="control-label" for="edicion">[% 'Edici&oacute;­n' | i18n %]</label>
             <div class="controls">  
                 <input type="text" id="edicion" name="edicion" >       
             </div>
@@ -141,7 +139,7 @@
 
         <!-- se usa? -->
         <div class="control-group">
-            <label class="checkbox" for="statistics_check">Generar estadisticas
+            <label class="checkbox" for="statistics_check">[% 'Generar estadisticas' | i18n %]
 
             <input type="checkbox" name="statistics_check" id="statistics_check"/></label>
 
@@ -153,7 +151,7 @@
                                                   button       => "btn btn-primary",
                                                   action       => "generarReporteCirculacion();", 
                                                   icon         => "",
-                                                  title        => "Consultar",
+                                                  title        => "Generar Reporte",
                                               ) ;
             [% END %]
           </div>
