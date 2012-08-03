@@ -1,14 +1,6 @@
 [% INCLUDE 'intranet-top.inc' %] 
 [% USE HTML %]
 
-<script>
-
-    $(document).ready(function(){
-          
-    });
-
-</script>
-
 [% PERL %]
     print C4::AR::Filtros::tabbedPane( titulo   => "[% 'Reportes de Circulaci&oacute;n' | i18n %]",
                              subtitulo          => "[% 'Navegue por las pesta&ntilde;as para acceder a los distintos reportes' | i18n %]",
@@ -16,7 +8,6 @@
                                                       {id => 'reservas', text=> "[% 'Reservas' | i18n %]" },
                                                      
                                                   ] ,
-                             content_id=> 'reportes_catalogo',
                              active_id => 'general',
     
     );
