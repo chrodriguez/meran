@@ -1,6 +1,3 @@
-[% INCLUDE 'intranet-top.inc' %]
-[% INCLUDE 'AutocompleteHelper.inc' %]
-
 <script type="text/javascript" src="/intranet-tmpl/includes/reports.js"></script>
 <script>
 
