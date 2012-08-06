@@ -1,7 +1,7 @@
 NameVirtualHost *:443
 
 <VirtualHost *:443>
-SetEnv MERAN_CONF "/etc/meran/reemplazarID/meran.conf"
+SetEnv MERAN_CONF "/etc/meran/reemplazarID.conf"
 PerlSwitches -wT 
 
 DirectoryIndex /meran/mainpage.pl 

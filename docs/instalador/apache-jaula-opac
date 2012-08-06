@@ -1,10 +1,10 @@
 NameVirtualHost *:80
 <VirtualHost *:80>
-DirectoryIndex /meran/reemplazarID/opac-main.pl 
+DirectoryIndex /meran/opac-main.pl 
 DocumentRoot /usr/share/meran/reemplazarID/opac/htdocs
 ErrorLog /var/log/meran/reemplazarID/opac-error.log
 TransferLog /var/log/meran/reemplazarID/opac-access.log
-SetEnv MERAN_CONF "/etc/meran/meran.conf"
+SetEnv MERAN_CONF "/etc/meran/reemplazarID.conf"
 Header set Access-Control-Allow-Origin *
 #SetEnv PERL5LIB "/usr/share/meran/reemplazarID/intranet/modules"
 

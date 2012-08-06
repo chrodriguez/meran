@@ -1,5 +1,5 @@
 #!/bin/bash
-version=0.1
+version=0.2
 if [ $(uname -a|grep amd64|wc -l) -gt 0 ];
   then 
      versionKernel=64;
@@ -37,16 +37,28 @@ generarJaula()
   a2ensite $ID-apache-jaula-opac
 }
 
+crearBaseDedatos()
+{
+  #Esto es lo que hay que fixear.....  
+  echo "Creando Base de DAtos, esto se va a demorar un buen rato"
+  mysql --default-character-set=utf8  $BDD_MERAN -u$USER_BDD_MERAN -p$PASS_BDD_MERAN < /root/basePrueba.sql
+  echo "FIXMEEEE. esto deberia estar en el archivo pasa que pesa 300 megas"
+  echo "Asignando permisos al indice, vamos a requerirle una vez mas la pass."
+  mysql --default-character-set=utf8  $BDD_MERAN -p < /tmp/$ID.permisosbdd6
+}     
 generarPermisosBDD()
 {
-  sed s/reemplazarDATABASE/$BDD_MERAN/g $sources_MERAN/permisosbdd.sql > /tmp/$ID.permisosbdd
+  head -n2 $sources_MERAN/permisosbdd.sql | sed s/reemplazarDATABASE/$BDD_MERAN/g > /tmp/$ID.permisosbdd
   sed s/reemplazarUSER/$USER_BDD_MERAN/g /tmp/$ID.permisosbdd > /tmp/$ID.permisosbdd2
-  sed s/reemplazarPASS/$PASS_BDD_MERAN/g /tmp/$ID.permisosbdd2 > /tmp/$ID.permisosbdd
-  sed s/reemplazarIUSER/$IUSER_BDD_MERAN/g /tmp/$ID.permisosbdd > /tmp/$ID.permisosbdd2
-  sed s/reemplazarIPASS/$IPASS_BDD_MERAN/g /tmp/$ID.permisosbdd2 > /tmp/$ID.permisosbdd
+  sed s/reemplazarPASS/$PASS_BDD_MERAN/g /tmp/$ID.permisosbdd2 > /tmp/$ID.permisosbdd3
+  echo "Tenemos que crear la base de datos $DD_MERAN y para eso pediremos los permisos de root"
+  mysql -p -uroot < /tmp/$ID.permisosbdd3
+  tail -n1 $sources_MERAN/permisosbdd.sql | sed s/reemplazarDATABASE/$BDD_MERAN/g > /tmp/$ID.permisosbdd4
+  sed s/reemplazarIUSER/$IUSER_BDD_MERAN/g  /tmp/$ID.permisosbdd4 > /tmp/$ID.permisosbdd5
+  sed s/reemplazarIPASS/$IPASS_BDD_MERAN/g /tmp/$ID.permisosbdd5 > /tmp/$ID.permisosbdd6
   echo "Procederemos a crear la base de datos y asignarle los permisos necesarios"
-  mysql -p -uroot < /tmp/$ID.permisosbdd
-  #rm /tmp/$ID.permisosbdd*
+  crearBaseDedatos
+  rm /tmp/$ID.permisosbdd*
 }
 
 
@@ -56,8 +68,8 @@ generarConfiguracion()
   sed s/reemplazarID/$ID/g $sources_MERAN/meran.conf > /tmp/$ID.meran.conf
   sed s/reemplazarUSER/$USER_BDD_MERAN/g /tmp/$ID.meran.conf > /tmp/$ID.meran2.conf
   sed s/reemplazarPASS/$PASS_BDD_MERAN/g /tmp/$ID.meran2.conf > /tmp/$ID.meran.conf
-  sed s/reemplazarDATABASE/$BDD_MERAN/g /tmp/$ID.meran.conf > $CONFIGURACION_MERAN/meran$ID.conf
-  #rm /tmp/$ID.meran*
+  sed s/reemplazarDATABASE/$BDD_MERAN/g /tmp/$ID.meran.conf > $CONFIGURACION_MERAN/$ID.conf
+  rm /tmp/$ID.meran
 }
 
 usage()
@@ -155,7 +167,7 @@ if [ $(dpkg -l |grep apache2|grep ii |wc -l ) -eq 0 ];
           #Instalar paquetes
           #su
           apt-get update
-          apt-get install apache2 mysql-server libapache2-mod-perl2
+          apt-get install apache2 mysql-server libapache2-mod-perl2 htmldoc
 
           #Configurar apache
           echo "Procederemos a habilitar en apache los modulos necesarios"
@@ -221,7 +233,6 @@ select OPCION in Jaula Sistema
       echo "Generando la Base de datos"
       echo "FIXXXXXXXX habria q parametrizar la base y la conexion"
       generarPermisosBDD
-      mysql --default-character-set=utf8  $BDD_MERAN -u$USER_BDD_MERAN -p$PASS_BDD_MERAN < /root/basePrueba.sql
       
       #Configurar cron
       echo "FIXME Faltan configurar los Crons"
@@ -231,8 +242,15 @@ select OPCION in Jaula Sistema
       /etc/init.d/apache2 restart
       #Iniciar sphinx
       echo "Ahora el Sphinx"
-      $DESTINO_MERAN/$ID/sphinx/bin/searchd -c $DESTINO_MERAN/$ID/sphinx/etc/sphinx.conf
-      $DESTINO_MERAN/$ID/sphinx/bin/indexer -c $DESTINO_MERAN/$ID/sphinx/etc/sphinx.conf --all --rotate
+      if [ $(netstat -natp |grep searchd |grep 9312|wc -l) -gt 0 ]
+        then
+          echo "Sphinx ya esta corriendo vas a tener que combinar a mano el archivo de configuracion y generar los indices"
+          echo "El archivo generado es $DESTINO_MERAN/$ID/sphinx/etc/sphinx.conf "
+        else
+          echo "Como Sphinx no estaba ejecutandose lo vamos a hacer ahora"
+          $DESTINO_MERAN/$ID/sphinx/bin/indexer -c $DESTINO_MERAN/$ID/sphinx/etc/sphinx.conf --all --rotate
+          $DESTINO_MERAN/$ID/sphinx/bin/searchd -c $DESTINO_MERAN/$ID/sphinx/etc/sphinx.conf
+      fi
       break
     else
       echo "Solicitó una instalación sistemica de Meran, lo que significa que se modificará el sistema base."
