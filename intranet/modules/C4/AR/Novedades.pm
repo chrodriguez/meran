@@ -594,7 +594,7 @@ sub uploadCoverImage{
     	};
     	if ($@){
 	         $msg_object->{'error'}= 1;
-	         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP02',} ) ;
+	         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP01',} ) ;
     	}
     }
     

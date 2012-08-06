@@ -309,8 +309,8 @@
                                             [% END %]
                                 </li>
               [% END %]
-
 				</li>
+        
 			      [% IF socio_data.usr_credential_type == "librarian" OR  socio_data.usr_credential_type == "superLibrarian" %]
       <li class="divider">
 		                                <li>
