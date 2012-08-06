@@ -72,23 +72,17 @@ elsif($tipoAccion eq "GENERAR_ARREGLO_CAMPOS_REFERENCIA"){
 
 } elsif ($obj->{'tipoAccion'} eq 'BUSQUEDA_EDICIONES') {
     
-    my $idNivel1=  $obj->{'id1'};
-
-#     my %params_combo;
-#     $params_combo{'onChange'}       = 'cambiarValorEnHidden()';
-
-    my $combo_ediciones = C4::AR::Utilidades::generarComboNivel2Detalle($idNivel1);
-#     my $combo_ediciones = C4::AR::Utilidades::generarComboNivel2($params_combo);  
+    my $combo_ediciones = C4::AR::Utilidades::generarComboNivel2Detalle( $obj->{'id1'});
 
     my ($template, $session, $t_params)= get_template_and_user({
-                        template_name => "/includes/partials/catalogo/combo_ediciones.inc",
-                        query => $input,
-                        type => "intranet",
-                        flagsrequired => {  ui => 'ANY', 
-                                            tipo_documento => 'ANY', 
-                                            accion => 'CONSULTA', 
-                                            entorno => 'undefined'},
-                    });
+                                                                    template_name => "/includes/partials/catalogo/combo_ediciones.inc",
+                                                                    query => $input,
+                                                                    type => "intranet",
+                                                                    flagsrequired => {  ui => 'ANY', 
+                                                                                        tipo_documento => 'ANY', 
+                                                                                        accion => 'CONSULTA', 
+                                                                                        entorno => 'undefined'},
+                                                            });
  
     $t_params->{'combo_ediciones'} = $combo_ediciones;
       
@@ -286,6 +280,23 @@ elsif($tipoAccion eq "MODIFICAR_ESTRUCTURA_CATALOGACION"){
     C4::AR::Auth::print_header($session);
     print $infoOperacionJSON;
 }
+# elsif($tipoAccion eq "BUSCAR_EDICIONES_BY_ID1"){
+#     my ($template, $session, $t_params) = get_template_and_user({
+#                             template_name => "catalogacion/estructura/eidcionesDeRegistro.tmpl",
+#                             query => $input,
+#                             type => "intranet",
+#                             authnotrequired => 0,
+#                             flagsrequired => {      ui => 'ANY', 
+#                                                     tipo_documento => 'ANY', 
+#                                                     accion => 'CONSULTA', 
+#                                                     entorno => 'datos_nivel1' },
+#                             debug => 1,
+#                     });
+    
+#     $t_params->{'ediciones_array'} = C4::AR::Catalogacion::getNivel2FromId1($obj->{'id1'});  
+    
+#     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+# }
 
 elsif($tipoAccion eq "CAMBIAR_VISIBILIDAD"){
 #Se cambia la visibilidad del campo.

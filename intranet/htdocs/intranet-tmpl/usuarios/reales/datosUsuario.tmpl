@@ -154,11 +154,18 @@ function updateInfoPrestarReserva(responseText){
 
     // setMessages(messageArray);
     
+    var messageHash; 
+    messageHash = { "error":"", "tipo": "intranet", "messages": []};  
     for(i=0; i<messageArray.length;i++){
+            messageHash.error= messageArray[i].error;
+            messageHash.messages[i]= {"message": messageArray[i].messages[0].message};
+          
 //         imprimirTicket(ticketsArray[i].ticket,i);
-        setMessages(messageArray[i]);
+           
     }
-     
+    
+    setMessages(messageHash);
+    
     for(i=0; i<messageArray.length;i++){
        if  (messageArray[i].error){
            hayError= 1;

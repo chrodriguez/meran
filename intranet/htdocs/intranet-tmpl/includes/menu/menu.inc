@@ -309,18 +309,18 @@
                                             [% END %]
                                 </li>
               [% END %]
-
 				</li>
+        
 			      [% IF socio_data.usr_credential_type == "librarian" OR  socio_data.usr_credential_type == "superLibrarian" %]
-<!--                                     <li class="divider">
+      <li class="divider">
 		                                <li>
- -->		                                            [% PERL %]
-		                                                #print C4::AR::Filtros::link_to( text =>     "<i class='icon-print'></i> [% 'Reportes' | i18n %]",
-		                                                #                                url =>      "[% url_prefix %]/reports/circulacion.pl",
-		                                                #                                title =>    "[% 'Reportes' | i18n %]"
-		                                                #                            ) ;
+		                                            [% PERL %]
+		                                                print C4::AR::Filtros::link_to( text =>     "<i class='icon-print'></i> [% 'Reportes' | i18n %]",
+		                                                                                url =>      "[% url_prefix %]/reports/circulacion.pl",
+		                                                                                title =>    "[% 'Reportes' | i18n %]"
+		                                                                            ) ;
 		                                            [% END %]
-		                                <!-- </li> -->
+		                            </li>
 				 [% END %]
 				</ul>
       [% END %]
