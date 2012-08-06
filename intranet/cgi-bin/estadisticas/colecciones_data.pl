@@ -14,6 +14,10 @@ use C4::AR::Reportes;
 my $params = $input->Vars;
 my ($tipos_item,$colours,$cantidad) = C4::AR::Reportes::getItemTypes($params);
 
+
+C4::AR::Utilidades::printARRAY($tipos_item);
+
+
 my $chart = Chart::OFC2->new(
     'title'  => C4::AR::Filtros::i18n('Colecciones'),
     x_axis => {

@@ -17,6 +17,7 @@
                                  content   => [ 
                                                 {id => 'labels', text => "[% 'Generaci&oacute;n de Etiquetas' | i18n %]"},
                                                 {id => 'unindexed', text => "[% 'Registros no indexados' | i18n %]"},
+                                                {id => 'colecciones', text => "[% 'Reporte de colecciones' | i18n %]"},
                                               ],
                                  content_id=> 'reportes_catalogo',
                                  active_id => 'labels',
@@ -31,10 +32,15 @@
         <div class="tab-pane fade " id="unindexed">
             [% INCLUDE 'partials/reportes/_registros_no_indexados.inc' %]
         </div>
+        <div class="tab-pane fade " id="colecciones">
+            [% INCLUDE 'partials/reportes/_reporte_colecciones.inc' %]
+        </div>
+
         <div class="tab-pane fade " id="busquedas">
             [% INCLUDE 'partials/reportes/_reporte_busquedas.inc' %]
         </div>
        
+
       </div>
 </section>
 

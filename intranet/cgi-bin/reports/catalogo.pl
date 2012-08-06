@@ -18,7 +18,15 @@ my ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
 });
 
 my $comboDeCategorias           = C4::AR::Utilidades::generarComboCategoriasDeSocio();
-
 $t_params->{'comboDeCategorias'} =$comboDeCategorias;
+
+my %params_for_combo = {};
+$params_for_combo{'default'} = 'ALL';
+
+$t_params->{'item_type_combo'} = C4::AR::Utilidades::generarComboTipoNivel3(\%params_for_combo);
+$t_params->{'ui_combo'} = C4::AR::Utilidades::generarComboUI();
+
+my $comboNivelBibliografico = C4::AR::Utilidades::generarComboNivelBibliografico();
+$t_params->{'comboNivelBibliografico'} = $comboNivelBibliografico;
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
