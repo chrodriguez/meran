@@ -60,6 +60,7 @@ function updateGuardarTiposQueAplica(responseText){
 function respuesta(responseText){
     var Messages=JSONstring.toObject(responseText);
     setMessages(Messages);
+    $("#basic-modal-content").modal('hide');
 }
 
 /*
@@ -82,7 +83,8 @@ function buscarTiposPrestamosSancionados(){
 
 function updateTiposPrestamosSancionados(responseText){
     $("#divSancionesTiposPrestamos").html(responseText);
-       buscarSancionesReglas();
+    clearMessages();
+    buscarSancionesReglas();
 }
 
 function buscarSancionesReglas(){
@@ -183,19 +185,14 @@ function agregarSancion_hide(){
  */
 function eliminarReglaSancion(regla_sancion){
 
-    jConfirm(ESTA_SEGURO_QUE_DESEA_BORRARLO,'Confirme', function(confirmStatus){ 
-        if (confirmStatus) {
             objAH                   = new AjaxHelper(updateEliminarReglaSancion);
             objAH.debug             = true;
             objAH.showOverlay       = true;
-            objAH.url=URL_PREFIX+"/admin/circulacion/sancionesDB.pl";
+            objAH.url               =URL_PREFIX+"/admin/circulacion/sancionesDB.pl";
             objAH.regla_sancion     = regla_sancion;
             objAH.tipoAccion        = "ELIMINAR_REGLA_SANCION";
             objAH.sendToServer();
-            //Cierro la ventana
-            vReglasSanciones.close();
-        }
-    });
+
 }
 
 function updateEliminarReglaSancion(responseText){

@@ -1,14 +1,8 @@
 [% INCLUDE "intranet-top.inc" %]
 <script src="/includes/jquery/jquery.jeditable.js"></script>
 
-[% IF message %]
-	<div class="alert alert-error">
-	        <strong>Oh snap!</strong> [% message %]
-	</div>
-[% END %]
-
 <fieldset>
-    <legend>[% "Administraci&oacute;n de regularidades de usuarios" | i18n %]</legend>
+    <legend><span class="titulos">[% 'Administraci&oacute;n de regularidades de usuarios' | i18n %]</span></legend>
   
     <p>
           [% "Aqu&iacute; podr&aacute; configurar los distintos casos de regularidad para tipos de usuario y estados" | i18n %]
