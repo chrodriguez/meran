@@ -853,7 +853,7 @@ sub generarIndice {
     $autor = join(' | ',@autores);
 
 
-    my $indice_busqueda = $self->indice_busqueda;
+    my $indice_busqueda = $self->estaEnIndice;
 
     if(!$indice_busqueda) {
         #Si no existe lo creo

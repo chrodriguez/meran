@@ -150,7 +150,7 @@ sub generar_indice {
 
              if($indice_busueda){
                  $indice_busueda->delete();
-                 }
+             }
 
             }
         else{
