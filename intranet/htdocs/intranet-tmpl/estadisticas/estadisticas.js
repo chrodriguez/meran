@@ -28,12 +28,13 @@ function toggleChecks(){
 function consultarColecciones(){
     var ui=$("#id_ui").val();
     var item_type=$("#tipo_nivel3_id").val();
-
+    var nivel_biblio=$("#id_nivel_bibliografico").val();
     objAH=new AjaxHelper(updateInfo);
     objAH.debug= true;
     objAH.showOverlay = true;
     objAH.url= URL_PREFIX+"/estadisticas/colecciones.pl";
     objAH.ui= ui;
+    objAH.nivel_biblio= nivel_biblio;
     objAH.item_type= item_type;
     //se envia la consulta
     objAH.sendToServer();

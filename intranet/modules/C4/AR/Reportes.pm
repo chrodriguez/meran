@@ -1152,30 +1152,37 @@ sub registroDeUsuarios {
 
 
 sub reporteColecciones{
-	# my ( $params, $return_arrays ) = @_;
 
-	# use C4::Modelo::CatRegistroMarcN2;
-	# my ($cat_registro_n2) = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(select => ['*'] );
+	my ($params) = @_;
 
-	# my @items;
-	# my @cant;
-	# my @colours;
-	# my @array_for_file_export;
+	use C4::Modelo::CatRegistroMarcN2;
+	my ($cat_registro_n2) = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(select => ['*'] );
 
-	# my %item_type_hash = {0};
-	# if ( ( $params->{'item_type'} ) && ( $params->{'item_type'} ne 'ALL' ) ) {
-	# 	foreach my $record (@$cat_registro_n2) {
-	# 		my $item_type = $record->getTipoDocumento;
-	# 		if ( ( $params->{'item_type'} eq $item_type ) ) {
-	# 			if ( !$item_type_hash{$item_type} ) {
-	# 				$item_type_hash{$item_type} = 0;
-	# 			}
-	# 			$item_type_hash{$item_type}++;
-	# 		}
-	# 	}
-	# }
+	my @items;
 
+	my %item_type_hash = {0};
+	if ( ( $params->{'item_type'} ) && ( $params->{'item_type'} ne 'ALL' ) ) {
+		foreach my $record (@$cat_registro_n2) {
+			my $item_type = $record->getTipoDocumento;
+			if ( ( $params->{'item_type'} eq $item_type ) ) {
+				if ( !$item_type_hash{$item_type} ) {
+					$item_type_hash{$item_type} = 0;
+				}
+				$item_type_hash{$item_type}++;
+			}
+		}
+	}
+	else {
+		foreach my $record (@$cat_registro_n2) {
+			my $item_type = $record->getTipoDocumento;
+			if ( !$item_type_hash{$item_type} ) {
+				$item_type_hash{$item_type} = 0;
+			}
+			$item_type_hash{$item_type}++;
+		}
+	}
 
+	return ($item_type_hash);
 
 }
 

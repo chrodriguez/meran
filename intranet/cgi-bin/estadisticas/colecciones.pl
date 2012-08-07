@@ -48,7 +48,7 @@ if (!$obj){
         $obj=C4::AR::Utilidades::from_json_ISO($obj);
 
         ($template, $session, $t_params) = get_template_and_user({
-                                template_name => "estadisticas/partial_swf.tmpl",
+                                template_name => "includes/partials/reportes/_reporte_colecciones_result.inc",
                                 query => $input,
                                 type => "intranet",
                                 authnotrequired => 0,
@@ -59,15 +59,18 @@ if (!$obj){
                                 debug => 1,
                         });
 
-        $data_url = C4::AR::Utilidades::getUrlPrefix()."/estadisticas/colecciones_data.pl?item_type=".$obj->{'item_type'}."%26ui=".$obj->{'ui'};
-        $t_params->{'data'} = C4::AR::Reportes::getArrayHash('getItemTypes',$obj);
+        # $data_url = C4::AR::Utilidades::getUrlPrefix()."/estadisticas/colecciones_data.pl?item_type=".$obj->{'item_type'}."%26ui=".$obj->{'ui'};
+        # $t_params->{'data'} = C4::AR::Reportes::getArrayHash('getItemTypes',$obj);
         
-        my ($data,$is_array_of_hash) = C4::AR::Reportes::getItemTypes($obj,1);
-        my ($path,$filename) = C4::AR::Reportes::toXLS($data,$is_array_of_hash,'Pagina 1','Colecciones');
+        # my ($data,$is_array_of_hash) = C4::AR::Reportes::getItemTypes($obj,1);
+        # my ($path,$filename) = C4::AR::Reportes::toXLS($data,$is_array_of_hash,'Pagina 1','Colecciones');
         
-        $t_params->{'filename'} = '/reports/'.$filename;
+        # $t_params->{'filename'} = '/reports/'.$filename;
 
+        my ($data) = C4::AR::Reportes::reporteColecciones($obj->{'item_type'});
 
+        $t_params->{'data'} = $data;
+      
 }
 
 my %params_for_combo = {};
