@@ -447,7 +447,7 @@ sub desactivar{
     my ($vencidos,$prestamos) = C4::AR::Prestamos::cantidadDePrestamosPorUsuario($self->getNro_socio);
     
     if ($vencidos || $prestamos){
-    	return (1,'U421');
+    	return (1,'U424');
     }
     $self->persona->desactivar;
     $self->setActivo(0);
