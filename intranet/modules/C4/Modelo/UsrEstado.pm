@@ -105,23 +105,8 @@ sub getAll{
                                                                    );
     }
     my $ref_cant = C4::Modelo::UsrEstado::Manager->get_usr_estado_count(query => \@filtros,);
-    my $self_nombre = $self->getNombre;
-    my $self_nombre_abreviado = $self->getNombre;
 
-    my $match = 0;
-    if ($matchig_or_not){
-        my @matched_array;
-        foreach my $each (@$ref_valores){
-          $match = ((distance($self_nombre,$each->getNombre)<=2) || (distance($self_nombre_abreviado,$each->getFuente)<=2));
-          if ($match){
-            push (@matched_array,$each);
-          }
-        }
-        return (scalar(@matched_array),\@matched_array);
-    }
-    else{
-      return($ref_cant,$ref_valores);
-    }
+    return($ref_cant,$ref_valores);
 }
 
 1;
