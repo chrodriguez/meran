@@ -1415,7 +1415,7 @@ sub detalleCompletoRegistro {
                 my $f024=$nivel2_marc->field('024');
                 $nivel2_marc->delete_fields($f024);
             }
-            else{
+            else {
                  if ($nivel2_marc->subfield('024','a') eq 'ISSN'){
                      if($nivel2_marc->field('022')){
                      #Si es issn y existe el campo borro el isbn
@@ -1429,7 +1429,6 @@ sub detalleCompletoRegistro {
                     }
                 }
         }
-
             
         ##IDIOMA##
         if($nivel2_marc->subfield('041','a')){
