@@ -202,9 +202,11 @@ sub getPreferenciasBooleanas{
   
     my $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( 
                                         #select  => ['variable'],
-                                        query   => [    categoria   => { eq => $categoria },
+                                        query   => [    categoria   => { like => $categoria.'%' },
                                                         type        => { eq => 'bool' },
                                         ],
+                                        sort_by => ['categoria','label'],
+
                                 ); 
 
     return $preferencias_array_ref;
@@ -220,7 +222,8 @@ sub getPreferenciasByCategoria{
     my $prefTemp = C4::Modelo::PrefPreferenciaSistema->new();
   
     $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( 
-                                        query => [ categoria => { eq => $str }],
+                                        query => [ categoria => { like => $str.'%' }],
+                                        sort_by => ['categoria','label'],
                                 ); 
 
     return (scalar($preferencias_array_ref), $preferencias_array_ref);
@@ -237,6 +240,7 @@ sub getPreferenciasLikeCategoria{
   
     $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( 
                                         query => [ categoria=> { like => '%'.$str.'%' }],
+                                        sort_by => ['categoria','label'],
                                 ); 
 
     return (scalar($preferencias_array_ref), $preferencias_array_ref);
@@ -252,7 +256,7 @@ sub getPreferenciasByCategoriaHash{
     my $prefTemp = C4::Modelo::PrefPreferenciaSistema->new();
   
     $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( 
-                                        query => [ categoria => { eq => $str }],
+                                        query => [ categoria => { like => $str.'%' }],
                                 );
     my %hash;
     foreach my $pref (@$preferencias_array_ref){
@@ -273,7 +277,7 @@ sub getPreferenciaLike {
   
     $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( 
                                         query => [ variable=> { like => '%'.$str.'%' }],
-                                        sort_by => ( $prefTemp->sortByString($orden) ),
+                                        sort_by => ['categoria','label'],
                                 ); 
 
     return (scalar($preferencias_array_ref), $preferencias_array_ref);
@@ -289,8 +293,8 @@ sub getPreferenciaLikeConCategoria {
   
     $preferencias_array_ref = C4::Modelo::PrefPreferenciaSistema::Manager->get_pref_preferencia_sistema( 
                                         query => [  variable  => { like => '%'.$str.'%' },
-                                                    categoria => { eq => $categoria } ],
-                                        sort_by => ( $prefTemp->sortByString($orden) ),
+                                                    categoria => { like => $categoria.'%' } ],
+                                        sort_by => ['categoria','label'],
                                 ); 
 
     return (scalar($preferencias_array_ref), $preferencias_array_ref);
