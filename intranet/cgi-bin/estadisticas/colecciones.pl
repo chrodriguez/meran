@@ -67,7 +67,7 @@ if (!$obj){
         
         # $t_params->{'filename'} = '/reports/'.$filename;
 
-        my ($data) = C4::AR::Reportes::reporteColecciones($obj->{'item_type'});
+        my ($data) = C4::AR::Reportes::reporteColecciones($obj);
 
         $t_params->{'data'} = $data;
       

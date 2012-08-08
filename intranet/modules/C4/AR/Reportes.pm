@@ -1159,22 +1159,37 @@ sub reporteColecciones{
 	my ($cat_registro_n2) = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(select => ['*'] );
 
 	my @items;
+	my @cant;
 
 	my %item_type_hash = {0};
+	my $niv_biblio;
 	if ( ( $params->{'item_type'} ) && ( $params->{'item_type'} ne 'ALL' ) ) {
 		foreach my $record (@$cat_registro_n2) {
-			my $item_type = $record->getTipoDocumento;
-			if ( ( $params->{'item_type'} eq $item_type ) ) {
-				if ( !$item_type_hash{$item_type} ) {
-					$item_type_hash{$item_type} = 0;
+			my $item_type = $record->getTipoDocumentoObject->id_tipo_doc;
+
+			my $niv_bibliografico = $record->nivel1->getNivelBibliograficoObject;
+
+			if ($params->{'item_type'} eq $item_type) {
+					
+					if ($niv_bibliografico){
+						$niv_biblio= $niv_bibliografico->getId;
+					} else {
+						$niv_bibliografico = "";
+					}
+				
+					if ( $params->{'nivel_biblio'} eq $niv_bibliografico){
+						if ( !$item_type_hash{$item_type} ) {
+							$item_type_hash{$item_type} = 0;
+						}
+						$item_type_hash{$item_type}++;
+					}
 				}
-				$item_type_hash{$item_type}++;
 			}
+			
 		}
-	}
-	else {
+	 else {
 		foreach my $record (@$cat_registro_n2) {
-			my $item_type = $record->getTipoDocumento;
+			my $item_type = $record->getTipoDocumentoObject->id_tipo_doc;
 			if ( !$item_type_hash{$item_type} ) {
 				$item_type_hash{$item_type} = 0;
 			}
@@ -1182,7 +1197,18 @@ sub reporteColecciones{
 		}
 	}
 
-	return ($item_type_hash);
+my $limit_of_view = 0;
+
+	foreach my $item ( keys %item_type_hash ) {
+		$item_type_hash{$item} = int $item_type_hash{$item};
+		if ( $item_type_hash{$item} > 0 ) {
+			push( @items,   $item );
+			push( @cant,    $item_type_hash{$item} );
+		}
+	}
+
+
+	return ( \@items);
 
 }
 
