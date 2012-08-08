@@ -47,7 +47,7 @@ sub agregar{
 
     $self->setIdImportacionEsquema($params->{'id_importacion_esquema'});
     $self->setCampoOrigen($params->{'campo'});
-    $self->setSubcampoOrigen(uc($params->{'subcampo'}));
+    $self->setSubcampoOrigen(lc($params->{'subcampo'}));
 
     $self->save();
 }
