@@ -46,16 +46,19 @@ if ($input->param('newflags')) {
 	}
 	else{
     		for(my $i=1;$i<6;$i++) {
-			my $flag=0;
-			if ($input->param('chk'.$i)){
-				$flag=1;
-			}
-	    	$flags=$flags.$flag;
+    			my $flag=0;
+    			if ($input->param('chk'.$i) == 1){
+    				$flag='1';
+			    }else{
+                    $flag='0';
+                }
+	    	    $flags=$flags.$flag;
     		}
 	}
 
 	C4::AR::Utilidades::cambiarLibreDeuda($flags);
-    $t_params->{'message'}= C4::AR::Filtros::i18n("La configuraci&oacute;n de la administraci&oacute;n se ha modificado.");
+    $t_params->{'mensaje'}= C4::AR::Filtros::i18n("La configuraci&oacute;n de la administraci&oacute;n se ha modificado.");
+    $t_params->{'mensaje_class'}= "alert-success";
 }
 
 my $libreD=C4::AR::Preferencias::getValorPreferencia("libreDeuda");
