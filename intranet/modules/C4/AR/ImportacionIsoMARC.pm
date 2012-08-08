@@ -1403,6 +1403,24 @@ sub detalleCompletoRegistro {
                 my $new_field= MARC::Field->new('910','#','#','a' => $tipo_documento->getNombre());
                 $nivel2_marc->append_fields($new_field);
             }
+
+        ##ISBN vs ISSN##
+
+        if($nivel2_marc->subfield('024','a')){
+                    C4::AR::Debug::debug(" ISBN vs ISSN!!! ".$nivel2_marc->subfield('024','a'));
+            if ($nivel2_marc->subfield('024','a') eq 'ISBN'){
+                #Si es isbn borro el issn
+                $nivel2_marc->delete_fields('022','024');
+                
+            }
+            else{
+                 if ($nivel2_marc->subfield('024','a') eq 'ISSN'){
+                     #Si es issn borro el isbn
+                      $nivel2_marc->delete_fields('020','024');
+                     }
+                }
+        }
+
             
         ##IDIOMA##
         if($nivel2_marc->subfield('041','a')){
@@ -1705,12 +1723,15 @@ sub getNivelBibliograficoFromMarcRecord{
         if ($nivel_bibliografico){
             #FIXME por ahora suponemos que viene bien el codigo, puede haber alias
              $resultado=$nivel_bibliografico;
-            #use Switch;
-            #switch ($tipo_documento) {
-                #case 'TEXTO' { 
-                    #$resultado = 'LIB';
-                    #}
-            #}
+            use Switch;
+            switch ($nivel_bibliografico) {
+                case 'IMP' { 
+                    $resultado = 'm';
+                    }
+                case 'LIB DIG' { 
+                    $resultado = 'm';
+                    }
+            }
         }
     return $resultado;
     }

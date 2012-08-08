@@ -958,4 +958,32 @@ sub getNavString{
     
     return ($string)
 }
+
+sub getAll{
+
+    my ($self) = shift;
+    my ($limit,$offset,$matchig_or_not,$filtro)=@_;
+    $matchig_or_not = $matchig_or_not || 0;
+    my @filtros;
+
+    if ($filtro){
+        my @filtros_or;
+        push(@filtros_or, (id => {eq => '%'.$filtro.'%'}) );
+        push(@filtros, (or => \@filtros_or) );
+    }
+    my $ref_valores;
+    if ($matchig_or_not){ #ESTOY BUSCANDO SIMILARES, POR LO TANTO NO TENGO QUE LIMITAR PARA PERDER RESULTADOS
+        push(@filtros, ($self->getPk => {ne => $self->getPkValue}) );
+        $ref_valores = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(query => \@filtros,);
+    }else{
+        $ref_valores = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(query => \@filtros,
+                                                                    limit => $limit, 
+                                                                    offset => $offset, 
+                                                                   );
+    }
+    my $ref_cant = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2_count(query => \@filtros,);
+
+    return($ref_cant,$ref_valores);
+}
+
 1;
