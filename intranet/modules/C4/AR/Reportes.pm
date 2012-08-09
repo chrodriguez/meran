@@ -1158,57 +1158,72 @@ sub reporteColecciones{
 	use C4::Modelo::CatRegistroMarcN2;
 	my ($cat_registro_n2) = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(select => ['*'] );
 
-	my @items;
 	my @cant;
 
 	my %item_type_hash = {0};
 	my $niv_biblio;
-	if ( ( $params->{'item_type'} ) && ( $params->{'item_type'} ne 'ALL' ) ) {
-		foreach my $record (@$cat_registro_n2) {
-			my $item_type = $record->getTipoDocumentoObject->id_tipo_doc;
 
-			my $niv_bibliografico = $record->nivel1->getNivelBibliograficoObject;
+	my @result;
+	my %hash_niveles3;
 
-			if ($params->{'item_type'} eq $item_type) {
+	foreach my $record (@$cat_registro_n2) {
+			
+					my $item_type = $record->getTipoDocumentoObject->id_tipo_doc;
+					
+					my $niv_bibliografico = $record->nivel1->getNivelBibliograficoObject;
 					
 					if ($niv_bibliografico){
 						$niv_biblio= $niv_bibliografico->getId;
 					} else {
-						$niv_bibliografico = "";
+						$niv_biblio = "";
 					}
-				
-					if ( $params->{'nivel_biblio'} eq $niv_bibliografico){
-						if ( !$item_type_hash{$item_type} ) {
-							$item_type_hash{$item_type} = 0;
-						}
-						$item_type_hash{$item_type}++;
+
+					if ($params->{'item_type'} eq $item_type || $params->{'item_type'} eq "" || $params->{'item_type'} eq "ALL") {
+							
+							if ( $params->{'nivel_biblio'} eq $niv_biblio || $params->{'nivel_biblio'} eq "" ){
+								
+									if ( !$item_type_hash{$item_type} ) {
+										$item_type_hash{$item_type} = 0;
+									}
+									$item_type_hash{$item_type}++;
+
+									my $niveles3_aux= C4::AR::Nivel3::getAllNivel3FromId2($record->id);
+
+									foreach my $n3 (@$niveles3_aux){
+							
+										my $ui_poseedora= $n3->getId_ui_poseedora;
+										my @niveles3;
+
+										if ( $params->{'ui'} eq $ui_poseedora || $params->{'ui'} eq ""){
+												push(@niveles3, $n3);
+										}
+
+										$hash_niveles3{
+														"results" => @niveles3,
+														"cant" => scalar(@niveles3)
+
+										};
+									}
+
+									push(@result, %hash_niveles3);
+							}
 					}
-				}
-			}
-			
-		}
-	 else {
-		foreach my $record (@$cat_registro_n2) {
-			my $item_type = $record->getTipoDocumentoObject->id_tipo_doc;
-			if ( !$item_type_hash{$item_type} ) {
-				$item_type_hash{$item_type} = 0;
-			}
-			$item_type_hash{$item_type}++;
-		}
+					
+					
 	}
 
-my $limit_of_view = 0;
+	# my $limit_of_view = 0;
 
-	foreach my $item ( keys %item_type_hash ) {
-		$item_type_hash{$item} = int $item_type_hash{$item};
-		if ( $item_type_hash{$item} > 0 ) {
-			push( @items,   $item );
-			push( @cant,    $item_type_hash{$item} );
-		}
-	}
+	# foreach my $item ( keys %item_type_hash ) {
+	# 	$item_type_hash{$item} = int $item_type_hash{$item};
+	# 	if ( $item_type_hash{$item} > 0 ) {
+	# 		push( @items,   $item );
+	# 		push( @cant,    $item_type_hash{$item} );
+	# 	}
+	# }
 
 
-	return ( \@items);
+	return (\@result, scalar(@result));
 
 }
 
