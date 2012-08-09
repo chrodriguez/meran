@@ -1409,18 +1409,26 @@ sub detalleCompletoRegistro {
         if($nivel2_marc->subfield('024','a')){
                     C4::AR::Debug::debug(" ISBN vs ISSN!!! ".$nivel2_marc->subfield('024','a'));
             if ($nivel2_marc->subfield('024','a') eq 'ISBN'){
-                #Si es isbn borro el issn
-                $nivel2_marc->delete_fields('022','024');
-                
+                #Si es isbn y existe borro el issn
+                my $f022=$nivel2_marc->field('022');
+                $nivel2_marc->delete_fields($f022);
+                my $f024=$nivel2_marc->field('024');
+                $nivel2_marc->delete_fields($f024);
             }
-            else{
+            else {
                  if ($nivel2_marc->subfield('024','a') eq 'ISSN'){
-                     #Si es issn borro el isbn
-                      $nivel2_marc->delete_fields('020','024');
+                     if($nivel2_marc->field('022')){
+                     #Si es issn y existe el campo borro el isbn
+                        my $f020=$nivel2_marc->field('020');
+                         if($f020){
+                            $nivel2_marc->delete_fields($f020);
+                         }
+                        my $f024=$nivel2_marc->field('024');
+                        $nivel2_marc->delete_fields($f024);
                      }
+                    }
                 }
         }
-
             
         ##IDIOMA##
         if($nivel2_marc->subfield('041','a')){

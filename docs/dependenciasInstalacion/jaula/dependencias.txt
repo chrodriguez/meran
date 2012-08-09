@@ -13,6 +13,7 @@ SQL::ReservedWords
 Bit::Vector::Overload
 Apache::Session
 Class::Singleton
+DateTime
 DateTime::Locale
 Class::Factory::Util
 Captcha::reCAPTCHA
@@ -85,3 +86,5 @@ HTML::HeadParser
 URI
 WWW::Shorten::generic
 JSON::Any
+Params::Validate
+

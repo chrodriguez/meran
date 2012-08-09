@@ -365,6 +365,7 @@ my %mensajesINTRA = (
     'U617' => 'Registro asociado con &eacute;xito!',
     'U618' => 'Disculpe, no se pudo asociar el registro',
     'U900' => 'El usuario ha sido eliminado del sistema.',
+    'U982' => 'El mensaje ha sido eliminado.',
     'C500' => 'Los items fueron guardados correctamente.',
     'C501' => 'Se produjo un error al intentar guardar los datos del item, repita la operacion.',
     'C502' => 'Se produjo un error, el codigo de barra ingresado esta repetido. Vuelva a intentarlo',

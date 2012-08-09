@@ -555,6 +555,8 @@ sub getTablaInstanceByTableName{
       case "usr_persona" { $tabla = C4::Modelo::UsrPersona->new()  }
       case "circ_prestamo" { $tabla = C4::Modelo::CircPrestamo->new()  }
       case "cat_visualizacion_opac" { $tabla = C4::Modelo::CatVisualizacionOpac->new()  }
+      case "usr_estado" { $tabla = C4::Modelo::UsrEstado->new()  }
+      case "usr_regularidad" { $tabla = C4::Modelo::UsrRegularidad->new()  }
 
       else { C4::AR::Debug::debug("getTablaInstanceByTableName()========================================= >TABLA POR NOMBRE INEXISTENTE") }
   }

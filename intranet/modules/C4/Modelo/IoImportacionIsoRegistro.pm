@@ -760,16 +760,16 @@ sub prepararNivelParaImportar{
                 my $subcampo          = $subfield->[0];
                 my $dato              = $subfield->[1];
                 my $estructura = C4::AR::Catalogacion::_getEstructuraFromCampoSubCampo( $hash_temp{'campo'}, $subcampo, $itemtype, $nivel);
-                if(($estructura)&&($estructura->getReferencia)){
+                if(($estructura)&&($estructura->infoReferencia)){
                     #es una referencia, yo tengo el dato nomás (luego se verá si hay que crear una nueva o ya existe en la base)
-                    my ($clave_tabla_referer_involved,$tabla_referer_involved) =  C4::AR::Referencias::getTablaInstanceByAlias($estructura->infoReferencia->getReferencia);
-                    my ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getAll(1,0,0,$dato);
                     my $tabla = $estructura->infoReferencia->getReferencia;
+                    my ($clave_tabla_referer_involved,$tabla_referer_involved) =  C4::AR::Referencias::getTablaInstanceByAlias($tabla);
+                    my ($ref_cantidad,$ref_valores) = $tabla_referer_involved->getAll(1,0,0,$dato);
 
                     if ($ref_cantidad){
                       #REFERENCIA ENCONTRADA
                         $dato =  $ref_valores->[0]->get_key_value;
-                      }
+                    }
                     else { #no existe la referencia, hay que crearla 
                       $dato = C4::AR::ImportacionIsoMARC::procesarReferencia($dato,$tabla,$clave_tabla_referer_involved,$tabla_referer_involved);
                     }

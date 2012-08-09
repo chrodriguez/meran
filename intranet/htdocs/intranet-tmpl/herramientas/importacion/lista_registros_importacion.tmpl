@@ -7,6 +7,7 @@
             checkProgress();
             scrollTo('import-footer');
           [% END %]
+          $('.popup').popover();
     });
 
 function cambiarFiltro (filtro){
@@ -119,20 +120,23 @@ function cambiarFiltro (filtro){
                             
                             <td>
                               [% IF detalle_importacion.getEstado == "IGNORADO" %]
-                                  <span class="label label-warning" 
+                                  <span class="label label-warning popup" 
                                         rel="popover" 
                                         data-content="[% detalle_importacion.getDetalle %]" 
+                                        data-placement="left" 
                                         data-original-title="[% 'Ignorado' | i18n %]" >
                                   [% 'Ignorado' | i18n %]</span>
                               [% ELSIF detalle_importacion.getEstado == "IMPORTADO" %]
-                                  <span class="label label-success"
+                                  <span class="label label-success popup"
                                         rel="popover" 
                                         data-content="[% detalle_importacion.getDetalle %]" 
+                                        data-placement="left" 
                                         data-original-title="[% 'Importado' | i18n %]" >
                                   [% 'Importado' | i18n %]</span>
                               [% ELSIF detalle_importacion.getEstado == "ERROR" %]
-                                  <span class="label label-warning popover_button" 
-                                        rel="popover" 
+                                  <span class="label label-warning popover_button popup" 
+                                        rel="popover"
+                                        data-placement="left" 
                                         data-content="[% detalle_importacion.getDetalle %]" 
                                         data-original-title="[% 'Error' | i18n %]" >
                                   [% 'Error' | i18n %]

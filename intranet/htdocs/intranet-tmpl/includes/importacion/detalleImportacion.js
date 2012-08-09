@@ -55,7 +55,7 @@ function detalleRegistroMARC(id){
 
 function updateDetalleRegistroMARC(responseText){
             $('#detalleRegistroMARC').html(responseText);
-            $.scrollTo('#detalleRegistroMARC');
+            scrollTo('detalleRegistroMARC');
 }
 
 /*

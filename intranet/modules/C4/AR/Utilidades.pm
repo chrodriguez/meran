@@ -1456,12 +1456,12 @@ NOTA: cambiar de PM a uno donde esten todo lo referido a las preferencias de sis
 sub cambiarLibreDeuda{
 
     my ($valor)=@_;
-    my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare(" UPDATE pref_preferencia_sistema
-                            SET value=?
-                            WHERE variable='libreDeuda'");
 
-    $sth->execute($valor);
+    C4::AR::Preferencias::setVariable('libreDeuda',$valor);
+    C4::AR::Preferencias::reloadAllPreferences();
+
+    return (1);
+
 }
 
 =item
