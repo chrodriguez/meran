@@ -100,8 +100,11 @@ if(l=="11111"){
 else{
 	for(i=0;i<5;i++){
 		var j=i+1;
-		if(l.charAt(i) == "1"){document.getElementById("chk"+j).checked=true;}
-		else{document.getElementById("chk"+j).checked=false;}
+		if(l.charAt(i) == "1"){
+                document.getElementById("chk"+j).checked=true;
+        }else{
+            document.getElementById("chk"+j).checked=false;
+        }
 	}
 }
 

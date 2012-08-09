@@ -182,7 +182,11 @@ var loaderPath= "";
                       [% IF !(socio.getNro_socio == socio.getNro_documento) %]
                           <dt class="inline left rightMargin">
                             [% "Nro. de Socio:" | i18n %]</dt>
-                          <dd><span class="label label-info click" onclick="showModalCambiarNroSocio();" >[% socio.getNro_socio %]</span></dd>
+                        	[% IF socio_data.usr_nro_socio != nro_socio %]
+                          		<dd><span class="label label-info click" onclick="showModalCambiarNroSocio();" >[% socio.getNro_socio %]</span></dd>
+                          	[% ELSE %]
+                          		<dd><span class="label label-info"  >[% socio.getNro_socio %]</span></dd>
+                          	[% END %]
                       [% END %]
 
                       <dt class="inline left rightMargin">[% "Categor&iacute;a:" | i18n %] </dt>

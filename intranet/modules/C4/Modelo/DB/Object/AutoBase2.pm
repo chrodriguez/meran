@@ -211,6 +211,7 @@ sub createFromAlias{
         case 'acm' {return C4::Modelo::RefAcm->new()}
 # TODO para el link de analiticas
         case 'nivel2' {return C4::Modelo::CatRegistroMarcN2->new()}
+        case 'usr_estado' {return C4::Modelo::UsrEstado->new()}
 	    else {C4::AR::Debug::debug("NO EXISTE LA TABLA DE REFERENCIA ".$classAlias) }
     }
 }

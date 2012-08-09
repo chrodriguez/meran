@@ -338,7 +338,7 @@
 				  <div id="end_top">
 				    [% IF mensaje %]
 							<div class="alert [% mensaje_class %]">
-							        <strong>[% 'Info' | i18n %]</strong> [% mensaje %]
+							        <strong>[% 'Informaci&oacute;n' | i18n %]</strong> [% mensaje %]
 							</div>
 				    [% END %]
 				  </div>

@@ -14,7 +14,7 @@ generarConfSphinx()
   sed s/reemplazarIUSER/$IUSER_BDD_MERAN/g /tmp/$ID.sphix.conf > /tmp/$ID.sphix2.conf
   sed s/reemplazarIPASS/$IPASS_BDD_MERAN/g /tmp/$ID.sphix2.conf > /tmp/$ID.sphix.conf
   sed s/reemplazarDATABASE/$BDD_MERAN/g /tmp/$ID.sphix.conf > $DESTINO_MERAN/$ID/sphinx/etc/sphinx.conf
-  #rm /tmp/$ID.sphix*
+  rm /tmp/$ID.sphix*
 
 }
 generarLogRotate()
@@ -81,14 +81,14 @@ Este script necesita si o si el parametro -i
 
 OPTIONS:
    -h      Show this message
-   -i      Identificador para esta instalación de meran
-   -d      Carpeta DESTINO donde se guardara la configuraion de meran
-   -b      Base de datos a usar. Por Defecto meran
+   -i      Identificador para esta instalación de meran. Este Identificador se va a utilizar en todo
+   -d      Carpeta DESTINO donde se guardara meran. Por defecto /usr/share/meran
+   -b      Base de datos a usar. Por Defecto va a ser meran
    -u      Usuario que se va a conectar a la base de datos. Por defecto kohaadmin
    -p      Pass del usuario que se va a conectar a la base de dato. Por defecto sera un random
    -s      Usuario que se va a utilizar en el indic. Por defecto indice
    -w      Pass del usuario que se va a utilizar en el indice. Por defecto sera un random
-   -c      directorio donde se guardará la configuracion de meran
+   -c      directorio donde se guardará la configuracion de meran. Por defecto sera /etc/meran y el archivo de configuracion sera $ID.conf
 EOF
 }
 
@@ -167,7 +167,8 @@ if [ $(dpkg -l |grep apache2|grep ii |wc -l ) -eq 0 ];
           #Instalar paquetes
           #su
           apt-get update
-          apt-get install apache2 mysql-server libapache2-mod-perl2 htmldoc
+          apt-get install apache2 mysql-server libapache2-mod-perl2 htmldoc libgd2-xpm libxpm4 htmldoc
+
 
           #Configurar apache
           echo "Procederemos a habilitar en apache los modulos necesarios"

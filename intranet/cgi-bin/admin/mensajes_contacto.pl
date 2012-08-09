@@ -18,7 +18,6 @@ my ($template, $session, $t_params) = get_template_and_user({
 			    });
 
 
-#FIXME paginador
 my %hash_temp   = {};
 my $obj         = \%hash_temp;
 my $accion      = $obj->{'tipoAccion'} = $input->param('tipoAccion');
@@ -28,6 +27,9 @@ my $url         = C4::AR::Utilidades::getUrlPrefix()."/admin/mensajes_contacto.p
 
 if ($accion eq 'eliminar'){
     C4::AR::MensajesContacto::eliminar($id_mensaje);
+	$t_params->{'mensaje'}        = C4::AR::Mensajes::getMensaje('U982','INTRA');
+	$t_params->{'mensaje_class'}  = "alert-info";
+
 }
 
 my ($ini,$pageNumber,$cantR)            = C4::AR::Utilidades::InitPaginador($ini);
