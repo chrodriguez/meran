@@ -1,142 +1,215 @@
 [% INCLUDE "intranet-top.inc" %]
 
-[% INCLUDE 'datePicker.inc' %]
+<link rel="stylesheet" href="/includes/jquery/datetimepicker/wijmo.css" type="text/css" media="screen" />
+<script src="/includes/jquery/datetimepicker/jquery-ui-datetimepicker.js" type="text/javascript"></script>
+<script type="text/javascript" src="/includes/jquery/datetimepicker/jquery.wijmo-open.all.2.1.6.min.js"></script>
+<script type="text/javascript" src="/includes/jquery/datetimepicker/wijmo-culture.js"></script>
 
 <script type="text/javascript">
 
-    function contains(a, obj){
-        for(var i = 0; i < a.length; i++) {
-            if(a[i] === obj){
-            return true;
-            }
+    //agregarFeriado
+    //agregado y quitado dinamicamente al input que agrega feriados
+    var handler = function(){
+
+        //si se intenta agregar un feriado sin seleccionar ninguna fecha no entra
+        if(fechasPost != ''){
+
+            _agregarFechasEnArray();
+
+            objAH               = new AjaxHelper(updateAgregarFeriado);
+            objAH.debug         = true;
+            objAH.showOverlay   = true;
+            objAH.url           = URL_PREFIX + '/admin/postFecha.pl';
+            objAH.debug         = true;
+            objAH.dates         = fechasPost;
+            objAH.stat          = 'true';
+            objAH.feriado       = $('#razonFeriado').val();
+            objAH.sendToServer();
         }
-        return false;
     }
 
-    function deleteFromFECHAS(fecha){
-        //Fecha Vieja
-        var FECHAS_SEL= new Array();
-        for(var i = 0; i < FECHAS.length; i++) {
-            if(FECHAS[i]!=fecha){FECHAS_SEL.push(FECHAS[i]);}
+    function _agregarFechasEnArray(){
+        for(var i = 0; i < fechasTemp.length; i++){
+            fechas.push(new Date(fechasTemp[i]));
         }
-        FECHAS=FECHAS_SEL;
     }
 
-    var FECHAS=new Array();
-    var firstTime=1; //PORQUE MIERDA SE EJECUTA LA 1RA VEZ!!!
+    function eliminarFeriado(){
+
+        //si se intenta agregar un feriado sin seleccionar ninguna fecha no entra
+        if(fechasPost != ''){
+
+            //primero eliminamos la fecha del array de fechas
+            deleteFechasFromArray();
+
+            objAH               = new AjaxHelper(updateEliminarFeriado);
+            objAH.debug         = true;
+            objAH.showOverlay   = true;
+            objAH.url           = URL_PREFIX + '/admin/postFecha.pl';
+            objAH.debug         = true;
+            objAH.dates         = fechasPost;
+            objAH.stat          = 'false';
+            objAH.feriado       = $('#razonFeriado').val();
+            objAH.sendToServer();
+        }
+    }
+
+    //FIXME: feo!!
+    function updateEliminarFeriado(responseText){
+        location.reload();
+    }
+
+    function updateAgregarFeriado(responseText){
+        $('#fechas').val('');
+        $('#razonFeriado').val('');
+        $('#mostrarFeriadosTotales').css('display', 'none');
+
+        $("#calendarioFeriados").wijcalendar({
+            selectedDates: [fechas]
+        });
+
+        proximosFeriados();
+    }
+
+    //handler que se llama cuando se hace click en el boton
+    // 'mostrar feriados originales'
+    handlerMostrarFeriados = function(){
+        $('#mostrarFeriadosTotales').css('display', 'none');
+        $('#eliminarFeriadoBoton').css('display', 'none');
+        $('#agregarFeriadoBoton').removeClass('disabled');
+
+        $("#calendarioFeriados").wijcalendar({
+            selectedDates: [fechas]
+        });
+    }
 
     function proximosFeriados(){
-
-        objAH=new AjaxHelper(updateProximosFeriados);
-        objAH.url=URL_PREFIX+'/admin/proximosFeriados.pl';
+        objAH       = new AjaxHelper(updateProximosFeriados);
+        objAH.url   = URL_PREFIX + '/admin/proximosFeriados.pl';
         objAH.sendToServer();
     }
-
 
     function updateProximosFeriados(responseText){
         $('#proximosFeriados').html(responseText);
     }
 
-    function postFecha(date,stat,feriado){
-        objAH=new AjaxHelper(updatePostFeriado);
-        objAH.debug= true;
-        objAH.showOverlay   = true;
-        objAH.url=URL_PREFIX+'/admin/postFecha.pl';
-        objAH.debug= true;
-        objAH.date= date;
-        objAH.stat= stat;
-        objAH.feriado= feriado;
-        objAH.sendToServer();
-    }
+    function deleteFechasFromArray(){
 
-    function updatePostFeriado(responseText){
-        proximosFeriados();
-    }
+        for(var i = 0; i < fechasDelete.length; i++){
 
-    function agregarFeriado(fecha){
-          jPrompt('[% "Razón del Feriado" | i18n %]', '', '[% "Feriados" | i18n %]', function(texto) {
-             if (texto){
-                 postFecha(fecha,'true',texto);
-                 FECHAS.push(fecha);
+            for(var x = 0; x < fechas.length; x++){
+                if (fechasDelete[i].toString() == fechas[x].toString()){
+                    // alert(fechas)
+                    // alert('vamos a borrar a ' + fechas[x].toString())
+                    // delete fechas[x];
+                    fechas.splice (x,x);
+                    // alert(fechas)
                 }
-            $('#calendarioFeriados').datepick('setDate', FECHAS);
-          });
+            }          
+        }
     }
 
-    function eliminarFeriado(fecha,index) {
-        jConfirm('[% "Eliminar el feriado" | i18n %] '+ fecha +' ?', '[% "Feriados" | i18n %]', function(r) {
-                   if(r){
-                         postFecha(fecha,'false','');
-                         deleteFromFECHAS(fecha);
-                        }
-                $('#calendarioFeriados').datepick('setDate', FECHAS);
-        });
-    }
-
-
-    $(function(){
-        crearDatePickerMultiple('calendarioFeriados',4,999,
-                function(dates){
-                    if (firstTime){
-                        firstTime=0;
-                    }
-                    else{
-                        var dateSelected=dates.pop();//Esto me dá la última fecha seleccionada, salvo que no haya más fechas.
-                        if (dateSelected){ 
-                            dates.push(dateSelected);
-                            var fecha= $.datepick.formatDate('dd/mm/yyyy',dateSelected);
-
-                            if (!contains(FECHAS,fecha)){
-                                //Fecha Nueva
-                                agregarFeriado(fecha);
-                            }
-                            else{
-                                //Fecha Vieja
-                                var FECHAS_SEL= new Array();
-                                for(var i = 0; i < dates.length; i++) {
-                                    FECHAS_SEL.push($.datepick.formatDate('dd/mm/yyyy',dates[i]));
-                                }
-
-                                var fecha_borrada='';
-                                var index;
-                                for(var i = 0; i < FECHAS.length; i++) {
-                                    if (!contains(FECHAS_SEL,FECHAS[i])){
-                                        fecha_borrada = FECHAS[i];
-                                        index=i;
-                                    }
-                                }
-                                if(fecha_borrada){
-                                    eliminarFeriado(fecha_borrada,index); 
-                                }
-                            }
-                        }
-                    }
-                }
-        );
-        });
+    var fechas          = new Array();
+    var fechasPost      = new Array(); //se mandan por AJAX
+    var fechasTemp      = new Array(); //temporales para agregarlas al array fechas
+    var fechasDelete    = new Array(); //temporales a borrar
 
     $(document).ready(function(){
+
+        $('#agregarFeriadoBoton').bind('click', handler);
+        $('#mostrarFeriadosTotales').bind('click', handlerMostrarFeriados);
+
         [% FOREACH date IN dates %]
-            FECHAS.push('[% date.getFecha %]');
+            fechas.push(new Date('[% date.getFechaParaCalendario %]'));
         [% END %]
 
-       $('#calendarioFeriados').datepick('setDate', FECHAS);
-       proximosFeriados();
-    }
-    );
+        $("#calendarioFeriados").wijcalendar({
+            culture: "es-ES",
+            monthCols: 3,
+            monthRows: 2,
+            prevTooltip: "Anterior",
+            nextTooltip: "Siguiente",
+            toolTipFormat: "dd/MM/yyyy",
+
+            selectedDatesChanged: function (e, args) { 
+
+                //mostramos el botos para resetear las fechas seleccionadas
+                $('#mostrarFeriadosTotales').css('display', '');
+
+                //lo reinicializamos primero
+                fechasPost      = new Array();
+                fechasTemp      = new Array();
+                fechasDelete    = new Array();
+                var encontre    = false;
+
+                $.each(args.dates, function(index, value) { 
+
+                    var fechaTemp   = new Date(value);
+                    encontre        = false;
+
+                    for(var i = 0; i < fechas.length; i++) {
+                        if (fechaTemp.toString() == fechas[i].toString()){
+                            encontre = true;
+                        }
+                    }
+
+                    if(encontre != true){
+                        //estamos agregando una fecha nueva
+                        fechasTemp.push(fechaTemp);
+                    }else{
+                        //estamos borrando una fecha ya seleccionada
+                        // fechasDelete = fechas;
+                        fechasDelete.push(fechaTemp);
+                    }
+
+                    //las agregamos a este array que se manda en la peticion AJAX
+                    fechasPost.push(value.getDate() + "/" + (value.getMonth()+1) + "/" + value.getFullYear());
+
+                    $('#fechas').val(value.getDate() + "/" + (value.getMonth()+1) + "/" + value.getFullYear());
+                });
+
+                var firstDate = args.dates[0];
+                var lastDate  = args.dates[args.dates.length - 1];
+
+                //mostramos al usuario en el input la fecha o el rango seleccionado
+                $('#fechas').val(firstDate.getDate() + "/" + (firstDate.getMonth()+1) + "/" + firstDate.getFullYear());
+
+                if ((firstDate !== lastDate) && (lastDate !== null)) {
+                    $('#fechas').val($('#fechas').val() + " -> " + lastDate.getDate() + "/" + (lastDate.getMonth()+1) + "/" + lastDate.getFullYear());
+                }
+
+                if(encontre == true){
+                    $('#eliminarFeriadoBoton').css('display', '');
+                    $('#agregarFeriadoBoton').addClass('disabled btn btn-primary');
+                    $('#agregarFeriadoBoton').unbind('click', handler);
+                }
+                
+            },
+
+            selectedDates: [fechas]
+         });
+
+        proximosFeriados();
+    });
 
 </script>
 
 <fieldset>
     <legend class="titulos">[% "Feriados" | i18n %]</legend>
 
-    <div style="float:left"  id="calendarioFeriados" >
-    </div>
+    <div id="calendarioFeriados"></div>
 
-    <div style="float:right"  id="proximosFeriados" >
-    </div>
+    <form class="well form-inline" onclick="return false;">
+        <input type="text" id="fechas" required placeholder="[% 'Fecha/s' | i18n %]">
+        <input type="hidden" id="action" value="add">
+        <input type="text" id="razonFeriado" value="" required placeholder="[% 'Razón del feriado' | i18n %]">
+        <button type="submit" id="agregarFeriadoBoton" class="btn btn-primary">[% 'Agregar feriado' | i18n %]</button>
+        <button type="submit" id="eliminarFeriadoBoton" class="btn btn-danger" style="display:none;" onclick="eliminarFeriado();">[% 'Eliminar feriado' | i18n %]</button>
+        <button type="submit" id="mostrarFeriadosTotales" class="btn btn-info" style="display:none;">[% 'Mostrar feriados originales' | i18n %]</button>
+    </form>
+
+    <div id="proximosFeriados"></div>
 
 </fieldset>
-
 
 [% INCLUDE "intranet-bottom.inc" %]
