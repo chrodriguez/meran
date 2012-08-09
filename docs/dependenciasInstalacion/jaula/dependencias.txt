@@ -1,3 +1,4 @@
+Data::Dumper
 Version::Requirements
 CPAN::Meta::Requirements
 Path::Class
