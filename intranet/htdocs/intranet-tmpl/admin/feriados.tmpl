@@ -64,6 +64,8 @@
         $('#fechas').val('');
         $('#razonFeriado').val('');
         $('#mostrarFeriadosTotales').css('display', 'none');
+        $('#agregarFeriadoBoton').text('Agregar feriado');
+        $('#eliminarFeriadoBoton').css('display', 'none');
 
         $("#calendarioFeriados").wijcalendar({
             selectedDates: [fechas]
@@ -179,12 +181,16 @@
 
                 if(encontre == true){
                     $('#eliminarFeriadoBoton').css('display', '');
-                    $('#agregarFeriadoBoton').addClass('disabled btn btn-primary');
-                    $('#agregarFeriadoBoton').unbind('click', handler);
+                    $('#agregarFeriadoBoton').html('<i id="agregarFeriadoIcon" class="icon-white icon-plus"></i> Editar feriado');
+                    $('#agregarFeriadoBoton').removeClass('btn btn-primary');
+                    $('#agregarFeriadoBoton').addClass('btn btn-inverse');
                 }else{
+                    $('#agregarFeriadoBoton').html('<i id="agregarFeriadoIcon" class="icon-white icon-plus"></i> Agregar feriado');
                     $('#eliminarFeriadoBoton').css('display', 'none');
                     $('#agregarFeriadoBoton').removeClass('disabled');
                     $('#agregarFeriadoBoton').bind('click', handler);
+                    $('#agregarFeriadoBoton').removeClass('btn btn-inverse');
+                    $('#agregarFeriadoBoton').addClass('btn btn-primary');
                 }
                 
             },
@@ -206,9 +212,10 @@
         <input type="text" id="fechas" required placeholder="[% 'Fecha/s' | i18n %]">
         <input type="hidden" id="action" value="add">
         <input type="text" id="razonFeriado" value="" required placeholder="[% 'Razón del feriado' | i18n %]">
-        <button type="submit" id="agregarFeriadoBoton" class="btn btn-primary">[% 'Agregar feriado' | i18n %]</button>
-        <button type="submit" id="eliminarFeriadoBoton" class="btn btn-danger" style="display:none;" onclick="eliminarFeriado();">[% 'Eliminar feriado' | i18n %]</button>
-        <button type="submit" id="mostrarFeriadosTotales" class="btn btn-info" style="display:none;">[% 'Mostrar feriados originales' | i18n %]</button>
+        <button type="submit" id="agregarFeriadoBoton" class="btn btn-primary"><i id="agregarFeriadoIcon" class="icon-white icon-plus"></i> [% 'Agregar feriado' | i18n %]</button>
+        <button type="submit" id="eliminarFeriadoBoton" class="btn btn-danger" style="display:none;" onclick="eliminarFeriado();"><i id="eliminarFeriadoIcon" class="icon-white icon-trash"></i> [% 'Eliminar feriado' | i18n %]</button>
+        <button type="submit" id="mostrarFeriadosTotales" class="btn btn-info" style="display:none;">
+            <i id="mostrarFeriadosTotalesIcon" class="icon-white icon-eye-open"></i> [% 'Mostrar feriados originales' | i18n %]</button>
     </form>
 
     <div id="proximosFeriados"></div>
