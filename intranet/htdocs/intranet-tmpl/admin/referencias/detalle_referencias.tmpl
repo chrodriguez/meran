@@ -69,13 +69,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                        [% IF involved %]
+                        [% IF involved_count > 0 %]
+                          [% write = 0 %]
                             [% FOREACH data IN involved %]
                                 [% IF data.cantidad > 0%]
+                                  [% write = 1 %]
                                   <tr>
                                       <td> [% "El registro tiene " | i18n %] [% data.cantidad %] [% " tupla(s) relacionada(s) en la tabla " | i18n %] [% data.tabla %]</td>
                                   </tr>
                                 [% END %]
+                            [% END %]
+                            [% IF !write %]
+                                  <div class="alert alert-info">[% "No existe ninguna tabla que haga uso de esta tabla de referencia" | i18n %]</div>
                             [% END %]
                         [% ELSE %]
                               <tr><td>[% "No existe ninguna tabla que haga uso de esta tabla de referencia" | i18n %]</td></tr>
@@ -89,6 +94,7 @@
 <fieldset>
     <legend>[% "Similares " | i18n %]: [% tabla %]</legend>
         <div class="datos_tabla_div_related" id="datos_tabla_div">
+          [% IF related_referers_count %]
             <table id="tablaResult_similares" class="table table-striped">
                 <thead>
                     [% IF referer_involved %]
@@ -102,7 +108,6 @@
                     [% END %]
                 </thead>
                 <tbody>
-                    [% IF related_referers %]
                         [% FOREACH related IN related_referers %]
                             <tr>
                                 <span onClick="mostrarReferencias('[% related.getAlias %]','[% related.getPkValue %]')">
@@ -137,11 +142,11 @@
                                 </td>
                             </tr>
                         [% END %]
-                    [% ELSE %]
-                          <tr><td>[% "No existe ninguna tabla que haga uso de esta tabla de referencia" | i18n %]</td></tr>
-                    [% END %]
               </tbody>
           </table>
+        [% ELSE %]
+              <div class="alert alert-warning">[% "No existe ninguna tabla que haga uso de esta tabla de referencia" | i18n %]</div>
+        [% END %]
       </div>
 </fieldset>
 

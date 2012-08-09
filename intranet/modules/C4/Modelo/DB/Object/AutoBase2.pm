@@ -212,6 +212,7 @@ sub createFromAlias{
 # TODO para el link de analiticas
         case 'nivel2' {return C4::Modelo::CatRegistroMarcN2->new()}
         case 'usr_estado' {return C4::Modelo::UsrEstado->new()}
+        case 'usr_regularidad' {return C4::Modelo::UsrRegularidad->new()}
 	    else {C4::AR::Debug::debug("NO EXISTE LA TABLA DE REFERENCIA ".$classAlias) }
     }
 }

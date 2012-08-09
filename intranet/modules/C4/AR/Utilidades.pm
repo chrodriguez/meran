@@ -583,13 +583,22 @@ sub crearComponentes{
                 );
     }
     elsif($tipoInput eq 'texta'){
+
+        my $class_texta = "";
+        if ( ($id ne "google_map") && ($id ne "twitter_follow_button") ){
+            $class_texta = "input-xxlarge editable_wysiwyg",
+        }else{
+            $class_texta = "input-xxlarge",    
+        }
+
         $inputCampos=CGI::textarea(
             -name    =>$id,
             -id  =>$id,
             -value   =>$valor,
-            -rows    =>$labels,
+            -rows    =>10,
             -cols    =>$values,
-                );
+            -class   => $class_texta,    
+        );
     }
     else{
         $inputCampos= CGI::hidden(-id=>$id,);

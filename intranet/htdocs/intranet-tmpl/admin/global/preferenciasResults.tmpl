@@ -31,6 +31,25 @@
 
 </script>
 
+
+<link href="/includes/css/aloha.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/includes/require.js"></script>
+<script type="text/javascript" src="/includes/aloha/aloha.js"
+                     data-aloha-plugins="common/ui,
+                                          common/format,
+                                          common/list,
+                                          common/link,
+                                          common/highlighteditables">
+</script>
+ 
+<script type="text/javascript">
+       Aloha.ready( function() {
+              var $ = Aloha.jQuery;
+              $('.editable_wysiwyg').aloha();
+       });
+</script>    
+
+
 <form id="formPreferencias" onclick="return false;" class="form-horizontal" action="[% url_prefix %]/admin/global/preferencias.pl?token=[% token %]" method="post">
     <fieldset class="resultados_busqueda">
     <legend>[% "Administraci&oacute;n de preferencias de sistema" | i18n %]</legend>
