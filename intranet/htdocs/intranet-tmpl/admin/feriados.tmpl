@@ -84,9 +84,11 @@
     }
 
     function proximosFeriados(){
+        startOverlay();
         objAH       = new AjaxHelper(updateProximosFeriados);
         objAH.url   = URL_PREFIX + '/admin/proximosFeriados.pl';
         objAH.sendToServer();
+        closeModal();
     }
 
     function updateProximosFeriados(responseText){
