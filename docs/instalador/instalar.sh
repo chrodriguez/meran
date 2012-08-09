@@ -153,6 +153,12 @@ if [ $(whoami) = root ];
     echo "Hay que ser root"
     exit 1
 fi
+if [ $(perl -v|grep 5.10.1|wc -l) -eq 0 ];
+  then
+    echo "No tenes la versión adecuada de perl instalada, se va a interrumpir el proceso, deberías tener la 5.10.1"
+    exit 1
+fi
+
 
 if [ $(dpkg -l |grep apache2|grep ii |wc -l ) -eq 0 ];
   then
