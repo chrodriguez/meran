@@ -30,6 +30,15 @@ sub getFecha{
     return (C4::Date::format_date($self->fecha,$dateformat));
 }
 
+=item
+    Devuelve la fecha en formato US, para el calendario
+=cut
+sub getFechaParaCalendario{
+    my ($self) = shift;
+
+    return (C4::Date::format_date($self->fecha,'us'));
+}
+
 sub getFeriado{
     my ($self) = shift;
 
@@ -41,6 +50,9 @@ sub getFeriado{
 sub setFecha{
     my ($self) = shift;
     my ($fecha,$status,$feriado) = @_;
+
+    C4::AR::Debug::debug("statusss : " . $status);
+
 
     if ($status eq "true"){
         $self->fecha($fecha);

@@ -54,7 +54,7 @@
     }
 
     function agregarFeriado(fecha){
-          jPrompt('[% "Raz&oacute;n del Feriado" | i18n %]', '', '[% "Feriados" | i18n %]', function(texto) {
+          jPrompt('[% "Razón del Feriado" | i18n %]', '', '[% "Feriados" | i18n %]', function(texto) {
              if (texto){
                  postFecha(fecha,'true',texto);
                  FECHAS.push(fecha);
