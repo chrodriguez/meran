@@ -66,6 +66,9 @@
         $('#mostrarFeriadosTotales').css('display', 'none');
         $('#agregarFeriadoBoton').text('Agregar feriado');
         $('#eliminarFeriadoBoton').css('display', 'none');
+        $('#agregarFeriadoBoton').removeClass('disabled btn btn-inverse');
+        $('#agregarFeriadoBoton').addClass('btn btn-primary');
+        $('#agregarFeriadoBoton').html('<i id="agregarFeriadoIcon" class="icon-white icon-plus"></i> Agregar feriado');
 
         $("#calendarioFeriados").wijcalendar({
             selectedDates: [fechas]
@@ -181,9 +184,9 @@
 
                 if(encontre == true){
                     $('#eliminarFeriadoBoton').css('display', '');
-                    $('#agregarFeriadoBoton').html('<i id="agregarFeriadoIcon" class="icon-white icon-plus"></i> Editar feriado');
+                    $('#agregarFeriadoBoton').html('<i id="agregarFeriadoIcon" class="icon-white icon-pencil"></i> Editar feriado');
                     $('#agregarFeriadoBoton').removeClass('btn btn-primary');
-                    $('#agregarFeriadoBoton').addClass('btn btn-inverse');
+                    $('#agregarFeriadoBoton').addClass('disabled btn btn-inverse');
                 }else{
                     $('#agregarFeriadoBoton').html('<i id="agregarFeriadoIcon" class="icon-white icon-plus"></i> Agregar feriado');
                     $('#eliminarFeriadoBoton').css('display', 'none');
