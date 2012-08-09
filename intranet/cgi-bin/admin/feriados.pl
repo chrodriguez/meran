@@ -18,6 +18,7 @@ my ($template, $session, $t_params) = get_template_and_user({
 			    });
 
 
-$t_params->{'dates'} = C4::AR::Utilidades::getFeriados();
+$t_params->{'dates'} 			= C4::AR::Utilidades::getFeriados();
 
+$t_params->{'page_sub_title'}  	= C4::AR::Filtros::i18n("Feriados");
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
