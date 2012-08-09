@@ -56,7 +56,8 @@
 
     //FIXME: feo!!
     function updateEliminarFeriado(responseText){
-        location.reload();
+        // location.reload();
+        updateAgregarFeriado(responseText);
     }
 
     function updateAgregarFeriado(responseText){
@@ -101,11 +102,7 @@
 
             for(var x = 0; x < fechas.length; x++){
                 if (fechasDelete[i].toString() == fechas[x].toString()){
-                    // alert(fechas)
-                    // alert('vamos a borrar a ' + fechas[x].toString())
-                    // delete fechas[x];
-                    fechas.splice (x,x);
-                    // alert(fechas)
+                    fechas.splice(x,x);
                 }
             }          
         }
@@ -184,6 +181,10 @@
                     $('#eliminarFeriadoBoton').css('display', '');
                     $('#agregarFeriadoBoton').addClass('disabled btn btn-primary');
                     $('#agregarFeriadoBoton').unbind('click', handler);
+                }else{
+                    $('#eliminarFeriadoBoton').css('display', 'none');
+                    $('#agregarFeriadoBoton').removeClass('disabled');
+                    $('#agregarFeriadoBoton').bind('click', handler);
                 }
                 
             },
