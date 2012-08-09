@@ -27,7 +27,7 @@
                 <li>Miguel Carbone</li>
                 <li>Gaspar Rajoy</li>
                 <li>Magal&iacute; Defalco</li>
-                <li>Francisco Raposeiras</li>
+                <li>J. Francisco Raposeiras</li>
         </ul><br>
 
         <a href="http://www.econo.unlp.edu.ar" target="_blank">Facultad de Ciencias Econ&oacute;micas</a><br><br>  
