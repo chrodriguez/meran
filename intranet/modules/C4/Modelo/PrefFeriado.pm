@@ -23,6 +23,13 @@ sub agregar{
     $self->setFecha($fecha,$status,$feriado);
 
 }
+
+sub getFeriado{
+    my ($self) = shift;
+
+    return (C4::Utilidades::trim($self->feriado));
+}
+
 sub getFecha{
     my ($self) = shift;
     my $dateformat = C4::Date::get_date_format();
@@ -51,9 +58,6 @@ sub setFecha{
     my ($self) = shift;
     my ($fecha,$status,$feriado) = @_;
 
-    C4::AR::Debug::debug("statusss : " . $status);
-
-
     if ($status eq "true"){
         $self->fecha($fecha);
         $self->feriado($feriado);
@@ -62,5 +66,5 @@ sub setFecha{
         $self->delete();
     }
 }
-1;
 
+1;
