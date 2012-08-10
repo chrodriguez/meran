@@ -75,6 +75,40 @@ sub setFuente{
     $self->fuente($fuente);
 }
 
+sub obtenerValoresCampo {
+    my ($self)=shift;
+    my ($campo,$orden)=@_;
+    my $ref_valores = C4::Modelo::UsrEstado::Manager->get_usr_estado
+                        ( select   => ['id_estado', $campo],
+                          sort_by => ($orden) );
+    my @array_valores;
+
+    for(my $i=0; $i<scalar(@$ref_valores); $i++ ){
+        my $valor;
+        $valor->{"clave"}=$ref_valores->[$i]->getId_estado;
+        $valor->{"valor"}=$ref_valores->[$i]->getCampo($campo);
+        push (@array_valores, $valor);
+    }
+    
+    return (scalar(@array_valores), \@array_valores);
+}
+
+sub obtenerValorCampo {
+    my ($self)=shift;
+    my ($campo,$id)=@_;
+    my $ref_valores = C4::Modelo::UsrEstado::Manager->get_usr_estado
+                        ( select   => [$campo],
+                          query =>[ id_estado => { eq => $id} ]);
+        
+#   return ($ref_valores->[0]->getCampo($campo));
+  if(scalar(@$ref_valores) > 0){
+    return ($ref_valores->[0]->getCampo($campo));
+  }else{
+    #no se pudo recuperar el objeto por el id pasado por parametro
+    return 'NO_TIENE';
+  }
+}
+
 sub getAll{
 
     my ($self) = shift;

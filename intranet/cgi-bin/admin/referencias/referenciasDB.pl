@@ -129,10 +129,12 @@ elsif ($accion eq "MOSTRAR_REFERENCIAS"){
         my ($tabla_related,$related_referers) = C4::AR::Referencias::mostrarSimilares($alias_tabla,$value_id);
     
         $t_params->{'involved'} = $items_involved;
+        $t_params->{'involved_count'} = scalar(@$items_involved);
         $t_params->{'used'} = $used_or_not;
         $t_params->{'mostrar_asignar'} = $obj->{'asignar'} || 0;
         $t_params->{'referer_involved'} = $referer_involved;
         $t_params->{'related_referers'} = $related_referers;
+        $t_params->{'related_referers_count'} = scalar(@$related_referers);
         $t_params->{'tabla_related'} = $tabla_related;
     }
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

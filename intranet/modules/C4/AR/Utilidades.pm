@@ -583,13 +583,22 @@ sub crearComponentes{
                 );
     }
     elsif($tipoInput eq 'texta'){
+
+        my $class_texta = "";
+        if ( ($id ne "google_map") && ($id ne "twitter_follow_button") ){
+            $class_texta = "input-xxlarge editable_wysiwyg",
+        }else{
+            $class_texta = "input-xxlarge",    
+        }
+
         $inputCampos=CGI::textarea(
             -name    =>$id,
             -id  =>$id,
             -value   =>$valor,
-            -rows    =>$labels,
+            -rows    =>10,
             -cols    =>$values,
-                );
+            -class   => $class_texta,    
+        );
     }
     else{
         $inputCampos= CGI::hidden(-id=>$id,);
@@ -4343,28 +4352,38 @@ sub getProximosFeriados{
     return ($feriados);
 }
 
+=item
+    Setea uno o mas feriados, dependiendo de cuantas fechas reciba por parametro
+=cut
 sub setFeriado{
 
-    my ($fecha,$status,$texto_feriado) = @_;
+    my ($fechas, $status, $texto_feriado) = @_;
 
     require C4::Modelo::PrefFeriado;
     require C4::Modelo::PrefFeriado::Manager;
+
     my $dateformat      = C4::Date::get_date_format();
     $texto_feriado      = Encode::encode_utf8($texto_feriado);
-    $fecha              = C4::Date::format_date_in_iso($fecha, $dateformat);
 
-    my $feriado = C4::Modelo::PrefFeriado::Manager->get_pref_feriado(query => [ fecha => { eq => $fecha } ] );
+    foreach my $fecha (@$fechas){
 
-    if (scalar(@$feriado)){
-        #El feriado ya existe!! se modifica el texto o se elimina dependiendo del status
-        $feriado->[0]->setFecha($fecha,$status,$texto_feriado);
+        $fecha      = C4::Date::format_date_in_iso($fecha, $dateformat);
+        my $feriado = C4::Modelo::PrefFeriado::Manager->get_pref_feriado(query => [ fecha => { eq => $fecha } ] );
 
-    }else{
-        $feriado = C4::Modelo::PrefFeriado->new();
-        eval{
-            $feriado->agregar($fecha,$status,$texto_feriado);
-        };
+        if (scalar(@$feriado)){
+
+            #El feriado ya existe!! se modifica el texto o se elimina dependiendo del status
+            $feriado->[0]->setFecha($fecha,$status,$texto_feriado);
+
+        }else{
+
+            $feriado = C4::Modelo::PrefFeriado->new();
+            eval{
+                $feriado->agregar($fecha,$status,$texto_feriado);
+            };
+        }
     }
+
     return (1);
 }
 
