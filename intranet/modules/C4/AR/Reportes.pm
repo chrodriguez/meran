@@ -1151,81 +1151,145 @@ sub registroDeUsuarios {
 }
 
 
-sub reporteColecciones{
+# sub reporteColecciones{
 
-	my ($params) = @_;
+# 	my ($params) = @_;
 
-	use C4::Modelo::CatRegistroMarcN2;
-	my ($cat_registro_n2) = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(select => ['*'] );
+# 	use C4::Modelo::CatRegistroMarcN2;
+# 	my ($cat_registro_n2) = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(select => ['*'] );
 
-	my @cant;
+# 	my @cant;
 
-	my %item_type_hash = {0};
-	my $niv_biblio;
+# 	my %item_type_hash = {0};
+# 	my $niv_biblio;
 
-	my @result;
-	my %hash_niveles3;
+# 	my @result;
+# 	my %hash_niveles3;
 
-	foreach my $record (@$cat_registro_n2) {
+# 	foreach my $record (@$cat_registro_n2) {
 			
-					my $item_type = $record->getTipoDocumentoObject->id_tipo_doc;
+# 					my $item_type = $record->getTipoDocumentoObject->id_tipo_doc;
 					
-					my $niv_bibliografico = $record->nivel1->getNivelBibliograficoObject;
+# 					my $niv_bibliografico = $record->nivel1->getNivelBibliograficoObject;
 					
-					if ($niv_bibliografico){
-						$niv_biblio= $niv_bibliografico->getId;
-					} else {
-						$niv_biblio = "";
-					}
+# 					if ($niv_bibliografico){
+# 						$niv_biblio= $niv_bibliografico->getId;
+# 					} else {
+# 						$niv_biblio = "";
+# 					}
 
-					if ($params->{'item_type'} eq $item_type || $params->{'item_type'} eq "" || $params->{'item_type'} eq "ALL") {
+# 					if ($params->{'item_type'} eq $item_type || $params->{'item_type'} eq "" || $params->{'item_type'} eq "ALL") {
 							
-							if ( $params->{'nivel_biblio'} eq $niv_biblio || $params->{'nivel_biblio'} eq "" ){
+# 							if ( $params->{'nivel_biblio'} eq $niv_biblio || $params->{'nivel_biblio'} eq "" ){
 								
-									if ( !$item_type_hash{$item_type} ) {
-										$item_type_hash{$item_type} = 0;
-									}
-									$item_type_hash{$item_type}++;
+# 									if ( !$item_type_hash{$item_type} ) {
+# 										$item_type_hash{$item_type} = 0;
+# 									}
+# 									$item_type_hash{$item_type}++;
 
-									my $niveles3_aux= C4::AR::Nivel3::getAllNivel3FromId2($record->id);
+# 									my $niveles3_aux= C4::AR::Nivel3::getAllNivel3FromId2($record->id);
 
-									foreach my $n3 (@$niveles3_aux){
+# 									foreach my $n3 (@$niveles3_aux){
 							
-										my $ui_poseedora= $n3->getId_ui_poseedora;
-										my @niveles3;
+# 										my $ui_poseedora= $n3->getId_ui_poseedora;
+# 										my @niveles3;
 
-										if ( $params->{'ui'} eq $ui_poseedora || $params->{'ui'} eq ""){
-												push(@niveles3, $n3);
-										}
+# 										if ( $params->{'ui'} eq $ui_poseedora || $params->{'ui'} eq ""){
+# 												push(@niveles3, $n3);
+# 										}
 
-										$hash_niveles3{
-														"results" => @niveles3,
-														"cant" => scalar(@niveles3)
+# 										$hash_niveles3{
+# 														"results" => @niveles3,
+# 														"cant" => scalar(@niveles3)
 
-										};
-									}
+# 										};
+# 									}
 
-									push(@result, %hash_niveles3);
-							}
-					}
+# 									push(@result, %hash_niveles3);
+# 							}
+# 					}
 					
 					
-	}
+# 	}
 
-	# my $limit_of_view = 0;
+# 	# my $limit_of_view = 0;
 
-	# foreach my $item ( keys %item_type_hash ) {
-	# 	$item_type_hash{$item} = int $item_type_hash{$item};
-	# 	if ( $item_type_hash{$item} > 0 ) {
-	# 		push( @items,   $item );
-	# 		push( @cant,    $item_type_hash{$item} );
-	# 	}
-	# }
+# 	# foreach my $item ( keys %item_type_hash ) {
+# 	# 	$item_type_hash{$item} = int $item_type_hash{$item};
+# 	# 	if ( $item_type_hash{$item} > 0 ) {
+# 	# 		push( @items,   $item );
+# 	# 		push( @cant,    $item_type_hash{$item} );
+# 	# 	}
+# 	# }
 
 
-	return (\@result, scalar(@result));
+# 	return (\@result, scalar(@result));
 
-}
+# }
+
+
+ sub reporteColecciones{
+ 		my ($params) = @_;
+
+		my $tipo_doc= 	$params->{'item_type'};
+		my $ui=			$params->{'ui'};
+
+		
+		my $fecha_ini = $params->{'fecha_ini'};
+		my $fecha_fin =	$params->{'fecha_fin'};
+
+		my $catRegistroMarcN3   = C4::Modelo::CatRegistroMarcN3->new();  
+   		my $db = $catRegistroMarcN3->db;
+		
+		my @filtros;
+
+		if ($tipo_doc ne ""){
+			push (@filtros, ("t2.marc_record"    => { like   => '%acat_ref_tipo_nivel3@'.$tipo_doc.'%'}));
+		} 
+
+		if ($params->{'nivel_biblio'} ne ""){
+			my $niv_biblio= C4::Modelo::RefNivelBibliografico->new();
+			my $niv_biblio_object = $niv_biblio->getObjetoById($params->{'nivel_biblio'});
+			my $niv_biblio_code = $niv_biblio_object->getCode();
+
+			push (@filtros, ("t2.marc_record"    => { like   => '%bref_nivel_bibliografico@'.$niv_biblio_code.'%'}));
+		} 
+
+		if ($ui ne ""){
+			push (@filtros, ("t2.marc_record"    => { like   => '%@'.$ui.'%'}));
+		}
+
+		if ($fecha_ini ne "Desde" && $fecha_fin ne "Hasta"){
+			push(@filtros, and => [ 'created_at' => 	{ gt => $fecha_ini, eq => $fecha_ini },
+                                	'created_at' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
+		} elsif($fecha_ini ne "Desde"){
+			push (@filtros, ('created_at' => { gt => $fecha_ini, eq => $fecha_ini }));
+
+		} elsif($fecha_fin ne "Hasta"){
+			push (@filtros, ('created_at' => { lt => $fecha_fin, eq => $fecha_fin }));
+		}
+
+ 								
+
+ 		my $nivel3_array_ref_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count(   
+                                                                        db  => $db,
+                                                                        query => \@filtros, 
+                                                                        require_objects => ['nivel2'],
+                                        );
+
+
+		my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(   
+                                                                        db  => $db,
+                                                                        query => \@filtros, 
+                                                                        require_objects => ['nivel2'],
+                                        );
+
+ 		C4::AR::Utilidades::printARRAY($nivel3_array_ref);
+		
+		return ($nivel3_array_ref, $nivel3_array_ref_count);
+ }
+
+
 
 
 

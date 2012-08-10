@@ -36,6 +36,8 @@ function consultarColecciones(){
     objAH.ui= ui;
     objAH.nivel_biblio= nivel_biblio;
     objAH.item_type= item_type;
+    objAH.fecha_ini= $("#fecha_ini").val();
+    objAH.fecha_fin= $("#fecha_fin").val();
     //se envia la consulta
     objAH.sendToServer();
 }
