@@ -114,9 +114,9 @@ sub gettemplate {
     my ($session)       = CGI::Session->load();
     my $url_server      = C4::AR::Preferencias::getValorPreferencia('serverName');
     my $user_theme      = $session->param('urs_theme') || $tema_opac;
-    my $server_port     = $ENV{'SERVER_PORT'};
+    my $server_port     = ":".$ENV{'SERVER_PORT'};
 
-    if ( ($server_port eq '80') || ($server_port eq '443') ){
+    if ( ($server_port != 80) || ($server_port != 443) ){
             $server_port = "";
     }
 
@@ -145,6 +145,7 @@ sub gettemplate {
             user_theme_intra            => $user_theme_intra,
             url_prefix                  => C4::AR::Utilidades::getUrlPrefix(),
             SERVER_ADDRESS              => $SERVER_URL,
+            SERVER_PORT                 => $server_port,
             socio_data                  => C4::AR::Auth::buildSocioDataHashFromSession(),
             date_separator              => C4::AR::Filtros::i18n("de"),
             CirculationEnabled          => C4::AR::Preferencias::getValorPreferencia("CirculationEnabled"),
