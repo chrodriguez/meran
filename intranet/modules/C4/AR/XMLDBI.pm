@@ -4,7 +4,8 @@ use XML::Parser;
 
 use vars qw(@ISA @EXPORT $table $dbh $sth @col_vals);
 
-@ISA= ("XML::Parser");
+# @ISA= ("XML::Parser");
+@ISA= ("XML::Checker::Parser");
 
 sub IsNumber {
 	my ($value) = @_;
