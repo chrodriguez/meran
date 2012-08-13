@@ -108,6 +108,10 @@ sub importarVisualizacion{
         open(FILE, $path) or die $!;
         my $file = join "", <FILE>;
 
+        #expresion regular que cambie <vista_campo></vista_campo> por <vista_campo>''</vista_campo>
+        #sino inserta NULL en MySQL y vista_campo es NOT NULL
+        $file =~ s/\<vista\_campo\>\<\/vista\_campo\>/\<vista\_campo\>\ \<\/vista\_campo\>/g;
+
 
         $xmldb->parsestring($file);
     };
