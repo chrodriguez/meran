@@ -112,7 +112,7 @@ sub End {
                 #DBI->trace(5);
 		#print "colvals are @col_vals\n";
 
-		$sth->execute(@col_vals) || die;
+		$sth->execute(@col_vals) || $dbh->rollback; 
 	        @col_vals = ();
 
                 # kip:
