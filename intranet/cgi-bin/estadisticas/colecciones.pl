@@ -67,10 +67,20 @@ if (!$obj){
         
         # $t_params->{'filename'} = '/reports/'.$filename;
 
-        my ($data) = C4::AR::Reportes::reporteColecciones($obj);
 
+        my $total_ejemp; 
+        if ($obj->{'total_ejemp'}){
+            $total_ejemp = $obj->{'total_ejemp'};
+        }
+
+        C4::AR::Debug::debug($total_ejemp);
+
+        my ($data, $cant) = C4::AR::Reportes::reporteColecciones($obj);
+
+        $t_params->{'total_ejemp'} = $total_ejemp;
         $t_params->{'data'} = $data;
-      
+        $t_params->{'cant'} = $cant;
+
 }
 
 my %params_for_combo = {};

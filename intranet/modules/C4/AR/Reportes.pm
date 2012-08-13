@@ -1234,7 +1234,6 @@ sub registroDeUsuarios {
 		my $tipo_doc= 	$params->{'item_type'};
 		my $ui=			$params->{'ui'};
 
-		
 		my $fecha_ini = $params->{'fecha_ini'};
 		my $fecha_fin =	$params->{'fecha_fin'};
 
@@ -1243,7 +1242,7 @@ sub registroDeUsuarios {
 		
 		my @filtros;
 
-		if ($tipo_doc ne ""){
+		if ($tipo_doc ne "" && $tipo_doc ne "ALL"){
 			push (@filtros, ("t2.marc_record"    => { like   => '%acat_ref_tipo_nivel3@'.$tipo_doc.'%'}));
 		} 
 
@@ -1269,8 +1268,6 @@ sub registroDeUsuarios {
 			push (@filtros, ('created_at' => { lt => $fecha_fin, eq => $fecha_fin }));
 		}
 
- 								
-
  		my $nivel3_array_ref_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count(   
                                                                         db  => $db,
                                                                         query => \@filtros, 
@@ -1284,7 +1281,6 @@ sub registroDeUsuarios {
                                                                         require_objects => ['nivel2'],
                                         );
 
- 		C4::AR::Utilidades::printARRAY($nivel3_array_ref);
 		
 		return ($nivel3_array_ref, $nivel3_array_ref_count);
  }
