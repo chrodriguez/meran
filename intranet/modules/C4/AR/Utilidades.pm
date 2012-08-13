@@ -4638,9 +4638,14 @@ sub url_for{
     my $url         = hash_params_to_url_params($url_base, $hash_ref);
     my $server      = $ENV{'SERVER_NAME'};
     my $proto       = ($ENV{'SERVER_PORT'} eq 443)?"https://":"http://";
-    my $url_final   = $proto.$server.getUrlPrefix().$url;
+    my $server_port     = ":".$ENV{'SERVER_PORT'};
 
-# C4::AR::Debug::debug("url_final => ".$url_final);
+    if ( ($server_port != 80) || ($server_port != 443) ){
+            $server_port = "";
+    }
+
+    my $url_final   = $proto.$server.$server_port.getUrlPrefix().$url;
+
     return $url_final;
 }
 
