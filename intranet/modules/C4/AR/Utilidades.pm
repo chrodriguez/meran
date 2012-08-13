@@ -4635,12 +4635,12 @@ sub hash_params_to_url_params{
 sub url_for{
     my ($url_base, $hash_ref) = @_;
 
-    my $url         = hash_params_to_url_params($url_base, $hash_ref);
-    my $server      = $ENV{'SERVER_NAME'};
-    my $proto       = ($ENV{'SERVER_PORT'} eq 443)?"https://":"http://";
+    my $url             = hash_params_to_url_params($url_base, $hash_ref);
+    my $server          = $ENV{'SERVER_NAME'};
+    my $proto           = ($ENV{'SERVER_PORT'} eq 443)?"https://":"http://";
     my $server_port     = ":".$ENV{'SERVER_PORT'};
 
-    if ( ($server_port != 80) || ($server_port != 443) ){
+    if ( ($server_port == 80) || ($server_port == 443) ){
             $server_port = "";
     }
 

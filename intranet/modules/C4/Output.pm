@@ -116,7 +116,7 @@ sub gettemplate {
     my $user_theme      = $session->param('urs_theme') || $tema_opac;
     my $server_port     = ":".$ENV{'SERVER_PORT'};
 
-    if ( ($server_port != 80) || ($server_port != 443) ){
+    if ( ($server_port == 80) || ($server_port == 443) ){
             $server_port = "";
     }
 
