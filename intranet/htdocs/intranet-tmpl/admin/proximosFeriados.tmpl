@@ -1,8 +1,11 @@
-       <fieldset>
-       <legend class="titulo_legend_resaltado">[% 'Pr&oacute;ximos Feriados' | i18n %]</legend>
-        <ul>
+<div style="max-height:200px; overflow-y:scroll;">
+    <fieldset>
+    <legend>[% 'Pr&oacute;ximos Feriados' | i18n %]</legend>
+    <dl class="dl-horizontal">
         [% FOREACH fecha IN proximos_feriados %]
-            <li>[% fecha.getFecha %] <strong>[% fecha.getFeriado %]</strong></li>
+            <dt>[% fecha.getFecha %]:</dt>
+            <dd>[% fecha.getFeriado %]</dd>
         [% END %]
-        </ul>
-       </fieldset>
+    </dl>
+    </fieldset>
+</div>

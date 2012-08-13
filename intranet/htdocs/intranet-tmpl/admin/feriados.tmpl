@@ -114,6 +114,7 @@
     }
 
     var fechas          = new Array();
+    var razonesFeriado  = new Array(); //array con las razones de los feriados
     var fechasPost      = new Array(); //se mandan por AJAX
     var fechasTemp      = new Array(); //temporales para agregarlas al array fechas
     var fechasDelete    = new Array(); //temporales a borrar
@@ -125,6 +126,7 @@
 
         [% FOREACH date IN dates %]
             fechas.push(new Date('[% date.getFechaParaCalendario %]'));
+            razonesFeriado.push('[% date.getFeriado %]')
         [% END %]
 
         $("#calendarioFeriados").wijcalendar({
@@ -145,6 +147,7 @@
                 fechasTemp      = new Array();
                 fechasDelete    = new Array();
                 var encontre    = false;
+                var index;
 
                 $.each(args.dates, function(index, value) { 
 
@@ -153,17 +156,22 @@
 
                     for(var i = 0; i < fechas.length; i++) {
                         if (fechaTemp.toString() == fechas[i].toString()){
-                            encontre = true;
+                            encontre    = true;
+                            index       = i;
                         }
                     }
 
                     if(encontre != true){
                         //estamos agregando una fecha nueva
                         fechasTemp.push(fechaTemp);
+                        $('#razonFeriado').val('');
                     }else{
                         //estamos borrando una fecha ya seleccionada
                         // fechasDelete = fechas;
                         fechasDelete.push(fechaTemp);
+
+                        //mostramos en el input la razon del feriado
+                        $('#razonFeriado').val(razonesFeriado[index])
                     }
 
                     //las agregamos a este array que se manda en la peticion AJAX
@@ -209,7 +217,7 @@
 <fieldset>
     <legend class="titulos">[% "Feriados" | i18n %]</legend>
 
-    <div id="calendarioFeriados"></div>
+    <div id="calendarioFeriados"></div><br />
 
     <form class="well form-inline" onclick="return false;">
         <input type="text" id="fechas" required placeholder="[% 'Fecha/s' | i18n %]">

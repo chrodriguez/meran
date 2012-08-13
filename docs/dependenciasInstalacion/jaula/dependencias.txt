@@ -88,4 +88,4 @@ URI
 WWW::Shorten::generic
 JSON::Any
 Params::Validate
-
+Crypt::Rijndael
