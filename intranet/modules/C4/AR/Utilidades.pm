@@ -4352,10 +4352,39 @@ sub getProximosFeriados{
     return ($feriados);
 }
 
+sub setFeriado{
+
+    my ($fecha, $status, $texto_feriado) = @_;
+
+    require C4::Modelo::PrefFeriado;
+    require C4::Modelo::PrefFeriado::Manager;
+
+    my $dateformat  = C4::Date::get_date_format();
+    $texto_feriado  = Encode::encode_utf8($texto_feriado);
+
+    $fecha          = C4::Date::format_date_in_iso($fecha, $dateformat);
+    my $feriado     = C4::Modelo::PrefFeriado::Manager->get_pref_feriado(query => [ fecha => { eq => $fecha } ] );
+
+    if (scalar(@$feriado)){
+
+        #El feriado ya existe!! se modifica el texto o se elimina dependiendo del status
+        $feriado->[0]->setFecha($fecha,$status,$texto_feriado);
+
+    }else{
+
+        $feriado = C4::Modelo::PrefFeriado->new();
+        eval{
+            $feriado->agregar($fecha,$status,$texto_feriado);
+        };
+    }
+    
+    return (1);
+}
+
 =item
     Setea uno o mas feriados, dependiendo de cuantas fechas reciba por parametro
 =cut
-sub setFeriado{
+sub setFeriadoFromArray{
 
     my ($fechas, $status, $texto_feriado) = @_;
 
@@ -4606,12 +4635,17 @@ sub hash_params_to_url_params{
 sub url_for{
     my ($url_base, $hash_ref) = @_;
 
-    my $url         = hash_params_to_url_params($url_base, $hash_ref);
-    my $server      = $ENV{'SERVER_NAME'};
-    my $proto       = ($ENV{'SERVER_PORT'} eq 443)?"https://":"http://";
-    my $url_final   = $proto.$server.getUrlPrefix().$url;
+    my $url             = hash_params_to_url_params($url_base, $hash_ref);
+    my $server          = $ENV{'SERVER_NAME'};
+    my $proto           = ($ENV{'SERVER_PORT'} eq 443)?"https://":"http://";
+    my $server_port     = ":".$ENV{'SERVER_PORT'};
 
-# C4::AR::Debug::debug("url_final => ".$url_final);
+    if ( ($server_port == 80) || ($server_port == 443) ){
+            $server_port = "";
+    }
+
+    my $url_final   = $proto.$server.$server_port.getUrlPrefix().$url;
+
     return $url_final;
 }
 

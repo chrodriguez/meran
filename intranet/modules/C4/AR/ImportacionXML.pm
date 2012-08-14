@@ -61,33 +61,7 @@ sub importarVisualizacion{
         return ($msg_object);
     }
 
-
-    ############################# validacion con DTD ########################
-
-    # TODO!!
-
-    # my $parser = new XML::Checker::Parser( SkipExternalDTD => 1 );
-
-    # # FIXME
-    # XML::Checker::Parser::set_sgml_search_path('C4::Context->config("opachtdocs").'visualizacion.dtd');
-        
-    # eval {
-
-    #      $parser->parsefile($path);
-    # };
-
-    # if ($@) {
-
-    #     # no es valido el xml
-    #     C4::AR::Debug::debug("se murio porque no es valido el XML");
-    #     $msg_object->{'error'} = 1;
-    #     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IXML01', 'intra'} ) ;
-
-    #     return ($msg_object);
-    # }
-
-
-    ############################# importacion en la base ########################
+    ################################ importacion y validacion  ###############################
 
     # perl xml2sql.pl -sn econo -uid root -pwd dev -table cat_visualizacion_opac -input output.xml -v -driver mysql -x
 
@@ -103,23 +77,28 @@ sub importarVisualizacion{
     #por ahora se borra siempre antes
     $xmldb->execute("DELETE FROM $table");
 
-    eval {
+    # eval {
 
         open(FILE, $path) or die $!;
         my $file = join "", <FILE>;
 
+        #expresion regular que cambie <vista_campo></vista_campo> por <vista_campo>''</vista_campo>
+        #sino inserta NULL en MySQL y vista_campo es NOT NULL
+        $file =~ s/\<vista\_campo\>\<\/vista\_campo\>/\<vista\_campo\>\ \<\/vista\_campo\>/g;
 
+        # valida contra un DTD
+        XML::Checker::Parser::map_uri('-//W3C//DTD HTML 4.0//EN' => C4::Context->config("dtdPath") . 'visualizacion.dtd');
         $xmldb->parsestring($file);
-    };
+    # };
 
-    if($@){
-        # no pudo insertarlo o algun error 
-        C4::AR::Debug::debug("se murio insertandolo en la base");
-        $msg_object->{'error'} = 1;
-        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IXML02', 'intra'} ) ;
+    # if($@){
+    #     # no pudo insertarlo o algun error 
+    #     C4::AR::Debug::debug("se murio insertandolo en la base o validando contra un DTD");
+    #     $msg_object->{'error'} = 1;
+    #     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IXML02', 'intra'} ) ;
 
-        return ($msg_object);
-    }
+    #     return ($msg_object);
+    # }
 
     $msg_object->{'error'} = 0;
     

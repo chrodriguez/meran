@@ -26,7 +26,6 @@ my $accion  = $obj->{'tipoAccion'} || undef;
 
 if ($accion eq "IMPORT"){
 
-    C4::AR::Debug::debug("antessss");
     my $msg_object  = C4::AR::ImportacionXML::importarVisualizacion($obj,$input->upload('fileImported'));
 
     my $codMsg      = C4::AR::Mensajes::getFirstCodeError($msg_object);

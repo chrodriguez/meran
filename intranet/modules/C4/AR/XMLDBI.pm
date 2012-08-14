@@ -1,10 +1,12 @@
 package XMLDBI;
 use DBI qw/:sql_types/;
-use XML::Parser;
+# use XML::Parser;
+use XML::Checker::Parser;
 
 use vars qw(@ISA @EXPORT $table $dbh $sth @col_vals);
 
-@ISA= ("XML::Parser");
+# @ISA= ("XML::Parser");
+@ISA= ("XML::Checker::Parser");
 
 sub IsNumber {
 	my ($value) = @_;
@@ -36,7 +38,7 @@ sub new {
 
 	# Setup the DB Connection
 
-	$dbh = DBI->connect("dbi:$driver:$datasource", $userid, $passwd) or die "Can't connect to datasource";
+	$dbh = DBI->connect("dbi:$driver:$datasource", $userid, $passwd, { AutoCommit => 0 }) or die "Can't connect to datasource";
 	if ($dbname) {
 		$dbh->do("use $dbname") || die $dbh->errstr;
 	}
@@ -73,6 +75,7 @@ sub Init {
 				);
 		};
 	if ($@) {
+		$dbh->rollback;
 		die $@;
 	}
 
@@ -109,7 +112,7 @@ sub End {
                 #DBI->trace(5);
 		#print "colvals are @col_vals\n";
 
-		$sth->execute(@col_vals) || die;
+		$sth->execute(@col_vals) || $dbh->rollback; 
 	        @col_vals = ();
 
                 # kip:
@@ -148,8 +151,7 @@ sub Proc {
 
 sub Final {
     my $expat = shift;
-
-	# Possibly put commit code here.
+    $dbh->commit;
 }
 
 1;

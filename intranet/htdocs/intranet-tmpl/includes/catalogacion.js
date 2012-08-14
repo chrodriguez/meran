@@ -407,6 +407,8 @@ function updateMostrarEstructuraDelNivel1(responseText){
         //asigno el handler para el validador
         validateForm('formNivel1',guardarModificarDocumentoN1);
         scrollTo('nivel1Tabla');  
+            $('.hasDatepicker').datepicker();
+
     }
 }
 
@@ -456,6 +458,7 @@ function updateMostrarEstructuraDelNivel2(responseText){
         }      
         
         scrollTo('nivel2Tabla');   
+        $('.hasDatepicker').datepicker();
     }
 }
 
@@ -530,6 +533,8 @@ function updateMostrarEstructuraDelNivel3(responseText){
             
         }
     }
+    $('.hasDatepicker').datepicker();
+
 }
 
 function switchTipoBarcode(chosen, readOnly){
@@ -2222,12 +2227,14 @@ function crearBotonAgregarReferenciaSubcampo(obj){
 }
 
 function crearCalendar(obj){
-    var comp = "<input class='input-xlarge' type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "' size='10' tabindex="+TAB_INDEX+" class='horizontal'>";
+    var comp = "<input class='input-xlarge hasDatepicker' type='text' id='" + obj.getIdCompCliente() + "' name='" + obj.getIdCompCliente() + "' value='" + obj.getDato() + "'' tabindex="+TAB_INDEX+">";
 
     $("#div" + obj.getIdCompCliente()).append(comp);
 
-    crearDatePicker(obj.getIdCompCliente());
+    // crearDatePicker(obj.getIdCompCliente());
     crearBotones(obj);
+    $("#div" + obj.getIdCompCliente()).datepicker();
+
 }
 
 function crearTextAnio(obj){

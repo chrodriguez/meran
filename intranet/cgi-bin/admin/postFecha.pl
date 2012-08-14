@@ -25,6 +25,6 @@ my $fechas  = $obj->{'dates'};
 my $status  = $obj->{'stat'};
 my $feriado = $obj->{'feriado'};
 
-C4::AR::Utilidades::setFeriado($fechas,$status,$feriado);
+C4::AR::Utilidades::setFeriadoFromArray($fechas,$status,$feriado);
 
 C4::AR::Auth::print_header($session);
