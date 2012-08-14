@@ -24,7 +24,7 @@ use vars qw(@EXPORT_OK @ISA);
 =cut
 sub importarVisualizacion{
 
-    my ($params,$postdata)  = @_;
+    my ($params, $postdata, $tipo)  = @_;
 
     my $msg_object          = C4::AR::Mensajes::create();
 
@@ -70,14 +70,20 @@ sub importarVisualizacion{
     my $user    = $context->config('userINTRA');
     my $pass    = $context->config('passINTRA');
     my $db      = $context->config('database');
-    my $table   = 'cat_visualizacion_opac';
+    my $table   = "";
 
-    my $xmldb   = XMLDBI->new('mysql', $db  . ';host=localhost', $user, $pass, 'cat_visualizacion_opac', $db);
+    if($tipo eq "opac"){
+        $table   = 'cat_visualizacion_opac';
+    }else{
+        $table   = 'cat_visualizacion_intra';
+    }
+
+    my $xmldb   = XMLDBI->new('mysql', $db  . ';host=localhost', $user, $pass, $table, $db);
 
     #por ahora se borra siempre antes
     $xmldb->execute("DELETE FROM $table");
 
-    # eval {
+    eval {
 
         open(FILE, $path) or die $!;
         my $file = join "", <FILE>;
@@ -89,16 +95,16 @@ sub importarVisualizacion{
         # valida contra un DTD
         XML::Checker::Parser::map_uri('-//W3C//DTD HTML 4.0//EN' => C4::Context->config("dtdPath") . 'visualizacion.dtd');
         $xmldb->parsestring($file);
-    # };
+    };
 
-    # if($@){
-    #     # no pudo insertarlo o algun error 
-    #     C4::AR::Debug::debug("se murio insertandolo en la base o validando contra un DTD");
-    #     $msg_object->{'error'} = 1;
-    #     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IXML02', 'intra'} ) ;
+    if($@){
+        # no pudo insertarlo o algun error 
+        C4::AR::Debug::debug("se murio insertandolo en la base o validando contra un DTD");
+        $msg_object->{'error'} = 1;
+        C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IXML02', 'intra'} ) ;
 
-    #     return ($msg_object);
-    # }
+        return ($msg_object);
+    }
 
     $msg_object->{'error'} = 0;
     
