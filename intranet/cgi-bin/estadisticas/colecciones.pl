@@ -67,19 +67,21 @@ if (!$obj){
         
         # $t_params->{'filename'} = '/reports/'.$filename;
 
+        my $ini             = $obj->{'ini'};     
 
-        my $total_ejemp; 
-        if ($obj->{'total_ejemp'}){
-            $total_ejemp = $obj->{'total_ejemp'};
-        }
+        my ($ini,$pageNumber,$cantR)= C4::AR::Utilidades::InitPaginador($ini);
 
-        C4::AR::Debug::debug($total_ejemp);
+        $t_params->{'ini'}= $obj->{'ini'} = $ini;
+        $t_params->{'cantR'}= $obj->{'cantR'} = $cantR;
+     
+        my ($data, $cant_n3, $cant_n1, $cant_n2) = C4::AR::Reportes::reporteColecciones($obj);
+        
+        $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cant_n3,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
 
-        my ($data, $cant) = C4::AR::Reportes::reporteColecciones($obj);
-
-        $t_params->{'total_ejemp'} = $total_ejemp;
         $t_params->{'data'} = $data;
-        $t_params->{'cant'} = $cant;
+        $t_params->{'cant_n3'} = $cant_n3;
+        $t_params->{'cant_n2'} = $cant_n2;
+        $t_params->{'cant_n1'} = $cant_n1;
 
 }
 

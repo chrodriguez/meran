@@ -1237,6 +1237,12 @@ sub registroDeUsuarios {
 		my $fecha_ini = $params->{'fecha_ini'};
 		my $fecha_fin =	$params->{'fecha_fin'};
 
+		my $ini    = $params->{'ini'} || 0;
+    	my $cantR  = $params->{'cantR'} || 1;
+
+    	C4::AR::Debug::debug( "INIIIIIIIIIIIIIIIIIIIIIIIIIIIII ".$ini  );
+		C4::AR::Debug::debug("RESULTDOSSSSSSSSSSSSSSSSSSSSSSSs ".$cantR );
+
 		my $catRegistroMarcN3   = C4::Modelo::CatRegistroMarcN3->new();  
    		my $db = $catRegistroMarcN3->db;
 		
@@ -1277,12 +1283,24 @@ sub registroDeUsuarios {
 
 		my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(   
                                                                         db  => $db,
+                                                                        limit => $cantR,
+    																	offset => $ini,
                                                                         query => \@filtros, 
                                                                         require_objects => ['nivel2'],
                                         );
 
-		
-		return ($nivel3_array_ref, $nivel3_array_ref_count);
+		my %n1;
+		my %n2;
+
+		foreach my $n3 (@$nivel3_array_ref){
+			$n1{$n3->id1}='';
+			$n2{$n3->id2}='';
+		}
+
+		my $cant_n1 = scalar keys %n1;
+		my $cant_n2 = scalar keys %n2;
+
+		return ($nivel3_array_ref, $nivel3_array_ref_count, $cant_n1, $cant_n2);
  }
 
 
