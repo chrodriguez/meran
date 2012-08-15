@@ -1240,8 +1240,8 @@ sub registroDeUsuarios {
 		my $ini    = $params->{'ini'} || 0;
     	my $cantR  = $params->{'cantR'} || 1;
 
-    	C4::AR::Debug::debug( "INIIIIIIIIIIIIIIIIIIIIIIIIIIIII ".$ini  );
-		C4::AR::Debug::debug("RESULTDOSSSSSSSSSSSSSSSSSSSSSSSs ".$cantR );
+  		$fecha_ini= C4::Date::format_date_hour($fecha_ini,"iso");
+		$fecha_fin= C4::Date::format_date_hour($fecha_fin,"iso");
 
 		my $catRegistroMarcN3   = C4::Modelo::CatRegistroMarcN3->new();  
    		my $db = $catRegistroMarcN3->db;
@@ -1265,7 +1265,7 @@ sub registroDeUsuarios {
 		}
 
 		if ($fecha_ini ne "Desde" && $fecha_fin ne "Hasta"){
-			push(@filtros, and => [ 'created_at' => 	{ gt => $fecha_ini, eq => $fecha_ini },
+			push(@filtros, and => [ 'created_at' => { gt => $fecha_ini, eq => $fecha_ini },
                                 	'created_at' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
 		} elsif($fecha_ini ne "Desde"){
 			push (@filtros, ('created_at' => { gt => $fecha_ini, eq => $fecha_ini }));
@@ -1289,13 +1289,30 @@ sub registroDeUsuarios {
                                                                         require_objects => ['nivel2'],
                                         );
 
+		# Hago la consulta de nuevo sin paginar para recuperar el total del niveles 1 y 2.	 
+
+		my $nivel3_array_ref_completo = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(   
+                                                                        db  => $db,
+                                                                        query => \@filtros, 
+                                                                        require_objects => ['nivel2'],
+                                        );
+
 		my %n1;
 		my %n2;
 
-		foreach my $n3 (@$nivel3_array_ref){
+		foreach my $n3 (@$nivel3_array_ref_completo){
 			$n1{$n3->id1}='';
 			$n2{$n3->id2}='';
 		}
+
+		foreach my $k (keys %n1){
+			C4::AR::Debug::debug($k);
+		}
+C4::AR::Debug::debug("nivlelllllllll 2");
+			foreach my $k2 (keys %n2){
+			C4::AR::Debug::debug($k2);
+		}
+
 
 		my $cant_n1 = scalar keys %n1;
 		my $cant_n2 = scalar keys %n2;

@@ -23,6 +23,9 @@ $t_params->{'comboDeCategorias'} =$comboDeCategorias;
 my %params_for_combo = {};
 $params_for_combo{'default'} = 'ALL';
 
+my $comboDisponibilidad= C4::AR::Utilidades::generarComboDeDisponibilidad();
+$t_params->{'disp_combo'} = $comboDisponibilidad;
+
 $t_params->{'item_type_combo'} = C4::AR::Utilidades::generarComboTipoNivel3(\%params_for_combo);
 $t_params->{'ui_combo'} = C4::AR::Utilidades::generarComboUI();
 
