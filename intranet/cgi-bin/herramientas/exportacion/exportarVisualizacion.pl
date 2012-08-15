@@ -11,6 +11,8 @@ use C4::Context;
 my $query   = new CGI;
 my $context = new C4::Context;
 
+my $tipo    = $query->param('tipo');
+
 my $user    = $context->config('userINTRA');
 my $pass    = $context->config('passINTRA');
 my $db      = $context->config('database');
@@ -21,8 +23,15 @@ eval{
 
     my $xmlout  = DBIx::XML_RDB->new ($dsn, "mysql", $user, $pass, $db) or die "Failed to make new xmlout";
 
-    $xmlout->DoSql( "select campo, tipo_ejemplar, pre, post, subcampo, vista_opac, vista_campo, orden, "
+    if($tipo eq "opac"){
+
+        $xmlout->DoSql( "select campo, tipo_ejemplar, pre, post, subcampo, vista_opac, vista_campo, orden, "
                 ." orden_subcampo, nivel FROM cat_visualizacion_opac");
+
+    }else{
+        $xmlout->DoSql( "select campo, tipo_ejemplar, pre, post, subcampo, vista_intra, vista_campo, orden, "
+                ." orden_subcampo, nivel FROM cat_visualizacion_intra");
+    }
     
     my $file = $xmlout->GetData;
     my $path = '/tmp/output.xml';

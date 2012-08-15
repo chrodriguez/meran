@@ -100,6 +100,16 @@ sub Start {
 	}
 }
 
+sub _rollBack{
+
+    my ($sth_) = @_;
+
+    C4::AR::Debug::debug("entro a rollbackkkkk !!!!!!!!!!!!!!!!!!!!!!!");
+    $sth_->rollback;
+
+    die();
+}
+
 sub End {
 	my ($expat, $element) = @_;
 	if ($element eq "ROW") {
@@ -112,7 +122,7 @@ sub End {
                 #DBI->trace(5);
 		#print "colvals are @col_vals\n";
 
-		$sth->execute(@col_vals) || $dbh->rollback; 
+		$sth->execute(@col_vals) || _rollBack($sth);
 	        @col_vals = ();
 
                 # kip:
