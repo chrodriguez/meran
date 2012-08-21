@@ -86,7 +86,7 @@ sub importarCreacionCatalogo{
         # $file =~ s/\<vista\_campo\>\<\/vista\_campo\>/\<vista\_campo\>\ \<\/vista\_campo\>/g;
 
         # valida contra un DTD
-        XML::Checker::Parser::map_uri('-//W3C//DTD HTML 4.0//EN' => C4::Context->config("dtdPath") . 'visualizacion.dtd');
+        XML::Checker::Parser::map_uri('-//W3C//DTD HTML 4.0//EN' => C4::Context->config("dtdPath") . 'catalogo.dtd');
         $xmldb->parsestring($file);
     };
 
