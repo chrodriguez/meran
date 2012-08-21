@@ -18,6 +18,39 @@
 
 <script type="text/javascript">
 
+    /*
+     * Exporta la visualizacion a un XML
+    */
+    function exportarCreacionCatalogo(){
+
+        bootbox.confirm(EXPORTACION_VISUALIZACION, function (ok){ 
+
+            if(ok){
+                $('#formExportarCreacionCatalogo').submit();
+            }
+
+        });
+    }
+
+    /*
+     * Importa la visualizacion desde un XML
+    */
+    function showImportarCreacionCatalogo(){
+
+        $('#importarCreacionCatalogo').modal();
+    }
+
+    /*
+     * Hace el submit del form para importar
+    */
+    function realizarImportacion(){
+
+        $('#importarCreacionCatalogo').modal('hide');
+        startOverlay();
+        $('#formImportarVisualizacion').submit();
+    }
+
+
     //copiado de detalle.tmpl
     //FIXME: deberia estar en catalogacion.js
     function editarEjemplar(id2,id3){
@@ -116,6 +149,12 @@ $(document).ready( function() {
 [% PERL %]
     print C4::AR::Filtros::ayuda_marc() ;
 [% END %]
+
+<div class="right">
+    <a class="btn btn-warning" onclick="exportarCreacionCatalogo()"><i class="icon-white icon-share"></i> Exportar</a>
+
+    <a class="btn btn-success" onclick="showImportarCreacionCatalogo()"><i class="icon-white icon-download-alt"></i> Importar</a>
+</div>
 
 <div id="abm_tablas_referencia"><div id="abm_tablas_referencia_content"></div></div>
 
@@ -317,6 +356,45 @@ $(document).ready( function() {
 <div id="detalleMARC" class="modal hide fade"></div>
 
 <div id="ayudaMARC" class="modal hide fade"></div>
+
+<div id="divFormExportarCreacionCatalogo" style="display:none;">
+    <form id="formExportarCreacionCatalogo" action="[% url_prefix %]/herramientas/exportacion/exportarCreacionCatalogo.pl" method="POST">
+    </form>
+</div>
+
+<div id="importarCreacionCatalogo" class="modal hide fade" >
+    <div class="modal-header">
+         <a href="#" class="close" data-dismiss="modal">×</a>
+        <h3>[% "Importar archivo de creaci&oacute;n de cat&aacute;logo" | i18n %]: </h3>
+    </div>
+
+    <div class="modal-body">
+        <form id="formImportarVisualizacion" class="form-horizontal" action="[% url_prefix %]/herramientas/importacion/importarCreacionCatalogo.pl" method="POST" enctype="multipart/form-data">
+            <div class="control-group">
+                <label class="control-label" for="campoX"> [% "Archivo" | i18n %]: </label>
+                <div class="controls">
+                    <input class="input-file" id="fileImported" name="fileImported" required type="file">
+                    <input type="hidden" id="tipoAccion" name="tipoAccion" value="IMPORT">
+                    <input type="hidden" id="context" name="context" value="opac">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal-footer">
+        [% PERL %]
+                print C4::AR::Filtros::to_Button(   text    => "[% 'Aceptar' | i18n %]",
+                                                    boton   => "btn btn-primary",
+                                                    onClick => "realizarImportacion()",
+                                                    title   => "[% 'Aceptar' | i18n %]",
+                                                    width => "auto",
+                                                    alternClass => "botonCentrado",
+                                                    inline => "1"
+                        ) ;
+        [% END %]
+
+    </div>
+</div>
 
 [% INCLUDE "intranet-bottom.inc" %]
 
