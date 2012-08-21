@@ -20,9 +20,6 @@
              </div>            
         </div>
 
-
-
-
         <div class="control-group">
             <label class="control-label"  for="fecha_alta"> [% "Fecha de Alta" | i18n %]</label>
             <div class="controls">
@@ -39,7 +36,7 @@
             [% PERL %]
                     print C4::AR::Filtros::action_button( 
                                                         button       => "btn btn-primary",
-                                                        action       => "consultarColecciones();", 
+                                                        action       => "reporteDisponibilidad();", 
                                                         icon         => "",
                                                         title        => "Buscar",
                                                     );
@@ -48,8 +45,6 @@
     </form>
 </div>
 
-<div id="result_chart"></div>
 
-<div id="report_result_busq" style="display:none;"></div>
 
 

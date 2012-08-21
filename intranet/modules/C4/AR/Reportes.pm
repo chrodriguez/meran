@@ -22,7 +22,8 @@ use vars qw(@EXPORT_OK @ISA);
   listarItemsDeInventarioPorSigTop
   listarItemsDeInventarioPorBarcode
   reporteRegistrosNoIndexados
-
+  reporteDisponibilidad
+  reporteColecciones
 );
 
 sub altasRegistro {
@@ -1228,7 +1229,61 @@ sub registroDeUsuarios {
 # }
 
 
- sub reporteColecciones{
+sub reporteDisponibilidad{
+	my ($params) = @_;
+
+	my $ui=			$params->{'ui'};
+	my $disponibilidad= 	$params->{'disponibilidad'};
+
+	my $ini    = $params->{'ini'} || 0;
+   	my $cantR  = $params->{'cantR'} || 1;
+
+	my $fecha_ini = $params->{'fecha_ini'};
+	my $fecha_fin =	$params->{'fecha_fin'};
+
+	my $catRegistroMarcN3   = C4::Modelo::CatRegistroMarcN3->new();  
+   	my $db = $catRegistroMarcN3->db;
+		
+	my @filtros;
+
+	if ($disponibilidad ne ""){
+		push (@filtros, ("t2.marc_record"    => { like   => '%oref_disponibilidad@'.$disponibilidad.'%'}));
+	} 
+
+	if ($fecha_ini ne "Desde" && $fecha_fin ne "Hasta"){
+			$fecha_ini= C4::Date::format_date_hour($fecha_ini,"iso");
+			$fecha_fin= C4::Date::format_date_hour($fecha_fin,"iso");
+			push(@filtros, and => [ 'created_at' => { gt => $fecha_ini, eq => $fecha_ini },
+                                	'created_at' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
+	} elsif($fecha_ini ne "Desde"){
+			push (@filtros, ('created_at' => { gt => $fecha_ini, eq => $fecha_ini }));
+
+	} elsif($fecha_fin ne "Hasta"){
+			push (@filtros, ('created_at' => { lt => $fecha_fin, eq => $fecha_fin }));
+		}
+
+	my $nivel3_array_ref_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count(   
+                                                                        db  => $db,
+                                                                        query => \@filtros, 
+                                                                        require_objects => ['nivel2'],
+                                        );
+
+
+	my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(   
+                                                                        db  => $db,
+                                                                        limit => $cantR,
+    																	offset => $ini,
+                                                                        query => \@filtros, 
+                                                                        require_objects => ['nivel2'],
+                                        );
+
+	
+	return ($nivel3_array_ref, $nivel3_array_ref_count);
+
+
+}
+
+sub reporteColecciones{
  		my ($params) = @_;
 
 		my $tipo_doc= 	$params->{'item_type'};

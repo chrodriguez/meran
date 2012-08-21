@@ -52,8 +52,4 @@
     </form>
 </div>
 
-<div id="result_chart"></div>
-
-<div id="report_result_busq" style="display:none;"></div>
-
 

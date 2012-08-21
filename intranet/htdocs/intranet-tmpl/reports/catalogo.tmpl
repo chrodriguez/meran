@@ -18,7 +18,7 @@
                                                 {id => 'labels', text => "[% 'Generaci&oacute;n de Etiquetas' | i18n %]"},
                                                 {id => 'unindexed', text => "[% 'Registros no indexados' | i18n %]"},
                                                 {id => 'colecciones', text => "[% 'Colecciones' | i18n %]"},
-                                           
+                                                {id => 'disponibilidad', text => "[% 'Disponibilidad de Ejemplares' | i18n %]"}
                                               ],
                                  content_id=> 'reportes_catalogo',
                                  active_id => 'labels',
@@ -47,7 +47,8 @@
 
       </div>
 </section>
-
+<div id="report_result_busq" style="display:none;"></div>
+<div id="result_chart"></div>
 
 [% INCLUDE 'intranet-bottom.inc' %]
 
