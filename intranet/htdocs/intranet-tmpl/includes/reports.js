@@ -19,10 +19,9 @@ function generarEtiquetas(id){
 }
 
 function reporteDisponibilidad(){
-	var ui=$("#id_ui").val();
-	alert(ui);
+	var ui=$("#uni_inf :first-child").val();
     var disponibilidad=$("#disponibilidad_id").val();
-    objAH=new AjaxHelper(updateInfo);
+    objAH=new AjaxHelper(udpdateReporteDisp);
     objAH.debug= true;
     objAH.showOverlay = true;
     objAH.url= URL_PREFIX+"/estadisticas/disponibilidad.pl";
@@ -37,6 +36,11 @@ function reporteDisponibilidad(){
 
 }
 
+function udpdateReporteDisp(responseText){
+    $('#report_disp_result').html(responseText);
+	$('#report_disp_result').show();
+
+}
 
 
 function cambiarSentidoOrd(){

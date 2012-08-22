@@ -1246,8 +1246,12 @@ sub reporteDisponibilidad{
 		
 	my @filtros;
 
-	if ($disponibilidad ne ""){
-		push (@filtros, ("t2.marc_record"    => { like   => '%oref_disponibilidad@'.$disponibilidad.'%'}));
+	if ($ui ne ""){
+		push (@filtros, ("t1.marc_record"    => { like   => '%@'.$ui.'%'}));
+	}
+
+	if ($disponibilidad ne "" && $disponibilidad ne "SIN SELECCIONAR" ){
+		push (@filtros, ("t1.marc_record"    => { like   => '%oref_disponibilidad@'.$disponibilidad.'%'}));
 	} 
 
 	if ($fecha_ini ne "Desde" && $fecha_fin ne "Hasta"){
@@ -1262,7 +1266,7 @@ sub reporteDisponibilidad{
 			push (@filtros, ('created_at' => { lt => $fecha_fin, eq => $fecha_fin }));
 		}
 
-	my $nivel3_array_ref_count = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count(   
+	my $cant = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3_count(   
                                                                         db  => $db,
                                                                         query => \@filtros, 
                                                                         require_objects => ['nivel2'],
@@ -1278,7 +1282,7 @@ sub reporteDisponibilidad{
                                         );
 
 	
-	return ($nivel3_array_ref, $nivel3_array_ref_count);
+	return ($nivel3_array_ref, $cant);
 
 
 }

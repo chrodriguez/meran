@@ -50,6 +50,9 @@
             [% END %]
         </div>
     </form>
+    
 </div>
+<div id="report_result_busq" style="display:none;"></div>
+<div id="result_chart"></div>
 
 

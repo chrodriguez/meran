@@ -8,16 +8,16 @@
       <form class="form-horizontal" id="form_reporte_busquedas" action="return false;">
         <div class="control-group">
             <label class="control-label"  for="ui"> [% "Unidad de informaci&oacute;n" | i18n %]</label>
-            <div id="ui" class="controls">  
+            <div id="uni_inf" class="controls">  
                      [% ui_combo %]      
              </div>            
         </div>
 
         <div class="control-group">
             <label class="control-label"  for="ui"> [% "Disponibilidad" | i18n %]</label>
-            <div id="ui" class="controls">  
+            <div id="disponibilidad" class="controls">  
                      [% disp_combo %]      
-             </div>            
+            </div>            
         </div>
 
         <div class="control-group">
@@ -27,8 +27,6 @@
                     <input type="text" id="fecha_fin" name="fecha_fin" data-datepicker="datepicker" placeholder="Hasta" value="" required>
             </div>         
 
-                  
-        
         </div>
 
 
@@ -44,6 +42,10 @@
         </div>
     </form>
 </div>
+
+<div id="report_disp_result" style="display:none;"></div>
+
+<div id="result_chart"></div>
 
 
 
