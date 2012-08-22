@@ -57,6 +57,18 @@
     <form class="form-horizontal" onsubmit="return false;">
 
         <div class="control-group" >
+            <label for="tipoOperacion" class="control-label">[% 'Tipo de operaci&oacute;n' | i18n %]</label>  
+            <div class="controls">
+                <select name="tipoOperacion" id="tipoOperacion">
+                    <option value="prestamo">Pr&eacute;stamo</option>
+                    <option value="renovacion">Renovaci&oacute;n</option>
+                    <option value="devolucion">Devoluci&oacute;n</option>
+                    <option value="">SIN SELECCIONAR</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="control-group" >
             <label for="tipo_prestamo_id" class="control-label">[% 'Tipo de pr&eacute;stamo' | i18n %]</label>  
             <div class="controls">
                 [% comboDeTipoPrestamos %]

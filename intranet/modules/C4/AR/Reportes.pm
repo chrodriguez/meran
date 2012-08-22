@@ -1497,6 +1497,7 @@ sub getReporteCirculacionGeneral{
     }
 
     #filtramos solo los prestamos, no las cancelaciones, devoluciones
+    # FIXME !! MAL, se tienen que poder seleccionar
     push(@filtros, ('tipo_operacion' =>  {eq => 'prestamo'} ));
 
     my $resultsArray = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
