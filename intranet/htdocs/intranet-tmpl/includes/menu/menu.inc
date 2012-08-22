@@ -24,10 +24,10 @@
 	                  [% END %]
 	              </li>
 	         	  <li>
-					[% PERL %]
-	                print C4::AR::Filtros::link_to( text =>     " [% 'Registros y Grupos' | i18n %]",
+					       [% PERL %]
+	                   print C4::AR::Filtros::link_to( text =>     " [% 'Registros y Grupos' | i18n %]",
 	                                                url =>      "[% url_prefix %]/catalogacion/registros_grupos.pl",
-													icon	=>		"icon-play",	                                                
+													                         icon	=>		"icon-play",	                                                
 	                                                title =>    " [% 'Registros y Grupos' | i18n %]"
 												  ) ;
 	                [% END %]
@@ -52,7 +52,16 @@
 	                                                                   ) ;
 	                                   [% END %]
 	                               </li>
-	
+	                          <li>
+                                  [% PERL %]
+                                      print C4::AR::Filtros::link_to( text  => " [% 'Ayuda MARC' | i18n %]",
+                                                                      url   => "[% url_prefix %]/admin/ayudaMarc.pl",
+                                                                      icon  => "icon-globe",
+                                                                      title =>  "[% 'Ayuda MARC' | i18n %]"
+                                                                  ) ;
+                                  [% END %]
+                          </li>
+
 	      [% IF socio_data.usr_credential_type == "superLibrarian" %]
                             <li class="nav-header">[% 'Preferencias' | i18n %]</li>	
 	              			      <li class="divider"></li>
@@ -107,9 +116,9 @@
                                 </li>
                                 <li>
                                             [% PERL %]
-                                                print C4::AR::Filtros::link_to( text =>     "[% ' Tipo de documento' | i18n %]",
+                                                print C4::AR::Filtros::link_to( text =>     " [% 'Tipo de documento' | i18n %]",
                                                                                 url =>      "[% url_prefix %]/catalogacion/tipo_documento.pl",
-                                                                                title =>    "[% 'Tipo de documento' | i18n %]",
+                                                                                title =>    " [% 'Tipo de documento' | i18n %]",
                                                                                 icon => "icon-cog",
                                                                             ) ;
                                             [% END %]
@@ -389,15 +398,6 @@
                                                                       url =>      "[% url_prefix %]/admin/logos.pl",
                                                                       icon=>		"icon-picture",
                                                                       title =>    "[% 'Logos' | i18n %]"
-                                                                  ) ;
-                                  [% END %]
-                          </li>
-                          <li>
-                                  [% PERL %]
-                                      print C4::AR::Filtros::link_to( text  => " [% 'Ayuda MARC' | i18n %]",
-                                                                      url   => "[% url_prefix %]/admin/ayudaMarc.pl",
-                                                                      icon  => "icon-cog",
-                                                                      title =>  "[% 'Ayuda MARC' | i18n %]"
                                                                   ) ;
                                   [% END %]
                           </li>
