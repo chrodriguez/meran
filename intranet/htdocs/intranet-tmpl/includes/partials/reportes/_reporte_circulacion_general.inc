@@ -1,5 +1,3 @@
-[% INCLUDE 'AutocompleteHelper.inc' %]
-
 <script type="text/javascript" src="/intranet-tmpl/includes/reports.js"></script>
 <script>
 
@@ -20,7 +18,6 @@
         generarReporteCirculacion();
     }
 
-    
     function generarReporteCirculacionGeneral(){
 
         objAH                   = new AjaxHelper(updateGenerarReporteCirculacionGeneral);
@@ -31,11 +28,7 @@
         objAH.tipoAccion        = "CIRC_GENERAL";
         objAH.funcion           = "changePageBusquedas";
         objAH.categoriaSocio    = $('#categoria_socio_id').val();
-        objAH.tipoReserva       = $('#tipoReserva').val();
-        objAH.tipoDoc           = $('#tipo_documento_id').val();
-        objAH.titulo            = $('#titulo').val();
-        objAH.edicion           = $('#edicion').val();
-        objAH.estadoReserva     = $('#estadoReserva').val();
+        objAH.tipoPrestamo      = $('#tipo_prestamo_id').val();
         objAH.fecha_inicio      = $('#date-from').val();
         objAH.fecha_fin         = $('#date-to').val();
         objAH.statistics        = $('#statistics_check').val();
@@ -56,9 +49,7 @@
     $(document).ready(function(){
         $('#date-from').datepicker();
         $('#date-to').datepicker();
-
     });
-
 
 </script>
 
@@ -66,13 +57,9 @@
     <form class="form-horizontal" onsubmit="return false;">
 
         <div class="control-group" >
-            <label for="tipoReserva" class="control-label">[% 'Tipo de pr&eacute;stamo' | i18n %]</label>  
+            <label for="tipo_prestamo_id" class="control-label">[% 'Tipo de pr&eacute;stamo' | i18n %]</label>  
             <div class="controls">
-                <select name="tipoReserva" id="tipoReserva">
-                    <option>Ejemplar</option>
-                    <option>Grupo</option>
-                    <option>TODOS</option>
-                </select>
+                [% comboDeTipoPrestamos %]
             </div>
         </div>
 
