@@ -2084,12 +2084,13 @@ sub _sendRecoveryPasswordMail_Unactive{
     my $mailMessage                 = C4::AR::Preferencias::getValorPreferencia('mailMessageForgotPassUnactive');
     
     $mailMessage                    =~ s/SOCIO/$completo/;
+
     #hay 2 NOMBRE_UI por eso repetido
     $mailMessage                    =~ s/NOMBRE_UI/$nombre_ui/;
     $mailMessage                    =~ s/NOMBRE_UI/$nombre_ui/;
 
     $mail{'mail_message'}           = $mailMessage;
-    $mail{'page_title'}             = C4::AR::Filtros::i18n("Olvido de su contrase&ntilde;a");
+    $mail{'page_title'}             = C4::AR::Filtros::i18n("Olvido de su clave de ingreso");
     
     my ($ok, $msg_error)            = C4::AR::Mail::send_mail(\%mail);
     
