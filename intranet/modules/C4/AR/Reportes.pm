@@ -1469,10 +1469,10 @@ sub getReporteCirculacionGeneral{
 
     my $categoria       = $data->{'categoriaSocio'};
     my $tipoPrestamo    = C4::AR::Utilidades::trim($data->{'tipoPrestamo'});
-
     my $fecha_inicio    = $data->{'fecha_inicio'};
     my $fecha_fin       = $data->{'fecha_fin'};
     my $statistics      = $data->{'statistics'};
+    my $tipoOperacion   = $data->{'tipoOperacion'};
     my $orden           = $data->{'orden'};
     my $sentido         = $data->{'asc'};
 
@@ -1488,6 +1488,10 @@ sub getReporteCirculacionGeneral{
         push(@filtros, ('socio.id_categoria' =>  {eq => $categoria} ));
     }
 
+    if ($tipoOperacion ne 'SIN SELECCIONAR'){
+        push(@filtros, ('tipo_operacion' =>  {eq => $tipoOperacion} ));
+    }
+
     $fecha_inicio   = C4::Date::format_date($fecha_inicio,"iso");
     $fecha_fin      = C4::Date::format_date($fecha_fin,"iso");
 
@@ -1495,10 +1499,6 @@ sub getReporteCirculacionGeneral{
         push( @filtros, and => [ 'fecha' => { ge => $fecha_inicio },
                                 'fecha' => { le => $fecha_fin } ] ); 
     }
-
-    #filtramos solo los prestamos, no las cancelaciones, devoluciones
-    # FIXME !! MAL, se tienen que poder seleccionar
-    push(@filtros, ('tipo_operacion' =>  {eq => 'prestamo'} ));
 
     my $resultsArray = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion( 
                                                                       query   => \@filtros,

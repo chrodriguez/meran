@@ -28,6 +28,7 @@
         objAH.tipoAccion        = "CIRC_GENERAL";
         objAH.funcion           = "changePageBusquedas";
         objAH.categoriaSocio    = $('#categoria_socio_id').val();
+        objAH.tipoOperacion     = $('#tipoOperacion').val();
         objAH.tipoPrestamo      = $('#tipo_prestamo_id').val();
         objAH.fecha_inicio      = $('#date-from').val();
         objAH.fecha_fin         = $('#date-to').val();
