@@ -15,6 +15,7 @@
     //actualizo los input hidden con los valores de los radio button de bootstrap
     function guardarPreferencias(){
 
+        startOverlay();
         for(pref in prefBooleanas){
 
             if($('#radios_' + prefBooleanas[pref] + '').find('.active').text() == "[% "Si" | i18n %]"){

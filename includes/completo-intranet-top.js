@@ -2041,10 +2041,13 @@ bytesTransfered=(Math.round(bytesUploaded*100)/100)
 +'%';document.getElementById('progressBar'+'_'+ID2_file).style.width=percentComplete.toString()+'%';document.getElementById('transferBytesInfo'+'_'+ID2_file).innerHTML=bytesTransfered;if(percentComplete==100){var uploadResponse=document.getElementById('uploadResponse'+'_'+ID2_file);uploadResponse.innerHTML='<span style="font-size: 18pt; font-weight: bold;">Procesando...</span>';uploadResponse.style.display='block';}}else{document.getElementById('progressBar').innerHTML='No se pudo completar';}}
 function uploadComplete(evt){clearInterval(intervalTimer);$('#'+'progressIndicator'+'_'+ID2_file+' > div').removeClass('active');$('#'+'progressIndicator'+'_'+ID2_file+' > div').removeClass('progress-striped');var uploadResponse=document.getElementById('uploadResponse'+'_'+ID2_file);uploadResponse.innerHTML=evt.target.responseText;uploadResponse.style.display='block';setTimeout(refreshMeranPage,4000);}
 function uploadFailed(evt){clearInterval(intervalTimer);alert("An error occurred while uploading the file.");}
-function uploadCanceled(evt){clearInterval(intervalTimer);alert("The upload has been canceled by the user or the browser dropped the connection.");}var overlay_on=false;function startOverlay(){if(!overlay_on){$('#ajax-indicator').modal({show:true,keyboard:false,backdrop:false,});overlay_on=true;}}
-function closeModal(id){if((id=='')||(id==null))
+function uploadCanceled(evt){clearInterval(intervalTimer);alert("The upload has been canceled by the user or the browser dropped the connection.");}var overlay_on=false;function startOverlay(){try{if(!overlay_on){$('#ajax-indicator').modal({show:true,keyboard:false,backdrop:false,});overlay_on=true;}}
+catch(e){}}
+function closeModal(id){try{if((id=='')||(id==null))
 $('#ajax-indicator').modal('hide');else
-$('#'+id).modal('hide');overlay_on=false;}
+$('#'+id).modal('hide');}
+catch(e){}
+overlay_on=false;}
 function _Init(options){if(options.showStatusIn!=''){if(options.offIndicator!=true)
 $('#'+options.showStatusIn).addClass('cargando');}else{if(options.showOverlay){startOverlay();}else{if(options.showState){_ShowState(options);}}}}
 function _AddDiv(){var contenedor=$('#state')[0];if(contenedor==null){$('body').append("<div id='state' class='loading' style='position:absolute'>&nbsp;</div>");$('#state').css('top','0px');$('#state').css('left','0px');}}
