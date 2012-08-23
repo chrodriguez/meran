@@ -92,10 +92,11 @@ var loaderPath= "";
 	         print C4::AR::Filtros::action_set_button(    
 	                                             title           => "[% socio.persona.getNombre %], [% socio.persona.getApellido %]",
 	                                             button          => 'btn btn-primary',
+	                                             action 		 => 'modificarDatosDeUsuario()', 
+	                                             icon 			 => "icon-white icon-pencil",
 	                                             actions         => [  [% IF needsDataValidation %]
 	                                                                       {title => "Validar datos Censales", action=>'validarDatosCensales();',icon=>"icon-share-alt"},
 	                                                                   [% END %]
-	                                                                   {title => "Modificar Datos", action=>'modificarDatosDeUsuario()', icon=>"icon-edit"},
 	                                                                   {title => "Deshabilitar Usuario", action=>'eliminarUsuario()', icon=>"icon-trash"},
 	                                                                   [% IF !socio.tieneAutorizado %]
 	                                                                         {title => "Agregar Usuario Adicional", action=>'agregarAutorizado()', icon=>"icon-plus-sign"},

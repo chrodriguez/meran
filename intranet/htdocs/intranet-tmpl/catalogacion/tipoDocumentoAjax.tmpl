@@ -18,8 +18,8 @@
 
                 <tr>
                     <td class="tipoDocImage">
-                        <a class="fancy_link" href="https://[% SERVER_ADDRESS %]/uploads/covers/DEFAULT.png">
-                          <img border="0" src="https://[% SERVER_ADDRESS %]/uploads/covers/DEFAULT.png" alt="[% p.getNombre %]" style>
+                        <a class="fancy_link" href="/uploads/covers/DEFAULT.png">
+                          <img border="0" src="/uploads/covers/DEFAULT.png" alt="[% p.getNombre %]" style>
                         </a>
                     </td>
                     <td>Default</td>
@@ -29,8 +29,8 @@
                 [% FOREACH d IN tiposDocumento %]
                     <tr id="[% d.id %]">
                         <td class="tipoDocImage">
-                            <a class="fancy_link" href="https://[% SERVER_ADDRESS %]/uploads/covers/[% d.getId_tipo_doc %].png">
-                              <img border="0" src="https://[% SERVER_ADDRESS %]/uploads/covers/[% d.getId_tipo_doc %].png" alt="[% p.getNombre %]" style>
+                            <a class="fancy_link" href="/uploads/covers/[% d.getId_tipo_doc %].png">
+                              <img border="0" src="/uploads/covers/[% d.getId_tipo_doc %].png" alt="[% p.getNombre %]" style>
                             </a>
                         </td>
                         <td>[% d.getNombre %]</td>
