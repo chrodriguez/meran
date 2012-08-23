@@ -69,6 +69,7 @@ elsif($tipoAccion eq "DETALLE"){
       $t_params->{'resultsloop'}        = $registros;
       $t_params->{'cantidad'}           = $cantidad;
       $t_params->{'id_importacion'}     = $id_importacion;
+      $t_params->{'id_esquema'}         = $id_esquema;
       $t_params->{'record_filter'}      = $record_filter;
       $t_params->{'jobID'}              = C4::AR::ImportacionIsoMARC::getImportacionById($id_importacion)->jobID;
 
