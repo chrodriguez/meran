@@ -129,7 +129,12 @@ sub getAll{
     my @filtros;
     if ($filtro){
         my @filtros_or;
-        push(@filtros_or, (nombre => {like => '%'.$filtro.'%'}) );
+        if ($matchig_or_not){
+            push(@filtros_or, (nombre => {like => '%'.$filtro.'%'}) );
+        }
+        else{
+            push(@filtros_or, (nombre => {eq => $filtro }) );
+            }
         push(@filtros, (or => \@filtros_or) );
     }
     my $ref_valores;
