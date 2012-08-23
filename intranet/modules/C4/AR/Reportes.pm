@@ -1272,6 +1272,9 @@ sub reporteDisponibilidad{
                                         );
 
 
+
+   
+
 	my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(   
                                                                         db  => $db,
                                                                         limit => $cantR,
