@@ -135,7 +135,7 @@
 		  			</div>	   
 			        [% IF content_title %]
 			        	<fieldset>
-			        		<legend class="title">[% content_title %]</legend>
+			        		<legend>[% content_title %]</legend>
 			        	</fieldset>
 			        [% END %]
 			        [% IF partial_template %]
