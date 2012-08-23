@@ -2035,7 +2035,7 @@ sub _sendRecoveryPasswordMail{
     # Datos para el mail
     use C4::Modelo::PrefUnidadInformacion;
     
-    my $completo                    = $socio->persona->getNombre . " " . $socio->persona->getApellido;
+    my $completo                    = Encode::decode_utf8($socio->persona->getNombre . " " . $socio->persona->getApellido);
     my $nro_socio                   = $socio->getNro_socio;
     my $ui                          = C4::AR::Referencias::obtenerDefaultUI();
     my $nombre_ui                   = Encode::decode_utf8($ui->getNombre());
@@ -2075,7 +2075,7 @@ sub _sendRecoveryPasswordMail_Unactive{
     # Datos para el mail
     use C4::Modelo::PrefUnidadInformacion;
                         
-    my $completo                    = $socio->persona->getNombre . " " . $socio->persona->getApellido;
+    my $completo                    = Encode::decode_utf8($socio->persona->getNombre . " " . $socio->persona->getApellido);
     my $nro_socio                   = $socio->getNro_socio;
 
     my $ui                          = C4::AR::Referencias::obtenerDefaultUI();
