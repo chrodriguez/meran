@@ -19,20 +19,29 @@ function updateNuevoEsquemaImportacion(responseText){
     scrollTo('esquema_result');
 }
 
-function showEsquemaImportacion(){
+function showEsquemaImportacion(id_esquema){
 
-	worker.onmessage = function(event) {showEsquemaImportacion_func(); };
+    var id = id_esquema;
+
+	worker.onmessage = function(event) {showEsquemaImportacion_func(id); };
 	worker.postMessage('data');
 }
 
 
-function showEsquemaImportacion_func(){
+function showEsquemaImportacion_func(id_esquema){
 	
+    var final_id;
+
+    if (id_esquema)
+        final_id = id_esquema;
+    else
+        final_id = $('#esquemaImportacion').val();
+
     objAH               = new AjaxHelper(updateShowEsquemaImportacion);
     objAH.url           = URL_PREFIX+'/herramientas/importacion/esquemas_importacionDB.pl';
     objAH.cache         = false;
     objAH.showOverlay   = true;  
-    objAH.esquema	 	= $('#esquemaImportacion').val();
+    objAH.esquema	 	= final_id;
     objAH.accion        = "OBTENER_ESQUEMA";
     objAH.funcion		= 'changePage';
     objAH.filtro		= $('#campo_search').val();

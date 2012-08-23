@@ -17,9 +17,20 @@ function cambiarFiltro (filtro){
 	
 </script>
 <div class="right ">
+
+        [% PERL %]
+                            print C4::AR::Filtros::action_link_button(   
+                                                                button   => "btn btn-warning",
+                                                                url => "[% url_prefix %]/herramientas/importacion/esquemas_importacion.pl",
+                                                                icon => "icon-white  icon-list-alt",
+                                                                params => ["token=[% token %]","id_esquema=[% id_esquema %]",],
+                                                                title   => " [% 'Esquemas' | i18n %]",
+                                    ) ;
+        [% END %]
+
          [% PERL %]
                              print C4::AR::Filtros::action_link_button( 
-                                                                 button   => "btn btn-warning",
+                                                                 button   => "btn btn-primary",
                                                                  url=>"[% url_prefix %]/herramientas/importacion/configurar_importacion.pl",
                                                                  params =>   ["id_importacion=[% id_importacion %]"],
                                                                  icon => "icon-white icon-cog",

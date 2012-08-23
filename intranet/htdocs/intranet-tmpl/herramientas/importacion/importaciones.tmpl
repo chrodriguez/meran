@@ -12,8 +12,17 @@
      <form class="form-horizontal">
         <section class="center-section-form">
 			<div class="right">
+                            [% PERL %]
+                                                print C4::AR::Filtros::action_link_button(   
+                                                                                    button   => "btn btn-warning",
+                                                                                    url => "[% url_prefix %]/herramientas/importacion/esquemas_importacion.pl",
+                                                                                    params => ["token=[% token%]",],
+                                                                                    icon => "icon-white icon-list-alt",
+                                                                                    title   => " [% 'Esquemas' | i18n %]",
+                                                        ) ;
+                            [% END %]
 			                [% PERL %]
-			                                    print C4::AR::Filtros::action_link_button(   text    => " [% 'Nueva importaci&oacute;n' | i18n %]",
+			                                    print C4::AR::Filtros::action_link_button(  
 			                                                                        button   => "btn btn-success",
 			                                                                        url => "[% url_prefix %]/herramientas/importacion/subirNuevaImportacion.pl",
                                                                                     icon => "icon-white icon-plus-sign",
@@ -21,14 +30,6 @@
 			                                                                        title   => " [% 'Nueva importaci&oacute;n' | i18n %]",
 			                                            ) ;
 			                [% END %]
-                            [% PERL %]
-                                                print C4::AR::Filtros::action_link_button(   text    => "[% 'Esquemas' | i18n %]",
-                                                                                    button   => "btn btn-warning",
-                                                                                    url => "[% url_prefix %]/herramientas/importacion/esquemas_importacion.pl",
-                                                                                    params => ["token=[% token%]",],
-                                                                                    title   => "[% 'Esquemas' | i18n %]",
-                                                        ) ;
-                            [% END %]
 			</div>
 	        <fieldset>
 	            <legend class="titulo_legend_resaltado">Listado de Importaciones</legend>  

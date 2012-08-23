@@ -63,7 +63,7 @@ elsif($tipoAccion eq "DETALLE"){
   my $record_filter   = $obj->{'record_filter'};
 
   my ($ini,$pageNumber,$cantR) = C4::AR::Utilidades::InitPaginador($ini);
-  my ($cantidad,$registros) = C4::AR::ImportacionIsoMARC::getRegistrosFromImportacion($id_importacion,$record_filter,$ini,$cantR,$search);
+  my ($cantidad,$registros,$id_esquema) = C4::AR::ImportacionIsoMARC::getRegistrosFromImportacion($id_importacion,$record_filter,$ini,$cantR,$search);
 
       $t_params->{'paginador'} = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
       $t_params->{'resultsloop'}        = $registros;
