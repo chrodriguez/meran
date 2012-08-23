@@ -140,6 +140,8 @@ sub link_to {
                 $url .= '?token='.$session->param('token'); 
             }
         }
+    } or do{
+        C4::AR::Debug::error("Se rompio Filtros.pm en :133 con: ".$@);
     };
 
     if ($ancla){
