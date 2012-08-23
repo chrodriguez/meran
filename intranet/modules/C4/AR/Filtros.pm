@@ -140,8 +140,8 @@ sub link_to {
                 $url .= '?token='.$session->param('token'); 
             }
         }
-    }
-    
+    };
+
     if ($ancla){
         $url .= "#".$ancla;
     }
