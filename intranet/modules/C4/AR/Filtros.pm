@@ -128,16 +128,21 @@ sub link_to {
     }
 
     my $session = CGI::Session->load();
-    if(($session->param('token'))&&(!$without_token)){        
-    #si hay sesion se usa el token, sino no tiene sentido
-        my $status = index($url,'?');
-         #SI NO HUBO PARAMETROS, EL TOKEN ES EL UNICO EN LA URL, O SEA QUE SE PONE ? EN VEZ DE &
-        if (($cant > 0)||($status != -1)){
-            $url .= '&amp;token='.$session->param('token'); #se agrega el token
-        }else{
-            $url .= '?token='.$session->param('token'); 
+
+    eval{
+        if(($session->param('token'))&&(!$without_token)){        
+        #si hay sesion se usa el token, sino no tiene sentido
+            my $status = index($url,'?');
+             #SI NO HUBO PARAMETROS, EL TOKEN ES EL UNICO EN LA URL, O SEA QUE SE PONE ? EN VEZ DE &
+            if (($cant > 0)||($status != -1)){
+                $url .= '&amp;token='.$session->param('token'); #se agrega el token
+            }else{
+                $url .= '?token='.$session->param('token'); 
+            }
         }
-    }
+    } or do{
+        C4::AR::Debug::error("Se rompio Filtros.pm en :133 con: ".$@);
+    };
 
     if ($ancla){
         $url .= "#".$ancla;

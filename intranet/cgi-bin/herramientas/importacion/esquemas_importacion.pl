@@ -27,6 +27,7 @@ $params_combo{'onChange'}                   = 'showEsquemaImportacion()';
 my $combo_esquemas_importacion              = C4::AR::Utilidades::generarComboEsquemasImportacion(\%params_combo);
 
 $t_params->{'combo_esquemas_importacion'}   = $combo_esquemas_importacion;
+$t_params->{'id_esquema'}                   = $input->param('id_esquema') || 0;
 $t_params->{'page_sub_title'}               = C4::AR::Filtros::i18n("Esquemas de importaci&oacute;n");
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

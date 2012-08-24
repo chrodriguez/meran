@@ -78,7 +78,7 @@
 	
 	
 	                                [% END %]
-		                            
+		                            	
 		                            </td>
 		                        [% END %]
 	                          </tr>
@@ -89,11 +89,13 @@
 	</fieldset>
 	<div class="form-actions">
 	[% PERL %]
-      print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Registro' | i18n %]",
-                                          boton   => "boton_agregar",
-                                          onClick => "agregarRegistro('[% tabla %]');",
-                                          title   => "[% 'Agregar Registro' | i18n %]",
+      print C4::AR::Filtros::action_button(   
+                                          button   	=> "btn btn-primary",
+                                          action 	=> 'agregarRegistro("[% tabla %]");',
+                                          icon      => "icon-plus icon-white",
+                                          title   	=> " [% 'Agregar Registro' | i18n %]",
               ) ;
-  [% END %]
+    [% END %]
+
   </div>
 </div>

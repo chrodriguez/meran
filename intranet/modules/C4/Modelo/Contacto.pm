@@ -41,7 +41,7 @@ sub agregar{
     $self->setPais($data_hash->{'pais'});
     $self->setTelefono($data_hash->{'telefono'});
     $self->setEmail($data_hash->{'email'});
-    $self->setAsunto($data_hash->{'asunto'});
+    $self->setAsunto(C4::AR::Utilidades::trim($data_hash->{'asunto'})||C4::AR::Filtros::i18n('(sin asunto)'));
     $self->setMensaje($data_hash->{'mensaje'});
     $self->setHora();
     $self->setFecha();
