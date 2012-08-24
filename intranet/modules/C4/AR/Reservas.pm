@@ -356,7 +356,7 @@ sub Enviar_Email_Asignacion_Reserva{
 
         my $mailFrom        = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveFrom"));
         my $mailSubject     = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveSubject"));
-        my $mailMessage =C4::AR::Preferencias::getValorPreferencia("reserveMessage");
+        my $mailMessage     = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveMessage"));
         
         my $nombreUI = Encode::decode_utf8($reserva->ui->getNombre);
         $mailSubject =~ s/BRANCH/$nombreUI/;
@@ -434,7 +434,7 @@ sub Enviar_Email_Cancelacion_Reserva{
         
         my $mailFrom        = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveFrom"));
         my $mailSubject     = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("subject_mail_cambio_disponibilidad_cancelacion"));
-        my $mailMessage     = C4::AR::Preferencias::getValorPreferencia("mensaje_mail_cambio_disponibilidad_cancelacion");
+        my $mailMessage     = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("mensaje_mail_cambio_disponibilidad_cancelacion"));
         
         my $nombreUI = Encode::decode_utf8($reserva->ui->getNombre);
         $mailSubject =~ s/BRANCH/$nombreUI/;
@@ -507,7 +507,7 @@ sub Enviar_Email_Reserva_A_Espera{
         
         my $mailFrom        = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("reserveFrom"));
         my $mailSubject     = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("subject_mail_cambio_disponibilidad_espera"));
-        my $mailMessage     = C4::AR::Preferencias::getValorPreferencia("mensaje_mail_cambio_disponibilidad_espera");
+        my $mailMessage     = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia("mensaje_mail_cambio_disponibilidad_espera"));
         
         my $nombreUI = Encode::decode_utf8($reserva->ui->getNombre);
         $mailSubject =~ s/BRANCH/$nombreUI/;
