@@ -20,7 +20,7 @@
   <p class="help-block">
         [% 'Creado por ' | i18n %]
         [% PERL %]
-            print C4::AR::Filtros::link_to(   text =>     "[% novedad.getUsuario %]",
+            print C4::AR::Filtros::link_to(   text =>     "[% novedad.socio.persona.getApeYNom %]",
                                               url=>"[% url_prefix %]/usuarios/reales/datosUsuario.pl", 
                                               params =>   ["nro_socio=[% novedad.getUsuario %]"],
                                               title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
