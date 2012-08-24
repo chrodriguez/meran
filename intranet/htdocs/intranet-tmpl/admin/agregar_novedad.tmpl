@@ -216,7 +216,8 @@
                           print C4::AR::Filtros::action_link_button( 
                                                           button    => "btn",
                                                           url       => "[% url_prefix %]/admin/novedades_opac.pl",
-                                                          title     => "[% 'Volver al listado' | i18n %]",
+                                                          icon        => "icon-arrow-left",
+                                                          title     => " [% 'Volver al listado' | i18n %]",
                                                       ) ;
 
                     [% END %]
@@ -225,6 +226,7 @@
                           print C4::AR::Filtros::action_button( 
                                                             button      => "btn btn-primary",
                                                             action      => "checkEliminarFotos()", 
+                                                            icon        => "icon-white icon-pencil",
                                                             title       => "[% 'Modificar' | i18n %]",
                                                           ) ;
 
@@ -236,12 +238,13 @@
                     [% PERL %]
                           print C4::AR::Filtros::action_link_button( 
                                                           button    => "btn",
+                                                          icon        => "icon-arrow-left",
                                                           url       => "[% url_prefix %]/admin/novedades_opac.pl",
-                                                          title     => "[% 'Volver al listado' | i18n %]",
+                                                          title     => " [% 'Volver al listado' | i18n %]",
                                                       ) ;
 
                     [% END %]
-                    <button class="btn btn-primary" type="submit">[% 'Agregar' | i18n %]</button>
+                    <button class="btn btn-primary" type="submit"><i class="icon-white icon-plus"></i>[% 'Agregar' | i18n %]</button>
                     
                 [% END %]
                 </div>
