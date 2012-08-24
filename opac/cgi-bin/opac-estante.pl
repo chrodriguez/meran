@@ -38,13 +38,14 @@ else{
         
         my $estante                     = C4::AR::Estantes::getEstante($id_estante);
         my $subEstantes                 = C4::AR::Estantes::getSubEstantes($id_estante);
-        my $nombre                      = $estante->getEstante;
-
-        $t_params->{'estante'}          = $estante;
-        $t_params->{'SUBESTANTES'}      = $subEstantes ;
-        $t_params->{'cant_subestantes'} = @$subEstantes;      
-    
+        if ($estante){
+            my $nombre                      = $estante->getEstante;
+            $t_params->{'estante'}          = $estante;
+            $t_params->{'SUBESTANTES'}      = $subEstantes ;
+            $t_params->{'cant_subestantes'} = @$subEstantes;      
+        }
     };
+
     if ($@){
 
         $t_params->{'mensaje'}              = "Ha ocurrido un error buscando los estantes";
