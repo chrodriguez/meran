@@ -25,17 +25,17 @@ Este módulo provee funciones para manipular estantes virtuales, incluyendo la c
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
-	&getListaEstantesPublicos
-        &getEstante
-        &getSubEstantes
-        &borrarEstantes
-        &borrarContenido
-        &modificarEstante
-        &agregarSubEstante
-        &buscarNombreDuplicado
-        &agregarEstante
-	&buscarEstante
-	&estaEnEstanteVirtual
+	    getListaEstantesPublicos
+        getEstante
+        getSubEstantes
+        borrarEstantes
+        borrarContenido
+        modificarEstante
+        agregarSubEstante
+        buscarNombreDuplicado
+        agregarEstante
+	    buscarEstante
+	    estaEnEstanteVirtual
 );
 
 sub getListaEstantesPublicos {
@@ -72,7 +72,7 @@ sub getEstante {
     
     my $estantes_array_ref = C4::Modelo::CatEstante::Manager->get_cat_estante( 
                                                                                 query => \@filtros,
-                                                                                with_objects => ['contenido.nivel2.nivel1.IndiceBusqueda' ],
+                                                                                require_objects => ['contenido.nivel2.nivel1.IndiceBusqueda']
                                                                                 );
     
     my $estante=  $estantes_array_ref->[0];
