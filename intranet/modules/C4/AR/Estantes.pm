@@ -45,7 +45,7 @@ sub getListaEstantesPublicos {
     my @filtros;
     push(@filtros, ( padre  => { eq => 0}, tipo  => { eq => 'public'} ));
 
-    my $estantes_array_ref = C4::Modelo::CatEstante::Manager->get_cat_estante( query => \@filtros, sort_by => 'estante');
+    my $estantes_array_ref = C4::Modelo::CatEstante::Manager->get_cat_estante( query => \@filtros, sort_by => 'estante', require_objects => ['contenido.nivel2.nivel1.IndiceBusqueda']);
 
     return ($estantes_array_ref);
 }
@@ -57,7 +57,7 @@ sub getSubEstantes {
     use C4::Modelo::CatEstante::Manager;
     my @filtros;
     push(@filtros, ( padre  => { eq => $id_estante} ));
-    my $estantes_array_ref = C4::Modelo::CatEstante::Manager->get_cat_estante( query => \@filtros, sort_by => 'estante');
+    my $estantes_array_ref = C4::Modelo::CatEstante::Manager->get_cat_estante( query => \@filtros, sort_by => 'estante', require_objects => ['contenido.nivel2.nivel1.IndiceBusqueda']);
 
     return ($estantes_array_ref);
 }
@@ -72,7 +72,7 @@ sub getEstante {
     
     my $estantes_array_ref = C4::Modelo::CatEstante::Manager->get_cat_estante( 
                                                                                 query => \@filtros,
-                                                                                require_objects => ['contenido.nivel2.nivel1']
+                                                                                require_objects => ['contenido.nivel2.nivel1.IndiceBusqueda']
                                                                                 );
     
     my $estante=  $estantes_array_ref->[0];
