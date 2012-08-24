@@ -52,6 +52,7 @@ if ($tipoAccion eq 'LISTAR'){
 
     $t_params->{'logos'}            = $logos;
     $t_params->{'cant_logos'}       = $cant_logos;
+    $t_params->{'opac_theme'}       = C4::AR::Preferencias::getValorPreferencia('tema_opac_default') || C4::AR::Preferencias::getValorPreferencia('defaultUI');
     $t_params->{'opac_htdocs'}      = C4::Context->config('temasOPAC');
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

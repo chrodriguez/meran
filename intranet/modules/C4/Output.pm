@@ -113,14 +113,16 @@ sub gettemplate {
     my $user_theme_intra;
     my ($session)       = CGI::Session->load();
     my $url_server      = C4::AR::Preferencias::getValorPreferencia('serverName');
-    my $user_theme      = $session->param('urs_theme') || $tema_opac;
+    my $opac_port       = ":".(C4::Context->config('opac_port')||'80');
+    my $user_theme      = $session->param('usr_theme') || $tema_opac;
     my $server_port     = ":".$ENV{'SERVER_PORT'};
 
     if ( ($server_port == 80) || ($server_port == 443) ){
             $server_port = "";
     }
 
-    my $SERVER_URL=(C4::AR::Utilidades::trim($url_server)||($ENV{'SERVER_NAME'})).$server_port;
+    my $SERVER_URL       =(C4::AR::Utilidades::trim($url_server)||($ENV{'SERVER_NAME'})).$server_port;
+    my $SERVER_URL_OPAC  =(C4::AR::Utilidades::trim($url_server)|($ENV{'SERVER_NAME'})).$opac_port;
 
     #para volver a tener temas, poner $session->param('usr_theme_intra') || $tema_intra;
     $user_theme_intra   = $tema_intra;
@@ -145,6 +147,7 @@ sub gettemplate {
             user_theme_intra            => $user_theme_intra,
             url_prefix                  => C4::AR::Utilidades::getUrlPrefix(),
             SERVER_ADDRESS              => $SERVER_URL,
+            SERVER_ADDRESS_OPAC         => $SERVER_URL_OPAC,
             SERVER_PORT                 => $server_port,
             socio_data                  => C4::AR::Auth::buildSocioDataHashFromSession(),
             date_separator              => C4::AR::Filtros::i18n("de"),
