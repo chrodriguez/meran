@@ -131,10 +131,10 @@ function borrarEstantesSeleccionados(estante,padre) {
         theStatus= ELIMINAR_LOS_ESTANTES+":\n";
 
         for(i=0;i<checks.length;i++) {
-            theStatus=theStatus+array[i].name+"\n";
+            theStatus=theStatus+"<span class='label label-success'>"+array[i].name+"</span>\n";
             estantes[i]=array[i].value;
         }
-        theStatus=theStatus + ESTA_SEGURO+"?";
+        theStatus+= "<br />"+ESTA_SEGURO+"?";
 
         bootbox.confirm(theStatus, function(confirmStatus){if (confirmStatus) borrarEstantes(estantes,estante,padre);});
     } else { 

@@ -13,6 +13,14 @@
  */
 var ancla = "";
 
+
+function buttonPost(button_id){
+	$('#'+button_id).addClass("disabled");
+	$('#'+button_id).text(GUARDANDO+"...");
+
+}
+
+
 function refreshMeranPage(){
 	location.reload(true);
 }
