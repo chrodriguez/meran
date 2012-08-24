@@ -124,7 +124,8 @@ my ($template, $session, $t_params) = get_template_and_user({
                 });
 
 my $tipos_de_prestamos=C4::AR::Prestamos::getTiposDePrestamos();
-$t_params->{'TIPOS_PRESTAMOS_LOOP'}= $tipos_de_prestamos;
+$t_params->{'TIPOS_PRESTAMOS_LOOP'}         = $tipos_de_prestamos;
+$t_params->{'TIPOS_PRESTAMOS_LOOP_COUNT'}   = scalar(@$tipos_de_prestamos);
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 

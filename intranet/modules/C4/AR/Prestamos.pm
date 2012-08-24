@@ -1171,47 +1171,86 @@ sub enviarRecordacionDePrestamoVencidos {
 
 =item
     Funcion interna que envia los recordatorios
+    El array_prestamos viene ordenado pro usuario. Por lo que si hay mas de un prestamos por usuario,
+    manda solo un mail.
 =cut
 sub _enviarRecordatorioVencidos{
 
     my (@array_prestamos) = @_;
 
     use C4::AR::Usuarios;
+
+    my $pres = shift @array_prestamos;
+
+    # corte de control
+    my $fin = 0;
     
-    if(scalar(@array_prestamos) > 0){
-    
-        foreach my $pres (@array_prestamos){
-       
-            my $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($pres->{'nro_socio'});
-            
-            # TODO: obtener los medios (twitter, facebook, etc) que tenga el usuario seleccionados para avisarle por ese medio
-            # por ahora lo hacemos solo con mail  
-             
-            # checkeamos si estan habilitadas las preferencias para mail                 
-            if (C4::AR::Preferencias::getValorPreferencia('EnabledMailSystem')){     
+    while (!$fin) {      
+
+        my $nroSocio            = $pres->getNro_socio();
+        my $socio               = C4::AR::Usuarios::getSocioInfoPorNroSocio($nroSocio);
+
+        my %mail;                    
+        my $nivel3              = C4::AR::Nivel3::getNivel3FromId3($pres->{'id3'});                    
+        my $nivel1              = C4::AR::Nivel3::getNivel1FromId1($nivel3->{'id1'});     
+        my $autor               = Encode::decode_utf8($nivel1->getAutor());
+        my $titulo              = Encode::decode_utf8($nivel1->getTitulo());
+        my $nombre              = Encode::decode_utf8($socio->{'persona'}->{'nombre'});
+        my $apellido            = Encode::decode_utf8($socio->{'persona'}->{'apellido'});
+        my $fecha_prestamo      = $pres->getFecha_vencimiento_formateada();
+        my $cuerpo_mensaje      = C4::AR::Preferencias::getValorPreferencia('vencidoMessage');
+
+        $cuerpo_mensaje         =~ s/FIRSTNAME\ SURNAME/$nombre\ $apellido/;
+        $cuerpo_mensaje         =~ s/VENCIMIENTO/$fecha_prestamo/;
+        $cuerpo_mensaje         =~ s/AUTHOR/$autor/;
+        $cuerpo_mensaje         =~ s/TITLE\:UNITITLE/$titulo/;
+        $cuerpo_mensaje         =~ s/\(EDICION\)//;
         
-                my %mail;                    
+        $mail{'mail_from'}      = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('mailFrom'));
+        $mail{'mail_to'}        = $socio->{'persona'}->email;
+        $mail{'mail_subject'}   = C4::AR::Preferencias::getValorPreferencia('vencidoSubject'); 
+        $mail{'mail_message'}   = $cuerpo_mensaje;
+
+        if (scalar(@array_prestamos) == 0) {
+            $fin    = 1;
+        } else {
+            $pres   = shift @array_prestamos;
+        }
+
+        while ( ($nroSocio eq $pres->getNro_socio()) && (!$fin) ) {
+
+
                 my $nivel3              = C4::AR::Nivel3::getNivel3FromId3($pres->{'id3'});                    
                 my $nivel1              = C4::AR::Nivel3::getNivel1FromId1($nivel3->{'id1'});     
-                my $autor               = $nivel1->getAutor();
-                my $titulo              = $nivel1->getTitulo();
+                my $autor               = Encode::decode_utf8($nivel1->getAutor());
+                my $titulo              = Encode::decode_utf8($nivel1->getTitulo());
+                my $nombre              = Encode::decode_utf8($socio->{'persona'}->{'nombre'});
+                my $apellido            = Encode::decode_utf8($socio->{'persona'}->{'apellido'});
                 my $fecha_prestamo      = $pres->getFecha_vencimiento_formateada();
                 my $cuerpo_mensaje      = C4::AR::Preferencias::getValorPreferencia('vencidoMessage');
+
+                $cuerpo_mensaje         =~ s/Sr\.\/Sra\.\ FIRSTNAME\ SURNAME\ :\ //;
               
-                $cuerpo_mensaje         =~ s/FIRSTNAME\ SURNAME/$socio->{'persona'}->{'nombre'}\ $socio->{'persona'}->{'apellido'}/;
+                $cuerpo_mensaje         =~ s/FIRSTNAME\ SURNAME/$nombre\ $apellido/;
                 $cuerpo_mensaje         =~ s/VENCIMIENTO/$fecha_prestamo/;
                 $cuerpo_mensaje         =~ s/AUTHOR/$autor/;
                 $cuerpo_mensaje         =~ s/TITLE\:UNITITLE/$titulo/;
                 $cuerpo_mensaje         =~ s/\(EDICION\)//;
-                
-                $mail{'mail_from'}      = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('mailFrom'));
-                $mail{'mail_to'}        = $socio->{'persona'}->email;
-                $mail{'mail_subject'}   = C4::AR::Preferencias::getValorPreferencia('vencidoSubject'); 
-                $mail{'mail_message'}   = $cuerpo_mensaje;
-                
-                C4::AR::Mail::send_mail(\%mail);
-            }
+
+                $mail{'mail_message'}   .= "<br /><br />" . $cuerpo_mensaje;
+
+                if (scalar(@array_prestamos) == 0) {
+                    $fin    = 1;
+                } else {
+                    $pres   = shift @array_prestamos;
+                }
         }
+
+        # FIXME: feo, hacer una funcion que arme el mail y aca solo mandarlo. Inmanejable cuando haya mas medios
+        if (C4::AR::Preferencias::getValorPreferencia('EnabledMailSystem')){  
+            C4::AR::Mail::send_mail(\%mail);
+        }
+        
     } 
 
 }
@@ -1274,8 +1313,9 @@ sub _enviarRecordatorio{
 =cut
 sub getAllPrestamosVencidosParaMail{
 
-    my $prestamos_array_ref               = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo();
-    
+    my $prestamos_array_ref               = C4::Modelo::CircPrestamo::Manager->get_circ_prestamo(
+                                                                                                    sort_by => ['nro_socio DESC']
+                                                                                                 );
     use C4::Modelo::CircPrestamoVencidoTemp::Manager;
     my $prestamos_vencidos_temp_array_ref = C4::Modelo::CircPrestamoVencidoTemp::Manager->get_circ_prestamo_vencido_temp();
     

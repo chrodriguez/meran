@@ -235,19 +235,12 @@ sub agregarLogoUI{
         #borramos algun logo que este, para pisarlo con este nuevo
         deleteLogosUI($db);
 
-        $logo->setNombre('DEO-UI');
+        my $code = C4::AR::Preferencias::getValorPreferencia('defaultUI').'-UI';
         
-        # if (C4::AR::Utilidades::validateString($params->{'alto'})){
-            # $logo->setAlto($params->{'alto'});
-            # $logo->setAlto('1');
-        # }
+        $logo->setNombre( $code);
         
-        # if (C4::AR::Utilidades::validateString($params->{'ancho'})){
-            # $logo->setAncho($params->{'ancho'});
-            # $logo->setAlto('1');
-        # }
         
-        my ($image,$msg_object) = uploadLogoUI($postdata,'DEO-UI', $params->{'context'},$msg_object);
+        my ($image,$msg_object) = uploadLogoUI($postdata, $code, $params->{'context'},$msg_object);
         
         $logo->setImagenPath($image);
         
