@@ -1305,8 +1305,6 @@ sub _enviarRecordatorio{
             $cuerpo_mensaje         =~ s/\(EDICION\)//;
             $cuerpo_mensaje         =~ s/BRANCH/Biblioteca/;
             $cuerpo_mensaje         =~ s/LINK/$link/;
-
-            C4::AR::Debug::debug("un mail en el primer while -----------------------------------------------------------!!!");
             
             $mail{'mail_from'}      = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('mailFrom'));
             $mail{'mail_to'}        = $socio->{'persona'}->email;
@@ -1345,8 +1343,6 @@ sub _enviarRecordatorio{
                 $cuerpo_mensaje         =~ s/LINK/$link/;
                 
                 $mail{'mail_message'}   .= "<br /><br />" . $cuerpo_mensaje;
-
-                C4::AR::Debug::debug("un mail en el 2º while ------------------------------------------------ !!!");
 
                 if (scalar(@array_prestamos) == 0) {
                     $fin    = 1;
