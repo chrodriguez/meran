@@ -127,7 +127,7 @@ sub link_to {
         $url = C4::AR::Utilidades::addParamToUrl($url,@result[0],@result[1]);
     }
 
-    my $session = CGI::Session->load();
+    my $session = CGI::Session->load() || CGI::Session->new();
 
     eval{
         if(($session->param('token'))&&(!$without_token)){        
