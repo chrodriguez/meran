@@ -26,7 +26,8 @@
                                         print C4::AR::Filtros::action_button(   
                                                                             button   => "btn btn-primary",
                                                                             action   => 'modificarEstante();',
-                                                                            title   => "[% 'Aceptar' | i18n %]",
+                                                                            icon     => 'icon-white icon-ok',
+                                                                            title   => " [% 'Aceptar' | i18n %]",
                                                                         
                                         ) ;
                   [% END %]
@@ -133,9 +134,10 @@
                                           
               [% PERL %]
                                         print C4::AR::Filtros::action_button(  
-                                                                            button   => "btn btn-success",
+                                                                            button   => "btn btn-primary",
                                                                             action => 'agregarSubEstante();',
-                                                                            title   => "[% 'Agregar Subestante' | i18n %]",
+                                                                            icon    => 'icon-white icon-ok'
+                                                                            title   => "[% ' Agregar Subestante' | i18n %]",
                                                                           
                                                 ) ;
               [% END %]

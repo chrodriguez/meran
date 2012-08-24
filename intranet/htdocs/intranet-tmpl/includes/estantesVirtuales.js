@@ -98,7 +98,6 @@ function verSubEstantes(estante,padre){
         objAH.estante= estante;
         objAH.padre= padre;
         objAH.tipo= 'VER_SUBESTANTE';
-        objAH.async = false;
         objAH.sendToServer();
 }
 
@@ -106,13 +105,10 @@ function updateVerSubEstantes(responseText){
     if(objAH.padre == 0){
         $('#subestante').html(responseText);
         scrollTo('subestante');
-   //     $('.datos_tabla_div_estantes').hide();
     }
     else{
         $('#subestante-'+ objAH.padre).html(responseText);
         scrollTo('subestante-'+ objAH.padre);
-        zebra('datos_tabla');
-     //   $('.datos_tabla_div_subestante_'+objAH.padre).hide();
     }
 }
 
