@@ -28,7 +28,7 @@
         objAH.tipoAccion        = "CIRC_GENERAL";
         objAH.funcion           = "changePageBusquedas";
         objAH.categoriaSocio    = $('#categoria_socio_id').val();
-        objAH.tipoOperacion     = $('#tipoOperacion').val();
+        // objAH.tipoOperacion     = $('#tipoOperacion').val();
         objAH.tipoPrestamo      = $('#tipo_prestamo_id').val();
         objAH.fecha_inicio      = $('#date-from').val();
         objAH.fecha_fin         = $('#date-to').val();
@@ -50,16 +50,6 @@
     $(document).ready(function(){
         $('#date-from').datepicker();
         $('#date-to').datepicker();
-
-        $('#divComboTipoPrestamo').hide();
-
-        $('#tipoOperacion').change(function() {
-            if($('#tipoOperacion').val() == 'prestamo'){
-                $('#divComboTipoPrestamo').show();
-            }else{
-                $('#divComboTipoPrestamo').hide();
-            }
-        });
     });
 
 </script>
@@ -67,7 +57,7 @@
 <div class="center_fieldset report_form_container">
     <form class="form-horizontal" onsubmit="return false;">
 
-        <div class="control-group" >
+        <!-- <div class="control-group" >
             <label for="tipoOperacion" class="control-label">[% 'Tipo de operaci&oacute;n' | i18n %]</label>  
             <div class="controls">
                 <select name="tipoOperacion" id="tipoOperacion">
@@ -78,7 +68,7 @@
                 </select>
             </div>
         </div>
-
+ -->
         <div class="control-group" id="divComboTipoPrestamo">
             <label for="tipo_prestamo_id" class="control-label">[% 'Tipo de pr&eacute;stamo' | i18n %]</label>  
             <div class="controls">
