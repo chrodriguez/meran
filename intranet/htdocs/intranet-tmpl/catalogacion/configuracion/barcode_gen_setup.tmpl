@@ -72,10 +72,10 @@
 			    </div>
 			    <div class="form-actions">
 					[% PERL %]
-					                    print C4::AR::Filtros::to_Button(   text    => "[% 'Buscar' | i18n %]",
-					                                                        onClick => "eleccionDeBarcodeFormat();",
-					                                                        boton    => "btn btn-primary",
-					                                                        inline => "1",
+					                    print C4::AR::Filtros::action_button(   
+					                    									title    	=> "[% 'Buscar' | i18n %]",
+					                                                        action 		=> "eleccionDeBarcodeFormat();",
+					                                                        button    	=> "btn btn-primary",
 					                            ) ;
 					[% END %]
 			    </div>    

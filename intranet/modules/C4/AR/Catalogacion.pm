@@ -2458,15 +2458,15 @@ sub updateBarcodeFormat{
     }
 
     if ($format ne ""){
-    #eval{
-        if (C4::AR::Utilidades::validateString($format)){
-           $format = $format_n3->setFormat($format);
-           $format_n3->setLong($long);
-           $format_n3->setId_tipo_doc($tipo_documento);
-           $format_n3->save();
-           C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'CB001', 'params' => [$tipo_documento]} ) ;
-        }
-    #};
+        eval{
+            if (C4::AR::Utilidades::validateString($format)){
+               $format = $format_n3->setFormat($format);
+               $format_n3->setLong($long);
+               $format_n3->setId_tipo_doc($tipo_documento);
+               $format_n3->save();
+               C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'CB001', 'params' => [$tipo_documento]} ) ;
+            }
+        };
     } else {
             $format = $format_n3->setFormat($format);
             $format_n3->setLong($long);
