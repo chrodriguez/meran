@@ -38,6 +38,8 @@ if($input->param('editando')){
     C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'SP000', 'params' => []} ) ;
 
     $t_params->{'mensaje'} = C4::AR::Mensajes::getMensaje('SP000','intranet');
+    $t_params->{'mensaje_class'}    = 'alert-success';
+    
 }
 
 #hay que recargarlas de nuevo para mostrar los valores actualizados

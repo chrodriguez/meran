@@ -15,7 +15,6 @@
     //actualizo los input hidden con los valores de los radio button de bootstrap
     function guardarPreferencias(){
 
-        startOverlay();
         for(pref in prefBooleanas){
 
             if($('#radios_' + prefBooleanas[pref] + '').find('.active').text() == "[% "Si" | i18n %]"){
@@ -34,7 +33,10 @@
 
 [% INCLUDE 'editorHTML.inc' %]
 
-<form id="formPreferencias" onclick="return false;" class="form-horizontal" action="[% url_prefix %]/admin/global/preferencias.pl?token=[% token %]" method="post">
+<form id="formPreferencias" class="form-horizontal" 
+      action="[% url_prefix %]/admin/global/preferencias.pl?token=[% token %]" method="post"
+      onsubmit="buttonPost('preferencias-submit');"
+      >
     <fieldset class="resultados_busqueda">
     <legend>[% "Administraci&oacute;n de preferencias de sistema" | i18n %]</legend>
 
@@ -65,14 +67,22 @@
             [% END %]
 
     <input type="hidden" id="editando" name="editando" value="1">
+            [% IF mensaje %]
+              <div class="alert [% mensaje_class %]">
+                      <strong>[% 'Informaci&oacute;n' | i18n %]</strong> [% mensaje %]
+              </div>
+            [% END %]
+    
     <div class="form-actions">
-      [% PERL %]
-                  print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
-                                                      type    => "submit",
-                                                      boton   => "boton_agregar",
-                                                      onclick => "guardarPreferencias();"
-                          ) ;
-      [% END %]
+        [% PERL %]
+                    print C4::AR::Filtros::action_button(   
+                                                        title   => "[% 'Guardar' | i18n %]",
+                                                        button  => "btn btn-primary",
+                                                        id      => "preferencias-submit",
+                                                        action  => "guardarPreferencias();",
+                                                        icon    => "icon-white icon-ok",
+                            ) ;
+        [% END %]
     </div>
 </form>
 

@@ -7,7 +7,7 @@
     /*================================================Reportes=================================================*/
     DEBE_INGRESAR_LA_SIGNATURA = "[% 'Debe ingresar una signatura topogr\u00e1fica' | i18n %]";
     DEBE_INGRESAR_EL_BARCODE = "[% 'Debe ingresar un barcode' | i18n %]";
-
+    GUARDANDO = "[% 'Guardando cambios' | i18n %]";
     /*================================================Circulacion=================================================*/
     FALLO_NOTA = "[% 'La nota no se ha podido guardar' | i18n %]";
     NOTA_GUARDADA = "[% 'La nota se actualizo correctamente' | i18n %]";

@@ -20,7 +20,7 @@ SSLCipherSuite HIGH:MEDIUM
 SSLCertificateFile /etc/apache2/ssl/apache.pem
 
 ErrorDocument 500 /meran/informacion/error.pl
-ErrorDocument 404 /meran/informacion/error.pl
+ErrorDocument 404 /meran/informacion/404notfound.pl
 <Directory /usr/share/meran/intranet/ >
 Order deny,allow
 Allow from all

@@ -11,8 +11,7 @@ Header set Access-Control-Allow-Origin *
 Alias /meran/ /usr/share/meran/opac/cgi-bin/
 
 ErrorDocument 500 /meran/informacion/error.pl
-ErrorDocument 404 /meran/informacion/error.pl
-
+ErrorDocument 404 /meran/informacion/404notfound.pl
 <Location /meran/ >
       SetHandler perl-script
       PerlResponseHandler ModPerl::Registry

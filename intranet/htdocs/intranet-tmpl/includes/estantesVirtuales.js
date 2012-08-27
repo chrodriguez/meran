@@ -98,7 +98,6 @@ function verSubEstantes(estante,padre){
         objAH.estante= estante;
         objAH.padre= padre;
         objAH.tipo= 'VER_SUBESTANTE';
-        objAH.async = false;
         objAH.sendToServer();
 }
 
@@ -106,13 +105,10 @@ function updateVerSubEstantes(responseText){
     if(objAH.padre == 0){
         $('#subestante').html(responseText);
         scrollTo('subestante');
-   //     $('.datos_tabla_div_estantes').hide();
     }
     else{
         $('#subestante-'+ objAH.padre).html(responseText);
         scrollTo('subestante-'+ objAH.padre);
-        zebra('datos_tabla');
-     //   $('.datos_tabla_div_subestante_'+objAH.padre).hide();
     }
 }
 
@@ -135,10 +131,10 @@ function borrarEstantesSeleccionados(estante,padre) {
         theStatus= ELIMINAR_LOS_ESTANTES+":\n";
 
         for(i=0;i<checks.length;i++) {
-            theStatus=theStatus+array[i].name+"\n";
+            theStatus=theStatus+"<span class='label label-success'>"+array[i].name+"</span>\n";
             estantes[i]=array[i].value;
         }
-        theStatus=theStatus + ESTA_SEGURO+"?";
+        theStatus+= "<br />"+ESTA_SEGURO+"?";
 
         bootbox.confirm(theStatus, function(confirmStatus){if (confirmStatus) borrarEstantes(estantes,estante,padre);});
     } else { 
