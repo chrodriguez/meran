@@ -368,16 +368,16 @@ sub Enviar_Email_Asignacion_Reserva{
         my $apellidoPersona = Encode::decode_utf8($socio->persona->getApellido);
         $mailMessage =~ s/SURNAME/$apellidoPersona/;
         
-        my $unititle=C4::AR::Nivel1::getUnititle($reserva->nivel2->nivel1->getId1);
+        my $unititle = Encode::decode_utf8(C4::AR::Nivel1::getUnititle($reserva->nivel2->nivel1->getId1));
         $mailMessage =~ s/UNITITLE/$unititle/;
         
-        my $tituloReserva = $reserva->nivel2->nivel1->getTitulo;
+        my $tituloReserva = Encode::decode_utf8($reserva->nivel2->nivel1->getTitulo);
         $mailMessage =~ s/TITLE/$tituloReserva/;
         
-        my $autorCompleto = $reserva->nivel2->nivel1->getAutor;
+        my $autorCompleto = Encode::decode_utf8($reserva->nivel2->nivel1->getAutor);
         $mailMessage =~ s/AUTHOR/$autorCompleto/;
         
-        my $edicion  =  $reserva->nivel2->getEdicion;
+        my $edicion  =  Encode::decode_utf8($reserva->nivel2->getEdicion);
         $mailMessage =~ s/EDICION/$edicion/;
 
         $mailMessage =~ s/a2/$apertura/;
@@ -446,16 +446,16 @@ sub Enviar_Email_Cancelacion_Reserva{
         my $apellidoPersona = Encode::decode_utf8($socio->persona->getApellido);
         $mailMessage =~ s/SURNAME/$apellidoPersona/;
         
-        my $unititle=C4::AR::Nivel1::getUnititle($reserva->nivel2->nivel1->getId1);
+        my $unititle = Encode::decode_utf8(C4::AR::Nivel1::getUnititle($reserva->nivel2->nivel1->getId1));
         $mailMessage =~ s/UNITITLE/$unititle/;
         
-        my $tituloReserva = $reserva->nivel2->nivel1->getTitulo;
+        my $tituloReserva = Encode::decode_utf8($reserva->nivel2->nivel1->getTitulo);
         $mailMessage =~ s/TITLE/$tituloReserva/;
         
-        my $autorCompleto = $reserva->nivel2->nivel1->getAutor;
+        my $autorCompleto = Encode::decode_utf8($reserva->nivel2->nivel1->getAutor);
         $mailMessage =~ s/AUTHOR/$autorCompleto/;
         
-        my $edicion  =  $reserva->nivel2->getEdicion;
+        my $edicion  =  Encode::decode_utf8($reserva->nivel2->getEdicion);
         $mailMessage =~ s/EDICION/$edicion/;
 
         $mailMessage     = Encode::decode_utf8($mailMessage);
@@ -519,16 +519,16 @@ sub Enviar_Email_Reserva_A_Espera{
         my $apellidoPersona = Encode::decode_utf8($socio->persona->getApellido);
         $mailMessage =~ s/SURNAME/$apellidoPersona/;
         
-        my $unititle=C4::AR::Nivel1::getUnititle($reserva->nivel2->nivel1->getId1);
+        my $unititle= Encode::decode_utf8(C4::AR::Nivel1::getUnititle($reserva->nivel2->nivel1->getId1));
         $mailMessage =~ s/UNITITLE/$unititle/;
         
-        my $tituloReserva = $reserva->nivel2->nivel1->getTitulo;
+        my $tituloReserva = Encode::decode_utf8($reserva->nivel2->nivel1->getTitulo);
         $mailMessage =~ s/TITLE/$tituloReserva/;
         
-        my $autorCompleto = $reserva->nivel2->nivel1->getAutor;
+        my $autorCompleto = Encode::decode_utf8($reserva->nivel2->nivel1->getAutor);
         $mailMessage =~ s/AUTHOR/$autorCompleto/;
         
-        my $edicion  =  $reserva->nivel2->getEdicion;
+        my $edicion  =  Encode::decode_utf8($reserva->nivel2->getEdicion);
         $mailMessage =~ s/EDICION/$edicion/;
 
         $mailMessage     = Encode::decode_utf8($mailMessage);
