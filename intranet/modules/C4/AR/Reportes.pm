@@ -1365,15 +1365,7 @@ sub reporteColecciones{
             $n2{$n3->id2}='';
         }
 
-        foreach my $k (keys %n1){
-            C4::AR::Debug::debug($k);
-        }
-C4::AR::Debug::debug("nivlelllllllll 2");
-            foreach my $k2 (keys %n2){
-            C4::AR::Debug::debug($k2);
-        }
-
-
+    
         my $cant_n1 = scalar keys %n1;
         my $cant_n2 = scalar keys %n2;
 

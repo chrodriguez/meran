@@ -1249,8 +1249,6 @@ sub getHistoricoDisponibilidad {
 sub getFechaUltimoCambioDisp{
     my ($id3) = @_;
 
-    C4::AR::Debug::debug("sfsdfsdsfsdsdfsdffffffffffffffffffffffffff");
-
     my $fecha          = C4::Modelo::CatHistoricoDisponibilidad::Manager->get_cat_historico_disponibilidad(   
                                                                                                             select => [ 'MAX(timestamp) AS timestamp'],
                                                                                                     

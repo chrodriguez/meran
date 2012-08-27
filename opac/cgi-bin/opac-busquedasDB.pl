@@ -15,7 +15,6 @@ my $input                   = new CGI;
 my $string                  = ($input->param('string')) || "";
 my $to_pdf;
 
-C4::AR::Debug::debug("asdfñlksdlñfklñsdkflñdskflñsdkflñksdñlf");
 
 if ($input->param('export')== "1"){
     $to_pdf                  = $input->param('export');
@@ -128,6 +127,7 @@ if ($to_pdf){
     if  ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
 
         if ($obj->{'estantes'}){
+
             #Busqueda por Estante Virtual
             $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&estantes=".$obj->{'estantes'}."&tipoAccion=".$obj->{'tipoAccion'};
 
@@ -142,6 +142,7 @@ if ($to_pdf){
             $obj->{'tipo_nivel3_name'} = -1; 
           } else {
                 if($obj->{'estantes_grupo'}){
+
                     #Busqueda por Estante Virtual
                     $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&estantes_grupo=".$obj->{'estantes_grupo'}."&tipoAccion=".$obj->{'tipoAccion'};
                     $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'};
@@ -151,6 +152,10 @@ if ($to_pdf){
                 
                     ($cantidad, $resultsarray)   = C4::AR::Busquedas::busquedaEstanteDeGrupo($obj->{'estantes_grupo'}, $session, $obj);
                 
+                    my $nivel_1= C4::AR::Nivel1::getNivel1FromId2($obj->{'estantes_grupo'});
+
+                    $obj->{'titulo_nivel_1'} = $nivel_1->getTitulo;
+
                     #Sino queda en el buscoPor
                     $obj->{'tipo_nivel3_name'} = -1; 
                 
