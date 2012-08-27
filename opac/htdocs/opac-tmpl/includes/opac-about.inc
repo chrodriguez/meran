@@ -1,4 +1,4 @@
-<div class="title">[% 'Datos de la biblioteca' | i18n %]</div>
+<legend>[% 'Datos de la biblioteca' | i18n %]</legend>
  
 <div class="well">
     <dl>
@@ -16,7 +16,7 @@
       [% END %]    
 </div>
 
-<div class="title">[% 'Equipo de desarrollo de MERAN' | i18n %]</div>
+<legend>[% 'Equipo de desarrollo de MERAN' | i18n %]</legend>
     <div class="well">
         <a href="http://www.cespi.unlp.edu.ar" target="_blank">CESPI</a> - <a href="http://www.linti.unlp.edu.ar" target="_blank">LINTI</a> - <a href="http://www.info.unlp.edu.ar" target="_blank">Facultad de Informática</a><br><br>	 
         <ul class="unstyled"> 
