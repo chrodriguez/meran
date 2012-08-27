@@ -21,7 +21,10 @@ my ($template, $session, $t_params)  = get_template_and_user({
                     debug => 1,
                 });
 
-my $combo_tablas = C4::AR::Utilidades::generarComboTablasDeReferencia();
+my %combo_params = {};
+$combo_params{'onChange'} = "obtenerTabla();";
+
+my $combo_tablas = C4::AR::Utilidades::generarComboTablasDeReferencia(\%combo_params);
 
 $t_params->{'combo_tablas'}= $combo_tablas;
 $t_params->{'page_sub_title'}=C4::AR::Filtros::i18n("Administraci&oacute;n de tablas de referencia");
