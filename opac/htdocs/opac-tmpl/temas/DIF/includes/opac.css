@@ -859,6 +859,7 @@ a.thumbnail:hover{border-color:#0088cc;-webkit-box-shadow:0 1px 4px rgba(0, 105,
 #opacLogo img{max-height:40px;max-width:140px;}
 legend{}
 .brand_less_padding{padding:10px 27px 10px !important;}
+.bigInput{height:32px !important;font-size:23px !important;}
 .alert-success blockquote{border-left:5px solid #DFF0D8 !important;}
 .title{background-color:#FAFAFA;font-size:20px;margin-bottom:20px;margin-top:15px;min-height:20px;padding:4px;}
 body{padding-bottom:60px;}
@@ -868,7 +869,7 @@ body{padding-bottom:60px;}
 .span90{width:90%;}
 .span98{width:98%;}
 .span330{width:330px;}
-.bigInput{height:32px;font-size:23px;color:#999;}
+.bigInput{color:#999;}
 .logo_opac_menu{float:left;line-height:0;max-width:150px;margin-top:5px;margin-left:5px;}
 .main_content{padding-top:60px;}
 .medium_font{font-size:40px !important;}
