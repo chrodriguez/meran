@@ -1,7 +1,8 @@
 
 <form id="contactform" name="contactform" method="POST" action="[% url_prefix %]/opac-contact.pl" class="form-horizontal">
     <section class="center-section-form">
-    <fieldset><legend>[% 'Sus datos' | i18n %]</legend>
+    <fieldset>
+        <legend>[% 'Sus datos' | i18n %]</legend>
  
         <div class="control-group">
             <label class="control-label" for="trato">[% 'Trato' | i18n %]:</label>

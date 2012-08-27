@@ -76,6 +76,7 @@ function agregarRegistro(tabla){
 function updateAgregarRegistro(responseText){
 
     $('#detalle_tabla').html(responseText);
+    $('#basic-modal-content').modal('hide');
 
 }
 

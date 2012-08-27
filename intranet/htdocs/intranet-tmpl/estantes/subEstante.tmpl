@@ -32,7 +32,8 @@
                                                                 print C4::AR::Filtros::action_button(
                                                                                                     button   => "btn btn-danger",
                                                                                                     action => "borrarEstantesSeleccionados([% estante.getId %],[% estante.getPadre %]);",
-                                                                                                    title   => "[% 'Borrar seleccionados' | i18n %]",
+                                                                                                    icon     => 'icon-white icon-minus',
+                                                                                                    title   => " [% 'Borrar seleccionados' | i18n %]",
                                                                                                 
                                                                         ) ;
                                             [% END %]
@@ -41,7 +42,8 @@
                                                                 print C4::AR::Filtros::action_button(
                                                                                                     button   => "btn btn-primary",
                                                                                                     action => 'editarEstante("[% estante.getEstante %]",[% estante.getId %],[% estante.getPadre %],[% IF estante.padre %][% estante.estante_padre.getPadre %][% ELSE %]-1[% END %]);',
-                                                                                                    title   => "[%  'Editar estante actual' | i18n %]",
+                                                                                                    icon     => 'icon-white icon-pencil',
+                                                                                                    title   => " [%  'Editar estante actual' | i18n %]",
                                                                                                
                                                                         ) ;
                                             [% END %]
@@ -54,8 +56,8 @@
                                             [% PERL %]
                                                                 print C4::AR::Filtros::action_button(
                                                                                                     button   => "btn btn-success",
-                                                                                                    icon => "",
-                                                                                                    title   => "[% 'Agregar subestante' | i18n %]",
+                                                                                                    icon => "icon-white icon-plus",
+                                                                                                    title   => " [% 'Agregar subestante' | i18n %]",
                                                                                                     action => "agregarNuevoSubEstante([% estante.getId %],[% estante.getPadre %]);",
                                                                                             
                                                                 ) ;
@@ -122,15 +124,14 @@
                             [% END %]
                             
                               <div class="form-actions">
-                                    
-                              
                                     [% IF estante.contenido %]
                                           [% PERL %]
                                                             
                                                               print C4::AR::Filtros::action_button(
                                                                                                       button  => "btn btn-danger",
                                                                                                       action => "borrarContenidoSeleccionado([% estante.getId %],[% estante.getPadre %]);",
-                                                                                                      title   => "[% 'Borrar seleccionados' | i18n %]",
+                                                                                                      icon     => 'icon-white icon-minus',
+                                                                                                      title   => " [% 'Borrar seleccionados' | i18n %]",
                                                                               ) ;
 
 
@@ -139,8 +140,9 @@
                                     [% END %]
                                     [% PERL %]            
                                                               print C4::AR::Filtros::action_button(
-                                                                                                    button   => "btn btn-success",
-                                                                                                    title   => "[% 'Agregar contenido' | i18n %]",
+                                                                                                    button   => "btn btn-primary",
+                                                                                                    title   => " [% 'Agregar contenido' | i18n %]",
+                                                                                                    icon => "icon-white icon-plus",
                                                                                                     action => "agregarContenido([% estante.getId %],[% estante.getPadre %]);",
                                                                         ) ;
                                     [% END %]
@@ -149,7 +151,6 @@
                            </fieldset>
  
                         </div>
-
                   </div>
         </div>
 </div>

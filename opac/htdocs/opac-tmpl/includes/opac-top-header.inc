@@ -13,13 +13,13 @@
         	</a>
         </div>
         [% ELSE %]
-			[% PERL %]
-	                   print C4::AR::Filtros::link_to( text    =>  "[% 'MERAN' | i18n %]",
-	                                                    url     =>  '[% url_prefix %]/opac-main.pl',
-	                                                    title   =>  "[% 'Inicio' | i18n %]",
-	                                                    class	=> "brand",
-	                            ) ;
-			[% END %]
+    			[% PERL %]
+    	                   print C4::AR::Filtros::link_to( text    =>  "[% 'MERAN' | i18n %]",
+    	                                                    url     =>  '[% url_prefix %]/opac-main.pl',
+    	                                                    title   =>  "[% 'Inicio' | i18n %]",
+    	                                                    class	=> "brand brand_less_padding",
+    	                            ) ;
+    			[% END %]
 		[% END %]
         <div class="nav-collapse">
           <ul class="nav">

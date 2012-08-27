@@ -803,9 +803,9 @@ sub agregarRegistro{
        
        C4::AR::Debug::debug("ALIAS DE LA TABLA ADDNEWRECORD ======================== ".$alias);
 
-    #eval{
+    eval{
         $object = $tabla->addNewRecord();
-    #};
+    };
 
     $tabla = $tabla->createFromAlias($alias);
 

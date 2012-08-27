@@ -490,6 +490,7 @@ sub getNivelBibliograficoObject{
 
     my $nivel_bibliografico = C4::Modelo::RefNivelBibliografico::Manager->get_ref_nivel_bibliografico( query => [ code => { eq => $code }]);
 
+    C4::AR::Debug::debug($nivel_bibliografico->[0]);
 
     return ($nivel_bibliografico->[0]);
 }

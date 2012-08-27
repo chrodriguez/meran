@@ -350,7 +350,7 @@ sub getRegistrosFromImportacion {
                                                                                                                         query => \@filtros);
 
     if(scalar(@$registros_array_ref) > 0){
-        return ($registros_array_ref_count, $registros_array_ref);
+        return ($registros_array_ref_count, $registros_array_ref, $registros_array_ref->[0]->ref_importacion->esquema->id);
     }else{
         return (0,0);
     }

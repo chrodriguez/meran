@@ -689,13 +689,13 @@ sub marc_record_with_data {
 sub as_stringReloaded {
     my ($field, $itemtype, $params) = @_;
 
-    my @subs;
+   
     my $db      = undef;
     my $campo   = $field->tag;
     my $nivel   = $params->{'nivel'};
 
-    my @array_subcampos;
-
+    my %subcampos;
+    my $cat_estruct_info_array;
     foreach my $subfield ($field->subfields()) {
         my %hash_temp;
         my $subcampo                        = $subfield->[0];
@@ -709,27 +709,51 @@ sub as_stringReloaded {
             $dato                           = $hash_temp{'dato_link'};
         }
 
-        my $cat_estruct_info_array          = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($field->tag, $subcampo, $itemtype, $nivel, $db);
+        $cat_estruct_info_array          = C4::AR::VisualizacionIntra::getVisualizacionFromCampoSubCampo($field->tag, $subcampo, $itemtype, $nivel, $db);
         my $text                            = "";
         if($cat_estruct_info_array){
 
-            $text                           = $cat_estruct_info_array->getPre().$dato.$cat_estruct_info_array->getPost();
-
-            $hash_temp{'dato'}              = $text;
-            $hash_temp{'orden_subcampo'}    = $cat_estruct_info_array->getOrdenSubCampo();
+            #$text                           = $cat_estruct_info_array->getPre().$dato.$cat_estruct_info_array->getPost();
+        #    $hash_temp{'dato'}              = $dato;
+        #    $hash_temp{'orden_subcampo'}    = $cat_estruct_info_array->getOrdenSubCampo();
+        #}
+          if(($dato)&&( C4::AR::Utilidades::trim($dato) ne '')){
+            if (!$subcampos{$subcampo}){
+                $subcampos{$subcampo}{'orden'}    = $cat_estruct_info_array->getOrdenSubCampo();
+                $subcampos{$subcampo}{'pre'}      = $cat_estruct_info_array->getPre();
+                $subcampos{$subcampo}{'inter'}    = $cat_estruct_info_array->getInter();
+                $subcampos{$subcampo}{'post'}     = $cat_estruct_info_array->getPost();
+                $subcampos{$subcampo}{'datos'}    = [$dato];
+            }
+            else{
+               my $tmp = $subcampos{$subcampo}{'datos'};
+               C4::AR::Debug::debug("Catalogacion => as_stringReloaded =>".$tmp);
+               push @$tmp, $dato;
+               $subcampos{$subcampo}{'datos'}=$tmp;
+            }
+         }
         }
-
-        push (@array_subcampos, \%hash_temp);
+        #push (@array_subcampos, \%hash_temp);
     } # foreach
 
-# TODO es una grasada pero anda!!!!!!!
-    @array_subcampos = sort{$a->{'orden_subcampo'} <=> $b->{'orden_subcampo'}} @array_subcampos;
 
-    foreach my $s (@array_subcampos){
-        push( @subs, $s->{'dato'} );
+    #my %subcampos = sort {$a->{'orden'} <=> $b->{'orden'}} values %subcampos;
+
+
+    # TODO es una grasada pero anda!!!!!!!
+    #@array_subcampos = sort{$a->{'orden_subcampo'} <=> $b->{'orden_subcampo'}} @array_subcampos;
+
+    my $texto='';
+    
+    #Se unen las ocurrencias con el separador intermedio!!
+    foreach my $subcampo (sort {$subcampos{$a}{'orden'} <=> $subcampos{$b}{'orden'}} keys %subcampos) {     
+        my $ocurrencias = $subcampos{$subcampo}{'datos'};
+        my $inter = $subcampos{$subcampo}{'inter'};
+        my $subsJoined= join( $inter, @$ocurrencias);
+        C4::AR::Debug::debug("JOINED!!! ".$subsJoined);
+        $texto.=$subcampos{$subcampo}{'pre'}.$subsJoined.$subcampos{$subcampo}{'post'};
     }
-
-    return join( " ", @subs );
+    return $texto;
 }
 
 sub guardarEsquema{

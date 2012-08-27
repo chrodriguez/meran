@@ -38,6 +38,15 @@ sub getObjeto{
 	return $objecto;
 }
 
+sub getObjetoById{
+    my ($self) = shift;
+    my ($id) = @_;
+
+    my $objecto= C4::Modelo::RefNivelBibliografico->new(id => $id);
+    $objecto->load();
+    return $objecto;
+}
+
 
 sub getId{
     my ($self) = shift;

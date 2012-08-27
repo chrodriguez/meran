@@ -448,7 +448,12 @@ sub getNivel2FromTipoDocumento {
 
     my $cant = scalar(@$cat_registro_marc_n2_array_ref);
 
+
+    C4::AR::Debug::debug("CANTIDAD REGISTROS MARC N2: ".$cant." TIPO: ".  $tipo_doc);
+
     for(my $i=0; $i < $cant; $i++){
+
+        C4::AR::Debug::debug($cat_registro_marc_n2_array_ref->[$i]->getTipoDocumentoObject());
 
         if($cat_registro_marc_n2_array_ref->[$i]->getTipoDocumentoObject() eq $tipo_doc){
             push(@cat_registro_marc_n2_array_ref_result, $cat_registro_marc_n2_array_ref->[$i]);
@@ -697,7 +702,7 @@ sub getRating{
     }
 
     if($rating_count > 0){
-        $rating_count = POSIX::ceil($count/$rating_count);
+        $rating_count = ($count/$rating_count);
     } 
     
     return $rating_count;

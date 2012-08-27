@@ -13,8 +13,12 @@
           </div>
           <div class="control-group">
               <div class="controls">
-              		<input type="checkbox" name="habilitados_filter" id="habilitados_filter">[% " Mostrar s&oacute;lo usuarios habilitados"| i18n %]
-              </div>
+                <label class="checkbox">
+                    <input type="checkbox" name="habilitados_filter" id="habilitados_filter">
+                                [% "Mostrar s&oacute;lo usuarios habilitados"| i18n %]
+                </label>
+
+            </div>
           </div>
 
 

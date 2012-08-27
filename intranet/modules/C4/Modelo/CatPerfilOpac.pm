@@ -15,7 +15,6 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id' ],
 );
 
-use C4::Modelo::PrefServidorZ3950;
 use C4::Modelo::CatPerfilOpac::Manager;
 use Text::LevenshteinXS;
 
@@ -33,7 +32,6 @@ sub setNombre{
 }
 
 sub nextMember{
-     return(C4::Modelo::PrefServidorZ3950->new());
 }
 
 

@@ -54,9 +54,7 @@
         }
     }
 
-    //FIXME: feo!!
     function updateEliminarFeriado(responseText){
-        // location.reload();
         updateAgregarFeriado(responseText);
     }
 
@@ -215,7 +213,9 @@
 </script>
 
 <fieldset>
-    <legend class="titulos">[% "Feriados" | i18n %]</legend>
+    <legend class="titulos">[% "Pr&oacute;ximos Feriados" | i18n %]</legend>
+
+    <div id="proximosFeriados"></div><br />
 
     <div id="calendarioFeriados"></div><br />
 
@@ -228,8 +228,6 @@
         <button type="submit" id="mostrarFeriadosTotales" class="btn btn-info" style="display:none;">
             <i id="mostrarFeriadosTotalesIcon" class="icon-white icon-eye-open"></i> [% 'Mostrar feriados originales' | i18n %]</button>
     </form>
-
-    <div id="proximosFeriados"></div>
 
 </fieldset>
 

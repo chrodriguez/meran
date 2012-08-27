@@ -30,7 +30,6 @@
   <link rel="stylesheet" href="[% temas %]/[% user_theme %]/includes/opac.css" />
   <link rel='stylesheet' media='screen and (max-width: 900px)' href="[% temas %]/[% user_theme %]/includes/opac-FF_fix.css" />  
   <link rel="stylesheet" href="/includes/jquery/fancybox/fancybox.css" type="text/css" media="screen" />
-  <link media="screen" rel="stylesheet" href="/includes/css/rateit.css" type="text/css">
 
   <script type="text/javascript">
     var token               = '[% token %]';
@@ -45,7 +44,6 @@
   <script src="/includes/AjaxHelper.js" type="text/javascript"></script>
   <script src="/includes/jquery/ui/ui-min.js" type="text/javascript"></script>
   <script src="/includes/jquery/ui/core.js" type="text/javascript"></script>
-  <script src="/includes/jquery/ui.stars.js" type="text/javascript"></script>
   [% INCLUDE 'AutocompleteHelper.inc' %]
   <script src="/includes/jquery/jquery.wysiwyg.js" type="text/javascript"></script>
   <script src="/includes/json/jsonStringify.js" type="text/javascript"></script>
@@ -61,7 +59,7 @@
   <script type="text/javascript" src="/includes/opac.js"></script>	
   <script type="text/javascript" src="/includes/jquery/jquery.alerts.js"></script>	
   <script type="text/javascript" src="/includes/jquery/fancybox/fancybox.js"></script>
-  <script type="text/javascript" src="/includes/jquery/jquery.rateit.min.js"></script>
+  <script type="text/javascript" src="/includes/jquery/jquery.raty.min.js"></script>
   <script type="text/javascript" src="/includes/jquery/jquery.tmpl.js"></script>
   
 
@@ -135,7 +133,7 @@
 		  			</div>	   
 			        [% IF content_title %]
 			        	<fieldset>
-			        		<legend class="title">[% content_title %]</legend>
+			        		<legend>[% content_title %]</legend>
 			        	</fieldset>
 			        [% END %]
 			        [% IF partial_template %]

@@ -26,7 +26,8 @@
                                                                     print C4::AR::Filtros::action_button(
                                                                                                         button  => "btn btn-danger",
                                                                                                         action => "borrarEstantesSeleccionados(0,0);",
-                                                                                                        title   => "[% 'Borrar seleccionados' | i18n %]",
+                                                                                                        icon     => 'icon-white icon-minus',
+                                                                                                        title   => " [% 'Borrar seleccionados' | i18n %]",
                                                                             ) ;
                                                       [% END %]
                                             [% ELSE %]
@@ -38,7 +39,8 @@
                                                 [% PERL %]
                                                                     print C4::AR::Filtros::action_button(
                                                                                                         button   => "btn btn-success",
-                                                                                                        title   => "[% 'Agregar estante' | i18n %]",
+                                                                                                        title   => " [% 'Agregar estante' | i18n %]",
+                                                                                                        icon     => 'icon-white icon-plus',
                                                                                                         action => "agregarNuevoEstante();",
                                                                             ) ;
                                                 [% END %]

@@ -49,10 +49,12 @@
 
 
 [% IF addBorrower %]
-   <div class="title"> [% "Agregar usuario real" | i18n %]</div>
+    <fieldset>
+        <legend class="titulo_legend">[% "Agregar usuario real" | i18n %]</legend>
+    </fieldset>
 [% ELSE  %]
     <div class="modal-header">
-     <h3>[% "Usuarios Reales - Modificar Datos" | i18n %]</h3>
+      <h3>[% "Modificar datos del usuario" | i18n %]</h3>
     </div>
 [% END %]
 
@@ -62,11 +64,8 @@
 
   <form class="form-horizontal" method="post" name="userDataForm" id="userDataForm" 
                 onsubmit="return [% IF addBorrower == 1 %] add(); [% ELSE %] save_modif(); [% END %]">
-          
-    <fieldset>
-        <legend>[% "Datos personales del usuario" | i18n %]</legend>
-            
-         
+      <fieldset>
+        <legend class="titulo_legend">[% "Datos personales" | i18n %]</legend>
             <div class="control-group error">
                   <label class="control-label" for="apellido">[% "Apellido" | i18n %]*</label>
                   <div class="controls">
@@ -117,7 +116,7 @@
                             <input type="text" id="nacimiento" name="nacimiento" data-datepicker="datepicker"  value="[% socio_modificar.persona.getNacimiento %]" required>
                       </div>
             </div>
-
+        </fieldset>
 
         <fieldset>
             <legend class="titulo_legend">[% "Informaci&oacute;n de contacto" | i18n %] </legend>
@@ -329,7 +328,7 @@
                     [% END %]
         
             </div>
-     </fieldset>
+
   </section>
 </form>
 

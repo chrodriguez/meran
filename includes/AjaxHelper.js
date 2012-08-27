@@ -9,18 +9,28 @@
 var overlay_on = false;
 
 function startOverlay(){
-	if (!overlay_on){
-		$('#ajax-indicator').modal({show:true, keyboard: false, backdrop: false,});
-		overlay_on = true;
+	try{
+		if (!overlay_on){
+			$('#ajax-indicator').modal({show:true, keyboard: false, backdrop: false,});
+			overlay_on = true;
+		}
+	}
+	catch (e){
+		
 	}
 }
 
 
 function closeModal(id){
-	if ((id == '') || (id == null))
-		$('#ajax-indicator').modal('hide');
-	else
-		$('#'+id).modal('hide');
+
+	try{
+		if ((id == '') || (id == null))
+			$('#ajax-indicator').modal('hide');
+		else
+			$('#'+id).modal('hide');
+	}
+	catch (e){
+	}
 	overlay_on = false;
 }
 //Funciones Privadas para manejar el estado del la consulta de AJAX

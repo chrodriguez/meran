@@ -1,4 +1,5 @@
-var ancla="";function refreshMeranPage(){location.reload(true);}
+var ancla="";function buttonPost(button_id){$('#'+button_id).addClass("disabled");$('#'+button_id).text(GUARDANDO+"...");}
+function refreshMeranPage(){location.reload(true);}
 function crearAncla(id,strAncla){if(!$("#"+strAncla)){new Insertion.Before(id,"<a id="+strAncla+" name="+strAncla
 +"></a>");}
 ancla="#"+strAncla;}

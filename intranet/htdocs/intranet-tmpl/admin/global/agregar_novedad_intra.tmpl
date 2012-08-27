@@ -74,6 +74,7 @@
                                   print C4::AR::Filtros::action_link_button( 
                                                                   button    => "btn",
                                                                   url       => "[% url_prefix %]/admin/global/novedades_intra.pl",
+                                                                  icon        => "icon-arrow-left",
                                                                   title     => "[% 'Volver al listado' | i18n %]",
                                                               ) ;
 
@@ -83,8 +84,8 @@
                                   print C4::AR::Filtros::action_button( 
                                                                     button      => "btn btn-primary",
                                                                     action      => "modificar()", 
-                                                                    icon        => "",
-                                                                    title       => "[% 'Modificar' | i18n %]",
+                                                                    icon        => "icon-white icon-pencil",
+                                                                    title       => " [% 'Modificar' | i18n %]",
                                                               ) ;
 
 
@@ -96,7 +97,8 @@
                                   print C4::AR::Filtros::action_link_button( 
                                                                   button    => "btn",
                                                                   url       => "[% url_prefix %]/admin/global/novedades_intra.pl",
-                                                                  title     => "[% 'Volver al listado' | i18n %]",
+                                                                  title     => " [% 'Volver al listado' | i18n %]",
+                                                                  icon        => "icon-arrow-left",
                                                               ) ;
 
                             [% END %]
@@ -105,8 +107,8 @@
                                   print C4::AR::Filtros::action_button( 
                                                                     button      => "btn btn-primary",
                                                                     action      => "agregar()", 
-                                                                    icon        => "",
-                                                                    title       => "[% 'Agregar' | i18n %]",
+                                                                    icon        => "icon-white icon-ok",
+                                                                    title       => " [% 'Aceptar' | i18n %]",
                                                               ) ;
 
 

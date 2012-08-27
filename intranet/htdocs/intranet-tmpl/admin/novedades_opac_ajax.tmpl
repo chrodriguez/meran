@@ -73,12 +73,11 @@
 </fieldset>
 <div class="form-actions">
 	[% PERL %]
-	            print C4::AR::Filtros::to_Button(   
-	                    text    => "[% 'Agregar novedad' | i18n %]",
-	                    boton   => "boton_buscar",
+	            print C4::AR::Filtros::action_link_button(   
+	                    button  => "btn btn-primary",
 	                    url     => "[% url_prefix %]/admin/agregar_novedad.pl?token=[% token %]",
-	                    width   => "auto",
-	                    title   => "[% 'Agregar novedad' | i18n %]",
+                      icon => "icon-white icon-plus",
+	                    title   => " [% 'Agregar novedad' | i18n %]",
 	                ) ;
 	[% END %]
 </div>

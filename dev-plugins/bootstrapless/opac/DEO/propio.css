@@ -85,9 +85,8 @@
 body {
     padding-bottom: 60px;
 }
-legend {
-    font-size: 16.5px;
-}
+
+
 -moz-transform:rotate(145deg); {
     opacity:1; {
         100%;
@@ -116,8 +115,6 @@ legend {
     border-radius: 4px;
 }
 .bigInput {
-    height: 32px;
-    font-size: 23px;
     color: #999;
 }
 .span90 {
