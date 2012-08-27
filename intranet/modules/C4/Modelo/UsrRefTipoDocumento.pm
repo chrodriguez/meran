@@ -21,6 +21,12 @@ use C4::Modelo::UsrRefTipoDocumento::Manager;
 use C4::Modelo::RefEstado;
 use Text::LevenshteinXS;
 
+sub toString{
+    my ($self) = shift;
+
+    return ($self->getDescripcion);
+}
+
 sub getId{
   my ($self) = shift;
 

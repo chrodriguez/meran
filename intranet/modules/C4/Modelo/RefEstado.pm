@@ -31,6 +31,12 @@ use Text::LevenshteinXS;
 # En procesos técnicos = STATE008
 ##################################################
 
+sub toString{
+    my ($self) = shift;
+
+    return ($self->getNombre);
+}
+
 sub paraBajaValue{
     
     return ('STATE000');

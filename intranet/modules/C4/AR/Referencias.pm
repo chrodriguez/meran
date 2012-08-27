@@ -515,7 +515,7 @@ sub getTabla{
        $tabla = $tabla->createFromAlias($alias);
     $limit = $limit || 20;
     $offset = $offset || 0;
-    my ($cantidad,$datos) = $tabla->getAll($limit,$offset,0,$filtro);
+    my ($cantidad,$datos) = $tabla->getAll($limit,$offset,0,$filtro,1);
     my $campos = $tabla->getCamposAsArray();
     my $clave = $tabla->meta->primary_key;
 

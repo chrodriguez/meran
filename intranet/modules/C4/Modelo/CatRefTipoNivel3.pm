@@ -25,6 +25,13 @@ use C4::Modelo::CatRefTipoNivel3::Manager;
 use Text::LevenshteinXS;
 
 
+sub toString{
+
+    my ($self)   = shift;
+
+    return $self->getNombre;
+}
+
 =item
     Agrega un objeto CatRefTipoNivel3
 =cut
