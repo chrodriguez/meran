@@ -9,10 +9,10 @@ __PACKAGE__->meta->setup(
 
     columns => [
         id           => { type => 'serial', overflow => 'truncate', not_null => 1 },
-        nombre       => { type => 'text', overflow => 'truncate', length => 65535, not_null => 1 },
-        apellido     => { type => 'text', overflow => 'truncate', length => 65535, not_null => 1 },
+        nombre       => { type => 'varchar', overflow => 'truncate', length => 128, not_null => 1 },
+        apellido     => { type => 'varchar', overflow => 'truncate', length => 128, not_null => 1 },
         nacionalidad => { type => 'character', overflow => 'truncate', length => 3 },
-        completo     => { type => 'text', overflow => 'truncate', length => 65535, not_null => 1 },
+        completo     => { type => 'varchar', overflow => 'truncate', length => 260, not_null => 1 },
     ],
 #     alias_column => ['id', 'campo'],
     primary_key_columns => [ 'id' ],
@@ -24,6 +24,8 @@ __PACKAGE__->meta->setup(
             type       => 'one to one',
         },
     ],
+
+    unique_key => [ 'nombre','apellido','nacionalidad' ],
 );
 use C4::Modelo::CatRefTipoNivel3;
 use C4::Modelo::CatAutor::Manager;
@@ -98,6 +100,7 @@ sub setNombre{
     my ($nombre) = @_;
 
     $self->nombre($nombre);
+    $self->setCompleto($self->getCompleto);
 }
 
 sub getApellido{
@@ -111,6 +114,8 @@ sub setApellido{
     my ($apellido) = @_;
 
     $self->apellido($apellido);
+    $self->setCompleto($self->getCompleto);
+
 }
 
 sub getNacionalidad{
@@ -131,7 +136,7 @@ sub getCompleto{
 
     my $completo = C4::AR::Utilidades::trim($self->completo);
 
-    if (!$completo){
+    if ( (!$completo) || ($completo eq "_SIN_VALOR_") ){
         if($self->getApellido){
             
             $completo = $self->getApellido;
@@ -156,6 +161,26 @@ sub setCompleto{
     my ($self) = shift;
     my ($completo) = @_;
 
+    $completo = C4::AR::Utilidades::trim($completo);
+
+    if (!$completo){
+        if($self->getApellido){
+            
+            $completo = $self->getApellido;
+            
+            if($self->getNombre){
+                $completo .= ", ".$self->getNombre;
+            }
+            
+        }else{
+            
+            if($self->getNombre){
+                $completo = $self->getNombre;
+            }
+            
+        }
+    }
+    
     $self->completo($completo);
 }
 

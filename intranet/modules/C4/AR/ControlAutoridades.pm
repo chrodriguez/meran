@@ -85,9 +85,14 @@ sub search_autores{
     my ($autor) = @_;
 
     my @filtros;
+    my @filtros_or;
 
-    push(@filtros, ( completo => { like => $autor.'%'}) );
+    push(@filtros_or, ( completo => { like => $autor.'%'}) );
+    push(@filtros_or, ( nombre => { like => $autor.'%'}) );
+    push(@filtros_or, ( apellido => { like => $autor.'%'}) );
 
+    push(@filtros, (or => \@filtros_or) );
+    
     use C4::AR::Preferencias;
     my $limit = C4::AR::Preferencias::getValorPreferencia('limite_resultados_autocompletables') || 20;
     

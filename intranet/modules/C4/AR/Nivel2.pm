@@ -702,7 +702,7 @@ sub getRating{
     }
 
     if($rating_count > 0){
-        $rating_count = POSIX::ceil($count/$rating_count);
+        $rating_count = ($count/$rating_count);
     } 
     
     return $rating_count;

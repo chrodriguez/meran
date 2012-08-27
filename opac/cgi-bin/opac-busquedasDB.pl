@@ -15,8 +15,6 @@ my $input                   = new CGI;
 my $string                  = ($input->param('string')) || "";
 my $to_pdf;
 
-C4::AR::Debug::debug("asdfñlksdlñfklñsdkflñdskflñsdkflñksdñlf");
-
 if ($input->param('export')== "1"){
     $to_pdf                  = $input->param('export');
 } else{
@@ -248,23 +246,6 @@ if ($to_pdf){
         $t_params->{'primera_vez'}   = $obj->{'primera_vez'}; 
         $t_params->{'sentido_orden'}   = $obj->{'sentido_orden'};   
         
-#         if ($obj->{'primera_vez'} == 1){
-#           $t_params->{'sentido_orden'}   = 1;
-#           $t_params->{'primera_vez'} = 1;
-#         } else {
-#                 $t_params->{'sentido_orden'} = $obj->{'sentido_orden'};
-#         }
-          
-        
-        
-#         if ($obj->{'primera_vez'} == 1){
-#           $t_params->{'sentido_orden'}   = 1;
-#           $t_params->{'primera_vez'} = 1;
-#         } else {
-#                 $t_params->{'sentido_orden'} = $obj->{'sentido_orden'};
-#         }
-        #pdf
-
         C4::AR::Debug::debug($t_params->{'sentido_orden'});
         C4::AR::Debug::debug( $t_params->{'primera_vez'} );
         C4::AR::Debug::debug($t_params->{'orden'});

@@ -3727,7 +3727,7 @@ sub autocompleteTemas{
 sub autoresAutocomplete{
     my ($autor) = @_;
 
-    my ($cant, $autores_array_ref) = &C4::AR::ControlAutoridades::search_autores($autor);
+    my ($cant, $autores_array_ref) = C4::AR::ControlAutoridades::search_autores($autor);
     my $resultado = "";
 
     foreach my $autor (@$autores_array_ref){

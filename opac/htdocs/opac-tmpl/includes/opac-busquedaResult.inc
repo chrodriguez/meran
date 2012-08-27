@@ -321,7 +321,7 @@
              <tbody>  
                 [% FOREACH NIVEL IN SEARCH_RESULTS %]
                     <tr>
-	                     <td>
+	                     <td style="width: 60px;">
 	                         [% IF NIVEL.portadas_grupo_cant > 0 %]
 	                                 [% FOREACH portada IN NIVEL.portadas_grupo %]
 	                                     [% IF loop.count < 4 %]
@@ -462,7 +462,7 @@
                         </td>
                         <td class="span2">
                             [% IF NIVEL.rating > 0 %]
-								<div class="rateit" data-rateit-max="5" data-rateit-value="[% NIVEL.rating %]" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+								<div class="rating_div" id="rating_[% NIVEL.id1 %]" data-rating="[% NIVEL.rating %]"></div>
 	                         [% ELSE %]
 	                           [% '----------' %]
 	                         [% END %]
@@ -493,6 +493,14 @@
                         </td>
 	                     [% END %]
                     </tr>
+        			<script>
+						$('#rating_[% NIVEL.id1 %]').raty({
+							  readOnly : true,
+							  half  : true,
+							  score    : [% NIVEL.rating %],
+						});
+					</script>
+
                 [% END %]
              </tbody>
         </table>
@@ -502,9 +510,9 @@
                   [% PERL %]
                       	print C4::AR::Filtros::action_set_button(    
                             button          => 'btn btn-primary',
-                            title => "[% 'Guardar B&uacute;squeda' | i18n %]",
+                            title => " [% 'Guardar B&uacute;squeda' | i18n %]",
                             action => 'generarPDF("ordenar_tabla")',
-                            icon => "",
+                            icon => "icon-white icon-inbox",
                                           
   
                               ) ;
