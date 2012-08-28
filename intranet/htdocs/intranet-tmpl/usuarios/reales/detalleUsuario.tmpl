@@ -240,7 +240,7 @@ var loaderPath= "";
 			                            
 			                            [% IF socio.persona.getEmail %]
 			                                <dt class="inline left rightMargin">[% "E-mail:" | i18n %]</dt>
-			                                <dd><a href="mailto:[% socio.persona.getEmail %]">[% socio.persona.getEmail %]</a></dd>
+			                                <dd><a href="mailto:[% socio.persona.getEmail %]" target="_blank">[% socio.persona.getEmail %]</a></dd>
 			                            [% END %]
 			                            
 			                            <dt class="inline left rightMargin">[% "Legajo :" | i18n %]</dt>
@@ -267,20 +267,28 @@ var loaderPath= "";
 			                                <dd>[% usercourse %]</dd>
 			                            [% END %]
 			          
-			                            <dt class="inline left rightMargin">[% "Instituci&oacute;n :" | i18n %]</dt>
-			                            <dd>[% socio.persona.getInstitucion %]</dd>
-                                        <br />          
+		          						[%IF  socio.persona.getInstitucion %]
+				                            <dt class="inline left rightMargin">[% "Instituci&oacute;n :" | i18n %]</dt>
+				                            <dd>[% socio.persona.getInstitucion %]</dd>
+	                                        <br />          
+                                        [% END %]
 
-			                            <dt class="inline left rightMargin">[% "Carrera :" | i18n %] </dt>
-			                            <dd>[%  socio.persona.getCarrera %]</dd>
-                                        <br />			
+                                        [% IF socio.persona.getCarrera %]
+				                            <dt class="inline left rightMargin">[% "Carrera :" | i18n %] </dt>
+				                            <dd>[% socio.persona.getCarrera %]</dd>
+	                                        <br />			
+                                        [% END %]
 
-			                            <dt class="inline left rightMargin">[% "A&ntilde;o :" | i18n %] </dt>
-			                            <dd>[%  socio.persona.getAnio %]</dd>
-                                        <br />          
-			
-			                            <dt class="inline left rightMargin">[% "Divisi&oacute;n :" | i18n %] </dt>
-			                            <dd>[%  socio.persona.getDivision %]</dd>
+                                    	[% IF socio.persona.getAnio %]
+				                            <dt class="inline left rightMargin">[% "A&ntilde;o :" | i18n %] </dt>
+				                            <dd>[% socio.persona.getAnio %]</dd>
+	                                        <br />          
+										[% END %]
+
+										[% IF socio.persona.getDivision %]
+				                            <dt class="inline left rightMargin">[% "Divisi&oacute;n :" | i18n %] </dt>
+				                            <dd>[% socio.persona.getDivision %]</dd>
+				                        [% END %]
 			                        </dl>
 			                    </div>
 		                    </div>
