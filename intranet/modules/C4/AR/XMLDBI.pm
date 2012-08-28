@@ -102,10 +102,8 @@ sub Start {
 
 sub _rollBack{
 
-    my ($sth_) = @_;
-
     C4::AR::Debug::debug("entro a rollbackkkkk !!!!!!!!!!!!!!!!!!!!!!!");
-    $sth_->rollback;
+    $sth->rollback;
 
     die();
 }
@@ -122,7 +120,7 @@ sub End {
                 #DBI->trace(5);
 		#print "colvals are @col_vals\n";
 
-		$sth->execute(@col_vals) || _rollBack($sth);
+		$sth->execute(@col_vals) || _rollBack();
 	        @col_vals = ();
 
                 # kip:

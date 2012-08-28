@@ -1,6 +1,6 @@
 var objAH;CAMPOS_ARRAY=new Array();SUBCAMPOS_ARRAY=new Array();function exportarVisualizacion(){bootbox.confirm(EXPORTACION_VISUALIZACION,function(ok){if(ok){$('#formExportarVisualizacion').submit();}});}
 function showImportarVisualizacion(){$('#importarVisualizacion').modal();}
-function realizarImportacion(){$('#importarVisualizacion').modal('hide');startOverlay();$('#formImportarVisualizacion').submit();}
+function realizarImportacion(){if($('#fileImported').val()!=""){$('#importarVisualizacion').modal('hide');startOverlay();$('#formImportarVisualizacion').submit();}}
 function mostrarTabla(){objAH=new AjaxHelper(updateMostrarTabla);objAH.debug=true;objAH.showOverlay=true;objAH.url=URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";objAH.tipoAccion='MOSTRAR_TABLA_CAMPO';objAH.ejemplar=$("#tipo_nivel3_id").val();objAH.nivel=$("#eleccion_nivel").val();objAH.sendToServer();}
 function updateMostrarTabla(responseText){$("#tablaResultCampos").html(responseText);scrollTo("tablaResultCampos");}
 function actualizarOrdenCampo(){objAH=new AjaxHelper(updateSortable);objAH.debug=true;objAH.url=URL_PREFIX+"/catalogacion/visualizacionOPAC/visualizacionOpacDB.pl";objAH.showOverlay=true;objAH.tipoAccion="ACTUALIZAR_ORDEN_AGRUPANDO";objAH.newOrderArray=$('#sortable').sortable('toArray');objAH.sendToServer();}
