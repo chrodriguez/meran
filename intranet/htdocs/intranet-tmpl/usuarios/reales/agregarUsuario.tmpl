@@ -308,23 +308,10 @@
             <p class="help-block">* [% 'Datos obligatorios' | i18n %].</p>                              
 
             <div class="form-actions">
-               
                     [% IF addBorrower %]
-                            [% PERL %]
-                                                print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar usuario' | i18n %]",
-                                                                                    boton   => "btn btn-primary",
-                                                                                    type    => "submit",
-                                                                                    inline  => "1",
-                                                        ) ;
-                            [% END %]
+                        <button type="submit" class="btn btn-primary"><i class="icon-white icon-ok"></i> [% 'Agregar usuario' | i18n %]</button>
                     [% ELSE  %]
-                            [% PERL %]
-                                                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar modificaci&oacute;n' | i18n %]",
-                                                                                    boton   => "btn btn-primary",
-                                                                                    type    => "submit",
-                                                                                    inline  => "1",
-                                                        ) ;
-                            [% END %]
+                        <button type="submit" class="btn btn-primary"><i class="icon-white icon-ok"></i> [% 'Guardar modificaci&oacute;n' | i18n %]</button>
                     [% END %]
         
             </div>
