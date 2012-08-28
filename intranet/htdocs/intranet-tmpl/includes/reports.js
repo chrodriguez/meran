@@ -1,6 +1,12 @@
 var report_obj;
 var result_div_id;
 
+
+function imprimirReporte(form_name){
+		$("#" + form_name).submit();
+}
+
+
 function generarEtiquetas(id){
 	report_obj                   	= new AjaxHelper(mostrarResultados);
 	result_div_id					= id;
@@ -27,7 +33,9 @@ function reporteDisponibilidad(){
     objAH.url= URL_PREFIX+"/estadisticas/disponibilidad.pl";
     objAH.fecha_ini= $("#fecha_inicio").val();
     objAH.fecha_fin= $("#fecha_final").val();
-
+ 
+    objAH.exportar= 0;
+  
     objAH.ui= ui;
     objAH.disponibilidad= disponibilidad;
 

@@ -104,13 +104,11 @@ if ($to_pdf){
     $t_params->{'SEARCH_RESULTS'}       = $resultsarray;
     $t_params->{'cantidad'}             = $cantidad;
     $t_params->{'exported'}             = 1;
+
     my $out= C4::AR::Auth::get_html_content($template, $t_params);
     my $filename= C4::AR::PdfGenerator::pdfFromHTML($out);
-
     print C4::AR::PdfGenerator::pdfHeader();
-
     C4::AR::PdfGenerator::printPDF($filename);
-
 
 } else {
     ($template, $session, $t_params)    = get_template_and_user({

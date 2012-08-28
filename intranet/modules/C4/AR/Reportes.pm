@@ -1258,10 +1258,10 @@ sub reporteDisponibilidad{
 			$fecha_fin= C4::Date::format_date_hour($fecha_fin,"iso");
 			push(@filtros, and => [ 'created_at' => { gt => $fecha_ini, eq => $fecha_ini },
                                 	'created_at' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
-	} elsif($fecha_ini ne "Desde"){
+	} elsif($fecha_ini ne "Desde" || $fecha_ini ne ""){
 			push (@filtros, ('created_at' => { gt => $fecha_ini, eq => $fecha_ini }));
 
-	} elsif($fecha_fin ne "Hasta"){
+	} elsif($fecha_fin ne "Hasta" || $fecha_fin ne ""){
 			push (@filtros, ('created_at' => { lt => $fecha_fin, eq => $fecha_fin }));
 		}
 

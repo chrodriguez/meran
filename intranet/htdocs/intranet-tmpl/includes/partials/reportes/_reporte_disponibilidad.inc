@@ -5,7 +5,8 @@
 
 
 <div class="center_fieldset report_form_container">  
-      <form class="form-horizontal" id="form_reporte_busquedas" action="return false;">
+      <form class="form-horizontal" id="form_reporte_disponibilidad" action="[% url_prefix %]/estadisticas/disponibilidad.pl">
+        <input type="hidden" name="exportar" value="1">
         <div class="control-group">
             <label class="control-label"  for="ui"> [% "Unidad de informaci&oacute;n" | i18n %]</label>
             <div id="uni_inf" class="controls">  
@@ -23,8 +24,8 @@
         <div class="control-group">
             <label class="control-label"  for="fecha_alta"> [% "Fecha de Alta" | i18n %]</label>
             <div class="controls">
-                    <input type="text" id="fecha_inicio" name="fecha_inicio" data-datepicker="datepicker"  placeholder="Desde" value="" required>
-                    <input type="text" id="fecha_final" name="fecha_final" data-datepicker="datepicker" placeholder="Hasta" value="" required>
+                    <input type="text" id="fecha_inicio" name="fecha_ini" data-datepicker="datepicker"  placeholder="Desde" value="" required>
+                    <input type="text" id="fecha_final" name="fecha_fin" data-datepicker="datepicker" placeholder="Hasta" value="" required>
             </div>         
 
         </div>
@@ -46,7 +47,3 @@
 <div id="report_disp_result" style="display:none;"></div>
 
 <div id="result_chart"></div>
-
-
-
-
