@@ -34,10 +34,8 @@
                               <a class="click" onClick="buscarPorAutor('[% prestamo.nivel3.nivel1.getAutor %]')" title="[% 'Filtrar por Autor' | i18n %]">[% prestamo.nivel3.nivel1.getAutor %]</a>
                           </td>
                           <td>
-                              <span class="label">
-                                [% IF prestamo.nivel3.nivel2.getEdicion %][% prestamo.nivel3.nivel2.getEdicion %][% END %]
-                                [% IF prestamo.nivel3.nivel2.getAnio_publicacion %]([% prestamo.nivel3.nivel2.getAnio_publicacion %])[% END %]
-                              </span>
+                              [% IF prestamo.nivel3.nivel2.getEdicion %][% prestamo.nivel3.nivel2.getEdicion %][% END %]
+                              [% IF prestamo.nivel3.nivel2.getAnio_publicacion %]([% prestamo.nivel3.nivel2.getAnio_publicacion %])[% END %]
                           </td>
                           <td>
                               [% PERL %]
