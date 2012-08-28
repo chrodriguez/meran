@@ -31,6 +31,14 @@ use C4::Modelo::UsrRefTipoDocumento;
 use C4::Modelo::UsrRefCategoriaSocio::Manager;
 use Text::LevenshteinXS;
     
+
+sub toString{
+    my ($self) = shift;
+
+    return ($self->getDescription);
+}
+
+
 sub nextMember{
     
     return(C4::Modelo::UsrRefTipoDocumento->new());

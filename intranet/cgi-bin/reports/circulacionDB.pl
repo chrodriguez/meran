@@ -78,7 +78,7 @@ elsif($tipoAccion eq "CIRC_GENERAL") {
     my ($ini,$pageNumber,$cantR)    = C4::AR::Utilidades::InitPaginador($ini);
     my ($results, $cantidad)        = C4::AR::Reportes::getReporteCirculacionGeneral($obj,$ini,$cantR);
 
-    $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
+    $t_params->{'paginador'}        = C4::AR::Utilidades::crearPaginador($cantidad,$cantR,$pageNumber,$funcion,$t_params);
     $t_params->{'cantidad'}         = $cantidad;
     $t_params->{'results'}          = $results;
 

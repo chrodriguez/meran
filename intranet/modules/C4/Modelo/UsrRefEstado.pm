@@ -15,5 +15,11 @@ __PACKAGE__->meta->setup(
     primary_key_columns => [ 'id_estado' ],
 );
 
+sub toString{
+    my ($self) = shift;
+
+    return ($self->descripcion);
+}
+
 1;
 

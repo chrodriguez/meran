@@ -30,6 +30,12 @@ use C4::Modelo::RefIdioma;
 use C4::Modelo::PrefUnidadInformacion::Manager;
 use Text::LevenshteinXS;
     
+sub toString{
+    my ($self) = shift;
+
+    return ($self->getNombre);
+}
+
 sub get_key_value{
     my ($self) = shift;
     

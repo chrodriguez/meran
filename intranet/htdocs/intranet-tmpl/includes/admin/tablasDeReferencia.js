@@ -39,7 +39,7 @@ function updateObtenerTablaFiltrada(responseText){
 function eliminarReferencia(tabla,id){
 
     $('#fieldset_tablaResult_involved').addClass("warning");
-    bootbox.confirm(TITLE_DELETE_REFERENCE+id+"?",function(confirmed){
+    bootbox.confirm(TITLE_DELETE_REFERENCE+" <span class='label label-important'>"+id+"</span>?",function(confirmed){
         if (confirmed){
             objAH=new AjaxHelper(updateEliminarReferencia);
             objAH.url= URL_PREFIX+'/admin/referencias/referenciasDB.pl';
@@ -76,6 +76,7 @@ function agregarRegistro(tabla){
 function updateAgregarRegistro(responseText){
 
     $('#detalle_tabla').html(responseText);
+    $('#basic-modal-content').modal('hide');
 
 }
 

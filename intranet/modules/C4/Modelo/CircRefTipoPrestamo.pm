@@ -34,6 +34,13 @@ __PACKAGE__->meta->setup(
 use C4::Modelo::CircRefTipoPrestamo::Manager;
 use C4::Modelo::RefSoporte;
 use Text::LevenshteinXS;
+
+sub toString{
+    my ($self) = shift;
+
+    return ($self->getDescripcion);
+}
+
 sub getId_tipo_prestamo{
     my ($self) = shift;
     return ($self->id_tipo_prestamo);

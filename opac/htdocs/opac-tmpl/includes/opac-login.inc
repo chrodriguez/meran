@@ -55,7 +55,7 @@
                 <div class="form-actions">
                             [% PERL %]
                                   print C4::AR::Filtros::action_link_button( 
-                                                                  button    => "btn btn-inverse",
+                                                                  button    => "btn",
                                                                   url       => "[% url_prefix %]/opac-forgot-password.pl",
                                                                   title     => "[% 'Olvid&eacute; mi contrase&ntilde;a' | i18n %]",
                                                               ) ;

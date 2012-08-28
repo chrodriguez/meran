@@ -61,7 +61,7 @@
 
             [% FOREACH SEARCH_RESULTS %]
                 <tr>
-                     <td>
+                     <td style="width: 60px;">
                          [% IF portadas_grupo_cant > 0 %]
                                  [% FOREACH portada IN portadas_grupo %]
                                      [% IF loop.count < 4 %]
@@ -181,10 +181,10 @@
             
                     <td>
                         [% FOREACH disponibilidad %]
-                            <b>[% tipoPrestamo %]</b> [% cantTotal %]<br>
-                               [% nodisponibles %]
-                               [% reservados %]
-                               [% prestados %]
+                            <b>[% tipoPrestamo %]</b> [% cantTotal %]<br />
+                               [% IF nodisponibles %][% nodisponibles %]<br />[% END %]
+                               [% IF reservados %][% reservados %]<br />[% END %]
+                               [% IF reservados %][% prestados %]<br />[% END %]
                         [% END %]
                     </td>   
                     [% IF signatura_filter %]
