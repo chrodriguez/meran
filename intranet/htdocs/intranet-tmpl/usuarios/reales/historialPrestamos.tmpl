@@ -30,16 +30,12 @@
                                                                   ) ;
                               [% END %]
                           </td>
-                          <td><a class="click" onClick="buscarPorAutor('[% prestamo.nivel3.nivel1.getAutor %]')" title="[% 'Filtrar por Autor' | i18n %]">
-                                            [% prestamo.nivel3.nivel1.getAutor %]
-                                      </a>
+                          <td>
+                              <a class="click" onClick="buscarPorAutor('[% prestamo.nivel3.nivel1.getAutor %]')" title="[% 'Filtrar por Autor' | i18n %]">[% prestamo.nivel3.nivel1.getAutor %]</a>
                           </td>
-                          <td>[% IF prestamo.nivel3.nivel2.getEdicion %]
-                                  [% prestamo.nivel3.nivel2.getEdicion %]
-                              [% END %]
-                              [% IF prestamo.nivel3.nivel2.getAnio_publicacion %]
-                                ([% prestamo.nivel3.nivel2.getAnio_publicacion %])
-                              [% END %]
+                          <td>
+                              [% IF prestamo.nivel3.nivel2.getEdicion %][% prestamo.nivel3.nivel2.getEdicion %][% END %]
+                              [% IF prestamo.nivel3.nivel2.getAnio_publicacion %]([% prestamo.nivel3.nivel2.getAnio_publicacion %])[% END %]
                           </td>
                           <td>
                               [% PERL %]
@@ -85,6 +81,5 @@
             </tbody>
 		</table>
   [% ELSE %]
-       </div>
-            <div class="alert alert-info">[% 'No hay pr&eacute;stamos para mostrar'| i18n %]</div>
+       <div class="alert alert-info">[% 'No hay pr&eacute;stamos para mostrar'| i18n %]</div>
 [% END %]
