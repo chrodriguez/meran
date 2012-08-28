@@ -41,7 +41,7 @@ crearBaseDedatos()
 {
   #Esto es lo que hay que fixear.....  
   echo "Creando Base de DAtos, esto se va a demorar un buen rato"
-  mysql --default-character-set=utf8  $BDD_MERAN -u$USER_BDD_MERAN -p$PASS_BDD_MERAN < /root/basePrueba.sql
+  mysql --default-character-set=utf8  $BDD_MERAN -u$USER_BDD_MERAN -p$PASS_BDD_MERAN < base.sql
   echo "FIXMEEEE. esto deberia estar en el archivo pasa que pesa 300 megas"
   echo "Asignando permisos al indice, vamos a requerirle una vez mas la pass."
   mysql --default-character-set=utf8  $BDD_MERAN -p < /tmp/$ID.permisosbdd6
