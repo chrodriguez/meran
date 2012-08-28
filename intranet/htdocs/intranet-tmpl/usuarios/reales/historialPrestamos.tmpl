@@ -19,12 +19,10 @@
                                                                     
                                           ) ;
                   [% END %]
-
                   <tbody>
                       [% FOREACH prestamo IN historial %]
                       <tr>
-
-                          <td>
+                        <td>
                               [% PERL %]
                                       print C4::AR::Filtros::link_to(	text => 	"[% HTML.escape(prestamo.nivel3.nivel1.getTitulo) %]",
                                                                       url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl",
@@ -32,28 +30,16 @@
                                                                   ) ;
                               [% END %]
                           </td>
-                          <td>
-                      
-                                      <a class="click" onClick="buscarPorAutor('[% prestamo.nivel3.nivel1.getAutor %]')" title="[% 'Filtrar por Autor' | i18n %]">
+                          <td><a class="click" onClick="buscarPorAutor('[% prestamo.nivel3.nivel1.getAutor %]')" title="[% 'Filtrar por Autor' | i18n %]">
                                             [% prestamo.nivel3.nivel1.getAutor %]
                                       </a>
-                                        
-                                    
-                            
                           </td>
-                          <td>
-                        
-                      
-                              [% IF prestamo.nivel3.nivel2.getEdicion %]
+                          <td>[% IF prestamo.nivel3.nivel2.getEdicion %]
                                   [% prestamo.nivel3.nivel2.getEdicion %]
                               [% END %]
-                      
                               [% IF prestamo.nivel3.nivel2.getAnio_publicacion %]
                                 ([% prestamo.nivel3.nivel2.getAnio_publicacion %])
                               [% END %]
-
-                      
-                      
                           </td>
                           <td>
                               [% PERL %]

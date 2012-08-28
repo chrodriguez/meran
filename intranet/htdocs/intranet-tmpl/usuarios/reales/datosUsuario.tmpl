@@ -62,8 +62,7 @@ function mostrarHistorialDePrestamos(){
 
 function updateMostrarHistorialDePrestamos(responseText){
 	$('#historialPrestamos').html(responseText);
-	zebra('tablaHistorialPrestamos');
-	$.scrollTo('#historialPrestamos');
+	scrollTo('#historialPrestamos');
 }
 
 function mostrarHistorialDeReservas(){
