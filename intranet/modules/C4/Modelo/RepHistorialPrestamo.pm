@@ -110,7 +110,7 @@ sub getFecha_prestamo{
 sub getFecha_prestamo_formateada{
 	my ($self)=shift;
 	my $dateformat = C4::Date::get_date_format();
-	return C4::Date::format_date($self->getFecha_prestamo,$dateformat);
+	return C4::AR::Utilidades::trim(C4::Date::format_date($self->getFecha_prestamo,$dateformat));
 }
 
 
@@ -205,7 +205,7 @@ sub setFecha_vencimiento{
 sub getFecha_vencimiento_formateada{
     my ($self) = shift;
     my $dateformat = C4::Date::get_date_format();
-    return C4::Date::format_date($self->getFecha_vencimiento,$dateformat);
+    return C4::AR::Utilidades::trim(C4::Date::format_date($self->getFecha_vencimiento,$dateformat));
 }
 
 sub getFecha_vencimiento{

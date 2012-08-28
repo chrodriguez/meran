@@ -560,7 +560,7 @@ sub getAnio_publicacion{
 
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
-    return $marc_record->subfield("260","c");
+    return C4::AR::Utilidades::trim($marc_record->subfield("260","c"));
 }
 
 
@@ -770,7 +770,7 @@ sub getEdicion{
 
     my $marc_record = MARC::Record->new_from_usmarc($self->getMarcRecord());
 
-    return $marc_record->subfield("250","a");
+    return C4::AR::Utilidades::trim($marc_record->subfield("250","a"));
 }
 
 sub getNroSerie{
