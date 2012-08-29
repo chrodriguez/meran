@@ -1740,7 +1740,7 @@ sub new_password_is_needed {
     if ($days ne '0') {
         my $err;
         my $today = Date::Manip::DateCalc("today","- ".$days." days",\$err);
-        my $lastChangePasswordDate = Date::Manip::ParseDate($socio->getLastchangepassword);
+        my $lastChangePasswordDate = Date::Manip::ParseDate($socio->getLast_change_password);
         return ( $socio->getChange_password && ((Date::Manip::Date_Cmp($today,$lastChangePasswordDate)) > 0) );
     } else {
         return ( $socio->getChange_password && $socio->getLast_change_password eq '0000-00-00');

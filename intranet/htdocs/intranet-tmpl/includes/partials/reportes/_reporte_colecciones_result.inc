@@ -32,9 +32,9 @@ function changePageBusquedas(ini){
 	          <td>
 	 
 	              [% PERL %]
-	                      print C4::AR::Filtros::link_to(	text => 	"[% res.nivel1.getTitulo %]",
-	                                                      url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl",
-	                                                      params =>	[	"id1=[% HTML.escape(res.nivel1.id) %]"], 
+	                      print C4::AR::Filtros::link_to(	text 	=> 	"[% res.nivel1.getTitulo %]",
+	                                                      url 		=>  "[% url_prefix %]/catalogacion/estructura/detalle.pl",
+	                                                      params 	=>	["id1=[% res.nivel1.getId1 %]"], 
 	                                                  ) ;
 	              [% END %]
 	          </td>
