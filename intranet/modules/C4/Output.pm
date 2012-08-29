@@ -92,7 +92,6 @@ sub gettemplate {
                     RELATIVE        => 1,
                     EVAL_PERL       => 1,
                     LOAD_FILTERS    => [ $filter ],
-                    ENCODING        => 'utf8',
 #                   RELATIVE => 1,
                     }); 
 
