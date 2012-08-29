@@ -26,7 +26,7 @@ eval{
             ."rules, grupo FROM cat_estructura_catalogacion");
 
     my $file = $xmlout->GetData;
-    my $path = '/tmp/output.xml';
+    my $path = '/tmp/MERAN-creacionCatalogo.xml';
 
     #escribirlo en /tmp
     open(WRITEIT, ">:encoding(UTF-8)", $path) or die "\nCant write to $path Reason: $!\n";

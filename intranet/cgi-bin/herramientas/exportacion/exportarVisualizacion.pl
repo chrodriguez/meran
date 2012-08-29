@@ -19,22 +19,30 @@ my $db      = $context->config('database');
 
 my $dsn     = "dbi:mysql:dbname=" . $db .";host=localhost";
 
+my $path;
+my $fileName;
+
 eval{
 
     my $xmlout  = DBIx::XML_RDB->new ($dsn, "mysql", $user, $pass, $db) or die "Failed to make new xmlout";
 
     if($tipo eq "opac"){
 
+        $fileName = 'MERAN-visualizacionOpac.xml';
+
         $xmlout->DoSql( "select campo, tipo_ejemplar, pre, post, subcampo, vista_opac, vista_campo, orden, "
                 ." orden_subcampo, nivel FROM cat_visualizacion_opac");
 
     }else{
+
+        $fileName = 'MERAN-visualizacionIntra.xml';
+
         $xmlout->DoSql( "select campo, tipo_ejemplar, pre, post, subcampo, vista_intra, vista_campo, orden, "
                 ." orden_subcampo, nivel FROM cat_visualizacion_intra");
     }
     
-    my $file = $xmlout->GetData;
-    my $path = '/tmp/output.xml';
+    my $file  = $xmlout->GetData;
+    $path     = '/tmp/' . $fileName;
 
     #escribirlo en /tmp
     open(WRITEIT, ">:encoding(UTF-8)", $path) or die "\nCant write to $path Reason: $!\n";
@@ -45,7 +53,7 @@ eval{
 
     print $query->header(
                           -type           => 'application/xml', 
-                          -attachment     => 'output.xml',
+                          -attachment     => $fileName,
                           -expires        => '0',
                       );
     my $buffer;

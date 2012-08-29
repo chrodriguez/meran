@@ -57,9 +57,13 @@ function showImportarCreacionCatalogo(){
 */
 function realizarImportacion(){
 
-    $('#importarCreacionCatalogo').modal('hide');
-    startOverlay();
-    $('#formImportarVisualizacion').submit();
+    if ($('#fileImported').val() != "") {
+
+        $('#importarCreacionCatalogo').modal('hide');
+        startOverlay();
+        $('#formImportarVisualizacion').submit();
+
+    }
 }
 
 //Muestra lo catalogado seguen el nivel y el tipo de item seleccionado (nivel > 1)
