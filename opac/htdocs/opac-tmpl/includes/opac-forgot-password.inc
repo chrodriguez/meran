@@ -26,7 +26,7 @@
                     <noscript><iframeframeborder="0" height="300" src="http://www.google.com/recaptcha/api/noscript?k=[% re_captcha_public_key %]" width="500"></iframe><textarea cols="40" name="recaptcha_challenge_field" rows="3"></textarea><input name="recaptcha_response_field" type="hidden" value="manual_challenge" /></noscript>
           
                     <div class="form-actions">
-                        <button class="btn btn-primary" type="submit">[% 'Enviar' | i18n %]</button>
+                        <button class="btn btn-large btn-primary" type="submit">[% 'Enviar' | i18n %]</button>
                     </div> 
                     
             </fieldset>            
