@@ -1253,15 +1253,15 @@ sub reporteDisponibilidad{
 		push (@filtros, ("t1.marc_record"    => { like   => '%oref_disponibilidad@'.$disponibilidad.'%'}));
 	} 
 
-	if ($fecha_ini ne "Desde" && $fecha_fin ne "Hasta"){
+	if ($fecha_ini ne "" && $fecha_fin ne ""){
 			$fecha_ini= C4::Date::format_date_hour($fecha_ini,"iso");
 			$fecha_fin= C4::Date::format_date_hour($fecha_fin,"iso");
 			push(@filtros, and => [ 'created_at' => { gt => $fecha_ini, eq => $fecha_ini },
                                 	'created_at' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
-	} elsif($fecha_ini ne "Desde" || $fecha_ini ne ""){
+	} elsif($fecha_ini ne ""){
 			push (@filtros, ('created_at' => { gt => $fecha_ini, eq => $fecha_ini }));
 
-	} elsif($fecha_fin ne "Hasta" || $fecha_fin ne ""){
+	} elsif($fecha_fin ne ""){
 			push (@filtros, ('created_at' => { lt => $fecha_fin, eq => $fecha_fin }));
 		}
 
@@ -1271,10 +1271,6 @@ sub reporteDisponibilidad{
                                                                         require_objects => ['nivel2'],
                                         );
 
-
-
-   
-
 	my $nivel3_array_ref = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(   
                                                                         db  => $db,
                                                                         limit => $cantR,
@@ -1283,8 +1279,15 @@ sub reporteDisponibilidad{
                                                                         require_objects => ['nivel2'],
                                         );
 
+    my $nivel3_array_ref_report = C4::Modelo::CatRegistroMarcN3::Manager->get_cat_registro_marc_n3(   
+                                                                        db  => $db,
+                                                                        query => \@filtros, 
+                                                                        require_objects => ['nivel2'],
+                                        );
+
+
 	
-	return ($nivel3_array_ref, $cant);
+	return ($nivel3_array_ref, $nivel3_array_ref_report ,$cant);
 
 
 }
@@ -1322,15 +1325,15 @@ sub reporteColecciones{
             push (@filtros, ("t1.marc_record"    => { like   => '%@'.$ui.'%'}));
         }
 
-        if ($fecha_ini ne "Desde" && $fecha_fin ne "Hasta"){
+        if ($fecha_ini ne "" && $fecha_fin ne ""){
             $fecha_ini= C4::Date::format_date_hour($fecha_ini,"iso");
             $fecha_fin= C4::Date::format_date_hour($fecha_fin,"iso");
             push(@filtros, and => [ 'created_at' => { gt => $fecha_ini, eq => $fecha_ini },
                                     'created_at' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
-        } elsif($fecha_ini ne "Desde"){
+        } elsif($fecha_ini ne ""){
             push (@filtros, ('created_at' => { gt => $fecha_ini, eq => $fecha_ini }));
 
-        } elsif($fecha_fin ne "Hasta"){
+        } elsif($fecha_fin ne ""){
             push (@filtros, ('created_at' => { lt => $fecha_fin, eq => $fecha_fin }));
         }
 
