@@ -236,6 +236,7 @@ elsif($accion eq "MODIFICAR_REGLAS"){
                     });
         my $reglas_sancion=&C4::AR::Sanciones::getReglasSancion();
         $t_params->{'REGLAS_SANCIONES'}= $reglas_sancion;
+
         C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }#end if($accion eq "MODIFICAR_REGLAS")
 
