@@ -116,6 +116,7 @@ sub link_to {
     my $url_absolute    = $params_hash_ref{'url_absolute'}||0;
     my $without_token   = $params_hash_ref{'without_token'}||0;
     my $ancla           = $params_hash_ref{'ancla'}||0;
+    my $onClick         = $params_hash_ref{'on_click'}||0;
     
     
     my $cant    = scalar(@$params);
@@ -163,6 +164,10 @@ sub link_to {
 
     if (C4::AR::Utilidades::validateString($class)){
          $link .= " class='$class'";
+    }
+
+    if (C4::AR::Utilidades::validateString($onClick)){
+         $link .= " onclick='$onClick'";
     }
 
     if($title ne ''){
