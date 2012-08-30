@@ -1480,11 +1480,11 @@ sub getReporteCirculacionGeneral{
     my $resultsarray;
 
     # tabla circ_ref_tipo_prestamo 
-    if ( C4::AR::Utilidades::validateString($tipoPrestamo) && ($tipoPrestamo ne 'SIN SELECCIONAR') ) {
+    if ( C4::AR::Utilidades::validateString($tipoPrestamo) ) {
         push(@filtros, ('tipo_prestamo_ref.id_tipo_prestamo' =>  {eq => $tipoPrestamo} ));
     }
 
-    if ( C4::AR::Utilidades::validateString($categoria) && $categoria ) {
+    if ( C4::AR::Utilidades::validateString($categoria) ) {
         push(@filtros, ('socio.id_categoria' =>  {eq => $categoria} ));
     }
 
@@ -1492,10 +1492,15 @@ sub getReporteCirculacionGeneral{
     #     push(@filtros, ('tipo_operacion' =>  {eq => $tipoOperacion} ));
     # }
 
-    $fecha_inicio   = C4::Date::format_date($fecha_inicio, "iso");
-    $fecha_fin      = C4::Date::format_date($fecha_fin, "iso");
 
-    if ($fecha_inicio ne 'Desde' && $fecha_fin ne 'Hasta'){
+    my $desde = C4::AR::Filtros::i18n('Desde');
+    my $hasta = C4::AR::Filtros::i18n('Hasta');
+
+    if ($fecha_inicio ne $desde && $fecha_fin ne $hasta) {
+
+        $fecha_inicio   = C4::Date::format_date($fecha_inicio, "iso");
+        $fecha_fin      = C4::Date::format_date($fecha_fin, "iso");
+
         push( @filtros, and => [ 'fecha' => { ge => $fecha_inicio },
                                 'fecha' => { le => $fecha_fin } ] ); 
     }
@@ -1506,17 +1511,20 @@ sub getReporteCirculacionGeneral{
                                                                       limit             => $cantR,
                                                                       offset            => $ini,
                                                                       require_objects   => [ 'socio', 'tipo_prestamo_ref' ],
-                                                                      # select            => ['id3'],
+                                                                      select            => ['id3'],
+                                                                      distinct          => 1,
                                                                       # with_objects => [],
 #                                                                      select            => ['socio.*'],
                                                                       # sort_by => $orden,
       
                                                         );
     # cantidad para el paginador
-    my ($rep_busqueda_count) = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(
-                                                                            query           => \@filtros,
-                                                                            require_objects => [ 'socio', 'tipo_prestamo_ref' ]                                               
-                                                                            );
+    # my ($rep_busqueda_count) = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(
+    #                                                                         query               => \@filtros,
+    #                                                                         # select              => ['id3'],
+    #                                                                         # distinct            => 1,
+    #                                                                         require_objects     => [ 'socio', 'tipo_prestamo_ref' ]                                               
+    #                                                                         );
       
     my @resultArray;                                                                      
 
@@ -1614,24 +1622,13 @@ sub getReporteCirculacionGeneral{
         $dataHash{'cantidad_domiciliario'}  = $cantidadDomiciliario->[0]->{'agregacion_temp'};
         $dataHash{'cantidad_sala'}          = $cantidadSala->[0]->{'agregacion_temp'};
         $dataHash{'cantidad_especial'}      = $cantidadEspecial->[0]->{'agregacion_temp'};
-        $dataHash{'objeto'}                 = $objetoRepCirculacion;
-
-        # %dataHash =  {
-        #         cantidad_usuarios       => $cantidadUsuarios,                            
-        #         cantidad_devoluciones   => $cantidadDevoluciones,                                  
-        #         cantidad_renovaciones   => $cantidadDevoluciones,                            
-        #         cantidad_domiciliario   => $cantidadDomiciliario,                               
-        #         cantidad_sala           => $cantidadSala,                                
-        #         cantidad_especial       => $cantidadEspecial,
-        #         objeto                  => $objetoRepCirculacion                            
-        # };
+        $dataHash{'objeto'}                 = C4::AR::Nivel1::getNivel1FromId1($objetoRepCirculacion->getId3());
         
         push(@resultArray, \%dataHash);
 
-
     }
 
-    return (\@resultArray, $rep_busqueda_count);
+    return (\@resultArray, scalar(@$resultsArray));
 
 }
 

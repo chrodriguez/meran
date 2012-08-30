@@ -26,7 +26,7 @@
             [% FOREACH res IN results %]   
               <tr>
                     <td>
-                        [% res.objeto %]
+                        [% res.objeto.getTitulo %]
                     </td>
                     <td>
                         [% res.cantidad_usuarios %]
