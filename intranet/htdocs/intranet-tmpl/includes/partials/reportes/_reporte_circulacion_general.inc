@@ -55,20 +55,10 @@
 </script>
 
 <div class="center_fieldset report_form_container">
-    <form class="form-horizontal" onsubmit="return false;">
+    <form class="form-horizontal" onsubmit="return false;" id="formReporteCiruculacionGeneral" action="[% url_prefix %]/reports/circulacion.pl">
 
-        <!-- <div class="control-group" >
-            <label for="tipoOperacion" class="control-label">[% 'Tipo de operaci&oacute;n' | i18n %]</label>  
-            <div class="controls">
-                <select name="tipoOperacion" id="tipoOperacion">
-                    <option value="">SIN SELECCIONAR</option>
-                    <option value="prestamo">Pr&eacute;stamo</option>
-                    <option value="renovacion">Renovaci&oacute;n</option>
-                    <option value="devolucion">Devoluci&oacute;n</option>
-                </select>
-            </div>
-        </div>
- -->
+        <input type="hidden" name="exportar" value="1">
+
         <div class="control-group" id="divComboTipoPrestamo">
             <label for="tipo_prestamo_id" class="control-label">[% 'Tipo de pr&eacute;stamo' | i18n %]</label>  
             <div class="controls">
