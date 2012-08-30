@@ -31,6 +31,9 @@ use vars qw(@EXPORT_OK @ISA);
         aprobarReview
         eliminarReviews
         checkReferenciaTipoDoc
+        promoteGrupo
+        unPromoteGrupo
+        checkPromotion
         
 );
 
@@ -911,9 +914,53 @@ sub buildNavForGroups{
     return \@elem_array;
 }
 
+sub checkPromotion{
+    my ($id2) = @_;
 
+    my $nivel2 = C4::AR::Nivel2::getNivel2FromId2($id2);
 
+    if ($nivel2){
+        if ($nivel2->isPromoted()){
+            return  C4::AR::Filtros::action_button( 
+                                                                      button        => "btn btn-inverse disabled",
+                                                                      action        => "unPromote(".$id2.",this)", 
+                                                                      icon          => "icon-white icon-thumbs-down",
+                                                                      title         => C4::AR::Filtros::i18n('No destacar'),
+                                                                  ) ;
 
+        }else{  C4::AR::Filtros::action_button( 
+                                                                      button        => "btn btn-inverse",
+                                                                      action        => "promote(".$id2.",this)", 
+                                                                      icon          => "icon-white icon-thumbs-up",
+                                                                      title         => C4::AR::Filtros::i18n('Destacar'),
+                                                                  ) ;
+        }
+    }
+}
+
+sub promoteGrupo{
+    my ($id2) = @_;
+
+    my $nivel2 = C4::AR::Nivel2::getNivel2FromId2($id2);
+
+    $nivel2->promote();
+
+    $nivel2->save();
+
+    return checkPromotion($id2);    
+}
+
+sub unPromoteGrupo{
+    my ($id2) = @_;
+
+    my $nivel2 = C4::AR::Nivel2::getNivel2FromId2($id2);
+
+    $nivel2->unPromote();
+
+    $nivel2->save();
+
+    return checkPromotion($id2);    
+}
 END { }       # module clean-up code here (global destructor)
 
 1;

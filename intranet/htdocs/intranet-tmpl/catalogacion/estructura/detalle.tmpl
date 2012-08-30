@@ -90,19 +90,6 @@
 			}
 		}
 
-		// function buscarEdicionesById1(){
-		// 		objAH                   = new AjaxHelper(updateBuscarEdicionesById);
-		//         objAH.debug             = true;
-		//         objAH.showOverlay       = true;
-		//         objAH.url               = URL_PREFIX+'/catalogacion/estructura/estructuraCataloDB.pl';
-		//         objAH.tipoAccion        = 'BUSCAR_EDICIONES_BY_ID1';
-		//         objAH.id1               = $('#buscar_edicion_hidden').val();
-		//         objAH.sendToServer();
-		// }
-
-		// function updateBuscarEdicionesById(responseText){
-		// 	var ediciones 	= JSONstring.toObject(responseText);  
-		// }
 
 		function updateGuardarAsociarRegistroFuente(responseText){
 	        var info        = JSONstring.toObject(responseText);  
@@ -120,6 +107,54 @@
 			 }
 		   }
 		}
+
+	    function promote(id2,button){
+	        objAH                   = new AjaxHelper(updateCheckPromotion);
+	        objAH.showOverlay       = false;
+	        objAH.url               = URL_PREFIX+'/catalogacion/estructura/estructuraCataloDB.pl';
+	        objAH.tipoAccion        = 'PROMOTE_GRUPO';
+	        objAH.id2               = id2;
+	        objAH.sendToServer();
+	        $(button).text('[% "Espere....." | i18n %]');
+	        $(button).attr('disabled','disabled');
+		}
+
+		function updatePromote(responseText){
+					   
+		}
+
+	    function unPromote(id2,button){
+	        objAH                   = new AjaxHelper(updateCheckPromotion);
+	        objAH.showOverlay       = false;
+	        objAH.url               = URL_PREFIX+'/catalogacion/estructura/estructuraCataloDB.pl';
+	        objAH.tipoAccion        = 'UNPROMOTE_GRUPO';
+	        objAH.id2               = id2;
+	        objAH.sendToServer();
+	        $(button).text('[% "Espere....." | i18n %]');
+	        $(button).attr('disabled','disabled');
+		}
+
+		function updateUnPromote(responseText){
+
+		}
+
+
+		function checkPromotion(id2){
+	        objAH                   = new AjaxHelper(updateCheckPromotion);
+	        objAH.showOverlay       = false;
+	        objAH.url               = URL_PREFIX+'/catalogacion/estructura/estructuraCataloDB.pl';
+	        objAH.tipoAccion        = 'CHECK_PROMOTION';
+	        objAH.id2               = id2;
+	        objAH.sendToServer();			
+		}
+
+		function updateCheckPromotion(responseText){
+
+			var splitted_response = responseText.split("/////////////////////ID2////////////////////");
+			$('#promotion_'+splitted_response[0]).html(splitted_response[1]);
+		}
+
+
     </script>
 
         <script type="text/javascript">
@@ -233,16 +268,12 @@
 	
 	<div id="detalleComun">
 	
-	<!-- ---------------Registro de libro TABLE------- -->
-	
-	
 	
 	<fieldset>
 		   	<div class="page-header">
         		<h1>[% titulo %] <small>[% tipo_documento %] - #[% id1 %]</small></h1>
             	<h2>[% autor %]</h2>	
            	</div>
-		 
     [% IF !indexado %]
 		<div class="alert alert-error">
 			<strong>[% "Atenci&oacute;n" |i18n %]!</strong> [% "El registro no se encuentra en el &iacute;ndice, y no aparece en las b&uacute;squedas" | i18n %].
@@ -378,6 +409,11 @@
                            <script src="http://books.google.com/books?jscmd=viewapi&bibkeys=ISBN:[% isbn %]&callback=ProcessGBSBookInfo"></script> 
                          [% END %]
 
+
+
+					 	<div id="promotion_[% id2 %]" class="right">
+
+					 	</div>
 		                [% PERL %]
 		                    print C4::AR::Filtros::action_set_button(    
 		                                                        title           => "[% 'Edici&oacute;n' | i18n %]",
@@ -602,6 +638,11 @@
 	        </fieldset>
 	        <script type="text/javascript">makeToggle('grupo[% id2 %]','trigger_3_[% id2 %]',null,false);</script>
         </section>
+	 	<script type="text/javascript">
+	 		checkPromotion('[% id2 %]');
+	 	</script>
+
+
 
 
 

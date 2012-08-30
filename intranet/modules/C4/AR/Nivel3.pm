@@ -605,6 +605,7 @@ sub detalleCompletoINTRA {
             $hash_nivel2->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($hash_nivel2->{'id2'},'L');
             $hash_nivel2->{'portada_edicion_local'}     = C4::AR::PortadaNivel2::getPortadasEdicion($hash_nivel2->{'id2'});
             $hash_nivel2->{'edicion'}                   = $nivel2_array_ref->[$i]->getEdicion();
+            $hash_nivel2->{'nivel2_object'}              = $nivel2_array_ref->[$i];
             #para los nav-tabs
             
             #Para el google book preview

@@ -11,7 +11,7 @@ __PACKAGE__->meta->setup(
         id                  => { type => 'serial', overflow => 'truncate', not_null => 1 },
         marc_record         => { type => 'text', overflow => 'truncate' },
         template            => { type => 'varchar', overflow => 'truncate', not_null => 1 },
-        clave_unicidad    => { type => 'text', overflow => 'truncate', length => 65535, not_null => 1 },
+        clave_unicidad      => { type => 'text', overflow => 'truncate', length => 65535, not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -909,6 +909,7 @@ sub estaEnIndice{
     return ($indice_result->[0]);
 
 }
+
 
 1;
 
