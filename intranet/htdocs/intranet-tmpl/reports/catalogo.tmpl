@@ -16,7 +16,6 @@
                                                 {id => 'unindexed', text => "[% 'Registros no indexados' | i18n %]"},
                                                 {id => 'colecciones', text => "[% 'Colecciones' | i18n %]"},
                                                 {id => 'disponibilidad', text => "[% 'Disponibilidad de Ejemplares' | i18n %]"}
-                                                <!-- {id => 'estantes', text => "[% 'Estantes Virtuales' | i18n %]"} -->
                                               ],
                                  content_id=> 'reportes_catalogo',
                                  active_id => 'labels',
@@ -37,10 +36,6 @@
           <div class="tab-pane fade " id="disponibilidad">
             [% INCLUDE 'partials/reportes/_reporte_disponibilidad.inc' %]
         </div>
-        <!-- <div class="tab-pane fade " id="estantes">
-            [% INCLUDE 'partials/reportes/_reporte_busquedas.inc' %]
-        </div> -->
-       
 
         <div class="tab-pane fade " id="busquedas">
             [% INCLUDE 'partials/reportes/_reporte_busquedas.inc' %]
