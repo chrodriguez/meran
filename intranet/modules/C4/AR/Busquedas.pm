@@ -2027,7 +2027,7 @@ sub armarBuscoPor{
     }
 
     if( C4::AR::Utilidades::validateString($params->{'estantes_grupo'})){
-        $buscoPor.= "Estantes virtuales del grupo: ".($params->{'estantes_grupo'})."&";
+        $buscoPor.= "Estantes virtuales de: ".($params->{'titulo_nivel_1'})."&";
     }   
 
 	if( C4::AR::Utilidades::validateString($params->{'codBarra'})){

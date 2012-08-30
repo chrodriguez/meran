@@ -15,6 +15,7 @@ my $input                   = new CGI;
 my $string                  = ($input->param('string')) || "";
 my $to_pdf;
 
+
 if ($input->param('export')== "1"){
     $to_pdf                  = $input->param('export');
 } else{
@@ -103,13 +104,11 @@ if ($to_pdf){
     $t_params->{'SEARCH_RESULTS'}       = $resultsarray;
     $t_params->{'cantidad'}             = $cantidad;
     $t_params->{'exported'}             = 1;
+
     my $out= C4::AR::Auth::get_html_content($template, $t_params);
     my $filename= C4::AR::PdfGenerator::pdfFromHTML($out);
-
     print C4::AR::PdfGenerator::pdfHeader();
-
     C4::AR::PdfGenerator::printPDF($filename);
-
 
 } else {
     ($template, $session, $t_params)    = get_template_and_user({
@@ -126,6 +125,7 @@ if ($to_pdf){
     if  ($obj->{'tipoAccion'} eq 'BUSQUEDA_AVANZADA'){
 
         if ($obj->{'estantes'}){
+
             #Busqueda por Estante Virtual
             $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&estantes=".$obj->{'estantes'}."&tipoAccion=".$obj->{'tipoAccion'};
 
@@ -140,6 +140,7 @@ if ($to_pdf){
             $obj->{'tipo_nivel3_name'} = -1; 
           } else {
                 if($obj->{'estantes_grupo'}){
+
                     #Busqueda por Estante Virtual
                     $url = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'}."&estantes_grupo=".$obj->{'estantes_grupo'}."&tipoAccion=".$obj->{'tipoAccion'};
                     $url_todos = C4::AR::Utilidades::getUrlPrefix()."/opac-busquedasDB.pl?token=".$obj->{'token'};
@@ -149,6 +150,10 @@ if ($to_pdf){
                 
                     ($cantidad, $resultsarray)   = C4::AR::Busquedas::busquedaEstanteDeGrupo($obj->{'estantes_grupo'}, $session, $obj);
                 
+                    my $nivel_1= C4::AR::Nivel1::getNivel1FromId2($obj->{'estantes_grupo'});
+
+                    $obj->{'titulo_nivel_1'} = $nivel_1->getTitulo;
+
                     #Sino queda en el buscoPor
                     $obj->{'tipo_nivel3_name'} = -1; 
                 
