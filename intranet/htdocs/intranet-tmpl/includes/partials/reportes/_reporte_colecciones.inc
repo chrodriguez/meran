@@ -45,8 +45,8 @@
                     print C4::AR::Filtros::action_button( 
                                                         button       => "btn btn-primary",
                                                         action       => "consultarColecciones();", 
-                                                        icon         => "",
-                                                        title        => "Buscar",
+                                                        icon         => "icon-white icon-search",
+                                                        title       =>'[% "Buscar"|i18n %]',
                                                     );
             [% END %]
         </div>

@@ -3,7 +3,13 @@ var result_div_id;
 
 
 function imprimirReporte(form_name){
-		$("#" + form_name).submit();
+	try{
+		$('#modal_report_long_call').modal('show');
+		setTimeout(function(){$('#modal_report_long_call').modal('hide');},5000);
+	}
+	catch(e){}
+	
+	$("#" + form_name).submit();
 }
 
 
@@ -48,6 +54,7 @@ function reporteDisponibilidad(){
 function udpdateReporteDisp(responseText){
     $('#report_disp_result').html(responseText);
 	$('#report_disp_result').show();
+    scrollTo('report_disp_result');
 
 }
 

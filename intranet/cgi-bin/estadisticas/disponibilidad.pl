@@ -33,15 +33,6 @@ my ($template, $session, $t_params, $data_url);
                                             debug => 1,
                 });
 
-# $data_url = C4::AR::Utilidades::getUrlPrefix()."/estadisticas/colecciones_data.pl?item_type=".$obj->{'item_type'}."%26ui=".$obj->{'ui'};
-# $t_params->{'data'} = C4::AR::Reportes::getArrayHash('getItemTypes',$obj);
-
-# my ($data,$is_array_of_hash) = C4::AR::Reportes::getItemTypes($obj,1);
-# my ($path,$filename) = C4::AR::Reportes::toXLS($data,$is_array_of_hash,'Pagina 1','Colecciones');
-
-# $t_params->{'filename'} = '/reports/'.$filename;
-
-
 $obj->{'fecha_ini'} =  C4::AR::Filtros::i18n($obj->{'fecha_ini'});
 $obj->{'fecha_fin'} =  C4::AR::Filtros::i18n($obj->{'fecha_fin'});
 

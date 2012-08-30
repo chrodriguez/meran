@@ -131,8 +131,8 @@
                         print C4::AR::Filtros::action_button( 
                                                         button       => "btn btn-primary",
                                                         action       => "generarReporteGenEtiquetas()", 
-                                                        icon         => "",
-                                                        title        => "Generar Reporte",
+                                                        icon         => "icon-white icon-search",
+                                                        title        => '[% "Generar Reporte" | i18n %]',
                                                     ) ;
                   [% END %]
                 </div>
