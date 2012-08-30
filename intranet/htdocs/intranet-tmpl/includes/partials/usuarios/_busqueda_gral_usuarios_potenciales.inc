@@ -37,8 +37,8 @@
                               print C4::AR::Filtros::action_button(
                                                               button       => "btn btn-primary",
                                                               action       => "buscarUsuariosPotenciales();",
-                                                              icon         => "",
-                                                              title        => "[% 'Buscar' | i18n %]",
+                                                              icon         => "icon-white icon-search",
+                                                              title        => " [% 'Buscar' | i18n %]",
                                                           ) ;
 
                       [% END %]
