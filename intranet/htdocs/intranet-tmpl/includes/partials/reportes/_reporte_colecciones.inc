@@ -5,7 +5,9 @@
 
 
 <div class="center_fieldset report_form_container">  
-      <form class="form-horizontal" id="form_reporte_busquedas" action="return false;">
+    <form class="form-horizontal" id="form_reporte_colecciones" action="[% url_prefix %]/estadisticas/colecciones.pl">
+        <input type="hidden" name="exportar" value="1">
+
         <div class="control-group">
             <label class="control-label"  for="tipo_item">[% "Tipo de item" | i18n %]</label>
             <div id="tipo_item" class="controls">  
@@ -37,8 +39,7 @@
                   
         
         </div>
-
-
+        
         <div class="form-actions">
             [% PERL %]
                     print C4::AR::Filtros::action_button( 
@@ -49,10 +50,9 @@
                                                     );
             [% END %]
         </div>
-    </form>
-    
+    </form> 
 </div>
-<div id="report_result_busq" style="display:none;"></div>
+<div id="report_col_result" style="display:none;"></div>
 <div id="result_chart"></div>
 
 
