@@ -980,7 +980,14 @@ sub getInvolvedCount{
     return ($cat_registro_marc_n3_count);
 }
 
+sub getFechaUltimoCambioDisp{
+    
+    my ($self) = shift;
+    
+    my $fecha=C4::AR::Nivel3::getFechaUltimoCambioDisp($self->getId);
 
+    return ($fecha->[0]->getTimestamp);
+}
 
 sub getReferenced{
 
@@ -993,7 +1000,6 @@ sub getReferenced{
 
     return ($cat_registro_marc_n3);
 }
-
 
 
 =head2 sub getMarcRecordConDatos

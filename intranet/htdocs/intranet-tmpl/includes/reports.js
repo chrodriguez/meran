@@ -1,6 +1,12 @@
 var report_obj;
 var result_div_id;
 
+
+function imprimirReporte(form_name){
+		$("#" + form_name).submit();
+}
+
+
 function generarEtiquetas(id){
 	report_obj                   	= new AjaxHelper(mostrarResultados);
 	result_div_id					= id;
@@ -18,6 +24,32 @@ function generarEtiquetas(id){
     report_obj.sendToServer();
 }
 
+function reporteDisponibilidad(){
+	var ui=$("#uni_inf :first-child").val();
+    var disponibilidad=$("#disponibilidad_id").val();
+    objAH=new AjaxHelper(udpdateReporteDisp);
+    objAH.debug= true;
+    objAH.showOverlay = true;
+    objAH.url= URL_PREFIX+"/estadisticas/disponibilidad.pl";
+    objAH.fecha_ini= $("#fecha_inicio").val();
+    objAH.fecha_fin= $("#fecha_final").val();
+ 
+    objAH.exportar= 0;
+  
+    objAH.ui= ui;
+    objAH.disponibilidad= disponibilidad;
+
+    objAH.funcion= 'changePage';
+    //se envia la consulta
+    objAH.sendToServer();
+
+}
+
+function udpdateReporteDisp(responseText){
+    $('#report_disp_result').html(responseText);
+	$('#report_disp_result').show();
+
+}
 
 
 function cambiarSentidoOrd(){

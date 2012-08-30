@@ -1242,6 +1242,27 @@ sub getHistoricoDisponibilidad {
     }
 }
 
+
+
+# Devuelve la fecha del utlimo cambio de disponibilidad
+
+sub getFechaUltimoCambioDisp{
+    my ($id3) = @_;
+
+    my $fecha          = C4::Modelo::CatHistoricoDisponibilidad::Manager->get_cat_historico_disponibilidad(   
+                                                                                                            select => [ 'MAX(timestamp) AS timestamp'],
+                                                                                                    
+                                                                                                            query =>  [id3 => { eq => $id3 }
+                                                                                                                   ]
+
+                                                                                                        );
+
+    return ($fecha);
+    
+}
+
+
+
 sub getHistoricoCirculacion {
 
     my ($id3,$ini,$cantR,$fecha_inicial,$fecha_final,$orden) = @_;
