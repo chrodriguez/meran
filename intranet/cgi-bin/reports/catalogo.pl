@@ -32,4 +32,8 @@ $t_params->{'ui_combo'} = C4::AR::Utilidades::generarComboUI();
 my $comboNivelBibliografico = C4::AR::Utilidades::generarComboNivelBibliografico();
 $t_params->{'comboNivelBibliografico'} = $comboNivelBibliografico;
 
+my $comboEstantesVirtuales = C4::AR::Utilidades::generarComboEstantes();
+$t_params->{'comboEstantesVirtuales'} = $comboEstantesVirtuales;
+
+
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

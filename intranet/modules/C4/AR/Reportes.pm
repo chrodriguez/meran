@@ -1391,7 +1391,20 @@ sub reporteColecciones{
  }
 
 
+# sub reporteEstantesVirtuales{
+#     my ($params) = @_;
 
+#         my $estante=         $params->{'estante'};
+
+
+#         my $ini    = $params->{'ini'} || 0;
+#         my $cantR  = $params->{'cantR'} || 1;
+
+#         my $nivel3_array_ref = C4::AR::Estantes::getSubEstantes($estante);
+        
+#         return ($nivel3_array_ref, $nivel3_array_ref_completo ,$nivel3_array_ref_count, $cant_n1, $cant_n2);
+
+# }
 
 
 sub reporteRegistrosNoIndexados{
