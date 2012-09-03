@@ -1,5 +1,5 @@
 #!/bin/bash
-version=0.3
+version=0.4
 if [ $(uname -a|grep amd64|wc -l) -gt 0 ];
   then 
      versionKernel=64;
