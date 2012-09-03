@@ -693,7 +693,6 @@ sub guardarNivel3DeImportacion{
     $hash_temp{'subcampos_array'}   =();
     $hash_temp{'cant_subcampos'}   = 0;
 
-
     my %hash_sub_temp = {};
     
     #UI origen
@@ -716,6 +715,13 @@ sub guardarNivel3DeImportacion{
     $hash->{'o'}= $nivel3->{'disponibilidad'}->getCodigo();
     $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
     $hash_temp{'cant_subcampos'}++;
+    
+    #Inventario
+    my $hash;
+    $hash->{'s'}= $nivel3->{'inventario'};
+    $hash_sub_temp{$hash_temp{'cant_subcampos'}} = $hash;
+    $hash_temp{'cant_subcampos'}++;
+    
     #Signatura
     my $hash;
     $hash->{'t'}= $nivel3->{'signatura_topografica'};
@@ -723,7 +729,6 @@ sub guardarNivel3DeImportacion{
     $hash_temp{'cant_subcampos'}++;
     
     $hash_temp{'subcampos_hash'} =\%hash_sub_temp;
-  
     if ($hash_temp{'cant_subcampos'}){
       push (@infoArrayNivel,\%hash_temp)
     }
@@ -740,7 +745,6 @@ sub prepararNivelParaImportar{
 
 
    my @infoArrayNivel=();
-   
    
        foreach my $field ($marc_record->fields) {
         if(! $field->is_control_field){
