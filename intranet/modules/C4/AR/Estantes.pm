@@ -76,7 +76,6 @@ sub getEstante {
                                                                                 );
     
     my $estante=  $estantes_array_ref->[0];
-    
 
     return ($estante);
 }

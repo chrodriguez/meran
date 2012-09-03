@@ -5,7 +5,7 @@ require Exporter;
 use C4::AR::Auth;
 use CGI;
 
-my $query = new CGI;
+my $query 	= new CGI;
 
 my ($template, $session, $t_params) = C4::AR::Auth::get_template_and_user({
                                     template_name   => "reports/circulacion.tmpl",
@@ -15,7 +15,7 @@ my ($template, $session, $t_params) = C4::AR::Auth::get_template_and_user({
                                     flagsrequired   => {  ui            => 'ANY', 
                                                         tipo_documento  => 'ANY', 
                                                         accion          => 'CONSULTA', 
-                                                        entorno         => 'undefined'},
+                                                        entorno         => 'undefined' },
 });
 
 $t_params->{'comboDeCategorias'}    = C4::AR::Utilidades::generarComboCategoriasDeSocio();

@@ -40,13 +40,11 @@
 
     <div class="modal-footer">
         [% PERL %]
-                print C4::AR::Filtros::to_Button(   text    => "[% 'Agregar Tipo de Documento' | i18n %]",
-                                                    boton   => "btn btn-primary",
-                                                    onClick => "guardarTipoDoc()",
-                                                    title   => "[% 'Agregar Tipo de Documento' | i18n %]",
-                                                    width => "auto",
-                                                    alternClass => "botonCentrado",
-                                                    inline => "1"
+                print C4::AR::Filtros::action_button(   
+                                                    button   => "btn btn-primary",
+                                                    action  => "guardarTipoDoc()",
+                                                    icon    => "icon-white icon-ok",
+                                                    title   => " [% 'Agregar Tipo de Documento' | i18n %]",
                         ) ;
         [% END %]
 

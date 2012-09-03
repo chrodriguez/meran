@@ -32,9 +32,9 @@ function changePageBusquedas(ini){
 	          <td>
 	 
 	              [% PERL %]
-	                      print C4::AR::Filtros::link_to(	text => 	"[% res.nivel1.getTitulo %]",
-	                                                      url=>"[% url_prefix %]/catalogacion/estructura/detalle.pl",
-	                                                      params =>	[	"id1=[% HTML.escape(res.nivel1.id) %]"], 
+	                      print C4::AR::Filtros::link_to(	text 	=> 	"[% res.nivel1.getTitulo %]",
+	                                                      url 		=>  "[% url_prefix %]/catalogacion/estructura/detalle.pl",
+	                                                      params 	=>	["id1=[% res.nivel1.getId1 %]"], 
 	                                                  ) ;
 	              [% END %]
 	          </td>
@@ -77,7 +77,20 @@ function changePageBusquedas(ini){
       <div class="resultados_consulta">[% "La cantidad de ediciones" | i18n %]: <strong>[% cant_n2 %]</strong></div><div class="resultados_consulta">[% "La cantidad de ejemplares" | i18n %]: <strong>[% cant_n3 %]</strong></div>
                  
 </div>
-
+[% IF !exportar %]
+<div class="form-actions" id="actions_ejemplares" style="margin-bottom: 0;">
+   <td>
+      [% PERL %]
+                print C4::AR::Filtros::action_set_button(    
+                        button  => 'btn btn-primary',
+                        title => " [% 'Exportar a PDF' | i18n %]",
+                        action => 'imprimirReporte("form_reporte_colecciones");',
+                        icon => "icon-white icon-inbox",
+                  ) ;
+      [% END %]
+   </td>
+</div>       
+[% END %]
 [% ELSE %]
 	<div class="alert alert-info">
               [% 'No hay resultados para mostrar' | i18n  %]

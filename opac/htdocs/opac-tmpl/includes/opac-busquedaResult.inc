@@ -352,10 +352,11 @@
                         <td>	
                             [% IF NIVEL.titulo %]
                                 [% PERL %]
-                                    print C4::AR::Filtros::link_to( text =>     "[% HTML.escape(NIVEL.titulo) %]",
-                                                                    url =>      "[% url_prefix %]/opac-detail.pl", 
-                                                                    params =>   ["id1=[% NIVEL.id1 %]"],
-                                                                    title =>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]"
+                                    print C4::AR::Filtros::link_to( text 		=>     "[% HTML.escape(NIVEL.titulo) %]",
+                                                                    url 		=>      "[% url_prefix %]/opac-detail.pl", 
+                                                                    params 		=>   ["id1=[% NIVEL.id1 %]"],
+                                                                    title 		=>    "[% 'Mostrar Detalle del Ejemplar' | i18n %]",
+		                                                            on_click 	=> "startOverlay();"
                                                                 ) ;
                                 [% END %]
                             [% ELSE %]

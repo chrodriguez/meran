@@ -140,10 +140,12 @@
                                     [% END %]
                                     [% PERL %]            
                                                               print C4::AR::Filtros::action_button(
+
                                                                                                     button   => "btn btn-primary",
                                                                                                     title   => " [% 'Agregar contenido' | i18n %]",
                                                                                                     icon => "icon-white icon-plus",
                                                                                                     action => "agregarContenido([% estante.getId %],[% estante.getPadre %]);",
+
                                                                         ) ;
                                     [% END %]
                               </div>

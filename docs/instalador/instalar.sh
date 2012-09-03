@@ -1,5 +1,5 @@
 #!/bin/bash
-version=0.2
+version=0.3
 if [ $(uname -a|grep amd64|wc -l) -gt 0 ];
   then 
      versionKernel=64;
@@ -27,8 +27,11 @@ generarLogRotate()
 
 generarJaula()
 {
-  sed s/reemplazarID/$ID/g $sources_MERAN/apache-jaula-ssl > /etc/apache2/sites-available/$ID-apache-jaula-ssl
-  sed s/reemplazarID/$ID/g $sources_MERAN/apache-jaula-opac > /etc/apache2/sites-available/$ID-apache-jaula-opac
+  sed s/reemplazarPATHBASE/$DESTINO_MERAN/g $sources_MERAN/apache-jaula-ssl > /tmp/$ID-apache-jaula-tmp
+  sed s/reemplazarID/$ID/g /tmp/$ID-apache-jaula-tmp > /etc/apache2/sites-available/$ID-apache-jaula-ssl
+  sed s/reemplazarPATHBASE/$DESTINO_MERAN/g $sources_MERAN/apache-jaula-opac > /tmp/$ID-apache-jaula-tmp
+  sed s/reemplazarID/$ID/g /tmp/$ID-apache-jaula-tmp > /etc/apache2/sites-available/$ID-apache-jaula-opac
+  rm /tmp/$ID-apache-jaula-tmp
   #Generar certificado de apache
   echo "Generando el certificado de apache"
   mkdir -p /etc/apache2/ssl/$ID
@@ -37,39 +40,29 @@ generarJaula()
   a2ensite $ID-apache-jaula-opac
 }
 
-crearBaseDedatos()
-{
-  #Esto es lo que hay que fixear.....  
-  echo "Creando Base de DAtos, esto se va a demorar un buen rato"
-  mysql --default-character-set=utf8  $BDD_MERAN -u$USER_BDD_MERAN -p$PASS_BDD_MERAN < base.sql
-  echo "FIXMEEEE. esto deberia estar en el archivo pasa que pesa 300 megas"
-  echo "Asignando permisos al indice, vamos a requerirle una vez mas la pass."
-  mysql --default-character-set=utf8  $BDD_MERAN -p < /tmp/$ID.permisosbdd6
-}     
 generarPermisosBDD()
 {
   head -n2 $sources_MERAN/permisosbdd.sql | sed s/reemplazarDATABASE/$BDD_MERAN/g > /tmp/$ID.permisosbdd
   sed s/reemplazarUSER/$USER_BDD_MERAN/g /tmp/$ID.permisosbdd > /tmp/$ID.permisosbdd2
   sed s/reemplazarPASS/$PASS_BDD_MERAN/g /tmp/$ID.permisosbdd2 > /tmp/$ID.permisosbdd3
-  echo "Tenemos que crear la base de datos $DD_MERAN y para eso pediremos los permisos de root"
-  mysql -p -uroot < /tmp/$ID.permisosbdd3
+  cat $sources_MERAN/base.sql >>  /tmp/$ID.permisosbdd3
   tail -n1 $sources_MERAN/permisosbdd.sql | sed s/reemplazarDATABASE/$BDD_MERAN/g > /tmp/$ID.permisosbdd4
-  sed s/reemplazarIUSER/$IUSER_BDD_MERAN/g  /tmp/$ID.permisosbdd4 > /tmp/$ID.permisosbdd5
-  sed s/reemplazarIPASS/$IPASS_BDD_MERAN/g /tmp/$ID.permisosbdd5 > /tmp/$ID.permisosbdd6
-  echo "Procederemos a crear la base de datos y asignarle los permisos necesarios"
-  crearBaseDedatos
+  sed s/reemplazarIUSER/$IUSER_BDD_MERAN/g /tmp/$ID.permisosbdd4 > /tmp/$ID.permisosbdd5
+  sed s/reemplazarIPASS/$IPASS_BDD_MERAN/g /tmp/$ID.permisosbdd5 >> /tmp/$ID.permisosbdd3
+  echo "Creando Base de DAtos, esto se va a demorar un buen rato"
+  echo "Tenemos que crear la base de datos $DD_MERAN y para eso pediremos los permisos de root de MySQL"
+  mysql --default-character-set=utf8  $BDD_MERAN -p < /tmp/$ID.permisosbdd3
   rm /tmp/$ID.permisosbdd*
 }
 
-
 generarConfiguracion()
 {
-  database=reemplazarDATABASE
   sed s/reemplazarID/$ID/g $sources_MERAN/meran.conf > /tmp/$ID.meran.conf
   sed s/reemplazarUSER/$USER_BDD_MERAN/g /tmp/$ID.meran.conf > /tmp/$ID.meran2.conf
   sed s/reemplazarPASS/$PASS_BDD_MERAN/g /tmp/$ID.meran2.conf > /tmp/$ID.meran.conf
-  sed s/reemplazarDATABASE/$BDD_MERAN/g /tmp/$ID.meran.conf > $CONFIGURACION_MERAN/$ID.conf
-  rm /tmp/$ID.meran
+  sed s/reemplazarPATHBASE/$DESTINO_MERAN/g /tmp/$ID.meran.conf > /tmp/$ID.meran2.conf
+  sed s/reemplazarDATABASE/$BDD_MERAN/g /tmp/$ID.meran2.conf > $CONFIGURACION_MERAN/meran$ID.conf
+  rm /tmp/$ID.meran*
 }
 
 usage()
@@ -77,7 +70,7 @@ usage()
 cat << EOF
 usage: $0 options
 
-Este script necesita si o si el parametro -i
+Este script necesita si o si el parametro -i que es el identificador de la instalación que se va a utilizar en todo el proceso.
 
 OPTIONS:
    -h      Show this message
@@ -86,9 +79,9 @@ OPTIONS:
    -b      Base de datos a usar. Por Defecto va a ser meran
    -u      Usuario que se va a conectar a la base de datos. Por defecto kohaadmin
    -p      Pass del usuario que se va a conectar a la base de dato. Por defecto sera un random
-   -s      Usuario que se va a utilizar en el indic. Por defecto indice
+   -s      Usuario que se va a utilizar en el indice. Por defecto indice
    -w      Pass del usuario que se va a utilizar en el indice. Por defecto sera un random
-   -c      directorio donde se guardará la configuracion de meran. Por defecto sera /etc/meran y el archivo de configuracion sera $ID.conf
+   -c      directorio donde se guardará la configuracion de meran. Por defecto sera /etc/meran y el archivo de configuracion sera meran$ID.conf
 EOF
 }
 
@@ -195,7 +188,7 @@ fi
 
 echo "Seleccione el tipo de Instalacion que quiere realizar"
 
-select OPCION in Jaula Sistema
+select OPCION in Jaula Sistemica
   do
   if [ $OPCION = Jaula ]; 
     then
@@ -208,7 +201,7 @@ select OPCION in Jaula Sistema
       if [ -e $CONFIGURACION_MERAN/meran$ID.conf ]; then
                 echo "El archivo de configuración ya existía"
                 mv $CONFIGURACION_MERAN/meran$ID.conf $CONFIGURACION_MERAN/meran$ID.$fecha.conf
-                echo "Se backupeo el archivo original a /etc/meran/meran.$fecha.conf"
+                echo "Se backupeo el archivo original a /etc/meran/meran$ID.$fecha.conf"
       fi
       if [ ! -d $CONFIGURACION_MERAN ]; then
         echo "El directorio de configuración no existía, lo creamos\n"
@@ -236,9 +229,7 @@ select OPCION in Jaula Sistema
       generarJaula 
       #Crear bdd
       echo "FIXME Faltan configurar los BDD"
-      echo "ESto se configuraria desde el web, ahora lo estoy haciendo desde un archivo que llevo de la maquina de gaspo, hay que borrarlo"
       echo "Generando la Base de datos"
-      echo "FIXXXXXXXX habria q parametrizar la base y la conexion"
       generarPermisosBDD
       
       #Configurar cron
@@ -252,9 +243,9 @@ select OPCION in Jaula Sistema
       if [ $(netstat -natp |grep searchd |grep 9312|wc -l) -gt 0 ]
         then
           echo "Sphinx ya esta corriendo vas a tener que combinar a mano el archivo de configuracion y generar los indices"
-          echo "El archivo generado es $DESTINO_MERAN/$ID/sphinx/etc/sphinx.conf "
+          echo "El archivo generado que tiene que andar es el $DESTINO_MERAN/$ID/sphinx/etc/sphinx.conf "
         else
-          echo "Como Sphinx no estaba ejecutandose lo vamos a hacer ahora"
+          echo "Como Sphinx no estaba ejecutándose lo vamos a hacer ahora"
           $DESTINO_MERAN/$ID/sphinx/bin/indexer -c $DESTINO_MERAN/$ID/sphinx/etc/sphinx.conf --all --rotate
           $DESTINO_MERAN/$ID/sphinx/bin/searchd -c $DESTINO_MERAN/$ID/sphinx/etc/sphinx.conf
       fi

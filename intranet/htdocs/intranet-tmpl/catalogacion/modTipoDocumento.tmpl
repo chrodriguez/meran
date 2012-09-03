@@ -26,13 +26,11 @@
 
 <div class="modal-footer">
     [% PERL %]
-            print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar cambios' | i18n %]",
-                                                boton   => "btn btn-primary",
-                                                onClick => "guardarModificacion();",
-                                                title   => "[% 'Guardar cambios' | i18n %]",
-                                                width   => "auto",
-                                                alternClass => "botonCentrado",
-                                                inline  => "1"
+            print C4::AR::Filtros::action_button(   
+                                                button   => "btn btn-primary",
+                                                action => "guardarModificacion();",
+                                                title   => '[% "Guardar cambios" | i18n %]',
+                                                icon    => "icon-white icon-ok",
                     ) ;
     [% END %]
 

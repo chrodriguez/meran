@@ -55,20 +55,10 @@
 </script>
 
 <div class="center_fieldset report_form_container">
-    <form class="form-horizontal" onsubmit="return false;">
+    <form class="form-horizontal" id="formReporteCiruculacionGeneral" action="[% url_prefix %]/reports/circulacionDB.pl">
 
-        <!-- <div class="control-group" >
-            <label for="tipoOperacion" class="control-label">[% 'Tipo de operaci&oacute;n' | i18n %]</label>  
-            <div class="controls">
-                <select name="tipoOperacion" id="tipoOperacion">
-                    <option value="">SIN SELECCIONAR</option>
-                    <option value="prestamo">Pr&eacute;stamo</option>
-                    <option value="renovacion">Renovaci&oacute;n</option>
-                    <option value="devolucion">Devoluci&oacute;n</option>
-                </select>
-            </div>
-        </div>
- -->
+        <input type="hidden" name="tipoAccion" value="EXPORT_CIRC_GENERAL">
+
         <div class="control-group" id="divComboTipoPrestamo">
             <label for="tipo_prestamo_id" class="control-label">[% 'Tipo de pr&eacute;stamo' | i18n %]</label>  
             <div class="controls">
@@ -86,8 +76,8 @@
         <div class="control-group">
             <label class="control-label"> [% "Rango de Fechas" | i18n %] </label>
             <div class="controls">
-                <input type="text" id="date-from" name="date-from" data-datepicker="datepicker" placeholder="Desde" value="" required>
-                <input type="text" id="date-to" name="date-to" data-datepicker="datepicker" placeholder="Hasta" value="" required>
+                <input type="text" id="date-from" name="date-from" data-datepicker="datepicker" placeholder="[% 'Desde' | i18n %]" value="" required>
+                <input type="text" id="date-to" name="date-to" data-datepicker="datepicker" placeholder="[% 'Hasta' | i18n %]" value="" required>
             </div>
         </div>
 

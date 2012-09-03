@@ -37,12 +37,11 @@
                 <div class="form-actions">
                 
                     [% PERL %]
-                        print C4::AR::Filtros::to_Button(   text    => "[% 'Obtener Permisos' | i18n %]",
-                                                            boton   => "btn btn-primary",
-                                                            onClick => "obtenerPermisos();",
-                                                            title   => "[% 'Obtener Permisos' | i18n %]",
-                                                            alternClass => "botonCentrado",
-                                                            inline  => "1"
+                        print C4::AR::Filtros::action_button(   
+                                                            button   => "btn btn-primary",
+                                                            action => "obtenerPermisos();",
+                                                            icon    => "icon-white icon-flag",
+                                                            title   => " [% 'Obtener Permisos' | i18n %]",
                                 ) ;
                     [% END %]
                     

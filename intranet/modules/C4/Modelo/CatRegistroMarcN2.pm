@@ -14,6 +14,7 @@ __PACKAGE__->meta->setup(
         indice              => { type => 'text', overflow => 'truncate' },
         indice_file_path    => { type => 'varchar', overflow => 'truncate', not_null => 0, length => 255, },
         template            => { type => 'varchar', overflow => 'truncate', not_null => 1 },
+        promoted            => { type => 'tinyint', default => 0,},
     ],
 
     primary_key_columns => [ 'id' ],
@@ -790,6 +791,20 @@ sub getPais{
     return $marc_record->subfield("043","c");
 }
 
+sub isPromoted{
+    my ($self) = shift;
+    return ($self->promoted);
+}
+
+sub promote{
+    my ($self) = shift;
+    return ($self->promoted(1));
+}
+
+sub unPromote{
+    my ($self) = shift;
+    return ($self->promoted(0));
+}
 
 
 sub getInvolvedCount{

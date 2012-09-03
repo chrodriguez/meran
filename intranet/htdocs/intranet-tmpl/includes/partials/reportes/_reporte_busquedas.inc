@@ -158,13 +158,12 @@
           </div>        
           
           <div class="form-actions">
-     <!--     <input type="submit" class="btn btn-primary" value="Consultar">-->
             [% PERL %]
                   print C4::AR::Filtros::action_button( 
                                                   button       => "btn btn-primary",
                                                   action       => "generarReporteBusquedas();", 
-                                                  icon         => "",
-                                                  title        => "Generar Reporte",
+                                                  icon         => "icon-white icon-inbox",
+                                                  title        => ' [% "Generar Reporte" | i18n %]',
                                               ) ;
             [% END %]
           </div>

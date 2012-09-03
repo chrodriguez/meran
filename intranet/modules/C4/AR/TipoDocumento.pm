@@ -35,12 +35,20 @@ sub agregarTipoDocumento{
         $tipoDoc->agregar($params);
 
         #subir imagen
-
-        if($postdata){
+        if ($postdata) {
             $msg_object = uploadCoverImage($postdata, $params->{'tipoDocumento'}, $msg_object);
-        } 
+        } else {
+            #no subio imagen, clonamos la default
+            $msg_object = uploadCoverImageDefault($params->{'tipoDocumento'}, $msg_object);
+        }
 
+        C4::AR::Debug::debug("error --------------------> - " . $msg_object->{'error'});
+        # hubo error subiendo la imagen
+        if($msg_object->{'error'}){
+            die();
+        }
 
+        C4::AR::Debug::debug("ESTO NO LO TIENE QUE EJECUTARRR ");
         $msg_object->{'error'} = 0;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'TD001', 'params' => []});
         $db->commit;
@@ -49,12 +57,18 @@ sub agregarTipoDocumento{
 
     if($@){
 
-        C4::AR::Mensajes::printErrorDB($@, 'AM01',"INTRA");
+        C4::AR::Debug::debug("entro al catch !!!!");
+
+        cancelUploadCoverImage($params->{'tipoDocumento'});
+
+        # C4::AR::Mensajes::printErrorDB($@, 'AM01',"INTRA");
         $msg_object->{'error'}= 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'TD002', 'params' => [$params->{'campo'}, $params->{'subcampo'}]} ) ;
 
         $db->rollback;
    }
+
+   $db->{connect_options}->{AutoCommit} = 1;
 
 
    return ($msg_object);
@@ -189,6 +203,37 @@ sub uploadCoverImage{
         $msg_object->{'error'} = 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'TD000', 'params' => []} ) ;
     }
+
+    return $msg_object;
+}
+
+=item
+    Esto se ejecuta cuando ocurre un error (rollback), elimina la imagen del sistema de 
+    archivos
+=cut
+sub cancelUploadCoverImage{
+    
+    my ($file_name) = @_;
+
+    my $uploaddir   = C4::Context->config("tipoDocumentoPath");
+
+    unlink($uploaddir ."/" . $file_name . ".png");
+}
+
+=item
+    Sube la imagen default al tipo de doc
+=cut
+sub uploadCoverImageDefault{
+    
+    my ($file_name, $msg_object) = @_;
+
+    my $uploaddir = C4::Context->config("tipoDocumentoPath");
+
+    use File::Copy;
+
+    copy($uploaddir . "/DEFAULT.png", $uploaddir . "/" . $file_name . ".png") or die "Copy failed: $!";
+
+    $msg_object->{'error'} = 0;
 
     return $msg_object;
 }

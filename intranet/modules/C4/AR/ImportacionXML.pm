@@ -135,14 +135,15 @@ sub importarVisualizacion{
             print WRITEIT; 
         }
         close(WRITEIT);
-        
-    }or do {
+    };
+
+    if ($@) {
         C4::AR::Debug::debug("se murio escribiendo el archivo");
         $msg_object->{'error'} = 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IXML03', 'intra'} ) ;
     
         return ($msg_object);
-    };
+    }
 
     ################################ importacion y validacion  ###############################
 
@@ -178,15 +179,16 @@ sub importarVisualizacion{
         # valida contra un DTD
         XML::Checker::Parser::map_uri('-//W3C//DTD HTML 4.0//EN' => C4::Context->config("dtdPath") . 'visualizacion.dtd');
         $xmldb->parsestring($file);
+    };
 
-    }or do{
+    if($@){
         # no pudo insertarlo o algun error 
         C4::AR::Debug::debug("se murio insertandolo en la base o validando contra un DTD");
         $msg_object->{'error'} = 1;
         C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'IXML02', 'intra'} ) ;
 
         return ($msg_object);
-    };
+    }
 
     $msg_object->{'error'} = 0;
     

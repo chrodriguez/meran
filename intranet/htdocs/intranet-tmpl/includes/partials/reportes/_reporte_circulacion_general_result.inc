@@ -26,7 +26,12 @@
             [% FOREACH res IN results %]   
               <tr>
                     <td>
-                        [% res.objeto %]
+                        [% PERL %]
+                          print C4::AR::Filtros::link_to(   text    =>  "[% res.objeto.getTitulo %]",
+                                                          url       =>  "[% url_prefix %]/catalogacion/estructura/detalle.pl",
+                                                          params    =>  ["id1=[% res.objeto.getId1 %]"], 
+                                                      ) ;
+                        [% END %]
                     </td>
                     <td>
                         [% res.cantidad_usuarios %]
@@ -44,6 +49,20 @@
            [% END %]
         </tbody>
     </table>
+  [% IF !exportar %]
+    <div class="form-actions" style="margin-bottom: 0;">
+       <td>
+          [% PERL %]
+                    print C4::AR::Filtros::action_set_button(    
+                            button  => 'btn btn-primary',
+                            title   => " [% 'Exportar a PDF' | i18n %]",
+                            action  => 'imprimirReporte("formReporteCiruculacionGeneral");',
+                            icon    => "icon-white icon-inbox",
+                      ) ;
+          [% END %]
+       </td>
+    </div>
+    [% END %]
 [% ELSE %]
     <div class="alert alert-info">
         [% 'No hay resultados para mostrar' | i18n  %]

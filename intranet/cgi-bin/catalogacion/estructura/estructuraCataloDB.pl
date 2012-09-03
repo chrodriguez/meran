@@ -954,3 +954,58 @@ elsif($tipoAccion eq "SHOW_ADD_PORTADA_EDICION"){
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
+elsif($tipoAccion eq "CHECK_PROMOTION"){
+
+    my ($template, $session, $t_params)  = get_template_and_user({
+                            template_name   => ('catalogacion/estructura/agregarPortadaEdicionModal.tmpl'),
+                            query           => $input,
+                            type            => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired   => {    ui              => 'ANY', 
+                                                    tipo_documento  => 'ANY', 
+                                                    accion          => 'CONSULTA', 
+                                                    entorno         => 'datos_nivel1' },
+    });
+
+   my $html      = C4::AR::Nivel2::checkPromotion($obj->{'id2'});
+
+   C4::AR::Auth::print_header($session);
+   print $obj->{'id2'}."/////////////////////ID2////////////////////".$html;
+
+}
+elsif($tipoAccion eq "PROMOTE_GRUPO"){
+
+    my ($template, $session, $t_params)  = get_template_and_user({
+                            template_name   => ('catalogacion/estructura/agregarPortadaEdicionModal.tmpl'),
+                            query           => $input,
+                            type            => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired   => {    ui              => 'ANY', 
+                                                    tipo_documento  => 'ANY', 
+                                                    accion          => 'CONSULTA', 
+                                                    entorno         => 'datos_nivel1' },
+    });
+
+   my $html      = C4::AR::Nivel2::promoteGrupo($obj->{'id2'});
+
+   C4::AR::Auth::print_header($session);
+   print $obj->{'id2'}."/////////////////////ID2////////////////////".$html;
+}
+elsif($tipoAccion eq "UNPROMOTE_GRUPO"){
+
+    my ($template, $session, $t_params)  = get_template_and_user({
+                            template_name   => ('catalogacion/estructura/agregarPortadaEdicionModal.tmpl'),
+                            query           => $input,
+                            type            => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired   => {    ui              => 'ANY', 
+                                                    tipo_documento  => 'ANY', 
+                                                    accion          => 'CONSULTA', 
+                                                    entorno         => 'datos_nivel1' },
+    });
+
+   my $html      = C4::AR::Nivel2::unPromoteGrupo($obj->{'id2'});
+
+   C4::AR::Auth::print_header($session);
+   print $obj->{'id2'}."/////////////////////ID2////////////////////".$html;
+}

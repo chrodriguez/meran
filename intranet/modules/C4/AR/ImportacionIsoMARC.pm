@@ -1535,7 +1535,11 @@ sub detalleCompletoRegistro {
 
         push(@niveles2, \%hash_nivel2);
     }
-    if(!$tipo_documento){$tipo_documento = C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");}
+    
+    if(!$tipo_documento){
+        $tipo_documento = C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
+    }
+    
     my %t_params;
     $t_params{'nivel1'}           = C4::AR::ImportacionIsoMARC::toMARC_Array($nivel1,$tipo_documento->getId_tipo_doc(),'',1);
     $t_params{'marc_record'}      = $nivel1;
@@ -1678,6 +1682,7 @@ sub getEjemplarFromMarcRecord {
     $hash_nivel3{'ui_origen'} = C4::AR::ImportacionIsoMARC::getUIFromMarcRecord($nivel3);
     $hash_nivel3{'ui_duenio'} = C4::AR::ImportacionIsoMARC::getUIFromMarcRecord($nivel3);
     $hash_nivel3{'signatura_topografica'}   =  $nivel3->subfield('995','t');
+    $hash_nivel3{'inventario'}   =  $nivel3->subfield('995','s');
     $hash_nivel3{'disponibilidad'}          =  C4::AR::ImportacionIsoMARC::getDisponibilidadEjemplar_Object($nivel3);
     $hash_nivel3{'estado'}                  =  C4::AR::ImportacionIsoMARC::getEstadoEjemplar_Object($nivel3);
     
