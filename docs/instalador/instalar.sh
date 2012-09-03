@@ -61,11 +61,8 @@ generarConfiguracion()
 sed s/reemplazarUSER/$(escaparVariable $USER_BDD_MERAN)/g /tmp/$ID.meran.conf > /tmp/$ID.meran2.conf
   sed s/reemplazarPASS/$(escaparVariable $PASS_BDD_MERAN)/g /tmp/$ID.meran2.conf > /tmp/$ID.meran.conf
   sed s/reemplazarPATHBASE/$(escaparVariable $DESTINO_MERAN)/g  /tmp/$ID.meran.conf > /tmp/$ID.meran2.conf
-echo $DESTINO_MERAN
-cat /tmp/$ID.meran2.conf
-exit;  
   sed s/reemplazarDATABASE/$(escaparVariable $BDD_MERAN)/g /tmp/$ID.meran2.conf > $CONFIGURACION_MERAN/meran$ID.conf
-  #rm /tmp/$ID.meran*
+  rm /tmp/$ID.meran*
 }
 
 usage()
