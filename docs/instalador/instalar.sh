@@ -10,16 +10,16 @@ echo "Bienvenido al instalador de meran version $version para sistemas de $versi
 
 generarConfSphinx()
 {
-  sed s/reemplazarID/$ID/g $sources_MERAN/sphinx.conf > /tmp/$ID.sphix.conf
-  sed s/reemplazarIUSER/$IUSER_BDD_MERAN/g /tmp/$ID.sphix.conf > /tmp/$ID.sphix2.conf
-  sed s/reemplazarIPASS/$IPASS_BDD_MERAN/g /tmp/$ID.sphix2.conf > /tmp/$ID.sphix.conf
-  sed s/reemplazarDATABASE/$BDD_MERAN/g /tmp/$ID.sphix.conf > $DESTINO_MERAN/$ID/sphinx/etc/sphinx.conf
+  sed s/reemplazarID/$(escaparVariable $ID)/g $sources_MERAN/sphinx.conf > /tmp/$ID.sphix.conf
+  sed s/reemplazarIUSER/$(escaparVariable  $IUSER_BDD_MERAN)/g /tmp/$ID.sphix.conf > /tmp/$ID.sphix2.conf
+  sed s/reemplazarIPASS/$(escaparVariable $IPASS_BDD_MERAN)/g /tmp/$ID.sphix2.conf > /tmp/$ID.sphix.conf
+  sed s/reemplazarDATABASE/$(escaparVariable $BDD_MERAN)/g /tmp/$ID.sphix.conf > $DESTINO_MERAN/$ID/sphinx/etc/sphinx.conf
   rm /tmp/$ID.sphix*
 
 }
 generarLogRotate()
 {
-  sed s/reemplazarID/$ID/g logrotate.d-meran > /etc/logrotate.d/logrotate.d-meran$ID
+  sed s/reemplazarID/$(escaparVariable $ID)/g logrotate.d-meran > /etc/logrotate.d/logrotate.d-meran$ID
   #Logs de meran
   mkdir -p /var/log/meran/$ID
   
@@ -27,10 +27,10 @@ generarLogRotate()
 
 generarJaula()
 {
-  sed s/reemplazarPATHBASE/$DESTINO_MERAN/g $sources_MERAN/apache-jaula-ssl > /tmp/$ID-apache-jaula-tmp
-  sed s/reemplazarID/$ID/g /tmp/$ID-apache-jaula-tmp > /etc/apache2/sites-available/$ID-apache-jaula-ssl
-  sed s/reemplazarPATHBASE/$DESTINO_MERAN/g $sources_MERAN/apache-jaula-opac > /tmp/$ID-apache-jaula-tmp
-  sed s/reemplazarID/$ID/g /tmp/$ID-apache-jaula-tmp > /etc/apache2/sites-available/$ID-apache-jaula-opac
+  sed s/reemplazarPATHBASE/$(escaparVariable $DESTINO_MERAN)/g $sources_MERAN/apache-jaula-ssl > /tmp/$ID-apache-jaula-tmp
+  sed s/reemplazarID/$(escaparVariable $ID)/g /tmp/$ID-apache-jaula-tmp > /etc/apache2/sites-available/$ID-apache-jaula-ssl
+  sed s/reemplazarPATHBASE/$(escaparVariable $DESTINO_MERAN)/g $sources_MERAN/apache-jaula-opac > /tmp/$ID-apache-jaula-tmp
+  sed s/reemplazarID/$(escaparVariable $ID)/g /tmp/$ID-apache-jaula-tmp > /etc/apache2/sites-available/$ID-apache-jaula-opac
   rm /tmp/$ID-apache-jaula-tmp
   #Generar certificado de apache
   echo "Generando el certificado de apache"
@@ -42,13 +42,13 @@ generarJaula()
 
 generarPermisosBDD()
 {
-  head -n2 $sources_MERAN/permisosbdd.sql | sed s/reemplazarDATABASE/$BDD_MERAN/g > /tmp/$ID.permisosbdd
-  sed s/reemplazarUSER/$USER_BDD_MERAN/g /tmp/$ID.permisosbdd > /tmp/$ID.permisosbdd2
-  sed s/reemplazarPASS/$PASS_BDD_MERAN/g /tmp/$ID.permisosbdd2 > /tmp/$ID.permisosbdd3
+  head -n2 $sources_MERAN/permisosbdd.sql | sed s/reemplazarDATABASE/$(escaparVariable $BDD_MERAN)/g > /tmp/$ID.permisosbdd
+  sed s/reemplazarUSER/$(escaparVariable $USER_BDD_MERAN)/g /tmp/$ID.permisosbdd > /tmp/$ID.permisosbdd2
+  sed s/reemplazarPASS/$(escaparVariable $PASS_BDD_MERAN)/g /tmp/$ID.permisosbdd2 > /tmp/$ID.permisosbdd3
   cat $sources_MERAN/base.sql >>  /tmp/$ID.permisosbdd3
-  tail -n1 $sources_MERAN/permisosbdd.sql | sed s/reemplazarDATABASE/$BDD_MERAN/g > /tmp/$ID.permisosbdd4
-  sed s/reemplazarIUSER/$IUSER_BDD_MERAN/g /tmp/$ID.permisosbdd4 > /tmp/$ID.permisosbdd5
-  sed s/reemplazarIPASS/$IPASS_BDD_MERAN/g /tmp/$ID.permisosbdd5 >> /tmp/$ID.permisosbdd3
+  tail -n1 $sources_MERAN/permisosbdd.sql | sed s/$(escaparVariable reemplazarDATABASE)/$BDD_MERAN/g > /tmp/$ID.permisosbdd4
+  sed s/reemplazarIUSER/$(escaparVariable $IUSER_BDD_MERAN)/g /tmp/$ID.permisosbdd4 > /tmp/$ID.permisosbdd5
+  sed s/reemplazarIPASS/$(escaparVariable $IPASS_BDD_MERAN)/g /tmp/$ID.permisosbdd5 >> /tmp/$ID.permisosbdd3
   echo "Creando Base de DAtos, esto se va a demorar un buen rato"
   echo "Tenemos que crear la base de datos $DD_MERAN y para eso pediremos los permisos de root de MySQL"
   mysql --default-character-set=utf8  $BDD_MERAN -p < /tmp/$ID.permisosbdd3
@@ -57,14 +57,14 @@ generarPermisosBDD()
 
 generarConfiguracion()
 {
-  sed s/reemplazarID/$ID/g $sources_MERAN/meran.conf > /tmp/$ID.meran.conf
-sed s/reemplazarUSER/$USER_BDD_MERAN/g /tmp/$ID.meran.conf > /tmp/$ID.meran2.conf
-  sed s/reemplazarPASS/$PASS_BDD_MERAN/g /tmp/$ID.meran2.conf > /tmp/$ID.meran.conf
-  sed s/reemplazarPATHBASE/$DESTINO_MERAN /g  /tmp/$ID.meran.conf > /tmp/$ID.meran2.conf
+  sed s/reemplazarID/$(escaparVariable $ID)/g $sources_MERAN/meran.conf > /tmp/$ID.meran.conf
+sed s/reemplazarUSER/$(escaparVariable $USER_BDD_MERAN)/g /tmp/$ID.meran.conf > /tmp/$ID.meran2.conf
+  sed s/reemplazarPASS/$(escaparVariable $PASS_BDD_MERAN)/g /tmp/$ID.meran2.conf > /tmp/$ID.meran.conf
+  sed s/reemplazarPATHBASE/$(escaparVariable $DESTINO_MERAN)/g  /tmp/$ID.meran.conf > /tmp/$ID.meran2.conf
 echo $DESTINO_MERAN
 cat /tmp/$ID.meran2.conf
 exit;  
-  sed s/reemplazarDATABASE/$BDD_MERAN/g /tmp/$ID.meran2.conf > $CONFIGURACION_MERAN/meran$ID.conf
+  sed s/reemplazarDATABASE/$(escaparVariable $BDD_MERAN)/g /tmp/$ID.meran2.conf > $CONFIGURACION_MERAN/meran$ID.conf
   #rm /tmp/$ID.meran*
 }
 
@@ -88,18 +88,10 @@ OPTIONS:
 EOF
 }
 
-escaparVariables()
+escaparVariable()
 {
 
-ID=$(echo $ID | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')
-sources_MERAN=$(echo $sources_MERAN | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')
-DESTINO_MERAN=$(echo $DESTINO_MERAN | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')
-CONFIGURACION_MERAN=$(echo $CONFIGURACION_MERAN | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')
-BDD_MERAN=$(echo $BDD_MERAN | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')
-USER_BDD_MERAN=$(echo $USER_BDD_MERAN | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')
-PASS_BDD_MERAN=$(echo $PASS_BDD_MERAN | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')
-IUSER_BDD_MERAN=$(echo $IUSER_BDD_MERAN | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')
-IPASS_BDD_MERAN=$(echo $IPASS_BDD_MERAN | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')
+echo $1 | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g'
 
 }
 ID=
@@ -168,7 +160,7 @@ if [ $(perl -v|grep 5.10.1|wc -l) -eq 0 ];
     echo "No tenes la versión adecuada de perl instalada, se va a interrumpir el proceso, deberías tener la 5.10.1"
     exit 1
 fi
-escparVariables
+
 
 if [ $(dpkg -l |grep apache2|grep ii |wc -l ) -eq 0 ];
   then
