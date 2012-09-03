@@ -107,12 +107,15 @@ use C4::AR::PdfGenerator;
 
 my $input = new CGI;
 my $obj=$input->param('obj');
+my $nombre_estante;
+
 
 if ($obj){
     $obj=C4::AR::Utilidades::from_json_ISO($obj);
 }else{ 
     $obj = $input->Vars;
-    $obj->{'estante'}= $obj->{'name_estante'};     
+    $obj->{'estante'}= $obj->{'name_estante'};
+    $nombre_estante= C4::AR::Estantes::getEstante($obj->{'estante'}).getEstante();     
 }
 
 my ($template, $session, $t_params, $data_url);
@@ -139,6 +142,9 @@ $t_params->{'cantR'}= $obj->{'cantR'}   = $cantR;
 
 my ($data, $cant)         = C4::AR::Reportes::reporteEstantesVirtuales($obj);
 
+
+C4::AR::Utilidades::printARRAY($data);
+
 $t_params->{'data'} = $data;
 
 if ($obj->{'exportar'}) {
@@ -157,6 +163,7 @@ if ($obj->{'exportar'}) {
 
     $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cant,$cantR, $pageNumber,$obj->{'funcion'},$t_params);
     $t_params->{'cant'} = $cant;
+    $t_params->{'nombre_estante'}=$nombre_estante;
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
