@@ -60,7 +60,7 @@ generarConfiguracion()
   sed s/reemplazarID/$ID/g $sources_MERAN/meran.conf > /tmp/$ID.meran.conf
 sed s/reemplazarUSER/$USER_BDD_MERAN/g /tmp/$ID.meran.conf > /tmp/$ID.meran2.conf
   sed s/reemplazarPASS/$PASS_BDD_MERAN/g /tmp/$ID.meran2.conf > /tmp/$ID.meran.conf
-  sed s/reemplazarPATHBASE/$(echo $DESTINO_MERAN | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')/g  /tmp/$ID.meran.conf > /tmp/$ID.meran2.conf
+  sed s/reemplazarPATHBASE/$DESTINO_MERAN /g  /tmp/$ID.meran.conf > /tmp/$ID.meran2.conf
 echo $DESTINO_MERAN
 cat /tmp/$ID.meran2.conf
 exit;  
@@ -88,6 +88,20 @@ OPTIONS:
 EOF
 }
 
+escaparVariables()
+{
+
+ID=$(echo $ID | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')
+sources_MERAN=$(echo $sources_MERAN | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')
+DESTINO_MERAN=$(echo $DESTINO_MERAN | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')
+CONFIGURACION_MERAN=$(echo $CONFIGURACION_MERAN | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')
+BDD_MERAN=$(echo $BDD_MERAN | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')
+USER_BDD_MERAN=$(echo $USER_BDD_MERAN | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')
+PASS_BDD_MERAN=$(echo $PASS_BDD_MERAN | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')
+IUSER_BDD_MERAN=$(echo $IUSER_BDD_MERAN | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')
+IPASS_BDD_MERAN=$(echo $IPASS_BDD_MERAN | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')
+
+}
 ID=
 sources_MERAN=$(dirname "${BASH_SOURCE[0]}")
 DESTINO_MERAN="/usr/share/meran"
@@ -154,7 +168,7 @@ if [ $(perl -v|grep 5.10.1|wc -l) -eq 0 ];
     echo "No tenes la versión adecuada de perl instalada, se va a interrumpir el proceso, deberías tener la 5.10.1"
     exit 1
 fi
-
+escparVariables
 
 if [ $(dpkg -l |grep apache2|grep ii |wc -l ) -eq 0 ];
   then
