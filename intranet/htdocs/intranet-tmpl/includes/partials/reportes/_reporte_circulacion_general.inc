@@ -55,9 +55,9 @@
 </script>
 
 <div class="center_fieldset report_form_container">
-    <form class="form-horizontal" onsubmit="return false;" id="formReporteCiruculacionGeneral" action="[% url_prefix %]/reports/circulacion.pl">
+    <form class="form-horizontal" id="formReporteCiruculacionGeneral" action="[% url_prefix %]/reports/circulacionDB.pl">
 
-        <input type="hidden" name="exportar" value="1">
+        <input type="hidden" name="tipoAccion" value="EXPORT_CIRC_GENERAL">
 
         <div class="control-group" id="divComboTipoPrestamo">
             <label for="tipo_prestamo_id" class="control-label">[% 'Tipo de pr&eacute;stamo' | i18n %]</label>  
