@@ -118,6 +118,7 @@ sub setCredentialType{
     my ($credential_type)=@_;
     $credential_type = $credential_type || 'estudiante';
     $self->credential_type($credential_type);
+    $self->activar();
     $self->save();
 }
 
@@ -527,7 +528,7 @@ sub getNro_socio{
 sub setNro_socio{
     my ($self) = shift;
     my ($nro_socio) = @_;
-    $self->nro_socio($nro_socio);
+    $self->nro_socio(C4::AR::Utilidades::trim($nro_socio));
 }
 
 sub getId_ui{
