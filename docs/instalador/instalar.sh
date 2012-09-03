@@ -58,11 +58,14 @@ generarPermisosBDD()
 generarConfiguracion()
 {
   sed s/reemplazarID/$ID/g $sources_MERAN/meran.conf > /tmp/$ID.meran.conf
-  sed s/reemplazarUSER/$USER_BDD_MERAN/g /tmp/$ID.meran.conf > /tmp/$ID.meran2.conf
+sed s/reemplazarUSER/$USER_BDD_MERAN/g /tmp/$ID.meran.conf > /tmp/$ID.meran2.conf
   sed s/reemplazarPASS/$PASS_BDD_MERAN/g /tmp/$ID.meran2.conf > /tmp/$ID.meran.conf
-  sed s/reemplazarPATHBASE/$DESTINO_MERAN/g /tmp/$ID.meran.conf > /tmp/$ID.meran2.conf
+  sed s/reemplazarPATHBASE/$(echo $DESTINO_MERAN | sed -e 's/\\/\\\\/g' -e 's/\//\\\//g' -e 's/&/\\\&/g')/g  /tmp/$ID.meran.conf > /tmp/$ID.meran2.conf
+echo $DESTINO_MERAN
+cat /tmp/$ID.meran2.conf
+exit;  
   sed s/reemplazarDATABASE/$BDD_MERAN/g /tmp/$ID.meran2.conf > $CONFIGURACION_MERAN/meran$ID.conf
-  rm /tmp/$ID.meran*
+  #rm /tmp/$ID.meran*
 }
 
 usage()
