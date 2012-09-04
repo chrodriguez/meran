@@ -172,9 +172,9 @@ sub crearRadioButtonBootstrap{
 
         #es la seleccionada
         if(@$values[$i] eq $valor){
-            $radio = $radio . '<button class="btn btn-primary active">' . $label . '</button>';
+            $radio = $radio . '<button type="button" class="btn btn-primary active">' . $label . '</button>';
         }else{
-            $radio = $radio . '<button class="btn btn-primary">' . $label . '</button>';
+            $radio = $radio . '<button type="button" class="btn btn-primary">' . $label . '</button>';
         }
 
         $i++;
