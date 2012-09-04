@@ -122,7 +122,7 @@ sub gettemplate {
     }
 
     my $SERVER_URL       =(C4::AR::Utilidades::trim($url_server)||($ENV{'SERVER_NAME'})).$server_port;
-    my $SERVER_URL_OPAC  =(C4::AR::Utilidades::trim($url_server)|($ENV{'SERVER_NAME'})).$opac_port;
+    my $SERVER_URL_OPAC  =(C4::AR::Utilidades::trim($url_server)||($ENV{'SERVER_NAME'})).$opac_port;
 
     #para volver a tener temas, poner $session->param('usr_theme_intra') || $tema_intra;
     $user_theme_intra   = $tema_intra;
