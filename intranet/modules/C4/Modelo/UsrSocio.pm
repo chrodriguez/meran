@@ -118,6 +118,7 @@ sub setCredentialType{
     my ($credential_type)=@_;
     $credential_type = $credential_type || 'estudiante';
     $self->credential_type($credential_type);
+    $self->activar();
     $self->save();
 }
 
