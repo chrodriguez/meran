@@ -17,8 +17,9 @@
 <div class="modal-footer">
                         [% PERL %]
                              print C4::AR::Filtros::action_button(
-                                     title           => '[% " Aceptar" | i18n %]',
+                                     title           => ' [% " Aceptar" | i18n %]',
                                      button          => 'btn btn-success',
+                                     icon            => 'icon-white icon-ok',
                                      action          => 'guardarModificacionCredenciales();',
                                  );
                          [% END %]

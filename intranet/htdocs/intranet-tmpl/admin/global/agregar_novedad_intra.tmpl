@@ -24,21 +24,21 @@
                 <div class="control-group">
                     <label class="control-label" for="titulo">[% 'Titulo' | i18n %]: </label>
                     <div class="controls">
-                        <input type="text" id="titulo" name="titulo" value="[% novedad.getTitulo %]">
+                        <input type="text" id="titulo" name="titulo" value="[% novedad.getTitulo %]" required>
                     </div>
                 </div>
                 
                 <div class="control-group">
                     <label class="control-label" for="categoria">[% 'Categor&iacute;a' | i18n %]: </label>
                     <div class="controls">
-                        <input type="text" id="categoria" name="categoria" value="[% novedad.getCategoria %]">
+                        <input type="text" id="categoria" name="categoria" value="[% novedad.getCategoria %]" required>
                     </div>
                 </div>
                 
                 <div class="control-group">
                     <label class="control-label" for="contenido">[% 'Contenido' | i18n %]: </label>
                     <div class="controls">
-                        <textarea id="contenido" name="contenido" style="width: 88.3%" >[%novedad.getContenido %]</textarea>
+                        <textarea id="contenido" name="contenido" style="width: 88.3%" required>[%novedad.getContenido %]</textarea>
                     </div>
                 </div>
                 

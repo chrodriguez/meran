@@ -220,6 +220,7 @@ function AjaxHelper(fncUpdateInfo, fncInit){
 						_HiddeState({showStatusIn: helper.showStatusIn, showOverlay: helper.showOverlay});
 						if(helper.onComplete){
 							if(ajax.responseText == 'CLIENT_REDIRECT'){
+									disableAlert();
                                     window.location = URL_PREFIX+"/redirectController.pl";
 							}else{
 

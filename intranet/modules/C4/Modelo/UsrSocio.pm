@@ -527,7 +527,7 @@ sub getNro_socio{
 sub setNro_socio{
     my ($self) = shift;
     my ($nro_socio) = @_;
-    $self->nro_socio($nro_socio);
+    $self->nro_socio(C4::AR::Utilidades::trim($nro_socio));
 }
 
 sub getId_ui{
