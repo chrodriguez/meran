@@ -278,15 +278,13 @@ sub desautorizarTercero {
             $socio->desautorizarTercero;
             $msg_object->{'error'}= 0;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U396', 'params' => [$socio->getNro_socio]} ) ;
-        };
-
-        if ($@){
+        } or do{
             #Se loguea error de Base de Datos
             &C4::AR::Mensajes::printErrorDB($@, 'B422','INTRA');
             #Se setea error para el usuario
             $msg_object->{'error'}= 1;
             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U398', 'params' => [$socio->getNro_socio]} ) ;
-        }
+        };
 
     return ($msg_object);
 }
