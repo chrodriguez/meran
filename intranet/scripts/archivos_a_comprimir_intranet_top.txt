@@ -11,3 +11,4 @@
 /includes/WindowHelper
 /includes/AutocompleteHelper
 /includes/md5
+/includes/modernizr

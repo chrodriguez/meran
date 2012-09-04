@@ -225,10 +225,11 @@ $(document).ready( function() {
 
            <div class="form-actions">
                     [% PERL %]
-                            print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Registro' | i18n %]",
-                                                                boton   => "btn btn-primary",
-                                                                onClick => "guardar(1);",
-                                                                title   => "[% 'Guardar Registro' | i18n %]",
+                            print C4::AR::Filtros::action_button(   
+                                                                button   => "btn btn-large btn-primary",
+                                                                action   => "guardar(1);",
+                                                                title    => " [% 'Guardar Registro' | i18n %]",
+                                                                icon     => "icon-white icon-ok",
                                     ) ;
                     [% END %]
            </div>
@@ -257,10 +258,11 @@ $(document).ready( function() {
 
           <div class="form-actions">
               [% PERL %]
-                      print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 2' | i18n %]",
-                                                          boton   => "btn btn-primary",
-                                                          onClick => "guardar(2);",
-                                                          title   => "[% 'Guardar el nivel 2' | i18n %]",
+                      print C4::AR::Filtros::action_button(   
+                                                          button  => "btn btn-large btn-primary",
+                                                          action  => "guardar(2);",
+                                                          title   => " [% 'Guardar el nivel 2' | i18n %]",
+                                                          icon    => "icon-white icon-ok",
                               ) ;
               [% END %]
         </div>
@@ -301,10 +303,11 @@ $(document).ready( function() {
             <div class="form-actions">
          
                             [% PERL %]
-                                    print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Nivel 3' | i18n %]",
-                                                                        boton   => "btn btn btn-primary",
-                                                                        onClick => "guardar(3);",
-                                                                        title   => "[% 'Guardar el nivel 3' | i18n %]",
+                                    print C4::AR::Filtros::action_button( 
+                                                                        button   => "btn btn-large btn btn-primary",
+                                                                        action => "guardar(3);",
+                                                                        title   => " [% 'Guardar el nivel 3' | i18n %]",
+                                                                        icon    => "icon-white icon-ok",
                                             ) ;
                             [% END %]
             </div>    

@@ -2632,6 +2632,9 @@ function cargarNivel1(params, TEMPLATE_ACTUAL){
 }
 
 function validateForm(formID, func){
+
+     //if (!Modernizr.input.required) // DO SOME STUFF}
+    
     //se setea el handler para el error
     $.validator.setDefaults({
         submitHandler:  func ,
@@ -2640,12 +2643,13 @@ function validateForm(formID, func){
     var _message= LLENE_EL_CAMPO;
 
     $().ready(function() {
-    $("#"+formID).validate({
-            errorElement: "span",
-            errorClass: "help-inline",
-//             rules: HASH_RULES,
-            messages: HASH_MESSAGES,
-    })});
+        $("#"+formID).validate({
+                errorElement: "span",
+                errorClass: "alert alert-error block",
+    //             rules: HASH_RULES,
+                messages: HASH_MESSAGES,
+        })}
+    );
 
 
     $("#"+formID).validate();

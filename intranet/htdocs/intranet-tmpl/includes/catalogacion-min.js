@@ -219,6 +219,6 @@ function updateBorrarGrupo(){}
 function cargarNivel1(params,TEMPLATE_ACTUAL){ID_N1=params.id1;ID_N2=params.id2;if(params.tipoAccion=='MODIFICAR_NIVEL_2'){modificarN2(params.id2,TEMPLATE_ACTUAL);getNivel2(params.id2);}else
 if(params.tipoAccion=='MODIFICAR_NIVEL_3'){modificarN3(params.id3,TEMPLATE_ACTUAL);mostrarInfoAltaNivel3(params.id2,TEMPLATE_ACTUAL);}else{modificarN1(params.id1,TEMPLATE_ACTUAL);mostrarInfoAltaNivel1(params.id1,TEMPLATE_ACTUAL);}
 }
-function validateForm(formID,func){$.validator.setDefaults({submitHandler:func,});var _message=LLENE_EL_CAMPO;$().ready(function(){$("#"+formID).validate({errorElement:"span",errorClass:"help-inline",messages:HASH_MESSAGES,})});$("#"+formID).validate();}
+function validateForm(formID,func){$.validator.setDefaults({submitHandler:func,});var _message=LLENE_EL_CAMPO;$().ready(function(){$("#"+formID).validate({errorElement:"span",errorClass:"alert alert-error block",messages:HASH_MESSAGES,})});$("#"+formID).validate();}
 function addRegistroAlindice(id1){objAH=new AjaxHelper(updateInfoActualizar);objAH.url=URL_PREFIX+'/reports/catalogoDB.pl';objAH.tipoAccion="ADD_REGISTRO_AL_INDICE";objAH.debug=true;objAH.showOverlay=true;var array_temp=new Array();array_temp[0]=id1;objAH.array_id1=array_temp;objAH.funcion="changePage";objAH.sendToServer();}
 function updateInfoActualizar(responseText){var Messages=JSONstring.toObject(responseText);setMessages(Messages);setTimeout(refreshMeranPage,5000);}

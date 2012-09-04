@@ -86,6 +86,7 @@
                                               [% END %]  
                                               <tbody>
                                                       [% FOREACH contenido_estante IN estante.contenido %]
+                                                        [% TRY %]
                                                           <tr>
                                                               <td>
                                                               <input type='checkbox' id="checkbox_[% estante.getId %]" name="checkbox_[% estante.getId %]" value="[% contenido_estante.getId2 %]">
@@ -114,6 +115,9 @@
                                                                     [% END %]
                                                               </td>
                                                           </tr>
+                                                        [% CATCH %]
+                                                          [% 'El grupo no existe m&aacute;s. Eliminar del estante' | i18n %]
+                                                        [% END %]
                                                       [% END %]
                                                   </tbody>
                                               </table>

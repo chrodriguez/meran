@@ -13,7 +13,7 @@
 
 [% USE HTML %]
 
-<form id="form_novedad" action="[% url_prefix %]/admin/global/editar_novedad_intra.pl" class="form-horizontal" method="POST" >
+<form id="form_novedad" action="[% url_prefix %]/admin/global/editar_novedad_intra.pl" class="form-horizontal" method="POST">
     <fieldset class="resultados_busqueda">
             [% IF editing %]
                 <legend>[% "Editar novedad de INTRA" | i18n %]:</legend>
@@ -68,53 +68,16 @@
                 <input type="hidden" id="token" name="token" value="[% token %]">
                 
                 <div class="form-actions">
-                        [% IF editing %]
-                        
-                            [% PERL %]
-                                  print C4::AR::Filtros::action_link_button( 
-                                                                  button    => "btn",
-                                                                  url       => "[% url_prefix %]/admin/global/novedades_intra.pl",
-                                                                  icon        => "icon-arrow-left",
-                                                                  title     => "[% 'Volver al listado' | i18n %]",
-                                                              ) ;
+                    [% PERL %]
+                          print C4::AR::Filtros::action_link_button( 
+                                                          button    => "btn",
+                                                          url       => "[% url_prefix %]/admin/global/novedades_intra.pl",
+                                                          title     => " [% 'Volver al listado' | i18n %]",
+                                                          icon      => "icon-arrow-left",
+                                                      ) ;
 
-                            [% END %]
-                            
-                            [% PERL %]
-                                  print C4::AR::Filtros::action_button( 
-                                                                    button      => "btn btn-primary",
-                                                                    action      => "modificar()", 
-                                                                    icon        => "icon-white icon-pencil",
-                                                                    title       => " [% 'Modificar' | i18n %]",
-                                                              ) ;
-
-
-                            [% END %]
-                            
-                        [% ELSE %]
-                        
-                            [% PERL %]
-                                  print C4::AR::Filtros::action_link_button( 
-                                                                  button    => "btn",
-                                                                  url       => "[% url_prefix %]/admin/global/novedades_intra.pl",
-                                                                  title     => " [% 'Volver al listado' | i18n %]",
-                                                                  icon        => "icon-arrow-left",
-                                                              ) ;
-
-                            [% END %]
-                            
-                            [% PERL %]
-                                  print C4::AR::Filtros::action_button( 
-                                                                    button      => "btn btn-primary",
-                                                                    action      => "agregar()", 
-                                                                    icon        => "icon-white icon-ok",
-                                                                    title       => " [% 'Aceptar' | i18n %]",
-                                                              ) ;
-
-
-                            [% END %]
-                                    
-                        [% END %]
+                    [% END %]
+                    <button class="btn btn-primary" type="submit"><i class="icon-white icon-ok"></i> [% 'Aceptar' | i18n %]</button>
                 </div>
         </div>
    </fieldset>

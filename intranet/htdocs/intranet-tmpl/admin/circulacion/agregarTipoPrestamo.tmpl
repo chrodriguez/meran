@@ -69,35 +69,35 @@ function Check(f) {
 		    [% "Agregar Tipo de Pr&eacute;stamo" | i18n %]
 		[% END %]
     </legend>
-    
-          <div class="form-horizontal">
+
+          <form class="form-horizontal" onsubmit="[% IF tipo_prestamo %] guardarModificacionTipoPrestamo(); [% ELSE %] guardarNuevoTipoPrestamo(); [% END %] return false;">
                 <div class="control-group">
                       [% IF tipo_prestamo %]
                           <label for="tipo_prestamo" class="control-label">[% 'Tipo de pr&eacute;stamo' | i18n %]</label>
                           <div class="controls">
-                              <input type=hidden id='id_tipo_prestamo'  value='[% tipo_prestamo.getId_tipo_prestamo %]'>
+                              <input type="hidden" id='id_tipo_prestamo'  value='[% tipo_prestamo.getId_tipo_prestamo %]'>
                               [% tipo_prestamo.getId_tipo_prestamo %]
                           </div>
                       [% ELSE %]
                           <label for="tipo_prestamo" class="control-label">[% "Tipo de pr&eacute;stamo" | i18n %]</label>
                           <div class="controls">
-                              <input type=text id='id_tipo_prestamo' size=6 maxlength=4 onBlur="toUC(this)">
+                              <input type="text" id='id_tipo_prestamo' size="6" maxlength="4" onBlur="toUC(this)" required>
                           </div>
                       [% END %]
                 </div>
                 <div class="control-group">
                           <label for="descripcion" class="control-label">[% "Descripci&oacute;n" | i18n %]</label>
                           <div class="controls">
-                                <input type=text id='descripcion' size=40 maxlength=80 value='[% tipo_prestamo.getDescripcion %]'>
+                                <input type="text" id='descripcion' size="40" maxlength="80" value='[% tipo_prestamo.getDescripcion %]' required>
                           </div>
                 </div>
                 <div class="control-group">
                           <label for="sala" class="control-label">[% "Para Sala" | i18n %]</label>
                           <div class="controls">
                                 [% IF tipo_prestamo.codigo_disponibilidad == 'CIRC0001' %]
-                                    <input type=checkbox id='disponibilidad' checked value=1>
+                                    <input type="checkbox" id='disponibilidad' checked value="1">
                                 [% ELSE %]
-                                    <input type=checkbox id='disponibilidad' value=1>
+                                    <input type="checkbox" id='disponibilidad' value=1>
                                 [% END %]
                           </div>
                 </div>
@@ -114,58 +114,38 @@ function Check(f) {
                 <div class="control-group">
                           <label for="max_prestamos" class="control-label">[% "M&aacute;xima cantidad de pr&eacute;stamos" | i18n %]</label>
                           <div class="controls">
-                              <input type=text  id='prestamos' size=10 value='[% tipo_prestamo.getPrestamos %]'>
+                              <input type="text"  id='prestamos' size="10" value='[% tipo_prestamo.getPrestamos %]' required>
                           </div>
                 </div>
                 <div class="control-group">
                           <label for="max_prestamos" class="control-label">[% "D&iacute;as de duraci&oacute;n del pr&eacute;stamo" | i18n %]</label>
                           <div class="controls">
-                                <input type=text id='dias_prestamo' size=40 maxlength=80 value='[% tipo_prestamo.getDias_prestamo %]'>
+                                <input type="text" id='dias_prestamo' size="40" maxlength="80" value='[% tipo_prestamo.getDias_prestamo %]' required>
                           </div> 
                 </div>
 
                 <div class="control-group">
                     <label for="renovaciones" class="control-label">[% "Renovaciones" | i18n %]</label>
                     <div class="controls">
-                        <input type=text id='renovaciones' size=40 maxlength=80 value='[% tipo_prestamo.getRenovaciones %]'>
+                        <input type="text" id='renovaciones' size="40" maxlength="80" value='[% tipo_prestamo.getRenovaciones %]' required>
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="dias_renovaciones" class="control-label">[% "D&iacute;as de Renovaci&oacute;n" | i18n %]</label>
                     <div class="controls">
-                        <input type=text id='dias_renovacion' size=40 maxlength=80 value='[% tipo_prestamo.getDias_renovacion %]'>
+                        <input type="text" id='dias_renovacion' size="40" maxlength="80" value='[% tipo_prestamo.getDias_renovacion %]' required>
                     </div>
                 </div>
                 <div class="control-group">
                     <label for="dias_antes_renovaciones" class="control-label">[% "Cuantos d&iacute;as antes se puede renovar" | i18n %]</label>
                     <div class="controls">
-                        <input type=text id='dias_antes_renovacion' size=40 maxlength=80 value='[% tipo_prestamo.getDias_antes_renovacion %]'>
+                        <input type="text" id='dias_antes_renovacion' size="40" maxlength="80" value='[% tipo_prestamo.getDias_antes_renovacion %]' required>
                     </div>
                 </div>
 
                 <div class="form-actions">
-                                  [% IF tipo_prestamo %]
-                                      [% PERL %]
-                                          print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
-                                                                              boton   => "boton_guardar",
-                                                                              onClick => "guardarModificacionTipoPrestamo();",
-                                                                              title   => "[% 'Guardar Cambios' | i18n %]",
-                                                                              alternClass => "botonCentrado",
-                                                                              inline => "1",
-                                                  ) ;
-                                      [% END %]
-                                  [% ELSE %]
-                                      [% PERL %]
-                                          print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
-                                                                              boton   => "boton_guardar",
-                                                                              onClick => "guardarNuevoTipoPrestamo();",
-                                                                              title   => "[% 'Guardar Cambios' | i18n %]",
-                                                                              alternClass => "botonCentrado",
-                                                                              inline => "1",
-                                                  ) ;
-                                      [% END %]
-                                  [% END %]
+                    <button type="submit" class="btn btn-large btn-primary"><i class="icon-white icon-ok"></i> [% "Guardar" | i18n %] </button>
                   </div>
-          </section>
-      </div>
+        </form>
+    </section>
 </fieldset>

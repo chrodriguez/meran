@@ -45,7 +45,6 @@
 	<script type="text/javascript" src="/includes/jquery/jquery-ui-1.8.9.custom.min.js"></script>
 	<script type="text/javascript" src="/includes/jquery/jquery.expander.js"></script>
 	<script type="text/javascript" src="/includes/jquery/jquery.nanoscroller.js"></script>
-	<script type="text/javascript" src="/includes/modernizr.js"></script>
 
 	<script type="text/javascript" src="/includes/jquery/fancybox/fancybox.js"></script>
 
@@ -301,15 +300,6 @@
 
 	    });
 	</script>
-	
-	
-<!-- 	<style> 
-/* 	.dropdown-menu { */
-/* 		max-height: 500px; */
-/* 		overflow: hidden; */
-/* 		overflow-y: auto; */
-/* 	} */
-</style>-->
 	
 	</head>
 	<body data-spy="scroll" data-spy="scroll" data-target=".side_bar">
