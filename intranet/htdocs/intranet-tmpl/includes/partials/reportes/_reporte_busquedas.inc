@@ -3,7 +3,7 @@
 <script type="text/javascript" src="/intranet-tmpl/includes/reports.js"></script>
 <script>
 
-    var ORDEN;
+    var ORDEN="valor";
     var ASC= 1;
 
     function changePageBusquedas(ini){
