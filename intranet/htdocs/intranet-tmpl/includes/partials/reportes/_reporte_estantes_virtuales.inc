@@ -3,7 +3,7 @@
 <script type="text/javascript" src="/intranet-tmpl/includes/reports.js"></script>
 
 <div class="center_fieldset report_form_container">  
-    <form class="form-horizontal" id="form_reporte_estantes_viertuales" action="[% url_prefix %]/estadisticas/estantes_virtuales.pl">
+    <form class="form-horizontal" id="form_reporte_estantes_virtuales" action="[% url_prefix %]/estadisticas/estantes_virtuales.pl">
         <input type="hidden" name="exportar" value="1">
 
         <div class="control-group">

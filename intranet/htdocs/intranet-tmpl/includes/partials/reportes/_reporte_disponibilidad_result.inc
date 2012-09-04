@@ -80,7 +80,7 @@ function changePageBusquedas(ini){
 <div class="well">
       <div class="resultados_consulta">[% "La cantidad de registros" | i18n %]: <strong>[% cant %]</strong></div>   
 </div>
-[% IF !exportar %]
+[% IF !exportar && cant %]
 <div class="form-actions" id="actions_ejemplares" style="margin-bottom: 0;">
    <td>
       [% PERL %]
