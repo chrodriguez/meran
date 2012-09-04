@@ -35,7 +35,7 @@ $VERSION = 0.01;
 sub get_date_format
 {
 	#Get the database handle
-	return C4::AR::Preferencias::getValorPreferencia('dateformat');
+	return (C4::AR::Utilidades::trim(C4::AR::Preferencias::getValorPreferencia('dateformat'))||'metric');
 }
 
 sub esHabil{
