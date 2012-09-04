@@ -111,7 +111,9 @@ var loaderPath= "";
                                                                        {title => "Generar carnet", action=>'formCarnet.submit();', icon=>"icon-barcode"},
                                                                        {title => "Libre Deuda", action=>'generarLibreDeuda()', icon=>"icon-asterisk"},
 	                                                                   {title => "Prest. Interbibliotecario", action=>'prestamosInterBibliotecarios()', icon=>"icon-shopping-cart"},
-	                                                                   {title => "Cambiar Credenciales", action=>'cambiarCredencial()', icon=>"icon-flag"},
+	                                                                   [% IF socio_data.usr_credential_type == "superLibrarian" %]
+	                                                                  	  {title => "Cambiar Credenciales", action=>'cambiarCredencial()', icon=>"icon-flag"},
+	                                                                   [% END %]
 	                                                                   [% IF foto_name %]
 	                                                                       {title => 'Eliminar Foto', action=>'eliminarFoto()', icon=>'icon-picture'},
 	                                                                   [% END %]

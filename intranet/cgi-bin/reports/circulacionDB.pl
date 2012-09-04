@@ -8,17 +8,59 @@ use JSON;
 use C4::AR::Reportes;
 use C4::Modelo::RepBusqueda;
 use C4::Modelo::RepHistorialBusqueda;
-
+use C4::AR::PdfGenerator;
 
 my $input       = new CGI;
-my $obj         = $input->param('obj');
-$obj            = C4::AR::Utilidades::from_json_ISO($obj);
-my $tipoAccion  = $obj->{'tipoAccion'}||"";
+my $obj         = $input->param('obj') || 0;
+
+if (!$obj) {
+    $obj         = $input->Vars;    
+} else {
+    $obj = C4::AR::Utilidades::from_json_ISO($obj);
+}
+
+my $tipoAccion  = $obj->{'tipoAccion'} || "";
 
 my ($template, $session, $t_params);
 
 
-if($tipoAccion eq "BUSQUEDAS"){
+if($tipoAccion eq "EXPORT_CIRC_GENERAL"){
+    ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
+                                        template_name   => "includes/partials/reportes/_reporte_circulacion_general_result.inc",
+                                        query           => $input,
+                                        type            => "intranet",
+                                        authnotrequired => 0,
+                                        flagsrequired   => {  ui            => 'ANY', 
+                                                            tipo_documento  => 'ANY', 
+                                                            accion          => 'CONSULTA', 
+                                                            entorno         => 'undefined'},
+    });
+
+    $obj->{'tipoPrestamo'}      =  $obj->{'tipo_prestamo_name'};
+    $obj->{'categoriaSocio'}    =  $obj->{'categoria_socio_id'};
+    $obj->{'fecha_inicio'}      =  $obj->{'date-from'};
+    $obj->{'fecha_fin'}         =  $obj->{'date-to'};
+
+    C4::AR::Utilidades::printHASH($obj);
+
+    my ($results, $cantidad)    = C4::AR::Reportes::getReporteCirculacionGeneralToExport($obj);
+
+    $t_params->{'cantidad'}     = $cantidad;
+    $t_params->{'results'}      = $results;
+    $t_params->{'exportar'}     = 1;
+
+    C4::AR::Debug::debug("data tipo fecha_inicio : " . $obj->{'fecha_inicio'});
+    C4::AR::Debug::debug("data : " . $results);
+
+    $obj->{'is_report'}         = "SI";
+
+    my $out                     = C4::AR::Auth::get_html_content($template, $t_params);
+    my $filename                = C4::AR::PdfGenerator::pdfFromHTML($out, $obj);
+
+    print C4::AR::PdfGenerator::pdfHeader(); 
+    C4::AR::PdfGenerator::printPDF($filename);
+} 
+elsif ($tipoAccion eq "BUSQUEDAS") {
     ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
                                         template_name   => "includes/partials/reportes/_reporte_circulacion_result.inc",
                                         query           => $input,
@@ -51,7 +93,7 @@ if($tipoAccion eq "BUSQUEDAS"){
 
     C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 }
-elsif($tipoAccion eq "CIRC_GENERAL") {
+elsif ($tipoAccion eq "CIRC_GENERAL") {
 
     ($template, $session, $t_params) = C4::AR::Auth::get_template_and_user({
                                         template_name   => "includes/partials/reportes/_reporte_circulacion_general_result.inc",

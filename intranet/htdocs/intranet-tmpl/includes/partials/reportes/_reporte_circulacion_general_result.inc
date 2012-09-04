@@ -49,7 +49,7 @@
            [% END %]
         </tbody>
     </table>
-
+  [% IF !exportar %]
     <div class="form-actions" style="margin-bottom: 0;">
        <td>
           [% PERL %]
@@ -62,6 +62,7 @@
           [% END %]
        </td>
     </div>
+    [% END %]
 [% ELSE %]
     <div class="alert alert-info">
         [% 'No hay resultados para mostrar' | i18n  %]

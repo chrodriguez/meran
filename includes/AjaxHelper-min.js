@@ -24,6 +24,6 @@ this.log=function(str){if((this.debug)&&(window.console)){window.console.log(str
 this.ajaxCallback=function(helper){if(this.debugJSON){JSONstring.debug=true;}
 helper.token=token;var params="obj="+JSONstring.make(helper);this.log("AjaxHelper => ajaxCallback \n"+params);this.log("AjaxHelper => token: "+helper.token);var _hash_key;if(this.cache){_hash_key=b64_md5(params);this.log("AjaxHelper => cache element");this.log("AjaxHelper => cache hash_key "+_hash_key);if(($.jCache!=null)&&($.jCache.hasItem(_hash_key))){return helper.onComplete($.jCache.getItem(_hash_key));}}
 $.ajax({type:"POST",url:helper.url,data:params,async:helper.async,beforeSend:function(){if(helper.showState){_Init({debug:helper.debug,showStatusIn:helper.showStatusIn,showOverlay:helper.showOverlay,offIndicator:helper.offIndicator});}
-if(helper.onBeforeSend){helper.onBeforeSend();}},complete:function(ajax){_HiddeState({showStatusIn:helper.showStatusIn,showOverlay:helper.showOverlay});if(helper.onComplete){if(ajax.responseText=='CLIENT_REDIRECT'){window.location=URL_PREFIX+"/redirectController.pl";}else{if(helper.cache){if($.jCache)
+if(helper.onBeforeSend){helper.onBeforeSend();}},complete:function(ajax){_HiddeState({showStatusIn:helper.showStatusIn,showOverlay:helper.showOverlay});if(helper.onComplete){if(ajax.responseText=='CLIENT_REDIRECT'){disableAlert();window.location=URL_PREFIX+"/redirectController.pl";}else{if(helper.cache){if($.jCache)
 $.jCache.setItem(_hash_key,ajax.responseText);}
 helper.onComplete(ajax.responseText);}}}});}}
