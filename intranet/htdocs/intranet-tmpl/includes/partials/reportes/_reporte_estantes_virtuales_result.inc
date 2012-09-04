@@ -10,25 +10,28 @@ function changePageBusquedas(ini){
 }
 </script>
 
-
-[% IF cant %]
-    <div class="well">
-        <div class="resultados_consulta">[% "La cantidad de subestantes" | i18n %]: <strong>[% cant %]</strong></div>             
-    </div>
-    <div>
+<div>
         <fieldset>
             <legend class="titulo_legend">[% nombre_estante | i18n %]</legend>
                 <ul class="unstyled">
+
+      [% IF cant %]
+   
+    
               		[% FOREACH res IN data %]
               				<li>[% res.estante %]</li>
               		[% END %]
                 </ul>
         </fieldset>
     </div>
+    <div class="well">
+        <div class="resultados_consulta">[% "La cantidad de subestantes" | i18n %]: <strong>[% cant %]</strong></div>             
+    </div>
+     <fieldset class="resultados_busqueda">
+              <legend class="titulo_legend">[% "Contenido" | i18n %]</legend>
 
     [% IF estante.contenido %]
-          <fieldset class="resultados_busqueda">
-              <legend class="titulo_legend">[% "Contenido" | i18n %]</legend>
+         
 
                 <div id="tabla_estantes_[% estante.getId %]" class="datos_tabla_div_contenido_[% estante.getId %]">
                       [% PERL %]
@@ -79,7 +82,7 @@ function changePageBusquedas(ini){
     [% ELSE %]
             <div class="alert alert-info">El estante no tiene contenido</div>  
     [% END %]
-
+  </fieldset>
 
     [% IF !exportar && cant %]
         <div class="form-actions" id="actions_ejemplares" style="margin-bottom: 0;">
