@@ -77,7 +77,7 @@ function changePageBusquedas(ini){
       <div class="resultados_consulta">[% "La cantidad de ediciones" | i18n %]: <strong>[% cant_n2 %]</strong></div><div class="resultados_consulta">[% "La cantidad de ejemplares" | i18n %]: <strong>[% cant_n3 %]</strong></div>
                  
 </div>
-[% IF !exportar %]
+[% IF !exportar && cant_n3 %]
 <div class="form-actions" id="actions_ejemplares" style="margin-bottom: 0;">
    <td>
       [% PERL %]

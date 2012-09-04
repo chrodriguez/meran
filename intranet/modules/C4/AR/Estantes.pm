@@ -65,6 +65,9 @@ sub getSubEstantes {
 sub getEstante {
     my ($id_estante,$orden) = @_;
 
+    C4::AR::Debug::debug("EN ESTANTES.PM");
+    C4::AR::Debug::debug($id_estante);
+
     use C4::Modelo::CatEstante;
     use C4::Modelo::CatEstante::Manager;
     my @filtros;

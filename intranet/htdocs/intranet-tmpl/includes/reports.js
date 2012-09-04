@@ -58,6 +58,27 @@ function udpdateReporteDisp(responseText){
 
 }
 
+function reporteEstantesVirtuales(){
+	var estante=$("#estante_id").val();
+    objAH=new AjaxHelper(udpdateReporteEstantesVirtuales);
+    objAH.debug= true;
+    objAH.showOverlay = true;
+    objAH.url= URL_PREFIX+"/estadisticas/estantes_virtuales.pl";
+    objAH.exportar= 0;
+    objAH.is_report= 1;
+    objAH.estante=estante;
+    objAH.funcion= 'changePage';
+    //se envia la consulta
+    objAH.sendToServer();
+}
+
+function udpdateReporteEstantesVirtuales(responseText){
+    $('#report_estante_result').html(responseText);
+	$('#report_estante_result').show();
+    scrollTo('report_estante_result');
+
+}
+
 
 function cambiarSentidoOrd(){
       if (ASC){
