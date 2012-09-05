@@ -1391,7 +1391,19 @@ sub reporteColecciones{
  }
 
 
+sub reporteEstantesVirtuales{
+    my ($params) = @_;
 
+        my $estante=         $params->{'estante'};
+
+        my $ini    = $params->{'ini'} || 0;
+        my $cantR  = $params->{'cantR'} || 1;
+
+        my $subEstantes = C4::AR::Estantes::getSubEstantes($estante);
+        
+        return ($subEstantes, scalar(@$subEstantes));
+
+}
 
 
 sub reporteRegistrosNoIndexados{

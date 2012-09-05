@@ -30,9 +30,9 @@ if ($editing){
                               authnotrequired => 0,
                               flagsrequired => {  ui => 'ANY', 
                                                   tipo_documento => 'ANY', 
-                                                  accion => 'CONSULTA', 
-                                                  entorno => 'permisos', 
-                                                  tipo_permiso => 'general'},
+                                                  accion => 'MODIFICACION', 
+                                                  entorno => 'usuarios', 
+                                                  },
                               debug => 1,
                           });
           $params{'nro_socio'} = $input->param('nro_socio');
