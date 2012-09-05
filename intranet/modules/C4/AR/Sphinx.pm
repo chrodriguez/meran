@@ -49,7 +49,7 @@ sub reindexar{
         push (@args, $index_to_use);
         push (@args, '--rotate');
         push (@args, '--quiet');
-        $mgr->indexer_sudo("sudo");
+        #$mgr->indexer_sudo("sudo");
         $mgr->indexer_args(\@args);
         $mgr->run_indexer();
         C4::AR::Debug::debug("Sphinx => reindexar => --all --rotate => ");
@@ -71,21 +71,24 @@ sub sphinx_start{
       } else {
           # Child runs this block
           # some code comes here
-          $mgr = $mgr || Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
-          $mgr->debug(0);
-      $mgr->searchd_sudo("sudo");
+          $mgr = $mgr || Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") ,
+            bindir => C4::Context->config("sphinx_bin_dir")});
+          $mgr->debug(1);
+      #$mgr->searchd_sudo("sudo");
           my $pids = $mgr->get_searchd_pid;
           if(scalar(@$pids) == 0){
-#               C4::AR::Debug::debug("Utilidades => generar_indice => el sphinx esta caido!!!!!!! => ");
+               #C4::AR::Debug::debug("Utilidades => generar_indice => el sphinx esta caido!!!!!!! => ");
+               #C4::AR::Debug::debug("El paath es ".$mgr->bindir);
               $mgr->start_searchd;
-#               C4::AR::Debug::debug("Utilidades => generar_indice => levantó sphinx!!!!!!! => ");
+               #C4::AR::Debug::debug("Utilidades => generar_indice => levantó sphinx!!!!!!! => ");
           }
           CORE::exit(0);
       }
   }else{
-      $mgr = $mgr || Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") });
-      $mgr->debug(0);
-      $mgr->searchd_sudo("sudo");
+    $mgr = $mgr || Sphinx::Manager->new({ config_file => C4::Context->config("sphinx_conf") ,
+            searchd_bin => C4::Context->config("sphinx_bin_dir")});
+      $mgr->debug(1);
+      #$mgr->searchd_sudo("sudo");
       my $pids = $mgr->get_searchd_pid;
       if(scalar(@$pids) == 0){
 #           C4::AR::Debug::debug("Utilidades => generar_indice => el sphinx esta caido!!!!!!! => ");
@@ -150,7 +153,7 @@ sub generar_indice {
 
              if($indice_busueda){
                  $indice_busueda->delete();
-             }
+                 }
 
             }
         else{
