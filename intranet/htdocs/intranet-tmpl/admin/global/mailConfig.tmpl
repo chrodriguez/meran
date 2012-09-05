@@ -129,22 +129,19 @@
 
         <div class="form-actions">
             [% PERL %]
-                        print C4::AR::Filtros::to_Button(   text    => "[% 'Probar' | i18n %]",
-                                                            boton   => "btn",
-                                                            onClick => "probarConfiguracion();",
-                                                            title   => "[% 'se enviar&aacute; un correo a su cuenta personal' | i18n %]",
-                                                            alternClass => "botonCentrado",
-                                                            inline  => "1"
+                        print C4::AR::Filtros::action_button(   
+                                                            title    => "[% 'Probar' | i18n %]",
+                                                            button   => "btn",
+                                                            action   => "probarConfiguracion();",
                                 ) ;
             [% END %]
 
             [% PERL %]
-                        print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
-                                                            boton   => "boton_agregar",
-                                                            onClick => "guardarConfiguracion();",
+                        print C4::AR::Filtros::action_button(   
+                                                            button  => "btn btn-primary",
+                                                            action => "guardarConfiguracion();",
                                                             title   => "[% 'Guardar Cambios' | i18n %]",
-                                                            alternClass => "botonCentrado",
-                                                            inline  => "1"
+                                                            icon     => "icon-white icon-ok", 
                                 ) ;
             [% END %]
         </div>
