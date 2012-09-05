@@ -11,6 +11,7 @@
 <div class="modal-body">
   <p>[% HTML.escape(mensaje.getMensaje) %]</p>
   <input type="hidden" name="email" id="email" value="[% HTML.escape(mensaje.getEmail) %]">
+  <input type="hidden" name="asunto" id="asunto" value="[% HTML.escape(mensaje.asunto) %]">
 	
 
   <div class="responder" style="display:none; padding-top:10px;">
