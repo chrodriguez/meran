@@ -262,6 +262,9 @@ sub send_mail_TEST {
     $mail{'mail_subject'}           = "Prueba de configuración de mail";
     $mail{'mail_message'}           = "Esta es una prueba de configuración del mail";
 
+    $mail{'page_title'} = C4::AR::Filtros::i18n("Titulo header del mail");
+    $mail{'link'} = "google.com";
+
     eval {
 
         ($ok, $msg_error)           = C4::AR::Mail::send_mail(\%mail);
