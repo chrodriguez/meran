@@ -12,6 +12,6 @@ use CGI::Session;
 
 my $session                 = CGI::Session->load();
 my $message_error           = "404";
-my ($template, $t_params)   = C4::Output::gettemplate("informacion/error_html.tmpl", 'intranet');
+my ($template, $t_params)   = C4::Output::gettemplate("informacion/error_html.tmpl", 'opac');
 
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

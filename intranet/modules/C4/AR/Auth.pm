@@ -1475,7 +1475,7 @@ sub redirectTo {
         print 'CLIENT_REDIRECT';
         exit;
 	}else{
-              my $session = CGI::Session->load();  
+        my $session = CGI::Session->load();  
         C4::AR::Debug::debug($url);   
 #        C4::AR::Debug::debug("redirectTo=> SERVER_REDIRECT");       
         my $input = CGI->new(); 
@@ -1516,6 +1516,12 @@ sub redirectToNoHTTPS {
     my $socio = C4::AR::Auth::getSessionNroSocio();
     $socio = C4::AR::Usuarios::getSocioInfoPorNroSocio($socio) || C4::Modelo::UsrSocio->new();
     #para saber si fue un llamado con AJAX
+    my $url_server      = C4::AR::Preferencias::getValorPreferencia('serverName');
+    my $opac_port       = ":".(C4::Context->config('opac_port')||'80');
+    my $server_port     = ":".$ENV{'SERVER_PORT'};
+    my $SERVER_URL       =(C4::AR::Utilidades::trim($url_server)||($ENV{'SERVER_NAME'})).$server_port;
+    my $SERVER_URL_OPAC  =(C4::AR::Utilidades::trim($url_server)||($ENV{'SERVER_NAME'})).$opac_port;
+
     if(C4::AR::Utilidades::isAjaxRequest()){
     #redirijo en el cliente
 #      C4::AR::Debug::debug("redirectToNoHTTPS=> CLIENT_REDIRECT");         
@@ -1529,10 +1535,10 @@ sub redirectToNoHTTPS {
         exit;
     }else{
         #redirijo en el servidor
-#         C4::AR::Debug::debug("redirectToNoHTTPS=> SERVER_REDIRECT");    
+         C4::AR::Debug::debug("redirectToNoHTTPS=> SERVER_REDIRECT \n\n\n");    
         my $input = CGI->new(); 
         print $input->redirect( 
-            -location => "http://".$ENV{'SERVER_NAME'}.$url, 
+            -location => $SERVER_URL_OPAC.$url, 
             -status => 301,
         ); 
 #         C4::AR::Debug::debug("redirectTo=> url: ".$url);
