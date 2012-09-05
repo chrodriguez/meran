@@ -1744,11 +1744,11 @@ sub getReporteCirculacionGeneral{
                                                         );
     # cantidad para el paginador
     my ($rep_busqueda_count) = C4::Modelo::RepHistorialCirculacion::Manager->get_rep_historial_circulacion_count(
-                                                                            query               => \@filtros,
-                                                                            select              => ['id3'],
-                                                                            distinct            => 1,
-                                                                            require_objects     => [ 'socio', 'tipo_prestamo_ref' ]                                               
-                                                                            );
+                                                                    query               => \@filtros,
+                                                                    select              => ['id3'],
+                                                                    distinct            => 1,
+                                                                    require_objects     => [ 'socio', 'tipo_prestamo_ref' ]                                               
+                                                                    );
       
     my @resultArray;                                                                      
 
