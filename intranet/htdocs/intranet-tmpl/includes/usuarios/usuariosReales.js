@@ -176,6 +176,11 @@ function updateAgregarUsuario(responseText){
             return(0);
 	var Messages=JSONstring.toObject(responseText);
 	setMessages(Messages);
+
+  if (!Messages.error){
+    delay(function(){window.location = URL_PREFIX+'/usuarios/reales/datosUsuario.pl?nro_socio='+Messages.messages[0].params[0]+'&token='+token;},3);
+  }
+
 }
 
 //*********************************************Fin***Agregar Usuario******************************************

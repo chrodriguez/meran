@@ -145,7 +145,7 @@ sub agregar{
     $self->setDivision($data_hash->{'division'});
     $self->setFoto($self->buildFotoNameHash());
     $self->save();
-    $self->convertirEnSocio($data_hash);
+    return $self->convertirEnSocio($data_hash);
 
 }
 
@@ -161,6 +161,7 @@ sub convertirEnSocio{
         $socio->agregar($data_hash);
         $socio->setId_estado(($data_hash->{'id_estado'}));
         $socio->setThemeINTRA($data_hash->{'tema'} || 'default');
+    return $socio;
 }
 
 sub modificar{
@@ -416,7 +417,6 @@ sub setNombre{
     my ($self) = shift;
     my ($nombre) = @_;
     Encode::encode_utf8($nombre);
-    C4::AR::Debug::debug("\n\n\n\n NOMREEEEEEEEEEEEEEEEEEEEEEEEEEE ".C4::AR::Utilidades::capitalizarString($nombre)."\n\n\n\n");
     $self->nombre(C4::AR::Utilidades::capitalizarString($nombre));
 }
 

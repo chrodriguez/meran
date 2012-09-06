@@ -269,8 +269,11 @@ sub nextNro_socio{
                                 select => ['nro_socio'],
                                 sort_by => ['nro_socio DESC'],
                                 );
-
-    return ($nro_socio->[0]->nro_socio + 1);
+    if ($nro_socio->[0]){
+        return ($nro_socio->[0]->nro_socio + 1);
+    }else{
+        return '1';            
+    }
 }
 
 sub modificar{

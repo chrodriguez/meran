@@ -1538,7 +1538,7 @@ sub redirectToNoHTTPS {
          C4::AR::Debug::debug("redirectToNoHTTPS=> SERVER_REDIRECT \n\n\n");    
         my $input = CGI->new(); 
         print $input->redirect( 
-            -location => $SERVER_URL_OPAC.$url, 
+            -location => "http://".$SERVER_URL_OPAC.$url, 
             -status => 301,
         ); 
 #         C4::AR::Debug::debug("redirectTo=> url: ".$url);
@@ -1567,9 +1567,6 @@ sub redirectToHTTPS {
 #     C4::AR::Debug::debug("redirectToHTTPS=> \n");
     my $puerto = C4::AR::Preferencias::getValorPreferencia("puerto_para_https")||'80';
     my $protocolo = "https";
-    if($puerto eq "80"){
-        $protocolo = "http";
-    }
     #para saber si fue un llamado con AJAX
     if(C4::AR::Utilidades::isAjaxRequest()){
     #redirijo en el cliente

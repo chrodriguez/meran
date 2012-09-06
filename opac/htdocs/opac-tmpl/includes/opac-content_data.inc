@@ -1,5 +1,6 @@
 
 [% USE HTML %]
+
     <div class="hero-unit row" id="search-bar">
       <section>
 	     	<h1 class="medium_font">[% 'Bienvenido ' | i18n %]
@@ -24,7 +25,7 @@
 			</p>
 	          	
 			[% IF cant_portada %]
-			     <div id="carousel_portada_opac" class="carousel">
+			     <div id="carousel_portada_opac" class="carousel slide">
 			            <div class="carousel-inner">
 			            [% FOREACH p IN portada %]
 			              <div class="item [% IF loop.first %]active[% END %]">
@@ -32,7 +33,7 @@
 			                [% IF p.getFooter %]
 				                <div class="carousel-caption">
 				                  <h4>[% p.getFooterTitle %]</h4>
-				                  <p style="font-size: 13px;">[% p.getFooter %]</p>
+				                  <p style="font-size: 13px; color: white;">[% p.getFooter %]</p>
 				                </div>
 				            [% END %]
 			              </div>
@@ -56,8 +57,6 @@
 	                   		  placeholder="[% IF title_search_bar %] [% title_search_bar %] [% ELSE %] [% 'Qu&eacute; necesit&aacute;s' | i18n %]? [% END %]"
 		        	>
 		        </p>
-		        
-		        <p><button class="btn btn-primary btn-large" type="submit">[% 'Buscar' | i18n %]</button></p>
 		    </form>
 	 </section>
     </div>
