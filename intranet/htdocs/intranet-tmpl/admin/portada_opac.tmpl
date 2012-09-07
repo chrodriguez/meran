@@ -3,11 +3,14 @@
 
 
 <script type="text/javascript">
-
-        function submitForm(){
-            $('#add_cover_form').modal('hide');
-            startOverlay();
-            $('#post_novedad_form').submit();
+        function submitForm(editing){
+        	if ( ($('#imagen').val()) || (editing) ){
+	            $('#add_cover_form').modal('hide');
+	            startOverlay();
+	            $('#post_novedad_form').submit();
+	        }else{
+	        	jAlert("[% 'Debe seleccionar un archivo' | i18n %]");
+	        }
         }
 
 
@@ -25,10 +28,19 @@
             $('#add_cover_form').modal();
 		}
 
-
-      function agregarPortada_show(){
-    	  $('#add_cover_form').modal();
-      }
+		function agregarPortada(id){
+		    objAH                   = new AjaxHelper(updateModificarPortada);
+		    objAH.showOverlay       = true;
+		    objAH.url               = URL_PREFIX+'/admin/portada_opac.pl';
+		    objAH.id_portada        = id;
+		    objAH.tipoAccion        = 'SHOW_ADD_PORTADA';
+		    objAH.sendToServer();
+		}
+		
+		function updateAgregarPortada(responseText){
+            $('#add_cover_form').html(responseText);
+            $('#add_cover_form').modal();
+		}
       
       $(function() {
 
@@ -68,8 +80,8 @@
 				[% FOREACH p IN portada %]
 				    <tr id="[% p.id %]">
 				        <td class="userImage">
-				            <a class="fancy_link" href="http://[% SERVER_ADDRESS %]/opac-tmpl/uploads/portada/[% p.getImagePath %]">
-                                  <img border="0" src="http://[% SERVER_ADDRESS %]/opac-tmpl/uploads/portada/[% p.getImagePath %]" alt >
+				            <a class="fancy_link" href="http://[% SERVER_ADDRESS_OPAC %]/opac-tmpl/uploads/portada/[% p.getImagePath %]">
+                                  <img border="0" src="http://[% SERVER_ADDRESS_OPAC %]/opac-tmpl/uploads/portada/[% p.getImagePath %]" alt >
 				            </a>
 			            </td>
                         <td>[% p.getFooterTitle %]</td>
@@ -77,9 +89,8 @@
 				        <td style="min-width: 100px;">
 				                  [% PERL %]
 				                      print C4::AR::Filtros::action_set_button(    
-                                            title => "Modificar", 
                                             action=>"modificarPortada([% p.id %])", 
-                                            icon=>"icon-white icon-edit",
+                                            icon=>"icon-white icon-pencil",
 				                            button          => 'btn btn-primary',
 				                            actions         => [
 					                                                {title  => "Eliminar", 
@@ -105,8 +116,9 @@
 	[% PERL %]
 	            print C4::AR::Filtros::action_button(   
 	                    button   => "btn btn-primary",
-	                    action   => 'agregarPortada_show();',
-	                    title   => "[% 'Agregar entrada' | i18n %]",
+	                    action   => 'agregarPortada();',
+	                    title    => " [% 'Agregar entrada' | i18n %]",
+	                    icon 	 => "icon-white icon-plus",
 	                ) ;
 	[% END %]
 </div>
@@ -115,7 +127,7 @@
         <h4 class="alert-heading">Atenci&oacute;n</h4>
         <p>[% 'Cargue fotos exactamente  del mismo tama&ntilde;o, de lo contrario, la portada va a sufrir cambios de tama&ntilde;o, provocando molestia visual' | i18n %].
             <br />
-           [% 'El tama&ntilde;o &oacute;nptimo para una correcta portada es de un m&aacute;ximo de 1200x200 px (manteniendo el aspecto)' | i18n %]
+           [% 'El tama&ntilde;o &oacute;nptimo para una correcta portada es de un m&aacute;ximo de 1200x200 px (manteniendo el aspecto) para im&aacute;genes sin texto, y de 1200x300 si se dispone de alguna descripci&oacute;n textual.' | i18n %]
            </p>
       </div>
 <div id="add_cover_form" class="modal hide fade" >

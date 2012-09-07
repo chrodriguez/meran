@@ -75,6 +75,22 @@ if ($accion){
 
 	    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
 
+    }elsif ($accion eq "SHOW_ADD_PORTADA"){
+
+
+        my ($template, $session, $t_params) = get_template_and_user({
+                                            template_name   => "includes/form_portada_opac.inc",
+                                            query           => $input,
+                                            type            => "intranet",
+                                            authnotrequired => 0,
+                                            flagsrequired   => {  ui => 'ANY', 
+                                                                accion => 'TODOS', 
+                                                                entorno => 'usuarios'},
+                                            debug => 1,
+                        });
+        
+        C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+
     }elsif ($accion eq "MOD"){
         my $msg_object = C4::AR::Novedades::modPortadaOpac($obj);
 

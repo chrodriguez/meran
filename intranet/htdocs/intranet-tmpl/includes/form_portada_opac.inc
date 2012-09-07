@@ -8,7 +8,8 @@
   </div>
   
   <div class="modal-body">
-    <form class="form-horizontal" id="post_novedad_form" method="post" action="[% url_prefix %]/admin/portada_opac.pl" enctype="multipart/form-data">
+    <form class="form-horizontal" id="post_novedad_form" method="post" action="[% url_prefix %]/admin/portada_opac.pl" 
+          enctype="multipart/form-data">
           <div class="control-group">
             <label class="control-label" for="titulo_footer">[% 'T&iacute;tulo del pie' | i18n %]</label>
             <div class="controls">
@@ -19,7 +20,7 @@
           <div class="control-group">
             <label class="control-label" for="footer">[% 'Pie de nota' | i18n %]</label>
             <div class="controls">
-                <textarea class="input-xlarge" id="footer" name="footer" >[% portada.getFooter %]</textarea>
+                <textarea class="input-xlarge" id="footer" name="footer">[% portada.getFooter %]</textarea>
             </div>
           </div>
             
@@ -27,7 +28,7 @@
 	          <div class="control-group">
 	            <label class="control-label" for="fileInput">[% 'Im&aacute;gen de portada' | i18n %]</label>
 	            <div class="controls">
-	              <input class="input-file" id="imagen" name="imagen" required type="file">
+	              <input class="input-file" id="imagen" name="imagen" type="file" required>
 	            </div>
 	          </div>
 	          <input type="hidden" id="tipoAccion" name="tipoAccion" value="ADD">
@@ -35,8 +36,8 @@
               <input type="hidden" id="tipoAccion" name="tipoAccion" value="MOD">
               <input type="hidden" id="id_portada" name="id_portada" value="[% portada.id %]">
 	      [% END %]
-	 </form>
+    </form>
   </div>
   <div class="modal-footer">
-      <button class="btn btn-primary" onclick="submitForm()">[% 'Enviar' | i18n %]</button>
+      <button onclick="submitForm([% editing %]);" class="btn btn-primary" >[% 'Enviar' | i18n %]</button>
   </div>

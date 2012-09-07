@@ -603,12 +603,12 @@ sub uploadCoverImage{
 	
 	    if ($check_size > $maxFileSize) {
 	         $msg_object->{'error'}= 1;
-             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP07', 'params' => ['512 KB']} ) ;
+             C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP07', 'params' => ["512KB"]} ) ;
 	    } 
     }    
     
     if (!$msg_object->{'error'}){
-    	C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP08', 'params' => ['512 KB']} ) ;
+    	C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'UP08', 'params' => ['512KB']} ) ;
     }
     
     return ($new_name.".".$type,$msg_object);

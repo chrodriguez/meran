@@ -101,7 +101,7 @@
              	$('#carousel_portada_opac').carousel({
              		pause: "hover",
              		interval: 5000,
-                });
+              });
           	 [% END %]
              	
         });

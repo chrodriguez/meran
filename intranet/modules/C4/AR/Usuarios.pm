@@ -178,8 +178,8 @@ sub agregarPersona {
         $db->{connect_options}->{AutoCommit} = 0;
         $db->begin_work;
         eval{
-            $person->agregar($params);
-            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => []});
+            my $socio = $person->agregar($params);
+            C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'U329', 'params' => [$socio->getNro_socio]});
             $db->commit;
             
         };
