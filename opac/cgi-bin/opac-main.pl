@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/speedy
 use strict;
 require Exporter;
 use C4::Output;  
@@ -6,7 +6,7 @@ use C4::AR::Auth;
 use C4::AR::Novedades;
 use CGI;
 
-my $query = new CGI;
+my $query =  CGI->new;
 
 my ($template, $session, $t_params)= get_template_and_user({
                                             template_name   => "opac-main.tmpl",
