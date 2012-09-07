@@ -34,6 +34,8 @@ $t_params->{'comboDeCredentials'}   = $comboDeCredentials;
 $t_params->{'comboDeEstados'}       = $comboDeEstados;
 $t_params->{'comboDeUI'}            = $comboDeUI;
 $t_params->{'addBorrower'}          = 1;
+$t_params->{'cumple_requisito_on'}  = C4::AR::Preferencias::getValorPreferencia("requisito_necesario")||0;
+
 
 $t_params->{'page_sub_title'}   = C4::AR::Filtros::i18n("Agregar Usuario");
 C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);

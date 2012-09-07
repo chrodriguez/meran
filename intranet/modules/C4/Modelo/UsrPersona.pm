@@ -35,7 +35,6 @@ __PACKAGE__->meta->setup(
         sexo             => { type => 'character', overflow => 'truncate', length => 1 },
         telefono_laboral => { type => 'varchar', overflow => 'truncate', length => 50 },
         es_socio         => { type => 'integer', overflow => 'truncate', length => 1, default => 0 },
-        cumple_condicion => { type => 'integer', overflow => 'truncate', default => '0', not_null => 1 },
         institucion      => { type => 'varchar', overflow => 'truncate', length => 255 },
         carrera          => { type => 'varchar', overflow => 'truncate', length => 255 },
         anio             => { type => 'varchar', overflow => 'truncate', length => 255 },
@@ -135,7 +134,6 @@ sub agregar{
     $self->setFecha_alta($data_hash->{'fecha_alta'});
     $self->setSexo($data_hash->{'sexo'});
     $self->setTelefono_laboral($data_hash->{'telefono_laboral'});
-    $self->setCumple_condicion($data_hash->{'cumple_condicion'});
     $self->setEs_socio(0);
     $data_hash->{'id_persona'}=$self->getId_persona;
     $data_hash->{'categoria_socio_id'}=$data_hash->{'categoria_socio_id'};
@@ -669,16 +667,6 @@ sub setTelefono_laboral{
     $self->telefono_laboral($telefono_laboral);
 }
 
-sub getCumple_condicion{
-    my ($self) = shift;
-    return ($self->cumple_condicion);
-}
-
-sub setCumple_condicion{
-    my ($self) = shift;
-    my ($cumple_condicion) = @_;
-    $self->cumple_condicion($cumple_condicion);
-}
 
 sub getInvolvedCount{
  
