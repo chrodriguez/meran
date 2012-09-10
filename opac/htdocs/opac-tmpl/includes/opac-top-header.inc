@@ -108,7 +108,7 @@
                     </li>     
 	            [% END %]     
           </ul> 
-          <form class="navbar-search pull-left" action="[% url_prefix %]/opac-busquedasDB.pl" method="get" onsubmit="startOverlay();">
+          <form class="navbar-search pull-left" action="[% url_prefix %]/opac-busquedasDB.pl" method="get" onsubmit="startOverlay(); return true;">
               <input type="text" name="string" id="search_bar" class="search-query span3" placeholder="[% 'Buscar' | i18n %]"
                    		  x-webkit-speech onwebkitspeechchange="javascript:startSearch();" 
                    		  speech onspeechchange="javascript:startSearch();"

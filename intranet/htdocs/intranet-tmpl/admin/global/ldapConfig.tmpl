@@ -7,7 +7,7 @@
         <p>Este método proporciona autenticaci&oacute;n contra un servidor LDAP externo. Si el nombre de usuario y contraseña facilitados son validos, MERAN crea una nueva entrada para el usuario en su base de datos.</p>
     </div>  
 <br>
-<form action="[% url_prefix %]/admin/global/ldap_config.pl?token=[% token %]" method="post" class="form-horizontal">
+<form action="[% url_prefix %]/admin/global/ldap_config.pl?token=[% token %]" method="post" class="form-horizontal" onsubmit="startOverlay(); return true;">
     <input type="hidden" name="adding" value="1"/>
 
     <fieldset>
