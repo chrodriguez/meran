@@ -228,14 +228,16 @@
                     </div>
             </div>
 
-          <div class="control-group">
-                <!--   <label class="control-label" for="cumple_requisito">[% "Cumple requisito" | i18n %]?</label>-->
-                    <div class="controls">
-                              <label class="checkbox">
-                                    <input  id="cumple_requisito" name="cumple_requisito" type="checkbox"  [% IF socio_modificar.cumpleRequisito %]  checked [% END %]>[% "Cumple requisito" | i18n %]?
-                              </label>      
-                    </div>
-            </div>
+          [% IF cumple_requisito_on %]
+            <div class="control-group">
+                  
+                      <div class="controls">
+                                <label class="checkbox">
+                                      <input  id="cumple_requisito" name="cumple_requisito" type="checkbox"  [% IF socio_modificar.cumpleRequisito %]  checked [% END %]>[% "Cumple requisito" | i18n %]?
+                                </label>      
+                      </div>
+              </div>
+           [% END %]
             <div class="control-group">
                     <label class="control-label" for="id_ui">[% "Unidad de Informaci&oacute;n" | i18n %]</label>
                     <div class="controls">
