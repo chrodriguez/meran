@@ -389,6 +389,7 @@ sub Enviar_Email_Asignacion_Reserva{
 
         my %mail;
         $mail{'mail_from'}             = $mailFrom;
+        $mail{'page_title'}            = Encode::decode_utf8("Asignación de Reserva");
         $mail{'mail_to'}               = $socio->persona->getEmail;
         $mail{'mail_subject'}          = $mailSubject;
         $mail{'mail_message'}          = $mailMessage;
