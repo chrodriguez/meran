@@ -30,7 +30,7 @@
         objAH.url               = URL_PREFIX+'/reports/circulacionDB.pl';
         objAH.tipoAccion        = "BUSQUEDAS";
         objAH.funcion           = "changePageBusquedas";
-        objAH.categoriaSocio    = $('#categoria_socio_id').val();
+        objAH.categoriaSocio    = $('#categoriaSocioReservas').val();
         objAH.tipoReserva       = $('#tipoReserva').val();
         objAH.tipoDoc           = $('#tipo_documento_id').val();
         objAH.titulo            = $('#titulo').val();
@@ -45,8 +45,8 @@
     }
 
     function updateGenerarReporteCirculacion(responseText){
-        $('#reportResultCirc').html(responseText);
-        $('#reportResultCirc').show();
+        $('#reportResultCirc2').html(responseText);
+        $('#reportResultCirc2').show();
         if (ORDEN){
               cambiarSentidoOrd();
         } 
@@ -76,8 +76,10 @@
 </script>
 
 <div class="center_fieldset report_form_container">
-    <form class="form-horizontal" onsubmit="return false;">
+    <form class="form-horizontal" id="formReporteCiruculacion" action="[% url_prefix %]/reports/circulacionDB.pl">
 
+        <input type="hidden" name="tipoAccion" value="EXPORT_CIRC">
+        
         <div class="control-group" >
             <label for="tipoReserva" class="control-label">[% 'Tipo de reserva' | i18n %]</label>  
             <div class="controls">
@@ -92,7 +94,7 @@
         <div class="control-group">
             <label class="control-label" for="categoria_socio_id">[% 'Categor&iacute;­a del usuario' | i18n %]</label>
             <div class="controls">  
-                [% comboDeCategorias %]          
+                [% comboDeCategoriasReservas %]          
             </div>
         </div>
 
@@ -157,4 +159,7 @@
           </div>
       </form>
  </div>
+
+
+<div id="reportResultCirc2" style="display:none;"></div>
  

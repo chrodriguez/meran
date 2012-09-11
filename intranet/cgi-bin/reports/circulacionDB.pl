@@ -23,8 +23,37 @@ my $tipoAccion  = $obj->{'tipoAccion'} || "";
 
 my ($template, $session, $t_params);
 
+if($tipoAccion eq "EXPORT_CIRC"){
+    ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
+                                        template_name   => "includes/partials/reportes/_reporte_circulacion_result.inc",
+                                        query           => $input,
+                                        type            => "intranet",
+                                        authnotrequired => 0,
+                                        flagsrequired   => {  ui            => 'ANY', 
+                                                            tipo_documento  => 'ANY', 
+                                                            accion          => 'CONSULTA', 
+                                                            entorno         => 'undefined'},
+    });
 
-if($tipoAccion eq "EXPORT_CIRC_GENERAL"){
+    $obj->{'categoriaSocio'}    =  $obj->{'categoria_socio_id'};
+    $obj->{'fecha_inicio'}      =  $obj->{'date-from'};
+    $obj->{'fecha_fin'}         =  $obj->{'date-to'};
+    
+    my ($results, $cantidad)    = C4::AR::Reportes::getReservasCirculacionToExport($obj);
+
+    $t_params->{'cantidad'}     = $cantidad;
+    $t_params->{'results'}      = $results;
+    $t_params->{'exportar'}     = 1;
+
+    $obj->{'is_report'}         = "SI";
+
+    my $out                     = C4::AR::Auth::get_html_content($template, $t_params);
+    my $filename                = C4::AR::PdfGenerator::pdfFromHTML($out, $obj);
+
+    print C4::AR::PdfGenerator::pdfHeader(); 
+    C4::AR::PdfGenerator::printPDF($filename);
+}
+elsif($tipoAccion eq "EXPORT_CIRC_GENERAL"){
     ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
                                         template_name   => "includes/partials/reportes/_reporte_circulacion_general_result.inc",
                                         query           => $input,

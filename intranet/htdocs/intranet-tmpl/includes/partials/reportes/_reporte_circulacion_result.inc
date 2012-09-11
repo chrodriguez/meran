@@ -11,12 +11,13 @@
             print C4::AR::Filtros::tableHeader(   
                               id              => "tablaResultCirculacion",
                               columns         => ['[% "Autor" | i18n %]','[% 'T&iacute;tulo' | i18n %]',
-                                                  '[% "Usuario" | i18n %]',
+                                                  '[% 'Cantidad de reservas' | i18n %]', '[% "Usuario" | i18n %]',
                                                   
                                                   ],
-                              order           => {  'Autor'             => 'autor', 
-                                                    'T&iacute;tulo'     => 'titulo',
-                                                    'Usuario'           => 'usuario',
+                              order           => {  'Autor'                 => 'autor', 
+                                                    'T&iacute;tulo'         => 'titulo',
+                                                    'Usuario'               => 'usuario',
+                                                    'Cantidad de reservas'  => 'cantidad_reservas',
                                                   } ,   
                               order_name_function => "reporte_circ",                            
                                     ) ;
@@ -26,17 +27,20 @@
               [% FOREACH res IN results %]   
                 <tr>
                   <td>
-                      [% res.nivel1.getAutor %]
+                      [% res.objeto.getAutor %]
                   </td>
                   <td>
-                      [% res.nivel1.getTitulo %]
+                      [% res.objeto.getTitulo %]
+                  </td>
+                  <td>
+                      [% res.reservas %]
                   </td>
                   <td>
                       [% IF nro_socio %] 
                                 [% PERL %]
-                                      print C4::AR::Filtros::link_to(   text =>     "[% res.nro_socio %]",
+                                      print C4::AR::Filtros::link_to(   text =>     "[% res.socio %]",
                                                             url=>"      [% url_prefix %]/usuarios/reales/datosUsuario.pl", 
-                                                            params =>   ["nro_socio=[% res.nro_socio %]"],
+                                                            params =>   ["nro_socio=[% res.socio %]"],
                                                             title =>    "[% 'Mostrar Detalle del Usuario' | i18n %]"
                                                       );
                                 [% END %]             
@@ -51,11 +55,23 @@
              [% END %]
         </tbody>
     </table>
+    [% IF !exportar %]
+    <div class="form-actions" style="margin-bottom: 0;">
+       <td>
+          [% PERL %]
+                    print C4::AR::Filtros::action_set_button(    
+                            button  => 'btn btn-primary',
+                            title   => " [% 'Exportar a PDF' | i18n %]",
+                            action  => 'imprimirReporte("formReporteCiruculacion");',
+                            icon    => "icon-white icon-inbox",
+                      ) ;
+          [% END %]
+       </td>
+    </div>
+    [% END %]
 [% ELSE %]
     <div class="alert alert-info">
         [% 'No hay resultados para mostrar' | i18n  %]
     </div>
 
 [% END %]
-
-

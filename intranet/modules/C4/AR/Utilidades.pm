@@ -2200,6 +2200,7 @@ sub generarComboTipoDeDocConValuesIds{
         $options_hash{'onBlur'}     = $params->{'onBlur'};
     }
 
+    C4::AR::Debug::debug("nameeeeeeeeee : " . $params->{'name'});
     $options_hash{'name'}       = $params->{'name'}||'tipo_documento_id';
     $options_hash{'id'}         = $params->{'id'}||'tipo_documento_id';
     $options_hash{'size'}       = $params->{'size'}||1;

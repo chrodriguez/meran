@@ -1252,6 +1252,7 @@ sub _enviarRecordatorioVencidos{
 
         # FIXME: feo, hacer una funcion que arme el mail y aca solo mandarlo. Inmanejable cuando haya mas medios
         if (C4::AR::Preferencias::getValorPreferencia('EnabledMailSystem')){  
+            C4::AR::Debug::debug("antessssssssssssssssssss -----------------------------");
             C4::AR::Mail::send_mail(\%mail);
         }
         
