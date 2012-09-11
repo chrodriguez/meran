@@ -79,7 +79,7 @@ function changePageBusquedas(ini){
 </div>
 [% IF !exportar && cant_n3 %]
 <div class="form-actions" id="actions_ejemplares" style="margin-bottom: 0;">
-   <td>
+   
       [% PERL %]
                 print C4::AR::Filtros::action_set_button(    
                         button  => 'btn btn-primary',
@@ -88,7 +88,7 @@ function changePageBusquedas(ini){
                         icon => "icon-white icon-inbox",
                   ) ;
       [% END %]
-   </td>
+   
 </div>       
 [% END %]
 [% ELSE %]

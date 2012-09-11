@@ -18,23 +18,23 @@ my $obj;
 
 my ($template, $session, $t_params);
 
+
+($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
+                                        template_name   => "includes/partials/reportes/_reporte_busquedas_result.inc",
+                                        query           => $input,
+                                        type            => "intranet",
+                                        authnotrequired => 0,
+                                        flagsrequired   => {  ui            => 'ANY', 
+                                                            tipo_documento  => 'ANY', 
+                                                            accion          => 'CONSULTA', 
+                                                            entorno         => 'undefined'},
+});
+
+
 if ($input->param('obj')){
-  
-  $obj = $input->param('obj');
-  $obj = C4::AR::Utilidades::from_json_ISO($obj);
-
-  ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
-                                          template_name   => "includes/partials/reportes/_reporte_busquedas_result.inc",
-                                          query           => $input,
-                                          type            => "intranet",
-                                          authnotrequired => 0,
-                                          flagsrequired   => {  ui            => 'ANY', 
-                                                              tipo_documento  => 'ANY', 
-                                                              accion          => 'CONSULTA', 
-                                                              entorno         => 'undefined'},
-  });
-
-
+    
+    $obj = $input->param('obj');
+    $obj = C4::AR::Utilidades::from_json_ISO($obj);
 
 } else {
   
@@ -47,26 +47,34 @@ if ($input->param('obj')){
     $obj->{'valor'}= $input->param('valor');
     $obj->{'fecha_inicio'}= $input->param('date-from');
     $obj->{'fecha_fin'}= $input->param('date-to');
-    $obj->{'fecha_fin'}= $input->param('date-to');
     $obj->{'is_report'}= "SI";
+    $obj->{'exportar'}= $input->param('exportar');
 
-    ($template, $session, $t_params)= C4::AR::Auth::get_template_and_user({
-                                            template_name   => "includes/partials/reportes/_reporte_busquedas_result_export.inc",
-                                            query           => $input,
-                                            type            => "intranet",
-                                            authnotrequired => 0,
-                                            flagsrequired   => {  ui            => 'ANY', 
-                                                                tipo_documento  => 'ANY', 
-                                                                accion          => 'CONSULTA', 
-                                                                entorno         => 'undefined'},
-    });
+
+
+    my $out= C4::AR::Auth::get_html_content($template, $t_params);
+    my $filename= C4::AR::PdfGenerator::pdfFromHTML($out,$obj);
+    print C4::AR::PdfGenerator::pdfHeader(); 
+    C4::AR::PdfGenerator::printPDF($filename);
 
 }
 
 
+
+$obj->{'fecha_inicio'} =  C4::AR::Filtros::i18n($obj->{'fecha_inicio'});
+$obj->{'fecha_fin'} =  C4::AR::Filtros::i18n($obj->{'fecha_fin'});
+
+if ($obj->{'fecha_inicio'} eq "Desde"){
+    $obj->{'fecha_inicio'} = "";
+} 
+
+if ($obj->{'fecha_fin'} eq "Hasta"){
+    $obj->{'fecha_fin'} = "";
+} 
+
+
 my $tipoAccion= $obj->{'tipoAccion'}||"";
 
-#     my $orden=$obj->{'orden'}||'fecha';
 $obj->{'ini'} = $obj->{'ini'} || 0;
 my $ini=$obj->{'ini'};
 my $funcion=$obj->{'funcion'};
@@ -93,22 +101,39 @@ if ($obj->{'asc'}){
 }
 #     C4::AR::Validator::validateParams('U389',$obj,['socio','ini','funcion'] );
 
+
 my ($results, $cantidad, $all_results);
 
 my ($ini,$pageNumber,$cantR)=C4::AR::Utilidades::InitPaginador($ini);
 
-($results, $cantidad, $all_results)= C4::AR::Reportes::getBusquedasDeUsuario($obj,$ini,$cantR);
-  
 
 if($tipoAccion eq "BUSQUEDAS"){
-    
-    $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
-#     ($results, $cantidad)= C4::AR::Reportes::getBusquedasDeUsuario($obj);
+
+    ($results, $cantidad, $all_results)= C4::AR::Reportes::getBusquedasDeUsuario($obj,$ini,$cantR);
 
     $t_params->{'cantidad'} = $cantidad;
-    $t_params->{'results'} = $results;
     $t_params->{'nro_socio'} = $obj->{'usuario'};
-    C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+
+    if ($obj->{'exportar'}){
+
+          $obj->{'is_report'}="SI";
+
+          $t_params->{'results'} = $all_results;
+          $t_params->{'exportar'} = 1;;
+
+          my $out= C4::AR::Auth::get_html_content($template, $t_params);
+          my $filename= C4::AR::PdfGenerator::pdfFromHTML($out,$obj);
+          print C4::AR::PdfGenerator::pdfHeader(); 
+          C4::AR::PdfGenerator::printPDF($filename);
+
+    } else {
+
+        $t_params->{'results'} = $results;
+        $t_params->{'paginador'}= C4::AR::Utilidades::crearPaginador($cantidad,$cantR, $pageNumber,$funcion,$t_params);
+
+        C4::AR::Auth::output_html_with_http_headers($template, $t_params, $session);
+    }
+
 
 } elsif ($tipoAccion eq "EXPORTAR_PDF"){
 # 

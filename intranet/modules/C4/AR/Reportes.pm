@@ -1497,7 +1497,9 @@ sub getBusquedasDeUsuario {
         push(@filtro, ('valor'  =>  { like => '% '.$valor.'%'}));
     }
    
-    if ($fecha_inicio != 'Desde' && $fecha_fin != 'Hasta'){
+    if ($fecha_inicio ne '' && $fecha_fin ne ''){
+        $fecha_inicio= C4::Date::format_date_hour($fecha_inicio,"iso");
+        $fecha_fin= C4::Date::format_date_hour($fecha_fin,"iso");
         push( @filtro, and => [ 'busqueda.fecha' => { gt => $fecha_inicio, eq => $fecha_inicio },
                                 'busqueda.fecha' => { lt => $fecha_fin, eq => $fecha_fin} ] ); 
     }
