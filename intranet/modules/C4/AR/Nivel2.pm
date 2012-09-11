@@ -34,6 +34,7 @@ use vars qw(@EXPORT_OK @ISA);
         promoteGrupo
         unPromoteGrupo
         checkPromotion
+        eliminarReviewsDeNivel2
         
 );
 
@@ -240,6 +241,7 @@ sub t_eliminarNivel2{
     
         eval {
             $cat_registro_marc_n2->eliminar($params);  
+            eliminarReviewsDeNivel2($id2,$db);
             $db->commit;
             eval {
                 C4::AR::Sphinx::generar_indice($cat_registro_marc_n2->getId1(), 'R_PARTIAL', 'UPDATE');
@@ -845,8 +847,25 @@ sub eliminarReviews{
          C4::AR::Mensajes::add($msg_object, {'codMsg'=> 'REV001'});
     } 
 
-
     return $msg_object;
+
+}
+
+
+sub eliminarReviewsDeNivel2{
+    my($id2,$db) = @_;
+
+    my @filtros;
+  
+    push (@filtros, (id2 => {eq => $id2}));
+    
+    $db = $db || C4::Modelo::CatRegistroMarcN2->new()->db();
+
+    my $reviews = C4::Modelo::CatRating::Manager->delete_cat_rating(   where    => \@filtros,
+                                                                       db       => $db,
+
+                                                                 );
+    return $reviews;
 
 }
 

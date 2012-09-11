@@ -974,12 +974,12 @@ function updateGuardarDocumentoN3(responseText){
 
     if (! (hayError(Messages) ) ){
 
-        if (FROM_DETALLE_REGISTRO == 1) {
+        // if (FROM_DETALLE_REGISTRO == 1) {
             disableAlert();
             // FIXME no se si esta funcionand
             $('#ajax-indicator').modal({show:true, keyboard: false, backdrop: false,});
             window.location = "detalle.pl?id1=" + ID_N1;
-        } else {
+        // } else {
 
             //inicializo el arreglo
             _freeMemory(ID3_ARRAY);
@@ -992,7 +992,7 @@ function updateGuardarDocumentoN3(responseText){
             mostrarInfoAltaNivel2(ID_N2);
             //muestra la tabla con los ejemplares agregados
             mostrarInfoAltaNivel3(ID_N2);
-        }
+        // }
     }
 
 }

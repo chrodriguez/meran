@@ -182,6 +182,8 @@ sub setCompleto{
     }
     
     $self->completo($completo);
+    $self->save();
+
 }
 
 sub nextMember{
