@@ -3,7 +3,7 @@
 <script type="text/javascript" src="/intranet-tmpl/includes/reports.js"></script>
 <script>
 
-    var ORDEN;
+    var ORDEN="valor";
     var ASC= 1;
 
     function changePageBusquedas(ini){
@@ -91,9 +91,11 @@
 
 <div class="center_fieldset report_form_container">
       <form class="form-horizontal" id="form_reporte_busquedas" action="[% url_prefix %]/reports/catalogoDB.pl" method="get">
-          <input type='hidden' id='accion' name="accion" value=''>
+          <input type='hidden' id='accion' name="accion" value='BUSQUEDAS'>
           <input type='hidden' id='orden' name="orden" value=''>
           <input type='hidden' id='asc' name="asc" value=''>
+          <input type='hidden' id='exportar' name="exportar" value='1'>
+
           <div id="divInfoUsuario" class="control-group" >
               <label for="usuario" class="control-label">[% 'Usuario' | i18n %]
                   [% PERL %]

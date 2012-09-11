@@ -35,6 +35,7 @@ my %mail;
 $mail{'mail_from'}      = Encode::decode_utf8(C4::AR::Preferencias::getValorPreferencia('mailFrom'));
 $mail{'mail_to'}        = $email;
 $mail{'mail_subject'}   = 'Re: '. $asunto;
+$mail{'page_title'}   = 'Respuesta de Contacto';
 
 use C4::Modelo::PrefUnidadInformacion;
 
