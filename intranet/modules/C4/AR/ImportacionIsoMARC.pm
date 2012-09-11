@@ -1703,9 +1703,15 @@ sub getTipoDocumentoFromMarcRecord {
             my $resultado =C4::AR::Preferencias::getValorPreferencia("defaultTipoNivel3");
             if ($tipo_documento){
                 use Switch;
-                switch ($tipo_documento) {
+                switch (uc($tipo_documento)) {
                     case 'TEXTO' { 
                         $resultado = 'LIB';
+                        }
+                    case 'CD' { 
+                        $resultado = 'CDR';
+                        }
+                    case 'DVD' { 
+                        $resultado = 'CDR';
                         }
                 }
             }
