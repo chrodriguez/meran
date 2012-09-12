@@ -39,7 +39,9 @@ $(document).ready(function() {
 <div id=windowHelp>
 	<div id="contentWindow" class="formElemets">
 		<fieldset>
-            <div class="modal-header">Ayuda MARC</div>
+            <div class="modal-header">
+                <h3>Ayuda MARC</h3>
+            </div>
             <div class="modal-body">
                 <div class="control-group">
                   <label for="campoHelp">Ingrese el campo o palabra:</label>
@@ -52,12 +54,12 @@ $(document).ready(function() {
                     Sub Campo:
                   </label>
                   <textarea id="subcampos" name="subcampos" rows="7" style="width:90%; max-width:100%;" readonly=readonly></textarea>
-                  <div class='modal-footer'>
-                      <a href="http://www.loc.gov/marc/classification/eccdspa.html" target="_blanc">
-                      para mas informaci&oacute;n MARC</a>
-                  </div>
               </div>
-          </div>
+            </div>
+            <div class='modal-footer'>
+                 <a href="http://www.loc.gov/marc/classification/eccdspa.html" target="_blanc">
+                  para mas informaci&oacute;n MARC</a>
+            </div>
         </fieldset>
 	</div> <!--end div contentWindow-->
 </div> <!--end div windowHelp-->

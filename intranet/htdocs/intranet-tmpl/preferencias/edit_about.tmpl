@@ -22,12 +22,7 @@
     
     
     <div class="form-actions">
-    [% PERL %]
-                print C4::AR::Filtros::to_Button(   text    => "[% 'Guardar Cambios' | i18n %]",
-                                                    type    => "submit",
-                                                    boton   => "boton_agregar",
-                        ) ;
-    [% END %]
+        <button class="btn btn-large btn-success" type="submit"><i class="icon-white icon-ok"></i> [% 'Guardar Cambios' | i18n %]</button>
     </div>
 </form>
 
