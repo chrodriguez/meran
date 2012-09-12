@@ -85,9 +85,19 @@
 				[% END %]	        
 	        </div>
 	        <div class="span4">
-	          <h2>[% 'Ejemplares destacados' | i18n %]</h2>
-	           <p>[% 'Revis&aacute; los ejemplares promovidos por la biblioteca' | i18n %].</p>
-	          <p><a class="btn" href="#">[% 'Ver ejemplares' | i18n %] &raquo;</a></p>
+	          	<h2>[% 'Ejemplares destacados' | i18n %]</h2>
+	           	<p>[% 'Revis&aacute; los ejemplares promovidos por la biblioteca' | i18n %].</p>
+				<p>
+		            [% PERL %]
+	                   print C4::AR::Filtros::action_link_button( 
+	                                                     button         => "btn click",
+	                                                     url       	=> "[% url_prefix %]/opac-destacados.pl",
+	                                                     params		=> ["token=[% token %]"],
+	                                                     title        => "[% 'Ver Destacados' | i18n %] &raquo;",
+	                                       ) ;
+	                [% END %]
+				</p>
+	          
 	       </div>
 	       
 	        <div class="span4">
