@@ -114,7 +114,8 @@ $(document).ready( function() {
 </script>
 
 [% PERL %]
-    print C4::AR::Filtros::ayuda_marc() ;
+    #se comenta la linea porque no tiene funcionalidad, ademas ya esta implicita la ayuda por campo
+    #print C4::AR::Filtros::ayuda_marc() ; 
 [% END %]
 
 <div id="abm_tablas_referencia"><div id="abm_tablas_referencia_content"></div></div>

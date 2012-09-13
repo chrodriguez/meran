@@ -75,11 +75,11 @@
                 
 		        <div class="form-actions">
 		            [% PERL %]
-		                                print C4::AR::Filtros::to_Button(   text    => "[% 'Ver detalle' | i18n %]",
-		                                                                    boton   => "btn btn-primary",
-		                                                                    onClick => "detalle();",
-		                                                                    title   => "[% 'Ver detalle' | i18n %]",
-		                                                                    inline  => 1,
+		                                print C4::AR::Filtros::action_button(   
+                                                                            title     => "[% 'Ver detalle' | i18n %]",
+		                                                                    button    => "btn btn-primary",
+		                                                                    action    => "detalle();",
+		                                                                    icon      => "icon-white icon-eye-open",
 		                                        ) ;
 		            [% END %]
 		        

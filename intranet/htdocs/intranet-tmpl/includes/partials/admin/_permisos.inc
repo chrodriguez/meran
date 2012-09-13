@@ -40,7 +40,7 @@
                         print C4::AR::Filtros::action_button(   
                                                             button   => "btn btn-primary",
                                                             action => "obtenerPermisos();",
-                                                            icon    => "icon-white icon-flag",
+                                                            icon    => "icon-white icon-ok",
                                                             title   => " [% 'Obtener Permisos' | i18n %]",
                                 ) ;
                     [% END %]

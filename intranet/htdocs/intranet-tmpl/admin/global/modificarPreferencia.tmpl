@@ -42,25 +42,25 @@
                 <div class="form-actions">
                         [% IF !nueva %]
 
-	                    [% PERL %]
-	                                print C4::AR::Filtros::to_Button(   
-	                                                    text    => "[% 'Guardar Modificaci&oacute;n' | i18n %]",
-	                                                    boton   => "btn btn-primary",
-	                                                    onClick => "guardarModificacion();",
-	                                                    title   => "[% 'Guardar Modificaci&oacute;n' | i18n %]", 
-	                                        ) ;
-	                    [% END %]
+    	                    [% PERL %]
+    	                                print C4::AR::Filtros::action_button(   
+    	                                                    title    => "[% 'Guardar Modificaci&oacute;n' | i18n %]",
+    	                                                    button   => "btn btn-primary",
+    	                                                    action => "guardarModificacion();",
+                                                            icon    => "icon-ok icon-white",
+    	                                        ) ;
+    	                    [% END %]
 
                         [% ELSE %]
 
-	                    [% PERL %]
-	                                print C4::AR::Filtros::to_Button(   
-	                                                    text    => "[% 'Guardar Nueva Variable' | i18n %]",
-	                                                    boton   => "btn btn-primary",
-	                                                    onClick => "guardarNuevaVariable();",
-	                                                    title   => "[% 'Guardar Nueva Variable' | i18n %]",
-	                                        ) ;
-	                    [% END %]
+    	                    [% PERL %]
+    	                                print C4::AR::Filtros::action_button(   
+    	                                                    title    => "[% 'Guardar Nueva Variable' | i18n %]",
+    	                                                    button   => "btn btn-primary",
+    	                                                    action => "guardarNuevaVariable();",
+                                                            icon    => "icon-ok icon-white",
+    	                                        ) ;
+    	                    [% END %]
                       [% END %]
                 </div>
 

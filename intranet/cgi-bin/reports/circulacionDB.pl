@@ -33,6 +33,7 @@ if($tipoAccion eq "EXPORT_CIRC"){
                                                             tipo_documento  => 'ANY', 
                                                             accion          => 'CONSULTA', 
                                                             entorno         => 'undefined'},
+                                        
     });
 
     $obj->{'categoriaSocio'}    =  $obj->{'categoria_socio_id'};
