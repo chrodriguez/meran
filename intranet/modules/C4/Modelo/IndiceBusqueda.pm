@@ -14,6 +14,7 @@ __PACKAGE__->meta->setup(
         string          => { type => 'text', overflow => 'truncate', not_null => 1},
         marc_record     => { type => 'text', overflow => 'truncate', not_null => 1},
         timestamp       => { type => 'timestamp', not_null => 1 },
+        hits            => { type => 'integer', default => '0', not_null => 1 },
     ],
 
     primary_key_columns => [ 'id' ],
@@ -36,6 +37,13 @@ sub setId{
     my ($self)  = shift;
     my ($id)   = @_;
     $self->id($id);
+}
+
+sub hit{
+    my ($self)  = shift;
+    $self->hits($self->hits+1);
+
+    $self->save();
 }
 
 

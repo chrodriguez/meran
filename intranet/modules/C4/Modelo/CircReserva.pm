@@ -221,6 +221,10 @@ sub agregar {
     $self->setEstado($data_hash->{'estado'});
     $self->save();
 
+
+    eval{
+        $self->nivel3->nivel2->nivel1->hit();
+    };
 #**********************************Se registra el movimiento en rep_historial_circulacion***************************
     my $dateformat                  = C4::Date::get_date_format();
     my ($historial_circulacion)     = C4::Modelo::RepHistorialCirculacion->new(db=>$self->db);

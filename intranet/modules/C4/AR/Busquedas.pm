@@ -1502,6 +1502,7 @@ C4::AR::Debug::debug("queryyyyyyyyyyyyyyyy :      ----------------------------->
                 $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
             }
     } else {
+            $sphinx->SetSortMode(SPH_SORT_ATTR_DESC,"hits");
             $sphinx->SetSortMode(SPH_SORT_ATTR_ASC,"titulo_local");
     }
  
