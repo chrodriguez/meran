@@ -223,7 +223,7 @@ sub agregar {
 
 
     eval{
-        $self->nivel3->nivel2->nivel1->hit();
+        $self->nivel2->nivel1->hit();
     };
 #**********************************Se registra el movimiento en rep_historial_circulacion***************************
     my $dateformat                  = C4::Date::get_date_format();
