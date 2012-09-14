@@ -2,7 +2,8 @@ function clearMessages(){$('#end_top').html("<div id='mensajes' class='alert hid
 function verificarRespuesta(responseText){if(responseText==0){jAlert(DATOS_ENVIADOS_INCORRECTOS,'Info','errboxid');return(0);}else{return(1);}}
 function setMessages(Messages_hashref){//@params
 var hayError=0;try{_createContentMessages();var i;if(Messages_hashref.error==1)
-$('#mensajes').addClass('alert-error');hayError=Messages_hashref.error;for(i=0;i<Messages_hashref.messages.length;i++){$('#mensajes').append('<p>'+Messages_hashref.messages[i].message+'</p>');}
+$('#mensajes').addClass('alert-error');if(Messages_hashref.success==1)
+$('#mensajes').addClass('alert-success');hayError=Messages_hashref.error;for(i=0;i<Messages_hashref.messages.length;i++){$('#mensajes').append('<p>'+Messages_hashref.messages[i].message+'</p>');}
 $('#mensajes').removeClass('hide');$('html, body').animate({scrollTop:0},'slow');_delay(clearMessages,60);}
 catch(e){}
 return hayError;}

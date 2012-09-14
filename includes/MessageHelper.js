@@ -60,7 +60,9 @@ function setMessages(Messages_hashref){
         var i;
         //se agregan todos los mensajes
         if (Messages_hashref.error == 1)
-        	$('#mensajes').addClass('alert-error');
+            $('#mensajes').addClass('alert-error');
+        if (Messages_hashref.success == 1)
+            $('#mensajes').addClass('alert-success');
         hayError = Messages_hashref.error;
         for(i=0;i<Messages_hashref.messages.length;i++){
             $('#mensajes').append('<p>' + Messages_hashref.messages[i].message + '</p>');

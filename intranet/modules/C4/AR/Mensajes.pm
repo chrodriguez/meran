@@ -100,6 +100,7 @@ my %mensajesOPAC = (
     'U606' => 'Hubo un problema en el proceso de restablecer su clave. Int&eacute;ntelo de nuevo. Si el problema persiste, dir&iacute;jase a la biblioteca.',
     'U607' => 'Para operar en el cat&aacute;logo p&uacute;blico, debe iniciar sesi&oacute; nuevamente. Disculpe las molestias.',
     'U608' => 'El mensaje de contacto ha sido enviado. En breve sera respondido por el personal de la biblioteca.',
+    'U609' => 'Muchas gracias, en breve el personal de la biblioteca revisar&aacute; el registro.',
     'F700' => 'Disculpe, no se pudo agregar el favorito, intente nuevamente.',
     'F701' => 'Se agrego el favorito con &eacute;xito',
     'F702' => 'Se elimin&oacute; el favorito con &eacute;xito',
@@ -724,38 +725,6 @@ sub printErrorDB {
     C4::AR::Debug::printErrorDB($errorsDB_array,$codigo,$tipo);
 }
 
-
-
-
-=item
-sub new {
-    my $self = {
-        _error => undef,
-        _messages => [],
-    };
-    bless $self, "Mensajes";
-    return $self;
-}
-
-sub error {
-    my ( $self, $error ) = @_;
-    $self->{_error} = $error if defined($error);
-    return $self->{_error};
-}
-
-sub messages {
-    my ( $self, $messages ) = @_;
-    $self->{_messages} = $messages if defined($messages);
-    return $self->{_messages};
-}
-
-sub messagesPush {
-    my ( $self, $messages , $hash) = @_;
-    $self->{_messages} = $messages if defined($messages);
-    push (@{$self->{_messages}}, $hash);
-    return $self->{_messages};
-}
-=cut
 
 
 sub create {

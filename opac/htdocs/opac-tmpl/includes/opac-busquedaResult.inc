@@ -210,7 +210,7 @@
 
 [% USE HTML %]
 	        	<div>
-		        	[% IF external_search %]
+		        	[% IF external_search  &&  0 %]
 					          [% IF cant_external_servers %]
 						          <div class="right" style="margin-top: 10px">
 									[% PERL %]
