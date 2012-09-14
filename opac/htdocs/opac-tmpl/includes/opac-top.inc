@@ -83,7 +83,7 @@
     <script type="text/javascript">    
 
       $(document).ready(function() {
-			$('.popover_button').popover({delay: { show: 300, hide: 100 }, trigger: 'hover'});
+			$('.popover_button').popover({delay: { show: 600, hide: 100 }, trigger: 'hover'});
 			$(".alert").alert();
           
                     $(function () {
