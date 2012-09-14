@@ -473,7 +473,7 @@
                             [% IF NIVEL.esta_en_favoritos %]
 			                    [% PERL %]
 			                      print C4::AR::Filtros::action_button( 
-			                                                      button    => "btn btn-info click",
+			                                                      button    => "btn btn-inverse click",
 			                                                      action    =>  'deleteFavorite([% NIVEL.id1 %],"fav_[% NIVEL.id1 %]",1);',
 			                                                      icon      => "icon-minus icon-white",
 			                                                      disabled	=> 1,

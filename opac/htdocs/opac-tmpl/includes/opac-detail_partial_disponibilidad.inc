@@ -65,8 +65,6 @@
 		                                                                                icon   => "icon-white icon-remove",
 		                                                                                title   => "[% 'Cancelar reserva' | i18n %]",
 		                                                                                action => 'cancelarReserva([% socio_data.object.getIdReserva(id2) %]);',
-	                                                                                    popover		=> {title=>'[% "Disponibilidad" | i18n %]',
-		                                                                                      					text => '[% "UD. ya tiene una reserva sobre esta edici&oacute;n" | i18n %].' },
 		                                                                        );
 		                                        [% END %]
 		                                    [% END %]

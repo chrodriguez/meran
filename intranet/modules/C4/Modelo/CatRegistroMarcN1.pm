@@ -36,6 +36,12 @@ sub getMarcRecord{
     return (C4::AR::Utilidades::trim($self->marc_record));
 }
 
+sub hit{
+    my ($self)  = shift;
+
+    $self->IndiceBusqueda->hit();
+}
+
 sub getClaveUnicidad{
     my ($self) = shift;
     return ($self->clave_unicidad);

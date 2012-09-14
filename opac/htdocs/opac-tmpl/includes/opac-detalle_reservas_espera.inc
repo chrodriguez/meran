@@ -54,8 +54,6 @@
                                                       icon => "icon-remove icon-white",
                                                       action => "cancelarReserva([% reserva.getId_reserva %])",
                                                       title   => "[% "" | i18n %]",
-                                                                      popover => {title =>'[% "Cancelar reserva" | i18n %]', 
-                                                                            text =>"[% 'Debes confirmar para cancelar' | i18n %]", placement => 'left', }
                                                       
                                               );
                           [% END %]
