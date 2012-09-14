@@ -740,6 +740,23 @@ sub getDestacados{
     my $promoted = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2(query => \@filtros, db => $db,);
     my $promoted_count = C4::Modelo::CatRegistroMarcN2::Manager->get_cat_registro_marc_n2_count(query => \@filtros, db => $db,);
 
+    foreach my $r (@$promoted){
+        $r->{'portada_registro'}          = C4::AR::PortadasRegistros::getImageForId2($r->getId2,'S');
+
+
+        $r->{'portada_registro_medium'}   = C4::AR::PortadasRegistros::getImageForId2($r->getId2,'M');
+        $r->{'portada_registro_big'}      = C4::AR::PortadasRegistros::getImageForId2($r->getId2,'L');
+        $r->{'portada_edicion_local'}     = C4::AR::PortadaNivel2::getPortadasEdicion($r->getId2);
+
+
+        C4::AR::Debug::debug("portada: ".$r->{'portada_registro'});
+
+         C4::AR::Debug::debug("portada: ".$r->{'portada_registro_medium'});
+          C4::AR::Debug::debug("portada: ".$r->{'portada_registro_big'});
+           C4::AR::Debug::debug("portada: ".$r->{'portada_edicion_local'});
+
+
+    }
 
     return (\@array_rating, $rating_count, $promoted, $promoted_count);
 
