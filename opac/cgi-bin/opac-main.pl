@@ -21,8 +21,7 @@ my ($template, $session, $t_params)= get_template_and_user({
 
 
 
-my $nro_socio                       = $session->param('nro_socio');            
-my ($cantidad,$grupos)              = C4::AR::Nivel1::getUltimosGrupos();
+my $nro_socio                       = $session->param('nro_socio');        
 
 #solo si hay socio logueado se hace todo esto
 if($nro_socio){
@@ -79,9 +78,7 @@ $t_params->{'novedad'}              = $novedades;
 $t_params->{'apertura_ui'}          = $apertura;
 $t_params->{'cierre_ui'}            = $cierre;
 $t_params->{'apertura_ui'}          = $apertura;
-$t_params->{'SEARCH_RESULTS'}       = $grupos;
-$t_params->{'cantidad'}             = $cantidad;
-$t_params->{'title_search_bar'}    = C4::AR::Preferencias::getValorPreferencia("title_search_bar"),
+$t_params->{'title_search_bar'}     = C4::AR::Preferencias::getValorPreferencia("title_search_bar"),
 $t_params->{'partial_template'}     = "opac-content_data.inc";
 $t_params->{'noAjaxRequests'}       = 0;
 $t_params->{'portada'}              = C4::AR::Novedades::getPortadaOpac();
