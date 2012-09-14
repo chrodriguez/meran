@@ -149,8 +149,8 @@ my %LABELS_COMPONENTS = (   "-1"            => C4::AR::Filtros::i18n("SIN SELECC
                             "combo"         => C4::AR::Filtros::i18n("Lista desplegable"),
                             "auto"          => C4::AR::Filtros::i18n("Autocompletable"),
                             "calendar"      => C4::AR::Filtros::i18n("Calendario"),
-                            "anio"          => C4::AR::Filtros::i18n("Anual"),
-                            "rango_anio"    => C4::AR::Filtros::i18n("Anual rango")
+                            # "anio"          => C4::AR::Filtros::i18n("Anual"),
+                            # "rango_anio"    => C4::AR::Filtros::i18n("Anual rango")
                         );
 
 

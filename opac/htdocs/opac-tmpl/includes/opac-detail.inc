@@ -6,14 +6,15 @@
 
 <script type="text/javascript">
 
-	function showModalReporteCatalogo(id2){
-		$("#modal_reporte_catalogo" + id2).modal('show'); 
-	}
-	
+
 	function mostrarIndice(id2){
 	    $("#indice_data" + id2).modal(); 
 	}
-	
+    
+[% IF socio_data.usr_nro_socio %]	
+    function showModalReporteCatalogo(id2){
+        $("#modal_reporte_catalogo" + id2).modal('show'); 
+    }
 
     function enviarReporteCatalogo(id2){
 
@@ -31,9 +32,6 @@
             
     }
 
-    /*
-    * Funcion que muestra la informacion de las reservas
-    */
     function updateEnviarReporteCatalogo(responseText){
         var Messages = JSONstring.toObject(responseText);
         setMessages(Messages);
@@ -42,7 +40,8 @@
         infoSanciones();
     }
 
-	
+[% END %]	
+
 	function ProcessGBSBookInfo(booksInfo) {
 		for (id in booksInfo) {
 		 var element = document.getElementById(id);
