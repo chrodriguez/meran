@@ -166,8 +166,10 @@
                                                 <h4>[% 'Reportar problema de registro' | i18n %]</h4>
                                               </div>
                                               <div class="modal-body">
-                                                <textarea type="text" rows="6" style="width: 90%;" id="text_reporte_catalogo[% id2 %]"
-                                                        placeholder="[% 'Contanos cual es el problema con el registro. S&eacute; lo m&aacute;s detallado posible. Gracias por el inter&eacute;s.' | i18n %]"></textarea>
+                                                <textarea type="text" rows="6" style="width: 90%; white-space: pre-line;" id="text_reporte_catalogo[% id2 %]"
+                                                        placeholder="[% 'Contanos cual es el problema con el registro. S&eacute; lo m&aacute;s detallado posible.  
+                                                                         Ej.: La edici&oacute;n es incorrecta. // Algunos car&aacute;cteres no se ven. // No figura el a&ntilde;o // Etc...  
+                                                                         Gracias por el inter&eacute;s.' | i18n %]"></textarea>
                                               </div>
                                               <div class="modal-footer">
                                                 <a href="#" class="btn btn-primary" onclick="enviarReporteCatalogo([% id2 %]);">
