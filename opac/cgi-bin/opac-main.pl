@@ -1,4 +1,5 @@
-#!/usr/bin/speedy
+#!/usr/bin/perl
+
 use strict;
 require Exporter;
 use C4::Output;  
